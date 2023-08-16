@@ -2,157 +2,136 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13D4A77ED89
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Aug 2023 01:01:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6521C77EDD1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Aug 2023 01:27:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347053AbjHPXAt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 16 Aug 2023 19:00:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60568 "EHLO
+        id S236673AbjHPX1V (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 16 Aug 2023 19:27:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347073AbjHPXAi (ORCPT
+        with ESMTP id S1347162AbjHPX1R (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Aug 2023 19:00:38 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4541213E
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Aug 2023 16:00:37 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1bd9b4f8e0eso45100775ad.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Aug 2023 16:00:37 -0700 (PDT)
+        Wed, 16 Aug 2023 19:27:17 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9548271F
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Aug 2023 16:27:15 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2b9cd6a554cso105372531fa.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Aug 2023 16:27:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20221208.gappssmtp.com; s=20221208; t=1692226837; x=1692831637;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=YnmoZ3ga1ET1Wc71XUduLe9pUU/wDl4S/VyFFqz22c8=;
-        b=duwOga/QOj4QNlMFZ05sp5UUfIwL/s+ymlt+gCf9NDin4ZUiUEYXXWfQd+InGma8bl
-         FvfNvOGENvolrM7Ku+oBOg66w2sB/EYMakoTYPnqyIALsxRxiVPue1uoZBMcRUyMYa2b
-         8ZJTGka5Vs3sVkO2RLOAP7wHUhWLO0w9YoUuQNCfDaVnG5bpZwh7V9fyuJx5bmz1LY/h
-         wPmkysCMH9ZP5XeVYmyUWGGarvVu4RAG8YLEUGDw6jfwyzwlVPVkjt25NZOcF1pl1McM
-         ZYvnKnsHS0Zd1Paotlci7uD6BT33tBad6mhFnWXIxa/1Mtc10tc9i9lt9nGu78nyxK9Y
-         cQFQ==
+        d=joelfernandes.org; s=google; t=1692228434; x=1692833234;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Q45JqAXzr4Yc7nNEyhWOzDg94DzcZe7EdIRyJCqv0Jo=;
+        b=YcPQmIOtMYQxiiZ/0AoABDlTNdSDIrOtk2rGs70EhaTerh977ds3mBVgJcKMcJTDHe
+         YjKFJ/KIfKRAka9zH6TltVJEIm9Zy6YyMSj1y+Tvdn7Ih5/BknEoMv00A1MUjAKHV86c
+         Jf0U662FZiWrgTbizBQ0/YqFTtOjmLu9LVX40=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692226837; x=1692831637;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YnmoZ3ga1ET1Wc71XUduLe9pUU/wDl4S/VyFFqz22c8=;
-        b=aY5muwc318iZO1GILfitwxY9Hz/GvP7fWAWpxHVevUa8SOQheE8PM8J6cwTb3Ix7LZ
-         XKBu3XP2n3/i17QuhG6J3iVeENp20MDRgz/6rw/F+7qh524T8kHX5Z2BDsxtuyEtSbUv
-         82UbR71puG3nfQa50FRpX17WeuY/WqUfLHO+FT7Y2QXoUk8UOsde8an5qNU9iq71RPmv
-         fBWH9NDE+jnQ5oExmiMe+VGiG/7H9nXlrTTDaiJNclfB2e9j992qSCC1y8ibhxpvpFAB
-         w/aH9ysu2jBo5D1P5LGw0028gZcdqnIamV7Zonp2rNdCU639WKxSXPcER7Xl3z4TP4xS
-         4igw==
-X-Gm-Message-State: AOJu0Yx5zvgZDWrQBDNmJv9ZpxxZPJuHJQtMQOW+sByQsB7AsYBQ8l7v
-        4xrVjC8GeePrTA6r2YKRaQe7N0nzZu6u7lN/mTyTuw==
-X-Google-Smtp-Source: AGHT+IHhe4kmKBgFUgOPvjGymnUdXSpKgb5bEeENJ/f+1WJNFEc9HZeY6sXLcRnTAVx6q+Hrdut15Q==
-X-Received: by 2002:a17:90b:3793:b0:263:129e:80ac with SMTP id mz19-20020a17090b379300b00263129e80acmr2817959pjb.38.1692226836748;
-        Wed, 16 Aug 2023 16:00:36 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id fv23-20020a17090b0e9700b0025645ce761dsm239018pjb.35.2023.08.16.16.00.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 16 Aug 2023 16:00:36 -0700 (PDT)
-Message-ID: <64dd5514.170a0220.834e4.0c3b@mx.google.com>
-Date:   Wed, 16 Aug 2023 16:00:36 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        d=1e100.net; s=20221208; t=1692228434; x=1692833234;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Q45JqAXzr4Yc7nNEyhWOzDg94DzcZe7EdIRyJCqv0Jo=;
+        b=XkydGGSePomcaIviOrQ2edEiPoE2pallqDwmXG7/3y3Idmc+n7Q+I8jbGPUpNGUR4X
+         IQM8Z5V42jLpzCx0abu4y9KHZ6Eel2MKjf6i+AZ50rD+HIuqEVoSussuez12e0CW5Hk/
+         QtNF8c+++vBPhe+slKSwf1SRA3Z0QQ+1LVjI4mx5VisEt1PGQj9SuDXbAzdN5on0Oryk
+         l5GvP0jBKIkjWAictzwknNO8UHoy5rSD1Me0y9c47vTtPrcW0xc21WdmQvTx+LTcH5B6
+         Mi1AFKoCmaefPh9G1Wy7KglZ1NLJgVyEC9s894SetcDLMvahCwYytNxiIGgpYSF2K5aS
+         j2tg==
+X-Gm-Message-State: AOJu0YwzXFbL+IljJFVDEW12xQpYurmHZxB7ERMs9XZ0TYMHkH4ephtH
+        JqJm1lRO7mbp96clNgpBniJr949NNt9jnFVYk7uzqg==
+X-Google-Smtp-Source: AGHT+IH0VhJQ4iHGjbsEVYoyXsbb7mFyuwd1ohzgGIBeAZ28yYlgIp80AlZ4zKJUOIb/8h8k0GqlMkO3KvQm76wUGac=
+X-Received: by 2002:a2e:80c7:0:b0:2b5:9f54:e290 with SMTP id
+ r7-20020a2e80c7000000b002b59f54e290mr2556165ljg.0.1692228434049; Wed, 16 Aug
+ 2023 16:27:14 -0700 (PDT)
 MIME-Version: 1.0
+References: <20230815190949.GA3207581@google.com> <6a234118-1ad2-4e22-ad80-f35a1dab8f03@paulmck-laptop>
+In-Reply-To: <6a234118-1ad2-4e22-ad80-f35a1dab8f03@paulmck-laptop>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Wed, 16 Aug 2023 19:27:03 -0400
+Message-ID: <CAEXW_YQkPOPXEwTCc3nZ2CH_scOomPgz7ACYECi3k64T+YD5Vg@mail.gmail.com>
+Subject: Re: [PATCH v3] rcutorture: Copy out ftrace into its own console file
+To:     paulmck@kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, Joel <agnel.joel@gmail.com>,
+        rcu@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Report-Type: build
-X-Kernelci-Kernel: v6.5-rc3-32-g9b1db732866b
-X-Kernelci-Tree: kselftest
-X-Kernelci-Branch: next
-Subject: kselftest/next build: 7 builds: 0 failed, 7 passed,
- 1 warning (v6.5-rc3-32-g9b1db732866b)
-To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kselftest/next build: 7 builds: 0 failed, 7 passed, 1 warning (v6.5-rc3-32-=
-g9b1db732866b)
+On Wed, Aug 16, 2023 at 6:57=E2=80=AFPM Paul E. McKenney <paulmck@kernel.or=
+g> wrote:
+>
+> On Tue, Aug 15, 2023 at 07:09:49PM +0000, Joel Fernandes (Google) wrote:
+> > When debugging, it can be difficult to quickly find the ftrace dump
+> > within the console log, which in turn makes it difficult to process it
+> > independent of the result of the console output.  This commit therefore
+> > copies the contents of the buffers into its own file to make it easier
+> > to locate and process the ftrace dump. The original ftrace dump is stil=
+l
+> > available in the console log in cases where it is more convenient to
+> > process it there, for example, when you have a script that processes
+> > console output as well as ftrace-dump data.
+> >
+> > Also handle the case of multiple ftrace dumps potentially showing up in=
+ the
+> > log. Example for a file like [1], it will extract as [2].
+> >
+> > [1]:
+> > foo
+> > foo
+> > Dumping ftrace buffer:
+> > ---------------------------------
+> > blah
+> > blah
+> > ---------------------------------
+> > more
+> > bar
+> > baz
+> > Dumping ftrace buffer:
+> > ---------------------------------
+> > blah2
+> > blah2
+> > ---------------------------------
+> > bleh
+> > bleh
+> >
+> > [2]:
+> >
+> > Ftrace dump 1:
+> > blah
+> > blah
+> >
+> > Ftrace dump 2:
+> > blah2
+> > blah2
+> >
+> >
+> > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+>
+> Very good, and I did queue this one.
+>
+> I fixed the indentation of the awk script.  Perhaps your text editor is
+> being too smart for our good?  ;-)
 
-Full Build Summary: https://kernelci.org/build/kselftest/branch/next/kernel=
-/v6.5-rc3-32-g9b1db732866b/
+Thanks!  Yes the editor messing up is a possibility, I'll go look at
+that, though the indent seems still messed up in your dev branch:
 
-Tree: kselftest
-Branch: next
-Git Describe: v6.5-rc3-32-g9b1db732866b
-Git Commit: 9b1db732866bee060b9bca9493e5ebf5e8874c48
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
-est.git
-Built: 4 unique architectures
+The line "/Dumping ftrace buffer:/ " has spaces, as does the "awk <
+$1" line. Is that intentional?  All the following ones have tabs.
 
-Warnings Detected:
+thanks,
 
-arm64:
-
-arm:
-
-i386:
-
-x86_64:
-    x86_64_defconfig+kselftest (clang-16): 1 warning
-
-
-Warnings summary:
-
-    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x39: relocation to=
- !ENDBR: .text+0x13df86
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, clang-16) =E2=80=94 PASS, 0 errors, 0 warnings,=
- 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest+arm64-chromebook (arm64, clang-16) =E2=80=94 PASS, 0 er=
-rors, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 1 w=
-arning, 0 section mismatches
-
-Warnings:
-    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x39: relocation to !END=
-BR: .text+0x13df86
-
----
-For more info write to <info@kernelci.org>
+ - Joel
