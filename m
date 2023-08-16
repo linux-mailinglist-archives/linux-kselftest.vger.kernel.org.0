@@ -2,80 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0398F77E8A1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Aug 2023 20:26:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C64B77E89F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Aug 2023 20:26:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234162AbjHPSZ6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        id S1345486AbjHPSZ6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
         Wed, 16 Aug 2023 14:25:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60272 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345521AbjHPSZk (ORCPT
+        with ESMTP id S1345534AbjHPSZl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Aug 2023 14:25:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52BD410C1
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Aug 2023 11:25:36 -0700 (PDT)
+        Wed, 16 Aug 2023 14:25:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B9C42702;
+        Wed, 16 Aug 2023 11:25:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CD83360AD7
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Aug 2023 18:25:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4806C433C8;
-        Wed, 16 Aug 2023 18:25:33 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CAFAD63F66;
+        Wed, 16 Aug 2023 18:25:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFE06C433CC;
+        Wed, 16 Aug 2023 18:25:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692210335;
-        bh=3OB+0jGpxFwrZAsIyEldxAoXpAeGJJFDaADP02UbZ6Y=;
+        s=k20201202; t=1692210337;
+        bh=Ys/SLUYq/H+BiAWtcmpLi2aTECuJmmf1YViHNLiOGv0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=pLPA/M2b43PpYjHnx+0qs78n7RbS7ICWBdrhoE9miyi4i/k9arS1LhLlwomsWht9C
-         QtnHQsjVLfI/T7zgbVKl204VS6bOCWFZJmnKQ8YhypCTl68mjXGGOJ8Kmx7fh+BpAR
-         MW248OtcPR4ggqrZhhfLEqCjt9QiIaestczNAsnOZBaS/4l5OQOv7fVen6X9kTgG1v
-         Vxvj5w/yfUjW37MCYaZUpA+I7BX286WkUUK4mMwq/HNDMNlhHa3fEktWtAlNirOmPP
-         fX+Qz57JmZ5E0LC1dA0cEaYpQbayd8YhpMTttHEJF1sKqUy5jv2rJi0UbtyBAnYsql
-         wo4XaatP2rv5w==
+        b=sK8La1GXuqPkxEAU+SJMidW38QovsSK6P/gSObqpJZ2z5OmAFUIx2Mx7u851s1UZC
+         EynWQO8UJXu/bPZSHAaLCJwwut3Xoncp/KyTVWDA8MBY0iVObyAUfM2ZOWOdRNoDXZ
+         IBfBBtEc77dX+OqScF5oDqvKq1ndi94tEsZuwuFJUK+0cJtaAqe/QnPZb7gFBMPbhh
+         F/1uD+CYyTkfjs4t8IVTt/TNRr05Y2HCbQT67hFp+ztfybGD/PL9n/N6XhuIhHSV+V
+         CaBov5hH3gBZbdcZUNSCIgyJMOF0Us78aVdha5Oy4EzClgf7DpPYnyPC9FxIb54pxo
+         /rt07yzlpbHTw==
 From:   Will Deacon <will@kernel.org>
-To:     Andre Przywara <andre.przywara@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Shuah Khan <shuah@kernel.org>
+To:     Ding Xiang <dingxiang@cmss.chinamobile.com>, shuah@kernel.org,
+        catalin.marinas@arm.com
 Cc:     kernel-team@android.com, Will Deacon <will@kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] kselftest/arm64: build BTI tests in output directory
-Date:   Wed, 16 Aug 2023 19:25:23 +0100
-Message-Id: <169219342837.1947103.11802774487228057167.b4-ty@kernel.org>
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] kselftest/arm64: fix a memleak in zt_regs_run()
+Date:   Wed, 16 Aug 2023 19:25:24 +0100
+Message-Id: <169219182714.1944257.1703987051897216466.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20230815145931.2522557-1-andre.przywara@arm.com>
-References: <20230815145931.2522557-1-andre.przywara@arm.com>
+In-Reply-To: <20230815074915.245528-1-dingxiang@cmss.chinamobile.com>
+References: <20230815074915.245528-1-dingxiang@cmss.chinamobile.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 15 Aug 2023 15:59:31 +0100, Andre Przywara wrote:
-> The arm64 BTI selftests are currently built in the source directory,
-> then the generated binaries are copied to the output directory.
-> This leaves the object files around in a potentially otherwise pristine
-> source tree, tainting it for out-of-tree kernel builds.
+On Tue, 15 Aug 2023 15:49:15 +0800, Ding Xiang wrote:
+> If memcmp() does not return 0, "zeros" need to be freed to prevent memleak
 > 
-> Prepend $(OUTPUT) to every reference to an object file in the Makefile,
-> and remove the extra handling and copying. This puts all generated files
-> under the output directory.
 > 
-> [...]
 
 Applied to arm64 (for-next/selftests), thanks!
 
-[1/1] kselftest/arm64: build BTI tests in output directory
-      https://git.kernel.org/arm64/c/e08302ee46c9
+[1/1] kselftest/arm64: fix a memleak in zt_regs_run()
+      https://git.kernel.org/arm64/c/46862da15e37
 
 Cheers,
 -- 
