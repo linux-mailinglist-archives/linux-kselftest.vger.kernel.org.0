@@ -2,75 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA83B77E6FB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Aug 2023 18:54:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7329577E71E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Aug 2023 18:59:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239600AbjHPQxc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 16 Aug 2023 12:53:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45004 "EHLO
+        id S1345019AbjHPQ70 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 16 Aug 2023 12:59:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344961AbjHPQxI (ORCPT
+        with ESMTP id S1345021AbjHPQ64 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Aug 2023 12:53:08 -0400
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08045199B
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Aug 2023 09:53:07 -0700 (PDT)
-Received: by mail-il1-x131.google.com with SMTP id e9e14a558f8ab-34a91a25db9so2861395ab.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 16 Aug 2023 09:53:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1692204786; x=1692809586;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lTSeYU3JyTRpC8MJkT9sFIq+oIiYKkH14KvEcr7o5GA=;
-        b=BBzzif0AayYda7c4a9xibgNV0egsHz2CC+x+7A2T4Hgb7Noi0B4ZQCjnOk06IN4ydd
-         GQNecB6WPh1L6q2HFIvWUmHWGugTWfAhSgg94xGIkLhd76Y8GmsjtfNP0fMWlnEqEYO3
-         /2Fm3IXGCiyE4FmUABsfCWEdyutTyTaCDu3M4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692204786; x=1692809586;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lTSeYU3JyTRpC8MJkT9sFIq+oIiYKkH14KvEcr7o5GA=;
-        b=WGyLoBQPscHnnr8Wv5NNl8G+zbPqkgCCVix10VEp892mHLot0wTb82vTkLiAAaIvPl
-         LedsFOdyuJFyaZb5mtDpWWXiMRTxF39c2+J/eMHpvuGPHMKo6C3yfzriOqfsgil3Ag+B
-         v3gc9+o7gPAXoRNL2aOx56UhUw6CTsEN0Z9rU4fsF3fuNXkRBrPypE8zPANBnmA5LAMU
-         zHfPx06Ot3VMQXpCawevxQTK0c8FpOPb32AIMcZnXRc87hWlxet85sR7bmfEY0phcFck
-         JMKVn4SsxVFsMmzfcqlr7D3UySzw/LMc1Nrebc9Tm3xaTIKkOqKCH7UqQhaa6l9Dn9BR
-         oeZA==
-X-Gm-Message-State: AOJu0Yyp8Xf4dmT7I2a8iwBsIAZU1GQruzU+edMVAIY0abrtHmoFh4nI
-        ffS6bR6ZxhFrcYSyWllqaudVIA==
-X-Google-Smtp-Source: AGHT+IGvK6s5Yc2BIInO8ztWs1EXMoonbB3rlX4P/LXTaEaHSUlEyofeK7VM2BgXuyJrq2wnnPBmWw==
-X-Received: by 2002:a92:b0c:0:b0:349:983c:4940 with SMTP id b12-20020a920b0c000000b00349983c4940mr3556570ilf.1.1692204786417;
-        Wed, 16 Aug 2023 09:53:06 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id b16-20020a92db10000000b003424b3d6d37sm4759933iln.24.2023.08.16.09.52.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 16 Aug 2023 09:53:05 -0700 (PDT)
-Message-ID: <3193a5a7-ea3b-e6ed-d42c-fa034c2affdc@linuxfoundation.org>
-Date:   Wed, 16 Aug 2023 10:52:34 -0600
+        Wed, 16 Aug 2023 12:58:56 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 172AB1FC3;
+        Wed, 16 Aug 2023 09:58:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=D2PHbo0EsztXcxRMSJk7ynouAeB9gcGPg6mbvGpkXA4=; b=IIimy8fCNOMjHgos9lmvKWQNPN
+        iGfrBehzONu1qS59k07b7d4+YSOY2ES5Aa2jREQdOhs5mWLvtcfwYgxILvNudfv0eYVQkIJxW95Yk
+        XobtiM/k/tdcKCxBA1aJOlkWkNqejmVyaWPqRJuNgFntjhyXIukStAHGGuTyjp4dsnwcjcs98gekD
+        x44e8cIyPL4NusHQsHlnHIgs4uU+PeSFnM/k2a90xxF8w0H+negx/xJajaBc0oEmc6l8tJYisMz9J
+        igd+Wzzy1mk9gk+BofvAr7NQMVqAxiIltqf8KOQx4Lt+R4vEKZyUTcevJ660YH5X2Za6s4c2S8TSk
+        JxYep2EQ==;
+Received: from sslproxy03.your-server.de ([88.198.220.132])
+        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1qWJqw-000AGF-TS; Wed, 16 Aug 2023 18:58:38 +0200
+Received: from [85.1.206.226] (helo=pc-102.home)
+        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1qWJqv-000SBc-R0; Wed, 16 Aug 2023 18:58:37 +0200
+Subject: Re: [PATCH bpf-next v4] selftests/bpf: trace_helpers.c: optimize
+ kallsyms cache
+To:     Rong Tao <rtoax@foxmail.com>, sdf@google.com, andrii@kernel.org
+Cc:     rongtao@cestc.cn, Mykola Lysenko <mykolal@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>,
+        Yonghong Song <yonghong.song@linux.dev>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        "open list:BPF [SELFTESTS] (Test Runners & Infrastructure)" 
+        <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <tencent_59C74613113F0C728524B2A82FE5540A5E09@qq.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <60da4749-3009-0e40-90bd-90cd03395e45@iogearbox.net>
+Date:   Wed, 16 Aug 2023 18:58:37 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH] selftests/futex: Order calls to futex_lock_pi
+In-Reply-To: <tencent_59C74613113F0C728524B2A82FE5540A5E09@qq.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Language: en-US
-To:     "Nysal Jan K.A" <nysal@linux.ibm.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        =?UTF-8?Q?Andr=c3=a9_Almeida?= <andrealmeid@igalia.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230814080927.61048-1-nysal@linux.ibm.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230814080927.61048-1-nysal@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.8/27002/Wed Aug 16 09:38:26 2023)
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -79,30 +75,114 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/14/23 02:09, Nysal Jan K.A wrote:
-> Observed occassional failures in the futex_wait_timeout test:
+On 8/16/23 3:36 AM, Rong Tao wrote:
+> From: Rong Tao <rongtao@cestc.cn>
 > 
-> ok 1 futex_wait relative succeeds
-> ok 2 futex_wait_bitset realtime succeeds
-> ok 3 futex_wait_bitset monotonic succeeds
-> ok 4 futex_wait_requeue_pi realtime succeeds
-> ok 5 futex_wait_requeue_pi monotonic succeeds
-> not ok 6 futex_lock_pi realtime returned 0
-> ......
+> Static ksyms often have problems because the number of symbols exceeds the
+> MAX_SYMS limit. Like changing the MAX_SYMS from 300000 to 400000 in
+> commit e76a014334a6("selftests/bpf: Bump and validate MAX_SYMS") solves
+> the problem somewhat, but it's not the perfect way.
 > 
-> The test expects the child thread to complete some steps before
-> the parent thread gets to run. There is an implicit expectation
-> of the order of invocation of futex_lock_pi between the child thread
-> and the parent thread. Make this order explicit. If the order is
-> not met, the futex_lock_pi call in the parent thread succeeds and
-> will not timeout.
+> This commit uses dynamic memory allocation, which completely solves the
+> problem caused by the limitation of the number of kallsyms.
 > 
-> Fixes: f4addd54b161 ("selftests: futex: Expand timeout test")
-> Signed-off-by: Nysal Jan K.A <nysal@linux.ibm.com>
+> Acked-by: Stanislav Fomichev <sdf@google.com>
+> Signed-off-by: Rong Tao <rongtao@cestc.cn>
 > ---
+> v4: Make sure most cases we don't need the realloc() path to begin with,
+>      and check strdup() return value.
+> v3: https://lore.kernel.org/lkml/tencent_50B4B2622FE7546A5FF9464310650C008509@qq.com/
+>      Do not use structs and judge ksyms__add_symbol function return value.
+> v2: https://lore.kernel.org/lkml/tencent_B655EE5E5D463110D70CD2846AB3262EED09@qq.com/
+>      Do the usual len/capacity scheme here to amortize the cost of realloc, and
+>      don't free symbols.
+> v1: https://lore.kernel.org/lkml/tencent_AB461510B10CD484E0B2F62E3754165F2909@qq.com/
+> ---
+>   tools/testing/selftests/bpf/trace_helpers.c | 46 ++++++++++++++++-----
+>   1 file changed, 36 insertions(+), 10 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
+> index f83d9f65c65b..a1461508925e 100644
+> --- a/tools/testing/selftests/bpf/trace_helpers.c
+> +++ b/tools/testing/selftests/bpf/trace_helpers.c
+> @@ -18,10 +18,35 @@
+>   #define TRACEFS_PIPE	"/sys/kernel/tracing/trace_pipe"
+>   #define DEBUGFS_PIPE	"/sys/kernel/debug/tracing/trace_pipe"
+>   
+> -#define MAX_SYMS 400000
+> -static struct ksym syms[MAX_SYMS];
+> +static struct ksym *syms;
+> +static int sym_cap;
+>   static int sym_cnt;
+>   
+> +static int ksyms__add_symbol(const char *name, unsigned long addr)
+> +{
+> +	void *tmp;
+> +	unsigned int new_cap;
+> +
+> +	if (sym_cnt + 1 > sym_cap) {
+> +		new_cap = sym_cap * 4 / 3;
+> +		tmp = realloc(syms, sizeof(struct ksym) * new_cap);
+> +		if (!tmp)
+> +			return -ENOMEM;
+> +		syms = tmp;
+> +		sym_cap = new_cap;
+> +	}
+> +
+> +	tmp = strdup(name);
+> +	if (!tmp)
+> +		return -ENOMEM;
+> +	syms[sym_cnt].addr = addr;
+> +	syms[sym_cnt].name = tmp;
+> +
+> +	sym_cnt++;
+> +
+> +	return 0;
+> +}
 
-Thank you. Applied to linux-kselftest next for Linux 6.6-rc1.
+Since this patch is about improving the load_kallsyms_refresh(), I mentioned in the v3
+that it would also be good to have the counterpart to release the allocated memory once
+the test concluded or upon error given it's dynamically allocated.
 
-thanks,
--- Shuah
+>   static int ksym_cmp(const void *p1, const void *p2)
+>   {
+>   	return ((struct ksym *)p1)->addr - ((struct ksym *)p2)->addr;
+> @@ -33,9 +58,14 @@ int load_kallsyms_refresh(void)
+>   	char func[256], buf[256];
+>   	char symbol;
+>   	void *addr;
+> -	int i = 0;
+> +	int ret;
+>   
+> +	/* Make sure most cases we don't need the realloc() path to begin with */
+> +	sym_cap = 400000;
+>   	sym_cnt = 0;
+> +	syms = malloc(sizeof(struct ksym) * sym_cap);
+> +	if (!syms)
+> +		return -ENOMEM;
+>   
+>   	f = fopen("/proc/kallsyms", "r");
+>   	if (!f)
+> @@ -46,15 +76,11 @@ int load_kallsyms_refresh(void)
+>   			break;
+>   		if (!addr)
+>   			continue;
+> -		if (i >= MAX_SYMS)
+> -			return -EFBIG;
+> -
+> -		syms[i].addr = (long) addr;
+> -		syms[i].name = strdup(func);
+> -		i++;
+> +		ret = ksyms__add_symbol(func, (unsigned long)addr);
+> +		if (ret)
+> +			return ret;
+>   	}
+>   	fclose(f);
+> -	sym_cnt = i;
+>   	qsort(syms, sym_cnt, sizeof(struct ksym), ksym_cmp);
+>   	return 0;
+>   }
+> 
 
+Thanks,
+Daniel
