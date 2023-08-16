@@ -2,168 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 475FC77EC42
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Aug 2023 23:53:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9058A77ED63
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Aug 2023 00:48:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346666AbjHPVw4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 16 Aug 2023 17:52:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45722 "EHLO
+        id S241955AbjHPWre (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 16 Aug 2023 18:47:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236987AbjHPVwb (ORCPT
+        with ESMTP id S1347097AbjHPWr3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Aug 2023 17:52:31 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A90511FD0;
-        Wed, 16 Aug 2023 14:52:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692222750; x=1723758750;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=rVl1VQ0/Pu6clkHkTiiKPvTNmDFEMjrN3oynjf9M8pg=;
-  b=f5zddQci9BgNwEPZ6eZOR8oZUCh0dycUx7N1hwnGpHGUWUwab+XR+RgO
-   wYju3OxIlfCZbwHUzKu4orK/UrlHczx06L2Lq/IprIQ/Qmu8BXCmIuQna
-   fQ5VIPXQ/jjbZ2/eHYjscn/Yx25Zbfr++3aNDL2pnQ/Lb4nDtaP36EN04
-   TYtjq4QJbuO9uyllrBbX/HbQ7x6ecsDGIVa11hOcgLdYNKu8/9K+wHuHO
-   SB9VndbC1aijXcuFKoEq4P1R32/2Z642uHhKxlfVnSxZwpyDDcj4mfGV+
-   XxD1RWbouTNRqo3OQxfxSEKQdco2MNb0mptewAtSWGwhLG/uKTjXh4rdR
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="439002330"
-X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="439002330"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2023 14:52:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="737451506"
-X-IronPort-AV: E=Sophos;i="6.01,178,1684825200"; 
-   d="scan'208";a="737451506"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga007.fm.intel.com with ESMTP; 16 Aug 2023 14:52:29 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Wed, 16 Aug 2023 14:52:29 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Wed, 16 Aug 2023 14:52:29 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27 via Frontend Transport; Wed, 16 Aug 2023 14:52:29 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.176)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.27; Wed, 16 Aug 2023 14:52:28 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ChQNu4Y5IGFn3QDpdipDfP7XJF5dDfCafHaLJQuRe6xaAvl9gp57bBg6gJU1V9+SWEX1Fa10w1FHuFRB0und/jgvbJ5Xg0vt0+/TruOk63RFtPrR19zsKtWfy14jHvRguS8B7DRsiCw9Su67fQSYdzGySqtVO+ARAfPh3mjjry9ccLod+AHHbG9uniMM8pxymlh6qfMpX4MqKEKD2oeYZ1I32T1bPIEwj1wOTCvzGs6+Hflj29iGPCv+njsJ5hUpkYrZM8P9mSk3fd0LiagBJrASwC2LBcrwPTPmuuzv47xOTXMIzWZobhbmy+XEcRxeGCwUwzvRXlDjBUoAitoDAQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DtEKJBD9nHucPOgMtgv0e0EkL40tO+dCgw+2/8RVjlc=;
- b=BBHDchFAqIXQV4ZykdpxiHT9jSMEaLqvcqfYmmY4/L+YE3L1pFsHvqu8UPpImbW1YH3WT1UsBAfwtYVgpElPcUqXRN8S5Cf2FtFWMDFYACK20NQrFuNuFwEpf1KTOdofGNx6on+aE6GtoOyTRXUCcrjr19C8ulJNTaMpGxBbWAOIiPifPxfeTbMZsHs4yM5cHISRiW0gWBbsjXu+OlJYcoJqE5Sym6iNnPRQqE+11HD1e+mkGGF6PRVI+q9TgPFtBU6LX+ZgWJdPDBHHB92glkj8zumVf1cbdbK4W6EXXyknTBj09j6l/VVA/vNRR2vYPgGzgekBEKabMkrs5isx5g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SJ2PR11MB7573.namprd11.prod.outlook.com (2603:10b6:a03:4d2::10)
- by CH3PR11MB7250.namprd11.prod.outlook.com (2603:10b6:610:149::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6678.29; Wed, 16 Aug
- 2023 21:52:26 +0000
-Received: from SJ2PR11MB7573.namprd11.prod.outlook.com
- ([fe80::47e:3e1f:bef4:20e0]) by SJ2PR11MB7573.namprd11.prod.outlook.com
- ([fe80::47e:3e1f:bef4:20e0%3]) with mapi id 15.20.6678.025; Wed, 16 Aug 2023
- 21:52:25 +0000
-Message-ID: <bacc2e6f-f747-ec65-b23b-4275d1cac018@intel.com>
-Date:   Wed, 16 Aug 2023 14:52:22 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.14.0
-Subject: Re: [PATCH 5/7] selftests/resctrl: Use pointers to build benchmark
- cmd and make it const
-Content-Language: en-US
-To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>
-CC:     Shuah Khan <skhan@linuxfoundation.org>,
-        <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
-        Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
-References: <20230808091625.12760-1-ilpo.jarvinen@linux.intel.com>
- <20230808091625.12760-6-ilpo.jarvinen@linux.intel.com>
- <f300a52c-d65f-fd74-18ce-7d37e76d144f@intel.com>
- <dd83f672-b9fc-cd79-10ff-70651d4822af@linux.intel.com>
- <87183b24-f343-2420-9bda-f1012e7195a1@intel.com>
- <f22efaf4-d87f-d3c4-b986-7d326c912a18@linux.intel.com>
-From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <f22efaf4-d87f-d3c4-b986-7d326c912a18@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: MW4PR04CA0077.namprd04.prod.outlook.com
- (2603:10b6:303:6b::22) To SJ2PR11MB7573.namprd11.prod.outlook.com
- (2603:10b6:a03:4d2::10)
+        Wed, 16 Aug 2023 18:47:29 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D7E12723
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Aug 2023 15:47:18 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id d75a77b69052e-40c72caec5cso125611cf.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 16 Aug 2023 15:47:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1692226038; x=1692830838;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gmAfMTPz4eh29CLf8sk04qA9x8l/5iZhtjn1NdNuQus=;
+        b=wIBTRZDkz6UQoktGyqxoTeEQiN6IHsdC3DKvn5H/h2iBRaohFe6JXoyF0NoAg/2tBp
+         pRlR+f/oy57QNKyAN14VMwjBN74w57rH/wr/BPlQeKkBa94KsFYRDmoYjCTp8kCV6hzO
+         DoGfbSoSyB9LY2seA1Dqat7bdi9sSxxPWwU1cnXjLX5zzGwDp7FWLBUSyJX7sehzokvT
+         GAUMhsc9pZ1Ooyt7lUb0tKj/6Nk4Xi5Q5zftKU53KqgbmokxHTGTOWITXYBDivdT4Ob9
+         l/z7ZDuqhiAy8tYSstQMSnht+l47Z0hVa9IsskRBLmlp7Ij+82KBTY14k7C8V66GPHLc
+         dxhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692226038; x=1692830838;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gmAfMTPz4eh29CLf8sk04qA9x8l/5iZhtjn1NdNuQus=;
+        b=SSrKl3j3KUNHTHBhTpTItDrCORN1lE7zZo9gdJbC7wB3ZGNxo/ILzxyK5B2xIrq1K6
+         LSTnFvscPxIbuWXpysIQMVcRzTjUQDKCW+sbNFt8e5053kAxKkSgKa9iNMNaA4h/LO9C
+         Pgl/7vb1DvX4OaNC59bJVOU7uxXtqc1k0LeYvbLmfF9/Yq6ZvUTDarxEJQIirHJue6+C
+         JpkYdGiBVuBKio4iecjP1BRARAOT1zhoD6UZwL8ta2rP8qxp8PM2APF6DckEcQbNguX3
+         L9DXiaR2LaxcRXtvKXMLOSN7xa9pgSf/9Zt4bW5fg6ZRKbJSd2chGQHlluku0s0GQFkh
+         KTpA==
+X-Gm-Message-State: AOJu0YxyEJ3IkUqF1I01iMozKTPO17a3liUmfLxUfFtrDAJ/lreDbTP9
+        HojB845tuJLn7Bqs883fOn24NRcEUj0vaS6pnVldHQ==
+X-Google-Smtp-Source: AGHT+IGKhVtNgZhUpSQYcnybxaqwvR/y997m77QY4GFoPXa9zfEq+ZbGp4ISpTVoDw/ZKneDf0Bl3pDyVZg2gBas0+c=
+X-Received: by 2002:ac8:118b:0:b0:40f:ec54:973 with SMTP id
+ d11-20020ac8118b000000b0040fec540973mr93254qtj.22.1692226037853; Wed, 16 Aug
+ 2023 15:47:17 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ2PR11MB7573:EE_|CH3PR11MB7250:EE_
-X-MS-Office365-Filtering-Correlation-Id: 819cf327-8151-4715-3d85-08db9ea313f7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: j984ab/JZCqr1D2sB8TyrsoS+iaDhBatshFIhz2iVzgPG1DTPYJV1wGhkMwR5gF9Z5F5X7d3CUFvwN41OgapcO9qd05bKDUjTuUf+z38fsRwCMi4r2U2Ky6CGlOT0hU3AFzGjuK6QDtTNO5CPi9LkV8py9Fe4g+0P+aZ/aXYlmbAsbOgU4JpAIaoeM32qeg5dyz6ZBTQOHZG2Wm31l7lrSBR+RPh7JDNqykEF7NSxKI2X2B4eLMP7vyBRN3J3lnVwPB2KTjZOHRN+cacHAHK3e2/1dkiK06jwB+tuhwQdP5YaRx4ahw41Q9y8TQNnmFiu0kJjBmKuw5YEBvOfcTi7VDiFSpLN8I+Ei1dRMp+RpKekuZoK5nf6XfMTFIMtWLPwHNMHQWMLrelkRbLEeySklv1pknYiUHgyR8ocgjmbtHuiEuEqQ8eoOmqpgVzx3aW64Un711Px6dDjjBRuLgyAly5SXNxhBJ0ZGUMz+4036VAv1Xkuu16/UStwcTQFHGERKDPsKqSVNhbkjzf8CnsW3CO+40GSyTrXlWqJG3OK1huUMjgc/QHeofebJ9OiEKqo6rbADnP6Bsx1SApq5wyVqbwYlJCxM3S6670hESK7Oq8F+0h68lEf47og4ZziMTe0oKjlUy9/B+/+H+VKCVjhQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7573.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(396003)(136003)(346002)(366004)(376002)(451199024)(1800799009)(186009)(316002)(54906003)(6916009)(66946007)(66556008)(66476007)(5660300002)(41300700001)(44832011)(31686004)(38100700002)(8676002)(4326008)(8936002)(82960400001)(2906002)(26005)(478600001)(86362001)(53546011)(6512007)(31696002)(36756003)(6506007)(6666004)(6486002)(2616005)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UmdzMFhrT2l3VW1HSjQ1QUhEeHdWd2tNVUlMM1lIYWxKcEpJcXNtSURzQXUv?=
- =?utf-8?B?RFQwWVB6S2lPeUpZZnFDZHVkY2RkMEJvZEVRWGJFYU9HVVh6ZVplMkZRUUhz?=
- =?utf-8?B?Q29ZUERDc3RpcVJNZ2c5bWtpckNNZUJoZ3BLOVY2NU1sYnEvcG9yeFdkckZV?=
- =?utf-8?B?YWRZd3V2OXFtcUFXa2EwZ1RBZXVlSnliVGFML2xRWjU5bjlidjVBbmYrMnFF?=
- =?utf-8?B?eCthcVFqbnBxZlZFcUY0UWQ1R3RKM2FMK3NTTVFockRoTWJaUks2bytPNzlU?=
- =?utf-8?B?QnBhUk8yK1FYemh5SmJUN3MxR2xOK2o4UjNmaXJzanRORklNUjA0STdla1R6?=
- =?utf-8?B?V2RZeHNXcVRla2hiTjg0cUtLSWtoT0hETXp5cHNjd25QRERPZXFYRnhGK1ZY?=
- =?utf-8?B?cHRMenpMd05ndWF4bS9rUzlzc3ZxZ0dLbE9zUExHYmR2SncvNnI0MXBJNzhM?=
- =?utf-8?B?ZGVsU1U0QmM3cnhLL2hWREFCZTh1NlJNM3Bqa3VvOGZkM1RGVnJjMW9JNlpi?=
- =?utf-8?B?c0FQQWl5Z3plR1gra1N1aDNad2p4eVNEWk1UVkxuTFBQWElpaVNZZTYxelJP?=
- =?utf-8?B?SkNVcVFYc3VlR0dQTDhGWU43TThLbDNRSkc3WjVweFZ3WUMzS2FKWlJpMVMr?=
- =?utf-8?B?VXNnZVh4aWZSb2x6dXNwOEZsOEEzRWc4b3FtYnNJaElycFFLUS85YUdtek1Q?=
- =?utf-8?B?bmxDcS9MbXN5RUROZXp1ZGZwdk5ackVMTDAxbllicVVlbzRzVlFvUFR1eTlC?=
- =?utf-8?B?V2s3aHphUFo3cktFeHQ1eTFvcUoxTU1TOHdKZWlpbFNZWnBqTlRoRGUvT0hu?=
- =?utf-8?B?c0xJWEZOU1RjQWR3VDBNSGV0TUtrT1BVRXhub2c1dVhZOEFLZkpTUVZxaW13?=
- =?utf-8?B?UmFoSTArMzZHb1F5OUhjZUErcjk2c2xiQUpqUWFpU1NWVkYyRmlieTRoZWtz?=
- =?utf-8?B?d1J0LzQ1clRyellNNTNocFlTVnRSOVZGc0FydVlUQlFCU0tnS1ZjVW1LcCsx?=
- =?utf-8?B?Ky9oUllQQVZvcUpFZHMvN0FPRG1xN1pPYWZ4Z21KRFBOTVFvZkx0bTlwaUpX?=
- =?utf-8?B?SDcvYzgwQUtsSmpjeVMva3kvaUZMejFKZ2VOLzhpYTJMWmV6eWtJcnhBRTl3?=
- =?utf-8?B?WXVRRXkzczlEcEpETnA3YWF2UklMQW1WdytJZUpXWExYL2pMZkhJZWlJdmQw?=
- =?utf-8?B?UEh1bCsrRDR1ZEUvdXBpTXA3RUhRbjBsMUh6bmJPY0pRZDZhVlpTQjNHT1BH?=
- =?utf-8?B?dDR0S1VQVGdYeHRLR2ppRE0xc3RSU0xCN3pxSThPRWE0S2lQZG5COHlBbmxn?=
- =?utf-8?B?cnFVbUhZb0ZFbU1ZOGNQRGJVQVl0UVhMWnRCa1pKVXdnSzBJdnRidkEwUllh?=
- =?utf-8?B?M3BaWVd2N2dranJtRjZmaVh0cVp4akVyV09hZFpWSCtEWWdFbTRoZDVvSGZu?=
- =?utf-8?B?QkgyQjdNcU9RczU4N09rb0w4TXFWVGROUGNNQ1RYeU55WXNZM3MvcTRQVGts?=
- =?utf-8?B?S1A0K0RHMThWSzV2U1RTQlBIcEtlMVg4cjFoNXJpL1hGNngvczZia2JvMFlK?=
- =?utf-8?B?bStLaVFZVnh2ODUwSm9DMDVWUTNlRmxPUGx3VWdSUlRZOEp2MXdaSW0wWitz?=
- =?utf-8?B?M09sZER4cjBUMkVNR2l5WXJ5ZkNMRUJUeEx5bjZidlZWQzZSbFZrZ3VUWkZy?=
- =?utf-8?B?Qng0QW5GSkFBVGJWQkZYTnVNYnY3MjR1QmFSY3BFRHRiWEZ2SGl1eVBZd2dH?=
- =?utf-8?B?Rm9SWWVEK2xqOUYvcE1UVzg4OVpRenNYMzh2amZTRkQ2UXBHaUtUaWE1dGRi?=
- =?utf-8?B?bHZNQUpiaWM1TnZUSDNkaEphNkdxYUZweDhiaHpOS2hKTVpCbmdWczV6SFZW?=
- =?utf-8?B?MVNMbURaMUpmSWF0NDZraWxaRjliS0Y0dWg0bG1SM3BpM1JhVXRvMkpROWlW?=
- =?utf-8?B?ZzZDOG5LR2U2MGlzcDZkR3BjSlhsY2d1RCs1cWVrZnFjcm9WSHJMOFgyaE9u?=
- =?utf-8?B?WHdSRkE2WTNNZW9EaVJ4YVE2dEFtcTRUc1dmcFBZZ2VoVW4vUWZkcjE0aVRk?=
- =?utf-8?B?UkNNM05mSTFSNFArSGp2WGhSbWdYZ3hGc0tHTlVPSU9FYmgyZHJqOVV5NlJO?=
- =?utf-8?B?bXAxRjlabUgxbmxRaDExN3VRWlFsbUM1TkVQdExqOXBhTEZvT3pCK2N6Y0tD?=
- =?utf-8?B?Ync9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 819cf327-8151-4715-3d85-08db9ea313f7
-X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB7573.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Aug 2023 21:52:25.6372
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cygU160FmBSgVZpv42YkBT6kPqzxGK66u3RR8EueZ8VolTJHHL4sIJq++gZQvjxIX+dtS647rkRXpoWoS0CGPiePFUqEVqWKpGKhxAaYw1c=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR11MB7250
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+References: <20230814-memfd-vm-noexec-uapi-fixes-v2-0-7ff9e3e10ba6@cyphar.com>
+ <20230814-memfd-vm-noexec-uapi-fixes-v2-4-7ff9e3e10ba6@cyphar.com>
+ <CALmYWFvxLee5+RyLh=vo6kpwMVS-_C7BJ9kmTPDa2tetgHOHPw@mail.gmail.com> <ZNxiLe_jkXpxh3QU@codewreck.org>
+In-Reply-To: <ZNxiLe_jkXpxh3QU@codewreck.org>
+From:   Jeff Xu <jeffxu@google.com>
+Date:   Wed, 16 Aug 2023 15:46:41 -0700
+Message-ID: <CALmYWFvk5N2p4_ANzq0NrcLaMRHrYqpNxzHWi8kvD59aC5ayhg@mail.gmail.com>
+Subject: Re: [PATCH v2 4/5] memfd: replace ratcheting feature from
+ vm.memfd_noexec with hierarchy
+To:     Dominique Martinet <asmadeus@codewreck.org>
+Cc:     Aleksa Sarai <cyphar@cyphar.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Daniel Verkamp <dverkamp@chromium.org>,
+        Christian Brauner <brauner@kernel.org>, stable@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -171,71 +79,109 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Ilpo,
+On Tue, Aug 15, 2023 at 10:44=E2=80=AFPM Dominique Martinet
+<asmadeus@codewreck.org> wrote:
+>
+> Jeff Xu wrote on Tue, Aug 15, 2023 at 10:13:18PM -0700:
+> > > Given that it is possible for CAP_SYS_ADMIN users to create executabl=
+e
+> > > binaries without memfd_create(2) and without touching the host
+> > > filesystem (not to mention the many other things a CAP_SYS_ADMIN proc=
+ess
+> > > would be able to do that would be equivalent or worse), it seems stra=
+nge
+> > > to cause a fair amount of headache to admins when there doesn't appea=
+r
+> > > to be an actual security benefit to blocking this. There appear to be
+> > > concerns about confused-deputy-esque attacks[2] but a confused deputy=
+ that
+> > > can write to arbitrary sysctls is a bigger security issue than
+> > > executable memfds.
+> > >
+> > Something to point out: The demo code might be enough to prove your
+> > case in other distributions, however, in ChromeOS, you can't run this
+> > code. The executable in ChromeOS are all from known sources and
+> > verified at boot.
+> > If an attacker could run this code in ChromeOS, that means the
+> > attacker already acquired arbitrary code execution through other ways,
+> > at that point, the attacker no longer needs to create/find an
+> > executable memfd, they already have the vehicle. You can't use an
+> > example of an attacker already running arbitrary code to prove that
+> > disable downgrading is useless.
+> > I agree it is a big problem that an attacker already can modify a
+> > sysctl.  Assuming this can happen by controlling arguments passed into
+> > sysctl, at the time, the attacker might not have full arbitrary code
+> > execution yet, that is the reason the original design is so
+> > restrictive.
+>
+> I don't understand how you can say an attacker cannot run arbitrary code
+> within a process here, yet assert that they'd somehow run memfd_create +
+> execveat on it if this sysctl is lowered -- the two look equivalent to
+> me?
+>
+It might require multiple steps for this attack, one possible scenario:
+1> control a write primitive in CAP_SYSADMIN process's memory,  change
+arguments of sysctl call, and downgrade the setting for memfd, e.g. change
+it=3D0 to revert to old behavior (by default creating executable memfd)
+2> control a non-privileged process that creates and writes to
+memfd, and write the contents with the binary that the
+attacker wants. This process just needs non-executable memfd, but
+isn't updated yet.
+3> Confuse a non-privilege process to execute the memfd the attacker
+wrote in step 2.
 
-On 8/16/2023 12:13 AM, Ilpo Järvinen wrote:
-> On Tue, 15 Aug 2023, Reinette Chatre wrote:
->> On 8/15/2023 2:42 AM, Ilpo Järvinen wrote:
->>> On Mon, 14 Aug 2023, Reinette Chatre wrote:
->>>>
->>>> On 8/8/2023 2:16 AM, Ilpo Järvinen wrote:
+In chromeOS, because all the executables are from verified sources,
+attackers typically can't easily use the step 3 alone (without step
+2),  and memfd was such a hole that enables an unverified executable.
 
-...
->>>>> diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
->>>>> index bcd0d2060f81..ddb1e83a3a64 100644
->>>>> --- a/tools/testing/selftests/resctrl/resctrl.h
->>>>> +++ b/tools/testing/selftests/resctrl/resctrl.h
->>>>> @@ -6,6 +6,7 @@
->>>>>  #include <math.h>
->>>>>  #include <errno.h>
->>>>>  #include <sched.h>
->>>>> +#include <stdint.h>
->>>>>  #include <stdlib.h>
->>>>>  #include <unistd.h>
->>>>>  #include <string.h>
->>>>> @@ -38,7 +39,14 @@
->>>>>  
->>>>>  #define END_OF_TESTS	1
->>>>>  
->>>>> +#define BENCHMARK_ARGS		64
->>>>> +
->>>>> +/* Approximate %zu max length */
->>>>> +#define SIZE_MAX_DECIMAL_SIZE	(sizeof(SIZE_MAX) * 8 / 3 + 2)
->>>>> +
->>>>> +/* Define default span both as integer and string, these should match */
->>>>>  #define DEFAULT_SPAN		(250 * MB)
->>>>> +#define DEFAULT_SPAN_STR	"262144000"
->>>>
->>>> I think above hardcoding can be eliminated by using asprintf()? This
->>>> does allocate memory though so I would like to understand why one
->>>> goal is to not dynamically allocate memory.
->>>
->>> Because it's simpler on the _free() side_. If there's no allocation, no 
->>> free() is needed.
->>>
->>> Only challenge that remains is the int -> string conversion for the 
->>> default span which can be either done like in the patch or using some 
->>> preprocessor trickery to convert the number to string. If you prefer the 
->>> latter, I can change to that so it's not hardcoded both as int and string.
->>>
->>
->> This manual int->string sounds like the trickery to me and can be avoided
->> by just using asprintf(). I understand that no free() is needed when no
->> memory is allocated but it looks to me as though these allocations can
->> be symmetrical - allocate the memory before the tests are run and free it
->> after?
-> 
-> It could be symmetrical but that means I'll be doing unnecessary alloc if 
-> -b is provided which I assume you're against given your comment on always 
-> creating copy of cmd in CMT test's case.
+In the original design, downgrading is not allowed, the attack chain
+of 2/3 is completely blocked.  With this new approach, attackers will
+try to find an additional step (step 1) to make the old attack (step 2
+and 3) working again. It is difficult but I can't say it is
+impossible.
 
-I seemed to have lost track here ... could you please elaborate where the
-unnecessary alloc will be?
+> CAP_SYS_ADMIN is a kludge of a capability that pretty much gives root as
+> soon as you can run arbitrary code (just have a look at the various
+> container escape example when the capability is given); I see little
+> point in trying to harden just this here.
 
-> 
-> I think I'll use similar resolution to this as CMT test does, it has an 
-> extra variable which is NULL in when -b is provided so free() is no-op
-> on that path. Then I can use asprintf().
-> 
+I'm not an expert in containers, if the industry is giving up on
+privileged containers, then the reasoning makes sense.
+From ChromeOS point of view, we don't use runc currently, so I think
+it makes more sense for runc users to drive these features.  The
+original design is with runc's in mind, and even privileged containers
+can't downgrade its own setting.
 
-Reinette
+> It'd make more sense to limit all sysctl modifications in the context
+> you're thinking of through e.g. selinux or another LSM.
+>
+I agree,  when I think more about this.
+Security features fit LSM better, LSM can do additional "allow/deny"
+on otherwise allowed behavior from user space code. Based on that,
+"disallow downgrading" fits LSM better.  Also from the same reasoning,
+I have second thoughts on the "=3D2", originally the "MEMFD_EXE was left
+out due to the thinking, if user code explicitly setting MEMFD_EXE,
+sysctl should not block it, it is the work of LSM. However, the "=3D2"
+has evolved to block MEMFD_EXE completely ... alas .. it might be too
+late to revert this, if this is what devs want, it can be that way.
+
+Thanks
+Best regards,
+-Jeff
+
+
+
+
+-Jeff
+
+> (in the context of users making their own containers, my suggestion is
+> always to never use CAP_SYS_ADMIN, or if they must give it to a separate
+> minimal container where they can limit user interaction)
+>
+>
+> FWIW, I also think the proposed =3D2 behaviour makes more sense, but this
+> is something we already discussed last month so I won't come back to it
+> as not really involved here.
+>
+> --
+> Dominique Martinet | Asmadeus
