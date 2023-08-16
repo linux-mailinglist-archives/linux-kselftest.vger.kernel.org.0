@@ -2,94 +2,141 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4FED77D811
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Aug 2023 04:01:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB03A77D89A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Aug 2023 04:54:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238830AbjHPCA5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 15 Aug 2023 22:00:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39504 "EHLO
+        id S241035AbjHPCyM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 15 Aug 2023 22:54:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241128AbjHPCAZ (ORCPT
+        with ESMTP id S241380AbjHPCyI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 15 Aug 2023 22:00:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29BEB2109;
-        Tue, 15 Aug 2023 19:00:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 08F4363077;
-        Wed, 16 Aug 2023 02:00:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 69EAFC433C8;
-        Wed, 16 Aug 2023 02:00:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692151223;
-        bh=NjdvKGLWlMm7qpdjzpjXl///wrEx0Ff//txitn47H6E=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=n4WmCbWX27u+ZIh/p0eXrmuek2LsQQdNPS0U/QI/6cWhLa2g9/rVxXAaQ0oa9RHRY
-         GoSi/cj3OWEY3pqR5zI1CxgzCuufiZHHCL5gC/6ckxkfTMKilg5UHqHQuQ+7EXvF/w
-         CqgroMJYG/7eX4hyZ+TrWpb4JqUKleVFpBrF9OmiI6NWNIens27z5MKQZPT9mxN/Pv
-         IIuFjXYsUoCd7FtKuTYjr1chLocxIgXDWgQ4+B45xDf2u4YQE9jeXdoTnUfa0Oqk7W
-         sZ4SHJXAJgE9vqLH6VDUY6oODnA2oAeOy/laAwhZeIUwuPIrgqSS8tgmufCIpju5+U
-         KmkxsPxRH+g+w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 53D55C39562;
-        Wed, 16 Aug 2023 02:00:23 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [net-next v2 0/2] seg6: add NEXT-C-SID support for SRv6 End.X
- behavior
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <169215122333.15326.393610409728204600.git-patchwork-notify@kernel.org>
-Date:   Wed, 16 Aug 2023 02:00:23 +0000
-References: <20230812180926.16689-1-andrea.mayer@uniroma2.it>
-In-Reply-To: <20230812180926.16689-1-andrea.mayer@uniroma2.it>
-To:     Andrea Mayer <andrea.mayer@uniroma2.it>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, dsahern@kernel.org, shuah@kernel.org,
+        Tue, 15 Aug 2023 22:54:08 -0400
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18169212E
+        for <linux-kselftest@vger.kernel.org>; Tue, 15 Aug 2023 19:54:07 -0700 (PDT)
+Received: by mail-qv1-xf2c.google.com with SMTP id 6a1803df08f44-6473fefcd23so4898976d6.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 15 Aug 2023 19:54:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cloudflare.com; s=google; t=1692154446; x=1692759246;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2jAVBy2MkmXmlDNRy4QvEu431ZhbMb0FhFH3eSVe50I=;
+        b=s1C2tL1gwzB9t1W8VGjfLV8zpPSqNILfvoZd7kA5FZ9giVSw/PctFcXKSiDXYkoGUj
+         1J3ikEOfXp+jpODaD5f7mpP0/lMAq0LmLyxnAz/lDqn5zuop//mbNmqaNG3n4CR7nOzd
+         3MJOvbDoMyc0pVW5eUOZfakv4t579QuSvvZRM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692154446; x=1692759246;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2jAVBy2MkmXmlDNRy4QvEu431ZhbMb0FhFH3eSVe50I=;
+        b=Yj/d7bScHrLbwsMeOPnMik4f+YWOzTWvpXMv15N+V32L8FjHho2CizYmYU8jO0Oj1y
+         DSOsp3VABTbKykXUtbiMIEJxDsiY0g2xgiq6ftkNnc28gk8TJgC2hwVDFCTs4IGOdaaf
+         nsVmpH90R1rEYv4ektUBxeJ1ukSNQSBubCemQWPhrFXu80wDVLrhllzQsWHF3ZuxfhMT
+         GfY+7y2dTWuQ+lSBS5msBFq4VI1LPiNXFE/cs1m55pOJHW4JrZPcXeyYY8AiE++9xXFK
+         fBGVyDVOgPS6/y2ZHU8ahg+F1CezDgIQSEL8x5TQQsxSX7iLi9q+JKPtj8Ksa1KcGNOq
+         Iu/A==
+X-Gm-Message-State: AOJu0YxuK4y4dhIo+Q2MJcVhJeE+CsoXQJe+FVi8LX93o5ES6qkpkIg6
+        KK2I43u6f0utBqN/gYF+WkP8og==
+X-Google-Smtp-Source: AGHT+IFUyON3WYFx3pyMbAY54IPL8txV66k0Ez5DFT6rOchV7FfvRatH9VayV7nsUi0glnx5sw9aFA==
+X-Received: by 2002:a0c:c444:0:b0:626:3a5a:f8dc with SMTP id t4-20020a0cc444000000b006263a5af8dcmr517063qvi.57.1692154446180;
+        Tue, 15 Aug 2023 19:54:06 -0700 (PDT)
+Received: from debian.debian ([140.141.197.139])
+        by smtp.gmail.com with ESMTPSA id c21-20020ae9e215000000b00765a9f53af0sm4136929qkc.128.2023.08.15.19.54.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 15 Aug 2023 19:54:05 -0700 (PDT)
+Date:   Tue, 15 Aug 2023 19:54:03 -0700
+From:   Yan Zhai <yan@cloudflare.com>
+To:     bpf@vger.kernel.org
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        David Ahern <dsahern@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Yan Zhai <yan@cloudflare.com>, Thomas Graf <tgraf@suug.ch>,
+        Jordan Griege <jgriege@cloudflare.com>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
         linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, stefano.salsano@uniroma2.it,
-        paolo.lungaroni@uniroma2.it, ahabdels.dev@gmail.com,
-        liuhangbin@gmail.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        linux-kselftest@vger.kernel.org, stable@vger.kernel.org
+Subject: [PATCH v5 bpf 0/4] lwt: fix return values of BPF ops
+Message-ID: <cover.1692153515.git.yan@cloudflare.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+lwt xmit hook does not expect positive return values in function
+ip_finish_output2 and ip6_finish_output. However, BPF programs can
+directly return positive statuses such like NET_XMIT_DROP, NET_RX_DROP,
+and etc to the caller. Such return values would make the kernel continue
+processing already freed skbs and eventually panic.
 
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+This set fixes the return values from BPF ops to unexpected continue
+processing, and checks strictly on the correct continue condition for
+future proof. In addition, add missing selftests for BPF_REDIRECT
+and BPF_REROUTE cases for BPF-CI.
 
-On Sat, 12 Aug 2023 20:09:24 +0200 you wrote:
-> In the Segment Routing (SR) architecture a list of instructions, called
-> segments, can be added to the packet headers to influence the forwarding and
-> processing of the packets in an SR enabled network.
-> 
-> Considering the Segment Routing over IPv6 data plane (SRv6) [1], the segment
-> identifiers (SIDs) are IPv6 addresses (128 bits) and the segment list (SID
-> List) is carried in the Segment Routing Header (SRH). A segment may correspond
-> to a "behavior" that is executed by a node when the packet is received.
-> The Linux kernel currently supports a large subset of the behaviors described
-> in [2] (e.g., End, End.X, End.T and so on).
-> 
-> [...]
+v4: https://lore.kernel.org/bpf/ZMD1sFTW8SFiex+x@debian.debian/T/ 
+v3: https://lore.kernel.org/bpf/cover.1690255889.git.yan@cloudflare.com/ 
+v2: https://lore.kernel.org/netdev/ZLdY6JkWRccunvu0@debian.debian/ 
+v1: https://lore.kernel.org/bpf/ZLbYdpWC8zt9EJtq@debian.debian/ 
 
-Here is the summary with links:
-  - [net-next,v2,1/2] seg6: add NEXT-C-SID support for SRv6 End.X behavior
-    https://git.kernel.org/netdev/net-next/c/7458575a07f1
-  - [net-next,v2,2/2] selftests: seg6: add selftest for NEXT-C-SID flavor in SRv6 End.X behavior
-    https://git.kernel.org/netdev/net-next/c/1c53717c8074
+changes since v4:
+ * fixed same error on BPF_REROUTE path
+ * re-implemented selftests under BPF-CI requirement
 
-You are awesome, thank you!
+changes since v3:
+ * minor change in commit message and changelogs
+ * tested by Jakub Sitnicki
+
+changes since v2:
+ * subject name changed
+ * also covered redirect to ingress case
+ * added selftests
+
+changes since v1:
+ * minor code style changes
+
+Yan Zhai (4):
+  lwt: fix return values of BPF ops
+  lwt: check LWTUNNEL_XMIT_CONTINUE strictly
+  selftests/bpf: add lwt_xmit tests for BPF_REDIRECT
+  selftests/bpf: add lwt_xmit tests for BPF_REROUTE
+
+ include/net/lwtunnel.h                        |   5 +-
+ net/core/lwt_bpf.c                            |   7 +-
+ net/ipv4/ip_output.c                          |   2 +-
+ net/ipv6/ip6_output.c                         |   2 +-
+ .../selftests/bpf/prog_tests/lwt_helpers.h    | 139 ++++++++
+ .../selftests/bpf/prog_tests/lwt_redirect.c   | 319 ++++++++++++++++++
+ .../selftests/bpf/prog_tests/lwt_reroute.c    | 256 ++++++++++++++
+ .../selftests/bpf/progs/test_lwt_redirect.c   |  58 ++++
+ .../selftests/bpf/progs/test_lwt_reroute.c    |  36 ++
+ 9 files changed, 817 insertions(+), 7 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/lwt_helpers.h
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/lwt_redirect.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/lwt_reroute.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_lwt_redirect.c
+ create mode 100644 tools/testing/selftests/bpf/progs/test_lwt_reroute.c
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.30.2
 
