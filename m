@@ -2,47 +2,47 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94E9F77EBBB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Aug 2023 23:27:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E34077EBCD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 16 Aug 2023 23:29:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346424AbjHPV0z (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 16 Aug 2023 17:26:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39022 "EHLO
+        id S1346488AbjHPV3H (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 16 Aug 2023 17:29:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346501AbjHPV0s (ORCPT
+        with ESMTP id S1346499AbjHPV2n (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 16 Aug 2023 17:26:48 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA71D1BE8;
-        Wed, 16 Aug 2023 14:26:46 -0700 (PDT)
+        Wed, 16 Aug 2023 17:28:43 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34241FD;
+        Wed, 16 Aug 2023 14:28:42 -0700 (PDT)
 Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id 605FA60174;
-        Wed, 16 Aug 2023 23:26:44 +0200 (CEST)
+        by domac.alu.hr (Postfix) with ESMTP id 19DF260174;
+        Wed, 16 Aug 2023 23:28:40 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1692221204; bh=qKCgEnpgvae4+SWUleyz/Br7qQr7Lwj+vKFlzTtf4f4=;
+        t=1692221320; bh=rIZf+tAqF67XAb0OfH9NkRmreg9cRVOUccORHUbh0H4=;
         h=From:To:Cc:Subject:Date:From;
-        b=RoCP8Q+imRVKysEr2nOOAqE/pHU4asus1gTj4j4rprDE6gnuCnqXwMhtFwwIKUB9Y
-         vyIbr5/nteC786Ajw0m9ZalOz5tpjXMSgp7hZTeBECHA/OhHovQSF/kfPb0giAWg8o
-         PgmzYSl62s3VN+82PSLG/cclTt3ywj9N5pC9yFmHeHaGYuk6nAUvbAUTYPXxREa7yd
-         J4aWZkkVmvdpPtKwl8ZLd9ps1RDOuouSdvgZ3yQ7rshyIbnQ39tH3nptFseKHchqcq
-         0WaohEqrQVXfn4QpCAaGyIHfn6xdzsJDkjTd6NCVBq4TDfEleUyZGP3HfHZKo1VMOU
-         CYPM1/bvoEYdg==
+        b=ip8HZAJDpPj4BkPt74Lq9cHX2vfPStRQpP7FbobsLN1TTqe10LT+MixTwEAaOEBsF
+         oWK0r2HuOPsrVjtIboxyzlw3b0IEIF1+Znp/bEaWY4IvSWROWft3gH+BEnAXQ45loi
+         k3chfVnEcxr8wpy0UNfoCYBM6g1kpRiCdvT+FeIWAx0fVUkraR8+6EB6xE6OeRr/8A
+         ICQAru91zWnNjB9WNPyaH8E8DqIxZ1OkISAhaX3s+7SOlzpFtOT0lNA2gwPyWHgl9K
+         +tlfom2aszpaiUdbzsw8mj7XigOShBCvDHkzIp2jkc47m5nljKRkcVlTcaEIce7Ip6
+         aigUO4Qq9wE8A==
 X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
 Received: from domac.alu.hr ([127.0.0.1])
         by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id jmYuHQsEBa5M; Wed, 16 Aug 2023 23:26:40 +0200 (CEST)
+        with ESMTP id YeHIiorDg4g1; Wed, 16 Aug 2023 23:28:36 +0200 (CEST)
 Received: from defiant.. (unknown [94.250.191.183])
-        by domac.alu.hr (Postfix) with ESMTPSA id D36C36015E;
-        Wed, 16 Aug 2023 23:26:32 +0200 (CEST)
+        by domac.alu.hr (Postfix) with ESMTPSA id 39A6B6015E;
+        Wed, 16 Aug 2023 23:28:36 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1692221200; bh=qKCgEnpgvae4+SWUleyz/Br7qQr7Lwj+vKFlzTtf4f4=;
+        t=1692221316; bh=rIZf+tAqF67XAb0OfH9NkRmreg9cRVOUccORHUbh0H4=;
         h=From:To:Cc:Subject:Date:From;
-        b=qwfJOGv6KMYz2S2eozDyAoukDK4gnIpeMTBHKXVDomcJpUZuH3lpx4UXFhsEmK1Jh
-         ja80ITU5qvGNwI3BIphSW+vA+IiSC7mwdDl2FGP5O0Px+qQvEDEeew0/GjGjx5HCLi
-         jRjkesxoQEnHpl/6RcNK+iIMJbKL6XeZSm+oLyA01UanWJtrXjO87HiMAjf+F/Ub5T
-         mHSt4kKS+mIea9kfm0eqCklgnVqBcqC2Ai2X3wWywRi6AmSuEs9uKkzUpkZlwD2vGM
-         c+VcZ6oEz66zaZzH/LspY4hnym+0mUT9OghsGyWmOKFTELe1n9FEKCWxK8YwEGmx1h
-         veEamjIlJaAzg==
+        b=LWpPMdZ6/Zn4Mqa3h4TvyvYrd3+6FpBCr+FCQVHpTkgc6VtAFWp2PdYo444oHEJ8k
+         26ALhOk4jmEMP38WH9I0oQBtucoIRfIjbFrxKn4xzHneBACkw9lbJtAW2IjMccALG6
+         F0iypWoinFein3WPA18nps7m6CGZxUe73qiP0MggSmekVvAJNCYVQWd/tf1+TPzg5Q
+         6K+ETVN+jiHpEkqrhv0OeYStLPb8q8SOPFEQFDZNdhCffkEJc5IemfFTlQcIaZzZYX
+         vtNZzPv/FbaVUtQ2eA3NXGYXOebntnqQOc0z4/TQnGepYk16jnXKSN4mBG5qgAFdQP
+         9nQehndIxFAJw==
 From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
 To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
         linux-kernel@vger.kernel.org
@@ -56,9 +56,9 @@ Cc:     "Luis R . Rodriguez" <mcgrof@kernel.org>,
         Randy Dunlap <rdunlap@infradead.org>,
         linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
         Dan Carpenter <error27@gmail.com>
-Subject: [PATCH v4 4.14 1/1] test_firmware: prevent race conditions by a correct implementation of locking
-Date:   Wed, 16 Aug 2023 23:24:06 +0200
-Message-Id: <20230816212405.816977-1-mirsad.todorovac@alu.unizg.hr>
+Subject: [PATCH v4 4.19 1/1] test_firmware: prevent race conditions by a correct implementation of locking
+Date:   Wed, 16 Aug 2023 23:27:18 +0200
+Message-Id: <20230816212717.817202-1-mirsad.todorovac@alu.unizg.hr>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -181,16 +181,16 @@ Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
 
 ---
  v4:
-	verbatim the same patch as for the 5.4 stable tree which patchwork didn't apply
+	verbatim the same patch as for the 5.4 stable tree which patchwork failed to apply.
 
  lib/test_firmware.c | 37 ++++++++++++++++++++++++++++---------
  1 file changed, 28 insertions(+), 9 deletions(-)
 
 diff --git a/lib/test_firmware.c b/lib/test_firmware.c
-index 34210306ea66..d407e5e670f3 100644
+index b5e779bcfb34..be3baea88b61 100644
 --- a/lib/test_firmware.c
 +++ b/lib/test_firmware.c
-@@ -283,16 +283,26 @@ static ssize_t config_test_show_str(char *dst,
+@@ -284,16 +284,26 @@ static ssize_t config_test_show_str(char *dst,
  	return len;
  }
  
@@ -220,7 +220,7 @@ index 34210306ea66..d407e5e670f3 100644
  	mutex_unlock(&test_fw_mutex);
  
  	return ret;
-@@ -322,7 +332,7 @@ static ssize_t test_dev_config_show_int(char *buf, int cfg)
+@@ -323,7 +333,7 @@ static ssize_t test_dev_config_show_int(char *buf, int cfg)
  	return snprintf(buf, PAGE_SIZE, "%d\n", val);
  }
  
@@ -229,7 +229,7 @@ index 34210306ea66..d407e5e670f3 100644
  {
  	int ret;
  	long new;
-@@ -334,14 +344,23 @@ static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
+@@ -335,14 +345,23 @@ static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
  	if (new > U8_MAX)
  		return -EINVAL;
  
@@ -255,7 +255,7 @@ index 34210306ea66..d407e5e670f3 100644
  static ssize_t test_dev_config_show_u8(char *buf, u8 cfg)
  {
  	u8 val;
-@@ -374,10 +393,10 @@ static ssize_t config_num_requests_store(struct device *dev,
+@@ -375,10 +394,10 @@ static ssize_t config_num_requests_store(struct device *dev,
  		mutex_unlock(&test_fw_mutex);
  		goto out;
  	}
