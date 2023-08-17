@@ -2,145 +2,146 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6894877FD71
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Aug 2023 20:03:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D608077FD92
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Aug 2023 20:13:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1351919AbjHQSCb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 17 Aug 2023 14:02:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43320 "EHLO
+        id S1354209AbjHQSMo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 17 Aug 2023 14:12:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354190AbjHQSCC (ORCPT
+        with ESMTP id S1354244AbjHQSMk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Aug 2023 14:02:02 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7CD42102
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Aug 2023 11:02:00 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-1c32a706b09so994387fac.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Aug 2023 11:02:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1692295320; x=1692900120;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SYb4Pd47UFlcMLjK0TyKHWunAauH0WdeCKCWucrXGAs=;
-        b=YbXL9Hs6z5ZuNLmZ+yLinpxkNiAnyvofipKx3SNA40CElWHpjhsMaVmhSm3YiSYMYl
-         gpDh4yrPCEBHb8F9sPw0jRjHgNslCPc+WFsIUC8Wxrw4Xf3XwRxO+5EDJHe8IXB67PYn
-         ZGuYoQ62+pOIxlkwfiPG4I4vLm7DQbem8afI4=
+        Thu, 17 Aug 2023 14:12:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5485B2D58
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Aug 2023 11:11:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1692295911;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rTErNomPttgl/viRXoYlofNYirDpLy640wteux782+8=;
+        b=H2s7/44d0dwcKfK1FaYnYVPpi1C3dnf6s1vELPKSPF0jS+PUteVHlA4BHZqn+0cMsSMcOS
+        vRY7GMd5ZSwawPS598n0P+38dbvMckW8gOU84DWqzyaRWtBP6fud2FDXXhWIU2gGaFPAci
+        06t4cSYoyZTYoNyqLdVcxPRqHlsaodA=
+Received: from mail-oa1-f72.google.com (mail-oa1-f72.google.com
+ [209.85.160.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-472-01A12Y8vP1W4CJiClD2PZQ-1; Thu, 17 Aug 2023 14:11:49 -0400
+X-MC-Unique: 01A12Y8vP1W4CJiClD2PZQ-1
+Received: by mail-oa1-f72.google.com with SMTP id 586e51a60fabf-1c4dfad6673so6265177fac.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Aug 2023 11:11:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692295320; x=1692900120;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SYb4Pd47UFlcMLjK0TyKHWunAauH0WdeCKCWucrXGAs=;
-        b=QOpK+H0dLTwAXc1nsP3+kOqZivHWACVqW8j/mG92XhHf8CruacSg1yTpQg95tE8HQ2
-         d4c2tQ0cN8bBmrofsmfD9Ocz3VFM2AVyB0JQirnOtS5B6Ql1Z20SnTQX3NutZD4COkpE
-         CjjcmXBp8tVl+PsVngQpAEP0owM1OkIYQlOzW0A2dTvUYPp8WI9hBo3y/DUozJmzZj+A
-         +VzvPj3jPdvy5s3pr0nYOq7T3PhS6gFEvw3os/BHGyvoafBhnzONQOawHmuFpvOiE6lD
-         XEnwCwhcT/qRF7W9qN1ADnzrvdendtAKAftsxF01qbLBuKB7t0c03t2Pl+qNkYQ0yH1q
-         Zv3g==
-X-Gm-Message-State: AOJu0YysCIefw02x74Fib3mIuPIYXR+yon0gKrJTLStXsWHTcb+wQ4WL
-        0UQLeZm54JtJd1Xc4jYvKVRMqw==
-X-Google-Smtp-Source: AGHT+IHqAFbrL4qdvGW97H1r5YhxKtn+dJdhOGwnTl2VThvVgLzvX54ojzU6tKtuiGeN6/G6QY07AQ==
-X-Received: by 2002:a05:6871:209:b0:1c0:d0e8:8ff5 with SMTP id t9-20020a056871020900b001c0d0e88ff5mr189976oad.1.1692295320147;
-        Thu, 17 Aug 2023 11:02:00 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id o24-20020a02cc38000000b0042b3e04510asm5035568jap.98.2023.08.17.11.01.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 17 Aug 2023 11:01:59 -0700 (PDT)
-Message-ID: <c1fd09a3-3c15-62b7-fbae-2ea04cbe06e8@linuxfoundation.org>
-Date:   Thu, 17 Aug 2023 12:01:58 -0600
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH 3/3] selftests: cachestat: test for cachestat availability
-To:     Andre Przywara <andre.przywara@arm.com>
-Cc:     Shuah Khan <shuah@kernel.org>, Nhat Pham <nphamcs@gmail.com>,
+        d=1e100.net; s=20221208; t=1692295908; x=1692900708;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rTErNomPttgl/viRXoYlofNYirDpLy640wteux782+8=;
+        b=iMgevpZmgihaV3SLUsQPVwqLNk50/LdbvsbmPF/RJsyqmbP+Hporvvmnu0ilxD8oq7
+         k5uVf/EsV8YVxgAI8UzsGak0RhA86MrFOzEEh4Vuv37je9dGfljoASglVNtVcLYrO96B
+         c3W8l3qubtPBdgUrA0kc8NQbQt7sdmcR0v/qU3/bazvVTjcXS0phCfP/HjQd8+sWWglU
+         vmG31xeKRmCIaUoBhEBr+Jl5DlpjqkI9PfZs1FMei55so0EXis551AfiFc6cK+utXOiD
+         094k2ni4nh/sIdJ55W3nMP6StupC3jEn0OsLvM7LB7EftPtD8004URsYFrZAyaZCbPrf
+         AK+A==
+X-Gm-Message-State: AOJu0YxYhGUAJOkWBxwYOnHR2IPjpGd2Q/JlM2wj9QCFfazH7Bj6DMN6
+        nRnbNey0y1oO3eGU3gDNndUImHBpyupDgWEnOsmP9bLNIigJHw5YDhRtZGiYKmJa5GUO188O573
+        QwZk3EqCq7SxbHTjb4vaZ+OXME9xl
+X-Received: by 2002:a05:6870:210f:b0:1ba:c622:3d5a with SMTP id f15-20020a056870210f00b001bac6223d5amr221675oae.18.1692295908795;
+        Thu, 17 Aug 2023 11:11:48 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHwERhgiG8BQEbAQpSqEJpeljF8hq9akQQFNWC+aNaxzMmCXPlOlMxrBacbtRCH+3VoEl22qg==
+X-Received: by 2002:a05:6870:210f:b0:1ba:c622:3d5a with SMTP id f15-20020a056870210f00b001bac6223d5amr221663oae.18.1692295908583;
+        Thu, 17 Aug 2023 11:11:48 -0700 (PDT)
+Received: from fedora ([174.89.37.104])
+        by smtp.gmail.com with ESMTPSA id p15-20020a0cf54f000000b0064721cf1535sm50551qvm.62.2023.08.17.11.11.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Aug 2023 11:11:48 -0700 (PDT)
+Date:   Thu, 17 Aug 2023 14:11:38 -0400
+From:   Lucas Karpinski <lkarpins@redhat.com>
+To:     Shakeel Butt <shakeelb@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
         Johannes Weiner <hannes@cmpxchg.org>,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20230815155612.2535947-1-andre.przywara@arm.com>
- <20230815155612.2535947-4-andre.przywara@arm.com>
- <59c0fcd1-a1f2-de37-c94d-76687934acd5@linuxfoundation.org>
- <20230817154754.278218ae@donnerap.manchester.arm.com>
-Content-Language: en-US
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230817154754.278218ae@donnerap.manchester.arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <muchun.song@linux.dev>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] selftests: cgroup: fix test_kmem_memcg_deletion
+ kernel mem check
+Message-ID: <nnxvxk23hrbr2rj2g5upbks6w766cgubhltfamvsto3mxidcxa@iovra4ubeq35>
+References: <jnyjalhg43mdnn6su2a2kmwzqasdyjsfdvipim2i2hvqo7w6y2@st57sbo4bkxf>
+ <20230817170702.mwem4nsy2ka4gj7n@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230817170702.mwem4nsy2ka4gj7n@google.com>
+User-Agent: NeoMutt/20230517
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/17/23 08:47, Andre Przywara wrote:
-> On Wed, 16 Aug 2023 11:11:49 -0600
-> Shuah Khan <skhan@linuxfoundation.org> wrote:
+On Thu, Aug 17, 2023 at 05:07:02PM +0000, Shakeel Butt wrote:
+> On Thu, Aug 17, 2023 at 08:47:26AM -0400, Lucas Karpinski wrote:
+> > The combination of using slab, anon, file, kernel_stack, and percpu is
+> > not accurate for total kernel memory utilization. Checking kernel within
+> > memory.stat provides a more accurate measurement.
+> > 
+> > Signed-off-by: Lucas Karpinski <lkarpins@redhat.com>
+> > ---
+> >  v1: https://lore.kernel.org/all/eex2vdlg4ow2j5bybmav73nbfzuspkk4zobnk7svua4jaypqb5@7ie6e4mci43t/
+> > 
+> >  tools/testing/selftests/cgroup/test_kmem.c | 25 +++++-----------------
+> >  1 file changed, 5 insertions(+), 20 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/cgroup/test_kmem.c b/tools/testing/selftests/cgroup/test_kmem.c
+> > index ed2e50bb1e76..3ef979ee0edf 100644
+> > --- a/tools/testing/selftests/cgroup/test_kmem.c
+> > +++ b/tools/testing/selftests/cgroup/test_kmem.c
+> > @@ -166,7 +166,7 @@ static int cg_run_in_subcgroups(const char *parent,
+> >   */
+> >  static int test_kmem_memcg_deletion(const char *root)
+> >  {
+> > -	long current, slab, anon, file, kernel_stack, pagetables, percpu, sock, sum;
+> > +	long current, kernel;
+> >  	int ret = KSFT_FAIL;
+> >  	char *parent;
+> >  
+> > @@ -184,30 +184,15 @@ static int test_kmem_memcg_deletion(const char *root)
+> >  		goto cleanup;
+> >  
+> >  	current = cg_read_long(parent, "memory.current");
+> > -	slab = cg_read_key_long(parent, "memory.stat", "slab ");
+> > -	anon = cg_read_key_long(parent, "memory.stat", "anon ");
+> > -	file = cg_read_key_long(parent, "memory.stat", "file ");
+> > -	kernel_stack = cg_read_key_long(parent, "memory.stat", "kernel_stack ");
+> > -	pagetables = cg_read_key_long(parent, "memory.stat", "pagetables ");
+> > -	percpu = cg_read_key_long(parent, "memory.stat", "percpu ");
+> > -	sock = cg_read_key_long(parent, "memory.stat", "sock ");
+> > -	if (current < 0 || slab < 0 || anon < 0 || file < 0 ||
+> > -	    kernel_stack < 0 || pagetables < 0 || percpu < 0 || sock < 0)
+> > +	kernel = cg_read_key_long(parent, "memory.stat", "kernel ");
+> > +	if (current < 0 || kernel < 0)
+> >  		goto cleanup;
+> >  
+> > -	sum = slab + anon + file + kernel_stack + pagetables + percpu + sock;
+> > -	if (abs(sum - current) < MAX_VMSTAT_ERROR) {
+> > +	if (abs(kernel - current) < MAX_VMSTAT_ERROR) {
 > 
-> Hi,
-> 
->> On 8/15/23 09:56, Andre Przywara wrote:
->>> As cachestat is a new syscall, it won't be available on older kernels,
->>> for instance those running on a build machine. In this case, a run
->>> reports all tests as "not ok" at the moment.
->>>
->>> Test for the cachestat syscall availability first, before doing further
->>> tests, and bail out early with a TAP SKIP comment.
->>>
->>> This also uses the opportunity to add the proper TAP headers, and add
->>> one check for the syscall error handling (illegal file descriptor).
->>>
->>> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
->>> ---
->>>    .../selftests/cachestat/test_cachestat.c      | 22 ++++++++++++++++++-
->>>    1 file changed, 21 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/tools/testing/selftests/cachestat/test_cachestat.c b/tools/testing/selftests/cachestat/test_cachestat.c
->>> index a5a4ac8dcb76c..77620e7ecf562 100644
->>> --- a/tools/testing/selftests/cachestat/test_cachestat.c
->>> +++ b/tools/testing/selftests/cachestat/test_cachestat.c
->>> @@ -15,6 +15,8 @@
->>>    
->>>    #include "../kselftest.h"
->>>    
->>> +#define NR_TESTS	8
->>> +
->>>    static const char * const dev_files[] = {
->>>    	"/dev/zero", "/dev/null", "/dev/urandom",
->>>    	"/proc/version", "/proc"
->>> @@ -235,7 +237,25 @@ bool test_cachestat_shmem(void)
->>>    
->>>    int main(void)
->>>    {
->>> -	int ret = 0;
->>> +	int ret;
->>> +
->>> +	ksft_print_header();
->>> +
->>> +	ret = syscall(__NR_cachestat, -1, NULL, NULL, 0);
->>> +	if (ret == -1 && errno == ENOSYS) {
->>> +		printf("1..0 # Skipped: cachestat syscall not available\n");
->>> +		return KSFT_SKIP;
->> What happens when other errors besides ENOSYS? The test shouldn't
->> continue.
-> 
-> -1 is an illegal file descriptor, and this is checked below (still using
-> the same ret and errno), but reported using the normal framework.
-> This check above is done early, before we even announce the plan, so that
-> we can skip *all* of the tests, since they don't make any sense when the
-> syscall is not available at all.
-> 
-> Does that make sense?
-> 
+> I don't think this is what you want. Since slab, kernel_stack,
+> pagetables and percpu are included in the kmem stats, you just want to
+> replace those with kmem. Basically keep the anon, file and sock stats.
+>
 
-Yup. I will apply this for Linux 6.6-rc1. You will get patchbot notification
-shortly.
+Will fix and send new patch version.
 
-thanks,
--- Shuah
+Thanks,
+Lucas
 
