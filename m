@@ -2,225 +2,155 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4580277F1FC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Aug 2023 10:22:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A85677F23B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Aug 2023 10:33:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348811AbjHQIV3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 17 Aug 2023 04:21:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58492 "EHLO
+        id S1348929AbjHQIdY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 17 Aug 2023 04:33:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348880AbjHQIVV (ORCPT
+        with ESMTP id S1348901AbjHQIdI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Aug 2023 04:21:21 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4AE273F;
-        Thu, 17 Aug 2023 01:21:20 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-99bfcf4c814so984926966b.0;
-        Thu, 17 Aug 2023 01:21:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692260478; x=1692865278;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=VBSUC9nLpujZz5zGGjUSv4NeViKHnBjmgypxXeOUcgE=;
-        b=MIgVVh8nKvI6iyrSAbEuu5zot6UxH3eWTH5khCh57BqGH4BWLtBoQnZbRc3KK9NWiR
-         CRJm1QQkh78SObWJYEROKZwR1oDjSl4NcUh+N2jbwAQg/tH5RWrrsLVG+BdCaBV4vv6b
-         FptR2/x6jQmW1oBSFaRVeCbP7kzH/eVxkNrJfuinlEALRZ8pTqE5GJ1InVW6Zr0XA0q8
-         ivyq7NFnioo0xNZW185tH474Hom38mTzoBPgqEiPyjokGBN5EgUe+IIM0Yx0TABq0aUA
-         M/fYKa4Ds/f5psEYvkvO6ihJyt+SOo6MKOJ3T5D3rK2K+XQH/sJXdmWsi1K0YFjayNYx
-         0Rsg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692260478; x=1692865278;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VBSUC9nLpujZz5zGGjUSv4NeViKHnBjmgypxXeOUcgE=;
-        b=P5ffrjxPmXx0g7zyzepchBoGBYP6HO6qy6XOXEcSApmST78FsRHCjJUk0rHz6mbIu+
-         EXdtLFxu6Q+FqOyLzhkYLkVz42atU1hwwIlP3g1p3c3Bv1LpgxW0rUyVpkfm0YXC/vG6
-         8xfKZXi4BaGTh/aDHrvkrPj2Cy9F1TATMDAL76K8RA6fLcN5DdmQ7q6209LzPjLoDmSN
-         plklhNnBWrn8V29/CjOaFR03sd+9VxXWzi1nT3zSWVB2S4MpJYjMCRu/fNKBlfdPngoQ
-         WdzpF95eHwgrLhFlCFuotF0fyDmH3qrf+f0N9uixaAT52UY4gTE+rXsNmYFSXrW8/lQL
-         QWTw==
-X-Gm-Message-State: AOJu0YzvXzl6m5TbXyojnOmpJGJB6Qcao6S8GZuiAh2CuGH9gpOxOH/h
-        ZNv4QXEJGFwH4MVJcbyqQUA=
-X-Google-Smtp-Source: AGHT+IG8F8vWRoMbRxe0XzNivqXEbX46cG0CiKv0fAc3Mk9H28wKWLwrT4liVmfGqnqnBCT9aryb1g==
-X-Received: by 2002:a17:906:4bd5:b0:99c:da24:bdb7 with SMTP id x21-20020a1709064bd500b0099cda24bdb7mr4578560ejv.71.1692260478226;
-        Thu, 17 Aug 2023 01:21:18 -0700 (PDT)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id a17-20020a17090682d100b009944e955e19sm9809102ejy.30.2023.08.17.01.21.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Aug 2023 01:21:17 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Thu, 17 Aug 2023 10:21:15 +0200
-To:     Rong Tao <rtoax@foxmail.com>
-Cc:     sdf@google.com, daniel@iogearbox.net, andrii@kernel.org,
-        rongtao@cestc.cn, Alexei Starovoitov <ast@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>,
-        Yonghong Song <yonghong.song@linux.dev>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        "open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)" 
-        <bpf@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v5] selftests/bpf: trace_helpers.c: optimize
- kallsyms cache
-Message-ID: <ZN3YeyMkgEg1IoKP@krava>
-References: <tencent_0E9E1A1C0981678D5E7EA9E4BDBA8EE2200A@qq.com>
+        Thu, 17 Aug 2023 04:33:08 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0858813D;
+        Thu, 17 Aug 2023 01:33:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692261187; x=1723797187;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=qZsIhhJX19J3NvVa2MXhgOu7cU+WST5BMLKkx34w6mU=;
+  b=ZMnU5rVg4rW6j7JTXi0yWP+a1KPHYf74wdQqK7L/xOWXadfcqev8pfHl
+   kQkmLK6u4yMExYgTNQlyJwMZxpDzVfrzTZDQgWuXJJcd4UKyiRmlrRNcZ
+   GFtE4z8I0VoFASvzqry3bigZAE3efPK4H+ieG2WLKT00DYgPE/ZX8B88X
+   hRgQUPjN9eAmBA9ejbjChvHZdNh56a8ACuwIFXGRI5yyxHPIIf3zUim1o
+   +dAnkc0PkiBN+a5072VB2dmeGPsgYlyd33io7+9EBlSU2KmUL+sronwCO
+   8vH8uVD2pq3Gi8dF13YZ+58yJG4yRHCpy05gSfrYPGoCCA0pU4NLdYdSk
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="353066902"
+X-IronPort-AV: E=Sophos;i="6.01,179,1684825200"; 
+   d="scan'208";a="353066902"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2023 01:32:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="763972332"
+X-IronPort-AV: E=Sophos;i="6.01,179,1684825200"; 
+   d="scan'208";a="763972332"
+Received: from lababeix-mobl1.ger.corp.intel.com ([10.251.212.52])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2023 01:32:30 -0700
+Date:   Thu, 17 Aug 2023 11:32:28 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+Subject: Re: [PATCH 5/7] selftests/resctrl: Use pointers to build benchmark
+ cmd and make it const
+In-Reply-To: <bacc2e6f-f747-ec65-b23b-4275d1cac018@intel.com>
+Message-ID: <c8b7118c-5830-98a0-5ae-66072e384b3@linux.intel.com>
+References: <20230808091625.12760-1-ilpo.jarvinen@linux.intel.com> <20230808091625.12760-6-ilpo.jarvinen@linux.intel.com> <f300a52c-d65f-fd74-18ce-7d37e76d144f@intel.com> <dd83f672-b9fc-cd79-10ff-70651d4822af@linux.intel.com> <87183b24-f343-2420-9bda-f1012e7195a1@intel.com>
+ <f22efaf4-d87f-d3c4-b986-7d326c912a18@linux.intel.com> <bacc2e6f-f747-ec65-b23b-4275d1cac018@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <tencent_0E9E1A1C0981678D5E7EA9E4BDBA8EE2200A@qq.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; BOUNDARY="8323329-1487371549-1692254509=:1692"
+Content-ID: <4fe2f0c1-789b-aaed-9bec-c4a3a3c7fdec@linux.intel.com>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Aug 17, 2023 at 01:03:45PM +0800, Rong Tao wrote:
-> From: Rong Tao <rongtao@cestc.cn>
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+
+--8323329-1487371549-1692254509=:1692
+Content-Type: text/plain; CHARSET=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
+Content-ID: <54a614b0-59d6-b2d-7a23-58126f223bbe@linux.intel.com>
+
+On Wed, 16 Aug 2023, Reinette Chatre wrote:
+> On 8/16/2023 12:13 AM, Ilpo Järvinen wrote:
+> > On Tue, 15 Aug 2023, Reinette Chatre wrote:
+> >> On 8/15/2023 2:42 AM, Ilpo Järvinen wrote:
+> >>> On Mon, 14 Aug 2023, Reinette Chatre wrote:
+> >>>>
+> >>>> On 8/8/2023 2:16 AM, Ilpo Järvinen wrote:
 > 
-> Static ksyms often have problems because the number of symbols exceeds the
-> MAX_SYMS limit. Like changing the MAX_SYMS from 300000 to 400000 in
-> commit e76a014334a6("selftests/bpf: Bump and validate MAX_SYMS") solves
-> the problem somewhat, but it's not the perfect way.
+> ...
+> >>>>> diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
+> >>>>> index bcd0d2060f81..ddb1e83a3a64 100644
+> >>>>> --- a/tools/testing/selftests/resctrl/resctrl.h
+> >>>>> +++ b/tools/testing/selftests/resctrl/resctrl.h
+> >>>>> @@ -6,6 +6,7 @@
+> >>>>>  #include <math.h>
+> >>>>>  #include <errno.h>
+> >>>>>  #include <sched.h>
+> >>>>> +#include <stdint.h>
+> >>>>>  #include <stdlib.h>
+> >>>>>  #include <unistd.h>
+> >>>>>  #include <string.h>
+> >>>>> @@ -38,7 +39,14 @@
+> >>>>>  
+> >>>>>  #define END_OF_TESTS	1
+> >>>>>  
+> >>>>> +#define BENCHMARK_ARGS		64
+> >>>>> +
+> >>>>> +/* Approximate %zu max length */
+> >>>>> +#define SIZE_MAX_DECIMAL_SIZE	(sizeof(SIZE_MAX) * 8 / 3 + 2)
+> >>>>> +
+> >>>>> +/* Define default span both as integer and string, these should match */
+> >>>>>  #define DEFAULT_SPAN		(250 * MB)
+> >>>>> +#define DEFAULT_SPAN_STR	"262144000"
+> >>>>
+> >>>> I think above hardcoding can be eliminated by using asprintf()? This
+> >>>> does allocate memory though so I would like to understand why one
+> >>>> goal is to not dynamically allocate memory.
+> >>>
+> >>> Because it's simpler on the _free() side_. If there's no allocation, no 
+> >>> free() is needed.
+> >>>
+> >>> Only challenge that remains is the int -> string conversion for the 
+> >>> default span which can be either done like in the patch or using some 
+> >>> preprocessor trickery to convert the number to string. If you prefer the 
+> >>> latter, I can change to that so it's not hardcoded both as int and string.
+> >>>
+> >>
+> >> This manual int->string sounds like the trickery to me and can be avoided
+> >> by just using asprintf(). I understand that no free() is needed when no
+> >> memory is allocated but it looks to me as though these allocations can
+> >> be symmetrical - allocate the memory before the tests are run and free it
+> >> after?
+> > 
+> > It could be symmetrical but that means I'll be doing unnecessary alloc if 
+> > -b is provided which I assume you're against given your comment on always 
+> > creating copy of cmd in CMT test's case.
 > 
-> This commit uses dynamic memory allocation, which completely solves the
-> problem caused by the limitation of the number of kallsyms.
+> I seemed to have lost track here ... could you please elaborate where the
+> unnecessary alloc will be?
+
+If there's what you call "symmetry", it implies the code always does 
+alloc. However, the logic in main() is such that when -b is provided, no 
+default benchmark command needs to be assigned, so no alloc for span is 
+necessary. Thus, there either is unnecessary alloc with -b or _no 
+symmetry_.
+
+But I've already converted to asprintf() so no need to continue this 
+discussion.
+
+> > I think I'll use similar resolution to this as CMT test does, it has an 
+> > extra variable which is NULL in when -b is provided so free() is no-op
+> > on that path. Then I can use asprintf().
+> > 
 > 
-> Acked-by: Stanislav Fomichev <sdf@google.com>
-> Signed-off-by: Rong Tao <rongtao@cestc.cn>
-> ---
-> v5: Release the allocated memory once the load_kallsyms_refresh() upon error
->     given it's dynamically allocated.
-> v4: https://lore.kernel.org/lkml/tencent_59C74613113F0C728524B2A82FE5540A5E09@qq.com/
->     Make sure most cases we don't need the realloc() path to begin with,
->     and check strdup() return value.
-> v3: https://lore.kernel.org/lkml/tencent_50B4B2622FE7546A5FF9464310650C008509@qq.com/
->     Do not use structs and judge ksyms__add_symbol function return value.
-> v2: https://lore.kernel.org/lkml/tencent_B655EE5E5D463110D70CD2846AB3262EED09@qq.com/
->     Do the usual len/capacity scheme here to amortize the cost of realloc, and
->     don't free symbols.
-> v1: https://lore.kernel.org/lkml/tencent_AB461510B10CD484E0B2F62E3754165F2909@qq.com/
-> ---
->  tools/testing/selftests/bpf/trace_helpers.c | 62 +++++++++++++++++----
->  1 file changed, 52 insertions(+), 10 deletions(-)
+> Reinette
 > 
-> diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
-> index f83d9f65c65b..0053ba22f0cb 100644
-> --- a/tools/testing/selftests/bpf/trace_helpers.c
-> +++ b/tools/testing/selftests/bpf/trace_helpers.c
-> @@ -18,10 +18,47 @@
->  #define TRACEFS_PIPE	"/sys/kernel/tracing/trace_pipe"
->  #define DEBUGFS_PIPE	"/sys/kernel/debug/tracing/trace_pipe"
->  
-> -#define MAX_SYMS 400000
-> -static struct ksym syms[MAX_SYMS];
-> +static struct ksym *syms;
-> +static int sym_cap;
->  static int sym_cnt;
->  
-> +static int ksyms__add_symbol(const char *name, unsigned long addr)
-> +{
-> +	void *tmp;
-> +	unsigned int new_cap;
-> +
-> +	if (sym_cnt + 1 > sym_cap) {
-> +		new_cap = sym_cap * 4 / 3;
-> +		tmp = realloc(syms, sizeof(struct ksym) * new_cap);
-> +		if (!tmp)
-> +			return -ENOMEM;
-> +		syms = tmp;
-> +		sym_cap = new_cap;
-> +	}
 
-sorry I did not notice earlier, but we have helper for realloc
-
-  libbpf_ensure_mem
-
-check the usage for example in prog_tests/kprobe_multi_test.c
-
-> +
-> +	tmp = strdup(name);
-> +	if (!tmp)
-> +		return -ENOMEM;
-> +	syms[sym_cnt].addr = addr;
-> +	syms[sym_cnt].name = tmp;
-> +
-> +	sym_cnt++;
-> +
-> +	return 0;
-> +}
-> +
-> +static void ksyms__free(void)
-> +{
-> +	unsigned int i;
-> +
-> +	if (!syms)
-> +		return;
-> +
-> +	for (i = 0; i < sym_cnt; i++)
-> +		free(syms[i].name);
-> +	free(syms);
-> +}
-> +
->  static int ksym_cmp(const void *p1, const void *p2)
->  {
->  	return ((struct ksym *)p1)->addr - ((struct ksym *)p2)->addr;
-> @@ -33,9 +70,14 @@ int load_kallsyms_refresh(void)
->  	char func[256], buf[256];
->  	char symbol;
->  	void *addr;
-> -	int i = 0;
-> +	int ret;
->  
-> +	/* Make sure most cases we don't need the realloc() path to begin with */
-> +	sym_cap = 400000;
->  	sym_cnt = 0;
-> +	syms = malloc(sizeof(struct ksym) * sym_cap);
-> +	if (!syms)
-> +		return -ENOMEM;
-
-libbpf_ensure_mem will also take care of first allocation and the capacity increase
-
-jirka
-
->  
->  	f = fopen("/proc/kallsyms", "r");
->  	if (!f)
-> @@ -46,17 +88,17 @@ int load_kallsyms_refresh(void)
->  			break;
->  		if (!addr)
->  			continue;
-> -		if (i >= MAX_SYMS)
-> -			return -EFBIG;
-> -
-> -		syms[i].addr = (long) addr;
-> -		syms[i].name = strdup(func);
-> -		i++;
-> +		ret = ksyms__add_symbol(func, (unsigned long)addr);
-> +		if (ret)
-> +			goto error;
->  	}
->  	fclose(f);
-> -	sym_cnt = i;
->  	qsort(syms, sym_cnt, sizeof(struct ksym), ksym_cmp);
->  	return 0;
-> +
-> +error:
-> +	ksyms__free();
-> +	return ret;
->  }
->  
->  int load_kallsyms(void)
-> -- 
-> 2.39.3
-> 
-> 
+-- 
+ i.
+--8323329-1487371549-1692254509=:1692--
