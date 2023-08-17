@@ -2,74 +2,67 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6657477FB4A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Aug 2023 17:56:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 093D277FB69
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Aug 2023 18:01:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353383AbjHQPze (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 17 Aug 2023 11:55:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41718 "EHLO
+        id S1353001AbjHQQAy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 17 Aug 2023 12:00:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353469AbjHQPz0 (ORCPT
+        with ESMTP id S1353417AbjHQQAj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Aug 2023 11:55:26 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E32B30E9
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Aug 2023 08:54:54 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id af79cd13be357-76d1dc1ebfdso51486185a.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Aug 2023 08:54:54 -0700 (PDT)
+        Thu, 17 Aug 2023 12:00:39 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BDF0F2
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Aug 2023 09:00:39 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-6887c3aac15so1970130b3a.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Aug 2023 09:00:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1692287693; x=1692892493;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sdyk/H9C92iJ/nBsFz7KxfsAvK+nt2wqCERHewxGWDU=;
-        b=cSQl7yt9otQXr+oR1mB0nAUMSggLBbl+x+yeuUh1BRvaPLY+5BVUHA9XY5vpaXnLwQ
-         I+HaTYsLWZHnC7qtaOHGmjwLl2/5BHmdv59N00yHP6YIcH7jJklGoMStSDd1TVKHohCi
-         pampRnwpD239s80gaLdHchFzC+a0w1oyAyFF1jWVzncrcQ0lgekpayKIU84Rd1wDjF4I
-         2/9khJ3u2ek6tzpqBd6IcgbZJC/89kWqNXeD8h1HeTAz3F/rP/W+L+zXszK4BEOLJ0b4
-         3bbWj4Gz0sm0DQOMRz2udncq5GAXL9t8Thff9BLCqlRWq9CksSuetZI7++mKz8RzoAHd
-         WVkA==
+        d=gmail.com; s=20221208; t=1692288038; x=1692892838;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zlT9fFwxzSwTM1kaYJgDOCQu0UvIzKLj9qZMmOR6x28=;
+        b=VmNUeJRQXAVcshDfrSK3Et1LD6PprjNbVNeGttwgD+xwqPFRoSJiXV01a/6kluD9I+
+         qRytK1na28nWsFpvtf2Th9yg9VI9aY+xddy856SeQyHAmS7Pn5YZd6d/soyTyTnk7WAw
+         +5uIgH9MEcHinqYXrTCmkmGrkBK/dXuP/vrYAP+rOfJmEudxia9o73P9cwDKq0nErq5A
+         GVWrQHGqkJETkGsiHFGLFJZoIcNFHgzm7Ma2oBaiPjLF0mmHAOZKkjhkMfBFJ8XfTiLk
+         8Txue3l0eRnHlah7YJAo4+8nXL/DsAAUE8Sw1+StyynHrx9pIuEsBBHRTfgF8IFfBkHu
+         YcKA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692287693; x=1692892493;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sdyk/H9C92iJ/nBsFz7KxfsAvK+nt2wqCERHewxGWDU=;
-        b=Jc8ylrW6E9wxL+Xq8PirUfWTQ49yQ1a0EMEUHPxmViVhhIHzP2XIIYDa8wlmJNKpuL
-         kde1fLb9rHyMOeRLAiDqx72TUvIrAGnIS7xbwEaHpjmHGegEPxVqCJlfDkmRXkQeznj/
-         AZrd4f95aCNH8M0qNm2OWGzb077o9nEV+dwJN3AvrQkXKu19V9HAD5R8pIV75L6+3Y7S
-         OLJHDaH39mCw4+rlMaGyAnEzc1zo+mhK9q+eGAeihvqGXedMkAJQTpUF+IJ4jDGCmUZH
-         Osnv0Kj9SHPJZA3DbiIN7JrJmz0Eh+OHKjZZ17Bc7e9ts1TL2UBkNJUqYtsjFK14zAUv
-         MryA==
-X-Gm-Message-State: AOJu0Yw0gFJtSteAXPzRHF422a0hFdTP+Csrn7f2sROTvbV5f0PhVgMO
-        OYE4TmDdTwQXK15ZWg1n9ym71jN7OtyuwtpsiR/w/7JrKwZ2KfbRVGXmaw==
-X-Google-Smtp-Source: AGHT+IHBoKIXOzw8g/P24SXKwipUqCn2o2dUKOdGE5ZCNm3euEjtUFmlPq+7vYSmTIjnuxYVtNffFqtgOHvxVmtNMww=
-X-Received: by 2002:a0c:e094:0:b0:61b:65f4:2a15 with SMTP id
- l20-20020a0ce094000000b0061b65f42a15mr4345292qvk.12.1692287692656; Thu, 17
- Aug 2023 08:54:52 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1692288038; x=1692892838;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zlT9fFwxzSwTM1kaYJgDOCQu0UvIzKLj9qZMmOR6x28=;
+        b=RKWUVlXFfL4Vq4gFZCs2j5f/68l3kLxup1Mkq6efHU24I5e2B5VLZ9LjtmgsqHLGGR
+         iwEO1KWhV6AedaeZZh2PfLqc9RrUAViF6tOwEPV86ePWDcnMkDsXbRrITtKzteFPw+WS
+         swF8LdACdNFoDNDzn5Nr4LcbonXtvMdzcMHW/dzkMsGnTaWHZ7yNPCAbgE6r1IrevjQB
+         3Vb5Np27ppN/nOLS2zz+klX6lEaSTSaXH9hYQPLpUCuG88mero4Af/t9J9dqC9jDAKTn
+         3u2GdNj4iBnz2xFnuKahLPIv1YQ//IcjDa0SVMRol2kE5VpJxn4e9yxR8Vvkpr7/4ksT
+         y3xA==
+X-Gm-Message-State: AOJu0Ywkipfg3Zz1AobXIQinXd1saGUwODWZxhi2VM8VrOn6kpfCfLe3
+        NldfrtIrF/gkU+edmN76tFE=
+X-Google-Smtp-Source: AGHT+IFbJG9KVcf0ORQF/w7iO7Nxg7X/MOZC4YGa5PCrSmP+GBVynwoW31tJgL6Bs6PF1VubX6ZEtw==
+X-Received: by 2002:a05:6a00:850:b0:689:f586:4add with SMTP id q16-20020a056a00085000b00689f5864addmr810149pfk.31.1692288038267;
+        Thu, 17 Aug 2023 09:00:38 -0700 (PDT)
+Received: from fanta-System-Product-Name.. ([222.252.65.171])
+        by smtp.gmail.com with ESMTPSA id s24-20020aa78298000000b00666b3706be6sm13018779pfm.107.2023.08.17.09.00.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Aug 2023 09:00:37 -0700 (PDT)
+From:   Anh Tuan Phan <tuananhlfc@gmail.com>
+To:     akpm@linux-foundation.org, shuah@kernel.org
+Cc:     Anh Tuan Phan <tuananhlfc@gmail.com>, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: [PATCH v1] selftests/mm: Fix WARNING comparing pointer to 0
+Date:   Thu, 17 Aug 2023 23:00:33 +0700
+Message-Id: <20230817160033.90079-1-tuananhlfc@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <CA+G9fYvFD-kE0+EGWkwcnR1DXRxh7p7OwQThJ6KWxYWVROJ4+A@mail.gmail.com>
-In-Reply-To: <CA+G9fYvFD-kE0+EGWkwcnR1DXRxh7p7OwQThJ6KWxYWVROJ4+A@mail.gmail.com>
-From:   Nick Desaulniers <ndesaulniers@google.com>
-Date:   Thu, 17 Aug 2023 08:54:41 -0700
-Message-ID: <CAKwvOd=h4aFisiY0w0awKkxk+i-aJM5+QbExYnboqzojLigx1Q@mail.gmail.com>
-Subject: Re: landlock: fs_test: fs_test.c:4524:9: error: initializer element
- is not a compile-time constant
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     clang-built-linux <llvm@lists.linux.dev>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, linux-fsdevel@vger.kernel.org,
-        lkft-triage@lists.linaro.org, Shuah Khan <shuah@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
-        Richard Weinberger <richard@nod.at>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,51 +70,29 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Aug 17, 2023 at 3:51=E2=80=AFAM Naresh Kamboju
-<naresh.kamboju@linaro.org> wrote:
->
-> While building selftests landlock following warnings / errors noticed on =
-the
-> Linux next with clang-17.
->
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->
-> Build errors:
-> ------------
-> landlock/fs_test
-> fs_test.c:4524:9: error: initializer element is not a compile-time consta=
-nt
+Remove comparing pointer to 0 to avoid this warning from coccinelle:
 
-Hi Naresh,
-Can you tell me more about your specific version of clang-17?
+./tools/testing/selftests/mm/map_populate.c:80:16-17: WARNING comparing pointer to 0, suggest !E
+./tools/testing/selftests/mm/map_populate.c:80:16-17: WARNING comparing pointer to 0
 
-I believe a fix of mine to clang should address this. It landed in
-clang-18, and was backported to clang-17 recently.
-https://github.com/llvm/llvm-project-release-prs/commit/0b2d5b967d983757938=
-97295d651f58f6fbd3034
+Signed-off-by: Anh Tuan Phan <tuananhlfc@gmail.com>
+---
+ tools/testing/selftests/mm/map_populate.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I suspect your clang-17 might need a rebuild.  Thanks for the report.
+diff --git a/tools/testing/selftests/mm/map_populate.c b/tools/testing/selftests/mm/map_populate.c
+index 240f2d9dae7a..7945d0754875 100644
+--- a/tools/testing/selftests/mm/map_populate.c
++++ b/tools/testing/selftests/mm/map_populate.c
+@@ -77,7 +77,7 @@ int main(int argc, char **argv)
+ 	unsigned long *smap;
+ 
+ 	ftmp = tmpfile();
+-	BUG_ON(ftmp == 0, "tmpfile()");
++	BUG_ON(!ftmp, "tmpfile()");
+ 
+ 	ret = ftruncate(fileno(ftmp), MMAP_SZ);
+ 	BUG_ON(ret, "ftruncate()");
+-- 
+2.34.1
 
->  4524 |         .mnt =3D mnt_tmp,
->       |                ^~~~~~~
-> 1 error generated.
->
-> Links:
->  - https://storage.tuxsuite.com/public/linaro/lkft/builds/2U69ue7AaypfY7e=
-RU4UUygecrDx/
->
-> Steps to reproduce:
-> tuxmake --runtime podman --target-arch arm64 --toolchain clang-17
-> --kconfig https://storage.tuxsuite.com/public/linaro/lkft/builds/2U69ue7A=
-aypfY7eRU4UUygecrDx/config
-> LLVM=3D1 LLVM_IAS=3D1 dtbs dtbs-legacy headers kernel kselftest modules
->
-> --
-> Linaro LKFT
-> https://lkft.linaro.org
->
-
-
---=20
-Thanks,
-~Nick Desaulniers
