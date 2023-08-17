@@ -2,97 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 093D277FB69
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Aug 2023 18:01:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE54977FBE8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Aug 2023 18:22:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353001AbjHQQAy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 17 Aug 2023 12:00:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48788 "EHLO
+        id S1353596AbjHQQVw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 17 Aug 2023 12:21:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353417AbjHQQAj (ORCPT
+        with ESMTP id S1353603AbjHQQVU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Aug 2023 12:00:39 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BDF0F2
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Aug 2023 09:00:39 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-6887c3aac15so1970130b3a.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Aug 2023 09:00:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692288038; x=1692892838;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zlT9fFwxzSwTM1kaYJgDOCQu0UvIzKLj9qZMmOR6x28=;
-        b=VmNUeJRQXAVcshDfrSK3Et1LD6PprjNbVNeGttwgD+xwqPFRoSJiXV01a/6kluD9I+
-         qRytK1na28nWsFpvtf2Th9yg9VI9aY+xddy856SeQyHAmS7Pn5YZd6d/soyTyTnk7WAw
-         +5uIgH9MEcHinqYXrTCmkmGrkBK/dXuP/vrYAP+rOfJmEudxia9o73P9cwDKq0nErq5A
-         GVWrQHGqkJETkGsiHFGLFJZoIcNFHgzm7Ma2oBaiPjLF0mmHAOZKkjhkMfBFJ8XfTiLk
-         8Txue3l0eRnHlah7YJAo4+8nXL/DsAAUE8Sw1+StyynHrx9pIuEsBBHRTfgF8IFfBkHu
-         YcKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692288038; x=1692892838;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zlT9fFwxzSwTM1kaYJgDOCQu0UvIzKLj9qZMmOR6x28=;
-        b=RKWUVlXFfL4Vq4gFZCs2j5f/68l3kLxup1Mkq6efHU24I5e2B5VLZ9LjtmgsqHLGGR
-         iwEO1KWhV6AedaeZZh2PfLqc9RrUAViF6tOwEPV86ePWDcnMkDsXbRrITtKzteFPw+WS
-         swF8LdACdNFoDNDzn5Nr4LcbonXtvMdzcMHW/dzkMsGnTaWHZ7yNPCAbgE6r1IrevjQB
-         3Vb5Np27ppN/nOLS2zz+klX6lEaSTSaXH9hYQPLpUCuG88mero4Af/t9J9dqC9jDAKTn
-         3u2GdNj4iBnz2xFnuKahLPIv1YQ//IcjDa0SVMRol2kE5VpJxn4e9yxR8Vvkpr7/4ksT
-         y3xA==
-X-Gm-Message-State: AOJu0Ywkipfg3Zz1AobXIQinXd1saGUwODWZxhi2VM8VrOn6kpfCfLe3
-        NldfrtIrF/gkU+edmN76tFE=
-X-Google-Smtp-Source: AGHT+IFbJG9KVcf0ORQF/w7iO7Nxg7X/MOZC4YGa5PCrSmP+GBVynwoW31tJgL6Bs6PF1VubX6ZEtw==
-X-Received: by 2002:a05:6a00:850:b0:689:f586:4add with SMTP id q16-20020a056a00085000b00689f5864addmr810149pfk.31.1692288038267;
-        Thu, 17 Aug 2023 09:00:38 -0700 (PDT)
-Received: from fanta-System-Product-Name.. ([222.252.65.171])
-        by smtp.gmail.com with ESMTPSA id s24-20020aa78298000000b00666b3706be6sm13018779pfm.107.2023.08.17.09.00.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Aug 2023 09:00:37 -0700 (PDT)
-From:   Anh Tuan Phan <tuananhlfc@gmail.com>
-To:     akpm@linux-foundation.org, shuah@kernel.org
-Cc:     Anh Tuan Phan <tuananhlfc@gmail.com>, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Subject: [PATCH v1] selftests/mm: Fix WARNING comparing pointer to 0
-Date:   Thu, 17 Aug 2023 23:00:33 +0700
-Message-Id: <20230817160033.90079-1-tuananhlfc@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 17 Aug 2023 12:21:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A6F02D4A
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Aug 2023 09:20:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1692289243;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=LKsXf14yPomkD3tSZWQknLH0bmhrzoGBJO+LGRQq7Mg=;
+        b=McxGmioc64553H4PFqZ+PVsSEwV99YvGaSLJSnaJcUJrGyLX7oBiE0TD2BMtTEMk15tPug
+        PUoXLcvJsoWqPFStOSuT6QQZ87Wrnm63m8TujYsaTxquf7L47Lmus0++iNjVuXJa8kBeNY
+        uXc9Fo8/jnSlpk6O16VByJCCR8kW+e8=
+Received: from mimecast-mx02.redhat.com (66.187.233.73 [66.187.233.73]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-148-e5jtcWMRP6mhMfLTjIMZVQ-1; Thu, 17 Aug 2023 12:20:35 -0400
+X-MC-Unique: e5jtcWMRP6mhMfLTjIMZVQ-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B851B3C0D86D;
+        Thu, 17 Aug 2023 16:18:07 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.224.39])
+        by smtp.corp.redhat.com (Postfix) with SMTP id 38C5EC15BAE;
+        Thu, 17 Aug 2023 16:18:03 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+        oleg@redhat.com; Thu, 17 Aug 2023 18:17:23 +0200 (CEST)
+Date:   Thu, 17 Aug 2023 18:17:18 +0200
+From:   Oleg Nesterov <oleg@redhat.com>
+To:     "Eric W. Biederman" <ebiederm@xmission.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        Petr Skocik <pskocik@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jens Axboe <axboe@kernel.dk>, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        Marco Elver <elver@google.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        "haifeng.xu" <haifeng.xu@shopee.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] [RFC] signal: Add KUnit tests
+Message-ID: <20230817161718.GA4121@redhat.com>
+References: <20230814210508.never.871-kees@kernel.org>
+ <87bkf68g5m.fsf@email.froward.int.ebiederm.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87bkf68g5m.fsf@email.froward.int.ebiederm.org>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Remove comparing pointer to 0 to avoid this warning from coccinelle:
+On 08/16, Eric W. Biederman wrote:
+>
+> Arguably we can skip this as well.  There are only 3 uses of
+> do_each_thread (pivot_root, SAK, and ia64 backtrace) and they all should
+> be changed to be for_each_process_thread.
 
-./tools/testing/selftests/mm/map_populate.c:80:16-17: WARNING comparing pointer to 0, suggest !E
-./tools/testing/selftests/mm/map_populate.c:80:16-17: WARNING comparing pointer to 0
+Hmm. I thought that do_each_thread() was already killed ...
+Let me send the trivial patch.
 
-Signed-off-by: Anh Tuan Phan <tuananhlfc@gmail.com>
----
- tools/testing/selftests/mm/map_populate.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+We also need to kill (or rework) while_each_thread() and next_thread(),
+I'll try to do this tomorrow.
 
-diff --git a/tools/testing/selftests/mm/map_populate.c b/tools/testing/selftests/mm/map_populate.c
-index 240f2d9dae7a..7945d0754875 100644
---- a/tools/testing/selftests/mm/map_populate.c
-+++ b/tools/testing/selftests/mm/map_populate.c
-@@ -77,7 +77,7 @@ int main(int argc, char **argv)
- 	unsigned long *smap;
- 
- 	ftmp = tmpfile();
--	BUG_ON(ftmp == 0, "tmpfile()");
-+	BUG_ON(!ftmp, "tmpfile()");
- 
- 	ret = ftruncate(fileno(ftmp), MMAP_SZ);
- 	BUG_ON(ret, "ftruncate()");
--- 
-2.34.1
+Oleg.
 
