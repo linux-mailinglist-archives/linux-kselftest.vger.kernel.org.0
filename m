@@ -2,182 +2,225 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67D4A77F14D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Aug 2023 09:35:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4580277F1FC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Aug 2023 10:22:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1348501AbjHQHfT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 17 Aug 2023 03:35:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50092 "EHLO
+        id S1348811AbjHQIV3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 17 Aug 2023 04:21:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1348443AbjHQHer (ORCPT
+        with ESMTP id S1348880AbjHQIVV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Aug 2023 03:34:47 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 330E02D76;
-        Thu, 17 Aug 2023 00:34:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692257674; x=1723793674;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=rmF20ILiRewNhKSKPQF88rzUPRQH7W1WYihsAEsRiP8=;
-  b=XfrVECgJ6HgtnY+j6QPm0hOXYqC+70ZbZQePyYpwBqEZUllelDxKdad8
-   cw1FMljBlSsed+TO2cZjlM6sAAsj4iTMwGF8pmC8npBcc3sENkByTRX5v
-   J69vtSVHTUAzqKTOVna34B1v9BfMUv8agazXJ5PWG1hpS6LGJ5xbhEyVj
-   djDbIQEFM11HSFzajfPmSvvujliE8na1cmeRW+GP9kguG4tudMvc8aL/o
-   tkjtUHC5MhEyFXJEM/dpJlqxf7cRA4FnahF6Vrd9+AQr5J11tDpxL0P2/
-   BSq+PWmgA+aScnbH/+Nu2gE/chf+Ae8eYRK3y2EJsSlFOuAyNpGRIz5w9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="403719190"
-X-IronPort-AV: E=Sophos;i="6.01,179,1684825200"; 
-   d="scan'208";a="403719190"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2023 00:34:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10803"; a="734568293"
-X-IronPort-AV: E=Sophos;i="6.01,179,1684825200"; 
-   d="scan'208";a="734568293"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by orsmga002.jf.intel.com with ESMTP; 17 Aug 2023 00:33:59 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27; Thu, 17 Aug 2023 00:33:58 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.27 via Frontend Transport; Thu, 17 Aug 2023 00:33:58 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.173)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.27; Thu, 17 Aug 2023 00:33:53 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=X/ZdOpeYb+D68XHZ+0e8FCWVsc8h3gjZJ5sAHr20kq108BCOLoUbg7Ci1bjjs7i/bOlsH3+rxDepWV2P8MU8z+b0nVhw4Eqi7yFCXi8d6nvnD+1dcxxqrdXftpIOOf0j+1HGq/86sCkLXsvflM43TRLf6YeZPl/8PRw7WpOdUO5Y+3oEb7ID4jTHoIG9ddaZP3OE/0Xvg4YrjHLZ2aC6DZVlb+mwTcrz5m+kvG+PRDH7PsU56mWYo+NJ95DQXPESNUe3NxV7CtYmkTBD0VrId2TAEJrIs2CIT9W767rLlM8nGkNZXIKA/rZhRcNoYt//4yEQ/L/iPwKN9BCJ2nFhXg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rmF20ILiRewNhKSKPQF88rzUPRQH7W1WYihsAEsRiP8=;
- b=mTrnissekBTZY165hos67Ep6aiWSk6UBv/M3b3ZLtUIpex0N08gLhZS5y3/SoSgww395p+T4W2JQZMN68G1pJy3pLqlLquFuUT6R6soBedVi9vJuh5qKDPNpLAanEhfkwiVTidMDE12TSR8SUBuvPK+B7GLA69E3HAdUhGT8SNKmaJgUoaJWlJ5bGOVDn+05HW95KuZCcfhZmk4lFMnm7yL3mqla/u+fIRDfRzyqavGOvJ0z5jg6ihqSDY3hAfZN/uNQJu9BihO3nxf+pxl5BV+UIwOCSsEmHMjL8sXOGbLP4xbqhhl9S9tHJc3o1DsrO8mh7QJ3oYCnCZfEoFP6rg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by PH7PR11MB7571.namprd11.prod.outlook.com (2603:10b6:510:27e::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6678.30; Thu, 17 Aug
- 2023 07:33:51 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::dcf3:7bac:d274:7bed]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::dcf3:7bac:d274:7bed%4]) with mapi id 15.20.6678.029; Thu, 17 Aug 2023
- 07:33:51 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     "Liu, Yi L" <yi.l.liu@intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>
-CC:     "cohuck@redhat.com" <cohuck@redhat.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>
-Subject: RE: [PATCH v8 5/5] iommu/vt-d: Implement hw_info for iommu capability
- query
-Thread-Topic: [PATCH v8 5/5] iommu/vt-d: Implement hw_info for iommu
- capability query
-Thread-Index: AQHZ0DswxtbPVo4wXkmPSUNmERqb9q/uGcyw
-Date:   Thu, 17 Aug 2023 07:33:51 +0000
-Message-ID: <BN9PR11MB5276D1526A8F929813244C4E8C1AA@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20230816121349.104436-1-yi.l.liu@intel.com>
- <20230816121349.104436-6-yi.l.liu@intel.com>
-In-Reply-To: <20230816121349.104436-6-yi.l.liu@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|PH7PR11MB7571:EE_
-x-ms-office365-filtering-correlation-id: 855d37ae-c59a-4a8b-5a62-08db9ef44da1
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: WfDjiLr5+K57qVo8lAIq+URr4AT/UO0D57pAZyibCwiiq+dnkIzCOFiOXQW5DcLtRM1+u6CJDnyEWKKOac0jSg1mQnGMNB005ibiPLRXZFRGNkS4LAH3Y2g8mEaDrR40CxiC+G+mao+N3mK7CC/ZLQeoNxiPHNWbzsGtSB1TIa3ekN11RGp4lLF7dMfi/jwoU4Z3zgKmepzd+9KwEVl1xnrOUxfHs51qxl0ivslQrS9fpffjNPxO6Urr5E1mdW7csofgUl3cI/y+83K2zzlY9jQpJtefHHl81PzoMdeS85Wfp4uB9ItTMi/DoI90bwc0C+pn4PhiasLxv07Pm604qF3y81MjAQmxlI6XK2sJ+kuFhxLdWA9kpD0/uhBYEulbr0f9d++QLl02UoNbw7IeCLHI77CKdnVu2LJb6N0WIN2NUadWbxqyA3k+Zibpxd3gN0JuqxXf4lqvq1Utr6pems0hbS9lXLQVd2p6+oIPDaJQmobsu42JaJEEgb1MiiNncOn+VPb450a1xP7BJdSH2b55mcq1PFWg8s+V8lvzhK7T6Gy97UZNu3Q8R1B47tSXU53pWqOB7qix4NJouqP8IO+9eiMkPcGBiMRJNzITlaYPDnTSSuJUpQRx0gXAXJnw
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(136003)(376002)(346002)(39860400002)(396003)(1800799009)(186009)(451199024)(55016003)(66556008)(64756008)(66476007)(38070700005)(38100700002)(76116006)(54906003)(66446008)(82960400001)(316002)(478600001)(122000001)(110136005)(66946007)(7416002)(2906002)(52536014)(41300700001)(4326008)(8676002)(8936002)(5660300002)(9686003)(71200400001)(7696005)(6506007)(26005)(558084003)(86362001)(33656002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?upbnSABoNq1zNn+9RKfccSa/0jBH+kltHVlGBbc5Jty7ACoPlSfDOVHbCKuq?=
- =?us-ascii?Q?8pcVoKdRGR3nsQ4MD2D5dMVTHrxlXIBy4fIICMDAr8L5q2QLwxKAoZ5L0fz3?=
- =?us-ascii?Q?fyinKu193A5kCUoKVupf3rsKFHk4IlEkNecoXsV1Wn+wPYdIvCDAlFifVwA/?=
- =?us-ascii?Q?HYtbwPB3zamQfByZBU9IIxQPiuH+J9FtclPpWqZ1QVNkPQJO1OxScKzCmk1N?=
- =?us-ascii?Q?SW0V6A7HSat48+YUhSpgCzhs1FgCoQXdziI78ZZBl6FEok6f46fGlal9b2FN?=
- =?us-ascii?Q?A3p96XitnHlpkMbtwAT8RtZmadorLQEMIhj1U62ULvN4XMEsLvmSnjcYMhTW?=
- =?us-ascii?Q?UnwCQsaGbD22yETVTBoE43uGTwfdG4rolmD9kivKq6vcO7eGea1rMWwtDg+6?=
- =?us-ascii?Q?9VMAbXotq5bQZiuuz80++gF10qGNPAW9cWgpzhcBabNOaRYIKlqG7iikE/L7?=
- =?us-ascii?Q?elONWw87azY+ynoBRnjMfNizeuOqBM+e3BDhMUOG+TZFMyvbKCRcKfzD3Uy/?=
- =?us-ascii?Q?1pkjfB7Pk2+1AWVDZHgVfVmnSk5vbEgCXMGko32cnRfoePEia9xYrybp95tx?=
- =?us-ascii?Q?ETWD6p5WsOmalqPC60VEj+V2TtHI0PKFoGEbF0gtrfkdiW/DJqI8ACngWgbS?=
- =?us-ascii?Q?YacZzAmBHaWgOF4YYCfBF861eqxdpz/gO3IGytlkAT7Kdvw1idOr++jgIlYI?=
- =?us-ascii?Q?/Iu06cCaZcy29ou9fes00d5lh2PgbYLuyKa2uolHfIwt26qL5NhLhWNizc3u?=
- =?us-ascii?Q?rbnMJqmplqmGycUpFgTJN1NU+Cr1BuMBrwXnjaC8LAYwMPqe6T2+8rUd8xGE?=
- =?us-ascii?Q?Bfb8qPRQRrtHbilmMk3RkkSgujJmyPvPj6zRu7v6yrtp8kyQgO4bM4cQApcv?=
- =?us-ascii?Q?gf7cfHtrIjcse9106BuslqIp0Fae9IQ1Z1f+zkE/CpF6ZamKwH7tLZAiVk0v?=
- =?us-ascii?Q?MKKqN0S2fQsaT5wpaBEoZFQ/ed1Xp/9puGI1ch+nit4scJkfa3VVIbVvqaXz?=
- =?us-ascii?Q?wuCPb3czr6XSBIUHOl+5/eGGwjiqyRL+mEuQuiSWGouu0ggaM0/8wIhtRL9l?=
- =?us-ascii?Q?yhnYKZwXHAhT7eYN0hrTIiEwh667w2hN1gABUAPQA2mV/+8gkjjA9RqLDTsz?=
- =?us-ascii?Q?WQyscIxHxmjIHmwTNt+5R430ZQK672Sih069oL1gcObntBQoBsPNyKFuDEph?=
- =?us-ascii?Q?NShJU1He2lhIg0BOpS6FRX3bXrEkTPZxwsDKLMMBGOwAlbx/p3gLihqeECLW?=
- =?us-ascii?Q?DfhBxlgcUClE3K6pS4Nx97BmMY6YSwV4aYu+2GptnTebPuQltdMuHlbYKFwn?=
- =?us-ascii?Q?Hd3OsqJdcG9f+dFoXFeeJfbILcSs9r4KhNoH9xwzYKHRWMrOQKh/Bj1Ko9kc?=
- =?us-ascii?Q?GjAiZVse+VSKTlSz1+74h8RYrcPDILHDmROIZAH35O3Wg+f7hYxfU4EXQGzE?=
- =?us-ascii?Q?Bq20Kn4HJe4X5oWm3EGGqY+OYUgEldsWSxQqsnrECuKCgDmzsVeV4oRSKw/7?=
- =?us-ascii?Q?mD87hDII2GohzUFqov+zTNoqbpg3TOUNz8ncG0h8XkaAeLa4TumXRDZuSAbt?=
- =?us-ascii?Q?njhGMtkojoMigljsMuF3P6pL2TtIVTx6swvsMekV?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 17 Aug 2023 04:21:21 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4AE273F;
+        Thu, 17 Aug 2023 01:21:20 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-99bfcf4c814so984926966b.0;
+        Thu, 17 Aug 2023 01:21:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692260478; x=1692865278;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=VBSUC9nLpujZz5zGGjUSv4NeViKHnBjmgypxXeOUcgE=;
+        b=MIgVVh8nKvI6iyrSAbEuu5zot6UxH3eWTH5khCh57BqGH4BWLtBoQnZbRc3KK9NWiR
+         CRJm1QQkh78SObWJYEROKZwR1oDjSl4NcUh+N2jbwAQg/tH5RWrrsLVG+BdCaBV4vv6b
+         FptR2/x6jQmW1oBSFaRVeCbP7kzH/eVxkNrJfuinlEALRZ8pTqE5GJ1InVW6Zr0XA0q8
+         ivyq7NFnioo0xNZW185tH474Hom38mTzoBPgqEiPyjokGBN5EgUe+IIM0Yx0TABq0aUA
+         M/fYKa4Ds/f5psEYvkvO6ihJyt+SOo6MKOJ3T5D3rK2K+XQH/sJXdmWsi1K0YFjayNYx
+         0Rsg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692260478; x=1692865278;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VBSUC9nLpujZz5zGGjUSv4NeViKHnBjmgypxXeOUcgE=;
+        b=P5ffrjxPmXx0g7zyzepchBoGBYP6HO6qy6XOXEcSApmST78FsRHCjJUk0rHz6mbIu+
+         EXdtLFxu6Q+FqOyLzhkYLkVz42atU1hwwIlP3g1p3c3Bv1LpgxW0rUyVpkfm0YXC/vG6
+         8xfKZXi4BaGTh/aDHrvkrPj2Cy9F1TATMDAL76K8RA6fLcN5DdmQ7q6209LzPjLoDmSN
+         plklhNnBWrn8V29/CjOaFR03sd+9VxXWzi1nT3zSWVB2S4MpJYjMCRu/fNKBlfdPngoQ
+         WdzpF95eHwgrLhFlCFuotF0fyDmH3qrf+f0N9uixaAT52UY4gTE+rXsNmYFSXrW8/lQL
+         QWTw==
+X-Gm-Message-State: AOJu0YzvXzl6m5TbXyojnOmpJGJB6Qcao6S8GZuiAh2CuGH9gpOxOH/h
+        ZNv4QXEJGFwH4MVJcbyqQUA=
+X-Google-Smtp-Source: AGHT+IG8F8vWRoMbRxe0XzNivqXEbX46cG0CiKv0fAc3Mk9H28wKWLwrT4liVmfGqnqnBCT9aryb1g==
+X-Received: by 2002:a17:906:4bd5:b0:99c:da24:bdb7 with SMTP id x21-20020a1709064bd500b0099cda24bdb7mr4578560ejv.71.1692260478226;
+        Thu, 17 Aug 2023 01:21:18 -0700 (PDT)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id a17-20020a17090682d100b009944e955e19sm9809102ejy.30.2023.08.17.01.21.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 17 Aug 2023 01:21:17 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Thu, 17 Aug 2023 10:21:15 +0200
+To:     Rong Tao <rtoax@foxmail.com>
+Cc:     sdf@google.com, daniel@iogearbox.net, andrii@kernel.org,
+        rongtao@cestc.cn, Alexei Starovoitov <ast@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>,
+        Yonghong Song <yonghong.song@linux.dev>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        "open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)" 
+        <bpf@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH bpf-next v5] selftests/bpf: trace_helpers.c: optimize
+ kallsyms cache
+Message-ID: <ZN3YeyMkgEg1IoKP@krava>
+References: <tencent_0E9E1A1C0981678D5E7EA9E4BDBA8EE2200A@qq.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 855d37ae-c59a-4a8b-5a62-08db9ef44da1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Aug 2023 07:33:51.4193
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Y9zmGFKoS1vM1P6shoFImJepx8vtiZQfCNVvKDkykJ41qXVkmhWHDrorXNzoAS/y0agyfag2bAv9/ZHtkyIVkg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB7571
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <tencent_0E9E1A1C0981678D5E7EA9E4BDBA8EE2200A@qq.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> From: Liu, Yi L <yi.l.liu@intel.com>
-> Sent: Wednesday, August 16, 2023 8:14 PM
->=20
-> Add intel_iommu_hw_info() to report cap_reg and ecap_reg information.
->=20
-> Acked-by: Lu Baolu <baolu.lu@linux.intel.com>
-> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-> Signed-off-by: Yi Liu <yi.l.liu@intel.com>
+On Thu, Aug 17, 2023 at 01:03:45PM +0800, Rong Tao wrote:
+> From: Rong Tao <rongtao@cestc.cn>
+> 
+> Static ksyms often have problems because the number of symbols exceeds the
+> MAX_SYMS limit. Like changing the MAX_SYMS from 300000 to 400000 in
+> commit e76a014334a6("selftests/bpf: Bump and validate MAX_SYMS") solves
+> the problem somewhat, but it's not the perfect way.
+> 
+> This commit uses dynamic memory allocation, which completely solves the
+> problem caused by the limitation of the number of kallsyms.
+> 
+> Acked-by: Stanislav Fomichev <sdf@google.com>
+> Signed-off-by: Rong Tao <rongtao@cestc.cn>
+> ---
+> v5: Release the allocated memory once the load_kallsyms_refresh() upon error
+>     given it's dynamically allocated.
+> v4: https://lore.kernel.org/lkml/tencent_59C74613113F0C728524B2A82FE5540A5E09@qq.com/
+>     Make sure most cases we don't need the realloc() path to begin with,
+>     and check strdup() return value.
+> v3: https://lore.kernel.org/lkml/tencent_50B4B2622FE7546A5FF9464310650C008509@qq.com/
+>     Do not use structs and judge ksyms__add_symbol function return value.
+> v2: https://lore.kernel.org/lkml/tencent_B655EE5E5D463110D70CD2846AB3262EED09@qq.com/
+>     Do the usual len/capacity scheme here to amortize the cost of realloc, and
+>     don't free symbols.
+> v1: https://lore.kernel.org/lkml/tencent_AB461510B10CD484E0B2F62E3754165F2909@qq.com/
+> ---
+>  tools/testing/selftests/bpf/trace_helpers.c | 62 +++++++++++++++++----
+>  1 file changed, 52 insertions(+), 10 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
+> index f83d9f65c65b..0053ba22f0cb 100644
+> --- a/tools/testing/selftests/bpf/trace_helpers.c
+> +++ b/tools/testing/selftests/bpf/trace_helpers.c
+> @@ -18,10 +18,47 @@
+>  #define TRACEFS_PIPE	"/sys/kernel/tracing/trace_pipe"
+>  #define DEBUGFS_PIPE	"/sys/kernel/debug/tracing/trace_pipe"
+>  
+> -#define MAX_SYMS 400000
+> -static struct ksym syms[MAX_SYMS];
+> +static struct ksym *syms;
+> +static int sym_cap;
+>  static int sym_cnt;
+>  
+> +static int ksyms__add_symbol(const char *name, unsigned long addr)
+> +{
+> +	void *tmp;
+> +	unsigned int new_cap;
+> +
+> +	if (sym_cnt + 1 > sym_cap) {
+> +		new_cap = sym_cap * 4 / 3;
+> +		tmp = realloc(syms, sizeof(struct ksym) * new_cap);
+> +		if (!tmp)
+> +			return -ENOMEM;
+> +		syms = tmp;
+> +		sym_cap = new_cap;
+> +	}
 
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+sorry I did not notice earlier, but we have helper for realloc
+
+  libbpf_ensure_mem
+
+check the usage for example in prog_tests/kprobe_multi_test.c
+
+> +
+> +	tmp = strdup(name);
+> +	if (!tmp)
+> +		return -ENOMEM;
+> +	syms[sym_cnt].addr = addr;
+> +	syms[sym_cnt].name = tmp;
+> +
+> +	sym_cnt++;
+> +
+> +	return 0;
+> +}
+> +
+> +static void ksyms__free(void)
+> +{
+> +	unsigned int i;
+> +
+> +	if (!syms)
+> +		return;
+> +
+> +	for (i = 0; i < sym_cnt; i++)
+> +		free(syms[i].name);
+> +	free(syms);
+> +}
+> +
+>  static int ksym_cmp(const void *p1, const void *p2)
+>  {
+>  	return ((struct ksym *)p1)->addr - ((struct ksym *)p2)->addr;
+> @@ -33,9 +70,14 @@ int load_kallsyms_refresh(void)
+>  	char func[256], buf[256];
+>  	char symbol;
+>  	void *addr;
+> -	int i = 0;
+> +	int ret;
+>  
+> +	/* Make sure most cases we don't need the realloc() path to begin with */
+> +	sym_cap = 400000;
+>  	sym_cnt = 0;
+> +	syms = malloc(sizeof(struct ksym) * sym_cap);
+> +	if (!syms)
+> +		return -ENOMEM;
+
+libbpf_ensure_mem will also take care of first allocation and the capacity increase
+
+jirka
+
+>  
+>  	f = fopen("/proc/kallsyms", "r");
+>  	if (!f)
+> @@ -46,17 +88,17 @@ int load_kallsyms_refresh(void)
+>  			break;
+>  		if (!addr)
+>  			continue;
+> -		if (i >= MAX_SYMS)
+> -			return -EFBIG;
+> -
+> -		syms[i].addr = (long) addr;
+> -		syms[i].name = strdup(func);
+> -		i++;
+> +		ret = ksyms__add_symbol(func, (unsigned long)addr);
+> +		if (ret)
+> +			goto error;
+>  	}
+>  	fclose(f);
+> -	sym_cnt = i;
+>  	qsort(syms, sym_cnt, sizeof(struct ksym), ksym_cmp);
+>  	return 0;
+> +
+> +error:
+> +	ksyms__free();
+> +	return ret;
+>  }
+>  
+>  int load_kallsyms(void)
+> -- 
+> 2.39.3
+> 
+> 
