@@ -2,118 +2,126 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5078977FC66
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Aug 2023 18:58:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A20777FC83
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Aug 2023 19:07:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231246AbjHQQ5i (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 17 Aug 2023 12:57:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46876 "EHLO
+        id S1353173AbjHQRHR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 17 Aug 2023 13:07:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353803AbjHQQ5P (ORCPT
+        with ESMTP id S1353818AbjHQRHK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Aug 2023 12:57:15 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 255B72D75
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Aug 2023 09:57:14 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1bd9b4f8e0eso104185ad.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 17 Aug 2023 09:57:14 -0700 (PDT)
+        Thu, 17 Aug 2023 13:07:10 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF50630C5
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Aug 2023 10:07:05 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-55bf2bf1cdeso93357a12.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Aug 2023 10:07:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1692291433; x=1692896233;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5jBteD18pe63JA7nhN088a/1muJJtAStcr5mOX/vhfA=;
-        b=inaDJWW8I+mpguLQ2GzQ+qwcaoqTtUbPgrf2yHqs5EK4qwPc8SjXADrCpy+Bdvm4/M
-         g4OC019YJUkkXR6SDD0oQ34YAs9nBXEGo1ruWXaah+cJ4McdhIuZO8E440d7LE4bQyZK
-         K5BcOVdABp1xZcPvK16dsaIVjeI+sWF5uXi24=
+        d=google.com; s=20221208; t=1692292025; x=1692896825;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=QnA3zPm2q98qby0UoFFaFMSu7nPrN723bBGGT2+DgLs=;
+        b=cPbrT9R7dbSgZyIYn0MoABD+dW9CzgzB0c2szdO9q2gaQezgEccSgLaZARJUxDii3N
+         z2xVLOsuI32LBrHAJjco19jtnJttDM9z5VTOcV4d0KghDeGC/LeT+LQNnXzLb5hXhfac
+         epcWSxrBvzEcCnO1xidylUFN1IPNUinKwyDkLHxFBALc+nXRm8rKZcufVEx5nlkyrSzw
+         8mIVqtIoFXayBbkUJNL8QSXTjk3u5fdN6MtfgO9MUf2uBhJ0JgHKIRfXe6BEmApaJufR
+         vKiuZpi7tq+ULrqeuRVyaDWvIZTtmJqvL2nsHH8hLJF84cIrJNlcfxBv7IXZxOuZxpUV
+         SCiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692291433; x=1692896233;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5jBteD18pe63JA7nhN088a/1muJJtAStcr5mOX/vhfA=;
-        b=TOGWYuuGkua1/gObPbNkEP7XPgHZkXPjjgYJ5WT7PLu7H8DbZupeDp4GMaQlbTeR31
-         c6RAn2pOY9tXsYycAClpAgzTCjslPvBYvpjaRzLsd8V+gonV8p9EdZ2HnLAOJuJmBWCe
-         esYDZRaWwJ6soQftD49M3PHU9OKm/DtwjRKBtF2AyWSB31htGo40lrOyq/ewmtYq2JUG
-         zpKgh67vATk9z5IsRzAtbjttYmEFuSKww538Zv8di2DwY5DH+l8lc4wnG+axmkVHG6xP
-         voaM7XD3EPY7MbQjoafTcMgpctgmuOcS3wAvucamS+8UEP2GvLCBm0bIXOIxMCvBlkEm
-         abVQ==
-X-Gm-Message-State: AOJu0YyBJsIdBFLU1O/EDt/9COCHZMdqrO0/Z2PYeZmIt2WQa1ZleR5O
-        93f2A8FVMPY7BkUDvFgRYk4Q1w==
-X-Google-Smtp-Source: AGHT+IGXiHai907yblQ4LJTd3jAsNR4lqc80bcNlEM4qD1hVRR/CqQRXK5Hyw8IoW/cXSZLVi5WANg==
-X-Received: by 2002:a17:903:2794:b0:1bb:c64f:9a5e with SMTP id jw20-20020a170903279400b001bbc64f9a5emr4769029plb.5.1692291433571;
-        Thu, 17 Aug 2023 09:57:13 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id jd17-20020a170903261100b001bf095dfb79sm2201447plb.235.2023.08.17.09.57.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 17 Aug 2023 09:57:12 -0700 (PDT)
-Date:   Thu, 17 Aug 2023 09:57:12 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     "Eric W. Biederman" <ebiederm@xmission.com>
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        Petr Skocik <pskocik@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jens Axboe <axboe@kernel.dk>, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        Marco Elver <elver@google.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        "haifeng.xu" <haifeng.xu@shopee.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] [RFC] signal: Add KUnit tests
-Message-ID: <202308170956.B7CA2B8BDB@keescook>
-References: <20230814210508.never.871-kees@kernel.org>
- <87bkf68g5m.fsf@email.froward.int.ebiederm.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87bkf68g5m.fsf@email.froward.int.ebiederm.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        d=1e100.net; s=20221208; t=1692292025; x=1692896825;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QnA3zPm2q98qby0UoFFaFMSu7nPrN723bBGGT2+DgLs=;
+        b=YE5I2i5LA5SllxAwzEmsPi+s23RT3IBNVJ266wMyXI6xldYw2xCO4AoC6jw2F34VN5
+         0LFlP3Z8CDmcVSViYq7mkQNOYfo9Gr2GEJWUJw3Jh4sAUIti40GbUzOKfq3us5W51zUh
+         Hts6knPUc9c0zdcO/J2EF/iw+kZ7ZmECEiAP6Hvj8L2GlPWbK0JVTveWZrk860J05Tpj
+         d4XkzQzF5DTbgwD9jJaHnHUroDOAoDKXUriBjbAdQYf0LuOJGoW/z5Cg+q15jj/ohxMH
+         RzdhTBytXAsaS8HbaPts5LTQCKwqi0/EXHpi7GyQvBjH2tM+tXVEIIPc/OGyYsgQQOSE
+         zn7A==
+X-Gm-Message-State: AOJu0YyYrDc2g1sA3/y8CPn9BYmX86QPFwLoKww47Z9I1oe52obHTO7U
+        wJs71nCsbUdLXd9lJRAKRsY4wdaf3TyX4Q==
+X-Google-Smtp-Source: AGHT+IEwMltNFPnv+TWY5AbM/L2SSVB4Cwu+aXXJkg5TrmecyH0tcs+CbpYVLgXJ5E30Hfo3VlYRap3agDlaNA==
+X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:262e])
+ (user=shakeelb job=sendgmr) by 2002:a17:903:64e:b0:1b8:d44:32aa with SMTP id
+ kh14-20020a170903064e00b001b80d4432aamr3467plb.1.1692292025414; Thu, 17 Aug
+ 2023 10:07:05 -0700 (PDT)
+Date:   Thu, 17 Aug 2023 17:07:02 +0000
+In-Reply-To: <jnyjalhg43mdnn6su2a2kmwzqasdyjsfdvipim2i2hvqo7w6y2@st57sbo4bkxf>
+Mime-Version: 1.0
+References: <jnyjalhg43mdnn6su2a2kmwzqasdyjsfdvipim2i2hvqo7w6y2@st57sbo4bkxf>
+Message-ID: <20230817170702.mwem4nsy2ka4gj7n@google.com>
+Subject: Re: [PATCH v2] selftests: cgroup: fix test_kmem_memcg_deletion kernel
+ mem check
+From:   Shakeel Butt <shakeelb@google.com>
+To:     Lucas Karpinski <lkarpins@redhat.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Muchun Song <muchun.song@linux.dev>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Aug 16, 2023 at 11:08:21PM -0500, Eric W. Biederman wrote:
-> Kees Cook <keescook@chromium.org> writes:
+On Thu, Aug 17, 2023 at 08:47:26AM -0400, Lucas Karpinski wrote:
+> The combination of using slab, anon, file, kernel_stack, and percpu is
+> not accurate for total kernel memory utilization. Checking kernel within
+> memory.stat provides a more accurate measurement.
 > 
-> > This is a continuation of the proposal[1] for mocking init_task for
-> > KUnit testing. Changing the behavior of kill_something_info() is moving
-> > forward[2] and I'd _really_ like to have some unit tests in place to
-> > actually test the behavioral changes.
-> >
-> > I tried to incorporate feedback from Daniel and David, and I think the
-> > result is fairly workable -- the only tricky part is building valid
-> > task_struct instances. :)
-> >
-> > Notably, I haven't actually gotten as far as testing the actual proposed
-> > behavioral change since I wanted to make sure this approach wasn't going
-> > to totally crash and burn.
-> >
-> > Thoughts?
+> Signed-off-by: Lucas Karpinski <lkarpins@redhat.com>
+> ---
+>  v1: https://lore.kernel.org/all/eex2vdlg4ow2j5bybmav73nbfzuspkk4zobnk7svua4jaypqb5@7ie6e4mci43t/
 > 
-> Overall this looks like a nice start.  More comments below.
+>  tools/testing/selftests/cgroup/test_kmem.c | 25 +++++-----------------
+>  1 file changed, 5 insertions(+), 20 deletions(-)
 > 
-> I do wonder though.  Would it perhaps be easier to create a pid
-> namespace with just the processes you want in it?
+> diff --git a/tools/testing/selftests/cgroup/test_kmem.c b/tools/testing/selftests/cgroup/test_kmem.c
+> index ed2e50bb1e76..3ef979ee0edf 100644
+> --- a/tools/testing/selftests/cgroup/test_kmem.c
+> +++ b/tools/testing/selftests/cgroup/test_kmem.c
+> @@ -166,7 +166,7 @@ static int cg_run_in_subcgroups(const char *parent,
+>   */
+>  static int test_kmem_memcg_deletion(const char *root)
+>  {
+> -	long current, slab, anon, file, kernel_stack, pagetables, percpu, sock, sum;
+> +	long current, kernel;
+>  	int ret = KSFT_FAIL;
+>  	char *parent;
+>  
+> @@ -184,30 +184,15 @@ static int test_kmem_memcg_deletion(const char *root)
+>  		goto cleanup;
+>  
+>  	current = cg_read_long(parent, "memory.current");
+> -	slab = cg_read_key_long(parent, "memory.stat", "slab ");
+> -	anon = cg_read_key_long(parent, "memory.stat", "anon ");
+> -	file = cg_read_key_long(parent, "memory.stat", "file ");
+> -	kernel_stack = cg_read_key_long(parent, "memory.stat", "kernel_stack ");
+> -	pagetables = cg_read_key_long(parent, "memory.stat", "pagetables ");
+> -	percpu = cg_read_key_long(parent, "memory.stat", "percpu ");
+> -	sock = cg_read_key_long(parent, "memory.stat", "sock ");
+> -	if (current < 0 || slab < 0 || anon < 0 || file < 0 ||
+> -	    kernel_stack < 0 || pagetables < 0 || percpu < 0 || sock < 0)
+> +	kernel = cg_read_key_long(parent, "memory.stat", "kernel ");
+> +	if (current < 0 || kernel < 0)
+>  		goto cleanup;
+>  
+> -	sum = slab + anon + file + kernel_stack + pagetables + percpu + sock;
+> -	if (abs(sum - current) < MAX_VMSTAT_ERROR) {
+> +	if (abs(kernel - current) < MAX_VMSTAT_ERROR) {
 
-Do you have a short example of how I could do this correctly? It's not
-obvious to me how to actually set all that up (and tear it down).
+I don't think this is what you want. Since slab, kernel_stack,
+pagetables and percpu are included in the kmem stats, you just want to
+replace those with kmem. Basically keep the anon, file and sock stats.
 
-> I am wondering because you failed to mock find_vpid and so you
-> are actually testing sending signals to kernel threads.
-
-Hah. Eek.
-
--- 
-Kees Cook
