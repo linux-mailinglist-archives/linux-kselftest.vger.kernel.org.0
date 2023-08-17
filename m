@@ -2,97 +2,99 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65B3F77FE11
-	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Aug 2023 20:45:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0483677FE65
+	for <lists+linux-kselftest@lfdr.de>; Thu, 17 Aug 2023 21:16:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1354518AbjHQSod (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 17 Aug 2023 14:44:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34822 "EHLO
+        id S1353536AbjHQTP1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 17 Aug 2023 15:15:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354616AbjHQSob (ORCPT
+        with ESMTP id S1354613AbjHQTPC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 17 Aug 2023 14:44:31 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A85D2D59;
-        Thu, 17 Aug 2023 11:44:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=s+yMCPhjOL7dlSQxxy56NPES58qbEzmGhM9FA47BA0A=; b=Qhnpe5SeMJkLfyfzpBPvYDPI3R
-        j4P85C4Uh4ATWL6Qq1ONYids/qrE8DOZasKvViv0jyxEQbwpZir0Hh4l6jtLAIp6gXzVIXmDT6SMv
-        Tc6Rc9QiP2qmdoOE21PNA7mCn9O2oj32s4xmFtpj8bh6J/6y+sHNvV0WaZSAIJdBVzM6jB7ETjlmW
-        Jkxg+4/TUq8LxBCINDUk1fiBOk9CY8pqYN2xKyc5JeWUbzGROI//o3ZUAIW41v5BQZTEbrPexe4tB
-        uryMhitBnum3WIHq6pdDOhbiix7W+6C2XiOCMsSDMv2BIgECJ0gsPDn3WW+YAELEepiYWi5DRCnUy
-        pVLPNISw==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qWhyt-006ztU-1Q;
-        Thu, 17 Aug 2023 18:44:27 +0000
-Message-ID: <17065c3f-87bb-c2a9-e8f6-82fecd15b9c7@infradead.org>
-Date:   Thu, 17 Aug 2023 11:44:26 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.14.0
-Subject: Re: linux-next: Tree for Aug 17 (DRM_TTM KUNIT tests)
-Content-Language: en-US
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Huang Rui <ray.huang@amd.com>
-References: <20230817144729.7d2b1b53@canb.auug.org.au>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230817144729.7d2b1b53@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 17 Aug 2023 15:15:02 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5055A359C
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Aug 2023 12:15:00 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-583312344e7so1835027b3.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 17 Aug 2023 12:15:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1692299699; x=1692904499;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=bFN9dp01RtqHwqhQI1dVarxsGtiPL2F5fMs/c+uKdWk=;
+        b=DjzAqPJrxIfw1BYw5i3FrieFrPSbaM+YcbWnz6sZAiIOz7zApNgX/BlsxaUITOB7iw
+         yCnIS239SXQ+yTqLs6JZm/h3Jvfh3dh4+oOkiUGEnKp9cLL875BN2opF+m5WNDI/TG0J
+         mPOdug1WnENIOFf5R7TJzlcr5pE5G7Gx/n0lWRxl9fk3MRMc/eWHeq+9IjPMT09mNcFa
+         PsmRvN7tq4U1WIYX7DdU2daYJB49YcuvtbHqDDIEm1A8jv2TvEyyCqt2cWIzJBHINfOj
+         cxrWVcT75yc6XmnLiK/PPsf/IBFO5mupHWPXQs3Z7Lf7+YN2wxPC8wJvtDQY27iF9rrS
+         2Z3w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692299699; x=1692904499;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bFN9dp01RtqHwqhQI1dVarxsGtiPL2F5fMs/c+uKdWk=;
+        b=gtXwcfzHMh+IW85nvKit7jHF+LBqRP9HVyCbH2P5zcN/gjcZXLNf97liYLUIsaWIAV
+         7RK++1r+5cB39D1x6cFjsyBaKahnIvvUGD7E4IMt9vqEhRb0dYk0Kl6S7Y68fqoSJxKE
+         MY3n9D7xqxA0tgm4XUJAoWOnXZUC0Xgm+PYcwXDzz0g/hSQIGnWdzRov6MFAxESyDdy3
+         MC72cLJh3DSnR+Y+oLq1fxFzuH70FeVOxLjORLrzq/i0YLGs5jY6ey7gJFpnDgrbYSKJ
+         G20s+ng35k9OmJLPS3OuijB+watuwFrLq5Eqsmj+22qTIwCFtAORo2RPnA5t6IbXKH3m
+         lvhQ==
+X-Gm-Message-State: AOJu0Yz/E5LXlesTnhvxj224aUyMmv2+TcXaPwfdZFkdNsFv1tEU+qXT
+        EhH/ipIfnxu4FdpJdKPRaLeP8ScJ5g==
+X-Google-Smtp-Source: AGHT+IGX5b4WQOsC3kP+cTVvJ7mVySPhcsavQyeEdDAUh6zcBnD/TXahce8aIDy43n9+rZRTSf81ojTVhw==
+X-Received: from rmoar-specialist.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:45d3])
+ (user=rmoar job=sendgmr) by 2002:a05:690c:707:b0:58c:9fda:d043 with SMTP id
+ bs7-20020a05690c070700b0058c9fdad043mr4166ywb.10.1692299699585; Thu, 17 Aug
+ 2023 12:14:59 -0700 (PDT)
+Date:   Thu, 17 Aug 2023 19:14:51 +0000
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.42.0.rc1.204.g551eb34607-goog
+Message-ID: <20230817191451.1026413-1-rmoar@google.com>
+Subject: [PATCH] kunit: fix struct kunit_attr header
+From:   Rae Moar <rmoar@google.com>
+To:     shuah@kernel.org, davidgow@google.com, brendan.higgins@linux.dev
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, Rae Moar <rmoar@google.com>,
+        kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Add parameter descriptions to struct kunit_attr header for the
+parameters attr_default and print.
 
+Fixes: 39e92cb1e4a1 ("kunit: Add test attributes API structure")
 
-On 8/16/23 21:47, Stephen Rothwell wrote:
-> Hi all,
-> 
-> Changes since 20230816:
-> 
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202308180127.VD7YRPGa-lkp@intel.com/
 
-on risc-v 32-bit:
-when
-# CONFIG_MMU is not set
+Signed-off-by: Rae Moar <rmoar@google.com>
+---
+ lib/kunit/attributes.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
+diff --git a/lib/kunit/attributes.c b/lib/kunit/attributes.c
+index 5e3034b6be99..1b512f7e1838 100644
+--- a/lib/kunit/attributes.c
++++ b/lib/kunit/attributes.c
+@@ -30,6 +30,8 @@ enum print_ops {
+  * attribute value
+  * @filter: function to indicate whether a given attribute value passes a
+  * filter
++ * @attr_default: default attribute value used during filtering
++ * @print: value of enum print_ops to indicate when to print attribute
+  */
+ struct kunit_attr {
+ 	const char *name;
 
-WARNING: unmet direct dependencies detected for DRM_TTM
-  Depends on [n]: HAS_IOMEM [=y] && DRM [=y] && MMU [=n]
-  Selected by [y]:
-  - DRM_TTM_KUNIT_TEST [=y] && HAS_IOMEM [=y] && DRM [=y] && KUNIT [=y]
-
-WARNING: unmet direct dependencies detected for DRM_TTM
-  Depends on [n]: HAS_IOMEM [=y] && DRM [=y] && MMU [=n]
-  Selected by [y]:
-  - DRM_TTM_KUNIT_TEST [=y] && HAS_IOMEM [=y] && DRM [=y] && KUNIT [=y]
-
-WARNING: unmet direct dependencies detected for DRM_TTM
-  Depends on [n]: HAS_IOMEM [=y] && DRM [=y] && MMU [=n]
-  Selected by [y]:
-  - DRM_TTM_KUNIT_TEST [=y] && HAS_IOMEM [=y] && DRM [=y] && KUNIT [=y]
-
-/opt/crosstool/gcc-13.1.0-nolibc/riscv32-linux/bin/riscv32-linux-ld: drivers/gpu/drm/ttm/ttm_bo_vm.o: in function `.L31':
-ttm_bo_vm.c:(.text+0x42c): undefined reference to `vmf_insert_pfn_prot'
-/opt/crosstool/gcc-13.1.0-nolibc/riscv32-linux/bin/riscv32-linux-ld: drivers/gpu/drm/ttm/ttm_bo_vm.o: in function `.L104':
-ttm_bo_vm.c:(.text+0xa70): undefined reference to `vmf_insert_pfn_prot'
-
-
+base-commit: 582eb3aeed2d06b122fba95518b84506d3d4ceb9
 -- 
-~Randy
+2.42.0.rc1.204.g551eb34607-goog
+
