@@ -2,130 +2,115 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 997FA781369
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Aug 2023 21:39:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F9787813FF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Aug 2023 22:00:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379642AbjHRTij (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Aug 2023 15:38:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36394 "EHLO
+        id S1379801AbjHRT7k (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Aug 2023 15:59:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379660AbjHRTiP (ORCPT
+        with ESMTP id S1379865AbjHRT7i (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Aug 2023 15:38:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02D191FCE;
-        Fri, 18 Aug 2023 12:38:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 88B7662D18;
-        Fri, 18 Aug 2023 19:38:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDBE7C433C8;
-        Fri, 18 Aug 2023 19:38:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692387492;
-        bh=01Q2xEmAO2pVJWHzK9M3MZQdGCIPPOuErEoePLDfq+0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZvLDUejgDxFNb6IhI4Y0qdql5M25cqQLtbiufVm4Gb1iXmTmAB0Vv7ahIz5a06KAb
-         PUVYYrLHaNR/SZqrZU0yrVK5FDSBVeGGfofO9+Df7X5NWY2X9XcazAltA6H9EsHtv+
-         fc4AWwR9CKunnY9EpyNqH+5BjOB9QdtB0QMaWXxuq/yd9mPtqlVE1q+rF9jr+uSXsI
-         f1NsCWGQH8w59yUVRi8q2TubicSUqChyEh/LQmmTFJ4Z4wetsknCZ6enP2KXAnB49z
-         oUn0kP6MHyAsmo5BdzSFWx5eauk1ZDTV4IrU/9IN+nMSi55OIHvkUfyBmizMa3JLC6
-         ole8zbgLwOsiA==
-Date:   Fri, 18 Aug 2023 20:38:02 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-        Deepak Gupta <debug@rivosinc.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v4 03/36] arm64/gcs: Document the ABI for Guarded Control
- Stacks
-Message-ID: <aaea542c-929c-4c9b-8caa-ca67e0eb9c1e@sirena.org.uk>
-References: <20230807-arm64-gcs-v4-0-68cfa37f9069@kernel.org>
- <20230807-arm64-gcs-v4-3-68cfa37f9069@kernel.org>
- <ZNOhjrYleGBR6Pbs@arm.com>
- <f4cec4b3-c386-4873-aa1d-90528e062f2a@sirena.org.uk>
- <ZN+qki9EaZ6f9XNi@arm.com>
+        Fri, 18 Aug 2023 15:59:38 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F0BF1706;
+        Fri, 18 Aug 2023 12:59:37 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2b95d5ee18dso20178621fa.1;
+        Fri, 18 Aug 2023 12:59:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692388775; x=1692993575;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qZnDLKTm+Vz68wW+NpBJGQv7K7EuvgOHLUSeyXNlCjo=;
+        b=niC/NhGgJdLzQDWhJ35lBiET52DjSLPJEHDaV8oJKza+nvvCv0soQR4Au1Eh+snuz4
+         H7OJ4oUMO83aS4/U38gA8ZSdKe66xDnyJticxRTZzXvDJ3fEWB6tUNmJjCE040S8m33K
+         uAvRRes5EjWuooXZwmzV/12pm3BfRSc2HdrZ3ESOd8klSSPuaS6zxufdlRq2bciM1K2Q
+         SFbZenKSnjpT+bqp+n92OX7mXjDWoWsXI0G8xt0/CwmdQi3NCIXtNz/EcdWy26UMmLjS
+         xAOF5Ca2Wouf+rce5ghWNZpCgGUGqJc1HAM0PcZjBQhfofUciDanhqh1phmBImQgs0Kv
+         7aZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692388775; x=1692993575;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qZnDLKTm+Vz68wW+NpBJGQv7K7EuvgOHLUSeyXNlCjo=;
+        b=AlpbSGsw6rcddBgpsNb4EgqXtq+BrC2LA492SGARF3/uTiwLKx1pb0sz4jYgCZQwIw
+         Hivnow52eY0aC1vVSr9b512+5AVX4lwgXonlTPj8fbAmFjEMaqc3edo4ZnG/y+1IyThT
+         haA8TdYX42zFuKD+AviXkAaOASvPrqUKD/VglpDhetj9W5lj1TSjARhew8gRPMy2weeI
+         ZTJ/eXht1CujY6VyU0Cb8JQI79Iomb806Rv652mARgW7tjvuaEzzbS/jkJn1x38EX7Cr
+         YrkGk96i8Zlru1QjnJLKoXqE3BDszHp6UKm9OPgxp7e3dt3zfz750AoRnCFEd4XEdo+L
+         xPMA==
+X-Gm-Message-State: AOJu0YxKhMfFxtJ3jRB2zh5CTGTnMoY9wHgmkU00YPPJkWioT4nHaKKJ
+        9dnZ3NxxckKEmOqD/3EB9pQH8+VHire+k5P6LoVdiXEK
+X-Google-Smtp-Source: AGHT+IHRz6m/oi/P/iekiR7QjNjXfP8gYDO4z7yafhS2Tyrt9xR/S/WYMg/RvhUJls4YXcHCJe7016jERHdPLHqvb0Y=
+X-Received: by 2002:a2e:3505:0:b0:2a7:adf7:1781 with SMTP id
+ z5-20020a2e3505000000b002a7adf71781mr175907ljz.2.1692388775263; Fri, 18 Aug
+ 2023 12:59:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="LNILMu582aOVL6hM"
-Content-Disposition: inline
-In-Reply-To: <ZN+qki9EaZ6f9XNi@arm.com>
-X-Cookie: Your aim is high and to the right.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230814134147.70289-1-hffilwlqm@gmail.com> <20230814134147.70289-2-hffilwlqm@gmail.com>
+ <20230817223143.jyclrtf3a6kmtgh5@macbook-pro-8.dhcp.thefacebook.com> <fea59b79-3f28-c580-185b-8c64dc21a399@gmail.com>
+In-Reply-To: <fea59b79-3f28-c580-185b-8c64dc21a399@gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Fri, 18 Aug 2023 12:59:24 -0700
+Message-ID: <CAADnVQKVKPpbMNV9XNc+yJCuaWRupsB5EBjghv++jGqYTnv6QQ@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next 1/2] bpf, x64: Fix tailcall infinite loop bug
+To:     Leon Hwang <hffilwlqm@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>,
+        Yonghong Song <yonghong.song@linux.dev>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        X86 ML <x86@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Mykola Lysenko <mykolal@fb.com>,
+        Shuah Khan <shuah@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        David Ahern <dsahern@kernel.org>,
+        Yizhou Tang <tangyeechou@gmail.com>, kernel-patches-bot@fb.com,
+        "Fijalkowski, Maciej" <maciej.fijalkowski@intel.com>,
+        Network Development <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Thu, Aug 17, 2023 at 7:10=E2=80=AFPM Leon Hwang <hffilwlqm@gmail.com> wr=
+ote:
+>
+>
+>
+> On 18/8/23 06:31, Alexei Starovoitov wrote:
+> > On Mon, Aug 14, 2023 at 09:41:46PM +0800, Leon Hwang wrote:
+> >> @@ -1147,6 +1152,7 @@ struct bpf_attach_target_info {
+> >>      struct module *tgt_mod;
+> >>      const char *tgt_name;
+> >>      const struct btf_type *tgt_type;
+> >> +    bool tail_call_ctx;
+> >
+> > Instead of extra flag here can you check tgt_prog->aux->tail_call_reach=
+able in check_attach_btf_id()
+> > and set tr->flags there?
+>
+> Should we check tgt_prog->aux->func[subprog]->is_func? Or, tgt_prog->aux-=
+>tail_call_reachable
+> is enough?
 
---LNILMu582aOVL6hM
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Fri, Aug 18, 2023 at 06:29:54PM +0100, Catalin Marinas wrote:
-
-> A related question - it may have been discussed intensively on the x86
-> thread (I may read it sometime) - why not have the libc map the shadow
-
-Your assumption that this is a single thread feels optimistic there.
-
-> stack and pass the pointer/size to clone3()? It saves us from having to
-> guess what the right size we'd need. struct clone_args is extensible.
-
-I can't recall or locate the specific reasoning there right now, perhaps
-Rick or someone else can?  I'd guess there would be compat concerns for
-things that don't go via libc which would complicate the story with
-identifying and marking things as GCS/SS safe, it's going to be more
-robust to just supply a GCS if the process is using it.  That said
-having a default doesn't preclude us using the extensibility to allow
-userspace directly to control the GCS size, I would certainly be in
-favour of adding support for that.
-
-> (I plan to get back next week to this series, I'll need to read a bit
-> more on the spec)
-
-I've been making changes, mostly in response to your feedback, so there
-should be a new version on Monday even if not everything is addressed
-yet.
-
---LNILMu582aOVL6hM
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTfyJkACgkQJNaLcl1U
-h9Cw3Af8Cnyy0Sa1PU1lq3c1HV/d6eNcVzOoN4kECuID3B/GKxWng90W0Z7wR75z
-Wl9H0WZxlDkqd/voFGHAJTEtlcEZMg6xNByq8Rhq2jw6R2EX3O8P6+Uqumjb3UQ8
-wb+PJyloj3BhXcQPiMH8vFHAs6b81DyPYo9NtaCLsYbtZv4MwGjgJKRrAl8+O2ct
-n/1P1Hpp/XUeTZUZvyWxrBdDUD7nLq9mQe2/+h6NxTtchrNTb98Kvgk7JrRefjrB
-7kehDj9XiBJt5vVkoSO+e5aVln7wgwWor3KsjviaeNzyXglWrx+VBIc8OT6FMiJw
-VIA6Wrc8ikvi1fZ/oooK9TnU+p5chw==
-=RgY5
------END PGP SIGNATURE-----
-
---LNILMu582aOVL6hM--
+Please let the thread continue to a logical conclusion before resending
+new version. Will reply there.
