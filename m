@@ -2,174 +2,184 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD66C7805B0
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Aug 2023 07:33:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FE3A780638
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Aug 2023 09:18:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1357278AbjHRFdE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Aug 2023 01:33:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43236 "EHLO
+        id S1358142AbjHRHR2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Aug 2023 03:17:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1357238AbjHRFcm (ORCPT
+        with ESMTP id S1358168AbjHRHRK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Aug 2023 01:32:42 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2066.outbound.protection.outlook.com [40.107.243.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64F94FC;
-        Thu, 17 Aug 2023 22:32:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DVtQeyzQjO3aRmoUKrICTcm5L6B8pA17YkaIxOoaPMuLLptvltzw6zcR6tQVMGgLkcVq2pXq5HQmUySMmIdlHvsZuRWtK9NGtyS8RvFaK5LfA2vCVso92AiGnwaAaipJPCG1lrQi5tfd83zGf7xieXPQpTMUwnBRD0lXioZFGCAX0WoYfPvsw5HNGBDrfUc5/EurN8w6u2vZmwlDhkA4K9dUmAOK7kyhhhb4MIgvLwiAWoDuj53DmQNjN9OORMn4ziJLJ5uUX1ovBvLgBt95El4rwAtei6S2G4+hCI+Pkg2LraRH7ZxmycoH9ZcDk7bUbl5TEvwrzQWRJjecYNYCVw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7G7G7qrvWLv9jHCCHdHlvH+1VHbH4qNm4ZV5AvcS0qg=;
- b=FzRQ1duCsq14NR/fOa3NXs7Uzd2hC11aBH4k0x20OvcV63eswyOhBiR21Gh+DGNlhPxeU8plXhecSXKi2q29E10jwv4fnPRplZhqV5HJI0cCTZpAP4lAQ8XDdjD7NAJnYMTQz+tFqmyjL5gHIaWi1yEo9/eOhX2UoDeL7hqDX5sXnyzQ8rJ6olVPJvLsmeY2/V5C+cmM8uYsOaj0zc/YO2/JndvBRIxOVm15/SklQRSHi4METlf7U5qUo8dMAYg3e3trv6RgJTQyHnTAgtPN3Y8vlcwXI/fi3j2Wd/DbsCCk/OdXLmPhSXN3Pr/V5BhvjuxFQ/ZFF6GpAObTtP9Zbw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7G7G7qrvWLv9jHCCHdHlvH+1VHbH4qNm4ZV5AvcS0qg=;
- b=S72BXVdHVd/QsM6MHow/tB0bWX4DZt4Olv/I5qms1OYPfngZxRXyUk4+4n5wR/JlWiqnCPVTeEUrlE67Gw2+0sZwFzdkmqmjSAnlghBIiSl44FwS3PpP2ExpiJiKj7xHYu4pBAHWBKW89d/t7G4DhsOSiecQl4jQJZEA1S/AI2k=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BYAPR12MB3589.namprd12.prod.outlook.com (2603:10b6:a03:df::29)
- by DS0PR12MB8561.namprd12.prod.outlook.com (2603:10b6:8:166::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6678.31; Fri, 18 Aug
- 2023 05:32:39 +0000
-Received: from BYAPR12MB3589.namprd12.prod.outlook.com
- ([fe80::3624:9885:6e0a:5d97]) by BYAPR12MB3589.namprd12.prod.outlook.com
- ([fe80::3624:9885:6e0a:5d97%6]) with mapi id 15.20.6678.031; Fri, 18 Aug 2023
- 05:32:39 +0000
-Message-ID: <02a565a0-9307-7620-7e53-f2630b97f0bd@amd.com>
-Date:   Fri, 18 Aug 2023 07:32:31 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: linux-next: Tree for Aug 17 (DRM_TTM KUNIT tests)
-Content-Language: en-US
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Karolina Stolarek <karolina.stolarek@intel.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        Huang Rui <ray.huang@amd.com>
-References: <20230817144729.7d2b1b53@canb.auug.org.au>
- <17065c3f-87bb-c2a9-e8f6-82fecd15b9c7@infradead.org>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <17065c3f-87bb-c2a9-e8f6-82fecd15b9c7@infradead.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR0P281CA0230.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:b2::17) To BYAPR12MB3589.namprd12.prod.outlook.com
- (2603:10b6:a03:df::29)
+        Fri, 18 Aug 2023 03:17:10 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98D9030E6;
+        Fri, 18 Aug 2023 00:17:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692343026; x=1723879026;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=hy9L/G7orcg7EKsXBpzuKk+u1iVyRUCiRiiWR/KGdJc=;
+  b=ad4gmbNApLfKRjeaWiqnmvu0rQeYRN1LQtOiWrN1KujaJjI7LZBSaMXn
+   fmo/Zq9JAJJsClh64urJGpkOa46H0iVVpAACIak+XLTBmyz1kYQ8lrkrU
+   AwZCJ4RBroqoOFLp2Yytkpt5xkDGhPdZlFB7kkhgiFBGiIskYEfwWRf6a
+   uaHGzB42ykNx74LXke3NNyJzoDP+zj6+JpuN+XsnOQJ4e8qo1PMDvjMKk
+   0WEG6SkwhO1/5mgNurAlJ5jzMELAv9XVXXatAFfq2C/rqnnrz+FJIJdtW
+   /HtlnpkboLRT0lE1Ll3uS4dPHjGssGFDI2suETLJ7TCkOgHiT5PFOImry
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="404017518"
+X-IronPort-AV: E=Sophos;i="6.01,182,1684825200"; 
+   d="scan'208";a="404017518"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2023 00:16:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="800379640"
+X-IronPort-AV: E=Sophos;i="6.01,182,1684825200"; 
+   d="scan'208";a="800379640"
+Received: from lkp-server02.sh.intel.com (HELO a9caf1a0cf30) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 18 Aug 2023 00:16:42 -0700
+Received: from kbuild by a9caf1a0cf30 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qWtir-0002D4-2R;
+        Fri, 18 Aug 2023 07:16:41 +0000
+Date:   Fri, 18 Aug 2023 15:16:04 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Peter Xu <peterx@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Greg KH <greg@kroah.com>,
+        kernel@collabora.com, Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>
+Subject: Re: [PATCH v32 2/6] fs/proc/task_mmu: Implement IOCTL to get and
+ optionally clear info about PTEs
+Message-ID: <202308181520.yCq9Z26w-lkp@intel.com>
+References: <20230816113049.1697849-3-usama.anjum@collabora.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR12MB3589:EE_|DS0PR12MB8561:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5d176f4d-c256-4bd4-7dac-08db9fac892d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: oU54JQSSc6gRaO/Akbwtd9+/cCxGLnP0XLvQOgCHdI5UHxk2t6FjFljJRsUlSrSqbYJYdhNHWs8OEYolra7sGYn2WvizImP62zeprPSH4HJB7JjrqzhkzrFh06+DGFf9jrNtkf0Y4Fs/GQlK5WVqYdL6wq6srsRRzWJvZOf8df49OLCA2ZqNuM3rnwPWkaJvyr6VS8Fb+uF+pmRSDOyhudnM8aUK6/aa+4RWDuErRacX1HcE7wH89iAfG4jOAKWo92zlU4qX0+5gsLG3P61ftDN7bp9+JcBTKoXFMTDQsP0dJuAoKEWehWOqviHvOjZ0x0blLRCoiqoDqWHi/W+aphfSyxv2YNEDNIYv+O7ldiS6RrDJa/KQXfMdrGHLf6J/J9eEvH27/E4cXC3ojGkZ1gj30WZWHniYPm6y87fE7Vt4p1rqzkxaCgLhNXK56R67+cjd8TJytmuyujMKHNc0bRxT04bO+iIK+zkAAqLFoyA4QhOKicTNPExkMe6e+Z1PPkl4fTz7iGLMBlZHOTv6hd6MVLetNF8olxoeUzyRdKxDVrXwJrnRF/3WEepGdMRjC/6bQ1CEDdr23UaJ0TIGyLp/a0ZaN627GDWnO9TfrrBAh3LM+z0SKzzezdu6cDt0LBvIn7MDjUdjF6Jl7VkLKg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB3589.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(396003)(136003)(346002)(376002)(366004)(1800799009)(451199024)(186009)(6666004)(6512007)(6506007)(53546011)(6486002)(83380400001)(38100700002)(31696002)(26005)(86362001)(36756003)(2616005)(41300700001)(2906002)(316002)(66556008)(66946007)(66476007)(110136005)(54906003)(5660300002)(8676002)(8936002)(4326008)(31686004)(478600001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NmJFMHM5SjRWTUpkemtIOWpkK1dhNUpNcTJjZjdYOXpFN2J6MEhFWUEwYmF2?=
- =?utf-8?B?NlVZdnNySlliVGY5andiT3R0UUZId3EyNEdzZmtCQ1JtZFl0MUlVOGQ3R3Mv?=
- =?utf-8?B?eXJwN0d3RjByM1E0bCtCR3VzYTNvL1ptdk15bjg2dlBQckpDeGRxamRNRi9G?=
- =?utf-8?B?enhmaTJSTFpVa2QzSWVZV0dyZ0hBUjVRNk1ZSzJGL2Rua25ZNVM0WjdrSklM?=
- =?utf-8?B?Vk1hVks2L2tZUXBXbDJUMmpuSGZMc2I5RFAxVGRURUU0eXh5UDNKTFdQTlJT?=
- =?utf-8?B?V25WMExhQ1ZvTnNTZWlZa3pDMFpHQVhtcVJ4ZGY0RmxQTlFBL2M1ZHVwSzVX?=
- =?utf-8?B?aGZMeFQxWklPNjkxMG9zeHNSZVYwNWN0bWZvZzlMc1QvQmFVYXBieXY4bHlN?=
- =?utf-8?B?UDh1WExaRVBLdUE2bXhmNVphMFdyb3lRblRvNGw2T09sWXNkVjk5aGx6VXZj?=
- =?utf-8?B?Uzcrd3FDNnArZmkzYjJPaFRkMDN3NlljMnNQYjVWV01ZQmdvdkdjS2NRcmJt?=
- =?utf-8?B?dHMzTk1zeW90YlRPeEdUWllNcEthN0UvaVRhZGxWV3lhWTNDNlNvaGdHRjFH?=
- =?utf-8?B?aG91Y0VwejBlbFNqVEdxMzNORkJhMlY0amI4SHNnOHJDOFg1RGFFSjdrSFdH?=
- =?utf-8?B?MEZDME5NcUNiU3BibDJpc0txYnpaRzdBSEZtWUdrTUU4VDllZmJwS3pjQ3ow?=
- =?utf-8?B?aFJTQ0NWams2ZFpwbkovbXdJV1B2aE9NN1hrWXdKSVpkTVE4NEhWaEYyVW1z?=
- =?utf-8?B?NzFGVUwvMU5JdzJ6bmNMcFlBNTd4a0xBL2N4VjZKMGNyakFUaGJWVkVpYTk2?=
- =?utf-8?B?ZjNuVGxjcExpenJMYTdUNVZlYkNCZW91bHJ4VHZCN0FySVhJblFJU0ZPMmU0?=
- =?utf-8?B?Y2xnek4wTm00V0lLR0pibzdnV0ZROExXTk9TTFk2cXJYOXh3S3lUVk9EUk81?=
- =?utf-8?B?cG1vaUlzZjFoSHVROEtjZDZ5TTkwaUpKWHRlSE1ndWdNdTZtZitXeWh6RXI4?=
- =?utf-8?B?dG1tS1U1MVhzZGJIWWRKdlRodHRsajJBaDQ1SWZXbEVwdXIrODJ4M0VPTCtk?=
- =?utf-8?B?cDVVM1YvQjhaQUlpdjZmbkliN2FHZHJXRUo1NDlIcDlkTGJPLzM3RXBUN2xW?=
- =?utf-8?B?SGNPLzMxYzhzUGcwTWxoaHdFQ1Q1L1RTTEtEL28xbjhkR1F5bDNEeEdzemxj?=
- =?utf-8?B?WjQ4eWNRazhwSktoRWo2dG9IcFM3eEdXMVp6ZVdJUWlJZHBYaDRZa0ljUzRa?=
- =?utf-8?B?SDVGeFJYTlkvMFNyaTBabWw3VkJnOXVzamJzR2xNcWNjZlpwa0RkM254UnBk?=
- =?utf-8?B?VlNZV3hVRlIyQzJpMkQzSXpxbzBkU3NxVVRDWTNDOXpxb3hFQVlKbGd1OExW?=
- =?utf-8?B?ZVlxemVDM0JjRExsNW9hU2w5RDVTZlg5Nkw5VThGNDdhT1NScjB4bkhaZFFK?=
- =?utf-8?B?UmlYZjVwTXJxM252RDJtbk5nc0NJVVpRK1EwalNuTFprSzYxcGk3KzN6azdY?=
- =?utf-8?B?cGJGVUg0L2QzZVlDZ3FDUTErR0ZaU1E4TTVTYi9jZTFmYnl5RUJmVEFTTFVP?=
- =?utf-8?B?cHFoYjR5cWM0YlBpUnJnbjQxZDRKZ2RscWVDU3FjTWFrZ010VllrcmhKVXZK?=
- =?utf-8?B?VGcrbkxXeG0zVzJCUm5SS3czODh2NW0vYUZmdFE2ckh4dzJadnNHbjJBYlRH?=
- =?utf-8?B?aDloVzBoZDhnejhUOHNqR01sWkVMTjA2MklMN2xjRU5FVXBYN05HZkw2ekxT?=
- =?utf-8?B?N0ZiWkVXYVRtSjJvaGd3VExjYnVGV2pzRXQvdUM3ZHI1ZXZsaWlIWDljVkti?=
- =?utf-8?B?RWZVQ3BEbHgwTUJHTTVXUmlqcHc2MjM0aHFuL1JCN1o0c0ZaakpvaWZlQmd0?=
- =?utf-8?B?L1VkTS9TTXBZMGx2OG5wQktFS2RmS0xWYmFMT3BSQlg2R1RXTHdkL0lIa2sr?=
- =?utf-8?B?WFl0Q3Urb3hWMUtvTUlDZXgxblBWeUQ1Wk9hS2pZU3pTTVlyN1JmTEdpeWJw?=
- =?utf-8?B?d0RtNFBWTGNrbUtXektJdTQzS3gxRHh3YjZmQ3c2M2c0Sk9pVzRvV3ZuVjNs?=
- =?utf-8?B?dXZUU0hUUGgrMTJKRmlWSUI3RHIvanIxNHpwYmIra3U1dDFCdnZIL0JiczRF?=
- =?utf-8?Q?7bSnwRul3i1lvwBkgo9v4bzON?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5d176f4d-c256-4bd4-7dac-08db9fac892d
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB3589.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Aug 2023 05:32:39.1155
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: K2uNR2FrCi0yytM3r7twZcvzJjolivPipqx0esjseItMVGPn6uOK55yupPmP5Grx
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8561
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230816113049.1697849-3-usama.anjum@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Am 17.08.23 um 20:44 schrieb Randy Dunlap:
->
-> On 8/16/23 21:47, Stephen Rothwell wrote:
->> Hi all,
->>
->> Changes since 20230816:
->>
-> on risc-v 32-bit:
-> when
-> # CONFIG_MMU is not set
+Hi Muhammad,
 
-Patch to fix this is already queued up for the next pull request.
+kernel test robot noticed the following build errors:
 
-Sorry for the noise,
-Christian.
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on next-20230817]
+[cannot apply to linus/master v6.5-rc6]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
->
->
-> WARNING: unmet direct dependencies detected for DRM_TTM
->    Depends on [n]: HAS_IOMEM [=y] && DRM [=y] && MMU [=n]
->    Selected by [y]:
->    - DRM_TTM_KUNIT_TEST [=y] && HAS_IOMEM [=y] && DRM [=y] && KUNIT [=y]
->
-> WARNING: unmet direct dependencies detected for DRM_TTM
->    Depends on [n]: HAS_IOMEM [=y] && DRM [=y] && MMU [=n]
->    Selected by [y]:
->    - DRM_TTM_KUNIT_TEST [=y] && HAS_IOMEM [=y] && DRM [=y] && KUNIT [=y]
->
-> WARNING: unmet direct dependencies detected for DRM_TTM
->    Depends on [n]: HAS_IOMEM [=y] && DRM [=y] && MMU [=n]
->    Selected by [y]:
->    - DRM_TTM_KUNIT_TEST [=y] && HAS_IOMEM [=y] && DRM [=y] && KUNIT [=y]
->
-> /opt/crosstool/gcc-13.1.0-nolibc/riscv32-linux/bin/riscv32-linux-ld: drivers/gpu/drm/ttm/ttm_bo_vm.o: in function `.L31':
-> ttm_bo_vm.c:(.text+0x42c): undefined reference to `vmf_insert_pfn_prot'
-> /opt/crosstool/gcc-13.1.0-nolibc/riscv32-linux/bin/riscv32-linux-ld: drivers/gpu/drm/ttm/ttm_bo_vm.o: in function `.L104':
-> ttm_bo_vm.c:(.text+0xa70): undefined reference to `vmf_insert_pfn_prot'
->
->
+url:    https://github.com/intel-lab-lkp/linux/commits/Muhammad-Usama-Anjum/userfaultfd-UFFD_FEATURE_WP_ASYNC/20230816-193454
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20230816113049.1697849-3-usama.anjum%40collabora.com
+patch subject: [PATCH v32 2/6] fs/proc/task_mmu: Implement IOCTL to get and optionally clear info about PTEs
+config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20230818/202308181520.yCq9Z26w-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 12.3.0
+reproduce: (https://download.01.org/0day-ci/archive/20230818/202308181520.yCq9Z26w-lkp@intel.com/reproduce)
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202308181520.yCq9Z26w-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   fs/proc/task_mmu.c: In function 'pagemap_scan_thp_entry':
+>> fs/proc/task_mmu.c:2077:28: error: 'HPAGE_SIZE' undeclared (first use in this function); did you mean 'PAGE_SIZE'?
+    2077 |         if (end != start + HPAGE_SIZE) {
+         |                            ^~~~~~~~~~
+         |                            PAGE_SIZE
+   fs/proc/task_mmu.c:2077:28: note: each undeclared identifier is reported only once for each function it appears in
+
+
+vim +2077 fs/proc/task_mmu.c
+
+  2044	
+  2045	static int pagemap_scan_thp_entry(pmd_t *pmd, unsigned long start,
+  2046					  unsigned long end, struct mm_walk *walk)
+  2047	{
+  2048	#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+  2049		struct pagemap_scan_private *p = walk->private;
+  2050		struct vm_area_struct *vma = walk->vma;
+  2051		unsigned long categories;
+  2052		spinlock_t *ptl;
+  2053		int ret = 0;
+  2054	
+  2055		ptl = pmd_trans_huge_lock(pmd, vma);
+  2056		if (!ptl)
+  2057			return -ENOENT;
+  2058	
+  2059		categories = p->cur_vma_category | pagemap_thp_category(*pmd);
+  2060	
+  2061		if (!pagemap_scan_is_interesting_page(categories, p))
+  2062			goto out_unlock;
+  2063	
+  2064		ret = pagemap_scan_output(categories, p, start, &end);
+  2065		if (start == end)
+  2066			goto out_unlock;
+  2067	
+  2068		if (~p->arg.flags & PM_SCAN_WP_MATCHING)
+  2069			goto out_unlock;
+  2070		if (~categories & PAGE_IS_WRITTEN)
+  2071			goto out_unlock;
+  2072	
+  2073		/*
+  2074		 * Break huge page into small pages if the WP operation
+  2075		 * needs to be performed on a portion of the huge page.
+  2076		 */
+> 2077		if (end != start + HPAGE_SIZE) {
+  2078			spin_unlock(ptl);
+  2079			split_huge_pmd(vma, pmd, start);
+  2080			pagemap_scan_backout_range(p, start, end);
+  2081			/* Report as if there was no THP */
+  2082			return -ENOENT;
+  2083		}
+  2084	
+  2085		make_uffd_wp_pmd(vma, start, pmd);
+  2086		flush_tlb_range(vma, start, end);
+  2087	out_unlock:
+  2088		spin_unlock(ptl);
+  2089		return ret;
+  2090	#else /* !CONFIG_TRANSPARENT_HUGEPAGE */
+  2091		return -ENOENT;
+  2092	#endif
+  2093	}
+  2094	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
