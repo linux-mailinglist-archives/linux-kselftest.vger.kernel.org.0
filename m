@@ -2,87 +2,77 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F9787813FF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Aug 2023 22:00:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7422781438
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Aug 2023 22:16:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379801AbjHRT7k (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Aug 2023 15:59:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46466 "EHLO
+        id S1379947AbjHRUP7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Aug 2023 16:15:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379865AbjHRT7i (ORCPT
+        with ESMTP id S1379968AbjHRUP1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Aug 2023 15:59:38 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F0BF1706;
-        Fri, 18 Aug 2023 12:59:37 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2b95d5ee18dso20178621fa.1;
-        Fri, 18 Aug 2023 12:59:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692388775; x=1692993575;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qZnDLKTm+Vz68wW+NpBJGQv7K7EuvgOHLUSeyXNlCjo=;
-        b=niC/NhGgJdLzQDWhJ35lBiET52DjSLPJEHDaV8oJKza+nvvCv0soQR4Au1Eh+snuz4
-         H7OJ4oUMO83aS4/U38gA8ZSdKe66xDnyJticxRTZzXvDJ3fEWB6tUNmJjCE040S8m33K
-         uAvRRes5EjWuooXZwmzV/12pm3BfRSc2HdrZ3ESOd8klSSPuaS6zxufdlRq2bciM1K2Q
-         SFbZenKSnjpT+bqp+n92OX7mXjDWoWsXI0G8xt0/CwmdQi3NCIXtNz/EcdWy26UMmLjS
-         xAOF5Ca2Wouf+rce5ghWNZpCgGUGqJc1HAM0PcZjBQhfofUciDanhqh1phmBImQgs0Kv
-         7aZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692388775; x=1692993575;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qZnDLKTm+Vz68wW+NpBJGQv7K7EuvgOHLUSeyXNlCjo=;
-        b=AlpbSGsw6rcddBgpsNb4EgqXtq+BrC2LA492SGARF3/uTiwLKx1pb0sz4jYgCZQwIw
-         Hivnow52eY0aC1vVSr9b512+5AVX4lwgXonlTPj8fbAmFjEMaqc3edo4ZnG/y+1IyThT
-         haA8TdYX42zFuKD+AviXkAaOASvPrqUKD/VglpDhetj9W5lj1TSjARhew8gRPMy2weeI
-         ZTJ/eXht1CujY6VyU0Cb8JQI79Iomb806Rv652mARgW7tjvuaEzzbS/jkJn1x38EX7Cr
-         YrkGk96i8Zlru1QjnJLKoXqE3BDszHp6UKm9OPgxp7e3dt3zfz750AoRnCFEd4XEdo+L
-         xPMA==
-X-Gm-Message-State: AOJu0YxKhMfFxtJ3jRB2zh5CTGTnMoY9wHgmkU00YPPJkWioT4nHaKKJ
-        9dnZ3NxxckKEmOqD/3EB9pQH8+VHire+k5P6LoVdiXEK
-X-Google-Smtp-Source: AGHT+IHRz6m/oi/P/iekiR7QjNjXfP8gYDO4z7yafhS2Tyrt9xR/S/WYMg/RvhUJls4YXcHCJe7016jERHdPLHqvb0Y=
-X-Received: by 2002:a2e:3505:0:b0:2a7:adf7:1781 with SMTP id
- z5-20020a2e3505000000b002a7adf71781mr175907ljz.2.1692388775263; Fri, 18 Aug
- 2023 12:59:35 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230814134147.70289-1-hffilwlqm@gmail.com> <20230814134147.70289-2-hffilwlqm@gmail.com>
- <20230817223143.jyclrtf3a6kmtgh5@macbook-pro-8.dhcp.thefacebook.com> <fea59b79-3f28-c580-185b-8c64dc21a399@gmail.com>
-In-Reply-To: <fea59b79-3f28-c580-185b-8c64dc21a399@gmail.com>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Fri, 18 Aug 2023 12:59:24 -0700
-Message-ID: <CAADnVQKVKPpbMNV9XNc+yJCuaWRupsB5EBjghv++jGqYTnv6QQ@mail.gmail.com>
-Subject: Re: [RFC PATCH bpf-next 1/2] bpf, x64: Fix tailcall infinite loop bug
-To:     Leon Hwang <hffilwlqm@gmail.com>
-Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>,
-        Yonghong Song <yonghong.song@linux.dev>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        X86 ML <x86@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>, Mykola Lysenko <mykolal@fb.com>,
+        Fri, 18 Aug 2023 16:15:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D60B41BD4;
+        Fri, 18 Aug 2023 13:15:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 42CC860DB6;
+        Fri, 18 Aug 2023 20:15:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4FBFC433C7;
+        Fri, 18 Aug 2023 20:15:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692389724;
+        bh=WCt+HTyPqpQoM8uuU7vN+x57RA6ZJu12mqg0CzvfAKw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UWpnqpi65SH3/qdqWBn6Zd1Ci2gAJDST/B3oTk2b0QqR4KzLEHujl/2sXAp34aaQz
+         rYf/Hxv4pGdxI4XtXA71/BlwdSjOlALBF8+7Nh/txVG1Pr0etLTfoxWGUJ+zGSMQ13
+         12qmiSM3fn6coLaVe6HKubfVBJb5Z/QsLDUtopgpRJBemR/BlWB0eyjCHm7pxUeA6y
+         yvGiBvlRhhmOnJmtqJKBgyLZHzlJhtJfhzvqoLPqNP+U1RPimemgLmIq2et3p1jWan
+         qRLwKdKD5hl3mrqoXMp+UCe8E/WSmGnN+WQpVc/+3X3jhGCfNqyeGGCMUIAzmPI1DF
+         i74Qa8ekO6c+g==
+Date:   Fri, 18 Aug 2023 21:15:15 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
         Shuah Khan <shuah@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        David Ahern <dsahern@kernel.org>,
-        Yizhou Tang <tangyeechou@gmail.com>, kernel-patches-bot@fb.com,
-        "Fijalkowski, Maciej" <maciej.fijalkowski@intel.com>,
-        Network Development <netdev@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+        Deepak Gupta <debug@rivosinc.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v4 19/36] arm64/gcs: Allocate a new GCS for threads with
+ GCS enabled
+Message-ID: <3a01ce20-3365-421b-95ff-211946808174@sirena.org.uk>
+References: <20230807-arm64-gcs-v4-0-68cfa37f9069@kernel.org>
+ <20230807-arm64-gcs-v4-19-68cfa37f9069@kernel.org>
+ <ZNZhG/4rBpTenYVH@arm.com>
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="45mwPxvFeqYyCSA9"
+Content-Disposition: inline
+In-Reply-To: <ZNZhG/4rBpTenYVH@arm.com>
+X-Cookie: Your aim is high and to the right.
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -91,26 +81,92 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Aug 17, 2023 at 7:10=E2=80=AFPM Leon Hwang <hffilwlqm@gmail.com> wr=
-ote:
->
->
->
-> On 18/8/23 06:31, Alexei Starovoitov wrote:
-> > On Mon, Aug 14, 2023 at 09:41:46PM +0800, Leon Hwang wrote:
-> >> @@ -1147,6 +1152,7 @@ struct bpf_attach_target_info {
-> >>      struct module *tgt_mod;
-> >>      const char *tgt_name;
-> >>      const struct btf_type *tgt_type;
-> >> +    bool tail_call_ctx;
-> >
-> > Instead of extra flag here can you check tgt_prog->aux->tail_call_reach=
-able in check_attach_btf_id()
-> > and set tr->flags there?
->
-> Should we check tgt_prog->aux->func[subprog]->is_func? Or, tgt_prog->aux-=
->tail_call_reachable
-> is enough?
 
-Please let the thread continue to a logical conclusion before resending
-new version. Will reply there.
+--45mwPxvFeqYyCSA9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Fri, Aug 11, 2023 at 05:26:03PM +0100, Catalin Marinas wrote:
+> On Mon, Aug 07, 2023 at 11:00:24PM +0100, Mark Brown wrote:
+
+> > +	mmap_write_lock(mm);
+> > +	mapped_addr = do_mmap(NULL, addr, size, PROT_READ, flags,
+> > +			      VM_SHADOW_STACK | VM_WRITE, 0, &unused, NULL);
+
+> Why not PROT_WRITE as well? I guess I need to check the x86 patches
+> since the do_mmap() called here has a different prototype than what's in
+> mainline.
+
+> This gets confusing since currently the VM_* flags are derived from the
+> PROT_* flags passed to mmap(). But you skip the PROT_WRITE in favour of
+> adding VM_WRITE directly.
+
+I have to confess that I inherited this from the x86 code and never
+thought too hard about it.  I've got a horrible feeling the reasoning is
+simply the way in which x86 fits shadow stack into the page tables
+without having a mechanism like permission indirection, these don't
+apply for us.
+
+> I haven't followed the x86 discussion but did we run out of PROT_* bits
+> for a PROT_SHADOW_STACK?
+
+It's more that there are security concerns with having PROT_, especially
+in conjunction with needing to provide a token for stack pivot - we not
+only need to map pages for the GCS, we also need to write a cap token
+into it so that we can pivot to the new stack.  If the GCS can ever be
+written to by userspace via normal means then that's an issue for the
+basic protection model that the feature is trying to implement.  If we
+have the PROT_ but try to check for bad uses of it that makes everything
+messy and complicated which is especially non-ideal for a feature with a
+security focus.  Having a more packaged system call is easier for
+everyone.
+
+More detail in the x86 patch that's currently in -next:
+
+   https://lore.kernel.org/all/20230319001535.23210-34-rick.p.edgecombe@intel.com/
+
+> > +	/* Allocate RLIMIT_STACK with limits of PAGE_SIZE..4G */
+> > +	size = PAGE_ALIGN(min_t(unsigned long long,
+> > +				rlimit(RLIMIT_STACK), SZ_4G));
+> > +	return max(PAGE_SIZE, size);
+> > +}
+
+> I saw Szabolcs commenting on the default size as well. Maybe we should
+> go for RLIMIT_STACK/2 but let's see how the other sub-thread is going.
+
+I've updated it.
+
+> > +	if ((clone_flags & (CLONE_VFORK | CLONE_VM)) != CLONE_VM)
+> > +		return 0;
+
+> Is it safe for CLONE_VFORK not to get a new shadow stack? A syscall for
+> exec could push something to the stack. I guess the GCS pointer in the
+> parent stays the same, so it wouldn't matter.
+
+Yes, pushing should be fine just as for the regular stack.
+
+> That said, I think this check should be somewhere higher up in the
+> caller of gcs_alloc_thread_stack(). The copy_thread_gcs() function
+> already does most of the above checks. Is the GCS allocation called from
+> elsewhere as well?
+
+That's the only place.  I've moved the above check into copy_thread_gcs(),
+you're right that the other checks are redundant as they're done in the
+caller already.
+
+--45mwPxvFeqYyCSA9
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTf0VIACgkQJNaLcl1U
+h9AK7Af8DxBPnoklDhEt6uL9Qzwyg5iHuvMMz45iQs74RTv9fEM/vR1B1L0U0vxL
+LjcRxv98KB+GM2DQ+YOoQK84V2okcpKSNu9l/0CY+hvT8JChP5Ljn/b3azVF3FGY
+QYftbzRipJONW9pKxIZ7Svx8+iZIg03PmcwJTtLRsi36gyykxlFbYhzZm/0VbWH6
+HDuDWH8yMX1/BQGizf3FM7CxbBmhcI/zzi2eUslQ3EPOoSKywy4JXRc49XAvrxbT
+Bu8EbBX7Oapi96h+KlZEAWSiTuD4plJ6pJQsjMdMcELiI//3sTIzNRNqmFxBIgWS
+O2Sp933Ku1aQm9TW9TcOY3MVq5dYiQ==
+=X4OS
+-----END PGP SIGNATURE-----
+
+--45mwPxvFeqYyCSA9--
