@@ -2,108 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51F027811FD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Aug 2023 19:31:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB63A781218
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Aug 2023 19:38:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378998AbjHRRae (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Aug 2023 13:30:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44628 "EHLO
+        id S1379118AbjHRRhj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Aug 2023 13:37:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379072AbjHRRaD (ORCPT
+        with ESMTP id S1379146AbjHRRhO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Aug 2023 13:30:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68FB03C23;
-        Fri, 18 Aug 2023 10:30:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EF566656E6;
-        Fri, 18 Aug 2023 17:30:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61717C433C7;
-        Fri, 18 Aug 2023 17:29:56 +0000 (UTC)
-Date:   Fri, 18 Aug 2023 18:29:54 +0100
-From:   Catalin Marinas <catalin.marinas@arm.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>,
-        Shuah Khan <shuah@kernel.org>,
-        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-        Deepak Gupta <debug@rivosinc.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-        "H.J. Lu" <hjl.tools@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v4 03/36] arm64/gcs: Document the ABI for Guarded Control
- Stacks
-Message-ID: <ZN+qki9EaZ6f9XNi@arm.com>
-References: <20230807-arm64-gcs-v4-0-68cfa37f9069@kernel.org>
- <20230807-arm64-gcs-v4-3-68cfa37f9069@kernel.org>
- <ZNOhjrYleGBR6Pbs@arm.com>
- <f4cec4b3-c386-4873-aa1d-90528e062f2a@sirena.org.uk>
+        Fri, 18 Aug 2023 13:37:14 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF3C54229;
+        Fri, 18 Aug 2023 10:37:09 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-565dc391be3so1648593a12.0;
+        Fri, 18 Aug 2023 10:37:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692380229; x=1692985029;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=YW52+wyDUyO2L5rIdP1Yu5xGuH4Mp8hYAuSlf8LZHvM=;
+        b=DwiSePEzdv2Jzdf8G0tfzoEBlouteK03XQFLxNmRdABq75AEyO1/tGBNELJ3TLN7mt
+         nPt8KL5cAKVc5BKX30S6+vARVT4wnMWrknfCcKcpS9FsITrtbc7GxHfMWy9At3teawA3
+         CgtIuJ9oBog9hBKQW1mWEVLFoixdipsTwxBAJ2s4WeYTM1dYG6grIRlJ62vQvTxd4PIu
+         K5Qg55Li9JLIFxS9+MYYAIysbWOPTZZdSHc4pFFwgS+W9lqlYLr6l3Mqd6+j9vj1z8/j
+         USUy3nFKBtHYg50KztR968edZMerwqa5/asMwnvpnQjWjk8Slr+qzgCIPoG+hwqxZiYo
+         8U3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692380229; x=1692985029;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=YW52+wyDUyO2L5rIdP1Yu5xGuH4Mp8hYAuSlf8LZHvM=;
+        b=GcFnuIwzorD1Ll+srgnkUNks0+liJblwZpIGimgkXv1bnqqNeTRqjelPc92D1jG6TL
+         /g2o02pV7Z+TPuyeKfGW4IjePa6jor0qJyFHv/bdPIlYybGlqAD207hEl1wZm02YsVUK
+         UC3BF81ykTK5sgG/dX3N1ktCLQgQZfiSuQpSZA80e/IkIMEY12/hCZIrDIwl3bJSl9eZ
+         GRR6DjLhhPi8OWPbLzCwahegCotnfp3jf+Sz49CVKCiAlng3Xse643xeUjipPzw6CLX9
+         ENmdHxmBtnr+NymZddSxUKjI7hqLB6Pd/+0DXP/Z2SYOzY+Bzh2QX+6Olo0VlWbuGVwp
+         cGwA==
+X-Gm-Message-State: AOJu0YwYLEOxp9Vr9ZnTQkB5Oq4AqxASNgCT8+6Od+plWoUM2C57+liU
+        i9Az8vYTbDc+06bYKJfYyGk=
+X-Google-Smtp-Source: AGHT+IHSa6TLwReCiv37Ufbq5NLyr7Ge9qIPIA+NlyZtg5Togo2BH2TlRRmtDi/ha7A/2yjOEwmN0w==
+X-Received: by 2002:a17:90a:31c2:b0:268:8ff2:5c0d with SMTP id j2-20020a17090a31c200b002688ff25c0dmr4246579pjf.17.1692380229059;
+        Fri, 18 Aug 2023 10:37:09 -0700 (PDT)
+Received: from fanta-System-Product-Name.. ([222.252.65.171])
+        by smtp.gmail.com with ESMTPSA id 1-20020a17090a19c100b00267ae12b80bsm3785031pjj.34.2023.08.18.10.37.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 18 Aug 2023 10:37:08 -0700 (PDT)
+From:   Anh Tuan Phan <tuananhlfc@gmail.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, shuah@kernel.org
+Cc:     Anh Tuan Phan <tuananhlfc@gmail.com>, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: [PATCH v1] selftests/net: Add log.txt and tools to .gitignore
+Date:   Sat, 19 Aug 2023 00:37:02 +0700
+Message-Id: <20230818173702.216265-1-tuananhlfc@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f4cec4b3-c386-4873-aa1d-90528e062f2a@sirena.org.uk>
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Aug 09, 2023 at 04:34:38PM +0100, Mark Brown wrote:
-> On Wed, Aug 09, 2023 at 03:24:14PM +0100, Catalin Marinas wrote:
-> > On Mon, Aug 07, 2023 at 11:00:08PM +0100, Mark Brown wrote:
-> > > +* When set PR_SHADOW_STACK_ENABLE flag allocates a Guarded Control Stack for
-> > 
-> > The 'for' at the end of the line above is not needed.
-> > 
-> > > +  and enables GCS for the thread, enabling the functionality controlled by
-> 
-> I find it a little clearer that it's a per thread stack here but sure.
+Update .gitignore to untrack tools directory and log.txt. "tools" is
+generated in "selftests/net/Makefile" and log.txt is generated in
+"selftests/net/gro.sh" when executing run_all_tests.
 
-If it reads better for you, feel free to keep it as is.
+Signed-off-by: Anh Tuan Phan <tuananhlfc@gmail.com>
+---
+ tools/testing/selftests/net/.gitignore | 2 ++
+ 1 file changed, 2 insertions(+)
 
-> > > +3.  Allocation of Guarded Control Stacks
-> > > +----------------------------------------
-> 
-> > > +* When GCS is enabled for a thread a new Guarded Control Stack will be
-> > > +  allocated for it of size RLIMIT_STACK / 2 or 2 gigabytes, whichever is
-> > > +  smaller.
-> 
-> > Is this number based on the fact that a function call would only push
-> > the LR to GCS while standard function prologue pushes at least two
-> > registers?
-> 
-> It's actually based on bitrot that I'd initially chosen a smaller value
-> since it's likely that functions will push at least something as you
-> suggest, the patches now just use RLIMIT_STACK.  I'll fix.
-
-A related question - it may have been discussed intensively on the x86
-thread (I may read it sometime) - why not have the libc map the shadow
-stack and pass the pointer/size to clone3()? It saves us from having to
-guess what the right size we'd need. struct clone_args is extensible.
-
-(I plan to get back next week to this series, I'll need to read a bit
-more on the spec)
-
+diff --git a/tools/testing/selftests/net/.gitignore b/tools/testing/selftests/net/.gitignore
+index 501854a89cc0..2f9d378edec3 100644
+--- a/tools/testing/selftests/net/.gitignore
++++ b/tools/testing/selftests/net/.gitignore
+@@ -15,6 +15,7 @@ ip_local_port_range
+ ipsec
+ ipv6_flowlabel
+ ipv6_flowlabel_mgr
++log.txt
+ msg_zerocopy
+ nettest
+ psock_fanout
+@@ -45,6 +46,7 @@ test_unix_oob
+ timestamping
+ tls
+ toeplitz
++tools
+ tun
+ txring_overwrite
+ txtimestamp
 -- 
-Catalin
+2.34.1
+
