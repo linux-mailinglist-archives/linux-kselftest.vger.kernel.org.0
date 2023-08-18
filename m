@@ -2,88 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FE3A780638
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Aug 2023 09:18:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F04E78064B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Aug 2023 09:26:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1358142AbjHRHR2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Aug 2023 03:17:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33000 "EHLO
+        id S1358157AbjHRHZp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Aug 2023 03:25:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1358168AbjHRHRK (ORCPT
+        with ESMTP id S1358181AbjHRHZo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Aug 2023 03:17:10 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98D9030E6;
-        Fri, 18 Aug 2023 00:17:06 -0700 (PDT)
+        Fri, 18 Aug 2023 03:25:44 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B696930DF;
+        Fri, 18 Aug 2023 00:25:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692343026; x=1723879026;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=hy9L/G7orcg7EKsXBpzuKk+u1iVyRUCiRiiWR/KGdJc=;
-  b=ad4gmbNApLfKRjeaWiqnmvu0rQeYRN1LQtOiWrN1KujaJjI7LZBSaMXn
-   fmo/Zq9JAJJsClh64urJGpkOa46H0iVVpAACIak+XLTBmyz1kYQ8lrkrU
-   AwZCJ4RBroqoOFLp2Yytkpt5xkDGhPdZlFB7kkhgiFBGiIskYEfwWRf6a
-   uaHGzB42ykNx74LXke3NNyJzoDP+zj6+JpuN+XsnOQJ4e8qo1PMDvjMKk
-   0WEG6SkwhO1/5mgNurAlJ5jzMELAv9XVXXatAFfq2C/rqnnrz+FJIJdtW
-   /HtlnpkboLRT0lE1Ll3uS4dPHjGssGFDI2suETLJ7TCkOgHiT5PFOImry
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="404017518"
+  t=1692343542; x=1723879542;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=iNg4a9mqt5LGbkucNgoalthA+YcKMoAQ1V5fU1A3TEs=;
+  b=OVON43epXBrU9TBxI1cnFxMI0YkOX2UxeCXQuA1ADYT+iGLLOsb5Ekke
+   Cv3XxOGAm4W3bRAKrWxj7571vzRFrO7YBcFMs3NZid3bAq18+IedUGwvK
+   YA9WNYabOoEDbHzQSEz08D7v/FoPIRt3FlDIdwZLZya9GKuUPnfmuX3ie
+   6Ebc/VQ7W9NyBcDC7efAfhdOMKioUiFWO77r8cYLy4x1j8+/wyjLrkKvr
+   KGbk7UPO7+kVfwzOyME6sFBfVwXUV7kK4s61dCyjB7rAnhDAIiAs0Vt0S
+   +arYuqON48s8j83kAQhyPpJEIBh8lrbKvBz8GFt3aZu+3ZZgh78FMe6jl
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="352624510"
 X-IronPort-AV: E=Sophos;i="6.01,182,1684825200"; 
-   d="scan'208";a="404017518"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2023 00:16:49 -0700
+   d="scan'208";a="352624510"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2023 00:25:42 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="800379640"
+X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="908757353"
 X-IronPort-AV: E=Sophos;i="6.01,182,1684825200"; 
-   d="scan'208";a="800379640"
-Received: from lkp-server02.sh.intel.com (HELO a9caf1a0cf30) ([10.239.97.151])
-  by fmsmga008.fm.intel.com with ESMTP; 18 Aug 2023 00:16:42 -0700
-Received: from kbuild by a9caf1a0cf30 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qWtir-0002D4-2R;
-        Fri, 18 Aug 2023 07:16:41 +0000
-Date:   Fri, 18 Aug 2023 15:16:04 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Peter Xu <peterx@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Greg KH <greg@kroah.com>,
-        kernel@collabora.com, Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>
-Subject: Re: [PATCH v32 2/6] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-Message-ID: <202308181520.yCq9Z26w-lkp@intel.com>
-References: <20230816113049.1697849-3-usama.anjum@collabora.com>
+   d="scan'208";a="908757353"
+Received: from sidorovd-mobl2.ger.corp.intel.com ([10.252.53.164])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2023 00:25:39 -0700
+Date:   Fri, 18 Aug 2023 10:25:37 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+cc:     Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+Subject: Re: [PATCH 5/7] selftests/resctrl: Use pointers to build benchmark
+ cmd and make it const
+In-Reply-To: <0587c078-306d-e3b4-ce5d-bcdfdeb66d27@intel.com>
+Message-ID: <c572a759-fbca-ca5b-3065-274757b1683@linux.intel.com>
+References: <20230808091625.12760-1-ilpo.jarvinen@linux.intel.com> <20230808091625.12760-6-ilpo.jarvinen@linux.intel.com> <f300a52c-d65f-fd74-18ce-7d37e76d144f@intel.com> <dd83f672-b9fc-cd79-10ff-70651d4822af@linux.intel.com> <87183b24-f343-2420-9bda-f1012e7195a1@intel.com>
+ <f22efaf4-d87f-d3c4-b986-7d326c912a18@linux.intel.com> <bacc2e6f-f747-ec65-b23b-4275d1cac018@intel.com> <c8b7118c-5830-98a0-5ae-66072e384b3@linux.intel.com> <0587c078-306d-e3b4-ce5d-bcdfdeb66d27@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230816113049.1697849-3-usama.anjum@collabora.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+Content-Type: multipart/mixed; boundary="8323329-1508127004-1692343541=:1737"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -92,94 +66,120 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Muhammad,
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-kernel test robot noticed the following build errors:
+--8323329-1508127004-1692343541=:1737
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
-[auto build test ERROR on akpm-mm/mm-everything]
-[also build test ERROR on next-20230817]
-[cannot apply to linus/master v6.5-rc6]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+On Thu, 17 Aug 2023, Reinette Chatre wrote:
+> On 8/17/2023 1:32 AM, Ilpo Järvinen wrote:
+> > On Wed, 16 Aug 2023, Reinette Chatre wrote:
+> >> On 8/16/2023 12:13 AM, Ilpo Järvinen wrote:
+> >>> On Tue, 15 Aug 2023, Reinette Chatre wrote:
+> >>>> On 8/15/2023 2:42 AM, Ilpo Järvinen wrote:
+> >>>>> On Mon, 14 Aug 2023, Reinette Chatre wrote:
+> >>>>>> On 8/8/2023 2:16 AM, Ilpo Järvinen wrote:
+> >>>>>>> diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
+> >>>>>>> index bcd0d2060f81..ddb1e83a3a64 100644
+> >>>>>>> --- a/tools/testing/selftests/resctrl/resctrl.h
+> >>>>>>> +++ b/tools/testing/selftests/resctrl/resctrl.h
+> >>>>>>> @@ -6,6 +6,7 @@
+> >>>>>>>  #include <math.h>
+> >>>>>>>  #include <errno.h>
+> >>>>>>>  #include <sched.h>
+> >>>>>>> +#include <stdint.h>
+> >>>>>>>  #include <stdlib.h>
+> >>>>>>>  #include <unistd.h>
+> >>>>>>>  #include <string.h>
+> >>>>>>> @@ -38,7 +39,14 @@
+> >>>>>>>  
+> >>>>>>>  #define END_OF_TESTS	1
+> >>>>>>>  
+> >>>>>>> +#define BENCHMARK_ARGS		64
+> >>>>>>> +
+> >>>>>>> +/* Approximate %zu max length */
+> >>>>>>> +#define SIZE_MAX_DECIMAL_SIZE	(sizeof(SIZE_MAX) * 8 / 3 + 2)
+> >>>>>>> +
+> >>>>>>> +/* Define default span both as integer and string, these should match */
+> >>>>>>>  #define DEFAULT_SPAN		(250 * MB)
+> >>>>>>> +#define DEFAULT_SPAN_STR	"262144000"
+> >>>>>>
+> >>>>>> I think above hardcoding can be eliminated by using asprintf()? This
+> >>>>>> does allocate memory though so I would like to understand why one
+> >>>>>> goal is to not dynamically allocate memory.
+> >>>>>
+> >>>>> Because it's simpler on the _free() side_. If there's no allocation, no 
+> >>>>> free() is needed.
+> >>>>>
+> >>>>> Only challenge that remains is the int -> string conversion for the 
+> >>>>> default span which can be either done like in the patch or using some 
+> >>>>> preprocessor trickery to convert the number to string. If you prefer the 
+> >>>>> latter, I can change to that so it's not hardcoded both as int and string.
+> >>>>>
+> >>>>
+> >>>> This manual int->string sounds like the trickery to me and can be avoided
+> >>>> by just using asprintf(). I understand that no free() is needed when no
+> >>>> memory is allocated but it looks to me as though these allocations can
+> >>>> be symmetrical - allocate the memory before the tests are run and free it
+> >>>> after?
+> >>>
+> >>> It could be symmetrical but that means I'll be doing unnecessary alloc if 
+> >>> -b is provided which I assume you're against given your comment on always 
+> >>> creating copy of cmd in CMT test's case.
+> >>
+> >> I seemed to have lost track here ... could you please elaborate where the
+> >> unnecessary alloc will be?
+> > 
+> > If there's what you call "symmetry", it implies the code always does 
+> > alloc. However, the logic in main() is such that when -b is provided, no 
+> 
+> No. Symmetry does not mean "always alloc"
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Muhammad-Usama-Anjum/userfaultfd-UFFD_FEATURE_WP_ASYNC/20230816-193454
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20230816113049.1697849-3-usama.anjum%40collabora.com
-patch subject: [PATCH v32 2/6] fs/proc/task_mmu: Implement IOCTL to get and optionally clear info about PTEs
-config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20230818/202308181520.yCq9Z26w-lkp@intel.com/config)
-compiler: arceb-elf-gcc (GCC) 12.3.0
-reproduce: (https://download.01.org/0day-ci/archive/20230818/202308181520.yCq9Z26w-lkp@intel.com/reproduce)
+Oh, so it simply meant code without memory leaks :-).
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202308181520.yCq9Z26w-lkp@intel.com/
+> - what I attempted to covey was
+> that tracking allocations become easier if the memory is freed in code
+> that is symmetrical to where the memory is allocated.
 
-All errors (new ones prefixed by >>):
+That's, unfortunately, what I needed to do even if it resulted in less 
+clean code when I, in a later patch that is not part of this series, 
+added a function the setup the default parameters into user parameters 
+struct. main() will now pass that span_str for it to do "symmetrical" 
+free inside main().
 
-   fs/proc/task_mmu.c: In function 'pagemap_scan_thp_entry':
->> fs/proc/task_mmu.c:2077:28: error: 'HPAGE_SIZE' undeclared (first use in this function); did you mean 'PAGE_SIZE'?
-    2077 |         if (end != start + HPAGE_SIZE) {
-         |                            ^~~~~~~~~~
-         |                            PAGE_SIZE
-   fs/proc/task_mmu.c:2077:28: note: each undeclared identifier is reported only once for each function it appears in
+> For example, if memory
+> is allocated at the beginning of main(), then it is freed on exit of main(),
 
+you make it sound easier than the reality is. There's no singular point 
+that is "exit of main()". It has way too many exit paths because of how 
+selftests framework works. It doesn't give you back control when you ask 
+it to exit the tests.
 
-vim +2077 fs/proc/task_mmu.c
+You'll see how complicated this gets once we get to the user parameters 
+structure patch but I'll use asprintf()+free() for now ;-). We can revisit 
+this discussion if you feel like it when we get to that patch.
 
-  2044	
-  2045	static int pagemap_scan_thp_entry(pmd_t *pmd, unsigned long start,
-  2046					  unsigned long end, struct mm_walk *walk)
-  2047	{
-  2048	#ifdef CONFIG_TRANSPARENT_HUGEPAGE
-  2049		struct pagemap_scan_private *p = walk->private;
-  2050		struct vm_area_struct *vma = walk->vma;
-  2051		unsigned long categories;
-  2052		spinlock_t *ptl;
-  2053		int ret = 0;
-  2054	
-  2055		ptl = pmd_trans_huge_lock(pmd, vma);
-  2056		if (!ptl)
-  2057			return -ENOENT;
-  2058	
-  2059		categories = p->cur_vma_category | pagemap_thp_category(*pmd);
-  2060	
-  2061		if (!pagemap_scan_is_interesting_page(categories, p))
-  2062			goto out_unlock;
-  2063	
-  2064		ret = pagemap_scan_output(categories, p, start, &end);
-  2065		if (start == end)
-  2066			goto out_unlock;
-  2067	
-  2068		if (~p->arg.flags & PM_SCAN_WP_MATCHING)
-  2069			goto out_unlock;
-  2070		if (~categories & PAGE_IS_WRITTEN)
-  2071			goto out_unlock;
-  2072	
-  2073		/*
-  2074		 * Break huge page into small pages if the WP operation
-  2075		 * needs to be performed on a portion of the huge page.
-  2076		 */
-> 2077		if (end != start + HPAGE_SIZE) {
-  2078			spin_unlock(ptl);
-  2079			split_huge_pmd(vma, pmd, start);
-  2080			pagemap_scan_backout_range(p, start, end);
-  2081			/* Report as if there was no THP */
-  2082			return -ENOENT;
-  2083		}
-  2084	
-  2085		make_uffd_wp_pmd(vma, start, pmd);
-  2086		flush_tlb_range(vma, start, end);
-  2087	out_unlock:
-  2088		spin_unlock(ptl);
-  2089		return ret;
-  2090	#else /* !CONFIG_TRANSPARENT_HUGEPAGE */
-  2091		return -ENOENT;
-  2092	#endif
-  2093	}
-  2094	
+...And to think this all is because C cannot easily make known constant 
+int -> string conversion w/o some runtime code.
+
+> or if there is a "test_resources_alloc()" that is called before a test is
+> run then there could be a "test_resources_free()" that is called
+> after a test is run.
+> 
+> > default benchmark command needs to be assigned, so no alloc for span is 
+> > necessary. Thus, there either is unnecessary alloc with -b or _no 
+> > symmetry_.
+> > 
+> > But I've already converted to asprintf() so no need to continue this 
+> > discussion.
+> 
+> Please note that asprintf() allocates memory that needs to be freed.
+
+Of course.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+ i.
+
+--8323329-1508127004-1692343541=:1737--
