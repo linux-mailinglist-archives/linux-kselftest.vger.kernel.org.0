@@ -2,80 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C0BB78091B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Aug 2023 11:56:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 18F8A7809B6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 18 Aug 2023 12:12:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1359445AbjHRJ4W (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Aug 2023 05:56:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34706 "EHLO
+        id S1359776AbjHRKMK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Aug 2023 06:12:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1359439AbjHRJz6 (ORCPT
+        with ESMTP id S1359831AbjHRKLu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Aug 2023 05:55:58 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B8A130DC;
-        Fri, 18 Aug 2023 02:55:51 -0700 (PDT)
-Received: from [192.168.100.7] (unknown [39.34.185.42])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 33CE8660723E;
-        Fri, 18 Aug 2023 10:55:41 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1692352549;
-        bh=jSm113VK4O5di5c9amVgQ+0TBD3Pa6bZ1kfgpxOAP9M=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=UkcqyLrBG7zmA6SoRIwPH7RykRwITDLpCgmJzIMdpZSSGhWDnrqRYMckR2Ls97+1O
-         0KztY/htn/6tBVPKzD01airJtHNIkqolcF/lC4qxZdCcCIz0gKOCCLv2FjRpMskBkk
-         UeZiPrsN3/kUd9pD3jXw+oIN5b/NJFtUmtohzW+ITtuPbs7qXaJx5LSdvXHazL9IEL
-         kvf1bfULa2BqMZenCP6KxI8mWcvO8ZeR4dqMraAPw/0NXKm2QCqvYCXIoJygu4Usld
-         p15w4ECqknF0FBilW+t7TgLKsYAPiwMeekZe3NUEtFlJ2WI1ff5f7dfE/Z3k+L9w7X
-         Y3wx4Hg2pc+OA==
-Message-ID: <ea2af063-67da-137b-1dc4-bace40568187@collabora.com>
-Date:   Fri, 18 Aug 2023 14:55:36 +0500
+        Fri, 18 Aug 2023 06:11:50 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03AE8422D;
+        Fri, 18 Aug 2023 03:11:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1692353484; x=1723889484;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=rHqX903VB6r+j2Z67w/QoSA0bxwpKfEGs235e0r5r8E=;
+  b=ck5UMLWXysbBjyJVvOj+1K1Z6OPAAdA+5kzSBRIad8AU4xupmEEIhdFb
+   Et/wK97oYMSObJvvYPdVmtXynevo83TJkAKljpR6nWG/4FAdN+tCMId+5
+   nwseHzOuBECsX2cxjEL/K+5Y+i+H0ucl3gvaRhlYm5l8Wsztq/EQ6QuQL
+   2rdCfrPNlayjwdljMbadgGV8wqGIyr2nmgB5acxNeOYYh0qXDIjRTHhiN
+   eRcxMPiqQP8xKfUpYGw2tu5aNSM+6yqjyh4OnmXJlJaqB4o/ob8k7R79s
+   rH1aQ5AWoTyQ04D4XGLusEtxkWRj0KsCS/KUKh4RK7Smm/u2lUQYYDoxz
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="370526271"
+X-IronPort-AV: E=Sophos;i="6.01,182,1684825200"; 
+   d="scan'208";a="370526271"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2023 03:10:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10805"; a="858624983"
+X-IronPort-AV: E=Sophos;i="6.01,182,1684825200"; 
+   d="scan'208";a="858624983"
+Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
+  by orsmga004.jf.intel.com with ESMTP; 18 Aug 2023 03:10:34 -0700
+From:   Yi Liu <yi.l.liu@intel.com>
+To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
+        kevin.tian@intel.com, robin.murphy@arm.com,
+        baolu.lu@linux.intel.com
+Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
+        kvm@vger.kernel.org, mjrosato@linux.ibm.com,
+        chao.p.peng@linux.intel.com, yi.l.liu@intel.com,
+        yi.y.sun@linux.intel.com, peterx@redhat.com, jasowang@redhat.com,
+        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
+        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        zhenzhong.duan@intel.com
+Subject: [PATCH v9 0/5] iommufd: Add iommu hardware info reporting
+Date:   Fri, 18 Aug 2023 03:10:28 -0700
+Message-Id: <20230818101033.4100-1-yi.l.liu@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.1
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        oe-kbuild-all@lists.linux.dev,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Greg KH <greg@kroah.com>,
-        kernel@collabora.com, Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>
-Subject: Re: [PATCH v32 2/6] fs/proc/task_mmu: Implement IOCTL to get and
- optionally clear info about PTEs
-To:     kernel test robot <lkp@intel.com>, Peter Xu <peterx@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WC?= =?UTF-8?Q?aw?= 
-        <emmir@google.com>, Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>
-References: <20230816113049.1697849-3-usama.anjum@collabora.com>
- <202308181520.yCq9Z26w-lkp@intel.com>
-Content-Language: en-US
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <202308181520.yCq9Z26w-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,100 +67,112 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/18/23 12:16 PM, kernel test robot wrote:
-> Hi Muhammad,
-> 
-> kernel test robot noticed the following build errors:
-> 
-> [auto build test ERROR on akpm-mm/mm-everything]
-> [also build test ERROR on next-20230817]
-> [cannot apply to linus/master v6.5-rc6]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Muhammad-Usama-Anjum/userfaultfd-UFFD_FEATURE_WP_ASYNC/20230816-193454
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-> patch link:    https://lore.kernel.org/r/20230816113049.1697849-3-usama.anjum%40collabora.com
-> patch subject: [PATCH v32 2/6] fs/proc/task_mmu: Implement IOCTL to get and optionally clear info about PTEs
-> config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20230818/202308181520.yCq9Z26w-lkp@intel.com/config)
-> compiler: arceb-elf-gcc (GCC) 12.3.0
-> reproduce: (https://download.01.org/0day-ci/archive/20230818/202308181520.yCq9Z26w-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202308181520.yCq9Z26w-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
->    fs/proc/task_mmu.c: In function 'pagemap_scan_thp_entry':
->>> fs/proc/task_mmu.c:2077:28: error: 'HPAGE_SIZE' undeclared (first use in this function); did you mean 'PAGE_SIZE'?
->     2077 |         if (end != start + HPAGE_SIZE) {
->          |                            ^~~~~~~~~~
->          |                            PAGE_SIZE
-I've been emailing arc maintainers for resolution of this error from April,
-but nobody replies there:
-https://lore.kernel.org/all/0e6b318a-bbf8-3701-00af-1802c6347897@collabora.com
+iommufd gives userspace the capability to manipulate iommu subsytem.
+e.g. DMA map/unmap etc. In the near future, it will support iommu nested
+translation. Different platform vendors have different implementations for
+the nested translation. For example, Intel VT-d supports using guest I/O
+page table as the stage-1 translation table. This requires guest I/O page
+table be compatible with hardware IOMMU. So before set up nested translation,
+userspace needs to know the hardware iommu information to understand the
+nested translation requirements.
 
->    fs/proc/task_mmu.c:2077:28: note: each undeclared identifier is reported only once for each function it appears in
-> 
-> 
-> vim +2077 fs/proc/task_mmu.c
-> 
->   2044	
->   2045	static int pagemap_scan_thp_entry(pmd_t *pmd, unsigned long start,
->   2046					  unsigned long end, struct mm_walk *walk)
->   2047	{
->   2048	#ifdef CONFIG_TRANSPARENT_HUGEPAGE
->   2049		struct pagemap_scan_private *p = walk->private;
->   2050		struct vm_area_struct *vma = walk->vma;
->   2051		unsigned long categories;
->   2052		spinlock_t *ptl;
->   2053		int ret = 0;
->   2054	
->   2055		ptl = pmd_trans_huge_lock(pmd, vma);
->   2056		if (!ptl)
->   2057			return -ENOENT;
->   2058	
->   2059		categories = p->cur_vma_category | pagemap_thp_category(*pmd);
->   2060	
->   2061		if (!pagemap_scan_is_interesting_page(categories, p))
->   2062			goto out_unlock;
->   2063	
->   2064		ret = pagemap_scan_output(categories, p, start, &end);
->   2065		if (start == end)
->   2066			goto out_unlock;
->   2067	
->   2068		if (~p->arg.flags & PM_SCAN_WP_MATCHING)
->   2069			goto out_unlock;
->   2070		if (~categories & PAGE_IS_WRITTEN)
->   2071			goto out_unlock;
->   2072	
->   2073		/*
->   2074		 * Break huge page into small pages if the WP operation
->   2075		 * needs to be performed on a portion of the huge page.
->   2076		 */
->> 2077		if (end != start + HPAGE_SIZE) {
->   2078			spin_unlock(ptl);
->   2079			split_huge_pmd(vma, pmd, start);
->   2080			pagemap_scan_backout_range(p, start, end);
->   2081			/* Report as if there was no THP */
->   2082			return -ENOENT;
->   2083		}
->   2084	
->   2085		make_uffd_wp_pmd(vma, start, pmd);
->   2086		flush_tlb_range(vma, start, end);
->   2087	out_unlock:
->   2088		spin_unlock(ptl);
->   2089		return ret;
->   2090	#else /* !CONFIG_TRANSPARENT_HUGEPAGE */
->   2091		return -ENOENT;
->   2092	#endif
->   2093	}
->   2094	
-> 
+This series reports the iommu hardware information for a given device
+which has been bound to iommufd. It is preparation work for userspace to
+allocate hwpt for given device. Like the nested translation support [1].
+
+This series introduces an iommu op to report the iommu hardware info,
+and an ioctl IOMMU_GET_HW_INFO is added to report such hardware info to
+user. enum iommu_hw_info_type is defined to differentiate the iommu hardware
+info reported to user hence user can decode them. This series adds the
+framework for iommu hw info reporting, and adds the vtd implementation. The
+complete code is available in [2].
+
+[1] https://lore.kernel.org/linux-iommu/20230724110406.107212-1-yi.l.liu@intel.com/
+[2] https://github.com/yiliu1765/iommufd/tree/iommufd_hw_info-v9
+
+Change log:
+
+v9:
+ - Simplify kdoc and updated commit logs
+ - Minor changes in iommufd_get_hw_info() from Kevin's review comments
+ - Add a selftest coverage for passing in a smaller buffer
+ - Add Kevin's r-b to patch 02/03/05.
+
+v8: https://lore.kernel.org/linux-iommu/20230816121349.104436-1-yi.l.liu@intel.com/
+ - Updated the uAPI by allowing a 0 value at the input @data_len
+ - Changed to always report the kernel supported data length instead of the
+   length that kernel filled in the user space buffer
+ - Updated uAPI doc accordingly
+ - Add one more selftest for 0 value @data_len and also check the output @data_len
+   with the size kernel supports
+ - Fix the usage of clear_user()
+ - Rebase on top of Jason's for-next branch (base: 65aaca1 iommufd: Remove iommufd_ref_to_users())
+ - Include the vtd hw_info implementation from vtd nesting series
+   https://lore.kernel.org/r/20230724111335.107427-12-yi.l.liu@intel.com
+
+v7: https://lore.kernel.org/linux-iommu/20230811071501.4126-1-yi.l.liu@intel.com/
+ - Use clear_user() (Jason)
+ - Add fail_nth for hw_ifo (Jason)
+
+v6: https://lore.kernel.org/linux-iommu/20230808153510.4170-1-yi.l.liu@intel.com/
+ - Add Jingqi's comment on patch 02
+ - Add Baolu's r-b to patch 03
+ - Address Jason's comment on patch 03
+
+v5: https://lore.kernel.org/linux-iommu/20230803143144.200945-1-yi.l.liu@intel.com/
+ - Return hw_info_type in the .hw_info op, hence drop hw_info_type field in iommu_ops (Kevin)
+ - Add Jason's r-b for patch 01
+ - Address coding style comments from Jason and Kevin w.r.t. patch 02, 03 and 04
+
+v4: https://lore.kernel.org/linux-iommu/20230724105936.107042-1-yi.l.liu@intel.com/
+ - Rename ioctl to IOMMU_GET_HW_INFO and structure to iommu_hw_info
+ - Move the iommufd_get_hw_info handler to main.c
+ - Place iommu_hw_info prior to iommu_hwpt_alloc
+ - Update the function namings accordingly
+ - Update uapi kdocs
+
+v3: https://lore.kernel.org/linux-iommu/20230511143024.19542-1-yi.l.liu@intel.com/#t
+ - Add r-b from Baolu
+ - Rename IOMMU_HW_INFO_TYPE_DEFAULT to be IOMMU_HW_INFO_TYPE_NONE to
+   better suit what it means
+ - Let IOMMU_DEVICE_GET_HW_INFO succeed even the underlying iommu driver
+   does not have driver-specific data to report per below remark.
+   https://lore.kernel.org/kvm/ZAcwJSK%2F9UVI9LXu@nvidia.com/
+
+v2: https://lore.kernel.org/linux-iommu/20230309075358.571567-1-yi.l.liu@intel.com/
+ - Drop patch 05 of v1 as it is already covered by other series
+ - Rename the capability info to be iommu hardware info
+
+v1: https://lore.kernel.org/linux-iommu/20230209041642.9346-1-yi.l.liu@intel.com/
+
+Regards,
+	Yi Liu
+
+Lu Baolu (1):
+  iommu: Add new iommu op to get iommu hardware information
+
+Nicolin Chen (1):
+  iommufd/selftest: Add coverage for IOMMU_GET_HW_INFO ioctl
+
+Yi Liu (3):
+  iommu: Move dev_iommu_ops() to private header
+  iommufd: Add IOMMU_GET_HW_INFO
+  iommu/vt-d: Implement hw_info for iommu capability query
+
+ drivers/iommu/intel/iommu.c                   | 19 +++++
+ drivers/iommu/iommu-priv.h                    | 11 +++
+ drivers/iommu/iommufd/device.c                | 73 +++++++++++++++++++
+ drivers/iommu/iommufd/iommufd_private.h       |  1 +
+ drivers/iommu/iommufd/iommufd_test.h          |  9 +++
+ drivers/iommu/iommufd/main.c                  |  3 +
+ drivers/iommu/iommufd/selftest.c              | 16 ++++
+ include/linux/iommu.h                         | 16 ++--
+ include/uapi/linux/iommufd.h                  | 71 ++++++++++++++++++
+ tools/testing/selftests/iommu/iommufd.c       | 38 +++++++++-
+ .../selftests/iommu/iommufd_fail_nth.c        |  4 +
+ tools/testing/selftests/iommu/iommufd_utils.h | 62 ++++++++++++++++
+ 12 files changed, 311 insertions(+), 12 deletions(-)
 
 -- 
-BR,
-Muhammad Usama Anjum
+2.34.1
+
