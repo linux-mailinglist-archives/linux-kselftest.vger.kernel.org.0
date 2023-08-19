@@ -2,41 +2,41 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D162781957
-	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Aug 2023 13:50:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0739B781958
+	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Aug 2023 13:50:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230345AbjHSLuu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 19 Aug 2023 07:50:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36356 "EHLO
+        id S230375AbjHSLu7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 19 Aug 2023 07:50:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229577AbjHSLut (ORCPT
+        with ESMTP id S229577AbjHSLu6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 19 Aug 2023 07:50:49 -0400
+        Sat, 19 Aug 2023 07:50:58 -0400
 Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-ve1eur01on2138.outbound.protection.outlook.com [40.107.14.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04428E40;
-        Sat, 19 Aug 2023 04:48:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A6333C10;
+        Sat, 19 Aug 2023 04:48:39 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZFIU6O+emtVKgNF89ZxfB1ELeUCRmnzyO94TMzS6oHJwixmI9ilEPbXSjL7+wgAbES7sgFjFTAyEhe1v6VpmwTDlBluJBOhrBHzwYxFKHxXyVCx9j89fRB/w/UXavEzRXK8m8A9JG/49NFzzgZQcltptDQcfsI9Z3itlWlW9zMtugcNkDB8bNv9hi/AVa4j2PflJY9DyEi8M4TCo0CTkmV+RtaBlOa0Fs4Cm5h0OW3h3zeo0Zl/epokcFfdHFUpmUaPCYIo9LveTv68PIesNY8MFpNlZBdS70K7UGm4IejohTOL2eC6ZTh5m4EUG0CMhirRhCXIztLQ1YS+b0V3M0Q==
+ b=jNhjzywRzUrJjkB2RFLHx5GIyV/JyzcxsyCRpGAqqkNaoUS/uJU5dPOjNZhigUPgvTSthDZSk4mq50fkXPx+u8bFS39Wi6NC+VrjgCSbr7zrUrDEk6J5vNU38Wq0h09XqzIZ3Vf3HkwKyM3uzmEu1x8YCyYIB0E9INuiJK1Ur5lJFFe1A2syMi66t4WtXn3ns9YX+NcKy4mDt7Wzom50E9doChrMJ1l8ssSs5BBxG7Z8ikhtPpMr056udlMdcG7aMsJyzrZD1QEt/vcVLBUkWfniFxiUkb5HebwQf53CVBAR2PPvR9UEn1+/DKzw80ovDHfrCjG9NTNfl6gQSVGtjQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2o0rhJlqav+t4qyW/MoMaNO6Zvbg4RccRp9L+S10wY0=;
- b=lz10ptwt8yvfP0TNlbdRnu11C41uYI/OyxbxsR8ik1PRKhaO/P0jr3ewkklaVlMiMPBEycz1ZrmXh/2d1Zsx9l3/k1XGPHLgLwI9oivXxEhupXQmIsKcvhGF72IHxnAPOODJxN2aSoLVn2SPgXIHSMZASjMokuZ2XAzSCWYBvu2jnsQeWNg1nDjZn3A4mzglnNB+0/mudxIHablv/6A/TlmcVRcEu4Dv2LEU4LbkhFl5+jvhhTezjohDNFgedt55k5IOUuy346VDi0oIGQBybnfQHoQWwepwVCvlkUkNWyQ9TPqmMXD8WPpZ2Dgo984QFIhGiYrsZmL9dQ1DhYs1lQ==
+ bh=WJ2YzlcVi6EnBaE6c23fRg75/fbGRMCYIYYVhtNnaco=;
+ b=ZfIv3OvvMFTJbwH2H6Bb1ooagaom6ewL3EHP4PxaWv1QmgAItdWKlw2/6stH/kz8OjVZ1qat3w2ICOABq+tNR/NwUWv8YjdJv4CA2E0ugjpZc+3FxjZ/DC87DtoMhb4nQBkeBxRKxop79yaQ9Jjl7eMyRZYfrzg5zScgMdVgtubcCibgcJA+0uBg6Fd4fUOVUYNrWEB2Xqi+OtHuikO7ucQgB84DLiJ9cRy9EYV12t2v5QuC7XQYBvGqtL8DJ5FWqfEVfieMxtoA+IdtBTcyixRne3vw52iZ77AqV9xNm+pUdqmylghAZ4uZs4HRM9C5xtqvBp8okBg7wbhT7ICOcg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=est.tech; dmarc=pass action=none header.from=est.tech;
  dkim=pass header.d=est.tech; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=estab.onmicrosoft.com;
  s=selector2-estab-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2o0rhJlqav+t4qyW/MoMaNO6Zvbg4RccRp9L+S10wY0=;
- b=UoGha7CxEp5w7IHOmXlDEEutBLxbhluoGKtlm4qbZdRlENer48xOJQsQvVHgZPCCWDbj/ugZM0RlQlBiTn3qADiUU5BjH4iD3iCqpjQYxvQP/MYNFZDhOz1AdRErUS9iKjcuQAis5GUtBw7iexwgQ5P7xRwU6//YSljY7HfHGSM=
+ bh=WJ2YzlcVi6EnBaE6c23fRg75/fbGRMCYIYYVhtNnaco=;
+ b=Jr22gqDyNVeUSOa+PTtzC/XFhMtl3mespX+kJIJLndW9ZK/m8jpgm3v17o3A0Mbp7/zs0Dr4tyewe+V/ZcSm/I4mQGFs+9fulcPwjpXKgg9c1VcAtmly7pQmkHlZhXiA1uVs3oX9N4lLWSvx7xdOoXuiA3GPEvjICXLKG3LPog0=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=est.tech;
 Received: from DBBP189MB1433.EURP189.PROD.OUTLOOK.COM (2603:10a6:10:1e7::15)
  by VE1P189MB1133.EURP189.PROD.OUTLOOK.COM (2603:10a6:800:14a::12) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.20; Sat, 19 Aug
- 2023 11:48:32 +0000
+ 2023 11:48:33 +0000
 Received: from DBBP189MB1433.EURP189.PROD.OUTLOOK.COM
  ([fe80::759b:94eb:c2e8:c670]) by DBBP189MB1433.EURP189.PROD.OUTLOOK.COM
  ([fe80::759b:94eb:c2e8:c670%6]) with mapi id 15.20.6699.020; Sat, 19 Aug 2023
@@ -51,65 +51,65 @@ Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Ido Schimmel <idosch@nvidia.com>,
         Shuah Khan <shuah@kernel.org>,
         Sriram Yagnaraman <sriram.yagnaraman@est.tech>
-Subject: [PATCH 1/3] ipv4: ignore dst hint for multipath routes
-Date:   Sat, 19 Aug 2023 13:48:23 +0200
-Message-Id: <20230819114825.30867-2-sriram.yagnaraman@est.tech>
+Subject: [PATCH 2/3] ipv6: ignore dst hint for multipath routes
+Date:   Sat, 19 Aug 2023 13:48:24 +0200
+Message-Id: <20230819114825.30867-3-sriram.yagnaraman@est.tech>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230819114825.30867-1-sriram.yagnaraman@est.tech>
 References: <20230819114825.30867-1-sriram.yagnaraman@est.tech>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: GV3P280CA0114.SWEP280.PROD.OUTLOOK.COM
- (2603:10a6:150:8::32) To DBBP189MB1433.EURP189.PROD.OUTLOOK.COM
+X-ClientProxiedBy: GV3P280CA0115.SWEP280.PROD.OUTLOOK.COM
+ (2603:10a6:150:8::18) To DBBP189MB1433.EURP189.PROD.OUTLOOK.COM
  (2603:10a6:10:1e7::15)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: DBBP189MB1433:EE_|VE1P189MB1133:EE_
-X-MS-Office365-Filtering-Correlation-Id: c2430af3-a665-4bca-4f88-08dba0aa3605
+X-MS-Office365-Filtering-Correlation-Id: 5f0b92e7-a5d7-4714-3a51-08dba0aa36de
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5gMhI+08ZNBM3FkaZAq29eow+VZk3aBWFbFeR1EbJSwEmOXxvUwuLQ8ghBLOtbPwt4bLaVPR+lBh0M4KosbDGalvrgMji56GuBCgSdsk/SsmmUB18SNuiNlfJgiz3N3Zy4GKLBPHmHnLtGsTlxd3FQCFN4IaO2Apl3bakTuenV5mnm2lYLZitWxkP52/DUuyYQFaL+FpQvG0KenhND6r4+yrX5EBsm4K/djCsTZTK7jmXgRBmTqTmb2nOAgG9bWFbeFd90Bp4naAdOiQhAJPHouGZRL+mSEK4L4prGAXLu0uNaVbrIe9lh0V14dwYSpVhQ/86WXRMOah8n0vBba8tRDj2q4r9USKpIAKYFdsOStXyR39NTryDx7nJ1lAZ+AF6Cxd7HPxPeSTCWj2RHjCvq8xAx0RMi8GZOtch/YzBcixnmjkc3RHKHJmTp7Oc5Sge9YhjXHySedO+RSI1TcjENyBU029Ut1J/437YL/nqZLL/qd9FIdRvVVBO0Ic41yIu1cgzU1Jv00lFm9spodJw496quPTS9KQAWaVurE5Gj2zMuAG3qDM/sc4W3883MG0ed7whgrMT7+RhY969dlEiY+Ufmk3YILs0qOzUjpJahaUqiX3vCQIubRG14v6OZBY
+X-Microsoft-Antispam-Message-Info: etYlnPnB6iPX1cgm/+2548vHUxK2Khod6PL+Ew2dHuDNo9UKNQWFvkIWPs16nvIi7zwRVdR0JkUEu5PJPR+j1Ot5nrcNb7TOIpzx6pIIRlNfnOG20nx6IU4b9rCU5jPLT3cKW+bBCETTx1/NRZuqz7qwZfiRREV5yVfZBZIXaxFIjsun3TptDCdJfNA9BYL9xVokYxXK+LqATQdl2/+tbf9kGWKCPrrpT8SUjL+IpygD5jBB93WIu7yAg7Mj9iw1NZcn9ngHQc9yXImsbkOwHdN/oD+UEXp10BGAgNPWWHJMg6tbCAS7tPBPR6XdODIj5LjT/oWVFARZrigXydNAyPFMYZsduE8CdTLqlRVTkA1d8Ki1sr7Zvjw4Q5wyd72Xv2CZynsYNE7UFyYjM1amAsjBm9eWHKPeUXszntyWstVFEq0j4GVdqt6GQaa0xnIkkULQuGHAuqk3iFajdNVDSVx2eHAQjfigH6P8OmwBZf/rJVkEKQUBxAAB//mkdgmkXaTl/nrFzgFD5Hv+h16vHHr6FleDtCfBPUoseLUuaqyZScHNmpHxtomcQNVV5WP4IJZGQjpiiX4dCNSVAnOgws6gL/gmKw+mrbp7AQ2vAVQX2FZTopZcljZG6XR0tvoLiEuf7zXAJnh3E/X6TV5FNQ==
 X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBP189MB1433.EURP189.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(396003)(376002)(39830400003)(136003)(346002)(451199024)(1800799009)(109986022)(186009)(66556008)(66946007)(54906003)(66476007)(2906002)(4326008)(8676002)(8936002)(41300700001)(316002)(70586007)(6666004)(6486002)(5660300002)(44832011)(6506007)(478600001)(6512007)(2616005)(1076003)(26005)(83380400001)(38100700002)(86362001)(36756003)(266003)(37730700002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?6JpoubQOcbYFPo/O9BAZ2M4lTvkR2g4UufNEUc9LHZgNlJ77Ue1cd75abu1M?=
- =?us-ascii?Q?rmBm09pG4zKdkr5NcaFoEw/5ftBQhbV5wgbaiVbh073J+5STxeOO2YiJ8xoP?=
- =?us-ascii?Q?HYNJzTvS+5JDLVDLJWktKchBIkS4+6rZmuGrjXnvK+G63pZx/ttln8/bD61/?=
- =?us-ascii?Q?0ixPbifyOJrOSV+QmGeEoldgcVgLF6PuGCASBreY7YnP5DK7uj05iefq+A9q?=
- =?us-ascii?Q?qQ94DjMe1i/938+X4GBBBb/2tTU0Idmk9zDesTG56lLn9GTBgLwOPIIfiewv?=
- =?us-ascii?Q?cqW69hHGDw6V50JhHAQ9L/oU2ymNdJOAKztF13jP4G6KrtFs/mzo5AIpYY93?=
- =?us-ascii?Q?0uAVmdLkph0dXAuhlr0ZGGNNeH7wolhJ3UoZMifo1zv3qYJwzr1vY0kslALf?=
- =?us-ascii?Q?b/uEYmXwWDL6Ll8eSZ7vRcB/4ctOfSme3cgKOalUFCTSX7mIxqy+XDq5VqkK?=
- =?us-ascii?Q?HYSoHtvJtjZjU/YU1lM7as2z1tDocXrSd0M7Qq+zfbfyVQsopkmVDhw8ZsMY?=
- =?us-ascii?Q?2+quEm+7oFAz2Gq9ajbyNgMn5dBzRSkMRwiOyoD2mmNxgZdut4xj0aRyF3M2?=
- =?us-ascii?Q?mB0k6qJA+CTz4UKGw2UdOmLajvuVQXfG1Pk/HSebVMZCJBeXCR/ATJ6Yh1gF?=
- =?us-ascii?Q?y+gDkYbGlpOlql4EjHBGHY8jGeEV5389EDC6+8oZE3C8fSekMuAGkqaCt80X?=
- =?us-ascii?Q?I1brZ4i0Ch2NwhnEo817+VMUsZWMIau9gcvRNxWXogOVJc5oFlcP5MydtyHn?=
- =?us-ascii?Q?uSWQmh33bGdczN4wugMB2kp7TSZKo4/DFXhG68d+fLwygHxbK3TE4/uVXgKp?=
- =?us-ascii?Q?C8tvWC9uOMn4eznI+/qgtB+oOKdyKUIgQHrS3n0NCYRDmgzt4GcFajeheYHH?=
- =?us-ascii?Q?p6m3MDJy697/7wyzkEvhBrbM5ferK0iVHPqFyKK0lFZ+cIQ5tuHBljp9pbup?=
- =?us-ascii?Q?ahJXa6wyRzBkMLile6wYdtTeiM9+JP1syTvWqQ7wsK33A8yU9BjCtEGokOE2?=
- =?us-ascii?Q?BxTWOOAn04JqGjeUYW4HlWMtj7Q6XIuwjd+5KppioFGhPQJtOsKGR/RQ9ypN?=
- =?us-ascii?Q?nLDe25gAK1Y1PsoXet1ubB7U5Epxy6G3+7lcffy7DXvhOoC/gSukGMEaU557?=
- =?us-ascii?Q?UCStYTO6YtU+/ogGtzcrHxmCmnCCSDmAoGX4anQviQdZMB555U0MeQLD8dkA?=
- =?us-ascii?Q?u2jUQfbA6+3PggaIhxL52gnueUJN4tw6oOt0txlPGfAN4NnuOawcWpheNwCU?=
- =?us-ascii?Q?mnxFFXjv3u37cUsPOKulfby2u2IOyMMMaOQDwhBSoc9wDId/nn+5zDYWcYKx?=
- =?us-ascii?Q?R4sekRGWSapooi3+2N1LsGlWhuh7QzmcEO54vfdGLJnuzyZTMT5OmhKMRQZW?=
- =?us-ascii?Q?QGW9pz83wFgfqM6tyHrYPiOOcEHf+jA+4EJLtKx6zW5mwmjofHKlYF/Xmk7p?=
- =?us-ascii?Q?I0DVi01IjdTbEGPtOQQli5N+h8l++8XWgucJC8suvTdrZ2AUi7peAUQ/MT44?=
- =?us-ascii?Q?wUy2gP521YJy6Jfr8OeJz35uPYZ9mXt5WCH4lKhgditIFhqIcrl/4BMv8SJ/?=
- =?us-ascii?Q?lyvkU3OAYgqj7YMQOK1wj6p6L8MnXXTqwrbXdDpBdAsV2ARVL4yyOkWE/YC4?=
- =?us-ascii?Q?+w=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1Q6teInSD3WMHwxqGvErw/DIvIUYjVJGCsgZBru6V9Wn4t54/e3lv5L8HrdY?=
+ =?us-ascii?Q?lWQO/Wax719kxXqhDa3dbwUEzHYuhuDtkZed61NjmGji/scJEgEEgIsCk9fx?=
+ =?us-ascii?Q?1pHT4Hln9iu6uZr0oLmCh8rhxxtPzU72at8ajYnV1KUntMCjqv8BLKD8VrnQ?=
+ =?us-ascii?Q?0M2znIxLgm0R1xoB325kBnZMrs46zc1bIZesMe//4t0XDBi10bnL28iYjSrJ?=
+ =?us-ascii?Q?29E2mZ9zS+ai15z20siZ8pvk939wSw4Wqawp7Ts18FMVt6nso7G0PC2CODMs?=
+ =?us-ascii?Q?zHlPPm8BvzDK+tIcG/1Trx7pxrMbGtrY+/AHRhJjspyTPJDGCBjea9YMc0Jh?=
+ =?us-ascii?Q?hACMXXYCn+ywJOjA306Nl7fmZfEXG5QGlKp67uYg5LUX8MrUJ+Hlt647ruxY?=
+ =?us-ascii?Q?/Ya/6oKOrtpuBxmJcX0xvFWCOIC1lJ+OSwHXenFycGT9mWn2MPkUnhGOhZhh?=
+ =?us-ascii?Q?sSZRGGeh5ZNkHOzAOu8JevA1C2EUK+9/bySxm8VZV9Dloq6Mauy7058YeR/b?=
+ =?us-ascii?Q?ix45EYA+xOJM4NlJRulyAwhZojYTceyCSuHuh/WLi5SPqK8Pgnh7fzP9ygUH?=
+ =?us-ascii?Q?F+9AcmEEv3XQd4I1xziaPr6nderiReOeL3ENIHF4Jfqe4fShzj+1nCbkO9Lc?=
+ =?us-ascii?Q?OSS3b6OmbFLgk1VASuo8RoxOUbV6CCA9rmKLbt5TWcvAME0x8qpyE3mNOS5R?=
+ =?us-ascii?Q?P1sS1RPTLu5LeXkg4+uoCZuLvM/GGNaenldRNrcR7lgY4KB0kgj5ErB1rANT?=
+ =?us-ascii?Q?6TYdBcKrNKtww+AqAvnOZOjMy+4fdu5RvB22YCnEzrH+lSJbMcWPAHYMkFrW?=
+ =?us-ascii?Q?RmGTZnVAf/8QtsoMhKiWt4sjgg2zkN5D6TUNk2TlLEJ4aQFUIluWRWcxWDYm?=
+ =?us-ascii?Q?RnORv4qkVOcOnhVUg3t03Q26sjU8urBG1sng6dOvrBfSl9pzYjmo9QigtTkj?=
+ =?us-ascii?Q?Cn69bx74nWDU9VRmK4i7iTbCIpJYA/W+vcj+qHhLIRags+pcfz8ARDOYbqTQ?=
+ =?us-ascii?Q?T2OD4SpbngbmUaidj4uj2Uhbs7qF5uVB9OgXrtZsSqCSb8/mY2HiUgb5vO2r?=
+ =?us-ascii?Q?5GIk3VeWAAHO/T6jWbHO6+zRXSVnz4hQWWdXQpvKYFUfZ9lGpj49ZlpJQkPL?=
+ =?us-ascii?Q?cUGU3v6LHaY+lGIVInYdix7IGKpsoCXQV1j48h8/KfvtY1N8/Bp8zffSGklJ?=
+ =?us-ascii?Q?UUb4Ktz+/gdO3mk12ZOrunEL+WmOOGHFc2jgoM/b3aFr2kK0QkfrRq+MAsG/?=
+ =?us-ascii?Q?8GpBY35FBPOyn3uNhPgqy7uPP2EGgT+hPgXaRpBoc0fgdcolLTEgqTep9Fnj?=
+ =?us-ascii?Q?mnkCcLxy+ZevvjIsVZcBOcsrcvRBheKjxUc8TjHl6AzPeqy89/EbxxkyWb8W?=
+ =?us-ascii?Q?TQgAZQxtJ/xlDGjfB4AyaS0BfCTuc3/OP4+1W7Mtc7jqhfEsk5atbqSXTptS?=
+ =?us-ascii?Q?uZDSxqAsEs6M/ZoOYmXjTb9upmO4nuVR0NXVy4DYagYOvXXY4WwVF/iYTWPo?=
+ =?us-ascii?Q?Vz5Vp4PUG2BUCb/bwauPfDc66DDS5y44qssav5432xlGpm3vUXrDrtScvXNE?=
+ =?us-ascii?Q?XuRUydj5Bs6/c2CN6osNWC7hE7/3wTYI6UVxilQ01mEMaYYpRTHWHUPwJesQ?=
+ =?us-ascii?Q?/Q=3D=3D?=
 X-OriginatorOrg: est.tech
-X-MS-Exchange-CrossTenant-Network-Message-Id: c2430af3-a665-4bca-4f88-08dba0aa3605
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5f0b92e7-a5d7-4714-3a51-08dba0aa36de
 X-MS-Exchange-CrossTenant-AuthSource: DBBP189MB1433.EURP189.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Aug 2023 11:48:31.5248
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Aug 2023 11:48:32.9241
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: d2585e63-66b9-44b6-a76e-4f4b217d97fd
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: mURj3FkXPq1gqQVZoFc2XFgnAs0OBkUayr9joIfxp6d8Kk7+91esC+SRVpxFm5fzfJ8fgQEm/gPRbzaW8rrQK9TVoMsXHZGw2dz2qTne1BI=
+X-MS-Exchange-CrossTenant-UserPrincipalName: vLsl/AFIb9L8a280ezP0H0I5U99IVaGNuggKbT8SlyI+OT6JeyqIll8g8AapYz5LUUGwcnAyslML9eP7ooSYI1HCrqcEkGxmE0xodRWRWEk=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1P189MB1133
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
@@ -126,53 +126,54 @@ packets in the same receive batch to the same next hop irrespective of
 multipath hash of the packet. So, do not extract route hint for packets
 whose destination is part of multipath group.
 
-Fixes: 02b24941619f ("ipv4: use dst hint for ipv4 list receive")
+Fixes: 197dbf24e360 ("ipv6: introduce and uses route look hints for list input.")
 
 Signed-off-by: Sriram Yagnaraman <sriram.yagnaraman@est.tech>
 ---
- include/net/ip.h    | 1 +
- net/ipv4/ip_input.c | 3 ++-
- net/ipv4/route.c    | 1 +
- 3 files changed, 4 insertions(+), 1 deletion(-)
+ include/linux/ipv6.h | 1 +
+ net/ipv6/ip6_input.c | 3 ++-
+ net/ipv6/route.c     | 2 ++
+ 3 files changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/include/net/ip.h b/include/net/ip.h
-index 332521170d9b..bdce572fa422 100644
---- a/include/net/ip.h
-+++ b/include/net/ip.h
-@@ -57,6 +57,7 @@ struct inet_skb_parm {
- #define IPSKB_FRAG_PMTU		BIT(6)
- #define IPSKB_L3SLAVE		BIT(7)
- #define IPSKB_NOPOLICY		BIT(8)
-+#define IPSKB_MULTIPATH		BIT(9)
- 
- 	u16			frag_max_size;
+diff --git a/include/linux/ipv6.h b/include/linux/ipv6.h
+index 839247a4f48e..fe3492a67b35 100644
+--- a/include/linux/ipv6.h
++++ b/include/linux/ipv6.h
+@@ -146,6 +146,7 @@ struct inet6_skb_parm {
+ #define IP6SKB_JUMBOGRAM      128
+ #define IP6SKB_SEG6	      256
+ #define IP6SKB_FAKEJUMBO      512
++#define IP6SKB_MULTIPATH      1024
  };
-diff --git a/net/ipv4/ip_input.c b/net/ipv4/ip_input.c
-index fe9ead9ee863..5e9c8156656a 100644
---- a/net/ipv4/ip_input.c
-+++ b/net/ipv4/ip_input.c
-@@ -584,7 +584,8 @@ static void ip_sublist_rcv_finish(struct list_head *head)
- static struct sk_buff *ip_extract_route_hint(const struct net *net,
- 					     struct sk_buff *skb, int rt_type)
+ 
+ #if defined(CONFIG_NET_L3_MASTER_DEV)
+diff --git a/net/ipv6/ip6_input.c b/net/ipv6/ip6_input.c
+index d94041bb4287..b8378814532c 100644
+--- a/net/ipv6/ip6_input.c
++++ b/net/ipv6/ip6_input.c
+@@ -99,7 +99,8 @@ static bool ip6_can_use_hint(const struct sk_buff *skb,
+ static struct sk_buff *ip6_extract_route_hint(const struct net *net,
+ 					      struct sk_buff *skb)
  {
--	if (fib4_has_custom_rules(net) || rt_type == RTN_BROADCAST)
-+	if (fib4_has_custom_rules(net) || rt_type == RTN_BROADCAST ||
-+	    IPCB(skb)->flags & IPSKB_MULTIPATH)
+-	if (fib6_routes_require_src(net) || fib6_has_custom_rules(net))
++	if (fib6_routes_require_src(net) || fib6_has_custom_rules(net) ||
++	    IP6CB(skb)->flags & IP6SKB_MULTIPATH)
  		return NULL;
  
  	return skb;
-diff --git a/net/ipv4/route.c b/net/ipv4/route.c
-index 92fede388d52..33626619aee7 100644
---- a/net/ipv4/route.c
-+++ b/net/ipv4/route.c
-@@ -2144,6 +2144,7 @@ static int ip_mkroute_input(struct sk_buff *skb,
- 		int h = fib_multipath_hash(res->fi->fib_net, NULL, skb, hkeys);
+diff --git a/net/ipv6/route.c b/net/ipv6/route.c
+index 56a55585eb79..4631e03c84b4 100644
+--- a/net/ipv6/route.c
++++ b/net/ipv6/route.c
+@@ -424,6 +424,8 @@ void fib6_select_path(const struct net *net, struct fib6_result *res,
+ 	if (match->nh && have_oif_match && res->nh)
+ 		return;
  
- 		fib_select_multipath(res, h);
-+		IPCB(skb)->flags |= IPSKB_MULTIPATH;
- 	}
- #endif
- 
++	IP6CB(skb)->flags |= IP6SKB_MULTIPATH;
++
+ 	/* We might have already computed the hash for ICMPv6 errors. In such
+ 	 * case it will always be non-zero. Otherwise now is the time to do it.
+ 	 */
 -- 
 2.34.1
 
