@@ -2,111 +2,95 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB9C4781A85
-	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Aug 2023 18:25:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C7BC781B68
+	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Aug 2023 02:10:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233950AbjHSQZs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 19 Aug 2023 12:25:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38496 "EHLO
+        id S229461AbjHTAJ7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 19 Aug 2023 20:09:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233930AbjHSQZs (ORCPT
+        with ESMTP id S229589AbjHTAJt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 19 Aug 2023 12:25:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBEAA12748;
-        Sat, 19 Aug 2023 09:25:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A4ED61D26;
-        Sat, 19 Aug 2023 16:25:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DD61C433C8;
-        Sat, 19 Aug 2023 16:25:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692462344;
-        bh=Gm54xopY5U1g+dtLdCK5BXvhK5nJLYt1xvvTvw4Ipn0=;
-        h=From:To:Cc:Subject:Date:From;
-        b=T6GsYfmlM2iBvguNjtaNVEn5Yfpe+DOYTsuVXVxaORC11cv1yKBJRbUmjgoFq0hH2
-         IP3h6MQ3AWE0RREdvLTdNk3vIN2xwCjSAW4mFrbB1N913sJoWsMPA8sHMoIivoPgFW
-         N95ys0niXO9pPKSvWzCM1EJ28Yjd4gK6ein72TNAIe0EiIHGlq8ONX/BSZ6JbmBWbc
-         aJW1ZeOJi8nGsrGgAWFUPzum08ulHkNO/X09PvmX5f/I+24m/qx+/SVl3aBdJYQBmZ
-         H6l5XkWy2OPV1ZDByOKieYjp14fehrhWO+NuOGHE2HopHVbeuoNV7nLDDaM4GlvXly
-         erBEyGNLS670Q==
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>,
-        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>,
-        linux-kernel@vger.kernel.org (open list),
-        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Subject: [PATCH v2] selftests/tpm2: tpm2-parse-error.py
-Date:   Sat, 19 Aug 2023 16:25:37 +0000
-Message-Id: <20230819162540.5717-1-jarkko@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Sat, 19 Aug 2023 20:09:49 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E00D17DDC2;
+        Sat, 19 Aug 2023 12:50:22 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3fe12baec61so19445695e9.2;
+        Sat, 19 Aug 2023 12:50:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692474621; x=1693079421;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sSB6bHkjwrLrFphZRXjaDm3kSiCaocff/7800VaCd8Q=;
+        b=gxUCaWSEn7y8qaC48/Ir3tNWSAROgPfUfqvIKkyE+gRVYZPhjJ03GFaN+8tnraN79e
+         215Yp1dgiehqEmpGGHGLDCCF4SDEwTUC/z7HLOhqLD5zrsNj/7LmI/7ma4NblW/opOqg
+         bQFVrmpiGSmPbZ2Yg5boXNgBv8m4wT+bVWuJxsHz+UIKd9LGyb8pPUvqxx5qco3gv6Wv
+         n6HJtAo55rpgB+aCczFTOiZFEvKDbrcwOFP538A4l/z/0wTDZZib2RxZhOX1UDGGUmz4
+         5L54+7N/YAfeV7+rfPelZlkEAV8A/rsDlOmoiH+oQI4x8PHykbo9JIWuT9PO/jpJz2WJ
+         +vpA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692474621; x=1693079421;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sSB6bHkjwrLrFphZRXjaDm3kSiCaocff/7800VaCd8Q=;
+        b=ByVdfBkFb1V/b7ojVxLHNdEhCsgRdoWJ5hs+ksmTyIPbMoloJQN+go4HpaUvhxMQ+z
+         JoriyaGJcmtGKKkRQwCZe4zJozDJ9iD9xaV1iP67sHRsmert7u55tHkpRd9+bq/ibvXm
+         nsBWVn5QDGiF+gQ4/7KPuQfv8s0hiqKdQKG0kghhT9xq+KmnZS5BFN0b3Pw5o9TSZYUu
+         pidUR3pIZK46ZpzGlWP5lpkhTA/EAlmBH2bQRdw1zahevARujz7SM/JLAuLK5cOZhaTB
+         pHpN12mkjId/AO7QkgoUUOqewmu7nz+i32N/wiHTNGdKZlpBdxKAAw8q6jDOIBS1DgZF
+         IRDA==
+X-Gm-Message-State: AOJu0YyG8tJB2BXTeRIUecpCfnCUzN6Dia1Zk0SnL/smGb0goOEV2dd8
+        viUMVah8Ngfa6lwEHoiPx/4WI8RMIpx5LIe3
+X-Google-Smtp-Source: AGHT+IHahhec10BYrPqz/QP1HfNcaB3/uicy40ATMZ7BLndPcptrIvIFgo8k7y6MTcL3w2uqTpqEmA==
+X-Received: by 2002:a1c:6a16:0:b0:3fa:98c3:7dbd with SMTP id f22-20020a1c6a16000000b003fa98c37dbdmr1935691wmc.41.1692474620596;
+        Sat, 19 Aug 2023 12:50:20 -0700 (PDT)
+Received: from mmaatuq-HP-Laptop-15-dy2xxx.. ([5.194.84.172])
+        by smtp.gmail.com with ESMTPSA id l19-20020a1c7913000000b003fe26bf65e7sm6861382wme.13.2023.08.19.12.50.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 19 Aug 2023 12:50:20 -0700 (PDT)
+From:   Mahmoud Maatuq <mahmoudmatook.mm@gmail.com>
+To:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kuba@kernel.org, netdev@vger.kernel.org,
+        willemdebruijn.kernel@gmail.com, davem@davemloft.net,
+        pabeni@redhat.com, edumazet@google.com, shuah@kernel.org
+Cc:     linux-kernel-mentees@lists.linuxfoundation.org,
+        Mahmoud Maatuq <mahmoudmatook.mm@gmail.com>
+Subject: [PATCH 0/2] selftests: Introduce common min()/max() and apply them in net tests
+Date:   Sat, 19 Aug 2023 23:50:03 +0400
+Message-Id: <20230819195005.99387-1-mahmoudmatook.mm@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a script to quickly parse any TPM error code. This can be useful, e.g.
-when parsing klog output when TPM fails in an internal kernel operation.
+The first patch introduces a common definition of 
+the min() and max() macros for use in multiple files under selftests. 
+This avoids the redundancy of having scattered local definitions 
+and prepares the groundwork for other files to simply include kselftest.h.
 
-Example transcript:
+The second patch then applies these new macros in the selftests/net files, 
+replacing the ternary operations. This directly addresses several 
+coccicheck warnings, making the code cleaner and more maintainable
 
-$ python3 tpm2-parse-error.py 0x1C4
-TPM_RC_VALUE: rc=0x000001c4
+Mahmoud Maatuq (2):
+  selftests: Provide local define of min() and max()
+  selftests/net: replace ternary operator with min()/max()
 
-Signed-off-by: Jarkko Sakkinen <jarkko@kernel.org>
----
-v2:
-Makefile: s/tpm2-parse-error/tpm2-parse-error.py/
----
- tools/testing/selftests/tpm2/Makefile           |  2 +-
- .../testing/selftests/tpm2/tpm2-parse-error.py  | 17 +++++++++++++++++
- 2 files changed, 18 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/tpm2/tpm2-parse-error.py
+ tools/testing/selftests/kselftest.h           | 7 +++++++
+ tools/testing/selftests/net/Makefile          | 2 ++
+ tools/testing/selftests/net/so_txtime.c       | 7 ++++---
+ tools/testing/selftests/net/udpgso_bench_tx.c | 6 +++---
+ 4 files changed, 16 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/tpm2/Makefile b/tools/testing/selftests/tpm2/Makefile
-index a9bf9459fb25..dbff77612785 100644
---- a/tools/testing/selftests/tpm2/Makefile
-+++ b/tools/testing/selftests/tpm2/Makefile
-@@ -2,4 +2,4 @@
- include ../lib.mk
- 
- TEST_PROGS := test_smoke.sh test_space.sh test_async.sh
--TEST_PROGS_EXTENDED := tpm2.py tpm2_tests.py
-+TEST_PROGS_EXTENDED := tpm2.py tpm2_tests.py tpm2-parse-error.py
-diff --git a/tools/testing/selftests/tpm2/tpm2-parse-error.py b/tools/testing/selftests/tpm2/tpm2-parse-error.py
-new file mode 100644
-index 000000000000..8eed72681af1
---- /dev/null
-+++ b/tools/testing/selftests/tpm2/tpm2-parse-error.py
-@@ -0,0 +1,17 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-3-Clause)
-+
-+from argparse import ArgumentParser
-+from argparse import FileType
-+import os
-+import sys
-+import tpm2
-+
-+def main():
-+    parser = ArgumentParser(description='Parse a TPM error code')
-+    parser.add_argument('rc', type=(lambda x: int(x, 0)))
-+    args = parser.parse_args()
-+    print(str(tpm2.ProtocolError(None, args.rc)))
-+
-+if __name__ == '__main__':
-+    main()
 -- 
-2.39.2
+2.34.1
 
