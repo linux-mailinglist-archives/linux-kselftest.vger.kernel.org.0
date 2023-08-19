@@ -2,61 +2,98 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10AA47816DD
-	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Aug 2023 04:52:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D14F478173B
+	for <lists+linux-kselftest@lfdr.de>; Sat, 19 Aug 2023 05:38:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244459AbjHSCv3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 18 Aug 2023 22:51:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52902 "EHLO
+        id S230477AbjHSDiY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 18 Aug 2023 23:38:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244430AbjHSCvB (ORCPT
+        with ESMTP id S230344AbjHSDiV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 18 Aug 2023 22:51:01 -0400
-Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38CD94223;
-        Fri, 18 Aug 2023 19:50:59 -0700 (PDT)
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4RSNXZ4RVqz9skw;
-        Sat, 19 Aug 2023 04:50:54 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cyphar.com; s=MBO0001;
-        t=1692413454;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fhTlw/KDqyUanTjcoZxqJpm0Dm5mWvJoRAWn5g99i9Q=;
-        b=KaQmHEg9LbsvEytLoH9O5QzW7WwwCyvMfgmDFD87x6WhtAgb8utIhO1DdQgtwvMZP/BQ9v
-        g4BpSHZsZkRwzWBUPe3DjxbA+iRmLhs7fJvj0l0TdPs7BKGyfZKZ4tnHb2/0fZfUtGgfBF
-        KUlGYs4G7gfXBXD+xuZDx6hSHuLpPgRmSqCp6NP67T3mvwJjGKQRM2jade7vbRPXDf15nz
-        4iZn/u9OF0+OplD2GhQzYrr2Zpm/2qQxLFMTm6LjdZRB8/HrZsCx4acNGQ6JM92vpnHSO4
-        8CX9ii7twfB8BX6MVeIyCmK3bkM1PuGuK7fLHI20AzeoXo+7xvLoYWG3J1YVfA==
-Date:   Sat, 19 Aug 2023 12:50:39 +1000
-From:   Aleksa Sarai <cyphar@cyphar.com>
-To:     Jeff Xu <jeffxu@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Daniel Verkamp <dverkamp@chromium.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        stable@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 0/5] memfd: cleanups for vm.memfd_noexec
-Message-ID: <20230819.022033-joyful.ward.quirky.defender-lpHlCTglJUSs@cyphar.com>
-References: <20230814-memfd-vm-noexec-uapi-fixes-v2-0-7ff9e3e10ba6@cyphar.com>
- <CALmYWFuALsM-0nxp+X552VpuPkehtUNiC84gvmgZ7A1LLqkx_g@mail.gmail.com>
+        Fri, 18 Aug 2023 23:38:21 -0400
+Received: from mail-ot1-x332.google.com (mail-ot1-x332.google.com [IPv6:2607:f8b0:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE859B;
+        Fri, 18 Aug 2023 20:38:19 -0700 (PDT)
+Received: by mail-ot1-x332.google.com with SMTP id 46e09a7af769-6bd0a0a675dso1234619a34.2;
+        Fri, 18 Aug 2023 20:38:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692416299; x=1693021099;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dmTd9LPLzzWYKe3BqlMTtEt2CsxGySX/14bhS+6KcNo=;
+        b=g/LRQqKy++m0sndFrKKwqZAMccTOZ0/tvSbN1sxEsR29MIRiyXp0YIHl+DaLSJgklD
+         jF5IBX8YLz9/4UUrAGAjTlzoYLSqmW/3AXwn9GekCH4zU0w4yIgBzcV9q8K0cntkSlLm
+         2+KSeAhHcAm50zuaY/FIYh+Jc7GCjloxTka1vX9+eFMKS7l0FBvFqiQ+JB3vu3WUsJoR
+         hBGRJNjNBnFMG8zJbvvIs8DqRnQKr7G2JlYXeaaq6SAiHb+bhtj3gzb8sSc6CvfcOQBn
+         VcDleBIip5m4isw213VzpTshW5/exltZGgpG8mMlO6t+O35WL9nn9jiD8cEcY34ORtkf
+         bqBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692416299; x=1693021099;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dmTd9LPLzzWYKe3BqlMTtEt2CsxGySX/14bhS+6KcNo=;
+        b=eVQ407k4TO4KegclkXaWftxTMwezIRC4mWgX4jEQ/UCmGiBNeOn7CHrk3xiSdaa9uC
+         21259h7XSTl49xJxAOc0ubuVs1qFc6Vba8xzolJ8ydGy9jTLXSNT1JNaxg1eihOroab0
+         kEcB8LP3fxTE2tLFKC2+jhgm8oS98Z1IaQaPNMHGqoRu70NE0emygbF8IqZ8sDEbYBoK
+         1s8bRg9HDi++BTZkh47wLdDwSMlo09DLALp6/rw41eHkwo0Sbz280j48jnftdPHupXXy
+         98Kapu/W1SXlQ7zE7pMFzCxvGUDS5LbtzAzK2nORrcfI8xG9HqVtJgSdj5X6Uo5e8tAV
+         qMvA==
+X-Gm-Message-State: AOJu0Yx8z+5m+sH8AmkxNORyqJZpFD/YTrJW8jTpnhAlRVPYylwyA/pX
+        hlIkQjy+ugP26/RXlRy5NQI=
+X-Google-Smtp-Source: AGHT+IHONxuWE7fXMBMP5Zji20fF4bK2e+h+CQmlY3olaUvkTvy4kiBwPWfbYAjc1gzQv7zmLiQdFA==
+X-Received: by 2002:a05:6870:2051:b0:1c0:219b:17f4 with SMTP id l17-20020a056870205100b001c0219b17f4mr1437619oad.5.1692416299037;
+        Fri, 18 Aug 2023 20:38:19 -0700 (PDT)
+Received: from [192.168.1.12] (bb219-74-209-211.singnet.com.sg. [219.74.209.211])
+        by smtp.gmail.com with ESMTPSA id 20-20020a17090a199400b00262d6ac0140sm2434749pji.9.2023.08.18.20.38.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 18 Aug 2023 20:38:18 -0700 (PDT)
+Message-ID: <fb6ec982-a0b4-2217-fda3-151cc37ad9a4@gmail.com>
+Date:   Sat, 19 Aug 2023 11:38:10 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="cl6uohug5kcd6xoo"
-Content-Disposition: inline
-In-Reply-To: <CALmYWFuALsM-0nxp+X552VpuPkehtUNiC84gvmgZ7A1LLqkx_g@mail.gmail.com>
-X-Rspamd-Queue-Id: 4RSNXZ4RVqz9skw
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.14.0
+Subject: Re: [RFC PATCH bpf-next 1/2] bpf, x64: Fix tailcall infinite loop bug
+Content-Language: en-US
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>,
+        Yonghong Song <yonghong.song@linux.dev>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        X86 ML <x86@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Mykola Lysenko <mykolal@fb.com>,
+        Shuah Khan <shuah@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        David Ahern <dsahern@kernel.org>,
+        Yizhou Tang <tangyeechou@gmail.com>, kernel-patches-bot@fb.com,
+        "Fijalkowski, Maciej" <maciej.fijalkowski@intel.com>,
+        Network Development <netdev@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+References: <20230814134147.70289-1-hffilwlqm@gmail.com>
+ <20230814134147.70289-2-hffilwlqm@gmail.com>
+ <20230817223143.jyclrtf3a6kmtgh5@macbook-pro-8.dhcp.thefacebook.com>
+ <fea59b79-3f28-c580-185b-8c64dc21a399@gmail.com>
+ <CAADnVQKVKPpbMNV9XNc+yJCuaWRupsB5EBjghv++jGqYTnv6QQ@mail.gmail.com>
+From:   Leon Hwang <hffilwlqm@gmail.com>
+In-Reply-To: <CAADnVQKVKPpbMNV9XNc+yJCuaWRupsB5EBjghv++jGqYTnv6QQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -64,114 +101,35 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
---cl6uohug5kcd6xoo
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On 2023-08-15, Jeff Xu <jeffxu@google.com> wrote:
-> On Mon, Aug 14, 2023 at 1:41=E2=80=AFAM Aleksa Sarai <cyphar@cyphar.com> =
-wrote:
-> >
-> > The most critical issue with vm.memfd_noexec=3D2 (the fact that passing
-> > MFD_EXEC would bypass it entirely[1]) has been fixed in Andrew's
-> > tree[2], but there are still some outstanding issues that need to be
-> > addressed:
-> >
-> >  * vm.memfd_noexec=3D2 shouldn't reject old-style memfd_create(2) sysca=
-lls
-> >    because it will make it far to difficult to ever migrate. Instead it
-> >    should imply MFD_EXEC.
-> >
-> >  * The dmesg warnings are pr_warn_once(), which on most systems means
-> >    that they will be used up by systemd or some other boot process and
-> >    userspace developers will never see it.
-> >
-> >    - For the !(flags & (MFD_EXEC | MFD_NOEXEC_SEAL)) case, outputting a
-> >      rate-limited message to the kernel log is necessary to tell
-> >      userspace that they should add the new flags.
-> >
-> >      Arguably the most ideal way to deal with the spam concern[3,4]
-> >      while still prompting userspace to switch to the new flags would be
-> >      to only log the warning once per task or something similar.
-> >      However, adding something to task_struct for tracking this would be
-> >      needless bloat for a single pr_warn_ratelimited().
-> >
-> >      So just switch to pr_info_ratelimited() to avoid spamming the log
-> >      with something that isn't a real warning. There's lots of
-> >      info-level stuff in dmesg, it seems really unlikely that this
-> >      should be an actual problem. Most programs are already switching to
-> >      the new flags anyway.
-> >
-> >    - For the vm.memfd_noexec=3D2 case, we need to log a warning for eve=
-ry
-> >      failure because otherwise userspace will have no idea why their
-> >      previously working program started returning -EACCES (previously
-> >      -EINVAL) from memfd_create(2). pr_warn_once() is simply wrong here.
-> >
-> >  * The racheting mechanism for vm.memfd_noexec makes it incredibly
-> >    unappealing for most users to enable the sysctl because enabling it
-> >    on &init_pid_ns means you need a system reboot to unset it. Given the
-> >    actual security threat being protected against, CAP_SYS_ADMIN users
-> >    being restricted in this way makes little sense.
-> >
-> >    The argument for this ratcheting by the original author was that it
-> >    allows you to have a hierarchical setting that cannot be unset by
-> >    child pidnses, but this is not accurate -- changing the parent
-> >    pidns's vm.memfd_noexec setting to be more restrictive didn't affect
-> >    children.
-> >
-> That is not exactly what I said though.
+On 2023/8/19 03:59, Alexei Starovoitov wrote:
+> On Thu, Aug 17, 2023 at 7:10 PM Leon Hwang <hffilwlqm@gmail.com> wrote:
+>>
+>>
+>>
+>> On 18/8/23 06:31, Alexei Starovoitov wrote:
+>>> On Mon, Aug 14, 2023 at 09:41:46PM +0800, Leon Hwang wrote:
+>>>> @@ -1147,6 +1152,7 @@ struct bpf_attach_target_info {
+>>>>      struct module *tgt_mod;
+>>>>      const char *tgt_name;
+>>>>      const struct btf_type *tgt_type;
+>>>> +    bool tail_call_ctx;
+>>>
+>>> Instead of extra flag here can you check tgt_prog->aux->tail_call_reachable in check_attach_btf_id()
+>>> and set tr->flags there?
+>>
+>> Should we check tgt_prog->aux->func[subprog]->is_func? Or, tgt_prog->aux->tail_call_reachable
+>> is enough?
+> 
+> Please let the thread continue to a logical conclusion before resending
+> new version. Will reply there.
 
-Sorry, I probably should've phrased this as "one of the main arguments".
-In the last discussion thread we had in the v1 of this patch, it was my
-impression that this was the primary sticking point.
+Sorry for the new version without logical conclusion.
 
-> From ChromeOS's position,  allowing downgrade is less secure, and this
-> setting was designed to be set at startup/reboot time from the very
-> beginning, such that the kernel command line or as part of the
-> container runtime environment (get passed to sandboxed container)
+I'll do it better in the future.
 
-If this had been implemented as a cmdline flag, it would be completely
-reasonable that you need to reboot to change it. However, it was
-implemented as a sysctl and the behaviour of sysctls is that admins can
-(generally) change them after they've been set -- even for
-security-related sysctls such as the fs.protected_* sysctls. The only
-counter-example I know if the YAMA one, and if I'm being honest I think
-that behaviour is also weird.
+Additionally, I'm looking forward to fix it, and then planning to add a
+feature to trace tailcalls with trampoline.
 
-> I understand your viewpoint,  from another distribution point of view,
->  the original design might be too restricted, so if the kernel wants
-> to weigh more on ease of admin, I'm OK with your approach.
-> Though it is less secure for ChromeOS - i.e. we do try to prevent
-> arbitrary code execution  as much as possible, even for CAP_SYSADMIN.
-> And with this change, it is less secure and one more possibility for
-> us to consider.
-
-FWIW I still think the threat model where a &init_user_ns-privileged
-CAP_SYS_ADMIN process can be tricked into writing a sysctl should be
-protected against by memfd_create(MFD_EXEC) doesn't really make sense
-for the vast majority of systems (if any).
-
-If ChromeOS really wants the old vm.memfd_noexec=3D2 behaviour to be
-enforced, this can be done with a very simple seccomp filter. If applied
-to pid1, this would also not be possible to unset without a reboot.
-
---=20
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-<https://www.cyphar.com/>
-
---cl6uohug5kcd6xoo
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQS2TklVsp+j1GPyqQYol/rSt+lEbwUCZOAt/gAKCRAol/rSt+lE
-b6Y+AP0Wm/MW4iFFZsjNk1Ve8p+43R1ThqUEhy9cNUa2A+qukwD/QNnCpAY1pDe8
-3IaSvk3K4nMzrVgV/bxIOy2uMvt6QQY=
-=W70o
------END PGP SIGNATURE-----
-
---cl6uohug5kcd6xoo--
+Thanks,
+Leon
