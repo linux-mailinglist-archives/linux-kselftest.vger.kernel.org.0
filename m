@@ -2,53 +2,54 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C7BC781B68
-	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Aug 2023 02:10:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 126EA781B6B
+	for <lists+linux-kselftest@lfdr.de>; Sun, 20 Aug 2023 02:10:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229461AbjHTAJ7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 19 Aug 2023 20:09:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42066 "EHLO
+        id S229491AbjHTAKA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 19 Aug 2023 20:10:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbjHTAJt (ORCPT
+        with ESMTP id S229594AbjHTAJu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 19 Aug 2023 20:09:49 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E00D17DDC2;
-        Sat, 19 Aug 2023 12:50:22 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3fe12baec61so19445695e9.2;
-        Sat, 19 Aug 2023 12:50:22 -0700 (PDT)
+        Sat, 19 Aug 2023 20:09:50 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAAAD69BDA;
+        Sat, 19 Aug 2023 12:50:37 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-31972944f30so1840252f8f.0;
+        Sat, 19 Aug 2023 12:50:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692474621; x=1693079421;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=sSB6bHkjwrLrFphZRXjaDm3kSiCaocff/7800VaCd8Q=;
-        b=gxUCaWSEn7y8qaC48/Ir3tNWSAROgPfUfqvIKkyE+gRVYZPhjJ03GFaN+8tnraN79e
-         215Yp1dgiehqEmpGGHGLDCCF4SDEwTUC/z7HLOhqLD5zrsNj/7LmI/7ma4NblW/opOqg
-         bQFVrmpiGSmPbZ2Yg5boXNgBv8m4wT+bVWuJxsHz+UIKd9LGyb8pPUvqxx5qco3gv6Wv
-         n6HJtAo55rpgB+aCczFTOiZFEvKDbrcwOFP538A4l/z/0wTDZZib2RxZhOX1UDGGUmz4
-         5L54+7N/YAfeV7+rfPelZlkEAV8A/rsDlOmoiH+oQI4x8PHykbo9JIWuT9PO/jpJz2WJ
-         +vpA==
+        d=gmail.com; s=20221208; t=1692474636; x=1693079436;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=syjYuYouKG6x9vMzQTgaYE6bMGQKoGTf55WJXqWNgfk=;
+        b=L4w33MvZDt+bejgB59yoSFPXfvYoa7sF0Bzw4eS6/jas4uM7W/XKooWVqYB1iRy66l
+         gnFpFknuahxpz1L1cGsQ6oMiUQrIN2a3l1jDwWQNtZbHhtdQl6O/VjLLAx7qk99jnpv3
+         Zv3aWmfvwcdLG2b0uajwFiA0OarHIjj4XXSVJOGvSSOygt+bVKObZYDWvJNwj8tlN1DU
+         j/+qVeaUN0i2XnKHVcEiSS5xkFL/aY75kBqJ5bEwkDgE2Z/txDZK7XV6wkQSNJFuh1Z5
+         lJR9HtrlCfBAicwNDH2PwXY9kS7kNVpncpDdMB4DpS7SyqHnAYXfpgLfgjnrsPtNKJMA
+         CkTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692474621; x=1693079421;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sSB6bHkjwrLrFphZRXjaDm3kSiCaocff/7800VaCd8Q=;
-        b=ByVdfBkFb1V/b7ojVxLHNdEhCsgRdoWJ5hs+ksmTyIPbMoloJQN+go4HpaUvhxMQ+z
-         JoriyaGJcmtGKKkRQwCZe4zJozDJ9iD9xaV1iP67sHRsmert7u55tHkpRd9+bq/ibvXm
-         nsBWVn5QDGiF+gQ4/7KPuQfv8s0hiqKdQKG0kghhT9xq+KmnZS5BFN0b3Pw5o9TSZYUu
-         pidUR3pIZK46ZpzGlWP5lpkhTA/EAlmBH2bQRdw1zahevARujz7SM/JLAuLK5cOZhaTB
-         pHpN12mkjId/AO7QkgoUUOqewmu7nz+i32N/wiHTNGdKZlpBdxKAAw8q6jDOIBS1DgZF
-         IRDA==
-X-Gm-Message-State: AOJu0YyG8tJB2BXTeRIUecpCfnCUzN6Dia1Zk0SnL/smGb0goOEV2dd8
-        viUMVah8Ngfa6lwEHoiPx/4WI8RMIpx5LIe3
-X-Google-Smtp-Source: AGHT+IHahhec10BYrPqz/QP1HfNcaB3/uicy40ATMZ7BLndPcptrIvIFgo8k7y6MTcL3w2uqTpqEmA==
-X-Received: by 2002:a1c:6a16:0:b0:3fa:98c3:7dbd with SMTP id f22-20020a1c6a16000000b003fa98c37dbdmr1935691wmc.41.1692474620596;
-        Sat, 19 Aug 2023 12:50:20 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1692474636; x=1693079436;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=syjYuYouKG6x9vMzQTgaYE6bMGQKoGTf55WJXqWNgfk=;
+        b=h+yW/3FEVl1xP8AaQRIZuHNGXILYWwotTxs5HbGOxj7fRxxtrttTG2qRE+EvC58ByS
+         V2M+/au4oKq/qH5rYpGV1Hd/r60hYQ4rZwbLftWN7pMGXs1Z4FZ4T4Z8B72mcZY4oLja
+         r4QUh+rkvnJKB4lAx8TRACUiXH7QKWEM/7sE7GnSCNUwllvFDrhNFNsCA735Ia8Ie7g7
+         /Ti2yJxWY4VhxPLhHlu3rS5ZZMttpL8uv/979vBJXMlBEWz93pNl4kEyjTU9Jucrc7Dk
+         54c1fhB14a5z3tZR8IfKCdukkZNZ3j3pa+rhd+GmZuTAI4g625OavrUYPS21tJYTjJ0A
+         GIMQ==
+X-Gm-Message-State: AOJu0Yz5Gog53QML7KGVRGNdohj5PSDMJDyq34bx+PueCLgv5LfxxcPw
+        p53RgBS4SN6kHKMjsdSW7trAlSkHxkdZ3O+W
+X-Google-Smtp-Source: AGHT+IHwz9i9RZEGQSJnV0omevwRbtNhcOM2kfj2XUSJk9HKoTKu5AgwgZFEvFvjQFf7QVMhzBYynA==
+X-Received: by 2002:adf:e802:0:b0:313:f45f:74a1 with SMTP id o2-20020adfe802000000b00313f45f74a1mr2071265wrm.51.1692474635765;
+        Sat, 19 Aug 2023 12:50:35 -0700 (PDT)
 Received: from mmaatuq-HP-Laptop-15-dy2xxx.. ([5.194.84.172])
-        by smtp.gmail.com with ESMTPSA id l19-20020a1c7913000000b003fe26bf65e7sm6861382wme.13.2023.08.19.12.50.17
+        by smtp.gmail.com with ESMTPSA id l19-20020a1c7913000000b003fe26bf65e7sm6861382wme.13.2023.08.19.12.50.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 19 Aug 2023 12:50:20 -0700 (PDT)
+        Sat, 19 Aug 2023 12:50:35 -0700 (PDT)
 From:   Mahmoud Maatuq <mahmoudmatook.mm@gmail.com>
 To:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         kuba@kernel.org, netdev@vger.kernel.org,
@@ -56,10 +57,12 @@ To:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         pabeni@redhat.com, edumazet@google.com, shuah@kernel.org
 Cc:     linux-kernel-mentees@lists.linuxfoundation.org,
         Mahmoud Maatuq <mahmoudmatook.mm@gmail.com>
-Subject: [PATCH 0/2] selftests: Introduce common min()/max() and apply them in net tests
-Date:   Sat, 19 Aug 2023 23:50:03 +0400
-Message-Id: <20230819195005.99387-1-mahmoudmatook.mm@gmail.com>
+Subject: [PATCH 1/2] selftests: Provide local define of min() and max()
+Date:   Sat, 19 Aug 2023 23:50:04 +0400
+Message-Id: <20230819195005.99387-2-mahmoudmatook.mm@gmail.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230819195005.99387-1-mahmoudmatook.mm@gmail.com>
+References: <20230819195005.99387-1-mahmoudmatook.mm@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -72,25 +75,38 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The first patch introduces a common definition of 
-the min() and max() macros for use in multiple files under selftests. 
-This avoids the redundancy of having scattered local definitions 
-and prepares the groundwork for other files to simply include kselftest.h.
+to avoid manual calculation of min and max values
+and fix coccinelle warnings such WARNING opportunity for min()/max()
+adding one common definition that could be used in multiple files
+under selftests.
+there are also some defines for min/max scattered locally inside sources
+under selftests.
+this also prepares for cleaning up those redundant defines and include
+kselftest.h instead.
 
-The second patch then applies these new macros in the selftests/net files, 
-replacing the ternary operations. This directly addresses several 
-coccicheck warnings, making the code cleaner and more maintainable
+Signed-off-by: Mahmoud Maatuq <mahmoudmatook.mm@gmail.com>
+---
+ tools/testing/selftests/kselftest.h | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-Mahmoud Maatuq (2):
-  selftests: Provide local define of min() and max()
-  selftests/net: replace ternary operator with min()/max()
-
- tools/testing/selftests/kselftest.h           | 7 +++++++
- tools/testing/selftests/net/Makefile          | 2 ++
- tools/testing/selftests/net/so_txtime.c       | 7 ++++---
- tools/testing/selftests/net/udpgso_bench_tx.c | 6 +++---
- 4 files changed, 16 insertions(+), 6 deletions(-)
-
+diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
+index 829be379545a..e8eb7e9afbc6 100644
+--- a/tools/testing/selftests/kselftest.h
++++ b/tools/testing/selftests/kselftest.h
+@@ -55,6 +55,13 @@
+ #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
+ #endif
+ 
++#ifndef min
++# define min(x, y) ((x) < (y) ? (x) : (y))
++#endif
++#ifndef max
++# define max(x, y) ((x) < (y) ? (y) : (x))
++#endif
++
+ /*
+  * gcc cpuid.h provides __cpuid_count() since v4.4.
+  * Clang/LLVM cpuid.h provides  __cpuid_count() since v3.4.0.
 -- 
 2.34.1
 
