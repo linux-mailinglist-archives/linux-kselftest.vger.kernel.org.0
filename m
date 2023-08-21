@@ -2,189 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF02F782702
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Aug 2023 12:23:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 256C5782803
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Aug 2023 13:34:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234653AbjHUKX6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 21 Aug 2023 06:23:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51562 "EHLO
+        id S232766AbjHULer (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 21 Aug 2023 07:34:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234659AbjHUKX4 (ORCPT
+        with ESMTP id S232736AbjHULeq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 21 Aug 2023 06:23:56 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DDF2E7;
-        Mon, 21 Aug 2023 03:23:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1692613434; x=1724149434;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=l9pS7YFiyzHJi8MEqqDnasrU/2+vFW4sjLLaPtIHJaw=;
-  b=g80MWmB4W6TZ7LBCccFTlPxAS/46OOZS3yVIkOdYDoGvS2sbkXvlkt/C
-   dQjErE706a6K0J7W3j/0GO7RfcBPDjKAL7S9WbRtJz2kiF/Oy8pK0nkM5
-   4konNsdewXo7LvyOIAVvdEYbKMTIrRcVY7CpbhV6tmsSmQ2ou5m//Ec5x
-   cCOx+IUljKEFnyVIqePoXRK66cusA6kRUBoaevA7wxZVzP1U+Uj7Q64F5
-   CjhP+DxbyUiyCwn2bV4PF6PjwJP2Bsj4gbeQfU5Z/nLZaCKyg1FD954Ab
-   hG4CPJQ/syUPzSBzpjVeJqKz0sYdCyQERR3A1qKH2SlTmiLbndBCdMFt4
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10808"; a="358530453"
-X-IronPort-AV: E=Sophos;i="6.01,189,1684825200"; 
-   d="scan'208";a="358530453"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2023 03:23:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10808"; a="735798153"
-X-IronPort-AV: E=Sophos;i="6.01,189,1684825200"; 
-   d="scan'208";a="735798153"
-Received: from nsnaveen-mobl.gar.corp.intel.com (HELO ijarvine-mobl2.ger.corp.intel.com) ([10.252.54.252])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Aug 2023 03:23:32 -0700
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-Cc:     Fenghua Yu <fenghua.yu@intel.com>, Babu Moger <babu.moger@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v2 7/7] selftests/resctrl: Cleanup benchmark argument parsing
-Date:   Mon, 21 Aug 2023 13:22:45 +0300
-Message-Id: <20230821102245.14430-8-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230821102245.14430-1-ilpo.jarvinen@linux.intel.com>
-References: <20230821102245.14430-1-ilpo.jarvinen@linux.intel.com>
+        Mon, 21 Aug 2023 07:34:46 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D5DDC;
+        Mon, 21 Aug 2023 04:34:44 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 55BA55C261E;
+        Mon, 21 Aug 2023 07:34:44 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Mon, 21 Aug 2023 07:34:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1692617684; x=1692704084; bh=d9ur8nZhHGPYN
+        lNZZr8e+NyS1wGTtgBr6uaH9qP+sp8=; b=aEBtMGPfMjRCvzEhvoH5k69DUdD4N
+        qkB/ZLTTDVcsRDGf6hDG46DIEpmPQ6ODJCJRUgQ1M2VQtEQRBglG3NFVrI+dUxzQ
+        o5Ddr1F0UNY1FLCeuIpFOcRaHudZbiP3e5JTmbeVqG99gyCzqTfq6aDiwssBiIeY
+        9vYuKpYqPWDuGIhxLR2V2uCbxYJg5dRPv1xUhJS1dnC6qs+qhqKAKLLdWwX+0h8j
+        4ngiK0phf/9KFpRdPZR2b3z5PNEWVrfXnZLQAdBrtOrmoLfAZ/uVZbC/wgTcORJO
+        XxmpwzLx24OzYfTcgzfVqOa2F97qBvPHqLenqNDWoKZzYoqj8nmZtVVsg==
+X-ME-Sender: <xms:00vjZPcvwQgGB8CzIRCvTKS_XvOMka0TyepjjEsfdYLEzXz0NWNa9g>
+    <xme:00vjZFNyA_32NIODRpbqITzPNdp7VM6_JNZaK2kNuoCKKA5Ji-c_RzpOqWr4hbsOL
+    H3EeFQyKkbMRgI>
+X-ME-Received: <xmr:00vjZIiXEinzZKspUrSbcXDXR9hyyqsWxL5bej4xvugNNEQTi9B9c5qia-Kv>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudduledggeduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepkfguohcu
+    ufgthhhimhhmvghluceoihguohhstghhsehiughoshgthhdrohhrgheqnecuggftrfgrth
+    htvghrnhepvddufeevkeehueegfedtvdevfefgudeifeduieefgfelkeehgeelgeejjeeg
+    gefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepih
+    guohhstghhsehiughoshgthhdrohhrgh
+X-ME-Proxy: <xmx:1EvjZA8hUhfZVAwND5gaZTlCZ6Z6tfHNxAKVa7fg-Iqp2iWPL22TIg>
+    <xmx:1EvjZLtRw28OcUQDTeN3SIp0Rm3ZzWXTbAu7HZ7Xn7TwWHPEMDgTeQ>
+    <xmx:1EvjZPFq4hQWzB0Sb-DdxldVzjIRNBGSadttPiWcMZJH62NEwMsh0g>
+    <xmx:1EvjZE83yiQGWOUrwer61EhIR_4liLd-znxI08wfWKndeQMnrKp2Tw>
+Feedback-ID: i494840e7:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 21 Aug 2023 07:34:43 -0400 (EDT)
+Date:   Mon, 21 Aug 2023 14:34:39 +0300
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Sriram Yagnaraman <sriram.yagnaraman@est.tech>
+Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        David Ahern <dsahern@kernel.org>,
+        Ido Schimmel <idosch@nvidia.com>, Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH 3/3] selftests: forwarding: Add test for load-balancing
+ between multiple servers
+Message-ID: <ZONLz5IyaG+XnUSJ@shredder>
+References: <20230819114825.30867-1-sriram.yagnaraman@est.tech>
+ <20230819114825.30867-4-sriram.yagnaraman@est.tech>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230819114825.30867-4-sriram.yagnaraman@est.tech>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Benchmark argument is handled by custom argument parsing code which is
-more complicated than it needs to be.
+On Sat, Aug 19, 2023 at 01:48:25PM +0200, Sriram Yagnaraman wrote:
+> Create a topology with 3 hosts, a router each in it's own network
+> namespace. Test IPv4 and IPv6 multipath routing from h1 to h2/h3 via
+> router r1 where a multipath route is setup to load-balance between h2
+> and h3.
+> 
+> See diagram in the test for more information.
 
-Process benchmark argument within the normal getopt() handling and drop
-entirely unnecessary ben_ind and has_ben variables. If -b is not given,
-setup the default benchmark command right after the switch statement
-and make -b to goto over it while it terminates the getopt() loop.
+How are you running this test? At least with veth pairs it is passing
+both before and after the patches. I didn't look into the veth driver,
+it might not even use the listified path.
 
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
----
- .../testing/selftests/resctrl/resctrl_tests.c | 71 ++++++++++---------
- 1 file changed, 36 insertions(+), 35 deletions(-)
+Also, I'm seeing the following errors during the test:
 
-diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
-index b440c4e3e153..c7b13eba3e60 100644
---- a/tools/testing/selftests/resctrl/resctrl_tests.c
-+++ b/tools/testing/selftests/resctrl/resctrl_tests.c
-@@ -173,28 +173,35 @@ static void run_cat_test(int cpu_no, int no_of_bits)
- 
- int main(int argc, char **argv)
- {
--	bool has_ben = false, mbm_test = true, mba_test = true, cmt_test = true;
--	int c, cpu_no = 1, argc_new = argc, i, no_of_bits = 0;
-+	bool mbm_test = true, mba_test = true, cmt_test = true;
-+	int c, cpu_no = 1, i, no_of_bits = 0;
- 	const char *benchmark_cmd[BENCHMARK_ARGS];
--	int ben_ind, tests = 0;
- 	char *span_str = NULL;
- 	bool cat_test = true;
- 	char *skip_reason;
-+	int tests = 0;
- 	int ret;
- 
--	for (i = 0; i < argc; i++) {
--		if (strcmp(argv[i], "-b") == 0) {
--			ben_ind = i + 1;
--			argc_new = ben_ind - 1;
--			has_ben = true;
--			break;
--		}
--	}
--
--	while ((c = getopt(argc_new, argv, "ht:b:n:p:")) != -1) {
-+	while ((c = getopt(argc, argv, "ht:b:n:p:")) != -1) {
- 		char *token;
- 
- 		switch (c) {
-+		case 'b':
-+			/*
-+			 * First move optind back to the (first) optarg and
-+			 * then build the benchmark command using the
-+			 * remaining arguments.
-+			 */
-+			optind--;
-+			if (argc - optind >= BENCHMARK_ARGS - 1)
-+				ksft_exit_fail_msg("Too long benchmark command");
-+
-+			/* Extract benchmark command from command line. */
-+			for (i = 0; i < argc - optind; i++)
-+				benchmark_cmd[i] = argv[i + optind];
-+			benchmark_cmd[i] = NULL;
-+
-+			goto last_arg;
- 		case 't':
- 			token = strtok(optarg, ",");
- 
-@@ -244,6 +251,19 @@ int main(int argc, char **argv)
- 		}
- 	}
- 
-+	/* If no benchmark is given by "-b" argument, use fill_buf. */
-+	benchmark_cmd[0] = "fill_buf";
-+	ret = asprintf(&span_str, "%u", DEFAULT_SPAN);
-+	if (ret < 0)
-+		ksft_exit_fail_msg("Out of memory!\n");
-+	benchmark_cmd[1] = span_str;
-+	benchmark_cmd[2] = "1";
-+	benchmark_cmd[3] = "0";
-+	benchmark_cmd[4] = "false";
-+	benchmark_cmd[5] = NULL;
-+
-+last_arg:
-+
- 	ksft_print_header();
- 
- 	/*
-@@ -251,28 +271,9 @@ int main(int argc, char **argv)
- 	 * 1. We write to resctrl FS
- 	 * 2. We execute perf commands
- 	 */
--	if (geteuid() != 0)
--		return ksft_exit_skip("Not running as root. Skipping...\n");
--
--	if (has_ben) {
--		if (argc - ben_ind >= BENCHMARK_ARGS - 1)
--			ksft_exit_fail_msg("Too long benchmark command.\n");
--
--		/* Extract benchmark command from command line. */
--		for (i = 0; i < argc - ben_ind; i++)
--			benchmark_cmd[i] = argv[i + ben_ind];
--		benchmark_cmd[i] = NULL;
--	} else {
--		/* If no benchmark is given by "-b" argument, use fill_buf. */
--		benchmark_cmd[0] = "fill_buf";
--		ret = asprintf(&span_str, "%u", DEFAULT_SPAN);
--		if (ret < 0)
--			ksft_exit_fail_msg("Out of memory!\n");
--		benchmark_cmd[1] = span_str;
--		benchmark_cmd[2] = "1";
--		benchmark_cmd[3] = "0";
--		benchmark_cmd[4] = "false";
--		benchmark_cmd[5] = NULL;
-+	if (geteuid() != 0) {
-+		skip_reason = "Not running as root. Skipping...\n";
-+		goto free_span;
- 	}
- 
- 	if (!check_resctrlfs_support()) {
--- 
-2.30.2
-
+sysctl: setting key "net.ipv4.fib_multipath_hash_policy": Invalid argument
+sysctl: setting key "net.ipv6.fib_multipath_hash_policy": Invalid argument
