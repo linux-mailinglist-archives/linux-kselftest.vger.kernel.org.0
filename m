@@ -2,235 +2,170 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E34A782DCE
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Aug 2023 18:05:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87EF1782DF1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Aug 2023 18:11:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234773AbjHUQFo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 21 Aug 2023 12:05:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48308 "EHLO
+        id S232939AbjHUQLK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 21 Aug 2023 12:11:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234695AbjHUQFo (ORCPT
+        with ESMTP id S234661AbjHUQLJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 21 Aug 2023 12:05:44 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 119ADFD;
-        Mon, 21 Aug 2023 09:05:42 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B37D81515;
-        Mon, 21 Aug 2023 09:06:22 -0700 (PDT)
-Received: from donnerap.arm.com (donnerap.manchester.arm.com [10.32.100.58])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CB3F93F64C;
-        Mon, 21 Aug 2023 09:05:40 -0700 (PDT)
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Shuah Khan <shuah@kernel.org>, Nhat Pham <nphamcs@gmail.com>,
-        Johannes Weiner <hannes@cmpxchg.org>
-Cc:     linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] selftests: cachestat: catch failing fsync test on tmpfs
-Date:   Mon, 21 Aug 2023 17:05:34 +0100
-Message-Id: <20230821160534.3414911-3-andre.przywara@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230821160534.3414911-1-andre.przywara@arm.com>
-References: <20230821160534.3414911-1-andre.przywara@arm.com>
+        Mon, 21 Aug 2023 12:11:09 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC1E91BD;
+        Mon, 21 Aug 2023 09:10:31 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 37LDXE4c021949;
+        Mon, 21 Aug 2023 11:10:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=
+        message-id:date:mime-version:subject:to:cc:references:from
+        :in-reply-to:content-type:content-transfer-encoding; s=
+        PODMain02222019; bh=daAm8nYc/MlFTPQHoO2+LlahLDiH/l9JMNn68PlbW10=; b=
+        aLf8dbET2liRhgakxWdGBYEVI9H0KFWy+BcNh47WLu4hdE3CbJ/lWc/4QVVMJctz
+        By+CncIDhJ4XBAA0wTHcGoMj4fWwPk82TmC971LC6vdbI+7Y+YM7tMoyXDih/FzX
+        uVDJGbw6v9tB6rxa5mOZAXdEEWV+/8TilQ0z8XOrgQF7QzKxMoVmB+WKXBPtakU/
+        DNFeRBEXEbKq2xpbM+bl/8jLpj35Cg3AZj8KMOLys97S4bKevcJTv/0kKblgMWw6
+        8bsvJzggtQPB1jfPFC/E2xjwwJnr0rSr/CKG5h2/RwKldRK2b+TQrs+mCbX+J4Bb
+        mkJW2qDD1LoQNk3mhz4Wgg==
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3sktt5rs5a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 21 Aug 2023 11:10:18 -0500 (CDT)
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Mon, 21 Aug
+ 2023 17:10:16 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.30 via Frontend Transport; Mon, 21 Aug 2023 17:10:16 +0100
+Received: from [198.90.251.75] (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.75])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 686303560;
+        Mon, 21 Aug 2023 16:10:16 +0000 (UTC)
+Message-ID: <0b780ce7-66a4-1a36-2a8a-a69c95f73d8a@opensource.cirrus.com>
+Date:   Mon, 21 Aug 2023 17:10:16 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v4 06/10] kunit: string-stream: Pass struct kunit to
+ string_stream_get_string()
+To:     David Gow <davidgow@google.com>
+CC:     <brendan.higgins@linux.dev>, <rmoar@google.com>,
+        <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
+        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>
+References: <20230814132309.32641-1-rf@opensource.cirrus.com>
+ <20230814132309.32641-7-rf@opensource.cirrus.com>
+ <CABVgOS=WoKEpPU=0f=mSfdx1g6AkEtx6QJTiNru1XSTev3sGaQ@mail.gmail.com>
+ <a8804709-ee00-d2ea-d55d-f8138bd3a500@opensource.cirrus.com>
+ <CABVgOSmPqM_zt9jGzYcJN-=AQW3z62cC7dzPJkV-jx6rCcMy=g@mail.gmail.com>
+Content-Language: en-US
+From:   Richard Fitzgerald <rf@opensource.cirrus.com>
+In-Reply-To: <CABVgOSmPqM_zt9jGzYcJN-=AQW3z62cC7dzPJkV-jx6rCcMy=g@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: 5MUIGkWS4uW8tNCta8On_OtB1Na3c--j
+X-Proofpoint-ORIG-GUID: 5MUIGkWS4uW8tNCta8On_OtB1Na3c--j
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The cachestat kselftest runs a test on a normal file, which is created
-temporarily in the current directory. Among the tests it runs there is a
-call to fsync(), which is expected to clean all dirty pages used by the
-file.
-However the tmpfs filesystem implements fsync() as noop_fsync(), so the
-call will not even attempt to clean anything when this test file happens
-to live on a tmpfs instance. This happens in an initramfs, or when the
-current directory is in /dev/shm or sometimes /tmp.
+On 17/08/2023 07:26, David Gow wrote:
+> On Tue, 15 Aug 2023 at 17:57, Richard Fitzgerald
+> <rf@opensource.cirrus.com> wrote:
+>>
+>> On 15/8/23 10:16, David Gow wrote:
+>>> On Mon, 14 Aug 2023 at 21:23, Richard Fitzgerald
+>>> <rf@opensource.cirrus.com> wrote:
+>>>>
+>>>> Pass a struct kunit* and gfp_t to string_stream_get_string(). Allocate
+>>>> the returned buffer using these instead of using the stream->test and
+>>>> stream->gfp.
+>>>>
+>>>> This is preparation for removing the dependence of string_stream on
+>>>> struct kunit, so that string_stream can be used for the debugfs log.
+>>>>
+>>>> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+>>>> ---
+>>>
+>>> Makes sense to me.
+>>>
+>>> I think that, if we weren't going to remove the struct kunit
+>>> dependency, we'd want to either keep a version of
+>>> string_stream_get_string() which uses it, or, e.g., fall back to it if
+>>> the struct passed in is NULL.
+>>>
+>>
+>> That was my first thought. But I thought that was open to subtle
+>> accidental bugs in calling code - it might return you a managed
+>> allocation, or it might return you an unmanaged allocation that you
+>> must free.
+>>
+>> As there weren't many callers of string_stream_get_string() I decided
+>> to go with changing the API to pass in test and gfp like other managed
+>> allocations. This makes it more generalized, since the returned buffer
+>> is not part of the stream itself, it's a temporary buffer owned by the
+>> caller. It also makes it clearer that what you are getting back is
+>> likely to be a managed allocation.
+>>
+>> If you'd prefer to leave string_stream_get_string() as it was, or make
+>> it return an unmanged buffer, I can send a new version.
+>>
+>>> The other option is to have a version which doesn't manage the string
+>>> at all, so just takes a gfp and requires the caller to free it (or
+>>
+>> I didn't add a companion function to get a raw unmanaged string buffer
+>> because there's nothing that needs it. It could be added later if
+>> it's needed.
+>>
+> 
+> Fair enough.
+> 
+>>> register an action to do so). If we did that, we could get rid of the
+>>> struct kunit pointer totally (though it may be better to keep it and
+>>> have both versions).
+>>>
+>>
+>> Another option is to make string_stream_get_string() return a raw
+>> buffer and add a kunit_string_stream_geT_string() that returns a
+>> managed buffer. This follows some consistency with the normal mallocs
+>> where kunit_xxxx() is the managed version.
+>>
+> 
+> Ooh... I like this best. Let's go with that.
+> 
 
-To avoid this test failing wrongly, use statfs() to check which filesystem
-the test file lives on. If that is "tmpfs", we skip the fsync() test.
+I was busy last week with other things and have only got back to looking
+at this.
 
-Since the fsync test is only one part of the "normal file" test, we now
-execute this twice, skipping the fsync part on the first call.
-This way only the second test, including the fsync part, would be skipped.
+I'm trying to decide what to do with string_stream_get_string() and I'd
+value an opinion.
 
-Signed-off-by: Andre Przywara <andre.przywara@arm.com>
----
- .../selftests/cachestat/test_cachestat.c      | 62 ++++++++++++++-----
- 1 file changed, 47 insertions(+), 15 deletions(-)
+The only use for a test-managed get_string() is the string_stream test.
+So I've thought of 4 options:
 
-diff --git a/tools/testing/selftests/cachestat/test_cachestat.c b/tools/testing/selftests/cachestat/test_cachestat.c
-index 8f8f46c24846d..4804c7dc7b312 100644
---- a/tools/testing/selftests/cachestat/test_cachestat.c
-+++ b/tools/testing/selftests/cachestat/test_cachestat.c
-@@ -4,10 +4,12 @@
- #include <stdio.h>
- #include <stdbool.h>
- #include <linux/kernel.h>
-+#include <linux/magic.h>
- #include <linux/mman.h>
- #include <sys/mman.h>
- #include <sys/shm.h>
- #include <sys/syscall.h>
-+#include <sys/vfs.h>
- #include <unistd.h>
- #include <string.h>
- #include <fcntl.h>
-@@ -15,7 +17,7 @@
- 
- #include "../kselftest.h"
- 
--#define NR_TESTS	8
-+#define NR_TESTS	9
- 
- static const char * const dev_files[] = {
- 	"/dev/zero", "/dev/null", "/dev/urandom",
-@@ -91,6 +93,20 @@ bool write_exactly(int fd, size_t filesize)
- 	return ret;
- }
- 
-+/*
-+ * fsync() is implemented via noop_fsync() on tmpfs. This makes the fsync()
-+ * test fail below, so we need to check for test file living on a tmpfs.
-+ */
-+static bool is_on_tmpfs(int fd)
-+{
-+	struct statfs statfs_buf;
-+
-+	if (fstatfs(fd, &statfs_buf))
-+		return false;
-+
-+	return statfs_buf.f_type == TMPFS_MAGIC;
-+}
-+
- /*
-  * Open/create the file at filename, (optionally) write random data to it
-  * (exactly num_pages), then test the cachestat syscall on this file.
-@@ -98,13 +114,13 @@ bool write_exactly(int fd, size_t filesize)
-  * If test_fsync == true, fsync the file, then check the number of dirty
-  * pages.
-  */
--bool test_cachestat(const char *filename, bool write_random, bool create,
--		bool test_fsync, unsigned long num_pages, int open_flags,
--		mode_t open_mode)
-+static int test_cachestat(const char *filename, bool write_random, bool create,
-+			  bool test_fsync, unsigned long num_pages,
-+			  int open_flags, mode_t open_mode)
- {
- 	size_t PS = sysconf(_SC_PAGESIZE);
- 	int filesize = num_pages * PS;
--	bool ret = true;
-+	int ret = KSFT_PASS;
- 	long syscall_ret;
- 	struct cachestat cs;
- 	struct cachestat_range cs_range = { 0, filesize };
-@@ -113,7 +129,7 @@ bool test_cachestat(const char *filename, bool write_random, bool create,
- 
- 	if (fd == -1) {
- 		ksft_print_msg("Unable to create/open file.\n");
--		ret = false;
-+		ret = KSFT_FAIL;
- 		goto out;
- 	} else {
- 		ksft_print_msg("Create/open %s\n", filename);
-@@ -122,7 +138,7 @@ bool test_cachestat(const char *filename, bool write_random, bool create,
- 	if (write_random) {
- 		if (!write_exactly(fd, filesize)) {
- 			ksft_print_msg("Unable to access urandom.\n");
--			ret = false;
-+			ret = KSFT_FAIL;
- 			goto out1;
- 		}
- 	}
-@@ -133,7 +149,7 @@ bool test_cachestat(const char *filename, bool write_random, bool create,
- 
- 	if (syscall_ret) {
- 		ksft_print_msg("Cachestat returned non-zero.\n");
--		ret = false;
-+		ret = KSFT_FAIL;
- 		goto out1;
- 
- 	} else {
-@@ -143,15 +159,17 @@ bool test_cachestat(const char *filename, bool write_random, bool create,
- 			if (cs.nr_cache + cs.nr_evicted != num_pages) {
- 				ksft_print_msg(
- 					"Total number of cached and evicted pages is off.\n");
--				ret = false;
-+				ret = KSFT_FAIL;
- 			}
- 		}
- 	}
- 
- 	if (test_fsync) {
--		if (fsync(fd)) {
-+		if (is_on_tmpfs(fd)) {
-+			ret = KSFT_SKIP;
-+		} else if (fsync(fd)) {
- 			ksft_print_msg("fsync fails.\n");
--			ret = false;
-+			ret = KSFT_FAIL;
- 		} else {
- 			syscall_ret = syscall(__NR_cachestat, fd, &cs_range, &cs, 0);
- 
-@@ -162,13 +180,13 @@ bool test_cachestat(const char *filename, bool write_random, bool create,
- 				print_cachestat(&cs);
- 
- 				if (cs.nr_dirty) {
--					ret = false;
-+					ret = KSFT_FAIL;
- 					ksft_print_msg(
- 						"Number of dirty should be zero after fsync.\n");
- 				}
- 			} else {
- 				ksft_print_msg("Cachestat (after fsync) returned non-zero.\n");
--				ret = false;
-+				ret = KSFT_FAIL;
- 				goto out1;
- 			}
- 		}
-@@ -259,7 +277,7 @@ int main(void)
- 		const char *dev_filename = dev_files[i];
- 
- 		if (test_cachestat(dev_filename, false, false, false,
--			4, O_RDONLY, 0400))
-+			4, O_RDONLY, 0400) == KSFT_PASS)
- 			ksft_test_result_pass("cachestat works with %s\n", dev_filename);
- 		else {
- 			ksft_test_result_fail("cachestat fails with %s\n", dev_filename);
-@@ -268,13 +286,27 @@ int main(void)
- 	}
- 
- 	if (test_cachestat("tmpfilecachestat", true, true,
--		true, 4, O_CREAT | O_RDWR, 0400 | 0600))
-+		false, 4, O_CREAT | O_RDWR, 0600) == KSFT_PASS)
- 		ksft_test_result_pass("cachestat works with a normal file\n");
- 	else {
- 		ksft_test_result_fail("cachestat fails with normal file\n");
- 		ret = 1;
- 	}
- 
-+	switch (test_cachestat("tmpfilecachestat", true, true,
-+		true, 4, O_CREAT | O_RDWR, 0600)) {
-+	case KSFT_FAIL:
-+		ksft_test_result_fail("cachestat fsync fails with normal file\n");
-+		ret = KSFT_FAIL;
-+		break;
-+	case KSFT_PASS:
-+		ksft_test_result_pass("cachestat fsync works with a normal file\n");
-+		break;
-+	case KSFT_SKIP:
-+		ksft_test_result_skip("tmpfilecachestat is on tmpfs\n");
-+		break;
-+	}
-+
- 	if (test_cachestat_shmem())
- 		ksft_test_result_pass("cachestat works with a shmem file\n");
- 	else {
--- 
-2.25.1
+1) Add a kunit_string_stream_get_string() anyway. But only the test code
+uses it.
 
+2) Change the tests to have a local function to do the same thing, and
+add an explicit test case for the (unmanaged)
+string_stream_get_string() that ensures it's freed.
+
+3) Change the tests to have a local function to get the string, which
+calls string_stream_get_string() then copies it to a test-managed buffer
+and frees the unmanaged buffer.
+
+4) Implement a kunit_kfree_on_exit() function that takes an already-
+allocated buffer and kfree()s it when the test exists, so that we can
+do:
+
+    // on success kunit_kfree_on_exit() returns the buffer it was given
+    str = kunit_kfree_on_exit(test, string_stream_get_string(stream));
+    KUNIT_ASSERT_NOT_ERR_OR_NULL(test, str);
+
+I'm leaning towards (2) but open to going with any of the other options.
