@@ -2,72 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31AC2783158
-	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Aug 2023 21:51:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F547783450
+	for <lists+linux-kselftest@lfdr.de>; Mon, 21 Aug 2023 23:05:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbjHUToW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 21 Aug 2023 15:44:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39516 "EHLO
+        id S231550AbjHUU73 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 21 Aug 2023 16:59:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230071AbjHUToV (ORCPT
+        with ESMTP id S231544AbjHUU73 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 21 Aug 2023 15:44:21 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C42D0D9
-        for <linux-kselftest@vger.kernel.org>; Mon, 21 Aug 2023 12:44:19 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-56c379a8250so1202864a12.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 21 Aug 2023 12:44:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1692647059; x=1693251859;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=SSCma3xFa9r8jkJRJYtQ3UJXMDuR6ih/O0h93W+17hY=;
-        b=PGySCjo26AZB9cqV8KpF/JMeY7vWef/kDAGS6lGDo0Q2RuJIf9UzSHhuepJrUdYeDP
-         3wsRtqVlyyhBzLg4NgnhNCDBql5wFYZXsWqJsTcRl1mU2NMggXSYZeYvlEGM5PpwIXvP
-         Iielz22yjvHt+QiS4NJj5jraczBUg9QlX3xA9A8GDGKLxHpG8GP/uEWad2wSPgfT93sp
-         EZ7hJaU0K7Ub0I5m2uJSamCTcj1KKMUbq+P7B36rHl21GsY7ypgdNkMCI3OMsw5Bbwl2
-         k8PVgGtQS/r/6BfdZ40O7B8paUefkaPLaVdXZYLeI194w5SGzeP5V2ybLicvfal8Jy53
-         Rw+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692647059; x=1693251859;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SSCma3xFa9r8jkJRJYtQ3UJXMDuR6ih/O0h93W+17hY=;
-        b=dVu+jvjnfv4dUySVqDAvtm3cK9Op2dZdy9+mQWyYElIHbzZExnEWQHltBp6qGLGqtv
-         5PFcsljNVGWdRFpCHDi7IX+BRNVct+nRRcgebCd57Doaq6bYsZMwnReXrQc2GnIhEtfK
-         Va1kiR72hNqPbqyhNHelVl3zRHayz995qYh77NQovcSzDGlxktBLKDXpPbBod9BtDkw5
-         Bf+cN2vyoHumPjNAdN0BPxZVsGgpH2bIIqXEQDcwGuOQqMtcjZ+UmxbDsVnzbBgh4+Sv
-         tRWAWT6lOycZ3ufwmTXrW2J6jKec85b3uAQ5o0DI7TzCJeKWygYiS8ahWROzBLFXIQiN
-         MR2A==
-X-Gm-Message-State: AOJu0YyzbJe1EASCYkzyvFQQJok0N3j5eecSQj8uUFKHbjAGrIC24bXp
-        qd19N5CoL8iYbyDmiVUQekOARhJ0GKc8+WsIfQ==
-X-Google-Smtp-Source: AGHT+IFZOgwoG4uIlCSpVcliJBnuI18zwdWZJ8yxViklw8jp6EKLckJ2Gu/KsjtW8j9EbVROEO3Wi7ZjHJ6bUpcQ0Q==
-X-Received: from ackerleytng-ctop.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:13f8])
- (user=ackerleytng job=sendgmr) by 2002:a17:903:41d0:b0:1b8:84d9:dea6 with
- SMTP id u16-20020a17090341d000b001b884d9dea6mr3274875ple.12.1692647059281;
- Mon, 21 Aug 2023 12:44:19 -0700 (PDT)
-Date:   Mon, 21 Aug 2023 19:44:11 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.42.0.rc1.204.g551eb34607-goog
-Message-ID: <20230821194411.2165757-1-ackerleytng@google.com>
-Subject: [PATCH] KVM: selftests: Add tests - invalid inputs for KVM_CREATE_GUEST_MEMFD
-From:   Ackerley Tng <ackerleytng@google.com>
-To:     pbonzini@redhat.com, seanjc@google.com, tglx@linutronix.de,
-        x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        hpa@zytor.com, shuah@kernel.org, andrew.jones@linux.dev,
-        ricarkol@google.com, chao.p.peng@linux.intel.com, tabba@google.com,
-        jarkko@kernel.org, yu.c.zhang@linux.intel.com,
-        vannapurve@google.com, ackerleytng@google.com,
-        erdemaktas@google.com, mail@maciej.szmigiero.name, vbabka@suse.cz,
-        david@redhat.com, qperret@google.com, michael.roth@amd.com,
-        wei.w.wang@intel.com, liam.merwick@oracle.com,
-        isaku.yamahata@gmail.com, kirill.shutemov@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
+        Mon, 21 Aug 2023 16:59:29 -0400
+Received: from out-21.mta1.migadu.com (out-21.mta1.migadu.com [IPv6:2001:41d0:203:375::15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92318BC
+        for <linux-kselftest@vger.kernel.org>; Mon, 21 Aug 2023 13:59:27 -0700 (PDT)
+Message-ID: <59278e71-3a88-5da9-b46e-9992987d258d@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1692651564;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Fe40UAqHy2mSuHq32lY+2IGEBxta1jrbqGlWmnXdHbg=;
+        b=N5I0skx59JzXu2baJXbF38imzDjl43wA/zkHuZpM2JUs8BsEU+frZFEWx4uCLnx9NBL6qc
+        INNWA6aXZMMOVEGHPE3PnqS+69ABvQNoDFOaldOjkRxc4p9eMOsl2Zs34xzX4ncdXfQhW4
+        8Xjh+GYHPKguFsHq3g5NFCJKbi5wEkI=
+Date:   Mon, 21 Aug 2023 13:59:12 -0700
+MIME-Version: 1.0
+Subject: Re: [PATCH v3 9/9] selftests/bpf/sockopt: Add io_uring support
+Content-Language: en-US
+To:     Breno Leitao <leitao@debian.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, io-uring@vger.kernel.org, kuba@kernel.org,
+        pabeni@redhat.com, krisman@suse.de,
+        Wang Yufen <wangyufen@huawei.com>,
+        =?UTF-8?Q?Daniel_M=c3=bcller?= <deso@posteo.net>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, sdf@google.com, axboe@kernel.dk,
+        asml.silence@gmail.com, willemdebruijn.kernel@gmail.com,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
+References: <20230817145554.892543-1-leitao@debian.org>
+ <20230817145554.892543-10-leitao@debian.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Martin KaFai Lau <martin.lau@linux.dev>
+In-Reply-To: <20230817145554.892543-10-leitao@debian.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,96 +66,94 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Test that invalid inputs for KVM_CREATE_GUEST_MEMFD, such as
-non-page-aligned page size and invalid flags, are rejected by the
-KVM_CREATE_GUEST_MEMFD with EINVAL
+On 8/17/23 7:55 AM, Breno Leitao wrote:
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index 538df8fb8c42..4da04242b848 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -362,6 +362,7 @@ CLANG_CFLAGS = $(CLANG_SYS_INCLUDES) \
+>   
+>   $(OUTPUT)/test_l4lb_noinline.o: BPF_CFLAGS += -fno-inline
+>   $(OUTPUT)/test_xdp_noinline.o: BPF_CFLAGS += -fno-inline
+> +$(OUTPUT)/test_progs.o: CFLAGS += -I../../../include/
 
-Signed-off-by: Ackerley Tng <ackerleytng@google.com>
----
- .../testing/selftests/kvm/guest_memfd_test.c  | 33 +++++++++++++++++++
- .../selftests/kvm/include/kvm_util_base.h     | 11 +++++--
- 2 files changed, 42 insertions(+), 2 deletions(-)
+This is the tools/include? Is it really needed? iirc, some of the prog_tests/*.c 
+has already been using files from tools/include.
 
-diff --git a/tools/testing/selftests/kvm/guest_memfd_test.c b/tools/testing/selftests/kvm/guest_memfd_test.c
-index eb93c608a7e0..a8e37f001297 100644
---- a/tools/testing/selftests/kvm/guest_memfd_test.c
-+++ b/tools/testing/selftests/kvm/guest_memfd_test.c
-@@ -90,6 +90,37 @@ static void test_fallocate(int fd, size_t page_size, size_t total_size)
- 	TEST_ASSERT(!ret, "fallocate to restore punched hole should succeed");
- }
- 
-+static void test_create_guest_memfd_invalid(struct kvm_vm *vm, size_t page_size)
-+{
-+	int fd;
-+	uint64_t size;
-+	uint64_t flags;
-+	uint64_t valid_flags = 0;
-+
-+	for (size = 1; size < page_size; size++) {
-+		fd = __vm_create_guest_memfd(vm, size, 0);
-+		TEST_ASSERT(
-+			fd == -1,
-+			"Creating guest memfds with non-page-aligned page sizes should fail");
-+		TEST_ASSERT(errno == EINVAL, "... and errno should be set to EINVAL");
-+	}
-+
-+#ifdef CONFIG_TRANSPARENT_HUGEPAGE
-+	valid_flags = KVM_GUEST_MEMFD_ALLOW_HUGEPAGE;
-+#endif
-+
-+	for (flags = 1; flags; flags <<= 1) {
-+		if (flags & valid_flags)
-+			continue;
-+
-+		fd = __vm_create_guest_memfd(vm, page_size, flags);
-+		TEST_ASSERT(
-+			fd == -1,
-+			"Creating guest memfds with invalid flags should fail");
-+		TEST_ASSERT(errno == EINVAL, "... and errno should be set to EINVAL");
-+	}
-+}
-+
- 
- int main(int argc, char *argv[])
- {
-@@ -103,6 +134,8 @@ int main(int argc, char *argv[])
- 
- 	vm = vm_create_barebones();
- 
-+	test_create_guest_memfd_invalid(vm, page_size);
-+
- 	fd = vm_create_guest_memfd(vm, total_size, 0);
- 
- 	test_file_read_write(fd);
-diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-index 39b38c75b99c..8bdfadd72349 100644
---- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-@@ -474,7 +474,8 @@ static inline uint64_t vm_get_stat(struct kvm_vm *vm, const char *stat_name)
- }
- 
- void vm_create_irqchip(struct kvm_vm *vm);
--static inline int vm_create_guest_memfd(struct kvm_vm *vm, uint64_t size,
-+
-+static inline int __vm_create_guest_memfd(struct kvm_vm *vm, uint64_t size,
- 					uint64_t flags)
- {
- 	struct kvm_create_guest_memfd gmem = {
-@@ -482,7 +483,13 @@ static inline int vm_create_guest_memfd(struct kvm_vm *vm, uint64_t size,
- 		.flags = flags,
- 	};
- 
--	int fd = __vm_ioctl(vm, KVM_CREATE_GUEST_MEMFD, &gmem);
-+	return __vm_ioctl(vm, KVM_CREATE_GUEST_MEMFD, &gmem);
-+}
-+
-+static inline int vm_create_guest_memfd(struct kvm_vm *vm, uint64_t size,
-+					uint64_t flags)
-+{
-+	int fd = __vm_create_guest_memfd(vm, size, flags);
- 
- 	TEST_ASSERT(fd >= 0, KVM_IOCTL_ERROR(KVM_CREATE_GUEST_MEMFD, fd));
- 	return fd;
--- 
-2.42.0.rc1.204.g551eb34607-goog
+>   
+>   $(OUTPUT)/flow_dissector_load.o: flow_dissector_load.h
+>   $(OUTPUT)/cgroup_getset_retval_hooks.o: cgroup_getset_retval_hooks.h
+> diff --git a/tools/testing/selftests/bpf/prog_tests/sockopt.c b/tools/testing/selftests/bpf/prog_tests/sockopt.c
+> index 9e6a5e3ed4de..4693ad8bfe8f 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/sockopt.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/sockopt.c
+> @@ -1,5 +1,6 @@
+>   // SPDX-License-Identifier: GPL-2.0
+>   #include <test_progs.h>
+> +#include <io_uring/mini_liburing.h>
+>   #include "cgroup_helpers.h"
+>   
+>   static char bpf_log_buf[4096];
+> @@ -38,6 +39,7 @@ static struct sockopt_test {
+>   	socklen_t			get_optlen_ret;
+>   
+>   	enum sockopt_test_error		error;
+> +	bool				io_uring_support;
+>   } tests[] = {
+>   
+>   	/* ==================== getsockopt ====================  */
+> @@ -53,6 +55,7 @@ static struct sockopt_test {
+>   		.attach_type = BPF_CGROUP_GETSOCKOPT,
+>   		.expected_attach_type = 0,
+>   		.error = DENY_LOAD,
+> +		.io_uring_support = true,
+
+DENY_LOAD probably won't be an intersting test. The set/getsockopt won't be called.
+
+The existing test does not seem to have SOL_SOCKET for getsockopt also.
+
+> -static int run_test(int cgroup_fd, struct sockopt_test *test)
+> +/* Core function that handles io_uring ring initialization,
+> + * sending SQE with sockopt command and waiting for the CQE.
+> + */
+> +static int uring_sockopt(int op, int fd, int level, int optname,
+> +			 const void *optval, socklen_t optlen)
+> +{
+> +	struct io_uring_cqe *cqe;
+> +	struct io_uring_sqe *sqe;
+> +	struct io_uring ring;
+> +	int err;
+> +
+> +	err = io_uring_queue_init(1, &ring, 0);
+> +	if (err) {
+> +		log_err("Failed to initialize io_uring ring");
+> +		return err;
+> +	}
+> +
+> +	sqe = io_uring_get_sqe(&ring);
+> +	if (!sqe) {
+> +		log_err("Failed to get an SQE");
+> +		return -1;
+
+No need to io_uring_queue_exit() on the error path?
+
+
+> +	}
+> +
+> +	io_uring_prep_cmd(sqe, op, fd, level, optname, optval, optlen);
+> +
+> +	err = io_uring_submit(&ring);
+> +	if (err != 1) {
+> +		log_err("Failed to submit SQE");
+
+Use ASSERT_* instead.
+
+Regarding how to land this set,
+it will be useful to have the selftest running in the bpf CI. While there is 
+iouring changes, some of the changes is in bpf and/or netdev also. eg. Patch 3 
+already has a conflict with the net-next and bpf-next tree because of a recent 
+commit in socket.c on Aug 9.
+
+May be Alexi and Daniel can advise how was similar patch managed before ?
+
 
