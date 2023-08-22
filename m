@@ -2,185 +2,210 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01E75784C2C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Aug 2023 23:42:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86845784CAD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Aug 2023 00:07:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231394AbjHVVm0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 22 Aug 2023 17:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45558 "EHLO
+        id S231538AbjHVWHW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 22 Aug 2023 18:07:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229999AbjHVVmZ (ORCPT
+        with ESMTP id S229555AbjHVWHW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Aug 2023 17:42:25 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A5DEC
-        for <linux-kselftest@vger.kernel.org>; Tue, 22 Aug 2023 14:42:23 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id ca18e2360f4ac-79248cacfeaso31098539f.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 22 Aug 2023 14:42:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1692740543; x=1693345343;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=7Ow6pCM+QP20h9g5N2QdjyOQ38DqfmJbWYeM8K1qy+4=;
-        b=i20RSApAOKJ8ir/jJsfJdPMau9sFLKKFzH6B+BHHpOzr48x9Zyv+B6H0aUTWLLFJn0
-         TQtaVX0uIct/8a1ZutlOlFnoEpaaK64QVZl3G+2gFh3n+5V6C3O+1rmk9dCprwmkZ0Lm
-         9SCcXovO4dPpCvNpEh+Kzh9kxr9GAtWoK8gjmIK0mVdNv63/2XNH0+qqezIC8GVfrbdw
-         HD/oK2+U/wtoZYACKCJQfjQ0yba40qV0dUGopakg+QC2VpErWjmHWIilptZDH7h/jqzI
-         Hg+BY/D0UekKBcXqLmnnfO10+/0SJ34wzRZwUBXnzinSseqm1iOoSdsgpBRw/cazEEtu
-         QOdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692740543; x=1693345343;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7Ow6pCM+QP20h9g5N2QdjyOQ38DqfmJbWYeM8K1qy+4=;
-        b=WZzrwLn3RNuD9KM5cScLBJnrzY2vScy2Xa8CStjMza7IS8JderqlT6EA984f0bC9Ye
-         /5aM1i+rinBfnULDBjwADmGrCNotMfOh1NDIi4yBkTD6gfGofjsfT0snJPg3JJOp2t+r
-         +HE5zogsH+3umPNqUPxz40NdjDvCCLye80udhLJvC/ve6t6KErLGt4o9PDuaXI1d3PkM
-         iTqaG61J+wPc5DwcJfg0XlAXkfo8cLTG9Rualq/ZKjaVaDYYo+L7sjci4frtSovCAAqX
-         2W/JEj1T9Ic7D+t78hrz4VlKjiY5gWbKUWDWlD3G3fs/8lGBUWIaOwtjFEWDuq+WXZwa
-         lmlQ==
-X-Gm-Message-State: AOJu0Ywuc8KQFQ2cMm8t2fift9nbiSgSS0T8mn06VlcNEsQVVYQBYRh0
-        Onb0/OdxJtKW9wtMqkLRH/qSpg==
-X-Google-Smtp-Source: AGHT+IEcpbrFTOH03Us9iPSIjiXeODFg/lzJ/XzgUDSbSKxU/6ulWFVq80iXoxB8Lz7Yq2tK3/gcOg==
-X-Received: by 2002:a5e:c102:0:b0:788:2eaf:46ce with SMTP id v2-20020a5ec102000000b007882eaf46cemr1048760iol.9.1692740543076;
-        Tue, 22 Aug 2023 14:42:23 -0700 (PDT)
-Received: from google.com (161.74.123.34.bc.googleusercontent.com. [34.123.74.161])
-        by smtp.gmail.com with ESMTPSA id 3-20020a5ea503000000b0078714764ca0sm2930223iog.40.2023.08.22.14.42.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Aug 2023 14:42:22 -0700 (PDT)
-Date:   Tue, 22 Aug 2023 21:42:20 +0000
-From:   Justin Stitt <justinstitt@google.com>
-To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
-        linux-input@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Kees Cook <keescook@google.com>
-Subject: Re: selftests: hid: trouble building with clang due to missing header
-Message-ID: <20230822214220.jjx3srik4mteeond@google.com>
-References: <CAFhGd8ryUcu2yPC+dFyDKNuVFHxT-=iayG+n2iErotBxgd0FVw@mail.gmail.com>
- <CAKwvOd=p_7gWwBnR_RHUPukkG1A25GQy6iOnX_eih7u65u=oxw@mail.gmail.com>
- <CAO-hwJLio2dWs01VAhCgmub5GVxRU-3RFQifviOL0OTaqj9Ktg@mail.gmail.com>
- <CAFhGd8qmXD6VN+nuXKtV_Uz14gzY1Kqo7tmOAhgYpTBdCnoJRQ@mail.gmail.com>
- <CAO-hwJJ_ipXwLjyhGC6_4r-uZ-sDbrb_W7um6F2vgws0d-hvTQ@mail.gmail.com>
- <CAO-hwJ+DTPXWbpNaBDvCkyAsWZHbeLiBwYo4k93ZW79Jt-HAkg@mail.gmail.com>
- <CAFhGd8pVjUPpukHxxbQCEnmgDUqy-tgBa7POkmgrYyFXVRAMEw@mail.gmail.com>
- <CAO-hwJJntQTzcJH5nf9RM1bVWGVW1kb28rJ3tgew1AEH00PmJQ@mail.gmail.com>
- <CAFhGd8rgdszt5vgWuGKkcpTZbKvihGCJXRKKq7RP17+71dTYww@mail.gmail.com>
+        Tue, 22 Aug 2023 18:07:22 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6CEDF1B9;
+        Tue, 22 Aug 2023 15:07:19 -0700 (PDT)
+Received: from UbuntuVM-18.efytirfs5hsengjwslc1ligxab.xx.internal.cloudapp.net (unknown [20.72.208.6])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 8811A2126CD6;
+        Tue, 22 Aug 2023 15:07:18 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8811A2126CD6
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1692742038;
+        bh=ccvcmxKiUzDpgLMe6MY0JLVApyZVXWCFreGvGxxSy8k=;
+        h=From:To:Cc:Subject:Date:From;
+        b=qCLXJOqaVbypJI1xgc0o9bQjz5O56c9z6O2uibHeeA+p9OA4FCJ69VapxdCFTKGm9
+         Uh0HR62602PgPemQQz/zxRmxXxeGackiUuCJyJEShXwDyXK5Hc1lvqqAH0dtdJb7GP
+         88V5SlfLGiar6rv/3h/3yB0JHnXi1idcxOaKIYJ8=
+From:   Hardik Garg <hargar@linux.microsoft.com>
+To:     stable@vger.kernel.org
+Cc:     Shuah Khan <shuah@kernel.org>, Hangbin Liu <liuhangbin@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, bjorn@kernel.org
+Subject: [PATCH 6.1] selftests/net: mv bpf/nat6to4.c to net folder
+Date:   Tue, 22 Aug 2023 22:07:10 +0000
+Message-Id: <20230822220710.3992-1-hargar@linux.microsoft.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFhGd8rgdszt5vgWuGKkcpTZbKvihGCJXRKKq7RP17+71dTYww@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,
+        RCVD_IN_SBL,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Aug 22, 2023 at 02:38:29PM -0700, Justin Stitt wrote:
-> On Tue, Aug 22, 2023 at 2:36 PM Benjamin Tissoires
-> <benjamin.tissoires@redhat.com> wrote:
-> >
-> > On Tue, Aug 22, 2023 at 11:26 PM Justin Stitt <justinstitt@google.com> wrote:
-> > >
-> > > On Tue, Aug 22, 2023 at 2:15 PM Benjamin Tissoires
-> > > <benjamin.tissoires@redhat.com> wrote:
-> > > >
-> > > > On Tue, Aug 22, 2023 at 11:06 PM Benjamin Tissoires
-> > > > <benjamin.tissoires@redhat.com> wrote:
-> > > > >
-> > > > > On Tue, Aug 22, 2023 at 10:57 PM Justin Stitt <justinstitt@google.com> wrote:
-> > > > > >
-> > > > > [...]
-> > > > > > > > > Here's the invocation I am running to build kselftest:
-> > > > > > > > > `$ make LLVM=1 ARCH=x86_64 mrproper headers && make LLVM=1 ARCH=x86_64
-> > > > > > > > > -j128 V=1 -C tools/testing/selftests`
-> > > > > > >
-> > > > > > > I think I fixed the same issue in the script I am running to launch
-> > > > > > > those tests in a VM. This was in commit
-> > > > > > > f9abdcc617dad5f14bbc2ebe96ee99f3e6de0c4e (in the v6.5-rc+ series).
-> > > > > > >
-> > > > > > > And in the commit log, I wrote:
-> > > > > > > ```
-> > > > > > > According to commit 01d6c48a828b ("Documentation: kselftest:
-> > > > > > > "make headers" is a prerequisite"), running the kselftests requires
-> > > > > > > to run "make headers" first.
-> > > > > > > ```
-> > > > > > >
-> > > > > > > So my assumption is that you also need to run "make headers" with the
-> > > > > > > proper flags before compiling the selftests themselves (I might be
-> > > > > > > wrong but that's how I read the commit).
-> > > > > >
-> > > > > > In my original email I pasted the invocation I used which includes the
-> > > > > > headers target. What are the "proper flags" in this case?
-> > > > > >
-> > > > >
-> > > > > "make LLVM=1 ARCH=x86_64 headers" no?
-> > > > >
-> > > > > But now I'm starting to wonder if that was not the intent of your
-> > > > > combined "make mrproper headers". I honestly never tried to combine
-> > > > > the 2. It's worth a try to split them I would say.
-> > > >
-> > > > Apologies, I just tested it, and it works (combining the 2).
-> > > >
-> > > > Which kernel are you trying to test?
-> > > > I tested your 2 commands on v6.5-rc7 and it just works.
-> > >
-> > > I'm also on v6.5-rc7 (706a741595047797872e669b3101429ab8d378ef)
-> > >
-> > > I ran these exact commands:
-> > > |    $ make mrproper
-> > > |    $ make LLVM=1 ARCH=x86_64 headers
-> > > |    $ make LLVM=1 ARCH=x86_64 -j128 -C tools/testing/selftests
-> > > TARGETS=hid &> out
-> > >
-> > > and here's the contents of `out` (still warnings/errors):
-> > > https://gist.github.com/JustinStitt/d0c30180a2a2e046c32d5f0ce5f59c6d
-> > >
-> > > I have a feeling I'm doing something fundamentally incorrectly. Any ideas?
-> >
-> > Sigh... there is a high chance my Makefile is not correct and uses the
-> > installed headers (I was running the exact same commands, but on a
-> > v6.4-rc7+ kernel).
-> >
-> > But sorry, it will have to wait for tomorrow if you want me to have a
-> > look at it. It's 11:35 PM here, and I need to go to bed
-> Take it easy. Thanks for the prompt responses here! I'd like to get
-> the entire kselftest make target building with Clang so that we can
-> close [1].
->
-> >
-> > Cheers,
-> > Benjamin
-> >
-> > >
-> > > To be clear, I can build the Kernel itself just fine across many
-> > > configs and architectures. I have, at the very least, the dependencies
-> > > required to accomplish that.
-> > >
-> > > >
-> > > > FTR:
-> > > > $> git checkout v6.5-rc7
-> > > > $> make LLVM=1 ARCH=x86_64 mrproper headers
-> > > > $> make LLVM=1 ARCH=x86_64 -j8 -C tools/testing/selftests TARGETS=hid
-> > > >
-> > > > ->   BINARY   hid_bpf
-> > > >
-> > > > Cheers,
-> > > > Benjamin
-> > > >
-> > >
-> >
->
-> [1]: https://github.com/ClangBuiltLinux/linux/issues/1910
+From: Hangbin Liu <liuhangbin@gmail.com>
 
-Erhm, I meant [1]: https://github.com/ClangBuiltLinux/linux/issues/1698
+commit 3c107f36db06 ("selftests/net: mv bpf/nat6to4.c to net folder")
+backport this v6.4 commit to v6.1 to fix this error:
+error: unable to open output file 'linux/kselftest/net/bpf/nat6to4.o':
+'No such file or directory'
+
+There are some issues with the bpf/nat6to4.c building.
+
+1. It use TEST_CUSTOM_PROGS, which will add the nat6to4.o to
+   kselftest-list file and run by common run_tests.
+2. When building the test via `make -C tools/testing/selftests/
+   TARGETS="net"`, the nat6to4.o will be build in selftests/net/bpf/
+   folder. But in test udpgro_frglist.sh it refers to ../bpf/nat6to4.o.
+   The correct path should be ./bpf/nat6to4.o.
+3. If building the test via `make -C tools/testing/selftests/ TARGETS="net"
+   install`. The nat6to4.o will be installed to kselftest_install/net/
+   folder. Then the udpgro_frglist.sh should refer to ./nat6to4.o.
+
+To fix the confusing test path, let's just move the nat6to4.c to net folder
+and build it as TEST_GEN_FILES.
+
+Fixes: edae34a3ed92 ("selftests net: add UDP GRO fraglist + bpf self-tests")
+Tested-by: Björn Töpel <bjorn@kernel.org>
+Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+Link: https://lore.kernel.org/r/20230118020927.3971864-1-liuhangbin@gmail.com
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+Signed-off-by: Hardik Garg <hargar@linux.microsoft.com>
+---
+ tools/testing/selftests/net/Makefile          | 50 ++++++++++++++++++-
+ tools/testing/selftests/net/bpf/Makefile      | 14 ------
+ .../testing/selftests/net/{bpf => }/nat6to4.c |  0
+ tools/testing/selftests/net/udpgro_frglist.sh |  8 +--
+ 4 files changed, 52 insertions(+), 20 deletions(-)
+ delete mode 100644 tools/testing/selftests/net/bpf/Makefile
+ rename tools/testing/selftests/net/{bpf => }/nat6to4.c (100%)
+
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index 69c58362c0ed..48d1a68be1d5 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -71,14 +71,60 @@ TEST_GEN_FILES += bind_bhash
+ TEST_GEN_PROGS += sk_bind_sendto_listen
+ TEST_GEN_PROGS += sk_connect_zero_addr
+ TEST_PROGS += test_ingress_egress_chaining.sh
++TEST_GEN_FILES += nat6to4.o
+ 
+ TEST_FILES := settings
+ 
+ include ../lib.mk
+ 
+-include bpf/Makefile
+-
+ $(OUTPUT)/reuseport_bpf_numa: LDLIBS += -lnuma
+ $(OUTPUT)/tcp_mmap: LDLIBS += -lpthread
+ $(OUTPUT)/tcp_inq: LDLIBS += -lpthread
+ $(OUTPUT)/bind_bhash: LDLIBS += -lpthread
++
++# Rules to generate bpf obj nat6to4.o
++CLANG ?= clang
++SCRATCH_DIR := $(OUTPUT)/tools
++BUILD_DIR := $(SCRATCH_DIR)/build
++BPFDIR := $(abspath ../../../lib/bpf)
++APIDIR := $(abspath ../../../include/uapi)
++
++CCINCLUDE += -I../bpf
++CCINCLUDE += -I../../../../usr/include/
++CCINCLUDE += -I$(SCRATCH_DIR)/include
++
++BPFOBJ := $(BUILD_DIR)/libbpf/libbpf.a
++
++MAKE_DIRS := $(BUILD_DIR)/libbpf
++$(MAKE_DIRS):
++	mkdir -p $@
++
++# Get Clang's default includes on this system, as opposed to those seen by
++# '-target bpf'. This fixes "missing" files on some architectures/distros,
++# such as asm/byteorder.h, asm/socket.h, asm/sockios.h, sys/cdefs.h etc.
++#
++# Use '-idirafter': Don't interfere with include mechanics except where the
++# build would have failed anyways.
++define get_sys_includes
++$(shell $(1) $(2) -v -E - </dev/null 2>&1 \
++	| sed -n '/<...> search starts here:/,/End of search list./{ s| \(/.*\)|-idirafter \1|p }') \
++$(shell $(1) $(2) -dM -E - </dev/null | grep '__riscv_xlen ' | awk '{printf("-D__riscv_xlen=%d -D__BITS_PER_LONG=%d", $$3, $$3)}')
++endef
++
++ifneq ($(CROSS_COMPILE),)
++CLANG_TARGET_ARCH = --target=$(notdir $(CROSS_COMPILE:%-=%))
++endif
++
++CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG),$(CLANG_TARGET_ARCH))
++
++$(OUTPUT)/nat6to4.o: nat6to4.c $(BPFOBJ) | $(MAKE_DIRS)
++	$(CLANG) -O2 -target bpf -c $< $(CCINCLUDE) $(CLANG_SYS_INCLUDES) -o $@
++
++$(BPFOBJ): $(wildcard $(BPFDIR)/*.[ch] $(BPFDIR)/Makefile)		       \
++	   $(APIDIR)/linux/bpf.h					       \
++	   | $(BUILD_DIR)/libbpf
++	$(MAKE) $(submake_extras) -C $(BPFDIR) OUTPUT=$(BUILD_DIR)/libbpf/     \
++		    EXTRA_CFLAGS='-g -O0'				       \
++		    DESTDIR=$(SCRATCH_DIR) prefix= all install_headers
++
++EXTRA_CLEAN := $(SCRATCH_DIR)
+diff --git a/tools/testing/selftests/net/bpf/Makefile b/tools/testing/selftests/net/bpf/Makefile
+deleted file mode 100644
+index 8ccaf8732eb2..000000000000
+--- a/tools/testing/selftests/net/bpf/Makefile
++++ /dev/null
+@@ -1,14 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0
+-
+-CLANG ?= clang
+-CCINCLUDE += -I../../bpf
+-CCINCLUDE += -I../../../../lib
+-CCINCLUDE += -I../../../../../usr/include/
+-
+-TEST_CUSTOM_PROGS = $(OUTPUT)/bpf/nat6to4.o
+-all: $(TEST_CUSTOM_PROGS)
+-
+-$(OUTPUT)/%.o: %.c
+-	$(CLANG) -O2 -target bpf -c $< $(CCINCLUDE) -o $@
+-
+-EXTRA_CLEAN := $(TEST_CUSTOM_PROGS)
+diff --git a/tools/testing/selftests/net/bpf/nat6to4.c b/tools/testing/selftests/net/nat6to4.c
+similarity index 100%
+rename from tools/testing/selftests/net/bpf/nat6to4.c
+rename to tools/testing/selftests/net/nat6to4.c
+diff --git a/tools/testing/selftests/net/udpgro_frglist.sh b/tools/testing/selftests/net/udpgro_frglist.sh
+index c9c4b9d65839..0a6359bed0b9 100755
+--- a/tools/testing/selftests/net/udpgro_frglist.sh
++++ b/tools/testing/selftests/net/udpgro_frglist.sh
+@@ -40,8 +40,8 @@ run_one() {
+ 
+ 	ip -n "${PEER_NS}" link set veth1 xdp object ${BPF_FILE} section xdp
+ 	tc -n "${PEER_NS}" qdisc add dev veth1 clsact
+-	tc -n "${PEER_NS}" filter add dev veth1 ingress prio 4 protocol ipv6 bpf object-file ../bpf/nat6to4.o section schedcls/ingress6/nat_6  direct-action
+-	tc -n "${PEER_NS}" filter add dev veth1 egress prio 4 protocol ip bpf object-file ../bpf/nat6to4.o section schedcls/egress4/snat4 direct-action
++	tc -n "${PEER_NS}" filter add dev veth1 ingress prio 4 protocol ipv6 bpf object-file nat6to4.o section schedcls/ingress6/nat_6  direct-action
++	tc -n "${PEER_NS}" filter add dev veth1 egress prio 4 protocol ip bpf object-file nat6to4.o section schedcls/egress4/snat4 direct-action
+         echo ${rx_args}
+ 	ip netns exec "${PEER_NS}" ./udpgso_bench_rx ${rx_args} -r &
+ 
+@@ -88,8 +88,8 @@ if [ ! -f ${BPF_FILE} ]; then
+ 	exit -1
+ fi
+ 
+-if [ ! -f bpf/nat6to4.o ]; then
+-	echo "Missing nat6to4 helper. Build bpfnat6to4.o selftest first"
++if [ ! -f nat6to4.o ]; then
++	echo "Missing nat6to4 helper. Build bpf nat6to4.o selftest first"
+ 	exit -1
+ fi
+ 
+-- 
+2.33.8
+
