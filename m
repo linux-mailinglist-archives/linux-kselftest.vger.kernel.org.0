@@ -2,97 +2,162 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28DE3783C85
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Aug 2023 11:10:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DE8D7841C6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Aug 2023 15:16:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234187AbjHVJKR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 22 Aug 2023 05:10:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49934 "EHLO
+        id S234300AbjHVNQB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 22 Aug 2023 09:16:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234075AbjHVJKQ (ORCPT
+        with ESMTP id S234173AbjHVNQA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Aug 2023 05:10:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6384A1BE;
-        Tue, 22 Aug 2023 02:10:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E6B2E64FE4;
-        Tue, 22 Aug 2023 09:10:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B12BC433C7;
-        Tue, 22 Aug 2023 09:10:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692695412;
-        bh=pQisISmZ66AdEx39jJ4009uh0Yx/8HETEG0JPihLCHM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dt1q16xZ4wVawYqxKyc7pTbYu+xIoHKLpdt4WziTYiykP4mBCSsx9VyKV3nGdWZuB
-         CGlsfHp0LveeO9NIsm2e6txPBhrMJk1AjqMm2owxcsfgIRV8U6Tt291oP3dqGDBQwG
-         gDHLPYuO5I1KGNzPSmFaAQ13Ck4sdojjeTz3R2DLhRG6otJRWx1AbClFee5WLwQArS
-         PEQ+W/rcU+hY/C9pH9HW980wqKbHfsBj2syDGyGfJ4KcbpYfg7B6yf6QcxIUaEjVGF
-         QYWB8QtIcGfFThWJC6mqnrDF7sLKwARR06oIWqrbVYOF+L5uhBGCzY8GFgI7AqFe2D
-         prG6ZSWsJIrdA==
-Date:   Tue, 22 Aug 2023 11:10:06 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Aleksa Sarai <cyphar@cyphar.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Jeff Xu <jeffxu@google.com>,
-        Kees Cook <keescook@chromium.org>,
-        Daniel Verkamp <dverkamp@chromium.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        stable@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 3/5] memfd: improve userspace warnings for missing
- exec-related flags
-Message-ID: <20230822-seenotrettung-bungalow-a4ea576f6f85@brauner>
-References: <20230814-memfd-vm-noexec-uapi-fixes-v2-0-7ff9e3e10ba6@cyphar.com>
- <20230814-memfd-vm-noexec-uapi-fixes-v2-3-7ff9e3e10ba6@cyphar.com>
+        Tue, 22 Aug 2023 09:16:00 -0400
+Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 691C5BE;
+        Tue, 22 Aug 2023 06:15:58 -0700 (PDT)
+Received: by mail-ot1-x329.google.com with SMTP id 46e09a7af769-6bd0a96e63dso3419144a34.2;
+        Tue, 22 Aug 2023 06:15:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1692710157; x=1693314957;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RgPksFBxOItSqlc53rqP9sg2Ql5BRaniyvUG/S3vZQA=;
+        b=Lqq7rBZlgW/W8/NpNTDcQpJStlieAl/FDDb81Yz+mVx6VVYYbh6O81p+kg1tZKNWi1
+         44vmOYZr8UPr0GQsdoy2tOail7xtPFRGfVpF2NowHee2zCYShOhK+w40x6SX6HoLx0/m
+         TGxQBaGZ01FBMTs1+unFMNzvimZFCAV1eKanwdTtKe+rGs3Eya2EeZpxlWDmVkMjZ3Xm
+         YHJR8zn/QRiaXCZORJbA9MpcAExO1lEFuE4GYAmK9Pxwok5hI+PgRT1j6a0j6a5C0wwR
+         9h/YayxcJ95TB/VId6DUH/7c/PXXaIOEbO7eQLvO0OTZT6YZqX/iXc+gMsXGSInY0uK4
+         KiwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692710157; x=1693314957;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RgPksFBxOItSqlc53rqP9sg2Ql5BRaniyvUG/S3vZQA=;
+        b=NgWsmfXSFcr9K9cRS0TvtaZV7TDlC0wcFyyUI08632dorI9/qwg16Ki0yE7LaumZWw
+         12qBm/WNi2uTfxXedmT6A9MDOIAj7goir7SRRRWIInkJCxclRy4KdahNUNuFgA/Imh17
+         vljY8s1j92BToq/JTwHXPRpRzWerx81tXA1Tworik2h1P00MI7BqVnXXe+JNQQ3+jmJV
+         bEYf77ConL5LOwzKw/3hzoqC7rKWfICmot3vOvgpCse54rtxHBoWqFxsZUZGeZfR61gn
+         J6ayiTyC3ishUWFQdvSj4oZNGnJVJiPec1JoWX1b+zfiDr3QXUDY3Ul8kWnir3hpLNxz
+         LpBg==
+X-Gm-Message-State: AOJu0YyDgUJHqDyb5NFEdA5PDqF1rNGg7d+fdO6gGc2el23PSwJM3ol9
+        zMKT5fTavQL/DT9SG/8zHnY=
+X-Google-Smtp-Source: AGHT+IGo8zeIWBKn82j/jvQCjzmHYpJVCtYbV2axFg8O5ZXrTSIe63shHY3sDxMgIUHBR3S1rBwiKQ==
+X-Received: by 2002:a9d:6295:0:b0:6b9:4216:c209 with SMTP id x21-20020a9d6295000000b006b94216c209mr10586169otk.12.1692710157602;
+        Tue, 22 Aug 2023 06:15:57 -0700 (PDT)
+Received: from debian.lan ([168.227.196.240])
+        by smtp.gmail.com with ESMTPSA id t15-20020a9d748f000000b006b9cbad68a8sm4486071otk.30.2023.08.22.06.15.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Aug 2023 06:15:56 -0700 (PDT)
+From:   "Ricardo B. Marliere" <rbmarliere@gmail.com>
+To:     broonie@kernel.org, skhan@linuxfoundation.org
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Ricardo B. Marliere" <rbmarliere@gmail.com>
+Subject: [PATCH] selftests: alsa: make LDLIBS consistent
+Date:   Tue, 22 Aug 2023 10:15:45 -0300
+Message-Id: <20230822131544.38152-1-rbmarliere@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230814-memfd-vm-noexec-uapi-fixes-v2-3-7ff9e3e10ba6@cyphar.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Aug 14, 2023 at 06:40:59PM +1000, Aleksa Sarai wrote:
-> In order to incentivise userspace to switch to passing MFD_EXEC and
-> MFD_NOEXEC_SEAL, we need to provide a warning on each attempt to call
-> memfd_create() without the new flags. pr_warn_once() is not useful
-> because on most systems the one warning is burned up during the boot
-> process (on my system, systemd does this within the first second of
-> boot) and thus userspace will in practice never see the warnings to push
-> them to switch to the new flags.
-> 
-> The original patchset[1] used pr_warn_ratelimited(), however there were
-> concerns about the degree of spam in the kernel log[2,3]. The resulting
-> inability to detect every case was flagged as an issue at the time[4].
-> 
-> While we could come up with an alternative rate-limiting scheme such as
-> only outputting the message if vm.memfd_noexec has been modified, or
-> only outputting the message once for a given task, these alternatives
-> have downsides that don't make sense given how low-stakes a single
-> kernel warning message is. Switching to pr_info_ratelimited() instead
-> should be fine -- it's possible some monitoring tool will be unhappy
-> with a stream of warning-level messages but there's already plenty of
-> info-level message spam in dmesg.
-> 
-> [1]: https://lore.kernel.org/20221215001205.51969-4-jeffxu@google.com/
-> [2]: https://lore.kernel.org/202212161233.85C9783FB@keescook/
-> [3]: https://lore.kernel.org/Y5yS8wCnuYGLHMj4@x1n/
-> [4]: https://lore.kernel.org/f185bb42-b29c-977e-312e-3349eea15383@linuxfoundation.org/
-> 
-> Cc: stable@vger.kernel.org # v6.3+
-> Fixes: 105ff5339f49 ("mm/memfd: add MFD_NOEXEC_SEAL and MFD_EXEC")
-> Signed-off-by: Aleksa Sarai <cyphar@cyphar.com>
-> ---
+In kselftest_deps.sh script, the level 3 parser is broken for the alsa
+subsystem Makefile.
 
-Reviewed-by: Christian Brauner <brauner@kernel.org>
+Output before patch:
+
+$ ./kselftest_deps.sh gcc alsa
+========================================================
+Kselftest Dependency Check for [./kselftest_deps.sh gcc alsa] results...
+========================================================
+Checked tests defining LDLIBS dependencies
+--------------------------------------------------------
+Total tests with Dependencies:
+6 Pass: 2 Fail: 4
+--------------------------------------------------------
+PASS: alsa/Makefile dependency check passed -lasound
+PASS: alsa/Makefile dependency check passed -lpthread
+--------------------------------------------------------
+Targets passed build dependency check on system:
+alsa
+--------------------------------------------------------
+FAIL: alsa/Makefile dependency check: $(shell
+FAIL: alsa/Makefile dependency check: pkg-config
+FAIL: alsa/Makefile dependency check: --libs
+FAIL: alsa/Makefile dependency check: alsa)
+--------------------------------------------------------
+Targets failed build dependency check on system:
+alsa
+--------------------------------------------------------
+Missing libraries system
+$(shell alsa) --libs pkg-config
+--------------------------------------------------------
+========================================================
+
+Output after patch:
+
+$ ./kselftest_deps.sh gcc alsa
+========================================================
+Kselftest Dependency Check for [./kselftest_deps.sh gcc alsa] results...
+========================================================
+Checked tests defining LDLIBS dependencies
+--------------------------------------------------------
+Total tests with Dependencies:
+2 Pass: 2 Fail: 0
+--------------------------------------------------------
+PASS: alsa/Makefile dependency check passed -lasound
+PASS: alsa/Makefile dependency check passed -lpthread
+--------------------------------------------------------
+Targets passed build dependency check on system:
+alsa
+--------------------------------------------------------
+========================================================
+
+Signed-off-by: Ricardo B. Marliere <rbmarliere@gmail.com>
+---
+ tools/testing/selftests/alsa/Makefile | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+diff --git a/tools/testing/selftests/alsa/Makefile b/tools/testing/selftests/alsa/Makefile
+index 5af9ba8a4645..b5670049c4e5 100644
+--- a/tools/testing/selftests/alsa/Makefile
++++ b/tools/testing/selftests/alsa/Makefile
+@@ -2,13 +2,13 @@
+ #
+ 
+ CFLAGS += $(shell pkg-config --cflags alsa)
+-LDLIBS += $(shell pkg-config --libs alsa)
+-ifeq ($(LDLIBS),)
+-LDLIBS += -lasound
++VAR_LDLIBS += $(shell pkg-config --libs alsa)
++ifeq ($(VAR_LDLIBS),)
++VAR_LDLIBS += -lasound
+ endif
+ CFLAGS += -L$(OUTPUT) -Wl,-rpath=./
+ 
+-LDLIBS+=-lpthread
++VAR_LDLIBS+=-lpthread
+ 
+ OVERRIDE_TARGETS = 1
+ 
+@@ -21,7 +21,7 @@ TEST_FILES := conf.d pcm-test.conf
+ include ../lib.mk
+ 
+ $(OUTPUT)/libatest.so: conf.c alsa-local.h
+-	$(CC) $(CFLAGS) -shared -fPIC $< $(LDLIBS) -o $@
++	$(CC) $(CFLAGS) -shared -fPIC $< $(VAR_LDLIBS) -o $@
+ 
+ $(OUTPUT)/%: %.c $(TEST_GEN_PROGS_EXTENDED) alsa-local.h
+-	$(CC) $(CFLAGS) $< $(LDLIBS) -latest -o $@
++	$(CC) $(CFLAGS) $< $(VAR_LDLIBS) -latest -o $@
+-- 
+2.40.1
+
