@@ -2,133 +2,97 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32C17783C57
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Aug 2023 10:58:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28DE3783C85
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Aug 2023 11:10:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234118AbjHVI6T (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 22 Aug 2023 04:58:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35340 "EHLO
+        id S234187AbjHVJKR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 22 Aug 2023 05:10:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234125AbjHVI6R (ORCPT
+        with ESMTP id S234075AbjHVJKQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Aug 2023 04:58:17 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD1CE50;
-        Tue, 22 Aug 2023 01:57:53 -0700 (PDT)
-Received: from [192.168.10.12] (unknown [39.45.215.81])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 22 Aug 2023 05:10:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6384A1BE;
+        Tue, 22 Aug 2023 02:10:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id BED3E660723E;
-        Tue, 22 Aug 2023 09:57:44 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1692694666;
-        bh=wntvJCRNZSJZfOWzq0DzF9xFq9O+r9VsQVLUqGarZ7A=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=VOpJVz4mrfYcTuC1jZo/XaMqhQO4hGE8mqTklaD9JK4WVjEfY53B/5eBZ+dBfQkOw
-         UX9YXt2puhRwPWV4kTxVR3sLtBZupYjrSfRn7wXLOzPqfXsYPmY+PRPnt3irbbJOo9
-         yPKbd/PvRYuoZIsxSdeHHWFdiGjKljMd73wafSk+pgDIory7RoQ3goCZphf1VedpUo
-         2aSIdD3Ei+GMxw0OPYL+dBDE2q0STm4mnJLDGcHhjsT2P+NckLCODgBCscLnoFUnLo
-         awPcfeTxXX/hyD9l4DYPHIcibYp9iTFXZXhCj7DWtNmv+Bn+Y1U/ylE/OLO257r2Hd
-         mjpL8apaPfOdg==
-Message-ID: <95fc0e92-79ed-4748-a565-a82469d087f6@collabora.com>
-Date:   Tue, 22 Aug 2023 13:57:40 +0500
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E6B2E64FE4;
+        Tue, 22 Aug 2023 09:10:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B12BC433C7;
+        Tue, 22 Aug 2023 09:10:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692695412;
+        bh=pQisISmZ66AdEx39jJ4009uh0Yx/8HETEG0JPihLCHM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dt1q16xZ4wVawYqxKyc7pTbYu+xIoHKLpdt4WziTYiykP4mBCSsx9VyKV3nGdWZuB
+         CGlsfHp0LveeO9NIsm2e6txPBhrMJk1AjqMm2owxcsfgIRV8U6Tt291oP3dqGDBQwG
+         gDHLPYuO5I1KGNzPSmFaAQ13Ck4sdojjeTz3R2DLhRG6otJRWx1AbClFee5WLwQArS
+         PEQ+W/rcU+hY/C9pH9HW980wqKbHfsBj2syDGyGfJ4KcbpYfg7B6yf6QcxIUaEjVGF
+         QYWB8QtIcGfFThWJC6mqnrDF7sLKwARR06oIWqrbVYOF+L5uhBGCzY8GFgI7AqFe2D
+         prG6ZSWsJIrdA==
+Date:   Tue, 22 Aug 2023 11:10:06 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Aleksa Sarai <cyphar@cyphar.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Jeff Xu <jeffxu@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Daniel Verkamp <dverkamp@chromium.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        stable@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 3/5] memfd: improve userspace warnings for missing
+ exec-related flags
+Message-ID: <20230822-seenotrettung-bungalow-a4ea576f6f85@brauner>
+References: <20230814-memfd-vm-noexec-uapi-fixes-v2-0-7ff9e3e10ba6@cyphar.com>
+ <20230814-memfd-vm-noexec-uapi-fixes-v2-3-7ff9e3e10ba6@cyphar.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        kernel@collabora.com, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/6] selftests: capabilities: remove duplicate unneeded
- defines
-To:     Shuah Khan <shuah@kernel.org>
-References: <20230805073809.1753462-1-usama.anjum@collabora.com>
-Content-Language: en-US
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20230805073809.1753462-1-usama.anjum@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230814-memfd-vm-noexec-uapi-fixes-v2-3-7ff9e3e10ba6@cyphar.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Shuah,
-
-Christian Brauner had picked [PATCH 4/6]. Others are still not picked.
-Please have a look.
-
-Thanks,
-Usama
-
-On 8/5/23 12:37 PM, Muhammad Usama Anjum wrote:
-> These duplicate defines should automatically be picked up from kernel
-> headers. Use KHDR_INCLUDES to add kernel header files.
+On Mon, Aug 14, 2023 at 06:40:59PM +1000, Aleksa Sarai wrote:
+> In order to incentivise userspace to switch to passing MFD_EXEC and
+> MFD_NOEXEC_SEAL, we need to provide a warning on each attempt to call
+> memfd_create() without the new flags. pr_warn_once() is not useful
+> because on most systems the one warning is burned up during the boot
+> process (on my system, systemd does this within the first second of
+> boot) and thus userspace will in practice never see the warnings to push
+> them to switch to the new flags.
 > 
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> The original patchset[1] used pr_warn_ratelimited(), however there were
+> concerns about the degree of spam in the kernel log[2,3]. The resulting
+> inability to detect every case was flagged as an issue at the time[4].
+> 
+> While we could come up with an alternative rate-limiting scheme such as
+> only outputting the message if vm.memfd_noexec has been modified, or
+> only outputting the message once for a given task, these alternatives
+> have downsides that don't make sense given how low-stakes a single
+> kernel warning message is. Switching to pr_info_ratelimited() instead
+> should be fine -- it's possible some monitoring tool will be unhappy
+> with a stream of warning-level messages but there's already plenty of
+> info-level message spam in dmesg.
+> 
+> [1]: https://lore.kernel.org/20221215001205.51969-4-jeffxu@google.com/
+> [2]: https://lore.kernel.org/202212161233.85C9783FB@keescook/
+> [3]: https://lore.kernel.org/Y5yS8wCnuYGLHMj4@x1n/
+> [4]: https://lore.kernel.org/f185bb42-b29c-977e-312e-3349eea15383@linuxfoundation.org/
+> 
+> Cc: stable@vger.kernel.org # v6.3+
+> Fixes: 105ff5339f49 ("mm/memfd: add MFD_NOEXEC_SEAL and MFD_EXEC")
+> Signed-off-by: Aleksa Sarai <cyphar@cyphar.com>
 > ---
->  tools/testing/selftests/capabilities/Makefile       | 2 +-
->  tools/testing/selftests/capabilities/test_execve.c  | 8 --------
->  tools/testing/selftests/capabilities/validate_cap.c | 8 --------
->  3 files changed, 1 insertion(+), 17 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/capabilities/Makefile b/tools/testing/selftests/capabilities/Makefile
-> index 6e9d98d457d5b..411ac098308f1 100644
-> --- a/tools/testing/selftests/capabilities/Makefile
-> +++ b/tools/testing/selftests/capabilities/Makefile
-> @@ -2,7 +2,7 @@
->  TEST_GEN_FILES := validate_cap
->  TEST_GEN_PROGS := test_execve
->  
-> -CFLAGS += -O2 -g -std=gnu99 -Wall
-> +CFLAGS += -O2 -g -std=gnu99 -Wall $(KHDR_INCLUDES)
->  LDLIBS += -lcap-ng -lrt -ldl
->  
->  include ../lib.mk
-> diff --git a/tools/testing/selftests/capabilities/test_execve.c b/tools/testing/selftests/capabilities/test_execve.c
-> index df0ef02b40367..e3a352b020a79 100644
-> --- a/tools/testing/selftests/capabilities/test_execve.c
-> +++ b/tools/testing/selftests/capabilities/test_execve.c
-> @@ -20,14 +20,6 @@
->  
->  #include "../kselftest.h"
->  
-> -#ifndef PR_CAP_AMBIENT
-> -#define PR_CAP_AMBIENT			47
-> -# define PR_CAP_AMBIENT_IS_SET		1
-> -# define PR_CAP_AMBIENT_RAISE		2
-> -# define PR_CAP_AMBIENT_LOWER		3
-> -# define PR_CAP_AMBIENT_CLEAR_ALL	4
-> -#endif
-> -
->  static int nerrs;
->  static pid_t mpid;	/*  main() pid is used to avoid duplicate test counts */
->  
-> diff --git a/tools/testing/selftests/capabilities/validate_cap.c b/tools/testing/selftests/capabilities/validate_cap.c
-> index cdfc94268fe6e..60b4e7b716a75 100644
-> --- a/tools/testing/selftests/capabilities/validate_cap.c
-> +++ b/tools/testing/selftests/capabilities/validate_cap.c
-> @@ -9,14 +9,6 @@
->  
->  #include "../kselftest.h"
->  
-> -#ifndef PR_CAP_AMBIENT
-> -#define PR_CAP_AMBIENT			47
-> -# define PR_CAP_AMBIENT_IS_SET		1
-> -# define PR_CAP_AMBIENT_RAISE		2
-> -# define PR_CAP_AMBIENT_LOWER		3
-> -# define PR_CAP_AMBIENT_CLEAR_ALL	4
-> -#endif
-> -
->  #if __GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 19)
->  # define HAVE_GETAUXVAL
->  #endif
 
--- 
-BR,
-Muhammad Usama Anjum
+Reviewed-by: Christian Brauner <brauner@kernel.org>
