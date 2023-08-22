@@ -2,84 +2,69 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 284E07844F7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Aug 2023 17:05:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 013E3784559
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Aug 2023 17:22:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235814AbjHVPF5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 22 Aug 2023 11:05:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51988 "EHLO
+        id S237020AbjHVPWH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 22 Aug 2023 11:22:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234755AbjHVPF4 (ORCPT
+        with ESMTP id S237032AbjHVPWH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Aug 2023 11:05:56 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2079.outbound.protection.outlook.com [40.107.20.79])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B60E198;
-        Tue, 22 Aug 2023 08:05:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BfrtkIHD41BdedViPMyVzl+Hx3DX+Q5alc3k43j05cI=;
- b=KNOT4WQr2ip1eJmqTzufkPODbARBuwPqAGEyg6jwpkUvQuj4hpohkJYoQs4aBWGNs+kCbeSXxznfj+zGXGBCf8g7HLr3Enjotltdm9WrXEcSlyi/WfjklvG65BbEF8OcU8vJTeatsxO/PJ4bBqUjSnqV6qdc+zHyL2aebdW5uTM=
-Received: from DUZPR01CA0298.eurprd01.prod.exchangelabs.com
- (2603:10a6:10:4b7::15) by AS8PR08MB8491.eurprd08.prod.outlook.com
- (2603:10a6:20b:566::19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.24; Tue, 22 Aug
- 2023 15:05:49 +0000
-Received: from DBAEUR03FT036.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:10:4b7:cafe::79) by DUZPR01CA0298.outlook.office365.com
- (2603:10a6:10:4b7::15) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.25 via Frontend
- Transport; Tue, 22 Aug 2023 15:05:49 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
- client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
- pr=C
-Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
- DBAEUR03FT036.mail.protection.outlook.com (100.127.142.193) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6723.15 via Frontend Transport; Tue, 22 Aug 2023 15:05:49 +0000
-Received: ("Tessian outbound 169aaa6bf2b7:v175"); Tue, 22 Aug 2023 15:05:49 +0000
-X-CheckRecipientChecked: true
-X-CR-MTA-CID: d37bb38f735fa9d8
-X-CR-MTA-TID: 64aa7808
-Received: from 44561ca60c7c.2
-        by 64aa7808-outbound-1.mta.getcheckrecipient.com id 31AF0FB9-91C9-4605-8271-7B75269EFF6E.1;
-        Tue, 22 Aug 2023 15:05:42 +0000
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com
-    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id 44561ca60c7c.2
-    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
-    Tue, 22 Aug 2023 15:05:42 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fLmSz49N4qNR5r0qm1oDSblwsc8ngBADluagQFCnQzg6tDu95KIShybBbukcLSpFGdJK+2kOsRVTFLOgSYqqzl0/gUxCEaG0Fpl2X5UShTkYZs30CnrvrV/elyUWl5QUhAi5XvE/ONduBFMRg3bpv5Zpj6lU5pb6D7qecDNUsa/RZuutI4kK6I3mlnJxqXjc7IlN/hKYdMLt0yESjnr1OvuHI9JSHb0Xak+FQUMr+qrL3he5uFk3JMp7jvDOdi9x+xceVRBSBqRdjpYIu/+eGowkzlXgtnAgxk+l5Xo/XLey+RcNN7NNFk8EdEjYO7wsH8sQsP08pOlgqIsl5GPWFw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BfrtkIHD41BdedViPMyVzl+Hx3DX+Q5alc3k43j05cI=;
- b=Ok8nPlgNTEmmtAwEG3R3clvatLK6DtXq5BTK43DZIYItmOAvdWWx1NuhwB/d5q1X8mv75I+2rwPKjF5qFuXqTdGiXYYnKvImc3kYeomlPznbW46YFDUCoWnOEth+x48Gb1d508XXW3+5dqfjExWnIdbUGGdvERB5lBaxFq10gxSuNRwu7gpDFCNmI9sLICYDUwHEWTdllKjQbIAh2UEwxHY6idVbEswpF2h8LVByveNYaoCUXIWssFzMY0DbPtxIvFXS7h9rYZ1+XPpJWkPiugiuJw04Hym8pllNokQmX4iMO26VMXI93/vN6NLU8NcfMYi9wMz7zVkAuJvruN4b2w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BfrtkIHD41BdedViPMyVzl+Hx3DX+Q5alc3k43j05cI=;
- b=KNOT4WQr2ip1eJmqTzufkPODbARBuwPqAGEyg6jwpkUvQuj4hpohkJYoQs4aBWGNs+kCbeSXxznfj+zGXGBCf8g7HLr3Enjotltdm9WrXEcSlyi/WfjklvG65BbEF8OcU8vJTeatsxO/PJ4bBqUjSnqV6qdc+zHyL2aebdW5uTM=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from DB9PR08MB7179.eurprd08.prod.outlook.com (2603:10a6:10:2cc::19)
- by AM8PR08MB5732.eurprd08.prod.outlook.com (2603:10a6:20b:1d4::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.24; Tue, 22 Aug
- 2023 15:05:39 +0000
-Received: from DB9PR08MB7179.eurprd08.prod.outlook.com
- ([fe80::adb0:61cb:8733:6db2]) by DB9PR08MB7179.eurprd08.prod.outlook.com
- ([fe80::adb0:61cb:8733:6db2%7]) with mapi id 15.20.6699.022; Tue, 22 Aug 2023
- 15:05:39 +0000
-Date:   Tue, 22 Aug 2023 16:05:15 +0100
-From:   Szabolcs Nagy <Szabolcs.Nagy@arm.com>
+        Tue, 22 Aug 2023 11:22:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D6EDCDF
+        for <linux-kselftest@vger.kernel.org>; Tue, 22 Aug 2023 08:21:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1692717675;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=K+4dLM+qjKpedR3SxcMNZWwteZnGWMqZ2x4IrF9xwmE=;
+        b=XhksWGvOujynlzvS4ImTi8AXCHbF/+RC2HFdzjfdePZw4G+w5BHMtkFUwC2tLgFIqeYnT/
+        raiaJsyAhEk3yuzXHlvDIMAQM7rZLKhzvyK+VaQ7zym6ealaHlpmGSX0kxVrYW5tJp7w90
+        Gb8MlHHpW9UMP8VW5d2D/KVOBmvQmPM=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-295-7708chULNlSIBDI4Lc-VzA-1; Tue, 22 Aug 2023 11:21:13 -0400
+X-MC-Unique: 7708chULNlSIBDI4Lc-VzA-1
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-30e3ee8a42eso2735955f8f.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 22 Aug 2023 08:21:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692717672; x=1693322472;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=K+4dLM+qjKpedR3SxcMNZWwteZnGWMqZ2x4IrF9xwmE=;
+        b=c0Uzji/Jbvkf6PPwfT4O9LlQXbDm3X5FatUn9X0U3ag8j+8V64wK7mHmzInAeu7hlL
+         MV6C4HtDWVFyQDUz76b6iYwoA9bFa/anyxBsdlZ5cgf+EvzHPGE2ujDrGjgKlzpdL9Pw
+         fRfbQSxmTgpjbIRJFgaMwHHV6bYCP+H9wxIdcob1dZRnnw0TNamX9lvtJm2VlBETedtz
+         iuOrzgIsq2lmN8Kf1PU8kHqn5iwj92MARs4rqxcGeLANNi4ZYhkjpyHPLEFLOQ/+XH52
+         iqyJi2HxpE036hu8vW1YboDhIKyPsgi/sU2qZDFHgib9PNrAD8PTYHPl2BtTY8dxNXe8
+         pi6g==
+X-Gm-Message-State: AOJu0Yxv/72kvE15ZVEvV+twI2O7J1hXa3lI8FTr7vBdPqYF6K3gLwlT
+        FApgmrhFHMm2mj4Adn0bBYYoUkzCYbR2RdpTNWvC4txpduLElrbihn8qCm3KUNvIpTh8htbZr8R
+        bC4CsKZy3oXghkt0VqAN/gvzRhG+h
+X-Received: by 2002:a5d:4ccc:0:b0:314:1230:29b0 with SMTP id c12-20020a5d4ccc000000b00314123029b0mr6891009wrt.52.1692717672412;
+        Tue, 22 Aug 2023 08:21:12 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGvvahb1vrGoYIb2vzRiaZnzgGGGa/+gqBYlj1b7B5EZtm9phlubqZT0TsAOsELNEsT5eF4fQ==
+X-Received: by 2002:a5d:4ccc:0:b0:314:1230:29b0 with SMTP id c12-20020a5d4ccc000000b00314123029b0mr6890972wrt.52.1692717671988;
+        Tue, 22 Aug 2023 08:21:11 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c706:7400:83da:ebad:ba7f:c97c? (p200300cbc706740083daebadba7fc97c.dip0.t-ipconnect.de. [2003:cb:c706:7400:83da:ebad:ba7f:c97c])
+        by smtp.gmail.com with ESMTPSA id n4-20020a5d4204000000b0031c5dda3aedsm3811087wrq.95.2023.08.22.08.21.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 22 Aug 2023 08:21:11 -0700 (PDT)
+Message-ID: <8f2cf5af-cad7-a69c-e8ec-39f48deae1cb@redhat.com>
+Date:   Tue, 22 Aug 2023 17:21:09 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.13.0
+Subject: Re: [PATCH v5 11/37] mm: Define VM_SHADOW_STACK for arm64 when we
+ support GCS
+Content-Language: en-US
 To:     Mark Brown <broonie@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
         Will Deacon <will@kernel.org>,
@@ -95,7 +80,8 @@ To:     Mark Brown <broonie@kernel.org>,
         Shuah Khan <shuah@kernel.org>,
         "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
         Deepak Gupta <debug@rivosinc.com>,
-        Ard Biesheuvel <ardb@kernel.org>
+        Ard Biesheuvel <ardb@kernel.org>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>
 Cc:     "H.J. Lu" <hjl.tools@gmail.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
@@ -105,77 +91,91 @@ Cc:     "H.J. Lu" <hjl.tools@gmail.com>,
         linux-arch@vger.kernel.org, linux-mm@kvack.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v5 04/37] arm64/gcs: Document the ABI for Guarded Control
- Stacks
-Message-ID: <ZOTOqxBFqselqN8U@arm.com>
 References: <20230822-arm64-gcs-v5-0-9ef181dd6324@kernel.org>
- <20230822-arm64-gcs-v5-4-9ef181dd6324@kernel.org>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230822-arm64-gcs-v5-4-9ef181dd6324@kernel.org>
-X-ClientProxiedBy: SN1PR12CA0070.namprd12.prod.outlook.com
- (2603:10b6:802:20::41) To DB9PR08MB7179.eurprd08.prod.outlook.com
- (2603:10a6:10:2cc::19)
-MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic: DB9PR08MB7179:EE_|AM8PR08MB5732:EE_|DBAEUR03FT036:EE_|AS8PR08MB8491:EE_
-X-MS-Office365-Filtering-Correlation-Id: c0698088-b06a-462f-86cb-08dba321456c
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: YcQqMwk4Dn5hMK+j4004Cs80OkhHHW6XQ7wOn41UvxizXAzqHevZO8vajBB9wd6zzuuO/XQSS10lQO09TMQVDfSDBHBMpeq2o9AcXLqwGMhvEe259I03oqU8PCZLDkXX7/q5VmGxHru6Ld/j3nQdfeSuVbb0v/VTe4Oel4cmS6F+InXhLkK/b7NTmpC8KttkbWlKmZqw2oVUOsEEqCrrtQEidefpZtXNy9KIpjRUeqSvWgHBPTG5Gi6fTShgUV9cDG9/fcX48UQWgPQEKZx4cw3Xm4STZn3TeyCdClt+bArIyIJjvq2HvPUugHEITSgPWmv4xqWU//JPcnpFnImaZkWXRUcM8HVs8sbB4DyljPhGEq2up1Q6LH+2jaWwxQ2WMp0gl9YjzDNvbOG8LmC1P+CSbh9Qcc7eJ1m3Eozz9YA34eQ3RIhTLhzbrwj8KQ5NBQSGflJATJtHpcqvxZE0j2J0Giy3lpuIkx/KGdBXOPWWhqaJXm6IYDh3OhS3lNHR+R90aZLBTTfQqmmMKnvBjSFYJbV/kf9nv7lPuPWQ1ET3jxTMhDbfJXF8/T8g/2buoK3RXkbc81lJdh/FBpyIgpbsuuRHu/CPZzRpVKK6CwQ=
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR08MB7179.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(136003)(376002)(39860400002)(346002)(366004)(1800799009)(186009)(451199024)(54906003)(66476007)(66556008)(6512007)(316002)(66946007)(110136005)(8676002)(8936002)(2616005)(4326008)(36756003)(41300700001)(921005)(478600001)(6666004)(38100700002)(6486002)(6506007)(4744005)(2906002)(7416002)(86362001)(5660300002)(26005);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR08MB5732
-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: DBAEUR03FT036.eop-EUR03.prod.protection.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: d3ed07dc-d070-4514-981c-08dba3213f11
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2WOUFxXj/22wybnGSH9BkICb8ukXUpakkExclI8FkAE1klcazkDsigPO3nJfriBLll8Aaqj7pwEZ5todAAaFOF8ZCqhxJ4ht7o2vVxQumERQvYLaEhQBvqiJn5rZDKwTslZlp4qhJykWEEUb39o2CAJa9NKcYgsUNJkIfnli1oFz3gZ5s3HoyGwfM1bmUbv2JZ/dSE/7UdZXDdeT0vU2runKP9mJmhQdlCUthOfRBXjA8iCfSYgNsJ9vi1B+Zd5K3faAzFarZ17pbmFuCpTMMOyIKAN550VHB8++bD51Dt0kLjuKwHK/5ggFlC58BteF5A/OU+S8Vs1vndxtm6i5PAlbCpiHCjPPhrgBv8ugfFxktgDVqDABh8YYCxpdK4coHwdkwd4tRCGgSsinEc5tlNZEFloyixBsV4LPCaT47CvJE+ZU9CRn1fZtLji5Dd7qwf0iUeEKLJ5zRdCxsVN0YLTZBZ2lZKA0eJgT236f4syf/9jTyoycqYgbZnQWkkCe1e57xzev07UL63ZYCaiJDBDZqQ9RG1wN3MGY9A0RfI+wbON4vkwGBgr4Y8Oa+rPxuzvFjParO9cfFr6DPspTx+uu3Do6BuKKtoBUr5ZUBZeHIhewFBq6UoX+x0GlZKw162tEGE37DAunmKvUJ1OMnNKSnL430z8gjoC1YWVUc6/SwYmITpwAq+GBP1CkqJ77Jv0tri72F72U0gn2Uh9mGuRg1zE+r7DPlHj34Fx9O5qSkoGCn+aSNxCS6g4chmNv
-X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230031)(4636009)(396003)(136003)(376002)(39860400002)(346002)(1800799009)(186009)(451199024)(82310400011)(46966006)(36840700001)(40470700004)(54906003)(6512007)(70586007)(316002)(70206006)(110136005)(450100002)(8676002)(8936002)(2616005)(107886003)(4326008)(36756003)(40460700003)(41300700001)(82740400003)(356005)(81166007)(921005)(478600001)(6666004)(6486002)(6506007)(40480700001)(4744005)(2906002)(47076005)(36860700001)(86362001)(336012)(5660300002)(26005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Aug 2023 15:05:49.5952
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c0698088-b06a-462f-86cb-08dba321456c
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
-X-MS-Exchange-CrossTenant-AuthSource: DBAEUR03FT036.eop-EUR03.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR08MB8491
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
+ <20230822-arm64-gcs-v5-11-9ef181dd6324@kernel.org>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230822-arm64-gcs-v5-11-9ef181dd6324@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-just nits.
+On 22.08.23 15:56, Mark Brown wrote:
+> Use VM_HIGH_ARCH_5 for guarded control stack pages.
+> 
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+>   Documentation/filesystems/proc.rst |  2 +-
+>   fs/proc/task_mmu.c                 |  3 +++
+>   include/linux/mm.h                 | 12 +++++++++++-
+>   3 files changed, 15 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
+> index 6ccb57089a06..086a0408a4d7 100644
+> --- a/Documentation/filesystems/proc.rst
+> +++ b/Documentation/filesystems/proc.rst
+> @@ -566,7 +566,7 @@ encoded manner. The codes are the following:
+>       mt    arm64 MTE allocation tags are enabled
+>       um    userfaultfd missing tracking
+>       uw    userfaultfd wr-protect tracking
+> -    ss    shadow stack page
+> +    ss    shadow/guarded control stack page
+>       ==    =======================================
+>   
+>   Note that there is no guarantee that every flag and associated mnemonic will
+> diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+> index cfab855fe7e9..e8c50848bb16 100644
+> --- a/fs/proc/task_mmu.c
+> +++ b/fs/proc/task_mmu.c
+> @@ -711,6 +711,9 @@ static void show_smap_vma_flags(struct seq_file *m, struct vm_area_struct *vma)
+>   #endif /* CONFIG_HAVE_ARCH_USERFAULTFD_MINOR */
+>   #ifdef CONFIG_X86_USER_SHADOW_STACK
+>   		[ilog2(VM_SHADOW_STACK)] = "ss",
+> +#endif
+> +#ifdef CONFIG_ARM64_GCS
+> +		[ilog2(VM_SHADOW_STACK)] = "ss",
+>   #endif
 
-The 08/22/2023 14:56, Mark Brown wrote:
-> +3.  Allocation of Guarded Control Stacks
-> +----------------------------------------
-...
-> +* Stacks allocated using map_shadow_stack() must be larger than 8 bytes and
-> +  must be 8 bytes aligned.
+See my comment below.
 
-"the size must be multiple of 8 bytes."
-
+>   	};
+>   	size_t i;
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 43fe625b85aa..3f939ae212e5 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -372,7 +372,17 @@ extern unsigned int kobjsize(const void *objp);
+>    * having a PAGE_SIZE guard gap.
+>    */
+>   # define VM_SHADOW_STACK	VM_HIGH_ARCH_5
+> -#else
+> +#endif
 > +
-> +* An address can be specified to map_shadow_stack(), if one is provided then
-> +  it must be aligned to a page boundary.
-...
-> +5.  Signal return
-> +-----------------
-...
-> +
-> +7.  ptrace extensions
-> +---------------------
+> +#if defined(CONFIG_ARM64_GCS)
+> +/*
+> + * arm64's Guarded Control Stack implements similar functionality and
+> + * has similar constraints to shadow stacks.
+> + */
+> +# define VM_SHADOW_STACK	VM_HIGH_ARCH_5
+> +#endif
 
-section 6. is missing
+
+Shouldn't that all just merged with the previous define(s)?
+
+Also, I wonder if we now want to have CONFIG_HAVE_ARCH_SHADOW_STACK or 
+similar.
+
+-- 
+Cheers,
+
+David / dhildenb
+
