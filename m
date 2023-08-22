@@ -2,117 +2,155 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FC05784BEB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Aug 2023 23:19:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63797784BF8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Aug 2023 23:26:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229516AbjHVVTI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 22 Aug 2023 17:19:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37946 "EHLO
+        id S231244AbjHVV0Y (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 22 Aug 2023 17:26:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjHVVTI (ORCPT
+        with ESMTP id S231178AbjHVV0Y (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Aug 2023 17:19:08 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9AC5187;
-        Tue, 22 Aug 2023 14:19:06 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-1c11d53221cso3211929fac.2;
-        Tue, 22 Aug 2023 14:19:06 -0700 (PDT)
+        Tue, 22 Aug 2023 17:26:24 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7204ECFE
+        for <linux-kselftest@vger.kernel.org>; Tue, 22 Aug 2023 14:26:19 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-51cff235226so10203970a12.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 22 Aug 2023 14:26:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1692739146; x=1693343946;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+QhSveUjFRzvbJU6tcbAhse1vUw7fPnNXtA2uAa/rMA=;
-        b=qIUyYszHLUZcW2OKsfDF+dzMqEhUCeh80QBC3PMO7XI7SNozglQEm5xcI2ZeEldTAv
-         qDl4Fh1AFGQZRoqz0xRf1e34ExTn3vnOc1OviGk+Zxj8Yp2u1exYErEmKwkVayQql9hC
-         is6OEY3HcbSYjIKXWzEibfmJfW4od51K2+LWYbjGEXjfp1i2CVMfZKFY7Aoa7yVCLbo7
-         hMV0Eo060XabIUg+s5bApOrxFXJbRYp5mYzWugANFlShkROofqlrGOKhhgMlla0S6k9q
-         fYH0O8OMtAmmnYO28eEcRvwtKZYaqT6u659DZtakBdY5Be9Z3N3CSx+w5D/uFrapJrfl
-         2I7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692739146; x=1693343946;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20221208; t=1692739578; x=1693344378;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+QhSveUjFRzvbJU6tcbAhse1vUw7fPnNXtA2uAa/rMA=;
-        b=lt9UyoDO3CSTzf5zUtMB0bmzxuvwd8Sp9ImazcTKguAgFECvTdu+ZUdFPU2HI8iRlF
-         jWVJ+zFAdKLtowu2xVGz7xMuiokQMx3FJX0zlIPU5RTY9iaSVpu7Sa9fX1/ywb/7A0jG
-         JtueVWMT1eIxunws670FbBgWKcsRcd6eMfqeVTh05cOKEhd+rsj+pwc7pC+3TFAPwT3u
-         gJn2708oHn2/Ncs/RizUWgZfZ+PhGYHLr0suvjQIJxhQy6D36jGs/E0FXfMOdh/ehGHm
-         Q0OcWgAlwutPbvQx1o6rmueLCJeHXSUkWWZiYr8zsJUpPlAb/R14KOmpj/hFi9LfGiHp
-         k7Xg==
-X-Gm-Message-State: AOJu0YyCge3JK6PUUBU5gGI6yipAgb5OUTEY9MCpkarHEMw6S95Z59vJ
-        PGkt82nNCACuWHP+qtBgv94=
-X-Google-Smtp-Source: AGHT+IH9ARwrK7Hw//4wT+MQqCnHM3I0jA6XZg97anoJAG2e950XptF80owYzz3XYMGYzqQ7X6J85Q==
-X-Received: by 2002:a05:6870:f10f:b0:1be:e066:acc with SMTP id k15-20020a056870f10f00b001bee0660accmr13068411oac.50.1692739145693;
-        Tue, 22 Aug 2023 14:19:05 -0700 (PDT)
-Received: from debian.org ([168.227.196.240])
-        by smtp.gmail.com with ESMTPSA id c5-20020a05687091c500b001b03e0c0970sm6125210oaf.2.2023.08.22.14.19.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Aug 2023 14:19:04 -0700 (PDT)
-Date:   Tue, 22 Aug 2023 18:19:14 -0300
-From:   Ricardo Marliere <rbmarliere@gmail.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     skhan@linuxfoundation.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests: alsa: make LDLIBS consistent
-Message-ID: <20230822211914.nxc3fzxcpgpxyepg@debian.org>
-References: <20230822131544.38152-1-rbmarliere@gmail.com>
- <2fd85cbe-9909-4200-be38-450d4c57425b@sirena.org.uk>
+        bh=32tFknpYUltGX7BrfzpOF/XJEJkxSlIebbE3WJkd8PM=;
+        b=7AkQbKGj7c2iyU1W1VleqR2BeJQxs9NQg4Dm4uTnHgD0my3qkctcx7KwwqdM17qsAG
+         tL3hMHIxigb2XVJGm1XzIcPBfVamX7KeRvrLHAtKdleDm6KUtL+rxHo0R+f2WRBPsiHS
+         yOR0jmYmcdpVcxe8AXGWkldfDIIjuFItsUpHs9dF8x6PG2sd9tDFnEYswintcvIb2REK
+         WjI/9McRGQDEze9QncuOg2aWiECZ9Gq8lKKBLrlxA5jb2hup3Nfr5pGBbrOZVNlIfacr
+         UXbl3v5rxMaYDIiB0pdyoWvxdN25vilG09QK6kdBb3wLSI+BVNTZJS/XUPSWdLSJRXdY
+         N/fg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692739578; x=1693344378;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=32tFknpYUltGX7BrfzpOF/XJEJkxSlIebbE3WJkd8PM=;
+        b=DYQ2YWQim69/PXvQueChSWiTwOiMioGzlOh5fZGPLtM52xfuLpR/yGB4JI1+EOoGY7
+         nvm6KPI6G2QorNdXqTXX6mIBfLSWI4BgGphuqR7XX0rEZfOr7fzdrUcFgWq/8VaLfCA1
+         UiPFQkDgOpPMAIx7hEALvDlq9V8ylqAwIynAHdqaW8b5l4r+ZProJE9wMSN4PXIRe0/V
+         /oAQ6m0TdyhHK1+e8rRnG+7VkZELc1XQNh/WNlMomm8p08uDv0AVIDU3OT+rhL2rbWuY
+         nGzP1V1DTXLNcjvnC+oaZ2x/bqRve2aM2HCjGq8j+GU18OWiokoCNL0RmKZCNGawfEk1
+         UyOA==
+X-Gm-Message-State: AOJu0YyH091Va50KquqKk+68e4as1hzoFGyAOqirJChtXpWZBqwJoIFf
+        2AtVubySLGLjW3ui596DmbHz/SyR+9AzJJFMLYM5bg==
+X-Google-Smtp-Source: AGHT+IEWAA9h4kEyYMlZHbSoVul6EaKjAtvHTpIGULLsioKqmRhgMN2F6THcR1biYGczo4vK53pCZCjRO/rt5x2G900=
+X-Received: by 2002:aa7:c414:0:b0:523:b133:5c7a with SMTP id
+ j20-20020aa7c414000000b00523b1335c7amr10629299edq.21.1692739577864; Tue, 22
+ Aug 2023 14:26:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tbfghwmrzlagbpi6"
-Content-Disposition: inline
-In-Reply-To: <2fd85cbe-9909-4200-be38-450d4c57425b@sirena.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CAFhGd8ryUcu2yPC+dFyDKNuVFHxT-=iayG+n2iErotBxgd0FVw@mail.gmail.com>
+ <CAKwvOd=p_7gWwBnR_RHUPukkG1A25GQy6iOnX_eih7u65u=oxw@mail.gmail.com>
+ <CAO-hwJLio2dWs01VAhCgmub5GVxRU-3RFQifviOL0OTaqj9Ktg@mail.gmail.com>
+ <CAFhGd8qmXD6VN+nuXKtV_Uz14gzY1Kqo7tmOAhgYpTBdCnoJRQ@mail.gmail.com>
+ <CAO-hwJJ_ipXwLjyhGC6_4r-uZ-sDbrb_W7um6F2vgws0d-hvTQ@mail.gmail.com> <CAO-hwJ+DTPXWbpNaBDvCkyAsWZHbeLiBwYo4k93ZW79Jt-HAkg@mail.gmail.com>
+In-Reply-To: <CAO-hwJ+DTPXWbpNaBDvCkyAsWZHbeLiBwYo4k93ZW79Jt-HAkg@mail.gmail.com>
+From:   Justin Stitt <justinstitt@google.com>
+Date:   Tue, 22 Aug 2023 14:26:06 -0700
+Message-ID: <CAFhGd8pVjUPpukHxxbQCEnmgDUqy-tgBa7POkmgrYyFXVRAMEw@mail.gmail.com>
+Subject: Re: selftests: hid: trouble building with clang due to missing header
+To:     Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc:     Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+        linux-input@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Kees Cook <keescook@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Tue, Aug 22, 2023 at 2:15=E2=80=AFPM Benjamin Tissoires
+<benjamin.tissoires@redhat.com> wrote:
+>
+> On Tue, Aug 22, 2023 at 11:06=E2=80=AFPM Benjamin Tissoires
+> <benjamin.tissoires@redhat.com> wrote:
+> >
+> > On Tue, Aug 22, 2023 at 10:57=E2=80=AFPM Justin Stitt <justinstitt@goog=
+le.com> wrote:
+> > >
+> > [...]
+> > > > > > Here's the invocation I am running to build kselftest:
+> > > > > > `$ make LLVM=3D1 ARCH=3Dx86_64 mrproper headers && make LLVM=3D=
+1 ARCH=3Dx86_64
+> > > > > > -j128 V=3D1 -C tools/testing/selftests`
+> > > >
+> > > > I think I fixed the same issue in the script I am running to launch
+> > > > those tests in a VM. This was in commit
+> > > > f9abdcc617dad5f14bbc2ebe96ee99f3e6de0c4e (in the v6.5-rc+ series).
+> > > >
+> > > > And in the commit log, I wrote:
+> > > > ```
+> > > > According to commit 01d6c48a828b ("Documentation: kselftest:
+> > > > "make headers" is a prerequisite"), running the kselftests requires
+> > > > to run "make headers" first.
+> > > > ```
+> > > >
+> > > > So my assumption is that you also need to run "make headers" with t=
+he
+> > > > proper flags before compiling the selftests themselves (I might be
+> > > > wrong but that's how I read the commit).
+> > >
+> > > In my original email I pasted the invocation I used which includes th=
+e
+> > > headers target. What are the "proper flags" in this case?
+> > >
+> >
+> > "make LLVM=3D1 ARCH=3Dx86_64 headers" no?
+> >
+> > But now I'm starting to wonder if that was not the intent of your
+> > combined "make mrproper headers". I honestly never tried to combine
+> > the 2. It's worth a try to split them I would say.
+>
+> Apologies, I just tested it, and it works (combining the 2).
+>
+> Which kernel are you trying to test?
+> I tested your 2 commands on v6.5-rc7 and it just works.
 
---tbfghwmrzlagbpi6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+I'm also on v6.5-rc7 (706a741595047797872e669b3101429ab8d378ef)
 
-On Tue, Aug 22, 2023 at 03:05:27PM +0100, Mark Brown wrote:
-> This seems like an undocumented bodge for whatever limitation the
-> checker script has.  If nothing else someone might come along later and
-> switch back to using the standard variable name, and TBH it does feel
-> like it'd be better to teach the checker to understand the pkg-config
-> idiom here.
+I ran these exact commands:
+|    $ make mrproper
+|    $ make LLVM=3D1 ARCH=3Dx86_64 headers
+|    $ make LLVM=3D1 ARCH=3Dx86_64 -j128 -C tools/testing/selftests
+TARGETS=3Dhid &> out
 
-I agree, I submitted a patch to fix the checker script.
+and here's the contents of `out` (still warnings/errors):
+https://gist.github.com/JustinStitt/d0c30180a2a2e046c32d5f0ce5f59c6d
 
-Thank you Mark
+I have a feeling I'm doing something fundamentally incorrectly. Any ideas?
 
+To be clear, I can build the Kernel itself just fine across many
+configs and architectures. I have, at the very least, the dependencies
+required to accomplish that.
 
---=20
-Ricardo Marliere	    https://marliere.net/
-030A 8E9E 424E E3C0 6557 87E1 C90B 8A7C 6386 58A6
-
---tbfghwmrzlagbpi6
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEAwqOnkJO48BlV4fhyQuKfGOGWKYFAmTlJk8ACgkQyQuKfGOG
-WKYb7hAAqwAsFLsCv615f3KEbWQXUkDllrKdvhGip1ZKDOJWtjA0k+GomFgO3VaG
-zdoswCgIzbaCPPI7AO/CtCqFJrFZOTx9/23FLOC6XKgAxGOZMJaoWeg/D+1DeFkw
-nnT6UJJDEsQ15KnNMGhJnXOskVnKWdG1pVrq6O+16Tk71oWJnLB07SFLKFCbsySB
-21LDe+FGDia5xzUbD7Y8vC5QI+2OLPWb1dIViJVWao3do6sGsOJnSACRp1G+MpFs
-qqYf69M/tD1VoPzpEBTUfrjHXCWFrZJizoOgzLFrZDexZIg672GyG0QX8Bs/HAUu
-KU4LIRMGBstygvLiEzk+5B+1hBt6Q9H1HtqTo7MKetTL7BQG+r8QHGHILuldT8kb
-CbH+JcQSsSNPUPlGc288MI7PL60iF0tH0nqzyb3wGlJ8zEOlhCWNTH55f1+3L5JA
-7R1142H5g/V2IkDkAeakvrTWYa06pzrfYk61l4mOBerxaMHr6snWaVsIBnVVrUv/
-SRKE4JoXnS5s+nDrfghI6TqRGKViSqVBQ5kcmjRiVhrB43/doOXjaAwK+n5BxgtN
-kxxEtB/faMTQqOkDUU9lOaGL0KPTP2CmC1Cw4imEueteHI47EhYoDMEFDy3TSln4
-N/ltUZ9jhuODs4g0zR7YdbIClaZGgsIUW6tfDeQ5OzIbHKhdWX0=
-=tALc
------END PGP SIGNATURE-----
-
---tbfghwmrzlagbpi6--
+>
+> FTR:
+> $> git checkout v6.5-rc7
+> $> make LLVM=3D1 ARCH=3Dx86_64 mrproper headers
+> $> make LLVM=3D1 ARCH=3Dx86_64 -j8 -C tools/testing/selftests TARGETS=3Dh=
+id
+>
+> ->   BINARY   hid_bpf
+>
+> Cheers,
+> Benjamin
+>
