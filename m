@@ -2,132 +2,146 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 399ED7848D8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Aug 2023 19:55:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E58C67849C8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 22 Aug 2023 20:57:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229554AbjHVRzj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 22 Aug 2023 13:55:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56176 "EHLO
+        id S229537AbjHVS5j (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 22 Aug 2023 14:57:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjHVRzi (ORCPT
+        with ESMTP id S229571AbjHVS5i (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 22 Aug 2023 13:55:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 013891FC8;
-        Tue, 22 Aug 2023 10:55:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 879A162094;
-        Tue, 22 Aug 2023 17:55:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02761C433C7;
-        Tue, 22 Aug 2023 17:55:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1692726934;
-        bh=nRhOqPrA5BuPwRcvI7MlHlUwPN6wyHo9eKiXJKZmvt4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=myEcl1WQzsR8pyBO5c97oqf72AeVeGXqJVloLwBX8iLiTVv8X7Ia5vxoJdiPn9i+Y
-         VjQOYYmvKvjZbfOh6E8xc61ay9ODF00wOGJfXl/c1vGl0Y6OYChvzjcdwufld/IScF
-         1UGlm7KFs7gyhSRfsTyEylIum6Z+RkaBDfABGffR9V76JaIS9JY5hMmlmS0q/9LklM
-         ePT2X4GvVlJEVV0h+Oer2GtY4Hxhd4pfL+5zEq8l0XyzfybeFF7tgxUXVLmquGqvQ1
-         TZIES52DEgXIUwTk2PsKGVvUBdwYPMTgBnyG4aO6gC+pZlhQLIK4t/O11L17SOC7Vu
-         mGZAJ84Zodf5Q==
-Date:   Tue, 22 Aug 2023 18:55:24 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "david@redhat.com" <david@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "maz@kernel.org" <maz@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "james.morse@arm.com" <james.morse@arm.com>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "palmer@dabbelt.com" <palmer@dabbelt.com>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
-        "oleg@redhat.com" <oleg@redhat.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "ebiederm@xmission.com" <ebiederm@xmission.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        Tue, 22 Aug 2023 14:57:38 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F51CD1;
+        Tue, 22 Aug 2023 11:57:32 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.nyi.internal (Postfix) with ESMTP id BC04B5C0156;
+        Tue, 22 Aug 2023 14:57:29 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Tue, 22 Aug 2023 14:57:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1692730649; x=1692817049; bh=NuEanQ67p/F6J
+        zbkMSjd9SblUPUJPw+qIEvafnE1DO8=; b=ubNz5RnR8nvmpBqTaIpFn2vO2jLNo
+        yy9hzwLfFaQFe8RRZZiougpFinfktew9EB5oXZhGyYa3RjAx054PGwlC3ihJ8GAY
+        rlokgNZL6dMbGfNl1ZcW9J+joQRD8aXrmd7ViCdhB4H23bBYS2unGAECNhEUuJ7o
+        OMqbsO5exV9WoLomUQydFQdCsmVCT3tdpyojxNmTw40YLrI+pitVtzLDNb/gH8qD
+        R5ouZc1dBYT/K0I3qqKfGEQlliOlPXTkNeevBZ6jZOiDAHAnHlUue7wrXQiVVAgG
+        7uzZ6+shVDb27dpSsF9ySTvD9Je1x9O9/R7LfpeyznkxdPzdwyu2Ebsjg==
+X-ME-Sender: <xms:GQXlZJeeQoHigCBFkPywLGMZj6Irrn9lRXAUjnUo3R-PNLkK891DSQ>
+    <xme:GQXlZHNMA1HhHsv8ytJ5q8Qwb8TjAZYawadjH5s8F6Z2EorteJ3mKL982jJxlzkpR
+    JNj6N24pC4ea3c>
+X-ME-Received: <xmr:GQXlZCg3e6CNPrprm4xRV9LtnDPjqt2x4v4kC4c8qfRJqG9RZU6w60oAuYXe4oDcN6w9p7G-2u9LB_Mb1wmsA65_LdHLlg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedruddvuddgudeftdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkugho
+    ucfutghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrg
+    htthgvrhhnpedvudefveekheeugeeftddvveefgfduieefudeifefgleekheegleegjeej
+    geeghfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hiughoshgthhesihguohhstghhrdhorhhg
+X-ME-Proxy: <xmx:GQXlZC_Yx9VolEZZH_1hYXhK_PwafUOyVULCxIogbkvjRgPjbVizmQ>
+    <xmx:GQXlZFsK6dsoe3d13X3kb9xhGC6GwMUYVsDB98vcSrBSnSpkq0qizA>
+    <xmx:GQXlZBHHUfgVldKRWWXx0o5mvoU4jtfCjdLF-7130wcDBa3nF0qrIw>
+    <xmx:GQXlZG_Z9E5a0B7-DpBsKrX--Qpqp2PFB8XYfaF4ydXMzlJccyyB3w>
+Feedback-ID: i494840e7:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 22 Aug 2023 14:57:28 -0400 (EDT)
+Date:   Tue, 22 Aug 2023 21:57:24 +0300
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Sriram Yagnaraman <sriram.yagnaraman@est.tech>
+Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
         "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "oliver.upton@linux.dev" <oliver.upton@linux.dev>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
-Subject: Re: [PATCH v5 11/37] mm: Define VM_SHADOW_STACK for arm64 when we
- support GCS
-Message-ID: <c9d0881d-e26b-4680-8f8e-0d5e1c82655c@sirena.org.uk>
-References: <20230822-arm64-gcs-v5-0-9ef181dd6324@kernel.org>
- <20230822-arm64-gcs-v5-11-9ef181dd6324@kernel.org>
- <8f2cf5af-cad7-a69c-e8ec-39f48deae1cb@redhat.com>
- <54b2c1e5-a99d-42c0-b686-1b5cbb849581@sirena.org.uk>
- <e10e729392c5fa421baf08b4ea7aaac6ffada0f5.camel@intel.com>
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        David Ahern <dsahern@kernel.org>,
+        Ido Schimmel <idosch@nvidia.com>, Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH 3/3] selftests: forwarding: Add test for load-balancing
+ between multiple servers
+Message-ID: <ZOUFFOIQeGazn2Dr@shredder>
+References: <20230819114825.30867-1-sriram.yagnaraman@est.tech>
+ <20230819114825.30867-4-sriram.yagnaraman@est.tech>
+ <ZONLz5IyaG+XnUSJ@shredder>
+ <DBBP189MB1433714989BBE41321848336951EA@DBBP189MB1433.EURP189.PROD.OUTLOOK.COM>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="M/5Lioh+7qcaKBw4"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e10e729392c5fa421baf08b4ea7aaac6ffada0f5.camel@intel.com>
-X-Cookie: MIT:
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <DBBP189MB1433714989BBE41321848336951EA@DBBP189MB1433.EURP189.PROD.OUTLOOK.COM>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Mon, Aug 21, 2023 at 07:36:47PM +0000, Sriram Yagnaraman wrote:
+> Do you think it would be OK to drop this patch from the series for now? I can come back with the selftest when I have something working correctly?
 
---M/5Lioh+7qcaKBw4
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+There's a more direct way of testing it and that's by counting the
+number of times the relevant FIB trace point was triggered. This script
+[1] does it for IPv4. For IPv6 the equivalent trace point is called
+fib6:fib6_table_lookup. The script can obviously be made nicer.
 
-On Tue, Aug 22, 2023 at 04:47:26PM +0000, Edgecombe, Rick P wrote:
-> On Tue, 2023-08-22 at 16:41 +0100, Mark Brown wrote:
+Before the patches:
 
-> > I can certainly update it to do that, I was just trying to fit in
-> > with
-> > how the code was written on the basis that there was probably a good
-> > reason for it that had been discussed somewhere.=A0 I can send an
-> > incremental patch for this on top of the x86 patches assuming they go
-> > in
-> > during the merge window.
+# ./mp_repo.sh 
+10020
 
-> There was something like that on the x86 series way back, but it was
-> dropped[0]. IIRC risc-v was going to try to do something other than
-> VM_SHADOW_STACK, so they may conflict some day. But in the meantime,
-> adding a CONFIG_HAVE_ARCH_SHADOW_STACK here in the arm series makes
-> sense to me.
+After the patches:
 
-OK, I'll do that.
+# ./mp_repo.sh 
+65535
 
---M/5Lioh+7qcaKBw4
-Content-Type: application/pgp-signature; name="signature.asc"
+You can see that after the patches the trace point is triggered for
+every packet. Sometimes it's a bit less. I assume because some events
+are lost.
 
------BEGIN PGP SIGNATURE-----
+Another approach would be to tweak the current test so that $h1 and $rp1
+are configured in a similar fashion to veth0 and veth1.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmTk9owACgkQJNaLcl1U
-h9BzkQf/R6al2pexuFT7yjh/QmDQ605ZLN9i97Je0LSd5PuT5nU6GF3W5a54fMib
-6W/3nsCaMStJXsvd+VW79higHGjkzwpJF2gPeI94UCLBgKYqU8qB4MR/adY9Ff1r
-1sA4RWSjuxtC8NBEoIYomxAXMpW05vpD0eruSLYjUnEnTf0NrXtxZmwZQjcVHeeS
-f47zzzB9vzZ1wei7YyAcO+oju9JjWVkD2jTdQJjddCKNIuR+qB98g/qO4BvHp86+
-OPVeSsY4Ko7Kqh4JKdTddAYte0KvQ0SaRh59Zmo6tcorDOv6yVJOfTOEQ8v2SdFD
-daJaRcq070YEVByUMToJ3C0wq/P7+w==
-=2kJA
------END PGP SIGNATURE-----
+[1]
+#!/bin/bash
 
---M/5Lioh+7qcaKBw4--
+ip link del dev veth0 &> /dev/null
+ip netns del ns1 &> /dev/null
+
+ip link add name veth0 type veth peer name veth1
+ethtool -K veth0 tcp-segmentation-offload off
+ethtool -K veth1 generic-receive-offload on
+echo 20000 > /sys/class/net/veth1/gro_flush_timeout
+echo 1 > /sys/class/net/veth1/napi_defer_hard_irqs
+
+ip netns add ns1
+
+ip link set dev veth0 up
+ip address add 192.0.2.1/28 dev veth0
+
+ip link set dev veth1 netns ns1
+ip -n ns1 link set dev veth1 up
+ip -n ns1 address add 192.0.2.2/28 dev veth1
+
+ip -n ns1 link set dev lo up
+ip netns exec ns1 sysctl -w -q net.ipv4.conf.all.forwarding=1
+ip netns exec ns1 sysctl -w -q net.ipv4.fib_multipath_hash_policy=1
+
+ip -n ns1 link add name dummy1 up type dummy
+ip -n ns1 address add 192.0.2.17/28 dev dummy1
+ip -n ns1 neigh add 192.0.2.18 lladdr 00:11:22:33:44:55 nud perm dev dummy1
+ip -n ns1 neigh add 192.0.2.19 lladdr 00:aa:bb:cc:dd:ee nud perm dev dummy1
+ip -n ns1 route add 198.51.100.0/24 nexthop via 192.0.2.18 nexthop via 192.0.2.19
+
+dmac=$(ip -n ns1 -j link show dev veth1 | jq -r '.[]["address"]')
+fout=$(mktemp)
+perf stat -o $fout -j -e fib:fib_table_lookup -- \
+        mausezahn veth0 -a own -b $dmac -A 192.0.2.1 -B 198.51.100.10 \
+        -t udp "sp=12345,dp=0-65535" -q
+tail -n 1 $fout | jq '.["counter-value"] | tonumber | floor'
