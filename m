@@ -2,165 +2,158 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B136A78582C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Aug 2023 14:55:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8684785886
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Aug 2023 15:11:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235226AbjHWMzP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 23 Aug 2023 08:55:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40048 "EHLO
+        id S233915AbjHWNL0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 23 Aug 2023 09:11:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33792 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235230AbjHWMzO (ORCPT
+        with ESMTP id S231472AbjHWNL0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 23 Aug 2023 08:55:14 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on2114.outbound.protection.outlook.com [40.107.8.114])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B68EE54;
-        Wed, 23 Aug 2023 05:55:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ACG9hChxsgFdDFA+rFyy3jWgrXl5uwvMP11KlHdyudAa94GdRTHDUM158Ui1keTNqnFNXXnhLvv2CBGi9AUmjkEqsTPGNLfUQKpRe1I9obzVtrD5ACDeoGydtwie8P7rRsJrnEArsDVFS7Xtp+VhYXWtNsEryoAwg3PA3Z9WK6k8Go7sUomEH9UDvixUvMzol4zBX+n24xRiucfHviZBT9RBJo4tiew0yzQNC5oNQ72Xp/yCDRNWlBl4Ng0+9Wgc0J7om3rbMfPeU+Qmx8plFFr9yBJhheA5tnAZeNxr0Z9HW1A2bXkD9XSdmONxM1sN5eS16QvqQcETBv3VKacGmA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=v1j/s+I4A3lVqGnIESEXwTcux4Mt0qssQm4od4BFGIU=;
- b=iTyv3adiKqTVeVAoAr396uAsTcIQkZyZtwtrN6Hm787G4an1cW4lvRmyyN9nawhG9K11JUKOR1DL80ZWh31Tfspb5ZnVPYUbLJosFrqDkrPHegTRs45Uq5eyMb8o6Vq0kKvA0fbt3SXnzVwvYHR8aMt8QRDQrkarPLj999nNZZot0HR/4ZkeJeWlfvWLfihyXIFcEzni6rknTSgipjFtFqNKdjb7gh/jHtb6yoQQpayFDsUJOAqeoGQZcVn8FkfKmT9Ba6jxv976hhrNIOHqh44HgWjqdFsm3+GclNwkMVlmJ+vKUEcuuYkGQRhXRGIV1lOuYqp1tlyNKsQRLo9jVA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=est.tech; dmarc=pass action=none header.from=est.tech;
- dkim=pass header.d=est.tech; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=estab.onmicrosoft.com;
- s=selector2-estab-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=v1j/s+I4A3lVqGnIESEXwTcux4Mt0qssQm4od4BFGIU=;
- b=LQ3k2J7ETr72qsuP87bYLEl1YPoNiBB5vbrJgWf5tU2J+yYuaPUl4jG7LvjlOuuvcv0tJmdJHpTt4er7Hs1OyW174yLItvC72AvfRAiUxt0/mwEPf7uZUA1giO8dkPgbWdtpaH7P4XTgIDQsJ2RHvcf3wp1iGdsQYoLp3vVkJzo=
-Received: from DBBP189MB1433.EURP189.PROD.OUTLOOK.COM (2603:10a6:10:1e7::15)
- by GVXP189MB2030.EURP189.PROD.OUTLOOK.COM (2603:10a6:150:6c::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.20; Wed, 23 Aug
- 2023 12:55:04 +0000
-Received: from DBBP189MB1433.EURP189.PROD.OUTLOOK.COM
- ([fe80::759b:94eb:c2e8:c670]) by DBBP189MB1433.EURP189.PROD.OUTLOOK.COM
- ([fe80::759b:94eb:c2e8:c670%6]) with mapi id 15.20.6699.022; Wed, 23 Aug 2023
- 12:55:04 +0000
-From:   Sriram Yagnaraman <sriram.yagnaraman@est.tech>
-To:     Ido Schimmel <idosch@idosch.org>
-CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        David Ahern <dsahern@kernel.org>,
-        Ido Schimmel <idosch@nvidia.com>, Shuah Khan <shuah@kernel.org>
-Subject: RE: [PATCH 3/3] selftests: forwarding: Add test for load-balancing
- between multiple servers
-Thread-Topic: [PATCH 3/3] selftests: forwarding: Add test for load-balancing
- between multiple servers
-Thread-Index: AQHZ0pMUlNN+cgUkKUqzv/5j/AbJm6/0ocqAgACCNMCAAYvVAIABLJYQ
-Date:   Wed, 23 Aug 2023 12:55:03 +0000
-Message-ID: <DBBP189MB1433662D9678A16702308CE5951CA@DBBP189MB1433.EURP189.PROD.OUTLOOK.COM>
-References: <20230819114825.30867-1-sriram.yagnaraman@est.tech>
- <20230819114825.30867-4-sriram.yagnaraman@est.tech>
- <ZONLz5IyaG+XnUSJ@shredder>
- <DBBP189MB1433714989BBE41321848336951EA@DBBP189MB1433.EURP189.PROD.OUTLOOK.COM>
- <ZOUFFOIQeGazn2Dr@shredder>
-In-Reply-To: <ZOUFFOIQeGazn2Dr@shredder>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=est.tech;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DBBP189MB1433:EE_|GVXP189MB2030:EE_
-x-ms-office365-filtering-correlation-id: 9107fb39-ae90-40ac-7e58-08dba3d82b78
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: VdIXMRbiXtCFOMNXzNqlo7o9adNyc+uzzqi99FE52mqF2htVX7e7KhsiVavaiu8sapWRvZOzVtqI4/5O9sNCK/492aBQHib4o9BnnoeMb15RXWj/xr59Y0wT2WJ4V1Ct96OZYfjC1XJDFNB5rpDD11WVJOGFcuxUyloeq4M7bFcUFKU7dJBy4zW1xnZxIijPb7bdPgvyXFBZ2dkkU4P4tQOyJGr+3EMWJL9v54Ul4/bPntguJ2oFRUZbqGyo4XFY4Ym1THXJ/L0qYDPTnD4TyUpZgaCnnPZEJUFpx9jgUtpODx9Bk/V4IPfeybt1YC7WIKSASzf855WcqOLJytkmipXysSmniG7DtZ3U5d/WFryjavAa7U4E2ioxp3kjlPMUdOhNthy5OAVZRPm/PteF8tZjdversbMCbdR21MhbPbtRZHGaFah0JkzxWtOEA+0BcWCiXaNp2gST/lQmO0C1vd9haThnFoAlsRb1j6WDH688u68JPulRqI0UYedHuFkLjcVb5hFsuaEfuR+q4ur7Z1yOMEqE0O+WevsFIdrlQBvvFv7O8VdYxm2eX/yY8ygfe6F/lKhU6svanDA//iRJ1ZEyOfuEm8VRjxOdgrorx9l8nOv/dmss9XJhmdlcgAqN
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBP189MB1433.EURP189.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(136003)(376002)(366004)(346002)(39840400004)(396003)(186009)(1800799009)(451199024)(26005)(9686003)(55016003)(38070700005)(122000001)(38100700002)(86362001)(33656002)(83380400001)(8936002)(316002)(8676002)(41300700001)(66556008)(6916009)(478600001)(66946007)(54906003)(7416002)(66476007)(2906002)(52536014)(76116006)(66446008)(4326008)(64756008)(71200400001)(7696005)(44832011)(6506007)(53546011)(5660300002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?QjNQSjQ0Mnk1YmtNc1luWUYzcWhLejZtMFBJWmJ2Q0Jld3Rka1FXTWxPOWlz?=
- =?utf-8?B?NW4rd2xiMGd6YWhQYnZ6QlpTYWpwT2NYOHFQWU4rV1FxbU5pclBDREt0WjJB?=
- =?utf-8?B?Qk1jUHpUbk1aWlhPSEV1aHJhV2lQYkh2Zm5YZk13MG5TaHJNSEl0c1lReVJK?=
- =?utf-8?B?U1REQmw2cTBIU1RTS21wc2lHWHdEWE9PRGt0QWtQS3pWd3ZYN2xoUDQzR013?=
- =?utf-8?B?b00zZ0hHUTlaVHRZQmowL2FwRklHcmYxaVMwL3QyaHErMDkyVUdONFIwTnVa?=
- =?utf-8?B?M2NCcXRzb2QwY0FMSk5BY1oxTUlDU2RFM2hlMnFQMlhLWXphTWVTSlpvSG9p?=
- =?utf-8?B?VGdvQU03OGZYUDdtZHJVSkJleGYrOFVmZDdaS215WXZueUtwMkxiRnp1cFRQ?=
- =?utf-8?B?OHVVeXZaVFVzZHlydEhDelpuKzRFSWFZZWJwV2pjdHo1YWFGZERXTmF0UEVi?=
- =?utf-8?B?NDFYZ1FHTVhOenkxSXI0Zi9hbGJYTk5jMldCRFlZZ1RuRE9KS1F1NkpucEVV?=
- =?utf-8?B?cUE3bjREZk8ybk8vNW9CcDFqdUhCMU5nU0N2WVN0NWtzNGl6WlJYd0FFS3Vh?=
- =?utf-8?B?MTYxK0NqdS8vcDJBU2VhVEhXWjh0T2kydUZ6NGowdkJKT1lSanE2SVl6a2Jz?=
- =?utf-8?B?eEpmcE5Ccmh0U0JjNTErb2pOa215VjJHRHErOVI3eUpXZ3E1MTdNcXMzNzNT?=
- =?utf-8?B?TU8rMnpXZk8rQTQ1ZVI4c0lhT2tHM3R3eW9paHVTNnVCd0VwbFRqWjZETzJF?=
- =?utf-8?B?cmd3b0tYOGE2SjB1clpMWWlZS05GMW9keWtxREFHZHdoTW92S0NWYVhzN0RH?=
- =?utf-8?B?bys0SUFCSVpkWGpSTUk5ZlJVVE8wUjVMYVRvUHlRbjhKZVpMaTA2aStFb2Ja?=
- =?utf-8?B?YmRlMU5pVlpmSVU4T2I0UncvbVJrcFRIQ1Zrdks2K3hFN0ZQUEJHNTFQUEc5?=
- =?utf-8?B?UDZEbmVrMWhkT09JSm04akRqK0tIUk0rL0xSWXdidGtZQnlZYU9NMFJTd2hB?=
- =?utf-8?B?QlpSaHNaNW45V2ZPcE1lSXlWaWFsVTUzQUJHbldjZTdoYU53eFpUVG8xaFQ5?=
- =?utf-8?B?VE1Ra0o4K1lKc1VaUEZvLzRSa1VyUGhINWJVakJPUXRSd00weHlhSHh2TFhy?=
- =?utf-8?B?RDRHU1FPOEN0UTJ5YkpraWlRQWF5ZXFidkpnMmd2dE1INWlDdk02YkJBYStM?=
- =?utf-8?B?dGUwOGI1MjdDZzhSSGxySU40dlU4allUNndXMHVxRnRLbUxjcXVualZ1Lzhm?=
- =?utf-8?B?azQyem8zU2lBL2FGMGJmMU5WVlFlNDhETlF6djYvT25WRDVZdE1vR0tVcXNP?=
- =?utf-8?B?WjNwSFJ3VXR1UmMvUXFPR1lwTEhKOEs2bHJQTEkrelFWNEVGM3VvRDdkaUZ5?=
- =?utf-8?B?LzNhN1ZlUTRLT2h4bVNnZHB4MmhFN3pVckNkRFdzVXJiQmQ5NEFDdUFJbmxx?=
- =?utf-8?B?Mkh1TUZ1eUFQM3dPMzhMNS9uU29MNkFYbnlqN3NSZEJ4eWdrR3lYMXdjcWVD?=
- =?utf-8?B?cTVXZWJYOHpOemVrbTRhZDR1NmtMcVlmNzRkdURtT1N6bkxVQy9YZmxPUDNo?=
- =?utf-8?B?SEl3MjFwaG1xdGc2Mlk0OHVQWWpZLzZqMU4wY2MwYU1MV1I3ZUFhUTdzUUdU?=
- =?utf-8?B?VVFramMwWURmc05hMnFrWWlkYlNEQWtGTUlhd2VEMVVldXhBMkVNRHM1ZU82?=
- =?utf-8?B?bmpDY1ZYQzVTZ0VHZFNPTnR3OUlFT2tkRjNmd2VoTlpoeDVuVSs4c1VSSEh0?=
- =?utf-8?B?WVR2SjJVdXlhSER6d1NDZVZKcW9KcEwyNndYcWVWWGVDTGZ1d3ViSlFLMTY0?=
- =?utf-8?B?aVBIdWljUmk4ZzUxUkExWm5JWmd1QkZDUWFmZGtkWjlQTWFKQjNybFNzdGFk?=
- =?utf-8?B?MzdPY3dER3dCOE9qOTJwUXVSOTdFd2V3Q0Q3NXp0eDN2Vm0vQ01OWmF4Sjl5?=
- =?utf-8?B?enUzdU0zUmF5L2QwZ2hMM3BuSGpVNVYvUTFNb2xjYlZmQlJGYVFuRTlGUXZZ?=
- =?utf-8?B?QnE0UW5UOU81THR6Rk5UTFI0Vyt5cHBRYWhVTW0vRlZ3NVFSYzNkSnZHYzln?=
- =?utf-8?B?cHVwZDhUb2hmMWFKNzBpdG5XaTBGM2cyQ0toSHJxaTdtZ01peWM5MUJBM2t5?=
- =?utf-8?Q?JdC63m+6gs0K48cHZ5pTtkaGg?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Wed, 23 Aug 2023 09:11:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5474BCEA;
+        Wed, 23 Aug 2023 06:11:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D5BED644E4;
+        Wed, 23 Aug 2023 13:11:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47DAAC433C7;
+        Wed, 23 Aug 2023 13:11:10 +0000 (UTC)
+Date:   Wed, 23 Aug 2023 14:11:07 +0100
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Szabolcs Nagy <Szabolcs.Nagy@arm.com>
+Cc:     Mark Brown <broonie@kernel.org>, Will Deacon <will@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+        Eric Biederman <ebiederm@xmission.com>,
+        Kees Cook <keescook@chromium.org>,
+        Shuah Khan <shuah@kernel.org>,
+        "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+        Deepak Gupta <debug@rivosinc.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        "H.J. Lu" <hjl.tools@gmail.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v4 03/36] arm64/gcs: Document the ABI for Guarded Control
+ Stacks
+Message-ID: <ZOYFazB1gYjzDRdA@arm.com>
+References: <20230807-arm64-gcs-v4-0-68cfa37f9069@kernel.org>
+ <20230807-arm64-gcs-v4-3-68cfa37f9069@kernel.org>
+ <ZNOhjrYleGBR6Pbs@arm.com>
+ <f4cec4b3-c386-4873-aa1d-90528e062f2a@sirena.org.uk>
+ <ZN+qki9EaZ6f9XNi@arm.com>
+ <aaea542c-929c-4c9b-8caa-ca67e0eb9c1e@sirena.org.uk>
+ <ZOTnL1SDJWZjHPUW@arm.com>
+ <43ec219d-bf20-47b8-a5f8-32bc3b64d487@sirena.org.uk>
+ <ZOXa98SqwYPwxzNP@arm.com>
 MIME-Version: 1.0
-X-OriginatorOrg: est.tech
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DBBP189MB1433.EURP189.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9107fb39-ae90-40ac-7e58-08dba3d82b78
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Aug 2023 12:55:04.0297
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: d2585e63-66b9-44b6-a76e-4f4b217d97fd
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 43RsDblWQH12o4xbNkds/VqHdv0Zj1ir3lQ5oUtDLQ+zsCotxu12RR2bmLWV+F51cxNKv7GDQU/fsHYhe8iBdAFxRy4y0YNabTFdCi9bEOg=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXP189MB2030
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZOXa98SqwYPwxzNP@arm.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogSWRvIFNjaGltbWVsIDxp
-ZG9zY2hAaWRvc2NoLm9yZz4NCj4gU2VudDogVHVlc2RheSwgMjIgQXVndXN0IDIwMjMgMjA6NTcN
-Cj4gVG86IFNyaXJhbSBZYWduYXJhbWFuIDxzcmlyYW0ueWFnbmFyYW1hbkBlc3QudGVjaD4NCj4g
-Q2M6IG5ldGRldkB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWtzZWxmdGVzdEB2Z2VyLmtlcm5lbC5v
-cmc7IERhdmlkIFMgLiBNaWxsZXINCj4gPGRhdmVtQGRhdmVtbG9mdC5uZXQ+OyBFcmljIER1bWF6
-ZXQgPGVkdW1hemV0QGdvb2dsZS5jb20+OyBKYWt1Yg0KPiBLaWNpbnNraSA8a3ViYUBrZXJuZWwu
-b3JnPjsgUGFvbG8gQWJlbmkgPHBhYmVuaUByZWRoYXQuY29tPjsgRGF2aWQgQWhlcm4NCj4gPGRz
-YWhlcm5Aa2VybmVsLm9yZz47IElkbyBTY2hpbW1lbCA8aWRvc2NoQG52aWRpYS5jb20+OyBTaHVh
-aCBLaGFuDQo+IDxzaHVhaEBrZXJuZWwub3JnPg0KPiBTdWJqZWN0OiBSZTogW1BBVENIIDMvM10g
-c2VsZnRlc3RzOiBmb3J3YXJkaW5nOiBBZGQgdGVzdCBmb3IgbG9hZC1iYWxhbmNpbmcNCj4gYmV0
-d2VlbiBtdWx0aXBsZSBzZXJ2ZXJzDQo+IA0KPiBPbiBNb24sIEF1ZyAyMSwgMjAyMyBhdCAwNzoz
-Njo0N1BNICswMDAwLCBTcmlyYW0gWWFnbmFyYW1hbiB3cm90ZToNCj4gPiBEbyB5b3UgdGhpbmsg
-aXQgd291bGQgYmUgT0sgdG8gZHJvcCB0aGlzIHBhdGNoIGZyb20gdGhlIHNlcmllcyBmb3Igbm93
-PyBJIGNhbg0KPiBjb21lIGJhY2sgd2l0aCB0aGUgc2VsZnRlc3Qgd2hlbiBJIGhhdmUgc29tZXRo
-aW5nIHdvcmtpbmcgY29ycmVjdGx5Pw0KPiANCj4gVGhlcmUncyBhIG1vcmUgZGlyZWN0IHdheSBv
-ZiB0ZXN0aW5nIGl0IGFuZCB0aGF0J3MgYnkgY291bnRpbmcgdGhlIG51bWJlciBvZg0KPiB0aW1l
-cyB0aGUgcmVsZXZhbnQgRklCIHRyYWNlIHBvaW50IHdhcyB0cmlnZ2VyZWQuIFRoaXMgc2NyaXB0
-IFsxXSBkb2VzIGl0IGZvciBJUHY0Lg0KPiBGb3IgSVB2NiB0aGUgZXF1aXZhbGVudCB0cmFjZSBw
-b2ludCBpcyBjYWxsZWQgZmliNjpmaWI2X3RhYmxlX2xvb2t1cC4gVGhlIHNjcmlwdA0KPiBjYW4g
-b2J2aW91c2x5IGJlIG1hZGUgbmljZXIuDQo+IA0KPiBCZWZvcmUgdGhlIHBhdGNoZXM6DQo+IA0K
-PiAjIC4vbXBfcmVwby5zaA0KPiAxMDAyMA0KPiANCj4gQWZ0ZXIgdGhlIHBhdGNoZXM6DQo+IA0K
-PiAjIC4vbXBfcmVwby5zaA0KPiA2NTUzNQ0KPiANCj4gWW91IGNhbiBzZWUgdGhhdCBhZnRlciB0
-aGUgcGF0Y2hlcyB0aGUgdHJhY2UgcG9pbnQgaXMgdHJpZ2dlcmVkIGZvciBldmVyeSBwYWNrZXQu
-DQo+IFNvbWV0aW1lcyBpdCdzIGEgYml0IGxlc3MuIEkgYXNzdW1lIGJlY2F1c2Ugc29tZSBldmVu
-dHMgYXJlIGxvc3QuDQo+IA0KPiBBbm90aGVyIGFwcHJvYWNoIHdvdWxkIGJlIHRvIHR3ZWFrIHRo
-ZSBjdXJyZW50IHRlc3Qgc28gdGhhdCAkaDEgYW5kICRycDEgYXJlDQo+IGNvbmZpZ3VyZWQgaW4g
-YSBzaW1pbGFyIGZhc2hpb24gdG8gdmV0aDAgYW5kIHZldGgxLg0KPiANCg0KTmljZS4gVGhhbmtz
-IGEgbG90LCBJIHdpbGwgc2VuZCB2MiB3aXRoIHRoaXMgYXBwcm9hY2guDQo=
+On Wed, Aug 23, 2023 at 11:09:59AM +0100, Szabolcs Nagy wrote:
+> The 08/22/2023 18:53, Mark Brown wrote:
+> > On Tue, Aug 22, 2023 at 05:49:51PM +0100, Catalin Marinas wrote:
+> > > It would be good if someone provided a summary of the x86 decision (I'll
+> > > get to those thread but most likely in September). I think we concluded
+> > > that we can't deploy GCS entirely transparently, so we need a libc
+> > > change (apart from the ELF annotations). Since libc is opting in to GCS,
+> > 
+> > Right, we need changes for setjmp()/longjmp() for example.
+> > 
+> > > we could also update the pthread_create() etc. to allocate the shadow
+> > > together with the standard stack.
+> > > 
+> > > Anyway, that's my preference but maybe there were good reasons not to do
+> > > this.
+> > 
+> > Yeah, it'd be good to understand.  I've been through quite a lot of old
+> > versions of the x86 series (I've not found them all, there's 30 versions
+> > or something of the old series plus the current one is on v9) and the
+> > code always appears to have been this way with changelogs that explain
+> > the what but not the why.  For example roughly the current behaviour was
+> > already in place in v10 of the original series:
+> > 
+> >    https://lore.kernel.org/lkml/20200429220732.31602-26-yu-cheng.yu@intel.com/
+> 
+> well the original shstk patches predate clone3 so no surprise there.
+> e.g. v6 is from 2018 and clone3 is 2019 linux 5.3
+> https://lore.kernel.org/lkml/20181119214809.6086-1-yu-cheng.yu@intel.com/
+
+Good point, I had not realised that.
+
+> > I do worry about the story for users calling the underlying clone3() API
+> > (or legacy clone() for that matter) directly, and we would also need to
+> > handle the initial GCS enable via prctl() - that's not insurmountable,
+> > we could add a size argument there that only gets interpreted during the
+> > initial enable for example.
+> 
+> musl and bionic currently use plain clone for threads.
+> 
+> and there is user code doing raw clone threads (such threads are
+> technically not allowed to call into libc) it's not immediately
+> clear to me if having gcs in those threads is better or worse.
+> 
+> glibc can use clone3 args for gcs, i'd expect the unmap to be more
+> annoying than the allocation, but possible (it is certainly more
+> work than leaving everything to the kernel).
+
+Unmapping is indeed more complex but I guess something similar needs to
+happen for the thread stack to be reclaimed.
+
+The thing I dislike about the kernel automatically mapping it is the
+arbitrary fraction of RLIMIT_STACK size. glibc may use RLIMIT_STACK as a
+hint for the thread stack size but is this the case for other libraries?
+Some quick search (which I may have misinterpreted) shows that musl uses
+128KB, bionic 1MB. So at this point the shadow stack size has no
+relevance for the actual thread stack.
+
+An alternative would be for the clone3() to provide an address _hint_
+and size for GCS and it would still be the kernel doing the mmap (and
+munmap on clearing). But at least the user has some control over the
+placement of the GCS and its size (and maybe providing the address has
+MAP_FIXED semantics).
+
+> > My sense is that they deployment story is going to be smoother with
+> > defaults being provided since it avoids dealing with the issue of what
+> > to do if userspace creates a thread without a GCS in a GCS enabled
+> > process but like I say I'd be totally happy to extend clone3().  I will
+> > put some patches together for that (probably once the x86 stuff lands).
+> > Given the size of this series it might be better split out for
+> > manageability if nothing else.
+> 
+> i would make thread without gcs to implicitly disable gcs, since
+> that's what's bw compat with clones outside of libc (the libc can
+> guarantee gcs allocation when gcs is enabled).
+
+Yes, this should work. Any invocation of clone() or clone3() without a
+shadow stack would disable GCS. What about the reverse, should GCS be
+enabled for a thread even if the clone3() caller has GCS disabled? I
+guess we shouldn't since GCS enabling depends on the prctl() state set
+previously.
+
+-- 
+Catalin
