@@ -2,77 +2,104 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98AFC785A99
-	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Aug 2023 16:33:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39F14785B13
+	for <lists+linux-kselftest@lfdr.de>; Wed, 23 Aug 2023 16:49:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236478AbjHWOd2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 23 Aug 2023 10:33:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33390 "EHLO
+        id S231419AbjHWOts (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 23 Aug 2023 10:49:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236475AbjHWOd2 (ORCPT
+        with ESMTP id S233614AbjHWOts (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 23 Aug 2023 10:33:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF759E75
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Aug 2023 07:33:21 -0700 (PDT)
+        Wed, 23 Aug 2023 10:49:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111B7E6C
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Aug 2023 07:49:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 613736590E
-        for <linux-kselftest@vger.kernel.org>; Wed, 23 Aug 2023 14:33:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36C37C433C7;
-        Wed, 23 Aug 2023 14:33:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1692801200;
-        bh=qQx11LfSno6jM75+HJPDx8bMm5EKXjZ7K5nn2tjb6gU=;
-        h=Date:From:To:Subject:References:In-Reply-To:From;
-        b=FKrwQ1nu+YsxuBdgJu0Q9Jdp5xoKG7e9nXwTTa9ZOKQde75WmpCo0kRjafEt33gZ3
-         LNUvbJxev0mXnohc796u6O91+8IWkyRJBePpaVoBfkFJ5zHg9lkbkxjoAON7NxnCHj
-         aKoGk2DnPQFKMmfzL4zjZRrTB01zm+Y6GDk3J5ko=
-Date:   Wed, 23 Aug 2023 16:33:17 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Wolfram Sang <wsa@kernel.org>, linux-kselftest@vger.kernel.org
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DAE46637E
+        for <linux-kselftest@vger.kernel.org>; Wed, 23 Aug 2023 14:49:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F0CCC433C8;
+        Wed, 23 Aug 2023 14:49:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1692802183;
+        bh=GoUQbJGBLBYXeeP8dapyXhG8puuAkUhYl1LYxuISEoM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=L4eOWS9RlM/h/M+amgq2bIijWHzGhkJdw3WgI+hqFHbxpr7lsWYW0yLZGu26m92LP
+         qt6pIn2s5Qj3lma3IAtpLcP9OLtSbE8UG53jC5pcTWDKzfq+AVUf8kJR7su1AqzGic
+         l/ZJpWyRMTd6/3+4bt724fQ4Fq3nRxOtihgFp10yqiym4VPO0sD22skVLuOE7FN2Qt
+         4xx8OW6gjC0TGVTjR1S3M3F+IAqRSuMCfaBvpLS0y3fZdPPkx4LaawMyJuyuMnuoJX
+         2oCWgqGLTwvasVTDH8BoZei+zI2F+ENAeGneUEDNTppEGhoWQu8zge9MC9tj0OCfJE
+         a2JBxn7p+lkxQ==
+Date:   Wed, 23 Aug 2023 16:49:37 +0200
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Joe Lawrence <joe.lawrence@redhat.com>
+Cc:     linux-kselftest@vger.kernel.org
 Subject: Re: Repo for tests which fail currently?
-Message-ID: <2023082335-retail-gallows-1fdc@gregkh>
+Message-ID: <ZOYcgT2Jnw8GLLjm@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        linux-kselftest@vger.kernel.org
 References: <ZOXxSA1UKBkU/ou4@ninjato>
+ <b60da0cb-6606-ef37-8fd3-6a222cda736f@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="PBPGGAT23kSm/Naq"
 Content-Disposition: inline
-In-Reply-To: <ZOXxSA1UKBkU/ou4@ninjato>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <b60da0cb-6606-ef37-8fd3-6a222cda736f@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Aug 23, 2023 at 01:45:12PM +0200, Wolfram Sang wrote:
-> Hi all,
-> 
-> for my talk at EOSS23 about object life-time issues[1], I created a
-> loose set of tests checking some longstanding problems in the Linux
-> Kernel. I would like to improve these tests. Now, I wonder where I could
-> contribute them to because their scope seems different to me. They are
-> not for regression testing because I don't have a fix for most of them.
-> Some fixes mean rewriting private data allocations for a whole subsystem
-> and drivers. The tests are rather meant for documenting known problems
-> and checking if someone started working on it. But it seems that
-> kselftest (and LTP also?) only accept tests which do not fail by
-> default. The question is now, is there another test collection project I
-> could contribute these tests to? I'd be very happy for pointers, I
-> started looking around but to no avail...
 
-Why not just add them to the kernel tree, with ksft_test_result_skip()
-being the result for now while they still fail, and then when the kernel
-code is fixed up, change that back to the correct
-ksft_test_result_error() call instead?
+--PBPGGAT23kSm/Naq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-"SKIP" is a good thing to take advantage of here.
+Hi Joe,
 
-thanks,
+thanks for your reply!
 
-greg k-h
+> Anyway maybe your question is less about mechanics (could you invert the
+> result, i.e. failure is success?) and more about where to collect such
+> tests?
+
+It is the latter, exactly. A failure is a failure and should be marked
+red. But where do we put tests which we know will fail and currently no
+one is working on fixing the issues? I wouldn't mind setting up a repo
+for this but let me elaborate more in the reply to Greg.
+
+Regards,
+
+   Wolfram
+
+
+--PBPGGAT23kSm/Naq
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmTmHH0ACgkQFA3kzBSg
+KbbUew/8Dpg7qTky0JiDw3cKGl9fSVB9ObbaXymvW3bpyssGUk/L4NffiiUvenzJ
+vq8TGyRJg5wJ6D15JNO6Emdtx+MDCUuHsuSXBxTfHx1IcIMK8oSiOdM6vW+UpV7t
+5/AooQbFcrnuYjXhqxxMZ1DqqrQdyG820XX8oQcos0QGD+1YsKjnFQG6wNJr/fPy
+nV0XQLEXh3exDZDvonIxja6onE5KDYMDhE2Sh9FPVfdtUmZ8e5dmp0IWPo9nIicl
+gEU4lfYpjIbExMpLzRpv9YjWxSAMdLA0Bd37jAsrHVumV8uHmt7G++zatgs+8TKM
+Q/rFV35mrpCevVKnfaz0cj3Zn9X7+X5+KxaRBCxp0Ec3/cxr6w8DPekjNJ9PA37f
+TdfDPFiqCccev3SrPqCBcGufZYPrw7nSmeFDhwyEOivKkycft/r7HkrB0pS7621i
+wx0ueMrsBs3Zj1bbPHqemSjSNpyUnWxYnbyYgAW0KaUNeOtXEfkFUnvKRdQdlE6h
+vjdVW7QuccTJPX29/ZvKTdf4fkGm3IVrFXpEtLLurCORl4xnoDuRFyXQkpaYwgpG
+TgutVY3sD77+MisZQQ7L5RjVTFvRV2jrBqrIl6TtDrOcktoXidbVgE/UYprjB23f
+cX7qwsFik+F+/MzO6zO7OHHYO3iZskiZyJwimhYjStMgQUsGWP8=
+=czhx
+-----END PGP SIGNATURE-----
+
+--PBPGGAT23kSm/Naq--
