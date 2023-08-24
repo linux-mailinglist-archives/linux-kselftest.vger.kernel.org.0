@@ -2,45 +2,45 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB903787193
-	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Aug 2023 16:33:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 089847871A8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 24 Aug 2023 16:34:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241613AbjHXOcn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 24 Aug 2023 10:32:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54528 "EHLO
+        id S238387AbjHXOdp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 24 Aug 2023 10:33:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241639AbjHXOcV (ORCPT
+        with ESMTP id S240251AbjHXOdP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 24 Aug 2023 10:32:21 -0400
+        Thu, 24 Aug 2023 10:33:15 -0400
 Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B8EC1BCF;
-        Thu, 24 Aug 2023 07:32:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 483271BE;
+        Thu, 24 Aug 2023 07:33:13 -0700 (PDT)
 Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 37OBiqaU023544;
-        Thu, 24 Aug 2023 09:31:33 -0500
+        by mx0b-001ae601.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 37OBiqaV023544;
+        Thu, 24 Aug 2023 09:31:34 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=
         from:to:cc:subject:date:message-id:in-reply-to:references
         :mime-version:content-transfer-encoding:content-type; s=
-        PODMain02222019; bh=1pwt1C/EAB+LiAxAJRYRJzDCa2r6Yh3RhPNpDk9yavo=; b=
-        Nrfjq4JIIq4cOe9m1TE+lt+aqpDk3WcngG7I8SA3+Jha2VmDsHRFrA0MVNtN5TOm
-        wuZFAwjeJOcdy+qgA1kRftrdJtUiXCR+kMJjjtAedl805kjVSuaMSWJ35dS5Bfqp
-        CNu9UIszMtxs+ZdlGyZacz/F5Sx200r/MChOkI7/Cfve4soRrhktBkawlZGnLb2U
-        BT8Mg4u33Kqvo20gxARKCfJqC9S9Bz7Zpj3V07SjyZjT9zLzEtO5yKBpU+gOUFyi
-        dT9dEScz2vQq6PUOr8M/hXL0eGhCZGAQoamlvI4aSCVeDI2R6bVaLyDrckHrRmX7
-        zOTh9yPyMqKR6sootAVbfA==
+        PODMain02222019; bh=1ecAzTTgRFxOlByV7wi+Nk1UaCCQVNJNqnvAOANu3Pc=; b=
+        luc97vUigU33Ncepo/uD6U+21wRb+YDbW2MP8lk29vhEmuuAenHaOSTnHf6IBTdr
+        J1VPfAFf0rDTV6MJRX+GxDes1NRRbSaR+aRQ8mDn9BlfRVGkvCcYY9u+MpdfgRkA
+        bi9ZdEU99p7hdmQqRESRboxzVmPl0ZEWGj1bplCI/gQb4yIbH1DMAb2Zj7JFS4zJ
+        v2luCSKHp9zUaRXEdv0F3C1VXtOwg+MLjoEEBwtMl77rA1R36k/yfLVW4xwHkFaJ
+        ER1+GX3MvfwhVQ1TAF/0oMEV6J9lnPeXOQYaPGPd9vsI8zuWAa5lnch0KNQieVfJ
+        +4Nd/Bw1MPsSGsDOWk4SUQ==
 Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3sp1w8geq3-4
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3sp1w8geq3-5
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 24 Aug 2023 09:31:33 -0500 (CDT)
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
+        Thu, 24 Aug 2023 09:31:34 -0500 (CDT)
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
  (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Thu, 24 Aug
  2023 15:31:30 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.30 via Frontend
- Transport; Thu, 24 Aug 2023 15:31:30 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.30 via Frontend Transport; Thu, 24 Aug 2023 15:31:30 +0100
 Received: from edi-sw-dsktp-006.ad.cirrus.com (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.75])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 1491F357D;
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 2B7FF46B;
         Thu, 24 Aug 2023 14:31:30 +0000 (UTC)
 From:   Richard Fitzgerald <rf@opensource.cirrus.com>
 To:     <brendan.higgins@linux.dev>, <davidgow@google.com>,
@@ -48,17 +48,17 @@ To:     <brendan.higgins@linux.dev>, <davidgow@google.com>,
 CC:     <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
         <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>,
         "Richard Fitzgerald" <rf@opensource.cirrus.com>
-Subject: [PATCH v5 07/10] kunit: string-stream: Decouple string_stream from kunit
-Date:   Thu, 24 Aug 2023 15:31:26 +0100
-Message-ID: <20230824143129.1957914-8-rf@opensource.cirrus.com>
+Subject: [PATCH v5 08/10] kunit: string-stream: Add tests for freeing resource-managed string_stream
+Date:   Thu, 24 Aug 2023 15:31:27 +0100
+Message-ID: <20230824143129.1957914-9-rf@opensource.cirrus.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230824143129.1957914-1-rf@opensource.cirrus.com>
 References: <20230824143129.1957914-1-rf@opensource.cirrus.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-GUID: j9_cXNhPgm5C1RnydIAPmsBAiKP7aRr8
-X-Proofpoint-ORIG-GUID: j9_cXNhPgm5C1RnydIAPmsBAiKP7aRr8
+X-Proofpoint-GUID: mTKF2H5FQLoUs9yJM53hlDVgCVMV2QKm
+X-Proofpoint-ORIG-GUID: mTKF2H5FQLoUs9yJM53hlDVgCVMV2QKm
 X-Proofpoint-Spam-Reason: safe
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
@@ -69,245 +69,231 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Re-work string_stream so that it is not tied to a struct kunit. This is
-to allow using it for the log of struct kunit_suite.
+string_stream_managed_free_test() allocates a resource-managed
+string_stream and tests that kunit_free_string_stream() calls
+string_stream_destroy().
 
-Instead of resource-managing individual allocations the whole string_stream
-can be resource-managed, if required.
+string_stream_resource_free_test() allocates a resource-managed
+string_stream and tests that string_stream_destroy() is called
+when the test resources are cleaned up.
 
-    alloc_string_stream() now allocates a string stream that is
-    not resource-managed.
-
-    string_stream_destroy() now works on an unmanaged string_stream
-    allocated by alloc_string_stream() and frees the entire
-    string_stream (previously it only freed the fragments).
-
-For resource-managed allocations use kunit_alloc_string_stream()
-and kunit_free_string_stream().
-
-In addition to this, string_stream_get_string() now returns an
-unmanaged buffer that the caller must kfree().
+The old string_stream_init_test() has been split into two tests,
+one for kunit_alloc_string_stream() and the other for
+alloc_string_stream().
 
 Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
 ---
 Changes since V4:
-- Adding the kunit_[alloc|free]_string_stream() functions has been split
-  out into the previous patch to reduce the amount of code churn in
-  this patch.
-- string_stream_destroy() has been kept and re-used instead of replacing
-  it with a new function.
-- string_stream_get_string() now returns an unmanaged buffer. This avoids
-  a large code change to string_stream_append().
-- Added wrapper function for resource free to prevent the type warning of
-  passing string_stream_destroy() directly to kunit_add_action_or_reset().
+- Added test case for kunit_free_string_stream().
+- Split the initialization test into separate tests for managed and
+  unmanaged allocations.
 ---
- lib/kunit/string-stream-test.c |  2 +-
- lib/kunit/string-stream.c      | 59 ++++++++++++++++++++++------------
- lib/kunit/string-stream.h      |  4 ++-
- lib/kunit/test.c               |  2 +-
- 4 files changed, 44 insertions(+), 23 deletions(-)
+ lib/kunit/string-stream-test.c | 135 ++++++++++++++++++++++++++++++++-
+ lib/kunit/string-stream.c      |   3 +
+ 2 files changed, 134 insertions(+), 4 deletions(-)
 
 diff --git a/lib/kunit/string-stream-test.c b/lib/kunit/string-stream-test.c
-index 89549c237069..45a2d221f1b5 100644
+index 45a2d221f1b5..6897c57e0db7 100644
 --- a/lib/kunit/string-stream-test.c
 +++ b/lib/kunit/string-stream-test.c
-@@ -16,6 +16,7 @@ static char *get_concatenated_string(struct kunit *test, struct string_stream *s
- 	char *str = string_stream_get_string(stream);
+@@ -6,11 +6,25 @@
+  * Author: Brendan Higgins <brendanhiggins@google.com>
+  */
  
- 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, str);
-+	kunit_add_action(test, (kunit_action_t *)kfree, (void *)str);
++#include <kunit/static_stub.h>
+ #include <kunit/test.h>
+ #include <linux/slab.h>
  
- 	return str;
- }
-@@ -30,7 +31,6 @@ static void string_stream_init_test(struct kunit *test)
- 
- 	KUNIT_EXPECT_EQ(test, stream->length, 0);
- 	KUNIT_EXPECT_TRUE(test, list_empty(&stream->fragments));
--	KUNIT_EXPECT_PTR_EQ(test, stream->test, test);
- 	KUNIT_EXPECT_EQ(test, stream->gfp, GFP_KERNEL);
- 	KUNIT_EXPECT_FALSE(test, stream->append_newlines);
- 
-diff --git a/lib/kunit/string-stream.c b/lib/kunit/string-stream.c
-index 12ecf15e1f6b..c39f1cba3bcd 100644
---- a/lib/kunit/string-stream.c
-+++ b/lib/kunit/string-stream.c
-@@ -13,30 +13,28 @@
  #include "string-stream.h"
  
- 
--static struct string_stream_fragment *alloc_string_stream_fragment(
--		struct kunit *test, int len, gfp_t gfp)
-+static struct string_stream_fragment *alloc_string_stream_fragment(int len, gfp_t gfp)
- {
- 	struct string_stream_fragment *frag;
- 
--	frag = kunit_kzalloc(test, sizeof(*frag), gfp);
-+	frag = kzalloc(sizeof(*frag), gfp);
- 	if (!frag)
- 		return ERR_PTR(-ENOMEM);
- 
--	frag->fragment = kunit_kmalloc(test, len, gfp);
-+	frag->fragment = kmalloc(len, gfp);
- 	if (!frag->fragment) {
--		kunit_kfree(test, frag);
-+		kfree(frag);
- 		return ERR_PTR(-ENOMEM);
- 	}
- 
- 	return frag;
- }
- 
--static void string_stream_fragment_destroy(struct kunit *test,
--					   struct string_stream_fragment *frag)
-+static void string_stream_fragment_destroy(struct string_stream_fragment *frag)
- {
- 	list_del(&frag->node);
--	kunit_kfree(test, frag->fragment);
--	kunit_kfree(test, frag);
-+	kfree(frag->fragment);
-+	kfree(frag);
- }
- 
- int string_stream_vadd(struct string_stream *stream,
-@@ -65,9 +63,7 @@ int string_stream_vadd(struct string_stream *stream,
- 	/* Need space for null byte. */
- 	buf_len++;
- 
--	frag_container = alloc_string_stream_fragment(stream->test,
--						      buf_len,
--						      stream->gfp);
-+	frag_container = alloc_string_stream_fragment(buf_len, stream->gfp);
- 	if (IS_ERR(frag_container))
- 		return PTR_ERR(frag_container);
- 
-@@ -111,7 +107,7 @@ static void string_stream_clear(struct string_stream *stream)
- 				 frag_container_safe,
- 				 &stream->fragments,
- 				 node) {
--		string_stream_fragment_destroy(stream->test, frag_container);
-+		string_stream_fragment_destroy(frag_container);
- 	}
- 	stream->length = 0;
- 	spin_unlock(&stream->lock);
-@@ -123,7 +119,7 @@ char *string_stream_get_string(struct string_stream *stream)
- 	size_t buf_len = stream->length + 1; /* +1 for null byte. */
- 	char *buf;
- 
--	buf = kunit_kzalloc(stream->test, buf_len, stream->gfp);
-+	buf = kzalloc(buf_len, stream->gfp);
- 	if (!buf)
- 		return NULL;
- 
-@@ -139,13 +135,17 @@ int string_stream_append(struct string_stream *stream,
- 			 struct string_stream *other)
- {
- 	const char *other_content;
-+	int ret;
- 
- 	other_content = string_stream_get_string(other);
- 
- 	if (!other_content)
- 		return -ENOMEM;
- 
--	return string_stream_add(stream, other_content);
-+	ret = string_stream_add(stream, other_content);
-+	kfree(other_content);
++struct string_stream_test_priv {
++	/* For testing resource-managed free. */
++	struct string_stream *freed_stream;
++	bool stream_free_again;
++};
 +
-+	return ret;
- }
- 
- bool string_stream_is_empty(struct string_stream *stream)
-@@ -153,16 +153,15 @@ bool string_stream_is_empty(struct string_stream *stream)
- 	return list_empty(&stream->fragments);
- }
- 
--static struct string_stream *alloc_string_stream(struct kunit *test, gfp_t gfp)
-+struct string_stream *alloc_string_stream(gfp_t gfp)
- {
- 	struct string_stream *stream;
- 
--	stream = kunit_kzalloc(test, sizeof(*stream), gfp);
-+	stream = kzalloc(sizeof(*stream), gfp);
- 	if (!stream)
- 		return ERR_PTR(-ENOMEM);
- 
- 	stream->gfp = gfp;
--	stream->test = test;
- 	INIT_LIST_HEAD(&stream->fragments);
- 	spin_lock_init(&stream->lock);
- 
-@@ -171,15 +170,35 @@ static struct string_stream *alloc_string_stream(struct kunit *test, gfp_t gfp)
- 
- void string_stream_destroy(struct string_stream *stream)
- {
-+	if (!stream)
-+		return;
-+
- 	string_stream_clear(stream);
-+	kfree(stream);
-+}
-+
-+static void resource_free_string_stream(void *p)
++static void cleanup_raw_stream(void *p)
 +{
 +	struct string_stream *stream = p;
 +
 +	string_stream_destroy(stream);
++}
++
+ static char *get_concatenated_string(struct kunit *test, struct string_stream *stream)
+ {
+ 	char *str = string_stream_get_string(stream);
+@@ -21,11 +35,12 @@ static char *get_concatenated_string(struct kunit *test, struct string_stream *s
+ 	return str;
  }
  
- struct string_stream *kunit_alloc_string_stream(struct kunit *test, gfp_t gfp)
+-/* string_stream object is initialized correctly. */
+-static void string_stream_init_test(struct kunit *test)
++/* Managed string_stream object is initialized correctly. */
++static void string_stream_managed_init_test(struct kunit *test)
  {
--	return alloc_string_stream(test, gfp);
+ 	struct string_stream *stream;
+ 
++	/* Resource-managed initialization. */
+ 	stream = kunit_alloc_string_stream(test, GFP_KERNEL);
+ 	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream);
+ 
+@@ -37,6 +52,101 @@ static void string_stream_init_test(struct kunit *test)
+ 	KUNIT_EXPECT_TRUE(test, string_stream_is_empty(stream));
+ }
+ 
++/* Unmanaged string_stream object is initialized correctly. */
++static void string_stream_unmanaged_init_test(struct kunit *test)
++{
 +	struct string_stream *stream;
 +
-+	stream = alloc_string_stream(gfp);
-+	if (IS_ERR(stream))
-+		return stream;
++	stream = alloc_string_stream(GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream);
++	kunit_add_action(test, cleanup_raw_stream, stream);
 +
-+	if (kunit_add_action_or_reset(test, resource_free_string_stream, stream) != 0)
-+		return ERR_PTR(-ENOMEM);
++	KUNIT_EXPECT_EQ(test, stream->length, 0);
++	KUNIT_EXPECT_TRUE(test, list_empty(&stream->fragments));
++	KUNIT_EXPECT_EQ(test, stream->gfp, GFP_KERNEL);
++	KUNIT_EXPECT_FALSE(test, stream->append_newlines);
 +
-+	return stream;
++	KUNIT_EXPECT_TRUE(test, string_stream_is_empty(stream));
++}
++
++static void string_stream_destroy_stub(struct string_stream *stream)
++{
++	struct kunit *fake_test = kunit_get_current_test();
++	struct string_stream_test_priv *priv = fake_test->priv;
++
++	if (priv->freed_stream)
++		priv->stream_free_again = true;
++
++	priv->freed_stream = stream;
++
++	/*
++	 * Avoid calling deactivate_static_stub() or changing
++	 * current->kunit_test during cleanup. Leave the stream to
++	 * be freed during the test exit.
++	 */
++}
++
++/* kunit_free_string_stream() calls string_stream_desrtoy() */
++static void string_stream_managed_free_test(struct kunit *test)
++{
++	struct string_stream_test_priv *priv = test->priv;
++	struct string_stream *stream;
++
++	priv->freed_stream = NULL;
++	priv->stream_free_again = false;
++	kunit_activate_static_stub(test,
++				   string_stream_destroy,
++				   string_stream_destroy_stub);
++
++	stream = kunit_alloc_string_stream(test, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream);
++
++	/* This should call the stub function. */
++	kunit_free_string_stream(test, stream);
++
++	KUNIT_EXPECT_PTR_EQ(test, priv->freed_stream, stream);
++	KUNIT_EXPECT_FALSE(test, priv->stream_free_again);
++}
++
++/* string_stream object is freed when test is cleaned up. */
++static void string_stream_resource_free_test(struct kunit *test)
++{
++	struct string_stream_test_priv *priv = test->priv;
++	struct kunit *fake_test;
++	struct string_stream *stream;
++
++	fake_test = kunit_kzalloc(test, sizeof(*fake_test), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, fake_test);
++
++	kunit_init_test(fake_test, "string_stream_fake_test", NULL);
++	fake_test->priv = priv;
++
++	/*
++	 * Activate stub before creating string_stream so the
++	 * string_stream will be cleaned up first.
++	 */
++	priv->freed_stream = NULL;
++	priv->stream_free_again = false;
++	kunit_activate_static_stub(fake_test,
++				   string_stream_destroy,
++				   string_stream_destroy_stub);
++
++	stream = kunit_alloc_string_stream(fake_test, GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream);
++
++	/* Set current->kunit_test to fake_test so the static stub will be called. */
++	current->kunit_test = fake_test;
++
++	/* Cleanup test - the stub function should be called */
++	kunit_cleanup(fake_test);
++
++	/* Set current->kunit_test back to current test. */
++	current->kunit_test = test;
++
++	KUNIT_EXPECT_PTR_EQ(test, priv->freed_stream, stream);
++	KUNIT_EXPECT_FALSE(test, priv->stream_free_again);
++}
++
+ /*
+  * Add a series of lines to a string_stream. Check that all lines
+  * appear in the correct order and no characters are dropped.
+@@ -327,8 +437,24 @@ static void string_stream_auto_newline_test(struct kunit *test)
+ 			   "One\nTwo\nThree\nFour\nFive\nSix\nSeven\n\nEight\n");
  }
  
- void kunit_free_string_stream(struct kunit *test, struct string_stream *stream)
- {
--	string_stream_destroy(stream);
-+	kunit_release_action(test, resource_free_string_stream, (void *)stream);
- }
-diff --git a/lib/kunit/string-stream.h b/lib/kunit/string-stream.h
-index 3e70ee9d66e9..c55925a9b67f 100644
---- a/lib/kunit/string-stream.h
-+++ b/lib/kunit/string-stream.h
-@@ -23,7 +23,6 @@ struct string_stream {
- 	struct list_head fragments;
- 	/* length and fragments are protected by this lock */
- 	spinlock_t lock;
--	struct kunit *test;
- 	gfp_t gfp;
- 	bool append_newlines;
++static int string_stream_test_init(struct kunit *test)
++{
++	struct string_stream_test_priv *priv;
++
++	priv = kunit_kzalloc(test, sizeof(*priv), GFP_KERNEL);
++	if (!priv)
++		return -ENOMEM;
++
++	test->priv = priv;
++
++	return 0;
++}
++
+ static struct kunit_case string_stream_test_cases[] = {
+-	KUNIT_CASE(string_stream_init_test),
++	KUNIT_CASE(string_stream_managed_init_test),
++	KUNIT_CASE(string_stream_unmanaged_init_test),
++	KUNIT_CASE(string_stream_managed_free_test),
++	KUNIT_CASE(string_stream_resource_free_test),
+ 	KUNIT_CASE(string_stream_line_add_test),
+ 	KUNIT_CASE(string_stream_variable_length_line_test),
+ 	KUNIT_CASE(string_stream_append_test),
+@@ -341,6 +467,7 @@ static struct kunit_case string_stream_test_cases[] = {
+ 
+ static struct kunit_suite string_stream_test_suite = {
+ 	.name = "string-stream-test",
+-	.test_cases = string_stream_test_cases
++	.test_cases = string_stream_test_cases,
++	.init = string_stream_test_init,
  };
-@@ -33,6 +32,9 @@ struct kunit;
- struct string_stream *kunit_alloc_string_stream(struct kunit *test, gfp_t gfp);
- void kunit_free_string_stream(struct kunit *test, struct string_stream *stream);
+ kunit_test_suites(&string_stream_test_suite);
+diff --git a/lib/kunit/string-stream.c b/lib/kunit/string-stream.c
+index c39f1cba3bcd..d2ded5207e9e 100644
+--- a/lib/kunit/string-stream.c
++++ b/lib/kunit/string-stream.c
+@@ -6,6 +6,7 @@
+  * Author: Brendan Higgins <brendanhiggins@google.com>
+  */
  
-+struct string_stream *alloc_string_stream(gfp_t gfp);
-+void free_string_stream(struct string_stream *stream);
++#include <kunit/static_stub.h>
+ #include <kunit/test.h>
+ #include <linux/list.h>
+ #include <linux/slab.h>
+@@ -170,6 +171,8 @@ struct string_stream *alloc_string_stream(gfp_t gfp)
+ 
+ void string_stream_destroy(struct string_stream *stream)
+ {
++	KUNIT_STATIC_STUB_REDIRECT(string_stream_destroy, stream);
 +
- int __printf(2, 3) string_stream_add(struct string_stream *stream,
- 				     const char *fmt, ...);
- 
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 93d9225d61e3..2ad45a4ac06a 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -296,7 +296,7 @@ static void kunit_print_string_stream(struct kunit *test,
- 		kunit_err(test, "\n");
- 	} else {
- 		kunit_err(test, "%s", buf);
--		kunit_kfree(test, buf);
-+		kfree(buf);
- 	}
- }
+ 	if (!stream)
+ 		return;
  
 -- 
 2.30.2
