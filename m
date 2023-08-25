@@ -2,64 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41F6C788050
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Aug 2023 08:50:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1FD478804F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Aug 2023 08:50:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242620AbjHYGu0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Aug 2023 02:50:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59360 "EHLO
+        id S242623AbjHYGu1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Aug 2023 02:50:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242626AbjHYGuK (ORCPT
+        with ESMTP id S242637AbjHYGuQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Aug 2023 02:50:10 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24F51199E
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Aug 2023 23:50:08 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-4005f0a6c2bso41765e9.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Aug 2023 23:50:08 -0700 (PDT)
+        Fri, 25 Aug 2023 02:50:16 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C69419AC
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Aug 2023 23:50:14 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3fe2d620d17so61065e9.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Aug 2023 23:50:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1692946206; x=1693551006; darn=vger.kernel.org;
+        d=google.com; s=20221208; t=1692946212; x=1693551012; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=y9/C/iopeAJjCopfQV57qGE6leNtFHY0soKF3us/qvw=;
-        b=R2l8xpVgXWYqZC1uZY4LSKK+5PZfXR2zW65dZij04wcpGK6F852RhhWOwhRuRdhX5k
-         XaPcrKbjjocvkFdUXu3ND8sQS3fBBguZMQgEpA3efolsTqoubtcwBd5pRly04MBrqgrw
-         CcEzq2zupTYspQ8GushtkgK1ZKMLMF7EL1LXznHtPfiMXcRiXTFHSljrMR5M/XCdU0bK
-         zOSKVg48fzEuHB4yx4cGfquI0SQ59WXniHpyA6sDugGpNQN2mF8fSJlIGcEtVKMHRPPc
-         BeHl9XoRYG1D0F38S4EfetKFER2mgZaWfWEx7E5LEQqCtrErkzEMcQoo6X1PYUHje1pe
-         isgA==
+        bh=4XJGEuSsUNJ0FvFh6tPXOVHQh5DqJ89Ot95xIgwaI24=;
+        b=GbTF8qzdnr25XPnLrraPj+DBcTjB8B+QIhuHH3paEn0iB6E5i3yBn1/+8EZ86qFqCW
+         koaGwtpwfT166KzTxM5Nvo7h2h50gt5+rPAMNsM61vavN4ognx4BsNnl2iPDzL/RFi2w
+         LSMMw2F+lcfkuC1S7NxFOb0ULV9y5y3Yqgb+O5nBUzhuqqdKq0+e2MOMoHSRrqC4zMa3
+         Chiq20DU3fLUGAwFASkT/TCzZYY8gXNIfS5BDUM8PF5v/a9f4KGPdjLSwZC2c8VdZWm7
+         vFpme1yct0J+Z/YUzO4C5BWWQnDIpyBjzP2m7g2zw/o1ze839c7BH+XeGPXA+VjyNjaR
+         kV0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692946206; x=1693551006;
+        d=1e100.net; s=20221208; t=1692946212; x=1693551012;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=y9/C/iopeAJjCopfQV57qGE6leNtFHY0soKF3us/qvw=;
-        b=V7IPAake3e5ub3eRZq478MuLj/lAqtE62KMRU3Zbv5XCIpZnLoIS5X/vipdSdxp19q
-         rBW8vHJ8ih4T+nlg1Zi0Nwv+MLHI6/M/dNX2/tvFQHXAipTybfK9ai8J84VK3VZGjxQh
-         7lx6TaF17BMhkMMR4escVNvqwo2mBC98QMRWzQjAJqtOP3DK5crDQYdZhL42DJ/rhhsZ
-         oSsKNjrFc8TwgGBNgV/ORItQJ+lgimonaeTDTAprM4fbc5u9SDVybukcRMo7QiKZfBdW
-         Empug3fiYTgoLHRbUYdq5SDKTpt6uUDRw+qdHtN071xlVGBVvw9PQJtXYi4X8O+/Xv2M
-         GV/w==
-X-Gm-Message-State: AOJu0YwoQazaKCK3EmxUQeAi0umDu2dojNcXNYv0roXSI2fMsKLHc5B2
-        yYJ6fnaOmYbMUk/UW1zgCmuoCRozUc8DF/PGgdHfkw==
-X-Google-Smtp-Source: AGHT+IGPw1DUsVc23ouE1ryvPhTWctzZOSKmy3x1UZDdBh5xuAupLXU070NGuWigv9yhvcZ4Obq2xwwxx8J9E66LMUI=
-X-Received: by 2002:a05:600c:3b02:b0:401:7c14:948d with SMTP id
- m2-20020a05600c3b0200b004017c14948dmr131113wms.2.1692946206590; Thu, 24 Aug
- 2023 23:50:06 -0700 (PDT)
+        bh=4XJGEuSsUNJ0FvFh6tPXOVHQh5DqJ89Ot95xIgwaI24=;
+        b=GF+Q5MRjB/iY2hAK2FgDFBfSj2KBob72krGrhsOFrqhil7t5fWFGasji3tkDpz+sJ4
+         eoVGIxeRZ6LnGfDHkWIBImq2NhaGPHFqsJZ3Ac5unoxXtn0n5ht2qb8/fSLgm+elpWkG
+         T6U6zaMKC/vHJRFFedLBYWFNN/eDZVO9uU/tbMqQz4q39oEmwD54S8mubbYWHUTrSz49
+         ELCvbtDuBUkLUKbfip69j6U3gBtT4KkQwwFVAkASFuNnQmiGLmwTVlOV3GckpRS3jPJ4
+         ypWqIR1AQsDEEA1i7d8ZGcyZYzy2GOixUOlSNWqvweqhMyj0cLDCHlnAfflRHkfF6Q8S
+         tZrQ==
+X-Gm-Message-State: AOJu0YwawWEhjwKTpkL6VksNQCmq2JWPYaTX/NFeMRvAnEDAqyZ2AiJl
+        bzi92TUOEpPQLImf+poEoIPyCWE1OuD5t17DvuF/LQ==
+X-Google-Smtp-Source: AGHT+IEcXa9pqxTHYq38o4Zreb4PndfleV2GPv3W1rPmWJXHnKgAuyA3HbDgKPVnV8cXVtQoU4gjurQQaQG3DzrTKdw=
+X-Received: by 2002:a05:600c:3d8e:b0:3fe:e9ea:9653 with SMTP id
+ bi14-20020a05600c3d8e00b003fee9ea9653mr130296wmb.4.1692946212639; Thu, 24 Aug
+ 2023 23:50:12 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230824143129.1957914-1-rf@opensource.cirrus.com> <20230824143129.1957914-8-rf@opensource.cirrus.com>
-In-Reply-To: <20230824143129.1957914-8-rf@opensource.cirrus.com>
+References: <20230824143129.1957914-1-rf@opensource.cirrus.com> <20230824143129.1957914-11-rf@opensource.cirrus.com>
+In-Reply-To: <20230824143129.1957914-11-rf@opensource.cirrus.com>
 From:   David Gow <davidgow@google.com>
-Date:   Fri, 25 Aug 2023 14:49:54 +0800
-Message-ID: <CABVgOSnfkh7Yw=6oCByDCw6w3a2JSeGi2wEPTsFc593KyaNnoQ@mail.gmail.com>
-Subject: Re: [PATCH v5 07/10] kunit: string-stream: Decouple string_stream
- from kunit
+Date:   Fri, 25 Aug 2023 14:50:00 +0800
+Message-ID: <CABVgOSk+wEegL2QzR1hJAxyeuy9cgQ8GuyChJvd22W0Qpj_B=A@mail.gmail.com>
+Subject: Re: [PATCH v5 10/10] kunit: string-stream: Test performance of string_stream
 To:     Richard Fitzgerald <rf@opensource.cirrus.com>
 Cc:     brendan.higgins@linux.dev, rmoar@google.com,
         linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
         linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000049b7360603b9c1ed"
+        boundary="000000000000a4d3950603b9c168"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
@@ -71,279 +70,127 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---00000000000049b7360603b9c1ed
+--000000000000a4d3950603b9c168
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 24 Aug 2023 at 22:32, Richard Fitzgerald
+On Thu, 24 Aug 2023 at 22:33, Richard Fitzgerald
 <rf@opensource.cirrus.com> wrote:
 >
-> Re-work string_stream so that it is not tied to a struct kunit. This is
-> to allow using it for the log of struct kunit_suite.
+> Add a test of the speed and memory use of string_stream.
 >
-> Instead of resource-managing individual allocations the whole string_stream
-> can be resource-managed, if required.
+> string_stream_performance_test() doesn't actually "test" anything (it
+> cannot fail unless the system has run out of allocatable memory) but it
+> measures the speed and memory consumption of the string_stream and reports
+> the result.
 >
->     alloc_string_stream() now allocates a string stream that is
->     not resource-managed.
->
->     string_stream_destroy() now works on an unmanaged string_stream
->     allocated by alloc_string_stream() and frees the entire
->     string_stream (previously it only freed the fragments).
->
-> For resource-managed allocations use kunit_alloc_string_stream()
-> and kunit_free_string_stream().
->
-> In addition to this, string_stream_get_string() now returns an
-> unmanaged buffer that the caller must kfree().
+> This allows changes in the string_stream implementation to be compared.
 >
 > Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
 > ---
-> Changes since V4:
-> - Adding the kunit_[alloc|free]_string_stream() functions has been split
->   out into the previous patch to reduce the amount of code churn in
->   this patch.
-> - string_stream_destroy() has been kept and re-used instead of replacing
->   it with a new function.
-> - string_stream_get_string() now returns an unmanaged buffer. This avoids
->   a large code change to string_stream_append().
-> - Added wrapper function for resource free to prevent the type warning of
->   passing string_stream_destroy() directly to kunit_add_action_or_reset().
-> ---
 
-The changes all make sense to me, and work here. Thanks!
-
-The only slight issue is there's one missing spot which still casts
-the kunit_action_t function pointer directly, in the test. Up to you
-if you want to change that, too (though it may need a helper of its
-own.)
+Still looks good to me, so still:
 
 Reviewed-by: David Gow <davidgow@google.com>
+
+My results are:
+   # string_stream_performance_test: Time elapsed:           4457 us
+   # string_stream_performance_test: Total string length:    573890
+   # string_stream_performance_test: Bytes requested:        823922
+   # string_stream_performance_test: Actual bytes allocated: 1048280
 
 Cheers,
 -- David
 
 
 
->  lib/kunit/string-stream-test.c |  2 +-
->  lib/kunit/string-stream.c      | 59 ++++++++++++++++++++++------------
->  lib/kunit/string-stream.h      |  4 ++-
->  lib/kunit/test.c               |  2 +-
->  4 files changed, 44 insertions(+), 23 deletions(-)
+>  lib/kunit/string-stream-test.c | 54 ++++++++++++++++++++++++++++++++++
+>  1 file changed, 54 insertions(+)
 >
 > diff --git a/lib/kunit/string-stream-test.c b/lib/kunit/string-stream-test.c
-> index 89549c237069..45a2d221f1b5 100644
+> index 6897c57e0db7..7d81d139b8f8 100644
 > --- a/lib/kunit/string-stream-test.c
 > +++ b/lib/kunit/string-stream-test.c
-> @@ -16,6 +16,7 @@ static char *get_concatenated_string(struct kunit *test, struct string_stream *s
->         char *str = string_stream_get_string(stream);
+> @@ -8,7 +8,9 @@
 >
->         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, str);
-> +       kunit_add_action(test, (kunit_action_t *)kfree, (void *)str);
-
-This still directly casts kfree to kunit_action_t, so triggers a
-warning. I'm okay with it personally (and at some point we'll probably
-implement a public kunit_free_at_end() function to do things like
-this, which we already have in some other tests).
-
-
+>  #include <kunit/static_stub.h>
+>  #include <kunit/test.h>
+> +#include <linux/ktime.h>
+>  #include <linux/slab.h>
+> +#include <linux/timekeeping.h>
 >
->         return str;
->  }
-> @@ -30,7 +31,6 @@ static void string_stream_init_test(struct kunit *test)
->
->         KUNIT_EXPECT_EQ(test, stream->length, 0);
->         KUNIT_EXPECT_TRUE(test, list_empty(&stream->fragments));
-> -       KUNIT_EXPECT_PTR_EQ(test, stream->test, test);
->         KUNIT_EXPECT_EQ(test, stream->gfp, GFP_KERNEL);
->         KUNIT_EXPECT_FALSE(test, stream->append_newlines);
->
-> diff --git a/lib/kunit/string-stream.c b/lib/kunit/string-stream.c
-> index 12ecf15e1f6b..c39f1cba3bcd 100644
-> --- a/lib/kunit/string-stream.c
-> +++ b/lib/kunit/string-stream.c
-> @@ -13,30 +13,28 @@
 >  #include "string-stream.h"
 >
->
-> -static struct string_stream_fragment *alloc_string_stream_fragment(
-> -               struct kunit *test, int len, gfp_t gfp)
-> +static struct string_stream_fragment *alloc_string_stream_fragment(int len, gfp_t gfp)
->  {
->         struct string_stream_fragment *frag;
->
-> -       frag = kunit_kzalloc(test, sizeof(*frag), gfp);
-> +       frag = kzalloc(sizeof(*frag), gfp);
->         if (!frag)
->                 return ERR_PTR(-ENOMEM);
->
-> -       frag->fragment = kunit_kmalloc(test, len, gfp);
-> +       frag->fragment = kmalloc(len, gfp);
->         if (!frag->fragment) {
-> -               kunit_kfree(test, frag);
-> +               kfree(frag);
->                 return ERR_PTR(-ENOMEM);
->         }
->
->         return frag;
+> @@ -437,6 +439,57 @@ static void string_stream_auto_newline_test(struct kunit *test)
+>                            "One\nTwo\nThree\nFour\nFive\nSix\nSeven\n\nEight\n");
 >  }
 >
-> -static void string_stream_fragment_destroy(struct kunit *test,
-> -                                          struct string_stream_fragment *frag)
-> +static void string_stream_fragment_destroy(struct string_stream_fragment *frag)
->  {
->         list_del(&frag->node);
-> -       kunit_kfree(test, frag->fragment);
-> -       kunit_kfree(test, frag);
-> +       kfree(frag->fragment);
-> +       kfree(frag);
->  }
->
->  int string_stream_vadd(struct string_stream *stream,
-> @@ -65,9 +63,7 @@ int string_stream_vadd(struct string_stream *stream,
->         /* Need space for null byte. */
->         buf_len++;
->
-> -       frag_container = alloc_string_stream_fragment(stream->test,
-> -                                                     buf_len,
-> -                                                     stream->gfp);
-> +       frag_container = alloc_string_stream_fragment(buf_len, stream->gfp);
->         if (IS_ERR(frag_container))
->                 return PTR_ERR(frag_container);
->
-> @@ -111,7 +107,7 @@ static void string_stream_clear(struct string_stream *stream)
->                                  frag_container_safe,
->                                  &stream->fragments,
->                                  node) {
-> -               string_stream_fragment_destroy(stream->test, frag_container);
-> +               string_stream_fragment_destroy(frag_container);
->         }
->         stream->length = 0;
->         spin_unlock(&stream->lock);
-> @@ -123,7 +119,7 @@ char *string_stream_get_string(struct string_stream *stream)
->         size_t buf_len = stream->length + 1; /* +1 for null byte. */
->         char *buf;
->
-> -       buf = kunit_kzalloc(stream->test, buf_len, stream->gfp);
-> +       buf = kzalloc(buf_len, stream->gfp);
->         if (!buf)
->                 return NULL;
->
-> @@ -139,13 +135,17 @@ int string_stream_append(struct string_stream *stream,
->                          struct string_stream *other)
->  {
->         const char *other_content;
-> +       int ret;
->
->         other_content = string_stream_get_string(other);
->
->         if (!other_content)
->                 return -ENOMEM;
->
-> -       return string_stream_add(stream, other_content);
-> +       ret = string_stream_add(stream, other_content);
-> +       kfree(other_content);
+> +/*
+> + * This doesn't actually "test" anything. It reports time taken
+> + * and memory used for logging a large number of lines.
+> + */
+> +static void string_stream_performance_test(struct kunit *test)
+> +{
+> +       struct string_stream_fragment *frag_container;
+> +       struct string_stream *stream;
+> +       char test_line[101];
+> +       ktime_t start_time, end_time;
+> +       size_t len, bytes_requested, actual_bytes_used, total_string_length;
+> +       int offset, i;
 > +
-> +       return ret;
->  }
->
->  bool string_stream_is_empty(struct string_stream *stream)
-> @@ -153,16 +153,15 @@ bool string_stream_is_empty(struct string_stream *stream)
->         return list_empty(&stream->fragments);
->  }
->
-> -static struct string_stream *alloc_string_stream(struct kunit *test, gfp_t gfp)
-> +struct string_stream *alloc_string_stream(gfp_t gfp)
->  {
->         struct string_stream *stream;
->
-> -       stream = kunit_kzalloc(test, sizeof(*stream), gfp);
-> +       stream = kzalloc(sizeof(*stream), gfp);
->         if (!stream)
->                 return ERR_PTR(-ENOMEM);
->
->         stream->gfp = gfp;
-> -       stream->test = test;
->         INIT_LIST_HEAD(&stream->fragments);
->         spin_lock_init(&stream->lock);
->
-> @@ -171,15 +170,35 @@ static struct string_stream *alloc_string_stream(struct kunit *test, gfp_t gfp)
->
->  void string_stream_destroy(struct string_stream *stream)
->  {
-> +       if (!stream)
-> +               return;
+> +       stream = kunit_alloc_string_stream(test, GFP_KERNEL);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream);
 > +
->         string_stream_clear(stream);
-> +       kfree(stream);
+> +       memset(test_line, 'x', sizeof(test_line) - 1);
+> +       test_line[sizeof(test_line) - 1] = '\0';
+> +
+> +       start_time = ktime_get();
+> +       for (i = 0; i < 10000; i++) {
+> +               offset = i % (sizeof(test_line) - 1);
+> +               string_stream_add(stream, "%s: %d\n", &test_line[offset], i);
+> +       }
+> +       end_time = ktime_get();
+> +
+> +       /*
+> +        * Calculate memory used. This doesn't include invisible
+> +        * overhead due to kernel allocator fragment size rounding.
+> +        */
+> +       bytes_requested = sizeof(*stream);
+> +       actual_bytes_used = ksize(stream);
+> +       total_string_length = 0;
+> +
+> +       list_for_each_entry(frag_container, &stream->fragments, node) {
+> +               bytes_requested += sizeof(*frag_container);
+> +               actual_bytes_used += ksize(frag_container);
+> +
+> +               len = strlen(frag_container->fragment);
+> +               total_string_length += len;
+> +               bytes_requested += len + 1; /* +1 for '\0' */
+> +               actual_bytes_used += ksize(frag_container->fragment);
+> +       }
+> +
+> +       kunit_info(test, "Time elapsed:           %lld us\n",
+> +                  ktime_us_delta(end_time, start_time));
+> +       kunit_info(test, "Total string length:    %zu\n", total_string_length);
+> +       kunit_info(test, "Bytes requested:        %zu\n", bytes_requested);
+> +       kunit_info(test, "Actual bytes allocated: %zu\n", actual_bytes_used);
 > +}
 > +
-> +static void resource_free_string_stream(void *p)
-> +{
-> +       struct string_stream *stream = p;
-> +
-> +       string_stream_destroy(stream);
->  }
->
->  struct string_stream *kunit_alloc_string_stream(struct kunit *test, gfp_t gfp)
+>  static int string_stream_test_init(struct kunit *test)
 >  {
-> -       return alloc_string_stream(test, gfp);
-> +       struct string_stream *stream;
-> +
-> +       stream = alloc_string_stream(gfp);
-> +       if (IS_ERR(stream))
-> +               return stream;
-> +
-> +       if (kunit_add_action_or_reset(test, resource_free_string_stream, stream) != 0)
-> +               return ERR_PTR(-ENOMEM);
-> +
-> +       return stream;
->  }
->
->  void kunit_free_string_stream(struct kunit *test, struct string_stream *stream)
->  {
-> -       string_stream_destroy(stream);
-> +       kunit_release_action(test, resource_free_string_stream, (void *)stream);
->  }
-> diff --git a/lib/kunit/string-stream.h b/lib/kunit/string-stream.h
-> index 3e70ee9d66e9..c55925a9b67f 100644
-> --- a/lib/kunit/string-stream.h
-> +++ b/lib/kunit/string-stream.h
-> @@ -23,7 +23,6 @@ struct string_stream {
->         struct list_head fragments;
->         /* length and fragments are protected by this lock */
->         spinlock_t lock;
-> -       struct kunit *test;
->         gfp_t gfp;
->         bool append_newlines;
+>         struct string_stream_test_priv *priv;
+> @@ -462,6 +515,7 @@ static struct kunit_case string_stream_test_cases[] = {
+>         KUNIT_CASE(string_stream_append_empty_string_test),
+>         KUNIT_CASE(string_stream_no_auto_newline_test),
+>         KUNIT_CASE(string_stream_auto_newline_test),
+> +       KUNIT_CASE(string_stream_performance_test),
+>         {}
 >  };
-> @@ -33,6 +32,9 @@ struct kunit;
->  struct string_stream *kunit_alloc_string_stream(struct kunit *test, gfp_t gfp);
->  void kunit_free_string_stream(struct kunit *test, struct string_stream *stream);
->
-> +struct string_stream *alloc_string_stream(gfp_t gfp);
-> +void free_string_stream(struct string_stream *stream);
-> +
->  int __printf(2, 3) string_stream_add(struct string_stream *stream,
->                                      const char *fmt, ...);
->
-> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> index 93d9225d61e3..2ad45a4ac06a 100644
-> --- a/lib/kunit/test.c
-> +++ b/lib/kunit/test.c
-> @@ -296,7 +296,7 @@ static void kunit_print_string_stream(struct kunit *test,
->                 kunit_err(test, "\n");
->         } else {
->                 kunit_err(test, "%s", buf);
-> -               kunit_kfree(test, buf);
-> +               kfree(buf);
->         }
->  }
 >
 > --
 > 2.30.2
 >
 
---00000000000049b7360603b9c1ed
+--000000000000a4d3950603b9c168
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -410,14 +257,14 @@ impZAng7ccvvK09K3ZuhwTIxJMsPXCZYsrXWORTw5sczRAP6XvKbPBJnsJoSTe5dFBPBHOQJOGhU
 qWfEfWnWMJPF3LxSGLpLFQXO3RwQqmxv08avwXfVPouh1xuB3FX7rpDabT8YDhu9JgIZkLEKko7L
 yQt6zWwng7k8YF/jGbiAta6VMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBV
-uE6JxvTtBBLqjNN/1v/a81fkVmgsc1QBRTkPG6H1RzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzA4MjUwNjUwMDZaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDs
+bBm7SNrdjWEn69clZnamsrqbpSIjXSf9YGWuSV3qADAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzA4MjUwNjUwMTJaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAK0O9vtudfqc0lqDe+FW6
-lGD60RyBN9FufrFjIc2TqCg6auMx0Rx+Oqk9+gQqFS3cniVr9850nUGnjJi5BhnCQBk7qPdfRsHp
-s0mFYX6FQ7mp78iGagQOV5FZzPJJdTVxZOW/0Qg+2Y30yvqffAXKmmz9auBJxCfxMFkx9+KmYBoL
-0uFqkbHOgHyedhUy5UW63KmBOheVq0qawQoYbFDjmjHlesteWAp/9pftkAZXPsSAkPJveBD5bYzL
-kt14gXDiYED3Pkt+ahqKf5VmsRVWsaO8CkX/doXXtyLwmO+jS2Wom4rJ+3S6lrQWBZsxPA4iDiTH
-XA8LRY9E8DcgTQ0fDQ==
---00000000000049b7360603b9c1ed--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAK6auv3Zd5NH/IFdGaEcQ
+ScJCqEemHKzDqV3MRPbEzSTUHUryz2BWHxFd52SJfu5gokfTNA8OAEXzMRfKGekpf/p+whUGWECR
+Ms4uFLoQTW5SjwTpP+Aifs/IUQa8UgehExTzZ2PZaoxeTK4CxzRc1g30IMNX5+eODYvWqAY9rbtT
+3Lxwg3vDWugxsBuCnvu5hB6Zf/Qxd33ZLSdwwzGFx7YSrKf4DVv581039C6vhS1A+2rTqqdXCPNQ
+j13A4S8bQgtEnFP+kNHTwEigQJaOXUkV0jugyJwPCJ7J+Ci1Jb9lUPJIrWBHxzTTy8p0MDO38tCy
+XqDjS1gzC7oIOEH/1A==
+--000000000000a4d3950603b9c168--
