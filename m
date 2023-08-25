@@ -2,95 +2,101 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1452788C03
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Aug 2023 17:00:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED3AB788C6D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Aug 2023 17:27:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244749AbjHYO7i (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Aug 2023 10:59:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53544 "EHLO
+        id S237846AbjHYP0g (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Aug 2023 11:26:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245416AbjHYO7P (ORCPT
+        with ESMTP id S240569AbjHYP01 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Aug 2023 10:59:15 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE852126;
-        Fri, 25 Aug 2023 07:59:13 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 37PBOr4f027978;
-        Fri, 25 Aug 2023 09:58:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=
-        message-id:date:mime-version:subject:to:cc:references:from
-        :in-reply-to:content-type:content-transfer-encoding; s=
-        PODMain02222019; bh=ZD8FKKTtU7kQcPRoe6eLXy9fe9a6900/QF8tmKBGP7Q=; b=
-        Nf8KRQnWUf/IIm5sLcIrtiUhoZfSIzw/W2A+ryy5nXxPjruFnsnrr2IvhVgGHhqe
-        aa4+gvcoPAXmA4W1+Y6vYOKUem8CTmf1WBbXOdHNxUyUwGrMWuuW1BmYZM0aGd/a
-        lJuRhEKaMXF1F7zWclAsJY1JFcRJrMOHZCgPmMVQ0UFdaeE0SVWb5xXtds/i4dRE
-        3sA7y0L+WIplqKhe7JSvHJxxCQxHIfHiqSrO2ed9/vja9N0yQ7Te1wPly3LaG9T/
-        sxNUzYurURt2ZsxwgHv2A3qRLXxNu4pRIp0aX88j0/9FP2/0XfhhSx+YoOrdqp8l
-        G8jLWZPWJOG6MihsPsN6aA==
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3sp1rbj6cr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 25 Aug 2023 09:58:56 -0500 (CDT)
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.30; Fri, 25 Aug
- 2023 15:58:54 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.30 via Frontend Transport; Fri, 25 Aug 2023 15:58:54 +0100
-Received: from [198.90.251.75] (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.75])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 0636F11AB;
-        Fri, 25 Aug 2023 14:58:54 +0000 (UTC)
-Message-ID: <b0c2e85f-fcc1-55fb-cef2-2e2d0fe56747@opensource.cirrus.com>
-Date:   Fri, 25 Aug 2023 15:58:53 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v5 02/10] kunit: string-stream: Improve testing of
- string_stream
-Content-Language: en-US
-To:     Rae Moar <rmoar@google.com>
-CC:     <brendan.higgins@linux.dev>, <davidgow@google.com>,
-        <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
-        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>
-References: <20230824143129.1957914-1-rf@opensource.cirrus.com>
- <20230824143129.1957914-3-rf@opensource.cirrus.com>
- <CA+GJov7nzgmGmMooAj9BpQ267W6atcsZJ=tULQQJYjbuQL4E0w@mail.gmail.com>
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-In-Reply-To: <CA+GJov7nzgmGmMooAj9BpQ267W6atcsZJ=tULQQJYjbuQL4E0w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: pnBpKmozqCv9uvz0RTk876WHbUF_Q49e
-X-Proofpoint-GUID: pnBpKmozqCv9uvz0RTk876WHbUF_Q49e
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 25 Aug 2023 11:26:27 -0400
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED2B2135
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Aug 2023 08:26:24 -0700 (PDT)
+Received: by mail-pl1-x649.google.com with SMTP id d9443c01a7336-1bf75ca4e4fso11531635ad.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 25 Aug 2023 08:26:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1692977184; x=1693581984;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=uT9B5IhwSieTS/lycgAO9B5cbkxabumJT7OeFCsXGMk=;
+        b=vvVTkRT+VuK5043ahLb/u/zj4f8sB0vqgAunodyYuRhNLeufoefzhoe4WNJFWBlqnT
+         fOjWSwwVNPHbk3edqUSOVA+XxAEjDCKjxs3HxwUIlookvW4KiCnYLFtt1qTalqSJOVGF
+         sScsGhUtVxEoQK15lzMQlLomYBvjcE2Sz4k/e1Oy+HS/9hhEtZcDcaVdaQEeyjXxZh3R
+         TzsVUTWd7XZcUj1STnMDvCZ5q8x5tT67ioP2DbuxoS8Xvt4bmsdKfkLeTHrNoo93HISk
+         V1NYfBP6/ZvZCCCq3TieE6qyCIY3XWbSHhfJP0iP2R+QQbrK8/8rYTZUS4Q+EnvzC4ai
+         inOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1692977184; x=1693581984;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uT9B5IhwSieTS/lycgAO9B5cbkxabumJT7OeFCsXGMk=;
+        b=RbpLpxREyu7b0wNRA9A9N/WLLylu4omK9MH+CUr+BmsGeds+erp6pO7mwa6C9h869+
+         3zX5naz3T8G4RKXbPYP/nRdU3Q4MlvP08UP0nyBWM9OsAlWTbzNZC4N5M8eInopvR2zq
+         f0kavKbJfP9XmK9OEO6tlZQMkw5Bvyn56YSt+pQ+7x0lw8SLaEK6JUEi1efhjx289Oiu
+         9KHSpQS6i4/tIy3Re61vXgELx+K+RZ5YKhb7LshzPLBjGjSube6pWZB0booFum+/M3X2
+         xZqM4ESqA4p/kOjahMdQNmnfc2m9wF9BZyoHUMz9THY0XPF8O1/791OwIbzyo5Rbr1X3
+         TnQQ==
+X-Gm-Message-State: AOJu0YzhoxMFfgBEmH7n1kw6Ysds7KdkxgdV+zrcEpvIR/pt/xCSDvgu
+        ucBxYhmWP858xUuFz/Mv9IyVulerj3U=
+X-Google-Smtp-Source: AGHT+IHBe26z5RAiUFUIi9mr/ywY4xvfcSUx9IiaElkVhEpKpN2zZSyFkiUVw2XIEkVi8AWhgt40SvUlcq8=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:902:e801:b0:1bc:4452:59c4 with SMTP id
+ u1-20020a170902e80100b001bc445259c4mr7073353plg.4.1692977184048; Fri, 25 Aug
+ 2023 08:26:24 -0700 (PDT)
+Date:   Fri, 25 Aug 2023 08:26:22 -0700
+In-Reply-To: <20230824202415.131824-1-mahmoudmatook.mm@gmail.com>
+Mime-Version: 1.0
+References: <20230824202415.131824-1-mahmoudmatook.mm@gmail.com>
+Message-ID: <ZOjIHo2A6HZ8K4Qp@google.com>
+Subject: Re: [PATCH v2 1/2] selftests: Provide local define of min() and max()
+From:   Sean Christopherson <seanjc@google.com>
+To:     Mahmoud Maatuq <mahmoudmatook.mm@gmail.com>
+Cc:     keescook@chromium.org, edumazet@google.com,
+        willemdebruijn.kernel@gmail.com, wad@chromium.org,
+        luto@amacapital.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kuba@kernel.org, shuah@kernel.org,
+        pabeni@redhat.com, linux-kselftest@vger.kernel.org,
+        davem@davemloft.net,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        David Laight <David.Laight@aculab.com>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 24/08/2023 23:42, Rae Moar wrote:
-> On Thu, Aug 24, 2023 at 10:31 AM Richard Fitzgerald
-> <rf@opensource.cirrus.com> wrote:
->>
->> Replace the minimal tests with more-thorough testing.
->>
-
-<SNIP>
-
->> +       KUNIT_EXPECT_EQ(test, stream->gfp, GFP_KERNEL);
+On Fri, Aug 25, 2023, Mahmoud Maatuq wrote:
+> to avoid manual calculation of min and max values
+> and fix coccinelle warnings such WARNING opportunity for min()/max()
+> adding one common definition that could be used in multiple files
+> under selftests.
+> there are also some defines for min/max scattered locally inside sources
+> under selftests.
+> this also prepares for cleaning up those redundant defines and include
+> kselftest.h instead.
 > 
-> As mentioned in the last version, if this causes a warning we will
-> look into it on the KUnit side.
->
+> Signed-off-by: Mahmoud Maatuq <mahmoudmatook.mm@gmail.com>
+> Suggested-by: David Laight <David.Laight@aculab.com>
+> ---
+> changes in v2:
+> redefine min/max in a more strict way to avoid 
+> signedness mismatch and multiple evaluation.
+> is_signed_type() moved from selftests/kselftest_harness.h 
+> to selftests/kselftest.h.
+> ---
+>  tools/testing/selftests/kselftest.h         | 24 +++++++++++++++++++++
 
-It does. I left it because you said you'd do a fix.
-But maybe it's better to change it to
+Heh, reminds me of https://xkcd.com/927.
 
-KUNIT_EXPECT_TRUE(test, stream_gfp == GFP_KERNEL);
-
-to avoid the warning for now.
+All of these #defines are available in tools/include/linux/kernel.h, and it's
+trivially easy for selftests to add all of tools/include to their include path.
+I don't see any reason for the selftests framework to define yet another version,
+just fix the individual tests.
