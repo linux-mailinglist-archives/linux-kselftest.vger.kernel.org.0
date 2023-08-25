@@ -2,64 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DB69788043
+	by mail.lfdr.de (Postfix) with ESMTP id 61A83788044
 	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Aug 2023 08:50:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242495AbjHYGtz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Aug 2023 02:49:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52286 "EHLO
+        id S242476AbjHYGty (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Aug 2023 02:49:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242478AbjHYGt1 (ORCPT
+        with ESMTP id S242605AbjHYGtd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Aug 2023 02:49:27 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FD461FE4
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Aug 2023 23:49:25 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3fef2fafee2so66015e9.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 24 Aug 2023 23:49:25 -0700 (PDT)
+        Fri, 25 Aug 2023 02:49:33 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358801FE9
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Aug 2023 23:49:30 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-4009fdc224dso42185e9.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 24 Aug 2023 23:49:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1692946164; x=1693550964; darn=vger.kernel.org;
+        d=google.com; s=20221208; t=1692946168; x=1693550968; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=uNKGwTwoIm07EQ2OqMnboJ7mZtl5WeDZFH0Chu5TRZ8=;
-        b=Er5AF2U/itDTK9d2n4caJHPpFDpF18NAQwVE1yXljtoshKPggSIiDfUjHb55c0bQ2h
-         8rpciWSpK8eUZBjGzC68Sj/s1vG8lb90BpWW4pqWRRmDsHkcMoKjswmY50+DtjCAgEiW
-         duOd1Aa1vFZmS6PiY8TDfpK5PTXxPdqxCjviMWk/8Vb74RforVBIIFm+B1CngGHNUf7T
-         95Nt017IK/db8VjlvJzlFzsSaCNvx7sKLKZp1QhDdnGARIsdjdGHVkYhwrXQ/9qWPzP/
-         txAJtR0kjspH3R+R+UDP+ZsHtsYl0Tg60ZAWfbQBCgwDIv7FDmaIgCxsceCA9eUHXhSU
-         9Arg==
+        bh=WhDp2kjJzIhg7wYFwKSKVdDRtwpRP1OuIpAzLl2nndk=;
+        b=bJgkeEwQz++r6bRWyPcsWdqa+IGVGbH144OM8+P80VZ2XI7lhWJdX5BG1JGB6Tq4bM
+         vMaAg8E9glYeppcc34ywDziPTOcQXnW/pxQ9SGUr3PSDPEIk8x6rjpDV+iKzu0WlQVOp
+         vxOtthgpcgdqy25NIsoWLPkuTrCvVjCJLmHm2SzJYnyLNKd6GeyszXrTpUWajCPZ9yia
+         9MrM64YT6gtJnjpMWiZhngVtMNgU/fFEDIAXTv49vQKkQRV6HQCUcXddEhwxg732axSD
+         3dMdjbvBpU0obyYW7bNc7xyMya7Q1plK3a+Omc2mITXuiMsYkQmlXVz45eBOs+wB6ccf
+         FEkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1692946164; x=1693550964;
+        d=1e100.net; s=20221208; t=1692946168; x=1693550968;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=uNKGwTwoIm07EQ2OqMnboJ7mZtl5WeDZFH0Chu5TRZ8=;
-        b=AzKg4u3tVEplNVQNJtssEA5qxJlbqzYwncJdcjq0DZfj/df0geEhTykRnflm+79lxN
-         mTmSbVkJCTFOq9V5VL57VZUrtq6785VMQGLRcyiqiSZY0GRg6tVA/mVZS9CjJ2u+DsZ2
-         nHBneI/48jLeaVBEjhSf5AVThlw1AJGVO7WENWqC9Kdnyb/I4QBWGNBNyA5LWYlTokho
-         VAY15g6JVPEiHrNL1k77pitkuSCbGuJVelpSvFD3uQwBnNEENpidk0FBG+4elcjrljTX
-         3nNlSwOGJjcGjakUTsElf9WSQ73m0bbWAzPNwQt4Lliy60sSgsYxr9RIzNq4Gc2Jj3Ui
-         KP4A==
-X-Gm-Message-State: AOJu0YysANVvMAttk1l1Equy80XN7t80uUMZNfDI0sBYDWFJwk/UWz9M
-        3gpRBiV7XvGuJBaSFzovakssn4jdVTy6w3P4YvI4iA==
-X-Google-Smtp-Source: AGHT+IHi6UV3hxpZcE5QYhwsQ02MwSt5B/SL2pzP9cVLW1Zlb+CUcK44V6+nF1iRSWVDwAMMCdfwCJ1wpzNxiot9Inw=
-X-Received: by 2002:a05:600c:1c92:b0:3fe:f32f:c57f with SMTP id
- k18-20020a05600c1c9200b003fef32fc57fmr138490wms.0.1692946163972; Thu, 24 Aug
- 2023 23:49:23 -0700 (PDT)
+        bh=WhDp2kjJzIhg7wYFwKSKVdDRtwpRP1OuIpAzLl2nndk=;
+        b=bONCR0oCZB7ZA3pf2APSHM4bQSqyuFY7JZfpkgbX+wI1TH/tuYJJxavWG24hFBOK2R
+         bH14RTt4pZ0CQRv36C30bXBc9rzMMJnHJfawVgaXdyJGucpQBQAprYDDbCm1l0jdezeF
+         rkm1xA3XTpMus+DyC8aP0qBXY/jJoNjFkxTxewBYXf1D11tjVdSP5qCsEoXKMWKifRUC
+         i+7brYO4GHTArkxGCt32tntqxh1CnCmtmjcwgpkmiPArDqlNhDe5MoAkdwkvErjby5YD
+         Iftm60FLVk9c4m2ZcQFz+hGF8x15LycWp1BFQc31Odn78/v0weie+hZ36mYNMbk1iSBY
+         Vlpg==
+X-Gm-Message-State: AOJu0YyXv9FZ0rOuVnbWzoUNKnevHlH93m22QKT6WTM5hEF3bhrpXrZv
+        GhbJY+8cQwjiOijkzV74ZId+i5E9NMqCkLjugnrMUDs2w/U5LonMhyw=
+X-Google-Smtp-Source: AGHT+IF5xymPSXe4tSBK8NStSLQdaQ1lABDrQGfQwp+tcHfPVkxg1IzRtPPwOJy0Q+M7RSbt7THZx5s43J8NBVoITZI=
+X-Received: by 2002:a05:600c:5106:b0:3fe:eb42:7ec with SMTP id
+ o6-20020a05600c510600b003feeb4207ecmr102381wms.1.1692946168488; Thu, 24 Aug
+ 2023 23:49:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230824143129.1957914-1-rf@opensource.cirrus.com> <20230824143129.1957914-2-rf@opensource.cirrus.com>
-In-Reply-To: <20230824143129.1957914-2-rf@opensource.cirrus.com>
+References: <20230824143129.1957914-1-rf@opensource.cirrus.com> <20230824143129.1957914-3-rf@opensource.cirrus.com>
+In-Reply-To: <20230824143129.1957914-3-rf@opensource.cirrus.com>
 From:   David Gow <davidgow@google.com>
-Date:   Fri, 25 Aug 2023 14:49:11 +0800
-Message-ID: <CABVgOSk+7XXT3GarvUUQuy7odEfqW9g1=GY4tHF=TyhaS=n5_Q@mail.gmail.com>
-Subject: Re: [PATCH v5 01/10] kunit: string-stream: Don't create a fragment
- for empty strings
+Date:   Fri, 25 Aug 2023 14:49:16 +0800
+Message-ID: <CABVgOSn4H7HAbn2ZR0KFBwLT6GfBteaGVJa8KT8Q4fjhM7nUQw@mail.gmail.com>
+Subject: Re: [PATCH v5 02/10] kunit: string-stream: Improve testing of string_stream
 To:     Richard Fitzgerald <rf@opensource.cirrus.com>
 Cc:     brendan.higgins@linux.dev, rmoar@google.com,
         linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
         linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000c0e9240603b9be49"
+        boundary="0000000000000659830603b9bfdf"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
@@ -71,17 +70,44 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---000000000000c0e9240603b9be49
+--0000000000000659830603b9bfdf
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 24 Aug 2023 at 22:32, 'Richard Fitzgerald' via KUnit
-Development <kunit-dev@googlegroups.com> wrote:
+On Thu, 24 Aug 2023 at 22:33, Richard Fitzgerald
+<rf@opensource.cirrus.com> wrote:
 >
-> If the result of the formatted string is an empty string just return
-> instead of creating an empty fragment.
+> Replace the minimal tests with more-thorough testing.
+>
+> string_stream_init_test() tests that struct string_stream is
+> initialized correctly.
+>
+> string_stream_line_add_test() adds a series of numbered lines and
+> checks that the resulting string contains all the lines.
+>
+> string_stream_variable_length_line_test() adds a large number of
+> lines of varying length to create many fragments, then tests that all
+> lines are present.
+>
+> string_stream_append_test() tests various cases of using
+> string_stream_append() to append the content of one stream to another.
+>
+> Adds string_stream_append_empty_string_test() to test that adding an
+> empty string to a string_stream doesn't create a new empty fragment.
 >
 > Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
 > ---
+> Changes since V4:
+> - Test cases for appending empty strings have been squashed into this
+>   patch.
+> - Call to string_stream_get_string() is wrapped in a local function
+>   get_concatenated_string(). This is to avoid a lot of code churn later
+>   when string_stream_get_string() is changed to return an unmanaged buffer.
+> ---
+
+This looks good to me. I'm not 100% sold on the
+'get_concatenated_string()' function long-term (despite its obvious
+benefits during the refactoring), but that's just personal taste. This
+version is fine regardless.
 
 Reviewed-by: David Gow <davidgow@google.com>
 
@@ -89,42 +115,273 @@ Cheers,
 -- David
 
 
->  lib/kunit/string-stream.c | 10 ++++++++--
->  1 file changed, 8 insertions(+), 2 deletions(-)
+>  lib/kunit/string-stream-test.c | 232 ++++++++++++++++++++++++++++++---
+>  1 file changed, 216 insertions(+), 16 deletions(-)
 >
-> diff --git a/lib/kunit/string-stream.c b/lib/kunit/string-stream.c
-> index cc32743c1171..ed24d86af9f5 100644
-> --- a/lib/kunit/string-stream.c
-> +++ b/lib/kunit/string-stream.c
-> @@ -50,11 +50,17 @@ int string_stream_vadd(struct string_stream *stream,
->         /* Make a copy because `vsnprintf` could change it */
->         va_copy(args_for_counting, args);
+> diff --git a/lib/kunit/string-stream-test.c b/lib/kunit/string-stream-test.c
+> index 110f3a993250..2b761ba01835 100644
+> --- a/lib/kunit/string-stream-test.c
+> +++ b/lib/kunit/string-stream-test.c
+> @@ -11,38 +11,238 @@
 >
-> -       /* Need space for null byte. */
-> -       len = vsnprintf(NULL, 0, fmt, args_for_counting) + 1;
-> +       /* Evaluate length of formatted string */
-> +       len = vsnprintf(NULL, 0, fmt, args_for_counting);
+>  #include "string-stream.h"
 >
->         va_end(args_for_counting);
->
-> +       if (len == 0)
-> +               return 0;
+> -static void string_stream_test_empty_on_creation(struct kunit *test)
+> +static char *get_concatenated_string(struct kunit *test, struct string_stream *stream)
+>  {
+> -       struct string_stream *stream = alloc_string_stream(test, GFP_KERNEL);
+> +       char *str = string_stream_get_string(stream);
 > +
-> +       /* Need space for null byte. */
-> +       len++;
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, str);
 > +
->         frag_container = alloc_string_stream_fragment(stream->test,
->                                                       len,
->                                                       stream->gfp);
+> +       return str;
+> +}
+> +
+> +/* string_stream object is initialized correctly. */
+> +static void string_stream_init_test(struct kunit *test)
+> +{
+> +       struct string_stream *stream;
+> +
+> +       stream = alloc_string_stream(test, GFP_KERNEL);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream);
+> +
+> +       KUNIT_EXPECT_EQ(test, stream->length, 0);
+> +       KUNIT_EXPECT_TRUE(test, list_empty(&stream->fragments));
+> +       KUNIT_EXPECT_PTR_EQ(test, stream->test, test);
+> +       KUNIT_EXPECT_EQ(test, stream->gfp, GFP_KERNEL);
+>
+>         KUNIT_EXPECT_TRUE(test, string_stream_is_empty(stream));
+>  }
+>
+> -static void string_stream_test_not_empty_after_add(struct kunit *test)
+> +/*
+> + * Add a series of lines to a string_stream. Check that all lines
+> + * appear in the correct order and no characters are dropped.
+> + */
+> +static void string_stream_line_add_test(struct kunit *test)
+>  {
+> -       struct string_stream *stream = alloc_string_stream(test, GFP_KERNEL);
+> +       struct string_stream *stream;
+> +       char line[60];
+> +       char *concat_string, *pos, *string_end;
+> +       size_t len, total_len;
+> +       int num_lines, i;
+>
+> -       string_stream_add(stream, "Foo");
+> +       stream = alloc_string_stream(test, GFP_KERNEL);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream);
+>
+> -       KUNIT_EXPECT_FALSE(test, string_stream_is_empty(stream));
+> +       /* Add series of sequence numbered lines */
+> +       total_len = 0;
+> +       for (i = 0; i < 100; ++i) {
+> +               len = snprintf(line, sizeof(line),
+> +                       "The quick brown fox jumps over the lazy penguin %d\n", i);
+> +
+> +               /* Sanity-check that our test string isn't truncated */
+> +               KUNIT_ASSERT_LT(test, len, sizeof(line));
+> +
+> +               string_stream_add(stream, line);
+> +               total_len += len;
+> +       }
+> +       num_lines = i;
+> +
+> +       concat_string = get_concatenated_string(test, stream);
+> +       KUNIT_EXPECT_NOT_ERR_OR_NULL(test, concat_string);
+> +       KUNIT_EXPECT_EQ(test, strlen(concat_string), total_len);
+> +
+> +       /*
+> +        * Split the concatenated string at the newlines and check that
+> +        * all the original added strings are present.
+> +        */
+> +       pos = concat_string;
+> +       for (i = 0; i < num_lines; ++i) {
+> +               string_end = strchr(pos, '\n');
+> +               KUNIT_EXPECT_NOT_NULL(test, string_end);
+> +
+> +               /* Convert to NULL-terminated string */
+> +               *string_end = '\0';
+> +
+> +               snprintf(line, sizeof(line),
+> +                        "The quick brown fox jumps over the lazy penguin %d", i);
+> +               KUNIT_EXPECT_STREQ(test, pos, line);
+> +
+> +               pos = string_end + 1;
+> +       }
+> +
+> +       /* There shouldn't be any more data after this */
+> +       KUNIT_EXPECT_EQ(test, strlen(pos), 0);
+>  }
+>
+> -static void string_stream_test_get_string(struct kunit *test)
+> +/* Add a series of lines of variable length to a string_stream. */
+> +static void string_stream_variable_length_line_test(struct kunit *test)
+>  {
+> -       struct string_stream *stream = alloc_string_stream(test, GFP_KERNEL);
+> -       char *output;
+> +       static const char line[] =
+> +               "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+> +               " 0123456789!$%^&*()_-+={}[]:;@'~#<>,.?/|";
+> +       struct string_stream *stream;
+> +       struct rnd_state rnd;
+> +       char *concat_string, *pos, *string_end;
+> +       size_t offset, total_len;
+> +       int num_lines, i;
+>
+> -       string_stream_add(stream, "Foo");
+> -       string_stream_add(stream, " %s", "bar");
+> +       stream = alloc_string_stream(test, GFP_KERNEL);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream);
+>
+> -       output = string_stream_get_string(stream);
+> -       KUNIT_ASSERT_STREQ(test, output, "Foo bar");
+> +       /*
+> +        * Log many lines of varying lengths until we have created
+> +        * many fragments.
+> +        * The "randomness" must be repeatable.
+> +        */
+> +       prandom_seed_state(&rnd, 3141592653589793238ULL);
+> +       total_len = 0;
+> +       for (i = 0; i < 100; ++i) {
+> +               offset = prandom_u32_state(&rnd) % (sizeof(line) - 1);
+> +               string_stream_add(stream, "%s\n", &line[offset]);
+> +               total_len += sizeof(line) - offset;
+> +       }
+> +       num_lines = i;
+> +
+> +       concat_string = get_concatenated_string(test, stream);
+> +       KUNIT_EXPECT_NOT_ERR_OR_NULL(test, concat_string);
+> +       KUNIT_EXPECT_EQ(test, strlen(concat_string), total_len);
+> +
+> +       /*
+> +        * Split the concatenated string at the newlines and check that
+> +        * all the original added strings are present.
+> +        */
+> +       prandom_seed_state(&rnd, 3141592653589793238ULL);
+> +       pos = concat_string;
+> +       for (i = 0; i < num_lines; ++i) {
+> +               string_end = strchr(pos, '\n');
+> +               KUNIT_EXPECT_NOT_NULL(test, string_end);
+> +
+> +               /* Convert to NULL-terminated string */
+> +               *string_end = '\0';
+> +
+> +               offset = prandom_u32_state(&rnd) % (sizeof(line) - 1);
+> +               KUNIT_EXPECT_STREQ(test, pos, &line[offset]);
+> +
+> +               pos = string_end + 1;
+> +       }
+> +
+> +       /* There shouldn't be any more data after this */
+> +       KUNIT_EXPECT_EQ(test, strlen(pos), 0);
+> +}
+> +
+> +/* Appending the content of one string stream to another. */
+> +static void string_stream_append_test(struct kunit *test)
+> +{
+> +       static const char * const strings_1[] = {
+> +               "one", "two", "three", "four", "five", "six",
+> +               "seven", "eight", "nine", "ten",
+> +       };
+> +       static const char * const strings_2[] = {
+> +               "Apple", "Pear", "Orange", "Banana", "Grape", "Apricot",
+> +       };
+> +       struct string_stream *stream_1, *stream_2;
+> +       const char *original_content, *stream_2_content;
+> +       char *combined_content;
+> +       size_t combined_length;
+> +       int i;
+> +
+> +       stream_1 = alloc_string_stream(test, GFP_KERNEL);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream_1);
+> +
+> +       stream_2 = alloc_string_stream(test, GFP_KERNEL);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream_2);
+> +
+> +       /* Append content of empty stream to empty stream */
+> +       string_stream_append(stream_1, stream_2);
+> +       KUNIT_EXPECT_EQ(test, strlen(get_concatenated_string(test, stream_1)), 0);
+> +
+> +       /* Add some data to stream_1 */
+> +       for (i = 0; i < ARRAY_SIZE(strings_1); ++i)
+> +               string_stream_add(stream_1, "%s\n", strings_1[i]);
+> +
+> +       original_content = get_concatenated_string(test, stream_1);
+> +
+> +       /* Append content of empty stream to non-empty stream */
+> +       string_stream_append(stream_1, stream_2);
+> +       KUNIT_EXPECT_STREQ(test, get_concatenated_string(test, stream_1), original_content);
+> +
+> +       /* Add some data to stream_2 */
+> +       for (i = 0; i < ARRAY_SIZE(strings_2); ++i)
+> +               string_stream_add(stream_2, "%s\n", strings_2[i]);
+> +
+> +       /* Append content of non-empty stream to non-empty stream */
+> +       string_stream_append(stream_1, stream_2);
+> +
+> +       /*
+> +        * End result should be the original content of stream_1 plus
+> +        * the content of stream_2.
+> +        */
+> +       stream_2_content = get_concatenated_string(test, stream_2);
+> +       combined_length = strlen(original_content) + strlen(stream_2_content);
+> +       combined_length++; /* for terminating \0 */
+> +       combined_content = kunit_kmalloc(test, combined_length, GFP_KERNEL);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, combined_content);
+> +       snprintf(combined_content, combined_length, "%s%s", original_content, stream_2_content);
+> +
+> +       KUNIT_EXPECT_STREQ(test, get_concatenated_string(test, stream_1), combined_content);
+> +
+> +       /* Append content of non-empty stream to empty stream */
+> +       string_stream_destroy(stream_1);
+> +
+> +       stream_1 = alloc_string_stream(test, GFP_KERNEL);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream_1);
+> +
+> +       string_stream_append(stream_1, stream_2);
+> +       KUNIT_EXPECT_STREQ(test, get_concatenated_string(test, stream_1), stream_2_content);
+> +}
+> +
+> +/* Adding an empty string should not create a fragment. */
+> +static void string_stream_append_empty_string_test(struct kunit *test)
+> +{
+> +       struct string_stream *stream;
+> +       int original_frag_count;
+> +
+> +       stream = alloc_string_stream(test, GFP_KERNEL);
+> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, stream);
+> +
+> +       /* Formatted empty string */
+> +       string_stream_add(stream, "%s", "");
+> +       KUNIT_EXPECT_TRUE(test, string_stream_is_empty(stream));
+> +       KUNIT_EXPECT_TRUE(test, list_empty(&stream->fragments));
+> +
+> +       /* Adding an empty string to a non-empty stream */
+> +       string_stream_add(stream, "Add this line");
+> +       original_frag_count = list_count_nodes(&stream->fragments);
+> +
+> +       string_stream_add(stream, "%s", "");
+> +       KUNIT_EXPECT_EQ(test, list_count_nodes(&stream->fragments), original_frag_count);
+> +       KUNIT_EXPECT_STREQ(test, get_concatenated_string(test, stream), "Add this line");
+>  }
+>
+>  static struct kunit_case string_stream_test_cases[] = {
+> -       KUNIT_CASE(string_stream_test_empty_on_creation),
+> -       KUNIT_CASE(string_stream_test_not_empty_after_add),
+> -       KUNIT_CASE(string_stream_test_get_string),
+> +       KUNIT_CASE(string_stream_init_test),
+> +       KUNIT_CASE(string_stream_line_add_test),
+> +       KUNIT_CASE(string_stream_variable_length_line_test),
+> +       KUNIT_CASE(string_stream_append_test),
+> +       KUNIT_CASE(string_stream_append_empty_string_test),
+>         {}
+>  };
+>
 > --
 > 2.30.2
 >
-> --
-> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20230824143129.1957914-2-rf%40opensource.cirrus.com.
 
---000000000000c0e9240603b9be49
+--0000000000000659830603b9bfdf
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -191,14 +448,14 @@ impZAng7ccvvK09K3ZuhwTIxJMsPXCZYsrXWORTw5sczRAP6XvKbPBJnsJoSTe5dFBPBHOQJOGhU
 qWfEfWnWMJPF3LxSGLpLFQXO3RwQqmxv08avwXfVPouh1xuB3FX7rpDabT8YDhu9JgIZkLEKko7L
 yQt6zWwng7k8YF/jGbiAta6VMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCB7
-ehKB6A8Lh54+T2VTvr61rg7UOhAjBbgt2pODpTTMTDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzA4MjUwNjQ5MjRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBp
+CymOZNeQOn00m7rMi0DtyTQuY2VZtoBmSkEOUMZqyTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzA4MjUwNjQ5MjhaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAGiz2dQa53lXiOII54hLg
-fvklJnh77XYo0dB4DY8V6+5DSwNE9UAh9UE90phHFlXsos4D/iFF+UYBih0yML6n8ApAnwIA2QLT
-vj98xJjSNcU0FgVxKeEnP9kcvsQoPI7qTAR48zP1Uaf7iX3XNadVrzgqLkd1CcUIHnXXJtOtXzsP
-cVfBtHNgmA2qk7AgjA5HzZQ7k+0Mb3sBfoheSTI5D2ZTjE5/hhbdbhVyeY4HcayQd30Hodt9vrjc
-Cjl6bv7QUEKkkqYmDyjSPNkbwic8FsxDJWegY/LSheMP2xPfL+/o6ifJg8z4Yh4BL0kQT2gjzo/E
-zPfmss1GvnjXokRdRw==
---000000000000c0e9240603b9be49--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAbxiXoSEoMb5tnNCEWF7M
+tgSoSFoNJDILn4rRfvRY5blKaUHdoAfEpWIG1mxDEtytU/e5P5XzPdNRZBpBb6JxfK5xTX+68mGu
+KYE918Lzxd3LGv9w/Oi8MaUfoFylUc0tGTimrAU3o5rRQExfaG4XEeFEgNtzArr3JogNBqJ7B94g
+qXhpw/R/oTiblacym8P437ZiRZWtN+zdplLEKbzHtxHhP6MRsFRPyiIVhco9+83c8SDitctpkD5e
+m6mcHM+cH8JuL7sTlC2g3mkjjDTPMDWM1LVeZEciFYmy63MIQM4Wa3+XpdZDvJtH36pscpE1LdZ4
+xQTNqUuYNoJXMbI5Ew==
+--0000000000000659830603b9bfdf--
