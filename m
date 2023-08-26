@@ -2,48 +2,83 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB5FC7893D1
-	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Aug 2023 06:32:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A6F1789561
+	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Aug 2023 11:46:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231422AbjHZEbj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 26 Aug 2023 00:31:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48204 "EHLO
+        id S231514AbjHZJp5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 26 Aug 2023 05:45:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231835AbjHZEbK (ORCPT
+        with ESMTP id S232358AbjHZJpf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 26 Aug 2023 00:31:10 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C55326B8;
-        Fri, 25 Aug 2023 21:31:02 -0700 (PDT)
-X-QQ-mid: bizesmtp69t1693024250t8x1szhz
-Received: from linux-lab-host.localdomain ( [116.30.128.222])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sat, 26 Aug 2023 12:30:48 +0800 (CST)
-X-QQ-SSF: 01200000000000E0Y000000A0000000
-X-QQ-FEAT: CR3LFp2JE4lYYSpivJlI2SuOuzPRWJJc0IWzbiEGnrcKe7FBJFh6wZ6s+PQ2F
-        37o20e7zvbK+67J0O+P7OT4mCfHmX3LySQKEgqzwX26Gr8zpzUHM3ZMUDgjRjHiDKGWpD3P
-        RakL14KHqxla/2WvULqNpYU7G+If8ywK4/UZofvWrn9k1XNJmh4gwyt+Dsnjl8w1dCwHmRg
-        tRRAgHzmHB24F0GBYVTHa6c/87WASvShOI+Yu+6CTgAFAsgwUb6TOlgfKwugUNFelUI4qmh
-        xGo8vC+ioADDnRaCE8B8AndYhPD6Gs0ukpg6f3VSjUqV/5fdQzfLuTfTtBZPC+0/fH4pE4I
-        5dZGfDHZorEkgf/I41Y/HvOk68z58F8EfJZq5j7
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 558064754395152056
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux@weissschuh.net,
-        thomas@t-8ch.de, Yuan Tan <tanyuan@tinylab.org>
-Subject: Re: [PATCH v2 3/3] selftests/nolibc: fix up O= option support
-Date:   Sat, 26 Aug 2023 12:30:46 +0800
-Message-Id: <20230826043046.53692-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230806121721.30774-1-falcon@tinylab.org>
-References: <20230806121721.30774-1-falcon@tinylab.org>
+        Sat, 26 Aug 2023 05:45:35 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A841B5;
+        Sat, 26 Aug 2023 02:45:33 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-31c6cd238e0so1737255f8f.0;
+        Sat, 26 Aug 2023 02:45:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1693043131; x=1693647931;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EcmeCq/32Wiyi3Ru6rZay2ig3zBVjavNEyIttUA3Hls=;
+        b=chwHg8mGkspRC0bpi1AOT4+Xo82JletVcBQUGMJu1iMGLwh8xJs3KfV5mAM9xGQqXz
+         daVXupwyuiVECSDFN/43DgShfgF6bPzGUEaLfuqgPKVYhq5pfzBTJaGG0ebhZFa5C1qD
+         iGNBNjwA20ReXbAhzUmZk1NKbxIhuLyVQUKAbVuHO+hhFFzFz7sUYKJeIrCmb6nffMeJ
+         dKTcLDSau51/EX3YkDm0NDttOOi9N5PBg4WQ4ITUf7codCnlTlMDEqyQzsCJEWyO/eqr
+         pTNNxeLoebEsFHftK+CvX4mCidW5CIVegIKzGaDQ25ojJmQg70ipnBxiLZIJqc67/f2K
+         yLMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693043131; x=1693647931;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EcmeCq/32Wiyi3Ru6rZay2ig3zBVjavNEyIttUA3Hls=;
+        b=CPg1Qh/5Is/m8ys++ONJc8Pu1Jr2aJBoqJ4JsnCoIv3vrnNmR79Pzgu2imfFqxjIh5
+         Iu9DnGugmuJ84+2dd2xI6HhNXjdchp14/pVRBVw9+kjFveGVl0uln22p//HBNa22Ud73
+         HXEk+7GhtAYnYZkO02MA7sexf0wUKqIVSnCpfXnkDG01Yl/p9sS9APiufb2ry095H9tl
+         y3lZaaA9r37AhN6P3qR5+ppw48rRGwVuT8BbzPvCiSQBv8ONGAaWFGhIfYFV0TAtCQrF
+         sj5PpYI3C+9xxD2ixB/whO3Ynn+UoQcVI4uhVqNNUaLKi2yDuCRF0RvI23+QO/Y7MBli
+         wfDw==
+X-Gm-Message-State: AOJu0Yyqn4xScNTxJfErYcAB4W+N+jxNMNKTD1ze7vFGp8weCNiq/E2A
+        Ct1vlgyT4hGueR4JAfn1oKo=
+X-Google-Smtp-Source: AGHT+IGugDagkjN8l4cZ2iCV4RjulgnZxvwY3RYAOx3N3ArjiJDFmUO3gLNIyGsmg0LAwwuVbUP2CQ==
+X-Received: by 2002:adf:ec8a:0:b0:317:de66:259b with SMTP id z10-20020adfec8a000000b00317de66259bmr16715345wrn.15.1693043131326;
+        Sat, 26 Aug 2023 02:45:31 -0700 (PDT)
+Received: from mmaatuq-HP-Laptop-15-dy2xxx ([2001:8f8:1163:6db:5fbb:8783:6dd3:4939])
+        by smtp.gmail.com with ESMTPSA id x3-20020a05600c2a4300b003fe601a7d46sm7646174wme.45.2023.08.26.02.45.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 26 Aug 2023 02:45:30 -0700 (PDT)
+Date:   Sat, 26 Aug 2023 13:45:23 +0400
+From:   Mahmoud Matook <mahmoudmatook.mm@gmail.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     keescook@chromium.org, edumazet@google.com,
+        willemdebruijn.kernel@gmail.com, wad@chromium.org,
+        luto@amacapital.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kuba@kernel.org, shuah@kernel.org,
+        pabeni@redhat.com, linux-kselftest@vger.kernel.org,
+        davem@davemloft.net,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        David Laight <David.Laight@aculab.com>
+Subject: Re: [PATCH v2 1/2] selftests: Provide local define of min() and max()
+Message-ID: <20230826094523.bl6kbcwelj23cydu@mmaatuq-HP-Laptop-15-dy2xxx>
+Mail-Followup-To: Sean Christopherson <seanjc@google.com>,
+        keescook@chromium.org, edumazet@google.com,
+        willemdebruijn.kernel@gmail.com, wad@chromium.org,
+        luto@amacapital.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kuba@kernel.org, shuah@kernel.org,
+        pabeni@redhat.com, linux-kselftest@vger.kernel.org,
+        davem@davemloft.net, linux-kernel-mentees@lists.linuxfoundation.org,
+        David Laight <David.Laight@aculab.com>
+References: <20230824202415.131824-1-mahmoudmatook.mm@gmail.com>
+ <ZOjIHo2A6HZ8K4Qp@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZOjIHo2A6HZ8K4Qp@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -52,108 +87,37 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi, Willy
+On 08/25, Sean Christopherson wrote:
 
-> > On Sat, Aug 05, 2023 at 02:13:11PM +0800, Zhangjin Wu wrote:
-> > > To avoid pollute the source code tree and avoid mrproper for every
-> > > architecture switch, the O= argument must be supported.
-> > > 
-> > > Both IMAGE and .config are from the building directory, let's use
-> > > objtree instead of srctree for them.
-> > > 
-> > > If no O= option specified, means building kernel in source code tree,
-> > > objtree should be srctree in such case.
-> > > 
-> > > To support relative path, as suggested by Thomas, $(COMMAND_O) is used
-> > > to pass the O=$(ABSOLUTE_O) to the $(MAKE) commands.
+> On Fri, Aug 25, 2023, Mahmoud Maatuq wrote:
+> > to avoid manual calculation of min and max values
+> > and fix coccinelle warnings such WARNING opportunity for min()/max()
+> > adding one common definition that could be used in multiple files
+> > under selftests.
+> > there are also some defines for min/max scattered locally inside sources
+> > under selftests.
+> > this also prepares for cleaning up those redundant defines and include
+> > kselftest.h instead.
 > > 
-> > Zhangjin, I cannot get this one to work, regardless of what I try:
-> > 
-> >    $ make -j8 O=$PWD/output-i386 nolibc-test XARCH=i386 CROSS_COMPILE=/f/tc/nolibc/gcc-12.3.0-nolibc/i386-linux/bin/i386-linux- CC=/f/tc/nolibc/gcc-12.3.0-nolibc/i386-linux/bin/i386-linux-gcc
-> >    (...)
-> >    CC      nolibc-test
-> >    In file included from sysroot/i386/include/stdio.h:14,
-> >                     from nolibc-test.c:13:
-> >    sysroot/i386/include/errno.h:10:10: fatal error: asm/errno.h: No such file or directory
-> >       10 | #include <asm/errno.h>
-> >          |          ^~~~~~~~~~~~~
-> >    compilation terminated.
-> >
+> > Signed-off-by: Mahmoud Maatuq <mahmoudmatook.mm@gmail.com>
+> > Suggested-by: David Laight <David.Laight@aculab.com>
+> > ---
+> > changes in v2:
+> > redefine min/max in a more strict way to avoid 
+> > signedness mismatch and multiple evaluation.
+> > is_signed_type() moved from selftests/kselftest_harness.h 
+> > to selftests/kselftest.h.
+> > ---
+> >  tools/testing/selftests/kselftest.h         | 24 +++++++++++++++++++++
 > 
-> Willy, I also just reproduced the issue, seems only i386 sysroot has no
-> asm/errno.h, will check why it is no rightly installed later.
+> Heh, reminds me of https://xkcd.com/927.
 > 
->     $ find sysroot/ -name "errno.h"
->     sysroot/arm/include/errno.h
->     sysroot/arm/include/asm-generic/errno.h
->     sysroot/arm/include/asm/errno.h
->     sysroot/arm/include/linux/errno.h
->     sysroot/riscv/include/errno.h
->     sysroot/riscv/include/asm-generic/errno.h
->     sysroot/riscv/include/asm/errno.h
->     sysroot/riscv/include/linux/errno.h
->     sysroot/s390/include/errno.h
->     sysroot/s390/include/asm-generic/errno.h
->     sysroot/s390/include/asm/errno.h
->     sysroot/s390/include/linux/errno.h
->     sysroot/arm64/include/errno.h
->     sysroot/arm64/include/asm-generic/errno.h
->     sysroot/arm64/include/asm/errno.h
->     sysroot/arm64/include/linux/errno.h
->     sysroot/mips/include/errno.h
->     sysroot/mips/include/asm-generic/errno.h
->     sysroot/mips/include/asm/errno.h
->     sysroot/mips/include/linux/errno.h
->     sysroot/x86_64/include/errno.h
->     sysroot/x86_64/include/asm-generic/errno.h
->     sysroot/x86_64/include/asm/errno.h
->     sysroot/x86_64/include/linux/errno.h
->     sysroot/i386/include/errno.h
->     sysroot/i386/include/asm-generic/errno.h
->     sysroot/i386/include/linux/errno.h
->     sysroot/powerpc/include/errno.h
->     sysroot/powerpc/include/asm-generic/errno.h
->     sysroot/powerpc/include/asm/errno.h
->     sysroot/powerpc/include/linux/errno.h
-> 
-> > I'll leave it aside for now as I've spent way longer than I hoped on
-> > these series. I could take the previous two patches however.
-> >
-> 
-> Ok, let's ignore this one, I will find why sysroot not install well for i386.
->
+> All of these #defines are available in tools/include/linux/kernel.h, and it's
+> trivially easy for selftests to add all of tools/include to their include path.
+> I don't see any reason for the selftests framework to define yet another version,
+> just fix the individual tests.
 
-Thanks to Yuan, he have done some testing and have found the root cause, that
-is mrproper on top-level source code tree is required before installing
-sysroot, otherwise, the 'generated' headers will not be installed (removed by
-scripts/Makefile.asm-generic).
-
-After mrproper (not with O=out, must on top-level source code tree), the
-asm/errno.h will be there:
-
-    ubuntu@linux-lab:/labs/linux-lab/src/linux-stable/tools/testing/selftests/nolibc$ find sysroot/ -name "errno.h"
-    sysroot/i386/include/errno.h
-    sysroot/i386/include/asm-generic/errno.h
-    sysroot/i386/include/asm/errno.h             --> here it is
-    sysroot/i386/include/linux/errno.h
-    sysroot/x86/include/errno.h
-    sysroot/x86/include/asm-generic/errno.h
-    sysroot/x86/include/asm/errno.h              --> here it is
-    sysroot/x86/include/linux/errno.h
-
-That also means, to use O=out for run-user, we also need to use O=out for
-defconfig (and kernel ...) too, otherwise, the top-level source code tree will
-be polluated.
-
-Seems a manual mrproper on top-level source code tree is always required for a
-new iteration, so, it may be ok to pick this patch with a note on the potential
-error.
-
-Best Regards,
-Zhangjin
-
-> Thanks,
-> Zhangjin
-> 
-> > Thanks,
-> > Willy
+giving the reviews seems that patchset is useless.
+still a confusing point for me; after adding tools/include to the
+include path of selftes how we can differentaite between  #include
+<linux/kernel.h> that under tools/include and one under usr/include.
