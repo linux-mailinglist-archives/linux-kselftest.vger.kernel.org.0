@@ -2,101 +2,89 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 860BE789078
-	for <lists+linux-kselftest@lfdr.de>; Fri, 25 Aug 2023 23:37:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C01C0789353
+	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Aug 2023 04:20:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231429AbjHYVgl convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 25 Aug 2023 17:36:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56214 "EHLO
+        id S230201AbjHZCUS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 25 Aug 2023 22:20:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231467AbjHYVgQ (ORCPT
+        with ESMTP id S229924AbjHZCTo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 25 Aug 2023 17:36:16 -0400
-Received: from us-smtp-delivery-44.mimecast.com (unknown [207.211.30.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8E582691
-        for <linux-kselftest@vger.kernel.org>; Fri, 25 Aug 2023 14:36:14 -0700 (PDT)
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-455-D7JWxK2KNzuQemzu4-MBxQ-1; Fri, 25 Aug 2023 17:35:53 -0400
-X-MC-Unique: D7JWxK2KNzuQemzu4-MBxQ-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2A3B985C710;
-        Fri, 25 Aug 2023 21:35:53 +0000 (UTC)
-Received: from hog.localdomain (unknown [10.39.192.31])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 24D531678B;
-        Fri, 25 Aug 2023 21:35:52 +0000 (UTC)
-From:   Sabrina Dubroca <sd@queasysnail.net>
-To:     netdev@vger.kernel.org
-Cc:     borisp@nvidia.com, john.fastabend@gmail.com, kuba@kernel.org,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        Sabrina Dubroca <sd@queasysnail.net>
-Subject: [PATCH net-next 03/17] selftests: tls: test some invalid inputs for setsockopt
-Date:   Fri, 25 Aug 2023 23:35:08 +0200
-Message-Id: <bfcfa9cffda56d2064296ab7c99a05775dd4c28e.1692977948.git.sd@queasysnail.net>
-In-Reply-To: <cover.1692977948.git.sd@queasysnail.net>
-References: <cover.1692977948.git.sd@queasysnail.net>
+        Fri, 25 Aug 2023 22:19:44 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55E272682;
+        Fri, 25 Aug 2023 19:19:40 -0700 (PDT)
+Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RXgR63Xc0zNmZJ;
+        Sat, 26 Aug 2023 10:16:02 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by dggpeml500026.china.huawei.com
+ (7.185.36.106) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Sat, 26 Aug
+ 2023 10:19:37 +0800
+From:   Zhengchao Shao <shaozhengchao@huawei.com>
+To:     <netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <shuah@kernel.org>
+CC:     <j.vosburgh@gmail.com>, <andy@greyhouse.net>,
+        <weiyongjun1@huawei.com>, <yuehaibing@huawei.com>,
+        <shaozhengchao@huawei.com>
+Subject: [PATCH net-next,v3] selftests: bonding: create directly devices in the target namespaces
+Date:   Sat, 26 Aug 2023 10:23:30 +0800
+Message-ID: <20230826022330.3474899-1-shaozhengchao@huawei.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: queasysnail.net
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset=WINDOWS-1252; x-default=true
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RDNS_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpeml500026.china.huawei.com (7.185.36.106)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This test will need to be updated if new ciphers are added.
+If failed to set link1_1 to netns client, we should delete link1_1 in the
+cleanup path. But if set link1_1 to netns client successfully, delete
+link1_1 will report warning. So it will be safer creating directly the
+devices in the target namespaces.
 
-Signed-off-by: Sabrina Dubroca <sd@queasysnail.net>
+Reported-by: Hangbin Liu <liuhangbin@gmail.com>
+Closes: https://lore.kernel.org/all/ZNyJx1HtXaUzOkNA@Laptop-X1/
+Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
 ---
- tools/testing/selftests/net/tls.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+v3: create the eth0 in the namespace
+v2: create directly devices in the target namespaces
+---
+ .../drivers/net/bonding/bond-arp-interval-causes-panic.sh | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/net/tls.c
-index 0da6952a047a..297d972558fb 100644
---- a/tools/testing/selftests/net/tls.c
-+++ b/tools/testing/selftests/net/tls.c
-@@ -241,6 +241,31 @@ TEST_F(tls_basic, base_base)
- 	EXPECT_EQ(memcmp(buf, test_str, send_len), 0);
- };
+diff --git a/tools/testing/selftests/drivers/net/bonding/bond-arp-interval-causes-panic.sh b/tools/testing/selftests/drivers/net/bonding/bond-arp-interval-causes-panic.sh
+index 7b2d421f09cf..4917dbb35a44 100755
+--- a/tools/testing/selftests/drivers/net/bonding/bond-arp-interval-causes-panic.sh
++++ b/tools/testing/selftests/drivers/net/bonding/bond-arp-interval-causes-panic.sh
+@@ -22,14 +22,12 @@ server_ip4=192.168.1.254
+ echo 180 >/proc/sys/kernel/panic
  
-+TEST_F(tls_basic, bad_cipher)
-+{
-+	struct tls_crypto_info_keys tls12;
-+
-+	tls12.crypto_info.version = 200;
-+	tls12.crypto_info.cipher_type = TLS_CIPHER_AES_GCM_128;
-+	EXPECT_EQ(setsockopt(self->fd, SOL_TLS, TLS_TX, &tls12, sizeof(struct tls12_crypto_info_aes_gcm_128)), -1);
-+
-+	tls12.crypto_info.version = TLS_1_2_VERSION;
-+	tls12.crypto_info.cipher_type = 50;
-+	EXPECT_EQ(setsockopt(self->fd, SOL_TLS, TLS_TX, &tls12, sizeof(struct tls12_crypto_info_aes_gcm_128)), -1);
-+
-+	tls12.crypto_info.version = TLS_1_2_VERSION;
-+	tls12.crypto_info.cipher_type = 59;
-+	EXPECT_EQ(setsockopt(self->fd, SOL_TLS, TLS_TX, &tls12, sizeof(struct tls12_crypto_info_aes_gcm_128)), -1);
-+
-+	tls12.crypto_info.version = TLS_1_2_VERSION;
-+	tls12.crypto_info.cipher_type = 10;
-+	EXPECT_EQ(setsockopt(self->fd, SOL_TLS, TLS_TX, &tls12, sizeof(struct tls12_crypto_info_aes_gcm_128)), -1);
-+
-+	tls12.crypto_info.version = TLS_1_2_VERSION;
-+	tls12.crypto_info.cipher_type = 70;
-+	EXPECT_EQ(setsockopt(self->fd, SOL_TLS, TLS_TX, &tls12, sizeof(struct tls12_crypto_info_aes_gcm_128)), -1);
-+}
-+
- FIXTURE(tls)
- {
- 	int fd, cfd;
+ # build namespaces
+-ip link add dev link1_1 type veth peer name link1_2
+-
+ ip netns add "server"
+-ip link set dev link1_2 netns server up name eth0
++ip netns add "client"
++ip -n client link add eth0 type veth peer name eth0 netns server
++ip netns exec server ip link set dev eth0 up
+ ip netns exec server ip addr add ${server_ip4}/24 dev eth0
+ 
+-ip netns add "client"
+-ip link set dev link1_1 netns client down name eth0
+ ip netns exec client ip link add dev bond0 down type bond mode 1 \
+ 	miimon 100 all_slaves_active 1
+ ip netns exec client ip link set dev eth0 down master bond0
 -- 
-2.40.1
+2.34.1
 
