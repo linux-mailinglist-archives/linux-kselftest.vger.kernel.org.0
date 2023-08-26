@@ -2,105 +2,188 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFCFF78978E
-	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Aug 2023 16:52:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 096357898AF
+	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Aug 2023 20:31:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229603AbjHZOwT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 26 Aug 2023 10:52:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36516 "EHLO
+        id S230289AbjHZSad (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 26 Aug 2023 14:30:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229607AbjHZOwJ (ORCPT
+        with ESMTP id S230207AbjHZSaN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 26 Aug 2023 10:52:09 -0400
-Received: from out203-205-251-60.mail.qq.com (out203-205-251-60.mail.qq.com [203.205.251.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B321092;
-        Sat, 26 Aug 2023 07:52:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1693061525;
-        bh=LtEsY7G+HK6wC6cDd51WmwCpbEwB5LJYRhRultDraXg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=ZoqA5hxnBz77pf2NzrOBYwGlEBrQQqOBcA9IAeYgrd1xPljipgdvueKVPcY22rOKx
-         MnidC5whHhAKGmRiGYWs+WWUO8N1EaIOvBkHO4WaD9LbPP8DE4dkz15JDuW3i/WogH
-         88vuDTJa7WOEfiWZGwh7dBcMtQDpXyJQch2cfH30=
-Received: from rtoax.. ([124.126.138.8])
-        by newxmesmtplogicsvrszb6-0.qq.com (NewEsmtp) with SMTP
-        id D0123010; Sat, 26 Aug 2023 22:52:01 +0800
-X-QQ-mid: xmsmtpt1693061521tq4y0dkrs
-Message-ID: <tencent_9E8059C821CBE9125DC5F57561341511CA05@qq.com>
-X-QQ-XMAILINFO: Mm/8i8/T4yneoU5mjlQNfywpteIHCsz+H4gc1J+Wc0I9Zuq9s6SanHKiKp3SDD
-         j9AG4ti5TbJJ5DKCsdnK1O869f1/ut3KmA6b8vWYs6Ni6d+Zx9gjrAkbjl4F4LF5JcohoBTLgwcX
-         lJ+giyB6CDTdKsQSSiuFWjISt9zZMdzNDf3t8dqeo5fExvnauPGtDbSOwZVao0i7j3kOCNQTyGj4
-         JKCFl4aN044txp3GCbejq0rNmIK2InrLzKVa0ErN60lpba2+hZtNmqx51uGyvb9ju3Efq0pXQBCT
-         jTze/lsDTtaGzxuwoxeCko7DjXPxMYKfRsRLa+6avUMvtl26EbitNhP7RiIUgnKr5A2rmfWqYsOl
-         W3WAkn5eE1VU+HtPiDrLPpWEyoL6Iw2F1vbZu+alhDDV5JNwZW75HLkhG+6lTTZtxMME4rPqTwls
-         IMV4Uhz9IgMfWK8KQadHppOYIzl1wQJ9ucV9OkDxE4Bv9BRPx+dI/sXiWMgBhoAz+UsVMW/BlhbL
-         lTNCUTiaRM9qUdP2mqbh6uRdSjKEUFWG5K9iIOguDB5j3vzI5JeKk6mLHj2oywWPq2nxR6e+rmbS
-         bXkljS0w4JT2nQzIJ34jSZ9R/vQkt5bO6ttXkGKrEl8QrO+jGLmdTqoJruVexqK6ArZYLdeICSpH
-         ydD3jLCpwiy7sOC/DDwaId83Afy7f/VM6EwzZI/nmb/tLpCtZWCifpb/TRtZ8BltiguICoGaY6Ws
-         5QKbX9aNl3lTOtlaqIbJdlqKPM0KQYkqmtKXT/20uS4dM6JFPqheDwAIj2FmE7tg7MbHn1LjyJ4b
-         Iiow55fAFN6nsJVPWgQ2jFPVBKoMm8bo8jKxYVOWdww0PQEQVLMUBCbgPBUMkHuEKsBGY5wtDJVD
-         vfRCqZmJHeHaactVtKMzgZT3GQpnpWq6LatKzHts+WK9PRPuMVPniZxVs4QsoOXN4d4oa6i7ISIW
-         qMXqzGFvovJBYesm0ZJlbjHK/F3FPrCkX1zLY+cClZdZBSO4UlJuWjHmM50SDoAK261XQ/m5kzFN
-         bq67q1KqIOIOPjCuXPVBbwZqjL05c=
-X-QQ-XMRINFO: M/715EihBoGSf6IYSX1iLFg=
-From:   Rong Tao <rtoax@foxmail.com>
-To:     olsajiri@gmail.com
-Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, martin.lau@linux.dev,
-        mykolal@fb.com, rongtao@cestc.cn, rtoax@foxmail.com,
-        sdf@google.com, shuah@kernel.org, song@kernel.org,
-        yonghong.song@linux.dev
-Subject: Re: [PATCH bpf-next v7] selftests/bpf: trace_helpers.c: optimize kallsyms cache
-Date:   Sat, 26 Aug 2023 22:52:00 +0800
-X-OQ-MSGID: <20230826145200.117062-1-rtoax@foxmail.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <ZOjUpt16gcTSGkdl@krava>
-References: <ZOjUpt16gcTSGkdl@krava>
+        Sat, 26 Aug 2023 14:30:13 -0400
+Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB1BBD;
+        Sat, 26 Aug 2023 11:30:07 -0700 (PDT)
+X-QQ-mid: bizesmtpipv602t1693074596txh9
+Received: from [IPV6:2001:da8:c000:3005:c026:8 ( [255.193.153.7])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Sun, 27 Aug 2023 02:29:54 +0800 (CST)
+X-QQ-SSF: 01200000000000907000000A0000000
+X-QQ-FEAT: fj/jKqveG5F37E2q+TLQp06oyzV8uk1tUboC9VYcnxaGoe+e4Hz5P2zI6fdDN
+        mhg/fyeruMJUt0N9AnR8rTJ2x70msQAaNrgiac2VQ7/6mTtSAQ1dlFpdR6TVkFMZNF/BmzI
+        RCtrNcZ1y6e89VgtLt1kvvLslWFVDtRewVIoHORpoXFJwk6bI0TmXFtpG+POPmE6SZ6u+vG
+        YnBTIr3Uv/OX6dM1sYlbvHeRttVvZsECzV4kHNBjkzAwYLxATHSrcvc8EE97ErHfcxzh0jy
+        VnXdMYyfKYp0Z+qTgXrff53HZbnoikT7UDy3cIKv6nqWaq3Zaaroj2LaKB9wmVFEPKeL8at
+        grnJuDetShCApaM8HmbQR/f8spR6myIEf43ayW8
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 9143129729124953103
+Message-ID: <B0DD4BA059591F13+4c61dc98-4d70-4ab2-b4ca-81c0e6596482@tinylab.org>
+Date:   Sun, 27 Aug 2023 02:29:53 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 3/3] selftests/nolibc: fix up O= option support
+Content-Language: en-GB
+To:     Zhangjin Wu <falcon@tinylab.org>, w@1wt.eu
+Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux@weissschuh.net,
+        thomas@t-8ch.de, Yuan Tan <tanyuan@tinylab.org>
+References: <20230806121721.30774-1-falcon@tinylab.org>
+ <20230826043046.53692-1-falcon@tinylab.org>
+From:   Yuan Tan <tanyuan@tinylab.org>
+In-Reply-To: <20230826043046.53692-1-falcon@tinylab.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtpipv:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
+X-Spam-Status: No, score=1.7 required=5.0 tests=BAYES_00,FORGED_MUA_MOZILLA,
+        RCVD_ILLEGAL_IP,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> perhaps we could fix that with 2 sets of functions:
-> 
->   - load_kallsyms
->     ksym_search
->     ksym_get_addr
-> 
->     that work like now on global syms pointer, perhaps we should
->     initialize it before we run tests or use mutex for init
-> 
->   - struct ksym *load_kallsyms_local()
->     ksym_search_local(struct ksym *syms, ...)
->     ksym_get_addr_local(struct ksym *syms, ...)
-> 
->     that work on local ksyms cache and the test frees it at the end,
->     it would be used in all tests that need updated kallsyms data and
->     use load_kallsyms_refresh for that
+Hi Zhangjin and Willy,
 
-Hi, jirka
+On 8/26/2023 12:30 PM, Zhangjin Wu wrote:
+> Hi, Willy
+>
+>>> On Sat, Aug 05, 2023 at 02:13:11PM +0800, Zhangjin Wu wrote:
+>>>> To avoid pollute the source code tree and avoid mrproper for every
+>>>> architecture switch, the O= argument must be supported.
+>>>>
+>>>> Both IMAGE and .config are from the building directory, let's use
+>>>> objtree instead of srctree for them.
+>>>>
+>>>> If no O= option specified, means building kernel in source code tree,
+>>>> objtree should be srctree in such case.
+>>>>
+>>>> To support relative path, as suggested by Thomas, $(COMMAND_O) is used
+>>>> to pass the O=$(ABSOLUTE_O) to the $(MAKE) commands.
+>>> Zhangjin, I cannot get this one to work, regardless of what I try:
+>>>
+>>>     $ make -j8 O=$PWD/output-i386 nolibc-test XARCH=i386 CROSS_COMPILE=/f/tc/nolibc/gcc-12.3.0-nolibc/i386-linux/bin/i386-linux- CC=/f/tc/nolibc/gcc-12.3.0-nolibc/i386-linux/bin/i386-linux-gcc
+>>>     (...)
+>>>     CC      nolibc-test
+>>>     In file included from sysroot/i386/include/stdio.h:14,
+>>>                      from nolibc-test.c:13:
+>>>     sysroot/i386/include/errno.h:10:10: fatal error: asm/errno.h: No such file or directory
+>>>        10 | #include <asm/errno.h>
+>>>           |          ^~~~~~~~~~~~~
+>>>     compilation terminated.
+>>>
+>> Willy, I also just reproduced the issue, seems only i386 sysroot has no
+>> asm/errno.h, will check why it is no rightly installed later.
+>>
+>>      $ find sysroot/ -name "errno.h"
+>>      sysroot/arm/include/errno.h
+>>      sysroot/arm/include/asm-generic/errno.h
+>>      sysroot/arm/include/asm/errno.h
+>>      sysroot/arm/include/linux/errno.h
+>>      sysroot/riscv/include/errno.h
+>>      sysroot/riscv/include/asm-generic/errno.h
+>>      sysroot/riscv/include/asm/errno.h
+>>      sysroot/riscv/include/linux/errno.h
+>>      sysroot/s390/include/errno.h
+>>      sysroot/s390/include/asm-generic/errno.h
+>>      sysroot/s390/include/asm/errno.h
+>>      sysroot/s390/include/linux/errno.h
+>>      sysroot/arm64/include/errno.h
+>>      sysroot/arm64/include/asm-generic/errno.h
+>>      sysroot/arm64/include/asm/errno.h
+>>      sysroot/arm64/include/linux/errno.h
+>>      sysroot/mips/include/errno.h
+>>      sysroot/mips/include/asm-generic/errno.h
+>>      sysroot/mips/include/asm/errno.h
+>>      sysroot/mips/include/linux/errno.h
+>>      sysroot/x86_64/include/errno.h
+>>      sysroot/x86_64/include/asm-generic/errno.h
+>>      sysroot/x86_64/include/asm/errno.h
+>>      sysroot/x86_64/include/linux/errno.h
+>>      sysroot/i386/include/errno.h
+>>      sysroot/i386/include/asm-generic/errno.h
+>>      sysroot/i386/include/linux/errno.h
+>>      sysroot/powerpc/include/errno.h
+>>      sysroot/powerpc/include/asm-generic/errno.h
+>>      sysroot/powerpc/include/asm/errno.h
+>>      sysroot/powerpc/include/linux/errno.h
+>>
+>>> I'll leave it aside for now as I've spent way longer than I hoped on
+>>> these series. I could take the previous two patches however.
+>>>
+>> Ok, let's ignore this one, I will find why sysroot not install well for i386.
+>>
+> Thanks to Yuan, he have done some testing and have found the root cause, that
+> is mrproper on top-level source code tree is required before installing
+> sysroot, otherwise, the 'generated' headers will not be installed (removed by
+> scripts/Makefile.asm-generic).
 
-How about keeping only one type of interface to avoid confusion about use
-and mutex locks. Like:
+More specifically, building kernel will generate 
+'linux/arch/x86/include/generated/uapi/asm/errno.h', which prevents 
+nolibc-test with O= generate 
+'output-x86/arch/x86/include/generated/asm/errno.h'.
 
-	struct ksyms *load_kallsyms(void);
-	struct ksyms *load_kallsyms_refresh(struct ksyms *ksyms);
-	void free_kallsyms(struct ksyms *ksyms);
+>
+> After mrproper (not with O=out, must on top-level source code tree), the
+> asm/errno.h will be there:
+>
+>      ubuntu@linux-lab:/labs/linux-lab/src/linux-stable/tools/testing/selftests/nolibc$ find sysroot/ -name "errno.h"
+>      sysroot/i386/include/errno.h
+>      sysroot/i386/include/asm-generic/errno.h
+>      sysroot/i386/include/asm/errno.h             --> here it is
+>      sysroot/i386/include/linux/errno.h
+>      sysroot/x86/include/errno.h
+>      sysroot/x86/include/asm-generic/errno.h
+>      sysroot/x86/include/asm/errno.h              --> here it is
+>      sysroot/x86/include/linux/errno.h
+>
+> That also means, to use O=out for run-user, we also need to use O=out for
+> defconfig (and kernel ...) too, otherwise, the top-level source code tree will
+> be polluated.
+>
+> Seems a manual mrproper on top-level source code tree is always required for a
+> new iteration, so, it may be ok to pick this patch with a note on the potential
+> error.
 
-	struct ksym *ksym_search(struct ksyms *ksyms, long key);
-	long ksym_get_addr(struct ksyms *ksyms, const char *name);
+There are two potential solutions for addressing this issue.
 
-I just submit v8 [0], please review.
+The first option involves copying 
+'linux/arch/x86/include/generated/uapi/asm/' to 'sysroot/x86/include/' 
+during the make of target headers_standalone.
 
-[0] https://lore.kernel.org/lkml/tencent_6D23FE187408D965E95DFAA858BC7E8C760A@qq.com/
+The second approach entails displaying an error message when the code 
+tree is not clean and prompting users to manually execute 'make 
+mrproper'. In this case, we can utilize the target 'outputmakefile' from 
+the root makefile directly.
+
+Willy, which method do you prefer? Do you have any alternative 
+suggestions? :)
+
+
+Besides. using x86_64-linux-gnu- won't reproduce this issue. It searched 
+and found 'asm/errno.h' in '/usr/include/x86_64-linux-gnu', whereas 
+'x86_64-linux' lacks these libraries.
+
+>
+> Best Regards,
+> Zhangjin
+>
+>> Thanks,
+>> Zhangjin
+>>
+>>> Thanks,
+>>> Willy
 
