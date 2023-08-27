@@ -2,155 +2,119 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9440789C22
-	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Aug 2023 10:33:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 95713789C6B
+	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Aug 2023 11:01:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230115AbjH0IdP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 27 Aug 2023 04:33:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39696 "EHLO
+        id S229735AbjH0JAX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 27 Aug 2023 05:00:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230120AbjH0Icx (ORCPT
+        with ESMTP id S229654AbjH0I7v (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 27 Aug 2023 04:32:53 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.155.65.254])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB11C121;
-        Sun, 27 Aug 2023 01:32:48 -0700 (PDT)
-X-QQ-mid: bizesmtp75t1693125151t58h728m
-Received: from linux-lab-host.localdomain ( [116.30.127.49])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sun, 27 Aug 2023 16:32:30 +0800 (CST)
-X-QQ-SSF: 01200000000000E0Y000000A0000000
-X-QQ-FEAT: k0mQ4ihyJQPOdSn7dTAaVLBa7NqkFcrJ34wVkvTNsdtNa88dEEAJ2cwCQF/hC
-        SiRr0vUWgzEAc1+oOUlteiVH2abPI6prbg6lFUGGzvLl/6In7zMRBuRk7NEQ2lxGJ0Y2QeG
-        F71lMpy8ZqUQoLdDnXpvpjbZ8WpZ48zsp2Wpk39KKR4RHlLllEqYV9Vgi5t4tTwdXpp48Ff
-        HQatNTyBrHeileClzp9zdOvq++4GU5sYRh+cLaRruTXa+62BZ4A3Hal2RXmMuA10dZXvYvU
-        +VVFnkQcO3Pg1HV0W32C1cpRN0PBOJTF9BRuQ0swgoPG1DOmcPsmP6lBoxjq+7mjl4Kf/Jh
-        BO1NKR0qRwkgyqsuNBvG4oMpVly9T2Gj6Bs2wgYev8VvKiwek+nShd46MR8WBW+oB+1qSZU
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 11048618283240064082
-From:   Zhangjin Wu <falcon@tinylab.org>
-To:     w@1wt.eu
-Cc:     falcon@tinylab.org, arnd@arndb.de, david.laight@aculab.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        thomas@t-8ch.de, tanyuan@tinylab.org
-Subject: [RFC] tools/nolibc: replace duplicated -ENOSYS return with single -ENOSYS return
-Date:   Sun, 27 Aug 2023 16:32:25 +0800
-Message-Id: <20230827083225.7534-1-falcon@tinylab.org>
-X-Mailer: git-send-email 2.25.1
+        Sun, 27 Aug 2023 04:59:51 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB49CAC;
+        Sun, 27 Aug 2023 01:59:34 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2ba1e9b1fa9so34226031fa.3;
+        Sun, 27 Aug 2023 01:59:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1693126773; x=1693731573;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wDTbBWfZTyLSY1GxTLcGBmj9Y3R8+oQOjLKgrRVSRoI=;
+        b=QsTJuukBOy9Wx5+UjxISZ03vjGGYXro+mcZAYFcirguMTn9wzEcqwl3AWIhPfbjSyk
+         luVnPk0eM9dz9PKRvwu4DR210UOLRAd4/aBqeq6Fv8e7VamaG42C6935IR6Ypka1P2z6
+         5lokt1yKQIEyNSrNa9Wpt4jrLPhkDto+udqpKpNpxXYxTBTLnYZreMAFn0Kthsq5TUzZ
+         NsvqrXNK56usF0VJbCp4Fm2TE8tIzLSj/0agSbXp762Jtu6yFvc3ywz4kfYBRYXEcYRb
+         A6yXEtiwgi0ehzbg2Ke0OYKeokPz9JJabP62Sk+aTjTDgwJkCq8s/CZWe2iEVVHcIeaF
+         vhOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693126773; x=1693731573;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wDTbBWfZTyLSY1GxTLcGBmj9Y3R8+oQOjLKgrRVSRoI=;
+        b=ek+f/g3VbPd5gRkSVCcJz4pvZWu4aE+S5MO/Z/X9xOR3TbbW2ONSf+WY6IbOsqc/Em
+         5m1dSqd82T5GqTUzeMHiqKG9MgCE9qtm3s56yOVfrWRajXDHi+7L+YcSZTqg/tADKTKh
+         mfR38jDIf8sZITmdgPWcK6QS3PslT1+jX9+y1Axvc9uPqP+Oo9cvG+NFCbOwGfnV0ik3
+         XQlZ0KBl/rbrWyuJHvNB6bFDVeet2CRZgxjYfkRZ8hU8WPQUGwEH0rrnbRjTrH1TPBvd
+         ngO5X9dwuFJV++o1TuLwf8N1g8oZ4WSYEZgwREISKm0mtPqjG2E8T6Q+jNv9GD0AFBZ2
+         M2hg==
+X-Gm-Message-State: AOJu0YxA0GvdIhoJJWxdBRtCHdbh9iTmx+VQMgF2aQWW3wzy1Il4UJjc
+        +/DBvFRYeWFKK0A/sK4hcup2P2mW2OuHlP7AjIc=
+X-Google-Smtp-Source: AGHT+IELcxDKtVSIb76h/AeuCg5XOvMcz/LwNeD+AyhN6t71aP3KPCKwg35DFtyslslGZGaVHIe92vXp93/iEL4SPfM=
+X-Received: by 2002:a2e:93c4:0:b0:2b4:6e21:637e with SMTP id
+ p4-20020a2e93c4000000b002b46e21637emr14351630ljh.16.1693126772636; Sun, 27
+ Aug 2023 01:59:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtp:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,RCVD_IN_VALIDITY_RPBL,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <cover.1690364259.git.haibo1.xu@intel.com> <ZMrVrXlvu/FJEayx@google.com>
+In-Reply-To: <ZMrVrXlvu/FJEayx@google.com>
+From:   Haibo Xu <xiaobo55x@gmail.com>
+Date:   Sun, 27 Aug 2023 16:59:21 +0800
+Message-ID: <CAJve8onbxHjJoC-k-TtOm1BBtjm38moaW-Kk8siKsxt9nwZZZw@mail.gmail.com>
+Subject: Re: [PATCH 0/4] RISCV: Add kvm Sstc timer selftest
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Haibo Xu <haibo1.xu@intel.com>, ajones@ventanamicro.com,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Vipin Sharma <vipinsh@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Andrew Jones <andrew.jones@linux.dev>,
+        Vishal Annapurve <vannapurve@google.com>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kvm-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi, Willy
-
-Since we have already finished the size inflate regression task [1], to share
-and discuss the progress about the -ENOSYS return work, here launchs a new
-thread, it is split from [2].
-
-[1]: https://lore.kernel.org/lkml/ZNtszQeigYuItaKA@1wt.eu/
-[2]: https://lore.kernel.org/lkml/20230814172233.225944-1-falcon@tinylab.org/#R
-
-This is only for brain storming, it is far from a solution ;-)
-
-> 
-> > [...]
-> > > > 
-> > > >     /* __systry2() is used to select one of two provided low level syscalls */
-> > > >     #define __systry2(a, sys_a, sys_b) \
-> > > >     	((NOLIBC__NR_##a != NOLIBC__NR_NOSYS) ? (sys_a) : (sys_b))
-> > > 
-> > > But this supposes that all of them are manually defined as you did above.
-> > > I'd rather implement an ugly is_numeric() macro based on argument
-> > > resolution. I've done it once in another project, I don't remember
-> > > precisely where it is but I vaguely remember that it used to check
-> > > that the string resolution of the argument gave a letter (when it
-> > > does not exist) or a digit (when it does). I can look into that later
-> > > if needed. But please avoid extra macro definitions as much as possible,
-> > > they're a real pain to handle in the code. There's no error when one is
-> > > missing or has a typo, it's difficult to follow them and they don't
-> > > appear in the debugger.
-> > >
-> > 
-> > Yeah, your reply inspired me to look into the IS_ENABLED() from
-> > ../include/linux/kconfig.h macro again, there was a __is_defined() there, let's
-> > throw away the ugly sysnr.h. I thought of IS_ENABLED() was only for y/n/m
-> > before, but it does return 0 when the macro is not defined, it uses the same
-> > trick in syscall() to calculate the number of arguments, if the macro is not
-> > defined, then, 0 "argument".
+On Thu, Aug 3, 2023 at 6:16=E2=80=AFAM Sean Christopherson <seanjc@google.c=
+om> wrote:
+>
+> On Thu, Jul 27, 2023, Haibo Xu wrote:
+> > The sstc_timer selftest is used to validate Sstc timer functionality
+> > in a guest, which sets up periodic timer interrupts and check the
+> > basic interrupt status upon its receipt.
 > >
-> 
-> The above trick is only for ""#define something 1" ;-)
+> > This KVM selftest was ported from aarch64 arch_timer and tested
+> > with Linux v6.5-rc3 on a Qemu riscv64 virt machine.
+> >
+> > Haibo Xu (4):
+> >   tools: riscv: Add header file csr.h
+> >   KVM: riscv: selftests: Add exception handling support
+> >   KVM: riscv: selftests: Add guest helper to get vcpu id
+> >   KVM: riscv: selftests: Add sstc_timer test
+>
+> FYI, patch 4 will conflict with the in-flight guest printf changes[*], as=
+ will
+> reworking the existing arch_timer test.  My plan is to create an immutabl=
+e tag
+> later this week (waiting to make sure nothing explodes).  I highly recomm=
+end basing
+> v2 on top of that.
 >
 
-Here shares a little progress on this, I have found it is easy to implement an
-ugly is_numeric() like macro as following:
+Hi Sean,
 
-    /* Imported from include/linux/stringify.h */
-    #define __stringify_1(x...)     #x
-    #define __stringify(x...)       __stringify_1(x)
+Could you help point me to the immutable tag for the guest printf changes?
 
-    /*
-     * Check __NR_* definition by stringizing
-     *
-     * - The stringizing is to silence compile error about undefined macro
-     * - If defined, the result looks like "3", "(4000 + 168)", not begin with '_'
-     * - If not defined, the result looks like "__NR_read", begins with '_'
-     */
+Regards,
+Haibo
 
-    #define __is_nr_defined(nr)     ___is_nr_defined(__stringify(nr))
-    #define ___is_nr_defined(str)   (str[0] != '_')
-
-__is_nr_defined() is able to check if __NR_xxx is defined, but the harder part
-is getting the number of defined __NR_* without the error about undefined
-macro.
-
-Of course, we can also use the __stringify() trick to do so, but it is
-expensive (bigger size, worse performance) to unstringify and get the number
-again, the expensive atoi() 'works' for the numeric __NR_*, but not work for
-(__NR_*_base + offset) like __NR_* definitions (used by ARM and MIPS), a simple
-interpreter is required for such cases and it is more expensive than atoi().
-
-    /* not for ARM and MIPS */
-
-    static int atoi(const char *s);
-    #define __get_nr(name)          __nr_atoi(__stringify(__NR_##name))
-    #define __nr_atoi(str)          (str[0] == '_' ? -1L : ___nr_atoi(str))
-    #define ___nr_atoi(str)         (str[0] == '(' ? -1L : atoi(str))
-
-Welcome more discussion or let's simply throw away this direction ;-)
-
-But it may really help us to drop tons of duplicated code pieces like this:
-
-    #ifdef __NR_xxxx
-    ...
-    #else
-        return -ENOSYS;
-    #endif
-
-David, Thomas and Arnd, any inspiration on this, or is this really impossible
-(or make things worse) in language level? ;-)
-
-What I'm thinking about is something like this or similar (As Willy commented
-before, the __sysdef() itself is not that good, please ignore itself, the core
-target here is using a single -ENOSYS return for all of the undefined
-branches):
-
-    #define __sysdef(name, ...)     \
-    	(__is_nr_defined(__NR_##name) ? my_syscall(__get_nr(name), ##__VA_ARGS__) : (long)-ENOSYS)
-
-Or as Arnd replied in an old email thread before, perhaps the whole #ifdef's
-code piece (and even the input types and return types of sys_*) above can be
-generated from .tbl or the generic unistd.h automatically in the sysroot
-installation stage?
-
-BR,
-Zhangjin
+> [*] https://lore.kernel.org/all/20230729003643.1053367-1-seanjc@google.co=
+m
