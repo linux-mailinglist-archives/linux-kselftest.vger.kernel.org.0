@@ -2,188 +2,164 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 096357898AF
-	for <lists+linux-kselftest@lfdr.de>; Sat, 26 Aug 2023 20:31:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2CCB789B0D
+	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Aug 2023 04:50:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230289AbjHZSad (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 26 Aug 2023 14:30:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41998 "EHLO
+        id S229523AbjH0Cta (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 26 Aug 2023 22:49:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230207AbjHZSaN (ORCPT
+        with ESMTP id S229703AbjH0CtX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 26 Aug 2023 14:30:13 -0400
-Received: from bg4.exmail.qq.com (bg4.exmail.qq.com [43.154.54.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CB1BBD;
-        Sat, 26 Aug 2023 11:30:07 -0700 (PDT)
-X-QQ-mid: bizesmtpipv602t1693074596txh9
-Received: from [IPV6:2001:da8:c000:3005:c026:8 ( [255.193.153.7])
-        by bizesmtp.qq.com (ESMTP) with 
-        id ; Sun, 27 Aug 2023 02:29:54 +0800 (CST)
-X-QQ-SSF: 01200000000000907000000A0000000
-X-QQ-FEAT: fj/jKqveG5F37E2q+TLQp06oyzV8uk1tUboC9VYcnxaGoe+e4Hz5P2zI6fdDN
-        mhg/fyeruMJUt0N9AnR8rTJ2x70msQAaNrgiac2VQ7/6mTtSAQ1dlFpdR6TVkFMZNF/BmzI
-        RCtrNcZ1y6e89VgtLt1kvvLslWFVDtRewVIoHORpoXFJwk6bI0TmXFtpG+POPmE6SZ6u+vG
-        YnBTIr3Uv/OX6dM1sYlbvHeRttVvZsECzV4kHNBjkzAwYLxATHSrcvc8EE97ErHfcxzh0jy
-        VnXdMYyfKYp0Z+qTgXrff53HZbnoikT7UDy3cIKv6nqWaq3Zaaroj2LaKB9wmVFEPKeL8at
-        grnJuDetShCApaM8HmbQR/f8spR6myIEf43ayW8
-X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 9143129729124953103
-Message-ID: <B0DD4BA059591F13+4c61dc98-4d70-4ab2-b4ca-81c0e6596482@tinylab.org>
-Date:   Sun, 27 Aug 2023 02:29:53 +0800
+        Sat, 26 Aug 2023 22:49:23 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73BC1FA;
+        Sat, 26 Aug 2023 19:49:21 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id 6a1803df08f44-64a70194fbeso14318966d6.0;
+        Sat, 26 Aug 2023 19:49:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1693104560; x=1693709360;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NCtnF9exppXJ6XEDIDPLdkpvn2zVvtmJBQygM/RMB4o=;
+        b=rAb2DkGtLtzvfBusGnyMbSTNQITIVKXuVi/834VnyW/8qP/QrdR+zwzLXjW4G9cS16
+         L80aJ8eBncSsGnLp7m/BIHTC5J29pNaiHgxMoR63mUkPSC22edCqtzExg7KRNeWcAehg
+         OWJXkDDMnjjzC/hb1xk9BRhuweSCXFoKMDSCQd/J+uMbKJCIo1sQPlwhhVKV0w2ixnL0
+         hW1HNfiSNNB1q/D2ClEburhGBGvUq2BcPhH0Zptmb08IPwI1fEO5jqOYLXRNZRY4zMD0
+         DeDqHTcMiKiXQl5hWxDOVcXsRbkOeeOOn4QWHYmYOeYaY0Z6zaHzDvurKz+p7KR06RUk
+         BLww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693104560; x=1693709360;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NCtnF9exppXJ6XEDIDPLdkpvn2zVvtmJBQygM/RMB4o=;
+        b=Jmfg7tZMqB/Is/qGG59kF2Gh19KiCGpXKxgKD5bWRMb39xGDQK/p58ti8JDhmJ3Rlp
+         cVO0Fe2Vag5ZGyKQoGK3LStCDVzwFG7Z5aYz1jDh4T5bWVwFVO0arzjeb1HV5BWZTrW+
+         xVZdZdEuVOSENdSRY8KMJyadcA45xKcZEJeNTq7aw9tnmj30RDdWD744VXD5CgXhbgIK
+         zRCWrn+QoB/PUJ8pMePaQSmRLVZcpJDNIzvJTIt01yXsEiniKBP6PaqrJSPV218XChE+
+         /S+ZYgxBQYt2Bj9GiQzkisCsmsVG/5NVpCR4QByQmdz1/BGhpLDN5S2BIB4XA0fp6un5
+         RauA==
+X-Gm-Message-State: AOJu0YyGjYHED97iArgCkJ3SdxmBdRbrCeYfRl6xrjRn7WukrPELj1Tu
+        /BZz1AzHA8M7km0V6xJa0RkrbvNsipP1P2i5aCY=
+X-Google-Smtp-Source: AGHT+IF4vkWOe6NkflE5M3y8AVEnYVu/enyv10HrjdIye1KfASXGZWMrI8GglN7QOaOkABkqbpataQrmDhg3E7fucmo=
+X-Received: by 2002:a05:6214:4111:b0:649:bf3:6dbe with SMTP id
+ kc17-20020a056214411100b006490bf36dbemr27581212qvb.62.1693104560582; Sat, 26
+ Aug 2023 19:49:20 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/3] selftests/nolibc: fix up O= option support
-Content-Language: en-GB
-To:     Zhangjin Wu <falcon@tinylab.org>, w@1wt.eu
-Cc:     arnd@arndb.de, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux@weissschuh.net,
-        thomas@t-8ch.de, Yuan Tan <tanyuan@tinylab.org>
-References: <20230806121721.30774-1-falcon@tinylab.org>
- <20230826043046.53692-1-falcon@tinylab.org>
-From:   Yuan Tan <tanyuan@tinylab.org>
-In-Reply-To: <20230826043046.53692-1-falcon@tinylab.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtpipv:tinylab.org:qybglogicsvrgz:qybglogicsvrgz5a-1
-X-Spam-Status: No, score=1.7 required=5.0 tests=BAYES_00,FORGED_MUA_MOZILLA,
-        RCVD_ILLEGAL_IP,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+References: <tencent_6D23FE187408D965E95DFAA858BC7E8C760A@qq.com>
+In-Reply-To: <tencent_6D23FE187408D965E95DFAA858BC7E8C760A@qq.com>
+From:   Yafang Shao <laoar.shao@gmail.com>
+Date:   Sun, 27 Aug 2023 10:48:44 +0800
+Message-ID: <CALOAHbCXVNXk4WUCRGCDsezzTfieDcLT=Jt00m4UX4zdw=RtsQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v8] selftests/bpf: trace_helpers.c: optimize
+ kallsyms cache
+To:     Rong Tao <rtoax@foxmail.com>
+Cc:     olsajiri@gmail.com, andrii@kernel.org, daniel@iogearbox.net,
+        sdf@google.com, Rong Tao <rongtao@cestc.cn>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>,
+        Yonghong Song <yonghong.song@linux.dev>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        =?UTF-8?Q?Daniel_M=C3=BCller?= <deso@posteo.net>,
+        Manu Bretelle <chantr4@gmail.com>,
+        Xu Kuohai <xukuohai@huawei.com>,
+        Ross Zwisler <zwisler@google.com>,
+        Eduard Zingerman <eddyz87@gmail.com>,
+        "open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)" 
+        <bpf@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "moderated list:ARM/STM32 ARCHITECTURE" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "moderated list:ARM/STM32 ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Zhangjin and Willy,
-
-On 8/26/2023 12:30 PM, Zhangjin Wu wrote:
-> Hi, Willy
+On Sat, Aug 26, 2023 at 10:46=E2=80=AFPM Rong Tao <rtoax@foxmail.com> wrote=
+:
 >
->>> On Sat, Aug 05, 2023 at 02:13:11PM +0800, Zhangjin Wu wrote:
->>>> To avoid pollute the source code tree and avoid mrproper for every
->>>> architecture switch, the O= argument must be supported.
->>>>
->>>> Both IMAGE and .config are from the building directory, let's use
->>>> objtree instead of srctree for them.
->>>>
->>>> If no O= option specified, means building kernel in source code tree,
->>>> objtree should be srctree in such case.
->>>>
->>>> To support relative path, as suggested by Thomas, $(COMMAND_O) is used
->>>> to pass the O=$(ABSOLUTE_O) to the $(MAKE) commands.
->>> Zhangjin, I cannot get this one to work, regardless of what I try:
->>>
->>>     $ make -j8 O=$PWD/output-i386 nolibc-test XARCH=i386 CROSS_COMPILE=/f/tc/nolibc/gcc-12.3.0-nolibc/i386-linux/bin/i386-linux- CC=/f/tc/nolibc/gcc-12.3.0-nolibc/i386-linux/bin/i386-linux-gcc
->>>     (...)
->>>     CC      nolibc-test
->>>     In file included from sysroot/i386/include/stdio.h:14,
->>>                      from nolibc-test.c:13:
->>>     sysroot/i386/include/errno.h:10:10: fatal error: asm/errno.h: No such file or directory
->>>        10 | #include <asm/errno.h>
->>>           |          ^~~~~~~~~~~~~
->>>     compilation terminated.
->>>
->> Willy, I also just reproduced the issue, seems only i386 sysroot has no
->> asm/errno.h, will check why it is no rightly installed later.
->>
->>      $ find sysroot/ -name "errno.h"
->>      sysroot/arm/include/errno.h
->>      sysroot/arm/include/asm-generic/errno.h
->>      sysroot/arm/include/asm/errno.h
->>      sysroot/arm/include/linux/errno.h
->>      sysroot/riscv/include/errno.h
->>      sysroot/riscv/include/asm-generic/errno.h
->>      sysroot/riscv/include/asm/errno.h
->>      sysroot/riscv/include/linux/errno.h
->>      sysroot/s390/include/errno.h
->>      sysroot/s390/include/asm-generic/errno.h
->>      sysroot/s390/include/asm/errno.h
->>      sysroot/s390/include/linux/errno.h
->>      sysroot/arm64/include/errno.h
->>      sysroot/arm64/include/asm-generic/errno.h
->>      sysroot/arm64/include/asm/errno.h
->>      sysroot/arm64/include/linux/errno.h
->>      sysroot/mips/include/errno.h
->>      sysroot/mips/include/asm-generic/errno.h
->>      sysroot/mips/include/asm/errno.h
->>      sysroot/mips/include/linux/errno.h
->>      sysroot/x86_64/include/errno.h
->>      sysroot/x86_64/include/asm-generic/errno.h
->>      sysroot/x86_64/include/asm/errno.h
->>      sysroot/x86_64/include/linux/errno.h
->>      sysroot/i386/include/errno.h
->>      sysroot/i386/include/asm-generic/errno.h
->>      sysroot/i386/include/linux/errno.h
->>      sysroot/powerpc/include/errno.h
->>      sysroot/powerpc/include/asm-generic/errno.h
->>      sysroot/powerpc/include/asm/errno.h
->>      sysroot/powerpc/include/linux/errno.h
->>
->>> I'll leave it aside for now as I've spent way longer than I hoped on
->>> these series. I could take the previous two patches however.
->>>
->> Ok, let's ignore this one, I will find why sysroot not install well for i386.
->>
-> Thanks to Yuan, he have done some testing and have found the root cause, that
-> is mrproper on top-level source code tree is required before installing
-> sysroot, otherwise, the 'generated' headers will not be installed (removed by
-> scripts/Makefile.asm-generic).
-
-More specifically, building kernel will generate 
-'linux/arch/x86/include/generated/uapi/asm/errno.h', which prevents 
-nolibc-test with O= generate 
-'output-x86/arch/x86/include/generated/asm/errno.h'.
-
+> From: Rong Tao <rongtao@cestc.cn>
 >
-> After mrproper (not with O=out, must on top-level source code tree), the
-> asm/errno.h will be there:
+> Static ksyms often have problems because the number of symbols exceeds th=
+e
+> MAX_SYMS limit. Like changing the MAX_SYMS from 300000 to 400000 in
+> commit e76a014334a6("selftests/bpf: Bump and validate MAX_SYMS") solves
+> the problem somewhat, but it's not the perfect way.
 >
->      ubuntu@linux-lab:/labs/linux-lab/src/linux-stable/tools/testing/selftests/nolibc$ find sysroot/ -name "errno.h"
->      sysroot/i386/include/errno.h
->      sysroot/i386/include/asm-generic/errno.h
->      sysroot/i386/include/asm/errno.h             --> here it is
->      sysroot/i386/include/linux/errno.h
->      sysroot/x86/include/errno.h
->      sysroot/x86/include/asm-generic/errno.h
->      sysroot/x86/include/asm/errno.h              --> here it is
->      sysroot/x86/include/linux/errno.h
+> This commit uses dynamic memory allocation, which completely solves the
+> problem caused by the limitation of the number of kallsyms.
 >
-> That also means, to use O=out for run-user, we also need to use O=out for
-> defconfig (and kernel ...) too, otherwise, the top-level source code tree will
-> be polluated.
->
-> Seems a manual mrproper on top-level source code tree is always required for a
-> new iteration, so, it may be ok to pick this patch with a note on the potential
-> error.
+> Acked-by: Stanislav Fomichev <sdf@google.com>
+> Signed-off-by: Rong Tao <rongtao@cestc.cn>
+> ---
+> v8: Resolves inter-thread contention for ksyms global variables.
+> v7: https://lore.kernel.org/lkml/tencent_BD6E19C00BF565CD5C36A9A0BD828CFA=
+210A@qq.com/
+>     Fix __must_check macro.
+> v6: https://lore.kernel.org/lkml/tencent_4A09A36F883A06EA428A593497642AF8=
+AF08@qq.com/
+>     Apply libbpf_ensure_mem()
+> v5: https://lore.kernel.org/lkml/tencent_0E9E1A1C0981678D5E7EA9E4BDBA8EE2=
+200A@qq.com/
+>     Release the allocated memory once the load_kallsyms_refresh() upon er=
+ror
+>     given it's dynamically allocated.
+> v4: https://lore.kernel.org/lkml/tencent_59C74613113F0C728524B2A82FE5540A=
+5E09@qq.com/
+>     Make sure most cases we don't need the realloc() path to begin with,
+>     and check strdup() return value.
+> v3: https://lore.kernel.org/lkml/tencent_50B4B2622FE7546A5FF9464310650C00=
+8509@qq.com/
+>     Do not use structs and judge ksyms__add_symbol function return value.
+> v2: https://lore.kernel.org/lkml/tencent_B655EE5E5D463110D70CD2846AB3262E=
+ED09@qq.com/
+>     Do the usual len/capacity scheme here to amortize the cost of realloc=
+, and
+>     don't free symbols.
+> v1: https://lore.kernel.org/lkml/tencent_AB461510B10CD484E0B2F62E3754165F=
+2909@qq.com/
+> ---
+>  samples/bpf/Makefile                          |   4 +
+>  samples/bpf/offwaketime_user.c                |   7 +-
+>  samples/bpf/sampleip_user.c                   |   9 +-
+>  samples/bpf/spintest_user.c                   |   7 +-
+>  samples/bpf/task_fd_query_user.c              |  13 +-
+>  samples/bpf/trace_event_user.c                |   7 +-
+>  .../selftests/bpf/prog_tests/bpf_cookie.c     |   7 +-
+>  .../selftests/bpf/prog_tests/fill_link_info.c |   9 +-
+>  .../bpf/prog_tests/get_stack_raw_tp.c         |  10 +-
+>  .../bpf/prog_tests/kprobe_multi_test.c        |  13 +-
+>  .../prog_tests/kprobe_multi_testmod_test.c    |  13 +-
+>  tools/testing/selftests/bpf/trace_helpers.c   | 116 ++++++++++++------
+>  tools/testing/selftests/bpf/trace_helpers.h   |  10 +-
+>  13 files changed, 154 insertions(+), 71 deletions(-)
 
-There are two potential solutions for addressing this issue.
+I think we'd better split it into two patches: one for samples/bpf/
+and another for tools/testing/selftests/bpf.
 
-The first option involves copying 
-'linux/arch/x86/include/generated/uapi/asm/' to 'sysroot/x86/include/' 
-during the make of target headers_standalone.
+BTW, why can't we just load it once for all ?  IOW, load the kallsyms
+before we start each individual test, and free it after all tests
+finish.
 
-The second approach entails displaying an error message when the code 
-tree is not clean and prompting users to manually execute 'make 
-mrproper'. In this case, we can utilize the target 'outputmakefile' from 
-the root makefile directly.
-
-Willy, which method do you prefer? Do you have any alternative 
-suggestions? :)
-
-
-Besides. using x86_64-linux-gnu- won't reproduce this issue. It searched 
-and found 'asm/errno.h' in '/usr/include/x86_64-linux-gnu', whereas 
-'x86_64-linux' lacks these libraries.
-
->
-> Best Regards,
-> Zhangjin
->
->> Thanks,
->> Zhangjin
->>
->>> Thanks,
->>> Willy
-
+--=20
+Regards
+Yafang
