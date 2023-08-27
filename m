@@ -2,80 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C71B789CED
-	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Aug 2023 12:16:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 040CA78A010
+	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Aug 2023 17:46:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbjH0KQP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 27 Aug 2023 06:16:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46092 "EHLO
+        id S229544AbjH0Pp5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 27 Aug 2023 11:45:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231171AbjH0KPt (ORCPT
+        with ESMTP id S230376AbjH0Ppu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 27 Aug 2023 06:15:49 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DE94E44;
-        Sun, 27 Aug 2023 03:15:25 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id ffacd0b85a97d-31ae6bf91a9so1838324f8f.2;
-        Sun, 27 Aug 2023 03:15:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693131322; x=1693736122;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JKRUbUuhJKaIwa3qDyE5pLuTPeYn99sgtOiRmzFrU1o=;
-        b=MZyNrK+zky4qPiM7YuIzYBRlUuXPVUlmaKRgMfhThnYq47Y8ZgEawrMIWMia4hy+GD
-         7QvwOzwmBddVVPfsHaU9D/y6wOwSYQBybpHv68Mpsnzae4ruR86Q0hr1Yr7mzimyRZTJ
-         FVFWgOtjqMUMfa4yKwS6gLnzUX+XO4bLr8EgmWX2tXY1gz3H20YiqvTRh6qN41xPD5dT
-         CL3tw9oCEg1TmsKgCglKmSx+KtCUdhbeII4Iv2qd2PxA3E/PIzuK0xGeI0oItDtkOKWr
-         RhNGS+DAqGyOKVdLJ4syJWoPOOZ0QbUdIbYQ+FVs2VjZF6bkAT8YehWikZl2JtOcfPzj
-         TcVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693131322; x=1693736122;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JKRUbUuhJKaIwa3qDyE5pLuTPeYn99sgtOiRmzFrU1o=;
-        b=MbZQkIiBb/tKm2J82z3Mam4rWCRvDeUDqoznjyv+whDQxrU9LtQDoQFzQD60JWZIYt
-         Eug9PolwLrKRCxXLZdUbD4+9vt3b+9Q5kcZ18IMNVCsAJoJnm4fcnj4IGElIoDW36JHl
-         74EBOzh3Nix/X2XJbTPKa97rFLbLPU/Nr5XIE7OGDft3ouVQWisl/uMAk2zYrajTh0TA
-         pKXudUUbotLz9zdozZoqGL/8hiTE53Sgckei/hIW0N3Lbuf8ogwWjJZNMoeaWiRwCghH
-         n1k5TgkuNpF++edaqKHs6Q9IfSPjJSoGyD0QUyGXnjEMxiEOwJyvkTqKSa2bXN1bZGQT
-         5zwQ==
-X-Gm-Message-State: AOJu0Yx75tIGYiyC/smainRhjLiGlyd+ZR7eGpfu6A51Qf7yvV++Ogda
-        UZrG05pbN1pa3b+hd06zyGQ=
-X-Google-Smtp-Source: AGHT+IEnyudIg3nKBtZiGWQhS9+o2sGjSVBJKjN8yVI0U2TXJjqwP76b4fojHe+sCRqJD3GIgEKUhw==
-X-Received: by 2002:adf:dc86:0:b0:317:ef76:b778 with SMTP id r6-20020adfdc86000000b00317ef76b778mr16658985wrj.63.1693131322390;
-        Sun, 27 Aug 2023 03:15:22 -0700 (PDT)
-Received: from localhost ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
-        by smtp.gmail.com with ESMTPSA id e8-20020a5d5948000000b003143add4396sm7168911wri.22.2023.08.27.03.15.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Aug 2023 03:15:21 -0700 (PDT)
-Date:   Sun, 27 Aug 2023 11:15:20 +0100
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Kirill A Shutemov <kirill@shutemov.name>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Lokesh Gidra <lokeshgidra@google.com>
-Subject: Re: [PATCH v5 6/7] selftests: mm: Add a test for remapping within a
- range
-Message-ID: <fb429d82-4576-42d7-b51f-7a72f7f8caec@lucifer.local>
-References: <20230822015501.791637-1-joel@joelfernandes.org>
- <20230822015501.791637-7-joel@joelfernandes.org>
- <08ce8c61-e7a2-417a-a3cc-d20861753ae8@lucifer.local>
+        Sun, 27 Aug 2023 11:45:50 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7BC2ED;
+        Sun, 27 Aug 2023 08:45:47 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id BB3AB3200413;
+        Sun, 27 Aug 2023 11:45:43 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Sun, 27 Aug 2023 11:45:44 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1693151143; x=1693237543; bh=JprlLIqEJWaRb
+        bi++2K0fgr0aIwsjL2WLjUkdt7UMVY=; b=fF+ce6qLQEP5ohnZiY6XGK71zIuDd
+        fx9JGhEUu+xcUSTxBHMsuaEMOu5AXbHZqVzXnOtB6x4GOtZdIsTI7cu9JtmeMeCx
+        tNIeXWBnIyCWrtC3xwh+u0S+htKjMYzEI8VyeloymvnUTueW1wnSNdfHBm/8rhH+
+        qGFlFVZarg1+hbgB8jvkijrOtWkNAQ18MGa/ML1HZCEAXSB3/iel4PBAYISAWqgm
+        NFRNfNaMHyYyi1C374ez3clGgb/YL2mwD3izrzmRaIrFl/JqRIIaDsh658RwALfD
+        KcM6y6zWlc1lQx3ulyYAa5maaCCZpwvfbEnAky1iTaX2n2Ku0KZLbyRYA==
+X-ME-Sender: <xms:p2_rZF1d32fJ6vaYYzALtRLxHJrkx2jWY39SmPUbFyUJI02-ggZN5Q>
+    <xme:p2_rZMFqrudxZ3Bx7Bss9pvWgfh6DVPj1yjs6-EODPID2igsiYLE_w5OAmRGKPr3W
+    LcD44XTbxm6eYs>
+X-ME-Received: <xmr:p2_rZF4yeRg21SfoZ9yYGzkk5DxJx_Cf95jRpgsCA_2w0jTHytxQQFH_TWrz>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudefvddgleegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepkfguohcu
+    ufgthhhimhhmvghluceoihguohhstghhsehiughoshgthhdrohhrgheqnecuggftrfgrth
+    htvghrnhepvddufeevkeehueegfedtvdevfefgudeifeduieefgfelkeehgeelgeejjeeg
+    gefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepih
+    guohhstghhsehiughoshgthhdrohhrgh
+X-ME-Proxy: <xmx:p2_rZC1SZoZW0QNJtBELsik3okBXbJCHDIooSI5RSSJBQlsGxlxS6A>
+    <xmx:p2_rZIEvJStKXevZ-avEbwrDSadS_9a3FfFuVKZkkZqWvKO2t2tW-w>
+    <xmx:p2_rZD-8VfH1yACZgAGpSeGNM33ojktmxenLzzVRPy_Yf9cw3OK0oQ>
+    <xmx:p2_rZGZucXPs_Oj3ClrrYeseb53giYE_eKvIkQPxPK0_bPfU_eqTTg>
+Feedback-ID: i494840e7:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 27 Aug 2023 11:45:42 -0400 (EDT)
+Date:   Sun, 27 Aug 2023 18:45:38 +0300
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Sriram Yagnaraman <sriram.yagnaraman@est.tech>
+Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        David Ahern <dsahern@kernel.org>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Shuah Khan <shuah@kernel.org>, Petr Machata <petrm@nvidia.com>
+Subject: Re: [PATCH net v2 2/3] ipv6: ignore dst hint for multipath routes
+Message-ID: <ZOtvor13INKwpwbc@shredder>
+References: <20230825090830.18635-1-sriram.yagnaraman@est.tech>
+ <20230825090830.18635-3-sriram.yagnaraman@est.tech>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <08ce8c61-e7a2-417a-a3cc-d20861753ae8@lucifer.local>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <20230825090830.18635-3-sriram.yagnaraman@est.tech>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,28 +79,31 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Aug 27, 2023 at 10:57:59AM +0100, Lorenzo Stoakes wrote:
-[snip]
+On Fri, Aug 25, 2023 at 11:08:29AM +0200, Sriram Yagnaraman wrote:
+> diff --git a/net/ipv6/route.c b/net/ipv6/route.c
+> index 56a55585eb79..4631e03c84b4 100644
+> --- a/net/ipv6/route.c
+> +++ b/net/ipv6/route.c
+> @@ -424,6 +424,8 @@ void fib6_select_path(const struct net *net, struct fib6_result *res,
+>  	if (match->nh && have_oif_match && res->nh)
+>  		return;
+>  
+> +	IP6CB(skb)->flags |= IP6SKB_MULTIPATH;
 
-> > +/*
-> > + * Verify that an mremap within a range does not cause corruption
-> > + * of unrelated part of range.
-> > + *
-> > + * Consider the following range which is 2MB aligned and is
-> > + * a part of a larger 10MB range which is not shown. Each
-> > + * character is 256KB below making the source and destination
+skb can be NULL here in case this is called as part of route query from
+user space, so we need:
 
-Just noticed, I think you misspeak here, as this test doens't seem to
-offset by 256 KiB? That is the strategy for mremap_move_1mb_from_start()
-rather than this test so perhaps comment needs to be moved around?
-
- * 2MB each. The lower case letters are moved (s to d) and the
- * upper case letters are not moved. The below test verifies
- * that the upper case S letters are not corrupted by the
- * adjacent mremap.
- *
- * |DDDDddddSSSSssss|
- */
- static void mremap_move_within_range(char pattern_seed)
-
-[snip]
+diff --git a/net/ipv6/route.c b/net/ipv6/route.c
+index 4631e03c84b4..a02328c93a53 100644
+--- a/net/ipv6/route.c
++++ b/net/ipv6/route.c
+@@ -424,7 +424,8 @@ void fib6_select_path(const struct net *net, struct fib6_result *res,
+        if (match->nh && have_oif_match && res->nh)
+                return;
+ 
+-       IP6CB(skb)->flags |= IP6SKB_MULTIPATH;
++       if (skb)
++               IP6CB(skb)->flags |= IP6SKB_MULTIPATH;
+ 
+        /* We might have already computed the hash for ICMPv6 errors. In such
+         * case it will always be non-zero. Otherwise now is the time to do it.
