@@ -2,67 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6D7578A209
-	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Aug 2023 23:47:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AADE78A219
+	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Aug 2023 23:52:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230134AbjH0Vq6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 27 Aug 2023 17:46:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57622 "EHLO
+        id S229874AbjH0Vvu convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 27 Aug 2023 17:51:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230334AbjH0Vqc (ORCPT
+        with ESMTP id S230186AbjH0Vvj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 27 Aug 2023 17:46:32 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A05C9120
-        for <linux-kselftest@vger.kernel.org>; Sun, 27 Aug 2023 14:46:29 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id ca18e2360f4ac-7927f36120cso82591539f.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 27 Aug 2023 14:46:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1693172789; x=1693777589;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=6mcwO+IbeJ6pSmZ/BjxjTTVqEmFcInv2K/OfpA2NMnU=;
-        b=Az9zw+ATe3PlF3OhMMTM/WWPXUwi/94KCKAGjXJD7qM6Mr6OrjUiOn1sH+8o/EsaOn
-         cdsc5A9xXnfw+YW2bjmLdScXX0nuHHoHS6oiYGmQAQVOSwLzL/56I4CuEJMsWm4tQFNy
-         iS5GrBPzUdWHXbboY3hnu8CQNg2WGc4D72uA4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693172789; x=1693777589;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6mcwO+IbeJ6pSmZ/BjxjTTVqEmFcInv2K/OfpA2NMnU=;
-        b=C+bEnEaawrOLQd8BrsJrVRkJXLqwIWh12aGdRH7RRsvgJSfiaOrdF6QHGScWikzDGv
-         3QDt6HdnhJHtwsuYkVn/ZuluzPyCbI+kf2+hzlEqpaDrEA2skQoIqYJgpJbY9X8WNwIY
-         nXWyZJZnY2GoUeBAyTj9p+V9F6afFi+UaviwWB/SZ8gJmlhGGclHHacDKWCHjMCB9ofd
-         KUU6K5dMNr0qe54qLW0MT2sNoEYBU6sIFaHgcrK+qgie5l5SfiE/j97kAo5VsNAqo3Qt
-         GKRYGtIAjOfXQvpWbglBM9qNtwun6ifHytWCny0a3F/DDCmF61Ihs5MQ9w1MJzaMVVLf
-         G6hQ==
-X-Gm-Message-State: AOJu0YyX6DzFCj16kp+fSpMM3/cv0wCRpogPf5N5AMNw3HnfcoW/b8+j
-        YeFMQtKV85J0NLDVG9mbOoJRgwlzQxMTIppZrbM=
-X-Google-Smtp-Source: AGHT+IE2PDpFOgkg1eIeYAvpTEAZMfuuiEANqDy0KOpHgWijDj9rwgdkP6amMl/prwYlxtPA6KcOrg==
-X-Received: by 2002:a6b:f214:0:b0:790:ff32:eb3 with SMTP id q20-20020a6bf214000000b00790ff320eb3mr17389815ioh.17.1693172788924;
-        Sun, 27 Aug 2023 14:46:28 -0700 (PDT)
-Received: from joelboxx5.c.googlers.com.com (156.190.123.34.bc.googleusercontent.com. [34.123.190.156])
-        by smtp.gmail.com with ESMTPSA id d13-20020a02a48d000000b0042b1cd4c096sm1992515jam.74.2023.08.27.14.46.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Aug 2023 14:46:28 -0700 (PDT)
-From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
-To:     stable@vger.kernel.org, "Paul E. McKenney" <paulmck@kernel.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Joel Fernandes <joel@joelfernandes.org>, rcu@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 5.10 1/2] torture: Avoid torture-test reboot loops
-Date:   Sun, 27 Aug 2023 21:46:20 +0000
-Message-ID: <20230827214622.240001-1-joel@joelfernandes.org>
-X-Mailer: git-send-email 2.42.0.rc1.204.g551eb34607-goog
+        Sun, 27 Aug 2023 17:51:39 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E97711A
+        for <linux-kselftest@vger.kernel.org>; Sun, 27 Aug 2023 14:51:36 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-21-i_qKFWZgNka4tYyQRpP4Gw-1; Sun, 27 Aug 2023 22:51:33 +0100
+X-MC-Unique: i_qKFWZgNka4tYyQRpP4Gw-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Sun, 27 Aug
+ 2023 22:51:35 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Sun, 27 Aug 2023 22:51:35 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Zhangjin Wu' <falcon@tinylab.org>, "w@1wt.eu" <w@1wt.eu>
+CC:     "arnd@arndb.de" <arnd@arndb.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "thomas@t-8ch.de" <thomas@t-8ch.de>,
+        "tanyuan@tinylab.org" <tanyuan@tinylab.org>
+Subject: RE: [RFC] tools/nolibc: replace duplicated -ENOSYS return with single
+ -ENOSYS return
+Thread-Topic: [RFC] tools/nolibc: replace duplicated -ENOSYS return with
+ single -ENOSYS return
+Thread-Index: AQHZ2MEQNQnWfqnECUm1iJ9YHQny8K/+quMQ
+Date:   Sun, 27 Aug 2023 21:51:35 +0000
+Message-ID: <4bbdea1710464fa2943663a25bf370c9@AcuMS.aculab.com>
+References: <20230827083225.7534-1-falcon@tinylab.org>
+In-Reply-To: <20230827083225.7534-1-falcon@tinylab.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,44 +62,48 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: "Paul E. McKenney" <paulmck@kernel.org>
+...
+> Of course, we can also use the __stringify() trick to do so, but it is
+> expensive (bigger size, worse performance) to unstringify and get the number
+> again, the expensive atoi() 'works' for the numeric __NR_*, but not work for
+> (__NR_*_base + offset) like __NR_* definitions (used by ARM and MIPS), a simple
+> interpreter is required for such cases and it is more expensive than atoi().
+> 
+>     /* not for ARM and MIPS */
+> 
+>     static int atoi(const char *s);
+>     #define __get_nr(name)          __nr_atoi(__stringify(__NR_##name))
+>     #define __nr_atoi(str)          (str[0] == '_' ? -1L : ___nr_atoi(str))
+>     #define ___nr_atoi(str)         (str[0] == '(' ? -1L : atoi(str))
+> 
+> Welcome more discussion or let's simply throw away this direction ;-)
 
-[ Upstream commit 10f84c2cfb5045e37d78cb5d4c8e8321e06ae18f ]
+While it will look horrid the it ought to be possible to
+get the compiler to evaluate the string.
 
-Currently, the various torture tests sometimes react to an early-boot
-bug by rebooting.  This is almost always counterproductive, needlessly
-consuming CPU time and bloating the console log.  This commit therefore
-adds the "-no-reboot" argument to qemu so that reboot requests will
-cause qemu to exit.
+Since "abc"[2] (etc) is converted to a constant (by gcc and clang
+except at -O0) and you only need to process "n" "nn" "nnn"
+"(n + m)" (with variable length n and m) then append some spaces
+and convert the characters back to digits.
 
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
----
- tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+So something that starts:
+#define dig(c) (c < '0' || c > '9' ? 999999 : c - '0')
+	str[0] == '_' ? -1 :
+	str[0] != '(' ? str[1] == ' ' ? dig(str[0]) :
+		str[2] == '1' ? (dig(str[0]) * 10 + dig(str[1]) :
+Any unexpected character will expand the 99999 and generate
+an over-large result.
+I'm not sure how constant the array index need to be.
+They may well have to be 'integer constant expressions'
+so cant depend on a previous str[const] value.
 
-diff --git a/tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh b/tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh
-index 6dc2b49b85ea..bdd747dc61f2 100755
---- a/tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh
-+++ b/tools/testing/selftests/rcutorture/bin/kvm-test-1-run.sh
-@@ -9,7 +9,7 @@
- #
- # Usage: kvm-test-1-run.sh config builddir resdir seconds qemu-args boot_args
- #
--# qemu-args defaults to "-enable-kvm -nographic", along with arguments
-+# qemu-args defaults to "-enable-kvm -nographic -no-reboot", along with arguments
- #			specifying the number of CPUs and other options
- #			generated from the underlying CPU architecture.
- # boot_args defaults to value returned by the per_version_boot_params
-@@ -132,7 +132,7 @@ then
- fi
- 
- # Generate -smp qemu argument.
--qemu_args="-enable-kvm -nographic $qemu_args"
-+qemu_args="-enable-kvm -nographic -no-reboot $qemu_args"
- cpu_count=`configNR_CPUS.sh $resdir/ConfigFragment`
- cpu_count=`configfrag_boot_cpus "$boot_args" "$config_template" "$cpu_count"`
- if test "$cpu_count" -gt "$TORTURE_ALLOTED_CPUS"
--- 
-2.42.0.rc1.204.g551eb34607-goog
+I just found a(nother) clang bug:
+	int f(void) { return "a"[2]; }
+compiles to just a 'return'.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
