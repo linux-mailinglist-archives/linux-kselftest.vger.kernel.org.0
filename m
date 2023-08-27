@@ -2,54 +2,50 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70ACE789BB7
-	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Aug 2023 09:17:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29BA6789BFD
+	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Aug 2023 10:01:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229531AbjH0HQ6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 27 Aug 2023 03:16:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51644 "EHLO
+        id S229665AbjH0IAa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 27 Aug 2023 04:00:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjH0HQb (ORCPT
+        with ESMTP id S230336AbjH0IAX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 27 Aug 2023 03:16:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA155123;
-        Sun, 27 Aug 2023 00:16:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 793E061FA9;
-        Sun, 27 Aug 2023 07:16:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61333C433C8;
-        Sun, 27 Aug 2023 07:16:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1693120586;
-        bh=HAJvTUoS9SuyCicHEbnAk7Ecn+ThZtFqVswyUPuqpro=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=etxzV+Yr30qiLNLM5dWELx1azOncPMyE1zjdh9eBwNqTc4jaDqxhl4hGSyWi+asN7
-         yMIhzZ0cfxanUkUN3FrQ7ehPsHAF0+CgU/aVZoPnKE88F7TIoG058lcsRZNp3xAHrs
-         8HVskqym3z6P8gDnWWymkSJX5uOIXtVczyCm+cCI=
-Date:   Sun, 27 Aug 2023 09:16:24 +0200
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Hardik Garg <hargar@linux.microsoft.com>
-Cc:     stable@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        Hangbin Liu <liuhangbin@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, bjorn@kernel.org
-Subject: Re: [PATCH 6.1] selftests/net: mv bpf/nat6to4.c to net folder
-Message-ID: <2023082703-plenty-colonial-5540@gregkh>
-References: <20230822220710.3992-1-hargar@linux.microsoft.com>
+        Sun, 27 Aug 2023 04:00:23 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35661EC;
+        Sun, 27 Aug 2023 01:00:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1693123218;
+        bh=B1mFk8uZ/BLYTjxk1k/ejCC5jmffZ0I7FxsOqwtYDWg=;
+        h=From:Subject:Date:To:Cc:From;
+        b=i9A17SGInjboXUzxVgk3l3W5cu7bCJyVf9+tBOMFoRGtAM5L7HrpezSt/Ye6ssuZU
+         mfswVfQk7bXo4DiQLX6nLh+g0Oyzdh2Fg9BUm3EsXdKqhcfMK5FbV2bIWjSzvtzN+F
+         a4iAO/hb2kh7/A6Zua4eSATXBxm3xOSe+9/DQQIw=
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Subject: [PATCH 0/2] nolibc: remove reliance on system headers
+Date:   Sun, 27 Aug 2023 10:00:14 +0200
+Message-Id: <20230827-nolibc-nostdinc-v1-0-995d1811f1f3@weissschuh.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230822220710.3992-1-hargar@linux.microsoft.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAI4C62QC/x2MywqAIBAAf0X2nLCu0OtXokPpVgthoRFB+O9Jp
+ 2EOMy8kjsIJevVC5FuSHKGIqRS4bQora/HFgZAsttTocOwyu4J0eQlOE9oOW2PR1w2U6oy8yPM
+ fhzHnD7DuN71hAAAA
+To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
+Cc:     Zhangjin Wu <falcon@tinylab.org>, Yuan Tan <tanyuan@tinylab.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1693123217; l=747;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=B1mFk8uZ/BLYTjxk1k/ejCC5jmffZ0I7FxsOqwtYDWg=;
+ b=4tkadWjyWeIpJdWSAHtHbIBxCI0veoaV6yaTRb4AjXizfbEpRH2p+Ax5dv4Ycm9T8pb91zAX9
+ mkdqpMW4YaOD9BAwhwG2o3QTIGnE+jHu4dHykbseE2rQ/ggPHNR+rw1
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,16 +53,26 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Aug 22, 2023 at 10:07:10PM +0000, Hardik Garg wrote:
-> From: Hangbin Liu <liuhangbin@gmail.com>
-> 
-> commit 3c107f36db06 ("selftests/net: mv bpf/nat6to4.c to net folder")
-> backport this v6.4 commit to v6.1 to fix this error:
-> error: unable to open output file 'linux/kselftest/net/bpf/nat6to4.o':
-> 'No such file or directory'
+This was prompted by the discussion about output directory support with
+O=.
+It seems sometimes we were pulling in system headers making testing
+annoying and unreliable.
 
-Note, this is a 6.3 commit, not 6.4 :)
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+Thomas Weißschuh (2):
+      tools/nolibc: add stdarg.h header
+      selftests/nolibc: use -nostdinc for nolibc-test
 
-Now queued up, thanks.
+ tools/include/nolibc/Makefile           |  1 +
+ tools/include/nolibc/stdarg.h           | 16 ++++++++++++++++
+ tools/testing/selftests/nolibc/Makefile |  2 +-
+ 3 files changed, 18 insertions(+), 1 deletion(-)
+---
+base-commit: 556fb7131e03b0283672fb40f6dc2d151752aaa7
+change-id: 20230827-nolibc-nostdinc-203908130d67
 
-greg k-h
+Best regards,
+-- 
+Thomas Weißschuh <linux@weissschuh.net>
+
