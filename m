@@ -2,76 +2,94 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FB1D789CAE
-	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Aug 2023 11:36:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BC5AE789CBE
+	for <lists+linux-kselftest@lfdr.de>; Sun, 27 Aug 2023 11:40:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229612AbjH0JgK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 27 Aug 2023 05:36:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55388 "EHLO
+        id S229552AbjH0Jjb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 27 Aug 2023 05:39:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230241AbjH0JgG (ORCPT
+        with ESMTP id S231150AbjH0JjN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 27 Aug 2023 05:36:06 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B749E1;
-        Sun, 27 Aug 2023 02:36:04 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-31ad779e6b3so1821299f8f.2;
-        Sun, 27 Aug 2023 02:36:04 -0700 (PDT)
+        Sun, 27 Aug 2023 05:39:13 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B41119;
+        Sun, 27 Aug 2023 02:39:09 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-52a1ce529fdso3191763a12.1;
+        Sun, 27 Aug 2023 02:39:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693128963; x=1693733763;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fyYjmY98zomYavB/RlCzc0eyVUey0K4QOLVItcmvGAc=;
-        b=Hvd0U2tvPIpgsz9Xf3eRylrJ25hItwSoK9O54JcTOFINLLgSA11Kt2K1sOAEFOg01/
-         NkIHTVUJ6JTXbfRkr/M1qMIkCY3u0ehM90Xg1ZiSrjaM44kSK3weoqDBRRu4HrN4qR4h
-         ZjbqlG2Qo8ey9kJXtCPHdv68aP2dkTPgKEatQ/xNZGzeYIlbasBggK0UlO0CCw+xsbBQ
-         XCuN3HPspRtJQ70GPiLi+GyvL/JjFDfS/vtpPABISMNAzpsrLYFCWdNQS0P4KkhAOR54
-         9QqCRYFYgdZOqUYTTJ6rRj+49VgkqmbN3RchLlenCAuQW06FBU6CqLk5nD3FPC5sD6xM
-         fPYQ==
+        d=gmail.com; s=20221208; t=1693129147; x=1693733947;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=qYyzxHypFBZu/5PuZAP2/UcI26Zcil+L0Fz3Xp+pJfs=;
+        b=PRj8lZz2kPU20CTQgrwm6OxN3uB9aGl90ghYmA9xlacx3vNPAyu9xPRovJzhp+l03T
+         VVoGuXIqMc9LvAO2tjyZmK7yNDC9wcLyhx0jo2RUl27nMIpsSQe+IhS5sQMyPH1d0gLi
+         EDnBBERDHxrw/VDkLkT4DoHxYBWYhjKYrzLnGANw2dLTADA4G6/Y0p5Lizwu8ockIj/3
+         GRAhqOdLAKY4F/oSh5MWZQA1OcyibCcDwAMJRmh7c87VnI118or4xaYyH7f1BcodaZtO
+         874uy5qbkRJ2QRjvojVdRhH6H7z732fwdAwEwSKfrb0ZxLh7HBA9o3uGmLjcGxu40rlY
+         eIqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693128963; x=1693733763;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fyYjmY98zomYavB/RlCzc0eyVUey0K4QOLVItcmvGAc=;
-        b=QleO1Qjzi00sXs9PEtVE9sXs9fXPqa/vTg9CgpXJfbr7wpW9oG93ihR5dF+/rP8Bj+
-         LjWcqhLIlEkBUVNQVz1H0BPRY7xDOGb8E92T8LkFkwqBjoE5fUQFLwyXv3myREeOyK5e
-         /5YDa7lKdrqb5ffUrqpsQjdqeTOhn4oYEhyR07xpjrmPDNT7g5APH3RePpVIKrZcL6qj
-         tglxDHIPgpI1HjTRIyyfJJM3XYV6wsrmAVpJoPfOrYdcWpc/hHaFrzmbcPGuyGbvi6kE
-         JCMKS6zcl6mGbH/fReMyr8I4WOjlKnJ8Kx1/sCQ6Z1E2rSOwO7gZreWNav5+jOpCBuBl
-         mltg==
-X-Gm-Message-State: AOJu0YwnyxBxpSI2uyZhJmsCqn6WF5y2S4lToZ7l6LdMdk2m2ZnVdSzW
-        xEi9hNY3KQK8tMAnaj5BooS/3TsWX+o=
-X-Google-Smtp-Source: AGHT+IEMWxi1eDxTy9m+kQuSIMn7V0I0RfSF7wi6LfJdtyy6Sa1BJ78Dz5FU+zo3YLeY8TIeZucwHg==
-X-Received: by 2002:a5d:684b:0:b0:317:597b:9f92 with SMTP id o11-20020a5d684b000000b00317597b9f92mr17146099wrw.57.1693128962699;
-        Sun, 27 Aug 2023 02:36:02 -0700 (PDT)
-Received: from localhost ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
-        by smtp.gmail.com with ESMTPSA id e8-20020a5d5948000000b003143add4396sm7083184wri.22.2023.08.27.02.36.01
+        d=1e100.net; s=20221208; t=1693129147; x=1693733947;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qYyzxHypFBZu/5PuZAP2/UcI26Zcil+L0Fz3Xp+pJfs=;
+        b=WT0Q06Lv3DoRKw0cKHbIzon3oHK2/Sw9QgtKqw/BIbOinvemcWMWxqwQLN4QhBnCDj
+         lY/Vw7rlqL6Z0L0gsJs46lpshxpP6qX4DdGUsn9UoUCJwGrGL4x3zoZwfugEp7uKFf2q
+         gFD1YK8mmNs0lDI4rWrWP2i/Gg83kCzLs/nUicLD8RdDDZ3njT6nvfLK49g1Oy9wwxr/
+         iof2jaye5LVS5SCGPlbAj2q5nhKrELG+5H6gSurYVzAE3IIy7kzPk3X7YkZ3BM88hiC+
+         yaqbd1cg/jVCLoi5tTJ6HlHddEwMeJ7RCjOEAL3+YyeZfwD7DjxeVfYCg7XCKAHK2fCb
+         on/w==
+X-Gm-Message-State: AOJu0YxWPfySICspxxtCSdzXSGWPUBbMRh5Dn/BKbqSjGWIOWBRPziqV
+        ncUBa/lHTY076n3l+DCbEdc=
+X-Google-Smtp-Source: AGHT+IHTC4+PGmt36J8oWvy7QzTwxMbml7C6CiDClOpCdEFZwNhm40K4/mfJtEwA6CRVXVk6ZbNOIQ==
+X-Received: by 2002:a17:907:2709:b0:9a1:eb67:c0ce with SMTP id w9-20020a170907270900b009a1eb67c0cemr9153281ejk.50.1693129146743;
+        Sun, 27 Aug 2023 02:39:06 -0700 (PDT)
+Received: from krava (ip-94-113-247-30.net.vodafone.cz. [94.113.247.30])
+        by smtp.gmail.com with ESMTPSA id n4-20020a170906688400b0099cf840527csm3206574ejr.153.2023.08.27.02.39.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Aug 2023 02:36:01 -0700 (PDT)
-Date:   Sun, 27 Aug 2023 10:36:00 +0100
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Kirill A Shutemov <kirill@shutemov.name>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Lokesh Gidra <lokeshgidra@google.com>
-Subject: Re: [PATCH v5 4/7] selftests: mm: Add a test for mutually aligned
- moves > PMD size
-Message-ID: <fb29e16f-ed90-483a-a020-0e10a2ef58a1@lucifer.local>
-References: <20230822015501.791637-1-joel@joelfernandes.org>
- <20230822015501.791637-5-joel@joelfernandes.org>
+        Sun, 27 Aug 2023 02:39:06 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Sun, 27 Aug 2023 11:39:02 +0200
+To:     Yafang Shao <laoar.shao@gmail.com>
+Cc:     Rong Tao <rtoax@foxmail.com>, olsajiri@gmail.com,
+        andrii@kernel.org, daniel@iogearbox.net, sdf@google.com,
+        Rong Tao <rongtao@cestc.cn>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>,
+        Yonghong Song <yonghong.song@linux.dev>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        Daniel =?iso-8859-1?Q?M=FCller?= <deso@posteo.net>,
+        Manu Bretelle <chantr4@gmail.com>,
+        Xu Kuohai <xukuohai@huawei.com>,
+        Ross Zwisler <zwisler@google.com>,
+        Eduard Zingerman <eddyz87@gmail.com>,
+        "open list:BPF [GENERAL] (Safe Dynamic Programs and Tools)" 
+        <bpf@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        "moderated list:ARM/STM32 ARCHITECTURE" 
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        "moderated list:ARM/STM32 ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH bpf-next v8] selftests/bpf: trace_helpers.c: optimize
+ kallsyms cache
+Message-ID: <ZOsZtjw3NAeMdWfv@krava>
+References: <tencent_6D23FE187408D965E95DFAA858BC7E8C760A@qq.com>
+ <CALOAHbCXVNXk4WUCRGCDsezzTfieDcLT=Jt00m4UX4zdw=RtsQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230822015501.791637-5-joel@joelfernandes.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CALOAHbCXVNXk4WUCRGCDsezzTfieDcLT=Jt00m4UX4zdw=RtsQ@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -82,75 +100,63 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Aug 22, 2023 at 01:54:57AM +0000, Joel Fernandes (Google) wrote:
-> This patch adds a test case to check if a PMD-alignment optimization
-> successfully happens.
->
-> I add support to make sure there is some room before the source mapping,
-> otherwise the optimization to trigger PMD-aligned move will be disabled
-> as the kernel will detect that a mapping before the source exists and
-> such optimization becomes impossible.
->
-> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> ---
->  tools/testing/selftests/mm/mremap_test.c | 12 +++++++++++-
->  1 file changed, 11 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/mm/mremap_test.c b/tools/testing/selftests/mm/mremap_test.c
-> index 6822d657f589..6304eb0947a3 100644
-> --- a/tools/testing/selftests/mm/mremap_test.c
-> +++ b/tools/testing/selftests/mm/mremap_test.c
-> @@ -44,6 +44,7 @@ enum {
->  	_1MB = 1ULL << 20,
->  	_2MB = 2ULL << 20,
->  	_4MB = 4ULL << 20,
-> +	_5MB = 5ULL << 20,
->  	_1GB = 1ULL << 30,
->  	_2GB = 2ULL << 30,
->  	PMD = _2MB,
-> @@ -235,6 +236,11 @@ static void *get_source_mapping(struct config c)
->  	unsigned long long mmap_min_addr;
->
->  	mmap_min_addr = get_mmap_min_addr();
-> +	/*
-> +	 * For some tests, we need to not have any mappings below the
-> +	 * source mapping. Add some headroom to mmap_min_addr for this.
-> +	 */
-> +	mmap_min_addr += 10 * _4MB;
+On Sun, Aug 27, 2023 at 10:48:44AM +0800, Yafang Shao wrote:
+> On Sat, Aug 26, 2023 at 10:46 PM Rong Tao <rtoax@foxmail.com> wrote:
+> >
+> > From: Rong Tao <rongtao@cestc.cn>
+> >
+> > Static ksyms often have problems because the number of symbols exceeds the
+> > MAX_SYMS limit. Like changing the MAX_SYMS from 300000 to 400000 in
+> > commit e76a014334a6("selftests/bpf: Bump and validate MAX_SYMS") solves
+> > the problem somewhat, but it's not the perfect way.
+> >
+> > This commit uses dynamic memory allocation, which completely solves the
+> > problem caused by the limitation of the number of kallsyms.
+> >
+> > Acked-by: Stanislav Fomichev <sdf@google.com>
+> > Signed-off-by: Rong Tao <rongtao@cestc.cn>
+> > ---
+> > v8: Resolves inter-thread contention for ksyms global variables.
+> > v7: https://lore.kernel.org/lkml/tencent_BD6E19C00BF565CD5C36A9A0BD828CFA210A@qq.com/
+> >     Fix __must_check macro.
+> > v6: https://lore.kernel.org/lkml/tencent_4A09A36F883A06EA428A593497642AF8AF08@qq.com/
+> >     Apply libbpf_ensure_mem()
+> > v5: https://lore.kernel.org/lkml/tencent_0E9E1A1C0981678D5E7EA9E4BDBA8EE2200A@qq.com/
+> >     Release the allocated memory once the load_kallsyms_refresh() upon error
+> >     given it's dynamically allocated.
+> > v4: https://lore.kernel.org/lkml/tencent_59C74613113F0C728524B2A82FE5540A5E09@qq.com/
+> >     Make sure most cases we don't need the realloc() path to begin with,
+> >     and check strdup() return value.
+> > v3: https://lore.kernel.org/lkml/tencent_50B4B2622FE7546A5FF9464310650C008509@qq.com/
+> >     Do not use structs and judge ksyms__add_symbol function return value.
+> > v2: https://lore.kernel.org/lkml/tencent_B655EE5E5D463110D70CD2846AB3262EED09@qq.com/
+> >     Do the usual len/capacity scheme here to amortize the cost of realloc, and
+> >     don't free symbols.
+> > v1: https://lore.kernel.org/lkml/tencent_AB461510B10CD484E0B2F62E3754165F2909@qq.com/
+> > ---
+> >  samples/bpf/Makefile                          |   4 +
+> >  samples/bpf/offwaketime_user.c                |   7 +-
+> >  samples/bpf/sampleip_user.c                   |   9 +-
+> >  samples/bpf/spintest_user.c                   |   7 +-
+> >  samples/bpf/task_fd_query_user.c              |  13 +-
+> >  samples/bpf/trace_event_user.c                |   7 +-
+> >  .../selftests/bpf/prog_tests/bpf_cookie.c     |   7 +-
+> >  .../selftests/bpf/prog_tests/fill_link_info.c |   9 +-
+> >  .../bpf/prog_tests/get_stack_raw_tp.c         |  10 +-
+> >  .../bpf/prog_tests/kprobe_multi_test.c        |  13 +-
+> >  .../prog_tests/kprobe_multi_testmod_test.c    |  13 +-
+> >  tools/testing/selftests/bpf/trace_helpers.c   | 116 ++++++++++++------
+> >  tools/testing/selftests/bpf/trace_helpers.h   |  10 +-
+> >  13 files changed, 154 insertions(+), 71 deletions(-)
+> 
+> I think we'd better split it into two patches: one for samples/bpf/
+> and another for tools/testing/selftests/bpf.
+> 
+> BTW, why can't we just load it once for all ?  IOW, load the kallsyms
+> before we start each individual test, and free it after all tests
+> finish.
 
-To be super nitty, you _in theory_ can't necessarily rely on arbitrary VAs
-being available even ones at a location that is the very opposite of where
-mappings will go by default.
+there are bpf_testmod tests that unload module so we need fresh
+symbols after that
 
-I guess the _ideal_ solution would be to PROT_NONE map a range to ensure
-it's there then munmap() bits you don't want to exist, but that'd involve
-reworking this whole test and yeah, not worth it.
-
->
->  retry:
->  	addr += c.src_alignment;
-> @@ -434,7 +440,7 @@ static int parse_args(int argc, char **argv, unsigned int *threshold_mb,
->  	return 0;
->  }
->
-> -#define MAX_TEST 13
-> +#define MAX_TEST 14
->  #define MAX_PERF_TEST 3
->  int main(int argc, char **argv)
->  {
-> @@ -500,6 +506,10 @@ int main(int argc, char **argv)
->  	test_cases[12] = MAKE_TEST(PUD, PUD, _2GB, NON_OVERLAPPING, EXPECT_SUCCESS,
->  				   "2GB mremap - Source PUD-aligned, Destination PUD-aligned");
->
-> +	/* Src and Dest addr 1MB aligned. 5MB mremap. */
-> +	test_cases[13] = MAKE_TEST(_1MB, _1MB, _5MB, NON_OVERLAPPING, EXPECT_SUCCESS,
-> +				  "5MB mremap - Source 1MB-aligned, Destination 1MB-aligned");
-> +
->  	perf_test_cases[0] =  MAKE_TEST(page_size, page_size, _1GB, NON_OVERLAPPING, EXPECT_SUCCESS,
->  					"1GB mremap - Source PTE-aligned, Destination PTE-aligned");
->  	/*
-> --
-> 2.42.0.rc1.204.g551eb34607-goog
->
-
-Reviewed-by: Lorenzo Stoakes <lstoakes@gmail.com>
+jirka
