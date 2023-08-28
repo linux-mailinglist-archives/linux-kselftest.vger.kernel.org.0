@@ -2,92 +2,153 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED5D778AE17
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Aug 2023 12:57:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C53178AE5A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Aug 2023 13:02:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232282AbjH1K4c (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 28 Aug 2023 06:56:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49012 "EHLO
+        id S232392AbjH1LBo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 28 Aug 2023 07:01:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232399AbjH1K4U (ORCPT
+        with ESMTP id S232458AbjH1LBZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 28 Aug 2023 06:56:20 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F81C19A;
-        Mon, 28 Aug 2023 03:55:23 -0700 (PDT)
+        Mon, 28 Aug 2023 07:01:25 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56F87A7;
+        Mon, 28 Aug 2023 04:01:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693220121; x=1724756121;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=UxKUOhuwkcSCEpW7Xpnp4lHioctyE1x03cSt4igskt4=;
-  b=b0W5P6iFza4XakXzQXI+bRa5Pv0g+qLDgR7WUDi0YuZZm7TC482liD0P
-   80YBBd5jsAUXk+SrHchSxVzyWp8rolKJS731+CNXtKajdiNd2sV3QwJEK
-   0Nz47lXN4PqATSI6wlvG81MM225XZXX8+oEBbF8PnLsV3xndWsW5CbDxd
-   pXs4tYEhsCEQU7kYaLo2uNpCObZ1DhghFFjI6+L+ajmvXQ+rIeeAqMYaj
-   nzsZm/Ro6v1NdTcL66fXmRgpSgH7bHxCqZPmKqT+vP2/EOqQhrWQapJ9M
-   0dD9dZl2Ira1Joetusld17nk3rElki443eLMKoqVaTav4arCEN7rAJWuP
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10815"; a="355399043"
+  t=1693220483; x=1724756483;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=6Sd5QShyFtlsZBfAcyEAspH6vjNE9Hs58VQFciHuCzI=;
+  b=J49sXw9p9f6elqW5sRJWRCIT5aZkN9C85+thI/p1PBiBR9QCiw8yfHbS
+   7DFdj3K9lmppddtXWueDdbMKojqeBHC4MiomXiztdft+9dtWv8w4kwxXn
+   HCgVBVIi3vPjZS+VCvsXT/wA//3fPbd2iI47uwFlrwTdfnfyb/i5ju/Yg
+   pBiWQjyWoebPt7sY2OXb/XFzihxaVOoWU2khcvdc838gOChC6n92CQPt0
+   5ieoUu6c56YtDhMmvJbUhTxgyaTfAdpX+L7F2cMK1MKndomrUS4wP4Ry/
+   zRp4YqOGYiFeu6wB45TE92tPFTVc5wO2lM9GDqBFs4rM28pgRBuDEylHX
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10815"; a="372479593"
 X-IronPort-AV: E=Sophos;i="6.02,207,1688454000"; 
-   d="scan'208";a="355399043"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2023 03:51:25 -0700
+   d="scan'208";a="372479593"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2023 04:01:22 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10815"; a="803658371"
+X-IronPort-AV: E=McAfee;i="6600,9927,10815"; a="731784870"
 X-IronPort-AV: E=Sophos;i="6.02,207,1688454000"; 
-   d="scan'208";a="803658371"
-Received: from nwiklans-mobl.ger.corp.intel.com (HELO wieczorr-mobl1.intel.com) ([10.213.22.120])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2023 03:51:24 -0700
-From:   "Wieczor-Retman, Maciej" <maciej.wieczor-retman@intel.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc:     ilpo.jarvinen@linux.intel.com, reinette.chatre@intel.com,
-        "Wieczor-Retman, Maciej" <maciej.wieczor-retman@intel.com>,
-        Wieczor-Retman@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 6/6] selftests/kvm: Replace attribute with macro
-Date:   Mon, 28 Aug 2023 12:49:10 +0200
-Message-ID: <82ed62dd7070203701b4ca326e62862404dd5f72.1693216959.git.maciej.wieczor-retman@intel.com>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <cover.1693216959.git.maciej.wieczor-retman@intel.com>
-References: <cover.1693216959.git.maciej.wieczor-retman@intel.com>
+   d="scan'208";a="731784870"
+Received: from gliakhov-mobl.ger.corp.intel.com ([10.251.214.48])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2023 04:01:20 -0700
+Date:   Mon, 28 Aug 2023 14:01:18 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     "Wieczor-Retman, Maciej" <maciej.wieczor-retman@intel.com>
+cc:     Christian Brauner <brauner@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 4/6] selftests/pidfd: Fix ksft print formats
+In-Reply-To: <ac9c6c136a9e249453f866f56eab175c27f48061.1693216959.git.maciej.wieczor-retman@intel.com>
+Message-ID: <c920ad68-45a7-23dd-9d4c-fac99e1a53c0@linux.intel.com>
+References: <cover.1693216959.git.maciej.wieczor-retman@intel.com> <ac9c6c136a9e249453f866f56eab175c27f48061.1693216959.git.maciej.wieczor-retman@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The __printf() macro is used in many tools in the linux kernel to
-validate the format specifiers in functions that use printf. Some
-selftests use it without putting it in a macro definition and some tests
-import the kselftests.h header.
+On Mon, 28 Aug 2023, Wieczor-Retman, Maciej wrote:
 
-Use __printf() attribute instead of the full attribute since the macro
-is inside kselftests.h and the header is already imported.
+> Many calls to ksft print functions have format strings that don't match
+> with other passed arguments. One call expects a string but doesn't
+> provide any argument after the format string.
+> 
+> Fix format specifiers so they match the passed variables.
+> 
+> Add a missing variable to ksft_test_result_pass() inside
+> pidfd_fdinfo_test() so it matches other cases in the switch statement.
+> 
+> Signed-off-by: Wieczor-Retman, Maciej <maciej.wieczor-retman@intel.com>
+> ---
+>  tools/testing/selftests/pidfd/pidfd_fdinfo_test.c |  2 +-
+>  tools/testing/selftests/pidfd/pidfd_test.c        | 12 ++++++------
+>  2 files changed, 7 insertions(+), 7 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c b/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c
+> index 4e86f927880c..01cc37bf611c 100644
+> --- a/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c
+> +++ b/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c
+> @@ -62,7 +62,7 @@ static void error_report(struct error *err, const char *test_name)
+>  		break;
+>  
+>  	case PIDFD_PASS:
+> -		ksft_test_result_pass("%s test: Passed\n");
+> +		ksft_test_result_pass("%s test: Passed\n", test_name);
 
-Signed-off-by: Wieczor-Retman, Maciej <maciej.wieczor-retman@intel.com>
----
- tools/testing/selftests/kvm/include/test_util.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Missing test_name leads to crash so this looks a Fixes: class thing for
+me but you didn't provide one.
 
-diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
-index a6e9f215ce70..710a8a78e8ce 100644
---- a/tools/testing/selftests/kvm/include/test_util.h
-+++ b/tools/testing/selftests/kvm/include/test_util.h
-@@ -33,7 +33,7 @@ static inline int _no_printf(const char *format, ...) { return 0; }
- #define pr_info(...) _no_printf(__VA_ARGS__)
- #endif
- 
--void print_skip(const char *fmt, ...) __attribute__((format(printf, 1, 2)));
-+void __printf(1, 2) print_skip(const char *fmt, ...);
- #define __TEST_REQUIRE(f, fmt, ...)				\
- do {								\
- 	if (!(f))						\
+>  		break;
+>  
+>  	default:
+> diff --git a/tools/testing/selftests/pidfd/pidfd_test.c b/tools/testing/selftests/pidfd/pidfd_test.c
+> index 00a07e7c571c..c081ae91313a 100644
+> --- a/tools/testing/selftests/pidfd/pidfd_test.c
+> +++ b/tools/testing/selftests/pidfd/pidfd_test.c
+> @@ -381,13 +381,13 @@ static int test_pidfd_send_signal_syscall_support(void)
+>  
+>  static void *test_pidfd_poll_exec_thread(void *priv)
+>  {
+> -	ksft_print_msg("Child Thread: starting. pid %d tid %d ; and sleeping\n",
+> +	ksft_print_msg("Child Thread: starting. pid %d tid %ld ; and sleeping\n",
+>  			getpid(), syscall(SYS_gettid));
+>  	ksft_print_msg("Child Thread: doing exec of sleep\n");
+>  
+>  	execl("/bin/sleep", "sleep", str(CHILD_THREAD_MIN_WAIT), (char *)NULL);
+>  
+> -	ksft_print_msg("Child Thread: DONE. pid %d tid %d\n",
+> +	ksft_print_msg("Child Thread: DONE. pid %d tid %ld\n",
+>  			getpid(), syscall(SYS_gettid));
+>  	return NULL;
+>  }
+> @@ -427,7 +427,7 @@ static int child_poll_exec_test(void *args)
+>  {
+>  	pthread_t t1;
+>  
+> -	ksft_print_msg("Child (pidfd): starting. pid %d tid %d\n", getpid(),
+> +	ksft_print_msg("Child (pidfd): starting. pid %d tid %ld\n", getpid(),
+>  			syscall(SYS_gettid));
+>  	pthread_create(&t1, NULL, test_pidfd_poll_exec_thread, NULL);
+>  	/*
+> @@ -480,10 +480,10 @@ static void test_pidfd_poll_exec(int use_waitpid)
+>  
+>  static void *test_pidfd_poll_leader_exit_thread(void *priv)
+>  {
+> -	ksft_print_msg("Child Thread: starting. pid %d tid %d ; and sleeping\n",
+> +	ksft_print_msg("Child Thread: starting. pid %d tid %ld ; and sleeping\n",
+>  			getpid(), syscall(SYS_gettid));
+>  	sleep(CHILD_THREAD_MIN_WAIT);
+> -	ksft_print_msg("Child Thread: DONE. pid %d tid %d\n", getpid(), syscall(SYS_gettid));
+> +	ksft_print_msg("Child Thread: DONE. pid %d tid %ld\n", getpid(), syscall(SYS_gettid));
+>  	return NULL;
+>  }
+>  
+> @@ -492,7 +492,7 @@ static int child_poll_leader_exit_test(void *args)
+>  {
+>  	pthread_t t1, t2;
+>  
+> -	ksft_print_msg("Child: starting. pid %d tid %d\n", getpid(), syscall(SYS_gettid));
+> +	ksft_print_msg("Child: starting. pid %d tid %ld\n", getpid(), syscall(SYS_gettid));
+>  	pthread_create(&t1, NULL, test_pidfd_poll_leader_exit_thread, NULL);
+>  	pthread_create(&t2, NULL, test_pidfd_poll_leader_exit_thread, NULL);
+>  
+> 
+
 -- 
-2.42.0
+ i.
 
