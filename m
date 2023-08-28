@@ -2,87 +2,105 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F44478A8F6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Aug 2023 11:31:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7081D78A92D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Aug 2023 11:47:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbjH1Jas (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 28 Aug 2023 05:30:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34268 "EHLO
+        id S229525AbjH1Jqc convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 28 Aug 2023 05:46:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230037AbjH1Jac (ORCPT
+        with ESMTP id S230293AbjH1JqZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 28 Aug 2023 05:30:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE5C9E
-        for <linux-kselftest@vger.kernel.org>; Mon, 28 Aug 2023 02:30:30 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DE103635A2
-        for <linux-kselftest@vger.kernel.org>; Mon, 28 Aug 2023 09:30:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3E0E9C433C8;
-        Mon, 28 Aug 2023 09:30:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693215029;
-        bh=bYNjX9N2ukSGxl1mpAuKF+SDMRngqt4GM3shizKtvfg=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ZQavHvyCrr5mmh2YacjqvK2OWlTPaa7LwQ/edi6nbXDXVM35z1Vtsk58EKBOBaaPu
-         OZSIP2RxuO1MflPiCSRSydUN0N1HV1Xlqt71SJPDZpkgEUd+wsKw91Qp/seWv6xyUw
-         pgEPVUVMBs/P8HkCeTxd2uHX8A/qHuIoyZ6bOBZdRaE7A2gaKMPKByxROcoU7FkGE1
-         z2HhYPrkMnE8ZnvTfvN4FiSGpY2R/Z0A0An2KaFRmkU21fss1gsmDoUxQNZbcvPDoG
-         vDH32hy8re6UmYHo+Qac6U4OIymVb2JAYbSEe/uuqoO+FH8QKnWTOXSZEHsIJtHd8s
-         4zDSFjyfGAiLA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1C3B7C3959E;
-        Mon, 28 Aug 2023 09:30:29 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 28 Aug 2023 05:46:25 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 019FC10E
+        for <linux-kselftest@vger.kernel.org>; Mon, 28 Aug 2023 02:46:14 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-243-xG4-vW29Mi-XX8dfW8eG2w-1; Mon, 28 Aug 2023 10:46:12 +0100
+X-MC-Unique: xG4-vW29Mi-XX8dfW8eG2w-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Mon, 28 Aug
+ 2023 10:46:14 +0100
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Mon, 28 Aug 2023 10:46:14 +0100
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Zhangjin Wu' <falcon@tinylab.org>, "'w@1wt.eu'" <w@1wt.eu>
+CC:     "'arnd@arndb.de'" <arnd@arndb.de>,
+        "'linux-kernel@vger.kernel.org'" <linux-kernel@vger.kernel.org>,
+        "'linux-kselftest@vger.kernel.org'" <linux-kselftest@vger.kernel.org>,
+        "'thomas@t-8ch.de'" <thomas@t-8ch.de>,
+        "'tanyuan@tinylab.org'" <tanyuan@tinylab.org>
+Subject: RE: [RFC] tools/nolibc: replace duplicated -ENOSYS return with single
+ -ENOSYS return
+Thread-Topic: [RFC] tools/nolibc: replace duplicated -ENOSYS return with
+ single -ENOSYS return
+Thread-Index: AQHZ2MEQNQnWfqnECUm1iJ9YHQny8K/+quMQgADLxVA=
+Date:   Mon, 28 Aug 2023 09:46:14 +0000
+Message-ID: <6819b8e273dc44e18f14be148549b828@AcuMS.aculab.com>
+References: <20230827083225.7534-1-falcon@tinylab.org>
+ <4bbdea1710464fa2943663a25bf370c9@AcuMS.aculab.com>
+In-Reply-To: <4bbdea1710464fa2943663a25bf370c9@AcuMS.aculab.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next,v3] selftests: bonding: create directly devices in
- the target namespaces
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <169321502911.13199.3114963814895556928.git-patchwork-notify@kernel.org>
-Date:   Mon, 28 Aug 2023 09:30:29 +0000
-References: <20230826022330.3474899-1-shaozhengchao@huawei.com>
-In-Reply-To: <20230826022330.3474899-1-shaozhengchao@huawei.com>
-To:     Zhengchao Shao <shaozhengchao@huawei.com>
-Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org, j.vosburgh@gmail.com, andy@greyhouse.net,
-        weiyongjun1@huawei.com, yuehaibing@huawei.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
-
-This patch was applied to bpf/bpf-next.git (master)
-by David S. Miller <davem@davemloft.net>:
-
-On Sat, 26 Aug 2023 10:23:30 +0800 you wrote:
-> If failed to set link1_1 to netns client, we should delete link1_1 in the
-> cleanup path. But if set link1_1 to netns client successfully, delete
-> link1_1 will report warning. So it will be safer creating directly the
-> devices in the target namespaces.
+From: David Laight
+> Sent: 27 August 2023 22:52
 > 
-> Reported-by: Hangbin Liu <liuhangbin@gmail.com>
-> Closes: https://lore.kernel.org/all/ZNyJx1HtXaUzOkNA@Laptop-X1/
-> Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
+> ...
+> > Of course, we can also use the __stringify() trick to do so, but it is
+> > expensive (bigger size, worse performance) to unstringify and get the number
+> > again, the expensive atoi() 'works' for the numeric __NR_*, but not work for
+> > (__NR_*_base + offset) like __NR_* definitions (used by ARM and MIPS), a simple
+> > interpreter is required for such cases and it is more expensive than atoi().
+> >
+> >     /* not for ARM and MIPS */
+> >
+> >     static int atoi(const char *s);
+> >     #define __get_nr(name)          __nr_atoi(__stringify(__NR_##name))
+> >     #define __nr_atoi(str)          (str[0] == '_' ? -1L : ___nr_atoi(str))
+> >     #define ___nr_atoi(str)         (str[0] == '(' ? -1L : atoi(str))
+> >
+> > Welcome more discussion or let's simply throw away this direction ;-)
 > 
-> [...]
+> While it will look horrid the it ought to be possible to
+> get the compiler to evaluate the string.
+...
+> So something that starts:
+> #define dig(c) (c < '0' || c > '9' ? 999999 : c - '0')
+> 	str[0] == '_' ? -1 :
+> 	str[0] != '(' ? str[1] == ' ' ? dig(str[0]) :
+> 		str[2] == '1' ? (dig(str[0]) * 10 + dig(str[1]) :
+> Any unexpected character will expand the 99999 and generate
+> an over-large result.
 
-Here is the summary with links:
-  - [net-next,v3] selftests: bonding: create directly devices in the target namespaces
-    https://git.kernel.org/bpf/bpf-next/c/bf68583624c5
+See https://godbolt.org/z/rear4c1hj
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+That will convert "1234" or "(1234 + 5678)" (or shorter numbers)
+as a compile-time constant.
 
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
