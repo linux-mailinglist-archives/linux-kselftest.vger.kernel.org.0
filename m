@@ -2,52 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F253F78ADD9
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Aug 2023 12:52:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAD8778ADD7
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Aug 2023 12:52:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232103AbjH1Kvn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        id S232118AbjH1Kvn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
         Mon, 28 Aug 2023 06:51:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52304 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232249AbjH1Kuu (ORCPT
+        with ESMTP id S232340AbjH1KvU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 28 Aug 2023 06:50:50 -0400
+        Mon, 28 Aug 2023 06:51:20 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF250199;
-        Mon, 28 Aug 2023 03:50:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4B86E5C;
+        Mon, 28 Aug 2023 03:50:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693219825; x=1724755825;
+  t=1693219839; x=1724755839;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=yeabUHzSr9wnJ5Khd/Kxt8JMKHZYb3HenPBaDj2y7Bw=;
-  b=XiXrDSwxfMaYndVIHbKk2K9Y+ha9boTBhY4t2O+o6AWtRveg356IvsOk
-   CPFVE6RtOLembWFeY6sfSykflTeRQMwn8xu71SEQMOyqmfKIWlcypUPmW
-   QkYtNKhjK2OMUEtdEGM/AiF/yB/GQFdWHoRmBH/pmhECH4IJsMkIf79Jx
-   N1D7A/kESZL44Y/TEoFkRfuUZA/zxZalh0Kcq4IugDVP2Eg4T/SzaD/Ne
-   2pTkXKwUylkf61donEE3MGbM0LE0Wih/B8u15EOez2MQJvtqRdyQXSGjS
-   s20vZCj3xcJaRk7dXVijWbug8kHt0gZvH1T+7uXfUQUpAswqHY4w4HoKw
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10815"; a="355398873"
+  bh=CCfcVevobufNXrw1gfQzQygL8lnnjRYVk1T6GYsBWnI=;
+  b=Bz+C1rYpKNjb90k9Nzg40kOUMEhlF7jaP1Dlo/yYMBHYHOAOQb7XSvkk
+   riK9Mzuyn8/RTpzzBFFBjPlX1OekdKShxUUkih6uur4IhjPNEwQIKjNYb
+   lM6QE9dmXOEIqdv+A5hyOiHrWnUDhUI9leh7FfOIKZwGigc01GYpD7QhP
+   GwLGFxKYo8meM4OQEPMkYn8MzTjOlgFTNYaufvYz0HffzTsgVptNHXPoA
+   P7aDmhjkGymUPADQ9h45uzJMXlDmYUMEFndDmsBBE98k0SAehtYrYybPa
+   H5vqym8NkDYnG/3wiPKBNjEEUK7a9KuVNiLvshL+laycCtjB8aXsQrj12
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10815"; a="355398910"
 X-IronPort-AV: E=Sophos;i="6.02,207,1688454000"; 
-   d="scan'208";a="355398873"
+   d="scan'208";a="355398910"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2023 03:50:22 -0700
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2023 03:50:39 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10815"; a="803658331"
+X-IronPort-AV: E=McAfee;i="6600,9927,10815"; a="803658340"
 X-IronPort-AV: E=Sophos;i="6.02,207,1688454000"; 
-   d="scan'208";a="803658331"
+   d="scan'208";a="803658340"
 Received: from nwiklans-mobl.ger.corp.intel.com (HELO wieczorr-mobl1.intel.com) ([10.213.22.120])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2023 03:50:22 -0700
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2023 03:50:39 -0700
 From:   "Wieczor-Retman, Maciej" <maciej.wieczor-retman@intel.com>
-To:     Shuah Khan <shuah@kernel.org>
+To:     Christian Brauner <brauner@kernel.org>,
+        Shuah Khan <shuah@kernel.org>
 Cc:     ilpo.jarvinen@linux.intel.com, reinette.chatre@intel.com,
         "Wieczor-Retman, Maciej" <maciej.wieczor-retman@intel.com>,
-        Wieczor-Retman@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/6] selftests/openat2: Fix wrong format specifier
-Date:   Mon, 28 Aug 2023 12:49:07 +0200
-Message-ID: <d71aa14c2a136d9faa7743b6bde414495f4b763c.1693216959.git.maciej.wieczor-retman@intel.com>
+        Wieczor-Retman@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH 4/6] selftests/pidfd: Fix ksft print formats
+Date:   Mon, 28 Aug 2023 12:49:08 +0200
+Message-ID: <ac9c6c136a9e249453f866f56eab175c27f48061.1693216959.git.maciej.wieczor-retman@intel.com>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <cover.1693216959.git.maciej.wieczor-retman@intel.com>
 References: <cover.1693216959.git.maciej.wieczor-retman@intel.com>
@@ -62,29 +63,85 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Ksft_print_msg() inside test_openat2_flags() uses the wrong format
-specifier for printing test.how->flags variable.
+Many calls to ksft print functions have format strings that don't match
+with other passed arguments. One call expects a string but doesn't
+provide any argument after the format string.
 
-Change the format specifier to %llX so it matches the printed variable.
+Fix format specifiers so they match the passed variables.
+
+Add a missing variable to ksft_test_result_pass() inside
+pidfd_fdinfo_test() so it matches other cases in the switch statement.
 
 Signed-off-by: Wieczor-Retman, Maciej <maciej.wieczor-retman@intel.com>
 ---
- tools/testing/selftests/openat2/openat2_test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/pidfd/pidfd_fdinfo_test.c |  2 +-
+ tools/testing/selftests/pidfd/pidfd_test.c        | 12 ++++++------
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/tools/testing/selftests/openat2/openat2_test.c b/tools/testing/selftests/openat2/openat2_test.c
-index 7fb902099de4..9024754530b2 100644
---- a/tools/testing/selftests/openat2/openat2_test.c
-+++ b/tools/testing/selftests/openat2/openat2_test.c
-@@ -300,7 +300,7 @@ void test_openat2_flags(void)
+diff --git a/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c b/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c
+index 4e86f927880c..01cc37bf611c 100644
+--- a/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c
++++ b/tools/testing/selftests/pidfd/pidfd_fdinfo_test.c
+@@ -62,7 +62,7 @@ static void error_report(struct error *err, const char *test_name)
+ 		break;
  
- 			ksft_print_msg("openat2 unexpectedly returned ");
- 			if (fdpath)
--				ksft_print_msg("%d['%s'] with %X (!= %X)\n",
-+				ksft_print_msg("%d['%s'] with %X (!= %llX)\n",
- 					       fd, fdpath, fdflags,
- 					       test->how.flags);
- 			else
+ 	case PIDFD_PASS:
+-		ksft_test_result_pass("%s test: Passed\n");
++		ksft_test_result_pass("%s test: Passed\n", test_name);
+ 		break;
+ 
+ 	default:
+diff --git a/tools/testing/selftests/pidfd/pidfd_test.c b/tools/testing/selftests/pidfd/pidfd_test.c
+index 00a07e7c571c..c081ae91313a 100644
+--- a/tools/testing/selftests/pidfd/pidfd_test.c
++++ b/tools/testing/selftests/pidfd/pidfd_test.c
+@@ -381,13 +381,13 @@ static int test_pidfd_send_signal_syscall_support(void)
+ 
+ static void *test_pidfd_poll_exec_thread(void *priv)
+ {
+-	ksft_print_msg("Child Thread: starting. pid %d tid %d ; and sleeping\n",
++	ksft_print_msg("Child Thread: starting. pid %d tid %ld ; and sleeping\n",
+ 			getpid(), syscall(SYS_gettid));
+ 	ksft_print_msg("Child Thread: doing exec of sleep\n");
+ 
+ 	execl("/bin/sleep", "sleep", str(CHILD_THREAD_MIN_WAIT), (char *)NULL);
+ 
+-	ksft_print_msg("Child Thread: DONE. pid %d tid %d\n",
++	ksft_print_msg("Child Thread: DONE. pid %d tid %ld\n",
+ 			getpid(), syscall(SYS_gettid));
+ 	return NULL;
+ }
+@@ -427,7 +427,7 @@ static int child_poll_exec_test(void *args)
+ {
+ 	pthread_t t1;
+ 
+-	ksft_print_msg("Child (pidfd): starting. pid %d tid %d\n", getpid(),
++	ksft_print_msg("Child (pidfd): starting. pid %d tid %ld\n", getpid(),
+ 			syscall(SYS_gettid));
+ 	pthread_create(&t1, NULL, test_pidfd_poll_exec_thread, NULL);
+ 	/*
+@@ -480,10 +480,10 @@ static void test_pidfd_poll_exec(int use_waitpid)
+ 
+ static void *test_pidfd_poll_leader_exit_thread(void *priv)
+ {
+-	ksft_print_msg("Child Thread: starting. pid %d tid %d ; and sleeping\n",
++	ksft_print_msg("Child Thread: starting. pid %d tid %ld ; and sleeping\n",
+ 			getpid(), syscall(SYS_gettid));
+ 	sleep(CHILD_THREAD_MIN_WAIT);
+-	ksft_print_msg("Child Thread: DONE. pid %d tid %d\n", getpid(), syscall(SYS_gettid));
++	ksft_print_msg("Child Thread: DONE. pid %d tid %ld\n", getpid(), syscall(SYS_gettid));
+ 	return NULL;
+ }
+ 
+@@ -492,7 +492,7 @@ static int child_poll_leader_exit_test(void *args)
+ {
+ 	pthread_t t1, t2;
+ 
+-	ksft_print_msg("Child: starting. pid %d tid %d\n", getpid(), syscall(SYS_gettid));
++	ksft_print_msg("Child: starting. pid %d tid %ld\n", getpid(), syscall(SYS_gettid));
+ 	pthread_create(&t1, NULL, test_pidfd_poll_leader_exit_thread, NULL);
+ 	pthread_create(&t2, NULL, test_pidfd_poll_leader_exit_thread, NULL);
+ 
 -- 
 2.42.0
 
