@@ -2,52 +2,52 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7D5078AE0A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Aug 2023 12:55:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED5D778AE17
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Aug 2023 12:57:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232307AbjH1Ky6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 28 Aug 2023 06:54:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53886 "EHLO
+        id S232282AbjH1K4c (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 28 Aug 2023 06:56:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232408AbjH1Kyw (ORCPT
+        with ESMTP id S232399AbjH1K4U (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 28 Aug 2023 06:54:52 -0400
+        Mon, 28 Aug 2023 06:56:20 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 662F5D8;
-        Mon, 28 Aug 2023 03:54:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F81C19A;
+        Mon, 28 Aug 2023 03:55:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693220065; x=1724756065;
+  t=1693220121; x=1724756121;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=QSTkRKepbci7ZibAbLE07UEc26Bgp7zEFWSUgACZfHY=;
-  b=Eai3InN0kYeNuPXpWc7UglyYQMAFkt7qGX+k2jpkEU8O9LaYbEo/ZfNf
-   OWje54hFiEK+gdg3k2Rnw4TtzKC2YwizNMLSXQoaZzOZJMHb8cU1qg3vp
-   XpHohgSCf+XLKLngMqMKwAUhsNyZBXa4OWko6jzSIoPRkwcVoLBEE0DYj
-   LGig1zJh33OscIqmoZsyjTulsyYw3y2BK6I1JnP1QviyGaRbZVRM8XZy/
-   lFDMfl9EkNwTLkH/hnZhe4Ed1rzGdCDMs8C7v5a+jjtrY9CtWqp8LDHku
-   HsnntEublYD6frubdPhT6paxY6P+eNPgqkKk2tYJldY/kILlICzbAyPlG
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10815"; a="355398964"
+  bh=UxKUOhuwkcSCEpW7Xpnp4lHioctyE1x03cSt4igskt4=;
+  b=b0W5P6iFza4XakXzQXI+bRa5Pv0g+qLDgR7WUDi0YuZZm7TC482liD0P
+   80YBBd5jsAUXk+SrHchSxVzyWp8rolKJS731+CNXtKajdiNd2sV3QwJEK
+   0Nz47lXN4PqATSI6wlvG81MM225XZXX8+oEBbF8PnLsV3xndWsW5CbDxd
+   pXs4tYEhsCEQU7kYaLo2uNpCObZ1DhghFFjI6+L+ajmvXQ+rIeeAqMYaj
+   nzsZm/Ro6v1NdTcL66fXmRgpSgH7bHxCqZPmKqT+vP2/EOqQhrWQapJ9M
+   0dD9dZl2Ira1Joetusld17nk3rElki443eLMKoqVaTav4arCEN7rAJWuP
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10815"; a="355399043"
 X-IronPort-AV: E=Sophos;i="6.02,207,1688454000"; 
-   d="scan'208";a="355398964"
+   d="scan'208";a="355399043"
 Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2023 03:50:54 -0700
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2023 03:51:25 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10815"; a="803658351"
+X-IronPort-AV: E=McAfee;i="6600,9927,10815"; a="803658371"
 X-IronPort-AV: E=Sophos;i="6.02,207,1688454000"; 
-   d="scan'208";a="803658351"
+   d="scan'208";a="803658371"
 Received: from nwiklans-mobl.ger.corp.intel.com (HELO wieczorr-mobl1.intel.com) ([10.213.22.120])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2023 03:50:53 -0700
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2023 03:51:24 -0700
 From:   "Wieczor-Retman, Maciej" <maciej.wieczor-retman@intel.com>
-To:     Shuah Khan <shuah@kernel.org>
+To:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>
 Cc:     ilpo.jarvinen@linux.intel.com, reinette.chatre@intel.com,
         "Wieczor-Retman, Maciej" <maciej.wieczor-retman@intel.com>,
-        Wieczor-Retman@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 5/6] selftests/sigaltstack: Fix wrong format specifier
-Date:   Mon, 28 Aug 2023 12:49:09 +0200
-Message-ID: <613189f12a8c15df7dc725e4b7ed66ffa4b30fb5.1693216959.git.maciej.wieczor-retman@intel.com>
+        Wieczor-Retman@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 6/6] selftests/kvm: Replace attribute with macro
+Date:   Mon, 28 Aug 2023 12:49:10 +0200
+Message-ID: <82ed62dd7070203701b4ca326e62862404dd5f72.1693216959.git.maciej.wieczor-retman@intel.com>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <cover.1693216959.git.maciej.wieczor-retman@intel.com>
 References: <cover.1693216959.git.maciej.wieczor-retman@intel.com>
@@ -62,29 +62,32 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The format specifier inside ksft printing function expects a long
-unsigned int but the passed variable is of unsigned int type.
+The __printf() macro is used in many tools in the linux kernel to
+validate the format specifiers in functions that use printf. Some
+selftests use it without putting it in a macro definition and some tests
+import the kselftests.h header.
 
-Fix the format specifier so it matches the passed variable.
+Use __printf() attribute instead of the full attribute since the macro
+is inside kselftests.h and the header is already imported.
 
 Signed-off-by: Wieczor-Retman, Maciej <maciej.wieczor-retman@intel.com>
 ---
- tools/testing/selftests/sigaltstack/sas.c | 2 +-
+ tools/testing/selftests/kvm/include/test_util.h | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/sigaltstack/sas.c b/tools/testing/selftests/sigaltstack/sas.c
-index 98d37cb744fb..07227fab1cc9 100644
---- a/tools/testing/selftests/sigaltstack/sas.c
-+++ b/tools/testing/selftests/sigaltstack/sas.c
-@@ -111,7 +111,7 @@ int main(void)
+diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
+index a6e9f215ce70..710a8a78e8ce 100644
+--- a/tools/testing/selftests/kvm/include/test_util.h
++++ b/tools/testing/selftests/kvm/include/test_util.h
+@@ -33,7 +33,7 @@ static inline int _no_printf(const char *format, ...) { return 0; }
+ #define pr_info(...) _no_printf(__VA_ARGS__)
+ #endif
  
- 	/* Make sure more than the required minimum. */
- 	stack_size = getauxval(AT_MINSIGSTKSZ) + SIGSTKSZ;
--	ksft_print_msg("[NOTE]\tthe stack size is %lu\n", stack_size);
-+	ksft_print_msg("[NOTE]\tthe stack size is %u\n", stack_size);
- 
- 	ksft_print_header();
- 	ksft_set_plan(3);
+-void print_skip(const char *fmt, ...) __attribute__((format(printf, 1, 2)));
++void __printf(1, 2) print_skip(const char *fmt, ...);
+ #define __TEST_REQUIRE(f, fmt, ...)				\
+ do {								\
+ 	if (!(f))						\
 -- 
 2.42.0
 
