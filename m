@@ -2,117 +2,179 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F6AA78A57E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Aug 2023 08:05:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8826578A591
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Aug 2023 08:16:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229607AbjH1GE2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 28 Aug 2023 02:04:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41540 "EHLO
+        id S229482AbjH1GQA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 28 Aug 2023 02:16:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229629AbjH1GEY (ORCPT
+        with ESMTP id S229795AbjH1GPx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 28 Aug 2023 02:04:24 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54AE9EC;
-        Sun, 27 Aug 2023 23:04:22 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1c06f6f98c0so21997275ad.3;
-        Sun, 27 Aug 2023 23:04:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693202662; x=1693807462;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3w60luS48j6vUYZqPx587vsJwRkad+xFDz6Iuy07TfY=;
-        b=kQml0mzl+6L4UF8cHDKVVCmFq4e5tayCw1DlF2QQvBw8fOOuBOeNGZ2c0Z2MqGDf3Z
-         sX/fJ2RezR87FM8ZXTuf3IgJ7zY+nfPLeU9eVJ1E4SmT+SAcpRC1+AZ29T4T941TVmHB
-         CavKMhjwlYhE0B1LpXI9nAljVdUIIPDYXyeCeSxMwwgLrSI8AIpd0Cc1Y3BhFS2opVSr
-         QeZHw4sd3XXHvGxTohPfKQPplaPZCz4I2lBldmZsut2xn3caRgfc0W7s0hwBNxwuYEEP
-         MpzKAXiOw/F+VqmfrsFHbwB/LGXiotbuRu/K+htuZmagLXnEOMRepD0wJrnjRNw8YKiV
-         nRvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693202662; x=1693807462;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3w60luS48j6vUYZqPx587vsJwRkad+xFDz6Iuy07TfY=;
-        b=gVlfYkkM5R86wh+4onwLzwscsx48EQoCyTtolE3kQa27mrkr3e4xjmYG9VcobTQoID
-         jgx1VFopj8aIUaCCvLr91Pew+cIFqdL5yODCH1unPkSBJDLhKOUudJRW6zY6FazNgHCx
-         j4d/Ux/xKqDul4lbEi7cE0lRH71GcpKVhCr5irQpKlE3IRTS4Q0u+PYPrE8eZU/a6oRe
-         xz6t6pZAolZwgCicLA9R45r6oH6IkCsqpcdEXPEIhyIBU3kwrhzvaYWo4ZdEIr8cuuX/
-         pHkZDzvblr4uaFqCxgGvWhCEZOjrqvB2m4yg0Efcsq/ahacgk74y12g5iXDxioLRNxUw
-         JFfQ==
-X-Gm-Message-State: AOJu0YxgiGcQDyraMWSGfgVJkg/6u5Awgy7P0bP5c7hoO/iUPbPn1jHo
-        oMxzHlUVf2qq8NuLIylaEMo=
-X-Google-Smtp-Source: AGHT+IELM9yP+4vP6DACSH+Fv9Hniiv/KteTD8sX/BfTxlIped+YCry8g1m/KSQIazlINwfa5tHodw==
-X-Received: by 2002:a17:902:c3c3:b0:1b8:6cae:3570 with SMTP id j3-20020a170902c3c300b001b86cae3570mr25192497plj.11.1693202661704;
-        Sun, 27 Aug 2023 23:04:21 -0700 (PDT)
-Received: from Laptop-X1 ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id k1-20020a170902c40100b001bde877a7casm6280498plk.264.2023.08.27.23.04.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 27 Aug 2023 23:04:20 -0700 (PDT)
-Date:   Mon, 28 Aug 2023 14:04:16 +0800
-From:   Hangbin Liu <liuhangbin@gmail.com>
-To:     Zhengchao Shao <shaozhengchao@huawei.com>
-Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org, j.vosburgh@gmail.com, andy@greyhouse.net,
-        weiyongjun1@huawei.com, yuehaibing@huawei.com
-Subject: Re: [PATCH net-next,v3] selftests: bonding: create directly devices
- in the target namespaces
-Message-ID: <ZOw44Bvbr4qRhz8x@Laptop-X1>
-References: <20230826022330.3474899-1-shaozhengchao@huawei.com>
+        Mon, 28 Aug 2023 02:15:53 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C892C6;
+        Sun, 27 Aug 2023 23:15:51 -0700 (PDT)
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 37S5okP2008404;
+        Mon, 28 Aug 2023 06:15:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=7E2JX0G+Cp9PXUeKI+Lq1dUU0Oxgx9NQ2B/9Q2fpK20=;
+ b=V7vKX1pTcWpMyW7rnbFaIXmSNA28cZNokDRKvIwPkqIk9VbpOEOHHyIxM88nD0khxWv4
+ IZ9m5Rj3YPVCqGPFb+3HDFu4Qcn0rRrCdOMhh95z1n2if1mW1KAKUB87udQntQ4WYYhy
+ dPWfmVJafmQ1PX1pOEQB+4HUT6cpJz6qprlUgAbeEMwkCdyNaunv0xT7iWUBoweOtHZl
+ nH9Tj956uxJKvUKpb8JwYZqphaKqduJFUS5JCDGhaUmD3v8pKNFzbU9p38bR1isv1nRV
+ fIw7cHlMAu28EDGZgBCq5W4i2d8F6CYJyn1uPCgTbs1kYqFpFVfMflcQQmtIo5RRlwfg nA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3sr9j23pw5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Aug 2023 06:15:37 +0000
+Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 37S5w8jC032595;
+        Mon, 28 Aug 2023 06:15:36 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3sr9j23pvw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Aug 2023 06:15:36 +0000
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+        by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 37S4xrQk009966;
+        Mon, 28 Aug 2023 06:15:35 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3sqw7k0a8x-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Aug 2023 06:15:35 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 37S6FXqr65077720
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 28 Aug 2023 06:15:33 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 961BD20043;
+        Mon, 28 Aug 2023 06:15:33 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 612E420040;
+        Mon, 28 Aug 2023 06:15:31 +0000 (GMT)
+Received: from li-34d1fccc-27cd-11b2-a85c-c167793e56f7.in.ibm.com (unknown [9.204.200.131])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 28 Aug 2023 06:15:31 +0000 (GMT)
+From:   Aboorva Devarajan <aboorvad@linux.vnet.ibm.com>
+To:     aboorvad@linux.vnet.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com,
+        rmclure@linux.ibm.com, arnd@arndb.de, joel@jms.id.au,
+        shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        pratik.r.sampat@gmail.com
+Cc:     sshegde@linux.vnet.ibm.com, srikar@linux.vnet.ibm.com
+Subject: [RFC v2 0/2] CPU-Idle latency selftest framework
+Date:   Mon, 28 Aug 2023 11:45:28 +0530
+Message-Id: <20230828061530.126588-1-aboorvad@linux.vnet.ibm.com>
+X-Mailer: git-send-email 2.39.3
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: CdAlT9_e1kUV31u58QzmoAuC_KWtytt3
+X-Proofpoint-ORIG-GUID: MOySqHvpnHCy6cjeUjHXsE8JojD0_3X9
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230826022330.3474899-1-shaozhengchao@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
+ definitions=2023-08-28_03,2023-08-25_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
+ malwarescore=0 adultscore=0 suspectscore=0 mlxlogscore=999
+ lowpriorityscore=0 mlxscore=0 spamscore=0 clxscore=1011 phishscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2308100000 definitions=main-2308280055
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Aug 26, 2023 at 10:23:30AM +0800, Zhengchao Shao wrote:
-> If failed to set link1_1 to netns client, we should delete link1_1 in the
-> cleanup path. But if set link1_1 to netns client successfully, delete
-> link1_1 will report warning. So it will be safer creating directly the
-> devices in the target namespaces.
-> 
-> Reported-by: Hangbin Liu <liuhangbin@gmail.com>
-> Closes: https://lore.kernel.org/all/ZNyJx1HtXaUzOkNA@Laptop-X1/
-> Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
-> ---
-> v3: create the eth0 in the namespace
-> v2: create directly devices in the target namespaces
-> ---
->  .../drivers/net/bonding/bond-arp-interval-causes-panic.sh | 8 +++-----
->  1 file changed, 3 insertions(+), 5 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/drivers/net/bonding/bond-arp-interval-causes-panic.sh b/tools/testing/selftests/drivers/net/bonding/bond-arp-interval-causes-panic.sh
-> index 7b2d421f09cf..4917dbb35a44 100755
-> --- a/tools/testing/selftests/drivers/net/bonding/bond-arp-interval-causes-panic.sh
-> +++ b/tools/testing/selftests/drivers/net/bonding/bond-arp-interval-causes-panic.sh
-> @@ -22,14 +22,12 @@ server_ip4=192.168.1.254
->  echo 180 >/proc/sys/kernel/panic
->  
->  # build namespaces
-> -ip link add dev link1_1 type veth peer name link1_2
-> -
->  ip netns add "server"
-> -ip link set dev link1_2 netns server up name eth0
-> +ip netns add "client"
-> +ip -n client link add eth0 type veth peer name eth0 netns server
-> +ip netns exec server ip link set dev eth0 up
->  ip netns exec server ip addr add ${server_ip4}/24 dev eth0
->  
-> -ip netns add "client"
-> -ip link set dev link1_1 netns client down name eth0
->  ip netns exec client ip link add dev bond0 down type bond mode 1 \
->  	miimon 100 all_slaves_active 1
->  ip netns exec client ip link set dev eth0 down master bond0
-> -- 
-> 2.34.1
-> 
+Changelog: v1 -> v2
 
-Acked-by: Hangbin Liu <liuhangbin@gmail.com>
+* Rebased on v6.5-rc6
+* Moved the test directory to powerpc debugfs
+* Minimal code refactoring
+
+RFC v1: 
+https://lore.kernel.org/all/20210611124154.56427-1-psampat@linux.ibm.com/
+
+Other related RFC:
+https://lore.kernel.org/all/20210430082804.38018-1-psampat@linux.ibm.com/
+
+Userspace selftest:
+https://lkml.org/lkml/2020/9/2/356
+
+----
+
+A kernel module + userspace driver to estimate the wakeup latency
+caused by going into stop states. The motivation behind this program is
+to find significant deviations behind advertised latency and residency
+values.
+
+The patchset measures latencies for two kinds of events. IPIs and Timers
+As this is a software-only mechanism, there will be additional latencies
+of the kernel-firmware-hardware interactions. To account for that, the
+program also measures a baseline latency on a 100 percent loaded CPU
+and the latencies achieved must be in view relative to that.
+
+To achieve this, we introduce a kernel module and expose its control
+knobs through the debugfs interface that the selftests can engage with.
+
+The kernel module provides the following interfaces within
+/sys/kernel/debug/powerpc/latency_test/ for,
+
+IPI test:
+    ipi_cpu_dest = Destination CPU for the IPI
+    ipi_cpu_src = Origin of the IPI
+    ipi_latency_ns = Measured latency time in ns
+Timeout test:
+    timeout_cpu_src = CPU on which the timer to be queued
+    timeout_expected_ns = Timer duration
+    timeout_diff_ns = Difference of actual duration vs expected timer
+
+Sample output is as follows:
+
+# --IPI Latency Test---
+# Baseline Avg IPI latency(ns): 2720
+# Observed Avg IPI latency(ns) - State snooze: 2565
+# Observed Avg IPI latency(ns) - State stop0_lite: 3856
+# Observed Avg IPI latency(ns) - State stop0: 3670
+# Observed Avg IPI latency(ns) - State stop1: 3872
+# Observed Avg IPI latency(ns) - State stop2: 17421
+# Observed Avg IPI latency(ns) - State stop4: 1003922
+# Observed Avg IPI latency(ns) - State stop5: 1058870
+#
+# --Timeout Latency Test--
+# Baseline Avg timeout diff(ns): 1435
+# Observed Avg timeout diff(ns) - State snooze: 1709
+# Observed Avg timeout diff(ns) - State stop0_lite: 2028
+# Observed Avg timeout diff(ns) - State stop0: 1954
+# Observed Avg timeout diff(ns) - State stop1: 1895
+# Observed Avg timeout diff(ns) - State stop2: 14556
+# Observed Avg timeout diff(ns) - State stop4: 873988
+# Observed Avg timeout diff(ns) - State stop5: 959137
+
+Aboorva Devarajan (2):
+  powerpc/cpuidle: cpuidle wakeup latency based on IPI and timer events
+  powerpc/selftest: Add support for cpuidle latency measurement
+
+ arch/powerpc/Kconfig.debug                    |  10 +
+ arch/powerpc/kernel/Makefile                  |   1 +
+ arch/powerpc/kernel/test_cpuidle_latency.c    | 156 ++++++
+ tools/testing/selftests/powerpc/Makefile      |   1 +
+ .../powerpc/cpuidle_latency/.gitignore        |   2 +
+ .../powerpc/cpuidle_latency/Makefile          |   6 +
+ .../cpuidle_latency/cpuidle_latency.sh        | 443 ++++++++++++++++++
+ .../powerpc/cpuidle_latency/settings          |   1 +
+ 8 files changed, 620 insertions(+)
+ create mode 100644 arch/powerpc/kernel/test_cpuidle_latency.c
+ create mode 100644 tools/testing/selftests/powerpc/cpuidle_latency/.gitignore
+ create mode 100644 tools/testing/selftests/powerpc/cpuidle_latency/Makefile
+ create mode 100755 tools/testing/selftests/powerpc/cpuidle_latency/cpuidle_latency.sh
+ create mode 100644 tools/testing/selftests/powerpc/cpuidle_latency/settings
+
+-- 
+2.25.1
+
