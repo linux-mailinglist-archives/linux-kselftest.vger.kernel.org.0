@@ -2,245 +2,136 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D99D778B986
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Aug 2023 22:27:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 205FC78BA0A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Aug 2023 23:15:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbjH1U0s (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 28 Aug 2023 16:26:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49440 "EHLO
+        id S233485AbjH1VOr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 28 Aug 2023 17:14:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231683AbjH1U0o (ORCPT
+        with ESMTP id S233581AbjH1VOd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 28 Aug 2023 16:26:44 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B80EAF9
-        for <linux-kselftest@vger.kernel.org>; Mon, 28 Aug 2023 13:26:40 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id e9e14a558f8ab-34b0f3b792dso13672055ab.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 28 Aug 2023 13:26:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1693254400; x=1693859200;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GdS5U3zAZC1OpDhYKXHHzRAYVsQHuMtwD7yrhm4gv74=;
-        b=KMraxVfGuS98aLRGVM4TJJO4fib8huPrdCiceopE0W7CyIMgd1A32MB5ehYm+3xloP
-         OGMbQNmR2zPKHhuYVGMHm3x2TCLlFpPMDBIxEXZ2WujuyYB/61GSSViRCJqFH03qaW72
-         8YXQ1NQxemTFe7uQKp9atnC6u4WfRI2Mup9Ug=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693254400; x=1693859200;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GdS5U3zAZC1OpDhYKXHHzRAYVsQHuMtwD7yrhm4gv74=;
-        b=GpDJWr3+BNG1EM7eNEB8DF+CkPdYqvVI3kIBtYAsQD29/3RCjiD9m4K01S7DyUOLK2
-         Lkz36pskkA8DfSMUhGYQDVsdwhIDUtrE/rp8K9LUg2f7dCelkBKLt5HylHxgJzgi6gDV
-         3WKuEtVz7u/ulOkD9yY/s4DFf950EfyRSOs1mUSjpmaKN4zzpZy0jG6RKZGVZcOkLJX4
-         opBwG6pKi5j6f5kMFwGwbdSobiUDEb24Yg9iqcJYVFMwDCrfralGGx25LOXcFeOK1r2l
-         IXjz7mN6Jt5NpZ4M7BZcjaB8yKf8S+wWE6nJ3JTzOcZZUu72At/D5ko+aAmXiQWP1O9M
-         MTjA==
-X-Gm-Message-State: AOJu0YyGjeKqEN15XFthxd9lDfBSIXkAfyyQrTHSHnHXPtrRSG4YJXo5
-        kcBCOkYajLywXbvKnzUIPjEcOw==
-X-Google-Smtp-Source: AGHT+IGRLCtFYkksB6W0I4qT0QxymU8BO3DUqCwvOEFrU8Ok9D94zjEg8TO2rLD8je6BGtvYtCaOKQ==
-X-Received: by 2002:a92:d7c7:0:b0:34a:c618:b904 with SMTP id g7-20020a92d7c7000000b0034ac618b904mr18628179ilq.22.1693254400046;
-        Mon, 28 Aug 2023 13:26:40 -0700 (PDT)
-Received: from localhost (156.190.123.34.bc.googleusercontent.com. [34.123.190.156])
-        by smtp.gmail.com with ESMTPSA id f11-20020a056638118b00b0042b3042ccd8sm2666957jas.13.2023.08.28.13.26.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Aug 2023 13:26:39 -0700 (PDT)
-Date:   Mon, 28 Aug 2023 20:26:38 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Kirill A Shutemov <kirill@shutemov.name>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Lokesh Gidra <lokeshgidra@google.com>
-Subject: Re: [PATCH v5 2/7] mm/mremap: Allow moves within the same VMA
-Message-ID: <20230828202638.GA1646335@google.com>
-References: <20230822015501.791637-1-joel@joelfernandes.org>
- <20230822015501.791637-3-joel@joelfernandes.org>
- <46196ba1-c54d-4c1d-954f-a0006602af99@lucifer.local>
- <20230828183240.GA1621761@google.com>
- <8891681e-532c-4d7b-bc28-b4ad3e017331@lucifer.local>
+        Mon, 28 Aug 2023 17:14:33 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A2FC3;
+        Mon, 28 Aug 2023 14:14:30 -0700 (PDT)
+Received: from notapiano.myfiosgateway.com (zone.collabora.co.uk [167.235.23.81])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 973B6660087A;
+        Mon, 28 Aug 2023 22:14:27 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1693257269;
+        bh=kMWLY6tuvILGJ3usJxrB0TPO3XiaNxG6Cf6+Lo6rdrg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RMNPZO/Vg4Y6R4vwYhpxQUY1VAdEKCTsmFKQPKgOcbOtPRYThJQEHvXlQ9gAGH+WE
+         LYbU7idaQDV1eWwELh4Gg6uAY76d9fHg5o2clXfcQc6rgc3oeB2CGWPTV580aZBHY6
+         rqUP5JU99WeKQL3Dls4/thGN11p/BvD6gPj0aIl1IOz+3Sy8zzvfibq7PHS43pbyy9
+         7SoGu5ir4DRtMq2YKYRLx8EmlSgUa2oACKOqkONTCAHW9A+n3n+T+JmbgxmqgHu0LR
+         x+EipqMVAq2OARILiP/Rxzjj0CETuU6qYc8MtK6geZ3V3PWd97+QSN73Jba8rR+tyB
+         YSJdcmIKCcVhA==
+From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Mark Brown <broonie@kernel.org>, kernelci@lists.linux.dev,
+        kernel@collabora.com, Guenter Roeck <groeck@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH v3 0/3] Add a test to catch unprobed Devicetree devices
+Date:   Mon, 28 Aug 2023 17:13:09 -0400
+Message-ID: <20230828211424.2964562-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8891681e-532c-4d7b-bc28-b4ad3e017331@lucifer.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Aug 28, 2023 at 08:00:18PM +0100, Lorenzo Stoakes wrote:
-> On Mon, Aug 28, 2023 at 06:32:40PM +0000, Joel Fernandes wrote:
-> > On Sun, Aug 27, 2023 at 10:21:14AM +0100, Lorenzo Stoakes wrote:
-> > [..]
-> > > >
-> > > >  /*
-> > > >   * Flags used by change_protection().  For now we make it a bitmap so
-> > > > diff --git a/mm/mremap.c b/mm/mremap.c
-> > > > index 035fbf542a8f..06baa13bd2c8 100644
-> > > > --- a/mm/mremap.c
-> > > > +++ b/mm/mremap.c
-> > > > @@ -490,12 +490,13 @@ static bool move_pgt_entry(enum pgt_entry entry, struct vm_area_struct *vma,
-> > > >  }
-> > > >
-> > > >  /*
-> > > > - * A helper to check if a previous mapping exists. Required for
-> > > > - * move_page_tables() and realign_addr() to determine if a previous mapping
-> > > > - * exists before we can do realignment optimizations.
-> > > > + * A helper to check if aligning down is OK. The aligned address should fall
-> > > > + * on *no mapping*. For the stack moving down, that's a special move within
-> > > > + * the VMA that is created to span the source and destination of the move,
-> > > > + * so we make an exception for it.
-> > > >   */
-> > > >  static bool can_align_down(struct vm_area_struct *vma, unsigned long addr_to_align,
-> > > > -			       unsigned long mask)
-> > > > +			    unsigned long mask, bool for_stack)
-> > > >  {
-> > > >  	unsigned long addr_masked = addr_to_align & mask;
-> > > >
-> > > > @@ -504,7 +505,7 @@ static bool can_align_down(struct vm_area_struct *vma, unsigned long addr_to_ali
-> > > >  	 * of the corresponding VMA, we can't align down or we will destroy part
-> > > >  	 * of the current mapping.
-> > > >  	 */
-> > > > -	if (vma->vm_start != addr_to_align)
-> > > > +	if (!for_stack && vma->vm_start != addr_to_align)
-> > > >  		return false;
-> > >
-> > > I'm a little confused by this exception, is it very specifically for the
-> > > shift_arg_pages() case where can assume we are safe to just discard the
-> > > lower portion of the stack?
-> > >
-> > > Wouldn't the find_vma_intersection() line below fail in this case? I may be
-> > > missing something here :)
-> >
-> > I think you are right. In v4, this was not an issue as we did this:
-> >
-> >
-> > +	if (!for_stack && vma->vm_start != addr_to_align)
-> > +		return false;
-> > +
-> > +	cur = find_vma_prev(vma->vm_mm, vma->vm_start, &prev);
-> > +	if (WARN_ON_ONCE(cur != vma))
-> > +		return false;
-> >
-> > Which essentially means this patch is a NOOP in v5 for the stack case.
-> 
-> >
-> > So what we really want is the VMA previous to @vma and whether than subsumes
-> > the masked address.
-> >
-> > Should I just change it back to the v4 version then as above for both patch 1
-> > and 2 and carry your review tags?
-> 
-> You will not be surprised to hear that I'd rather not :) I think if we did
-> revert to that approach it'd need rework anyway, so I'd ask for a respin w/o
-> tag if we were to go down that road.
-> 
-> HOWEVER let's first clarify what we want to check.
-> 
-> My understand (please correct me if mistaken) is that there are two
-> acceptable cases:-
-> 
-> 1. !for_stack
-> 
->  addr_masked         addr_to_align
->  |                   |
->  v                   v
->  .                   |-----|
->  . <-must be empty-> | vma |
->  .                   |-----|
-> 
-> 2. for_stack
-> 
->       addr_masked         addr_to_align
->       |                   |
->       v                   v
->  |----.-------------------.-----|
->  |    .        vma        .     |
->  |----.-------------------.-----|
-> 
-> Meaning that there are only two cases that we should care about:-
-> 
-> 1. !for_stack: addr_to_align == vma->vm_start and no other VMA exists
->    between this and addr_masked
-> 
-> 2. for_stack: addr_masked is in the same VMA as addr_to_align.
-> 
-> In this case, the check can surely be:-
-> 
-> return find_vma_intersection(vma->vm_mm, addr_masked, addr_to_align) ==
-> 	(for_stack ? vma : NULL);
-> 
-> (maybe would be less ugly to actually assign the intersection value to a
-> local var and check that)
 
-For completness: Lorenzo made some valid points on IRC and we'll do this
-patch (2/7) like this for v6 after sufficient testing.
+Regressions that cause a device to no longer be probed by a driver can
+have a big impact on the platform's functionality, and despite being
+relatively common there isn't currently any generic test to detect them.
+As an example, bootrr [1] does test for device probe, but it requires
+defining the expected probed devices for each platform.
 
-static bool can_align_down(struct vm_area_struct *vma, unsigned long addr_to_align,
-                              unsigned long mask, bool for_stack)
-{
-       unsigned long addr_masked = addr_to_align & mask;
-       /*
-        * If @addr_to_align of either source or destination is not the beginning
-        * of the corresponding VMA, we can't align down or we will destroy part
-        * of the current mapping for cases other than the stack.
-        */
-       if (!for_stack && vma->vm_start != addr_to_align)
-	       return false;
+Given that the Devicetree already provides a static description of
+devices on the system, it is a good basis for building such a test on
+top.
 
-       /* In the stack case we explicitly permit in-VMA alignment. */
-       if (for_stack && addr_masked >= vma->vm_start)
-	       return true;
+This series introduces a test to catch regressions that prevent devices
+from probing.
 
-       /*
-        * Make sure the realignment doesn't cause the address to fall on an
-        * existing mapping.
-        */
-       return find_vma_intersection(vma->vm_mm, addr_masked, vma->vm_start) == NULL;
-}
+Patches 1 and 2 extend the existing dt-extract-compatibles to be able to
+output only the compatibles that can be expected to match a Devicetree
+node to a driver. Patch 2 adds a kselftest that walks over the
+Devicetree nodes on the current platform and compares the compatibles to
+the ones on the list, and on an ignore list, to point out devices that
+failed to be probed.
 
-Thanks Lorenzo for the suggestion!
+A compatible list is needed because not all compatibles that can show up
+in a Devicetree node can be used to match to a driver, for example the
+code for that compatible might use "OF_DECLARE" type macros and avoid
+the driver framework, or the node might be controlled by a driver that
+was bound to a different node.
 
-> >
-> > This is also hard to test as it requires triggering the execve stack move
-> > case. Though it is not a bug (as it is essentially a NOOP), it still would be
-> > nice to test it. This is complicated by also the fact that mremap(2) itself
-> > does not allow overlapping moves. I could try to hardcode the unfavorable
-> > situation as I have done in the past to force that mremap warning.
-> 
-> I find this exception a bit confusing, why are we so adamant on performing
-> the optimisation in this case when it makes the code uglier and is rather
-> hard to understand? Does it really matter that much?
+An ignore list is needed for the few cases where it's common for a
+driver to match a device but not probe, like for the "simple-mfd"
+compatible, where the driver only probes if that compatible is the
+node's first compatible.
 
-Let me know if you still felt it made the code uglier, but it looks like just
-one more if() condition. And who knows may be in the future we want to do
-such overlapping moves for other cases? ;)
+The reason for parsing the kernel source instead of relying on
+information exposed by the kernel at runtime (say, looking at modaliases
+or introducing some other mechanism), is to be able to catch issues
+where a config was renamed or a driver moved across configs, and the
+.config used by the kernel not updated accordingly. We need to parse the
+source to find all compatibles present in the kernel independent of the
+current config being run.
 
-> I wonder whether it wouldn't be better to just drop that (unless you really
-> felt strongly about it) for the patch set and then perhaps address it in a
-> follow up?
-> This may entirely be a product of my simply not entirely understanding this
-> case so do forgive the probing, I just want to make sure we handle it
-> correctly!
+[1] https://github.com/kernelci/bootrr
 
-It was just to avoid that false-positive warning where we can align down the
-stack move to avoid warnings about zero'd PMDs. We could certainly do it in
-this series or as a follow-up but since we came up with the above snippet, I
-will keep it in this series for now and hopefully you are ok with that.
+Changes in v3:
+- Added DT selftest path to MAINTAINERS
+- Enabled device probe test for nodes with 'status = "ok"'
+- Added pass/fail/skip totals to end of test output
 
-thanks,
+Changes in v2:
+- Extended dt-extract-compatibles script to be able to extract driver
+  matching compatibles, instead of adding a new one in Coccinelle
+- Made kselftest output in the KTAP format
 
- - Joel
+Nícolas F. R. A. Prado (3):
+  dt: dt-extract-compatibles: Handle cfile arguments in generator
+    function
+  dt: dt-extract-compatibles: Add flag for driver matching compatibles
+  kselftest: Add new test for detecting unprobed Devicetree devices
+
+ MAINTAINERS                                   |  1 +
+ scripts/dtc/dt-extract-compatibles            | 74 +++++++++++++----
+ tools/testing/selftests/Makefile              |  1 +
+ tools/testing/selftests/dt/.gitignore         |  1 +
+ tools/testing/selftests/dt/Makefile           | 21 +++++
+ .../selftests/dt/compatible_ignore_list       |  1 +
+ tools/testing/selftests/dt/ktap_helpers.sh    | 70 ++++++++++++++++
+ .../selftests/dt/test_unprobed_devices.sh     | 83 +++++++++++++++++++
+ 8 files changed, 236 insertions(+), 16 deletions(-)
+ create mode 100644 tools/testing/selftests/dt/.gitignore
+ create mode 100644 tools/testing/selftests/dt/Makefile
+ create mode 100644 tools/testing/selftests/dt/compatible_ignore_list
+ create mode 100644 tools/testing/selftests/dt/ktap_helpers.sh
+ create mode 100755 tools/testing/selftests/dt/test_unprobed_devices.sh
+
+-- 
+2.42.0
 
