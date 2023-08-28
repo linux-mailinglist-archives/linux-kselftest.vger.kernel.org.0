@@ -2,269 +2,126 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F53C78A9CF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Aug 2023 12:16:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A81D378ACA3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Aug 2023 12:42:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230299AbjH1KQY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 28 Aug 2023 06:16:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48596 "EHLO
+        id S231735AbjH1Kld (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 28 Aug 2023 06:41:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230412AbjH1KQR (ORCPT
+        with ESMTP id S231840AbjH1Kl3 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 28 Aug 2023 06:16:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8729295;
-        Mon, 28 Aug 2023 03:16:14 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0CF73636BB;
-        Mon, 28 Aug 2023 10:16:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1F46C433C8;
-        Mon, 28 Aug 2023 10:16:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1693217773;
-        bh=sZ8cxdgAVDsKMlxUNjIyKHGUtpoAaxk8rYyloJbZoCg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=A86nd8tUKm/sM3nT3ptW+JFmSq1xExOhG21VfNJXCZCzSC6qdKDVxgH8HkPNNPn9Q
-         moOsUzfIMAzc5JMVAztfDvHdRx13N9CL/ubE32rBBULESJ505c217G6OrMv2LU7sVF
-         Z/w5a8rgUOLHaO351+c+5UwZFLczMb7hDf1LfGZY=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, Luis Chamberlain <mcgrof@kernel.org>,
-        Russ Weight <russell.h.weight@intel.com>,
-        Takashi Iwai <tiwai@suse.de>,
-        Tianfei Zhang <tianfei.zhang@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-kselftest@vger.kernel.org, Dan Carpenter <error27@gmail.com>,
-        Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Subject: [PATCH 4.14 34/57] test_firmware: prevent race conditions by a correct implementation of locking
-Date:   Mon, 28 Aug 2023 12:12:54 +0200
-Message-ID: <20230828101145.521375928@linuxfoundation.org>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20230828101144.231099710@linuxfoundation.org>
-References: <20230828101144.231099710@linuxfoundation.org>
-User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
+        Mon, 28 Aug 2023 06:41:29 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F7C119;
+        Mon, 28 Aug 2023 03:41:27 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 37SABuZ5031648;
+        Mon, 28 Aug 2023 05:41:14 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=
+        from:to:cc:subject:date:message-id:mime-version
+        :content-transfer-encoding:content-type; s=PODMain02222019; bh=a
+        dptGb/WfXkWF/5gMdIyYCn0kSpTmfqyg0jDIXzIcRA=; b=AahwV8w92Q+QOqeUf
+        z9h9XGmrS9pfL2b5btpSvLGNXYiT45J+x11Xx5UYNWG4AsGptHqak/Wy/rbLFOW7
+        rCaMPucTmUrolTzoFb6ynyXkkrXHLUzyx1z2ZgSSCL66tORk5ZA4JbZ4kXNZjOOS
+        UXrss1ltLSYcW9VMVzGe+I1PV9kJoezoOaI8LVciHNLUZhmE+uTVCVa23mmccGeo
+        e2tH7WOUq+1wbMhjwnfu33JczFEwwNvOSBSjW5kumaPrxCSqh88mf3RmOe4R1Tj6
+        HflPE7uNMOcUQBhAwokwAji3ao/IeLUkRH7q4qsQ/VBQysGbWG+PK9nxmwjgH2bq
+        VSF9A==
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3sqdtj1my9-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 28 Aug 2023 05:41:13 -0500 (CDT)
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.37; Mon, 28 Aug
+ 2023 11:41:12 +0100
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.37 via Frontend Transport; Mon, 28 Aug 2023 11:41:12 +0100
+Received: from edi-sw-dsktp-006.ad.cirrus.com (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.75])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id E9AD511AA;
+        Mon, 28 Aug 2023 10:41:11 +0000 (UTC)
+From:   Richard Fitzgerald <rf@opensource.cirrus.com>
+To:     <brendan.higgins@linux.dev>, <davidgow@google.com>,
+        <rmoar@google.com>
+CC:     <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
+        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>,
+        "Richard Fitzgerald" <rf@opensource.cirrus.com>
+Subject: [PATCH v6 00/10] kunit: Add dynamically-extending log
+Date:   Mon, 28 Aug 2023 11:41:01 +0100
+Message-ID: <20230828104111.2394344-1-rf@opensource.cirrus.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: s-tTiMRa_hO7PSTRpzdFfwjpQ_C9RW4_
+X-Proofpoint-GUID: s-tTiMRa_hO7PSTRpzdFfwjpQ_C9RW4_
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-4.14-stable review patch.  If anyone has any objections, please let me know.
+This patch chain changes the logging implementation to use string_stream
+so that the log will grow dynamically.
 
-------------------
+The first 8 patches add test code for string_stream, and make some
+changes to string_stream needed to be able to use it for the log.
 
-From: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+The final patch adds a performance report of string_stream.
 
-commit 4acfe3dfde685a5a9eaec5555351918e2d7266a1 upstream.
+CHANGES SINCE V5:
+Patch 2:
+- Avoid cast warning when using KUNIT_EXPECT_EQ() on a gfp_t. Instead pass
+  the result of the comparison to KUNIT_EXPECT_TRUE(). While it would be
+  nice to use KUNIT_EXPECT_EQ(), it's probably better to avoid introducing
+  build or sparse warnings.
 
-Dan Carpenter spotted a race condition in a couple of situations like
-these in the test_firmware driver:
+- In string_stream_append_test() rename original_content to
+  stream1_content_before_append.
 
-static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
-{
-        u8 val;
-        int ret;
+Patch 7:
+- Make string_stream_clear() public (in v5 this was done in patch #8).
+- In string-stream-test.c add a wrapper for kfree() to prevent a cast
+  warning when calling kunit_add_action().
 
-        ret = kstrtou8(buf, 10, &val);
-        if (ret)
-                return ret;
+Patch 8:
+- Fix memory leak when calling the redirected string_stream_destroy_stub().
 
-        mutex_lock(&test_fw_mutex);
-        *(u8 *)cfg = val;
-        mutex_unlock(&test_fw_mutex);
+Patch 9:
+- In kunit-test.c: add wrapper function around kfree() to prevent cast
+  warning when calling kunit_add_action().
+- Fix unused variable warning in kunit_log_test() when built as a module.
 
-        /* Always return full write size even if we didn't consume all */
-        return size;
-}
+Richard Fitzgerald (10):
+  kunit: string-stream: Don't create a fragment for empty strings
+  kunit: string-stream: Improve testing of string_stream
+  kunit: string-stream: Add option to make all lines end with newline
+  kunit: string-stream-test: Add cases for string_stream newline
+    appending
+  kunit: Don't use a managed alloc in is_literal()
+  kunit: string-stream: Add kunit_alloc_string_stream()
+  kunit: string-stream: Decouple string_stream from kunit
+  kunit: string-stream: Add tests for freeing resource-managed
+    string_stream
+  kunit: Use string_stream for test log
+  kunit: string-stream: Test performance of string_stream
 
-static ssize_t config_num_requests_store(struct device *dev,
-                                         struct device_attribute *attr,
-                                         const char *buf, size_t count)
-{
-        int rc;
+ include/kunit/test.h           |  14 +-
+ lib/kunit/assert.c             |  14 +-
+ lib/kunit/debugfs.c            |  36 ++-
+ lib/kunit/kunit-test.c         |  56 +++-
+ lib/kunit/string-stream-test.c | 525 +++++++++++++++++++++++++++++++--
+ lib/kunit/string-stream.c      | 100 +++++--
+ lib/kunit/string-stream.h      |  16 +-
+ lib/kunit/test.c               |  50 +---
+ 8 files changed, 688 insertions(+), 123 deletions(-)
 
-        mutex_lock(&test_fw_mutex);
-        if (test_fw_config->reqs) {
-                pr_err("Must call release_all_firmware prior to changing config\n");
-                rc = -EINVAL;
-                mutex_unlock(&test_fw_mutex);
-                goto out;
-        }
-        mutex_unlock(&test_fw_mutex);
-
-        rc = test_dev_config_update_u8(buf, count,
-                                       &test_fw_config->num_requests);
-
-out:
-        return rc;
-}
-
-static ssize_t config_read_fw_idx_store(struct device *dev,
-                                        struct device_attribute *attr,
-                                        const char *buf, size_t count)
-{
-        return test_dev_config_update_u8(buf, count,
-                                         &test_fw_config->read_fw_idx);
-}
-
-The function test_dev_config_update_u8() is called from both the locked
-and the unlocked context, function config_num_requests_store() and
-config_read_fw_idx_store() which can both be called asynchronously as
-they are driver's methods, while test_dev_config_update_u8() and siblings
-change their argument pointed to by u8 *cfg or similar pointer.
-
-To avoid deadlock on test_fw_mutex, the lock is dropped before calling
-test_dev_config_update_u8() and re-acquired within test_dev_config_update_u8()
-itself, but alas this creates a race condition.
-
-Having two locks wouldn't assure a race-proof mutual exclusion.
-
-This situation is best avoided by the introduction of a new, unlocked
-function __test_dev_config_update_u8() which can be called from the locked
-context and reducing test_dev_config_update_u8() to:
-
-static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
-{
-        int ret;
-
-        mutex_lock(&test_fw_mutex);
-        ret = __test_dev_config_update_u8(buf, size, cfg);
-        mutex_unlock(&test_fw_mutex);
-
-        return ret;
-}
-
-doing the locking and calling the unlocked primitive, which enables both
-locked and unlocked versions without duplication of code.
-
-The similar approach was applied to all functions called from the locked
-and the unlocked context, which safely mitigates both deadlocks and race
-conditions in the driver.
-
-__test_dev_config_update_bool(), __test_dev_config_update_u8() and
-__test_dev_config_update_size_t() unlocked versions of the functions
-were introduced to be called from the locked contexts as a workaround
-without releasing the main driver's lock and thereof causing a race
-condition.
-
-The test_dev_config_update_bool(), test_dev_config_update_u8() and
-test_dev_config_update_size_t() locked versions of the functions
-are being called from driver methods without the unnecessary multiplying
-of the locking and unlocking code for each method, and complicating
-the code with saving of the return value across lock.
-
-Fixes: 7feebfa487b92 ("test_firmware: add support for request_firmware_into_buf")
-Cc: Luis Chamberlain <mcgrof@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Russ Weight <russell.h.weight@intel.com>
-Cc: Takashi Iwai <tiwai@suse.de>
-Cc: Tianfei Zhang <tianfei.zhang@intel.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: Colin Ian King <colin.i.king@gmail.com>
-Cc: Randy Dunlap <rdunlap@infradead.org>
-Cc: linux-kselftest@vger.kernel.org
-Cc: stable@vger.kernel.org # v5.4
-Suggested-by: Dan Carpenter <error27@gmail.com>
-Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Link: https://lore.kernel.org/r/20230509084746.48259-1-mirsad.todorovac@alu.unizg.hr
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- lib/test_firmware.c |   37 ++++++++++++++++++++++++++++---------
- 1 file changed, 28 insertions(+), 9 deletions(-)
-
---- a/lib/test_firmware.c
-+++ b/lib/test_firmware.c
-@@ -283,16 +283,26 @@ static ssize_t config_test_show_str(char
- 	return len;
- }
- 
--static int test_dev_config_update_bool(const char *buf, size_t size,
--				       bool *cfg)
-+static inline int __test_dev_config_update_bool(const char *buf, size_t size,
-+						bool *cfg)
- {
- 	int ret;
- 
--	mutex_lock(&test_fw_mutex);
- 	if (strtobool(buf, cfg) < 0)
- 		ret = -EINVAL;
- 	else
- 		ret = size;
-+
-+	return ret;
-+}
-+
-+static int test_dev_config_update_bool(const char *buf, size_t size,
-+				       bool *cfg)
-+{
-+	int ret;
-+
-+	mutex_lock(&test_fw_mutex);
-+	ret = __test_dev_config_update_bool(buf, size, cfg);
- 	mutex_unlock(&test_fw_mutex);
- 
- 	return ret;
-@@ -322,7 +332,7 @@ static ssize_t test_dev_config_show_int(
- 	return snprintf(buf, PAGE_SIZE, "%d\n", val);
- }
- 
--static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
-+static inline int __test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
- {
- 	int ret;
- 	long new;
-@@ -334,14 +344,23 @@ static int test_dev_config_update_u8(con
- 	if (new > U8_MAX)
- 		return -EINVAL;
- 
--	mutex_lock(&test_fw_mutex);
- 	*(u8 *)cfg = new;
--	mutex_unlock(&test_fw_mutex);
- 
- 	/* Always return full write size even if we didn't consume all */
- 	return size;
- }
- 
-+static int test_dev_config_update_u8(const char *buf, size_t size, u8 *cfg)
-+{
-+	int ret;
-+
-+	mutex_lock(&test_fw_mutex);
-+	ret = __test_dev_config_update_u8(buf, size, cfg);
-+	mutex_unlock(&test_fw_mutex);
-+
-+	return ret;
-+}
-+
- static ssize_t test_dev_config_show_u8(char *buf, u8 cfg)
- {
- 	u8 val;
-@@ -374,10 +393,10 @@ static ssize_t config_num_requests_store
- 		mutex_unlock(&test_fw_mutex);
- 		goto out;
- 	}
--	mutex_unlock(&test_fw_mutex);
- 
--	rc = test_dev_config_update_u8(buf, count,
--				       &test_fw_config->num_requests);
-+	rc = __test_dev_config_update_u8(buf, count,
-+					 &test_fw_config->num_requests);
-+	mutex_unlock(&test_fw_mutex);
- 
- out:
- 	return rc;
-
+-- 
+2.30.2
 
