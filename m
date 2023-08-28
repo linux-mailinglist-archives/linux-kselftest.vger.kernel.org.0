@@ -2,149 +2,121 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80FC878B73E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Aug 2023 20:33:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D20478B742
+	for <lists+linux-kselftest@lfdr.de>; Mon, 28 Aug 2023 20:35:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232140AbjH1Sc5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 28 Aug 2023 14:32:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36786 "EHLO
+        id S231790AbjH1SeB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 28 Aug 2023 14:34:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232021AbjH1Scp (ORCPT
+        with ESMTP id S232647AbjH1Sdk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 28 Aug 2023 14:32:45 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D53A5B9
-        for <linux-kselftest@vger.kernel.org>; Mon, 28 Aug 2023 11:32:42 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id ca18e2360f4ac-79289fefdbeso91692339f.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 28 Aug 2023 11:32:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1693247562; x=1693852362;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vlH1F433gTQcUsEtLxKZUpHNUAMNhRhkYP0DbGmnz0M=;
-        b=nFrb0GNPs/wTaQ8nE94D2sT5zOH75np79gen6grO8f06qzDww14rcelBIZ8AryJmtx
-         ykbAJyUCuQOhz4qfjy3SCSQ6Zk7nW9JNYgSZn4AUNdQ4WCSRwZ8/RtnIKDm68XSqo3Zh
-         jcaqMY9hihGchweqJvZBajTMOa2WtIolhXueg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693247562; x=1693852362;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vlH1F433gTQcUsEtLxKZUpHNUAMNhRhkYP0DbGmnz0M=;
-        b=FhOfCc+VADI7Vuv5KB3Zmv4aLu6VE01Tr8aW5kbVpsWX8QTCYuPDxAz1CyL0LN3te3
-         vBzHtNLJotmDaOryGDavZceLENaoMUrNqSf3aHpIg0W2ed9HNIVrBF7nGzD5P42JyBW7
-         7uN3q6c/TsCBF2eEPznq3ANrxbEs7Hx6pb83zTdcAelthPMpGLtQwAc39p00HatWWxYh
-         0soA1t9ufWbmEQOrA1Bi/vUhMls3Wndqu7CPhBRw4Sa5fSdFPOyD0lr0o+Ik0m90K7kF
-         9bgP+zhxWf32FySHAonY4b0wHbI3/88+rXVnS1m55gm4RDYRNd9rG9Lp18RYh+9Jt3jl
-         +qIQ==
-X-Gm-Message-State: AOJu0YxW75DWMrNlLmFWhF7t1KvhOPiNZu3Ni6gSaHtdoiakF5bYSPkj
-        Ak5Cq57RDKK5YRHq2TeelA5Tag==
-X-Google-Smtp-Source: AGHT+IFBKaZS5q2OBtEoOJhIJR2uV7Jev+fXXzpRuiK0lkyhalyR6TxJ2IhnOS+W5HHEfqZbHItCdg==
-X-Received: by 2002:a5d:9718:0:b0:786:f47b:c063 with SMTP id h24-20020a5d9718000000b00786f47bc063mr17281322iol.21.1693247562178;
-        Mon, 28 Aug 2023 11:32:42 -0700 (PDT)
-Received: from localhost (156.190.123.34.bc.googleusercontent.com. [34.123.190.156])
-        by smtp.gmail.com with ESMTPSA id f7-20020a6bdd07000000b007922dc27aa6sm2677118ioc.24.2023.08.28.11.32.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 28 Aug 2023 11:32:41 -0700 (PDT)
-Date:   Mon, 28 Aug 2023 18:32:40 +0000
-From:   Joel Fernandes <joel@joelfernandes.org>
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, Shuah Khan <shuah@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Michal Hocko <mhocko@suse.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Kirill A Shutemov <kirill@shutemov.name>,
-        "Liam R. Howlett" <liam.howlett@oracle.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Lokesh Gidra <lokeshgidra@google.com>
-Subject: Re: [PATCH v5 2/7] mm/mremap: Allow moves within the same VMA
-Message-ID: <20230828183240.GA1621761@google.com>
-References: <20230822015501.791637-1-joel@joelfernandes.org>
- <20230822015501.791637-3-joel@joelfernandes.org>
- <46196ba1-c54d-4c1d-954f-a0006602af99@lucifer.local>
+        Mon, 28 Aug 2023 14:33:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB1D0191;
+        Mon, 28 Aug 2023 11:33:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6E20963E38;
+        Mon, 28 Aug 2023 18:33:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 434E3C433C7;
+        Mon, 28 Aug 2023 18:33:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1693247615;
+        bh=d9s+rleTXjh+026kI2xWsxmN3r2l1b03zx5KLcfxN1o=;
+        h=From:To:Cc:Subject:Date:From;
+        b=JLl7eKcVOYvqYwCZx8WuoW5qAEQxNojEVCj58HmPzmnbXaDXNc+9KIC3d1egAZf/i
+         G9wacsZ5VdVSc+x3ogaIsPtGMC7K8JoZI+5bVnrM/OCqUvHB6F6FRAWhHqJiEFT1df
+         QJHwXmkfyblzKeg8pPr6QuaCH+LOvdPMrsPmb4h/CeQTuT2U85a/pHoHhAwvSEBtCk
+         wt98pjgYRQDgVjMu7PfwZtqhiaOStwuDvZI2bRBBdHbp4cmZGHt619296TVT+D42g6
+         ta59kocFoNrWKE4qQObSKDMl7UTvD0aj4+VjNBpwojAluxPqOcmrCU2tJQSGZhZSms
+         FimAYEksbRE4Q==
+From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
+To:     Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, bpf@vger.kernel.org
+Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next] selftests/bpf: Include build flavors for install target
+Date:   Mon, 28 Aug 2023 20:33:29 +0200
+Message-Id: <20230828183329.546959-1-bjorn@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <46196ba1-c54d-4c1d-954f-a0006602af99@lucifer.local>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Aug 27, 2023 at 10:21:14AM +0100, Lorenzo Stoakes wrote:
-[..] 
-> >
-> >  /*
-> >   * Flags used by change_protection().  For now we make it a bitmap so
-> > diff --git a/mm/mremap.c b/mm/mremap.c
-> > index 035fbf542a8f..06baa13bd2c8 100644
-> > --- a/mm/mremap.c
-> > +++ b/mm/mremap.c
-> > @@ -490,12 +490,13 @@ static bool move_pgt_entry(enum pgt_entry entry, struct vm_area_struct *vma,
-> >  }
-> >
-> >  /*
-> > - * A helper to check if a previous mapping exists. Required for
-> > - * move_page_tables() and realign_addr() to determine if a previous mapping
-> > - * exists before we can do realignment optimizations.
-> > + * A helper to check if aligning down is OK. The aligned address should fall
-> > + * on *no mapping*. For the stack moving down, that's a special move within
-> > + * the VMA that is created to span the source and destination of the move,
-> > + * so we make an exception for it.
-> >   */
-> >  static bool can_align_down(struct vm_area_struct *vma, unsigned long addr_to_align,
-> > -			       unsigned long mask)
-> > +			    unsigned long mask, bool for_stack)
-> >  {
-> >  	unsigned long addr_masked = addr_to_align & mask;
-> >
-> > @@ -504,7 +505,7 @@ static bool can_align_down(struct vm_area_struct *vma, unsigned long addr_to_ali
-> >  	 * of the corresponding VMA, we can't align down or we will destroy part
-> >  	 * of the current mapping.
-> >  	 */
-> > -	if (vma->vm_start != addr_to_align)
-> > +	if (!for_stack && vma->vm_start != addr_to_align)
-> >  		return false;
-> 
-> I'm a little confused by this exception, is it very specifically for the
-> shift_arg_pages() case where can assume we are safe to just discard the
-> lower portion of the stack?
-> 
-> Wouldn't the find_vma_intersection() line below fail in this case? I may be
-> missing something here :)
+From: Björn Töpel <bjorn@rivosinc.com>
 
-I think you are right. In v4, this was not an issue as we did this:
+When using the "install" or targets depending on install,
+e.g. "gen_tar", the BPF machine flavors weren't included.
 
+A command like:
+  | make ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- O=/workspace/kbuild \
+  |    HOSTCC=gcc FORMAT= SKIP_TARGETS="arm64 ia64 powerpc sparc64 x86 sgx" \
+  |    -C tools/testing/selftests gen_tar
+would not include bpf/no_alu32, bpf/cpuv4, or bpf/bpf-gcc.
 
-+	if (!for_stack && vma->vm_start != addr_to_align)
-+		return false;
+Include the BPF machine flavors for "install" make target.
+
+Signed-off-by: Björn Töpel <bjorn@rivosinc.com>
+---
+ tools/testing/selftests/bpf/Makefile | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index edef49fcd23e..7c77a21c3371 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -598,12 +598,14 @@ $(eval $(call DEFINE_TEST_RUNNER,test_progs))
+ TRUNNER_BPF_BUILD_RULE := CLANG_NOALU32_BPF_BUILD_RULE
+ TRUNNER_BPF_CFLAGS := $(BPF_CFLAGS) $(CLANG_CFLAGS)
+ $(eval $(call DEFINE_TEST_RUNNER,test_progs,no_alu32))
++INSTDIRS := no_alu32
+ 
+ # Define test_progs-cpuv4 test runner.
+ ifneq ($(CLANG_CPUV4),)
+ TRUNNER_BPF_BUILD_RULE := CLANG_CPUV4_BPF_BUILD_RULE
+ TRUNNER_BPF_CFLAGS := $(BPF_CFLAGS) $(CLANG_CFLAGS)
+ $(eval $(call DEFINE_TEST_RUNNER,test_progs,cpuv4))
++INSTDIRS += cpuv4
+ endif
+ 
+ # Define test_progs BPF-GCC-flavored test runner.
+@@ -611,6 +613,7 @@ ifneq ($(BPF_GCC),)
+ TRUNNER_BPF_BUILD_RULE := GCC_BPF_BUILD_RULE
+ TRUNNER_BPF_CFLAGS := $(BPF_CFLAGS) $(call get_sys_includes,gcc,)
+ $(eval $(call DEFINE_TEST_RUNNER,test_progs,bpf_gcc))
++INSTDIRS += bpf_gcc
+ endif
+ 
+ # Define test_maps test runner.
+@@ -714,3 +717,12 @@ EXTRA_CLEAN := $(TEST_CUSTOM_PROGS) $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)	\
+ 
+ # Delete partially updated (corrupted) files on error
+ .DELETE_ON_ERROR:
 +
-+	cur = find_vma_prev(vma->vm_mm, vma->vm_start, &prev);
-+	if (WARN_ON_ONCE(cur != vma))
-+		return false;
++DEFAULT_INSTALL_RULE := $(INSTALL_RULE)
++override define INSTALL_RULE
++	$(DEFAULT_INSTALL_RULE)
++	@for DIR in $(INSTDIRS); do		  \
++		mkdir -p $(INSTALL_PATH)/$$DIR;   \
++		rsync -a $(OUTPUT)/$$DIR/*.bpf.o $(INSTALL_PATH)/$$DIR;\
++	done
++endef
 
-Which essentially means this patch is a NOOP in v5 for the stack case.
-
-So what we really want is the VMA previous to @vma and whether than subsumes
-the masked address.
-
-Should I just change it back to the v4 version then as above for both patch 1
-and 2 and carry your review tags?
-
-This is also hard to test as it requires triggering the execve stack move
-case. Though it is not a bug (as it is essentially a NOOP), it still would be
-nice to test it. This is complicated by also the fact that mremap(2) itself
-does not allow overlapping moves. I could try to hardcode the unfavorable
-situation as I have done in the past to force that mremap warning.
-
-thanks,
-
- - Joel
+base-commit: 8be6f88b9d3fe1f6724daec4a70d6023742c9df7
+-- 
+2.39.2
 
