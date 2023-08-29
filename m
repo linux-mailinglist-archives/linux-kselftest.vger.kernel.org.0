@@ -2,228 +2,223 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0381B78BFE8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Aug 2023 10:09:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CBE0D78C0E4
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Aug 2023 11:02:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233991AbjH2IIy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 29 Aug 2023 04:08:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50812 "EHLO
+        id S234300AbjH2JCD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 29 Aug 2023 05:02:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233775AbjH2IIY (ORCPT
+        with ESMTP id S234355AbjH2JBo (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 29 Aug 2023 04:08:24 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A089BF;
-        Tue, 29 Aug 2023 01:08:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KltUgCmfjJEarCImZn3du6JO9TzWdjxn2bsg7IigrMYvDz9m8OjR1uZFJUo4T2N05wGwTOXp4KOmgQecUnEgeWJw2U7FjKw8PD+Av7d/Rfrxwb95vtzGr02pNKxEbi8YMpQa/q+av7enPpdsn1BYhHt7xpIRRIMr2ZQDp9a88novKpCMveFc5X+0Xtc6dyfh6CCa8sk+bV3i0OgcnJdRMMcmlHYYnRFPsp868wu3Yn62gqwVnXT6BoBWQYj1sGm2Nu9UL4FhB0lv363j0+/p1+DdVp/24VmR3Nk9FVKX6aZdfaTYXruWif/yWq6mPMb/aoDHf82cGnVPXKaHd6YIYA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oB0TdLTgOEIjEEiApRqdMo2GkOhICc6QrTNqzMzlvgU=;
- b=GQXxD/UFOtmPBPS//o5+GMl83XAxXmzNJmiDUOK7a0U6om8ZUsITnPC8gzhyd44osrV1PC4/izLqJStiUK0M+2OPXwf6/eCJ8Pedt4saOXDe8qH+f1KX/S6SYwtr0Ew0JJm269iiU0lwAqG2QK6Djq4wZ1dgu8zhCKMbk40608/fu4KRZ6Dsgg6xNb62LcKvww24/v5i027RTSfc6h9/TmoNtAepFQSWTVdAXwGf4U2DZ9yoG71TCpel8QQioDk9TLjCIFcvnxS+aSAUqaf/l/+9vRc1mL8z2uBmxErnVsXQM0TJ8hYR7HSSI6pJzrNxMEpRunz/EB8VsWXJzzJITQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=oB0TdLTgOEIjEEiApRqdMo2GkOhICc6QrTNqzMzlvgU=;
- b=gsqCNzslEscmXXF8NHfSOkVvbVHOpVniSf+SeUxtXAg9iDTTgD2rh54gdtmIBQvvmqnJPOU0dSWAeOkCHNAwc01DzKI33agmeA2ywO8yJJ1ecGr+6b58QMYVJxQiMwMH1VLf2Ii598rfjSP/LwtfCBLcwV/cnrjeX5bqF6u5wSY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from SJ2PR12MB8690.namprd12.prod.outlook.com (2603:10b6:a03:540::10)
- by BY5PR12MB4920.namprd12.prod.outlook.com (2603:10b6:a03:1d3::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6699.35; Tue, 29 Aug
- 2023 08:08:18 +0000
-Received: from SJ2PR12MB8690.namprd12.prod.outlook.com
- ([fe80::da13:5f6:45:fa40]) by SJ2PR12MB8690.namprd12.prod.outlook.com
- ([fe80::da13:5f6:45:fa40%4]) with mapi id 15.20.6699.027; Tue, 29 Aug 2023
- 08:08:18 +0000
-Date:   Tue, 29 Aug 2023 16:07:52 +0800
-From:   Huang Rui <ray.huang@amd.com>
-To:     "Meng, Li (Jassmine)" <Li.Meng@amd.com>
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
-        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
-        "Yuan, Perry" <Perry.Yuan@amd.com>,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>
-Subject: Re: [PATCH V4 6/7] Documentation: amd-pstate: introduce AMD Pstate
- Preferred Core
-Message-ID: <ZO2nWDqXZR/qGBO1@amd.com>
-References: <20230829064340.1136448-1-li.meng@amd.com>
- <20230829064340.1136448-7-li.meng@amd.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230829064340.1136448-7-li.meng@amd.com>
-X-ClientProxiedBy: SI1PR02CA0015.apcprd02.prod.outlook.com
- (2603:1096:4:1f7::18) To SJ2PR12MB8690.namprd12.prod.outlook.com
- (2603:10b6:a03:540::10)
+        Tue, 29 Aug 2023 05:01:44 -0400
+Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F308139
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Aug 2023 02:01:41 -0700 (PDT)
+Received: by mail-vs1-xe34.google.com with SMTP id ada2fe7eead31-44ee3a547adso242625137.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 29 Aug 2023 02:01:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1693299700; x=1693904500;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=n+CqqB4EY3ISGsS51lvl5duWo7g4p4NV86kSm7kFdCw=;
+        b=CTQlSHoodUNoGIxrDYWdQGj8MxQrd+T9d6i7bsORQQbHmxA8AuwDYWti2UrW5koY4+
+         I7F2C1OLNXGpUq47R8gm6Wm93PLr+PZ3CEvPDyFwQkP1PwBrAfi+3K0mSKYBBHf1ZTot
+         86pmmbdxi5mWDFNo6rhmMu8EDWPo0KKpAN8caxuilOQq29RK9EkGIhx4mGXszgrRACOQ
+         IGVmqN+qGRKOhJXK9nGCTn0JN4PzfgXsQDd9W0/ZC+9KM/s59GlzsEb4AjfnHUymBIBI
+         H5aS+trRmY0seudVqvyBCRojNSjRFmKqyRhp4rb4+k+BXRazAY4pwgWY5YefKvUgYY9d
+         i77Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693299700; x=1693904500;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=n+CqqB4EY3ISGsS51lvl5duWo7g4p4NV86kSm7kFdCw=;
+        b=BqB7PQzSRlb1yBEg4WglFgAdHF902CjiXI6v1K0wkWODy/6mt0IEE/YR0bf35AOGxD
+         kB5UVFtcpW24TQgeyn8qQZj8DcKIepgd36czqrO2i2hwPWW/NB0K/UIgwXKzJgqd0dA4
+         urmNXPYw2sNDc+MnIafYVWN6eCTLvqZxc1vyH7iB9xkfUYDmSI4V0hiDBXsCBYZUCL8I
+         zSL/dh/yMV75JlGsT8XooVwRsnERSkcgbE/wJwtBYRoUve9Eb6QIhVrxcbbcSw+FJO9m
+         7iiDdNpRrH7P7UlnmMtrQZdzDRkgby9GdqbOIC00sQneZn+tAVZiYhOtwMAtpDt70YJT
+         W0Kg==
+X-Gm-Message-State: AOJu0Yxj/7MMiWf4EjIpyPKyPqtSXtKJeDGrXHZJzbxr0FzWW416lOxQ
+        Ak8jOawYD79FOr8C+iJYlbgtUNxWzEduME6cM0U5KlgmO45VmxUPJN4=
+X-Google-Smtp-Source: AGHT+IEXREhN0QCHw4JhByYeog64RUzxQ1vaMpUYuUfifiJfTidhNz/iw1Ug/Bnk5aAZcTvF5yWugzL8QmphCZKjLeo=
+X-Received: by 2002:a05:6102:2365:b0:44e:af33:4607 with SMTP id
+ o5-20020a056102236500b0044eaf334607mr7210377vsa.2.1693299700108; Tue, 29 Aug
+ 2023 02:01:40 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ2PR12MB8690:EE_|BY5PR12MB4920:EE_
-X-MS-Office365-Filtering-Correlation-Id: ff605495-1bbd-4f4d-20bb-08dba8671a59
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nNMK6K7oN233psmxp6h3x1hj62tGrmzATrb6C/mQCb3RCODIfYGJuF5vJk1n0ZjByJnISECcfdTcHQcrNnDB2GiqCagdWjiVr0+TIF1oxlBcIfjMFbvWL80gf2EyIFkW/ny90gyw3bZKT84kQ80drHbGAxshOjEk8uASTwmUr7qwWr2bF6+me3eMHwRkZI4ytJ53XP4Opb9OOETsMnblCvF3tJwtJlUcS7HVa1V91dO/wzSCdAYAo4QYPl+3ahzXh49YAVnfJR6dOhHDRCSILp7k0vDXJtk7JOSKBvUmczS7zWZ1cSb9NMcQBW02mcKP3U7zISzXE5hHTwKNQxGrFyOkGlYHbKpWJxiNeqUTK74ifBXvZSgUEUcuRcWbZaO52FLgxtJZrn871Ncp0iZR9Y/YqL0EosNOmA4aR6G5mVdyv/L/OBdHsQo18I1PHzAOVXsC/XMxh8iprYW7JYS0qLRQqr82ckq7R4Nnc3CdoVkKpRhO6IlauurAPLLFYY77DUQC0Yj+pS857+ypPwJk8wdrKvi3UPW63+0+R064xv9iCsiUxi/97kwlrC8URfYx
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR12MB8690.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(366004)(346002)(396003)(376002)(136003)(1800799009)(451199024)(186009)(6512007)(38100700002)(316002)(37006003)(6636002)(41300700001)(4326008)(6862004)(2906002)(83380400001)(86362001)(2616005)(36756003)(26005)(5660300002)(8676002)(8936002)(6666004)(6506007)(6486002)(66556008)(66476007)(54906003)(66946007)(478600001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ugIDJq/ltP8yQgHlRD+2V5AFiWb9zaV8/lw1k851lYqaY+P5RtHZV58O0KSI?=
- =?us-ascii?Q?i4+s5oylUV+gqd8I0BDkwtz+i6pUduNZ26tDgwDNQvdKnDtctYZlp0ZqcEAm?=
- =?us-ascii?Q?5PV61QymeS1E9mfmhP5CWB2CF+OPGvpE6VgQY9hfk9Uxi07t07yAUjnMIhAr?=
- =?us-ascii?Q?MZb1zU4KI7t1Xu6AzB3PEhucdkAR5ke3M8RqF5YAgUn8xYIkE7jKuJ0pIPsJ?=
- =?us-ascii?Q?WcCkrPJwsouC+aq1k2RNX1NqWE8fyWwvl0hrsumLw0xHYDTo0fyfJf80w/xs?=
- =?us-ascii?Q?BWatfD1WnvD7mxnetzQZgCM7rN7Oa/KaBhjR+pLm5KnZbHd5DovEccCD3a9K?=
- =?us-ascii?Q?Zer0ILsjCPjmDQUWcdvwC5fKn6L+x3JZDgPPRtswXt0rar2SLzyCJZtPxtmq?=
- =?us-ascii?Q?7tBWy5Dp13dqI4bHGcXtgTxafVrdjv5D0kgLRMNqo87eN4IXUi1WQzZGbigy?=
- =?us-ascii?Q?WZIzSa7CNFRwF6yjfiy97EGYTdNvyI54O+VD52Pnhs+G05UEkWTYRF7yU2NR?=
- =?us-ascii?Q?uOPp2ummCjAOcQ5GJFMepcCtlYzFFA0E+ZRhgpAJlURKjWIOW5lWKuKMmVsf?=
- =?us-ascii?Q?JcgbA3YFicThsZUvceAl6CAgnIDMgeWopZsVB5Q+verb44EHOW0HXHsAJsCR?=
- =?us-ascii?Q?5WxVncHDuANraAJ7AYC7oG1WalmoWaMc0J1qLn5vjQkF+oRNBD3ng6Txazmd?=
- =?us-ascii?Q?Og3cxtzdetwJ5VyMkmusOfWTZ+7YCuS2p3tPKztYTCR8VH4cR7x+XOMPmyR+?=
- =?us-ascii?Q?qfembwLAegDEYUkoV1/ftr0N1k6o+kDE6o6Rc9XqlIH/iuRfSpxt6jSKvTFs?=
- =?us-ascii?Q?EFanyeY8gvKvu4BC0/RAyTJuekWxwM+gZAOgQuuzRgG4VDfStYBmtPTh6JTf?=
- =?us-ascii?Q?qlksRSC/FaSC+flWbg3p7lBppr+TjI2wx5bOmoz9h94aomz2j/qUT1uOCpNq?=
- =?us-ascii?Q?GF6Bkg25ad1ybB2yD1G1mKbjvnHQqB76gdencc5YrnAwgphd7L/geZ1o2lbU?=
- =?us-ascii?Q?mgGETU8AUC32YPRiEVwNiXnpyYPKktcEaDZ7MqorRVjZoDhmCrDilGH/DgjA?=
- =?us-ascii?Q?UcwGSkpXeY+7NSFRCmKXYhkYHyT+Oih5ROFpea9N65loCcb5aC/uJMVXMDs9?=
- =?us-ascii?Q?Chx+G7hBFEtBaMNgS8vntkZ5Au4cMB8Wm4QgL4iq/UYBUfURaaHp6XIvRnjj?=
- =?us-ascii?Q?MM3yMagrH6PyABvCTWOk7WohO0DEeM2OkKfde5/a4vceIVtTn6FMWRcfu0BW?=
- =?us-ascii?Q?yLAb0rMH8w1IOv+CspYVCObUHaejukuzE76QaL5VpTqTD/LzJDzIB2sxcLue?=
- =?us-ascii?Q?7XNsQ+wI7e+Pq/EUVVRRL6ln7rXTJ/ki6LdDcQnURgz5/oBLJLODpUk9auEq?=
- =?us-ascii?Q?zNpoSeT4vX1c9hMBxo4ZID2mEvTueN3RUe6gc4F/vfMWcdJZ055oS4k+VslH?=
- =?us-ascii?Q?YxHaWBEPlnYuYTcfXKxCoxHUBTxFzCDMKdg0Gs4+0x4nA9eeg+85Z0wzL2iN?=
- =?us-ascii?Q?ygog5RvGZWsCWWuDDL3hUSsskzrNxK6lLNUw36fZ9St+pSvgLx6ApFsaj73O?=
- =?us-ascii?Q?2QXEM0Tq2cEGkSOIxIsSWc8JoZY4+8Ub7RFK8Y+R?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ff605495-1bbd-4f4d-20bb-08dba8671a59
-X-MS-Exchange-CrossTenant-AuthSource: SJ2PR12MB8690.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Aug 2023 08:08:18.2000
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: G/sdNos7/i5IsKvFsyLKED7NHCxl4Cq5N9DAae9mGnnGE4zdEp9+nO3TO2U80Umwp3EVq6XsJaAni6S40xhFiQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4920
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Tue, 29 Aug 2023 14:31:28 +0530
+Message-ID: <CA+G9fYvFG4AuXiUQMFBaB8G+a2+-xxbikYkT7Rnpwj5s5KoVaQ@mail.gmail.com>
+Subject: selftests: net: pmtu.sh: Unable to handle kernel paging request at
+ virtual address
+To:     Netdev <netdev@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, lkft-triage@lists.linaro.org,
+        open list <linux-kernel@vger.kernel.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Stefano Brivio <sbrivio@redhat.com>,
+        Shuah Khan <shuah@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Aug 29, 2023 at 02:43:39PM +0800, Meng, Li (Jassmine) wrote:
-> Introduce AMD Pstate Preferred Core.
-> 
-> check preferred core state:
-> $ cat /sys/devices/system/cpu/amd-pstate/prefcore
-> 
-> Signed-off-by: Meng Li <li.meng@amd.com>
-> ---
->  Documentation/admin-guide/pm/amd-pstate.rst | 54 +++++++++++++++++++++
->  1 file changed, 54 insertions(+)
-> 
-> diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
-> index 1cf40f69278c..400264d52007 100644
-> --- a/Documentation/admin-guide/pm/amd-pstate.rst
-> +++ b/Documentation/admin-guide/pm/amd-pstate.rst
-> @@ -353,6 +353,48 @@ is activated.  In this mode, driver requests minimum and maximum performance
->  level and the platform autonomously selects a performance level in this range
->  and appropriate to the current workload.
->  
-> +AMD Pstate Preferred Core
-> +=================================
-> +
-> +The core frequency is subjected to the process variation in semiconductors.
-> +Not all cores are able to reach the maximum frequency respecting the
-> +infrastructure limits. Consequently, AMD has redefined the concept of
-> +maximum frequency of a part. This means that a fraction of cores can reach
-> +maximum frequency. To find the best process scheduling policy for a given
-> +scenario, OS needs to know the core ordering informed by the platform through
-> +highest performance capability register of the CPPC interface.
-> +
-> +``AMD Pstate Preferred Core`` enables the scheduler to prefer scheduling on
-> +cores that can achieve a higher frequency with lower voltage. The preferred
-> +core rankings can dynamically change based on the workload, platform conditions,
-> +thermals and ageing.
-> +
-> +The priority metric will be initialized by the AMD Pstate driver. The AMD Pstate
+The selftests: net: pmtu.sh running on Linux next got this kernel panic on
+qemu-arm64.
 
-Please align with ``amd-pstate`` in the whole documentation.
 
-> +driver will also determine whether or not ``AMD Pstate Preferred Core`` is
-> +supported by the platform.
-> +
-> +AMD Pstate driver will provide an initial core ordering when the system boots.
+logs:
+====
+[    0.000000] Linux version 6.5.0 (tuxmake@tuxmake) (Debian clang
+version 18.0.0 (++20230822112105+841c4dc7e51e-1~exp1~20230822112223.851),
+Debian LLD 18.0.0) #1 SMP PREEMPT @1693176139
 
-The same here.
+...
+# selftests: net: pmtu.sh
+# TEST: ipv4: PMTU exceptions                                         [ OK ]
+# TEST: ipv4: PMTU exceptions - nexthop objects                       [ OK ]
+# TEST: ipv6: PMTU exceptions                                         [ OK ]
+# TEST: ipv6: PMTU exceptions - nexthop objects                       [ OK ]
 
-> +The platform uses the CPPC interfaces to communicate the core ranking to the
-> +operating system and scheduler to make sure that OS is choosing the cores
-> +with highest performance firstly for scheduling the process. When AMD Pstate
-> +driver receives a message with the highest performance change, it will
-> +update the core ranking and set the cpu's priority.
-> +
-> +AMD Preferred Core Switch
-> +=================================
-> +Kernel Parameters
-> +-----------------
-> +
-> +``AMD Pstate Preferred Core`` has two states: enable and disable.
-> +Enable/disable states can be chosen by different kernel parameters.
-> +Default enable ``AMD Pstate Preferred Core``.
-> +
-> +``amd_prefcore=disable``
-> +
-> +for systems that support ``AMD Pstate Preferred Core``, the core rankings will
-> +always be advertised by the platform. But OS can choose to ignore that via the
-> +kernel parameter ``amd_prefcore=disable``.
+...
 
-As the comment in previos patch, we would better to let developers know how
-to detect this function in the hardware.
+# TEST: vti4: PMTU exceptions, routed (ESP-in-UDP)                    [FAIL]
+#   PMTU exception wasn't created after exceeding PMTU (IP payload length 1438)
+# ./pmtu.sh: 938: kill: No such process
+#
+# ./pmtu.sh: 938: kill: No such process
+#
+<47>[  366.411270] systemd-journald[84]: Sent WATCHDOG=1 notification.
+# TEST: vti4: default MTU assignment                                  [ OK ]
+# TEST: vti6: default MTU assignment                                  [ OK ]
+# TEST: vti4: MTU setting on link creation                            [ OK ]
+# TEST: vti6: MTU setting on link creation                            [ OK ]
+# TEST: vti6: MTU changes on link changes                             [ OK ]
+# TEST: ipv4: cleanup of cached exceptions                            [ OK ]
+# TEST: ipv4: cleanup of cached exceptions - nexthop objects          [ OK ]
+# TEST: ipv6: cleanup of cached exceptions                            [ OK ]
+# TEST: ipv6: cleanup of cached exceptions - nexthop objects          [ OK ]
+<1>[  398.987591] Unable to handle kernel paging request at virtual
+address ffff5dbb8189f000
+<1>[  398.988469] Mem abort info:
+<1>[  398.988712]   ESR = 0x0000000097b58004
+<1>[  398.989264]   EC = 0x25: DABT (current EL), IL = 32 bits
+<1>[  398.989893]   SET = 0, FnV = 0
+<1>[  398.990312]   EA = 0, S1PTW = 0
+<1>[  398.990768]   FSC = 0x04: level 0 translation fault
+<1>[  398.992330] Data abort info:
+<1>[  398.992591]   Access size = 4 byte(s)
+<1>[  398.992811]   SSE = 1, SRT = 21
+<1>[  398.993008]   SF = 1, AR = 0
+<1>[  398.993243]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
+<1>[  398.993601]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
+<1>[  398.994094] swapper pgtable: 4k pages, 48-bit VAs, pgdp=0000000041d49000
+<1>[  398.994603] [ffff5dbb8189f000] pgd=0000000000000000, p4d=0000000000000000
+<0>[  398.995464] Internal error: Oops: 0000000097b58004 [#1] PREEMPT SMP
+<4>[  398.996177] Modules linked in: fou6 sit fou bridge stp llc vxlan
+ip6_udp_tunnel udp_tunnel act_csum libcrc32c act_pedit cls_flower
+sch_prio veth vrf macvtap macvlan tap crct10dif_ce sm3_ce sm3 sha3_ce
+sha512_ce sha512_arm64 fuse drm dm_mod ip_tables x_tables [last
+unloaded: test_blackhole_dev]
+<4>[  398.999384] CPU: 1 PID: 132 Comm: kworker/u4:3 Not tainted 6.5.0 #1
+<4>[  399.000045] Hardware name: linux,dummy-virt (DT)
+<4>[  399.001079] Workqueue: netns cleanup_net
+<4>[  399.002441] pstate: 824000c9 (Nzcv daIF +PAN -UAO +TCO -DIT
+-SSBS BTYPE=--)
+<4>[  399.003881] pc : percpu_counter_add_batch+0x28/0xd0
+<4>[  399.004637] lr : dst_destroy+0x44/0x1e4
+<4>[  399.004904] sp : ffff80008000be70
+<4>[  399.005864] x29: ffff80008000be70 x28: ffffa2457df6ea40 x27:
+ffffa2457df24008
+<4>[  399.006586] x26: ffffa2457dffa000 x25: 000000000000000a x24:
+0000000000000002
+<4>[  399.007360] x23: 0000000000000000 x22: 000000000000000a x21:
+ffff0000c0e90ec0
+<4>[  399.008276] x20: 0000000000000000 x19: ffff0000c4f83440 x18:
+0000000000000000
+<4>[  399.009327] x17: ffff5dbb8189f000 x16: ffff800080008000 x15:
+0000000000000010
+<4>[  399.009653] x14: 0000000000000010 x13: 0000000000000004 x12:
+0000000000000701
+<4>[  399.010159] x11: 0000000000000001 x10: fffffc00030c7260 x9 :
+ffff5dbb8189f000
+<4>[  399.010742] x8 : 0000000000000000 x7 : 7f7f7f7f7f7f7f7f x6 :
+fefefefefefefeff
+<4>[  399.012056] x5 : 000000000010000e x4 : fffffc00030c7260 x3 :
+000000000010000e
+<4>[  399.013082] x2 : 0000000000000020 x1 : ffffffffffffffff x0 :
+ffff0000c4f83440
+<4>[  399.014716] Call trace:
+<4>[  399.015702]  percpu_counter_add_batch+0x28/0xd0
+<4>[  399.016399]  dst_destroy+0x44/0x1e4
+<4>[  399.016681]  dst_destroy_rcu+0x14/0x20
+<4>[  399.017009]  rcu_core+0x2d0/0x5e0
+<4>[  399.017311]  rcu_core_si+0x10/0x1c
+<4>[  399.017609]  __do_softirq+0xd4/0x23c
+<4>[  399.017991]  ____do_softirq+0x10/0x1c
+<4>[  399.018320]  call_on_irq_stack+0x24/0x4c
+<4>[  399.018723]  do_softirq_own_stack+0x1c/0x28
+<4>[  399.022639]  __irq_exit_rcu+0x6c/0xcc
+<4>[  399.023434]  irq_exit_rcu+0x10/0x1c
+<4>[  399.023962]  el1_interrupt+0x8c/0xc0
+<4>[  399.024810]  el1h_64_irq_handler+0x18/0x24
+<4>[  399.025324]  el1h_64_irq+0x64/0x68
+<4>[  399.025612]  _raw_spin_lock_bh+0x0/0x6c
+<4>[  399.026102]  cleanup_net+0x280/0x45c
+<4>[  399.026403]  process_one_work+0x1d4/0x310
+<4>[  399.027140]  worker_thread+0x248/0x470
+<4>[  399.027621]  kthread+0xfc/0x184
+<4>[  399.028068]  ret_from_fork+0x10/0x20
+<0>[  399.029333] Code: d50343df aa0003f3 f9401008 d53cd049 (b8a86935)
+<4>[  399.030578] ---[ end trace 0000000000000000 ]---
+<0>[  399.031422] Kernel panic - not syncing: Oops: Fatal exception in interrupt
+<2>[  399.032320] SMP: stopping secondary CPUs
+<0>[  399.033487] Kernel Offset: 0x2244fc200000 from 0xffff800080000000
+<0>[  399.033819] PHYS_OFFSET: 0x40000000
+<0>[  399.034096] CPU features: 0x00000000,68f167a1,ccc6773f
+<0>[  399.034779] Memory Limit: none
+<0>[  399.035768] ---[ end Kernel panic - not syncing: Oops: Fatal
+exception in interrupt ]---
 
-Thanks,
-Ray
+Links:
+ - https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.5/testrun/19373075/suite/log-parser-test/test/check-kernel-oops/log
+ - https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.5/testrun/19373075/suite/log-parser-test/tests/
+ -   https://storage.tuxsuite.com/public/linaro/lkft/builds/2UaRggcJ0lNsDMIbbFaiyz3Qwsi/
 
-> +
->  User Space Interface in ``sysfs`` - General
->  ===========================================
->  
-> @@ -385,6 +427,18 @@ control its functionality at the system level.  They are located in the
->          to the operation mode represented by that string - or to be
->          unregistered in the "disable" case.
->  
-> +``prefcore``
-> +	Preferred Core state of the driver: "enabled" or "disabled".
-> +
-> +	"enabled"
-> +		Enable the AMD Preferred Core.
-> +
-> +	"disabled"
-> +		Disable the AMD Preferred Core
-> +
-> +
-> +        This attribute is read-only to check the state of Preferred Core.
-> +
->  ``cpupower`` tool support for ``amd-pstate``
->  ===============================================
->  
-> -- 
-> 2.34.1
-> 
+Steps to reproduce:
+===================
+#
+# To install tuxrun to your home directory at ~/.local/bin:
+# pip3 install -U --user tuxrun==0.48.0
+#
+# Or install a deb/rpm depending on the running distribution
+# See https://tuxmake.org/install-deb/ or
+# https://tuxmake.org/install-rpm/
+#
+# See https://tuxrun.org/ for complete documentation.
+#
+# Please follow the additional instructions if the tests are related to FVP:
+# https://tuxrun.org/run-fvp/
+#
+
+tuxrun --runtime podman --device qemu-arm64 --boot-args rw --kernel
+https://storage.tuxsuite.com/public/linaro/lkft/builds/2UaRggcJ0lNsDMIbbFaiyz3Qwsi/Image.gz
+--modules https://storage.tuxsuite.com/public/linaro/lkft/builds/2UaRggcJ0lNsDMIbbFaiyz3Qwsi/modules.tar.xz
+--rootfs https://storage.tuxboot.com/debian/bookworm/arm64/rootfs.ext4.xz
+--parameters SHARD_INDEX=1 --parameters SKIPFILE=skipfile-lkft.yaml
+--parameters SHARD_NUMBER=5 --parameters
+KSELFTEST=https://storage.tuxsuite.com/public/linaro/lkft/builds/2UaRggcJ0lNsDMIbbFaiyz3Qwsi/kselftest.tar.xz
+--image docker.io/linaro/tuxrun-dispatcher:v0.48.0 --tests
+kselftest-net --timeouts boot=30 kselftest-net=30
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org
