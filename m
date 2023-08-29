@@ -2,98 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABB4F78BC42
-	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Aug 2023 02:49:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C778978BCA7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 29 Aug 2023 04:11:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232557AbjH2AsT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 28 Aug 2023 20:48:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43800 "EHLO
+        id S232918AbjH2CKf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 28 Aug 2023 22:10:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234663AbjH2Arx (ORCPT
+        with ESMTP id S235249AbjH2CKd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 28 Aug 2023 20:47:53 -0400
-Received: from out203-205-221-240.mail.qq.com (out203-205-221-240.mail.qq.com [203.205.221.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F3013D;
-        Mon, 28 Aug 2023 17:47:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1693270062;
-        bh=LxUutieyTDutRI1JM5YEeCPiPo1Dpb9gHQrtgvK0grI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=koIrWq6cwt0dYLGXnXiBA9XbHAWYLFoasGNfCdo7VacjfLWZdlINsJRtpZBUmMDwJ
-         +6vKi7rNlANRMz5uhtGlJQx2lskLAJJg8xXuRtAMLcn+a6f0mDpQ+OJVkj0Gt3qVzl
-         PONwmmLrJ8d5TFbFu5ThaAEVQl91VWooW0j77wQk=
-Received: from localhost.localdomain ([39.156.73.12])
-        by newxmesmtplogicsvrszc2-0.qq.com (NewEsmtp) with SMTP
-        id BE3B6E68; Tue, 29 Aug 2023 08:47:35 +0800
-X-QQ-mid: xmsmtpt1693270055tucwvy5he
-Message-ID: <tencent_F746AF27A3E588BF061F427F59F9979A2A08@qq.com>
-X-QQ-XMAILINFO: MGSlRwRrdVfIisT3TiXB4uYFg1pb70VmVj01DWlSdnyXveEPvcdfOti4Q7+mlg
-         3vm370upAN81LRC9/x3JRq4rGtFv69eq7BpBUc1EIO+ezuZzWYVks3EJByyg33EydPy8vrJgieNS
-         2Z6R9SZeFE0PPT1HDn6njhxKOuw48AlXhRpqKEmqSywXA8XjPOoqEiGgdqOlQac+iLAKxljaBvJo
-         hF2RrRCPHzbv8DGPEAg9L6I5jCgZf6ZyGsVU20EXN2wcsHoReJuJJ0XfAVXbdkLlFupuABXVqHGu
-         jd0VcB1p4gSRIpfl18m7I5bw/HVILqal4kLI7npc5mrVwGOpw/B8P3HDRnVKEAeTtM4loIKSfGfS
-         uBgjc9H16GM95fCAsPgbYiEGWRRJX5CCNm2BxAlmAjeuir0qzLhq0BRO91mwTi2D6INeC95OiU/n
-         I0kagyzaInYM/CnD8K5UIVeQyVn/taydaNjrw1THMkVfxzDO5nmYc3OWAikwAtSeGidmXCYn/6DL
-         uKIReuw1Iv9bNPKUx9Rya9fvMk/equbsebS5l0Rvy1zVcaOzkBPf45R4sxlmAzJ3mndd9M2G8UyY
-         470Ch9UnwI7OXBFRZrpc+wXu12kUXqtNazHb2D7BoL/dlwSzWtA/+o4fz8DqJZpisd7zED0yg5yx
-         54Ywr4nKB8tVu9V3SwgFS7MaKdL7P4JmPg8S3+goUu/bJom6I+PiviJxNzMxFzAfNnTooEfwiRno
-         yaUpEtGelmDznC95nZYnsHD1TQxoDgWPLI1OkU8AO7bcqSUnIMa7C6GB4zhimzed/uiL4wInWQvC
-         JqsML0mv6f6htaA3tCIEOlI+mu/ucVinF85nNJobmVUVe1e6p+q++qkzrtlW3oZIHdCNylaIC25g
-         ct0J8TTWg0ujX7S83T4uc/Yg0zFh+0qFWVe/ukPQBfVn8blD5/VHPcJm/OnTpTO/UZICgMDLr0oS
-         K3zDZM5OqIvEwHsJEbRJRndGKzShRoSxMqY3/3Kf6VHbv54j84pYcOUjkl9ev3
-X-QQ-XMRINFO: MPJ6Tf5t3I/ycC2BItcBVIA=
-From:   Rong Tao <rtoax@foxmail.com>
-To:     olsajiri@gmail.com
-Cc:     alexandre.torgue@foss.st.com, andrii@kernel.org, ast@kernel.org,
-        bpf@vger.kernel.org, chantr4@gmail.com, daniel@iogearbox.net,
-        deso@posteo.net, eddyz87@gmail.com, haoluo@google.com,
-        iii@linux.ibm.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        laoar.shao@gmail.com, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com, martin.lau@linux.dev,
-        mcoquelin.stm32@gmail.com, mykolal@fb.com, rongtao@cestc.cn,
-        rtoax@foxmail.com, sdf@google.com, shuah@kernel.org,
-        song@kernel.org, xukuohai@huawei.com, yonghong.song@linux.dev,
-        zwisler@google.com
-Subject: Re: [PATCH bpf-next v8] selftests/bpf: trace_helpers.c: optimize kallsyms cache
-Date:   Tue, 29 Aug 2023 08:47:35 +0800
-X-OQ-MSGID: <20230829004735.99516-1-rtoax@foxmail.com>
-X-Mailer: git-send-email 2.39.3
-In-Reply-To: <ZOynCqBv/JJyZ2Kj@krava>
-References: <ZOynCqBv/JJyZ2Kj@krava>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_BLOCKED,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        Mon, 28 Aug 2023 22:10:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 003D21AE;
+        Mon, 28 Aug 2023 19:10:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D113863D34;
+        Tue, 29 Aug 2023 02:10:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 42626C433C7;
+        Tue, 29 Aug 2023 02:10:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1693275027;
+        bh=7u7Fn1KRwrCyVSJc7SMMrkMvqleCtoKnRlQL2Mz/7aQ=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=Cjih29VyuLlcjGTscjGuk+DG64OEz/+c+1EK3NpFE0r+6xMZacRdUIWPT3+HJIzH8
+         902PpehEV+MZZakwPuD+SLSX0GT7R5IUhBbk8+lw4eK33T8+vhp9rI2XrFY+cRg3rc
+         yOAHymw0nDrMfTmEM1f8PJtSn+lDReuOt+VKzhEURBAU0/s7cL4XFwMH/lPXl7kpgV
+         tilbGKyFXvWVB8o7pt4F1eyVXuyIXtfaPvjUrDV9bXqVI4zoE0GA72Vol9Hqu9aEuJ
+         4wJLrRQS1RUkd2V1j8BzWm6X9ox67gKvU7w7DdaQ9KZQRcw5OmbU/zwOPwUIW7V9tj
+         fKfN4IDvD7N9g==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2211BE301F2;
+        Tue, 29 Aug 2023 02:10:27 +0000 (UTC)
+Subject: Re: [GIT PULL] Kselftest update for Linux 6.6-rc1
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <60f2cdf4-8d85-58ee-eb6c-ba15bb97d783@linuxfoundation.org>
+References: <60f2cdf4-8d85-58ee-eb6c-ba15bb97d783@linuxfoundation.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <60f2cdf4-8d85-58ee-eb6c-ba15bb97d783@linuxfoundation.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-next-6.6-rc1
+X-PR-Tracked-Commit-Id: 9b1db732866bee060b9bca9493e5ebf5e8874c48
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 5a31cc7297072a7266a910ca5266b640d27803b4
+Message-Id: <169327502711.1632.5479243668876158647.pr-tracker-bot@kernel.org>
+Date:   Tue, 29 Aug 2023 02:10:27 +0000
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>, shuah@kernel.org,
+        skhan@linuxfoundation.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> > Hi, jirka. Thanks for your reply.
-> > 
-> > > > @@ -164,13 +165,14 @@ int main(int argc, char **argv)
-> > > >  	}
-> > > >  
-> > > >  	/* initialize kernel symbol translation */
-> > > > -	if (load_kallsyms()) {
-> > > > +	ksyms = load_kallsyms();
-> > > 
-> > > if we keep the load_kallsyms/ksym_search/ksym_get_addr functions as described
-> > > in [1] the samples/bpf would stay untouched apart from the Makefile change
-> > 
-> > Maybe we should make this modification, wouldn't it be better? After all,
-> > not modifying the source code of samples/bpf is not really a reason not to
-> > make modifications to load_kallsyms(), what do you think?
-> 
-> I think we want separate selftest and samples changes and I don't see
-> other way to do that
+The pull request you sent on Mon, 28 Aug 2023 09:18:10 -0600:
 
-Thanks, jirka, I didn't notice this in the previous discussion, sorry.
-Let me try to solve this problem.
+> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-next-6.6-rc1
 
-Rong Tao
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/5a31cc7297072a7266a910ca5266b640d27803b4
 
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
