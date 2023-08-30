@@ -2,225 +2,112 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9237178DBBA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Aug 2023 20:46:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83DD878DABA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Aug 2023 20:38:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238267AbjH3Sha (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 30 Aug 2023 14:37:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57920 "EHLO
+        id S231518AbjH3ShB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 30 Aug 2023 14:37:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245654AbjH3Ps6 (ORCPT
+        with ESMTP id S245671AbjH3Pwp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 30 Aug 2023 11:48:58 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8332B19A;
-        Wed, 30 Aug 2023 08:48:55 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 7294A5C0125;
-        Wed, 30 Aug 2023 11:48:52 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Wed, 30 Aug 2023 11:48:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1693410532; x=1693496932; bh=OBnVGQWEM3kMS
-        4B7KKbSwDUGaRUbADHZE4qYXlfiygM=; b=PvLNe5kKHYWU/kPp5/cS8VLuYCn9I
-        4lNckk7tMtgEHmv4VNrGWwF88UPNyjelrIt7RkQqqlHto6gN4L8mntb0sbyqBSia
-        86Gxu5hZr2/RTRD6MpIRfKuS2vc5Ib803/E+YRRgtv87koxrbg/1fwaDM87f5LwZ
-        fowfKR72EM4xuLyc7Asu7O+tYYurB3QEkL6epRmM73azPWKMMRcNuzzT61Aj+JDq
-        Br8aqCnp2Pvk1u9LMniYDnKecBb4IfHVIHOJkV4l+qvocqwDgFi/EpST95gUeyG0
-        hUCw6NhUXB62k+XdF81EXT88acnubjpR1msWjpKWG/4AqtGRdnKNT5CGQ==
-X-ME-Sender: <xms:5GTvZCaczUmjdeSEq0nl0ximLjWr1U7ozfldVZiKrqZPkz2nnpudAg>
-    <xme:5GTvZFa801WI9x03l1A-ufF_yqbejNTdsiL_3h1XBVRzonkRW18yeoZop7EMD1jfe
-    yN0haE1F5pSnWg>
-X-ME-Received: <xmr:5GTvZM_MBPGrGMELEqs7Jdgkr7_MKzoZbntMVUU6iV1q_jBu2RQsOXHW-rDA45CY8wO5nez5mf_0o1qQwyIquIhXKBsBlw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudefkedgleeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepkfguohcu
-    ufgthhhimhhmvghluceoihguohhstghhsehiughoshgthhdrohhrgheqnecuggftrfgrth
-    htvghrnhepvddufeevkeehueegfedtvdevfefgudeifeduieefgfelkeehgeelgeejjeeg
-    gefhnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepih
-    guohhstghhsehiughoshgthhdrohhrgh
-X-ME-Proxy: <xmx:5GTvZEqaxIQAAKiuq-FIvjQDhoLF0v9aUNUpPLz5BxSjyFAAHJKzuw>
-    <xmx:5GTvZNrxz85PDRLg9sUaNoLDszxQmtGMjusVDuZzD3pCtt6FCdJTCA>
-    <xmx:5GTvZCRysmOkjJ1pC5TIDwgLB72K86VK-Ju0Jx1Jznt93zQ_Sc4fSQ>
-    <xmx:5GTvZBeHTOFhHHRduGki5e_tMbXpiDxjr4ZJN18IgrzifRAN7wSrUA>
-Feedback-ID: i494840e7:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 30 Aug 2023 11:48:51 -0400 (EDT)
-Date:   Wed, 30 Aug 2023 18:48:46 +0300
-From:   Ido Schimmel <idosch@idosch.org>
-To:     Sriram Yagnaraman <sriram.yagnaraman@est.tech>
-Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        David Ahern <dsahern@kernel.org>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Shuah Khan <shuah@kernel.org>, Petr Machata <petrm@nvidia.com>
-Subject: Re: [PATCH net v4 3/3] selftests: fib_tests: Add multipath list
- receive tests
-Message-ID: <ZO9k3kSVHpxO1owX@shredder>
-References: <20230830091341.17273-1-sriram.yagnaraman@est.tech>
- <20230830091341.17273-4-sriram.yagnaraman@est.tech>
+        Wed, 30 Aug 2023 11:52:45 -0400
+Received: from sonic310-21.consmr.mail.gq1.yahoo.com (sonic310-21.consmr.mail.gq1.yahoo.com [98.137.69.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4CDD19A
+        for <linux-kselftest@vger.kernel.org>; Wed, 30 Aug 2023 08:52:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.ca; s=s2048; t=1693410761; bh=8CTksIvAv2QdlANLJfYI5FQM3vInY3fXsMesns0e+O8=; h=Date:From:Subject:To:Cc:References:From:Subject:Reply-To; b=h4Ew7GjVk0rHjLoaxnXW2fOnrXN6Qkmyqt/ockRwGKKNNUO9Q1K4S9hl6PcKid9I8nZWpn76BICXuMRs6SD4XuSGeA42SlYesHMpdxi4XqyvQ/NvssDkQLFCtfW13v8s+M2pNU7uLcJUKoBBuoFtl8banchWttJ65Sq5VzVNRBQ0MM1fTHtMI3C7Gx1xcNDAkG60zw+2nA4FtIqzoka5FeoeBzeYDdRgh587ATX762DhZN2yojL/nzcCDdfBVrmtJCjOAb6C/ao+PuYs2wkit/ypLYXUx7VSpIg8yi9aW613+KyfOM7+kOWqwgUa/astVF1KYZlm5wxbnO2iJ2y2Ug==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1693410761; bh=0lrHScO/I7vSWMOyh4mLKLzRypQUeQIwcNAt3n0VJXy=; h=X-Sonic-MF:Date:From:Subject:To:From:Subject; b=l3bfb6XhIfnmyFq1o1ds8OmStgAEJ4ApeW8hGAYWmH5oEZyQCHJL0uyecqmynGvexWtyl3ERCv1d9BgI2JaBl0fbxUtNVqFjdA7KqgiqVqkn3nkjecoctz5bU2HlI4C8HV36FX2BhuTBEwUf2Y/lQeJna2s9cHOKL/00mETrX4mNbv4boiHFju7tB2DR3eBN0fGo0qjwf6jW9qGEH1CemZsxUz5akQY/B0LloUQ5QDuG4ra3MNtjhX67/qCEYpoqIsvtJola0bv2a355n4hKjxEI884RP7o/uNJ3GTdX7uusdF3r2Tf2nNP5e4q/NWbs66dUf24WJ3cR6TQw1sYDDA==
+X-YMail-OSG: Xa6wI1YVM1lKeIRWpDr1AtIlgVLEYFo0v9ci1dUfIkYd8YgZSbJZMd5Z6AigbfQ
+ A7O53H22YJFHIzl5OyX9bO7wl1uE28enUNkq428eq4kF_0a5XfRJPsb2pBvDlf1jzbdlQGF0Ub3l
+ eaVBJ6_a9xryUh1KFeKoovKeiZLbhFvirUREIZoWD1NnLP4LfnREKTElIGOij3e4LgB7NURH25kE
+ pxqvrvZERCA6c1lS5DfkiF3G2xDX14sVVAjSbdrAa.1SSywTTjMytOjZiDct9EyexVA627nBx1YP
+ 5fLGF0Cm_5cewxyNGjLNQrph.TTy3ehjR1QXRXHR7bDivKoMjbOxTM2Zm.GjeJbDHNRSe_uXJuoZ
+ V5ihPc.1DQGgsEuirtorvxCwkK.qahVjuXAc0xgQxwC9SPgrwvtJN2MCJfFoclv7rrBOkvoPNNmW
+ ghFMLvRqZWHuBEygbhoVa_msekk5dbf1ZLLckyxByS2WATt90MaQHNv27wpE3cipHLkBjtOtORiO
+ 7Ru0RGWzAdHuGwBghTfwEezSULxeV2h67f4vV635SwynulUf944skjMbQ5HCxzvCDVH0RxJVTJIT
+ eR.vmq_WNOSYisA3O2y7_c1ZvEkwikcqXbYpjJyXW92qrgYl4BIfJUIJy24B6MOjrgxKLsXj7iEE
+ lyzJGQPSRgUxhl4enVJ8ZefNSN2kIQ_YJoZmfYcIbVIapc0MIB4QYl2UaJwptbBrWd2FXIlzUrAN
+ IWZv1bYafbhyrUF6XYLw8G5Q6dnswNokfhs_0.3MH_HOSsdcCOt6hDIwXS3cMjCP966owrnL1.ln
+ U4GxXIaFzyygZ0yvReAYNEkKiona.yqn7qIVTvVjduu3zmo0nUvQjmsda4x6zJK71l8mQ0rgFmv2
+ d37OLFS16usypVYbqZGfcdzOFg8ac6tnP_FUNwslCURftaJgdvG7TZtKDecdfiIAqpqZPBzcfZ2y
+ aJqi3XmCBc09ax8UFuT_mWiJXRXg0TjldbNSXLZpcFkI0ufZegynyJh7hV6lNRy.Gkz6GKMuDJK6
+ tGileUy.8y8_2UdHOHsnJo3CY151SwR6j7njsF5NXQukAYUFIiMo7yEJ0LWP1NtTFd6qTowRbasX
+ WOCvX1xEz_KswN2GvOYeGIz_fEuvgEkqzl2WWTDXBPWuOXfyy1aU7eckSb8QA3UuPg2PFuOB9Zic
+ EiN3rmuD0oe13P1Pc.hzcPhlohOA5q4U2hxrJCLf7T1tjcyyA2h2oyjZtXhe3uWRkVyqCl6fT5fS
+ bpcqlbaa.jMfc2TxuQ7c4Mzecjfme25IDRMZEVyVSQDI5.X5gkRCie3ei1xNdqAiiwVV7Akbaj8A
+ .44ZRb1L5eeZ8kryjfgx65c_RO9504qVqM4m8TaSS085FSBlGN36JWf_V9aVw6tDUc.P0wfbJcA5
+ fZjZH4lpL1KsRGtZVSFusDKNFTom4rJe5bDipNC7Xn0PVTiwTQVYt2POmxeTFQgHXJEfwivJQLLb
+ xFYo1tEQMmeM2cS2R8.SjcOpyBmMiwmU3cUSGZCAZ0AyEEur1g8NL2nrNSjaANY1Ydsfd_IFTtE8
+ cKMxJXEz88VHFn6UJa4FJhV3pXRb7AtWc1kQTRwz.8AC_fQNiSzLAjP_Ds42vkuSVJpFx25dOcp4
+ k_TLHN2SorhUoiMrsopSNGLTOOkRe8G5ZyEX_0Am8ORuWDOC0MztNrxzT59q2FNXgWYs4_A7XoaG
+ axvY0hyP15l.ho0IPEkW_rgkY5u6iDrz2H3KEfp0Qjn5aUA..pABbJceqCATDailqB5.n0nxIhUc
+ jmjVRBhyo3CPqfVnOUql.eay.Uxr_8oWXUggfZvWIkrHGgUIryUyRhnObHbjpbU8zOcX70uqYkeb
+ qEgPb0nODHOyYmatt1PBwBBY2pi_9fg8x_xlnKC3yzq1vcxnNhTYSQsjpFWtsM3bKWRgFUtQzjeQ
+ ivXMrPzTMjUiQqZQuXOCyOpIXOJ600QIf.qh_hv2PvhCPLGkJSa5fq_pULf51A.V_L6AYKUgDBd.
+ DfheRPe1.AHwseXPANVWkDoianH9KV_dRS1gbFSfRQDQ6r_JPBf5hpxLGdxNWKduQrpycQbZvI_T
+ Xj5UzC_.zUwIoDu2Q1lz4r3RyPJtLyBdHwiTIlLaYDuVruJwMFlN0dJ40DON_q.vbo4t9Z6UCQu3
+ e4qa8ch3iI8SPXFyuSuvIXpTXiY1C4vS9qanUqvS8FBtxpj_uUzerP54kfcAwu9lbWhAuS1IiTfU
+ LwDYqbtDGgtBayFBSE.1ptvrrqSEw78uvqkgvdE2MSDSu9oUIWX16Zg--
+X-Sonic-MF: <alex_y_xu@yahoo.ca>
+X-Sonic-ID: c1ca1027-4a5d-4fb6-8760-830c245382b5
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.gq1.yahoo.com with HTTP; Wed, 30 Aug 2023 15:52:41 +0000
+Received: by hermes--production-bf1-865889d799-xc84r (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 0bd111ed5816a0df5a4f025ef033cea4;
+          Wed, 30 Aug 2023 15:52:37 +0000 (UTC)
+Date:   Wed, 30 Aug 2023 11:52:33 -0400
+From:   "Alex Xu (Hello71)" <alex_y_xu@yahoo.ca>
+Subject: Don't fill the kernel log with memfd_create messages
+To:     Christian Brauner <brauner@kernel.org>,
+        Aleksa Sarai <cyphar@cyphar.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Jeff Xu <jeffxu@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Daniel Verkamp <dverkamp@chromium.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        stable@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230830091341.17273-4-sriram.yagnaraman@est.tech>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Message-Id: <1693408388.rwssx8r1h9.none@localhost>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+References: <1693408388.rwssx8r1h9.none.ref@localhost>
+X-Mailer: WebService/1.1.21763 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Aug 30, 2023 at 11:13:41AM +0200, Sriram Yagnaraman wrote:
-> +link_stats_get()
-> +{
-> +	local ns=$1; shift
-> +        local dev=$1; shift
-> +        local dir=$1; shift
-> +        local stat=$1; shift
+Hi all,
 
-Indentation is off...
+Recently "memfd: improve userspace warnings for missing exec-related=20
+flags" was merged. On my system, this is a regression, not an=20
+improvement, because the entire 256k kernel log buffer (default on x86)=20
+is filled with these warnings and "__do_sys_memfd_create: 122 callbacks=20
+suppressed". I haven't investigated too closely, but the most likely=20
+cause is Wayland libraries.
 
-> +
-> +        ip -n $ns -j -s link show dev $dev \
-> +                | jq '.[]["stats64"]["'$dir'"]["'$stat'"]'
-> +}
-> +
-> +list_rcv_eval()
-> +{
-> +	local name=$1; shift
-> +	local file=$1; shift
-> +	local expected=$1; shift
-> +	local exp=$1; shift
+This is too serious of a consequence for using an old API, especially=20
+considering how recently the flags were added. The vast majority of=20
+software has not had time to add the flags: glibc does not define the=20
+macros until 2.38 which was released less than one month ago, man-pages=20
+does not document the flags, and according to Debian Code Search, only=20
+systemd, stress-ng, and strace actually pass either of these flags.
 
-Nit: You can drop the first and last arguments since they don't change
-between both invocations.
+Furthermore, since old kernels reject unknown flags, it's not just a=20
+matter of defining and passing the flag; every program needs to=20
+add logic to handle EINVAL and try again.
 
-> +
-> +
+Some other way needs to be found to encourage userspace to add the=20
+flags; otherwise, this message will be patched out because the kernel=20
+log becomes unusable after running unupdated programs, which will still=20
+exist even after upstreams are fixed. In particular, AppImages,=20
+flatpaks, snaps, and similar app bundles contain vendored Wayland=20
+libraries which can be difficult or impossible to update.
 
-Unnecessary blank line
-
-
-> +	local count=$(tail -n 1 $file | jq '.["counter-value"] | tonumber | floor')
-> +	local ratio=$(echo "scale=2; $count / $expected" | bc -l)
-> +	local res=$(echo "$ratio $exp" | bc)
-> +	[[ $res -eq 1 ]]
-> +	log_test $? 0 "$name route hit ratio ($ratio)"
-> +}
-> +
-> +ipv4_mpath_list_test()
-> +{
-> +	echo
-> +	echo "IPv4 multipath list receive tests"
-> +
-> +	mpath_dep_check || return 1
-> +
-> +	route_setup
-> +
-> +	set -e
-> +	run_cmd "ip netns exec ns1 ethtool -K veth1 tcp-segmentation-offload off"
-> +
-> +	run_cmd "ip netns exec ns2 bash -c \"echo 20000 > /sys/class/net/veth2/gro_flush_timeout\""
-> +	run_cmd "ip netns exec ns2 bash -c \"echo 1 > /sys/class/net/veth2/napi_defer_hard_irqs\""
-> +	run_cmd "ip netns exec ns2 ethtool -K veth2 generic-receive-offload on"
-> +	run_cmd "ip -n ns2 link add name nh1 up type dummy"
-> +	run_cmd "ip -n ns2 link add name nh2 up type dummy"
-> +	run_cmd "ip -n ns2 address add 172.16.201.1/24 dev nh1"
-> +	run_cmd "ip -n ns2 address add 172.16.202.1/24 dev nh2"
-> +	run_cmd "ip -n ns2 neigh add 172.16.201.2 lladdr 00:11:22:33:44:55 nud perm dev nh1"
-> +	run_cmd "ip -n ns2 neigh add 172.16.202.2 lladdr 00:aa:bb:cc:dd:ee nud perm dev nh2"
-> +	run_cmd "ip -n ns2 route add 203.0.113.0/24
-> +		nexthop via 172.16.201.2 nexthop via 172.16.202.2"
-> +	run_cmd "ip netns exec ns2 sysctl -qw net.ipv4.fib_multipath_hash_policy=1"
-> +	set +e
-> +
-> +	local dmac=$(ip -n ns2 -j link show dev veth2 | jq -r '.[]["address"]')
-> +	local tmp_file=$(mktemp)
-> +	local cmd="ip netns exec ns1 mausezahn veth1 -a own -b $dmac
-> +		-A 172.16.101.1 -B 203.0.113.1 -t udp 'sp=12345,dp=0-65535' -q"
-> +
-> +	# Packets forwarded in a list using a multipath route must not reuse a
-> +	# cached result so that a flow always hits the same nexthop. In other
-> +	# words, the FIB lookup tracepoint needs to be triggered for every
-> +	# packet.
-> +	local t0_rx_pkts=$(link_stats_get ns2 veth2 rx packets)
-> +	run_cmd "perf stat -e fib:fib_table_lookup --filter 'err == 0' -j -o $tmp_file -- $cmd"
-> +	local t1_rx_pkts=$(link_stats_get ns2 veth2 rx packets)
-> +	local diff=$(echo $t1_rx_pkts - $t0_rx_pkts | bc -l)
-> +	list_rcv_eval "Multipath" $tmp_file $diff ">= 0.95"
-> +
-> +	rm $tmp_file
-> +	route_cleanup
-> +}
-> +
-> +ipv6_mpath_list_test()
-> +{
-> +	echo
-> +	echo "IPv6 multipath list receive tests"
-> +
-> +	mpath_dep_check || return 1
-> +
-> +	route_setup
-> +
-> +	set -e
-> +	run_cmd "ip netns exec ns1 ethtool -K veth1 tcp-segmentation-offload off"
-> +
-> +	run_cmd "ip netns exec ns2 bash -c \"echo 20000 > /sys/class/net/veth2/gro_flush_timeout\""
-> +	run_cmd "ip netns exec ns2 bash -c \"echo 1 > /sys/class/net/veth2/napi_defer_hard_irqs\""
-> +	run_cmd "ip netns exec ns2 ethtool -K veth2 generic-receive-offload on"
-> +	run_cmd "ip -n ns2 link add name nh1 up type dummy"
-> +	run_cmd "ip -n ns2 link add name nh2 up type dummy"
-> +	run_cmd "ip -n ns2 -6 address add 2001:db8:201::1/64 dev nh1"
-> +	run_cmd "ip -n ns2 -6 address add 2001:db8:202::1/64 dev nh2"
-> +	run_cmd "ip -n ns2 -6 neigh add 2001:db8:201::2 lladdr 00:11:22:33:44:55 nud perm dev nh1"
-> +	run_cmd "ip -n ns2 -6 neigh add 2001:db8:202::2 lladdr 00:aa:bb:cc:dd:ee nud perm dev nh2"
-> +	run_cmd "ip -n ns2 -6 route add 2001:db8:301::/64
-> +		nexthop via 2001:db8:201::2 nexthop via 2001:db8:202::2"
-> +	run_cmd "ip netns exec ns2 sysctl -qw net.ipv6.fib_multipath_hash_policy=1"
-> +	set +e
-> +
-> +	local dmac=$(ip -n ns2 -j link show dev veth2 | jq -r '.[]["address"]')
-> +	local tmp_file=$(mktemp)
-> +	local cmd="ip netns exec ns1 mausezahn -6 veth1 -a own -b $dmac
-> +		-A 2001:db8:101::1 -B 2001:db8:301::1 -t udp 'sp=12345,dp=0-65535' -q"
-> +
-> +	# Packets forwarded in a list using a multipath route must not reuse a
-> +	# cached result so that a flow always hits the same nexthop. In other
-> +	# words, the FIB lookup tracepoint needs to be triggered for every
-> +	# packet.
-> +	local t0_rx_pkts=$(link_stats_get ns2 veth2 rx packets)
-> +	run_cmd "perf stat -e fib6:fib6_table_lookup --filter 'err == 0' -j -o $tmp_file -- $cmd"
-> +	local t1_rx_pkts=$(link_stats_get ns2 veth2 rx packets)
-> +	local diff=$(echo $t1_rx_pkts - $t0_rx_pkts | bc -l)
-> +	list_rcv_eval "Multipath" $tmp_file $diff ">= 0.95"
-> +
-> +	rm $tmp_file
-> +	route_cleanup
-> +}
-> +
->  ################################################################################
->  # usage
->  
-> @@ -2433,6 +2587,8 @@ do
->  	ipv6_mangle)			ipv6_mangle_test;;
->  	ipv4_bcast_neigh)		ipv4_bcast_neigh_test;;
->  	fib6_gc_test|ipv6_gc)		fib6_gc_test;;
-> +	ipv4_mpath_list)		ipv4_mpath_list_test;;
-> +	ipv6_mpath_list)		ipv6_mpath_list_test;;
->  
->  	help) echo "Test names: $TESTS"; exit 0;;
->  	esac
-> -- 
-> 2.34.1
-> 
-> 
+Thanks,
+Alex.
