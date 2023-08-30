@@ -2,105 +2,90 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DA8478DAC8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Aug 2023 20:38:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF31178DACC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 30 Aug 2023 20:38:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237922AbjH3ShI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 30 Aug 2023 14:37:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38388 "EHLO
+        id S237962AbjH3ShL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 30 Aug 2023 14:37:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242212AbjH3H2B (ORCPT
+        with ESMTP id S242298AbjH3Hza (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 30 Aug 2023 03:28:01 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 948751BB;
-        Wed, 30 Aug 2023 00:27:58 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 37U7Rjoa025275;
-        Wed, 30 Aug 2023 09:27:45 +0200
-Date:   Wed, 30 Aug 2023 09:27:45 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc:     Shuah Khan <shuah@kernel.org>, Zhangjin Wu <falcon@tinylab.org>,
-        Yuan Tan <tanyuan@tinylab.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 1/2] tools/nolibc: add stdarg.h header
-Message-ID: <ZO7vcTwa4GjWkPDe@1wt.eu>
-References: <20230827-nolibc-nostdinc-v1-0-995d1811f1f3@weissschuh.net>
- <20230827-nolibc-nostdinc-v1-1-995d1811f1f3@weissschuh.net>
+        Wed, 30 Aug 2023 03:55:30 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1807C193;
+        Wed, 30 Aug 2023 00:55:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693382127; x=1724918127;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=gy42heFFBmku26L7zRC32gHV7wb/DscL5QqcL5RLE0Y=;
+  b=GeEnD3P2iiZJqRJjlE/XcTOfB7AqeZc/F7/rbQC4Rsyaj6A0byGzgQej
+   vrs7ubAfDzPSfiAgLF11P8Xp3Qx3g61ARLYNG3dcVpE1Zh9G+7C0AJrKB
+   LwmQ3B1VWylHdyLBGntTCEkxZVJtO9+dDjpLZSE+Bt9t7vby0KfCIzcBd
+   rhNhmVOd8H6EkyPXsRzB9c2iqGCo9IlS8mq3IWbdwcu6Bc3lJaL5QLG/i
+   B4WXOZ7lfybd1bVldYCfw+TjKC/hZoHbtIaqbUUCIwZIirfnM1UnygDmi
+   RKSegDSrlynParS9gc5aPBCFE4Wehef+FdH0NfX7KOsyHtJyKw3BQK7zA
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10817"; a="375533341"
+X-IronPort-AV: E=Sophos;i="6.02,212,1688454000"; 
+   d="scan'208";a="375533341"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2023 00:55:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10817"; a="829138446"
+X-IronPort-AV: E=Sophos;i="6.02,212,1688454000"; 
+   d="scan'208";a="829138446"
+Received: from jkrzyszt-mobl2.ger.corp.intel.com (HELO jkrzyszt-mobl2.intranet) ([10.213.24.84])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Aug 2023 00:55:20 -0700
+From:   Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
+To:     Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        drm-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        intel-xe@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH] kunit: Fix test log size limit too low for some tests
+Date:   Wed, 30 Aug 2023 09:54:20 +0200
+Message-ID: <20230830075419.26484-2-janusz.krzysztofik@linux.intel.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230827-nolibc-nostdinc-v1-1-995d1811f1f3@weissschuh.net>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Aug 27, 2023 at 10:00:15AM +0200, Thomas Weiﬂschuh wrote:
-> This allows nolic to work with `-nostdinc` avoiding any reliance on
-> system headers.
-> 
-> The implementation has been lifted from musl libc 1.2.4.
-> There is already an implementation of stdarg.h in include/linux/stdarg.h
-> but that is GPL licensed and therefore not suitable for nolibc.
-> 
-> The used compiler builtins have been validated to be at least available
-> since GCC 4.1.2 and clang 3.0.0.
-> 
-> Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
-> ---
->  tools/include/nolibc/Makefile |  1 +
->  tools/include/nolibc/stdarg.h | 16 ++++++++++++++++
->  2 files changed, 17 insertions(+)
-> 
-> diff --git a/tools/include/nolibc/Makefile b/tools/include/nolibc/Makefile
-> index 909b6eb500fe..e69c26abe1ea 100644
-> --- a/tools/include/nolibc/Makefile
-> +++ b/tools/include/nolibc/Makefile
-> @@ -34,6 +34,7 @@ all_files := \
->  		signal.h \
->  		stackprotector.h \
->  		std.h \
-> +		stdarg.h \
->  		stdint.h \
->  		stdlib.h \
->  		string.h \
-> diff --git a/tools/include/nolibc/stdarg.h b/tools/include/nolibc/stdarg.h
-> new file mode 100644
-> index 000000000000..c628b5783da6
-> --- /dev/null
-> +++ b/tools/include/nolibc/stdarg.h
-> @@ -0,0 +1,16 @@
-> +/* SPDX-License-Identifier: LGPL-2.1 OR MIT */
-> +/*
-> + * Variadic argument support for NOLIBC
-> + * Copyright (C) 2005-2020 Rich Felker, et al.
-> + */
-> +
-> +#ifndef _NOLIBC_STDARG_H
-> +#define _NOLIBC_STDARG_H
-> +
-> +typedef __builtin_va_list va_list;
-> +#define va_start(v, l)   __builtin_va_start(v, l)
-> +#define va_end(v)        __builtin_va_end(v)
-> +#define va_arg(v, l)     __builtin_va_arg(v, l)
-> +#define va_copy(d, s)    __builtin_va_copy(d, s)
-> +
-> +#endif /* _NOLIBC_STDARG_H */
+Now we have memory space available to a kunit test case log exposed via
+debugfs limited to 2048 bytes, while some parametrized test cases, e.g.,
+drm_framebuffer.drm_test_framebuffer_create, need more.  For this reason,
+debugfs results from affected test cases get truncated silently, and
+external tools that rely on parsing of debugfs results can fail.
 
-Now with your other explanation I agree, however we need to change:
+Increase kunit test case log size limit to 4096 bytes.
 
-  #include <stdarg.h>
+Signed-off-by: Janusz Krzysztofik <janusz.krzysztofik@linux.intel.com>
+---
+ include/kunit/test.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-to
+diff --git a/include/kunit/test.h b/include/kunit/test.h
+index d33114097d0d0..d20eb1884edfa 100644
+--- a/include/kunit/test.h
++++ b/include/kunit/test.h
+@@ -34,7 +34,7 @@ DECLARE_STATIC_KEY_FALSE(kunit_running);
+ struct kunit;
+ 
+ /* Size of log associated with test. */
+-#define KUNIT_LOG_SIZE 2048
++#define KUNIT_LOG_SIZE 4096
+ 
+ /* Maximum size of parameter description string. */
+ #define KUNIT_PARAM_DESC_SIZE 128
+-- 
+2.41.0
 
-  #include "stdarg.h"
-
-in stdio.h and sys.h so that we always use ours from now on.
-
-Willy
