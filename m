@@ -2,315 +2,222 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9584F78E789
-	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Aug 2023 10:04:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A3E678E791
+	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Aug 2023 10:07:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238378AbjHaIEE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 31 Aug 2023 04:04:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55194 "EHLO
+        id S229747AbjHaIHd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 31 Aug 2023 04:07:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241403AbjHaIEC (ORCPT
+        with ESMTP id S229706AbjHaIHd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 31 Aug 2023 04:04:02 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2133.outbound.protection.outlook.com [40.107.22.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C261DCE7;
-        Thu, 31 Aug 2023 01:03:57 -0700 (PDT)
+        Thu, 31 Aug 2023 04:07:33 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93F81A4;
+        Thu, 31 Aug 2023 01:07:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693469250; x=1725005250;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=KuO7hc69zZ7ajFjKx5vfL5zyGtHNaBKsIh/chjSoTTM=;
+  b=EQRVUcnJH/AyZMjLi2a3KjIWLGACf9BuOB/shkNZwf6KCjNj+Hwrg3Vu
+   EexXZJNG/3YBNqkxDyE60MJlR4vZXDYKmoWBD09x++XZYyRl9VaDHbGUt
+   RJv+orRkjThmAGeP4Zh0N5/Aqzq7mlDoMa8By4v51fuR6xPqMyjrWU1+b
+   APBzVCc9chKQKdey6PEpUXy1xZKVp7g3uHu/FAVo9DV7KvkLNa6OOSDvS
+   myFCnB474ZV87ke5TfFY5QQPyEvM8J2uoTiGS25aHOVZ7H842vMWRl0Bl
+   PZDyEzJnqEd05zso5amsSp3gvy0crHJhJlmkt1Wp9T96aHbQaH0nVqxz4
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="375801658"
+X-IronPort-AV: E=Sophos;i="6.02,216,1688454000"; 
+   d="scan'208";a="375801658"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Aug 2023 01:07:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10818"; a="854056443"
+X-IronPort-AV: E=Sophos;i="6.02,216,1688454000"; 
+   d="scan'208";a="854056443"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga002.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 31 Aug 2023 01:07:27 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27; Thu, 31 Aug 2023 01:07:24 -0700
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.27 via Frontend Transport; Thu, 31 Aug 2023 01:07:24 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.101)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.27; Thu, 31 Aug 2023 01:07:24 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ONB4iq87OqRt9iQ1sMjdVRuxWRzN3aMq74J4kiRrR9qri71TFOSXBdavk4TdxBbjFeKuviW3h4vjtYu2nM5sMaR/BAEYfy/g5qngvCr+b6RgNKZs68V+wPOY04UEHyItrXFZnPdJyV9LpdSDjl9bDlpPvFafjHvSUft4vJphhONV8u39xAItkc4XF3azpB/C9AJ0aMifParbxjACtj0k8psU97Tg456z9WqhOHj3cgzE9PDamhZgMK9XPh22iArwBsghacfJ1m6FtniOs9ovVAC5wgqiQkxFHBSUGVeozOM9l4o6w3zYeNs1tC1guNutp2+femYqS0yoQJtLwadmPg==
+ b=Qfmfcejj52EcVE8EuCHZRb9uiq0Uacc8MuyOQAZHE+TdY41DiH1Md5LJjBEB9+bzwYrQ06F15Fj20lwyrUYT3jOQFjG4vBWiw4EpOSKCH9IdKB1BA5uYQB0Ug/O6wV1C55LLuUzRdW1njTGO5DZWiOx8GHqyWkeGqD2qEDRN3ukIcpUl7kJkZW8D/07tx3WE7FyVJXuwhMslYaRmEUIpQ2xpiN4LngFaEo9XV/FcZgjTSaaxgGI+n7ui493rTW+1ZYlLNoo3BsBXOklBqtAGNSibIkJG5O5RcbGGfMqTBb9d2PqGH6SIKWLq+xD6BfKymNzRKJ72UCXygcMs30WwtQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8v+GHjlDzHL/t070+Y37pKXuwkSJB9ccc/xn7nJFlqQ=;
- b=FpT8FpRps5Wkt+hQWbzkGVDYoUolMR2GttsGVR9CMyiL2+9KKlJ4UGv2KqoOKUEUXl0fbsUUrKfQqew51/L0vhGYTFym/+Gh0WwJICdoBsD7N90Teund2SiEo1dftxWnev5xVwVmcBkNzbrvQ4JwNS/F5TqlXG81DUUxP9SIniwjn8aVimXKRl0U7NR3dL3PmxMTjhdfs4J5XjiJYYeSSxGx6kYzpHcUGhse1YIwK+cJMZgLxFH55Oc2zM+b8hzTAv7NkckSwOcr2VP3wgyOzsGLoCBZWZ8LU1BroAv4/NsR+UXAH6slG4tDO7eWWj+3D85FAf7LEnnhT2rU3FQu7w==
+ bh=gAnZHMBnv5BXVz1yuIIEM7dbzq5V0z1ulpbsTFcp5YM=;
+ b=MUeOhjSBbP6UJYt0aVVP7kmwt8rU7cG11vy0qgcPlQWzQd/hzr0WdeySulIhuZPpq1G1TVMpK42ptz3Wnia1QiIHxGwNZ/Q+sYAaq3uZonlRqycWhYyus2LGsG8dK6mG274rTgYz1kqFnII8jBHpDD37z7atP1noAFqlNsspVdKWkdC5xqQCpnix2SZS2/lLwXiTZqfSs3qkV2CiVMv9Nqz9I3ZoY63PF7l8X0NNobsJ3d2GYW2PLMKWQebei5gnsTC66VofQQTmmxALEGL25+1hGV9eynXeg1r9GQyw07JOcJs8nC15iA+ckCqhnjxOlLoQHMqnELt/KdW1/GfufA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=est.tech; dmarc=pass action=none header.from=est.tech;
- dkim=pass header.d=est.tech; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=estab.onmicrosoft.com;
- s=selector2-estab-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8v+GHjlDzHL/t070+Y37pKXuwkSJB9ccc/xn7nJFlqQ=;
- b=gnQtefOmBA7srmTU05vf/8OrbvDR8t/Qn29uj+ObNS0Au485mzraNouwSeBur7FtsmyUAr/imtaeKKf4hxPIKAArFnJt3O0OYiL1ua/URUUz5ocSjTB3HuD5iVJhIPj0ze4DG0Vz1H0nRc14TVaLvKMbOE0/ppEECCuqgYBqqmI=
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=est.tech;
-Received: from DBBP189MB1433.EURP189.PROD.OUTLOOK.COM (2603:10a6:10:1e7::15)
- by DB9P189MB1929.EURP189.PROD.OUTLOOK.COM (2603:10a6:10:33a::9) with
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MN0PR11MB6231.namprd11.prod.outlook.com (2603:10b6:208:3c4::15)
+ by IA1PR11MB7176.namprd11.prod.outlook.com (2603:10b6:208:418::5) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.20; Thu, 31 Aug
- 2023 08:03:43 +0000
-Received: from DBBP189MB1433.EURP189.PROD.OUTLOOK.COM
- ([fe80::759b:94eb:c2e8:c670]) by DBBP189MB1433.EURP189.PROD.OUTLOOK.COM
- ([fe80::759b:94eb:c2e8:c670%6]) with mapi id 15.20.6745.021; Thu, 31 Aug 2023
- 08:03:43 +0000
-From:   Sriram Yagnaraman <sriram.yagnaraman@est.tech>
-Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        David Ahern <dsahern@kernel.org>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Shuah Khan <shuah@kernel.org>, Petr Machata <petrm@nvidia.com>,
-        Sriram Yagnaraman <sriram.yagnaraman@est.tech>
-Subject: [PATCH net v5 3/3] selftests: fib_tests: Add multipath list receive tests
-Date:   Thu, 31 Aug 2023 10:03:32 +0200
-Message-Id: <20230831080332.2495-4-sriram.yagnaraman@est.tech>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230831080332.2495-1-sriram.yagnaraman@est.tech>
-References: <20230831080332.2495-1-sriram.yagnaraman@est.tech>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.21; Thu, 31 Aug
+ 2023 08:06:57 +0000
+Received: from MN0PR11MB6231.namprd11.prod.outlook.com
+ ([fe80::8824:ea30:b0ab:f107]) by MN0PR11MB6231.namprd11.prod.outlook.com
+ ([fe80::8824:ea30:b0ab:f107%4]) with mapi id 15.20.6745.020; Thu, 31 Aug 2023
+ 08:06:57 +0000
+Date:   Thu, 31 Aug 2023 10:06:44 +0200
+From:   Maciej =?utf-8?Q?Wiecz=C3=B3r-Retman?= 
+        <maciej.wieczor-retman@intel.com>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <shuah@kernel.org>, <fenghua.yu@intel.com>,
+        <ilpo.jarvinen@linux.intel.com>
+Subject: Re: [PATCH v2 1/2] selftests/resctrl: Fix schemata write error check
+Message-ID: <gp6qu6zqa7h23ddqfff4mwigh7b5tzfsfkqlrpu7xz4yydk4ck@pgxge6ftz7we>
+References: <cover.1693213468.git.maciej.wieczor-retman@intel.com>
+ <6c263fdd2b09060e667d179be13ce8f989821673.1693213468.git.maciej.wieczor-retman@intel.com>
+ <57f891d8-09f9-fe5d-fa85-0669f5e8d1ce@intel.com>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: GV3P280CA0054.SWEP280.PROD.OUTLOOK.COM
- (2603:10a6:150:9::24) To DBBP189MB1433.EURP189.PROD.OUTLOOK.COM
- (2603:10a6:10:1e7::15)
+In-Reply-To: <57f891d8-09f9-fe5d-fa85-0669f5e8d1ce@intel.com>
+X-ClientProxiedBy: BE1P281CA0031.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:b10:22::15) To MN0PR11MB6231.namprd11.prod.outlook.com
+ (2603:10b6:208:3c4::15)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DBBP189MB1433:EE_|DB9P189MB1929:EE_
-X-MS-Office365-Filtering-Correlation-Id: 82a673d5-e7d0-40c2-d6d5-08dba9f8cb4e
+X-MS-TrafficTypeDiagnostic: MN0PR11MB6231:EE_|IA1PR11MB7176:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0815d73b-5f7f-4cc8-e264-08dba9f93ea3
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: HUuKI2X22EinKdKH3vzkZLnUUP9AvSvW8PRFSUeRuqFRkt6RriYzm5XHGKmN9d+bbWyyBYexBrs1Fz/Ya712OYw6vzCgAFG5HTmjiQlM57YdRUdwqvRWIkOV3xwSbmtUZ29wyh1eakQpIT0CkNhMrr9EWp3sCNVQVpv8jCb8dyvNhcCKUUhoKtg/SGrC4lsVfInXdAmEbGl7MwVTi+y3QoegHbD9p+r11ks5F6bv8r1HAh98/olgis11NGH94i5kWbMStxleTgbMclj38LTBEqsbVCcmq7HVlHOGpv6D8UrLq/J3aLJXk1SMXBvm4tS+f3oYhwfBOciqU+JAwsUeUUiMpzeGJ+/lKfRwkCRC3iNlw250SIJhOZ5NyvR+8EdfZrEHyRHBZGpNRjlnbh1yDdQb3O0LvbamTy1TrJY2NdBtoMN4usZPFp6jH7ZqdtDu4/OON6S9cLdaWt3tnsZhuDStGWrTWaF/0U9TBHlpe1koPCR2sWARmPXfx0Ex6s+EQxb97dHTxg0iQjfpphqfgtCyy6SvVpGaw0huH9r9LZicH/UvbVgJiUuLDCcXJxRu4Yb43hV1y1e2UPVcDVQW5WRqa960emLqAqnbR/JGkrulZmIXref9vvkd30eBC8rA
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBBP189MB1433.EURP189.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(346002)(136003)(39840400004)(376002)(396003)(109986022)(1800799009)(451199024)(186009)(36756003)(7416002)(83380400001)(8676002)(86362001)(44832011)(41300700001)(8936002)(4326008)(5660300002)(6666004)(1076003)(26005)(2616005)(6486002)(6506007)(6512007)(478600001)(2906002)(38100700002)(54906003)(66556008)(66476007)(70586007)(66946007)(316002)(266003)(37730700002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: qEnOUWM2zXHoqLgWU0N6SNrZT/Nh6sr/U1CqbXvRCabWqOz2mtG25YylXlwMIrx3eYOdEwRZ1WHHWJUU/JkDsjCFoh21V/YqnsraLIXkyvsMCPN7D28YbK53PhDzF0Ieho4wVU+L2bzZfQQw6qg7tStttZf8P1J2oeMhGi9p7Oba6y0tzut+cHP/EXyVkjuePHMW2UEiQ7LlM94k36aDsgCHphu9otsl8sPiP3LxE+sIG5AMDH1EtDUX58KPWZt5xdWlUUnOD5eghgQerSien9T83xBNFBat3+U1BhQhqzGXJjOKRAuFKt879oBNVTgMYqbO02Cg20lf2dZ2sbDyVDHXnG3wAA6hYOI8INThWKHOGoh38jZO0gEAoJDr09l6zhEHnmfypRNtpk6iqF00LutrQwC8OUJ79OVM3HM/jv/CedorXOAW/mFIyDw2T7V27WA8KYlLiCtsA+FBN+D5SbOKMJ9h8neJBN+4D1OfHTRdFIMOfZAjBcn38eyIjsD6bwmxzLRMvenVCJAWV3hOvm7xDZYbnzdxPIf9FEfM4KK7m5tqBy7EeuE7lMhlDKnv
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6231.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(366004)(346002)(39860400002)(396003)(376002)(136003)(186009)(1800799009)(451199024)(6486002)(6666004)(6506007)(6512007)(9686003)(53546011)(478600001)(83380400001)(66574015)(26005)(2906002)(33716001)(6636002)(66556008)(66476007)(41300700001)(66946007)(5660300002)(316002)(8936002)(6862004)(8676002)(4326008)(86362001)(82960400001)(38100700002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?cHcpPthBcDF8vrFNhL72ki/jlJoXX74HujKAvvhzVDmQT0mC6aakCtKWbaCu?=
- =?us-ascii?Q?rtcAeGxtuMkdBfApGtoq7ZQBWb2NJAl2q3J7/iXVTJlaPD8YGPsMyav3n40w?=
- =?us-ascii?Q?rdK67tVUl7Z6AZWek4o+l6w5zzgkJYo4U85H8Pr50Zfltkl6cmZRmP32BG2M?=
- =?us-ascii?Q?V9jkaeueI3tBEhXEtuV8gzQyETUYJqRtdNlnv8XiXkF/VgUSkiRCUNV4HXsD?=
- =?us-ascii?Q?xTrtc3qCxwvutF23Yf3hKxg8dI2E7S2dnVXFL4V5rdvnvsksTjMr/P4KOF1a?=
- =?us-ascii?Q?Ny1DDU07McGdJI2DGu9PKzjYcYt77W3KuGU72sNhgHGXTW+Nr1BJHH571Zqs?=
- =?us-ascii?Q?FZ39wlr0ngfc11q+YexVK7TwphymYUTxE/A2RTWa2P8yjKDTYiYuei5eFu7n?=
- =?us-ascii?Q?1CABvgte/sWxqfS22PyEWcYTiELRf7ZSr2hTCy22d2U8K6k0w86BuH2Mfkex?=
- =?us-ascii?Q?KHq3KhEAw4dVy2pd1SiE07sPabD8ze4K3FAwlCgBdXiTa50RU4FQKm4YO8QO?=
- =?us-ascii?Q?2gLZaiFLb63ccydjlzqC8bXekWiJ2TV/7FzaNBCADMKQDeGk6KCzWWmnl0YP?=
- =?us-ascii?Q?FmCysra3QRCk+ay8dDhsjwxBELnC+Xa+M9v2jJcb0kLEtJoUjHOGWn0aIrQW?=
- =?us-ascii?Q?FZIPO+RcqovSOzUTOLzkH1QSnCEaJA+da9SJ74yUHql+AlcebTGBfo1Wlc0E?=
- =?us-ascii?Q?MNcW1dYT3dV3PerfnQAaAIw3BPgjveDCatTQGE3DO09eK9iKebgRNNxQRodi?=
- =?us-ascii?Q?L5KQf6AgNOX83fPTjYOGneTggBl5q3jnChsrkI489Y1vHdwmxSv0S6Lkp1v8?=
- =?us-ascii?Q?ZE4gmggR3arqmgCjkQcgh7dv/N/ynY2NK+qJs8oajpwSAxY78Vqu61bYLQhU?=
- =?us-ascii?Q?DEttn/tEby/rG5PgIzhKo8hfvPxM26dE1FQBFZUSrWkga+uTybQNvukiLC45?=
- =?us-ascii?Q?BKJmQmyvUina1wpJCNwrRazHFCiiXGZUoKcnedzzsCvfnoPkt4g2H/HhiO5v?=
- =?us-ascii?Q?L+8Dyd+A0dGeYlp7Ka1gv67hLnB0wTYKlzU3CEqj7rtGTjewonYhpCgLE4Rq?=
- =?us-ascii?Q?7qXSEYUozljH6yzfPwPAnKgPrs1NE3btibiB3e1cUyC8Rzty1jvhX4na1JMM?=
- =?us-ascii?Q?0VuPN075aImae0qzN9cSvLDU7faTmJOSoKffccf4OrFVtT2tgyU5mqg55+yB?=
- =?us-ascii?Q?u2G3CuqBAshyDmeaP83LLLJlL5+BXBYRXdZFSayhrmRg5MsayJ+olOGDSxO0?=
- =?us-ascii?Q?nPIFborDf3qcMz89S12A9XWzTbesylUs+kLl06AtYlto81CzAX0xP2JzB0iE?=
- =?us-ascii?Q?L8e4pAB+qa+Wkceff+NIEvc+TQgN26+MbdYnLsq+0+vf8+b3TjyqyMM0LN+g?=
- =?us-ascii?Q?EX7b6t6X74kKRcsDMH9pu8e6/QrTOIW2KEHYyl7F7AcDkC+5BLIsF4gpsB/I?=
- =?us-ascii?Q?FLdjiotKfwiEeEeNqe6JH43guo1zTZ7/q2EFiKoCMr9U5TFLaqYiIcFKKH5k?=
- =?us-ascii?Q?NMs1ISPvcquoVCvrbAB9VsXyh9TuH9tnZ1cP/ZAOkYy4CgK0O82PShJ7EKHJ?=
- =?us-ascii?Q?7M+0OWyyh9vWs9fV8w2wb29IdaM9ygcmVYz95ae+IdPB/2QH0+QWH3oDie5x?=
- =?us-ascii?Q?rQ=3D=3D?=
-X-OriginatorOrg: est.tech
-X-MS-Exchange-CrossTenant-Network-Message-Id: 82a673d5-e7d0-40c2-d6d5-08dba9f8cb4e
-X-MS-Exchange-CrossTenant-AuthSource: DBBP189MB1433.EURP189.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Aug 2023 08:03:43.2429
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?4A/at5InewFoJtADUY7yFjped9qJyssaiYbw08nFxAJeNi5JLn5CNv5fZz?=
+ =?iso-8859-1?Q?fp3PCchq3QeDPd3yIovr7sBZGiXDLFTbEsTztmml7o6fnvRZb9CqXZct54?=
+ =?iso-8859-1?Q?GF8Q91ySgHgx6jW8VcYwYXnvi7t+OExowRZ1keLRJRJ2sTh3rfWfVFR8Qr?=
+ =?iso-8859-1?Q?gpuONJxP2N8K1G48PNyQokU6XX2zMxLDfcf1vw4vR8gknbpibDJ5tOKV8U?=
+ =?iso-8859-1?Q?isOMMN+3kiwBFkv22gtdU0Pogz3+PdHtUM08iwIeJ/Kt8NO6CXkDngce+s?=
+ =?iso-8859-1?Q?wOB/56RqEgW6sIpe2XaFWIYOE5DK3I+f/uvE7kqbLS/UBbpfXgRaf5fAEM?=
+ =?iso-8859-1?Q?L7Hpi6xQk5fh1GLxZLxyBpPvheJSsUOju7ccAkoqRdbIo8CYSfVAyhddw0?=
+ =?iso-8859-1?Q?39UNmQFdslcdoqzQIJNsknNuKTJod7j5vPv78pejTjdkvvs2txqRIzTIir?=
+ =?iso-8859-1?Q?/vWoEcVXRcDb//3QysazR/0K+y4sgXgzPLwdEDJ2ujaR7z/sXhvN2xSAoF?=
+ =?iso-8859-1?Q?KZ9AoRQg+EX9QpemK41GMSUYIlNSAGD7tzLb072vVv+Phy/MR+gkdBK3os?=
+ =?iso-8859-1?Q?ofiFLmG5mIUMCU9V6f1oCz44Nd5zSyzrQfjpn4p8oqSU2QOfXR1pSZ/kT6?=
+ =?iso-8859-1?Q?JpChV423/i4w02ICLKHDVIaTZmJ+wgtB00XCIS9ogS6a/Bo6NgLWTcw/64?=
+ =?iso-8859-1?Q?bNT8pwjaR+nZhefPe47rkYVKv84SvBjZZWGvJHQg25RVlubh5RXNymVdw8?=
+ =?iso-8859-1?Q?O2VRnrdvioMyKpKirhtgUpkHqITQItsT8nPza3H58YmR9KmOlI4DkTVxxe?=
+ =?iso-8859-1?Q?4dtjQtsf4M747nKhOkTeiJZ8JQh8SaJOAX0IqeDGqOBFUx5CG9RDaON7sP?=
+ =?iso-8859-1?Q?jFQAuBcJ2s9hqND/FOqICY3yWXcbCvRmSU3Q42G1zGL8nixyN6UAC5Oscq?=
+ =?iso-8859-1?Q?ALRXK5PaHDjkGkEqPE9p/Smd2mSGD+/oXZEbh4p1n26XeH6ZGeE6OSlNuv?=
+ =?iso-8859-1?Q?s4bPOME3iICxiRuhKgc3nlqEPmmZnWHh7i0rh1sj7o0cOW4BL0D8L2tSjR?=
+ =?iso-8859-1?Q?T4bGiJX8Hc0K6DWXu2r6QKqHaQlc04PfyFW+lz41eRMp4aHNVz5dJ+6d8m?=
+ =?iso-8859-1?Q?IzfEo6O2/g1Td6icSCIvcwax6+cJd9Ejsvvs6LEsa3QxlREbQSKbsIBrs3?=
+ =?iso-8859-1?Q?+4TqzaYrN7Yn2QaVNweICpiv5IcEwVzw/YvV8vbqFbZ0sQ7147ibde+4+Z?=
+ =?iso-8859-1?Q?I38tBly+iDVFyGuDxBlRCXkP9so14Sc0qeSce2EeUlZ1ZzX8hM2XDG/eob?=
+ =?iso-8859-1?Q?01yVWBb/0vpFgSNPgfoO7A6AKmep7ykZKF+MO17nK+sLYJ0HCvk22bu9vY?=
+ =?iso-8859-1?Q?QuzPu0dTatP/JD8bwJLA5Wmiyz2yoRJajeFuHHz3VlGHrJiamrdaboXq6D?=
+ =?iso-8859-1?Q?BeKBQ2bbQ6FH2vSxLeF906k1ly2gaY+yj2RDrRdzJKoNGnAL44QHzl7WfG?=
+ =?iso-8859-1?Q?PY8aaEtBVQUa13DUS3W6qWj5f4V7T4wLhYIBxzexuYSWrPmzOUWftsJAro?=
+ =?iso-8859-1?Q?I/kNSAfZJ1UY/A8fN545QKZnxxXX5mwyO0dcn3eEJcBCrqgiwOESZuNUZF?=
+ =?iso-8859-1?Q?ONBODuziXIRY1A4MxJ6VvUpQlCkVnMmAjBVZmEa6tcE/3WXETHnZbqnMex?=
+ =?iso-8859-1?Q?c430mePCRQRjKRXPfBY=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0815d73b-5f7f-4cc8-e264-08dba9f93ea3
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6231.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Aug 2023 08:06:56.8754
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: d2585e63-66b9-44b6-a76e-4f4b217d97fd
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LxsBFf7FKA9BhOqV2XzR7hd4NBq1yww0i5/CbT+pWlrOusYyXNGIgi3STNLHSEkPqh/g53+xdvNBww/P1EQIFACD5cV8Shu0+oL997uE3g4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9P189MB1929
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: Js4+Su++EZ2dGobQ0s9rM7nKtRhSh0wZeoW+4CsTZ36OZa6/wnq7FOpDztDvPnZjtOfXrB2DU1ne49hhXsg3XFI3DfVXI1k83da4quLBwdY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB7176
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The test uses perf stat to count the number of fib:fib_table_lookup
-tracepoint hits for IPv4 and the number of fib6:fib6_table_lookup for
-IPv6. The measured count is checked to be within 5% of the total number
-of packets sent via veth1.
+Hi,
+thanks for the comments!
 
-Signed-off-by: Sriram Yagnaraman <sriram.yagnaraman@est.tech>
----
- tools/testing/selftests/net/fib_tests.sh | 155 ++++++++++++++++++++++-
- 1 file changed, 154 insertions(+), 1 deletion(-)
+On 2023-08-30 at 13:49:18 -0700, Reinette Chatre wrote:
+>Hi Maciej,
+>
+>On 8/28/2023 2:56 AM, Wieczor-Retman, Maciej wrote:
+>> Writing bitmasks to the schemata can fail when the bitmask doesn't
+>> adhere to some constraints defined by what a particular CPU supports.
+>> Some example of constraints are max length or having contiguous bits.
+>> The driver should properly return errors when any rule concerning
+>> bitmask format is broken.
+>> 
+>> Resctrl FS returns error codes from fprintf() only when fclose() is
+>> called. Current error checking scheme allows invalid bitmasks to be
+>> written into schemata file and the selftest doesn't notice because the
+>> fclose() error code isn't checked.
+>> 
+>> Substitute fopen(), flose() and fprintf() with open(), close() and
+>> write() to avoid error code buffering between fprintf() and fclose().
+>> 
+>> Add newline to the end of the schema string so it satisfies rdt
+>> schemata writing requirements.
+>
+>I am not sure how to interpret the above because existing code already
+>adds a newline to the end of the schema when the buffer is written to
 
-diff --git a/tools/testing/selftests/net/fib_tests.sh b/tools/testing/selftests/net/fib_tests.sh
-index d328af4a149c..e7d2a530618a 100755
---- a/tools/testing/selftests/net/fib_tests.sh
-+++ b/tools/testing/selftests/net/fib_tests.sh
-@@ -12,7 +12,8 @@ ksft_skip=4
- TESTS="unregister down carrier nexthop suppress ipv6_notify ipv4_notify \
-        ipv6_rt ipv4_rt ipv6_addr_metric ipv4_addr_metric ipv6_route_metrics \
-        ipv4_route_metrics ipv4_route_v6_gw rp_filter ipv4_del_addr \
--       ipv6_del_addr ipv4_mangle ipv6_mangle ipv4_bcast_neigh fib6_gc_test"
-+       ipv6_del_addr ipv4_mangle ipv6_mangle ipv4_bcast_neigh fib6_gc_test \
-+       ipv4_mpath_list ipv6_mpath_list"
- 
- VERBOSE=0
- PAUSE_ON_FAIL=no
-@@ -2352,6 +2353,156 @@ ipv4_bcast_neigh_test()
- 	cleanup
- }
- 
-+mpath_dep_check()
-+{
-+	if [ ! -x "$(command -v mausezahn)" ]; then
-+		echo "mausezahn command not found. Skipping test"
-+		return 1
-+	fi
-+
-+	if [ ! -x "$(command -v jq)" ]; then
-+		echo "jq command not found. Skipping test"
-+		return 1
-+	fi
-+
-+	if [ ! -x "$(command -v bc)" ]; then
-+		echo "bc command not found. Skipping test"
-+		return 1
-+	fi
-+
-+	if [ ! -x "$(command -v perf)" ]; then
-+		echo "perf command not found. Skipping test"
-+		return 1
-+	fi
-+
-+	perf list fib:* | grep -q fib_table_lookup
-+	if [ $? -ne 0 ]; then
-+		echo "IPv4 FIB tracepoint not found. Skipping test"
-+		return 1
-+	fi
-+
-+	perf list fib6:* | grep -q fib6_table_lookup
-+	if [ $? -ne 0 ]; then
-+		echo "IPv6 FIB tracepoint not found. Skipping test"
-+		return 1
-+	fi
-+
-+	return 0
-+}
-+
-+link_stats_get()
-+{
-+	local ns=$1; shift
-+	local dev=$1; shift
-+	local dir=$1; shift
-+	local stat=$1; shift
-+
-+	ip -n $ns -j -s link show dev $dev \
-+		| jq '.[]["stats64"]["'$dir'"]["'$stat'"]'
-+}
-+
-+list_rcv_eval()
-+{
-+	local file=$1; shift
-+	local expected=$1; shift
-+
-+	local count=$(tail -n 1 $file | jq '.["counter-value"] | tonumber | floor')
-+	local ratio=$(echo "scale=2; $count / $expected" | bc -l)
-+	local res=$(echo "$ratio >= 0.95" | bc)
-+	[[ $res -eq 1 ]]
-+	log_test $? 0 "Multipath route hit ratio ($ratio)"
-+}
-+
-+ipv4_mpath_list_test()
-+{
-+	echo
-+	echo "IPv4 multipath list receive tests"
-+
-+	mpath_dep_check || return 1
-+
-+	route_setup
-+
-+	set -e
-+	run_cmd "ip netns exec ns1 ethtool -K veth1 tcp-segmentation-offload off"
-+
-+	run_cmd "ip netns exec ns2 bash -c \"echo 20000 > /sys/class/net/veth2/gro_flush_timeout\""
-+	run_cmd "ip netns exec ns2 bash -c \"echo 1 > /sys/class/net/veth2/napi_defer_hard_irqs\""
-+	run_cmd "ip netns exec ns2 ethtool -K veth2 generic-receive-offload on"
-+	run_cmd "ip -n ns2 link add name nh1 up type dummy"
-+	run_cmd "ip -n ns2 link add name nh2 up type dummy"
-+	run_cmd "ip -n ns2 address add 172.16.201.1/24 dev nh1"
-+	run_cmd "ip -n ns2 address add 172.16.202.1/24 dev nh2"
-+	run_cmd "ip -n ns2 neigh add 172.16.201.2 lladdr 00:11:22:33:44:55 nud perm dev nh1"
-+	run_cmd "ip -n ns2 neigh add 172.16.202.2 lladdr 00:aa:bb:cc:dd:ee nud perm dev nh2"
-+	run_cmd "ip -n ns2 route add 203.0.113.0/24
-+		nexthop via 172.16.201.2 nexthop via 172.16.202.2"
-+	run_cmd "ip netns exec ns2 sysctl -qw net.ipv4.fib_multipath_hash_policy=1"
-+	set +e
-+
-+	local dmac=$(ip -n ns2 -j link show dev veth2 | jq -r '.[]["address"]')
-+	local tmp_file=$(mktemp)
-+	local cmd="ip netns exec ns1 mausezahn veth1 -a own -b $dmac
-+		-A 172.16.101.1 -B 203.0.113.1 -t udp 'sp=12345,dp=0-65535' -q"
-+
-+	# Packets forwarded in a list using a multipath route must not reuse a
-+	# cached result so that a flow always hits the same nexthop. In other
-+	# words, the FIB lookup tracepoint needs to be triggered for every
-+	# packet.
-+	local t0_rx_pkts=$(link_stats_get ns2 veth2 rx packets)
-+	run_cmd "perf stat -e fib:fib_table_lookup --filter 'err == 0' -j -o $tmp_file -- $cmd"
-+	local t1_rx_pkts=$(link_stats_get ns2 veth2 rx packets)
-+	local diff=$(echo $t1_rx_pkts - $t0_rx_pkts | bc -l)
-+	list_rcv_eval $tmp_file $diff
-+
-+	rm $tmp_file
-+	route_cleanup
-+}
-+
-+ipv6_mpath_list_test()
-+{
-+	echo
-+	echo "IPv6 multipath list receive tests"
-+
-+	mpath_dep_check || return 1
-+
-+	route_setup
-+
-+	set -e
-+	run_cmd "ip netns exec ns1 ethtool -K veth1 tcp-segmentation-offload off"
-+
-+	run_cmd "ip netns exec ns2 bash -c \"echo 20000 > /sys/class/net/veth2/gro_flush_timeout\""
-+	run_cmd "ip netns exec ns2 bash -c \"echo 1 > /sys/class/net/veth2/napi_defer_hard_irqs\""
-+	run_cmd "ip netns exec ns2 ethtool -K veth2 generic-receive-offload on"
-+	run_cmd "ip -n ns2 link add name nh1 up type dummy"
-+	run_cmd "ip -n ns2 link add name nh2 up type dummy"
-+	run_cmd "ip -n ns2 -6 address add 2001:db8:201::1/64 dev nh1"
-+	run_cmd "ip -n ns2 -6 address add 2001:db8:202::1/64 dev nh2"
-+	run_cmd "ip -n ns2 -6 neigh add 2001:db8:201::2 lladdr 00:11:22:33:44:55 nud perm dev nh1"
-+	run_cmd "ip -n ns2 -6 neigh add 2001:db8:202::2 lladdr 00:aa:bb:cc:dd:ee nud perm dev nh2"
-+	run_cmd "ip -n ns2 -6 route add 2001:db8:301::/64
-+		nexthop via 2001:db8:201::2 nexthop via 2001:db8:202::2"
-+	run_cmd "ip netns exec ns2 sysctl -qw net.ipv6.fib_multipath_hash_policy=1"
-+	set +e
-+
-+	local dmac=$(ip -n ns2 -j link show dev veth2 | jq -r '.[]["address"]')
-+	local tmp_file=$(mktemp)
-+	local cmd="ip netns exec ns1 mausezahn -6 veth1 -a own -b $dmac
-+		-A 2001:db8:101::1 -B 2001:db8:301::1 -t udp 'sp=12345,dp=0-65535' -q"
-+
-+	# Packets forwarded in a list using a multipath route must not reuse a
-+	# cached result so that a flow always hits the same nexthop. In other
-+	# words, the FIB lookup tracepoint needs to be triggered for every
-+	# packet.
-+	local t0_rx_pkts=$(link_stats_get ns2 veth2 rx packets)
-+	run_cmd "perf stat -e fib6:fib6_table_lookup --filter 'err == 0' -j -o $tmp_file -- $cmd"
-+	local t1_rx_pkts=$(link_stats_get ns2 veth2 rx packets)
-+	local diff=$(echo $t1_rx_pkts - $t0_rx_pkts | bc -l)
-+	list_rcv_eval $tmp_file $diff
-+
-+	rm $tmp_file
-+	route_cleanup
-+}
-+
- ################################################################################
- # usage
- 
-@@ -2433,6 +2584,8 @@ do
- 	ipv6_mangle)			ipv6_mangle_test;;
- 	ipv4_bcast_neigh)		ipv4_bcast_neigh_test;;
- 	fib6_gc_test|ipv6_gc)		fib6_gc_test;;
-+	ipv4_mpath_list)		ipv4_mpath_list_test;;
-+	ipv6_mpath_list)		ipv6_mpath_list_test;;
- 
- 	help) echo "Test names: $TESTS"; exit 0;;
- 	esac
+Okay, true. I meant I moved it a few lines back but there is no real
+change there. I'll just remove this paragraph.
+
+>the schemata file. Also please use "resctrl schemata" since RDT is
+>Intel specific and does not use schemata terminology.
+
+Thank you, I'll change it.
+
+>> 
+>> Remove newline character from the schemat string after writing it to
+>> the schemata file so it prints correctly before function return.
+>
+>schemat -> "schema" or "schemata"?
+
+I'll stick with schema as that's the variable name, thanks for finding
+this typo.
+
+>> Pass the string generated with strerror() to the "reason" buffer so
+>> the error message is more verbose. Extend "reason" buffer so it can hold
+>> longer messages.
+>> 
+>> Changelog v2:
+>> - Rewrite patch message.
+>> - Double "reason" buffer size to fit longer error explanation.
+>> - Redo file interactions with syscalls instead of stdio functions.
+>> 
+>
+>Please place the above "Changelog v2" snippet below the "---" lines below.
+>This is text that should not end up in the kernel log.
+
+Yes, I realized I made this mistake a few hours after sending the patch.
+I'll correct it and make sure to double check it before sending next time.
+
+>> Signed-off-by: Wieczor-Retman, Maciej <maciej.wieczor-retman@intel.com>
+>> ---
+>
+>(list of changes should go here)
+>
+>Reinette
+>
+
 -- 
-2.34.1
-
+Kind regards
+Maciej Wieczór-Retman
