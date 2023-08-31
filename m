@@ -2,85 +2,108 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9F3E78F427
-	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Aug 2023 22:36:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6C2178F42C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 31 Aug 2023 22:37:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238795AbjHaUgb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 31 Aug 2023 16:36:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43246 "EHLO
+        id S1347421AbjHaUhU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 31 Aug 2023 16:37:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231266AbjHaUgb (ORCPT
+        with ESMTP id S1347400AbjHaUhT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 31 Aug 2023 16:36:31 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51C41E7A;
-        Thu, 31 Aug 2023 13:36:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=IRy+jY3LYBzy+1khXTmPoKs3NhI+qRJ1PfaTp9S4xeg=; b=O5d5mNvRLgwJlq7sYmWWTzFDSX
-        59I43cnXZ+NNfkuKlbB445ItTWxtGhXbx/2foj4AyW3iUwJJle5lGQnXiVwgJLFYNcPAegU2u8JLJ
-        wjn1ZtttAE/FdlooGRxJDtb2nrhZ64nFEY100mUkXvzasYURv60hOtvA0xUkXYX7Oliere8BshZ4Q
-        mI5Z5qOipqk2+HTkYZ99u59W9V+0uduaHnQHaCu951LFua9MPr0mPf1T7zqL9JPjP3AxWdAo2t07k
-        EI6YtigZMm2ZqnbSnfoArlooyDYhtB5yGviUch6pgjsPBmQncD2a7scB0/eZj5qvBlhEDOb7Ywg23
-        xaEIcRBw==;
-Received: from sslproxy03.your-server.de ([88.198.220.132])
-        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1qboOi-0006jM-MW; Thu, 31 Aug 2023 22:36:13 +0200
-Received: from [178.197.249.54] (helo=linux.home)
-        by sslproxy03.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1qboOi-000Rwp-KF; Thu, 31 Aug 2023 22:36:12 +0200
-Subject: Re: [PATCH bpf v2] selftests/bpf: Include build flavors for install
- target
-To:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     =?UTF-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230831162954.111485-1-bjorn@kernel.org>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <8351f451-43a4-86cf-562b-c0433ee38c50@iogearbox.net>
-Date:   Thu, 31 Aug 2023 22:36:12 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
-MIME-Version: 1.0
-In-Reply-To: <20230831162954.111485-1-bjorn@kernel.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.8/27017/Thu Aug 31 09:40:48 2023)
-X-Spam-Status: No, score=-5.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 31 Aug 2023 16:37:19 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7627E6A
+        for <linux-kselftest@vger.kernel.org>; Thu, 31 Aug 2023 13:37:15 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-d7b980794easo1006051276.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 31 Aug 2023 13:37:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1693514235; x=1694119035; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Riep5pyahAnxXOHIAicjRGy5HGdPOIzlJBXzr6RzmUM=;
+        b=d/tC/9gCiFcMnNxE3maBKwVuY5qvIt6zYsH3KEo7xLnXPE65YE0sNlyQLdm5zpja53
+         ci5w6djzFf7cPny4E3Jt7x85cP5duyK8doqAsAr3hxJ+gERTU7tTO1nBpxnmjfG5v6Gh
+         IqO36G4YiCXcHnfLSA7KbuiVGkrWny3b6QNIud109AeL+ShJBP9+wktprm1V8UXg7Lfl
+         OUesBf2RLh7dqJq8zAFIAHVFt2791297eamndqeiX3iGzevcXXehdBfadl4DADJLUMRB
+         /+ABw/o933QtEpbByEgABP4hfm2J03cRUAp6GjQ37iwpmf3fUf3z12sjdjC8W4GUosa4
+         1kDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693514235; x=1694119035;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Riep5pyahAnxXOHIAicjRGy5HGdPOIzlJBXzr6RzmUM=;
+        b=COsY+LFGnVliivPLWA5EHSe3MOR5QRZlCe+MVabE5t26n6+hmV61YjVmOvp3mi2d0S
+         UGhGPb6LMzKf3K+QCtY3LlhPeL7ZOc+UEhgHZK+gCGtzpM2NQbjhg4gXbDR9E5xEy8MD
+         CYQAHA2QrWqogl8gtIJzqqS7yiq+05UJ2Xl30hE5ug5eU8JTQv7PeMtFfle0FcZeVHbO
+         pUcH5zlfMI4gQSvXSIl9rLKkHJcQR1tVk3JxSMG8zQgrYSwIrz20RjXzpvTGCHTQKly3
+         q69Z+lqluu5IYKzktVoPnNrjuFDL7UGmYw2Q6eOvbDkxIjLnLkKcrFGFZodxTDmrtLGl
+         J5Sg==
+X-Gm-Message-State: AOJu0YysAWz2/jB5CEjY2La/S2FhJCI/aT8UWAHiSu3zrEyARCHDGsFL
+        TSpr1Qi3GABPeJlfng8I++KLhuK6LaHuDK5G
+X-Google-Smtp-Source: AGHT+IFcu8cOp7pIa9OilL6fag67y6JJgGLJBhTT1SQk4UIAxSrG1Tx5R8I4WGtPGGNkLdRhCeCUlRFRF/gQcWz4
+X-Received: from mclapinski.waw.corp.google.com ([2a00:79e0:9b:0:36f8:f0a:6df2:a7d5])
+ (user=mclapinski job=sendgmr) by 2002:a25:9f89:0:b0:d4f:d7a5:ba3b with SMTP
+ id u9-20020a259f89000000b00d4fd7a5ba3bmr21259ybq.8.1693514235020; Thu, 31 Aug
+ 2023 13:37:15 -0700 (PDT)
+Date:   Thu, 31 Aug 2023 22:36:45 +0200
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.42.0.283.g2d96d420d3-goog
+Message-ID: <20230831203647.558079-1-mclapinski@google.com>
+Subject: [PATCH 0/2] fcntl: add fcntl(F_CHECK_ORIGINAL_MEMFD)
+From:   Michal Clapinski <mclapinski@google.com>
+To:     Jeff Layton <jlayton@kernel.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jeff Xu <jeffxu@google.com>, Aleksa Sarai <cyphar@cyphar.com>,
+        Daniel Verkamp <dverkamp@chromium.org>,
+        Kees Cook <keescook@chromium.org>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     Michal Clapinski <mclapinski@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 8/31/23 6:29 PM, Björn Töpel wrote:
-> From: Björn Töpel <bjorn@rivosinc.com>
-> 
-> When using the "install" or targets depending on install,
-> e.g. "gen_tar", the BPF machine flavors weren't included.
-> 
-> A command like:
->    | make ARCH=riscv CROSS_COMPILE=riscv64-linux-gnu- O=/workspace/kbuild \
->    |    HOSTCC=gcc FORMAT= SKIP_TARGETS="arm64 ia64 powerpc sparc64 x86 sgx" \
->    |    -C tools/testing/selftests gen_tar
-> would not include bpf/no_alu32, bpf/cpuv4, or bpf/bpf-gcc.
-> 
-> Include the BPF machine flavors for "install" make target.
-> 
-> Signed-off-by: Björn Töpel <bjorn@rivosinc.com>
+This change introduces a new fcntl to check if an fd points to a memfd's
+original open fd (the one created by memfd_create).
 
-Lgtm, applied, thanks!
+We encountered an issue with migrating memfds in CRIU (checkpoint
+restore in userspace - it migrates running processes between
+machines). Imagine a scenario:
+1. Create a memfd. By default it's open with O_RDWR and yet one can
+exec() to it (unlike with regular files, where one would get ETXTBSY).
+2. Reopen that memfd with O_RDWR via /proc/self/fd/<fd>.
+
+Now those 2 fds are indistinguishable from userspace. You can't exec()
+to either of them (since the reopen incremented inode->i_writecount)
+and their /proc/self/fdinfo/ are exactly the same. Unfortunately they
+are not the same. If you close the second one, the first one becomes
+exec()able again. If you close the first one, the other doesn't become
+exec()able. Therefore during migration it does matter which is recreated
+first and which is reopened but there is no way for CRIU to tell which
+was first.
+
+Michal Clapinski (2):
+  fcntl: add fcntl(F_CHECK_ORIGINAL_MEMFD)
+  selftests: test fcntl(F_CHECK_ORIGINAL_MEMFD)
+
+ fs/fcntl.c                                 |  3 ++
+ include/uapi/linux/fcntl.h                 |  9 ++++++
+ tools/testing/selftests/memfd/memfd_test.c | 32 ++++++++++++++++++++++
+ 3 files changed, 44 insertions(+)
+
+-- 
+2.42.0.283.g2d96d420d3-goog
+
