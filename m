@@ -2,75 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB3C6790535
-	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Sep 2023 07:16:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6031379053A
+	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Sep 2023 07:24:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237603AbjIBFQI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 2 Sep 2023 01:16:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41190 "EHLO
+        id S232339AbjIBFYt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 2 Sep 2023 01:24:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1351518AbjIBFQH (ORCPT
+        with ESMTP id S229492AbjIBFYt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 2 Sep 2023 01:16:07 -0400
-Received: from out203-205-221-149.mail.qq.com (out203-205-221-149.mail.qq.com [203.205.221.149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A811170A
-        for <linux-kselftest@vger.kernel.org>; Fri,  1 Sep 2023 22:16:03 -0700 (PDT)
+        Sat, 2 Sep 2023 01:24:49 -0400
+Received: from out203-205-221-155.mail.qq.com (out203-205-221-155.mail.qq.com [203.205.221.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6D291704;
+        Fri,  1 Sep 2023 22:24:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1693631761;
-        bh=VDeJU94IWnvseyKaMxC4IUln27g8AmHmoNXDqEplCe8=;
+        s=s201512; t=1693632283;
+        bh=f3BahJ0f5WwmfyARP2+MMnay33J1y6FDk8/4avkW738=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=y98HrSljU15JiM4eaxs4iPQ85bCyaOAwK51n36h4MBI17vJXGmmWzMKvHnAKpvB0Y
-         De7nRbXL+INgiwL1YV1poTb9pTre1cNVHbvmbL8l/yd/TdxUSw7gAtmLkWnWltX3+d
-         +/TEgY7xqCtDRjy0xjiVOCidefICoTdu2vyAm+e8=
+        b=wpF6JS6KXAIr8io0RvELG1G1Oys49Tc+uSHboZ5n8XMkp/wVMIGbetuMxq2LdXj0G
+         iaS0aAH7GXlKTa1Um8UByGQUUF53ler/u2lPAX0iQ5etjPKHqdxVwYN1aj+LZAzMJZ
+         MF2ExR5BD0MwLxXSmjCLMymfnscNceLUTxZ8MS5w=
 Received: from rtoax.lan ([120.245.114.63])
         by newxmesmtplogicsvrsza12-0.qq.com (NewEsmtp) with SMTP
-        id 3EA29043; Sat, 02 Sep 2023 13:15:42 +0800
-X-QQ-mid: xmsmtpt1693631746tb9aw2kru
-Message-ID: <tencent_610B9D67B15C66A858BD5E8DF623CA18840A@qq.com>
-X-QQ-XMAILINFO: NKv2G1wnhDBne0mgP5e8Y2tcHeHRdNu5Q0RL7PHJuVBIhlza8+x+J6yuCnozKQ
-         Bd9sjr0FaoV3Ewulrh4ofynlPvtSqJj0N4bqDCnALENDC7cLq6+A6XtJqom7ARNR2SI7KUkW+2Px
-         YE/2Rl1vGzdus6T9H6+OP/gXEI8S/YvhxThr0D+xcwzUHWlkEGbdwY6Ca3TmU++IwmyV8xkgRwb+
-         s/9p2A9q9kCFxnfiri24XCl5v+SWlPslQl4GBZRDnjv3o+ijfsedpZVLK+Sfn4X9ygwK/rBQ0zDR
-         RzIoP91t9hgg4Tp9nTmngcMAV6LM5VG+/6dAhVTARq+GjVtzSO7IdWzp5pVmCMz/PExE+itSKo0g
-         8u8JLQxnT4o3xu28ixiB4h5CoB5hle4/zsPwJ8zb4Y1AzedwWwTiJajaWZi5tM5tgwUa1+aNCTW+
-         IRFRyzcvsTa9z6SPrDcGrm46oXQb9tqxKq6Ai4rj/I9CgTIeAMaaFsbYUWntyzAPpJa5C/JbsVFo
-         LJb9j4jikTBh0JwRLT3CTKQSzURW1rWwMnkgJ8SF92le7JklBvN4J0ylrHl1p+fugu1dlLOUy14d
-         pQcBOyACmcepJSi1qiLQdn7rGZ3VHRzWr/A1iwgsk4h6wegkus95GtWUFjTMSZqHLGJfNAQLB2j3
-         S9XZ9PNno6wsJT4Y8+tkQio4kiymt6z0KKi+963FWUG1n0STvHxYspD8fvzR7GVQMwl7DUZe7GQq
-         mCVS5spq0myogqsAcP7UeMUc35ExqE5i7Kb92sbS3rIyqddty+UilEWe8l+/IDdcKbqPUEyy/L0t
-         QHhRmXWV9MM1RnB5URGv/ATDhJ9H/NJPBaC7iQJDV2s+04cu5/1SSoOyhMD6lm3OvSoNqg7fWw8L
-         UvJP4IuoevqrBUrG1CNtsH2r8PLOkWimwODo1iALnhKNI2Q/zPNpW5pQwCof8PVvkU5SJdOTtszh
-         MHlQLJzim8Nx39r/oI0RAlFb5levTZV9AsZhT+bAV9R6Y+eEi6vbkZIeS/nzykbn/clWHFTKrIPb
-         1+I6SV8yfZAXm895L7
-X-QQ-XMRINFO: M/715EihBoGSf6IYSX1iLFg=
+        id 62613CE1; Sat, 02 Sep 2023 13:24:38 +0800
+X-QQ-mid: xmsmtpt1693632278tgbiug7q4
+Message-ID: <tencent_2B465711F30DC88514B2842F1D54005E8109@qq.com>
+X-QQ-XMAILINFO: NEq0i4SycP3b8o/n7e9Utp3j5PTmzMk0VaaageYuv1vGOoNomrBZd0QBV4XFjx
+         hZmvIstl+9IdjzOFT4q5vHpMJrX9JS537Q04Ru2XnY1ZESIh4KDAdN5ipHlYk6zUf4DTN4jd/5aE
+         SxZM2g651a3hquWEm0yolNVZazQ7iqYeHJ37R3RYnf+bH7UC85rfiwL8PeE5JHLG4vWBxWEn9pod
+         k/uFDmwX76qXG2ou4em1v3DimLFLEiMOA7Zlnr5XNowth1K1qhMF7gKiEP/XiObuQKL+MVTlDbTr
+         ovqa2+2epOh/DIK+2104M6LVjLe3Sur1OdCAuiv72JhfdfHqf4vKNdnxpJb6Ne++Z4Chv0gvZPBf
+         YKNwm1+xh8I9mO9VckOUYwrYBw9dol/c6AIMsP7gRAoJAsTEiUxPttpFv1QEGZahgSIheROKCHEV
+         dbl7kbYidkA8gg0lvKF7WmvTsnsJX7APcpJUTPP88TlItVyclRdoOnuy8nNqzQBDL50dD+Lv2hzj
+         rjcA/g/ZikILwca0zTXsrZoCsLDiNAtKmPCNllcc7plFyIJneeczG/aG5ql7MEqM+RCWTl66xqQ/
+         dvEluiKsFwhI9pS+LGURWJhRVCIJA3FAgiTiALJMm7ciDp2NUbIegWJo2OvuzClB5XdhjTbsFBAy
+         ThrPQGa1RMVFDg5KjNvuIn84rzeDYAz3gZB56bG+lMZdxkuZ2hZ/8YyaFkiHWSJKmH1q3/dlFJIy
+         AgpSvabryQ12+Bf9QF+COYu+d0uoGc/NNrQnyYOa441j3cOqW5zbLcxBgko64lgu3q8w7X6osuIv
+         /r45qkG8d7RAvaIr1JSsdxEnVZecMmb4URSZM4A8nHqYWdz7BdRPaKL6ILs9YuBwzsZ+thFB4uiZ
+         a2jQ/G+uH73hvo++OR4Eh86GfleNbiYBDTPYd+O17azxkFkLIEHxj4oF9+XESU5NLGh14r/7xVZy
+         8Ps1mJ0tn32SINEdEhVlyMtl6btS7casr1CoYrXwX2BHgovHfourZqD9zD7wibWg0yjQ1jsvOvnH
+         SAMByaP4ZDlyXzXqy8
+X-QQ-XMRINFO: OD9hHCdaPRBwq3WW+NvGbIU=
 From:   Rong Tao <rtoax@foxmail.com>
-To:     olsajiri@gmail.com, andrii@kernel.org, daniel@iogearbox.net,
-        sdf@google.com
-Cc:     Rong Tao <rongtao@cestc.cn>, Alexei Starovoitov <ast@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>,
-        Yonghong Song <yonghong.song@linux.dev>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Yafang Shao <laoar.shao@gmail.com>,
-        bpf@vger.kernel.org (open list:BPF [GENERAL] (Safe Dynamic Programs and
-        Tools)), linux-kernel@vger.kernel.org (open list),
-        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
-        linux-stm32@st-md-mailman.stormreply.com (moderated list:ARM/STM32
-        ARCHITECTURE),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/STM32
-        ARCHITECTURE)
-Subject: [PATCH bpf-next v10 2/2] selftests/bpf: trace_helpers.c: Add a global ksyms initialization mutex
-Date:   Sat,  2 Sep 2023 13:14:05 +0800
-X-OQ-MSGID: <20230902051421.139040-2-rtoax@foxmail.com>
+To:     rtoax@foxmail.com
+Cc:     alexandre.torgue@foss.st.com, andrii@kernel.org, ast@kernel.org,
+        bpf@vger.kernel.org, daniel@iogearbox.net, haoluo@google.com,
+        john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org,
+        laoar.shao@gmail.com, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com, martin.lau@linux.dev,
+        mcoquelin.stm32@gmail.com, mykolal@fb.com, olsajiri@gmail.com,
+        rongtao@cestc.cn, sdf@google.com, shuah@kernel.org,
+        song@kernel.org, yonghong.song@linux.dev
+Subject: Re: [PATCH bpf-next v10 0/2] selftests/bpf: Optimize kallsyms cache
+Date:   Sat,  2 Sep 2023 13:24:38 +0800
+X-OQ-MSGID: <20230902052438.139708-1-rtoax@foxmail.com>
 X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20230902051421.139040-1-rtoax@foxmail.com>
+In-Reply-To: <tencent_4F0CF08592B31A2E69546C5E174785109F09@qq.com>
 References: <tencent_4F0CF08592B31A2E69546C5E174785109F09@qq.com>
- <20230902051421.139040-1-rtoax@foxmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -83,49 +72,13 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Rong Tao <rongtao@cestc.cn>
+Hi, every one.
 
-As Jirka said [0], we just need to make sure that global ksyms
-initialization won't race.
+I'm so sorry, that i'm not familier with 'how to submit patch series',
+I just sent some emails repeatedly using the git send-email command,
+please ignore the error messages.
 
-[0] https://lore.kernel.org/lkml/ZPCbAs3ItjRd8XVh@krava/
+PS: How to send patch collections using git send-email?
 
-Signed-off-by: Rong Tao <rongtao@cestc.cn>
----
- tools/testing/selftests/bpf/trace_helpers.c | 4 ++++
- 1 file changed, 4 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/trace_helpers.c b/tools/testing/selftests/bpf/trace_helpers.c
-index d64c4ef336e1..500b60226e5e 100644
---- a/tools/testing/selftests/bpf/trace_helpers.c
-+++ b/tools/testing/selftests/bpf/trace_helpers.c
-@@ -7,6 +7,7 @@
- #include <errno.h>
- #include <fcntl.h>
- #include <poll.h>
-+#include <pthread.h>
- #include <unistd.h>
- #include <linux/perf_event.h>
- #include <sys/mman.h>
-@@ -26,6 +27,7 @@ struct ksyms {
- };
- 
- static struct ksyms *ksyms;
-+static pthread_mutex_t ksyms_mutex = PTHREAD_MUTEX_INITIALIZER;
- 
- static int ksyms__add_symbol(struct ksyms *ksyms, const char *name,
- 							 unsigned long addr)
-@@ -115,8 +117,10 @@ struct ksyms *load_kallsyms_local(void)
- 
- int load_kallsyms(void)
- {
-+	pthread_mutex_lock(&ksyms_mutex);
- 	if (!ksyms)
- 		ksyms = load_kallsyms_local();
-+	pthread_mutex_unlock(&ksyms_mutex);
- 	return ksyms ? 0 : 1;
- }
- 
--- 
-2.41.0
+Rong Tao
 
