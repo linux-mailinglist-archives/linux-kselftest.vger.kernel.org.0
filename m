@@ -2,212 +2,165 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C23E0790B65
-	for <lists+linux-kselftest@lfdr.de>; Sun,  3 Sep 2023 11:43:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E30ED790CA7
+	for <lists+linux-kselftest@lfdr.de>; Sun,  3 Sep 2023 17:13:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236251AbjICJn7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 3 Sep 2023 05:43:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49750 "EHLO
+        id S235149AbjICPNk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 3 Sep 2023 11:13:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbjICJn6 (ORCPT
+        with ESMTP id S230078AbjICPNk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 3 Sep 2023 05:43:58 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE9CCC7
-        for <linux-kselftest@vger.kernel.org>; Sun,  3 Sep 2023 02:43:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693734235; x=1725270235;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nVvY2zgMHS1Nk0W2QWVzNbG/CIXehPZg1lY9zdv05zs=;
-  b=T9Ldn42r86CS5Jo731n23VTGj9PcGr9VnjTQuXy+hXcu2vFjcTERlqhL
-   r+HECZCqsR8w4FoxtfcnsCuBVgd21b1JDX5Obg0VB8THf7S99TR7q5qrx
-   3BpthwKDP+UEppTxjFeeU694sK31V74hsKOpPvaoR7IhOCG9YmHcFnYDw
-   dprhqUO1lX2Y+obKlLPHDUAwmXuMp23BI3+y79Xj5G9V/YjKljx8aa3Q/
-   PGRj3mVPEFngOafByvMTudasLlYUROkWYyIQkFNnmCiTK8bUWeIhqHVyG
-   wacLZ224x7SafVOCBfiZ1qKSd3k3M2CUx+hDkLHrzw9lXdpzVI53IgHpp
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10821"; a="380226617"
-X-IronPort-AV: E=Sophos;i="6.02,224,1688454000"; 
-   d="scan'208";a="380226617"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2023 02:43:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10821"; a="734003107"
-X-IronPort-AV: E=Sophos;i="6.02,224,1688454000"; 
-   d="scan'208";a="734003107"
-Received: from lkp-server01.sh.intel.com (HELO 5d8055a4f6aa) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 03 Sep 2023 02:43:52 -0700
-Received: from kbuild by 5d8055a4f6aa with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qcje1-00034N-1x;
-        Sun, 03 Sep 2023 09:43:49 +0000
-Date:   Sun, 3 Sep 2023 17:43:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Jinjie Ruan <ruanjinjie@huawei.com>, brendan.higgins@linux.dev,
-        davidgow@google.com, skhan@linuxfoundation.org,
-        jk@codeconstruct.com.au, dlatypov@google.com, rmoar@google.com,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Cc:     oe-kbuild-all@lists.linux.dev
-Subject: Re: [PATCH v2 2/4] kunit: Fix the wrong err path and add goto labels
- in kunit_filter_suites()
-Message-ID: <202309031733.usGHpnSR-lkp@intel.com>
-References: <20230903071028.1518913-3-ruanjinjie@huawei.com>
+        Sun, 3 Sep 2023 11:13:40 -0400
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B9CAF
+        for <linux-kselftest@vger.kernel.org>; Sun,  3 Sep 2023 08:13:37 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id ca18e2360f4ac-76c64da0e46so40824039f.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 03 Sep 2023 08:13:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1693754016; x=1694358816; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=CCvQ9I3iX0QNbfprGz58qw4sI+PzMWVZGPRTGiDllgA=;
+        b=L4K6rt5r9HcwPbf9IQ/+LEowMCr/1AjmF/SivHILUUEvX1UtxO0iy990ha3e0tnILX
+         /315QAJ860cny6tOiJxMssvi/NSanB0y8vTBJTkDY2u7HLdMsgVDSmKN1e/XQ7XRtZkA
+         VlU3uS+qLRGSR9pyTxd5HnOMEYL55/YeMYvO4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693754016; x=1694358816;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CCvQ9I3iX0QNbfprGz58qw4sI+PzMWVZGPRTGiDllgA=;
+        b=MbnMAj8Il6xEFotzdzF7suEL2QYbR4HB7hKQEvkT/BX11V0xz5sErHGNcRtuM2h10x
+         isD5F1iTKMkl8xuRkbQ6TCX17cyCoAbcvZN5Y3k8b8q1N05xa0o8A8aI8Mt67GCUDvk6
+         FaKiHC+fdwHBFApNquYRyHLZOTrbmZHgJ8QfmMCT1L4r4jos8HmVjaEmXmlhj6IzFC58
+         1FONrTMhb+lpF5bcIqduFzeYerT/1gtyrWGGM3pWUAGmZ09qIyuARJOaQA2v45pRdmeO
+         7kXQcpvABVAlT+Lk3IYY5wuNIa7GlARGRlhQysR6bCZTrRq+Nrgfa1qjyFU1sR4AtHG8
+         R+ig==
+X-Gm-Message-State: AOJu0Yy15lNuLQSxqbL/IU3IkP1Cb0UaUZlL5K5wbmZ0n1v94ty+7NyP
+        jQGkCzulhZedJJydk9UDagpeVg==
+X-Google-Smtp-Source: AGHT+IE/HjnLbiJxM1Lmb727IC4/RfuR7vJbdORXm2i4XVKm0REgtSjEy7C30GQyEeQtcHiz426FWQ==
+X-Received: by 2002:a5d:9b0d:0:b0:790:9f0c:3069 with SMTP id y13-20020a5d9b0d000000b007909f0c3069mr8461710ion.9.1693754016455;
+        Sun, 03 Sep 2023 08:13:36 -0700 (PDT)
+Received: from joelboxx5.corp.google.com (156.190.123.34.bc.googleusercontent.com. [34.123.190.156])
+        by smtp.gmail.com with ESMTPSA id f5-20020a6b5105000000b007835a305f61sm2605897iob.36.2023.09.03.08.13.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 03 Sep 2023 08:13:35 -0700 (PDT)
+From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Michal Hocko <mhocko@suse.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Kirill A Shutemov <kirill@shutemov.name>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Lokesh Gidra <lokeshgidra@google.com>
+Subject: [PATCH v6 0/7] Optimize mremap during mutual alignment within PMD
+Date:   Sun,  3 Sep 2023 15:13:21 +0000
+Message-ID: <20230903151328.2981432-1-joel@joelfernandes.org>
+X-Mailer: git-send-email 2.42.0.283.g2d96d420d3-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230903071028.1518913-3-ruanjinjie@huawei.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Jinjie,
+Hello!
 
-kernel test robot noticed the following build warnings:
+Here is v6 of the mremap start address optimization / fix for exec warning.
+Should be hopefully final now and only 2/7 and 6/7 need a tag. Thanks a lot to
+Lorenzo and Linus for the detailed reviews.
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on next-20230831]
-[cannot apply to v6.5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Description of patches
+======================
+These patches optimizes the start addresses in move_page_tables() and tests the
+changes. It addresses a warning [1] that occurs due to a downward, overlapping
+move on a mutually-aligned offset within a PMD during exec. By initiating the
+copy process at the PMD level when such alignment is present, we can prevent
+this warning and speed up the copying process at the same time. Linus Torvalds
+suggested this idea. Check the individual patches for more details.
+[1] https://lore.kernel.org/all/ZB2GTBD%2FLWTrkOiO@dhcp22.suse.cz/
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jinjie-Ruan/kunit-Fix-wild-memory-access-bug-in-kunit_free_suite_set/20230903-151137
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20230903071028.1518913-3-ruanjinjie%40huawei.com
-patch subject: [PATCH v2 2/4] kunit: Fix the wrong err path and add goto labels in kunit_filter_suites()
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230903/202309031733.usGHpnSR-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230903/202309031733.usGHpnSR-lkp@intel.com/reproduce)
+History of patches:
+v5->v6:
+1. Reworking the stack case a bit more and tested it (should be final now).
+2. Other small nits.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309031733.usGHpnSR-lkp@intel.com/
+v4->v5:
+1. Rebased on mainline.
+2. Several improvement suggestions from Lorenzo.
 
-All warnings (new ones prefixed by >>):
+v3->v4:
+1. Care to be taken to move purely within a VMA, in other words this check
+   in call_align_down():
+    if (vma->vm_start != addr_masked)
+            return false;
 
-   lib/kunit/executor.c: In function 'kunit_filter_suites':
->> lib/kunit/executor.c:227:1: warning: label 'free_copy' defined but not used [-Wunused-label]
-     227 | free_copy:
-         | ^~~~~~~~~
->> lib/kunit/executor.c:221:1: warning: label 'free_parsed_glob' defined but not used [-Wunused-label]
-     221 | free_parsed_glob:
-         | ^~~~~~~~~~~~~~~~
+    As an example of why this is needed:
+    Consider the following range which is 2MB aligned and is
+    a part of a larger 10MB range which is not shown. Each
+    character is 256KB below making the source and destination
+    2MB each. The lower case letters are moved (s to d) and the
+    upper case letters are not moved.
 
+    |DDDDddddSSSSssss|
 
-vim +/free_copy +227 lib/kunit/executor.c
+    If we align down 'ssss' to start from the 'SSSS', we will end up destroying
+    SSSS. The above if statement prevents that and I verified it.
 
-   132	
-   133	struct kunit_suite_set
-   134	kunit_filter_suites(const struct kunit_suite_set *suite_set,
-   135			    const char *filter_glob,
-   136			    char *filters,
-   137			    char *filter_action,
-   138			    int *err)
-   139	{
-   140		int i, j, k;
-   141		int filter_count = 0;
-   142		struct kunit_suite **copy, **copy_start, *filtered_suite, *new_filtered_suite;
-   143		struct kunit_suite_set filtered = {NULL, NULL};
-   144		struct kunit_glob_filter parsed_glob;
-   145		struct kunit_attr_filter *parsed_filters = NULL;
-   146	
-   147		const size_t max = suite_set->end - suite_set->start;
-   148	
-   149		copy = kmalloc_array(max, sizeof(*filtered.start), GFP_KERNEL);
-   150		if (!copy) { /* won't be able to run anything, return an empty set */
-   151			return filtered;
-   152		}
-   153		copy_start = copy;
-   154	
-   155		if (filter_glob)
-   156			kunit_parse_glob_filter(&parsed_glob, filter_glob);
-   157	
-   158		/* Parse attribute filters */
-   159		if (filters) {
-   160			filter_count = kunit_get_filter_count(filters);
-   161			parsed_filters = kcalloc(filter_count, sizeof(*parsed_filters), GFP_KERNEL);
-   162			if (!parsed_filters) {
-   163				kfree(copy);
-   164				return filtered;
-   165			}
-   166			for (j = 0; j < filter_count; j++)
-   167				parsed_filters[j] = kunit_next_attr_filter(&filters, err);
-   168			if (*err)
-   169				goto free_parsed_filters;
-   170		}
-   171	
-   172		for (i = 0; &suite_set->start[i] != suite_set->end; i++) {
-   173			filtered_suite = suite_set->start[i];
-   174			if (filter_glob) {
-   175				if (!glob_match(parsed_glob.suite_glob, filtered_suite->name))
-   176					continue;
-   177				filtered_suite = kunit_filter_glob_tests(filtered_suite,
-   178						parsed_glob.test_glob);
-   179				if (IS_ERR(filtered_suite)) {
-   180					*err = PTR_ERR(filtered_suite);
-   181					goto free_parsed_filters;
-   182				}
-   183			}
-   184			if (filter_count > 0 && parsed_filters != NULL) {
-   185				for (k = 0; k < filter_count; k++) {
-   186					new_filtered_suite = kunit_filter_attr_tests(filtered_suite,
-   187							parsed_filters[k], filter_action, err);
-   188	
-   189					/* Free previous copy of suite */
-   190					if (k > 0 || filter_glob) {
-   191						kfree(filtered_suite->test_cases);
-   192						kfree(filtered_suite);
-   193					}
-   194	
-   195					filtered_suite = new_filtered_suite;
-   196	
-   197					if (*err)
-   198						goto free_parsed_filters;
-   199	
-   200					if (IS_ERR(filtered_suite)) {
-   201						*err = PTR_ERR(filtered_suite);
-   202						goto free_parsed_filters;
-   203					}
-   204					if (!filtered_suite)
-   205						break;
-   206				}
-   207			}
-   208	
-   209			if (!filtered_suite)
-   210				continue;
-   211	
-   212			*copy++ = filtered_suite;
-   213		}
-   214		filtered.start = copy_start;
-   215		filtered.end = copy;
-   216	
-   217	free_parsed_filters:
-   218		if (filter_count)
-   219			kfree(parsed_filters);
-   220	
- > 221	free_parsed_glob:
-   222		if (filter_glob) {
-   223			kfree(parsed_glob.suite_glob);
-   224			kfree(parsed_glob.test_glob);
-   225		}
-   226	
- > 227	free_copy:
-   228		if (*err)
-   229			kfree(copy);
-   230	
-   231		return filtered;
-   232	}
-   233	
+    I also added a test for this in the last patch.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2. Handle the stack case separately. We do not care about #1 for stack movement
+   because the 'SSSS' does not matter during this move. Further we need to do this
+   to prevent the stack move warning.
+
+    if (!for_stack && vma->vm_start <= addr_masked)
+            return false;
+
+v2->v3:
+1. Masked address was stored in int, fixed it to unsigned long to avoid truncation.
+2. We now handle moves happening purely within a VMA, a new test is added to handle this.
+3. More code comments.
+
+v1->v2:
+1. Trigger the optimization for mremaps smaller than a PMD. I tested by tracing
+that it works correctly.
+
+2. Fix issue with bogus return value found by Linus if we broke out of the
+above loop for the first PMD itself.
+
+v1: Initial RFC.
+
+Joel Fernandes (1):
+selftests: mm: Add a test for moving from an offset from start of
+mapping
+
+Joel Fernandes (Google) (6):
+mm/mremap: Optimize the start addresses in move_page_tables()
+mm/mremap: Allow moves within the same VMA for stack moves
+selftests: mm: Fix failure case when new remap region was not found
+selftests: mm: Add a test for mutually aligned moves > PMD size
+selftests: mm: Add a test for remapping to area immediately after
+existing mapping
+selftests: mm: Add a test for remapping within a range
+
+fs/exec.c                                |   2 +-
+include/linux/mm.h                       |   2 +-
+mm/mremap.c                              |  73 +++++-
+tools/testing/selftests/mm/mremap_test.c | 301 +++++++++++++++++++----
+4 files changed, 329 insertions(+), 49 deletions(-)
+
+--
+2.42.0.283.g2d96d420d3-goog
+
