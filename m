@@ -2,35 +2,35 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B4DE790B1B
-	for <lists+linux-kselftest@lfdr.de>; Sun,  3 Sep 2023 09:10:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C145E790B1C
+	for <lists+linux-kselftest@lfdr.de>; Sun,  3 Sep 2023 09:11:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230007AbjICHK7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 3 Sep 2023 03:10:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45776 "EHLO
+        id S230282AbjICHLD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 3 Sep 2023 03:11:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjICHK7 (ORCPT
+        with ESMTP id S229464AbjICHLC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 3 Sep 2023 03:10:59 -0400
+        Sun, 3 Sep 2023 03:11:02 -0400
 Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C8A197
-        for <linux-kselftest@vger.kernel.org>; Sun,  3 Sep 2023 00:10:56 -0700 (PDT)
-Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.55])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4RdjWs593mzQjL3;
-        Sun,  3 Sep 2023 15:07:37 +0800 (CST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D53A1A5
+        for <linux-kselftest@vger.kernel.org>; Sun,  3 Sep 2023 00:10:59 -0700 (PDT)
+Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.53])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4RdjWx0g80zQjL8;
+        Sun,  3 Sep 2023 15:07:41 +0800 (CST)
 Received: from huawei.com (10.90.53.73) by kwepemi500008.china.huawei.com
  (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Sun, 3 Sep
- 2023 15:10:53 +0800
+ 2023 15:10:57 +0800
 From:   Jinjie Ruan <ruanjinjie@huawei.com>
 To:     <brendan.higgins@linux.dev>, <davidgow@google.com>,
         <skhan@linuxfoundation.org>, <jk@codeconstruct.com.au>,
         <dlatypov@google.com>, <rmoar@google.com>,
-        <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>
-CC:     <ruanjinjie@huawei.com>
-Subject: [PATCH v2 1/4] kunit: Fix wild-memory-access bug in kunit_free_suite_set()
-Date:   Sun, 3 Sep 2023 15:10:25 +0800
-Message-ID: <20230903071028.1518913-2-ruanjinjie@huawei.com>
+        <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
+        Ruan Jinjie <ruanjinjie@huawei.com>
+Subject: [PATCH v2 2/4] kunit: Fix the wrong err path and add goto labels in kunit_filter_suites()
+Date:   Sun, 3 Sep 2023 15:10:26 +0800
+Message-ID: <20230903071028.1518913-3-ruanjinjie@huawei.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230903071028.1518913-1-ruanjinjie@huawei.com>
 References: <20230903071028.1518913-1-ruanjinjie@huawei.com>
@@ -49,120 +49,87 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Inject fault while probing kunit-example-test.ko, if kstrdup()
-fails in mod_sysfs_setup() in load_module(), the mod->state will
-switch from MODULE_STATE_COMING to MODULE_STATE_GOING instead of
-from MODULE_STATE_LIVE to MODULE_STATE_GOING, so only
-kunit_module_exit() will be called without kunit_module_init(), and
-the mod->kunit_suites is no set correctly and the free in
-kunit_free_suite_set() will cause below wild-memory-access bug.
+Take the last kfree(parsed_filters) and add it to be the first. Take
+the first kfree(copy) and add it to be the last. The Best practice is to
+return these errors reversely.
 
-The mod->state state machine when load_module() succeeds:
+And as David suggested, add several labels which target only the things
+which actually have been allocated so far.
 
-MODULE_STATE_UNFORMED ---> MODULE_STATE_COMING ---> MODULE_STATE_LIVE
-	 ^						|
-	 |						| delete_module
-	 +---------------- MODULE_STATE_GOING <---------+
-
-The mod->state state machine when load_module() fails at
-mod_sysfs_setup():
-
-MODULE_STATE_UNFORMED ---> MODULE_STATE_COMING ---> MODULE_STATE_GOING
-	^						|
-	|						|
-	+-----------------------------------------------+
-
-Call kunit_module_init() at MODULE_STATE_COMING state to fix the issue
-because MODULE_STATE_LIVE is transformed from it.
-
- Unable to handle kernel paging request at virtual address ffffff341e942a88
- KASAN: maybe wild-memory-access in range [0x0003f9a0f4a15440-0x0003f9a0f4a15447]
- Mem abort info:
-   ESR = 0x0000000096000004
-   EC = 0x25: DABT (current EL), IL = 32 bits
-   SET = 0, FnV = 0
-   EA = 0, S1PTW = 0
-   FSC = 0x04: level 0 translation fault
- Data abort info:
-   ISV = 0, ISS = 0x00000004, ISS2 = 0x00000000
-   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
-   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
- swapper pgtable: 4k pages, 48-bit VAs, pgdp=00000000441ea000
- [ffffff341e942a88] pgd=0000000000000000, p4d=0000000000000000
- Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
- Modules linked in: kunit_example_test(-) cfg80211 rfkill 8021q garp mrp stp llc ipv6 [last unloaded: kunit_example_test]
- CPU: 3 PID: 2035 Comm: modprobe Tainted: G        W        N 6.5.0-next-20230828+ #136
- Hardware name: linux,dummy-virt (DT)
- pstate: a0000005 (NzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
- pc : kfree+0x2c/0x70
- lr : kunit_free_suite_set+0xcc/0x13c
- sp : ffff8000829b75b0
- x29: ffff8000829b75b0 x28: ffff8000829b7b90 x27: 0000000000000000
- x26: dfff800000000000 x25: ffffcd07c82a7280 x24: ffffcd07a50ab300
- x23: ffffcd07a50ab2e8 x22: 1ffff00010536ec0 x21: dfff800000000000
- x20: ffffcd07a50ab2f0 x19: ffffcd07a50ab2f0 x18: 0000000000000000
- x17: 0000000000000000 x16: 0000000000000000 x15: ffffcd07c24b6764
- x14: ffffcd07c24b63c0 x13: ffffcd07c4cebb94 x12: ffff700010536ec7
- x11: 1ffff00010536ec6 x10: ffff700010536ec6 x9 : dfff800000000000
- x8 : 00008fffefac913a x7 : 0000000041b58ab3 x6 : 0000000000000000
- x5 : 1ffff00010536ec5 x4 : ffff8000829b7628 x3 : dfff800000000000
- x2 : ffffff341e942a80 x1 : ffffcd07a50aa000 x0 : fffffc0000000000
- Call trace:
-  kfree+0x2c/0x70
-  kunit_free_suite_set+0xcc/0x13c
-  kunit_module_notify+0xd8/0x360
-  blocking_notifier_call_chain+0xc4/0x128
-  load_module+0x382c/0x44a4
-  init_module_from_file+0xd4/0x128
-  idempotent_init_module+0x2c8/0x524
-  __arm64_sys_finit_module+0xac/0x100
-  invoke_syscall+0x6c/0x258
-  el0_svc_common.constprop.0+0x160/0x22c
-  do_el0_svc+0x44/0x5c
-  el0_svc+0x38/0x78
-  el0t_64_sync_handler+0x13c/0x158
-  el0t_64_sync+0x190/0x194
- Code: aa0003e1 b25657e0 d34cfc42 8b021802 (f9400440)
- ---[ end trace 0000000000000000 ]---
- Kernel panic - not syncing: Oops: Fatal exception
- SMP: stopping secondary CPUs
- Kernel Offset: 0x4d0742200000 from 0xffff800080000000
- PHYS_OFFSET: 0xffffee43c0000000
- CPU features: 0x88000203,3c020000,1000421b
- Memory Limit: none
- Rebooting in 1 seconds..
-
-Fixes: 3d6e44623841 ("kunit: unify module and builtin suite definitions")
+Fixes: 529534e8cba3 ("kunit: Add ability to filter attributes")
+Fixes: abbf73816b6f ("kunit: fix possible memory leak in kunit_filter_suites()")
 Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
 Reviewed-by: Rae Moar <rmoar@google.com>
-Reviewed-by: David Gow <davidgow@google.com>
+Suggested-by: David Gow <davidgow@google.com>
 ---
 v2:
-- Add Reviewed-by.
-- Adjust the 4th patch to be the second.
+- Add err path labels.
+- Update the commit message and title.
 ---
- lib/kunit/test.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ lib/kunit/executor.c | 21 ++++++++++++---------
+ 1 file changed, 12 insertions(+), 9 deletions(-)
 
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 49698a168437..421f13981412 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -784,12 +784,13 @@ static int kunit_module_notify(struct notifier_block *nb, unsigned long val,
- 
- 	switch (val) {
- 	case MODULE_STATE_LIVE:
--		kunit_module_init(mod);
- 		break;
- 	case MODULE_STATE_GOING:
- 		kunit_module_exit(mod);
- 		break;
- 	case MODULE_STATE_COMING:
-+		kunit_module_init(mod);
-+		break;
- 	case MODULE_STATE_UNFORMED:
- 		break;
+diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
+index 5181aa2e760b..0eda42b0c9bb 100644
+--- a/lib/kunit/executor.c
++++ b/lib/kunit/executor.c
+@@ -166,7 +166,7 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
+ 		for (j = 0; j < filter_count; j++)
+ 			parsed_filters[j] = kunit_next_attr_filter(&filters, err);
+ 		if (*err)
+-			goto err;
++			goto free_parsed_filters;
  	}
+ 
+ 	for (i = 0; &suite_set->start[i] != suite_set->end; i++) {
+@@ -178,7 +178,7 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
+ 					parsed_glob.test_glob);
+ 			if (IS_ERR(filtered_suite)) {
+ 				*err = PTR_ERR(filtered_suite);
+-				goto err;
++				goto free_parsed_filters;
+ 			}
+ 		}
+ 		if (filter_count > 0 && parsed_filters != NULL) {
+@@ -195,10 +195,11 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
+ 				filtered_suite = new_filtered_suite;
+ 
+ 				if (*err)
+-					goto err;
++					goto free_parsed_filters;
++
+ 				if (IS_ERR(filtered_suite)) {
+ 					*err = PTR_ERR(filtered_suite);
+-					goto err;
++					goto free_parsed_filters;
+ 				}
+ 				if (!filtered_suite)
+ 					break;
+@@ -213,17 +214,19 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
+ 	filtered.start = copy_start;
+ 	filtered.end = copy;
+ 
+-err:
+-	if (*err)
+-		kfree(copy);
++free_parsed_filters:
++	if (filter_count)
++		kfree(parsed_filters);
+ 
++free_parsed_glob:
+ 	if (filter_glob) {
+ 		kfree(parsed_glob.suite_glob);
+ 		kfree(parsed_glob.test_glob);
+ 	}
+ 
+-	if (filter_count)
+-		kfree(parsed_filters);
++free_copy:
++	if (*err)
++		kfree(copy);
+ 
+ 	return filtered;
+ }
 -- 
 2.34.1
 
