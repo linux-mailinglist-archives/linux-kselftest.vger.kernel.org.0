@@ -2,35 +2,35 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C145E790B1C
-	for <lists+linux-kselftest@lfdr.de>; Sun,  3 Sep 2023 09:11:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BFC1790B1D
+	for <lists+linux-kselftest@lfdr.de>; Sun,  3 Sep 2023 09:11:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230282AbjICHLD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 3 Sep 2023 03:11:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50458 "EHLO
+        id S230373AbjICHLL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 3 Sep 2023 03:11:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjICHLC (ORCPT
+        with ESMTP id S230328AbjICHLK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 3 Sep 2023 03:11:02 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D53A1A5
-        for <linux-kselftest@vger.kernel.org>; Sun,  3 Sep 2023 00:10:59 -0700 (PDT)
-Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4RdjWx0g80zQjL8;
-        Sun,  3 Sep 2023 15:07:41 +0800 (CST)
+        Sun, 3 Sep 2023 03:11:10 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2C25197
+        for <linux-kselftest@vger.kernel.org>; Sun,  3 Sep 2023 00:11:05 -0700 (PDT)
+Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4RdjYp4YYHz1M8k3;
+        Sun,  3 Sep 2023 15:09:18 +0800 (CST)
 Received: from huawei.com (10.90.53.73) by kwepemi500008.china.huawei.com
  (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Sun, 3 Sep
- 2023 15:10:57 +0800
+ 2023 15:11:01 +0800
 From:   Jinjie Ruan <ruanjinjie@huawei.com>
 To:     <brendan.higgins@linux.dev>, <davidgow@google.com>,
         <skhan@linuxfoundation.org>, <jk@codeconstruct.com.au>,
         <dlatypov@google.com>, <rmoar@google.com>,
-        <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
-        Ruan Jinjie <ruanjinjie@huawei.com>
-Subject: [PATCH v2 2/4] kunit: Fix the wrong err path and add goto labels in kunit_filter_suites()
-Date:   Sun, 3 Sep 2023 15:10:26 +0800
-Message-ID: <20230903071028.1518913-3-ruanjinjie@huawei.com>
+        <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>
+CC:     <ruanjinjie@huawei.com>
+Subject: [PATCH v2 3/4] kunit: Fix possible null-ptr-deref in kunit_parse_glob_filter()
+Date:   Sun, 3 Sep 2023 15:10:27 +0800
+Message-ID: <20230903071028.1518913-4-ruanjinjie@huawei.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230903071028.1518913-1-ruanjinjie@huawei.com>
 References: <20230903071028.1518913-1-ruanjinjie@huawei.com>
@@ -49,87 +49,136 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Take the last kfree(parsed_filters) and add it to be the first. Take
-the first kfree(copy) and add it to be the last. The Best practice is to
-return these errors reversely.
+Inject fault while probing kunit-example-test.ko, if kzalloc fails
+in kunit_parse_glob_filter(), strcpy() or strncpy() to NULL will
+cause below null-ptr-deref bug. So check NULL for kzalloc() and
+return int instead of void for kunit_parse_glob_filter().
 
-And as David suggested, add several labels which target only the things
-which actually have been allocated so far.
+ Unable to handle kernel paging request at virtual address dfff800000000000
+ KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
+ Mem abort info:
+   ESR = 0x0000000096000005
+   EC = 0x25: DABT (current EL), IL = 32 bits
+   SET = 0, FnV = 0
+   EA = 0, S1PTW = 0
+   FSC = 0x05: level 1 translation fault
+ Data abort info:
+   ISV = 0, ISS = 0x00000005, ISS2 = 0x00000000
+   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
+   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
+ [dfff800000000000] address between user and kernel address ranges
+ Internal error: Oops: 0000000096000005 [#1] PREEMPT SMP
+ Modules linked in: kunit_example_test cfg80211 rfkill 8021q garp mrp stp llc ipv6 [last unloaded: kunit_example_test]
+ CPU: 4 PID: 6047 Comm: modprobe Tainted: G        W        N 6.5.0-next-20230829+ #141
+ Hardware name: linux,dummy-virt (DT)
+ pstate: 80000005 (Nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+ pc : strncpy+0x58/0xc0
+ lr : kunit_filter_suites+0x15c/0xa84
+ sp : ffff800082a17420
+ x29: ffff800082a17420 x28: 0000000000000000 x27: 0000000000000004
+ x26: 0000000000000000 x25: ffffa847e40a5320 x24: 0000000000000001
+ x23: 0000000000000000 x22: 0000000000000001 x21: dfff800000000000
+ x20: 000000000000002a x19: 0000000000000000 x18: 00000000750b3b54
+ x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+ x14: 0000000000000000 x13: 34393178302f3039 x12: ffff7508fcea4ec1
+ x11: 1ffff508fcea4ec0 x10: ffff7508fcea4ec0 x9 : dfff800000000000
+ x8 : ffff6051b1a7f86a x7 : ffff800082a17270 x6 : 0000000000000002
+ x5 : 0000000000000098 x4 : ffff028d9817b250 x3 : 0000000000000000
+ x2 : 0000000000000000 x1 : ffffa847e40a5320 x0 : 0000000000000000
+ Call trace:
+  strncpy+0x58/0xc0
+  kunit_filter_suites+0x15c/0xa84
+  kunit_module_notify+0x1b0/0x3ac
+  blocking_notifier_call_chain+0xc4/0x128
+  do_init_module+0x250/0x594
+  load_module+0x37b0/0x44b4
+  init_module_from_file+0xd4/0x128
+  idempotent_init_module+0x2c8/0x524
+  __arm64_sys_finit_module+0xac/0x100
+  invoke_syscall+0x6c/0x258
+  el0_svc_common.constprop.0+0x160/0x22c
+  do_el0_svc+0x44/0x5c
+  el0_svc+0x38/0x78
+  el0t_64_sync_handler+0x13c/0x158
+  el0t_64_sync+0x190/0x194
+ Code: 5400028a d343fe63 12000a62 39400034 (38f56863)
+ ---[ end trace 0000000000000000 ]---
+ Kernel panic - not syncing: Oops: Fatal exception
+ SMP: stopping secondary CPUs
+ Kernel Offset: 0x284761400000 from 0xffff800080000000
+ PHYS_OFFSET: 0xfffffd7380000000
+ CPU features: 0x88000203,3c020000,1000421b
+ Memory Limit: none
+ Rebooting in 1 seconds..
 
-Fixes: 529534e8cba3 ("kunit: Add ability to filter attributes")
-Fixes: abbf73816b6f ("kunit: fix possible memory leak in kunit_filter_suites()")
+Fixes: a127b154a8f2 ("kunit: tool: allow filtering test cases via glob")
 Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
 Reviewed-by: Rae Moar <rmoar@google.com>
-Suggested-by: David Gow <davidgow@google.com>
+Reviewed-by: David Gow <davidgow@google.com>
 ---
 v2:
-- Add err path labels.
-- Update the commit message and title.
+- goto the new add identical purpose free_copy label.
 ---
- lib/kunit/executor.c | 21 ++++++++++++---------
- 1 file changed, 12 insertions(+), 9 deletions(-)
+ lib/kunit/executor.c | 23 +++++++++++++++++++----
+ 1 file changed, 19 insertions(+), 4 deletions(-)
 
 diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-index 5181aa2e760b..0eda42b0c9bb 100644
+index 0eda42b0c9bb..28f144de748b 100644
 --- a/lib/kunit/executor.c
 +++ b/lib/kunit/executor.c
-@@ -166,7 +166,7 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
- 		for (j = 0; j < filter_count; j++)
- 			parsed_filters[j] = kunit_next_attr_filter(&filters, err);
- 		if (*err)
--			goto err;
-+			goto free_parsed_filters;
- 	}
+@@ -65,7 +65,7 @@ struct kunit_glob_filter {
+ };
  
- 	for (i = 0; &suite_set->start[i] != suite_set->end; i++) {
-@@ -178,7 +178,7 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
- 					parsed_glob.test_glob);
- 			if (IS_ERR(filtered_suite)) {
- 				*err = PTR_ERR(filtered_suite);
--				goto err;
-+				goto free_parsed_filters;
- 			}
- 		}
- 		if (filter_count > 0 && parsed_filters != NULL) {
-@@ -195,10 +195,11 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
- 				filtered_suite = new_filtered_suite;
+ /* Split "suite_glob.test_glob" into two. Assumes filter_glob is not empty. */
+-static void kunit_parse_glob_filter(struct kunit_glob_filter *parsed,
++static int kunit_parse_glob_filter(struct kunit_glob_filter *parsed,
+ 				    const char *filter_glob)
+ {
+ 	const int len = strlen(filter_glob);
+@@ -73,16 +73,28 @@ static void kunit_parse_glob_filter(struct kunit_glob_filter *parsed,
  
- 				if (*err)
--					goto err;
-+					goto free_parsed_filters;
+ 	if (!period) {
+ 		parsed->suite_glob = kzalloc(len + 1, GFP_KERNEL);
++		if (!parsed->suite_glob)
++			return -ENOMEM;
 +
- 				if (IS_ERR(filtered_suite)) {
- 					*err = PTR_ERR(filtered_suite);
--					goto err;
-+					goto free_parsed_filters;
- 				}
- 				if (!filtered_suite)
- 					break;
-@@ -213,17 +214,19 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
- 	filtered.start = copy_start;
- 	filtered.end = copy;
- 
--err:
--	if (*err)
--		kfree(copy);
-+free_parsed_filters:
-+	if (filter_count)
-+		kfree(parsed_filters);
- 
-+free_parsed_glob:
- 	if (filter_glob) {
- 		kfree(parsed_glob.suite_glob);
- 		kfree(parsed_glob.test_glob);
+ 		parsed->test_glob = NULL;
+ 		strcpy(parsed->suite_glob, filter_glob);
+-		return;
++		return 0;
  	}
  
--	if (filter_count)
--		kfree(parsed_filters);
-+free_copy:
-+	if (*err)
-+		kfree(copy);
+ 	parsed->suite_glob = kzalloc(period - filter_glob + 1, GFP_KERNEL);
++	if (!parsed->suite_glob)
++		return -ENOMEM;
++
+ 	parsed->test_glob = kzalloc(len - (period - filter_glob) + 1, GFP_KERNEL);
++	if (!parsed->test_glob) {
++		kfree(parsed->suite_glob);
++		return -ENOMEM;
++	}
  
- 	return filtered;
+ 	strncpy(parsed->suite_glob, filter_glob, period - filter_glob);
+ 	strncpy(parsed->test_glob, period + 1, len - (period - filter_glob));
++
++	return 0;
  }
+ 
+ /* Create a copy of suite with only tests that match test_glob. */
+@@ -152,8 +164,11 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
+ 	}
+ 	copy_start = copy;
+ 
+-	if (filter_glob)
+-		kunit_parse_glob_filter(&parsed_glob, filter_glob);
++	if (filter_glob) {
++		*err = kunit_parse_glob_filter(&parsed_glob, filter_glob);
++		if (*err)
++			goto free_copy;
++	}
+ 
+ 	/* Parse attribute filters */
+ 	if (filters) {
 -- 
 2.34.1
 
