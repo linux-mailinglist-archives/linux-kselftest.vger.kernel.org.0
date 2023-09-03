@@ -2,69 +2,69 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43A4F790CB2
+	by mail.lfdr.de (Postfix) with ESMTP id 8C7E8790CB3
 	for <lists+linux-kselftest@lfdr.de>; Sun,  3 Sep 2023 17:13:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243965AbjICPNw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 3 Sep 2023 11:13:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53796 "EHLO
+        id S244223AbjICPNx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 3 Sep 2023 11:13:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243495AbjICPNq (ORCPT
+        with ESMTP id S243793AbjICPNt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 3 Sep 2023 11:13:46 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9553011A
-        for <linux-kselftest@vger.kernel.org>; Sun,  3 Sep 2023 08:13:42 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id ca18e2360f4ac-795547f055fso33810839f.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 03 Sep 2023 08:13:42 -0700 (PDT)
+        Sun, 3 Sep 2023 11:13:49 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9936612A
+        for <linux-kselftest@vger.kernel.org>; Sun,  3 Sep 2023 08:13:43 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id ca18e2360f4ac-79564282cb1so21313239f.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 03 Sep 2023 08:13:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1693754022; x=1694358822; darn=vger.kernel.org;
+        d=joelfernandes.org; s=google; t=1693754023; x=1694358823; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JBAJc+/RO3zfkzT8oQUizmToikDAYdiXUobcga/v+/I=;
-        b=XNqp/7cUxCblamQ14jAv2530ONZdbHS8TfgSn+1vc+pkWsi4bjulAI+d5M7X6rN2Jo
-         1IhL1ZQDqWYsXj14OYub0Xh2CCcakwHVDpNea7lDyOSqkMFLqhDYLVqSBT4X3Xn+ztf+
-         ZxoPkY1DZVB9n60LXrBl/boVlxcvPLUov7YqY=
+        bh=f+nqtAseasZFOdOpIwYvU1wfrPMXCZ3Zt4BE+IzJOeI=;
+        b=icCM7tAzofuObhoJQPpsMpaO+grSsCguGAmim704GqP8i0u1ttjtGUGUoHa3E5vRjs
+         zKxkWRouRndPglhy6x+rPOwjcFPdDCi93iOcjGd+LXmjzx2cItmRTPTG83TYiYP7RiAU
+         fnxCDKydFoOsyu+ocnnMmvLl1vFOjDaUJGR6w=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693754022; x=1694358822;
+        d=1e100.net; s=20221208; t=1693754023; x=1694358823;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JBAJc+/RO3zfkzT8oQUizmToikDAYdiXUobcga/v+/I=;
-        b=R+NlkrPkGK2TlA2nXPYXGSpNjjXU5jylAR6xS03K638wcIRuviLn3Bf9hjBv/huSQ7
-         wOSQcJjafIysTZUDeY67bgmosO6gS6Bc15K+pvyXJR8LMXasTkkCFCQxqduqh8aZjtPx
-         ifsdn/iJnDXuozq0SrkrsyN5igb2i47UflsSCvq8Mj8ia324yW5kzVZNlfBe6i6o3+xa
-         ZCKWgOpZ+kZTn2PyVSwvNelUexeAwfkTwWUdBb9gRz4BatYtKJjCjb+VjtMejx0ym9Zp
-         2lDAMM502uJB6OtWRywBALxytNPSn6T6RTayaMTVhOOTGJvM0thnKXPufI6+0NDG7f7T
-         fg1g==
-X-Gm-Message-State: AOJu0YwI9jYK4KJF4yed5LXkzt9skOiFTWtbALcZUxkZNTy1BD0t67ot
-        mW4A3YL6Xoi6sBw66S4rUCTjLskdad5IpaRKFQQ=
-X-Google-Smtp-Source: AGHT+IEnJA2vqbUSl47p66mh9CCynh4MUM2TZrhlzcxgAiU4zPqoOBOaRdFGp3Nx/rofoZWjgNCIdw==
-X-Received: by 2002:a6b:7218:0:b0:77e:3598:e511 with SMTP id n24-20020a6b7218000000b0077e3598e511mr9517002ioc.2.1693754022005;
+        bh=f+nqtAseasZFOdOpIwYvU1wfrPMXCZ3Zt4BE+IzJOeI=;
+        b=Xm80vcrB1EF1cqy912Pt2TTkmiGaGo3jcg9hIcx1SrDSZ1pO149n6AwbgsAgND5yAf
+         jbtDiRquYgPwamlh3jTL2+VUsvggTTK4UVsbTJFe4iS3cUAmyG2KuuEaSPxHfY4wdGLS
+         1kEdohc2IEPEJFJY0rpbv5X0ZtFDX3DQXFd138RwQx5LVesxaTpJuz2gU4LJxiy96/WC
+         qnec6k5XWUjIasPCBvE3AzqJG4QeUf5JoGv/e1/kjFuWh1zh4N+nfdcGIUdMoF55ckyQ
+         TVFPdRMTwfkrk+cnoZm0FkwQuYkt/7+2ej8cFv2tae+f35o+6BxnCkkKA1wjJtJIr5XC
+         TwCw==
+X-Gm-Message-State: AOJu0Yze8Dom+z0NBTW3jNg0q7XTYaOnqoBhEL6jKpBzYO3mO2h/cEJU
+        T9c7bvUPxlOx3/xMOWm/Kb6tlg==
+X-Google-Smtp-Source: AGHT+IG0ubtl3WQP2iLAfgo/8U3Gp+Qcadj9ljmVKqqAyOzu0TCZj645xHn8dTLLCtLKiiIphITokw==
+X-Received: by 2002:a6b:ec16:0:b0:792:82f8:6f90 with SMTP id c22-20020a6bec16000000b0079282f86f90mr8856879ioh.16.1693754022914;
         Sun, 03 Sep 2023 08:13:42 -0700 (PDT)
 Received: from joelboxx5.corp.google.com (156.190.123.34.bc.googleusercontent.com. [34.123.190.156])
-        by smtp.gmail.com with ESMTPSA id f5-20020a6b5105000000b007835a305f61sm2605897iob.36.2023.09.03.08.13.41
+        by smtp.gmail.com with ESMTPSA id f5-20020a6b5105000000b007835a305f61sm2605897iob.36.2023.09.03.08.13.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 03 Sep 2023 08:13:41 -0700 (PDT)
+        Sun, 03 Sep 2023 08:13:42 -0700 (PDT)
 From:   "Joel Fernandes (Google)" <joel@joelfernandes.org>
 To:     linux-kernel@vger.kernel.org
-Cc:     "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+Cc:     Joel Fernandes <joel@joelfernandes.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
         linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
         Shuah Khan <shuah@kernel.org>,
         Vlastimil Babka <vbabka@suse.cz>,
         Michal Hocko <mhocko@suse.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
-        Lorenzo Stoakes <lstoakes@gmail.com>,
         Kirill A Shutemov <kirill@shutemov.name>,
         "Liam R. Howlett" <liam.howlett@oracle.com>,
         "Paul E. McKenney" <paulmck@kernel.org>,
         Suren Baghdasaryan <surenb@google.com>,
         Kalesh Singh <kaleshsingh@google.com>,
         Lokesh Gidra <lokeshgidra@google.com>
-Subject: [PATCH v6 6/7] selftests: mm: Add a test for remapping within a range
-Date:   Sun,  3 Sep 2023 15:13:27 +0000
-Message-ID: <20230903151328.2981432-7-joel@joelfernandes.org>
+Subject: [PATCH v6 7/7] selftests: mm: Add a test for moving from an offset from start of mapping
+Date:   Sun,  3 Sep 2023 15:13:28 +0000
+Message-ID: <20230903151328.2981432-8-joel@joelfernandes.org>
 X-Mailer: git-send-email 2.42.0.283.g2d96d420d3-goog
 In-Reply-To: <20230903151328.2981432-1-joel@joelfernandes.org>
 References: <20230903151328.2981432-1-joel@joelfernandes.org>
@@ -79,67 +79,189 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Move a block of memory within a memory range. Any alignment optimization
-on the source address may cause corruption. Verify using kselftest that
-it works. I have also verified with tracing that such optimization does
-not happen due to this check in can_align_down():
+From: Joel Fernandes <joel@joelfernandes.org>
 
-if (!for_stack && vma->vm_start != addr_to_align)
-	return false;
+It is possible that the aligned address falls on no existing mapping,
+however that does not mean that we can just align it down to that.
+This test verifies that the "vma->vm_start != addr_to_align" check in
+can_align_down() prevents disastrous results if aligning down when
+source and dest are mutually aligned within a PMD but the source/dest
+addresses requested are not at the beginning of the respective mapping
+containing these addresses.
 
+Reviewed-by: Lorenzo Stoakes <lstoakes@gmail.com>
 Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 ---
- tools/testing/selftests/mm/mremap_test.c | 79 +++++++++++++++++++++++-
- 1 file changed, 78 insertions(+), 1 deletion(-)
+ tools/testing/selftests/mm/mremap_test.c | 189 ++++++++++++++++-------
+ 1 file changed, 134 insertions(+), 55 deletions(-)
 
 diff --git a/tools/testing/selftests/mm/mremap_test.c b/tools/testing/selftests/mm/mremap_test.c
-index d7366074e2a8..12a095457f4c 100644
+index 12a095457f4c..1f836e670a37 100644
 --- a/tools/testing/selftests/mm/mremap_test.c
 +++ b/tools/testing/selftests/mm/mremap_test.c
-@@ -23,6 +23,7 @@
- #define VALIDATION_NO_THRESHOLD 0	/* Verify the entire region */
+@@ -24,6 +24,7 @@
  
  #define MIN(X, Y) ((X) < (Y) ? (X) : (Y))
-+#define SIZE_MB(m) ((size_t)m * (1024 * 1024))
+ #define SIZE_MB(m) ((size_t)m * (1024 * 1024))
++#define SIZE_KB(k) ((size_t)k * 1024)
  
  struct config {
  	unsigned long long src_alignment;
-@@ -226,6 +227,79 @@ static void mremap_expand_merge_offset(FILE *maps_fp, unsigned long page_size)
- 		ksft_test_result_fail("%s\n", test_name);
+@@ -148,6 +149,60 @@ static bool is_range_mapped(FILE *maps_fp, void *start, void *end)
+ 	return success;
  }
  
 +/*
-+ * Verify that an mremap within a range does not cause corruption
-+ * of unrelated part of range.
-+ *
-+ * Consider the following range which is 2MB aligned and is
-+ * a part of a larger 20MB range which is not shown. Each
-+ * character is 256KB below making the source and destination
-+ * 2MB each. The lower case letters are moved (s to d) and the
-+ * upper case letters are not moved. The below test verifies
-+ * that the upper case S letters are not corrupted by the
-+ * adjacent mremap.
-+ *
-+ * |DDDDddddSSSSssss|
++ * Returns the start address of the mapping on success, else returns
++ * NULL on failure.
 + */
-+static void mremap_move_within_range(char pattern_seed)
++static void *get_source_mapping(struct config c)
 +{
-+	char *test_name = "mremap mremap move within range";
-+	void *src, *dest;
++	unsigned long long addr = 0ULL;
++	void *src_addr = NULL;
++	unsigned long long mmap_min_addr;
++
++	mmap_min_addr = get_mmap_min_addr();
++	/*
++	 * For some tests, we need to not have any mappings below the
++	 * source mapping. Add some headroom to mmap_min_addr for this.
++	 */
++	mmap_min_addr += 10 * _4MB;
++
++retry:
++	addr += c.src_alignment;
++	if (addr < mmap_min_addr)
++		goto retry;
++
++	src_addr = mmap((void *) addr, c.region_size, PROT_READ | PROT_WRITE,
++					MAP_FIXED_NOREPLACE | MAP_ANONYMOUS | MAP_SHARED,
++					-1, 0);
++	if (src_addr == MAP_FAILED) {
++		if (errno == EPERM || errno == EEXIST)
++			goto retry;
++		goto error;
++	}
++	/*
++	 * Check that the address is aligned to the specified alignment.
++	 * Addresses which have alignments that are multiples of that
++	 * specified are not considered valid. For instance, 1GB address is
++	 * 2MB-aligned, however it will not be considered valid for a
++	 * requested alignment of 2MB. This is done to reduce coincidental
++	 * alignment in the tests.
++	 */
++	if (((unsigned long long) src_addr & (c.src_alignment - 1)) ||
++			!((unsigned long long) src_addr & c.src_alignment)) {
++		munmap(src_addr, c.region_size);
++		goto retry;
++	}
++
++	if (!src_addr)
++		goto error;
++
++	return src_addr;
++error:
++	ksft_print_msg("Failed to map source region: %s\n",
++			strerror(errno));
++	return NULL;
++}
++
+ /*
+  * This test validates that merge is called when expanding a mapping.
+  * Mapping containing three pages is created, middle page is unmapped
+@@ -300,60 +355,6 @@ static void mremap_move_within_range(char pattern_seed)
+ 		ksft_test_result_fail("%s\n", test_name);
+ }
+ 
+-/*
+- * Returns the start address of the mapping on success, else returns
+- * NULL on failure.
+- */
+-static void *get_source_mapping(struct config c)
+-{
+-	unsigned long long addr = 0ULL;
+-	void *src_addr = NULL;
+-	unsigned long long mmap_min_addr;
+-
+-	mmap_min_addr = get_mmap_min_addr();
+-	/*
+-	 * For some tests, we need to not have any mappings below the
+-	 * source mapping. Add some headroom to mmap_min_addr for this.
+-	 */
+-	mmap_min_addr += 10 * _4MB;
+-
+-retry:
+-	addr += c.src_alignment;
+-	if (addr < mmap_min_addr)
+-		goto retry;
+-
+-	src_addr = mmap((void *) addr, c.region_size, PROT_READ | PROT_WRITE,
+-					MAP_FIXED_NOREPLACE | MAP_ANONYMOUS | MAP_SHARED,
+-					-1, 0);
+-	if (src_addr == MAP_FAILED) {
+-		if (errno == EPERM || errno == EEXIST)
+-			goto retry;
+-		goto error;
+-	}
+-	/*
+-	 * Check that the address is aligned to the specified alignment.
+-	 * Addresses which have alignments that are multiples of that
+-	 * specified are not considered valid. For instance, 1GB address is
+-	 * 2MB-aligned, however it will not be considered valid for a
+-	 * requested alignment of 2MB. This is done to reduce coincidental
+-	 * alignment in the tests.
+-	 */
+-	if (((unsigned long long) src_addr & (c.src_alignment - 1)) ||
+-			!((unsigned long long) src_addr & c.src_alignment)) {
+-		munmap(src_addr, c.region_size);
+-		goto retry;
+-	}
+-
+-	if (!src_addr)
+-		goto error;
+-
+-	return src_addr;
+-error:
+-	ksft_print_msg("Failed to map source region: %s\n",
+-			strerror(errno));
+-	return NULL;
+-}
+-
+ /* Returns the time taken for the remap on success else returns -1. */
+ static long long remap_region(struct config c, unsigned int threshold_mb,
+ 			      char pattern_seed)
+@@ -487,6 +488,83 @@ static long long remap_region(struct config c, unsigned int threshold_mb,
+ 	return ret;
+ }
+ 
++/*
++ * Verify that an mremap aligning down does not destroy
++ * the beginning of the mapping just because the aligned
++ * down address landed on a mapping that maybe does not exist.
++ */
++static void mremap_move_1mb_from_start(char pattern_seed)
++{
++	char *test_name = "mremap move 1mb from start at 1MB+256KB aligned src";
++	void *src = NULL, *dest = NULL;
 +	int i, success = 1;
 +
-+	size_t size = SIZE_MB(20);
-+	void *ptr = mmap(NULL, size, PROT_READ | PROT_WRITE,
-+			 MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+	if (ptr == MAP_FAILED) {
-+		perror("mmap");
++	/* Config to reuse get_source_mapping() to do an aligned mmap. */
++	struct config c = {
++		.src_alignment = SIZE_MB(1) + SIZE_KB(256),
++		.region_size = SIZE_MB(6)
++	};
++
++	src = get_source_mapping(c);
++	if (!src) {
 +		success = 0;
 +		goto out;
 +	}
-+	memset(ptr, 0, size);
 +
-+	src = ptr + SIZE_MB(6);
-+	src = (void *)((unsigned long)src & ~(SIZE_MB(2) - 1));
++	c.src_alignment = SIZE_MB(1) + SIZE_KB(256);
++	dest = get_source_mapping(c);
++	if (!dest) {
++		success = 0;
++		goto out;
++	}
 +
 +	/* Set byte pattern for source block. */
 +	srand(pattern_seed);
@@ -147,7 +269,11 @@ index d7366074e2a8..12a095457f4c 100644
 +		((char *)src)[i] = (char) rand();
 +	}
 +
-+	dest = src - SIZE_MB(2);
++	/*
++	 * Unmap the beginning of dest so that the aligned address
++	 * falls on no mapping.
++	 */
++	munmap(dest, SIZE_MB(1));
 +
 +	void *new_ptr = mremap(src + SIZE_MB(1), SIZE_MB(1), SIZE_MB(1),
 +						   MREMAP_MAYMOVE | MREMAP_FIXED, dest + SIZE_MB(1));
@@ -172,8 +298,11 @@ index d7366074e2a8..12a095457f4c 100644
 +	}
 +
 +out:
-+	if (munmap(ptr, size) == -1)
-+		perror("munmap");
++	if (src && munmap(src, c.region_size) == -1)
++		perror("munmap src");
++
++	if (dest && munmap(dest, c.region_size) == -1)
++		perror("munmap dest");
 +
 +	if (success)
 +		ksft_test_result_pass("%s\n", test_name);
@@ -181,35 +310,26 @@ index d7366074e2a8..12a095457f4c 100644
 +		ksft_test_result_fail("%s\n", test_name);
 +}
 +
- /*
-  * Returns the start address of the mapping on success, else returns
-  * NULL on failure.
-@@ -491,6 +565,7 @@ int main(int argc, char **argv)
+ static void run_mremap_test_case(struct test test_case, int *failures,
+ 				 unsigned int threshold_mb,
+ 				 unsigned int pattern_seed)
+@@ -565,7 +643,7 @@ int main(int argc, char **argv)
  	unsigned int threshold_mb = VALIDATION_DEFAULT_THRESHOLD;
  	unsigned int pattern_seed;
  	int num_expand_tests = 2;
-+	int num_misc_tests = 1;
+-	int num_misc_tests = 1;
++	int num_misc_tests = 2;
  	struct test test_cases[MAX_TEST] = {};
  	struct test perf_test_cases[MAX_PERF_TEST];
  	int page_size;
-@@ -572,7 +647,7 @@ int main(int argc, char **argv)
- 				(threshold_mb * _1MB >= _1GB);
- 
- 	ksft_set_plan(ARRAY_SIZE(test_cases) + (run_perf_tests ?
--		      ARRAY_SIZE(perf_test_cases) : 0) + num_expand_tests);
-+		      ARRAY_SIZE(perf_test_cases) : 0) + num_expand_tests + num_misc_tests);
- 
- 	for (i = 0; i < ARRAY_SIZE(test_cases); i++)
- 		run_mremap_test_case(test_cases[i], &failures, threshold_mb,
-@@ -590,6 +665,8 @@ int main(int argc, char **argv)
- 
+@@ -666,6 +744,7 @@ int main(int argc, char **argv)
  	fclose(maps_fp);
  
-+	mremap_move_within_range(pattern_seed);
-+
+ 	mremap_move_within_range(pattern_seed);
++	mremap_move_1mb_from_start(pattern_seed);
+ 
  	if (run_perf_tests) {
  		ksft_print_msg("\n%s\n",
- 		 "mremap HAVE_MOVE_PMD/PUD optimization time comparison for 1GB region:");
 -- 
 2.42.0.283.g2d96d420d3-goog
 
