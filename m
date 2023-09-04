@@ -2,121 +2,136 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 569387915AA
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Sep 2023 12:24:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B38947915D9
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Sep 2023 12:49:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241012AbjIDKY7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 4 Sep 2023 06:24:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49852 "EHLO
+        id S237429AbjIDKtC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 4 Sep 2023 06:49:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1352743AbjIDJyK (ORCPT
+        with ESMTP id S233006AbjIDKtC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 4 Sep 2023 05:54:10 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CB93CE1;
-        Mon,  4 Sep 2023 02:53:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1693821236; x=1725357236;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=8sQ3qCqDltmKmKXyDYt3/9gs19z0E3/d+pnpfc744Eg=;
-  b=afOF8N6K1irEG5LoF5dBUCSknO7F7LDUPQ4CDRfjaMZzhGEOL2WY/nRF
-   XWFACxDzfuJ4thCabk8dpqSlioQCiyi6zAQRXdD/HAMRtbiaTBTRYw/6p
-   4F+dWlexZRjElvKqLoq+CYXmzLlry5NmF9QbpIqXwWzTWnYbu1mbWslrH
-   xmI8ztd0nG/oBddQsNPRP3SkqTSV7+zDJS+ROCeQ4zRLNPCMc2CmLIdOy
-   nB8bvwxrDfYdp3KK0hzowcyCeNxcttzubHzDgDpEIX5YKCWRJrVYBtjik
-   Jyr1bu72a94kZRDmW9SSkif4Y1uk6BI0QUALPsLheks72ft87ndsL76kk
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10822"; a="356880629"
-X-IronPort-AV: E=Sophos;i="6.02,226,1688454000"; 
-   d="scan'208";a="356880629"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2023 02:53:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10822"; a="740700618"
-X-IronPort-AV: E=Sophos;i="6.02,226,1688454000"; 
-   d="scan'208";a="740700618"
-Received: from okozlyk-mobl.ger.corp.intel.com (HELO ijarvine-mobl2.ger.corp.intel.com) ([10.249.44.17])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2023 02:53:52 -0700
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        =?UTF-8?q?Maciej=20Wiecz=C3=B3r-Retman?= 
-        <maciej.wieczor-retman@intel.com>
-Cc:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Babu Moger <babu.moger@amd.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v5 0/8] selftests/resctrl: Rework benchmark command handling
-Date:   Mon,  4 Sep 2023 12:53:31 +0300
-Message-Id: <20230904095339.11321-1-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
+        Mon, 4 Sep 2023 06:49:02 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0384513E;
+        Mon,  4 Sep 2023 03:48:58 -0700 (PDT)
+Received: from [192.168.100.7] (unknown [39.34.185.243])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id CDCB866071DF;
+        Mon,  4 Sep 2023 11:48:54 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1693824536;
+        bh=k8kliKdo4+iIHRLqSKtbjBxDArE5A5ZN/aNGBF/7xOQ=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=aWYbEFN6Ey6zDENOv+2zxoLamc2uBbbohXXPHSCRTTbLzuIR0aQ3vmPibzl9+W5z/
+         T0pS+1TsE23oSfRaoLDEH34Z9gQs4Lugk3uFYAacoHKYLV33MxLa3m0/Z+Wwt33/bp
+         +aKIZ7KYMIeSJa88rMf0gfxauFwRXWUyacGAqAiFrRIQixUR4/9HiejOwDAEZZh1vI
+         LluVgj+O1MxJJeKNKhO44tzy0vxufvJcBaA68B7ZmM80pt4b9ly78W8jMVQKDA0RAR
+         7LttAzjzHBdwUl7RRu5gR8XhfGkvxckvvu3C5XbfbL+cpCCfpN/MFvM3qy5bhjxw3F
+         wwa41rMKceJ5Q==
+Message-ID: <9c0dae5b-a7ee-4399-abf3-883a5946f2f6@collabora.com>
+Date:   Mon, 4 Sep 2023 15:48:50 +0500
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        kernel@collabora.com, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/6] selftests: capabilities: remove duplicate unneeded
+ defines
+To:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+References: <20230805073809.1753462-1-usama.anjum@collabora.com>
+ <95fc0e92-79ed-4748-a565-a82469d087f6@collabora.com>
+Content-Language: en-US
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <95fc0e92-79ed-4748-a565-a82469d087f6@collabora.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The benchmark command handling (-b) in resctrl selftests is overly
-complicated code. This series turns the benchmark command immutable to
-preserve it for all selftests and improves benchmark command related
-error handling.
+On 8/22/23 1:57 PM, Muhammad Usama Anjum wrote:
+> Hi Shuah,
+> 
+> Christian Brauner had picked [PATCH 4/6]. Others are still not picked.
+> Please have a look.
+Soft reminder
 
-This series also ends up removing the strcpy() calls which were pointed
-out earlier.
-
-v5:
-- Fix another off-by-one error
-- Reorder local var declarations in main() to follow rev. xmas tree
-
-v4:
-- Correct off-by-one error in -b processing
-- Reordered code in main() to make freeing span_str simpler (in new patch)
-- Use consistent style for const char * const *
-
-v3:
-- Removed DEFAULT_SPAN_STR for real and the duplicated copy of defines
-  that made to v2 likely due to my incorrect conflict resolutions
-
-v2:
-- Added argument length check into patch 1/7
-- Updated also -b line in help message.
-- Document -b argument related "algorithm"
-- Use asprintf() to convert defined constant int to string
-- Improved changelog texts
-- Added \n to ksft_exit_fail_msg() call messages.
-- Print DEFAULT_SPAN with %u instead of %zu to avoid need to cast it
-
-Ilpo Järvinen (8):
-  selftests/resctrl: Ensure the benchmark commands fits to its array
-  selftests/resctrl: Correct benchmark command help
-  selftests/resctrl: Remove bw_report and bm_type from main()
-  selftests/resctrl: Simplify span lifetime
-  selftests/resctrl: Reorder resctrl FS prep code and benchmark_cmd init
-  selftests/resctrl: Make benchmark command const and build it with
-    pointers
-  selftests/resctrl: Remove ben_count variable
-  selftests/resctrl: Cleanup benchmark argument parsing
-
- tools/testing/selftests/resctrl/cache.c       |   5 +-
- tools/testing/selftests/resctrl/cat_test.c    |  13 +--
- tools/testing/selftests/resctrl/cmt_test.c    |  34 ++++--
- tools/testing/selftests/resctrl/mba_test.c    |   4 +-
- tools/testing/selftests/resctrl/mbm_test.c    |   7 +-
- tools/testing/selftests/resctrl/resctrl.h     |  16 +--
- .../testing/selftests/resctrl/resctrl_tests.c | 100 ++++++++----------
- tools/testing/selftests/resctrl/resctrl_val.c |  10 +-
- 8 files changed, 104 insertions(+), 85 deletions(-)
+> 
+> Thanks,
+> Usama
+> 
+> On 8/5/23 12:37 PM, Muhammad Usama Anjum wrote:
+>> These duplicate defines should automatically be picked up from kernel
+>> headers. Use KHDR_INCLUDES to add kernel header files.
+>>
+>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>> ---
+>>  tools/testing/selftests/capabilities/Makefile       | 2 +-
+>>  tools/testing/selftests/capabilities/test_execve.c  | 8 --------
+>>  tools/testing/selftests/capabilities/validate_cap.c | 8 --------
+>>  3 files changed, 1 insertion(+), 17 deletions(-)
+>>
+>> diff --git a/tools/testing/selftests/capabilities/Makefile b/tools/testing/selftests/capabilities/Makefile
+>> index 6e9d98d457d5b..411ac098308f1 100644
+>> --- a/tools/testing/selftests/capabilities/Makefile
+>> +++ b/tools/testing/selftests/capabilities/Makefile
+>> @@ -2,7 +2,7 @@
+>>  TEST_GEN_FILES := validate_cap
+>>  TEST_GEN_PROGS := test_execve
+>>  
+>> -CFLAGS += -O2 -g -std=gnu99 -Wall
+>> +CFLAGS += -O2 -g -std=gnu99 -Wall $(KHDR_INCLUDES)
+>>  LDLIBS += -lcap-ng -lrt -ldl
+>>  
+>>  include ../lib.mk
+>> diff --git a/tools/testing/selftests/capabilities/test_execve.c b/tools/testing/selftests/capabilities/test_execve.c
+>> index df0ef02b40367..e3a352b020a79 100644
+>> --- a/tools/testing/selftests/capabilities/test_execve.c
+>> +++ b/tools/testing/selftests/capabilities/test_execve.c
+>> @@ -20,14 +20,6 @@
+>>  
+>>  #include "../kselftest.h"
+>>  
+>> -#ifndef PR_CAP_AMBIENT
+>> -#define PR_CAP_AMBIENT			47
+>> -# define PR_CAP_AMBIENT_IS_SET		1
+>> -# define PR_CAP_AMBIENT_RAISE		2
+>> -# define PR_CAP_AMBIENT_LOWER		3
+>> -# define PR_CAP_AMBIENT_CLEAR_ALL	4
+>> -#endif
+>> -
+>>  static int nerrs;
+>>  static pid_t mpid;	/*  main() pid is used to avoid duplicate test counts */
+>>  
+>> diff --git a/tools/testing/selftests/capabilities/validate_cap.c b/tools/testing/selftests/capabilities/validate_cap.c
+>> index cdfc94268fe6e..60b4e7b716a75 100644
+>> --- a/tools/testing/selftests/capabilities/validate_cap.c
+>> +++ b/tools/testing/selftests/capabilities/validate_cap.c
+>> @@ -9,14 +9,6 @@
+>>  
+>>  #include "../kselftest.h"
+>>  
+>> -#ifndef PR_CAP_AMBIENT
+>> -#define PR_CAP_AMBIENT			47
+>> -# define PR_CAP_AMBIENT_IS_SET		1
+>> -# define PR_CAP_AMBIENT_RAISE		2
+>> -# define PR_CAP_AMBIENT_LOWER		3
+>> -# define PR_CAP_AMBIENT_CLEAR_ALL	4
+>> -#endif
+>> -
+>>  #if __GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 19)
+>>  # define HAVE_GETAUXVAL
+>>  #endif
+> 
 
 -- 
-2.30.2
-
+BR,
+Muhammad Usama Anjum
