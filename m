@@ -2,124 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3281F791225
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Sep 2023 09:29:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDDAB791522
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Sep 2023 11:54:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1352435AbjIDH3k (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 4 Sep 2023 03:29:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49406 "EHLO
+        id S1351352AbjIDJyR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 4 Sep 2023 05:54:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243704AbjIDH3j (ORCPT
+        with ESMTP id S1348055AbjIDJyQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 4 Sep 2023 03:29:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FAC611A;
-        Mon,  4 Sep 2023 00:29:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C369FB80DB6;
-        Mon,  4 Sep 2023 07:29:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95C28C433C8;
-        Mon,  4 Sep 2023 07:29:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693812562;
-        bh=x31Nmxsvwnf9cm5nZ8qyMX1uiVUXha813H5LnskzPW8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hxLvWAJRPfxBtldsU5bPkb5pf9NDOgQFbEL65qIrVd8TRyXG2w6DGcKnKDFYAeCPQ
-         e0Kw76aa/ZBExuqCXJr0YyiN1mUB03q5Yg30xZ3QsXwDmMT+tO4f7ZLj915Z1XSRqg
-         oVQaPWepG14MPOHdJovS8kQ1Quu0y4K2Gu0qkZy5G0fDb1jwEbPzNx2/flFUiq0vFJ
-         uItE/Yy97/6OCKh5+vQkks3DXtrr4mNSkFpkmdgWrjGH3EK/bYOJU2pC+sadyHD41N
-         lLIRll6ZIECoAovno2XiTjuxQsfnY65J3td8wnhfWDmeHV0NsnTvj9phNCVZleSDqH
-         pHedHG72aa3Pg==
-Date:   Mon, 4 Sep 2023 09:29:16 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     =?utf-8?B?TWljaGHFgiBDxYJhcGnFhHNraQ==?= <mclapinski@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jeff Xu <jeffxu@google.com>, Aleksa Sarai <cyphar@cyphar.com>,
-        Daniel Verkamp <dverkamp@chromium.org>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 1/2] fcntl: add fcntl(F_CHECK_ORIGINAL_MEMFD)
-Message-ID: <20230904-meistens-umeinander-3366194553a1@brauner>
-References: <20230831203647.558079-1-mclapinski@google.com>
- <20230831203647.558079-2-mclapinski@google.com>
- <20230901-lockt-erbfolge-e1f9a26f0d63@brauner>
- <CAAi7L5f1KYrAyCYLzUN0dSy6xuQCGcC7SQML4+KUdxnQ6RaFfg@mail.gmail.com>
- <202309011133.10D66D0785@keescook>
+        Mon, 4 Sep 2023 05:54:16 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56AC8E54;
+        Mon,  4 Sep 2023 02:54:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693821241; x=1725357241;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=QIhDNZOjoBuIRTtsqyOS8+9qZ2I1zQKVMs1FA+2oWcw=;
+  b=PKpggrYg8UqPkykYrXjeMy97P4RaTvj57EyiL3aRara33dxc1Wue9ISA
+   6xb8EDy3+u8+9mLG9V8mBIFUO+uGDN2em4/VTWEbQXgm3AqY1Py0rg+DB
+   oN+vWHKImcd1B/vxi82g3cvgvH5MFSZ+YJOIUq6IHGDV3DXKpwz7+mskb
+   5MBtjuXO8vb8P7sU5uYPVEukDTxsARCdgoZ0lKvLGs0q5ChbNpBPN3Bu0
+   m2Z3EZYsNUtKyT2BqaUIP+qZwiKZQlbvMiXXrqb6ABnlXHS/39evCjdMR
+   AGCA41xgleLSSYrm2ax1Rrmxp01Am/vKuSR6lKhgFY4InAdYq/KwSLNx1
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10822"; a="356880655"
+X-IronPort-AV: E=Sophos;i="6.02,226,1688454000"; 
+   d="scan'208";a="356880655"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2023 02:54:00 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10822"; a="740700632"
+X-IronPort-AV: E=Sophos;i="6.02,226,1688454000"; 
+   d="scan'208";a="740700632"
+Received: from okozlyk-mobl.ger.corp.intel.com (HELO ijarvine-mobl2.ger.corp.intel.com) ([10.249.44.17])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Sep 2023 02:53:57 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Reinette Chatre <reinette.chatre@intel.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
+        =?UTF-8?q?Maciej=20Wiecz=C3=B3r-Retman?= 
+        <maciej.wieczor-retman@intel.com>
+Cc:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Babu Moger <babu.moger@amd.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v5 1/8] selftests/resctrl: Ensure the benchmark commands fits to its array
+Date:   Mon,  4 Sep 2023 12:53:32 +0300
+Message-Id: <20230904095339.11321-2-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230904095339.11321-1-ilpo.jarvinen@linux.intel.com>
+References: <20230904095339.11321-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <202309011133.10D66D0785@keescook>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Sep 01, 2023 at 11:34:32AM -0700, Kees Cook wrote:
-> On Fri, Sep 01, 2023 at 04:50:53PM +0200, Michał Cłapiński wrote:
-> > On Fri, Sep 1, 2023 at 2:56 PM Christian Brauner <brauner@kernel.org> wrote:
-> > >
-> > > On Thu, Aug 31, 2023 at 10:36:46PM +0200, Michal Clapinski wrote:
-> > > > Add a way to check if an fd points to the memfd's original open fd
-> > > > (the one created by memfd_create).
-> > > > Useful because only the original open fd can be both writable and
-> > > > executable.
-> > > >
-> > > > Signed-off-by: Michal Clapinski <mclapinski@google.com>
-> > > > ---
-> > > >  fs/fcntl.c                 | 3 +++
-> > > >  include/uapi/linux/fcntl.h | 9 +++++++++
-> > > >  2 files changed, 12 insertions(+)
-> > > >
-> > > > diff --git a/fs/fcntl.c b/fs/fcntl.c
-> > > > index e871009f6c88..301527e07a4d 100644
-> > > > --- a/fs/fcntl.c
-> > > > +++ b/fs/fcntl.c
-> > > > @@ -419,6 +419,9 @@ static long do_fcntl(int fd, unsigned int cmd, unsigned long arg,
-> > > >       case F_SET_RW_HINT:
-> > > >               err = fcntl_rw_hint(filp, cmd, arg);
-> > > >               break;
-> > > > +     case F_CHECK_ORIGINAL_MEMFD:
-> > > > +             err = !(filp->f_mode & FMODE_WRITER);
-> > > > +             break;
-> > >
-> > > Honestly, make this an ioctl on memfds. This is so specific that it
-> > > really doesn't belong into fcntl().
-> > 
-> > I've never touched ioctls but if I'm correct, I can't just add it to
-> > memfd. I would have to add it to the underlying fs, so hugetlbfs and
-> > shmem (which I think can be defined as ramfs so also there). File
-> > sealing fcntl is already memfd specific. Are you sure ioctl will be a
-> > better idea?
+Benchmark command is copied into an array in the stack. The array is
+BENCHMARK_ARGS items long but the command line could try to provide a
+longer command. Argument size is also fixed by BENCHMARK_ARG_SIZE (63
+bytes of space after fitting the terminating \0 character) and user
+could have inputted argument longer than that.
 
-fcntl() should be generic. Frankly, the sealing stuff should've gone
-into an ioctl as well and only upgraded to a fcntl() once multiple fd
-types support it.
+Return error in case the benchmark command does not fit to the space
+allocated for it.
 
-> 
-> Does this check "mean" anything for other files? Because if it's
-> generically useful (and got renamed) it maybe would be right for
-> fcntl...
+Fixes: ecdbb911f22d ("selftests/resctrl: Add MBM test")
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Tested-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+Reviewed-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+Reviewed-by: "Wieczor-Retman, Maciej" <maciej.wieczor-retman@intel.com>
+---
+ tools/testing/selftests/resctrl/resctrl_tests.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-For regular files it just means that the file has gotten write access to
-the underlying fs and we use this flag to release the necessary
-refcounts/protections once the file is closed.
+diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
+index d511daeb6851..9e2bc8ba95f1 100644
+--- a/tools/testing/selftests/resctrl/resctrl_tests.c
++++ b/tools/testing/selftests/resctrl/resctrl_tests.c
+@@ -255,9 +255,14 @@ int main(int argc, char **argv)
+ 		return ksft_exit_skip("Not running as root. Skipping...\n");
+ 
+ 	if (has_ben) {
++		if (argc - ben_ind >= BENCHMARK_ARGS)
++			ksft_exit_fail_msg("Too long benchmark command.\n");
++
+ 		/* Extract benchmark command from command line. */
+ 		for (i = ben_ind; i < argc; i++) {
+ 			benchmark_cmd[i - ben_ind] = benchmark_cmd_area[i];
++			if (strlen(argv[i]) >= BENCHMARK_ARG_SIZE)
++				ksft_exit_fail_msg("Too long benchmark command argument.\n");
+ 			sprintf(benchmark_cmd[i - ben_ind], "%s", argv[i]);
+ 		}
+ 		benchmark_cmd[ben_count] = NULL;
+-- 
+2.30.2
 
-If this check has any meaning beyond that than it only has meaning for
-memfd. I'm also not sure why this checks FMODE_WRITER and not
-FMODE_WRITE as FMODE_WRITER is almost an entirely internal thing that
-only very specific codepaths need to know about.
