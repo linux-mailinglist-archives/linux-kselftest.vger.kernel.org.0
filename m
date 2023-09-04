@@ -2,134 +2,124 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BF3B7911C9
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Sep 2023 09:09:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3281F791225
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Sep 2023 09:29:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344261AbjIDHJc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 4 Sep 2023 03:09:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50418 "EHLO
+        id S1352435AbjIDH3k (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 4 Sep 2023 03:29:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230299AbjIDHJb (ORCPT
+        with ESMTP id S243704AbjIDH3j (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 4 Sep 2023 03:09:31 -0400
-Received: from mout-p-101.mailbox.org (mout-p-101.mailbox.org [IPv6:2001:67c:2050:0:465::101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 950FDA0;
-        Mon,  4 Sep 2023 00:09:27 -0700 (PDT)
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [IPv6:2001:67c:2050:b231:465::202])
+        Mon, 4 Sep 2023 03:29:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FAC611A;
+        Mon,  4 Sep 2023 00:29:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
         (No client certificate requested)
-        by mout-p-101.mailbox.org (Postfix) with ESMTPS id 4RfKWQ2KsXz9sT0;
-        Mon,  4 Sep 2023 09:09:22 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cyphar.com; s=MBO0001;
-        t=1693811362;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=cq7qOZE8xlGiGZJPTa8yzpYZ1oFjZWMPNorQyVEd/Xg=;
-        b=LDCQEZVL0xpuZmPp1oz1O/PrYOZ21hPWBxqRc4Q6Au/AfG71IKLuV1NhN635Elh/nQTX7j
-        zjLu379c2FzrJtB2pxXNxRqBWW9LVFKSHx4zPU9MnrZGVWwxTkinJ/Kkmny3h+JOVmOmlZ
-        11iYEFzePn1nolFhGHj76p853EtiII8ssmRyg0UtozDlf1qScHpkYqfuxiUXKYitkKyga+
-        TZ73c4jLGPrdgFtMFlbQzJVGd1Iid7kHBh9wY8gg4R6oT1G1urbcf9D9SL5zw7pWFC+D0b
-        +HyFq7Y5NdknCZrbt1yM0qHEQH4oQmxIfBOt/V2NiDICipNOhLVfcGrZCWAxZg==
-Date:   Mon, 4 Sep 2023 17:09:09 +1000
-From:   Aleksa Sarai <cyphar@cyphar.com>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Damian Tometzki <dtometzki@fedoraproject.org>,
-        Shuah Khan <shuah@kernel.org>, Jeff Xu <jeffxu@google.com>,
-        Kees Cook <keescook@chromium.org>,
+        by ams.source.kernel.org (Postfix) with ESMTPS id C369FB80DB6;
+        Mon,  4 Sep 2023 07:29:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95C28C433C8;
+        Mon,  4 Sep 2023 07:29:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1693812562;
+        bh=x31Nmxsvwnf9cm5nZ8qyMX1uiVUXha813H5LnskzPW8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hxLvWAJRPfxBtldsU5bPkb5pf9NDOgQFbEL65qIrVd8TRyXG2w6DGcKnKDFYAeCPQ
+         e0Kw76aa/ZBExuqCXJr0YyiN1mUB03q5Yg30xZ3QsXwDmMT+tO4f7ZLj915Z1XSRqg
+         oVQaPWepG14MPOHdJovS8kQ1Quu0y4K2Gu0qkZy5G0fDb1jwEbPzNx2/flFUiq0vFJ
+         uItE/Yy97/6OCKh5+vQkks3DXtrr4mNSkFpkmdgWrjGH3EK/bYOJU2pC+sadyHD41N
+         lLIRll6ZIECoAovno2XiTjuxQsfnY65J3td8wnhfWDmeHV0NsnTvj9phNCVZleSDqH
+         pHedHG72aa3Pg==
+Date:   Mon, 4 Sep 2023 09:29:16 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     =?utf-8?B?TWljaGHFgiBDxYJhcGnFhHNraQ==?= <mclapinski@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jeff Xu <jeffxu@google.com>, Aleksa Sarai <cyphar@cyphar.com>,
         Daniel Verkamp <dverkamp@chromium.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Dominique Martinet <asmadeus@codewreck.org>,
-        stable@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Marc Dionne <marc.dionne@auristor.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 3/5] memfd: improve userspace warnings for missing
- exec-related flags
-Message-ID: <20230904.070506-tidy.dividend.mousy.flasks-BFYX3RqFch3q@cyphar.com>
-References: <20230814-memfd-vm-noexec-uapi-fixes-v2-0-7ff9e3e10ba6@cyphar.com>
- <20230814-memfd-vm-noexec-uapi-fixes-v2-3-7ff9e3e10ba6@cyphar.com>
- <ZPFzCSIgZ4QuHsSC@fedora.fritz.box>
- <20230902155850.ca1d32c16862cbe54ebd36ef@linux-foundation.org>
+Subject: Re: [PATCH 1/2] fcntl: add fcntl(F_CHECK_ORIGINAL_MEMFD)
+Message-ID: <20230904-meistens-umeinander-3366194553a1@brauner>
+References: <20230831203647.558079-1-mclapinski@google.com>
+ <20230831203647.558079-2-mclapinski@google.com>
+ <20230901-lockt-erbfolge-e1f9a26f0d63@brauner>
+ <CAAi7L5f1KYrAyCYLzUN0dSy6xuQCGcC7SQML4+KUdxnQ6RaFfg@mail.gmail.com>
+ <202309011133.10D66D0785@keescook>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nnx76nxb2yfdk3in"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230902155850.ca1d32c16862cbe54ebd36ef@linux-foundation.org>
-X-Rspamd-Queue-Id: 4RfKWQ2KsXz9sT0
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <202309011133.10D66D0785@keescook>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-
---nnx76nxb2yfdk3in
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On 2023-09-02, Andrew Morton <akpm@linux-foundation.org> wrote:
-> On Fri, 1 Sep 2023 07:13:45 +0200 Damian Tometzki <dtometzki@fedoraprojec=
-t.org> wrote:
->=20
-> > >  	if (!(flags & (MFD_EXEC | MFD_NOEXEC_SEAL))) {
-> > > -		pr_warn_once(
-> > > +		pr_info_ratelimited(
-> > >  			"%s[%d]: memfd_create() called without MFD_EXEC or MFD_NOEXEC_SEA=
-L set\n",
-> > >  			current->comm, task_pid_nr(current));
-> > >  	}
-> > >=20
-> > > --=20
-> > > 2.41.0
+On Fri, Sep 01, 2023 at 11:34:32AM -0700, Kees Cook wrote:
+> On Fri, Sep 01, 2023 at 04:50:53PM +0200, Michał Cłapiński wrote:
+> > On Fri, Sep 1, 2023 at 2:56 PM Christian Brauner <brauner@kernel.org> wrote:
 > > >
-> > Hello Sarai,
-> >=20
-> > i got a lot of messages in dmesg with this. DMESG is unuseable with
-> > this.=20
-> > [ 1390.349462] __do_sys_memfd_create: 5 callbacks suppressed
-> > [ 1390.349468] pipewire-pulse[2930]: memfd_create() called without MFD_=
-EXEC or MFD_NOEXEC_SEAL set
-> > [ 1390.350106] pipewire[2712]: memfd_create() called without MFD_EXEC o=
-r MFD_NOEXEC_SEAL set
->=20
-> OK, thanks, I'll revert this.  Spamming everyone even harder isn't a
-> good way to get developers to fix their stuff.
+> > > On Thu, Aug 31, 2023 at 10:36:46PM +0200, Michal Clapinski wrote:
+> > > > Add a way to check if an fd points to the memfd's original open fd
+> > > > (the one created by memfd_create).
+> > > > Useful because only the original open fd can be both writable and
+> > > > executable.
+> > > >
+> > > > Signed-off-by: Michal Clapinski <mclapinski@google.com>
+> > > > ---
+> > > >  fs/fcntl.c                 | 3 +++
+> > > >  include/uapi/linux/fcntl.h | 9 +++++++++
+> > > >  2 files changed, 12 insertions(+)
+> > > >
+> > > > diff --git a/fs/fcntl.c b/fs/fcntl.c
+> > > > index e871009f6c88..301527e07a4d 100644
+> > > > --- a/fs/fcntl.c
+> > > > +++ b/fs/fcntl.c
+> > > > @@ -419,6 +419,9 @@ static long do_fcntl(int fd, unsigned int cmd, unsigned long arg,
+> > > >       case F_SET_RW_HINT:
+> > > >               err = fcntl_rw_hint(filp, cmd, arg);
+> > > >               break;
+> > > > +     case F_CHECK_ORIGINAL_MEMFD:
+> > > > +             err = !(filp->f_mode & FMODE_WRITER);
+> > > > +             break;
+> > >
+> > > Honestly, make this an ioctl on memfds. This is so specific that it
+> > > really doesn't belong into fcntl().
+> > 
+> > I've never touched ioctls but if I'm correct, I can't just add it to
+> > memfd. I would have to add it to the underlying fs, so hugetlbfs and
+> > shmem (which I think can be defined as ramfs so also there). File
+> > sealing fcntl is already memfd specific. Are you sure ioctl will be a
+> > better idea?
 
-Sorry, I'm on vacation. I will send a follow-up patch to remove this
-logging entirely -- if we can't do rate-limited logging then logging a
-single message effectively at boot time makes no sense. I had hoped that
-this wouldn't be too much (given there is a fair amount of INFO-level
-spam in the kernel log) but I guess the default ratelimit (5Hz) is too
-liberal.
+fcntl() should be generic. Frankly, the sealing stuff should've gone
+into an ioctl as well and only upgraded to a fcntl() once multiple fd
+types support it.
 
-Perhaps we can re-consider adding some logging in the future, when more
-programs have migrated. The only other "reasonable" way to reduce the
-logging would be to add something to task_struct so we only log once per
-task, but obviously that's massively overkill.
+> 
+> Does this check "mean" anything for other files? Because if it's
+> generically useful (and got renamed) it maybe would be right for
+> fcntl...
 
-(FWIW, I don't think the logging was ever necessary. There's nothing
-wrong with running an older program that doesn't pass the flags.)
+For regular files it just means that the file has gotten write access to
+the underlying fs and we use this flag to release the necessary
+refcounts/protections once the file is closed.
 
---=20
-Aleksa Sarai
-Senior Software Engineer (Containers)
-SUSE Linux GmbH
-<https://www.cyphar.com/>
-
---nnx76nxb2yfdk3in
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQS2TklVsp+j1GPyqQYol/rSt+lEbwUCZPWCkAAKCRAol/rSt+lE
-b5gWAP4/tAjH570jwrKkdsMIvm/7W9rAOvo1QLnJCd9r8MsX7QD9GDs3+9jWfNMB
-lIppOxMkHE1/QyB4f/KzZwzay2OayQQ=
-=/tpV
------END PGP SIGNATURE-----
-
---nnx76nxb2yfdk3in--
+If this check has any meaning beyond that than it only has meaning for
+memfd. I'm also not sure why this checks FMODE_WRITER and not
+FMODE_WRITE as FMODE_WRITER is almost an entirely internal thing that
+only very specific codepaths need to know about.
