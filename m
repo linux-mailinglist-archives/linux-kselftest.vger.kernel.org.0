@@ -2,338 +2,162 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7951791B88
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Sep 2023 18:26:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C88CA791C3E
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Sep 2023 19:57:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1353296AbjIDQ02 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 4 Sep 2023 12:26:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35356 "EHLO
+        id S1353362AbjIDR5U (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 4 Sep 2023 13:57:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240655AbjIDQ01 (ORCPT
+        with ESMTP id S232840AbjIDR5U (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 4 Sep 2023 12:26:27 -0400
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2EDCC5;
-        Mon,  4 Sep 2023 09:25:56 -0700 (PDT)
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-99bed101b70so251809466b.3;
-        Mon, 04 Sep 2023 09:25:56 -0700 (PDT)
+        Mon, 4 Sep 2023 13:57:20 -0400
+Received: from mail-ot1-x32e.google.com (mail-ot1-x32e.google.com [IPv6:2607:f8b0:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7057DA
+        for <linux-kselftest@vger.kernel.org>; Mon,  4 Sep 2023 10:57:15 -0700 (PDT)
+Received: by mail-ot1-x32e.google.com with SMTP id 46e09a7af769-6bb07d274feso1401426a34.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 04 Sep 2023 10:57:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1693850235; x=1694455035; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=swkHmiUb0yhEMZkQvxpItqW1CYY4TW8bZX8jwtRrDks=;
+        b=cb9tkM/iL4YSN4kL6EYaiuoh7iZHtH84Z8AbWBxKP/TM5mPZwhbu7wT60gMNRFJTFQ
+         TLuzLbQUlwbkRCBvMRvDvPITSRO11TREHU54Xpw2o9pbCIH3JGVjFdu975rV1Razk7Zp
+         k6Gaszje7/gmjZ/lQ4ZTgR681nWSbeekR/HhUuX1xCuhpmnm4E70hboPgkP8D/7WPHPI
+         ia0qEytaAqL9NEU7lmhH5xk65gtnoMi2roa7HJ506sEebh1YtubFVIxjF+f6j0THst00
+         qiAe3BN41iv1ZL94XdLlZGqCJqFWVk0vougJMxzAi31JPB92NQMebi+gd7t6PU2c8F4/
+         DI5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693844746; x=1694449546;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1693850235; x=1694455035;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/injwFwPCEHXUwspfhEaGXaHWVZoMocD4z29NwXIPbw=;
-        b=P05PDJzAjiJ1cWWc6lqRJ40L33pvvs7hR6H4OGrK63zBZQdiBcQ1fraI+yi2SKPOyM
-         579gMA6+7lcS4aMfQTU5G+LzBezTU+ZdqH44WIf9C8EEG2VTijDxpWKvLi1Px+gk6cmJ
-         uBc3lYRCdSajPH+BhaORDJqDL+ap9WNRVSRBZkg0Xk/eaKUrJxQQvbuvj7mojMc8KCgC
-         9MjIXa6lHXnvGEkYWXwazgQwkQRhxYb2NXLECmKRMJSjU3MFEa7PDM6jM1czs0CsB4C0
-         LvqlcC/oa3sJ7y9G5n8rI5avUlyqns/4On0qehm5wRAW3dxF917buDQaDF+EJVjROf/3
-         53ww==
-X-Gm-Message-State: AOJu0YwA4pTJrBeZJ7X2u8REc5ZpLRICSZbHFzse1q+i/VyptFfHUqHp
-        2a6XnWYTrIVZ1dsNo3nEw88Mq+m5Hf3tyg==
-X-Google-Smtp-Source: AGHT+IE0M/etACOA3TJqXPFfT/nGxjhKhbwgCaaa0LEpaA3e4QJIoBD/G/DbeQfgGkp/N8WZFLjhZA==
-X-Received: by 2002:a17:906:18c:b0:9a1:cdf1:ba3 with SMTP id 12-20020a170906018c00b009a1cdf10ba3mr9618375ejb.27.1693844745972;
-        Mon, 04 Sep 2023 09:25:45 -0700 (PDT)
-Received: from localhost (fwdproxy-cln-005.fbsv.net. [2a03:2880:31ff:5::face:b00c])
-        by smtp.gmail.com with ESMTPSA id l11-20020a170906938b00b0098de7d28c34sm6382983ejx.193.2023.09.04.09.25.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Sep 2023 09:25:45 -0700 (PDT)
-From:   Breno Leitao <leitao@debian.org>
-To:     sdf@google.com, axboe@kernel.dk, asml.silence@gmail.com,
-        willemdebruijn.kernel@gmail.com, martin.lau@linux.dev,
-        krisman@suse.de, Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Song Liu <song@kernel.org>,
-        Yonghong Song <yonghong.song@linux.dev>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, io-uring@vger.kernel.org, kuba@kernel.org,
-        pabeni@redhat.com,
-        =?UTF-8?q?Daniel=20M=C3=BCller?= <deso@posteo.net>,
-        Wang Yufen <wangyufen@huawei.com>,
-        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Subject: [PATCH v4 10/10] selftests/bpf/sockopt: Add io_uring support
-Date:   Mon,  4 Sep 2023 09:25:03 -0700
-Message-Id: <20230904162504.1356068-11-leitao@debian.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230904162504.1356068-1-leitao@debian.org>
-References: <20230904162504.1356068-1-leitao@debian.org>
+        bh=swkHmiUb0yhEMZkQvxpItqW1CYY4TW8bZX8jwtRrDks=;
+        b=bICVZjV4MEtldgyCpr05eR2cZdmNm2fLTrd8CqWQTOI//G2HvbviGP1tQV7QZ9GUEV
+         /wPNtzn0VZvfVE0hpKAaWtX5XThMlpiDge7Cf3zprFfsqG83sq77zoPZedNN5U+lj6xS
+         3/CZiBkCsKnVfOeukI9Rz8+gmUtRk70s4BBudHHFOsTdjyreXyK/bxwA3Tkn0KRVO8/H
+         JeOBYlYvoJN6V/C0V8G6p9SvHc9LNhrIcC8frTBk3gH/fl8CScEKP02oEAsXEJc+kBtq
+         7XxOc2qZ9sCAjNRXS5IbSZKzphcTbITeUjY4xYh99podf0me4BHWzRERYRIpBm+euC3S
+         tH5A==
+X-Gm-Message-State: AOJu0Yz7Ob7UbSWLNJe0W0yWFkte2je2Lfen5e10Wvnt5fbgzP0ZNcEp
+        UqQb3jPzQjTpgbB92Lg016Uj2dzkHqz0u+d9qizkCQ==
+X-Google-Smtp-Source: AGHT+IHdOus5yMZIdY0V3oMaSqxbqstcsrA7CWMqnWsmMfZIlWsMuFuSAUCbK7FfY1M3ethbVj2G2I2D++Y+esaXCnE=
+X-Received: by 2002:a05:6358:7e53:b0:139:b4c0:93c with SMTP id
+ p19-20020a0563587e5300b00139b4c0093cmr13972089rwm.5.1693850234778; Mon, 04
+ Sep 2023 10:57:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20230831203647.558079-1-mclapinski@google.com>
+ <20230831203647.558079-2-mclapinski@google.com> <20230901-lockt-erbfolge-e1f9a26f0d63@brauner>
+ <CAAi7L5f1KYrAyCYLzUN0dSy6xuQCGcC7SQML4+KUdxnQ6RaFfg@mail.gmail.com>
+ <202309011133.10D66D0785@keescook> <20230904-meistens-umeinander-3366194553a1@brauner>
+In-Reply-To: <20230904-meistens-umeinander-3366194553a1@brauner>
+From:   =?UTF-8?B?TWljaGHFgiBDxYJhcGnFhHNraQ==?= <mclapinski@google.com>
+Date:   Mon, 4 Sep 2023 19:57:03 +0200
+Message-ID: <CAAi7L5eW1ZOfwvFz4b9As7-MkKyCgCQcG-41VMv6vfYpyRW_eA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] fcntl: add fcntl(F_CHECK_ORIGINAL_MEMFD)
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Jeff Xu <jeffxu@google.com>, Aleksa Sarai <cyphar@cyphar.com>,
+        Daniel Verkamp <dverkamp@chromium.org>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Expand the sockopt test to use also check for io_uring {g,s}etsockopt
-commands operations.
+On Mon, Sep 4, 2023 at 9:29=E2=80=AFAM Christian Brauner <brauner@kernel.or=
+g> wrote:
+>
+> On Fri, Sep 01, 2023 at 11:34:32AM -0700, Kees Cook wrote:
+> > On Fri, Sep 01, 2023 at 04:50:53PM +0200, Micha=C5=82 C=C5=82api=C5=84s=
+ki wrote:
+> > > On Fri, Sep 1, 2023 at 2:56=E2=80=AFPM Christian Brauner <brauner@ker=
+nel.org> wrote:
+> > > >
+> > > > On Thu, Aug 31, 2023 at 10:36:46PM +0200, Michal Clapinski wrote:
+> > > > > Add a way to check if an fd points to the memfd's original open f=
+d
+> > > > > (the one created by memfd_create).
+> > > > > Useful because only the original open fd can be both writable and
+> > > > > executable.
+> > > > >
+> > > > > Signed-off-by: Michal Clapinski <mclapinski@google.com>
+> > > > > ---
+> > > > >  fs/fcntl.c                 | 3 +++
+> > > > >  include/uapi/linux/fcntl.h | 9 +++++++++
+> > > > >  2 files changed, 12 insertions(+)
+> > > > >
+> > > > > diff --git a/fs/fcntl.c b/fs/fcntl.c
+> > > > > index e871009f6c88..301527e07a4d 100644
+> > > > > --- a/fs/fcntl.c
+> > > > > +++ b/fs/fcntl.c
+> > > > > @@ -419,6 +419,9 @@ static long do_fcntl(int fd, unsigned int cmd=
+, unsigned long arg,
+> > > > >       case F_SET_RW_HINT:
+> > > > >               err =3D fcntl_rw_hint(filp, cmd, arg);
+> > > > >               break;
+> > > > > +     case F_CHECK_ORIGINAL_MEMFD:
+> > > > > +             err =3D !(filp->f_mode & FMODE_WRITER);
+> > > > > +             break;
+> > > >
+> > > > Honestly, make this an ioctl on memfds. This is so specific that it
+> > > > really doesn't belong into fcntl().
+> > >
+> > > I've never touched ioctls but if I'm correct, I can't just add it to
+> > > memfd. I would have to add it to the underlying fs, so hugetlbfs and
+> > > shmem (which I think can be defined as ramfs so also there). File
+> > > sealing fcntl is already memfd specific. Are you sure ioctl will be a
+> > > better idea?
+>
+> fcntl() should be generic. Frankly, the sealing stuff should've gone
+> into an ioctl as well and only upgraded to a fcntl() once multiple fd
+> types support it.
+>
 
-This patch starts by marking each test if they support io_uring support
-or not.
+But ioctl is good for stuff related to the underlying fs, which this
+isn't. I'm worried if I rewrite it as an ioctl and put it in 3
+different places, the maintainers of shmem, hugetlbfs and ramfs will
+tell me to rewrite it as an fcntl. If a new filesystem pops up that
+can be used as the backend for memfd, the ioctl will also have to be
+added there.
 
-Right now, io_uring cmd getsockopt() has a limitation of only
-accepting level == SOL_SOCKET, otherwise it returns -EOPNOTSUPP. Since
-there aren't any test exercising getsockopt(level == SOL_SOCKET), this
-patch changes two tests to use level == SOL_SOCKET, they are
-"getsockopt: support smaller ctx->optlen" and "getsockopt: read
-ctx->optlen".
-There is no limitation for the setsockopt() part.
+> >
+> > Does this check "mean" anything for other files? Because if it's
+> > generically useful (and got renamed) it maybe would be right for
+> > fcntl...
+>
+> For regular files it just means that the file has gotten write access to
+> the underlying fs and we use this flag to release the necessary
+> refcounts/protections once the file is closed.
+>
+> If this check has any meaning beyond that than it only has meaning for
+> memfd. I'm also not sure why this checks FMODE_WRITER and not
+> FMODE_WRITE as FMODE_WRITER is almost an entirely internal thing that
+> only very specific codepaths need to know about.
 
-Later, each test runs using regular {g,s}etsockopt systemcalls, and, if
-liburing is supported, execute the same test (again), but calling
-liburing {g,s}setsockopt commands.
-
-This patch also changes the level of two tests to use SOL_SOCKET for the
-following two tests. This is going to help to exercise the io_uring
-subsystem:
- * getsockopt: read ctx->optlen
- * getsockopt: support smaller ctx->optlen
-
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
- .../selftests/bpf/prog_tests/sockopt.c        | 113 +++++++++++++++++-
- 1 file changed, 107 insertions(+), 6 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockopt.c b/tools/testing/selftests/bpf/prog_tests/sockopt.c
-index 9e6a5e3ed4de..9b1f7f0b1f7e 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockopt.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockopt.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include <io_uring/mini_liburing.h>
- #include "cgroup_helpers.h"
- 
- static char bpf_log_buf[4096];
-@@ -38,6 +39,7 @@ static struct sockopt_test {
- 	socklen_t			get_optlen_ret;
- 
- 	enum sockopt_test_error		error;
-+	bool				io_uring_support;
- } tests[] = {
- 
- 	/* ==================== getsockopt ====================  */
-@@ -251,7 +253,9 @@ static struct sockopt_test {
- 		.attach_type = BPF_CGROUP_GETSOCKOPT,
- 		.expected_attach_type = BPF_CGROUP_GETSOCKOPT,
- 
-+		.get_level = SOL_SOCKET,
- 		.get_optlen = 64,
-+		.io_uring_support = true,
- 	},
- 	{
- 		.descr = "getsockopt: deny bigger ctx->optlen",
-@@ -276,6 +280,7 @@ static struct sockopt_test {
- 		.get_optlen = 64,
- 
- 		.error = EFAULT_GETSOCKOPT,
-+		.io_uring_support = true,
- 	},
- 	{
- 		.descr = "getsockopt: ignore >PAGE_SIZE optlen",
-@@ -318,6 +323,7 @@ static struct sockopt_test {
- 		.get_optval = {}, /* the changes are ignored */
- 		.get_optlen = PAGE_SIZE + 1,
- 		.error = EOPNOTSUPP_GETSOCKOPT,
-+		.io_uring_support = true,
- 	},
- 	{
- 		.descr = "getsockopt: support smaller ctx->optlen",
-@@ -337,8 +343,10 @@ static struct sockopt_test {
- 		.attach_type = BPF_CGROUP_GETSOCKOPT,
- 		.expected_attach_type = BPF_CGROUP_GETSOCKOPT,
- 
-+		.get_level = SOL_SOCKET,
- 		.get_optlen = 64,
- 		.get_optlen_ret = 32,
-+		.io_uring_support = true,
- 	},
- 	{
- 		.descr = "getsockopt: deny writing to ctx->optval",
-@@ -518,6 +526,7 @@ static struct sockopt_test {
- 		.set_level = 123,
- 
- 		.set_optlen = 1,
-+		.io_uring_support = true,
- 	},
- 	{
- 		.descr = "setsockopt: allow changing ctx->level",
-@@ -572,6 +581,7 @@ static struct sockopt_test {
- 		.set_optname = 123,
- 
- 		.set_optlen = 1,
-+		.io_uring_support = true,
- 	},
- 	{
- 		.descr = "setsockopt: allow changing ctx->optname",
-@@ -624,6 +634,7 @@ static struct sockopt_test {
- 		.expected_attach_type = BPF_CGROUP_SETSOCKOPT,
- 
- 		.set_optlen = 64,
-+		.io_uring_support = true,
- 	},
- 	{
- 		.descr = "setsockopt: ctx->optlen == -1 is ok",
-@@ -640,6 +651,7 @@ static struct sockopt_test {
- 		.expected_attach_type = BPF_CGROUP_SETSOCKOPT,
- 
- 		.set_optlen = 64,
-+		.io_uring_support = true,
- 	},
- 	{
- 		.descr = "setsockopt: deny ctx->optlen < 0 (except -1)",
-@@ -658,6 +670,7 @@ static struct sockopt_test {
- 		.set_optlen = 4,
- 
- 		.error = EFAULT_SETSOCKOPT,
-+		.io_uring_support = true,
- 	},
- 	{
- 		.descr = "setsockopt: deny ctx->optlen > input optlen",
-@@ -675,6 +688,7 @@ static struct sockopt_test {
- 		.set_optlen = 64,
- 
- 		.error = EFAULT_SETSOCKOPT,
-+		.io_uring_support = true,
- 	},
- 	{
- 		.descr = "setsockopt: ignore >PAGE_SIZE optlen",
-@@ -940,7 +954,89 @@ static int load_prog(const struct bpf_insn *insns,
- 	return fd;
- }
- 
--static int run_test(int cgroup_fd, struct sockopt_test *test)
-+/* Core function that handles io_uring ring initialization,
-+ * sending SQE with sockopt command and waiting for the CQE.
-+ */
-+static int uring_sockopt(int op, int fd, int level, int optname,
-+			 const void *optval, socklen_t optlen)
-+{
-+	struct io_uring_cqe *cqe;
-+	struct io_uring_sqe *sqe;
-+	struct io_uring ring;
-+	int err;
-+
-+	err = io_uring_queue_init(1, &ring, 0);
-+	if (!ASSERT_OK(err, "Failed to initialize io_uring ring"))
-+		return err;
-+
-+	sqe = io_uring_get_sqe(&ring);
-+	if (!ASSERT_NEQ(sqe, NULL, "Failed to get an SQE")) {
-+		err = -1;
-+		goto fail;
-+	}
-+
-+	io_uring_prep_cmd(sqe, op, fd, level, optname, optval, optlen);
-+
-+	err = io_uring_submit(&ring);
-+	if (!ASSERT_EQ(err, 1, "Failed to submit SQE"))
-+		goto fail;
-+
-+	err = io_uring_wait_cqe(&ring, &cqe);
-+	if (!ASSERT_OK(err, "Failed to wait for CQE"))
-+		goto fail;
-+
-+	err = cqe->res;
-+
-+fail:
-+	io_uring_queue_exit(&ring);
-+
-+	return err;
-+}
-+
-+static int uring_setsockopt(int fd, int level, int optname, const void *optval,
-+			    socklen_t optlen)
-+{
-+	return uring_sockopt(SOCKET_URING_OP_SETSOCKOPT, fd, level, optname,
-+			     optval, optlen);
-+}
-+
-+static int uring_getsockopt(int fd, int level, int optname, void *optval,
-+			    socklen_t *optlen)
-+{
-+	int ret = uring_sockopt(SOCKET_URING_OP_GETSOCKOPT, fd, level, optname,
-+				optval, *optlen);
-+	if (ret < 0)
-+		return ret;
-+
-+	/* Populate optlen back to be compatible with systemcall interface,
-+	 * and simplify the test.
-+	 */
-+	*optlen = ret;
-+
-+	return 0;
-+}
-+
-+/* Execute the setsocktopt operation */
-+static int call_setsockopt(bool use_io_uring, int fd, int level, int optname,
-+			   const void *optval, socklen_t optlen)
-+{
-+	if (use_io_uring)
-+		return uring_setsockopt(fd, level, optname, optval, optlen);
-+
-+	return setsockopt(fd, level, optname, optval, optlen);
-+}
-+
-+/* Execute the getsocktopt operation */
-+static int call_getsockopt(bool use_io_uring, int fd, int level, int optname,
-+			   void *optval, socklen_t *optlen)
-+{
-+	if (use_io_uring)
-+		return uring_getsockopt(fd, level, optname, optval, optlen);
-+
-+	return getsockopt(fd, level, optname, optval, optlen);
-+}
-+
-+static int run_test(int cgroup_fd, struct sockopt_test *test, bool use_io_uring)
- {
- 	int sock_fd, err, prog_fd;
- 	void *optval = NULL;
-@@ -980,8 +1076,9 @@ static int run_test(int cgroup_fd, struct sockopt_test *test)
- 			test->set_optlen = num_pages * sysconf(_SC_PAGESIZE) + remainder;
- 		}
- 
--		err = setsockopt(sock_fd, test->set_level, test->set_optname,
--				 test->set_optval, test->set_optlen);
-+		err = call_setsockopt(use_io_uring, sock_fd, test->set_level,
-+				      test->set_optname, test->set_optval,
-+				      test->set_optlen);
- 		if (err) {
- 			if (errno == EPERM && test->error == EPERM_SETSOCKOPT)
- 				goto close_sock_fd;
-@@ -1008,8 +1105,8 @@ static int run_test(int cgroup_fd, struct sockopt_test *test)
- 		socklen_t expected_get_optlen = test->get_optlen_ret ?:
- 			test->get_optlen;
- 
--		err = getsockopt(sock_fd, test->get_level, test->get_optname,
--				 optval, &optlen);
-+		err = call_getsockopt(use_io_uring, sock_fd, test->get_level,
-+				      test->get_optname, optval, &optlen);
- 		if (err) {
- 			if (errno == EOPNOTSUPP && test->error == EOPNOTSUPP_GETSOCKOPT)
- 				goto free_optval;
-@@ -1063,7 +1160,11 @@ void test_sockopt(void)
- 		if (!test__start_subtest(tests[i].descr))
- 			continue;
- 
--		ASSERT_OK(run_test(cgroup_fd, &tests[i]), tests[i].descr);
-+		ASSERT_OK(run_test(cgroup_fd, &tests[i], false),
-+			  tests[i].descr);
-+		if (tests[i].io_uring_support)
-+			ASSERT_OK(run_test(cgroup_fd, &tests[i], true),
-+				  tests[i].descr);
- 	}
- 
- 	close(cgroup_fd);
--- 
-2.34.1
-
+If you reopen the memfd via /proc/<pid>/fd/ with O_RDWR, both file
+objects (the original and the reopened one) have FMODE_WRITE, so
+knowing if the flag is set gives me nothing. FMODE_WRITER is the only
+difference between the original fd and the reopened one. This flag
+also dictates whether `inode->i_writecount` will be decremented on
+close (in `put_file_access`) which influences exec()ability of the
+other fd. It surprised me too that this flag theoretically means
+"write access to underlying fs" but it's used to determine whether to
+decrement i_writecount.
