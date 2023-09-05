@@ -2,54 +2,54 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90CD279309F
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Sep 2023 23:06:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AC727930A2
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Sep 2023 23:06:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240870AbjIEVGd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 5 Sep 2023 17:06:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36868 "EHLO
+        id S243802AbjIEVGf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 5 Sep 2023 17:06:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235852AbjIEVGb (ORCPT
+        with ESMTP id S236553AbjIEVGc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Sep 2023 17:06:31 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD4E13E;
-        Tue,  5 Sep 2023 14:06:25 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3fef56f7248so29092625e9.3;
-        Tue, 05 Sep 2023 14:06:25 -0700 (PDT)
+        Tue, 5 Sep 2023 17:06:32 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0FC51A2;
+        Tue,  5 Sep 2023 14:06:26 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-31977ace1c8so2630322f8f.1;
+        Tue, 05 Sep 2023 14:06:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693947984; x=1694552784; darn=vger.kernel.org;
+        d=gmail.com; s=20221208; t=1693947985; x=1694552785; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=CwquC/nnDI7T/ZG1VkEe4vm26r8Eh5aZWTrEcG67A7A=;
-        b=ogzWoEoCwZZX0FD0DLSju5DPTLU9khObOdupZlj/uhVoSAmfZD9xEvxMEQYVXSGTlH
-         q7/oWAbb8hyJtp5OFvp9Rfm9001ogO9zpJYpPYKx9Cyjx6N30IqFUPt1SVU7xpRWRx7C
-         erkolG24bNyjsKE+hT6F6f8FT0LSAy6Wf6Lsej3Eedb2k3AQRF/D1lDHvs2OIt0HAR26
-         RheJxoaZ+9mbScP5ZYOROTAWvI9xsg7mEndTgB2vlny4ZfSCElRwp/ZVTzDSdRk61VZj
-         N76UXiYukM+rCrbwzSWn9TeMXd6rZacUa9DfVFh0WMYwRvFcReb8xVaoLQdQ6mSMKtuY
-         N1Yw==
+        bh=uYw2sBIqQ+y5a56KRhVpmKODqheJWAeWBRyQ0D2RtJk=;
+        b=Ly4JFlYbm24kwl42YdGswau5kh6lkGXFqu9iTv+/s508FJEjbNqX5Jp1PYCIFEWrj5
+         8HrhlTwHpYhu/pvcMZWqWZZgB3OIF7YQq2Gifrh9Ux2CnImi98vHVxamgjoYjkB8dhvX
+         HvkWp3FSLvvwSrE5aEzWWjilce0fAiIDMmx4/TheYnZiaThvfcKA1w8R9vhsw2iTWI6l
+         OxdaKA8SIgKKSBQGufzPOTC/fjg7d0FYjXgkywilhmHKOstxZaiOw/kfe7saCqJJygPU
+         pjNQxspFAI66cUMWeEcF++k3Dvquin0XsHEjNJclvyFNvftACW8T8vt1aLx1umDbTusz
+         LP7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693947984; x=1694552784;
+        d=1e100.net; s=20221208; t=1693947985; x=1694552785;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=CwquC/nnDI7T/ZG1VkEe4vm26r8Eh5aZWTrEcG67A7A=;
-        b=ibtM9EQWZgm7KDblWQ6bLaOuTHKY3j4eQoChk8pFcmeaLKN9dbMncmTyq5ra30zRX9
-         u/PzxTGGNzFeS2bN3yEfXJKGoz+qf2/pbrKONgUW17siNcK+/CnN5npAlSyN+uApGLXR
-         Elhakq7zdboiW/sbmMlaoSzmBxS3GtzoZ+SpUZ5kFNWsf3+bNhkhEk7/XsxYJkaUpK1W
-         vW3hsw4Ojy3GT4p85fxjIjsUAMiNnzGvZgZMnz9da8QNCaCy34ge/fSiBquA5R4yUG3c
-         GBGe7gYCGVL0ZadKABAWCmvdV+i/GM/fgA5gHqnIR1G0Q4Js8RLn+eE7SdCdywWDkRD/
-         2HTA==
-X-Gm-Message-State: AOJu0YygJY+j+F6L+DaedsdD2p1Oz/kKE7sdGk6Hycj1U9mFiA7zipn9
-        Kng57BrPrZ99hSlKaiJxs8w=
-X-Google-Smtp-Source: AGHT+IHKpJIXt9w3hLunKRC4nLADCMpDxptUOsD0paIfnpBLl10KUBID17zOR4PNE74VCPb0Vle71A==
-X-Received: by 2002:a7b:cd96:0:b0:3fb:a0fc:1ba1 with SMTP id y22-20020a7bcd96000000b003fba0fc1ba1mr636373wmj.35.1693947983968;
-        Tue, 05 Sep 2023 14:06:23 -0700 (PDT)
+        bh=uYw2sBIqQ+y5a56KRhVpmKODqheJWAeWBRyQ0D2RtJk=;
+        b=KgZCQnef+qqjLAmQOxoeKk6qJS8KcXZ01pvfPA1KuwmUzNwbUTY7t2KmiYwj6UuypH
+         SI3rRlAMkhTgBJRuM+Z1qTjP5qItQUezNgA6TbUJwnJbo9HwRZsfC7MmlJ9NzIHhZ2/l
+         0FjxHozNWLdGK2GGUYhTpBr0YELIMi4kfmzhDhULp5U7mwj+rmYc5Q3ZYSTcVradJirz
+         o3Jw1gjoeh6Vjzrc34DSRyFRwhCxkbVw+itJa1bbbw52kW1Igx5HyLOdXdwAYPsN8Ab4
+         EutN5S5o8FBT4LcxiPXPH5ymyGVSL6oyxsHCASwMjsdFeB80GzTMRx0c5g/zLt9BrClL
+         HJMQ==
+X-Gm-Message-State: AOJu0YzUyqkC52vBCNvzuibfCSLeun5/VlxvKczyCqOsPAgfok7NO4ws
+        lqLa2LVuTbJDsbgWLfmyf4Y=
+X-Google-Smtp-Source: AGHT+IF7OU/wHLI0hWBp0MjehOxhxDJzfWhI/L7w/T7gbyv/9j0KzXFV/0Mi7VTnZsRq1wWlgsz8NA==
+X-Received: by 2002:a5d:508d:0:b0:317:6310:a616 with SMTP id a13-20020a5d508d000000b003176310a616mr734496wrt.36.1693947985047;
+        Tue, 05 Sep 2023 14:06:25 -0700 (PDT)
 Received: from ip-172-31-30-46.eu-west-1.compute.internal (ec2-54-170-241-106.eu-west-1.compute.amazonaws.com. [54.170.241.106])
-        by smtp.gmail.com with ESMTPSA id e18-20020a5d5012000000b00317b063590fsm18427672wrt.55.2023.09.05.14.06.23
+        by smtp.gmail.com with ESMTPSA id e18-20020a5d5012000000b00317b063590fsm18427672wrt.55.2023.09.05.14.06.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Sep 2023 14:06:23 -0700 (PDT)
+        Tue, 05 Sep 2023 14:06:24 -0700 (PDT)
 From:   Puranjay Mohan <puranjay12@gmail.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -67,9 +67,9 @@ To:     Alexei Starovoitov <ast@kernel.org>,
         bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     puranjay12@gmail.com
-Subject: [PATCH bpf-next 2/8] arm32, bpf: add support for sign-extension load instruction
-Date:   Tue,  5 Sep 2023 21:06:15 +0000
-Message-Id: <20230905210621.1711859-3-puranjay12@gmail.com>
+Subject: [PATCH bpf-next 3/8] arm32, bpf: add support for sign-extension mov instruction
+Date:   Tue,  5 Sep 2023 21:06:16 +0000
+Message-Id: <20230905210621.1711859-4-puranjay12@gmail.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230905210621.1711859-1-puranjay12@gmail.com>
 References: <20230905210621.1711859-1-puranjay12@gmail.com>
@@ -85,141 +85,109 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The cpuv4 added the support of an instruction that is similar to load
-but also sign-extends the result after the load.
+The cpuv4 added a new BPF_MOVSX instruction that sign extends the src
+before moving it to the destination.
 
-BPF_MEMSX | <size> | BPF_LDX means dst = *(signed size *) (src + offset)
-here <size> can be one of BPF_B, BPF_H, BPF_W.
+BPF_ALU | BPF_MOVSX sign extends 8-bit and 16-bit operands into 32-bit
+operands, and zeroes the remaining upper 32 bits.
 
-ARM32 has instructions to load a byte or a half word with sign
-extension into a 32bit register. As the JIT uses two 32 bit registers
-to simulate a 64-bit BPF register, an extra instruction is emitted to
-sign-extent the result up to the second register.
+BPF_ALU64 | BPF_MOVSX sign extends 8-bit, 16-bit, and 32-bit  operands
+into 64-bit operands.
+
+The offset field of the instruction is used to tell the number of bit to
+use for sign-extension. BPF_MOV and BPF_MOVSX have the same code but the
+former sets offset to 0 and the later one sets the offset to 8, 16 or 32
+
+The behaviour of this instruction is dst = (s8,s16,s32)src
+
+On ARM32 the implementation uses LSH and ARSH to extend the 8/16 bits to
+a 32-bit register and then it is sign extended to the upper 32-bit
+register using ARSH. For 32-bit we just move it to the destination
+register and use ARSH to extend it to the upper 32-bit register.
 
 Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
 ---
- arch/arm/net/bpf_jit_32.c | 69 ++++++++++++++++++++++++++++++++++++++-
- arch/arm/net/bpf_jit_32.h |  2 ++
- 2 files changed, 70 insertions(+), 1 deletion(-)
+ arch/arm/net/bpf_jit_32.c | 35 ++++++++++++++++++++++++++++++-----
+ 1 file changed, 30 insertions(+), 5 deletions(-)
 
 diff --git a/arch/arm/net/bpf_jit_32.c b/arch/arm/net/bpf_jit_32.c
-index b26579da770e..f7c162479cf2 100644
+index f7c162479cf2..0a30188de660 100644
 --- a/arch/arm/net/bpf_jit_32.c
 +++ b/arch/arm/net/bpf_jit_32.c
-@@ -333,6 +333,9 @@ static u32 arm_bpf_ldst_imm8(u32 op, u8 rt, u8 rn, s16 imm8)
- #define ARM_LDRD_I(rt, rn, off)	arm_bpf_ldst_imm8(ARM_INST_LDRD_I, rt, rn, off)
- #define ARM_LDRH_I(rt, rn, off)	arm_bpf_ldst_imm8(ARM_INST_LDRH_I, rt, rn, off)
- 
-+#define ARM_LDRSH_I(rt, rn, off) arm_bpf_ldst_imm8(ARM_INST_LDRSH_I, rt, rn, off)
-+#define ARM_LDRSB_I(rt, rn, off) arm_bpf_ldst_imm8(ARM_INST_LDRSB_I, rt, rn, off)
-+
- #define ARM_STR_I(rt, rn, off)	arm_bpf_ldst_imm12(ARM_INST_STR_I, rt, rn, off)
- #define ARM_STRB_I(rt, rn, off)	arm_bpf_ldst_imm12(ARM_INST_STRB_I, rt, rn, off)
- #define ARM_STRD_I(rt, rn, off)	arm_bpf_ldst_imm8(ARM_INST_STRD_I, rt, rn, off)
-@@ -1026,6 +1029,24 @@ static bool is_ldst_imm(s16 off, const u8 size)
- 	return -off_max <= off && off <= off_max;
+@@ -747,12 +747,16 @@ static inline void emit_a32_alu_r64(const bool is64, const s8 dst[],
  }
  
-+static bool is_ldst_imm8(s16 off, const u8 size)
-+{
-+	s16 off_max = 0;
-+
-+	switch (size) {
-+	case BPF_B:
-+		off_max = 0xff;
-+		break;
-+	case BPF_W:
-+		off_max = 0xfff;
-+		break;
-+	case BPF_H:
-+		off_max = 0xff;
-+		break;
+ /* dst = src (4 bytes)*/
+-static inline void emit_a32_mov_r(const s8 dst, const s8 src,
++static inline void emit_a32_mov_r(const s8 dst, const s8 src, const u8 off,
+ 				  struct jit_ctx *ctx) {
+ 	const s8 *tmp = bpf2a32[TMP_REG_1];
+ 	s8 rt;
+ 
+ 	rt = arm_bpf_get_reg32(src, tmp[0], ctx);
++	if (off && off != 32) {
++		emit(ARM_LSL_I(rt, rt, 32 - off), ctx);
++		emit(ARM_ASR_I(rt, rt, 32 - off), ctx);
 +	}
-+	return -off_max <= off && off <= off_max;
-+}
-+
- /* *(size *)(dst + off) = src */
- static inline void emit_str_r(const s8 dst, const s8 src[],
- 			      s16 off, struct jit_ctx *ctx, const u8 sz){
-@@ -1105,6 +1126,45 @@ static inline void emit_ldx_r(const s8 dst[], const s8 src,
- 	arm_bpf_put_reg64(dst, rd, ctx);
+ 	arm_bpf_put_reg32(dst, rt, ctx);
  }
  
-+/* dst = *(signed size*)(src + off) */
-+static inline void emit_ldsx_r(const s8 dst[], const s8 src,
-+			       s16 off, struct jit_ctx *ctx, const u8 sz){
+@@ -761,15 +765,15 @@ static inline void emit_a32_mov_r64(const bool is64, const s8 dst[],
+ 				  const s8 src[],
+ 				  struct jit_ctx *ctx) {
+ 	if (!is64) {
+-		emit_a32_mov_r(dst_lo, src_lo, ctx);
++		emit_a32_mov_r(dst_lo, src_lo, 0, ctx);
+ 		if (!ctx->prog->aux->verifier_zext)
+ 			/* Zero out high 4 bytes */
+ 			emit_a32_mov_i(dst_hi, 0, ctx);
+ 	} else if (__LINUX_ARM_ARCH__ < 6 &&
+ 		   ctx->cpu_architecture < CPU_ARCH_ARMv5TE) {
+ 		/* complete 8 byte move */
+-		emit_a32_mov_r(dst_lo, src_lo, ctx);
+-		emit_a32_mov_r(dst_hi, src_hi, ctx);
++		emit_a32_mov_r(dst_lo, src_lo, 0, ctx);
++		emit_a32_mov_r(dst_hi, src_hi, 0, ctx);
+ 	} else if (is_stacked(src_lo) && is_stacked(dst_lo)) {
+ 		const u8 *tmp = bpf2a32[TMP_REG_1];
+ 
+@@ -785,6 +789,24 @@ static inline void emit_a32_mov_r64(const bool is64, const s8 dst[],
+ 	}
+ }
+ 
++/* dst = (signed)src */
++static inline void emit_a32_movsx_r64(const bool is64, const u8 off, const s8 dst[], const s8 src[],
++				      struct jit_ctx *ctx) {
 +	const s8 *tmp = bpf2a32[TMP_REG_1];
-+	const s8 *rd = is_stacked(dst_lo) ? tmp : dst;
-+	s8 rm = src;
++	const s8 *rt;
 +
-+	if (!is_ldst_imm8(off, sz)) {
-+		emit_a32_mov_i(tmp[0], off, ctx);
-+		emit(ARM_ADD_R(tmp[0], tmp[0], src), ctx);
-+		rm = tmp[0];
-+		off = 0;
-+	} else if (rd[1] == rm) {
-+		emit(ARM_MOV_R(tmp[0], rm), ctx);
-+		rm = tmp[0];
++	rt = arm_bpf_get_reg64(dst, tmp, ctx);
++
++	emit_a32_mov_r(dst_lo, src_lo, off, ctx);
++	if (!is64) {
++		if (!ctx->prog->aux->verifier_zext)
++			/* Zero out high 4 bytes */
++			emit_a32_mov_i(dst_hi, 0, ctx);
++	} else {
++		emit(ARM_ASR_I(rt[0], rt[1], 31), ctx);
 +	}
-+	switch (sz) {
-+	case BPF_B:
-+		/* Load a Byte with sign extension*/
-+		emit(ARM_LDRSB_I(rd[1], rm, off), ctx);
-+		/* Carry the sign extension to upper 32 bits */
-+		emit(ARM_ASR_I(rd[0], rd[1], 31), ctx);
-+		break;
-+	case BPF_H:
-+		/* Load a HalfWord with sign extension*/
-+		emit(ARM_LDRSH_I(rd[1], rm, off), ctx);
-+		/* Carry the sign extension to upper 32 bits */
-+		emit(ARM_ASR_I(rd[0], rd[1], 31), ctx);
-+		break;
-+	case BPF_W:
-+		/* Load a Word*/
-+		emit(ARM_LDR_I(rd[1], rm, off), ctx);
-+		/* Carry the sign extension to upper 32 bits */
-+		emit(ARM_ASR_I(rd[0], rd[1], 31), ctx);
-+		break;
-+	}
-+	arm_bpf_put_reg64(dst, rd, ctx);
 +}
 +
- /* Arithmatic Operation */
- static inline void emit_ar_r(const u8 rd, const u8 rt, const u8 rm,
- 			     const u8 rn, struct jit_ctx *ctx, u8 op,
-@@ -1603,8 +1663,15 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
- 	case BPF_LDX | BPF_MEM | BPF_H:
- 	case BPF_LDX | BPF_MEM | BPF_B:
- 	case BPF_LDX | BPF_MEM | BPF_DW:
-+	/* LDSX: dst = *(signed size *)(src + off) */
-+	case BPF_LDX | BPF_MEMSX | BPF_B:
-+	case BPF_LDX | BPF_MEMSX | BPF_H:
-+	case BPF_LDX | BPF_MEMSX | BPF_W:
- 		rn = arm_bpf_get_reg32(src_lo, tmp2[1], ctx);
--		emit_ldx_r(dst, rn, off, ctx, BPF_SIZE(code));
-+		if (BPF_MODE(insn->code) == BPF_MEMSX)
-+			emit_ldsx_r(dst, rn, off, ctx, BPF_SIZE(code));
-+		else
-+			emit_ldx_r(dst, rn, off, ctx, BPF_SIZE(code));
- 		break;
- 	/* speculation barrier */
- 	case BPF_ST | BPF_NOSPEC:
-diff --git a/arch/arm/net/bpf_jit_32.h b/arch/arm/net/bpf_jit_32.h
-index e0b593a1498d..79c7373fadce 100644
---- a/arch/arm/net/bpf_jit_32.h
-+++ b/arch/arm/net/bpf_jit_32.h
-@@ -79,9 +79,11 @@
- #define ARM_INST_LDST__IMM12	0x00000fff
- #define ARM_INST_LDRB_I		0x05500000
- #define ARM_INST_LDRB_R		0x07d00000
-+#define ARM_INST_LDRSB_I	0x015000d0
- #define ARM_INST_LDRD_I		0x014000d0
- #define ARM_INST_LDRH_I		0x015000b0
- #define ARM_INST_LDRH_R		0x019000b0
-+#define ARM_INST_LDRSH_I	0x015000f0
- #define ARM_INST_LDR_I		0x05100000
- #define ARM_INST_LDR_R		0x07900000
- 
+ /* Shift operations */
+ static inline void emit_a32_alu_i(const s8 dst, const u32 val,
+ 				struct jit_ctx *ctx, const u8 op) {
+@@ -1445,7 +1467,10 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
+ 				emit_a32_mov_i(dst_hi, 0, ctx);
+ 				break;
+ 			}
+-			emit_a32_mov_r64(is64, dst, src, ctx);
++			if (insn->off)
++				emit_a32_movsx_r64(is64, insn->off, dst, src, ctx);
++			else
++				emit_a32_mov_r64(is64, dst, src, ctx);
+ 			break;
+ 		case BPF_K:
+ 			/* Sign-extend immediate value to destination reg */
 -- 
 2.39.2
 
