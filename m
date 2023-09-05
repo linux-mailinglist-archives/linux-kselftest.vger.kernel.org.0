@@ -2,63 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89CB77926E6
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Sep 2023 18:34:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FDEF792635
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Sep 2023 18:26:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239169AbjIEQH0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 5 Sep 2023 12:07:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34660 "EHLO
+        id S237841AbjIEQHH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 5 Sep 2023 12:07:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353683AbjIEHNp (ORCPT
+        with ESMTP id S1353684AbjIEHNt (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Sep 2023 03:13:45 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42D43CC2
-        for <linux-kselftest@vger.kernel.org>; Tue,  5 Sep 2023 00:13:40 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-52c96d5df86so16252a12.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 05 Sep 2023 00:13:40 -0700 (PDT)
+        Tue, 5 Sep 2023 03:13:49 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1177CCC2
+        for <linux-kselftest@vger.kernel.org>; Tue,  5 Sep 2023 00:13:46 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-529fa243739so21257a12.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 05 Sep 2023 00:13:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1693898019; x=1694502819; darn=vger.kernel.org;
+        d=google.com; s=20221208; t=1693898024; x=1694502824; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/tKLxD+gN1zixDT+CN7RoSGgjaoaC0QEpeT8gEho2zE=;
-        b=CfImJeCzt5IYM/A2aVBmyMe5kK+gc2eDO05BTM0Lc5iSc1Zs/FcDH3or5fbqyThtCM
-         BAGJfZyQ4FynWBSmeKPnL6K7QAMkW4MR1WeZTtTQPpaYzOs9syxRHxxi6CnJSoAeMT7E
-         oFTTub1eAhbblGJ/vqSa9po5zGLo6unpCMwAxGiRONXbz+yg6YbqTNV9BaQfmX2/MB6+
-         h9aQ6ha5pHjo3IIsM5EysDB+v1hS3q44A47KaMopKnk3+UGJPfvouQdFDGCzq4YVratm
-         frjmJkuPaOyWQJ+ZLpIKhpoquONJiLtDyE3oxnccQp3fd/RDpBKVNdjDAgsSxUx8q8lc
-         HGDA==
+        bh=2tggdSU6Aq6n2hHOfadtstz208sLhBuTpb6IbrPMgfM=;
+        b=TkDHe8qZww2PzMaBPiiNiQGUbh/kSzrLz3Bpugevkgf1ZUXY//Y4oUWmTIGo1Hyr8J
+         e3d4Bcc4S0yTJ+Skrli69bbj2B1jp4lwHLfGjsJq7uyrgmOIkCC2qEXHGg7O26Crt1vj
+         X1MtSWgUiDFXADcmeQjnSArgcHqx32iaI+pLZkHV/HL4Fl+LlxeL8MEBCToVfmKrxpCR
+         6Hv4nUTr8pfbHPEoCEtJhuzx1y0r3fvcBN2m9XOyw86hBQClg6lFvtIa9RsbwpcjYdd8
+         bwgZka/6T7tZkVIAbyo81EpZYWdLdf54Mx/YUXGvQgh801WIivXvgZX44HB9QI2JAZLd
+         quZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693898019; x=1694502819;
+        d=1e100.net; s=20221208; t=1693898024; x=1694502824;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/tKLxD+gN1zixDT+CN7RoSGgjaoaC0QEpeT8gEho2zE=;
-        b=OJcDIs/vhBNTNP19qfGjSbzOKNvM6Nrz8buqc9tBVaZ09i2UYsaxdk8LiAHdyhoKaN
-         QjStq6qZZ0HF1jwcI7U/2duvn9JfZkvWfRai7Y1qkJ12S8T3w+f4IKwLXAfzLEje5hmQ
-         Rp2L4BiqSA2AQ8IRJV5yiE5qHp5ZTdcHO3Y0ZgWdoE2F9i+cDhJIlCVVTakgPyTaenFI
-         U3+ZXp5CxWhZR3+/QlH5mnPiEV6Ub9X9aMbFiMVU6V52Ydpex4xdXnRekyMq6rwNb/PX
-         +jUr6Qj3PdkWCwNIqtjLua3hKxzIXfz18GF2a5zI4Rqwu3Hoz247aYxMZBidFxdL7yG7
-         QFoQ==
-X-Gm-Message-State: AOJu0YxX19VWU2Fqw/PT4d0+raqHKJ4dfbFzMU2GKEPgK49Syqv4qlpq
-        cDDrPM2hTI3iV8+9WrNQc3TeLqOIM59gcUBnRruyHtPGn6qm+YKFcdyQ+g==
-X-Google-Smtp-Source: AGHT+IGOM/Vf225apo+BFAqzLAArYSjs9L9GwkEC9UwfUzRqw1vyTpdj9ZZG25VMrKT+GCP3kcEPryDX5/xZbeMTPiU=
-X-Received: by 2002:a50:9f6f:0:b0:506:b280:4993 with SMTP id
- b102-20020a509f6f000000b00506b2804993mr277376edf.2.1693898018759; Tue, 05 Sep
- 2023 00:13:38 -0700 (PDT)
+        bh=2tggdSU6Aq6n2hHOfadtstz208sLhBuTpb6IbrPMgfM=;
+        b=jK/5T6CB0TAlQmFnhAojCyGAmC58IwjoYNziBmGs0MJ+ff6N5tIplUNVn/pXTzC5A2
+         ZzmVR7ClCobouBXMpEzojc6qcSL6sFX5p6VppLsxlbdS2rQhs7lhi2Fm3Ycz1ao+zzHG
+         rec9+i2TIraOYwbJmUUtxikZrM/Utf4O5RyGZOI5lynKXs99w8Se3uhzgJMRtc2FQvRG
+         Qdv1IArVbWCvhlY453f0QOefOxv6uHCeoLXjY3T5uqrcnMNlFV/VmHWzeqFOS2RJZrzs
+         Yw0Xefz4ULw0TE9j+t+NoyDhV9NzsZwFKwIBEysTc3aNIPeeJurl0f/5XW3Cd1jsSrcv
+         oBrA==
+X-Gm-Message-State: AOJu0YxSDJLmNCPVyFS01xnMR60kTg4xeAS2vkjrckpBGHPh758o+9Op
+        Yvh7KawCnpA4b/Zni8ezgsMl7Y7ssBGj7tUNrLNoPg==
+X-Google-Smtp-Source: AGHT+IHeunbDWyvbFlOq3QOqNISl9M/o+SleYUDPodOSFbxiAKbUKLnHhQL1XHqu9ldBJO4Me3iYpt34nsj9l10wuUY=
+X-Received: by 2002:a50:d085:0:b0:519:7d2:e256 with SMTP id
+ v5-20020a50d085000000b0051907d2e256mr213704edd.0.1693898024545; Tue, 05 Sep
+ 2023 00:13:44 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230903071028.1518913-1-ruanjinjie@huawei.com> <20230903071028.1518913-4-ruanjinjie@huawei.com>
-In-Reply-To: <20230903071028.1518913-4-ruanjinjie@huawei.com>
+References: <20230903071028.1518913-1-ruanjinjie@huawei.com> <20230903071028.1518913-5-ruanjinjie@huawei.com>
+In-Reply-To: <20230903071028.1518913-5-ruanjinjie@huawei.com>
 From:   David Gow <davidgow@google.com>
-Date:   Tue, 5 Sep 2023 15:13:27 +0800
-Message-ID: <CABVgOS=5mA6eaHNnn0yrZt3g03ZaAW112KotaBO6u2Lm+66aEA@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] kunit: Fix possible null-ptr-deref in kunit_parse_glob_filter()
+Date:   Tue, 5 Sep 2023 15:13:32 +0800
+Message-ID: <CABVgOSmP8Dy4W4nuDee-p9=nvijy1TeBJj_wOh_VVLoahzvauw@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] kunit: Fix possible memory leak in kunit_filter_suites()
 To:     Jinjie Ruan <ruanjinjie@huawei.com>
 Cc:     brendan.higgins@linux.dev, skhan@linuxfoundation.org,
         jk@codeconstruct.com.au, dlatypov@google.com, rmoar@google.com,
         linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000b609d80604975def"
+        boundary="0000000000000ea43c0604975e9a"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
@@ -70,161 +70,64 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---000000000000b609d80604975def
+--0000000000000ea43c0604975e9a
 Content-Type: text/plain; charset="UTF-8"
 
 On Sun, 3 Sept 2023 at 15:11, 'Jinjie Ruan' via KUnit Development
 <kunit-dev@googlegroups.com> wrote:
 >
-> Inject fault while probing kunit-example-test.ko, if kzalloc fails
-> in kunit_parse_glob_filter(), strcpy() or strncpy() to NULL will
-> cause below null-ptr-deref bug. So check NULL for kzalloc() and
-> return int instead of void for kunit_parse_glob_filter().
+> If both filter_glob and filters are not NULL, and kunit_parse_glob_filter()
+> succeed, but kcalloc parsed_filters fails, the suite_glob and test_glob of
+> parsed kzalloc in kunit_parse_glob_filter() will be leaked.
 >
->  Unable to handle kernel paging request at virtual address dfff800000000000
->  KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
->  Mem abort info:
->    ESR = 0x0000000096000005
->    EC = 0x25: DABT (current EL), IL = 32 bits
->    SET = 0, FnV = 0
->    EA = 0, S1PTW = 0
->    FSC = 0x05: level 1 translation fault
->  Data abort info:
->    ISV = 0, ISS = 0x00000005, ISS2 = 0x00000000
->    CM = 0, WnR = 0, TnD = 0, TagAccess = 0
->    GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
->  [dfff800000000000] address between user and kernel address ranges
->  Internal error: Oops: 0000000096000005 [#1] PREEMPT SMP
->  Modules linked in: kunit_example_test cfg80211 rfkill 8021q garp mrp stp llc ipv6 [last unloaded: kunit_example_test]
->  CPU: 4 PID: 6047 Comm: modprobe Tainted: G        W        N 6.5.0-next-20230829+ #141
->  Hardware name: linux,dummy-virt (DT)
->  pstate: 80000005 (Nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->  pc : strncpy+0x58/0xc0
->  lr : kunit_filter_suites+0x15c/0xa84
->  sp : ffff800082a17420
->  x29: ffff800082a17420 x28: 0000000000000000 x27: 0000000000000004
->  x26: 0000000000000000 x25: ffffa847e40a5320 x24: 0000000000000001
->  x23: 0000000000000000 x22: 0000000000000001 x21: dfff800000000000
->  x20: 000000000000002a x19: 0000000000000000 x18: 00000000750b3b54
->  x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
->  x14: 0000000000000000 x13: 34393178302f3039 x12: ffff7508fcea4ec1
->  x11: 1ffff508fcea4ec0 x10: ffff7508fcea4ec0 x9 : dfff800000000000
->  x8 : ffff6051b1a7f86a x7 : ffff800082a17270 x6 : 0000000000000002
->  x5 : 0000000000000098 x4 : ffff028d9817b250 x3 : 0000000000000000
->  x2 : 0000000000000000 x1 : ffffa847e40a5320 x0 : 0000000000000000
->  Call trace:
->   strncpy+0x58/0xc0
->   kunit_filter_suites+0x15c/0xa84
->   kunit_module_notify+0x1b0/0x3ac
->   blocking_notifier_call_chain+0xc4/0x128
->   do_init_module+0x250/0x594
->   load_module+0x37b0/0x44b4
->   init_module_from_file+0xd4/0x128
->   idempotent_init_module+0x2c8/0x524
->   __arm64_sys_finit_module+0xac/0x100
->   invoke_syscall+0x6c/0x258
->   el0_svc_common.constprop.0+0x160/0x22c
->   do_el0_svc+0x44/0x5c
->   el0_svc+0x38/0x78
->   el0t_64_sync_handler+0x13c/0x158
->   el0t_64_sync+0x190/0x194
->  Code: 5400028a d343fe63 12000a62 39400034 (38f56863)
->  ---[ end trace 0000000000000000 ]---
->  Kernel panic - not syncing: Oops: Fatal exception
->  SMP: stopping secondary CPUs
->  Kernel Offset: 0x284761400000 from 0xffff800080000000
->  PHYS_OFFSET: 0xfffffd7380000000
->  CPU features: 0x88000203,3c020000,1000421b
->  Memory Limit: none
->  Rebooting in 1 seconds..
+> As Rae suggested, assign -ENOMEM to *err to correctly free copy and goto
+> free_parsed_glob to free the suite/test_glob of parsed.
 >
-> Fixes: a127b154a8f2 ("kunit: tool: allow filtering test cases via glob")
+> Fixes: 1c9fd080dffe ("kunit: fix uninitialized variables bug in attributes filtering")
 > Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
-> Reviewed-by: Rae Moar <rmoar@google.com>
-> Reviewed-by: David Gow <davidgow@google.com>
+> Suggested-by: Rae Moar <rmoar@google.com>
 > ---
 > v2:
-> - goto the new add identical purpose free_copy label.
+> - Add *err = -ENOMEM before goto to correctly free copy.
+> - Goto the new add identical purpose free_parsed_glob label.
+> - Update the commit message.
 > ---
 
 Looks good to me.
 
-This is still,
 Reviewed-by: David Gow <davidgow@google.com>
 
 Cheers,
 -- David
 
 
->  lib/kunit/executor.c | 23 +++++++++++++++++++----
->  1 file changed, 19 insertions(+), 4 deletions(-)
+>  lib/kunit/executor.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 >
 > diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-> index 0eda42b0c9bb..28f144de748b 100644
+> index 28f144de748b..a6348489d45f 100644
 > --- a/lib/kunit/executor.c
 > +++ b/lib/kunit/executor.c
-> @@ -65,7 +65,7 @@ struct kunit_glob_filter {
->  };
->
->  /* Split "suite_glob.test_glob" into two. Assumes filter_glob is not empty. */
-> -static void kunit_parse_glob_filter(struct kunit_glob_filter *parsed,
-> +static int kunit_parse_glob_filter(struct kunit_glob_filter *parsed,
->                                     const char *filter_glob)
->  {
->         const int len = strlen(filter_glob);
-> @@ -73,16 +73,28 @@ static void kunit_parse_glob_filter(struct kunit_glob_filter *parsed,
->
->         if (!period) {
->                 parsed->suite_glob = kzalloc(len + 1, GFP_KERNEL);
-> +               if (!parsed->suite_glob)
-> +                       return -ENOMEM;
-> +
->                 parsed->test_glob = NULL;
->                 strcpy(parsed->suite_glob, filter_glob);
-> -               return;
-> +               return 0;
->         }
->
->         parsed->suite_glob = kzalloc(period - filter_glob + 1, GFP_KERNEL);
-> +       if (!parsed->suite_glob)
-> +               return -ENOMEM;
-> +
->         parsed->test_glob = kzalloc(len - (period - filter_glob) + 1, GFP_KERNEL);
-> +       if (!parsed->test_glob) {
-> +               kfree(parsed->suite_glob);
-> +               return -ENOMEM;
-> +       }
->
->         strncpy(parsed->suite_glob, filter_glob, period - filter_glob);
->         strncpy(parsed->test_glob, period + 1, len - (period - filter_glob));
-> +
-> +       return 0;
->  }
->
->  /* Create a copy of suite with only tests that match test_glob. */
-> @@ -152,8 +164,11 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
->         }
->         copy_start = copy;
->
-> -       if (filter_glob)
-> -               kunit_parse_glob_filter(&parsed_glob, filter_glob);
-> +       if (filter_glob) {
-> +               *err = kunit_parse_glob_filter(&parsed_glob, filter_glob);
-> +               if (*err)
-> +                       goto free_copy;
-> +       }
->
->         /* Parse attribute filters */
->         if (filters) {
+> @@ -175,8 +175,8 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
+>                 filter_count = kunit_get_filter_count(filters);
+>                 parsed_filters = kcalloc(filter_count, sizeof(*parsed_filters), GFP_KERNEL);
+>                 if (!parsed_filters) {
+> -                       kfree(copy);
+> -                       return filtered;
+> +                       *err = -ENOMEM;
+> +                       goto free_parsed_glob;
+>                 }
+>                 for (j = 0; j < filter_count; j++)
+>                         parsed_filters[j] = kunit_next_attr_filter(&filters, err);
 > --
 > 2.34.1
 >
 > --
 > You received this message because you are subscribed to the Google Groups "KUnit Development" group.
 > To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20230903071028.1518913-4-ruanjinjie%40huawei.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20230903071028.1518913-5-ruanjinjie%40huawei.com.
 
---000000000000b609d80604975def
+--0000000000000ea43c0604975e9a
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -291,14 +194,14 @@ impZAng7ccvvK09K3ZuhwTIxJMsPXCZYsrXWORTw5sczRAP6XvKbPBJnsJoSTe5dFBPBHOQJOGhU
 qWfEfWnWMJPF3LxSGLpLFQXO3RwQqmxv08avwXfVPouh1xuB3FX7rpDabT8YDhu9JgIZkLEKko7L
 yQt6zWwng7k8YF/jGbiAta6VMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCD+
-ojkSFyC2ov7UrzIhM1lncq35cCzT8qI7BBIOVvr7gzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzA5MDUwNzEzMzlaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAU
+ESxvbLutZcRXNFhebvKlYzVo32TgV0F0nyvsFxw8cTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzA5MDUwNzEzNDRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAJowAclDVFph6QK4Z7ieG
-fMPLr+ug1dFmul67ULh2+20V5Gu4GYTBTD0gKMOP7htTlKqOGUpmAgEyPsz6KmEg1ARCy7bnDvIW
-e+NceZJuq4V5BSNj1vUELbkI4+73FuT/m+RV+9tOp5hh8Jn7VXZQXYPgp137WGZrzYr2L32rkpHB
-vRloE/BE+ypJ5cgUWqYADX0xl0cYvn1R7OB5ti8PUcd+VmBbxYDeBmC1jt5EVyqrOMQH5cvlDmzM
-9Y9hF3nEKOS1x/k2Na/bqMaIgqtb0ih7gOG/A45LVKjt2RdvzJCcKgq7/iAzyBnYud3csvkYCGwr
-3Ui/5bQbDNeTZ0PI6Q==
---000000000000b609d80604975def--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAOMUWkSfAMRU5/4gIOkWD
+Xh6XcvOOuumrwv7Y4vYQfZN3C0F56J3YbcHDFaUxDOdREK27PJJ36KbJ5A6MGgCY0ERUFyH04pWV
+MTNcXt6T4TS/fKWT69ocM1GXD7urVQbAe8F1s7ZoSVBDMzxTzyyhRZs8JPUuwzRC7z9vAVVV3pKz
+UY6Ot1DmOx3UwhLz2HXePGhm5lWA7ePOeYxr4i3fwajm4tmp80Ojo61MbM7dKx7eYDQlX72GU0CU
+0fC8GSHqKcJWpwhnJaRK4qhciIGHSE2RZ8cINy7AUb1iQy42O8wTqQljjALpYvCppHFn9bbU4mbq
+U6Py+gbfBWTNrR22Jw==
+--0000000000000ea43c0604975e9a--
