@@ -2,83 +2,93 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ECAD7927F7
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Sep 2023 18:41:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 972F5792C9F
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Sep 2023 19:41:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239454AbjIEQH6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 5 Sep 2023 12:07:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46402 "EHLO
+        id S229626AbjIERl3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 5 Sep 2023 13:41:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1354784AbjIEOWW (ORCPT
+        with ESMTP id S238199AbjIERhe (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Sep 2023 10:22:22 -0400
-Received: from out162-62-57-210.mail.qq.com (out162-62-57-210.mail.qq.com [162.62.57.210])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C91194;
-        Tue,  5 Sep 2023 07:22:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1693923725;
-        bh=HENdTPz9DKLgwbLK0xXsSzaRwMyikMlHnYMJdwmq++0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=H7EaYOp5egAJsKwnA8munvzl9JiKOzBwhRK8/WJHf+uurhgJdAZG47SHzkELlCTwB
-         JpP1Bod9ZPJf86/SDiJmNYzwwJItNk42oS6MIi5iDp75H9VGP5PjFfAUEK3rlxiIL5
-         9TvPGp4gqOwNdpfCQmzOm/DznxiW/b1PqcSNW/jc=
-Received: from rtoax.lan ([120.245.114.157])
-        by newxmesmtplogicsvrszb1-0.qq.com (NewEsmtp) with SMTP
-        id 580046EB; Tue, 05 Sep 2023 22:22:00 +0800
-X-QQ-mid: xmsmtpt1693923720t1sy3uo3k
-Message-ID: <tencent_2D10CB0CD885A8B2A42EAB546E5EEF467B09@qq.com>
-X-QQ-XMAILINFO: NY3HYYTs4gYS5ZQPGHX+/hR4HEKI2ljXem8GivFomlSl2eDzLj1NiT397Jr5pD
-         8nI9TJ9PMGRcMnU/o/lcNJwmB8eE3spPvl53RKPPydsXy2XxmhL5Xbo6b3tyLa3tm6GB0twTnT1k
-         XnCeFIYs5MvEvK9rP3UvLqdIy4EBciqWWabXZNCrwQ6M68HyrKvBPzaNSX5ChOyk55iPAKs/MZgH
-         NdLJbxm7G9auXiRPutnh5FyX2qJYWYWwxOqZUZfMIMMS1M0W6sJV30RAevtPiC+EYnI5RQ8N7pDq
-         dlNsmW4rJNQwYL8cWyPLLXaslEbu51mntl4vGEXxiSidInFK8RUo1+7zEM/k3qSq2owg5iOTcleO
-         kNDEqHXtSn6aUB3rpWUTslfqXNCPnZv3zkNaeY5UDXdK7jf3bW3un6ApZnVs+j6BqCX+T4SbiLWF
-         wKfoTpO5FXTHQUqByPMnE6Lcq9ELoZyK1PK+LP6ZOPRdnI4CUtF7CufpFUGpxW+0JtsdmYWt1UOa
-         Ptdj9W33+EJ9qtwDOy3D0ifyoQBuzhTgm56Fwe7glclWed0OyGYfYaIGWdVe8KBLhgYMWRWBB5I7
-         eZQ3bWBqlIpkdmMA8Nz+OwHoNV4+J/vej98+WtOV8C8RYfzrwOaLMf5xEqmf83gpWV4vJ9LCJs4W
-         OuMcEzmX/3JOzG/VHst7kryEPYYG8d6IKSMPDwzJnhyAL68Z4HBYRTKiL47KSA7GKR52DAaQuc7m
-         DbTMchSTmwiU7lPjevb7ZUMD4iTYgbneF99Xz/ujZWLreCzVNqvURl6lRSB94n3/cFaTcTEIBboc
-         PvOOIhw/pDwjQkw+3M3JmAvxIiIIQDvkGLJreVYhIcqJBHtHqIe/8ebzngGeivwt0B1kPhhygoUH
-         lnav8x5/yOs8CfwhhkTRbXm6RdrFBE/ES5gUmRhGlq7aBmlOHExNAGcoUOf1TFpLaCLuKxSowxu8
-         3kYG7KvR6ysnbGGiGoohMCNtb+DV16G0GJuaUybFE0xUPATzDfsiDAk83DnYqmp/yhq3e4jsyoV/
-         mByZ4qvFfYoRjGczcwKdFEysvUroc=
-X-QQ-XMRINFO: NyFYKkN4Ny6FSmKK/uo/jdU=
-From:   Rong Tao <rtoax@foxmail.com>
-To:     olsajiri@gmail.com
-Cc:     alexandre.torgue@foss.st.com, andrii@kernel.org, ast@kernel.org,
-        bpf@vger.kernel.org, daniel@iogearbox.net, haoluo@google.com,
-        john.fastabend@gmail.com, kpsingh@kernel.org, laoar.shao@gmail.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com, martin.lau@linux.dev,
-        mcoquelin.stm32@gmail.com, mykolal@fb.com, rongtao@cestc.cn,
-        rtoax@foxmail.com, sdf@google.com, shuah@kernel.org,
-        song@kernel.org, yonghong.song@linux.dev
-Subject: Re: [PATCH bpf-next v10 1/2] selftests/bpf: trace_helpers.c: optimize kallsyms cache
-Date:   Tue,  5 Sep 2023 22:21:59 +0800
-X-OQ-MSGID: <20230905142159.114458-1-rtoax@foxmail.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <ZPY1Lu8341L+d5Rw@krava>
-References: <ZPY1Lu8341L+d5Rw@krava>
+        Tue, 5 Sep 2023 13:37:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F388176C04
+        for <linux-kselftest@vger.kernel.org>; Tue,  5 Sep 2023 10:06:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1693933491;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=kiG7LMI58PbxxQ7NC4rZfW+AyfhbvsaLPh/UOZNP78k=;
+        b=JPRahlb4deVQUNjJB+fS6xu9zJhed3VppD+r2KCW0ZcJPpWtJ1C0jCDbG2za8m0gCNIl70
+        n2Rg0WCDzW7DDPdULi49kWfucDHCfta+dHLvCIkTrlld3WFL9s+Ju2Zn1+mlP/WNiC1Yup
+        nUx3xn5yP1UcVnXGL7mJzxYur/vuKhg=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-657-j9vJhjXcOjWqfSdsL5P9pA-1; Tue, 05 Sep 2023 12:20:09 -0400
+X-MC-Unique: j9vJhjXcOjWqfSdsL5P9pA-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 8B0A11C09CC6;
+        Tue,  5 Sep 2023 16:20:08 +0000 (UTC)
+Received: from oldenburg.str.redhat.com (unknown [10.2.16.42])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 8C0EF2026D68;
+        Tue,  5 Sep 2023 16:20:06 +0000 (UTC)
+From:   Florian Weimer <fweimer@redhat.com>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     Damian Tometzki <dtometzki@fedoraproject.org>,
+        Aleksa Sarai <cyphar@cyphar.com>,
+        Shuah Khan <shuah@kernel.org>, Jeff Xu <jeffxu@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Daniel Verkamp <dverkamp@chromium.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Dominique Martinet <asmadeus@codewreck.org>,
+        stable@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 3/5] memfd: improve userspace warnings for missing
+ exec-related flags
+References: <20230814-memfd-vm-noexec-uapi-fixes-v2-0-7ff9e3e10ba6@cyphar.com>
+        <20230814-memfd-vm-noexec-uapi-fixes-v2-3-7ff9e3e10ba6@cyphar.com>
+        <ZPFzCSIgZ4QuHsSC@fedora.fritz.box>
+        <20230902155850.ca1d32c16862cbe54ebd36ef@linux-foundation.org>
+Date:   Tue, 05 Sep 2023 18:20:05 +0200
+In-Reply-To: <20230902155850.ca1d32c16862cbe54ebd36ef@linux-foundation.org>
+        (Andrew Morton's message of "Sat, 2 Sep 2023 15:58:50 -0700")
+Message-ID: <8734zs7ft6.fsf@oldenburg.str.redhat.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H4,
-        RCVD_IN_MSPIKE_WL,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi, jirka.
+* Andrew Morton:
 
-I just fix all your advise[0], and submit new patchset v11.
-please review.
+> OK, thanks, I'll revert this.  Spamming everyone even harder isn't a
+> good way to get developers to fix their stuff.
 
-Rong Tao
+Is this really buggy userspace?  Are future kernels going to require
+some of these flags?
 
-[0] https://lore.kernel.org/lkml/ZPY1Lu8341L+d5Rw@krava/
+That's going to break lots of applications which use memfd_create to
+enable run-time code generation on locked-down systems because it looked
+like a stable interface (=E2=80=9Cdon't break userspace=E2=80=9D and all th=
+at).
+
+Thanks,
+Florian
 
