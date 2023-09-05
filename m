@@ -2,63 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D75577925F0
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Sep 2023 18:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6695E7925CB
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Sep 2023 18:24:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239382AbjIEQHt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 5 Sep 2023 12:07:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60358 "EHLO
+        id S239314AbjIEQHq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 5 Sep 2023 12:07:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353679AbjIEHMz (ORCPT
+        with ESMTP id S1353680AbjIEHNC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Sep 2023 03:12:55 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 445EBCC2
-        for <linux-kselftest@vger.kernel.org>; Tue,  5 Sep 2023 00:12:51 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-529fa243739so21234a12.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 05 Sep 2023 00:12:51 -0700 (PDT)
+        Tue, 5 Sep 2023 03:13:02 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37885CC2
+        for <linux-kselftest@vger.kernel.org>; Tue,  5 Sep 2023 00:12:55 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-52c96d5df86so16237a12.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 05 Sep 2023 00:12:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1693897970; x=1694502770; darn=vger.kernel.org;
+        d=google.com; s=20221208; t=1693897973; x=1694502773; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xO7LtF7pg9kxayvxL/JvI59Ebyv7N6JDPJg5W/aTLLo=;
-        b=zNlkyDW1JUlqaUWsZwz6OvWnR7PclQj5iAu3BcKr+22GWRORPEgLWbXMGVAR2h9fJE
-         lhLN4Gg35ZU/zugs/wozpJalbJc6xNJzNCSY5egT23q7zr1ocg6mKApMY9hVn/KwOu/U
-         xN8QpIhzftXF5atupvKW2ZQb01QTkGxTt6ajyj8r+SUnQBZ5Ms62v3X7iem9gYADHkxr
-         vAZGJRZo4CFn17Plp0tikM0AARnxWaVR9ixjMUDRFpow+u8wtYChSEKGpOZx1ZRl3rvU
-         Z8PHEsJVrS6afO4xsFeaz2BfMG8RY7fnX2BmFEmFd9YP0237rTS8YOhN6resV6m8H7QV
-         D/tA==
+        bh=kkiu/4cdTx1FHq+ZuEIoI2XAIjTNPzAcyEHuEDrhni4=;
+        b=niAK6HPXakfelykze69q28bRz78D1B2jbQ5JNcoFq4Ptv2TkqLn06wedqWl6BiU/Lc
+         YGbrbWl8MtgyGiquPFZMQEILzgBc9RotJa0kI6qpHTuBZ3ntfzSQiijj1tml5RGZuiDv
+         yKax98SOZD6GK85xw2C+t7jTKeKrwpBawMoqFmKj0lhvCgSAkw+eh0L/uJK8DNWYqN/p
+         w0APPpxcpCG8T3sqZTCfXwuhWajUJCUhxtxfnQDK4yuJbBNrj6qr67+JXnY5pBK13XTL
+         12U2ppWh+p4SbdPXMfxsRZz79Rp1KoaRMFEq9YEeFUJ0fw20MtVn4gDTtnhBf9yGc5Tc
+         dMiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693897970; x=1694502770;
+        d=1e100.net; s=20221208; t=1693897973; x=1694502773;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=xO7LtF7pg9kxayvxL/JvI59Ebyv7N6JDPJg5W/aTLLo=;
-        b=jjt8O2wwtWcBxjK/WEYtvMZZI7IrImUr2kvB9qAPEmrpaysPIFyH2zTMq6C6cqEj3M
-         qGFBRlAhgYyPmYHvU9o67eWUTFRax4M98KQBJyJiovrGHT4Mk6eY3ID2tLLkDpp3gjGi
-         +E50rrfBrRniqHWk88pXXiW0jI9roIN1owhwbsXtF9Lw/AnkinOJeQqSPAGX5HBQPlSN
-         GfrVgziPwqifI5FgpzW+wSFHPw1ZZ8MCZAsrAgIRpx+PtW9EokOIR8GxcyMxyGSDhm5W
-         Arzi8EXfYBi3UJx+wdGYj3NJN49hkht/KGYutXXfNUuTCdcf/guJwYzKRCQ3yh/7vaSC
-         XOwQ==
-X-Gm-Message-State: AOJu0YwANKZTtvYyhLDwqWOIEOS/PKHQG4ri3Q9ZbmvS0cHxwu6OrkxJ
-        R+N+7loEhjlI0OESULd29OWBLWj8umiYVfhdZ1MiAw==
-X-Google-Smtp-Source: AGHT+IGQuVqsAYCHA2zkucEPjCLPSjr4Bv27qQj7wMr2oXb4iD5ms8oXKwAIiN3WtnNiZBMTeDFTZ8IgtMYLc8nSSiU=
-X-Received: by 2002:a50:baad:0:b0:523:193b:5587 with SMTP id
- x42-20020a50baad000000b00523193b5587mr172836ede.6.1693897969652; Tue, 05 Sep
- 2023 00:12:49 -0700 (PDT)
+        bh=kkiu/4cdTx1FHq+ZuEIoI2XAIjTNPzAcyEHuEDrhni4=;
+        b=aIP8JRyvVC0Pc8cYLLE1JCII8+G1AtjC/X4kn8r3aYTTBo8cVrSzzdki0zC7Tn1XX4
+         IPSP8T4Nwx1oWdHFd+hkCSvAdri4k8gcOqpWt74Yl1CjFqiW1NJIpUo0PKKgEJZKgpNG
+         DMzqCulHh9Fkrr+pu1pYaPmOV0i7JUNLzJhQsRsB0xX2LUzELXBQmbxWsozKhmwrMY31
+         VNsD0AkjXpKutcjDqQUqaggyW7202NF5rn3ZmffQAiVGgjAdExLrN+1hSMzWPdbWCFSW
+         btHYY5cfbQlSYDG4qnhzVzXETVpgN8MgF8Fycu10wU9sE8D1kAhgHlNe/Ti4/zTXmK4i
+         MwDA==
+X-Gm-Message-State: AOJu0YxBTUCKAYA1kWT2E263ekYE3JmZKg0QSRT/3idjMUH1KRwNPhM0
+        a9/79Rg0VYtNgfwrgwGOSYQdxcTPRbaKUxR8HuU8K8pDcX+LkFgcNHKPKQ==
+X-Google-Smtp-Source: AGHT+IFujouFJUZb/bn1CunL9t8D1TWLwKiYfe4/5CoRo6o5j7Lo8DF2FmilrB8+1M08LmDsfF/DR6OwuElESqkRYE0=
+X-Received: by 2002:a50:9ee4:0:b0:523:d5bc:8424 with SMTP id
+ a91-20020a509ee4000000b00523d5bc8424mr210650edf.5.1693897973549; Tue, 05 Sep
+ 2023 00:12:53 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230903071028.1518913-1-ruanjinjie@huawei.com> <20230903071028.1518913-2-ruanjinjie@huawei.com>
-In-Reply-To: <20230903071028.1518913-2-ruanjinjie@huawei.com>
+References: <20230903071028.1518913-1-ruanjinjie@huawei.com> <20230903071028.1518913-3-ruanjinjie@huawei.com>
+In-Reply-To: <20230903071028.1518913-3-ruanjinjie@huawei.com>
 From:   David Gow <davidgow@google.com>
-Date:   Tue, 5 Sep 2023 15:12:35 +0800
-Message-ID: <CABVgOS=8Jw1ExrpY_6-a3Nc6NJRf0Jb17D-WS33JwED6Xz95bQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/4] kunit: Fix wild-memory-access bug in kunit_free_suite_set()
+Date:   Tue, 5 Sep 2023 15:12:42 +0800
+Message-ID: <CABVgOSkWVmX485X1w09oMgY6Y=f1ecwQ2nqAtLrPDzBPQAh-7g@mail.gmail.com>
+Subject: Re: [PATCH v2 2/4] kunit: Fix the wrong err path and add goto labels
+ in kunit_filter_suites()
 To:     Jinjie Ruan <ruanjinjie@huawei.com>
 Cc:     brendan.higgins@linux.dev, skhan@linuxfoundation.org,
         jk@codeconstruct.com.au, dlatypov@google.com, rmoar@google.com,
         linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000ca8afd0604975ac8"
+        boundary="000000000000068c1a0604975b04"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
@@ -70,139 +71,113 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---000000000000ca8afd0604975ac8
+--000000000000068c1a0604975b04
 Content-Type: text/plain; charset="UTF-8"
 
-On Sun, 3 Sept 2023 at 15:11, Jinjie Ruan <ruanjinjie@huawei.com> wrote:
+On Sun, 3 Sept 2023 at 15:11, 'Jinjie Ruan' via KUnit Development
+<kunit-dev@googlegroups.com> wrote:
 >
-> Inject fault while probing kunit-example-test.ko, if kstrdup()
-> fails in mod_sysfs_setup() in load_module(), the mod->state will
-> switch from MODULE_STATE_COMING to MODULE_STATE_GOING instead of
-> from MODULE_STATE_LIVE to MODULE_STATE_GOING, so only
-> kunit_module_exit() will be called without kunit_module_init(), and
-> the mod->kunit_suites is no set correctly and the free in
-> kunit_free_suite_set() will cause below wild-memory-access bug.
+> Take the last kfree(parsed_filters) and add it to be the first. Take
+> the first kfree(copy) and add it to be the last. The Best practice is to
+> return these errors reversely.
 >
-> The mod->state state machine when load_module() succeeds:
+> And as David suggested, add several labels which target only the things
+> which actually have been allocated so far.
 >
-> MODULE_STATE_UNFORMED ---> MODULE_STATE_COMING ---> MODULE_STATE_LIVE
->          ^                                              |
->          |                                              | delete_module
->          +---------------- MODULE_STATE_GOING <---------+
->
-> The mod->state state machine when load_module() fails at
-> mod_sysfs_setup():
->
-> MODULE_STATE_UNFORMED ---> MODULE_STATE_COMING ---> MODULE_STATE_GOING
->         ^                                               |
->         |                                               |
->         +-----------------------------------------------+
->
-> Call kunit_module_init() at MODULE_STATE_COMING state to fix the issue
-> because MODULE_STATE_LIVE is transformed from it.
->
->  Unable to handle kernel paging request at virtual address ffffff341e942a88
->  KASAN: maybe wild-memory-access in range [0x0003f9a0f4a15440-0x0003f9a0f4a15447]
->  Mem abort info:
->    ESR = 0x0000000096000004
->    EC = 0x25: DABT (current EL), IL = 32 bits
->    SET = 0, FnV = 0
->    EA = 0, S1PTW = 0
->    FSC = 0x04: level 0 translation fault
->  Data abort info:
->    ISV = 0, ISS = 0x00000004, ISS2 = 0x00000000
->    CM = 0, WnR = 0, TnD = 0, TagAccess = 0
->    GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
->  swapper pgtable: 4k pages, 48-bit VAs, pgdp=00000000441ea000
->  [ffffff341e942a88] pgd=0000000000000000, p4d=0000000000000000
->  Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
->  Modules linked in: kunit_example_test(-) cfg80211 rfkill 8021q garp mrp stp llc ipv6 [last unloaded: kunit_example_test]
->  CPU: 3 PID: 2035 Comm: modprobe Tainted: G        W        N 6.5.0-next-20230828+ #136
->  Hardware name: linux,dummy-virt (DT)
->  pstate: a0000005 (NzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->  pc : kfree+0x2c/0x70
->  lr : kunit_free_suite_set+0xcc/0x13c
->  sp : ffff8000829b75b0
->  x29: ffff8000829b75b0 x28: ffff8000829b7b90 x27: 0000000000000000
->  x26: dfff800000000000 x25: ffffcd07c82a7280 x24: ffffcd07a50ab300
->  x23: ffffcd07a50ab2e8 x22: 1ffff00010536ec0 x21: dfff800000000000
->  x20: ffffcd07a50ab2f0 x19: ffffcd07a50ab2f0 x18: 0000000000000000
->  x17: 0000000000000000 x16: 0000000000000000 x15: ffffcd07c24b6764
->  x14: ffffcd07c24b63c0 x13: ffffcd07c4cebb94 x12: ffff700010536ec7
->  x11: 1ffff00010536ec6 x10: ffff700010536ec6 x9 : dfff800000000000
->  x8 : 00008fffefac913a x7 : 0000000041b58ab3 x6 : 0000000000000000
->  x5 : 1ffff00010536ec5 x4 : ffff8000829b7628 x3 : dfff800000000000
->  x2 : ffffff341e942a80 x1 : ffffcd07a50aa000 x0 : fffffc0000000000
->  Call trace:
->   kfree+0x2c/0x70
->   kunit_free_suite_set+0xcc/0x13c
->   kunit_module_notify+0xd8/0x360
->   blocking_notifier_call_chain+0xc4/0x128
->   load_module+0x382c/0x44a4
->   init_module_from_file+0xd4/0x128
->   idempotent_init_module+0x2c8/0x524
->   __arm64_sys_finit_module+0xac/0x100
->   invoke_syscall+0x6c/0x258
->   el0_svc_common.constprop.0+0x160/0x22c
->   do_el0_svc+0x44/0x5c
->   el0_svc+0x38/0x78
->   el0t_64_sync_handler+0x13c/0x158
->   el0t_64_sync+0x190/0x194
->  Code: aa0003e1 b25657e0 d34cfc42 8b021802 (f9400440)
->  ---[ end trace 0000000000000000 ]---
->  Kernel panic - not syncing: Oops: Fatal exception
->  SMP: stopping secondary CPUs
->  Kernel Offset: 0x4d0742200000 from 0xffff800080000000
->  PHYS_OFFSET: 0xffffee43c0000000
->  CPU features: 0x88000203,3c020000,1000421b
->  Memory Limit: none
->  Rebooting in 1 seconds..
->
-> Fixes: 3d6e44623841 ("kunit: unify module and builtin suite definitions")
+> Fixes: 529534e8cba3 ("kunit: Add ability to filter attributes")
+> Fixes: abbf73816b6f ("kunit: fix possible memory leak in kunit_filter_suites()")
 > Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
 > Reviewed-by: Rae Moar <rmoar@google.com>
-> Reviewed-by: David Gow <davidgow@google.com>
+> Suggested-by: David Gow <davidgow@google.com>
 > ---
 > v2:
-> - Add Reviewed-by.
-> - Adjust the 4th patch to be the second.
+> - Add err path labels.
+> - Update the commit message and title.
 > ---
 
-Still looks good, thanks.
+This looks good to me. The kernel test robot does complain about
+unused labels, so it might make sense to wait to introduce the labels
+in the later patches (or merge patches 2,3,4 together), but personally
+I'm okay with it as-is, as these should be merged in one go.
 
 Reviewed-by: David Gow <davidgow@google.com>
 
-Cheers,
+
 -- David
 
-
->  lib/kunit/test.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  lib/kunit/executor.c | 21 ++++++++++++---------
+>  1 file changed, 12 insertions(+), 9 deletions(-)
 >
-> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> index 49698a168437..421f13981412 100644
-> --- a/lib/kunit/test.c
-> +++ b/lib/kunit/test.c
-> @@ -784,12 +784,13 @@ static int kunit_module_notify(struct notifier_block *nb, unsigned long val,
->
->         switch (val) {
->         case MODULE_STATE_LIVE:
-> -               kunit_module_init(mod);
->                 break;
->         case MODULE_STATE_GOING:
->                 kunit_module_exit(mod);
->                 break;
->         case MODULE_STATE_COMING:
-> +               kunit_module_init(mod);
-> +               break;
->         case MODULE_STATE_UNFORMED:
->                 break;
+> diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
+> index 5181aa2e760b..0eda42b0c9bb 100644
+> --- a/lib/kunit/executor.c
+> +++ b/lib/kunit/executor.c
+> @@ -166,7 +166,7 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
+>                 for (j = 0; j < filter_count; j++)
+>                         parsed_filters[j] = kunit_next_attr_filter(&filters, err);
+>                 if (*err)
+> -                       goto err;
+> +                       goto free_parsed_filters;
 >         }
+>
+>         for (i = 0; &suite_set->start[i] != suite_set->end; i++) {
+> @@ -178,7 +178,7 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
+>                                         parsed_glob.test_glob);
+>                         if (IS_ERR(filtered_suite)) {
+>                                 *err = PTR_ERR(filtered_suite);
+> -                               goto err;
+> +                               goto free_parsed_filters;
+>                         }
+>                 }
+>                 if (filter_count > 0 && parsed_filters != NULL) {
+> @@ -195,10 +195,11 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
+>                                 filtered_suite = new_filtered_suite;
+>
+>                                 if (*err)
+> -                                       goto err;
+> +                                       goto free_parsed_filters;
+> +
+>                                 if (IS_ERR(filtered_suite)) {
+>                                         *err = PTR_ERR(filtered_suite);
+> -                                       goto err;
+> +                                       goto free_parsed_filters;
+>                                 }
+>                                 if (!filtered_suite)
+>                                         break;
+> @@ -213,17 +214,19 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
+>         filtered.start = copy_start;
+>         filtered.end = copy;
+>
+> -err:
+> -       if (*err)
+> -               kfree(copy);
+> +free_parsed_filters:
+> +       if (filter_count)
+> +               kfree(parsed_filters);
+>
+> +free_parsed_glob:
+>         if (filter_glob) {
+>                 kfree(parsed_glob.suite_glob);
+>                 kfree(parsed_glob.test_glob);
+>         }
+>
+> -       if (filter_count)
+> -               kfree(parsed_filters);
+> +free_copy:
+> +       if (*err)
+> +               kfree(copy);
+>
+>         return filtered;
+>  }
 > --
 > 2.34.1
 >
+> --
+> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20230903071028.1518913-3-ruanjinjie%40huawei.com.
 
---000000000000ca8afd0604975ac8
+--000000000000068c1a0604975b04
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -269,14 +244,14 @@ impZAng7ccvvK09K3ZuhwTIxJMsPXCZYsrXWORTw5sczRAP6XvKbPBJnsJoSTe5dFBPBHOQJOGhU
 qWfEfWnWMJPF3LxSGLpLFQXO3RwQqmxv08avwXfVPouh1xuB3FX7rpDabT8YDhu9JgIZkLEKko7L
 yQt6zWwng7k8YF/jGbiAta6VMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCs
-aGruJfyyz0vrNRPjDCgfnoKnvViBTpxL7/IAHaMLyDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzA5MDUwNzEyNTBaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBC
+OuqX09Wmh5qJKulddcjVIih3a/qi7nfjNgpfJOmDKDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzA5MDUwNzEyNTNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAj0BjUfEjPT+S3v7XI/xm
-xAYIo1NnHTgXkmyHJjo7RnMVA34NXtJsYmTBwYJyN71S0EC9FI+wmaYhr1r7zMibPg8vkIGwBHp5
-mfGiu9T9K3WNTu0QBOrmOdLOaKYr0oocs5BkZKyqQuoa1IUug6pgs48szov/6lNjDdW6jVQyDh2J
-QHpofn9dyuKjWCtMZEinhWeRki3H3oTAKfGFjB90Vc71qhKmMTUDjDY+kKC0KHEnQicif2xlchef
-NCkZKx3yS2gNghtJsgRR+oyimJEwv3PT3UowseVEXndDj76Cr31pe3sLEbGR/PF5zgbuY79Iaa4Q
-IVf+ec1F8pFmfmY3kg==
---000000000000ca8afd0604975ac8--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAbRYFtgExbhcP7IfmDqPs
+zVM5Fd0Pfn0STz9XYtrKckG9h46yomgM+xfLfZku79JAjFl/L2H7XKRyagOMVNIbwqJLb5wLLz13
+4XK1YymFZuN2iueISu+5ODYMjysE3oWMFI2RyPj5sxuRWcK3gSgm5E2f6RYcRpEdQhGaAweGn1n/
+rcG4OHcDrNvvb2KJIVNgg7Gkmh7u6vBqFbyo2n4Ow4+PRm2MH8qQTEqUhXYeHrBNAQ+e2Yks8y28
+7gReNOzth9x1N4rxU2Jm6zYiDgTPRykWIOZXXMakjJFWDGppFYU9ZqTlAZ01FMFqWpwrKWtjFuWk
+6rKsl4eFWkp+BGhpkQ==
+--000000000000068c1a0604975b04--
