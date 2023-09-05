@@ -2,67 +2,98 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4D5D792792
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Sep 2023 18:37:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90C8D792687
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Sep 2023 18:28:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239346AbjIEQHr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 5 Sep 2023 12:07:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39800 "EHLO
+        id S239061AbjIEQHS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 5 Sep 2023 12:07:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1353920AbjIEIhk (ORCPT
+        with ESMTP id S1354291AbjIEKgX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Sep 2023 04:37:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 666C0CC7;
-        Tue,  5 Sep 2023 01:37:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 26528B810DD;
-        Tue,  5 Sep 2023 08:37:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0789DC433C7;
-        Tue,  5 Sep 2023 08:37:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1693903053;
-        bh=nWeFZ6k8Xp2HYyQVWrIflEtvKs0At25doDrjBv8b9Xc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=a3KHuyxON2Cfx5cByngTSUvF71JgIUfFtllAa+zWBn9rRYKAHtQ9ka6PE+09g79Hz
-         sX+sNvCxZLg2to1VPXIkSdgKsgfQcA6xCMYt7VcWyd9XjDpdo7ldqBve5ALXm0xDdZ
-         botAFOkfLQsBhy6M1ekNwvEZ00SKJ6UT1xgTMg5SO+gSjG1/E2fENKSQ16vknBKPsu
-         lf9dLvshd2atW9l4L2oGMdbhZ2EwWQaV29c2PW5o3DSfINtmyz5rDHTTfgzpTf9NCy
-         ldWaLCjTq+pzip/g28puzBobSJnYRwS/NzcE+6zYHzbjxhKuMavqULzt8AoJJR6uxn
-         m4ziyG4KZGCZw==
-Date:   Tue, 5 Sep 2023 10:37:27 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     =?utf-8?B?TWljaGHFgiBDxYJhcGnFhHNraQ==?= <mclapinski@google.com>
-Cc:     Kees Cook <keescook@chromium.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jeff Xu <jeffxu@google.com>, Aleksa Sarai <cyphar@cyphar.com>,
-        Daniel Verkamp <dverkamp@chromium.org>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 1/2] fcntl: add fcntl(F_CHECK_ORIGINAL_MEMFD)
-Message-ID: <20230905-ungehalten-umkehren-9cff581cffce@brauner>
-References: <20230831203647.558079-1-mclapinski@google.com>
- <20230831203647.558079-2-mclapinski@google.com>
- <20230901-lockt-erbfolge-e1f9a26f0d63@brauner>
- <CAAi7L5f1KYrAyCYLzUN0dSy6xuQCGcC7SQML4+KUdxnQ6RaFfg@mail.gmail.com>
- <202309011133.10D66D0785@keescook>
- <20230904-meistens-umeinander-3366194553a1@brauner>
- <CAAi7L5eW1ZOfwvFz4b9As7-MkKyCgCQcG-41VMv6vfYpyRW_eA@mail.gmail.com>
+        Tue, 5 Sep 2023 06:36:23 -0400
+Received: from mail-ej1-x642.google.com (mail-ej1-x642.google.com [IPv6:2a00:1450:4864:20::642])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2049199
+        for <linux-kselftest@vger.kernel.org>; Tue,  5 Sep 2023 03:36:19 -0700 (PDT)
+Received: by mail-ej1-x642.google.com with SMTP id a640c23a62f3a-99bf3f59905so356032066b.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 05 Sep 2023 03:36:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1693910178; x=1694514978; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Nfqw6iJ4ruL8BEmtuLRWIN/7uvJd+Y/QPLQc2ETsH8Q=;
+        b=XV9PLVD3fdr42GJfQOoeFU5sVtu/bfHdL1XWsFUlf2FdWbfasCwXtTnX+44W1A5T3P
+         d3bTRGKEWOHTji+OxuC9IpAxwEGU2WK2afbvTpevUhDt7PM6efa++JBSlgr7bVAjP2Oo
+         liQMt58vI8tiyOap++lHpgb1NzDsl2wdJHEpWdAIDB3OxWvJqnPl27m4HNbN7sYJJ2oo
+         AUlPH9N7m2bFib6dY/qx3uNaXxZe15YkMVmZGqJrlBsmyG94YGr8jYzHeXsKFnoeAMdh
+         2Kb+N8AY3V5Da/ALXQ8eTex3bhCEQALMYowlIhJBwtLVFpDBwvo0Ig2PhgB+S58ojtsO
+         Ev0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1693910178; x=1694514978;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Nfqw6iJ4ruL8BEmtuLRWIN/7uvJd+Y/QPLQc2ETsH8Q=;
+        b=NLkPzPYOTJttxyHwDAvORJK/CG3TR+SRGmyZu4HNWcPL2VizBlMFIONCj8z3LgEphh
+         1aWDfKVRFlCogKYXRoj2E2m6/6ETHrJkPoKfpYX/pQSAlPykfrAdt95QvZ5J3yRUidlU
+         p5j2T67vms6UY5/6KzN+7hQH2NPXYhufMc0o6V4aqu99j1ust79dL64IsMGOXygyqudt
+         D1RThpZG5Go3QPxjCXwaO9YRanjdsmafK9N7+U80g9hddwdKI7oNBwPi3xwCIpZJkNh5
+         ZQqSA/pLlX44N3KD2OQGntEhtBrxDsHxyWq6/rbsio7EtyElHKikLbZNlYqCTgMqZFul
+         z1Cg==
+X-Gm-Message-State: AOJu0Yyj8BpnPmwalKks6tEnbHz5KDPFVBxNw237lfx3SWu0vmv3Y1xI
+        47YViVhbtM6pww9298Xn5RjyNA==
+X-Google-Smtp-Source: AGHT+IHkRyEbp0w5QIZbj1GlQvlGuscWTdMpQO8f95QsDXvDTy2lmlAWjOWJLe7UTlpwG3PDaD3ODQ==
+X-Received: by 2002:a17:906:10db:b0:9a1:e395:2d10 with SMTP id v27-20020a17090610db00b009a1e3952d10mr9165785ejv.75.1693910178039;
+        Tue, 05 Sep 2023 03:36:18 -0700 (PDT)
+Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
+        by smtp.gmail.com with ESMTPSA id l13-20020a170906a40d00b0099bc0daf3d7sm7484299ejz.182.2023.09.05.03.36.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Sep 2023 03:36:17 -0700 (PDT)
+Date:   Tue, 5 Sep 2023 12:36:16 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Haibo Xu <haibo1.xu@intel.com>
+Cc:     xiaobo55x@gmail.com, Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Guo Ren <guoren@kernel.org>, wchen <waylingii@gmail.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        Aaron Lewis <aaronlewis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Mingwei Zhang <mizhang@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Lei Wang <lei4.wang@intel.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Peter Gonda <pgonda@google.com>,
+        Thomas Huth <thuth@redhat.com>, Like Xu <likexu@tencent.com>,
+        Philippe =?utf-8?Q?Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Michal Luczaj <mhal@rbox.co>, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvm-riscv@lists.infradead.org
+Subject: Re: [PATCH v2 0/8] RISCV: Add kvm Sstc timer selftest
+Message-ID: <20230905-eb7998dbd945ed9dd12659ea@orel>
+References: <cover.1693659382.git.haibo1.xu@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAAi7L5eW1ZOfwvFz4b9As7-MkKyCgCQcG-41VMv6vfYpyRW_eA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <cover.1693659382.git.haibo1.xu@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,265 +101,91 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Sep 04, 2023 at 07:57:03PM +0200, Michał Cłapiński wrote:
-> On Mon, Sep 4, 2023 at 9:29 AM Christian Brauner <brauner@kernel.org> wrote:
-> >
-> > On Fri, Sep 01, 2023 at 11:34:32AM -0700, Kees Cook wrote:
-> > > On Fri, Sep 01, 2023 at 04:50:53PM +0200, Michał Cłapiński wrote:
-> > > > On Fri, Sep 1, 2023 at 2:56 PM Christian Brauner <brauner@kernel.org> wrote:
-> > > > >
-> > > > > On Thu, Aug 31, 2023 at 10:36:46PM +0200, Michal Clapinski wrote:
-> > > > > > Add a way to check if an fd points to the memfd's original open fd
-> > > > > > (the one created by memfd_create).
-> > > > > > Useful because only the original open fd can be both writable and
-> > > > > > executable.
-> > > > > >
-> > > > > > Signed-off-by: Michal Clapinski <mclapinski@google.com>
-> > > > > > ---
-> > > > > >  fs/fcntl.c                 | 3 +++
-> > > > > >  include/uapi/linux/fcntl.h | 9 +++++++++
-> > > > > >  2 files changed, 12 insertions(+)
-> > > > > >
-> > > > > > diff --git a/fs/fcntl.c b/fs/fcntl.c
-> > > > > > index e871009f6c88..301527e07a4d 100644
-> > > > > > --- a/fs/fcntl.c
-> > > > > > +++ b/fs/fcntl.c
-> > > > > > @@ -419,6 +419,9 @@ static long do_fcntl(int fd, unsigned int cmd, unsigned long arg,
-> > > > > >       case F_SET_RW_HINT:
-> > > > > >               err = fcntl_rw_hint(filp, cmd, arg);
-> > > > > >               break;
-> > > > > > +     case F_CHECK_ORIGINAL_MEMFD:
-> > > > > > +             err = !(filp->f_mode & FMODE_WRITER);
+Hi Haibo,
 
-That by the way is broken or at least misleading.
+Some of your patch summaries say 'selftest' instead of 'selftests'. Please
+correct those for the next version.
 
-Looking at the sealing stuff, it's only available for memfds, i.e.,
-memfd_create(). Any non-memfds have F_SEAL_SEAL set meaning that setting
-seals on any non-memfds fails.
+Thanks,
+drew
 
-But your check is available on any tmpfs or hugetlbfs file in addition
-to memfds. In fact, it available for any file/fd...
-
-But it has unclear meaning for anything that isn't a memfd_create() memfd.
-
-> > > > > > +             break;
-> > > > >
-> > > > > Honestly, make this an ioctl on memfds. This is so specific that it
-> > > > > really doesn't belong into fcntl().
-> > > >
-> > > > I've never touched ioctls but if I'm correct, I can't just add it to
-> > > > memfd. I would have to add it to the underlying fs, so hugetlbfs and
-> > > > shmem (which I think can be defined as ramfs so also there). File
-> > > > sealing fcntl is already memfd specific. Are you sure ioctl will be a
-> > > > better idea?
-> >
-> > fcntl() should be generic. Frankly, the sealing stuff should've gone
-> > into an ioctl as well and only upgraded to a fcntl() once multiple fd
-> > types support it.
-> >
+On Sat, Sep 02, 2023 at 08:59:22PM +0800, Haibo Xu wrote:
+> The RISC-V arch_timer selftest is used to validate Sstc timer
+> functionality in a guest, which sets up periodic timer interrupts
+> and check the basic interrupt status upon its receipt.
 > 
-> But ioctl is good for stuff related to the underlying fs, which this
-> isn't. I'm worried if I rewrite it as an ioctl and put it in 3
-> different places, the maintainers of shmem, hugetlbfs and ramfs will
-> tell me to rewrite it as an fcntl. If a new filesystem pops up that
-> can be used as the backend for memfd, the ioctl will also have to be
-> added there.
-
-I see your concern but first, the fact that memfd_create() was
-implemented as a multiplexer over different filesystem types was a
-deliberate choice. But that's not an argument to make us absorb an
-ill-defined fcntl() addition. We're just up for a repeat if you decide
-to add yet more fcntl()s later.
-
-Second, looking at:
-
-memfd_fcntl()
--> memfd_get_seals()
-   -> memfd_file_seals_ptr()
-      {
-              if (shmem_file(file))
-                      return &SHMEM_I(file_inode(file))->seals;
-      
-      #ifdef CONFIG_HUGETLBFS
-              if (is_file_hugepages(file))
-                      return &HUGETLBFS_I(file_inode(file))->seals;
-      #endif
-      
-              return NULL;
-      }
-
-If you have a third backend then you need to handle that anyway. You
-even need to add a new seals inode member to that new backend. So you
-already fiddle with each backend to accomodate memfds.
-
-Whether you do that to as a wrapper located in mm/memfd.c that's
-callable from the fses ioctl implementation or through memfd_fcntl()
-really isn't any more complicated.
-
-(UNTESTED, FAILS TO COMPILE ON PURPOSE)
-
-diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
-index 316c4cebd3f3..bbdddcdc8936 100644
---- a/fs/hugetlbfs/inode.c
-+++ b/fs/hugetlbfs/inode.c
-@@ -1324,6 +1324,12 @@ static void init_once(void *foo)
- 	inode_init_once(&ei->vfs_inode);
- }
- 
-+static int hugetlbfs_file_ioctl(struct file *file, unsigned int cmd, unsigned int arg)
-+{
-+	return memfd_ioctl(file, cmd, arg);
-+}
-+
- const struct file_operations hugetlbfs_file_operations = {
- 	.read_iter		= hugetlbfs_read_iter,
- 	.mmap			= hugetlbfs_file_mmap,
-@@ -1331,6 +1337,8 @@ const struct file_operations hugetlbfs_file_operations = {
- 	.get_unmapped_area	= hugetlb_get_unmapped_area,
- 	.llseek			= default_llseek,
- 	.fallocate		= hugetlbfs_fallocate,
-+	.unlocked_ioctl		= hugetlbfs_file_ioctl,
-+	.compat_ioctl		= hugetlbfs_file_ioctl,
- };
- 
- static const struct inode_operations hugetlbfs_dir_inode_operations = {
-diff --git a/include/linux/memfd.h b/include/linux/memfd.h
-index e7abf6fa4c52..7e3c97ad842f 100644
---- a/include/linux/memfd.h
-+++ b/include/linux/memfd.h
-@@ -6,11 +6,16 @@
- 
- #ifdef CONFIG_MEMFD_CREATE
- extern long memfd_fcntl(struct file *file, unsigned int cmd, unsigned int arg);
-+long memfd_ioctl(struct file *file, unsigned int cmd, unsigned int arg);
- #else
- static inline long memfd_fcntl(struct file *f, unsigned int c, unsigned int a)
- {
- 	return -EINVAL;
- }
-+static inline long memfd_ioctl(struct file *file, unsigned int cmd, unsigned int arg)
-+{
-
-	PROPERLY DETECT A memfd_create() MEMFD INSTEAD OF F_SEAL_SEAL
-
-+	return -EINVAL;
-+}
- #endif
- 
- #endif /* __LINUX_MEMFD_H */
-diff --git a/mm/memfd.c b/mm/memfd.c
-index 1cad1904fc26..4a26df1f4a91 100644
---- a/mm/memfd.c
-+++ b/mm/memfd.c
-@@ -243,6 +243,7 @@ static int memfd_get_seals(struct file *file)
- 	return seals ? *seals : -EINVAL;
- }
- 
-+/* new memfd specific functionality goes into memfd_ioctl() */
- long memfd_fcntl(struct file *file, unsigned int cmd, unsigned int arg)
- {
- 	long error;
-@@ -254,6 +255,12 @@ long memfd_fcntl(struct file *file, unsigned int cmd, unsigned int arg)
- 	case F_GET_SEALS:
- 		error = memfd_get_seals(file);
- 		break;
-+	case F_SOMETHING_1:
-+		error = memfd_something_1(file);
-+		break;
-+	case F_SOMETHING_1:
-+		error = memfd_something_2(file);
-+		break;
- 	default:
- 		error = -EINVAL;
- 		break;
-@@ -262,6 +269,22 @@ long memfd_fcntl(struct file *file, unsigned int cmd, unsigned int arg)
- 	return error;
- }
- 
-+long memfd_ioctl(struct file *file, unsigned int cmd, unsigned int arg)
-+{
-+	long error;
-+
-+	switch (cmd) {
-+	case F_SOMETHING_1:
-+		error = memfd_something_1(file);
-+		break;
-+	case F_SOMETHING_1:
-+		error = memfd_something_2(file);
-+		break;
-+	}
-+
-+	return memfd_fcntl(file, cmd, arg);
-+}
-+
- #define MFD_NAME_PREFIX "memfd:"
- #define MFD_NAME_PREFIX_LEN (sizeof(MFD_NAME_PREFIX) - 1)
- #define MFD_NAME_MAX_LEN (NAME_MAX - MFD_NAME_PREFIX_LEN)
-diff --git a/mm/shmem.c b/mm/shmem.c
-index 02e62fccc80d..6f580b2bf004 100644
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -4445,6 +4445,11 @@ static int shmem_error_remove_page(struct address_space *mapping,
- 	return 0;
- }
- 
-+static inline shmem_file_ioctl(struct file *file, unsigned int cmd, unsigned int arg)
-+{
-+	return memfd_ioctl(file, cmd, arg);
-+}
-+
- const struct address_space_operations shmem_aops = {
- 	.writepage	= shmem_writepage,
- 	.dirty_folio	= noop_dirty_folio,
-@@ -4471,6 +4476,8 @@ static const struct file_operations shmem_file_operations = {
- 	.splice_read	= shmem_file_splice_read,
- 	.splice_write	= iter_file_splice_write,
- 	.fallocate	= shmem_fallocate,
-+	.unlocked_ioctl	= shmem_file_ioctl,
-+	.compat_ioctl	= shmem_file_ioctl,
- #endif
- };
- 
+> This KVM selftest was ported from aarch64 arch_timer and tested
+> with Linux v6.5-rc5 on a Qemu riscv64 virt machine.
 > 
-> > >
-> > > Does this check "mean" anything for other files? Because if it's
-> > > generically useful (and got renamed) it maybe would be right for
-> > > fcntl...
-> >
-> > For regular files it just means that the file has gotten write access to
-> > the underlying fs and we use this flag to release the necessary
-> > refcounts/protections once the file is closed.
-> >
-> > If this check has any meaning beyond that than it only has meaning for
-> > memfd. I'm also not sure why this checks FMODE_WRITER and not
-> > FMODE_WRITE as FMODE_WRITER is almost an entirely internal thing that
-> > only very specific codepaths need to know about.
+> ---
+> Changed since v1:
+>   * Rebase to kvm-riscv/riscv_kvm_next
+>   * Cherry-pick Sean's kselftest guest printf patch set
+>     https://lore.kernel.org/all/20230729003643.1053367-1-seanjc@google.com/
+>   * Copy the entire csr.h verbatim
+>   * Unified the function names for exception vector table setup
+>     void vm_init_vector_tables(struct kvm_vm *vm);
+>     void vcpu_init_vector_tables(struct kvm_vcpu *vcpu);
+>   * Format the handler.S asm file per Andrew's comments
+>   * Consolidate the timer test code for arm64 and riscv
+>     based on Andrew's and Sean's suggestion
 > 
-> If you reopen the memfd via /proc/<pid>/fd/ with O_RDWR, both file
-> objects (the original and the reopened one) have FMODE_WRITE, so
-> knowing if the flag is set gives me nothing. FMODE_WRITER is the only
-> difference between the original fd and the reopened one. This flag
-> also dictates whether `inode->i_writecount` will be decremented on
-> close (in `put_file_access`) which influences exec()ability of the
-> other fd. It surprised me too that this flag theoretically means
-> "write access to underlying fs" but it's used to determine whether to
-> decrement i_writecount.
-
-It's not surprising at all. It's how read-write fds are created.
-memfd_create() is the oddball because it uses an internal tmpfs
-kernmount that's never remountable read-only afaict otherwise this would
-be pretty broken as memfd_create() doesn't do the usual mark sb writable
-and get write access to the mount dance and so the mount or sb could go
-ro behind it's back.
-
-And this has zero meaning for non-memfd. So NAK on fcntl(). However, as
-an ioctl() on memfd backends we won't care.
-
-And I would suggest to figure out a nicer way to differentiate between
-memfd_create() and regular tmpfs/hugetlbfs files. So you can explicitly
-detect them instead of this implict F_SEAL_SEALS dance. For example,
-abuse a higher flag bit in unsigned int seals that both tmpfs and
-hugetlbfs already have and set F_MEMFD or whatever. Or some other
-mechanism. Just a thought.
-
-Really, fcntl() is wrong here.
+> Haibo Xu (8):
+>   KVM: selftests: Unify the codes for guest exception handling
+>   KVM: arm64: selftest: Split arch_timer test code
+>   tools: riscv: Add header file csr.h
+>   KVM: riscv: selftests: Switch to use macro from csr.h
+>   KVM: riscv: selftests: Add exception handling support
+>   KVM: riscv: selftests: Add guest helper to get vcpu id
+>   KVM: riscv: selftest: Change vcpu_has_ext to a common function
+>   KVM: riscv: selftests: Add sstc timer test
+> 
+>  tools/arch/riscv/include/asm/csr.h            | 521 ++++++++++++++++++
+>  tools/testing/selftests/kvm/Makefile          |  11 +-
+>  .../selftests/kvm/aarch64/arch_timer.c        | 292 +---------
+>  .../selftests/kvm/aarch64/debug-exceptions.c  |   4 +-
+>  .../selftests/kvm/aarch64/page_fault_test.c   |   4 +-
+>  .../testing/selftests/kvm/aarch64/vgic_irq.c  |   4 +-
+>  tools/testing/selftests/kvm/arch_timer.c      | 261 +++++++++
+>  .../selftests/kvm/include/aarch64/processor.h |  12 +-
+>  .../selftests/kvm/include/kvm_util_base.h     |   9 +
+>  .../selftests/kvm/include/riscv/arch_timer.h  |  80 +++
+>  .../selftests/kvm/include/riscv/processor.h   |  60 +-
+>  .../selftests/kvm/include/timer_test.h        |  58 ++
+>  .../selftests/kvm/include/x86_64/processor.h  |   5 -
+>  .../selftests/kvm/lib/aarch64/processor.c     |   6 +-
+>  .../selftests/kvm/lib/riscv/handlers.S        | 101 ++++
+>  .../selftests/kvm/lib/riscv/processor.c       |  86 +++
+>  .../selftests/kvm/lib/x86_64/processor.c      |   4 +-
+>  .../testing/selftests/kvm/riscv/arch_timer.c  | 130 +++++
+>  .../selftests/kvm/riscv/get-reg-list.c        |  14 -
+>  tools/testing/selftests/kvm/x86_64/amx_test.c |   4 +-
+>  .../selftests/kvm/x86_64/fix_hypercall_test.c |   4 +-
+>  .../selftests/kvm/x86_64/hyperv_evmcs.c       |   4 +-
+>  .../selftests/kvm/x86_64/hyperv_features.c    |   8 +-
+>  .../testing/selftests/kvm/x86_64/hyperv_ipi.c |   6 +-
+>  .../selftests/kvm/x86_64/kvm_pv_test.c        |   4 +-
+>  .../selftests/kvm/x86_64/monitor_mwait_test.c |   4 +-
+>  .../kvm/x86_64/pmu_event_filter_test.c        |   8 +-
+>  .../smaller_maxphyaddr_emulation_test.c       |   4 +-
+>  .../selftests/kvm/x86_64/svm_int_ctl_test.c   |   4 +-
+>  .../kvm/x86_64/svm_nested_shutdown_test.c     |   4 +-
+>  .../kvm/x86_64/svm_nested_soft_inject_test.c  |   4 +-
+>  .../kvm/x86_64/ucna_injection_test.c          |   8 +-
+>  .../kvm/x86_64/userspace_msr_exit_test.c      |   4 +-
+>  .../vmx_exception_with_invalid_guest_state.c  |   4 +-
+>  .../selftests/kvm/x86_64/vmx_pmu_caps_test.c  |   4 +-
+>  .../selftests/kvm/x86_64/xapic_ipi_test.c     |   4 +-
+>  .../selftests/kvm/x86_64/xcr0_cpuid_test.c    |   4 +-
+>  .../selftests/kvm/x86_64/xen_shinfo_test.c    |   4 +-
+>  38 files changed, 1376 insertions(+), 376 deletions(-)
+>  create mode 100644 tools/arch/riscv/include/asm/csr.h
+>  create mode 100644 tools/testing/selftests/kvm/arch_timer.c
+>  create mode 100644 tools/testing/selftests/kvm/include/riscv/arch_timer.h
+>  create mode 100644 tools/testing/selftests/kvm/include/timer_test.h
+>  create mode 100644 tools/testing/selftests/kvm/lib/riscv/handlers.S
+>  create mode 100644 tools/testing/selftests/kvm/riscv/arch_timer.c
+> 
+> -- 
+> 2.34.1
+> 
