@@ -2,273 +2,304 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 776B8794243
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Sep 2023 19:51:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2609794313
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Sep 2023 20:33:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237811AbjIFRvi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 6 Sep 2023 13:51:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33712 "EHLO
+        id S243558AbjIFSdz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 6 Sep 2023 14:33:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjIFRvh (ORCPT
+        with ESMTP id S238201AbjIFSdv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 6 Sep 2023 13:51:37 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D19B1BEE;
-        Wed,  6 Sep 2023 10:50:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=aWjb14uW/zl5ZiJhpdMnMaAjHbew4N4XH+H5fI3tCxfRTpKjZ894E7Z/SVstm2lH0FnOlQXX3h4R83fbdjq/b+9vaN+7Pw5qnSSoqaf5ov4gbqLOOI3BaMKemXk0k7xhNkjXW7v5lATp0FIKkb6WUK7HnZOsRaisISBIbJvnHbVAFr+fn+V24i/HoYyuJHKxwQ7FtturfeAbharT0futjV979hKvjcAQXgScW3ILBvxywgHPR5vIf7UmfrnjPnHfAlPHHjNhzWL3pp3fpoAxKcvpkGD8zWFXUTAxLnKjcXwRUDBxuvgm4R2p9AZiJC9YmZ+c2aEUI5XMhkOD87t1Iw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lb2jArSeuzdmxvEH+b+WIrmOlEd0m/wFiraHHeF/a/c=;
- b=aGjxWNdFVE5YuAEvGjAEZbzlT8OwYyKmGciiVVJuuYKLppe9NX/nVjj4ji0VQEXoO6/UAcnDtaI9E6v2oUepsNmqP2cI9J9Q0D14fVIUCxqlH7QoxLOaiXMlDYrc/ynPDTRg3UQwBUCl7MKk81/cQiPtEPE+bPygD1jHOSY8f2P06ukIcJo8qDitQFJIZe17zka71H5jmDzIZ9J8DXFQwr3C2WPdQG8WxrKyo0k5vsbD4NnCTsaRL8HC8+h2JbuJZ1JTGqQhtgVRcTq1F2BRmm2TtNwZD2N5rE3abFH7UUXtGfC//li05mVCguMnqFfr/MSRkLZhZvuGh5g+HE690w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lb2jArSeuzdmxvEH+b+WIrmOlEd0m/wFiraHHeF/a/c=;
- b=tokGn4Yd2pBdn3GaKwGTVnqYqy0tTsT4n5D+u1DtOeBxtaWB6mSDMxHPnMUeOfeplRurVbSvozP/dQZSP+QNoYJcbt/xF3WwUexL6j+xL6etO0KpeHvxgNW2ddAOEY35AtqyhnqWV3BBxlNvIyzCqS0B58ji9jYzZpTTpnR8W7E=
-Received: from CY5PR15CA0188.namprd15.prod.outlook.com (2603:10b6:930:82::9)
- by MN2PR12MB4486.namprd12.prod.outlook.com (2603:10b6:208:263::23) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.34; Wed, 6 Sep
- 2023 17:50:22 +0000
-Received: from CY4PEPF0000E9D6.namprd05.prod.outlook.com
- (2603:10b6:930:82:cafe::8) by CY5PR15CA0188.outlook.office365.com
- (2603:10b6:930:82::9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6745.36 via Frontend
- Transport; Wed, 6 Sep 2023 17:50:22 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CY4PEPF0000E9D6.mail.protection.outlook.com (10.167.241.80) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6768.25 via Frontend Transport; Wed, 6 Sep 2023 17:50:22 +0000
-Received: from BLR-5CG13462PL.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Wed, 6 Sep
- 2023 12:50:16 -0500
-From:   Wyes Karny <wyes.karny@amd.com>
-To:     Meng Li <li.meng@amd.com>
-CC:     Wyes Karny <wyes.karny@amd.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Huang Rui <ray.huang@amd.com>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <x86@kernel.org>,
-        <linux-acpi@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        <linux-kselftest@vger.kernel.org>,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Shimmer Huang <shimmer.huang@amd.com>,
-        Perry Yuan <Perry.Yuan@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>
-Subject: Re: [PATCH V5 5/7] cpufreq: amd-pstate: Update amd-pstate preferred core ranking dynamically
-Date:   Wed, 6 Sep 2023 23:19:37 +0530
-Message-ID: <20230906174756.n7itmfrc37crp2uz@BLR-5CG13462PL.amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230905015116.2268926-6-li.meng@amd.com>
-References: <20230905015116.2268926-1-li.meng@amd.com> <20230905015116.2268926-6-li.meng@amd.com>
+        Wed, 6 Sep 2023 14:33:51 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E117DE6A;
+        Wed,  6 Sep 2023 11:33:23 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-31dcd553fecso149981f8f.2;
+        Wed, 06 Sep 2023 11:33:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1694025202; x=1694630002; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DkMd8RucoJq7+YF1ccMKdQnJgACQ8uOQuFZimzqRtoU=;
+        b=qS/lQOlGe9YTHo+9cyHgy/2Fs68CQZh7ERBYpL5LbKfn0sgbr/NUCnAypT0iFvyvk3
+         xax9bhdzBqT3JkYAn/td+h2SeAePsi7JBMHYMPJBM60r0L+ldh5087kxPFKh16hMKwSD
+         9kN5G3m+7yM6C330zWfBLynyjhuyNikpuNhRIOl0GniLml0EB5YKPpSQMyMTKRur3++n
+         W0tVxBRVBLE18aE2W3BX9jFgkiBb/KOMteJIOdWW8VN4SLzEuW4/vezwKi1sqI1g+p4L
+         SnYUvP+qYS5Zv52P7Dba10jMsvH8rI6FjygUOEn70xu0BCu2EmS7GvvVe7Fn06MmV1pn
+         3l7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1694025202; x=1694630002;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DkMd8RucoJq7+YF1ccMKdQnJgACQ8uOQuFZimzqRtoU=;
+        b=jJ8aN5giTnIct2tZaXdzEyCUqQUlFIT9RHt10uHC32vaLHt34yf8mZxd1EMef8bZLi
+         ht0kBJU7yycqoLaFqsc/9G1zTJuyKwO74AXUpH/b+/lKOInW7Yr7QHoZ+Y6i/MXDi5fW
+         VGgloAgk1sb/M++q3jJq+JLLoW4aI5sPmY2wtkKl/rL+ndkcKweW1vYb0/uCgGg9bkN7
+         uTzB9IQj9C3B28O2ubzfdSnBspKcWfi/feRbONt9X+r4xW/WV21SSceMfjeFO6PrKodi
+         brz/zliZpyPXdV8I+Unlh3GBeSLi0vxqk/o6UfGoCgYxAl99MH8tyl/gT4+CgVnKd78M
+         PCFQ==
+X-Gm-Message-State: AOJu0YzcO4rasZMubkDkdBwwL6kUynIbFEZvLWeTXFxbs0fS8qyDpRM+
+        /T6se3l2vT15uO7QHHWR62w=
+X-Google-Smtp-Source: AGHT+IEHI/QWDjLE4ntz3KI5NlVa9dtEpq2TyN/azxHrtUHhNiLe4lz1R2Kk3jYEQfgGuKa1ZQOSnA==
+X-Received: by 2002:a05:6000:1366:b0:31a:d6cb:7f94 with SMTP id q6-20020a056000136600b0031ad6cb7f94mr2913086wrz.23.1694025201915;
+        Wed, 06 Sep 2023 11:33:21 -0700 (PDT)
+Received: from ip-172-31-30-46.eu-west-1.compute.internal (ec2-54-170-241-106.eu-west-1.compute.amazonaws.com. [54.170.241.106])
+        by smtp.gmail.com with ESMTPSA id l10-20020a5d4bca000000b003180155493esm21094891wrt.67.2023.09.06.11.33.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Sep 2023 11:33:21 -0700 (PDT)
+From:   Puranjay Mohan <puranjay12@gmail.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>,
+        Yonghong Song <yonghong.song@linux.dev>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shubham Bansal <illusionist.neo@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     puranjay12@gmail.com
+Subject: [PATCH bpf-next v2 0/8] arm32, bpf: add support for cpuv4 insns
+Date:   Wed,  6 Sep 2023 18:33:12 +0000
+Message-Id: <20230906183320.1959008-1-puranjay12@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9D6:EE_|MN2PR12MB4486:EE_
-X-MS-Office365-Filtering-Correlation-Id: b2dc9e82-1f1c-49e5-09d7-08dbaf01be28
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: O9wxqCUs6SkZG+Z3yfR0cRDKhB7BEgOnnTdcCjDuFH0e6oaZ88/gkopfhuNKyg0Deei5s6R+f7s/NHMtGK347QhQeXdjhtiYzKrNbaBTRfbStfBNYGPTafEsRwLvAsmYHmhqhFiMIL1QAbpAMK4BJBqaS36ZUrv57I/q6qJdlvP2zNMknms9WeA/3le58awwUW5Vu3OUOkWsOQsHnTDRSbVv6LWtkl/QcV1HgwWBFh3m//Fg/DH9cjUrqvBLuG8vRsI7CEB7sEXI0k1WrYeJxooEIyY7hbFPyTAgmy4RM0pY63yq0aKH8z+dQwlAvUPHNgIx9TGjog2lsHVQF9YKVIDfXwlxarkxV+FAPM9CJt/vbrhRs+TfnYs9wzFvbM2gh6dgQ313kM4JnHRSobd0Tg7X05kSCkwRUnsIw0yJI5VucigRGCUsieXDT4TGpU0VwBnbHGTCByULi4eVysNBaMXqT+nST0XDsrR3X/hoxZ7PnJCnJY9wsEh76AE2tqB04TR/Y6wLCEnpfoKs4MsjWRXlaGqUFLrJkciivrp+NW+2F+b2HiFzc6h6/BapDogjH0tZuuw2Dt7FY3whez1H8PVgHLjGfMU+bvkLfCpNaMj908fiwUftXtvHGBnup90RGuy2hvyFaD1oilM44lws4RGELFUdDLvy84lflqv5nOnftCu9VnYX4nB+NFw5SEFB3lzSRk3jD0PVs7Suj7gzHVbqMW5owgfaY53GQa/TdVv/InKHQ8KEWJJMZz6AldQK
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(82310400011)(186009)(1800799009)(451199024)(46966006)(36840700001)(40470700004)(40460700003)(55016003)(66899024)(70206006)(54906003)(6636002)(70586007)(316002)(508600001)(81166007)(2906002)(356005)(86362001)(4326008)(8936002)(6862004)(44832011)(8676002)(36860700001)(83380400001)(5660300002)(15650500001)(7696005)(26005)(47076005)(16526019)(6666004)(336012)(426003)(1076003)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Sep 2023 17:50:22.2242
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b2dc9e82-1f1c-49e5-09d7-08dbaf01be28
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000E9D6.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4486
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Meng Li,
+Changes in V1 -> V2:
+- Fix coding style issues.
+- Don't use tmp variable for src in emit_ldsx_r() as it is redundant.
+- Optimize emit_ldsx_r() when offset can fit in immediate.
 
-On 05 Sep 09:51, Meng Li wrote:
-> Preferred core rankings can be changed dynamically by the
-> platform based on the workload and platform conditions and
-> accounting for thermals and aging.
-> When this occurs, cpu priority need to be set.
-> 
-> Signed-off-by: Meng Li <li.meng@amd.com>
-> Reviewed-by: Wyes Karny <wyes.karny@amd.com>
-> ---
->  drivers/cpufreq/amd-pstate.c | 36 ++++++++++++++++++++++++++++++++++--
->  include/linux/amd-pstate.h   | 11 +++++++++++
->  2 files changed, 45 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index 454eb6e789e7..8c19e1d50d29 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -318,6 +318,7 @@ static int pstate_init_perf(struct amd_cpudata *cpudata)
->  	WRITE_ONCE(cpudata->nominal_perf, AMD_CPPC_NOMINAL_PERF(cap1));
->  	WRITE_ONCE(cpudata->lowest_nonlinear_perf, AMD_CPPC_LOWNONLIN_PERF(cap1));
->  	WRITE_ONCE(cpudata->lowest_perf, AMD_CPPC_LOWEST_PERF(cap1));
-> +	WRITE_ONCE(cpudata->cppc_highest_perf, AMD_CPPC_HIGHEST_PERF(cap1));
+Add the support for cpuv4 instructions for ARM32 BPF JIT. 64-bit division
+was not supported earlier so this series adds 64-bit DIV, SDIV, MOD, SMOD
+instructions as well.
 
-Is there any reason to change this variable name form
-`prefcore_highest_perf`(in v3)  to `cppc_highest_perf`?  I feel
-`cppc_highest_perf` is bit confusing as there is already `highest_perf`
-variable present. How about something like `prefcore_ranking` variable
-name?
+This series needs any one of the patches from [1] to disable zero-extension
+for BPF_MEMSX to support ldsx.
 
-Thanks,
-Wyes
+The relevant selftests have passed expect ldsx_insn which needs fentry:
 
->  
->  	return 0;
->  }
-> @@ -339,6 +340,7 @@ static int cppc_init_perf(struct amd_cpudata *cpudata)
->  	WRITE_ONCE(cpudata->lowest_nonlinear_perf,
->  		   cppc_perf.lowest_nonlinear_perf);
->  	WRITE_ONCE(cpudata->lowest_perf, cppc_perf.lowest_perf);
-> +	WRITE_ONCE(cpudata->cppc_highest_perf, cppc_perf.highest_perf);
->  
->  	if (cppc_state == AMD_PSTATE_ACTIVE)
->  		return 0;
-> @@ -545,7 +547,7 @@ static void amd_pstate_adjust_perf(unsigned int cpu,
->  	if (target_perf < capacity)
->  		des_perf = DIV_ROUND_UP(cap_perf * target_perf, capacity);
->  
-> -	min_perf = READ_ONCE(cpudata->highest_perf);
-> +	min_perf = READ_ONCE(cpudata->lowest_perf);
->  	if (_min_perf < capacity)
->  		min_perf = DIV_ROUND_UP(cap_perf * _min_perf, capacity);
->  
-> @@ -748,6 +750,34 @@ static void amd_pstate_init_prefcore(void)
->  	schedule_work(&sched_prefcore_work);
->  }
->  
-> +static void amd_pstate_update_highest_perf(unsigned int cpu)
-> +{
-> +	struct cpufreq_policy *policy;
-> +	struct amd_cpudata *cpudata;
-> +	u32 prev_high = 0, cur_high = 0;
-> +	u64 highest_perf;
-> +	int ret;
-> +
-> +	if (!prefcore)
-> +		return;
-> +
-> +	ret = amd_pstate_get_highest_perf(cpu, &highest_perf);
-> +	if (ret)
-> +		return;
-> +
-> +	policy = cpufreq_cpu_get(cpu);
-> +	cpudata = policy->driver_data;
-> +	cur_high = highest_perf;
-> +	prev_high = READ_ONCE(cpudata->cppc_highest_perf);
-> +
-> +	if (prev_high != cur_high) {
-> +		WRITE_ONCE(cpudata->cppc_highest_perf, cur_high);
-> +		sched_set_itmt_core_prio(cur_high, cpu);
-> +	}
-> +
-> +	cpufreq_cpu_put(policy);
-> +}
-> +
->  static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
->  {
->  	int min_freq, max_freq, nominal_freq, lowest_nonlinear_freq, ret;
-> @@ -912,7 +942,7 @@ static ssize_t show_amd_pstate_highest_perf(struct cpufreq_policy *policy,
->  	u32 perf;
->  	struct amd_cpudata *cpudata = policy->driver_data;
->  
-> -	perf = READ_ONCE(cpudata->highest_perf);
-> +	perf = READ_ONCE(cpudata->cppc_highest_perf);
->  
->  	return sysfs_emit(buf, "%u\n", perf);
->  }
-> @@ -1479,6 +1509,7 @@ static struct cpufreq_driver amd_pstate_driver = {
->  	.suspend	= amd_pstate_cpu_suspend,
->  	.resume		= amd_pstate_cpu_resume,
->  	.set_boost	= amd_pstate_set_boost,
-> +	.update_highest_perf	= amd_pstate_update_highest_perf,
->  	.name		= "amd-pstate",
->  	.attr		= amd_pstate_attr,
->  };
-> @@ -1493,6 +1524,7 @@ static struct cpufreq_driver amd_pstate_epp_driver = {
->  	.online		= amd_pstate_epp_cpu_online,
->  	.suspend	= amd_pstate_epp_suspend,
->  	.resume		= amd_pstate_epp_resume,
-> +	.update_highest_perf	= amd_pstate_update_highest_perf,
->  	.name		= "amd-pstate-epp",
->  	.attr		= amd_pstate_epp_attr,
->  };
-> diff --git a/include/linux/amd-pstate.h b/include/linux/amd-pstate.h
-> index 446394f84606..2159fd5693fe 100644
-> --- a/include/linux/amd-pstate.h
-> +++ b/include/linux/amd-pstate.h
-> @@ -31,6 +31,11 @@ struct amd_aperf_mperf {
->  	u64 mperf;
->  	u64 tsc;
->  };
-> +	/* For platforms that do not support the preferred core feature, the
-> +	 * highest_pef may be configured with 166 or 255, to avoid max frequency
-> +	 * calculated wrongly. we take the AMD_CPPC_HIGHEST_PERF(cap1) value as
-> +	 * the default max perf.
-> +	 */
->  
->  /**
->   * struct amd_cpudata - private CPU data for AMD P-State
-> @@ -39,11 +44,16 @@ struct amd_aperf_mperf {
->   * @cppc_req_cached: cached performance request hints
->   * @highest_perf: the maximum performance an individual processor may reach,
->   *		  assuming ideal conditions
-> + *		  For platforms that do not support the preferred core feature, the
-> + *		  highest_pef may be configured with 166 or 255, to avoid max frequency
-> + *		  calculated wrongly. we take the fixed value as the highest_perf.
->   * @nominal_perf: the maximum sustained performance level of the processor,
->   *		  assuming ideal operating conditions
->   * @lowest_nonlinear_perf: the lowest performance level at which nonlinear power
->   *			   savings are achieved
->   * @lowest_perf: the absolute lowest performance level of the processor
-> + * @cppc_highest_perf: the maximum performance an individual processor may reach,
-> + *		  assuming ideal conditions
->   * @max_freq: the frequency that mapped to highest_perf
->   * @min_freq: the frequency that mapped to lowest_perf
->   * @nominal_freq: the frequency that mapped to nominal_perf
-> @@ -70,6 +80,7 @@ struct amd_cpudata {
->  	u32	nominal_perf;
->  	u32	lowest_nonlinear_perf;
->  	u32	lowest_perf;
-> +	u32     cppc_highest_perf;
->  
->  	u32	max_freq;
->  	u32	min_freq;
-> -- 
-> 2.34.1
-> 
+Tested on BeagleBone Black (ARMv7-A):
+
+[root@alarm del]# echo 1 > /proc/sys/net/core/bpf_jit_enable
+[root@alarm del]# ./test_progs -a verifier_sdiv,verifier_movsx,verifier_ldsx,verifier_gotol,verifier_bswap
+#337/1   verifier_bswap/BSWAP, 16:OK
+#337/2   verifier_bswap/BSWAP, 16 @unpriv:OK
+#337/3   verifier_bswap/BSWAP, 32:OK
+#337/4   verifier_bswap/BSWAP, 32 @unpriv:OK
+#337/5   verifier_bswap/BSWAP, 64:OK
+#337/6   verifier_bswap/BSWAP, 64 @unpriv:OK
+#337     verifier_bswap:OK
+#351/1   verifier_gotol/gotol, small_imm:OK
+#351/2   verifier_gotol/gotol, small_imm @unpriv:OK
+#351     verifier_gotol:OK
+#359/1   verifier_ldsx/LDSX, S8:OK
+#359/2   verifier_ldsx/LDSX, S8 @unpriv:OK
+#359/3   verifier_ldsx/LDSX, S16:OK
+#359/4   verifier_ldsx/LDSX, S16 @unpriv:OK
+#359/5   verifier_ldsx/LDSX, S32:OK
+#359/6   verifier_ldsx/LDSX, S32 @unpriv:OK
+#359/7   verifier_ldsx/LDSX, S8 range checking, privileged:OK
+#359/8   verifier_ldsx/LDSX, S16 range checking:OK
+#359/9   verifier_ldsx/LDSX, S16 range checking @unpriv:OK
+#359/10  verifier_ldsx/LDSX, S32 range checking:OK
+#359/11  verifier_ldsx/LDSX, S32 range checking @unpriv:OK
+#359     verifier_ldsx:OK
+#370/1   verifier_movsx/MOV32SX, S8:OK
+#370/2   verifier_movsx/MOV32SX, S8 @unpriv:OK
+#370/3   verifier_movsx/MOV32SX, S16:OK
+#370/4   verifier_movsx/MOV32SX, S16 @unpriv:OK
+#370/5   verifier_movsx/MOV64SX, S8:OK
+#370/6   verifier_movsx/MOV64SX, S8 @unpriv:OK
+#370/7   verifier_movsx/MOV64SX, S16:OK
+#370/8   verifier_movsx/MOV64SX, S16 @unpriv:OK
+#370/9   verifier_movsx/MOV64SX, S32:OK
+#370/10  verifier_movsx/MOV64SX, S32 @unpriv:OK
+#370/11  verifier_movsx/MOV32SX, S8, range_check:OK
+#370/12  verifier_movsx/MOV32SX, S8, range_check @unpriv:OK
+#370/13  verifier_movsx/MOV32SX, S16, range_check:OK
+#370/14  verifier_movsx/MOV32SX, S16, range_check @unpriv:OK
+#370/15  verifier_movsx/MOV32SX, S16, range_check 2:OK
+#370/16  verifier_movsx/MOV32SX, S16, range_check 2 @unpriv:OK
+#370/17  verifier_movsx/MOV64SX, S8, range_check:OK
+#370/18  verifier_movsx/MOV64SX, S8, range_check @unpriv:OK
+#370/19  verifier_movsx/MOV64SX, S16, range_check:OK
+#370/20  verifier_movsx/MOV64SX, S16, range_check @unpriv:OK
+#370/21  verifier_movsx/MOV64SX, S32, range_check:OK
+#370/22  verifier_movsx/MOV64SX, S32, range_check @unpriv:OK
+#370/23  verifier_movsx/MOV64SX, S16, R10 Sign Extension:OK
+#370/24  verifier_movsx/MOV64SX, S16, R10 Sign Extension @unpriv:OK
+#370     verifier_movsx:OK
+#382/1   verifier_sdiv/SDIV32, non-zero imm divisor, check 1:OK
+#382/2   verifier_sdiv/SDIV32, non-zero imm divisor, check 1 @unpriv:OK
+#382/3   verifier_sdiv/SDIV32, non-zero imm divisor, check 2:OK
+#382/4   verifier_sdiv/SDIV32, non-zero imm divisor, check 2 @unpriv:OK
+#382/5   verifier_sdiv/SDIV32, non-zero imm divisor, check 3:OK
+#382/6   verifier_sdiv/SDIV32, non-zero imm divisor, check 3 @unpriv:OK
+#382/7   verifier_sdiv/SDIV32, non-zero imm divisor, check 4:OK
+#382/8   verifier_sdiv/SDIV32, non-zero imm divisor, check 4 @unpriv:OK
+#382/9   verifier_sdiv/SDIV32, non-zero imm divisor, check 5:OK
+#382/10  verifier_sdiv/SDIV32, non-zero imm divisor, check 5 @unpriv:OK
+#382/11  verifier_sdiv/SDIV32, non-zero imm divisor, check 6:OK
+#382/12  verifier_sdiv/SDIV32, non-zero imm divisor, check 6 @unpriv:OK
+#382/13  verifier_sdiv/SDIV32, non-zero imm divisor, check 7:OK
+#382/14  verifier_sdiv/SDIV32, non-zero imm divisor, check 7 @unpriv:OK
+#382/15  verifier_sdiv/SDIV32, non-zero imm divisor, check 8:OK
+#382/16  verifier_sdiv/SDIV32, non-zero imm divisor, check 8 @unpriv:OK
+#382/17  verifier_sdiv/SDIV32, non-zero reg divisor, check 1:OK
+#382/18  verifier_sdiv/SDIV32, non-zero reg divisor, check 1 @unpriv:OK
+#382/19  verifier_sdiv/SDIV32, non-zero reg divisor, check 2:OK
+#382/20  verifier_sdiv/SDIV32, non-zero reg divisor, check 2 @unpriv:OK
+#382/21  verifier_sdiv/SDIV32, non-zero reg divisor, check 3:OK
+#382/22  verifier_sdiv/SDIV32, non-zero reg divisor, check 3 @unpriv:OK
+#382/23  verifier_sdiv/SDIV32, non-zero reg divisor, check 4:OK
+#382/24  verifier_sdiv/SDIV32, non-zero reg divisor, check 4 @unpriv:OK
+#382/25  verifier_sdiv/SDIV32, non-zero reg divisor, check 5:OK
+#382/26  verifier_sdiv/SDIV32, non-zero reg divisor, check 5 @unpriv:OK
+#382/27  verifier_sdiv/SDIV32, non-zero reg divisor, check 6:OK
+#382/28  verifier_sdiv/SDIV32, non-zero reg divisor, check 6 @unpriv:OK
+#382/29  verifier_sdiv/SDIV32, non-zero reg divisor, check 7:OK
+#382/30  verifier_sdiv/SDIV32, non-zero reg divisor, check 7 @unpriv:OK
+#382/31  verifier_sdiv/SDIV32, non-zero reg divisor, check 8:OK
+#382/32  verifier_sdiv/SDIV32, non-zero reg divisor, check 8 @unpriv:OK
+#382/33  verifier_sdiv/SDIV64, non-zero imm divisor, check 1:OK
+#382/34  verifier_sdiv/SDIV64, non-zero imm divisor, check 1 @unpriv:OK
+#382/35  verifier_sdiv/SDIV64, non-zero imm divisor, check 2:OK
+#382/36  verifier_sdiv/SDIV64, non-zero imm divisor, check 2 @unpriv:OK
+#382/37  verifier_sdiv/SDIV64, non-zero imm divisor, check 3:OK
+#382/38  verifier_sdiv/SDIV64, non-zero imm divisor, check 3 @unpriv:OK
+#382/39  verifier_sdiv/SDIV64, non-zero imm divisor, check 4:OK
+#382/40  verifier_sdiv/SDIV64, non-zero imm divisor, check 4 @unpriv:OK
+#382/41  verifier_sdiv/SDIV64, non-zero imm divisor, check 5:OK
+#382/42  verifier_sdiv/SDIV64, non-zero imm divisor, check 5 @unpriv:OK
+#382/43  verifier_sdiv/SDIV64, non-zero imm divisor, check 6:OK
+#382/44  verifier_sdiv/SDIV64, non-zero imm divisor, check 6 @unpriv:OK
+#382/45  verifier_sdiv/SDIV64, non-zero reg divisor, check 1:OK
+#382/46  verifier_sdiv/SDIV64, non-zero reg divisor, check 1 @unpriv:OK
+#382/47  verifier_sdiv/SDIV64, non-zero reg divisor, check 2:OK
+#382/48  verifier_sdiv/SDIV64, non-zero reg divisor, check 2 @unpriv:OK
+#382/49  verifier_sdiv/SDIV64, non-zero reg divisor, check 3:OK
+#382/50  verifier_sdiv/SDIV64, non-zero reg divisor, check 3 @unpriv:OK
+#382/51  verifier_sdiv/SDIV64, non-zero reg divisor, check 4:OK
+#382/52  verifier_sdiv/SDIV64, non-zero reg divisor, check 4 @unpriv:OK
+#382/53  verifier_sdiv/SDIV64, non-zero reg divisor, check 5:OK
+#382/54  verifier_sdiv/SDIV64, non-zero reg divisor, check 5 @unpriv:OK
+#382/55  verifier_sdiv/SDIV64, non-zero reg divisor, check 6:OK
+#382/56  verifier_sdiv/SDIV64, non-zero reg divisor, check 6 @unpriv:OK
+#382/57  verifier_sdiv/SMOD32, non-zero imm divisor, check 1:OK
+#382/58  verifier_sdiv/SMOD32, non-zero imm divisor, check 1 @unpriv:OK
+#382/59  verifier_sdiv/SMOD32, non-zero imm divisor, check 2:OK
+#382/60  verifier_sdiv/SMOD32, non-zero imm divisor, check 2 @unpriv:OK
+#382/61  verifier_sdiv/SMOD32, non-zero imm divisor, check 3:OK
+#382/62  verifier_sdiv/SMOD32, non-zero imm divisor, check 3 @unpriv:OK
+#382/63  verifier_sdiv/SMOD32, non-zero imm divisor, check 4:OK
+#382/64  verifier_sdiv/SMOD32, non-zero imm divisor, check 4 @unpriv:OK
+#382/65  verifier_sdiv/SMOD32, non-zero imm divisor, check 5:OK
+#382/66  verifier_sdiv/SMOD32, non-zero imm divisor, check 5 @unpriv:OK
+#382/67  verifier_sdiv/SMOD32, non-zero imm divisor, check 6:OK
+#382/68  verifier_sdiv/SMOD32, non-zero imm divisor, check 6 @unpriv:OK
+#382/69  verifier_sdiv/SMOD32, non-zero reg divisor, check 1:OK
+#382/70  verifier_sdiv/SMOD32, non-zero reg divisor, check 1 @unpriv:OK
+#382/71  verifier_sdiv/SMOD32, non-zero reg divisor, check 2:OK
+#382/72  verifier_sdiv/SMOD32, non-zero reg divisor, check 2 @unpriv:OK
+#382/73  verifier_sdiv/SMOD32, non-zero reg divisor, check 3:OK
+#382/74  verifier_sdiv/SMOD32, non-zero reg divisor, check 3 @unpriv:OK
+#382/75  verifier_sdiv/SMOD32, non-zero reg divisor, check 4:OK
+#382/76  verifier_sdiv/SMOD32, non-zero reg divisor, check 4 @unpriv:OK
+#382/77  verifier_sdiv/SMOD32, non-zero reg divisor, check 5:OK
+#382/78  verifier_sdiv/SMOD32, non-zero reg divisor, check 5 @unpriv:OK
+#382/79  verifier_sdiv/SMOD32, non-zero reg divisor, check 6:OK
+#382/80  verifier_sdiv/SMOD32, non-zero reg divisor, check 6 @unpriv:OK
+#382/81  verifier_sdiv/SMOD64, non-zero imm divisor, check 1:OK
+#382/82  verifier_sdiv/SMOD64, non-zero imm divisor, check 1 @unpriv:OK
+#382/83  verifier_sdiv/SMOD64, non-zero imm divisor, check 2:OK
+#382/84  verifier_sdiv/SMOD64, non-zero imm divisor, check 2 @unpriv:OK
+#382/85  verifier_sdiv/SMOD64, non-zero imm divisor, check 3:OK
+#382/86  verifier_sdiv/SMOD64, non-zero imm divisor, check 3 @unpriv:OK
+#382/87  verifier_sdiv/SMOD64, non-zero imm divisor, check 4:OK
+#382/88  verifier_sdiv/SMOD64, non-zero imm divisor, check 4 @unpriv:OK
+#382/89  verifier_sdiv/SMOD64, non-zero imm divisor, check 5:OK
+#382/90  verifier_sdiv/SMOD64, non-zero imm divisor, check 5 @unpriv:OK
+#382/91  verifier_sdiv/SMOD64, non-zero imm divisor, check 6:OK
+#382/92  verifier_sdiv/SMOD64, non-zero imm divisor, check 6 @unpriv:OK
+#382/93  verifier_sdiv/SMOD64, non-zero imm divisor, check 7:OK
+#382/94  verifier_sdiv/SMOD64, non-zero imm divisor, check 7 @unpriv:OK
+#382/95  verifier_sdiv/SMOD64, non-zero imm divisor, check 8:OK
+#382/96  verifier_sdiv/SMOD64, non-zero imm divisor, check 8 @unpriv:OK
+#382/97  verifier_sdiv/SMOD64, non-zero reg divisor, check 1:OK
+#382/98  verifier_sdiv/SMOD64, non-zero reg divisor, check 1 @unpriv:OK
+#382/99  verifier_sdiv/SMOD64, non-zero reg divisor, check 2:OK
+#382/100 verifier_sdiv/SMOD64, non-zero reg divisor, check 2 @unpriv:OK
+#382/101 verifier_sdiv/SMOD64, non-zero reg divisor, check 3:OK
+#382/102 verifier_sdiv/SMOD64, non-zero reg divisor, check 3 @unpriv:OK
+#382/103 verifier_sdiv/SMOD64, non-zero reg divisor, check 4:OK
+#382/104 verifier_sdiv/SMOD64, non-zero reg divisor, check 4 @unpriv:OK
+#382/105 verifier_sdiv/SMOD64, non-zero reg divisor, check 5:OK
+#382/106 verifier_sdiv/SMOD64, non-zero reg divisor, check 5 @unpriv:OK
+#382/107 verifier_sdiv/SMOD64, non-zero reg divisor, check 6:OK
+#382/108 verifier_sdiv/SMOD64, non-zero reg divisor, check 6 @unpriv:OK
+#382/109 verifier_sdiv/SMOD64, non-zero reg divisor, check 7:OK
+#382/110 verifier_sdiv/SMOD64, non-zero reg divisor, check 7 @unpriv:OK
+#382/111 verifier_sdiv/SMOD64, non-zero reg divisor, check 8:OK
+#382/112 verifier_sdiv/SMOD64, non-zero reg divisor, check 8 @unpriv:OK
+#382/113 verifier_sdiv/SDIV32, zero divisor:OK
+#382/114 verifier_sdiv/SDIV32, zero divisor @unpriv:OK
+#382/115 verifier_sdiv/SDIV64, zero divisor:OK
+#382/116 verifier_sdiv/SDIV64, zero divisor @unpriv:OK
+#382/117 verifier_sdiv/SMOD32, zero divisor:OK
+#382/118 verifier_sdiv/SMOD32, zero divisor @unpriv:OK
+#382/119 verifier_sdiv/SMOD64, zero divisor:OK
+#382/120 verifier_sdiv/SMOD64, zero divisor @unpriv:OK
+#382     verifier_sdiv:OK
+Summary: 5/163 PASSED, 0 SKIPPED, 0 FAILED
+
+As the selftests don't compile for 32-bit architectures without
+modifications I have added new tests to lib/test_bpf.c for cpuv4 insns:
+
+test_bpf: Summary: 1052 PASSED, 0 FAILED, [891/1040 JIT'ed]
+test_bpf: test_tail_calls: Summary: 10 PASSED, 0 FAILED, [10/10 JIT'ed]
+test_bpf: test_skb_segment: Summary: 2 PASSED, 0 FAILED
+
+[1] https://lore.kernel.org/all/mb61p5y4u3ptd.fsf@amazon.com/
+
+Puranjay Mohan (8):
+  arm32, bpf: add support for 32-bit offset jmp instruction
+  arm32, bpf: add support for sign-extension load instruction
+  arm32, bpf: add support for sign-extension mov instruction
+  arm32, bpf: add support for unconditional bswap instruction
+  arm32, bpf: add support for 32-bit signed division
+  arm32, bpf: add support for 64 bit division instruction
+  selftest, bpf: enable cpu v4 tests for arm32
+  bpf/tests: add tests for cpuv4 instructions
+
+ arch/arm/net/bpf_jit_32.c                     | 275 ++++++++++++-
+ arch/arm/net/bpf_jit_32.h                     |   4 +
+ include/linux/filter.h                        |  50 ++-
+ lib/test_bpf.c                                | 371 ++++++++++++++++++
+ .../selftests/bpf/progs/verifier_bswap.c      |   3 +-
+ .../selftests/bpf/progs/verifier_gotol.c      |   3 +-
+ .../selftests/bpf/progs/verifier_ldsx.c       |   3 +-
+ .../selftests/bpf/progs/verifier_movsx.c      |   3 +-
+ .../selftests/bpf/progs/verifier_sdiv.c       |   3 +-
+ 9 files changed, 688 insertions(+), 27 deletions(-)
+
+-- 
+2.39.2
+
