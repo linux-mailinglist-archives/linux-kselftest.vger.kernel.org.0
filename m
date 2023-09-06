@@ -2,164 +2,132 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DD187933A8
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Sep 2023 04:15:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E9F27933E8
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Sep 2023 05:03:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232120AbjIFCPw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 5 Sep 2023 22:15:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36970 "EHLO
+        id S230229AbjIFDD7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 5 Sep 2023 23:03:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233168AbjIFCPw (ORCPT
+        with ESMTP id S229510AbjIFDD6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 5 Sep 2023 22:15:52 -0400
-Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E714CF9;
-        Tue,  5 Sep 2023 19:15:36 -0700 (PDT)
-Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2bcc331f942so5686951fa.0;
-        Tue, 05 Sep 2023 19:15:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693966534; x=1694571334; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8AW5DEjMPwf/WOBjq6Yy/rxPXX4Pw+fsGwtExcVSRjU=;
-        b=ejQc0UYbO2umFssYxQrKYtro5XGaKThG5D72q0QtEmcJnsweMXgD2277D2YijMNnRC
-         5dq+dyavOMEXKIUFpOcdN9QVxrkHJfXe17psO4xMLCqOetxXsRFx5qlFR1YBg1/kHauA
-         AV9JW5oLmys2x1gPOrvkpqkU8Yn12t7N92fEgLW+UBgNpvQaDr3Xy8az/OX0oXQcjqj9
-         K/+AwuZaBjZCt7rEgugCUDOaN6oABOqDHyN6inxawZwcz9a46ko0caNLEPNVI0WEHddI
-         g7R+GbyjXseOMaBJiBss2uUOQFMD91tJM1GZoJ0//z6W2w9syPvUmvWBYgCDDvf+RK7R
-         V1+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693966534; x=1694571334;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8AW5DEjMPwf/WOBjq6Yy/rxPXX4Pw+fsGwtExcVSRjU=;
-        b=L1pYfj3juZxt6ReD/TRKt1Ozk0Lzaz3vw76Pkvpm5tsjmYFPm25JcyDUJr+wmVH39i
-         eNanBBlbSxxe/nBQyEaeUds0kc/SLZ9kmrIDL88tsHxQFvC+EjKu16lDQz7BqcZkBW3u
-         lYyLlhiB8u8FSxBwwrDLRnx+Y5KJa+w5l/FTiF0LsuIcg3LRpINYpXL3L+STH23d5MMY
-         Vp4ieJGuBy9M6eRXQbqa3nPx/cmFRrhQW09ZIY57w88b+esKcg3bIgWPfoEV13VXI9cs
-         KOO8FeMV0OjPlpMLFt3ozv3GWknqXfO/Y1C+M433UTZQSj9iZwF+HpzY1jKjYLB6RANh
-         pUiA==
-X-Gm-Message-State: AOJu0YxHbLDPnYuma5vXcq4OXXMzhpGFDKnTMi7+ykzxoXdTennL4ilQ
-        KS8Jmq4l9QpxhRTim5hqPCTs58j414tRIpeQI2c=
-X-Google-Smtp-Source: AGHT+IFINadRkT5OvEK7LBs75KJ/A6GYonKZM55L5Tbnd4WVkS+YBQznNFHrs/NRClyfQ2LSLrrokB+J+aTJxpaXGK4=
-X-Received: by 2002:a2e:9e56:0:b0:2b6:c3f9:b86b with SMTP id
- g22-20020a2e9e56000000b002b6c3f9b86bmr501791ljk.15.1693966534248; Tue, 05 Sep
- 2023 19:15:34 -0700 (PDT)
+        Tue, 5 Sep 2023 23:03:58 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D14BBCC3;
+        Tue,  5 Sep 2023 20:03:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1693969434; x=1725505434;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=WIdengHnfLVVyorpdiXXqfA4JGvJSbjUaTS4CPENnpA=;
+  b=V/qR1UgfsDNBM3WyRbNdgBf6z5Ex/41BYSxX/HAlOl6upR1VI2hsSHPG
+   eRarTx/Rxz4elI75U1E5K2CXJ5JTVfz8pMmHf4mDLo0WjYW01hqteJUUG
+   LmgVsd8wlx1VLkTOlVSu9u5VyOfUNKvrRTLFMHLqYCnAU8QknCK8+/lRX
+   W8wJkp4cgakG2frl0sXPnlN4MW/ahXukQj8dXHxkinnMSE4OrKp4+W5O2
+   CXuXP2Rm/u0anlMOwttjoz5CtJ0GHRFm9KL+/v896CK5+5+H2XvcO7HC5
+   eu7Krbxa3eWaVLQIgNpb/2CZwsqm6MMCVgwuozHb94V2c6Ai8hlTratGP
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10824"; a="375859556"
+X-IronPort-AV: E=Sophos;i="6.02,230,1688454000"; 
+   d="scan'208";a="375859556"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2023 20:03:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10824"; a="806843784"
+X-IronPort-AV: E=Sophos;i="6.02,230,1688454000"; 
+   d="scan'208";a="806843784"
+Received: from lkp-server02.sh.intel.com (HELO e0b2ea88afd5) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 05 Sep 2023 20:03:48 -0700
+Received: from kbuild by e0b2ea88afd5 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qdipW-0002PB-1R;
+        Wed, 06 Sep 2023 03:03:46 +0000
+Date:   Wed, 6 Sep 2023 11:02:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Meng Li <li.meng@amd.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Huang Rui <ray.huang@amd.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-acpi@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Shimmer Huang <shimmer.huang@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>, Meng Li <li.meng@amd.com>
+Subject: Re: [PATCH V5 3/7] cpufreq: amd-pstate: Enable amd-pstate preferred
+ core supporting.
+Message-ID: <202309061049.2ag7qkvI-lkp@intel.com>
+References: <20230905015116.2268926-4-li.meng@amd.com>
 MIME-Version: 1.0
-References: <cover.1693659382.git.haibo1.xu@intel.com> <7affb0387d7272573f7093de7887872e1fb5979b.1693659382.git.haibo1.xu@intel.com>
- <20230904-ba5051a5bf17d17f2711d7dc@orel>
-In-Reply-To: <20230904-ba5051a5bf17d17f2711d7dc@orel>
-From:   Haibo Xu <xiaobo55x@gmail.com>
-Date:   Wed, 6 Sep 2023 10:15:23 +0800
-Message-ID: <CAJve8ok7xny2f+J_O0SFZRAiKGMinM9C1YK=OXVpABem=KttnQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/8] KVM: selftests: Unify the codes for guest
- exception handling
-To:     Andrew Jones <ajones@ventanamicro.com>
-Cc:     Haibo Xu <haibo1.xu@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Guo Ren <guoren@kernel.org>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        wchen <waylingii@gmail.com>,
-        Daniel Henrique Barboza <dbarboza@ventanamicro.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Aaron Lewis <aaronlewis@google.com>,
-        Mingwei Zhang <mizhang@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Ackerley Tng <ackerleytng@google.com>,
-        Lei Wang <lei4.wang@intel.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Like Xu <likexu@tencent.com>, Peter Gonda <pgonda@google.com>,
-        Thomas Huth <thuth@redhat.com>,
-        =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <philmd@linaro.org>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Michal Luczaj <mhal@rbox.co>,
-        zhang songyi <zhang.songyi@zte.com.cn>,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvm-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230905015116.2268926-4-li.meng@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Sep 4, 2023 at 7:16=E2=80=AFPM Andrew Jones <ajones@ventanamicro.co=
-m> wrote:
->
-> On Sat, Sep 02, 2023 at 08:59:23PM +0800, Haibo Xu wrote:
-> > Rename the vm_init_descriptor_tables() and vcpu_init_vector_tables()
->                                              ^ vcpu_init_descriptor_table=
-s()
->
-> > prototypes to vm_init_vector_tables() and vcpu_init_vector_tables()
-> > respectively, so that we can use common names for the architectures
-> > (x86/aarch64/riscv) and then put them in a common header.
-> >
-> > By the way, vm_install_exception_handler() prototype were also moved to
-> > the common header since they are commonly used across the architectures=
-.
-> >
-> > The patch is a preparation to share the guest exception handling codes
-> > in riscv.
-> >
-> > Suggested-by: Andrew Jones <ajones@ventanamicro.com>
-> > Suggested-by: Sean Christopherson <seanjc@google.com>
-> > Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
-> > ---
-> >  tools/testing/selftests/kvm/aarch64/arch_timer.c          | 4 ++--
-> >  tools/testing/selftests/kvm/aarch64/debug-exceptions.c    | 4 ++--
-> >  tools/testing/selftests/kvm/aarch64/page_fault_test.c     | 4 ++--
-> >  tools/testing/selftests/kvm/aarch64/vgic_irq.c            | 4 ++--
-> >  tools/testing/selftests/kvm/include/aarch64/processor.h   | 8 +-------
-> >  tools/testing/selftests/kvm/include/kvm_util_base.h       | 7 +++++++
-> >  tools/testing/selftests/kvm/include/x86_64/processor.h    | 5 -----
-> >  tools/testing/selftests/kvm/lib/aarch64/processor.c       | 6 +++---
-> >  tools/testing/selftests/kvm/lib/x86_64/processor.c        | 4 ++--
-> >  tools/testing/selftests/kvm/x86_64/amx_test.c             | 4 ++--
-> >  tools/testing/selftests/kvm/x86_64/fix_hypercall_test.c   | 4 ++--
-> >  tools/testing/selftests/kvm/x86_64/hyperv_evmcs.c         | 4 ++--
-> >  tools/testing/selftests/kvm/x86_64/hyperv_features.c      | 8 ++++----
-> >  tools/testing/selftests/kvm/x86_64/hyperv_ipi.c           | 6 +++---
-> >  tools/testing/selftests/kvm/x86_64/kvm_pv_test.c          | 4 ++--
-> >  tools/testing/selftests/kvm/x86_64/monitor_mwait_test.c   | 4 ++--
-> >  .../testing/selftests/kvm/x86_64/pmu_event_filter_test.c  | 8 ++++----
-> >  .../kvm/x86_64/smaller_maxphyaddr_emulation_test.c        | 4 ++--
-> >  tools/testing/selftests/kvm/x86_64/svm_int_ctl_test.c     | 4 ++--
-> >  .../selftests/kvm/x86_64/svm_nested_shutdown_test.c       | 4 ++--
-> >  .../selftests/kvm/x86_64/svm_nested_soft_inject_test.c    | 4 ++--
-> >  tools/testing/selftests/kvm/x86_64/ucna_injection_test.c  | 8 ++++----
-> >  .../selftests/kvm/x86_64/userspace_msr_exit_test.c        | 4 ++--
-> >  .../kvm/x86_64/vmx_exception_with_invalid_guest_state.c   | 4 ++--
-> >  tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c    | 4 ++--
-> >  tools/testing/selftests/kvm/x86_64/xapic_ipi_test.c       | 4 ++--
-> >  tools/testing/selftests/kvm/x86_64/xcr0_cpuid_test.c      | 4 ++--
-> >  tools/testing/selftests/kvm/x86_64/xen_shinfo_test.c      | 4 ++--
-> >  28 files changed, 66 insertions(+), 70 deletions(-)
-> >
->
-> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+Hi Meng,
 
-Thanks for the review!
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on rafael-pm/linux-next]
+[also build test WARNING on linus/master v6.5 next-20230905]
+[cannot apply to tip/x86/core]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Meng-Li/x86-Drop-CPU_SUP_INTEL-from-SCHED_MC_PRIO-for-the-expansion/20230906-003754
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20230905015116.2268926-4-li.meng%40amd.com
+patch subject: [PATCH V5 3/7] cpufreq: amd-pstate: Enable amd-pstate preferred core supporting.
+config: x86_64-randconfig-r022-20230906 (https://download.01.org/0day-ci/archive/20230906/202309061049.2ag7qkvI-lkp@intel.com/config)
+compiler: clang version 16.0.4 (https://github.com/llvm/llvm-project.git ae42196bc493ffe877a7e3dff8be32035dea4d07)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230906/202309061049.2ag7qkvI-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309061049.2ag7qkvI-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> drivers/cpufreq/amd-pstate.c:1131:8: warning: unused variable 'dev_attr_hw_prefcore' [-Wunused-variable]
+   static DEVICE_ATTR_RO(hw_prefcore);
+          ^
+   include/linux/device.h:198:26: note: expanded from macro 'DEVICE_ATTR_RO'
+           struct device_attribute dev_attr_##_name = __ATTR_RO(_name)
+                                   ^
+   <scratch space>:91:1: note: expanded from here
+   dev_attr_hw_prefcore
+   ^
+   1 warning generated.
+
+
+vim +/dev_attr_hw_prefcore +1131 drivers/cpufreq/amd-pstate.c
+
+  1126	
+  1127	cpufreq_freq_attr_ro(amd_pstate_highest_perf);
+  1128	cpufreq_freq_attr_rw(energy_performance_preference);
+  1129	cpufreq_freq_attr_ro(energy_performance_available_preferences);
+  1130	static DEVICE_ATTR_RW(status);
+> 1131	static DEVICE_ATTR_RO(hw_prefcore);
+  1132	static DEVICE_ATTR_RO(prefcore);
+  1133	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
