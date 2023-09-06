@@ -2,115 +2,215 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48A70793848
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Sep 2023 11:32:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDFB3793983
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Sep 2023 12:08:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231288AbjIFJcH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 6 Sep 2023 05:32:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42076 "EHLO
+        id S233603AbjIFKIM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 6 Sep 2023 06:08:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237110AbjIFJcF (ORCPT
+        with ESMTP id S229947AbjIFKIM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 6 Sep 2023 05:32:05 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDA9E170B;
-        Wed,  6 Sep 2023 02:32:01 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2bd0d19a304so56675781fa.1;
-        Wed, 06 Sep 2023 02:32:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693992720; x=1694597520; darn=vger.kernel.org;
-        h=mime-version:user-agent:message-id:in-reply-to:date:references
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=K0j1GUZDUHTZyz6OodkfAkKlIJdEvZl5TSnWqqW/Tf8=;
-        b=EeEHlel7UmWlFT7uWGr2SnAkke0wfwcXI5+HVjZ+I6Vo1Ky81YGmTnaIm0QCWTqMe2
-         9FNvfBjr8HHvIlvuisVLzUxn5goJWlnrUFn4ul0aC9XIuJ0SkgINAvWPfiqq2a6xQgt8
-         idI9zrZf6FJqnwRG1NoemlxbU023BTJ1O4IV8QtNTPO1CgBugmsd5YugKN5NGxvxdpJE
-         3w+gUiFKCoxRH6ciNTiE4aJav6DXGrSgCyDsQ6aBdH5xwQkN+ErPFH1PJJ0Box6eihb5
-         BLOPdkKPpI+Fz/kyBNFEuf4TUFcmUUnl413YqxbdEszyRciNPUfkr5rPtRunzp/tA1R0
-         3L8A==
+        Wed, 6 Sep 2023 06:08:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E17CF1981
+        for <linux-kselftest@vger.kernel.org>; Wed,  6 Sep 2023 03:07:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1693994826;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to; bh=/RQY8EhQSYV947okEcMf9SCXpiOLyQ4TKDc7ZGfngFs=;
+        b=NSyp8QmzmcFH/yw2e/HBg0ACV/uqCLoK4dHVvRMuPnsiVGaSkyVhJ5iCG5LaQRYJeea+gc
+        1Ana9zULx1DniKQ1DJuGMpWq7NMndCHfXtQ5V3T+0/p4Gh0wsPlDe7Y64nBDgg0eeasBlw
+        FDWLbhZIf/6eH7qsyi3s1KSAAN7Jc5I=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-370-_cT4XLm5OqOtsluE489fYw-1; Wed, 06 Sep 2023 06:07:04 -0400
+X-MC-Unique: _cT4XLm5OqOtsluE489fYw-1
+Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-6553ab83954so33380066d6.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 06 Sep 2023 03:07:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693992720; x=1694597520;
-        h=mime-version:user-agent:message-id:in-reply-to:date:references
-         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=K0j1GUZDUHTZyz6OodkfAkKlIJdEvZl5TSnWqqW/Tf8=;
-        b=hbjqrq/KWnocWfMOTMy4JZWgRwNT5FqiViEDymUL8aGO5XunBdzHCzmUCtFmv+EPhr
-         WIlxx/6CGPGrACVwGD7RoRBWf9XdFop0qCXzYaNLIOBqdCzti7JVKe0SG4XxqtPRZAcp
-         Cqpr5lRl45mi6HhsuB4ndkFIg16idVlk20zh11zDAIoiqquQ3id2bTaD/vcLqb4rN0Vz
-         y8p+/8K/vLv6DaRLX1fxS1z3W5b9tIxyospnBDPvU2jDXBykglPBYU6oA72CZXI5hhpw
-         NgsixvU8UhmjAHD8u5DwhtzbGI0Vsg3BvoftUSD0uJ7O0TXipVgP70fGbW61r0yMGYql
-         42UA==
-X-Gm-Message-State: AOJu0Yz0p+y2AEhww8RdPR5USj+11sG5QwNYR4JDjhyeuoHM+JmVHDaz
-        7gi/WyRAKFPHZJgw0e1JXV/hP+0fq7eX1oUfr5I=
-X-Google-Smtp-Source: AGHT+IFCiHXuSO55+qSuAuYI+tAIFaIk0hNLqcjWr9xssUtrfnTHCAZdwIwDFu9Yj9POG7nv8bEC1A==
-X-Received: by 2002:a2e:9203:0:b0:2b4:6e21:637e with SMTP id k3-20020a2e9203000000b002b46e21637emr1831678ljg.16.1693992719625;
-        Wed, 06 Sep 2023 02:31:59 -0700 (PDT)
-Received: from dev-dsk-pjy-1a-76bc80b3.eu-west-1.amazon.com (54-240-197-231.amazon.com. [54.240.197.231])
-        by smtp.gmail.com with ESMTPSA id 6-20020a05600c028600b003feea62440bsm19221702wmk.43.2023.09.06.02.31.58
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 06 Sep 2023 02:31:59 -0700 (PDT)
-From:   Puranjay Mohan <puranjay12@gmail.com>
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>,
-        Yonghong Song <yonghong.song@linux.dev>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shubham Bansal <illusionist.neo@gmail.com>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next 4/8] arm32, bpf: add support for unconditional
- bswap instruction
-References: <20230905210621.1711859-1-puranjay12@gmail.com>
-        <20230905210621.1711859-5-puranjay12@gmail.com>
-        <ZPeecV807AVEkCJB@shell.armlinux.org.uk>
-Date:   Wed, 06 Sep 2023 09:31:58 +0000
-In-Reply-To: <ZPeecV807AVEkCJB@shell.armlinux.org.uk> (Russell King's message
-        of "Tue, 5 Sep 2023 22:32:33 +0100")
-Message-ID: <mb61pjzt33awh.fsf@amazon.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
+        d=1e100.net; s=20221208; t=1693994823; x=1694599623;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/RQY8EhQSYV947okEcMf9SCXpiOLyQ4TKDc7ZGfngFs=;
+        b=cqKCQL9gplaOpYUzgSapPS/YKzXVn+/kG5fDFCiv9HtSOM497LqL/BtdHnoPlQ6Ep+
+         /QWnQJiYeJ33QlTWDfYD40kKFbc2qSHc37BrpN/3N2Rx+4QH5BPncp7gdh+fsK+whZpZ
+         LaLeerxS3oddV34axGWloHU2jM9yYQKkUqr/Jo1B0ykpHQMOgAm5HTnPMTyfjnD5p5kn
+         x4meamBasDIjIQJuQYLdIfLIzELBEVr3PQK07KxyzYLP0ASMJ0WzstPWrbH/8tgT8Tjt
+         bQPq6NmHbXbNS7VaEgjjAW+Q/Tbzjyg7ZLStMkoTwr/hhzmi0H/EwuM2/JwnmalRQgU4
+         Chbw==
+X-Gm-Message-State: AOJu0YwZT7LtD8V9x5ma4UbleIyORqYDnD2ic3ovzs59hf0ygA2FfzFX
+        2SElblHQVk1tLe1+8NJ5wbrITv0BanPWkdwaf7bRE+D16PqcWenMhH7oJtYHdVd1XyNzmWmzZ7V
+        0ScQcnFqw8G5y7lldEQOplOvtWEMj
+X-Received: by 2002:a05:620a:450e:b0:767:d0c:9ec1 with SMTP id t14-20020a05620a450e00b007670d0c9ec1mr18790043qkp.59.1693994823231;
+        Wed, 06 Sep 2023 03:07:03 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IER6lA3GZ2HJx02uZDFzEvMD289KltLM2voUWuDrrPLQUuyA++SmLKTw5IhFvw4+QV3T8+bMw==
+X-Received: by 2002:a05:620a:450e:b0:767:d0c:9ec1 with SMTP id t14-20020a05620a450e00b007670d0c9ec1mr18790022qkp.59.1693994822882;
+        Wed, 06 Sep 2023 03:07:02 -0700 (PDT)
+Received: from localhost ([2a01:e0a:b25:f902::ff])
+        by smtp.gmail.com with ESMTPSA id oo20-20020a05620a531400b00767f14f5856sm4822652qkn.117.2023.09.06.03.07.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Sep 2023 03:07:02 -0700 (PDT)
+Date:   Wed, 6 Sep 2023 12:07:00 +0200
+From:   Maxime Ripard <mripard@redhat.com>
+To:     Thomas =?utf-8?Q?Hellstr=C3=B6m?= 
+        <thomas.hellstrom@linux.intel.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>
+Cc:     intel-xe@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Subject: Re: [Intel-xe] [PATCH 2/3] drm/tests/drm_exec: Add a test for object
+ freeing within drm_exec_fini()
+Message-ID: <b5eaqvccx7iitverhenjozczpvgrehcznl2k2c43t6qlnn4sf4@wzkzsntne5mt>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="b3p2wfg2aaam75px"
+Content-Disposition: inline
+In-Reply-To: <5d25d6ea-3a96-3be1-3742-7e3c1b417d14@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Sep 05 2023, Russell King (Oracle) wrote:
 
-> On Tue, Sep 05, 2023 at 09:06:17PM +0000, Puranjay Mohan wrote:
->> The cpuv4 added a new unconditional bswap instruction with following
->> behaviour:
->> 
->> BPF_ALU64 | BPF_TO_LE | BPF_END with imm = 16/32/64 means:
->> dst = bswap16(dst)
->> dst = bswap32(dst)
->> dst = bswap64(dst)
->> 
->> As we already support converting to big-endian from little-endian we can
->> use the same for unconditional bswap.
->> Since ARM32 is always little-endian, just treat the unconditional scenario
->
-> This is not true. Arm32 BPF is disabled for BE32 but not for BE8. It's
-> entirely possible to build a kernel using BE8 for ARMv7 and have the
-> BPF JIT enabled:
->
->         select HAVE_EBPF_JIT if !CPU_ENDIAN_BE32
->
-> So it's not true to say "Since ARM32 is always little-endian".
+--b3p2wfg2aaam75px
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Sure, I will change the commit message in next version.
+On Tue, Sep 05, 2023 at 03:42:58PM +0200, Thomas Hellstr=F6m wrote:
+> Hi, Maxime
+>=20
+> On 9/5/23 15:16, Maxime Ripard wrote:
+> > On Tue, Sep 05, 2023 at 02:32:38PM +0200, Thomas Hellstr=F6m wrote:
+> > > Hi,
+> > >=20
+> > > On 9/5/23 14:05, Maxime Ripard wrote:
+> > > > Hi,
+> > > >=20
+> > > > On Tue, Sep 05, 2023 at 10:58:31AM +0200, Thomas Hellstr=F6m wrote:
+> > > > > Check that object freeing from within drm_exec_fini() works as ex=
+pected
+> > > > > and doesn't generate any warnings.
+> > > > >=20
+> > > > > Cc: Christian K=F6nig <christian.koenig@amd.com>
+> > > > > Cc: dri-devel@lists.freedesktop.org
+> > > > > Signed-off-by: Thomas Hellstr=F6m <thomas.hellstrom@linux.intel.c=
+om>
+> > > > > ---
+> > > > >    drivers/gpu/drm/tests/drm_exec_test.c | 47 +++++++++++++++++++=
+++++++++
+> > > > >    1 file changed, 47 insertions(+)
+> > > > >=20
+> > > > > diff --git a/drivers/gpu/drm/tests/drm_exec_test.c b/drivers/gpu/=
+drm/tests/drm_exec_test.c
+> > > > > index 563949d777dd..294c25f49cc7 100644
+> > > > > --- a/drivers/gpu/drm/tests/drm_exec_test.c
+> > > > > +++ b/drivers/gpu/drm/tests/drm_exec_test.c
+> > > > > @@ -170,6 +170,52 @@ static void test_prepare_array(struct kunit =
+*test)
+> > > > >    	drm_gem_private_object_fini(&gobj2);
+> > > > >    }
+> > > > > +static const struct drm_gem_object_funcs put_funcs =3D {
+> > > > > +	.free =3D (void *)kfree,
+> > > > > +};
+> > > > > +
+> > > > > +/*
+> > > > > + * Check that freeing objects from within drm_exec_fini()
+> > > > > + * behaves as expected.
+> > > > > + */
+> > > > > +static void test_early_put(struct kunit *test)
+> > > > > +{
+> > > > > +	struct drm_exec_priv *priv =3D test->priv;
+> > > > > +	struct drm_gem_object *gobj1;
+> > > > > +	struct drm_gem_object *gobj2;
+> > > > > +	struct drm_gem_object *array[2];
+> > > > > +	struct drm_exec exec;
+> > > > > +	int ret;
+> > > > > +
+> > > > > +	gobj1 =3D kzalloc(sizeof(*gobj1), GFP_KERNEL);
+> > > > > +	KUNIT_EXPECT_NOT_ERR_OR_NULL(test, gobj1);
+> > > > > +	if (!gobj1)
+> > > > > +		return;
+> > > > > +
+> > > > > +	gobj2 =3D kzalloc(sizeof(*gobj2), GFP_KERNEL);
+> > > > > +	KUNIT_EXPECT_NOT_ERR_OR_NULL(test, gobj2);
+> > > > > +	if (!gobj2) {
+> > > > > +		kfree(gobj1);
+> > > > > +		return;
+> > > > > +	}
+> > > > > +
+> > > > > +	gobj1->funcs =3D &put_funcs;
+> > > > > +	gobj2->funcs =3D &put_funcs;
+> > > > > +	array[0] =3D gobj1;
+> > > > > +	array[1] =3D gobj2;
+> > > > > +	drm_gem_private_object_init(priv->drm, gobj1, PAGE_SIZE);
+> > > > > +	drm_gem_private_object_init(priv->drm, gobj2, PAGE_SIZE);
+> > > > > +
+> > > > > +	drm_exec_init(&exec, DRM_EXEC_INTERRUPTIBLE_WAIT);
+> > > > > +	drm_exec_until_all_locked(&exec)
+> > > > > +		ret =3D drm_exec_prepare_array(&exec, array, ARRAY_SIZE(array),
+> > > > > +					     1);
+> > > > > +	KUNIT_EXPECT_EQ(test, ret, 0);
+> > > > > +	drm_gem_object_put(gobj1);
+> > > > > +	drm_gem_object_put(gobj2);
+> > > > > +	drm_exec_fini(&exec);
+> > > > It doesn't look like you actually check that "freeing objects from
+> > > > within drm_exec_fini() behaves as expected." What is the expectation
+> > > > here, and how is it checked?
+> > > Hm. Good question, I've been manually checking dmesg for lockdep spla=
+ts. Is
+> > > there a way to automate that?
+> > I'm not familiar with the drm_exec API, but judging by the code I'd
+> > assume you want to check that gobj1 and gobj2 are actually freed using
+> > kfree?
+>=20
+> Actually not. What's important here is that the call to drm_exec_fini(),
+> which puts the last references to gobj1 and gobj2 doesn't trigger any
+> lockdep splats, like the one in the commit message of patch 3/3. So to ma=
+ke
+> more sense, the test could perhaps be conditioned on
+> CONFIG_DEBUG_LOCK_ALLOC. Still it would require manual checking of dmesg()
+> after being run.
 
-Thanks,
-Puranjay
+I'm not aware of something to check on lockdep's status when running a
+kunit test, but I'm not sure anyone is expected to look at the dmesg
+trace when running kunit to find out whether the test succeeded or not.
+
+It looks like there was an attempt at some point to fail the test if
+there was a lockdep error:
+https://lore.kernel.org/all/20200814205527.1833459-1-urielguajardojr@gmail.=
+com/
+
+It doesn't look like it's been merged though. David, Brendan, do you
+know why it wasn't merged or if there is a good option for us there?
+
+At the very least, I think a comment after the call to drm_exec_fini to
+make it clear that the error would be in the kernel logs, and a better
+one on the test definition to explicitly say what you want to make sure
+of, and how one can check it's been done would be great.
+
+Maxime
+
+--b3p2wfg2aaam75px
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZPhPRAAKCRDj7w1vZxhR
+xfKrAP9GJQ9krwMWKBfn+oS/xcJcENfMR2hgY8v24XvFjdc2tQD8CrK6MAaFADhH
+vRBoO3UJcLAhsnt7EihZYwy1JZ/tGws=
+=xOIu
+-----END PGP SIGNATURE-----
+
+--b3p2wfg2aaam75px--
+
