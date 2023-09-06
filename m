@@ -2,53 +2,53 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CA4079383E
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Sep 2023 11:30:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 48A70793848
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Sep 2023 11:32:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236808AbjIFJa3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 6 Sep 2023 05:30:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38712 "EHLO
+        id S231288AbjIFJcH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 6 Sep 2023 05:32:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235329AbjIFJa3 (ORCPT
+        with ESMTP id S237110AbjIFJcF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 6 Sep 2023 05:30:29 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20BCD1732;
-        Wed,  6 Sep 2023 02:29:49 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2bcc846fed0so53878551fa.2;
-        Wed, 06 Sep 2023 02:29:49 -0700 (PDT)
+        Wed, 6 Sep 2023 05:32:05 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDA9E170B;
+        Wed,  6 Sep 2023 02:32:01 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id 38308e7fff4ca-2bd0d19a304so56675781fa.1;
+        Wed, 06 Sep 2023 02:32:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1693992561; x=1694597361; darn=vger.kernel.org;
+        d=gmail.com; s=20221208; t=1693992720; x=1694597520; darn=vger.kernel.org;
         h=mime-version:user-agent:message-id:in-reply-to:date:references
          :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/RsfULzpF1odV8BlqVly8vHWfWckX8ePw3jzEkac84c=;
-        b=HGWY78217NAWwRbV1imkKz1avzHjGN484j1O8KSz480YaEy3VmUIdmykLePYnY5jAY
-         nLEe/bgkwHdvsl1Mj65PWAN9WQqQX5ycfwMEUjj73gSxU66wsKAf10nKfBpoao7jUsB5
-         tWNqlOfTayh7tI8Du7B5P3Eyc+hsqyFuTrrj6pMe/pLT/mkWw89/GhEGH6vXAgx6Pdya
-         t4jpnJGc6boLX+Fa2GZbM/Nd6uc0mVoj38vdjJsKfzR8NmC22ZSDZIDCEpfbOVwctS5z
-         lDie3P+vMyfy0CGoLguXZU1szYFA76mNfQd+xOHp8AsulieOkm6mg3ivBC61EcTkZBqV
-         jyrQ==
+        bh=K0j1GUZDUHTZyz6OodkfAkKlIJdEvZl5TSnWqqW/Tf8=;
+        b=EeEHlel7UmWlFT7uWGr2SnAkke0wfwcXI5+HVjZ+I6Vo1Ky81YGmTnaIm0QCWTqMe2
+         9FNvfBjr8HHvIlvuisVLzUxn5goJWlnrUFn4ul0aC9XIuJ0SkgINAvWPfiqq2a6xQgt8
+         idI9zrZf6FJqnwRG1NoemlxbU023BTJ1O4IV8QtNTPO1CgBugmsd5YugKN5NGxvxdpJE
+         3w+gUiFKCoxRH6ciNTiE4aJav6DXGrSgCyDsQ6aBdH5xwQkN+ErPFH1PJJ0Box6eihb5
+         BLOPdkKPpI+Fz/kyBNFEuf4TUFcmUUnl413YqxbdEszyRciNPUfkr5rPtRunzp/tA1R0
+         3L8A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693992561; x=1694597361;
+        d=1e100.net; s=20221208; t=1693992720; x=1694597520;
         h=mime-version:user-agent:message-id:in-reply-to:date:references
          :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/RsfULzpF1odV8BlqVly8vHWfWckX8ePw3jzEkac84c=;
-        b=eOg5HM4Rs+1Ap0OX0Bzp42TCKhFfhVVOSfWtpEomvuggqRPanZQmIuo6PZep/xo1jL
-         slgB4aPRfwKRRbChIywGWNBWppPqTtQRt39ajJNTau/v5I7NAP1UcL+JELeQB5JdP7qv
-         38BY1Fwdp5sh9FEuhB8uI3bHOWG4K9mEVqzjCYKPMdzaWQeUvVtdLe2xYMMShis27gac
-         skDa3RDHub0ayo2ZYOLbIsdBqVqkSGfZzin8gX9wVruXtvRNzusFBDdzrS7Nzy3aLPKg
-         47QMWGkFEOWC7yuV4NBy+I6p+4/tjllmZzZRDCcKJEiPHGhihJI8G8L5OGxJodIdXE6V
-         sAhg==
-X-Gm-Message-State: AOJu0YwR+kY9XgT8VQZ49dAESnUBXd4gV6JXjvpw+CILMqHfwH/cu6uP
-        z2CAfhmPB/QZ/ka5odML6Azlke7l1UpkCm0Yvu0=
-X-Google-Smtp-Source: AGHT+IGKaMJSDf8csr0Zu2G/4dDSjwT1H9c5ww+CXkDQ7LrEQU9iFyU8J49LizPWQ/hizsoPTC0mPg==
-X-Received: by 2002:a2e:9cd5:0:b0:2bc:c21d:311f with SMTP id g21-20020a2e9cd5000000b002bcc21d311fmr1561491ljj.52.1693992560399;
-        Wed, 06 Sep 2023 02:29:20 -0700 (PDT)
+        bh=K0j1GUZDUHTZyz6OodkfAkKlIJdEvZl5TSnWqqW/Tf8=;
+        b=hbjqrq/KWnocWfMOTMy4JZWgRwNT5FqiViEDymUL8aGO5XunBdzHCzmUCtFmv+EPhr
+         WIlxx/6CGPGrACVwGD7RoRBWf9XdFop0qCXzYaNLIOBqdCzti7JVKe0SG4XxqtPRZAcp
+         Cqpr5lRl45mi6HhsuB4ndkFIg16idVlk20zh11zDAIoiqquQ3id2bTaD/vcLqb4rN0Vz
+         y8p+/8K/vLv6DaRLX1fxS1z3W5b9tIxyospnBDPvU2jDXBykglPBYU6oA72CZXI5hhpw
+         NgsixvU8UhmjAHD8u5DwhtzbGI0Vsg3BvoftUSD0uJ7O0TXipVgP70fGbW61r0yMGYql
+         42UA==
+X-Gm-Message-State: AOJu0Yz0p+y2AEhww8RdPR5USj+11sG5QwNYR4JDjhyeuoHM+JmVHDaz
+        7gi/WyRAKFPHZJgw0e1JXV/hP+0fq7eX1oUfr5I=
+X-Google-Smtp-Source: AGHT+IFCiHXuSO55+qSuAuYI+tAIFaIk0hNLqcjWr9xssUtrfnTHCAZdwIwDFu9Yj9POG7nv8bEC1A==
+X-Received: by 2002:a2e:9203:0:b0:2b4:6e21:637e with SMTP id k3-20020a2e9203000000b002b46e21637emr1831678ljg.16.1693992719625;
+        Wed, 06 Sep 2023 02:31:59 -0700 (PDT)
 Received: from dev-dsk-pjy-1a-76bc80b3.eu-west-1.amazon.com (54-240-197-231.amazon.com. [54.240.197.231])
-        by smtp.gmail.com with ESMTPSA id t12-20020a7bc3cc000000b003fef19bb55csm19209577wmj.34.2023.09.06.02.29.19
+        by smtp.gmail.com with ESMTPSA id 6-20020a05600c028600b003feea62440bsm19221702wmk.43.2023.09.06.02.31.58
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Wed, 06 Sep 2023 02:29:20 -0700 (PDT)
+        Wed, 06 Sep 2023 02:31:59 -0700 (PDT)
 From:   Puranjay Mohan <puranjay12@gmail.com>
 To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
@@ -65,22 +65,22 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
         bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next 6/8] arm32, bpf: add support for 64 bit
- division instruction
+Subject: Re: [PATCH bpf-next 4/8] arm32, bpf: add support for unconditional
+ bswap instruction
 References: <20230905210621.1711859-1-puranjay12@gmail.com>
-        <20230905210621.1711859-7-puranjay12@gmail.com>
-        <ZPein8oS5egqGwzp@shell.armlinux.org.uk>
-Date:   Wed, 06 Sep 2023 09:29:19 +0000
-In-Reply-To: <ZPein8oS5egqGwzp@shell.armlinux.org.uk> (Russell King's message
-        of "Tue, 5 Sep 2023 22:50:23 +0100")
-Message-ID: <mb61po7if3b0w.fsf@amazon.com>
+        <20230905210621.1711859-5-puranjay12@gmail.com>
+        <ZPeecV807AVEkCJB@shell.armlinux.org.uk>
+Date:   Wed, 06 Sep 2023 09:31:58 +0000
+In-Reply-To: <ZPeecV807AVEkCJB@shell.armlinux.org.uk> (Russell King's message
+        of "Tue, 5 Sep 2023 22:32:33 +0100")
+Message-ID: <mb61pjzt33awh.fsf@amazon.com>
 User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.2 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -89,68 +89,28 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On Tue, Sep 05 2023, Russell King (Oracle) wrote:
 
-> On Tue, Sep 05, 2023 at 09:06:19PM +0000, Puranjay Mohan wrote:
->> +cont:
->> +
->> +	/* Call appropriate function */
->> +	if (sign)
->> +		emit_mov_i(ARM_IP, op == BPF_DIV ? (u32)jit_sdiv64 : (u32)jit_smod64, ctx);
->> +	else
->> +		emit_mov_i(ARM_IP, op == BPF_DIV ? (u32)jit_udiv64 : (u32)jit_mod64, ctx);
+> On Tue, Sep 05, 2023 at 09:06:17PM +0000, Puranjay Mohan wrote:
+>> The cpuv4 added a new unconditional bswap instruction with following
+>> behaviour:
+>> 
+>> BPF_ALU64 | BPF_TO_LE | BPF_END with imm = 16/32/64 means:
+>> dst = bswap16(dst)
+>> dst = bswap32(dst)
+>> dst = bswap64(dst)
+>> 
+>> As we already support converting to big-endian from little-endian we can
+>> use the same for unconditional bswap.
+>> Since ARM32 is always little-endian, just treat the unconditional scenario
 >
-> Same comment as the previous patch here.
-
-Will fix both in next version.
-
+> This is not true. Arm32 BPF is disabled for BE32 but not for BE8. It's
+> entirely possible to build a kernel using BE8 for ARMv7 and have the
+> BPF JIT enabled:
 >
->> +
->> +	emit_blx_r(ARM_IP, ctx);
->> +
->> +	/* Save return value */
->> +	if (rd[1] != ARM_R0) {
->> +		emit(ARM_MOV_R(rd[0], ARM_R1), ctx);
->> +		emit(ARM_MOV_R(rd[1], ARM_R0), ctx);
->> +	}
->> +
->> +	/* Recover {R1, R0} from stack if it is not Rd */
->> +	if (rd[1] != ARM_R0)
->> +		emit(ARM_POP(BIT(ARM_R0) | BIT(ARM_R1)), ctx);
->> +	else
->> +		emit(ARM_ADD_I(ARM_SP, ARM_SP, 8), ctx);
->> +
->> +	/* Recover {R3, R2} from stack if it is not Rd */
->> +	if (rd[1] != ARM_R2)
->> +		emit(ARM_POP(BIT(ARM_R2) | BIT(ARM_R3)), ctx);
->> +	else
->> +		emit(ARM_ADD_I(ARM_SP, ARM_SP, 8), ctx);
+>         select HAVE_EBPF_JIT if !CPU_ENDIAN_BE32
 >
-> 	if (rd[1] != ARM_R0) {
-> 		emit(ARM_POP(BIT(ARM_R0) | BIT(ARM_R1)), ctx);
-> 		emit(ARM_ADD_I(ARM_SP, ARM_SP, 8), ctx);
-> 	} else if (rd[1] != ARM_R2) {
-> 		emit(ARM_ADD_I(ARM_SP, ARM_SP, 8), ctx);
-> 		emit(ARM_POP(BIT(ARM_R2) | BIT(ARM_R3)), ctx);
-> 	} else {
-> 		emit(ARM_ADD_I(ARM_SP, ARM_SP, 16), ctx);
-> 	}
->
-> Hmm?
+> So it's not true to say "Since ARM32 is always little-endian".
 
-Actually, there can also be a situation where rd[1] != ARM_R0 && rd[1] != ARM_R2,
-so should I do it like:
-
- 	if (rd[1] != ARM_R0 && rd[1] != ARM_R2) {
- 		emit(ARM_POP(BIT(ARM_R0) | BIT(ARM_R1)), ctx);
- 		emit(ARM_POP(BIT(ARM_R2) | BIT(ARM_R3)), ctx);      
- 	} else if (rd[1] != ARM_R0) {
- 		emit(ARM_POP(BIT(ARM_R0) | BIT(ARM_R1)), ctx);
- 		emit(ARM_ADD_I(ARM_SP, ARM_SP, 8), ctx);
- 	} else if (rd[1] != ARM_R2) {
- 		emit(ARM_ADD_I(ARM_SP, ARM_SP, 8), ctx);
- 		emit(ARM_POP(BIT(ARM_R2) | BIT(ARM_R3)), ctx);
- 	} else {
- 		emit(ARM_ADD_I(ARM_SP, ARM_SP, 16), ctx);
- 	}
+Sure, I will change the commit message in next version.
 
 Thanks,
 Puranjay
