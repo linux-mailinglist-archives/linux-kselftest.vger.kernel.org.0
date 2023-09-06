@@ -2,63 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DA21793584
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Sep 2023 08:45:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D87B9793583
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Sep 2023 08:45:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238666AbjIFGp7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        id S229913AbjIFGp7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
         Wed, 6 Sep 2023 02:45:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49922 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234292AbjIFGp7 (ORCPT
+        with ESMTP id S238666AbjIFGp7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Wed, 6 Sep 2023 02:45:59 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BEEAE52
-        for <linux-kselftest@vger.kernel.org>; Tue,  5 Sep 2023 23:45:52 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-4005f0a6c2bso41005e9.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 05 Sep 2023 23:45:51 -0700 (PDT)
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCF27E46
+        for <linux-kselftest@vger.kernel.org>; Tue,  5 Sep 2023 23:45:54 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-402c80b71ecso58955e9.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 05 Sep 2023 23:45:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1693982750; x=1694587550; darn=vger.kernel.org;
+        d=google.com; s=20221208; t=1693982753; x=1694587553; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=WrrxV9K8gRq8tFtzR8KUHE52vlpgIf+HZCmiNf37goI=;
-        b=gkHmJGKDwbQsxyPzts5f8uWcEYrDZRmgKxXyMKA+9J+KYODL3oB42JczsXJwb9XNkN
-         q+imJK9utfa+3wJbwpkfSB95sX6mQ5e1i3AsvpTXdO2Z1EVXA3iC8QpTDcdpHOfrVaYX
-         cOAmtYIqeozAST33/qd6tGU17ETzVViJVQrXJZBLygUVEH6X/Jk3pQpoAL4z1HmrpU0W
-         IRXXQSNOzTInzd9netjvixDngwru99vvZvyaCIzrp+UFTSVIcHlF6+1LHy//WAsDY0Kz
-         T0Rm1oSGkbLbFuAFentSt0PpLE2l/VfT2MZJy+cX1t6HQBJNc2KgFN/+cosK0C/U0AjX
-         Kljw==
+        bh=h9PAKKLi2CB500G1Eyz+PHdxKt6T5irV+0NgGfTKtlU=;
+        b=xaH8kLo9Ox4WrSjfkymeZ/vkiLoHxEXp7JWafbAXeQtrgj0NCmSSeFrNe6aQbS5NSJ
+         TMI0Ur7oyHiBuTifZFEOrqgYkqfUI7CpOWaSvg63x4ClInWm3/gQEzm2dGtkB9ueFajZ
+         n152EJ/iuWTTKBAzYdlhpRNAHhNs0XGNjD98sArcPqbnih4zXq+JoetjCmXDBfxnXR26
+         oP1haB7n5JUjYxXPQbQAYsJwL85V5OdfAFz6GMnPlVpxRfe5CMHeuut8yZLuT0ItSkV7
+         2hdcMFr0hubnq+bu82poO2IDGSrZzUFvdLCystpHPJHoCe2fg/8cySkjWg7yBv4lPZLH
+         0/9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693982750; x=1694587550;
+        d=1e100.net; s=20221208; t=1693982753; x=1694587553;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=WrrxV9K8gRq8tFtzR8KUHE52vlpgIf+HZCmiNf37goI=;
-        b=fPM1r38lF1JnmdY+VMGbp1hX7dtOJd1+01YUfPQaEv8TmHK74pefL8fbBbBmxDrsoi
-         XjyVEfMWliM93s0b3KBTaRqvatnqenTKNRuS+8eamS9Y3LW/bX7P2NnwGbuLOWU9eUFR
-         UBGJqL07doFNsEWl+HhqzgOJ7ctxuN6+0wvEh4/IQmfrf4zWf92U4r594yZgOk1eXurk
-         FQImjArOp3JsNzkOW/XehQ+7hdDLs5A/vEfTw5KvgKFK4puIoJ8dq/FzER2KqqCFqrpA
-         VaxE4nY6VrNWfre74z3Ny6romTBCsJn6MsURX+QgA3unK1hwfrbyQPLvV4xvKy6w3MfQ
-         CaEQ==
-X-Gm-Message-State: AOJu0YwWaVUThr7ULZYDtJN9LfI8tTX3P1UGW/ejKgJGpmGJKn135iBE
-        GSkWquJpG0GYLA0TwTpM0L5QCxNDQ2HrZ3FaHh/Tow==
-X-Google-Smtp-Source: AGHT+IFJ7zjbOIVDpY7YVsBQrCrd8MM6PXqJj9yMxGK+8Fz2v85IWPUU2LLFKmvJGCDttOqZLSPZysvd7qsTOAGW0cs=
-X-Received: by 2002:a05:600c:1c11:b0:3f7:e4d8:2569 with SMTP id
- j17-20020a05600c1c1100b003f7e4d82569mr57331wms.5.1693982750352; Tue, 05 Sep
- 2023 23:45:50 -0700 (PDT)
+        bh=h9PAKKLi2CB500G1Eyz+PHdxKt6T5irV+0NgGfTKtlU=;
+        b=gV7zbvYlP1uex16zV/hXk5QVMZuDueD6UFAli6mTff1PFSzhP3DexWTCwgEdBA3jDs
+         A51ERBTevH3UH7oQYWFijxb+U7LMjbShWqRytr777pcB5uvJXRwciaVfwZnXHwIYuMJU
+         AAFg2Nxqn3/9rZEEvmLXuvLQvEllJBm8/AA1c0WSJsiAJT7eQ7Ywme8Q1CDh1TzxTLSX
+         BsQw1/DHByOtilPGF04SJQfnSypz3/QdtSnFJC/ufK3BZ6NgrxGRzmVsM/H0WozniFA+
+         QPZe8g97mdsZaBoKSReR0PVUBYZLbGbtvImN0CRQy/d3WM3gs1Hjj57k8ShjwK0PGkVc
+         CgMw==
+X-Gm-Message-State: AOJu0YyPlF67dRnmtd9KpqgTwZ2S+U2ZOUwq300N9yI/wWa92tcSXP+k
+        p8/SdmsCWmjxrq6lhCF9aN3RgUrubg3zpd3lus5sCQ==
+X-Google-Smtp-Source: AGHT+IGgXuBxFKPhfWmVrO2BEImYVwdNvBLk2jzMyVMu/kSccgmbD88Ttz7EIM7dimtkgJw1ZXB36rhu7O55nxibxuM=
+X-Received: by 2002:a05:600c:4fd1:b0:3fe:ef25:8b86 with SMTP id
+ o17-20020a05600c4fd100b003feef258b86mr87281wmq.4.1693982753369; Tue, 05 Sep
+ 2023 23:45:53 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230904132139.103140-1-benjamin@sipsolutions.net>
-In-Reply-To: <20230904132139.103140-1-benjamin@sipsolutions.net>
+References: <20230904132139.103140-1-benjamin@sipsolutions.net> <20230904132139.103140-2-benjamin@sipsolutions.net>
+In-Reply-To: <20230904132139.103140-2-benjamin@sipsolutions.net>
 From:   David Gow <davidgow@google.com>
-Date:   Wed, 6 Sep 2023 14:45:36 +0800
-Message-ID: <CABVgOSkvVX3D-fgmO-w6eJm7fxQL1T-tVJ6oMVQVhEn98Bmdqw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kunit: add parameter generation macro using
- description from array
+Date:   Wed, 6 Sep 2023 14:45:41 +0800
+Message-ID: <CABVgOS=4vrEkaDe9LNLqnPoqi3Vg_FJZVj7WMMik42oBZpcS2g@mail.gmail.com>
+Subject: Re: [PATCH 2/2] kunit: add a convenience allocation wrapper for SKBs
 To:     benjamin@sipsolutions.net
 Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
         Benjamin Berg <benjamin.berg@intel.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000001df6c30604ab18c5"
+        boundary="00000000000049411f0604ab1883"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -70,113 +69,126 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---0000000000001df6c30604ab18c5
+--00000000000049411f0604ab1883
 Content-Type: text/plain; charset="UTF-8"
 
 On Mon, 4 Sept 2023 at 21:22, <benjamin@sipsolutions.net> wrote:
 >
 > From: Benjamin Berg <benjamin.berg@intel.com>
 >
-> The existing KUNIT_ARRAY_PARAM macro requires a separate function to
-> get the description. However, in a lot of cases the description can
-> just be copied directly from the array. Add a second macro that
-> avoids having to write a static function just for a single strscpy.
+> Add a simple convenience helper to allocate and zero fill an SKB for the
+> use by a kunit test. Also provide a way to free it again in case that
+> may be desirable.
+>
+> This simply mirrors the kunit_kmalloc API.
 >
 > Signed-off-by: Benjamin Berg <benjamin.berg@intel.com>
 > ---
 
-Looks good to me: this will be much more convenient. The actual
-implementation looks spot on, just a small comment about the
-documentation change.
+This _looks_ pretty good to me, but again, I'd like to see something
+use it, be it a simple test for these helpers, or a real-world test
+which takes advantage of them. Particularly since I've not had to use
+sk_buffs before, personally, so I'd love to see it actually working.
 
-It may make sense to write some tests and/or some follow-up patches to
-existing tests to use this macro, too. I'm just a little wary of
-introducing something totally unused. (I'm happy to do these myself if
-you don't have time, though.)
-
-Regardless, with the documentation fix, this is:
-Reviewed-by: David Gow <davidgow@google.com>
+Otherwise, this seems okay to me. I'll hold off a final judgement
+until I've had a chance to actually run it, but I've left a few minor
+notes (mostly to myself) below.
 
 Cheers,
 -- David
 
->  Documentation/dev-tools/kunit/usage.rst |  7 ++++---
->  include/kunit/test.h                    | 19 +++++++++++++++++++
->  2 files changed, 23 insertions(+), 3 deletions(-)
+>  include/kunit/skbuff.h | 51 ++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 51 insertions(+)
+>  create mode 100644 include/kunit/skbuff.h
 >
-> diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
-> index c27e1646ecd9..fe8c28d66dfe 100644
-> --- a/Documentation/dev-tools/kunit/usage.rst
-> +++ b/Documentation/dev-tools/kunit/usage.rst
-> @@ -571,8 +571,9 @@ By reusing the same ``cases`` array from above, we can write the test as a
->         {
->                 strcpy(desc, t->str);
->         }
-> -       // Creates `sha1_gen_params()` to iterate over `cases`.
-> -       KUNIT_ARRAY_PARAM(sha1, cases, case_to_desc);
-> +       // Creates `sha1_gen_params()` to iterate over `cases` while using
-> +       // the struct member `str` for the case description.
-> +       KUNIT_ARRAY_PARAM_DESC(sha1, cases, str);
-
-I'd suggest either getting rid of the case_to_desc function totally
-here, or show both the manual KUNIT_ARRAY_PARAM() example, and then
-point out explicitly that KUNIT_ARRAY_PARAM_DESC() can replace it.
-
-Otherwise we end up with a vestigial function which doesn't do
-anything and is confusing.
-
-
->
->         // Looks no different from a normal test.
->         static void sha1_test(struct kunit *test)
-> @@ -588,7 +589,7 @@ By reusing the same ``cases`` array from above, we can write the test as a
->         }
->
->         // Instead of KUNIT_CASE, we use KUNIT_CASE_PARAM and pass in the
-> -       // function declared by KUNIT_ARRAY_PARAM.
-> +       // function declared by KUNIT_ARRAY_PARAM or KUNIT_ARRAY_PARAM_DESC.
->         static struct kunit_case sha1_test_cases[] = {
->                 KUNIT_CASE_PARAM(sha1_test, sha1_gen_params),
->                 {}
-> diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index 68ff01aee244..f60d11e41855 100644
-> --- a/include/kunit/test.h
-> +++ b/include/kunit/test.h
-> @@ -1516,6 +1516,25 @@ do {                                                                            \
->                 return NULL;                                                                    \
->         }
->
-> +/**
-> + * KUNIT_ARRAY_PARAM_DESC() - Define test parameter generator from an array.
-> + * @name:  prefix for the test parameter generator function.
-> + * @array: array of test parameters.
-> + * @desc_member: structure member from array element to use as description
+> diff --git a/include/kunit/skbuff.h b/include/kunit/skbuff.h
+> new file mode 100644
+> index 000000000000..947fc8b5b48f
+> --- /dev/null
+> +++ b/include/kunit/skbuff.h
+> @@ -0,0 +1,51 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Base unit test (KUnit) API.
 > + *
-> + * Define function @name_gen_params which uses @array to generate parameters.
+> + * Copyright (C) 2023 Intel Corporation
 > + */
-> +#define KUNIT_ARRAY_PARAM_DESC(name, array, desc_member)                                       \
-> +       static const void *name##_gen_params(const void *prev, char *desc)                      \
-> +       {                                                                                       \
-> +               typeof((array)[0]) *__next = prev ? ((typeof(__next)) prev) + 1 : (array);      \
-> +               if (__next - (array) < ARRAY_SIZE((array))) {                                   \
-> +                       strscpy(desc, __next->desc_member, KUNIT_PARAM_DESC_SIZE);              \
-> +                       return __next;                                                          \
-> +               }                                                                               \
-> +               return NULL;                                                                    \
-> +       }
 > +
->  // TODO(dlatypov@google.com): consider eventually migrating users to explicitly
->  // include resource.h themselves if they need it.
->  #include <kunit/resource.h>
+> +#ifndef _KUNIT_SKBUFF_H
+> +#define _KUNIT_SKBUFF_H
+
+Is it worth us hiding this behind #if IS_ENABLED(CONFIG_KUNIT)? I
+suspect not (we haven't bothered for resource.h, and only really do
+this for hooks/stubs).
+
+> +
+> +#include <kunit/resource.h>
+> +#include <linux/skbuff.h>
+> +
+> +/**
+> + * kunit_zalloc_skb() - Allocate and initialize a resource managed skb.
+> + * @test: The test case to which the skb belongs
+> + * @len: size to allocate
+> + *
+> + * Allocate a new struct sk_buff with GFP_KERNEL, zero fill the give length
+> + * and add it as a resource to the kunit test for automatic cleanup.
+> + *
+> + * Returns: newly allocated SKB, or %NULL on error
+> + */
+> +static inline struct sk_buff *kunit_zalloc_skb(struct kunit *test, int len,
+> +                                              gfp_t gfp)
+> +{
+> +       struct sk_buff *res = alloc_skb(len, GFP_KERNEL);
+> +
+> +       if (!res || skb_pad(res, len))
+> +               return NULL;
+
+From a quick look, skb_pad() will free 'res' if it fails? If so, this
+is fine, if not we may need to move the add_action call below to
+prevent a leak.
+
+> +
+> +       if (kunit_add_action_or_reset(test, (kunit_action_t *)kfree_skb, res))
+> +               return NULL;
+
+Just be warned that, while casting to kunit_action_t* is fine by me,
+some versions of clang are warning on any function pointer casts. So
+you can expect some whinge-y automatic emails from the kernel test
+robot and similar.
+
+> +
+> +       return res;
+> +}
+> +
+> +/**
+> + * kunit_kfree_skb() - Like kfree_skb except for allocations managed by KUnit.
+> + * @test: The test case to which the resource belongs.
+> + * @skb: The SKB to free.
+> + */
+> +static inline void kunit_kfree_skb(struct kunit *test, struct sk_buff *skb)
+> +{
+> +       if (!skb)
+> +               return;
+> +
+> +       kunit_release_action(test, (kunit_action_t *)kfree_skb, (void *)skb);
+
+As above, note that the kunit_action_t cast may cause warnings on some
+versions of clang. I'm personally okay with it, but if you want to
+write a wrapper to avoid it, that's fine by me, too.
+
+
+> +}
+> +
+> +#endif /* _KUNIT_SKBUFF_H */
 > --
 > 2.41.0
 >
 > --
 > You received this message because you are subscribed to the Google Groups "KUnit Development" group.
 > To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20230904132139.103140-1-benjamin%40sipsolutions.net.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20230904132139.103140-2-benjamin%40sipsolutions.net.
 
---0000000000001df6c30604ab18c5
+--00000000000049411f0604ab1883
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -243,14 +255,14 @@ impZAng7ccvvK09K3ZuhwTIxJMsPXCZYsrXWORTw5sczRAP6XvKbPBJnsJoSTe5dFBPBHOQJOGhU
 qWfEfWnWMJPF3LxSGLpLFQXO3RwQqmxv08avwXfVPouh1xuB3FX7rpDabT8YDhu9JgIZkLEKko7L
 yQt6zWwng7k8YF/jGbiAta6VMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBw
-9x327beZmAvfo3gxtFhIh1ldyK2SdaV1/OKVSUZqxzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzA5MDYwNjQ1NTBaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDc
+0YNlb6ibTW2vUtzuA6iSSieTb4FbJ24w2aEYvDUzyzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzA5MDYwNjQ1NTNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAce2L7mjmP2pKd0MTxEGB
-1rPomLxciJ/cKTaFci1ZkKDrd0OQaqe3fAA9oJofPdM9n0rkOc5GTEVSSlTz+47BcKrluGeHfClK
-3kvySP4iIGJjiqEONY+0wdryHLwT2VrRC60Lzw9FrYZdV8Hivj34CnBiML3IsCu4B8zO/3fBvcdl
-vC5jNonH1estKCuilCn0ntLjYNkvIx8Oj5I/s9lZngG3oGqurtl8Qa5fCULaG/YGnmPiiRbRDUIu
-UOyW6pfQznEtO2EIqzSad0L1yCW1atJwMfRutjo5Em0kTLifJAFtsf4qpLuyHUSRx/elGWVRKXaH
-EAkUosECqnp/6+6Wbg==
---0000000000001df6c30604ab18c5--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAME7jKlH0JCiKHA9pfGBp
+RRJLQJHvGqkCM+N8djg4U+I78/OsVGUiXkbz7kMdlFRfpd5sZ4dXaFEQE2PcwnRgvhmd86Z9ALST
+evcdJKZnk1nNPJ81pQFTIxUT65tLTg7UpSBZCHIuEYFPgA8NbgwcwDvv8XUMhupVbuoYeSY5zL48
+T4/kio2gZ2VQzUFjZ0uSuOxD3d4g8HKxjps4JSWr0maqATxnVhHuRdrmd9gyvNsY1es0FGFgLZYV
+vL6z0wjquXyqFzKediSHAvl5UtfulpOWMKBAVwsgkwNRmQF87AdbFjUmxNgO+E0uyRGwS53czfYf
+ihg2W8DopA5MVgcPqw==
+--00000000000049411f0604ab1883--
