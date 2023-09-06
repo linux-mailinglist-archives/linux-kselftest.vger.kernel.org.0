@@ -2,215 +2,151 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDFB3793983
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Sep 2023 12:08:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7017479398C
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Sep 2023 12:10:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233603AbjIFKIM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 6 Sep 2023 06:08:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42938 "EHLO
+        id S232405AbjIFKKm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 6 Sep 2023 06:10:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbjIFKIM (ORCPT
+        with ESMTP id S229947AbjIFKKl (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 6 Sep 2023 06:08:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E17CF1981
-        for <linux-kselftest@vger.kernel.org>; Wed,  6 Sep 2023 03:07:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1693994826;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to; bh=/RQY8EhQSYV947okEcMf9SCXpiOLyQ4TKDc7ZGfngFs=;
-        b=NSyp8QmzmcFH/yw2e/HBg0ACV/uqCLoK4dHVvRMuPnsiVGaSkyVhJ5iCG5LaQRYJeea+gc
-        1Ana9zULx1DniKQ1DJuGMpWq7NMndCHfXtQ5V3T+0/p4Gh0wsPlDe7Y64nBDgg0eeasBlw
-        FDWLbhZIf/6eH7qsyi3s1KSAAN7Jc5I=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-370-_cT4XLm5OqOtsluE489fYw-1; Wed, 06 Sep 2023 06:07:04 -0400
-X-MC-Unique: _cT4XLm5OqOtsluE489fYw-1
-Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-6553ab83954so33380066d6.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 06 Sep 2023 03:07:03 -0700 (PDT)
+        Wed, 6 Sep 2023 06:10:41 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 051BA9E;
+        Wed,  6 Sep 2023 03:10:38 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2bceca8a41aso53487381fa.0;
+        Wed, 06 Sep 2023 03:10:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1693995036; x=1694599836; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EfOqaeV+KknayCO8Oeiwloxt+zMetEN9D2laP149Llc=;
+        b=eX7iAaVjLf53GweOplBPQovNC4DitqXdyaFSGS7sS4KLCaHEsY47HRom2wt4P8QvU9
+         qF+Pv+myq4l5Etj6ij4jBQL/VbWh3uo+S2UOVwdhuVCKXu4EPs8rn1L3KNPJoRHfSVjS
+         LLbfZ7NhgiAZ/h5yq/KMVTwMJMlC2eLBbyJXXLRM4LdgK1Z6Lb2KOvam0NMSDVqki7dn
+         hn8GzHIMtIr6NUXSHuG+IZCTM+E2LXCM3tfA7SG9WEWnUdtAT8+C8Jp7wN/L9uIUuMND
+         jNf3nlHjacG2MLgTbEnl41pcFxaNnXGejI3yMOdF8Ub5zi9mEGBjG1V15d9VS4NEU8sE
+         bH/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1693994823; x=1694599623;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/RQY8EhQSYV947okEcMf9SCXpiOLyQ4TKDc7ZGfngFs=;
-        b=cqKCQL9gplaOpYUzgSapPS/YKzXVn+/kG5fDFCiv9HtSOM497LqL/BtdHnoPlQ6Ep+
-         /QWnQJiYeJ33QlTWDfYD40kKFbc2qSHc37BrpN/3N2Rx+4QH5BPncp7gdh+fsK+whZpZ
-         LaLeerxS3oddV34axGWloHU2jM9yYQKkUqr/Jo1B0ykpHQMOgAm5HTnPMTyfjnD5p5kn
-         x4meamBasDIjIQJuQYLdIfLIzELBEVr3PQK07KxyzYLP0ASMJ0WzstPWrbH/8tgT8Tjt
-         bQPq6NmHbXbNS7VaEgjjAW+Q/Tbzjyg7ZLStMkoTwr/hhzmi0H/EwuM2/JwnmalRQgU4
-         Chbw==
-X-Gm-Message-State: AOJu0YwZT7LtD8V9x5ma4UbleIyORqYDnD2ic3ovzs59hf0ygA2FfzFX
-        2SElblHQVk1tLe1+8NJ5wbrITv0BanPWkdwaf7bRE+D16PqcWenMhH7oJtYHdVd1XyNzmWmzZ7V
-        0ScQcnFqw8G5y7lldEQOplOvtWEMj
-X-Received: by 2002:a05:620a:450e:b0:767:d0c:9ec1 with SMTP id t14-20020a05620a450e00b007670d0c9ec1mr18790043qkp.59.1693994823231;
-        Wed, 06 Sep 2023 03:07:03 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IER6lA3GZ2HJx02uZDFzEvMD289KltLM2voUWuDrrPLQUuyA++SmLKTw5IhFvw4+QV3T8+bMw==
-X-Received: by 2002:a05:620a:450e:b0:767:d0c:9ec1 with SMTP id t14-20020a05620a450e00b007670d0c9ec1mr18790022qkp.59.1693994822882;
-        Wed, 06 Sep 2023 03:07:02 -0700 (PDT)
-Received: from localhost ([2a01:e0a:b25:f902::ff])
-        by smtp.gmail.com with ESMTPSA id oo20-20020a05620a531400b00767f14f5856sm4822652qkn.117.2023.09.06.03.07.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Sep 2023 03:07:02 -0700 (PDT)
-Date:   Wed, 6 Sep 2023 12:07:00 +0200
-From:   Maxime Ripard <mripard@redhat.com>
-To:     Thomas =?utf-8?Q?Hellstr=C3=B6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>
-Cc:     intel-xe@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Subject: Re: [Intel-xe] [PATCH 2/3] drm/tests/drm_exec: Add a test for object
- freeing within drm_exec_fini()
-Message-ID: <b5eaqvccx7iitverhenjozczpvgrehcznl2k2c43t6qlnn4sf4@wzkzsntne5mt>
+        d=1e100.net; s=20221208; t=1693995036; x=1694599836;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EfOqaeV+KknayCO8Oeiwloxt+zMetEN9D2laP149Llc=;
+        b=MVs+5RAYL/CJF+ph25mnyWqHMj7ADCDv+XknKKb3NFTd57YPceJGVl7WW+NbU7ONc8
+         w0wm5MGzIRk2G2e83EEUZMb/0UUhMBPtscsn2LjFzfE+m/7YkW9ts4Qnd/USqmaPkjQ3
+         BUEOHIp9a7+CNLVmdKUO9n6aifMz2c+/q5+nngL7MYlwbvoF7J71ysVVI/hAeyb2s2b5
+         qtavY6j0khPpnHIE+81oJY4L25YZZpdOf4DCqxvkNMTy5sWRNrBAWrdkG10QMGp3+kpZ
+         ED+APKOLyJJGGHs0XY7IUEnNgreglj8c4K1sprY22cOdVi6zDoyQwEBdiT/Pk5Syd94o
+         EOzQ==
+X-Gm-Message-State: AOJu0YxQilSnoIQMtBo5B9xXlgEl6W+szWwxgrpOD4mNorqB4BY8Mfwk
+        ZLAJqvQBjDYlXhbTe2q/BPYmvlZLwyk61/TU3no=
+X-Google-Smtp-Source: AGHT+IFgpGZUTmfvyaicrKry99f2uX/eh3DtKB8c/qKcmnkcHz7uwZYtn0qD9L1QTcGEetIJKq9wCp8WNJgZPbJB/RM=
+X-Received: by 2002:a05:651c:104a:b0:2bd:180d:67b1 with SMTP id
+ x10-20020a05651c104a00b002bd180d67b1mr1816321ljm.51.1693995035890; Wed, 06
+ Sep 2023 03:10:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="b3p2wfg2aaam75px"
-Content-Disposition: inline
-In-Reply-To: <5d25d6ea-3a96-3be1-3742-7e3c1b417d14@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1693659382.git.haibo1.xu@intel.com> <b6ef1b031e3a581f481cf19a26623388163444b4.1693659382.git.haibo1.xu@intel.com>
+ <20230904-aa8b0d8d23d391586686038a@orel>
+In-Reply-To: <20230904-aa8b0d8d23d391586686038a@orel>
+From:   Haibo Xu <xiaobo55x@gmail.com>
+Date:   Wed, 6 Sep 2023 18:10:24 +0800
+Message-ID: <CAJve8ok5cU+h1K+WJ+aDpB+u+PBo8XosUyyVbMGy-xR0XiWFdw@mail.gmail.com>
+Subject: Re: [PATCH v2 7/8] KVM: riscv: selftest: Change vcpu_has_ext to a
+ common function
+To:     Andrew Jones <ajones@ventanamicro.com>
+Cc:     Haibo Xu <haibo1.xu@intel.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Guo Ren <guoren@kernel.org>,
+        Daniel Henrique Barboza <dbarboza@ventanamicro.com>,
+        wchen <waylingii@gmail.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Vishal Annapurve <vannapurve@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Aaron Lewis <aaronlewis@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Mingwei Zhang <mizhang@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Lei Wang <lei4.wang@intel.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Like Xu <likexu@tencent.com>, Peter Gonda <pgonda@google.com>,
+        Thomas Huth <thuth@redhat.com>,
+        =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <philmd@linaro.org>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Michal Luczaj <mhal@rbox.co>, Paul Durrant <paul@xen.org>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvm-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Mon, Sep 4, 2023 at 10:04=E2=80=AFPM Andrew Jones <ajones@ventanamicro.c=
+om> wrote:
+>
+> On Sat, Sep 02, 2023 at 08:59:29PM +0800, Haibo Xu wrote:
+> > diff --git a/tools/testing/selftests/kvm/riscv/get-reg-list.c b/tools/t=
+esting/selftests/kvm/riscv/get-reg-list.c
+> > index d8ecacd03ecf..c4028bf32e3f 100644
+> > --- a/tools/testing/selftests/kvm/riscv/get-reg-list.c
+> > +++ b/tools/testing/selftests/kvm/riscv/get-reg-list.c
+> > @@ -44,20 +44,6 @@ bool check_reject_set(int err)
+> >       return err =3D=3D EINVAL;
+> >  }
+> >
+> > -static inline bool vcpu_has_ext(struct kvm_vcpu *vcpu, int ext)
+> > -{
+> > -     int ret;
+> > -     unsigned long value;
+> > -
+> > -     ret =3D __vcpu_get_reg(vcpu, RISCV_ISA_EXT_REG(ext), &value);
+> > -     if (ret) {
+> > -             printf("Failed to get ext %d", ext);
+> > -             return false;
+> > -     }
+> > -
+> > -     return !!value;
+>
+> get-reg-list will now assert on get-reg when an extension isn't present,
+> rather than failing the __TEST_REQUIRE(), which would do a skip instead.
+> We need both the return false version and the assert version.
+>
 
---b3p2wfg2aaam75px
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Ok, Will keep this one for get-reg-list and add another one for
+arch-timer specific usage.
 
-On Tue, Sep 05, 2023 at 03:42:58PM +0200, Thomas Hellstr=F6m wrote:
-> Hi, Maxime
->=20
-> On 9/5/23 15:16, Maxime Ripard wrote:
-> > On Tue, Sep 05, 2023 at 02:32:38PM +0200, Thomas Hellstr=F6m wrote:
-> > > Hi,
-> > >=20
-> > > On 9/5/23 14:05, Maxime Ripard wrote:
-> > > > Hi,
-> > > >=20
-> > > > On Tue, Sep 05, 2023 at 10:58:31AM +0200, Thomas Hellstr=F6m wrote:
-> > > > > Check that object freeing from within drm_exec_fini() works as ex=
-pected
-> > > > > and doesn't generate any warnings.
-> > > > >=20
-> > > > > Cc: Christian K=F6nig <christian.koenig@amd.com>
-> > > > > Cc: dri-devel@lists.freedesktop.org
-> > > > > Signed-off-by: Thomas Hellstr=F6m <thomas.hellstrom@linux.intel.c=
-om>
-> > > > > ---
-> > > > >    drivers/gpu/drm/tests/drm_exec_test.c | 47 +++++++++++++++++++=
-++++++++
-> > > > >    1 file changed, 47 insertions(+)
-> > > > >=20
-> > > > > diff --git a/drivers/gpu/drm/tests/drm_exec_test.c b/drivers/gpu/=
-drm/tests/drm_exec_test.c
-> > > > > index 563949d777dd..294c25f49cc7 100644
-> > > > > --- a/drivers/gpu/drm/tests/drm_exec_test.c
-> > > > > +++ b/drivers/gpu/drm/tests/drm_exec_test.c
-> > > > > @@ -170,6 +170,52 @@ static void test_prepare_array(struct kunit =
-*test)
-> > > > >    	drm_gem_private_object_fini(&gobj2);
-> > > > >    }
-> > > > > +static const struct drm_gem_object_funcs put_funcs =3D {
-> > > > > +	.free =3D (void *)kfree,
-> > > > > +};
-> > > > > +
-> > > > > +/*
-> > > > > + * Check that freeing objects from within drm_exec_fini()
-> > > > > + * behaves as expected.
-> > > > > + */
-> > > > > +static void test_early_put(struct kunit *test)
-> > > > > +{
-> > > > > +	struct drm_exec_priv *priv =3D test->priv;
-> > > > > +	struct drm_gem_object *gobj1;
-> > > > > +	struct drm_gem_object *gobj2;
-> > > > > +	struct drm_gem_object *array[2];
-> > > > > +	struct drm_exec exec;
-> > > > > +	int ret;
-> > > > > +
-> > > > > +	gobj1 =3D kzalloc(sizeof(*gobj1), GFP_KERNEL);
-> > > > > +	KUNIT_EXPECT_NOT_ERR_OR_NULL(test, gobj1);
-> > > > > +	if (!gobj1)
-> > > > > +		return;
-> > > > > +
-> > > > > +	gobj2 =3D kzalloc(sizeof(*gobj2), GFP_KERNEL);
-> > > > > +	KUNIT_EXPECT_NOT_ERR_OR_NULL(test, gobj2);
-> > > > > +	if (!gobj2) {
-> > > > > +		kfree(gobj1);
-> > > > > +		return;
-> > > > > +	}
-> > > > > +
-> > > > > +	gobj1->funcs =3D &put_funcs;
-> > > > > +	gobj2->funcs =3D &put_funcs;
-> > > > > +	array[0] =3D gobj1;
-> > > > > +	array[1] =3D gobj2;
-> > > > > +	drm_gem_private_object_init(priv->drm, gobj1, PAGE_SIZE);
-> > > > > +	drm_gem_private_object_init(priv->drm, gobj2, PAGE_SIZE);
-> > > > > +
-> > > > > +	drm_exec_init(&exec, DRM_EXEC_INTERRUPTIBLE_WAIT);
-> > > > > +	drm_exec_until_all_locked(&exec)
-> > > > > +		ret =3D drm_exec_prepare_array(&exec, array, ARRAY_SIZE(array),
-> > > > > +					     1);
-> > > > > +	KUNIT_EXPECT_EQ(test, ret, 0);
-> > > > > +	drm_gem_object_put(gobj1);
-> > > > > +	drm_gem_object_put(gobj2);
-> > > > > +	drm_exec_fini(&exec);
-> > > > It doesn't look like you actually check that "freeing objects from
-> > > > within drm_exec_fini() behaves as expected." What is the expectation
-> > > > here, and how is it checked?
-> > > Hm. Good question, I've been manually checking dmesg for lockdep spla=
-ts. Is
-> > > there a way to automate that?
-> > I'm not familiar with the drm_exec API, but judging by the code I'd
-> > assume you want to check that gobj1 and gobj2 are actually freed using
-> > kfree?
->=20
-> Actually not. What's important here is that the call to drm_exec_fini(),
-> which puts the last references to gobj1 and gobj2 doesn't trigger any
-> lockdep splats, like the one in the commit message of patch 3/3. So to ma=
-ke
-> more sense, the test could perhaps be conditioned on
-> CONFIG_DEBUG_LOCK_ALLOC. Still it would require manual checking of dmesg()
-> after being run.
-
-I'm not aware of something to check on lockdep's status when running a
-kunit test, but I'm not sure anyone is expected to look at the dmesg
-trace when running kunit to find out whether the test succeeded or not.
-
-It looks like there was an attempt at some point to fail the test if
-there was a lockdep error:
-https://lore.kernel.org/all/20200814205527.1833459-1-urielguajardojr@gmail.=
-com/
-
-It doesn't look like it's been merged though. David, Brendan, do you
-know why it wasn't merged or if there is a good option for us there?
-
-At the very least, I think a comment after the call to drm_exec_fini to
-make it clear that the error would be in the kernel logs, and a better
-one on the test definition to explicitly say what you want to make sure
-of, and how one can check it's been done would be great.
-
-Maxime
-
---b3p2wfg2aaam75px
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZPhPRAAKCRDj7w1vZxhR
-xfKrAP9GJQ9krwMWKBfn+oS/xcJcENfMR2hgY8v24XvFjdc2tQD8CrK6MAaFADhH
-vRBoO3UJcLAhsnt7EihZYwy1JZ/tGws=
-=xOIu
------END PGP SIGNATURE-----
-
---b3p2wfg2aaam75px--
-
+> > -}
+> > -
+> >  void finalize_vcpu(struct kvm_vcpu *vcpu, struct vcpu_reg_list *c)
+> >  {
+> >       struct vcpu_reg_sublist *s;
+> > --
+> > 2.34.1
+> >
+>
+> Thanks,
+> drew
