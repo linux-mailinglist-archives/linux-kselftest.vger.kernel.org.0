@@ -2,200 +2,385 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48048793C64
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Sep 2023 14:12:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9F5E793CEB
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Sep 2023 14:44:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240603AbjIFMMz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 6 Sep 2023 08:12:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46926 "EHLO
+        id S236097AbjIFMow (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 6 Sep 2023 08:44:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240590AbjIFMMy (ORCPT
+        with ESMTP id S233463AbjIFMow (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 6 Sep 2023 08:12:54 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47A17E71;
-        Wed,  6 Sep 2023 05:12:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694002368; x=1725538368;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IX8tqAU4qqO4xD68t3JJmbkfL8h79O8BisSE4UjrixU=;
-  b=JzwTu5jodsE1ARpc0Ff0D+XJ+W2av1zvk6PIkdrq6AghZTPlWjqRnf0F
-   ndgjiuefGR4AsccBGPaklesK/tioIqXgZrFNHOBbyMkJgglfzKyPvgSTQ
-   lpTL/Rhjq9k9fMEK/FBVwEhh0cH4m1HUfCzdHtZBhZAJn3eZN7zQblH9k
-   jE7Q8SgNPhl+gtLl57irBRWB4hwQEkvurpMcEA1YX8lo/Y0vVJTuBPcny
-   26y0TIB47ZaXYCyz0jNhSvDW/NgRB4SGlDwuRuvkDxS/fjLF04q7DuRO4
-   jsS9lACZhWverDpc6htDeYe8muNaSkEx5JFNEUIHAabUKDwnhUb0pbj+2
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="357362012"
-X-IronPort-AV: E=Sophos;i="6.02,231,1688454000"; 
-   d="scan'208";a="357362012"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2023 05:12:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="806982511"
-X-IronPort-AV: E=Sophos;i="6.02,231,1688454000"; 
-   d="scan'208";a="806982511"
-Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
-  by fmsmga008.fm.intel.com with ESMTP; 06 Sep 2023 05:12:03 -0700
-Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qdrO4-0000Bh-2d;
-        Wed, 06 Sep 2023 12:12:00 +0000
-Date:   Wed, 6 Sep 2023 20:11:57 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Meng Li <li.meng@amd.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Huang Rui <ray.huang@amd.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-acpi@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Shimmer Huang <shimmer.huang@amd.com>,
-        Perry Yuan <Perry.Yuan@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>, Meng Li <li.meng@amd.com>
-Subject: Re: [PATCH V5 3/7] cpufreq: amd-pstate: Enable amd-pstate preferred
- core supporting.
-Message-ID: <202309061958.4wimkcbo-lkp@intel.com>
-References: <20230905015116.2268926-4-li.meng@amd.com>
+        Wed, 6 Sep 2023 08:44:52 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A70C10CC;
+        Wed,  6 Sep 2023 05:44:47 -0700 (PDT)
+Received: from [192.168.100.7] (unknown [59.103.219.75])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 660C466072E5;
+        Wed,  6 Sep 2023 13:44:38 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1694004285;
+        bh=2Hy416HIimMmtLwQOJg3KtDgvwKos8dGIQ36vxE9Wjo=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=kpkqbzl4qJ9CFTyCBR+9f/FLmP7jie3FrOCMe523qNwOB1p9o3BdLFnUNMZ2FLUKA
+         Q6FN5sUBQt1lBSPkcwzYrf35sljzkaFmvlmU6xYdiwRAnqQJRt5pPESMNVggagZBD6
+         TvWpnyhyWLSZBpE1iJiqlqvNyENxFjmvUZKj+wrounNRMWY2Mikn9aVmE0MyKQzpSt
+         AX4/eLhvaont7g9r3uaq4K/d7H2p85FlSOW3AtesM8J4lg7GVGIcbf96eLFiHVXol9
+         BqltlHK5n0z9IyvrI/y3bT6gcuSNj+vRYNosTEZaS3MZIfeYa1l96gn8XXcDVuskep
+         9M3dVDFSv/eiA==
+Message-ID: <aab6585e-d650-4b00-9760-990f88382909@collabora.com>
+Date:   Wed, 6 Sep 2023 17:44:33 +0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230905015116.2268926-4-li.meng@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@Oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        David Hildenbrand <david@redhat.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Peter Xu <peterx@redhat.com>
+Subject: Re: [PATCH v33 0/6] Implement IOCTL to get and optionally clear info
+ about PTEs
+To:     Andrew Morton <akpm@linux-foundation.org>
+References: <20230821141518.870589-1-usama.anjum@collabora.com>
+Content-Language: en-US
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <20230821141518.870589-1-usama.anjum@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Meng,
+Soft Reminder.
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on rafael-pm/linux-next]
-[also build test WARNING on linus/master v6.5 next-20230906]
-[cannot apply to tip/x86/core]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Meng-Li/x86-Drop-CPU_SUP_INTEL-from-SCHED_MC_PRIO-for-the-expansion/20230906-003754
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20230905015116.2268926-4-li.meng%40amd.com
-patch subject: [PATCH V5 3/7] cpufreq: amd-pstate: Enable amd-pstate preferred core supporting.
-config: x86_64-defconfig (https://download.01.org/0day-ci/archive/20230906/202309061958.4wimkcbo-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230906/202309061958.4wimkcbo-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202309061958.4wimkcbo-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   In file included from include/linux/node.h:18,
-                    from include/linux/cpu.h:17,
-                    from include/linux/cpufreq.h:12,
-                    from drivers/cpufreq/amd-pstate.c:30:
->> include/linux/device.h:198:33: warning: 'dev_attr_hw_prefcore' defined but not used [-Wunused-variable]
-     198 |         struct device_attribute dev_attr_##_name = __ATTR_RO(_name)
-         |                                 ^~~~~~~~~
-   drivers/cpufreq/amd-pstate.c:1131:8: note: in expansion of macro 'DEVICE_ATTR_RO'
-    1131 | static DEVICE_ATTR_RO(hw_prefcore);
-         |        ^~~~~~~~~~~~~~
-
-
-vim +/dev_attr_hw_prefcore +198 include/linux/device.h
-
-ca22e56debc57b4 Kay Sievers        2011-12-14  123  
-ca22e56debc57b4 Kay Sievers        2011-12-14  124  ssize_t device_show_ulong(struct device *dev, struct device_attribute *attr,
-ca22e56debc57b4 Kay Sievers        2011-12-14  125  			  char *buf);
-ca22e56debc57b4 Kay Sievers        2011-12-14  126  ssize_t device_store_ulong(struct device *dev, struct device_attribute *attr,
-ca22e56debc57b4 Kay Sievers        2011-12-14  127  			   const char *buf, size_t count);
-ca22e56debc57b4 Kay Sievers        2011-12-14  128  ssize_t device_show_int(struct device *dev, struct device_attribute *attr,
-ca22e56debc57b4 Kay Sievers        2011-12-14  129  			char *buf);
-ca22e56debc57b4 Kay Sievers        2011-12-14  130  ssize_t device_store_int(struct device *dev, struct device_attribute *attr,
-ca22e56debc57b4 Kay Sievers        2011-12-14  131  			 const char *buf, size_t count);
-91872392f08486f Borislav Petkov    2012-10-09  132  ssize_t device_show_bool(struct device *dev, struct device_attribute *attr,
-91872392f08486f Borislav Petkov    2012-10-09  133  			char *buf);
-91872392f08486f Borislav Petkov    2012-10-09  134  ssize_t device_store_bool(struct device *dev, struct device_attribute *attr,
-91872392f08486f Borislav Petkov    2012-10-09  135  			 const char *buf, size_t count);
-ca22e56debc57b4 Kay Sievers        2011-12-14  136  
-cd00bc2ca42705b James Seo          2023-05-08  137  /**
-cd00bc2ca42705b James Seo          2023-05-08  138   * DEVICE_ATTR - Define a device attribute.
-cd00bc2ca42705b James Seo          2023-05-08  139   * @_name: Attribute name.
-cd00bc2ca42705b James Seo          2023-05-08  140   * @_mode: File mode.
-cd00bc2ca42705b James Seo          2023-05-08  141   * @_show: Show handler. Optional, but mandatory if attribute is readable.
-cd00bc2ca42705b James Seo          2023-05-08  142   * @_store: Store handler. Optional, but mandatory if attribute is writable.
-cd00bc2ca42705b James Seo          2023-05-08  143   *
-cd00bc2ca42705b James Seo          2023-05-08  144   * Convenience macro for defining a struct device_attribute.
-cd00bc2ca42705b James Seo          2023-05-08  145   *
-cd00bc2ca42705b James Seo          2023-05-08  146   * For example, ``DEVICE_ATTR(foo, 0644, foo_show, foo_store);`` expands to:
-cd00bc2ca42705b James Seo          2023-05-08  147   *
-cd00bc2ca42705b James Seo          2023-05-08  148   * .. code-block:: c
-cd00bc2ca42705b James Seo          2023-05-08  149   *
-cd00bc2ca42705b James Seo          2023-05-08  150   *	struct device_attribute dev_attr_foo = {
-cd00bc2ca42705b James Seo          2023-05-08  151   *		.attr	= { .name = "foo", .mode = 0644 },
-cd00bc2ca42705b James Seo          2023-05-08  152   *		.show	= foo_show,
-cd00bc2ca42705b James Seo          2023-05-08  153   *		.store	= foo_store,
-cd00bc2ca42705b James Seo          2023-05-08  154   *	};
-cd00bc2ca42705b James Seo          2023-05-08  155   */
-a7fd67062efc5b0 Kay Sievers        2005-10-01  156  #define DEVICE_ATTR(_name, _mode, _show, _store) \
-a7fd67062efc5b0 Kay Sievers        2005-10-01  157  	struct device_attribute dev_attr_##_name = __ATTR(_name, _mode, _show, _store)
-cd00bc2ca42705b James Seo          2023-05-08  158  
-cd00bc2ca42705b James Seo          2023-05-08  159  /**
-cd00bc2ca42705b James Seo          2023-05-08  160   * DEVICE_ATTR_PREALLOC - Define a preallocated device attribute.
-cd00bc2ca42705b James Seo          2023-05-08  161   * @_name: Attribute name.
-cd00bc2ca42705b James Seo          2023-05-08  162   * @_mode: File mode.
-cd00bc2ca42705b James Seo          2023-05-08  163   * @_show: Show handler. Optional, but mandatory if attribute is readable.
-cd00bc2ca42705b James Seo          2023-05-08  164   * @_store: Store handler. Optional, but mandatory if attribute is writable.
-cd00bc2ca42705b James Seo          2023-05-08  165   *
-cd00bc2ca42705b James Seo          2023-05-08  166   * Like DEVICE_ATTR(), but ``SYSFS_PREALLOC`` is set on @_mode.
-cd00bc2ca42705b James Seo          2023-05-08  167   */
-7fda9100bb8258b Christophe Leroy   2017-12-18  168  #define DEVICE_ATTR_PREALLOC(_name, _mode, _show, _store) \
-7fda9100bb8258b Christophe Leroy   2017-12-18  169  	struct device_attribute dev_attr_##_name = \
-7fda9100bb8258b Christophe Leroy   2017-12-18  170  		__ATTR_PREALLOC(_name, _mode, _show, _store)
-cd00bc2ca42705b James Seo          2023-05-08  171  
-cd00bc2ca42705b James Seo          2023-05-08  172  /**
-cd00bc2ca42705b James Seo          2023-05-08  173   * DEVICE_ATTR_RW - Define a read-write device attribute.
-cd00bc2ca42705b James Seo          2023-05-08  174   * @_name: Attribute name.
-cd00bc2ca42705b James Seo          2023-05-08  175   *
-cd00bc2ca42705b James Seo          2023-05-08  176   * Like DEVICE_ATTR(), but @_mode is 0644, @_show is <_name>_show,
-cd00bc2ca42705b James Seo          2023-05-08  177   * and @_store is <_name>_store.
-cd00bc2ca42705b James Seo          2023-05-08  178   */
-ced321bf9151535 Greg Kroah-Hartman 2013-07-14  179  #define DEVICE_ATTR_RW(_name) \
-ced321bf9151535 Greg Kroah-Hartman 2013-07-14  180  	struct device_attribute dev_attr_##_name = __ATTR_RW(_name)
-cd00bc2ca42705b James Seo          2023-05-08  181  
-cd00bc2ca42705b James Seo          2023-05-08  182  /**
-cd00bc2ca42705b James Seo          2023-05-08  183   * DEVICE_ATTR_ADMIN_RW - Define an admin-only read-write device attribute.
-cd00bc2ca42705b James Seo          2023-05-08  184   * @_name: Attribute name.
-cd00bc2ca42705b James Seo          2023-05-08  185   *
-cd00bc2ca42705b James Seo          2023-05-08  186   * Like DEVICE_ATTR_RW(), but @_mode is 0600.
-cd00bc2ca42705b James Seo          2023-05-08  187   */
-3022c6a1b4b76c4 Dan Williams       2020-06-25  188  #define DEVICE_ATTR_ADMIN_RW(_name) \
-3022c6a1b4b76c4 Dan Williams       2020-06-25  189  	struct device_attribute dev_attr_##_name = __ATTR_RW_MODE(_name, 0600)
-cd00bc2ca42705b James Seo          2023-05-08  190  
-cd00bc2ca42705b James Seo          2023-05-08  191  /**
-cd00bc2ca42705b James Seo          2023-05-08  192   * DEVICE_ATTR_RO - Define a readable device attribute.
-cd00bc2ca42705b James Seo          2023-05-08  193   * @_name: Attribute name.
-cd00bc2ca42705b James Seo          2023-05-08  194   *
-cd00bc2ca42705b James Seo          2023-05-08  195   * Like DEVICE_ATTR(), but @_mode is 0444 and @_show is <_name>_show.
-cd00bc2ca42705b James Seo          2023-05-08  196   */
-ced321bf9151535 Greg Kroah-Hartman 2013-07-14  197  #define DEVICE_ATTR_RO(_name) \
-ced321bf9151535 Greg Kroah-Hartman 2013-07-14 @198  	struct device_attribute dev_attr_##_name = __ATTR_RO(_name)
-cd00bc2ca42705b James Seo          2023-05-08  199  
+On 8/21/23 7:15 PM, Muhammad Usama Anjum wrote:
+> *Changes in v33*:
+> - Add PAGE_IS_FILE support for THPs
+> 
+> *Changes in v31 and v32*:
+> - Minor updates
+> 
+> *Changes in v30*:
+> - Rebase on top of next-20230815
+> - Minor nitpicks
+> 
+> *Changes in v29:*
+> - Polish IOCTL and improve documentation
+> 
+> *Changes in v28:*
+> - Fix walk_end and add 17 test cases in selftests patch
+> 
+> *Changes in v27:*
+> - Handle review comments and minor improvements
+> - Add performance improvement patch on top with test for easy review
+> 
+> *Changes in v26:*
+> - Code re-structurring and API changes in PAGEMAP_IOCTL
+> 
+> *Changes in v25*:
+> - Do proper filtering on hole as well (hole got missed earlier)
+> 
+> *Changes in v24*:
+> - Rebase on top of next-20230710
+> - Place WP markers in case of hole as well
+> 
+> *Changes in v23*:
+> - Set vec_buf_index in loop only when vec_buf_index is set
+> - Return -EFAULT instead of -EINVAL if vec is NULL
+> - Correctly return the walk ending address to the page granularity
+> 
+> *Changes in v22*:
+> - Interface change:
+>   - Replace [start start + len) with [start, end)
+>   - Return the ending address of the address walk in start
+> 
+> *Changes in v21*:
+> - Abort walk instead of returning error if WP is to be performed on
+>   partial hugetlb
+> 
+> *Changes in v20*
+> - Correct PAGE_IS_FILE and add PAGE_IS_PFNZERO
+> 
+> *Changes in v19*
+> - Minor changes and interface updates
+> 
+> *Changes in v18*
+> - Rebase on top of next-20230613
+> - Minor updates
+> 
+> *Changes in v17*
+> - Rebase on top of next-20230606
+> - Minor improvements in PAGEMAP_SCAN IOCTL patch
+> 
+> *Changes in v16*
+> - Fix a corner case
+> - Add exclusive PM_SCAN_OP_WP back
+> 
+> *Changes in v15*
+> - Build fix (Add missed build fix in RESEND)
+> 
+> *Changes in v14*
+> - Fix build error caused by #ifdef added at last minute in some configs
+> 
+> *Changes in v13*
+> - Rebase on top of next-20230414
+> - Give-up on using uffd_wp_range() and write new helpers, flush tlb only
+>   once
+> 
+> *Changes in v12*
+> - Update and other memory types to UFFD_FEATURE_WP_ASYNC
+> - Rebaase on top of next-20230406
+> - Review updates
+> 
+> *Changes in v11*
+> - Rebase on top of next-20230307
+> - Base patches on UFFD_FEATURE_WP_UNPOPULATED
+> - Do a lot of cosmetic changes and review updates
+> - Remove ENGAGE_WP + !GET operation as it can be performed with
+>   UFFDIO_WRITEPROTECT
+> 
+> *Changes in v10*
+> - Add specific condition to return error if hugetlb is used with wp
+>   async
+> - Move changes in tools/include/uapi/linux/fs.h to separate patch
+> - Add documentation
+> 
+> *Changes in v9:*
+> - Correct fault resolution for userfaultfd wp async
+> - Fix build warnings and errors which were happening on some configs
+> - Simplify pagemap ioctl's code
+> 
+> *Changes in v8:*
+> - Update uffd async wp implementation
+> - Improve PAGEMAP_IOCTL implementation
+> 
+> *Changes in v7:*
+> - Add uffd wp async
+> - Update the IOCTL to use uffd under the hood instead of soft-dirty
+>   flags
+> 
+> *Motivation*
+> The real motivation for adding PAGEMAP_SCAN IOCTL is to emulate Windows
+> GetWriteWatch() and ResetWriteWatch() syscalls [1]. The GetWriteWatch()
+> retrieves the addresses of the pages that are written to in a region of
+> virtual memory.
+> 
+> This syscall is used in Windows applications and games etc. This syscall is
+> being emulated in pretty slow manner in userspace. Our purpose is to
+> enhance the kernel such that we translate it efficiently in a better way.
+> Currently some out of tree hack patches are being used to efficiently
+> emulate it in some kernels. We intend to replace those with these patches.
+> So the whole gaming on Linux can effectively get benefit from this. It
+> means there would be tons of users of this code.
+> 
+> CRIU use case [2] was mentioned by Andrei and Danylo:
+>> Use cases for migrating sparse VMAs are binaries sanitized with ASAN,
+>> MSAN or TSAN [3]. All of these sanitizers produce sparse mappings of
+>> shadow memory [4]. Being able to migrate such binaries allows to highly
+>> reduce the amount of work needed to identify and fix post-migration
+>> crashes, which happen constantly.
+> 
+> Andrei's defines the following uses of this code:
+> * it is more granular and allows us to track changed pages more
+>   effectively. The current interface can clear dirty bits for the entire
+>   process only. In addition, reading info about pages is a separate
+>   operation. It means we must freeze the process to read information
+>   about all its pages, reset dirty bits, only then we can start dumping
+>   pages. The information about pages becomes more and more outdated,
+>   while we are processing pages. The new interface solves both these
+>   downsides. First, it allows us to read pte bits and clear the
+>   soft-dirty bit atomically. It means that CRIU will not need to freeze
+>   processes to pre-dump their memory. Second, it clears soft-dirty bits
+>   for a specified region of memory. It means CRIU will have actual info
+>   about pages to the moment of dumping them.
+> * The new interface has to be much faster because basic page filtering
+>   is happening in the kernel. With the old interface, we have to read
+>   pagemap for each page.
+> 
+> *Implementation Evolution (Short Summary)*
+> From the definition of GetWriteWatch(), we feel like kernel's soft-dirty
+> feature can be used under the hood with some additions like:
+> * reset soft-dirty flag for only a specific region of memory instead of
+> clearing the flag for the entire process
+> * get and clear soft-dirty flag for a specific region atomically
+> 
+> So we decided to use ioctl on pagemap file to read or/and reset soft-dirty
+> flag. But using soft-dirty flag, sometimes we get extra pages which weren't
+> even written. They had become soft-dirty because of VMA merging and
+> VM_SOFTDIRTY flag. This breaks the definition of GetWriteWatch(). We were
+> able to by-pass this short coming by ignoring VM_SOFTDIRTY until David
+> reported that mprotect etc messes up the soft-dirty flag while ignoring
+> VM_SOFTDIRTY [5]. This wasn't happening until [6] got introduced. We
+> discussed if we can revert these patches. But we could not reach to any
+> conclusion. So at this point, I made couple of tries to solve this whole
+> VM_SOFTDIRTY issue by correcting the soft-dirty implementation:
+> * [7] Correct the bug fixed wrongly back in 2014. It had potential to cause
+> regression. We left it behind.
+> * [8] Keep a list of soft-dirty part of a VMA across splits and merges. I
+> got the reply don't increase the size of the VMA by 8 bytes.
+> 
+> At this point, we left soft-dirty considering it is too much delicate and
+> userfaultfd [9] seemed like the only way forward. From there onward, we
+> have been basing soft-dirty emulation on userfaultfd wp feature where
+> kernel resolves the faults itself when WP_ASYNC feature is used. It was
+> straight forward to add WP_ASYNC feature in userfautlfd. Now we get only
+> those pages dirty or written-to which are really written in reality. (PS
+> There is another WP_UNPOPULATED userfautfd feature is required which is
+> needed to avoid pre-faulting memory before write-protecting [9].)
+> 
+> All the different masks were added on the request of CRIU devs to create
+> interface more generic and better.
+> 
+> [1] https://learn.microsoft.com/en-us/windows/win32/api/memoryapi/nf-memoryapi-getwritewatch
+> [2] https://lore.kernel.org/all/20221014134802.1361436-1-mdanylo@google.com
+> [3] https://github.com/google/sanitizers
+> [4] https://github.com/google/sanitizers/wiki/AddressSanitizerAlgorithm#64-bit
+> [5] https://lore.kernel.org/all/bfcae708-db21-04b4-0bbe-712badd03071@redhat.com
+> [6] https://lore.kernel.org/all/20220725142048.30450-1-peterx@redhat.com/
+> [7] https://lore.kernel.org/all/20221122115007.2787017-1-usama.anjum@collabora.com
+> [8] https://lore.kernel.org/all/20221220162606.1595355-1-usama.anjum@collabora.com
+> [9] https://lore.kernel.org/all/20230306213925.617814-1-peterx@redhat.com
+> [10] https://lore.kernel.org/all/20230125144529.1630917-1-mdanylo@google.com
+> 
+> * Original Cover letter from v8*
+> Hello,
+> 
+> Note:
+> Soft-dirty pages and pages which have been written-to are synonyms. As
+> kernel already has soft-dirty feature inside which we have given up to
+> use, we are using written-to terminology while using UFFD async WP under
+> the hood.
+> 
+> It is possible to find and clear soft-dirty pages entirely in userspace.
+> But it isn't efficient:
+> - The mprotect and SIGSEGV handler for bookkeeping
+> - The userfaultfd wp (synchronous) with the handler for bookkeeping
+> 
+> Some benchmarks can be seen here[1]. This series adds features that weren't
+> present earlier:
+> - There is no atomic get soft-dirty/Written-to status and clear present in
+>   the kernel.
+> - The pages which have been written-to can not be found in accurate way.
+>   (Kernel's soft-dirty PTE bit + sof_dirty VMA bit shows more soft-dirty
+>   pages than there actually are.)
+> 
+> Historically, soft-dirty PTE bit tracking has been used in the CRIU
+> project. The procfs interface is enough for finding the soft-dirty bit
+> status and clearing the soft-dirty bit of all the pages of a process.
+> We have the use case where we need to track the soft-dirty PTE bit for
+> only specific pages on-demand. We need this tracking and clear mechanism
+> of a region of memory while the process is running to emulate the
+> getWriteWatch() syscall of Windows.
+> 
+> *(Moved to using UFFD instead of soft-dirty feature to find pages which
+> have been written-to from v7 patch series)*:
+> Stop using the soft-dirty flags for finding which pages have been
+> written to. It is too delicate and wrong as it shows more soft-dirty
+> pages than the actual soft-dirty pages. There is no interest in
+> correcting it [2][3] as this is how the feature was written years ago.
+> It shouldn't be updated to changed behaviour. Peter Xu has suggested
+> using the async version of the UFFD WP [4] as it is based inherently
+> on the PTEs.
+> 
+> So in this patch series, I've added a new mode to the UFFD which is
+> asynchronous version of the write protect. When this variant of the
+> UFFD WP is used, the page faults are resolved automatically by the
+> kernel. The pages which have been written-to can be found by reading
+> pagemap file (!PM_UFFD_WP). This feature can be used successfully to
+> find which pages have been written to from the time the pages were
+> write protected. This works just like the soft-dirty flag without
+> showing any extra pages which aren't soft-dirty in reality.
+> 
+> The information related to pages if the page is file mapped, present and
+> swapped is required for the CRIU project [5][6]. The addition of the
+> required mask, any mask, excluded mask and return masks are also required
+> for the CRIU project [5].
+> 
+> The IOCTL returns the addresses of the pages which match the specific
+> masks. The page addresses are returned in struct page_region in a compact
+> form. The max_pages is needed to support a use case where user only wants
+> to get a specific number of pages. So there is no need to find all the
+> pages of interest in the range when max_pages is specified. The IOCTL
+> returns when the maximum number of the pages are found. The max_pages is
+> optional. If max_pages is specified, it must be equal or greater than the
+> vec_size. This restriction is needed to handle worse case when one
+> page_region only contains info of one page and it cannot be compacted.
+> This is needed to emulate the Windows getWriteWatch() syscall.
+> 
+> The patch series include the detailed selftest which can be used as an
+> example for the uffd async wp test and PAGEMAP_IOCTL. It shows the
+> interface usages as well.
+> 
+> [1] https://lore.kernel.org/lkml/54d4c322-cd6e-eefd-b161-2af2b56aae24@collabora.com/
+> [2] https://lore.kernel.org/all/20221220162606.1595355-1-usama.anjum@collabora.com
+> [3] https://lore.kernel.org/all/20221122115007.2787017-1-usama.anjum@collabora.com
+> [4] https://lore.kernel.org/all/Y6Hc2d+7eTKs7AiH@x1n
+> [5] https://lore.kernel.org/all/YyiDg79flhWoMDZB@gmail.com/
+> [6] https://lore.kernel.org/all/20221014134802.1361436-1-mdanylo@google.com/
+> 
+> Regards,
+> Muhammad Usama Anjum
+> 
+> Muhammad Usama Anjum (5):
+>   fs/proc/task_mmu: Implement IOCTL to get and optionally clear info
+>     about PTEs
+>   fs/proc/task_mmu: Add fast paths to get/clear PAGE_IS_WRITTEN flag
+>   tools headers UAPI: Update linux/fs.h with the kernel sources
+>   mm/pagemap: add documentation of PAGEMAP_SCAN IOCTL
+>   selftests: mm: add pagemap ioctl tests
+> 
+> Peter Xu (1):
+>   userfaultfd: UFFD_FEATURE_WP_ASYNC
+> 
+>  Documentation/admin-guide/mm/pagemap.rst     |   89 +
+>  Documentation/admin-guide/mm/userfaultfd.rst |   35 +
+>  fs/proc/task_mmu.c                           |  722 ++++++++
+>  fs/userfaultfd.c                             |   26 +-
+>  include/linux/hugetlb.h                      |    1 +
+>  include/linux/userfaultfd_k.h                |   28 +-
+>  include/uapi/linux/fs.h                      |   59 +
+>  include/uapi/linux/userfaultfd.h             |    9 +-
+>  mm/hugetlb.c                                 |   34 +-
+>  mm/memory.c                                  |   28 +-
+>  tools/include/uapi/linux/fs.h                |   59 +
+>  tools/testing/selftests/mm/.gitignore        |    2 +
+>  tools/testing/selftests/mm/Makefile          |    3 +-
+>  tools/testing/selftests/mm/config            |    1 +
+>  tools/testing/selftests/mm/pagemap_ioctl.c   | 1660 ++++++++++++++++++
+>  tools/testing/selftests/mm/run_vmtests.sh    |    4 +
+>  16 files changed, 2736 insertions(+), 24 deletions(-)
+>  create mode 100644 tools/testing/selftests/mm/pagemap_ioctl.c
+> 
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+BR,
+Muhammad Usama Anjum
