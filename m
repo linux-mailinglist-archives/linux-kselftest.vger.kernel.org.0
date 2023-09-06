@@ -2,54 +2,54 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 64062794317
+	by mail.lfdr.de (Postfix) with ESMTP id 16CF1794316
 	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Sep 2023 20:33:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243469AbjIFSd6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 6 Sep 2023 14:33:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37036 "EHLO
+        id S234422AbjIFSd4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 6 Sep 2023 14:33:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242232AbjIFSdw (ORCPT
+        with ESMTP id S238652AbjIFSdv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 6 Sep 2023 14:33:52 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE911724;
-        Wed,  6 Sep 2023 11:33:25 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-307d58b3efbso173533f8f.0;
-        Wed, 06 Sep 2023 11:33:25 -0700 (PDT)
+        Wed, 6 Sep 2023 14:33:51 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 794A9172C;
+        Wed,  6 Sep 2023 11:33:26 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-31ae6bf91a9so156768f8f.2;
+        Wed, 06 Sep 2023 11:33:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694025204; x=1694630004; darn=vger.kernel.org;
+        d=gmail.com; s=20221208; t=1694025205; x=1694630005; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KpPHnCbawH8HGxq3WXucSI65VKZBAcp+nA65BcypCyI=;
-        b=ZOqaViz4UeXJQxOfyHGCDr9FoQhBCHkA5EyHb1Alb2BCQ8FA8jyQV4SkYdyAzxyYLn
-         b+anBdTe4PwUnqvQZ0iMfN2TS4OUI0z2utwJjOfe2OKzrt+s4LSXdhS5UXVzxZQuXoSW
-         OsRlv8jrEhYdu+/YVU9dqpfI3upwBTrVymfhdTeaAFNOKTGQeoPFj6gk+CshFykRIRsD
-         mcHA2qSquDJpSTjk5KVIUSUfu9DD0bgZOPQX52/p79SNoRiWxqpkT+1eoIw/R2bwM+IP
-         kt0ZYwf9Y0ImzOLm67c8VV4RnQs6fRewFyg0UdvbLtQfzo0y47DjzILotXKxHgs9eBl3
-         QTlQ==
+        bh=HtDAfb39ZYubUMCOEk1qZOBpZCAofwQ4xmthOS0X+3o=;
+        b=aT/CweoZ6rmWSwATUjyDMl/gOX2I6aB9yOyNCR1spO9PyJBymo6qJjxXY1ljnacKih
+         ZToWxIceAUGcKt2I4PScrGfM+dN5kcE/sUJz3Z0UGprrliaFX5UCVwIjLfTz7W4/EAhe
+         /3BqGhqKKIE+t3hwmfQqWfMuoOo1xqkORvo+iEiHEkfioTtwFaNPmLZsYA/j7DLfNA1U
+         pxkv5vjtOuztbPeJXIcJYx9905p6vC+uWkZhU+p/b1VyeyLxIAvzu5VhzKzPGWn15NSY
+         cMaKotxCnCGE37nmeyU0ddpeCopxo+XIG4TT30MPV1qVHo4S9aCfioUqKbeL96pQdKx3
+         Hpfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1694025204; x=1694630004;
+        d=1e100.net; s=20221208; t=1694025205; x=1694630005;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=KpPHnCbawH8HGxq3WXucSI65VKZBAcp+nA65BcypCyI=;
-        b=ena09D/jj79597ztWfjDh0pRVjNW143d/iWqGErKM0dJHUiKLS3pfSygCzA05dSLOd
-         9jeDwHZBnsXbYUG2XZ+YiqrjX4lu+rQFUD6RfAyc5DN17PDvZF7aDRkd3fOJWCoXGsvk
-         DIbhD/R90+y7j8VUnNrxxMO1Ms2yd7nBaUdyg7vZmTSj8odf+yv+x49/W1tgRthLUYmG
-         RKXJPtjhJGwWv3Um/qz7mZthzZ8ufAMetIGr2jLps4YQXLEG5QPVdMs+c8aNVnliRpNd
-         MH6B0oa1Uc4jEz7ASyfO2boR/+fqNdcczxswHCgcdebbhg7i/FAco+z8GRbXyavNxyTR
-         Fv6w==
-X-Gm-Message-State: AOJu0YzfROZvBnV9IX1IzxEo7VwrLk+QkQec/5u2t+s3mVkBf/u2u8Pv
-        t8qQJTYby/XiBswpo3+cZ2sdrJOXo08QcNdn9Uc=
-X-Google-Smtp-Source: AGHT+IEulztVzD7X1nLQgBA1OIwdrqWi5ZjxxO5Dlpa2UyE7g7salfPTaIETYncgU6bOzmhY25ZEoQ==
-X-Received: by 2002:adf:f552:0:b0:31a:d773:51a5 with SMTP id j18-20020adff552000000b0031ad77351a5mr3076504wrp.27.1694025204093;
+        bh=HtDAfb39ZYubUMCOEk1qZOBpZCAofwQ4xmthOS0X+3o=;
+        b=OTFq3cnRIk7oBmYUvtCTAOxSO6DUtr/73wmA2C5maKj4dnBvnNO/5HArUul9Q42+sx
+         g/Kuolc/Xk74maiCuMkToWmt2KRM9jfVZzh61jIEbgbAAoDEVUNfS0PQGxmJewDFJD31
+         e+6jNQmYnB+an9BK5ifFUVAEWx6Zfh3Zo7aWb+3UCRytS9FzcgXJ4jXtSowt/97n43Kp
+         f5c62O1jegu76ItFx+CzqrGwWIeGktWJamvd3QILHwg527f3FY4CRTbBBaeILr52soDP
+         eTE+brY2DHiL3JjKe8ltHxlxLNAE819O1WuujhIPiQrfDUd1mapWuXisHa3ebU0J2+vu
+         9pFA==
+X-Gm-Message-State: AOJu0YzSBQXGcKKaOlrWU5TSpbjFBB2BplRw1vhirJ9XpvgiWTY9D3PV
+        sdim2oa2RyjDa5V8IduZRFM=
+X-Google-Smtp-Source: AGHT+IEz+QlAVOBpdX9sT0us/nqZrZxdKYyxIUBbGgJapKwG6O9eU5K+6bwfnP0GpW0fTAgNhALN4w==
+X-Received: by 2002:adf:efc2:0:b0:317:3b13:94c3 with SMTP id i2-20020adfefc2000000b003173b1394c3mr3037733wrp.41.1694025204750;
         Wed, 06 Sep 2023 11:33:24 -0700 (PDT)
 Received: from ip-172-31-30-46.eu-west-1.compute.internal (ec2-54-170-241-106.eu-west-1.compute.amazonaws.com. [54.170.241.106])
-        by smtp.gmail.com with ESMTPSA id l10-20020a5d4bca000000b003180155493esm21094891wrt.67.2023.09.06.11.33.23
+        by smtp.gmail.com with ESMTPSA id l10-20020a5d4bca000000b003180155493esm21094891wrt.67.2023.09.06.11.33.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Sep 2023 11:33:23 -0700 (PDT)
+        Wed, 06 Sep 2023 11:33:24 -0700 (PDT)
 From:   Puranjay Mohan <puranjay12@gmail.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -67,9 +67,9 @@ To:     Alexei Starovoitov <ast@kernel.org>,
         bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
 Cc:     puranjay12@gmail.com
-Subject: [PATCH bpf-next v2 3/8] arm32, bpf: add support for sign-extension mov instruction
-Date:   Wed,  6 Sep 2023 18:33:15 +0000
-Message-Id: <20230906183320.1959008-4-puranjay12@gmail.com>
+Subject: [PATCH bpf-next v2 4/8] arm32, bpf: add support for unconditional bswap instruction
+Date:   Wed,  6 Sep 2023 18:33:16 +0000
+Message-Id: <20230906183320.1959008-5-puranjay12@gmail.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230906183320.1959008-1-puranjay12@gmail.com>
 References: <20230906183320.1959008-1-puranjay12@gmail.com>
@@ -85,109 +85,39 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The cpuv4 added a new BPF_MOVSX instruction that sign extends the src
-before moving it to the destination.
+The cpuv4 added a new unconditional bswap instruction with following
+behaviour:
 
-BPF_ALU | BPF_MOVSX sign extends 8-bit and 16-bit operands into 32-bit
-operands, and zeroes the remaining upper 32 bits.
+BPF_ALU64 | BPF_TO_LE | BPF_END with imm = 16/32/64 means:
+dst = bswap16(dst)
+dst = bswap32(dst)
+dst = bswap64(dst)
 
-BPF_ALU64 | BPF_MOVSX sign extends 8-bit, 16-bit, and 32-bit  operands
-into 64-bit operands.
-
-The offset field of the instruction is used to tell the number of bit to
-use for sign-extension. BPF_MOV and BPF_MOVSX have the same code but the
-former sets offset to 0 and the later one sets the offset to 8, 16 or 32
-
-The behaviour of this instruction is dst = (s8,s16,s32)src
-
-On ARM32 the implementation uses LSH and ARSH to extend the 8/16 bits to
-a 32-bit register and then it is sign extended to the upper 32-bit
-register using ARSH. For 32-bit we just move it to the destination
-register and use ARSH to extend it to the upper 32-bit register.
+As we already support converting to big-endian from little-endian we can
+use the same for unconditional bswap. just treat the unconditional scenario
+the same as big-endian conversion.
 
 Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
 ---
- arch/arm/net/bpf_jit_32.c | 35 ++++++++++++++++++++++++++++++-----
- 1 file changed, 30 insertions(+), 5 deletions(-)
+ arch/arm/net/bpf_jit_32.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
 diff --git a/arch/arm/net/bpf_jit_32.c b/arch/arm/net/bpf_jit_32.c
-index 0a272a02959b..56ea8022e989 100644
+index 56ea8022e989..f837db5c71b1 100644
 --- a/arch/arm/net/bpf_jit_32.c
 +++ b/arch/arm/net/bpf_jit_32.c
-@@ -747,12 +747,16 @@ static inline void emit_a32_alu_r64(const bool is64, const s8 dst[],
- }
- 
- /* dst = src (4 bytes)*/
--static inline void emit_a32_mov_r(const s8 dst, const s8 src,
-+static inline void emit_a32_mov_r(const s8 dst, const s8 src, const u8 off,
- 				  struct jit_ctx *ctx) {
- 	const s8 *tmp = bpf2a32[TMP_REG_1];
- 	s8 rt;
- 
- 	rt = arm_bpf_get_reg32(src, tmp[0], ctx);
-+	if (off && off != 32) {
-+		emit(ARM_LSL_I(rt, rt, 32 - off), ctx);
-+		emit(ARM_ASR_I(rt, rt, 32 - off), ctx);
-+	}
- 	arm_bpf_put_reg32(dst, rt, ctx);
- }
- 
-@@ -761,15 +765,15 @@ static inline void emit_a32_mov_r64(const bool is64, const s8 dst[],
- 				  const s8 src[],
- 				  struct jit_ctx *ctx) {
- 	if (!is64) {
--		emit_a32_mov_r(dst_lo, src_lo, ctx);
-+		emit_a32_mov_r(dst_lo, src_lo, 0, ctx);
- 		if (!ctx->prog->aux->verifier_zext)
- 			/* Zero out high 4 bytes */
- 			emit_a32_mov_i(dst_hi, 0, ctx);
- 	} else if (__LINUX_ARM_ARCH__ < 6 &&
- 		   ctx->cpu_architecture < CPU_ARCH_ARMv5TE) {
- 		/* complete 8 byte move */
--		emit_a32_mov_r(dst_lo, src_lo, ctx);
--		emit_a32_mov_r(dst_hi, src_hi, ctx);
-+		emit_a32_mov_r(dst_lo, src_lo, 0, ctx);
-+		emit_a32_mov_r(dst_hi, src_hi, 0, ctx);
- 	} else if (is_stacked(src_lo) && is_stacked(dst_lo)) {
- 		const u8 *tmp = bpf2a32[TMP_REG_1];
- 
-@@ -785,6 +789,24 @@ static inline void emit_a32_mov_r64(const bool is64, const s8 dst[],
- 	}
- }
- 
-+/* dst = (signed)src */
-+static inline void emit_a32_movsx_r64(const bool is64, const u8 off, const s8 dst[], const s8 src[],
-+				      struct jit_ctx *ctx) {
-+	const s8 *tmp = bpf2a32[TMP_REG_1];
-+	const s8 *rt;
-+
-+	rt = arm_bpf_get_reg64(dst, tmp, ctx);
-+
-+	emit_a32_mov_r(dst_lo, src_lo, off, ctx);
-+	if (!is64) {
-+		if (!ctx->prog->aux->verifier_zext)
-+			/* Zero out high 4 bytes */
-+			emit_a32_mov_i(dst_hi, 0, ctx);
-+	} else {
-+		emit(ARM_ASR_I(rt[0], rt[1], 31), ctx);
-+	}
-+}
-+
- /* Shift operations */
- static inline void emit_a32_alu_i(const s8 dst, const u32 val,
- 				struct jit_ctx *ctx, const u8 op) {
-@@ -1446,7 +1468,10 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
- 				emit_a32_mov_i(dst_hi, 0, ctx);
- 				break;
- 			}
--			emit_a32_mov_r64(is64, dst, src, ctx);
-+			if (insn->off)
-+				emit_a32_movsx_r64(is64, insn->off, dst, src, ctx);
-+			else
-+				emit_a32_mov_r64(is64, dst, src, ctx);
- 			break;
- 		case BPF_K:
- 			/* Sign-extend immediate value to destination reg */
+@@ -1633,8 +1633,10 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
+ 	/* dst = htobe(dst) */
+ 	case BPF_ALU | BPF_END | BPF_FROM_LE:
+ 	case BPF_ALU | BPF_END | BPF_FROM_BE:
++	/* dst = bswap(dst) */
++	case BPF_ALU64 | BPF_END | BPF_TO_LE:
+ 		rd = arm_bpf_get_reg64(dst, tmp, ctx);
+-		if (BPF_SRC(code) == BPF_FROM_LE)
++		if (BPF_SRC(code) == BPF_FROM_LE && BPF_CLASS(code) != BPF_ALU64)
+ 			goto emit_bswap_uxt;
+ 		switch (imm) {
+ 		case 16:
 -- 
 2.39.2
 
