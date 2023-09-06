@@ -2,71 +2,117 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF098794528
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Sep 2023 23:36:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 846747945D7
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Sep 2023 00:02:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231678AbjIFVg7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 6 Sep 2023 17:36:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49036 "EHLO
+        id S240746AbjIFWCP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 6 Sep 2023 18:02:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231613AbjIFVg7 (ORCPT
+        with ESMTP id S230380AbjIFWCP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 6 Sep 2023 17:36:59 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EB8BE7C;
-        Wed,  6 Sep 2023 14:36:55 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3B28C433C7;
-        Wed,  6 Sep 2023 21:36:53 +0000 (UTC)
-Date:   Wed, 6 Sep 2023 17:37:06 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     zhengyejian1@huawei.com, akaher@vmware.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, mhiramat@kernel.org,
-        shuah@kernel.org, skhan@linuxfoundation.org, yeweihua4@huawei.com
-Subject: Re: "[PATCH] selftests/ftrace: Correctly enable event in
- instance-event.tc"
-Message-ID: <20230906173706.7aeb8716@gandalf.local.home>
-In-Reply-To: <20230906103718.0405ccb4@gandalf.local.home>
-References: <b62e6539-7b25-c8ab-6b6c-47e723023297@huawei.com>
-        <20230906142652.191866-1-naresh.kamboju@linaro.org>
-        <20230906103718.0405ccb4@gandalf.local.home>
-X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Wed, 6 Sep 2023 18:02:15 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2979172E;
+        Wed,  6 Sep 2023 15:02:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694037731; x=1725573731;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=CTCvrcu7YjmCiO9BUFROPsDi8XJkcyMLi88JXj4GLuA=;
+  b=PwSIC50qv/r4HWvoo76afxMww+TwsQTGrSkbKsWluAcAZhZtI+cJkbih
+   6KFilPwu1FPAj2qEpeSAulUck1sopFdC0KN25HzMmAzp5aJjnNcrtEVMC
+   3ODPT3bKYSFJjVm3U3PGIMELpeuLaVRQnkWKIOzS8QhQuLiRgLhwhJJfm
+   tVlyIWNS+neMTnPvsNuDTlz3Jsf8SSUWPlqvFXEsy9QSjayUo/OYXNMQD
+   8KcTI1PcKblfkmTPnFhCBRPIA/roIUQd5koeb0XTB0QbTCk77UEdwUA57
+   NEQKISTxRPFo2WyvUxbUhtzhQsqgWJ4n2UQNvhIG0uyFjPqAMjIS0Qwwn
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="357507866"
+X-IronPort-AV: E=Sophos;i="6.02,233,1688454000"; 
+   d="scan'208";a="357507866"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2023 15:02:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10825"; a="718438522"
+X-IronPort-AV: E=Sophos;i="6.02,233,1688454000"; 
+   d="scan'208";a="718438522"
+Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 06 Sep 2023 15:02:06 -0700
+Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qe0b5-0000cx-33;
+        Wed, 06 Sep 2023 22:02:03 +0000
+Date:   Thu, 7 Sep 2023 06:01:54 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Meng Li <li.meng@amd.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Huang Rui <ray.huang@amd.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-acpi@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Shimmer Huang <shimmer.huang@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>, Meng Li <li.meng@amd.com>
+Subject: Re: [PATCH V5 6/7] Documentation: amd-pstate: introduce amd-pstate
+ preferred core
+Message-ID: <202309070502.YxzVpYTO-lkp@intel.com>
+References: <20230905015116.2268926-7-li.meng@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230905015116.2268926-7-li.meng@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 6 Sep 2023 10:37:18 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+Hi Meng,
 
-> > Log details,
-> > -------------
-> > # ok 45 ftrace - test tracing error log support
-> > <47>[ 1373.662292] systemd-journald[90]: Sent WATCHDOG=1 notification.
-> > # ok 46 Test creation and deletion of trace instances while setting an event  
-> 
-> It's definitely a race with the creation and deletion of instances.
-> 
-> I'm going to run it on my laptop VM and see if that reproduces it. My other
-> VM is on a pretty powerful machine, and perhaps that's keeping it from
-> hitting the race.
+kernel test robot noticed the following build warnings:
 
-Putting in a while loop of:
+[auto build test WARNING on rafael-pm/linux-next]
+[also build test WARNING on linus/master v6.5 next-20230906]
+[cannot apply to tip/x86/core]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-  # while :; do ./ftracetest test.d/instances/instance-event.tc ; done
+url:    https://github.com/intel-lab-lkp/linux/commits/Meng-Li/x86-Drop-CPU_SUP_INTEL-from-SCHED_MC_PRIO-for-the-expansion/20230906-003754
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20230905015116.2268926-7-li.meng%40amd.com
+patch subject: [PATCH V5 6/7] Documentation: amd-pstate: introduce amd-pstate preferred core
+reproduce: (https://download.01.org/0day-ci/archive/20230907/202309070502.YxzVpYTO-lkp@intel.com/reproduce)
 
-eventually triggered the bug. Looks like this is really an existing bug not
-related to the eventfs, but the eventfs code actually opened up the window
-of this race.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309070502.YxzVpYTO-lkp@intel.com/
 
-Hopefully I'll have a fix shortly.
+All warnings (new ones prefixed by >>):
 
--- Steve
+>> Documentation/admin-guide/pm/amd-pstate.rst:304: WARNING: Title underline too short.
+
+vim +304 Documentation/admin-guide/pm/amd-pstate.rst
+
+c22760885fd6f7 Huang Rui  2021-12-24  301  
+92e6088427c5da Perry Yuan 2023-01-31  302  
+3a7b575560efa6 Meng Li    2023-09-05  303  ``amd-pstate`` Driver Operation Modes
+92e6088427c5da Perry Yuan 2023-01-31 @304  =================================
+92e6088427c5da Perry Yuan 2023-01-31  305  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
