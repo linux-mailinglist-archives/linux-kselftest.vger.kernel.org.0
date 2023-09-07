@@ -2,123 +2,181 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D94CF797753
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Sep 2023 18:24:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 661F97976B5
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Sep 2023 18:14:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231401AbjIGQYR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 7 Sep 2023 12:24:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41232 "EHLO
+        id S238751AbjIGQOy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 7 Sep 2023 12:14:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239158AbjIGQIC (ORCPT
+        with ESMTP id S239217AbjIGQOb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 7 Sep 2023 12:08:02 -0400
-Received: from pandora.armlinux.org.uk (unknown [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C562686;
-        Thu,  7 Sep 2023 09:01:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=kD1YyyXNG+bKprfq5aUsbhIrdAQXRAipj+bdh10wsGU=; b=R5fqY8O2CcUumwu92I2xrAwmUL
-        yMLTuJVgImd3QuqAH0tF6A3Y566HtfP1Y114wlFKQQET0OJr4PIH4abLwJpaJ5OEe6T3+eUmrVakt
-        yPTbl5ao/TDmrhHhDhq4VSYSnse/2m6jQp8RL7c69MzMBr4a51OfMpOK7G6krh2FY80dnTZV1ll3K
-        I2RW11wNhczD+0zYkplqeuxtmqek4kcYeOTZifCnBoaboKiGe+nyTJrAvIjCr8BE/b1UlocnCUFof
-        v08TR5qtkTSUbqghY4XTGtxl4qmPgfCHPZ3AbooDxRztGtWLnL5pl1uVwyaRx8v/c7WC5CF21ToZx
-        nBrSed5w==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:36812)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.96)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1qeB6R-0001lj-0o;
-        Thu, 07 Sep 2023 10:15:07 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1qeB6Q-0005ie-Gr; Thu, 07 Sep 2023 10:15:06 +0100
-Date:   Thu, 7 Sep 2023 10:15:06 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Puranjay Mohan <puranjay12@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>,
-        Yonghong Song <yonghong.song@linux.dev>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shubham Bansal <illusionist.neo@gmail.com>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 4/8] arm32, bpf: add support for
- unconditional bswap instruction
-Message-ID: <ZPmUmqzvq1sV7r/f@shell.armlinux.org.uk>
-References: <20230906183320.1959008-1-puranjay12@gmail.com>
- <20230906183320.1959008-5-puranjay12@gmail.com>
- <ZPmOUYBdRxR1/8vw@shell.armlinux.org.uk>
- <mb61pzg1y1hb5.fsf@amazon.com>
+        Thu, 7 Sep 2023 12:14:31 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0DFD1FE8;
+        Thu,  7 Sep 2023 09:10:57 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-52c88a03f99so1467246a12.2;
+        Thu, 07 Sep 2023 09:10:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1694102993; x=1694707793; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EBBEzL7qY3uq6+ZqigJzuGuvME9kRMD/negQGQFd1kU=;
+        b=SVZ3HxdXmiXzCR3Sg4YkbUiQK5WHwETv3O3BrTFQ+jw5sKWGBZM6Hag0a7249Uogof
+         wSEz0ad57FX0XyHKFUSS0OsMHVwclj6u2mnqyNBkikj07KP0KPREzy6M5zZYh68eU8yo
+         ONg6MZfg949Er1TgPsYZRWEibT1sQpXGkg5KBcCsVQCs9ocsQyxcwYSWFL1etUPTNDg6
+         E0mUxI4/E0M0t6arTvkEoP2ZH0S3b824Lx6OJVknSr5nrsaXyYBaYdH9dxfltVCszhE6
+         apK4S0ZTozlj/xr+clcCGc9QPg70gERbhJ/eFCRc3mk1pJovU7uzQIS/pjfvn5M8JcPr
+         HL9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1694102993; x=1694707793;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EBBEzL7qY3uq6+ZqigJzuGuvME9kRMD/negQGQFd1kU=;
+        b=kXjMsZ79g/QSnre9deS0wouUz0mQiiUQfDIc97dqKYnPkI2Jf5rnbyRsE7iZQ7FOwJ
+         zBSFF3hKb0PBepgqvxyrTixzf38tQ1cMCoY3jzz/PMFhYMrNuglv2mtCuma+l/epaZy8
+         t9th/jd/aLK4yIV0EZOLbgGu/H946K08IJicBZ0NVTCoUoviWOwTDyCZYEnhM/neJTk9
+         ZtU0sEUdgZc6ZOktQx7knsp32KDeBy3gmGXzIsFZkjmUtht50GQTOQUgryDxOqc439S0
+         +/7t9J9YJxqyspyMlVuM+IszxMAzhtH+2AClPxTPUp8+Wt5cHnQw2O0jc9UARb/AXRDr
+         kGSw==
+X-Gm-Message-State: AOJu0YzkuZaO5kygphD4AF86Si5fHxv7D7nJszdsZ0JNiiN33hN35BWF
+        4yCxKdk3ylOeMLYVziYegSbKFcrXeLcXxkds+Hi0vQFj
+X-Google-Smtp-Source: AGHT+IF10+wenAf/r4lgyEOBY89UZGCOdwUC3J+LpxGhdoe1wYTW/cIeqheprklSo2IBVjz46fa7sLxs5xkSY5w4zLI=
+X-Received: by 2002:a2e:804c:0:b0:2bc:c830:4cbb with SMTP id
+ p12-20020a2e804c000000b002bcc8304cbbmr3729686ljg.45.1694078317171; Thu, 07
+ Sep 2023 02:18:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <mb61pzg1y1hb5.fsf@amazon.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RDNS_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+References: <cover.1693659382.git.haibo1.xu@intel.com> <b6ef1b031e3a581f481cf19a26623388163444b4.1693659382.git.haibo1.xu@intel.com>
+ <20230904-aa8b0d8d23d391586686038a@orel> <CAJve8ok5cU+h1K+WJ+aDpB+u+PBo8XosUyyVbMGy-xR0XiWFdw@mail.gmail.com>
+ <CAJve8om+dLcG+4trDfG1yx8vhj52RhPZrJoF-emWDX+OPM088A@mail.gmail.com> <20230907-bde62d037a3aaeedfe31f964@orel>
+In-Reply-To: <20230907-bde62d037a3aaeedfe31f964@orel>
+From:   Haibo Xu <xiaobo55x@gmail.com>
+Date:   Thu, 7 Sep 2023 17:18:25 +0800
+Message-ID: <CAJve8okJOHofRK=0VRG8QPetOgk_WexEui_3UtEKk+4x1iPwMA@mail.gmail.com>
+Subject: Re: [PATCH v2 7/8] KVM: riscv: selftest: Change vcpu_has_ext to a
+ common function
+To:     Andrew Jones <ajones@ventanamicro.com>
+Cc:     Haibo Xu <haibo1.xu@intel.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Guo Ren <guoren@kernel.org>,
+        Daniel Henrique Barboza <dbarboza@ventanamicro.com>,
+        wchen <waylingii@gmail.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Vishal Annapurve <vannapurve@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Aaron Lewis <aaronlewis@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Mingwei Zhang <mizhang@google.com>,
+        Jim Mattson <jmattson@google.com>,
+        Lei Wang <lei4.wang@intel.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Like Xu <likexu@tencent.com>, Peter Gonda <pgonda@google.com>,
+        Thomas Huth <thuth@redhat.com>,
+        =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <philmd@linaro.org>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Michal Luczaj <mhal@rbox.co>, Paul Durrant <paul@xen.org>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvm-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Sep 07, 2023 at 09:08:46AM +0000, Puranjay Mohan wrote:
-> On Thu, Sep 07 2023, Russell King (Oracle) wrote:
-> 
-> > On Wed, Sep 06, 2023 at 06:33:16PM +0000, Puranjay Mohan wrote:
-> >> @@ -1633,8 +1633,10 @@ static int build_insn(const struct bpf_insn *insn, struct jit_ctx *ctx)
-> >>  	/* dst = htobe(dst) */
-> >>  	case BPF_ALU | BPF_END | BPF_FROM_LE:
-> >>  	case BPF_ALU | BPF_END | BPF_FROM_BE:
-> >> +	/* dst = bswap(dst) */
-> >> +	case BPF_ALU64 | BPF_END | BPF_TO_LE:
-> >>  		rd = arm_bpf_get_reg64(dst, tmp, ctx);
-> >> -		if (BPF_SRC(code) == BPF_FROM_LE)
-> >> +		if (BPF_SRC(code) == BPF_FROM_LE && BPF_CLASS(code) != BPF_ALU64)
+On Thu, Sep 7, 2023 at 5:01=E2=80=AFPM Andrew Jones <ajones@ventanamicro.co=
+m> wrote:
+>
+> On Thu, Sep 07, 2023 at 11:57:00AM +0800, Haibo Xu wrote:
+> > On Wed, Sep 6, 2023 at 6:10=E2=80=AFPM Haibo Xu <xiaobo55x@gmail.com> w=
+rote:
+> > >
+> > > On Mon, Sep 4, 2023 at 10:04=E2=80=AFPM Andrew Jones <ajones@ventanam=
+icro.com> wrote:
+> > > >
+> > > > On Sat, Sep 02, 2023 at 08:59:29PM +0800, Haibo Xu wrote:
+> > > > > diff --git a/tools/testing/selftests/kvm/riscv/get-reg-list.c b/t=
+ools/testing/selftests/kvm/riscv/get-reg-list.c
+> > > > > index d8ecacd03ecf..c4028bf32e3f 100644
+> > > > > --- a/tools/testing/selftests/kvm/riscv/get-reg-list.c
+> > > > > +++ b/tools/testing/selftests/kvm/riscv/get-reg-list.c
+> > > > > @@ -44,20 +44,6 @@ bool check_reject_set(int err)
+> > > > >       return err =3D=3D EINVAL;
+> > > > >  }
+> > > > >
+> > > > > -static inline bool vcpu_has_ext(struct kvm_vcpu *vcpu, int ext)
+> > > > > -{
+> > > > > -     int ret;
+> > > > > -     unsigned long value;
+> > > > > -
+> > > > > -     ret =3D __vcpu_get_reg(vcpu, RISCV_ISA_EXT_REG(ext), &value=
+);
+> > > > > -     if (ret) {
+> > > > > -             printf("Failed to get ext %d", ext);
+> > > > > -             return false;
+> > > > > -     }
+> > > > > -
+> > > > > -     return !!value;
+> > > >
+> > > > get-reg-list will now assert on get-reg when an extension isn't pre=
+sent,
+> > > > rather than failing the __TEST_REQUIRE(), which would do a skip ins=
+tead.
+> > > > We need both the return false version and the assert version.
+> > > >
+> > >
+> > > Ok, Will keep this one for get-reg-list and add another one for
+> > > arch-timer specific usage.
+> > >
 > >
-> > With the addition of the BPF_ALU64 case, I'm wondering why this if() is
-> > affected. If you were adding:
+> > Just thought about it again, maybe we only need the "return false"
+> > version for both get-reg-list
+> > and arch-timer tests since if an extension was not available, the test
+> > can be skipped with a message.
 > >
-> > 	case BPF_ALU64 | BPF_END | BPF_FROM_LE:
+> > bool vcpu_has_ext(struct kvm_vcpu *vcpu, int ext)
+> > {
+> >        unsigned long value =3D 0;
 > >
-> > then maybe there would be a reason, but the BPF_ALU64 | BPF_END |
-> > BPF_TO_LE case will never match even the original if() statement.
-> 
-> The reason is that these mean the same thing.
-> from: include/uapi/linux/bpf.h
-> 
-> #define BPF_TO_LE	0x00	/* convert to little-endian */
-> #define BPF_TO_BE	0x08	/* convert to big-endian */
-> #define BPF_FROM_LE	BPF_TO_LE
-> #define BPF_FROM_BE	BPF_TO_BE
-> 
-> So, to not cause confusion and follow the earlier cases I can add:
-> 
-> case BPF_ALU64 | BPF_END | BPF_FROM_LE:
-> 
-> in the next version.
+> >        __vcpu_get_reg(vcpu, RISCV_ISA_EXT_REG(ext), &value);
+> >
+> >        return !!value;
+> > }
+>
+> Yup, I had actually seen that when reviewing a later patch in this series=
+,
+> but I wasn't concerned if we added the assert type anyway, since we
+> frequently end up with the two function types for KVM queries. If we don'=
+t
+> have a need for an assert type yet, then we don't need to introduce it.
+> However, we should introduce the non-assert type as __vcpu_has_ext(),
+> reserving the vcpu_has_ext() name for the assert type, per the kvm
+> selftests naming convention.
+>
 
-It might be worth adding a comment after each stating one of:
+Sure, thanks!
 
-	/* also BPF_TO_LE */
-	/* also BPF_TO_BE */
-
-as appropriate to make this more readable.
-
-Thanks.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+> Thanks,
+> drew
