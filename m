@@ -2,138 +2,126 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74214794684
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Sep 2023 00:46:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C9ED796E42
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Sep 2023 03:01:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232065AbjIFWqp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 6 Sep 2023 18:46:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37120 "EHLO
+        id S231382AbjIGBBi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 6 Sep 2023 21:01:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244494AbjIFWqp (ORCPT
+        with ESMTP id S229563AbjIGBBh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 6 Sep 2023 18:46:45 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F02561BC5;
-        Wed,  6 Sep 2023 15:46:39 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9422FC433C9;
-        Wed,  6 Sep 2023 22:46:38 +0000 (UTC)
-Date:   Wed, 6 Sep 2023 18:46:50 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     zhengyejian1@huawei.com, akaher@vmware.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org, mhiramat@kernel.org,
-        shuah@kernel.org, skhan@linuxfoundation.org, yeweihua4@huawei.com
+        Wed, 6 Sep 2023 21:01:37 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AE4EE8;
+        Wed,  6 Sep 2023 18:01:33 -0700 (PDT)
+Received: from dggpeml500012.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Rh19V427qz1M8v6;
+        Thu,  7 Sep 2023 08:59:42 +0800 (CST)
+Received: from [10.67.110.218] (10.67.110.218) by
+ dggpeml500012.china.huawei.com (7.185.36.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.31; Thu, 7 Sep 2023 09:01:30 +0800
+Message-ID: <eb050960-b2bb-4dbe-7879-a0dd3935556e@huawei.com>
+Date:   Thu, 7 Sep 2023 09:01:30 +0800
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
 Subject: Re: "[PATCH] selftests/ftrace: Correctly enable event in
  instance-event.tc"
-Message-ID: <20230906184650.074dfdcf@gandalf.local.home>
-In-Reply-To: <20230906145000.29291a1b@gandalf.local.home>
+Content-Language: en-US
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>
+CC:     <akaher@vmware.com>, <linux-kernel@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>,
+        <linux-trace-kernel@vger.kernel.org>, <mhiramat@kernel.org>,
+        <shuah@kernel.org>, <skhan@linuxfoundation.org>,
+        <yeweihua4@huawei.com>
 References: <b62e6539-7b25-c8ab-6b6c-47e723023297@huawei.com>
-        <20230906142652.191866-1-naresh.kamboju@linaro.org>
-        <20230906145000.29291a1b@gandalf.local.home>
-X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+ <20230906142652.191866-1-naresh.kamboju@linaro.org>
+ <20230906103718.0405ccb4@gandalf.local.home>
+ <20230906173706.7aeb8716@gandalf.local.home>
+From:   Zheng Yejian <zhengyejian1@huawei.com>
+In-Reply-To: <20230906173706.7aeb8716@gandalf.local.home>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.110.218]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpeml500012.china.huawei.com (7.185.36.15)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 6 Sep 2023 14:50:00 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
-
-> BTW, when you ran these, did you apply:
+On 2023/9/7 05:37, Steven Rostedt wrote:
+> On Wed, 6 Sep 2023 10:37:18 -0400
+> Steven Rostedt <rostedt@goodmis.org> wrote:
 > 
->   https://patchwork.kernel.org/project/linux-trace-kernel/patch/20230905183332.628d7cc0@gandalf.local.home/
+>>> Log details,
+>>> -------------
+>>> # ok 45 ftrace - test tracing error log support
+>>> <47>[ 1373.662292] systemd-journald[90]: Sent WATCHDOG=1 notification.
+>>> # ok 46 Test creation and deletion of trace instances while setting an event
+>>
+>> It's definitely a race with the creation and deletion of instances.
+>>
+>> I'm going to run it on my laptop VM and see if that reproduces it. My other
+>> VM is on a pretty powerful machine, and perhaps that's keeping it from
+>> hitting the race.
+> 
+> Putting in a while loop of:
+> 
+>    # while :; do ./ftracetest test.d/instances/instance-event.tc ; done
+> 
 
-Can you both try the above patch and this patch?
+In test.d/instances/instance-event.tc, concurrently create/delete/access
+intances just about 1 second and then killed them, it may cause missing
+the race.
 
--- Steve
+No longer sleep and kill, following testcase can also reproduce:
+```
+#!/bin/bash
 
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index 35783a7baf15..0827037ee3b8 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -4973,6 +4973,33 @@ int tracing_open_generic_tr(struct inode *inode, struct file *filp)
- 	return 0;
- }
- 
-+/*
-+ * The private pointer of the inode is the trace_event_file.
-+ * Update the tr ref count associated to it.
-+ */
-+int tracing_open_file_tr(struct inode *inode, struct file *filp)
-+{
-+	struct trace_event_file *file = inode->i_private;
-+	int ret;
-+
-+	ret = tracing_check_open_get_tr(file->tr);
-+	if (ret)
-+		return ret;
-+
-+	filp->private_data = inode->i_private;
-+
-+	return 0;
-+}
-+
-+int tracing_release_file_tr(struct inode *inode, struct file *filp)
-+{
-+	struct trace_event_file *file = inode->i_private;
-+
-+	trace_array_put(file->tr);
-+
-+	return 0;
-+}
-+
- static int tracing_mark_open(struct inode *inode, struct file *filp)
- {
- 	stream_open(inode, filp);
-diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
-index 5669dd1f90d9..77debe53f07c 100644
---- a/kernel/trace/trace.h
-+++ b/kernel/trace/trace.h
-@@ -610,6 +610,8 @@ void tracing_reset_all_online_cpus(void);
- void tracing_reset_all_online_cpus_unlocked(void);
- int tracing_open_generic(struct inode *inode, struct file *filp);
- int tracing_open_generic_tr(struct inode *inode, struct file *filp);
-+int tracing_open_file_tr(struct inode *inode, struct file *filp);
-+int tracing_release_file_tr(struct inode *inode, struct file *filp);
- bool tracing_is_disabled(void);
- bool tracer_tracing_is_on(struct trace_array *tr);
- void tracer_tracing_on(struct trace_array *tr);
-diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
-index ed367d713be0..2af92177b765 100644
---- a/kernel/trace/trace_events.c
-+++ b/kernel/trace/trace_events.c
-@@ -2103,9 +2103,10 @@ static const struct file_operations ftrace_set_event_notrace_pid_fops = {
- };
- 
- static const struct file_operations ftrace_enable_fops = {
--	.open = tracing_open_generic,
-+	.open = tracing_open_file_tr,
- 	.read = event_enable_read,
- 	.write = event_enable_write,
-+	.release = tracing_release_file_tr,
- 	.llseek = default_llseek,
- };
- 
-@@ -2122,9 +2123,10 @@ static const struct file_operations ftrace_event_id_fops = {
- };
- 
- static const struct file_operations ftrace_event_filter_fops = {
--	.open = tracing_open_generic,
-+	.open = tracing_open_file_tr,
- 	.read = event_filter_read,
- 	.write = event_filter_write,
-+	.release = tracing_release_file_tr,
- 	.llseek = default_llseek,
- };
- 
--- 
-2.40.1
+cd /sys/kernel/tracing/instances
+
+instance_slam() {
+   while :; do
+           mkdir foo 2> /dev/null
+           rmdir foo 2> /dev/null
+   done
+}
+
+instance_set() {
+         while :; do
+                 echo 1 > foo/events/sched/sched_switch/enable
+         done 2> /dev/null
+}
+
+instance_slam &
+p1=$!
+echo $p1
+
+instance_set &
+p2=$!
+echo $p2
+```
+
+--
+
+Thanks,
+Zheng Yejian
+
+> eventually triggered the bug. Looks like this is really an existing bug not
+> related to the eventfs, but the eventfs code actually opened up the window
+> of this race.
+> 
+> Hopefully I'll have a fix shortly.
+> 
+> -- Steve
+> 
 
