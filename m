@@ -2,60 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F079A796F6D
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Sep 2023 05:57:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EBAC796F92
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Sep 2023 06:20:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232938AbjIGD5X (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 6 Sep 2023 23:57:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45310 "EHLO
+        id S229843AbjIGEU4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 7 Sep 2023 00:20:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232726AbjIGD5S (ORCPT
+        with ESMTP id S229582AbjIGEUq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 6 Sep 2023 23:57:18 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C908E41;
-        Wed,  6 Sep 2023 20:57:14 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id 38308e7fff4ca-2b974031aeaso9504891fa.0;
-        Wed, 06 Sep 2023 20:57:14 -0700 (PDT)
+        Thu, 7 Sep 2023 00:20:46 -0400
+Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EF14E5A;
+        Wed,  6 Sep 2023 21:20:42 -0700 (PDT)
+Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2bd6611873aso8785181fa.1;
+        Wed, 06 Sep 2023 21:20:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694059032; x=1694663832; darn=vger.kernel.org;
+        d=gmail.com; s=20221208; t=1694060440; x=1694665240; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3UQs6noN/LuXhMaxtbcJru+m5+v+IlSKIcqynK+aM9Y=;
-        b=fDxrT+lGMq39XKjj0KXPz9tLGKvx+OLZzhBNbX/fCD3TCPiNk+uJWvOCAy1aLhnjRS
-         H0O3gkiCnj0RSPsKFJedJYK/cxirktn8hnfb84y8HrEEMtIhrzea95j9iHfEErY3mJIU
-         CTSeh+4K4anxvtQBxbKCFfWRIbta3FYCr5/6Rz2l+5N6EBNAxvjxuIB8kRW6ELHAyF+P
-         /fh9cRJMzSSOinvTY4lAZD4WudDIWB5dC6Iqe4t5YHDflfHPN8ZPYmqgz6f20+oiQwo2
-         40gx0Urv2OqthbO5PO1Y6tQ0gLQQ3huvrgfpSszuyl8OBr5eLavDcAPyim+mLUibNxZb
-         540g==
+        bh=ggNyFVV0uCZfL0MPihiu3QYZ5fZKGzQ4fJp4UHCFGEg=;
+        b=HWBS0nUWsOsKvQ+VXFuldC4tQTAUV+5XT5KWF26mFXmxg4cP72eH5F8dzz4e44Hul7
+         gr8dj6BkTYGhOqEaBNi3t1Ngv7agqGfjaMs84hZYKbSFmAjIfQkInuoaSp6AgLHJDE/q
+         IeL52TG5u338zUzHeypJi0VexrOhcRlgPrKy9twg4gkGzUQGnRFGb+6gNs3vaCz8t+X+
+         733KrODsDS3eAiShJaj8OconiakzJeO4kvjpX60XzP8Sjm+yULWo1HZ5pN+vhrtoDej0
+         VguEBFOxGjbUJgNwmI+50ccok55eTEdEOSsR7pCsZRyiccnTUZ871TUACHk+jZuWdBHK
+         Z8eQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1694059032; x=1694663832;
+        d=1e100.net; s=20221208; t=1694060440; x=1694665240;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3UQs6noN/LuXhMaxtbcJru+m5+v+IlSKIcqynK+aM9Y=;
-        b=BRN0aV9DOQHNiRqpP7U0Dlt7yCI7BlOhpT38eZ8Yy2810rQ4LoMHXcgrxoZi2dP+VT
-         pxGnBxh0XgMqNJKiNMzuPlk5uU7tEW5VFgctB0rKuj0Z9NICNCh0NlQifbd6LQRTdcJo
-         DtVjm+jsxYfJARbJGaTW/vIUha/5eENrE7Ii+q0Feq8kK+jCgBVMVTKnOBmy7sqf+yq1
-         hJ5wiyJMxD+PjpyA18nl8fphk1cO/FerqxeUdZAeV4abbZkI8V/99o67kHwyuYKLUMTc
-         WUNI98nTQuPjfjHQS7SY0wF6gPwsOzDEZ0U461nU2GeGrCVnzVtucD5wngcKDBJaydzC
-         dW6w==
-X-Gm-Message-State: AOJu0YwkIxJePRs3I604lQFJHAfVsZaxvK8OGPBISxBITfcIAnvF9+Cb
-        Y/jYQGf+GOOa58pmJaLusZqu+VUw6gjocbsYAKo=
-X-Google-Smtp-Source: AGHT+IGI6qgIYSsAicMI6I+r6ioP3/2vp5QnhFlwnPmei3QJDcCP4J/D9Z4FZEYYhTF0QZ1jr8qCxHSm6ZraniakZgA=
-X-Received: by 2002:a2e:9c10:0:b0:2bc:b70d:9cb5 with SMTP id
- s16-20020a2e9c10000000b002bcb70d9cb5mr3530939lji.33.1694059032084; Wed, 06
- Sep 2023 20:57:12 -0700 (PDT)
+        bh=ggNyFVV0uCZfL0MPihiu3QYZ5fZKGzQ4fJp4UHCFGEg=;
+        b=WK14T/19jeAA2PDIDskctzRwl24ReZGRmwkcPcxrkIwx87dPZsuKyjH2kwUM5zda1/
+         LCP4ArMiMHolkp15T/mi+C+AXbeL69sbMyZaoneWzH73GHwMbCMia5eGPCYUkcCdoB2s
+         HHFKgSm20CdDLbi5POS8InzQNwRa9IvCACZBXKbJWS4PBCTRTIinft2Z7drFDLf44GRo
+         f8j9rfF5KpwcIZoBKYZNJXmeGvXgCuCnMILxtsHk/FPi3I6z2ZUB+Qknpc9QFwbTe7Zd
+         OtHLqp3FDpSGgYy5eFeQk9hFFeDt4s2EcytLhHECmb8vMI/rMTkoiJFl7k+rx2E6Ta+A
+         4aiw==
+X-Gm-Message-State: AOJu0YxoKzq6d00tyAPacHLhzo0+nlCRLrr5bkRZ5t2eGxWy9izJTXhk
+        qzL47t1r2pnPQ4/LKSzrxFUNebUhsYTfsKNM/ZQ=
+X-Google-Smtp-Source: AGHT+IEs3wMkr3Qdbzy7z2cdD2QQiWNG7Kmko0xSRTbnllA2oAUwbpm0j15v/Il5Cbh5yzHk8TJ3foGdBVTBUXfKPp0=
+X-Received: by 2002:a2e:8708:0:b0:2bb:aaec:abad with SMTP id
+ m8-20020a2e8708000000b002bbaaecabadmr3613921lji.30.1694060440378; Wed, 06 Sep
+ 2023 21:20:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1693659382.git.haibo1.xu@intel.com> <b6ef1b031e3a581f481cf19a26623388163444b4.1693659382.git.haibo1.xu@intel.com>
- <20230904-aa8b0d8d23d391586686038a@orel> <CAJve8ok5cU+h1K+WJ+aDpB+u+PBo8XosUyyVbMGy-xR0XiWFdw@mail.gmail.com>
-In-Reply-To: <CAJve8ok5cU+h1K+WJ+aDpB+u+PBo8XosUyyVbMGy-xR0XiWFdw@mail.gmail.com>
+References: <cover.1693659382.git.haibo1.xu@intel.com> <d2b3c53537fef3f0a2d27d8be663a64123d4bc3c.1693659382.git.haibo1.xu@intel.com>
+ <20230904-a69c6a228bf4553cc58bca17@orel>
+In-Reply-To: <20230904-a69c6a228bf4553cc58bca17@orel>
 From:   Haibo Xu <xiaobo55x@gmail.com>
-Date:   Thu, 7 Sep 2023 11:57:00 +0800
-Message-ID: <CAJve8om+dLcG+4trDfG1yx8vhj52RhPZrJoF-emWDX+OPM088A@mail.gmail.com>
-Subject: Re: [PATCH v2 7/8] KVM: riscv: selftest: Change vcpu_has_ext to a
- common function
+Date:   Thu, 7 Sep 2023 12:20:29 +0800
+Message-ID: <CAJve8ok03P-t7pTA9mH=5vvkUy4NtxHac_Z_NM88cs55YQZATg@mail.gmail.com>
+Subject: Re: [PATCH v2 8/8] KVM: riscv: selftests: Add sstc timer test
 To:     Andrew Jones <ajones@ventanamicro.com>
 Cc:     Haibo Xu <haibo1.xu@intel.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
@@ -70,25 +69,26 @@ Cc:     Haibo Xu <haibo1.xu@intel.com>,
         Anup Patel <anup@brainfault.org>,
         Atish Patra <atishp@atishpatra.org>,
         Guo Ren <guoren@kernel.org>,
-        Daniel Henrique Barboza <dbarboza@ventanamicro.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Greentime Hu <greentime.hu@sifive.com>,
         wchen <waylingii@gmail.com>,
+        Daniel Henrique Barboza <dbarboza@ventanamicro.com>,
         Sean Christopherson <seanjc@google.com>,
         Ricardo Koller <ricarkol@google.com>,
         Vishal Annapurve <vannapurve@google.com>,
         David Matlack <dmatlack@google.com>,
         Aaron Lewis <aaronlewis@google.com>,
+        Mingwei Zhang <mizhang@google.com>,
         Vitaly Kuznetsov <vkuznets@redhat.com>,
         Ackerley Tng <ackerleytng@google.com>,
-        Mingwei Zhang <mizhang@google.com>,
-        Jim Mattson <jmattson@google.com>,
-        Lei Wang <lei4.wang@intel.com>,
         Vipin Sharma <vipinsh@google.com>,
         Maxim Levitsky <mlevitsk@redhat.com>,
-        Like Xu <likexu@tencent.com>, Peter Gonda <pgonda@google.com>,
-        Thomas Huth <thuth@redhat.com>,
+        Peter Gonda <pgonda@google.com>,
         =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <philmd@linaro.org>,
+        Thomas Huth <thuth@redhat.com>, Like Xu <likexu@tencent.com>,
         David Woodhouse <dwmw@amazon.co.uk>,
-        Michal Luczaj <mhal@rbox.co>, Paul Durrant <paul@xen.org>,
+        Michal Luczaj <mhal@rbox.co>,
+        zhang songyi <zhang.songyi@zte.com.cn>,
         linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
         kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
@@ -105,68 +105,86 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Sep 6, 2023 at 6:10=E2=80=AFPM Haibo Xu <xiaobo55x@gmail.com> wrote=
-:
+On Mon, Sep 4, 2023 at 10:58=E2=80=AFPM Andrew Jones <ajones@ventanamicro.c=
+om> wrote:
 >
-> On Mon, Sep 4, 2023 at 10:04=E2=80=AFPM Andrew Jones <ajones@ventanamicro=
-.com> wrote:
+> On Sat, Sep 02, 2023 at 08:59:30PM +0800, Haibo Xu wrote:
+> > Add a KVM selftest to validate the Sstc timer functionality.
+> > The test was ported from arm64 arch timer test.
 > >
-> > On Sat, Sep 02, 2023 at 08:59:29PM +0800, Haibo Xu wrote:
-> > > diff --git a/tools/testing/selftests/kvm/riscv/get-reg-list.c b/tools=
-/testing/selftests/kvm/riscv/get-reg-list.c
-> > > index d8ecacd03ecf..c4028bf32e3f 100644
-> > > --- a/tools/testing/selftests/kvm/riscv/get-reg-list.c
-> > > +++ b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-> > > @@ -44,20 +44,6 @@ bool check_reject_set(int err)
-> > >       return err =3D=3D EINVAL;
-> > >  }
-> > >
-> > > -static inline bool vcpu_has_ext(struct kvm_vcpu *vcpu, int ext)
-> > > -{
-> > > -     int ret;
-> > > -     unsigned long value;
-> > > -
-> > > -     ret =3D __vcpu_get_reg(vcpu, RISCV_ISA_EXT_REG(ext), &value);
-> > > -     if (ret) {
-> > > -             printf("Failed to get ext %d", ext);
-> > > -             return false;
-> > > -     }
-> > > -
-> > > -     return !!value;
-> >
-> > get-reg-list will now assert on get-reg when an extension isn't present=
-,
-> > rather than failing the __TEST_REQUIRE(), which would do a skip instead=
+> > Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
+> > ---
+
+> > diff --git a/tools/testing/selftests/kvm/riscv/arch_timer.c b/tools/tes=
+ting/selftests/kvm/riscv/arch_timer.c
+> > new file mode 100644
+> > index 000000000000..c50a33c1e4f9
+> > --- /dev/null
+> > +++ b/tools/testing/selftests/kvm/riscv/arch_timer.c
+> > @@ -0,0 +1,130 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * arch_timer.c - Tests the riscv64 sstc timer IRQ functionality
+> > + *
+> > + * The test validates the sstc timer IRQs using vstimecmp registers.
+> > + * It's ported from the aarch64 arch_timer test.
+> > + *
+
+> guest_run[_stage]() can be shared with aarch64, we just have a single
+> stage=3D0 for riscv.
+>
+
+Yes, we can. But if we share the guest_run[_stage]() by moving it to
+kvm/arch_timer.c
+or kvm/include/timer_test.h, we need to declare extra sub-functions
+somewhere in a
+header file(etc. guest_configure_timer_action()).
+
+> > +
+> > +static void guest_code(void)
+> > +{
+> > +     uint32_t cpu =3D guest_get_vcpuid();
+> > +     struct test_vcpu_shared_data *shared_data =3D &vcpu_shared_data[c=
+pu];
+> > +
+> > +     local_irq_disable();
+> > +     timer_irq_disable();
+> > +     local_irq_enable();
+>
+> I don't think we need to disable all interrupts when disabling the timer
+> interrupt.
+>
+
+There is no local_irq_disable() protection during the initial debug
+phase, but the test always
+fail with below error messages:
+
+Guest assert failed,  vcpu 0; stage; 0; iter: 0
+=3D=3D=3D=3D Test Assertion Failure =3D=3D=3D=3D
+  riscv/arch_timer.c:78: config_iter + 1 =3D=3D irq_iter
+  pid=3D585 tid=3D586 errno=3D4 - Interrupted system call
+  (stack trace empty)
+  0x1 !=3D 0x0 (config_iter + 1 !=3D irq_iter)
+
+To be frank, I am not quite sure why the local_irq_disable/enable() matters=
 .
-> > We need both the return false version and the assert version.
+One possible reason may be some timer irq was triggered before we set up th=
+e
+timecmp register.
+
+> > +
+> > +     guest_run(shared_data);
+> > +
+> > +     GUEST_DONE();
+> > +}
+> > +
+> > +void test_vm_cleanup(struct kvm_vm *vm)
+> > +{
+> > +     kvm_vm_free(vm);
+> > +}
+> > --
+> > 2.34.1
 > >
 >
-> Ok, Will keep this one for get-reg-list and add another one for
-> arch-timer specific usage.
->
-
-Just thought about it again, maybe we only need the "return false"
-version for both get-reg-list
-and arch-timer tests since if an extension was not available, the test
-can be skipped with a message.
-
-bool vcpu_has_ext(struct kvm_vcpu *vcpu, int ext)
-{
-       unsigned long value =3D 0;
-
-       __vcpu_get_reg(vcpu, RISCV_ISA_EXT_REG(ext), &value);
-
-       return !!value;
-}
-
-> > > -}
-> > > -
-> > >  void finalize_vcpu(struct kvm_vcpu *vcpu, struct vcpu_reg_list *c)
-> > >  {
-> > >       struct vcpu_reg_sublist *s;
-> > > --
-> > > 2.34.1
-> > >
-> >
-> > Thanks,
-> > drew
+> Thanks,
+> drew
