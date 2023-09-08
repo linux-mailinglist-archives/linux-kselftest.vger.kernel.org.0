@@ -2,136 +2,127 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E462F798C75
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Sep 2023 20:16:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9662F7990C1
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Sep 2023 22:02:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343603AbjIHSQY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 8 Sep 2023 14:16:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50322 "EHLO
+        id S230457AbjIHUDB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 8 Sep 2023 16:03:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343630AbjIHSQT (ORCPT
+        with ESMTP id S234042AbjIHUDA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 Sep 2023 14:16:19 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFC0F2694
-        for <linux-kselftest@vger.kernel.org>; Fri,  8 Sep 2023 11:15:51 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id 41be03b00d2f7-55b0e7efb1cso1781621a12.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 08 Sep 2023 11:15:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1694196940; x=1694801740; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=bzJP90890J6DS2ILmbqR2WVOWLTtiT+JlksVWQCV4ig=;
-        b=bl1ujU67u+ixwOtWaNyzQYq6xi+db+hRTqrSlc9fo1MBXyOQDzUHcSWOl1EE1DZck8
-         ihVhFlX8uf1jAE5kx5bHDrex0bjQD5kAXNPCgD7MJuqG2Mhoe3EAz/EQBxy103HmFB5D
-         4P+0PoOgIuOw5w05cwwbmTraKHXQyT0ivyCKIFkWyLWjAgYtM77l/lfu3av2Ib7vcSVC
-         TIpYX0gEHPBZai/qHms8Jo8g6JQVGctlqByrmoEL4d1QMsyLKqa8rcE+gyydzdbfxbYl
-         9wAjbc/1ZhxjRtGxSuV9g2fR2h4Xf3nLMyipdp7MBk95+znL5kR0r0dT119oHVSwX8up
-         U12g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694196940; x=1694801740;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bzJP90890J6DS2ILmbqR2WVOWLTtiT+JlksVWQCV4ig=;
-        b=jvyvhDdsq9XrGjYEh5J2Sfv3jbpxFbYqequXIwSOpIrRf3/U0x3Vu5TXHAkpEbsfyJ
-         LftZkprfbSQ0y8VNOaTJ8i7fgEp0Ye9i/HqLcyveQ8Xqlp+Zte65SEAh4yVi8xbfjnJe
-         R1f7E8+9DpmRyxUcL7X//qalutoVQ3GIEzAfl5Qd9/buCkfu8yCNE7tS8UKkRCfwx8MA
-         leP3jrClZAGHrWHMoPBh6YkCz/lZPGPnotpd3/xlDXSeD65bz/cGKdgQ1z0Vz4hc4NDz
-         mN6ir231Gb+TI/R46cBhzkKPNn9sfPg4EHPGJivQxrhcgvG6yysAWcGDEIv/PEXfBLUc
-         Xw9Q==
-X-Gm-Message-State: AOJu0YxZ1o648w1x2BNh2SOCgf31Zq/u2W/23B6alkiqZxyNbOXbBBl0
-        IerVRYhxrxpwAwqxwqXEVRPjjA==
-X-Google-Smtp-Source: AGHT+IG0SwDIfppHqNdGwPcCJeyT+JHKoYho2GCcjlhn6+AsFFggC/8y6hZlSv40pk2Mc9WSvFBLTQ==
-X-Received: by 2002:a05:6a21:a58c:b0:140:4563:2243 with SMTP id gd12-20020a056a21a58c00b0014045632243mr3966325pzc.50.1694196940044;
-        Fri, 08 Sep 2023 11:15:40 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id b11-20020aa7810b000000b00687a4b70d1esm1579235pfi.218.2023.09.08.11.15.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Sep 2023 11:15:39 -0700 (PDT)
-Message-ID: <64fb64cb.a70a0220.b726f.3ec1@mx.google.com>
-Date:   Fri, 08 Sep 2023 11:15:39 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 8 Sep 2023 16:03:00 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F267210DF;
+        Fri,  8 Sep 2023 13:02:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694203359; x=1725739359;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=R88nXWWc0OUb6aIDazZdF1rypv5AxHZtVExhYQzX2hM=;
+  b=XG4DuEg7Rt6taSiKZKPn/NP0NwDAy7Qjgf+WM2OhKopD6y/OX/9MO+sV
+   qdlZqqUKfJ9HaV2ax6IC4uJ9+2MerKQLqfkjF8+XjBxOVBrSNcaWUAzRL
+   YJxlF2QyIOkuroetY8MRFCYw7KSPvl33sXZ18YRdPLftA8AMllp6keODx
+   /SvPWsLyZccz0rtG8fBxClUnt/4wkgVS/RWfafaJSFHQHwUUkmzk2356a
+   kvynUR0GFOTUnaCTZAHGL/+a0T7pCZsYOY3k1+dtcBUp61ZCCr1F6Bm6Q
+   pN2Ukn1iZ/6pl2jOhUsCUI0X9JwgpHjA/ruqVK+0SRoJ+QlwefKurnKlL
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10827"; a="357200341"
+X-IronPort-AV: E=Sophos;i="6.02,237,1688454000"; 
+   d="scan'208";a="357200341"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Sep 2023 13:02:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10827"; a="885782557"
+X-IronPort-AV: E=Sophos;i="6.02,237,1688454000"; 
+   d="scan'208";a="885782557"
+Received: from lkp-server01.sh.intel.com (HELO 59b3c6e06877) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 08 Sep 2023 13:02:10 -0700
+Received: from kbuild by 59b3c6e06877 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qehgP-0002Yc-0X;
+        Fri, 08 Sep 2023 20:02:25 +0000
+Date:   Sat, 9 Sep 2023 04:02:10 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Michal Clapinski <mclapinski@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <muchun.song@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Hugh Dickins <hughd@google.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>, Yi Liu <yi.l.liu@intel.com>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Hans Verkuil <hverkuil@xs4all.nl>,
+        Steve French <stfrench@microsoft.com>,
+        Simon Ser <contact@emersion.fr>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Marc Dionne <marc.dionne@auristor.com>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        David Howells <dhowells@redhat.com>,
+        Luca Vizzarro <Luca.Vizzarro@arm.com>,
+        Jeff Xu <jeffxu@google.com>, Aleksa Sarai <cyphar@cyphar.com>,
+        Kees Cook <keescook@chromium.org>,
+        Daniel Verkamp <dverkamp@chromium.org>,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Michal Clapinski <mclapinski@google.com>
+Subject: Re: [PATCH v2 1/2] mm/memfd: add ioctl(MEMFD_CHECK_IF_ORIGINAL)
+Message-ID: <202309090301.rMwXPz1I-lkp@intel.com>
+References: <20230908175738.41895-2-mclapinski@google.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: next
-X-Kernelci-Tree: kselftest
-X-Kernelci-Report-Type: test
-X-Kernelci-Kernel: linux-kselftest-next-6.6-rc1-4-g3f3f384139ed
-Subject: kselftest/next kselftest-seccomp: 2 runs,
- 1 regressions (linux-kselftest-next-6.6-rc1-4-g3f3f384139ed)
-To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230908175738.41895-2-mclapinski@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kselftest/next kselftest-seccomp: 2 runs, 1 regressions (linux-kselftest-ne=
-xt-6.6-rc1-4-g3f3f384139ed)
+Hi Michal,
 
-Regressions Summary
--------------------
+kernel test robot noticed the following build warnings:
 
-platform        | arch  | lab           | compiler | defconfig             =
-       | regressions
-----------------+-------+---------------+----------+-----------------------=
--------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-10   | defconfig+kse...4-chro=
-mebook | 1          =
+[auto build test WARNING on akpm-mm/mm-everything]
 
+url:    https://github.com/intel-lab-lkp/linux/commits/Michal-Clapinski/mm-memfd-add-ioctl-MEMFD_CHECK_IF_ORIGINAL/20230909-020048
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20230908175738.41895-2-mclapinski%40google.com
+patch subject: [PATCH v2 1/2] mm/memfd: add ioctl(MEMFD_CHECK_IF_ORIGINAL)
+config: riscv-allnoconfig (https://download.01.org/0day-ci/archive/20230909/202309090301.rMwXPz1I-lkp@intel.com/config)
+compiler: riscv64-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230909/202309090301.rMwXPz1I-lkp@intel.com/reproduce)
 
-  Details:  https://kernelci.org/test/job/kselftest/branch/next/kernel/linu=
-x-kselftest-next-6.6-rc1-4-g3f3f384139ed/plan/kselftest-seccomp/
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309090301.rMwXPz1I-lkp@intel.com/
 
-  Test:     kselftest-seccomp
-  Tree:     kselftest
-  Branch:   next
-  Describe: linux-kselftest-next-6.6-rc1-4-g3f3f384139ed
-  URL:      https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kse=
-lftest.git
-  SHA:      3f3f384139ed147c71e1d770accf610133d5309b =
+All warnings (new ones prefixed by >>):
 
-
-
-Test Regressions
----------------- =
+>> mm/shmem.c:4480:13: warning: 'shmem_file_ioctl' defined but not used [-Wunused-function]
+    4480 | static long shmem_file_ioctl(struct file *file, unsigned int cmd,
+         |             ^~~~~~~~~~~~~~~~
 
 
+vim +/shmem_file_ioctl +4480 mm/shmem.c
 
-platform        | arch  | lab           | compiler | defconfig             =
-       | regressions
-----------------+-------+---------------+----------+-----------------------=
--------+------------
-mt8173-elm-hana | arm64 | lab-collabora | gcc-10   | defconfig+kse...4-chro=
-mebook | 1          =
+  4479	
+> 4480	static long shmem_file_ioctl(struct file *file, unsigned int cmd,
+  4481				     unsigned long arg)
+  4482	{
+  4483		return memfd_ioctl(file, cmd, arg);
+  4484	}
+  4485	
 
-
-  Details:     https://kernelci.org/test/plan/id/64fb56d8bff248dd32286dd3
-
-  Results:     0 PASS, 1 FAIL, 0 SKIP
-  Full config: defconfig+kselftest+arm64-chromebook
-  Compiler:    gcc-10 (aarch64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210=
-110)
-  Plain log:   https://storage.kernelci.org//kselftest/next/linux-kselftest=
--next-6.6-rc1-4-g3f3f384139ed/arm64/defconfig+kselftest+arm64-chromebook/gc=
-c-10/lab-collabora/kselftest-seccomp-mt8173-elm-hana.txt
-  HTML log:    https://storage.kernelci.org//kselftest/next/linux-kselftest=
--next-6.6-rc1-4-g3f3f384139ed/arm64/defconfig+kselftest+arm64-chromebook/gc=
-c-10/lab-collabora/kselftest-seccomp-mt8173-elm-hana.html
-  Rootfs:      http://storage.kernelci.org/images/rootfs/debian/bullseye-ks=
-elftest/20230623.0/arm64/initrd.cpio.gz =
-
-
-
-  * kselftest-seccomp.login: https://kernelci.org/test/case/id/64fb56d8bff2=
-48dd32286dd4
-        failing since 325 days (last pass: linux-kselftest-next-6.0-rc2-11-=
-g144eeb2fc761, first fail: v6.1-rc1) =
-
- =20
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
