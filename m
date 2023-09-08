@@ -2,48 +2,48 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B8C4798C53
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Sep 2023 20:14:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 546B9798E90
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Sep 2023 21:02:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241356AbjIHSOD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 8 Sep 2023 14:14:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33764 "EHLO
+        id S232839AbjIHTCa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 8 Sep 2023 15:02:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232816AbjIHSOD (ORCPT
+        with ESMTP id S229957AbjIHTCa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 Sep 2023 14:14:03 -0400
+        Fri, 8 Sep 2023 15:02:30 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FCF9212F;
-        Fri,  8 Sep 2023 11:13:27 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1D57C433CC;
-        Fri,  8 Sep 2023 18:01:57 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DDB3E46;
+        Fri,  8 Sep 2023 12:02:15 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA40DC433B9;
+        Fri,  8 Sep 2023 18:02:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694196118;
-        bh=ukqUF+v1kN7+x5zDRqQ+dQLLBt3uOBB5B6FX0qlJI6o=;
+        s=k20201202; t=1694196158;
+        bh=FmxEL57wKOoZ8HJxy0Z4z4fZQdqvVjWyGKLslaCRunI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QwzNqb8/vfpc0Gl8ZKZr+Dp0xxB4LGOUa9btHUvxFIMvu0eCHZWifqEdQtAFsja5f
-         uvBD5lBjgW3qwIWJQU5VDvjsHNt5zg/Sqz4/9XjZzkoz6a0VPLox9LqJX8DYN3C7oh
-         /po6mgxhoLfKXeOySrbRZkQnavWt6YxQa4gDfi8xKvL7wEAt6pmNvvrSOi/sArzYzZ
-         BwV02MDKQO3nvwrw6DLptaxeZ7ZDYNALfseh9ldjdXjF3t6mdW5sEOcRPcRfEgJ6E+
-         wPRzlbEDJ8hA0CgM613eKg5PPuzHxwkFJaQl7kGE7l0eJ19ERJ8Blmc1Taf7Jke192
-         EtrNqOT5ytvlQ==
+        b=NCWx3QEeLhI15S/s7ziKkv2DjgUp5MHzPu8GlLgAcmJPSj0HqcKM/H8z4ixFbArGj
+         cI0Wt9/5SjELaBW6GF8SS+nUW64BirzFLwheDn/dmPYIyFApI4GSOgYsGOnJq5HVwT
+         xl1gd6/dNVyjtaze3JRIbqlhkwWgMovBVG1P3MnOIEFItPckO/WNVNm8qgE1PyaZ48
+         UaECkcBNMwcR6QVQMnt3CkrjRtqqm/8to+hCwJtczERZVj4rLxnWSYSxNXsqwXvSaO
+         bJtbdzA0ZraCGhpsMxpueQKohtTShtESJivc+zqFamg2YwPzqXItwgOxikoYQytbve
+         TTn6pk8mKroLA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Zhangjin Wu <falcon@tinylab.org>,
         =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
         Willy Tarreau <w@1wt.eu>, Sasha Levin <sashal@kernel.org>,
         shuah@kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.4 13/13] selftests/nolibc: fix up kernel parameters support
-Date:   Fri,  8 Sep 2023 14:00:59 -0400
-Message-Id: <20230908180100.3458151-13-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 10/10] selftests/nolibc: fix up kernel parameters support
+Date:   Fri,  8 Sep 2023 14:02:02 -0400
+Message-Id: <20230908180203.3458330-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230908180100.3458151-1-sashal@kernel.org>
-References: <20230908180100.3458151-1-sashal@kernel.org>
+In-Reply-To: <20230908180203.3458330-1-sashal@kernel.org>
+References: <20230908180203.3458330-1-sashal@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.4.15
+X-stable-base: Linux 6.1.52
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -96,10 +96,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 31 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index d37d036876ea9..041f5d16a9d87 100644
+index 78bced95ac630..f8e8e8d2a5e18 100644
 --- a/tools/testing/selftests/nolibc/nolibc-test.c
 +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -782,6 +782,35 @@ static const struct test test_names[] = {
+@@ -630,6 +630,35 @@ static struct test test_names[] = {
  	{ 0 }
  };
  
@@ -135,7 +135,7 @@ index d37d036876ea9..041f5d16a9d87 100644
  int main(int argc, char **argv, char **envp)
  {
  	int min = 0;
-@@ -807,10 +836,10 @@ int main(int argc, char **argv, char **envp)
+@@ -655,10 +684,10 @@ int main(int argc, char **argv, char **envp)
  	 *    syscall:5-15[:.*],stdlib:8-10
  	 */
  	test = argv[1];
