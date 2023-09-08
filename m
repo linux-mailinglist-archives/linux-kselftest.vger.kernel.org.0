@@ -2,349 +2,147 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CE85798A5C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Sep 2023 18:04:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 278C8798B59
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Sep 2023 19:17:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244850AbjIHQEg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 8 Sep 2023 12:04:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44776 "EHLO
+        id S239126AbjIHRR3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 8 Sep 2023 13:17:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244825AbjIHQEf (ORCPT
+        with ESMTP id S229492AbjIHRR2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 Sep 2023 12:04:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 192481FDF
-        for <linux-kselftest@vger.kernel.org>; Fri,  8 Sep 2023 09:03:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1694189021;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=c5qKGDJOH0h32jOCU9/toIJ7m/LhliQCTlgTlpbMOlk=;
-        b=W6xRGmayA4FT+2V13upy+5Y33uUoKvs5sdVL/SQl/70ZQB5Or/tR1qfmHj6sKvZShMfJ2j
-        B0O5OeCbO3nJCoJzrCrYfaeCe/mlLslhNCn1b8uDDIfC/D4oIjnJmsWaf37KeAKphzOQHS
-        33KNG9ZgfJFbILXMh+pDPtNQ36txTa0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-614-qVvRZSWPMUOFjFvB_AMgfg-1; Fri, 08 Sep 2023 12:03:38 -0400
-X-MC-Unique: qVvRZSWPMUOFjFvB_AMgfg-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F2BAC101A529;
-        Fri,  8 Sep 2023 16:03:36 +0000 (UTC)
-Received: from warthog.procyon.org.com (unknown [10.42.28.148])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 25E5FC03295;
-        Fri,  8 Sep 2023 16:03:35 +0000 (UTC)
-From:   David Howells <dhowells@redhat.com>
-To:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@lst.de>
-Cc:     David Howells <dhowells@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Christian Brauner <brauner@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] iov_iter: Kunit tests for page extraction
-Date:   Fri,  8 Sep 2023 17:03:22 +0100
-Message-ID: <20230908160322.1714302-4-dhowells@redhat.com>
-In-Reply-To: <20230908160322.1714302-1-dhowells@redhat.com>
-References: <20230908160322.1714302-1-dhowells@redhat.com>
+        Fri, 8 Sep 2023 13:17:28 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEA5BCE6
+        for <linux-kselftest@vger.kernel.org>; Fri,  8 Sep 2023 10:17:24 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id 41be03b00d2f7-564b6276941so1706633a12.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 08 Sep 2023 10:17:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1694193444; x=1694798244; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=VqTO94yBsa78RGJDWM2gYxxXm6/ZvnXkcbd4F+ggfjI=;
+        b=ByYVo0CtWU/h3rb1yV1Lt8hi829Ee9P8Ou7Aiwjx57owqkePkRDaxj4rcebhsyTIkR
+         wcZF1F4NFcZg5xT1SmlL3z9rKNUbI8xH9pEXjvWFO0Vk8DNpZMpwCev6h1kE4zzlm+8h
+         RM3SiNm6IGihkzj3rBz7zuAPTkO6jrjEnSbJDpGaq2a6Zb+v0y2hBTTAVK1DDXlPJ010
+         v88C1SgL7xV15row9CyH43DCIDmZAnPqMqn+ajdzWMkbZFhyOqv33rashnJxyS2M8D55
+         A3IDgiDrHQHaooNYpwYZYv57N37PQx3eVp3uwVS4Dt0driOWMJaVt/vMqFkqkqbVItQj
+         yJIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694193444; x=1694798244;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VqTO94yBsa78RGJDWM2gYxxXm6/ZvnXkcbd4F+ggfjI=;
+        b=fj9EJpsfWbIoZ4Dg0KTRaDPEmjio7bwrRqJKZJClRUrPZHGMRPRA+b0qCoze+vTRSb
+         y+RgRhR9tKLmqgtVhqNJck57n6iLoWBZBDYtsxlrMyP0Qmeugdo7Vuxwo3QQ5BZgDi92
+         oVu1IQWh8u8gJhTeiLYuVLGel3qRBcMcQxNe2/jkukipLAxFsl4MjxrUeSvDFSVqKTBY
+         q9+HNB0vPHByeVbFRO+h3BK4z4sojDCZT6uwLgtgtRb49L3I8pK3RlAUGlzhYhyejZDO
+         jHiX9qtJeso+S6Xn0YL5J8KdD2iDcf39v72QCVJIEwEffa+oOFv4Hb/G9Otn2D7hRY66
+         c1RA==
+X-Gm-Message-State: AOJu0YzJD+HTWN6gc//QUVivigOKlr86DZGpU2R6eCvEFJvn59Rq/9Fj
+        YCCM/nPniQS9zhvRFrQsjlHFpCH9j59B8DvLCcwgVA==
+X-Google-Smtp-Source: AGHT+IHDv+Xh+MMnYwVKrLd9/7j5WZldMEtlgPBed9yk0cKXGKAJZ2cNnueUkspKIYPmEv1EqgqLOw==
+X-Received: by 2002:a17:90a:fe86:b0:269:18f5:683e with SMTP id co6-20020a17090afe8600b0026918f5683emr3133798pjb.3.1694193444034;
+        Fri, 08 Sep 2023 10:17:24 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id rj14-20020a17090b3e8e00b00268032f6a64sm3255025pjb.25.2023.09.08.10.17.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Sep 2023 10:17:23 -0700 (PDT)
+Message-ID: <64fb5723.170a0220.2922b.8475@mx.google.com>
+Date:   Fri, 08 Sep 2023 10:17:23 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: next
+X-Kernelci-Tree: kselftest
+X-Kernelci-Report-Type: build
+X-Kernelci-Kernel: linux-kselftest-next-6.6-rc1-4-g3f3f384139ed
+Subject: kselftest/next build: 6 builds: 0 failed, 6 passed,
+ 1 warning (linux-kselftest-next-6.6-rc1-4-g3f3f384139ed)
+To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add some kunit tests for page extraction for ITER_BVEC, ITER_KVEC and
-ITER_XARRAY type iterators.  ITER_UBUF and ITER_IOVEC aren't dealt with as
-they require userspace VM interaction.  ITER_DISCARD isn't dealt with
-either as that can't be extracted.
+kselftest/next build: 6 builds: 0 failed, 6 passed, 1 warning (linux-kselft=
+est-next-6.6-rc1-4-g3f3f384139ed)
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Christoph Hellwig <hch@lst.de>
-cc: Christian Brauner <brauner@kernel.org>
-cc: Jens Axboe <axboe@kernel.dk>
-cc: Al Viro <viro@zeniv.linux.org.uk>
-cc: David Hildenbrand <david@redhat.com>
-cc: John Hubbard <jhubbard@nvidia.com>
-cc: linux-mm@kvack.org
-cc: linux-block@vger.kernel.org
-cc: linux-fsdevel@vger.kernel.org
+Full Build Summary: https://kernelci.org/build/kselftest/branch/next/kernel=
+/linux-kselftest-next-6.6-rc1-4-g3f3f384139ed/
+
+Tree: kselftest
+Branch: next
+Git Describe: linux-kselftest-next-6.6-rc1-4-g3f3f384139ed
+Git Commit: 3f3f384139ed147c71e1d770accf610133d5309b
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
+est.git
+Built: 4 unique architectures
+
+Warnings Detected:
+
+arm64:
+
+arm:
+
+i386:
+
+x86_64:
+    x86_64_defconfig+kselftest (clang-16): 1 warning
+
+
+Warnings summary:
+
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x39: relocation to=
+ !ENDBR: .text+0x13df86
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 1 w=
+arning, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x39: relocation to !END=
+BR: .text+0x13df86
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
 ---
- lib/kunit_iov_iter.c | 240 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 240 insertions(+)
-
-diff --git a/lib/kunit_iov_iter.c b/lib/kunit_iov_iter.c
-index 25a910187d17..859b67c4d697 100644
---- a/lib/kunit_iov_iter.c
-+++ b/lib/kunit_iov_iter.c
-@@ -519,6 +519,243 @@ static void __init iov_kunit_copy_from_xarray(struct kunit *test)
- 	KUNIT_SUCCEED();
- }
- 
-+/*
-+ * Test the extraction of ITER_KVEC-type iterators.
-+ */
-+static void __init iov_kunit_extract_pages_kvec(struct kunit *test)
-+{
-+	const struct kvec_test_range *pr;
-+	struct iov_iter iter;
-+	struct page **bpages, *pagelist[8], **pages = pagelist;
-+	struct kvec kvec[8];
-+	u8 *buffer;
-+	ssize_t len;
-+	size_t bufsize, size = 0, npages;
-+	int i, from;
-+
-+	bufsize = 0x100000;
-+	npages = bufsize / PAGE_SIZE;
-+
-+	buffer = iov_kunit_create_buffer(test, &bpages, npages);
-+
-+	iov_kunit_load_kvec(test, &iter, READ, kvec, ARRAY_SIZE(kvec),
-+			    buffer, bufsize, kvec_test_ranges);
-+	size = iter.count;
-+
-+	pr = kvec_test_ranges;
-+	from = pr->from;
-+	do {
-+		size_t offset0 = LONG_MAX;
-+
-+		for (i = 0; i < ARRAY_SIZE(pagelist); i++)
-+			pagelist[i] = (void *)(unsigned long)0xaa55aa55aa55aa55ULL;
-+
-+		len = iov_iter_extract_pages(&iter, &pages, 100 * 1024,
-+					     ARRAY_SIZE(pagelist), 0, &offset0);
-+		KUNIT_EXPECT_GE(test, len, 0);
-+		if (len < 0)
-+			break;
-+		KUNIT_EXPECT_GE(test, (ssize_t)offset0, 0);
-+		KUNIT_EXPECT_LT(test, offset0, PAGE_SIZE);
-+		KUNIT_EXPECT_LE(test, len, size);
-+		KUNIT_EXPECT_EQ(test, iter.count, size - len);
-+		size -= len;
-+
-+		if (len == 0)
-+			break;
-+
-+		for (i = 0; i < ARRAY_SIZE(pagelist); i++) {
-+			struct page *p;
-+			ssize_t part = min_t(ssize_t, len, PAGE_SIZE - offset0);
-+			int ix;
-+
-+			KUNIT_ASSERT_GE(test, part, 0);
-+			while (from == pr->to) {
-+				pr++;
-+				from = pr->from;
-+				if (from < 0)
-+					goto stop;
-+			}
-+			ix = from / PAGE_SIZE;
-+			KUNIT_ASSERT_LT(test, ix, npages);
-+			p = bpages[ix];
-+			KUNIT_EXPECT_PTR_EQ(test, pagelist[i], p);
-+			KUNIT_EXPECT_EQ(test, offset0, from % PAGE_SIZE);
-+			from += part;
-+			len -= part;
-+			KUNIT_ASSERT_GE(test, len, 0);
-+			if (len == 0)
-+				break;
-+			offset0 = 0;
-+		}
-+
-+		if (test->status == KUNIT_FAILURE)
-+			break;
-+	} while (iov_iter_count(&iter) > 0);
-+
-+stop:
-+	KUNIT_EXPECT_EQ(test, size, 0);
-+	KUNIT_EXPECT_EQ(test, iter.count, 0);
-+	KUNIT_SUCCEED();
-+}
-+
-+/*
-+ * Test the extraction of ITER_BVEC-type iterators.
-+ */
-+static void __init iov_kunit_extract_pages_bvec(struct kunit *test)
-+{
-+	const struct bvec_test_range *pr;
-+	struct iov_iter iter;
-+	struct page **bpages, *pagelist[8], **pages = pagelist;
-+	struct bio_vec bvec[8];
-+	ssize_t len;
-+	size_t bufsize, size = 0, npages;
-+	int i, from;
-+
-+	bufsize = 0x100000;
-+	npages = bufsize / PAGE_SIZE;
-+
-+	iov_kunit_create_buffer(test, &bpages, npages);
-+	iov_kunit_load_bvec(test, &iter, READ, bvec, ARRAY_SIZE(bvec),
-+			    bpages, npages, bufsize, bvec_test_ranges);
-+	size = iter.count;
-+
-+	pr = bvec_test_ranges;
-+	from = pr->from;
-+	do {
-+		size_t offset0 = LONG_MAX;
-+
-+		for (i = 0; i < ARRAY_SIZE(pagelist); i++)
-+			pagelist[i] = (void *)(unsigned long)0xaa55aa55aa55aa55ULL;
-+
-+		len = iov_iter_extract_pages(&iter, &pages, 100 * 1024,
-+					     ARRAY_SIZE(pagelist), 0, &offset0);
-+		KUNIT_EXPECT_GE(test, len, 0);
-+		if (len < 0)
-+			break;
-+		KUNIT_EXPECT_GE(test, (ssize_t)offset0, 0);
-+		KUNIT_EXPECT_LT(test, offset0, PAGE_SIZE);
-+		KUNIT_EXPECT_LE(test, len, size);
-+		KUNIT_EXPECT_EQ(test, iter.count, size - len);
-+		size -= len;
-+
-+		if (len == 0)
-+			break;
-+
-+		for (i = 0; i < ARRAY_SIZE(pagelist); i++) {
-+			struct page *p;
-+			ssize_t part = min_t(ssize_t, len, PAGE_SIZE - offset0);
-+			int ix;
-+
-+			KUNIT_ASSERT_GE(test, part, 0);
-+			while (from == pr->to) {
-+				pr++;
-+				from = pr->from;
-+				if (from < 0)
-+					goto stop;
-+			}
-+			ix = pr->page + from / PAGE_SIZE;
-+			KUNIT_ASSERT_LT(test, ix, npages);
-+			p = bpages[ix];
-+			KUNIT_EXPECT_PTR_EQ(test, pagelist[i], p);
-+			KUNIT_EXPECT_EQ(test, offset0, from % PAGE_SIZE);
-+			from += part;
-+			len -= part;
-+			KUNIT_ASSERT_GE(test, len, 0);
-+			if (len == 0)
-+				break;
-+			offset0 = 0;
-+		}
-+
-+		if (test->status == KUNIT_FAILURE)
-+			break;
-+	} while (iov_iter_count(&iter) > 0);
-+
-+stop:
-+	KUNIT_EXPECT_EQ(test, size, 0);
-+	KUNIT_EXPECT_EQ(test, iter.count, 0);
-+	KUNIT_SUCCEED();
-+}
-+
-+/*
-+ * Test the extraction of ITER_XARRAY-type iterators.
-+ */
-+static void __init iov_kunit_extract_pages_xarray(struct kunit *test)
-+{
-+	const struct kvec_test_range *pr;
-+	struct iov_iter iter;
-+	struct xarray *xarray;
-+	struct page **bpages, *pagelist[8], **pages = pagelist;
-+	ssize_t len;
-+	size_t bufsize, size = 0, npages;
-+	int i, from;
-+
-+	bufsize = 0x100000;
-+	npages = bufsize / PAGE_SIZE;
-+
-+	xarray = iov_kunit_create_xarray(test);
-+
-+	iov_kunit_create_buffer(test, &bpages, npages);
-+	iov_kunit_load_xarray(test, &iter, READ, xarray, bpages, npages);
-+
-+	for (pr = kvec_test_ranges; pr->from >= 0; pr++) {
-+		from = pr->from;
-+		size = pr->to - from;
-+		KUNIT_ASSERT_LE(test, pr->to, bufsize);
-+
-+		iov_iter_xarray(&iter, WRITE, xarray, from, size);
-+
-+		do {
-+			size_t offset0 = LONG_MAX;
-+
-+			for (i = 0; i < ARRAY_SIZE(pagelist); i++)
-+				pagelist[i] = (void *)(unsigned long)0xaa55aa55aa55aa55ULL;
-+
-+			len = iov_iter_extract_pages(&iter, &pages, 100 * 1024,
-+						     ARRAY_SIZE(pagelist), 0, &offset0);
-+			KUNIT_EXPECT_GE(test, len, 0);
-+			if (len < 0)
-+				break;
-+			KUNIT_EXPECT_LE(test, len, size);
-+			KUNIT_EXPECT_EQ(test, iter.count, size - len);
-+			if (len == 0)
-+				break;
-+			size -= len;
-+			KUNIT_EXPECT_GE(test, (ssize_t)offset0, 0);
-+			KUNIT_EXPECT_LT(test, offset0, PAGE_SIZE);
-+
-+			for (i = 0; i < ARRAY_SIZE(pagelist); i++) {
-+				struct page *p;
-+				ssize_t part = min_t(ssize_t, len, PAGE_SIZE - offset0);
-+				int ix;
-+
-+				KUNIT_ASSERT_GE(test, part, 0);
-+				ix = from / PAGE_SIZE;
-+				KUNIT_ASSERT_LT(test, ix, npages);
-+				p = bpages[ix];
-+				KUNIT_EXPECT_PTR_EQ(test, pagelist[i], p);
-+				KUNIT_EXPECT_EQ(test, offset0, from % PAGE_SIZE);
-+				from += part;
-+				len -= part;
-+				KUNIT_ASSERT_GE(test, len, 0);
-+				if (len == 0)
-+					break;
-+				offset0 = 0;
-+			}
-+
-+			if (test->status == KUNIT_FAILURE)
-+				goto stop;
-+		} while (iov_iter_count(&iter) > 0);
-+
-+		KUNIT_EXPECT_EQ(test, size, 0);
-+		KUNIT_EXPECT_EQ(test, iter.count, 0);
-+		KUNIT_EXPECT_EQ(test, iter.iov_offset, pr->to - pr->from);
-+	}
-+
-+stop:
-+	KUNIT_SUCCEED();
-+}
-+
- static struct kunit_case __refdata iov_kunit_cases[] = {
- 	KUNIT_CASE(iov_kunit_copy_to_kvec),
- 	KUNIT_CASE(iov_kunit_copy_from_kvec),
-@@ -526,6 +763,9 @@ static struct kunit_case __refdata iov_kunit_cases[] = {
- 	KUNIT_CASE(iov_kunit_copy_from_bvec),
- 	KUNIT_CASE(iov_kunit_copy_to_xarray),
- 	KUNIT_CASE(iov_kunit_copy_from_xarray),
-+	KUNIT_CASE(iov_kunit_extract_pages_kvec),
-+	KUNIT_CASE(iov_kunit_extract_pages_bvec),
-+	KUNIT_CASE(iov_kunit_extract_pages_xarray),
- 	{}
- };
- 
-
+For more info write to <info@kernelci.org>
