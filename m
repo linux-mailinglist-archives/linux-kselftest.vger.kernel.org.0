@@ -2,107 +2,151 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0C1E798817
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Sep 2023 15:49:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9F76798825
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Sep 2023 15:53:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235191AbjIHNt1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 8 Sep 2023 09:49:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58458 "EHLO
+        id S231743AbjIHNxr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 8 Sep 2023 09:53:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233325AbjIHNt0 (ORCPT
+        with ESMTP id S230266AbjIHNxr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 Sep 2023 09:49:26 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44A471BF6;
-        Fri,  8 Sep 2023 06:49:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-        bh=uqY6Z5h6ZluAE9vpCfYrBwCL495VscqDRqy2N8Ea9Gw=; b=jGqURuwfyBPWOeEwk8Azmv3R7a
-        b5SMleDF3N5YuFPK0TzWTXLmhKnZ/nUJG58G2AbPMPCQiccSKMkPZnVleKN7qZXHODP8TAy/opAUM
-        WNY5XTVD0w/7qjUskXl/Rt11Dd3v9eReTnLM0aGEnf6K48x5bZwerxatXdgg5gyGUox8l6h6wlBO8
-        BG0tOp550Lx28Bh4L0ACP9yfLyE540Du/RTiXfgtO8cvG52Vh37qYSIH8EsIvbhIhhyExE9jG3o1F
-        11QYhBeCTaifFQcAGPqfWfNoGci9P4SO9L0gggMdcqLakNsH2lm96yamsmmk7UMWdD7aecVUyuqnE
-        DAS8RzVA==;
-Received: from sslproxy05.your-server.de ([78.46.172.2])
-        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1qebr9-000BEW-5V; Fri, 08 Sep 2023 15:49:07 +0200
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1qebr8-000DG6-Fl; Fri, 08 Sep 2023 15:49:06 +0200
-Subject: Re: [PATCH bpf-next v3 9/9] MAINTAINERS: Add myself for ARM32 BPF JIT
- maintainer.
-To:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Puranjay Mohan <puranjay12@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>,
-        Yonghong Song <yonghong.song@linux.dev>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shubham Bansal <illusionist.neo@gmail.com>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230907230550.1417590-1-puranjay12@gmail.com>
- <20230907230550.1417590-10-puranjay12@gmail.com>
- <ZPrdQEhw4f+TK8TB@shell.armlinux.org.uk>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <1a4bc20a-b7ff-3697-5859-a2bb868c575f@iogearbox.net>
-Date:   Fri, 8 Sep 2023 15:49:05 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Fri, 8 Sep 2023 09:53:47 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C85121BF4
+        for <linux-kselftest@vger.kernel.org>; Fri,  8 Sep 2023 06:53:42 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id 38308e7fff4ca-2bf66a32f25so14592101fa.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 08 Sep 2023 06:53:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1694181221; x=1694786021; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sk5RLnrnvhNAIkRA+BMVhrpIi3v+xSod2h+zzv+FwRU=;
+        b=E6FTV/ARJc1sPI9xs3Qz7wXyJCizcsvUj/Wqt9MiNd/8fi3EG1YvRDeDLltZ+AFy1K
+         Z2KENS9zv9mjSmuhv8Jws2d5an3r72iIMpyLeTY1bbe2u+HXIJIYitAqHBv2CLTd6PJh
+         VYW+0TSsh+ibTgejXdch2PBNU9ufU3gNCksdw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694181221; x=1694786021;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sk5RLnrnvhNAIkRA+BMVhrpIi3v+xSod2h+zzv+FwRU=;
+        b=TB7OYM/bgdWRHOeo57VCmKuIiFYWrXfSiRDLco4Blr38yB59bafu4CTmHC+RufZQOe
+         7ObrB4HOzSdBQJnAF1NI90Wdq9hjzJrOk88lhjC16ssf6dxLNnsjcKK/nUjLv7Lyf9id
+         KfTeesnGCrCqgpFIzSLpF9m3kyd2AWVJUBxDN6H8FDOBgu06r5ZT0TGyvsXljnLiOLqa
+         Z8TqvCSTbXK3DI9VATqZnFMgjI+23f4l8162mpIomg5nD+cy2Hev7c5vAgR7yrAvW39u
+         C0lNO7FDVugDyhEOAx9dlMjT34GHGrD3lMyKjhxec5m0PA0z/VfuZbuccA8Mz1rQGtzf
+         yWJQ==
+X-Gm-Message-State: AOJu0YzbQBNWjpsDcUljVzOn3TAgm4XjiIRbK7oirzwyZv30qhoJgDcJ
+        w4ugPKGUZcMgbTIu6gyzhMnyf81VF3EZP1m4Qn42kUk6DYsT0HlN
+X-Google-Smtp-Source: AGHT+IEIHTIzxn4/TggJPFsx2XF99VqeSdnxqqoXJAUrJV1HapjE/VT2B66m9pwyvnmkKIa4qoDwrI1qc7nClGYo53s=
+X-Received: by 2002:a2e:86c4:0:b0:2bd:beb:4aca with SMTP id
+ n4-20020a2e86c4000000b002bd0beb4acamr1950228ljj.13.1694181220873; Fri, 08 Sep
+ 2023 06:53:40 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <ZPrdQEhw4f+TK8TB@shell.armlinux.org.uk>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.8/27025/Fri Sep  8 09:37:45 2023)
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230908033047.2537010-1-joel@joelfernandes.org> <df66924b-d484-457f-8c79-21aadc4c13ec@paulmck-laptop>
+In-Reply-To: <df66924b-d484-457f-8c79-21aadc4c13ec@paulmck-laptop>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Fri, 8 Sep 2023 09:53:30 -0400
+Message-ID: <CAEXW_YTjDM9LWKiupgOXwfsz7RnNT24UEQ=RZB+3n1VdJRNqvw@mail.gmail.com>
+Subject: Re: [PATCH v2] rcu/torture: Improve badness extraction from console logs
+To:     paulmck@kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, rcu@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 9/8/23 10:37 AM, Russell King (Oracle) wrote:
-> On Thu, Sep 07, 2023 at 11:05:50PM +0000, Puranjay Mohan wrote:
->> As Shubham has been inactive since 2017, Add myself for ARM32 BPF JIT.
->>
->> Signed-off-by: Puranjay Mohan <puranjay12@gmail.com>
->> ---
->>   MAINTAINERS | 5 +++--
->>   1 file changed, 3 insertions(+), 2 deletions(-)
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 612d6d1dbf36..c241856819bd 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -3602,9 +3602,10 @@ F:	Documentation/devicetree/bindings/iio/accel/bosch,bma400.yaml
->>   F:	drivers/iio/accel/bma400*
->>   
->>   BPF JIT for ARM
->> -M:	Shubham Bansal <illusionist.neo@gmail.com>
->> +M:	Puranjay Mohan <puranjay12@gmail.com>
->> +R:	Shubham Bansal <illusionist.neo@gmail.com>
-> 
-> Don't forget that I also want to review the changes, but I guess my
-> arch/arm entry will cover this too.
+On Fri, Sep 8, 2023 at 8:08=E2=80=AFAM Paul E. McKenney <paulmck@kernel.org=
+> wrote:
+>
+> On Fri, Sep 08, 2023 at 03:30:46AM +0000, Joel Fernandes (Google) wrote:
+> > Currently console.log.diags contains an output like follows:
+> > [ 2457.293734] WARNING: CPU: 2 PID: 13 at kernel/rcu/tasks.h:1061 rcu_t=
+asks_trace_pregp_step+0x4a/0x50
+> > [ 2457.542385] Call Trace:
+> >
+> > This is not very useful and easier access to the call trace is desired.
+> > Improve the script by extracting more lines after each grep match.
+> > Provide a summary in the beginning like before, but also include detail=
+s
+> > below. Limit the total number of issues to a maximum of 10. And limit
+> > the lines included after each issue to a maximum of 20.
+>
+> Much better!
+>
+> The above commit log would be better something as follows:
 
-If there are no objections from all parties, it would be nice/better if both of
-you (Puranjay & Russell) could be explicitly added here as maintainers.
+Looks good to me, I will update it to use your version, thanks.
 
-Thanks,
-Daniel
+> ------------------------------------------------------------------------
+>
+> Plus please see one simplification below.
+>
+>                                                         Thanx, Paul
+>
+> > With these changes the output becomes:
+> >
+> > Issues found:
+> > Line 6228: [ 2457.293734] WARNING: CPU: 2 PID: 13 at kernel/rcu/tasks.h=
+:1061 rcu_tasks_trace_pregp_step+0x4a/0x50
+> > Line 6245: [ 2457.542385] Call Trace:
+> >
+[...]
+> >
+> > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > ---
+> > v1->v2: Limit number of issues reported and include summary on the top.
+> >
+> >  .../rcutorture/bin/console-badness.sh         | 42 ++++++++++++++++++-
+> >  1 file changed, 41 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/tools/testing/selftests/rcutorture/bin/console-badness.sh =
+b/tools/testing/selftests/rcutorture/bin/console-badness.sh
+> > index aad51e7c0183..2612a4931723 100755
+> > --- a/tools/testing/selftests/rcutorture/bin/console-badness.sh
+> > +++ b/tools/testing/selftests/rcutorture/bin/console-badness.sh
+> > @@ -9,10 +9,50 @@
+> >  # Copyright (C) 2020 Facebook, Inc.
+> >  #
+> >  # Authors: Paul E. McKenney <paulmck@kernel.org>
+> > +INPUT_DATA=3D$(< /dev/stdin)
+>
+> Long runs can have extremely large console.log files, which might not
+> play well with shell variables.  So this really needs to go into a file.
+
+Thanks a lot for this feedback. Just for completeness -- it is the
+grepped lines (containing bad strings) that go into a shell variable,
+not the whole file. That can still be quite large so your suggestion
+is well taken and I will make the changes as you suggested!
+
+[...]
+> One issue here is that if a number of badness strings occur in console.lo=
+g
+> in quick succession, there will be overlapping output, as in a given line
+> from console.log might be printed many times.  For example, "WARNING"
+> is often almost immediately followed by "Call Trace".
+>
+> In that case, is there a nice way to print the lines starting with the
+> line containing "WARNING" though the 20 lines following "Call Trace"?
+
+Yes, maybe I can coalesce them somehow since we do have the line
+numbers. Thanks for the suggestion! I did notice that too but now that
+you mention, I will improve on that.
+
+Will post another version soon, thanks!
+
+ - Joel
