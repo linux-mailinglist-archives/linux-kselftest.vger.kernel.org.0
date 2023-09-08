@@ -2,51 +2,54 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 546B9798E90
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Sep 2023 21:02:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05916798C57
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Sep 2023 20:14:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232839AbjIHTCa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 8 Sep 2023 15:02:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49094 "EHLO
+        id S232816AbjIHSOe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 8 Sep 2023 14:14:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229957AbjIHTCa (ORCPT
+        with ESMTP id S238675AbjIHSOd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 Sep 2023 15:02:30 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DDB3E46;
-        Fri,  8 Sep 2023 12:02:15 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA40DC433B9;
-        Fri,  8 Sep 2023 18:02:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694196158;
-        bh=FmxEL57wKOoZ8HJxy0Z4z4fZQdqvVjWyGKLslaCRunI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=NCWx3QEeLhI15S/s7ziKkv2DjgUp5MHzPu8GlLgAcmJPSj0HqcKM/H8z4ixFbArGj
-         cI0Wt9/5SjELaBW6GF8SS+nUW64BirzFLwheDn/dmPYIyFApI4GSOgYsGOnJq5HVwT
-         xl1gd6/dNVyjtaze3JRIbqlhkwWgMovBVG1P3MnOIEFItPckO/WNVNm8qgE1PyaZ48
-         UaECkcBNMwcR6QVQMnt3CkrjRtqqm/8to+hCwJtczERZVj4rLxnWSYSxNXsqwXvSaO
-         bJtbdzA0ZraCGhpsMxpueQKohtTShtESJivc+zqFamg2YwPzqXItwgOxikoYQytbve
-         TTn6pk8mKroLA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Zhangjin Wu <falcon@tinylab.org>,
-        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-        Willy Tarreau <w@1wt.eu>, Sasha Levin <sashal@kernel.org>,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 10/10] selftests/nolibc: fix up kernel parameters support
-Date:   Fri,  8 Sep 2023 14:02:02 -0400
-Message-Id: <20230908180203.3458330-10-sashal@kernel.org>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230908180203.3458330-1-sashal@kernel.org>
-References: <20230908180203.3458330-1-sashal@kernel.org>
+        Fri, 8 Sep 2023 14:14:33 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 136FC1FEA;
+        Fri,  8 Sep 2023 11:13:56 -0700 (PDT)
+Received: from notapiano.myfiosgateway.com (zone.collabora.co.uk [167.235.23.81])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C384F66072B9;
+        Fri,  8 Sep 2023 19:12:46 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1694196768;
+        bh=58aqhulC4fc6Pn7pCzoNspVmthf7zQNQ+CuztnXMM9k=;
+        h=From:To:Cc:Subject:Date:From;
+        b=D3/TDBhLtJg+v4QCDK7vby4V4RgDhW59/2BiowmTy3GpcnlDjbyicbjTnYuXicxEw
+         Y3HdFg7/iU+AW7hn6vfue4HXulIbjdLeNSOvrlJjMtWG2orbl9SS4g253yI2zewFsR
+         4ubUq5xRQzqU7rhz0+C+JAL7/52MaDdE27nJX/TdCHVWKJaIdUJ+1Xus1l4mnpsuNI
+         jSy5GprjgCaIWa7MIelrOWKCZobhBdVer6TQNpO42wuXZYvK/epcHg139TYdHhkZrN
+         rJCbVR3nLXC6KLoJ3RDlACvxkdLGlEcwKm8HPQKTW5Muz4OMnEVcnDX/VO4qw5gxTB
+         F/A9njH6ylDcw==
+From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+To:     Takashi Iwai <tiwai@suse.com>
+Cc:     kernel@collabora.com,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>, Jaroslav Kysela <perex@perex.cz>,
+        Mark Brown <broonie@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH] kselftest/alsa: Mark test plan as skipped when no cards are available
+Date:   Fri,  8 Sep 2023 14:12:40 -0400
+Message-ID: <20230908181242.95714-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.52
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,100 +57,56 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Zhangjin Wu <falcon@tinylab.org>
+When no soundcards are available, it won't be possible to run any tests.
+Currently, when this happens, in both pcm-test and mixer-test, 0
+tests are reported, and the pass exit code is returned. Instead, call
+ksft_exit_skip() so that the whole test plan is marked as skipped in the
+KTAP output and it exits with the skip exit code.
 
-[ Upstream commit c388c9920da2679f62bec48d00ca9e80e9d0a364 ]
+Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-kernel parameters allow pass two types of strings, one type is like
-'noapic', another type is like 'panic=5', the first type is passed as
-arguments of the init program, the second type is passed as environment
-variables of the init program.
-
-when users pass kernel parameters like this:
-
-    noapic NOLIBC_TEST=syscall
-
-our nolibc-test program will use the test setting from argv[1] and
-ignore the one from NOLIBC_TEST environment variable, and at last, it
-will print the following line and ignore the whole test setting.
-
-    Ignoring unknown test name 'noapic'
-
-reversing the parsing order does solve the above issue:
-
-    test = getenv("NOLIBC_TEST");
-    if (test)
-        test = argv[1];
-
-but it still doesn't work with such kernel parameters (without
-NOLIBC_TEST environment variable):
-
-    noapic FOO=bar
-
-To support all of the potential kernel parameters, let's verify the test
-setting from both of argv[1] and NOLIBC_TEST environment variable.
-
-Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
-Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
-Signed-off-by: Willy Tarreau <w@1wt.eu>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/nolibc/nolibc-test.c | 33 ++++++++++++++++++--
- 1 file changed, 31 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index 78bced95ac630..f8e8e8d2a5e18 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -630,6 +630,35 @@ static struct test test_names[] = {
- 	{ 0 }
- };
+ tools/testing/selftests/alsa/mixer-test.c | 7 +++++--
+ tools/testing/selftests/alsa/pcm-test.c   | 7 +++++--
+ 2 files changed, 10 insertions(+), 4 deletions(-)
+
+diff --git a/tools/testing/selftests/alsa/mixer-test.c b/tools/testing/selftests/alsa/mixer-test.c
+index c95d63e553f4..8f45c15a5667 100644
+--- a/tools/testing/selftests/alsa/mixer-test.c
++++ b/tools/testing/selftests/alsa/mixer-test.c
+@@ -66,8 +66,11 @@ static void find_controls(void)
+ 	char *card_name, *card_longname;
  
-+int is_setting_valid(char *test)
-+{
-+	int idx, len, test_len, valid = 0;
-+	char delimiter;
-+
-+	if (!test)
-+		return valid;
-+
-+	test_len = strlen(test);
-+
-+	for (idx = 0; test_names[idx].name; idx++) {
-+		len = strlen(test_names[idx].name);
-+		if (test_len < len)
-+			continue;
-+
-+		if (strncmp(test, test_names[idx].name, len) != 0)
-+			continue;
-+
-+		delimiter = test[len];
-+		if (delimiter != ':' && delimiter != ',' && delimiter != '\0')
-+			continue;
-+
-+		valid = 1;
-+		break;
-+	}
-+
-+	return valid;
-+}
-+
- int main(int argc, char **argv, char **envp)
- {
- 	int min = 0;
-@@ -655,10 +684,10 @@ int main(int argc, char **argv, char **envp)
- 	 *    syscall:5-15[:.*],stdlib:8-10
- 	 */
- 	test = argv[1];
--	if (!test)
-+	if (!is_setting_valid(test))
- 		test = getenv("NOLIBC_TEST");
+ 	card = -1;
+-	if (snd_card_next(&card) < 0 || card < 0)
+-		return;
++	err = snd_card_next(&card);
++	if (err < 0)
++		ksft_exit_skip("Couldn't open first soundcard. rc=%d\n", err);
++	if (card < 0)
++		ksft_exit_skip("No soundcard available\n");
  
--	if (test) {
-+	if (is_setting_valid(test)) {
- 		char *comma, *colon, *dash, *value;
+ 	config = get_alsalib_config();
  
- 		do {
+diff --git a/tools/testing/selftests/alsa/pcm-test.c b/tools/testing/selftests/alsa/pcm-test.c
+index 2f5e3c462194..74d9cf8b5a69 100644
+--- a/tools/testing/selftests/alsa/pcm-test.c
++++ b/tools/testing/selftests/alsa/pcm-test.c
+@@ -161,8 +161,11 @@ static void find_pcms(void)
+ 	snd_pcm_info_alloca(&pcm_info);
+ 
+ 	card = -1;
+-	if (snd_card_next(&card) < 0 || card < 0)
+-		return;
++	err = snd_card_next(&card);
++	if (err < 0)
++		ksft_exit_skip("Couldn't open first soundcard. rc=%d\n", err);
++	if (card < 0)
++		ksft_exit_skip("No soundcard available\n");
+ 
+ 	config = get_alsalib_config();
+ 
 -- 
-2.40.1
+2.42.0
 
