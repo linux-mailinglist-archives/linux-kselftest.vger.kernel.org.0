@@ -2,62 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74EB5799220
-	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Sep 2023 00:22:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B6E4799223
+	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Sep 2023 00:22:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237558AbjIHWWu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 8 Sep 2023 18:22:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59538 "EHLO
+        id S245667AbjIHWWv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 8 Sep 2023 18:22:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245667AbjIHWWt (ORCPT
+        with ESMTP id S245719AbjIHWWu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 Sep 2023 18:22:49 -0400
+        Fri, 8 Sep 2023 18:22:50 -0400
 Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC9D41FE9
-        for <linux-kselftest@vger.kernel.org>; Fri,  8 Sep 2023 15:22:44 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-c8f360a07a2so2638661276.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 08 Sep 2023 15:22:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C299B1FDF
+        for <linux-kselftest@vger.kernel.org>; Fri,  8 Sep 2023 15:22:45 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-d7e79ec07b4so2658797276.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 08 Sep 2023 15:22:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1694211764; x=1694816564; darn=vger.kernel.org;
+        d=google.com; s=20221208; t=1694211765; x=1694816565; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=9irfI9A0N/Dt7kJJSjpCAtQ4KpuXf47ryLkMZkjJxb8=;
-        b=iAs4beuKZ2q3E6N3f1tNzGqeZjG/EcTLbWmMDX06pL+TW1odRjPXd8WDXIJIxBLe4n
-         WJbDRVlkQtqlePwdbUQXlbNPcfdhVOCrCKOzNsDIJBr4Hk/nK/E/mFxocNbByOC7+4od
-         63yL0yKZaNtCDkfAMHOyBeFGVzbdSeL3lrYmKoLhRMMxw5YntKN9WDwHCSYPiJIK6dQK
-         fuk4sU/+vViQBJ1aciPEMbMLjJPCPPBzMk6XqdypKh9EgG13rgHLQsBmow/H+wO/swjs
-         E2nNohyuDAj+hAEayRxj8MuIZwq5wFaHZooQSQozQmp1NcUb5VsnPzSiQc12bPe1RlLR
-         xUyw==
+        bh=v5Cp90T0HlHlM0qC1hGQ5/U223gFFo3yll8YGs+M5Ps=;
+        b=wTH73xfC5sR0hHLUTvDc2/m2mxqoHxkQey+iy4hqKadwoQ8TxF+KO054e3OWfypwky
+         ruG2ueEh4Kg654e5MUSHGtaeaYZbKmW2rT20+yF8tUjSI+9zIZd9l7j7yIP47T9AlI/W
+         lCWikjAu1OI3jkedQTfyNrEvRXN+pvHxAg1JLPhswppt5maG8gOjDyo31Nh2RZ8u3KED
+         KpWtKXPcDuNBZAJVH5F9FTQo3KriqTwndFBHkOsAbxKjhX9yrvLCr7s37r7CYKPEL0Pz
+         mgEDxyeD9vdFltGdIUN5qwBy5WJmXmF05ya6K4Xtc0LUOIcPkBE7zRLKLolOyIPJSk0n
+         7Ixg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694211764; x=1694816564;
+        d=1e100.net; s=20230601; t=1694211765; x=1694816565;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9irfI9A0N/Dt7kJJSjpCAtQ4KpuXf47ryLkMZkjJxb8=;
-        b=Q1Uyjq9Mh/s4Ws2J+T09//AxsYkuv+MlcOlhzhr8dnihGMCYtPkRZGhUXQeZpeDEQh
-         VtK1n25trx/B7tHZkVU7AaxJLApk4HBVh73bAHYdvNKEMXxBhMi9fr/7GZEAoHP+2J4k
-         C2rVDuY3MQQKhpXFzqBF6g4npjgINJv2LQI9t3vug4h5vwfW0ySyQQeHiKEfZnNfOz7O
-         rdOXOPQMV1IyGzlKAHegpMlJnpg7plklC7fFtLZtQCqnd782PzuHcIuyxtmd8v6tMEHJ
-         0sVN/DBniCYuAETANQJiLZ0GAg/tZHmueJMpAACPC+GbUsAuqenEZZjo+/GZh3sTCo0C
-         OvWg==
-X-Gm-Message-State: AOJu0Yxcofi29PV945trUKLEtcRlbFU2AicoKJGkSylvuJPxQ1i3WV3J
-        Z3iT9TDAFpcDBsORGgh/82bw8dWPyFZUXEnSCA==
-X-Google-Smtp-Source: AGHT+IFtq0snbvMXeqBS8VLVImcr9xrcVjtDXsq4clwId3rPRzXuop4Ehcv6ufF/SxSOtY+mWo9nUsHBtDPCLpEyHg==
+        bh=v5Cp90T0HlHlM0qC1hGQ5/U223gFFo3yll8YGs+M5Ps=;
+        b=lltrsLBZiRvVCSK6lc3HGNf5qyfPiGbrvXz6z6SvcRbx2eLxNqEb/vC9niITpuGjZ0
+         8C9hdqk140DBGZUH2nQLo+ucgo4+9/sz3MSTfgZoXFRdV3UA/P89dv93t94ZIeskX9RM
+         Mh18Yw/5P55c4ebReLOgTpnAYLCCXh5VjHzMPvCbyX8X448gfQms7Y2M2HrQx9xBST4W
+         t6D1NVXufU3Qs/xJtiD9EL/sLZ91K+U3F1+MnHhXbmjtAcg9tEG/DdDG1BFB8D24ySjm
+         E1/J49olLogBG3zyBvsUI9oD7nIGUnCOQkPW4w8oeJgXpkLBhlvAmQtcRiWEa+dR6ZOA
+         eS5Q==
+X-Gm-Message-State: AOJu0YzAdBZNBijCXkS273UiDCqkozNoxvkl4VB4R3tmprDdX7iAFa2R
+        VPtXn+on9oiuBAMgT3keOaW0hAAva0JphgtEzQ==
+X-Google-Smtp-Source: AGHT+IFPFnTyGsFoc2ZSx47UoKkXlKTd1lUGjg7l0A9M/UItmxbV7iwmacXunuMpKmXV7s1YWdzHQiesT5QQCTmmtQ==
 X-Received: from jstitt-linux1.c.googlers.com ([fda3:e722:ac3:cc00:2b:ff92:c0a8:23b5])
- (user=justinstitt job=sendgmr) by 2002:a25:cb4d:0:b0:d13:856b:c10a with SMTP
- id b74-20020a25cb4d000000b00d13856bc10amr82340ybg.3.1694211763898; Fri, 08
- Sep 2023 15:22:43 -0700 (PDT)
-Date:   Fri, 08 Sep 2023 22:22:39 +0000
+ (user=justinstitt job=sendgmr) by 2002:a25:b29a:0:b0:d7e:91ce:4619 with SMTP
+ id k26-20020a25b29a000000b00d7e91ce4619mr72493ybj.2.1694211764994; Fri, 08
+ Sep 2023 15:22:44 -0700 (PDT)
+Date:   Fri, 08 Sep 2023 22:22:40 +0000
 In-Reply-To: <20230908-kselftest-09-08-v2-0-0def978a4c1b@google.com>
 Mime-Version: 1.0
 References: <20230908-kselftest-09-08-v2-0-0def978a4c1b@google.com>
 X-Developer-Key: i=justinstitt@google.com; a=ed25519; pk=tC3hNkJQTpNX/gLKxTNQKDmiQl6QjBNCGKJINqAdJsE=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1694211760; l=1956;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1694211760; l=819;
  i=justinstitt@google.com; s=20230717; h=from:subject:message-id;
- bh=6t8U2ctGsOCguE1q+j7opibZJXo2rKtjXxRgmhSJEx0=; b=6HwCgpBH7Dms8xi43xj5xBqDMogSIehMI+w9LKuw68MhZgBZRYqaREBJnnDKMwyX+B7vVbEy+
- acvBW/er81XDbEJIFYnTeXWIVtHVBw/Lc8w2xXSbOZP1FOMD9jveHZq
+ bh=Fpue+BQes/IsmvChTzta8giCoFG0nhFAwjMFha0XbBk=; b=FPcBxS7/Tinifrs92XiVf0HUjlKN++LkVXDHzYy0yvRwYAtxE2iVOoZp9QZgBtlGeGYK7eftL
+ gV450GrArSzCjcFyglvip5hagZgozWtKZAOu4zZvAOoQH8odEMQi2tg
 X-Mailer: b4 0.12.3
-Message-ID: <20230908-kselftest-09-08-v2-2-0def978a4c1b@google.com>
-Subject: [PATCH v2 2/3] selftests/hid: do not manually call headers_install
+Message-ID: <20230908-kselftest-09-08-v2-3-0def978a4c1b@google.com>
+Subject: [PATCH v2 3/3] selftests/hid: force using our compiled libbpf headers
 From:   Justin Stitt <justinstitt@google.com>
 To:     Jiri Kosina <jikos@kernel.org>,
         Benjamin Tissoires <benjamin.tissoires@redhat.com>,
@@ -69,7 +69,7 @@ Content-Type: text/plain; charset="utf-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -78,54 +78,28 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Benjamin Tissoires <bentiss@kernel.org>
 
-"make headers" is a requirement before calling make on the selftests
-dir, so we should not have to manually install those headers
+Turns out that we were relying on the globally installed headers, not
+the ones we freshly compiled.
+Add a manual include in CFLAGS to sort this out.
 
 Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
 ---
- tools/testing/selftests/hid/Makefile | 8 ++------
- 1 file changed, 2 insertions(+), 6 deletions(-)
+ tools/testing/selftests/hid/Makefile | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/tools/testing/selftests/hid/Makefile b/tools/testing/selftests/hid/Makefile
-index 01c0491d64da..c5522088ece4 100644
+index c5522088ece4..b01c14077c5d 100644
 --- a/tools/testing/selftests/hid/Makefile
 +++ b/tools/testing/selftests/hid/Makefile
-@@ -21,7 +21,7 @@ CXX ?= $(CROSS_COMPILE)g++
- 
+@@ -22,6 +22,8 @@ CXX ?= $(CROSS_COMPILE)g++
  HOSTPKG_CONFIG := pkg-config
  
--CFLAGS += -g -O0 -rdynamic -Wall -Werror -I$(KHDR_INCLUDES) -I$(OUTPUT)
-+CFLAGS += -g -O0 -rdynamic -Wall -Werror -I$(OUTPUT)
+ CFLAGS += -g -O0 -rdynamic -Wall -Werror -I$(OUTPUT)
++CFLAGS += -I$(OUTPUT)/tools/include
++
  LDLIBS += -lelf -lz -lrt -lpthread
  
  # Silence some warnings when compiled with clang
-@@ -65,7 +65,6 @@ BPFTOOLDIR := $(TOOLSDIR)/bpf/bpftool
- SCRATCH_DIR := $(OUTPUT)/tools
- BUILD_DIR := $(SCRATCH_DIR)/build
- INCLUDE_DIR := $(SCRATCH_DIR)/include
--KHDR_INCLUDES := $(SCRATCH_DIR)/uapi/include
- BPFOBJ := $(BUILD_DIR)/libbpf/libbpf.a
- ifneq ($(CROSS_COMPILE),)
- HOST_BUILD_DIR		:= $(BUILD_DIR)/host
-@@ -151,9 +150,6 @@ else
- 	$(Q)cp "$(VMLINUX_H)" $@
- endif
- 
--$(KHDR_INCLUDES)/linux/hid.h: $(top_srcdir)/include/uapi/linux/hid.h
--	$(MAKE) -C $(top_srcdir) INSTALL_HDR_PATH=$(SCRATCH_DIR)/uapi headers_install
--
- $(RESOLVE_BTFIDS): $(HOST_BPFOBJ) | $(HOST_BUILD_DIR)/resolve_btfids	\
- 		       $(TOOLSDIR)/bpf/resolve_btfids/main.c	\
- 		       $(TOOLSDIR)/lib/rbtree.c			\
-@@ -231,7 +227,7 @@ $(BPF_SKELS): %.skel.h: %.bpf.o $(BPFTOOL) | $(OUTPUT)
- 	$(Q)$(BPFTOOL) gen object $(<:.o=.linked1.o) $<
- 	$(Q)$(BPFTOOL) gen skeleton $(<:.o=.linked1.o) name $(notdir $(<:.bpf.o=)) > $@
- 
--$(OUTPUT)/%.o: %.c $(BPF_SKELS) $(KHDR_INCLUDES)/linux/hid.h
-+$(OUTPUT)/%.o: %.c $(BPF_SKELS)
- 	$(call msg,CC,,$@)
- 	$(Q)$(CC) $(CFLAGS) -c $(filter %.c,$^) $(LDLIBS) -o $@
- 
 
 -- 
 2.42.0.283.g2d96d420d3-goog
