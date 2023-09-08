@@ -2,57 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EEB8798BA2
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Sep 2023 19:58:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB73F798BA5
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Sep 2023 19:58:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245352AbjIHR6J (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 8 Sep 2023 13:58:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40838 "EHLO
+        id S245200AbjIHR6K (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 8 Sep 2023 13:58:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245241AbjIHR6H (ORCPT
+        with ESMTP id S245327AbjIHR6J (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 Sep 2023 13:58:07 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AFCE1FC9
-        for <linux-kselftest@vger.kernel.org>; Fri,  8 Sep 2023 10:58:03 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5958487ca15so25460377b3.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 08 Sep 2023 10:58:03 -0700 (PDT)
+        Fri, 8 Sep 2023 13:58:09 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC0621FCF
+        for <linux-kselftest@vger.kernel.org>; Fri,  8 Sep 2023 10:58:05 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-594e5e2e608so26095547b3.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 08 Sep 2023 10:58:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1694195882; x=1694800682; darn=vger.kernel.org;
+        d=google.com; s=20221208; t=1694195885; x=1694800685; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fOWw6cIr3DHErX8Jy6XcNouUGNoG83SlOd1aTTOGtPk=;
-        b=gxc06Z9c/AzYTHOJWlKbIU/KmhObfzuUvf+z+B2B3TrKmQfg0IlWfeLQILhngLBQ/a
-         DBaV8imXRYbjxfHmFdNJxyGVwtyPdGnKuj3hO+++i1oc0kdkOFHdwxDa7dBe2XCycbmz
-         Y9toewjuNheKViZHK8+y6CBUHJ0U97TuROQQjpqPLAy0VmZHjl1824dGU7UKJQAqWMms
-         DFO/5vyVZVU2TZkm4TmRoa9gTEv1MpL/su5FN6VdfSzlIrLU1vIDRSZY4SdiRJLbqPN5
-         wjag4BhQ9mjis5kZlKCWjD1eDIWsBfhlNWZ1d71yyXScr9oR3nY2e/ZW5U733Y/w0mvq
-         0TOw==
+        bh=tNRAzZU/edQLTJw3qIY/o1dxHISQKnf/BXQhNzjVbbY=;
+        b=2qSjhcS0RK7HJABT1Le0Aj7tqR8nz/9wcSX3NJzL26yTMiYoFtqPnZ05T3ya+9GSMS
+         VDGhE8w6S6gPu6RB9e91do03PTw2mTij5Oh//DYubXC6S/w5HmMm3OqZM1WrDvS4dWXS
+         L6OGTauhNjnFJR7+2DarFhsrkRqMWimwuG1k6zkiLkgAzhMJR5JsE0MATkIPlY1qyDtw
+         Zpr2lQIdPEzcqGDYua+NI74QUjy16VLltzViM0AJhpxGnooaAitClfLc3hGq2ecZNrEd
+         YhcUzXf2bS1FdMugB3nc2y0+ocRn+NJ+SDMbnsHSnoyL7wyYSxA+CrsBpo+oC3QGHl2Y
+         +O5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694195882; x=1694800682;
+        d=1e100.net; s=20230601; t=1694195885; x=1694800685;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fOWw6cIr3DHErX8Jy6XcNouUGNoG83SlOd1aTTOGtPk=;
-        b=Jmb8GBhe6PEGibNfSjdeQOmv/dYwJFJUxMpwt29RFXoyt2+uVo+HyFz4JwatmEtJRZ
-         fbFT91D5zNngmnDDaWfuWNMZqP76n+Draw7CzXc4cpsmcXMcPPkckCjZuPgJN+Rj5KSc
-         p28EAyQmEejpTVyDCMiZJ42vfoZB86YZCbJGwDbVcqO/Y/ts6zpcVF2tUyrRpWzTvBbl
-         +RfVMKdjxNWxmEPPW4MRFN48i+UQiV+h2HTwJgGeYLKP7LOO/KNbZhh67O1N8W6U8i57
-         ODSMOXrPGLFE1XocufaObtiPiuTNbgSHBG48vY0NA3Afvr5ly+WqUM9WY4EZGGDYvBQ2
-         dYyA==
-X-Gm-Message-State: AOJu0YyW3oJu5ZPBktXf2ay04e+uw1RBuWOBKJeq9MsqZo5Jp3SmHUUK
-        acAsFhP9ns/LD+KHt6ruO4lK0sKgLrURMjaT
-X-Google-Smtp-Source: AGHT+IE5bvyoUpPyi5zts+0vRvDDIo/LdDOiErDcfAUR6eXex8q5LfTR+2Qdlr+ta/HZrQD4sEhbFIAJ61n546Jd
+        bh=tNRAzZU/edQLTJw3qIY/o1dxHISQKnf/BXQhNzjVbbY=;
+        b=dED0d+LqJ7jEdB7/vmhDwWzitOuTHbQX84a8lh+MDgtH6u3CniOApsTO1PmJKK3sFm
+         IKfFkqaiWaMjpXJNCaOEeNPOLb8rSPNkGH71etCTZu2ux0nEMuBGTNDlzbkVgYVkFKlT
+         dCGWRKkMGClcNoTxzH2PZnUJUp5dBGhtHPwIYj8GSlDF6I2/kAyikyDhdRjQTHY4iyT+
+         uFDUOey6GDM4QbH4QHASvrL5J/tsWVhwfEeFHoIHRCMafItoKR0F8fQdgkfoL+c/LUs6
+         HY1/ifgfCta1ceVS920uCbwrrRfNZUaUAh99j9iLZw11n/LyOGQ4T0cLhuMuV7SyFpDr
+         7dPA==
+X-Gm-Message-State: AOJu0YxwaN0C+KVeWqB27Kia5bE0ZKTBiIcSDj4/muwaK+z6X85F83/n
+        8mZQSHGovafQR8ff4ciSqqhJ39Kuxy3yuNz6
+X-Google-Smtp-Source: AGHT+IFoF1EiaUeA0+DU6tYzZsfsoi52XXqVRErttNtmBwyZirUf/VwWuA0433pCTHLt3+OeKv0sjSkOLMN7x+ON
 X-Received: from mclapinski.waw.corp.google.com ([2a00:79e0:9b:0:aa82:a90b:b76f:32b0])
- (user=mclapinski job=sendgmr) by 2002:a81:ae66:0:b0:58c:6ddd:d27c with SMTP
- id g38-20020a81ae66000000b0058c6dddd27cmr76506ywk.6.1694195882399; Fri, 08
- Sep 2023 10:58:02 -0700 (PDT)
-Date:   Fri,  8 Sep 2023 19:57:37 +0200
+ (user=mclapinski job=sendgmr) by 2002:a25:9208:0:b0:d7f:8774:dfd4 with SMTP
+ id b8-20020a259208000000b00d7f8774dfd4mr62282ybo.12.1694195885073; Fri, 08
+ Sep 2023 10:58:05 -0700 (PDT)
+Date:   Fri,  8 Sep 2023 19:57:38 +0200
 In-Reply-To: <20230908175738.41895-1-mclapinski@google.com>
 Mime-Version: 1.0
 References: <20230908175738.41895-1-mclapinski@google.com>
 X-Mailer: git-send-email 2.42.0.283.g2d96d420d3-goog
-Message-ID: <20230908175738.41895-2-mclapinski@google.com>
-Subject: [PATCH v2 1/2] mm/memfd: add ioctl(MEMFD_CHECK_IF_ORIGINAL)
+Message-ID: <20230908175738.41895-3-mclapinski@google.com>
+Subject: [PATCH v2 2/2] selftests: test ioctl(MEMFD_CHECK_IF_ORIGINAL)
 From:   Michal Clapinski <mclapinski@google.com>
 To:     Jonathan Corbet <corbet@lwn.net>,
         Mike Kravetz <mike.kravetz@oracle.com>,
@@ -87,151 +87,75 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a way to check if an fd points to the memfd's original open fd
-(the one created by memfd_create).
-Useful because only the original open fd can be both writable and
-executable.
-
 Signed-off-by: Michal Clapinski <mclapinski@google.com>
 ---
- Documentation/userspace-api/ioctl/ioctl-number.rst |  1 +
- fs/hugetlbfs/inode.c                               |  9 +++++++++
- include/linux/memfd.h                              | 12 ++++++++++++
- mm/memfd.c                                         |  9 +++++++++
- mm/shmem.c                                         |  9 +++++++++
- 5 files changed, 40 insertions(+)
+ tools/testing/selftests/memfd/memfd_test.c | 32 ++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
-diff --git a/Documentation/userspace-api/ioctl/ioctl-number.rst b/Documentation/userspace-api/ioctl/ioctl-number.rst
-index 4ea5b837399a..9a0782116ac2 100644
---- a/Documentation/userspace-api/ioctl/ioctl-number.rst
-+++ b/Documentation/userspace-api/ioctl/ioctl-number.rst
-@@ -355,6 +355,7 @@ Code  Seq#    Include File                                           Comments
- 0xB6  all    linux/fpga-dfl.h
- 0xB7  all    uapi/linux/remoteproc_cdev.h                            <mailto:linux-remoteproc@vger.kernel.org>
- 0xB7  all    uapi/linux/nsfs.h                                       <mailto:Andrei Vagin <avagin@openvz.org>>
-+0xB8  00     linux/memfd.h
- 0xC0  00-0F  linux/usb/iowarrior.h
- 0xCA  00-0F  uapi/misc/cxl.h
- 0xCA  10-2F  uapi/misc/ocxl.h
-diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
-index 316c4cebd3f3..89ff46f7ac54 100644
---- a/fs/hugetlbfs/inode.c
-+++ b/fs/hugetlbfs/inode.c
-@@ -35,6 +35,7 @@
- #include <linux/magic.h>
- #include <linux/migrate.h>
- #include <linux/uio.h>
-+#include <linux/memfd.h>
+diff --git a/tools/testing/selftests/memfd/memfd_test.c b/tools/testing/selftests/memfd/memfd_test.c
+index 3df008677239..1a702af6e01a 100644
+--- a/tools/testing/selftests/memfd/memfd_test.c
++++ b/tools/testing/selftests/memfd/memfd_test.c
+@@ -13,6 +13,7 @@
+ #include <stdlib.h>
+ #include <signal.h>
+ #include <string.h>
++#include <sys/ioctl.h>
+ #include <sys/mman.h>
+ #include <sys/stat.h>
+ #include <sys/syscall.h>
+@@ -39,6 +40,10 @@
  
- #include <linux/uaccess.h>
- #include <linux/sched/mm.h>
-@@ -1324,6 +1325,12 @@ static void init_once(void *foo)
- 	inode_init_once(&ei->vfs_inode);
+ #define MFD_NOEXEC_SEAL	0x0008U
+ 
++#ifndef MEMFD_CHECK_IF_ORIGINAL
++#define MEMFD_CHECK_IF_ORIGINAL _IOR(0xB8, 0, int)
++#endif
++
+ /*
+  * Default is not to test hugetlbfs
+  */
+@@ -1567,6 +1572,31 @@ static void test_share_fork(char *banner, char *b_suffix)
+ 	close(fd);
  }
  
-+static long hugetlbfs_file_ioctl(struct file *file, unsigned int cmd,
-+				 unsigned long arg)
++static void test_ioctl_check_original(void)
 +{
-+	return memfd_ioctl(file, cmd, arg);
++	int fd, fd2;
++
++	printf("%s IOCTL-CHECK-ORIGINAL\n", memfd_str);
++	fd = sys_memfd_create("kern_memfd_check_original", 0);
++	if (fd < 0) {
++		printf("memfd_create failed: %m\n");
++		abort();
++	}
++	if (ioctl(fd, MEMFD_CHECK_IF_ORIGINAL) != 1) {
++		printf("ioctl(MEMFD_CHECK_IF_ORIGINAL) failed\n");
++		abort();
++	}
++
++	fd2 = mfd_assert_reopen_fd(fd);
++	if (ioctl(fd2, MEMFD_CHECK_IF_ORIGINAL) != 0) {
++		printf("ioctl(MEMFD_CHECK_IF_ORIGINAL) failed\n");
++		abort();
++	}
++
++	close(fd);
++	close(fd2);
 +}
 +
- const struct file_operations hugetlbfs_file_operations = {
- 	.read_iter		= hugetlbfs_read_iter,
- 	.mmap			= hugetlbfs_file_mmap,
-@@ -1331,6 +1338,8 @@ const struct file_operations hugetlbfs_file_operations = {
- 	.get_unmapped_area	= hugetlb_get_unmapped_area,
- 	.llseek			= default_llseek,
- 	.fallocate		= hugetlbfs_fallocate,
-+	.unlocked_ioctl		= hugetlbfs_file_ioctl,
-+	.compat_ioctl		= hugetlbfs_file_ioctl,
- };
- 
- static const struct inode_operations hugetlbfs_dir_inode_operations = {
-diff --git a/include/linux/memfd.h b/include/linux/memfd.h
-index e7abf6fa4c52..50f512624c92 100644
---- a/include/linux/memfd.h
-+++ b/include/linux/memfd.h
-@@ -3,14 +3,26 @@
- #define __LINUX_MEMFD_H
- 
- #include <linux/file.h>
-+#include <linux/ioctl.h>
- 
- #ifdef CONFIG_MEMFD_CREATE
- extern long memfd_fcntl(struct file *file, unsigned int cmd, unsigned int arg);
-+extern long memfd_ioctl(struct file *file, unsigned int cmd, unsigned int arg);
- #else
- static inline long memfd_fcntl(struct file *f, unsigned int c, unsigned int a)
+ int main(int argc, char **argv)
  {
- 	return -EINVAL;
- }
-+static inline long memfd_ioctl(struct file *f, unsigned int c, unsigned int a)
-+{
-+	return -EINVAL;
-+}
- #endif
+ 	pid_t pid;
+@@ -1609,6 +1639,8 @@ int main(int argc, char **argv)
+ 	test_share_open("SHARE-OPEN", "");
+ 	test_share_fork("SHARE-FORK", "");
  
-+/*
-+ * Return 1 if the memfd is original (i.e. was created by memfd_create,
-+ * not reopened), 0 otherwise.
-+ */
-+#define MEMFD_CHECK_IF_ORIGINAL		_IOR(0xB8, 0, int)
++	test_ioctl_check_original();
 +
- #endif /* __LINUX_MEMFD_H */
-diff --git a/mm/memfd.c b/mm/memfd.c
-index 1cad1904fc26..06bcb970c387 100644
---- a/mm/memfd.c
-+++ b/mm/memfd.c
-@@ -262,6 +262,15 @@ long memfd_fcntl(struct file *file, unsigned int cmd, unsigned int arg)
- 	return error;
- }
- 
-+long memfd_ioctl(struct file *file, unsigned int cmd, unsigned int arg)
-+{
-+	if (cmd == MEMFD_CHECK_IF_ORIGINAL)
-+		return (file->f_mode & FMODE_WRITE) &&
-+		       !(file->f_mode & FMODE_WRITER);
-+
-+	return -EINVAL;
-+}
-+
- #define MFD_NAME_PREFIX "memfd:"
- #define MFD_NAME_PREFIX_LEN (sizeof(MFD_NAME_PREFIX) - 1)
- #define MFD_NAME_MAX_LEN (NAME_MAX - MFD_NAME_PREFIX_LEN)
-diff --git a/mm/shmem.c b/mm/shmem.c
-index 02e62fccc80d..347fcba15fb7 100644
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -79,6 +79,7 @@ static struct vfsmount *shm_mnt;
- #include <linux/rmap.h>
- #include <linux/uuid.h>
- #include <linux/quotaops.h>
-+#include <linux/memfd.h>
- 
- #include <linux/uaccess.h>
- 
-@@ -4459,6 +4460,12 @@ const struct address_space_operations shmem_aops = {
- };
- EXPORT_SYMBOL(shmem_aops);
- 
-+static long shmem_file_ioctl(struct file *file, unsigned int cmd,
-+			     unsigned long arg)
-+{
-+	return memfd_ioctl(file, cmd, arg);
-+}
-+
- static const struct file_operations shmem_file_operations = {
- 	.mmap		= shmem_mmap,
- 	.open		= shmem_file_open,
-@@ -4471,6 +4478,8 @@ static const struct file_operations shmem_file_operations = {
- 	.splice_read	= shmem_file_splice_read,
- 	.splice_write	= iter_file_splice_write,
- 	.fallocate	= shmem_fallocate,
-+	.unlocked_ioctl = shmem_file_ioctl,
-+	.compat_ioctl   = shmem_file_ioctl,
- #endif
- };
- 
+ 	/* Run test-suite in a multi-threaded environment with a shared
+ 	 * file-table. */
+ 	pid = spawn_idle_thread(CLONE_FILES | CLONE_FS | CLONE_VM);
 -- 
 2.42.0.283.g2d96d420d3-goog
 
