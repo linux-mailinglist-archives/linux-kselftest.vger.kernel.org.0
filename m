@@ -2,160 +2,84 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB73F798BA5
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Sep 2023 19:58:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65FF2798BC5
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Sep 2023 20:01:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245200AbjIHR6K (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 8 Sep 2023 13:58:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40862 "EHLO
+        id S245471AbjIHSBb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 8 Sep 2023 14:01:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245327AbjIHR6J (ORCPT
+        with ESMTP id S245550AbjIHSBa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 Sep 2023 13:58:09 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC0621FCF
-        for <linux-kselftest@vger.kernel.org>; Fri,  8 Sep 2023 10:58:05 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-594e5e2e608so26095547b3.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 08 Sep 2023 10:58:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1694195885; x=1694800685; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tNRAzZU/edQLTJw3qIY/o1dxHISQKnf/BXQhNzjVbbY=;
-        b=2qSjhcS0RK7HJABT1Le0Aj7tqR8nz/9wcSX3NJzL26yTMiYoFtqPnZ05T3ya+9GSMS
-         VDGhE8w6S6gPu6RB9e91do03PTw2mTij5Oh//DYubXC6S/w5HmMm3OqZM1WrDvS4dWXS
-         L6OGTauhNjnFJR7+2DarFhsrkRqMWimwuG1k6zkiLkgAzhMJR5JsE0MATkIPlY1qyDtw
-         Zpr2lQIdPEzcqGDYua+NI74QUjy16VLltzViM0AJhpxGnooaAitClfLc3hGq2ecZNrEd
-         YhcUzXf2bS1FdMugB3nc2y0+ocRn+NJ+SDMbnsHSnoyL7wyYSxA+CrsBpo+oC3QGHl2Y
-         +O5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694195885; x=1694800685;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tNRAzZU/edQLTJw3qIY/o1dxHISQKnf/BXQhNzjVbbY=;
-        b=dED0d+LqJ7jEdB7/vmhDwWzitOuTHbQX84a8lh+MDgtH6u3CniOApsTO1PmJKK3sFm
-         IKfFkqaiWaMjpXJNCaOEeNPOLb8rSPNkGH71etCTZu2ux0nEMuBGTNDlzbkVgYVkFKlT
-         dCGWRKkMGClcNoTxzH2PZnUJUp5dBGhtHPwIYj8GSlDF6I2/kAyikyDhdRjQTHY4iyT+
-         uFDUOey6GDM4QbH4QHASvrL5J/tsWVhwfEeFHoIHRCMafItoKR0F8fQdgkfoL+c/LUs6
-         HY1/ifgfCta1ceVS920uCbwrrRfNZUaUAh99j9iLZw11n/LyOGQ4T0cLhuMuV7SyFpDr
-         7dPA==
-X-Gm-Message-State: AOJu0YxwaN0C+KVeWqB27Kia5bE0ZKTBiIcSDj4/muwaK+z6X85F83/n
-        8mZQSHGovafQR8ff4ciSqqhJ39Kuxy3yuNz6
-X-Google-Smtp-Source: AGHT+IFoF1EiaUeA0+DU6tYzZsfsoi52XXqVRErttNtmBwyZirUf/VwWuA0433pCTHLt3+OeKv0sjSkOLMN7x+ON
-X-Received: from mclapinski.waw.corp.google.com ([2a00:79e0:9b:0:aa82:a90b:b76f:32b0])
- (user=mclapinski job=sendgmr) by 2002:a25:9208:0:b0:d7f:8774:dfd4 with SMTP
- id b8-20020a259208000000b00d7f8774dfd4mr62282ybo.12.1694195885073; Fri, 08
- Sep 2023 10:58:05 -0700 (PDT)
-Date:   Fri,  8 Sep 2023 19:57:38 +0200
-In-Reply-To: <20230908175738.41895-1-mclapinski@google.com>
-Mime-Version: 1.0
-References: <20230908175738.41895-1-mclapinski@google.com>
-X-Mailer: git-send-email 2.42.0.283.g2d96d420d3-goog
-Message-ID: <20230908175738.41895-3-mclapinski@google.com>
-Subject: [PATCH v2 2/2] selftests: test ioctl(MEMFD_CHECK_IF_ORIGINAL)
-From:   Michal Clapinski <mclapinski@google.com>
-To:     Jonathan Corbet <corbet@lwn.net>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <muchun.song@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>, Shuah Khan <shuah@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>, Yi Liu <yi.l.liu@intel.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Steve French <stfrench@microsoft.com>,
-        Simon Ser <contact@emersion.fr>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Marc Dionne <marc.dionne@auristor.com>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        Luca Vizzarro <Luca.Vizzarro@arm.com>,
-        Jeff Xu <jeffxu@google.com>, Aleksa Sarai <cyphar@cyphar.com>,
-        Kees Cook <keescook@chromium.org>,
-        Daniel Verkamp <dverkamp@chromium.org>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Cc:     Michal Clapinski <mclapinski@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 8 Sep 2023 14:01:30 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 738122133;
+        Fri,  8 Sep 2023 11:01:00 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1939C433C9;
+        Fri,  8 Sep 2023 18:00:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1694196045;
+        bh=HA0290nYjJTra1Fa8i+NOPy4ak9llenwVNo887t/S40=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=siKVS1zCYUaqWiFNOPWljF7J1BEXRd6RU2WpjwgJ/9rZGnNgyv9OIYLUzgaIxwFon
+         4fkHmcCUtoZfHGn4fEVUaRQKxC097T8b57PkpBhZD/p7Hij5G7C8TRZM2Hizof6WAw
+         UrsaXNm1n4L7JBtzL0J8OeHpnWehTvRbMibhnM63a/cq6OfQ+vXlRbJWpvOVfH4f6A
+         vd/8AGH4J3+FI/DkQSwM56smhR70qVb7QegxXrYrYW1xKTv3aB2sX5n+uEauf5fzkT
+         PRKgFNzuIzTkseKVj/Uzq2/EOyNyB2rjtqHc1v8qKhohlj+R7lKVJsF4gey0S2zFtJ
+         2j0+4adHmS5yg==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Ding Xiang <dingxiang@cmss.chinamobile.com>,
+        Will Deacon <will@kernel.org>, Sasha Levin <sashal@kernel.org>,
+        catalin.marinas@arm.com, shuah@kernel.org, broonie@kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.5 10/16] kselftest/arm64: fix a memleak in zt_regs_run()
+Date:   Fri,  8 Sep 2023 13:59:47 -0400
+Message-Id: <20230908175953.3457942-10-sashal@kernel.org>
+X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230908175953.3457942-1-sashal@kernel.org>
+References: <20230908175953.3457942-1-sashal@kernel.org>
+MIME-Version: 1.0
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.5.2
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Signed-off-by: Michal Clapinski <mclapinski@google.com>
----
- tools/testing/selftests/memfd/memfd_test.c | 32 ++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+From: Ding Xiang <dingxiang@cmss.chinamobile.com>
 
-diff --git a/tools/testing/selftests/memfd/memfd_test.c b/tools/testing/selftests/memfd/memfd_test.c
-index 3df008677239..1a702af6e01a 100644
---- a/tools/testing/selftests/memfd/memfd_test.c
-+++ b/tools/testing/selftests/memfd/memfd_test.c
-@@ -13,6 +13,7 @@
- #include <stdlib.h>
- #include <signal.h>
- #include <string.h>
-+#include <sys/ioctl.h>
- #include <sys/mman.h>
- #include <sys/stat.h>
- #include <sys/syscall.h>
-@@ -39,6 +40,10 @@
+[ Upstream commit 46862da15e37efedb7d2d21e167f506c0b533772 ]
+
+If memcmp() does not return 0, "zeros" need to be freed to prevent memleak
+
+Signed-off-by: Ding Xiang <dingxiang@cmss.chinamobile.com>
+Link: https://lore.kernel.org/r/20230815074915.245528-1-dingxiang@cmss.chinamobile.com
+Signed-off-by: Will Deacon <will@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/arm64/signal/testcases/zt_regs.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tools/testing/selftests/arm64/signal/testcases/zt_regs.c b/tools/testing/selftests/arm64/signal/testcases/zt_regs.c
+index e1eb4d5c027ab..2e384d731618b 100644
+--- a/tools/testing/selftests/arm64/signal/testcases/zt_regs.c
++++ b/tools/testing/selftests/arm64/signal/testcases/zt_regs.c
+@@ -65,6 +65,7 @@ int zt_regs_run(struct tdescr *td, siginfo_t *si, ucontext_t *uc)
+ 	if (memcmp(zeros, (char *)zt + ZT_SIG_REGS_OFFSET,
+ 		   ZT_SIG_REGS_SIZE(zt->nregs)) != 0) {
+ 		fprintf(stderr, "ZT data invalid\n");
++		free(zeros);
+ 		return 1;
+ 	}
  
- #define MFD_NOEXEC_SEAL	0x0008U
- 
-+#ifndef MEMFD_CHECK_IF_ORIGINAL
-+#define MEMFD_CHECK_IF_ORIGINAL _IOR(0xB8, 0, int)
-+#endif
-+
- /*
-  * Default is not to test hugetlbfs
-  */
-@@ -1567,6 +1572,31 @@ static void test_share_fork(char *banner, char *b_suffix)
- 	close(fd);
- }
- 
-+static void test_ioctl_check_original(void)
-+{
-+	int fd, fd2;
-+
-+	printf("%s IOCTL-CHECK-ORIGINAL\n", memfd_str);
-+	fd = sys_memfd_create("kern_memfd_check_original", 0);
-+	if (fd < 0) {
-+		printf("memfd_create failed: %m\n");
-+		abort();
-+	}
-+	if (ioctl(fd, MEMFD_CHECK_IF_ORIGINAL) != 1) {
-+		printf("ioctl(MEMFD_CHECK_IF_ORIGINAL) failed\n");
-+		abort();
-+	}
-+
-+	fd2 = mfd_assert_reopen_fd(fd);
-+	if (ioctl(fd2, MEMFD_CHECK_IF_ORIGINAL) != 0) {
-+		printf("ioctl(MEMFD_CHECK_IF_ORIGINAL) failed\n");
-+		abort();
-+	}
-+
-+	close(fd);
-+	close(fd2);
-+}
-+
- int main(int argc, char **argv)
- {
- 	pid_t pid;
-@@ -1609,6 +1639,8 @@ int main(int argc, char **argv)
- 	test_share_open("SHARE-OPEN", "");
- 	test_share_fork("SHARE-FORK", "");
- 
-+	test_ioctl_check_original();
-+
- 	/* Run test-suite in a multi-threaded environment with a shared
- 	 * file-table. */
- 	pid = spawn_idle_thread(CLONE_FILES | CLONE_FS | CLONE_VM);
 -- 
-2.42.0.283.g2d96d420d3-goog
+2.40.1
 
