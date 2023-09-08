@@ -2,45 +2,45 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65FF2798BC5
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Sep 2023 20:01:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9E06798BDD
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Sep 2023 20:02:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245471AbjIHSBb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 8 Sep 2023 14:01:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43286 "EHLO
+        id S245652AbjIHSC2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 8 Sep 2023 14:02:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245550AbjIHSBa (ORCPT
+        with ESMTP id S238069AbjIHSCX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 Sep 2023 14:01:30 -0400
+        Fri, 8 Sep 2023 14:02:23 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 738122133;
-        Fri,  8 Sep 2023 11:01:00 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1939C433C9;
-        Fri,  8 Sep 2023 18:00:43 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F2862695;
+        Fri,  8 Sep 2023 11:01:45 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3977DC43397;
+        Fri,  8 Sep 2023 18:00:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694196045;
-        bh=HA0290nYjJTra1Fa8i+NOPy4ak9llenwVNo887t/S40=;
+        s=k20201202; t=1694196056;
+        bh=7b2Oe6+qXpTGIi+Hwfw3z7qcnnB7BgV1QYcvYDD1nKQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=siKVS1zCYUaqWiFNOPWljF7J1BEXRd6RU2WpjwgJ/9rZGnNgyv9OIYLUzgaIxwFon
-         4fkHmcCUtoZfHGn4fEVUaRQKxC097T8b57PkpBhZD/p7Hij5G7C8TRZM2Hizof6WAw
-         UrsaXNm1n4L7JBtzL0J8OeHpnWehTvRbMibhnM63a/cq6OfQ+vXlRbJWpvOVfH4f6A
-         vd/8AGH4J3+FI/DkQSwM56smhR70qVb7QegxXrYrYW1xKTv3aB2sX5n+uEauf5fzkT
-         PRKgFNzuIzTkseKVj/Uzq2/EOyNyB2rjtqHc1v8qKhohlj+R7lKVJsF4gey0S2zFtJ
-         2j0+4adHmS5yg==
+        b=Nydx/Bzqj4vZNp4s4Gjm7sImYWdgrUAeaBftLNv1KMKfCCgz2hr9bpWXMsbDl9SF8
+         Onjw+EvvcqcYK/vBZRNuNcyBkOYRTiSsN22/zWKB+SCYc0Wp16rvutzgKNKlmodjNb
+         5KFJCa2Y/V7QT/C5ZrYrhNg+ZnsJk3OOF8OsKMK6uuB3ZJ9zx+2+dVyev1x2hP5dFX
+         mDbPyW7fYHiWTe8/Sb2/QIUd/xFJ5ZggYJMooujzbN9+ugtpPwG5h0+EIl6bblIuZX
+         fj/3PI3QXKoWFSheYIuE3rRee0YnJGV9j/ecHqhkmYiMcS5nXLdmK9X7dUlQMcu2po
+         7RfeDTXF696gg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Ding Xiang <dingxiang@cmss.chinamobile.com>,
-        Will Deacon <will@kernel.org>, Sasha Levin <sashal@kernel.org>,
-        catalin.marinas@arm.com, shuah@kernel.org, broonie@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.5 10/16] kselftest/arm64: fix a memleak in zt_regs_run()
-Date:   Fri,  8 Sep 2023 13:59:47 -0400
-Message-Id: <20230908175953.3457942-10-sashal@kernel.org>
+Cc:     Zhangjin Wu <falcon@tinylab.org>,
+        =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        Willy Tarreau <w@1wt.eu>, Sasha Levin <sashal@kernel.org>,
+        shuah@kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.5 15/16] selftests/nolibc: fix up kernel parameters support
+Date:   Fri,  8 Sep 2023 13:59:52 -0400
+Message-Id: <20230908175953.3457942-15-sashal@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230908175953.3457942-1-sashal@kernel.org>
 References: <20230908175953.3457942-1-sashal@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.5.2
@@ -54,32 +54,100 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Ding Xiang <dingxiang@cmss.chinamobile.com>
+From: Zhangjin Wu <falcon@tinylab.org>
 
-[ Upstream commit 46862da15e37efedb7d2d21e167f506c0b533772 ]
+[ Upstream commit c388c9920da2679f62bec48d00ca9e80e9d0a364 ]
 
-If memcmp() does not return 0, "zeros" need to be freed to prevent memleak
+kernel parameters allow pass two types of strings, one type is like
+'noapic', another type is like 'panic=5', the first type is passed as
+arguments of the init program, the second type is passed as environment
+variables of the init program.
 
-Signed-off-by: Ding Xiang <dingxiang@cmss.chinamobile.com>
-Link: https://lore.kernel.org/r/20230815074915.245528-1-dingxiang@cmss.chinamobile.com
-Signed-off-by: Will Deacon <will@kernel.org>
+when users pass kernel parameters like this:
+
+    noapic NOLIBC_TEST=syscall
+
+our nolibc-test program will use the test setting from argv[1] and
+ignore the one from NOLIBC_TEST environment variable, and at last, it
+will print the following line and ignore the whole test setting.
+
+    Ignoring unknown test name 'noapic'
+
+reversing the parsing order does solve the above issue:
+
+    test = getenv("NOLIBC_TEST");
+    if (test)
+        test = argv[1];
+
+but it still doesn't work with such kernel parameters (without
+NOLIBC_TEST environment variable):
+
+    noapic FOO=bar
+
+To support all of the potential kernel parameters, let's verify the test
+setting from both of argv[1] and NOLIBC_TEST environment variable.
+
+Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
+Signed-off-by: Zhangjin Wu <falcon@tinylab.org>
+Signed-off-by: Willy Tarreau <w@1wt.eu>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- tools/testing/selftests/arm64/signal/testcases/zt_regs.c | 1 +
- 1 file changed, 1 insertion(+)
+ tools/testing/selftests/nolibc/nolibc-test.c | 33 ++++++++++++++++++--
+ 1 file changed, 31 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/arm64/signal/testcases/zt_regs.c b/tools/testing/selftests/arm64/signal/testcases/zt_regs.c
-index e1eb4d5c027ab..2e384d731618b 100644
---- a/tools/testing/selftests/arm64/signal/testcases/zt_regs.c
-+++ b/tools/testing/selftests/arm64/signal/testcases/zt_regs.c
-@@ -65,6 +65,7 @@ int zt_regs_run(struct tdescr *td, siginfo_t *si, ucontext_t *uc)
- 	if (memcmp(zeros, (char *)zt + ZT_SIG_REGS_OFFSET,
- 		   ZT_SIG_REGS_SIZE(zt->nregs)) != 0) {
- 		fprintf(stderr, "ZT data invalid\n");
-+		free(zeros);
- 		return 1;
- 	}
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index 486334981e601..55628a25df0a3 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -939,6 +939,35 @@ static const struct test test_names[] = {
+ 	{ 0 }
+ };
  
++int is_setting_valid(char *test)
++{
++	int idx, len, test_len, valid = 0;
++	char delimiter;
++
++	if (!test)
++		return valid;
++
++	test_len = strlen(test);
++
++	for (idx = 0; test_names[idx].name; idx++) {
++		len = strlen(test_names[idx].name);
++		if (test_len < len)
++			continue;
++
++		if (strncmp(test, test_names[idx].name, len) != 0)
++			continue;
++
++		delimiter = test[len];
++		if (delimiter != ':' && delimiter != ',' && delimiter != '\0')
++			continue;
++
++		valid = 1;
++		break;
++	}
++
++	return valid;
++}
++
+ int main(int argc, char **argv, char **envp)
+ {
+ 	int min = 0;
+@@ -964,10 +993,10 @@ int main(int argc, char **argv, char **envp)
+ 	 *    syscall:5-15[:.*],stdlib:8-10
+ 	 */
+ 	test = argv[1];
+-	if (!test)
++	if (!is_setting_valid(test))
+ 		test = getenv("NOLIBC_TEST");
+ 
+-	if (test) {
++	if (is_setting_valid(test)) {
+ 		char *comma, *colon, *dash, *value;
+ 
+ 		do {
 -- 
 2.40.1
 
