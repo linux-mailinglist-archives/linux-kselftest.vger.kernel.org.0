@@ -2,35 +2,35 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 338E87987AC
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Sep 2023 15:17:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A83D7987B2
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Sep 2023 15:19:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238716AbjIHNRX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 8 Sep 2023 09:17:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55452 "EHLO
+        id S236982AbjIHNTo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 8 Sep 2023 09:19:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231295AbjIHNRX (ORCPT
+        with ESMTP id S231295AbjIHNTn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 Sep 2023 09:17:23 -0400
+        Fri, 8 Sep 2023 09:19:43 -0400
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7467E19B5;
-        Fri,  8 Sep 2023 06:17:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D421D19B5;
+        Fri,  8 Sep 2023 06:19:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=tYNgQCrpYkOoEOuoU0hVR2Y36XucRBC2ub7wl0zHoG4=; b=fDjhL5KTtkbc8il/az7cU6WOK/
-        nDskd1sZyNc9XzS5AMX5KVaz+cR/FdanUYOwMyFYLcvdbYpBXbT4EXYmvQ9+xFF30kktgA+5YqbG2
-        vvlNlIr/SKK+Di/CyOgsqQHo6Gvdqf47shaMDJUxrtabiS4zbrcS/ljljAoIOjnbCOWYB+4b1U6fN
-        LdALdJHKGMDoceqFScUv2Qc3s4dkHNt0cgtlVCvcmX3lZcXsVgZeEjEkqdWXudfd3llx3MfGuh1ig
-        Wyaz827Se7RdSCdjUoMaciH2Fsd31jU8NZO7xi91UHigAFNcv4r7kiRduMePben/a8zl0ObWlW6bV
-        yUmyPnMw==;
+        bh=byTGpZunXOY72bf+Yy8GIShaEnFa/OpSgKmuUVjqnmY=; b=AQvtYt+4V1wAPVojSoKVC8VN+y
+        36uhQcVVz5smyjYMiZ5NigdM/nkLwL6Wl0kEizgybkW2MrZLsQlJvoHn5zH5S72pwKgAc97OmXrUC
+        tMVnaHZ86dnAJ00YxIEwBMpBZ0KVSaE+3Ryv2DoNB/9Pb29it7NN5JoIsWjlPQVPetmRm5F583tZU
+        CP/6IXuKdu+4QKxfdxAJTkWVTTj2WkD6rfpiIN6XejGoGjcuVe32uepWTpg717Vpl0VoZxkVx5ebs
+        iXtpRuEh568t3mQZI4rWPGSxxQL1/qeg/o2iQF5H2phK/Iis3RvdUl+WU27FUEAqhIgcMAY1aDVMG
+        MynsH61g==;
 Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
         by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qebM6-000JlF-Lp; Fri, 08 Sep 2023 13:17:02 +0000
+        id 1qebOK-000JqN-A1; Fri, 08 Sep 2023 13:19:20 +0000
 Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 53898300472; Fri,  8 Sep 2023 15:17:02 +0200 (CEST)
-Date:   Fri, 8 Sep 2023 15:17:02 +0200
+        id EFF70300472; Fri,  8 Sep 2023 15:19:19 +0200 (CEST)
+Date:   Fri, 8 Sep 2023 15:19:19 +0200
 From:   Peter Zijlstra <peterz@infradead.org>
 To:     Meng Li <li.meng@amd.com>
 Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
@@ -47,15 +47,15 @@ Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
         Xiaojian Du <Xiaojian.Du@amd.com>,
         Viresh Kumar <viresh.kumar@linaro.org>,
         Borislav Petkov <bp@alien8.de>
-Subject: Re: [PATCH V5 3/7] cpufreq: amd-pstate: Enable amd-pstate preferred
- core supporting.
-Message-ID: <20230908131702.GF19320@noisy.programming.kicks-ass.net>
+Subject: Re: [PATCH V5 4/7] cpufreq: Add a notification message that the
+ highest perf has changed
+Message-ID: <20230908131919.GG19320@noisy.programming.kicks-ass.net>
 References: <20230905015116.2268926-1-li.meng@amd.com>
- <20230905015116.2268926-4-li.meng@amd.com>
+ <20230905015116.2268926-5-li.meng@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230905015116.2268926-4-li.meng@amd.com>
+In-Reply-To: <20230905015116.2268926-5-li.meng@amd.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -65,54 +65,12 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Sep 05, 2023 at 09:51:12AM +0800, Meng Li wrote:
+On Tue, Sep 05, 2023 at 09:51:13AM +0800, Meng Li wrote:
+> ACPI 6.5 section 8.4.6.1.1.1 specifies that Notify event 0x85 can be
+> emmitted to cause the the OSPM to re-evaluate the highest performance
+> register. Add support for this event.
+> 
+> Signed-off-by: Meng Li <li.meng@amd.com>
+> Link: https://uefi.org/specs/ACPI/6.5/08_Processor_Configuration_and_Control.html?highlight=cppc#cpc-continuous-performance-control
 
-> +static void amd_pstate_init_prefcore(void)
-> +{
-> +	int cpu, ret;
-> +	u64 highest_perf;
-> +
-> +	if (!prefcore)
-> +		return;
-> +
-> +	for_each_online_cpu(cpu) {
-> +		ret = amd_pstate_get_highest_perf(cpu, &highest_perf);
-> +		if (ret)
-> +			break;
-> +
-> +		sched_set_itmt_core_prio(highest_perf, cpu);
-> +
-> +		/* check if CPPC preferred core feature is enabled*/
-> +		if (highest_perf == AMD_PSTATE_MAX_CPPC_PERF) {
-> +			hw_prefcore = false;
-> +			prefcore = false;
-> +			return;
-> +		}
-> +	}
-> +
-> +	/*
-> +	 * This code can be run during CPU online under the
-> +	 * CPU hotplug locks, so sched_set_amd_prefcore_support()
-> +	 * cannot be called from here.  Queue up a work item
-> +	 * to invoke it.
-> +	 */
-> +	schedule_work(&sched_prefcore_work);
-> +}
-
-> @@ -1506,6 +1593,8 @@ static int __init amd_pstate_init(void)
->  		}
->  	}
->  
-> +	amd_pstate_init_prefcore();
-> +
->  	return ret;
->  
->  global_attr_free:
-
-
-I'm confused,...  you call amd_pstate_init_prefcore() at
-device_initcall(). Once per boot.
-
-Then it iterates all online CPUs..
-
-But what if you boot with some CPUs offline and bring then online later?
+Does uefi.org guarantee this is a stable link?
