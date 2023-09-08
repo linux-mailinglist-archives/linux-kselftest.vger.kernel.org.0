@@ -2,106 +2,91 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3ECF17987BD
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Sep 2023 15:24:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B71B27987C8
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Sep 2023 15:26:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231596AbjIHNYT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 8 Sep 2023 09:24:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57008 "EHLO
+        id S243538AbjIHN02 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 8 Sep 2023 09:26:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231295AbjIHNYT (ORCPT
+        with ESMTP id S238473AbjIHN01 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 8 Sep 2023 09:24:19 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 683CD19BC;
-        Fri,  8 Sep 2023 06:24:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=B9k4dnbji9dnrByms7YY3LGk13xuTrwM08yQHVzelLI=; b=hR2iVHQlXKi/fwdpa5csKFUJ2M
-        vU1v4kHdiUiHfW+lu2TZOzHRGEVKf3slc98/Wu+YFD3oqRA7Z2XHWqdCtxXMNE532Nr/bkDEo0eT+
-        eGT8KhdyJkK/8Dx8kYnYco5QYpvcUyswVC1OyLkdzqs0vcfKG2Z3aHWzplkg0GphhVN6maXT5XlEc
-        OUJEYjDq3xbsuxWd39Cc7vNM4UucsSoSy9i/XTMafRtRbIp3ZoediI0dOgN4D11zphRdoHRXTAS/a
-        ftvMj/AXWgXhjYm2jXsZ49FrhnjDrtxabMALqJPYEVqbrGe5Z0NhZxrSxqCyIWB9si+a6h1JH2lT3
-        JuY1IOQg==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qebSt-000MEr-6f; Fri, 08 Sep 2023 13:24:03 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 33F96300472; Fri,  8 Sep 2023 15:24:02 +0200 (CEST)
-Date:   Fri, 8 Sep 2023 15:24:02 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Meng Li <li.meng@amd.com>
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Huang Rui <ray.huang@amd.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-acpi@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Shimmer Huang <shimmer.huang@amd.com>,
-        Perry Yuan <Perry.Yuan@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>
-Subject: Re: [PATCH V5 4/7] cpufreq: Add a notification message that the
- highest perf has changed
-Message-ID: <20230908132402.GH19320@noisy.programming.kicks-ass.net>
-References: <20230905015116.2268926-1-li.meng@amd.com>
- <20230905015116.2268926-5-li.meng@amd.com>
+        Fri, 8 Sep 2023 09:26:27 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB0C31BF0
+        for <linux-kselftest@vger.kernel.org>; Fri,  8 Sep 2023 06:26:23 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2be5e2a3c86so37956861fa.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 08 Sep 2023 06:26:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1694179582; x=1694784382; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JtvG7vCoPjzvZ6xl4mQwiW30hYHrBTBAj9DoApT1P2w=;
+        b=BYn73QHDStv9k1exZIKuf3DqEmF6+ZmY8FPKu5IEONwpwm9I6zJtaQdfu+5sMAMYC/
+         aXmvh+o0Mq3ozChUsun7fffo7jT+zOl5hFiKfcz4SARdxjPA4f9BsKdYBLFz0wlwNI4K
+         Bqq5wb5A7V3ASoiwJ3IPNVtG69/6JS+5RwDgU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694179582; x=1694784382;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JtvG7vCoPjzvZ6xl4mQwiW30hYHrBTBAj9DoApT1P2w=;
+        b=Q8mowOtobVhMRMYa6fc/X3+vWaverDW6wHygbKJbErUq6KMok6wojEV7zALchufIMm
+         m3A4olWUTstkQ8au9u5MZ5HgSibR8stTFlusLCVKgFJB1LclyrALAe4FaS+ymOD2+d9W
+         iKTdXROBKZ2LWspzBG5OuKLHpAugEOEjodj666pMoJLSarK7xJwYcK1I10AF9lVA7ggo
+         dJXU+R7aQ+Fvq33X/nwjnxY9OmTF5n90eALCbEO0k3oZQCc7ctcgKUooQb9KN9lSoF3P
+         klau7qff1M42veuREmDg/1qF6rbIMxC6X/1qul3S5UnDVNg4ddUkyoBan0JVxc2Ij35k
+         ifRQ==
+X-Gm-Message-State: AOJu0Ywj2TmiTs8H9/yosqFm9oQlsrfF+ms/Obc1tQNi+4QofSfaYMwR
+        rSdSlI/k6ih0uwOdEdWiCewHlbXzoODQYeXYkKnUZg==
+X-Google-Smtp-Source: AGHT+IHXE6NA7384Ovya/IgVK7bR8Nri7iznp2hNET+Y6LuS6TLo2xz8tphlwO1rMJaX6yLUnlk6HxEqoKFut1VYR20=
+X-Received: by 2002:a2e:844e:0:b0:2bc:d507:6ee with SMTP id
+ u14-20020a2e844e000000b002bcd50706eemr912865ljh.7.1694179581822; Fri, 08 Sep
+ 2023 06:26:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230905015116.2268926-5-li.meng@amd.com>
+References: <20230903151328.2981432-1-joel@joelfernandes.org>
+ <20230903151328.2981432-2-joel@joelfernandes.org> <ZPscoU1l4HzP15sz@dhcp22.suse.cz>
+In-Reply-To: <ZPscoU1l4HzP15sz@dhcp22.suse.cz>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Fri, 8 Sep 2023 09:26:10 -0400
+Message-ID: <CAEXW_YQ1d2QK_dav59qVtj7zNrPLL+5zC8wGxAu7ZXC2Oou=6Q@mail.gmail.com>
+Subject: Re: [PATCH v6 1/7] mm/mremap: Optimize the start addresses in move_page_tables()
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     linux-kernel@vger.kernel.org, Lorenzo Stoakes <lstoakes@gmail.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        Shuah Khan <shuah@kernel.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Kirill A Shutemov <kirill@shutemov.name>,
+        "Liam R. Howlett" <liam.howlett@oracle.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Lokesh Gidra <lokeshgidra@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Sep 05, 2023 at 09:51:13AM +0800, Meng Li wrote:
-> ACPI 6.5 section 8.4.6.1.1.1 specifies that Notify event 0x85 can be
-> emmitted to cause the the OSPM to re-evaluate the highest performance
-> register. Add support for this event.
-> 
-> Signed-off-by: Meng Li <li.meng@amd.com>
-> Link: https://uefi.org/specs/ACPI/6.5/08_Processor_Configuration_and_Control.html?highlight=cppc#cpc-continuous-performance-control
-> ---
->  drivers/acpi/processor_driver.c |  6 ++++++
->  drivers/cpufreq/cpufreq.c       | 13 +++++++++++++
->  include/linux/cpufreq.h         |  5 +++++
->  3 files changed, 24 insertions(+)
-> 
-> diff --git a/drivers/acpi/processor_driver.c b/drivers/acpi/processor_driver.c
-> index 4bd16b3f0781..29b2fb68a35d 100644
-> --- a/drivers/acpi/processor_driver.c
-> +++ b/drivers/acpi/processor_driver.c
-> @@ -27,6 +27,7 @@
->  #define ACPI_PROCESSOR_NOTIFY_PERFORMANCE 0x80
->  #define ACPI_PROCESSOR_NOTIFY_POWER	0x81
->  #define ACPI_PROCESSOR_NOTIFY_THROTTLING	0x82
-> +#define ACPI_PROCESSOR_NOTIFY_HIGEST_PERF_CHANGED	0x85
->  
->  MODULE_AUTHOR("Paul Diefenbaugh");
->  MODULE_DESCRIPTION("ACPI Processor Driver");
-> @@ -83,6 +84,11 @@ static void acpi_processor_notify(acpi_handle handle, u32 event, void *data)
->  		acpi_bus_generate_netlink_event(device->pnp.device_class,
->  						  dev_name(&device->dev), event, 0);
->  		break;
-> +	case ACPI_PROCESSOR_NOTIFY_HIGEST_PERF_CHANGED:
-> +		cpufreq_update_highest_perf(pr->id);
-> +		acpi_bus_generate_netlink_event(device->pnp.device_class,
-> +						  dev_name(&device->dev), event, 0);
-> +		break;
->  	default:
->  		acpi_handle_debug(handle, "Unsupported event [0x%x]\n", event);
->  		break;
+On Fri, Sep 8, 2023 at 9:07=E2=80=AFAM Michal Hocko <mhocko@suse.com> wrote=
+:
+>
+> Sorry for being silent most of the time in this patch series and thanks
+> for pushing it forward.
+>
+[...]
+>
+> The patch looks good to me.
+> Acked-by: Michal Hocko <mhocko@suse.com>
 
-I've obviously not read the link, but the above seems to suggest that
-every CPU that has its limits changed gets the 'interrupt' ?
+Thank you very much!!
+
+ - Joel
