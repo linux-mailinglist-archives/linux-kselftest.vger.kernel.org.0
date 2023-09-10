@@ -2,82 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2BBB799F39
-	for <lists+linux-kselftest@lfdr.de>; Sun, 10 Sep 2023 20:00:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CCEE5799F7C
+	for <lists+linux-kselftest@lfdr.de>; Sun, 10 Sep 2023 21:29:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbjIJSA0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 10 Sep 2023 14:00:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58956 "EHLO
+        id S230009AbjIJT3k (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 10 Sep 2023 15:29:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229958AbjIJSA0 (ORCPT
+        with ESMTP id S229973AbjIJT3h (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 10 Sep 2023 14:00:26 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FB4184;
-        Sun, 10 Sep 2023 11:00:22 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CBAE2C433C9;
-        Sun, 10 Sep 2023 18:00:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694368821;
-        bh=aB2UE18ifINeruLLLa2U/ieX/8koQ+oI9z8xxKyuIvQ=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=MvVSVRjqFOB3eCa3WcubwQYCaCUPa8zQFD7ptrdEGSvNLrohKfmSPe/ZoqVIpfsza
-         JWpKaY2Y0z+Pj+aCXosA6wD2Jvq0w/hcp76ns+3cKuCwl8HMIFsy/t48QvymK0LV4j
-         RfIMhUPofSTMLj8+c0JhugcTC6NZsHF5HPclEAeoPLPV8/WCvmJq6cuT8ofOei38iX
-         Wogu5cxMObHF2bGyD31jaLAW/e7G8XUnJE3/xL6wIanepGr3H8Ndp9YywQAZd4Ekid
-         NuBFJPRx5MF0YtvlMfpkht8e6j54EwLmd0nOZd8QZsZhbfai1OZWiRlzVUS7B7tHhD
-         a8Els9WHw2rpg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B0E2EE505B7;
-        Sun, 10 Sep 2023 18:00:21 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Sun, 10 Sep 2023 15:29:37 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E0A3188;
+        Sun, 10 Sep 2023 12:29:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1694374163;
+        bh=iXISKFMxSwqsbdiN0L+f35DyWarIGiJQLnukw86Cd9E=;
+        h=From:Date:Subject:To:Cc:From;
+        b=mP26J0GdNnotkg3mALjkDU0d39CK1f9tY9aHj4s29fAAI5MTUbJPZEOu4CmNLdIbj
+         aSb59dErQldEOCtmNFJCj4KXMXCtgyUm33S+dwtsX84QF0YIlWM2FwLqfbxuqjrrGS
+         zsHeyCAJDepqbB+1A4JnAle0SEFB0vlIDVCYa3Ig=
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Date:   Sun, 10 Sep 2023 21:29:01 +0200
+Subject: [PATCH] selftests/nolibc: libc-test: avoid -Wstringop-overflow
+ warnings
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] selftests/net: Improve bind_bhash.sh to accommodate
- predictable network interface names
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <169436882172.20878.148707165455399821.git-patchwork-notify@kernel.org>
-Date:   Sun, 10 Sep 2023 18:00:21 +0000
-References: <VI1P193MB0752FDA6D89743CF57FB600599EFA@VI1P193MB0752.EURP193.PROD.OUTLOOK.COM>
-In-Reply-To: <VI1P193MB0752FDA6D89743CF57FB600599EFA@VI1P193MB0752.EURP193.PROD.OUTLOOK.COM>
-To:     Juntong Deng <juntong.deng@outlook.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, shuah@kernel.org, netdev@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-Id: <20230910-nolibc-poll-fault-v1-1-2b7a16f48259@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIAPwY/mQC/x3MTQ5AMBBA4avIrE3SHwRXEYtiyiRNKy0iEXfXW
+ H6L9x5IFJkS9MUDkS5OHHyGLAuYN+NXQl6yQQmlRScF+uB4mnEPzqE1pzuwkrUyTasbsi3kbo9
+ k+f6fw/i+H1r5xIRjAAAA
+To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1694374162; l=4663;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=iXISKFMxSwqsbdiN0L+f35DyWarIGiJQLnukw86Cd9E=;
+ b=2Iv84yGEzPB3mR/55/KWES0iOYVZ3GzoiKHeBxC3wYsv2No1p5GPnI7dVzIm8/t4CgNVyp5xD
+ aZ5RJezVFhmCXxOsWQSKhrwJmajxvT4FMs8pMuXhI8G78HSf7D4gAi6
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+Newer versions of glibc annotate the poll() function with
+__attribute__(access) which triggers a compiler warning inside the
+testcase poll_fault.
+Avoid this by using a plain NULL which is enough for the testcase.
+To avoid potential future warnings also adapt the other EFAULT
+testcases, except select_fault as NULL is a valid value for its
+argument.
 
-This patch was applied to netdev/net.git (main)
-by David S. Miller <davem@davemloft.net>:
+nolibc-test.c: In function ‘run_syscall’:
+nolibc-test.c:338:62: warning: ‘poll’ writing 8 bytes into a region of size 0 overflows the destination [-Wstringop-overflow=]
+  338 |         do { if (!(cond)) result(llen, SKIPPED); else ret += expect_syserr2(expr, expret, experr1, experr2, llen); } while (0)
+      |                                                              ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+nolibc-test.c:341:9: note: in expansion of macro ‘EXPECT_SYSER2’
+  341 |         EXPECT_SYSER2(cond, expr, expret, experr, 0)
+      |         ^~~~~~~~~~~~~
+nolibc-test.c:905:47: note: in expansion of macro ‘EXPECT_SYSER’
+  905 |                 CASE_TEST(poll_fault);        EXPECT_SYSER(1, poll((void *)1, 1, 0), -1, EFAULT); break;
+      |                                               ^~~~~~~~~~~~
+cc1: note: destination object is likely at address zero
+In file included from /usr/include/poll.h:1,
+                 from nolibc-test.c:33:
+/usr/include/sys/poll.h:54:12: note: in a call to function ‘poll’ declared with attribute ‘access (write_only, 1, 2)’
+   54 | extern int poll (struct pollfd *__fds, nfds_t __nfds, int __timeout)
+      |            ^~~~
 
-On Thu,  7 Sep 2023 00:26:03 +0800 you wrote:
-> Starting with v197, systemd uses predictable interface network names,
-> the traditional interface naming scheme (eth0) is deprecated, therefore
-> it cannot be assumed that the eth0 interface exists on the host.
-> 
-> This modification makes the bind_bhash test program run in a separate
-> network namespace and no longer needs to consider the name of the
-> network interface on the host.
-> 
-> [...]
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+ tools/testing/selftests/nolibc/nolibc-test.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Here is the summary with links:
-  - selftests/net: Improve bind_bhash.sh to accommodate predictable network interface names
-    https://git.kernel.org/netdev/net/c/ced33ca07d8d
+diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+index e2b70641a1e7..a0478f8eaee8 100644
+--- a/tools/testing/selftests/nolibc/nolibc-test.c
++++ b/tools/testing/selftests/nolibc/nolibc-test.c
+@@ -895,14 +895,14 @@ int run_syscall(int min, int max)
+ 		CASE_TEST(lseek_0);           EXPECT_SYSER(1, lseek(0, 0, SEEK_SET), -1, ESPIPE); break;
+ 		CASE_TEST(mkdir_root);        EXPECT_SYSER(1, mkdir("/", 0755), -1, EEXIST); break;
+ 		CASE_TEST(mmap_bad);          EXPECT_PTRER(1, mmap(NULL, 0, PROT_READ, MAP_PRIVATE, 0, 0), MAP_FAILED, EINVAL); break;
+-		CASE_TEST(munmap_bad);        EXPECT_SYSER(1, munmap((void *)1, 0), -1, EINVAL); break;
++		CASE_TEST(munmap_bad);        EXPECT_SYSER(1, munmap(NULL, 0), -1, EINVAL); break;
+ 		CASE_TEST(mmap_munmap_good);  EXPECT_SYSZR(1, test_mmap_munmap()); break;
+ 		CASE_TEST(open_tty);          EXPECT_SYSNE(1, tmp = open("/dev/null", 0), -1); if (tmp != -1) close(tmp); break;
+ 		CASE_TEST(open_blah);         EXPECT_SYSER(1, tmp = open("/proc/self/blah", 0), -1, ENOENT); if (tmp != -1) close(tmp); break;
+ 		CASE_TEST(pipe);              EXPECT_SYSZR(1, test_pipe()); break;
+ 		CASE_TEST(poll_null);         EXPECT_SYSZR(1, poll(NULL, 0, 0)); break;
+ 		CASE_TEST(poll_stdout);       EXPECT_SYSNE(1, ({ struct pollfd fds = { 1, POLLOUT, 0}; poll(&fds, 1, 0); }), -1); break;
+-		CASE_TEST(poll_fault);        EXPECT_SYSER(1, poll((void *)1, 1, 0), -1, EFAULT); break;
++		CASE_TEST(poll_fault);        EXPECT_SYSER(1, poll(NULL, 1, 0), -1, EFAULT); break;
+ 		CASE_TEST(prctl);             EXPECT_SYSER(1, prctl(PR_SET_NAME, (unsigned long)NULL, 0, 0, 0), -1, EFAULT); break;
+ 		CASE_TEST(read_badf);         EXPECT_SYSER(1, read(-1, &tmp, 1), -1, EBADF); break;
+ 		CASE_TEST(rmdir_blah);        EXPECT_SYSER(1, rmdir("/blah"), -1, ENOENT); break;
+@@ -911,7 +911,7 @@ int run_syscall(int min, int max)
+ 		CASE_TEST(select_stdout);     EXPECT_SYSNE(1, ({ fd_set fds; FD_ZERO(&fds); FD_SET(1, &fds); select(2, NULL, &fds, NULL, NULL); }), -1); break;
+ 		CASE_TEST(select_fault);      EXPECT_SYSER(1, select(1, (void *)1, NULL, NULL, 0), -1, EFAULT); break;
+ 		CASE_TEST(stat_blah);         EXPECT_SYSER(1, stat("/proc/self/blah", &stat_buf), -1, ENOENT); break;
+-		CASE_TEST(stat_fault);        EXPECT_SYSER(1, stat((void *)1, &stat_buf), -1, EFAULT); break;
++		CASE_TEST(stat_fault);        EXPECT_SYSER(1, stat(NULL, &stat_buf), -1, EFAULT); break;
+ 		CASE_TEST(stat_timestamps);   EXPECT_SYSZR(1, test_stat_timestamps()); break;
+ 		CASE_TEST(symlink_root);      EXPECT_SYSER(1, symlink("/", "/"), -1, EEXIST); break;
+ 		CASE_TEST(unlink_root);       EXPECT_SYSER(1, unlink("/"), -1, EISDIR); break;
 
-You are awesome, thank you!
+---
+base-commit: f7a6e4791e3d685eddca29b5d16d183ee0407caa
+change-id: 20230910-nolibc-poll-fault-4152a6836ef8
+
+Best regards,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Thomas Weißschuh <linux@weissschuh.net>
 
