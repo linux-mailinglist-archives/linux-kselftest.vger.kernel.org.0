@@ -2,97 +2,82 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23CC0799A49
-	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Sep 2023 19:40:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2BBB799F39
+	for <lists+linux-kselftest@lfdr.de>; Sun, 10 Sep 2023 20:00:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232657AbjIIRk7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 9 Sep 2023 13:40:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55590 "EHLO
+        id S229981AbjIJSA0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 10 Sep 2023 14:00:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237402AbjIIRk5 (ORCPT
+        with ESMTP id S229958AbjIJSA0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 9 Sep 2023 13:40:57 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9D73188;
-        Sat,  9 Sep 2023 10:40:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=7Y6bR9Kn2+pZ6DuqXBHPpEEuVHpFr7kKzyX99O1ems0=; b=JQFbjSfH+strhTcGUoh29NcXzq
-        zRIRp62BFWCSrFJnC7Xp9EK4i0T3pHW68XOCaXrkuQHg9cs4O7paEsDFFfCUj2qtaX7kO6Q2NBZ6x
-        GPzR8uSkTt80duohNCwTYPxlHXO291hct6udYg4nQ8pDUgYuaQVIRE+GCmHbW+8UOs3hm745rNiK7
-        xxSI52L2j0zUtLuWgockDH1nWWkR7AUokBs9cay9i1hTVHNsofp6KQL9fnlPWj4XesGN03dm0R5fD
-        G5JQgDK6u9L5j/LM2I3Q/dPkDqlImGlnmPj51SHzQ5E8Z+sFRtYgWXWn/vWXkbBNMuFShukR8kgB7
-        SbhVla7w==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qf1wR-003R46-2k;
-        Sat, 09 Sep 2023 17:40:21 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-        id EE4ED300348; Sat,  9 Sep 2023 19:40:20 +0200 (CEST)
-Date:   Sat, 9 Sep 2023 19:40:20 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Meng Li <li.meng@amd.com>
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Huang Rui <ray.huang@amd.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-acpi@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Shimmer Huang <shimmer.huang@amd.com>,
-        Perry Yuan <Perry.Yuan@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>, Wyes Karny <wyes.karny@amd.com>
-Subject: Re: [PATCH V6 5/7] cpufreq: amd-pstate: Update amd-pstate preferred
- core ranking dynamically
-Message-ID: <20230909174020.GB33532@noisy.programming.kicks-ass.net>
-References: <20230908074653.2799055-1-li.meng@amd.com>
- <20230908074653.2799055-6-li.meng@amd.com>
+        Sun, 10 Sep 2023 14:00:26 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49FB4184;
+        Sun, 10 Sep 2023 11:00:22 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id CBAE2C433C9;
+        Sun, 10 Sep 2023 18:00:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1694368821;
+        bh=aB2UE18ifINeruLLLa2U/ieX/8koQ+oI9z8xxKyuIvQ=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=MvVSVRjqFOB3eCa3WcubwQYCaCUPa8zQFD7ptrdEGSvNLrohKfmSPe/ZoqVIpfsza
+         JWpKaY2Y0z+Pj+aCXosA6wD2Jvq0w/hcp76ns+3cKuCwl8HMIFsy/t48QvymK0LV4j
+         RfIMhUPofSTMLj8+c0JhugcTC6NZsHF5HPclEAeoPLPV8/WCvmJq6cuT8ofOei38iX
+         Wogu5cxMObHF2bGyD31jaLAW/e7G8XUnJE3/xL6wIanepGr3H8Ndp9YywQAZd4Ekid
+         NuBFJPRx5MF0YtvlMfpkht8e6j54EwLmd0nOZd8QZsZhbfai1OZWiRlzVUS7B7tHhD
+         a8Els9WHw2rpg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id B0E2EE505B7;
+        Sun, 10 Sep 2023 18:00:21 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230908074653.2799055-6-li.meng@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] selftests/net: Improve bind_bhash.sh to accommodate
+ predictable network interface names
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <169436882172.20878.148707165455399821.git-patchwork-notify@kernel.org>
+Date:   Sun, 10 Sep 2023 18:00:21 +0000
+References: <VI1P193MB0752FDA6D89743CF57FB600599EFA@VI1P193MB0752.EURP193.PROD.OUTLOOK.COM>
+In-Reply-To: <VI1P193MB0752FDA6D89743CF57FB600599EFA@VI1P193MB0752.EURP193.PROD.OUTLOOK.COM>
+To:     Juntong Deng <juntong.deng@outlook.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, shuah@kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Sep 08, 2023 at 03:46:51PM +0800, Meng Li wrote:
-> +static void amd_pstate_update_highest_perf(unsigned int cpu)
-> +{
-> +	struct cpufreq_policy *policy;
-> +	struct amd_cpudata *cpudata;
-> +	u32 prev_high = 0, cur_high = 0;
-> +	u64 highest_perf;
-> +	int ret;
-> +
-> +	if (!prefcore)
-> +		return;
-> +
-> +	ret = amd_pstate_get_highest_perf(cpu, &highest_perf);
-> +	if (ret)
-> +		return;
-> +
-> +	policy = cpufreq_cpu_get(cpu);
-> +	cpudata = policy->driver_data;
-> +	cur_high = highest_perf;
-> +	prev_high = READ_ONCE(cpudata->prefcore_ranking);
-> +
-> +	if (prev_high != cur_high) {
-> +		WRITE_ONCE(cpudata->prefcore_ranking, cur_high);
-> +		sched_set_itmt_core_prio(cur_high, cpu);
-> +	}
-> +
-> +	cpufreq_cpu_put(policy);
-> +}
+Hello:
 
-Idem -- I told to clarify the u32 vs int thing, nothing here.
+This patch was applied to netdev/net.git (main)
+by David S. Miller <davem@davemloft.net>:
+
+On Thu,  7 Sep 2023 00:26:03 +0800 you wrote:
+> Starting with v197, systemd uses predictable interface network names,
+> the traditional interface naming scheme (eth0) is deprecated, therefore
+> it cannot be assumed that the eth0 interface exists on the host.
+> 
+> This modification makes the bind_bhash test program run in a separate
+> network namespace and no longer needs to consider the name of the
+> network interface on the host.
+> 
+> [...]
+
+Here is the summary with links:
+  - selftests/net: Improve bind_bhash.sh to accommodate predictable network interface names
+    https://git.kernel.org/netdev/net/c/ced33ca07d8d
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
