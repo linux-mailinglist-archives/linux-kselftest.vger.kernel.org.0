@@ -2,116 +2,156 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 328C579B923
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Sep 2023 02:09:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A624579BC73
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Sep 2023 02:14:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345348AbjIKVTm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 11 Sep 2023 17:19:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33374 "EHLO
+        id S1345299AbjIKVT2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 11 Sep 2023 17:19:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236749AbjIKLUD (ORCPT
+        with ESMTP id S236778AbjIKLZb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 11 Sep 2023 07:20:03 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 108CFCDD;
-        Mon, 11 Sep 2023 04:19:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694431199; x=1725967199;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=eIbMDqgI1VdHnVLRbKO7jTB1Ubvov6e0AspTTuCSqIU=;
-  b=YWpbo5ef7TbIDBzbOR6eZkQ8BYvDHzUyQ9qvRFX9ymqAk1u5+WgRNYtw
-   f6jY3mKj3JvRt3Gjp4bNBX1YApKO99nDkHCyvZx3HroM5noJvELR8x9Va
-   9N/19sxkBiFIzaDH21Pbee8TcgO2J8DSaqzJ/zFxKLSaiWi9XzuVa3n5Y
-   3EgX1JVmwgfqvi6J4YGuUpLzZ2+XYIPrGk6RfRYIPp9/DVABBTI6nfYQ5
-   3sHXU3L8Nwa1VP64O+1T7NsCcYuq8qpvtnTvY8opz3GTt+AkxAFAwvmJ/
-   oOBVaCqfWD4lB2b1dldoym1wQNLolQZNUmi2D13jrfkKECv0uRrvNRpbJ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10829"; a="464428629"
-X-IronPort-AV: E=Sophos;i="6.02,243,1688454000"; 
-   d="scan'208";a="464428629"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 04:19:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10829"; a="916990571"
-X-IronPort-AV: E=Sophos;i="6.02,243,1688454000"; 
-   d="scan'208";a="916990571"
-Received: from mzarkov-mobl3.ger.corp.intel.com (HELO ijarvine-mobl2.ger.corp.intel.com) ([10.252.36.200])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 04:19:56 -0700
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org,
-        =?UTF-8?q?Maciej=20Wiecz=C3=B3r-Retman?= 
-        <maciej.wieczor-retman@intel.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 4/5] selftests/resctrl: Fix feature checks
-Date:   Mon, 11 Sep 2023 14:19:29 +0300
-Message-Id: <20230911111930.16088-5-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230911111930.16088-1-ilpo.jarvinen@linux.intel.com>
-References: <20230911111930.16088-1-ilpo.jarvinen@linux.intel.com>
+        Mon, 11 Sep 2023 07:25:31 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354C9CF0;
+        Mon, 11 Sep 2023 04:25:27 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F433C433C7;
+        Mon, 11 Sep 2023 11:25:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1694431526;
+        bh=EawFgFNxTGjsJlWqhpuJ848r9v1XFD1NX8Vu8QQ6TjY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jO0WffPeuErMHhfcC3J7dNtdQz66zQu2iwFfVzC1cMw8x/yE8ao1Bull7dXvgGRYu
+         5cL2043vY5RhN4nqTmdXw6AgkX5DGJUzMs+Ul+hrPKtnyC2JFu2JFbuUVo/iZ7gmaL
+         FesHFRoiYdYdWqcLu/cWHT5zryfwqQoqPN+eePSqCOqlWrXG6HdinHg+mzFvMyW8ii
+         6PhKr/X39RAIPqc4noWg1Kqtqy0KemXXHgh0eGgQCHEOuSinP033sRAWIhUAaMHlm6
+         4n8wQoox3WtnQpp4YGrcNtnKop/TQu9A9FT98fbrMzGVovmRJ4bZZkbCTExfJ9JwAT
+         8eo2dzc+W1Dxg==
+Date:   Mon, 11 Sep 2023 13:25:23 +0200
+From:   Maxime Ripard <mripard@kernel.org>
+To:     Jani Nikula <jani.nikula@linux.intel.com>
+Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        linux-kernel@vger.kernel.org,
+        =?utf-8?B?TWHDrXJh?= Canal <mairacanal@riseup.net>,
+        dri-devel@lists.freedesktop.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com
+Subject: Re: [PATCH 1/2] kunit: Warn if tests are slow
+Message-ID: <l2eeghk7kz4rzsvlvvsj4vayo5s4ctnrizwkjolhaa2p3xdz75@jcczdtol52y7>
+References: <20230911-kms-slow-tests-v1-0-d3800a69a1a1@kernel.org>
+ <20230911-kms-slow-tests-v1-1-d3800a69a1a1@kernel.org>
+ <87leddf2fs.fsf@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rllaj5tmvs7jz32f"
+Content-Disposition: inline
+In-Reply-To: <87leddf2fs.fsf@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The MBA and CMT tests expect support of other features to be able to
-run.
 
-When platform only supports MBA but not MBM, MBA test will fail with:
-Failed to open total bw file: No such file or directory
+--rllaj5tmvs7jz32f
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-When platform only supports CMT but not CAT, CMT test will fail with:
-Failed to open bit mask file '/sys/fs/resctrl/info/L3/cbm_mask': No such file or directory
+Hi Jani,
 
-Extend feature checks to cover these two conditions.
+On Mon, Sep 11, 2023 at 01:07:35PM +0300, Jani Nikula wrote:
+> On Mon, 11 Sep 2023, Maxime Ripard <mripard@kernel.org> wrote:
+> > Kunit recently gained support to setup attributes, the first one being
+> > the speed of a given test, then allowing to filter out slow tests.
+> >
+> > A slow test is defined in the documentation as taking more than one
+> > second. There's an another speed attribute called "super slow" but whose
+> > definition is less clear.
+> >
+> > Add support to the test runner to check the test execution time, and
+> > report tests that should be marked as slow but aren't.
+> >
+> > Signed-off-by: Maxime Ripard <mripard@kernel.org>
+> > ---
+> >  lib/kunit/test.c | 16 ++++++++++++++++
+> >  1 file changed, 16 insertions(+)
+> >
+> > diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> > index 49698a168437..a3b924501f3d 100644
+> > --- a/lib/kunit/test.c
+> > +++ b/lib/kunit/test.c
+> > @@ -379,6 +379,9 @@ static void kunit_run_case_internal(struct kunit *t=
+est,
+> >  				    struct kunit_suite *suite,
+> >  				    struct kunit_case *test_case)
+> >  {
+> > +	struct timespec64 start, end;
+> > +	struct timespec64 duration;
+> > +
+> >  	if (suite->init) {
+> >  		int ret;
+> > =20
+> > @@ -390,7 +393,20 @@ static void kunit_run_case_internal(struct kunit *=
+test,
+> >  		}
+> >  	}
+> > =20
+> > +	ktime_get_ts64(&start);
+> > +
+> >  	test_case->run_case(test);
+> > +
+> > +	ktime_get_ts64(&end);
+> > +
+> > +	duration =3D timespec64_sub(end, start);
+> > +
+> > +	if (duration.tv_sec >=3D 1 &&
+> > +	    (test_case->attr.speed =3D=3D KUNIT_SPEED_UNSET ||
+> > +	     test_case->attr.speed >=3D KUNIT_SPEED_NORMAL))
+> > +		kunit_warn(test,
+> > +			   "Test should be marked slow (runtime: %lld.%09lds)",
+> > +			   duration.tv_sec, duration.tv_nsec);
+>=20
+> Two thoughts:
+>=20
+> Should there be some tolerance here? Otherwise we're flagging this on
+> the slowest machines, and we'll be defining tests slow based on
+> that. Like, warn if it takes more than 2 seconds.
 
-Fixes: ee0415681eb6 ("selftests/resctrl: Use resctrl/info for feature detection")
-Cc: <stable@vger.kernel.org> # selftests/resctrl: Refactor feature check to use resource and feature name
-Cc: <stable@vger.kernel.org> # selftests/resctrl: Remove duplicate feature check from CMT test
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
- tools/testing/selftests/resctrl/resctrl_tests.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+I'm not sure what the expectation from David and Brendan are here. I'll
+follow what they suggest, but with a couple of hundreds tests like we
+have in DRM at the moment, the difference in run time can be up to 5
+minutes :/
 
-diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
-index 3052394ca884..4e9b392d28dc 100644
---- a/tools/testing/selftests/resctrl/resctrl_tests.c
-+++ b/tools/testing/selftests/resctrl/resctrl_tests.c
-@@ -118,7 +118,9 @@ static void run_mba_test(const char * const *benchmark_cmd, int cpu_no)
- 		return;
- 	}
- 
--	if (!validate_resctrl_feature_request("MB", NULL) || (get_vendor() != ARCH_INTEL)) {
-+	if (!validate_resctrl_feature_request("MB", NULL) ||
-+	    !validate_resctrl_feature_request("L3_MON", "mbm_local_bytes") ||
-+	    (get_vendor() != ARCH_INTEL)) {
- 		ksft_test_result_skip("Hardware does not support MBA or MBA is disabled\n");
- 		goto umount;
- 	}
-@@ -148,7 +150,8 @@ static void run_cmt_test(const char * const *benchmark_cmd, int cpu_no)
- 		return;
- 	}
- 
--	if (!validate_resctrl_feature_request("L3_MON", "llc_occupancy")) {
-+	if (!validate_resctrl_feature_request("L3_MON", "llc_occupancy") ||
-+	    !validate_resctrl_feature_request("L3", NULL)) {
- 		ksft_test_result_skip("Hardware does not support CMT or CMT is disabled\n");
- 		goto umount;
- 	}
--- 
-2.30.2
+> What if someone makes a test faster, but forgets to update the
+> attribute? Should we also flag slow tests that are in fact fast?
 
+I'm not sure we can do that actually, because it certainly depends on
+the hardware running the tests. So I would definitely expect most of the
+slow tests to be running faster on some hardware.
+
+Like, running kunit natively on my workstation clears all the DRM tests
+in 6s, while it takes about 60s using qemu to test it on arm64, so they
+would be considered slow on arm64 but not by default.
+
+Maxime
+
+--rllaj5tmvs7jz32f
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZP75IwAKCRDj7w1vZxhR
+xTcYAP9N6vHg5h6885y/C3Tc0z1f6IQ0dk+FGmjUeus+bW/YOQEAl7UhCwI0k+Hm
+xYUWCTOJcXuebaOI4VfAA+udV4uSJgM=
+=sWMz
+-----END PGP SIGNATURE-----
+
+--rllaj5tmvs7jz32f--
