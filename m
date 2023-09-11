@@ -2,113 +2,78 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6D4A79B11E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Sep 2023 01:51:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F3FC79AF54
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Sep 2023 01:47:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345397AbjIKVUQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 11 Sep 2023 17:20:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33382 "EHLO
+        id S1345368AbjIKVTy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 11 Sep 2023 17:19:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55272 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236751AbjIKLUG (ORCPT
+        with ESMTP id S237317AbjIKMfu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 11 Sep 2023 07:20:06 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD869CDD;
-        Mon, 11 Sep 2023 04:20:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694431202; x=1725967202;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=qVo58leRfHfx78TMUsQ9bFhX9krqsCC7gNZleGpHRMg=;
-  b=N33mWU54WRfvoBR9KZvg/lHODg6GHHsFyuhtjDHz7vZj7YkpJNBDE6CN
-   LcrREw3VpAtdx7iCzn22LxreZimvLdVicO9wJsI4HZti5fwJm5xPTe6Y+
-   FIHK9PexuFULjtHaHSmbxV2A+xKXVf6586bDST/YjGAYuVTBF3hFuZIJR
-   1bTaYOIJcWiZPAPCeq2bxj7Ig1XEX6W/y+BEOlDyuCTLVjibfzELFTBwY
-   a2KGwsERLrLbKE8ge9Ok3zakID7Fp/qTvCDr4RNGieIkNnW0/h7mZ+GHB
-   LEI0fa328bB3AALujlf1zCYoGHk/g44umiKyjFmmMZq8+ZLLjeeErVwJa
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10829"; a="464428640"
-X-IronPort-AV: E=Sophos;i="6.02,243,1688454000"; 
-   d="scan'208";a="464428640"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 04:20:02 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10829"; a="916990588"
-X-IronPort-AV: E=Sophos;i="6.02,243,1688454000"; 
-   d="scan'208";a="916990588"
-Received: from mzarkov-mobl3.ger.corp.intel.com (HELO ijarvine-mobl2.ger.corp.intel.com) ([10.252.36.200])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 04:19:59 -0700
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org,
-        =?UTF-8?q?Maciej=20Wiecz=C3=B3r-Retman?= 
-        <maciej.wieczor-retman@intel.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
-        stable@vger.kernel.org,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 5/5] selftests/resctrl: Reduce failures due to outliers in MBA/MBM tests
-Date:   Mon, 11 Sep 2023 14:19:30 +0300
-Message-Id: <20230911111930.16088-6-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230911111930.16088-1-ilpo.jarvinen@linux.intel.com>
-References: <20230911111930.16088-1-ilpo.jarvinen@linux.intel.com>
+        Mon, 11 Sep 2023 08:35:50 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9451C1B9;
+        Mon, 11 Sep 2023 05:35:44 -0700 (PDT)
+Received: from notapiano (zone.collabora.co.uk [167.235.23.81])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id D0DA866072FE;
+        Mon, 11 Sep 2023 13:35:41 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1694435743;
+        bh=2yYlnLDcQr0wJy6CrkPZpvlV0KavzexY53zkN7IrZyA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=UffwBR4KOcQEm5v+0L+6qB8gGt/bAVeSbNBmhf1a73zN/RDNGbGcrKnCtHMwSGRiL
+         rTjGEvDl+QywFdr4MH/eG440yLj+DtbxvhC3GcH+0dfXHue/6c+qFHqlH/lfBhdBnJ
+         aOrn5xGIMqycaf/ZpkGgnHsYs+KwDejH7J+Fo82Eu++1sW144013s4HL007wQn898U
+         so5cg/WoraKt2fvXc+oZk4URl0cNZoboD0Ha2VUc5dw59lbT0G8IxJjmw1idzyWnm5
+         p0czQT6hLWTfEIL5sNcEL1k/868b8ZyXV5w1Am6UcLoSpPZA23Xn1MrlQBleo/HP3N
+         RgWQuS1ECqEuQ==
+Date:   Mon, 11 Sep 2023 08:35:37 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Takashi Iwai <tiwai@suse.com>, kernel@collabora.com,
+        Jaroslav Kysela <perex@perex.cz>,
+        Shuah Khan <shuah@kernel.org>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] kselftest/alsa: Mark test plan as skipped when no cards
+ are available
+Message-ID: <868a8f08-ba39-4550-8e7b-0572ea03c4e7@notapiano>
+References: <20230908181242.95714-1-nfraprado@collabora.com>
+ <0fa0901e-d271-438d-bc2b-11399ad3b07c@sirena.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <0fa0901e-d271-438d-bc2b-11399ad3b07c@sirena.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-5% difference upper bound for success is a bit on the low side for the
-MBA and MBM tests. Some platforms produce outliers that are slightly
-above that, typically 6-7%.
+On Sat, Sep 09, 2023 at 12:08:22AM +0100, Mark Brown wrote:
+> On Fri, Sep 08, 2023 at 02:12:40PM -0400, Nícolas F. R. A. Prado wrote:
+> > When no soundcards are available, it won't be possible to run any tests.
+> > Currently, when this happens, in both pcm-test and mixer-test, 0
+> > tests are reported, and the pass exit code is returned. Instead, call
+> > ksft_exit_skip() so that the whole test plan is marked as skipped in the
+> > KTAP output and it exits with the skip exit code.
+> 
+> Why?
 
-Relaxing the MBA/MBM success bound to 8% removes most of the failures
-due those frequent outliers.
+To better reflect the actual test plan status. If 0 tests were run, it doesn't
+really make sense to say that the test plan passed, rather it was skipped since
+nothing was run. So with this change, if there's a regression that prevents the
+soundcard driver from even probing, the result won't be "pass", but "skip", and
+the reason 'No soundcard available' will be in the logs.
 
-Fixes: 06bd03a57f8c ("selftests/resctrl: Fix MBA/MBM results reporting format")
-Cc: <stable@vger.kernel.org>
-Signed-off-by: Ilpo JÃ¤rvinen <ilpo.jarvinen@linux.intel.com>
----
- tools/testing/selftests/resctrl/mba_test.c | 2 +-
- tools/testing/selftests/resctrl/mbm_test.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
-index cf8284dadcb2..d3bf4368341e 100644
---- a/tools/testing/selftests/resctrl/mba_test.c
-+++ b/tools/testing/selftests/resctrl/mba_test.c
-@@ -12,7 +12,7 @@
- 
- #define RESULT_FILE_NAME	"result_mba"
- #define NUM_OF_RUNS		5
--#define MAX_DIFF_PERCENT	5
-+#define MAX_DIFF_PERCENT	8
- #define ALLOCATION_MAX		100
- #define ALLOCATION_MIN		10
- #define ALLOCATION_STEP		10
-diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
-index 1ae131a2e246..d3c0d30c676a 100644
---- a/tools/testing/selftests/resctrl/mbm_test.c
-+++ b/tools/testing/selftests/resctrl/mbm_test.c
-@@ -11,7 +11,7 @@
- #include "resctrl.h"
- 
- #define RESULT_FILE_NAME	"result_mbm"
--#define MAX_DIFF_PERCENT	5
-+#define MAX_DIFF_PERCENT	8
- #define NUM_OF_RUNS		5
- 
- static int
--- 
-2.30.2
-
+Thanks,
+Nícolas
