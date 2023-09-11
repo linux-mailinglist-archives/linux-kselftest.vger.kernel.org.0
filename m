@@ -2,78 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F3FC79AF54
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Sep 2023 01:47:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C92779B33B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Sep 2023 01:59:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345368AbjIKVTy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 11 Sep 2023 17:19:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55272 "EHLO
+        id S244233AbjIKVSo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 11 Sep 2023 17:18:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237317AbjIKMfu (ORCPT
+        with ESMTP id S238249AbjIKNwY (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 11 Sep 2023 08:35:50 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9451C1B9;
-        Mon, 11 Sep 2023 05:35:44 -0700 (PDT)
-Received: from notapiano (zone.collabora.co.uk [167.235.23.81])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id D0DA866072FE;
-        Mon, 11 Sep 2023 13:35:41 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1694435743;
-        bh=2yYlnLDcQr0wJy6CrkPZpvlV0KavzexY53zkN7IrZyA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UffwBR4KOcQEm5v+0L+6qB8gGt/bAVeSbNBmhf1a73zN/RDNGbGcrKnCtHMwSGRiL
-         rTjGEvDl+QywFdr4MH/eG440yLj+DtbxvhC3GcH+0dfXHue/6c+qFHqlH/lfBhdBnJ
-         aOrn5xGIMqycaf/ZpkGgnHsYs+KwDejH7J+Fo82Eu++1sW144013s4HL007wQn898U
-         so5cg/WoraKt2fvXc+oZk4URl0cNZoboD0Ha2VUc5dw59lbT0G8IxJjmw1idzyWnm5
-         p0czQT6hLWTfEIL5sNcEL1k/868b8ZyXV5w1Am6UcLoSpPZA23Xn1MrlQBleo/HP3N
-         RgWQuS1ECqEuQ==
-Date:   Mon, 11 Sep 2023 08:35:37 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Takashi Iwai <tiwai@suse.com>, kernel@collabora.com,
-        Jaroslav Kysela <perex@perex.cz>,
-        Shuah Khan <shuah@kernel.org>, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] kselftest/alsa: Mark test plan as skipped when no cards
- are available
-Message-ID: <868a8f08-ba39-4550-8e7b-0572ea03c4e7@notapiano>
-References: <20230908181242.95714-1-nfraprado@collabora.com>
- <0fa0901e-d271-438d-bc2b-11399ad3b07c@sirena.org.uk>
+        Mon, 11 Sep 2023 09:52:24 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA035CD7;
+        Mon, 11 Sep 2023 06:52:20 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D32B7C433CA;
+        Mon, 11 Sep 2023 13:52:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1694440340;
+        bh=G+uYgBverc1Ro/xgHPw6sRBSg+pKfkM04MdXBtul8Ys=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=zAa4SXRRmgVZFAyg8O4lK6YGb/A1l92rZqVK2b3brRAqh1V3aY8FlNEDTfBH4RIqa
+         MdU3LwywjdNmZOZ9VgV3eZMRY2twybZHLb+rXK3Nu8BAYUGWXeHQuU1VC+9s1crcf1
+         SK0CAkyO4infzSgIxq+QVLyxneSg7iAom8Fl7M8c=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     stable@vger.kernel.org
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        patches@lists.linux.dev, Shuah Khan <shuah@kernel.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Will Drewry <wad@chromium.org>,
+        linux-kselftest@vger.kernel.org, Kees Cook <keescook@chromium.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH 6.5 019/739] selftests/harness: Actually report SKIP for signal tests
+Date:   Mon, 11 Sep 2023 15:36:58 +0200
+Message-ID: <20230911134651.576399076@linuxfoundation.org>
+X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20230911134650.921299741@linuxfoundation.org>
+References: <20230911134650.921299741@linuxfoundation.org>
+User-Agent: quilt/0.67
+X-stable: review
+X-Patchwork-Hint: ignore
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <0fa0901e-d271-438d-bc2b-11399ad3b07c@sirena.org.uk>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Sep 09, 2023 at 12:08:22AM +0100, Mark Brown wrote:
-> On Fri, Sep 08, 2023 at 02:12:40PM -0400, Nícolas F. R. A. Prado wrote:
-> > When no soundcards are available, it won't be possible to run any tests.
-> > Currently, when this happens, in both pcm-test and mixer-test, 0
-> > tests are reported, and the pass exit code is returned. Instead, call
-> > ksft_exit_skip() so that the whole test plan is marked as skipped in the
-> > KTAP output and it exits with the skip exit code.
-> 
-> Why?
+6.5-stable review patch.  If anyone has any objections, please let me know.
 
-To better reflect the actual test plan status. If 0 tests were run, it doesn't
-really make sense to say that the test plan passed, rather it was skipped since
-nothing was run. So with this change, if there's a regression that prevents the
-soundcard driver from even probing, the result won't be "pass", but "skip", and
-the reason 'No soundcard available' will be in the logs.
+------------------
 
-Thanks,
-Nícolas
+From: Kees Cook <keescook@chromium.org>
+
+[ Upstream commit b3d46e11fec0c5a8972e5061bb1462119ae5736d ]
+
+Tests that were expecting a signal were not correctly checking for a
+SKIP condition. Move the check before the signal checking when
+processing test result.
+
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Andy Lutomirski <luto@amacapital.net>
+Cc: Will Drewry <wad@chromium.org>
+Cc: linux-kselftest@vger.kernel.org
+Fixes: 9847d24af95c ("selftests/harness: Refactor XFAIL into SKIP")
+Signed-off-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ tools/testing/selftests/kselftest_harness.h | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
+
+diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+index 5fd49ad0c696f..e05ac82610467 100644
+--- a/tools/testing/selftests/kselftest_harness.h
++++ b/tools/testing/selftests/kselftest_harness.h
+@@ -938,7 +938,11 @@ void __wait_for_test(struct __test_metadata *t)
+ 		fprintf(TH_LOG_STREAM,
+ 			"# %s: Test terminated by timeout\n", t->name);
+ 	} else if (WIFEXITED(status)) {
+-		if (t->termsig != -1) {
++		if (WEXITSTATUS(status) == 255) {
++			/* SKIP */
++			t->passed = 1;
++			t->skip = 1;
++		} else if (t->termsig != -1) {
+ 			t->passed = 0;
+ 			fprintf(TH_LOG_STREAM,
+ 				"# %s: Test exited normally instead of by signal (code: %d)\n",
+@@ -950,11 +954,6 @@ void __wait_for_test(struct __test_metadata *t)
+ 			case 0:
+ 				t->passed = 1;
+ 				break;
+-			/* SKIP */
+-			case 255:
+-				t->passed = 1;
+-				t->skip = 1;
+-				break;
+ 			/* Other failure, assume step report. */
+ 			default:
+ 				t->passed = 0;
+-- 
+2.40.1
+
+
+
