@@ -2,142 +2,160 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23E8E79CE2A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Sep 2023 12:24:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 756BF79CEFB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Sep 2023 12:57:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231560AbjILKYB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 12 Sep 2023 06:24:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60160 "EHLO
+        id S229912AbjILK5P (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 12 Sep 2023 06:57:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231222AbjILKX5 (ORCPT
+        with ESMTP id S233901AbjILK5O (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 12 Sep 2023 06:23:57 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAE49B9
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 Sep 2023 03:23:53 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1c3887039d4so26881995ad.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 Sep 2023 03:23:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1694514233; x=1695119033; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=M9LIb5haVVHTJnBYry+OCoJloq0Q0VbbRaGISgkSZ5M=;
-        b=tryLHP29ZbXlPBFjTBr263izMLZmsewcCZvRVp0cRmWLtTsuW36plvaco8xMVaTw9f
-         xof/EiVgtpnXBOmt/1+mU+uLrXsi0lTwFPapYp4V73rJyX4lrgVQ7zHn1amY6WtGUQQf
-         PFjHtcENePCGYFczxn+E22Y3I8LbBPEbyyo/BUiguRxFyk4iFa0es6JOyBQWpn7vHxo8
-         rbaqls1UJXvP29j8i7Qk+VYl+j9wVJEM9q/jVIcmITP3Sy9QoD1ZEDYB1fIf5HxwqPXF
-         PKr9gq1qVGaw3fhjeKZd3u6/CZo+lO/KEPzZK4ulK9GWD3u+zIRTsCkPidfOjju+WOHU
-         rRDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694514233; x=1695119033;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=M9LIb5haVVHTJnBYry+OCoJloq0Q0VbbRaGISgkSZ5M=;
-        b=OD8OSTJXv4Adz/Mys1dkVAEP1xh8xxhhrBGkk8SEBWxNs5rgnQrMNbjy4kKNC8Pn4D
-         3TTzsaI4sSZ6P77gUhWVU4aGlGXxgbbTYpMGfihhIZn4E6f2UgWWYaNVPH4LVLd+ijHx
-         TpnO6D9mW/gqShct3LA3E6NtfWm9JChMHL7WbNmGb1Kq5nRuEaOYxdtZ+HuuM9cgE7eM
-         8mfZ6pKO9/+PsPCT4gKGB8qTXzQPTkt9b+65IL0DhyVbH+uokfQLkC9n5Yf0i1tc6HMb
-         d2D6kR1Xot2+NScJbRAqbbcLMKcLTaSk6uylZCzZVcXJ3stzT3+MHJB300wj/QdU2No8
-         +YlQ==
-X-Gm-Message-State: AOJu0YzxaMlU2ikygN/yWSRkz2fvlBmxNyzFAgm0Wn+R57/YQX896noa
-        Dm5uN7VvNT5nx+r7Y8zGQgKwqg==
-X-Google-Smtp-Source: AGHT+IEmgdDEUJ9JrQjm0gbzQ86T5t9CvRObKuPE3dADfCJu9EHt7NCkdJcWeSSlEO+b9rD4JiFnaQ==
-X-Received: by 2002:a17:903:2282:b0:1c0:bcbc:d78 with SMTP id b2-20020a170903228200b001c0bcbc0d78mr12208361plh.14.1694514233421;
-        Tue, 12 Sep 2023 03:23:53 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id bc7-20020a170902930700b001beef2c9bffsm1576553plb.85.2023.09.12.03.23.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Sep 2023 03:23:52 -0700 (PDT)
-Message-ID: <65003c38.170a0220.c6d7b.5009@mx.google.com>
-Date:   Tue, 12 Sep 2023 03:23:52 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Tue, 12 Sep 2023 06:57:14 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25E9ABE;
+        Tue, 12 Sep 2023 03:57:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694516230; x=1726052230;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=gmV0KiwKba1PSNl2UVCdi3U5WkDZQcsXPrzZ4xrOoOg=;
+  b=MUD7owgCZQplNWfJz3SfzqVxNsAdEQVXqBBa5T/p5rMRDNekD++JlCGg
+   fmrmRKM1hLL+3JZ2SttH3PPmdjoFZkQ2n/35ziEpNed1sQf/x4pWPKmzH
+   x3cCrHzlNm0qk3efDaSt/5qDpgcFN5wq8fU7uAsdGkwS+lNsxV4h5NtbQ
+   lsMxJjWBE4sLEL6/E3El7xWKYdGIqVch4Z6fwah4DGmHcpX8COz7G58iD
+   /zmsAvVBmmZqeW/SjJBfuOPSm6ZvpaKhjZkasVSYduKTmbqnJcNFqDS+T
+   ebWXzmb2Ypo9s1YML0s2/I3Ga4bvm1A5/G/qgoNLuQOcCru+AJbOuUxgt
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="378251081"
+X-IronPort-AV: E=Sophos;i="6.02,139,1688454000"; 
+   d="scan'208";a="378251081"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2023 03:57:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="1074510354"
+X-IronPort-AV: E=Sophos;i="6.02,139,1688454000"; 
+   d="scan'208";a="1074510354"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.249.45.152])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2023 03:57:01 -0700
+Message-ID: <340eae90-d270-5e52-4982-a67459bc46dd@intel.com>
+Date:   Tue, 12 Sep 2023 13:56:57 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Branch: fixes
-X-Kernelci-Tree: kselftest
-X-Kernelci-Kernel: v6.6-rc1-3-g7ab6fe6625c9
-X-Kernelci-Report-Type: build
-Subject: kselftest/fixes build: 6 builds: 0 failed, 6 passed,
- 1 warning (v6.6-rc1-3-g7ab6fe6625c9)
-To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.15.0
+Subject: Re: [PATCH v2 5/7] tools/perf: fix Python string escapes
+Content-Language: en-US
+To:     Benjamin Gray <bgray@linux.ibm.com>, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+        llvm@lists.linux.dev, linux-pm@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     Jonathan Corbet <corbet@lwn.net>, Ian Abbott <abbotti@mev.co.uk>,
+        H Hartley Sweeten <hsweeten@visionengravers.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Jan Kiszka <jan.kiszka@siemens.com>,
+        Kieran Bingham <kbingham@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        linux-perf-users@vger.kernel.org,
+        Todd E Brandt <todd.e.brandt@linux.intel.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
+References: <20230912060801.95533-1-bgray@linux.ibm.com>
+ <20230912060801.95533-6-bgray@linux.ibm.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20230912060801.95533-6-bgray@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kselftest/fixes build: 6 builds: 0 failed, 6 passed, 1 warning (v6.6-rc1-3-=
-g7ab6fe6625c9)
+On 12/09/23 09:07, Benjamin Gray wrote:
+> Python 3.6 introduced a DeprecationWarning for invalid escape sequences.
+> This is upgraded to a SyntaxWarning in Python 3.12, and will eventually
+> be a syntax error.
+> 
+> Fix these now to get ahead of it before it's an error.
+> 
+> Signed-off-by: Benjamin Gray <bgray@linux.ibm.com>
+> ---
+>  tools/perf/pmu-events/jevents.py                 | 2 +-
+>  tools/perf/scripts/python/arm-cs-trace-disasm.py | 4 ++--
+>  tools/perf/scripts/python/compaction-times.py    | 2 +-
+>  tools/perf/scripts/python/exported-sql-viewer.py | 4 ++--
+>  4 files changed, 6 insertions(+), 6 deletions(-)
+> 
+> diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
+> index a7e88332276d..980f080a5a2c 100755
+> --- a/tools/perf/pmu-events/jevents.py
+> +++ b/tools/perf/pmu-events/jevents.py
+> @@ -83,7 +83,7 @@ def c_len(s: str) -> int:
+>    """Return the length of s a C string
+>  
+>    This doesn't handle all escape characters properly. It first assumes
+> -  all \ are for escaping, it then adjusts as it will have over counted
+> +  all \\ are for escaping, it then adjusts as it will have over counted
 
-Full Build Summary: https://kernelci.org/build/kselftest/branch/fixes/kerne=
-l/v6.6-rc1-3-g7ab6fe6625c9/
+It looks like the whole string should be a raw string
 
-Tree: kselftest
-Branch: fixes
-Git Describe: v6.6-rc1-3-g7ab6fe6625c9
-Git Commit: 7ab6fe6625c9bdcb8fa5f61c8f8e30e13f689284
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
-est.git
-Built: 4 unique architectures
+>    \\. The code uses \000 rather than \0 as a terminator as an adjacent
+>    number would be folded into a string of \0 (ie. "\0" + "5" doesn't
+>    equal a terminator followed by the number 5 but the escape of
+> diff --git a/tools/perf/scripts/python/arm-cs-trace-disasm.py b/tools/perf/scripts/python/arm-cs-trace-disasm.py
+> index d59ff53f1d94..de58991c78bb 100755
+> --- a/tools/perf/scripts/python/arm-cs-trace-disasm.py
+> +++ b/tools/perf/scripts/python/arm-cs-trace-disasm.py
+> @@ -45,8 +45,8 @@ parser = OptionParser(option_list=option_list)
+>  # Initialize global dicts and regular expression
+>  disasm_cache = dict()
+>  cpu_data = dict()
+> -disasm_re = re.compile("^\s*([0-9a-fA-F]+):")
+> -disasm_func_re = re.compile("^\s*([0-9a-fA-F]+)\s.*:")
+> +disasm_re = re.compile(r"^\s*([0-9a-fA-F]+):")
+> +disasm_func_re = re.compile(r"^\s*([0-9a-fA-F]+)\s.*:")
+>  cache_size = 64*1024
+>  
+>  glb_source_file_name	= None
+> diff --git a/tools/perf/scripts/python/compaction-times.py b/tools/perf/scripts/python/compaction-times.py
+> index 2560a042dc6f..9401f7c14747 100644
+> --- a/tools/perf/scripts/python/compaction-times.py
+> +++ b/tools/perf/scripts/python/compaction-times.py
+> @@ -260,7 +260,7 @@ def pr_help():
+>  
+>  comm_re = None
+>  pid_re = None
+> -pid_regex = "^(\d*)-(\d*)$|^(\d*)$"
+> +pid_regex = r"^(\d*)-(\d*)$|^(\d*)$"
+>  
+>  opt_proc = popt.DISP_DFL
+>  opt_disp = topt.DISP_ALL
+> diff --git a/tools/perf/scripts/python/exported-sql-viewer.py b/tools/perf/scripts/python/exported-sql-viewer.py
+> index 13f2d8a81610..121cf61ba1b3 100755
+> --- a/tools/perf/scripts/python/exported-sql-viewer.py
+> +++ b/tools/perf/scripts/python/exported-sql-viewer.py
+> @@ -677,8 +677,8 @@ class CallGraphModelBase(TreeModel):
+>  			#   sqlite supports GLOB (text only) which uses * and ? and is case sensitive
+>  			if not self.glb.dbref.is_sqlite3:
+>  				# Escape % and _
+> -				s = value.replace("%", "\%")
+> -				s = s.replace("_", "\_")
+> +				s = value.replace("%", "\\%")
+> +				s = s.replace("_", "\\_")
 
-Warnings Detected:
+Raw strings seem more readable, so could be
+used here too
 
-arm64:
+>  				# Translate * and ? into SQL LIKE pattern characters % and _
+>  				trans = string.maketrans("*?", "%_")
+>  				match = " LIKE '" + str(s).translate(trans) + "'"
 
-arm:
-
-i386:
-
-x86_64:
-    x86_64_defconfig+kselftest (clang-16): 1 warning
-
-
-Warnings summary:
-
-    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to=
- !ENDBR: .text+0x1393eb
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 1 w=
-arning, 0 section mismatches
-
-Warnings:
-    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to !END=
-BR: .text+0x1393eb
-
----
-For more info write to <info@kernelci.org>
