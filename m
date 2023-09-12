@@ -2,74 +2,80 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0BAE79D2EA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Sep 2023 15:54:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D02E79D361
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Sep 2023 16:16:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235011AbjILNyj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 12 Sep 2023 09:54:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52664 "EHLO
+        id S233173AbjILOQg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 12 Sep 2023 10:16:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234939AbjILNyi (ORCPT
+        with ESMTP id S230151AbjILOQf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 12 Sep 2023 09:54:38 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 91B5010CE;
-        Tue, 12 Sep 2023 06:54:34 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 764301007;
-        Tue, 12 Sep 2023 06:55:11 -0700 (PDT)
-Received: from [10.1.32.154] (XHFQ2J9959.cambridge.arm.com [10.1.32.154])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7DD4A3F5A1;
-        Tue, 12 Sep 2023 06:54:32 -0700 (PDT)
-Message-ID: <7ce438e4-2f6c-4644-adff-b8cc95d8ee73@arm.com>
-Date:   Tue, 12 Sep 2023 14:54:31 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [linus:master] [selftests] 58e2847ad2:
- kernel-selftests.openat2.resolve_test.fail
-Content-Language: en-GB
-From:   Ryan Roberts <ryan.roberts@arm.com>
-To:     kernel test robot <oliver.sang@intel.com>
-Cc:     oe-lkp@lists.linux.dev, lkp@intel.com,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Florent Revest <revest@chromium.org>,
-        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Tue, 12 Sep 2023 10:16:35 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 577F810D;
+        Tue, 12 Sep 2023 07:16:31 -0700 (PDT)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7B07824001A;
+        Tue, 12 Sep 2023 14:16:28 +0000 (UTC)
+From:   Sabrina Dubroca <sd@queasysnail.net>
+To:     netdev@vger.kernel.org
+Cc:     Sabrina Dubroca <sd@queasysnail.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Dave Watson <davejwatson@fb.com>,
         linux-kselftest@vger.kernel.org
-References: <202309121342.97e2f008-oliver.sang@intel.com>
- <2a503271-0d44-40ae-8d13-65aba0345d4a@arm.com>
-In-Reply-To: <2a503271-0d44-40ae-8d13-65aba0345d4a@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Subject: [PATCH net] selftests: tls: swap the TX and RX sockets in some tests
+Date:   Tue, 12 Sep 2023 16:16:25 +0200
+Message-ID: <aae431141a7c5e143af5339e6aa80cb6cd3087b9.1694443646.git.sd@queasysnail.net>
+X-Mailer: git-send-email 2.42.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-GND-Sasl: sd@queasysnail.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/09/2023 13:16, Ryan Roberts wrote:
-> On 12/09/2023 07:17, kernel test robot wrote:
->>
->>
->> Hello,
->>
->> kernel test robot noticed "kernel-selftests.openat2.resolve_test.fail" on:
->>
->> commit: 58e2847ad2e6322a25dedf8b4549ff924baf8395 ("selftests: line buffer test program's stdout")
->> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
-> 
-> Thanks for the report - I'm looking into this now and will get back to you once
-> I have some more info.
+tls.sendmsg_large and tls.sendmsg_multiple are trying to send through
+the self->cfd socket (only configured with TLS_RX) and to receive through
+the self->fd socket (only configured with TLS_TX), so they're not using
+kTLS at all. Swap the sockets.
 
-I found the problem and sent a patch to the list with the explanation of what it
-going on. Sorry about that!
+Fixes: 7f657d5bf507 ("selftests: tls: add selftests for TLS sockets")
+Signed-off-by: Sabrina Dubroca <sd@queasysnail.net>
+---
+ tools/testing/selftests/net/tls.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-https://lore.kernel.org/lkml/20230912135048.1755771-1-ryan.roberts@arm.com/
-
-> 
-> Thanks,
-> Ryan
-> 
+diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/net/tls.c
+index 297d972558fb..464853a7f982 100644
+--- a/tools/testing/selftests/net/tls.c
++++ b/tools/testing/selftests/net/tls.c
+@@ -613,11 +613,11 @@ TEST_F(tls, sendmsg_large)
+ 
+ 		msg.msg_iov = &vec;
+ 		msg.msg_iovlen = 1;
+-		EXPECT_EQ(sendmsg(self->cfd, &msg, 0), send_len);
++		EXPECT_EQ(sendmsg(self->fd, &msg, 0), send_len);
+ 	}
+ 
+ 	while (recvs++ < sends) {
+-		EXPECT_NE(recv(self->fd, mem, send_len, 0), -1);
++		EXPECT_NE(recv(self->cfd, mem, send_len, 0), -1);
+ 	}
+ 
+ 	free(mem);
+@@ -646,9 +646,9 @@ TEST_F(tls, sendmsg_multiple)
+ 	msg.msg_iov = vec;
+ 	msg.msg_iovlen = iov_len;
+ 
+-	EXPECT_EQ(sendmsg(self->cfd, &msg, 0), total_len);
++	EXPECT_EQ(sendmsg(self->fd, &msg, 0), total_len);
+ 	buf = malloc(total_len);
+-	EXPECT_NE(recv(self->fd, buf, total_len, 0), -1);
++	EXPECT_NE(recv(self->cfd, buf, total_len, 0), -1);
+ 	for (i = 0; i < iov_len; i++) {
+ 		EXPECT_EQ(memcmp(test_strs[i], buf + len_cmp,
+ 				 strlen(test_strs[i])),
+-- 
+2.42.0
 
