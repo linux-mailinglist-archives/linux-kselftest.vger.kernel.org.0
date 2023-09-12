@@ -2,108 +2,142 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F93179CE41
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Sep 2023 12:28:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23E8E79CE2A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Sep 2023 12:24:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234253AbjILK2A (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 12 Sep 2023 06:28:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50120 "EHLO
+        id S231560AbjILKYB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 12 Sep 2023 06:24:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234088AbjILK1n (ORCPT
+        with ESMTP id S231222AbjILKX5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 12 Sep 2023 06:27:43 -0400
-X-Greylist: delayed 532 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 12 Sep 2023 03:27:12 PDT
-Received: from smtp69.iad3b.emailsrvr.com (smtp69.iad3b.emailsrvr.com [146.20.161.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047CF10F8
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 Sep 2023 03:27:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mev.co.uk;
-        s=20221208-6x11dpa4; t=1694513899;
-        bh=FH3C6DGeGqxyT5D0x1WZDEUoGXKaA0SlVyvXD/E86uk=;
-        h=Date:Subject:To:From:From;
-        b=Tq6xJ2+piqPbhOIJE69N/bFxHEol/tmPY3c/hCTgDQpjfzcL1PHLR0dKjZfF714V7
-         Vl/6zaEzVFXQTpS59Oc3i3RhW8WqIwPdHyjcxiin/hSqOtSelQtRrdQ5MMJLWJtYqR
-         D98zi0KdjdUX1nH+1iIJQBq7/UhFQ72R5qHGEl7g=
-X-Auth-ID: abbotti@mev.co.uk
-Received: by smtp17.relay.iad3b.emailsrvr.com (Authenticated sender: abbotti-AT-mev.co.uk) with ESMTPSA id C837BA00C7;
-        Tue, 12 Sep 2023 06:18:15 -0400 (EDT)
-Message-ID: <44acdea6-271f-4e71-a0b3-d74a92034a9a@mev.co.uk>
-Date:   Tue, 12 Sep 2023 11:18:13 +0100
+        Tue, 12 Sep 2023 06:23:57 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAE49B9
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 Sep 2023 03:23:53 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1c3887039d4so26881995ad.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 Sep 2023 03:23:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1694514233; x=1695119033; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=M9LIb5haVVHTJnBYry+OCoJloq0Q0VbbRaGISgkSZ5M=;
+        b=tryLHP29ZbXlPBFjTBr263izMLZmsewcCZvRVp0cRmWLtTsuW36plvaco8xMVaTw9f
+         xof/EiVgtpnXBOmt/1+mU+uLrXsi0lTwFPapYp4V73rJyX4lrgVQ7zHn1amY6WtGUQQf
+         PFjHtcENePCGYFczxn+E22Y3I8LbBPEbyyo/BUiguRxFyk4iFa0es6JOyBQWpn7vHxo8
+         rbaqls1UJXvP29j8i7Qk+VYl+j9wVJEM9q/jVIcmITP3Sy9QoD1ZEDYB1fIf5HxwqPXF
+         PKr9gq1qVGaw3fhjeKZd3u6/CZo+lO/KEPzZK4ulK9GWD3u+zIRTsCkPidfOjju+WOHU
+         rRDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694514233; x=1695119033;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=M9LIb5haVVHTJnBYry+OCoJloq0Q0VbbRaGISgkSZ5M=;
+        b=OD8OSTJXv4Adz/Mys1dkVAEP1xh8xxhhrBGkk8SEBWxNs5rgnQrMNbjy4kKNC8Pn4D
+         3TTzsaI4sSZ6P77gUhWVU4aGlGXxgbbTYpMGfihhIZn4E6f2UgWWYaNVPH4LVLd+ijHx
+         TpnO6D9mW/gqShct3LA3E6NtfWm9JChMHL7WbNmGb1Kq5nRuEaOYxdtZ+HuuM9cgE7eM
+         8mfZ6pKO9/+PsPCT4gKGB8qTXzQPTkt9b+65IL0DhyVbH+uokfQLkC9n5Yf0i1tc6HMb
+         d2D6kR1Xot2+NScJbRAqbbcLMKcLTaSk6uylZCzZVcXJ3stzT3+MHJB300wj/QdU2No8
+         +YlQ==
+X-Gm-Message-State: AOJu0YzxaMlU2ikygN/yWSRkz2fvlBmxNyzFAgm0Wn+R57/YQX896noa
+        Dm5uN7VvNT5nx+r7Y8zGQgKwqg==
+X-Google-Smtp-Source: AGHT+IEmgdDEUJ9JrQjm0gbzQ86T5t9CvRObKuPE3dADfCJu9EHt7NCkdJcWeSSlEO+b9rD4JiFnaQ==
+X-Received: by 2002:a17:903:2282:b0:1c0:bcbc:d78 with SMTP id b2-20020a170903228200b001c0bcbc0d78mr12208361plh.14.1694514233421;
+        Tue, 12 Sep 2023 03:23:53 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id bc7-20020a170902930700b001beef2c9bffsm1576553plb.85.2023.09.12.03.23.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Sep 2023 03:23:52 -0700 (PDT)
+Message-ID: <65003c38.170a0220.c6d7b.5009@mx.google.com>
+Date:   Tue, 12 Sep 2023 03:23:52 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/7] drivers/comedi: fix Python string escapes
-To:     Benjamin Gray <bgray@linux.ibm.com>, linux-ia64@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        llvm@lists.linux.dev, linux-pm@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        H Hartley Sweeten <hsweeten@visionengravers.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Jan Kiszka <jan.kiszka@siemens.com>,
-        Kieran Bingham <kbingham@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org,
-        Todd E Brandt <todd.e.brandt@linux.intel.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
-References: <20230912060801.95533-1-bgray@linux.ibm.com>
- <20230912060801.95533-4-bgray@linux.ibm.com>
-Content-Language: en-GB
-From:   Ian Abbott <abbotti@mev.co.uk>
-Organization: MEV Ltd.
-In-Reply-To: <20230912060801.95533-4-bgray@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Classification-ID: 263f4c94-c5b5-4040-bf22-1f7e4ea60010-1-1
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: fixes
+X-Kernelci-Tree: kselftest
+X-Kernelci-Kernel: v6.6-rc1-3-g7ab6fe6625c9
+X-Kernelci-Report-Type: build
+Subject: kselftest/fixes build: 6 builds: 0 failed, 6 passed,
+ 1 warning (v6.6-rc1-3-g7ab6fe6625c9)
+To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/09/2023 07:07, Benjamin Gray wrote:
-> Python 3.6 introduced a DeprecationWarning for invalid escape sequences.
-> This is upgraded to a SyntaxWarning in Python 3.12, and will eventually
-> be a syntax error.
-> 
-> Fix these now to get ahead of it before it's an error.
-> 
-> Signed-off-by: Benjamin Gray <bgray@linux.ibm.com>
-> ---
->   drivers/comedi/drivers/ni_routing/tools/convert_csv_to_c.py | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/comedi/drivers/ni_routing/tools/convert_csv_to_c.py b/drivers/comedi/drivers/ni_routing/tools/convert_csv_to_c.py
-> index 90378fb50580..d19101fc2a94 100755
-> --- a/drivers/comedi/drivers/ni_routing/tools/convert_csv_to_c.py
-> +++ b/drivers/comedi/drivers/ni_routing/tools/convert_csv_to_c.py
-> @@ -44,7 +44,7 @@ def routedict_to_structinit_single(name, D, return_name=False):
->   
->       lines.append('\t\t[B({})] = {{'.format(D0_sig))
->       for D1_sig, value in D1:
-> -      if not re.match('[VIU]\([^)]*\)', value):
-> +      if not re.match(r'[VIU]\([^)]*\)', value):
->           sys.stderr.write('Invalid register format: {}\n'.format(repr(value)))
->           sys.stderr.write(
->             'Register values should be formatted with V(),I(),or U()\n')
+kselftest/fixes build: 6 builds: 0 failed, 6 passed, 1 warning (v6.6-rc1-3-=
+g7ab6fe6625c9)
 
-Looks good thanks!  I ran the modified script using 'make everything' in 
-the directory (after setting up a python venv to install ctypesgen) and 
-it didn't break anything. (There were some harmless errors output by 
-ctypesgen due to failing to parse some GCC extensions, but those are 
-nothing to do with this patch and the generated C files are OK.)
+Full Build Summary: https://kernelci.org/build/kselftest/branch/fixes/kerne=
+l/v6.6-rc1-3-g7ab6fe6625c9/
 
-Reviewed-by: Ian Abbott <abbotti@mev.co.uk>
+Tree: kselftest
+Branch: fixes
+Git Describe: v6.6-rc1-3-g7ab6fe6625c9
+Git Commit: 7ab6fe6625c9bdcb8fa5f61c8f8e30e13f689284
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
+est.git
+Built: 4 unique architectures
 
--- 
--=( Ian Abbott <abbotti@mev.co.uk> || MEV Ltd. is a company  )=-
--=( registered in England & Wales.  Regd. number: 02862268.  )=-
--=( Regd. addr.: S11 & 12 Building 67, Europa Business Park, )=-
--=( Bird Hall Lane, STOCKPORT, SK3 0XA, UK. || www.mev.co.uk )=-
+Warnings Detected:
 
+arm64:
+
+arm:
+
+i386:
+
+x86_64:
+    x86_64_defconfig+kselftest (clang-16): 1 warning
+
+
+Warnings summary:
+
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to=
+ !ENDBR: .text+0x1393eb
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 1 w=
+arning, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to !END=
+BR: .text+0x1393eb
+
+---
+For more info write to <info@kernelci.org>
