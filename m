@@ -2,187 +2,170 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04C1B79C6F9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Sep 2023 08:34:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4251679C841
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Sep 2023 09:36:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbjILGer (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 12 Sep 2023 02:34:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43110 "EHLO
+        id S229866AbjILHgX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 12 Sep 2023 03:36:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229994AbjILGep (ORCPT
+        with ESMTP id S230148AbjILHgV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 12 Sep 2023 02:34:45 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0179CAF;
-        Mon, 11 Sep 2023 23:34:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694500482; x=1726036482;
-  h=date:from:to:cc:subject:message-id:references:
-   content-transfer-encoding:in-reply-to:mime-version;
-  bh=7E0H9ixOKV6DqCMSKJwANw3YhruT4j+FU2cfqV1zMW0=;
-  b=gk8kPDOQT1hTCHInVTjJsQwWHbZ6Npca9ze0YZTpF5xxke611g19/Fjr
-   DaQ5/1NcpSt/dTZopj2Db2FIZmRUNRa0ETBynIfFSxSLCp3KTRfWkIYQ5
-   IXW6Fzr0akUiblDl1QNszFPZOc6bt+MYX8xuv95pUUJZpxTenc7ZSqeYn
-   dX/NFZhTiWjOGJANsLthdcuM35+c6Yl1CnL//GYmTMEMJq6ESZaPrTxmJ
-   UdSeHgdko6fNORGB1ju/VY2BZ2SSSUcrjipAdcOZK7S0wA5Pq/y656vaS
-   oFGEPCzP39oxNfLjvtwkZe0FWIV35Ef8A3asr1/uaW9R7HNQ1NSlKBRvl
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="375619884"
-X-IronPort-AV: E=Sophos;i="6.02,245,1688454000"; 
-   d="scan'208";a="375619884"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 23:34:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="693381754"
-X-IronPort-AV: E=Sophos;i="6.02,245,1688454000"; 
-   d="scan'208";a="693381754"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orsmga003.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 11 Sep 2023 23:34:34 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32; Mon, 11 Sep 2023 23:34:34 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32 via Frontend Transport; Mon, 11 Sep 2023 23:34:34 -0700
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.47) by
- edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.32; Mon, 11 Sep 2023 23:34:34 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mfrh37eMkPwpUAR2bZ9ZZDSXHNk3JfK77rZPLSxP1sxt2OukwwEoPKHYVeAeodTcfOflW3Bi0A8ASKhxBw/chhkSR0+0KEAwGbhlN+dOCrW+k4p4mTR71it4m7iNR/tAzA+6uvjpcSe61cdUUyJB1cluhoQWLN7xGHpiTc+Y8WyDav0ybPEf2gGjq4rOAaA/8Ntk4qXRr+zaWGdYnHqpF6b6a82OPXeRoHO5NgHbvy9oRP2KOAA9s7mhr0bReAEnoJcq8dt7VN0zPLD7uaxVa8cxA3Ru+hOKjUHZFKdGvz5IE4z5pFNwrwxyLH8JXWfGXuPw+z3rM2hbQJMfy7lyJg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0811dn8HyBlGyFRNy+doyvnGXVOx2dvmbDmq2+ETfQs=;
- b=YnKDNxTuKgWS5t9pPiwiz1yyffFzQ9VqcnxRh8WYW2Y8lJeRMhMeM9sKHrPVpCFjINApeYlJulgZUx1RF3MXz4gQtOCsAC/S1R2gVRnN4fz6SAMjaerfdIRJKhVH6ggK8Lu08rxIRit6sbnd6FGzu0ZwiJiZuEeG1ewvDZQfUvxXY9jDaR/jG21B/S9+DD3u4RSC0TtUUKQVgoEjbk4qckrkuUTzwz7IaqQMkrr8gffLz79bNPt5n0mgawjS+6FNuXWytkcrOB6ClCTPoEGxOTtX2BmUbGWI3tlkqqOKlp5ZUysRueHZvVZxCrE+h43tkiBs5k0I3fVKV8ZTJRLoDg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MN0PR11MB6231.namprd11.prod.outlook.com (2603:10b6:208:3c4::15)
- by DS0PR11MB7802.namprd11.prod.outlook.com (2603:10b6:8:de::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6768.37; Tue, 12 Sep
- 2023 06:34:32 +0000
-Received: from MN0PR11MB6231.namprd11.prod.outlook.com
- ([fe80::8824:ea30:b0ab:f107]) by MN0PR11MB6231.namprd11.prod.outlook.com
- ([fe80::8824:ea30:b0ab:f107%4]) with mapi id 15.20.6745.034; Tue, 12 Sep 2023
- 06:34:32 +0000
-Date:   Tue, 12 Sep 2023 08:34:21 +0200
-From:   Maciej =?utf-8?Q?Wiecz=C3=B3r-Retman?= 
-        <maciej.wieczor-retman@intel.com>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-CC:     Fenghua Yu <fenghua.yu@intel.com>, Shuah Khan <shuah@kernel.org>,
-        <ilpo.jarvinen@linux.intel.com>, <linux-kernel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH RESEND v3 2/2] selftests/resctrl: Move run_benchmark() to
- a more fitting file
-Message-ID: <gjyv2lwrrw3n5n3olcedjjvhbyqqikic5fvuquc74srybgylq5@uxpvgadeuhhp>
-References: <cover.1693575451.git.maciej.wieczor-retman@intel.com>
- <7026d06ce116c4c5b5454c814cda69387c54e2a0.1693575451.git.maciej.wieczor-retman@intel.com>
- <e0fa9375-0b50-af89-81d3-eaaecf19a788@intel.com>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <e0fa9375-0b50-af89-81d3-eaaecf19a788@intel.com>
-X-ClientProxiedBy: BE1P281CA0428.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:b10:81::20) To MN0PR11MB6231.namprd11.prod.outlook.com
- (2603:10b6:208:3c4::15)
+        Tue, 12 Sep 2023 03:36:21 -0400
+Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32387E79
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 Sep 2023 00:36:17 -0700 (PDT)
+Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-31f7c87353eso549417f8f.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 Sep 2023 00:36:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ffwll.ch; s=google; t=1694504175; x=1695108975; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=M+grCUostfIpNDbJCtZATyVfp717UCSAOFrm4GuSqa4=;
+        b=Zi6OvxxqPSYGMupXReZWbsSk1pSc16kc4OftahhHWPL1n7PvMwoivfdyoVwEIgyHw+
+         Y5K2UV1owEK8GmmcsrWP7TABUv1NIIBE4eFXXtmvrjFqusMyZVWNrvpWtAMxE+PbBK6Y
+         53mrBKWMvKUSvxMA2mHqexUkRmWpqaVTpomoE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694504175; x=1695108975;
+        h=in-reply-to:content-disposition:mime-version:references
+         :mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=M+grCUostfIpNDbJCtZATyVfp717UCSAOFrm4GuSqa4=;
+        b=BqwynOknBhObe2UuRJreZdXJ5H8ozwW7kpq0jNIJD/z42eT3goNrgmJysBmgjCnvSO
+         QfkNFikVUDqFG+8ClSzOtByzMgXI5+yO74IH3gLJOAddi2LRmo3cfQoS0tCySTUVRmEJ
+         ilifuofKptzln4JuMvvOL/jQ8xdrQLKKATp37KW7b/i5034CZXpE2aiioU4CPGP6d9pk
+         c7LOcV8Dx6oko+27ccfeVgyFAtoReMyMI51GuhHVXSax2v4LFsKjuxAUjch2Rmq05B1I
+         uU3MdDSU9Nxdl+duivNRiUJ12ybIW5iD8oMzW8x+ytJxW+B5X4BpKXFEiKNpsld0U+XK
+         K5pg==
+X-Gm-Message-State: AOJu0YzOT2VuJOYepO3oSKGfqY9IddPSKud4/WbGe3rxOsQ0HQuuZLFX
+        GyhyQqa0zvTxw4yo2s4RR3DxBA==
+X-Google-Smtp-Source: AGHT+IGxydkfPGJ6b1sjOo2veJypAVFwoUoaaZ8mu7ON6QOiYcwhv+yqb2kpDK9bW/DrJ1e3VPPNXQ==
+X-Received: by 2002:a05:6000:70a:b0:31f:84c9:d75f with SMTP id bs10-20020a056000070a00b0031f84c9d75fmr8444826wrb.4.1694504175484;
+        Tue, 12 Sep 2023 00:36:15 -0700 (PDT)
+Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
+        by smtp.gmail.com with ESMTPSA id d6-20020adfef86000000b00317ddccb0d1sm12118428wro.24.2023.09.12.00.36.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Sep 2023 00:36:14 -0700 (PDT)
+Date:   Tue, 12 Sep 2023 09:36:12 +0200
+From:   Daniel Vetter <daniel@ffwll.ch>
+To:     Maxime Ripard <mripard@kernel.org>
+Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        =?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH 2/2] drm/tests: Flag slow tests as such
+Message-ID: <ZQAU7Juw5WM1LAAM@phenom.ffwll.local>
+Mail-Followup-To: Maxime Ripard <mripard@kernel.org>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>, David Airlie <airlied@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        =?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20230911-kms-slow-tests-v1-0-d3800a69a1a1@kernel.org>
+ <20230911-kms-slow-tests-v1-2-d3800a69a1a1@kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR11MB6231:EE_|DS0PR11MB7802:EE_
-X-MS-Office365-Filtering-Correlation-Id: b644a9f5-b27d-4a8b-4fe8-08dbb35a5324
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: s7/iZranWPfanlv/EpseyPLYqBprzUD+xCJvcntxmsO/A8I3usZyA3IZdxK3P1uOUIgnbaZjW1irM7zmWGZkL5SYnyw0+PUlkaFCPnNx0En9o5SJZMPok8cW1QfTwQt7dg158EIL45dYev2CXx/aRyug9BdoOPita7uq9sRyO2WZIoLT2Z9mN4QJyoYvZpTiJH9rXz2DKHN3GVnP/2wgFCFWU/l0KZe6c8j2enmSWAy/3/u4UAwBT6zS9+N+t1ZfLdTU5eSb0uCScau4dcH/l724nxXGDz/j8XhuDf8S0HAz0C6AayK+adb+wvqlTkZPx9LIQypI9Q14qCAL8ydFsicNh8bJvzccZgV/eZ7YU+r7NyDYCbObJj9C22iKhF2IXn2kbaSNrXRHfhq5RKxJrqmBDBAXVKhtuXsfnHTduG3KNPITanSKtrGaPErdCogoUBsU1oVaLMepmyhZRufb5FIn1C2h5F6MXEPT4xUlviZ7tuigAVYwGfpASkJgtxBgKO3DFvyvm8i/p+kG74+NTM6MW5WmX8SwVYH+rKltuvAdgtaR+mk2foOMVO3GtMN0Ur4wgc7G2g1LyndimAa1RwkkIlV9PBJvSaTpyoBZFQ+ZlUCeGw8rj8u4QlKNs2St
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6231.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(39860400002)(346002)(376002)(136003)(396003)(366004)(451199024)(1800799009)(186009)(66946007)(6506007)(6666004)(66556008)(54906003)(66476007)(6636002)(53546011)(6486002)(6512007)(9686003)(316002)(41300700001)(478600001)(8936002)(8676002)(4326008)(6862004)(66899024)(26005)(5660300002)(82960400001)(38100700002)(2906002)(33716001)(86362001)(27256005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?YtWFAVrY9OjB5B1fX6M+frCYAwf2joUI6WwpcLhGZ9rN9yR71agBCK2mb0?=
- =?iso-8859-1?Q?OEJdBcuXNXYx8RENRvd0wgkUWAoCpYYS8QGwxBgSmRLEsFF506Ie7O9Rud?=
- =?iso-8859-1?Q?FjzdVVKadC53DGFDDQgaWG4sp1OQGAVekkEGTcGd6sYtx0/MReyKl7YIDw?=
- =?iso-8859-1?Q?8d3JvZRCPtZNygMYYIs6MroETtD2bG1sMBABTPZY9heZsihqqNvVsyEpI5?=
- =?iso-8859-1?Q?ANRQqKb8fdBwvA71DBVSG0xuugo7oaN9LbtkavFYcaGMaSxSXHyj79bI11?=
- =?iso-8859-1?Q?1RvFKve68oDcHfQEaW+zNLyHj7s5dYlQcXCayVFmzqrbfU80xeLMXXaMjY?=
- =?iso-8859-1?Q?/oO4EipaDgPlAj1ERoQUVJB+jfgL9aguQl5gQf4vOMRb8X/DehhRBjMIXb?=
- =?iso-8859-1?Q?7C9ffGqWXe2qDQisDxrrb/tXjxCwO/aZjcrMMFCtzarOw6vxH439Tx/nn7?=
- =?iso-8859-1?Q?RTCxYfvjarW9jNDi6sv21+tjBAsZ2kCllzvA0hUMHyfcnJL5KFkNKSH8tZ?=
- =?iso-8859-1?Q?K2ofvxcJeOyS/Q7YIcDTPau8c19fFP06BlYFGoeFnxD2r3L6C966Q7WIme?=
- =?iso-8859-1?Q?UDWbQryGqA2BXr4Vb/aYmF3eiLi45aEvMIDxCEuw+6W2AVSwB7mZa5fwXC?=
- =?iso-8859-1?Q?SW8ZWeaFcEWQedwYhI1sBP9s5J+K8UGunHMi1JBOKcdKvazhNmI690bEZG?=
- =?iso-8859-1?Q?UtYsUoTgjRHNAxgjAD55cQ3LYcjW5RTRzKMP8uWCt5jJFzKLWZoxQd65yT?=
- =?iso-8859-1?Q?+aqOisQPVNlxJGg4UoK3qq5PkQNOXxZGXxaihr5BEBioJPAh9TVIy4qNv8?=
- =?iso-8859-1?Q?KhnJG1l7Lwj5q/qJy9RkJYon399spivzWkQabTeVwO+iuAxhhUVvy7eYhA?=
- =?iso-8859-1?Q?hLMoNpRfyzQiq37J2K2lfMdKm1VZ7C+HCowbB4XiyY/FAW6lP1oKfswyAZ?=
- =?iso-8859-1?Q?fEOnsajOK85w+dEIqtAYYlkNNN4ZDXY3txM7ZXzWrcq7OLZocjkUI0XQQs?=
- =?iso-8859-1?Q?ePKd51cTaFf7AjmpLjMCNFSZUvczmsqfQvXsYJ7lyDcURNSOpZBX7+KYF7?=
- =?iso-8859-1?Q?1u5RipqmeROztm220Z2PfSvs2H4/bkTlkQ4VyIerHIK6vHaOdtU8nSCi/1?=
- =?iso-8859-1?Q?duiurGjq/LYIW4MMlzXZQvyKI3/VZr9JrBjM4DGcnnpTC9bTZg6+jKTQXf?=
- =?iso-8859-1?Q?+PvjPqw1jn4rdSzdNSn1F2lvxSELnfn0kMFKGjbZ/DrR2NifSvsZAeBcxn?=
- =?iso-8859-1?Q?8qpSGAEq8nyw0uTuqe8QqT7DiewpCbkbm2Hp94ytsYoEYjmTyU3LwRWsXe?=
- =?iso-8859-1?Q?Yi4bXSchYPQIS9grXnvm/294xLhOQ16hYOHFkoo2JEMqjDxS7bFIdD/5mW?=
- =?iso-8859-1?Q?UVe5rlBKM91HcwGZ8joH/t0v6QJGV+nOjYeACZR3DNa2trrlltHDh4CuhF?=
- =?iso-8859-1?Q?l4wg0udcgihWTGXk+WAP6dzGz48O2uOiDY4RetElE2Y4jWKYpNabCKBqbi?=
- =?iso-8859-1?Q?U3Ev3abL1wL0Wv2aaGtgLw5UCXKZDCmuaSeYut4wJDcfvlo5o4WaksIPcP?=
- =?iso-8859-1?Q?Dzucsuo8TJvlvydOu6kawaZWLSIx0dCcRVb2GBaSUrvlJZqoEeeeqCqFqW?=
- =?iso-8859-1?Q?t+PaQTlARBGOhbdDDdERO/vFmfRwALcB8RbF3DZ+29lizJuctt09leyKBI?=
- =?iso-8859-1?Q?ogQxuvTkCSfQI0ojplk=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: b644a9f5-b27d-4a8b-4fe8-08dbb35a5324
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6231.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Sep 2023 06:34:32.7248
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NN55S6kumbCz1ZgAkzfBNMaRmX52uc7nKEC3iTm3z4gOQGI74VCb4vCXxdRNWGMHCrlmkuMKLCTcRV/54+hrH35Dgdl5LmDfQxGkeaiy7yU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB7802
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230911-kms-slow-tests-v1-2-d3800a69a1a1@kernel.org>
+X-Operating-System: Linux phenom 6.4.0-3-amd64 
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
+On Mon, Sep 11, 2023 at 11:51:06AM +0200, Maxime Ripard wrote:
+> Kunit recently gained a speed attribute that allows to filter out slow
+> tests. A slow test is defined in the documentation as a test taking more
+> than a second to execute.
+> 
+> Let's flag the few tests that are doing so on my machine when running:
+> 
+> ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/gpu/drm/tests \
+> 	--cross_compile aarch64-linux-gnu- --arch arm64
+> 
+> Suggested-by: David Gow <davidgow@google.com>
+> Signed-off-by: Maxime Ripard <mripard@kernel.org>
 
-On 2023-09-11 at 09:59:31 -0700, Reinette Chatre wrote:
->Hi Maciej,
->
->On 9/1/2023 6:42 AM, Wieczor-Retman Maciej wrote:
->> resctrlfs.c file contains mostly functions that interact in some way
->
->This can just be "resctrlfs.c contains ..." (no need for "file")
+Ugh ... not a fan.
 
-Right, sorry, I'll correct this and the one below.
+igt has a really bad habit of making disastrously combinatorial tests with
+impossible runtimes, and then just filtering these out so it's still fast.
 
->> with resctrl FS entries while functions inside resctrl_val.c deal with
->> measurements and benchmarking.
->> 
->> run_benchmark() is located in resctrlfs.c file even though it's
->
->same here
->
->> purpose is not interacting with the resctrl FS but to execute cache
->> checking logic.
->> 
->> Move run_benchmark() to resctrl_val.c just before resctrl_val() that
->> makes use of run_benchmark(). Make run_benchmark() static since it's
->> not used between multiple files anymore.
->> 
->> Remove return comment from kernel-doc since the function is type void.
->> 
->> Signed-off-by: Wieczor-Retman Maciej <maciej.wieczor-retman@intel.com>
->> Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
->
->Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
->
->Reinette
+Maybe some stress tests for overall system make sense like this, but
+absolutely not for unit tests. And I did spot check some of these, they're
+just combinatorial explosions with large repetition counts and some fun
+stuff like going through prime numbers because surely that's a good idea.
 
-Thank you for the review!
+Imo delete them all, and if that causes a real gap in coverage, ask the
+authors to write some actual good unit tests for these corner cases.
+
+Cheers, Sima
+> ---
+>  drivers/gpu/drm/tests/drm_buddy_test.c |  2 +-
+>  drivers/gpu/drm/tests/drm_mm_test.c    | 14 +++++++-------
+>  2 files changed, 8 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/tests/drm_buddy_test.c b/drivers/gpu/drm/tests/drm_buddy_test.c
+> index 09ee6f6af896..6f79cde2df55 100644
+> --- a/drivers/gpu/drm/tests/drm_buddy_test.c
+> +++ b/drivers/gpu/drm/tests/drm_buddy_test.c
+> @@ -742,7 +742,7 @@ static struct kunit_case drm_buddy_tests[] = {
+>  	KUNIT_CASE(drm_test_buddy_alloc_range),
+>  	KUNIT_CASE(drm_test_buddy_alloc_optimistic),
+>  	KUNIT_CASE(drm_test_buddy_alloc_pessimistic),
+> -	KUNIT_CASE(drm_test_buddy_alloc_smoke),
+> +	KUNIT_CASE_SLOW(drm_test_buddy_alloc_smoke),
+>  	KUNIT_CASE(drm_test_buddy_alloc_pathological),
+>  	{}
+>  };
+> diff --git a/drivers/gpu/drm/tests/drm_mm_test.c b/drivers/gpu/drm/tests/drm_mm_test.c
+> index 186b28dc7038..c1e662c2a76c 100644
+> --- a/drivers/gpu/drm/tests/drm_mm_test.c
+> +++ b/drivers/gpu/drm/tests/drm_mm_test.c
+> @@ -2228,23 +2228,23 @@ module_param(max_prime, uint, 0400);
+>  static struct kunit_case drm_mm_tests[] = {
+>  	KUNIT_CASE(drm_test_mm_init),
+>  	KUNIT_CASE(drm_test_mm_debug),
+> -	KUNIT_CASE(drm_test_mm_reserve),
+> -	KUNIT_CASE(drm_test_mm_insert),
+> -	KUNIT_CASE(drm_test_mm_replace),
+> -	KUNIT_CASE(drm_test_mm_insert_range),
+> +	KUNIT_CASE_SLOW(drm_test_mm_reserve),
+> +	KUNIT_CASE_SLOW(drm_test_mm_insert),
+> +	KUNIT_CASE_SLOW(drm_test_mm_replace),
+> +	KUNIT_CASE_SLOW(drm_test_mm_insert_range),
+>  	KUNIT_CASE(drm_test_mm_frag),
+>  	KUNIT_CASE(drm_test_mm_align),
+>  	KUNIT_CASE(drm_test_mm_align32),
+>  	KUNIT_CASE(drm_test_mm_align64),
+> -	KUNIT_CASE(drm_test_mm_evict),
+> +	KUNIT_CASE_SLOW(drm_test_mm_evict),
+>  	KUNIT_CASE(drm_test_mm_evict_range),
+>  	KUNIT_CASE(drm_test_mm_topdown),
+>  	KUNIT_CASE(drm_test_mm_bottomup),
+>  	KUNIT_CASE(drm_test_mm_lowest),
+>  	KUNIT_CASE(drm_test_mm_highest),
+>  	KUNIT_CASE(drm_test_mm_color),
+> -	KUNIT_CASE(drm_test_mm_color_evict),
+> -	KUNIT_CASE(drm_test_mm_color_evict_range),
+> +	KUNIT_CASE_SLOW(drm_test_mm_color_evict),
+> +	KUNIT_CASE_SLOW(drm_test_mm_color_evict_range),
+>  	{}
+>  };
+>  
+> 
+> -- 
+> 2.41.0
+> 
 
 -- 
-Kind regards
-Maciej Wieczór-Retman
+Daniel Vetter
+Software Engineer, Intel Corporation
+http://blog.ffwll.ch
