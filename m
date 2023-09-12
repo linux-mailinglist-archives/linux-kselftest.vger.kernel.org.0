@@ -2,240 +2,223 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9D6C79C6C9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Sep 2023 08:17:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA70079C6EE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Sep 2023 08:33:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbjILGSC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 12 Sep 2023 02:18:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46286 "EHLO
+        id S229978AbjILGdM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 12 Sep 2023 02:33:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbjILGSB (ORCPT
+        with ESMTP id S229956AbjILGdL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 12 Sep 2023 02:18:01 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF88E78;
-        Mon, 11 Sep 2023 23:17:57 -0700 (PDT)
+        Tue, 12 Sep 2023 02:33:11 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80670E76;
+        Mon, 11 Sep 2023 23:33:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694499477; x=1726035477;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=PnV2Q1NMq/14IqkmajYkGVpaNK0ykYYjLpGES1HoQRs=;
-  b=DOr7Iu6IyljgCg3Lhu2Wgf32zZePGZpxsBNpuMbRMq6cjbmym5guZVQW
-   aW+gPLN55v5WIeEkeevkjB73tZJT7usoYjYizeAjvXBTNyDa+mvApA3Xf
-   KUi48mmW0NbRuC4TNYdK1CjAFNq4uAbzy9bYDfp2lPgX0/XRT8YTcIjnP
-   6qobKzcPOnr1Lckmx2BvoEqf5aWhv3Xep5dE5mm9U36Z2GPvtquQNTYNv
-   UIPyuIEgpg4Tzo6ldl+VUXXp8xO93iAYBdBgGusGog9c7YDStoxhTtn1F
-   ul9eJd6bn/8POE9+L07ZRVPgLAmvcnUTF5PgnuyFRo/rHHKmH2lIkL17r
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="442298686"
+  t=1694500387; x=1726036387;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=4ZdPUh5fj46VTZkvVI2em1ZKi6IIcapNTY91Uv23ZYw=;
+  b=JBUJY1MMIfunK5ScQE1jh45byvR4rxwgix+U0XxwReRA46aH9+t8/SEh
+   IxvJW/3xTp4aT5tbdBI0y7MVRKVkXzYPfjRa+2pP1ZcPbNZBBobU9cnP/
+   aeVSiuPwe919BmD1Z1FZKVbxMR+F+UopJLvK0SFfZBB2GBjgFyLzEvVIP
+   SfbP1ts0Op1FMzq/hA6Lej50Rj63r7DOEzlcxw1ck4Q3UA8PoTvtNBfO3
+   bTv1BialD8UVbwoYW9fcem0Tmvx18V3hDvnub7JECQlZzBepPWlRAN9HS
+   P5otRMydeMBOnvAlYNxAZyC7ttpP9guCcMmX0MDYUps8S1Fj3p2NpF5hV
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="375619582"
 X-IronPort-AV: E=Sophos;i="6.02,245,1688454000"; 
-   d="scan'208";a="442298686"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 23:17:57 -0700
+   d="scan'208";a="375619582"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2023 23:33:07 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="867250494"
+X-IronPort-AV: E=McAfee;i="6600,9927,10830"; a="693380960"
 X-IronPort-AV: E=Sophos;i="6.02,245,1688454000"; 
-   d="scan'208";a="867250494"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orsmga004.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 11 Sep 2023 23:17:54 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32; Mon, 11 Sep 2023 23:17:53 -0700
+   d="scan'208";a="693380960"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orsmga003.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 11 Sep 2023 23:33:06 -0700
 Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32; Mon, 11 Sep 2023 23:17:53 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ 15.1.2507.32; Mon, 11 Sep 2023 23:33:06 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
  orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32 via Frontend Transport; Mon, 11 Sep 2023 23:17:53 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.101)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ 15.1.2507.32 via Frontend Transport; Mon, 11 Sep 2023 23:33:06 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.101)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.32; Mon, 11 Sep 2023 23:17:52 -0700
+ 15.1.2507.32; Mon, 11 Sep 2023 23:33:06 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=I8jacsqFy0hhfxEsCYtOin7b12tEaZGYlgOqTsrC2D3sEqHsq4TRsnPn5oSuj+urXcAH5+mwdz8DfSi2wt0+WEW8gmnV2/eiBBpBRy5uWzcQd8CQ232Z9J0F/0PKmauYgZvCHn+Y0wWSJHasw8jcoKsJZLR8Fz7k+NMSItlK7XIS8ViSgTAjw1JibLOBG0XHxK1nv+mlFC+HCblMw5gc/PATtiuwEzha9kJ8j0fI8U3DtEZ0bOku40VZPcd+6lMMs1UvGFCcZWBzSC7zYVGNc3IeAFBmy4wGF0e5X1bd7cK/yLJ1mU3wspvPZFfFE8HkuUueI2dNAuZvqDZtuQUlVA==
+ b=SpE9yLNn0p5UTNh1bLI2e7b00R/JUp67kDWcT3pnYXnh5NkA5E4/rjxwLuXqF5v73GGDGt2Dnxy7uZtJgEHMfvZj/lEEcvd3PJYyKyvqyOgrYVsu2WhqU75F0bcLt6ypzTwqjWvRc8bGsJwfJtVEUT3CIobehgHWqXQQTHVsBINvSxNM+3MVdbjpJrGLDRTQmDcTSxREscQL2Rtx54xzoRbJ5EHGsIJtdTJfACSJmjw9Hneefv1ju3yxDOKwhNQ/ka81JWjdbXGT2UlvL2KEgqxOccl2rCmCOjToMw5rAQD3LxHPlOnTPV2TTKYUPLlAGuUZVCW9Zcr3QqIgoZEq9w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=otIqKsytV685mkM7q1QhVKAKA+XE4nx1pg7gNyZ1Ryo=;
- b=ik1OU0IGMD+S6jZQ/6+7BrCoVs5Uu3NozD/83ZuoLxLEoeo6Q9rZavSGiMS7lwej8rVzE2SpCzEswWql07TTg2hPj8rHXfJ9GsCJePEFgUqDz9FXAiLrBxuSLEVVQEc3O+dt3bhfdsLk6O4qqWmcyjpRy4rgsXgN6x+uoayqw9PAmh1lsRR9WnFwXk16Hi9lFhNH7lwidoOVrQYTsldu3N48+iDPXPFT7t5iQuP+J8WIruAuQOe+utlhWyPROOo7jzYRicQ9gJ9vcRNBlBnD76HZrdrv5vP0buubE7CRQS/J9bEYrrz2Im1cv4ngCGTdBz9P3k+kydHhp55DW7Js6A==
+ bh=xw6U0qDsh3U+i/Qcigmd/CJLB6CrjSvRhzjihhHnvhU=;
+ b=HJeIzDsXEsYtNuADKeHiInxAJ5RY8LJyypiq4UDZpUPuSmq0vB1zhZGP/wZwv+xaPSZMlIo9gMJNs1R/xbURIZapBBPZ7K4Z44SdK73wJiTVncNARQSv9eMjufqU0nNyizmOt5P84AJlmhzBIKR9AN3ygga+Rd6Nvxfvzj/V5jJMtbwpBknD4FBE2HNLguPCXC9lqE9jzHSa42ySIwDoEebq26kBnKwIz9XLpFSp2gTI2K7jH6OUL/mmyggWhvFkTKoOngskazhTIIWsHLsyo1oMwaVCM0AesSZHAR4Wiw2lScZsx7JDLdoCjI6XYCPEq7HjoVTjHj6JGjDULK+Rfg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH8PR11MB6779.namprd11.prod.outlook.com (2603:10b6:510:1ca::17)
- by SA0PR11MB4638.namprd11.prod.outlook.com (2603:10b6:806:73::15) with
+Received: from MN0PR11MB6231.namprd11.prod.outlook.com (2603:10b6:208:3c4::15)
+ by DS0PR11MB7802.namprd11.prod.outlook.com (2603:10b6:8:de::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6768.35; Tue, 12 Sep
- 2023 06:17:51 +0000
-Received: from PH8PR11MB6779.namprd11.prod.outlook.com
- ([fe80::73c6:1231:e700:924]) by PH8PR11MB6779.namprd11.prod.outlook.com
- ([fe80::73c6:1231:e700:924%4]) with mapi id 15.20.6768.029; Tue, 12 Sep 2023
- 06:17:50 +0000
-Date:   Tue, 12 Sep 2023 14:17:38 +0800
-From:   kernel test robot <oliver.sang@intel.com>
-To:     Ryan Roberts <ryan.roberts@arm.com>
-CC:     <oe-lkp@lists.linux.dev>, <lkp@intel.com>,
-        <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Florent Revest <revest@chromium.org>,
-        =?iso-8859-1?B?Suly9G1l?= Glisse <jglisse@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <oliver.sang@intel.com>
-Subject: [linus:master] [selftests]  58e2847ad2:
- kernel-selftests.openat2.resolve_test.fail
-Message-ID: <202309121342.97e2f008-oliver.sang@intel.com>
-Content-Type: text/plain; charset="us-ascii"
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6768.37; Tue, 12 Sep
+ 2023 06:33:04 +0000
+Received: from MN0PR11MB6231.namprd11.prod.outlook.com
+ ([fe80::8824:ea30:b0ab:f107]) by MN0PR11MB6231.namprd11.prod.outlook.com
+ ([fe80::8824:ea30:b0ab:f107%4]) with mapi id 15.20.6745.034; Tue, 12 Sep 2023
+ 06:33:04 +0000
+Date:   Tue, 12 Sep 2023 08:32:57 +0200
+From:   Maciej =?utf-8?Q?Wiecz=C3=B3r-Retman?= 
+        <maciej.wieczor-retman@intel.com>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+CC:     Fenghua Yu <fenghua.yu@intel.com>, Shuah Khan <shuah@kernel.org>,
+        <ilpo.jarvinen@linux.intel.com>, <linux-kernel@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH RESEND v3 1/2] selftests/resctrl: Fix schemata write
+ error check
+Message-ID: <sr6ana6d7ebtuxbhjuo6kcnhnn2zzvg3ivve6mndqeb3nxrzo7@mrfmtzlxlwdh>
+References: <cover.1693575451.git.maciej.wieczor-retman@intel.com>
+ <960b5302cee8e5bb0e83dcf20cd2ef4d353b7b0b.1693575451.git.maciej.wieczor-retman@intel.com>
+ <99eabc5c-f5e3-27dd-0a29-ad0cdb7b4239@intel.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-X-ClientProxiedBy: SG2PR02CA0016.apcprd02.prod.outlook.com
- (2603:1096:3:17::28) To PH8PR11MB6779.namprd11.prod.outlook.com
- (2603:10b6:510:1ca::17)
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <99eabc5c-f5e3-27dd-0a29-ad0cdb7b4239@intel.com>
+X-ClientProxiedBy: FR2P281CA0143.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:98::16) To MN0PR11MB6231.namprd11.prod.outlook.com
+ (2603:10b6:208:3c4::15)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH8PR11MB6779:EE_|SA0PR11MB4638:EE_
-X-MS-Office365-Filtering-Correlation-Id: da423da8-00f9-47bb-6428-08dbb357fd77
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-TrafficTypeDiagnostic: MN0PR11MB6231:EE_|DS0PR11MB7802:EE_
+X-MS-Office365-Filtering-Correlation-Id: 073b119a-9d10-422d-ac17-08dbb35a1e09
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: I50ybrl722fElz6BhAHrumj2g6OUPZlPVMHd98a71ICxOkb4gedmD3um9lQHsPLb1teQPnJYJHWo0Ns85FNs8m5nfCRI6xhGE6Qj0gSXsvAZ0NmVg4TG8Sbbu/pEHvNByq7Q4blnLa0Avhy7s6blkulwmdmcDfsyjsK3bca5TQccRunecTVY+kx9RHXTq7D9BJDN58Ve/zfh6bMhKHebysSgHS5AQlWMnghdxTBjDBZ6fssPZSycvs/NaoQuZUeyOoSwczXgiHWDyzkmOEGTb6gtLkQuipXEq9kwyFs7/bwtTF2RE2Zh02Mg3ZaIV1M7AOelnP9dopwNJVV/WXRzd+uNzx+rGXLRKjutAiiyK52Ul2SqKax6ZUPj7bChI/p84No+avY7CF9kwaXkRDJ1DWOQncdX8WU08qN6ZX7WNB2lNfPnCKI3c5kXxxqLLcByeUJEVr+tzZ1YSP2V6J1TniKe+q1kQxoWQ1QJSu28UNxh6/GW2s0VrOLsDkyyiCMQwN5yhXasxe/gAD5HeYiQfhINxfBTzKMuz1L3m4nioCv998H4d2AlQ1QvrRjRLUpp97apUOc/S4RemTyYMJyBgA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB6779.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(396003)(136003)(366004)(39860400002)(376002)(451199024)(186009)(1800799009)(5660300002)(66946007)(41300700001)(316002)(8676002)(8936002)(54906003)(4326008)(6916009)(66476007)(66556008)(6512007)(966005)(478600001)(36756003)(38100700002)(6486002)(2616005)(7416002)(6666004)(6506007)(26005)(2906002)(107886003)(1076003)(83380400001)(86362001)(82960400001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: cVhqTPNSSOEGKUN9o7G871xGzTUZ9irxn0s6sm01yPJ46jJEU/4zPzf++/RxXgusn4ps2N65AlPQlz4E/8CKYrJh2hTUlq5gWlfuMpgKmmaWq/3rZT4UkItoaRKDEIvFke5ABQCV2Nzx8W/LIarmsVuveCXC7mTmZVpjMX1OoKRYQl+YKMtyJWr2+NkGBBMKv4FE/7FNj3R53pHfo7NBqpciNs9KgsM5jYks2HNOeLkdJH6DuLlikbKkVDfjKleUWC9k6mKqEdmqdAYWrWSCwGcxeVWaivU3NHnrV1mz0u6gmz0HdTmxxoxei/oA6aQuJmhreIOzhXWAdLTRTJJ2cP2T0TJRCxHg/msrLr2VGMnaYIKB34n2lt0del7W4DTXEF3hysugppF1x43MKiSFtm52eEbl15gUrHVV93tyMDB0m5lcgySAWKS7ornDXTQ8cEKHJK8y7SRoNXUn+8FKyniFbE+cmCGF4XxeX7awl49EemDH0Pj3SRUxanZirQgbJf9lL5nNq6YqCybgMQuUeV8JY6Z10i12wYUI6w3M7lRa2PGuad1SxnsI8vCVwBbZ3BlT80gGv66G8A3yBiGnI3jtpd4WPSuiiq55SZR6cYktzb8I635ADII9G8mUHvLm
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6231.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(39860400002)(346002)(376002)(136003)(396003)(366004)(451199024)(1800799009)(186009)(66946007)(6506007)(6666004)(66556008)(54906003)(66476007)(6636002)(53546011)(6486002)(6512007)(9686003)(316002)(41300700001)(478600001)(8936002)(8676002)(4326008)(6862004)(26005)(5660300002)(82960400001)(38100700002)(66574015)(2906002)(33716001)(86362001)(83380400001)(27256005);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?f6ieQXyUFVCy0yFFZpntaY6sscZvBbYYg5VoyYZ145kyQlS2cUUZPdAdSXLt?=
- =?us-ascii?Q?COM9joo+QssvXzacFX7d7qU9ARGynUuCgkQEjVCPqm1tOMf0yLBdBeto18iP?=
- =?us-ascii?Q?5M2naIN3d4Z0vTGETcXnN1P+j7f35DtLMRe28n3sFMrfa4/61qlkfepoSV/w?=
- =?us-ascii?Q?xoiU5Dt2ovVjkGNQcLBJLxfWJO1Y2176vwSL/xuLqN7csbVi6h0wHP3AyhW1?=
- =?us-ascii?Q?b1YoXpDLdfl0xbx261xjJrMnopfZhPILPZwxXeV6voY8YISJ2jLbD1Ss7x0I?=
- =?us-ascii?Q?1XJmi4FSLNd24v7TqXfa+KAkenUPGUiaqvvoYSfKnP1W6ytyzKrXXJOAttl6?=
- =?us-ascii?Q?MSiTOgOyuFDrWDpB8njNSaIfPIqwAgxBF4zVm2F3hkme9ltRRA4DMmJmstsU?=
- =?us-ascii?Q?J6DZZPcSuH+2qbwX4x+Hba1N4JYhdSse1yUohuxhBbqHjQthK7d2+QfLo6K/?=
- =?us-ascii?Q?rLmBq4Q/PfQLe4Th6/t/WT8ZFoLCG4k65XJhAnkKpRSZkn/kDD9Buzs8S+zD?=
- =?us-ascii?Q?/pltmXNinXUsM55pa7VMdxbani6x4ul/Ou63QDywjfuY7aME1gJ6NT3Pb40H?=
- =?us-ascii?Q?KWukFGdMAljIli5acimq3oo8fFG5EzdD/XnmMKRpeodLBdn5JpyYE+J/YHAk?=
- =?us-ascii?Q?tF1wzb5hQ1gbjIaaDFGRTxaiYXhMNi6LkeWEERDGkqwWGl/bHDZ5PMGDk78a?=
- =?us-ascii?Q?uLxwUjv1OO+YkRFXwvGQQNX1g5x66iqNZN+rYU2YKlv5gR1WetKgncIqvV/H?=
- =?us-ascii?Q?10a0ekBdDg3UFCZqYRLgv0jLHwaugD3QPUUg0xVEivbu9zkn60+GKG9Xk0rU?=
- =?us-ascii?Q?mvslsm3EklH2zU9hUhq8mFo1uQ8jPzOJK5jjyuTVeKdhpVXj1bfiztC4KZXe?=
- =?us-ascii?Q?ng6ox0JZ98Nb9i2Q9DGA92gbzp5Xq1ru5MnEDRauEH7kL2U0dozvT/ZG9rX+?=
- =?us-ascii?Q?A75oIAeTxnu6NFdA/38+5UR9eMjWUyh/v7b9+EOL7qe77kpYiErc0pwYZUwb?=
- =?us-ascii?Q?Qb1H0kXlUP3ZTKVAT9/tvN3iWGBZ8BMc8Tmf9n6tAgTzdE7VUAmW1xlhDR14?=
- =?us-ascii?Q?s3KrROFaaJJURXkuDsPof9eEieQE9V+FP0PZNc2LM3iY88U7LbaC+dTo77do?=
- =?us-ascii?Q?qJjd0WQ9RhuyY04bfCKAIxnnRf/dboF4F9VmS2QeSOOWEk0Z4RwDX3NzVUR/?=
- =?us-ascii?Q?oRKAEYqXTvRkGhcSr5fCq+OkXXpfdQB7D5X2/raAMgP/ojioaAyd5aA68zWn?=
- =?us-ascii?Q?F1vMJMWL8f55fMa81G4OumKKATyqXXBxQqNODLCDeGThTzRFwYSXhScsk0FV?=
- =?us-ascii?Q?HtjAgyXz3Ie+TXlhr1xYaQc0/K+pnYOgd4oFtj7/KkDjd64EG/TA6j5TrMEA?=
- =?us-ascii?Q?Y55dwT/r9qyhJDLfgNohj4IskuQ2L/myRN+oWsTb55Di7onG7QJGXF6VxnzF?=
- =?us-ascii?Q?zaGNov4uJmp1aH/GK+DCQ60ozRe2X5WC3Qr1hDMzjX8K/sOTsyDWLd7sUK4g?=
- =?us-ascii?Q?k3+mgJfj+Mnq8YMoH2cltnt4+V/oXpsMkY1fdhvzjSzhSUZpI7zYNvFYDyIr?=
- =?us-ascii?Q?MLntRoYOqLwWjGFeLVgsK272APdJXXoCv5yz+j5GToydhaJaqg1PizGmXbDC?=
- =?us-ascii?Q?1A=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: da423da8-00f9-47bb-6428-08dbb357fd77
-X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB6779.namprd11.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?cTBFYWNUNkFhWTYxWnFMMkhZZGNlUWtIU2tLTHRvTUswYmprK1A1NkdYVE96?=
+ =?utf-8?B?L3BKTkVDbkhqbXEzSHpQTGxZaFNuN2hjTll1aDJJREwrUzBPbFRYVVpHeHNN?=
+ =?utf-8?B?QzI0aDdaYm95c3NobVBJa2xWME5hRzJKS1FhaFR0Z3FITkJNNmtBQTAwaUQ5?=
+ =?utf-8?B?NHhUQWszK0t5R2hkSHM3TWE2VURIWXRCUmcxOW9Gb28wM1JvS3pFaHgxRmpT?=
+ =?utf-8?B?OTlWdHVQWXRKT3VPM3lsenJtSDRQaytCM1N4eTJFaDBmNHcrSUh3c2RrZlVV?=
+ =?utf-8?B?akFjMVlhWERyeFJhVFI3U2wyek1kRm1VYngrSEhlVjBpeEdqQUNIZmhJMTkr?=
+ =?utf-8?B?OTZrbklhUGFRZWxWTytTL0t4azltNTZvblo1WVdSSlpSU0lPYVhURFcwcHU5?=
+ =?utf-8?B?KzRvbW1IUm1TQS8rbkRzRFhHTmdEakZQSzJ3WUNvQ252Rk1OUU90dU02SW5j?=
+ =?utf-8?B?a2NocVprWklMT3p0QUlrOVNOQ3NUTGY0QkdEUS9wNjh4cSsrdzhqUmpuOSs0?=
+ =?utf-8?B?WWdFQTEyak5iTzYzNXA3ZmdOdjlKbHNvVWt2Ti92Y211SlZHalFDZCtnK3NZ?=
+ =?utf-8?B?dG1TRmhqTVFsMWhObVpMdzZhT0t3NEFPQ2VOVzFTS25MK1NHcEhoQVU5VHR2?=
+ =?utf-8?B?T0k3eTVjRXdpTTlOU2VOU3FRVGp1MDVST2ppUmZ1L0EzYjB5aWVoTjJyQnQv?=
+ =?utf-8?B?VThtVmtuNjJISTg2S0kzY200WEozUjhVU3JWU29ZN21qc3JUMWNMeWhld29X?=
+ =?utf-8?B?aTdORFJFaVdCV3N2YkFTb0RnTjBXeklFSWVHaktYMEF6R2NIU2NFZTZoZUsx?=
+ =?utf-8?B?Y0JmdGlEbHA0UVZSMjNMZ1BOZkZla0tVdk9hQm9YMkdyS2tINGtKcU4wbTBM?=
+ =?utf-8?B?Zkd3UmpiaitPVjFKRFNmZFV6cW1NekUxSE93STR1YVZJaHdOenJ6R1FDb0lH?=
+ =?utf-8?B?VklqSUhpWnR2Z2Z3RWhaSWo1dkFKRlFseWg3eFhQSU0rR3NqSUFvNTJ3VVk4?=
+ =?utf-8?B?WGEyMlB6d2QyaUdxSS9DbWZOeXcvanBYYVFpS2V4Zy9pSkJKcEQydzdPSHlK?=
+ =?utf-8?B?cGtBOFQvdmxIMDV2V0VpUzJOemtaSFZsNU9SUW9mclpjeS9JemplYVIwelRY?=
+ =?utf-8?B?N1pjMFhReExiR1JIMXhRRWlpTThySXdKOWkrVytOdU13MnhDZllPb2FReTRj?=
+ =?utf-8?B?Wms0ZzYzRExNYjVnaDNQaWw0V1ptRGNMNG1TeE1yYW8vN21hUkdZbUVESEZI?=
+ =?utf-8?B?KytuRnErY2k3dndUUzJuTmpsYURYY25WOU5NVlREaC9iRzFhUC90SE96dlNm?=
+ =?utf-8?B?ZGs5UUlVVk9tVmMydzZGU3R4UndCVElyR2xTd1R0bzZLSlhCZWZKT3QzK1pt?=
+ =?utf-8?B?azBLNXNFVlhwZVVqMWp2cmlPem1XTk4xVFJGT1dzN3Z2d0FTVjhnbFRiSmlm?=
+ =?utf-8?B?OVR1MGxFbitUY2tNWkNzTWc5SmFxMitoWFVVVy8zSmdwYytkU3ZkQmkwRlVU?=
+ =?utf-8?B?bzRxVmJWTFVIVVdqQVRxUFBTQUE5TW5zM3B2eVV4dFVjRnRFWm94RXdNVXpz?=
+ =?utf-8?B?UTJFcmpRV1dRRTJkSFJLN1dVMjZXSzkwR1FlaTBvbytYZkRPTlQxRk9PcnZ4?=
+ =?utf-8?B?Y3RzQmYydGhMTWo3QW5zVW5yd1MydW5nV28rNGdjZHZIa3gwc2NuRW8xU3VT?=
+ =?utf-8?B?c1dFcXQzSDZ3K0NNMnlEcml4S2NMeWRiNWlNNXVrRUJ3SUVvMXYwNDJlemJi?=
+ =?utf-8?B?UktwS1orcXBsYW1wcjl2NFRwZzNVN0pINkJZaGRrNHRjQVpQSFB0MlZtMHlL?=
+ =?utf-8?B?citYeTZzYStpTXNJSXFkUEYyc1NIQ2RLTjZXT0ozYVFBSTM2R0xnNit5bDN2?=
+ =?utf-8?B?dVhvL0poQ1RIdGRzUVNYa2ljYng1MVUvR3lrazR4dTk4UDVoa055WS9KM2sw?=
+ =?utf-8?B?QjRjNkdGU0RENmNzZjhmRDNLT0hueUpZT0R5a0FXd01XNzcvOWc1VXhSLzJU?=
+ =?utf-8?B?T1lhb3hNc2pudW1NOEVtaFRGMHRPck5aZ0ZHYTBrLzJHUjIyUnViWDVvVCt6?=
+ =?utf-8?B?VmttNUYraW5Pejd3MVQ4cUNEUVZHYzRpd0dWNTdwemZoRzFUZ0YwemNWYWhO?=
+ =?utf-8?B?aVNhYnM5WDFNMTNDcXVEdVRXd3FkVUtlWXV3MHRyR1gzZHIyT01XRVVucHcw?=
+ =?utf-8?Q?a2VkfsNjnhmoWHtYsPAETRY=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 073b119a-9d10-422d-ac17-08dbb35a1e09
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6231.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Sep 2023 06:17:50.0090
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Sep 2023 06:33:03.7119
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: U0cpcpGmMDMTCYHwm37bzP+XdTuZLFqXWY5niNNnMs9AxJ0/NDbnGStcY59BncbRzNV5VlUXO9YTZp1Ejug+aQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR11MB4638
+X-MS-Exchange-CrossTenant-UserPrincipalName: tayqJoZx3dh5LFC1ckiLYqXGs2bUMNrg1/cC5teccmW7coLkLlGDAJMeta7l7hw4oelj9Bx/ikpv6tFBjchBw52JycY6B0Ms+A0N67e7NpM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB7802
 X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On 2023-09-11 at 09:59:06 -0700, Reinette Chatre wrote:
+>Hi Maciej,
+>When I build the tests with this applied I encounter the following:
+>
+>resctrlfs.c: In function ‘write_schemata’:
+>resctrlfs.c:475:14: warning: implicit declaration of function ‘open’; did you mean ‘popen’? [-Wimplicit-function-declaration]
+>  475 |         fd = open(controlgroup, O_WRONLY);
+>      |              ^~~~
+>      |              popen
+>resctrlfs.c:475:33: error: ‘O_WRONLY’ undeclared (first use in this function)
+>  475 |         fd = open(controlgroup, O_WRONLY);
+>      |                                 ^~~~~~~~
+>resctrlfs.c:475:33: note: each undeclared identifier is reported only once for each function it appears in
 
+Hmm, that's odd. How do you build the tests?
 
-Hello,
+I use "make -C tools/testing/selftests/resctrl" while in the root kernel
+source directory. I tried to get the same error you experienced by
+compiling some dummy test program with "open" and "O_WRONLY". From the
+experiment I found that the "resctrl.h" header provides the declarations
+that are causing your errors.
 
-kernel test robot noticed "kernel-selftests.openat2.resolve_test.fail" on:
+>> diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
+>> index bd36ee206602..b0b14a5bcbf5 100644
+>> --- a/tools/testing/selftests/resctrl/resctrlfs.c
+>> +++ b/tools/testing/selftests/resctrl/resctrlfs.c
+>> @@ -488,9 +488,8 @@ int write_bm_pid_to_resctrl(pid_t bm_pid, char *ctrlgrp, char *mongrp,
+>>   */
+>>  int write_schemata(char *ctrlgrp, char *schemata, int cpu_no, char *resctrl_val)
+>>  {
+>> -	char controlgroup[1024], schema[1024], reason[64];
+>> -	int resource_id, ret = 0;
+>> -	FILE *fp;
+>> +	char controlgroup[1024], schema[1024], reason[128];
+>> +	int resource_id, fd, schema_len = -1, ret = 0;
+>>  
+>>  	if (strncmp(resctrl_val, MBA_STR, sizeof(MBA_STR)) &&
+>>  	    strncmp(resctrl_val, MBM_STR, sizeof(MBM_STR)) &&
+>> @@ -518,27 +517,30 @@ int write_schemata(char *ctrlgrp, char *schemata, int cpu_no, char *resctrl_val)
+>>  
+>>  	if (!strncmp(resctrl_val, CAT_STR, sizeof(CAT_STR)) ||
+>>  	    !strncmp(resctrl_val, CMT_STR, sizeof(CMT_STR)))
+>> -		sprintf(schema, "%s%d%c%s", "L3:", resource_id, '=', schemata);
+>> +		schema_len = snprintf(schema, sizeof(schema), "%s%d%c%s\n",
+>> +				      "L3:", resource_id, '=', schemata);
+>>  	if (!strncmp(resctrl_val, MBA_STR, sizeof(MBA_STR)) ||
+>>  	    !strncmp(resctrl_val, MBM_STR, sizeof(MBM_STR)))
+>> -		sprintf(schema, "%s%d%c%s", "MB:", resource_id, '=', schemata);
+>> +		schema_len = snprintf(schema, sizeof(schema), "%s%d%c%s\n",
+>> +				      "MB:", resource_id, '=', schemata);
+>>  
+>> -	fp = fopen(controlgroup, "w");
+>> -	if (!fp) {
+>> +	fd = open(controlgroup, O_WRONLY);
+>> +	if (!fd) {
+>>  		sprintf(reason, "Failed to open control group");
+>
+>It makes code easier to understand and maintain if it is kept
+>consistent. It is thus unexpected for open() error handling to
+>be untouched while write() error handling is modified. I think
+>the addition of errno in error handling of write() is helpful. 
+>Could you do the same for open()?
 
-commit: 58e2847ad2e6322a25dedf8b4549ff924baf8395 ("selftests: line buffer test program's stdout")
-https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
-
-
-[test failed on linus/master 0bb80ecc33a8fb5a682236443c1e740d5c917d1d]
-[test failed on linux-next/master 7bc675554773f09d88101bf1ccfc8537dc7c0be9]
-
-in testcase: kernel-selftests
-version: kernel-selftests-x86_64-60acb023-1_20230329
-with following parameters:
-
-	group: group-02
-
-
-
-compiler: gcc-12
-test machine: 36 threads 1 sockets Intel(R) Core(TM) i9-10980XE CPU @ 3.00GHz (Cascade Lake) with 32G memory
-
-(please refer to attached dmesg/kmsg for entire log/backtrace)
-
-
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <oliver.sang@intel.com>
-| Closes: https://lore.kernel.org/oe-lkp/202309121342.97e2f008-oliver.sang@intel.com
-
-
-besides kernel-selftests.openat2.resolve_test, we also observed
-
-ea09800bf17561a0 58e2847ad2e6322a25dedf8b454
----------------- ---------------------------
-       fail:runs  %reproduction    fail:runs
-           |             |             |
-           :6          100%           6:6     kernel-selftests.openat2.openat2_test.fail
-           :6          100%           6:6     kernel-selftests.openat2.resolve_test.fail
-
-which pass on parent commit.
-
-however, there are other tests such like below "perf_events: sigtrap_threads"
-are not impacted by this commit.
-
-we want to consult with you if there is some special config need to do after
-this commit? Thanks a lot!
-
-
-
-TAP version 13
-1..3
-# timeout set to 300
-# selftests: openat2: openat2_test
-# ==4052==ASan runtime does not come first in initial library list; you should either link runtime to your application or manually preload it with LD_PRELOAD.
-not ok 1 selftests: openat2: openat2_test # exit=1
-# timeout set to 300
-# selftests: openat2: resolve_test
-# ==4070==ASan runtime does not come first in initial library list; you should either link runtime to your application or manually preload it with LD_PRELOAD.
-not ok 2 selftests: openat2: resolve_test # exit=1
-
-...
-
-TAP version 13
-1..2
-# timeout set to 120
-# selftests: perf_events: sigtrap_threads
-# TAP version 13
-# 1..5
-# # Starting 5 tests from 1 test cases.
-# #  RUN           sigtrap_threads.remain_disabled ...
-# #            OK  sigtrap_threads.remain_disabled
-# ok 1 sigtrap_threads.remain_disabled
-
-...
-
-
-The kernel config and materials to reproduce are available at:
-https://download.01.org/0day-ci/archive/20230912/202309121342.97e2f008-oliver.sang@intel.com
-
-
+Okay, I'll add that, thanks.
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
-
+Kind regards
+Maciej Wieczór-Retman
