@@ -2,170 +2,106 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4251679C841
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Sep 2023 09:36:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E6C7779CA2F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Sep 2023 10:38:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229866AbjILHgX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 12 Sep 2023 03:36:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53650 "EHLO
+        id S232755AbjILIil (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 12 Sep 2023 04:38:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230148AbjILHgV (ORCPT
+        with ESMTP id S232812AbjILIil (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 12 Sep 2023 03:36:21 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32387E79
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 Sep 2023 00:36:17 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id ffacd0b85a97d-31f7c87353eso549417f8f.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 Sep 2023 00:36:17 -0700 (PDT)
+        Tue, 12 Sep 2023 04:38:41 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A945E7A;
+        Tue, 12 Sep 2023 01:38:37 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-991c786369cso709125266b.1;
+        Tue, 12 Sep 2023 01:38:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ffwll.ch; s=google; t=1694504175; x=1695108975; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=M+grCUostfIpNDbJCtZATyVfp717UCSAOFrm4GuSqa4=;
-        b=Zi6OvxxqPSYGMupXReZWbsSk1pSc16kc4OftahhHWPL1n7PvMwoivfdyoVwEIgyHw+
-         Y5K2UV1owEK8GmmcsrWP7TABUv1NIIBE4eFXXtmvrjFqusMyZVWNrvpWtAMxE+PbBK6Y
-         53mrBKWMvKUSvxMA2mHqexUkRmWpqaVTpomoE=
+        d=gmail.com; s=20221208; t=1694507915; x=1695112715; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=d5WzW7udVB3HdwrirrUGrjvkqjfIkPOdv3DY3SpLmXk=;
+        b=kprj7FtczO5+01Xw1n/tLGqFrn4h+aI1W4RCgmCVk+sgHNEZc0gI6y5r8U/p2JwwW5
+         ijqy/USEumr+x1/XvTAv1GXBTosc4MM0GtlQafqXNg8c74CNffK7KHZatwRgFQhTDHwW
+         ScZv7b/m1d2fmkZWNakXFByd5l9XhcMF4uey2lA/6ojOa2AkvQ8zeMOiaSVfI4KDesLN
+         Hnh7K1zD1SrDjHh7CX5mk1LYnzRQrbTwRqB4PowqDm4CAhigzyH9SiC793x3A5UD2ODu
+         HPXUiBGU7VLYLtGEMtKlVYdJZdvHx/3YF9NPODYyrspCwmX0Ck8LuIxnK0IjItnegm+D
+         6JJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694504175; x=1695108975;
-        h=in-reply-to:content-disposition:mime-version:references
-         :mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=M+grCUostfIpNDbJCtZATyVfp717UCSAOFrm4GuSqa4=;
-        b=BqwynOknBhObe2UuRJreZdXJ5H8ozwW7kpq0jNIJD/z42eT3goNrgmJysBmgjCnvSO
-         QfkNFikVUDqFG+8ClSzOtByzMgXI5+yO74IH3gLJOAddi2LRmo3cfQoS0tCySTUVRmEJ
-         ilifuofKptzln4JuMvvOL/jQ8xdrQLKKATp37KW7b/i5034CZXpE2aiioU4CPGP6d9pk
-         c7LOcV8Dx6oko+27ccfeVgyFAtoReMyMI51GuhHVXSax2v4LFsKjuxAUjch2Rmq05B1I
-         uU3MdDSU9Nxdl+duivNRiUJ12ybIW5iD8oMzW8x+ytJxW+B5X4BpKXFEiKNpsld0U+XK
-         K5pg==
-X-Gm-Message-State: AOJu0YzOT2VuJOYepO3oSKGfqY9IddPSKud4/WbGe3rxOsQ0HQuuZLFX
-        GyhyQqa0zvTxw4yo2s4RR3DxBA==
-X-Google-Smtp-Source: AGHT+IGxydkfPGJ6b1sjOo2veJypAVFwoUoaaZ8mu7ON6QOiYcwhv+yqb2kpDK9bW/DrJ1e3VPPNXQ==
-X-Received: by 2002:a05:6000:70a:b0:31f:84c9:d75f with SMTP id bs10-20020a056000070a00b0031f84c9d75fmr8444826wrb.4.1694504175484;
-        Tue, 12 Sep 2023 00:36:15 -0700 (PDT)
-Received: from phenom.ffwll.local ([2a02:168:57f4:0:efd0:b9e5:5ae6:c2fa])
-        by smtp.gmail.com with ESMTPSA id d6-20020adfef86000000b00317ddccb0d1sm12118428wro.24.2023.09.12.00.36.14
+        d=1e100.net; s=20230601; t=1694507915; x=1695112715;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=d5WzW7udVB3HdwrirrUGrjvkqjfIkPOdv3DY3SpLmXk=;
+        b=qZVBYYtIWwEVInH8hGiAszcRGWrrxYKTMKvIh9AfBZzwvUx2pqAXoi2vZekPPrKULZ
+         1rJmLgkn6Lv5O6PO9JMahv7ewml6u4zQ04w4F2rmB1XCnNYT+SWIqmRXxilKygvUfdKK
+         cru2aCXDZ6wYWVAAKrqmX3OLesRJZ9zsg8fmkn/hKNGYzuYIpR9hFVwws4FZbV9Ee0Of
+         3DpfXu/2f9KGASMg23A0dAAH0UPFjGXtmoNXL1JB6+1Ef/uMLwy1cSD6sfsB3NBQ7eXU
+         q259zZXsZ+D4Yx2hhrqJf/415NOcTNuwoVpNNKyODPZIvQuJ1KHoDWDEPOVwVZV5TsRd
+         JcsA==
+X-Gm-Message-State: AOJu0YyIX7ggiTBoYhauachN8gbtAAnpMFPW0CtSK20Rd1nexbuHD+rj
+        +K3BHh3g/imOtuxROr+GhL4=
+X-Google-Smtp-Source: AGHT+IEwPItuktnWOR0gh0mbE4XlHJQpgYLFMu1sfdxplQaopwaTpT2qalC3/qPX5N1G4uxUV65OHA==
+X-Received: by 2002:a17:906:5350:b0:9aa:1020:8c39 with SMTP id j16-20020a170906535000b009aa10208c39mr8166508ejo.18.1694507915324;
+        Tue, 12 Sep 2023 01:38:35 -0700 (PDT)
+Received: from lelloman-5950.. (host-87-10-35-251.retail.telecomitalia.it. [87.10.35.251])
+        by smtp.gmail.com with ESMTPSA id b10-20020a170906038a00b0099b76c3041csm6511726eja.7.2023.09.12.01.38.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Sep 2023 00:36:14 -0700 (PDT)
-Date:   Tue, 12 Sep 2023 09:36:12 +0200
-From:   Daniel Vetter <daniel@ffwll.ch>
-To:     Maxime Ripard <mripard@kernel.org>
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        =?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH 2/2] drm/tests: Flag slow tests as such
-Message-ID: <ZQAU7Juw5WM1LAAM@phenom.ffwll.local>
-Mail-Followup-To: Maxime Ripard <mripard@kernel.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>, David Airlie <airlied@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        =?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20230911-kms-slow-tests-v1-0-d3800a69a1a1@kernel.org>
- <20230911-kms-slow-tests-v1-2-d3800a69a1a1@kernel.org>
+        Tue, 12 Sep 2023 01:38:34 -0700 (PDT)
+From:   Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+To:     dan.carpenter@linaro.org, akpm@linux-foundation.org,
+        kernel-team@meta.com, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+Subject: [PATCH] selftests: cgroup: fix test_zswap error path and meaningless check
+Date:   Tue, 12 Sep 2023 10:38:00 +0200
+Message-Id: <20230912083800.57435-1-cerasuolodomenico@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230911-kms-slow-tests-v1-2-d3800a69a1a1@kernel.org>
-X-Operating-System: Linux phenom 6.4.0-3-amd64 
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Sep 11, 2023 at 11:51:06AM +0200, Maxime Ripard wrote:
-> Kunit recently gained a speed attribute that allows to filter out slow
-> tests. A slow test is defined in the documentation as a test taking more
-> than a second to execute.
-> 
-> Let's flag the few tests that are doing so on my machine when running:
-> 
-> ./tools/testing/kunit/kunit.py run --kunitconfig=drivers/gpu/drm/tests \
-> 	--cross_compile aarch64-linux-gnu- --arch arm64
-> 
-> Suggested-by: David Gow <davidgow@google.com>
-> Signed-off-by: Maxime Ripard <mripard@kernel.org>
+Replace destruction paths with simple returns before the test cgroup is
+created, there is nothing to free or destroy at that point.
 
-Ugh ... not a fan.
+Remove pointless check, stored_pages is a size_t and cannot be < 0.
 
-igt has a really bad habit of making disastrously combinatorial tests with
-impossible runtimes, and then just filtering these out so it's still fast.
+Fixes: a549f9f31561 ("selftests: cgroup: add test_zswap with no kmem bypass test")
+Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
+---
+ tools/testing/selftests/cgroup/test_zswap.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-Maybe some stress tests for overall system make sense like this, but
-absolutely not for unit tests. And I did spot check some of these, they're
-just combinatorial explosions with large repetition counts and some fun
-stuff like going through prime numbers because surely that's a good idea.
-
-Imo delete them all, and if that causes a real gap in coverage, ask the
-authors to write some actual good unit tests for these corner cases.
-
-Cheers, Sima
-> ---
->  drivers/gpu/drm/tests/drm_buddy_test.c |  2 +-
->  drivers/gpu/drm/tests/drm_mm_test.c    | 14 +++++++-------
->  2 files changed, 8 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/tests/drm_buddy_test.c b/drivers/gpu/drm/tests/drm_buddy_test.c
-> index 09ee6f6af896..6f79cde2df55 100644
-> --- a/drivers/gpu/drm/tests/drm_buddy_test.c
-> +++ b/drivers/gpu/drm/tests/drm_buddy_test.c
-> @@ -742,7 +742,7 @@ static struct kunit_case drm_buddy_tests[] = {
->  	KUNIT_CASE(drm_test_buddy_alloc_range),
->  	KUNIT_CASE(drm_test_buddy_alloc_optimistic),
->  	KUNIT_CASE(drm_test_buddy_alloc_pessimistic),
-> -	KUNIT_CASE(drm_test_buddy_alloc_smoke),
-> +	KUNIT_CASE_SLOW(drm_test_buddy_alloc_smoke),
->  	KUNIT_CASE(drm_test_buddy_alloc_pathological),
->  	{}
->  };
-> diff --git a/drivers/gpu/drm/tests/drm_mm_test.c b/drivers/gpu/drm/tests/drm_mm_test.c
-> index 186b28dc7038..c1e662c2a76c 100644
-> --- a/drivers/gpu/drm/tests/drm_mm_test.c
-> +++ b/drivers/gpu/drm/tests/drm_mm_test.c
-> @@ -2228,23 +2228,23 @@ module_param(max_prime, uint, 0400);
->  static struct kunit_case drm_mm_tests[] = {
->  	KUNIT_CASE(drm_test_mm_init),
->  	KUNIT_CASE(drm_test_mm_debug),
-> -	KUNIT_CASE(drm_test_mm_reserve),
-> -	KUNIT_CASE(drm_test_mm_insert),
-> -	KUNIT_CASE(drm_test_mm_replace),
-> -	KUNIT_CASE(drm_test_mm_insert_range),
-> +	KUNIT_CASE_SLOW(drm_test_mm_reserve),
-> +	KUNIT_CASE_SLOW(drm_test_mm_insert),
-> +	KUNIT_CASE_SLOW(drm_test_mm_replace),
-> +	KUNIT_CASE_SLOW(drm_test_mm_insert_range),
->  	KUNIT_CASE(drm_test_mm_frag),
->  	KUNIT_CASE(drm_test_mm_align),
->  	KUNIT_CASE(drm_test_mm_align32),
->  	KUNIT_CASE(drm_test_mm_align64),
-> -	KUNIT_CASE(drm_test_mm_evict),
-> +	KUNIT_CASE_SLOW(drm_test_mm_evict),
->  	KUNIT_CASE(drm_test_mm_evict_range),
->  	KUNIT_CASE(drm_test_mm_topdown),
->  	KUNIT_CASE(drm_test_mm_bottomup),
->  	KUNIT_CASE(drm_test_mm_lowest),
->  	KUNIT_CASE(drm_test_mm_highest),
->  	KUNIT_CASE(drm_test_mm_color),
-> -	KUNIT_CASE(drm_test_mm_color_evict),
-> -	KUNIT_CASE(drm_test_mm_color_evict_range),
-> +	KUNIT_CASE_SLOW(drm_test_mm_color_evict),
-> +	KUNIT_CASE_SLOW(drm_test_mm_color_evict_range),
->  	{}
->  };
->  
-> 
-> -- 
-> 2.41.0
-> 
-
+diff --git a/tools/testing/selftests/cgroup/test_zswap.c b/tools/testing/selftests/cgroup/test_zswap.c
+index 49def87a909b..5257106776d5 100644
+--- a/tools/testing/selftests/cgroup/test_zswap.c
++++ b/tools/testing/selftests/cgroup/test_zswap.c
+@@ -178,10 +178,10 @@ static int test_no_kmem_bypass(const char *root)
+ 
+ 	/* Set up test memcg */
+ 	if (cg_write(root, "cgroup.subtree_control", "+memory"))
+-		goto out;
++		return KSFT_FAIL;
+ 	test_group = cg_name(root, "kmem_bypass_test");
+ 	if (!test_group)
+-		goto out;
++		return KSFT_FAIL;
+ 
+ 	/* Spawn memcg child and wait for it to allocate */
+ 	set_min_free_kb(min_free_kb_low);
+@@ -208,8 +208,6 @@ static int test_no_kmem_bypass(const char *root)
+ 		free(trigger_allocation);
+ 		if (get_zswap_stored_pages(&stored_pages))
+ 			break;
+-		if (stored_pages < 0)
+-			break;
+ 		/* If memory was pushed to zswap, verify it belongs to memcg */
+ 		if (stored_pages > stored_pages_threshold) {
+ 			int zswapped = cg_read_key_long(test_group, "memory.stat", "zswapped ");
 -- 
-Daniel Vetter
-Software Engineer, Intel Corporation
-http://blog.ffwll.ch
+2.34.1
+
