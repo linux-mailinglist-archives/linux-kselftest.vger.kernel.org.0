@@ -2,115 +2,74 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED88E79D2D2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Sep 2023 15:51:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D0BAE79D2EA
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Sep 2023 15:54:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235220AbjILNvx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 12 Sep 2023 09:51:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56370 "EHLO
+        id S235011AbjILNyj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 12 Sep 2023 09:54:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235673AbjILNvD (ORCPT
+        with ESMTP id S234939AbjILNyi (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 12 Sep 2023 09:51:03 -0400
+        Tue, 12 Sep 2023 09:54:38 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E4EFD10D7;
-        Tue, 12 Sep 2023 06:50:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 91B5010CE;
+        Tue, 12 Sep 2023 06:54:34 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C146EC15;
-        Tue, 12 Sep 2023 06:51:35 -0700 (PDT)
-Received: from e125769.cambridge.arm.com (e125769.cambridge.arm.com [10.1.196.26])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 642633F5A1;
-        Tue, 12 Sep 2023 06:50:56 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 764301007;
+        Tue, 12 Sep 2023 06:55:11 -0700 (PDT)
+Received: from [10.1.32.154] (XHFQ2J9959.cambridge.arm.com [10.1.32.154])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7DD4A3F5A1;
+        Tue, 12 Sep 2023 06:54:32 -0700 (PDT)
+Message-ID: <7ce438e4-2f6c-4644-adff-b8cc95d8ee73@arm.com>
+Date:   Tue, 12 Sep 2023 14:54:31 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [linus:master] [selftests] 58e2847ad2:
+ kernel-selftests.openat2.resolve_test.fail
+Content-Language: en-GB
 From:   Ryan Roberts <ryan.roberts@arm.com>
-To:     Shuah Khan <shuah@kernel.org>, Tom Rix <trix@redhat.com>,
-        kernel test robot <oliver.sang@intel.com>,
+To:     kernel test robot <oliver.sang@intel.com>
+Cc:     oe-lkp@lists.linux.dev, lkp@intel.com,
+        linux-kernel@vger.kernel.org,
         Andrew Morton <akpm@linux-foundation.org>,
         Mark Brown <broonie@kernel.org>,
         David Hildenbrand <david@redhat.com>,
         Florent Revest <revest@chromium.org>,
-        =?UTF-8?q?J=C3=A9r=C3=B4me=20Glisse?= <jglisse@redhat.com>,
+        =?UTF-8?B?SsOpcsO0bWUgR2xpc3Nl?= <jglisse@redhat.com>,
         John Hubbard <jhubbard@nvidia.com>,
-        Peter Xu <peterx@redhat.com>
-Cc:     Ryan Roberts <ryan.roberts@arm.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, oe-lkp@lists.linux.dev, lkp@intel.com
-Subject: [PATCH v1] selftests: Link libasan statically for tests with -fsanitize=address
-Date:   Tue, 12 Sep 2023 14:50:48 +0100
-Message-Id: <20230912135048.1755771-1-ryan.roberts@arm.com>
-X-Mailer: git-send-email 2.25.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kselftest@vger.kernel.org
+References: <202309121342.97e2f008-oliver.sang@intel.com>
+ <2a503271-0d44-40ae-8d13-65aba0345d4a@arm.com>
+In-Reply-To: <2a503271-0d44-40ae-8d13-65aba0345d4a@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When dynamically linking, Address Sanitizer requires its library to be
-the first one to be loaded; this is apparently to ensure that every call
-to malloc is intercepted. If using LD_PRELOAD, those listed libraries
-will be loaded before the libraries listed in the program's ELF and will
-therefore violate this requirement, leading to the below failure and
-output from ASan.
+On 12/09/2023 13:16, Ryan Roberts wrote:
+> On 12/09/2023 07:17, kernel test robot wrote:
+>>
+>>
+>> Hello,
+>>
+>> kernel test robot noticed "kernel-selftests.openat2.resolve_test.fail" on:
+>>
+>> commit: 58e2847ad2e6322a25dedf8b4549ff924baf8395 ("selftests: line buffer test program's stdout")
+>> https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
+> 
+> Thanks for the report - I'm looking into this now and will get back to you once
+> I have some more info.
 
-commit 58e2847ad2e6 ("selftests: line buffer test program's stdout")
-modified the kselftest runner to force line buffering by forcing the
-test programs to run through `stdbuf`. It turns out that stdbuf
-implements line buffering by injecting a library via LD_PRELOAD.
-Therefore selftests that use ASan started failing.
+I found the problem and sent a patch to the list with the explanation of what it
+going on. Sorry about that!
 
-Fix this by statically linking libasan in the affected test programs,
-using the `-static-libasan` option. Note this is already the default for
-Clang, but not got GCC.
+https://lore.kernel.org/lkml/20230912135048.1755771-1-ryan.roberts@arm.com/
 
-Test output sample for failing case:
-
-  TAP version 13
-  1..3
-  # timeout set to 300
-  # selftests: openat2: openat2_test
-  # ==4052==ASan runtime does not come first in initial library list;
-  you should either link runtime to your application or manually preload
-  it with LD_PRELOAD.
-  not ok 1 selftests: openat2: openat2_test # exit=1
-  # timeout set to 300
-  # selftests: openat2: resolve_test
-  # ==4070==ASan runtime does not come first in initial library list;
-  you should either link runtime to your application or manually preload
-  it with LD_PRELOAD.
-  not ok 2 selftests: openat2: resolve_test # exit=1
-
-Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
-Fixes: 58e2847ad2e6 ("selftests: line buffer test program's stdout")
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Closes: https://lore.kernel.org/oe-lkp/202309121342.97e2f008-oliver.sang@intel.com
----
- tools/testing/selftests/fchmodat2/Makefile | 2 +-
- tools/testing/selftests/openat2/Makefile   | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/fchmodat2/Makefile b/tools/testing/selftests/fchmodat2/Makefile
-index 20839f8e43f2..71ec34bf1501 100644
---- a/tools/testing/selftests/fchmodat2/Makefile
-+++ b/tools/testing/selftests/fchmodat2/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0-or-later
-
--CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined $(KHDR_INCLUDES)
-+CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined -static-libasan $(KHDR_INCLUDES)
- TEST_GEN_PROGS := fchmodat2_test
-
- include ../lib.mk
-diff --git a/tools/testing/selftests/openat2/Makefile b/tools/testing/selftests/openat2/Makefile
-index 843ba56d8e49..254d676a2689 100644
---- a/tools/testing/selftests/openat2/Makefile
-+++ b/tools/testing/selftests/openat2/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0-or-later
-
--CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined
-+CFLAGS += -Wall -O2 -g -fsanitize=address -fsanitize=undefined -static-libasan
- TEST_GEN_PROGS := openat2_test resolve_test rename_attack_test
-
- include ../lib.mk
---
-2.25.1
+> 
+> Thanks,
+> Ryan
+> 
 
