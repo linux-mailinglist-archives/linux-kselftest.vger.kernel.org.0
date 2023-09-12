@@ -2,66 +2,66 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18BE079D760
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Sep 2023 19:18:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 560D779D7DF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Sep 2023 19:46:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232252AbjILRSL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 12 Sep 2023 13:18:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51170 "EHLO
+        id S231812AbjILRqg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 12 Sep 2023 13:46:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233220AbjILRSK (ORCPT
+        with ESMTP id S237143AbjILRqc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 12 Sep 2023 13:18:10 -0400
+        Tue, 12 Sep 2023 13:46:32 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3B7B10F6;
-        Tue, 12 Sep 2023 10:18:06 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC702C433C7;
-        Tue, 12 Sep 2023 17:18:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1694539084;
-        bh=c2Ov69hO0AC4q1Ltdb0qHvD5gAxgfLF2qaudopzkkCk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=kezSafD+vHrENLsiYBzEm37IOQg3Bw6BjYSSsBdcd588oUNoikJNXGPLkGNbD3JWB
-         zIqxiSblsWziF/22AK6lLQFj/e0GOO1sZtNW0434skNnVWcKK9yPekM98UVsBbQg+d
-         LPr0653efBwugzZ06KokYAw83E8DUPVypy9W+fXI=
-Date:   Tue, 12 Sep 2023 10:18:02 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-Cc:     dan.carpenter@linaro.org, kernel-team@meta.com,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] selftests: cgroup: fix test_zswap error path and
- meaningless check
-Message-Id: <20230912101802.25b280ac306694ff02001706@linux-foundation.org>
-In-Reply-To: <20230912083800.57435-1-cerasuolodomenico@gmail.com>
-References: <20230912083800.57435-1-cerasuolodomenico@gmail.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61AC2E59;
+        Tue, 12 Sep 2023 10:46:28 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6CB3C433C8;
+        Tue, 12 Sep 2023 17:46:26 +0000 (UTC)
+Date:   Tue, 12 Sep 2023 13:46:44 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Beau Belgrave <beaub@linux.microsoft.com>
+Cc:     Mark Brown <broonie@kernel.org>, shuah@kernel.org,
+        mhiramat@kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, naresh.kamboju@linaro.org,
+        anders.roxell@linaro.org, arnd@arndb.de,
+        Shuah Khan <skhan@linuxfoundation.org>
+Subject: Re: [PATCH v2] selftests/user_events: Fix failures when user_events
+ is not installed
+Message-ID: <20230912134644.3b7959b9@gandalf.local.home>
+In-Reply-To: <20230912171234.GA3704-beaub@linux.microsoft.com>
+References: <20230908201916.562-1-beaub@linux.microsoft.com>
+        <29fce076-746c-4650-8358-b4e0fa215cf7@sirena.org.uk>
+        <20230908212712.211a4964@gandalf.local.home>
+        <20230912171234.GA3704-beaub@linux.microsoft.com>
+X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 12 Sep 2023 10:38:00 +0200 Domenico Cerasuolo <cerasuolodomenico@gmail.com> wrote:
+On Tue, 12 Sep 2023 10:12:34 -0700
+Beau Belgrave <beaub@linux.microsoft.com> wrote:
 
-> Replace destruction paths with simple returns before the test cgroup is
-> created, there is nothing to free or destroy at that point.
-> 
-> Remove pointless check, stored_pages is a size_t and cannot be < 0.
-> 
-> ...
->
-> @@ -208,8 +208,6 @@ static int test_no_kmem_bypass(const char *root)
->  		free(trigger_allocation);
->  		if (get_zswap_stored_pages(&stored_pages))
->  			break;
-> -		if (stored_pages < 0)
-> -			break;
->  		/* If memory was pushed to zswap, verify it belongs to memcg */
->  		if (stored_pages > stored_pages_threshold) {
->  			int zswapped = cg_read_key_long(test_group, "memory.stat", "zswapped ");
 
-stored_pages will be set to -1 on error.  It would be better to cast
-stored_pages to ssize_t in the check, rather than simply ignoring
-errors?
+> > I guess I was wrong and some people do care ;-)
+> > 
+> > -- Steve  
+> 
+> It looks like this change got applied [1] to the fixes branch of
+> linux-kselftest. I can either send a V3 with this addressed or build a
+> patch based upon the fixes branch on top of this one to address it.
+> 
+> Which way do you all prefer?
+> 
+> Thanks,
+> -Beau
+> 
+> 1. https://git.kernel.org/shuah/linux-kselftest/c/a06023a8f78d
+
+I'm guessing that this would go through Shuah's tree right? So it would be
+up to her to decide that.
+
+-- Steve
+
