@@ -2,234 +2,163 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 919CA79DD21
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Sep 2023 02:27:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC2A479DD9B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Sep 2023 03:34:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231393AbjIMA1b (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 12 Sep 2023 20:27:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38858 "EHLO
+        id S236790AbjIMBek (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 12 Sep 2023 21:34:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230105AbjIMA1a (ORCPT
+        with ESMTP id S231414AbjIMBej (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 12 Sep 2023 20:27:30 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BA6C10CC;
-        Tue, 12 Sep 2023 17:27:26 -0700 (PDT)
-Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 38D08gwA019846;
-        Wed, 13 Sep 2023 00:27:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=vJ47LIlyMN6BcmeJQaZ+TSvAsnWDFx+CGPLVYoUMJMg=;
- b=Xai9qt3q8ndV/PNBfxS7QCXdrMaeQiAerixJV6Qt4NKeTNsrmH+U3pSl/xfdqVWDLP7o
- wkI4XsWMNAQSuLlC4Bn9Qllc/jmm8KOS1idnQPh0PKCGLLOVkbBtymf/6iUJj3LDfC1+
- jTMTrx1PjxbwcgTdEKKbi8lIh0jNoIp8ld4DPVN+L4bhDQUHpWUfKpW1t6zkFJIQSpmt
- kNAoRTVxxYyLSY9RfyNz8olm+cruSF8b6ZeRLxPVJWTkQReHcpVkFiOTOVEEVy0+BCBy
- PhTrub0p/b1To2XW06S/YYyW03Tw/BZzfNPVxJORqeAVhEVkCorCmmyEBXghUGumnsd/ bw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3t31w18rp6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 13 Sep 2023 00:27:01 +0000
-Received: from m0353724.ppops.net (m0353724.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 38D0GGLG015456;
-        Wed, 13 Sep 2023 00:27:00 GMT
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3t31w18rp0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 13 Sep 2023 00:27:00 +0000
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-        by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 38CMOSwJ011967;
-        Wed, 13 Sep 2023 00:26:59 GMT
-Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
-        by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3t15r1xpht-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 13 Sep 2023 00:26:59 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 38D0QvIY15270576
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 13 Sep 2023 00:26:57 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id AE8D92004B;
-        Wed, 13 Sep 2023 00:26:57 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id ACB3820040;
-        Wed, 13 Sep 2023 00:26:56 +0000 (GMT)
-Received: from ozlabs.au.ibm.com (unknown [9.192.253.14])
-        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Wed, 13 Sep 2023 00:26:56 +0000 (GMT)
-Received: from [10.61.2.107] (haven.au.ibm.com [9.192.254.114])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-        (No client certificate requested)
-        by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 9206B600D2;
-        Wed, 13 Sep 2023 10:26:53 +1000 (AEST)
-Message-ID: <d603d3b3-7563-d1c9-5086-c5bb78ea2e52@linux.ibm.com>
-Date:   Wed, 13 Sep 2023 10:26:53 +1000
+        Tue, 12 Sep 2023 21:34:39 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D929D10FE;
+        Tue, 12 Sep 2023 18:34:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694568875; x=1726104875;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BWOxUPW3HtPNFgEFOHoQhbd+ni/5DnSj2ZCuh3rTtAc=;
+  b=gc2/i1+a6Ggyong+Hyi3NBuVgxJoss5mBmJyoxlsxTOHqcqxLK3JD2mU
+   zdNdExS27EO+uNynKx9dGD8/peBB1E/YQQ9k8QCLIjqAod3+qrvdUV4SW
+   7cxnD6vzBjcnpDtBePMb2wt+sbOf71KF2Lvku4OFEHVPUjBIDvfo60HtE
+   xgeG84dvIf0RYnGzD5tdMJIpW1/2Lz2yrbNdvHAOtGAG62F8N3Lf+s0BY
+   Kj2+CnC+7cMbHI2tTpdTVEl9AV9nGa8FS3bTzOA0pUkilRjV4wGfFYUBA
+   ukaN5PTrx19/KFX4a+3roCuq0vWMo0sshLhUeCW5oBY/C2hTlrsu3R/aL
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="375868416"
+X-IronPort-AV: E=Sophos;i="6.02,141,1688454000"; 
+   d="scan'208";a="375868416"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Sep 2023 18:34:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="867581317"
+X-IronPort-AV: E=Sophos;i="6.02,141,1688454000"; 
+   d="scan'208";a="867581317"
+Received: from lkp-server02.sh.intel.com (HELO 47e905db7d2b) ([10.239.97.151])
+  by orsmga004.jf.intel.com with ESMTP; 12 Sep 2023 18:34:29 -0700
+Received: from kbuild by 47e905db7d2b with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qgElv-0000Zb-2H;
+        Wed, 13 Sep 2023 01:34:27 +0000
+Date:   Wed, 13 Sep 2023 09:34:19 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Meng Li <li.meng@amd.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Huang Rui <ray.huang@amd.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-acpi@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Shimmer Huang <shimmer.huang@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>, Meng Li <li.meng@amd.com>
+Subject: Re: [PATCH V6 1/7] x86: Drop CPU_SUP_INTEL from SCHED_MC_PRIO for
+ the expansion.
+Message-ID: <202309130938.dmI2pWUB-lkp@intel.com>
+References: <20230908074653.2799055-2-li.meng@amd.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH v2 5/7] tools/perf: fix Python string escapes
-To:     Adrian Hunter <adrian.hunter@intel.com>,
-        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, llvm@lists.linux.dev,
-        linux-pm@vger.kernel.org, bpf@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     Jonathan Corbet <corbet@lwn.net>, Ian Abbott <abbotti@mev.co.uk>,
-        H Hartley Sweeten <hsweeten@visionengravers.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Jan Kiszka <jan.kiszka@siemens.com>,
-        Kieran Bingham <kbingham@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        linux-perf-users@vger.kernel.org,
-        Todd E Brandt <todd.e.brandt@linux.intel.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
-References: <20230912060801.95533-1-bgray@linux.ibm.com>
- <20230912060801.95533-6-bgray@linux.ibm.com>
- <340eae90-d270-5e52-4982-a67459bc46dd@intel.com>
-Content-Language: en-US, en-AU
-From:   Benjamin Gray <bgray@linux.ibm.com>
-In-Reply-To: <340eae90-d270-5e52-4982-a67459bc46dd@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: nPp4DIV1vcd4fwS4D0Cqs57ORl3eAsK5
-X-Proofpoint-ORIG-GUID: AEImhDdKX-tnhwvE_4BGBdHirF0d-OVB
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.267,Aquarius:18.0.957,Hydra:6.0.601,FMLib:17.11.176.26
- definitions=2023-09-12_23,2023-09-05_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- bulkscore=0 adultscore=0 suspectscore=0 priorityscore=1501 clxscore=1015
- impostorscore=0 mlxscore=0 spamscore=0 malwarescore=0 mlxlogscore=999
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2308100000 definitions=main-2309120205
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230908074653.2799055-2-li.meng@amd.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 12/9/23 8:56 pm, Adrian Hunter wrote:
-> On 12/09/23 09:07, Benjamin Gray wrote:
->> diff --git a/tools/perf/pmu-events/jevents.py b/tools/perf/pmu-events/jevents.py
->> index a7e88332276d..980f080a5a2c 100755
->> --- a/tools/perf/pmu-events/jevents.py
->> +++ b/tools/perf/pmu-events/jevents.py
->> @@ -83,7 +83,7 @@ def c_len(s: str) -> int:
->>     """Return the length of s a C string
->>   
->>     This doesn't handle all escape characters properly. It first assumes
->> -  all \ are for escaping, it then adjusts as it will have over counted
->> +  all \\ are for escaping, it then adjusts as it will have over counted
-> 
-> It looks like the whole string should be a raw string
-> 
-...
->> -				s = value.replace("%", "\%")
->> -				s = s.replace("_", "\_")
->> +				s = value.replace("%", "\\%")
->> +				s = s.replace("_", "\\_")
-> 
-> Raw strings seem more readable, so could be
-> used here too
+Hi Meng,
 
-Yeah, sounds good. I normally use r strings only for regex, but there 
-shouldn't be any ambiguity here (it might have been misleading if the 
-search argument to replace looked like a regex).
+kernel test robot noticed the following build errors:
 
-Having the docstring be an r string is a good catch. There's probably a 
-few like that in the kernel, but finding them is a little more 
-complicated because they might be 'valid' syntax (e.g., the '\000' just 
-becomes a null byte. This series is focused on the syntax errors though, 
-so I'll just leave it be.
+[auto build test ERROR on rafael-pm/linux-next]
+[also build test ERROR on tip/x86/core linus/master v6.6-rc1 next-20230912]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-How is the following?
----
-Subject: [PATCH] tools/perf: fix Python string escapes
+url:    https://github.com/intel-lab-lkp/linux/commits/Meng-Li/x86-Drop-CPU_SUP_INTEL-from-SCHED_MC_PRIO-for-the-expansion/20230908-154939
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20230908074653.2799055-2-li.meng%40amd.com
+patch subject: [PATCH V6 1/7] x86: Drop CPU_SUP_INTEL from SCHED_MC_PRIO for the expansion.
+config: i386-buildonly-randconfig-004-20230913 (https://download.01.org/0day-ci/archive/20230913/202309130938.dmI2pWUB-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230913/202309130938.dmI2pWUB-lkp@intel.com/reproduce)
 
-Python 3.6 introduced a DeprecationWarning for invalid escape sequences.
-This is upgraded to a SyntaxWarning in Python 3.12, and will eventually
-be a syntax error.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309130938.dmI2pWUB-lkp@intel.com/
 
-Fix these now to get ahead of it before it's an error.
+All errors (new ones prefixed by >>):
 
-Signed-off-by: Benjamin Gray <bgray@linux.ibm.com>
----
-  tools/perf/pmu-events/jevents.py                 | 2 +-
-  tools/perf/scripts/python/arm-cs-trace-disasm.py | 4 ++--
-  tools/perf/scripts/python/compaction-times.py    | 2 +-
-  tools/perf/scripts/python/exported-sql-viewer.py | 4 ++--
-  4 files changed, 6 insertions(+), 6 deletions(-)
+   In file included from drivers/cpufreq/amd-pstate.c:41:
+>> include/acpi/processor.h:226:9: error: unknown type name 'phys_cpuid_t'
+     226 |         phys_cpuid_t phys_id;   /* CPU hardware ID such as APIC ID for x86 */
+         |         ^~~~~~~~~~~~
+   include/acpi/processor.h:355:1: error: unknown type name 'phys_cpuid_t'
+     355 | phys_cpuid_t acpi_get_phys_id(acpi_handle, int type, u32 acpi_id);
+         | ^~~~~~~~~~~~
+   include/acpi/processor.h:356:1: error: unknown type name 'phys_cpuid_t'
+     356 | phys_cpuid_t acpi_map_madt_entry(u32 acpi_id);
+         | ^~~~~~~~~~~~
+   include/acpi/processor.h:357:20: error: unknown type name 'phys_cpuid_t'
+     357 | int acpi_map_cpuid(phys_cpuid_t phys_id, u32 acpi_id);
+         |                    ^~~~~~~~~~~~
+   drivers/cpufreq/amd-pstate.c: In function 'amd_pstate_acpi_pm_profile_server':
+   drivers/cpufreq/amd-pstate.c:1076:17: error: 'acpi_gbl_FADT' undeclared (first use in this function); did you mean 'acpi_table_fadt'?
+    1076 |         switch (acpi_gbl_FADT.preferred_profile) {
+         |                 ^~~~~~~~~~~~~
+         |                 acpi_table_fadt
+   drivers/cpufreq/amd-pstate.c:1076:17: note: each undeclared identifier is reported only once for each function it appears in
+   drivers/cpufreq/amd-pstate.c: In function 'amd_pstate_acpi_pm_profile_undefined':
+   drivers/cpufreq/amd-pstate.c:1087:13: error: 'acpi_gbl_FADT' undeclared (first use in this function); did you mean 'acpi_table_fadt'?
+    1087 |         if (acpi_gbl_FADT.preferred_profile == PM_UNSPECIFIED)
+         |             ^~~~~~~~~~~~~
+         |             acpi_table_fadt
 
-diff --git a/tools/perf/pmu-events/jevents.py 
-b/tools/perf/pmu-events/jevents.py
-index a7e88332276d..1b4519333a28 100755
---- a/tools/perf/pmu-events/jevents.py
-+++ b/tools/perf/pmu-events/jevents.py
-@@ -80,7 +80,7 @@ def file_name_to_table_name(prefix: str, parents: 
-Sequence[str],
+Kconfig warnings: (for reference only)
+   WARNING: unmet direct dependencies detected for X86_AMD_PSTATE
+   Depends on [n]: CPU_FREQ [=y] && X86 [=y] && ACPI [=n]
+   Selected by [y]:
+   - SCHED_MC_PRIO [=y] && SCHED_MC [=y] && CPU_SUP_AMD [=y]
+   WARNING: unmet direct dependencies detected for VIDEO_OV7640
+   Depends on [n]: MEDIA_SUPPORT [=y] && VIDEO_DEV [=y] && VIDEO_CAMERA_SENSOR [=n]
+   Selected by [y]:
+   - VIDEO_GO7007 [=y] && MEDIA_SUPPORT [=y] && MEDIA_USB_SUPPORT [=y] && MEDIA_ANALOG_TV_SUPPORT [=y] && VIDEO_DEV [=y] && I2C [=y] && SND [=y] && USB [=y] && MEDIA_SUBDRV_AUTOSELECT [=y] && MEDIA_CAMERA_SUPPORT [=y]
 
 
-  def c_len(s: str) -> int:
--  """Return the length of s a C string
-+  r"""Return the length of s a C string
+vim +/phys_cpuid_t +226 include/acpi/processor.h
 
-    This doesn't handle all escape characters properly. It first assumes
-    all \ are for escaping, it then adjusts as it will have over counted
-diff --git a/tools/perf/scripts/python/arm-cs-trace-disasm.py 
-b/tools/perf/scripts/python/arm-cs-trace-disasm.py
-index d59ff53f1d94..de58991c78bb 100755
---- a/tools/perf/scripts/python/arm-cs-trace-disasm.py
-+++ b/tools/perf/scripts/python/arm-cs-trace-disasm.py
-@@ -45,8 +45,8 @@ parser = OptionParser(option_list=option_list)
-  # Initialize global dicts and regular expression
-  disasm_cache = dict()
-  cpu_data = dict()
--disasm_re = re.compile("^\s*([0-9a-fA-F]+):")
--disasm_func_re = re.compile("^\s*([0-9a-fA-F]+)\s.*:")
-+disasm_re = re.compile(r"^\s*([0-9a-fA-F]+):")
-+disasm_func_re = re.compile(r"^\s*([0-9a-fA-F]+)\s.*:")
-  cache_size = 64*1024
+^1da177e4c3f41 Linus Torvalds    2005-04-16  222  
+^1da177e4c3f41 Linus Torvalds    2005-04-16  223  struct acpi_processor {
+^1da177e4c3f41 Linus Torvalds    2005-04-16  224  	acpi_handle handle;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  225  	u32 acpi_id;
+828aef376d7a12 Catalin Marinas   2015-03-24 @226  	phys_cpuid_t phys_id;	/* CPU hardware ID such as APIC ID for x86 */
+af8f3f514d193e Hanjun Guo        2015-01-04  227  	u32 id;		/* CPU logical ID allocated by OS */
+^1da177e4c3f41 Linus Torvalds    2005-04-16  228  	u32 pblk;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  229  	int performance_platform_limit;
+01854e697a77a4 Luming Yu         2007-05-26  230  	int throttling_platform_limit;
+ff55a9cebab024 Len Brown         2007-06-02  231  	/* 0 - states 0..n-th state available */
+01854e697a77a4 Luming Yu         2007-05-26  232  
+^1da177e4c3f41 Linus Torvalds    2005-04-16  233  	struct acpi_processor_flags flags;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  234  	struct acpi_processor_power power;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  235  	struct acpi_processor_performance *performance;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  236  	struct acpi_processor_throttling throttling;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  237  	struct acpi_processor_limit limit;
+d9460fd227ed2c Zhang Rui         2008-01-17  238  	struct thermal_cooling_device *cdev;
+ac212b6980d8d5 Rafael J. Wysocki 2013-05-03  239  	struct device *dev; /* Processor device. */
+3000ce3c52f8b8 Rafael J. Wysocki 2019-10-16  240  	struct freq_qos_request perflib_req;
+3000ce3c52f8b8 Rafael J. Wysocki 2019-10-16  241  	struct freq_qos_request thermal_req;
+^1da177e4c3f41 Linus Torvalds    2005-04-16  242  };
+^1da177e4c3f41 Linus Torvalds    2005-04-16  243  
 
-  glb_source_file_name	= None
-diff --git a/tools/perf/scripts/python/compaction-times.py 
-b/tools/perf/scripts/python/compaction-times.py
-index 2560a042dc6f..9401f7c14747 100644
---- a/tools/perf/scripts/python/compaction-times.py
-+++ b/tools/perf/scripts/python/compaction-times.py
-@@ -260,7 +260,7 @@ def pr_help():
-
-  comm_re = None
-  pid_re = None
--pid_regex = "^(\d*)-(\d*)$|^(\d*)$"
-+pid_regex = r"^(\d*)-(\d*)$|^(\d*)$"
-
-  opt_proc = popt.DISP_DFL
-  opt_disp = topt.DISP_ALL
-diff --git a/tools/perf/scripts/python/exported-sql-viewer.py 
-b/tools/perf/scripts/python/exported-sql-viewer.py
-index 13f2d8a81610..78763531fe5a 100755
---- a/tools/perf/scripts/python/exported-sql-viewer.py
-+++ b/tools/perf/scripts/python/exported-sql-viewer.py
-@@ -677,8 +677,8 @@ class CallGraphModelBase(TreeModel):
-  			#   sqlite supports GLOB (text only) which uses * and ? and is case 
-sensitive
-  			if not self.glb.dbref.is_sqlite3:
-  				# Escape % and _
--				s = value.replace("%", "\%")
--				s = s.replace("_", "\_")
-+				s = value.replace("%", r"\%")
-+				s = s.replace("_", r"\_")
-  				# Translate * and ? into SQL LIKE pattern characters % and _
-  				trans = string.maketrans("*?", "%_")
-  				match = " LIKE '" + str(s).translate(trans) + "'"
 -- 
-2.41.0
-
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
