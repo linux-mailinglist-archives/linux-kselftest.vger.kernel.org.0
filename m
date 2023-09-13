@@ -2,56 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB06379E836
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Sep 2023 14:42:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 70DC979EA70
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Sep 2023 16:07:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233560AbjIMMmK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 13 Sep 2023 08:42:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49312 "EHLO
+        id S235393AbjIMOHb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 13 Sep 2023 10:07:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231132AbjIMMmJ (ORCPT
+        with ESMTP id S231767AbjIMOHa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 Sep 2023 08:42:09 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 384DC19B1;
-        Wed, 13 Sep 2023 05:42:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694608925; x=1726144925;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=IvFLjYsEpiHrR+BQ0j+mSxRo0C5kF8/dWX+/TG66kjI=;
-  b=flu41bUCRPBzBG45zGVW6uuxROm9dYbNiAYir9Za81esHg2vkvIlvy0B
-   MRjMbSHEd1lRzOJwLT9ukXANDnqxckjaYGbHoYbGty8zDUPdExZb9ihMg
-   IfpnvoBfjTbvbAl+F7LF46k7JFAOZOISUDWsXes1k+TszwebSFxkCc6o3
-   3qwZ50X9aNZDFGwmrX7ZEuPhuCikCJ2+PKFJ1GH4aZ2Fu4mK3FA0Bq5mM
-   9XfZj9zcAbgfFTcmoC23rqJH5OXK90s6z+YBmoDgV3mE3JKxQkGGi1CGz
-   B8KfyrYVmao/2joAPe77I1XZDdf9c+aDlmxfXtuJ7LzQpyHFHSWkYLH5u
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="358918745"
-X-IronPort-AV: E=Sophos;i="6.02,143,1688454000"; 
-   d="scan'208";a="358918745"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2023 05:42:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="867775703"
-X-IronPort-AV: E=Sophos;i="6.02,143,1688454000"; 
-   d="scan'208";a="867775703"
-Received: from pakurapo-mobl3.ger.corp.intel.com (HELO ijarvine-mobl2.ger.corp.intel.com) ([10.249.45.213])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2023 05:42:01 -0700
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     =?UTF-8?q?Maciej=20Wiecz=C3=B3r-Retman?= 
-        <maciej.wieczor-retman@intel.com>,
-        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 1/1] selftests/resctrl: Move _GNU_SOURCE define into Makefile
-Date:   Wed, 13 Sep 2023 15:41:53 +0300
-Message-Id: <20230913124153.32077-1-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
+        Wed, 13 Sep 2023 10:07:30 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57A5319B1
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 Sep 2023 07:07:26 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-401ce65dfc4so20492665e9.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 Sep 2023 07:07:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1694614045; x=1695218845; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=eUcO5LOOz7EzwAPKcG26jxLJeh1V8AQ265+bz+A8SoI=;
+        b=ghWp2P7FzMPfXxx92sRRLIgspF6ywoLPI0exB8rmYw6q8Zt7orULGR5cdhjmcfkk0U
+         CGb0H/ATVoRbVugygxPv5L8tjzBRbAF0Dc30fPMfzJvhvS97QWFQv2hgc6fba9aBJnQ7
+         5wwedTvp7Rkm4MgxthcG92MgyXT3liwxeH76nIX20pDHAX5gEZjzEeCUAUpKqBgQHqvt
+         VQSyknI+PQ8XX4SsjhwALP63aNhxwvyaTfo+gGd+9w8gbcb7FRl9jSmVR7Tjb4XN9JWo
+         MdIS5LScIr9h/Kv4n8MX49KAcBNpXmExcux+w9xx2XBJYz4oXHDkDg4ORpHE7nj3uaHQ
+         scHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694614045; x=1695218845;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eUcO5LOOz7EzwAPKcG26jxLJeh1V8AQ265+bz+A8SoI=;
+        b=vUvxlLvSJanGsUmJQjMTC14GghGM1PZkxSuXWzbHTvCFtoTKQFkVV7jsaIp/7XYBda
+         I6OnGOOuymChl8o4Ar7QuXqDiQWQFDIEScUsgouPVBIaOUtiI6dcdXB7p8HztLS4mG1K
+         kHCxor21M0qmyrqQF/QpcmyaeyQAx5zLxOvzBwe+1bWOPG5wsqKAo/glUmp9F/uE806l
+         FBQKg5JVBb9+FQ/wrT3NLE/Mx1HBBo1VRoAgojEYgh87UnqTtriUFLJZ2HXn1FGHQ7BH
+         ev6nJJDrkPEdNNHeFG/mWEMzo0SAHdEK3lxXgypF11ZD4lYw6idqqbqFixyLRHwr+DGX
+         3STw==
+X-Gm-Message-State: AOJu0Yz+fnEpJwvXEudGtqYlkFCYkAE5Ti0oEiwt7RJQCMkcJwC72dUx
+        lnzNjINyvxLYE7CqfXwDKRCVjQ==
+X-Google-Smtp-Source: AGHT+IGCH9EQFNujQ2CA3x2E+UgIyr58wi0F+nWTVuTCbTQOTY+VR6HOeI5WcUFS+BmJOSuQbmxsDA==
+X-Received: by 2002:a05:600c:1da2:b0:401:7d3b:cc84 with SMTP id p34-20020a05600c1da200b004017d3bcc84mr2256337wms.0.1694614044700;
+        Wed, 13 Sep 2023 07:07:24 -0700 (PDT)
+Received: from carbon-x1.. ([2a01:e0a:999:a3a0:8fed:c1bc:8957:f1f0])
+        by smtp.gmail.com with ESMTPSA id q5-20020a7bce85000000b004013797efb6sm2166222wmj.9.2023.09.13.07.07.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Sep 2023 07:07:23 -0700 (PDT)
+From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>
+To:     Shuah Khan <shuah@kernel.org>,
+        Gabriel Krisman Bertazi <krisman@collabora.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Cc:     =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <cleger@rivosinc.com>
+Subject: [PATCH] selftests: sud_test: return correct emulated syscall value on RISC-V
+Date:   Wed, 13 Sep 2023 16:07:11 +0200
+Message-Id: <20230913140711.266975-1-cleger@rivosinc.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -59,42 +66,36 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently, _GNU_SOURCE is defined in resctrl.h. Defining _GNU_SOURCE
-has a large impact on what gets defined when including headers either
-before or after it. This can result in compile failures if .c file
-decides to include a standard header file before resctrl.h.
+Currently, the sud_test expects the emulated syscall to return the
+emulated syscall number. This assumption only works on architectures
+were the syscall calling convention use the same register for syscall
+number/syscall return value. This is not the case for RISC-V and thus
+the return value must be also emulated using the provided ucontext.
 
-It is safer to define _GNU_SOURCE in Makefile so it is always defined
-regardless of in which order includes are done.
-
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Signed-off-by: Clément Léger <cleger@rivosinc.com>
 ---
- tools/testing/selftests/resctrl/Makefile  | 2 +-
- tools/testing/selftests/resctrl/resctrl.h | 1 -
- 2 files changed, 1 insertion(+), 2 deletions(-)
+ tools/testing/selftests/syscall_user_dispatch/sud_test.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/tools/testing/selftests/resctrl/Makefile b/tools/testing/selftests/resctrl/Makefile
-index 5073dbc96125..2deac2031de9 100644
---- a/tools/testing/selftests/resctrl/Makefile
-+++ b/tools/testing/selftests/resctrl/Makefile
-@@ -1,6 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
+diff --git a/tools/testing/selftests/syscall_user_dispatch/sud_test.c b/tools/testing/selftests/syscall_user_dispatch/sud_test.c
+index b5d592d4099e..1b5553c19700 100644
+--- a/tools/testing/selftests/syscall_user_dispatch/sud_test.c
++++ b/tools/testing/selftests/syscall_user_dispatch/sud_test.c
+@@ -158,6 +158,14 @@ static void handle_sigsys(int sig, siginfo_t *info, void *ucontext)
  
--CFLAGS = -g -Wall -O2 -D_FORTIFY_SOURCE=2
-+CFLAGS = -g -Wall -O2 -D_FORTIFY_SOURCE=2 -D_GNU_SOURCE
- CFLAGS += $(KHDR_INCLUDES)
+ 	/* In preparation for sigreturn. */
+ 	SYSCALL_DISPATCH_OFF(glob_sel);
++
++	/*
++	 * Modify interrupted context returned value according to syscall
++	 * calling convention
++	 */
++#if defined(__riscv)
++	((ucontext_t*)ucontext)->uc_mcontext.__gregs[REG_A0] = MAGIC_SYSCALL_1;
++#endif
+ }
  
- TEST_GEN_PROGS := resctrl_tests
-diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index 838d1a438f33..eff178befe4a 100644
---- a/tools/testing/selftests/resctrl/resctrl.h
-+++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -1,5 +1,4 @@
- /* SPDX-License-Identifier: GPL-2.0 */
--#define _GNU_SOURCE
- #ifndef RESCTRL_H
- #define RESCTRL_H
- #include <stdio.h>
+ TEST(dispatch_and_return)
 -- 
-2.30.2
+2.40.1
 
