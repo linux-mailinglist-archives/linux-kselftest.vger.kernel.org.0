@@ -2,187 +2,242 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E91479E48E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Sep 2023 12:07:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6231479E5A3
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Sep 2023 13:03:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239544AbjIMKHz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 13 Sep 2023 06:07:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48434 "EHLO
+        id S239847AbjIMLDI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 13 Sep 2023 07:03:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235251AbjIMKHy (ORCPT
+        with ESMTP id S231897AbjIMLDI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 Sep 2023 06:07:54 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC6B8196;
-        Wed, 13 Sep 2023 03:07:50 -0700 (PDT)
+        Wed, 13 Sep 2023 07:03:08 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57CBB1726;
+        Wed, 13 Sep 2023 04:03:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694599670; x=1726135670;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=LB0KrmpFYku3E3d3V1Vi9229KiDvvUs4ovM0w3CfM1A=;
-  b=BvsqlI1oteHKjYnuHl5T6p5lsSYB6JSNZ7T+YCgipizymyMT6aebv1aA
-   Oi29qv+Bi8PSQR3VzwtWvps6S946sIyDyN7RXlpp/m+KE7OBVTf27gVka
-   7RueWK8UMhWaCDYUPPX2uk/Fb+I+fbiF+lgVAHxuduUazMCFTCGardt3o
-   wfsxwOUXGOzfJ11bANqYFccSEjiFQO9mqgxojD8JA/Gb+1giGAKLvFpf7
-   5bkXefHV227PYf7F99+/GQ0ZJud9Zfzbj4rksUehjHjpeGjP6IMqc7s7q
-   obCGoQShIgHhtrLMrsYeDvWXRKqjHxw+kmhFoRtM/HqnovDsGVg1N940O
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="358888719"
-X-IronPort-AV: E=Sophos;i="6.02,142,1688454000"; 
-   d="scan'208";a="358888719"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2023 03:07:50 -0700
+  t=1694602984; x=1726138984;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=tl2PB1NpiVR1OX9ewKIvOnsbXbiiP6qbvDil9+QGcmk=;
+  b=ZrQdZw3I4BlReGfihJyTQQn4qBMdyG3QSVdPAkSp1dYDVoKedILmRWGN
+   OcP+pLZJf/Y6v8ybbEyJxvAlqkPNXvlbzywZANAiPxyM1BChMN+p0w51l
+   1RzXegace+X2XuXtek4oDDltk6YyygxXlN99JQGf23JacDiJuYE0ALiLF
+   FZBYw4nvwHt7SOes4CV33clz1JpZNDxJ1/tvkVsQ1eucwuGTMNUVI7suj
+   nKkFAGCweX3vdNbRCIy0UK6G+wzbb3UvG09Nk0N+NHYPEz+j4hk+YS2eK
+   0Z16r5l6+D75HJmzV4LaFdU8ou2OgJlXS2GgBl6i2bsWTH/93gjDvKhsw
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="464998542"
+X-IronPort-AV: E=Sophos;i="6.02,143,1688454000"; 
+   d="scan'208";a="464998542"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2023 04:03:03 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="1074896738"
-X-IronPort-AV: E=Sophos;i="6.02,142,1688454000"; 
-   d="scan'208";a="1074896738"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga005.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 13 Sep 2023 03:07:50 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32; Wed, 13 Sep 2023 03:07:49 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32 via Frontend Transport; Wed, 13 Sep 2023 03:07:49 -0700
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.174)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.32; Wed, 13 Sep 2023 03:07:49 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=FhLShkx/p1tw1ACESk6W5H3DFW7yia4sqz/epXutXzo05ACxWawRl4+hKV0rVdQ4Jxg+OzATTf/O+NqSXQsBU+g5kk10qDbOTy13t7a5dL75pJRA/Y7CS3ajV34A8cTQpAvw8qtD2u4AGb1AR2F63bGM+1LHgNRiJLjrS0OsKvL+u6HCwXJxwBqKFT+XgTT1VphGI5qD7Q4RgDYPEBwuxKaaAtvozzQwjOLDH5FcqyPF4DFZDVXHM2qwp/9IKkIs7JZU71snJbBS40bWEPbu0PzQ7rBeUUhsxcpqvsd75zPVHwgnN+cFwMq+pDAtniqZrdvGAKPMTSB5BwexRrJ8dA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iLjeKtPddiTjFEK5ezNYcc/u7YdKXYqRlV3YLhS9VZM=;
- b=aatAqieRihz7Zm0jJjVGpYiNyOna8wYFHfxF2KfgfUjHU+Bsw++F8b1DR71bwn92rgRTQHBntdyk+BgwTxepkWWWR0fsUBRwOvDNFev1Bks60hB6mA1hwkdQtCxjbVCrzujLdxXf9I41BcoUrpz8cBu5KMPM5+d1k/kU0mc7SwEqWYCXGV/qHo0ANGosF4UE/JwQLvly5WTk3FrhMKGqPxwNl162mMscO31o5z8ruAvQqs8VDGN4g1q6X9I3PGvoy5dygpAMPImDhPR6X9dFngo2e1CWCUNzwK72imrBl5Dn0KCQk3zK2E5MkwQQX8HFpL/EnvOHY0I4cYsMs2yDAQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM6PR11MB3625.namprd11.prod.outlook.com (2603:10b6:5:13a::21)
- by DS0PR11MB7624.namprd11.prod.outlook.com (2603:10b6:8:141::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6768.34; Wed, 13 Sep
- 2023 10:07:43 +0000
-Received: from DM6PR11MB3625.namprd11.prod.outlook.com
- ([fe80::bede:bd20:31e9:fcb4]) by DM6PR11MB3625.namprd11.prod.outlook.com
- ([fe80::bede:bd20:31e9:fcb4%7]) with mapi id 15.20.6768.029; Wed, 13 Sep 2023
- 10:07:43 +0000
-Message-ID: <a1531a48-b59d-d5ff-130b-5cc6a571a9d1@intel.com>
-Date:   Wed, 13 Sep 2023 12:07:02 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.13.0
-Subject: Re: [PATCH] tracing/user_events: fix long size check in the ABI
- selftest
-Content-Language: en-US
-To:     Shuah Khan <shuah@kernel.org>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>
-CC:     Beau Belgrave <beaub@linux.microsoft.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        <linux-kselftest@vger.kernel.org>, <stable@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230911160935.10720-1-aleksander.lobakin@intel.com>
-From:   Alexander Lobakin <aleksander.lobakin@intel.com>
-In-Reply-To: <20230911160935.10720-1-aleksander.lobakin@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: FR2P281CA0164.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:99::14) To DM6PR11MB3625.namprd11.prod.outlook.com
- (2603:10b6:5:13a::21)
+X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="737457082"
+X-IronPort-AV: E=Sophos;i="6.02,143,1688454000"; 
+   d="scan'208";a="737457082"
+Received: from pakurapo-mobl3.ger.corp.intel.com ([10.249.45.213])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2023 04:03:01 -0700
+Date:   Wed, 13 Sep 2023 14:02:58 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+cc:     Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org,
+        =?ISO-8859-15?Q?Maciej_Wiecz=F3r-Retman?= 
+        <maciej.wieczor-retman@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH 3/5] selftests/resctrl: Refactor feature check to use
+ resource and feature name
+In-Reply-To: <b5a36b8a-c5c7-84a9-270e-bef4478d4bff@intel.com>
+Message-ID: <eac7deb6-3593-7a59-7df8-208392254f7@linux.intel.com>
+References: <20230911111930.16088-1-ilpo.jarvinen@linux.intel.com> <20230911111930.16088-4-ilpo.jarvinen@linux.intel.com> <b5a36b8a-c5c7-84a9-270e-bef4478d4bff@intel.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR11MB3625:EE_|DS0PR11MB7624:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2f88dcbd-ba77-43e8-5e32-08dbb4414511
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gcRMUzUEUkYJmv8KX2s7ojdRRH0xfJLleI1pQYD+KEmfZFZ3zxNM2g2TPJhMtAUl7lS7mQ2GT1HuKweVILty9hkU/Y3MBlZJtgoKwsvcEhneZ/KGGzuCezMexIHu9IKOxhZNR2vvFE+J24L4CWRh+oXh1qB4QLX+2zeIvEwo9kTBkwxtZu42rqmPX4V2CicnZA783DRvwNf4gia4z14YPj0er6eE+86W9QIOArECWVvF5HgiFxKJ0897la8LAhtcAOo4qhzAiKPruHkIwf9tAlUvHg2whRpRtZ10ZGrrhP48NmOwGO2zASui3rrWj8CtKYwlRZw5s1lGtZFVxlycMZuWa/ltMJbIpgfsLLXqSA3mc9lcPcEfQe4rc6CT8oElY90b+zApbNgNVFrXoPBLoR4vNk0AduULFQ/cDsQ1m7B1wV1DZCEseGy7RdO6NfaMdwbZIqvmlNYnh1Teg3nFjf4KwxYdRlqrp4Spzi/X/JUJYICguC5doZXaYLXe7McF/+HK+ZxAhQpu5/FNdqosfu0dSyiwxbRd0slLYWw106J65gPN2ZoNidp8sr8RS17fUz50IsH2v3NCazNYym2XEAfUvozFRp5v0oKOF2+iGFN5FX5dg+GBRHXGaHYm9p/yb7fbFS4Q5sw0Y5oXiC18uw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3625.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(396003)(376002)(136003)(366004)(39860400002)(1800799009)(186009)(451199024)(41300700001)(31686004)(6486002)(6506007)(6666004)(36756003)(86362001)(31696002)(38100700002)(82960400001)(316002)(2616005)(2906002)(6512007)(8936002)(5660300002)(110136005)(478600001)(4326008)(54906003)(66556008)(26005)(66476007)(66946007)(8676002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ekkzMzROYkYwVUtqdFRpNnZPWC9PMit6b2hJdWdKSElLQ241OGtYMnA4UnpZ?=
- =?utf-8?B?ZEVpNFlQUXVsQnRrQ2JPMTdUb0ZhcVdNODFwTUVkTU1MdXl6ZHpNWWluN1lW?=
- =?utf-8?B?U0VOd1JvSHhUVEQ4UC94cVM4Qldxdk1LYVkyZDNOZ3h1MnJjKzZ1UlA3bE9W?=
- =?utf-8?B?eDZoN3kvTnhmdUJQc2JFWHVaWXcwUTlGYWJ4WlIzQ3FlRWM4UjNsRWlHU3FO?=
- =?utf-8?B?WkJoYUc5WnQwYTJ0Vi9GcnlRRS9hNisvd05rU2l1VmlRdEVYRW83TVR4bEVE?=
- =?utf-8?B?SkJpY2ZUSDAwdFZvT1lMdUZIUHNYOXRIZDlFVDRiWUt4WkNhMFFWZHd0TVB2?=
- =?utf-8?B?blhVMkMvbFNSYTBOQzdPejFFRVBhL2ljSFVFVEpVWXp6SE9UYUxrUlZUR3Bh?=
- =?utf-8?B?VHBtelIwQUVWUFpadFdGQ3NleklOWStRVk5uMnhKdHVsTmZ2aWVVRTdBdERj?=
- =?utf-8?B?K3BZTUNYNTFBUTVuZ0JOblRZNHhhSnBIYXh1MDRtMlJTeDQyaXhWbGZtbEhy?=
- =?utf-8?B?V01CY1hIck96OGdHWXc3SE02TkJqSDRqK3F4U3BHczFBeFVwRERpV2hkSm50?=
- =?utf-8?B?Sjd5ZzNvS0pQU3M5YTllWURmb3FvN3l5ME9JeCtxNzRoeDFkU2NmQkYvbXpG?=
- =?utf-8?B?NmFlTzBjRzZUYUlVSGxpbjdqUGFBQWk3Y2RRV0gwaHhJSDVzYSs2M0hIVGZF?=
- =?utf-8?B?L0YyMGZIcXVPTXhWcnJQVGhGRzVUODBLQ1IrRkl1Q3ZmeGxRNWZJZzNLRENu?=
- =?utf-8?B?Nm1PbEpaSHlIWjcyU3RNTWVUMG5uNktpZzVpS1E3ZzlOZHFhRHlJOStWL2N0?=
- =?utf-8?B?bFBlNnEyUGVLUFhjN2NFMzN4aU4vblNMcGtudEN2TzVCZkFMbjhKMUU4ZlZm?=
- =?utf-8?B?MFhrQ2ttYjhBandLMTR0N0ZSM0o0OTEvdG1HN212NTFGZXg4VExiYm5LaXM1?=
- =?utf-8?B?UHE2UVJPWUVmbEo3ekhIempzT0dxN1V0Q05BZTNvcGx4TG9jdGFOODVkWVZx?=
- =?utf-8?B?SWVhSVBybVc1NFJzZG1oRjhWbG5LcDRLQmZvTUJpZCtkUFRLaExOeTV6Umcx?=
- =?utf-8?B?dHM2a3hZWGI4bkJrU1l3bFcrNDNrS0p4RXc2U3k3WlI4UFdzVHRDT1Y4NWdY?=
- =?utf-8?B?U0Vqb1NHM2I5clNTTzc0WDlNS044WFZ1bUwwUkp2TjYrQXlGSHJDK2VYcVNH?=
- =?utf-8?B?L2lHQjZURnZveDRKYTY0T3g2Qld0cFZWZFh6ejZzaHVqUHlpV1pYOEZyMmJB?=
- =?utf-8?B?MjgxblYrd0hOM1lIVWxrZDg1N1F4emgwU1F4L1ZXV0RrVTJ2SVFQa0tLUkFS?=
- =?utf-8?B?TUI3V2h1NnNTdnQrbXlhSEFJVHJPUStoZXVwdTRhbFY2bjZLWDlSUjZIaUlZ?=
- =?utf-8?B?bFJHc05Zd0RDdHcweE4yWGNMamlJalR2R1UyTnBTR3VkMkhvTkk1UHloMVZ6?=
- =?utf-8?B?ejhDWmQ5Nm00eEZQL3RNRDg4eW9sT0FwVFpBSzZkSzJQaDFVQ2JaQlZDV1hI?=
- =?utf-8?B?dE9DM1ZLQnZabVJzWWxUVWZTL0VLQlhORUJXL2xCenUyanFxMmxuN2ZtdjVo?=
- =?utf-8?B?MUpxTkRQZjJsNllCM1krV3JqaGhINGRMMnBRamRScWhoQTRGQlJEWFFpL3cy?=
- =?utf-8?B?cVFCMkNYaTExbjF6cDY2MFY4V0pST1RVRUprTXRqY1hkQUNsTzhwdUppUWFo?=
- =?utf-8?B?UjdZZ2JwUEpYTmJzdW5KUlJMcHloT2FwTW1oU2lVNWc1SEExTlRndlllejJU?=
- =?utf-8?B?VVJzRUo2RGVXemx3bFVsdmZTRzlqSk1yTmlBVk1YMWNkZ1gwamw0K2RKL0J4?=
- =?utf-8?B?dVJMSDJrWWZYZGkwTXdQaytkRTNvVU82ZlN1VGU2djVOeWRzWGRiU3dPWGxu?=
- =?utf-8?B?Rlo5cGJiQTlrY0lZYVR1K1NQcmZGZmJYUVYwQnp0cGNWT214QThyVndPVDFy?=
- =?utf-8?B?ajRzM3N0K1FFbkNGZlgyZ3BoNGxoR05lTmNXbFNQU1daZHZ0TnpzcjdqV0ow?=
- =?utf-8?B?SitPNjRCTnMrT2Vic1YzZHlVeklJRDFhUGV5aHlPTVB5ZitNd1FMN0R5Z3dQ?=
- =?utf-8?B?cUhQZTBkZEtHYXZTK25Rbk5kT241TzliRDNudG5UUTJSVDVzMG9PSGhTNUZ1?=
- =?utf-8?B?bGNLaUpEejRnZFk4ZFJ1ZkY2eGdabWxCalhxYStkclFCTk5xWXpCVnBpcDdP?=
- =?utf-8?B?bHc9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2f88dcbd-ba77-43e8-5e32-08dbb4414511
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3625.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Sep 2023 10:07:43.1657
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3mYS1T0erp/Fm3qBvwt9iKU5r7mJo3szk+HxfvzCJDSSniR6ga30PSNep8G64nuatIXDFGjU6eTuwCLgGxV17PNuIE88HO/DCDWzCLsb5tE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB7624
-X-OriginatorOrg: intel.com
+Content-Type: multipart/mixed; BOUNDARY="8323329-947309311-1694599446=:1849"
+Content-ID: <67bd5477-5f-654-0e6-7d4be5efb566@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Alexander Lobakin <aleksander.lobakin@intel.com>
-Date: Mon, 11 Sep 2023 18:09:35 +0200
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-> The current check for 64-bit architecture is double-bugged.
-> First of all, %BITS_PER_LONG is not available in the userspace,
-> the underscored version from <asm/bitsperlong.h> must be used.
-> The following check:
-> 
->  #if BITS_PER_LONG == 0
->  #error
->  #endif
-> 
-> triggers the error in this source file -- the macro is undefined and
-> thus is implicitly evaluated to 0.
-> Next, %BITS_PER_LONG means "bits", not "bytes". In the Linux kernel,
-> it can be 32 or 64, never 8. Given that the tests guarded by that check
-> are meant to be run on a 64-bit system, the correct value would be 64.
-> 
-> Prefix the macro name and fix the value it's compared to.
-> 
-> Fixes: 60b1af8de8c1 ("tracing/user_events: Add ABI self-test")
-> Cc: stable@vger.kernel.org # 6.4+
-> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-> Signed-off-by: Alexander Lobakin <aleksander.lobakin@intel.com>
+--8323329-947309311-1694599446=:1849
+Content-Type: text/plain; CHARSET=UTF-8
+Content-Transfer-Encoding: 8BIT
+Content-ID: <f2223ced-6689-2843-d663-8356e8e1b650@linux.intel.com>
 
-Patchwork says "Accepted", but I don't see it anywhere on korg O_o
+On Tue, 12 Sep 2023, Reinette Chatre wrote:
+> On 9/11/2023 4:19 AM, Ilpo Järvinen wrote:
+> > Feature check in validate_resctrl_feature_request() takes in the test
+> > name string and maps that to what to check per test.
+> > 
+> > Pass resource and feature names to validate_resctrl_feature_request()
+> > directly rather than deriving them from the test name inside the
+> > function which makes the feature check easier to extend for new test
+> > cases.
+> > 
+> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> > Cc: <stable@vger.kernel.org>
+> 
+> This does not seem to be stable material.
 
-[...]
+Alone it isn't, but both 2/5 and this 3/5 are prerequisites for 4/5 as 
+shown by the tags there.
 
-Thanks,
-Olek
+> > ---
+> >  tools/testing/selftests/resctrl/resctrl.h     |  6 +-
+> >  .../testing/selftests/resctrl/resctrl_tests.c | 10 +--
+> >  tools/testing/selftests/resctrl/resctrlfs.c   | 69 ++++++++-----------
+> >  3 files changed, 34 insertions(+), 51 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
+> > index dd07463cdf48..89ced4152933 100644
+> > --- a/tools/testing/selftests/resctrl/resctrl.h
+> > +++ b/tools/testing/selftests/resctrl/resctrl.h
+
+> > diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
+> > index bd36ee206602..bd547a10791c 100644
+> > --- a/tools/testing/selftests/resctrl/resctrlfs.c
+> > +++ b/tools/testing/selftests/resctrl/resctrlfs.c
+> > @@ -10,6 +10,8 @@
+> >   */
+> >  #include "resctrl.h"
+> >  
+> > +#include <limits.h>
+> > +
+> 
+> Could you please include <limits.h> before the local resctrl.h?
+
+Believe me I tried that first but it did not work. So this intentionally 
+in the current order as resctrl.h defines _GNU_SOURCE which is among 
+things that tends to alter many things. If I reorder them, the build gives 
+me these issues:
+
+resctrlfs.c: In function ‘taskset_benchmark’:
+resctrlfs.c:284:2: warning: implicit declaration of function ‘CPU_ZERO’; 
+did you mean ‘FP_ZERO’? [-Wimplicit-function-declaration]
+  284 |  CPU_ZERO(&my_set);
+      |  ^~~~~~~~
+      |  FP_ZERO
+resctrlfs.c:285:2: warning: implicit declaration of function ‘CPU_SET’ 
+[-Wimplicit-function-declaration]
+  285 |  CPU_SET(cpu_no, &my_set);
+      |  ^~~~~~~
+resctrlfs.c:287:6: warning: implicit declaration of function 
+‘sched_setaffinity’ [-Wimplicit-function-declaration]
+  287 |  if (sched_setaffinity(bm_pid, sizeof(cpu_set_t), &my_set)) {
+      |      ^~~~~~~~~~~~~~~~~
+
+It might be useful to move _GNU_SOURCE define into Makefile though to 
+avoid these kind of issues (but that's not material for this patch).
+
+> >  static int find_resctrl_mount(char *buffer)
+> >  {
+> >  	FILE *mounts;
+> > @@ -604,63 +606,46 @@ char *fgrep(FILE *inf, const char *str)
+> >  
+> >  /*
+> >   * validate_resctrl_feature_request - Check if requested feature is valid.
+> > - * @resctrl_val:	Requested feature
+> > + * @resource:	Required resource (e.g., MB, L3, L2, L3_MON, etc.)
+> > + * @feature:	Feature to be checked under resource (can be NULL). This path
+> > + *		is relative to the resource path.
+> 
+> I do not think "this path" is accurate. @feature is not a path but an entry
+> within the mon_features file.
+
+Yes, agreed.
+
+> Also please note that mon_features only exists for L3_MON, none of the other
+> listed resources have an associated mon_features file in resctrl. This
+> function is created to be generic has specific requirements on what
+> valid (never checked) parameters should be. This may be ok with the usage
+> but it should not pretend to be generic.
+
+So are you recommending I split this function into two where the new one 
+would do the mon_features check?
+
+> >  	char *res;
+> >  	FILE *inf;
+> >  	int ret;
+> >  
+> > -	if (!resctrl_val)
+> > +	if (!resource)
+> >  		return false;
+> >  
+> >  	ret = find_resctrl_mount(NULL);
+> >  	if (ret)
+> >  		return false;
+> >  
+> > -	if (!strncmp(resctrl_val, CAT_STR, sizeof(CAT_STR))) {
+> > -		if (!stat(L3_PATH, &statbuf))
+> > -			return true;
+> > -	} else if (!strncmp(resctrl_val, MBA_STR, sizeof(MBA_STR))) {
+> > -		if (!stat(MB_PATH, &statbuf))
+> > -			return true;
+> > -	} else if (!strncmp(resctrl_val, MBM_STR, sizeof(MBM_STR)) ||
+> > -		   !strncmp(resctrl_val, CMT_STR, sizeof(CMT_STR))) {
+> > -		if (!stat(L3_MON_PATH, &statbuf)) {
+> > -			inf = fopen(L3_MON_FEATURES_PATH, "r");
+> > -			if (!inf)
+> > -				return false;
+> > -
+> > -			if (!strncmp(resctrl_val, CMT_STR, sizeof(CMT_STR))) {
+> > -				res = fgrep(inf, "llc_occupancy");
+> > -				if (res) {
+> > -					found = true;
+> > -					free(res);
+> > -				}
+> > -			}
+> > -
+> > -			if (!strncmp(resctrl_val, MBM_STR, sizeof(MBM_STR))) {
+> > -				res = fgrep(inf, "mbm_total_bytes");
+> > -				if (res) {
+> > -					free(res);
+> > -					res = fgrep(inf, "mbm_local_bytes");
+> > -					if (res) {
+> > -						found = true;
+> > -						free(res);
+> > -					}
+> > -				}
+> > -			}
+> > -			fclose(inf);
+> > -		}
+> > -	}
+> > +	snprintf(res_path, sizeof(res_path), "%s/%s", INFO_PATH, resource);
+> > +
+> > +	if (stat(res_path, &statbuf))
+> > +		return false;
+> > +
+> > +	if (!feature)
+> > +		return true;
+> > +
+> > +	snprintf(res_path, sizeof(res_path), "%s/%s/mon_features", INFO_PATH, resource);
+> > +	inf = fopen(res_path, "r");
+> > +	if (!inf)
+> > +		return false;
+> > +
+> > +	res = fgrep(inf, feature);
+> > +	free(res);
+> > +	fclose(inf);
+> >  
+> > -	return found;
+> > +	return res;
+> 
+> This is unexpected. Function should return bool but instead returns a char * that
+> has been freed?
+
+Okay, I understand it looks confusing when relying on implicit conversion 
+to boolean (despite being functionally correct).
+
+I can do this instead to make it more obvious the intention is to convert 
+the result to boolean and not return a pointer:
+	return !!res;
+
+-- 
+ i.
+--8323329-947309311-1694599446=:1849--
