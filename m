@@ -2,224 +2,110 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7044A79ECE1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Sep 2023 17:28:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC23A79ED11
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Sep 2023 17:33:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229513AbjIMP2v (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 13 Sep 2023 11:28:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57086 "EHLO
+        id S229498AbjIMPdL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 13 Sep 2023 11:33:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229573AbjIMP2n (ORCPT
+        with ESMTP id S229456AbjIMPdK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 Sep 2023 11:28:43 -0400
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE9A61BD6;
-        Wed, 13 Sep 2023 08:28:39 -0700 (PDT)
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-99c3c8adb27so888272466b.1;
-        Wed, 13 Sep 2023 08:28:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694618918; x=1695223718;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=f1vGDg0uCtdiqjKqDiwFtuGhRJ18xP0o/QuRB7i2CeI=;
-        b=A11Q5a1VP/fcQ9TgOWN78oPoZg6kkmtsNi8QeNGpOkGuscvR8HqQ6es6BHcDKvKp2x
-         lBr2okhW4SWaRc0xECzgePXGbkx53DUIerGucgd5ltRQdrnaZX1FW5qZwaDU3IgLEZ/5
-         tW3urGbcup0SaCqGrLa6idF3tGoqyRzxZ9eQoOCgzMuTThsnaf4rjR/FRMUDHAk1lj8/
-         qBHkYYbd95m76Pxyzal2pZKIzPqb0j/1E+u52NBGs9hULg8ElXMQwFfwZjuI0l0dcSLH
-         FCMmdZpbvxuKPQboKGIqYdMMG2s5K7THQNlvjIVVXjnPxQaQPmGaxU+/xjplB5XwD3ZA
-         noLw==
-X-Gm-Message-State: AOJu0YzCcGjpJd6aYMOGT5rgjkO0gH3gY+w4pBLs4Blmejm/B1PVWTYG
-        iJKu5vdGCKZLxTCDtLkvzlo=
-X-Google-Smtp-Source: AGHT+IHmrrgmP8mf+1WIardtNbDBakZ+xUtLB1E1+f4WfhRclf5HQB29Q5O+QutRs462a3Yp0wPRsw==
-X-Received: by 2002:a17:906:3151:b0:9a1:c495:66bb with SMTP id e17-20020a170906315100b009a1c49566bbmr2361258eje.60.1694618918240;
-        Wed, 13 Sep 2023 08:28:38 -0700 (PDT)
-Received: from localhost (fwdproxy-cln-009.fbsv.net. [2a03:2880:31ff:9::face:b00c])
-        by smtp.gmail.com with ESMTPSA id rn3-20020a170906d92300b0099cc3c7ace2sm8709378ejb.140.2023.09.13.08.28.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Sep 2023 08:28:37 -0700 (PDT)
-From:   Breno Leitao <leitao@debian.org>
-To:     sdf@google.com, axboe@kernel.dk, asml.silence@gmail.com,
-        willemdebruijn.kernel@gmail.com, kuba@kernel.org,
-        pabeni@redhat.com, martin.lau@linux.dev, krisman@suse.de,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Song Liu <song@kernel.org>,
-        Yonghong Song <yonghong.song@linux.dev>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, io-uring@vger.kernel.org,
-        =?UTF-8?q?Daniel=20M=C3=BCller?= <deso@posteo.net>,
-        Wang Yufen <wangyufen@huawei.com>,
-        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Subject: [PATCH v6 8/8] selftests/bpf/sockopt: Add io_uring support
-Date:   Wed, 13 Sep 2023 08:27:44 -0700
-Message-Id: <20230913152744.2333228-9-leitao@debian.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230913152744.2333228-1-leitao@debian.org>
-References: <20230913152744.2333228-1-leitao@debian.org>
+        Wed, 13 Sep 2023 11:33:10 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D06FB93;
+        Wed, 13 Sep 2023 08:33:06 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDB9CC433C8;
+        Wed, 13 Sep 2023 15:33:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1694619186;
+        bh=w4eOXdxxEVpvJRthlhaH92nifcMz3GmSivudS7jagvk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CSdc05swdFI+Usg6TPK+loCrKdjcCDoD1l3eV91+bwpg9zqRnvz5+aPx2ibFa2Fo+
+         uRXQRALXPUo+Ctds8aJoAih2KTot+U3jqSStD6Ik+9HHGu73OA7p0UXd476CdW2ebO
+         sq7OXF18Qa4JIGGYdSmXiZeHIrRv2Lp/1p4E4FTtArHa4yvdivVEZsS3XuE3c8a7tK
+         UkuqyAMJOc7oxW6WwGVXFKy+fnXsrgER+81eHlo5tvcZ1abF082K1Wahmkkkt4hXM+
+         Ixh57M0SW2OStwN98jdOiHFiTDnEKlVpltLqON9IY6n7Aln2jSEuwLkRHH8rDaoxIG
+         hxNzcOcJ7MpmA==
+Date:   Wed, 13 Sep 2023 16:33:00 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
+        <nfraprado@collabora.com>
+Cc:     Takashi Iwai <tiwai@suse.com>, kernel@collabora.com,
+        Jaroslav Kysela <perex@perex.cz>,
+        Shuah Khan <shuah@kernel.org>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] kselftest/alsa: Mark test plan as skipped when no cards
+ are available
+Message-ID: <ae381a70-3236-4792-9c3e-19d67a4377a1@sirena.org.uk>
+References: <20230908181242.95714-1-nfraprado@collabora.com>
+ <0fa0901e-d271-438d-bc2b-11399ad3b07c@sirena.org.uk>
+ <868a8f08-ba39-4550-8e7b-0572ea03c4e7@notapiano>
+ <ZP8kLM5ln2YBCHap@finisterre.sirena.org.uk>
+ <a12b1144-bea0-4bd7-a429-da800dc8f568@notapiano>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="HVlTO/OC556kjwhz"
+Content-Disposition: inline
+In-Reply-To: <a12b1144-bea0-4bd7-a429-da800dc8f568@notapiano>
+X-Cookie: Use extra care when cleaning on stairs.
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Expand the BPF sockopt test to use also check for io_uring
-{g,s}etsockopt commands operations.
 
-Create infrastructure to run io_uring tests using the mini_liburing
-helpers, so, the {g,s}etsockopt operation could either be called from
-system calls, or, via io_uring.
+--HVlTO/OC556kjwhz
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Add a 'use_io_uring' parameter to run_test(), to specify if the test
-should be run using io_uring if the parameter is set, or via the regular
-system calls if false.
+On Tue, Sep 12, 2023 at 03:23:34PM -0400, N=EDcolas F. R. A. Prado wrote:
+> On Mon, Sep 11, 2023 at 03:29:00PM +0100, Mark Brown wrote:
 
-Call *all* tests twice, using the regular io_uring path, and the new
-io_uring path.
+> > So, I would interpret the overall result for the suite as being "No
+> > errors were found in any of the cards discovered" if there is no
+> > configuration file specified which enumerates the set of cards that are
+> > expected (if there is a config file that's a different matter, we know
+> > what we're expecting).  I'm not sure that the different behaviour for 0
+> > cards is super useful.
 
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
- .../selftests/bpf/prog_tests/sockopt.c        | 95 +++++++++++++++++--
- 1 file changed, 89 insertions(+), 6 deletions(-)
+> Right... So what we want to be doing is adding a config file for every pl=
+atform
+> defining the card(s) and PCMs expected, so that when they're missing a te=
+st
+> failure will be triggered which is even more helpful. Although I've notic=
+ed that
+> only missing PCMs are detected currently, but I imagine it should be poss=
+ible to
+> to extend the code to detect missing cards as well.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockopt.c b/tools/testing/selftests/bpf/prog_tests/sockopt.c
-index 9e6a5e3ed4de..40fb4c315ad9 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockopt.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockopt.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <test_progs.h>
-+#include <io_uring/mini_liburing.h>
- #include "cgroup_helpers.h"
- 
- static char bpf_log_buf[4096];
-@@ -940,7 +941,85 @@ static int load_prog(const struct bpf_insn *insns,
- 	return fd;
- }
- 
--static int run_test(int cgroup_fd, struct sockopt_test *test)
-+/* Core function that handles io_uring ring initialization,
-+ * sending SQE with sockopt command and waiting for the CQE.
-+ */
-+static int uring_sockopt(int op, int fd, int level, int optname,
-+			 const void *optval, socklen_t *optlen)
-+{
-+	struct io_uring_cqe *cqe;
-+	struct io_uring_sqe *sqe;
-+	struct io_uring ring;
-+	int err;
-+
-+	err = io_uring_queue_init(1, &ring, 0);
-+	if (!ASSERT_OK(err, "Initialize io_uring ring"))
-+		return err;
-+
-+	sqe = io_uring_get_sqe(&ring);
-+	if (!ASSERT_NEQ(sqe, NULL, "Get an SQE")) {
-+		err = -1;
-+		goto fail;
-+	}
-+
-+	if (op == SOCKET_URING_OP_GETSOCKOPT)
-+		io_uring_prep_cmd_get(sqe, op, fd, level, optname, optval,
-+				      optlen);
-+	else
-+		io_uring_prep_cmd(sqe, op, fd, level, optname, optval,
-+				  *optlen);
-+
-+	err = io_uring_submit(&ring);
-+	if (!ASSERT_EQ(err, 1, "Submit SQE"))
-+		goto fail;
-+
-+	err = io_uring_wait_cqe(&ring, &cqe);
-+	if (!ASSERT_OK(err, "Wait for CQE"))
-+		goto fail;
-+
-+	err = cqe->res;
-+
-+fail:
-+	io_uring_queue_exit(&ring);
-+
-+	return err;
-+}
-+
-+static int uring_setsockopt(int fd, int level, int optname, const void *optval,
-+			    socklen_t *optlen)
-+{
-+	return uring_sockopt(SOCKET_URING_OP_SETSOCKOPT, fd, level, optname,
-+			     optval, optlen);
-+}
-+
-+static int uring_getsockopt(int fd, int level, int optname, void *optval,
-+			    socklen_t *optlen)
-+{
-+	return uring_sockopt(SOCKET_URING_OP_GETSOCKOPT, fd, level, optname,
-+			     optval, optlen);
-+}
-+
-+/* Execute the setsocktopt operation */
-+static int call_setsockopt(bool use_io_uring, int fd, int level, int optname,
-+			   const void *optval, socklen_t optlen)
-+{
-+	if (use_io_uring)
-+		return uring_setsockopt(fd, level, optname, optval, &optlen);
-+
-+	return setsockopt(fd, level, optname, optval, optlen);
-+}
-+
-+/* Execute the getsocktopt operation */
-+static int call_getsockopt(bool use_io_uring, int fd, int level, int optname,
-+			   void *optval, socklen_t *optlen)
-+{
-+	if (use_io_uring)
-+		return uring_getsockopt(fd, level, optname, optval, optlen);
-+
-+	return getsockopt(fd, level, optname, optval, optlen);
-+}
-+
-+static int run_test(int cgroup_fd, struct sockopt_test *test, bool use_io_uring)
- {
- 	int sock_fd, err, prog_fd;
- 	void *optval = NULL;
-@@ -980,8 +1059,9 @@ static int run_test(int cgroup_fd, struct sockopt_test *test)
- 			test->set_optlen = num_pages * sysconf(_SC_PAGESIZE) + remainder;
- 		}
- 
--		err = setsockopt(sock_fd, test->set_level, test->set_optname,
--				 test->set_optval, test->set_optlen);
-+		err = call_setsockopt(use_io_uring, sock_fd, test->set_level,
-+				      test->set_optname, test->set_optval,
-+				      test->set_optlen);
- 		if (err) {
- 			if (errno == EPERM && test->error == EPERM_SETSOCKOPT)
- 				goto close_sock_fd;
-@@ -1008,8 +1088,8 @@ static int run_test(int cgroup_fd, struct sockopt_test *test)
- 		socklen_t expected_get_optlen = test->get_optlen_ret ?:
- 			test->get_optlen;
- 
--		err = getsockopt(sock_fd, test->get_level, test->get_optname,
--				 optval, &optlen);
-+		err = call_getsockopt(use_io_uring, sock_fd, test->get_level,
-+				      test->get_optname, optval, &optlen);
- 		if (err) {
- 			if (errno == EOPNOTSUPP && test->error == EOPNOTSUPP_GETSOCKOPT)
- 				goto free_optval;
-@@ -1063,7 +1143,10 @@ void test_sockopt(void)
- 		if (!test__start_subtest(tests[i].descr))
- 			continue;
- 
--		ASSERT_OK(run_test(cgroup_fd, &tests[i]), tests[i].descr);
-+		ASSERT_OK(run_test(cgroup_fd, &tests[i], false),
-+			  tests[i].descr);
-+		ASSERT_OK(run_test(cgroup_fd, &tests[i], true),
-+			  tests[i].descr);
- 	}
- 
- 	close(cgroup_fd);
--- 
-2.34.1
+It seems like a reasonable approach for systems that do want to have
+this confirmation.
 
+> I take it the intention is to expand the conf.d directory with configs fo=
+r all
+> platforms currently being tested then? There's only one example file ther=
+e so I
+> wasn't sure.
+
+I think it's a question for people working on individual systems if they
+want that coverage, for example I don't really care for the things in my
+CI because I have higher level stuff which will notice any newly missing
+tests so I don't need the test to do anything here.
+
+--HVlTO/OC556kjwhz
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmUB1isACgkQJNaLcl1U
+h9B5dgf/cLXB70t6XRr3Q6R/yRGtT8S2hofbEAcc5/fjzyJfBGpuC9e2QDtn43LX
+nz2xx0PD72h2gg4yD3s80zc4wiGHOSaPAeDVCS/7VmxA37k18yP7pinIl/0LM+3s
+6vAOZvpQCRqNjIWJo9F/2/FfUVTKkYZ6rhXPfsTLG2de4U2oTe3zi5qc5/4hBpTh
+PteqY+OK6m6/27zm3uva3vJml6vnpeofBwo+IHp6+RYLMcF1xWw3rJFv4VlOSGOf
+GgbfY5xaOqnTHaCGVGRqQhQXRly3/iKRqv+goyPm/s/0PFgQfzIWtot9O0+0OIum
+4v44q+DWxTLjtgGlJh0VINsZdWiBFw==
+=ivXT
+-----END PGP SIGNATURE-----
+
+--HVlTO/OC556kjwhz--
