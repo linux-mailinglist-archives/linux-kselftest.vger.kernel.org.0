@@ -2,100 +2,184 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E592A79E0A9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Sep 2023 09:17:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF31479E473
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Sep 2023 12:01:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235421AbjIMHR3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 13 Sep 2023 03:17:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49772 "EHLO
+        id S233917AbjIMKB5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 13 Sep 2023 06:01:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236875AbjIMHR2 (ORCPT
+        with ESMTP id S231757AbjIMKB5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 Sep 2023 03:17:28 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD4E1984;
-        Wed, 13 Sep 2023 00:17:24 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-68fbb10dea4so2637445b3a.3;
-        Wed, 13 Sep 2023 00:17:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694589444; x=1695194244; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Acu4nw1FXdQveACPv6+swZOIpF9eDwL9S1R/+hJY+40=;
-        b=LdnBnjyXqPFfdorvMxFpe/7TnH2mowSHcBuo+m62lLVd3lKkDViTX0ZLV5dCj6GNz5
-         +4eBaw/YtM6pr/tjJcU+LVLP2Mkm7tNMcfctSrftOPnPk7xXE1sHe+8XphArjCU4I/TN
-         sCW+M/VdjQ3NsjUFex7zE23Wqbe0dfHu2kcASJY0UdWvhkDrlFWn0hYWoUnR+/LGm+EU
-         F4m2hONIVNREvZnPzFzEUx3sm/BnMYDsY5mQR6R3JIywYziqFFvuZPaOZIBvOyWklhwm
-         3sqeqDn81hKFoyPiu+OZTDi88rfLPF2RgNzFRlMGPVnxOlBCXivEw6peO4CZpaihfc3P
-         0FfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694589444; x=1695194244;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Acu4nw1FXdQveACPv6+swZOIpF9eDwL9S1R/+hJY+40=;
-        b=ZlbyDJVq/S+wWYSkeLF0ackG1r8z2jsAD99lKU5Zvcx97nPes89/GbxkE2zpo0b11y
-         GGSDMxSYhWw37mN3hoMq3QT4y60Vuh+KU3j1nOR06erxOASW6g1gRge01PZT7FGwygPL
-         2g/jucePppcKzc/Vmo4KUDMZrFzPK2ivRnnw0QqiVQ6eO1uqqaslozTn2fpMaWKUqmIb
-         ghR5sqYJPPownNNHc4ua5Pcj2SCSbN5zeVPECgRm8wHsSUondbRFX3hjZLvsynfjzUKL
-         Gfc1hvZkq/PaX26kyWDHSK4aWzIoXaHhAH6S+0jiNOQ20dcT5XXOJ4k7eew3hLhxN2BQ
-         lj2A==
-X-Gm-Message-State: AOJu0YwyFYA+ZTuxyK07MPVlH62acaLB9WRMJTCLCGifhH634cGq4TrR
-        CKINQiiI1ZzgarOm4DvP/K1o9RGhe487ur4BsHk=
-X-Google-Smtp-Source: AGHT+IGCsNzD/UpJA9G+hgegxKBvYQkpYChDDeCF7oHQOnNF6IHt41a6oPe9d8KBv4u1GXGEvqZas0QcYddQ4NoqoQQ=
-X-Received: by 2002:a05:6a00:18a0:b0:68f:b2f3:7737 with SMTP id
- x32-20020a056a0018a000b0068fb2f37737mr2305803pfh.15.1694589444020; Wed, 13
- Sep 2023 00:17:24 -0700 (PDT)
+        Wed, 13 Sep 2023 06:01:57 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4BD7198C;
+        Wed, 13 Sep 2023 03:01:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694599312; x=1726135312;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=xWu7IXMLYndESrsIDPkU/w6h/boIoVzFmP3NM90RAfo=;
+  b=Um2rC1Ji6IGTOGWUqewqqTTUGo2FiT8Ej2Sm7DZt0NS14NPV1pY//GOS
+   ms3XOueA/Cntihiu4wMVWP45IavsqeVWW5SdYFvAyhbma/7j34uNjVscA
+   F+G5D7x5cDnEd6FLthzc3zoqukk6WeLT0zlKpW27QWxSiAbQD6ydXRVEP
+   D/SvEkGCSn/ryhgGlODsXy2u2c28UakzDNf9U/fmvRPUMvsGa1ia/1yFP
+   56GyRqP/WZZ+9FMHS3Ku7iU9ZvNwT8rVagXJK6hnc9dWTWHCy2t2e3Yu7
+   lPfGAaOCO4EymUU0qKq/tVWhtpDiRem8wW0fCcKVG4f6qNNV2QFhKLFIb
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="378529237"
+X-IronPort-AV: E=Sophos;i="6.02,142,1688454000"; 
+   d="scan'208";a="378529237"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2023 03:01:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10831"; a="834247693"
+X-IronPort-AV: E=Sophos;i="6.02,142,1688454000"; 
+   d="scan'208";a="834247693"
+Received: from pakurapo-mobl3.ger.corp.intel.com ([10.249.45.213])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2023 03:01:44 -0700
+Date:   Wed, 13 Sep 2023 13:01:38 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+cc:     Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org,
+        =?ISO-8859-15?Q?Maciej_Wiecz=F3r-Retman?= 
+        <maciej.wieczor-retman@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH 1/5] selftests/resctrl: Extend signal handler coverage
+ to unmount on receiving signal
+In-Reply-To: <4176a620-4cec-5d57-42a3-a15c0fe3eb73@intel.com>
+Message-ID: <aab4b1cc-6eb5-c324-e97e-c6699e2d165@linux.intel.com>
+References: <20230911111930.16088-1-ilpo.jarvinen@linux.intel.com> <20230911111930.16088-2-ilpo.jarvinen@linux.intel.com> <4176a620-4cec-5d57-42a3-a15c0fe3eb73@intel.com>
 MIME-Version: 1.0
-References: <20230912083800.57435-1-cerasuolodomenico@gmail.com> <20230912101802.25b280ac306694ff02001706@linux-foundation.org>
-In-Reply-To: <20230912101802.25b280ac306694ff02001706@linux-foundation.org>
-From:   Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-Date:   Wed, 13 Sep 2023 09:17:12 +0200
-Message-ID: <CA+CLi1gtgwa7JZC_NvynOKhM59j_hYpAnc+ivTjXobOqHkQb-A@mail.gmail.com>
-Subject: Re: [PATCH] selftests: cgroup: fix test_zswap error path and
- meaningless check
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     dan.carpenter@linaro.org, kernel-team@meta.com,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/mixed; boundary="8323329-2077064899-1694599306=:1849"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Sep 12, 2023 at 7:18=E2=80=AFPM Andrew Morton <akpm@linux-foundatio=
-n.org> wrote:
->
-> On Tue, 12 Sep 2023 10:38:00 +0200 Domenico Cerasuolo <cerasuolodomenico@=
-gmail.com> wrote:
->
-> > Replace destruction paths with simple returns before the test cgroup is
-> > created, there is nothing to free or destroy at that point.
-> >
-> > Remove pointless check, stored_pages is a size_t and cannot be < 0.
-> >
-> > ...
-> >
-> > @@ -208,8 +208,6 @@ static int test_no_kmem_bypass(const char *root)
-> >               free(trigger_allocation);
-> >               if (get_zswap_stored_pages(&stored_pages))
-> >                       break;
-> > -             if (stored_pages < 0)
-> > -                     break;
-> >               /* If memory was pushed to zswap, verify it belongs to me=
-mcg */
-> >               if (stored_pages > stored_pages_threshold) {
-> >                       int zswapped =3D cg_read_key_long(test_group, "me=
-mory.stat", "zswapped ");
->
-> stored_pages will be set to -1 on error.  It would be better to cast
-> stored_pages to ssize_t in the check, rather than simply ignoring
-> errors?
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-I'm not sure I understood, isn't it safe to just rely on the return value o=
-f
-get_zswap_stored_pages a few lines above? In that case we break the loop an=
-d
-the value of stored_pages is not used.
+--8323329-2077064899-1694599306=:1849
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+
+On Tue, 12 Sep 2023, Reinette Chatre wrote:
+> On 9/11/2023 4:19 AM, Ilpo Järvinen wrote:
+> > Unmounting resctrl FS has been moved into the per test functions in
+> > resctrl_tests.c by commit caddc0fbe495 ("selftests/resctrl: Move
+> > resctrl FS mount/umount to higher level"). In case a signal (SIGINT,
+> > SIGTERM, or SIGHUP) is received, the running selftest is aborted by
+> > ctrlc_handler() which then unmounts resctrl fs before exiting. The
+> > current section between signal_handler_register() and
+> > signal_handler_unregister(), however, does not cover the entire
+> > duration when resctrl FS is mounted.
+> > 
+> > Move signal_handler_register() and signal_handler_unregister() call
+> > into the test functions in resctrl_tests.c to properly unmount resctrl
+> > fs. Adjust child process kill() call in ctrlc_handler() to only be
+> > invoked if the child was already forked.
+> 
+> Thank you for catching this.
+> 
+> > 
+> > Fixes: caddc0fbe495 ("selftests/resctrl: Move resctrl FS mount/umount to higher level")
+> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> > Cc: <stable@vger.kernel.org>
+> > ---
+> >  tools/testing/selftests/resctrl/cat_test.c    |  8 -------
+> >  .../testing/selftests/resctrl/resctrl_tests.c | 24 +++++++++++++++++++
+> >  tools/testing/selftests/resctrl/resctrl_val.c | 22 ++++++++---------
+> >  3 files changed, 34 insertions(+), 20 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
+> > index 97b87285ab2a..224ba8544d8a 100644
+> > --- a/tools/testing/selftests/resctrl/cat_test.c
+> > +++ b/tools/testing/selftests/resctrl/cat_test.c
+> > @@ -167,12 +167,6 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
+> >  		strcpy(param.filename, RESULT_FILE_NAME1);
+> >  		param.num_of_runs = 0;
+> >  		param.cpu_no = sibling_cpu_no;
+> > -	} else {
+> > -		ret = signal_handler_register();
+> > -		if (ret) {
+> > -			kill(bm_pid, SIGKILL);
+> > -			goto out;
+> > -		}
+> >  	}
+> >  
+> >  	remove(param.filename);
+> > @@ -209,10 +203,8 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
+> >  		}
+> >  		close(pipefd[0]);
+> >  		kill(bm_pid, SIGKILL);
+> > -		signal_handler_unregister();
+> >  	}
+> >  
+> > -out:
+> >  	cat_test_cleanup();
+> >  
+> >  	return ret;
+> > diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
+> > index 823672a20a43..3d66fbdc2df3 100644
+> > --- a/tools/testing/selftests/resctrl/resctrl_tests.c
+> > +++ b/tools/testing/selftests/resctrl/resctrl_tests.c
+> > @@ -73,8 +73,13 @@ static void run_mbm_test(const char * const *benchmark_cmd, int cpu_no)
+> >  
+> >  	ksft_print_msg("Starting MBM BW change ...\n");
+> >  
+> > +	res = signal_handler_register();
+> > +	if (res)
+> > +		return;
+> > +
+> >  	res = mount_resctrlfs();
+> >  	if (res) {
+> > +		signal_handler_unregister();
+> >  		ksft_exit_fail_msg("Failed to mount resctrl FS\n");
+> >  		return;
+> >  	}
+> > @@ -91,6 +96,7 @@ static void run_mbm_test(const char * const *benchmark_cmd, int cpu_no)
+> >  
+> >  umount:
+> >  	umount_resctrlfs();
+> > +	signal_handler_unregister();
+> >  }
+> >  
+> >  static void run_mba_test(const char * const *benchmark_cmd, int cpu_no)
+> > @@ -99,8 +105,13 @@ static void run_mba_test(const char * const *benchmark_cmd, int cpu_no)
+> >  
+> >  	ksft_print_msg("Starting MBA Schemata change ...\n");
+> >  
+> > +	res = signal_handler_register();
+> > +	if (res)
+> > +		return;
+> > +
+> >  	res = mount_resctrlfs();
+> >  	if (res) {
+> > +		signal_handler_unregister();
+> >  		ksft_exit_fail_msg("Failed to mount resctrl FS\n");
+> >  		return;
+> >  	}
+> > @@ -115,6 +126,7 @@ static void run_mba_test(const char * const *benchmark_cmd, int cpu_no)
+> >  
+> >  umount:
+> >  	umount_resctrlfs();
+> > +	signal_handler_unregister();
+> >  }
+> >  
+> 
+> This adds more duplicated code for every test. Have you considered a
+> single test setup function that can be used to mount resctrl FS and setup
+> the signal handler paired with a single test teardown function?
+
+Yes. Consolidating all these is among my not-yet submitted patches.
+I just had to do a backport-friendly Fixes patch first for this.
+
+-- 
+ i.
+
+--8323329-2077064899-1694599306=:1849--
