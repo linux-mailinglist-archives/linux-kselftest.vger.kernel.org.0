@@ -2,54 +2,54 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 117CF79FEB8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Sep 2023 10:46:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DAE379FF00
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Sep 2023 10:52:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236563AbjINIql (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 14 Sep 2023 04:46:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58522 "EHLO
+        id S236011AbjINIwW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 14 Sep 2023 04:52:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236536AbjINIqh (ORCPT
+        with ESMTP id S235968AbjINIwW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Sep 2023 04:46:37 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24DF998
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Sep 2023 01:46:33 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-401b393ddd2so7686215e9.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Sep 2023 01:46:33 -0700 (PDT)
+        Thu, 14 Sep 2023 04:52:22 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2982D1BF2
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Sep 2023 01:52:17 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-403004a96a4so7412885e9.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Sep 2023 01:52:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1694681191; x=1695285991; darn=vger.kernel.org;
+        d=ventanamicro.com; s=google; t=1694681535; x=1695286335; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KQEPjdH4Gli9KAKRohOP4WFvJ7BvjQDzxENQGkakYUo=;
-        b=akqB3OZmyrYPrr/2AkSGvD93rHAXS+FRk5BVzmf8wBaG6o33cIZAeJVxQAJ4aOgLgC
-         ODJLzw/M7HRGg+Bc5/Rxu/z35r0SJ3t2/MyBM9/hWRI6ONHlRkT0Z8gEd7ufyj0yB88U
-         u2FnVScOUwu9REAnC0s5ZS5LMRzY53Xuq2TjWlWb1dUDm+aY2Xot+A+81SbbO0GXYaM3
-         gFXysm9D1b/J/0DqOvOCYOP2xlGPi2SbsUUoAem3z8z6tJ+uwcs6xzUYydHF9nqSXkjO
-         IAXfgKVaAYzmOYVFtb73AISpAyf2VGV6xT4hNJqe3+zRdUg99BnLMZCND8iFNJsMNvLY
-         pNMw==
+        bh=lMUcG5dET7EFobfbAHbzg2lwyOfsWQ8F2tpkEXeY8DY=;
+        b=StgrfO85sslASZLu1luVqtO7tb55qbJgvfpXkg9pTAfsDnQnC7nM+Yxjs2Ar02n6aW
+         SsYJ/0RYNy1wMPnHBZz5y7uxU2qdGDeWZ3CbMk4AD5jVwtTuHxIwtMsW1VGfwUv5xmNg
+         8EzC7EGHo288N93zQg/H35PEtCrEC8RMTLHNQZLpN8z/XXhiyWB1gI5nlTUjBLTNfhg6
+         vk6/BTYqcwyVUuPNOCJ1Vz5mxMrLZdNqnAYbhxj7BKsQohSCRBtbxK0ucHGuFyje3ecI
+         zqu395Teyh74NhcpJnFEGQbtFjyZtJETeej3Cp93WIsDYUkHWJK5Gff/O3ScKKO+PKKW
+         cAlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694681191; x=1695285991;
+        d=1e100.net; s=20230601; t=1694681535; x=1695286335;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=KQEPjdH4Gli9KAKRohOP4WFvJ7BvjQDzxENQGkakYUo=;
-        b=Dl2U0aitCptLkmaFOhVD4sXOSMqoWGu/wunoll+6xL3EtOw4sntZQ669uYVCD7e90C
-         l6AWPNk24wyH+BgGm3PiyHWzsKQkxkksB8RCNwBOy+pg8bUruJXDNVnOntUWutnRRQfF
-         q41mj7r6ULXM+0wpPekPqs6xwBsIlx1VT6aLKlozB/eaietRm8UgkVBhMPeyAXLCuDQv
-         Rn6hSmojiMTlGfngqSvRtc2qpdiIUOY0iotNnRZe+SVnmS94TxuF6ta6p1ITtkx+0ZAe
-         YlAcvjABSx/P2yXXKzb93s8vloyeOsQu/1iyTKGGfnL96v5/llmMaMzqeC7qNC2mKiCR
-         JgNQ==
-X-Gm-Message-State: AOJu0YxZeSbDo3FVSMxYwDGgjk5ZZyr1a9U7xWleKUP7ziFITwOTyiIq
-        YWxO84Or0CscajRg2d625yVpOQ==
-X-Google-Smtp-Source: AGHT+IEirTjVMIzTLjC7sB1QXwQuxnOxm1+1fH/gEKNI6n9l8wkInADFzO37/+IpdsjO1bWWulPatg==
-X-Received: by 2002:a5d:6105:0:b0:319:8427:d221 with SMTP id v5-20020a5d6105000000b003198427d221mr4297904wrt.62.1694681191504;
-        Thu, 14 Sep 2023 01:46:31 -0700 (PDT)
+        bh=lMUcG5dET7EFobfbAHbzg2lwyOfsWQ8F2tpkEXeY8DY=;
+        b=JyHM+YiSmhFZ9hj/GqUc0e1gHcsSQqw3LlxO5VF7dcUZc6Q/fgytgotHF4ESzQytFU
+         1rVH+6KU3mXZU6DmOwpm3a2+zVMH/Nwv6CaIq3oYGds4LVUUYHcLSirYN+YlMg2RkDpU
+         N7lJbhqsf8Lt0ad98ddT6s+Q5lkNSfjTm1sH8bAvuF87Mc23/ueUSI9WUHu01rcHioRS
+         DJVXEZbPcLLBSCuC9DmzW9acSZWs2VCPVdBO0lTAfT+vbo1K0/FmQUFZeIuFwbdJb3iF
+         yfrr0lG4yVp3FPnJjmpkV4vSnAFD97fSB56gdknzv8wSYM08dyeDgmdxMEpFH+uKGVeg
+         E4vg==
+X-Gm-Message-State: AOJu0YxnvxQsiYe026xBUBxulDbb58ynZ5ixRFYhSJNvwQorGcniluNI
+        ezZc+nqT649z9RB7Lfev4SjSBQ==
+X-Google-Smtp-Source: AGHT+IF/71ROIOoJExJf8FEqPIRkV7f1W6lv97o8MVa7W5dAed2t55G5dPLBGqXoAtZVnyXGa4aJ8Q==
+X-Received: by 2002:a5d:4f88:0:b0:319:83e4:bbbf with SMTP id d8-20020a5d4f88000000b0031983e4bbbfmr4097683wru.20.1694681535355;
+        Thu, 14 Sep 2023 01:52:15 -0700 (PDT)
 Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id y14-20020a5d4ace000000b003176eab8868sm1157269wrs.82.2023.09.14.01.46.30
+        by smtp.gmail.com with ESMTPSA id r8-20020a5d4e48000000b0031ad2f9269dsm1137143wrt.40.2023.09.14.01.52.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Sep 2023 01:46:31 -0700 (PDT)
-Date:   Thu, 14 Sep 2023 10:46:30 +0200
+        Thu, 14 Sep 2023 01:52:14 -0700 (PDT)
+Date:   Thu, 14 Sep 2023 10:52:08 +0200
 From:   Andrew Jones <ajones@ventanamicro.com>
 To:     Haibo Xu <haibo1.xu@intel.com>
 Cc:     xiaobo55x@gmail.com, Paul Walmsley <paul.walmsley@sifive.com>,
@@ -66,70 +66,78 @@ Cc:     xiaobo55x@gmail.com, Paul Walmsley <paul.walmsley@sifive.com>,
         Sean Christopherson <seanjc@google.com>,
         Ricardo Koller <ricarkol@google.com>,
         Vishal Annapurve <vannapurve@google.com>,
+        Peter Xu <peterx@redhat.com>,
         Vipin Sharma <vipinsh@google.com>,
         David Matlack <dmatlack@google.com>,
-        Aaron Lewis <aaronlewis@google.com>,
         Colton Lewis <coltonlewis@google.com>,
+        Aaron Lewis <aaronlewis@google.com>,
         Thomas Huth <thuth@redhat.com>, linux-kernel@vger.kernel.org,
         linux-riscv@lists.infradead.org, kvm@vger.kernel.org,
         linux-kselftest@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
         kvm-riscv@lists.infradead.org
-Subject: Re: [PATCH v3 2/9] KVM: selftests: Unify the makefile rule for split
- targets
-Message-ID: <20230914-393dcb077c664af16c4830e4@orel>
+Subject: Re: [PATCH v3 5/9] KVM: riscv: selftests: Switch to use macro from
+ csr.h
+Message-ID: <20230914-18bfe93b679e290188e70307@orel>
 References: <cover.1694421911.git.haibo1.xu@intel.com>
- <cda6cc71c9bdde87fe87f6c2dec4f03ca249dd62.1694421911.git.haibo1.xu@intel.com>
+ <6cdda82518977c67004ee01a767bc67962352c13.1694421911.git.haibo1.xu@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cda6cc71c9bdde87fe87f6c2dec4f03ca249dd62.1694421911.git.haibo1.xu@intel.com>
+In-Reply-To: <6cdda82518977c67004ee01a767bc67962352c13.1694421911.git.haibo1.xu@intel.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Sep 14, 2023 at 09:36:56AM +0800, Haibo Xu wrote:
-> A separate makefile rule was used for split targets which was added
-> in patch(KVM: arm64: selftests: Split get-reg-list test code). This
-> could be avoided by minor changes to the recipes of current rule.
-> 
+On Thu, Sep 14, 2023 at 09:36:59AM +0800, Haibo Xu wrote:
 > Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
 > ---
->  tools/testing/selftests/kvm/Makefile | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
+>  tools/testing/selftests/kvm/include/riscv/processor.h | 8 +-------
+>  1 file changed, 1 insertion(+), 7 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-> index a3bb36fb3cfc..7972269e8c5f 100644
-> --- a/tools/testing/selftests/kvm/Makefile
-> +++ b/tools/testing/selftests/kvm/Makefile
-> @@ -249,13 +249,10 @@ TEST_DEP_FILES += $(patsubst %.o, %.d, $(SPLIT_TESTS_OBJS))
->  -include $(TEST_DEP_FILES)
+> diff --git a/tools/testing/selftests/kvm/include/riscv/processor.h b/tools/testing/selftests/kvm/include/riscv/processor.h
+> index 5b62a3d2aa9b..67766baed4f7 100644
+> --- a/tools/testing/selftests/kvm/include/riscv/processor.h
+> +++ b/tools/testing/selftests/kvm/include/riscv/processor.h
+> @@ -8,6 +8,7 @@
+>  #define SELFTEST_KVM_PROCESSOR_H
 >  
->  $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED): %: %.o
-> -	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH) $< $(LIBKVM_OBJS) $(LDLIBS) -o $@
-> +	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH) $^ $(LDLIBS) -o $@
->  $(TEST_GEN_OBJ): $(OUTPUT)/%.o: %.c
->  	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
+>  #include "kvm_util.h"
+> +#include <asm/csr.h>
+>  #include <linux/stringify.h>
+
+nit: Usually we try to keep the order of our includes separated into five
+categories, listed below, where each category is sorted alphabetically. Of
+course any dependencies the includes have on each other need to be
+considered too.
+
+<library-includes-without-a-subdir>
+<library-includes-with-subdir>
+<linux/...>
+<asm/...>
+"local-includes"
+
 >  
-> -$(SPLIT_TESTS_TARGETS): %: %.o $(SPLIT_TESTS_OBJS)
-> -	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH) $^ $(LDLIBS) -o $@
+>  static inline uint64_t __kvm_reg_id(uint64_t type, uint64_t idx,
+> @@ -95,13 +96,6 @@ static inline uint64_t __kvm_reg_id(uint64_t type, uint64_t idx,
+>  #define PGTBL_PAGE_SIZE				PGTBL_L0_BLOCK_SIZE
+>  #define PGTBL_PAGE_SIZE_SHIFT			PGTBL_L0_BLOCK_SHIFT
+>  
+> -#define SATP_PPN				_AC(0x00000FFFFFFFFFFF, UL)
+> -#define SATP_MODE_39				_AC(0x8000000000000000, UL)
+> -#define SATP_MODE_48				_AC(0x9000000000000000, UL)
+> -#define SATP_ASID_BITS				16
+> -#define SATP_ASID_SHIFT				44
+> -#define SATP_ASID_MASK				_AC(0xFFFF, UL)
 > -
->  EXTRA_CLEAN += $(LIBKVM_OBJS) $(TEST_DEP_FILES) $(TEST_GEN_OBJ) $(SPLIT_TESTS_OBJS) cscope.*
+>  #define SBI_EXT_EXPERIMENTAL_START		0x08000000
+>  #define SBI_EXT_EXPERIMENTAL_END		0x08FFFFFF
 >  
->  x := $(shell mkdir -p $(sort $(dir $(LIBKVM_C_OBJ) $(LIBKVM_S_OBJ))))
-> @@ -274,6 +271,7 @@ $(LIBKVM_STRING_OBJ): $(OUTPUT)/%.o: %.c
->  x := $(shell mkdir -p $(sort $(dir $(TEST_GEN_PROGS))))
->  $(TEST_GEN_PROGS): $(LIBKVM_OBJS)
->  $(TEST_GEN_PROGS_EXTENDED): $(LIBKVM_OBJS)
-> +$(SPLIT_TESTS_TARGETS): $(OUTPUT)/%: $(ARCH_DIR)/%.o
->  
->  cscope: include_paths = $(LINUX_TOOL_INCLUDE) $(LINUX_HDR_PATH) include lib ..
->  cscope:
 > -- 
 > 2.34.1
 >
 
-Nice.
+Assuming the CONFIG_64BIT patch will come before this, then
 
 Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 
