@@ -2,55 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C5CE7A100A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Sep 2023 23:51:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D7BF7A100E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Sep 2023 23:51:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229606AbjINVvv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 14 Sep 2023 17:51:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36520 "EHLO
+        id S229730AbjINVvy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 14 Sep 2023 17:51:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbjINVvu (ORCPT
+        with ESMTP id S229723AbjINVvy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Sep 2023 17:51:50 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47AFC270B
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Sep 2023 14:51:46 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-59bfccec7f3so10655487b3.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Sep 2023 14:51:46 -0700 (PDT)
+        Thu, 14 Sep 2023 17:51:54 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE8A1BFA
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Sep 2023 14:51:48 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-d817775453dso1675472276.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Sep 2023 14:51:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1694728305; x=1695333105; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=f5AmKdq1pRjBoWugao1uMYxjphGEN0AUTFevs+I8FV8=;
-        b=DtMkF6B9loTkxqAiL7t9DxXW12XBfzsD5JupOxSD+35qj8/okpJueuqaVxt6qDAA8q
-         E1OrM7KA8pZ3YPWjSOXALl+HchfoX4qRVv87qgfA9RzWNtdO6CJ8BGQEwm/mNJ7wzhPt
-         enGU8HVrL0b2tlUg5iSagAaqZA1oJJayo5AjfkyXUQMjJAEkdqbXP7aK1OH7t7MlBu2x
-         EVg12xfRU/lnVBR2LPWkhlgGtyat0Aqf+G+yzooILGnfEMNoPaBVQ2O5SqrJ3xAgOh1b
-         /Y1qTn9wo5TqyjTCT9+k2Ac5I2OO1AdpZaiw1lRGeCagm0F+/N/jNVe+bHsVCwDiETXU
-         vdEQ==
+        d=google.com; s=20230601; t=1694728308; x=1695333108; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mZlU0Kf/Gcn2G/sI4bkJCwhLYRSeXEzqS2NQ4Iszo2s=;
+        b=zFFXD4nYP3g8vduEG2wQpmlZC0rGS3wvsdeGjYc0KUCGZ0KZeFIyry4osfRAjpGXRY
+         d0cCLNQYe+bb4lE+2BUL7kRRVe7/fefh/IyWFJifQY82ysw66ViVl4MIl1qHK6XMrRdk
+         FqYV1RTRKgvCBiUcgF1/liJcFJsHiAjWadGAMelyF6+mkFRFoWU0lAU+7M9ifeQbSxKx
+         s4BlvVFp31wupGO5MADIRgHrB8j57cTydJolnHC9mP+lMEZFTKU7a+AxuQACw1YmCsih
+         33zbY+MTMHEavXjMJI+zgF+U3LjYZr+Wui6eY/NkpR55E93TUIpTdHl6CjxrALdrz6OD
+         z6/w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694728305; x=1695333105;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=f5AmKdq1pRjBoWugao1uMYxjphGEN0AUTFevs+I8FV8=;
-        b=KS2Rovcez1/opz+AVtaRD0YY/GzNzlE9aSa6OBhOmKabLuB/TVo4JuzuKAkXgfW89x
-         OK8P6qywaJ7bPDqh9qufFeo/B34p3DoQce6KyL9vsVUTWBl81ci2o5gp85HjJdwAkAJa
-         daPpPybmnXUrQ/mfVKjwpiIXLwAhsNb2r70MPvjtYPoEsRu0bNsnFFSDdUf0NF1VJ4mC
-         LRVWQo8IZduXKZ2FmaTNMKx25+eHnSVJlO8JY1CfQlgbfOvZk+qdGCuEpC/7BGusZPUY
-         rBNU5CzVygp3eDHEOE7R5eKGQz8vaFXWa+OzQAWnby+vDoBBU3E43jxBzeG/UDOiegxD
-         3g/g==
-X-Gm-Message-State: AOJu0Ywk4y30sdDbBrtE3KNT/2CXRAWHVB+gTUKXhqr48vEGSFf3H7TZ
-        a3eqW/tPQNAYIt8HBH5OQYNlhulieA==
-X-Google-Smtp-Source: AGHT+IHC8lDywtd/3DEAcrqeCtnI7BBVZqxz6OQQKZ2Pz6wFZ+PgIiPJP0JXxADfRz+G4oMIAJKsW2usLQ==
+        d=1e100.net; s=20230601; t=1694728308; x=1695333108;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mZlU0Kf/Gcn2G/sI4bkJCwhLYRSeXEzqS2NQ4Iszo2s=;
+        b=dw43hsxyk+j22+WzHs5G4O9ujh0BCtpCT8FS+sGcLtixBzvSlCwCGTcZ3yK210axWM
+         a4ci8G9ea70dLhwAF4W1vn3lKWZobgBwPTkoVoJe8wYU/E6AurKXZMmt6wQ5dnrwirJr
+         zazmqI4oKyl2AKXgF3pzFTTEHVFERdgaHWeP0ZE4LdSEW+tymg5Kocc/5iBxd2ibrjMl
+         06NXMFMgCD2b+26yTRg/l7woKxsDJZvcwJdtQlRK9WzEewqPCw5iSK3vlCxcrGEfLuHZ
+         ZtazR1vCgX3sbELFScuVhwljgslZsGxcpIv2CslQGORX/T75EiYL3lMJPtYaClVu1jvg
+         EuOg==
+X-Gm-Message-State: AOJu0YwQN5yIjkn5WP4TFDqPsJ/6WPOERrwu4hGljh9XcQzSSFmPz0/i
+        CeCg6GJohOjJD87YGppbkmqcMu8DQg==
+X-Google-Smtp-Source: AGHT+IFs2QTkWETQW88X7lVAYojwqxgUvIgWK6HjjeZUUZaPFEtRPnJAVID9TsxJZMd+RrcvrrEDfAobkg==
 X-Received: from rmoar-specialist.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:45d3])
- (user=rmoar job=sendgmr) by 2002:a05:6902:905:b0:d64:f7ec:6d5d with SMTP id
- bu5-20020a056902090500b00d64f7ec6d5dmr155560ybb.10.1694728305515; Thu, 14 Sep
- 2023 14:51:45 -0700 (PDT)
-Date:   Thu, 14 Sep 2023 21:51:40 +0000
+ (user=rmoar job=sendgmr) by 2002:a25:40d:0:b0:d7a:6a4c:b657 with SMTP id
+ 13-20020a25040d000000b00d7a6a4cb657mr166298ybe.0.1694728308004; Thu, 14 Sep
+ 2023 14:51:48 -0700 (PDT)
+Date:   Thu, 14 Sep 2023 21:51:41 +0000
+In-Reply-To: <20230914215141.3399584-1-rmoar@google.com>
 Mime-Version: 1.0
+References: <20230914215141.3399584-1-rmoar@google.com>
 X-Mailer: git-send-email 2.42.0.459.ge4e396fd5e-goog
-Message-ID: <20230914215141.3399584-1-rmoar@google.com>
-Subject: [PATCH 1/2] kunit: tool: add parsing of test attributes
+Message-ID: <20230914215141.3399584-2-rmoar@google.com>
+Subject: [PATCH 2/2] kunit: tool: add attributes output to kunit.py
 From:   Rae Moar <rmoar@google.com>
 To:     shuah@kernel.org, davidgow@google.com, dlatypov@google.com,
         brendan.higgins@linux.dev
@@ -61,52 +63,94 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add parsing of attributes as diagnostic data. Fixes issue with test plan
-being parsed incorrectly as diagnostic data when located after
-suite-level attributes.
+Output attributes in kunit.py results.
 
-Note that if there does not exist a test plan line, the diagnostic lines
-between the suite header and the first result will be saved in the suite
-log rather than the first test log.
+Example of format:
 
-This could be changed to do the opposite if preferred.
+[21:33:23] =================== example (7 subtests) ===================
+[21:33:23] module: kunit_example_test
+[21:33:23] [PASSED] example_simple_test
+...
+[21:33:23] [PASSED] example_slow_test
+[21:33:23] speed: slow
+[21:33:23] =================== [PASSED] example =======================
+
+The attributes are outputted directly below the associated test.
+
+Note that the attributes lines are saved in the log and then the log is
+parsed for attributes rather than saving attributes in their own field.
+
+This is due to diagnostic lines being saved prior to the creation of the
+associated test object.
 
 Signed-off-by: Rae Moar <rmoar@google.com>
 ---
- tools/testing/kunit/kunit_parser.py | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ tools/testing/kunit/kunit_parser.py | 31 +++++++++++++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
 diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-index 79d8832c862a..ce34be15c929 100644
+index ce34be15c929..ffa9cfdcf5d6 100644
 --- a/tools/testing/kunit/kunit_parser.py
 +++ b/tools/testing/kunit/kunit_parser.py
-@@ -450,7 +450,7 @@ def parse_diagnostic(lines: LineStream) -> List[str]:
- 	Log of diagnostic lines
- 	"""
- 	log = []  # type: List[str]
--	non_diagnostic_lines = [TEST_RESULT, TEST_HEADER, KTAP_START, TAP_START]
-+	non_diagnostic_lines = [TEST_RESULT, TEST_HEADER, KTAP_START, TAP_START, TEST_PLAN]
- 	while lines and not any(re.match(lines.peek())
- 			for re in non_diagnostic_lines):
- 		log.append(lines.pop())
-@@ -726,6 +726,7 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str], is_subtest:
- 		# test plan
- 		test.name = "main"
- 		ktap_line = parse_ktap_header(lines, test)
-+		test.log.extend(parse_diagnostic(lines))
- 		parse_test_plan(lines, test)
- 		parent_test = True
- 	else:
-@@ -737,6 +738,7 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str], is_subtest:
- 		if parent_test:
- 			# If KTAP version line and/or subtest header is found, attempt
- 			# to parse test plan and print test header
-+			test.log.extend(parse_diagnostic(lines))
+@@ -509,6 +509,34 @@ def print_test_header(test: Test) -> None:
+ 			message += f'({test.expected_count} subtests)'
+ 	stdout.print_with_timestamp(format_test_divider(message, len(message)))
+ 
++TEST_HEADER_ATTR = re.compile(r'^\s*# (.*): (.*)$')
++TEST_ATTR = re.compile(r'^\s*# (.*)\.(.*): (.*)$')
++
++def print_test_attr(test: Test) -> None:
++	"""
++	Attributes, if present, will be printed in a list separated by
++	commas.
++
++	Example:
++	'module: example_test, speed: slow'
++
++	Parameters:
++	test - Test object representing current test being printed
++	"""
++	attr_list = ["module", "speed"]
++	output = []
++
++	for line in test.log:
++		test_match = TEST_ATTR.match(line)
++		header_match = TEST_HEADER_ATTR.match(line)
++		if test_match and (test_match.group(1) == test.name
++					  and (test_match.group(2) in attr_list)):
++			output.append(test_match.group(2) + ": " + test_match.group(3))
++		elif header_match and (header_match.group(1) in attr_list):
++			output.append(header_match.group(1) + ": " + header_match.group(2))
++	if output:
++		stdout.print_with_timestamp(", ".join(output))
++
+ def print_log(log: Iterable[str]) -> None:
+ 	"""Prints all strings in saved log for test in yellow."""
+ 	formatted = textwrap.dedent('\n'.join(log))
+@@ -741,6 +769,7 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str], is_subtest:
+ 			test.log.extend(parse_diagnostic(lines))
  			parse_test_plan(lines, test)
  			print_test_header(test)
++			print_test_attr(test)
  	expected_count = test.expected_count
-
-base-commit: 9076bc476d7ebf0565903c4b048442131825c1c3
+ 	subtests = []
+ 	test_num = 1
+@@ -763,6 +792,7 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str], is_subtest:
+ 				test.counts.add_status(
+ 					TestStatus.TEST_CRASHED)
+ 				print_test_result(sub_test)
++				print_test_attr(sub_test)
+ 			else:
+ 				test.log.extend(sub_log)
+ 				break
+@@ -796,6 +826,7 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str], is_subtest:
+ 		print_test_footer(test)
+ 	elif is_subtest:
+ 		print_test_result(test)
++		print_test_attr(test)
+ 	return test
+ 
+ def parse_run_tests(kernel_output: Iterable[str]) -> Test:
 -- 
 2.42.0.459.ge4e396fd5e-goog
 
