@@ -2,114 +2,117 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFFE07A057F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Sep 2023 15:24:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F1B47A07D4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Sep 2023 16:49:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238760AbjINNYr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 14 Sep 2023 09:24:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44778 "EHLO
+        id S240740AbjINOtH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 14 Sep 2023 10:49:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238886AbjINNYr (ORCPT
+        with ESMTP id S240624AbjINOsv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Sep 2023 09:24:47 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 697991BEB;
-        Thu, 14 Sep 2023 06:24:43 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7D36C433C8;
-        Thu, 14 Sep 2023 13:24:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694697883;
-        bh=ApqBLmkZaOR9bG+HCuUd45NKWx9gUEFfpn0IjLXQiSA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MsZpkq2Qfg4PGoVIOMmE06NU8NwcxYgQWuzHyaEdgO4eFr1TmqhlFmr3Zow5EoaoY
-         NsyBod+a1fCTNP5TSmgFnVSn1TOyVnmR08NOdRzzpc4hroDQEoXQrOPVTxXrLyAbh1
-         bZqy+saUO0I+jw60sp06sPMEJ5CzQVLPF82U2v3/d/YbUfwCrT8j4bQTuVW9xLrOH8
-         Z/89qoW9RZsKT9zz9x2CeDZk4saVDdP5F+rg9aLHKKw9/JC8U3ufljvKGLZ7UtmbUy
-         xzIKb2ALVWNZrWf79H2I4PIvOSF5T4M6KKF453tW+3ZBgznKKmRm0gO/RrJCGi47p8
-         O7vc+ggnYTsgg==
-Date:   Thu, 14 Sep 2023 15:24:40 +0200
-From:   Maxime Ripard <mripard@kernel.org>
-To:     Daniel Vetter <daniel@ffwll.ch>
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        David Airlie <airlied@gmail.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        =?utf-8?B?TWHDrXJh?= Canal <mairacanal@riseup.net>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH 2/2] drm/tests: Flag slow tests as such
-Message-ID: <wnqxfgo7tljhecw2cajoeb3aga3szfen6eohowjrepfqwakka5@pm6a7iaii7fy>
-References: <20230911-kms-slow-tests-v1-0-d3800a69a1a1@kernel.org>
- <20230911-kms-slow-tests-v1-2-d3800a69a1a1@kernel.org>
- <ZQAU7Juw5WM1LAAM@phenom.ffwll.local>
+        Thu, 14 Sep 2023 10:48:51 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76BA226A5
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Sep 2023 07:48:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694702923; x=1726238923;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PYbv1CeDR70yYZFWuHi3j2UJXWlRgHS7ah+9vINpQfo=;
+  b=SfA7ZWbp6Zj8cZNf6+It4th18R5HTPLdPvm/EoQPFsrL3IyhwDu+u+o2
+   EQiIpiCXoUFaFi93W/h3HZoYdatINSHRUWF1ZgP0Yonh64h2NS2DZUQVC
+   pKe+s1NdFBGXrIQ31xELVcFsdltcnhTFrTc7JtARndnTYIhPW9iWgee+t
+   K44UDBoXIbtYgNuwo/XD5tWktWegRM9MY7J8iBMYbv5972dkeHx3dHstX
+   GOOd1fGqSIi/EbHr861+YyaySfQzfJc7qwXgCvzhRZhZh/RK4rXFMPFUA
+   1vOAVpEQJtHQZ1CbAdm1A6Nd0ktnq9tkjwpPQ/FuoRaCXrTUU2x32AJIL
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="443019729"
+X-IronPort-AV: E=Sophos;i="6.02,146,1688454000"; 
+   d="scan'208";a="443019729"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2023 07:45:14 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="991414624"
+X-IronPort-AV: E=Sophos;i="6.02,146,1688454000"; 
+   d="scan'208";a="991414624"
+Received: from lkp-server02.sh.intel.com (HELO 9ef86b2655e5) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 14 Sep 2023 07:45:10 -0700
+Received: from kbuild by 9ef86b2655e5 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qgnae-0001hh-2x;
+        Thu, 14 Sep 2023 14:45:08 +0000
+Date:   Thu, 14 Sep 2023 22:44:33 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Jinjie Ruan <ruanjinjie@huawei.com>, brendan.higgins@linux.dev,
+        davidgow@google.com, skhan@linuxfoundation.org,
+        dlatypov@google.com, rmoar@google.com,
+        janusz.krzysztofik@linux.intel.com,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Cc:     oe-kbuild-all@lists.linux.dev, ruanjinjie@huawei.com
+Subject: Re: [PATCH 4/4] kunit: test: Fix the possible memory leak in
+ executor_test
+Message-ID: <202309142251.uJ8saAZv-lkp@intel.com>
+References: <20230914114629.1517650-5-ruanjinjie@huawei.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="s2sns2gwxynnnns6"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZQAU7Juw5WM1LAAM@phenom.ffwll.local>
+In-Reply-To: <20230914114629.1517650-5-ruanjinjie@huawei.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Hi Jinjie,
 
---s2sns2gwxynnnns6
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+kernel test robot noticed the following build warnings:
 
-Hi Sima,
+[auto build test WARNING on linus/master]
+[also build test WARNING on next-20230914]
+[cannot apply to v6.6-rc1]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-(For some reason, it looks like your mailer sets up the headers to reply
-to every recipient but you)
+url:    https://github.com/intel-lab-lkp/linux/commits/Jinjie-Ruan/kunit-Fix-missed-memory-release-in-kunit_free_suite_set/20230914-194915
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20230914114629.1517650-5-ruanjinjie%40huawei.com
+patch subject: [PATCH 4/4] kunit: test: Fix the possible memory leak in executor_test
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230914/202309142251.uJ8saAZv-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20230914/202309142251.uJ8saAZv-lkp@intel.com/reproduce)
 
-On Tue, Sep 12, 2023 at 09:36:12AM +0200, Daniel Vetter wrote:
-> On Mon, Sep 11, 2023 at 11:51:06AM +0200, Maxime Ripard wrote:
-> > Kunit recently gained a speed attribute that allows to filter out slow
-> > tests. A slow test is defined in the documentation as a test taking more
-> > than a second to execute.
-> >=20
-> > Let's flag the few tests that are doing so on my machine when running:
-> >=20
-> > ./tools/testing/kunit/kunit.py run --kunitconfig=3Ddrivers/gpu/drm/test=
-s \
-> > 	--cross_compile aarch64-linux-gnu- --arch arm64
-> >=20
-> > Suggested-by: David Gow <davidgow@google.com>
-> > Signed-off-by: Maxime Ripard <mripard@kernel.org>
->=20
-> Ugh ... not a fan.
->=20
-> igt has a really bad habit of making disastrously combinatorial tests with
-> impossible runtimes, and then just filtering these out so it's still fast.
->=20
-> Maybe some stress tests for overall system make sense like this, but
-> absolutely not for unit tests.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202309142251.uJ8saAZv-lkp@intel.com/
 
-I agree, I didn't want to reduce testing though.
+All warnings (new ones prefixed by >>):
 
-> And I did spot check some of these, they're just combinatorial
-> explosions with large repetition counts and some fun stuff like going
-> through prime numbers because surely that's a good idea.
->=20
-> Imo delete them all, and if that causes a real gap in coverage, ask
-> the authors to write some actual good unit tests for these corner
-> cases.
+   In file included from lib/kunit/executor.c:353:
+>> lib/kunit/executor_test.c:274:13: warning: 'kfree_at_end' defined but not used [-Wunused-function]
+     274 | static void kfree_at_end(struct kunit *test, const void *to_free)
+         |             ^~~~~~~~~~~~
 
-Ack, I will send a patch doing so.
 
-Thanks!
-Maxime
+vim +/kfree_at_end +274 lib/kunit/executor_test.c
 
---s2sns2gwxynnnns6
-Content-Type: application/pgp-signature; name="signature.asc"
+1d71307a6f94df Daniel Latypov 2021-04-20  270  
+1d71307a6f94df Daniel Latypov 2021-04-20  271  /* Use the resource API to register a call to kfree(to_free).
+1d71307a6f94df Daniel Latypov 2021-04-20  272   * Since we never actually use the resource, it's safe to use on const data.
+1d71307a6f94df Daniel Latypov 2021-04-20  273   */
+1d71307a6f94df Daniel Latypov 2021-04-20 @274  static void kfree_at_end(struct kunit *test, const void *to_free)
+1d71307a6f94df Daniel Latypov 2021-04-20  275  {
+1d71307a6f94df Daniel Latypov 2021-04-20  276  	/* kfree() handles NULL already, but avoid allocating a no-op cleanup. */
+1d71307a6f94df Daniel Latypov 2021-04-20  277  	if (IS_ERR_OR_NULL(to_free))
+1d71307a6f94df Daniel Latypov 2021-04-20  278  		return;
+00e63f8afcfc6b David Gow      2023-05-25  279  
+00e63f8afcfc6b David Gow      2023-05-25  280  	kunit_add_action(test,
+00e63f8afcfc6b David Gow      2023-05-25  281  			(kunit_action_t *)kfree,
+1d71307a6f94df Daniel Latypov 2021-04-20  282  			(void *)to_free);
+1d71307a6f94df Daniel Latypov 2021-04-20  283  }
+1d71307a6f94df Daniel Latypov 2021-04-20  284  
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZQMJmAAKCRDj7w1vZxhR
-xWU7AQCec2+TjFtEJCwvBH+eX+OLCselkl5YoaquXV57CrLH8gEApqmPauoZqE05
-5F2myjAiz2vFlA78a+oQ1h6+efFs6Qc=
-=Lwvb
------END PGP SIGNATURE-----
-
---s2sns2gwxynnnns6--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
