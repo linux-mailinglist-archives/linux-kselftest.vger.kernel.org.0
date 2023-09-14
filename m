@@ -2,237 +2,155 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FD0779F366
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Sep 2023 23:01:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B21C179F646
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Sep 2023 03:27:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232726AbjIMVBl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 13 Sep 2023 17:01:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39550 "EHLO
+        id S233279AbjINB2B (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 13 Sep 2023 21:28:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232759AbjIMVBj (ORCPT
+        with ESMTP id S233400AbjINB2A (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 Sep 2023 17:01:39 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 950811BD2;
-        Wed, 13 Sep 2023 14:01:33 -0700 (PDT)
+        Wed, 13 Sep 2023 21:28:00 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79FAD1BD1;
+        Wed, 13 Sep 2023 18:27:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694638893; x=1726174893;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=nON+/n7BsEoIeZVfkYOuqgt0FBKkcC8UuoTiN50FAgk=;
-  b=B/TypQugVb+SlZkp4BqMLwjwqSt7eFQP9cH1J+X0rMN15tmwRmOkC9Xt
-   F022QDgIf+/GZT/O5IFc3TltBJArFGXbGDVHTShmnt6go5yxucTQaFYBP
-   uwmme95PsE662eoLYxBXpQIRXva5yGLIi8G6F00fgNRvODG0IJGHqSMQb
-   gYBY9+AVzN7DpjD3kLkGEpXXF6MFmviJjxYoBgWMPaxrHlqyXzockCDR5
-   CbhxcI7i6xGG3cve56vMRwe4OILIKFm+SvRlFUBm1v+nkPgKe40YRFtV3
-   K4MrMRw9yHZGbTthxrkN14VIUp1UzdHbrDJ/A6I4+AXMKGmm5a7DJWe3Y
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="363819703"
+  t=1694654876; x=1726190876;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ueE/011k9DiwV0Anf9SWAZccz4IuGXFEGSyhfc+Fk0k=;
+  b=DfQuoVf5XhvkZwpdK1eoYwINamWBmIwKEM8v2zvkqyJvs0jRrukzeC1G
+   GLh7IVjm7cQaLit+KIUKVlImqK/7VQzcywhCA0FjENG52xqtivS2DdRyS
+   bVIQRcbm+4Dt8P1mWmWgSTILE+4wdP3eOogXAlPY4MQzI7Z56qirQpb+M
+   XoubkjgdATql7y8+S3w35PrJIugrA2jXs3ax266DfwU602BOdvxUclgXn
+   RYXszGcLCjH2/mOAs+LfUv+XpEXC6eZXWj+oh8a2lYqt+9tewvRV5TEUk
+   55qECN7f5eQGFefAyDzxcmuqhygpVayLugyqKdo9ia8yjVCVsZkEbfHDT
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="377733953"
 X-IronPort-AV: E=Sophos;i="6.02,144,1688454000"; 
-   d="scan'208";a="363819703"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2023 14:01:27 -0700
+   d="scan'208";a="377733953"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2023 18:27:55 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="867963747"
+X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="694048860"
 X-IronPort-AV: E=Sophos;i="6.02,144,1688454000"; 
-   d="scan'208";a="867963747"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga004.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 13 Sep 2023 14:01:26 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32; Wed, 13 Sep 2023 14:01:25 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32 via Frontend Transport; Wed, 13 Sep 2023 14:01:25 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.40) by
- edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.32; Wed, 13 Sep 2023 14:01:25 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gOYZDjCfnfWcKKESd+XPto4lP/lOExJttb+XWVO10iUxp/hcv8aEcV+0KKF+x4G9yMsoCdWC/gsbPO7u8jA4zSq+o9WTAkKfdElc39Obm+0b2rNymGLBoCZZpHZasFdjYVFJU1J1mkgeuwYDWQJp9Rh6ILGfJ0Dnh6WvWcz2zwa1oKLs7TGoAv3ZvsjvgiR1b4jIuvtwdbzDT0lkbIFYjvFeERndODuVVzpxJMg8IaCU2C00lFhKS3YoM153mWvEsYhcCZuAY+xYBzBcMrYVqVIsNKiPD+mOhQ7Wu/u8hahGLeQ3qO72P3F87iybdpcooUU6/SeyuNPCc4ymhrFuMQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RfmRfBGHERSV2Baobnm+3YCsl7gB0/GxsP5DF1To2P8=;
- b=b0hGcCtbRJPL/pO7O/ZvNDy7kwKxHwi2TCSFuFyP7KgwxcKSK8PIZWGWbQx5Ef3UjigXcUorMToJz8eA2XODadHPE7MU7mEaH+51I2Aw9oJNNXd9Qm3VEGGnJDYCgwQxRAXmrjZT+e2LCI9R0twDqSSDg8TIbLN25c7LPb6OqHh7WY8xwcyLpymtBRQnb2SY8pxz/l4rhQre1FminiAHD+0mYfmN9xEm9wCHBMYUeVfMnBXydWK3d8ZccN2JbD1G4UQsZEHurDXrClWDTTATFOsCoPeZuEpUep1UVMKliXhM0TwaTCldm0m6t/B9ka6az36hmfoaLKGw9FLSLUGdtQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SJ2PR11MB7573.namprd11.prod.outlook.com (2603:10b6:a03:4d2::10)
- by IA1PR11MB7811.namprd11.prod.outlook.com (2603:10b6:208:3f9::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.20; Wed, 13 Sep
- 2023 21:00:21 +0000
-Received: from SJ2PR11MB7573.namprd11.prod.outlook.com
- ([fe80::afd6:ce92:6244:7203]) by SJ2PR11MB7573.namprd11.prod.outlook.com
- ([fe80::afd6:ce92:6244:7203%5]) with mapi id 15.20.6768.029; Wed, 13 Sep 2023
- 21:00:21 +0000
-Message-ID: <ae5ab387-0a1c-3613-5c04-db879aebc856@intel.com>
-Date:   Wed, 13 Sep 2023 14:00:19 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.15.0
-Subject: Re: [PATCH 5/5] selftests/resctrl: Reduce failures due to outliers in
- MBA/MBM tests
-Content-Language: en-US
-To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>
-CC:     Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        <linux-kselftest@vger.kernel.org>,
-        =?UTF-8?Q?Maciej_Wiecz=c3=b3r-Retman?= 
-        <maciej.wieczor-retman@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
-        <stable@vger.kernel.org>
-References: <20230911111930.16088-1-ilpo.jarvinen@linux.intel.com>
- <20230911111930.16088-6-ilpo.jarvinen@linux.intel.com>
- <cf7439c4-f72c-a145-5a65-84ae15c5d96f@intel.com>
- <c1518af-cc3c-3aa7-a3c-4bbfe8cc6cd@linux.intel.com>
-From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <c1518af-cc3c-3aa7-a3c-4bbfe8cc6cd@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: MWH0EPF00056D0B.namprd21.prod.outlook.com
- (2603:10b6:30f:fff2:0:1:0:b) To SJ2PR11MB7573.namprd11.prod.outlook.com
- (2603:10b6:a03:4d2::10)
+   d="scan'208";a="694048860"
+Received: from haibo-optiplex-7090.sh.intel.com ([10.239.159.132])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2023 18:27:48 -0700
+From:   Haibo Xu <haibo1.xu@intel.com>
+Cc:     xiaobo55x@gmail.com, haibo1.xu@intel.com, ajones@ventanamicro.com,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Like Xu <likexu@tencent.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Thomas Huth <thuth@redhat.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        Aaron Lewis <aaronlewis@google.com>,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvm-riscv@lists.infradead.org
+Subject: [PATCH v3 0/9] RISCV: Add kvm Sstc timer selftests
+Date:   Thu, 14 Sep 2023 09:36:54 +0800
+Message-Id: <cover.1694421911.git.haibo1.xu@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ2PR11MB7573:EE_|IA1PR11MB7811:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2569358b-6f7e-495b-3dbb-08dbb49c7192
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wLHd4CKcR1n3f4n31YxIfufbsjwOI3rp/hD1GPZSlmU69ACQhKZnViLHBqm+W7k8RBUopzs18Pe1o6uPGFQ2OO2sYpxi+NjrnXaQZEt17LDeSYvEx6x2iqC3I0l3oTgXaf+ldaX5VIY6aKe82vS/QMJ9Ut+qjhglZgAsvtXhPnFHutEe2uSzrfVlHCxEJSUZnav5T27uSYtBmMPGBm4xz2A8TyKGT/Nn09P2DIE8Iqd6fby+hDhCsI1YGu6trWAbpkAH43a5WV0kXz4YZP1M+Liny7RRSOEkBAGj7ny0UU1iFP8/lb+q71zZwNbOTyR5KhtLzDMPm0MuQiixKmJ9PvjoiCiOxjqDN0ZW0HGeVzlkLCl/zKd/A+c/cjW/SDjEJLdMmcINOsE3BkbRruGMYrMnEHZifsTYAb57aRwX/2Rs9inY8SpP6mZJg0c3K8XXzFfg2s917EV1Qvo3er1N9iNd2GZdL5mOBNupC0egVoEQcklV1SGzUEaNwZ+YKJvT4rTQQR6mxy0+tpNogYtc3DTqakwqZYRsWfChQAgWirYMUIYOG0iR1u3ufK3zsQ+YzQdeRpAH+77HQQ+2B9uSBuU+ompPv1whjubDqBhQi1fiUsm4zfnA8RC2NoT8fQXBrPTYmfJ7j6O/Yw0ZJXWsjw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7573.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(366004)(396003)(376002)(39860400002)(136003)(451199024)(186009)(1800799009)(4326008)(66946007)(66556008)(66476007)(8936002)(8676002)(478600001)(2616005)(82960400001)(41300700001)(316002)(6916009)(6506007)(53546011)(6486002)(6512007)(54906003)(83380400001)(5660300002)(26005)(44832011)(31686004)(66574015)(2906002)(86362001)(31696002)(36756003)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NHlMc3JkcWx6T2ZQN3JsY1IxNzhURTZxaHpFeVh3R3JWZXlSaUw0bkloRklU?=
- =?utf-8?B?OGtteEhPVG9UYzNSd3ZVVTA3d3NObDNMWmxJVjlUdHFSL2JOU09pa3pQcXli?=
- =?utf-8?B?akk2V2ZybGZRei90TXAvQ0hNYTRsdnExT3RDNnlCNlNWYkU5R1U5WU85b1Nu?=
- =?utf-8?B?UVJlMG5oUm5EakpBdmREREN6dzUxWENJbHh5V0RXZU1Yd3lxRTZOSENYZ0FP?=
- =?utf-8?B?ZkdSN2tRWVRKRVByM1JoZzVOY1dqc1hDSHNQdGhnc2JsbFgweER1elNOUkVj?=
- =?utf-8?B?UktjLzhTazRyUXZXaU1vNytiVnJLTldPMDlQUFJIbGx3VGxIdVdMR2xVOUpR?=
- =?utf-8?B?SjRWM2ZGcHdGK1JWbGdJdU5PMFBSOWd0OUsvcnZWSjFYSTNMUG1SUFF1MDdm?=
- =?utf-8?B?dERJdEJ4bGVoZ3NURmlHS2pDMGRVdlh6S1o2LzVRY3hHczVnaC9zZkhLYnUw?=
- =?utf-8?B?WEF6amgrMVNYeEROYzI2cG5xZzBSaVhYTlo5dFI5Q3dwSzRWN1FySnJmbUJt?=
- =?utf-8?B?em9HNTczZ2VPVFFvZjNLWklEOWRzKzZHWDNoM1hnaEI2a2U4V3pCS3lOKzYy?=
- =?utf-8?B?NnBkVXRVM0VmcWpZd2V6Q2duUHkrQXZZYk00dmd1TXVhOE9IRm11NzlWME5r?=
- =?utf-8?B?ajRadHBSTGxLNko5RTVXcWR5RzBscGsxRHBmSVIzQno1Y2NaUU00WU5tb0ls?=
- =?utf-8?B?TFkrYXBwM0FPZmlJdDB3RTF6TzFQUmR6L0syZXExR2YySzNCNGFOa1JPaEFs?=
- =?utf-8?B?R2xPdFUreWdDd0QzRmFCdW1xdmNId2tUSDFVN0ZYZndSVXBKTWp6SjRGRXph?=
- =?utf-8?B?VmRHVnRSczRBZElEQThhM0QvWHZ2QmorMkgybTFqVFZhdTk5RWlaZ1l0Y3pG?=
- =?utf-8?B?cC9IWVdjS2EvMmlUZmlVdm5xNzlIWWp6NmFmeXJueG94SVY1MlhJZk5wRmp2?=
- =?utf-8?B?NFNXQU9BYmdYQ2hSdFVCSmxtNDZGaVZwYllPaE1iOEJIQ25ibXpHbG9sN1pq?=
- =?utf-8?B?eS9JWldXMHBFZXFHWWdiQnFUTU1nMEdVVTVIci81Y1lkRzhGYzY4S0Q3RFBk?=
- =?utf-8?B?dEVSazhWWEg3NXgzOUhzY1gwOVk3cVFsMldIQ2dSZkE5b2hXM1pFdHk2L3Fo?=
- =?utf-8?B?UkZ6OU12Mkp3dzRKOGRNa2NPQ0licUNSd1ozc2orSVZTbWJwVXVnUFQxcDdk?=
- =?utf-8?B?cnlhb1JFbVNTaUdLTDA5ejF2YmEzcnJBb1FqWlBqNlU2TUM4VXA4bGNlMzAv?=
- =?utf-8?B?a1hTclBuWXN3R0plTkEwbW8xVkhpakdMRzU5RVRWdXNwSDRKamo2Y2I3OXlC?=
- =?utf-8?B?V0orWmJMYmVQb3BQOURDRnJYZE5HR1c0SDVUWVVsUklCL2x1N05ocUxaMnJv?=
- =?utf-8?B?a2dQZGwyZE9rL2I5Z0g3ZGF3NnZGNElwNVlOWUQydENsMTE2Rm1FNHJpQzdp?=
- =?utf-8?B?czJqeVVvNjNlYnNiUUdpRjc2Y1hBTzI1SVpBMk5VM2hQV2V5dmtpTlZ6cy9B?=
- =?utf-8?B?RTFNNW9zaGRMcXFYeDFqNDB1VU1OWXAxOGdjMTl0R0JLcys3c09hWm5qc21p?=
- =?utf-8?B?UkZ4bGlBempPalUrb3cySVJPc3FaMytBczZDeE9HaWxUTWV5aFNPS2lGUVI3?=
- =?utf-8?B?UG1Yd1ZucHhQS0d6UEZBQWJ0Wks2blZUcW55RXBNZUFjMVM0YUwycVA2bXd1?=
- =?utf-8?B?a1J1Zm9pVEFCQUJxdmRpZHhaczNBdUR2NjZsVnZScXpCQW5Ua2swdU52M2tn?=
- =?utf-8?B?cnFOT2xZZDZIc2oyOFpTMUdvQVdEOEFZNFpZRUxZWmY4TDRtSWdaY2s2YVQ0?=
- =?utf-8?B?c0djWWpSMHdydDNqbE5NVDU4TmZyN2MwdndNREtKSks5dEpqemN0WjRYdUhL?=
- =?utf-8?B?bVVJS29qUnV2SU44ekNvY0FSMkdWZU9DKzhBU3Y4d3NMbDVRS0dDRXZOUFFO?=
- =?utf-8?B?V0JxMkpreVNadE9iYVdxVk5zc3BJU0dLSk12UFZKekdKN2NLek9MRERqTXhV?=
- =?utf-8?B?OFp4dWZuTDYyTk94Mnk0eC9hS1o1cmNuRG51dE1oclRXMVZmL012cGl4eDNs?=
- =?utf-8?B?WUoxVS9TTGNkVWN0YTB6VEFkZzVDQmUvYy84SktZeXJJRjByT2VBUUpIY0Yv?=
- =?utf-8?B?eXcvMElKZXQwM3VNUW82aGtGeDh4R2Mvbk5STnBsMnVSOFpLZitYZDREYnhp?=
- =?utf-8?B?L0E9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2569358b-6f7e-495b-3dbb-08dbb49c7192
-X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB7573.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Sep 2023 21:00:21.7863
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: MeyWBlog1g6F7XKlpBqjIhHvgfykWegF2SF/3aNXTBa/sU0ZljxcOSWBeepRCl+GJABLR37pNtPMfOc7dl34AOnKsJXkh5nfEzGBWN73l48=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB7811
-X-OriginatorOrg: intel.com
+Content-Transfer-Encoding: 8bit
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Ilpo,
+The RISC-V arch_timer selftests is used to validate Sstc timer
+functionality in a guest, which sets up periodic timer interrupts
+and check the basic interrupt status upon its receipt.
 
-On 9/13/2023 4:43 AM, Ilpo Järvinen wrote:
-> On Tue, 12 Sep 2023, Reinette Chatre wrote:
->> On 9/11/2023 4:19 AM, Ilpo Järvinen wrote:
->>> 5% difference upper bound for success is a bit on the low side for the
->>
->> "a bit on the low side" is very vague.
-> 
-> The commit that introduced that 5% bound plainly admitted it's "randomly 
-> chosen value". At least that wasn't vague, I guess. :-)
-> 
-> So what I'm trying to do here is to have "randomly chosen value" replaced 
-> with a value that seems to work well enough based on measurements on 
-> a large set of platforms.
+This KVM selftests was ported from aarch64 arch_timer and tested
+with Linux v6.6-rc1 on a Qemu riscv64 virt machine.
 
-Already a better motivation for this change. Your cover letter also hints
-at this but this description does not mention that this is not just
-another number pulled from the air but indeed one that is based on
-significant testing on a large variety of systems. This description can
-surely mention all the work you did that ended with proposing this new
-number, no?
+---
+Changed since v2:
+  * Rebase to Linux 6.6-rc1
+  * Add separate patch for kvm/Makefile improvement
+  * Move aarch64 specific macros to aarch64/arch_timer.c
+  * Add -DCONFIG_64BIT to kvm/Makefile CFLAGS to ensure
+    only 64bit registers were available in csr.h
+  * Avoid some #ifdef in kvm/arch_timer.c by setting some
+    aarch64 specific variable to 0 on risc-v
 
-> 
-> Personally, I don't care much about this, I can just ignore the failures 
-> due to outliers (and also reports about failing MBA/MBM test if somebody 
-> ever sends one to me), but if I'd be one running automated tests it would 
-> be annoying to have a problem like this unaddressed.
+Haibo Xu (9):
+  KVM: selftests: Unify the codes for guest exception handling
+  KVM: selftests: Unify the makefile rule for split targets
+  KVM: arm64: selftests: Split arch_timer test code
+  tools: riscv: Add header file csr.h
+  KVM: riscv: selftests: Switch to use macro from csr.h
+  KVM: riscv: selftests: Add exception handling support
+  KVM: riscv: selftests: Add guest helper to get vcpu id
+  KVM: riscv: selftests: Change vcpu_has_ext to a common function
+  KVM: riscv: selftests: Add sstc timer test
 
-In no way was I suggesting that this should not be addressed.
+ tools/arch/riscv/include/asm/csr.h            | 521 ++++++++++++++++++
+ tools/testing/selftests/kvm/Makefile          |  14 +-
+ .../selftests/kvm/aarch64/arch_timer.c        | 291 +---------
+ .../selftests/kvm/aarch64/debug-exceptions.c  |   4 +-
+ .../selftests/kvm/aarch64/page_fault_test.c   |   4 +-
+ .../testing/selftests/kvm/aarch64/vgic_irq.c  |   4 +-
+ tools/testing/selftests/kvm/arch_timer.c      | 250 +++++++++
+ .../selftests/kvm/include/aarch64/processor.h |  12 +-
+ .../selftests/kvm/include/kvm_util_base.h     |   9 +
+ .../selftests/kvm/include/riscv/arch_timer.h  |  80 +++
+ .../selftests/kvm/include/riscv/processor.h   |  63 ++-
+ .../testing/selftests/kvm/include/test_util.h |   2 +
+ .../selftests/kvm/include/timer_test.h        |  43 ++
+ .../selftests/kvm/include/x86_64/processor.h  |   5 -
+ .../selftests/kvm/lib/aarch64/processor.c     |   6 +-
+ .../selftests/kvm/lib/riscv/handlers.S        | 101 ++++
+ .../selftests/kvm/lib/riscv/processor.c       |  86 +++
+ .../selftests/kvm/lib/x86_64/processor.c      |   4 +-
+ .../testing/selftests/kvm/riscv/arch_timer.c  | 107 ++++
+ .../selftests/kvm/riscv/get-reg-list.c        |  16 +-
+ tools/testing/selftests/kvm/x86_64/amx_test.c |   4 +-
+ .../selftests/kvm/x86_64/fix_hypercall_test.c |   4 +-
+ .../selftests/kvm/x86_64/hyperv_evmcs.c       |   4 +-
+ .../selftests/kvm/x86_64/hyperv_features.c    |   8 +-
+ .../testing/selftests/kvm/x86_64/hyperv_ipi.c |   6 +-
+ .../selftests/kvm/x86_64/kvm_pv_test.c        |   4 +-
+ .../selftests/kvm/x86_64/monitor_mwait_test.c |   4 +-
+ .../kvm/x86_64/pmu_event_filter_test.c        |   8 +-
+ .../smaller_maxphyaddr_emulation_test.c       |   4 +-
+ .../selftests/kvm/x86_64/svm_int_ctl_test.c   |   4 +-
+ .../kvm/x86_64/svm_nested_shutdown_test.c     |   4 +-
+ .../kvm/x86_64/svm_nested_soft_inject_test.c  |   4 +-
+ .../kvm/x86_64/ucna_injection_test.c          |   8 +-
+ .../kvm/x86_64/userspace_msr_exit_test.c      |   4 +-
+ .../vmx_exception_with_invalid_guest_state.c  |   4 +-
+ .../selftests/kvm/x86_64/vmx_pmu_caps_test.c  |   4 +-
+ .../selftests/kvm/x86_64/xapic_ipi_test.c     |   4 +-
+ .../selftests/kvm/x86_64/xcr0_cpuid_test.c    |   4 +-
+ .../selftests/kvm/x86_64/xen_shinfo_test.c    |   4 +-
+ 39 files changed, 1338 insertions(+), 374 deletions(-)
+ create mode 100644 tools/arch/riscv/include/asm/csr.h
+ create mode 100644 tools/testing/selftests/kvm/arch_timer.c
+ create mode 100644 tools/testing/selftests/kvm/include/riscv/arch_timer.h
+ create mode 100644 tools/testing/selftests/kvm/include/timer_test.h
+ create mode 100644 tools/testing/selftests/kvm/lib/riscv/handlers.S
+ create mode 100644 tools/testing/selftests/kvm/riscv/arch_timer.c
 
-> 
->>> MBA and MBM tests. Some platforms produce outliers that are slightly
->>> above that, typically 6-7%.
->>>
->>> Relaxing the MBA/MBM success bound to 8% removes most of the failures
->>> due those frequent outliers.
->>
->> This description needs more context on what issue is being solved here.
->> What does the % difference represent? How was new percentage determined?
->>
->> Did you investigate why there are differences between platforms? From
->> what I understand these tests measure memory bandwidth using perf and
->> resctrl and then compare the difference. Are there interesting things 
->> about the platforms on which the difference is higher than 5%?
-> 
-> Not really I think. The number just isn't that stable to always remain 
-> below 5% (even if it usually does).
-> 
-> Only systematic thing I've come across is that if I play with the read 
-> pattern for defeating the hw prefetcher (you've seen a patch earlier and 
-> it will be among the series I'll send after this one), it has an impact 
-> which looks more systematic across all MBM/MBA tests. But it's not what 
-> I'm trying now address with this patch.
-> 
->> Could
->> those be systems with multiple sockets (and thus multiple PMUs that need
->> to be setup, reset, and read)? Can the reading of the counters be improved
->> instead of relaxing the success criteria? A quick comparison between
->> get_mem_bw_imc() and get_mem_bw_resctrl() makes me think that a difference
->> is not surprising ... note how the PMU counters are started and reset
->> (potentially on multiple sockets) at every iteration while the resctrl
->> counters keep rolling and new values are just subtracted from previous.
-> 
-> Perhaps, I can try to look into it (add to my todo list so I won't 
-> forget). But in the meantime, this new value is picked using a criteria 
-> that looks better than "randomly chosen value". If I ever manage to 
-> address the outliers, the bound could be lowered again.
-> 
-> I'll update the changelog to explain things better.
-> 
-> 
-ok, thank you.
+-- 
+2.34.1
 
-Reinette
