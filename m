@@ -2,115 +2,234 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 647977A0162
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Sep 2023 12:15:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26B967A016E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Sep 2023 12:17:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237924AbjINKP7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 14 Sep 2023 06:15:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57994 "EHLO
+        id S238074AbjINKRH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 14 Sep 2023 06:17:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230444AbjINKP7 (ORCPT
+        with ESMTP id S237316AbjINKRG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Sep 2023 06:15:59 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C7CD1BE5
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Sep 2023 03:15:54 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id ffacd0b85a97d-31c5a2e8501so675733f8f.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Sep 2023 03:15:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1694686553; x=1695291353; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VyIjI/I6fiuQb5fro76kkYxOSc4xq/0TuIo+mtjDBWI=;
-        b=QA3eGr+g541KCdar2tCcnj5cTCklF9uEIbH6NOz9SXHpL0vOAKJBOKvewdQFiNhQrD
-         ZBu9q3pL2wUuSBviEFP36/T5c02jF8lmYaxkpY1TOxj7UkB/H/4ZzkEMv/3DlvakqTqz
-         YV/NolPyqkBEjkIufXupEfjuF7kfCjUiGKNm/8AAYXlXjKw48qjqbeKjytASiU0RomIz
-         enDWv2eGMJ1Wz8WkC8vg7+0dMUWSCTjBXX0a4VqPD/4nx+LUOKbhTGo5ssvU4ssDG8ha
-         RGnAEPnT2AqoFf6MQ0NYSRRjosa1m1wzX+7CUMoyEG3dScBrDQwmEUz94hL6bzy22H9q
-         9l9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694686553; x=1695291353;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VyIjI/I6fiuQb5fro76kkYxOSc4xq/0TuIo+mtjDBWI=;
-        b=Sj9H9A0VhsZ672e3JbSU//2744NI4PXl7ea2LtX7aLjniJvEbD+NN2vOWy8EOfCxhL
-         /ARuvqlsAYg6S2PTEMzdAVXujlUCeNHWrNWd0PBmiQqH3tnKQNb8X+Q7SvH3JeF1Am5P
-         VdeeSbiy9y7b1LLzmFat2MLp7gmbcMAFCn4e1EZS2LEN25eFezLjAxZ3r1UnHSAHrZyZ
-         zNhqFmwwN+fnQ54EmmebUOc7kQegybBs4CGf3rq/So81YqsOyKYPztRP1oQra3rtt2hJ
-         aMGjQAmoVziy0bxYFH6gPB5SM9XjWPJcxoffFcjLRVxBqARuynzZO5pw1Ls6et8x+cUV
-         xdyg==
-X-Gm-Message-State: AOJu0Yy8gO+66aEA6UWOQLPOt8Sv1FyZsWZywL0NcqSN7vThytQF6u0P
-        B0S4+lnnOQP7pymLqhGM/yP/ow==
-X-Google-Smtp-Source: AGHT+IH7ZT746JOyiS+eOvZlolhRQEl4EX2Lm6S0kGQOnu5nvVuWeFGDXcIG88aW5kDFIAcnKh6/BQ==
-X-Received: by 2002:adf:d0c3:0:b0:31a:d2f9:7372 with SMTP id z3-20020adfd0c3000000b0031ad2f97372mr4347143wrh.29.1694686552802;
-        Thu, 14 Sep 2023 03:15:52 -0700 (PDT)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id k8-20020a5d5248000000b0031fc4c31d77sm1340310wrc.88.2023.09.14.03.15.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Sep 2023 03:15:51 -0700 (PDT)
-Date:   Thu, 14 Sep 2023 12:15:50 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Conor Dooley <conor.dooley@microchip.com>
-Cc:     Haibo Xu <haibo1.xu@intel.com>, xiaobo55x@gmail.com,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        Aaron Lewis <aaronlewis@google.com>,
-        Thomas Huth <thuth@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        Thu, 14 Sep 2023 06:17:06 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FF7B1BE9;
+        Thu, 14 Sep 2023 03:17:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694686622; x=1726222622;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=xwU357hoRpQ9eDowzALLhet7mgbrEK4Ba2dcwI07Bwc=;
+  b=DDCPuKCOGHaZdSsvZ9MNsQG0yFmXw9Jl4XFSB3kewR/uXCUdxxqJoANq
+   NmzjYcP/wcw7RZtBFzKOEPUACKaDdr/GpP367dUXcJb6AhV0GH4H/D/0y
+   zhIYzLaOISZkUFUwiZd6W6kWYh/oJkI4SB1MAry+1C0wMXS2LbaThvxcH
+   a9o3sYzki2wDj1155iNMRBASe5NrQP0R/s8efDJQ6IcGRyM64cT2p1Jd7
+   nixgZjbMCuBJzV0D+csJrBkEZofE3+5lzIpPJSum7/bLEYYzFvn3PE1Bp
+   ZbDq57APaiGNtdXGEWh58DREJI+NTAnWv6alcIxX9nTGrG5z7GDG5GBrE
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="382714605"
+X-IronPort-AV: E=Sophos;i="6.02,145,1688454000"; 
+   d="scan'208";a="382714605"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2023 03:17:02 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="810006698"
+X-IronPort-AV: E=Sophos;i="6.02,145,1688454000"; 
+   d="scan'208";a="810006698"
+Received: from skolhe-mobl1.ger.corp.intel.com ([10.252.36.254])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2023 03:16:59 -0700
+Date:   Thu, 14 Sep 2023 13:16:57 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+cc:     Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
         linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvm-riscv@lists.infradead.org
-Subject: Re: [PATCH v3 9/9] KVM: riscv: selftests: Add sstc timer test
-Message-ID: <20230914-2232dea1c6d03fb5985755e6@orel>
-References: <cover.1694421911.git.haibo1.xu@intel.com>
- <64e0637cd6f22dd7557ed44bd2242001e7830d1c.1694421911.git.haibo1.xu@intel.com>
- <20230914-ee133dd5e804282ce28833d6@orel>
- <20230914-reflector-preshow-786425ad7ae2@wendy>
+        =?ISO-8859-15?Q?Maciej_Wiecz=F3r-Retman?= 
+        <maciej.wieczor-retman@intel.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH 1/5] selftests/resctrl: Extend signal handler coverage
+ to unmount on receiving signal
+In-Reply-To: <d6cc3829-9b7d-6a0b-c734-c33f6a66959c@intel.com>
+Message-ID: <9dfe761f-6779-44c6-c227-5175d53ac25@linux.intel.com>
+References: <20230911111930.16088-1-ilpo.jarvinen@linux.intel.com> <20230911111930.16088-2-ilpo.jarvinen@linux.intel.com> <4176a620-4cec-5d57-42a3-a15c0fe3eb73@intel.com> <aab4b1cc-6eb5-c324-e97e-c6699e2d165@linux.intel.com>
+ <d6cc3829-9b7d-6a0b-c734-c33f6a66959c@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230914-reflector-preshow-786425ad7ae2@wendy>
+Content-Type: multipart/mixed; BOUNDARY="8323329-1304429825-1694686039=:1814"
+Content-ID: <763f45ca-bbf4-67b9-6a86-20e4cae7a6f1@linux.intel.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Sep 14, 2023 at 10:52:15AM +0100, Conor Dooley wrote:
-> On Thu, Sep 14, 2023 at 11:36:01AM +0200, Andrew Jones wrote:
-> > > +static inline void cpu_relax(void)
-> > > +{
-> > > +#ifdef __riscv_zihintpause
-> > > +	asm volatile("pause" ::: "memory");
-> > > +#else
-> > > +	/* Encoding of the pause instruction */
-> > > +	asm volatile(".4byte 0x100000F" ::: "memory");
-> > > +#endif
-> > > +}
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
+
+--8323329-1304429825-1694686039=:1814
+Content-Type: text/plain; CHARSET=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
+Content-ID: <ecbe4e3f-6a73-628f-ca63-fef6d244f48@linux.intel.com>
+
+On Wed, 13 Sep 2023, Reinette Chatre wrote:
+> On 9/13/2023 3:01 AM, Ilpo Järvinen wrote:
+> > On Tue, 12 Sep 2023, Reinette Chatre wrote:
+> >> On 9/11/2023 4:19 AM, Ilpo Järvinen wrote:
+> >>> Unmounting resctrl FS has been moved into the per test functions in
+> >>> resctrl_tests.c by commit caddc0fbe495 ("selftests/resctrl: Move
+> >>> resctrl FS mount/umount to higher level"). In case a signal (SIGINT,
+> >>> SIGTERM, or SIGHUP) is received, the running selftest is aborted by
+> >>> ctrlc_handler() which then unmounts resctrl fs before exiting. The
+> >>> current section between signal_handler_register() and
+> >>> signal_handler_unregister(), however, does not cover the entire
+> >>> duration when resctrl FS is mounted.
+> >>>
+> >>> Move signal_handler_register() and signal_handler_unregister() call
+> >>> into the test functions in resctrl_tests.c to properly unmount resctrl
+> >>> fs. Adjust child process kill() call in ctrlc_handler() to only be
+> >>> invoked if the child was already forked.
+> >>
+> >> Thank you for catching this.
+> >>
+> >>>
+> >>> Fixes: caddc0fbe495 ("selftests/resctrl: Move resctrl FS mount/umount to higher level")
+> >>> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> >>> Cc: <stable@vger.kernel.org>
+> >>> ---
+> >>>  tools/testing/selftests/resctrl/cat_test.c    |  8 -------
+> >>>  .../testing/selftests/resctrl/resctrl_tests.c | 24 +++++++++++++++++++
+> >>>  tools/testing/selftests/resctrl/resctrl_val.c | 22 ++++++++---------
+> >>>  3 files changed, 34 insertions(+), 20 deletions(-)
+> >>>
+> >>> diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
+> >>> index 97b87285ab2a..224ba8544d8a 100644
+> >>> --- a/tools/testing/selftests/resctrl/cat_test.c
+> >>> +++ b/tools/testing/selftests/resctrl/cat_test.c
+> >>> @@ -167,12 +167,6 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
+> >>>  		strcpy(param.filename, RESULT_FILE_NAME1);
+> >>>  		param.num_of_runs = 0;
+> >>>  		param.cpu_no = sibling_cpu_no;
+> >>> -	} else {
+> >>> -		ret = signal_handler_register();
+> >>> -		if (ret) {
+> >>> -			kill(bm_pid, SIGKILL);
+> >>> -			goto out;
+> >>> -		}
+> >>>  	}
+> >>>  
+> >>>  	remove(param.filename);
+> >>> @@ -209,10 +203,8 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
+> >>>  		}
+> >>>  		close(pipefd[0]);
+> >>>  		kill(bm_pid, SIGKILL);
+> >>> -		signal_handler_unregister();
+> >>>  	}
+> >>>  
+> >>> -out:
+> >>>  	cat_test_cleanup();
+> >>>  
+> >>>  	return ret;
+> >>> diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
+> >>> index 823672a20a43..3d66fbdc2df3 100644
+> >>> --- a/tools/testing/selftests/resctrl/resctrl_tests.c
+> >>> +++ b/tools/testing/selftests/resctrl/resctrl_tests.c
+> >>> @@ -73,8 +73,13 @@ static void run_mbm_test(const char * const *benchmark_cmd, int cpu_no)
+> >>>  
+> >>>  	ksft_print_msg("Starting MBM BW change ...\n");
+> >>>  
+> >>> +	res = signal_handler_register();
+> >>> +	if (res)
+> >>> +		return;
+> >>> +
+> >>>  	res = mount_resctrlfs();
+> >>>  	if (res) {
+> >>> +		signal_handler_unregister();
+> >>>  		ksft_exit_fail_msg("Failed to mount resctrl FS\n");
+> >>>  		return;
+> >>>  	}
+> >>> @@ -91,6 +96,7 @@ static void run_mbm_test(const char * const *benchmark_cmd, int cpu_no)
+> >>>  
+> >>>  umount:
+> >>>  	umount_resctrlfs();
+> >>> +	signal_handler_unregister();
+> >>>  }
+> >>>  
+> >>>  static void run_mba_test(const char * const *benchmark_cmd, int cpu_no)
+> >>> @@ -99,8 +105,13 @@ static void run_mba_test(const char * const *benchmark_cmd, int cpu_no)
+> >>>  
+> >>>  	ksft_print_msg("Starting MBA Schemata change ...\n");
+> >>>  
+> >>> +	res = signal_handler_register();
+> >>> +	if (res)
+> >>> +		return;
+> >>> +
+> >>>  	res = mount_resctrlfs();
+> >>>  	if (res) {
+> >>> +		signal_handler_unregister();
+> >>>  		ksft_exit_fail_msg("Failed to mount resctrl FS\n");
+> >>>  		return;
+> >>>  	}
+> >>> @@ -115,6 +126,7 @@ static void run_mba_test(const char * const *benchmark_cmd, int cpu_no)
+> >>>  
+> >>>  umount:
+> >>>  	umount_resctrlfs();
+> >>> +	signal_handler_unregister();
+> >>>  }
+> >>>  
+> >>
+> >> This adds more duplicated code for every test. Have you considered a
+> >> single test setup function that can be used to mount resctrl FS and setup
+> >> the signal handler paired with a single test teardown function?
 > > 
-> > cpu_relax() should go to include/riscv/processor.h
+> > Yes. Consolidating all these is among my not-yet submitted patches.
+> > I just had to do a backport-friendly Fixes patch first for this.
+> > 
 > 
-> Can the one from asm/vdso/processor.h be reused, or are there special
-> considerations preventing that?
+> Could you please help me understand how the duplicate calls are more
+> backport friendly?
 
-We'd need to copy it into tools/arch/riscv/include/asm, but it could be
-done. Hmm, now that I look at it, I see we're missing the barrier() call
-in this kvm selftests version.
+Hi,
 
-Thanks,
-drew
+It's simply because the refactoring that has to be done to be able to 
+introduce the generalized test framework is much more invasive and far 
+reaching than this patch. Essentially, all the call signatures of the test 
+functions need to match and the feature checks need to be done in new per 
+test functions too. This is the diffstat of those changes alone:
+
+ tools/testing/selftests/resctrl/cat_test.c      |  21 +++--
+ tools/testing/selftests/resctrl/cmt_test.c      |  26 +++--
+ tools/testing/selftests/resctrl/mba_test.c      |  20 +++-
+ tools/testing/selftests/resctrl/mbm_test.c      |  20 +++-
+ tools/testing/selftests/resctrl/resctrl.h       |  43 ++++++++-
+ tools/testing/selftests/resctrl/resctrl_tests.c | 220 +++++++++++++++----------------------------
+ tools/testing/selftests/resctrl/resctrlfs.c     |   5 +
+
+(tools/testing/selftests/resctrl/resctrl_tests.c --- part would 
+be slightly less if I'd reorder this patch but that only 24 lines off as 
+per diffstat of this patch).
+
+But that's not all.... To be able to push the generalized test framework 
+to stable, you need to also count in the benchmark cmd changes which 
+worked towards making the call signatures identical. So here's the 
+diffstat for that series for quick reference:
+
+ tools/testing/selftests/resctrl/cache.c       |   5 +-
+ tools/testing/selftests/resctrl/cat_test.c    |  13 +--
+ tools/testing/selftests/resctrl/cmt_test.c    |  34 ++++--
+ tools/testing/selftests/resctrl/mba_test.c    |   4 +-
+ tools/testing/selftests/resctrl/mbm_test.c    |   7 +-
+ tools/testing/selftests/resctrl/resctrl.h     |  16 +--
+ .../testing/selftests/resctrl/resctrl_tests.c | 100 ++++++++----------
+ tools/testing/selftests/resctrl/resctrl_val.c |  10 +-
+
+That's ~500 lines changed vs ~50 so it's a magnitude worse and much less 
+localized.
+
+And rest assured, I did not like introducing the duplicated calls any more 
+than you do (I did not write the generalized test framework for nothing, 
+after all) but the way taken in this patch seemed the most reasonable 
+option under these circumstances.
+
+-- 
+ i.
+--8323329-1304429825-1694686039=:1814--
