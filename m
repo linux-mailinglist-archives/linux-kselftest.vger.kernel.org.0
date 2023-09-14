@@ -2,190 +2,298 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 674C37A0AA2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Sep 2023 18:20:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FB847A0B37
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Sep 2023 19:05:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231695AbjINQUv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 14 Sep 2023 12:20:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41222 "EHLO
+        id S232594AbjINRFs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 14 Sep 2023 13:05:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229992AbjINQUu (ORCPT
+        with ESMTP id S231326AbjINRFr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Sep 2023 12:20:50 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E21399B;
-        Thu, 14 Sep 2023 09:20:45 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-500a8b2b73eso1944994e87.0;
-        Thu, 14 Sep 2023 09:20:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1694708444; x=1695313244; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=J95EVnvedQGsOXFf9YyeDY6M57brRLbFCl8LMxPg7Xc=;
-        b=pVoCwqsjbNrDMr63tfrSXgWlY/ABLBXMtFHPCklw1HnPobi9MjUjzAvoxpAfUPGg7y
-         oP68t/OMVp+nEc38UfIkGejWupRin3usi5AyDDtXQm+qZ6mqaOcaMkd80Y3f4xL4lp7Q
-         TmP9KqCaETofJvw73TkHKc/lQWgTS5dNMOa2S1jXYNW0iNKgbf5bikLCLPVpZjXgyBf0
-         bTcIfBSSCADBtaj58rppzKZR/jMq0PRvnPCXMOY2wUXFTmuU8FoTZEUjXxPPgyYtR6y4
-         UKPCTs0OfbUzN10PSKVbMPBBTnHoWbes+ckgb3bRPE4t/VCrcliCbCq/I2Wut9NLH1uj
-         DjjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694708444; x=1695313244;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=J95EVnvedQGsOXFf9YyeDY6M57brRLbFCl8LMxPg7Xc=;
-        b=pUPVt+TtMPLS6958QokQ0XtYv/1mzlaZJw8No55NDMMw4wLsBqhS5gS3S/yW3Mwk4O
-         9KuW5L6YXz1prpoJVKj9y4059ZpXXnC+QoyxBtXAPEOmF+UuU3WZ4jVLUmzWsrglMzQ0
-         S/90++vxII1kvdDQvv9W2MgDDpeLNaKpv0XqP1GL8/fQ2TYITrOni+m/IBn7huzSwK66
-         tUD1TAOjDTVYNPMP7QB/vyKGJqNGvhS14HAYqUK4H+/ip4Dl/XM+Q8FXphFi1dEUEthi
-         SD5704TWvg2C72K1a4lfAh3W8TbOW5en4jf32kJrTClXx+psbmILToZAlo+nEacT+A/D
-         i1jw==
-X-Gm-Message-State: AOJu0YyuKsfcq2/BWXtgUDfbdP7jIfHtKHEhltTriFdQc3Cya+OjW+JS
-        TQnnKom51smmPrRrj+aqxfiZAsoVv/2Zl3XFcSE=
-X-Google-Smtp-Source: AGHT+IGq5hOj8vL3TMQVdZKjYxMC3LkGk25J0zeXmYONkzwmZ89uatlv3waUJU08I2cSoeHLfS3oHQvDBmnDcOmiyRc=
-X-Received: by 2002:ac2:5394:0:b0:4f9:5580:1894 with SMTP id
- g20-20020ac25394000000b004f955801894mr4511518lfh.15.1694708443569; Thu, 14
- Sep 2023 09:20:43 -0700 (PDT)
-MIME-Version: 1.0
-References: <CAADnVQLid7QvukhnqRoY2VVFi1tCfkPFsMGUUeHDtCgf0SAJCg@mail.gmail.com>
- <20230913122827.91591-1-gerhorst@amazon.de>
-In-Reply-To: <20230913122827.91591-1-gerhorst@amazon.de>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Thu, 14 Sep 2023 09:20:32 -0700
-Message-ID: <CAADnVQJsjVf3t0OJCZkc3rNpHMi_ZTtwLa3LBMi6ot3zufnb+A@mail.gmail.com>
-Subject: Re: [PATCH 2/3] Revert "bpf: Fix issue in verifying allow_ptr_leaks"
-To:     Luis Gerhorst <gerhorst@cs.fau.de>
-Cc:     Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Hao Luo <haoluo@google.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Jiri Olsa <jolsa@kernel.org>, KP Singh <kpsingh@kernel.org>,
-        Yafang Shao <laoar.shao@gmail.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Stanislav Fomichev <sdf@google.com>,
-        Song Liu <song@kernel.org>,
-        Yonghong Song <yonghong.song@linux.dev>,
-        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        gerhorst@amazon.de, Ilya Leoshkevich <iii@linux.ibm.com>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
+        Thu, 14 Sep 2023 13:05:47 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BA801FE1;
+        Thu, 14 Sep 2023 10:05:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694711143; x=1726247143;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=tUD1/z6POA3IUtdx5XVzuwR95oUWZZa4NLHp9FWHlmg=;
+  b=YFqSbA3zGe4A/P3zZ0C0Z1h8S0GA8lrUpOU2v8GbDN6ICTAibRpPlVPB
+   WlsFuWqGQqmSpKh2KePaa9nmaQj0G1NTKecxEtANkTPsOStzxM9Mkqo3M
+   4yTstizEJk3T/yu9a3G0eXxrwBEf7d5YGa4SvsdWw5ziDJkLq7hc9T4DT
+   +1BSFZoSTnc1i0dgDjJJXjg3U8ib2TCKPfDfw/tVHpwn7LJiOJ6I0HBrD
+   zhsqMsjri6PmuAj79wNhP8Ehr1r4Dfg1hmonOTYtQZNBok2dbU5CeqzHx
+   W4tYjGZg0HBEmjYsw0SldI5vdNvBKC/JWaiD2puqmSOY6ELUftq2i3Ty3
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="369315210"
+X-IronPort-AV: E=Sophos;i="6.02,146,1688454000"; 
+   d="scan'208";a="369315210"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2023 10:05:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="773950069"
+X-IronPort-AV: E=Sophos;i="6.02,146,1688454000"; 
+   d="scan'208";a="773950069"
+Received: from skolhe-mobl1.ger.corp.intel.com ([10.252.36.254])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Sep 2023 10:05:07 -0700
+Date:   Thu, 14 Sep 2023 20:05:05 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+cc:     Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org,
+        =?ISO-8859-15?Q?Maciej_Wiecz=F3r-Retman?= 
+        <maciej.wieczor-retman@intel.com>,
         LKML <linux-kernel@vger.kernel.org>,
-        Hagar Gamal Halim Hemdan <hagarhem@amazon.de>,
-        Puranjay Mohan <puranjay12@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH 1/5] selftests/resctrl: Extend signal handler coverage
+ to unmount on receiving signal
+In-Reply-To: <b32f4bd1-9e99-3daa-9d39-8f241b41170c@intel.com>
+Message-ID: <52478b0-15e6-9072-df34-612ec0ebfa@linux.intel.com>
+References: <20230911111930.16088-1-ilpo.jarvinen@linux.intel.com> <20230911111930.16088-2-ilpo.jarvinen@linux.intel.com> <4176a620-4cec-5d57-42a3-a15c0fe3eb73@intel.com> <aab4b1cc-6eb5-c324-e97e-c6699e2d165@linux.intel.com> <d6cc3829-9b7d-6a0b-c734-c33f6a66959c@intel.com>
+ <9dfe761f-6779-44c6-c227-5175d53ac25@linux.intel.com> <b32f4bd1-9e99-3daa-9d39-8f241b41170c@intel.com>
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="8323329-256835453-1694711109=:1814"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Sep 13, 2023 at 5:30=E2=80=AFAM Luis Gerhorst <gerhorst@amazon.de> =
-wrote:
->
-> This reverts commit d75e30dddf73449bc2d10bb8e2f1a2c446bc67a2.
->
-> To mitigate Spectre v1, the verifier relies on static analysis to deduct
-> constant pointer bounds, which can then be enforced by rewriting pointer
-> arithmetic [1] or index masking [2]. This relies on the fact that every
-> memory region to be accessed has a static upper bound and every date
-> below that bound is accessible. The verifier can only rewrite pointer
-> arithmetic or insert masking instructions to mitigate Spectre v1 if a
-> static upper bound, below of which every access is valid, can be given.
->
-> When allowing packet pointer comparisons, this introduces a way for the
-> program to effectively construct an accessible pointer for which no
-> static upper bound is known. Intuitively, this is obvious as a packet
-> might be of any size and therefore 0 is the only statically known upper
-> bound below of which every date is always accessible (i.e., none).
->
-> To clarify, the problem is not that comparing two pointers can be used
-> for pointer leaks in the same way in that comparing a pointer to a known
-> scalar can be used for pointer leaks. That is because the "secret"
-> components of the addresses cancel each other out if the pointers are
-> into the same region.
->
-> With [3] applied, the following malicious BPF program can be loaded into
-> the kernel without CAP_PERFMON:
->
-> r2 =3D *(u32 *)(r1 + 76) // data
-> r3 =3D *(u32 *)(r1 + 80) // data_end
-> r4 =3D r2
-> r4 +=3D 1
-> if r4 > r3 goto exit
-> r5 =3D *(u8 *)(r2 + 0) // speculatively read secret
-> r5 &=3D 1 // choose bit to leak
-> // ... side channel to leak secret bit
-> exit:
-> // ...
->
-> This is jited to the following amd64 code which still contains the
-> gadget:
->
->    0:   endbr64
->    4:   nopl   0x0(%rax,%rax,1)
->    9:   xchg   %ax,%ax
->    b:   push   %rbp
->    c:   mov    %rsp,%rbp
->    f:   endbr64
->   13:   push   %rbx
->   14:   mov    0xc8(%rdi),%rsi // data
->   1b:   mov    0x50(%rdi),%rdx // data_end
->   1f:   mov    %rsi,%rcx
->   22:   add    $0x1,%rcx
->   26:   cmp    %rdx,%rcx
->   29:   ja     0x000000000000003f // branch to mispredict
->   2b:   movzbq 0x0(%rsi),%r8 // speculative load of secret
->   30:   and    $0x1,%r8 // choose bit to leak
->   34:   xor    %ebx,%ebx
->   36:   cmp    %rbx,%r8
->   39:   je     0x000000000000003f // branch based on secret
->   3b:   imul   $0x61,%r8,%r8 // leak using port contention side channel
->   3f:   xor    %eax,%eax
->   41:   pop    %rbx
->   42:   leaveq
->   43:   retq
->
-> Here I'm using a port contention side channel because storing the secret
-> to the stack causes the verifier to insert an lfence for unrelated
-> reasons (SSB mitigation) which would terminate the speculation.
->
-> As Daniel already pointed out to me, data_end is even attacker
-> controlled as one could send many packets of sufficient length to train
-> the branch prediction into assuming data_end >=3D data will never be true=
-.
-> When the attacker then sends a packet with insufficient data, the
-> Spectre v1 gadget leaks the chosen bit of some value that lies behind
-> data_end.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-The above analysis is correct, but unlike traditional spec_v1
-the attacker doesn't control data/data_end.
-The attack can send many large packets to train that data + X < data_end
-and then send a small packet where CPU will mispredict that branch
-and data + X will speculatively read past data_end,
-so the attacker can extract a bit past data_end,
-but data/data_end themselves cannot be controlled.
-So whether this bit 0 or 1 has no bearing.
-The attack cannot be repeated for the same location.
-The attacker can read one bit 8 times in a row and all of them
-will be from different locations in the memory.
-Same as reading 8 random bits from 8 random locations.
-Hence I don't think this revert is necessary.
-I don't believe you can craft an actual exploit.
+--8323329-256835453-1694711109=:1814
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
-Your patch 3 says:
-       /* Speculative access to be prevented. */
-+       char secret =3D *((char *) iph);
-+
-+       /* Leak the first bit of the secret value that lies behind data_end=
- to a
-+        * SMP silbling thread that also executes imul instructions. If the=
- bit
-+        * is 1, the silbling will experience a slowdown. */
-+       long long x =3D secret;
-+       if (secret & 1) {
-+               x *=3D 97;
-+       }
+On Thu, 14 Sep 2023, Reinette Chatre wrote:
+> On 9/14/2023 3:16 AM, Ilpo Järvinen wrote:
+> > On Wed, 13 Sep 2023, Reinette Chatre wrote:
+> >> On 9/13/2023 3:01 AM, Ilpo Järvinen wrote:
+> >>> On Tue, 12 Sep 2023, Reinette Chatre wrote:
+> >>>> On 9/11/2023 4:19 AM, Ilpo Järvinen wrote:
+> >>>>> Unmounting resctrl FS has been moved into the per test functions in
+> >>>>> resctrl_tests.c by commit caddc0fbe495 ("selftests/resctrl: Move
+> >>>>> resctrl FS mount/umount to higher level"). In case a signal (SIGINT,
+> >>>>> SIGTERM, or SIGHUP) is received, the running selftest is aborted by
+> >>>>> ctrlc_handler() which then unmounts resctrl fs before exiting. The
+> >>>>> current section between signal_handler_register() and
+> >>>>> signal_handler_unregister(), however, does not cover the entire
+> >>>>> duration when resctrl FS is mounted.
+> >>>>>
+> >>>>> Move signal_handler_register() and signal_handler_unregister() call
+> >>>>> into the test functions in resctrl_tests.c to properly unmount resctrl
+> >>>>> fs. Adjust child process kill() call in ctrlc_handler() to only be
+> >>>>> invoked if the child was already forked.
+> >>>>
+> >>>> Thank you for catching this.
+> >>>>
+> >>>>>
+> >>>>> Fixes: caddc0fbe495 ("selftests/resctrl: Move resctrl FS mount/umount to higher level")
+> >>>>> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> >>>>> Cc: <stable@vger.kernel.org>
+> >>>>> ---
+> >>>>>  tools/testing/selftests/resctrl/cat_test.c    |  8 -------
+> >>>>>  .../testing/selftests/resctrl/resctrl_tests.c | 24 +++++++++++++++++++
+> >>>>>  tools/testing/selftests/resctrl/resctrl_val.c | 22 ++++++++---------
+> >>>>>  3 files changed, 34 insertions(+), 20 deletions(-)
+> >>>>>
+> >>>>> diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
+> >>>>> index 97b87285ab2a..224ba8544d8a 100644
+> >>>>> --- a/tools/testing/selftests/resctrl/cat_test.c
+> >>>>> +++ b/tools/testing/selftests/resctrl/cat_test.c
+> >>>>> @@ -167,12 +167,6 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
+> >>>>>  		strcpy(param.filename, RESULT_FILE_NAME1);
+> >>>>>  		param.num_of_runs = 0;
+> >>>>>  		param.cpu_no = sibling_cpu_no;
+> >>>>> -	} else {
+> >>>>> -		ret = signal_handler_register();
+> >>>>> -		if (ret) {
+> >>>>> -			kill(bm_pid, SIGKILL);
+> >>>>> -			goto out;
+> >>>>> -		}
+> >>>>>  	}
+> >>>>>  
+> >>>>>  	remove(param.filename);
+> >>>>> @@ -209,10 +203,8 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
+> >>>>>  		}
+> >>>>>  		close(pipefd[0]);
+> >>>>>  		kill(bm_pid, SIGKILL);
+> >>>>> -		signal_handler_unregister();
+> >>>>>  	}
+> >>>>>  
+> >>>>> -out:
+> >>>>>  	cat_test_cleanup();
+> >>>>>  
+> >>>>>  	return ret;
+> >>>>> diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
+> >>>>> index 823672a20a43..3d66fbdc2df3 100644
+> >>>>> --- a/tools/testing/selftests/resctrl/resctrl_tests.c
+> >>>>> +++ b/tools/testing/selftests/resctrl/resctrl_tests.c
+> >>>>> @@ -73,8 +73,13 @@ static void run_mbm_test(const char * const *benchmark_cmd, int cpu_no)
+> >>>>>  
+> >>>>>  	ksft_print_msg("Starting MBM BW change ...\n");
+> >>>>>  
+> >>>>> +	res = signal_handler_register();
+> >>>>> +	if (res)
+> >>>>> +		return;
+> >>>>> +
+> >>>>>  	res = mount_resctrlfs();
+> >>>>>  	if (res) {
+> >>>>> +		signal_handler_unregister();
+> >>>>>  		ksft_exit_fail_msg("Failed to mount resctrl FS\n");
+> >>>>>  		return;
+> >>>>>  	}
+> >>>>> @@ -91,6 +96,7 @@ static void run_mbm_test(const char * const *benchmark_cmd, int cpu_no)
+> >>>>>  
+> >>>>>  umount:
+> >>>>>  	umount_resctrlfs();
+> >>>>> +	signal_handler_unregister();
+> >>>>>  }
+> >>>>>  
+> >>>>>  static void run_mba_test(const char * const *benchmark_cmd, int cpu_no)
+> >>>>> @@ -99,8 +105,13 @@ static void run_mba_test(const char * const *benchmark_cmd, int cpu_no)
+> >>>>>  
+> >>>>>  	ksft_print_msg("Starting MBA Schemata change ...\n");
+> >>>>>  
+> >>>>> +	res = signal_handler_register();
+> >>>>> +	if (res)
+> >>>>> +		return;
+> >>>>> +
+> >>>>>  	res = mount_resctrlfs();
+> >>>>>  	if (res) {
+> >>>>> +		signal_handler_unregister();
+> >>>>>  		ksft_exit_fail_msg("Failed to mount resctrl FS\n");
+> >>>>>  		return;
+> >>>>>  	}
+> >>>>> @@ -115,6 +126,7 @@ static void run_mba_test(const char * const *benchmark_cmd, int cpu_no)
+> >>>>>  
+> >>>>>  umount:
+> >>>>>  	umount_resctrlfs();
+> >>>>> +	signal_handler_unregister();
+> >>>>>  }
+> >>>>>  
+> >>>>
+> >>>> This adds more duplicated code for every test. Have you considered a
+> >>>> single test setup function that can be used to mount resctrl FS and setup
+> >>>> the signal handler paired with a single test teardown function?
+> >>>
+> >>> Yes. Consolidating all these is among my not-yet submitted patches.
+> >>> I just had to do a backport-friendly Fixes patch first for this.
+> >>>
+> >>
+> >> Could you please help me understand how the duplicate calls are more
+> >> backport friendly?
+> > 
+> > Hi,
+> > 
+> > It's simply because the refactoring that has to be done to be able to 
+> > introduce the generalized test framework is much more invasive and far 
+> > reaching than this patch. Essentially, all the call signatures of the test 
+> > functions need to match and the feature checks need to be done in new per 
+> > test functions too. This is the diffstat of those changes alone:
+> > 
+> >  tools/testing/selftests/resctrl/cat_test.c      |  21 +++--
+> >  tools/testing/selftests/resctrl/cmt_test.c      |  26 +++--
+> >  tools/testing/selftests/resctrl/mba_test.c      |  20 +++-
+> >  tools/testing/selftests/resctrl/mbm_test.c      |  20 +++-
+> >  tools/testing/selftests/resctrl/resctrl.h       |  43 ++++++++-
+> >  tools/testing/selftests/resctrl/resctrl_tests.c | 220 +++++++++++++++----------------------------
+> >  tools/testing/selftests/resctrl/resctrlfs.c     |   5 +
+> > 
+> > (tools/testing/selftests/resctrl/resctrl_tests.c --- part would 
+> > be slightly less if I'd reorder this patch but that only 24 lines off as 
+> > per diffstat of this patch).
+> > 
+> > But that's not all.... To be able to push the generalized test framework 
+> > to stable, you need to also count in the benchmark cmd changes which 
+> > worked towards making the call signatures identical. So here's the 
+> > diffstat for that series for quick reference:
+> > 
+> >  tools/testing/selftests/resctrl/cache.c       |   5 +-
+> >  tools/testing/selftests/resctrl/cat_test.c    |  13 +--
+> >  tools/testing/selftests/resctrl/cmt_test.c    |  34 ++++--
+> >  tools/testing/selftests/resctrl/mba_test.c    |   4 +-
+> >  tools/testing/selftests/resctrl/mbm_test.c    |   7 +-
+> >  tools/testing/selftests/resctrl/resctrl.h     |  16 +--
+> >  .../testing/selftests/resctrl/resctrl_tests.c | 100 ++++++++----------
+> >  tools/testing/selftests/resctrl/resctrl_val.c |  10 +-
+> > 
+> > That's ~500 lines changed vs ~50 so it's a magnitude worse and much less 
+> > localized.
+> > 
+> > And rest assured, I did not like introducing the duplicated calls any more 
+> > than you do (I did not write the generalized test framework for nothing, 
+> > after all) but the way taken in this patch seemed the most reasonable 
+> > option under these circumstances.
+> > 
+> 
+> hmmm ... I did not expect that a total refactoring would be needed.
+> 
+> I was thinking about a change from this:
+> 
+> 
+> 	testX(...) 
+> 	{
+> 	
+> 		res = signal_handler_register();
+> 		/* error handling */
+> 		res = mount_resctrlfs();
+> 		/* error handling */
+> 		
+> 		/* test */
+> 
+> 		unmount_resctrlfs();
+> 		signal_handler_register();
+> 
+> 	}
+> 
+> 
+> to this:
+> 
+> 
+> 	int test_setup(...)
+> 	{
+> 		res = signal_handler_register();
+> 		/* error handling */
+> 		res = mount_resctrlfs();
+> 		/* error handling */
+> 	}
+> 
+> 
+> 	void test_cleanup(...)
+> 	{
+> 		unmount_resctrlfs();
+> 		signal_handler_register();
+> 	}
+> 
+> 
+> 	testX(...)
+> 	{
+> 
+> 		res = test_setup(..);
+> 		/* error handling */
+> 
+> 		/* test */
+> 
+> 		test_cleanup();
+> 	}
+> 
+> I expect this to also support the bigger refactoring.
 
-the comment is correct, but speculative access alone is not enough
-to leak data.
+Okay, I'll do so then.
+
+However, having already written the generic run_single_test() function 
+that is part of the generic test framework, I definitely don't feel those 
+helpers would be that helpful for it. It more feels like they'd make the 
+flow less obvious by adding those two extra calls there but that's of 
+course matter of taste.
+
+
+-- 
+ i.
+
+--8323329-256835453-1694711109=:1814--
