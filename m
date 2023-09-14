@@ -2,54 +2,54 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DAE379FF00
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Sep 2023 10:52:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07E3279FF77
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Sep 2023 11:05:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236011AbjINIwW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 14 Sep 2023 04:52:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53918 "EHLO
+        id S236632AbjINJFW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 14 Sep 2023 05:05:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235968AbjINIwW (ORCPT
+        with ESMTP id S236606AbjINJFV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Sep 2023 04:52:22 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2982D1BF2
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Sep 2023 01:52:17 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-403004a96a4so7412885e9.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Sep 2023 01:52:17 -0700 (PDT)
+        Thu, 14 Sep 2023 05:05:21 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ABC0CC7
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Sep 2023 02:05:17 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-40473f1fe9fso2070925e9.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Sep 2023 02:05:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1694681535; x=1695286335; darn=vger.kernel.org;
+        d=ventanamicro.com; s=google; t=1694682315; x=1695287115; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=lMUcG5dET7EFobfbAHbzg2lwyOfsWQ8F2tpkEXeY8DY=;
-        b=StgrfO85sslASZLu1luVqtO7tb55qbJgvfpXkg9pTAfsDnQnC7nM+Yxjs2Ar02n6aW
-         SsYJ/0RYNy1wMPnHBZz5y7uxU2qdGDeWZ3CbMk4AD5jVwtTuHxIwtMsW1VGfwUv5xmNg
-         8EzC7EGHo288N93zQg/H35PEtCrEC8RMTLHNQZLpN8z/XXhiyWB1gI5nlTUjBLTNfhg6
-         vk6/BTYqcwyVUuPNOCJ1Vz5mxMrLZdNqnAYbhxj7BKsQohSCRBtbxK0ucHGuFyje3ecI
-         zqu395Teyh74NhcpJnFEGQbtFjyZtJETeej3Cp93WIsDYUkHWJK5Gff/O3ScKKO+PKKW
-         cAlw==
+        bh=/mRrBnh8S4j8WTa2+bV8lSaUBhWpdN931kOj5VJSEI8=;
+        b=UOl8Qzy11vgi3rOc9gqjGmspZmIl8dqJBmzSdR9xllQC9RfcRK9KLqZrQlquTOj/BK
+         nOvJVMGO4npz3FSEuXm9+JUHBQ+tPVg/cg6LZlwigL1dDZtstYVpgwUup+4Gk8kpYFtP
+         /knFoHf7hkrSf9PC9keILr94tV9MwNQqWB/KNKpwgce/t4R/f8Zm+UQO9uLACDzdPIEJ
+         wPH6hQE6MdXgy1fJSp4x+XG3KWe+MVA6blipJNpLcvupwmGtI0YBj7Y2HIihfdbY69VM
+         ywjS7fW3MxAnnIoKmhH/Y8zW6wj8DYxuTmosOESxqTXv7D/Ys83/SmfBUqaxJoJCsLL0
+         ASzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694681535; x=1695286335;
+        d=1e100.net; s=20230601; t=1694682315; x=1695287115;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=lMUcG5dET7EFobfbAHbzg2lwyOfsWQ8F2tpkEXeY8DY=;
-        b=JyHM+YiSmhFZ9hj/GqUc0e1gHcsSQqw3LlxO5VF7dcUZc6Q/fgytgotHF4ESzQytFU
-         1rVH+6KU3mXZU6DmOwpm3a2+zVMH/Nwv6CaIq3oYGds4LVUUYHcLSirYN+YlMg2RkDpU
-         N7lJbhqsf8Lt0ad98ddT6s+Q5lkNSfjTm1sH8bAvuF87Mc23/ueUSI9WUHu01rcHioRS
-         DJVXEZbPcLLBSCuC9DmzW9acSZWs2VCPVdBO0lTAfT+vbo1K0/FmQUFZeIuFwbdJb3iF
-         yfrr0lG4yVp3FPnJjmpkV4vSnAFD97fSB56gdknzv8wSYM08dyeDgmdxMEpFH+uKGVeg
-         E4vg==
-X-Gm-Message-State: AOJu0YxnvxQsiYe026xBUBxulDbb58ynZ5ixRFYhSJNvwQorGcniluNI
-        ezZc+nqT649z9RB7Lfev4SjSBQ==
-X-Google-Smtp-Source: AGHT+IF/71ROIOoJExJf8FEqPIRkV7f1W6lv97o8MVa7W5dAed2t55G5dPLBGqXoAtZVnyXGa4aJ8Q==
-X-Received: by 2002:a5d:4f88:0:b0:319:83e4:bbbf with SMTP id d8-20020a5d4f88000000b0031983e4bbbfmr4097683wru.20.1694681535355;
-        Thu, 14 Sep 2023 01:52:15 -0700 (PDT)
+        bh=/mRrBnh8S4j8WTa2+bV8lSaUBhWpdN931kOj5VJSEI8=;
+        b=WH0qZ01ZFuYj8oLDm5s8bBr21VdWF+9pGvaY40IrsbMjzSel4mVafIlGXPyZ8f31s3
+         MEIq6TbXbHwsZ2LsysaDIXfjNfMC7acgPiycmqV/IcOFrrn5LKfad1BSMBR+3Dli4HsI
+         3cA+O+u/yilKSRsNY8+qNkFYzRSo37sFLLU6cY3q8lgdUVFeRfPd1nMVVe6CGoZcT8rX
+         CKtJcC8Mqk8yPYZG1A/RGyMIzcNPAUg1SgZ1BQ8hqw92ol2LClk3YAQwpwzGppTgrNG2
+         5YdEyXcyUoWGMSLiMeRZZ+5JcP9gNComwogj1OQlujdAP1LRkFrqdHwCRFzw3DhzRFnk
+         b6+A==
+X-Gm-Message-State: AOJu0YyJBA9yirnFSZ2z0NvIS0zTeo8x0f9cYaanqWr0o42JiNPgJzVq
+        qcoOtFJ75gL7+v2BVZGW4XodSg==
+X-Google-Smtp-Source: AGHT+IFy8TjeoZnzEKVRF6ve15/1ZtfpBeOza9n+OW8rYx1ZUEatSJ80NefZ30RlKJWhr7ppOLul1g==
+X-Received: by 2002:a05:600c:6d7:b0:404:74e3:27a4 with SMTP id b23-20020a05600c06d700b0040474e327a4mr285671wmn.40.1694682315033;
+        Thu, 14 Sep 2023 02:05:15 -0700 (PDT)
 Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id r8-20020a5d4e48000000b0031ad2f9269dsm1137143wrt.40.2023.09.14.01.52.14
+        by smtp.gmail.com with ESMTPSA id m10-20020a7bce0a000000b003fee53feab5sm1391448wmc.10.2023.09.14.02.05.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Sep 2023 01:52:14 -0700 (PDT)
-Date:   Thu, 14 Sep 2023 10:52:08 +0200
+        Thu, 14 Sep 2023 02:05:14 -0700 (PDT)
+Date:   Thu, 14 Sep 2023 11:05:13 +0200
 From:   Andrew Jones <ajones@ventanamicro.com>
 To:     Haibo Xu <haibo1.xu@intel.com>
 Cc:     xiaobo55x@gmail.com, Paul Walmsley <paul.walmsley@sifive.com>,
@@ -66,78 +66,123 @@ Cc:     xiaobo55x@gmail.com, Paul Walmsley <paul.walmsley@sifive.com>,
         Sean Christopherson <seanjc@google.com>,
         Ricardo Koller <ricarkol@google.com>,
         Vishal Annapurve <vannapurve@google.com>,
-        Peter Xu <peterx@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
         Vipin Sharma <vipinsh@google.com>,
         David Matlack <dmatlack@google.com>,
+        Thomas Huth <thuth@redhat.com>,
         Colton Lewis <coltonlewis@google.com>,
         Aaron Lewis <aaronlewis@google.com>,
-        Thomas Huth <thuth@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
         kvm-riscv@lists.infradead.org
-Subject: Re: [PATCH v3 5/9] KVM: riscv: selftests: Switch to use macro from
- csr.h
-Message-ID: <20230914-18bfe93b679e290188e70307@orel>
+Subject: Re: [PATCH v3 8/9] KVM: riscv: selftests: Change vcpu_has_ext to a
+ common function
+Message-ID: <20230914-d6645bbc5ac80999674e9685@orel>
 References: <cover.1694421911.git.haibo1.xu@intel.com>
- <6cdda82518977c67004ee01a767bc67962352c13.1694421911.git.haibo1.xu@intel.com>
+ <dd81ef2b87e4cc160cb0ee782010dcf3543e065a.1694421911.git.haibo1.xu@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6cdda82518977c67004ee01a767bc67962352c13.1694421911.git.haibo1.xu@intel.com>
+In-Reply-To: <dd81ef2b87e4cc160cb0ee782010dcf3543e065a.1694421911.git.haibo1.xu@intel.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Sep 14, 2023 at 09:36:59AM +0800, Haibo Xu wrote:
+On Thu, Sep 14, 2023 at 09:37:02AM +0800, Haibo Xu wrote:
+> Move vcpu_has_ext to the processor.c and rename it to __vcpu_has_ext
+> so that other test cases can use it for vCPU extension check.
+> 
 > Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
 > ---
->  tools/testing/selftests/kvm/include/riscv/processor.h | 8 +-------
->  1 file changed, 1 insertion(+), 7 deletions(-)
+>  .../selftests/kvm/include/riscv/processor.h      |  2 ++
+>  .../testing/selftests/kvm/lib/riscv/processor.c  |  9 +++++++++
+>  tools/testing/selftests/kvm/riscv/get-reg-list.c | 16 +---------------
+>  3 files changed, 12 insertions(+), 15 deletions(-)
 > 
 > diff --git a/tools/testing/selftests/kvm/include/riscv/processor.h b/tools/testing/selftests/kvm/include/riscv/processor.h
-> index 5b62a3d2aa9b..67766baed4f7 100644
+> index 2c975d9cead2..7d5517648ea7 100644
 > --- a/tools/testing/selftests/kvm/include/riscv/processor.h
 > +++ b/tools/testing/selftests/kvm/include/riscv/processor.h
-> @@ -8,6 +8,7 @@
->  #define SELFTEST_KVM_PROCESSOR_H
+> @@ -42,6 +42,8 @@ static inline uint64_t __kvm_reg_id(uint64_t type, uint64_t idx,
+>  #define RISCV_ISA_EXT_REG(idx)	__kvm_reg_id(KVM_REG_RISCV_ISA_EXT, \
+>  					     idx, KVM_REG_SIZE_ULONG)
 >  
->  #include "kvm_util.h"
-> +#include <asm/csr.h>
->  #include <linux/stringify.h>
-
-nit: Usually we try to keep the order of our includes separated into five
-categories, listed below, where each category is sorted alphabetically. Of
-course any dependencies the includes have on each other need to be
-considered too.
-
-<library-includes-without-a-subdir>
-<library-includes-with-subdir>
-<linux/...>
-<asm/...>
-"local-includes"
-
+> +bool __vcpu_has_ext(struct kvm_vcpu *vcpu, int ext);
+> +
+>  struct ex_regs {
+>  	unsigned long ra;
+>  	unsigned long sp;
+> diff --git a/tools/testing/selftests/kvm/lib/riscv/processor.c b/tools/testing/selftests/kvm/lib/riscv/processor.c
+> index 39a1e9902dec..e527ad0abc30 100644
+> --- a/tools/testing/selftests/kvm/lib/riscv/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/riscv/processor.c
+> @@ -15,6 +15,15 @@
 >  
->  static inline uint64_t __kvm_reg_id(uint64_t type, uint64_t idx,
-> @@ -95,13 +96,6 @@ static inline uint64_t __kvm_reg_id(uint64_t type, uint64_t idx,
->  #define PGTBL_PAGE_SIZE				PGTBL_L0_BLOCK_SIZE
->  #define PGTBL_PAGE_SIZE_SHIFT			PGTBL_L0_BLOCK_SHIFT
+>  static vm_vaddr_t exception_handlers;
 >  
-> -#define SATP_PPN				_AC(0x00000FFFFFFFFFFF, UL)
-> -#define SATP_MODE_39				_AC(0x8000000000000000, UL)
-> -#define SATP_MODE_48				_AC(0x9000000000000000, UL)
-> -#define SATP_ASID_BITS				16
-> -#define SATP_ASID_SHIFT				44
-> -#define SATP_ASID_MASK				_AC(0xFFFF, UL)
+> +bool __vcpu_has_ext(struct kvm_vcpu *vcpu, int ext)
+> +{
+> +	unsigned long value = 0;
+> +
+> +	__vcpu_get_reg(vcpu, RISCV_ISA_EXT_REG(ext), &value);
+> +
+> +	return !!value;
+
+I'd rather not assume that value will remain zero across a system call
+which fails. Let's write this as
+
+     unsigned long value = 0;
+     int ret;
+
+     ret = __vcpu_get_reg(vcpu, RISCV_ISA_EXT_REG(ext), &value);
+
+     return !ret && !!value;
+
+> +}
+> +
+>  static uint64_t page_align(struct kvm_vm *vm, uint64_t v)
+>  {
+>  	return (v + vm->page_size) & ~(vm->page_size - 1);
+> diff --git a/tools/testing/selftests/kvm/riscv/get-reg-list.c b/tools/testing/selftests/kvm/riscv/get-reg-list.c
+> index d8ecacd03ecf..0dcff823f287 100644
+> --- a/tools/testing/selftests/kvm/riscv/get-reg-list.c
+> +++ b/tools/testing/selftests/kvm/riscv/get-reg-list.c
+> @@ -44,20 +44,6 @@ bool check_reject_set(int err)
+>  	return err == EINVAL;
+>  }
+>  
+> -static inline bool vcpu_has_ext(struct kvm_vcpu *vcpu, int ext)
+> -{
+> -	int ret;
+> -	unsigned long value;
 > -
->  #define SBI_EXT_EXPERIMENTAL_START		0x08000000
->  #define SBI_EXT_EXPERIMENTAL_END		0x08FFFFFF
+> -	ret = __vcpu_get_reg(vcpu, RISCV_ISA_EXT_REG(ext), &value);
+> -	if (ret) {
+> -		printf("Failed to get ext %d", ext);
+> -		return false;
+> -	}
+> -
+> -	return !!value;
+> -}
+> -
+>  void finalize_vcpu(struct kvm_vcpu *vcpu, struct vcpu_reg_list *c)
+>  {
+>  	struct vcpu_reg_sublist *s;
+> @@ -77,7 +63,7 @@ void finalize_vcpu(struct kvm_vcpu *vcpu, struct vcpu_reg_list *c)
+>  		__vcpu_set_reg(vcpu, RISCV_ISA_EXT_REG(s->feature), 1);
 >  
+>  		/* Double check whether the desired extension was enabled */
+> -		__TEST_REQUIRE(vcpu_has_ext(vcpu, s->feature),
+> +		__TEST_REQUIRE(__vcpu_has_ext(vcpu, s->feature),
+>  			       "%s not available, skipping tests\n", s->name);
+>  	}
+>  }
 > -- 
 > 2.34.1
 >
 
-Assuming the CONFIG_64BIT patch will come before this, then
+Otherwise,
 
 Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 
