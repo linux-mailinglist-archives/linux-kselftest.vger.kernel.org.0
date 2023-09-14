@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07B5379F64F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Sep 2023 03:28:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D898879F652
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Sep 2023 03:29:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233738AbjINB3B (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 13 Sep 2023 21:29:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53864 "EHLO
+        id S233760AbjINB3K (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 13 Sep 2023 21:29:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233689AbjINB3B (ORCPT
+        with ESMTP id S233753AbjINB3E (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 13 Sep 2023 21:29:01 -0400
+        Wed, 13 Sep 2023 21:29:04 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0803A1BD0;
-        Wed, 13 Sep 2023 18:28:56 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29B0F1724;
+        Wed, 13 Sep 2023 18:29:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1694654937; x=1726190937;
+  t=1694654940; x=1726190940;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=5UfZoKGBq/7/L2LJ952Ru+6rkK0Om5Ix7dA2Fgs+OGg=;
-  b=eMb1SORDVa5tTKD/ul+Ugu27vEViDP5Zk0E3QM73TpxOe5pCj4jGwdnC
-   CeDgEEN9YP7GwonNp2gQpkXmaBO2wa+DSoOozp86NOZHhI3LGseiGDA4N
-   DxEY5HSFOnKgkI9YBWVZ6YbK5fNuoF6vP+QSPrdWjHiAQ4lyTGSROSyfC
-   cJpAK8MQU8D5JdYNamkwmzylHaQn9jDo1ReLdkfBxSBmQP50BEQeAGud4
-   /M+VMq+fg7BYmAu9/r7Uasg5aX/laLSDEBpNMJHBMQcrfWI+5W78fmhky
-   0lR7/YMU8TfhVxwI3+yd0REkMjqA42fN9Y+3CBCjWhs8ska6RQkKxR1Lb
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="377734095"
+  bh=Lo4uRtPQWDBUkwGW4MU7Tlf+bWLfEsYF1jx9Qw2IHYM=;
+  b=cpRRJVe4Gp2z3HsAVscV1Xrrzm8AM5Xi+y1oR1+aT6agV11osLsAJTTu
+   /rjn5SEj6by4lGN3eF6jD0pSTcwqm/zhb6vEIhQbfv6aBvhullt/Kpps/
+   P4qQhXyq4vhcjVyE63YFCzdMDPAIhmIfSOlAFwNmhjOiRCA4fLunl/eiA
+   1AZzisPL0FhNeYUkIgXczl6PL+x3Rb4DL00XWpYbEyZSpChR5HkKAwleu
+   pJA33p6fZevCCbyqkxlLr26SGvvfihOpXeJuHDiH241LcIoI+soeGhydI
+   JZMh+oNxJr/9izV0qAzpPxGDY9iFOb3thNEuZhvJmK9Mk6ESbVj/nmQTp
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="377734136"
 X-IronPort-AV: E=Sophos;i="6.02,144,1688454000"; 
-   d="scan'208";a="377734095"
+   d="scan'208";a="377734136"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2023 18:28:40 -0700
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2023 18:28:54 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="694049232"
+X-IronPort-AV: E=McAfee;i="6600,9927,10832"; a="694049279"
 X-IronPort-AV: E=Sophos;i="6.02,144,1688454000"; 
-   d="scan'208";a="694049232"
+   d="scan'208";a="694049279"
 Received: from haibo-optiplex-7090.sh.intel.com ([10.239.159.132])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2023 18:28:33 -0700
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Sep 2023 18:28:48 -0700
 From:   Haibo Xu <haibo1.xu@intel.com>
 Cc:     xiaobo55x@gmail.com, haibo1.xu@intel.com, ajones@ventanamicro.com,
         Paul Walmsley <paul.walmsley@sifive.com>,
@@ -55,18 +55,18 @@ Cc:     xiaobo55x@gmail.com, haibo1.xu@intel.com, ajones@ventanamicro.com,
         Sean Christopherson <seanjc@google.com>,
         Ricardo Koller <ricarkol@google.com>,
         Vishal Annapurve <vannapurve@google.com>,
-        David Matlack <dmatlack@google.com>,
         Vipin Sharma <vipinsh@google.com>,
+        David Matlack <dmatlack@google.com>,
         Thomas Huth <thuth@redhat.com>,
-        Colton Lewis <coltonlewis@google.com>,
         Aaron Lewis <aaronlewis@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
         linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
         kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
         kvm-riscv@lists.infradead.org
-Subject: [PATCH v3 3/9] KVM: arm64: selftests: Split arch_timer test code
-Date:   Thu, 14 Sep 2023 09:36:57 +0800
-Message-Id: <66f81991b15de608c43c96c911387cf0ee0a49b1.1694421911.git.haibo1.xu@intel.com>
+Subject: [PATCH v3 4/9] tools: riscv: Add header file csr.h
+Date:   Thu, 14 Sep 2023 09:36:58 +0800
+Message-Id: <119c9d06d64b7e4932c5f74a05af1e769cbe7da6.1694421911.git.haibo1.xu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1694421911.git.haibo1.xu@intel.com>
 References: <cover.1694421911.git.haibo1.xu@intel.com>
@@ -77,691 +77,562 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Split the arch-neutral test code out of aarch64/arch_timer.c
-and put them into a common arch_timer.c. This is a preparation
-to share timer test codes in riscv.
+Borrow the csr definitions and operations from kernel's
+arch/riscv/include/asm/csr.h to tools/ for riscv. Since
+only 64bit was supported for RISC-V KVM selftests, add
+CONFIG_64BIT definition in kvm/Makefile to ensure only
+64bit registers were available in csr.h.
 
 Suggested-by: Andrew Jones <ajones@ventanamicro.com>
 Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 ---
- tools/testing/selftests/kvm/Makefile          |   3 +-
- .../selftests/kvm/aarch64/arch_timer.c        | 275 +-----------------
- tools/testing/selftests/kvm/arch_timer.c      | 248 ++++++++++++++++
- .../testing/selftests/kvm/include/test_util.h |   2 +
- .../selftests/kvm/include/timer_test.h        |  42 +++
- 5 files changed, 300 insertions(+), 270 deletions(-)
- create mode 100644 tools/testing/selftests/kvm/arch_timer.c
- create mode 100644 tools/testing/selftests/kvm/include/timer_test.h
+ tools/arch/riscv/include/asm/csr.h   | 521 +++++++++++++++++++++++++++
+ tools/testing/selftests/kvm/Makefile |   3 +
+ 2 files changed, 524 insertions(+)
+ create mode 100644 tools/arch/riscv/include/asm/csr.h
 
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index 7972269e8c5f..0102a0297b84 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -140,7 +140,6 @@ TEST_GEN_PROGS_x86_64 += system_counter_offset_test
- TEST_GEN_PROGS_EXTENDED_x86_64 += x86_64/nx_huge_pages_test
- 
- TEST_GEN_PROGS_aarch64 += aarch64/aarch32_id_regs
--TEST_GEN_PROGS_aarch64 += aarch64/arch_timer
- TEST_GEN_PROGS_aarch64 += aarch64/debug-exceptions
- TEST_GEN_PROGS_aarch64 += aarch64/hypercalls
- TEST_GEN_PROGS_aarch64 += aarch64/page_fault_test
-@@ -150,6 +149,7 @@ TEST_GEN_PROGS_aarch64 += aarch64/vcpu_width_config
- TEST_GEN_PROGS_aarch64 += aarch64/vgic_init
- TEST_GEN_PROGS_aarch64 += aarch64/vgic_irq
- TEST_GEN_PROGS_aarch64 += access_tracking_perf_test
-+TEST_GEN_PROGS_aarch64 += arch_timer
- TEST_GEN_PROGS_aarch64 += demand_paging_test
- TEST_GEN_PROGS_aarch64 += dirty_log_test
- TEST_GEN_PROGS_aarch64 += dirty_log_perf_test
-@@ -188,6 +188,7 @@ TEST_GEN_PROGS_riscv += kvm_page_table_test
- TEST_GEN_PROGS_riscv += set_memory_region_test
- TEST_GEN_PROGS_riscv += kvm_binary_stats_test
- 
-+SPLIT_TESTS += arch_timer
- SPLIT_TESTS += get-reg-list
- 
- TEST_PROGS += $(TEST_PROGS_$(ARCH_DIR))
-diff --git a/tools/testing/selftests/kvm/aarch64/arch_timer.c b/tools/testing/selftests/kvm/aarch64/arch_timer.c
-index b63859829a96..4688b258247c 100644
---- a/tools/testing/selftests/kvm/aarch64/arch_timer.c
-+++ b/tools/testing/selftests/kvm/aarch64/arch_timer.c
-@@ -1,64 +1,19 @@
- // SPDX-License-Identifier: GPL-2.0-only
- /*
-- * arch_timer.c - Tests the aarch64 timer IRQ functionality
-- *
-  * The test validates both the virtual and physical timer IRQs using
-- * CVAL and TVAL registers. This consitutes the four stages in the test.
-- * The guest's main thread configures the timer interrupt for a stage
-- * and waits for it to fire, with a timeout equal to the timer period.
-- * It asserts that the timeout doesn't exceed the timer period.
-- *
-- * On the other hand, upon receipt of an interrupt, the guest's interrupt
-- * handler validates the interrupt by checking if the architectural state
-- * is in compliance with the specifications.
-- *
-- * The test provides command-line options to configure the timer's
-- * period (-p), number of vCPUs (-n), and iterations per stage (-i).
-- * To stress-test the timer stack even more, an option to migrate the
-- * vCPUs across pCPUs (-m), at a particular rate, is also provided.
-+ * CVAL and TVAL registers.
-  *
-  * Copyright (c) 2021, Google LLC.
-  */
- #define _GNU_SOURCE
- 
--#include <stdlib.h>
--#include <pthread.h>
--#include <linux/kvm.h>
--#include <linux/sizes.h>
--#include <linux/bitmap.h>
--#include <sys/sysinfo.h>
--
--#include "kvm_util.h"
--#include "processor.h"
--#include "delay.h"
- #include "arch_timer.h"
-+#include "delay.h"
- #include "gic.h"
-+#include "processor.h"
-+#include "timer_test.h"
- #include "vgic.h"
- 
--#define NR_VCPUS_DEF			4
--#define NR_TEST_ITERS_DEF		5
--#define TIMER_TEST_PERIOD_MS_DEF	10
--#define TIMER_TEST_ERR_MARGIN_US	100
--#define TIMER_TEST_MIGRATION_FREQ_MS	2
--
--struct test_args {
--	int nr_vcpus;
--	int nr_iter;
--	int timer_period_ms;
--	int migration_freq_ms;
--	struct kvm_arm_counter_offset offset;
--};
--
--static struct test_args test_args = {
--	.nr_vcpus = NR_VCPUS_DEF,
--	.nr_iter = NR_TEST_ITERS_DEF,
--	.timer_period_ms = TIMER_TEST_PERIOD_MS_DEF,
--	.migration_freq_ms = TIMER_TEST_MIGRATION_FREQ_MS,
--	.offset = { .reserved = 1 },
--};
--
--#define msecs_to_usecs(msec)		((msec) * 1000LL)
--
- #define GICD_BASE_GPA			0x8000000ULL
- #define GICR_BASE_GPA			0x80A0000ULL
- 
-@@ -70,22 +25,8 @@ enum guest_stage {
- 	GUEST_STAGE_MAX,
- };
- 
--/* Shared variables between host and guest */
--struct test_vcpu_shared_data {
--	int nr_iter;
--	enum guest_stage guest_stage;
--	uint64_t xcnt;
--};
--
--static struct kvm_vcpu *vcpus[KVM_MAX_VCPUS];
--static pthread_t pt_vcpu_run[KVM_MAX_VCPUS];
--static struct test_vcpu_shared_data vcpu_shared_data[KVM_MAX_VCPUS];
--
- static int vtimer_irq, ptimer_irq;
- 
--static unsigned long *vcpu_done_map;
--static pthread_mutex_t vcpu_done_map_lock;
--
- static void
- guest_configure_timer_action(struct test_vcpu_shared_data *shared_data)
- {
-@@ -222,137 +163,6 @@ static void guest_code(void)
- 	GUEST_DONE();
- }
- 
--static void *test_vcpu_run(void *arg)
--{
--	unsigned int vcpu_idx = (unsigned long)arg;
--	struct ucall uc;
--	struct kvm_vcpu *vcpu = vcpus[vcpu_idx];
--	struct kvm_vm *vm = vcpu->vm;
--	struct test_vcpu_shared_data *shared_data = &vcpu_shared_data[vcpu_idx];
--
--	vcpu_run(vcpu);
--
--	/* Currently, any exit from guest is an indication of completion */
--	pthread_mutex_lock(&vcpu_done_map_lock);
--	__set_bit(vcpu_idx, vcpu_done_map);
--	pthread_mutex_unlock(&vcpu_done_map_lock);
--
--	switch (get_ucall(vcpu, &uc)) {
--	case UCALL_SYNC:
--	case UCALL_DONE:
--		break;
--	case UCALL_ABORT:
--		sync_global_from_guest(vm, *shared_data);
--		fprintf(stderr, "Guest assert failed,  vcpu %u; stage; %u; iter: %u\n",
--			vcpu_idx, shared_data->guest_stage, shared_data->nr_iter);
--		REPORT_GUEST_ASSERT(uc);
--		break;
--	default:
--		TEST_FAIL("Unexpected guest exit\n");
--	}
--
--	return NULL;
--}
--
--static uint32_t test_get_pcpu(void)
--{
--	uint32_t pcpu;
--	unsigned int nproc_conf;
--	cpu_set_t online_cpuset;
--
--	nproc_conf = get_nprocs_conf();
--	sched_getaffinity(0, sizeof(cpu_set_t), &online_cpuset);
--
--	/* Randomly find an available pCPU to place a vCPU on */
--	do {
--		pcpu = rand() % nproc_conf;
--	} while (!CPU_ISSET(pcpu, &online_cpuset));
--
--	return pcpu;
--}
--
--static int test_migrate_vcpu(unsigned int vcpu_idx)
--{
--	int ret;
--	cpu_set_t cpuset;
--	uint32_t new_pcpu = test_get_pcpu();
--
--	CPU_ZERO(&cpuset);
--	CPU_SET(new_pcpu, &cpuset);
--
--	pr_debug("Migrating vCPU: %u to pCPU: %u\n", vcpu_idx, new_pcpu);
--
--	ret = pthread_setaffinity_np(pt_vcpu_run[vcpu_idx],
--				     sizeof(cpuset), &cpuset);
--
--	/* Allow the error where the vCPU thread is already finished */
--	TEST_ASSERT(ret == 0 || ret == ESRCH,
--		    "Failed to migrate the vCPU:%u to pCPU: %u; ret: %d\n",
--		    vcpu_idx, new_pcpu, ret);
--
--	return ret;
--}
--
--static void *test_vcpu_migration(void *arg)
--{
--	unsigned int i, n_done;
--	bool vcpu_done;
--
--	do {
--		usleep(msecs_to_usecs(test_args.migration_freq_ms));
--
--		for (n_done = 0, i = 0; i < test_args.nr_vcpus; i++) {
--			pthread_mutex_lock(&vcpu_done_map_lock);
--			vcpu_done = test_bit(i, vcpu_done_map);
--			pthread_mutex_unlock(&vcpu_done_map_lock);
--
--			if (vcpu_done) {
--				n_done++;
--				continue;
--			}
--
--			test_migrate_vcpu(i);
--		}
--	} while (test_args.nr_vcpus != n_done);
--
--	return NULL;
--}
--
--static void test_run(struct kvm_vm *vm)
--{
--	pthread_t pt_vcpu_migration;
--	unsigned int i;
--	int ret;
--
--	pthread_mutex_init(&vcpu_done_map_lock, NULL);
--	vcpu_done_map = bitmap_zalloc(test_args.nr_vcpus);
--	TEST_ASSERT(vcpu_done_map, "Failed to allocate vcpu done bitmap\n");
--
--	for (i = 0; i < (unsigned long)test_args.nr_vcpus; i++) {
--		ret = pthread_create(&pt_vcpu_run[i], NULL, test_vcpu_run,
--				     (void *)(unsigned long)i);
--		TEST_ASSERT(!ret, "Failed to create vCPU-%d pthread\n", i);
--	}
--
--	/* Spawn a thread to control the vCPU migrations */
--	if (test_args.migration_freq_ms) {
--		srand(time(NULL));
--
--		ret = pthread_create(&pt_vcpu_migration, NULL,
--					test_vcpu_migration, NULL);
--		TEST_ASSERT(!ret, "Failed to create the migration pthread\n");
--	}
--
--
--	for (i = 0; i < test_args.nr_vcpus; i++)
--		pthread_join(pt_vcpu_run[i], NULL);
--
--	if (test_args.migration_freq_ms)
--		pthread_join(pt_vcpu_migration, NULL);
--
--	bitmap_free(vcpu_done_map);
--}
--
- static void test_init_timer_irq(struct kvm_vm *vm)
- {
- 	/* Timer initid should be same for all the vCPUs, so query only vCPU-0 */
-@@ -369,7 +179,7 @@ static void test_init_timer_irq(struct kvm_vm *vm)
- 
- static int gic_fd;
- 
--static struct kvm_vm *test_vm_create(void)
-+struct kvm_vm *test_vm_create(void)
- {
- 	struct kvm_vm *vm;
- 	unsigned int i;
-@@ -400,81 +210,8 @@ static struct kvm_vm *test_vm_create(void)
- 	return vm;
- }
- 
--static void test_vm_cleanup(struct kvm_vm *vm)
-+void test_vm_cleanup(struct kvm_vm *vm)
- {
- 	close(gic_fd);
- 	kvm_vm_free(vm);
- }
--
--static void test_print_help(char *name)
--{
--	pr_info("Usage: %s [-h] [-n nr_vcpus] [-i iterations] [-p timer_period_ms]\n",
--		name);
--	pr_info("\t-n: Number of vCPUs to configure (default: %u; max: %u)\n",
--		NR_VCPUS_DEF, KVM_MAX_VCPUS);
--	pr_info("\t-i: Number of iterations per stage (default: %u)\n",
--		NR_TEST_ITERS_DEF);
--	pr_info("\t-p: Periodicity (in ms) of the guest timer (default: %u)\n",
--		TIMER_TEST_PERIOD_MS_DEF);
--	pr_info("\t-m: Frequency (in ms) of vCPUs to migrate to different pCPU. 0 to turn off (default: %u)\n",
--		TIMER_TEST_MIGRATION_FREQ_MS);
--	pr_info("\t-o: Counter offset (in counter cycles, default: 0)\n");
--	pr_info("\t-h: print this help screen\n");
--}
--
--static bool parse_args(int argc, char *argv[])
--{
--	int opt;
--
--	while ((opt = getopt(argc, argv, "hn:i:p:m:o:")) != -1) {
--		switch (opt) {
--		case 'n':
--			test_args.nr_vcpus = atoi_positive("Number of vCPUs", optarg);
--			if (test_args.nr_vcpus > KVM_MAX_VCPUS) {
--				pr_info("Max allowed vCPUs: %u\n",
--					KVM_MAX_VCPUS);
--				goto err;
--			}
--			break;
--		case 'i':
--			test_args.nr_iter = atoi_positive("Number of iterations", optarg);
--			break;
--		case 'p':
--			test_args.timer_period_ms = atoi_positive("Periodicity", optarg);
--			break;
--		case 'm':
--			test_args.migration_freq_ms = atoi_non_negative("Frequency", optarg);
--			break;
--		case 'o':
--			test_args.offset.counter_offset = strtol(optarg, NULL, 0);
--			test_args.offset.reserved = 0;
--			break;
--		case 'h':
--		default:
--			goto err;
--		}
--	}
--
--	return true;
--
--err:
--	test_print_help(argv[0]);
--	return false;
--}
--
--int main(int argc, char *argv[])
--{
--	struct kvm_vm *vm;
--
--	if (!parse_args(argc, argv))
--		exit(KSFT_SKIP);
--
--	__TEST_REQUIRE(!test_args.migration_freq_ms || get_nprocs() >= 2,
--		       "At least two physical CPUs needed for vCPU migration");
--
--	vm = test_vm_create();
--	test_run(vm);
--	test_vm_cleanup(vm);
--
--	return 0;
--}
-diff --git a/tools/testing/selftests/kvm/arch_timer.c b/tools/testing/selftests/kvm/arch_timer.c
+diff --git a/tools/arch/riscv/include/asm/csr.h b/tools/arch/riscv/include/asm/csr.h
 new file mode 100644
-index 000000000000..ea3dd1a772b0
+index 000000000000..4e86c82aacbd
 --- /dev/null
-+++ b/tools/testing/selftests/kvm/arch_timer.c
-@@ -0,0 +1,248 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * arch_timer.c - Tests the arch timer IRQ functionality
-+ *
-+ * The guest's main thread configures the timer interrupt and waits
-+ * for it to fire, with a timeout equal to the timer period.
-+ * It asserts that the timeout doesn't exceed the timer period.
-+ *
-+ * On the other hand, upon receipt of an interrupt, the guest's interrupt
-+ * handler validates the interrupt by checking if the architectural state
-+ * is in compliance with the specifications.
-+ *
-+ * The test provides command-line options to configure the timer's
-+ * period (-p), number of vCPUs (-n), and iterations per stage (-i).
-+ * To stress-test the timer stack even more, an option to migrate the
-+ * vCPUs across pCPUs (-m), at a particular rate, is also provided.
-+ *
-+ * Copyright (c) 2021, Google LLC.
-+ */
-+
-+#define _GNU_SOURCE
-+
-+#include <stdlib.h>
-+#include <pthread.h>
-+#include <linux/sizes.h>
-+#include <linux/bitmap.h>
-+#include <sys/sysinfo.h>
-+
-+#include "timer_test.h"
-+
-+struct test_args test_args = {
-+	.nr_vcpus = NR_VCPUS_DEF,
-+	.nr_iter = NR_TEST_ITERS_DEF,
-+	.timer_period_ms = TIMER_TEST_PERIOD_MS_DEF,
-+	.migration_freq_ms = TIMER_TEST_MIGRATION_FREQ_MS,
-+	.offset = { .reserved = 1 },
-+};
-+
-+struct kvm_vcpu *vcpus[KVM_MAX_VCPUS];
-+struct test_vcpu_shared_data vcpu_shared_data[KVM_MAX_VCPUS];
-+
-+static pthread_t pt_vcpu_run[KVM_MAX_VCPUS];
-+static unsigned long *vcpu_done_map;
-+static pthread_mutex_t vcpu_done_map_lock;
-+
-+static void *test_vcpu_run(void *arg)
-+{
-+	unsigned int vcpu_idx = (unsigned long)arg;
-+	struct ucall uc;
-+	struct kvm_vcpu *vcpu = vcpus[vcpu_idx];
-+	struct kvm_vm *vm = vcpu->vm;
-+	struct test_vcpu_shared_data *shared_data = &vcpu_shared_data[vcpu_idx];
-+
-+	vcpu_run(vcpu);
-+
-+	/* Currently, any exit from guest is an indication of completion */
-+	pthread_mutex_lock(&vcpu_done_map_lock);
-+	__set_bit(vcpu_idx, vcpu_done_map);
-+	pthread_mutex_unlock(&vcpu_done_map_lock);
-+
-+	switch (get_ucall(vcpu, &uc)) {
-+	case UCALL_SYNC:
-+	case UCALL_DONE:
-+		break;
-+	case UCALL_ABORT:
-+		sync_global_from_guest(vm, *shared_data);
-+		fprintf(stderr, "Guest assert failed,  vcpu %u; stage; %u; iter: %u\n",
-+			vcpu_idx, shared_data->guest_stage, shared_data->nr_iter);
-+		REPORT_GUEST_ASSERT(uc);
-+		break;
-+	default:
-+		TEST_FAIL("Unexpected guest exit\n");
-+	}
-+
-+	return NULL;
-+}
-+
-+static uint32_t test_get_pcpu(void)
-+{
-+	uint32_t pcpu;
-+	unsigned int nproc_conf;
-+	cpu_set_t online_cpuset;
-+
-+	nproc_conf = get_nprocs_conf();
-+	sched_getaffinity(0, sizeof(cpu_set_t), &online_cpuset);
-+
-+	/* Randomly find an available pCPU to place a vCPU on */
-+	do {
-+		pcpu = rand() % nproc_conf;
-+	} while (!CPU_ISSET(pcpu, &online_cpuset));
-+
-+	return pcpu;
-+}
-+
-+static int test_migrate_vcpu(unsigned int vcpu_idx)
-+{
-+	int ret;
-+	cpu_set_t cpuset;
-+	uint32_t new_pcpu = test_get_pcpu();
-+
-+	CPU_ZERO(&cpuset);
-+	CPU_SET(new_pcpu, &cpuset);
-+
-+	pr_debug("Migrating vCPU: %u to pCPU: %u\n", vcpu_idx, new_pcpu);
-+
-+	ret = pthread_setaffinity_np(pt_vcpu_run[vcpu_idx],
-+				     sizeof(cpuset), &cpuset);
-+
-+	/* Allow the error where the vCPU thread is already finished */
-+	TEST_ASSERT(ret == 0 || ret == ESRCH,
-+		    "Failed to migrate the vCPU:%u to pCPU: %u; ret: %d\n",
-+		    vcpu_idx, new_pcpu, ret);
-+
-+	return ret;
-+}
-+
-+static void *test_vcpu_migration(void *arg)
-+{
-+	unsigned int i, n_done;
-+	bool vcpu_done;
-+
-+	do {
-+		usleep(msecs_to_usecs(test_args.migration_freq_ms));
-+
-+		for (n_done = 0, i = 0; i < test_args.nr_vcpus; i++) {
-+			pthread_mutex_lock(&vcpu_done_map_lock);
-+			vcpu_done = test_bit(i, vcpu_done_map);
-+			pthread_mutex_unlock(&vcpu_done_map_lock);
-+
-+			if (vcpu_done) {
-+				n_done++;
-+				continue;
-+			}
-+
-+			test_migrate_vcpu(i);
-+		}
-+	} while (test_args.nr_vcpus != n_done);
-+
-+	return NULL;
-+}
-+
-+static void test_run(struct kvm_vm *vm)
-+{
-+	pthread_t pt_vcpu_migration;
-+	unsigned int i;
-+	int ret;
-+
-+	pthread_mutex_init(&vcpu_done_map_lock, NULL);
-+	vcpu_done_map = bitmap_zalloc(test_args.nr_vcpus);
-+	TEST_ASSERT(vcpu_done_map, "Failed to allocate vcpu done bitmap\n");
-+
-+	for (i = 0; i < (unsigned long)test_args.nr_vcpus; i++) {
-+		ret = pthread_create(&pt_vcpu_run[i], NULL, test_vcpu_run,
-+				     (void *)(unsigned long)i);
-+		TEST_ASSERT(!ret, "Failed to create vCPU-%d pthread\n", i);
-+	}
-+
-+	/* Spawn a thread to control the vCPU migrations */
-+	if (test_args.migration_freq_ms) {
-+		srand(time(NULL));
-+
-+		ret = pthread_create(&pt_vcpu_migration, NULL,
-+					test_vcpu_migration, NULL);
-+		TEST_ASSERT(!ret, "Failed to create the migration pthread\n");
-+	}
-+
-+
-+	for (i = 0; i < test_args.nr_vcpus; i++)
-+		pthread_join(pt_vcpu_run[i], NULL);
-+
-+	if (test_args.migration_freq_ms)
-+		pthread_join(pt_vcpu_migration, NULL);
-+
-+	bitmap_free(vcpu_done_map);
-+}
-+
-+static void test_print_help(char *name)
-+{
-+	pr_info("Usage: %s [-h] [-n nr_vcpus] [-i iterations] [-p timer_period_ms]\n",
-+		name);
-+	pr_info("\t-n: Number of vCPUs to configure (default: %u; max: %u)\n",
-+		NR_VCPUS_DEF, KVM_MAX_VCPUS);
-+	pr_info("\t-i: Number of iterations per stage (default: %u)\n",
-+		NR_TEST_ITERS_DEF);
-+	pr_info("\t-p: Periodicity (in ms) of the guest timer (default: %u)\n",
-+		TIMER_TEST_PERIOD_MS_DEF);
-+	pr_info("\t-m: Frequency (in ms) of vCPUs to migrate to different pCPU. 0 to turn off (default: %u)\n",
-+		TIMER_TEST_MIGRATION_FREQ_MS);
-+	pr_info("\t-o: Counter offset (in counter cycles, default: 0)\n");
-+	pr_info("\t-h: print this help screen\n");
-+}
-+
-+static bool parse_args(int argc, char *argv[])
-+{
-+	int opt;
-+
-+	while ((opt = getopt(argc, argv, "hn:i:p:m:o:")) != -1) {
-+		switch (opt) {
-+		case 'n':
-+			test_args.nr_vcpus = atoi_positive("Number of vCPUs", optarg);
-+			if (test_args.nr_vcpus > KVM_MAX_VCPUS) {
-+				pr_info("Max allowed vCPUs: %u\n",
-+					KVM_MAX_VCPUS);
-+				goto err;
-+			}
-+			break;
-+		case 'i':
-+			test_args.nr_iter = atoi_positive("Number of iterations", optarg);
-+			break;
-+		case 'p':
-+			test_args.timer_period_ms = atoi_positive("Periodicity", optarg);
-+			break;
-+		case 'm':
-+			test_args.migration_freq_ms = atoi_non_negative("Frequency", optarg);
-+			break;
-+		case 'o':
-+			test_args.offset.counter_offset = strtol(optarg, NULL, 0);
-+			test_args.offset.reserved = 0;
-+			break;
-+		case 'h':
-+		default:
-+			goto err;
-+		}
-+	}
-+
-+	return true;
-+
-+err:
-+	test_print_help(argv[0]);
-+	return false;
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	struct kvm_vm *vm;
-+
-+	if (!parse_args(argc, argv))
-+		exit(KSFT_SKIP);
-+
-+	__TEST_REQUIRE(!test_args.migration_freq_ms || get_nprocs() >= 2,
-+		       "At least two physical CPUs needed for vCPU migration");
-+
-+	vm = test_vm_create();
-+	test_run(vm);
-+	test_vm_cleanup(vm);
-+
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
-index 7e614adc6cf4..c019675f6259 100644
---- a/tools/testing/selftests/kvm/include/test_util.h
-+++ b/tools/testing/selftests/kvm/include/test_util.h
-@@ -20,6 +20,8 @@
- #include <sys/mman.h>
- #include "kselftest.h"
- 
-+#define msecs_to_usecs(msec)    ((msec) * 1000LL)
-+
- static inline int _no_printf(const char *format, ...) { return 0; }
- 
- #ifdef DEBUG
-diff --git a/tools/testing/selftests/kvm/include/timer_test.h b/tools/testing/selftests/kvm/include/timer_test.h
-new file mode 100644
-index 000000000000..04e8aff2dc22
---- /dev/null
-+++ b/tools/testing/selftests/kvm/include/timer_test.h
-@@ -0,0 +1,42 @@
++++ b/tools/arch/riscv/include/asm/csr.h
+@@ -0,0 +1,521 @@
 +/* SPDX-License-Identifier: GPL-2.0-only */
 +/*
-+ * timer test specific header
-+ *
-+ * Copyright (C) 2018, Google LLC
++ * Copyright (C) 2015 Regents of the University of California
 + */
 +
-+#ifndef SELFTEST_KVM_TIMER_TEST_H
-+#define SELFTEST_KVM_TIMER_TEST_H
++#ifndef _ASM_RISCV_CSR_H
++#define _ASM_RISCV_CSR_H
 +
-+#include "kvm_util.h"
++#include <linux/bits.h>
 +
-+#define NR_VCPUS_DEF            4
-+#define NR_TEST_ITERS_DEF       5
-+#define TIMER_TEST_PERIOD_MS_DEF    10
-+#define TIMER_TEST_ERR_MARGIN_US    100
-+#define TIMER_TEST_MIGRATION_FREQ_MS    2
++/* Status register flags */
++#define SR_SIE		_AC(0x00000002, UL) /* Supervisor Interrupt Enable */
++#define SR_MIE		_AC(0x00000008, UL) /* Machine Interrupt Enable */
++#define SR_SPIE		_AC(0x00000020, UL) /* Previous Supervisor IE */
++#define SR_MPIE		_AC(0x00000080, UL) /* Previous Machine IE */
++#define SR_SPP		_AC(0x00000100, UL) /* Previously Supervisor */
++#define SR_MPP		_AC(0x00001800, UL) /* Previously Machine */
++#define SR_SUM		_AC(0x00040000, UL) /* Supervisor User Memory Access */
 +
-+/* Timer test cmdline parameters */
-+struct test_args {
-+	int nr_vcpus;
-+	int nr_iter;
-+	int timer_period_ms;
-+	int migration_freq_ms;
-+	struct kvm_arm_counter_offset offset;
-+};
++#define SR_FS		_AC(0x00006000, UL) /* Floating-point Status */
++#define SR_FS_OFF	_AC(0x00000000, UL)
++#define SR_FS_INITIAL	_AC(0x00002000, UL)
++#define SR_FS_CLEAN	_AC(0x00004000, UL)
++#define SR_FS_DIRTY	_AC(0x00006000, UL)
 +
-+/* Shared variables between host and guest */
-+struct test_vcpu_shared_data {
-+	int nr_iter;
-+	int guest_stage;
-+	uint64_t xcnt;
-+};
++#define SR_VS		_AC(0x00000600, UL) /* Vector Status */
++#define SR_VS_OFF	_AC(0x00000000, UL)
++#define SR_VS_INITIAL	_AC(0x00000200, UL)
++#define SR_VS_CLEAN	_AC(0x00000400, UL)
++#define SR_VS_DIRTY	_AC(0x00000600, UL)
 +
-+extern struct test_args test_args;
-+extern struct kvm_vcpu *vcpus[];
-+extern struct test_vcpu_shared_data vcpu_shared_data[];
++#define SR_XS		_AC(0x00018000, UL) /* Extension Status */
++#define SR_XS_OFF	_AC(0x00000000, UL)
++#define SR_XS_INITIAL	_AC(0x00008000, UL)
++#define SR_XS_CLEAN	_AC(0x00010000, UL)
++#define SR_XS_DIRTY	_AC(0x00018000, UL)
 +
-+struct kvm_vm *test_vm_create(void);
-+void test_vm_cleanup(struct kvm_vm *vm);
++#define SR_FS_VS	(SR_FS | SR_VS) /* Vector and Floating-Point Unit */
 +
-+#endif /* SELFTEST_KVM_TIMER_TEST_H */
++#ifndef CONFIG_64BIT
++#define SR_SD		_AC(0x80000000, UL) /* FS/VS/XS dirty */
++#else
++#define SR_SD		_AC(0x8000000000000000, UL) /* FS/VS/XS dirty */
++#endif
++
++#ifdef CONFIG_64BIT
++#define SR_UXL		_AC(0x300000000, UL) /* XLEN mask for U-mode */
++#define SR_UXL_32	_AC(0x100000000, UL) /* XLEN = 32 for U-mode */
++#define SR_UXL_64	_AC(0x200000000, UL) /* XLEN = 64 for U-mode */
++#endif
++
++/* SATP flags */
++#ifndef CONFIG_64BIT
++#define SATP_PPN	_AC(0x003FFFFF, UL)
++#define SATP_MODE_32	_AC(0x80000000, UL)
++#define SATP_ASID_BITS	9
++#define SATP_ASID_SHIFT	22
++#define SATP_ASID_MASK	_AC(0x1FF, UL)
++#else
++#define SATP_PPN	_AC(0x00000FFFFFFFFFFF, UL)
++#define SATP_MODE_39	_AC(0x8000000000000000, UL)
++#define SATP_MODE_48	_AC(0x9000000000000000, UL)
++#define SATP_MODE_57	_AC(0xa000000000000000, UL)
++#define SATP_ASID_BITS	16
++#define SATP_ASID_SHIFT	44
++#define SATP_ASID_MASK	_AC(0xFFFF, UL)
++#endif
++
++/* Exception cause high bit - is an interrupt if set */
++#define CAUSE_IRQ_FLAG		(_AC(1, UL) << (__riscv_xlen - 1))
++
++/* Interrupt causes (minus the high bit) */
++#define IRQ_S_SOFT		1
++#define IRQ_VS_SOFT		2
++#define IRQ_M_SOFT		3
++#define IRQ_S_TIMER		5
++#define IRQ_VS_TIMER		6
++#define IRQ_M_TIMER		7
++#define IRQ_S_EXT		9
++#define IRQ_VS_EXT		10
++#define IRQ_M_EXT		11
++#define IRQ_S_GEXT		12
++#define IRQ_PMU_OVF		13
++#define IRQ_LOCAL_MAX		(IRQ_PMU_OVF + 1)
++#define IRQ_LOCAL_MASK		GENMASK((IRQ_LOCAL_MAX - 1), 0)
++
++/* Exception causes */
++#define EXC_INST_MISALIGNED	0
++#define EXC_INST_ACCESS		1
++#define EXC_INST_ILLEGAL	2
++#define EXC_BREAKPOINT		3
++#define EXC_LOAD_MISALIGNED	4
++#define EXC_LOAD_ACCESS		5
++#define EXC_STORE_MISALIGNED	6
++#define EXC_STORE_ACCESS	7
++#define EXC_SYSCALL		8
++#define EXC_HYPERVISOR_SYSCALL	9
++#define EXC_SUPERVISOR_SYSCALL	10
++#define EXC_INST_PAGE_FAULT	12
++#define EXC_LOAD_PAGE_FAULT	13
++#define EXC_STORE_PAGE_FAULT	15
++#define EXC_INST_GUEST_PAGE_FAULT	20
++#define EXC_LOAD_GUEST_PAGE_FAULT	21
++#define EXC_VIRTUAL_INST_FAULT		22
++#define EXC_STORE_GUEST_PAGE_FAULT	23
++
++/* PMP configuration */
++#define PMP_R			0x01
++#define PMP_W			0x02
++#define PMP_X			0x04
++#define PMP_A			0x18
++#define PMP_A_TOR		0x08
++#define PMP_A_NA4		0x10
++#define PMP_A_NAPOT		0x18
++#define PMP_L			0x80
++
++/* HSTATUS flags */
++#ifdef CONFIG_64BIT
++#define HSTATUS_VSXL		_AC(0x300000000, UL)
++#define HSTATUS_VSXL_SHIFT	32
++#endif
++#define HSTATUS_VTSR		_AC(0x00400000, UL)
++#define HSTATUS_VTW		_AC(0x00200000, UL)
++#define HSTATUS_VTVM		_AC(0x00100000, UL)
++#define HSTATUS_VGEIN		_AC(0x0003f000, UL)
++#define HSTATUS_VGEIN_SHIFT	12
++#define HSTATUS_HU		_AC(0x00000200, UL)
++#define HSTATUS_SPVP		_AC(0x00000100, UL)
++#define HSTATUS_SPV		_AC(0x00000080, UL)
++#define HSTATUS_GVA		_AC(0x00000040, UL)
++#define HSTATUS_VSBE		_AC(0x00000020, UL)
++
++/* HGATP flags */
++#define HGATP_MODE_OFF		_AC(0, UL)
++#define HGATP_MODE_SV32X4	_AC(1, UL)
++#define HGATP_MODE_SV39X4	_AC(8, UL)
++#define HGATP_MODE_SV48X4	_AC(9, UL)
++#define HGATP_MODE_SV57X4	_AC(10, UL)
++
++#define HGATP32_MODE_SHIFT	31
++#define HGATP32_VMID_SHIFT	22
++#define HGATP32_VMID		GENMASK(28, 22)
++#define HGATP32_PPN		GENMASK(21, 0)
++
++#define HGATP64_MODE_SHIFT	60
++#define HGATP64_VMID_SHIFT	44
++#define HGATP64_VMID		GENMASK(57, 44)
++#define HGATP64_PPN		GENMASK(43, 0)
++
++#define HGATP_PAGE_SHIFT	12
++
++#ifdef CONFIG_64BIT
++#define HGATP_PPN		HGATP64_PPN
++#define HGATP_VMID_SHIFT	HGATP64_VMID_SHIFT
++#define HGATP_VMID		HGATP64_VMID
++#define HGATP_MODE_SHIFT	HGATP64_MODE_SHIFT
++#else
++#define HGATP_PPN		HGATP32_PPN
++#define HGATP_VMID_SHIFT	HGATP32_VMID_SHIFT
++#define HGATP_VMID		HGATP32_VMID
++#define HGATP_MODE_SHIFT	HGATP32_MODE_SHIFT
++#endif
++
++/* VSIP & HVIP relation */
++#define VSIP_TO_HVIP_SHIFT	(IRQ_VS_SOFT - IRQ_S_SOFT)
++#define VSIP_VALID_MASK		((_AC(1, UL) << IRQ_S_SOFT) | \
++				 (_AC(1, UL) << IRQ_S_TIMER) | \
++				 (_AC(1, UL) << IRQ_S_EXT))
++
++/* AIA CSR bits */
++#define TOPI_IID_SHIFT		16
++#define TOPI_IID_MASK		GENMASK(11, 0)
++#define TOPI_IPRIO_MASK		GENMASK(7, 0)
++#define TOPI_IPRIO_BITS		8
++
++#define TOPEI_ID_SHIFT		16
++#define TOPEI_ID_MASK		GENMASK(10, 0)
++#define TOPEI_PRIO_MASK		GENMASK(10, 0)
++
++#define ISELECT_IPRIO0		0x30
++#define ISELECT_IPRIO15		0x3f
++#define ISELECT_MASK		GENMASK(8, 0)
++
++#define HVICTL_VTI		BIT(30)
++#define HVICTL_IID		GENMASK(27, 16)
++#define HVICTL_IID_SHIFT	16
++#define HVICTL_DPR		BIT(9)
++#define HVICTL_IPRIOM		BIT(8)
++#define HVICTL_IPRIO		GENMASK(7, 0)
++
++/* xENVCFG flags */
++#define ENVCFG_STCE			(_AC(1, ULL) << 63)
++#define ENVCFG_PBMTE			(_AC(1, ULL) << 62)
++#define ENVCFG_CBZE			(_AC(1, UL) << 7)
++#define ENVCFG_CBCFE			(_AC(1, UL) << 6)
++#define ENVCFG_CBIE_SHIFT		4
++#define ENVCFG_CBIE			(_AC(0x3, UL) << ENVCFG_CBIE_SHIFT)
++#define ENVCFG_CBIE_ILL			_AC(0x0, UL)
++#define ENVCFG_CBIE_FLUSH		_AC(0x1, UL)
++#define ENVCFG_CBIE_INV			_AC(0x3, UL)
++#define ENVCFG_FIOM			_AC(0x1, UL)
++
++/* symbolic CSR names: */
++#define CSR_CYCLE		0xc00
++#define CSR_TIME		0xc01
++#define CSR_INSTRET		0xc02
++#define CSR_HPMCOUNTER3		0xc03
++#define CSR_HPMCOUNTER4		0xc04
++#define CSR_HPMCOUNTER5		0xc05
++#define CSR_HPMCOUNTER6		0xc06
++#define CSR_HPMCOUNTER7		0xc07
++#define CSR_HPMCOUNTER8		0xc08
++#define CSR_HPMCOUNTER9		0xc09
++#define CSR_HPMCOUNTER10	0xc0a
++#define CSR_HPMCOUNTER11	0xc0b
++#define CSR_HPMCOUNTER12	0xc0c
++#define CSR_HPMCOUNTER13	0xc0d
++#define CSR_HPMCOUNTER14	0xc0e
++#define CSR_HPMCOUNTER15	0xc0f
++#define CSR_HPMCOUNTER16	0xc10
++#define CSR_HPMCOUNTER17	0xc11
++#define CSR_HPMCOUNTER18	0xc12
++#define CSR_HPMCOUNTER19	0xc13
++#define CSR_HPMCOUNTER20	0xc14
++#define CSR_HPMCOUNTER21	0xc15
++#define CSR_HPMCOUNTER22	0xc16
++#define CSR_HPMCOUNTER23	0xc17
++#define CSR_HPMCOUNTER24	0xc18
++#define CSR_HPMCOUNTER25	0xc19
++#define CSR_HPMCOUNTER26	0xc1a
++#define CSR_HPMCOUNTER27	0xc1b
++#define CSR_HPMCOUNTER28	0xc1c
++#define CSR_HPMCOUNTER29	0xc1d
++#define CSR_HPMCOUNTER30	0xc1e
++#define CSR_HPMCOUNTER31	0xc1f
++#define CSR_CYCLEH		0xc80
++#define CSR_TIMEH		0xc81
++#define CSR_INSTRETH		0xc82
++#define CSR_HPMCOUNTER3H	0xc83
++#define CSR_HPMCOUNTER4H	0xc84
++#define CSR_HPMCOUNTER5H	0xc85
++#define CSR_HPMCOUNTER6H	0xc86
++#define CSR_HPMCOUNTER7H	0xc87
++#define CSR_HPMCOUNTER8H	0xc88
++#define CSR_HPMCOUNTER9H	0xc89
++#define CSR_HPMCOUNTER10H	0xc8a
++#define CSR_HPMCOUNTER11H	0xc8b
++#define CSR_HPMCOUNTER12H	0xc8c
++#define CSR_HPMCOUNTER13H	0xc8d
++#define CSR_HPMCOUNTER14H	0xc8e
++#define CSR_HPMCOUNTER15H	0xc8f
++#define CSR_HPMCOUNTER16H	0xc90
++#define CSR_HPMCOUNTER17H	0xc91
++#define CSR_HPMCOUNTER18H	0xc92
++#define CSR_HPMCOUNTER19H	0xc93
++#define CSR_HPMCOUNTER20H	0xc94
++#define CSR_HPMCOUNTER21H	0xc95
++#define CSR_HPMCOUNTER22H	0xc96
++#define CSR_HPMCOUNTER23H	0xc97
++#define CSR_HPMCOUNTER24H	0xc98
++#define CSR_HPMCOUNTER25H	0xc99
++#define CSR_HPMCOUNTER26H	0xc9a
++#define CSR_HPMCOUNTER27H	0xc9b
++#define CSR_HPMCOUNTER28H	0xc9c
++#define CSR_HPMCOUNTER29H	0xc9d
++#define CSR_HPMCOUNTER30H	0xc9e
++#define CSR_HPMCOUNTER31H	0xc9f
++
++#define CSR_SSCOUNTOVF		0xda0
++
++#define CSR_SSTATUS		0x100
++#define CSR_SIE			0x104
++#define CSR_STVEC		0x105
++#define CSR_SCOUNTEREN		0x106
++#define CSR_SSCRATCH		0x140
++#define CSR_SEPC		0x141
++#define CSR_SCAUSE		0x142
++#define CSR_STVAL		0x143
++#define CSR_SIP			0x144
++#define CSR_SATP		0x180
++
++#define CSR_STIMECMP		0x14D
++#define CSR_STIMECMPH		0x15D
++
++/* Supervisor-Level Window to Indirectly Accessed Registers (AIA) */
++#define CSR_SISELECT		0x150
++#define CSR_SIREG		0x151
++
++/* Supervisor-Level Interrupts (AIA) */
++#define CSR_STOPEI		0x15c
++#define CSR_STOPI		0xdb0
++
++/* Supervisor-Level High-Half CSRs (AIA) */
++#define CSR_SIEH		0x114
++#define CSR_SIPH		0x154
++
++#define CSR_VSSTATUS		0x200
++#define CSR_VSIE		0x204
++#define CSR_VSTVEC		0x205
++#define CSR_VSSCRATCH		0x240
++#define CSR_VSEPC		0x241
++#define CSR_VSCAUSE		0x242
++#define CSR_VSTVAL		0x243
++#define CSR_VSIP		0x244
++#define CSR_VSATP		0x280
++#define CSR_VSTIMECMP		0x24D
++#define CSR_VSTIMECMPH		0x25D
++
++#define CSR_HSTATUS		0x600
++#define CSR_HEDELEG		0x602
++#define CSR_HIDELEG		0x603
++#define CSR_HIE			0x604
++#define CSR_HTIMEDELTA		0x605
++#define CSR_HCOUNTEREN		0x606
++#define CSR_HGEIE		0x607
++#define CSR_HENVCFG		0x60a
++#define CSR_HTIMEDELTAH		0x615
++#define CSR_HENVCFGH		0x61a
++#define CSR_HTVAL		0x643
++#define CSR_HIP			0x644
++#define CSR_HVIP		0x645
++#define CSR_HTINST		0x64a
++#define CSR_HGATP		0x680
++#define CSR_HGEIP		0xe12
++
++/* Virtual Interrupts and Interrupt Priorities (H-extension with AIA) */
++#define CSR_HVIEN		0x608
++#define CSR_HVICTL		0x609
++#define CSR_HVIPRIO1		0x646
++#define CSR_HVIPRIO2		0x647
++
++/* VS-Level Window to Indirectly Accessed Registers (H-extension with AIA) */
++#define CSR_VSISELECT		0x250
++#define CSR_VSIREG		0x251
++
++/* VS-Level Interrupts (H-extension with AIA) */
++#define CSR_VSTOPEI		0x25c
++#define CSR_VSTOPI		0xeb0
++
++/* Hypervisor and VS-Level High-Half CSRs (H-extension with AIA) */
++#define CSR_HIDELEGH		0x613
++#define CSR_HVIENH		0x618
++#define CSR_HVIPH		0x655
++#define CSR_HVIPRIO1H		0x656
++#define CSR_HVIPRIO2H		0x657
++#define CSR_VSIEH		0x214
++#define CSR_VSIPH		0x254
++
++#define CSR_MSTATUS		0x300
++#define CSR_MISA		0x301
++#define CSR_MIDELEG		0x303
++#define CSR_MIE			0x304
++#define CSR_MTVEC		0x305
++#define CSR_MENVCFG		0x30a
++#define CSR_MENVCFGH		0x31a
++#define CSR_MSCRATCH		0x340
++#define CSR_MEPC		0x341
++#define CSR_MCAUSE		0x342
++#define CSR_MTVAL		0x343
++#define CSR_MIP			0x344
++#define CSR_PMPCFG0		0x3a0
++#define CSR_PMPADDR0		0x3b0
++#define CSR_MVENDORID		0xf11
++#define CSR_MARCHID		0xf12
++#define CSR_MIMPID		0xf13
++#define CSR_MHARTID		0xf14
++
++/* Machine-Level Window to Indirectly Accessed Registers (AIA) */
++#define CSR_MISELECT		0x350
++#define CSR_MIREG		0x351
++
++/* Machine-Level Interrupts (AIA) */
++#define CSR_MTOPEI		0x35c
++#define CSR_MTOPI		0xfb0
++
++/* Virtual Interrupts for Supervisor Level (AIA) */
++#define CSR_MVIEN		0x308
++#define CSR_MVIP		0x309
++
++/* Machine-Level High-Half CSRs (AIA) */
++#define CSR_MIDELEGH		0x313
++#define CSR_MIEH		0x314
++#define CSR_MVIENH		0x318
++#define CSR_MVIPH		0x319
++#define CSR_MIPH		0x354
++
++#define CSR_VSTART		0x8
++#define CSR_VCSR		0xf
++#define CSR_VL			0xc20
++#define CSR_VTYPE		0xc21
++#define CSR_VLENB		0xc22
++
++#ifdef CONFIG_RISCV_M_MODE
++# define CSR_STATUS	CSR_MSTATUS
++# define CSR_IE		CSR_MIE
++# define CSR_TVEC	CSR_MTVEC
++# define CSR_SCRATCH	CSR_MSCRATCH
++# define CSR_EPC	CSR_MEPC
++# define CSR_CAUSE	CSR_MCAUSE
++# define CSR_TVAL	CSR_MTVAL
++# define CSR_IP		CSR_MIP
++
++# define CSR_IEH		CSR_MIEH
++# define CSR_ISELECT	CSR_MISELECT
++# define CSR_IREG	CSR_MIREG
++# define CSR_IPH		CSR_MIPH
++# define CSR_TOPEI	CSR_MTOPEI
++# define CSR_TOPI	CSR_MTOPI
++
++# define SR_IE		SR_MIE
++# define SR_PIE		SR_MPIE
++# define SR_PP		SR_MPP
++
++# define RV_IRQ_SOFT		IRQ_M_SOFT
++# define RV_IRQ_TIMER	IRQ_M_TIMER
++# define RV_IRQ_EXT		IRQ_M_EXT
++#else /* CONFIG_RISCV_M_MODE */
++# define CSR_STATUS	CSR_SSTATUS
++# define CSR_IE		CSR_SIE
++# define CSR_TVEC	CSR_STVEC
++# define CSR_SCRATCH	CSR_SSCRATCH
++# define CSR_EPC	CSR_SEPC
++# define CSR_CAUSE	CSR_SCAUSE
++# define CSR_TVAL	CSR_STVAL
++# define CSR_IP		CSR_SIP
++
++# define CSR_IEH		CSR_SIEH
++# define CSR_ISELECT	CSR_SISELECT
++# define CSR_IREG	CSR_SIREG
++# define CSR_IPH		CSR_SIPH
++# define CSR_TOPEI	CSR_STOPEI
++# define CSR_TOPI	CSR_STOPI
++
++# define SR_IE		SR_SIE
++# define SR_PIE		SR_SPIE
++# define SR_PP		SR_SPP
++
++# define RV_IRQ_SOFT		IRQ_S_SOFT
++# define RV_IRQ_TIMER	IRQ_S_TIMER
++# define RV_IRQ_EXT		IRQ_S_EXT
++# define RV_IRQ_PMU	IRQ_PMU_OVF
++# define SIP_LCOFIP     (_AC(0x1, UL) << IRQ_PMU_OVF)
++
++#endif /* !CONFIG_RISCV_M_MODE */
++
++/* IE/IP (Supervisor/Machine Interrupt Enable/Pending) flags */
++#define IE_SIE		(_AC(0x1, UL) << RV_IRQ_SOFT)
++#define IE_TIE		(_AC(0x1, UL) << RV_IRQ_TIMER)
++#define IE_EIE		(_AC(0x1, UL) << RV_IRQ_EXT)
++
++#ifdef __ASSEMBLY__
++#define __ASM_STR(x)    x
++#else
++#define __ASM_STR(x)    #x
++#endif
++
++#ifndef __ASSEMBLY__
++
++#define csr_swap(csr, val)					\
++({								\
++	unsigned long __v = (unsigned long)(val);		\
++	__asm__ __volatile__ ("csrrw %0, " __ASM_STR(csr) ", %1"\
++			      : "=r" (__v) : "rK" (__v)		\
++			      : "memory");			\
++	__v;							\
++})
++
++#define csr_read(csr)						\
++({								\
++	register unsigned long __v;				\
++	__asm__ __volatile__ ("csrr %0, " __ASM_STR(csr)	\
++			      : "=r" (__v) :			\
++			      : "memory");			\
++	__v;							\
++})
++
++#define csr_write(csr, val)					\
++({								\
++	unsigned long __v = (unsigned long)(val);		\
++	__asm__ __volatile__ ("csrw " __ASM_STR(csr) ", %0"	\
++			      : : "rK" (__v)			\
++			      : "memory");			\
++})
++
++#define csr_read_set(csr, val)					\
++({								\
++	unsigned long __v = (unsigned long)(val);		\
++	__asm__ __volatile__ ("csrrs %0, " __ASM_STR(csr) ", %1"\
++			      : "=r" (__v) : "rK" (__v)		\
++			      : "memory");			\
++	__v;							\
++})
++
++#define csr_set(csr, val)					\
++({								\
++	unsigned long __v = (unsigned long)(val);		\
++	__asm__ __volatile__ ("csrs " __ASM_STR(csr) ", %0"	\
++			      : : "rK" (__v)			\
++			      : "memory");			\
++})
++
++#define csr_read_clear(csr, val)				\
++({								\
++	unsigned long __v = (unsigned long)(val);		\
++	__asm__ __volatile__ ("csrrc %0, " __ASM_STR(csr) ", %1"\
++			      : "=r" (__v) : "rK" (__v)		\
++			      : "memory");			\
++	__v;							\
++})
++
++#define csr_clear(csr, val)					\
++({								\
++	unsigned long __v = (unsigned long)(val);		\
++	__asm__ __volatile__ ("csrc " __ASM_STR(csr) ", %0"	\
++			      : : "rK" (__v)			\
++			      : "memory");			\
++})
++
++#endif /* __ASSEMBLY__ */
++
++#endif /* _ASM_RISCV_CSR_H */
+diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+index 0102a0297b84..89ecee2fdb73 100644
+--- a/tools/testing/selftests/kvm/Makefile
++++ b/tools/testing/selftests/kvm/Makefile
+@@ -222,6 +222,9 @@ CFLAGS += -Wall -Wstrict-prototypes -Wuninitialized -O2 -g -std=gnu99 \
+ ifeq ($(ARCH),s390)
+ 	CFLAGS += -march=z10
+ endif
++ifeq ($(ARCH),riscv)
++	CFLAGS += -DCONFIG_64BIT
++endif
+ 
+ no-pie-option := $(call try-run, echo 'int main(void) { return 0; }' | \
+         $(CC) -Werror $(CFLAGS) -no-pie -x c - -o "$$TMP", -no-pie)
 -- 
 2.34.1
 
