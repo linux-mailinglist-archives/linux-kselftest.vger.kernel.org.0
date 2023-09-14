@@ -2,326 +2,178 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20B0379FF86
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Sep 2023 11:06:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 869C879FF8E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Sep 2023 11:07:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236695AbjINJGl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 14 Sep 2023 05:06:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46284 "EHLO
+        id S236874AbjINJHG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 14 Sep 2023 05:07:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237293AbjINJG3 (ORCPT
+        with ESMTP id S236958AbjINJHB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Sep 2023 05:06:29 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5A9C1BF2
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Sep 2023 02:06:24 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-402bec56ca6so59585e9.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Sep 2023 02:06:24 -0700 (PDT)
+        Thu, 14 Sep 2023 05:07:01 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E16E21FD5
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Sep 2023 02:06:56 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-402bec56ca6so59685e9.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Sep 2023 02:06:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1694682383; x=1695287183; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1694682415; x=1695287215; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=oW078Qik9aBUF1qxqvh6tI9D0b25YtuCO00ZQI0E2dc=;
-        b=WiAGWQPOOS25WL16vvWo+kf1E7rdqCiw9rSQlfeGtpk2GqY01Bp5NDDZgOVKSuGnwt
-         q3gI7BlPFWSRaNmEt5vHPA/JTUI3t8jYWv1EfqOzjGa26j+lRPqRy7g9gDBsoLIUFgY8
-         FpkIiCXjL3A7+PgRyP1HpiWuaWzF1gU2bIrhbsu/F7rWebSUPGINWz8qvNA+5GgtsaKN
-         CZznKUTq9xZTEKSNVHG7tc63CIVModvAua4UOhUP/NNhqGhvifaNwX03fhyspWedMq6U
-         QqQqxEJZzc97vNrpG6lkkfmY7GS2ilwGms4xp1Y7g5Wc988q0pawN2DWmn8pFdHFdpKM
-         ck4Q==
+        bh=zNHpTfXTtqAQfiHkPxqTt6BY3EOQDxzaIUvo3Aq/qms=;
+        b=odTN4FDR5ZL9JO98jJXi9CIFYzlqxXVa5PHiX/Hv7tlZqjuml5S3wvWbH2bOJrPwsE
+         fgZspEIX/i6zzlEUL84mPdO0Q3YrPjPGn8gz0VUjQUmlpkSdRcmYfDty/04KelAmJ3ct
+         ZveheVdQRKCUKlO5SQVT53xRZ2Dr2o2Ze6T1gs8H1RH7j0C51YRvE0TpQxFPo8BuFL4h
+         BXz9wKcNXCvDPMHY8FLBqKSpRvb2TBXuvHuj1GHXVH9qo7JUHniLteV71ioIUbsKbUSo
+         z1uUMXmnyP/kYvO1SmQQQ9g7OHq2WAzTUXZMvyME/CEB2rqxAbkC3rOkuuh8xO+q58zI
+         /Pag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694682383; x=1695287183;
+        d=1e100.net; s=20230601; t=1694682415; x=1695287215;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=oW078Qik9aBUF1qxqvh6tI9D0b25YtuCO00ZQI0E2dc=;
-        b=PpxuobV8vclxlgyx+CUQgRUh2prQRTSJGAMXJ9VrWfWTAKVSeOt17expqPm+MHF7A1
-         h5JZWqsFJjeg9DNDNrkeM+ARg1pn1V7Zhhh/fiMz4Jv4ifGDAKHpqseSeg48RKIR9E9J
-         yM8ZK/m5T3Crm2e5ljorwduUmSn0b+11huo7WKrpAcjLbWnjt+hU07IT6xVe4RNBvYFF
-         B4tp/VJGEXudy7M2pnMfbwUxc2tAYzYmwgn56jKX5qsvwCgHZgYbSlyoqe18ij+/xBoF
-         SL6S/ajIum8PwlIlPNvrBrNRApS859qI1Y6j/t8DE+IDqR47KkzzbGR2SLQa1ehnrmYG
-         jmRw==
-X-Gm-Message-State: AOJu0Yz7ijCM57jjZMx+BtKLRxbhpbQpKo7mZqLnu2M5hRpUskdM7sUY
-        6l0C4/rzZNT/rWgNXt30ZJgM6vW8jLoppieEqsuDMw==
-X-Google-Smtp-Source: AGHT+IEg27lWBSdW+CbUv+CgKOCnvKBq2YwHVx6FDCPtZIa0HpYGWeG8ydnLRUY9gE7G/BZA/aGpJQf45a+NukdLEm8=
+        bh=zNHpTfXTtqAQfiHkPxqTt6BY3EOQDxzaIUvo3Aq/qms=;
+        b=J84ouYB7RjyIkBiVp3d5fAdI90nzmPFjt1MiyRAawpv6Rvwm/UDQSx3NH3wpLfaQZ3
+         qELA5dKCCXmCf45cJLOOzVRX/57kyKMCRzwTMF2M+3VldVGfl90bUjowJSv0szpOSQno
+         DZ6kEDffUnAbkiSbDk65uEXcUETauzsDfBSPprQCDAOOPHSTTI240vmHqvUIxlCR8NFY
+         UmKFQqgXTuO3MI13I3cVLbm/MKOa8E1RSBAVsZfqE3mnbcdhhEd3quP2H/AFpziE5FTU
+         QHVwggf83JjmQLsjiuYZz9QstnaMLtGS7WRxvcuCu87EPgWQiSg0ANf172fYShR08hZ2
+         lI+w==
+X-Gm-Message-State: AOJu0Yx5YvuuCF5OK3ckKZB31cwFLF8Y/xeLj+FpkX2Agn4oxFdz38vW
+        fBpef9gRoInem72hRAlarn29pPgifkbuS50Ja3l68w==
+X-Google-Smtp-Source: AGHT+IGpZo7fNoS4nx6ZKxRbzBP6HVGGyALcKDWjdUstPR5czgPSLKTOeRvhQOWF2miRlY9Vd0JqzZUfZutsL91/xRc=
 X-Received: by 2002:a7b:c3c8:0:b0:400:fffe:edf6 with SMTP id
- t8-20020a7bc3c8000000b00400fffeedf6mr249595wmj.1.1694682383030; Thu, 14 Sep
- 2023 02:06:23 -0700 (PDT)
+ t8-20020a7bc3c8000000b00400fffeedf6mr249723wmj.1.1694682415195; Thu, 14 Sep
+ 2023 02:06:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230908213148.3610108-1-rmoar@google.com>
-In-Reply-To: <20230908213148.3610108-1-rmoar@google.com>
+References: <20230908213148.3610108-1-rmoar@google.com> <20230908213148.3610108-2-rmoar@google.com>
+In-Reply-To: <20230908213148.3610108-2-rmoar@google.com>
 From:   David Gow <davidgow@google.com>
-Date:   Thu, 14 Sep 2023 17:06:08 +0800
-Message-ID: <CABVgOSnTGFgzje3QZfN69We+26oWrWKoJQQP_=zphSLk4PG1xA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] kunit: add ability to run tests after boot using debugfs
+Date:   Thu, 14 Sep 2023 17:06:43 +0800
+Message-ID: <CABVgOS=0coPxNE12EsOb-y-VGQ4hafSiNiVj8sLfCCG8LLz8Vw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] Documentation: Add debugfs docs with run after boot
 To:     Rae Moar <rmoar@google.com>
 Cc:     shuah@kernel.org, dlatypov@google.com, brendan.higgins@linux.dev,
         sadiyakazi@google.com, linux-kselftest@vger.kernel.org,
         kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000007a8a7606054dfd0b"
+        boundary="00000000000063d21606054dff8f"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---0000000000007a8a7606054dfd0b
+--00000000000063d21606054dff8f
 Content-Type: text/plain; charset="UTF-8"
 
-On Sat, 9 Sept 2023 at 05:31, Rae Moar <rmoar@google.com> wrote:
+On Sat, 9 Sept 2023 at 05:32, Rae Moar <rmoar@google.com> wrote:
 >
-> Add functionality to run built-in tests after boot by writing to a
-> debugfs file.
+> Expand the documentation on the KUnit debugfs filesystem on the
+> run_manual.rst page.
 >
-> Add a new debugfs file labeled "run" for each test suite to use for
-> this purpose.
+> Add section describing how to access results using debugfs.
 >
-> As an example, write to the file using the following:
->
-> echo "any string" > /sys/kernel/debugfs/kunit/<testsuite>/run
->
-> This will trigger the test suite to run and will print results to the
-> kernel log.
->
-> Note that what you "write" to the debugfs file will not be saved.
->
-> To guard against running tests concurrently with this feature, add a
-> mutex lock around running kunit. This supports the current practice of
-> not allowing tests to be run concurrently on the same kernel.
->
-> This functionality may not work for all tests.
->
-> This new functionality could be used to design a parameter
-> injection feature in the future.
+> Add section describing how to run tests after boot using debugfs.
 >
 > Signed-off-by: Rae Moar <rmoar@google.com>
+> Co-developed-by: Sadiya Kazi <sadiyakazi@google.com>
+> Signed-off-by: Sadiya Kazi <sadiyakazi@google.com>
 > ---
 
-This is looking pretty good, but I have a few nitpicks below and one big issue.
+Looks good to me, a few nitpicks, and the fact that we'll probably
+need to add something about init section suites when those are
+implemented.
 
-The big issue is that this doesn't seem to exclude test suites created
-with kunit_test_init_section_suite{,s}(). The init section versions of
-the suite declarations, by definition, won't work if run after the
-kernel has finished booting. At the moment, these macros just pass
-through to the normal versions (because we've not been able to run
-after boot until now), but we'll need to implement it (maybe as a
-separate linker section, maybe as an attribute, etc) now. I expect
-that the correct solution here would be to not create the 'run'
-debugfs file for these tests. But I could be convinced to have it
-exist, but to just say "this test cannot be run after boot" if you've
-got a good argument. In any case, grep 'test.h' for "NOTE TO KUNIT
-DEVS" and you'll see the details.
+(Also, since you sent the email, your sign off should be at the bottom
+of the list above.)
 
-My one other not-totally-related thought (and this extends to module
-loading, too, so is possibly more useful as a separate patch) is that
-we're continually incrementing the test number still. This doesn't
-matter if we read the results from debugfs though, and it may make
-more sense to have this continue to increment (and thus treat all of
-dmesg as one long KTAP document). We could always add a reset option
-to debugfs in a follow-up patch if we want. But that's not something
-I'd hold this up with.
+>  Documentation/dev-tools/kunit/run_manual.rst | 45 ++++++++++++++++++--
+>  1 file changed, 41 insertions(+), 4 deletions(-)
+>
+> diff --git a/Documentation/dev-tools/kunit/run_manual.rst b/Documentation/dev-tools/kunit/run_manual.rst
+> index e7b46421f247..613385c5ba5b 100644
+> --- a/Documentation/dev-tools/kunit/run_manual.rst
+> +++ b/Documentation/dev-tools/kunit/run_manual.rst
+> @@ -49,9 +49,46 @@ loaded.
+>
+>  The results will appear in TAP format in ``dmesg``.
+>
+> +debugfs
+> +=======
+> +
+> +``debugfs`` is a file system that enables user interaction with the files to
+> +make kernel information available to user space. A user can interact with
+> +the debugfs filesystem using a variety of file operations, such as open,
+> +read, and write.
+> +
+> +By default, only the root user has access to the debugfs directory.
 
->
-> Changes since v1:
-> - Removed second patch as this problem has been fixed
-> - Added Documentation patch
-> - Made changes to work with new dynamically-extending log feature
->
-> Note that these patches now rely on (and are rebased on) the patch series:
-> https://lore.kernel.org/all/20230828104111.2394344-1-rf@opensource.cirrus.com/
->
->  lib/kunit/debugfs.c | 66 +++++++++++++++++++++++++++++++++++++++++++++
->  lib/kunit/test.c    | 13 +++++++++
->  2 files changed, 79 insertions(+)
->
-> diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
-> index 270d185737e6..8c0a970321ce 100644
-> --- a/lib/kunit/debugfs.c
-> +++ b/lib/kunit/debugfs.c
-> @@ -8,12 +8,14 @@
->  #include <linux/module.h>
->
->  #include <kunit/test.h>
-> +#include <kunit/test-bug.h>
->
->  #include "string-stream.h"
->  #include "debugfs.h"
->
->  #define KUNIT_DEBUGFS_ROOT             "kunit"
->  #define KUNIT_DEBUGFS_RESULTS          "results"
-> +#define KUNIT_DEBUGFS_RUN              "run"
->
->  /*
->   * Create a debugfs representation of test suites:
-> @@ -21,6 +23,8 @@
->   * Path                                                Semantics
->   * /sys/kernel/debug/kunit/<testsuite>/results Show results of last run for
->   *                                             testsuite
-> + * /sys/kernel/debug/kunit/<testsuite>/run     Write to this file to trigger
-> + *                                             testsuite to run
->   *
->   */
->
-> @@ -99,6 +103,51 @@ static int debugfs_results_open(struct inode *inode, struct file *file)
->         return single_open(file, debugfs_print_results, suite);
->  }
->
-> +/*
-> + * Print a usage message to the debugfs "run" file
-> + * (/sys/kernel/debug/kunit/<testsuite>/run) if opened.
-> + */
-> +static int debugfs_print_run(struct seq_file *seq, void *v)
-> +{
-> +       struct kunit_suite *suite = (struct kunit_suite *)seq->private;
-> +
-> +       seq_puts(seq, "Write to this file to trigger the test suite to run.\n");
-> +       seq_printf(seq, "usage: echo \"any string\" > /sys/kernel/debugfs/kunit/%s/run\n",
-> +                       suite->name);
-> +       return 0;
-> +}
-> +
-> +/*
-> + * The debugfs "run" file (/sys/kernel/debug/kunit/<testsuite>/run)
-> + * contains no information. Write to the file to trigger the test suite
-> + * to run.
-> + */
-> +static int debugfs_run_open(struct inode *inode, struct file *file)
-> +{
-> +       struct kunit_suite *suite;
-> +
-> +       suite = (struct kunit_suite *)inode->i_private;
-> +
-> +       return single_open(file, debugfs_print_run, suite);
-> +}
-> +
-> +/*
-> + * Trigger a test suite to run by writing to the suite's "run" debugfs
-> + * file found at: /sys/kernel/debug/kunit/<testsuite>/run
-> + *
-> + * Note: what is written to this file will not be saved.
-> + */
-> +static ssize_t debugfs_run(struct file *file,
-> +               const char __user *buf, size_t count, loff_t *ppos)
-> +{
-> +       struct inode *f_inode = file->f_inode;
-> +       struct kunit_suite *suite = (struct kunit_suite *) f_inode->i_private;
-> +
-> +       __kunit_test_suites_init(&suite, 1);
-> +
-> +       return count;
-> +}
-> +
->  static const struct file_operations debugfs_results_fops = {
->         .open = debugfs_results_open,
->         .read = seq_read,
-> @@ -106,10 +155,23 @@ static const struct file_operations debugfs_results_fops = {
->         .release = debugfs_release,
->  };
->
-> +static const struct file_operations debugfs_run_fops = {
-> +       .open = debugfs_run_open,
-> +       .read = seq_read,
-> +       .write = debugfs_run,
-> +       .llseek = seq_lseek,
-> +       .release = debugfs_release,
-> +};
-> +
->  void kunit_debugfs_create_suite(struct kunit_suite *suite)
->  {
->         struct kunit_case *test_case;
->
-> +       if (suite->log) {
-> +               /* Clear the suite log that's leftover from a previous run. */
-> +               string_stream_clear(suite->log);
-> +               return;
-> +       }
+These two paragraphs are probably a bit excessive: we want to focus on
+what KUnit can do with debugfs, not describing what debugfs is as a
+whole (which is best left to pages like
+Documentation/filesystems/debugfs.rst )
 
-Can we just move this to kunit_init_suite() in test.c. It doesn't feel
-quite debugfs-y enough, and the return here tripped me up for a little
-too long.
-
-Ideally, we'd then split up kunit_init_suite() into a one-time
-initialisation (which calls kunit_debugfs_create_suite()), and a reset
-function (which resets the state of the suite back to the beginning).
-We then only call init once, but reset on every execution.
->         /* Allocate logs before creating debugfs representation. */
->         suite->log = alloc_string_stream(GFP_KERNEL);
->         string_stream_set_append_newlines(suite->log, true);
-> @@ -124,6 +186,10 @@ void kunit_debugfs_create_suite(struct kunit_suite *suite)
->         debugfs_create_file(KUNIT_DEBUGFS_RESULTS, S_IFREG | 0444,
->                             suite->debugfs,
->                             suite, &debugfs_results_fops);
 > +
-> +       debugfs_create_file(KUNIT_DEBUGFS_RUN, S_IFREG | 0644,
-> +                           suite->debugfs,
-> +                           suite, &debugfs_run_fops);
->  }
->
->  void kunit_debugfs_destroy_suite(struct kunit_suite *suite)
-> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> index 651cbda9f250..d376b886d72d 100644
-> --- a/lib/kunit/test.c
-> +++ b/lib/kunit/test.c
-> @@ -13,6 +13,7 @@
->  #include <linux/kernel.h>
->  #include <linux/module.h>
->  #include <linux/moduleparam.h>
-> +#include <linux/mutex.h>
->  #include <linux/panic.h>
->  #include <linux/sched/debug.h>
->  #include <linux/sched.h>
-> @@ -22,6 +23,8 @@
->  #include "string-stream.h"
->  #include "try-catch-impl.h"
->
-> +static struct mutex kunit_run_lock;
+> +If ``CONFIG_KUNIT_DEBUGFS`` is enabled, you can use KUnit debugfs
+> +filesystem to perform the following actions.
 > +
-
-Should we use DEFINE_MUTEX() here rather than initialising it at runtime?
-
->  /*
->   * Hook to fail the current test and print an error message to the log.
->   */
-> @@ -668,6 +671,11 @@ int __kunit_test_suites_init(struct kunit_suite * const * const suites, int num_
->                 return 0;
->         }
->
-> +       /* Use mutex lock to guard against running tests concurrently. */
-> +       if (mutex_lock_interruptible(&kunit_run_lock)) {
-> +               pr_err("kunit: test interrupted\n");
-> +               return -EINTR;
-> +       }
->         static_branch_inc(&kunit_running);
->
->         for (i = 0; i < num_suites; i++) {
-> @@ -676,6 +684,7 @@ int __kunit_test_suites_init(struct kunit_suite * const * const suites, int num_
->         }
->
->         static_branch_dec(&kunit_running);
-> +       mutex_unlock(&kunit_run_lock);
->         return 0;
->  }
->  EXPORT_SYMBOL_GPL(__kunit_test_suites_init);
-> @@ -836,6 +845,10 @@ static int __init kunit_init(void)
->         kunit_install_hooks();
->
->         kunit_debugfs_init();
+> +Retrieve Test Results
+> +=====================
 > +
-> +       /* Initialize lock to guard against running tests concurrently. */
-> +       mutex_init(&kunit_run_lock);
+> +You can use debugfs to retrieve KUnit test results. The test results are
+> +accessible from the debugfs filesystem in the following read-only file:
 > +
+> +.. code-block :: bash
+> +
+> +       /sys/kernel/debug/kunit/<test_suite>/results
+> +
+> +The test results are available in KTAP format.
 
-As I understand it, we can just use DEFINE_MUTEX() above.
+We _could_ mention that this is a separate KTAP document (i.e., the
+numbering starts at 1), though it may be obvious.
+
+> +
+> +Run Tests After Kernel Has Booted
+> +=================================
+> +
+> +You can use the debugfs filesystem to trigger built-in tests to run after
+> +boot. To run the test suite, you can use the following command to write to
+> +the ``/sys/kernel/debug/kunit/<test_suite>/run`` file:
+> +
+> +.. code-block :: bash
+> +
+> +       echo "any string" > /sys/kernel/debugfs/kunit/<test_suite>/run
+> +
+> +As a result, the test suite runs and the results are printed to the kernel
+> +log.
+> +
+>  .. note ::
+>
+> -       If ``CONFIG_KUNIT_DEBUGFS`` is enabled, KUnit test results will
+> -       be accessible from the ``debugfs`` filesystem (if mounted).
+> -       They will be in ``/sys/kernel/debug/kunit/<test_suite>/results``, in
+> -       TAP format.
+> +       The contents written to the debugfs file
+> +       ``/sys/kernel/debug/kunit/<test_suite>/run`` are not saved.
+
+This is possibly a bit obvious. Maybe it'd be more useful with a bit
+more context, e.g., "The contents written to the file ... are
+discarded; it is the act of writing which triggers the test, not the
+specific contents written."?
+
+It might be worth having a note that tests cannot run concurrently, so
+this may block or fail.
+
+Equally, it may be worth having a note for test authors, that their
+tests will need to correctly initialise and/or clean up any data, so
+the test runs correctly a second time.
 
 
->  #ifdef CONFIG_MODULES
->         return register_module_notifier(&kunit_mod_nb);
->  #else
->
-> base-commit: b754593274e04fc840482a658b29791bc8f8b933
 > --
 > 2.42.0.283.g2d96d420d3-goog
 >
 
---0000000000007a8a7606054dfd0b
+--00000000000063d21606054dff8f
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -388,14 +240,14 @@ impZAng7ccvvK09K3ZuhwTIxJMsPXCZYsrXWORTw5sczRAP6XvKbPBJnsJoSTe5dFBPBHOQJOGhU
 qWfEfWnWMJPF3LxSGLpLFQXO3RwQqmxv08avwXfVPouh1xuB3FX7rpDabT8YDhu9JgIZkLEKko7L
 yQt6zWwng7k8YF/jGbiAta6VMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDH
-MmBeipXJ4VWNj3jl018ILe9Czs5b5Aq4gg57hrFjoDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzA5MTQwOTA2MjNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDy
+Dj0NN0bCychgwX5Hsr6IrAPjzfCc4qkNB7DU8K6BQzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzA5MTQwOTA2NTVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAEpMvVu/qNIHGFnzjRqLc
-OSQvlJkacFG6ASnicCH+jpLr70a+FvzFn2FxbUM66t6iYPgmTObT+1W4kaQVo/iAgrxUu2KRUub1
-OYyQtl0szfTVlUT0pQszQkgIfvwS1bayiy7jU84BhUoYhhy6O2WF6UPjdRoYeAg1ykCrTwwqXfYd
-Z2ixpAtBAgOz7DYnBAeP9qyjto/YD2hx/ajcbZBwvL647ypl93bCsRZAmW20gvHlRVSiVnKxVnFJ
-+rooMcpEgeGKNiXS+9t+ulm19pXUcPrq5CxRoykPGlZrAx/gSVDi6jq3H4YN9n/1f3MPMZOkm5hW
-CDWyaEnZskHn8y9Taw==
---0000000000007a8a7606054dfd0b--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAHaaby1hYSQ/ysUYu+Jro
+Zpbw4rMia7Wpxq4al0sCSWdhDJIPNM8kzI3rrZwk04nmg7sXqupmoXYbvh/dtJViOxaNBnTB/9DX
+0fWO2A0Mc0UutXC+yyycPsXDibFyIPdY+6XeCdD2GSkNIDsL+zKk7iwmIjPFpbl4vGME4sSWhSbW
++wrCzFZHTrdbvipZ+/tfCnrx1Hih7vT67hT9RCcCkTN0Cjk2WJTgk9KA4Jl/UnB7g+59Erf5qD2E
+oewXyKOCnDleaorovwNohmzsxbpzpoEgEagmom5fyuY45yu9Sw2bDP3mpmlgjMezvNagqiwaYoMG
+1FvWqcNfcsZphUDNMA==
+--00000000000063d21606054dff8f--
