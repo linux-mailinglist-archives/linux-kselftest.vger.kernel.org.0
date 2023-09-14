@@ -2,155 +2,101 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D7BF7A100E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Sep 2023 23:51:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 356657A101C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Sep 2023 23:57:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229730AbjINVvy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 14 Sep 2023 17:51:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33922 "EHLO
+        id S229472AbjINV5X (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 14 Sep 2023 17:57:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbjINVvy (ORCPT
+        with ESMTP id S229447AbjINV5W (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Sep 2023 17:51:54 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE8A1BFA
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Sep 2023 14:51:48 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-d817775453dso1675472276.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Sep 2023 14:51:48 -0700 (PDT)
+        Thu, 14 Sep 2023 17:57:22 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7C321BFA;
+        Thu, 14 Sep 2023 14:57:18 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1c0d5b16aacso12418325ad.1;
+        Thu, 14 Sep 2023 14:57:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1694728308; x=1695333108; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mZlU0Kf/Gcn2G/sI4bkJCwhLYRSeXEzqS2NQ4Iszo2s=;
-        b=zFFXD4nYP3g8vduEG2wQpmlZC0rGS3wvsdeGjYc0KUCGZ0KZeFIyry4osfRAjpGXRY
-         d0cCLNQYe+bb4lE+2BUL7kRRVe7/fefh/IyWFJifQY82ysw66ViVl4MIl1qHK6XMrRdk
-         FqYV1RTRKgvCBiUcgF1/liJcFJsHiAjWadGAMelyF6+mkFRFoWU0lAU+7M9ifeQbSxKx
-         s4BlvVFp31wupGO5MADIRgHrB8j57cTydJolnHC9mP+lMEZFTKU7a+AxuQACw1YmCsih
-         33zbY+MTMHEavXjMJI+zgF+U3LjYZr+Wui6eY/NkpR55E93TUIpTdHl6CjxrALdrz6OD
-         z6/w==
+        d=gmail.com; s=20221208; t=1694728638; x=1695333438; darn=vger.kernel.org;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X34N50NaiDX+PBJtKJBqu0HsGsPzsSqdEPNcf7aeIrs=;
+        b=PX2VQQqAiWTaBfzhNszo/To7XsEfIzIpKOBNFVhclk15Ev+P8MYg3cD5ngxpZKFNKH
+         /9V3JJDtBfQwkwOzxW3WplbkYp55+pEXM55fEOCM1ZuDQPUEFrsYgYe+mQ8ae+1wLF/5
+         IIHi2f1Rcg03TIrsFfpkyjRO/uHjz4aFzhCZSxzd/qNksGpV0zsv8uVr5MR83oTrvyeL
+         p+ovLEkuckafvMBWiCH4+p5XDkOZMmRUGtuz44/m+qS7AHoDqKOGtEut6cQoldMyNVAG
+         TacqQZzSCt5KOvoIJbouYvc4YaSbt+mK6OMstpVI4PBYxwtg8m1fFVXIUOF7B4Cu6cTM
+         h5Ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694728308; x=1695333108;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mZlU0Kf/Gcn2G/sI4bkJCwhLYRSeXEzqS2NQ4Iszo2s=;
-        b=dw43hsxyk+j22+WzHs5G4O9ujh0BCtpCT8FS+sGcLtixBzvSlCwCGTcZ3yK210axWM
-         a4ci8G9ea70dLhwAF4W1vn3lKWZobgBwPTkoVoJe8wYU/E6AurKXZMmt6wQ5dnrwirJr
-         zazmqI4oKyl2AKXgF3pzFTTEHVFERdgaHWeP0ZE4LdSEW+tymg5Kocc/5iBxd2ibrjMl
-         06NXMFMgCD2b+26yTRg/l7woKxsDJZvcwJdtQlRK9WzEewqPCw5iSK3vlCxcrGEfLuHZ
-         ZtazR1vCgX3sbELFScuVhwljgslZsGxcpIv2CslQGORX/T75EiYL3lMJPtYaClVu1jvg
-         EuOg==
-X-Gm-Message-State: AOJu0YwQN5yIjkn5WP4TFDqPsJ/6WPOERrwu4hGljh9XcQzSSFmPz0/i
-        CeCg6GJohOjJD87YGppbkmqcMu8DQg==
-X-Google-Smtp-Source: AGHT+IFs2QTkWETQW88X7lVAYojwqxgUvIgWK6HjjeZUUZaPFEtRPnJAVID9TsxJZMd+RrcvrrEDfAobkg==
-X-Received: from rmoar-specialist.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:45d3])
- (user=rmoar job=sendgmr) by 2002:a25:40d:0:b0:d7a:6a4c:b657 with SMTP id
- 13-20020a25040d000000b00d7a6a4cb657mr166298ybe.0.1694728308004; Thu, 14 Sep
- 2023 14:51:48 -0700 (PDT)
-Date:   Thu, 14 Sep 2023 21:51:41 +0000
-In-Reply-To: <20230914215141.3399584-1-rmoar@google.com>
-Mime-Version: 1.0
-References: <20230914215141.3399584-1-rmoar@google.com>
-X-Mailer: git-send-email 2.42.0.459.ge4e396fd5e-goog
-Message-ID: <20230914215141.3399584-2-rmoar@google.com>
-Subject: [PATCH 2/2] kunit: tool: add attributes output to kunit.py
-From:   Rae Moar <rmoar@google.com>
-To:     shuah@kernel.org, davidgow@google.com, dlatypov@google.com,
-        brendan.higgins@linux.dev
-Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, Rae Moar <rmoar@google.com>
-Content-Type: text/plain; charset="UTF-8"
+        d=1e100.net; s=20230601; t=1694728638; x=1695333438;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=X34N50NaiDX+PBJtKJBqu0HsGsPzsSqdEPNcf7aeIrs=;
+        b=SvVWCdufCR/8/7KP1NlAUj7oLfRWaq1cq4JBaFIGkwO6meKGrlkRoJ85HSjHquwPVM
+         8olVUlPFt04sAc9CiKCjtH9LQ86FoYzLSjsqJgfY7xZ01A6GN2f7+SV02gQPw5BiA4kK
+         fmhzL03469LO35MN9T7hciN15806X9jEZuo6sbIaVbdlWeE4pcslmoAUO6usITqoyUs9
+         zYLQ57fISy1lVc7iqXbk9qjYt/1/094ahRCfplBiLpWveKZ9pJWpsQvlCiOUGAz5bEc2
+         w0PB8zAKuDXoY+Luan9SjKAkzK4P9vDZTq3+rJEZfRsd5oIS6n8d3KlI37hifA/OhofP
+         E3ug==
+X-Gm-Message-State: AOJu0YxMDdjYddPkBe4dDchIu4LIr+sGqNlVllO7jUWArbbfK9KT+ig/
+        qYUbTL1ILaRQETn3nYCosb8=
+X-Google-Smtp-Source: AGHT+IGIaI/uWkQLliCTRlQFV1QfmbwrrxnMWQ0mT8W+Jdap0w9HAyjlgBEZRZvbgXVCbtXJ8c4H3g==
+X-Received: by 2002:a17:903:2284:b0:1bc:8fca:9d59 with SMTP id b4-20020a170903228400b001bc8fca9d59mr7882429plh.29.1694728638036;
+        Thu, 14 Sep 2023 14:57:18 -0700 (PDT)
+Received: from smtpclient.apple (c-73-162-233-46.hsd1.ca.comcast.net. [73.162.233.46])
+        by smtp.gmail.com with ESMTPSA id bb6-20020a170902bc8600b001bba7aab822sm2049158plb.5.2023.09.14.14.57.15
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 14 Sep 2023 14:57:17 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.700.6\))
+Subject: Re: [PATCH 2/3] userfaultfd: UFFDIO_REMAP uABI
+From:   Nadav Amit <nadav.amit@gmail.com>
+In-Reply-To: <20230914152620.2743033-3-surenb@google.com>
+Date:   Thu, 14 Sep 2023 14:57:04 -0700
+Cc:     Andrew Morton <akpm@linux-foundation.org>, viro@zeniv.linux.org.uk,
+        brauner@kernel.org, shuah@kernel.org,
+        Andrea Arcangeli <aarcange@redhat.com>, lokeshgidra@google.com,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Hugh Dickins <hughd@google.com>, mhocko@suse.com,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>, Liam.Howlett@oracle.com,
+        Jann Horn <jannh@google.com>, zhangpeng362@huawei.com,
+        bgeffon@google.com, kaleshsingh@google.com, ngeoffray@google.com,
+        jdduke@google.com, linux-mm <linux-mm@kvack.org>,
+        linux-fsdevel@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-kselftest@vger.kernel.org, kernel-team@android.com
+Content-Transfer-Encoding: 7bit
+Message-Id: <4F9BBE45-22D0-4F8D-BA56-CA3459998DC4@gmail.com>
+References: <20230914152620.2743033-1-surenb@google.com>
+ <20230914152620.2743033-3-surenb@google.com>
+To:     Suren Baghdasaryan <surenb@google.com>
+X-Mailer: Apple Mail (2.3731.700.6)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Output attributes in kunit.py results.
 
-Example of format:
+> On Sep 14, 2023, at 8:26 AM, Suren Baghdasaryan <surenb@google.com> wrote:
+> 
+> + 	if (!pte_same(ptep_clear_flush(src_vma, src_addr, src_pte),
+> +       	orig_src_pte))
+> + 		BUG_ON(1);
 
-[21:33:23] =================== example (7 subtests) ===================
-[21:33:23] module: kunit_example_test
-[21:33:23] [PASSED] example_simple_test
-...
-[21:33:23] [PASSED] example_slow_test
-[21:33:23] speed: slow
-[21:33:23] =================== [PASSED] example =======================
+Just a minor detail regarding these few lines:
 
-The attributes are outputted directly below the associated test.
+Besides the less-than-ideal use of BUG_ON() here, I think that this code
+assumes that the PTE cannot change at this point. However, as the PTE was
+still mapped at this point, I think the access and dirty bits can be set.
 
-Note that the attributes lines are saved in the log and then the log is
-parsed for attributes rather than saving attributes in their own field.
+tl;dr: this appears to be triggerable by userspace.
 
-This is due to diagnostic lines being saved prior to the creation of the
-associated test object.
-
-Signed-off-by: Rae Moar <rmoar@google.com>
----
- tools/testing/kunit/kunit_parser.py | 31 +++++++++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
-
-diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
-index ce34be15c929..ffa9cfdcf5d6 100644
---- a/tools/testing/kunit/kunit_parser.py
-+++ b/tools/testing/kunit/kunit_parser.py
-@@ -509,6 +509,34 @@ def print_test_header(test: Test) -> None:
- 			message += f'({test.expected_count} subtests)'
- 	stdout.print_with_timestamp(format_test_divider(message, len(message)))
- 
-+TEST_HEADER_ATTR = re.compile(r'^\s*# (.*): (.*)$')
-+TEST_ATTR = re.compile(r'^\s*# (.*)\.(.*): (.*)$')
-+
-+def print_test_attr(test: Test) -> None:
-+	"""
-+	Attributes, if present, will be printed in a list separated by
-+	commas.
-+
-+	Example:
-+	'module: example_test, speed: slow'
-+
-+	Parameters:
-+	test - Test object representing current test being printed
-+	"""
-+	attr_list = ["module", "speed"]
-+	output = []
-+
-+	for line in test.log:
-+		test_match = TEST_ATTR.match(line)
-+		header_match = TEST_HEADER_ATTR.match(line)
-+		if test_match and (test_match.group(1) == test.name
-+					  and (test_match.group(2) in attr_list)):
-+			output.append(test_match.group(2) + ": " + test_match.group(3))
-+		elif header_match and (header_match.group(1) in attr_list):
-+			output.append(header_match.group(1) + ": " + header_match.group(2))
-+	if output:
-+		stdout.print_with_timestamp(", ".join(output))
-+
- def print_log(log: Iterable[str]) -> None:
- 	"""Prints all strings in saved log for test in yellow."""
- 	formatted = textwrap.dedent('\n'.join(log))
-@@ -741,6 +769,7 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str], is_subtest:
- 			test.log.extend(parse_diagnostic(lines))
- 			parse_test_plan(lines, test)
- 			print_test_header(test)
-+			print_test_attr(test)
- 	expected_count = test.expected_count
- 	subtests = []
- 	test_num = 1
-@@ -763,6 +792,7 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str], is_subtest:
- 				test.counts.add_status(
- 					TestStatus.TEST_CRASHED)
- 				print_test_result(sub_test)
-+				print_test_attr(sub_test)
- 			else:
- 				test.log.extend(sub_log)
- 				break
-@@ -796,6 +826,7 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str], is_subtest:
- 		print_test_footer(test)
- 	elif is_subtest:
- 		print_test_result(test)
-+		print_test_attr(test)
- 	return test
- 
- def parse_run_tests(kernel_output: Iterable[str]) -> Test:
--- 
-2.42.0.459.ge4e396fd5e-goog
-
+[ as for the performance of this code, the lack of batching would mean
+  that for multithreaded applications where more than a single page is
+  remapped, performance would suffer ]
