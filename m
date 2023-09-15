@@ -2,169 +2,162 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 083FE7A1FCB
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Sep 2023 15:25:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CD437A2244
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Sep 2023 17:23:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235250AbjIONZn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 15 Sep 2023 09:25:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52030 "EHLO
+        id S235725AbjIOPXY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 15 Sep 2023 11:23:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234575AbjIONZn (ORCPT
+        with ESMTP id S236067AbjIOPXQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 15 Sep 2023 09:25:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0AA0C1FF1
-        for <linux-kselftest@vger.kernel.org>; Fri, 15 Sep 2023 06:25:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1694784300;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=YwX0LvGe2IzI2EOEiWJxA7uUIanGLX6c6iCFRhbWEYk=;
-        b=N9TJb7DU+wiRYto+J74cKWfMrmN0tHju+qlbrqTSn7cahsoQs7GCd0XtD/6gRT0PxABy4v
-        sZgUWO2rPzMiq5UCOo8nyl1X2DdOAxtJtfr7BLixdHBOFOWFXjad2I7ZIRG9cMsu2h/vcl
-        NgWlsz9Vqh6JIllP351l1+xwMenmmoE=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-66-4Bq-zBPcP-SVdF6pYdLdww-1; Fri, 15 Sep 2023 09:24:54 -0400
-X-MC-Unique: 4Bq-zBPcP-SVdF6pYdLdww-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CA13480349B;
-        Fri, 15 Sep 2023 13:24:53 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.216])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6689610F1BE9;
-        Fri, 15 Sep 2023 13:24:51 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <5017b9fa177f4deaa5d481a5d8914ab4@AcuMS.aculab.com>
-References: <5017b9fa177f4deaa5d481a5d8914ab4@AcuMS.aculab.com> <dcc6543d71524ac488ca2a56dd430118@AcuMS.aculab.com> <20230914221526.3153402-1-dhowells@redhat.com> <20230914221526.3153402-10-dhowells@redhat.com> <3370515.1694772627@warthog.procyon.org.uk>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     dhowells@redhat.com, Al Viro <viro@zeniv.linux.org.uk>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Jens Axboe <axboe@kernel.dk>, "Christoph Hellwig" <hch@lst.de>,
-        Christian Brauner <christian@brauner.io>,
-        "Matthew Wilcox" <willy@infradead.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        David Gow <davidgow@google.com>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "kunit-dev@googlegroups.com" <kunit-dev@googlegroups.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        "David Hildenbrand" <david@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: Re: [RFC PATCH 9/9] iov_iter: Add benchmarking kunit tests for UBUF/IOVEC
+        Fri, 15 Sep 2023 11:23:16 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CC5810C7
+        for <linux-kselftest@vger.kernel.org>; Fri, 15 Sep 2023 08:23:09 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-68fc1bbc94eso1938620b3a.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 15 Sep 2023 08:23:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1694791389; x=1695396189; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JzUny5ZDY3B8dwGvMbx7t3ZOXwBY6DGZ8A+gn9ETcXA=;
+        b=0BdMv/t2kSwIcKkYEe7jYMeCfjq1Wys4SU/VqXRf8qbeN5IUQMoPXdh4U/Fq9S1eeb
+         GfZVVox/pywXV/ZWA0zOGbRkpWqRZvsMjiRGk8xbuBToQe+nlkw4Zhni2V6VfEK03+rw
+         2qyXgbGZfiGXGzs6ADpgRasRS1rqM88EzCLxdV/fbAZUNZxqnf/b2PdQdq1MBzpjWfra
+         5aJLuSa7NjhIeLKbD6ODkJeUs73PtT86mwSYaIJ3d597u6BabQDpnqBMh5N1096YRydc
+         oOo0xg677ZfTTyRzmzASBfkYkSAIhii21ZOAOtDZvpLWZovm4fV0f4Jpt4cWncUOXokW
+         x+xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694791389; x=1695396189;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JzUny5ZDY3B8dwGvMbx7t3ZOXwBY6DGZ8A+gn9ETcXA=;
+        b=wUctT17HSUj3WM98NN1ggd5akq9goRVmvl7S1KseALyvQYpekbs+h900n7uvxnqDLp
+         z9JgFi35/F4QRku2ua7khMlUhqWUMFMHiOL/Q/JuKqGItIUg2CXCdaTN7xqGba81EnfG
+         RL/vkFaF2Ajhua5s8xvnBfg19pBPNiqrZNpDVEcNxr1l6MBd15JzGeQNvVEhxP1IsQSO
+         U3x4wPFV8E9R7Rx3jcCeDf8xg/AFBmXlU721ct/+eS37ZGHo3flwqednHtNe8r+truGS
+         SB0dVXGPFKoXnb5zmIbQFDjPnUwwHt25e/aIhQbBR5lV2950W7cBkMm5EVvwh9aJMA9J
+         W2Aw==
+X-Gm-Message-State: AOJu0YxNNqo8NtqOgOKMs2+DP1Cn9enWWspplquKnQYxXv0GKPJTlN5a
+        a8RO4FonpaE47vl0D+oidxKBHw==
+X-Google-Smtp-Source: AGHT+IElDW4bTTqtNEHxEJSI2zqsGM7eb0Y6Wp/U3CPQiwi0iSahU1mcqFPPoZA/wBkxBNyUQ3xnlg==
+X-Received: by 2002:a05:6a00:3186:b0:690:1857:3349 with SMTP id bj6-20020a056a00318600b0069018573349mr1453397pfb.25.1694791389091;
+        Fri, 15 Sep 2023 08:23:09 -0700 (PDT)
+Received: from ghost ([50.168.177.76])
+        by smtp.gmail.com with ESMTPSA id c15-20020aa78c0f000000b0068fb5e44827sm3087719pfd.67.2023.09.15.08.23.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Sep 2023 08:23:08 -0700 (PDT)
+Date:   Fri, 15 Sep 2023 11:23:05 -0400
+From:   Charlie Jenkins <charlie@rivosinc.com>
+To:     Alexandre Ghiti <alexghiti@rivosinc.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH -fixes] riscv: kselftests: Fix mm build by removing
+ testcases subdirectory
+Message-ID: <ZQR22QUisvS2CPQS@ghost>
+References: <20230915100113.13131-1-alexghiti@rivosinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3629597.1694784290.1@warthog.procyon.org.uk>
-Date:   Fri, 15 Sep 2023 14:24:50 +0100
-Message-ID: <3629598.1694784290@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230915100113.13131-1-alexghiti@rivosinc.com>
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-David Laight <David.Laight@ACULAB.COM> wrote:
+On Fri, Sep 15, 2023 at 12:01:13PM +0200, Alexandre Ghiti wrote:
+> kselftests fails to build because the mm/testcases subdirectory is not
+> created and then the compiler fails to output the binary there.
+> 
+> So fix this by simply removing this subdirectory which is not very
+> useful.
+> 
+> Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
+> ---
+>  tools/testing/selftests/riscv/mm/Makefile                   | 6 +++---
+>  .../selftests/riscv/mm/{testcases => }/mmap_bottomup.c      | 2 +-
+>  .../selftests/riscv/mm/{testcases => }/mmap_default.c       | 2 +-
+>  .../testing/selftests/riscv/mm/{testcases => }/mmap_test.h  | 0
+>  .../testing/selftests/riscv/mm/{testcases => }/run_mmap.sh  | 0
+>  5 files changed, 5 insertions(+), 5 deletions(-)
+>  rename tools/testing/selftests/riscv/mm/{testcases => }/mmap_bottomup.c (97%)
+>  rename tools/testing/selftests/riscv/mm/{testcases => }/mmap_default.c (97%)
+>  rename tools/testing/selftests/riscv/mm/{testcases => }/mmap_test.h (100%)
+>  rename tools/testing/selftests/riscv/mm/{testcases => }/run_mmap.sh (100%)
+> 
+> diff --git a/tools/testing/selftests/riscv/mm/Makefile b/tools/testing/selftests/riscv/mm/Makefile
+> index 11e0f0568923..c333263f2b27 100644
+> --- a/tools/testing/selftests/riscv/mm/Makefile
+> +++ b/tools/testing/selftests/riscv/mm/Makefile
+> @@ -5,11 +5,11 @@
+>  # Additional include paths needed by kselftest.h and local headers
+>  CFLAGS += -D_GNU_SOURCE -std=gnu99 -I.
+>  
+> -TEST_GEN_FILES := testcases/mmap_default testcases/mmap_bottomup
+> +TEST_GEN_FILES := mmap_default mmap_bottomup
+>  
+> -TEST_PROGS := testcases/run_mmap.sh
+> +TEST_PROGS := run_mmap.sh
+>  
+>  include ../../lib.mk
+>  
+> -$(OUTPUT)/mm: testcases/mmap_default.c testcases/mmap_bottomup.c testcases/mmap_tests.h
+> +$(OUTPUT)/mm: mmap_default.c mmap_bottomup.c mmap_tests.h
+>  	$(CC) -o$@ $(CFLAGS) $(LDFLAGS) $^
+> diff --git a/tools/testing/selftests/riscv/mm/testcases/mmap_bottomup.c b/tools/testing/selftests/riscv/mm/mmap_bottomup.c
+> similarity index 97%
+> rename from tools/testing/selftests/riscv/mm/testcases/mmap_bottomup.c
+> rename to tools/testing/selftests/riscv/mm/mmap_bottomup.c
+> index b29379f7e478..1757d19ca89b 100644
+> --- a/tools/testing/selftests/riscv/mm/testcases/mmap_bottomup.c
+> +++ b/tools/testing/selftests/riscv/mm/mmap_bottomup.c
+> @@ -1,6 +1,6 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  #include <sys/mman.h>
+> -#include <testcases/mmap_test.h>
+> +#include <mmap_test.h>
+>  
+>  #include "../../kselftest_harness.h"
+>  
+> diff --git a/tools/testing/selftests/riscv/mm/testcases/mmap_default.c b/tools/testing/selftests/riscv/mm/mmap_default.c
+> similarity index 97%
+> rename from tools/testing/selftests/riscv/mm/testcases/mmap_default.c
+> rename to tools/testing/selftests/riscv/mm/mmap_default.c
+> index d1accb91b726..c63c60b9397e 100644
+> --- a/tools/testing/selftests/riscv/mm/testcases/mmap_default.c
+> +++ b/tools/testing/selftests/riscv/mm/mmap_default.c
+> @@ -1,6 +1,6 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  #include <sys/mman.h>
+> -#include <testcases/mmap_test.h>
+> +#include <mmap_test.h>
+>  
+>  #include "../../kselftest_harness.h"
+>  
+> diff --git a/tools/testing/selftests/riscv/mm/testcases/mmap_test.h b/tools/testing/selftests/riscv/mm/mmap_test.h
+> similarity index 100%
+> rename from tools/testing/selftests/riscv/mm/testcases/mmap_test.h
+> rename to tools/testing/selftests/riscv/mm/mmap_test.h
+> diff --git a/tools/testing/selftests/riscv/mm/testcases/run_mmap.sh b/tools/testing/selftests/riscv/mm/run_mmap.sh
+> similarity index 100%
+> rename from tools/testing/selftests/riscv/mm/testcases/run_mmap.sh
+> rename to tools/testing/selftests/riscv/mm/run_mmap.sh
+> -- 
+> 2.39.2
+> 
+Fixes the problem.
 
-> You could also just not do the copy!
-> Although you need (say) asm volatile("\n",:::"memory") to
-> stop it all being completely optimised away.
-> That might show up a difference in the 'out_of_line' test
-> where 15% on top on the data copies is massive - it may be
-> that the data cache behaviour is very different for the
-> two cases.
+Reviewed-by: Charlie Jenkins <charlie@rivosinc.com>
 
-I tried using the following as the load:
-
-	volatile unsigned long foo;
-
-	static __always_inline
-	size_t idle_user_iter(void __user *iter_from, size_t progress,
-			      size_t len, void *to, void *priv2)
-	{
-		nop();
-		nop();
-		foo += (unsigned long)iter_from;
-		foo += (unsigned long)len;
-		foo += (unsigned long)to + progress;
-		nop();
-		nop();
-		return 0;
-	}
-
-	static __always_inline
-	size_t idle_kernel_iter(void *iter_from, size_t progress,
-				size_t len, void *to, void *priv2)
-	{
-		nop();
-		nop();
-		foo += (unsigned long)iter_from;
-		foo += (unsigned long)len;
-		foo += (unsigned long)to + progress;
-		nop();
-		nop();
-		return 0;
-	}
-
-	size_t iov_iter_idle(struct iov_iter *iter, size_t len, void *priv)
-	{
-		return iterate_and_advance(iter, len, priv,
-					   idle_user_iter, idle_kernel_iter);
-	}
-	EXPORT_SYMBOL(iov_iter_idle);
-
-adding various things into a volatile variable to prevent the optimiser from
-discarding the calculations.
-
-I get:
-
- iov_kunit_benchmark_bvec: avg 395 uS, stddev 46 uS
- iov_kunit_benchmark_bvec: avg 397 uS, stddev 38 uS
- iov_kunit_benchmark_bvec: avg 411 uS, stddev 57 uS
- iov_kunit_benchmark_bvec_outofline: avg 781 uS, stddev 5 uS
- iov_kunit_benchmark_bvec_outofline: avg 781 uS, stddev 6 uS
- iov_kunit_benchmark_bvec_outofline: avg 781 uS, stddev 7 uS
- iov_kunit_benchmark_bvec_split: avg 3599 uS, stddev 737 uS
- iov_kunit_benchmark_bvec_split: avg 3664 uS, stddev 838 uS
- iov_kunit_benchmark_bvec_split: avg 3669 uS, stddev 875 uS
- iov_kunit_benchmark_iovec: avg 472 uS, stddev 17 uS
- iov_kunit_benchmark_iovec: avg 506 uS, stddev 59 uS
- iov_kunit_benchmark_iovec: avg 525 uS, stddev 14 uS
- iov_kunit_benchmark_kvec: avg 421 uS, stddev 73 uS
- iov_kunit_benchmark_kvec: avg 428 uS, stddev 68 uS
- iov_kunit_benchmark_kvec: avg 469 uS, stddev 75 uS
- iov_kunit_benchmark_ubuf: avg 1052 uS, stddev 6 uS
- iov_kunit_benchmark_ubuf: avg 1168 uS, stddev 8 uS
- iov_kunit_benchmark_ubuf: avg 1168 uS, stddev 9 uS
- iov_kunit_benchmark_xarray: avg 680 uS, stddev 11 uS
- iov_kunit_benchmark_xarray: avg 682 uS, stddev 20 uS
- iov_kunit_benchmark_xarray: avg 686 uS, stddev 46 uS
- iov_kunit_benchmark_xarray_outofline: avg 1340 uS, stddev 34 uS
- iov_kunit_benchmark_xarray_outofline: avg 1358 uS, stddev 12 uS
- iov_kunit_benchmark_xarray_outofline: avg 1358 uS, stddev 15 uS
-
-where I made the iovec and kvec tests split their buffers into PAGE_SIZE
-segments and the ubuf test issue an iteration per PAGE_SIZE'd chunk.
-Splitting kvec into just 8 results in the iteration taking <1uS.
-
-The bvec_split test is doing a kmalloc() per 256 pages inside of the loop,
-which is why that takes quite a long time.
-
-David
-
+- Charlie
