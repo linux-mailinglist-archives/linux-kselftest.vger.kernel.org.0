@@ -2,47 +2,167 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9ADA7A17A2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Sep 2023 09:42:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBB6A7A18D5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Sep 2023 10:29:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230454AbjIOHmD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 15 Sep 2023 03:42:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52266 "EHLO
+        id S233007AbjIOI3p (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 15 Sep 2023 04:29:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232215AbjIOHmD (ORCPT
+        with ESMTP id S232195AbjIOI3k (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 15 Sep 2023 03:42:03 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12FC7A1
-        for <linux-kselftest@vger.kernel.org>; Fri, 15 Sep 2023 00:41:54 -0700 (PDT)
-Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Rn5gY0dBwz1N7rg;
-        Fri, 15 Sep 2023 15:39:53 +0800 (CST)
-Received: from huawei.com (10.90.53.73) by kwepemi500008.china.huawei.com
- (7.221.188.139) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Fri, 15 Sep
- 2023 15:41:51 +0800
-From:   Jinjie Ruan <ruanjinjie@huawei.com>
-To:     <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Maxime Ripard <mripard@kernel.org>,
-        Benjamin Berg <benjamin.berg@intel.com>
-CC:     <ruanjinjie@huawei.com>
-Subject: [PATCH] kunit: Fix a null-ptr-deref bug in kunit_run_case_catch_errors()
-Date:   Fri, 15 Sep 2023 15:41:10 +0800
-Message-ID: <20230915074110.2854382-1-ruanjinjie@huawei.com>
-X-Mailer: git-send-email 2.34.1
+        Fri, 15 Sep 2023 04:29:40 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7A682718;
+        Fri, 15 Sep 2023 01:28:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1694766536; x=1726302536;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=rXN2vgEFOe/d/osAOl68swQSsiQm+9U6+UAp45TzebM=;
+  b=noYBeUd5AlorByGQUOR7bjwNjLbNj8/V/nPAIkwnWCBSJSDdZ8KNv8RX
+   9FAYoAuaNV+f8hlNbAes4FxHtXayk4el95pspIRIJTdIuUBpPJGaQlorF
+   9Fjx3dsYlHZfzYXEtcFPHGAyJ2F3dQP0BgP4XfoaUsnouLvrXgqvLnoio
+   /GVzyHj5AOCrQHOmOpvNaC6ihjI/R37hlgLVzEwpS2c8s2RSyXEX8atHA
+   Hax81W23e6m+szBXunVSQquja5EZtQNbXaKGmEsrPOSETwX6S6RrcVLgT
+   KlAAWvDCBMDw6CQ4Go7/7/FYT3bTlWW66bi0AXt3v9qYhrFexEJ33SUz6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="358610438"
+X-IronPort-AV: E=Sophos;i="6.02,148,1688454000"; 
+   d="scan'208";a="358610438"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Sep 2023 01:17:08 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10833"; a="721600644"
+X-IronPort-AV: E=Sophos;i="6.02,148,1688454000"; 
+   d="scan'208";a="721600644"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga006.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 15 Sep 2023 01:17:08 -0700
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32; Fri, 15 Sep 2023 01:17:07 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32; Fri, 15 Sep 2023 01:17:07 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32 via Frontend Transport; Fri, 15 Sep 2023 01:17:07 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.176)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.32; Fri, 15 Sep 2023 01:17:07 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UaftalRJnvHFuvlQNVCGw33iThParRq4yrM4/V9ulpM7lA9l6301YX/N4//HmsQMww9a7AM8ZZmoieE6XRqXhcckyCG75ATDMGIDUR/t1kTgR7uGYh+Riiy1SOJiJ8774JVBjgzElJYaoExMswdNNHE0KnlkEoaLh3K2DSiaO1sP1oNznqjOC1jLvxmc9EAGBnQ9CYs2vh5WuPUXKiB/wltc7lzeiFCTFw2897MQ/UmhckDqMR0IkVGgTRccHxT0Pl3S7ZxpEnsw2AMXZaHLPD3AHW3FH0eailfjkSshBvLhctZnrsZbvhsAuCSr5XuB70Dem3j4bIDwcGC7W0rkSw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wKafXxime7pzf514Gmq3uPCTkg8cnCJpwci8xz7v8qI=;
+ b=chT7smKSKPrHlaGEvzSAbuagxvrQqnSmDucPDYjGBPNRWKylprS7mC+ZW6WS139JXmKzZ655WpG7ikMIpyoKTdOKa4atCB76z1aLIzYUPByJYDBCM1sB4qXiW8u877CJN6VkHSlB77iJ38CfxT2OZUMKyJI7pw1KvOERfXzlXMbtNd2BFUW6pd9SF+yJVBGGVJY0BVsGSJzdDOz3XJQAzpfBwP3qyABz3aB8D7PJs7F2lUo7tZTCbaxpaZlIiFZfZs7FFrs2iM0Qbb3qFeeF09vIYb47trW7VGJDhbeM0y1TOdefHpkgsiMhSiGSzxz25+INJZObACQXUaOGrqUR9A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MN0PR11MB6231.namprd11.prod.outlook.com (2603:10b6:208:3c4::15)
+ by BN9PR11MB5225.namprd11.prod.outlook.com (2603:10b6:408:132::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.21; Fri, 15 Sep
+ 2023 08:17:05 +0000
+Received: from MN0PR11MB6231.namprd11.prod.outlook.com
+ ([fe80::6ecb:9e9a:87e5:f342]) by MN0PR11MB6231.namprd11.prod.outlook.com
+ ([fe80::6ecb:9e9a:87e5:f342%4]) with mapi id 15.20.6792.020; Fri, 15 Sep 2023
+ 08:17:03 +0000
+Date:   Fri, 15 Sep 2023 10:16:56 +0200
+From:   Maciej =?utf-8?Q?Wiecz=C3=B3r-Retman?= 
+        <maciej.wieczor-retman@intel.com>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+CC:     Fenghua Yu <fenghua.yu@intel.com>, Shuah Khan <shuah@kernel.org>,
+        <ilpo.jarvinen@linux.intel.com>, <linux-kernel@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH RESEND v3 1/2] selftests/resctrl: Fix schemata write
+ error check
+Message-ID: <3a24bhplwgpn343hc4vwze2jnt4jebzvoigtbzom4gb5xuyb4c@ffs2qhy3ouay>
+References: <cover.1693575451.git.maciej.wieczor-retman@intel.com>
+ <960b5302cee8e5bb0e83dcf20cd2ef4d353b7b0b.1693575451.git.maciej.wieczor-retman@intel.com>
+ <99eabc5c-f5e3-27dd-0a29-ad0cdb7b4239@intel.com>
+ <sr6ana6d7ebtuxbhjuo6kcnhnn2zzvg3ivve6mndqeb3nxrzo7@mrfmtzlxlwdh>
+ <a7f0dfb9-c841-b240-fca9-b908517a44d0@intel.com>
+ <jyxp5mspjn7xbmclj5sumbsuwd424fqmdvntiiuq24tiz5yqb4@qunho7whbamf>
+ <6d6dba28-a7f0-1f49-3f59-4e0026d0c2b8@intel.com>
+ <ycbcan5wcxtz2mbywz6zdoyfus26vrhus6enipe543x2ejyt77@m3l4ksir7k2k>
+ <6fbc0b65-0f02-3c7f-bd7a-5183d24a1fe5@intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6fbc0b65-0f02-3c7f-bd7a-5183d24a1fe5@intel.com>
+X-ClientProxiedBy: FR0P281CA0221.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:ac::17) To MN0PR11MB6231.namprd11.prod.outlook.com
+ (2603:10b6:208:3c4::15)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.90.53.73]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemi500008.china.huawei.com (7.221.188.139)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR11MB6231:EE_|BN9PR11MB5225:EE_
+X-MS-Office365-Filtering-Correlation-Id: b3862636-e134-4af9-903e-08dbb5c42403
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: XnrDggRTyKA3a+LKMfPk5sncRrikUUyQUR3YQ0uVklW/R6lFT3z43Dfd0E11PucCR+YAvCGY6z/4nA0+L95yAPobSJHGZmgxd2Lw5+//yZIPc3kUMOxj5q2zI429RbL8xQOb0wb7ii6mGftgNlMILQKXLPT6cn+nwoa0nh9S12DLOXaUpUODTgfQGO12gMX1xIJUCg+qwQ8tu3qrseBm2+09QLdmHb9YuOl6cvbjkTnFzEJ9f7YLOJ3+ePcb84rtaYBiweBFSWEyM3J3icvJfcfkNhdE8b6trkrpdb6yPJ67DCXzh/VgV7oiJkvQOeblkL5miu/ZG9hSgrqYabVysv33XrK7/nAuuw964CmYw0CPaX9B32j9bdr9vA81hMXk8+393rmJ2SErEF1/mZzt46SX5XDQlANiIxN0ftfzLoF7UKIfxx/HKt+2HMHKfC2aVLfMM20tN53i2oZbyUvKuS4MQESPPuVQCRrQc79fCo2u4wvppkUhWEOaZ3wKvVPxnzp6Ho83VgF4n6fCSYXYzCxyy2jZcR+2wJ1KHaMgmbs=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6231.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(39860400002)(136003)(376002)(346002)(366004)(396003)(186009)(451199024)(1800799009)(6512007)(9686003)(53546011)(82960400001)(6486002)(6506007)(66899024)(33716001)(38100700002)(6666004)(5660300002)(83380400001)(66574015)(26005)(2906002)(6862004)(8676002)(4326008)(8936002)(316002)(66556008)(66946007)(66476007)(6636002)(54906003)(86362001)(41300700001)(478600001)(966005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?L2JrUnZlbEhyZE0vMGhjUkxMVHdNS3pKOEtibXFwczcxUWdCNTVqYmd1ZU9T?=
+ =?utf-8?B?OGRXMW81cndmZTl4anBFcDVNS0psUFk3KytYWTU2OVRrTlluQ2p1ZTBxMGov?=
+ =?utf-8?B?Q2F4VDRFN2prOVkyZWlnYmRwbWlvWTFYbnp5aTF5bnJNVnFOYzVzbFNySmtR?=
+ =?utf-8?B?RXY4M1pxRnV2cmRJSjJxT0wxZUZieVBzSUhmTUpLUGJ2UjZ4RG1vaHowSG5q?=
+ =?utf-8?B?L2paRG5CVkVtNVRwTHBvN2FDZ3hzaEo1c0ZtN1JlMVJJT29hOWNjRktKcEc2?=
+ =?utf-8?B?aVMrTkE4VDFvQWFvMy9RNzRQTUlLc0pnMkp2aHd1VnFyTjJkQ1MvcGJXYWt4?=
+ =?utf-8?B?Nmcxd1RYNFhoK05zV0E5V21RdjBNQTJtc21RRmRqZzdFdXU4OTgzSU12b1Nn?=
+ =?utf-8?B?dTIvQkFpSFBOOTNhSkt0UWIwdjlQNS9ySmVQWUxOMUtwVnFwUkNQcVhuRVRQ?=
+ =?utf-8?B?cFRGY1JTVk9IOHRZSUR5eUQ2clVWUzd5V0kvQWN6WXVFK1lubC96NUU0aUsv?=
+ =?utf-8?B?ejE1bTJZU0hlVG43K1I2WnIxV1VkeDBmSDdVN1RQUTlUZzgraG91ZytlaHlZ?=
+ =?utf-8?B?NVlTZTFmUXlPZjFnOXhaSXJFVVI3azh4amJJRjA5NkJZYzRCM3E2a2lXQzRH?=
+ =?utf-8?B?YTlMdFQ4Y0RuY0IzU1NVaG9SbkIvcjREN3ZJSjUybGpKcCt6cEFWV2lDcGg4?=
+ =?utf-8?B?VW5xamFCSUg1cm91VXhOOVRDUHlLc0RIZ21DNzJEazRBQW81VVVOUmQyZkg0?=
+ =?utf-8?B?bndXcmt0NHJPSVd5djIvaTlDT0YxMko0bFA5M2RRellmdkdMb3RPYzVsa3F1?=
+ =?utf-8?B?d04vK3lUZ0ZQRE50VXo1ZlpCalE4bTFHOE93ZU5qaTNySGRGbnVqYnV0eldv?=
+ =?utf-8?B?aTRqSllXRDZJQzJvdEVad0VvekF5ZExVM2tTOTlGbXdlc0JRY0t1U083UUla?=
+ =?utf-8?B?dE5BeUN3RlJ2VDFuUS9XVHhHcWJ5ajJHZ25WRWJGL0JSeHFmK3BYN0FqWHg1?=
+ =?utf-8?B?S1dZZUpDUzcxb0FGY0FnN05LTCsvWmFaSktzMTh3TkVLK25SRHVsVXdmeWcv?=
+ =?utf-8?B?OWNBclE1LzVnRW9idElxWXBNeDlmM2ZvTnp5cDh1TDVZejlmNTQ3NmFZZTRL?=
+ =?utf-8?B?cGtJLzFUN3VhZ3ZtQlJsSU1nLzBaWndIOTZnMGozNHIxRHMxY0xiNkxKSnY1?=
+ =?utf-8?B?Yjg3V0l3b3FaVGc2Sy9KbWVQVVNzemE0ZVllZ1N6YXEwSTRTbGpveDFRSjhu?=
+ =?utf-8?B?VjQ4TGptSnljQVMwUlJaa0JFUWRTaWs3WnhNZ0VyeVNMUDE0aTI1Zlc3Vy9p?=
+ =?utf-8?B?Q1puS1VsUS9nQW1jM3J0QzlqWkl5eXY0MXF6NStBenRiMmdHL3FJYzVxZFpZ?=
+ =?utf-8?B?dHlMOUl1R3h4TXF5MGpTRkdhd0RvZjBYMlpHVXF5NWF3ZW5hZDBBMjRIeS9o?=
+ =?utf-8?B?KzZjSXhYWUZpdGNqTUpTaThKa0w0c1Robkh1YkxQdHlrT2JWa2Z4MEUvSWgr?=
+ =?utf-8?B?amRJSzM5b25pbGFhVkxKUElrbDFPdy93dlE1Y004OVFNeHZKQ2tQMHhuM1g5?=
+ =?utf-8?B?bk1QZmtLQTBRclkyZ3YvcTlnNktjQmU5enB5RmJuSXhORVpROURXRndUTGRh?=
+ =?utf-8?B?S3dITVdVZHN5OUFPRjFNYUtmQ3JKV1VrZis1S1U4azVHNktJRzZwZzFKVmlt?=
+ =?utf-8?B?M0k3UkoyeDN3cTFrajY5eHYrQmw1a0FSVHQvMVEyWDhSNDFQRmtGN3pzQW1o?=
+ =?utf-8?B?N2N6V25NK1RmUG9YMmJrZW5pZE9KY2haUHRrNGE2ZnBuL0VZTW9Ic3NsZ29n?=
+ =?utf-8?B?UGFmRnd1ek9ieUxabXV6Q2xjamEvMlA1SUQzK052VkorNmdCQUI0Vmx0Zlh3?=
+ =?utf-8?B?VWlacm93eVBXQVBiYVBIa0dqenh6NWx2VXVuc2UxNVhkSzRISFJyYmhCWW9n?=
+ =?utf-8?B?bVNENk14a3F0RnFaWU01bHhIcXVIbUkwL3hyMXk0S2ZtbThWNHZSVVlSMDY5?=
+ =?utf-8?B?Zk9IUFFWMzBWTS8xNmFHOGhZaytMNDdVWDFtZ1duMi9JN1JJRm94QWtSTU9p?=
+ =?utf-8?B?eGlVcUIwMDZvcjltS01vaE9mUS9xTnNBZzR3V3ZlU2d2dzRQMG9UVjRTTlha?=
+ =?utf-8?B?RTI2aWxJRXdqbGFRMTVraUVPd1JZVjdIM1FjSWQrODEzeDk3K2wrVTJ4b3hu?=
+ =?utf-8?Q?mLiDpIuj9Kq8B4W7pJNTwJ0=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: b3862636-e134-4af9-903e-08dbb5c42403
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6231.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Sep 2023 08:17:02.6895
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5HvVyaBOrCQ+5GsCCpoy74hpwLVH9ZIA1RBXwrGQeqcJtvTHqPf/MhetnxkkLO2wmG+iI1M9GguaNgzHhkyWVdl++kxCzMKJrhoxLo1zzOE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR11MB5225
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,216 +170,80 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Inject fault while probing kunit-test.ko, the below null-ptr-deref
-occurs.
+On 2023-09-14 at 08:14:25 -0700, Reinette Chatre wrote:
+>Hi Maciej,
+>
+>On 9/13/2023 11:01 PM, Maciej Wieczór-Retman wrote:
+>> On 2023-09-13 at 11:49:19 -0700, Reinette Chatre wrote:
+>>> On 9/12/2023 10:59 PM, Maciej Wieczór-Retman wrote:
+>>>> On 2023-09-12 at 09:00:28 -0700, Reinette Chatre wrote:
+>>>>> On 9/11/2023 11:32 PM, Maciej Wieczór-Retman wrote:
+>>>>>> On 2023-09-11 at 09:59:06 -0700, Reinette Chatre wrote:
+>>>>>>> Hi Maciej,
+>>>>>>> When I build the tests with this applied I encounter the following:
+>>>>>>>
+>>>>>>> resctrlfs.c: In function ‘write_schemata’:
+>>>>>>> resctrlfs.c:475:14: warning: implicit declaration of function ‘open’; did you mean ‘popen’? [-Wimplicit-function-declaration]
+>>>>>>>  475 |         fd = open(controlgroup, O_WRONLY);
+>>>>>>>      |              ^~~~
+>>>>>>>      |              popen
+>>>>>>> resctrlfs.c:475:33: error: ‘O_WRONLY’ undeclared (first use in this function)
+>>>>>>>  475 |         fd = open(controlgroup, O_WRONLY);
+>>>>>>>      |                                 ^~~~~~~~
+>>>>>>> resctrlfs.c:475:33: note: each undeclared identifier is reported only once for each function it appears in
+>>>>>>
+>>>>>> Hmm, that's odd. How do you build the tests?
+>>>>>
+>>>>> I applied this series on top of kselftest repo's "next" branch.
+>>>>>
+>>>>> I use a separate build directory and first ran "make headers". After that,
+>>>>> $ make O=<build dir> -C tools/testing/selftests/resctrl
+>>>>
+>>>> I do the same, just without the build directory, but that shouldn't
+>>>> matter here I guess.
+>>>>
+>>>>>> I use "make -C tools/testing/selftests/resctrl" while in the root kernel
+>>>>>> source directory. I tried to get the same error you experienced by
+>>>>>> compiling some dummy test program with "open" and "O_WRONLY". From the
+>>>>>> experiment I found that the "resctrl.h" header provides the declarations
+>>>>>> that are causing your errors.
+>>>>>
+>>>> >From what I can tell resctrl.h does not include fcntl.h that provides
+>>>>> what is needed.
+>>>>
+>>>> I found out you can run "gcc -M <file>" and it will recursively tell you
+>>>> what headers are including other headers.
+>>>>
+>>>> Using this I found that "resctrl.h" includes <sys/mount.h> which in turn
+>>>> includes <fcntl.h> out of /usr/include/sys directory. Is that also the
+>>>> case on your system?
+>>>>
+>>>
+>>> No. The test system I used is running glibc 2.35 and it seems that including
+>>> fcntl.h was added to sys/mount.h in 2.36. See glibc commit
+>>> 78a408ee7ba0 ("linux: Add open_tree")
+>>>
+>>> Generally we should avoid indirect inclusions and here I think certainly so
+>>> since it cannot be guaranteed that fcntl.h would be available via 
+>>> sys/mount.h.
+>> 
+>> Okay, would including the fcntl.h header to resctrl.h be okay in this
+>> case? Or is there some other more sophisticated way of doing that (some
+>> include guard or checking glibc version for example)?
+>
+>Ideally fcntl.h would be included in the file it is used. Doing so you may
+>encounter the same problems as Ilpo in [1]. If that is the case and that fix works
+>for you then you may want to have this series depend on Ilpo's work.
 
-In kunit_run_case_catch_errors(), if the first kunit_try_catch_run()
-fails in kthread_run(), the kunit_try_run_case() will not run, so the
-kunit_resource_test_init() and kunit_resource_test_cases() will not
-run. And if the second call of kunit_try_catch_run() succeeds, it
-will call kunit_resource_test_exit(), but the test->priv is NULL, call
-kunit_cleanup() will cause below null-ptr-deref.
+Thanks a lot for finding this, and yes, I get the same errors by adding the
+header. I'll send the next version of this series with the added header
+rebased on top of Ilpo's series you mentioned.
 
-So just return the error code if the first kunit_try_catch_run()
-fails.
+>Reinette
+>
+>[1] https://lore.kernel.org/lkml/dfc53e-3f92-82e4-6af-d1a28e8c199a@linux.intel.com/
+> 
 
- BUG: KASAN: null-ptr-deref in _raw_spin_lock_irqsave+0x7e/0xe0
- Write of size 4 at addr 0000000000000054 by task kunit_try_catch/10476
-
- CPU: 2 PID: 10476 Comm: kunit_try_catch Tainted: G        W        N 6.6.0-rc1+ #77
- Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
- Call Trace:
-  <TASK>
-  dump_stack_lvl+0x33/0x50
-  print_report+0x3e5/0x600
-  ? dequeue_entity+0x3c1/0x11e0
-  ? rcu_trc_cmpxchg_need_qs+0x5e/0xa0
-  ? _raw_spin_lock_irqsave+0x7e/0xe0
-  kasan_report+0x90/0xc0
-  ? _raw_spin_lock_irqsave+0x7e/0xe0
-  kasan_check_range+0xe9/0x190
-  _raw_spin_lock_irqsave+0x7e/0xe0
-  ? _raw_read_lock_bh+0x40/0x40
-  ? _raw_spin_lock_irqsave+0x8d/0xe0
-  kunit_cleanup+0x77/0x110
-  kunit_resource_test_exit+0x2c/0x50 [kunit_test]
-  ? __kthread_parkme+0x8b/0x160
-  kunit_try_run_case_cleanup+0xac/0xe0
-  ? kunit_cleanup+0x110/0x110
-  kunit_generic_run_threadfn_adapter+0x4a/0x90
-  ? kunit_try_catch_throw+0x80/0x80
-  kthread+0x2b6/0x380
-  ? kthread_complete_and_exit+0x20/0x20
-  ret_from_fork+0x2d/0x70
-  ? kthread_complete_and_exit+0x20/0x20
-  ret_from_fork_asm+0x11/0x20
-  </TASK>
- ==================================================================
- Disabling lock debugging due to kernel taint
- BUG: kernel NULL pointer dereference, address: 0000000000000054
- #PF: supervisor write access in kernel mode
- #PF: error_code(0x0002) - not-present page
- PGD 0 P4D 0
- Oops: 0002 [#1] PREEMPT SMP KASAN
- CPU: 2 PID: 10476 Comm: kunit_try_catch Tainted: G    B   W        N 6.6.0-rc1+ #77
- Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
- RIP: 0010:_raw_spin_lock_irqsave+0x96/0xe0
- Code: 00 00 48 89 ef c7 44 24 20 00 00 00 00 e8 c2 02 88 fd be 04 00 00 00 48 8d 7c 24 20 e8 b3 02 88 fd ba 01 00 00 00 8b 44 24 20 <f0> 0f b1 55 00 75 2e 48 b8 00 00 00 00 00 fc ff df 48 c7 04 03 00
- RSP: 0018:ffff888108d07de0 EFLAGS: 00010097
- RAX: 0000000000000000 RBX: 1ffff110211a0fbc RCX: ffffffff840a0c9d
- RDX: 0000000000000001 RSI: 0000000000000004 RDI: ffff888108d07e00
- RBP: 0000000000000054 R08: ffffed10211a0fc0 R09: ffffed10211a0fc1
- R10: ffffed10211a0fc0 R11: 0000000000000003 R12: 0000000000000246
- R13: dffffc0000000000 R14: ffff88810dbdf590 R15: 0000000000000054
- FS:  0000000000000000(0000) GS:ffff888119f00000(0000) knlGS:0000000000000000
- CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
- CR2: 0000000000000054 CR3: 0000000107a31002 CR4: 0000000000170ee0
- DR0: ffffffff8faefce8 DR1: ffffffff8faefce9 DR2: ffffffff8faefcea
- DR3: ffffffff8faefceb DR6: 00000000ffff0ff0 DR7: 0000000000000600
- Call Trace:
-  <TASK>
-  ? __die_body+0x1b/0x60
-  ? page_fault_oops+0x238/0x760
-  ? page_fault_oops+0x760/0x760
-  ? spurious_kernel_fault+0x2d0/0x2d0
-  ? search_bpf_extables+0x134/0x190
-  ? fixup_exception+0x4a/0xa20
-  ? do_user_addr_fault+0xaa/0x1180
-  ? exc_page_fault+0x5a/0xd0
-  ? asm_exc_page_fault+0x22/0x30
-  ? _raw_spin_lock_irqsave+0x8d/0xe0
-  ? _raw_spin_lock_irqsave+0x96/0xe0
-  ? _raw_read_lock_bh+0x40/0x40
-  ? _raw_spin_lock_irqsave+0x8d/0xe0
-  kunit_cleanup+0x77/0x110
-  kunit_resource_test_exit+0x2c/0x50 [kunit_test]
-  ? __kthread_parkme+0x8b/0x160
-  kunit_try_run_case_cleanup+0xac/0xe0
-  ? kunit_cleanup+0x110/0x110
-  kunit_generic_run_threadfn_adapter+0x4a/0x90
-  ? kunit_try_catch_throw+0x80/0x80
-  kthread+0x2b6/0x380
-  ? kthread_complete_and_exit+0x20/0x20
-  ret_from_fork+0x2d/0x70
-  ? kthread_complete_and_exit+0x20/0x20
-  ret_from_fork_asm+0x11/0x20
-  </TASK>
- Modules linked in: kunit_test(+) [last unloaded: kunit_test]
- Dumping ftrace buffer:
-    (ftrace buffer empty)
- CR2: 0000000000000054
- ---[ end trace 0000000000000000 ]---
- RIP: 0010:_raw_spin_lock_irqsave+0x96/0xe0
- Code: 00 00 48 89 ef c7 44 24 20 00 00 00 00 e8 c2 02 88 fd be 04 00 00 00 48 8d 7c 24 20 e8 b3 02 88 fd ba 01 00 00 00 8b 44 24 20 <f0> 0f b1 55 00 75 2e 48 b8 00 00 00 00 00 fc ff df 48 c7 04 03 00
- RSP: 0018:ffff888108d07de0 EFLAGS: 00010097
- RAX: 0000000000000000 RBX: 1ffff110211a0fbc RCX: ffffffff840a0c9d
- RDX: 0000000000000001 RSI: 0000000000000004 RDI: ffff888108d07e00
- RBP: 0000000000000054 R08: ffffed10211a0fc0 R09: ffffed10211a0fc1
- R10: ffffed10211a0fc0 R11: 0000000000000003 R12: 0000000000000246
- R13: dffffc0000000000 R14: ffff88810dbdf590 R15: 0000000000000054
- FS:  0000000000000000(0000) GS:ffff888119f00000(0000) knlGS:0000000000000000
- CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
- CR2: 0000000000000054 CR3: 0000000107a31002 CR4: 0000000000170ee0
- DR0: ffffffff8faefce8 DR1: ffffffff8faefce9 DR2: ffffffff8faefcea
- DR3: ffffffff8faefceb DR6: 00000000ffff0ff0 DR7: 0000000000000600
- Kernel panic - not syncing: Fatal exception
- Dumping ftrace buffer:
-    (ftrace buffer empty)
- Kernel Offset: disabled
- Rebooting in 1 seconds..
-
-Fixes: 55e8c1b49ac5 ("kunit: Always run cleanup from a test kthread")
-Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
----
- include/kunit/try-catch.h | 2 +-
- lib/kunit/test.c          | 6 +++++-
- lib/kunit/try-catch.c     | 9 ++++++---
- 3 files changed, 12 insertions(+), 5 deletions(-)
-
-diff --git a/include/kunit/try-catch.h b/include/kunit/try-catch.h
-index c507dd43119d..5192b8e0aac6 100644
---- a/include/kunit/try-catch.h
-+++ b/include/kunit/try-catch.h
-@@ -53,7 +53,7 @@ struct kunit_try_catch {
- 	void *context;
- };
- 
--void kunit_try_catch_run(struct kunit_try_catch *try_catch, void *context);
-+int kunit_try_catch_run(struct kunit_try_catch *try_catch, void *context);
- 
- void __noreturn kunit_try_catch_throw(struct kunit_try_catch *try_catch);
- 
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 421f13981412..f20cce96a971 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -512,6 +512,7 @@ static void kunit_run_case_catch_errors(struct kunit_suite *suite,
- {
- 	struct kunit_try_catch_context context;
- 	struct kunit_try_catch *try_catch;
-+	int ret = 0;
- 
- 	try_catch = &test->try_catch;
- 
-@@ -522,7 +523,9 @@ static void kunit_run_case_catch_errors(struct kunit_suite *suite,
- 	context.test = test;
- 	context.suite = suite;
- 	context.test_case = test_case;
--	kunit_try_catch_run(try_catch, &context);
-+	ret = kunit_try_catch_run(try_catch, &context);
-+	if (ret)
-+		goto out;
- 
- 	/* Now run the cleanup */
- 	kunit_try_catch_init(try_catch,
-@@ -531,6 +534,7 @@ static void kunit_run_case_catch_errors(struct kunit_suite *suite,
- 			     kunit_catch_run_case_cleanup);
- 	kunit_try_catch_run(try_catch, &context);
- 
-+out:
- 	/* Propagate the parameter result to the test case. */
- 	if (test->status == KUNIT_FAILURE)
- 		test_case->status = KUNIT_FAILURE;
-diff --git a/lib/kunit/try-catch.c b/lib/kunit/try-catch.c
-index f7825991d576..b937da7ec0a4 100644
---- a/lib/kunit/try-catch.c
-+++ b/lib/kunit/try-catch.c
-@@ -55,7 +55,7 @@ static unsigned long kunit_test_timeout(void)
- 	return 300 * msecs_to_jiffies(MSEC_PER_SEC); /* 5 min */
- }
- 
--void kunit_try_catch_run(struct kunit_try_catch *try_catch, void *context)
-+int kunit_try_catch_run(struct kunit_try_catch *try_catch, void *context)
- {
- 	DECLARE_COMPLETION_ONSTACK(try_completion);
- 	struct kunit *test = try_catch->test;
-@@ -70,7 +70,8 @@ void kunit_try_catch_run(struct kunit_try_catch *try_catch, void *context)
- 				  "kunit_try_catch_thread");
- 	if (IS_ERR(task_struct)) {
- 		try_catch->catch(try_catch->context);
--		return;
-+		try_catch->try_result = -EINTR;
-+		return PTR_ERR(task_struct);
- 	}
- 
- 	time_remaining = wait_for_completion_timeout(&try_completion,
-@@ -84,7 +85,7 @@ void kunit_try_catch_run(struct kunit_try_catch *try_catch, void *context)
- 	exit_code = try_catch->try_result;
- 
- 	if (!exit_code)
--		return;
-+		return 0;
- 
- 	if (exit_code == -EFAULT)
- 		try_catch->try_result = 0;
-@@ -94,5 +95,7 @@ void kunit_try_catch_run(struct kunit_try_catch *try_catch, void *context)
- 		kunit_err(test, "Unknown error: %d\n", exit_code);
- 
- 	try_catch->catch(try_catch->context);
-+
-+	return 0;
- }
- EXPORT_SYMBOL_GPL(kunit_try_catch_run);
 -- 
-2.34.1
-
+Kind regards
+Maciej Wieczór-Retman
