@@ -2,61 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A18E7A15FC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Sep 2023 08:22:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05C047A1602
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Sep 2023 08:23:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbjIOGWD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 15 Sep 2023 02:22:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59552 "EHLO
+        id S230101AbjIOGX4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 15 Sep 2023 02:23:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjIOGWC (ORCPT
+        with ESMTP id S229561AbjIOGXz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 15 Sep 2023 02:22:02 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B68091BD0;
-        Thu, 14 Sep 2023 23:21:54 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-500cfb168c6so2907381e87.2;
-        Thu, 14 Sep 2023 23:21:54 -0700 (PDT)
+        Fri, 15 Sep 2023 02:23:55 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C4B6270B;
+        Thu, 14 Sep 2023 23:23:50 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-500bbe3ef0eso2141635e87.1;
+        Thu, 14 Sep 2023 23:23:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1694758912; x=1695363712; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1694759029; x=1695363829; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4CbOaBoTgdqZjkC9bgxngrjMf2gb+bcUOXRH9i9PPC4=;
-        b=gY+rr6zZ+YNlIujztVUPNA9p9k5+SIjUrRBND7JK73DqqDCwFV2qwVGcOoIpoTjpKb
-         wGdWVNtFHkttnGvDtEqS16t2h3VNhNq2LgyjVl/iaiP7t7OcO5vwWSWs7+GDDBuQzGgy
-         0dBtxL2S/hOe5P1ofEm70vrL5o+gGSsNeLNsnRgmaqbdNUPr6QOQTgYXuovk0Y8dhiMT
-         KLUym03KOpoih4bEFfdV22IbdzxztVDPS+kUlpeMAI6Vzy5UzLR3qk5NsRVsOwGape37
-         KxQRbS9ZXI4AAZk3rxJ+Tl2KVU9glLl6Je4/9iY/NWqKB2FqtAidAPOxVZAlLYq7iXVw
-         OZyQ==
+        bh=g1zuvJ7RRCqy9MSyULz3DiU3qO3y4/pQtJW6GP4mEKM=;
+        b=hNEqoUQO/cTfVnBAqJ435MWPucNekQCo7hLibOtNN6t3uywMByiX0hlg093awL6lv7
+         d0fZH7aZxzNMWL0j3hb2Tcaoex8P1GhymqJ3BSbjvQCDmazK0NtbsZG52W7fHnpeqZ+g
+         hCJPraPNGxRkYqiXkqklDg0MGvIWdVKR/2THGlSJBK6F/RmrPNRWTpc6lJXtJ/lcRxN0
+         4x+f1Uheh3cY5/ASavdQz89nrKpR6owZ6WZNfU3l+jv+yvnaxs9jilDNLWTbqPFwy3Gk
+         pcIwuOWDLbDufm2D8JYDN/z3xC1nYOoFkcLcbFjMKqj48PmIJ+AKtWhW4SPQarNDZGUg
+         8qPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694758912; x=1695363712;
+        d=1e100.net; s=20230601; t=1694759029; x=1695363829;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4CbOaBoTgdqZjkC9bgxngrjMf2gb+bcUOXRH9i9PPC4=;
-        b=uwZbp8JZNhe9yVQL+A5klm49Iua6vsgYriFHdAFYRdtWdupNH6tlZzo82wxlU+kNDx
-         3jmj8MTaV7FmsP4iMzShpwF3Xp5VP2357WicKYKHeDApmm94ZDsH6dN0qqbUnS6/TV7V
-         Mi4gdwlhYjtHf0sXA+pxln14B8+mIpNvcIxSo9JX1vz/H3OfFK1ETcZVvdiOWjkVyYqp
-         4fxOkkXUZamrrW85+aiKpzc/tLaA9PPbn8RVih9/NIlFlj4L4z1A6TK4vW/sm3+lcPi1
-         JodhSnJEqc0kyJb3lTqZ/2R2fnD/kT5+n59YQhaiqRyPdmUI2/SBBo+gGAkL989hvhzj
-         WkhQ==
-X-Gm-Message-State: AOJu0YwOctrAs+SF+9U5ve2sExGXejlKe9i3pk72vmZODV1oWSoftKoJ
-        bAwDO/2zcHrP4Pg5mOZPp7VPZIiaGuRfnVgPQRE=
-X-Google-Smtp-Source: AGHT+IFQEpOnX9uf3gdbZsJHudImE7kbvB8OM+rS3Fi4ABBNMgv5QYCfVKA10TAI1f03ryjhcKZYalx2hAKJFWVnvIc=
-X-Received: by 2002:a19:6715:0:b0:502:e2be:54b5 with SMTP id
- b21-20020a196715000000b00502e2be54b5mr569046lfc.17.1694758912398; Thu, 14 Sep
- 2023 23:21:52 -0700 (PDT)
+        bh=g1zuvJ7RRCqy9MSyULz3DiU3qO3y4/pQtJW6GP4mEKM=;
+        b=v1ZFMLuhljvYHmsC8zO80hcCwa/xgb84uYwI1CeFZaAxaFIC/W0XkDOEzE440yuC4K
+         3UpySiW9s56EBq3BoRAk6dSVQq4WjNC+tOhXRPrY+IR7GtfMpp8Q4jC3MID+01XLp8KI
+         K5+NWURitc6WgeIukpK5t2CQS+TPMm1WjDB9pe0Bq+k6nAaT+Cskk/cTxxTUZMC37rdi
+         GNN0Uvle2YJuVXKYub2tUWLJsqWUz61QnqdpumP/cXa99Kv8fD8e5ISBHUO3F5WdDfhY
+         x5PuKXeDPTlBDUsRucjk4XyiafuE98y6tMV1mF45f8rKR8YBJ2IYU6mCzjzQ4LkLPMIi
+         4+/w==
+X-Gm-Message-State: AOJu0YzLkqgyT8uzZFsmYSoxbjGEwNpus88nwnRn93dZ7x++IwYt0x16
+        5fFOcqDMjZaaQ6FJB1VHrFypynnRcIqGblAuNJs=
+X-Google-Smtp-Source: AGHT+IGj/HsfBsymLbWepYETxK1fPN+QHY/uRqAGLNuLGZZu2qI+OypS0+lHToloM5nAwXB8QRxambJWef0/qHqiQfY=
+X-Received: by 2002:a05:6512:1095:b0:502:d973:3206 with SMTP id
+ j21-20020a056512109500b00502d9733206mr1476766lfg.6.1694759028702; Thu, 14 Sep
+ 2023 23:23:48 -0700 (PDT)
 MIME-Version: 1.0
 References: <cover.1694421911.git.haibo1.xu@intel.com> <64e0637cd6f22dd7557ed44bd2242001e7830d1c.1694421911.git.haibo1.xu@intel.com>
- <20230914-d2e594e7d84503ad14036e2d@orel>
-In-Reply-To: <20230914-d2e594e7d84503ad14036e2d@orel>
+ <20230914-ee133dd5e804282ce28833d6@orel> <20230914-reflector-preshow-786425ad7ae2@wendy>
+ <20230914-2232dea1c6d03fb5985755e6@orel>
+In-Reply-To: <20230914-2232dea1c6d03fb5985755e6@orel>
 From:   Haibo Xu <xiaobo55x@gmail.com>
-Date:   Fri, 15 Sep 2023 14:21:41 +0800
-Message-ID: <CAJve8onhY534T=Hyncjfi4GfdZ+0D2xM+jRSaYCAWCdaKxPUcQ@mail.gmail.com>
+Date:   Fri, 15 Sep 2023 14:23:37 +0800
+Message-ID: <CAJve8ok9de0bGMU24iyUSX6V4+1tZM3ca=Ntyk=2gythd4uWCg@mail.gmail.com>
 Subject: Re: [PATCH v3 9/9] KVM: riscv: selftests: Add sstc timer test
 To:     Andrew Jones <ajones@ventanamicro.com>
-Cc:     Haibo Xu <haibo1.xu@intel.com>,
+Cc:     Conor Dooley <conor.dooley@microchip.com>,
+        Haibo Xu <haibo1.xu@intel.com>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
@@ -85,7 +87,7 @@ Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,26 +95,33 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Sep 14, 2023 at 5:52=E2=80=AFPM Andrew Jones <ajones@ventanamicro.c=
+On Thu, Sep 14, 2023 at 6:15=E2=80=AFPM Andrew Jones <ajones@ventanamicro.c=
 om> wrote:
 >
-> On Thu, Sep 14, 2023 at 09:37:03AM +0800, Haibo Xu wrote:
-> > Add a KVM selftests to validate the Sstc timer functionality.
-> > The test was ported from arm64 arch timer test.
+> On Thu, Sep 14, 2023 at 10:52:15AM +0100, Conor Dooley wrote:
+> > On Thu, Sep 14, 2023 at 11:36:01AM +0200, Andrew Jones wrote:
+> > > > +static inline void cpu_relax(void)
+> > > > +{
+> > > > +#ifdef __riscv_zihintpause
+> > > > + asm volatile("pause" ::: "memory");
+> > > > +#else
+> > > > + /* Encoding of the pause instruction */
+> > > > + asm volatile(".4byte 0x100000F" ::: "memory");
+> > > > +#endif
+> > > > +}
+> > >
+> > > cpu_relax() should go to include/riscv/processor.h
+> >
+> > Can the one from asm/vdso/processor.h be reused, or are there special
+> > considerations preventing that?
 >
-> I just tried this test out. Running it over and over again on QEMU I see
-> it works sometimes, but it frequently fails with the
-> GUEST_ASSERT_EQ(config_iter + 1, irq_iter) assert and at least once I
-> also saw the __GUEST_ASSERT(xcnt >=3D cmp) assert.
+> We'd need to copy it into tools/arch/riscv/include/asm, but it could be
+> done. Hmm, now that I look at it, I see we're missing the barrier() call
+> in this kvm selftests version.
 >
 
-Good catch!
-
-I can also reproduce this issue and it is a common problem for both
-arm64 and riscv because it also happens in a arm64 Qemu VM.
-
-It seems like a synchronization issue between host and guest shared
-variables. Will double check the test code.
+Will reuse the one from asm/vdso/processor.h and copy it to
+tools/arch/riscv/include/asm.
 
 > Thanks,
 > drew
