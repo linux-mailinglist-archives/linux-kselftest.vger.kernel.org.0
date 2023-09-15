@@ -2,153 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D81D07A1BA6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Sep 2023 12:03:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 573377A1BD0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Sep 2023 12:11:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233958AbjIOKDy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 15 Sep 2023 06:03:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34706 "EHLO
+        id S234225AbjIOKLy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 15 Sep 2023 06:11:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233854AbjIOKDw (ORCPT
+        with ESMTP id S234221AbjIOKLu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 15 Sep 2023 06:03:52 -0400
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DC5135A9
-        for <linux-kselftest@vger.kernel.org>; Fri, 15 Sep 2023 03:01:29 -0700 (PDT)
-Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-31427ddd3fbso1661510f8f.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 15 Sep 2023 03:01:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1694772077; x=1695376877; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9YXFI+WhfAISDbsXD1xioqZrn+hF0Uu9c9p7iUiwhwc=;
-        b=deGzgNWQix/q7NKb17Nk2nCXzUBteH08tH4BnpE+JPpoinZr/yNgvOLzGa0as0qloq
-         Sk/9/2e/iIwsNF4mcplA0+7ROleKXuVwk1vswydk7BPDTPINzmeCZ3GhJc7QgdgLAZiS
-         fA79w+nIuy1EYxy6RvostX31XC0G4896EwWgESDmm9bYOj5+yGvwFwEZhz262yAPObk9
-         qxRDrXT6fldL7CReO1TEtTGAQetrAhjDxEc+ObxgkJNXk9Dt7MmpP0u8Twa9eNd0fbFI
-         80Tf75AD4PSXWMxmXITdfrGQ+wFwQRaN2K1UAPs/KcAX0wbOlImAOh5GwXPojtSlpiob
-         lACA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694772077; x=1695376877;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9YXFI+WhfAISDbsXD1xioqZrn+hF0Uu9c9p7iUiwhwc=;
-        b=TjB5ULsyVeVZApIlcgfb2F3DNum0TGGLqAL4D6ZcrJEO/hYQPU4OjklbVpi8SLTj5e
-         ppmbPdbZOT4hw/e0rq7W8njDUdX932K2Di/g1C6g4kZQsjcPVaOo8p1QZ5nbOf6xYs8x
-         YvI1xcpo+OjepY2iUjqihT9XHybp1Yr5RJMAC5i9WkFGSz1SxQpLvkO5Hbz62Pvk/Fae
-         ub0SxGK/i9j9reT02cX97LiZBDZGTC6poIJHtYPL2JKTuEVctdKboSqBf5NHtXlIgmKw
-         RaYCLW3i1DPhaIeBYQAXfY5dQkc0W3PETERhENMAvr6gErNCv4gYY21K73vbBdxQStRU
-         3XPw==
-X-Gm-Message-State: AOJu0Yyrz1qqrTfB3B47vbPBfyb9x4hslRLhx2tW+Gbw3Zd4qXdH0q4L
-        o3tYMqAVFw6wq5pbVMdkTl7kskj97DVlxyIPkgA=
-X-Google-Smtp-Source: AGHT+IFjJ+aht9zx/gPFks21b7hJ4FuUG1vcbtzV4LI5E5IEoy/v218pa5LbKYLuHYFo6Stc9Z5KtA==
-X-Received: by 2002:adf:a303:0:b0:31f:f84e:f63e with SMTP id c3-20020adfa303000000b0031ff84ef63emr540429wrb.54.1694772076646;
-        Fri, 15 Sep 2023 03:01:16 -0700 (PDT)
-Received: from alex-rivos.home (amontpellier-656-1-456-62.w92-145.abo.wanadoo.fr. [92.145.124.62])
-        by smtp.gmail.com with ESMTPSA id f4-20020adfdb44000000b00317f29ad113sm4057900wrj.32.2023.09.15.03.01.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Sep 2023 03:01:15 -0700 (PDT)
-From:   Alexandre Ghiti <alexghiti@rivosinc.com>
-To:     Shuah Khan <shuah@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Charlie Jenkins <charlie@rivosinc.com>,
-        linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Subject: [PATCH -fixes] riscv: kselftests: Fix mm build by removing testcases subdirectory
-Date:   Fri, 15 Sep 2023 12:01:13 +0200
-Message-Id: <20230915100113.13131-1-alexghiti@rivosinc.com>
-X-Mailer: git-send-email 2.39.2
+        Fri, 15 Sep 2023 06:11:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id AAA0910E6
+        for <linux-kselftest@vger.kernel.org>; Fri, 15 Sep 2023 03:10:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1694772637;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=5U61MhzJI73OJTFzPfDsmy/XLiTcwMLxEtjvstIs+RY=;
+        b=bDJKujLhTL+nZDzKGHc9cWT+eqNcQXsF8Bki/BJbmPdQ2KsU7Wr9XicIOzVV8uLDUOlGev
+        OCMcCkRCbLFVOwgKMlN1opUKoi9hkf/iv48Dt4QMJNIh3+OKARWoPcEo8u+iibO1oOgLrJ
+        MJzmKrlQP4yNpdefFhgVyNIn7dgWmz0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-396-u5N0xklJP8-lgLuGgb9A3w-1; Fri, 15 Sep 2023 06:10:32 -0400
+X-MC-Unique: u5N0xklJP8-lgLuGgb9A3w-1
+Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B637A85A5A8;
+        Fri, 15 Sep 2023 10:10:31 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.216])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 388F240C2070;
+        Fri, 15 Sep 2023 10:10:28 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <dcc6543d71524ac488ca2a56dd430118@AcuMS.aculab.com>
+References: <dcc6543d71524ac488ca2a56dd430118@AcuMS.aculab.com> <20230914221526.3153402-1-dhowells@redhat.com> <20230914221526.3153402-10-dhowells@redhat.com>
+To:     David Laight <David.Laight@ACULAB.COM>
+Cc:     dhowells@redhat.com, Al Viro <viro@zeniv.linux.org.uk>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Jens Axboe <axboe@kernel.dk>, Christoph Hellwig <hch@lst.de>,
+        "Christian Brauner" <christian@brauner.io>,
+        Matthew Wilcox <willy@infradead.org>,
+        "Brendan Higgins" <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "kunit-dev@googlegroups.com" <kunit-dev@googlegroups.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        John Hubbard <jhubbard@nvidia.com>
+Subject: Re: [RFC PATCH 9/9] iov_iter: Add benchmarking kunit tests for UBUF/IOVEC
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <3370514.1694772627.1@warthog.procyon.org.uk>
+Date:   Fri, 15 Sep 2023 11:10:27 +0100
+Message-ID: <3370515.1694772627@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kselftests fails to build because the mm/testcases subdirectory is not
-created and then the compiler fails to output the binary there.
+David Laight <David.Laight@ACULAB.COM> wrote:
 
-So fix this by simply removing this subdirectory which is not very
-useful.
+> > Add kunit tests to benchmark 256MiB copies to a UBUF iterator and an IOVEC
+> > iterator.  This attaches a userspace VM with a mapped file in it
+> > temporarily to the test thread.
+> 
+> Isn't that going to be completely dominated by the cache fills
+> from memory?
 
-Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
----
- tools/testing/selftests/riscv/mm/Makefile                   | 6 +++---
- .../selftests/riscv/mm/{testcases => }/mmap_bottomup.c      | 2 +-
- .../selftests/riscv/mm/{testcases => }/mmap_default.c       | 2 +-
- .../testing/selftests/riscv/mm/{testcases => }/mmap_test.h  | 0
- .../testing/selftests/riscv/mm/{testcases => }/run_mmap.sh  | 0
- 5 files changed, 5 insertions(+), 5 deletions(-)
- rename tools/testing/selftests/riscv/mm/{testcases => }/mmap_bottomup.c (97%)
- rename tools/testing/selftests/riscv/mm/{testcases => }/mmap_default.c (97%)
- rename tools/testing/selftests/riscv/mm/{testcases => }/mmap_test.h (100%)
- rename tools/testing/selftests/riscv/mm/{testcases => }/run_mmap.sh (100%)
+Yes...  but it should be consistent in the amount of time that consumes since
+no device drivers are involved.  I can try adding the same folio to the
+anon_file multiple times - it might work especially if I don't put the pages
+on the LRU (if that's even possible) - but I wanted separate pages for the
+extraction test.
 
-diff --git a/tools/testing/selftests/riscv/mm/Makefile b/tools/testing/selftests/riscv/mm/Makefile
-index 11e0f0568923..c333263f2b27 100644
---- a/tools/testing/selftests/riscv/mm/Makefile
-+++ b/tools/testing/selftests/riscv/mm/Makefile
-@@ -5,11 +5,11 @@
- # Additional include paths needed by kselftest.h and local headers
- CFLAGS += -D_GNU_SOURCE -std=gnu99 -I.
- 
--TEST_GEN_FILES := testcases/mmap_default testcases/mmap_bottomup
-+TEST_GEN_FILES := mmap_default mmap_bottomup
- 
--TEST_PROGS := testcases/run_mmap.sh
-+TEST_PROGS := run_mmap.sh
- 
- include ../../lib.mk
- 
--$(OUTPUT)/mm: testcases/mmap_default.c testcases/mmap_bottomup.c testcases/mmap_tests.h
-+$(OUTPUT)/mm: mmap_default.c mmap_bottomup.c mmap_tests.h
- 	$(CC) -o$@ $(CFLAGS) $(LDFLAGS) $^
-diff --git a/tools/testing/selftests/riscv/mm/testcases/mmap_bottomup.c b/tools/testing/selftests/riscv/mm/mmap_bottomup.c
-similarity index 97%
-rename from tools/testing/selftests/riscv/mm/testcases/mmap_bottomup.c
-rename to tools/testing/selftests/riscv/mm/mmap_bottomup.c
-index b29379f7e478..1757d19ca89b 100644
---- a/tools/testing/selftests/riscv/mm/testcases/mmap_bottomup.c
-+++ b/tools/testing/selftests/riscv/mm/mmap_bottomup.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-only
- #include <sys/mman.h>
--#include <testcases/mmap_test.h>
-+#include <mmap_test.h>
- 
- #include "../../kselftest_harness.h"
- 
-diff --git a/tools/testing/selftests/riscv/mm/testcases/mmap_default.c b/tools/testing/selftests/riscv/mm/mmap_default.c
-similarity index 97%
-rename from tools/testing/selftests/riscv/mm/testcases/mmap_default.c
-rename to tools/testing/selftests/riscv/mm/mmap_default.c
-index d1accb91b726..c63c60b9397e 100644
---- a/tools/testing/selftests/riscv/mm/testcases/mmap_default.c
-+++ b/tools/testing/selftests/riscv/mm/mmap_default.c
-@@ -1,6 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-only
- #include <sys/mman.h>
--#include <testcases/mmap_test.h>
-+#include <mmap_test.h>
- 
- #include "../../kselftest_harness.h"
- 
-diff --git a/tools/testing/selftests/riscv/mm/testcases/mmap_test.h b/tools/testing/selftests/riscv/mm/mmap_test.h
-similarity index 100%
-rename from tools/testing/selftests/riscv/mm/testcases/mmap_test.h
-rename to tools/testing/selftests/riscv/mm/mmap_test.h
-diff --git a/tools/testing/selftests/riscv/mm/testcases/run_mmap.sh b/tools/testing/selftests/riscv/mm/run_mmap.sh
-similarity index 100%
-rename from tools/testing/selftests/riscv/mm/testcases/run_mmap.sh
-rename to tools/testing/selftests/riscv/mm/run_mmap.sh
--- 
-2.39.2
+> I'd have thought you'd need to use something with a lot of
+> small fragments so that the iteration code dominates the copy.
+
+That would actually be a separate benchmark case which I should try also.
+
+> Some measurements can be made using readv() and writev()
+> on /dev/zero and /dev/null.
+
+Forget /dev/null; that doesn't actually engage any iteration code.  The same
+for writing to /dev/zero.  Reading from /dev/zero does its own iteration thing
+rather than using iterate_and_advance(), presumably because it checks for
+signals and resched.
+
+David
 
