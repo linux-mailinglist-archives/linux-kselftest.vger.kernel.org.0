@@ -2,195 +2,182 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 320787A10CF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Sep 2023 00:17:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 349927A13D3
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Sep 2023 04:26:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230129AbjINWRp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 14 Sep 2023 18:17:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37036 "EHLO
+        id S231269AbjIOC1B (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 14 Sep 2023 22:27:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230037AbjINWRX (ORCPT
+        with ESMTP id S230512AbjIOC1B (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Sep 2023 18:17:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A95DC273A
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Sep 2023 15:16:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1694729765;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=kJbp/xPUEeZPZ6xlN6+ErzCN36LIEvr4JCtOzFEoqKk=;
-        b=Zg5bLVhW9DiM3kMLRpCzR2iePJy154BIK8k2TkH6O18GqtpnHdIIT5IXM8xGIj7VzG+Ej4
-        fJsREFnHp5Z6ijgPIG/dyWnozbJ8cFhvKbBpyeISEeu+2b6637TRAb7VTYum3JOfgnwz17
-        78jN6UX3xl/T4gfhJVJgw1aF9PI5XjQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-321-oafUx_6YMSSpr0ZeGoRjbg-1; Thu, 14 Sep 2023 18:15:59 -0400
-X-MC-Unique: oafUx_6YMSSpr0ZeGoRjbg-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 20ECC816525;
-        Thu, 14 Sep 2023 22:15:58 +0000 (UTC)
-Received: from warthog.procyon.org.com (unknown [10.42.28.216])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 686E72026D4B;
-        Thu, 14 Sep 2023 22:15:55 +0000 (UTC)
-From:   David Howells <dhowells@redhat.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     David Howells <dhowells@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Christoph Hellwig <hch@lst.de>,
-        Christian Brauner <christian@brauner.io>,
-        David Laight <David.Laight@ACULAB.COM>,
-        Matthew Wilcox <willy@infradead.org>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        David Gow <davidgow@google.com>, linux-fsdevel@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-mm@kvack.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>
-Subject: [RFC PATCH 9/9] iov_iter: Add benchmarking kunit tests for UBUF/IOVEC
-Date:   Thu, 14 Sep 2023 23:15:26 +0100
-Message-ID: <20230914221526.3153402-10-dhowells@redhat.com>
-In-Reply-To: <20230914221526.3153402-1-dhowells@redhat.com>
-References: <20230914221526.3153402-1-dhowells@redhat.com>
+        Thu, 14 Sep 2023 22:27:01 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E35082134;
+        Thu, 14 Sep 2023 19:26:56 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id 6a1803df08f44-6491907dbc3so9527596d6.2;
+        Thu, 14 Sep 2023 19:26:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1694744816; x=1695349616; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0V+Ej050wtBPVkvgLAURHyBGUEz6TBckGLvBwf0w5ek=;
+        b=biaJ2IxunrpxB70Atdrc1R4WoE9HsATB3NyVNjXtZhI6vXfNMuT9x6emDg4VSqyj3b
+         T+VeroTjs09eeB3OVFr8TehRrDylmzIlqnsJFOE1if3ipC/HuRkEdy1sqmC/VNB5LRJD
+         bOL17MiNyVjQwI3qeAmYjcfNhOmFwGH+rtmBMJFei7FQAfTq330R0w16XZCVCjtkc5ze
+         4uR1+lwJsLVM7Zxtz1TDHPZQtTQLQY9IFPVb+XfdtyU33Jcd1nsl9nuS41lIYiIKzgam
+         Qgo/v8yY/ACqRAyeNiusFGK5jdNyNXsE1hvqoksyGa7rkRySwabs3GMheuLS7CSGMx3D
+         io6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1694744816; x=1695349616;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0V+Ej050wtBPVkvgLAURHyBGUEz6TBckGLvBwf0w5ek=;
+        b=MtCc7NcoiLW0kAbEppJfP2v2UIzPL40q9y0LERpDOq50rjLOZlRPBgs49ebFYl3SU4
+         WpaNyMkuKtkB+rtnuVejkTdFKjwsSg9aeVczmofnwSYMghwz3rzFuw7GVIMSC3fcBW2y
+         Vamv2qhvGljwnpGpw2wf5H0y+bGjgUJE57cl0dVJ8WJ5Kn2z6ev/ZYxyFnbhSNQ+sqNT
+         lqbgkQcwM6ppPMyajxeXe1Bx6zXi2Pz6UYXbz5DdsmJk615bUmrp8TDeyyHI4gwusMN6
+         rk8S6Cy2g8IMWCo+AleBZN6mE530zBWLpVt2tmojvVk7cipxBUvuQXWtt8EeSinc9YGK
+         dVDA==
+X-Gm-Message-State: AOJu0YzHdsauoe2e16RFo3QFWxuFipXMdF/uOYlYUa5Rx//mun39edaM
+        2ZrVz5sj8ZwFPNKp1XrJ1kGDaCF/zN67SBtxgWg=
+X-Google-Smtp-Source: AGHT+IEQIFGBqnwaVx6CYRVwvI75J6PHFp1VzHmY85UfwZyp/hATEeui96erhiU98nairCgDsIa4WHzwKu1kuXTsxbc=
+X-Received: by 2002:a0c:e04a:0:b0:631:f9ad:1d43 with SMTP id
+ y10-20020a0ce04a000000b00631f9ad1d43mr403460qvk.14.1694744815978; Thu, 14 Sep
+ 2023 19:26:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+References: <CAADnVQLid7QvukhnqRoY2VVFi1tCfkPFsMGUUeHDtCgf0SAJCg@mail.gmail.com>
+ <20230913122827.91591-1-gerhorst@amazon.de>
+In-Reply-To: <20230913122827.91591-1-gerhorst@amazon.de>
+From:   Yafang Shao <laoar.shao@gmail.com>
+Date:   Fri, 15 Sep 2023 10:26:19 +0800
+Message-ID: <CALOAHbAswO78gQ+D6yOupi5Hx_i3xqHQFrjGdWR=EhdVvV3ZkA@mail.gmail.com>
+Subject: Re: [PATCH 2/3] Revert "bpf: Fix issue in verifying allow_ptr_leaks"
+To:     gerhorst@cs.fau.de
+Cc:     alexei.starovoitov@gmail.com, andrii@kernel.org, ast@kernel.org,
+        bpf@vger.kernel.org, daniel@iogearbox.net, haoluo@google.com,
+        john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org,
+        martin.lau@linux.dev, sdf@google.com, song@kernel.org,
+        yonghong.song@linux.dev, mykolal@fb.com, shuah@kernel.org,
+        gerhorst@amazon.de, iii@linux.ibm.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Hagar Gamal Halim Hemdan <hagarhem@amazon.de>,
+        Puranjay Mohan <puranjay12@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add kunit tests to benchmark 256MiB copies to a UBUF iterator and an IOVEC
-iterator.  This attaches a userspace VM with a mapped file in it
-temporarily to the test thread.
+On Wed, Sep 13, 2023 at 8:30=E2=80=AFPM Luis Gerhorst <gerhorst@amazon.de> =
+wrote:
+>
+> This reverts commit d75e30dddf73449bc2d10bb8e2f1a2c446bc67a2.
+>
+> To mitigate Spectre v1, the verifier relies on static analysis to deduct
+> constant pointer bounds, which can then be enforced by rewriting pointer
+> arithmetic [1] or index masking [2]. This relies on the fact that every
+> memory region to be accessed has a static upper bound and every date
+> below that bound is accessible. The verifier can only rewrite pointer
+> arithmetic or insert masking instructions to mitigate Spectre v1 if a
+> static upper bound, below of which every access is valid, can be given.
+>
+> When allowing packet pointer comparisons, this introduces a way for the
+> program to effectively construct an accessible pointer for which no
+> static upper bound is known. Intuitively, this is obvious as a packet
+> might be of any size and therefore 0 is the only statically known upper
+> bound below of which every date is always accessible (i.e., none).
+>
+> To clarify, the problem is not that comparing two pointers can be used
+> for pointer leaks in the same way in that comparing a pointer to a known
+> scalar can be used for pointer leaks. That is because the "secret"
+> components of the addresses cancel each other out if the pointers are
+> into the same region.
+>
+> With [3] applied, the following malicious BPF program can be loaded into
+> the kernel without CAP_PERFMON:
+>
+> r2 =3D *(u32 *)(r1 + 76) // data
+> r3 =3D *(u32 *)(r1 + 80) // data_end
+> r4 =3D r2
+> r4 +=3D 1
+> if r4 > r3 goto exit
+> r5 =3D *(u8 *)(r2 + 0) // speculatively read secret
+> r5 &=3D 1 // choose bit to leak
+> // ... side channel to leak secret bit
+> exit:
+> // ...
+>
+> This is jited to the following amd64 code which still contains the
+> gadget:
+>
+>    0:   endbr64
+>    4:   nopl   0x0(%rax,%rax,1)
+>    9:   xchg   %ax,%ax
+>    b:   push   %rbp
+>    c:   mov    %rsp,%rbp
+>    f:   endbr64
+>   13:   push   %rbx
+>   14:   mov    0xc8(%rdi),%rsi // data
+>   1b:   mov    0x50(%rdi),%rdx // data_end
+>   1f:   mov    %rsi,%rcx
+>   22:   add    $0x1,%rcx
+>   26:   cmp    %rdx,%rcx
+>   29:   ja     0x000000000000003f // branch to mispredict
+>   2b:   movzbq 0x0(%rsi),%r8 // speculative load of secret
+>   30:   and    $0x1,%r8 // choose bit to leak
+>   34:   xor    %ebx,%ebx
+>   36:   cmp    %rbx,%r8
+>   39:   je     0x000000000000003f // branch based on secret
+>   3b:   imul   $0x61,%r8,%r8 // leak using port contention side channel
+>   3f:   xor    %eax,%eax
+>   41:   pop    %rbx
+>   42:   leaveq
+>   43:   retq
+>
+> Here I'm using a port contention side channel because storing the secret
+> to the stack causes the verifier to insert an lfence for unrelated
+> reasons (SSB mitigation) which would terminate the speculation.
+>
+> As Daniel already pointed out to me, data_end is even attacker
+> controlled as one could send many packets of sufficient length to train
+> the branch prediction into assuming data_end >=3D data will never be true=
+.
+> When the attacker then sends a packet with insufficient data, the
+> Spectre v1 gadget leaks the chosen bit of some value that lies behind
+> data_end.
+>
+> To make it clear that the problem is not the pointer comparison but the
+> missing masking instruction, it can be useful to transform the code
+> above into the following equivalent pseudocode:
+>
+> r2 =3D data
+> r3 =3D data_end
+> r6 =3D ... // index to access, constant does not help
+> r7 =3D data_end - data // only known at runtime, could be [0,PKT_MAX)
+> if !(r6 < r7) goto exit
+> // no masking of index in r6 happens
+> r2 +=3D r6 // addr. to access
+> r5 =3D *(u8 *)(r2 + 0) // speculatively read secret
+> // ... leak secret as above
+>
+> One idea to resolve this while still allowing for unprivileged packet
+> access would be to always allocate a power of 2 for the packet data and
+> then also pass the respective index mask in the skb structure. The
+> verifier would then have to check that this index mask is always applied
+> to the offset before a packet pointer is dereferenced. This patch does
+> not implement this extension, but only reverts [3].
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Andrew Morton <akpm@linux-foundation.org>
-cc: Christoph Hellwig <hch@lst.de>
-cc: Christian Brauner <brauner@kernel.org>
-cc: Jens Axboe <axboe@kernel.dk>
-cc: Al Viro <viro@zeniv.linux.org.uk>
-cc: Matthew Wilcox <willy@infradead.org>
-cc: David Hildenbrand <david@redhat.com>
-cc: John Hubbard <jhubbard@nvidia.com>
-cc: Brendan Higgins <brendanhiggins@google.com>
-cc: David Gow <davidgow@google.com>
-cc: linux-kselftest@vger.kernel.org
-cc: kunit-dev@googlegroups.com
-cc: linux-mm@kvack.org
-cc: linux-fsdevel@vger.kernel.org
----
- lib/kunit_iov_iter.c | 85 ++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 85 insertions(+)
+Hi Luis,
 
-diff --git a/lib/kunit_iov_iter.c b/lib/kunit_iov_iter.c
-index f8d0cd6a2923..cc9c64663a73 100644
---- a/lib/kunit_iov_iter.c
-+++ b/lib/kunit_iov_iter.c
-@@ -1304,6 +1304,89 @@ static void *__init iov_kunit_create_source(struct kunit *test, size_t npages)
- 	return scratch;
- }
- 
-+/*
-+ * Time copying 256MiB through an ITER_UBUF.
-+ */
-+static void __init iov_kunit_benchmark_ubuf(struct kunit *test)
-+{
-+	struct iov_iter iter;
-+	unsigned int samples[IOV_KUNIT_NR_SAMPLES];
-+	ktime_t a, b;
-+	ssize_t copied;
-+	size_t size = 256 * 1024 * 1024, npages = size / PAGE_SIZE;
-+	void *scratch;
-+	int i;
-+	u8 __user *buffer;
-+
-+	/* Allocate a huge buffer and populate it with pages. */
-+	buffer = iov_kunit_create_user_buf(test, npages, NULL);
-+
-+	/* Create a single large buffer to copy to/from. */
-+	scratch = iov_kunit_create_source(test, npages);
-+
-+	/* Perform and time a bunch of copies. */
-+	kunit_info(test, "Benchmarking copy_to_iter() over UBUF:\n");
-+	for (i = 0; i < IOV_KUNIT_NR_SAMPLES; i++) {
-+		iov_iter_ubuf(&iter, ITER_DEST, buffer, size);
-+
-+		a = ktime_get_real();
-+		copied = copy_to_iter(scratch, size, &iter);
-+		b = ktime_get_real();
-+		KUNIT_EXPECT_EQ(test, copied, size);
-+		samples[i] = ktime_to_us(ktime_sub(b, a));
-+	}
-+
-+	iov_kunit_benchmark_print_stats(test, samples);
-+	KUNIT_SUCCEED();
-+}
-+
-+/*
-+ * Time copying 256MiB through an ITER_IOVEC.
-+ */
-+static void __init iov_kunit_benchmark_iovec(struct kunit *test)
-+{
-+	struct iov_iter iter;
-+	struct iovec iov[8];
-+	unsigned int samples[IOV_KUNIT_NR_SAMPLES];
-+	ktime_t a, b;
-+	ssize_t copied;
-+	size_t size = 256 * 1024 * 1024, npages = size / PAGE_SIZE, part;
-+	void *scratch;
-+	int i;
-+	u8 __user *buffer;
-+
-+	/* Allocate a huge buffer and populate it with pages. */
-+	buffer = iov_kunit_create_user_buf(test, npages, NULL);
-+
-+	/* Create a single large buffer to copy to/from. */
-+	scratch = iov_kunit_create_source(test, npages);
-+
-+	/* Split the target over a number of iovecs */
-+	copied = 0;
-+	for (i = 0; i < ARRAY_SIZE(iov); i++) {
-+		part = size / ARRAY_SIZE(iov);
-+		iov[i].iov_base = buffer + copied;
-+		iov[i].iov_len = part;
-+		copied += part;
-+	}
-+	iov[i - 1].iov_len += size - part;
-+
-+	/* Perform and time a bunch of copies. */
-+	kunit_info(test, "Benchmarking copy_to_iter() over IOVEC:\n");
-+	for (i = 0; i < IOV_KUNIT_NR_SAMPLES; i++) {
-+		iov_iter_init(&iter, ITER_DEST, iov, ARRAY_SIZE(iov), size);
-+
-+		a = ktime_get_real();
-+		copied = copy_to_iter(scratch, size, &iter);
-+		b = ktime_get_real();
-+		KUNIT_EXPECT_EQ(test, copied, size);
-+		samples[i] = ktime_to_us(ktime_sub(b, a));
-+	}
-+
-+	iov_kunit_benchmark_print_stats(test, samples);
-+	KUNIT_SUCCEED();
-+}
-+
- /*
-  * Time copying 256MiB through an ITER_KVEC.
-  */
-@@ -1504,6 +1587,8 @@ static struct kunit_case __refdata iov_kunit_cases[] = {
- 	KUNIT_CASE(iov_kunit_extract_pages_kvec),
- 	KUNIT_CASE(iov_kunit_extract_pages_bvec),
- 	KUNIT_CASE(iov_kunit_extract_pages_xarray),
-+	KUNIT_CASE(iov_kunit_benchmark_ubuf),
-+	KUNIT_CASE(iov_kunit_benchmark_iovec),
- 	KUNIT_CASE(iov_kunit_benchmark_kvec),
- 	KUNIT_CASE(iov_kunit_benchmark_bvec),
- 	KUNIT_CASE(iov_kunit_benchmark_bvec_split),
+The skb pointer comparison is a reasonable operation in a networking bpf pr=
+og.
+If we just prohibit a reasonable operation to prevent a possible
+spectre v1 attack, it looks a little weird, right ?
+Should we figure out a real fix to prevent it ?
 
+--=20
+Regards
+Yafang
