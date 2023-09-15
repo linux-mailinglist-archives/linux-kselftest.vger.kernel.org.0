@@ -2,31 +2,31 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 926677A13FF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Sep 2023 04:53:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 218007A1402
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Sep 2023 04:53:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbjIOCxE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 14 Sep 2023 22:53:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44870 "EHLO
+        id S229548AbjIOCxM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 14 Sep 2023 22:53:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbjIOCxE (ORCPT
+        with ESMTP id S231722AbjIOCxL (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Sep 2023 22:53:04 -0400
+        Thu, 14 Sep 2023 22:53:11 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F1B726AB;
-        Thu, 14 Sep 2023 19:53:00 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 095D2C433C8;
-        Fri, 15 Sep 2023 02:52:57 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 806B72703;
+        Thu, 14 Sep 2023 19:53:07 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44B9DC433C8;
+        Fri, 15 Sep 2023 02:53:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694746379;
-        bh=BMoIA/XytQAickyMtxvDt0cV0B7GH433aHBEMFeeRZA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=cI0cRs6qX5hHpd59KhlA3hhK/Qql5/OjdtMEa3olBNhsnYd/e3op+jcl3KLu0BV8w
-         RiEYfVAoYEvsFOzZvj27inW/LGydZnbhhHXGcPjfnz25pHn0jwDd1ILy8UKvbN9zB3
-         OK2C7gXEQnKz3Vr60XXbCjyF8tPWZE+++a5tVe21EWqxU++Ci5bCOlRqQBxQ4vju+w
-         gJq25kZYHVM3a46zVBvfPUAT8vRgQy5n9GUlelf6ALlF6imhHL/rAQnc/UTJ3iv4tG
-         +16xC6MX6g3x/v2SqaDqjBK3e9BuOsJedv6ba6keD2wIfOpwEeZAjRZzjMnjab2s+h
-         5uTX7Yzl3Svog==
+        s=k20201202; t=1694746386;
+        bh=xT8faQ/VQn4QsrSETrKl21TSbXbkbXRLNmsjtMslsE0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=vE+6+K2v8eFHCuG2uMpBuFLYWDxqqOXd+irJE2hgT8Kzn2qCdWCy1yLXm/zxJGcle
+         766beCUyr429m9vHPiYbpBIH1ir4Ac1FU1pAssUxZCd0fxPupJtIfjmwwqCV1CizFh
+         urwwnI45LhwWV3A+6CX6il2CrZWabaG/fK1UIvPJW4QNgmq7jiOh7NATX2Jh8W9xyx
+         sboRSLtK7W/n1muo988SNeyulnEUWTL/ZqrG2xmmHhw+zkZA3YEHyXowMDaMr2B5hD
+         XGukIVihyc7OyD/VMQU5eVcRYGaRVI6Xe4hn3oV8PWGyIPnbyMw5YD+9QK8yLIrpZk
+         HOBb+tcLjtjgQ==
 From:   SeongJae Park <sj@kernel.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     SeongJae Park <sj@kernel.org>,
@@ -34,91 +34,60 @@ Cc:     SeongJae Park <sj@kernel.org>,
         damon@lists.linux.dev, linux-mm@kvack.org,
         kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 0/8] mm/damon: provide pseudo-moving sum based access rate
-Date:   Fri, 15 Sep 2023 02:52:43 +0000
-Message-Id: <20230915025251.72816-1-sj@kernel.org>
+Subject: [PATCH 4/8] mm/damon/core-test: add a unit test for damon_moving_sum()
+Date:   Fri, 15 Sep 2023 02:52:47 +0000
+Message-Id: <20230915025251.72816-5-sj@kernel.org>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230915025251.72816-1-sj@kernel.org>
+References: <20230915025251.72816-1-sj@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Changes from RFC
-(https://lore.kernel.org/damon/20230909033711.55794-1-sj@kernel.org/)
-- Rebase on latest mm-unstable
-- Minor wordsmithing of coverletter
+Add a simple unit test for the pseudo moving-sum function
+(damon_moving_sum()).
 
-DAMON checks the access to each region for every sampling interval, increase
-the access rate counter of the region, namely nr_accesses, if the access was
-made.  For every aggregation interval, the counter is reset.  The counter is
-exposed to users to be used as a metric showing the relative access rate
-(frequency) of each region.  In other words, DAMON provides access rate of each
-region in every aggregation interval.  The aggregation avoids temporal access
-pattern changes making things confusing.  However, this also makes a few
-DAMON-related operations to unnecessarily need to be aligned to the aggregation
-interval.  This can restrict the flexibility of DAMON applications, especially
-when the aggregation interval is huge.
+Signed-off-by: SeongJae Park <sj@kernel.org>
+---
+ mm/damon/core-test.h | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-To provide the monitoring results in finer-grained timing while keeping
-handling of temporal access pattern change, this patchset implements a
-pseudo-moving sum based access rate metric.  It is pseudo-moving sum because
-strict moving sum implementation would need to keep all values for last time
-window, and that could incur high overhead of there could be arbitrary number
-of values in a time window.  Especially in case of the nr_accesses, since the
-sampling interval and aggregation interval can arbitrarily set and the past
-values should be maintained for every region, it could be risky.  The
-pseudo-moving sum assumes there were no temporal access pattern change in last
-discrete time window to remove the needs for keeping the list of the last time
-window values.  As a result, it beocmes not strict moving sum implementation,
-but provides a reasonable accuracy.
-
-Also, it keeps an important property of the moving sum.  That is, the moving
-sum becomes same to discrete-window based sum at the time that aligns to the
-time window.  This means using the pseudo moving sum based nr_accesses makes no
-change to users who shows the value for every aggregation interval.
-
-Patches Sequence
-----------------
-
-The sequence of the patches is as follows.  The first four patches are
-for preparation of the change.  The first two (patches 1 and 2)
-implements a helper function for nr_accesses update and eliminate corner
-case that skips use of the function, respectively.  Following two
-(patches 3 and 4) respectively implement the pseudo-moving sum function
-and its simple unit test case.
-
-Two patches for making DAMON to use the pseudo-moving sum follow.  The
-fifthe one (patch 5) introduces a new field for representing the
-pseudo-moving sum-based access rate of each region, and the sixth one
-makes the new representation to actually updated with the pseudo-moving
-sum function.
-
-Last two patches (patches 7 and 8) makes followup fixes for skipping
-unnecessary updates and marking the moving sum function as static,
-respectively.
-
-SeongJae Park (8):
-  mm/damon/core: define and use a dedicated function for region access
-    rate update
-  mm/damon/vaddr: call damon_update_region_access_rate() always
-  mm/damon/core: implement a pseudo-moving sum function
-  mm/damon/core-test: add a unit test for damon_moving_sum()
-  mm/damon/core: introduce nr_accesses_bp
-  mm/damon/core: use pseudo-moving sum for nr_accesses_bp
-  mm/damon/core: skip updating nr_accesses_bp for each aggregation
-    interval
-  mm/damon/core: mark damon_moving_sum() as a static function
-
- include/linux/damon.h | 16 +++++++++-
- mm/damon/core-test.h  | 21 ++++++++++++
- mm/damon/core.c       | 74 +++++++++++++++++++++++++++++++++++++++++++
- mm/damon/paddr.c      | 11 +++----
- mm/damon/vaddr.c      | 22 +++++++------
- 5 files changed, 128 insertions(+), 16 deletions(-)
-
-
-base-commit: a5b7405a0eaa74d23547ede9c3820f01ee0a2c13
+diff --git a/mm/damon/core-test.h b/mm/damon/core-test.h
+index 6cc8b245586d..c539f0e8377e 100644
+--- a/mm/damon/core-test.h
++++ b/mm/damon/core-test.h
+@@ -341,6 +341,21 @@ static void damon_test_set_attrs(struct kunit *test)
+ 	KUNIT_EXPECT_EQ(test, damon_set_attrs(c, &invalid_attrs), -EINVAL);
+ }
+ 
++static void damon_test_moving_sum(struct kunit *test)
++{
++	unsigned int mvsum = 50000, nomvsum = 50000, len_window = 10;
++	unsigned int new_values[] = {10000, 0, 10000, 0, 0, 0, 10000, 0, 0, 0};
++	unsigned int expects[] = {55000, 50000, 55000, 50000, 45000, 40000,
++		45000, 40000, 35000, 30000};
++	int i;
++
++	for (i = 0; i < ARRAY_SIZE(new_values); i++) {
++		mvsum = damon_moving_sum(mvsum, nomvsum, len_window,
++				new_values[i]);
++		KUNIT_EXPECT_EQ(test, mvsum, expects[i]);
++	}
++}
++
+ static void damos_test_new_filter(struct kunit *test)
+ {
+ 	struct damos_filter *filter;
+@@ -425,6 +440,7 @@ static struct kunit_case damon_test_cases[] = {
+ 	KUNIT_CASE(damon_test_set_regions),
+ 	KUNIT_CASE(damon_test_update_monitoring_result),
+ 	KUNIT_CASE(damon_test_set_attrs),
++	KUNIT_CASE(damon_test_moving_sum),
+ 	KUNIT_CASE(damos_test_new_filter),
+ 	KUNIT_CASE(damos_test_filter_out),
+ 	{},
 -- 
 2.25.1
 
