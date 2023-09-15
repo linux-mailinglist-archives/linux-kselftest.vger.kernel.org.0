@@ -2,182 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 349927A13D3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Sep 2023 04:26:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 926677A13FF
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Sep 2023 04:53:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231269AbjIOC1B (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 14 Sep 2023 22:27:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50886 "EHLO
+        id S229767AbjIOCxE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 14 Sep 2023 22:53:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230512AbjIOC1B (ORCPT
+        with ESMTP id S229548AbjIOCxE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 14 Sep 2023 22:27:01 -0400
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E35082134;
-        Thu, 14 Sep 2023 19:26:56 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id 6a1803df08f44-6491907dbc3so9527596d6.2;
-        Thu, 14 Sep 2023 19:26:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1694744816; x=1695349616; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0V+Ej050wtBPVkvgLAURHyBGUEz6TBckGLvBwf0w5ek=;
-        b=biaJ2IxunrpxB70Atdrc1R4WoE9HsATB3NyVNjXtZhI6vXfNMuT9x6emDg4VSqyj3b
-         T+VeroTjs09eeB3OVFr8TehRrDylmzIlqnsJFOE1if3ipC/HuRkEdy1sqmC/VNB5LRJD
-         bOL17MiNyVjQwI3qeAmYjcfNhOmFwGH+rtmBMJFei7FQAfTq330R0w16XZCVCjtkc5ze
-         4uR1+lwJsLVM7Zxtz1TDHPZQtTQLQY9IFPVb+XfdtyU33Jcd1nsl9nuS41lIYiIKzgam
-         Qgo/v8yY/ACqRAyeNiusFGK5jdNyNXsE1hvqoksyGa7rkRySwabs3GMheuLS7CSGMx3D
-         io6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694744816; x=1695349616;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0V+Ej050wtBPVkvgLAURHyBGUEz6TBckGLvBwf0w5ek=;
-        b=MtCc7NcoiLW0kAbEppJfP2v2UIzPL40q9y0LERpDOq50rjLOZlRPBgs49ebFYl3SU4
-         WpaNyMkuKtkB+rtnuVejkTdFKjwsSg9aeVczmofnwSYMghwz3rzFuw7GVIMSC3fcBW2y
-         Vamv2qhvGljwnpGpw2wf5H0y+bGjgUJE57cl0dVJ8WJ5Kn2z6ev/ZYxyFnbhSNQ+sqNT
-         lqbgkQcwM6ppPMyajxeXe1Bx6zXi2Pz6UYXbz5DdsmJk615bUmrp8TDeyyHI4gwusMN6
-         rk8S6Cy2g8IMWCo+AleBZN6mE530zBWLpVt2tmojvVk7cipxBUvuQXWtt8EeSinc9YGK
-         dVDA==
-X-Gm-Message-State: AOJu0YzHdsauoe2e16RFo3QFWxuFipXMdF/uOYlYUa5Rx//mun39edaM
-        2ZrVz5sj8ZwFPNKp1XrJ1kGDaCF/zN67SBtxgWg=
-X-Google-Smtp-Source: AGHT+IEQIFGBqnwaVx6CYRVwvI75J6PHFp1VzHmY85UfwZyp/hATEeui96erhiU98nairCgDsIa4WHzwKu1kuXTsxbc=
-X-Received: by 2002:a0c:e04a:0:b0:631:f9ad:1d43 with SMTP id
- y10-20020a0ce04a000000b00631f9ad1d43mr403460qvk.14.1694744815978; Thu, 14 Sep
- 2023 19:26:55 -0700 (PDT)
+        Thu, 14 Sep 2023 22:53:04 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F1B726AB;
+        Thu, 14 Sep 2023 19:53:00 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 095D2C433C8;
+        Fri, 15 Sep 2023 02:52:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1694746379;
+        bh=BMoIA/XytQAickyMtxvDt0cV0B7GH433aHBEMFeeRZA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=cI0cRs6qX5hHpd59KhlA3hhK/Qql5/OjdtMEa3olBNhsnYd/e3op+jcl3KLu0BV8w
+         RiEYfVAoYEvsFOzZvj27inW/LGydZnbhhHXGcPjfnz25pHn0jwDd1ILy8UKvbN9zB3
+         OK2C7gXEQnKz3Vr60XXbCjyF8tPWZE+++a5tVe21EWqxU++Ci5bCOlRqQBxQ4vju+w
+         gJq25kZYHVM3a46zVBvfPUAT8vRgQy5n9GUlelf6ALlF6imhHL/rAQnc/UTJ3iv4tG
+         +16xC6MX6g3x/v2SqaDqjBK3e9BuOsJedv6ba6keD2wIfOpwEeZAjRZzjMnjab2s+h
+         5uTX7Yzl3Svog==
+From:   SeongJae Park <sj@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     SeongJae Park <sj@kernel.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        damon@lists.linux.dev, linux-mm@kvack.org,
+        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/8] mm/damon: provide pseudo-moving sum based access rate
+Date:   Fri, 15 Sep 2023 02:52:43 +0000
+Message-Id: <20230915025251.72816-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <CAADnVQLid7QvukhnqRoY2VVFi1tCfkPFsMGUUeHDtCgf0SAJCg@mail.gmail.com>
- <20230913122827.91591-1-gerhorst@amazon.de>
-In-Reply-To: <20230913122827.91591-1-gerhorst@amazon.de>
-From:   Yafang Shao <laoar.shao@gmail.com>
-Date:   Fri, 15 Sep 2023 10:26:19 +0800
-Message-ID: <CALOAHbAswO78gQ+D6yOupi5Hx_i3xqHQFrjGdWR=EhdVvV3ZkA@mail.gmail.com>
-Subject: Re: [PATCH 2/3] Revert "bpf: Fix issue in verifying allow_ptr_leaks"
-To:     gerhorst@cs.fau.de
-Cc:     alexei.starovoitov@gmail.com, andrii@kernel.org, ast@kernel.org,
-        bpf@vger.kernel.org, daniel@iogearbox.net, haoluo@google.com,
-        john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org,
-        martin.lau@linux.dev, sdf@google.com, song@kernel.org,
-        yonghong.song@linux.dev, mykolal@fb.com, shuah@kernel.org,
-        gerhorst@amazon.de, iii@linux.ibm.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hagar Gamal Halim Hemdan <hagarhem@amazon.de>,
-        Puranjay Mohan <puranjay12@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Sep 13, 2023 at 8:30=E2=80=AFPM Luis Gerhorst <gerhorst@amazon.de> =
-wrote:
->
-> This reverts commit d75e30dddf73449bc2d10bb8e2f1a2c446bc67a2.
->
-> To mitigate Spectre v1, the verifier relies on static analysis to deduct
-> constant pointer bounds, which can then be enforced by rewriting pointer
-> arithmetic [1] or index masking [2]. This relies on the fact that every
-> memory region to be accessed has a static upper bound and every date
-> below that bound is accessible. The verifier can only rewrite pointer
-> arithmetic or insert masking instructions to mitigate Spectre v1 if a
-> static upper bound, below of which every access is valid, can be given.
->
-> When allowing packet pointer comparisons, this introduces a way for the
-> program to effectively construct an accessible pointer for which no
-> static upper bound is known. Intuitively, this is obvious as a packet
-> might be of any size and therefore 0 is the only statically known upper
-> bound below of which every date is always accessible (i.e., none).
->
-> To clarify, the problem is not that comparing two pointers can be used
-> for pointer leaks in the same way in that comparing a pointer to a known
-> scalar can be used for pointer leaks. That is because the "secret"
-> components of the addresses cancel each other out if the pointers are
-> into the same region.
->
-> With [3] applied, the following malicious BPF program can be loaded into
-> the kernel without CAP_PERFMON:
->
-> r2 =3D *(u32 *)(r1 + 76) // data
-> r3 =3D *(u32 *)(r1 + 80) // data_end
-> r4 =3D r2
-> r4 +=3D 1
-> if r4 > r3 goto exit
-> r5 =3D *(u8 *)(r2 + 0) // speculatively read secret
-> r5 &=3D 1 // choose bit to leak
-> // ... side channel to leak secret bit
-> exit:
-> // ...
->
-> This is jited to the following amd64 code which still contains the
-> gadget:
->
->    0:   endbr64
->    4:   nopl   0x0(%rax,%rax,1)
->    9:   xchg   %ax,%ax
->    b:   push   %rbp
->    c:   mov    %rsp,%rbp
->    f:   endbr64
->   13:   push   %rbx
->   14:   mov    0xc8(%rdi),%rsi // data
->   1b:   mov    0x50(%rdi),%rdx // data_end
->   1f:   mov    %rsi,%rcx
->   22:   add    $0x1,%rcx
->   26:   cmp    %rdx,%rcx
->   29:   ja     0x000000000000003f // branch to mispredict
->   2b:   movzbq 0x0(%rsi),%r8 // speculative load of secret
->   30:   and    $0x1,%r8 // choose bit to leak
->   34:   xor    %ebx,%ebx
->   36:   cmp    %rbx,%r8
->   39:   je     0x000000000000003f // branch based on secret
->   3b:   imul   $0x61,%r8,%r8 // leak using port contention side channel
->   3f:   xor    %eax,%eax
->   41:   pop    %rbx
->   42:   leaveq
->   43:   retq
->
-> Here I'm using a port contention side channel because storing the secret
-> to the stack causes the verifier to insert an lfence for unrelated
-> reasons (SSB mitigation) which would terminate the speculation.
->
-> As Daniel already pointed out to me, data_end is even attacker
-> controlled as one could send many packets of sufficient length to train
-> the branch prediction into assuming data_end >=3D data will never be true=
-.
-> When the attacker then sends a packet with insufficient data, the
-> Spectre v1 gadget leaks the chosen bit of some value that lies behind
-> data_end.
->
-> To make it clear that the problem is not the pointer comparison but the
-> missing masking instruction, it can be useful to transform the code
-> above into the following equivalent pseudocode:
->
-> r2 =3D data
-> r3 =3D data_end
-> r6 =3D ... // index to access, constant does not help
-> r7 =3D data_end - data // only known at runtime, could be [0,PKT_MAX)
-> if !(r6 < r7) goto exit
-> // no masking of index in r6 happens
-> r2 +=3D r6 // addr. to access
-> r5 =3D *(u8 *)(r2 + 0) // speculatively read secret
-> // ... leak secret as above
->
-> One idea to resolve this while still allowing for unprivileged packet
-> access would be to always allocate a power of 2 for the packet data and
-> then also pass the respective index mask in the skb structure. The
-> verifier would then have to check that this index mask is always applied
-> to the offset before a packet pointer is dereferenced. This patch does
-> not implement this extension, but only reverts [3].
+Changes from RFC
+(https://lore.kernel.org/damon/20230909033711.55794-1-sj@kernel.org/)
+- Rebase on latest mm-unstable
+- Minor wordsmithing of coverletter
 
-Hi Luis,
+DAMON checks the access to each region for every sampling interval, increase
+the access rate counter of the region, namely nr_accesses, if the access was
+made.  For every aggregation interval, the counter is reset.  The counter is
+exposed to users to be used as a metric showing the relative access rate
+(frequency) of each region.  In other words, DAMON provides access rate of each
+region in every aggregation interval.  The aggregation avoids temporal access
+pattern changes making things confusing.  However, this also makes a few
+DAMON-related operations to unnecessarily need to be aligned to the aggregation
+interval.  This can restrict the flexibility of DAMON applications, especially
+when the aggregation interval is huge.
 
-The skb pointer comparison is a reasonable operation in a networking bpf pr=
-og.
-If we just prohibit a reasonable operation to prevent a possible
-spectre v1 attack, it looks a little weird, right ?
-Should we figure out a real fix to prevent it ?
+To provide the monitoring results in finer-grained timing while keeping
+handling of temporal access pattern change, this patchset implements a
+pseudo-moving sum based access rate metric.  It is pseudo-moving sum because
+strict moving sum implementation would need to keep all values for last time
+window, and that could incur high overhead of there could be arbitrary number
+of values in a time window.  Especially in case of the nr_accesses, since the
+sampling interval and aggregation interval can arbitrarily set and the past
+values should be maintained for every region, it could be risky.  The
+pseudo-moving sum assumes there were no temporal access pattern change in last
+discrete time window to remove the needs for keeping the list of the last time
+window values.  As a result, it beocmes not strict moving sum implementation,
+but provides a reasonable accuracy.
 
---=20
-Regards
-Yafang
+Also, it keeps an important property of the moving sum.  That is, the moving
+sum becomes same to discrete-window based sum at the time that aligns to the
+time window.  This means using the pseudo moving sum based nr_accesses makes no
+change to users who shows the value for every aggregation interval.
+
+Patches Sequence
+----------------
+
+The sequence of the patches is as follows.  The first four patches are
+for preparation of the change.  The first two (patches 1 and 2)
+implements a helper function for nr_accesses update and eliminate corner
+case that skips use of the function, respectively.  Following two
+(patches 3 and 4) respectively implement the pseudo-moving sum function
+and its simple unit test case.
+
+Two patches for making DAMON to use the pseudo-moving sum follow.  The
+fifthe one (patch 5) introduces a new field for representing the
+pseudo-moving sum-based access rate of each region, and the sixth one
+makes the new representation to actually updated with the pseudo-moving
+sum function.
+
+Last two patches (patches 7 and 8) makes followup fixes for skipping
+unnecessary updates and marking the moving sum function as static,
+respectively.
+
+SeongJae Park (8):
+  mm/damon/core: define and use a dedicated function for region access
+    rate update
+  mm/damon/vaddr: call damon_update_region_access_rate() always
+  mm/damon/core: implement a pseudo-moving sum function
+  mm/damon/core-test: add a unit test for damon_moving_sum()
+  mm/damon/core: introduce nr_accesses_bp
+  mm/damon/core: use pseudo-moving sum for nr_accesses_bp
+  mm/damon/core: skip updating nr_accesses_bp for each aggregation
+    interval
+  mm/damon/core: mark damon_moving_sum() as a static function
+
+ include/linux/damon.h | 16 +++++++++-
+ mm/damon/core-test.h  | 21 ++++++++++++
+ mm/damon/core.c       | 74 +++++++++++++++++++++++++++++++++++++++++++
+ mm/damon/paddr.c      | 11 +++----
+ mm/damon/vaddr.c      | 22 +++++++------
+ 5 files changed, 128 insertions(+), 16 deletions(-)
+
+
+base-commit: a5b7405a0eaa74d23547ede9c3820f01ee0a2c13
+-- 
+2.25.1
+
