@@ -2,126 +2,178 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34D307A26E5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Sep 2023 21:07:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D0057A2935
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Sep 2023 23:17:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236829AbjIOTGl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 15 Sep 2023 15:06:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34492 "EHLO
+        id S237452AbjIOVQz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 15 Sep 2023 17:16:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237059AbjIOTGe (ORCPT
+        with ESMTP id S238016AbjIOVQu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 15 Sep 2023 15:06:34 -0400
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F011E98
-        for <linux-kselftest@vger.kernel.org>; Fri, 15 Sep 2023 12:06:28 -0700 (PDT)
-Received: by mail-qv1-xf2e.google.com with SMTP id 6a1803df08f44-6564515ec4eso830266d6.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 15 Sep 2023 12:06:28 -0700 (PDT)
+        Fri, 15 Sep 2023 17:16:50 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 278D21B1
+        for <linux-kselftest@vger.kernel.org>; Fri, 15 Sep 2023 14:15:03 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1c39f2b4f5aso21860985ad.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 15 Sep 2023 14:15:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1694804788; x=1695409588; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/NNdNMoPNLRC5J4Us7rjn5YK+Bn2P8ki5j52BrAmQfc=;
-        b=IcUP3ZThw4r0yzR1wPf2MKuL86qqJTY3lGmO5wVIwizbo32mHmJNZZSk/HLCKHmzhW
-         Gla9MXisJOcGl205VuT46VlfVlhP6xgjKUvgEbqifKysED3psNQ5hqW3CZOjgckLmjeX
-         43LkHAbC+H1FUTt/bAuUJd+MV8LWoq2/Z74adGTaSMb3PVcM6bURd5o8B0Dd8ZnDhmch
-         F88soN5Lthi1YPNktkbKNwEd2wMiZaMQllXBNNsrJx1dLyIgTkvZTwdgw5Ap7ERCiBEj
-         aEE4u5wKUgjHR8vyQY0ZFUpZ7YEJ7LxF7BwF+AgWpkAv65snr4p5kovPzR4wE932OWEy
-         6kNQ==
+        d=telus.net; s=google; t=1694812502; x=1695417302; darn=vger.kernel.org;
+        h=thread-index:content-language:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7teTS75eyEcS4dZgXo+EcQywzkucHFzMxSjJFBdTG8Y=;
+        b=gQFM8VApOidWK0tDq0dRoHGzmCkfDoMbNV8gns2ba5RfW/7ZRoB3EquxOCaI7mBvsb
+         Ux2wCnc1eXaIeLe3O6HH/GVq3xIwewSTNpTJRmMwd1HIDWm8UMfqq/m1zHBcXNT2Xu6g
+         9y1ZugZuykwcnH2MAz36QkBqxlv38SmbxMIq3u44DYlWhyKIBy2yjokC2Kuzi9N5wpyk
+         baBPSAVjQBfqFad3c663Yc1itkgf3S97BKToEhcGq19bSnLeccFMarPQ9oRglVqZ0I4p
+         TqsgNILa/uJ3SUzaNmpQITFeFB61MfZ9Zf46mEX1PpyiPJX8c8vwNaMcCuNM5gxQAl3m
+         od+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1694804788; x=1695409588;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/NNdNMoPNLRC5J4Us7rjn5YK+Bn2P8ki5j52BrAmQfc=;
-        b=RgGVLif9otx/N2I5NYdOfex0J66iSByobDrq5pXz6fZG/mCBSnV6BHqqMSdjhRqPcu
-         +pdoZEvuxC2v89fzFIApFhQmKGhYhepTp219KtJlzLQlpTWXqckjw4fzTjg6NvqhGiXf
-         D+wr7qKLADoIIjfkHfktfXYmGdpHybFbkznK0yCesUhUSTm+SoFHlPEva0Q1B///xe9T
-         f5+OeIxRajGC7SkHXOXJJWhn8lFRj6baYuLMlF5NjNPOu6FAcX1qOnmdNTPKToTHeqdK
-         xc+pUcE0OXEXJyP0CX48jPOHHzBQ8fKQf224EkJyldZHJzWpF9IJs/qD/R2R4LbMUQmW
-         U6gQ==
-X-Gm-Message-State: AOJu0YwXJQ5FgrO7kIaEA8hv7Qo+2X4C4/ia2lptEwPbpgOAsvH9nHp2
-        8W98naQi3V3TojaxqwmJGtuWPBbFb2w2RxWB/FBcFg==
-X-Google-Smtp-Source: AGHT+IHnUmEPsIeFlP8ufy20De8OLVwpSSqcrp7lDWmTe6PTj/7WjDAOWdhgq5G3z26K+KHrakYbT0n8GVD/uGs4Htc=
-X-Received: by 2002:a0c:e301:0:b0:651:65ca:141d with SMTP id
- s1-20020a0ce301000000b0065165ca141dmr2504505qvl.37.1694804787931; Fri, 15 Sep
- 2023 12:06:27 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1694812502; x=1695417302;
+        h=thread-index:content-language:content-transfer-encoding
+         :mime-version:message-id:date:subject:in-reply-to:references:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7teTS75eyEcS4dZgXo+EcQywzkucHFzMxSjJFBdTG8Y=;
+        b=L/2pRKJPiY4C1SEBj8BuyT+GY3HNF1gWO07Mq59gdcveB93KH6ROhUYGz4KVfTDZP0
+         ef7ZUIjvjcUe80GX+6N9DIomSwGFwB0GfzS1wSzzBHYCd9NoEk30CTiBeULL96Bz06F5
+         2ty3Lthd6+I/OutwIodKGyMb51YhQu1356u2xXsYQomVO84z4n3/4rkCsUhHpzagUTHh
+         fUnG9R3KzsRhtgU4fx/ZCuBOptEWEzU/Tb4Whf5VV6KBYJfoRtoF6mt9L4AcZ/48IZR1
+         XPWgA+hBE1uQjBJ9pA/sWts1tYu/lu8iu5wGPVpwJ4bVL4vS4pW7Lbm/Az6vWGsPewAj
+         spqQ==
+X-Gm-Message-State: AOJu0YyD1zOXpHPHp+U+vcTCfGng3yXMean7zIenwIGIq3YRS99C90LG
+        WqdxuCISZuSbT9ljcfv+m6RxEA==
+X-Google-Smtp-Source: AGHT+IG+M7M64WtxGxEzGQ+nMIdywrrCr5EkuN09OBfh+ct5EkdMstf4ZBHrJuQ7SW4gopMdT0gz/Q==
+X-Received: by 2002:a17:902:ea0f:b0:1bf:557c:5a2c with SMTP id s15-20020a170902ea0f00b001bf557c5a2cmr3127053plg.44.1694812502564;
+        Fri, 15 Sep 2023 14:15:02 -0700 (PDT)
+Received: from DougS18 (s66-183-142-209.bc.hsia.telus.net. [66.183.142.209])
+        by smtp.gmail.com with ESMTPSA id jk15-20020a170903330f00b001b9fef7f454sm1478417plb.73.2023.09.15.14.15.01
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Fri, 15 Sep 2023 14:15:01 -0700 (PDT)
+From:   "Doug Smythies" <dsmythies@telus.net>
+To:     "'Swapnil Sapkal'" <swapnil.sapkal@amd.com>,
+        <rafael.j.wysocki@intel.com>, <Ray.Huang@amd.com>,
+        <li.meng@amd.com>, <shuah@kernel.org>
+Cc:     <sukrut.bellary@gmail.com>, <gautham.shenoy@amd.com>,
+        <wyes.karny@amd.com>, <Perry.Yuan@amd.com>,
+        <Mario.Limonciello@amd.com>, <zwisler@chromium.org>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>,
+        "'Srinivas Pandruvada'" <srinivas.pandruvada@linux.intel.com>,
+        "Doug Smythies" <dsmythies@telus.net>
+References: <20230915104057.132210-1-swapnil.sapkal@amd.com> <20230915104057.132210-3-swapnil.sapkal@amd.com>
+In-Reply-To: <20230915104057.132210-3-swapnil.sapkal@amd.com>
+Subject: RE: [PATCH 2/2] tools/power/x86/intel_pstate_tracer: Use pygnuplot package for Gnuplot
+Date:   Fri, 15 Sep 2023 14:15:03 -0700
+Message-ID: <00b201d9e819$b2447e80$16cd7b80$@telus.net>
 MIME-Version: 1.0
-References: <20230915050125.3609689-1-davidgow@google.com>
-In-Reply-To: <20230915050125.3609689-1-davidgow@google.com>
-From:   Sami Tolvanen <samitolvanen@google.com>
-Date:   Fri, 15 Sep 2023 12:05:50 -0700
-Message-ID: <CABCJKueOu+MwgvTcEUY51tJ1YjNjS-3zHhAHP=1TQUC1wd_1VA@mail.gmail.com>
-Subject: Re: [RFC PATCH] kunit: Add a macro to wrap a deferred action function
-To:     David Gow <davidgow@google.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Rae Moar <rmoar@google.com>, dlatypov@google.com,
-        Benjamin Berg <benjamin.berg@intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-hardening@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+        charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: en-ca
+Thread-Index: AQKwVkrK5CGttHhKf0ienv16Lobu0QKE+b5trlszgRA=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi David,
+On 2023.09.15 03:41 Swapnil Sapkal wrote:
 
-On Thu, Sep 14, 2023 at 10:01=E2=80=AFPM David Gow <davidgow@google.com> wr=
-ote:
->
-> KUnit's deferred action API accepts a void(*)(void *) function pointer
-> which is called when the test is exited. However, we very frequently
-> want to use existing functions which accept a single pointer, but which
-> may not be of type void*. While this is probably dodgy enough to be on
-> the wrong side of the C standard, it's been often used for similar
-> callbacks, and gcc's -Wcast-function-type seems to ignore cases where
-> the only difference is the type of the argument, assuming it's
-> compatible (i.e., they're both pointers to data).
->
-> However, clang 16 has introduced -Wcast-function-type-strict, which no
-> longer permits any deviation in function pointer type. This seems to be
-> because it'd break CFI, which validates the type of function calls.
->
-> This rather ruins our attempts to cast functions to defer them, and
-> leaves us with a few options:
-> 1. Stick our fingers in our ears an ignore the warning. (It's worked so
->    far, but probably isn't the right thing to do.)
-> 2. Find some horrible way of casting which fools the compiler into
->    letting us do the cast. (It'd still break CFI, though.)
-> 3. Disable the warning, and CFI for this function. This isn't optimal,
->    but may make sense for test-only code. However, I think we'd have to
->    do this for every function called, not just the caller, so maybe it's
->    not practical.
-> 4. Manually write wrappers around any such functions. This is ugly (do
->    we really want two copies of each function, one of which has no type
->    info and just forwards to the other). It could get repetitive.
-> 5. Generate these wrappers with a macro. That's what this patch does.
->
-> I'm broadly okay with any of the options above, though whatever we go
-> with will no doubt require some bikeshedding of details (should these
-> wrappers be public, do we dedupe them, etc).
->
-> Thoughts?
+> In intel_pstate_tracer.py, Gnuplot is used to generate 2D plots.
+> In current implementation this tracer gives error while importing
+> the module because Gnuplot is imported from package Gnuplot-py which
+> does not support python 3.x. Fix this by using pygnuplot package to
+> import this module.
 
-Using a macro to generate a wrapper is a reasonable approach IMO, and
-we've used it before in the kernel to fix type mismatches in
-indirectly called functions (v4l2-ioctl and cfg80211 come to mind at
-least).
+As described in the prerequisites section, the package name is distribution dependant.
+On my distribution the original package name is phython3-gnuplot,
+and it is working fine.
 
-Sami
+sys.version_info(major=3, minor=8, micro=10, releaselevel='final', serial=0)
+
+I don't currently have python3-pygnuplot installed, and so this patch breaks
+the  intel_pstate_tracer for me.
+
+So, I installed the python3-pygnuplot package, and it still didn't work, as there
+still wasn't a pygnuplot module to import.
+So, I found something called PyGnuplot.py and so changed to that and got further.
+But then it got upset with:
+
+  File "./intel_pstate_tracer.py.amd", line 298, in common_gnuplot_settings
+    g_plot = gnuplot.Gnuplot(persist=1)
+NameError: name 'gnuplot' is not defined
+
+I gave up and returned to the unpatched
+intel_pstate_tracer.py
+And checked that is still worked fine. It did.
+
+So, I do not accept this proposed patch.
+
+Not really related, but for a few years now I have been meaning to
+change the minimum python version prerequisite to >= 3.0 and
+to change the shebang line from this:
+
+#!/usr/bin/env python
+
+To this:
+
+#!/usr/bin/env python3
+
+I have to use the latter version on my distro.
+Back when I looked into it, things were inconsistent,
+so I didn't know what to do. The kernel tree has 52 .py files
+of the latter shebang and 11 of the former.
+
+... Doug
+
+> Signed-off-by: Swapnil Sapkal <swapnil.sapkal@amd.com>
+> ---
+> tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py      | 1 -
+> tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py | 4 ++--
+> 2 files changed, 2 insertions(+), 3 deletions(-)
+>
+> diff --git a/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py b/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
+> index 2448bb07973f..14f8d81f91de 100755
+> --- a/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
+> +++ b/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
+> @@ -27,7 +27,6 @@ import re
+>  import signal
+>  import sys
+>  import getopt
+> -import Gnuplot
+>  from numpy import *
+>  from decimal import *
+>  sys.path.append(os.path.join(os.path.dirname(__file__), '../intel_pstate_tracer'))
+> diff --git a/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+b/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+> index ec3323100e1a..68412abdd7d4 100755
+> --- a/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+> +++ b/tools/power/x86/intel_pstate_tracer/intel_pstate_tracer.py
+> @@ -32,7 +32,7 @@ import re
+>  import signal
+>  import sys
+> import getopt
+> -import Gnuplot
+> +from pygnuplot import gnuplot
+>  from numpy import *
+>  from decimal import *
+> 
+> @@ -295,7 +295,7 @@ def common_all_gnuplot_settings(output_png):
+> def common_gnuplot_settings():
+>      """ common gnuplot settings. """
+> 
+> -    g_plot = Gnuplot.Gnuplot(persist=1)
+> +    g_plot = gnuplot.Gnuplot(persist=1)
+> #   The following line is for rigor only. It seems to be assumed for .csv files
+>      g_plot('set datafile separator \",\"')
+>      g_plot('set ytics nomirror')
+> -- 
+> 2.34.1
+
+
