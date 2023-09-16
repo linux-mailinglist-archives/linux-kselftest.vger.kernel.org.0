@@ -2,74 +2,70 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A2847A2D51
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Sep 2023 04:10:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AA0E77A2D72
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Sep 2023 04:27:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238126AbjIPCKO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 15 Sep 2023 22:10:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35456 "EHLO
+        id S238431AbjIPC0q (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 15 Sep 2023 22:26:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45096 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237962AbjIPCKN (ORCPT
+        with ESMTP id S238551AbjIPC0P (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 15 Sep 2023 22:10:13 -0400
+        Fri, 15 Sep 2023 22:26:15 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08EDD173C;
-        Fri, 15 Sep 2023 19:10:08 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D3E2C433C9;
-        Sat, 16 Sep 2023 02:10:07 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 670DE195;
+        Fri, 15 Sep 2023 19:26:10 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 11994C433C7;
+        Sat, 16 Sep 2023 02:26:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1694830207;
-        bh=I2fvF7L5MWw0Xd6X92VF2iHBCnxT4grJu/1S+mVZwhQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SKhM4RCiPW/WTsWk5JRgIEMREqf3W6POSXpmuWjX+pNtpbUKhf9uSSUSCfWwTyVmt
-         O0IjP4qBbo7CWUTv7afVCGvVFZEuytTab+a9LlQKW78/utBW81O3uDztR6cOx5ev64
-         pIX82Gd/olQdHoBt8QLIc80rPpTTZd16EGrkeI9BkD0T3iFbc0tiYmCH/AFuqA2fFY
-         j4s2acBog/OIGBGeyBvNG+xzEImkvBvcF83HnXH9ajYft0z5YG6VdlyQ3G190oTika
-         y4PWdtiibt/78XrDsqhUy3bsC2YFWGbyhY1zo9tv79mChFaA9yJPIfOFqFoQTp8xQD
-         H4lwh2LfGuiTQ==
-From:   SeongJae Park <sj@kernel.org>
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     SeongJae Park <sj@kernel.org>, Shuah Khan <shuah@kernel.org>,
-        damon@lists.linux.dev, linux-mm@kvack.org,
+        s=k20201202; t=1694831170;
+        bh=sJzZeBQQH+9c13mQAMW2013+6AUbvTRRMEez+d4CAbY=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=JYoxJVj/6RScY2ul8Pt763aIayDeiFamfknxp4BEKy+oEVhiex7YtO32PDFaiYLUK
+         ApYIzbR5H7o6QSUF7ZPlEFyIgUlIdaXWHGxCd/LM6vajOWTqAlsliTxyrSnDVqs8u+
+         9RFP4i9u+w6KiGpN2PyxcvSBMk+2IlNblyMguMy3pLaREsnEyarSdGHMGyJDmekwn3
+         2TA9/1LnfC2cQUQdRjdS9EhBygUeLBARs3qFNYAswah9u3Y+h5z8dIDEQO/IplqUHS
+         m+1oawg9s5GDmH9TUHjxlSbXAaRBK9u+YoMkiFH+0RWCPKL+kEpmQoEqIvStYUrDoU
+         09ZedBkovhCHQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id E9864E26880;
+        Sat, 16 Sep 2023 02:26:09 +0000 (UTC)
+Subject: Re: [GIT PULL] Kselftest second fixes update for Linux 6.6-rc2
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <9e0ad8c3-4441-d054-208f-657fe4faff5e@linuxfoundation.org>
+References: <9e0ad8c3-4441-d054-208f-657fe4faff5e@linuxfoundation.org>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <9e0ad8c3-4441-d054-208f-657fe4faff5e@linuxfoundation.org>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-6.6-rc2
+X-PR-Tracked-Commit-Id: 7e021da80f48582171029714f8a487347f29dddb
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 57d88e8a5974644039fbc47806bac7bb12025636
+Message-Id: <169483116994.10033.2548666273472168813.pr-tracker-bot@kernel.org>
+Date:   Sat, 16 Sep 2023 02:26:09 +0000
+To:     Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        shuah <shuah@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 7/9] selftests/damon/sysfs: test DAMOS apply intervals
-Date:   Sat, 16 Sep 2023 02:09:43 +0000
-Message-Id: <20230916020945.47296-8-sj@kernel.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230916020945.47296-1-sj@kernel.org>
-References: <20230916020945.47296-1-sj@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Update DAMON selftests to test existence of the file for reading/writing
-DAMOS apply interval under each scheme directory.
+The pull request you sent on Fri, 15 Sep 2023 12:37:09 -0600:
 
-Signed-off-by: SeongJae Park <sj@kernel.org>
----
- tools/testing/selftests/damon/sysfs.sh | 1 +
- 1 file changed, 1 insertion(+)
+> git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-6.6-rc2
 
-diff --git a/tools/testing/selftests/damon/sysfs.sh b/tools/testing/selftests/damon/sysfs.sh
-index 60a9a305aef0..56f0230a8b92 100644
---- a/tools/testing/selftests/damon/sysfs.sh
-+++ b/tools/testing/selftests/damon/sysfs.sh
-@@ -175,6 +175,7 @@ test_scheme()
- 	ensure_dir "$scheme_dir" "exist"
- 	ensure_file "$scheme_dir/action" "exist" "600"
- 	test_access_pattern "$scheme_dir/access_pattern"
-+	ensure_file "$scheme_dir/apply_interval_us" "exist" "600"
- 	test_quotas "$scheme_dir/quotas"
- 	test_watermarks "$scheme_dir/watermarks"
- 	test_filters "$scheme_dir/filters"
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/57d88e8a5974644039fbc47806bac7bb12025636
+
+Thank you!
+
 -- 
-2.25.1
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
