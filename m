@@ -2,86 +2,182 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45ECA7A3610
-	for <lists+linux-kselftest@lfdr.de>; Sun, 17 Sep 2023 17:09:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C0237A361F
+	for <lists+linux-kselftest@lfdr.de>; Sun, 17 Sep 2023 17:22:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233251AbjIQPJH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 17 Sep 2023 11:09:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44384 "EHLO
+        id S229594AbjIQPWG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 17 Sep 2023 11:22:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237269AbjIQPI7 (ORCPT
+        with ESMTP id S233512AbjIQPVr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 17 Sep 2023 11:08:59 -0400
-Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B84DB187;
-        Sun, 17 Sep 2023 08:08:53 -0700 (PDT)
-Received: (from willy@localhost)
-        by pcw.home.local (8.15.2/8.15.2/Submit) id 38HF8KQT014506;
-        Sun, 17 Sep 2023 17:08:20 +0200
-Date:   Sun, 17 Sep 2023 17:08:20 +0200
-From:   Willy Tarreau <w@1wt.eu>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/4] tools/nolibc: avoid unused parameter warnings for
- ENOSYS fallbacks
-Message-ID: <20230917150820.GA14418@1wt.eu>
-References: <20230914-nolibc-syscall-nr-v1-0-e50df410da11@weissschuh.net>
- <20230914-nolibc-syscall-nr-v1-2-e50df410da11@weissschuh.net>
- <20230917025851.GE9646@1wt.eu>
- <2bd688b7-5f1b-44ca-a41b-6e90dc3e8557@t-8ch.de>
- <20230917094827.GA11081@1wt.eu>
- <1ef57a1e-89d3-4eb6-be12-3045a31f99e4@t-8ch.de>
+        Sun, 17 Sep 2023 11:21:47 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0468B5;
+        Sun, 17 Sep 2023 08:21:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1694964099;
+        bh=IIibg1/4WvIjXQyZJl+4IBf/DvAGCXDdcSGNSt2pWjA=;
+        h=From:Date:Subject:To:Cc:From;
+        b=LlqUgOyEsBqAZqjJivPFcSsQLVsFgWx5g0J7ezOBTL/g0AJZYqIhsArLRKAkEKYwa
+         2DCtFNjYNDQQTkXxJ6gKzi+WDjtKJx4OXgMHeNOWpvuI7lx441MwIrivlZjiVXYxMH
+         gkxxH3KX0nTexxX7Po80lIjCgsDBLSB98egltGts=
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Date:   Sun, 17 Sep 2023 17:21:38 +0200
+Subject: [PATCH RFC v2] selftests/nolibc: don't embed initramfs into kernel
+ image
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1ef57a1e-89d3-4eb6-be12-3045a31f99e4@t-8ch.de>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-Id: <20230917-nolibc-initramfs-v2-1-f0f293a8b198@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIAIEZB2UC/3WNwQrCMBBEf6Xs2UiSxoCehIIf4FV6iMnWLGgq2
+ ViV0n839O7xzTBvZmDMhAyHZoaMEzGNqYLeNOCjSzcUFCqDlrqVe2VFGu909YISleweAwszBCn
+ R+VbvLNTZM+NAn1V5gfOpg76GkbiM+bveTGqt/hsnJaQwRln0GLyz4fhGYmYfX3GbsEC/LMsPb
+ 8YCkLoAAAA=
+To:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>, Willy Tarreau <w@1wt.eu>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1694964099; l=5921;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=IIibg1/4WvIjXQyZJl+4IBf/DvAGCXDdcSGNSt2pWjA=;
+ b=TMywZlcbRfqxkouH8taMqHBh3L3qIqomdcFFYO6Sgvb1gIcjNkUTBZBzTsZX2PgpnQIyVEeek
+ RpFYtG0ll4MB5N+H1KBQwsBkanZ7UaY2LH6RT6Wp84CFmzlJLUWQu9r
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Sep 17, 2023 at 05:07:18PM +0200, Thomas Wei�schuh wrote:
-> On 2023-09-17 11:48:27+0200, Willy Tarreau wrote:
-> > [..]
-> > > Maybe the macro-equivalent of this?
-> > > 
-> > > static inline int __nolibc_enosys(...)
-> > > {
-> > > 	return -ENOSYS;
-> > > }
-> > > 
-> > > The only-vararg function unfortunately needs C23 so we can't use it.
-> > >
-> > > It's clear to the users that this is about ENOSYS and we don't need a
-> > > bunch of new macros similar.
-> > 
-> > I like it, I didn't think about varargs, it's an excellent idea! Let's
-> > just do simpler, start with a first arg "syscall_num" that we may later
-> > reuse for debugging, and just mark this one unused:
-> > 
-> >   static inline int __nolibc_enosys(int syscall_num, ...)
-> >   {
-> > 	(void)syscall_num;
-> >   	return -ENOSYS;
-> >   }
-> 
-> But which syscall_num to use, as the point of __nolibc_enosys() would be
-> that no syscall number is available and the defines are missing.
+When the initramfs is embedded into the kernel each rebuild of it will
+trigger a full kernel relink and all the expensive postprocessing steps.
 
-good point :-)
+Currently nolibc-test and therefore the initramfs are always rebuild,
+even without source changes, leading to lots of slow kernel relinks.
 
-> For debugging we could add a string argument, though.
+Instead of linking the initramfs into the kernel assemble it manually
+and pass it explicitly to qemu.
+This avoids all of the kernel relinks.
 
-That works for me.
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+Currently the nolibc testsuite embeds the test executable into a kernel
+image with CONFIG_INITRAMFS_SOURCE.
+This forces a full kernel relink everytime the test executable is
+updated.
 
-Willy
+This relinking step dominates the test cycle.
+It is slower than building and running the test in qemu together.
+
+With a bit of Makefile-shuffling the relinking can be avoided.
+---
+Changes in v2:
+- avoid need to modify top-level Makefile
+- drop patch removing "rerun" target
+- add kernel-standalone target
+- Link to v1: https://lore.kernel.org/r/20230916-nolibc-initramfs-v1-0-4416ecedca6d@weissschuh.net
+---
+ tools/testing/selftests/nolibc/Makefile | 42 ++++++++++++++++++++-------------
+ 1 file changed, 26 insertions(+), 16 deletions(-)
+
+diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+index 689658f81a19..ee6a9ad28cfd 100644
+--- a/tools/testing/selftests/nolibc/Makefile
++++ b/tools/testing/selftests/nolibc/Makefile
+@@ -131,18 +131,20 @@ REPORT  ?= awk '/\[OK\][\r]*$$/{p++} /\[FAIL\][\r]*$$/{if (!f) printf("\n"); f++
+ 
+ help:
+ 	@echo "Supported targets under selftests/nolibc:"
+-	@echo "  all          call the \"run\" target below"
+-	@echo "  help         this help"
+-	@echo "  sysroot      create the nolibc sysroot here (uses \$$ARCH)"
+-	@echo "  nolibc-test  build the executable (uses \$$CC and \$$CROSS_COMPILE)"
+-	@echo "  libc-test    build an executable using the compiler's default libc instead"
+-	@echo "  run-user     runs the executable under QEMU (uses \$$XARCH, \$$TEST)"
+-	@echo "  initramfs    prepare the initramfs with nolibc-test"
+-	@echo "  defconfig    create a fresh new default config (uses \$$XARCH)"
+-	@echo "  kernel       (re)build the kernel with the initramfs (uses \$$XARCH)"
+-	@echo "  run          runs the kernel in QEMU after building it (uses \$$XARCH, \$$TEST)"
+-	@echo "  rerun        runs a previously prebuilt kernel in QEMU (uses \$$XARCH, \$$TEST)"
+-	@echo "  clean        clean the sysroot, initramfs, build and output files"
++	@echo "  all               call the \"run\" target below"
++	@echo "  help              this help"
++	@echo "  sysroot           create the nolibc sysroot here (uses \$$ARCH)"
++	@echo "  nolibc-test       build the executable (uses \$$CC and \$$CROSS_COMPILE)"
++	@echo "  libc-test         build an executable using the compiler's default libc instead"
++	@echo "  run-user          runs the executable under QEMU (uses \$$XARCH, \$$TEST)"
++	@echo "  initramfs.cpio    prepare the initramfs archive with nolibc-test"
++	@echo "  initramfs         prepare the initramfs tree with nolibc-test"
++	@echo "  defconfig         create a fresh new default config (uses \$$XARCH)"
++	@echo "  kernel            (re)build the kernel (uses \$$XARCH)"
++	@echo "  kernel-standalone (re)build the kernel with the initramfs (uses \$$XARCH)"
++	@echo "  run               runs the kernel in QEMU after building it (uses \$$XARCH, \$$TEST)"
++	@echo "  rerun             runs a previously prebuilt kernel in QEMU (uses \$$XARCH, \$$TEST)"
++	@echo "  clean             clean the sysroot, initramfs, build and output files"
+ 	@echo ""
+ 	@echo "The output file is \"run.out\". Test ranges may be passed using \$$TEST."
+ 	@echo ""
+@@ -195,6 +197,9 @@ run-user: nolibc-test
+ 	$(Q)qemu-$(QEMU_ARCH) ./nolibc-test > "$(CURDIR)/run.out" || :
+ 	$(Q)$(REPORT) $(CURDIR)/run.out
+ 
++initramfs.cpio: kernel nolibc-test
++	$(QUIET_GEN)echo 'file /init nolibc-test 755 0 0' | $(srctree)/usr/gen_init_cpio - > initramfs.cpio
++
+ initramfs: nolibc-test
+ 	$(QUIET_MKDIR)mkdir -p initramfs
+ 	$(call QUIET_INSTALL, initramfs/init)
+@@ -203,17 +208,20 @@ initramfs: nolibc-test
+ defconfig:
+ 	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper $(DEFCONFIG) prepare
+ 
+-kernel: initramfs
++kernel:
++	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(IMAGE_NAME)
++
++kernel-standalone: initramfs
+ 	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(IMAGE_NAME) CONFIG_INITRAMFS_SOURCE=$(CURDIR)/initramfs
+ 
+ # run the tests after building the kernel
+-run: kernel
+-	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
++run: kernel initramfs.cpio
++	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -initrd initramfs.cpio -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
+ 	$(Q)$(REPORT) $(CURDIR)/run.out
+ 
+ # re-run the tests from an existing kernel
+ rerun:
+-	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
++	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -initrd initramfs.cpio -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
+ 	$(Q)$(REPORT) $(CURDIR)/run.out
+ 
+ # report with existing test log
+@@ -227,6 +235,8 @@ clean:
+ 	$(Q)rm -f nolibc-test
+ 	$(call QUIET_CLEAN, libc-test)
+ 	$(Q)rm -f libc-test
++	$(call QUIET_CLEAN, initramfs.cpio)
++	$(Q)rm -rf initramfs.cpio
+ 	$(call QUIET_CLEAN, initramfs)
+ 	$(Q)rm -rf initramfs
+ 	$(call QUIET_CLEAN, run.out)
+
+---
+base-commit: 3f79a57865b33f49fdae6655510bd27c8e6610e0
+change-id: 20230916-nolibc-initramfs-4fd00eac3256
+
+Best regards,
+-- 
+Thomas Weißschuh <linux@weissschuh.net>
+
