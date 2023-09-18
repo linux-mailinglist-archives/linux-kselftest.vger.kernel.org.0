@@ -2,71 +2,76 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF03A7A50BD
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Sep 2023 19:14:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E830C7A50E5
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Sep 2023 19:25:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230353AbjIRROU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 18 Sep 2023 13:14:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39520 "EHLO
+        id S229652AbjIRRZG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 18 Sep 2023 13:25:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbjIRROS (ORCPT
+        with ESMTP id S229989AbjIRRZF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 18 Sep 2023 13:14:18 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 673C090
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 Sep 2023 10:14:13 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id ca18e2360f4ac-7950d0c85bbso52515139f.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 Sep 2023 10:14:13 -0700 (PDT)
+        Mon, 18 Sep 2023 13:25:05 -0400
+Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 803D4121
+        for <linux-kselftest@vger.kernel.org>; Mon, 18 Sep 2023 10:24:59 -0700 (PDT)
+Received: by mail-io1-xd2b.google.com with SMTP id ca18e2360f4ac-77dcff76e35so59844439f.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 18 Sep 2023 10:24:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1695057253; x=1695662053; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1695057899; x=1695662699; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ie4OPVJg6VkbmJGC/wWGQH6IojD/zRo6+BSb7Fsy9JI=;
-        b=DNl+DzVkGgl4TJkwuJ9c4+5wGWNvbM2InDF1SNefKskc8l6AD0liH3lWzupbRCaOJn
-         v5jd4+DMSz/nq/X9WKS8SWRlqgGn0yvZzMygyL3s8IFhILMwXoi8nK17pknxBD7E85+a
-         jKViiTDI4nsUYP843NuTF3b6mNpkiv7p738A8=
+        bh=XHmyNtZRGj+r/j/G7CbRibxxcZBx+UTQ5mP0xbLF240=;
+        b=IE5+O2n0ShLxXU829jR1cINfhvWeMXuKxxmgOV/xM08cpVvbixRLLIRlHA3MkMXHOZ
+         wj7od0nV265UlEfALm68RPTbDRACmwEQkalGfNRwgJRHjSjGyKeyeEjxXvibeeYrMW3l
+         WH4J0ztK3mkbcmYx9AyI8ATHKHtGrjxPCStlI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695057253; x=1695662053;
+        d=1e100.net; s=20230601; t=1695057899; x=1695662699;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ie4OPVJg6VkbmJGC/wWGQH6IojD/zRo6+BSb7Fsy9JI=;
-        b=IjI/7psMTo+WL78cPGOCn57sHhpyCW2B01MXJvtNjg4abv+YZKY5NfNd8V5kx1a+Uw
-         pIWQXpVpMVXjfKfBX362pvQNOunu6A4lv5ClUaeqZyI4Jq/vO9+tFNBlDOVYNhS4kinG
-         tLlxCMEAsn39ecoYaA8/vakFnjciEA6ii2OsP3TVSndyODfO7G7vhMlaAp8O3ZrbEmJK
-         d8VnSAUhNgBqTqI7grbYq3OgzHnTk+Qw9dXgCkXWP16RJASaLQLCrW/iXeGR9vxah9/h
-         0Pe+QcSUIdRwhME3aQtixo9xG7Phd9EWy2HqWsJbpgqzEVIgj8Fi5sNfiigNO0nmDwwy
-         3eeA==
-X-Gm-Message-State: AOJu0YyrteElryRzbK7HtDkoUTlRP0jlv4DO53IJ7i+F1TsrK/gHJrZw
-        PMXNRPcncMQr/TtGklb8fJ9l0w==
-X-Google-Smtp-Source: AGHT+IG2V3CJARBNRxPKJKeXyTh9r0NpUgCO8mWIrC0bsn2cdb/nmfGR+IUEAWSd4X2yjN18/40B7g==
-X-Received: by 2002:a05:6602:2cd1:b0:794:cbb8:725e with SMTP id j17-20020a0566022cd100b00794cbb8725emr13416129iow.2.1695057252743;
-        Mon, 18 Sep 2023 10:14:12 -0700 (PDT)
+        bh=XHmyNtZRGj+r/j/G7CbRibxxcZBx+UTQ5mP0xbLF240=;
+        b=e+szgNZ8Tse1A7a0NnVP5abdccBrY4zuk0WAHrWWYmtHIu+n2e9MgrDzkVpPtVHWKc
+         Elc2DRbxsDyJhPDmvWJ9/Ouo2KVdGwpCIm5zbS2shs3m+kgFH7xwnmy0zgDngNW47DF5
+         KYuVDieRvC8fwGpZcDM6jHVk85Hq8xMVKdrAsvdLsEh9WEg64rwsXiQUElGWmjKP3IGl
+         pKyp+sb+SN4rWTvl3zPFRfm2jdXnbMOHz/J9h3Wv23UxzmYPJxh3rH0y++KMEbaHGiPs
+         ORfl7Hq2kfIcZaTZxCNI41s1VwEgKSnsOqw2H2yEckkO+bau7g0qtXFY5HC46KDFHmCg
+         tuEQ==
+X-Gm-Message-State: AOJu0YzeqFtyETlWg2M2rWhAiSi3HTFmgQXuD4AhEmPiVYIAQ1fXrhwy
+        amNuUF0QOCyy3/xmHz4MYtrynw==
+X-Google-Smtp-Source: AGHT+IG8zSvNfr6+khcoHiE7xQDRSFBwUFrI6G55nMfl8DKpv4GXtM1aJNknfr8iPELEl9G5ZXABiw==
+X-Received: by 2002:a6b:3bce:0:b0:790:958e:a667 with SMTP id i197-20020a6b3bce000000b00790958ea667mr11136825ioa.2.1695057898872;
+        Mon, 18 Sep 2023 10:24:58 -0700 (PDT)
 Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id x13-20020a5e830d000000b0077e3566a801sm2872515iom.29.2023.09.18.10.14.12
+        by smtp.gmail.com with ESMTPSA id h15-20020a056602130f00b007911db1e6f4sm3056358iov.44.2023.09.18.10.24.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Sep 2023 10:14:12 -0700 (PDT)
-Message-ID: <3a279a31-7a3b-fed9-e50f-b0d86f4de4f6@linuxfoundation.org>
-Date:   Mon, 18 Sep 2023 11:14:11 -0600
+        Mon, 18 Sep 2023 10:24:58 -0700 (PDT)
+Message-ID: <2535d4a7-62fe-c9b2-3b86-cf418760087e@linuxfoundation.org>
+Date:   Mon, 18 Sep 2023 11:24:57 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.15.1
-Subject: Re: [PATCH] selftests: uevent filtering: fix return on error in
- uevent_listener
+Subject: Re: [PATCH v2 2/3] selftests/hid: do not manually call
+ headers_install
 Content-Language: en-US
-To:     Javier Carrasco <javier.carrasco.cruz@gmail.com>,
+To:     Justin Stitt <justinstitt@google.com>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
         Shuah Khan <shuah@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+Cc:     Eduard Zingerman <eddyz87@gmail.com>, linux-input@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bpf@vger.kernel.org, Benjamin Tissoires <bentiss@kernel.org>,
         Shuah Khan <skhan@linuxfoundation.org>
-References: <20230916-topic-self_uevent_filtering-v1-1-26ede507d454@gmail.com>
+References: <20230908-kselftest-09-08-v2-0-0def978a4c1b@google.com>
+ <20230908-kselftest-09-08-v2-2-0def978a4c1b@google.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20230916-topic-self_uevent_filtering-v1-1-26ede507d454@gmail.com>
+In-Reply-To: <20230908-kselftest-09-08-v2-2-0def978a4c1b@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,44 +79,18 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 9/16/23 10:11, Javier Carrasco wrote:
-> Assign the error value to the real returned variable fret. The ret
-> variable is used to check function return values and assigning values to
-> it on error has no effect as it is an unused value.
+On 9/8/23 16:22, Justin Stitt wrote:
+> From: Benjamin Tissoires <bentiss@kernel.org>
 > 
-> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-> ---
->   tools/testing/selftests/uevent/uevent_filtering.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+> "make headers" is a requirement before calling make on the selftests
+> dir, so we should not have to manually install those headers
 > 
-> diff --git a/tools/testing/selftests/uevent/uevent_filtering.c b/tools/testing/selftests/uevent/uevent_filtering.c
-> index 5cebfb356345..e191b6d69f8c 100644
-> --- a/tools/testing/selftests/uevent/uevent_filtering.c
-> +++ b/tools/testing/selftests/uevent/uevent_filtering.c
-> @@ -158,7 +158,7 @@ static int uevent_listener(unsigned long post_flags, bool expect_uevent,
->   		r = recvmsg(sk_fd, &hdr, 0);
->   		if (r <= 0) {
->   			fprintf(stderr, "%s - Failed to receive uevent\n", strerror(errno));
-> -			ret = -1;
-> +			fret = -1;
->   			break;
->   		}
->   
-> @@ -172,7 +172,7 @@ static int uevent_listener(unsigned long post_flags, bool expect_uevent,
->   
->   		if (!expect_uevent) {
->   			fprintf(stderr, "Received unexpected uevent:\n");
-> -			ret = -1;
-> +			fret = -1;
->   		}
->   
->   		if (TH_LOG_ENABLED) {
-> 
+> Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
 
-Thank you for the find. Please simplify these leg and use just one
-variable for failures, ret or fret and not both to avoid future
-coding errors like this one you are fixing.
+Thank for making this change. Just check bpf continues to
+compile and run though.
+
+Acked-by: Shuah Khan <skhan@linuxfoundation.org>
 
 thanks,
 -- Shuah
-
