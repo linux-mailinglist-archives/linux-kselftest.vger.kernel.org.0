@@ -2,62 +2,70 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A48D7A508C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Sep 2023 19:08:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF03A7A50BD
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Sep 2023 19:14:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231414AbjIRRIv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 18 Sep 2023 13:08:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55520 "EHLO
+        id S230353AbjIRROU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 18 Sep 2023 13:14:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231382AbjIRRIq (ORCPT
+        with ESMTP id S230006AbjIRROS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 18 Sep 2023 13:08:46 -0400
-Received: from mail-oa1-x2a.google.com (mail-oa1-x2a.google.com [IPv6:2001:4860:4864:20::2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C583D9
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 Sep 2023 10:08:26 -0700 (PDT)
-Received: by mail-oa1-x2a.google.com with SMTP id 586e51a60fabf-1c504386374so3114378fac.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 Sep 2023 10:08:26 -0700 (PDT)
+        Mon, 18 Sep 2023 13:14:18 -0400
+Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 673C090
+        for <linux-kselftest@vger.kernel.org>; Mon, 18 Sep 2023 10:14:13 -0700 (PDT)
+Received: by mail-io1-xd2f.google.com with SMTP id ca18e2360f4ac-7950d0c85bbso52515139f.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 18 Sep 2023 10:14:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695056905; x=1695661705; darn=vger.kernel.org;
-        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YgsQjPYSA4x9EUAST26pLIMgzwk5/fmUNEDBBVE+P4A=;
-        b=grH+ZwK1UYdft+7Si3P+7Qi9uLWgQuuOv9eINrHhKroBVS1Kh6l3QkoNNGtH4pEakN
-         BrzDNC0JnZTyHw0xLZDeHCMAiO6VTjx1L2pRAkxz+SpfxPAHSZnRq2GLxTBWoOA1SOIc
-         JF1N82wp5zQby9S9b9Taun6y5IWbc8OKPhpLIx9Algzg3NFjCZ1P/hiFUwNO7s5nNFxg
-         bLEEXtvB4//lmQQJP7mgXgAh1r23WkUg/9retWQTLykXkBxJ63yAg9T3DwFlu/YwwypM
-         RnHDLK9gzhNTuWa4DBJMU55lquUBIYFe+9b6aJCrT41OnkF9WI28v/VOK1iQTGWwRJzZ
-         wf6A==
+        d=linuxfoundation.org; s=google; t=1695057253; x=1695662053; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ie4OPVJg6VkbmJGC/wWGQH6IojD/zRo6+BSb7Fsy9JI=;
+        b=DNl+DzVkGgl4TJkwuJ9c4+5wGWNvbM2InDF1SNefKskc8l6AD0liH3lWzupbRCaOJn
+         v5jd4+DMSz/nq/X9WKS8SWRlqgGn0yvZzMygyL3s8IFhILMwXoi8nK17pknxBD7E85+a
+         jKViiTDI4nsUYP843NuTF3b6mNpkiv7p738A8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695056905; x=1695661705;
-        h=to:subject:message-id:date:from:sender:mime-version
+        d=1e100.net; s=20230601; t=1695057253; x=1695662053;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YgsQjPYSA4x9EUAST26pLIMgzwk5/fmUNEDBBVE+P4A=;
-        b=Xp1ztbZ5H5B5H04tGRIE4NOTPLFqcpW+CYveL1xFg8KZzSoj1UiQdOEg1EQOgaNTzX
-         HUdgtLV7jRLyESBRr+wkNSchNzDMZqHemK+3B/8JJqzGT6Y44NV81SuJRtraFqqXSRD1
-         2F4KYwbMUN3lmD6YdlK7y4h3XhqBsZTXN96oia2XX4gaJztSu7qEY92c8hOF6pdBfGmi
-         Iltj0qRXBtoT/2iiZcFBIEv7xvvN04cAheHqYWKOTJUM3XN/bi/aRCm1JjQQwAM/keqO
-         riz7RMnbsx1M8qSr8sEuJEyZffRFojejQG3YLvPboOC4JAQydilO2oKoITMWaNMFb6ba
-         j2QQ==
-X-Gm-Message-State: AOJu0YwCXzk5hbuuesWHrvahFMc3tEcZ+RI8iyCuj5kaQqTbdfrCj/LG
-        y1f0k5reagV1GlgshQ1sBJYzy6eUL4E2g8zotv0=
-X-Google-Smtp-Source: AGHT+IF2GxNrWO1Srah90nHDU+JvJDmeDyKQlmweOAZYhoYGbE72HIbpNWeELu2uIrvyY/Q2RO3xUdYeJ37Umz9NSbU=
-X-Received: by 2002:a05:6870:b691:b0:1d5:b442:5de7 with SMTP id
- cy17-20020a056870b69100b001d5b4425de7mr10340230oab.35.1695056904872; Mon, 18
- Sep 2023 10:08:24 -0700 (PDT)
+        bh=ie4OPVJg6VkbmJGC/wWGQH6IojD/zRo6+BSb7Fsy9JI=;
+        b=IjI/7psMTo+WL78cPGOCn57sHhpyCW2B01MXJvtNjg4abv+YZKY5NfNd8V5kx1a+Uw
+         pIWQXpVpMVXjfKfBX362pvQNOunu6A4lv5ClUaeqZyI4Jq/vO9+tFNBlDOVYNhS4kinG
+         tLlxCMEAsn39ecoYaA8/vakFnjciEA6ii2OsP3TVSndyODfO7G7vhMlaAp8O3ZrbEmJK
+         d8VnSAUhNgBqTqI7grbYq3OgzHnTk+Qw9dXgCkXWP16RJASaLQLCrW/iXeGR9vxah9/h
+         0Pe+QcSUIdRwhME3aQtixo9xG7Phd9EWy2HqWsJbpgqzEVIgj8Fi5sNfiigNO0nmDwwy
+         3eeA==
+X-Gm-Message-State: AOJu0YyrteElryRzbK7HtDkoUTlRP0jlv4DO53IJ7i+F1TsrK/gHJrZw
+        PMXNRPcncMQr/TtGklb8fJ9l0w==
+X-Google-Smtp-Source: AGHT+IG2V3CJARBNRxPKJKeXyTh9r0NpUgCO8mWIrC0bsn2cdb/nmfGR+IUEAWSd4X2yjN18/40B7g==
+X-Received: by 2002:a05:6602:2cd1:b0:794:cbb8:725e with SMTP id j17-20020a0566022cd100b00794cbb8725emr13416129iow.2.1695057252743;
+        Mon, 18 Sep 2023 10:14:12 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id x13-20020a5e830d000000b0077e3566a801sm2872515iom.29.2023.09.18.10.14.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Sep 2023 10:14:12 -0700 (PDT)
+Message-ID: <3a279a31-7a3b-fed9-e50f-b0d86f4de4f6@linuxfoundation.org>
+Date:   Mon, 18 Sep 2023 11:14:11 -0600
 MIME-Version: 1.0
-Sender: mrmgfocus@gmail.com
-Received: by 2002:a05:6358:9896:b0:139:8565:29c6 with HTTP; Mon, 18 Sep 2023
- 10:08:24 -0700 (PDT)
-From:   Dr Lisa Williams <lw4666555@gmail.com>
-Date:   Mon, 18 Sep 2023 10:08:24 -0700
-X-Google-Sender-Auth: C7EyQVAUxNXmFec-lYaEr8u-EYY
-Message-ID: <CAPNbEC8qLbcSLphD80qGouFW-=FrAGfJjQ4nyZ=1GyFX+-2uRw@mail.gmail.com>
-Subject: Hi,
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH] selftests: uevent filtering: fix return on error in
+ uevent_listener
+Content-Language: en-US
+To:     Javier Carrasco <javier.carrasco.cruz@gmail.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230916-topic-self_uevent_filtering-v1-1-26ede507d454@gmail.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20230916-topic-self_uevent_filtering-v1-1-26ede507d454@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,13 +74,44 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi,
+On 9/16/23 10:11, Javier Carrasco wrote:
+> Assign the error value to the real returned variable fret. The ret
+> variable is used to check function return values and assigning values to
+> it on error has no effect as it is an unused value.
+> 
+> Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+> ---
+>   tools/testing/selftests/uevent/uevent_filtering.c | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/uevent/uevent_filtering.c b/tools/testing/selftests/uevent/uevent_filtering.c
+> index 5cebfb356345..e191b6d69f8c 100644
+> --- a/tools/testing/selftests/uevent/uevent_filtering.c
+> +++ b/tools/testing/selftests/uevent/uevent_filtering.c
+> @@ -158,7 +158,7 @@ static int uevent_listener(unsigned long post_flags, bool expect_uevent,
+>   		r = recvmsg(sk_fd, &hdr, 0);
+>   		if (r <= 0) {
+>   			fprintf(stderr, "%s - Failed to receive uevent\n", strerror(errno));
+> -			ret = -1;
+> +			fret = -1;
+>   			break;
+>   		}
+>   
+> @@ -172,7 +172,7 @@ static int uevent_listener(unsigned long post_flags, bool expect_uevent,
+>   
+>   		if (!expect_uevent) {
+>   			fprintf(stderr, "Received unexpected uevent:\n");
+> -			ret = -1;
+> +			fret = -1;
+>   		}
+>   
+>   		if (TH_LOG_ENABLED) {
+> 
 
-My name is Dr. Lisa Williams, from the United States, currently living
-in the United Kingdom.
+Thank you for the find. Please simplify these leg and use just one
+variable for failures, ret or fret and not both to avoid future
+coding errors like this one you are fixing.
 
-I hope you consider my friend request. I will share some of my photos
-and more details about me when I get your reply.
+thanks,
+-- Shuah
 
-With love
-Lisa
