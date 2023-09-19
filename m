@@ -2,58 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EAC67A6CDC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Sep 2023 23:18:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BED67A6CDE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Sep 2023 23:19:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233353AbjISVSw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 19 Sep 2023 17:18:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47452 "EHLO
+        id S233342AbjISVTF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 19 Sep 2023 17:19:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233342AbjISVSw (ORCPT
+        with ESMTP id S233341AbjISVTF (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Sep 2023 17:18:52 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1C54BF
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Sep 2023 14:18:42 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-529fa243739so5703a12.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Sep 2023 14:18:42 -0700 (PDT)
+        Tue, 19 Sep 2023 17:19:05 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFB60AF
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Sep 2023 14:18:58 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-4047c6ec21dso32445e9.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Sep 2023 14:18:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695158321; x=1695763121; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1695158337; x=1695763137; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fFbUVEyx9xFAaoaUBhgKpTEnsBdbnWty5nYMgOKKdeM=;
-        b=PdZHH/GAAinrFGJ3mR48Z0x319C0jQBtHbh8UabVAUbPmnlKaYKqxvzu+7AqpNELPq
-         5b9WMnaoBOU5GBU8w1Tzg1WyFJyVIRL9Z2/ZPQSuyJRS6vZ6yP7KRbu7n54BmW1becHD
-         Cadc/BVgrwC8VBR77zTvHlop358KOPrK8kKKv4VndAMrOpOIRLklJOvr0t2PTh6xoC20
-         L1Eb3/XnxoKyqdqGlZxdx/688ficfCrhrsCd1DsPS2hKhN5eUStyBzG+o8Y11K7Ao+kJ
-         2NaIQP9UTxGwWtdFUSONCzvSO/cmfvjNXd62R1T5KgaiVOIfG5J4I+h0dATuAqw4ovNR
-         zdWg==
+        bh=0mEjcifAMmd5ubXRblSphhZqePAkqWyOBejjs3OPgzw=;
+        b=LVZampVqDstBkkl/CfPQIngFTT0tPmgZNJmAIIR5+ShoRpeWz1hygkBimXHsKfmWIt
+         43xf996gPka+GBC4o0zEEce88LOV9P4hrlFJACzoijOYo3vfRfQs55maIIeBCN5b4iNq
+         Vlx4GUBnkLKDkVPgxw3NkAyDn62tz/b6A35hEavPQ5Sz9ioKWZXmS8logCtXlLujmh7Y
+         tyk96KpMLprvPZ5ELFxRJkWpbEaCFLi0Vzis0wt18K2VGGtGvydsbkqirWUiYhj3di6e
+         gw6HwtrPtPKgjvofCnT5mNLbFybFARfs23J2OUa2sV8U8G78ViFc8MBduVN/hJw3zHUr
+         R2og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695158321; x=1695763121;
+        d=1e100.net; s=20230601; t=1695158337; x=1695763137;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fFbUVEyx9xFAaoaUBhgKpTEnsBdbnWty5nYMgOKKdeM=;
-        b=AJgVcehQgpWWyOO9phgP7aW+YpJekYYXdtTWT3RYRh0+/Bpi4uWhEXYz8D6WNwizhU
-         cZsGcXlmytVQV3CgdDZSwuOdNnYvMGMR0gY0K86OshEF00ZvWk4NiAw9v730iJDNlWSH
-         D5W2mzew8hxG8XXjQnb1tNycCweMeP7F5t33q2WhxWXTGAPNz6HUp49ixqfXL4iWCpV+
-         brjxAIJUMybIBD6x8afQxvX4Jb9J8CiZLsB/Obp74eLt7nzcBaYfJ6pMhAmf2/Gk+WTb
-         UAXekjQpYUx2IT0jnVklKbjTT64iJphRC9E777T/wXWRKpGaPR23HNNv5gyd4qzfCVr1
-         AtFw==
-X-Gm-Message-State: AOJu0Yy3472y33E8B29MzD5JM/QNUVP82BP4zcQf6W6GKcux+7ZeUHZB
-        u/xH165JmQXs+u9zzNBEbza/HEjXE1mck6W++XJ3zA==
-X-Google-Smtp-Source: AGHT+IEn8pcUnd1239or3kYNE3XJc/zcpNyY7aPWHqLGQsRCXyG9nyzE0Tfgn31v5DTzzjPWEj/x/sDbfv7o/ppEt/E=
-X-Received: by 2002:a50:bae5:0:b0:530:4a6e:25a9 with SMTP id
- x92-20020a50bae5000000b005304a6e25a9mr30111ede.6.1695158321099; Tue, 19 Sep
- 2023 14:18:41 -0700 (PDT)
+        bh=0mEjcifAMmd5ubXRblSphhZqePAkqWyOBejjs3OPgzw=;
+        b=ZGMTJELDNBIUHxjZdd/Dxhi/Aniuc+b/bZrCLGEWgdxT0vE+hmkZg8k/AcPnzoa8pk
+         P5H8idAmJjUQqmlQdYAqbRtR5xrCzkRA58n6TB5jtnDZbBUoQhCsa3gr17GnKOxlltM3
+         yHnLzLgq5PpYk7MXWqpN66X4o1gs6NMh8IhP7azJS7KvkMOr/TRg4sYVuuhI8NgRzP1B
+         fE+7hQnZ+S74Scc5CPDBMTDy1FSgPW2v5O+iFX3EmljPcgdgxl3xZac8m61yRip755WQ
+         D9pJGcX4DxAX5bfQ9Ic/BgV52s6F2tSa/4Wve7Y0CsrPvfBG2zcGyTRMGAJvmZpDiqVk
+         BG3A==
+X-Gm-Message-State: AOJu0YxOuG05YMUl1zD/M1Rqge5eKrGtgRPy3s85jab9dHWbqVlehIuB
+        vxd9Ew7U0wXV5IXbjstCTdolfv5BAvGUTxVAmatE2g==
+X-Google-Smtp-Source: AGHT+IHw1g4Y330tGOXgL2B4af6/+QpN/ACMaYhna1qhrJLljNxH1iMdyRQsbkLxT5EVrjuvF7AK6BPNwi9zBtYakSM=
+X-Received: by 2002:a05:600c:49a4:b0:404:7462:1f87 with SMTP id
+ h36-20020a05600c49a400b0040474621f87mr25176wmp.6.1695158337184; Tue, 19 Sep
+ 2023 14:18:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230914114629.1517650-1-ruanjinjie@huawei.com> <20230914114629.1517650-3-ruanjinjie@huawei.com>
-In-Reply-To: <20230914114629.1517650-3-ruanjinjie@huawei.com>
+References: <20230914114629.1517650-1-ruanjinjie@huawei.com> <20230914114629.1517650-4-ruanjinjie@huawei.com>
+In-Reply-To: <20230914114629.1517650-4-ruanjinjie@huawei.com>
 From:   Rae Moar <rmoar@google.com>
-Date:   Tue, 19 Sep 2023 17:18:28 -0400
-Message-ID: <CA+GJov7GkioSj4AZ71b96yEs329qCZ7GKtimHVX6YEndO_4ToQ@mail.gmail.com>
-Subject: Re: [PATCH 2/4] kunit: Fix the wrong kfree of copy for kunit_filter_suites()
+Date:   Tue, 19 Sep 2023 17:18:45 -0400
+Message-ID: <CA+GJov6VnaojY7aA7LvhwmWwPziyAVOLZB97oAJMTWRh19r0eg@mail.gmail.com>
+Subject: Re: [PATCH 3/4] kunit: Fix possible memory leak in kunit_filter_suites()
 To:     Jinjie Ruan <ruanjinjie@huawei.com>
 Cc:     brendan.higgins@linux.dev, davidgow@google.com,
         skhan@linuxfoundation.org, dlatypov@google.com,
@@ -76,42 +76,98 @@ On Thu, Sep 14, 2023 at 7:47=E2=80=AFAM 'Jinjie Ruan' via KUnit Development
 <kunit-dev@googlegroups.com> wrote:
 >
 > If the outer layer for loop is iterated more than once and it fails not
-> in the first iteration, the copy pointer has been moved. So it should fre=
-e
-> the original copy's backup copy_start.
+> in the first iteration, the filtered_suite and filtered_suite->test_cases
+> allocated in the last kunit_filter_attr_tests() in last inner for loop
+> is leaked.
 >
-> Fixes: abbf73816b6f ("kunit: fix possible memory leak in kunit_filter_sui=
-tes()")
+> So add a new free_filtered_suite err label and free the filtered_suite
+> and filtered_suite->test_cases so far. And change kmalloc_array of copy
+> to kcalloc to Clear the copy to make the kfree safe.
+>
+> Fixes: 5d31f71efcb6 ("kunit: add kunit.filter_glob cmdline option to filt=
+er suites")
+> Fixes: 529534e8cba3 ("kunit: Add ability to filter attributes")
 > Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
 
 Hello!
 
-This looks good to me as well.
+This looks good to me. I just have one comment below.
 
 Reviewed-by: Rae Moar <rmoar@google.com>
 
 Thanks!
-
 -Rae
 
 > ---
->  lib/kunit/executor.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  lib/kunit/executor.c | 17 +++++++++++++----
+>  1 file changed, 13 insertions(+), 4 deletions(-)
 >
 > diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-> index a037a46fae5e..9358ed2df839 100644
+> index 9358ed2df839..1236b3cd2fbb 100644
 > --- a/lib/kunit/executor.c
 > +++ b/lib/kunit/executor.c
-> @@ -243,7 +243,7 @@ kunit_filter_suites(const struct kunit_suite_set *sui=
+> @@ -157,10 +157,11 @@ kunit_filter_suites(const struct kunit_suite_set *s=
+uite_set,
+>         struct kunit_suite_set filtered =3D {NULL, NULL};
+>         struct kunit_glob_filter parsed_glob;
+>         struct kunit_attr_filter *parsed_filters =3D NULL;
+> +       struct kunit_suite * const *suites;
+>
+>         const size_t max =3D suite_set->end - suite_set->start;
+>
+> -       copy =3D kmalloc_array(max, sizeof(*filtered.start), GFP_KERNEL);
+> +       copy =3D kcalloc(max, sizeof(*filtered.start), GFP_KERNEL);
+>         if (!copy) { /* won't be able to run anything, return an empty se=
+t */
+>                 return filtered;
+>         }
+> @@ -195,7 +196,7 @@ kunit_filter_suites(const struct kunit_suite_set *sui=
 te_set,
+>                                         parsed_glob.test_glob);
+>                         if (IS_ERR(filtered_suite)) {
+>                                 *err =3D PTR_ERR(filtered_suite);
+> -                               goto free_parsed_filters;
+> +                               goto free_filtered_suite;
+>                         }
+>                 }
+>                 if (filter_count > 0 && parsed_filters !=3D NULL) {
+> @@ -212,11 +213,11 @@ kunit_filter_suites(const struct kunit_suite_set *s=
+uite_set,
+>                                 filtered_suite =3D new_filtered_suite;
 >
->  free_copy:
->         if (*err)
-> -               kfree(copy);
-> +               kfree(copy_start);
+>                                 if (*err)
+> -                                       goto free_parsed_filters;
+> +                                       goto free_filtered_suite;
 >
->         return filtered;
->  }
+>                                 if (IS_ERR(filtered_suite)) {
+>                                         *err =3D PTR_ERR(filtered_suite);
+> -                                       goto free_parsed_filters;
+> +                                       goto free_filtered_suite;
+>                                 }
+>                                 if (!filtered_suite)
+>                                         break;
+> @@ -231,6 +232,14 @@ kunit_filter_suites(const struct kunit_suite_set *su=
+ite_set,
+>         filtered.start =3D copy_start;
+>         filtered.end =3D copy;
+>
+> +free_filtered_suite:
+> +       if (*err) {
+> +               for (suites =3D copy_start; suites < copy; suites++) {
+> +                       kfree((*suites)->test_cases);
+> +                       kfree(*suites);
+> +               }
+> +       }
+> +
+
+As this is pretty similar code to kunit_free_suite_set, I wish you
+could use that method instead but I'm not actually sure it would be
+cleaner.
+
+
+>  free_parsed_filters:
+>         if (filter_count)
+>                 kfree(parsed_filters);
 > --
 > 2.34.1
 >
@@ -121,4 +177,4 @@ te_set,
 > To unsubscribe from this group and stop receiving emails from it, send an=
  email to kunit-dev+unsubscribe@googlegroups.com.
 > To view this discussion on the web visit https://groups.google.com/d/msgi=
-d/kunit-dev/20230914114629.1517650-3-ruanjinjie%40huawei.com.
+d/kunit-dev/20230914114629.1517650-4-ruanjinjie%40huawei.com.
