@@ -2,260 +2,207 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69DF27A5FB2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Sep 2023 12:34:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 73E367A61AD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Sep 2023 13:48:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231580AbjISKeX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 19 Sep 2023 06:34:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60176 "EHLO
+        id S231130AbjISLsz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 19 Sep 2023 07:48:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229674AbjISKeW (ORCPT
+        with ESMTP id S229497AbjISLsy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Sep 2023 06:34:22 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2087.outbound.protection.outlook.com [40.107.92.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 189C1F3;
-        Tue, 19 Sep 2023 03:34:15 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=N/+p4SpHwMzGOenirB6mxUBiVlg8P3pOXPH2DBme6iSkJqbuNSKufkz4bNgzTny6yMCsLf9O+Mpwwz3J9/SX9vSX4UZxzATYbMXOSUTALnUFVVqQNxi4UtUgIkJnIQ3PqdwvHPr6p4Wtqe4iCaCP7zIM6/5iu0WfIP12HSzPWxb7i8uNvVN3T84cvy2umwyvMVhlJapFq7EpDtLVozPPcmrwznu1h/AI9hRpdMS5xvJKyErEaJo7/oaw3EZ+QSXs+7POOP7uA1jsWzW+CnGozYcT6HG2brqfEjtHv2MMWXpNy6g50YPmzPAxEZFCCkRWdo0PXZRESVOO292xkTD62w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=64FcbRcrXNerMZTZqvliAuI+D0U18OuyO2Dusc3iYGw=;
- b=kUxbefKvcplejxQeuAbBsySz8/DSbr7IQt1zMtU6k7HSdchQOqKeqIgsYRg21nwc8d/H1QieVJh8zqn03cDxEvYBrZsZ2v/SkullBc3aXpSgLOYZv6hJYwqLdtEM+mpxZdfkyx1DsckcUj3HVf7Bs5LYF0sCTK13YY1pJXbSopufGBu+Pny3hkumUisthTMlsOVmGJH93dMWxVNX7wpeK3pUdITUx4zW9n5bQ2Ulw1ErjhPUa7H/l7U7Lwen2AQGAG2LzS8shDdOhcTKLZqBYElMCRZG57Bc4zPMNGSB0fTlcIFsubbX/j9DH6W0A2d83kDXS71wwf+uC09/Anuk+w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=64FcbRcrXNerMZTZqvliAuI+D0U18OuyO2Dusc3iYGw=;
- b=4e8bDlPrLT5aI7MCOnq6CFPsotpaqOqNqnZudscQSRvHsBWJ5KN/0GM9awfjfoRuq0WMNFVPiKhadhRvdy7AbwAierYZ0g4ybIVjJKAWVHFhxEUa1UKBkEyqORSeBziiEiqfM1yBGfL2nJCNCJO2Vu7Ubz2qjgpO+9u7+AKgbsc=
-Received: from MN2PR17CA0021.namprd17.prod.outlook.com (2603:10b6:208:15e::34)
- by SA3PR12MB8763.namprd12.prod.outlook.com (2603:10b6:806:312::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.28; Tue, 19 Sep
- 2023 10:34:09 +0000
-Received: from BL6PEPF0001AB4F.namprd04.prod.outlook.com
- (2603:10b6:208:15e:cafe::7c) by MN2PR17CA0021.outlook.office365.com
- (2603:10b6:208:15e::34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.27 via Frontend
- Transport; Tue, 19 Sep 2023 10:34:09 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BL6PEPF0001AB4F.mail.protection.outlook.com (10.167.242.73) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6792.19 via Frontend Transport; Tue, 19 Sep 2023 10:34:09 +0000
-Received: from ethanolxb491host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 19 Sep
- 2023 05:34:08 -0500
-From:   Swapnil Sapkal <swapnil.sapkal@amd.com>
-To:     <ray.huang@amd.com>, <shuah@kernel.org>
-CC:     <sukrut.bellary@gmail.com>, <li.meng@amd.com>,
-        <gautham.shenoy@amd.com>, <wyes.karny@amd.com>,
-        <Perry.Yuan@amd.com>, <Mario.Limonciello@amd.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>,
-        Swapnil Sapkal <swapnil.sapkal@amd.com>
-Subject: [PATCH v2] selftests/amd-pstate: Fix broken paths to run workloads in amd-pstate-ut
-Date:   Tue, 19 Sep 2023 10:33:51 +0000
-Message-ID: <20230919103351.48681-1-swapnil.sapkal@amd.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 19 Sep 2023 07:48:54 -0400
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30FF2E3;
+        Tue, 19 Sep 2023 04:48:42 -0700 (PDT)
+Received: from leknes.fjasle.eu ([46.142.99.103]) by mrelayeu.kundenserver.de
+ (mreue011 [212.227.15.167]) with ESMTPSA (Nemesis) id
+ 1MpD39-1rU32D0eCt-00qh95; Tue, 19 Sep 2023 13:47:54 +0200
+Received: by leknes.fjasle.eu (Postfix, from userid 1000)
+        id B7DBF3E9B4; Tue, 19 Sep 2023 13:47:47 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=fjasle.eu; s=mail;
+        t=1695124068; bh=nmeuXLZk5BWSMOsNpfSkXKF7Qd+tLy4N88pMrtO1oXU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qCmBEC4q10JGX3wyfYWBNDaMKIUnF8accmx4H16x9sZAC04P4H6r5Ka3GMfe8WRaV
+         40NxV5h3JWUlxIaDruehebrYkIRj/rNhS/0tWybDTGy1/UG3PfUvBPGYR/vjHSN8bB
+         mY9Q1iJmkvNSZYd/8PrZC54Zb87jDE1Hhin6Wt0s=
+Date:   Tue, 19 Sep 2023 13:47:47 +0200
+From:   Nicolas Schier <nicolas@fjasle.eu>
+To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc:     Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC v2] selftests/nolibc: don't embed initramfs into
+ kernel image
+Message-ID: <ZQmKYz6WRkznqdWV@fjasle.eu>
+References: <20230917-nolibc-initramfs-v2-1-f0f293a8b198@weissschuh.net>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL6PEPF0001AB4F:EE_|SA3PR12MB8763:EE_
-X-MS-Office365-Filtering-Correlation-Id: cb118fbb-4c44-433a-231d-08dbb8fbf545
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QTnZLji9Vw17P/MJiNG5YK89E6Mrd3CJanRi4Z+lGIaSRcWRcnS+1GUpQHodxJdzFQcO9QPOqwc1WknMp02Ny0zFmPFSlWUR2tXB5EJqxmUpB9Y/qR0t+8NkTWhXPhQaMJNAhxe4txpKTbytoywSM+qrBIEBlWjW4onkF88S4omlstrc7UwcCbp+p/bigFVg1KowR8kOjc5pEdhUXe3Q4S3Y6CBzMRq8QU7Y/4edKNTdkcZZJSJ8tpvdvOXF++RBhzJpijYn6sTiNijnam9qfn22u1E6kDj+SwvVvYZEO+9eQMMV76jRm0xR/xUEDVKKn+n3K23nuWGH/B8djs83j/20g4scz3tN2WLV8x+DXftSHZ6WLi+6SVHyOZHI70Hg3lkmZLwI1K9OvrdALif+OWKGwLynuTw4r/kjSbMjYiC/3kCBjsGG97NDdFSF1lw6ObujWQRDmdPbTzpNS3ax8F2KR2nR5iKxme3OK8YsrCyAH4GdhxBfMMt7PaE6x/aLKt5XnBH+jDOQ49wwaln6wAEgCAF6OARmrDS0n9HZF0SoNI0NEpNstjK69xpY4D+fT4Q6+FBeA1OrivUPe5uI9nSCr8reIZQSKa79QBhgVKa+ak3n8bzZuv8QO8C/MYJhcfOhqiKfDrsq6SJVY0slt08GE6hFYLBOjgLtlDRE1HUxQPAT24r5Eil+FummErrgs9ILyTp6OR6dagI5ttJIyj2Ni9uUOzjEVoBW8uE8PudT8H76TtWfocyXKcFDKH8L5h5fHOcNwwSCdMD526OIgQ==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(39860400002)(376002)(136003)(346002)(396003)(1800799009)(186009)(451199024)(82310400011)(36840700001)(46966006)(40470700004)(6666004)(7696005)(40460700003)(36756003)(81166007)(86362001)(356005)(82740400003)(40480700001)(36860700001)(2616005)(16526019)(1076003)(26005)(2906002)(47076005)(336012)(426003)(478600001)(83380400001)(44832011)(8676002)(5660300002)(110136005)(4326008)(41300700001)(8936002)(70586007)(70206006)(54906003)(316002)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Sep 2023 10:34:09.3839
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: cb118fbb-4c44-433a-231d-08dbb8fbf545
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL6PEPF0001AB4F.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB8763
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230917-nolibc-initramfs-v2-1-f0f293a8b198@weissschuh.net>
+Organisation: AVM GmbH
+X-Provags-ID: V03:K1:AI4RW+U+z5OjltmaIRmDpMq9Q94TiDilXlDL2Na8kATQIRVHK2U
+ rvgZ+e6sn5Qrq/blRej4g7jml4Ufb2swextL9aaZl3mrs4oxYlNgHx+X5ccpNQLh5sLC8bm
+ yMuiFQuewMJuwj2Xx1b0zOPI1FWO6vIyjfurdZlYab/x0naFSyIXG3Mq/GYtdn5DJHGqxL2
+ a88o60KQgKHRSYrBKgqeQ==
+UI-OutboundReport: notjunk:1;M01:P0:C8fldALX24o=;hb7CL7PypnMZNCdVxrYDUL6lXHq
+ 1Pu0+2F+BzCGlUAO1XSxCiy4otYNzeVcXrhMbSV21T5lRYEVQkxkFW5RE13qARi//mRf7LUt4
+ oynsMb7z7ok91YhFUE17Hk+7qufvGAzuNObSFXc/j3tUZIJfRCBc946cWLGHtBupzjgh15Yg+
+ J7jw0migdb4ylgFsfdPM+RLnVO0BcG0p2xxSilCLmEypOFyhIXKN/LaODbu9vnplGGqu/5M0c
+ aIwctndOEyouFqvQb1uJoEqKhiitlumtknro7KqHUlox4kUGWD/+PVfGLlPeYYdyQ5QrqUWis
+ zrkfOnJwp9/F3yRmU9bOp/TpGzTVdMXQgaazKxtqcaZEnON2LB75MhpU3XE6I+VSz1wARMMD2
+ l48JeFGPnt8mApTxGqIfHaWGamobEw7zrZLJl6zSdoNKZMe91VeiIBzeIOFPGkdbMTbUhGN3y
+ FeAxV/GesH34B6scnzdmamseurScz1Tjb9Sdw1w671XLhIRJeWYLy8ek0NyZ/bhC0QWvuXLDR
+ TSx8ozJg28CRXcUukIvcZLA92SRAL/w9nCNVIqR7PXzPoyhdUKCsyvqOAG2JnbZe4H+p5uLKO
+ tGtYKuUs4z0lxhUvrn9FxseGVl5u/GPaARRioDo74fSt/1mNGosFA3DDk1kzSgTd4tSe0cVbW
+ FmyHc8yIvSVLI28kP3utjpZZnh6/ZV9unHGQAYez6qFdlATfOBlZzF9r+sOh2HIjqn17+xN3q
+ CveBOWco372asafdXoD2dvw2gCe6mfI34sz9wHuP9jMqLgZVsh5rXukXtSBw7YAp/ugrmgGnJ
+ uW69NP/Ky8K3oyK261sV9SPmjUeLWmvbfIbjfpFrfH0JyVQ+kXqMClDtyS3WlkumQgAloX8B8
+ Zhy2GyAzCOYBH9g==
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-In selftests/amd-pstate, tbench and gitsource microbenchmarks are used to
-compare the performance with different governors. In Current
-implementation relative path to run `amd_pstate_tracer.py`
-broken. Fixed this by using absolute paths.
-Also selftests/amd-pstate uses distro `perf` to capture stats while running
-these microbenchmarks. Distro `perf` is not working with upstream
-kernel. Fixed this by providing an option to give the perf binary path.
+On Sun, Sep 17, 2023 at 05:21:38PM +0200 Thomas Weißschuh wrote:
+> When the initramfs is embedded into the kernel each rebuild of it will
+> trigger a full kernel relink and all the expensive postprocessing steps.
+> 
+> Currently nolibc-test and therefore the initramfs are always rebuild,
+> even without source changes, leading to lots of slow kernel relinks.
+> 
+> Instead of linking the initramfs into the kernel assemble it manually
+> and pass it explicitly to qemu.
+> This avoids all of the kernel relinks.
+> 
+> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> ---
+> Currently the nolibc testsuite embeds the test executable into a kernel
+> image with CONFIG_INITRAMFS_SOURCE.
+> This forces a full kernel relink everytime the test executable is
+> updated.
+> 
+> This relinking step dominates the test cycle.
+> It is slower than building and running the test in qemu together.
+> 
+> With a bit of Makefile-shuffling the relinking can be avoided.
+> ---
+> Changes in v2:
+> - avoid need to modify top-level Makefile
+> - drop patch removing "rerun" target
+> - add kernel-standalone target
+> - Link to v1: https://lore.kernel.org/r/20230916-nolibc-initramfs-v1-0-4416ecedca6d@weissschuh.net
+> ---
 
-Signed-off-by: Swapnil Sapkal <swapnil.sapkal@amd.com>
----
- .../x86/amd_pstate_tracer/amd_pstate_trace.py |  2 +-
- .../testing/selftests/amd-pstate/gitsource.sh | 14 +++++++-----
- tools/testing/selftests/amd-pstate/run.sh     | 22 +++++++++++++------
- tools/testing/selftests/amd-pstate/tbench.sh  |  4 ++--
- 4 files changed, 27 insertions(+), 15 deletions(-)
+Thanks, seems to work as described (and I am surprised how fast the 'run'
+target is) and patch looks good to me.
 
-diff --git a/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py b/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
-index 904df0ea0a1e..2448bb07973f 100755
---- a/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
-+++ b/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
-@@ -30,7 +30,7 @@ import getopt
- import Gnuplot
- from numpy import *
- from decimal import *
--sys.path.append('../intel_pstate_tracer')
-+sys.path.append(os.path.join(os.path.dirname(__file__), '../intel_pstate_tracer'))
- #import intel_pstate_tracer
- import intel_pstate_tracer as ipt
- 
-diff --git a/tools/testing/selftests/amd-pstate/gitsource.sh b/tools/testing/selftests/amd-pstate/gitsource.sh
-index 5f2171f0116d..c327444d3506 100755
---- a/tools/testing/selftests/amd-pstate/gitsource.sh
-+++ b/tools/testing/selftests/amd-pstate/gitsource.sh
-@@ -66,12 +66,15 @@ post_clear_gitsource()
- 
- install_gitsource()
- {
--	if [ ! -d $git_name ]; then
-+	if [ ! -d $SCRIPTDIR/$git_name ]; then
-+		BACKUP_DIR=$(pwd)
-+		cd $SCRIPTDIR
- 		printf "Download gitsource, please wait a moment ...\n\n"
- 		wget -O $git_tar $gitsource_url > /dev/null 2>&1
- 
- 		printf "Tar gitsource ...\n\n"
- 		tar -xzf $git_tar
-+		cd $BACKUP_DIR
- 	fi
- }
- 
-@@ -79,12 +82,13 @@ install_gitsource()
- run_gitsource()
- {
- 	echo "Launching amd pstate tracer for $1 #$2 tracer_interval: $TRACER_INTERVAL"
--	./amd_pstate_trace.py -n tracer-gitsource-$1-$2 -i $TRACER_INTERVAL > /dev/null 2>&1 &
-+	$SCRIPTDIR/../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py -n tracer-gitsource-$1-$2 -i $TRACER_INTERVAL > /dev/null 2>&1 &
- 
- 	printf "Make and test gitsource for $1 #$2 make_cpus: $MAKE_CPUS\n"
--	cd $git_name
--	perf stat -a --per-socket -I 1000 -e power/energy-pkg/ /usr/bin/time -o ../$OUTFILE_GIT.time-gitsource-$1-$2.log make test -j$MAKE_CPUS > ../$OUTFILE_GIT-perf-$1-$2.log 2>&1
--	cd ..
-+	BACKUP_DIR=$(pwd)
-+	cd $SCRIPTDIR/$git_name
-+	$PERF stat -a --per-socket -I 1000 -e power/energy-pkg/ /usr/bin/time -o $BACKUP_DIR/$OUTFILE_GIT.time-gitsource-$1-$2.log make test -j$MAKE_CPUS > $BACKUP_DIR/$OUTFILE_GIT-perf-$1-$2.log 2>&1
-+	cd $BACKUP_DIR
- 
- 	for job in `jobs -p`
- 	do
-diff --git a/tools/testing/selftests/amd-pstate/run.sh b/tools/testing/selftests/amd-pstate/run.sh
-index de4d8e9c9565..0803e70b04da 100755
---- a/tools/testing/selftests/amd-pstate/run.sh
-+++ b/tools/testing/selftests/amd-pstate/run.sh
-@@ -8,9 +8,11 @@ else
- 	FILE_MAIN=DONE
- fi
- 
--source basic.sh
--source tbench.sh
--source gitsource.sh
-+SCRIPTDIR=`dirname "$0"`
-+
-+source $SCRIPTDIR/basic.sh
-+source $SCRIPTDIR/tbench.sh
-+source $SCRIPTDIR/gitsource.sh
- 
- # amd-pstate-ut only run on x86/x86_64 AMD systems.
- ARCH=$(uname -m 2>/dev/null | sed -e 's/i.86/x86/' -e 's/x86_64/x86/')
-@@ -22,6 +24,7 @@ OUTFILE=selftest
- OUTFILE_TBENCH="$OUTFILE.tbench"
- OUTFILE_GIT="$OUTFILE.gitsource"
- 
-+PERF=/usr/bin/perf
- SYSFS=
- CPUROOT=
- CPUFREQROOT=
-@@ -149,8 +152,9 @@ help()
- 	     gitsource: Gitsource testing.>]
- 	[-t <tbench time limit>]
- 	[-p <tbench process number>]
--	[-l <loop times for tbench>]
-+	[-l <loop times for tbench/gitsource>]
- 	[-i <amd tracer interval>]
-+	[-b <perf binary>]
- 	[-m <comparative test: acpi-cpufreq>]
- 	\n"
- 	exit 2
-@@ -158,7 +162,7 @@ help()
- 
- parse_arguments()
- {
--	while getopts ho:c:t:p:l:i:m: arg
-+	while getopts ho:c:t:p:l:i:b:m: arg
- 	do
- 		case $arg in
- 			h) # --help
-@@ -189,6 +193,10 @@ parse_arguments()
- 				TRACER_INTERVAL=$OPTARG
- 				;;
- 
-+			b) # --perf-binary
-+				PERF=`realpath $OPTARG`
-+				;;
-+
- 			m) # --comparative-test
- 				COMPARATIVE_TEST=$OPTARG
- 				;;
-@@ -202,8 +210,8 @@ parse_arguments()
- 
- command_perf()
- {
--	if ! command -v perf > /dev/null; then
--		echo $msg please install perf. >&2
-+	if ! $PERF -v; then
-+		echo $msg please install perf or provide perf binary path as argument >&2
- 		exit $ksft_skip
- 	fi
- }
-diff --git a/tools/testing/selftests/amd-pstate/tbench.sh b/tools/testing/selftests/amd-pstate/tbench.sh
-index 49c9850341f6..70e5863e74ea 100755
---- a/tools/testing/selftests/amd-pstate/tbench.sh
-+++ b/tools/testing/selftests/amd-pstate/tbench.sh
-@@ -64,11 +64,11 @@ post_clear_tbench()
- run_tbench()
- {
- 	echo "Launching amd pstate tracer for $1 #$2 tracer_interval: $TRACER_INTERVAL"
--	./amd_pstate_trace.py -n tracer-tbench-$1-$2 -i $TRACER_INTERVAL > /dev/null 2>&1 &
-+	$SCRIPTDIR/../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py -n tracer-tbench-$1-$2 -i $TRACER_INTERVAL > /dev/null 2>&1 &
- 
- 	printf "Test tbench for $1 #$2 time_limit: $TIME_LIMIT procs_num: $PROCESS_NUM\n"
- 	tbench_srv > /dev/null 2>&1 &
--	perf stat -a --per-socket -I 1000 -e power/energy-pkg/ tbench -t $TIME_LIMIT $PROCESS_NUM > $OUTFILE_TBENCH-perf-$1-$2.log 2>&1
-+	$PERF stat -a --per-socket -I 1000 -e power/energy-pkg/ tbench -t $TIME_LIMIT $PROCESS_NUM > $OUTFILE_TBENCH-perf-$1-$2.log 2>&1
- 
- 	pid=`pidof tbench_srv`
- 	kill $pid
+Reviewed-by: Nicolas Schier <nicolas@fjasle.eu>
+
+
+>  tools/testing/selftests/nolibc/Makefile | 42 ++++++++++++++++++++-------------
+>  1 file changed, 26 insertions(+), 16 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+> index 689658f81a19..ee6a9ad28cfd 100644
+> --- a/tools/testing/selftests/nolibc/Makefile
+> +++ b/tools/testing/selftests/nolibc/Makefile
+> @@ -131,18 +131,20 @@ REPORT  ?= awk '/\[OK\][\r]*$$/{p++} /\[FAIL\][\r]*$$/{if (!f) printf("\n"); f++
+>  
+>  help:
+>  	@echo "Supported targets under selftests/nolibc:"
+> -	@echo "  all          call the \"run\" target below"
+> -	@echo "  help         this help"
+> -	@echo "  sysroot      create the nolibc sysroot here (uses \$$ARCH)"
+> -	@echo "  nolibc-test  build the executable (uses \$$CC and \$$CROSS_COMPILE)"
+> -	@echo "  libc-test    build an executable using the compiler's default libc instead"
+> -	@echo "  run-user     runs the executable under QEMU (uses \$$XARCH, \$$TEST)"
+> -	@echo "  initramfs    prepare the initramfs with nolibc-test"
+> -	@echo "  defconfig    create a fresh new default config (uses \$$XARCH)"
+> -	@echo "  kernel       (re)build the kernel with the initramfs (uses \$$XARCH)"
+> -	@echo "  run          runs the kernel in QEMU after building it (uses \$$XARCH, \$$TEST)"
+> -	@echo "  rerun        runs a previously prebuilt kernel in QEMU (uses \$$XARCH, \$$TEST)"
+> -	@echo "  clean        clean the sysroot, initramfs, build and output files"
+> +	@echo "  all               call the \"run\" target below"
+> +	@echo "  help              this help"
+> +	@echo "  sysroot           create the nolibc sysroot here (uses \$$ARCH)"
+> +	@echo "  nolibc-test       build the executable (uses \$$CC and \$$CROSS_COMPILE)"
+> +	@echo "  libc-test         build an executable using the compiler's default libc instead"
+> +	@echo "  run-user          runs the executable under QEMU (uses \$$XARCH, \$$TEST)"
+> +	@echo "  initramfs.cpio    prepare the initramfs archive with nolibc-test"
+> +	@echo "  initramfs         prepare the initramfs tree with nolibc-test"
+> +	@echo "  defconfig         create a fresh new default config (uses \$$XARCH)"
+> +	@echo "  kernel            (re)build the kernel (uses \$$XARCH)"
+> +	@echo "  kernel-standalone (re)build the kernel with the initramfs (uses \$$XARCH)"
+> +	@echo "  run               runs the kernel in QEMU after building it (uses \$$XARCH, \$$TEST)"
+> +	@echo "  rerun             runs a previously prebuilt kernel in QEMU (uses \$$XARCH, \$$TEST)"
+> +	@echo "  clean             clean the sysroot, initramfs, build and output files"
+>  	@echo ""
+>  	@echo "The output file is \"run.out\". Test ranges may be passed using \$$TEST."
+>  	@echo ""
+> @@ -195,6 +197,9 @@ run-user: nolibc-test
+>  	$(Q)qemu-$(QEMU_ARCH) ./nolibc-test > "$(CURDIR)/run.out" || :
+>  	$(Q)$(REPORT) $(CURDIR)/run.out
+>  
+> +initramfs.cpio: kernel nolibc-test
+> +	$(QUIET_GEN)echo 'file /init nolibc-test 755 0 0' | $(srctree)/usr/gen_init_cpio - > initramfs.cpio
+> +
+>  initramfs: nolibc-test
+>  	$(QUIET_MKDIR)mkdir -p initramfs
+>  	$(call QUIET_INSTALL, initramfs/init)
+> @@ -203,17 +208,20 @@ initramfs: nolibc-test
+>  defconfig:
+>  	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) mrproper $(DEFCONFIG) prepare
+>  
+> -kernel: initramfs
+> +kernel:
+> +	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(IMAGE_NAME)
+> +
+> +kernel-standalone: initramfs
+>  	$(Q)$(MAKE) -C $(srctree) ARCH=$(ARCH) CC=$(CC) CROSS_COMPILE=$(CROSS_COMPILE) $(IMAGE_NAME) CONFIG_INITRAMFS_SOURCE=$(CURDIR)/initramfs
+>  
+>  # run the tests after building the kernel
+> -run: kernel
+> -	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
+> +run: kernel initramfs.cpio
+> +	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -initrd initramfs.cpio -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
+>  	$(Q)$(REPORT) $(CURDIR)/run.out
+>  
+>  # re-run the tests from an existing kernel
+>  rerun:
+> -	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
+> +	$(Q)qemu-system-$(QEMU_ARCH) -display none -no-reboot -kernel "$(srctree)/$(IMAGE)" -initrd initramfs.cpio -serial stdio $(QEMU_ARGS) > "$(CURDIR)/run.out"
+>  	$(Q)$(REPORT) $(CURDIR)/run.out
+>  
+>  # report with existing test log
+> @@ -227,6 +235,8 @@ clean:
+>  	$(Q)rm -f nolibc-test
+>  	$(call QUIET_CLEAN, libc-test)
+>  	$(Q)rm -f libc-test
+> +	$(call QUIET_CLEAN, initramfs.cpio)
+> +	$(Q)rm -rf initramfs.cpio
+>  	$(call QUIET_CLEAN, initramfs)
+>  	$(Q)rm -rf initramfs
+>  	$(call QUIET_CLEAN, run.out)
+> 
+> ---
+> base-commit: 3f79a57865b33f49fdae6655510bd27c8e6610e0
+> change-id: 20230916-nolibc-initramfs-4fd00eac3256
+> 
+> Best regards,
+> -- 
+> Thomas Weißschuh <linux@weissschuh.net>
+
 -- 
-2.34.1
-
+epost|xmpp: nicolas@fjasle.eu          irc://oftc.net/nsc
+↳ gpg: 18ed 52db e34f 860e e9fb  c82b 7d97 0932 55a0 ce7f
+     -- frykten for herren er opphav til kunnskap --
