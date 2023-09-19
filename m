@@ -2,145 +2,111 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90E207A6ADE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Sep 2023 20:50:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 77C167A6AF9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Sep 2023 20:57:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232362AbjISSuD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 19 Sep 2023 14:50:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53180 "EHLO
+        id S232572AbjISS6A (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 19 Sep 2023 14:58:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232084AbjISSuD (ORCPT
+        with ESMTP id S232549AbjISS6A (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Sep 2023 14:50:03 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 234119D
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Sep 2023 11:49:57 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-4047c6ec21dso18495e9.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Sep 2023 11:49:57 -0700 (PDT)
+        Tue, 19 Sep 2023 14:58:00 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BECA2E1
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Sep 2023 11:57:52 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-500a8b2b73eso9827073e87.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Sep 2023 11:57:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695149395; x=1695754195; darn=vger.kernel.org;
+        d=atishpatra.org; s=google; t=1695149871; x=1695754671; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3b3SE1y993w9s8TptT+65qp+DeVHMyKSmy+Ooj7umuM=;
-        b=PSFZ/zTb2uhWJFHReGyXjuajECuDa0FA67//VPxjG8dPGcqndKRXCnDu75IdUJyl+3
-         WacmLDJnOk82+60rRfTE5Uw8Vlefi86Ye1XBpQI6JP6XVMYFu4wwX9RPshjcQcKdkNBV
-         a+GNv4oDMVPrh5kyMkUrQI2Oi8+MoIN6gB74p1vUa8dmnvnfgUppg7fau3Bh4cd6tx4r
-         FdKVdlVXx0RDtQQxhag+aILrrJJibvTs9DE8h0WOSQhOhnm3pzrVg8l5PEvdlBIGB4MH
-         b9xjvQ4SlfdPiTwkA0cBsVOa32Tgzhr86Vb/1iJXiMNWVBwSKgFB0Fpr/O4okLB19+h0
-         F+bA==
+        bh=vhVTmCY18AAwuZtx0mwKmmrwAcWS17iU82Rcu9KB1Uo=;
+        b=PjeRXiIgIo5irZi0xds6a4vSeJX8/FWPN5gEBvv9ZakAtHMfjqpt51cEBmz3AXzv/7
+         NyLXsQQO8GN2ySiFoUGN3b1E/hLoUQOSHuXirYCWRsAW7s0IEDFQPk7dt3dXenKtNvTe
+         kgIeF1l+PlrxG16BJv31Aba7GDUwEPUldUghU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695149395; x=1695754195;
+        d=1e100.net; s=20230601; t=1695149871; x=1695754671;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3b3SE1y993w9s8TptT+65qp+DeVHMyKSmy+Ooj7umuM=;
-        b=qAwTeMfZMnA6y0FyqPXmVsjvJxy/i45cTyCmyKxLifpqy3KswEBoNnTmUn/8gFhT9/
-         2Uskb5GwL9P0hUY9sFkdbVp3HrESg7bmcFZhkE83ifCwAuuhQSNi1IM+Gpm7ZmIbRZo5
-         V0k4QbQwW0lbuHCdn14GrsABAlgo+hTBdEsoEKGuZBuRAPpFo/rcNjJHGOtx8NQi6+Ac
-         DtxOiI5dqx5UuElRNRaNLFNmubU0Gva86lgIeP442M5XezsCO6g1qLLECSiooHrOnSYs
-         k9Uqp8KRoM+Od7pV7DbJPkMuzx+1IkHOrgVIYPhoml6Ftm3alNGT3rTo9HaRkvmXlg6G
-         uTHg==
-X-Gm-Message-State: AOJu0YzEj7hOHmCfIpQ0/H1nWQAxn+8zJ9ojqVn7LK/WQ748qiJlqMCW
-        A+8fQ2k9zn+q0mI9O4z1fIyKTIwoiXAvEQ0sLvG23w==
-X-Google-Smtp-Source: AGHT+IHdRcasEy33j0LLjfk3xBcc7G26qkdrcJaCdU/boWopbvtOxlEHTEfXJ/SqOn0lzR3O4BAc9O47dYEpPB99F4c=
-X-Received: by 2002:a05:600c:1d09:b0:3fe:f32f:c57f with SMTP id
- l9-20020a05600c1d0900b003fef32fc57fmr16193wms.0.1695149395391; Tue, 19 Sep
- 2023 11:49:55 -0700 (PDT)
+        bh=vhVTmCY18AAwuZtx0mwKmmrwAcWS17iU82Rcu9KB1Uo=;
+        b=v6Ti3TXNHlZ2N4R0t+itBukCUIs5EHdtbrIuT7QFzD12TTTROuX+u9CsQ4TGwArIb7
+         RIxWoppWMw85VQzaF4L36Z2Z67X6UHI6HybpChlQEgxvCQrpBmXxgIe7/nhqcEGKytLC
+         WStD6VWWGzdcdS4HlwJtNoBlnekWUC6/6Ik1ob/3Us/bSiJJppRv3n31PtOSjzW+aJcl
+         UEt3AZM5Gn8hpPPz16XUTebk4vLCA5/9TpVtmVLRgjGSk44uM4UfaHnY29v4OxUcNUAx
+         3BeA26M+FYO2Oz16rwiCjhiG15BJhwwHhmjcOt9NDDymALYWm/p/t9FsvEXxwn8j26G7
+         e2PA==
+X-Gm-Message-State: AOJu0YwZ6AVmOhfG18CE4AEnjaYJZKNTZ0Nb4ywLhKVxOzDlDnYx/P+5
+        ySJtjNNOiw/d+vi7164xdJB6K5OK/z+d8gqAYTsM
+X-Google-Smtp-Source: AGHT+IGzgFUkeaLucDDy+VjfOLYnjbzLxksr6Bjjy8m/XEtgrZyisbaxP5h6+A9hOORSOeSpaVrcf+At/pha0PYjcCA=
+X-Received: by 2002:ac2:5b1c:0:b0:503:314f:affe with SMTP id
+ v28-20020ac25b1c000000b00503314faffemr498289lfn.17.1695149870227; Tue, 19 Sep
+ 2023 11:57:50 -0700 (PDT)
 MIME-Version: 1.0
-References: <3ff9d019-75b6-45ee-9b03-9d6ec7c5364f@moroto.mountain>
-In-Reply-To: <3ff9d019-75b6-45ee-9b03-9d6ec7c5364f@moroto.mountain>
-From:   Rae Moar <rmoar@google.com>
-Date:   Tue, 19 Sep 2023 14:49:43 -0400
-Message-ID: <CA+GJov4SRGa6scDUmm1Tzu8JX4ZaF8S7YVxwZVvYJMSLXVRwrw@mail.gmail.com>
-Subject: Re: [PATCH] kunit: Check for kunit_parse_glob_filter() failure
-To:     Dan Carpenter <dan.carpenter@linaro.org>
-Cc:     Daniel Latypov <dlatypov@google.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        kernel-janitors@vger.kernel.org
+References: <20230918180646.1398384-1-apatel@ventanamicro.com> <20230918180646.1398384-2-apatel@ventanamicro.com>
+In-Reply-To: <20230918180646.1398384-2-apatel@ventanamicro.com>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Tue, 19 Sep 2023 11:57:38 -0700
+Message-ID: <CAOnJCULNPvZzWH5bAFW+zKL_kM15Du+qV50atfqUsB1pzp0dmA@mail.gmail.com>
+Subject: Re: [PATCH 1/4] RISC-V: KVM: Fix KVM_GET_REG_LIST API for ISA_EXT registers
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Andrew Jones <ajones@ventanamicro.com>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Sep 15, 2023 at 8:58=E2=80=AFAM Dan Carpenter <dan.carpenter@linaro=
-.org> wrote:
+On Mon, Sep 18, 2023 at 11:07=E2=80=AFAM Anup Patel <apatel@ventanamicro.co=
+m> wrote:
 >
-> Smatch complains that the missing error checks would lead to a crash:
+> The ISA_EXT registers to enabled/disable ISA extensions for VCPU
+> are always available when underlying host has the corresponding
+> ISA extension. The copy_isa_ext_reg_indices() called by the
+> KVM_GET_REG_LIST API does not align with this expectation so
+> let's fix it.
 >
->     lib/kunit/executor_test.c:40 parse_filter_test()
->     error: double free of 'filter.test_glob'
->
-> We may as well do it right...
->
-> Fixes: a127b154a8f2 ("kunit: tool: allow filtering test cases via glob")
-> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
-
-Hello!
-
-We definitely should add in checks for these errors. I have a couple
-comments below.
-
-Thanks!
--Rae
-
+> Fixes: 031f9efafc08 ("KVM: riscv: Add KVM_GET_REG_LIST API support")
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
 > ---
->  lib/kunit/executor_test.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+>  arch/riscv/kvm/vcpu_onereg.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/lib/kunit/executor_test.c b/lib/kunit/executor_test.c
-> index b4f6f96b2844..176c9c9dfcfc 100644
-> --- a/lib/kunit/executor_test.c
-> +++ b/lib/kunit/executor_test.c
-> @@ -27,13 +27,15 @@ static void parse_filter_test(struct kunit *test)
->  {
->         struct kunit_glob_filter filter =3D {NULL, NULL};
+> diff --git a/arch/riscv/kvm/vcpu_onereg.c b/arch/riscv/kvm/vcpu_onereg.c
+> index 1b7e9fa265cb..e7e833ced91b 100644
+> --- a/arch/riscv/kvm/vcpu_onereg.c
+> +++ b/arch/riscv/kvm/vcpu_onereg.c
+> @@ -842,7 +842,7 @@ static int copy_isa_ext_reg_indices(const struct kvm_=
+vcpu *vcpu,
+>                 u64 reg =3D KVM_REG_RISCV | size | KVM_REG_RISCV_ISA_EXT =
+| i;
 >
-> -       kunit_parse_glob_filter(&filter, "suite");
-> +       if (!kunit_parse_glob_filter(&filter, "suite"))
-> +               return;
-
-First, this is returning every time this test is run because the
-kunit_parse_glob_filter returns 0 when there is no error. So this
-should instead be checking for a result of not equal to 0.
-
-Secondly, this should fail the test if the parsing returns an error.
-So instead of returning I would recommend using a KUNIT_ASSERT
-statement to check the result of this method is equal to 0.
-
->         KUNIT_EXPECT_STREQ(test, filter.suite_glob, "suite");
->         KUNIT_EXPECT_FALSE(test, filter.test_glob);
->         kfree(filter.suite_glob);
->         kfree(filter.test_glob);
+>                 isa_ext =3D kvm_isa_ext_arr[i];
+> -               if (!__riscv_isa_extension_available(vcpu->arch.isa, isa_=
+ext))
+> +               if (!__riscv_isa_extension_available(NULL, isa_ext))
+>                         continue;
 >
-> -       kunit_parse_glob_filter(&filter, "suite.test");
-> +       if (!kunit_parse_glob_filter(&filter, "suite.test"))
-> +               return;
-
-Similar to above I think this should be changed to a KUNIT_ASSERT
-statement to ensure the result is equal to 0.
-
->         KUNIT_EXPECT_STREQ(test, filter.suite_glob, "suite");
->         KUNIT_EXPECT_STREQ(test, filter.test_glob, "test");
->         kfree(filter.suite_glob);
+>                 if (uindices) {
 > --
-> 2.39.2
+> 2.34.1
 >
-> --
-> You received this message because you are subscribed to the Google Groups=
- "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgi=
-d/kunit-dev/3ff9d019-75b6-45ee-9b03-9d6ec7c5364f%40moroto.mountain.
+
+
+Reviewed-by: Atish Patra <atishp@rivosinc.com>
+--=20
+Regards,
+Atish
