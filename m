@@ -2,56 +2,84 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC34B7A5BBE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Sep 2023 09:57:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52E3C7A5D1D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Sep 2023 10:57:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230080AbjISH5P (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 19 Sep 2023 03:57:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54156 "EHLO
+        id S230288AbjISI5l (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 19 Sep 2023 04:57:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230010AbjISH5P (ORCPT
+        with ESMTP id S229690AbjISI5k (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Sep 2023 03:57:15 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEDBC100;
-        Tue, 19 Sep 2023 00:57:09 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3CA4FC433C8;
-        Tue, 19 Sep 2023 07:57:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695110229;
-        bh=htQQ2FKHvXLVeL8p+eXAdtx1fMJOjR4PUpElFMKZmN8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DPrYWXipXZJdXGi4m4osl3qZ7MBnh8weLjgO7/xXIO5pQl8clIxe/0Y0NZxtBJ9UY
-         nUOO9CZDTA0arOa8FsurXadf0pzWwjCBNfFOXdXIC4WOUDMV+4Z/Emdo/qH2TOy0/N
-         czCoFE0oyL3+SY1NbA1+93AlBKQkXDhGKUd312ao2Le0mPIQVjvcDfj0c8UZ5/4wfz
-         7uhbnt8zod5c3QxB5ktAOEcQu6wvpan2wWQFugq5mpQIC1qfIfoSsuE0U/V0MPZEAK
-         n2q7xpXKC2f5aNSo+9Js1azxyt+xv86exbrDS753wojB/7IN3cAg9/J/ThbIGokR/8
-         I7H/DBkCJybwg==
-Date:   Tue, 19 Sep 2023 09:57:07 +0200
-From:   Maxime Ripard <mripard@kernel.org>
-To:     David Gow <davidgow@google.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Rae Moar <rmoar@google.com>, dlatypov@google.com,
-        Benjamin Berg <benjamin.berg@intel.com>,
-        Richard Fitzgerald <rf@opensource.cirrus.com>,
-        llvm@lists.linux.dev, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-hardening@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>
-Subject: Re: [RFC PATCH] kunit: Add a macro to wrap a deferred action function
-Message-ID: <aylskx5ylpgbjj2k7vxzhggo7qs6kw5lbwqfusewmwu6xuusgl@zjsdgy57362n>
-References: <20230915050125.3609689-1-davidgow@google.com>
+        Tue, 19 Sep 2023 04:57:40 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDCEA11A;
+        Tue, 19 Sep 2023 01:57:34 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id ffacd0b85a97d-31f71b25a99so5336250f8f.2;
+        Tue, 19 Sep 2023 01:57:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1695113853; x=1695718653; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8M0oH3rEpj2jIH57zHE90N6wAzwLmk1hC60jq7/TfHg=;
+        b=UnvUmYW9t+62tSO9cDZLDbwBNl0sLb/ElHQhYNWBNFnkmSHpH53HhSMbHKM3wmxnm9
+         nQfAJfz1JE3yqc0ZC+DfxsHNi11Id0LWKjoyDpfJK8BT/4Ov/NUe9w3hQMGvyy6PUNkh
+         0TyNsm8KFzQHF6S0mZm5eVUzIaBVCKlc6DKscas3MhaIU+BKfxkMzgpbH0HD8fxYPztc
+         iBViLpo0W5lPQPI+6IARjdadXo5g0ISfHHXz6r2SoLIyTDLNDb1OP4gZetL2FqIsBEUV
+         Kxi5hRNJ6VzKgc6f2Huf9gGYpirxqhetqjV0L8hFsLblSSV5mWYMkC2+q5hJxQerkt6g
+         gk4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695113853; x=1695718653;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8M0oH3rEpj2jIH57zHE90N6wAzwLmk1hC60jq7/TfHg=;
+        b=ROdYee6uVmJmbTBv2Gmu8xwDG22BVw5e8BOAqONeD0/IivdiVyTXPeqk9G+UyK8WbS
+         kvPxjw1Y03mvwlvEKVchaz5hLyI/9PAJPwKnG9e8XexJVGHINkeLkqpYqU31YEzW1su6
+         wlV0B5c2Bjp4/DXhCwXW6EP0d/Exu3ziywoCV9AGdtVjyMO0Y0dW/iBGp53lMpRkujQ6
+         x3NnxOqePh+cDNw4aYl+JntOQVeinV/Hgy1DNYWMnLtEYZdQ5mER8qg4Ure/ZeRZ7zeA
+         EEQMbw+p64Z4BhcUvCOVXFxHDt0y/yzVs1yvvjFPG7dI7UW2G5uke+DMcuZEmGrFFK0j
+         WN0A==
+X-Gm-Message-State: AOJu0YwAb4Hk7Cd7HxTaJfKxHCakwrCtzebV4b6g9GbNgAhU5BTJZLKO
+        hSwnRxhHX3ZjgrFBC9naTbvhn+cmmX06fRzCHDI=
+X-Google-Smtp-Source: AGHT+IFEm6ihX07RHkQmJfPR6TpX2UomyvS3tyYQCrIhoP2uqDAyqq7eUstv+fQIDZ8XqcVULym8YSHeZoX2xIpK0Ws=
+X-Received: by 2002:adf:ce87:0:b0:317:57f0:fae with SMTP id
+ r7-20020adfce87000000b0031757f00faemr9012499wrn.63.1695113853086; Tue, 19 Sep
+ 2023 01:57:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="qzavn4uvzmrnbux4"
-Content-Disposition: inline
-In-Reply-To: <20230915050125.3609689-1-davidgow@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <CAADnVQJ4Fg-VQ-tVCEqsKLuozT7y_o8pZ1oM3eBW7u-Z0jOk4A@mail.gmail.com>
+ <20230918112549.105846-1-gerhorst@amazon.de>
+In-Reply-To: <20230918112549.105846-1-gerhorst@amazon.de>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 19 Sep 2023 01:57:21 -0700
+Message-ID: <CAADnVQJZRqNZ_rKw2tUrmDpwhW7JGUge1+9x1_qtROf=OyMpHw@mail.gmail.com>
+Subject: Re: [PATCH 2/3] Revert "bpf: Fix issue in verifying allow_ptr_leaks"
+To:     Luis Gerhorst <gerhorst@amazon.de>
+Cc:     Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>, bpf <bpf@vger.kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Luis Gerhorst <gerhorst@cs.fau.de>,
+        Hagar Gamal Halim Hemdan <hagarhem@amazon.de>,
+        Hao Luo <haoluo@google.com>,
+        Ilya Leoshkevich <iii@linux.ibm.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Jiri Olsa <jolsa@kernel.org>, KP Singh <kpsingh@kernel.org>,
+        Yafang Shao <laoar.shao@gmail.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Puranjay Mohan <puranjay12@gmail.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Shuah Khan <shuah@kernel.org>, Song Liu <song@kernel.org>,
+        Yonghong Song <yonghong.song@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,63 +87,52 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Mon, Sep 18, 2023 at 4:26=E2=80=AFAM Luis Gerhorst <gerhorst@amazon.de> =
+wrote:
+>
+> It is true that this is not easily possible using the method most exploit=
+s use,
+> at least to my knowledge (i.e., accessing the same address from another c=
+ore).
+> However, it is still possible to evict the cacheline with skb->data/data_=
+end
+> from the cache in between the loads by iterating over a large map using
+> bpf_loop(). Then the load of skb->data_end would be slow while skb->data =
+is
+> readily available in a callee-saved register.
 
---qzavn4uvzmrnbux4
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+...
 
-On Fri, Sep 15, 2023 at 01:01:23PM +0800, David Gow wrote:
-> KUnit's deferred action API accepts a void(*)(void *) function pointer
-> which is called when the test is exited. However, we very frequently
-> want to use existing functions which accept a single pointer, but which
-> may not be of type void*. While this is probably dodgy enough to be on
-> the wrong side of the C standard, it's been often used for similar
-> callbacks, and gcc's -Wcast-function-type seems to ignore cases where
-> the only difference is the type of the argument, assuming it's
-> compatible (i.e., they're both pointers to data).
->=20
-> However, clang 16 has introduced -Wcast-function-type-strict, which no
-> longer permits any deviation in function pointer type. This seems to be
-> because it'd break CFI, which validates the type of function calls.
->=20
-> This rather ruins our attempts to cast functions to defer them, and
-> leaves us with a few options:
-> 1. Stick our fingers in our ears an ignore the warning. (It's worked so
->    far, but probably isn't the right thing to do.)
-> 2. Find some horrible way of casting which fools the compiler into
->    letting us do the cast. (It'd still break CFI, though.)
-> 3. Disable the warning, and CFI for this function. This isn't optimal,
->    but may make sense for test-only code. However, I think we'd have to
->    do this for every function called, not just the caller, so maybe it's
->    not practical.
-> 4. Manually write wrappers around any such functions. This is ugly (do
->    we really want two copies of each function, one of which has no type
->    info and just forwards to the other). It could get repetitive.
-> 5. Generate these wrappers with a macro. That's what this patch does.
->=20
-> I'm broadly okay with any of the options above, though whatever we go
-> with will no doubt require some bikeshedding of details (should these
-> wrappers be public, do we dedupe them, etc).
->=20
-> Thoughts?
+> call %[bpf_loop]; \
+> gadget_%=3D: \
+> r2 =3D *(u32 *)(r7 + 80);   \
+> if r2 <=3D r9 goto exit_%=3D; \
 
-Looks awesome :)
+r9 is supposed to be available in the callee-saved register? :)
+I think you're missing that it is _callee_ saved.
+If that bpf_loop indeed managed to flush L1 cache the
+refill of r9 in the epilogue would be a cache miss.
+And r7 will be a cache miss as well.
+So there is no chance cpu will execute 'if r2 <=3D r9' speculatively.
 
-We ended up using a wrapper in KMS to workaround this issue and would
-benefit from it too.
+I have to agree that the above approach sounds plausible in theory
+and I've never seen anyone propose to mispredict a branch
+this way. Which also means that no known speculation attack
+was crafted. I suspect that's a strong sign that
+the above approach is indeed a theory and it doesn't work in practice.
+Likely because the whole cache is flushed the subsequent misses
+will spoil all speculation. For spec v1 to work you need
+only one slow load in one side of that branch.
+The other load and the speculative code after should not miss.
+When it does the spec code won't be able to leave the breadcrumbs
+of the leaked bit in the cache.
+'Leak full byte' is also 'wishful thinking' imo.
+I haven't seen any attack that leaks byte at-a-time.
 
-Maxime
-
---qzavn4uvzmrnbux4
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZQlUUwAKCRDj7w1vZxhR
-xTUeAQCXea7YsXjxXaDvxqjnE997V4ealgCJYazsP/VqEvHEawEAp7F5FghSDNVD
-/T5BI0YgKuv0gkRyUl7Mzj3oYZDKEg0=
-=Vf6p
------END PGP SIGNATURE-----
-
---qzavn4uvzmrnbux4--
+So I will insist on seeing a full working exploit before doing
+anything else here. It's good to discuss this cpu speculation
+concerns, but we have to stay practical.
+Even removing bpf from the picture there is so much code
+in the network core that checks packet boundaries.
+One can find plenty of cases of 'read past skb->end'
+under speculation and I'm arguing none of them are exploitable.
