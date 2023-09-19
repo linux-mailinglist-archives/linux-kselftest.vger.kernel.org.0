@@ -2,171 +2,184 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 365217A6BC0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Sep 2023 21:49:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2803C7A6BD9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Sep 2023 21:54:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232957AbjISTtP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 19 Sep 2023 15:49:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55808 "EHLO
+        id S232066AbjISTyy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 19 Sep 2023 15:54:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232400AbjISTtO (ORCPT
+        with ESMTP id S232549AbjISTyw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Sep 2023 15:49:14 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2834ED
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Sep 2023 12:49:08 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-404f881aa48so25615e9.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Sep 2023 12:49:08 -0700 (PDT)
+        Tue, 19 Sep 2023 15:54:52 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D881B9D
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Sep 2023 12:54:45 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-50098cc8967so9883382e87.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Sep 2023 12:54:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695152947; x=1695757747; darn=vger.kernel.org;
+        d=atishpatra.org; s=google; t=1695153284; x=1695758084; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/YB5lVTEo2oIGM22JEX9SYzDoyZreOUPzeoeG//8zcw=;
-        b=rSzxSb4lPSs6zf+HtOamNlnaZNA+6CuWlZP5iTkQl9d6551+GzZ6R/qrA3EpDtyVmg
-         LmV/5oFS+XMPdEurjKji72WQtcLvc+VmmcOb9/qUFepgvekrDtxW4TBUSq0o2676CGdX
-         5Nf1VUc2CKEuyuyfUyT3WgvmEaqluCCOITxIBX6MciKDc2Tb0NhY7VxEtwLHClw7d4n3
-         jKAqPY74ocbFNJYkNzNG1q7+i+Qoa+oihVoF7JeoLpmAdptGX6DoTQc2QySourFg1Z4u
-         KqgVpT3Ula0C44K/d6XfiAbkRAXTp29u601ktKtDXEeW85d6E/Xdtf+HTETcNot/Xqxp
-         NvUw==
+        bh=HjrdE60++TcwatJpXQy7OuWtzjqtwzDOP4HlaCMD688=;
+        b=sRu16KAOkVD0agT9pdQCQeM8bB1TjVRVnK5JwdoDH07GsZD92zQ+g+Id0bjhm5mEy/
+         gmVPHQ3ADTrUphmtraeXoguL/snemaBJnAz5BY3hycpPufCq3yW8cw/ucCed53DjC9K1
+         8wZbbg3ImSfHvoUi4VHA+dZG2NHEM2dtHdooE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695152947; x=1695757747;
+        d=1e100.net; s=20230601; t=1695153284; x=1695758084;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/YB5lVTEo2oIGM22JEX9SYzDoyZreOUPzeoeG//8zcw=;
-        b=U7vF2GWA9Qyzwcq8BzQnc2QBxe0XqO20kJmlfjHN6gC5AM1jJ4MsKWZYcmylzcVjl1
-         2tZqI5BeA8Goy6HdbduOgi90cASD+liW6cwI6AIPSmU54Zk9cpcj+zXKx8r3vl5I+d7j
-         SDYaXBdsq9AeA6QU03Td84W1aqnMvMnhGuDFp51Wl5uMI8pKoZIpLPlivbGcIHq+u3YZ
-         UqVaVAZNCWqsym9n/hMAICHtV1pmbDUa6SeTBY6dSkVoNk5b9sq0ELzVEK6wGJAUmw3B
-         CUTY+cVyesm5OCsKfn9BqW7+KR4MF9BmE0LXb5ctfu9myG/YuBajO2LjopDPXrtI4eEj
-         D7LQ==
-X-Gm-Message-State: AOJu0YzNrLsla07ox+03aIuhjlikZV5Ml5Rma6HjBgxC5M+s/U2O1H1a
-        15hl0qxyUpBWr14YOt7XBp/HEk4VyH9KGftaAXPlFg==
-X-Google-Smtp-Source: AGHT+IEeHVmf20rC/G4IyqVK9B1XveSpZx9ksqGyeNUYQvj6A7jFxrBpFhywFsvx1XPrY0bCbW2fPEHPrYz5CNEv4jo=
-X-Received: by 2002:a05:600c:1d06:b0:3fe:d691:7d63 with SMTP id
- l6-20020a05600c1d0600b003fed6917d63mr16494wms.6.1695152947216; Tue, 19 Sep
- 2023 12:49:07 -0700 (PDT)
+        bh=HjrdE60++TcwatJpXQy7OuWtzjqtwzDOP4HlaCMD688=;
+        b=aRXrRFaMV40MP2MKFVmhFAMfGwtOvTKznfNllHVwQOQJyHI3DXCkqlZqoyL3QdRX+n
+         D9B6d4ZXUheJuC5utgToKja1evmaGwq2OwOCYn3+UEJjlkOPjTSehq3f7CbPP9t+lCxN
+         ln6N4j7+5J+/QAMbD9oGfbSPyXBfhXrsYnEupGauiu/k+xtZ2tpeyr4llc2JV976WFjV
+         EVOzZ5P+MQeQSwCNfkNa7Uw9jaFJ4XApYxmTm+lgiNEypTzPoGIU28JH2+aJR5cPKjMY
+         NiFWWRgLJojYQ17gHrJKYty+SUR5erpAwI3CJLq+41pQuPrn+07L06R6vKadSLFr8IOY
+         Qw0Q==
+X-Gm-Message-State: AOJu0Yx3rpCzoUQJk8q9ZYiOUW7zmOSeHbJFFVft3RrWLmDoXrA6/C65
+        7Yi3u+g/Gpe9+cdvu0Vx2Xxz9PQYFyc9JQdWUvZg
+X-Google-Smtp-Source: AGHT+IGCP2sHSYQZgQISUa9EgUk/8O464Rrr/vqidV5rzxfkX7nm0h42VEh5K+cIZmfXJ4mpo7ccdy+WLMgXrV6wO8E=
+X-Received: by 2002:a05:6512:475:b0:4fe:8c4:44fb with SMTP id
+ x21-20020a056512047500b004fe08c444fbmr546266lfd.38.1695153283961; Tue, 19 Sep
+ 2023 12:54:43 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230911-kms-slow-tests-v1-0-d3800a69a1a1@kernel.org> <20230911-kms-slow-tests-v1-1-d3800a69a1a1@kernel.org>
-In-Reply-To: <20230911-kms-slow-tests-v1-1-d3800a69a1a1@kernel.org>
-From:   Rae Moar <rmoar@google.com>
-Date:   Tue, 19 Sep 2023 15:48:55 -0400
-Message-ID: <CA+GJov6sQMmEiTQ7cupyC2cx-aWvV7M6ki4W8naEHyA8tbSbdg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kunit: Warn if tests are slow
-To:     Maxime Ripard <mripard@kernel.org>
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        =?UTF-8?B?TWHDrXJhIENhbmFs?= <mairacanal@riseup.net>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20230918180646.1398384-1-apatel@ventanamicro.com> <20230918180646.1398384-4-apatel@ventanamicro.com>
+In-Reply-To: <20230918180646.1398384-4-apatel@ventanamicro.com>
+From:   Atish Patra <atishp@atishpatra.org>
+Date:   Tue, 19 Sep 2023 12:54:32 -0700
+Message-ID: <CAOnJCUJYDHtbYS4js7PSAeLqT4sL5zi7DT5xeSww+5Nvs2UhcA@mail.gmail.com>
+Subject: Re: [PATCH 3/4] KVM: riscv: selftests: Fix ISA_EXT register handling
+ in get-reg-list
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Andrew Jones <ajones@ventanamicro.com>, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Sep 11, 2023 at 5:51=E2=80=AFAM Maxime Ripard <mripard@kernel.org> =
-wrote:
+On Mon, Sep 18, 2023 at 11:07=E2=80=AFAM Anup Patel <apatel@ventanamicro.co=
+m> wrote:
 >
-> Kunit recently gained support to setup attributes, the first one being
-> the speed of a given test, then allowing to filter out slow tests.
+> Same set of ISA_EXT registers are not present on all host because
+> ISA_EXT registers are visible to the KVM user space based on the
+> ISA extensions available on the host. Also, disabling an ISA
+> extension using corresponding ISA_EXT register does not affect
+> the visibility of the ISA_EXT register itself.
 >
-> A slow test is defined in the documentation as taking more than one
-> second. There's an another speed attribute called "super slow" but whose
-> definition is less clear.
+> Based on the above, we should filter-out all ISA_EXT registers.
 >
-> Add support to the test runner to check the test execution time, and
-> report tests that should be marked as slow but aren't.
->
-> Signed-off-by: Maxime Ripard <mripard@kernel.org>
 
-Hi!
+In that case, we don't need the switch case any more. Just a
+conditional check with KVM_RISCV_ISA_EXT_MAX should be sufficient.
 
-I like this idea especially if it was helpful in identifying slow
-tests already! I have a few thoughts on this. I share Jani's concern
-for warning all tests on slow machines. I can think of a few options.
-
-First, we could increase the threshold to about 2s even though that
-would eliminate warnings on potentially slow tests. However, this
-would point out the slowest tests.
-
-Second, we could change this to warn users only when they choose by
-making this a configurable option or making this a script to output a
-list of all unmarked slow tests.
-
-Third, we could leave this as is. As the KUnit warnings do not show up
-in the kunit.py output and do not cause the test to fail in any way
-they are relatively harmless if they are unwanted by the user.
-
-Not quite sure which I prefer? The second option might be the cleanest
-for the user and the time threshold could even be customizable. Let me
-know what you think.
-
+> Fixes: 477069398ed6 ("KVM: riscv: selftests: Add get-reg-list test")
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
 > ---
->  lib/kunit/test.c | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
+>  .../selftests/kvm/riscv/get-reg-list.c        | 35 +++++++++++--------
+>  1 file changed, 21 insertions(+), 14 deletions(-)
 >
-> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> index 49698a168437..a3b924501f3d 100644
-> --- a/lib/kunit/test.c
-> +++ b/lib/kunit/test.c
-> @@ -379,6 +379,9 @@ static void kunit_run_case_internal(struct kunit *tes=
-t,
->                                     struct kunit_suite *suite,
->                                     struct kunit_case *test_case)
+> diff --git a/tools/testing/selftests/kvm/riscv/get-reg-list.c b/tools/tes=
+ting/selftests/kvm/riscv/get-reg-list.c
+> index d8ecacd03ecf..76c0ad11e423 100644
+> --- a/tools/testing/selftests/kvm/riscv/get-reg-list.c
+> +++ b/tools/testing/selftests/kvm/riscv/get-reg-list.c
+> @@ -14,17 +14,33 @@
+>
+>  bool filter_reg(__u64 reg)
 >  {
-> +       struct timespec64 start, end;
-> +       struct timespec64 duration;
-> +
->         if (suite->init) {
->                 int ret;
+> +       switch (reg & ~REG_MASK) {
+>         /*
+> -        * Some ISA extensions are optional and not present on all host,
+> -        * but they can't be disabled through ISA_EXT registers when pres=
+ent.
+> -        * So, to make life easy, just filtering out these kind of regist=
+ers.
+> +        * Same set of ISA_EXT registers are not present on all host beca=
+use
+> +        * ISA_EXT registers are visible to the KVM user space based on t=
+he
+> +        * ISA extensions available on the host. Also, disabling an ISA
+> +        * extension using corresponding ISA_EXT register does not affect
+> +        * the visibility of the ISA_EXT register itself.
+> +        *
+> +        * Based on above, we should filter-out all ISA_EXT registers.
+>          */
+> -       switch (reg & ~REG_MASK) {
+> +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_A:
+> +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_C:
+> +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_D:
+> +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_F:
+> +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_H:
+> +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_I:
+> +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_M:
+> +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_SVPBMT:
+>         case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_SSTC:
+>         case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_SVINVAL:
+>         case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_ZIHINTPAUSE:
+> +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_ZICBOM:
+> +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_ZICBOZ:
+>         case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_ZBB:
+>         case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_SSAIA:
+> +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_V:
+> +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_SVNAPOT:
+>         case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_ZBA:
+>         case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_ZBS:
+>         case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_ZICNTR:
+> @@ -50,12 +66,7 @@ static inline bool vcpu_has_ext(struct kvm_vcpu *vcpu,=
+ int ext)
+>         unsigned long value;
 >
-> @@ -390,7 +393,20 @@ static void kunit_run_case_internal(struct kunit *te=
-st,
->                 }
->         }
->
-> +       ktime_get_ts64(&start);
-> +
->         test_case->run_case(test);
-> +
-> +       ktime_get_ts64(&end);
-> +
-> +       duration =3D timespec64_sub(end, start);
-> +
-> +       if (duration.tv_sec >=3D 1 &&
-> +           (test_case->attr.speed =3D=3D KUNIT_SPEED_UNSET ||
-> +            test_case->attr.speed >=3D KUNIT_SPEED_NORMAL))
-> +               kunit_warn(test,
-> +                          "Test should be marked slow (runtime: %lld.%09=
-lds)",
-> +                          duration.tv_sec, duration.tv_nsec);
-
-I would consider moving this if statement into a separate function.
-
+>         ret =3D __vcpu_get_reg(vcpu, RISCV_ISA_EXT_REG(ext), &value);
+> -       if (ret) {
+> -               printf("Failed to get ext %d", ext);
+> -               return false;
+> -       }
+> -
+> -       return !!value;
+> +       return (ret) ? false : !!value;
 >  }
 >
->  static void kunit_case_internal_cleanup(struct kunit *test)
->
+>  void finalize_vcpu(struct kvm_vcpu *vcpu, struct vcpu_reg_list *c)
+> @@ -506,10 +517,6 @@ static __u64 base_regs[] =3D {
+>         KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_TIMER | KVM_REG_=
+RISCV_TIMER_REG(time),
+>         KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_TIMER | KVM_REG_=
+RISCV_TIMER_REG(compare),
+>         KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_TIMER | KVM_REG_=
+RISCV_TIMER_REG(state),
+> -       KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_ISA_EXT | KVM_=
+RISCV_ISA_EXT_A,
+> -       KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_ISA_EXT | KVM_=
+RISCV_ISA_EXT_C,
+> -       KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_ISA_EXT | KVM_=
+RISCV_ISA_EXT_I,
+> -       KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_ISA_EXT | KVM_=
+RISCV_ISA_EXT_M,
+>         KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_EXT | KVM_=
+REG_RISCV_SBI_SINGLE | KVM_RISCV_SBI_EXT_V01,
+>         KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_EXT | KVM_=
+REG_RISCV_SBI_SINGLE | KVM_RISCV_SBI_EXT_TIME,
+>         KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_EXT | KVM_=
+REG_RISCV_SBI_SINGLE | KVM_RISCV_SBI_EXT_IPI,
 > --
-> 2.41.0
+> 2.34.1
 >
-> --
-> You received this message because you are subscribed to the Google Groups=
- "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgi=
-d/kunit-dev/20230911-kms-slow-tests-v1-1-d3800a69a1a1%40kernel.org.
+
+
+--=20
+Regards,
+Atish
