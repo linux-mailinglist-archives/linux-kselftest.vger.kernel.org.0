@@ -2,254 +2,289 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 124067A70B8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Sep 2023 04:51:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28FBD7A70BB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Sep 2023 04:57:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231269AbjITCvY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 19 Sep 2023 22:51:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51958 "EHLO
+        id S231675AbjITC5f (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 19 Sep 2023 22:57:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbjITCvX (ORCPT
+        with ESMTP id S229641AbjITC5e (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 19 Sep 2023 22:51:23 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2041.outbound.protection.outlook.com [40.107.94.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89A0499;
-        Tue, 19 Sep 2023 19:51:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=e6DH7swfciu15qhzvDs5a3JM6IQJPx7lnSNjjZwqso755gwgIYFHiCxGafOJO7hoE1li7KH7uaeJ7jDEjjs0N7ep7Q6hO1J8NyYOWjcZ8BumXxmdzfPxnWmJeYWFavvuteOYW171DMX+oANVwJ7oL0hEsy3vpPZ4+V7jMsVUvfl7WJcA7Swrcfi2OPYvYUNW5zel3EBt/dV97mn1aL/Af6oAs7EsMgcd6Cd0mD3w6k6Kb+tQu8teSUNVDC16wPNYlknm/E37nDWe8LJDSY1F4Yd/C4nHPnLEG/alSusyLkrF3ule2xqsnwbb7/zkGijw3+JciFZPPidlDPLtl2BEIA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EQG6iKWgClvTcP8ze8L0GYNhdVz+5Y11TSTkzhE8th4=;
- b=KzH5+6b41e1YvAJUGqwYYlY4S2htaLrLxT8veAA3SfMqCx0rDBUZwnftZI7Ob+INo3WcBnrVPfx5H4JITuHvCprAMcXirdTrB29XAlrIeoDZhT5z2VtaKqHfo4B6fd0cq/1EpLHigUeokoieSI97fzWEH29B5asT2nWmFIugN0JkNw1pN8DtvNtR31PE0kEYBz1vK7pVTRvxjNTiDVutJgdjpnfNYJ1mf6N/16Mtz0/TvW7r7ncFm0/TEQDHkgGSzdtnH3XNujL7Cij/bYw8adDeLcrfV0Ioluj5SrFRteZEMATy7PL5LhX0+XNxgRK35tkcomfFuknwZ4nAGuI9ww==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=EQG6iKWgClvTcP8ze8L0GYNhdVz+5Y11TSTkzhE8th4=;
- b=C7wJLFlFiuKS6eo34dbGlha3FiKcXBIrk8q1gv1Go88Oy89R7kWMkkRggMv0udQp6w3zWG0+kNQcPwEOWEMHTcKVC9sYMsE2eQdxXn+9LuLZPsxkVqJ5UYjCe1gT9kc4MEP5eAb4AA4TzPUrME6TIu9p/RoR1tzT+DCquwl28+I=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from SJ2PR12MB8690.namprd12.prod.outlook.com (2603:10b6:a03:540::10)
- by BN9PR12MB5242.namprd12.prod.outlook.com (2603:10b6:408:11f::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.27; Wed, 20 Sep
- 2023 02:51:14 +0000
-Received: from SJ2PR12MB8690.namprd12.prod.outlook.com
- ([fe80::c3b:811:fd1d:c33e]) by SJ2PR12MB8690.namprd12.prod.outlook.com
- ([fe80::c3b:811:fd1d:c33e%6]) with mapi id 15.20.6792.021; Wed, 20 Sep 2023
- 02:51:13 +0000
-Date:   Wed, 20 Sep 2023 10:50:47 +0800
-From:   Huang Rui <ray.huang@amd.com>
-To:     "Meng, Li (Jassmine)" <Li.Meng@amd.com>
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
-        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
-        "Yuan, Perry" <Perry.Yuan@amd.com>,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>
-Subject: Re: [PATCH V7 0/7] amd-pstate preferred core
-Message-ID: <ZQpeByJeE9ygy2bd@amd.com>
-References: <20230918081407.756858-1-li.meng@amd.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230918081407.756858-1-li.meng@amd.com>
-X-ClientProxiedBy: SGBP274CA0022.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b0::34)
- To SJ2PR12MB8690.namprd12.prod.outlook.com (2603:10b6:a03:540::10)
+        Tue, 19 Sep 2023 22:57:34 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF42C9
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Sep 2023 19:57:27 -0700 (PDT)
+Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.56])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4Rr3596whYzMlLZ;
+        Wed, 20 Sep 2023 10:53:49 +0800 (CST)
+Received: from [10.67.109.254] (10.67.109.254) by
+ kwepemi500008.china.huawei.com (7.221.188.139) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.31; Wed, 20 Sep 2023 10:57:24 +0800
+Message-ID: <fa0bd5fa-88b6-c7af-7004-08978ae52dfa@huawei.com>
+Date:   Wed, 20 Sep 2023 10:57:23 +0800
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ2PR12MB8690:EE_|BN9PR12MB5242:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1ad5150f-fb31-418c-7963-08dbb98473f7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Y13CPyWMrzi6LCWlzXQu2Lz7fX9lwzIEpTd1a+2ZKLbp8uFyRc+hFGr+MH6BOhYxfWXerhN8AO7fysn8bmRtX6mvD55zxVC/p+NHcxkKnZ/bSi1KYszXIwx3OZr6nQvJLfUvSS9OOZfc+CfT5x1Q2CXU1Xdai8nLHoGdZ1M1hrPFDNDfWAFu4yhfI5qtApoBmrdbkVWatjYUbShYyU14UAe9Az2PA1bUUkJlaS/P2utHoJbEtg64C3FYQ14+3HrOd7d1yFahA/anB2CzD7majRH/NR+AgsbQefuzOTTbhXwKJcoypcymLqE2Ny+HudyvCbMLw06G4n5qZrdRbGRf5+SE2nqpUt+wVbSnZTYRr2duznbUugv2lAHuh2+QGB+R5PGQJd0ygA1whkLUxoFa4v5+Zw8L9sBep5jkMcAtVlhZHb3X7x0RaEychAlr5DhSW1F8a3EqNJP58X24UBUzb80b0gPUN2rsN6J5NK5NqX+lEyb+OQjzQki0IZTd4hZ+c8jaer9z0orl4g9ImYlWJLsHVO4+vXBB9STD1nWwVAMIe81katvSRWoxvuYns4M8
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR12MB8690.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(376002)(346002)(39860400002)(396003)(366004)(451199024)(186009)(1800799009)(6506007)(6486002)(6666004)(478600001)(36756003)(38100700002)(86362001)(2616005)(26005)(5660300002)(6512007)(83380400001)(8936002)(8676002)(6862004)(41300700001)(66556008)(4326008)(37006003)(6636002)(66476007)(54906003)(316002)(66946007)(2906002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?JTSEI0qaBibyLrorghjm5QYlkTHigsgjeyjBkMuVulH6utEQS1qps8FX58uR?=
- =?us-ascii?Q?jRWBw2/LPTSiFxddq8D66b7X7/MSsd5sChdc1RKXRSUEfrLo6MFA57K0E9Dp?=
- =?us-ascii?Q?fsxfO4Ym2H0vIVOGsJyzjOSiWGkdBtQl9o4XIQtmwYpiDTRtLoJKQWdcuMwc?=
- =?us-ascii?Q?VzHK5nwHka2fDwn37zXw4AB/CLa16UmJ/ZwjkdGM2AiMI//Ims1y0+hEKkaB?=
- =?us-ascii?Q?4UwsrT5icmf62ilF15ArF6ulan9tHD30+4uSlDcQuXxftUj9VtHQR9kaWq0V?=
- =?us-ascii?Q?tiubgkAQm1wDCOZcQybRwmzg5mtXzwxgdKeycmg/zHhWrCq8B5F2hv9+X04P?=
- =?us-ascii?Q?X6Qeb+mtq+PR0uXQIWXAqCh7Olbr+SRLSrnSbRxg23thb4WHr5Xlw1ZYn1b2?=
- =?us-ascii?Q?sLfV3YQS1x9iFq78cKsUeQDUGPsufrT/8oxuOB8N8pvO/XHcfiDItkfUL9Fm?=
- =?us-ascii?Q?0AoWT7bHGwhihhhjWarrtu0nTvkMPZB2JatUX315ptXgZMqCWYjsQ+mFcrHJ?=
- =?us-ascii?Q?hPs4S5Lqwwe4j3EA6fPvPTG/89bvgLy97DC5zAPrJ+wCZZwmJXb7z4GpqNtm?=
- =?us-ascii?Q?Om1t2xCdTCE6bU9/51oq9LEJf+LQ+3ivd7AqHyZtve/YOUEJaffUzqvmtvqb?=
- =?us-ascii?Q?+sPchwz5PpoA0jBsP5lXEv90BpLErvwXg15uJDkLlobtKaDWC4jSoo5AKooz?=
- =?us-ascii?Q?hfZfYrRii8cjjqLGYp9PVchpPk7jz1eCIrL/5WHK3sJN2NA0Hw70BQUiCMr5?=
- =?us-ascii?Q?E8i4rJCA5eHJBkpRJwHsyj8y+JcQrTupopky3cO/E/h08tmX6g1pA+E23Au6?=
- =?us-ascii?Q?F8W7/SgCuZvpKbuaMtmgBp/xhKqIMVg8T7FaN/3DSZdffADqLcw8hNHm2NcF?=
- =?us-ascii?Q?fUVo8cJV5MJe+9HEWjb+BU+QeZpmnD3swgwVj/wRcFKOIC4k1giNVhDFS3p5?=
- =?us-ascii?Q?SeL/FZsoUCG+xBQ/ac5rOsv5LiKeR4Sv1hh/przaiOiQzJf2CQrfc2JqXRZk?=
- =?us-ascii?Q?w7Dkzxa7TYJY5mx9Umxq2Qtw78PIwmLSqmLCzRNK13RxuIgJsgq8yQGFExIs?=
- =?us-ascii?Q?1fr9zoUusF72hp/ZM+S2R45kvAED2vwyXANmh1ApBckstbQ7GP5CcYDHyQQO?=
- =?us-ascii?Q?aylZ3WJ2duzdVET6jqB3XWEafDUmD+oYMikLRv/Z9Jmo5ZAbBH9VB5m+0v18?=
- =?us-ascii?Q?vRINK5ZzN5HoodpkWHbCvOv+LuId3+x15kRTZLh+AxUEhJxf+m7/5UAiHE1M?=
- =?us-ascii?Q?srk84FX67FdZFLndRBztQ9ksIleRsjTZ0PW27UJqrbGAUK0CF9mN3M4MrBHL?=
- =?us-ascii?Q?ZxiRMEtSb9qigfqz8UwUwW3uNQUEjzqt29QXnHiNX6I+iFb5FfDCQEz+/c32?=
- =?us-ascii?Q?7+DN0o1H/k2hwDXDfcmFV/rkUGdLHagDXD05DOQ3qXeFb2Z2OEiujH5tdBad?=
- =?us-ascii?Q?IuHCuSM3xpavfJxQ5H0IT25CvdxEJcEHaUv2C1Zi5VFW4nVqVmnmyRCXubJI?=
- =?us-ascii?Q?NyYyW5Wx3PRn7aGWzIV67BNVO1rVKK+uGVbB340U2Ac7SpTout+lqW6wTWhL?=
- =?us-ascii?Q?lMB1PoBKrHN89sMvsdLwrdIDWTZYzSXPypKY9KOO?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1ad5150f-fb31-418c-7963-08dbb98473f7
-X-MS-Exchange-CrossTenant-AuthSource: SJ2PR12MB8690.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Sep 2023 02:51:13.7433
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: wEPdOUKArrBY4UWehoGvg/BeNcPAfkmNFhfJ/kKPTBloqKrcrn9oe6nkBr/azRL6JaN8U4Zok95ts0NC3FVPKw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN9PR12MB5242
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH 4/4] kunit: test: Fix the possible memory leak in
+ executor_test
+Content-Language: en-US
+To:     Rae Moar <rmoar@google.com>
+CC:     <brendan.higgins@linux.dev>, <davidgow@google.com>,
+        <skhan@linuxfoundation.org>, <dlatypov@google.com>,
+        <janusz.krzysztofik@linux.intel.com>,
+        <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>
+References: <20230914114629.1517650-1-ruanjinjie@huawei.com>
+ <20230914114629.1517650-5-ruanjinjie@huawei.com>
+ <CA+GJov7Uya8r4T6EtQQ03KQ7BPRsCb8N3y687eDxDitnJ3Aifw@mail.gmail.com>
+From:   Ruan Jinjie <ruanjinjie@huawei.com>
+In-Reply-To: <CA+GJov7Uya8r4T6EtQQ03KQ7BPRsCb8N3y687eDxDitnJ3Aifw@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.109.254]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemi500008.china.huawei.com (7.221.188.139)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Sep 18, 2023 at 04:14:00PM +0800, Meng, Li (Jassmine) wrote:
-> Hi all:
-> 
-> The core frequency is subjected to the process variation in semiconductors.
-> Not all cores are able to reach the maximum frequency respecting the
-> infrastructure limits. Consequently, AMD has redefined the concept of
-> maximum frequency of a part. This means that a fraction of cores can reach
-> maximum frequency. To find the best process scheduling policy for a given
-> scenario, OS needs to know the core ordering informed by the platform through
-> highest performance capability register of the CPPC interface.
-> 
-> Earlier implementations of amd-pstate preferred core only support a static
-> core ranking and targeted performance. Now it has the ability to dynamically
-> change the preferred core based on the workload and platform conditions and
-> accounting for thermals and aging.
-> 
-> Amd-pstate driver utilizes the functions and data structures provided by
-> the ITMT architecture to enable the scheduler to favor scheduling on cores
-> which can be get a higher frequency with lower voltage.
-> We call it amd-pstate preferred core.
-> 
-> Here sched_set_itmt_core_prio() is called to set priorities and
-> sched_set_itmt_support() is called to enable ITMT feature.
-> Amd-pstate driver uses the highest performance value to indicate
-> the priority of CPU. The higher value has a higher priority.
-> 
-> Amd-pstate driver will provide an initial core ordering at boot time.
-> It relies on the CPPC interface to communicate the core ranking to the
-> operating system and scheduler to make sure that OS is choosing the cores
-> with highest performance firstly for scheduling the process. When amd-pstate
-> driver receives a message with the highest performance change, it will
-> update the core ranking.
-> 
-> Changes form V6->V7:
-> - x86:
-> - - Modify kconfig about X86_AMD_PSTATE.
-> - cpufreq: amd-pstate:
-> - - modify incorrect comments about scheduler_work().
-> - - convert highest_perf data type.
-> - - modify preferred core init when cpu init and online.
-> - acpi: cppc:
-> - - modify link of CPPC highest performance.
-> - cpufreq:
-> - - modify link of CPPC highest performance changed.
-> 
-> Changes form V5->V6:
-> - cpufreq: amd-pstate:
-> - - modify the wrong tag order.
-> - - modify warning about hw_prefcore sysfs attribute.
-> - - delete duplicate comments.
-> - - modify the variable name cppc_highest_perf to prefcore_ranking.
-> - - modify judgment conditions for setting highest_perf.
-> - - modify sysfs attribute for CPPC highest perf to pr_debug message.
-> - Documentation: amd-pstate:
-> - - modify warning: title underline too short.
 
-Apart from the comment in patch 3, others look good for me.
 
-Please feel free to add my RB in other patches:
+On 2023/9/20 5:19, Rae Moar wrote:
+> On Thu, Sep 14, 2023 at 7:47 AM 'Jinjie Ruan' via KUnit Development
+> <kunit-dev@googlegroups.com> wrote:
+>>
+>> If kunit_filter_suites() succeeds, not only copy but also filtered_suite
+>> and filtered_suite->test_cases should be freed.
+>>
+>> So use kunit_free_suite_set() to free the filtered_suite,
+>> filtered_suite->test_cases and copy as kunit_module_exit() and
+>> kunit_run_all_tests() do it.
+>>
+>> Fixes: e5857d396f35 ("kunit: flatten kunit_suite*** to kunit_suite** in .kunit_test_suites")
+>> Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
+> 
+> Hello!
+> 
+> This looks mostly good to me. But I have one notable comment. See below.
+> 
+> Thanks!
+> -Rae
+> 
+>> ---
+>>  lib/kunit/executor_test.c | 24 ++++++++++++++++++------
+>>  1 file changed, 18 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/lib/kunit/executor_test.c b/lib/kunit/executor_test.c
+>> index b4f6f96b2844..987b81dce01e 100644
+>> --- a/lib/kunit/executor_test.c
+>> +++ b/lib/kunit/executor_test.c
+>> @@ -56,7 +56,6 @@ static void filter_suites_test(struct kunit *test)
+>>         got = kunit_filter_suites(&suite_set, "suite2", NULL, NULL, &err);
+>>         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start);
+>>         KUNIT_ASSERT_EQ(test, err, 0);
+>> -       kfree_at_end(test, got.start);
+>>
+>>         /* Validate we just have suite2 */
+>>         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start[0]);
+>> @@ -64,6 +63,9 @@ static void filter_suites_test(struct kunit *test)
+>>
+>>         /* Contains one element (end is 1 past end) */
+>>         KUNIT_ASSERT_EQ(test, got.end - got.start, 1);
+>> +
+>> +       if (!err)
+>> +               kunit_free_suite_set(got);
+> 
+> I definitely appreciate the change to free all of "got" rather than
+> just "got.start".
+> 
+> However, kfree_at_end used deferred actions to ensure the kfree would
+> occur at the end of the test. With this change, if the test fails the
+> suite set could not be freed.
 
-Reviewed-by: Huang Rui <ray.huang@amd.com>
+Only when suite_set.start != NULL which is equivalent to err == 0 the
+suite set will be freed in kunit_module_exit(), and
+kunit_free_suite_set() will be called only when kunit_filter_suites()
+succeeds with err == 0. So judging from the use of kunit_filter_suites()
+in kunit_module_exit() and kunit_run_all_tests(), it only wants to free
+the suite set when kunit_filter_suites() succeeds with err == 0. So in
+kunit_filter_suites() , we free
+copy, filtered_suite and filtered_suite->test_cases if (*err) is true.
+
+So if the test fails the suite set will be freed also. And there's a
+double free problem in kfree_at_end(test, got.start) if the test fails.
+So only free the suite set when err == 0.
+
+
+737 static void kunit_module_init(struct module *mod)
+738 {
+739         struct kunit_suite_set suite_set = {
+740                 mod->kunit_suites, mod->kunit_suites +
+mod->num_kunit_suites,
+741         };
+742         const char *action = kunit_action();
+743         int err = 0;
+744
+745         suite_set = kunit_filter_suites(&suite_set,
+746                                         kunit_filter_glob() ?: "*.*",
+747                                         kunit_filter(),
+kunit_filter_action(),
+748                                         &err);
+
+765 static void kunit_module_exit(struct module *mod)
+766 {
+767         struct kunit_suite_set suite_set = {
+768                 mod->kunit_suites, mod->kunit_suites +
+mod->num_kunit_suites,
+769         };
+770         const char *action = kunit_action();
+771
+772         if (!action)
+773                 __kunit_test_suites_exit(mod->kunit_suites,
+774                                          mod->num_kunit_suites);
+775
+776         if (suite_set.start)
+777                 kunit_free_suite_set(suite_set);
+778 }
+
+
+
+314 int kunit_run_all_tests(void)
+315 {
+           ......
+325         if (filter_glob_param || filter_param) {
+326                 suite_set = kunit_filter_suites(&suite_set,
+filter_glob_param,
+327                                 filter_param, filter_action_param,
+&err);
+328                 if (err) {
+329                         pr_err("kunit executor: error filtering
+suites: %d\n", err);
+330                         goto out;
+331                 }
+332         }
+......
+342
+343         if (filter_glob_param || filter_param) { /* a copy was made
+of each suite */
+344                 kunit_free_suite_set(suite_set);
+345         }
+346
+347 out:
+348         kunit_handle_shutdown();
+349         return err;
+350 }
+
 
 > 
-> Changes form V4->V5:
-> - cpufreq: amd-pstate:
-> - - modify sysfs attribute for CPPC highest perf.
-> - - modify warning about comments
-> - - rebase linux-next
-> - cpufreq: 
-> - - Moidfy warning about function declarations.
-> - Documentation: amd-pstate:
-> - - align with ``amd-pstat``
+> Intead, is there any way to alter the function kfree_at_end (could be
+> renamed) to take in "got" and then use deferred actions to ensure
+> kunit_free_suite_set is called at the end of the test?
+
+It is good iead. And it may be fine to call kfree_at_end(test, got) if
+err == 0 to avoid double free issue.
+
 > 
-> Changes form V3->V4:
-> - Documentation: amd-pstate:
-> - - Modify inappropriate descriptions.
+> Let me know what you think about this.
 > 
-> Changes form V2->V3:
-> - x86:
-> - - Modify kconfig and description.
-> - cpufreq: amd-pstate: 
-> - - Add Co-developed-by tag in commit message.
-> - cpufreq:
-> - - Modify commit message.
-> - Documentation: amd-pstate:
-> - - Modify inappropriate descriptions.
 > 
-> Changes form V1->V2:
-> - acpi: cppc:
-> - - Add reference link.
-> - cpufreq:
-> - - Moidfy link error.
-> - cpufreq: amd-pstate: 
-> - - Init the priorities of all online CPUs
-> - - Use a single variable to represent the status of preferred core.
-> - Documentation:
-> - - Default enabled preferred core.
-> - Documentation: amd-pstate: 
-> - - Modify inappropriate descriptions.
-> - - Default enabled preferred core.
-> - - Use a single variable to represent the status of preferred core.
-> 
-> Meng Li (7):
->   x86: Drop CPU_SUP_INTEL from SCHED_MC_PRIO for the expansion.
->   acpi: cppc: Add get the highest performance cppc control
->   cpufreq: amd-pstate: Enable amd-pstate preferred core supporting.
->   cpufreq: Add a notification message that the highest perf has changed
->   cpufreq: amd-pstate: Update amd-pstate preferred core ranking
->     dynamically
->   Documentation: amd-pstate: introduce amd-pstate preferred core
->   Documentation: introduce amd-pstate preferrd core mode kernel command
->     line options
-> 
->  .../admin-guide/kernel-parameters.txt         |   5 +
->  Documentation/admin-guide/pm/amd-pstate.rst   |  58 +++++-
->  arch/x86/Kconfig                              |   5 +-
->  drivers/acpi/cppc_acpi.c                      |  13 ++
->  drivers/acpi/processor_driver.c               |   6 +
->  drivers/cpufreq/amd-pstate.c                  | 197 ++++++++++++++++--
->  drivers/cpufreq/cpufreq.c                     |  13 ++
->  include/acpi/cppc_acpi.h                      |   5 +
->  include/linux/amd-pstate.h                    |   6 +
->  include/linux/cpufreq.h                       |   5 +
->  10 files changed, 291 insertions(+), 22 deletions(-)
-> 
-> -- 
-> 2.34.1
+>>  }
+>>
+>>  static void filter_suites_test_glob_test(struct kunit *test)
+>> @@ -82,7 +84,6 @@ static void filter_suites_test_glob_test(struct kunit *test)
+>>         got = kunit_filter_suites(&suite_set, "suite2.test2", NULL, NULL, &err);
+>>         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start);
+>>         KUNIT_ASSERT_EQ(test, err, 0);
+>> -       kfree_at_end(test, got.start);
+>>
+>>         /* Validate we just have suite2 */
+>>         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start[0]);
+>> @@ -93,6 +94,9 @@ static void filter_suites_test_glob_test(struct kunit *test)
+>>         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start[0]->test_cases);
+>>         KUNIT_EXPECT_STREQ(test, (const char *)got.start[0]->test_cases[0].name, "test2");
+>>         KUNIT_EXPECT_FALSE(test, got.start[0]->test_cases[1].name);
+>> +
+>> +       if (!err)
+>> +               kunit_free_suite_set(got);
+>>  }
+>>
+>>  static void filter_suites_to_empty_test(struct kunit *test)
+>> @@ -109,10 +113,12 @@ static void filter_suites_to_empty_test(struct kunit *test)
+>>
+>>         got = kunit_filter_suites(&suite_set, "not_found", NULL, NULL, &err);
+>>         KUNIT_ASSERT_EQ(test, err, 0);
+>> -       kfree_at_end(test, got.start); /* just in case */
+>>
+>>         KUNIT_EXPECT_PTR_EQ_MSG(test, got.start, got.end,
+>>                                 "should be empty to indicate no match");
+>> +
+>> +       if (!err)
+>> +               kunit_free_suite_set(got);
+>>  }
+>>
+>>  static void parse_filter_attr_test(struct kunit *test)
+>> @@ -172,7 +178,6 @@ static void filter_attr_test(struct kunit *test)
+>>         got = kunit_filter_suites(&suite_set, NULL, filter, NULL, &err);
+>>         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start);
+>>         KUNIT_ASSERT_EQ(test, err, 0);
+>> -       kfree_at_end(test, got.start);
+>>
+>>         /* Validate we just have normal_suite */
+>>         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start[0]);
+>> @@ -183,6 +188,9 @@ static void filter_attr_test(struct kunit *test)
+>>         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start[0]->test_cases);
+>>         KUNIT_EXPECT_STREQ(test, got.start[0]->test_cases[0].name, "normal");
+>>         KUNIT_EXPECT_FALSE(test, got.start[0]->test_cases[1].name);
+>> +
+>> +       if (!err)
+>> +               kunit_free_suite_set(got);
+>>  }
+>>
+>>  static void filter_attr_empty_test(struct kunit *test)
+>> @@ -200,10 +208,12 @@ static void filter_attr_empty_test(struct kunit *test)
+>>
+>>         got = kunit_filter_suites(&suite_set, NULL, filter, NULL, &err);
+>>         KUNIT_ASSERT_EQ(test, err, 0);
+>> -       kfree_at_end(test, got.start); /* just in case */
+>>
+>>         KUNIT_EXPECT_PTR_EQ_MSG(test, got.start, got.end,
+>>                                 "should be empty to indicate no match");
+>> +
+>> +       if (!err)
+>> +               kunit_free_suite_set(got);
+>>  }
+>>
+>>  static void filter_attr_skip_test(struct kunit *test)
+>> @@ -222,7 +232,6 @@ static void filter_attr_skip_test(struct kunit *test)
+>>         got = kunit_filter_suites(&suite_set, NULL, filter, "skip", &err);
+>>         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start);
+>>         KUNIT_ASSERT_EQ(test, err, 0);
+>> -       kfree_at_end(test, got.start);
+>>
+>>         /* Validate we have both the slow and normal test */
+>>         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start[0]->test_cases);
+>> @@ -233,6 +242,9 @@ static void filter_attr_skip_test(struct kunit *test)
+>>         /* Now ensure slow is skipped and normal is not */
+>>         KUNIT_EXPECT_EQ(test, got.start[0]->test_cases[0].status, KUNIT_SKIPPED);
+>>         KUNIT_EXPECT_FALSE(test, got.start[0]->test_cases[1].status);
+>> +
+>> +       if (!err)
+>> +               kunit_free_suite_set(got);
+>>  }
+>>
+>>  static struct kunit_case executor_test_cases[] = {
+>> --
+>> 2.34.1
+>>
+>> --
+>> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
+>> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
+>> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20230914114629.1517650-5-ruanjinjie%40huawei.com.
 > 
