@@ -2,123 +2,138 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3777D7A75A3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Sep 2023 10:19:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC5E67A7643
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Sep 2023 10:49:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233473AbjITITG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 20 Sep 2023 04:19:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54768 "EHLO
+        id S233464AbjITItP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 20 Sep 2023 04:49:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233706AbjITIS7 (ORCPT
+        with ESMTP id S233125AbjITItO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Sep 2023 04:18:59 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74BDC128
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Sep 2023 01:18:52 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-401f68602a8so71903565e9.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Sep 2023 01:18:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1695197931; x=1695802731; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=LqBFN5FLB49lnK/5qmtGVnKUxCOh5CXzqPeEzI92Gus=;
-        b=H/Q66Ri5aVz8NB1wAKAM3VNIBTPApCowNWaRlZopnkcBTDnIRvtVsrcvEApkM14cGJ
-         K45ugsy/hyZMkcGKsxou6GqsGyszxX9AzfdO+Mog2ljcczoiGRU6Ofu2a+5b2bODg771
-         CCLQEp3BtZ2eEcKT2yAEyQSPUOTeVXvhIzubmnj8JlxvZ9r8CuZdaNjHQodVs1hd7wuV
-         +wHxfqt15K7ckzrhC+EGWhnk4LYd5QiIO5q7TsbvcoI6XoYyzZjDsYT6iN/mmNXbQxWu
-         CNu0GzpTkQsH8Vjb/wkQI1Jxe7v2Yf2Q2D34wkIwmOsBGBqvKDzgrr8BGWH1QcIWWLpF
-         RTDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695197931; x=1695802731;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LqBFN5FLB49lnK/5qmtGVnKUxCOh5CXzqPeEzI92Gus=;
-        b=FV8iG+Q4m2Gve5XkTe1NWS6YJEgrxDBEwciNDbGxVsOxaQvqvGeciolmHjbwCfJQoz
-         Zpaa1tDXOYzRW5+TE68VbyhjezlBleWxWyIExEYYsi8NKKhUM1dizEyNU/u98oIfUrWn
-         hBI65ytA7vob6tuapEKLZjqQqO/jd07cq0ptTxPeRq/klOPky5hE39SoCfNuV7gsYE6j
-         vdsK3nPVpRSQRwJImTR1otMnzqjPBuC3LRPLfY8ApTXbxDUwF4QPq9g8jVSVznn/znaU
-         smmGv1FmJUieCwmJ5cKUlbsj7p0RT9WMFe0TdGTvL7izxvA4t+SL+Fds36E0fUQxyjpj
-         kr9w==
-X-Gm-Message-State: AOJu0Yyeh28ECf602FtX+qW/z1PmUgb4sWa1Wpd5xgFtTcPPJsCqthTY
-        Uk8xQrOx7lg5iYvarnSCXoyNDA==
-X-Google-Smtp-Source: AGHT+IEL6XDWeA1RRkJT2O9NGVoH7Skvq4BGuzq8l9Y1wg1d+Qpftyi3lW7iMmOUd4m4gogg1F9R8g==
-X-Received: by 2002:a05:600c:ace:b0:401:b53e:6c40 with SMTP id c14-20020a05600c0ace00b00401b53e6c40mr1791966wmr.10.1695197930897;
-        Wed, 20 Sep 2023 01:18:50 -0700 (PDT)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id c26-20020a05600c0ada00b00400268671c6sm1250996wmr.13.2023.09.20.01.18.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Sep 2023 01:18:50 -0700 (PDT)
-Date:   Wed, 20 Sep 2023 10:18:49 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Conor Dooley <conor@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Mayuresh Chitale <mchitale@ventanamicro.com>,
-        devicetree@vger.kernel.org, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 7/7] KVM: riscv: selftests: Add condops extensions to
- get-reg-list test
-Message-ID: <20230920-d30b398a99804418792264c3@orel>
-References: <20230919035343.1399389-1-apatel@ventanamicro.com>
- <20230919035343.1399389-8-apatel@ventanamicro.com>
+        Wed, 20 Sep 2023 04:49:14 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BDAA93;
+        Wed, 20 Sep 2023 01:49:08 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B8FCC433C7;
+        Wed, 20 Sep 2023 08:49:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1695199748;
+        bh=qSsw71s1Fjqhd6GpejqtDVQ+WOuNOzjUTZO9Z7vF7/U=;
+        h=From:To:Cc:Subject:Date:From;
+        b=fFAMTd+2BBf2WY/P+COVYj/C+yt5CW2oUw5+/gHjtBVXIg8DfalWC6QQBjBe0+lzI
+         HCRD/4HKgXi6HHRdTJBRaP3MAtQfvuk4CuqD3kn14luq9yfCUZ219qJyhzlljI5rZ0
+         8GOsRtOiS4bY3sHoIrlScmuKF1T6NIfYXb/i0b+ci1NyaVrMNe3xaEUKH13jcFMCtE
+         gKwWWwElx1pddNUlBvkKnp7oOVbW9AUj9bTtiYF0FLTQuEVCaPLu/Si1b39j9VM/A9
+         rGnf/k9CCmLomNoq1h3YsW+zmKbfqgMn2wC3CnTBuBvXwxQ8sRFz1Wt+ImMkHcNRNN
+         Zc5kHJiq44UWQ==
+From:   Maxime Ripard <mripard@kernel.org>
+To:     Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>
+Cc:     Maxime Ripard <mripard@kernel.org>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Rae Moar <rmoar@google.com>, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] kunit: Warn if tests are slow
+Date:   Wed, 20 Sep 2023 10:49:03 +0200
+Message-ID: <20230920084903.1522728-1-mripard@kernel.org>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230919035343.1399389-8-apatel@ventanamicro.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Sep 19, 2023 at 09:23:43AM +0530, Anup Patel wrote:
-> We have a new conditional operations related ISA extensions so let us add
-> these extensions to get-reg-list test.
-> 
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> ---
->  tools/testing/selftests/kvm/riscv/get-reg-list.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/kvm/riscv/get-reg-list.c b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-> index 9f464c7996c6..4ad4bf87fa78 100644
-> --- a/tools/testing/selftests/kvm/riscv/get-reg-list.c
-> +++ b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-> @@ -50,6 +50,8 @@ bool filter_reg(__u64 reg)
->  	case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_ZIFENCEI:
->  	case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_ZIHPM:
->  	case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_SMSTATEEN:
-> +	case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_XVENTANACONDOPS:
-> +	case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_ZICOND:
->  		return true;
->  	/* AIA registers are always available when Ssaia can't be disabled */
->  	case KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_AIA | KVM_REG_RISCV_CSR_AIA_REG(siselect):
-> @@ -360,6 +362,8 @@ static const char *isa_ext_id_to_str(__u64 id)
->  		"KVM_RISCV_ISA_EXT_ZIFENCEI",
->  		"KVM_RISCV_ISA_EXT_ZIHPM",
->  		"KVM_RISCV_ISA_EXT_SMSTATEEN",
-> +		"KVM_RISCV_ISA_EXT_XVENTANACONDOPS",
-> +		"KVM_RISCV_ISA_EXT_ZICOND",
->  	};
->  
->  	if (reg_off >= ARRAY_SIZE(kvm_isa_ext_reg_name)) {
-> -- 
-> 2.34.1
->
+Kunit recently gained support to setup attributes, the first one being
+the speed of a given test, then allowing to filter out slow tests.
 
-Don't we want to add test configs for these?
+A slow test is defined in the documentation as taking more than one
+second. There's an another speed attribute called "super slow" but whose
+definition is less clear.
 
-Thanks,
-drew
+Add support to the test runner to check the test execution time, and
+report tests that should be marked as slow but aren't.
+
+Signed-off-by: Maxime Ripard <mripard@kernel.org>
+
+---
+
+To: Brendan Higgins <brendan.higgins@linux.dev>
+To: David Gow <davidgow@google.com>
+Cc: Jani Nikula <jani.nikula@linux.intel.com>
+Cc: Rae Moar <rmoar@google.com>
+Cc: linux-kselftest@vger.kernel.org
+Cc: kunit-dev@googlegroups.com
+Cc: linux-kernel@vger.kernel.org
+
+Changes from v1:
+- Split the patch out of the series
+- Change to trigger the warning only if the runtime is twice the
+  threshold (Jani, Rae)
+- Split the speed check into a separate function (Rae)
+- Link: https://lore.kernel.org/all/20230911-kms-slow-tests-v1-0-d3800a69a1a1@kernel.org/
+---
+ lib/kunit/test.c | 27 +++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
+
+diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+index 49698a168437..a1d5dd2bf87d 100644
+--- a/lib/kunit/test.c
++++ b/lib/kunit/test.c
+@@ -372,6 +372,25 @@ void kunit_init_test(struct kunit *test, const char *name, char *log)
+ }
+ EXPORT_SYMBOL_GPL(kunit_init_test);
+ 
++#define KUNIT_SPEED_SLOW_THRESHOLD_S	1
++
++static void kunit_run_case_check_speed(struct kunit *test,
++				       struct kunit_case *test_case,
++				       struct timespec64 duration)
++{
++	enum kunit_speed speed = test_case->attr.speed;
++
++	if (duration.tv_sec < (2 * KUNIT_SPEED_SLOW_THRESHOLD_S))
++		return;
++
++	if (speed == KUNIT_SPEED_VERY_SLOW || speed == KUNIT_SPEED_SLOW)
++		return;
++
++	kunit_warn(test,
++		   "Test should be marked slow (runtime: %lld.%09lds)",
++		   duration.tv_sec, duration.tv_nsec);
++}
++
+ /*
+  * Initializes and runs test case. Does not clean up or do post validations.
+  */
+@@ -379,6 +398,8 @@ static void kunit_run_case_internal(struct kunit *test,
+ 				    struct kunit_suite *suite,
+ 				    struct kunit_case *test_case)
+ {
++	struct timespec64 start, end;
++
+ 	if (suite->init) {
+ 		int ret;
+ 
+@@ -390,7 +411,13 @@ static void kunit_run_case_internal(struct kunit *test,
+ 		}
+ 	}
+ 
++	ktime_get_ts64(&start);
++
+ 	test_case->run_case(test);
++
++	ktime_get_ts64(&end);
++
++	kunit_run_case_check_speed(test, test_case, timespec64_sub(end, start));
+ }
+ 
+ static void kunit_case_internal_cleanup(struct kunit *test)
+-- 
+2.41.0
+
