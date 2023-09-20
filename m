@@ -2,59 +2,60 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A8EE7A83EA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Sep 2023 15:52:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CB657A8446
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Sep 2023 15:57:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236392AbjITNwQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 20 Sep 2023 09:52:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54610 "EHLO
+        id S236620AbjITN5E (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 20 Sep 2023 09:57:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236342AbjITNwQ (ORCPT
+        with ESMTP id S236667AbjITN4j (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Sep 2023 09:52:16 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00FC8C6
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Sep 2023 06:52:08 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id 41be03b00d2f7-578af21ff50so1617169a12.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Sep 2023 06:52:08 -0700 (PDT)
+        Wed, 20 Sep 2023 09:56:39 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5BB2ED
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 Sep 2023 06:56:33 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id 41be03b00d2f7-578e33b6fb7so466174a12.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 Sep 2023 06:56:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1695217928; x=1695822728; darn=vger.kernel.org;
+        d=ventanamicro.com; s=google; t=1695218193; x=1695822993; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FzKUIkp2N4mFsPMBkGOtGZ83qroR9oeUcPf9C3+REGI=;
-        b=Afz5XzDwptMY7dWBZQPXw2i0KdFVRR6oMLfCqIQ9e7jBl6L8qTcD5KYq5ZThPKHSv4
-         t49sU10OIwYxFm0vm2HM9LJjDpPlhBxYQtQvW5PKAuFvf1h9nRVSFgW409JijUhfwDtk
-         FM31hIqH8mmQ50yRJXCu4e28aNrpm2h6MKLutBcb6EgpzMsS3DP0DIkzK4rBBi30cJOR
-         1+VWSEmGmvo6XyqtYLfIRrZyeojrpCbKjoiQi+7AZRzIAN8JcOYDrgfqOO2VwMvTTjku
-         KbuRfhoEThYJGT1bSb8+FdOLSG3cX9hqSd18DLatbNq0Ewvilc62/H2UcUU/ftddgtn4
-         sofQ==
+        bh=gWvN1Bpbs1PF50qBbgm5YoDriWQXveHOdhR/Dx6i6jg=;
+        b=jumE20PqqxAOG4i4XuVhj2Nh8I6uySmZUS93YfHY39qWcwjbLIRR5M+ck+mKp0NWXD
+         uzeC4VI/6nKwqJwmoIyQ056PUqpI0++aifGvopEMs8T5eaLR3VVSL6DmsUZt0ddgXphm
+         ySlNyon5TUygh10a/CidiQU9h5nt+LUG2TTFq7PH927GexnxrnMLUOw0x617/Q2LW3Is
+         RykXdeC9AKumyTPXURHuJRExonlMn70okeL6/moqXpUiRjiHol1JZNre3vAt/oHq0+Hj
+         FuRww++Vb5LYoff/watqnwLyHGPhJnGElUpjR1dVbXMFoI4rKFfqh7bi0o4Ane2Gq+Yv
+         RQDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695217928; x=1695822728;
+        d=1e100.net; s=20230601; t=1695218193; x=1695822993;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FzKUIkp2N4mFsPMBkGOtGZ83qroR9oeUcPf9C3+REGI=;
-        b=xF98CulcvycWecHPzeE8BUNqCAA8qUIsQXuQGRqBPislrFc5HFnAbBOSCGEgQMrodm
-         o2g+Eg4XiIgNR5dSmtJFKiF6w45FUr715iujjVrfe4n/DS0A5bo7VZ4iIvTW3dgACj8y
-         bl7/o56A6nNXAebtWW6oT8PVktcH0WEw1yRE496U6Tu0KeUSDuBvnMDecRaztKH1VXQW
-         dE2smSJI8iFwVd4lhz8j9Bcxwk38BBuEqHZ8NkPRd3mcilfDmZu9KpHDNNV6czaHDDla
-         krnRsuryxaJpM6B+J5dvnZ5S0TMguFTmdPXWtlp2FpUP/aN622v6WRqypNNLI8CU4pzs
-         5lbg==
-X-Gm-Message-State: AOJu0YwWJuD/kCYo/3BU6ZjVNSDsY8uqGkHZq0urdXmGkqMjxy/PlHFd
-        dCOSkmvyxwZH7VPswNbrsxr/eWvtMOALB9cqr6SJ1Q==
-X-Google-Smtp-Source: AGHT+IGXSUP8486WAuGjNv3n0pBFc9g0bpvw4aa5VzPg+ObGcV35R+/p4WGbHUmzy1ayTCndxJcGUvNBRm3i9v1Kurw=
-X-Received: by 2002:a17:90a:3d43:b0:26b:7d8e:edf9 with SMTP id
- o3-20020a17090a3d4300b0026b7d8eedf9mr2256888pjf.49.1695217928154; Wed, 20 Sep
- 2023 06:52:08 -0700 (PDT)
+        bh=gWvN1Bpbs1PF50qBbgm5YoDriWQXveHOdhR/Dx6i6jg=;
+        b=M0U1D1JRHioLqClmOGecVPhbZthYwxod8yNz+r5AL//wJOZm45mIBdojcKM5uO0ARo
+         1KV6cjDGpTWp/DQDXMyJCWywCz2YD/6lWjCx8WX/OJI/tuEJva4u3PKySFz2G8HcZuuE
+         GqHptepzy8xi9rk47xZd2qy8g4Y09nrnG53cJTyWeTQh78fGLu1IZe7opISuJdu2pWuV
+         AW5zhi73QrhQF6ugviJ1p30qVUlbLg8/q38PVK7WNkukITC1+1/VAArxEOYpq0CfRavL
+         mtN8MX/BmaWR22Kdg9QZoIE1Nw3qU2j0aGCB+mfEprwwF0A+iBgl7KZV4YSjEOljQziF
+         pvKg==
+X-Gm-Message-State: AOJu0YwfF2lvHqISJ/drKcF2GStyIW3Y+a1Fr4kt7eKUofxpI7q9EusN
+        YXc7E53v/Qtftw/WphqNEXPtAkhZfnGFr2FmlSo0qA==
+X-Google-Smtp-Source: AGHT+IFb9PPNvdqtSUNwQS6mJlCIQK/y8XDdGfu9RdEx32Z3P7W7GzvDtIiLZCDP6pBGCTmuF0vbzKB6JetQRNt81ig=
+X-Received: by 2002:a05:6a20:6a27:b0:14c:383b:294a with SMTP id
+ p39-20020a056a206a2700b0014c383b294amr2839055pzk.5.1695218193018; Wed, 20 Sep
+ 2023 06:56:33 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230918180646.1398384-1-apatel@ventanamicro.com>
- <20230918180646.1398384-5-apatel@ventanamicro.com> <CAOnJCU+h-Y_i=HkCf194SLWp-7bqzMhRLC31q0xxQDMuLppapA@mail.gmail.com>
-In-Reply-To: <CAOnJCU+h-Y_i=HkCf194SLWp-7bqzMhRLC31q0xxQDMuLppapA@mail.gmail.com>
+ <20230918180646.1398384-4-apatel@ventanamicro.com> <CAOnJCUJYDHtbYS4js7PSAeLqT4sL5zi7DT5xeSww+5Nvs2UhcA@mail.gmail.com>
+In-Reply-To: <CAOnJCUJYDHtbYS4js7PSAeLqT4sL5zi7DT5xeSww+5Nvs2UhcA@mail.gmail.com>
 From:   Anup Patel <apatel@ventanamicro.com>
-Date:   Wed, 20 Sep 2023 19:21:56 +0530
-Message-ID: <CAK9=C2XFGoZ-JZmMv4qmgzE+0Rt_pv+5k8UMJ0ivh=MaBoxxhA@mail.gmail.com>
-Subject: Re: [PATCH 4/4] KVM: riscv: selftests: Selectively filter-out AIA registers
+Date:   Wed, 20 Sep 2023 19:26:21 +0530
+Message-ID: <CAK9=C2UbjOGyxo8oP36Tinjhv1jRpCb+hVbZCOJ70G4-WiHw1g@mail.gmail.com>
+Subject: Re: [PATCH 3/4] KVM: riscv: selftests: Fix ISA_EXT register handling
+ in get-reg-list
 To:     Atish Patra <atishp@atishpatra.org>
 Cc:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
         Palmer Dabbelt <palmer@dabbelt.com>,
@@ -65,7 +66,7 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -74,107 +75,123 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Sep 20, 2023 at 1:43=E2=80=AFAM Atish Patra <atishp@atishpatra.org>=
+On Wed, Sep 20, 2023 at 1:24=E2=80=AFAM Atish Patra <atishp@atishpatra.org>=
  wrote:
 >
 > On Mon, Sep 18, 2023 at 11:07=E2=80=AFAM Anup Patel <apatel@ventanamicro.=
 com> wrote:
 > >
-> > Currently the AIA ONE_REG registers are reported by get-reg-list
-> > as new registers for various vcpu_reg_list configs whenever Ssaia
-> > is available on the host because Ssaia extension can only be
-> > disabled by Smstateen extension which is not always available.
+> > Same set of ISA_EXT registers are not present on all host because
+> > ISA_EXT registers are visible to the KVM user space based on the
+> > ISA extensions available on the host. Also, disabling an ISA
+> > extension using corresponding ISA_EXT register does not affect
+> > the visibility of the ISA_EXT register itself.
 > >
-> > To tackle this, we should filter-out AIA ONE_REG registers only
-> > when Ssaia can't be disabled for a VCPU.
+> > Based on the above, we should filter-out all ISA_EXT registers.
 > >
+>
+> In that case, we don't need the switch case any more. Just a
+> conditional check with KVM_RISCV_ISA_EXT_MAX should be sufficient.
+
+If we compare against KVM_RISCV_ISA_EXT_MAX then we will forget
+adding test configs for newer ISA extensions.
+
+>
 > > Fixes: 477069398ed6 ("KVM: riscv: selftests: Add get-reg-list test")
 > > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
 > > ---
-> >  .../selftests/kvm/riscv/get-reg-list.c        | 23 +++++++++++++++++--
-> >  1 file changed, 21 insertions(+), 2 deletions(-)
+> >  .../selftests/kvm/riscv/get-reg-list.c        | 35 +++++++++++--------
+> >  1 file changed, 21 insertions(+), 14 deletions(-)
 > >
 > > diff --git a/tools/testing/selftests/kvm/riscv/get-reg-list.c b/tools/t=
 esting/selftests/kvm/riscv/get-reg-list.c
-> > index 76c0ad11e423..85907c86b835 100644
+> > index d8ecacd03ecf..76c0ad11e423 100644
 > > --- a/tools/testing/selftests/kvm/riscv/get-reg-list.c
 > > +++ b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-> > @@ -12,6 +12,8 @@
+> > @@ -14,17 +14,33 @@
 > >
-> >  #define REG_MASK (KVM_REG_ARCH_MASK | KVM_REG_SIZE_MASK)
-> >
-> > +static bool isa_ext_cant_disable[KVM_RISCV_ISA_EXT_MAX];
-> > +
 > >  bool filter_reg(__u64 reg)
 > >  {
-> >         switch (reg & ~REG_MASK) {
-> > @@ -48,6 +50,15 @@ bool filter_reg(__u64 reg)
-> >         case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_ZIFENCEI:
-> >         case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_ZIHPM:
-> >                 return true;
-> > +       /* AIA registers are always available when Ssaia can't be disab=
-led */
-> > +       case KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_AIA | KVM_REG_RISCV_=
-CSR_AIA_REG(siselect):
-> > +       case KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_AIA | KVM_REG_RISCV_=
-CSR_AIA_REG(iprio1):
-> > +       case KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_AIA | KVM_REG_RISCV_=
-CSR_AIA_REG(iprio2):
-> > +       case KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_AIA | KVM_REG_RISCV_=
-CSR_AIA_REG(sieh):
-> > +       case KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_AIA | KVM_REG_RISCV_=
-CSR_AIA_REG(siph):
-> > +       case KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_AIA | KVM_REG_RISCV_=
-CSR_AIA_REG(iprio1h):
-> > +       case KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_AIA | KVM_REG_RISCV_=
-CSR_AIA_REG(iprio2h):
-> > +               return isa_ext_cant_disable[KVM_RISCV_ISA_EXT_SSAIA] ? =
-true : false;
->
-> Ahh I guess. you do need the switch case for AIA CSRs but for ISA
-> extensions can be avoided as it is contiguous.
-
-Fow now, let's leave it as-is because this way get-reg-list will
-complain if some new ONE_REG register is missed out.
-
->
-> >         default:
-> >                 break;
-> >         }
-> > @@ -71,14 +82,22 @@ static inline bool vcpu_has_ext(struct kvm_vcpu *vc=
-pu, int ext)
+> > +       switch (reg & ~REG_MASK) {
+> >         /*
+> > -        * Some ISA extensions are optional and not present on all host=
+,
+> > -        * but they can't be disabled through ISA_EXT registers when pr=
+esent.
+> > -        * So, to make life easy, just filtering out these kind of regi=
+sters.
+> > +        * Same set of ISA_EXT registers are not present on all host be=
+cause
+> > +        * ISA_EXT registers are visible to the KVM user space based on=
+ the
+> > +        * ISA extensions available on the host. Also, disabling an ISA
+> > +        * extension using corresponding ISA_EXT register does not affe=
+ct
+> > +        * the visibility of the ISA_EXT register itself.
+> > +        *
+> > +        * Based on above, we should filter-out all ISA_EXT registers.
+> >          */
+> > -       switch (reg & ~REG_MASK) {
+> > +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_A:
+> > +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_C:
+> > +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_D:
+> > +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_F:
+> > +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_H:
+> > +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_I:
+> > +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_M:
+> > +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_SVPBMT:
+> >         case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_SSTC:
+> >         case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_SVINVAL:
+> >         case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_ZIHINTPAUSE:
+> > +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_ZICBOM:
+> > +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_ZICBOZ:
+> >         case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_ZBB:
+> >         case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_SSAIA:
+> > +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_V:
+> > +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_SVNAPOT:
+> >         case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_ZBA:
+> >         case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_ZBS:
+> >         case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_ZICNTR:
+> > @@ -50,12 +66,7 @@ static inline bool vcpu_has_ext(struct kvm_vcpu *vcp=
+u, int ext)
+> >         unsigned long value;
+> >
+> >         ret =3D __vcpu_get_reg(vcpu, RISCV_ISA_EXT_REG(ext), &value);
+> > -       if (ret) {
+> > -               printf("Failed to get ext %d", ext);
+> > -               return false;
+> > -       }
+> > -
+> > -       return !!value;
+> > +       return (ret) ? false : !!value;
+> >  }
 > >
 > >  void finalize_vcpu(struct kvm_vcpu *vcpu, struct vcpu_reg_list *c)
-> >  {
-> > +       int rc;
-> >         struct vcpu_reg_sublist *s;
-> > +       unsigned long isa_ext_state[KVM_RISCV_ISA_EXT_MAX] =3D { 0 };
-> > +
-> > +       for (int i =3D 0; i < KVM_RISCV_ISA_EXT_MAX; i++)
-> > +               __vcpu_get_reg(vcpu, RISCV_ISA_EXT_REG(i), &isa_ext_sta=
-te[i]);
-> >
-> >         /*
-> >          * Disable all extensions which were enabled by default
-> >          * if they were available in the risc-v host.
-> >          */
-> > -       for (int i =3D 0; i < KVM_RISCV_ISA_EXT_MAX; i++)
-> > -               __vcpu_set_reg(vcpu, RISCV_ISA_EXT_REG(i), 0);
-> > +       for (int i =3D 0; i < KVM_RISCV_ISA_EXT_MAX; i++) {
-> > +               rc =3D __vcpu_set_reg(vcpu, RISCV_ISA_EXT_REG(i), 0);
-> > +               if (rc && isa_ext_state[i])
-> > +                       isa_ext_cant_disable[i] =3D true;
-> > +       }
-> >
-> >         for_each_sublist(c, s) {
-> >                 if (!s->feature)
+> > @@ -506,10 +517,6 @@ static __u64 base_regs[] =3D {
+> >         KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_TIMER | KVM_RE=
+G_RISCV_TIMER_REG(time),
+> >         KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_TIMER | KVM_RE=
+G_RISCV_TIMER_REG(compare),
+> >         KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_TIMER | KVM_RE=
+G_RISCV_TIMER_REG(state),
+> > -       KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_ISA_EXT | KV=
+M_RISCV_ISA_EXT_A,
+> > -       KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_ISA_EXT | KV=
+M_RISCV_ISA_EXT_C,
+> > -       KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_ISA_EXT | KV=
+M_RISCV_ISA_EXT_I,
+> > -       KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_ISA_EXT | KV=
+M_RISCV_ISA_EXT_M,
+> >         KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_EXT | KV=
+M_REG_RISCV_SBI_SINGLE | KVM_RISCV_SBI_EXT_V01,
+> >         KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_EXT | KV=
+M_REG_RISCV_SBI_SINGLE | KVM_RISCV_SBI_EXT_TIME,
+> >         KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_EXT | KV=
+M_REG_RISCV_SBI_SINGLE | KVM_RISCV_SBI_EXT_IPI,
 > > --
 > > 2.34.1
 > >
 >
-> Otherwise, LGTM.
->
-> Reviewed-by: Atish Patra <atishp@rivosinc.com>
 >
 > --
 > Regards,
