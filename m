@@ -2,144 +2,145 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35E7E7A720B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Sep 2023 07:27:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 861E77A720E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Sep 2023 07:31:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232717AbjITF1c (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 20 Sep 2023 01:27:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53202 "EHLO
+        id S232160AbjITFcC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 20 Sep 2023 01:32:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232756AbjITF1K (ORCPT
+        with ESMTP id S230021AbjITFcA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Sep 2023 01:27:10 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74E5B10CB
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Sep 2023 22:26:16 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-31f7638be6eso6007540f8f.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Sep 2023 22:26:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1695187575; x=1695792375; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=I/hPQ2aul6l5anqC2DYg1b33GU8acR4UMMOAz4f8qXg=;
-        b=o0Gf+tWRogb+SbLM1tSG1E8qc0qcYjOA6p/GnF194s6vGNv8UA9uXqiz1L4XqoErLR
-         Qmm4dH5FYiCgGfeU/uzFZBiV4GBiafgRl3NrFLUrWW4NLjg4/eawNYnUuvuyT0fqSJlL
-         Ho16+LKwJeUzgLpaffIYtLy8MmbpX219KDE5v86W3sBfnKot5IR+CAWixAQWzDGrpbQ1
-         Li7balcTrfkTVOtWc3YSm07MDipAVMNYivuQQQqFEAzX4iOAuZ49zqj7YT0mktWPeYCr
-         J6I6f9VKFQ6k3urr/MOiUSftPzLhV5OSHw/8nq9W/v07wpyj73xI+6V92/PTkOUWTVzL
-         +AEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695187575; x=1695792375;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=I/hPQ2aul6l5anqC2DYg1b33GU8acR4UMMOAz4f8qXg=;
-        b=ovr22xYochLTJ3/PiXA7aMIcUAviTDMFN0G8ZUfdIaykJa3xTQJiLnGijGp4cVHDRH
-         0XfdQ5gPOGYRcLtgzfMHxxeU5ah0GBvHU+aiwO5+TT1sjVouwQVsk9TeuoeD8PDh8cx2
-         hv194qBR9+cf8LtoiAro+Q65RNVtWmj1s6po73PvwI1Eamjw8paBzVeSfL5weZeiCgZI
-         FlOL5qpA9dtK8QpD2u0XH8vOkRc49pC0rbf3HpeF2nIAM6YDWd/Q2CeePN2cSIGgVwOc
-         OC1XzQtSSzhVN3PfZ4BP6g6H9dCu96bPgnMn2e7y1QPXYOZCZ7uECQCu50QAaZ0VTxwP
-         HOJA==
-X-Gm-Message-State: AOJu0Yw4/N/bqp6bcZDE6hKMJIbheFfXjNdAAk3xxiV8MfoCSjJ3O4W4
-        CGEZzlgHTKgnkyO++YQWY+lBSA==
-X-Google-Smtp-Source: AGHT+IFzgI1qI3qqkSIQbqlVAElk88cX+8fv0gUH+cKvN29I57hXEltVb4ZmH0gDcWJ0gA+gzE05kg==
-X-Received: by 2002:adf:dc8f:0:b0:321:5d9f:2d9f with SMTP id r15-20020adfdc8f000000b003215d9f2d9fmr1348682wrj.47.1695187574848;
-        Tue, 19 Sep 2023 22:26:14 -0700 (PDT)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id g10-20020adff3ca000000b003200c918c81sm9574162wrp.112.2023.09.19.22.26.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Sep 2023 22:26:14 -0700 (PDT)
-Date:   Wed, 20 Sep 2023 07:26:13 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Atish Patra <atishp@atishpatra.org>
-Cc:     Anup Patel <apatel@ventanamicro.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 4/4] KVM: riscv: selftests: Selectively filter-out AIA
- registers
-Message-ID: <20230920-d9e483ee61b25b834af160bb@orel>
-References: <20230918180646.1398384-1-apatel@ventanamicro.com>
- <20230918180646.1398384-5-apatel@ventanamicro.com>
- <CAOnJCU+h-Y_i=HkCf194SLWp-7bqzMhRLC31q0xxQDMuLppapA@mail.gmail.com>
- <20230920-bc0e3956d144be651727e252@orel>
+        Wed, 20 Sep 2023 01:32:00 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFC9994;
+        Tue, 19 Sep 2023 22:31:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695187914; x=1726723914;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=2ZDObok8tPCkBhY6mmZB5GJuaJNpwpqQA9IWqa6JVVc=;
+  b=cIlTPRo5ZMDfKHf1PhlDW/3Dc6mw6TGdS+bLzq4valYKCBvRE9Taqrj+
+   2dCnMPKEDgxax3TiNO8LAtBJBt1NKYW51avF4e2vwNSgHR9N5mPLylNDV
+   gaGm6ByQLwDD1VVIInPDYx0r+Bq9muSUPZI67TSTcaYwBiwakEj7nOuF5
+   ZY/8ELuwjbf+3pO4Q/K3FvMTcrgnr0AvCg5/Xp2mzti7IlbzQruAPel7H
+   SKG1HAA6nB5bFBqQBIQD+TSkbRiQ4g3rt4hffY5tMUKE5ecKsyz6XHdOD
+   NvaP5lTuHcdZC0qhaZoelju2MqSyVCYNJKFrYCzJPbVhy7uxvW1R755cG
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10838"; a="365179311"
+X-IronPort-AV: E=Sophos;i="6.02,161,1688454000"; 
+   d="scan'208";a="365179311"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Sep 2023 22:31:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10838"; a="861832052"
+X-IronPort-AV: E=Sophos;i="6.02,161,1688454000"; 
+   d="scan'208";a="861832052"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.127]) ([10.239.159.127])
+  by fmsmga002.fm.intel.com with ESMTP; 19 Sep 2023 22:31:48 -0700
+Message-ID: <7aa8fd9e-e43d-db68-bdb6-fe4f891255ca@linux.intel.com>
+Date:   Wed, 20 Sep 2023 13:28:41 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230920-bc0e3956d144be651727e252@orel>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Cc:     baolu.lu@linux.intel.com, cohuck@redhat.com, eric.auger@redhat.com,
+        nicolinc@nvidia.com, kvm@vger.kernel.org, mjrosato@linux.ibm.com,
+        chao.p.peng@linux.intel.com, yi.y.sun@linux.intel.com,
+        peterx@redhat.com, jasowang@redhat.com,
+        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
+        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        zhenzhong.duan@intel.com, joao.m.martins@oracle.com
+Subject: Re: [PATCH 6/6] iommu/vt-d: Add domain_alloc_user op
+Content-Language: en-US
+To:     Yi Liu <yi.l.liu@intel.com>, joro@8bytes.org,
+        alex.williamson@redhat.com, jgg@nvidia.com, kevin.tian@intel.com,
+        robin.murphy@arm.com
+References: <20230919092523.39286-1-yi.l.liu@intel.com>
+ <20230919092523.39286-7-yi.l.liu@intel.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20230919092523.39286-7-yi.l.liu@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Sep 20, 2023 at 06:48:11AM +0200, Andrew Jones wrote:
-> On Tue, Sep 19, 2023 at 01:12:47PM -0700, Atish Patra wrote:
-> > On Mon, Sep 18, 2023 at 11:07 AM Anup Patel <apatel@ventanamicro.com> wrote:
-> > >
-> > > Currently the AIA ONE_REG registers are reported by get-reg-list
-> > > as new registers for various vcpu_reg_list configs whenever Ssaia
-> > > is available on the host because Ssaia extension can only be
-> > > disabled by Smstateen extension which is not always available.
-> > >
-> > > To tackle this, we should filter-out AIA ONE_REG registers only
-> > > when Ssaia can't be disabled for a VCPU.
-> > >
-> > > Fixes: 477069398ed6 ("KVM: riscv: selftests: Add get-reg-list test")
-> > > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> > > ---
-> > >  .../selftests/kvm/riscv/get-reg-list.c        | 23 +++++++++++++++++--
-> > >  1 file changed, 21 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/tools/testing/selftests/kvm/riscv/get-reg-list.c b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-> > > index 76c0ad11e423..85907c86b835 100644
-> > > --- a/tools/testing/selftests/kvm/riscv/get-reg-list.c
-> > > +++ b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-> > > @@ -12,6 +12,8 @@
-> > >
-> > >  #define REG_MASK (KVM_REG_ARCH_MASK | KVM_REG_SIZE_MASK)
-> > >
-> > > +static bool isa_ext_cant_disable[KVM_RISCV_ISA_EXT_MAX];
-> > > +
-> > >  bool filter_reg(__u64 reg)
-> > >  {
-> > >         switch (reg & ~REG_MASK) {
-> > > @@ -48,6 +50,15 @@ bool filter_reg(__u64 reg)
-> > >         case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_ZIFENCEI:
-> > >         case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_ZIHPM:
-> > >                 return true;
-> > > +       /* AIA registers are always available when Ssaia can't be disabled */
-> > > +       case KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_AIA | KVM_REG_RISCV_CSR_AIA_REG(siselect):
-> > > +       case KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_AIA | KVM_REG_RISCV_CSR_AIA_REG(iprio1):
-> > > +       case KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_AIA | KVM_REG_RISCV_CSR_AIA_REG(iprio2):
-> > > +       case KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_AIA | KVM_REG_RISCV_CSR_AIA_REG(sieh):
-> > > +       case KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_AIA | KVM_REG_RISCV_CSR_AIA_REG(siph):
-> > > +       case KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_AIA | KVM_REG_RISCV_CSR_AIA_REG(iprio1h):
-> > > +       case KVM_REG_RISCV_CSR | KVM_REG_RISCV_CSR_AIA | KVM_REG_RISCV_CSR_AIA_REG(iprio2h):
-> > > +               return isa_ext_cant_disable[KVM_RISCV_ISA_EXT_SSAIA] ? true : false;
-> > 
-> > Ahh I guess. you do need the switch case for AIA CSRs but for ISA
-> > extensions can be avoided as it is contiguous.
-> 
-> I guess we could so something like
-> 
-> case KVM_REG_RISCV_ISA_EXT ... KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_MAX:
-> 
-> for the ISA extensions.
->
+On 9/19/23 5:25 PM, Yi Liu wrote:
+> This adds the domain_alloc_user op implementation. It supports allocating
+> domains to be used as parent under nested translation.
 
-On second thought, I think I like them each listed explicitly. When we add
-a new extension it will show up in the new register list, which will not
-only remind us that it needs to be filtered, but also that we should
-probably also create a specific config for it.
+Documentation/process/submitting-patches.rst:
 
-Thanks,
-drew
+Describe your changes in imperative mood, e.g. "make xyzzy do frotz"
+instead of "[This patch] makes xyzzy do frotz" or "[I] changed xyzzy
+to do frotz", as if you are giving orders to the codebase to change
+its behaviour.
+
+So how about,
+
+Add the domain_alloc_user callback to support allocating domains used as
+parent under nested translation.
+
+?
+
+> 
+> Signed-off-by: Yi Liu <yi.l.liu@intel.com>
+> ---
+>   drivers/iommu/intel/iommu.c | 20 ++++++++++++++++++++
+>   1 file changed, 20 insertions(+)
+> 
+> diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+> index 5db283c17e0d..491bcde1ff96 100644
+> --- a/drivers/iommu/intel/iommu.c
+> +++ b/drivers/iommu/intel/iommu.c
+> @@ -4074,6 +4074,25 @@ static struct iommu_domain *intel_iommu_domain_alloc(unsigned type)
+>   	return NULL;
+>   }
+>   
+> +static struct iommu_domain *
+> +intel_iommu_domain_alloc_user(struct device *dev, u32 flags)
+> +{
+> +	struct iommu_domain *domain;
+> +	struct intel_iommu *iommu;
+> +
+> +	iommu = device_to_iommu(dev, NULL, NULL);
+> +	if (!iommu)
+> +		return ERR_PTR(-ENODEV);
+> +
+> +	if ((flags & IOMMU_HWPT_ALLOC_NEST_PARENT) && !ecap_nest(iommu->ecap))
+> +		return ERR_PTR(-EOPNOTSUPP);
+> +
+> +	domain = iommu_domain_alloc(dev->bus);
+
+No need to bounce between core and driver. Just,
+
+	intel_iommu_domain_alloc(IOMMU_DOMAIN_UNMANAGED);
+
+and fully initialize it before return.
+
+> +	if (!domain)
+> +		domain = ERR_PTR(-ENOMEM);
+> +	return domain;
+> +}
+> +
+>   static void intel_iommu_domain_free(struct iommu_domain *domain)
+>   {
+>   	if (domain != &si_domain->domain && domain != &blocking_domain)
+> @@ -4807,6 +4826,7 @@ const struct iommu_ops intel_iommu_ops = {
+>   	.capable		= intel_iommu_capable,
+>   	.hw_info		= intel_iommu_hw_info,
+>   	.domain_alloc		= intel_iommu_domain_alloc,
+> +	.domain_alloc_user	= intel_iommu_domain_alloc_user,
+>   	.probe_device		= intel_iommu_probe_device,
+>   	.probe_finalize		= intel_iommu_probe_finalize,
+>   	.release_device		= intel_iommu_release_device,
+
+Best regards,
+baolu
