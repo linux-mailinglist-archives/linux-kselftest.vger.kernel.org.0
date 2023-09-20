@@ -2,200 +2,144 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CB657A8446
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Sep 2023 15:57:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 234A57A8619
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Sep 2023 16:03:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236620AbjITN5E (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 20 Sep 2023 09:57:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56228 "EHLO
+        id S236384AbjITOD1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 20 Sep 2023 10:03:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236667AbjITN4j (ORCPT
+        with ESMTP id S236587AbjITODX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Sep 2023 09:56:39 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5BB2ED
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Sep 2023 06:56:33 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id 41be03b00d2f7-578e33b6fb7so466174a12.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 20 Sep 2023 06:56:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1695218193; x=1695822993; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gWvN1Bpbs1PF50qBbgm5YoDriWQXveHOdhR/Dx6i6jg=;
-        b=jumE20PqqxAOG4i4XuVhj2Nh8I6uySmZUS93YfHY39qWcwjbLIRR5M+ck+mKp0NWXD
-         uzeC4VI/6nKwqJwmoIyQ056PUqpI0++aifGvopEMs8T5eaLR3VVSL6DmsUZt0ddgXphm
-         ySlNyon5TUygh10a/CidiQU9h5nt+LUG2TTFq7PH927GexnxrnMLUOw0x617/Q2LW3Is
-         RykXdeC9AKumyTPXURHuJRExonlMn70okeL6/moqXpUiRjiHol1JZNre3vAt/oHq0+Hj
-         FuRww++Vb5LYoff/watqnwLyHGPhJnGElUpjR1dVbXMFoI4rKFfqh7bi0o4Ane2Gq+Yv
-         RQDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695218193; x=1695822993;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gWvN1Bpbs1PF50qBbgm5YoDriWQXveHOdhR/Dx6i6jg=;
-        b=M0U1D1JRHioLqClmOGecVPhbZthYwxod8yNz+r5AL//wJOZm45mIBdojcKM5uO0ARo
-         1KV6cjDGpTWp/DQDXMyJCWywCz2YD/6lWjCx8WX/OJI/tuEJva4u3PKySFz2G8HcZuuE
-         GqHptepzy8xi9rk47xZd2qy8g4Y09nrnG53cJTyWeTQh78fGLu1IZe7opISuJdu2pWuV
-         AW5zhi73QrhQF6ugviJ1p30qVUlbLg8/q38PVK7WNkukITC1+1/VAArxEOYpq0CfRavL
-         mtN8MX/BmaWR22Kdg9QZoIE1Nw3qU2j0aGCB+mfEprwwF0A+iBgl7KZV4YSjEOljQziF
-         pvKg==
-X-Gm-Message-State: AOJu0YwfF2lvHqISJ/drKcF2GStyIW3Y+a1Fr4kt7eKUofxpI7q9EusN
-        YXc7E53v/Qtftw/WphqNEXPtAkhZfnGFr2FmlSo0qA==
-X-Google-Smtp-Source: AGHT+IFb9PPNvdqtSUNwQS6mJlCIQK/y8XDdGfu9RdEx32Z3P7W7GzvDtIiLZCDP6pBGCTmuF0vbzKB6JetQRNt81ig=
-X-Received: by 2002:a05:6a20:6a27:b0:14c:383b:294a with SMTP id
- p39-20020a056a206a2700b0014c383b294amr2839055pzk.5.1695218193018; Wed, 20 Sep
- 2023 06:56:33 -0700 (PDT)
+        Wed, 20 Sep 2023 10:03:23 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC8BB9;
+        Wed, 20 Sep 2023 07:03:13 -0700 (PDT)
+Received: from notapiano (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 8A6936607201;
+        Wed, 20 Sep 2023 15:03:10 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1695218591;
+        bh=0As1l5pUnNWGSkzZabr2JsNuZssFSpilRQkjdz8AJ1k=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=igMB+AMiayEFp612LIiv/IJGUNWjv/yfNcI67RWl3fmXUEAusqwBRIlxTDEnn2i74
+         okinKpYzPipz6KpaHM6vvNcdzoEXqnTJ2BgQiVicY1/H3HXJHGjSAysNjpxU7HhdCs
+         F5ZGEAKOmET+xH7LYlgwLFAJMwlcvTf/KRpwxU2fn4JmBJ5QOlVGdMJrEJoPX7bOvB
+         twcnEEonoCMblVmogccUDxSIVxOChfpO4MI6qbNxW0kQh0YGDbPdJRKLlZxhsddiz6
+         ZMNqYv8Rg1RsUg86xJu1pzQnOcJAVnrGWtuFpq4W0DC1i2LZFeNKUErHFMEZd6klRr
+         Efc5V3eD7jPiw==
+Date:   Wed, 20 Sep 2023 10:03:06 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     Mark Brown <broonie@kernel.org>, kernelci@lists.linux.dev,
+        kernel@collabora.com, Guenter Roeck <groeck@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 0/3] Add a test to catch unprobed Devicetree devices
+Message-ID: <97c368a1-9c76-490a-848e-eacd6411e810@notapiano>
+References: <20230828211424.2964562-1-nfraprado@collabora.com>
 MIME-Version: 1.0
-References: <20230918180646.1398384-1-apatel@ventanamicro.com>
- <20230918180646.1398384-4-apatel@ventanamicro.com> <CAOnJCUJYDHtbYS4js7PSAeLqT4sL5zi7DT5xeSww+5Nvs2UhcA@mail.gmail.com>
-In-Reply-To: <CAOnJCUJYDHtbYS4js7PSAeLqT4sL5zi7DT5xeSww+5Nvs2UhcA@mail.gmail.com>
-From:   Anup Patel <apatel@ventanamicro.com>
-Date:   Wed, 20 Sep 2023 19:26:21 +0530
-Message-ID: <CAK9=C2UbjOGyxo8oP36Tinjhv1jRpCb+hVbZCOJ70G4-WiHw1g@mail.gmail.com>
-Subject: Re: [PATCH 3/4] KVM: riscv: selftests: Fix ISA_EXT register handling
- in get-reg-list
-To:     Atish Patra <atishp@atishpatra.org>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Andrew Jones <ajones@ventanamicro.com>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230828211424.2964562-1-nfraprado@collabora.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Sep 20, 2023 at 1:24=E2=80=AFAM Atish Patra <atishp@atishpatra.org>=
- wrote:
->
-> On Mon, Sep 18, 2023 at 11:07=E2=80=AFAM Anup Patel <apatel@ventanamicro.=
-com> wrote:
-> >
-> > Same set of ISA_EXT registers are not present on all host because
-> > ISA_EXT registers are visible to the KVM user space based on the
-> > ISA extensions available on the host. Also, disabling an ISA
-> > extension using corresponding ISA_EXT register does not affect
-> > the visibility of the ISA_EXT register itself.
-> >
-> > Based on the above, we should filter-out all ISA_EXT registers.
-> >
->
-> In that case, we don't need the switch case any more. Just a
-> conditional check with KVM_RISCV_ISA_EXT_MAX should be sufficient.
+On Mon, Aug 28, 2023 at 05:13:09PM -0400, Nícolas F. R. A. Prado wrote:
+> 
+> Regressions that cause a device to no longer be probed by a driver can
+> have a big impact on the platform's functionality, and despite being
+> relatively common there isn't currently any generic test to detect them.
+> As an example, bootrr [1] does test for device probe, but it requires
+> defining the expected probed devices for each platform.
+> 
+> Given that the Devicetree already provides a static description of
+> devices on the system, it is a good basis for building such a test on
+> top.
+> 
+> This series introduces a test to catch regressions that prevent devices
+> from probing.
+> 
+> Patches 1 and 2 extend the existing dt-extract-compatibles to be able to
+> output only the compatibles that can be expected to match a Devicetree
+> node to a driver. Patch 2 adds a kselftest that walks over the
+> Devicetree nodes on the current platform and compares the compatibles to
+> the ones on the list, and on an ignore list, to point out devices that
+> failed to be probed.
+> 
+> A compatible list is needed because not all compatibles that can show up
+> in a Devicetree node can be used to match to a driver, for example the
+> code for that compatible might use "OF_DECLARE" type macros and avoid
+> the driver framework, or the node might be controlled by a driver that
+> was bound to a different node.
+> 
+> An ignore list is needed for the few cases where it's common for a
+> driver to match a device but not probe, like for the "simple-mfd"
+> compatible, where the driver only probes if that compatible is the
+> node's first compatible.
+> 
+> The reason for parsing the kernel source instead of relying on
+> information exposed by the kernel at runtime (say, looking at modaliases
+> or introducing some other mechanism), is to be able to catch issues
+> where a config was renamed or a driver moved across configs, and the
+> .config used by the kernel not updated accordingly. We need to parse the
+> source to find all compatibles present in the kernel independent of the
+> current config being run.
+> 
+> [1] https://github.com/kernelci/bootrr
+> 
+> Changes in v3:
+> - Added DT selftest path to MAINTAINERS
+> - Enabled device probe test for nodes with 'status = "ok"'
+> - Added pass/fail/skip totals to end of test output
+> 
+> Changes in v2:
+> - Extended dt-extract-compatibles script to be able to extract driver
+>   matching compatibles, instead of adding a new one in Coccinelle
+> - Made kselftest output in the KTAP format
+> 
+> Nícolas F. R. A. Prado (3):
+>   dt: dt-extract-compatibles: Handle cfile arguments in generator
+>     function
+>   dt: dt-extract-compatibles: Add flag for driver matching compatibles
+>   kselftest: Add new test for detecting unprobed Devicetree devices
+> 
+>  MAINTAINERS                                   |  1 +
+>  scripts/dtc/dt-extract-compatibles            | 74 +++++++++++++----
+>  tools/testing/selftests/Makefile              |  1 +
+>  tools/testing/selftests/dt/.gitignore         |  1 +
+>  tools/testing/selftests/dt/Makefile           | 21 +++++
+>  .../selftests/dt/compatible_ignore_list       |  1 +
+>  tools/testing/selftests/dt/ktap_helpers.sh    | 70 ++++++++++++++++
+>  .../selftests/dt/test_unprobed_devices.sh     | 83 +++++++++++++++++++
+>  8 files changed, 236 insertions(+), 16 deletions(-)
+>  create mode 100644 tools/testing/selftests/dt/.gitignore
+>  create mode 100644 tools/testing/selftests/dt/Makefile
+>  create mode 100644 tools/testing/selftests/dt/compatible_ignore_list
+>  create mode 100644 tools/testing/selftests/dt/ktap_helpers.sh
+>  create mode 100755 tools/testing/selftests/dt/test_unprobed_devices.sh
 
-If we compare against KVM_RISCV_ISA_EXT_MAX then we will forget
-adding test configs for newer ISA extensions.
+Hi Rob,
 
->
-> > Fixes: 477069398ed6 ("KVM: riscv: selftests: Add get-reg-list test")
-> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> > ---
-> >  .../selftests/kvm/riscv/get-reg-list.c        | 35 +++++++++++--------
-> >  1 file changed, 21 insertions(+), 14 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/kvm/riscv/get-reg-list.c b/tools/t=
-esting/selftests/kvm/riscv/get-reg-list.c
-> > index d8ecacd03ecf..76c0ad11e423 100644
-> > --- a/tools/testing/selftests/kvm/riscv/get-reg-list.c
-> > +++ b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-> > @@ -14,17 +14,33 @@
-> >
-> >  bool filter_reg(__u64 reg)
-> >  {
-> > +       switch (reg & ~REG_MASK) {
-> >         /*
-> > -        * Some ISA extensions are optional and not present on all host=
-,
-> > -        * but they can't be disabled through ISA_EXT registers when pr=
-esent.
-> > -        * So, to make life easy, just filtering out these kind of regi=
-sters.
-> > +        * Same set of ISA_EXT registers are not present on all host be=
-cause
-> > +        * ISA_EXT registers are visible to the KVM user space based on=
- the
-> > +        * ISA extensions available on the host. Also, disabling an ISA
-> > +        * extension using corresponding ISA_EXT register does not affe=
-ct
-> > +        * the visibility of the ISA_EXT register itself.
-> > +        *
-> > +        * Based on above, we should filter-out all ISA_EXT registers.
-> >          */
-> > -       switch (reg & ~REG_MASK) {
-> > +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_A:
-> > +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_C:
-> > +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_D:
-> > +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_F:
-> > +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_H:
-> > +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_I:
-> > +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_M:
-> > +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_SVPBMT:
-> >         case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_SSTC:
-> >         case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_SVINVAL:
-> >         case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_ZIHINTPAUSE:
-> > +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_ZICBOM:
-> > +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_ZICBOZ:
-> >         case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_ZBB:
-> >         case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_SSAIA:
-> > +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_V:
-> > +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_SVNAPOT:
-> >         case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_ZBA:
-> >         case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_ZBS:
-> >         case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_ZICNTR:
-> > @@ -50,12 +66,7 @@ static inline bool vcpu_has_ext(struct kvm_vcpu *vcp=
-u, int ext)
-> >         unsigned long value;
-> >
-> >         ret =3D __vcpu_get_reg(vcpu, RISCV_ISA_EXT_REG(ext), &value);
-> > -       if (ret) {
-> > -               printf("Failed to get ext %d", ext);
-> > -               return false;
-> > -       }
-> > -
-> > -       return !!value;
-> > +       return (ret) ? false : !!value;
-> >  }
-> >
-> >  void finalize_vcpu(struct kvm_vcpu *vcpu, struct vcpu_reg_list *c)
-> > @@ -506,10 +517,6 @@ static __u64 base_regs[] =3D {
-> >         KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_TIMER | KVM_RE=
-G_RISCV_TIMER_REG(time),
-> >         KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_TIMER | KVM_RE=
-G_RISCV_TIMER_REG(compare),
-> >         KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_TIMER | KVM_RE=
-G_RISCV_TIMER_REG(state),
-> > -       KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_ISA_EXT | KV=
-M_RISCV_ISA_EXT_A,
-> > -       KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_ISA_EXT | KV=
-M_RISCV_ISA_EXT_C,
-> > -       KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_ISA_EXT | KV=
-M_RISCV_ISA_EXT_I,
-> > -       KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_ISA_EXT | KV=
-M_RISCV_ISA_EXT_M,
-> >         KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_EXT | KV=
-M_REG_RISCV_SBI_SINGLE | KVM_RISCV_SBI_EXT_V01,
-> >         KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_EXT | KV=
-M_REG_RISCV_SBI_SINGLE | KVM_RISCV_SBI_EXT_TIME,
-> >         KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_EXT | KV=
-M_REG_RISCV_SBI_SINGLE | KVM_RISCV_SBI_EXT_IPI,
-> > --
-> > 2.34.1
-> >
->
->
-> --
-> Regards,
-> Atish
+gentle ping on this series.
 
-Regards,
-Anup
+I take it you'll be merging this through your tree, so I've added Shuah's R-b
+that she supplied on v2 for the kselftest patch.
+
+Thanks,
+Nícolas
