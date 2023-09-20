@@ -2,61 +2,55 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D967E7A8CF4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Sep 2023 21:34:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B47887A8D33
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Sep 2023 21:56:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230050AbjITTes (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 20 Sep 2023 15:34:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60648 "EHLO
+        id S229630AbjITT4n (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 20 Sep 2023 15:56:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjITTej (ORCPT
+        with ESMTP id S229840AbjITT4m (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Sep 2023 15:34:39 -0400
-Received: from vulcan.natalenko.name (vulcan.natalenko.name [104.207.131.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9D3B9F;
-        Wed, 20 Sep 2023 12:34:31 -0700 (PDT)
-Received: from spock.localnet (unknown [94.142.239.106])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by vulcan.natalenko.name (Postfix) with ESMTPSA id 74E58150A22B;
-        Wed, 20 Sep 2023 21:34:28 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
-        s=dkim-20170712; t=1695238468;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ieFwOXSMXwW5Z1TbA7klO5guFnw5DamdxsZ5CsxGlt0=;
-        b=Wpkll7Je8Gck2iZpd4BOW50eRsftKl4A3iDUArvIOYyke7t3nm5Fli7jg4q5J3dJGqEEVy
-        kEYUkhw7PIY+Cd/WggeAxoELj3T7EBZ741uOX07yatvrGaYUBgLLLU9TUsowp1OuVGQMWj
-        n+h5ufMLaU9YYHTGfcKYISaR6KJC4oc=
-From:   Oleksandr Natalenko <oleksandr@natalenko.name>
-To:     Huang Rui <ray.huang@amd.com>, Meng Li <li.meng@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-acpi@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org,
-        Nathan Fontenot <nathan.fontenot@amd.com>,
-        Deepak Sharma <deepak.sharma@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Shimmer Huang <shimmer.huang@amd.com>,
-        Perry Yuan <Perry.Yuan@amd.com>,
-        Xiaojian Du <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
-Subject: Re: [PATCH V7 0/7] amd-pstate preferred core
-Date:   Wed, 20 Sep 2023 21:34:17 +0200
-Message-ID: <12290212.O9o76ZdvQC@natalenko.name>
-In-Reply-To: <ce377dda-e1ce-4553-b9b8-125620b8b2d7@amd.com>
-References: <20230918081407.756858-1-li.meng@amd.com> <5973628.lOV4Wx5bFT@natalenko.name>
- <ce377dda-e1ce-4553-b9b8-125620b8b2d7@amd.com>
+        Wed, 20 Sep 2023 15:56:42 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EBD2A9;
+        Wed, 20 Sep 2023 12:56:32 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3492C433C9;
+        Wed, 20 Sep 2023 19:56:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1695239791;
+        bh=hql+kAlfoekBXt3vTaUlDPCPrQsmIUz1/+7V8SFb+1I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=mh0SXSCxI277x52AMsLpiUAKi4OdbN74SkXCBJ1erB5G8Q0U2erESV4xVcreGe11C
+         tcD53cdu3OKl0FXCrQ8Z74MgPvufYKrCm2YDaM+dGTQlluoWt3+4N/vi1R8ArBeLdO
+         ls5lfikybrVorW2FfJniAfC61bNdClvNxrJ2DMPOGFZOVsUWmDGFcNd7sh7ueaze6X
+         naMurG4DY98f98wj3qaet6ZTTU685zfen0JwbYjmajv48va87B4Yzzr8e92YcoUYOM
+         w7Oo+YettRVEEFb4TGfNjyc58RZkr2ptyRjdIdIPeq7Cnc+IaywoU85brGfJ32D2kj
+         01FyucPY3x0yQ==
+Received: (nullmailer pid 2823556 invoked by uid 1000);
+        Wed, 20 Sep 2023 19:56:29 -0000
+Date:   Wed, 20 Sep 2023 14:56:29 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
+        <nfraprado@collabora.com>
+Cc:     Frank Rowand <frowand.list@gmail.com>,
+        Shuah Khan <shuah@kernel.org>, Mark Brown <broonie@kernel.org>,
+        kernelci@lists.linux.dev, kernel@collabora.com,
+        Guenter Roeck <groeck@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 0/3] Add a test to catch unprobed Devicetree devices
+Message-ID: <20230920195629.GA2784994-robh@kernel.org>
+References: <20230828211424.2964562-1-nfraprado@collabora.com>
+ <97c368a1-9c76-490a-848e-eacd6411e810@notapiano>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart5713749.DvuYhMxLoT";
- micalg="pgp-sha256"; protocol="application/pgp-signature"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <97c368a1-9c76-490a-848e-eacd6411e810@notapiano>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,97 +58,91 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---nextPart5713749.DvuYhMxLoT
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"; protected-headers="v1"
-From: Oleksandr Natalenko <oleksandr@natalenko.name>
-Subject: Re: [PATCH V7 0/7] amd-pstate preferred core
-Date: Wed, 20 Sep 2023 21:34:17 +0200
-Message-ID: <12290212.O9o76ZdvQC@natalenko.name>
-In-Reply-To: <ce377dda-e1ce-4553-b9b8-125620b8b2d7@amd.com>
-MIME-Version: 1.0
+On Wed, Sep 20, 2023 at 10:03:06AM -0400, Nícolas F. R. A. Prado wrote:
+> On Mon, Aug 28, 2023 at 05:13:09PM -0400, Nícolas F. R. A. Prado wrote:
+> > 
+> > Regressions that cause a device to no longer be probed by a driver can
+> > have a big impact on the platform's functionality, and despite being
+> > relatively common there isn't currently any generic test to detect them.
+> > As an example, bootrr [1] does test for device probe, but it requires
+> > defining the expected probed devices for each platform.
+> > 
+> > Given that the Devicetree already provides a static description of
+> > devices on the system, it is a good basis for building such a test on
+> > top.
+> > 
+> > This series introduces a test to catch regressions that prevent devices
+> > from probing.
+> > 
+> > Patches 1 and 2 extend the existing dt-extract-compatibles to be able to
+> > output only the compatibles that can be expected to match a Devicetree
+> > node to a driver. Patch 2 adds a kselftest that walks over the
+> > Devicetree nodes on the current platform and compares the compatibles to
+> > the ones on the list, and on an ignore list, to point out devices that
+> > failed to be probed.
+> > 
+> > A compatible list is needed because not all compatibles that can show up
+> > in a Devicetree node can be used to match to a driver, for example the
+> > code for that compatible might use "OF_DECLARE" type macros and avoid
+> > the driver framework, or the node might be controlled by a driver that
+> > was bound to a different node.
+> > 
+> > An ignore list is needed for the few cases where it's common for a
+> > driver to match a device but not probe, like for the "simple-mfd"
+> > compatible, where the driver only probes if that compatible is the
+> > node's first compatible.
+> > 
+> > The reason for parsing the kernel source instead of relying on
+> > information exposed by the kernel at runtime (say, looking at modaliases
+> > or introducing some other mechanism), is to be able to catch issues
+> > where a config was renamed or a driver moved across configs, and the
+> > .config used by the kernel not updated accordingly. We need to parse the
+> > source to find all compatibles present in the kernel independent of the
+> > current config being run.
+> > 
+> > [1] https://github.com/kernelci/bootrr
+> > 
+> > Changes in v3:
+> > - Added DT selftest path to MAINTAINERS
+> > - Enabled device probe test for nodes with 'status = "ok"'
+> > - Added pass/fail/skip totals to end of test output
+> > 
+> > Changes in v2:
+> > - Extended dt-extract-compatibles script to be able to extract driver
+> >   matching compatibles, instead of adding a new one in Coccinelle
+> > - Made kselftest output in the KTAP format
+> > 
+> > Nícolas F. R. A. Prado (3):
+> >   dt: dt-extract-compatibles: Handle cfile arguments in generator
+> >     function
+> >   dt: dt-extract-compatibles: Add flag for driver matching compatibles
+> >   kselftest: Add new test for detecting unprobed Devicetree devices
+> > 
+> >  MAINTAINERS                                   |  1 +
+> >  scripts/dtc/dt-extract-compatibles            | 74 +++++++++++++----
+> >  tools/testing/selftests/Makefile              |  1 +
+> >  tools/testing/selftests/dt/.gitignore         |  1 +
+> >  tools/testing/selftests/dt/Makefile           | 21 +++++
+> >  .../selftests/dt/compatible_ignore_list       |  1 +
+> >  tools/testing/selftests/dt/ktap_helpers.sh    | 70 ++++++++++++++++
+> >  .../selftests/dt/test_unprobed_devices.sh     | 83 +++++++++++++++++++
+> >  8 files changed, 236 insertions(+), 16 deletions(-)
+> >  create mode 100644 tools/testing/selftests/dt/.gitignore
+> >  create mode 100644 tools/testing/selftests/dt/Makefile
+> >  create mode 100644 tools/testing/selftests/dt/compatible_ignore_list
+> >  create mode 100644 tools/testing/selftests/dt/ktap_helpers.sh
+> >  create mode 100755 tools/testing/selftests/dt/test_unprobed_devices.sh
+> 
+> Hi Rob,
+> 
+> gentle ping on this series.
+> 
+> I take it you'll be merging this through your tree, so I've added Shuah's R-b
+> that she supplied on v2 for the kselftest patch.
 
-Hello.
+Sorry, now applied.
 
-On st=C5=99eda 20. z=C3=A1=C5=99=C3=AD 2023 18:56:09 CEST Mario Limonciello=
- wrote:
-> > When applied on top of v6.5.3 this breaks turbo on my 5950X after suspe=
-nd/resume cycle. Please see the scenario description below.
-> >=20
-> > If I boot v6.5.3 + this patchset, then `turbostat` reports ~4.9 GHz on =
-core 0 where `taskset -c 0 dd if=3D/dev/zero of=3D/dev/null` is being run.
-> >=20
-> > After I suspend the machine and then resume it, and run `dd` again, `tu=
-rbostat` reports the core to be capped to a stock frequency of ~3.4 GHz. Re=
-booting the machine fixes this, and the CPU can boost again.
-> >=20
-> > If this patchset is reverted, then the CPU can turbo after suspend/resu=
-me cycle just fine.
-> >=20
-> > I'm using `amd_pstate=3Dguided`.
-> >=20
-> > Is this behaviour expected?
->=20
-> To help confirm where the issue is, can I ask you to do three=20
-> experiments with the patch series applied:
->=20
-> 1) 'amd_pstate=3Dactive' on your kernel command line.
+If you send something before or in the merge window, it is best to 
+rebase and resend after rc1 comes out.
 
-The issue is reproducible. If I toggle the governor in cpupower to `powersa=
-ve` and back to `performance`, boost is restored.
-
-> 2) 'amd_pstate=3Dactive amd_prefcore=3Ddisable' on your kernel command li=
-ne.
-
-The issue is not reproducible.
-
-> 3) 'amd_pstate=3Dguided amd_prefcore=3Ddisable' on your kernel command li=
-ne.
-
-The issue is not reproducible.
-
-I should also mention that in my initial configuration I use `amd_pstate=3D=
-guided` and `schedutil`. If I switch to `performance` after suspend-resume =
-cycle, the boost is restored. However, if I switch back to `schedutil`, the=
- freq is capped.
-
-Does this info help?
-
-> Looking through the code, I anticipate from your report that it=20
-> reproduces on "1" but not "2" and "3".
->=20
-> Meng,
->=20
-> Can you try to repro?
->=20
-> I think that it's probably a call to amd_pstate_init_prefcore() missing
-> from amd_pstate_cpu_resume() and also amd_pstate_epp_resume().
-
-=2D-=20
-Oleksandr Natalenko (post-factum)
---nextPart5713749.DvuYhMxLoT
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEZUOOw5ESFLHZZtOKil/iNcg8M0sFAmULSTkACgkQil/iNcg8
-M0sqsA//eFdiuY7Cxaer5l0lBux1QhGyN0q30uy+zbybTXSfN4BGYulhA/nihp5k
-TRvwAYlSQf1Zhoi40S2xQlpblgLkiSl+a9UtdVju7RKfButrbNhFmQSygIHYQnmc
-kKYu+2079+3GvpFYPxtMJBR5UNbbNZ+dFTmj8SYnQ7Zm0cizbzi+WtIphnNuhubE
-fLs8Dc1XtvrqukGjffefSDjzQ7pd/LIcD1zG4nPbdyUIki52P/Y4TewqqJ8ZePg5
-qw/a/pRHePddz4rnEjCuSswZ98PXfipz7C1R49b1I6E7UlFAPqWnMQbioKYPUsWW
-Eszd8omTV4ejEwZ6kX22zynoCHNRg8O37SMBHxhNbIzIOVXTyGtD+9c4wd6AjAvy
-/+VRk9JJGHoZfh9YOB8tHNvmxzKUEQSW93KKlD8Var5hsqzWHsUxkCn3U74hB7Px
-dWmKRtau/qrarrS068QtM8QOIgfegUzvu0s6DyVFleI9Sx0zjfV1cfzgv02OYY75
-9Zk+/qfNe6opvZMtGLTMUueQGMy1KGYhN55PPMxy5S1LeZPgfXZDHWdBMqQYpz3X
-RyNLvfoUYHGSQJJBKvhuloW0sauhFtVnBG7CF3A8e6t3dvzqBrwem+vdFBZw4uwt
-xuw0b6tGpTkmeRCtz23xGHpH9qE6uIo4Bo2FxenUm3jZHnNbALY=
-=EcDU
------END PGP SIGNATURE-----
-
---nextPart5713749.DvuYhMxLoT--
-
-
-
+Rob
