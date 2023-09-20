@@ -2,154 +2,86 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D563C7A8E1E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Sep 2023 23:01:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 756C47A8EB6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Sep 2023 23:51:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229758AbjITVBM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 20 Sep 2023 17:01:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47218 "EHLO
+        id S229436AbjITVv4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 20 Sep 2023 17:51:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbjITVBM (ORCPT
+        with ESMTP id S229509AbjITVvz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Sep 2023 17:01:12 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62D18D3;
-        Wed, 20 Sep 2023 14:01:04 -0700 (PDT)
-Received: from notapiano (unknown [185.213.155.222])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 20 Sep 2023 17:51:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90AF3C6
+        for <linux-kselftest@vger.kernel.org>; Wed, 20 Sep 2023 14:51:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1695246666;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=mb2TaKKb4j3v0Qjvph/ZrpHnGP1w4j4um3WN9+g8J4M=;
+        b=ibMqtqDl6aYvbQMTQRQ3UDBJCw3fHvJvT3mgzwmv3Hni5txyoNGBnfQAE1xxP4nqsBqUzH
+        vpv6dLafM4mgjcix+KG5lkJ2Ee0eBwkxPRhnLd6sjkCYuuoAkK+LV9tTYnnk2b1yvzBiUM
+        WVHwtqmWtTp3a0xMv6FUbw1tVRlpKK4=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-670-2LSAMNEHNnKBiXvbRx8oqA-1; Wed, 20 Sep 2023 17:51:03 -0400
+X-MC-Unique: 2LSAMNEHNnKBiXvbRx8oqA-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4A88D6607243;
-        Wed, 20 Sep 2023 22:01:01 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1695243662;
-        bh=Rtz3erKyUOgKqZM9Fh/lnQavTB+Wa5RuboyAzdxYPLg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EjtNw7g2/rRrUYorNvkEqpKPwq+RWcONPEdiiyLA/JzNV4qLkpq1ko4v9iaU9EwSz
-         UT0TDFmRA07pEn24u2Wyb37LLo2PqvxnpDLaLjhUPoghKY5cKOQtMyogxRe3dDqV0q
-         gROtD6w1u4K2iV1be/a2j/ptDKVwQzqhWF30lr1iMR1yvf1SLDLmkyTeLeurVIn+CR
-         Tx3ihWbL2GL6Qe5ZQi+LFsKhmcoX4V5WQI9KmRvR5rFWXhUzsUvEOUjorwg/zbrKsh
-         Ca5fLcRW/meo/Z5i74tx+xE3mJ37WPHtDwKMzW5gYsOGI6RV1WnzOMihTDT26wnl2o
-         2UejAn5V85png==
-Date:   Wed, 20 Sep 2023 17:00:56 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Frank Rowand <frowand.list@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, Mark Brown <broonie@kernel.org>,
-        kernelci@lists.linux.dev, kernel@collabora.com,
-        Guenter Roeck <groeck@chromium.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 0/3] Add a test to catch unprobed Devicetree devices
-Message-ID: <368a1fc3-02d7-49f2-a881-f39259f8c186@notapiano>
-References: <20230828211424.2964562-1-nfraprado@collabora.com>
- <97c368a1-9c76-490a-848e-eacd6411e810@notapiano>
- <20230920195629.GA2784994-robh@kernel.org>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id B9B3D3C02539;
+        Wed, 20 Sep 2023 21:51:02 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.42.28.216])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C95AF492B16;
+        Wed, 20 Sep 2023 21:51:00 +0000 (UTC)
+Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
+        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
+        Kingdom.
+        Registered in England and Wales under Company Registration No. 3798903
+From:   David Howells <dhowells@redhat.com>
+In-Reply-To: <20230920130400.203330-1-dhowells@redhat.com>
+References: <20230920130400.203330-1-dhowells@redhat.com>
+Cc:     dhowells@redhat.com, Jens Axboe <axboe@kernel.dk>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Christian Brauner <christian@brauner.io>,
+        David Laight <David.Laight@ACULAB.COM>,
+        Matthew Wilcox <willy@infradead.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>, linux-fsdevel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-mm@kvack.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v2 0/9] iov_iter: kunit: Cleanup, abstraction and more tests
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230920195629.GA2784994-robh@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <654562.1695246660.1@warthog.procyon.org.uk>
+Date:   Wed, 20 Sep 2023 22:51:00 +0100
+Message-ID: <654563.1695246660@warthog.procyon.org.uk>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=2.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,MISSING_HEADERS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Sep 20, 2023 at 02:56:29PM -0500, Rob Herring wrote:
-> On Wed, Sep 20, 2023 at 10:03:06AM -0400, Nícolas F. R. A. Prado wrote:
-> > On Mon, Aug 28, 2023 at 05:13:09PM -0400, Nícolas F. R. A. Prado wrote:
-> > > 
-> > > Regressions that cause a device to no longer be probed by a driver can
-> > > have a big impact on the platform's functionality, and despite being
-> > > relatively common there isn't currently any generic test to detect them.
-> > > As an example, bootrr [1] does test for device probe, but it requires
-> > > defining the expected probed devices for each platform.
-> > > 
-> > > Given that the Devicetree already provides a static description of
-> > > devices on the system, it is a good basis for building such a test on
-> > > top.
-> > > 
-> > > This series introduces a test to catch regressions that prevent devices
-> > > from probing.
-> > > 
-> > > Patches 1 and 2 extend the existing dt-extract-compatibles to be able to
-> > > output only the compatibles that can be expected to match a Devicetree
-> > > node to a driver. Patch 2 adds a kselftest that walks over the
-> > > Devicetree nodes on the current platform and compares the compatibles to
-> > > the ones on the list, and on an ignore list, to point out devices that
-> > > failed to be probed.
-> > > 
-> > > A compatible list is needed because not all compatibles that can show up
-> > > in a Devicetree node can be used to match to a driver, for example the
-> > > code for that compatible might use "OF_DECLARE" type macros and avoid
-> > > the driver framework, or the node might be controlled by a driver that
-> > > was bound to a different node.
-> > > 
-> > > An ignore list is needed for the few cases where it's common for a
-> > > driver to match a device but not probe, like for the "simple-mfd"
-> > > compatible, where the driver only probes if that compatible is the
-> > > node's first compatible.
-> > > 
-> > > The reason for parsing the kernel source instead of relying on
-> > > information exposed by the kernel at runtime (say, looking at modaliases
-> > > or introducing some other mechanism), is to be able to catch issues
-> > > where a config was renamed or a driver moved across configs, and the
-> > > .config used by the kernel not updated accordingly. We need to parse the
-> > > source to find all compatibles present in the kernel independent of the
-> > > current config being run.
-> > > 
-> > > [1] https://github.com/kernelci/bootrr
-> > > 
-> > > Changes in v3:
-> > > - Added DT selftest path to MAINTAINERS
-> > > - Enabled device probe test for nodes with 'status = "ok"'
-> > > - Added pass/fail/skip totals to end of test output
-> > > 
-> > > Changes in v2:
-> > > - Extended dt-extract-compatibles script to be able to extract driver
-> > >   matching compatibles, instead of adding a new one in Coccinelle
-> > > - Made kselftest output in the KTAP format
-> > > 
-> > > Nícolas F. R. A. Prado (3):
-> > >   dt: dt-extract-compatibles: Handle cfile arguments in generator
-> > >     function
-> > >   dt: dt-extract-compatibles: Add flag for driver matching compatibles
-> > >   kselftest: Add new test for detecting unprobed Devicetree devices
-> > > 
-> > >  MAINTAINERS                                   |  1 +
-> > >  scripts/dtc/dt-extract-compatibles            | 74 +++++++++++++----
-> > >  tools/testing/selftests/Makefile              |  1 +
-> > >  tools/testing/selftests/dt/.gitignore         |  1 +
-> > >  tools/testing/selftests/dt/Makefile           | 21 +++++
-> > >  .../selftests/dt/compatible_ignore_list       |  1 +
-> > >  tools/testing/selftests/dt/ktap_helpers.sh    | 70 ++++++++++++++++
-> > >  .../selftests/dt/test_unprobed_devices.sh     | 83 +++++++++++++++++++
-> > >  8 files changed, 236 insertions(+), 16 deletions(-)
-> > >  create mode 100644 tools/testing/selftests/dt/.gitignore
-> > >  create mode 100644 tools/testing/selftests/dt/Makefile
-> > >  create mode 100644 tools/testing/selftests/dt/compatible_ignore_list
-> > >  create mode 100644 tools/testing/selftests/dt/ktap_helpers.sh
-> > >  create mode 100755 tools/testing/selftests/dt/test_unprobed_devices.sh
-> > 
-> > Hi Rob,
-> > 
-> > gentle ping on this series.
-> > 
-> > I take it you'll be merging this through your tree, so I've added Shuah's R-b
-> > that she supplied on v2 for the kselftest patch.
-> 
-> Sorry, now applied.
-> 
-> If you send something before or in the merge window, it is best to 
-> rebase and resend after rc1 comes out.
+David Howells <dhowells@redhat.com> wrote:
 
-Ah didn't know about that, will keep it in mind for the future, thanks!
+> Hi Jens,
+> 
+> Can you consider taking this through the block tree?
 
-Nícolas
+Sorry, I forgot to remove the 'RFC' tag in the subject.
+
+David
+
