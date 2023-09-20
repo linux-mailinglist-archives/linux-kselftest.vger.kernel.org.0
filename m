@@ -2,125 +2,159 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AABA37A8A94
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Sep 2023 19:27:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D967E7A8CF4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Sep 2023 21:34:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229449AbjITR1j (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 20 Sep 2023 13:27:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39648 "EHLO
+        id S230050AbjITTes (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 20 Sep 2023 15:34:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbjITR1j (ORCPT
+        with ESMTP id S229441AbjITTej (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 20 Sep 2023 13:27:39 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D9679AF;
-        Wed, 20 Sep 2023 10:27:32 -0700 (PDT)
-Received: from DESKTOP-4OLSCEK. (unknown [76.135.27.212])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 1247C20C1461;
-        Wed, 20 Sep 2023 10:27:32 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1247C20C1461
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1695230852;
-        bh=CdjNAAQI9rDAO2aGgTHU9OUaCjVaEdkcivKez+VgMug=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CeQgq7gS01268FpA5iDSgN779IED27xIBmUyX6BlwMCOtTEbiAi4dlv6/9mBHwdFb
-         bvig9hFnzbuD18mM5qVoXg4+cZIs/aa0Yg3s5Qau62q7ddeDlOVc6PTJ4kt2K1KFKy
-         pHcPnnv2HEIDH/Yhjz77trwGH5vPxp0Spa7NNSbI=
-Date:   Wed, 20 Sep 2023 10:27:29 -0700
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        lkft-triage@lists.linaro.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Mark Brown <broonie@kernel.org>
-Subject: Re: selftests: user_events: ftrace_test: Internal error: Oops:
- 0000000096000021
-Message-ID: <20230920172729.GB467-beaub@linux.microsoft.com>
-References: <CA+G9fYtio=EY-fitOJZgAWsgVHX8XhgdNQnfMoUBVFrnSP5TZg@mail.gmail.com>
- <ZQr_yqLJHesRRMjR@FVFF77S0Q05N.cambridge.arm.com>
+        Wed, 20 Sep 2023 15:34:39 -0400
+Received: from vulcan.natalenko.name (vulcan.natalenko.name [104.207.131.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9D3B9F;
+        Wed, 20 Sep 2023 12:34:31 -0700 (PDT)
+Received: from spock.localnet (unknown [94.142.239.106])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vulcan.natalenko.name (Postfix) with ESMTPSA id 74E58150A22B;
+        Wed, 20 Sep 2023 21:34:28 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
+        s=dkim-20170712; t=1695238468;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ieFwOXSMXwW5Z1TbA7klO5guFnw5DamdxsZ5CsxGlt0=;
+        b=Wpkll7Je8Gck2iZpd4BOW50eRsftKl4A3iDUArvIOYyke7t3nm5Fli7jg4q5J3dJGqEEVy
+        kEYUkhw7PIY+Cd/WggeAxoELj3T7EBZ741uOX07yatvrGaYUBgLLLU9TUsowp1OuVGQMWj
+        n+h5ufMLaU9YYHTGfcKYISaR6KJC4oc=
+From:   Oleksandr Natalenko <oleksandr@natalenko.name>
+To:     Huang Rui <ray.huang@amd.com>, Meng Li <li.meng@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-acpi@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Shimmer Huang <shimmer.huang@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>
+Subject: Re: [PATCH V7 0/7] amd-pstate preferred core
+Date:   Wed, 20 Sep 2023 21:34:17 +0200
+Message-ID: <12290212.O9o76ZdvQC@natalenko.name>
+In-Reply-To: <ce377dda-e1ce-4553-b9b8-125620b8b2d7@amd.com>
+References: <20230918081407.756858-1-li.meng@amd.com> <5973628.lOV4Wx5bFT@natalenko.name>
+ <ce377dda-e1ce-4553-b9b8-125620b8b2d7@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZQr_yqLJHesRRMjR@FVFF77S0Q05N.cambridge.arm.com>
-X-Spam-Status: No, score=-17.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="nextPart5713749.DvuYhMxLoT";
+ micalg="pgp-sha256"; protocol="application/pgp-signature"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Sep 20, 2023 at 03:20:58PM +0100, Mark Rutland wrote:
-> Hi Naresh,
-> 
-> As a general thing, for arm64 issues could you please Cc the linux-arm-kernel
-> mailing list?
-> 
-> On Wed, Sep 20, 2023 at 02:40:24PM +0200, Naresh Kamboju wrote:
-> > Following selftests: user_events: ftrace_test running on arm64 Juno-r2
-> > Linux next-20230919.
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > 
-> > kselftest: Running tests in user_events
-> > TAP version 13
-> > 1..4
-> > # timeout set to 90
-> > # selftests: user_events: ftrace_test
-> > [ 1138.755735] Unable to handle kernel paging request at virtual address ffff00082fc89ed4
-> > [ 1138.763768] Mem abort info:
-> > [ 1138.766692]   ESR = 0x0000000096000021
-> > [ 1138.770495]   EC = 0x25: DABT (current EL), IL = 32 bits
-> > [ 1138.775879]   SET = 0, FnV = 0
-> > [ 1138.779018]   EA = 0, S1PTW = 0
-> > [ 1138.782264]   FSC = 0x21: alignment fault
-> 
-> So this is an alignment fault, to a 4-byte aligned address...
-> 
-> > [ 1138.786399] Data abort info:
-> > [ 1138.789356]   ISV = 0, ISS = 0x00000021, ISS2 = 0x00000000
-> > [ 1138.794969]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
-> > [ 1138.800095]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
-> > [ 1138.805436] swapper pgtable: 4k pages, 48-bit VAs, pgdp=000000008265b000
-> > [ 1138.812175] [ffff00082fc89ed4] pgd=18000009ffdf8003,
-> > p4d=18000009ffdf8003, pud=18000009ffa0e003, pmd=18000009ff88f003,
-> > pte=00680008afc89707
-> > [ 1138.824824] Internal error: Oops: 0000000096000021 [#1] PREEMPT SMP
-> > # TAP[ 1138.831117] Modules linked in: tda998x hdlcd onboard_usb_hub
-> > crct10dif_ce cec drm_dma_helper drm_kms_helper drm fuse backlight
-> > dm_mod ip_tables x_tables
-> > [ 1138.845227] CPU: 1 PID: 4752 Comm: ftrace_test Not tainted
-> > 6.6.0-rc2-next-20230919 #1
-> > v[e r1s1i3o8n. 81533080] Hardware name: ARM Juno development board (r2) (DT)
-> > 
-> > # 1..6
-> > # # Starting 6 tests from 1 test cases.
-> > # #  RUN           user.register_events ...
-> > [ 1138.868317] pstate: 20000005 (nzCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> > [ 1138.875291] pc : user_event_enabler_write
-> > (arch/arm64/include/asm/atomic_ll_sc.h:210 (discriminator 2)
-> > arch/arm64/include/asm/atomic.h:64 (discriminator 2)
-> > include/linux/atomic/atomic-arch-fallback.h:3656 (discriminator 2)
-> > include/linux/atomic/atomic-long.h:964 (discriminator 2)
-> 
-> ... as part of some atomic_long_*() operation, where atomic_long_t should be
-> 8-byte aligned, so we've got a dodgy address.
-> 
+--nextPart5713749.DvuYhMxLoT
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"; protected-headers="v1"
+From: Oleksandr Natalenko <oleksandr@natalenko.name>
+Subject: Re: [PATCH V7 0/7] amd-pstate preferred core
+Date: Wed, 20 Sep 2023 21:34:17 +0200
+Message-ID: <12290212.O9o76ZdvQC@natalenko.name>
+In-Reply-To: <ce377dda-e1ce-4553-b9b8-125620b8b2d7@amd.com>
+MIME-Version: 1.0
 
-This appears to be the same issue [1] that was sent to linux-trace-kernel.
-There's a proposal [2] there to get a generic set_bit_aligned() function to
-ensure alignment for both little and big endian devices.
+Hello.
 
-Thanks,
--Beau
+On st=C5=99eda 20. z=C3=A1=C5=99=C3=AD 2023 18:56:09 CEST Mario Limonciello=
+ wrote:
+> > When applied on top of v6.5.3 this breaks turbo on my 5950X after suspe=
+nd/resume cycle. Please see the scenario description below.
+> >=20
+> > If I boot v6.5.3 + this patchset, then `turbostat` reports ~4.9 GHz on =
+core 0 where `taskset -c 0 dd if=3D/dev/zero of=3D/dev/null` is being run.
+> >=20
+> > After I suspend the machine and then resume it, and run `dd` again, `tu=
+rbostat` reports the core to be capped to a stock frequency of ~3.4 GHz. Re=
+booting the machine fixes this, and the CPU can boost again.
+> >=20
+> > If this patchset is reverted, then the CPU can turbo after suspend/resu=
+me cycle just fine.
+> >=20
+> > I'm using `amd_pstate=3Dguided`.
+> >=20
+> > Is this behaviour expected?
+>=20
+> To help confirm where the issue is, can I ask you to do three=20
+> experiments with the patch series applied:
+>=20
+> 1) 'amd_pstate=3Dactive' on your kernel command line.
 
-1. https://lore.kernel.org/linux-trace-kernel/20230914131102.179100-1-cleger@rivosinc.com/
-2. https://lore.kernel.org/linux-trace-kernel/20230915115449.3d7103b841cd593d1a09a129@kernel.org/
+The issue is reproducible. If I toggle the governor in cpupower to `powersa=
+ve` and back to `performance`, boost is restored.
+
+> 2) 'amd_pstate=3Dactive amd_prefcore=3Ddisable' on your kernel command li=
+ne.
+
+The issue is not reproducible.
+
+> 3) 'amd_pstate=3Dguided amd_prefcore=3Ddisable' on your kernel command li=
+ne.
+
+The issue is not reproducible.
+
+I should also mention that in my initial configuration I use `amd_pstate=3D=
+guided` and `schedutil`. If I switch to `performance` after suspend-resume =
+cycle, the boost is restored. However, if I switch back to `schedutil`, the=
+ freq is capped.
+
+Does this info help?
+
+> Looking through the code, I anticipate from your report that it=20
+> reproduces on "1" but not "2" and "3".
+>=20
+> Meng,
+>=20
+> Can you try to repro?
+>=20
+> I think that it's probably a call to amd_pstate_init_prefcore() missing
+> from amd_pstate_cpu_resume() and also amd_pstate_epp_resume().
+
+=2D-=20
+Oleksandr Natalenko (post-factum)
+--nextPart5713749.DvuYhMxLoT
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEZUOOw5ESFLHZZtOKil/iNcg8M0sFAmULSTkACgkQil/iNcg8
+M0sqsA//eFdiuY7Cxaer5l0lBux1QhGyN0q30uy+zbybTXSfN4BGYulhA/nihp5k
+TRvwAYlSQf1Zhoi40S2xQlpblgLkiSl+a9UtdVju7RKfButrbNhFmQSygIHYQnmc
+kKYu+2079+3GvpFYPxtMJBR5UNbbNZ+dFTmj8SYnQ7Zm0cizbzi+WtIphnNuhubE
+fLs8Dc1XtvrqukGjffefSDjzQ7pd/LIcD1zG4nPbdyUIki52P/Y4TewqqJ8ZePg5
+qw/a/pRHePddz4rnEjCuSswZ98PXfipz7C1R49b1I6E7UlFAPqWnMQbioKYPUsWW
+Eszd8omTV4ejEwZ6kX22zynoCHNRg8O37SMBHxhNbIzIOVXTyGtD+9c4wd6AjAvy
+/+VRk9JJGHoZfh9YOB8tHNvmxzKUEQSW93KKlD8Var5hsqzWHsUxkCn3U74hB7Px
+dWmKRtau/qrarrS068QtM8QOIgfegUzvu0s6DyVFleI9Sx0zjfV1cfzgv02OYY75
+9Zk+/qfNe6opvZMtGLTMUueQGMy1KGYhN55PPMxy5S1LeZPgfXZDHWdBMqQYpz3X
+RyNLvfoUYHGSQJJBKvhuloW0sauhFtVnBG7CF3A8e6t3dvzqBrwem+vdFBZw4uwt
+xuw0b6tGpTkmeRCtz23xGHpH9qE6uIo4Bo2FxenUm3jZHnNbALY=
+=EcDU
+-----END PGP SIGNATURE-----
+
+--nextPart5713749.DvuYhMxLoT--
+
+
+
