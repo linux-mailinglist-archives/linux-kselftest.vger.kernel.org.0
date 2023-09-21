@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C37EB7A9AFC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Sep 2023 20:52:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DE8C7A9BC0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Sep 2023 21:04:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230394AbjIUSw4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 21 Sep 2023 14:52:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46476 "EHLO
+        id S229918AbjIUTEO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 21 Sep 2023 15:04:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230424AbjIUSwi (ORCPT
+        with ESMTP id S229914AbjIUTED (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Sep 2023 14:52:38 -0400
+        Thu, 21 Sep 2023 15:04:03 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BC683A84;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70CDE5B99;
         Thu, 21 Sep 2023 10:49:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1695318592; x=1726854592;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=Yi3c68gD4hTElDHskv0VcpfkQgw6vI/1kl3oI770f+E=;
-  b=cSWmsMhGqWV7OteKQqTngpFY/v0HROD3PLPH+xV0QyR0OIILPT9r7zIg
-   Ljry7lPJkNWd6Q0J/NQV4nGL478g2yzrVoDq9F5JPUx8gcP/hV+ZJb7WW
-   w1lSr0ES3hF3SL/kHhdhB28Ipc6EnQlFMpLEJrSjOjz9qGdji3f7Df74i
-   yIwpjPqWcoek9XlsxK8b0ZDOUSlyX2J99w6fIXrkjk517CxVkVzmJA901
-   afFSCXnQW/oTZUBZW3tkOIvEqV2hvahTNZRjHlEQ8PtHAMfa0sm4er7QT
-   2NZ96ZnWX0taW9MpzIYHZrLgIPb+j40ww5Vnxw3e3rJ3mB5VPadVhmSMA
+  bh=Bz3ca0YRi75jrvCVUg/Zp4X79iO7/7EaRLPYgFOWiCI=;
+  b=fZbKJ8myqMe+3ImZSrhI1iGjNHKssv0agOgCVsJCZTiAl/hfiNb1c17f
+   zaUBtUopjfqkx/QZ5ZIEexqjm4oDBEKpZjpmhjlcYSRUl0tZm08Fbx7ux
+   /rFnhZcVgPp+M/ZH+iSBI1d2tepPxk2Y+2i9immJ9EZkoiyhl7UC3p18g
+   gue1/gbJLz+1tgWRxVbnMidvMQuJ+qYxY9iFIR80Z9WwisdIbsgfYF9/A
+   XiYvcSIkFcUlyPc3hbwkKqDZjZQUZvFPFlXqrpyE3ba9A/XQG3mvnCYh8
+   b7YrQMxlV5OEp7tmvfHZcwEJY8/bAK0c1lv/Gsj9upHkzEpkTZZG3P+r4
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="359832848"
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="359832860"
 X-IronPort-AV: E=Sophos;i="6.03,164,1694761200"; 
-   d="scan'208";a="359832848"
+   d="scan'208";a="359832860"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 00:52:11 -0700
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 00:52:12 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="723649516"
+X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="723649520"
 X-IronPort-AV: E=Sophos;i="6.03,164,1694761200"; 
-   d="scan'208";a="723649516"
+   d="scan'208";a="723649520"
 Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by orsmga006.jf.intel.com with ESMTP; 21 Sep 2023 00:52:10 -0700
+  by orsmga006.jf.intel.com with ESMTP; 21 Sep 2023 00:52:11 -0700
 From:   Yi Liu <yi.l.liu@intel.com>
 To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
         kevin.tian@intel.com, robin.murphy@arm.com,
@@ -51,9 +51,9 @@ Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
         suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         zhenzhong.duan@intel.com, joao.m.martins@oracle.com
-Subject: [PATCH v4 05/17] iommufd: Separate kernel-managed HWPT alloc/destroy/abort functions
-Date:   Thu, 21 Sep 2023 00:51:26 -0700
-Message-Id: <20230921075138.124099-6-yi.l.liu@intel.com>
+Subject: [PATCH v4 06/17] iommufd: Add shared alloc_fn function pointer and mutex pointer
+Date:   Thu, 21 Sep 2023 00:51:27 -0700
+Message-Id: <20230921075138.124099-7-yi.l.liu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230921075138.124099-1-yi.l.liu@intel.com>
 References: <20230921075138.124099-1-yi.l.liu@intel.com>
@@ -71,125 +71,146 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Nicolin Chen <nicolinc@nvidia.com>
 
-As one of the previous commits mentioned, a user-managed HWPT will have
-some different attributes/members. It'd be more clear by having separate
-allocators. Since the existing iommufd_hw_pagetable_alloc() serves well
-kernel-managed HWPTs, apply some minimal updates to mark it as a kernel-
-managed HWPT allocator.
+This allows iommufd_hwpt_alloc() to have a common routine but jump to a
+different allocator and hold a different mutex, corresponding to types
+of HWPT allocation (either kernel-managed or user-managed). This shared
+function pointer takes "pt_obj" as an input that would be coverted into
+an IOAS pointer or a parent HWPT pointer.
 
-Also, add a pair of function pointers (abort and destroy) in the struct,
-to separate different cleanup routines. Then rename the existing cleanup
-functions to iommufd_kernel_managed_hwpt_destroy/abort() linked to the
-HWPT in the allocator.
+Then, update the kernel-managed allocator to follow this pt_obj change.
 
 Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
 Signed-off-by: Yi Liu <yi.l.liu@intel.com>
 ---
- drivers/iommu/iommufd/hw_pagetable.c    | 34 ++++++++++++++++++++-----
- drivers/iommu/iommufd/iommufd_private.h |  3 +++
- 2 files changed, 31 insertions(+), 6 deletions(-)
+ drivers/iommu/iommufd/device.c          |  2 +-
+ drivers/iommu/iommufd/hw_pagetable.c    | 46 ++++++++++++++++++-------
+ drivers/iommu/iommufd/iommufd_private.h |  3 +-
+ 3 files changed, 37 insertions(+), 14 deletions(-)
 
-diff --git a/drivers/iommu/iommufd/hw_pagetable.c b/drivers/iommu/iommufd/hw_pagetable.c
-index 554a9c3d740f..1cc7178121d1 100644
---- a/drivers/iommu/iommufd/hw_pagetable.c
-+++ b/drivers/iommu/iommufd/hw_pagetable.c
-@@ -8,7 +8,7 @@
- #include "../iommu-priv.h"
- #include "iommufd_private.h"
- 
--void iommufd_hw_pagetable_destroy(struct iommufd_object *obj)
-+static void iommufd_kernel_managed_hwpt_destroy(struct iommufd_object *obj)
- {
- 	struct iommufd_hw_pagetable *hwpt =
- 		container_of(obj, struct iommufd_hw_pagetable, obj);
-@@ -27,7 +27,12 @@ void iommufd_hw_pagetable_destroy(struct iommufd_object *obj)
- 	refcount_dec(&hwpt->ioas->obj.users);
- }
- 
--void iommufd_hw_pagetable_abort(struct iommufd_object *obj)
-+void iommufd_hw_pagetable_destroy(struct iommufd_object *obj)
-+{
-+	container_of(obj, struct iommufd_hw_pagetable, obj)->destroy(obj);
-+}
-+
-+static void iommufd_kernel_managed_hwpt_abort(struct iommufd_object *obj)
- {
- 	struct iommufd_hw_pagetable *hwpt =
- 		container_of(obj, struct iommufd_hw_pagetable, obj);
-@@ -42,6 +47,11 @@ void iommufd_hw_pagetable_abort(struct iommufd_object *obj)
- 	iommufd_hw_pagetable_destroy(obj);
- }
- 
-+void iommufd_hw_pagetable_abort(struct iommufd_object *obj)
-+{
-+	container_of(obj, struct iommufd_hw_pagetable, obj)->abort(obj);
-+}
-+
- int iommufd_hw_pagetable_enforce_cc(struct iommufd_hw_pagetable *hwpt)
- {
- 	if (hwpt->enforce_cache_coherency)
-@@ -57,7 +67,7 @@ int iommufd_hw_pagetable_enforce_cc(struct iommufd_hw_pagetable *hwpt)
- }
- 
- /**
-- * iommufd_hw_pagetable_alloc() - Get an iommu_domain for a device
-+ * iommufd_hw_pagetable_alloc() - Get a kernel-managed iommu_domain for a device
-  * @ictx: iommufd context
-  * @ioas: IOAS to associate the domain with
-  * @idev: Device to get an iommu_domain for
-@@ -66,9 +76,9 @@ int iommufd_hw_pagetable_enforce_cc(struct iommufd_hw_pagetable *hwpt)
-  * @user_data: Optional user_data pointer
-  * @immediate_attach: True if idev should be attached to the hwpt
-  *
-- * Allocate a new iommu_domain and return it as a hw_pagetable. The HWPT
-- * will be linked to the given ioas and upon return the underlying iommu_domain
-- * is fully popoulated.
-+ * Allocate a new iommu_domain (must be IOMMU_DOMAIN_UNMANAGED) and return it as
-+ * a kernel-managed hw_pagetable. The HWPT will be linked to the given ioas and
-+ * upon return the underlying iommu_domain is fully popoulated.
-  *
-  * The caller must hold the ioas->mutex until after
-  * iommufd_object_abort_and_destroy() or iommufd_object_finalize() is called on
-@@ -103,6 +113,8 @@ iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
- 	/* Pairs with iommufd_hw_pagetable_destroy() */
- 	refcount_inc(&ioas->obj.users);
- 	hwpt->ioas = ioas;
-+	hwpt->abort = iommufd_kernel_managed_hwpt_abort;
-+	hwpt->destroy = iommufd_kernel_managed_hwpt_destroy;
- 
- 	if (ops->domain_alloc_user) {
- 		hwpt->domain = ops->domain_alloc_user(idev->dev, flags,
-@@ -121,6 +133,16 @@ iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
- 		}
+diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
+index e04900f101f1..eb120f70a3e3 100644
+--- a/drivers/iommu/iommufd/device.c
++++ b/drivers/iommu/iommufd/device.c
+@@ -539,7 +539,7 @@ iommufd_device_auto_get_domain(struct iommufd_device *idev,
+ 		goto out_unlock;
  	}
  
-+	if (WARN_ON_ONCE(hwpt->domain->type != IOMMU_DOMAIN_UNMANAGED)) {
+-	hwpt = iommufd_hw_pagetable_alloc(idev->ictx, ioas, idev,
++	hwpt = iommufd_hw_pagetable_alloc(idev->ictx, &ioas->obj, idev,
+ 					  0, IOMMU_HWPT_TYPE_DEFAULT,
+ 					  NULL, immediate_attach);
+ 	if (IS_ERR(hwpt)) {
+diff --git a/drivers/iommu/iommufd/hw_pagetable.c b/drivers/iommu/iommufd/hw_pagetable.c
+index 1cc7178121d1..b2af68776877 100644
+--- a/drivers/iommu/iommufd/hw_pagetable.c
++++ b/drivers/iommu/iommufd/hw_pagetable.c
+@@ -69,7 +69,7 @@ int iommufd_hw_pagetable_enforce_cc(struct iommufd_hw_pagetable *hwpt)
+ /**
+  * iommufd_hw_pagetable_alloc() - Get a kernel-managed iommu_domain for a device
+  * @ictx: iommufd context
+- * @ioas: IOAS to associate the domain with
++ * @pt_obj: An object to an IOAS to associate the domain with
+  * @idev: Device to get an iommu_domain for
+  * @flags: Flags from userspace
+  * @hwpt_type: Requested type of hw_pagetable
+@@ -85,12 +85,15 @@ int iommufd_hw_pagetable_enforce_cc(struct iommufd_hw_pagetable *hwpt)
+  * the returned hwpt.
+  */
+ struct iommufd_hw_pagetable *
+-iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
++iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx,
++			   struct iommufd_object *pt_obj,
+ 			   struct iommufd_device *idev, u32 flags,
+ 			   enum iommu_hwpt_type hwpt_type,
+ 			   struct iommu_user_data *user_data,
+ 			   bool immediate_attach)
+ {
++	struct iommufd_ioas *ioas =
++		container_of(pt_obj, struct iommufd_ioas, obj);
+ 	const struct iommu_ops *ops = dev_iommu_ops(idev->dev);
+ 	struct iommufd_hw_pagetable *hwpt;
+ 	int rc;
+@@ -184,10 +187,19 @@ iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
+ 
+ int iommufd_hwpt_alloc(struct iommufd_ucmd *ucmd)
+ {
++	struct iommufd_hw_pagetable *(*alloc_fn)(
++					struct iommufd_ctx *ictx,
++					struct iommufd_object *pt_obj,
++					struct iommufd_device *idev,
++					u32 flags, enum iommu_hwpt_type type,
++					struct iommu_user_data *user_data,
++					bool flag);
+ 	struct iommu_hwpt_alloc *cmd = ucmd->cmd;
+ 	struct iommufd_hw_pagetable *hwpt;
++	struct iommufd_object *pt_obj;
+ 	struct iommufd_device *idev;
+ 	struct iommufd_ioas *ioas;
++	struct mutex *mutex;
+ 	int rc;
+ 
+ 	if (cmd->flags & ~IOMMU_HWPT_ALLOC_NEST_PARENT || cmd->__reserved)
+@@ -197,17 +209,26 @@ int iommufd_hwpt_alloc(struct iommufd_ucmd *ucmd)
+ 	if (IS_ERR(idev))
+ 		return PTR_ERR(idev);
+ 
+-	ioas = iommufd_get_ioas(ucmd->ictx, cmd->pt_id);
+-	if (IS_ERR(ioas)) {
+-		rc = PTR_ERR(ioas);
++	pt_obj = iommufd_get_object(ucmd->ictx, cmd->pt_id, IOMMUFD_OBJ_ANY);
++	if (IS_ERR(pt_obj)) {
 +		rc = -EINVAL;
-+		goto out_abort;
-+	}
-+	/* Driver is buggy by mixing user-managed op in kernel-managed ops */
-+	if (WARN_ON_ONCE(hwpt->domain->ops->cache_invalidate_user)) {
+ 		goto out_put_idev;
+ 	}
+ 
+-	mutex_lock(&ioas->mutex);
+-	hwpt = iommufd_hw_pagetable_alloc(ucmd->ictx, ioas,
+-					  idev, cmd->flags,
+-					  IOMMU_HWPT_TYPE_DEFAULT,
+-					  NULL, false);
++	switch (pt_obj->type) {
++	case IOMMUFD_OBJ_IOAS:
++		ioas = container_of(pt_obj, struct iommufd_ioas, obj);
++		mutex = &ioas->mutex;
++		alloc_fn = iommufd_hw_pagetable_alloc;
++		break;
++	default:
 +		rc = -EINVAL;
-+		goto out_abort;
++		goto out_put_pt;
 +	}
 +
- 	/*
- 	 * Set the coherency mode before we do iopt_table_add_domain() as some
- 	 * iommus have a per-PTE bit that controls it and need to decide before
++	mutex_lock(mutex);
++	hwpt = alloc_fn(ucmd->ictx, pt_obj, idev, cmd->flags,
++			IOMMU_HWPT_TYPE_DEFAULT, NULL, false);
+ 	if (IS_ERR(hwpt)) {
+ 		rc = PTR_ERR(hwpt);
+ 		goto out_unlock;
+@@ -223,8 +244,9 @@ int iommufd_hwpt_alloc(struct iommufd_ucmd *ucmd)
+ out_hwpt:
+ 	iommufd_object_abort_and_destroy(ucmd->ictx, &hwpt->obj);
+ out_unlock:
+-	mutex_unlock(&ioas->mutex);
+-	iommufd_put_object(&ioas->obj);
++	mutex_unlock(mutex);
++out_put_pt:
++	iommufd_put_object(pt_obj);
+ out_put_idev:
+ 	iommufd_put_object(&idev->obj);
+ 	return rc;
 diff --git a/drivers/iommu/iommufd/iommufd_private.h b/drivers/iommu/iommufd/iommufd_private.h
-index 1d3b1a74e854..3e89c3d530f3 100644
+index 3e89c3d530f3..e4d06ae6b0c5 100644
 --- a/drivers/iommu/iommufd/iommufd_private.h
 +++ b/drivers/iommu/iommufd/iommufd_private.h
-@@ -234,6 +234,9 @@ struct iommufd_hw_pagetable {
- 	struct iommufd_object obj;
- 	struct iommu_domain *domain;
+@@ -250,7 +250,8 @@ struct iommufd_hw_pagetable {
+ };
  
-+	void (*abort)(struct iommufd_object *obj);
-+	void (*destroy)(struct iommufd_object *obj);
-+
- 	union {
- 		struct { /* kernel-managed */
- 			struct iommufd_ioas *ioas;
+ struct iommufd_hw_pagetable *
+-iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
++iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx,
++			   struct iommufd_object *pt_obj,
+ 			   struct iommufd_device *idev, u32 flags,
+ 			   enum iommu_hwpt_type hwpt_type,
+ 			   struct iommu_user_data *user_data,
 -- 
 2.34.1
 
