@@ -2,34 +2,63 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BD457A965D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Sep 2023 19:10:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D28EC7A98B1
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Sep 2023 19:51:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229849AbjIURCl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 21 Sep 2023 13:02:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44974 "EHLO
+        id S229998AbjIURvo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 21 Sep 2023 13:51:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbjIURCJ (ORCPT
+        with ESMTP id S229757AbjIURvZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Sep 2023 13:02:09 -0400
-Received: from mail.avm.de (mail.avm.de [IPv6:2001:bf0:244:244::94])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 510FB2112;
-        Thu, 21 Sep 2023 10:01:14 -0700 (PDT)
-Received: from mail-auth.avm.de (unknown [IPv6:2001:bf0:244:244::71])
-        by mail.avm.de (Postfix) with ESMTPS;
-        Thu, 21 Sep 2023 10:06:01 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
-        t=1695283566; bh=EzGmNrSKOJc7ZUWqu95aGt4JAKmhiqLPdGsju567CAk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=s5BAmOkMuI+eBqvoX4jxWJ6gSAWinUICiwcr9FCuzw16BjWz/LRBk2pOKtoc289IH
-         LLJsqZbrXEYCAGHSdUrrGPH+OErDMkrB5B6yA98g/ZVu5NLG3t/vI0+YXCJQzJw16Z
-         0CqlBe9j3IF5pEnsxff5BskDQAnpen3+7kaJM3Fo=
-Received: from localhost (unknown [172.17.88.63])
-        by mail-auth.avm.de (Postfix) with ESMTPSA id 1044581C20;
-        Thu, 21 Sep 2023 10:06:01 +0200 (CEST)
-Date:   Thu, 21 Sep 2023 10:06:00 +0200
-From:   Johannes Nixdorf <jnixdorf-oss@avm.de>
-To:     Nikolay Aleksandrov <razor@blackwall.org>
+        Thu, 21 Sep 2023 13:51:25 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1547946DF7
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Sep 2023 10:25:57 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-40535597f01so9206045e9.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Sep 2023 10:25:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blackwall-org.20230601.gappssmtp.com; s=20230601; t=1695317154; x=1695921954; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Oet/D+JdIKmqqEXMeGgkoE2/3Tw5UCJOvyH76c8x0dQ=;
+        b=qxj6vJrFg99h2//xNWVEafXUbt8d7YfAKtjvPItx5YArVcXqayk6YCLzWKBk1lukxC
+         Tf+QWaKfrUG0TPvQD839tTg0Lm1Xi254GdfVGawC+VigQmZbpZ7c+QIKZX8wPj+YrJEo
+         N+0spPtfs+WrOktVOulQbr6E5UaOzL7fk4ghbZTGHYLB2+XrccAIdCKTV18kJ6SZ9C2k
+         kDEkl3aOh3FMylB3Eam+jXqOh5uMCfrw6McJFQ8GQutQR7p9W0w9CtS8VIpcmkZAmFLG
+         fU1DwCQMGp/GrJNquShZyBqbNzeyxqAvttDrd5X0ZFcLNUwpUQuwjfSpdPhlPc+REhlD
+         hftg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695317154; x=1695921954;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Oet/D+JdIKmqqEXMeGgkoE2/3Tw5UCJOvyH76c8x0dQ=;
+        b=FSM72M3T1dang7OJb4duSugBO7EdzLs6niJx9fOTjzsLyWBP6W6vcMSRySupfKu0PX
+         ntr//NVU7FHbcSJYCT2STUIv8qSvOOsQehrL6lRridd7i4ThAHs9OfryIEFg+pVMcEAj
+         GcHh7E3kMWagKLj9K2LNPH8ukAEM3dn5Q/egpsoBvHPprjMtdVzFeIutuFXbviIhIUWZ
+         LrvFy+LM1P26u8F6dUgvH0HeyrsFkeDGi1c7dV15Du3Ii7OHHNaDpbYWAcKN7Zpm4KQs
+         zy+Bo8CcSIbmJ3+GZg+qPga5/hg4B9sEJeHXG4MIrh5VaazhJ1jBsN40XGa11Arp5H2j
+         74Aw==
+X-Gm-Message-State: AOJu0YxXxa32xSZYJABoB/eGQqa6W/Xa8cQksUBRhQui7VUhEZu0O98a
+        HSkwkS4DaERRO9A/MUuKlnYpCSgrnMqQfktmfAEL2lXz
+X-Google-Smtp-Source: AGHT+IGSqpABR6NJIutspbmDVZEhOKpxYfh5Gelph+0yVDatq2aZ3E+NWHnq2oOH1AMJw/MFATUt/Q==
+X-Received: by 2002:ac2:5b1c:0:b0:503:314f:affe with SMTP id v28-20020ac25b1c000000b00503314faffemr4577024lfn.17.1695291285601;
+        Thu, 21 Sep 2023 03:14:45 -0700 (PDT)
+Received: from [192.168.0.105] (haunt.prize.volia.net. [93.72.109.136])
+        by smtp.gmail.com with ESMTPSA id ay15-20020a056402202f00b00532c32e2b2dsm622021edb.18.2023.09.21.03.14.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Sep 2023 03:14:45 -0700 (PDT)
+Message-ID: <ab1130bb-38ce-1804-7981-6a4532d6ff7b@blackwall.org>
+Date:   Thu, 21 Sep 2023 13:14:43 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH net-next v4 2/6] net: bridge: Set strict_start_type for
+ br_policy
+Content-Language: en-US
+To:     Johannes Nixdorf <jnixdorf-oss@avm.de>
 Cc:     "David S. Miller" <davem@davemloft.net>,
         Andrew Lunn <andrew@lunn.ch>, David Ahern <dsahern@gmail.com>,
         Eric Dumazet <edumazet@google.com>,
@@ -42,25 +71,16 @@ Cc:     "David S. Miller" <davem@davemloft.net>,
         Vladimir Oltean <vladimir.oltean@nxp.com>,
         bridge@lists.linux-foundation.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v4 5/6] net: bridge: Add a configurable default
- FDB learning limit
-Message-ID: <ZQv5aNbgqxCuOKyr@u-jnixdorf.ads.avm.de>
 References: <20230919-fdb_limit-v4-0-39f0293807b8@avm.de>
- <20230919-fdb_limit-v4-5-39f0293807b8@avm.de>
- <cc14cd4a-f3bb-3d6f-5b38-ec73cad32570@blackwall.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cc14cd4a-f3bb-3d6f-5b38-ec73cad32570@blackwall.org>
-X-purgate-ID: 149429::1695283561-FD4345D2-604B728F/0/0
-X-purgate-type: clean
-X-purgate-size: 3303
-X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
-X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
-X-purgate: clean
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+ <20230919-fdb_limit-v4-2-39f0293807b8@avm.de>
+ <1c12b8f2-b28b-f326-b24f-f1ea602832d7@blackwall.org>
+ <ZQvvgiz4rE8u6vba@u-jnixdorf.ads.avm.de>
+From:   Nikolay Aleksandrov <razor@blackwall.org>
+In-Reply-To: <ZQvvgiz4rE8u6vba@u-jnixdorf.ads.avm.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,75 +88,53 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Sep 20, 2023 at 02:00:27PM +0300, Nikolay Aleksandrov wrote:
-> On 9/19/23 11:12, Johannes Nixdorf wrote:
-> > Add a Kconfig option to configure a default FDB learning limit system
-> > wide, so a distributor building a special purpose kernel can limit all
-> > created bridges by default.
-> > 
-> > The limit is only a soft default setting and overrideable on a per bridge
-> > basis using netlink.
-> > 
-> > Signed-off-by: Johannes Nixdorf <jnixdorf-oss@avm.de>
-> > ---
-> >   net/bridge/Kconfig     | 13 +++++++++++++
-> >   net/bridge/br_device.c |  2 ++
-> >   2 files changed, 15 insertions(+)
-> > 
-> > diff --git a/net/bridge/Kconfig b/net/bridge/Kconfig
-> > index 3c8ded7d3e84..c0d9c08088c4 100644
-> > --- a/net/bridge/Kconfig
-> > +++ b/net/bridge/Kconfig
-> > @@ -84,3 +84,16 @@ config BRIDGE_CFM
-> >   	  Say N to exclude this support and reduce the binary size.
-> >   	  If unsure, say N.
-> > +
-> > +config BRIDGE_DEFAULT_FDB_MAX_LEARNED
-> > +	int "Default FDB learning limit"
-> > +	default 0
-> > +	depends on BRIDGE
-> > +	help
-> > +	  Sets a default limit on the number of learned FDB entries on
-> > +	  new bridges. This limit can be overwritten via netlink on a
-> > +	  per bridge basis.
-> > +
-> > +	  The default of 0 disables the limit.
-> > +
-> > +	  If unsure, say 0.
-> > diff --git a/net/bridge/br_device.c b/net/bridge/br_device.c
-> > index 9a5ea06236bd..3214391c15a0 100644
-> > --- a/net/bridge/br_device.c
-> > +++ b/net/bridge/br_device.c
-> > @@ -531,6 +531,8 @@ void br_dev_setup(struct net_device *dev)
-> >   	br->bridge_ageing_time = br->ageing_time = BR_DEFAULT_AGEING_TIME;
-> >   	dev->max_mtu = ETH_MAX_MTU;
-> > +	br->fdb_max_learned = CONFIG_BRIDGE_DEFAULT_FDB_MAX_LEARNED;
-> > +
-> >   	br_netfilter_rtable_init(br);
-> >   	br_stp_timer_init(br);
-> >   	br_multicast_init(br);
-> > 
+On 9/21/23 10:23, Johannes Nixdorf wrote:
+> On Wed, Sep 20, 2023 at 01:46:02PM +0300, Nikolay Aleksandrov wrote:
+>> On 9/19/23 11:12, Johannes Nixdorf wrote:
+>>> Set any new attributes added to br_policy to be parsed strictly, to
+>>> prevent userspace from passing garbage.
+>>>
+>>> Signed-off-by: Johannes Nixdorf <jnixdorf-oss@avm.de>
+>>> ---
+>>>    net/bridge/br_netlink.c | 2 ++
+>>>    1 file changed, 2 insertions(+)
+>>>
+>>> diff --git a/net/bridge/br_netlink.c b/net/bridge/br_netlink.c
+>>> index 10f0d33d8ccf..505683ef9a26 100644
+>>> --- a/net/bridge/br_netlink.c
+>>> +++ b/net/bridge/br_netlink.c
+>>> @@ -1229,6 +1229,8 @@ static size_t br_port_get_slave_size(const struct net_device *brdev,
+>>>    }
+>>>    static const struct nla_policy br_policy[IFLA_BR_MAX + 1] = {
+>>> +	[IFLA_BR_UNSPEC]	= { .strict_start_type =
+>>> +				    IFLA_BR_MCAST_QUERIER_STATE + 1 },
+>>>    	[IFLA_BR_FORWARD_DELAY]	= { .type = NLA_U32 },
+>>>    	[IFLA_BR_HELLO_TIME]	= { .type = NLA_U32 },
+>>>    	[IFLA_BR_MAX_AGE]	= { .type = NLA_U32 },
+>>>
+>>
+>> instead of IFLA_BR_MCAST_QUERIER_STATE + 1, why not move around the patch
+>> and just use the new attribute name?
+>> These are uapi, they won't change.
 > 
-> This one I'm not sure about at all. Distributions can just create the bridge
-> with a predefined limit. This is not flexible and just adds
-> one more kconfig option that is rather unnecessary. Why having a kconfig
-> knob is better than bridge creation time limit setting? You still have
-> to create the bridge, so why not set the limit then?
+> I wanted to avoid having a state between the two commits where the new
+> attributes are already added, but not yet strictly verified. Otherwise
+> they would present a slightly different UAPI at that one commit boundary
+> than after this commit.
+> 
 
-The problem I'm trying to solve here are unaware applications. Assuming
-this change lands in the next Linux release there will still be quite
-some time until the major applications that create bridges (distribution
-specific or common network management tools, the container solution of
-they day, for embedded some random vendor tools, etc.) will pick it
-up. In this series I chose a default of 0 to not break existing setups
-that rely on some arbitrary amount of FDB entries, so those unaware
-applications will create bridges without limits. I added the Kconfig
-setting so someone who knows their use cases can still set a more fitting
-default limit.
+That's not really a problem, the attribute is the same.
 
-More specifically to our use case as an embedded vendor that builds their
-own kernels and knows they have no use case that requires huge FDB tables,
-the kernel config allows us to set a safe default limit before starting
-to teach all our applications and our upstream vendors' code about the
-new netlink attribute. As this patch is relatively simple, we can also
-keep it downstream if there is opposition to it here though.
+> This is also not the only place in the kernel where strict_start_type
+> is specified that way. See e.g. commit c00041cf1cb8 ("net: bridge: Set
+> strict_start_type at two policies"), even though that seems mostly be
+> done to turn on strict_start_type preemtively, not in the same series
+> that adds the new attribute.
+
+Please, just use the new attribute to be more explicit where the strict 
+parsing starts.
+
+Thanks,
+  Nik
+
+
