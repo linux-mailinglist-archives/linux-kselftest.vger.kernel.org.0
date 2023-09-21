@@ -2,94 +2,141 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AFA307A96D3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Sep 2023 19:11:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 181577A9601
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Sep 2023 19:00:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229505AbjIURFU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 21 Sep 2023 13:05:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39264 "EHLO
+        id S229611AbjIUQ5Z (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 21 Sep 2023 12:57:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230168AbjIURE4 (ORCPT
+        with ESMTP id S229637AbjIUQ5W (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Sep 2023 13:04:56 -0400
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5612111;
-        Thu, 21 Sep 2023 10:02:39 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id A363832009CF;
-        Thu, 21 Sep 2023 08:13:18 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Thu, 21 Sep 2023 08:13:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1695298398; x=1695384798; bh=qL6/VmfuEG0N5
-        xc6Mz2PvEm3VWqhSA+Pyx12f0FNgWU=; b=NNL8lLZ+nJLyfc6TshaXc4SDbglQp
-        a5ODaObdGtjszpBwKJ0Noyh3s/ouKVzOk3ISKCOGJ3XNBvbqe5AeN/048pZRLjiv
-        iBeXMcn5Gi7b6wms38bJmdhePlZtGCQ+5HjCoS3OQvYf2yjeN0DWol9H/ihvIlDs
-        B1BHuUigB92bXlPuGOFtLqzAKW3g4AEQYixtrwoJIEpt6B7/FO+9wvNzOBG2L5hx
-        sswKQwV9JYGbLdkR2oUkpP+YqpSyQzc6UG1sXviI8XOuUUXYG6ogPgML+mfJlpO0
-        qq9W6KkzK9vIs9UL/dRRcEqKyy6fVp8LwO6Gcl48X8QEQG6hrxKy0BQMA==
-X-ME-Sender: <xms:XTMMZU558zdbFxDVrw_Ze1QeomT43lgk6oMhblaUrxvWoyO7G_QfMw>
-    <xme:XTMMZV7WhFGkfhy9cDBfZoImR4-U9VV7Mi4kFtDuSncH_98CDVb_P4hub8H-HR-yc
-    OBI4cjlhYaZV1Y>
-X-ME-Received: <xmr:XTMMZTcSMCggTH-WN0omJfhlEc3mEWy01SQXRyhqoBeTbUYjI0E6aEzV7OtjGHYb_W0usouEZjkh-1JGP-0H5cRPMxaSrA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedviedrudekiedggeekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtrodttddtvdenucfhrhhomhepkfguohcu
-    ufgthhhimhhmvghluceoihguohhstghhsehiughoshgthhdrohhrgheqnecuggftrfgrth
-    htvghrnhepfeefueegheehleelgeehjefgieeltdeuteekkeefheejudffleefgfeludeh
-    hfejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepih
-    guohhstghhsehiughoshgthhdrohhrgh
-X-ME-Proxy: <xmx:XTMMZZKXbA6vPaFCLmzHouZnZ4RYukMibMg83PSsC7kY1pdEfS-2sA>
-    <xmx:XTMMZYJ5RUdkPQnNAdANDWlG2JlM3L6gEl3iA6nHkf9F4yaJLjFrgw>
-    <xmx:XTMMZawkfgR8HELWgXaCFL5B3mVVXvyaTzTDKMBF4Vk_o0qllOJ0lw>
-    <xmx:XjMMZV5p-3tjzZoiv3kOV5hCZK4mJttyW-Lf9t0syPcIwKPKyijm1A>
-Feedback-ID: i494840e7:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 21 Sep 2023 08:13:16 -0400 (EDT)
-Date:   Thu, 21 Sep 2023 15:13:12 +0300
-From:   Ido Schimmel <idosch@idosch.org>
-To:     Johannes Nixdorf <jnixdorf-oss@avm.de>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Andrew Lunn <andrew@lunn.ch>, David Ahern <dsahern@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        bridge@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next v4 1/6] net: bridge: Set BR_FDB_ADDED_BY_USER
- early in fdb_add_entry
-Message-ID: <ZQwzWINOPagvLgbS@shredder>
-References: <20230919-fdb_limit-v4-0-39f0293807b8@avm.de>
- <20230919-fdb_limit-v4-1-39f0293807b8@avm.de>
+        Thu, 21 Sep 2023 12:57:22 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26BD1CD1;
+        Thu, 21 Sep 2023 09:56:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695315398; x=1726851398;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=di5mpgdL3ZYPjG1RlMEW/pRlAICty+pOXRnLRRLTIco=;
+  b=daO0sh/gw+2Eod/nVAK1d5Py8qPqnkzWhfXH+7YFkg3hTo9dr5Xi6yzO
+   CdwyQIsR2nL5krhYIlrKRRJRLPmGXwOQiLrky00R9i8sHApUZG535MUBb
+   ONL7ZCMDf4AWYv/wktp/exXVDzpWjEqX4xSbo7BSKzt28lF8pN12iQXZJ
+   EX0VbxsvFV5kzCELvlQbadCDeeNEDAHBq61QaWr5xc3FQ1RjFBWbk19ta
+   q6dJbeKm5M6OcqwgJUcHIyZJ16HtjZbxqDFY69PnGXNoW2kbhP3CYTZzM
+   iWDPwTZzhBHHwzZHcZXteLNIt7Mu1VMqMQxbaNUW4NfWehNnigJCb3oYF
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10840"; a="360769961"
+X-IronPort-AV: E=Sophos;i="6.03,165,1694761200"; 
+   d="scan'208";a="360769961"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 06:33:46 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10840"; a="750386212"
+X-IronPort-AV: E=Sophos;i="6.03,165,1694761200"; 
+   d="scan'208";a="750386212"
+Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.254.213.213]) ([10.254.213.213])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 06:33:41 -0700
+Message-ID: <e493c62d-8f10-17c8-f660-dbae19c481a4@linux.intel.com>
+Date:   Thu, 21 Sep 2023 21:33:38 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230919-fdb_limit-v4-1-39f0293807b8@avm.de>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Cc:     baolu.lu@linux.intel.com, cohuck@redhat.com, eric.auger@redhat.com,
+        nicolinc@nvidia.com, kvm@vger.kernel.org, mjrosato@linux.ibm.com,
+        chao.p.peng@linux.intel.com, yi.y.sun@linux.intel.com,
+        peterx@redhat.com, jasowang@redhat.com,
+        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
+        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        zhenzhong.duan@intel.com, joao.m.martins@oracle.com
+Subject: Re: [PATCH v5 07/11] iommufd: Add data structure for Intel VT-d
+ stage-1 cache invalidation
+Content-Language: en-US
+To:     Yi Liu <yi.l.liu@intel.com>, joro@8bytes.org,
+        alex.williamson@redhat.com, jgg@nvidia.com, kevin.tian@intel.com,
+        robin.murphy@arm.com
+References: <20230921075431.125239-1-yi.l.liu@intel.com>
+ <20230921075431.125239-8-yi.l.liu@intel.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20230921075431.125239-8-yi.l.liu@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.9 required=5.0 tests=DKIMWL_WL_HIGH,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Sep 19, 2023 at 10:12:48AM +0200, Johannes Nixdorf wrote:
-> In preparation of the following fdb limit for dynamically learned entries,
-> allow fdb_create to detect that the entry was added by the user. This
-> way it can skip applying the limit in this case.
+On 2023/9/21 15:54, Yi Liu wrote:
+> This adds the data structure for flushing iotlb for the nested domain
+> allocated with IOMMU_HWPT_TYPE_VTD_S1 type.
 > 
-> Signed-off-by: Johannes Nixdorf <jnixdorf-oss@avm.de>
+> This only supports invalidating IOTLB, but no for device-TLB as device-TLB
+> invalidation will be covered automatically in the IOTLB invalidation if the
+> underlying IOMMU driver has enabled ATS for the affected device.
+> 
+> Signed-off-by: Yi Liu <yi.l.liu@intel.com>
+> ---
+>   include/uapi/linux/iommufd.h | 34 ++++++++++++++++++++++++++++++++++
+>   1 file changed, 34 insertions(+)
+> 
+> diff --git a/include/uapi/linux/iommufd.h b/include/uapi/linux/iommufd.h
+> index 18a502e206c3..3050efbceb57 100644
+> --- a/include/uapi/linux/iommufd.h
+> +++ b/include/uapi/linux/iommufd.h
+> @@ -510,6 +510,40 @@ struct iommu_hw_info {
+>   };
+>   #define IOMMU_GET_HW_INFO _IO(IOMMUFD_TYPE, IOMMUFD_CMD_GET_HW_INFO)
+>   
+> +/**
+> + * enum iommu_hwpt_vtd_s1_invalidate_flags - Flags for Intel VT-d
+> + *                                           stage-1 cache invalidation
+> + * @IOMMU_VTD_QI_FLAGS_LEAF: The LEAF flag indicates whether only the
+> + *                           leaf PTE caching needs to be invalidated
+> + *                           and other paging structure caches can be
+> + *                           preserved.
+> + */
+> +enum iommu_hwpt_vtd_s1_invalidate_flags {
+> +	IOMMU_VTD_QI_FLAGS_LEAF = 1 << 0,
+> +};
+> +
+> +/**
+> + * struct iommu_hwpt_vtd_s1_invalidate - Intel VT-d cache invalidation
+> + *                                       (IOMMU_HWPT_TYPE_VTD_S1)
+> + * @addr: The start address of the addresses to be invalidated.
 
-Reviewed-by: Ido Schimmel <idosch@nvidia.com>
+Is there an alignment requirement for @addr? If so, is 4K alignment
+sufficient? Perhaps we need to document it here so that user space can
+calculate the @addr correctly.
+
+> + * @npages: Number of contiguous 4K pages to be invalidated.
+> + * @flags: Combination of enum iommu_hwpt_vtd_s1_invalidate_flags
+> + * @__reserved: Must be 0
+> + *
+> + * The Intel VT-d specific invalidation data for user-managed stage-1 cache
+> + * invalidation under nested translation. Userspace uses this structure to
+> + * tell host about the impacted caches after modifying the stage-1 page table.
+> + *
+> + * Invalidating all the caches related to the page table by setting @addr
+> + * to be 0 and @npages to be __aligned_u64(-1).
+> + */
+> +struct iommu_hwpt_vtd_s1_invalidate {
+> +	__aligned_u64 addr;
+> +	__aligned_u64 npages;
+> +	__u32 flags;
+> +	__u32 __reserved;
+> +};
+> +
+>   /**
+>    * struct iommu_hwpt_invalidate - ioctl(IOMMU_HWPT_INVALIDATE)
+>    * @size: sizeof(struct iommu_hwpt_invalidate)
+
+Best regards,
+baolu
