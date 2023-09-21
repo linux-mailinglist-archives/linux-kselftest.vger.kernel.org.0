@@ -2,230 +2,141 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B136C7A9A50
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Sep 2023 20:38:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B70AF7A9A6A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Sep 2023 20:39:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230105AbjIUSiK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 21 Sep 2023 14:38:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35088 "EHLO
+        id S230406AbjIUSj0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 21 Sep 2023 14:39:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229906AbjIUSh3 (ORCPT
+        with ESMTP id S230224AbjIUSjS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Sep 2023 14:37:29 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CFDCD94C4
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Sep 2023 11:30:05 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id ca18e2360f4ac-79a7dc97aa2so52231739f.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Sep 2023 11:30:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1695321004; x=1695925804; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6ozbk2dNvyLppvWHLoOva5zzVtfg/F/fwO01G7KL2kM=;
-        b=Q1YvxgWo0snpU17c07XO8ZCRGcWz5wPdeWIl+PaFpEDeLJA5yLDEwJ97lFmXtPwpLU
-         EiAarcbHmLcBBfVuljBnwbO5JH3uPn2EcaiudA5tYsMuVgISfQHt2z1dmn3+hMJBlio9
-         mPTCV7ClSKo08l9mq3kh1VAsYfN81p9X017+RnAR+e9xbLSIwyMdDx/CNfc4Y5ytP1B5
-         NFFB19o863N6enoI9fQL9zsdcdI5cW0i/RuF2y1Qtne+W2dRnog2at74rqmO3AkzOyMF
-         5PVBfUTtWVsgnOZ+sl1u5dL586RLyGBndHy6UNtNUctc7sICGsBpUrd17dii7oKGHkZq
-         MV8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695321004; x=1695925804;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6ozbk2dNvyLppvWHLoOva5zzVtfg/F/fwO01G7KL2kM=;
-        b=ouSX/bpxLM38Cbo27kXqbL7RgSAHDrP3+9t/dJkpFSN4VyhwTjZ6RI9su6O4c2o4A5
-         KS/NV4yfa3IeF86496Ifi4lLDWNIxoJDCseD7UwmIakr/nfHqCZS//qDtsPrip5BAqPC
-         b849aYynnpXOMDa81i7H0VHte5K/HkESAPG3Z/I41eGbWc0d3hrG4RNEJKjV/mhBoyEC
-         nrQwJKo21b3w4QSxVSPXuPNFymBOrA0aZj/0UAWqK8TnWkTuN5WfFtyXh1H52CeRl9Ga
-         Efmy+DXUNuRLbMRP0kslm9z5pk8Wi4gfQ11AQfivT4c7MgvfNNJ7zeMeEBwbesu6ELi3
-         H+ug==
-X-Gm-Message-State: AOJu0YwgRpP0KoLL+B08/T0xCr+9kS8ysRsr9Dhghqpa/5hpPUTrfI0C
-        0cQRTgePZn9BPquAD0jwfO2eF99EZve5LePYtXoCMUcCKsc64kdNxhw=
-X-Google-Smtp-Source: AGHT+IGEz5Xdf1ltfP1h7ZOlY0i0Ff2p3WqisTkzXjo50kTCkDUhMr0te2MZhczsxuS2lrcKSxSji/XZakkgWoQtiRY=
-X-Received: by 2002:a17:90a:6c05:b0:26b:698f:dda7 with SMTP id
- x5-20020a17090a6c0500b0026b698fdda7mr4682988pjj.32.1695273183695; Wed, 20 Sep
- 2023 22:13:03 -0700 (PDT)
+        Thu, 21 Sep 2023 14:39:18 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 403CFA5D6C
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Sep 2023 10:59:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1695281192;
+        bh=DL8YQ5E8Zv2eZGMa34HZreA4MM1po6Pq4Ubem3mz4wk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=rr3oPnwnGwBUfGBN0YhjJfwFk6yaDy62debC2Rb8kgDzD5hQnCoEvoPDP8eEL4C/H
+         J0eEjae3Kg4KwYax7kmerM4W6XHW0cKjSZpzGf3th//c7p0U0ELDjXkxlrl5wRhYvr
+         4fqEVlqGHReRHAHT1KDdC/UnKpxBoJWDJS18rFOlil0EEC669ao+UhlWVi5VW8EqQ3
+         mIQMkuuAclpMJ3psIN/fRG0Rq/mIWWPNF5FVkbOIMegAoPGZ6e+O8wQRFU+KZuiVFJ
+         /5tb5/E3uMPBCmcBWZhtSgvTRclT1x6n4a8BfZ+O/0C6p/Cfok3Gre1WI9WdoQ4rxC
+         jln558KihtYdQ==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Rrn5M6TMFz4xPR;
+        Thu, 21 Sep 2023 17:26:31 +1000 (AEST)
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     <linuxppc-dev@lists.ozlabs.org>
+Cc:     <linux-kselftest@vger.kernel.org>, <skhan@linuxfoundation.org>,
+        <keescook@chromium.org>
+Subject: [PATCH] selftests/powerpc: Fix emit_tests to work with run_kselftest.sh
+Date:   Thu, 21 Sep 2023 17:26:10 +1000
+Message-ID: <20230921072623.828772-1-mpe@ellerman.id.au>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
-References: <20230918180646.1398384-1-apatel@ventanamicro.com>
- <20230918180646.1398384-4-apatel@ventanamicro.com> <CAOnJCUJYDHtbYS4js7PSAeLqT4sL5zi7DT5xeSww+5Nvs2UhcA@mail.gmail.com>
- <CAK9=C2UbjOGyxo8oP36Tinjhv1jRpCb+hVbZCOJ70G4-WiHw1g@mail.gmail.com> <CAOnJCULajHa6H6Rt75rNepYaT-3+Bo=1hQVb_oozPZK13N6yKQ@mail.gmail.com>
-In-Reply-To: <CAOnJCULajHa6H6Rt75rNepYaT-3+Bo=1hQVb_oozPZK13N6yKQ@mail.gmail.com>
-From:   Anup Patel <apatel@ventanamicro.com>
-Date:   Thu, 21 Sep 2023 10:42:50 +0530
-Message-ID: <CAK9=C2XxgCGudCH0tQqHe+t+Fyc34sVHia_5bfcZ6ZR37Udx7Q@mail.gmail.com>
-Subject: Re: [PATCH 3/4] KVM: riscv: selftests: Fix ISA_EXT register handling
- in get-reg-list
-To:     Atish Patra <atishp@atishpatra.org>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Andrew Jones <ajones@ventanamicro.com>, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.0 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Sep 21, 2023 at 4:31=E2=80=AFAM Atish Patra <atishp@atishpatra.org>=
- wrote:
->
-> On Wed, Sep 20, 2023 at 6:56=E2=80=AFAM Anup Patel <apatel@ventanamicro.c=
-om> wrote:
-> >
-> > On Wed, Sep 20, 2023 at 1:24=E2=80=AFAM Atish Patra <atishp@atishpatra.=
-org> wrote:
-> > >
-> > > On Mon, Sep 18, 2023 at 11:07=E2=80=AFAM Anup Patel <apatel@ventanami=
-cro.com> wrote:
-> > > >
-> > > > Same set of ISA_EXT registers are not present on all host because
-> > > > ISA_EXT registers are visible to the KVM user space based on the
-> > > > ISA extensions available on the host. Also, disabling an ISA
-> > > > extension using corresponding ISA_EXT register does not affect
-> > > > the visibility of the ISA_EXT register itself.
-> > > >
-> > > > Based on the above, we should filter-out all ISA_EXT registers.
-> > > >
-> > >
-> > > In that case, we don't need the switch case any more. Just a
-> > > conditional check with KVM_RISCV_ISA_EXT_MAX should be sufficient.
-> >
-> > If we compare against KVM_RISCV_ISA_EXT_MAX then we will forget
-> > adding test configs for newer ISA extensions.
-> >
->
-> I feel it just bloats the code as we may end up in hundreds of
-> extensions in the future
-> given the state of the extension scheme.
+In order to use run_kselftest.sh the list of tests must be emitted to
+populate kselftest-list.txt.
 
-That is bound to happen so eventually we will have to revisit the
-get-reg-list test.
+The powerpc Makefile is written to use EMIT_TESTS. But support for
+EMIT_TESTS was dropped in commit d4e59a536f50 ("selftests: Use runner.sh
+for emit targets"). Although prior to that commit a548de0fe8e1
+("selftests: lib.mk: add test execute bit check to EMIT_TESTS") had
+already broken run_kselftest.sh for powerpc due to the executable check
+using the wrong path.
 
-Regards,
-Anup
+It can be fixed by replacing the EMIT_TESTS definitions with actual
+emit_tests rules in the powerpc Makefiles. This makes run_kselftest.sh
+able to run powerpc tests:
 
->
-> > >
-> > > > Fixes: 477069398ed6 ("KVM: riscv: selftests: Add get-reg-list test"=
-)
-> > > > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> > > > ---
-> > > >  .../selftests/kvm/riscv/get-reg-list.c        | 35 +++++++++++----=
-----
-> > > >  1 file changed, 21 insertions(+), 14 deletions(-)
-> > > >
-> > > > diff --git a/tools/testing/selftests/kvm/riscv/get-reg-list.c b/too=
-ls/testing/selftests/kvm/riscv/get-reg-list.c
-> > > > index d8ecacd03ecf..76c0ad11e423 100644
-> > > > --- a/tools/testing/selftests/kvm/riscv/get-reg-list.c
-> > > > +++ b/tools/testing/selftests/kvm/riscv/get-reg-list.c
-> > > > @@ -14,17 +14,33 @@
-> > > >
-> > > >  bool filter_reg(__u64 reg)
-> > > >  {
-> > > > +       switch (reg & ~REG_MASK) {
-> > > >         /*
-> > > > -        * Some ISA extensions are optional and not present on all =
-host,
-> > > > -        * but they can't be disabled through ISA_EXT registers whe=
-n present.
-> > > > -        * So, to make life easy, just filtering out these kind of =
-registers.
-> > > > +        * Same set of ISA_EXT registers are not present on all hos=
-t because
-> > > > +        * ISA_EXT registers are visible to the KVM user space base=
-d on the
-> > > > +        * ISA extensions available on the host. Also, disabling an=
- ISA
-> > > > +        * extension using corresponding ISA_EXT register does not =
-affect
-> > > > +        * the visibility of the ISA_EXT register itself.
-> > > > +        *
-> > > > +        * Based on above, we should filter-out all ISA_EXT registe=
-rs.
-> > > >          */
-> > > > -       switch (reg & ~REG_MASK) {
-> > > > +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_A:
-> > > > +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_C:
-> > > > +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_D:
-> > > > +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_F:
-> > > > +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_H:
-> > > > +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_I:
-> > > > +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_M:
-> > > > +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_SVPBMT:
-> > > >         case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_SSTC:
-> > > >         case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_SVINVAL:
-> > > >         case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_ZIHINTPAUSE:
-> > > > +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_ZICBOM:
-> > > > +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_ZICBOZ:
-> > > >         case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_ZBB:
-> > > >         case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_SSAIA:
-> > > > +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_V:
-> > > > +       case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_SVNAPOT:
-> > > >         case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_ZBA:
-> > > >         case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_ZBS:
-> > > >         case KVM_REG_RISCV_ISA_EXT | KVM_RISCV_ISA_EXT_ZICNTR:
-> > > > @@ -50,12 +66,7 @@ static inline bool vcpu_has_ext(struct kvm_vcpu =
-*vcpu, int ext)
-> > > >         unsigned long value;
-> > > >
-> > > >         ret =3D __vcpu_get_reg(vcpu, RISCV_ISA_EXT_REG(ext), &value=
-);
-> > > > -       if (ret) {
-> > > > -               printf("Failed to get ext %d", ext);
-> > > > -               return false;
-> > > > -       }
-> > > > -
-> > > > -       return !!value;
-> > > > +       return (ret) ? false : !!value;
-> > > >  }
-> > > >
-> > > >  void finalize_vcpu(struct kvm_vcpu *vcpu, struct vcpu_reg_list *c)
-> > > > @@ -506,10 +517,6 @@ static __u64 base_regs[] =3D {
-> > > >         KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_TIMER | KV=
-M_REG_RISCV_TIMER_REG(time),
-> > > >         KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_TIMER | KV=
-M_REG_RISCV_TIMER_REG(compare),
-> > > >         KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_TIMER | KV=
-M_REG_RISCV_TIMER_REG(state),
-> > > > -       KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_ISA_EXT =
-| KVM_RISCV_ISA_EXT_A,
-> > > > -       KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_ISA_EXT =
-| KVM_RISCV_ISA_EXT_C,
-> > > > -       KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_ISA_EXT =
-| KVM_RISCV_ISA_EXT_I,
-> > > > -       KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_ISA_EXT =
-| KVM_RISCV_ISA_EXT_M,
-> > > >         KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_EXT =
-| KVM_REG_RISCV_SBI_SINGLE | KVM_RISCV_SBI_EXT_V01,
-> > > >         KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_EXT =
-| KVM_REG_RISCV_SBI_SINGLE | KVM_RISCV_SBI_EXT_TIME,
-> > > >         KVM_REG_RISCV | KVM_REG_SIZE_ULONG | KVM_REG_RISCV_SBI_EXT =
-| KVM_REG_RISCV_SBI_SINGLE | KVM_RISCV_SBI_EXT_IPI,
-> > > > --
-> > > > 2.34.1
-> > > >
-> > >
-> > >
-> > > --
-> > > Regards,
-> > > Atish
-> >
-> > Regards,
-> > Anup
->
->
->
-> --
-> Regards,
-> Atish
+  $ cd linux
+  $ export ARCH=powerpc
+  $ export CROSS_COMPILE=powerpc64le-linux-gnu-
+  $ make headers
+  $ make -j -C tools/testing/selftests install
+  $ grep -c "^powerpc" tools/testing/selftests/kselftest_install/kselftest-list.txt
+  182
+
+Fixes: d4e59a536f50 ("selftests: Use runner.sh for emit targets")
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
+---
+ tools/testing/selftests/powerpc/Makefile     |  7 +++----
+ tools/testing/selftests/powerpc/pmu/Makefile | 11 ++++++-----
+ 2 files changed, 9 insertions(+), 9 deletions(-)
+
+I'll plan to merge this via the powerpc tree.
+
+cheers
+
+diff --git a/tools/testing/selftests/powerpc/Makefile b/tools/testing/selftests/powerpc/Makefile
+index 49f2ad1793fd..7ea42fa02eab 100644
+--- a/tools/testing/selftests/powerpc/Makefile
++++ b/tools/testing/selftests/powerpc/Makefile
+@@ -59,12 +59,11 @@ override define INSTALL_RULE
+ 	done;
+ endef
+ 
+-override define EMIT_TESTS
++emit_tests:
+ 	+@for TARGET in $(SUB_DIRS); do \
+ 		BUILD_TARGET=$(OUTPUT)/$$TARGET;	\
+-		$(MAKE) OUTPUT=$$BUILD_TARGET -s -C $$TARGET emit_tests;\
++		$(MAKE) OUTPUT=$$BUILD_TARGET -s -C $$TARGET $@;\
+ 	done;
+-endef
+ 
+ override define CLEAN
+ 	+@for TARGET in $(SUB_DIRS); do \
+@@ -77,4 +76,4 @@ endef
+ tags:
+ 	find . -name '*.c' -o -name '*.h' | xargs ctags
+ 
+-.PHONY: tags $(SUB_DIRS)
++.PHONY: tags $(SUB_DIRS) emit_tests
+diff --git a/tools/testing/selftests/powerpc/pmu/Makefile b/tools/testing/selftests/powerpc/pmu/Makefile
+index 2b95e44d20ff..a284fa874a9f 100644
+--- a/tools/testing/selftests/powerpc/pmu/Makefile
++++ b/tools/testing/selftests/powerpc/pmu/Makefile
+@@ -30,13 +30,14 @@ override define RUN_TESTS
+ 	+TARGET=event_code_tests; BUILD_TARGET=$$OUTPUT/$$TARGET; $(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET run_tests
+ endef
+ 
+-DEFAULT_EMIT_TESTS := $(EMIT_TESTS)
+-override define EMIT_TESTS
+-	$(DEFAULT_EMIT_TESTS)
++emit_tests:
++	for TEST in $(TEST_GEN_PROGS); do \
++		BASENAME_TEST=`basename $$TEST`;	\
++		echo "$(COLLECTION):$$BASENAME_TEST";	\
++	done
+ 	+TARGET=ebb; BUILD_TARGET=$$OUTPUT/$$TARGET; $(MAKE) OUTPUT=$$BUILD_TARGET -s -C $$TARGET emit_tests
+ 	+TARGET=sampling_tests; BUILD_TARGET=$$OUTPUT/$$TARGET; $(MAKE) OUTPUT=$$BUILD_TARGET -s -C $$TARGET emit_tests
+ 	+TARGET=event_code_tests; BUILD_TARGET=$$OUTPUT/$$TARGET; $(MAKE) OUTPUT=$$BUILD_TARGET -s -C $$TARGET emit_tests
+-endef
+ 
+ DEFAULT_INSTALL_RULE := $(INSTALL_RULE)
+ override define INSTALL_RULE
+@@ -64,4 +65,4 @@ sampling_tests:
+ event_code_tests:
+ 	TARGET=$@; BUILD_TARGET=$$OUTPUT/$$TARGET; mkdir -p $$BUILD_TARGET; $(MAKE) OUTPUT=$$BUILD_TARGET -k -C $$TARGET all
+ 
+-.PHONY: all run_tests ebb sampling_tests event_code_tests
++.PHONY: all run_tests ebb sampling_tests event_code_tests emit_tests
+-- 
+2.41.0
+
