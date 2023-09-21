@@ -2,175 +2,141 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56F2C7A976A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Sep 2023 19:23:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BD457A965D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Sep 2023 19:10:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbjIURXy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 21 Sep 2023 13:23:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40134 "EHLO
+        id S229849AbjIURCl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 21 Sep 2023 13:02:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229851AbjIURXd (ORCPT
+        with ESMTP id S229633AbjIURCJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Sep 2023 13:23:33 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBE9010935;
-        Thu, 21 Sep 2023 10:11:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695316281; x=1726852281;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=FMm83P7beXWMiji6R1eFj/4s+rv6p3/F5Z6Swx5xKU0=;
-  b=fJfrXwRKOYbKdwqSK5pUfEbo4I7uYX2awFltlmFUShU5TvTiKR3Wqhs9
-   n+l142v33IkkagWsUV+IJNuKvmnGOHjdrjSMyd4FjlB0T6vOEtzZzg1hR
-   FhKDXGk9OcWIKX+Gd4luabSWOKR4G+LLti3nf31H5AoMDIElQXqvxM1CX
-   zprk6zXhAcpctYAPqLiALQJe3+oN+SFI2zJluIEL2OpveJ+6jxPaajqqm
-   b2FAbIhv6BEtTPMtKpnzaw1PgKo7p7P16f7LrZzMLs1zpPADLiU2DIxsP
-   LlR1iMYj9xpClYXyfYtUQZIV4nppdJ76a2dvfy5eVK54hdgDpB5sepcCt
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="370764506"
-X-IronPort-AV: E=Sophos;i="6.03,164,1694761200"; 
-   d="scan'208";a="370764506"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Sep 2023 00:54:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10839"; a="812523193"
-X-IronPort-AV: E=Sophos;i="6.03,164,1694761200"; 
-   d="scan'208";a="812523193"
-Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by fmsmga008.fm.intel.com with ESMTP; 21 Sep 2023 00:54:54 -0700
-From:   Yi Liu <yi.l.liu@intel.com>
-To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
-        kevin.tian@intel.com, robin.murphy@arm.com,
-        baolu.lu@linux.intel.com
-Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
-        kvm@vger.kernel.org, mjrosato@linux.ibm.com,
-        chao.p.peng@linux.intel.com, yi.l.liu@intel.com,
-        yi.y.sun@linux.intel.com, peterx@redhat.com, jasowang@redhat.com,
-        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
-        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        zhenzhong.duan@intel.com, joao.m.martins@oracle.com
-Subject: [PATCH v5 11/11] iommu/vt-d: Disallow read-only mappings to nest parent domain
-Date:   Thu, 21 Sep 2023 00:54:31 -0700
-Message-Id: <20230921075431.125239-12-yi.l.liu@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230921075431.125239-1-yi.l.liu@intel.com>
-References: <20230921075431.125239-1-yi.l.liu@intel.com>
+        Thu, 21 Sep 2023 13:02:09 -0400
+Received: from mail.avm.de (mail.avm.de [IPv6:2001:bf0:244:244::94])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 510FB2112;
+        Thu, 21 Sep 2023 10:01:14 -0700 (PDT)
+Received: from mail-auth.avm.de (unknown [IPv6:2001:bf0:244:244::71])
+        by mail.avm.de (Postfix) with ESMTPS;
+        Thu, 21 Sep 2023 10:06:01 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
+        t=1695283566; bh=EzGmNrSKOJc7ZUWqu95aGt4JAKmhiqLPdGsju567CAk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=s5BAmOkMuI+eBqvoX4jxWJ6gSAWinUICiwcr9FCuzw16BjWz/LRBk2pOKtoc289IH
+         LLJsqZbrXEYCAGHSdUrrGPH+OErDMkrB5B6yA98g/ZVu5NLG3t/vI0+YXCJQzJw16Z
+         0CqlBe9j3IF5pEnsxff5BskDQAnpen3+7kaJM3Fo=
+Received: from localhost (unknown [172.17.88.63])
+        by mail-auth.avm.de (Postfix) with ESMTPSA id 1044581C20;
+        Thu, 21 Sep 2023 10:06:01 +0200 (CEST)
+Date:   Thu, 21 Sep 2023 10:06:00 +0200
+From:   Johannes Nixdorf <jnixdorf-oss@avm.de>
+To:     Nikolay Aleksandrov <razor@blackwall.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Andrew Lunn <andrew@lunn.ch>, David Ahern <dsahern@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        bridge@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v4 5/6] net: bridge: Add a configurable default
+ FDB learning limit
+Message-ID: <ZQv5aNbgqxCuOKyr@u-jnixdorf.ads.avm.de>
+References: <20230919-fdb_limit-v4-0-39f0293807b8@avm.de>
+ <20230919-fdb_limit-v4-5-39f0293807b8@avm.de>
+ <cc14cd4a-f3bb-3d6f-5b38-ec73cad32570@blackwall.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cc14cd4a-f3bb-3d6f-5b38-ec73cad32570@blackwall.org>
+X-purgate-ID: 149429::1695283561-FD4345D2-604B728F/0/0
+X-purgate-type: clean
+X-purgate-size: 3303
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
+X-purgate: clean
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Lu Baolu <baolu.lu@linux.intel.com>
+On Wed, Sep 20, 2023 at 02:00:27PM +0300, Nikolay Aleksandrov wrote:
+> On 9/19/23 11:12, Johannes Nixdorf wrote:
+> > Add a Kconfig option to configure a default FDB learning limit system
+> > wide, so a distributor building a special purpose kernel can limit all
+> > created bridges by default.
+> > 
+> > The limit is only a soft default setting and overrideable on a per bridge
+> > basis using netlink.
+> > 
+> > Signed-off-by: Johannes Nixdorf <jnixdorf-oss@avm.de>
+> > ---
+> >   net/bridge/Kconfig     | 13 +++++++++++++
+> >   net/bridge/br_device.c |  2 ++
+> >   2 files changed, 15 insertions(+)
+> > 
+> > diff --git a/net/bridge/Kconfig b/net/bridge/Kconfig
+> > index 3c8ded7d3e84..c0d9c08088c4 100644
+> > --- a/net/bridge/Kconfig
+> > +++ b/net/bridge/Kconfig
+> > @@ -84,3 +84,16 @@ config BRIDGE_CFM
+> >   	  Say N to exclude this support and reduce the binary size.
+> >   	  If unsure, say N.
+> > +
+> > +config BRIDGE_DEFAULT_FDB_MAX_LEARNED
+> > +	int "Default FDB learning limit"
+> > +	default 0
+> > +	depends on BRIDGE
+> > +	help
+> > +	  Sets a default limit on the number of learned FDB entries on
+> > +	  new bridges. This limit can be overwritten via netlink on a
+> > +	  per bridge basis.
+> > +
+> > +	  The default of 0 disables the limit.
+> > +
+> > +	  If unsure, say 0.
+> > diff --git a/net/bridge/br_device.c b/net/bridge/br_device.c
+> > index 9a5ea06236bd..3214391c15a0 100644
+> > --- a/net/bridge/br_device.c
+> > +++ b/net/bridge/br_device.c
+> > @@ -531,6 +531,8 @@ void br_dev_setup(struct net_device *dev)
+> >   	br->bridge_ageing_time = br->ageing_time = BR_DEFAULT_AGEING_TIME;
+> >   	dev->max_mtu = ETH_MAX_MTU;
+> > +	br->fdb_max_learned = CONFIG_BRIDGE_DEFAULT_FDB_MAX_LEARNED;
+> > +
+> >   	br_netfilter_rtable_init(br);
+> >   	br_stp_timer_init(br);
+> >   	br_multicast_init(br);
+> > 
+> 
+> This one I'm not sure about at all. Distributions can just create the bridge
+> with a predefined limit. This is not flexible and just adds
+> one more kconfig option that is rather unnecessary. Why having a kconfig
+> knob is better than bridge creation time limit setting? You still have
+> to create the bridge, so why not set the limit then?
 
-When remapping hardware is configured by system software in scalable mode
-as Nested (PGTT=011b) and with PWSNP field Set in the PASID-table-entry,
-it may Set Accessed bit and Dirty bit (and Extended Access bit if enabled)
-in first-stage page-table entries even when second-stage mappings indicate
-that corresponding first-stage page-table is Read-Only.
+The problem I'm trying to solve here are unaware applications. Assuming
+this change lands in the next Linux release there will still be quite
+some time until the major applications that create bridges (distribution
+specific or common network management tools, the container solution of
+they day, for embedded some random vendor tools, etc.) will pick it
+up. In this series I chose a default of 0 to not break existing setups
+that rely on some arbitrary amount of FDB entries, so those unaware
+applications will create bridges without limits. I added the Kconfig
+setting so someone who knows their use cases can still set a more fitting
+default limit.
 
-As the result, contents of pages designated by VMM as Read-Only can be
-modified by IOMMU via PML5E (PML4E for 4-level tables) access as part of
-address translation process due to DMAs issued by Guest.
-
-This disallows read-only mappings in the domain that is supposed to be used
-as nested parent. Reference from Sapphire Rapids Specification Update [1],
-errata details, SPR17. Userspace should know this limitation by checking
-the IOMMU_HW_INFO_VTD_ERRATA_772415_SPR17 flag reported in the IOMMU_GET_HW_INFO
-ioctl.
-
-[1] https://www.intel.com/content/www/us/en/content-details/772415/content-details.html
-
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-Signed-off-by: Yi Liu <yi.l.liu@intel.com>
----
- drivers/iommu/intel/iommu.c  | 11 +++++++++++
- drivers/iommu/intel/iommu.h  |  1 +
- include/uapi/linux/iommufd.h | 12 +++++++++++-
- 3 files changed, 23 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 9b10e4b1d400..dbcdf7b95b9f 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -2193,6 +2193,11 @@ __domain_mapping(struct dmar_domain *domain, unsigned long iov_pfn,
- 	if ((prot & (DMA_PTE_READ|DMA_PTE_WRITE)) == 0)
- 		return -EINVAL;
- 
-+	if (!(prot & DMA_PTE_WRITE) && domain->is_nested_parent) {
-+		pr_err_ratelimited("Read-only mapping is disallowed on the domain which serves as the parent in a nested configuration, due to HW errata (ERRATA_772415_SPR17)\n");
-+		return -EINVAL;
-+	}
-+
- 	attr = prot & (DMA_PTE_READ | DMA_PTE_WRITE | DMA_PTE_SNP);
- 	attr |= DMA_FL_PTE_PRESENT;
- 	if (domain->use_first_level) {
-@@ -4106,6 +4111,11 @@ intel_iommu_domain_alloc_user(struct device *dev, u32 flags,
- 			domain = ERR_PTR(-ENOMEM);
- 	}
- 
-+	if (!IS_ERR(domain)) {
-+		struct dmar_domain *dmar_domain = container_of(domain,
-+						struct dmar_domain, domain);
-+		dmar_domain->is_nested_parent = request_nest_parent;
-+	}
- 	return domain;
- }
- 
-@@ -4831,6 +4841,7 @@ static void *intel_iommu_hw_info(struct device *dev, u32 *length, u32 *type)
- 	if (!vtd)
- 		return ERR_PTR(-ENOMEM);
- 
-+	vtd->flags = IOMMU_HW_INFO_VTD_ERRATA_772415_SPR17;
- 	vtd->cap_reg = iommu->cap;
- 	vtd->ecap_reg = iommu->ecap;
- 	*length = sizeof(*vtd);
-diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
-index ac23b9d22d20..8d0aac71c135 100644
---- a/drivers/iommu/intel/iommu.h
-+++ b/drivers/iommu/intel/iommu.h
-@@ -592,6 +592,7 @@ struct dmar_domain {
- 					 * otherwise, goes through the second
- 					 * level.
- 					 */
-+	u8 is_nested_parent:1;		/* has other domains nested on it */
- 
- 	spinlock_t lock;		/* Protect device tracking lists */
- 	struct list_head devices;	/* all devices' list */
-diff --git a/include/uapi/linux/iommufd.h b/include/uapi/linux/iommufd.h
-index 3050efbceb57..99401d7d70b2 100644
---- a/include/uapi/linux/iommufd.h
-+++ b/include/uapi/linux/iommufd.h
-@@ -440,10 +440,20 @@ struct iommu_hwpt_alloc {
- };
- #define IOMMU_HWPT_ALLOC _IO(IOMMUFD_TYPE, IOMMUFD_CMD_HWPT_ALLOC)
- 
-+/**
-+ * enum iommu_hw_info_vtd_flags - Flags for VT-d hw_info
-+ * @IOMMU_HW_INFO_VTD_ERRATA_772415_SPR17: If set, disallow nesting on domains
-+ *                                   with read-only mapping.
-+ *                                   https://www.intel.com/content/www/us/en/content-details/772415/content-details.html
-+ */
-+enum iommu_hw_info_vtd_flags {
-+	IOMMU_HW_INFO_VTD_ERRATA_772415_SPR17 = 1 << 0,
-+};
-+
- /**
-  * struct iommu_hw_info_vtd - Intel VT-d hardware information
-  *
-- * @flags: Must be 0
-+ * @flags: Combination of enum iommu_hw_info_vtd_flags
-  * @__reserved: Must be 0
-  *
-  * @cap_reg: Value of Intel VT-d capability register defined in VT-d spec
--- 
-2.34.1
-
+More specifically to our use case as an embedded vendor that builds their
+own kernels and knows they have no use case that requires huge FDB tables,
+the kernel config allows us to set a safe default limit before starting
+to teach all our applications and our upstream vendors' code about the
+new netlink attribute. As this patch is relatively simple, we can also
+keep it downstream if there is opposition to it here though.
