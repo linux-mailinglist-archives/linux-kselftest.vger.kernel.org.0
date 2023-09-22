@@ -2,196 +2,391 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 770D37AA6D6
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Sep 2023 03:58:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AC6B7AA92D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Sep 2023 08:38:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230292AbjIVB6D (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 21 Sep 2023 21:58:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58190 "EHLO
+        id S230377AbjIVGiE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 22 Sep 2023 02:38:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230071AbjIVB6C (ORCPT
+        with ESMTP id S230365AbjIVGiD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 21 Sep 2023 21:58:02 -0400
-Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B44FF1
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Sep 2023 18:57:56 -0700 (PDT)
-Received: by mail-yb1-xb30.google.com with SMTP id 3f1490d57ef6-d857c8a1d50so1979921276.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Sep 2023 18:57:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695347875; x=1695952675; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0VO+Ge+AE8f/BpXh60ZRTwmlgGyLBpX4NWc4kauL7gk=;
-        b=pmQOuQek+Dl/zj3tPrIx7LwBXB4aerpHjaEzxIZuB7M/N3H1KuPpemDl6z0YPLq0CM
-         3uAkTbLuX+PZb46BGuARtF1YHeCEzkpzP+r59XPuhw2JHxDTTnlqB5zwdHxVFuVDlitV
-         MQiWo/qKUdmaxb1EmRVw8jC6ZnQ63IQ3tOYvPAFZwpZlQgUfhkeKkpIhu1cSPYhkdYJi
-         gi5HGnq9FcwvIXhwU0wVH8IExu3D5n6Ssiz0dgWxGvUkcx2eqA3VhDvCPz06IafRmSHV
-         8N37wdUbbqKQ3x9pV2A9vC+7cZfoK6lRC6wQHaxc+mai2/dCIBxyT90eO6b5YDUuev7E
-         yjHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695347875; x=1695952675;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0VO+Ge+AE8f/BpXh60ZRTwmlgGyLBpX4NWc4kauL7gk=;
-        b=lQguqYP+S3T7J6dWtlURuYJy2Uj5xsGxpIfG/TKghg0aDsR5cBfppbWtyE1zYk651s
-         Kkuh2ISb+dZOIJ6m4hsqeMMrijP7vtHecAUfiVHrLqJ+Q1QfZty9Y+bbnehzQnNsn934
-         qvMDQnOs+Sqj2FBbUvK+rqlF+CcZV/01uvSQ8aeNeX3CwUHBkXEvlcnAMJimfgg0Ctc3
-         CXIh39ROOGgNsNMSsTSjocpu7TOCeNfZcp72HMv70wUqcqCTXooiwVDl7tjhS9ZqEDFz
-         fwA7yb9Nti82MZnV2RLUWZ9+j9dZ/X89G7xkPPwhjmU91ONvwUmPyV3wqVjV67avCBXE
-         KeEQ==
-X-Gm-Message-State: AOJu0YzGz5Lixp21YzZ7IDUg63iHXATMLrQCcqFUKplgaVG1/u7yboou
-        My+d0xJ4vMYN6fFXJOFY7FobWj7+tAFL+0/sGWKktQ==
-X-Google-Smtp-Source: AGHT+IFDkyyPEsrC9Wj9nF/S+MbVDC6dnqaz+XU/fSuXkDfbU5BW9gEPn4qeHv0lwMKIpSIhy5Aq1Uhhnng66UQqtWU=
-X-Received: by 2002:a25:cf48:0:b0:d7e:df89:dda1 with SMTP id
- f69-20020a25cf48000000b00d7edf89dda1mr7254798ybg.7.1695347874999; Thu, 21 Sep
- 2023 18:57:54 -0700 (PDT)
+        Fri, 22 Sep 2023 02:38:03 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9292083
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Sep 2023 23:37:56 -0700 (PDT)
+Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4RsMvK61FLzVl3X;
+        Fri, 22 Sep 2023 14:34:53 +0800 (CST)
+Received: from [10.67.109.254] (10.67.109.254) by
+ kwepemi500008.china.huawei.com (7.221.188.139) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.31; Fri, 22 Sep 2023 14:37:54 +0800
+Message-ID: <dbfa620b-8be1-13bb-d0a9-0ee61dbc5d3e@huawei.com>
+Date:   Fri, 22 Sep 2023 14:37:53 +0800
 MIME-Version: 1.0
-References: <20230914152620.2743033-1-surenb@google.com> <20230914152620.2743033-3-surenb@google.com>
- <ZQNMze6SXdIm13CW@casper.infradead.org> <e77b75f9-ab9e-f20b-6484-22f73524c159@redhat.com>
- <f6e350f4-1bf3-ca10-93f8-c11db44ce62b@redhat.com> <CAJuCfpGqt1V5puRMhLkjG6F2T4xtsDY8qy--ZfBPNL9kxPyWtg@mail.gmail.com>
- <354f2508-74d5-2723-502c-32d009f77a3e@redhat.com>
-In-Reply-To: <354f2508-74d5-2723-502c-32d009f77a3e@redhat.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Thu, 21 Sep 2023 18:57:42 -0700
-Message-ID: <CAJuCfpFk6tfP=nJng4G1dSsSEy-piQUSAShrVdBJzXBH=YF3aQ@mail.gmail.com>
-Subject: Re: [PATCH 2/3] userfaultfd: UFFDIO_REMAP uABI
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Matthew Wilcox <willy@infradead.org>, akpm@linux-foundation.org,
-        viro@zeniv.linux.org.uk, brauner@kernel.org, shuah@kernel.org,
-        aarcange@redhat.com, lokeshgidra@google.com, peterx@redhat.com,
-        hughd@google.com, mhocko@suse.com, axelrasmussen@google.com,
-        rppt@kernel.org, Liam.Howlett@oracle.com, jannh@google.com,
-        zhangpeng362@huawei.com, bgeffon@google.com,
-        kaleshsingh@google.com, ngeoffray@google.com, jdduke@google.com,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kernel-team@android.com
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.0
+Subject: Re: [PATCH v2 4/4] kunit: test: Fix the possible memory leak in
+ executor_test
+Content-Language: en-US
+To:     Rae Moar <rmoar@google.com>
+CC:     <brendan.higgins@linux.dev>, <davidgow@google.com>,
+        <skhan@linuxfoundation.org>, <dlatypov@google.com>,
+        <janusz.krzysztofik@linux.intel.com>,
+        <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>
+References: <20230921014008.3887257-1-ruanjinjie@huawei.com>
+ <20230921014008.3887257-5-ruanjinjie@huawei.com>
+ <CA+GJov5OynJa5W=ofWA1zLrq+CBFaJgOn-LQMc+40TEaZNkD+g@mail.gmail.com>
+From:   Ruan Jinjie <ruanjinjie@huawei.com>
+In-Reply-To: <CA+GJov5OynJa5W=ofWA1zLrq+CBFaJgOn-LQMc+40TEaZNkD+g@mail.gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.109.254]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ kwepemi500008.china.huawei.com (7.221.188.139)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Sep 21, 2023 at 11:17=E2=80=AFAM David Hildenbrand <david@redhat.co=
-m> wrote:
->
-> On 21.09.23 20:04, Suren Baghdasaryan wrote:
-> > On Thu, Sep 14, 2023 at 6:45=E2=80=AFPM David Hildenbrand <david@redhat=
-.com> wrote:
-> >>
-> >> On 14.09.23 20:43, David Hildenbrand wrote:
-> >>> On 14.09.23 20:11, Matthew Wilcox wrote:
-> >>>> On Thu, Sep 14, 2023 at 08:26:12AM -0700, Suren Baghdasaryan wrote:
-> >>>>> +++ b/include/linux/userfaultfd_k.h
-> >>>>> @@ -93,6 +93,23 @@ extern int mwriteprotect_range(struct mm_struct =
-*dst_mm,
-> >>>>>     extern long uffd_wp_range(struct vm_area_struct *vma,
-> >>>>>                        unsigned long start, unsigned long len, bool=
- enable_wp);
-> >>>>>
-> >>>>> +/* remap_pages */
-> >>>>> +extern void double_pt_lock(spinlock_t *ptl1, spinlock_t *ptl2);
-> >>>>> +extern void double_pt_unlock(spinlock_t *ptl1, spinlock_t *ptl2);
-> >>>>> +extern ssize_t remap_pages(struct mm_struct *dst_mm,
-> >>>>> +                      struct mm_struct *src_mm,
-> >>>>> +                      unsigned long dst_start,
-> >>>>> +                      unsigned long src_start,
-> >>>>> +                      unsigned long len, __u64 flags);
-> >>>>> +extern int remap_pages_huge_pmd(struct mm_struct *dst_mm,
-> >>>>> +                           struct mm_struct *src_mm,
-> >>>>> +                           pmd_t *dst_pmd, pmd_t *src_pmd,
-> >>>>> +                           pmd_t dst_pmdval,
-> >>>>> +                           struct vm_area_struct *dst_vma,
-> >>>>> +                           struct vm_area_struct *src_vma,
-> >>>>> +                           unsigned long dst_addr,
-> >>>>> +                           unsigned long src_addr);
-> >>>>
-> >>>> Drop the 'extern' markers from function declarations.
-> >>>>
-> >>>>> +int remap_pages_huge_pmd(struct mm_struct *dst_mm,
-> >>>>> +                    struct mm_struct *src_mm,
-> >>>>> +                    pmd_t *dst_pmd, pmd_t *src_pmd,
-> >>>>> +                    pmd_t dst_pmdval,
-> >>>>> +                    struct vm_area_struct *dst_vma,
-> >>>>> +                    struct vm_area_struct *src_vma,
-> >>>>> +                    unsigned long dst_addr,
-> >>>>> +                    unsigned long src_addr)
-> >>>>> +{
-> >>>>> +   pmd_t _dst_pmd, src_pmdval;
-> >>>>> +   struct page *src_page;
-> >>>>> +   struct anon_vma *src_anon_vma, *dst_anon_vma;
-> >>>>> +   spinlock_t *src_ptl, *dst_ptl;
-> >>>>> +   pgtable_t pgtable;
-> >>>>> +   struct mmu_notifier_range range;
-> >>>>> +
-> >>>>> +   src_pmdval =3D *src_pmd;
-> >>>>> +   src_ptl =3D pmd_lockptr(src_mm, src_pmd);
-> >>>>> +
-> >>>>> +   BUG_ON(!pmd_trans_huge(src_pmdval));
-> >>>>> +   BUG_ON(!pmd_none(dst_pmdval));
-> >>>>> +   BUG_ON(!spin_is_locked(src_ptl));
-> >>>>> +   mmap_assert_locked(src_mm);
-> >>>>> +   mmap_assert_locked(dst_mm);
-> >>>>> +   BUG_ON(src_addr & ~HPAGE_PMD_MASK);
-> >>>>> +   BUG_ON(dst_addr & ~HPAGE_PMD_MASK);
-> >>>>> +
-> >>>>> +   src_page =3D pmd_page(src_pmdval);
-> >>>>> +   BUG_ON(!PageHead(src_page));
-> >>>>> +   BUG_ON(!PageAnon(src_page));
-> >>>>
-> >>>> Better to add a src_folio =3D page_folio(src_page);
-> >>>> and then folio_test_anon() here.
-> >>>>
-> >>>>> +   if (unlikely(page_mapcount(src_page) !=3D 1)) {
-> >>>>
-> >>>> Brr, this is going to miss PTE mappings of this folio.  I think you
-> >>>> actually want folio_mapcount() instead, although it'd be more effici=
-ent
-> >>>> to look at folio->_entire_mapcount =3D=3D 1 and _nr_pages_mapped =3D=
-=3D 0.
-> >>>> Not wure what a good name for that predicate would be.
-> >>>
-> >>> We have
-> >>>
-> >>>     * It only works on non shared anonymous pages because those can
-> >>>     * be relocated without generating non linear anon_vmas in the rma=
-p
-> >>>     * code.
-> >>>     *
-> >>>     * It provides a zero copy mechanism to handle userspace page faul=
-ts.
-> >>>     * The source vma pages should have mapcount =3D=3D 1, which can b=
-e
-> >>>     * enforced by using madvise(MADV_DONTFORK) on src vma.
-> >>>
-> >>> Use PageAnonExclusive(). As long as KSM is not involved and you don't
-> >>> use fork(), that flag should be good enough for that use case here.
-> >>>
-> >> ... and similarly don't do any of that swapcount stuff and only check =
-if
-> >> the swap pte is anon exclusive.
-> >
-> > I'm preparing v2 and this is the only part left for me to address but
-> > I'm not clear how. David, could you please clarify how I should be
-> > checking swap pte to be exclusive without swapcount?
->
-> If you have a real swp pte (not a non-swap pte like migration entries)
-> you should be able to just use pte_swp_exclusive().
 
-Got it. Thanks!
 
->
-> --
-> Cheers,
->
-> David / dhildenb
->
+On 2023/9/22 3:50, Rae Moar wrote:
+> On Wed, Sep 20, 2023 at 9:41 PM 'Jinjie Ruan' via KUnit Development
+> <kunit-dev@googlegroups.com> wrote:
+>>
+>> When CONFIG_KUNIT_ALL_TESTS=y, making CONFIG_DEBUG_KMEMLEAK=y and
+>> CONFIG_DEBUG_KMEMLEAK_AUTO_SCAN=y, the below memory leak is detected.
+>>
+>> If kunit_filter_suites() succeeds, not only copy but also filtered_suite
+>> and filtered_suite->test_cases should be freed.
+>>
+>> So use kunit_free_suite_set() to free the filtered_suite,
+>> filtered_suite->test_cases and copy as kunit_module_exit() and
+>> kunit_run_all_tests() do it. And the func kfree_at_end() is not used so
+>> remove it. After applying this patch, the following memory leak is never
+>> detected.
+>>
+>> unreferenced object 0xffff8881001de400 (size 1024):
+>>   comm "kunit_try_catch", pid 1396, jiffies 4294720452 (age 932.801s)
+>>   hex dump (first 32 bytes):
+>>     73 75 69 74 65 32 00 00 00 00 00 00 00 00 00 00  suite2..........
+>>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>>   backtrace:
+>>     [<ffffffff817db753>] __kmalloc_node_track_caller+0x53/0x150
+>>     [<ffffffff817bd242>] kmemdup+0x22/0x50
+>>     [<ffffffff829e961d>] kunit_filter_suites+0x44d/0xcc0
+>>     [<ffffffff829eb69f>] filter_suites_test+0x12f/0x360
+>>     [<ffffffff829e802a>] kunit_generic_run_threadfn_adapter+0x4a/0x90
+>>     [<ffffffff81236fc6>] kthread+0x2b6/0x380
+>>     [<ffffffff81096afd>] ret_from_fork+0x2d/0x70
+>>     [<ffffffff81003511>] ret_from_fork_asm+0x11/0x20
+>> unreferenced object 0xffff8881052cd388 (size 192):
+>>   comm "kunit_try_catch", pid 1396, jiffies 4294720452 (age 932.801s)
+>>   hex dump (first 32 bytes):
+>>     a0 85 9e 82 ff ff ff ff 80 cd 7c 84 ff ff ff ff  ..........|.....
+>>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>>   backtrace:
+>>     [<ffffffff817dbad2>] __kmalloc+0x52/0x150
+>>     [<ffffffff829e9651>] kunit_filter_suites+0x481/0xcc0
+>>     [<ffffffff829eb69f>] filter_suites_test+0x12f/0x360
+>>     [<ffffffff829e802a>] kunit_generic_run_threadfn_adapter+0x4a/0x90
+>>     [<ffffffff81236fc6>] kthread+0x2b6/0x380
+>>     [<ffffffff81096afd>] ret_from_fork+0x2d/0x70
+>>     [<ffffffff81003511>] ret_from_fork_asm+0x11/0x20
+>>
+>> unreferenced object 0xffff888100da8400 (size 1024):
+>>   comm "kunit_try_catch", pid 1398, jiffies 4294720454 (age 781.945s)
+>>   hex dump (first 32 bytes):
+>>     73 75 69 74 65 32 00 00 00 00 00 00 00 00 00 00  suite2..........
+>>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>>   backtrace:
+>>     [<ffffffff817db753>] __kmalloc_node_track_caller+0x53/0x150
+>>     [<ffffffff817bd242>] kmemdup+0x22/0x50
+>>     [<ffffffff829e961d>] kunit_filter_suites+0x44d/0xcc0
+>>     [<ffffffff829eb13f>] filter_suites_test_glob_test+0x12f/0x560
+>>     [<ffffffff829e802a>] kunit_generic_run_threadfn_adapter+0x4a/0x90
+>>     [<ffffffff81236fc6>] kthread+0x2b6/0x380
+>>     [<ffffffff81096afd>] ret_from_fork+0x2d/0x70
+>>     [<ffffffff81003511>] ret_from_fork_asm+0x11/0x20
+>> unreferenced object 0xffff888105117878 (size 96):
+>>   comm "kunit_try_catch", pid 1398, jiffies 4294720454 (age 781.945s)
+>>   hex dump (first 32 bytes):
+>>     a0 85 9e 82 ff ff ff ff a0 ac 7c 84 ff ff ff ff  ..........|.....
+>>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>>   backtrace:
+>>     [<ffffffff817dbad2>] __kmalloc+0x52/0x150
+>>     [<ffffffff829e9651>] kunit_filter_suites+0x481/0xcc0
+>>     [<ffffffff829eb13f>] filter_suites_test_glob_test+0x12f/0x560
+>>     [<ffffffff829e802a>] kunit_generic_run_threadfn_adapter+0x4a/0x90
+>>     [<ffffffff81236fc6>] kthread+0x2b6/0x380
+>>     [<ffffffff81096afd>] ret_from_fork+0x2d/0x70
+>>     [<ffffffff81003511>] ret_from_fork_asm+0x11/0x20
+>> unreferenced object 0xffff888102c31c00 (size 1024):
+>>   comm "kunit_try_catch", pid 1404, jiffies 4294720460 (age 781.948s)
+>>   hex dump (first 32 bytes):
+>>     6e 6f 72 6d 61 6c 5f 73 75 69 74 65 00 00 00 00  normal_suite....
+>>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>>   backtrace:
+>>     [<ffffffff817db753>] __kmalloc_node_track_caller+0x53/0x150
+>>     [<ffffffff817bd242>] kmemdup+0x22/0x50
+>>     [<ffffffff829ecf17>] kunit_filter_attr_tests+0xf7/0x860
+>>     [<ffffffff829e99ff>] kunit_filter_suites+0x82f/0xcc0
+>>     [<ffffffff829ea975>] filter_attr_test+0x195/0x5f0
+>>     [<ffffffff829e802a>] kunit_generic_run_threadfn_adapter+0x4a/0x90
+>>     [<ffffffff81236fc6>] kthread+0x2b6/0x380
+>>     [<ffffffff81096afd>] ret_from_fork+0x2d/0x70
+>>     [<ffffffff81003511>] ret_from_fork_asm+0x11/0x20
+>> unreferenced object 0xffff8881052cd250 (size 192):
+>>   comm "kunit_try_catch", pid 1404, jiffies 4294720460 (age 781.948s)
+>>   hex dump (first 32 bytes):
+>>     a0 85 9e 82 ff ff ff ff 00 a9 7c 84 ff ff ff ff  ..........|.....
+>>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>>   backtrace:
+>>     [<ffffffff817dbad2>] __kmalloc+0x52/0x150
+>>     [<ffffffff829ecfc1>] kunit_filter_attr_tests+0x1a1/0x860
+>>     [<ffffffff829e99ff>] kunit_filter_suites+0x82f/0xcc0
+>>     [<ffffffff829ea975>] filter_attr_test+0x195/0x5f0
+>>     [<ffffffff829e802a>] kunit_generic_run_threadfn_adapter+0x4a/0x90
+>>     [<ffffffff81236fc6>] kthread+0x2b6/0x380
+>>     [<ffffffff81096afd>] ret_from_fork+0x2d/0x70
+>>     [<ffffffff81003511>] ret_from_fork_asm+0x11/0x20
+>> unreferenced object 0xffff888104f4e400 (size 1024):
+>>   comm "kunit_try_catch", pid 1408, jiffies 4294720464 (age 781.944s)
+>>   hex dump (first 32 bytes):
+>>     73 75 69 74 65 00 00 00 00 00 00 00 00 00 00 00  suite...........
+>>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>>   backtrace:
+>>     [<ffffffff817db753>] __kmalloc_node_track_caller+0x53/0x150
+>>     [<ffffffff817bd242>] kmemdup+0x22/0x50
+>>     [<ffffffff829ecf17>] kunit_filter_attr_tests+0xf7/0x860
+>>     [<ffffffff829e99ff>] kunit_filter_suites+0x82f/0xcc0
+>>     [<ffffffff829e9fc3>] filter_attr_skip_test+0x133/0x6e0
+>>     [<ffffffff829e802a>] kunit_generic_run_threadfn_adapter+0x4a/0x90
+>>     [<ffffffff81236fc6>] kthread+0x2b6/0x380
+>>     [<ffffffff81096afd>] ret_from_fork+0x2d/0x70
+>>     [<ffffffff81003511>] ret_from_fork_asm+0x11/0x20
+>> unreferenced object 0xffff8881052cc620 (size 192):
+>>   comm "kunit_try_catch", pid 1408, jiffies 4294720464 (age 781.944s)
+>>   hex dump (first 32 bytes):
+>>     a0 85 9e 82 ff ff ff ff c0 a8 7c 84 ff ff ff ff  ..........|.....
+>>     00 00 00 00 00 00 00 00 02 00 00 00 02 00 00 00  ................
+>>   backtrace:
+>>     [<ffffffff817dbad2>] __kmalloc+0x52/0x150
+>>     [<ffffffff829ecfc1>] kunit_filter_attr_tests+0x1a1/0x860
+>>     [<ffffffff829e99ff>] kunit_filter_suites+0x82f/0xcc0
+>>     [<ffffffff829e9fc3>] filter_attr_skip_test+0x133/0x6e0
+>>     [<ffffffff829e802a>] kunit_generic_run_threadfn_adapter+0x4a/0x90
+>>     [<ffffffff81236fc6>] kthread+0x2b6/0x380
+>>     [<ffffffff81096afd>] ret_from_fork+0x2d/0x70
+>>     [<ffffffff81003511>] ret_from_fork_asm+0x11/0x20
+>>
+>> Fixes: e5857d396f35 ("kunit: flatten kunit_suite*** to kunit_suite** in .kunit_test_suites")
+>> Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
+>> Reported-by: kernel test robot <lkp@intel.com>
+>> Closes: https://lore.kernel.org/oe-kbuild-all/202309142251.uJ8saAZv-lkp@intel.com/
+> 
+> Hello!
+> 
+> Thanks for sending out a new version and responding to my comments. I
+> do have one issue below.
+> 
+> Thanks!
+> -Rae
+> 
+>> ---
+>> v2:
+>> - Add the memory leak backtrace.
+>> - Remove the unused func kfree_at_end() kernel test robot noticed.
+>> - Update the commit message.
+>> ---
+>>  lib/kunit/executor_test.c | 40 ++++++++++++++++++---------------------
+>>  1 file changed, 18 insertions(+), 22 deletions(-)
+>>
+>> diff --git a/lib/kunit/executor_test.c b/lib/kunit/executor_test.c
+>> index b4f6f96b2844..88d26c9cdce8 100644
+>> --- a/lib/kunit/executor_test.c
+>> +++ b/lib/kunit/executor_test.c
+>> @@ -9,7 +9,6 @@
+>>  #include <kunit/test.h>
+>>  #include <kunit/attributes.h>
+>>
+>> -static void kfree_at_end(struct kunit *test, const void *to_free);
+>>  static struct kunit_suite *alloc_fake_suite(struct kunit *test,
+>>                                             const char *suite_name,
+>>                                             struct kunit_case *test_cases);
+>> @@ -56,7 +55,6 @@ static void filter_suites_test(struct kunit *test)
+>>         got = kunit_filter_suites(&suite_set, "suite2", NULL, NULL, &err);
+>>         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start);
+>>         KUNIT_ASSERT_EQ(test, err, 0);
+>> -       kfree_at_end(test, got.start);
+>>
+>>         /* Validate we just have suite2 */
+>>         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start[0]);
+>> @@ -64,6 +62,9 @@ static void filter_suites_test(struct kunit *test)
+>>
+>>         /* Contains one element (end is 1 past end) */
+>>         KUNIT_ASSERT_EQ(test, got.end - got.start, 1);
+> 
+> If filtering incorrectly outputs more than one suite, the line above
+> will fail. This will cause the test to exit immediately because this
+> is an ASSERT statement instead of an EXPECT statement.
+> 
+> If this happens, the suite set will never be freed. Instead we should
+> change this to KUNIT_EXPECT_EQ so the test will continue to the below
+> if statement.
+> 
+> We should change this for all similar lines where we still want to
+> free the suite if they fail.
+
+Right! It is better to update the kfree_at_end() func to solve these
+problems. I'll try to do it sooner.
+
+> 
+>> +
+>> +       if (!err)
+>> +               kunit_free_suite_set(got);
+> 
+>>  }
+>>
+>>  static void filter_suites_test_glob_test(struct kunit *test)
+>> @@ -82,7 +83,6 @@ static void filter_suites_test_glob_test(struct kunit *test)
+>>         got = kunit_filter_suites(&suite_set, "suite2.test2", NULL, NULL, &err);
+>>         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start);
+>>         KUNIT_ASSERT_EQ(test, err, 0);
+>> -       kfree_at_end(test, got.start);
+>>
+>>         /* Validate we just have suite2 */
+>>         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start[0]);
+>> @@ -93,6 +93,9 @@ static void filter_suites_test_glob_test(struct kunit *test)
+>>         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start[0]->test_cases);
+>>         KUNIT_EXPECT_STREQ(test, (const char *)got.start[0]->test_cases[0].name, "test2");
+>>         KUNIT_EXPECT_FALSE(test, got.start[0]->test_cases[1].name);
+>> +
+>> +       if (!err)
+>> +               kunit_free_suite_set(got);
+> 
+> Again I recommend changing the line in this test from
+> "KUNIT_ASSERT_EQ(test, got.end - got.start, 1);" to an EXPECT
+> statement.
+> 
+>>  }
+>>
+>>  static void filter_suites_to_empty_test(struct kunit *test)
+>> @@ -109,10 +112,12 @@ static void filter_suites_to_empty_test(struct kunit *test)
+>>
+>>         got = kunit_filter_suites(&suite_set, "not_found", NULL, NULL, &err);
+>>         KUNIT_ASSERT_EQ(test, err, 0);
+>> -       kfree_at_end(test, got.start); /* just in case */
+>>
+>>         KUNIT_EXPECT_PTR_EQ_MSG(test, got.start, got.end,
+>>                                 "should be empty to indicate no match");
+>> +
+>> +       if (!err)
+>> +               kunit_free_suite_set(got);
+> 
+> This test seems good.
+> 
+>>  }
+>>
+>>  static void parse_filter_attr_test(struct kunit *test)
+>> @@ -172,7 +177,6 @@ static void filter_attr_test(struct kunit *test)
+>>         got = kunit_filter_suites(&suite_set, NULL, filter, NULL, &err);
+>>         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start);
+>>         KUNIT_ASSERT_EQ(test, err, 0);
+>> -       kfree_at_end(test, got.start);
+>>
+>>         /* Validate we just have normal_suite */
+>>         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start[0]);
+>> @@ -183,6 +187,9 @@ static void filter_attr_test(struct kunit *test)
+>>         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start[0]->test_cases);
+>>         KUNIT_EXPECT_STREQ(test, got.start[0]->test_cases[0].name, "normal");
+>>         KUNIT_EXPECT_FALSE(test, got.start[0]->test_cases[1].name);
+>> +
+>> +       if (!err)
+>> +               kunit_free_suite_set(got);
+> 
+> Again I recommend changing the line in this test from
+> "KUNIT_ASSERT_EQ(test, got.end - got.start, 1);" to an EXPECT
+> statement.
+> 
+>>  }
+>>
+>>  static void filter_attr_empty_test(struct kunit *test)
+>> @@ -200,10 +207,12 @@ static void filter_attr_empty_test(struct kunit *test)
+>>
+>>         got = kunit_filter_suites(&suite_set, NULL, filter, NULL, &err);
+>>         KUNIT_ASSERT_EQ(test, err, 0);
+>> -       kfree_at_end(test, got.start); /* just in case */
+>>
+>>         KUNIT_EXPECT_PTR_EQ_MSG(test, got.start, got.end,
+>>                                 "should be empty to indicate no match");
+>> +
+>> +       if (!err)
+>> +               kunit_free_suite_set(got);
+> 
+> This test seems good.
+> 
+>>  }
+>>
+>>  static void filter_attr_skip_test(struct kunit *test)
+>> @@ -222,7 +231,6 @@ static void filter_attr_skip_test(struct kunit *test)
+>>         got = kunit_filter_suites(&suite_set, NULL, filter, "skip", &err);
+>>         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start);
+>>         KUNIT_ASSERT_EQ(test, err, 0);
+>> -       kfree_at_end(test, got.start);
+>>
+>>         /* Validate we have both the slow and normal test */
+>>         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start[0]->test_cases);
+>> @@ -233,6 +241,9 @@ static void filter_attr_skip_test(struct kunit *test)
+>>         /* Now ensure slow is skipped and normal is not */
+>>         KUNIT_EXPECT_EQ(test, got.start[0]->test_cases[0].status, KUNIT_SKIPPED);
+>>         KUNIT_EXPECT_FALSE(test, got.start[0]->test_cases[1].status);
+>> +
+>> +       if (!err)
+>> +               kunit_free_suite_set(got);
+> 
+> Similarly, the line "KUNIT_ASSERT_EQ(test,
+> kunit_suite_num_test_cases(got.start[0]), 2)" may exit causing the
+> suite to not be freed. This should be changed to an EXPECT statement.
+> However, we may then want to check before accessing the test cases.
+> 
+>>  }
+>>
+>>  static struct kunit_case executor_test_cases[] = {
+>> @@ -255,21 +266,6 @@ static struct kunit_suite executor_test_suite = {
+>>  kunit_test_suites(&executor_test_suite);
+>>
+>>  /* Test helpers */
+>> -
+>> -/* Use the resource API to register a call to kfree(to_free).
+>> - * Since we never actually use the resource, it's safe to use on const data.
+>> - */
+>> -static void kfree_at_end(struct kunit *test, const void *to_free)
+>> -{
+>> -       /* kfree() handles NULL already, but avoid allocating a no-op cleanup. */
+>> -       if (IS_ERR_OR_NULL(to_free))
+>> -               return;
+>> -
+>> -       kunit_add_action(test,
+>> -                       (kunit_action_t *)kfree,
+>> -                       (void *)to_free);
+>> -}
+>> -
+>>  static struct kunit_suite *alloc_fake_suite(struct kunit *test,
+>>                                             const char *suite_name,
+>>                                             struct kunit_case *test_cases)
+>> --
+>> 2.34.1
+>>
+>> --
+>> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
+>> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
+>> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20230921014008.3887257-5-ruanjinjie%40huawei.com.
+> 
