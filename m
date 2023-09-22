@@ -2,64 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FB0C7AAA56
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Sep 2023 09:34:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D2FE7AAA57
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Sep 2023 09:34:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230508AbjIVHeh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 22 Sep 2023 03:34:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60014 "EHLO
+        id S231254AbjIVHeq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 22 Sep 2023 03:34:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231262AbjIVHeg (ORCPT
+        with ESMTP id S231497AbjIVHem (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 22 Sep 2023 03:34:36 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DABD192
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Sep 2023 00:34:30 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-405290ab4b6so83995e9.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Sep 2023 00:34:30 -0700 (PDT)
+        Fri, 22 Sep 2023 03:34:42 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 795ADF7
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 Sep 2023 00:34:35 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-53074ee0c2aso8444a12.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 Sep 2023 00:34:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695368068; x=1695972868; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1695368074; x=1695972874; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=lvsfe1A7ySnA+ZmJ7RyFE79ZzBP8RvVu/wViGAKAYuE=;
-        b=1bXjsM/YC/bOcEPOCZzvVUf9KvN6rtwtVLtkC8fmo7at3tK1rme7jchHUM+XxG+KjO
-         tk4qBQWdiVNDhMsuXwPa82Qx4fvk94qLUAHNZpNv60jtVOKKf1G4f73ztUUH2T2s/fJo
-         2xTADLDG2mr2lVkjfIVNCTii4JFgGQ+3Ho2Zcet1i3X3HH5qobunhKbu1VLdGPNqyKJN
-         YXdxDjed0PzzgAWBp38XLLihBwHeDwAE2Cs5/0O0G6cd3AmmN1jTlsGlgB0RIoAUmrIf
-         Nw7gLfepTp7mReBFwqnw31lHuj6t+jElAdWse9GH1GI/WQdeacSWIQXkAMzu1XwWzuPA
-         SeNw==
+        bh=K5zfdaunYQTmV6YNygu+cahM/gn1GwaaC8BvjKIZIUE=;
+        b=W+6UYy6mKxmu9s41nTzdvz1NsyV/N1jqKiIsUtJUjBLDNghhaQQAsLQYtstQ+uJKAn
+         19hchToa5i6r2cI8NrhoZhh6rPE8zHDosBtn7aDYODXJRwt4/I+ozpiunDMzESBnqMWC
+         5XMP2wMbi8+oi1eflIc1up8+twGfOmYRyijxOplhoDXYVwYK5+dfdmdtUitxPGXJy3o5
+         FvsV/xsRDj8i9TWslEbBUYEVVOPaT33UKFWWBjEG2QWnoRALqwhJgIXwxzY/nVjEl6vJ
+         QYOTF136TG2DRCq8yCWSbDQWZ+QOq9YG+HCBUSIbgy5jdcaEnbflM0K7rQJao75khu/I
+         Q+Sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695368068; x=1695972868;
+        d=1e100.net; s=20230601; t=1695368074; x=1695972874;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=lvsfe1A7ySnA+ZmJ7RyFE79ZzBP8RvVu/wViGAKAYuE=;
-        b=XPFI4QX9LEQ3JKxaAZszOF+qRPyS9sBYxvgR52mgJpwmcEFrAYljQsa0YhvurFBcXW
-         kuqRBb8Sj7lH/Ftdt6ckmLkw31cBKgq2G+EbUuFEozF5/A3vTpypafwX7Nw/ieNzraPU
-         laPavCViLEjUZUTrMQRHFqYsK75vPYmtqadjrgthM0jCmyCNt7+tR3BEZXtb8LdstOrm
-         EeELIFfcDu44nztGZRGJfmncoTT3DwhN+I/ZxdE4C9LwlmQTADPE/kV2+ZWdG84Qbcz7
-         xwbPu7PeTGowiehu6gdfTUHP2dwsYp5LUIAe6IAgDFNs9a3J05HIfRCWf5n2zhSWHI34
-         tclg==
-X-Gm-Message-State: AOJu0YxUyxf4W+VNEIimJUgGq3XxiumhphVAkSoUZJGonVkVDvfPKNMV
-        1nRJp0EDIBFMGIABGpkMini9u8Hli0bWQFBvAMTDug==
-X-Google-Smtp-Source: AGHT+IGMDJaRkn0zJUKADKvdjfROCOtZVFSNnNgeysSV5LX7H2/C91eCcqtRMUdIulWlD85MNp/hYjaf3MNfnPVZR30=
-X-Received: by 2002:a05:600c:2e4c:b0:404:7462:1f87 with SMTP id
- q12-20020a05600c2e4c00b0040474621f87mr46123wmf.6.1695368068364; Fri, 22 Sep
- 2023 00:34:28 -0700 (PDT)
+        bh=K5zfdaunYQTmV6YNygu+cahM/gn1GwaaC8BvjKIZIUE=;
+        b=ijliTgFxxacbKym5zUG4ZnhN/FH1/eosCcwCbvdypK16U0qOiDnrYRhg24fgWBKwwn
+         BsNnsdPZZbP0MXsBlRHXoX7E3BH7HM7A7ix9tjKTFML7W0gAhafEerRY1ZXwtTYHMV0z
+         aUC8E9lgLktga4i4D6OPGkH0srTwThEWMqEcZ7oeHXPRqEBtuplcg0UXXky8/93OUKQJ
+         aCz8pxRRUML94inSanfBBm6oO7iP02zZQM2uvEdd6xr59jQVp0GSlW/EKiygvAFqpja8
+         OkOg8P79mVaAX9fmJHtwAH5//rbYtqk++48jCuz/+JlxHJl5vlC/jhK6VET+rXFRbowY
+         /5/A==
+X-Gm-Message-State: AOJu0YzZFwla3V7YIBTAWlUmf7bwLWLVQvMfKyfkRJu00bPLh0ZahjGD
+        27Gx6t7uXYA69fePQb0DeqbCtJmbys4NcBOZvJy6PA==
+X-Google-Smtp-Source: AGHT+IEPLuo6LrBmKTy++ho0VHpctxc6V8ieemPAES8C644JmizFcjEU7ZFq5FdTexY1xMC4IOIK9BbSoQFW/52zNEo=
+X-Received: by 2002:a50:d083:0:b0:52f:5f65:873c with SMTP id
+ v3-20020a50d083000000b0052f5f65873cmr28334edd.3.1695368073862; Fri, 22 Sep
+ 2023 00:34:33 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230921014008.3887257-1-ruanjinjie@huawei.com> <20230921014008.3887257-4-ruanjinjie@huawei.com>
-In-Reply-To: <20230921014008.3887257-4-ruanjinjie@huawei.com>
+References: <20230921014008.3887257-1-ruanjinjie@huawei.com> <20230921014008.3887257-5-ruanjinjie@huawei.com>
+In-Reply-To: <20230921014008.3887257-5-ruanjinjie@huawei.com>
 From:   David Gow <davidgow@google.com>
-Date:   Fri, 22 Sep 2023 15:34:17 +0800
-Message-ID: <CABVgOSkX7fM5aW7_5qvx+pSEfWztrhF+j=-AgSb+Mv2+Wb1OaQ@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] kunit: Fix possible memory leak in kunit_filter_suites()
+Date:   Fri, 22 Sep 2023 15:34:22 +0800
+Message-ID: <CABVgOSkfctCd0KUQaRJDzOjp5wjOxFz+W-LZ11cC39=dDpQ8=A@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] kunit: test: Fix the possible memory leak in executor_test
 To:     Jinjie Ruan <ruanjinjie@huawei.com>
 Cc:     brendan.higgins@linux.dev, skhan@linuxfoundation.org,
         dlatypov@google.com, rmoar@google.com,
         janusz.krzysztofik@linux.intel.com,
         linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000008204950605eda31f"
+        boundary="000000000000d42c490605eda323"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -71,120 +71,318 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---0000000000008204950605eda31f
+--000000000000d42c490605eda323
 Content-Type: text/plain; charset="UTF-8"
 
 On Thu, 21 Sept 2023 at 09:41, 'Jinjie Ruan' via KUnit Development
 <kunit-dev@googlegroups.com> wrote:
 >
-> If the outer layer for loop is iterated more than once and it fails not
-> in the first iteration, the filtered_suite and filtered_suite->test_cases
-> allocated in the last kunit_filter_attr_tests() in last inner for loop
-> is leaked.
+> When CONFIG_KUNIT_ALL_TESTS=y, making CONFIG_DEBUG_KMEMLEAK=y and
+> CONFIG_DEBUG_KMEMLEAK_AUTO_SCAN=y, the below memory leak is detected.
 >
-> So add a new free_filtered_suite err label and free the filtered_suite
-> and filtered_suite->test_cases so far. And change kmalloc_array of copy
-> to kcalloc to Clear the copy to make the kfree safe.
+> If kunit_filter_suites() succeeds, not only copy but also filtered_suite
+> and filtered_suite->test_cases should be freed.
 >
-> Fixes: 5d31f71efcb6 ("kunit: add kunit.filter_glob cmdline option to filter suites")
-> Fixes: 529534e8cba3 ("kunit: Add ability to filter attributes")
+> So use kunit_free_suite_set() to free the filtered_suite,
+> filtered_suite->test_cases and copy as kunit_module_exit() and
+> kunit_run_all_tests() do it. And the func kfree_at_end() is not used so
+> remove it. After applying this patch, the following memory leak is never
+> detected.
+>
+> unreferenced object 0xffff8881001de400 (size 1024):
+>   comm "kunit_try_catch", pid 1396, jiffies 4294720452 (age 932.801s)
+>   hex dump (first 32 bytes):
+>     73 75 69 74 65 32 00 00 00 00 00 00 00 00 00 00  suite2..........
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<ffffffff817db753>] __kmalloc_node_track_caller+0x53/0x150
+>     [<ffffffff817bd242>] kmemdup+0x22/0x50
+>     [<ffffffff829e961d>] kunit_filter_suites+0x44d/0xcc0
+>     [<ffffffff829eb69f>] filter_suites_test+0x12f/0x360
+>     [<ffffffff829e802a>] kunit_generic_run_threadfn_adapter+0x4a/0x90
+>     [<ffffffff81236fc6>] kthread+0x2b6/0x380
+>     [<ffffffff81096afd>] ret_from_fork+0x2d/0x70
+>     [<ffffffff81003511>] ret_from_fork_asm+0x11/0x20
+> unreferenced object 0xffff8881052cd388 (size 192):
+>   comm "kunit_try_catch", pid 1396, jiffies 4294720452 (age 932.801s)
+>   hex dump (first 32 bytes):
+>     a0 85 9e 82 ff ff ff ff 80 cd 7c 84 ff ff ff ff  ..........|.....
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<ffffffff817dbad2>] __kmalloc+0x52/0x150
+>     [<ffffffff829e9651>] kunit_filter_suites+0x481/0xcc0
+>     [<ffffffff829eb69f>] filter_suites_test+0x12f/0x360
+>     [<ffffffff829e802a>] kunit_generic_run_threadfn_adapter+0x4a/0x90
+>     [<ffffffff81236fc6>] kthread+0x2b6/0x380
+>     [<ffffffff81096afd>] ret_from_fork+0x2d/0x70
+>     [<ffffffff81003511>] ret_from_fork_asm+0x11/0x20
+>
+> unreferenced object 0xffff888100da8400 (size 1024):
+>   comm "kunit_try_catch", pid 1398, jiffies 4294720454 (age 781.945s)
+>   hex dump (first 32 bytes):
+>     73 75 69 74 65 32 00 00 00 00 00 00 00 00 00 00  suite2..........
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<ffffffff817db753>] __kmalloc_node_track_caller+0x53/0x150
+>     [<ffffffff817bd242>] kmemdup+0x22/0x50
+>     [<ffffffff829e961d>] kunit_filter_suites+0x44d/0xcc0
+>     [<ffffffff829eb13f>] filter_suites_test_glob_test+0x12f/0x560
+>     [<ffffffff829e802a>] kunit_generic_run_threadfn_adapter+0x4a/0x90
+>     [<ffffffff81236fc6>] kthread+0x2b6/0x380
+>     [<ffffffff81096afd>] ret_from_fork+0x2d/0x70
+>     [<ffffffff81003511>] ret_from_fork_asm+0x11/0x20
+> unreferenced object 0xffff888105117878 (size 96):
+>   comm "kunit_try_catch", pid 1398, jiffies 4294720454 (age 781.945s)
+>   hex dump (first 32 bytes):
+>     a0 85 9e 82 ff ff ff ff a0 ac 7c 84 ff ff ff ff  ..........|.....
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<ffffffff817dbad2>] __kmalloc+0x52/0x150
+>     [<ffffffff829e9651>] kunit_filter_suites+0x481/0xcc0
+>     [<ffffffff829eb13f>] filter_suites_test_glob_test+0x12f/0x560
+>     [<ffffffff829e802a>] kunit_generic_run_threadfn_adapter+0x4a/0x90
+>     [<ffffffff81236fc6>] kthread+0x2b6/0x380
+>     [<ffffffff81096afd>] ret_from_fork+0x2d/0x70
+>     [<ffffffff81003511>] ret_from_fork_asm+0x11/0x20
+> unreferenced object 0xffff888102c31c00 (size 1024):
+>   comm "kunit_try_catch", pid 1404, jiffies 4294720460 (age 781.948s)
+>   hex dump (first 32 bytes):
+>     6e 6f 72 6d 61 6c 5f 73 75 69 74 65 00 00 00 00  normal_suite....
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<ffffffff817db753>] __kmalloc_node_track_caller+0x53/0x150
+>     [<ffffffff817bd242>] kmemdup+0x22/0x50
+>     [<ffffffff829ecf17>] kunit_filter_attr_tests+0xf7/0x860
+>     [<ffffffff829e99ff>] kunit_filter_suites+0x82f/0xcc0
+>     [<ffffffff829ea975>] filter_attr_test+0x195/0x5f0
+>     [<ffffffff829e802a>] kunit_generic_run_threadfn_adapter+0x4a/0x90
+>     [<ffffffff81236fc6>] kthread+0x2b6/0x380
+>     [<ffffffff81096afd>] ret_from_fork+0x2d/0x70
+>     [<ffffffff81003511>] ret_from_fork_asm+0x11/0x20
+> unreferenced object 0xffff8881052cd250 (size 192):
+>   comm "kunit_try_catch", pid 1404, jiffies 4294720460 (age 781.948s)
+>   hex dump (first 32 bytes):
+>     a0 85 9e 82 ff ff ff ff 00 a9 7c 84 ff ff ff ff  ..........|.....
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<ffffffff817dbad2>] __kmalloc+0x52/0x150
+>     [<ffffffff829ecfc1>] kunit_filter_attr_tests+0x1a1/0x860
+>     [<ffffffff829e99ff>] kunit_filter_suites+0x82f/0xcc0
+>     [<ffffffff829ea975>] filter_attr_test+0x195/0x5f0
+>     [<ffffffff829e802a>] kunit_generic_run_threadfn_adapter+0x4a/0x90
+>     [<ffffffff81236fc6>] kthread+0x2b6/0x380
+>     [<ffffffff81096afd>] ret_from_fork+0x2d/0x70
+>     [<ffffffff81003511>] ret_from_fork_asm+0x11/0x20
+> unreferenced object 0xffff888104f4e400 (size 1024):
+>   comm "kunit_try_catch", pid 1408, jiffies 4294720464 (age 781.944s)
+>   hex dump (first 32 bytes):
+>     73 75 69 74 65 00 00 00 00 00 00 00 00 00 00 00  suite...........
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<ffffffff817db753>] __kmalloc_node_track_caller+0x53/0x150
+>     [<ffffffff817bd242>] kmemdup+0x22/0x50
+>     [<ffffffff829ecf17>] kunit_filter_attr_tests+0xf7/0x860
+>     [<ffffffff829e99ff>] kunit_filter_suites+0x82f/0xcc0
+>     [<ffffffff829e9fc3>] filter_attr_skip_test+0x133/0x6e0
+>     [<ffffffff829e802a>] kunit_generic_run_threadfn_adapter+0x4a/0x90
+>     [<ffffffff81236fc6>] kthread+0x2b6/0x380
+>     [<ffffffff81096afd>] ret_from_fork+0x2d/0x70
+>     [<ffffffff81003511>] ret_from_fork_asm+0x11/0x20
+> unreferenced object 0xffff8881052cc620 (size 192):
+>   comm "kunit_try_catch", pid 1408, jiffies 4294720464 (age 781.944s)
+>   hex dump (first 32 bytes):
+>     a0 85 9e 82 ff ff ff ff c0 a8 7c 84 ff ff ff ff  ..........|.....
+>     00 00 00 00 00 00 00 00 02 00 00 00 02 00 00 00  ................
+>   backtrace:
+>     [<ffffffff817dbad2>] __kmalloc+0x52/0x150
+>     [<ffffffff829ecfc1>] kunit_filter_attr_tests+0x1a1/0x860
+>     [<ffffffff829e99ff>] kunit_filter_suites+0x82f/0xcc0
+>     [<ffffffff829e9fc3>] filter_attr_skip_test+0x133/0x6e0
+>     [<ffffffff829e802a>] kunit_generic_run_threadfn_adapter+0x4a/0x90
+>     [<ffffffff81236fc6>] kthread+0x2b6/0x380
+>     [<ffffffff81096afd>] ret_from_fork+0x2d/0x70
+>     [<ffffffff81003511>] ret_from_fork_asm+0x11/0x20
+>
+> Fixes: e5857d396f35 ("kunit: flatten kunit_suite*** to kunit_suite** in .kunit_test_suites")
 > Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
-> Reviewed-by: Rae Moar <rmoar@google.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202309142251.uJ8saAZv-lkp@intel.com/
 > ---
 > v2:
-> - Add Reviewed-by.
+> - Add the memory leak backtrace.
+> - Remove the unused func kfree_at_end() kernel test robot noticed.
+
+We have some plans to reintroduce a similar function later as a
+general kunit feature, but it's fine removing it here.
+
+> - Update the commit message.
 > ---
 
-This looks good to me, though I admit that this code is starting to
-get a bit too complicated...
+This mostly looks good, but as Rae pointed out, the cleanup won't get
+called if some of the assertions fail.
 
-A few thoughts below, but they're more notes-to-self for a future
-refactoring than something I think this patch needs.
+Using something more like kfree_at_end(), such as
+kunit_add_action(test, (kunit_action_t *)kunit_free_suite_set, got)
+would resolve all of these issues.
 
-Reviewed-by: David Gow <davidgow@google.com>
+(You may need to write a wrapper around kunit_free_suite_set to make
+it work as an action if you go down that path.)
 
+Cheers,
 -- David
 
->  lib/kunit/executor.c | 17 +++++++++++++----
->  1 file changed, 13 insertions(+), 4 deletions(-)
+>  lib/kunit/executor_test.c | 40 ++++++++++++++++++---------------------
+>  1 file changed, 18 insertions(+), 22 deletions(-)
 >
-> diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-> index 9358ed2df839..1236b3cd2fbb 100644
-> --- a/lib/kunit/executor.c
-> +++ b/lib/kunit/executor.c
-> @@ -157,10 +157,11 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
->         struct kunit_suite_set filtered = {NULL, NULL};
->         struct kunit_glob_filter parsed_glob;
->         struct kunit_attr_filter *parsed_filters = NULL;
-> +       struct kunit_suite * const *suites;
+> diff --git a/lib/kunit/executor_test.c b/lib/kunit/executor_test.c
+> index b4f6f96b2844..88d26c9cdce8 100644
+> --- a/lib/kunit/executor_test.c
+> +++ b/lib/kunit/executor_test.c
+> @@ -9,7 +9,6 @@
+>  #include <kunit/test.h>
+>  #include <kunit/attributes.h>
 >
->         const size_t max = suite_set->end - suite_set->start;
+> -static void kfree_at_end(struct kunit *test, const void *to_free);
+>  static struct kunit_suite *alloc_fake_suite(struct kunit *test,
+>                                             const char *suite_name,
+>                                             struct kunit_case *test_cases);
+> @@ -56,7 +55,6 @@ static void filter_suites_test(struct kunit *test)
+>         got = kunit_filter_suites(&suite_set, "suite2", NULL, NULL, &err);
+>         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start);
+>         KUNIT_ASSERT_EQ(test, err, 0);
+> -       kfree_at_end(test, got.start);
 >
-> -       copy = kmalloc_array(max, sizeof(*filtered.start), GFP_KERNEL);
-> +       copy = kcalloc(max, sizeof(*filtered.start), GFP_KERNEL);
->         if (!copy) { /* won't be able to run anything, return an empty set */
->                 return filtered;
->         }
-> @@ -195,7 +196,7 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
->                                         parsed_glob.test_glob);
->                         if (IS_ERR(filtered_suite)) {
->                                 *err = PTR_ERR(filtered_suite);
-> -                               goto free_parsed_filters;
-> +                               goto free_filtered_suite;
->                         }
->                 }
->                 if (filter_count > 0 && parsed_filters != NULL) {
-> @@ -212,11 +213,11 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
->                                 filtered_suite = new_filtered_suite;
+>         /* Validate we just have suite2 */
+>         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start[0]);
+> @@ -64,6 +62,9 @@ static void filter_suites_test(struct kunit *test)
 >
->                                 if (*err)
-> -                                       goto free_parsed_filters;
-> +                                       goto free_filtered_suite;
->
->                                 if (IS_ERR(filtered_suite)) {
->                                         *err = PTR_ERR(filtered_suite);
-> -                                       goto free_parsed_filters;
-> +                                       goto free_filtered_suite;
->                                 }
->                                 if (!filtered_suite)
->                                         break;
-> @@ -231,6 +232,14 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
->         filtered.start = copy_start;
->         filtered.end = copy;
-
-Do we really need both filtered.start and copy_start, and filtered.end
-/ copy? The only case where they're different would be when an error
-occurs, and it should be easy to simply reset them to NULL then,
-anyway.
-
->
-> +free_filtered_suite:
-> +       if (*err) {
-> +               for (suites = copy_start; suites < copy; suites++) {
-> +                       kfree((*suites)->test_cases);
-> +                       kfree(*suites);
-> +               }
-
-We possibly should set filtered = {NULL, NULL} here. It's not actually
-possible for them to be non-NULL at this point, so it is redundant,
-but it's not easy to tell (and it looks like this could be returning a
-freed pointer here, even though it's not).
-
-
-> +       }
+>         /* Contains one element (end is 1 past end) */
+>         KUNIT_ASSERT_EQ(test, got.end - got.start, 1);
 > +
->  free_parsed_filters:
->         if (filter_count)
->                 kfree(parsed_filters);
+> +       if (!err)
+> +               kunit_free_suite_set(got);
+>  }
+>
+>  static void filter_suites_test_glob_test(struct kunit *test)
+> @@ -82,7 +83,6 @@ static void filter_suites_test_glob_test(struct kunit *test)
+>         got = kunit_filter_suites(&suite_set, "suite2.test2", NULL, NULL, &err);
+>         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start);
+>         KUNIT_ASSERT_EQ(test, err, 0);
+> -       kfree_at_end(test, got.start);
+>
+>         /* Validate we just have suite2 */
+>         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start[0]);
+> @@ -93,6 +93,9 @@ static void filter_suites_test_glob_test(struct kunit *test)
+>         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start[0]->test_cases);
+>         KUNIT_EXPECT_STREQ(test, (const char *)got.start[0]->test_cases[0].name, "test2");
+>         KUNIT_EXPECT_FALSE(test, got.start[0]->test_cases[1].name);
+> +
+> +       if (!err)
+
+Because of the KUNIT_ASSERT_EQ(test, err, 0) call above, we know err
+is nonzero here, so this conditional shouldn't be required. But it
+also wouldn't be if you used a deferred action to clean up.
+
+
+> +               kunit_free_suite_set(got);
+>  }
+>
+>  static void filter_suites_to_empty_test(struct kunit *test)
+> @@ -109,10 +112,12 @@ static void filter_suites_to_empty_test(struct kunit *test)
+>
+>         got = kunit_filter_suites(&suite_set, "not_found", NULL, NULL, &err);
+>         KUNIT_ASSERT_EQ(test, err, 0);
+> -       kfree_at_end(test, got.start); /* just in case */
+>
+>         KUNIT_EXPECT_PTR_EQ_MSG(test, got.start, got.end,
+>                                 "should be empty to indicate no match");
+> +
+> +       if (!err)
+> +               kunit_free_suite_set(got);
+>  }
+>
+>  static void parse_filter_attr_test(struct kunit *test)
+> @@ -172,7 +177,6 @@ static void filter_attr_test(struct kunit *test)
+>         got = kunit_filter_suites(&suite_set, NULL, filter, NULL, &err);
+>         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start);
+>         KUNIT_ASSERT_EQ(test, err, 0);
+> -       kfree_at_end(test, got.start);
+>
+>         /* Validate we just have normal_suite */
+>         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start[0]);
+> @@ -183,6 +187,9 @@ static void filter_attr_test(struct kunit *test)
+>         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start[0]->test_cases);
+>         KUNIT_EXPECT_STREQ(test, got.start[0]->test_cases[0].name, "normal");
+>         KUNIT_EXPECT_FALSE(test, got.start[0]->test_cases[1].name);
+> +
+> +       if (!err)
+> +               kunit_free_suite_set(got);
+>  }
+>
+>  static void filter_attr_empty_test(struct kunit *test)
+> @@ -200,10 +207,12 @@ static void filter_attr_empty_test(struct kunit *test)
+>
+>         got = kunit_filter_suites(&suite_set, NULL, filter, NULL, &err);
+>         KUNIT_ASSERT_EQ(test, err, 0);
+> -       kfree_at_end(test, got.start); /* just in case */
+>
+>         KUNIT_EXPECT_PTR_EQ_MSG(test, got.start, got.end,
+>                                 "should be empty to indicate no match");
+> +
+> +       if (!err)
+> +               kunit_free_suite_set(got);
+>  }
+>
+>  static void filter_attr_skip_test(struct kunit *test)
+> @@ -222,7 +231,6 @@ static void filter_attr_skip_test(struct kunit *test)
+>         got = kunit_filter_suites(&suite_set, NULL, filter, "skip", &err);
+>         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start);
+>         KUNIT_ASSERT_EQ(test, err, 0);
+> -       kfree_at_end(test, got.start);
+>
+>         /* Validate we have both the slow and normal test */
+>         KUNIT_ASSERT_NOT_ERR_OR_NULL(test, got.start[0]->test_cases);
+> @@ -233,6 +241,9 @@ static void filter_attr_skip_test(struct kunit *test)
+>         /* Now ensure slow is skipped and normal is not */
+>         KUNIT_EXPECT_EQ(test, got.start[0]->test_cases[0].status, KUNIT_SKIPPED);
+>         KUNIT_EXPECT_FALSE(test, got.start[0]->test_cases[1].status);
+> +
+> +       if (!err)
+> +               kunit_free_suite_set(got);
+>  }
+>
+>  static struct kunit_case executor_test_cases[] = {
+> @@ -255,21 +266,6 @@ static struct kunit_suite executor_test_suite = {
+>  kunit_test_suites(&executor_test_suite);
+>
+>  /* Test helpers */
+> -
+> -/* Use the resource API to register a call to kfree(to_free).
+> - * Since we never actually use the resource, it's safe to use on const data.
+> - */
+> -static void kfree_at_end(struct kunit *test, const void *to_free)
+> -{
+> -       /* kfree() handles NULL already, but avoid allocating a no-op cleanup. */
+> -       if (IS_ERR_OR_NULL(to_free))
+> -               return;
+> -
+> -       kunit_add_action(test,
+> -                       (kunit_action_t *)kfree,
+> -                       (void *)to_free);
+> -}
+> -
+>  static struct kunit_suite *alloc_fake_suite(struct kunit *test,
+>                                             const char *suite_name,
+>                                             struct kunit_case *test_cases)
 > --
 > 2.34.1
 >
 > --
 > You received this message because you are subscribed to the Google Groups "KUnit Development" group.
 > To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20230921014008.3887257-4-ruanjinjie%40huawei.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20230921014008.3887257-5-ruanjinjie%40huawei.com.
 
---0000000000008204950605eda31f
+--000000000000d42c490605eda323
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -251,14 +449,14 @@ impZAng7ccvvK09K3ZuhwTIxJMsPXCZYsrXWORTw5sczRAP6XvKbPBJnsJoSTe5dFBPBHOQJOGhU
 qWfEfWnWMJPF3LxSGLpLFQXO3RwQqmxv08avwXfVPouh1xuB3FX7rpDabT8YDhu9JgIZkLEKko7L
 yQt6zWwng7k8YF/jGbiAta6VMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBo
-sEln7m34GRqIPR9Tc/ibTrnql2QdG7mh3IzIW2e6xzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzA5MjIwNzM0MjhaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCB5
+HR6Az4E3QKs4e0EZCCpGM2s/x/5SnzPA1pUrU8rX+TAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzA5MjIwNzM0MzRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEATdSREeWyakid33ss7kUP
-bZ3lDEsp+q4NpNu7I99z2WUAKEr1gyZswC6lD0NLthcstS3SZHhgpIbCdNJggeFV1gwztY6zVYkX
-Kh9PTse8v43wj8O8G4sTT981GW7seS/95VSWI/7gtKzBew97xb/SL8z5Yh6wLFHO9CTv0mWbDE2W
-II9ZVPV63pZsdwLs35eV0vbbubbZ/eTmFu9VDKrQvKsYp3eT6V2DsuUXOwGW2lQPcRlUy4Sn/zTQ
-wU59keZ1HV8q7BgMtYG9vUg6nMPrdP0+RZwqZkvhaoQy6jyE+/SLltfIzhw4jGcz1LMSC4tNJkmX
-+OwWWVW6SB6CRfeLfA==
---0000000000008204950605eda31f--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAAHgKlvO3L1CMcn10N77F
+6hGroBZZcPASGpESDjbZ1tehqbCxc/o8K0DY7/tUuAhPTQJJb0lnIMhFSoQiCziNjhm4NcLoepD9
+mFu2PYoIKCgQBzJJN3YqGVLvevyZMMlpAYXnsDIGMApGBT9+FN5HzaT7+3K9j/3WdvlXXsVw9DnA
+TrtUPjYD7XpaElIuPZiPXRPrcBC2q5iW0wR0sjYc3gOvFD2AuS0Gdx2qI/Z96bMwLCh2dXrRcnsH
+6vduPtGiM2Wkp+zWAzQlRtoG3J7wzotqASyxz1yzJ1U9AjPqg2LlzTWQu2LgqRf5doLuitAGsxeu
+i2dm5n3Wdq0z6b7BNQ==
+--000000000000d42c490605eda323--
