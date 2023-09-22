@@ -2,62 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BF3E7AAA2F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Sep 2023 09:25:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D355B7AAA54
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Sep 2023 09:34:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231639AbjIVHZe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 22 Sep 2023 03:25:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49190 "EHLO
+        id S230166AbjIVHea (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 22 Sep 2023 03:34:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231755AbjIVHZM (ORCPT
+        with ESMTP id S230508AbjIVHe2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 22 Sep 2023 03:25:12 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C92AE63
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Sep 2023 00:23:15 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-4053a7b36b0so51325e9.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Sep 2023 00:23:14 -0700 (PDT)
+        Fri, 22 Sep 2023 03:34:28 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40D83180
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 Sep 2023 00:34:22 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-405290ab4b6so83955e9.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 Sep 2023 00:34:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695367393; x=1695972193; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1695368060; x=1695972860; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=owO2G7+kHzi3Lu12CSVESua2coGOVBHM+2DJNBB5XPg=;
-        b=0Q2o3ZJ0k9A+mpGhpkX8Qya/N1MaYNFjOuUPllcq8V7GoobZ7kZQhmZaYy5lJcnsn2
-         gpvlbLMAoKkRfa0haxZB2PU7A9s4cJCiq6cEDb6/MIz2Li1nN9Q0eGRARUVL6uMg3m4R
-         afEMb79GfBep9zdoujII6sKbb4lsDeACF/DKW0GSX7PnwS1bd1snYeSiwu0XSfZG/+DF
-         kzgS+y31/aKJyVfzysUwhNpbl74+5cpRFhHJQQVukeBo9Mr03iDjYjc2OMOZhfEeSG0l
-         1FPLU8M8/9UpsshDR5jkeGTXz6dbMCdWXTXpUgMoyjtX/8QIxPnGoyh91hrjIzeCYhyl
-         x7JA==
+        bh=TC1iXnC2LRkY8cITgck02AVxsEa5TTnjDjoLDfLLdjw=;
+        b=T0LlQEbLWqv9zLYwb6tCWSEb4tdZeFgl4UeqQxbBbik38D8Hvs7oj5guSdiyVRmc4q
+         U0fZhtkbENHycpkwgx7orD89P/92lyVNIuUi62cVAdt2RJS0dKOJiliXQkGhjywxvgcZ
+         FpaejLOsJK05RDDbAZz8i5QWVo0VMSBEgGoNg4DUZk+ulDsfFBJrGD2iJSnTz0HYynDf
+         oTke4Z0otYGXvnaY+jFhnmQUn4p+XPEQKjzIFTkA5ezOX0VL3qLJ/hnZCW5gaFgeUA00
+         cOYsWnOUPrpXj0UN2UrYpKIU6MPhAulxAAzUSMvaaWPeVe/ZZ1UH8GQxoba0qQUOiXPh
+         F2lQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695367393; x=1695972193;
+        d=1e100.net; s=20230601; t=1695368060; x=1695972860;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=owO2G7+kHzi3Lu12CSVESua2coGOVBHM+2DJNBB5XPg=;
-        b=Y4rPQHz+BYeaILeTjvpqJZ7XiznQS27n3GcQipkHUxXvn2tGKgYbL/+wWd0jRcvJfu
-         ReyiysaRcNzKaMpYLZBA+Nn7oKHB1/j2jN373YXlP2NGybYj1c0NNRBMVY3IpY30Dy6v
-         E2z5tWOyazOp0qkhUOGWf5CSV6LgZY2gpxWvLLy2oKcenmaP+pyYVSttauuqnFUsRlMB
-         2xmugHAGKqaiw6noohOqbSU57Wik6Lm/tIjcJeLM6QNnh6cdqHxACbKWscC9frkFJZZ7
-         9rGs8x5tDDnkSlP8Y0QH3UGDp1iUmM+96xl0VyX5qWK8CgeF/1yoEYkjajlOGpOsMsoz
-         Oc5w==
-X-Gm-Message-State: AOJu0YxeLkHVo4DNG0Jw/SoRwnQpqfiT5he2W3oabDTE2KyC0PB7yQDa
-        c4W1ZrO5ncTR2xciARa1r3XulVhtgrYC7CgCutmC7Q==
-X-Google-Smtp-Source: AGHT+IFz5zZGP/nGmJ+xRB+rNqOo286jPo4uJd4tx+TcIcPVPH2xOKdKGl6PWwguEl8KbtuxDzA/VcUtVBxW/0kPDJg=
-X-Received: by 2002:a05:600c:319c:b0:405:320a:44f9 with SMTP id
- s28-20020a05600c319c00b00405320a44f9mr28714wmp.5.1695367393295; Fri, 22 Sep
- 2023 00:23:13 -0700 (PDT)
+        bh=TC1iXnC2LRkY8cITgck02AVxsEa5TTnjDjoLDfLLdjw=;
+        b=N0m04BnePPFTbVt6+p1BqkvTieIkuszzN+OqK8CFf7ufRRRZRRQ1oDNNTYx+P1Vj0u
+         o3vfcbpIpaGHLhIlQYYT+BTxj5X53sJ0VtfaP+CMMvMW4aUjUPDtPrhHVYRtoDlkHie7
+         DiGf+ysuIBUs6oEMPqA0XXV3KyLfwBfyH3Y2c1dZyd3bDVjKXNd5Cs89y2Vc2ZVvT1Yo
+         N2MkZahh89jqb6i1wkMfwsFo2dLm5SHDZm/jEDVybOzoODnCgXIcGgnIbPg33dzcWWbE
+         ROZgLAtzjZWzI2Ko6oOwqZVGV+Ubdey3vWXxCtP35XV9qUAM4TQ35yGsRiig9/nOeRU5
+         evYA==
+X-Gm-Message-State: AOJu0Yw3wvLRzgQirVj/X2EdtdFO+/t5oPQjBP96efh0pl/0pCLkCiC6
+        O38sgIPzkkLltAjnNekId1aJ91BWfDz7JfoWscEPHw==
+X-Google-Smtp-Source: AGHT+IGVk5kIadHrHu5Xf1/ktxH5y32cCzo14YZrEU0ieYNKZCYjAepS7v5ARMiKj1XVTM11JChFvLgddyNFDwrcMWQ=
+X-Received: by 2002:a05:600c:2e4c:b0:404:7462:1f87 with SMTP id
+ q12-20020a05600c2e4c00b0040474621f87mr46121wmf.6.1695368060546; Fri, 22 Sep
+ 2023 00:34:20 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230921081810.3584078-1-make_ruc2021@163.com>
-In-Reply-To: <20230921081810.3584078-1-make_ruc2021@163.com>
+References: <20230921014008.3887257-1-ruanjinjie@huawei.com> <20230921014008.3887257-2-ruanjinjie@huawei.com>
+In-Reply-To: <20230921014008.3887257-2-ruanjinjie@huawei.com>
 From:   David Gow <davidgow@google.com>
-Date:   Fri, 22 Sep 2023 15:22:58 +0800
-Message-ID: <CABVgOS=suPzTKOnGvPKzpA4LnJGkXBjwD0_xEN-r80-o=pT3_w@mail.gmail.com>
-Subject: Re: [PATCH] list: test: potential dereference of null pointer
-To:     Ma Ke <make_ruc2021@163.com>
-Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
+Date:   Fri, 22 Sep 2023 15:34:06 +0800
+Message-ID: <CABVgOS=TnPJy82Dz35izRiApa=Rbh4aS+fxgnGnPOUQgpg96qw@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] kunit: Fix missed memory release in kunit_free_suite_set()
+To:     Jinjie Ruan <ruanjinjie@huawei.com>
+Cc:     brendan.higgins@linux.dev, skhan@linuxfoundation.org,
+        dlatypov@google.com, rmoar@google.com,
+        janusz.krzysztofik@linux.intel.com,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000044df3a0605ed7bf9"
+        boundary="00000000000009b4600605eda3b0"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -69,72 +71,86 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---00000000000044df3a0605ed7bf9
+--00000000000009b4600605eda3b0
 Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 21 Sept 2023 at 16:18, Ma Ke <make_ruc2021@163.com> wrote:
+On Thu, 21 Sept 2023 at 09:41, 'Jinjie Ruan' via KUnit Development
+<kunit-dev@googlegroups.com> wrote:
 >
-> To avoid the failure of alloc, we could check the return value of
-> kmalloc() and kzalloc().
+> modprobe cpumask_kunit and rmmod cpumask_kunit, kmemleak detect
+> a suspected memory leak as below.
 >
-> Signed-off-by: Ma Ke <make_ruc2021@163.com>
+> If kunit_filter_suites() in kunit_module_init() succeeds, the
+> suite_set.start will not be NULL and the kunit_free_suite_set() in
+> kunit_module_exit() should free all the memory which has not
+> been freed. However the test_cases in suites is left out.
+>
+> unreferenced object 0xffff54ac47e83200 (size 512):
+>   comm "modprobe", pid 592, jiffies 4294913238 (age 1367.612s)
+>   hex dump (first 32 bytes):
+>     84 13 1a f0 d3 b6 ff ff 30 68 1a f0 d3 b6 ff ff  ........0h......
+>     00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
+>   backtrace:
+>     [<000000008dec63a2>] slab_post_alloc_hook+0xb8/0x368
+>     [<00000000ec280d8e>] __kmem_cache_alloc_node+0x174/0x290
+>     [<00000000896c7740>] __kmalloc+0x60/0x2c0
+>     [<000000007a50fa06>] kunit_filter_suites+0x254/0x5b8
+>     [<0000000078cc98e2>] kunit_module_notify+0xf4/0x240
+>     [<0000000033cea952>] notifier_call_chain+0x98/0x17c
+>     [<00000000973d05cc>] notifier_call_chain_robust+0x4c/0xa4
+>     [<000000005f95895f>] blocking_notifier_call_chain_robust+0x4c/0x74
+>     [<0000000048e36fa7>] load_module+0x1a2c/0x1c40
+>     [<0000000004eb8a91>] init_module_from_file+0x94/0xcc
+>     [<0000000037dbba28>] idempotent_init_module+0x184/0x278
+>     [<00000000161b75cb>] __arm64_sys_finit_module+0x68/0xa8
+>     [<000000006dc1669b>] invoke_syscall+0x44/0x100
+>     [<00000000fa87e304>] el0_svc_common.constprop.1+0x68/0xe0
+>     [<000000009d8ad866>] do_el0_svc+0x1c/0x28
+>     [<000000005b83c607>] el0_svc+0x3c/0xc4
+>
+> Fixes: e5857d396f35 ("kunit: flatten kunit_suite*** to kunit_suite** in .kunit_test_suites")
+> Fixes: b67abaad4d25 ("kunit: Allow kunit test modules to use test filtering")
+> Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
+> Reviewed-by: Rae Moar <rmoar@google.com>
+> ---
+> v2:
+> - Add Reviewed-by.
 > ---
 
-Fair enough, though I'd want the test to fail in this case (or, at the
-very least, be skipped).
+Looks good to me.
 
-Could we use KUNIT_ASSERT_NOT_NULL() here?
+Reviewed-by: David Gow <davidgow@google.com>
 
-Furthermore, there are a few bugs in the patch, see below.
 
-Cheers,
--- David
 
->  lib/list-test.c | 5 +++++
->  1 file changed, 5 insertions(+)
+>  lib/kunit/executor.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
 >
-> diff --git a/lib/list-test.c b/lib/list-test.c
-> index 0cc27de9cec8..9f82cac3a822 100644
-> --- a/lib/list-test.c
-> +++ b/lib/list-test.c
-> @@ -27,9 +27,14 @@ static void list_test_list_init(struct kunit *test)
->         INIT_LIST_HEAD(&list2);
+> diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
+> index a6348489d45f..a037a46fae5e 100644
+> --- a/lib/kunit/executor.c
+> +++ b/lib/kunit/executor.c
+> @@ -137,8 +137,10 @@ void kunit_free_suite_set(struct kunit_suite_set suite_set)
+>  {
+>         struct kunit_suite * const *suites;
 >
->         list4 = kzalloc(sizeof(*list4), GFP_KERNEL | __GFP_NOFAIL);
-> +       if (!list4)
-> +               return;
-
-Instead, let's use:
-KUNIT_ASSERT_NOT_NULL(test, list4)
-
->         INIT_LIST_HEAD(list4);
->
->         list5 = kmalloc(sizeof(*list5), GFP_KERNEL | __GFP_NOFAIL);
-> +       if (!list5)
-
-Shouldn't this be in {}s? We don't want to return unconditionally.
-
-> +               kfree(list5);
-
-We shouldn't free a NULL pointer. Should this be kfree(list4)?
-
-Either way, maybe we should swap the allocations out for
-kunit_kzalloc(), which will automatically free everything on test
-exit.
-
-> +               return;
-
-Again, let's use KUNIT_ASSERT_NOT_NULL() here. Or at the very least,
-call KUNIT_FAIL() to make sure we're noting the test has failed.
-
->         memset(list5, 0xFF, sizeof(*list5));
->         INIT_LIST_HEAD(list5);
+> -       for (suites = suite_set.start; suites < suite_set.end; suites++)
+> +       for (suites = suite_set.start; suites < suite_set.end; suites++) {
+> +               kfree((*suites)->test_cases);
+>                 kfree(*suites);
+> +       }
+>         kfree(suite_set.start);
+>  }
 >
 > --
-> 2.37.2
+> 2.34.1
 >
+> --
+> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20230921014008.3887257-2-ruanjinjie%40huawei.com.
 
---00000000000044df3a0605ed7bf9
+--00000000000009b4600605eda3b0
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -201,14 +217,14 @@ impZAng7ccvvK09K3ZuhwTIxJMsPXCZYsrXWORTw5sczRAP6XvKbPBJnsJoSTe5dFBPBHOQJOGhU
 qWfEfWnWMJPF3LxSGLpLFQXO3RwQqmxv08avwXfVPouh1xuB3FX7rpDabT8YDhu9JgIZkLEKko7L
 yQt6zWwng7k8YF/jGbiAta6VMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBS
-Woxabsr4542V9QQ2Fbwp/ssOezSIAji9abbM+Nb6gDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzA5MjIwNzIzMTNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDg
+R9pYqwzyrWZ39YV740wL3VHueF1i8h7f+0KvUK7aYjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzA5MjIwNzM0MjBaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAbHes8ZzXKqAQJL6NIwn9
-f9DQ5itTnmra+CtKZGP8nf+SiQpaueuaukbiDeMElKzXklHqTFcIZXZhz/uxN9aplJbEhV/1eOkU
-eTIrTniQAvSGDUgn1C3ON0KTAaJgSnF86KpRRLl2zKqZlzltEg5zocVZL1GTWFE83ku7UkZsoIcj
-yvD8WNBoWoZht6p7PWGEbokS9HvQKNjhHhV5fUWMfeFsqYRexATs0FsOue+ni0L3Lf7P8dOYYOsX
-4fq1bs9db31polgjZi3ROHtnp9962gqNOsRqY4BIPo83IIH7nqbwRQ7Ch4c7yEsTermYp11jbgHt
-lDOMXcsd8j59+nB6uw==
---00000000000044df3a0605ed7bf9--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAcohjQ+H+l+AqmaJMjZRZ
+9kiZ4/kPCL11Vj1M54xgdZeoYURTUEhPO550hylZqcMYA1R84mTB5+cRueWCkaH2HF886P+6vIua
+PWMinls6PlwLr7kriA3aciKQx/w7LggM/P9CEO28rBX1zquYiUjU8ASIXqzzwF+uoJvDyMBzu7Rv
+jJgwVNxBMryt1TYVi5ohLPqEqNoKUG4woX7iv0FCKtRVgIPARbRtakyBgAz2uSpQz14bZUWh0pyA
+TDAtWL6Wj+imkABaP0CS1T3hcdytJPXJ+e5HulMm9hicDjLW3wZV8nzQxHckP8A9Waob5p76lRXt
+Uyn0vMq8vrmswiGCmQ==
+--00000000000009b4600605eda3b0--
