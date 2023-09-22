@@ -2,64 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC1627AAA55
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Sep 2023 09:34:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FB0C7AAA56
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Sep 2023 09:34:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230220AbjIVHeg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 22 Sep 2023 03:34:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60020 "EHLO
+        id S230508AbjIVHeh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 22 Sep 2023 03:34:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230508AbjIVHed (ORCPT
+        with ESMTP id S231262AbjIVHeg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 22 Sep 2023 03:34:33 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D0ED180
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Sep 2023 00:34:27 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-51e24210395so13043a12.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Sep 2023 00:34:27 -0700 (PDT)
+        Fri, 22 Sep 2023 03:34:36 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DABD192
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 Sep 2023 00:34:30 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-405290ab4b6so83995e9.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 Sep 2023 00:34:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695368066; x=1695972866; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1695368068; x=1695972868; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=KGduRXZTnPL7Sd3nUxvbQ1+MAp8VdRl2rSIT5ArrC8E=;
-        b=Y2heZ4rfDaxEmpwg+pHsrN3xtAvi2zba3YRoVl7MwWcuJt3QuhU9EVlGeGFyJFFkmY
-         vldNQ6He/QG3RpH6OplXWNO17CMeo+SYRaeTbqCElcTAc6x98PtVetdZnAsDPRnVp4QR
-         6D427NikWDc+MDooqKPbMWLqWt5E5VOpLniq3ULFrrYzL3GR/IyFPo+bivabs+o/JmYc
-         4Jui2PMirDMeRx6ibGAVJl7Ez1TDdDMX34IT6cbktjkPSD2W0KeM8YBLOcJbbQcPBfpX
-         xBhEAcpabGkWy0tSJwiu3IZrF4lQYU2/QeLRtNDhkqbhS9dOQcFwduTbzG2c3dYiptxi
-         igOQ==
+        bh=lvsfe1A7ySnA+ZmJ7RyFE79ZzBP8RvVu/wViGAKAYuE=;
+        b=1bXjsM/YC/bOcEPOCZzvVUf9KvN6rtwtVLtkC8fmo7at3tK1rme7jchHUM+XxG+KjO
+         tk4qBQWdiVNDhMsuXwPa82Qx4fvk94qLUAHNZpNv60jtVOKKf1G4f73ztUUH2T2s/fJo
+         2xTADLDG2mr2lVkjfIVNCTii4JFgGQ+3Ho2Zcet1i3X3HH5qobunhKbu1VLdGPNqyKJN
+         YXdxDjed0PzzgAWBp38XLLihBwHeDwAE2Cs5/0O0G6cd3AmmN1jTlsGlgB0RIoAUmrIf
+         Nw7gLfepTp7mReBFwqnw31lHuj6t+jElAdWse9GH1GI/WQdeacSWIQXkAMzu1XwWzuPA
+         SeNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695368066; x=1695972866;
+        d=1e100.net; s=20230601; t=1695368068; x=1695972868;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=KGduRXZTnPL7Sd3nUxvbQ1+MAp8VdRl2rSIT5ArrC8E=;
-        b=eSzYaa9E0euMDXknqJu1gGpMo47gMXuAG9gDGWS2Zn9XOIrYkebXFxB1PfWOqb1TAZ
-         1atbIw9o1gk8/9OYFTSlH76epgSrJ6U3MiHSOtwNKYxaaY+6IhFKmkkg9EQeGo3SI3Bq
-         kOl/k43EmtPkcl4jtEVpWs+yrVuCzdb74sAOLkuB+OBRrwRGgzacbZBYodXWDGXri6ei
-         5POI+OkDo1LECTzJpdKjEeUtfI/EnQ4BuHUmVFixXn6FmigRAibpVNQb+Qi1raOTm3il
-         0ZODWCwZzjnRXGQDZXbCtFMprjslniXBQTxfmVGRll7n08VCdQgh+z+0S0GA7l4V8zs3
-         diAg==
-X-Gm-Message-State: AOJu0YxTkwjVqYelBq3QxnkFUzC+E8kOF1PvrTg0m8Lvr7x8ec4fG2B1
-        um72Ll0/7aKEJws9jvXNpNMFI5y/brGGlTQxQW4EQw==
-X-Google-Smtp-Source: AGHT+IEC2pWLl+btm2Q6q4sudsAD9XthBT2dOrjuNTeaLFJ01Wg2X08vRVvWL8CRe7H6dLOJFf1oIrcYwRLoKzpjjgw=
-X-Received: by 2002:a50:9fa5:0:b0:523:bdc9:48a9 with SMTP id
- c34-20020a509fa5000000b00523bdc948a9mr52097edf.0.1695368065816; Fri, 22 Sep
- 2023 00:34:25 -0700 (PDT)
+        bh=lvsfe1A7ySnA+ZmJ7RyFE79ZzBP8RvVu/wViGAKAYuE=;
+        b=XPFI4QX9LEQ3JKxaAZszOF+qRPyS9sBYxvgR52mgJpwmcEFrAYljQsa0YhvurFBcXW
+         kuqRBb8Sj7lH/Ftdt6ckmLkw31cBKgq2G+EbUuFEozF5/A3vTpypafwX7Nw/ieNzraPU
+         laPavCViLEjUZUTrMQRHFqYsK75vPYmtqadjrgthM0jCmyCNt7+tR3BEZXtb8LdstOrm
+         EeELIFfcDu44nztGZRGJfmncoTT3DwhN+I/ZxdE4C9LwlmQTADPE/kV2+ZWdG84Qbcz7
+         xwbPu7PeTGowiehu6gdfTUHP2dwsYp5LUIAe6IAgDFNs9a3J05HIfRCWf5n2zhSWHI34
+         tclg==
+X-Gm-Message-State: AOJu0YxUyxf4W+VNEIimJUgGq3XxiumhphVAkSoUZJGonVkVDvfPKNMV
+        1nRJp0EDIBFMGIABGpkMini9u8Hli0bWQFBvAMTDug==
+X-Google-Smtp-Source: AGHT+IGMDJaRkn0zJUKADKvdjfROCOtZVFSNnNgeysSV5LX7H2/C91eCcqtRMUdIulWlD85MNp/hYjaf3MNfnPVZR30=
+X-Received: by 2002:a05:600c:2e4c:b0:404:7462:1f87 with SMTP id
+ q12-20020a05600c2e4c00b0040474621f87mr46123wmf.6.1695368068364; Fri, 22 Sep
+ 2023 00:34:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230921014008.3887257-1-ruanjinjie@huawei.com> <20230921014008.3887257-3-ruanjinjie@huawei.com>
-In-Reply-To: <20230921014008.3887257-3-ruanjinjie@huawei.com>
+References: <20230921014008.3887257-1-ruanjinjie@huawei.com> <20230921014008.3887257-4-ruanjinjie@huawei.com>
+In-Reply-To: <20230921014008.3887257-4-ruanjinjie@huawei.com>
 From:   David Gow <davidgow@google.com>
-Date:   Fri, 22 Sep 2023 15:34:12 +0800
-Message-ID: <CABVgOSn_jGietC1d54qEwy7vmNSPQQavjE9Fo1fnH9i21WCYbw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] kunit: Fix the wrong kfree of copy for kunit_filter_suites()
+Date:   Fri, 22 Sep 2023 15:34:17 +0800
+Message-ID: <CABVgOSkX7fM5aW7_5qvx+pSEfWztrhF+j=-AgSb+Mv2+Wb1OaQ@mail.gmail.com>
+Subject: Re: [PATCH v2 3/4] kunit: Fix possible memory leak in kunit_filter_suites()
 To:     Jinjie Ruan <ruanjinjie@huawei.com>
 Cc:     brendan.higgins@linux.dev, skhan@linuxfoundation.org,
         dlatypov@google.com, rmoar@google.com,
         janusz.krzysztofik@linux.intel.com,
         linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000058ff420605eda378"
+        boundary="0000000000008204950605eda31f"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -71,17 +71,23 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---00000000000058ff420605eda378
+--0000000000008204950605eda31f
 Content-Type: text/plain; charset="UTF-8"
 
 On Thu, 21 Sept 2023 at 09:41, 'Jinjie Ruan' via KUnit Development
 <kunit-dev@googlegroups.com> wrote:
 >
 > If the outer layer for loop is iterated more than once and it fails not
-> in the first iteration, the copy pointer has been moved. So it should free
-> the original copy's backup copy_start.
+> in the first iteration, the filtered_suite and filtered_suite->test_cases
+> allocated in the last kunit_filter_attr_tests() in last inner for loop
+> is leaked.
 >
-> Fixes: abbf73816b6f ("kunit: fix possible memory leak in kunit_filter_suites()")
+> So add a new free_filtered_suite err label and free the filtered_suite
+> and filtered_suite->test_cases so far. And change kmalloc_array of copy
+> to kcalloc to Clear the copy to make the kfree safe.
+>
+> Fixes: 5d31f71efcb6 ("kunit: add kunit.filter_glob cmdline option to filter suites")
+> Fixes: 529534e8cba3 ("kunit: Add ability to filter attributes")
 > Signed-off-by: Jinjie Ruan <ruanjinjie@huawei.com>
 > Reviewed-by: Rae Moar <rmoar@google.com>
 > ---
@@ -89,39 +95,96 @@ On Thu, 21 Sept 2023 at 09:41, 'Jinjie Ruan' via KUnit Development
 > - Add Reviewed-by.
 > ---
 
-Nice catch. Thanks!
+This looks good to me, though I admit that this code is starting to
+get a bit too complicated...
+
+A few thoughts below, but they're more notes-to-self for a future
+refactoring than something I think this patch needs.
 
 Reviewed-by: David Gow <davidgow@google.com>
 
-Cheers,
 -- David
 
-
->  lib/kunit/executor.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  lib/kunit/executor.c | 17 +++++++++++++----
+>  1 file changed, 13 insertions(+), 4 deletions(-)
 >
 > diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
-> index a037a46fae5e..9358ed2df839 100644
+> index 9358ed2df839..1236b3cd2fbb 100644
 > --- a/lib/kunit/executor.c
 > +++ b/lib/kunit/executor.c
-> @@ -243,7 +243,7 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
+> @@ -157,10 +157,11 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
+>         struct kunit_suite_set filtered = {NULL, NULL};
+>         struct kunit_glob_filter parsed_glob;
+>         struct kunit_attr_filter *parsed_filters = NULL;
+> +       struct kunit_suite * const *suites;
 >
->  free_copy:
->         if (*err)
-> -               kfree(copy);
-> +               kfree(copy_start);
+>         const size_t max = suite_set->end - suite_set->start;
 >
->         return filtered;
->  }
+> -       copy = kmalloc_array(max, sizeof(*filtered.start), GFP_KERNEL);
+> +       copy = kcalloc(max, sizeof(*filtered.start), GFP_KERNEL);
+>         if (!copy) { /* won't be able to run anything, return an empty set */
+>                 return filtered;
+>         }
+> @@ -195,7 +196,7 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
+>                                         parsed_glob.test_glob);
+>                         if (IS_ERR(filtered_suite)) {
+>                                 *err = PTR_ERR(filtered_suite);
+> -                               goto free_parsed_filters;
+> +                               goto free_filtered_suite;
+>                         }
+>                 }
+>                 if (filter_count > 0 && parsed_filters != NULL) {
+> @@ -212,11 +213,11 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
+>                                 filtered_suite = new_filtered_suite;
+>
+>                                 if (*err)
+> -                                       goto free_parsed_filters;
+> +                                       goto free_filtered_suite;
+>
+>                                 if (IS_ERR(filtered_suite)) {
+>                                         *err = PTR_ERR(filtered_suite);
+> -                                       goto free_parsed_filters;
+> +                                       goto free_filtered_suite;
+>                                 }
+>                                 if (!filtered_suite)
+>                                         break;
+> @@ -231,6 +232,14 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
+>         filtered.start = copy_start;
+>         filtered.end = copy;
+
+Do we really need both filtered.start and copy_start, and filtered.end
+/ copy? The only case where they're different would be when an error
+occurs, and it should be easy to simply reset them to NULL then,
+anyway.
+
+>
+> +free_filtered_suite:
+> +       if (*err) {
+> +               for (suites = copy_start; suites < copy; suites++) {
+> +                       kfree((*suites)->test_cases);
+> +                       kfree(*suites);
+> +               }
+
+We possibly should set filtered = {NULL, NULL} here. It's not actually
+possible for them to be non-NULL at this point, so it is redundant,
+but it's not easy to tell (and it looks like this could be returning a
+freed pointer here, even though it's not).
+
+
+> +       }
+> +
+>  free_parsed_filters:
+>         if (filter_count)
+>                 kfree(parsed_filters);
 > --
 > 2.34.1
 >
 > --
 > You received this message because you are subscribed to the Google Groups "KUnit Development" group.
 > To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20230921014008.3887257-3-ruanjinjie%40huawei.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20230921014008.3887257-4-ruanjinjie%40huawei.com.
 
---00000000000058ff420605eda378
+--0000000000008204950605eda31f
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -188,14 +251,14 @@ impZAng7ccvvK09K3ZuhwTIxJMsPXCZYsrXWORTw5sczRAP6XvKbPBJnsJoSTe5dFBPBHOQJOGhU
 qWfEfWnWMJPF3LxSGLpLFQXO3RwQqmxv08avwXfVPouh1xuB3FX7rpDabT8YDhu9JgIZkLEKko7L
 yQt6zWwng7k8YF/jGbiAta6VMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCB
-E7+odDpz9xlX59Jpu21M0ndlVJ+ChVkNqRUI/NCVnjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzA5MjIwNzM0MjZaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBo
+sEln7m34GRqIPR9Tc/ibTrnql2QdG7mh3IzIW2e6xzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzA5MjIwNzM0MjhaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAmrXpDRyLJ9Y+3l2C9SCt
-mjFJMG7B1SU5eBkYliJek4sYdhCH5ka508WQFPLyX2M+8H+ZnccfGM2n1zZ4UPbo7ELbGQ0G8dTe
-V/Er9LbmpNMeLGl5X5WFIdsjxBUF0SuMelczhjZqPr0ROvvXpiKl/i5iwQs6MJw6N+/03LTAoM13
-gR3byqCOxfmvlimIORTooEJWXyTx6I4FLRWDysbKJ4LjGf6gMx9P9aAV+5gBfAtCw9GSBAEIbFfp
-QQ8JUN6qgxgjffaowY6SYvYRXx8LnTJxebNJETQYncFoIG6l2KRnCAEiCVcbkmc8a0MlyS9PI/SI
-WQNOn3bDBZuEimcmag==
---00000000000058ff420605eda378--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEATdSREeWyakid33ss7kUP
+bZ3lDEsp+q4NpNu7I99z2WUAKEr1gyZswC6lD0NLthcstS3SZHhgpIbCdNJggeFV1gwztY6zVYkX
+Kh9PTse8v43wj8O8G4sTT981GW7seS/95VSWI/7gtKzBew97xb/SL8z5Yh6wLFHO9CTv0mWbDE2W
+II9ZVPV63pZsdwLs35eV0vbbubbZ/eTmFu9VDKrQvKsYp3eT6V2DsuUXOwGW2lQPcRlUy4Sn/zTQ
+wU59keZ1HV8q7BgMtYG9vUg6nMPrdP0+RZwqZkvhaoQy6jyE+/SLltfIzhw4jGcz1LMSC4tNJkmX
++OwWWVW6SB6CRfeLfA==
+--0000000000008204950605eda31f--
