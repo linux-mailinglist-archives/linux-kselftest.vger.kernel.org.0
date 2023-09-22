@@ -2,62 +2,65 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 490597AAF92
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Sep 2023 12:33:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED7BF7AB0C3
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Sep 2023 13:31:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233316AbjIVKdM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 22 Sep 2023 06:33:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46084 "EHLO
+        id S233689AbjIVLbf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 22 Sep 2023 07:31:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233329AbjIVKdK (ORCPT
+        with ESMTP id S233654AbjIVLbf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 22 Sep 2023 06:33:10 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9344180;
-        Fri, 22 Sep 2023 03:33:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695378784; x=1726914784;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=SyfnY6W14HGgwMDg7wokjZ8/hcSfGXMKBGRrnXyYHJw=;
-  b=n7uSUCWVK6dJt2g0d0cTHbckbpiS7V3yU/BcnVpG/LN1ufcd0Vb28nOF
-   OGj6mi/35xj3kJcNLz0HHYZ3/2+ZlPigmwprxd6Ih6l1920W/LmEhLmIl
-   rXuhSAn0MURz2fDRw7lPTk5+PfjZkVk7cWkIfhBiZGdJzuLoc2z/pVrDc
-   KKoCx5X4IN5vOi/2wG7bA/eIiRlGs3ZfqJ4nOmyojQClR6Y/goY6kmSB8
-   9Q1uFR+hAExU66weJVzT0NjVYDWZOe+ZR2iIEYK6aoa6nTfV7fcr4qcVN
-   gpw1W9xGGj6/uAQpIXlPMS8/T/Uek8qT6agrAd4fEsyC80sIz/v0BXo2i
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10840"; a="380695477"
-X-IronPort-AV: E=Sophos;i="6.03,167,1694761200"; 
-   d="scan'208";a="380695477"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2023 03:30:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10840"; a="921110159"
-X-IronPort-AV: E=Sophos;i="6.03,167,1694761200"; 
-   d="scan'208";a="921110159"
-Received: from rblanarx-mobl.ger.corp.intel.com ([10.252.52.48])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Sep 2023 03:30:49 -0700
-Date:   Fri, 22 Sep 2023 13:30:46 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-cc:     Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] selftests/resctrl: Fix schemata write error
- check
-In-Reply-To: <5e17ed39ffb8d6bd530c057aa04e3ffb997573a9.1695369120.git.maciej.wieczor-retman@intel.com>
-Message-ID: <8cae9816-15a7-b9df-7f41-9ea4a125c0b7@linux.intel.com>
-References: <cover.1695369120.git.maciej.wieczor-retman@intel.com> <5e17ed39ffb8d6bd530c057aa04e3ffb997573a9.1695369120.git.maciej.wieczor-retman@intel.com>
+        Fri, 22 Sep 2023 07:31:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A2C118F
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 Sep 2023 04:30:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1695382249;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=Jztq6ZSW+DFjK0TGPvxI4443RijcynGeDENgItasJng=;
+        b=Urq8J/D/AJPt4skhZDfZIUWfZ62HFO+8fphtT9O6cEasZ2o8HISuwVmXXGAWMDERL9favM
+        50lBNmUeV/+N9xHhVLqzPpZqzSiOOMkva6lmpL/5UToFcxFazBSb0coL9cp7cVvXXgTiAi
+        83ZcvM7ri3B8ytsi/9xVHLTUjXrEwiU=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-131-AXOT6qMjPBKf6kL2RW6i-A-1; Fri, 22 Sep 2023 07:30:44 -0400
+X-MC-Unique: AXOT6qMjPBKf6kL2RW6i-A-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 42C7A811E86;
+        Fri, 22 Sep 2023 11:30:43 +0000 (UTC)
+Received: from warthog.procyon.org.com (unknown [10.42.28.216])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 5B2A020268D6;
+        Fri, 22 Sep 2023 11:30:40 +0000 (UTC)
+From:   David Howells <dhowells@redhat.com>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     David Howells <dhowells@redhat.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>,
+        Christian Brauner <christian@brauner.io>,
+        David Laight <David.Laight@ACULAB.COM>,
+        Matthew Wilcox <willy@infradead.org>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        David Gow <davidgow@google.com>, linux-fsdevel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-mm@kvack.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 00/10] iov_iter: kunit: Cleanup, abstraction and more tests
+Date:   Fri, 22 Sep 2023 12:30:28 +0100
+Message-ID: <20230922113038.1135236-1-dhowells@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323329-428847694-1695378428=:1840"
-Content-ID: <5f8cfbd2-7587-81d-9d96-b45675339813@linux.intel.com>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,127 +68,100 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Hi Jens,
 
---8323329-428847694-1695378428=:1840
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-Content-ID: <d7393897-f1d0-7a4f-40c8-33cc47f7d0a7@linux.intel.com>
+Can you consider taking this through the block tree?
 
-On Fri, 22 Sep 2023, Maciej Wieczor-Retman wrote:
+These patches make some changes to the kunit tests previously added for
+iov_iter testing, in particular adding testing of UBUF/IOVEC iterators and
+some benchmarking:
 
-> Writing bitmasks to the schemata can fail when the bitmask doesn't
-> adhere to constraints defined by what a particular CPU supports.
-> Some example of constraints are max length or having contiguous bits.
-> The driver should properly return errors when any rule concerning
-> bitmask format is broken.
-> 
-> Resctrl FS returns error codes from fprintf() only when fclose() is
-> called. Current error checking scheme allows invalid bitmasks to be
-> written into schemata file and the selftest doesn't notice because the
-> fclose() error code isn't checked.
-> 
-> Substitute fopen(), flose() and fprintf() with open(), close() and
-> write() to avoid error code buffering between fprintf() and fclose().
-> 
-> Remove newline character from the schema string after writing it to
-> the schemata file so it prints correctly before function return.
-> 
-> Pass the string generated with strerror() to the "reason" buffer so
-> the error message is more verbose. Extend "reason" buffer so it can hold
-> longer messages.
-> 
-> Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-> ---
-> Changelog v4:
-> - Unify error checking between open() and write(). (Reinette)
-> - Add fcntl.h for glibc backward compatiblitiy. (Reinette)
-> 
-> Changelog v3:
-> - Rename fp to fd. (Ilpo)
-> - Remove strlen, strcspn and just use the snprintf value instead. (Ilpo)
-> 
-> Changelog v2:
-> - Rewrite patch message.
-> - Double "reason" buffer size to fit longer error explanation.
-> - Redo file interactions with syscalls instead of stdio functions.
-> 
->  tools/testing/selftests/resctrl/resctrlfs.c | 30 ++++++++++++---------
->  1 file changed, 17 insertions(+), 13 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-> index 3a8111362d26..edc8fc6e44b0 100644
-> --- a/tools/testing/selftests/resctrl/resctrlfs.c
-> +++ b/tools/testing/selftests/resctrl/resctrlfs.c
-> @@ -8,6 +8,7 @@
->   *    Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>,
->   *    Fenghua Yu <fenghua.yu@intel.com>
->   */
-> +#include <fcntl.h>
->  #include <limits.h>
->  
->  #include "resctrl.h"
-> @@ -490,9 +491,8 @@ int write_bm_pid_to_resctrl(pid_t bm_pid, char *ctrlgrp, char *mongrp,
->   */
->  int write_schemata(char *ctrlgrp, char *schemata, int cpu_no, char *resctrl_val)
->  {
-> -	char controlgroup[1024], schema[1024], reason[64];
-> -	int resource_id, ret = 0;
-> -	FILE *fp;
-> +	char controlgroup[1024], schema[1024], reason[128];
-> +	int resource_id, fd, schema_len = -1, ret = 0;
->
->  	if (strncmp(resctrl_val, MBA_STR, sizeof(MBA_STR)) &&
->  	    strncmp(resctrl_val, MBM_STR, sizeof(MBM_STR)) &&
-> @@ -520,27 +520,31 @@ int write_schemata(char *ctrlgrp, char *schemata, int cpu_no, char *resctrl_val)
->  
->  	if (!strncmp(resctrl_val, CAT_STR, sizeof(CAT_STR)) ||
->  	    !strncmp(resctrl_val, CMT_STR, sizeof(CMT_STR)))
-> -		sprintf(schema, "%s%d%c%s", "L3:", resource_id, '=', schemata);
-> +		schema_len = snprintf(schema, sizeof(schema), "%s%d%c%s\n",
-> +				      "L3:", resource_id, '=', schemata);
->  	if (!strncmp(resctrl_val, MBA_STR, sizeof(MBA_STR)) ||
->  	    !strncmp(resctrl_val, MBM_STR, sizeof(MBM_STR)))
-> -		sprintf(schema, "%s%d%c%s", "MB:", resource_id, '=', schemata);
-> +		schema_len = snprintf(schema, sizeof(schema), "%s%d%c%s\n",
-> +				      "MB:", resource_id, '=', schemata);
->  
-> -	fp = fopen(controlgroup, "w");
-> -	if (!fp) {
-> -		sprintf(reason, "Failed to open control group");
-> +	fd = open(controlgroup, O_WRONLY);
-> +	if (!fd) {
-> +		snprintf(reason, sizeof(reason),
-> +			 "open() failed : %s", strerror(errno));
->  		ret = -1;
->  
->  		goto out;
->  	}
-> -
-> -	if (fprintf(fp, "%s\n", schema) < 0) {
-> -		sprintf(reason, "Failed to write schemata in control group");
-> -		fclose(fp);
-> +	if (write(fd, schema, schema_len) < 0) {
-> +		snprintf(reason, sizeof(reason),
-> +			 "write() failed : %s", strerror(errno));
-> +		close(fd);
->  		ret = -1;
->  
->  		goto out;
->  	}
-> -	fclose(fp);
-> +	close(fd);
-> +	schema[schema_len - 1] = 0;
->  
->  out:
->  	ksft_print_msg("Write schema \"%s\" to resctrl FS%s%s\n",
-> 
+ (1) Clean up a couple of checkpatch style complaints.
 
-Thanks for fixing this.
+ (2) Consolidate some repeated bits of code into helper functions and use
+     the same struct to represent straight offset/address ranges and
+     partial page lists.
 
-Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+ (3) Add a function to set up a userspace VM, attach the VM to the kunit
+     testing thread, create an anonymous file, stuff some pages into the
+     file and map the file into the VM to act as a buffer that can be used
+     with UBUF/IOVEC iterators.
 
--- 
- i.
---8323329-428847694-1695378428=:1840--
+     I map an anonymous file with pages attached rather than using MAP_ANON
+     so that I can check the pages obtained from iov_iter_extract_pages()
+     without worrying about them changing due to swap, migrate, etc..
+
+     [?] Is this the best way to do things?  Mirroring execve, it requires
+     a number of extra core symbols to be exported.  Should this be done in
+     the core code?
+
+ (4) Add tests for copying into and out of UBUF and IOVEC iterators.
+
+ (5) Add tests for extracting pages from UBUF and IOVEC iterators.
+
+ (6) Add tests to benchmark copying 256MiB to UBUF, IOVEC, KVEC, BVEC and
+     XARRAY iterators.
+
+ (7) Add a test to bencmark copying 256MiB from an xarray that gets decanted
+     into 256-page BVEC iterators to model batching from the pagecache.
+
+ (8) Add a test to benchmark copying 256MiB through dynamically allocated
+     256-page bvecs to simulate bio construction.
+
+Example benchmarks output:
+
+	iov_kunit_benchmark_ubuf: avg 4474 uS, stddev 1340 uS
+	iov_kunit_benchmark_iovec: avg 6619 uS, stddev 23 uS
+	iov_kunit_benchmark_kvec: avg 2672 uS, stddev 14 uS
+	iov_kunit_benchmark_bvec: avg 3189 uS, stddev 19 uS
+	iov_kunit_benchmark_bvec_split: avg 3403 uS, stddev 8 uS
+	iov_kunit_benchmark_xarray: avg 3709 uS, stddev 7 uS
+
+I've pushed the patches here also:
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=iov-kunit
+
+David
+
+Changes
+=======
+ver #3)
+ - #include <linux/personality.h> to get READ_IMPLIES_EXEC.
+ - Add a test to benchmark decanting an xarray into bio_vecs.
+
+ver #2)
+ - Use MAP_ANON to make the user buffer if we don't want a list of pages.
+ - KUNIT_ASSERT_NOT_ERR_OR_NULL() doesn't like __user pointers as the
+   condition, so cast.
+ - Make the UBUF benchmark loop, doing an iterator per page so that the
+   overhead from the iterator code is not negligible.
+ - Make the KVEC benchmark use an iovec per page so that the iteration is
+   not not negligible.
+ - Switch the benchmarking to use copy_from_iter() so that only a single
+   page is needed in the userspace buffer (as it can be shared R/O), not
+   256MiB's worth.
+
+Link: https://lore.kernel.org/r/20230914221526.3153402-1-dhowells@redhat.com/ # v1
+Link: https://lore.kernel.org/r/20230920130400.203330-1-dhowells@redhat.com/ # v2
+
+David Howells (10):
+  iov_iter: Fix some checkpatch complaints in kunit tests
+  iov_iter: Consolidate some of the repeated code into helpers
+  iov_iter: Consolidate the test vector struct in the kunit tests
+  iov_iter: Consolidate bvec pattern checking
+  iov_iter: Create a function to prepare userspace VM for UBUF/IOVEC
+    tests
+  iov_iter: Add copy kunit tests for ITER_UBUF and ITER_IOVEC
+  iov_iter: Add extract kunit tests for ITER_UBUF and ITER_IOVEC
+  iov_iter: Add benchmarking kunit tests
+  iov_iter: Add kunit to benchmark decanting of xarray to bvec
+  iov_iter: Add benchmarking kunit tests for UBUF/IOVEC
+
+ arch/s390/kernel/vdso.c |    1 +
+ fs/anon_inodes.c        |    1 +
+ kernel/fork.c           |    2 +
+ lib/kunit_iov_iter.c    | 1317 +++++++++++++++++++++++++++++++++------
+ mm/mmap.c               |    1 +
+ mm/util.c               |    3 +
+ 6 files changed, 1139 insertions(+), 186 deletions(-)
+
