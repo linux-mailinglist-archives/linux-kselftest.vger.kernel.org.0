@@ -2,72 +2,69 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 863737ABD11
-	for <lists+linux-kselftest@lfdr.de>; Sat, 23 Sep 2023 03:32:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51C1E7AC405
+	for <lists+linux-kselftest@lfdr.de>; Sat, 23 Sep 2023 19:37:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231202AbjIWBcM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 22 Sep 2023 21:32:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35302 "EHLO
+        id S232027AbjIWRhF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 23 Sep 2023 13:37:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231171AbjIWBcK (ORCPT
+        with ESMTP id S231831AbjIWRhE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 22 Sep 2023 21:32:10 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7EA81AB
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Sep 2023 18:32:00 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-d81503de9c9so3978795276.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Sep 2023 18:32:00 -0700 (PDT)
+        Sat, 23 Sep 2023 13:37:04 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8431519C;
+        Sat, 23 Sep 2023 10:36:58 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1c39f2b4f5aso29766245ad.0;
+        Sat, 23 Sep 2023 10:36:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695432720; x=1696037520; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6sBdVMfMRjf51/A4FAmBdDBudgEJD7XIV0S+Rn1ebf8=;
-        b=DHDysvaQOkX+1QeT/kRjvxWEKSghwM022OG9aVVfIA1HUHjcImsI4IF+/RT6YSchjW
-         fQDyr2N2FylsXYPtG1o+DoTbmH36dC2J/hpq09BjZJ/vyAH7BfCAkWaBq66Bi+zo/x/W
-         xkXiqymmKqvkBlPMxJ6FLjQm/JAfDhpUgJUrxucLVjn5skb/7lCJ6qydVcoEMakQTvay
-         rYb+IURzuvPwyTg7c7JJoI+x1HmEbcdIvBldc1G5e773ILAkauXmf0RjlXBmtoHPVEOo
-         wQlBuequYCqx/SI8LLggkRYDcUIGFt/kDu8uZmcO18tRvQ1eU1uUgXjmLcsz0ZSZ6H8Q
-         VT2w==
+        d=gmail.com; s=20230601; t=1695490618; x=1696095418; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jlE6JLRfL48qtVwq8jA/2h0BZ48NcfrSjI1lDQ5avkE=;
+        b=UUDKUWN6eT64lnmOU3admofshJbH0x33cyjAFmu3qr4uF528zwtB7P2xPv+L5jqa2S
+         SKiBgdIAmZWaHRbJbAzMDI/f+hC10EdF2q1wqM1OZ20OVJuy3AnFuYxwa16Dt5EiEps5
+         EoNpOmgTQW+g3DmAGo9domgb1o+dPiJvKpV4HwWb6gZp3x/grizgbLLaCWjlcpQVGag/
+         06jfntnoHsJPjZjXKflw/8Y22YEbJJfOd9TT7N3JiLFgvyCZg9YH5NzBlneO2us9aPEk
+         6RpzU+UvOqBqpR0ESO8dtZ9hzPMUdxMYSAjRNQxbtiD6ffjXA7TuvqvQDVFuKiaqnmf5
+         Iszg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695432720; x=1696037520;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6sBdVMfMRjf51/A4FAmBdDBudgEJD7XIV0S+Rn1ebf8=;
-        b=G+QeZGeIfzZXTNSzhujJC4vZkclP40L2bFMClTenSNMawNvfRJNvONMKc7l0Af+sPY
-         IRrvTE5THAWl3AxGOqBmLiqqmafsJM+2IWEf/cPWmmWx2sxn/3k6xylhv5NM9K1cO5gf
-         eAoQks0xTlKvGRgJ8lGRFo/M4CS1W9cHj2v7ev7+pN27M1zT1gcovVbVoDajde/eQ8nJ
-         lk2wNtGFrm4moxxjUbZTKTBbUD08gyI7JQ94S1Ibt6McjljLN70mRTrOatlKUbvTf0mk
-         D8it1Eg4OqjvKFMjBF4PHHKDppDv0MNgqDHe0LZ36aDHftDlH4dUlqIyIaT+vEYb2qDk
-         kRJg==
-X-Gm-Message-State: AOJu0YxnaTEKCPd0D2ulX+pMzbBY9gXB1HJ27/ULUtNy2NdUo6JkjwQ8
-        LJYPsGubU+/7/+CEl72K16W7MyOJdWw=
-X-Google-Smtp-Source: AGHT+IE2yWzcwua2aqDzlLl0Y+Ymi3r6rJDilflyRWbYZnXXI88FhB4QNhRbeG/BF6XKbV1cknxCSUOXvog=
-X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:3398:6644:ed7f:bec9])
- (user=surenb job=sendgmr) by 2002:a25:d09:0:b0:d7b:9185:e23d with SMTP id
- 9-20020a250d09000000b00d7b9185e23dmr9469ybn.6.1695432719939; Fri, 22 Sep 2023
- 18:31:59 -0700 (PDT)
-Date:   Fri, 22 Sep 2023 18:31:46 -0700
-In-Reply-To: <20230923013148.1390521-1-surenb@google.com>
-Mime-Version: 1.0
-References: <20230923013148.1390521-1-surenb@google.com>
-X-Mailer: git-send-email 2.42.0.515.g380fc7ccd1-goog
-Message-ID: <20230923013148.1390521-4-surenb@google.com>
-Subject: [PATCH v2 3/3] selftests/mm: add UFFDIO_REMAP ioctl test
-From:   Suren Baghdasaryan <surenb@google.com>
-To:     akpm@linux-foundation.org
-Cc:     viro@zeniv.linux.org.uk, brauner@kernel.org, shuah@kernel.org,
-        aarcange@redhat.com, lokeshgidra@google.com, peterx@redhat.com,
-        david@redhat.com, hughd@google.com, mhocko@suse.com,
-        axelrasmussen@google.com, rppt@kernel.org, willy@infradead.org,
-        Liam.Howlett@oracle.com, jannh@google.com, zhangpeng362@huawei.com,
-        bgeffon@google.com, kaleshsingh@google.com, ngeoffray@google.com,
-        jdduke@google.com, surenb@google.com, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        d=1e100.net; s=20230601; t=1695490618; x=1696095418;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jlE6JLRfL48qtVwq8jA/2h0BZ48NcfrSjI1lDQ5avkE=;
+        b=C6FX4aDJ0uFzgA0DklRZZdIgongw8Hsl7mo/v1GY1xjh4rw2OMlosK2GcZCkL1XtQj
+         rNkMdP6D25vFggQOAewrrutORjSMgeS0clhroFNxpfsp1vKknhzZMN7hFCbgKiYJndDn
+         GPq2+fFOYMxOm3LvX6SrM0YFIb565DMe366NPofyhcDpMr7Ck6fkohphhHKFwQEOPhku
+         ny5MfkiW1XYQmrDP/ebiHeZ0R/FAxit5mrxGkmO+VB3U+QratOys4KjOVeQNCMJhvtAR
+         cfelCZwqme/2AQcmtCVH1oKR+eNySwgiIDTNEv6Yg4ZGL+lBLYNYseVyegUD6o97nulu
+         mhlA==
+X-Gm-Message-State: AOJu0YwmRirPCIDPgoDRr7iHVSVmUOnlaeIGoNMS0KY+WMtx+ij+UBeO
+        gfCBhbNJg7KqFwub+H26WxIL/fAYa2U=
+X-Google-Smtp-Source: AGHT+IFSlAyqGeRovEjDNA4A/S+3zh83GX0PrVo3gnROIu0Q0EjRgGRrlmfg0p7A9iVAdg6YXQtFCQ==
+X-Received: by 2002:a17:902:e84d:b0:1c4:50fd:7cd1 with SMTP id t13-20020a170902e84d00b001c450fd7cd1mr2130303plg.11.1695490617930;
+        Sat, 23 Sep 2023 10:36:57 -0700 (PDT)
+Received: from atom0118 ([2405:201:c009:52e1:3075:4405:fdad:b3f9])
+        by smtp.gmail.com with ESMTPSA id n5-20020a170902e54500b001b8b2b95068sm5585448plf.204.2023.09.23.10.36.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 23 Sep 2023 10:36:57 -0700 (PDT)
+Date:   Sat, 23 Sep 2023 23:06:52 +0530
+From:   Atul Kumar Pant <atulpant.linux@gmail.com>
+To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com
+Cc:     shuah@kernel.org, linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-rtc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6] selftests: rtc: Fixes rtctest error handling.
+Message-ID: <20230923173652.GC159038@atom0118>
+References: <20230817091401.72674-1-atulpant.linux@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230817091401.72674-1-atulpant.linux@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,184 +72,57 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a test for new UFFDIO_REMAP ioctl which uses uffd to remaps source
-into destination buffer while checking the contents of both after
-remapping. After the operation the content of the destination buffer
-should match the original source buffer's content while the source
-buffer should be zeroed.
+On Thu, Aug 17, 2023 at 02:44:01PM +0530, Atul Kumar Pant wrote:
+> Adds a check to verify if the rtc device file is valid or not
+> and prints a useful error message if the file is not accessible.
+> 
+> Signed-off-by: Atul Kumar Pant <atulpant.linux@gmail.com>
+> ---
+> 
+> changes since v5:
+>     Updated error message to use strerror().
+> 	If the rtc file is invalid, the skip the test.
+> 
+> changes since v4:
+>     Updated the commit message.
+> 
+> changes since v3:
+>     Added Linux-kselftest and Linux-kernel mailing lists.
+> 
+> changes since v2:
+>     Changed error message when rtc file does not exist.
+> 
+> changes since v1:
+>     Removed check for uid=0
+>     If rtc file is invalid, then exit the test.
+> 
+>  tools/testing/selftests/rtc/rtctest.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/selftests/rtc/rtctest.c
+> index 630fef735c7e..27b466111885 100644
+> --- a/tools/testing/selftests/rtc/rtctest.c
+> +++ b/tools/testing/selftests/rtc/rtctest.c
+> @@ -15,6 +15,7 @@
+>  #include <sys/types.h>
+>  #include <time.h>
+>  #include <unistd.h>
+> +#include <error.h>
+>  
+>  #include "../kselftest_harness.h"
+>  #include "../kselftest.h"
+> @@ -437,7 +438,7 @@ int main(int argc, char **argv)
+>  	if (access(rtc_file, F_OK) == 0)
+>  		ret = test_harness_run(argc, argv);
+>  	else
+> -		ksft_exit_fail_msg("[ERROR]: Cannot access rtc file %s - Exiting\n", rtc_file);
+> +		ksft_exit_skip("%s: %s\n", rtc_file, strerror(errno));
+>  
+>  	return ret;
+>  }
+> -- 
+> 2.25.1
+> 
 
-Signed-off-by: Suren Baghdasaryan <surenb@google.com>
----
- tools/testing/selftests/mm/uffd-common.c     | 41 ++++++++++++-
- tools/testing/selftests/mm/uffd-common.h     |  1 +
- tools/testing/selftests/mm/uffd-unit-tests.c | 62 ++++++++++++++++++++
- 3 files changed, 102 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/mm/uffd-common.c b/tools/testing/selftests/mm/uffd-common.c
-index 02b89860e193..2a3ffd0ce96e 100644
---- a/tools/testing/selftests/mm/uffd-common.c
-+++ b/tools/testing/selftests/mm/uffd-common.c
-@@ -52,6 +52,13 @@ static int anon_allocate_area(void **alloc_area, bool is_src)
- 		*alloc_area = NULL;
- 		return -errno;
- 	}
-+
-+	/* Prevent source pages from collapsing into THPs */
-+	if (madvise(*alloc_area, nr_pages * page_size, MADV_NOHUGEPAGE)) {
-+		*alloc_area = NULL;
-+		return -errno;
-+	}
-+
- 	return 0;
- }
- 
-@@ -484,8 +491,14 @@ void uffd_handle_page_fault(struct uffd_msg *msg, struct uffd_args *args)
- 		offset = (char *)(unsigned long)msg->arg.pagefault.address - area_dst;
- 		offset &= ~(page_size-1);
- 
--		if (copy_page(uffd, offset, args->apply_wp))
--			args->missing_faults++;
-+		/* UFFD_REMAP is supported for anon non-shared mappings. */
-+		if (uffd_test_ops == &anon_uffd_test_ops && !map_shared) {
-+			if (remap_page(uffd, offset))
-+				args->missing_faults++;
-+		} else {
-+			if (copy_page(uffd, offset, args->apply_wp))
-+				args->missing_faults++;
-+		}
- 	}
- }
- 
-@@ -620,6 +633,30 @@ int copy_page(int ufd, unsigned long offset, bool wp)
- 	return __copy_page(ufd, offset, false, wp);
- }
- 
-+int remap_page(int ufd, unsigned long offset)
-+{
-+	struct uffdio_remap uffdio_remap;
-+
-+	if (offset >= nr_pages * page_size)
-+		err("unexpected offset %lu\n", offset);
-+	uffdio_remap.dst = (unsigned long) area_dst + offset;
-+	uffdio_remap.src = (unsigned long) area_src + offset;
-+	uffdio_remap.len = page_size;
-+	uffdio_remap.mode = UFFDIO_REMAP_MODE_ALLOW_SRC_HOLES;
-+	uffdio_remap.remap = 0;
-+	if (ioctl(ufd, UFFDIO_REMAP, &uffdio_remap)) {
-+		/* real retval in uffdio_remap.remap */
-+		if (uffdio_remap.remap != -EEXIST)
-+			err("UFFDIO_REMAP error: %"PRId64,
-+			    (int64_t)uffdio_remap.remap);
-+		wake_range(ufd, uffdio_remap.dst, page_size);
-+	} else if (uffdio_remap.remap != page_size) {
-+		err("UFFDIO_REMAP error: %"PRId64, (int64_t)uffdio_remap.remap);
-+	} else
-+		return 1;
-+	return 0;
-+}
-+
- int uffd_open_dev(unsigned int flags)
- {
- 	int fd, uffd;
-diff --git a/tools/testing/selftests/mm/uffd-common.h b/tools/testing/selftests/mm/uffd-common.h
-index 7c4fa964c3b0..2bbb15d1920c 100644
---- a/tools/testing/selftests/mm/uffd-common.h
-+++ b/tools/testing/selftests/mm/uffd-common.h
-@@ -111,6 +111,7 @@ void wp_range(int ufd, __u64 start, __u64 len, bool wp);
- void uffd_handle_page_fault(struct uffd_msg *msg, struct uffd_args *args);
- int __copy_page(int ufd, unsigned long offset, bool retry, bool wp);
- int copy_page(int ufd, unsigned long offset, bool wp);
-+int remap_page(int ufd, unsigned long offset);
- void *uffd_poll_thread(void *arg);
- 
- int uffd_open_dev(unsigned int flags);
-diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
-index 2709a34a39c5..a33819639187 100644
---- a/tools/testing/selftests/mm/uffd-unit-tests.c
-+++ b/tools/testing/selftests/mm/uffd-unit-tests.c
-@@ -824,6 +824,10 @@ static void uffd_events_test_common(bool wp)
- 	char c;
- 	struct uffd_args args = { 0 };
- 
-+	/* Prevent source pages from being mapped more than once */
-+	if (madvise(area_src, nr_pages * page_size, MADV_DONTFORK))
-+		err("madvise(MADV_DONTFORK) failed");
-+
- 	fcntl(uffd, F_SETFL, uffd_flags | O_NONBLOCK);
- 	if (uffd_register(uffd, area_dst, nr_pages * page_size,
- 			  true, wp, false))
-@@ -1062,6 +1066,58 @@ static void uffd_poison_test(uffd_test_args_t *targs)
- 	uffd_test_pass();
- }
- 
-+static void uffd_remap_test(uffd_test_args_t *targs)
-+{
-+	unsigned long nr;
-+	pthread_t uffd_mon;
-+	char c;
-+	unsigned long long count;
-+	struct uffd_args args = { 0 };
-+
-+	if (uffd_register(uffd, area_dst, nr_pages * page_size,
-+			  true, false, false))
-+		err("register failure");
-+
-+	if (pthread_create(&uffd_mon, NULL, uffd_poll_thread, &args))
-+		err("uffd_poll_thread create");
-+
-+	/*
-+	 * Read each of the pages back using the UFFD-registered mapping. We
-+	 * expect that the first time we touch a page, it will result in a missing
-+	 * fault. uffd_poll_thread will resolve the fault by remapping source
-+	 * page to destination.
-+	 */
-+	for (nr = 0; nr < nr_pages; nr++) {
-+		/* Check area_src content */
-+		count = *area_count(area_src, nr);
-+		if (count != count_verify[nr])
-+			err("nr %lu source memory invalid %llu %llu\n",
-+			    nr, count, count_verify[nr]);
-+
-+		/* Faulting into area_dst should remap the page */
-+		count = *area_count(area_dst, nr);
-+		if (count != count_verify[nr])
-+			err("nr %lu memory corruption %llu %llu\n",
-+			    nr, count, count_verify[nr]);
-+
-+		/* Re-check area_src content which should be empty */
-+		count = *area_count(area_src, nr);
-+		if (count != 0)
-+			err("nr %lu remap failed %llu %llu\n",
-+			    nr, count, count_verify[nr]);
-+	}
-+
-+	if (write(pipefd[1], &c, sizeof(c)) != sizeof(c))
-+		err("pipe write");
-+	if (pthread_join(uffd_mon, NULL))
-+		err("join() failed");
-+
-+	if (args.missing_faults != nr_pages || args.minor_faults != 0)
-+		uffd_test_fail("stats check error");
-+	else
-+		uffd_test_pass();
-+}
-+
- /*
-  * Test the returned uffdio_register.ioctls with different register modes.
-  * Note that _UFFDIO_ZEROPAGE is tested separately in the zeropage test.
-@@ -1139,6 +1195,12 @@ uffd_test_case_t uffd_tests[] = {
- 		.mem_targets = MEM_ALL,
- 		.uffd_feature_required = 0,
- 	},
-+	{
-+		.name = "remap",
-+		.uffd_fn = uffd_remap_test,
-+		.mem_targets = MEM_ANON,
-+		.uffd_feature_required = 0,
-+	},
- 	{
- 		.name = "wp-fork",
- 		.uffd_fn = uffd_wp_fork_test,
--- 
-2.42.0.515.g380fc7ccd1-goog
-
+	Hi Shuah, I have made the changes as per your comments. Can you please
+	review the changes ?
