@@ -2,128 +2,89 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E1B87ABC67
-	for <lists+linux-kselftest@lfdr.de>; Sat, 23 Sep 2023 01:39:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D2C377ABCDE
+	for <lists+linux-kselftest@lfdr.de>; Sat, 23 Sep 2023 02:55:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229564AbjIVXjs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 22 Sep 2023 19:39:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53816 "EHLO
+        id S230461AbjIWAzW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 22 Sep 2023 20:55:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230412AbjIVXjm (ORCPT
+        with ESMTP id S230440AbjIWAzV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 22 Sep 2023 19:39:42 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9612919E
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Sep 2023 16:39:36 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id d75a77b69052e-41513d2cca7so137241cf.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Sep 2023 16:39:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695425975; x=1696030775; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2Im+zOMVypPEia8MVs6KRCiMY7tEGPMADLH1faEZpG8=;
-        b=GVjK1JuHmXaLO6w3JhyU+SYpIZ4Lf6lAiXdAj1bfSaSCnPcx7tLyoXazDRTDS9wW17
-         xLvQdHm4N+LCzjvtySDWSujmnSwrYNgVsKp1KFspqeHESICFqZ2I/+SWsSoSsh0IQIER
-         spxN9guLw/UtwvybFSwfWgHyANOC572eJHWxfCpRTuDhY/Gaz2iomM2D9jSu86WnCux5
-         RDz8NKFEyOV+jc1u09f7aFeqJAb+Bsny71k+EdlLNPYO+4M1vSso3hQyURJSHVN4vGFw
-         fbfo3DmQORQN5rlzYUqybh1Fy3SpYmr6AJXeWxGAIlh8NQb+iT5tJlaoMr1hNUX47HAI
-         VMmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695425975; x=1696030775;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2Im+zOMVypPEia8MVs6KRCiMY7tEGPMADLH1faEZpG8=;
-        b=Zfx7U6n9pXC9c0S5vJClbMRswy+NHi4FYIp8EZg3fYMiZTpb0NHHNvPvDfupFErZr7
-         /f3Az+esdDxix99Q0gx53qHtyAfi3XtxN83fDwM2xeiV94hwJyb8N+4TDnnK15KLh4DU
-         2/ozjtU/MPIsuqWmieurzbeR3JbQxUESENNZl8cwdoodfiM9KlYftLbMyJgK3vqyda3i
-         XQp1QRa6i5slvLA9q0PZR9Qwf1DVR7Ep78c6LsLBg7MwLBkN+mSCyGDhA3/PE9+n3p+u
-         TUzBG972ZJEwwf88w8FN96IR4ZFjb7yZEafHI/Z2oHUPjARJL/p2z8TCp5H4Oi/h614a
-         uzfQ==
-X-Gm-Message-State: AOJu0YzNEe/iKYrCNJnb1If0b7sU81Yce7ccTDes55tkddtAo21OmCnB
-        VEu03eofMt3J1seS7HqRDgByXf7TwmFjKVTltaVCzg==
-X-Google-Smtp-Source: AGHT+IFVZjVuHQd8Fqrz/Pbsl23SeiMNn6a2XOn/teOInfmWdqwud/8Hv9MwItGOLmgG2jBGD5mVG4k0cwESNTNIz+U=
-X-Received: by 2002:a05:622a:307:b0:418:4db:afab with SMTP id
- q7-20020a05622a030700b0041804dbafabmr50047qtw.9.1695425975627; Fri, 22 Sep
- 2023 16:39:35 -0700 (PDT)
+        Fri, 22 Sep 2023 20:55:21 -0400
+Received: from m15.mail.163.com (m15.mail.163.com [45.254.50.219])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 58693B9;
+        Fri, 22 Sep 2023 17:55:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=iDdID
+        +mUbQqXmzWzgfAKYDj+iqF4rEcFDTg8Favomh0=; b=O/v7DGkp6qzTXQG7g2Rlf
+        ux+K1pd8QCc3utMyeaub9ITi6//M9FuwEQpbB2wJKNx/KwFrwjDGwACyUOk2l8hL
+        2bFWHEYhDqWjRJuni8KrDzk+QsOM3IPEXUbRSjZEuGem4iu9Z7MJtATKNuH7qnB+
+        X9WvAdWFgplnnv9Vg/m39c=
+Received: from icess-ProLiant-DL380-Gen10.. (unknown [183.174.60.14])
+        by zwqz-smtp-mta-g0-1 (Coremail) with SMTP id _____wCnzvMuNw5lHGodBA--.12688S4;
+        Sat, 23 Sep 2023 08:54:17 +0800 (CST)
+From:   Ma Ke <make_ruc2021@163.com>
+To:     davidgow@google.com
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org, Ma Ke <make_ruc2021@163.com>
+Subject: [PATCH v3] list: test: potential dereference of null pointer
+Date:   Sat, 23 Sep 2023 08:54:04 +0800
+Message-Id: <20230923005404.3633619-1-make_ruc2021@163.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-References: <20230922113923.3621959-1-make_ruc2021@163.com>
-In-Reply-To: <20230922113923.3621959-1-make_ruc2021@163.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Fri, 22 Sep 2023 16:39:23 -0700
-Message-ID: <CAGS_qxqGFP5nWmvGmUJYDWXTndyq_HCVZDpYeNr9UFTk3zJ_DA@mail.gmail.com>
-Subject: Re: [PATCH v2] list: test: potential dereference of null pointer
-To:     Ma Ke <make_ruc2021@163.com>
-Cc:     davidgow@google.com, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wCnzvMuNw5lHGodBA--.12688S4
+X-Coremail-Antispam: 1Uf129KBjvdXoWrurWkJw47urWxGw15uw47XFb_yoWkJFX_Za
+        yxAr1kWr1UJrWxtFn5Jr4rZ3WkKw1kZF1vqa93Kry3AFy7Cr18C3W2vr4fJ3y3WrWfCa9I
+        kw4DCr1UGw1DGjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRM5l8UUUUUU==
+X-Originating-IP: [183.174.60.14]
+X-CM-SenderInfo: 5pdnvshuxfjiisr6il2tof0z/xtbBFRnzC2B9oOTR4gAAse
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Sep 22, 2023 at 4:40=E2=80=AFAM Ma Ke <make_ruc2021@163.com> wrote:
->
-> To avoid the failure of alloc, we could check the return value of
-> kmalloc() and kzalloc().
+To avoid the failure of alloc, we could check the return value of
+kmalloc() and kzalloc().
 
-Thanks, that's a good point, some suggestions below.
-And also a question for David Gow whenever he sees this.
+Signed-off-by: Ma Ke <make_ruc2021@163.com>
+---
+ lib/list-test.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
->
-> Signed-off-by: Ma Ke <make_ruc2021@163.com>
-> ---
->  lib/list-test.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
->
-> diff --git a/lib/list-test.c b/lib/list-test.c
-> index 0cc27de9cec8..70e898976dbf 100644
-> --- a/lib/list-test.c
-> +++ b/lib/list-test.c
-> @@ -27,9 +27,18 @@ static void list_test_list_init(struct kunit *test)
->         INIT_LIST_HEAD(&list2);
->
->         list4 =3D kzalloc(sizeof(*list4), GFP_KERNEL | __GFP_NOFAIL);
-> +       if (!list4) {
-> +               KUNIT_FAIL(test, "Initialising list4 failed.\n");
-> +               return;
-> +       }
+diff --git a/lib/list-test.c b/lib/list-test.c
+index 0cc27de9cec8..a0b478042477 100644
+--- a/lib/list-test.c
++++ b/lib/list-test.c
+@@ -26,10 +26,12 @@ static void list_test_list_init(struct kunit *test)
+ 
+ 	INIT_LIST_HEAD(&list2);
+ 
+-	list4 = kzalloc(sizeof(*list4), GFP_KERNEL | __GFP_NOFAIL);
++	list4 = kunit_kzalloc(test, sizeof(*list4), GFP_KERNEL | __GFP_NOFAIL);
++	KUNIT_ASSERT_NOT_NULL(test, list4);
+ 	INIT_LIST_HEAD(list4);
+ 
+ 	list5 = kmalloc(sizeof(*list5), GFP_KERNEL | __GFP_NOFAIL);
++	KUNIT_ASSERT_NOT_NULL(test, list5);
+ 	memset(list5, 0xFF, sizeof(*list5));
+ 	INIT_LIST_HEAD(list5);
+ 
+@@ -40,7 +42,6 @@ static void list_test_list_init(struct kunit *test)
+ 	KUNIT_EXPECT_TRUE(test, list_empty_careful(list4));
+ 	KUNIT_EXPECT_TRUE(test, list_empty_careful(list5));
+ 
+-	kfree(list4);
+ 	kfree(list5);
+ }
+ 
+-- 
+2.37.2
 
-Note: we can replace this with a one-liner
-  KUNIT_ASSERT_NOT_NULL(test, list4);
-
->         INIT_LIST_HEAD(list4);
->
->         list5 =3D kmalloc(sizeof(*list5), GFP_KERNEL | __GFP_NOFAIL);
-> +       if (!list5) {
-> +               kfree(list4);
-
-We can also replace this check with the one-liner
-  KUNIT_ASSERT_NOT_NULL(test, list5);
-
-But we'd need to migrate the kzalloc() call to use kunit_kzalloc():
-  kunit_kzalloc(test, sizeof(*list4), GFP_KERNEL | __GFP_NOFAIL);
-that way we don't have to manually free list4.
-
-I'm not sure why the original version didn't use the kunit helpers to
-begin with.
-Perhaps David would remember.
-
-A quick lazy ^F over the original patch didn't find anything afaict,
-https://lore.kernel.org/linux-kselftest/a127aeaa-e5ba-2d8d-0894-936e0563750=
-8@kernel.org/T/#u
-
-
-> +               KUNIT_FAIL(test, "Initialising list5 failed.\n");
-> +               return;
-> +       }
-
-Daniel
