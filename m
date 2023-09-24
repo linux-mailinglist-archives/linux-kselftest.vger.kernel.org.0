@@ -2,31 +2,31 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB1DB7AC91B
-	for <lists+linux-kselftest@lfdr.de>; Sun, 24 Sep 2023 15:25:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20DF07AC9A2
+	for <lists+linux-kselftest@lfdr.de>; Sun, 24 Sep 2023 15:36:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230123AbjIXNZa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 24 Sep 2023 09:25:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34222 "EHLO
+        id S230382AbjIXNga (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 24 Sep 2023 09:36:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230487AbjIXNYU (ORCPT
+        with ESMTP id S230364AbjIXNYR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 24 Sep 2023 09:24:20 -0400
+        Sun, 24 Sep 2023 09:24:17 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF904EFE;
-        Sun, 24 Sep 2023 06:20:28 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AEBAC433C9;
-        Sun, 24 Sep 2023 13:20:27 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F4219AF;
+        Sun, 24 Sep 2023 06:20:46 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27003C433B6;
+        Sun, 24 Sep 2023 13:20:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695561628;
+        s=k20201202; t=1695561646;
         bh=Fly4wWpTO5IDypLkx4t6fiAgcBDlsgiBtf87rD/WXAw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=B/svroqnyCohMFM5MIrDUILAXWXFRY1gkbDcLze2uItwS5roMp6LR/Dl7yeyS/Twd
-         zXnxF4+KPJ1TTjVpB8EI2hcU7TKqbnoC/5I0etR/751sascPDiyubveOBSFpQ64XgF
-         jL9eCRjFQiFFJoTImgOU1k9vCkhIqMWgJMdfzm/qCGiuzTLohlA29qjw0LbMHS0pMk
-         YSl+SqV7CrwwIkLtb/iuDHrlxtWgccpI6JGai+HBCD3nNPMXNbiSyMHBysZ9MOWFL2
-         ediL/STUZZFz7OzPh7O2W0S5D8CGq1DlOZXIzFkCIqHbqnqEOJM+sk1zdAfcR1FyEH
-         kx2Q1Y4uXiaQg==
+        b=OJIVFvTzI6IQdDNCPKmdNqrqMDIqBPgNC8VWTWymu+U+pP5JbeljJs/RBymQFGQZq
+         MAuyYt/nYPZIIW4mi/EOyACKOUFPvGSIx//35yie84zHdMj90k7bbuGObr/Nj54sO/
+         WuY3Q5/hMVzVgqkOMESdK9noilRbJJN1PN80iuPCCUa0/JrVJ+3/O7bvUsddd5ptEa
+         bLGkT6ofjCGMdFbTjjvO36A1C8uklAnTCYTZnIaPJS1uftBf2+JEUSHeUb52viTsDr
+         xoMMuataI1wif0RgtW2KEKBg/f40J92RXQi4VvybZeYcj4cOkxCjK9h1A1iF9Hywbx
+         nmCKuEW0XRKjQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Zheng Yejian <zhengyejian1@huawei.com>,
@@ -35,17 +35,23 @@ Cc:     Zheng Yejian <zhengyejian1@huawei.com>,
         Shuah Khan <skhan@linuxfoundation.org>,
         Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
         linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 5/7] selftests/ftrace: Correctly enable event in instance-event.tc
-Date:   Sun, 24 Sep 2023 09:20:12 -0400
-Message-Id: <20230924132015.1276811-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 4.19 5/7] selftests/ftrace: Correctly enable event in instance-event.tc
+Date:   Sun, 24 Sep 2023 09:20:29 -0400
+Message-Id: <20230924132033.1276920-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230924132015.1276811-1-sashal@kernel.org>
-References: <20230924132015.1276811-1-sashal@kernel.org>
+In-Reply-To: <20230924132033.1276920-1-sashal@kernel.org>
+References: <20230924132033.1276920-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.4.257
+X-stable-base: Linux 4.19.295
 Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
