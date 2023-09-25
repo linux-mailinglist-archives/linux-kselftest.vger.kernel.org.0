@@ -2,54 +2,54 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA2D17AD94D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Sep 2023 15:39:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 583187AD950
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Sep 2023 15:39:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231996AbjIYNjq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 25 Sep 2023 09:39:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44096 "EHLO
+        id S232093AbjIYNjt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 25 Sep 2023 09:39:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232099AbjIYNjm (ORCPT
+        with ESMTP id S232078AbjIYNjr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 25 Sep 2023 09:39:42 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A11FE11C
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Sep 2023 06:39:34 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1c434c33ec0so46230315ad.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 25 Sep 2023 06:39:34 -0700 (PDT)
+        Mon, 25 Sep 2023 09:39:47 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E4D011F
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Sep 2023 06:39:41 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1c60f1a2652so16003425ad.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Sep 2023 06:39:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1695649174; x=1696253974; darn=vger.kernel.org;
+        d=ventanamicro.com; s=google; t=1695649181; x=1696253981; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=P0nR1d1X0MlBXUc/LZD12tdCUY8BFx747N+beNbmoR4=;
-        b=gwT99oCScaQ6PLarPlk9fI/jgD2fLi+GlERhCoR+X5vmRTP7r0brzzZa57gjc7JLXJ
-         hSbCFFrTYfSKL/GVM1MSf/wTbvQ2gd5x3VMTqbieOmysc099WVynZpe0jvinnFbZjSQi
-         mZG3KR2FtDPTHewkBHER6RuIV+gnVArYP6OLghMLUZRaUqG3ir7p5e931EV2kNI2FF8j
-         LWg6ijX3ftlo+rLIkqd9pjuc4n0OtA7OOmHKwJHPDUG3Wkcldy3C/5JzLRyBrBmUhkZ8
-         9Z0D6APi5NZhdRfNeFI64821ymn8WkJ295p94rSGn6OmM++xr5Wdglw1Uc+4HVACe9kD
-         t99Q==
+        bh=G0o9lQ4GgOP7dFq6KPsGtVotlHRRQlDwzXlKCC3Ypps=;
+        b=gwCl1sa8ieneOtMpWBzxOynwDwUY4AWoiWG6ZeedXFCFSjA9JHkSAW+2gcDWMafss1
+         wVRptBE4st3m8NKHX2A0CkkyXJqwSzSqKssRybbOagQoRfz3tmuTWRXBkH/z2v9iSev5
+         SJi+U8zRYsftlfA2qLMCtHgvYZAAaNcIbAK2Sh9gTn2Ck5oLOEOQsbY92/7SpmBLVUyz
+         xuRbMvmn76EPyaGDqvMTIg6bPzQW+TyvwdmsN/HUc0KnMxqdWMnEvYTGEwvF/XUpwpUP
+         s4QnlK4QIGjGLpK9PY40RcH1FBb4774L8JvMNXth6f2rjqkbqD3H7HZLcgFDO4izF5se
+         99Rw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695649174; x=1696253974;
+        d=1e100.net; s=20230601; t=1695649181; x=1696253981;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=P0nR1d1X0MlBXUc/LZD12tdCUY8BFx747N+beNbmoR4=;
-        b=Zbw0cBzyyYsle4isw8kBgYCGZou/OkiOEhjC5eTqy+xyQe4Xd4jh29Iaem2FzPmuW1
-         5NPP26t1p5iPNPyNMKKAlBREYPX0yAAWFgwt2dlK/Pu5ZKoiaTubUtWWb/R+MYZNiBTh
-         pe4Ncd6ikFhoCFxFZqoVva66Zb1TvkAfYZy1Y8IXRMvxwoSh2LJjf0G0jFfifnqkt48s
-         W/+t8CC+lNpdT6fIxT0CnnfuSNQSSUywLRM+VSL198TMAn9Pnh1WYt/I8qgln7x+Vv3E
-         TjFnBxEeFJSPYYgNH4cOUgM78Sf9JaF4dGs4/CmPITabQtlS/+sZL2wrE9WmtiUy11l4
-         q4KQ==
-X-Gm-Message-State: AOJu0YxTm90vWoEVB9qa8sTRH7T/6889obY38NZe+NlUKjxydX7U6ZZO
-        +REPDLLGCniWvGlC80zogo348w==
-X-Google-Smtp-Source: AGHT+IGe2ltYHOKifgoZuKPVFkm63dkXjtN4qjeWkEpgdWPkv+o21XyWmATLP8vrvzDJy8UtUBfYhw==
-X-Received: by 2002:a17:902:d4c4:b0:1c6:f56:9315 with SMTP id o4-20020a170902d4c400b001c60f569315mr2815286plg.68.1695649173981;
-        Mon, 25 Sep 2023 06:39:33 -0700 (PDT)
+        bh=G0o9lQ4GgOP7dFq6KPsGtVotlHRRQlDwzXlKCC3Ypps=;
+        b=sF/qPFQtVbyTmkvADOt+I421e8N9MgT9XtFcMC8rc1NTxYCZhvE0XXot3eg363VwOR
+         R7MfhBD9h2CPqQ7qZMG+BqdO+N9qGrAT36+Zb3+7AzqUstma/+qFHAahthyONU71UYVM
+         6DrqFuAVMpHJHltTitn8JMCKNeTtexLC+2q/7F4ytjDmrqcxaafJzVAXDRVN4TYA2DEg
+         Sv6trnLKSmdAjzmLgS25gyU1N5rcrUvoH44bUQ620oW2w7Sqfy1KrzrWBgBIqdioiS8B
+         GWxCK49pCoLEEXjo/OGhJ/rIlHEMMu79d2sFEh26KTln350dKR81VbprLpVW0htxB07b
+         0kSg==
+X-Gm-Message-State: AOJu0YzXpZ2UFB/NQ9rrGZCJ1Iw86/b2qBhvucJGZ0fqqU/l/eMikmUg
+        QdeOnyice2k9vF5F45Rwd5owtQ==
+X-Google-Smtp-Source: AGHT+IHWCYspI/fUj+Ig0k3L9hYf5Uzb2FzPkjigw9xzhpmfqfpqTqSt/ibnnqx7qGmYx7Sty1gsrA==
+X-Received: by 2002:a17:902:e5d1:b0:1c3:868f:5958 with SMTP id u17-20020a170902e5d100b001c3868f5958mr14239969plf.20.1695649180488;
+        Mon, 25 Sep 2023 06:39:40 -0700 (PDT)
 Received: from anup-ubuntu-vm.localdomain ([103.97.165.210])
-        by smtp.gmail.com with ESMTPSA id p11-20020a170902eacb00b001c625d6ffccsm969433pld.129.2023.09.25.06.39.28
+        by smtp.gmail.com with ESMTPSA id p11-20020a170902eacb00b001c625d6ffccsm969433pld.129.2023.09.25.06.39.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Sep 2023 06:39:33 -0700 (PDT)
+        Mon, 25 Sep 2023 06:39:40 -0700 (PDT)
 From:   Anup Patel <apatel@ventanamicro.com>
 To:     Paolo Bonzini <pbonzini@redhat.com>,
         Atish Patra <atishp@atishpatra.org>,
@@ -65,9 +65,9 @@ Cc:     Andrew Jones <ajones@ventanamicro.com>,
         kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Anup Patel <apatel@ventanamicro.com>
-Subject: [PATCH v2 3/9] dt-bindings: riscv: Add Zicond extension entry
-Date:   Mon, 25 Sep 2023 19:08:53 +0530
-Message-Id: <20230925133859.1735879-4-apatel@ventanamicro.com>
+Subject: [PATCH v2 4/9] RISC-V: Detect Zicond from ISA string
+Date:   Mon, 25 Sep 2023 19:08:54 +0530
+Message-Id: <20230925133859.1735879-5-apatel@ventanamicro.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230925133859.1735879-1-apatel@ventanamicro.com>
 References: <20230925133859.1735879-1-apatel@ventanamicro.com>
@@ -83,30 +83,44 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add an entry for the Zicond extension to the riscv,isa-extensions property.
+The RISC-V integer conditional (Zicond) operation extension defines
+standard conditional arithmetic and conditional-select/move operations
+which are inspired from the XVentanaCondOps extension. In fact, QEMU
+RISC-V also has support for emulating Zicond extension.
+
+Let us detect Zicond extension from ISA string available through
+DT or ACPI.
 
 Signed-off-by: Anup Patel <apatel@ventanamicro.com>
 ---
- Documentation/devicetree/bindings/riscv/extensions.yaml | 6 ++++++
- 1 file changed, 6 insertions(+)
+ arch/riscv/include/asm/hwcap.h | 1 +
+ arch/riscv/kernel/cpufeature.c | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/riscv/extensions.yaml b/Documentation/devicetree/bindings/riscv/extensions.yaml
-index cad8ef68eca7..3f0b47686080 100644
---- a/Documentation/devicetree/bindings/riscv/extensions.yaml
-+++ b/Documentation/devicetree/bindings/riscv/extensions.yaml
-@@ -225,6 +225,12 @@ properties:
-             ratified in the 20191213 version of the unprivileged ISA
-             specification.
+diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
+index b7efe9e2fa89..15bafc02ffd4 100644
+--- a/arch/riscv/include/asm/hwcap.h
++++ b/arch/riscv/include/asm/hwcap.h
+@@ -60,6 +60,7 @@
+ #define RISCV_ISA_EXT_ZIHPM		42
+ #define RISCV_ISA_EXT_SMSTATEEN		43
+ #define RISCV_ISA_EXT_XVENTANACONDOPS	44
++#define RISCV_ISA_EXT_ZICOND		45
  
-+        - const: zicond
-+          description:
-+            The standard Zicond extension for conditional arithmetic and
-+            conditional-select/move operations as ratified in commit 95cf1f9
-+            ("Add changes requested by Ved during signoff") of riscv-zicond.
-+
-         - const: zicsr
-           description: |
-             The standard Zicsr extension for control and status register
+ #define RISCV_ISA_EXT_MAX		64
+ 
+diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+index 3a31d34fe709..7f683916f2c2 100644
+--- a/arch/riscv/kernel/cpufeature.c
++++ b/arch/riscv/kernel/cpufeature.c
+@@ -167,6 +167,7 @@ const struct riscv_isa_ext_data riscv_isa_ext[] = {
+ 	__RISCV_ISA_EXT_DATA(zicbom, RISCV_ISA_EXT_ZICBOM),
+ 	__RISCV_ISA_EXT_DATA(zicboz, RISCV_ISA_EXT_ZICBOZ),
+ 	__RISCV_ISA_EXT_DATA(zicntr, RISCV_ISA_EXT_ZICNTR),
++	__RISCV_ISA_EXT_DATA(zicond, RISCV_ISA_EXT_ZICOND),
+ 	__RISCV_ISA_EXT_DATA(zicsr, RISCV_ISA_EXT_ZICSR),
+ 	__RISCV_ISA_EXT_DATA(zifencei, RISCV_ISA_EXT_ZIFENCEI),
+ 	__RISCV_ISA_EXT_DATA(zihintpause, RISCV_ISA_EXT_ZIHINTPAUSE),
 -- 
 2.34.1
 
