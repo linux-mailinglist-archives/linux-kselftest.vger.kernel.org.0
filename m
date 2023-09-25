@@ -2,45 +2,45 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FE9A7ADC7B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Sep 2023 17:58:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CB7277ADC7E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Sep 2023 17:58:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232503AbjIYP6T (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 25 Sep 2023 11:58:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60314 "EHLO
+        id S232883AbjIYP6V (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 25 Sep 2023 11:58:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229865AbjIYP6S (ORCPT
+        with ESMTP id S232913AbjIYP6U (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 25 Sep 2023 11:58:18 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8250B92;
-        Mon, 25 Sep 2023 08:58:11 -0700 (PDT)
+        Mon, 25 Sep 2023 11:58:20 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D62083;
+        Mon, 25 Sep 2023 08:58:12 -0700 (PDT)
 Received: from localhost.localdomain (unknown [IPv6:2001:b07:646b:e2:e4be:399f:af39:e0db])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: laura.nao)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 58A83660730D;
-        Mon, 25 Sep 2023 16:58:09 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 40F08660730F;
+        Mon, 25 Sep 2023 16:58:10 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
         s=mail; t=1695657490;
-        bh=pWW4E+juaK7sF2s3dY0MCFnnwr1NNNbo05xJAUGYROA=;
+        bh=EEqhOcRvF/DQtqCs/NvE/9iYGwFlvA+3yXcKw/uNJ1A=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ls0Xjum/CtdmRFRNcGlGFVV91i4W5NGWQBarpZh8bf2tuql3/484rhRUzosm61Fkz
-         XeFO6yosnwhD1iMuW6v6UebEVR4DVGWcs/xMDhybzV0k8I8oW8dEXiY7VcWhpjqgg4
-         1iQ87heThFs7/BvP4xnEUV/E7brWT00zqhw3NurWGQUCjy6sgRt7YHPC+xr9T92TqQ
-         BIdIAUWbLAfNY/Bg6TzwVI007mD6949+ArZvts/+OxKCUVP9khlk+0Ews2VXYG2Jbe
-         e4UpgrrnjqQViZHYuniMt9Eo8mcnfY3E3dxDfCmuKfBg0JnO1QMb90SmJPFpkeQ/c4
-         aags64so693TQ==
+        b=LDYOjgxLNbXIw54fenrFdcQCvwvGY7mnYuayj2hL4NMTFxgAC0gU14bcb2bVq3ESh
+         765GV5yygLzr2tVcO/TomhaJbO0nLqmnkGPKxstwoNY7kV4hKvnPsTtgheddykarPR
+         QTRk8zhDhS9ZUCFn9iXCu+xApzZTRt1NevLLj/0IJLhI8i0EvyfU9YAbsJZB/QlI/P
+         +TXRNekYaRl2ED+W80EWI+w8fnmQ79OtzkOszhpEefdPkME5qfBGrzfEK6OERUwmAC
+         N1HnFxbqjjIKUghOr1iOv5GuGNEx48lvkAmwcvuUPne82THfucX8yi90Xvp8j6gl0T
+         2awAeHU7PJKRA==
 From:   Laura Nao <laura.nao@collabora.com>
 To:     rafael@kernel.org, lenb@kernel.org, shuah@kernel.org
 Cc:     linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
         linux-kselftest@vger.kernel.org, groeck@chromium.org,
         broonie@kernel.org, robh+dt@kernel.org, kernelci@lists.linux.dev,
         kernel@collabora.com, Laura Nao <laura.nao@collabora.com>
-Subject: [RFC PATCH 1/2] acpi: Add script to extract ACPI device ids in the kernel
-Date:   Mon, 25 Sep 2023 17:58:05 +0200
-Message-Id: <20230925155806.1812249-2-laura.nao@collabora.com>
+Subject: [RFC PATCH 2/2] kselftest: Add test to detect unprobed devices on ACPI platforms
+Date:   Mon, 25 Sep 2023 17:58:06 +0200
+Message-Id: <20230925155806.1812249-3-laura.nao@collabora.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230925155806.1812249-1-laura.nao@collabora.com>
 References: <20230925155806.1812249-1-laura.nao@collabora.com>
@@ -55,98 +55,170 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a script to extract all the supported acpi device ids
-from kernel sources.
+Add new kselftest that tests whether devices declared in the ACPI
+namespace and supported by the kernel are correctly bound
+to a driver.
 
-The list of IDs returned by the script can be used as a
-reference to determine if a device declared in the ACPI namespace
-with certain _HID/_CID is supported by the kernel or not.
+The test runs the acpi-extract-ids script to generate a list
+of all the ACPI device IDs present in the kernel sources.
+The list is then used as a reference to determine which of the
+devices declared in the ACPI namespace are supported by the kernel
+and therefore expected to bind to a driver.
 
 Signed-off-by: Laura Nao <laura.nao@collabora.com>
 ---
- MAINTAINERS                   |  1 +
- scripts/acpi/acpi-extract-ids | 60 +++++++++++++++++++++++++++++++++++
- 2 files changed, 61 insertions(+)
- create mode 100755 scripts/acpi/acpi-extract-ids
+ MAINTAINERS                                   |  1 +
+ tools/testing/selftests/Makefile              |  1 +
+ tools/testing/selftests/acpi/.gitignore       |  2 +
+ tools/testing/selftests/acpi/Makefile         | 23 ++++++
+ .../selftests/acpi/test_unprobed_devices.sh   | 75 +++++++++++++++++++
+ 5 files changed, 102 insertions(+)
+ create mode 100644 tools/testing/selftests/acpi/.gitignore
+ create mode 100644 tools/testing/selftests/acpi/Makefile
+ create mode 100755 tools/testing/selftests/acpi/test_unprobed_devices.sh
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 27751573e314..7540316d82f5 100644
+index 7540316d82f5..5c83b36f26ed 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -294,6 +294,7 @@ F:	drivers/pnp/pnpacpi/
- F:	include/acpi/
+@@ -295,6 +295,7 @@ F:	include/acpi/
  F:	include/linux/acpi.h
  F:	include/linux/fwnode.h
-+F:	scripts/acpi/acpi-extract-ids
+ F:	scripts/acpi/acpi-extract-ids
++F:	tools/testing/selftests/acpi/
  F:	tools/power/acpi/
  
  ACPI APEI
-diff --git a/scripts/acpi/acpi-extract-ids b/scripts/acpi/acpi-extract-ids
-new file mode 100755
-index 000000000000..12c8e09281dd
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 11aa8a834794..bb95daf9ae91 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -1,4 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0
++TARGETS += acpi
+ TARGETS += alsa
+ TARGETS += amd-pstate
+ TARGETS += arm64
+diff --git a/tools/testing/selftests/acpi/.gitignore b/tools/testing/selftests/acpi/.gitignore
+new file mode 100644
+index 000000000000..2526540468f4
 --- /dev/null
-+++ b/scripts/acpi/acpi-extract-ids
-@@ -0,0 +1,60 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0-only
++++ b/tools/testing/selftests/acpi/.gitignore
+@@ -0,0 +1,2 @@
++supported_id_list
++ktap_helpers.sh
+\ No newline at end of file
+diff --git a/tools/testing/selftests/acpi/Makefile b/tools/testing/selftests/acpi/Makefile
+new file mode 100644
+index 000000000000..806e75f15824
+--- /dev/null
++++ b/tools/testing/selftests/acpi/Makefile
+@@ -0,0 +1,23 @@
++PY3 = $(shell which python3 2>/dev/null)
++
++ifneq ($(PY3),)
++
++TEST_PROGS := test_unprobed_devices.sh
++TEST_GEN_FILES := supported_id_list ktap_helpers.sh
++
++include ../lib.mk
++
++$(OUTPUT)/supported_id_list:
++	$(top_srcdir)/scripts/acpi/acpi-extract-ids $(top_srcdir) > $@
++
++$(OUTPUT)/ktap_helpers.sh:
++	cp $(top_srcdir)/tools/testing/selftests/dt/ktap_helpers.sh $@
++
++else
++
++all: no_py3_warning
++
++no_py3_warning:
++	@echo "Missing python3. This test will be skipped."
++
++endif
+\ No newline at end of file
+diff --git a/tools/testing/selftests/acpi/test_unprobed_devices.sh b/tools/testing/selftests/acpi/test_unprobed_devices.sh
+new file mode 100755
+index 000000000000..aa8c62166b4d
+--- /dev/null
++++ b/tools/testing/selftests/acpi/test_unprobed_devices.sh
+@@ -0,0 +1,75 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
 +#
-+# Heavily inspired by the scripts/dtc/dt-extract-compatibles script,
-+# adapted for the ACPI use case.
++# Copyright (c) 2023 Collabora Ltd
++#
++# Inspired by the tools/testing/selftests/dt/test_unprobed_devices.sh
++# script, adapted for the ACPI use case.
++#
++# This script checks whether devices declared in the ACPI namespace
++# and supported by the kernel are correctly bound to a driver.
++#
++# A list of all the ACPI device IDs present in the kernel sources
++# is used as reference to determine which of the devices declared
++# in the ACPI tables are supported.
 +#
 +
-+import os
-+import glob
-+import re
-+import argparse
++DIR="$(dirname "$(readlink -f "$0")")"
 +
++source "${DIR}"/ktap_helpers.sh
 +
-+def parse_acpi_device_ids(file):
-+    """ Find all device ID strings in acpi_device_id struct """
-+    id_list = []
++ACPI_SYSTEM_DIR="/sys/devices/LNXSYSTM:00"
++SUPPORTED_ID_LIST="${DIR}"/supported_id_list
 +
-+    with open(file, 'r', encoding='utf-8') as f:
-+        data = f.read().replace('\n', '')
++KSFT_PASS=0
++KSFT_FAIL=1
++KSFT_SKIP=4
 +
-+        for m in re.finditer(r'acpi_device_id(\s+\S+)?\s+(\S+)\[\](\s+\S+)?\s*=\s*({.*?);', data):
-+            id_list += re.findall(r'\"(\S+)\"', m[4])
++ktap_print_header
 +
-+    return id_list
++if [[ ! -d "${ACPI_SYSTEM_DIR}" ]]; then
++	ktap_skip_all "${ACPI_SYSTEM_DIR} doesn't exist."
++	exit "${KSFT_SKIP}"
++fi
 +
++# The ACPI specification mandates that ACPI objects representing devices on
++# non-enumerable and enumerable busses contain a _HID or an _ADR identification
++# object respectively.
++# Get a list of devices of both types, by searching the ACPI sysfs subtree for
++# directories containing a hid or adr attribute.
++supp_dev_paths=$(while IFS=$'\n' read -r dev_path; do
++	if [ ! -f "${dev_path}"/hid ] && [ ! -f "${dev_path}"/adr ]; then
++		continue
++	fi
 +
-+def print_acpi_device_ids(filename, id_list):
-+    if not id_list:
-+        return
-+    if show_filename:
-+        compat_str = ' '.join(id_list)
-+        print(filename + ": ID(s): " + compat_str)
-+    else:
-+        print(*id_list, sep='\n')
++	if [ -f "${dev_path}"/hid ]; then
++		if ! grep -x -q -i "$(cat "${dev_path}"/hid)" "${SUPPORTED_ID_LIST}"; then
++			continue
++		fi
++	fi
 +
++	echo "${dev_path}"
++done < <(find ${ACPI_SYSTEM_DIR} -name uevent -exec dirname {} \;))
 +
-+def files_to_parse(path_args):
-+    for f in path_args:
-+        if os.path.isdir(f):
-+            for filename in glob.iglob(f + "/**/*.c", recursive=True):
-+                yield filename
-+        else:
-+            yield f
++supp_dev_paths_num=$(echo "${supp_dev_paths}" | wc -w)
++ktap_set_plan "${supp_dev_paths_num}"
 +
++ret="${KSFT_PASS}"
++for dev_path in ${supp_dev_paths}; do
++	desc="$(cat "${dev_path}"/path)"
++	[ -f "${dev_path}"/hid ] && desc+=" $(cat "${dev_path}"/hid)"
 +
-+show_filename = False
++	# ACPI device objects might be linked to other objects in the device
++	# hierarchy (e.g. devices on the PCI bus).
++	# In these cases, the driver folder will be in the companion object's sysfs
++	# directory, linked by physical_node.
++	if [ -d "${dev_path}"/physical_node/driver ] || [ -d "${dev_path}"/driver ]; then
++		ktap_test_pass "${desc}"
++	else
++		ret="${KSFT_FAIL}"
++		ktap_test_fail "${desc}"
++	fi
++done
 +
-+if __name__ == "__main__":
-+    ap = argparse.ArgumentParser()
-+    ap.add_argument("cfile", type=str, nargs='*',
-+                    help="C source files or directories to parse")
-+    ap.add_argument('-H', '--with-filename',
-+                    help="Print filename with device ids", action="store_true")
-+    args = ap.parse_args()
-+
-+    show_filename = args.with_filename
-+
-+    for f in files_to_parse(args.cfile):
-+        id_list = parse_acpi_device_ids(f)
-+        print_acpi_device_ids(f, id_list)
++ktap_print_totals
++exit "${ret}"
 -- 
 2.30.2
 
