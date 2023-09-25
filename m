@@ -2,143 +2,137 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 911EB7ADE85
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Sep 2023 20:18:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DF6A07ADFA2
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Sep 2023 21:40:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233241AbjIYSSf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 25 Sep 2023 14:18:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45266 "EHLO
+        id S232992AbjIYTkP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 25 Sep 2023 15:40:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233267AbjIYSS2 (ORCPT
+        with ESMTP id S229481AbjIYTkO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 25 Sep 2023 14:18:28 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2055.outbound.protection.outlook.com [40.107.223.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1C3EE58;
-        Mon, 25 Sep 2023 11:18:09 -0700 (PDT)
+        Mon, 25 Sep 2023 15:40:14 -0400
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-db5eur01olkn2046.outbound.protection.outlook.com [40.92.64.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8B9101;
+        Mon, 25 Sep 2023 12:40:06 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oJTD/OlVsTF3+RJxAu31mjT5KsZ0yyTGWzwhfAYvuFxk+0Z9rnRZZBcBjATcvK5eEiBxTQ9Z5HRr9NEn3MJFlVJBkYZ5sIMQp7y+/liV5fp10czA0elG5EUc0N878xkvGEmOyxm9aj0nc8cQKcJH3BkAPAXJ9Eb8leZjuRV1KHJvi6x/YEqqrZiQC5u5RyhnmjGnMJ3mBeiG3gFg9CySoatRwXPwbbYQld0DEd1/+QajwTYZuBhqTsYpCPlwWl3BObPoeLu+6M5LuaVh6Dqi0y5wSF+rUfyzvSAZxLdOKerDiXKjc57Mq2avYNNQo0sNnFN16Xae8IESmxmT2IOE5w==
+ b=nlz6ugNUKeTCgUyepL2qJgkraoGSPfXK9vIIkQzgAViYv1OG0MAnwcGQbFCl5huJ2lZEZfAquN29cpLIXiangpCnJ16PiGoLu6OQ6ZZINM5g8+n+RNBzfzHzmbBL+7CIe5tsKLbaXv6ihfOwYxV0ei7biTs52HmjB2TTRcYFMVzWB1qYqHNVhnnhY0T19L1B38Oc3ZSNQHHQbbHjrRDkorTWy6S4AQ59wgChnTJUl3pLpvBkAMKSx6TL/szOXRSJ1xBBCeKAN/PcXp2XG7VMOWaEk5F1ys/8xRooOQqKE5ob20v+CsxYzi9A16grg6sNrxmwkX18C8/dUV2cpedABA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/NchV+bYWyhxLSi9oE1VoshpekonTOldxtuUD6Wbpvo=;
- b=MpDcJgfBr6DOsK6MR4qreyIqcIFP7n9eTiJZ2Vxq08pddnH4pSZO7UVSZw1L9UM1R4P9yL0tsUc5GETG4Z/5/rZkrz3yRKwE+eQ+8H00FD54xoTp+zP/ip5CKH6hCZjlnGLvebt5qy0Z++sB8VvpaSXaxjTjd2pGCkgZ+kQKQm11oLQKlD8QwaScdFPF7uf4k7ovCQWzJtlY77U3ay+k4ktC0dMQTR/8BVVCT42QUHVtdgnHbMwQtmwYwqCwU/QGrkK7tHbLUuY7rCNqgYF1Fh8nq9jMQpp6o+49UR7EVqn5sdzfI+Bmsldq4UsT/EbQhUKtNikc0Q4c2O5hDZo2zQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.233) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
+ bh=+CVD3Q27nJ01Fi3J203j4E6t6HvjGWGCK3DuwnLbYCo=;
+ b=UZbJA0kxBn6ecM1RAMYB1lrQkyh0x7A4aL6XLqF7UNaFATBurVr6aMfkE5/xueCel6Oy+tm44TkDc9XqD6oOafG96wTNrOblMWhtL6dSS/24HdV/5jgOBzKySDXZ5K2Dj0a1JOhzMo8y7S1shDW5yN8YtTjwB/auMG0I18UkaUNJWMmbyk6bUfQtzlAi2/MFBI5unWgXu3PDnPYiDq3Q+BrAmWzz9p4tVu/vSV7mvs9Jcg14hbGZdXE1lFQ+xsLcn+oX43bnTxQjxnKA+ifpmQR/4UWrwyrAW3ZRvrl7ZCKprkWI8HmZ71muD4lsKq1XDqyisAF6usPfoCtq1V9kgQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/NchV+bYWyhxLSi9oE1VoshpekonTOldxtuUD6Wbpvo=;
- b=PJW+bc1sKvf7RFS3tTQQCY/fOHYI1IiSCTqIe/tlVi/A2k6LI3PP4xqTyg1aeMLIPEUX799jXPydpWMSaeBc/LBaFfcf3cidVP6qF2ManCELBLf75zqvhz1E43PffbTA4bTJ70WvpBW79xVi9s68bLtpnBS44DCKR1tU6e46IMdZPL2rPxU85/WHr4up5lySQxEGTndTD/fpKW+Gzp7mxPnTf8evcWrrDmdw2nUBGuX4vtB09iSnix74rssN55ET/kRcTaRqkahqpdgPWxNNcnBUPgUxpyxxEigaLZ88tvitYaQ6Bl/ZxbrAwNFy6ESdi2ZcbmA+a2xBGMGHHBcEog==
-Received: from DS7PR03CA0049.namprd03.prod.outlook.com (2603:10b6:5:3b5::24)
- by BL1PR12MB5876.namprd12.prod.outlook.com (2603:10b6:208:398::19) with
+ bh=+CVD3Q27nJ01Fi3J203j4E6t6HvjGWGCK3DuwnLbYCo=;
+ b=D8EQyz4jg/6CC4JQm/FP5pf4VTLA59h3U2ePZ6fJdQvanEzYQMDI4fDgrYAbqYNTBBaGzd7QPPmoMFc176wHOXK2hiXswA3WEwVd9kDRKcmkUEo2Y7VlEKo6t7cBR0nuTDxZx/5dBEPixwdvX/F6P9ap9CNkcJRKvolB4EI8yk53NtIW4KTWstKaArEParXravT0wu0Q/F05+Zkl5P4Mmokpc2YYYfICVtQAl00cqyjeZXPc3Pf3lcu0ztiKSKubM140/fEObSFz+LyJ9bt/RfqYKaGoe8CuNBQ81yrSsa9H6mWHzKS/z3z9q7IVyv9vDeqw5EoOSU/cVnuHZv/mIw==
+Received: from VI1P193MB0752.EURP193.PROD.OUTLOOK.COM (2603:10a6:800:32::19)
+ by AS8P193MB1207.EURP193.PROD.OUTLOOK.COM (2603:10a6:20b:33b::21) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.27; Mon, 25 Sep
- 2023 18:18:06 +0000
-Received: from DS1PEPF00017099.namprd05.prod.outlook.com
- (2603:10b6:5:3b5:cafe::81) by DS7PR03CA0049.outlook.office365.com
- (2603:10b6:5:3b5::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.35 via Frontend
- Transport; Mon, 25 Sep 2023 18:18:06 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.233) by
- DS1PEPF00017099.mail.protection.outlook.com (10.167.18.103) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6838.14 via Frontend Transport; Mon, 25 Sep 2023 18:18:06 +0000
-Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
- (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 25 Sep
- 2023 11:17:54 -0700
-Received: from drhqmail202.nvidia.com (10.126.190.181) by
- drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Mon, 25 Sep 2023 11:17:53 -0700
-Received: from Asurada-Nvidia (10.127.8.13) by mail.nvidia.com
- (10.126.190.181) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41 via Frontend
- Transport; Mon, 25 Sep 2023 11:17:52 -0700
-Date:   Mon, 25 Sep 2023 11:17:51 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-CC:     Baolu Lu <baolu.lu@linux.intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        <joro@8bytes.org>, <alex.williamson@redhat.com>,
-        <kevin.tian@intel.com>, <robin.murphy@arm.com>,
-        <cohuck@redhat.com>, <eric.auger@redhat.com>,
-        <kvm@vger.kernel.org>, <mjrosato@linux.ibm.com>,
-        <chao.p.peng@linux.intel.com>, <yi.y.sun@linux.intel.com>,
-        <peterx@redhat.com>, <jasowang@redhat.com>,
-        <shameerali.kolothum.thodi@huawei.com>, <lulu@redhat.com>,
-        <suravee.suthikulpanit@amd.com>, <iommu@lists.linux.dev>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <zhenzhong.duan@intel.com>, <joao.m.martins@oracle.com>
-Subject: Re: [PATCH v4 01/17] iommu: Add hwpt_type with user_data for
- domain_alloc_user op
-Message-ID: <ZRHOz+uuJ9gGE2ZF@Asurada-Nvidia>
-References: <20230921075138.124099-1-yi.l.liu@intel.com>
- <20230921075138.124099-2-yi.l.liu@intel.com>
- <4b17d331-957b-44d3-8a19-0b2ccc59150b@linux.intel.com>
- <ZQyuIQbyVk9p8C8o@Asurada-Nvidia>
- <20230925130506.GA13733@nvidia.com>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6813.28; Mon, 25 Sep
+ 2023 19:40:04 +0000
+Received: from VI1P193MB0752.EURP193.PROD.OUTLOOK.COM
+ ([fe80::3164:ae5c:78f7:23ad]) by VI1P193MB0752.EURP193.PROD.OUTLOOK.COM
+ ([fe80::3164:ae5c:78f7:23ad%4]) with mapi id 15.20.6813.024; Mon, 25 Sep 2023
+ 19:40:04 +0000
+From:   Juntong Deng <juntong.deng@outlook.com>
+To:     longman@redhat.com, lizefan.x@bytedance.com, tj@kernel.org,
+        hannes@cmpxchg.org, shuah@kernel.org
+Cc:     cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: [PATCH] selftests/cgroup: Fix awk usage in test_cpuset_prs.sh that may cause error
+Date:   Tue, 26 Sep 2023 03:38:19 +0800
+Message-ID: <VI1P193MB07522BFC89B6B6DC5A89153999FCA@VI1P193MB0752.EURP193.PROD.OUTLOOK.COM>
+X-Mailer: git-send-email 2.39.2
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TMN:  [Q1FYZPJYQuqtuAZ0vMiCQViRc0oaC9I1]
+X-ClientProxiedBy: AS4PR09CA0001.eurprd09.prod.outlook.com
+ (2603:10a6:20b:5e0::7) To VI1P193MB0752.EURP193.PROD.OUTLOOK.COM
+ (2603:10a6:800:32::19)
+X-Microsoft-Original-Message-ID: <20230925193819.6603-1-juntong.deng@outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230925130506.GA13733@nvidia.com>
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
+X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS1PEPF00017099:EE_|BL1PR12MB5876:EE_
-X-MS-Office365-Filtering-Correlation-Id: 98ffef03-393d-4dc6-62d1-08dbbdf3c3db
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
+X-MS-TrafficTypeDiagnostic: VI1P193MB0752:EE_|AS8P193MB1207:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5f3ef119-0c17-40ad-8e14-08dbbdff3734
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: z0IpDxQWYHYWSeCjvhzAZzNZ6ztRjORw2ObdhBPK60Pq9tBxFSexAVRBKA1oWuxVFaRTPYyfaLiyzw0aUUEGD3gJQvGfz6q7EQT4ijuKSq9HZiM1ptegCCEgsDtOWdi3vViwOebtRwGcrOteUI+iLL3UOdLsJzvEgnhzDb21NYbQ1z0e3dSguxsZElvz+hlK925kmndTvw9nfdAC0lLHbVhKaiXjO/S4ywemeC5VPjcYSdtNW/BJ+fn4R5kPoTox5IFJyw0+6n0X94efbSn0+JHhWuVpLhi3KaaYTsNsH+i8z5pU/cueGYq8wWntyoEBEBp+j/Qbj3vdxAiqtFkLsG9bVqeS3UHRFZ6HjZMVbAj+hQmCmfX/ruPOJBS4tNi4no6fX3UWcjsVU/84u7jTvsrqfdO1SCJIJLW/Wy249dlHexwGci9TKLmcAINxkJO/RHzWWF8JXIt6KS2H9rFf6h+xac09EimHTk8oqQVGXvf3S+9Kw+PaSdKsMjONDTFHt/MkXcpXNcfW4LLTq06NNSKYCinsbYkyhqeuwn9UBTEwslo6rY+vt2w28X+b/agLXL7VfWvJv5ta41P5hv131ximplP8YmZANmlTkf+hzVRFrFgjbnXubpqXlbOleSHqZUNkeGw/8GL8oXXrPcgTRUPm8k2Kqg9SStiLG1kLO3PViJmqh3ik9QXo3fonX9LSwqpKFemQTMUhM9R8WSNFvjutPFhoni7q0x7SBhyw2i8ZodvCpVRvpTSJ/ypAk2+BlJk4YS5eghbxRnAMa9/cyA==
-X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230031)(4636009)(136003)(396003)(376002)(39860400002)(346002)(230922051799003)(82310400011)(1800799009)(451199024)(186009)(36840700001)(40470700004)(46966006)(70586007)(54906003)(4744005)(316002)(86362001)(70206006)(2906002)(82740400003)(33716001)(7636003)(41300700001)(6636002)(356005)(36860700001)(5660300002)(7416002)(47076005)(478600001)(55016003)(8936002)(6862004)(66899024)(4326008)(83380400001)(9686003)(26005)(40480700001)(40460700003)(8676002)(426003)(336012)(67856001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Sep 2023 18:18:06.2288
+X-Microsoft-Antispam-Message-Info: rh6O9R7gcPbGz2f0EnL3urW8Um8l7GqeWqbVkLguPjfnMvebqm4/ORzyJ1bYNs59ZXzG9bECHvMECy83R7QPXZ0zOPeyM+WNT6mRPRSKqtYHqPdynZM9VEZKPZ1ewG4q2h7npHUvrXeC4UbVfmdF4vocmuTzMe5qAGMqQaMa+kXd9xllqOzLsZyU+2emsr8hUNb9CYUS96TLjGwgRoKQSKDeFkFgL+EJEkOpEwDJpmjYzIZ2ros78Bo+9enoGt9qX40bUu5Jl6XRgQjF41PNWGkSaNpGk3VbVO51tec4CmTTeqJ/Spa3tdddAUK0109eDUDUORljrIJfXV01yLoZnK1CA2UXbDqhslR2LbUD7PlhrIJz89S7lRdKeSU7cOzAL+qMRZkBAQ59xIOX1Rj5xpYX/sdgTczCkMUqOlXxdz6K/M1WYIMQhBZQM8afw1G1Bk53PDCwpPJk/RcLZMM5P6cL5TYiUY9OMqtBVUARXeH4DjofjIobMQvylE2Q1/5qrnSY/HOs7pPmTzvw3IWfNBm8cQWKO52tP7lznbVgej8mgYP/w/bENvfZP75cHAtB
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?RMbnDoI0ZvOB9E6cLBGpBS7bT8PnpuMfRLvL2JAzElvBpwJlprOQiEz2B9ux?=
+ =?us-ascii?Q?AHkPKgi4qkUCTVf+19iCkPBlTWFOsiUjCTIdtYC4D5ANkZWaw/NaBxEwi6R5?=
+ =?us-ascii?Q?zUpqgnoxLDsrlWa+/D8359HeOPtgyUBETwJTZL2gwjKcfI+ZB9DzklrwmV4f?=
+ =?us-ascii?Q?slVlv1qmbAq1mZ0veyFwW1JKZ4X8ErlLd67q3q7Z+BgW+MriuoPEyHdiVRXi?=
+ =?us-ascii?Q?EYXMahFNVtlhlW5x30hoIJlfbNdeg71QvqcqNi8wYMwKHNRIKeaUBh5unIuK?=
+ =?us-ascii?Q?vj7tnLw3HhaBJE4V8HtW0EoYe/CKl3Ll1Uhw1wvf3/FBAMn7rvN91SMF8qEY?=
+ =?us-ascii?Q?LlvlgI+TtqrdBpWBF3HKFOM5YPsmsv7048PfgApAMUoRbV+tLdoc+VRJvVEJ?=
+ =?us-ascii?Q?rmdH9GEcOLcVtdwumOoFqOkfYfMg7MNPi6icpJHjf5ZFZkoTEOHuSDx4en9P?=
+ =?us-ascii?Q?1y7G+DMoIF78MJD7Q6IKKf2FKZPv4e2ZukC9E9qp6MryyA5RANmPdSOnv/iF?=
+ =?us-ascii?Q?601aSmZI/KDWHYbPogpBuhZItCXx4TFV9O5H9UyWRSdOli7DDC2ZdGP5kmUE?=
+ =?us-ascii?Q?/PcE0qRJHVBBKlyCocVtmykA+A9OaS/gGWTP3ujlmbNow7dax0SkvW7XAFZz?=
+ =?us-ascii?Q?M3ae3EwYvhv3z5OalNcawtjfV1EiGRjfdViqxKek4KqTPlH+Wg+9QdiK1tll?=
+ =?us-ascii?Q?nHquVQKoQmABlVo1trZPtvs59r4xIqti9U4BvmPcN+WCaPHDB/qZjWuf+Vta?=
+ =?us-ascii?Q?XtUzPyGo1fyQhQif+Qz3QTUZf/cVVOwOPSqYGVlzQAbShn34Brfl3v71uH+8?=
+ =?us-ascii?Q?+aivyW6y8h+InSOl4xCzWYaKZp+xPMy86bxrk2KljZ8pJb/iYot+bS4mBHui?=
+ =?us-ascii?Q?cUNRLOHkyLDQ2XnedeAFsdxKNPjLw66ZHqUz83Zcu0nBjfBx/BW+xRYQHJ1P?=
+ =?us-ascii?Q?AShT5eisDAkhqAPcMkGuHlfKNmDqFX31ItjY31fdCxg+aWoyXqu8UPgG6+Oq?=
+ =?us-ascii?Q?kBYL4NYrLPjDOVUtyCIjdiis6yfm3G5YRLvv8U6/w5xtS6hbhbQK0mHq4H3h?=
+ =?us-ascii?Q?Nqy2csAtYLjbrD8FQ/vntuh5/mr/rGdgzKHGEZ9Msvp6MWc0+VpnPJjFQ9Fj?=
+ =?us-ascii?Q?0yUt6u1PX9PrvIGNWH2I9N/x9Ce4iy87xb+3ydzC94S0cVEUDp1rYjnDPMCC?=
+ =?us-ascii?Q?WsNvUTfMfnGct2mQi4HVJPupP8+0f8Cs14smmZ39427IeoPCMGaubu+uxQM?=
+ =?us-ascii?Q?=3D?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5f3ef119-0c17-40ad-8e14-08dbbdff3734
+X-MS-Exchange-CrossTenant-AuthSource: VI1P193MB0752.EURP193.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Sep 2023 19:40:04.6035
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 98ffef03-393d-4dc6-62d1-08dbbdf3c3db
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF00017099.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5876
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8P193MB1207
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Sep 25, 2023 at 10:05:06AM -0300, Jason Gunthorpe wrote:
-> On Thu, Sep 21, 2023 at 01:58:19PM -0700, Nicolin Chen wrote:
-> 
-> > Perhaps we could put all min_len defines in uAPI header, like:
-> > include/uapi/linux/gfs2_ondisk.h:442:#define LH_V1_SIZE (offsetofend(struct gfs2_log_header, lh_hash))
-> > In this way, drivers won't need to deal with that nor have risks
-> > of breaking ABI by changing a min_len.
-> 
-> I don't think we need constants, just be sure that every call to 
-> iommu_copy_user_data() has an offsetof() as the last parameter.
-> 
-> Indeed perhaps you should put it in a macro and force this to happen eg:
-> 
->  #define iommu_copy_user_data(user_data, from, min_size_member) \
->   __iommu_copy_user_data(user_data, from, offsetofend(typeof(*from), min_size_member))
-> 
->  iommu_copy_user_data(user_data, &data, iotlb);
+According to the awk manual, the -e option does not need to be specified
+in front of 'program' (unless you need to mix program-file).
 
-OK. And always use sizeof(typeof(*from)) in the mcaro for the
-current data_len, I assume?
+The redundant -e option can cause error when users use awk tools other
+than gawk (for example, mawk does not support the -e option).
 
-Thanks
-Nic
+Error Example:
+awk: not an option: -e
+Cgroup v2 mount point not found!
+
+Signed-off-by: Juntong Deng <juntong.deng@outlook.com>
+---
+ tools/testing/selftests/cgroup/test_cpuset_prs.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+index 4afb132e4e4f..6820653e8432 100755
+--- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
++++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+@@ -20,7 +20,7 @@ skip_test() {
+ WAIT_INOTIFY=$(cd $(dirname $0); pwd)/wait_inotify
+ 
+ # Find cgroup v2 mount point
+-CGROUP2=$(mount -t cgroup2 | head -1 | awk -e '{print $3}')
++CGROUP2=$(mount -t cgroup2 | head -1 | awk '{print $3}')
+ [[ -n "$CGROUP2" ]] || skip_test "Cgroup v2 mount point not found!"
+ 
+ CPUS=$(lscpu | grep "^CPU(s):" | sed -e "s/.*:[[:space:]]*//")
+-- 
+2.39.2
+
