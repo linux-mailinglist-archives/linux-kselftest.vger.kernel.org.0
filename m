@@ -2,131 +2,217 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 471DD7AEE98
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Sep 2023 16:57:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0537A7AEF8E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Sep 2023 17:24:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233819AbjIZOeZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 Sep 2023 10:34:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60044 "EHLO
+        id S233293AbjIZPY4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 Sep 2023 11:24:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234447AbjIZOeY (ORCPT
+        with ESMTP id S229520AbjIZPY4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 Sep 2023 10:34:24 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8C46FB
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Sep 2023 07:34:17 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2c12ae20a5cso145070541fa.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Sep 2023 07:34:17 -0700 (PDT)
+        Tue, 26 Sep 2023 11:24:56 -0400
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1013116
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 Sep 2023 08:24:48 -0700 (PDT)
+Received: by mail-il1-x131.google.com with SMTP id e9e14a558f8ab-3512b4eedf1so3758885ab.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 Sep 2023 08:24:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1695738856; x=1696343656; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=/riFuqlTy29sJVYgyLAuQOHUjoD2tge6GmUK1p+oNFo=;
-        b=H6jiNH6eKW4fNubrtolzQWuFBpZSTlFgowBn7rCGXgskl5pqIc7Z4Nqth5SE/6rSjq
-         9jru1QQBkVPHHnYtuBivH5UXvIO5nlLO9FgxYC/aEId/6s89ZkhgXsdwT4KlKOulWfQ8
-         qVRrkZwhJqMTr9TUDvqohEy52siP1JMmqoLBgsBrFzbTE7Z92TQDZk1c+AFSIoZ5Q4LT
-         Guo69cu2Bp6wY0t84cZ8p57Bn8IYm8FvuaaqEjOQlFm/lAwRyltr4TZPxtR6uEawWu6+
-         3CkFbMgf3TUBnDztdxd1qmKdBmueWP3sGLocSmBjPYBXHmdL0IModcrRyc5yqFazjLyf
-         GqHQ==
+        d=linuxfoundation.org; s=google; t=1695741888; x=1696346688; darn=vger.kernel.org;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=Sz9sMTvIUxZN8rDQT7cU7OZY6iqEUW4DRQ6cOnr7tnQ=;
+        b=gu3jY/4LB7Ls0qp7kAHIPw+jKiJeq+mVt85wekv5BGtQDJzvMIZDvOKCRJkWu07p3h
+         FSv/lgIaCjjOvcH0N1od+/AWV38gHyvfDLGE42T/UVFg3ZQGgT/lG2XIO1/c0T0hBNSg
+         JNxahoyJudFUkmPyR2HHYmBEQEh2ZFgHZquCA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695738856; x=1696343656;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/riFuqlTy29sJVYgyLAuQOHUjoD2tge6GmUK1p+oNFo=;
-        b=ASXF2SdqSEo6x/z+40ki4BvCapDM4fBMlWxoQcY/PCK6JrL0kJB+VM35yfWheMlJW7
-         8gHLQn1s7Eu8ft4/NC3YYrAHP1kIlPZHR9wqOp4/eVNG+oC1qooIZbVT0TQWTE7c9z7j
-         LNKYgSh9EtJmk8FesD9gKDZMxLuyl/vijsNOkhh6X3uHAF6n22W23I/z72DlLX8qMmzG
-         bR1jLlpSeInkETk5mltMRlBgEGKt4Fl8mTLTqI632AWw2pAxYcIRXl+rrfXnYKS0LpWo
-         l0B2i4TGRCMqIkQYgwOPWdd7B50JqrewtJnQPcs/zFfBEeYydOJXgLQDbdEPJjLf7ktG
-         PiLg==
-X-Gm-Message-State: AOJu0Yztd3quiuarDQi3wQ7F9wVr4m8bM+8HA5n56WHq9eotV8VzOBoh
-        JZZP4ZvExu2mDfic3TMkzYQmjQ==
-X-Google-Smtp-Source: AGHT+IGK6jhA/UCwpJHkwbyR/2+2F0OVC7pOaBisfmsQWfnk9JuVbAkFtDU5C2SUoJpgwUFe+tFE0Q==
-X-Received: by 2002:ac2:5397:0:b0:4fd:faf0:6591 with SMTP id g23-20020ac25397000000b004fdfaf06591mr7584690lfh.10.1695738855814;
-        Tue, 26 Sep 2023 07:34:15 -0700 (PDT)
-Received: from localhost (h3221.n1.ips.mtn.co.ug. [41.210.178.33])
-        by smtp.gmail.com with ESMTPSA id g4-20020aa7c584000000b0052e2472f884sm6916835edq.21.2023.09.26.07.34.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Sep 2023 07:34:15 -0700 (PDT)
-Date:   Tue, 26 Sep 2023 17:34:12 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Rae Moar <rmoar@google.com>
-Cc:     Daniel Latypov <dlatypov@google.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] kunit: Check for kunit_parse_glob_filter() failure
-Message-ID: <7bee596c-e0af-40cd-8204-6767266c8a0d@kadam.mountain>
-References: <3ff9d019-75b6-45ee-9b03-9d6ec7c5364f@moroto.mountain>
- <CA+GJov4SRGa6scDUmm1Tzu8JX4ZaF8S7YVxwZVvYJMSLXVRwrw@mail.gmail.com>
+        d=1e100.net; s=20230601; t=1695741888; x=1696346688;
+        h=subject:from:cc:to:content-language:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Sz9sMTvIUxZN8rDQT7cU7OZY6iqEUW4DRQ6cOnr7tnQ=;
+        b=PrBgbQK4naKS3MYK9PA7e8pLG08wrqlj64AMOOjRhgtd0LNQt5MY6YqVLLrl+VElwa
+         dbFjqN1aSG2xM9TNuc72qB2k3ntPHLvUtKi9+LEsGPJiahH6dXbHaZqX121No0NuWPJ5
+         At2FWa4sWVKCXnVW3v7o0cauip0Yxm/SbWTb9TPnQFIemIRatnl6rrtEeK4hWPD4gEHK
+         KyZL5lYlAoEnPfAAaOBRGIsB1Cjr6PxtYtLBwnb73bBspqs/rqYhGM4fLrxOTlCe85/c
+         +72x4ffo0LWHN30gXhxgVkSjI74EdUrBwLrw04HG9EDqgFFAWf6JYXSs4rN3x8CUzukB
+         YB7A==
+X-Gm-Message-State: AOJu0YwxJMmfOoMGUdD06Nzq36CbWsFEg3llOqvb2WnTquEus8GMzPQ+
+        w0hj+u7P9VUV4p0aMJ2xD9URqW4URAHdAthKRH4=
+X-Google-Smtp-Source: AGHT+IHhXxQeFfl6M89yV3/O+UqN2y+ZB3m0qhwa5+y4zFLAiEKE69mKlnxsMdpHTYruBx+25vz2WQ==
+X-Received: by 2002:a05:6e02:f41:b0:351:54db:c1c9 with SMTP id y1-20020a056e020f4100b0035154dbc1c9mr1542364ilj.1.1695741888176;
+        Tue, 26 Sep 2023 08:24:48 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id x3-20020a056e021bc300b003513b61b472sm1608383ilv.38.2023.09.26.08.24.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Sep 2023 08:24:47 -0700 (PDT)
+Content-Type: multipart/mixed; boundary="------------h1Dst0bFCEhvMn0AJ7NrkwTQ"
+Message-ID: <f7b2da1d-6e47-0599-03d1-c1786ff69998@linuxfoundation.org>
+Date:   Tue, 26 Sep 2023 09:24:47 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+GJov4SRGa6scDUmm1Tzu8JX4ZaF8S7YVxwZVvYJMSLXVRwrw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Content-Language: en-US
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Shuah Khan <skhan@linuxfoundation.org>, shuah <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+From:   Shuah Khan <skhan@linuxfoundation.org>
+Subject: [GIT PULL] Kselftest fixes update for Linux 6.6-rc4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Sep 19, 2023 at 02:49:43PM -0400, Rae Moar wrote:
-> On Fri, Sep 15, 2023 at 8:58 AM Dan Carpenter <dan.carpenter@linaro.org> wrote:
-> >
-> > Smatch complains that the missing error checks would lead to a crash:
-> >
-> >     lib/kunit/executor_test.c:40 parse_filter_test()
-> >     error: double free of 'filter.test_glob'
-> >
-> > We may as well do it right...
-> >
-> > Fixes: a127b154a8f2 ("kunit: tool: allow filtering test cases via glob")
-> > Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
-> 
-> Hello!
-> 
-> We definitely should add in checks for these errors. I have a couple
-> comments below.
-> 
-> Thanks!
-> -Rae
-> 
-> > ---
-> >  lib/kunit/executor_test.c | 6 ++++--
-> >  1 file changed, 4 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/lib/kunit/executor_test.c b/lib/kunit/executor_test.c
-> > index b4f6f96b2844..176c9c9dfcfc 100644
-> > --- a/lib/kunit/executor_test.c
-> > +++ b/lib/kunit/executor_test.c
-> > @@ -27,13 +27,15 @@ static void parse_filter_test(struct kunit *test)
-> >  {
-> >         struct kunit_glob_filter filter = {NULL, NULL};
-> >
-> > -       kunit_parse_glob_filter(&filter, "suite");
-> > +       if (!kunit_parse_glob_filter(&filter, "suite"))
-> > +               return;
-> 
-> First, this is returning every time this test is run because the
-> kunit_parse_glob_filter returns 0 when there is no error. So this
-> should instead be checking for a result of not equal to 0.
+This is a multi-part message in MIME format.
+--------------h1Dst0bFCEhvMn0AJ7NrkwTQ
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Oh...  Duh.  Sorry.  That's embarrassing.
+Hi Linus,
 
-> 
-> Secondly, this should fail the test if the parsing returns an error.
-> So instead of returning I would recommend using a KUNIT_ASSERT
-> statement to check the result of this method is equal to 0.
+Please pull the following Kselftest fixes update for Linux 6.6-rc4.
 
-Will do.  Thanks!
+This kselftest fixes update for Linux 6.6-rc4 consists of one
+single fix to unmount tracefs when test created mount.
 
-regards,
-dan carpenter
+diff is attached.
 
+thanks.
+-- Shuah
+
+----------------------------------------------------------------
+The following changes since commit ce9ecca0238b140b88f43859b211c9fdfd8e5b70:
+
+   Linux 6.6-rc2 (2023-09-17 14:40:24 -0700)
+
+are available in the Git repository at:
+
+   git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest tags/linux-kselftest-fixes-6.6-rc4
+
+for you to fetch changes up to 8ed99af4a266a3492d773b5d85c3f8e9f81254b6:
+
+   selftests/user_events: Fix to unmount tracefs when test created mount (2023-09-18 11:04:52 -0600)
+
+----------------------------------------------------------------
+linux-kselftest-fixes-6.6-rc4
+
+This kselftest fixes update for Linux 6.6-rc4 consists of one
+single fix to unmount tracefs when test created mount.
+
+----------------------------------------------------------------
+Beau Belgrave (1):
+       selftests/user_events: Fix to unmount tracefs when test created mount
+
+  tools/testing/selftests/user_events/abi_test.c     |  4 +++-
+  tools/testing/selftests/user_events/dyn_test.c     |  5 ++++-
+  tools/testing/selftests/user_events/ftrace_test.c  |  5 ++++-
+  tools/testing/selftests/user_events/perf_test.c    |  5 ++++-
+  .../selftests/user_events/user_events_selftests.h  | 24 +++++++++++++++++-----
+  5 files changed, 34 insertions(+), 9 deletions(-)
+
+----------------------------------------------------------------
+--------------h1Dst0bFCEhvMn0AJ7NrkwTQ
+Content-Type: text/x-patch; charset=UTF-8;
+ name="linux-kselftest-fixes-6.6-rc4.diff"
+Content-Disposition: attachment; filename="linux-kselftest-fixes-6.6-rc4.diff"
+Content-Transfer-Encoding: base64
+
+ZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3VzZXJfZXZlbnRzL2FiaV90
+ZXN0LmMgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy91c2VyX2V2ZW50cy9hYmlfdGVzdC5j
+CmluZGV4IDIyMzc0ZDI5ZmZkZC4uODIwMmYxMzI3YzM5IDEwMDY0NAotLS0gYS90b29scy90
+ZXN0aW5nL3NlbGZ0ZXN0cy91c2VyX2V2ZW50cy9hYmlfdGVzdC5jCisrKyBiL3Rvb2xzL3Rl
+c3Rpbmcvc2VsZnRlc3RzL3VzZXJfZXZlbnRzL2FiaV90ZXN0LmMKQEAgLTkxLDE2ICs5MSwx
+OCBAQCBzdGF0aWMgaW50IHJlZ19kaXNhYmxlKGxvbmcgKmVuYWJsZSwgaW50IGJpdCkKIAog
+RklYVFVSRSh1c2VyKSB7CiAJbG9uZyBjaGVjazsKKwlib29sIHVtb3VudDsKIH07CiAKIEZJ
+WFRVUkVfU0VUVVAodXNlcikgewotCVVTRVJfRVZFTlRfRklYVFVSRV9TRVRVUChyZXR1cm4p
+OworCVVTRVJfRVZFTlRfRklYVFVSRV9TRVRVUChyZXR1cm4sIHNlbGYtPnVtb3VudCk7CiAK
+IAljaGFuZ2VfZXZlbnQoZmFsc2UpOwogCXNlbGYtPmNoZWNrID0gMDsKIH0KIAogRklYVFVS
+RV9URUFSRE9XTih1c2VyKSB7CisJVVNFUl9FVkVOVF9GSVhUVVJFX1RFQVJET1dOKHNlbGYt
+PnVtb3VudCk7CiB9CiAKIFRFU1RfRih1c2VyLCBlbmFibGVtZW50KSB7CmRpZmYgLS1naXQg
+YS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy91c2VyX2V2ZW50cy9keW5fdGVzdC5jIGIvdG9v
+bHMvdGVzdGluZy9zZWxmdGVzdHMvdXNlcl9ldmVudHMvZHluX3Rlc3QuYwppbmRleCAzMmM4
+MjdhNTJkN2QuLmE4NTk4MDE5MGJlYSAxMDA2NDQKLS0tIGEvdG9vbHMvdGVzdGluZy9zZWxm
+dGVzdHMvdXNlcl9ldmVudHMvZHluX3Rlc3QuYworKysgYi90b29scy90ZXN0aW5nL3NlbGZ0
+ZXN0cy91c2VyX2V2ZW50cy9keW5fdGVzdC5jCkBAIC0xNDQsMTMgKzE0NCwxNiBAQCBkbyB7
+IFwKIAogRklYVFVSRSh1c2VyKSB7CiAJaW50IGNoZWNrOworCWJvb2wgdW1vdW50OwogfTsK
+IAogRklYVFVSRV9TRVRVUCh1c2VyKSB7Ci0JVVNFUl9FVkVOVF9GSVhUVVJFX1NFVFVQKHJl
+dHVybik7CisJVVNFUl9FVkVOVF9GSVhUVVJFX1NFVFVQKHJldHVybiwgc2VsZi0+dW1vdW50
+KTsKIH0KIAogRklYVFVSRV9URUFSRE9XTih1c2VyKSB7CisJVVNFUl9FVkVOVF9GSVhUVVJF
+X1RFQVJET1dOKHNlbGYtPnVtb3VudCk7CisKIAl3YWl0X2Zvcl9kZWxldGUoKTsKIH0KIApk
+aWZmIC0tZ2l0IGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvdXNlcl9ldmVudHMvZnRyYWNl
+X3Rlc3QuYyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3VzZXJfZXZlbnRzL2Z0cmFjZV90
+ZXN0LmMKaW5kZXggNmEyNjBjYWVlZGRjLi5kY2Q3NTA5ZmUyZTAgMTAwNjQ0Ci0tLSBhL3Rv
+b2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3VzZXJfZXZlbnRzL2Z0cmFjZV90ZXN0LmMKKysrIGIv
+dG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvdXNlcl9ldmVudHMvZnRyYWNlX3Rlc3QuYwpAQCAt
+MjA0LDEwICsyMDQsMTEgQEAgRklYVFVSRSh1c2VyKSB7CiAJaW50IGRhdGFfZmQ7CiAJaW50
+IGVuYWJsZV9mZDsKIAlpbnQgY2hlY2s7CisJYm9vbCB1bW91bnQ7CiB9OwogCiBGSVhUVVJF
+X1NFVFVQKHVzZXIpIHsKLQlVU0VSX0VWRU5UX0ZJWFRVUkVfU0VUVVAocmV0dXJuKTsKKwlV
+U0VSX0VWRU5UX0ZJWFRVUkVfU0VUVVAocmV0dXJuLCBzZWxmLT51bW91bnQpOwogCiAJc2Vs
+Zi0+c3RhdHVzX2ZkID0gb3BlbihzdGF0dXNfZmlsZSwgT19SRE9OTFkpOwogCUFTU0VSVF9O
+RSgtMSwgc2VsZi0+c3RhdHVzX2ZkKTsKQEAgLTIxOSw2ICsyMjAsOCBAQCBGSVhUVVJFX1NF
+VFVQKHVzZXIpIHsKIH0KIAogRklYVFVSRV9URUFSRE9XTih1c2VyKSB7CisJVVNFUl9FVkVO
+VF9GSVhUVVJFX1RFQVJET1dOKHNlbGYtPnVtb3VudCk7CisKIAljbG9zZShzZWxmLT5zdGF0
+dXNfZmQpOwogCWNsb3NlKHNlbGYtPmRhdGFfZmQpOwogCmRpZmYgLS1naXQgYS90b29scy90
+ZXN0aW5nL3NlbGZ0ZXN0cy91c2VyX2V2ZW50cy9wZXJmX3Rlc3QuYyBiL3Rvb2xzL3Rlc3Rp
+bmcvc2VsZnRlc3RzL3VzZXJfZXZlbnRzL3BlcmZfdGVzdC5jCmluZGV4IGY4OTMzOThjZGEw
+NS4uNTI4OGU3NjhiMjA3IDEwMDY0NAotLS0gYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy91
+c2VyX2V2ZW50cy9wZXJmX3Rlc3QuYworKysgYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy91
+c2VyX2V2ZW50cy9wZXJmX3Rlc3QuYwpAQCAtMTExLDE2ICsxMTEsMTkgQEAgc3RhdGljIGlu
+dCBjbGVhcihpbnQgKmNoZWNrKQogRklYVFVSRSh1c2VyKSB7CiAJaW50IGRhdGFfZmQ7CiAJ
+aW50IGNoZWNrOworCWJvb2wgdW1vdW50OwogfTsKIAogRklYVFVSRV9TRVRVUCh1c2VyKSB7
+Ci0JVVNFUl9FVkVOVF9GSVhUVVJFX1NFVFVQKHJldHVybik7CisJVVNFUl9FVkVOVF9GSVhU
+VVJFX1NFVFVQKHJldHVybiwgc2VsZi0+dW1vdW50KTsKIAogCXNlbGYtPmRhdGFfZmQgPSBv
+cGVuKGRhdGFfZmlsZSwgT19SRFdSKTsKIAlBU1NFUlRfTkUoLTEsIHNlbGYtPmRhdGFfZmQp
+OwogfQogCiBGSVhUVVJFX1RFQVJET1dOKHVzZXIpIHsKKwlVU0VSX0VWRU5UX0ZJWFRVUkVf
+VEVBUkRPV04oc2VsZi0+dW1vdW50KTsKKwogCWNsb3NlKHNlbGYtPmRhdGFfZmQpOwogCiAJ
+aWYgKGNsZWFyKCZzZWxmLT5jaGVjaykgIT0gMCkKZGlmZiAtLWdpdCBhL3Rvb2xzL3Rlc3Rp
+bmcvc2VsZnRlc3RzL3VzZXJfZXZlbnRzL3VzZXJfZXZlbnRzX3NlbGZ0ZXN0cy5oIGIvdG9v
+bHMvdGVzdGluZy9zZWxmdGVzdHMvdXNlcl9ldmVudHMvdXNlcl9ldmVudHNfc2VsZnRlc3Rz
+LmgKaW5kZXggNjkwMzc4OTQyZjgyLi5lMWMzYzA2M2MwMzEgMTAwNjQ0Ci0tLSBhL3Rvb2xz
+L3Rlc3Rpbmcvc2VsZnRlc3RzL3VzZXJfZXZlbnRzL3VzZXJfZXZlbnRzX3NlbGZ0ZXN0cy5o
+CisrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL3VzZXJfZXZlbnRzL3VzZXJfZXZlbnRz
+X3NlbGZ0ZXN0cy5oCkBAIC0xMSwxMyArMTEsMTkgQEAKIAogI2luY2x1ZGUgIi4uL2tzZWxm
+dGVzdC5oIgogCi1zdGF0aWMgaW5saW5lIGJvb2wgdHJhY2Vmc19lbmFibGVkKGNoYXIgKipt
+ZXNzYWdlLCBib29sICpmYWlsKQorc3RhdGljIGlubGluZSB2b2lkIHRyYWNlZnNfdW5tb3Vu
+dCh2b2lkKQoreworCXVtb3VudCgiL3N5cy9rZXJuZWwvdHJhY2luZyIpOworfQorCitzdGF0
+aWMgaW5saW5lIGJvb2wgdHJhY2Vmc19lbmFibGVkKGNoYXIgKiptZXNzYWdlLCBib29sICpm
+YWlsLCBib29sICp1bW91bnQpCiB7CiAJc3RydWN0IHN0YXQgYnVmOwogCWludCByZXQ7CiAK
+IAkqbWVzc2FnZSA9ICIiOwogCSpmYWlsID0gZmFsc2U7CisJKnVtb3VudCA9IGZhbHNlOwog
+CiAJLyogRW5zdXJlIHRyYWNlZnMgaXMgaW5zdGFsbGVkICovCiAJcmV0ID0gc3RhdCgiL3N5
+cy9rZXJuZWwvdHJhY2luZyIsICZidWYpOwpAQCAtMzcsNiArNDMsOCBAQCBzdGF0aWMgaW5s
+aW5lIGJvb2wgdHJhY2Vmc19lbmFibGVkKGNoYXIgKiptZXNzYWdlLCBib29sICpmYWlsKQog
+CQkJcmV0dXJuIGZhbHNlOwogCQl9CiAKKwkJKnVtb3VudCA9IHRydWU7CisKIAkJcmV0ID0g
+c3RhdCgiL3N5cy9rZXJuZWwvdHJhY2luZy9SRUFETUUiLCAmYnVmKTsKIAl9CiAKQEAgLTQ5
+LDEzICs1NywxNCBAQCBzdGF0aWMgaW5saW5lIGJvb2wgdHJhY2Vmc19lbmFibGVkKGNoYXIg
+KiptZXNzYWdlLCBib29sICpmYWlsKQogCXJldHVybiB0cnVlOwogfQogCi1zdGF0aWMgaW5s
+aW5lIGJvb2wgdXNlcl9ldmVudHNfZW5hYmxlZChjaGFyICoqbWVzc2FnZSwgYm9vbCAqZmFp
+bCkKK3N0YXRpYyBpbmxpbmUgYm9vbCB1c2VyX2V2ZW50c19lbmFibGVkKGNoYXIgKiptZXNz
+YWdlLCBib29sICpmYWlsLCBib29sICp1bW91bnQpCiB7CiAJc3RydWN0IHN0YXQgYnVmOwog
+CWludCByZXQ7CiAKIAkqbWVzc2FnZSA9ICIiOwogCSpmYWlsID0gZmFsc2U7CisJKnVtb3Vu
+dCA9IGZhbHNlOwogCiAJaWYgKGdldHVpZCgpICE9IDApIHsKIAkJKm1lc3NhZ2UgPSAiTXVz
+dCBiZSBydW4gYXMgcm9vdCI7CkBAIC02Myw3ICs3Miw3IEBAIHN0YXRpYyBpbmxpbmUgYm9v
+bCB1c2VyX2V2ZW50c19lbmFibGVkKGNoYXIgKiptZXNzYWdlLCBib29sICpmYWlsKQogCQly
+ZXR1cm4gZmFsc2U7CiAJfQogCi0JaWYgKCF0cmFjZWZzX2VuYWJsZWQobWVzc2FnZSwgZmFp
+bCkpCisJaWYgKCF0cmFjZWZzX2VuYWJsZWQobWVzc2FnZSwgZmFpbCwgdW1vdW50KSkKIAkJ
+cmV0dXJuIGZhbHNlOwogCiAJLyogRW5zdXJlIHVzZXJfZXZlbnRzIGlzIGluc3RhbGxlZCAq
+LwpAQCAtODUsMTAgKzk0LDEwIEBAIHN0YXRpYyBpbmxpbmUgYm9vbCB1c2VyX2V2ZW50c19l
+bmFibGVkKGNoYXIgKiptZXNzYWdlLCBib29sICpmYWlsKQogCXJldHVybiB0cnVlOwogfQog
+Ci0jZGVmaW5lIFVTRVJfRVZFTlRfRklYVFVSRV9TRVRVUChzdGF0ZW1lbnQpIGRvIHsgXAor
+I2RlZmluZSBVU0VSX0VWRU5UX0ZJWFRVUkVfU0VUVVAoc3RhdGVtZW50LCB1bW91bnQpIGRv
+IHsgXAogCWNoYXIgKm1lc3NhZ2U7IFwKIAlib29sIGZhaWw7IFwKLQlpZiAoIXVzZXJfZXZl
+bnRzX2VuYWJsZWQoJm1lc3NhZ2UsICZmYWlsKSkgeyBcCisJaWYgKCF1c2VyX2V2ZW50c19l
+bmFibGVkKCZtZXNzYWdlLCAmZmFpbCwgJih1bW91bnQpKSkgeyBcCiAJCWlmIChmYWlsKSB7
+IFwKIAkJCVRIX0xPRygiU2V0dXAgZmFpbGVkIGR1ZSB0bzogJXMiLCBtZXNzYWdlKTsgXAog
+CQkJQVNTRVJUX0ZBTFNFKGZhaWwpOyBcCkBAIC05Nyw0ICsxMDYsOSBAQCBzdGF0aWMgaW5s
+aW5lIGJvb2wgdXNlcl9ldmVudHNfZW5hYmxlZChjaGFyICoqbWVzc2FnZSwgYm9vbCAqZmFp
+bCkKIAl9IFwKIH0gd2hpbGUgKDApCiAKKyNkZWZpbmUgVVNFUl9FVkVOVF9GSVhUVVJFX1RF
+QVJET1dOKHVtb3VudCkgZG8geyBcCisJaWYgKCh1bW91bnQpKSAgXAorCQl0cmFjZWZzX3Vu
+bW91bnQoKTsgXAorfSB3aGlsZSAoMCkKKwogI2VuZGlmIC8qIF9VU0VSX0VWRU5UU19TRUxG
+VEVTVFNfSCAqLwo=
+
+--------------h1Dst0bFCEhvMn0AJ7NrkwTQ--
