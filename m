@@ -2,56 +2,56 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A1077AED00
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Sep 2023 14:40:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C12A7AED43
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Sep 2023 14:54:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234036AbjIZMlC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 Sep 2023 08:41:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36336 "EHLO
+        id S229783AbjIZMyn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 Sep 2023 08:54:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234563AbjIZMlA (ORCPT
+        with ESMTP id S234451AbjIZMym (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 Sep 2023 08:41:00 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C27EEEB;
-        Tue, 26 Sep 2023 05:40:53 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-534659061afso1271375a12.3;
-        Tue, 26 Sep 2023 05:40:53 -0700 (PDT)
+        Tue, 26 Sep 2023 08:54:42 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2C27C9;
+        Tue, 26 Sep 2023 05:54:35 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id 38308e7fff4ca-2c02e232c48so147836521fa.1;
+        Tue, 26 Sep 2023 05:54:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695732052; x=1696336852; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1695732874; x=1696337674; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/YRY9yQJk6mtkXHIe9rZvZZaiQwNs3B0gJlBYDdShz4=;
-        b=Xi2XxTX3xArWBdetnfGWEnUDO/eXd4x1OaDIxhl499kqcPt79zew8Z1cwwPj78e1Pn
-         3EKg1kgg3O3GcUgII0zhUM8euhQUk4hqpnXWmNRWGTabQPOpbevY3NzaMiQpBNzs6FCj
-         h9XR3CI5/qW+AKUtaMkDk3TZcogGovRkFyYFBLOGkmb3qoT7PK0qjNEVYuamECXEuCxy
-         +l4IRyBbbX68NisE35YLmAR3+nL+FdkQpdFfa8vlAlQ1sChLF0PAhke3xzEwa+1A9qrk
-         hstIo8td561BQGCfogLMLTzimzzg4i45bpns3M0LO2GWjjwXEvLtHjx4hoPGpJKDZd2Y
-         7Khg==
+        bh=DSSA76tbtMgsClZO2PhtmBjLBmv/PWyp0ZgUSY7GNBs=;
+        b=P/GXb1y5F1+m/mcwe/HJu7pVCUrv4gWMSdvaFPYsCyoEJgHlRfnogLZJg8v2R3uE+b
+         MtkRiYL1oDaxK9cu/vfjMClo/b8KAz64nxvQfxWnkwOSFmIrLr44w/D9Adez0XpFmFP/
+         5WaD8opLfXOybOSnllonoZek2QsDhz42wzgHOUCf4oEYIpG26lJkREowVdZuTKQgugK/
+         cK8YXmVyVOH5oephSY9i1TFI/kXzrVJ0BTNEi6HFLoWNxfTJCpES0Lt+y9dyoPufHRGW
+         tC8novXp1zL9wSLxcOg/Y+JRdt0c1COgK+bVbsg7o7ZImXe4vK56zD3cw4zuGhu7aWSE
+         MAZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695732052; x=1696336852;
+        d=1e100.net; s=20230601; t=1695732874; x=1696337674;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/YRY9yQJk6mtkXHIe9rZvZZaiQwNs3B0gJlBYDdShz4=;
-        b=tONfrgijPhZIp84k0qx15aaE4lo98dFBBl8ELOLhG8EodeYb6XOqhpHUG+DvXjY9Pw
-         /47e4rZf01OWflex/gNCza+VRjcTVCFH/DtDrxwPfHMQWjJeJPYxITv/BF1/l17I5GDX
-         tururvYnbq0V8XMWueUKoXA3ImL6drOWjOpexac6ybXC9QsIvQYLeeo5Yni+m6NBGxeJ
-         ajtPWpoLqBk8BaUMzI+XnZ49PHGBCRg3eCIpZNWVgCvIxGtkaxCwXBI9S0nKRoXjI/4r
-         tIihc0uPLutQNUguNEINOWxCi2LBAULCmLXGL6JLflBbjBHE8+Ael+n0HlVUubIgSLdL
-         e8+w==
-X-Gm-Message-State: AOJu0YxkQE6nqq2tWBpiFPeRXgTXBEdZMpbCJtDdcHYCzeqVmXRHfXDI
-        zIu8N0iq4g4NphYO77866E4=
-X-Google-Smtp-Source: AGHT+IF8Bdu1wgi4OEbTgX8REMmOZ0IDM7txTkRoPoTX2SZd3bXWXkaQRg0+frzvdN8lSkDNuHq7Bg==
-X-Received: by 2002:aa7:c755:0:b0:530:bbeb:571 with SMTP id c21-20020aa7c755000000b00530bbeb0571mr8885034eds.36.1695732051949;
-        Tue, 26 Sep 2023 05:40:51 -0700 (PDT)
+        bh=DSSA76tbtMgsClZO2PhtmBjLBmv/PWyp0ZgUSY7GNBs=;
+        b=J35l5WgTBIkRFGnyYFEcUEdU0XaHsIrTn/QLz1d963R/CKMf2Ry5RJ1XfeSopn5/od
+         3DkGj1eWHCNQiopwkwG3HiDkTuA/XmXD3KkwZ6ufZD72B+vj+9uFM09MMqXlW8TnIabW
+         nozUP/ivFwZoLzIWinrUTE0i0erCwTY6uu1/GGvACQ0BT4HQm/Eu02umFohRkXQ+/S8y
+         +PgF1/z7b5ha3gZzozqPWQ8IAakE4sJjWbFHRKHp2ZqhsM5e5NxSSrlY0hC2MgXEbCDW
+         36cnOQwd/A/pNh8T9qoNQJdVAgSAyr2svBKp/IsIkfRXufedjObLgSUhRs73+qg7fl/M
+         9TqA==
+X-Gm-Message-State: AOJu0Yzf1m/QxaGes4NhklJZiA0ipXnXdFj/l6Rvw4fjHoD8OCy5/pgR
+        GL/HAlP49JzoMa8wOGda5ko=
+X-Google-Smtp-Source: AGHT+IEPvklHw0p3Crq2PTux3ivV5HO1SBeCs+IvL0I3tYCNQrjzF4d3c3KB2oyW1xw3xIZcHQ3l9g==
+X-Received: by 2002:a2e:88c6:0:b0:2c0:1673:53af with SMTP id a6-20020a2e88c6000000b002c0167353afmr7995991ljk.14.1695732873666;
+        Tue, 26 Sep 2023 05:54:33 -0700 (PDT)
 Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id d7-20020a056402516700b0052f3471ccf6sm6768323ede.6.2023.09.26.05.40.51
+        by smtp.gmail.com with ESMTPSA id lg15-20020a170906f88f00b0099d0a8ccb5fsm7641329ejb.152.2023.09.26.05.54.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Sep 2023 05:40:51 -0700 (PDT)
+        Tue, 26 Sep 2023 05:54:33 -0700 (PDT)
 From:   Jiri Olsa <olsajiri@gmail.com>
 X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Tue, 26 Sep 2023 14:40:49 +0200
+Date:   Tue, 26 Sep 2023 14:54:31 +0200
 To:     Tony Ambardar <tony.ambardar@gmail.com>
 Cc:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Alexei Starovoitov <ast@kernel.org>,
@@ -60,7 +60,7 @@ Cc:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Shuah Khan <shuah@kernel.org>
 Subject: Re: [PATCH bpf-next v1] bpf/selftests: improve arg parsing in
  test_verifier
-Message-ID: <ZRLRUQEf7M4wa1HJ@krava>
+Message-ID: <ZRLUhxycLfWgefhC@krava>
 References: <20230925233702.19466-1-Tony.Ambardar@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -77,57 +77,9 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On Mon, Sep 25, 2023 at 04:37:02PM -0700, Tony Ambardar wrote:
-> Current test_verifier provides little feedback or argument validation,
-> instead silently falling back to running all tests in case of user error
-> or even expected use cases. Trying to do manual exploratory testing,
-> switching between kernel versions (e.g. with varying tests), or working
-> around problematic tests (e.g. kernel hangs/crashes) can be a frustrating
-> experience.
-> 
-> Rework argument parsing to be more robust and strict, and provide basic
-> help on errors. Clamp test ranges to valid values and add an option to
-> list available built-in tests ("-l"). Default "test_verifier" behaviour
-> (run all tests) is unchanged and backwards-compatible. Updated examples:
-> 
->      $ test_verifier die die die     # previously ran all tests
->      Usage: test_verifier -l | [-v|-vv] [<tst_lo> [<tst_hi>]]
-> 
->      $ test_verifier 700 9999        # runs test subset from 700 to end
-> 
-> Signed-off-by: Tony Ambardar <Tony.Ambardar@gmail.com>
-> ---
->  tools/testing/selftests/bpf/test_verifier.c | 54 ++++++++++++---------
->  1 file changed, 30 insertions(+), 24 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
-> index 98107e0452d3..3712b5363f60 100644
-> --- a/tools/testing/selftests/bpf/test_verifier.c
-> +++ b/tools/testing/selftests/bpf/test_verifier.c
-> @@ -10,9 +10,11 @@
->  #include <endian.h>
->  #include <asm/types.h>
->  #include <linux/types.h>
-> +#include <linux/minmax.h>
 
-this fails to compile
+SNIP
 
-  BINARY   test_verifier
-test_verifier.c:13:10: fatal error: linux/minmax.h: No such file or directory
-   13 | #include <linux/minmax.h>
-      |          ^~~~~~~~~~~~~~~~
-
-looks like you could use perhaps <linux/kernel.h> instead?
-
-jirka
-
-
->  #include <stdint.h>
->  #include <stdio.h>
->  #include <stdlib.h>
-> +#include <ctype.h>
->  #include <unistd.h>
->  #include <errno.h>
->  #include <string.h>
 > @@ -1848,36 +1850,40 @@ int main(int argc, char **argv)
 >  {
 >  	unsigned int from = 0, to = ARRAY_SIZE(tests);
@@ -174,6 +126,12 @@ jirka
 > -		unsigned int t = atoi(argv[arg]);
 > +	for (i = 1; i <= 2 && argc > 1; i++, arg++, argc--) {
 > +		unsigned int t = min(atoi(argv[arg]), ARRAY_SIZE(tests) - 1);
+
+this looks like unnecessary loop, the code before is easy to understand,
+could we just do the args check on isdigit and valid index value in there?
+
+jirka
+
 >  
 > -		if (t < to) {
 > +		if (!isdigit(*argv[arg]))
