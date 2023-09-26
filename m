@@ -2,102 +2,119 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C927C7AE94F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Sep 2023 11:35:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E894B7AEB5D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Sep 2023 13:22:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234207AbjIZJfW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 Sep 2023 05:35:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50108 "EHLO
+        id S230103AbjIZLW5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 Sep 2023 07:22:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234114AbjIZJfT (ORCPT
+        with ESMTP id S229726AbjIZLW5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 Sep 2023 05:35:19 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 035FEF3;
-        Tue, 26 Sep 2023 02:35:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695720913; x=1727256913;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=bZj72hwk6aGVHqUfVsQNiXvoc1GB8ZJ+RY64a2dEVnk=;
-  b=CsFHfwDjUPio3TMeQ2KS9igb5wWbW/08xnYhqcUybO0NggZHh19kwHyS
-   zfDr9YI0ht/JkwU0sUIZkmzL/dz3nLYJkZ4wIc47evQ6z8tA2v1zhUc5t
-   uOfB7Khf9qO5+w0fGR4A/6N+HDM9qkxrjpvJ+1M80GXqZVEZQ4QSNxm+m
-   30lC/HqCC9+K8kv6MZcJw/TNjs5E2YmweYPrjJQzuzW9y6o4fCzJfPmKz
-   A6T2NGk1UwqBmYDlKdv2LIv1flPwHNfxsHTAMqY9KdR9CIbwb7ELoTalM
-   Bp2FZgH+OggPdYuwpW4kUhQgVMGPOg50lLIjgbwIq+xeadLWGUVZcNihI
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10843"; a="412442921"
-X-IronPort-AV: E=Sophos;i="6.03,177,1694761200"; 
-   d="scan'208";a="412442921"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2023 02:31:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10843"; a="725373049"
-X-IronPort-AV: E=Sophos;i="6.03,177,1694761200"; 
-   d="scan'208";a="725373049"
-Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by orsmga006.jf.intel.com with ESMTP; 26 Sep 2023 02:31:26 -0700
-From:   Yi Liu <yi.l.liu@intel.com>
-To:     alex.williamson@redhat.com, jgg@nvidia.com, kevin.tian@intel.com,
-        robin.murphy@arm.com, baolu.lu@linux.intel.com
-Cc:     joro@8bytes.org, cohuck@redhat.com, eric.auger@redhat.com,
-        nicolinc@nvidia.com, kvm@vger.kernel.org, mjrosato@linux.ibm.com,
-        chao.p.peng@linux.intel.com, yi.l.liu@intel.com,
-        yi.y.sun@linux.intel.com, peterx@redhat.com, jasowang@redhat.com,
-        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
-        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        zhenzhong.duan@intel.com, joao.m.martins@oracle.com
-Subject: [RFC 3/3] vfio/pci: Expose PCIe PASID capability to userspace
-Date:   Tue, 26 Sep 2023 02:31:21 -0700
-Message-Id: <20230926093121.18676-4-yi.l.liu@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230926093121.18676-1-yi.l.liu@intel.com>
-References: <20230926093121.18676-1-yi.l.liu@intel.com>
+        Tue, 26 Sep 2023 07:22:57 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 737D3EB;
+        Tue, 26 Sep 2023 04:22:50 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.west.internal (Postfix) with ESMTP id 17C8E320047A;
+        Tue, 26 Sep 2023 07:22:48 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Tue, 26 Sep 2023 07:22:49 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1695727367; x=1695813767; bh=+JlMwL7peYxkx
+        bAOj7Omdxd33gxKlbj7HQtEwxgZzWE=; b=cKtLQu23NwBKm/8ULa+QXLjcUNspZ
+        wW75f+V9km5/McnePuQ8zxBaVc1EUavIkjlNmr9ed6/0nWKDmB4t69EI62hnQoLc
+        OskoRIIVRcs/cxPjRZEwX2ImPVQW9hhZwPpYj9xjZ7oeNn5lgrH+jQ7eG08rltjm
+        rMhcL4q6EyFQBDBqnd5IyIwz8/dU3sDJNE2GRvWwTZySynVdwcrqnbAB1Sf9kFBV
+        6bIVnKw1vm3EHdIKD7MKO2ZJ0X+b1oXfWN8h8wz8unZoTYmwDVAJC0A2iz2HGsZV
+        Mmkj8R8N8S4nyOPEbc1r2u5jUqrj23+6L1OunXCD8vjqbQf29o5/pHH+w==
+X-ME-Sender: <xms:Br8SZZnRxR3i8BF83N90OG3khcU2X-wsCZ5RfY4-jZiXSnJbnLmeoQ>
+    <xme:Br8SZU3Qi5ZG2GquKPSJ8JWIr8k2FTWitHdwElYmImeZmc-qQPTIyKAi5H7HmJWQW
+    MJVHH-6CNlmMmA>
+X-ME-Received: <xmr:Br8SZfo2CXtSl-oPJW0pmWV2HRnV0rU4NhIdPUzY_smwJdQxwXlOuKAnFdshKTVNEaRPgGI6M5L3-SQs2Nwn7UvJPL0JxA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvjedrtddtgdduudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpefkughoucfu
+    tghhihhmmhgvlhcuoehiughoshgthhesihguohhstghhrdhorhhgqeenucggtffrrghtth
+    gvrhhnpedvudefveekheeugeeftddvveefgfduieefudeifefgleekheegleegjeejgeeg
+    hfenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehiug
+    hoshgthhesihguohhstghhrdhorhhg
+X-ME-Proxy: <xmx:B78SZZlwrGnrRS4gZwpkpdDoNQdPEydVfSlgKf47CizoL5_RzgYHXg>
+    <xmx:B78SZX0r5aKMHBoJbvq8ShHhKXTL7k900RBssAZlJeayAfY470Ti8g>
+    <xmx:B78SZYtuyD6OlsdcDI9GCNlDzO9VPwfWeUfbKXh-A4yK7q3dovLt8w>
+    <xmx:B78SZe3j76nG1OCKI-nGeo_DuePqsApH62Pfn_zmrL1hKJ5UFZRNpg>
+Feedback-ID: i494840e7:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 26 Sep 2023 07:22:46 -0400 (EDT)
+Date:   Tue, 26 Sep 2023 14:22:42 +0300
+From:   Ido Schimmel <idosch@idosch.org>
+To:     Johannes Nixdorf <jnixdorf-oss@avm.de>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Andrew Lunn <andrew@lunn.ch>, David Ahern <dsahern@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        bridge@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v4 3/6] net: bridge: Track and limit dynamically
+ learned FDB entries
+Message-ID: <ZRK/ArWPNHgjVvWA@shredder>
+References: <20230919-fdb_limit-v4-0-39f0293807b8@avm.de>
+ <20230919-fdb_limit-v4-3-39f0293807b8@avm.de>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230919-fdb_limit-v4-3-39f0293807b8@avm.de>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This exposes PCIe PASID capability to userspace and where to emulate this
-capability if wants to further expose it to VM.
+On Tue, Sep 19, 2023 at 10:12:50AM +0200, Johannes Nixdorf wrote:
+> A malicious actor behind one bridge port may spam the kernel with packets
+> with a random source MAC address, each of which will create an FDB entry,
+> each of which is a dynamic allocation in the kernel.
+> 
+> There are roughly 2^48 different MAC addresses, further limited by the
+> rhashtable they are stored in to 2^31. Each entry is of the type struct
+> net_bridge_fdb_entry, which is currently 128 bytes big. This means the
+> maximum amount of memory allocated for FDB entries is 2^31 * 128B =
+> 256GiB, which is too much for most computers.
+> 
+> Mitigate this by maintaining a per bridge count of those automatically
+> generated entries in fdb_n_learned, and a limit in fdb_max_learned. If
+> the limit is hit new entries are not learned anymore.
+> 
+> For backwards compatibility the default setting of 0 disables the limit.
+> 
+> User-added entries by netlink or from bridge or bridge port addresses
+> are never blocked and do not count towards that limit.
+> 
+> Introduce a new fdb entry flag BR_FDB_DYNAMIC_LEARNED to keep track of
+> whether an FDB entry is included in the count. The flag is enabled for
+> dynamically learned entries, and disabled for all other entries. This
+> should be equivalent to BR_FDB_ADDED_BY_USER and BR_FDB_LOCAL being unset,
+> but contrary to the two flags it can be toggled atomically.
+> 
+> Atomicity is required here, as there are multiple callers that modify the
+> flags, but are not under a common lock (br_fdb_update is the exception
+> for br->hash_lock, br_fdb_external_learn_add for RTNL).
+> 
+> Signed-off-by: Johannes Nixdorf <jnixdorf-oss@avm.de>
 
-And this only exposes PASID capability for devices which has PCIe PASID
-extended struture in its configuration space. While for VFs, userspace
-is still unable to see this capability as SR-IOV spec forbides VF to
-implement PASID capability extended structure. It is a TODO in future.
-Related discussion can be found in below links:
-
-https://lore.kernel.org/kvm/20200407095801.648b1371@w520.home/
-https://lore.kernel.org/kvm/BL1PR11MB5271A60035EF591A5BE8AC878C01A@BL1PR11MB5271.namprd11.prod.outlook.com/
-
-Signed-off-by: Yi Liu <yi.l.liu@intel.com>
----
- drivers/vfio/pci/vfio_pci_config.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/vfio/pci/vfio_pci_config.c b/drivers/vfio/pci/vfio_pci_config.c
-index 7e2e62ab0869..dfae5ad5ebc0 100644
---- a/drivers/vfio/pci/vfio_pci_config.c
-+++ b/drivers/vfio/pci/vfio_pci_config.c
-@@ -95,7 +95,7 @@ static const u16 pci_ext_cap_length[PCI_EXT_CAP_ID_MAX + 1] = {
- 	[PCI_EXT_CAP_ID_LTR]	=	PCI_EXT_CAP_LTR_SIZEOF,
- 	[PCI_EXT_CAP_ID_SECPCI]	=	0,	/* not yet */
- 	[PCI_EXT_CAP_ID_PMUX]	=	0,	/* not yet */
--	[PCI_EXT_CAP_ID_PASID]	=	0,	/* not yet */
-+	[PCI_EXT_CAP_ID_PASID]	=	PCI_EXT_CAP_PASID_SIZEOF,
- 	[PCI_EXT_CAP_ID_DVSEC]	=	0xFF,
- };
- 
--- 
-2.34.1
-
+Reviewed-by: Ido Schimmel <idosch@nvidia.com>
