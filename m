@@ -2,180 +2,186 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB6FC7AE286
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Sep 2023 01:38:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D43C7AE465
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Sep 2023 06:09:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230125AbjIYXh6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 25 Sep 2023 19:37:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33516 "EHLO
+        id S232956AbjIZEJR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 Sep 2023 00:09:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231201AbjIYXh5 (ORCPT
+        with ESMTP id S229882AbjIZEJR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 25 Sep 2023 19:37:57 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4924F116;
-        Mon, 25 Sep 2023 16:37:51 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1c5bbb205e3so68392315ad.0;
-        Mon, 25 Sep 2023 16:37:51 -0700 (PDT)
+        Tue, 26 Sep 2023 00:09:17 -0400
+Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC96E6
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Sep 2023 21:09:08 -0700 (PDT)
+Received: by mail-oi1-x234.google.com with SMTP id 5614622812f47-3ae2ec1a222so3317110b6e.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 25 Sep 2023 21:09:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1695685070; x=1696289870; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=cv0O21j6tEHRD16fyNBggI9xx4lBjDTEd1wZVJg2WZM=;
-        b=L5Q1e5V3Hp6CeJGnvsJTqn+neavdsMYT/SKh08CqD/fl/gIjwiBFpN8sm+LH3Td9dX
-         dEw4T9qJ7oC+KK9FPDDlw7h90kg3wZhruVNqfFvNNanGHrZ/y8ZRZKPqm3gjqUAaF9yz
-         oMeSkUGtJ1kjITdQbF7NayVFRTxFvCYVay9DxrRN85ygPoy9I/lmX+ANGJItoY546mjM
-         iYO7tzlfs/3n+Jbrtb5WxEfvtQvmpOM6yBcGRXgoEq0Tf3xd9sj8CUsFDvYtjYH4N1fj
-         12LB/3H79wR74pjvR0bDVnrSd6SySAwC9jQRH+rB/XVwin6sQKoV0a3HSiMh3zIeCQkX
-         0MTQ==
+        d=ventanamicro.com; s=google; t=1695701348; x=1696306148; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sqOFR+aV2U747dOvG4VR290UntHO+h5U56cTzrU/C40=;
+        b=RVRuxCV9UxPq9ivAiEFO3pzFyI46rQd842Pu4Fpu9yOkIQzaWIQ/8uIi55O7pMMZxD
+         5Jni4QA4gA9p5k6E5a8+1wOTiU8t727yDr3XrIGVPiMep+84hSGjWUVRXOWE+t8lnMB7
+         T1TdkCay+nNKOnXydGfR3H+I5h/CFQ1iI+7YiI5sFlRCum3FjlzxtiaiFBv/5avsT2ms
+         +SnI5ozP+VjiChzksZssEusASH3isEm1CeJgLpzL0OaD2jXHOFC33QuKDQmGV3s+Zap/
+         nBaoU2GXwkYlKy+AQKoZWXYc4HZgzntdBBMOQZP0srMkZRuldqsLgy20ijIB4tt+5SyU
+         L4OQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695685070; x=1696289870;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cv0O21j6tEHRD16fyNBggI9xx4lBjDTEd1wZVJg2WZM=;
-        b=fuASLi/iXRCQfU2GgZi5yOnGnxDMgfRsNlYGU4x/N3kUWboYJIKA4Pl/lLsSV1svng
-         0bQcc4M5P1pQWKqSWf+hF4YTz2pDg6V989eEi1FLiEZbFuXujvGMh6dYk5TEfpKhQgRc
-         xk6AqlONCtOoi70nvb3V9dCOliOsYRs5YLCPJcNyAYLJlF7yX3v7A3+gpUTrZQexcpWE
-         5z7wc7FhtUpycqRwdGQY+R683AJs16qkqFPqxrQj8vVjuH4uU9ynDdULPao367a6KCsn
-         yoPZPAG+fLIEgVipeQZquPt3KNG7jlaVp4ec0z682ztRWu2Z8GDSRUsmdPKYzvBMelbh
-         +5cQ==
-X-Gm-Message-State: AOJu0YyDlTHkVty0wp/pLXykg8UQetxUvRiTTj/a2sJ9CDy1zuhiQHJO
-        LKKkdlq3LzN/dgheQrttDpOs7UygpY8=
-X-Google-Smtp-Source: AGHT+IHa9xV1TKFdilYUVAPeFnWWJh1C/MYUePTZ2gl31uYYa2T6D1VFtSEKy2FCVy/eEPcCeHbNhw==
-X-Received: by 2002:a17:903:32ce:b0:1c4:3cd5:4298 with SMTP id i14-20020a17090332ce00b001c43cd54298mr11647351plr.18.1695685070177;
-        Mon, 25 Sep 2023 16:37:50 -0700 (PDT)
-Received: from localhost.localdomain (69-172-146-53.cable.teksavvy.com. [69.172.146.53])
-        by smtp.gmail.com with ESMTPSA id jj19-20020a170903049300b001b9d7c8f44dsm291286plb.182.2023.09.25.16.37.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 25 Sep 2023 16:37:49 -0700 (PDT)
-From:   Tony Ambardar <tony.ambardar@gmail.com>
-X-Google-Original-From: Tony Ambardar <Tony.Ambardar@gmail.com>
-To:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     Tony Ambardar <Tony.Ambardar@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Shuah Khan <shuah@kernel.org>
-Subject: [PATCH bpf-next v1] bpf/selftests: improve arg parsing in test_verifier
-Date:   Mon, 25 Sep 2023 16:37:02 -0700
-Message-Id: <20230925233702.19466-1-Tony.Ambardar@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20230601; t=1695701348; x=1696306148;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sqOFR+aV2U747dOvG4VR290UntHO+h5U56cTzrU/C40=;
+        b=N751u5cOgrgbtPapVviabTxtylYob1ChrOIOx77yxdveQHzVbq/Tu4Huc6BVZ0e0Ng
+         IiQY1ZWj4d+HnDSBJVmlSnUR2iUPl9Es2WL1Phf61TjFL/BAqERFIO3PNe4h090adKlZ
+         o27HISAPMRrv5+zfmtjh9/7ZqY0deqKZrWliqL7jTvhrnbEIYX4Mcnt39Zz7yFHT9Z3G
+         MJPlGzWefcHdV0HFYK4zsvBuNMXTZeWhdljbF/rTExlKetLnoMQwsCS9ojmfC5MvgV3H
+         vGq+g1nTpphC/02RRpoPuFxANYykrfzZXrGdvBWoXzoWIaJRzm9oOalf2JrAJvKr2sXg
+         0U5w==
+X-Gm-Message-State: AOJu0YwHrzm+gowWx3wf9XIInm+jgfVNBjlYZZSqUSLEThyp86FHI7EK
+        ovxP984kjVcD4FY1bA70z/W2n0Wp3U6oe7VSUnq/ww==
+X-Google-Smtp-Source: AGHT+IGmAxRog0hnxnVuuXVJuHjUbHq/ZKXhq770X+Pd2SPALmcAYb8MwVNhUMNSdmD8plbQLTGKkz2OCmPClWmIJ90=
+X-Received: by 2002:a05:6808:1a21:b0:3a7:2690:94e0 with SMTP id
+ bk33-20020a0568081a2100b003a7269094e0mr13581224oib.4.1695701347858; Mon, 25
+ Sep 2023 21:09:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20230925133859.1735879-1-apatel@ventanamicro.com>
+ <20230925133859.1735879-3-apatel@ventanamicro.com> <ZRHH25IyJJLWSolC@ghost>
+In-Reply-To: <ZRHH25IyJJLWSolC@ghost>
+From:   Anup Patel <apatel@ventanamicro.com>
+Date:   Tue, 26 Sep 2023 09:38:56 +0530
+Message-ID: <CAK9=C2UoKxM+wknB4n8=okyXCCE6t0Vvz4jU_tBW6DMm6Vb3DA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/9] RISC-V: Detect XVentanaCondOps from ISA string
+To:     Charlie Jenkins <charlie@rivosinc.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Conor Dooley <conor@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shuah Khan <shuah@kernel.org>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Mayuresh Chitale <mchitale@ventanamicro.com>,
+        devicetree@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Current test_verifier provides little feedback or argument validation,
-instead silently falling back to running all tests in case of user error
-or even expected use cases. Trying to do manual exploratory testing,
-switching between kernel versions (e.g. with varying tests), or working
-around problematic tests (e.g. kernel hangs/crashes) can be a frustrating
-experience.
-
-Rework argument parsing to be more robust and strict, and provide basic
-help on errors. Clamp test ranges to valid values and add an option to
-list available built-in tests ("-l"). Default "test_verifier" behaviour
-(run all tests) is unchanged and backwards-compatible. Updated examples:
-
-     $ test_verifier die die die     # previously ran all tests
-     Usage: test_verifier -l | [-v|-vv] [<tst_lo> [<tst_hi>]]
-
-     $ test_verifier 700 9999        # runs test subset from 700 to end
-
-Signed-off-by: Tony Ambardar <Tony.Ambardar@gmail.com>
----
- tools/testing/selftests/bpf/test_verifier.c | 54 ++++++++++++---------
- 1 file changed, 30 insertions(+), 24 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/test_verifier.c b/tools/testing/selftests/bpf/test_verifier.c
-index 98107e0452d3..3712b5363f60 100644
---- a/tools/testing/selftests/bpf/test_verifier.c
-+++ b/tools/testing/selftests/bpf/test_verifier.c
-@@ -10,9 +10,11 @@
- #include <endian.h>
- #include <asm/types.h>
- #include <linux/types.h>
-+#include <linux/minmax.h>
- #include <stdint.h>
- #include <stdio.h>
- #include <stdlib.h>
-+#include <ctype.h>
- #include <unistd.h>
- #include <errno.h>
- #include <string.h>
-@@ -1848,36 +1850,40 @@ int main(int argc, char **argv)
+On Mon, Sep 25, 2023 at 11:18=E2=80=AFPM Charlie Jenkins <charlie@rivosinc.=
+com> wrote:
+>
+> On Mon, Sep 25, 2023 at 07:08:52PM +0530, Anup Patel wrote:
+> > The Veyron-V1 CPU supports custom conditional arithmetic and
+> > conditional-select/move operations referred to as XVentanaCondOps
+> > extension. In fact, QEMU RISC-V also has support for emulating
+> > XVentanaCondOps extension.
+> >
+> > Let us detect XVentanaCondOps extension from ISA string available
+> > through DT or ACPI.
+> >
+> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> > Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+> > ---
+> >  arch/riscv/include/asm/hwcap.h | 1 +
+> >  arch/riscv/kernel/cpufeature.c | 1 +
+> >  2 files changed, 2 insertions(+)
+> >
+> > diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hw=
+cap.h
+> > index 0f520f7d058a..b7efe9e2fa89 100644
+> > --- a/arch/riscv/include/asm/hwcap.h
+> > +++ b/arch/riscv/include/asm/hwcap.h
+> > @@ -59,6 +59,7 @@
+> >  #define RISCV_ISA_EXT_ZIFENCEI               41
+> >  #define RISCV_ISA_EXT_ZIHPM          42
+> >  #define RISCV_ISA_EXT_SMSTATEEN              43
+> > +#define RISCV_ISA_EXT_XVENTANACONDOPS        44
+> >
+> >  #define RISCV_ISA_EXT_MAX            64
+> >
+> > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeat=
+ure.c
+> > index 3755a8c2a9de..3a31d34fe709 100644
+> > --- a/arch/riscv/kernel/cpufeature.c
+> > +++ b/arch/riscv/kernel/cpufeature.c
+> > @@ -182,6 +182,7 @@ const struct riscv_isa_ext_data riscv_isa_ext[] =3D=
  {
- 	unsigned int from = 0, to = ARRAY_SIZE(tests);
- 	bool unpriv = !is_admin();
--	int arg = 1;
--
--	if (argc > 1 && strcmp(argv[1], "-v") == 0) {
-+	int i, arg = 1;
-+
-+	while (argc > 1 && *argv[arg] == '-') {
-+		if (strcmp(argv[arg], "-l") == 0) {
-+			for (i = from; i < to; i++)
-+				printf("#%d %s\n", i, tests[i].descr);
-+			return EXIT_SUCCESS;
-+		} else if (strcmp(argv[arg], "-v") == 0) {
-+			verbose = true;
-+			verif_log_level = 1;
-+		} else if (strcmp(argv[arg], "-vv") == 0) {
-+			verbose = true;
-+			verif_log_level = 2;
-+		} else
-+			goto out_help;
- 		arg++;
--		verbose = true;
--		verif_log_level = 1;
- 		argc--;
- 	}
--	if (argc > 1 && strcmp(argv[1], "-vv") == 0) {
--		arg++;
--		verbose = true;
--		verif_log_level = 2;
--		argc--;
--	}
--
--	if (argc == 3) {
--		unsigned int l = atoi(argv[arg]);
--		unsigned int u = atoi(argv[arg + 1]);
- 
--		if (l < to && u < to) {
--			from = l;
--			to   = u + 1;
--		}
--	} else if (argc == 2) {
--		unsigned int t = atoi(argv[arg]);
-+	for (i = 1; i <= 2 && argc > 1; i++, arg++, argc--) {
-+		unsigned int t = min(atoi(argv[arg]), ARRAY_SIZE(tests) - 1);
- 
--		if (t < to) {
-+		if (!isdigit(*argv[arg]))
-+			goto out_help;
-+		if (i == 1)
- 			from = t;
--			to   = t + 1;
--		}
-+		to = t + 1;
-+	}
-+
-+	if (argc > 1) {
-+out_help:
-+		printf("Usage: %s -l | [-v|-vv] [<tst_lo> [<tst_hi>]]\n",
-+		       argv[0]);
-+		return EXIT_FAILURE;
- 	}
- 
- 	unpriv_disabled = get_unpriv_disabled();
--- 
-2.34.1
+> >       __RISCV_ISA_EXT_DATA(svinval, RISCV_ISA_EXT_SVINVAL),
+> >       __RISCV_ISA_EXT_DATA(svnapot, RISCV_ISA_EXT_SVNAPOT),
+> >       __RISCV_ISA_EXT_DATA(svpbmt, RISCV_ISA_EXT_SVPBMT),
+> > +     __RISCV_ISA_EXT_DATA(xventanacondops, RISCV_ISA_EXT_XVENTANACONDO=
+PS),
+> >  };
+> >
+> >  const size_t riscv_isa_ext_count =3D ARRAY_SIZE(riscv_isa_ext);
+> > --
+> > 2.34.1
+> >
+> >
+> > _______________________________________________
+> > linux-riscv mailing list
+> > linux-riscv@lists.infradead.org
+> > http://lists.infradead.org/mailman/listinfo/linux-riscv
+>
+> I worry about storing vendor extensions in this file. Because vendor
+> extensions are not standardized, they can only be expected to have the
+> desired behavior on hardware with the appropriate vendor id. A couple
 
+Assuming that a vendor extension is only available on hardware with
+appropriate vendor id is not correct because:
+1) vendor A can allow vendor B to implement a custom extension
+    defined by vendor B
+2) vendor A and vendor B can jointly develop a RISC-V CPU where
+    both vendors integrate their custom extensions.
+
+It is best to identify a vendor extension independently with a
+"X<vendor_name><extension_name>" string to keep it simple
+and scalable.
+
+Along these lines, each T-Head custom extension should have a
+"XThead<xyz>" name associated with it.
+
+> months ago I sent a patch to address this by handling vector extensions
+> independently for each vendor [1]. I dropped the patch because it
+> relied upon Heiko's T-Head vector extension support that he stopped
+> working on. However, I can revive this patch so you can build off of it.
+
+At least, the conditional operations don't need a hwprobe interface
+because an application is either compiled with or without conditional
+operations. In other words, effective use of conditional operation is
+only possible if compiler generates these instructions based on
+code patterns.
+
+>
+> This scheme has the added benefit that vendors do not have to worry
+> about conficting extensions, and the kernel does not have to act as a
+> key registry for vendors.
+
+How can vendor extensions conflict if they all follow the
+"X<vendor_name><extension_name>" naming scheme ?
+
+>
+> What are your thoughts?
+>
+> - Charlie
+>
+> [1] https://lore.kernel.org/lkml/20230705-thead_vendor_extensions-v1-2-ad=
+6915349c4d@rivosinc.com/
+>
+
+Regards,
+Anup
