@@ -2,80 +2,69 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 439887AF855
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Sep 2023 04:54:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43FE87AF83F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Sep 2023 04:42:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233663AbjI0Cy2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 Sep 2023 22:54:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43998 "EHLO
+        id S235378AbjI0CmT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 Sep 2023 22:42:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235055AbjI0Cw1 (ORCPT
+        with ESMTP id S235498AbjI0CkS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 Sep 2023 22:52:27 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 277A965A1
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Sep 2023 18:26:37 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id ca18e2360f4ac-7748ca56133so68283139f.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Sep 2023 18:26:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1695777996; x=1696382796; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=k0LsinjnQ0psiRqDV4BJbkShjH1QSE7MgPkz+IEjFHc=;
-        b=P27TWAM76pouKVhn9k7uJh0d2mxC3rLFsCOMyLN740kl7yA3Tk0HiOW1c5W6/vxm6o
-         VEzCjGWMZo90auylb5OiKB0raT2ZtqhqVO/EZn2N+ePDCIqcWmQNUIar9D7kGovSbhQJ
-         EKH+Z0Ojbn34xLHt77dNfPCjCWR+lCDllm/+w=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695777996; x=1696382796;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k0LsinjnQ0psiRqDV4BJbkShjH1QSE7MgPkz+IEjFHc=;
-        b=eLlKPpMqkBEWuB1FV6M0GUw6eXJ6eQ/LjJoAM4w0KxemB6jan1gjtIrZqN1P8ZVmCo
-         bBGPwVhYaNWXhM5yW3otJVBrgl/4Bz58n54EgiFo0Hd8Xm/sB9Vgn+if+uXXHAbvucO0
-         3wM3/O7D+5PffG1tPl77XmNFrwXLqbycyKBRMtFWES6J4kTNJIYO6xnUbHWM5CHsb65G
-         kOwJJQmHyvf58S57S9z+rHa/EnubSQsWJvzSZJv+Yk5uVHGsewgGyzwCvpDsnMlwzHWH
-         Gm06QEFM56DYkOrNVOjRZfSsAwUaBIY/Vni6qGjFgOi2ZB/1OIh36jq2XnxBKHKRu44J
-         /MLg==
-X-Gm-Message-State: AOJu0Yx0Oo6v0yLZdzeo9gMOIlOTkXH1pGV5UDdLlEWuBZnbDdD7ei+d
-        SVgzZy+4KFKBysKQWdfUBM0RwQ==
-X-Google-Smtp-Source: AGHT+IFCOJWMcvH/PMk6PXaOABE9naegOE1OjxmKKpTl8Tq0vbJU2EbQZCuBXNzabPcsOTBAqRoEHA==
-X-Received: by 2002:a92:cac7:0:b0:351:54db:c1c9 with SMTP id m7-20020a92cac7000000b0035154dbc1c9mr594374ilq.1.1695777996416;
-        Tue, 26 Sep 2023 18:26:36 -0700 (PDT)
-Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id y3-20020a92d203000000b0034f3220c086sm2393099ily.12.2023.09.26.18.26.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 26 Sep 2023 18:26:35 -0700 (PDT)
-Message-ID: <cd11111a-321e-3b29-3d7b-8844189f791e@linuxfoundation.org>
-Date:   Tue, 26 Sep 2023 19:26:34 -0600
+        Tue, 26 Sep 2023 22:40:18 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E6DD1BC1;
+        Tue, 26 Sep 2023 19:08:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695780492; x=1727316492;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=jiTLn3Vg5DjW5KMS+3IRSYx4PUzUN/fR9h6uUPmnC/8=;
+  b=AZrw6dH8U7x4Wo5ICcGz9XsZq8MRYfi2eCZxpRcFunSZou8NgiaJ9wIT
+   eWBY/vvmEJ/QupUWNm8oam9zC1d8iNdAX8CvdqIZp2BM/D5z7nrWH5Lrw
+   onLk2e4NzX/36ctYz62ScIDa3l5TUXKpYUoLwmeoSFOteCroRpRh2z5QX
+   yZVMuCTJ2r1fxTbo60aU8HuOTGeplDlYk4+XOe7SYSqQiu60REF7VqJLJ
+   9PTe1K0GLcwPEfBmbSJIKl7682pUHpm0pcV33Lg1prVvjsuHlq9yZMVa3
+   euFLEFv3Sz48nJX8G3DqUGhRF90PJI0efPI6Fx/JjDpE9Ipk64lms4zLi
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="361963137"
+X-IronPort-AV: E=Sophos;i="6.03,179,1694761200"; 
+   d="scan'208";a="361963137"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2023 19:08:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.03,179,1694761200"; 
+   d="scan'208";a="373163"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.127]) ([10.239.159.127])
+  by orviesa001.jf.intel.com with ESMTP; 26 Sep 2023 19:07:35 -0700
+Message-ID: <a5e18b46-cccc-a2f7-91ae-aa5c942cd887@linux.intel.com>
+Date:   Wed, 27 Sep 2023 10:04:51 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.15.1
-Subject: Re: [PATCH] selftests/rseq: fix kselftest Clang build warnings
+Cc:     baolu.lu@linux.intel.com, cohuck@redhat.com, eric.auger@redhat.com,
+        nicolinc@nvidia.com, kvm@vger.kernel.org, mjrosato@linux.ibm.com,
+        chao.p.peng@linux.intel.com, yi.y.sun@linux.intel.com,
+        peterx@redhat.com, jasowang@redhat.com,
+        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
+        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        zhenzhong.duan@intel.com, joao.m.martins@oracle.com
+Subject: Re: [RFC 1/8] iommu: Introduce a replace API for device pasid
+To:     Yi Liu <yi.l.liu@intel.com>, joro@8bytes.org,
+        alex.williamson@redhat.com, jgg@nvidia.com, kevin.tian@intel.com,
+        robin.murphy@arm.com
+References: <20230926092651.17041-1-yi.l.liu@intel.com>
+ <20230926092651.17041-2-yi.l.liu@intel.com>
 Content-Language: en-US
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Justin Stitt <justinstitt@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        llvm@lists.linux.dev, Shuah Khan <skhan@linuxfoundation.org>
-References: <20230912-kselftest-param_test-c-v1-1-80a6cffc7374@google.com>
- <CAFhGd8on9_DJUZqT5uKgPzOtJNn99sY3TprcPzD5pm3GmYx8oQ@mail.gmail.com>
- <eabe9db0-c934-af2d-e5a9-9d644593851c@efficios.com>
- <63dd7222-99dc-8e11-3a51-b132e4115ac5@linuxfoundation.org>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <63dd7222-99dc-8e11-3a51-b132e4115ac5@linuxfoundation.org>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20230926092651.17041-2-yi.l.liu@intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,49 +72,83 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 9/26/23 14:39, Shuah Khan wrote:
-> On 9/26/23 13:02, Mathieu Desnoyers wrote:
->> On 9/26/23 08:20, Justin Stitt wrote:
->>> Ping.
->>>
->>> Looking to get this patch and [1] slated for 6.7 which fixes some
->>> kselftest builds on older kernels.
->>>
->>> On Wed, Sep 13, 2023 at 6:03 AM Justin Stitt <justinstitt@google.com> wrote:
->>>>
->>>> When building with Clang, I am getting many warnings from the selftests/rseq tree.
->>>>
->>>> Here's one such example from rseq tree:
->>>> |  param_test.c:1234:10: error: address argument to atomic operation must be a pointer to _Atomic type ('intptr_t *' (aka 'long *') invalid)
->>>> |   1234 |         while (!atomic_load(&args->percpu_list_ptr)) {}
->>>> |        |                 ^           ~~~~~~~~~~~~~~~~~~~~~~
->>>> |  /usr/local/google/home/justinstitt/repos/tc-build/build/llvm/final/lib/clang/18/include/stdatomic.h:140:29: note: expanded from macro 'atomic_load'
->>>> |    140 | #define atomic_load(object) __c11_atomic_load(object, __ATOMIC_SEQ_CST)
->>>> |        |                             ^                 ~~~~~~
->>>>
->>>> Use compiler builtins `__atomic_load_n()` and `__atomic_store_n()` with
->>>> accompanying __ATOMIC_ACQUIRE and __ATOMIC_RELEASE, respectively. This
->>>> will fix the warnings because the compiler builtins do not expect their
->>>> arguments to have _Atomic type. This should also make TSAN happier.
->>>>
->>>> Link: https://github.com/ClangBuiltLinux/linux/issues/1698
->>>> Link: https://github.com/ClangBuiltLinux/continuous-integration2/issues/61
->>>> Suggested-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
->>>> Signed-off-by: Justin Stitt <justinstitt@google.com>
->>
->> Reviewed-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
->>
->> Peter, should this go through tip ?
->>
->> Shuah, should to go through selftests ?
->>
+On 9/26/23 5:26 PM, Yi Liu wrote:
+> From: Lu Baolu <baolu.lu@linux.intel.com>
 > 
-> I can take this through selftests and apply it - hoping there
-> are no conflicts with what's in Peter's tree.
+> Provide a high-level API to allow replacements of one domain with
+> another for specific pasid of a device. This is similar to
+> iommu_group_replace_domain() and it is also expected to be used
+> only by IOMMUFD.
+> 
+> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+> Signed-off-by: Yi Liu <yi.l.liu@intel.com>
+> ---
+>   drivers/iommu/iommu-priv.h |  2 ++
+>   drivers/iommu/iommu.c      | 73 ++++++++++++++++++++++++++++++--------
+>   2 files changed, 60 insertions(+), 15 deletions(-)
 > 
 
-Applied to linux-kselftest next for Linux 6.7-rc1
+[...]
 
-thanks,
--- Shuah
+> @@ -3433,8 +3443,8 @@ EXPORT_SYMBOL_GPL(iommu_attach_device_pasid);
+>    * The @domain must have been attached to @pasid of the @dev with
+>    * iommu_attach_device_pasid().
+>    */
+> -void iommu_detach_device_pasid(struct iommu_domain *domain, struct device *dev,
+> -			       ioasid_t pasid)
+> +void iommu_detach_device_pasid(struct iommu_domain *domain,
+> +			       struct device *dev, ioasid_t pasid)
 
+Above change is irrelevant.
+
+>   {
+>   	struct iommu_group *group = iommu_group_get(dev);
+>   
+> @@ -3447,6 +3457,39 @@ void iommu_detach_device_pasid(struct iommu_domain *domain, struct device *dev,
+>   }
+>   EXPORT_SYMBOL_GPL(iommu_detach_device_pasid);
+>   
+> +/**
+> + * iommu_replace_device_pasid - replace the domain that a pasid is attached to
+> + * @domain: new IOMMU domain to replace with
+> + * @dev: the physical device
+> + * @pasid: pasid that will be attached to the new domain
+> + *
+> + * This API allows the pasid to switch domains. Return 0 on success, or an
+> + * error. The pasid will roll back to use the old domain if failure. The
+> + * caller could call iommu_detach_device_pasid() before free the old domain
+> + * in order to avoid use-after-free case.
+
+The comment does not match the actual behavior of the code. We need to
+discuss and agree on which state the PASID should park in if replacing
+the domain fails.
+
+> + */
+> +int iommu_replace_device_pasid(struct iommu_domain *domain,
+> +			       struct device *dev, ioasid_t pasid)
+> +{
+> +	struct iommu_group *group = dev->iommu_group;
+> +	int ret;
+> +
+> +	if (!domain)
+> +		return -EINVAL;
+> +
+> +	if (!group)
+> +		return -ENODEV;
+> +
+> +	mutex_lock(&group->mutex);
+> +	__iommu_remove_group_pasid(group, pasid);
+> +	xa_erase(&group->pasid_array, pasid);
+> +	ret = __iommu_group_attach_pasid(domain, group, pasid);
+> +	mutex_unlock(&group->mutex);
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_NS_GPL(iommu_replace_device_pasid, IOMMUFD_INTERNAL);
+> +
+>   /*
+>    * iommu_get_domain_for_dev_pasid() - Retrieve domain for @pasid of @dev
+>    * @dev: the queried device
+
+Best regards,
+baolu
