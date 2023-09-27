@@ -2,70 +2,69 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D49757AF876
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Sep 2023 05:10:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BCE307AF875
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Sep 2023 05:10:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230284AbjI0DKl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 26 Sep 2023 23:10:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48532 "EHLO
+        id S229527AbjI0DK2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 26 Sep 2023 23:10:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230381AbjI0DIk (ORCPT
+        with ESMTP id S229570AbjI0DI1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 26 Sep 2023 23:08:40 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFEA9170D;
-        Tue, 26 Sep 2023 19:20:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695781251; x=1727317251;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=AydsJicsTjhS4lwN66GX3GcPaMOacXh1JO4dOr+xExI=;
-  b=W3gDhIvHsEzweWYkj3DoIY2+dNDSyxmJjuheHxS4cPaxY+8e1fVP39fv
-   KAv92EQhnspZWdqc8Kqypwu5EDgUU1q+fZAbECKrrhJ/eML10zpuvxraN
-   NcBBQETnzyrXDfq7i1z5cwF49HmB335vyOForKmoqn5Za7nR8HTDkJzN3
-   TMnO0I88eZU+e9tK6ymzp3Gunb65598orEFlLqtOBOtXopZjRa2HZZXIj
-   XbzH52cjCrdyXf3SBdNbRRHZEQARorR1maDMvIvMQ2BBQYlOZkmpwCh5n
-   niyspcWJTOOZoX3A5blyyOw3ef7FGWWNlF5e9DZ4qCtmHKvCkF1XmLWkG
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="381611481"
-X-IronPort-AV: E=Sophos;i="6.03,179,1694761200"; 
-   d="scan'208";a="381611481"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2023 19:20:51 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="864616370"
-X-IronPort-AV: E=Sophos;i="6.03,179,1694761200"; 
-   d="scan'208";a="864616370"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.127]) ([10.239.159.127])
-  by fmsmga002.fm.intel.com with ESMTP; 26 Sep 2023 19:20:45 -0700
-Message-ID: <e73f3a0e-5c1b-674e-7ef1-53d963a540d3@linux.intel.com>
-Date:   Wed, 27 Sep 2023 10:17:31 +0800
+        Tue, 26 Sep 2023 23:08:27 -0400
+Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 917C4126
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 Sep 2023 19:18:21 -0700 (PDT)
+Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-1dd1db54d42so2826464fac.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 Sep 2023 19:18:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1695781101; x=1696385901; darn=vger.kernel.org;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=IPGwCwd+jVA93ZpKj+iEhwPhKtiUIJB4pw4J1MAfToQ=;
+        b=bqkeD9DdHXnV/N7Yev6jzHFrKytmZNTNt2wGf/+BhXqGannD5lY9MIEsyn3JydrZKr
+         cfwN+6sAdeiAX6c0X0hdQNADoH0gSBbQ/ptjL0LecWdPje8wZXOJQimp/LhZPvZtTFYs
+         0DWGvSSV4dZlALPpcbHduaqpEM0ZL4zMCr5jLjpyIvjtegmny68QnOHNacSTKIdnOh6j
+         SfO0D+aLp0W2Bwdtm6Rt7Df2MQq/nI9nUmUrNJ6NUlXBIUxZoCT1aDrmERvFQ/vSNpzh
+         55elIP2kqGRd0cqLxg7QNR3cbSmqWI4H6kCv5Gnp0mK+EDFmTCe791mBSxhOV1U1+nWO
+         q36Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695781101; x=1696385901;
+        h=from:to:subject:content-transfer-encoding:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IPGwCwd+jVA93ZpKj+iEhwPhKtiUIJB4pw4J1MAfToQ=;
+        b=dXI4UBLYTKhocRB7W0kQ6FpV6QhicpClvEsC+N+4QhD//P2HZTyO2ibRNrFTAcDofi
+         ePaC+1yeOIqhz2PFHjQ+k2O3ONoVhcRr7zcw+7jQ2qfB0EAqFBJjnZKdu7vH8Klbfyku
+         qOfwLM3BeprSeBti3v7qyeByrcy9b0PH/l8Gni/1LorGE2+yn0qWBx25kMrU8HAQOwS+
+         MMQ7d8X6utvFs2Y7Q31hndLHnzkoQDEZi+bE+IOzfFwQAaX8kjmwt/XEVqGSGFU7a/la
+         sCqi3KVhmJ9vCbz37FANlOCGv+6fpCFdnOKGNEn2VByJXXEFiMFdkjTN/nzPLNGj/CyB
+         JQcw==
+X-Gm-Message-State: AOJu0YxBIK7JjFJ4DHydUIaSvfWCd9laoxjD9zcvZzmGZ8N32BpHd/BL
+        PM9CCnUvAm4oLdn3117GrQRqgA==
+X-Google-Smtp-Source: AGHT+IFc9IYBu1zqddIz1v9zc+ox7s0KhsWJsK0q39C+3JTGcAydZYHF9subG7266xmN07b81HJNJA==
+X-Received: by 2002:a05:6358:5e0c:b0:140:f00a:ee2c with SMTP id q12-20020a0563585e0c00b00140f00aee2cmr976215rwn.11.1695781100663;
+        Tue, 26 Sep 2023 19:18:20 -0700 (PDT)
+Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
+        by smtp.gmail.com with ESMTPSA id m10-20020a63940a000000b00584d035c08asm1770824pge.24.2023.09.26.19.18.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Sep 2023 19:18:19 -0700 (PDT)
+Message-ID: <651390eb.630a0220.fc64f.731b@mx.google.com>
+Date:   Tue, 26 Sep 2023 19:18:19 -0700 (PDT)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Cc:     baolu.lu@linux.intel.com, cohuck@redhat.com, eric.auger@redhat.com,
-        nicolinc@nvidia.com, kvm@vger.kernel.org, mjrosato@linux.ibm.com,
-        chao.p.peng@linux.intel.com, yi.y.sun@linux.intel.com,
-        peterx@redhat.com, jasowang@redhat.com,
-        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
-        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        zhenzhong.duan@intel.com, joao.m.martins@oracle.com
-Subject: Re: [RFC 2/8] iommufd: replace attach_fn with a structure
-Content-Language: en-US
-To:     Yi Liu <yi.l.liu@intel.com>, joro@8bytes.org,
-        alex.williamson@redhat.com, jgg@nvidia.com, kevin.tian@intel.com,
-        robin.murphy@arm.com
-References: <20230926092651.17041-1-yi.l.liu@intel.com>
- <20230926092651.17041-3-yi.l.liu@intel.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20230926092651.17041-3-yi.l.liu@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Kernelci-Branch: fixes
+X-Kernelci-Tree: kselftest
+X-Kernelci-Kernel: linux-kselftest-fixes-6.6-rc4-1-g6f874fa021df
+X-Kernelci-Report-Type: build
+Subject: kselftest/fixes build: 6 builds: 0 failed, 6 passed,
+ 1 warning (linux-kselftest-fixes-6.6-rc4-1-g6f874fa021df)
+To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+From:   "kernelci.org bot" <bot@kernelci.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,46 +72,77 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 9/26/23 5:26 PM, Yi Liu wrote:
-> Most of the core logic before conducting the actual device attach/
-> replace operation can be shared with pasid attach/replace. Create
-> a new structure so more information (e.g. pasid) can be later added
-> along with the attach_fn.
-> 
-> Signed-off-by: Kevin Tian<kevin.tian@intel.com>
-> Signed-off-by: Yi Liu<yi.l.liu@intel.com>
-> ---
->   drivers/iommu/iommufd/device.c          | 35 ++++++++++++++++---------
->   drivers/iommu/iommufd/iommufd_private.h |  8 ++++++
->   2 files changed, 30 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
-> index 645ab5d290fe..4fa4153c5df7 100644
-> --- a/drivers/iommu/iommufd/device.c
-> +++ b/drivers/iommu/iommufd/device.c
-> @@ -597,8 +597,11 @@ iommufd_device_do_replace(struct iommufd_device *idev,
->   	return ERR_PTR(rc);
->   }
->   
-> -typedef struct iommufd_hw_pagetable *(*attach_fn)(
-> -	struct iommufd_device *idev, struct iommufd_hw_pagetable *hwpt);
-> +static struct iommufd_hw_pagetable *do_attach(struct iommufd_device *idev,
-> +		struct iommufd_hw_pagetable *hwpt, struct attach_data *data)
-> +{
-> +	return data->attach_fn(idev, hwpt);
-> +}
+kselftest/fixes build: 6 builds: 0 failed, 6 passed, 1 warning (linux-kself=
+test-fixes-6.6-rc4-1-g6f874fa021df)
 
-I assume that this change was made because we need to pass the pasid
-value to the attach_fn() callback.
+Full Build Summary: https://kernelci.org/build/kselftest/branch/fixes/kerne=
+l/linux-kselftest-fixes-6.6-rc4-1-g6f874fa021df/
 
-If so, how about passing it directly to attach_fn() function?
+Tree: kselftest
+Branch: fixes
+Git Describe: linux-kselftest-fixes-6.6-rc4-1-g6f874fa021df
+Git Commit: 6f874fa021dfc7bf37f4f37da3a5aaa41fe9c39c
+Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
+est.git
+Built: 4 unique architectures
 
-typedef struct iommufd_hw_pagetable *(*attach_fn)(
-		struct iommufd_device *idev,
-		struct iommufd_hw_pagetable *hwpt,
-		ioasid_t pasid);
+Warnings Detected:
 
-In no pasid case, use IOMMU_NO_PASID.
+arm64:
 
-Best regards,
-baolu
+arm:
+
+i386:
+
+x86_64:
+    x86_64_defconfig+kselftest (clang-16): 1 warning
+
+
+Warnings summary:
+
+    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to=
+ !ENDBR: .text+0x13950b
+
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D
+
+Detailed per-defconfig build reports:
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
+ section mismatches
+
+---------------------------------------------------------------------------=
+-----
+defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
+rs, 0 warnings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
+s, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
+ings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
+nings, 0 section mismatches
+
+---------------------------------------------------------------------------=
+-----
+x86_64_defconfig+kselftest (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 1 w=
+arning, 0 section mismatches
+
+Warnings:
+    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to !END=
+BR: .text+0x13950b
+
+---
+For more info write to <info@kernelci.org>
