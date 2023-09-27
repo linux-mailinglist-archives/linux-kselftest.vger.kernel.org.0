@@ -2,149 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A68A57B01A8
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Sep 2023 12:19:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC33E7B0250
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Sep 2023 13:02:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231231AbjI0KTQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 27 Sep 2023 06:19:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54486 "EHLO
+        id S229648AbjI0LC2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 27 Sep 2023 07:02:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231219AbjI0KTQ (ORCPT
+        with ESMTP id S229458AbjI0LC0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 27 Sep 2023 06:19:16 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4644959E2;
-        Wed, 27 Sep 2023 03:19:14 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CBB9C433CB;
-        Wed, 27 Sep 2023 10:19:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695809953;
-        bh=63LUFA7Rl18RX8Q038A1fYQa94hjblSR5oEGq9wpy9M=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=CNDXL9gSoveVjidsqC1k/2LIN1hh2S5fELc/bM0aWxDbf1F1qTGT9JIWuq2p0kQWA
-         VbtWjdUnvqynQGHunCxKKylvq/NEZ1GSzE7rFQg8K07TL4SnRrT5f2dy5cLX4xDcZ6
-         LGQyYSHUnh/VwrflPTQctGMdSMONlN0f7SlEiRpxEH8mkXl4eSeBgGrvfYca7TZXsd
-         Wlu8nVJTI5cwgq+OR8tRZeJPosKMA980CHmOfzZ14ZkSvPzc3d5x85SDZH531THDv+
-         388gPs30MGiK33PYkApvKP5l18NAC2UH/Bxp7eTiDKZJ4gkAXIyGiche7bKDvA3OVY
-         cAI6vClWcFuuQ==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Wed, 27 Sep 2023 12:18:59 +0200
-Subject: [PATCH 3/3] selftests: timers: Convert nsleep-lat test to generate
- KTAP output
+        Wed, 27 Sep 2023 07:02:26 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2772F3;
+        Wed, 27 Sep 2023 04:02:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1695812545; x=1727348545;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=O5il/qQ8Ygfz16OqECjDz2RFbtz7dYf9brLjgdVGI60=;
+  b=ciiX3Y7GcZPnWGjCDDCmVzaREupnhSPpo5sIzyy85EW2BsjCaMLi05bt
+   AsOZvrNwxj3Zb+EqdeCP4ZuQVIm5MhHRt15y+MT9xm6Yah+M9IgeqvY+2
+   f8N9s9tz6TiAM9qKgFWLCsX9GWhnZA0R0HSFynmUIyxq05UKZy+TMQS6L
+   ngimTW1YF1gaIc73Bw58iFs+/r4x5oy3eX6mLZPpkGyJGbrfpPcZlyjCU
+   N3jYL8g9e2gzhS0wRW15QFiEmECR0XL/fm7qoDa4EsQFCzV1/UnGiaLJ0
+   CFBttW0JcrN0Ojsoq1SNWv40aRjRLY0STUNIrtCBdLSvGGYhgTKbJPdhS
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="445930820"
+X-IronPort-AV: E=Sophos;i="6.03,179,1694761200"; 
+   d="scan'208";a="445930820"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2023 04:02:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="749163047"
+X-IronPort-AV: E=Sophos;i="6.03,179,1694761200"; 
+   d="scan'208";a="749163047"
+Received: from vsovraso-mobl.ccr.corp.intel.com (HELO box.shutemov.name) ([10.249.33.20])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Sep 2023 04:02:22 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id DBE9C109883; Wed, 27 Sep 2023 14:02:19 +0300 (+03)
+Date:   Wed, 27 Sep 2023 14:02:19 +0300
+From:   kirill.shutemov@linux.intel.com
+To:     Binbin Wu <binbin.wu@linux.intel.com>
+Cc:     dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
+        shuah@kernel.org, linux-kselftest@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, weihong.zhang@intel.com
+Subject: Re: [PATCH] selftests/x86/lam: Zero out buffer for readlink()
+Message-ID: <20230927110219.b5n3fbbwrxtcwtzp@box.shutemov.name>
+References: <20230923233346.12726-1-binbin.wu@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230927-ktap-posix-timers-v1-3-399de1cbfbea@kernel.org>
-References: <20230927-ktap-posix-timers-v1-0-399de1cbfbea@kernel.org>
-In-Reply-To: <20230927-ktap-posix-timers-v1-0-399de1cbfbea@kernel.org>
-To:     Shuah Khan <shuah@kernel.org>, John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.13-dev-099c9
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2526; i=broonie@kernel.org;
- h=from:subject:message-id; bh=63LUFA7Rl18RX8Q038A1fYQa94hjblSR5oEGq9wpy9M=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBlFAGahoQsX/geKms8lLTrIjGh9lXenG7MMNoBY
- V2BUzIxQuCJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZRQBmgAKCRAk1otyXVSH
- 0E3kCACDFYKSRI/bju7XA5tvQmMIDmo50WpFrllXyh1+Edx6XHx4SPX2EOIgZimzb8zIOngirha
- O14Jd8sJ3wTPgNhiEn5rjZPKHLKeBPZSiKBB18oG3hppYlH5QzQLGbTh4iMcLGHsdsjx/i11YD/
- pVcILKC2dPQ1TpQdnX3kxiPHnDCBg6sKjDGC+OavOx7AppQ87LiegTclLRVI+F222rcyZZwLr7o
- v565/QixdxM6qouc/icy+c5Z/mWk2sTZIVPXzOtbEqMviIntLkZpLd/bAQ7kOIb3q7XJ/NCmb/R
- PNIvJ06W+xnJA2ShnhXIqi4XIWP3L73qFrPqE2nmFxh4PZIu
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230923233346.12726-1-binbin.wu@linux.intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently the nsleep-lat test does not produce KTAP output but rather a
-custom format. This means that we only get a pass/fail for the suite, not
-for each individual test that the suite does. Convert to using the standard
-kselftest output functions which result in KTAP output being generated.
+On Sun, Sep 24, 2023 at 07:33:46AM +0800, Binbin Wu wrote:
+> Zero out the buffer for readlink() since readlink() does not append a
+> terminating null byte to the buffer.
+> 
+> Fixes: 833c12ce0f430 ("selftests/x86/lam: Add inherit test cases for linear-address masking")
+> 
+> Signed-off-by: Binbin Wu <binbin.wu@linux.intel.com>
+> ---
+>  tools/testing/selftests/x86/lam.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/x86/lam.c b/tools/testing/selftests/x86/lam.c
+> index eb0e46905bf9..9f06942a8e25 100644
+> --- a/tools/testing/selftests/x86/lam.c
+> +++ b/tools/testing/selftests/x86/lam.c
+> @@ -680,7 +680,7 @@ static int handle_execve(struct testcases *test)
+>  		perror("Fork failed.");
+>  		ret = 1;
+>  	} else if (pid == 0) {
+> -		char path[PATH_MAX];
+> +		char path[PATH_MAX] = {0};
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/timers/nsleep-lat.c | 26 ++++++++++++--------------
- 1 file changed, 12 insertions(+), 14 deletions(-)
+Shouldn't it be PATH_MAX+1 to handle the case when readlink(2) stores
+exactly PATH_MAX bytes into the buffer?
 
-diff --git a/tools/testing/selftests/timers/nsleep-lat.c b/tools/testing/selftests/timers/nsleep-lat.c
-index eb3e79ed7b4a..edb5acacf214 100644
---- a/tools/testing/selftests/timers/nsleep-lat.c
-+++ b/tools/testing/selftests/timers/nsleep-lat.c
-@@ -118,7 +118,7 @@ int nanosleep_lat_test(int clockid, long long ns)
- 	clock_gettime(clockid, &end);
- 
- 	if (((timespec_sub(start, end)/count)-ns) > UNRESONABLE_LATENCY) {
--		printf("Large rel latency: %lld ns :", (timespec_sub(start, end)/count)-ns);
-+		ksft_print_msg("Large rel latency: %lld ns :", (timespec_sub(start, end)/count)-ns);
- 		return -1;
- 	}
- 
-@@ -132,20 +132,23 @@ int nanosleep_lat_test(int clockid, long long ns)
- 	}
- 
- 	if (latency/count > UNRESONABLE_LATENCY) {
--		printf("Large abs latency: %lld ns :", latency/count);
-+		ksft_print_msg("Large abs latency: %lld ns :", latency/count);
- 		return -1;
- 	}
- 
- 	return 0;
- }
- 
--
-+#define SKIPPED_CLOCK_COUNT 3
- 
- int main(int argc, char **argv)
- {
- 	long long length;
- 	int clockid, ret;
- 
-+	ksft_print_header();
-+	ksft_set_plan(NR_CLOCKIDS - CLOCK_REALTIME - SKIPPED_CLOCK_COUNT);
-+
- 	for (clockid = CLOCK_REALTIME; clockid < NR_CLOCKIDS; clockid++) {
- 
- 		/* Skip cputime clockids since nanosleep won't increment cputime */
-@@ -154,9 +157,6 @@ int main(int argc, char **argv)
- 				clockid == CLOCK_HWSPECIFIC)
- 			continue;
- 
--		printf("nsleep latency %-26s ", clockstring(clockid));
--		fflush(stdout);
--
- 		length = 10;
- 		while (length <= (NSEC_PER_SEC * 10)) {
- 			ret = nanosleep_lat_test(clockid, length);
-@@ -167,14 +167,12 @@ int main(int argc, char **argv)
- 		}
- 
- 		if (ret == UNSUPPORTED) {
--			printf("[UNSUPPORTED]\n");
--			continue;
--		}
--		if (ret < 0) {
--			printf("[FAILED]\n");
--			return ksft_exit_fail();
-+			ksft_test_result_skip("%s\n", clockstring(clockid));
-+		} else {
-+			ksft_test_result(ret >= 0, "%s\n",
-+					 clockstring(clockid));
- 		}
--		printf("[OK]\n");
- 	}
--	return ksft_exit_pass();
-+
-+	ksft_finished();
- }
+>  
+>  		/* Set LAM mode in parent process */
+>  		if (set_lam(lam) != 0)
+> 
+> base-commit: ce9ecca0238b140b88f43859b211c9fdfd8e5b70
+> -- 
+> 2.25.1
+> 
 
 -- 
-2.39.2
-
+  Kiryl Shutsemau / Kirill A. Shutemov
