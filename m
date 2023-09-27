@@ -2,87 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 527367B0148
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Sep 2023 12:07:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63A377B01A2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Sep 2023 12:19:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230146AbjI0KHM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 27 Sep 2023 06:07:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58670 "EHLO
+        id S229648AbjI0KTN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 27 Sep 2023 06:19:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjI0KHL (ORCPT
+        with ESMTP id S229478AbjI0KTJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 27 Sep 2023 06:07:11 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB1C13A
-        for <linux-kselftest@vger.kernel.org>; Wed, 27 Sep 2023 03:07:08 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1c6193d6bb4so286675ad.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 27 Sep 2023 03:07:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695809228; x=1696414028; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Q1sms3m0q6TLkv39Fz9Q4qmOvbekvnpwGel5K6RYBQc=;
-        b=at8uisa0YQ0hvncF516eoG4P5ngKKrkwrkwZ4a2vQXMKdJaAQEWvSHmFo/l1URlrPx
-         hgQXkAuy1ytPQyGQ+9KJcfbxfcviRrQZJ83HOgfxvVTFtlHpzsHGjJFFntcjDCCeBT8W
-         UzIRoQLmdhz80kOOBFsBzFQAcbryCo2bU0Fjt2E5Ql3lUYFhc4/j8OvDfk2MEduDn2r4
-         HW0BGf1JPXF9XN+MKPfWdkYGmC1C4+7pSgauDfN13fn/PUJe51fLKPQISHVsXlaXk/Ft
-         BX3sjsRrq9AGD4JZpJiAMPH4TJCqrglQ+Z4M8PJik8jCbroTMZOVswWZqR55qUlv+4V0
-         wK7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695809228; x=1696414028;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Q1sms3m0q6TLkv39Fz9Q4qmOvbekvnpwGel5K6RYBQc=;
-        b=bDpcELWksQ3ij316hFbnzj/Hn60LkCU+cuxvlJc8tzmd3B0pZyIzUblmrkgJlHXhpJ
-         sjaMID0hSs2ekMk2qWdDtPgivpVvzT1zUlh7zdpbeVgTbkzskQ1j+Tl8PVJ1Jh/WdQRh
-         QxEvZOvcpSdaqPz70POKm5hK7UNJe23DgJcH/Ieui3FGVrV3i1khBX92QZNby1Fi4pqT
-         x0pe5vDJQmHIiaZxbKCRoEO+PCvA/NhW05aI7F/w6ozrhMRmptMgF7BeHoro5+mjpxHv
-         743HOuBy0bJDT4KMy4a2TCrY/GqtddXjFUZPjCulGqvLannwWv3STG9fhyUUkAkMyst8
-         WpKw==
-X-Gm-Message-State: AOJu0YzrjToTSKoW7VGeHxgqi9BWojr2XbJGeBkPuGtnN6jryy2YHCY/
-        CNYL2ULOchn50n6hFzy4xf0qTVphtj1jNZ6x9Hf7cQ==
-X-Google-Smtp-Source: AGHT+IFanxwa4yIU2V0wyf1ATfRK+p51m+xb0grLdzm8c9lTbvXMJ08UMOTQPeDLgoFL36VWCTONOa1jpRuoh7MZ4k8=
-X-Received: by 2002:a17:902:ea04:b0:1c6:20ca:2cb8 with SMTP id
- s4-20020a170902ea0400b001c620ca2cb8mr458147plg.22.1695809227668; Wed, 27 Sep
- 2023 03:07:07 -0700 (PDT)
+        Wed, 27 Sep 2023 06:19:09 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEDF3210C;
+        Wed, 27 Sep 2023 03:19:08 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18759C433C7;
+        Wed, 27 Sep 2023 10:19:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1695809948;
+        bh=0PmME+5Au82O+VzIZuXB83pi8BaLUH3zUZNmXJdkrUw=;
+        h=From:Subject:Date:To:Cc:From;
+        b=UUVM9YpTeVoJO7P9hubHPoCkeQFm1IGkHTUaVajqOqHbJigSKZkr0pN0IkSjW3xqX
+         F0yKQniqdk+kNmIvXzKbFFIaqA0WDX4tro39EcusJujOF3MEuwutz4H0o5NoX6c6nO
+         vIaVIsUUGa85ciSfeWaUT1f5nArjW2mVn7XnsyRUBTbRogpMgAifiTsJxA0Nl6nUdl
+         4vq9gh785fcHtUj4K4hCJo0dzOd/O/kCDobeJ2Z3b26irOUwB8dVs5Q4kSWZKkYomg
+         fIlcAMZDD2IR8+gR2mIXrBQh5LnYnByF7Sdw/ARtqOxnyWPtUMD+2r3pnVoUrBqK1w
+         uAf8h3oiFR8NQ==
+From:   Mark Brown <broonie@kernel.org>
+Subject: [PATCH 0/3] selftests: timers: Convert some more of the timers
+ tests to KTAP
+Date:   Wed, 27 Sep 2023 12:18:56 +0200
+Message-Id: <20230927-ktap-posix-timers-v1-0-399de1cbfbea@kernel.org>
 MIME-Version: 1.0
-References: <20230923013148.1390521-1-surenb@google.com> <20230923013148.1390521-3-surenb@google.com>
-In-Reply-To: <20230923013148.1390521-3-surenb@google.com>
-From:   Jann Horn <jannh@google.com>
-Date:   Wed, 27 Sep 2023 12:06:31 +0200
-Message-ID: <CAG48ez11FdESrYYDLmtZEgZ7osDi-QDYpk+Z0p=qjpCks++7rg@mail.gmail.com>
-Subject: potential new userfaultfd vs khugepaged conflict [was: Re: [PATCH v2
- 2/3] userfaultfd: UFFDIO_REMAP uABI]
-To:     Suren Baghdasaryan <surenb@google.com>,
-        Hugh Dickins <hughd@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Al Viro <viro@zeniv.linux.org.uk>, brauner@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Lokesh Gidra <lokeshgidra@google.com>,
-        Peter Xu <peterx@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mike Rapoport <rppt@kernel.org>, willy@infradead.org,
-        Liam.Howlett@oracle.com, zhangpeng362@huawei.com,
-        Brian Geffon <bgeffon@google.com>,
-        Kalesh Singh <kaleshsingh@google.com>,
-        Nicolas Geoffray <ngeoffray@google.com>,
-        Jared Duke <jdduke@google.com>, Linux-MM <linux-mm@kvack.org>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        kernel-team <kernel-team@android.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJEBFGUC/x3MQQ5AMBBA0avIrE1CUeUqYtEwmIhqOiKSxt01l
+ m/xfwShwCTQZxEC3Sx8uoQyz2DarFsJeU4GVaiq6JTG/bIe/Sn84MUHBUHdUteaWuvSNJA6H2j
+ h538O4/t+Gqfw/GMAAAA=
+To:     Shuah Khan <shuah@kernel.org>, John Stultz <jstultz@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.13-dev-099c9
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1408; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=0PmME+5Au82O+VzIZuXB83pi8BaLUH3zUZNmXJdkrUw=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBlFAGXHvGD3YtH5Be1xhGkqOjkUjLKQQ+Q8Nsbe
+ bdu8rk1DriJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZRQBlwAKCRAk1otyXVSH
+ 0MJGB/94fv4Ns+92xD2BTjAF4KBDDqEgvHJZUOUnmdoFrI9d+PowvFNZtxT0W6+0hZzIlcD1vZb
+ uW4D97T6Zzylj0Svz3HYyv2um0EeLG5IhsQDIMVtkuJPTwJYhUcxCuRREhX4cdnsOd2cMzdiOFj
+ fL+LVmjY3bEwIQvQi2KH8JQ62fHbYgcVDpvoSKSWGzi/Sd3WHHK1rSCAkKzQw8jpA/ePC42JXO+
+ MtKOY++xh4+NtJDvlHIM5MNHnZewcSl045TIc5A+TbouC66mi4Zkrsk+Ve0XmJ5PreWFI/7Chy+
+ fqzQlC80GLWOUyC78mVDIrM95vmOtY2FAB6jk9+Y+0521wXd
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,253 +65,35 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-[moving Hugh into "To:" recipients as FYI for khugepaged interaction]
+KTAP is the standard output format for selftests, providing a method for
+systems running the selftests to get results from individual tests
+rather than just a pass/fail for the test program as a whole.  While
+many of the timers tests use KTAP some have custom output formats, let's
+convert a few more to KTAP to make them work better in automation.
 
-On Sat, Sep 23, 2023 at 3:31=E2=80=AFAM Suren Baghdasaryan <surenb@google.c=
-om> wrote:
-> From: Andrea Arcangeli <aarcange@redhat.com>
->
-> This implements the uABI of UFFDIO_REMAP.
->
-> Notably one mode bitflag is also forwarded (and in turn known) by the
-> lowlevel remap_pages method.
->
-> Signed-off-by: Andrea Arcangeli <aarcange@redhat.com>
-> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-[...]
-> +/*
-> + * The mmap_lock for reading is held by the caller. Just move the page
-> + * from src_pmd to dst_pmd if possible, and return true if succeeded
-> + * in moving the page.
-> + */
-> +static int remap_pages_pte(struct mm_struct *dst_mm,
-> +                          struct mm_struct *src_mm,
-> +                          pmd_t *dst_pmd,
-> +                          pmd_t *src_pmd,
-> +                          struct vm_area_struct *dst_vma,
-> +                          struct vm_area_struct *src_vma,
-> +                          unsigned long dst_addr,
-> +                          unsigned long src_addr,
-> +                          __u64 mode)
-> +{
-> +       swp_entry_t entry;
-> +       pte_t orig_src_pte, orig_dst_pte;
-> +       spinlock_t *src_ptl, *dst_ptl;
-> +       pte_t *src_pte =3D NULL;
-> +       pte_t *dst_pte =3D NULL;
-> +
-> +       struct folio *src_folio =3D NULL;
-> +       struct anon_vma *src_anon_vma =3D NULL;
-> +       struct mmu_notifier_range range;
-> +       int err =3D 0;
-> +
-> +       mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, src_mm,
-> +                               src_addr, src_addr + PAGE_SIZE);
-> +       mmu_notifier_invalidate_range_start(&range);
-> +retry:
-> +       dst_pte =3D pte_offset_map_nolock(dst_mm, dst_pmd, dst_addr, &dst=
-_ptl);
-> +
-> +       /* If an huge pmd materialized from under us fail */
-> +       if (unlikely(!dst_pte)) {
-> +               err =3D -EFAULT;
-> +               goto out;
-> +       }
-> +
-> +       src_pte =3D pte_offset_map_nolock(src_mm, src_pmd, src_addr, &src=
-_ptl);
-> +
-> +       /*
-> +        * We held the mmap_lock for reading so MADV_DONTNEED
-> +        * can zap transparent huge pages under us, or the
-> +        * transparent huge page fault can establish new
-> +        * transparent huge pages under us.
-> +        */
-> +       if (unlikely(!src_pte)) {
-> +               err =3D -EFAULT;
-> +               goto out;
-> +       }
-> +
-> +       BUG_ON(pmd_none(*dst_pmd));
-> +       BUG_ON(pmd_none(*src_pmd));
-> +       BUG_ON(pmd_trans_huge(*dst_pmd));
-> +       BUG_ON(pmd_trans_huge(*src_pmd));
+The posix_timers test made use of perror(), I've added a generic helper
+to kselftest.h for that since it seems like it'll be useful elsewhere.
 
-This works for now, but note that Hugh Dickins has recently been
-reworking khugepaged such that PTE-based mappings can be collapsed
-into transhuge mappings under the mmap lock held in *read mode*;
-holders of the mmap lock in read mode can only synchronize against
-this by taking the right page table spinlock and rechecking the pmd
-value. This is only the case for file-based mappings so far, not for
-anonymous private VMAs; and this code only operates on anonymous
-private VMAs so far, so it works out.
+There are more tests that don't use KTAP, several of them just run a
+single test so don't really benefit from KTAP and there were a couple
+where the conversion was a bit more complex so I've left them for now.
 
-But if either Hugh further reworks khugepaged such that anonymous VMAs
-can be collapsed under the mmap lock in read mode, or you expand this
-code to work on file-backed VMAs, then it will become possible to hit
-these BUG_ON() calls. I'm not sure what the plans for khugepaged going
-forward are, but the number of edgecases everyone has to keep in mind
-would go down if you changed this function to deal gracefully with
-page tables disappearing under you.
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+Mark Brown (3):
+      kselftest: Add a ksft_perror() helper
+      selftests: timers: Convert posix_timers test to generate KTAP output
+      selftests: timers: Convert nsleep-lat test to generate KTAP output
 
-In the newest version of mm/pgtable-generic.c, above
-__pte_offset_map_lock(), there is a big comment block explaining the
-current rules for page table access; in particular, regarding the
-helper pte_offset_map_nolock() that you're using:
+ tools/testing/selftests/kselftest.h           | 14 +++++
+ tools/testing/selftests/timers/nsleep-lat.c   | 26 ++++-----
+ tools/testing/selftests/timers/posix_timers.c | 81 ++++++++++++++-------------
+ 3 files changed, 67 insertions(+), 54 deletions(-)
+---
+base-commit: 6465e260f48790807eef06b583b38ca9789b6072
+change-id: 20230926-ktap-posix-timers-67e978466185
 
- * pte_offset_map_nolock(mm, pmd, addr, ptlp), above, is like pte_offset_ma=
-p();
- * but when successful, it also outputs a pointer to the spinlock in ptlp -=
- as
- * pte_offset_map_lock() does, but in this case without locking it.  This h=
-elps
- * the caller to avoid a later pte_lockptr(mm, *pmd), which might by that t=
-ime
- * act on a changed *pmd: pte_offset_map_nolock() provides the correct spin=
-lock
- * pointer for the page table that it returns.  In principle, the caller sh=
-ould
- * recheck *pmd once the lock is taken; in practice, no callsite needs that=
- -
- * either the mmap_lock for write, or pte_same() check on contents, is enou=
-gh.
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
 
-If this becomes hittable in the future, I think you will need to
-recheck *pmd, at least for dst_pte, to avoid copying PTEs into a
-detached page table.
-
-> +       spin_lock(dst_ptl);
-> +       orig_dst_pte =3D *dst_pte;
-> +       spin_unlock(dst_ptl);
-> +       if (!pte_none(orig_dst_pte)) {
-> +               err =3D -EEXIST;
-> +               goto out;
-> +       }
-> +
-> +       spin_lock(src_ptl);
-> +       orig_src_pte =3D *src_pte;
-> +       spin_unlock(src_ptl);
-> +       if (pte_none(orig_src_pte)) {
-> +               if (!(mode & UFFDIO_REMAP_MODE_ALLOW_SRC_HOLES))
-> +                       err =3D -ENOENT;
-> +               else /* nothing to do to remap a hole */
-> +                       err =3D 0;
-> +               goto out;
-> +       }
-> +
-> +       if (pte_present(orig_src_pte)) {
-> +               /*
-> +                * Pin and lock both source folio and anon_vma. Since we =
-are in
-> +                * RCU read section, we can't block, so on contention hav=
-e to
-> +                * unmap the ptes, obtain the lock and retry.
-> +                */
-> +               if (!src_folio) {
-> +                       struct folio *folio;
-> +
-> +                       /*
-> +                        * Pin the page while holding the lock to be sure=
- the
-> +                        * page isn't freed under us
-> +                        */
-> +                       spin_lock(src_ptl);
-> +                       if (!pte_same(orig_src_pte, *src_pte)) {
-> +                               spin_unlock(src_ptl);
-> +                               err =3D -EAGAIN;
-> +                               goto out;
-> +                       }
-> +
-> +                       folio =3D vm_normal_folio(src_vma, src_addr, orig=
-_src_pte);
-> +                       if (!folio || !folio_test_anon(folio) ||
-> +                           folio_test_large(folio) ||
-> +                           folio_estimated_sharers(folio) !=3D 1) {
-> +                               spin_unlock(src_ptl);
-> +                               err =3D -EBUSY;
-> +                               goto out;
-> +                       }
-> +
-> +                       folio_get(folio);
-> +                       src_folio =3D folio;
-> +                       spin_unlock(src_ptl);
-> +
-> +                       /* block all concurrent rmap walks */
-> +                       if (!folio_trylock(src_folio)) {
-> +                               pte_unmap(&orig_src_pte);
-> +                               pte_unmap(&orig_dst_pte);
-> +                               src_pte =3D dst_pte =3D NULL;
-> +                               /* now we can block and wait */
-> +                               folio_lock(src_folio);
-> +                               goto retry;
-> +                       }
-> +               }
-> +
-> +               if (!src_anon_vma) {
-> +                       /*
-> +                        * folio_referenced walks the anon_vma chain
-> +                        * without the folio lock. Serialize against it w=
-ith
-> +                        * the anon_vma lock, the folio lock is not enoug=
-h.
-> +                        */
-> +                       src_anon_vma =3D folio_get_anon_vma(src_folio);
-> +                       if (!src_anon_vma) {
-> +                               /* page was unmapped from under us */
-> +                               err =3D -EAGAIN;
-> +                               goto out;
-> +                       }
-> +                       if (!anon_vma_trylock_write(src_anon_vma)) {
-> +                               pte_unmap(&orig_src_pte);
-> +                               pte_unmap(&orig_dst_pte);
-> +                               src_pte =3D dst_pte =3D NULL;
-> +                               /* now we can block and wait */
-> +                               anon_vma_lock_write(src_anon_vma);
-> +                               goto retry;
-> +                       }
-> +               }
-> +
-> +               err =3D remap_anon_pte(dst_mm, src_mm,  dst_vma, src_vma,
-> +                                    dst_addr, src_addr, dst_pte, src_pte=
-,
-> +                                    orig_dst_pte, orig_src_pte,
-> +                                    dst_ptl, src_ptl, src_folio);
-> +       } else {
-> +               entry =3D pte_to_swp_entry(orig_src_pte);
-> +               if (non_swap_entry(entry)) {
-> +                       if (is_migration_entry(entry)) {
-> +                               pte_unmap(&orig_src_pte);
-> +                               pte_unmap(&orig_dst_pte);
-> +                               src_pte =3D dst_pte =3D NULL;
-> +                               migration_entry_wait(src_mm, src_pmd,
-> +                                                    src_addr);
-> +                               err =3D -EAGAIN;
-> +                       } else
-> +                               err =3D -EFAULT;
-> +                       goto out;
-> +               }
-> +
-> +               err =3D remap_swap_pte(dst_mm, src_mm, dst_addr, src_addr=
-,
-> +                                    dst_pte, src_pte,
-> +                                    orig_dst_pte, orig_src_pte,
-> +                                    dst_ptl, src_ptl);
-> +       }
-> +
-> +out:
-> +       if (src_anon_vma) {
-> +               anon_vma_unlock_write(src_anon_vma);
-> +               put_anon_vma(src_anon_vma);
-> +       }
-> +       if (src_folio) {
-> +               folio_unlock(src_folio);
-> +               folio_put(src_folio);
-> +       }
-> +       if (dst_pte)
-> +               pte_unmap(dst_pte);
-> +       if (src_pte)
-> +               pte_unmap(src_pte);
-> +       mmu_notifier_invalidate_range_end(&range);
-> +
-> +       return err;
-> +}
