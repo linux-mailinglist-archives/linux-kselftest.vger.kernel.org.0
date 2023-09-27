@@ -2,166 +2,84 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 525EF7AFA1F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Sep 2023 07:32:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0DA57AF9AA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Sep 2023 06:48:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbjI0Fch (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 27 Sep 2023 01:32:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35440 "EHLO
+        id S229555AbjI0Esd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 27 Sep 2023 00:48:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229810AbjI0Fbx (ORCPT
+        with ESMTP id S229579AbjI0Err (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 27 Sep 2023 01:31:53 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB1593EF;
-        Tue, 26 Sep 2023 15:14:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695766484; x=1727302484;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=PU/28rhQaCvit4L1SyhTFmhAZOiImiGqxQr9WCu8ih0=;
-  b=FbRyxE/pRyo3Wcp8u2HoHbjgBbnhXFvMtSZXF8winvGvtTSRSsp0gE2n
-   8Y7yW31wo+cYK10u8rx6ykYvqhOXTx3lKxuQcGgcKzlyu0fIWCVvz3rIw
-   LAl7vLFTvjL5rIoEMpOLr6rum+gzYxLXjoDOKh4/4cNKYt4HlZo1xidI4
-   33J2KbQ8d3L1JHlfD6H6TqX3Bl636j8ABgf+bceFUp7Z1nmG0BlG3Z2/+
-   29RLwnnuMPzllEjCymD8CvWTkmBiJxqEviE4+50PPbpJhs4c/j4kU5B2O
-   LrgJJo4VwLoVdYHKW33oh2kqRSGHBW7hw7sbAa/WCO5RmBZp8EgKzGMHM
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="385526706"
-X-IronPort-AV: E=Sophos;i="6.03,179,1694761200"; 
-   d="scan'208";a="385526706"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Sep 2023 14:39:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10845"; a="1079866728"
-X-IronPort-AV: E=Sophos;i="6.03,179,1694761200"; 
-   d="scan'208";a="1079866728"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga005.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 26 Sep 2023 14:39:58 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32; Tue, 26 Sep 2023 14:39:58 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32; Tue, 26 Sep 2023 14:39:54 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32 via Frontend Transport; Tue, 26 Sep 2023 14:39:54 -0700
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.168)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.32; Tue, 26 Sep 2023 14:39:54 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KWqhihScjNPLwNal9vve3i76AzhnlkBI6ThYBYuA16hPxB9wadt8R+1J0Gzsb66WxKKvHWmhYOxzijwt7ARZtDB0kTSeuEw/7pf435ZFMdHnpO01TVpToIVEtvYC/EFkGKgY9vxYFNEpzwe8USs/BTnKbawyhL/9R+8a2+N+j/4MZaav8jZXzim7C64mdMoIkl2u441sBzNs6/ZrFbwI31na4S6WZCTWyCdcH+8MVGgWXgcoWfB3+IsEap+KwDWjuCwgxQvb8GjBF5+fy8qgDWs5wj7Rdd0dzR+lG2L2R3bzuYO7n7cqLvLKnuZUePZP6DKVsJu50Qv7+C/lnoZ7yA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NKA4I3rc00r+ouar130IJjosx+hFDFY6sH1Z3iqgjaE=;
- b=aVlisTC+a/Q0PWdRa7ByTx+Yn+CA1geyhZ/GqGgeBsJDoz0XI5zNuWF7Fs5z8YEppe6B+leRiiKSRkkLPURuBabi8OBYoy0gOj8kthZFUqRrEvL6O5oHONKcCALOrOfyXg07TdvObC3hg2amvkRw0FAgTWNDkuZmbBfrCF6tSFKndpq/tum3UFPm1qV/p8Uf4dxp1rxzCa5AHPuS6082tJsBVkaowfdHZeh27BpeaitcjfhOfpa9l7fV+lbO8JjsraHM6GJlMmyRJBlYkNybeoRtpNPahKLUYryw/GlaPdWqYB/DwR0PvZuTVZ1qCj91y0q1TEEhFf/iBUczdMWmEg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SJ2PR11MB7573.namprd11.prod.outlook.com (2603:10b6:a03:4d2::10)
- by SA2PR11MB5131.namprd11.prod.outlook.com (2603:10b6:806:116::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6813.21; Tue, 26 Sep
- 2023 21:39:52 +0000
-Received: from SJ2PR11MB7573.namprd11.prod.outlook.com
- ([fe80::bd70:f215:4a97:c84e]) by SJ2PR11MB7573.namprd11.prod.outlook.com
- ([fe80::bd70:f215:4a97:c84e%6]) with mapi id 15.20.6813.017; Tue, 26 Sep 2023
- 21:39:52 +0000
-Message-ID: <36e02c1f-fecf-f6c0-3baa-96fa15e6327d@intel.com>
-Date:   Tue, 26 Sep 2023 14:39:49 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.15.1
-Subject: Re: [PATCH v2 3/6] selftests/resctrl: Move _GNU_SOURCE define into
- Makefile
-Content-Language: en-US
-To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Wed, 27 Sep 2023 00:47:47 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A5610CE
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 Sep 2023 19:13:29 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-691c05bc5aaso8758539b3a.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 26 Sep 2023 19:13:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1695780808; x=1696385608; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ZV6WWLW/um6fjmDxBYmHw3kQW73zJt+fvsBsocXSqds=;
+        b=DC8d5SUKAatSiQdlBhnd5VF3uy902y7PBvuSVQVWE7DHAzwMT2LVJdtRVQKWIMIT2j
+         53Gp/cgLv3p7Wy7pJK4vGLZMV250o5YFrhnIRvhrk3IbkkDWHR3D/D2kiWdb5m8EvJrM
+         gnrAAvM+y5lROMtXpstp4RevSM1+m2eGiY4M8r9kUUMjrsyGhLGcxTczj1eIPsLuNreu
+         8AnUspd8OgN9AqkNB/vK7runY7jNlC7xbXjJUOta1iQ4yFBrKlJyB8Ez6bavloQJQj7I
+         RAqd3wPrUpioJiNsIqcOvgE6HxwfLHcI1KIwXQCc5pBJq6uUx0t7/SZerQOCGSM4rrA+
+         UrEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695780808; x=1696385608;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZV6WWLW/um6fjmDxBYmHw3kQW73zJt+fvsBsocXSqds=;
+        b=wNTY9u3CkVIq4sWsNaEbju5WumDunIdZ3TC9eKdk6vZ23QtiJ47qy1V4HxUmWqrQb2
+         CjEpUpOFwtpK58hi8l+8EfoVaJbFCWpCABBInAESjzPkOsumT1yXta3E0ZuO730WTsJm
+         yTbpLNwA6I2IaH+E4YEVxEHOtS2EFHVHc4jLfUpzWA9bsNvLV9woNKOwwo8haabmkXxk
+         aL2jJFj/Q6lG5cky1A9wQfWFF8iV7QHTMKH9oW5yPAiEJcCFDGNA9LA50Su043IqFweV
+         Qqy6muB8fE/e4Wxr42BfUFI7UhXfxmc7Gxx8PHdW+vWYeZFYzkNXc13w4UAD2U1+4WQn
+         +W9w==
+X-Gm-Message-State: AOJu0YxaGXG4U4OSIK8gA4oRn942+pyiuzVr6RMO+myiLt5EoM1ny6Fk
+        dBXiLZl4JHIuoEUCoyGuu/SghA==
+X-Google-Smtp-Source: AGHT+IE1uy7Z2/RTHVKKBhrojjBrMYzG+W9qZc3apbDrbDB/vlS2HSZCgLb+7NFBKhVe0YuAu/kyOA==
+X-Received: by 2002:a05:6a00:cd5:b0:68c:49e4:bd71 with SMTP id b21-20020a056a000cd500b0068c49e4bd71mr709094pfv.34.1695780808529;
+        Tue, 26 Sep 2023 19:13:28 -0700 (PDT)
+Received: from ghost ([2601:647:5700:6860:6eef:9e73:7774:1855])
+        by smtp.gmail.com with ESMTPSA id k12-20020aa7820c000000b0068fda1db80bsm10616571pfi.75.2023.09.26.19.13.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Sep 2023 19:13:28 -0700 (PDT)
+Date:   Tue, 26 Sep 2023 19:13:24 -0700
+From:   Charlie Jenkins <charlie@rivosinc.com>
+To:     Anup Patel <apatel@ventanamicro.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Conor Dooley <conor@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        <linux-kselftest@vger.kernel.org>,
-        =?UTF-8?Q?Maciej_Wiecz=c3=b3r-Retman?= 
-        <maciej.wieczor-retman@intel.com>
-CC:     LKML <linux-kernel@vger.kernel.org>,
-        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
-        <stable@vger.kernel.org>
-References: <20230915154438.82931-1-ilpo.jarvinen@linux.intel.com>
- <20230915154438.82931-4-ilpo.jarvinen@linux.intel.com>
-From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <20230915154438.82931-4-ilpo.jarvinen@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: MW4PR03CA0149.namprd03.prod.outlook.com
- (2603:10b6:303:8c::34) To SJ2PR11MB7573.namprd11.prod.outlook.com
- (2603:10b6:a03:4d2::10)
+        Andrew Jones <ajones@ventanamicro.com>,
+        Mayuresh Chitale <mchitale@ventanamicro.com>,
+        devicetree@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2 2/9] RISC-V: Detect XVentanaCondOps from ISA string
+Message-ID: <ZROPxDPYGDcGm2J/@ghost>
+References: <20230925133859.1735879-1-apatel@ventanamicro.com>
+ <20230925133859.1735879-3-apatel@ventanamicro.com>
+ <ZRHH25IyJJLWSolC@ghost>
+ <CAK9=C2UoKxM+wknB4n8=okyXCCE6t0Vvz4jU_tBW6DMm6Vb3DA@mail.gmail.com>
+ <CAK9=C2X9FpLTW4mDTNUWkoRLAXZonPzhrsOD5xrCfrqKSbaLhg@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ2PR11MB7573:EE_|SA2PR11MB5131:EE_
-X-MS-Office365-Filtering-Correlation-Id: f4bea5b1-18d3-42b8-277f-08dbbed91dff
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: FVEvZHntqv0wo4SA3PAwq7g7RSafHsIaL3C6nEsQdZ32Zz/UJoxGeDw6hOBSTsk1FKS6djseRzBwcJqQwJ1f8QtV0i+j6+Rv0VPsAhqVeZwsjuhEenpAbRvA7VKHW9q3BIP21HmJg1prnUX+h+RgixpkcocowxtJEunBqpXrzef9OqQrHe3Bo6ekX+Y+BZXkpFx7XbJ7x0hL/hza8jVoXjVa5xj4xFt0wtBA4EnBZYXwMrkdDDtdPyCb0yRrnDyfpl9zYrlZMDaWArx+KW/o8KnWaEbOeB7EYZ2fBQwC8KXfbNXDD6Mk//Nu9+Z4f6vloVmPR+zKbxTBwlgkMbcdLpbbN+XalsL1Rqbr6AyE6zF0jDAdmcqnUDdeYucPOVHJK8XFXS8cMOfhgPS7CkaAsHBZM7ZwQzVg1mdHIFnXewkoK552QRqpZBfxDHERTYmpYBT1uhCNUxERWHVYf+AYxTOfuTKzMNXSbigqFgEe+o62ToW6XKJhHQRKPKYsHg6J5lyyc8CdsNNMhKD/9tr91S22uWT626VzQa4GIaBktA6CW+g35GSg/oz6U7ZYx5dnpFGg3yW37QOpbYx43vLNdIN4NQPsFvQFTotHMW8nUvuI6eDUtmCFmuPEpNigBjO7sSSYSMkRMH0VDorAYQXmBA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7573.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(396003)(376002)(136003)(366004)(346002)(230922051799003)(451199024)(186009)(1800799009)(38100700002)(110136005)(6512007)(6506007)(6666004)(31696002)(53546011)(6486002)(83380400001)(44832011)(478600001)(31686004)(66556008)(6636002)(316002)(54906003)(66476007)(86362001)(66946007)(41300700001)(8936002)(26005)(4326008)(8676002)(4744005)(66574015)(5660300002)(36756003)(2616005)(82960400001)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VkRTU1piekFueTZKbVorOTNYT2V6U0NBczBxY2gzRWtRSTVVQkhJNGorUnd0?=
- =?utf-8?B?MU8wWjhwN1I0dkJJU092MmMxa29XZlF2eUFDZ28zeE90blM0R1Q5RnNCdklH?=
- =?utf-8?B?QjFNZUNVY2tFVTVwV2lFNkZodHppNklCa25FVENaT3IweU00dzJqSTdTaUlk?=
- =?utf-8?B?RTAzS2VJdk13eGQ2OW5uajJkVWs3T3RsWmpXUUgvdXVSZ3g2ekZnRnZCSmdr?=
- =?utf-8?B?QnRXMm96RDdzdXVWeU16Yno1eXM1L1Ztc1RvY1RRcFU1SkRWV3pyeEpuTFpi?=
- =?utf-8?B?Qk9CRXVhRTQ5Q0R2Rmh6VlBHRkhWZ0NEQnVVNHZHbmFuNTlpWjJvdDk2TzVr?=
- =?utf-8?B?ZG5xWkZCTEVKQjA4UWRHUDhOUVF1ZlhkN3B1TkJTcmZya0xLWW9vVktSZ09M?=
- =?utf-8?B?M1psVG1IbTVLU0tKbHErZUFZYU1MMU1tUTU4NnFHNTQ2bGk1NUpnRWtEZW0v?=
- =?utf-8?B?VTRXM2dCTzV2RzV2VW5CdEMzV1VTaDJpSEo3aC9jb09TbFJXUC9vZU5RTE80?=
- =?utf-8?B?TjFYb016ZVE2UWMxY3dObkU4MFJSNlBkazU0QzcyeUtpbnFMWU5yd3Jsd0Fl?=
- =?utf-8?B?eDQ3cWFQUVNJOThFcmdmREJOZTlPT1RJUWIwVlptZmxGVHYzN1BXd0ZVNHpl?=
- =?utf-8?B?b3J5Mi9iVjgzTUZCRzh2TXpFZWdHSE5JTktkQW5peG9abkE1WjV5b3JKR1dz?=
- =?utf-8?B?b0ZUOTdZdnJkWUZVSkJrd0tvcStyakxwc2FIUzUyMldSalNEUFpJZWg1d1V1?=
- =?utf-8?B?bk1hSWxTdENZVEhZR0JCa2JLUUpRNThpNjNMUWJKb1VreFNRa3hBakMyRWtw?=
- =?utf-8?B?V1V5Q3AzNCtFMGVqbzE0djhhdnUwVEUwa01wdXpmdlphaGVxWCtnZXZhV1li?=
- =?utf-8?B?bzQ5RytkLzhuSC9ac2FkVi8zNS9sRFhMZTZqWFpkdnIvb0FPTmtpWlBCT3RP?=
- =?utf-8?B?MC9FV2x6dUVocmN1NG1DQzlxd0lpNEEybTdodDJabmVFVXh5V1NBZERyZXM2?=
- =?utf-8?B?THBzQ3VPYWRMZkgzNUV6UWVTMk4rMlNqNW1pSThSN3Rrb3hWNVNhR1dmblI0?=
- =?utf-8?B?T2s5SnI4VU81U1pEaWpoODN6MFRZMi8zb2RyVVd2Q0ZQbmZxME1oMzFiVDRE?=
- =?utf-8?B?MGlCZzJSNjhDM3drQWJKcmtZcEFleUhrSS9iTDR6QkhQTlhFZ1ExOVJuNmx3?=
- =?utf-8?B?NDN0SkNWa1JnTkw1WWR5dlVnZE14bWpNUEw4NHF5ZVNLTitRaFp4N1ZSRks2?=
- =?utf-8?B?d0RWd0dMWk5mVGpPdmZHdXhZOHhxUEtzM2RodFVHSC9NL0E5TWhJNFhmUE5Q?=
- =?utf-8?B?anZJTXFoRGlpZlZVNW9EQ1UySkZHRGpNRFprTG9IOVdqRzM2eHJra0FSQUFU?=
- =?utf-8?B?YVcrbnRVbzVTYXNUZ3pQbFB2bnZFbm9ScERQL01sNnExTHRGdHE5dkx0bW1D?=
- =?utf-8?B?UDB6eVpkMXVYaHdaQ0lPTFNHOGdDWnBJcnhVWS9uNkoyNWZLYzhmWVBCNGo5?=
- =?utf-8?B?N0xEWjFTb21tcHVFcHhqQmRrTjNkTU9rZjdvK3dJanloK3RxazVIYXNFdFA0?=
- =?utf-8?B?akluVE5QM2JhTXkwL1llOXdMQ0lPR1BTQUQ4eWFyZVRmc1dmRXdvV01XZXMv?=
- =?utf-8?B?L1VpSVlWSTBoREE4d25qMHlzQkhlTEhxWTc5Smx0RUNBR2p6dVJ2OGdmY29X?=
- =?utf-8?B?T2ZGZHZaeXZ3bkx0aHNnSE9QQk1BSE9pQkhVU3dTOUV1aTMxWG81VVZsMCtl?=
- =?utf-8?B?V0hhT213TmxCRnErNUp2cWJqWUoxSnNmZWdjbWRtZlFWU0kwT2NMaW13VVpD?=
- =?utf-8?B?UlVreHlKMGNzMEIxYTBHTkdBMHQwbGtkM0tYTWprV2gwN1hqTE9UQlR5OFEy?=
- =?utf-8?B?YW9BZ2djYk1NaVJpVlFEa1lRdFdFSFZKbDZ5NU9uZjV2MXFIQnBLc0FxeThE?=
- =?utf-8?B?UkJnTVh2MjNBUy9rYkVTS1d4MWk5VlhoOEtLSjRlWXlxdjJmZ1YrNjJxWlNK?=
- =?utf-8?B?RVA4aWJYOG5qQlV2cHc4V0pJMmFoeVZ0WnhJQVpzTFErOStZNllxMFFCUGVW?=
- =?utf-8?B?d3hDVU1YMkd3bnI5Z091dDNxMTloY0dlK0VpU0ExM0pxT2Fqc21lU2phS0hy?=
- =?utf-8?B?by9oZnVRcE1ZZEVaVW5keU1FZFRYL2hDVTMyMDNYSVpMb3l3cmU1M2pmR3c5?=
- =?utf-8?B?N3c9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: f4bea5b1-18d3-42b8-277f-08dbbed91dff
-X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB7573.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Sep 2023 21:39:52.4536
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: PVraXTbQSCEyDDoE+V0m/B7jR9u1YZ9C/Y7iaKjBlE7584hwleyIzGTlpA+ofBjfaAnkbg3T66AgRtWzgBvtLx80DBcomE6DPiz9AiyX5Gc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB5131
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAK9=C2X9FpLTW4mDTNUWkoRLAXZonPzhrsOD5xrCfrqKSbaLhg@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -169,26 +87,121 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Ilpo,
-
-On 9/15/2023 8:44 AM, Ilpo Järvinen wrote:
-> Currently, _GNU_SOURCE is defined in resctrl.h. Defining _GNU_SOURCE
-
-nitpick: If you do submit a new version, could you please drop the
-"Currently".
-
-> has a large impact on what gets defined when including headers either
-> before or after it. This can result in compile failures if .c file
-> decides to include a standard header file before resctrl.h.
+On Tue, Sep 26, 2023 at 09:44:38AM +0530, Anup Patel wrote:
+> On Tue, Sep 26, 2023 at 9:38 AM Anup Patel <apatel@ventanamicro.com> wrote:
+> >
+> > On Mon, Sep 25, 2023 at 11:18 PM Charlie Jenkins <charlie@rivosinc.com> wrote:
+> > >
+> > > On Mon, Sep 25, 2023 at 07:08:52PM +0530, Anup Patel wrote:
+> > > > The Veyron-V1 CPU supports custom conditional arithmetic and
+> > > > conditional-select/move operations referred to as XVentanaCondOps
+> > > > extension. In fact, QEMU RISC-V also has support for emulating
+> > > > XVentanaCondOps extension.
+> > > >
+> > > > Let us detect XVentanaCondOps extension from ISA string available
+> > > > through DT or ACPI.
+> > > >
+> > > > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> > > > Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+> > > > ---
+> > > >  arch/riscv/include/asm/hwcap.h | 1 +
+> > > >  arch/riscv/kernel/cpufeature.c | 1 +
+> > > >  2 files changed, 2 insertions(+)
+> > > >
+> > > > diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
+> > > > index 0f520f7d058a..b7efe9e2fa89 100644
+> > > > --- a/arch/riscv/include/asm/hwcap.h
+> > > > +++ b/arch/riscv/include/asm/hwcap.h
+> > > > @@ -59,6 +59,7 @@
+> > > >  #define RISCV_ISA_EXT_ZIFENCEI               41
+> > > >  #define RISCV_ISA_EXT_ZIHPM          42
+> > > >  #define RISCV_ISA_EXT_SMSTATEEN              43
+> > > > +#define RISCV_ISA_EXT_XVENTANACONDOPS        44
+> > > >
+> > > >  #define RISCV_ISA_EXT_MAX            64
+> > > >
+> > > > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> > > > index 3755a8c2a9de..3a31d34fe709 100644
+> > > > --- a/arch/riscv/kernel/cpufeature.c
+> > > > +++ b/arch/riscv/kernel/cpufeature.c
+> > > > @@ -182,6 +182,7 @@ const struct riscv_isa_ext_data riscv_isa_ext[] = {
+> > > >       __RISCV_ISA_EXT_DATA(svinval, RISCV_ISA_EXT_SVINVAL),
+> > > >       __RISCV_ISA_EXT_DATA(svnapot, RISCV_ISA_EXT_SVNAPOT),
+> > > >       __RISCV_ISA_EXT_DATA(svpbmt, RISCV_ISA_EXT_SVPBMT),
+> > > > +     __RISCV_ISA_EXT_DATA(xventanacondops, RISCV_ISA_EXT_XVENTANACONDOPS),
+> > > >  };
+> > > >
+> > > >  const size_t riscv_isa_ext_count = ARRAY_SIZE(riscv_isa_ext);
+> > > > --
+> > > > 2.34.1
+> > > >
+> > > >
+> > > > _______________________________________________
+> > > > linux-riscv mailing list
+> > > > linux-riscv@lists.infradead.org
+> > > > http://lists.infradead.org/mailman/listinfo/linux-riscv
+> > >
+> > > I worry about storing vendor extensions in this file. Because vendor
+> > > extensions are not standardized, they can only be expected to have the
+> > > desired behavior on hardware with the appropriate vendor id. A couple
+> >
+> > Assuming that a vendor extension is only available on hardware with
+> > appropriate vendor id is not correct because:
+> > 1) vendor A can allow vendor B to implement a custom extension
+> >     defined by vendor B
 > 
-> It is safer to define _GNU_SOURCE in Makefile so it is always defined
-> regardless of in which order includes are done.
+> Typo correction: "vendor A can allow vendor B to implement a custom
+> extension defined by vendor A"
 > 
-> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> Cc: <stable@vger.kernel.org>
+> > 2) vendor A and vendor B can jointly develop a RISC-V CPU where
+> >     both vendors integrate their custom extensions.
+> >
+> > It is best to identify a vendor extension independently with a
+> > "X<vendor_name><extension_name>" string to keep it simple
+> > and scalable.
+> >
+> > Along these lines, each T-Head custom extension should have a
+> > "XThead<xyz>" name associated with it.
+> >
+> > > months ago I sent a patch to address this by handling vector extensions
+> > > independently for each vendor [1]. I dropped the patch because it
+> > > relied upon Heiko's T-Head vector extension support that he stopped
+> > > working on. However, I can revive this patch so you can build off of it.
+> >
+> > At least, the conditional operations don't need a hwprobe interface
+> > because an application is either compiled with or without conditional
+> > operations. In other words, effective use of conditional operation is
+> > only possible if compiler generates these instructions based on
+> > code patterns.
+> >
 
-Thank you.
+I was conflating hwprobe with hwcap when I was thinking about this.
+However, I think it might still be beneficial to split out the vendor
+extensions. It is possible for vendors to implement each other's
+extensions but I don't expect that to be the average case. Because I do
+not expect this to be the average case, riscv_isa_ext becomes needlessly
+large as it has to contain the extensions of every vendor.
 
-Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
+> > >
+> > > This scheme has the added benefit that vendors do not have to worry
+> > > about conficting extensions, and the kernel does not have to act as a
+> > > key registry for vendors.
+> >
+> > How can vendor extensions conflict if they all follow the
+> > "X<vendor_name><extension_name>" naming scheme ?
+> >
+> > >
+> > > What are your thoughts?
+> > >
+> > > - Charlie
+> > >
+> > > [1] https://lore.kernel.org/lkml/20230705-thead_vendor_extensions-v1-2-ad6915349c4d@rivosinc.com/
+> > >
+> >
+> > Regards,
+> > Anup
+> 
+> Regards,
+> Anup
 
-Reinette
+- Charlie
