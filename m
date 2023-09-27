@@ -2,69 +2,78 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AF787B0D8F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Sep 2023 22:46:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB29F7B0DDA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Sep 2023 23:09:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbjI0UqO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 27 Sep 2023 16:46:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39154 "EHLO
+        id S229923AbjI0VJJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 27 Sep 2023 17:09:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjI0UqN (ORCPT
+        with ESMTP id S229458AbjI0VJD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 27 Sep 2023 16:46:13 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D39CE122
-        for <linux-kselftest@vger.kernel.org>; Wed, 27 Sep 2023 13:46:10 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-4053f24c900so11715e9.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 27 Sep 2023 13:46:10 -0700 (PDT)
+        Wed, 27 Sep 2023 17:09:03 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D9B11F
+        for <linux-kselftest@vger.kernel.org>; Wed, 27 Sep 2023 14:08:56 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-59c215f2f4aso154650347b3.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 27 Sep 2023 14:08:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695847569; x=1696452369; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1695848936; x=1696453736; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=IiWv8zF03DQVTTRi4wE0QRJ+TeCqVzE2qQ9Nguz4Rx0=;
-        b=nHwkXiVts9TyH0GlK8Y/09+6sz1GexZVW6cizDexxhd8PnZI5JdG2PWIoqQvhi1V9D
-         Ph88qt1ahrATqtBXyDMPAIaqgRIOGPyZt2GUvY7JjQyH/rGz2uZ20+/QovWo8YmbmmnY
-         aBQmO+IxpKp5x55VPfWybG/xeksDRkDvvdxjbh5CXDSgIHqkgAArcqYi8rTaRQcCCUFT
-         CkBxDU137sZvWurP7F7+KK+DPt+s3YsYjJmq5oC7yib1XTAeF18lVQRZeprPi2aYjx0F
-         MD79gsnOLT9xkHfW9E7V0HV+AOYByWyGDFknePeRi6jQ5czQ6gCAk7nuoJTOkYaP8ER6
-         nCuQ==
+        bh=LJ3RtqlQfpk8UFjpglCqA8/SAQruGYgZhJ0s9qkYTS0=;
+        b=GwrisqqwaEQKj5TGkuMzGZVnjvCltMLSvfw+oTFL7+cXmC+bVpXUcFai9LB933/4EN
+         k/UxLiheSz1Q5FoHtxaiuNxfAymeYlYlJFEN9AAMWoiHFjptB2FO61ppYOiZdEIPDxrf
+         J6DnrE0TTUOR8yRP/v0XMX2w2+DfhhfWV0FWrVoARLVtJy1s0ZBbYcBcoKN+Ga2hqG6R
+         B6KZJQrwJX6e9lglBaQzq5t2PJkC+P2ePdVkT8RRFND7o0yoDHQTzMtNORlT3mKehI+H
+         ZgeFpQNhmnfIRim0dGoSpD2QOIr0Bki0BrNXrTbTTgodUXywpDfmxJsF7md6Bu1lMcua
+         Lm5A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695847569; x=1696452369;
+        d=1e100.net; s=20230601; t=1695848936; x=1696453736;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=IiWv8zF03DQVTTRi4wE0QRJ+TeCqVzE2qQ9Nguz4Rx0=;
-        b=LfWWgpFsen94akmGkmGujceOWsGUQF+sCnRVdPu+Wb76kRd51JNU14zWQDCRsGZOl6
-         jchQsWfHFLqY1JmOLOIyhOx4iN+71Ax5d32mdoNzXze/g91ysh0jZYWIEC8JZ/4kcFux
-         JQTnIIqmmW8H4TBfdAcMtZlqpG62wKADLr8Zbm5Eni9XxM1GhUsZXQgzhaFydsadFFca
-         TeZjwbHIo1gOOSFtYBM5GpfUU3AGHigX4aclz2X5NOKPP+mzfpp6ks79Xoh9f8iNDeFn
-         zqcMouhd0mnqSHf2Cy0HA/YNUvEnJZ8sLZTQ26wE8KfTZs5x9iGBroucvb749IRad/nK
-         fUYg==
-X-Gm-Message-State: AOJu0Yz5EhQEeU0viWHyc60kyhKr/PGNxwIMvS+pWzhGtEbkGKlfobje
-        Wc7+h8wFD1qby0C5CfaGrRd8fw5e2THgn1nP0Mw6YQ==
-X-Google-Smtp-Source: AGHT+IHruQy5cdas8SjBkxKLT3MeHevaL7Rji2zWlQjZNute8nnAiRLP7qehqyrprjOZMwxahWBZR26kdSaGYdeYMmA=
-X-Received: by 2002:a05:600c:1d9d:b0:3f6:f4b:d4a6 with SMTP id
- p29-20020a05600c1d9d00b003f60f4bd4a6mr252199wms.7.1695847569143; Wed, 27 Sep
- 2023 13:46:09 -0700 (PDT)
+        bh=LJ3RtqlQfpk8UFjpglCqA8/SAQruGYgZhJ0s9qkYTS0=;
+        b=H7niTxkpij2UW3iwEK22Z73nQJEA+vuEbPkFo37Gogk5XuiUTN4qaC85kgNFDZVvAO
+         FCFw8G+0Meo0cCTcbCZt9uTtjcxGqvdJqtnYGePQDM+MMxrrQY7qk098fRTV7CskXsUG
+         9Gcm7qbfSTVBNNySnzegv31IIODErLYuYlRAbZt7gUTHJh8LHeiz1ygjVxRJkH2mhToA
+         CTAAGMBrSDrYHl+Wl9+i8H0TJne3QaWVrdY/rUZ0rjsjPINineAqmJTf8wUPnntPyvJX
+         bCEpM1C/ZDUBjjnLJyCEp71z1wm6vWn4vTMcVESt3eIIV7CnHbcgVst8ongbhK6XYb3Y
+         6F2A==
+X-Gm-Message-State: AOJu0YxIZGQ+/bu44bcfjiwZFP9nUZIIhNGiUPB2yg/BKPXaanng+m69
+        Onam9LKXgWMNT1e4xwN08GIih0m1YJZd/48X9ZaysQ==
+X-Google-Smtp-Source: AGHT+IFQ3LjVbNrzo1sOTmszvqWNthQMtO/SQnGtyKq1516K2UvzMCwdQ9Au4tmdWUB4WEOlJTGOpoDcgymQ9ZXPCh0=
+X-Received: by 2002:a81:9252:0:b0:59b:f744:f158 with SMTP id
+ j79-20020a819252000000b0059bf744f158mr3415967ywg.15.1695848935547; Wed, 27
+ Sep 2023 14:08:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230927165058.29484-1-rf@opensource.cirrus.com>
-In-Reply-To: <20230927165058.29484-1-rf@opensource.cirrus.com>
-From:   Rae Moar <rmoar@google.com>
-Date:   Wed, 27 Sep 2023 16:45:57 -0400
-Message-ID: <CA+GJov5BP7O6RYWrvqFuFpH9dUevwBRrEEX6Hs3vri+NSwGK_A@mail.gmail.com>
-Subject: Re: [PATCH] kunit: debugfs: Handle errors from alloc_string_stream()
-To:     Richard Fitzgerald <rf@opensource.cirrus.com>
-Cc:     brendan.higgins@linux.dev, davidgow@google.com,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org,
-        Dan Carpenter <dan.carpenter@linaro.org>
+References: <20230923013148.1390521-1-surenb@google.com> <20230923013148.1390521-3-surenb@google.com>
+ <CAG48ez1N2kryy08eo0dcJ5a9O-3xMT8aOrgrcD+CqBN=cBfdDw@mail.gmail.com>
+ <CAJuCfpGb5Amo9Sk0yyruJt9NKaYe9-y+5jmU442NSf3+VT5-dA@mail.gmail.com>
+ <CAG48ez2WNOMwPo4OMVUHbS4mirwbqHUY5qUaaZ9DTkXdkzrjiQ@mail.gmail.com> <CAJuCfpGcsBE2XqPJSVo1gdE_O96gzS5=ET=u0uSBSX3Lj56CtA@mail.gmail.com>
+In-Reply-To: <CAJuCfpGcsBE2XqPJSVo1gdE_O96gzS5=ET=u0uSBSX3Lj56CtA@mail.gmail.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Wed, 27 Sep 2023 14:08:42 -0700
+Message-ID: <CAJuCfpHY5zhkS0OPxOK-twb6pDJg6OpXZnPquw_9wBmbjFiF9Q@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] userfaultfd: UFFDIO_REMAP uABI
+To:     Jann Horn <jannh@google.com>
+Cc:     akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
+        brauner@kernel.org, shuah@kernel.org, aarcange@redhat.com,
+        lokeshgidra@google.com, peterx@redhat.com, david@redhat.com,
+        hughd@google.com, mhocko@suse.com, axelrasmussen@google.com,
+        rppt@kernel.org, willy@infradead.org, Liam.Howlett@oracle.com,
+        zhangpeng362@huawei.com, bgeffon@google.com,
+        kaleshsingh@google.com, ngeoffray@google.com, jdduke@google.com,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kernel-team@android.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,99 +81,240 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Sep 27, 2023 at 12:51=E2=80=AFPM 'Richard Fitzgerald' via KUnit
-Development <kunit-dev@googlegroups.com> wrote:
+On Wed, Sep 27, 2023 at 1:42=E2=80=AFPM Suren Baghdasaryan <surenb@google.c=
+om> wrote:
 >
-> In kunit_debugfs_create_suite() give up and skip creating the debugfs
-> file if any of the alloc_string_stream() calls return an error or NULL.
-> Only put a value in the log pointer of kunit_suite and kunit_test if it
-> is a valid pointer to a log.
+> On Wed, Sep 27, 2023 at 1:04=E2=80=AFPM Jann Horn <jannh@google.com> wrot=
+e:
+> >
+> > On Wed, Sep 27, 2023 at 8:08=E2=80=AFPM Suren Baghdasaryan <surenb@goog=
+le.com> wrote:
+> > > On Wed, Sep 27, 2023 at 5:47=E2=80=AFAM Jann Horn <jannh@google.com> =
+wrote:
+> > > > On Sat, Sep 23, 2023 at 3:31=E2=80=AFAM Suren Baghdasaryan <surenb@=
+google.com> wrote:
+> > > > > From: Andrea Arcangeli <aarcange@redhat.com>
+> > > > >
+> > > > > This implements the uABI of UFFDIO_REMAP.
+> > > > >
+> > > > > Notably one mode bitflag is also forwarded (and in turn known) by=
+ the
+> > > > > lowlevel remap_pages method.
+> > > > >
+> > > > > Signed-off-by: Andrea Arcangeli <aarcange@redhat.com>
+> > > > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > [...]
+> > > > > +                       /*
+> > > > > +                        * folio_referenced walks the anon_vma ch=
+ain
+> > > > > +                        * without the folio lock. Serialize agai=
+nst it with
+> > > > > +                        * the anon_vma lock, the folio lock is n=
+ot enough.
+> > > > > +                        */
+> > > > > +                       src_anon_vma =3D folio_get_anon_vma(src_f=
+olio);
+> > > > > +                       if (!src_anon_vma) {
+> > > > > +                               /* page was unmapped from under u=
+s */
+> > > > > +                               err =3D -EAGAIN;
+> > > > > +                               goto out;
+> > > > > +                       }
+> > > > > +                       if (!anon_vma_trylock_write(src_anon_vma)=
+) {
+> > > > > +                               pte_unmap(&orig_src_pte);
+> > > > > +                               pte_unmap(&orig_dst_pte);
+> > > > > +                               src_pte =3D dst_pte =3D NULL;
+> > > > > +                               /* now we can block and wait */
+> > > > > +                               anon_vma_lock_write(src_anon_vma)=
+;
+> > > > > +                               goto retry;
+> > > > > +                       }
+> > > > > +               }
+> > > >
+> > > > So at this point we have:
+> > > >
+> > > >  - the current src_pte
+> > > >  - some referenced+locked src_folio that used to be mapped exclusiv=
+ely
+> > > > at src_addr
+> > > >  - (the anon_vma associated with the src_folio)
+> > > >
+> > > > > +               err =3D remap_anon_pte(dst_mm, src_mm,  dst_vma, =
+src_vma,
+> > > > > +                                    dst_addr, src_addr, dst_pte,=
+ src_pte,
+> > > > > +                                    orig_dst_pte, orig_src_pte,
+> > > > > +                                    dst_ptl, src_ptl, src_folio)=
+;
+> > > >
+> > > > And then this will, without touching folio mapcounts/refcounts, del=
+ete
+> > > > the current PTE at src_addr, and create a PTE at dst_addr pointing =
+to
+> > > > the old src_folio, leading to incorrect refcounts/mapcounts?
+> > >
+> > > I assume this still points to the missing previous_src_pte check
+> > > discussed in the previous comments. Is that correct or is there yet
+> > > another issue?
+> >
+> > This is still referring to the missing previous_src_pte check.
+> >
+> > > >
+> > > > > +       } else {
+> > > > [...]
+> > > > > +       }
+> > > > > +
+> > > > > +out:
+> > > > > +       if (src_anon_vma) {
+> > > > > +               anon_vma_unlock_write(src_anon_vma);
+> > > > > +               put_anon_vma(src_anon_vma);
+> > > > > +       }
+> > > > > +       if (src_folio) {
+> > > > > +               folio_unlock(src_folio);
+> > > > > +               folio_put(src_folio);
+> > > > > +       }
+> > > > > +       if (dst_pte)
+> > > > > +               pte_unmap(dst_pte);
+> > > > > +       if (src_pte)
+> > > > > +               pte_unmap(src_pte);
+> > > > > +       mmu_notifier_invalidate_range_end(&range);
+> > > > > +
+> > > > > +       return err;
+> > > > > +}
+> > > > [...]
+> > > > > +ssize_t remap_pages(struct mm_struct *dst_mm, struct mm_struct *=
+src_mm,
+> > > > > +                   unsigned long dst_start, unsigned long src_st=
+art,
+> > > > > +                   unsigned long len, __u64 mode)
+> > > > > +{
+> > > > > +       struct vm_area_struct *src_vma, *dst_vma;
+> > > > > +       unsigned long src_addr, dst_addr;
+> > > > > +       pmd_t *src_pmd, *dst_pmd;
+> > > > > +       long err =3D -EINVAL;
+> > > > > +       ssize_t moved =3D 0;
+> > > > > +
+> > > > > +       /*
+> > > > > +        * Sanitize the command parameters:
+> > > > > +        */
+> > > > > +       BUG_ON(src_start & ~PAGE_MASK);
+> > > > > +       BUG_ON(dst_start & ~PAGE_MASK);
+> > > > > +       BUG_ON(len & ~PAGE_MASK);
+> > > > > +
+> > > > > +       /* Does the address range wrap, or is the span zero-sized=
+? */
+> > > > > +       BUG_ON(src_start + len <=3D src_start);
+> > > > > +       BUG_ON(dst_start + len <=3D dst_start);
+> > > > > +
+> > > > > +       /*
+> > > > > +        * Because these are read sempahores there's no risk of l=
+ock
+> > > > > +        * inversion.
+> > > > > +        */
+> > > > > +       mmap_read_lock(dst_mm);
+> > > > > +       if (dst_mm !=3D src_mm)
+> > > > > +               mmap_read_lock(src_mm);
+> > > > > +
+> > > > > +       /*
+> > > > > +        * Make sure the vma is not shared, that the src and dst =
+remap
+> > > > > +        * ranges are both valid and fully within a single existi=
+ng
+> > > > > +        * vma.
+> > > > > +        */
+> > > > > +       src_vma =3D find_vma(src_mm, src_start);
+> > > > > +       if (!src_vma || (src_vma->vm_flags & VM_SHARED))
+> > > > > +               goto out;
+> > > > > +       if (src_start < src_vma->vm_start ||
+> > > > > +           src_start + len > src_vma->vm_end)
+> > > > > +               goto out;
+> > > > > +
+> > > > > +       dst_vma =3D find_vma(dst_mm, dst_start);
+> > > > > +       if (!dst_vma || (dst_vma->vm_flags & VM_SHARED))
+> > > > > +               goto out;
+> > > > > +       if (dst_start < dst_vma->vm_start ||
+> > > > > +           dst_start + len > dst_vma->vm_end)
+> > > > > +               goto out;
+> > > > > +
+> > > > > +       err =3D validate_remap_areas(src_vma, dst_vma);
+> > > > > +       if (err)
+> > > > > +               goto out;
+> > > > > +
+> > > > > +       for (src_addr =3D src_start, dst_addr =3D dst_start;
+> > > > > +            src_addr < src_start + len;) {
+> > > > > +               spinlock_t *ptl;
+> > > > > +               pmd_t dst_pmdval;
+> > > > > +               unsigned long step_size;
+> > > > > +
+> > > > > +               BUG_ON(dst_addr >=3D dst_start + len);
+> > > > > +               /*
+> > > > > +                * Below works because anonymous area would not h=
+ave a
+> > > > > +                * transparent huge PUD. If file-backed support i=
+s added,
+> > > > > +                * that case would need to be handled here.
+> > > > > +                */
+> > > > > +               src_pmd =3D mm_find_pmd(src_mm, src_addr);
+> > > > > +               if (unlikely(!src_pmd)) {
+> > > > > +                       if (!(mode & UFFDIO_REMAP_MODE_ALLOW_SRC_=
+HOLES)) {
+> > > > > +                               err =3D -ENOENT;
+> > > > > +                               break;
+> > > > > +                       }
+> > > > > +                       src_pmd =3D mm_alloc_pmd(src_mm, src_addr=
+);
+> > > > > +                       if (unlikely(!src_pmd)) {
+> > > > > +                               err =3D -ENOMEM;
+> > > > > +                               break;
+> > > > > +                       }
+> > > > > +               }
+> > > > > +               dst_pmd =3D mm_alloc_pmd(dst_mm, dst_addr);
+> > > > > +               if (unlikely(!dst_pmd)) {
+> > > > > +                       err =3D -ENOMEM;
+> > > > > +                       break;
+> > > > > +               }
+> > > > > +
+> > > > > +               dst_pmdval =3D pmdp_get_lockless(dst_pmd);
+> > > > > +               /*
+> > > > > +                * If the dst_pmd is mapped as THP don't override=
+ it and just
+> > > > > +                * be strict. If dst_pmd changes into TPH after t=
+his check, the
+> > > > > +                * remap_pages_huge_pmd() will detect the change =
+and retry
+> > > > > +                * while remap_pages_pte() will detect the change=
+ and fail.
+> > > > > +                */
+> > > > > +               if (unlikely(pmd_trans_huge(dst_pmdval))) {
+> > > > > +                       err =3D -EEXIST;
+> > > > > +                       break;
+> > > > > +               }
+> > > > > +
+> > > > > +               ptl =3D pmd_trans_huge_lock(src_pmd, src_vma);
+> > > > > +               if (ptl && !pmd_trans_huge(*src_pmd)) {
+> > > > > +                       spin_unlock(ptl);
+> > > > > +                       ptl =3D NULL;
+> > > > > +               }
+> > > >
+> > > > This still looks wrong - we do still have to split_huge_pmd()
+> > > > somewhere so that remap_pages_pte() works.
+> > >
+> > > Hmm, I guess this extra check is not even needed...
+> >
+> > Hm, and instead we'd bail at the pte_offset_map_nolock() in
+> > remap_pages_pte()? I guess that's unusual but works...
 >
-> This prevents the potential invalid dereference reported by smatch:
->
->  lib/kunit/debugfs.c:115 kunit_debugfs_create_suite() error: 'suite->log'
->         dereferencing possible ERR_PTR()
->  lib/kunit/debugfs.c:119 kunit_debugfs_create_suite() error: 'test_case->=
-log'
->         dereferencing possible ERR_PTR()
->
-> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
-> Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-> Fixes: 05e2006ce493 ("kunit: Use string_stream for test log")
+> Yes, that's what I was thinking but I agree, that seems fragile. Maybe
+> just bail out early if (ptl && !pmd_trans_huge())?
 
-Hi!
+No, actually we can still handle is_swap_pmd() case by splitting it
+and remapping the individual ptes. So, I can bail out only in case of
+pmd_devmap().
 
-I've tested this and this all looks good to me.
 
-Reviewed-by: Rae Moar <rmoar@google.com>
-
-Thanks!
-Rae
-
-> ---
->  lib/kunit/debugfs.c | 29 ++++++++++++++++++++++++-----
->  1 file changed, 24 insertions(+), 5 deletions(-)
 >
-> diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
-> index 270d185737e6..73075ca6e88c 100644
-> --- a/lib/kunit/debugfs.c
-> +++ b/lib/kunit/debugfs.c
-> @@ -109,14 +109,27 @@ static const struct file_operations debugfs_results=
-_fops =3D {
->  void kunit_debugfs_create_suite(struct kunit_suite *suite)
->  {
->         struct kunit_case *test_case;
-> +       struct string_stream *stream;
->
-> -       /* Allocate logs before creating debugfs representation. */
-> -       suite->log =3D alloc_string_stream(GFP_KERNEL);
-> -       string_stream_set_append_newlines(suite->log, true);
-> +       /*
-> +        * Allocate logs before creating debugfs representation.
-> +        * The log pointer must be NULL if there isn't a log so only
-> +        * set it if the log stream was created successfully.
-> +        */
-> +       stream =3D alloc_string_stream(GFP_KERNEL);
-> +       if (IS_ERR_OR_NULL(stream))
-> +               goto err;
-> +
-> +       string_stream_set_append_newlines(stream, true);
-> +       suite->log =3D stream;
->
->         kunit_suite_for_each_test_case(suite, test_case) {
-> -               test_case->log =3D alloc_string_stream(GFP_KERNEL);
-> -               string_stream_set_append_newlines(test_case->log, true);
-> +               stream =3D alloc_string_stream(GFP_KERNEL);
-> +               if (IS_ERR_OR_NULL(stream))
-> +                       goto err;
-> +
-> +               string_stream_set_append_newlines(stream, true);
-> +               test_case->log =3D stream;
->         }
->
->         suite->debugfs =3D debugfs_create_dir(suite->name, debugfs_rootdi=
-r);
-> @@ -124,6 +137,12 @@ void kunit_debugfs_create_suite(struct kunit_suite *=
-suite)
->         debugfs_create_file(KUNIT_DEBUGFS_RESULTS, S_IFREG | 0444,
->                             suite->debugfs,
->                             suite, &debugfs_results_fops);
-> +       return;
-> +
-> +err:
-> +       string_stream_destroy(suite->log);
-> +       kunit_suite_for_each_test_case(suite, test_case)
-> +               string_stream_destroy(test_case->log);
->  }
->
->  void kunit_debugfs_destroy_suite(struct kunit_suite *suite)
-> --
-> 2.30.2
->
-> --
-> You received this message because you are subscribed to the Google Groups=
- "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgi=
-d/kunit-dev/20230927165058.29484-1-rf%40opensource.cirrus.com.
+> >
+> > (It would be a thing to look out for if anyone tried to backport this,
+> > since the checks in pte_offset_map_nolock() were only introduced in
+> > 6.5, but idk if anyone's doing that)
