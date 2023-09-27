@@ -2,34 +2,34 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67A5B7B0613
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Sep 2023 16:04:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D28047B060C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Sep 2023 16:03:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232069AbjI0OEJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 27 Sep 2023 10:04:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36208 "EHLO
+        id S232037AbjI0ODw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 27 Sep 2023 10:03:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232065AbjI0OEI (ORCPT
+        with ESMTP id S231758AbjI0ODv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 27 Sep 2023 10:04:08 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2043.outbound.protection.outlook.com [40.107.21.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D2C211D;
-        Wed, 27 Sep 2023 07:04:05 -0700 (PDT)
+        Wed, 27 Sep 2023 10:03:51 -0400
+Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2057.outbound.protection.outlook.com [40.107.247.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6278710A;
+        Wed, 27 Sep 2023 07:03:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
  s=selector2-armh-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CtQhUKKAeciLMz8eOcAzcWfX0r2cwo1XnqJpJwevaOw=;
- b=C3G5pwolId6E0/SNrrLGnc5x3R1MZyvrL8fUc//Aucc+Rp0cbtgWoO1K5JSvnE0gSgs8TUA6iLfslmrqm3K/UMw2ULdd8blsEcq93AxrzIUxSBETZH0fAiuBMhnSnTwNE4ly2I15D3fyE3naBrvVP0r/KwjmOtEw+zbbgMao6AA=
-Received: from AM0PR10CA0120.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:208:e6::37)
- by DB3PR08MB10336.eurprd08.prod.outlook.com (2603:10a6:10:43b::10) with
+ bh=fP0hZBQLW0r5LPMNDw9vkQWBkTgVKFZIvfc9QkLlChM=;
+ b=Yrx8MYtKqgv9lvFMg6MENe9rLixHTzZ+HgyngQg4Xu3XO/KXDeB/We1+Z9727+I3RgXDmySuAoquSk8F/fk7MC8hbGS0YLS5LiQs9vYzaUdB+3nklBpY/N1DFOD6PmZPizrtUjSF99GFTUBzNS0Mg18hb8R5/ccQvnyUJvIZcA4=
+Received: from DU2PR04CA0152.eurprd04.prod.outlook.com (2603:10a6:10:2b0::7)
+ by AM0PR08MB5457.eurprd08.prod.outlook.com (2603:10a6:208:180::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6813.28; Wed, 27 Sep
- 2023 14:04:01 +0000
-Received: from AM7EUR03FT010.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:208:e6:cafe::bd) by AM0PR10CA0120.outlook.office365.com
- (2603:10a6:208:e6::37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6792.35 via Frontend
- Transport; Wed, 27 Sep 2023 14:04:00 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.21; Wed, 27 Sep
+ 2023 14:03:47 +0000
+Received: from DBAEUR03FT003.eop-EUR03.prod.protection.outlook.com
+ (2603:10a6:10:2b0:cafe::a6) by DU2PR04CA0152.outlook.office365.com
+ (2603:10a6:10:2b0::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.21 via Frontend
+ Transport; Wed, 27 Sep 2023 14:03:47 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
  smtp.mailfrom=arm.com; dkim=pass (signature was verified)
  header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
@@ -38,27 +38,27 @@ Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
  client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
  pr=C
 Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
- AM7EUR03FT010.mail.protection.outlook.com (100.127.141.22) with Microsoft
+ DBAEUR03FT003.mail.protection.outlook.com (100.127.142.89) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6838.21 via Frontend Transport; Wed, 27 Sep 2023 14:03:59 +0000
-Received: ("Tessian outbound 0ae75d4034ba:v211"); Wed, 27 Sep 2023 14:03:59 +0000
+ 15.20.6838.21 via Frontend Transport; Wed, 27 Sep 2023 14:03:46 +0000
+Received: ("Tessian outbound 0ae75d4034ba:v211"); Wed, 27 Sep 2023 14:03:46 +0000
 X-CheckRecipientChecked: true
-X-CR-MTA-CID: 8c0c49c206008a61
+X-CR-MTA-CID: ae231f9e02a9b0cb
 X-CR-MTA-TID: 64aa7808
-Received: from e06e0c146651.1
-        by 64aa7808-outbound-1.mta.getcheckrecipient.com id 705B4AD0-0930-4F3A-A271-0479D60E97DC.1;
-        Wed, 27 Sep 2023 14:01:54 +0000
-Received: from EUR01-DB5-obe.outbound.protection.outlook.com
-    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id e06e0c146651.1
+Received: from 42361384454a.1
+        by 64aa7808-outbound-1.mta.getcheckrecipient.com id 7EDF8468-9F69-4C21-BA86-2E1A1B912054.1;
+        Wed, 27 Sep 2023 14:01:51 +0000
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com
+    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id 42361384454a.1
     (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
-    Wed, 27 Sep 2023 14:01:54 +0000
+    Wed, 27 Sep 2023 14:01:51 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iTgipIyIGLUaqx8CnxNrhipBpXF/SlrTYhzx+lH3ilrA1+fF0PQmV+dG+MuIuVXfkobWhfBqy1LhokCWi6HOyUjX9a+TkB4qGNQz9lDmyeTlBtAqEQNwVVawk1RdrWNP4cwftkiefK9xaQ+dDmShdj3mdZ/8RTNNGb667Tf8kfezTjGYnHr76peXYeG5+hN2q+UL+IVqj8Pyx3KxjFAZsx3TLeD9qKRBdRwCR56l94es7tudaEt9n0CF+adVncu6ptJalZKKxDbyZFoiFiUhZ/j1JlPOIbIp/WCdyDK5jJXg9jMEQ0dJpxuOc2tQEGzOLmf/9+n/qfgha3idczB79A==
+ b=dPJCUUrZNNyO177ukqeVhbgMpCT3DoTiFQBkauYBSbcsjLQnQgayICGsdIlQh9CKb+DKgkWgpwZwIt0yLDOXkppkkLJQx/iofqdAhPR1AZ//EGi+9Wg/gKpNKJe9KF7eUTVLPWiTPh1xIfussZyc/1q1UlNlaUX2U+PI3IfBysPIEHlorOHNSYqHxBYdqEIjvqM8zuCJXbBU8nlnqtYWZXn0cPetWvL7dnqnYluVAZltr3QcclojYTFcLMn6CN4w3MRAxTN0T9vauLSr/+lowiJJEJMxHSIOjeAkvk9svzXtpdLDt7ILiA1mFTX5ckPpq3Ux0dy9uVIEmrqAC8Q6Mw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CtQhUKKAeciLMz8eOcAzcWfX0r2cwo1XnqJpJwevaOw=;
- b=VKAOf1uaRWHTU7wrOMiDdqGz9B8/CKRUVV77bPVlDM/zZZV4/4RRDeUCJfLDzOKmqwBuyPKLR3ZVvksBkIx3a1ojM/zcFyURIWRZ67JyyBeqKllZmAq9Yc5zdt6s8+SNHTZgGplOkY+5j0TBR+GJOXBJg3w36F88JLbTSaPZjmS865rVtRoDkDjnYKmATneYozMd+1WU6VIbs050S03jlleqbK6M+95WkFQC9rtXvL+oYC/dyxdqZRuAp/vi+hjCfCMQ3Xu4IK1iB65EyGzZG9ijFUuSvuuMOFBoQ25krnwwo4zPSNHwOyioyLUhFzZNBtJpav1PYSevnqjC+NUWiA==
+ bh=fP0hZBQLW0r5LPMNDw9vkQWBkTgVKFZIvfc9QkLlChM=;
+ b=N3ZJcDjUd1sbw5LgCA5Ljo9fzFb9wQPxto2aWnel/ldP6MGDO3bPDqAeeWWeq8ZgSDNO1B+bhbwuqz3T5W73VU1JS4OqH/0KgmsC2GI6cjRNAqdtVA/WvZwppwDZPsX8F5DMFtdZZHpOiWssvW3shHI+RDIBrWaiclzYGKfSTvliUCGXrrdNJOFy2PiHS2Sq5KADEEb4+/tsIi2mlYUW+fhBqdG3Dierm+FLAzv//R/Pjuatwb6NNRwSNZaHnMwHSDKcWICNC5t2NHHPhhgCQNdXzVHG0y80o73y04wTFCcxVFrXijvics2EqJbaROiVU095TzAgXVGu9GxJ/tUt+g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  40.67.248.234) smtp.rcpttodomain=lists.infradead.org smtp.mailfrom=arm.com;
  dmarc=pass (p=none sp=none pct=100) action=none header.from=arm.com;
@@ -66,18 +66,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
  s=selector2-armh-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=CtQhUKKAeciLMz8eOcAzcWfX0r2cwo1XnqJpJwevaOw=;
- b=C3G5pwolId6E0/SNrrLGnc5x3R1MZyvrL8fUc//Aucc+Rp0cbtgWoO1K5JSvnE0gSgs8TUA6iLfslmrqm3K/UMw2ULdd8blsEcq93AxrzIUxSBETZH0fAiuBMhnSnTwNE4ly2I15D3fyE3naBrvVP0r/KwjmOtEw+zbbgMao6AA=
-Received: from AS9PR05CA0256.eurprd05.prod.outlook.com (2603:10a6:20b:493::23)
- by PA4PR08MB7595.eurprd08.prod.outlook.com (2603:10a6:102:271::14) with
+ bh=fP0hZBQLW0r5LPMNDw9vkQWBkTgVKFZIvfc9QkLlChM=;
+ b=Yrx8MYtKqgv9lvFMg6MENe9rLixHTzZ+HgyngQg4Xu3XO/KXDeB/We1+Z9727+I3RgXDmySuAoquSk8F/fk7MC8hbGS0YLS5LiQs9vYzaUdB+3nklBpY/N1DFOD6PmZPizrtUjSF99GFTUBzNS0Mg18hb8R5/ccQvnyUJvIZcA4=
+Received: from DB9PR05CA0009.eurprd05.prod.outlook.com (2603:10a6:10:1da::14)
+ by AS4PR08MB7653.eurprd08.prod.outlook.com (2603:10a6:20b:4cf::5) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6813.28; Wed, 27 Sep
- 2023 14:01:52 +0000
-Received: from AM7EUR03FT046.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:20b:493:cafe::a2) by AS9PR05CA0256.outlook.office365.com
- (2603:10a6:20b:493::23) with Microsoft SMTP Server (version=TLS1_2,
+ 2023 14:01:49 +0000
+Received: from DBAEUR03FT051.eop-EUR03.prod.protection.outlook.com
+ (2603:10a6:10:1da:cafe::a3) by DB9PR05CA0009.outlook.office365.com
+ (2603:10a6:10:1da::14) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.21 via Frontend
- Transport; Wed, 27 Sep 2023 14:01:52 +0000
+ Transport; Wed, 27 Sep 2023 14:01:49 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 40.67.248.234)
  smtp.mailfrom=arm.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=arm.com;
@@ -85,13 +85,17 @@ Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
  40.67.248.234 as permitted sender) receiver=protection.outlook.com;
  client-ip=40.67.248.234; helo=nebula.arm.com; pr=C
 Received: from nebula.arm.com (40.67.248.234) by
- AM7EUR03FT046.mail.protection.outlook.com (100.127.140.78) with Microsoft
+ DBAEUR03FT051.mail.protection.outlook.com (100.127.142.148) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6838.22 via Frontend Transport; Wed, 27 Sep 2023 14:01:52 +0000
-Received: from AZ-NEU-EX03.Arm.com (10.251.24.31) by AZ-NEU-EX04.Arm.com
- (10.251.24.32) with Microsoft SMTP Server (version=TLS1_2,
+ 15.20.6838.21 via Frontend Transport; Wed, 27 Sep 2023 14:01:49 +0000
+Received: from AZ-NEU-EX02.Emea.Arm.com (10.251.26.5) by AZ-NEU-EX03.Arm.com
+ (10.251.24.31) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Wed, 27 Sep
- 2023 14:01:39 +0000
+ 2023 14:01:40 +0000
+Received: from AZ-NEU-EX03.Arm.com (10.251.24.31) by AZ-NEU-EX02.Emea.Arm.com
+ (10.251.26.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Wed, 27 Sep
+ 2023 14:01:40 +0000
 Received: from e124191.cambridge.arm.com (10.1.197.45) by mail.arm.com
  (10.251.24.31) with Microsoft SMTP Server id 15.1.2507.27 via Frontend
  Transport; Wed, 27 Sep 2023 14:01:39 +0000
@@ -104,9 +108,9 @@ CC:     <nd@arm.com>, <akpm@linux-foundation.org>,
         <will@kernel.org>, <kvmarm@lists.linux.dev>,
         <linux-fsdevel@vger.kernel.org>, <linux-mm@kvack.org>,
         <linux-kselftest@vger.kernel.org>
-Subject: [PATCH v1 12/20] arm64: handle PKEY/POE faults
-Date:   Wed, 27 Sep 2023 15:01:15 +0100
-Message-ID: <20230927140123.5283-13-joey.gouly@arm.com>
+Subject: [PATCH v1 13/20] arm64: stop using generic mm_hooks.h
+Date:   Wed, 27 Sep 2023 15:01:16 +0100
+Message-ID: <20230927140123.5283-14-joey.gouly@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230927140123.5283-1-joey.gouly@arm.com>
 References: <20230927140123.5283-1-joey.gouly@arm.com>
@@ -114,32 +118,32 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EOPAttributedMessage: 1
-X-MS-TrafficTypeDiagnostic: AM7EUR03FT046:EE_|PA4PR08MB7595:EE_|AM7EUR03FT010:EE_|DB3PR08MB10336:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3b4df554-8f9d-463c-cade-08dbbf6298c1
+X-MS-TrafficTypeDiagnostic: DBAEUR03FT051:EE_|AS4PR08MB7653:EE_|DBAEUR03FT003:EE_|AM0PR08MB5457:EE_
+X-MS-Office365-Filtering-Correlation-Id: 343aca99-b31a-49b6-61b1-08dbbf62915d
 x-checkrecipientrouted: true
 NoDisclaimer: true
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: AzNW/jfyN/py6pQnyO+mnLYMGlf7+Ka8Zv3VNpmpyhalAKo+iPntU4LF5pPlWJHLVa+H9foC/UAzAZekswYuh9DhOMQvNLtCNTd7pqvjWlQWpfVLvEUR1IbBBdrLH4vAhADdmadNdn8OIjNPwrDyJRwQgkdFRs4MSrf6rYt7Ilk6rZZZf7XyGHV3x8ZGmG4rFqlQ+4TkyWppjFU2Vw2TH5qwHM2GdRrfzfXudmGP6nCVLYmBq+W0m2bKEQrzDE+xs1LEWYfmh3ytpTHYs6ubNZUM+356zQc7b+LYbN6fQVYCm+9UZsSpIiCXKxSnoLwOc3qGPIOo3izhCE3MmHmeB6ZFY+Scl9Ayjo2N48+xoIlRHM5LsY+EVj/NSWweZ3mGPcOYwH4KQrS90v4XRF1TPYVucrOabF8ZkipQ/e7gGvuTQU8bhaoMNrO07c7dFGDGnKP4oncbJJRE0upySoaUxybRCB3iwGLdOMDf2OXBxeNxNbrit8dL7xJlhtlGU1ISug/ut0Ub5u2+MgSM0iigG0HnFB1LL382f7sFPvHF5tgJ+YuMNCrY6UafBt6duiEx+jW7s047dxAftF4qB+AVWihAWljEkAYa4xoDpu+EGbz1rjLMp5owpcCQQe8SbJEOo9Ux2aj2txihbg1RZWABNL+hDio4QpIqbJg86Q7hLx61kkN7iNWlGsg+La/1BZOfPGbXvSl4NzAABNmHMzblgepjqSpRL0taZZIz9YlBd97NJ8mCRpelrZLKX4cpybGVvyb98KlL8DIo0H3ILHTfig==
-X-Forefront-Antispam-Report-Untrusted: CIP:40.67.248.234;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:nebula.arm.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(136003)(346002)(396003)(39860400002)(376002)(230922051799003)(186009)(451199024)(1800799009)(82310400011)(40470700004)(36840700001)(46966006)(2906002)(36756003)(86362001)(40480700001)(5660300002)(44832011)(26005)(70206006)(54906003)(70586007)(2616005)(336012)(316002)(1076003)(426003)(41300700001)(6916009)(478600001)(7696005)(8676002)(4326008)(8936002)(47076005)(40460700003)(82740400003)(356005)(6666004)(36860700001)(81166007)(83380400001)(7416002)(36900700001);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR08MB7595
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: AM7EUR03FT010.eop-EUR03.prod.protection.outlook.com
+X-Microsoft-Antispam-Message-Info-Original: du8ahLLIPeC9aWNg18cDj6DAuuvBKq7TIOCwkSO9W6bRQvyJ8x1dUN2enprZH2zUd1C6a5buJDsOSePUj+WJXweB4a+8l7RXJnCGukKSaRGTAhM9QGJSdEOF45cn5vIgmN5UhD08LlZb/jK6gbd+5rAkJv7zwxT/bfHKS3AQwgM1IelX0ckDQPKKQkwKgZ6gL7mmL6E/nv4AMvsbJ+t4zIB8UGfhqF6YWaBP0iNaT6JCPnjHA4EEtkI7WBlU54DrXZI+GgtA6dqLbeOHVrWlrFLjEcuTukEN2i9CCYWQ+3IJzEDEZinhMf+OPXUjXOpueiqW0elFhUfyoGHffJAotL0bzrcyYwvqtH6A0d44dICctd/tlBGe6bQLqTM8c6BO/kspiTD+UKjG4EQHKVckTlUKg6/43vbcnPrtI4AB4kkCbJGUa12I+Zhydz+2fPisjREOABuf9jLhUI2e7peT8BbJBsBk2FfBGUPJVaoeXby+Th/81Z5sQQ0OgW4uiVzkVEJlvLs4h4z3uzDIltD5EMUeogK0/J9/dBz+ufGGCWmvyBvh829lohATA2mJbJjCMDO8+WS2QlgRbWzJbzE0L+w/Dk3Syg7JJe/aSnluf6p1HSf1kwFuS3qWgmO69NT6rZxEeN7sExHW0Jdzo2auSviK9iar04gcpB5OZ1x8Z2sEMDsQ8s3nwiT8T5Q3uCYpThqF5rO/rrU21o+/k7BvUjTCTSU4Tm1+DoX5GTx45V6kfWNxAkvwxmz/oaS4Nly9fK59ysQAr/c5PwqlIYa1aeaiOwoG9Rmv2E8BARRPuHs=
+X-Forefront-Antispam-Report-Untrusted: CIP:40.67.248.234;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:nebula.arm.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(376002)(39860400002)(396003)(346002)(136003)(230922051799003)(451199024)(186009)(82310400011)(1800799009)(36840700001)(40470700004)(46966006)(54906003)(316002)(70206006)(70586007)(6916009)(7416002)(40480700001)(8676002)(4326008)(41300700001)(8936002)(2906002)(44832011)(478600001)(40460700003)(26005)(6666004)(36860700001)(47076005)(83380400001)(5660300002)(7696005)(81166007)(426003)(2616005)(336012)(36756003)(1076003)(86362001)(82740400003)(356005)(41533002)(36900700001);DIR:OUT;SFP:1101;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS4PR08MB7653
+X-MS-Exchange-Transport-CrossTenantHeadersStripped: DBAEUR03FT003.eop-EUR03.prod.protection.outlook.com
 X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: 4725d3bd-55f8-4bd3-0ad8-08dbbf624d42
+X-MS-Office365-Filtering-Correlation-Id-Prvs: dce59fe5-efad-4c43-be7a-08dbbf624b62
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gdNe05r38aQCz2WtmnmkXPl3beeToRCdkxNT0Q3e8d+ti637z5CKQjkFC3NfQIXmutx2LOMID4T/pbQkOgPxQmyFSMcEqVl9eJ6JPSfaACBXExLcDMoH4Kkoy7k8N5+2gtM5SFDi8TjowlWdR1GOBltnkn5wKHnWSf4rHmw9rZH4QTjQBRg4Pb5Jwq88Z6lJTwq+GTUhxtmnStiPF4WuhIwZsbr/9W25fC+XUWsjx++J95bO1soBSD7VJrzlEuK5LjD+KK0G7QPFX9clDR3GJVXeDohz64tEljntJgpZ9ttTc2alos0PiTXFh+e/ffWUILYQ13MhqEw6eNcdS0DculnhJ+nfhuI2fT+EYoLkKJX4aCzylT0TtAcMmWjidlKeiobnsANJEgTWkaww3/yV8K6MZnTcJ1pl5Fu0QlkGtWzjXv+gez0NAtA0X0/qg3BNcXtZ6elpUIBqKx9PlZRCtUeuNSMOEP/UeKFV/gISjwdpYMd/54QCjDZ/KfB3UsAcd9PQv4J61wgNyn7ZvyFX+cCAw5LlwulTuE67L9huqr4yrPNynSjmVkRBB+Rzc/0dJrEcJdr0nTpbIoGJ0Cdmb1B/klGcL0x+7lJxnzI3JUWdS6ZsaXGw2QHp3zm/9KbJ7XETR5FcprXWwP4R7IBm394ALmFmDAHaLy/XrzJRMk9tBRP1s1WyMe5SceK+0VkFNIcWblv0kEKLYI3NWjaup7EYj5/YKV+sv0GNvkUw0+jMYP4b+rlN3FF8sy/e+Xvs
-X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230031)(4636009)(136003)(346002)(396003)(39860400002)(376002)(230922051799003)(186009)(451199024)(1800799009)(82310400011)(40470700004)(36840700001)(46966006)(2906002)(36756003)(86362001)(40480700001)(5660300002)(44832011)(26005)(70206006)(54906003)(70586007)(2616005)(336012)(450100002)(6862004)(316002)(1076003)(426003)(41300700001)(478600001)(7696005)(8676002)(4326008)(8936002)(47076005)(40460700003)(82740400003)(6666004)(36860700001)(81166007)(83380400001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: z+QeMTAfsWdBQhC2N1CHm2OBekb8UK2fZ5k8QygNI8Ks8L+9tF4HJXf1CbSdrTou5Ps/A1B/SpZphwn5gKzN5ze445uodR+RAN/8SQx0OQlu1QQlkklCoYSOvw+L4PEOe0KMFF4RNnmh3L4dYJE5t13CicHZFASiYAZximSG9d+C+Sh32xeG0PPDbaS543vN/G9ncudxEGvzt1YY/AtEThLxs07onRTEL8xQcL1veTLN+ShasqFmmxJ8W/xvahxpxVB3k8uDTBAPol5xyM7Y4cjtOjFA2jffgsDBrBGv5cqk7IU4GPPLrFMDQEkeKDRmLP67Z+BS07z8MDLLSaDeU2jkJQyydpNwsvgDdmIygeSu2MBLOOgKrK5VO1sgDbashYAM/jg146MzWzjto0rb2PtHxV3xRCiWHeessye2zjouMzfJVXly2xK86x2YfzVXqEIfe6Wi1RjHj9+rZv84zMSxO7sZhOYOnMfQ6B5q7LGxB2IwHVi9VrOmbXzBzO7C3mw1xAsAzYwtHH4EoulF97O7gANhoPrKYHTtFOMDWmrzHtEmua8a3OxrUv5UYuQyI+L1EOgVeBenMa69PyagSrHpLUKY7Jrq8F5PKcKbr1jU6ppaQiLNVrBqYsrJ2a8XhzPdL92or3Bldi62Tewqj/sxkHppBDG5QD36iKVs/UzRBheXlygglZpf3I1PgYOfD7Qp0DJccrgXcJfYAD473L6eQHjmq7/GNxkakfeUtGZiU8zZ9jZozogjGKh1GF55rJyvcMPNtpug8vJRGk29wQ==
+X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230031)(4636009)(136003)(39860400002)(396003)(376002)(346002)(230922051799003)(451199024)(1800799009)(186009)(82310400011)(46966006)(40470700004)(36840700001)(44832011)(450100002)(83380400001)(2906002)(4326008)(47076005)(6862004)(8936002)(8676002)(36860700001)(6666004)(7696005)(40480700001)(316002)(86362001)(70206006)(54906003)(336012)(26005)(41300700001)(2616005)(426003)(82740400003)(1076003)(478600001)(40460700003)(5660300002)(70586007)(81166007)(36756003)(41533002);DIR:OUT;SFP:1101;
 X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Sep 2023 14:03:59.2813
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Sep 2023 14:03:46.9104
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3b4df554-8f9d-463c-cade-08dbbf6298c1
+X-MS-Exchange-CrossTenant-Network-Message-Id: 343aca99-b31a-49b6-61b1-08dbbf62915d
 X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
-X-MS-Exchange-CrossTenant-AuthSource: AM7EUR03FT010.eop-EUR03.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: DBAEUR03FT003.eop-EUR03.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB3PR08MB10336
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR08MB5457
 X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
         SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY autolearn=no
@@ -150,130 +154,61 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-If a memory fault occurs that is due to an overlay/pkey fault, report that to
-userspace with a SEGV_PKUERR.
+These functions will be extended to support pkeys.
 
 Signed-off-by: Joey Gouly <joey.gouly@arm.com>
 Cc: Catalin Marinas <catalin.marinas@arm.com>
 Cc: Will Deacon <will@kernel.org>
 ---
- arch/arm64/include/asm/traps.h |  1 +
- arch/arm64/kernel/traps.c      | 12 ++++++++--
- arch/arm64/mm/fault.c          | 44 +++++++++++++++++++++++++++++++---
- 3 files changed, 52 insertions(+), 5 deletions(-)
+ arch/arm64/include/asm/mmu_context.h | 21 ++++++++++++++++++++-
+ 1 file changed, 20 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/include/asm/traps.h b/arch/arm64/include/asm/traps.h
-index d66dfb3a72dd..dae51eccfc19 100644
---- a/arch/arm64/include/asm/traps.h
-+++ b/arch/arm64/include/asm/traps.h
-@@ -26,6 +26,7 @@ try_emulate_armv8_deprecated(struct pt_regs *regs, u32 insn)
- void force_signal_inject(int signal, int code, unsigned long address, unsigned long err);
- void arm64_notify_segfault(unsigned long addr);
- void arm64_force_sig_fault(int signo, int code, unsigned long far, const char *str);
-+void arm64_force_sig_fault_pkey(int signo, int code, unsigned long far, const char *str, int pkey);
- void arm64_force_sig_mceerr(int code, unsigned long far, short lsb, const char *str);
- void arm64_force_sig_ptrace_errno_trap(int errno, unsigned long far, const char *str);
- 
-diff --git a/arch/arm64/kernel/traps.c b/arch/arm64/kernel/traps.c
-index 8b70759cdbb9..b68682c284a2 100644
---- a/arch/arm64/kernel/traps.c
-+++ b/arch/arm64/kernel/traps.c
-@@ -263,16 +263,24 @@ static void arm64_show_signal(int signo, const char *str)
- 	__show_regs(regs);
- }
- 
--void arm64_force_sig_fault(int signo, int code, unsigned long far,
--			   const char *str)
-+void arm64_force_sig_fault_pkey(int signo, int code, unsigned long far,
-+			   const char *str, int pkey)
- {
- 	arm64_show_signal(signo, str);
- 	if (signo == SIGKILL)
- 		force_sig(SIGKILL);
-+	else if (code == SEGV_PKUERR)
-+		force_sig_pkuerr((void __user *)far, pkey);
- 	else
- 		force_sig_fault(signo, code, (void __user *)far);
- }
- 
-+void arm64_force_sig_fault(int signo, int code, unsigned long far,
-+			   const char *str)
-+{
-+	arm64_force_sig_fault_pkey(signo, code, far, str, 0);
-+}
-+
- void arm64_force_sig_mceerr(int code, unsigned long far, short lsb,
- 			    const char *str)
- {
-diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
-index 2e5d1e238af9..a76906199479 100644
---- a/arch/arm64/mm/fault.c
-+++ b/arch/arm64/mm/fault.c
-@@ -37,6 +37,7 @@
- #include <asm/esr.h>
- #include <asm/kprobes.h>
- #include <asm/mte.h>
-+#include <asm/pkeys.h>
- #include <asm/processor.h>
+diff --git a/arch/arm64/include/asm/mmu_context.h b/arch/arm64/include/asm/mmu_context.h
+index a6fb325424e7..c0eeed54225e 100644
+--- a/arch/arm64/include/asm/mmu_context.h
++++ b/arch/arm64/include/asm/mmu_context.h
+@@ -20,7 +20,6 @@
+ #include <asm/cpufeature.h>
+ #include <asm/daifflags.h>
+ #include <asm/proc-fns.h>
+-#include <asm-generic/mm_hooks.h>
+ #include <asm/cputype.h>
  #include <asm/sysreg.h>
- #include <asm/system_misc.h>
-@@ -497,6 +498,23 @@ static void do_bad_area(unsigned long far, unsigned long esr,
- #define VM_FAULT_BADMAP		((__force vm_fault_t)0x010000)
- #define VM_FAULT_BADACCESS	((__force vm_fault_t)0x020000)
+ #include <asm/tlbflush.h>
+@@ -209,6 +208,20 @@ init_new_context(struct task_struct *tsk, struct mm_struct *mm)
+ 	return 0;
+ }
  
-+static bool fault_from_pkey(unsigned long esr, struct vm_area_struct *vma,
-+			unsigned int mm_flags)
++static inline int arch_dup_mmap(struct mm_struct *oldmm, struct mm_struct *mm)
 +{
-+	unsigned long iss2 = ESR_ELx_ISS2(esr);
-+
-+	if (!arch_pkeys_enabled())
-+		return false;
-+
-+	if (iss2 & ESR_ELx_Overlay)
-+		return true;
-+
-+	return !arch_vma_access_permitted(vma,
-+			mm_flags & FAULT_FLAG_WRITE,
-+			mm_flags & FAULT_FLAG_INSTRUCTION,
-+			mm_flags & FAULT_FLAG_REMOTE);
++	return 0;
 +}
 +
- static vm_fault_t __do_page_fault(struct mm_struct *mm,
- 				  struct vm_area_struct *vma, unsigned long addr,
- 				  unsigned int mm_flags, unsigned long vm_flags,
-@@ -688,9 +706,29 @@ static int __kprobes do_page_fault(unsigned long far, unsigned long esr,
- 		 * Something tried to access memory that isn't in our memory
- 		 * map.
- 		 */
--		arm64_force_sig_fault(SIGSEGV,
--				      fault == VM_FAULT_BADACCESS ? SEGV_ACCERR : SEGV_MAPERR,
--				      far, inf->name);
-+		int fault_kind;
-+		/*
-+		 * The pkey value that we return to userspace can be different
-+		 * from the pkey that caused the fault.
-+		 *
-+		 * 1. T1   : mprotect_key(foo, PAGE_SIZE, pkey=4);
-+		 * 2. T1   : set AMR to deny access to pkey=4, touches, page
-+		 * 3. T1   : faults...
-+		 * 4.    T2: mprotect_key(foo, PAGE_SIZE, pkey=5);
-+		 * 5. T1   : enters fault handler, takes mmap_lock, etc...
-+		 * 6. T1   : reaches here, sees vma_pkey(vma)=5, when we really
-+		 *	     faulted on a pte with its pkey=4.
-+		 */
-+		int pkey = vma_pkey(vma);
++static inline void arch_exit_mmap(struct mm_struct *mm)
++{
++}
 +
-+		if (fault_from_pkey(esr, vma, mm_flags))
-+			fault_kind = SEGV_PKUERR;
-+		else
-+			fault_kind = fault == VM_FAULT_BADACCESS ? SEGV_ACCERR : SEGV_MAPERR;
++static inline void arch_unmap(struct mm_struct *mm,
++			unsigned long start, unsigned long end)
++{
++}
 +
-+		arm64_force_sig_fault_pkey(SIGSEGV,
-+				      fault_kind,
-+				      far, inf->name, pkey);
- 	}
+ #ifdef CONFIG_ARM64_SW_TTBR0_PAN
+ static inline void update_saved_ttbr0(struct task_struct *tsk,
+ 				      struct mm_struct *mm)
+@@ -298,6 +311,12 @@ static inline unsigned long mm_untag_mask(struct mm_struct *mm)
+ 	return -1UL >> 8;
+ }
  
- 	return 0;
++static inline bool arch_vma_access_permitted(struct vm_area_struct *vma,
++		bool write, bool execute, bool foreign)
++{
++	return true;
++}
++
+ #include <asm-generic/mmu_context.h>
+ 
+ #endif /* !__ASSEMBLY__ */
 -- 
 2.25.1
 
