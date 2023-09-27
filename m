@@ -2,156 +2,287 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF1127B0C37
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Sep 2023 20:53:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 581097B0D21
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Sep 2023 22:04:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229539AbjI0SxU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 27 Sep 2023 14:53:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46716 "EHLO
+        id S229754AbjI0UEr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 27 Sep 2023 16:04:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjI0SxT (ORCPT
+        with ESMTP id S229772AbjI0UEr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 27 Sep 2023 14:53:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A95F8E6
-        for <linux-kselftest@vger.kernel.org>; Wed, 27 Sep 2023 11:52:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1695840757;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Kq5Qg2bQQlEqkI6mgl+PBDF3TD7HEyYrhhIx1gLZrcg=;
-        b=eDWnEDa08UjIOp072Z8kURuihNsmqYZ8UqlfdWSQ29/LgaLhrWmOcC1me+u8LjgM3iSqbo
-        uuutoHa32iKKhuRHTf5Ack4SZiFk4Uv27WNJZoAoGKKj5+L8PO0NZQnrxQPUhp4m3s0RbM
-        2SKJfthpPr0WNoowvK3N8HAXug4ym/w=
-Received: from mail-oo1-f72.google.com (mail-oo1-f72.google.com
- [209.85.161.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-317-SFNpSrepMP2aq2gqpPqLlg-1; Wed, 27 Sep 2023 14:52:35 -0400
-X-MC-Unique: SFNpSrepMP2aq2gqpPqLlg-1
-Received: by mail-oo1-f72.google.com with SMTP id 006d021491bc7-57be2b0e95cso11236685eaf.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 27 Sep 2023 11:52:35 -0700 (PDT)
+        Wed, 27 Sep 2023 16:04:47 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95E3211D
+        for <linux-kselftest@vger.kernel.org>; Wed, 27 Sep 2023 13:04:44 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1c6052422acso6945ad.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 27 Sep 2023 13:04:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1695845084; x=1696449884; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=M+XWKbIJGAs+2CKK7tWSiWj10aUmSxPjwzc7ZpoiI1E=;
+        b=4wNF6k0ql3NGzj+SCSfd8DA/aMLofLCcpjvNj3duDaEtESiv4nLwLmMYZNUOlspf/S
+         eQNywfBXBxpUZFd+3YCosvvf02fjbevsOvaanDiZQaYZX2YD8UViio8WKWrY3e0je8Nz
+         P217nt13Hm8lY4W7MyMJ2XxO64CpmDJR9U7+SWJhTNU5o1S7HxmbMUxDPhAgTN7gdtgt
+         AUU0FoOza5Kmy6a7B0cUEn8pGstJj81sgThalaOQDDtDkUqzwPB3ZAV0HOJEvJ1Pu0gU
+         SZKBnyXGH5Gd27MR7gRsptaGPUTpEoymoFb4NxFe5gOwalarsGuo/53jGxA+/j3tGpgQ
+         i3rQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695840755; x=1696445555;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1695845084; x=1696449884;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Kq5Qg2bQQlEqkI6mgl+PBDF3TD7HEyYrhhIx1gLZrcg=;
-        b=C1bNLVbQvm4sOEdGkoU6Wp+5FYGwvPbhCqDBZzfxH8Rri9xQ+Y3VFJ28PSZhlRBCk9
-         Cf3ICzwWw9/FwX0+IGn38DHYllyADJkLf3K+jmEc0RS6wyvpdlUpH9TZKPTmTRusRC+k
-         Oa3LA4QC4hcGHnUvOAP5EkpomE/NptfuUHU7IN5klytyK/6wsjhgiUn87EORWu5e4Jbw
-         wZ0XTRmPEI3JvbBs3qYbEOYvGpnsENpWJJMhAj5DyUSrO3sLg7vh43HVwpdlj1vm4Ns+
-         aEDmW8dxrwfrGikVtX26AQK3T5Uwex4kEz/ZuRM8FgBVqPWMAQsdsbnfnGu2A2N0dFh2
-         Qtcg==
-X-Gm-Message-State: AOJu0Yyo0UQ3Rmdf+N36t6R4Z4GiTpDxr83XJqk1IYuMca2/NKWjfofB
-        6ckkz5AeBqxaHbmHZAhjvafWaArqwLooIBJUkT0GU+JGi5XpWKnZuNfXYO2UDHVzY7dNm5RW61q
-        LL1CtKBum5kyyV+SZulld9GGg9ZGL
-X-Received: by 2002:a4a:6246:0:b0:57b:6a40:8a9e with SMTP id y6-20020a4a6246000000b0057b6a408a9emr3241149oog.7.1695840755193;
-        Wed, 27 Sep 2023 11:52:35 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IE3cPePjgR+735wrJbNOWlgYYeVheIM5ALo2dqBObMKFrQpCrxuu4qqIaRtOinyevyLL0/Zfw==
-X-Received: by 2002:a4a:6246:0:b0:57b:6a40:8a9e with SMTP id y6-20020a4a6246000000b0057b6a408a9emr3241122oog.7.1695840754919;
-        Wed, 27 Sep 2023 11:52:34 -0700 (PDT)
-Received: from redhat.com ([38.15.60.12])
-        by smtp.gmail.com with ESMTPSA id p187-20020a4a48c4000000b0054f85f67f31sm2878334ooa.46.2023.09.27.11.52.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Sep 2023 11:52:34 -0700 (PDT)
-Date:   Wed, 27 Sep 2023 12:52:31 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     "Liu, Yi L" <yi.l.liu@intel.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>,
-        "Martins, Joao" <joao.m.martins@oracle.com>
-Subject: Re: [RFC 3/3] vfio/pci: Expose PCIe PASID capability to userspace
-Message-ID: <20230927125231.3aacde62.alex.williamson@redhat.com>
-In-Reply-To: <BN9PR11MB5276375C4BE33AC0632321A68CC2A@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20230926093121.18676-1-yi.l.liu@intel.com>
-        <20230926093121.18676-4-yi.l.liu@intel.com>
-        <BN9PR11MB5276375C4BE33AC0632321A68CC2A@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+        bh=M+XWKbIJGAs+2CKK7tWSiWj10aUmSxPjwzc7ZpoiI1E=;
+        b=EZnmrJnD4WGrlUIFNpAKnvP7ee99ie0+m0GiZp8PBcyu5iwxlhmy7dnYaMM4dj5PIL
+         PgvTuVL/oVpEySTSsNgYBmTpKxKDFIRpJzQUsBjdNdg48iyQuGAbZ6k8YUG2I6Y2q2lP
+         szwtdJ12zmba7RhirBZJS5rW5BudRTqUp76e4guvFQh+GKChVS834a0TLy9XzFMzKB0v
+         LPcvaOIJXvU1E7F1BZg5jYg8SUOZJWTyqhAksT+II52MRtayyPYtb9NeueJ+bKBD0+TD
+         +Auol2KiSUPF0vEpwBr3gefLmaoDlugxOIN3NQyNb7h9ZR251Ssoktyo9eQBPOQfttrM
+         qmcw==
+X-Gm-Message-State: AOJu0YxVaoqdt/1EE52scbeFKQVwZrQjXxs3vd7+H99Upref5i9ic2nN
+        QSlAdYPFjTtWqAfoFEVV9mcDn6Uv2eBQlAd4AgsTpw==
+X-Google-Smtp-Source: AGHT+IGGVIFFSOgyJo8JdJxittG6SViQRjz4xTB/xRvT5NGB27U15736n2XSm+PW86J4HyH8mjwxAkUSePlEAP9pdsg=
+X-Received: by 2002:a17:902:d482:b0:1c3:fe16:9f32 with SMTP id
+ c2-20020a170902d48200b001c3fe169f32mr524985plg.15.1695845083776; Wed, 27 Sep
+ 2023 13:04:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230923013148.1390521-1-surenb@google.com> <20230923013148.1390521-3-surenb@google.com>
+ <CAG48ez1N2kryy08eo0dcJ5a9O-3xMT8aOrgrcD+CqBN=cBfdDw@mail.gmail.com> <CAJuCfpGb5Amo9Sk0yyruJt9NKaYe9-y+5jmU442NSf3+VT5-dA@mail.gmail.com>
+In-Reply-To: <CAJuCfpGb5Amo9Sk0yyruJt9NKaYe9-y+5jmU442NSf3+VT5-dA@mail.gmail.com>
+From:   Jann Horn <jannh@google.com>
+Date:   Wed, 27 Sep 2023 22:04:06 +0200
+Message-ID: <CAG48ez2WNOMwPo4OMVUHbS4mirwbqHUY5qUaaZ9DTkXdkzrjiQ@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] userfaultfd: UFFDIO_REMAP uABI
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
+        brauner@kernel.org, shuah@kernel.org, aarcange@redhat.com,
+        lokeshgidra@google.com, peterx@redhat.com, david@redhat.com,
+        hughd@google.com, mhocko@suse.com, axelrasmussen@google.com,
+        rppt@kernel.org, willy@infradead.org, Liam.Howlett@oracle.com,
+        zhangpeng362@huawei.com, bgeffon@google.com,
+        kaleshsingh@google.com, ngeoffray@google.com, jdduke@google.com,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 27 Sep 2023 08:07:54 +0000
-"Tian, Kevin" <kevin.tian@intel.com> wrote:
+On Wed, Sep 27, 2023 at 8:08=E2=80=AFPM Suren Baghdasaryan <surenb@google.c=
+om> wrote:
+> On Wed, Sep 27, 2023 at 5:47=E2=80=AFAM Jann Horn <jannh@google.com> wrot=
+e:
+> > On Sat, Sep 23, 2023 at 3:31=E2=80=AFAM Suren Baghdasaryan <surenb@goog=
+le.com> wrote:
+> > > From: Andrea Arcangeli <aarcange@redhat.com>
+> > >
+> > > This implements the uABI of UFFDIO_REMAP.
+> > >
+> > > Notably one mode bitflag is also forwarded (and in turn known) by the
+> > > lowlevel remap_pages method.
+> > >
+> > > Signed-off-by: Andrea Arcangeli <aarcange@redhat.com>
+> > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+[...]
+> > > +                       /*
+> > > +                        * folio_referenced walks the anon_vma chain
+> > > +                        * without the folio lock. Serialize against =
+it with
+> > > +                        * the anon_vma lock, the folio lock is not e=
+nough.
+> > > +                        */
+> > > +                       src_anon_vma =3D folio_get_anon_vma(src_folio=
+);
+> > > +                       if (!src_anon_vma) {
+> > > +                               /* page was unmapped from under us */
+> > > +                               err =3D -EAGAIN;
+> > > +                               goto out;
+> > > +                       }
+> > > +                       if (!anon_vma_trylock_write(src_anon_vma)) {
+> > > +                               pte_unmap(&orig_src_pte);
+> > > +                               pte_unmap(&orig_dst_pte);
+> > > +                               src_pte =3D dst_pte =3D NULL;
+> > > +                               /* now we can block and wait */
+> > > +                               anon_vma_lock_write(src_anon_vma);
+> > > +                               goto retry;
+> > > +                       }
+> > > +               }
+> >
+> > So at this point we have:
+> >
+> >  - the current src_pte
+> >  - some referenced+locked src_folio that used to be mapped exclusively
+> > at src_addr
+> >  - (the anon_vma associated with the src_folio)
+> >
+> > > +               err =3D remap_anon_pte(dst_mm, src_mm,  dst_vma, src_=
+vma,
+> > > +                                    dst_addr, src_addr, dst_pte, src=
+_pte,
+> > > +                                    orig_dst_pte, orig_src_pte,
+> > > +                                    dst_ptl, src_ptl, src_folio);
+> >
+> > And then this will, without touching folio mapcounts/refcounts, delete
+> > the current PTE at src_addr, and create a PTE at dst_addr pointing to
+> > the old src_folio, leading to incorrect refcounts/mapcounts?
+>
+> I assume this still points to the missing previous_src_pte check
+> discussed in the previous comments. Is that correct or is there yet
+> another issue?
 
-> > From: Liu, Yi L <yi.l.liu@intel.com>
-> > Sent: Tuesday, September 26, 2023 5:31 PM
-> > 
-> > This exposes PCIe PASID capability to userspace and where to emulate this
-> > capability if wants to further expose it to VM.
-> > 
-> > And this only exposes PASID capability for devices which has PCIe PASID
-> > extended struture in its configuration space. While for VFs, userspace
-> > is still unable to see this capability as SR-IOV spec forbides VF to
-> > implement PASID capability extended structure. It is a TODO in future.
-> > Related discussion can be found in below links:
-> > 
-> > https://lore.kernel.org/kvm/20200407095801.648b1371@w520.home/
-> > https://lore.kernel.org/kvm/BL1PR11MB5271A60035EF591A5BE8AC878C01A
-> > @BL1PR11MB5271.namprd11.prod.outlook.com/
-> >   
-> 
-> Yes, we need a decision for VF case.
-> 
-> If the consensus is to continue exposing the PASID capability in vfio-pci
-> config space by developing a kernel quirk mechanism to find offset for
-> VF, then this patch for PF is orthogonal to that VF work and can go as it is.
-> 
-> But if the decision is to have a device feature for the user to enumerate
-> the vPASID capability and let the VMM take care of finding the vPASID
-> cap offset, then better we start doing that for PF too since it's not good
-> to have two enumeration interfaces for PF/VF respectively.
+This is still referring to the missing previous_src_pte check.
 
-Note also that QEMU implements a lazy algorithm for exposing
-capabilities, the default is to expose them, so we need to consider
-existing VMs seeing a new read-only PASID capability on an assigned PF.
+> >
+> > > +       } else {
+> > [...]
+> > > +       }
+> > > +
+> > > +out:
+> > > +       if (src_anon_vma) {
+> > > +               anon_vma_unlock_write(src_anon_vma);
+> > > +               put_anon_vma(src_anon_vma);
+> > > +       }
+> > > +       if (src_folio) {
+> > > +               folio_unlock(src_folio);
+> > > +               folio_put(src_folio);
+> > > +       }
+> > > +       if (dst_pte)
+> > > +               pte_unmap(dst_pte);
+> > > +       if (src_pte)
+> > > +               pte_unmap(src_pte);
+> > > +       mmu_notifier_invalidate_range_end(&range);
+> > > +
+> > > +       return err;
+> > > +}
+> > [...]
+> > > +ssize_t remap_pages(struct mm_struct *dst_mm, struct mm_struct *src_=
+mm,
+> > > +                   unsigned long dst_start, unsigned long src_start,
+> > > +                   unsigned long len, __u64 mode)
+> > > +{
+> > > +       struct vm_area_struct *src_vma, *dst_vma;
+> > > +       unsigned long src_addr, dst_addr;
+> > > +       pmd_t *src_pmd, *dst_pmd;
+> > > +       long err =3D -EINVAL;
+> > > +       ssize_t moved =3D 0;
+> > > +
+> > > +       /*
+> > > +        * Sanitize the command parameters:
+> > > +        */
+> > > +       BUG_ON(src_start & ~PAGE_MASK);
+> > > +       BUG_ON(dst_start & ~PAGE_MASK);
+> > > +       BUG_ON(len & ~PAGE_MASK);
+> > > +
+> > > +       /* Does the address range wrap, or is the span zero-sized? */
+> > > +       BUG_ON(src_start + len <=3D src_start);
+> > > +       BUG_ON(dst_start + len <=3D dst_start);
+> > > +
+> > > +       /*
+> > > +        * Because these are read sempahores there's no risk of lock
+> > > +        * inversion.
+> > > +        */
+> > > +       mmap_read_lock(dst_mm);
+> > > +       if (dst_mm !=3D src_mm)
+> > > +               mmap_read_lock(src_mm);
+> > > +
+> > > +       /*
+> > > +        * Make sure the vma is not shared, that the src and dst rema=
+p
+> > > +        * ranges are both valid and fully within a single existing
+> > > +        * vma.
+> > > +        */
+> > > +       src_vma =3D find_vma(src_mm, src_start);
+> > > +       if (!src_vma || (src_vma->vm_flags & VM_SHARED))
+> > > +               goto out;
+> > > +       if (src_start < src_vma->vm_start ||
+> > > +           src_start + len > src_vma->vm_end)
+> > > +               goto out;
+> > > +
+> > > +       dst_vma =3D find_vma(dst_mm, dst_start);
+> > > +       if (!dst_vma || (dst_vma->vm_flags & VM_SHARED))
+> > > +               goto out;
+> > > +       if (dst_start < dst_vma->vm_start ||
+> > > +           dst_start + len > dst_vma->vm_end)
+> > > +               goto out;
+> > > +
+> > > +       err =3D validate_remap_areas(src_vma, dst_vma);
+> > > +       if (err)
+> > > +               goto out;
+> > > +
+> > > +       for (src_addr =3D src_start, dst_addr =3D dst_start;
+> > > +            src_addr < src_start + len;) {
+> > > +               spinlock_t *ptl;
+> > > +               pmd_t dst_pmdval;
+> > > +               unsigned long step_size;
+> > > +
+> > > +               BUG_ON(dst_addr >=3D dst_start + len);
+> > > +               /*
+> > > +                * Below works because anonymous area would not have =
+a
+> > > +                * transparent huge PUD. If file-backed support is ad=
+ded,
+> > > +                * that case would need to be handled here.
+> > > +                */
+> > > +               src_pmd =3D mm_find_pmd(src_mm, src_addr);
+> > > +               if (unlikely(!src_pmd)) {
+> > > +                       if (!(mode & UFFDIO_REMAP_MODE_ALLOW_SRC_HOLE=
+S)) {
+> > > +                               err =3D -ENOENT;
+> > > +                               break;
+> > > +                       }
+> > > +                       src_pmd =3D mm_alloc_pmd(src_mm, src_addr);
+> > > +                       if (unlikely(!src_pmd)) {
+> > > +                               err =3D -ENOMEM;
+> > > +                               break;
+> > > +                       }
+> > > +               }
+> > > +               dst_pmd =3D mm_alloc_pmd(dst_mm, dst_addr);
+> > > +               if (unlikely(!dst_pmd)) {
+> > > +                       err =3D -ENOMEM;
+> > > +                       break;
+> > > +               }
+> > > +
+> > > +               dst_pmdval =3D pmdp_get_lockless(dst_pmd);
+> > > +               /*
+> > > +                * If the dst_pmd is mapped as THP don't override it =
+and just
+> > > +                * be strict. If dst_pmd changes into TPH after this =
+check, the
+> > > +                * remap_pages_huge_pmd() will detect the change and =
+retry
+> > > +                * while remap_pages_pte() will detect the change and=
+ fail.
+> > > +                */
+> > > +               if (unlikely(pmd_trans_huge(dst_pmdval))) {
+> > > +                       err =3D -EEXIST;
+> > > +                       break;
+> > > +               }
+> > > +
+> > > +               ptl =3D pmd_trans_huge_lock(src_pmd, src_vma);
+> > > +               if (ptl && !pmd_trans_huge(*src_pmd)) {
+> > > +                       spin_unlock(ptl);
+> > > +                       ptl =3D NULL;
+> > > +               }
+> >
+> > This still looks wrong - we do still have to split_huge_pmd()
+> > somewhere so that remap_pages_pte() works.
+>
+> Hmm, I guess this extra check is not even needed...
 
-That might support an alternate means to expose the capability.
+Hm, and instead we'd bail at the pte_offset_map_nolock() in
+remap_pages_pte()? I guess that's unusual but works...
 
-> My preference is via device feature given Qemu already includes lots of
-> quirks for vfio-pci devices. Another reason is that when supporting vPASID
-> with SIOV there are some arch constraints which the driver needs to
-> report to the user to follow (e.g.  don't assign ENQCMD-capable sibling
-> vdev's to a same guest, etc.).
-
-?!
-
-> A device feature interface can better
-> encapsulate everything related to vPASID in one place.
-
-Sorry if I don't remember, have you posted a proposal for the device
-feature interface?  Thanks,
-
-Alex
-
+(It would be a thing to look out for if anyone tried to backport this,
+since the checks in pte_offset_map_nolock() were only introduced in
+6.5, but idk if anyone's doing that)
