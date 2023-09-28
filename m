@@ -2,107 +2,140 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B47197B1B4A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Sep 2023 13:37:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A031B7B1C92
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Sep 2023 14:36:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231770AbjI1Lha (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 28 Sep 2023 07:37:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45166 "EHLO
+        id S231437AbjI1MgB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 28 Sep 2023 08:36:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231167AbjI1Lha (ORCPT
+        with ESMTP id S231967AbjI1MgA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 28 Sep 2023 07:37:30 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 967009C;
-        Thu, 28 Sep 2023 04:37:28 -0700 (PDT)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 38SBT6HS003484;
-        Thu, 28 Sep 2023 06:37:23 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=
-        from:to:cc:subject:date:message-id:mime-version
-        :content-transfer-encoding:content-type; s=PODMain02222019; bh=p
-        tuXmZ2hqF+4cAMHCMtuZ+jtvOIi1tvA4FTQu+eJeZY=; b=bnLMoFBwLxlHwjnWP
-        l7q8J5Jjd/tTfKE73iZf7of3UTgRPxdP2hnd+LghsV1MNnH4Uvxq2Koe2jhl/8aY
-        rutC7Q8/puGKQG+8CqIFnEmaOJBV9V7w1jNyHPkdGQjRRwXSx+Dt3DQYAnK93sRk
-        2KmSwO0MI+lW7i3uj7BgZr8tV7nXk20+6y0nT6RET1c73MlpPWuPy0HBryRV0ULO
-        4zkAFQkv6xASDNJ1M0CSIZ0rpRJme7yCmDLw9PA07bXII6plhi+1cQyVTpbitd9z
-        R3NKxmWgHPWG6bwChRz+6v57TcIVxOIW3z9qONk73m8BUED5jvN/QH1caOSGfpB9
-        ykE3g==
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3t9veje087-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 28 Sep 2023 06:37:23 -0500 (CDT)
-Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.37; Thu, 28 Sep
- 2023 12:37:21 +0100
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.37 via Frontend
- Transport; Thu, 28 Sep 2023 12:37:21 +0100
-Received: from edi-sw-dsktp-006.ad.cirrus.com (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.13])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 255AB11AB;
-        Thu, 28 Sep 2023 11:37:21 +0000 (UTC)
-From:   Richard Fitzgerald <rf@opensource.cirrus.com>
-To:     <brendan.higgins@linux.dev>, <davidgow@google.com>,
-        <rmoar@google.com>
-CC:     <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
-        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>,
-        "Richard Fitzgerald" <rf@opensource.cirrus.com>,
-        Dan Carpenter <dan.carpenter@linaro.org>
-Subject: [PATCH] kunit: debugfs: Fix unchecked dereference in debugfs_print_results()
-Date:   Thu, 28 Sep 2023 12:37:21 +0100
-Message-ID: <20230928113721.3867117-1-rf@opensource.cirrus.com>
-X-Mailer: git-send-email 2.30.2
+        Thu, 28 Sep 2023 08:36:00 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2E7B191
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 Sep 2023 05:35:57 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-317c3ac7339so12317698f8f.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 Sep 2023 05:35:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blackwall-org.20230601.gappssmtp.com; s=20230601; t=1695904556; x=1696509356; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OPk2ZzrID8Ruy/e6ubyOdQXDCXqUez+jUlvGZE9CHoc=;
+        b=DI6SzCmC+ik1/3gGJtZaaEQEZeBEH2IzH7xEn3xfdfCkGFJnUqILygvEr79HM2pY6W
+         n0ATXu30vKju6aYcfvas+ex9CBs/pyIN90PELqPIYlKxbx12rqdqFSJ2nJFM7aiHCNYX
+         ld/UMYHGLcsR2veCA1tEFrzC1YBJyn/nxygpi/vmC3sAdVtyyzNwydlxlZdrd4JNdYXB
+         uRapu+NpaTRv7Zu2FRiMV1Xwess9RIjl9oIGvWlsyWA32PJVa2ScA+KDlqjOd0wk8+Lc
+         sswWC1nEhS0ZmnKdMj83SoMJRbMjdTnxC9rDg0BUB0forlhaNErN7d2+kuOvIteyFuVq
+         qrYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695904556; x=1696509356;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OPk2ZzrID8Ruy/e6ubyOdQXDCXqUez+jUlvGZE9CHoc=;
+        b=xSu+nk8FbEPvlMptXXk2BrHQYkFQZf+aFqwQTz8qsaXQWtzaAIODJpPuBWhLCtuzbv
+         rgMu3gruhtSbC4xvWEGsox9S/uPqkWwuZJ0KhSQ0nwFICVmv3yOb8uYLTWrxjw7o6YGc
+         YB5XlQ9K7rK5909RjTLV5OTBMrWt+ox2g57BHHvy0K8zKvX6uYiqX39zuyY5zQTz8VBK
+         HV+G2ud/W9JwO41ufNZZlKjnVhiUiKpBvWToJMx1l0aJ1fYWTyFaDXlI6krDLQ0ugQBc
+         LURNXlbQONB6sJdnO0wjlCAOnLndhzFZ0f7FvJhxKSZxG8BkBMZcE+m1HY4Blxba0KFL
+         OM8g==
+X-Gm-Message-State: AOJu0Yx16RcRwekxKgJ+AdrVEBt8ANzylSJ+Ek5Y5IUk1LR3exb8byM1
+        OJ74O40rheX2KnpMyOJ4fYMSpg==
+X-Google-Smtp-Source: AGHT+IG+ptZJRlwen4reypsH0+PwYcAGCXwddHDZkmlJP4KAaSG4l2LCo5phyY7HK5it2f8kKzCUsw==
+X-Received: by 2002:a05:6000:985:b0:320:9e7:d525 with SMTP id by5-20020a056000098500b0032009e7d525mr1391079wrb.46.1695904555860;
+        Thu, 28 Sep 2023 05:35:55 -0700 (PDT)
+Received: from [192.168.0.105] (haunt.prize.volia.net. [93.72.109.136])
+        by smtp.gmail.com with ESMTPSA id iw7-20020a05600c54c700b003fc16ee2864sm18319287wmb.48.2023.09.28.05.35.54
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 28 Sep 2023 05:35:55 -0700 (PDT)
+Message-ID: <2c985516-88a3-9fee-dbd1-134aecd323e5@blackwall.org>
+Date:   Thu, 28 Sep 2023 15:35:53 +0300
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.5.0
+Subject: Re: [PATCH] bridge: MTU auto tuning ignores IFLA_MTU on NEWLINK
+Content-Language: en-US
+From:   Nikolay Aleksandrov <razor@blackwall.org>
+To:     Trent Lloyd <trent.lloyd@canonical.com>,
+        Roopa Prabhu <roopa@nvidia.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, bridge@lists.linux-foundation.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20230927075713.1253681-1-trent.lloyd@canonical.com>
+ <3dccacd8-4249-87f8-690c-6083374dc9d1@blackwall.org>
+In-Reply-To: <3dccacd8-4249-87f8-690c-6083374dc9d1@blackwall.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: 5pMYG62xJDFvXrySNZzRtJ72E7kGlvej
-X-Proofpoint-ORIG-GUID: 5pMYG62xJDFvXrySNZzRtJ72E7kGlvej
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Move the call to kunit_suite_has_succeeded() after the check that
-the kunit_suite pointer is valid.
+On 9/27/23 11:10, Nikolay Aleksandrov wrote:
+> On 9/27/23 10:57, Trent Lloyd wrote:
+>> Commit 804b854d374e ("net: bridge: disable bridge MTU auto tuning if it
+>> was set manually") disabled auto-tuning of the bridge MTU when the MTU
+>> was explicitly set by the user, however that would only happen when the
+>> MTU was set after creation. This commit ensures auto-tuning is also
+>> disabled when the MTU is set during bridge creation.
+>>
+>> Currently when the br_netdev_ops br_change_mtu function is called, the
+>> flag BROPT_MTU_SET_BY_USER is set. However this function is only called
+>> when the MTU is changed after interface creation and is not called if
+>> the MTU is specified during creation with IFLA_MTU (br_dev_newlink).
+>>
+>> br_change_mtu also does not get called if the MTU is set to the same
+>> value it currently has, which makes it difficult to work around this
+>> issue (especially for the default MTU of 1500) as you have to first
+>> change the MTU to some other value and then back to the desired value.
+>>
+> 
+> Yep, I think I also described this in the commit message of my patch.
+> 
+>> Add new selftests to ensure the bridge MTU is handled correctly:
+>>   - Bridge created with user-specified MTU (1500)
+>>   - Bridge created with user-specified MTU (2000)
+>>   - Bridge created without user-specified MTU
+>>   - Bridge created with user-specified MTU set after creation (2000)
+>>
+>> Regression risk: Any workload which erroneously specified an MTU during
+>> creation but accidentally relied upon auto-tuning to a different value
+>> may be broken by this change.
+>>
+> 
+> Hmm, you're right. There's a risk of regression. Also it acts 
+> differently when set to 1500 as you've mentioned. I think they should 
+> act the same, also bridge's fake rtable RTAX_MTU is not set.
+> 
+>> Link: https://bugs.launchpad.net/ubuntu/+source/linux/+bug/2034099
+>> Fixes: 804b854d374e ("net: bridge: disable bridge MTU auto tuning if 
+>> it was set manually")
+>> Signed-off-by: Trent Lloyd <trent.lloyd@canonical.com>
+>> ---
+> 
 
-This was found by smatch:
+So I've been thinking about this and to elaborate - my concerns are two
+first is inconsistency between setting MTU at create vs later when it's 
+the default (i.e. this way disables auto-tuning, while later it doesn't)
+and second is potential breakage as some network managers always set the 
+mtu when creating devices. That would suddenly start disabling 
+auto-tuning and that will surprise some people which expect it to work.
 
- lib/kunit/debugfs.c:66 debugfs_print_results() warn: variable
- dereferenced before check 'suite' (see line 63)
+I think if you make them both act the same and leave out that case with 
+a big comment why, this would be good for -net. To fully solve the 
+problem without breaking anyone I think we should add control over the 
+autotuning flag so it can be turned on/off by the users. That would be 
+explicit and will work for all cases, but that is net-next material.
 
-Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
-Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
-Fixes: 38289a26e1b8 ("kunit: fix debugfs code to use enum kunit_status, not bool")
----
- lib/kunit/debugfs.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
-index 9d167adfa746..382706dfb47d 100644
---- a/lib/kunit/debugfs.c
-+++ b/lib/kunit/debugfs.c
-@@ -60,12 +60,14 @@ static void debugfs_print_result(struct seq_file *seq, struct string_stream *log
- static int debugfs_print_results(struct seq_file *seq, void *v)
- {
- 	struct kunit_suite *suite = (struct kunit_suite *)seq->private;
--	enum kunit_status success = kunit_suite_has_succeeded(suite);
-+	enum kunit_status success;
- 	struct kunit_case *test_case;
- 
- 	if (!suite)
- 		return 0;
- 
-+	success = kunit_suite_has_succeeded(suite);
-+
- 	/* Print KTAP header so the debugfs log can be parsed as valid KTAP. */
- 	seq_puts(seq, "KTAP version 1\n");
- 	seq_puts(seq, "1..1\n");
--- 
-2.30.2
+Thanks,
+  Nik
 
