@@ -2,156 +2,148 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE8757B2172
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Sep 2023 17:36:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23C7D7B2230
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Sep 2023 18:24:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231332AbjI1Pgs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 28 Sep 2023 11:36:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47772 "EHLO
+        id S230274AbjI1QYW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 28 Sep 2023 12:24:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231979AbjI1Pgr (ORCPT
+        with ESMTP id S231195AbjI1QYV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 28 Sep 2023 11:36:47 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CF10D6
-        for <linux-kselftest@vger.kernel.org>; Thu, 28 Sep 2023 08:36:43 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-579de633419so160781097b3.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 28 Sep 2023 08:36:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695915402; x=1696520202; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6e7z54uATHSSGDjwccq5t2JrfgU8sx45IO2zPYWKTu4=;
-        b=y8sNghs5WMsnE7q6gtrMdqawiQAkTO1W5wa6oeNCXaAnuO5coljUYTKHQIIfk2EMz2
-         O25kuKl7THw2USeCRD4TNJVsZHVtZ1giiId7FZ0JqmdU8ZVSd9+kN47fAiKLStgbEb5e
-         usE/N6m4Y0cwIdXKW/u6KHbCvCTczaAfx6pF2X0UF37Pq1+fMjvdpI14KJbH1zDBDIl/
-         juh4k3DFjFMvD9wNeCDGpfw5WWXogmG6cItwx4IfXa2Cfau+P2POuvxTuixFc80Nthod
-         UaUhXr0/TzzolcftVars+LAO0gPugAto8XVIVPAGnG+4SWS5OlQWIBrONT8wGIJMwPGd
-         Q6Ag==
+        Thu, 28 Sep 2023 12:24:21 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B874E199
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 Sep 2023 09:23:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1695918215;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=X3MbseqfofQuHt4pLHARDa7jXnUI0dOG+j1Sy7M9elo=;
+        b=TMUlpF1ty890qukjEQKkovrhOWeBwtje5hRP12mV5V3p9QoQ2uug2viB0nS7VD1DOm9XxG
+        kcnWKLKj95ZcnAE3AHlC4qThiAB6QnB/ML7j/a0CqAUf90DrZNmjjcjpZEPY7FvfuykSLs
+        Q1M90NU/Hpvu+bEPCSrmfguvyznTsag=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-147-KJYle2NoN72HBU8Al4Jvnw-1; Thu, 28 Sep 2023 12:23:33 -0400
+X-MC-Unique: KJYle2NoN72HBU8Al4Jvnw-1
+Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-417c06c459cso34999851cf.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 Sep 2023 09:23:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695915402; x=1696520202;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6e7z54uATHSSGDjwccq5t2JrfgU8sx45IO2zPYWKTu4=;
-        b=GIr9Pt/1gIhvb3mgMl3GWjzetkFcP6svDMuMz4l4EO5Ynz+Dtx22e+dUaXJfa4cdYu
-         tjM7NmwGq4SgiKYCuM1S0335v0Z3Pkz5ryDTc+MM/0AFj+3lRHFU1koV7t0FYDMu98T5
-         xCKyfG2XJfJDc4DIpMBN1RWQfLZPsi/ZuR58N/aJ3+OF+bfYAKc8Tb2LKeKcnoPloj+h
-         +S6JKQIDxs9HjCjJ04E2n8MzFUKD4NSBq8HKKYQPYpMNC29dNsCJz6phSa2AzJ5JG0wx
-         +XWK1SW88A8V1euesgN3zw9HNqYFU48oOIidU9d+E4LHG8/mVeKmqXeA2byjzlVRsdPz
-         ysVQ==
-X-Gm-Message-State: AOJu0YyJTYJQJtEcsA5gvZM/xwoBBxw2OTmMcTa3aPsebNl8gh4XQ59Q
-        xOEmHevi5Urx9h71DVhTRwzDccEGtNy/X2odlHzXzw==
-X-Google-Smtp-Source: AGHT+IFjUIiq8zXa/6i3Gd2mLTZVRJSM762ThmYuOrNiwbXezL93NXanoc8htBlyr6ZC4BGKzu/lDhUW4vJYOzuiSDk=
-X-Received: by 2002:a81:4e85:0:b0:569:479f:6d7f with SMTP id
- c127-20020a814e85000000b00569479f6d7fmr1392570ywb.43.1695915402166; Thu, 28
- Sep 2023 08:36:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230923013148.1390521-1-surenb@google.com> <20230923013148.1390521-3-surenb@google.com>
- <CAG48ez1N2kryy08eo0dcJ5a9O-3xMT8aOrgrcD+CqBN=cBfdDw@mail.gmail.com>
- <CAJuCfpGb5Amo9Sk0yyruJt9NKaYe9-y+5jmU442NSf3+VT5-dA@mail.gmail.com>
- <CAG48ez2WNOMwPo4OMVUHbS4mirwbqHUY5qUaaZ9DTkXdkzrjiQ@mail.gmail.com>
- <CAJuCfpGcsBE2XqPJSVo1gdE_O96gzS5=ET=u0uSBSX3Lj56CtA@mail.gmail.com>
- <CAJuCfpHY5zhkS0OPxOK-twb6pDJg6OpXZnPquw_9wBmbjFiF9Q@mail.gmail.com> <CAG48ez3w7kbetfhEd7trLhOKJYPw4jSVBeOC+psZZR84d-hJaw@mail.gmail.com>
-In-Reply-To: <CAG48ez3w7kbetfhEd7trLhOKJYPw4jSVBeOC+psZZR84d-hJaw@mail.gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Thu, 28 Sep 2023 08:36:31 -0700
-Message-ID: <CAJuCfpHrmgdoJaN0P4FGzRFbu-o+c5+H6-r=5A=xrVd2GU2QyQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] userfaultfd: UFFDIO_REMAP uABI
-To:     Jann Horn <jannh@google.com>
+        d=1e100.net; s=20230601; t=1695918213; x=1696523013;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X3MbseqfofQuHt4pLHARDa7jXnUI0dOG+j1Sy7M9elo=;
+        b=vAuYnOOKfLGQhyTEZT8KE8S6Hzr7PotdgOjPrl76Nrtlfe+6HhnvNdw16r1geUreBy
+         oDRy1i9kKQuBHW4KEvRLyCNiMcZsgeK4eDjN6/QSGJ+4A8ZKQcihdwNX5tN+aFYfUWkI
+         lkmSO/nlVxjycht1pUM7b2MawP5A9zPqBLMDCwGfIRZVyQR1PAVxIa5eupviuItK/0/G
+         U00q2JvsvM8ktTPruaiRyJWzEsbxWRIobWgon8TVOusMNg7no/7dfb/RY4MDOfFgM5g2
+         55Owrwh/6osSzUK6dRYV832KoFvYhrepV6bLECxuQEQAxxd/3ZShXcPIM5nC/O0BIijZ
+         Zfxw==
+X-Gm-Message-State: AOJu0YxM2Ut/osYHctvysihxBy6kxwsjo0zVq8TaP0lq0eLBCfOT5YK9
+        X34mpFLPfh18QhKN/PQYkaPdSOi9Zy2L6q3rv21xU5ex5s33paP696OW6RO5nd/D6VApBfHafzo
+        q23VKHpR2V2C2xiNZBLdJFT8YwlKg
+X-Received: by 2002:a05:622a:1a0b:b0:411:ff8f:d5aa with SMTP id f11-20020a05622a1a0b00b00411ff8fd5aamr1620281qtb.3.1695918212865;
+        Thu, 28 Sep 2023 09:23:32 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGhws7KLpQsxWmAY8E3zXcIKtOKrYQ/GpK2ItdQp8TYckvr8XWrXOC2qrQiNhX2yyfLB1f44g==
+X-Received: by 2002:a05:622a:1a0b:b0:411:ff8f:d5aa with SMTP id f11-20020a05622a1a0b00b00411ff8fd5aamr1620257qtb.3.1695918212563;
+        Thu, 28 Sep 2023 09:23:32 -0700 (PDT)
+Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
+        by smtp.gmail.com with ESMTPSA id l11-20020ac84ccb000000b004181441cb2dsm3585433qtv.34.2023.09.28.09.23.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Sep 2023 09:23:32 -0700 (PDT)
+Date:   Thu, 28 Sep 2023 12:23:28 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Suren Baghdasaryan <surenb@google.com>
 Cc:     akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
         brauner@kernel.org, shuah@kernel.org, aarcange@redhat.com,
-        lokeshgidra@google.com, peterx@redhat.com, david@redhat.com,
-        hughd@google.com, mhocko@suse.com, axelrasmussen@google.com,
-        rppt@kernel.org, willy@infradead.org, Liam.Howlett@oracle.com,
+        lokeshgidra@google.com, david@redhat.com, hughd@google.com,
+        mhocko@suse.com, axelrasmussen@google.com, rppt@kernel.org,
+        willy@infradead.org, Liam.Howlett@oracle.com, jannh@google.com,
         zhangpeng362@huawei.com, bgeffon@google.com,
         kaleshsingh@google.com, ngeoffray@google.com, jdduke@google.com,
         linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2 1/3] userfaultfd: UFFDIO_REMAP: rmap preparation
+Message-ID: <ZRWogK5s5/giHuGu@x1n>
+References: <20230923013148.1390521-1-surenb@google.com>
+ <20230923013148.1390521-2-surenb@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230923013148.1390521-2-surenb@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Sep 27, 2023 at 3:49=E2=80=AFPM Jann Horn <jannh@google.com> wrote:
->
-> On Wed, Sep 27, 2023 at 11:08=E2=80=AFPM Suren Baghdasaryan <surenb@googl=
-e.com> wrote:
-> > On Wed, Sep 27, 2023 at 1:42=E2=80=AFPM Suren Baghdasaryan <surenb@goog=
-le.com> wrote:
-> > >
-> > > On Wed, Sep 27, 2023 at 1:04=E2=80=AFPM Jann Horn <jannh@google.com> =
-wrote:
-> > > >
-> > > > On Wed, Sep 27, 2023 at 8:08=E2=80=AFPM Suren Baghdasaryan <surenb@=
-google.com> wrote:
-> > > > > On Wed, Sep 27, 2023 at 5:47=E2=80=AFAM Jann Horn <jannh@google.c=
-om> wrote:
-> > > > > > On Sat, Sep 23, 2023 at 3:31=E2=80=AFAM Suren Baghdasaryan <sur=
-enb@google.com> wrote:
-> > > > > > > +               dst_pmdval =3D pmdp_get_lockless(dst_pmd);
-> > > > > > > +               /*
-> > > > > > > +                * If the dst_pmd is mapped as THP don't over=
-ride it and just
-> > > > > > > +                * be strict. If dst_pmd changes into TPH aft=
-er this check, the
-> > > > > > > +                * remap_pages_huge_pmd() will detect the cha=
-nge and retry
-> > > > > > > +                * while remap_pages_pte() will detect the ch=
-ange and fail.
-> > > > > > > +                */
-> > > > > > > +               if (unlikely(pmd_trans_huge(dst_pmdval))) {
-> > > > > > > +                       err =3D -EEXIST;
-> > > > > > > +                       break;
-> > > > > > > +               }
-> > > > > > > +
-> > > > > > > +               ptl =3D pmd_trans_huge_lock(src_pmd, src_vma)=
-;
-> > > > > > > +               if (ptl && !pmd_trans_huge(*src_pmd)) {
-> > > > > > > +                       spin_unlock(ptl);
-> > > > > > > +                       ptl =3D NULL;
-> > > > > > > +               }
-> > > > > >
-> > > > > > This still looks wrong - we do still have to split_huge_pmd()
-> > > > > > somewhere so that remap_pages_pte() works.
-> > > > >
-> > > > > Hmm, I guess this extra check is not even needed...
-> > > >
-> > > > Hm, and instead we'd bail at the pte_offset_map_nolock() in
-> > > > remap_pages_pte()? I guess that's unusual but works...
-> > >
-> > > Yes, that's what I was thinking but I agree, that seems fragile. Mayb=
-e
-> > > just bail out early if (ptl && !pmd_trans_huge())?
-> >
-> > No, actually we can still handle is_swap_pmd() case by splitting it
-> > and remapping the individual ptes. So, I can bail out only in case of
-> > pmd_devmap().
->
-> FWIW I only learned today that "real" swap PMDs don't actually exist -
-> only migration entries, which are encoded as swap PMDs, exist. You can
-> see that when you look through the cases that something like
-> __split_huge_pmd() or zap_pmd_range() actually handles.
+Suren,
 
-Ah, good point.
+Sorry to review so late.
 
->
-> So I think if you wanted to handle all the PMD types properly here
-> without splitting, you could do that without _too_ much extra code.
-> But idk if it's worth it.
+On Fri, Sep 22, 2023 at 06:31:44PM -0700, Suren Baghdasaryan wrote:
+> diff --git a/mm/rmap.c b/mm/rmap.c
+> index ec7f8e6c9e48..c1ebbd23fa61 100644
+> --- a/mm/rmap.c
+> +++ b/mm/rmap.c
+> @@ -542,6 +542,7 @@ struct anon_vma *folio_lock_anon_vma_read(struct folio *folio,
+>  	struct anon_vma *root_anon_vma;
+>  	unsigned long anon_mapping;
+>  
+> +repeat:
+>  	rcu_read_lock();
+>  	anon_mapping = (unsigned long)READ_ONCE(folio->mapping);
+>  	if ((anon_mapping & PAGE_MAPPING_FLAGS) != PAGE_MAPPING_ANON)
+> @@ -586,6 +587,18 @@ struct anon_vma *folio_lock_anon_vma_read(struct folio *folio,
+>  	rcu_read_unlock();
+>  	anon_vma_lock_read(anon_vma);
+>  
+> +	/*
+> +	 * Check if UFFDIO_REMAP changed the anon_vma. This is needed
+> +	 * because we don't assume the folio was locked.
+> +	 */
+> +	if (unlikely((unsigned long) READ_ONCE(folio->mapping) !=
+> +		     anon_mapping)) {
+> +		anon_vma_unlock_read(anon_vma);
+> +		put_anon_vma(anon_vma);
+> +		anon_vma = NULL;
+> +		goto repeat;
+> +	}
 
-Yeah, I guess I can call pmd_migration_entry_wait() and retry by
-returning EAGAIN, similar to how remap_pages_pte() handles PTE
-migration. Looks simple enough.
+We have an open-coded fast path above this:
 
-Thanks for all the pointers! I'll start cooking the next version.
+	if (down_read_trylock(&root_anon_vma->rwsem)) {
+		/*
+		 * If the folio is still mapped, then this anon_vma is still
+		 * its anon_vma, and holding the mutex ensures that it will
+		 * not go away, see anon_vma_free().
+		 */
+		if (!folio_mapped(folio)) {
+			up_read(&root_anon_vma->rwsem);
+			anon_vma = NULL;
+		}
+		goto out;
+	}
+
+Would that also need such check?
+
+> +
+>  	if (atomic_dec_and_test(&anon_vma->refcount)) {
+>  		/*
+>  		 * Oops, we held the last refcount, release the lock
+> -- 
+> 2.42.0.515.g380fc7ccd1-goog
+> 
+
+-- 
+Peter Xu
+
