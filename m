@@ -2,282 +2,219 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 737637B1FDB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Sep 2023 16:38:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DEF807B2154
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Sep 2023 17:30:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230270AbjI1Oid (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 28 Sep 2023 10:38:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51030 "EHLO
+        id S232097AbjI1Pai (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 28 Sep 2023 11:30:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbjI1Oia (ORCPT
+        with ESMTP id S231940AbjI1PaW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 28 Sep 2023 10:38:30 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17EAA19E;
-        Thu, 28 Sep 2023 07:38:28 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77B60C433C7;
-        Thu, 28 Sep 2023 14:38:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1695911907;
-        bh=sOssdkEDOu+oIP+T5MSwmPgEXystV1oGz6QEO2yuBlw=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=I97GdR3XyY/ltTQZT/rviiLJPoX0sl+qvjaUkaGpr+dt8Sx3caPcJgDF3+i9vIpUH
-         UEQpU+6T7BaBloSLmoTeVB/ElkqrkI4rT8O0S2aOBMZtH5AhV/0V9o+FmK03MiC4h3
-         PA39xZZ/4rE63fIM09OqrqGEtCUe46Dq0nPoBxQbfazh48cBP7KgeEFGO8u3pFBxWp
-         9bkE72dqGo3LC0GFZh7GwOpWsnESK/+sFpA5K1bC75OIdrZ46ZTG8BeWp0Rwdiv7Uz
-         lyba8iTWOxmCFbr9uZDNL2oolGido1i7bxn6zEbNOiG+/WRdIAWWilsi812RSpInqQ
-         6du9RipFhe92w==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Thu, 28 Sep 2023 16:38:12 +0200
-Subject: [PATCH 2/2] selftests/exec: Convert execveat test to generate KTAP
- output
+        Thu, 28 Sep 2023 11:30:22 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 303361A5
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 Sep 2023 08:30:20 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1c6052422acso166465ad.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 Sep 2023 08:30:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1695915019; x=1696519819; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gW3bQkxv5ZlVvPDaRZ7GOUnQxOQtKH5unki4YKmOzgQ=;
+        b=pBn+H+ni9EOJ4jKn6TpZfhqkcqfY9Z3xCfaTO2FkB9Rr47Z3RVSxDst6po7Ai6tsZ0
+         OjxwbRaWaDzGUsiEcJzZn+NeDek3XxVqGI3wY7yXK/fwBCyLE0vriydhOpPUUL+3sFCN
+         PheLGrNP2ShN0JP5IMyXM2mL1HB7PpeE8epZJKr0YnmY6ezexGUiuhAw3HyZngrK2tbY
+         oRRsizqyE7PvQvOdqiKojUT0LSaASlXpV3hg6E5QH08Y/9Yp47+HfAkA+vNRPQ4c3N20
+         OMrVGTo8mV145JYxvRBnesRPr2Qzh9pLZZWvLu8djV3+OVOIBM8jXi6i1EApMS/rR5sI
+         GdPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695915019; x=1696519819;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gW3bQkxv5ZlVvPDaRZ7GOUnQxOQtKH5unki4YKmOzgQ=;
+        b=ejOR9vywS+IHGf7z3QGx88cZhthVRnfsm392d99W06ZhkjbPrmeu+/VsEPW0C2HIhN
+         aTUDg9WOBczibyOuykvdCBtbZU/bG6uaivFqCc7F29L1sH8BSuV4zeDWHdqsH3WqDFz7
+         1hFL1Lb2BRaeqNGWASK8HZprEGgXq+tS175jzvKB2ug/TQmkjSSRvWugqM9FjQPunESX
+         m3tfy5B2Lls87qSPDZZVhR8XHtWcOE/Zgcu89UNd9ZGanL0tPKwGZ+Ms41K1pFxOlkh7
+         VYz4FlNZxk62yN4qNniTikV+NzBYuhWCO+dLHRL7RK9tdWtW/hvlAVAPXm+eLUoQnpfn
+         nDpg==
+X-Gm-Message-State: AOJu0YyQji3cC7B1s5RrHZoJ/eYEPr8M6nhK+P8Gq6HrjEpkG0zCYAJi
+        ldh30PE/6NpISqjGyOk8CGDd6nlMQLMZj2NabLm91w==
+X-Google-Smtp-Source: AGHT+IHHyfIM/7h2yPICm3uZHEnv53ZDC4+2b2+nBKsf/B6JPSxSiNPVillmryDthljWo4bey1UqJpEOBpTCWBBBy5E=
+X-Received: by 2002:a17:902:9a85:b0:1c4:1392:e4b5 with SMTP id
+ w5-20020a1709029a8500b001c41392e4b5mr686821plp.21.1695915019275; Thu, 28 Sep
+ 2023 08:30:19 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230928-ktap-exec-v1-2-1013a2db0426@kernel.org>
-References: <20230928-ktap-exec-v1-0-1013a2db0426@kernel.org>
-In-Reply-To: <20230928-ktap-exec-v1-0-1013a2db0426@kernel.org>
-To:     Shuah Khan <shuah@kernel.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.13-dev-099c9
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7284; i=broonie@kernel.org;
- h=from:subject:message-id; bh=sOssdkEDOu+oIP+T5MSwmPgEXystV1oGz6QEO2yuBlw=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBlFY/exx+aGs0kTE5g6OXj8ApwZm43FD63znXZR
- F6AffJwc9SJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZRWP3gAKCRAk1otyXVSH
- 0HwGCACBRHBT8cww7vfUB5X5v/kNEMKGqvcT34gJ7FjV5qKozSGvfJ2Lz6Ylcxqu8ri3q8WVZdQ
- K9KEzo7y+a015hv7U4cEdlokDVpd20LaQb2O5EfN0U1Ve/5eYO/481VpMMCIkBQnnipRNeP+V15
- lJrkWdwigTKGutND2V9CAwgYLDho0OG2RANWJHr14YaoowHQ1pcHOF42C2QAwNzronMhXy2YbWm
- EP2kP464BNTg4oSP9XqAWVATNoz9o1MAhxagyRAZSRkUfE2N8qwWgjPnC1/9X0z2TeWjJOkhakd
- mOUicmTdtxj2n6cYJpQnO5Yl6uDmmc0/lWERHkBRCAqjZg1e
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230923013148.1390521-1-surenb@google.com> <20230923013148.1390521-3-surenb@google.com>
+ <CAG48ez11FdESrYYDLmtZEgZ7osDi-QDYpk+Z0p=qjpCks++7rg@mail.gmail.com> <CAJuCfpG1sjJdEoxtYFk9-r_5kutss_C3breJVFz99efsKKXzqg@mail.gmail.com>
+In-Reply-To: <CAJuCfpG1sjJdEoxtYFk9-r_5kutss_C3breJVFz99efsKKXzqg@mail.gmail.com>
+From:   Jann Horn <jannh@google.com>
+Date:   Thu, 28 Sep 2023 17:29:43 +0200
+Message-ID: <CAG48ez2uMXLigojbF3HD20Q5jL4ZMSZf6GS-5Y7P=jiB7gibpQ@mail.gmail.com>
+Subject: Re: potential new userfaultfd vs khugepaged conflict [was: Re: [PATCH
+ v2 2/3] userfaultfd: UFFDIO_REMAP uABI]
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>, brauner@kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Lokesh Gidra <lokeshgidra@google.com>,
+        Peter Xu <peterx@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mike Rapoport <rppt@kernel.org>, willy@infradead.org,
+        Liam.Howlett@oracle.com, zhangpeng362@huawei.com,
+        Brian Geffon <bgeffon@google.com>,
+        Kalesh Singh <kaleshsingh@google.com>,
+        Nicolas Geoffray <ngeoffray@google.com>,
+        Jared Duke <jdduke@google.com>, Linux-MM <linux-mm@kvack.org>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        kernel-team <kernel-team@android.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Currently the execveat test does not produce KTAP output but rather a
-custom format. This means that we only get a pass/fail for the suite, not
-for each individual test that the suite does. Convert to using the standard
-kselftest output functions which result in KTAP output being generated.
+On Wed, Sep 27, 2023 at 7:12=E2=80=AFPM Suren Baghdasaryan <surenb@google.c=
+om> wrote:
+>
+> On Wed, Sep 27, 2023 at 3:07=E2=80=AFAM Jann Horn <jannh@google.com> wrot=
+e:
+> >
+> > [moving Hugh into "To:" recipients as FYI for khugepaged interaction]
+> >
+> > On Sat, Sep 23, 2023 at 3:31=E2=80=AFAM Suren Baghdasaryan <surenb@goog=
+le.com> wrote:
+> > > From: Andrea Arcangeli <aarcange@redhat.com>
+> > >
+> > > This implements the uABI of UFFDIO_REMAP.
+> > >
+> > > Notably one mode bitflag is also forwarded (and in turn known) by the
+> > > lowlevel remap_pages method.
+> > >
+> > > Signed-off-by: Andrea Arcangeli <aarcange@redhat.com>
+> > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > [...]
+> > > +/*
+> > > + * The mmap_lock for reading is held by the caller. Just move the pa=
+ge
+> > > + * from src_pmd to dst_pmd if possible, and return true if succeeded
+> > > + * in moving the page.
+> > > + */
+> > > +static int remap_pages_pte(struct mm_struct *dst_mm,
+> > > +                          struct mm_struct *src_mm,
+> > > +                          pmd_t *dst_pmd,
+> > > +                          pmd_t *src_pmd,
+> > > +                          struct vm_area_struct *dst_vma,
+> > > +                          struct vm_area_struct *src_vma,
+> > > +                          unsigned long dst_addr,
+> > > +                          unsigned long src_addr,
+> > > +                          __u64 mode)
+> > > +{
+> > > +       swp_entry_t entry;
+> > > +       pte_t orig_src_pte, orig_dst_pte;
+> > > +       spinlock_t *src_ptl, *dst_ptl;
+> > > +       pte_t *src_pte =3D NULL;
+> > > +       pte_t *dst_pte =3D NULL;
+> > > +
+> > > +       struct folio *src_folio =3D NULL;
+> > > +       struct anon_vma *src_anon_vma =3D NULL;
+> > > +       struct mmu_notifier_range range;
+> > > +       int err =3D 0;
+> > > +
+> > > +       mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, src_mm,
+> > > +                               src_addr, src_addr + PAGE_SIZE);
+> > > +       mmu_notifier_invalidate_range_start(&range);
+> > > +retry:
+> > > +       dst_pte =3D pte_offset_map_nolock(dst_mm, dst_pmd, dst_addr, =
+&dst_ptl);
+> > > +
+> > > +       /* If an huge pmd materialized from under us fail */
+> > > +       if (unlikely(!dst_pte)) {
+> > > +               err =3D -EFAULT;
+> > > +               goto out;
+> > > +       }
+> > > +
+> > > +       src_pte =3D pte_offset_map_nolock(src_mm, src_pmd, src_addr, =
+&src_ptl);
+> > > +
+> > > +       /*
+> > > +        * We held the mmap_lock for reading so MADV_DONTNEED
+> > > +        * can zap transparent huge pages under us, or the
+> > > +        * transparent huge page fault can establish new
+> > > +        * transparent huge pages under us.
+> > > +        */
+> > > +       if (unlikely(!src_pte)) {
+> > > +               err =3D -EFAULT;
+> > > +               goto out;
+> > > +       }
+> > > +
+> > > +       BUG_ON(pmd_none(*dst_pmd));
+> > > +       BUG_ON(pmd_none(*src_pmd));
+> > > +       BUG_ON(pmd_trans_huge(*dst_pmd));
+> > > +       BUG_ON(pmd_trans_huge(*src_pmd));
+> >
+> > This works for now, but note that Hugh Dickins has recently been
+> > reworking khugepaged such that PTE-based mappings can be collapsed
+> > into transhuge mappings under the mmap lock held in *read mode*;
+> > holders of the mmap lock in read mode can only synchronize against
+> > this by taking the right page table spinlock and rechecking the pmd
+> > value. This is only the case for file-based mappings so far, not for
+> > anonymous private VMAs; and this code only operates on anonymous
+> > private VMAs so far, so it works out.
+> >
+> > But if either Hugh further reworks khugepaged such that anonymous VMAs
+> > can be collapsed under the mmap lock in read mode, or you expand this
+> > code to work on file-backed VMAs, then it will become possible to hit
+> > these BUG_ON() calls. I'm not sure what the plans for khugepaged going
+> > forward are, but the number of edgecases everyone has to keep in mind
+> > would go down if you changed this function to deal gracefully with
+> > page tables disappearing under you.
+> >
+> > In the newest version of mm/pgtable-generic.c, above
+> > __pte_offset_map_lock(), there is a big comment block explaining the
+> > current rules for page table access; in particular, regarding the
+> > helper pte_offset_map_nolock() that you're using:
+> >
+> >  * pte_offset_map_nolock(mm, pmd, addr, ptlp), above, is like pte_offse=
+t_map();
+> >  * but when successful, it also outputs a pointer to the spinlock in pt=
+lp - as
+> >  * pte_offset_map_lock() does, but in this case without locking it.  Th=
+is helps
+> >  * the caller to avoid a later pte_lockptr(mm, *pmd), which might by th=
+at time
+> >  * act on a changed *pmd: pte_offset_map_nolock() provides the correct =
+spinlock
+> >  * pointer for the page table that it returns.  In principle, the calle=
+r should
+> >  * recheck *pmd once the lock is taken; in practice, no callsite needs =
+that -
+> >  * either the mmap_lock for write, or pte_same() check on contents, is =
+enough.
+> >
+> > If this becomes hittable in the future, I think you will need to
+> > recheck *pmd, at least for dst_pte, to avoid copying PTEs into a
+> > detached page table.
+>
+> Thanks for the warning, Jann. It sounds to me it would be better to
+> add this pmd check now even though it's not hittable. Does that sound
+> good to everyone?
 
-The main trick with this is that, being an exec() related test, the
-program executes itself and returns specific exit codes to verify
-success meaning that we need to only use the top level kselftest
-header/summary functions when invoked directly rather than when run as
-part of a test.
-
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/exec/execveat.c | 87 ++++++++++++++++++++-------------
- 1 file changed, 52 insertions(+), 35 deletions(-)
-
-diff --git a/tools/testing/selftests/exec/execveat.c b/tools/testing/selftests/exec/execveat.c
-index 67bf7254a48f..bf79d664c8e6 100644
---- a/tools/testing/selftests/exec/execveat.c
-+++ b/tools/testing/selftests/exec/execveat.c
-@@ -23,6 +23,9 @@
- 
- #include "../kselftest.h"
- 
-+#define TESTS_EXPECTED 51
-+#define TEST_NAME_LEN (PATH_MAX * 4)
-+
- static char longpath[2 * PATH_MAX] = "";
- static char *envp[] = { "IN_TEST=yes", NULL, NULL };
- static char *argv[] = { "execveat", "99", NULL };
-@@ -43,71 +46,85 @@ static int execveat_(int fd, const char *path, char **argv, char **envp,
- static int _check_execveat_fail(int fd, const char *path, int flags,
- 				int expected_errno, const char *errno_str)
- {
-+	char test_name[TEST_NAME_LEN];
- 	int rc;
- 
- 	errno = 0;
--	printf("Check failure of execveat(%d, '%s', %d) with %s... ",
--		fd, path?:"(null)", flags, errno_str);
-+	snprintf(test_name, sizeof(test_name),
-+		 "Check failure of execveat(%d, '%s', %d) with %s",
-+		 fd, path?:"(null)", flags, errno_str);
- 	rc = execveat_(fd, path, argv, envp, flags);
- 
- 	if (rc > 0) {
--		printf("[FAIL] (unexpected success from execveat(2))\n");
-+		ksft_print_msg("unexpected success from execveat(2)\n");
-+		ksft_test_result_fail("%s\n", test_name);
- 		return 1;
- 	}
- 	if (errno != expected_errno) {
--		printf("[FAIL] (expected errno %d (%s) not %d (%s)\n",
--			expected_errno, strerror(expected_errno),
--			errno, strerror(errno));
-+		ksft_print_msg("expected errno %d (%s) not %d (%s)\n",
-+			       expected_errno, strerror(expected_errno),
-+			       errno, strerror(errno));
-+		ksft_test_result_fail("%s\n", test_name);
- 		return 1;
- 	}
--	printf("[OK]\n");
-+	ksft_test_result_pass("%s\n", test_name);
- 	return 0;
- }
- 
- static int check_execveat_invoked_rc(int fd, const char *path, int flags,
- 				     int expected_rc, int expected_rc2)
- {
-+	char test_name[TEST_NAME_LEN];
- 	int status;
- 	int rc;
- 	pid_t child;
- 	int pathlen = path ? strlen(path) : 0;
- 
- 	if (pathlen > 40)
--		printf("Check success of execveat(%d, '%.20s...%s', %d)... ",
--			fd, path, (path + pathlen - 20), flags);
-+		snprintf(test_name, sizeof(test_name),
-+			 "Check success of execveat(%d, '%.20s...%s', %d)... ",
-+			 fd, path, (path + pathlen - 20), flags);
- 	else
--		printf("Check success of execveat(%d, '%s', %d)... ",
--			fd, path?:"(null)", flags);
-+		snprintf(test_name, sizeof(test_name),
-+			 "Check success of execveat(%d, '%s', %d)... ",
-+			 fd, path?:"(null)", flags);
-+
- 	child = fork();
- 	if (child < 0) {
--		printf("[FAIL] (fork() failed)\n");
-+		ksft_perror("fork() failed");
-+		ksft_test_result_fail("%s\n", test_name);
- 		return 1;
- 	}
- 	if (child == 0) {
- 		/* Child: do execveat(). */
- 		rc = execveat_(fd, path, argv, envp, flags);
--		printf("[FAIL]: execveat() failed, rc=%d errno=%d (%s)\n",
--			rc, errno, strerror(errno));
-+		ksft_print_msg("execveat() failed, rc=%d errno=%d (%s)\n",
-+			       rc, errno, strerror(errno));
-+		ksft_test_result_fail("%s\n", test_name);
- 		exit(1);  /* should not reach here */
- 	}
- 	/* Parent: wait for & check child's exit status. */
- 	rc = waitpid(child, &status, 0);
- 	if (rc != child) {
--		printf("[FAIL] (waitpid(%d,...) returned %d)\n", child, rc);
-+		ksft_print_msg("waitpid(%d,...) returned %d\n", child, rc);
-+		ksft_test_result_fail("%s\n", test_name);
- 		return 1;
- 	}
- 	if (!WIFEXITED(status)) {
--		printf("[FAIL] (child %d did not exit cleanly, status=%08x)\n",
--			child, status);
-+		ksft_print_msg("child %d did not exit cleanly, status=%08x\n",
-+			       child, status);
-+		ksft_test_result_fail("%s\n", test_name);
- 		return 1;
- 	}
- 	if ((WEXITSTATUS(status) != expected_rc) &&
- 	    (WEXITSTATUS(status) != expected_rc2)) {
--		printf("[FAIL] (child %d exited with %d not %d nor %d)\n",
--			child, WEXITSTATUS(status), expected_rc, expected_rc2);
-+		ksft_print_msg("child %d exited with %d not %d nor %d\n",
-+			       child, WEXITSTATUS(status), expected_rc,
-+			       expected_rc2);
-+		ksft_test_result_fail("%s\n", test_name);
- 		return 1;
- 	}
--	printf("[OK]\n");
-+	ksft_test_result_pass("%s\n", test_name);
- 	return 0;
- }
- 
-@@ -129,11 +146,9 @@ static int open_or_die(const char *filename, int flags)
- {
- 	int fd = open(filename, flags);
- 
--	if (fd < 0) {
--		printf("Failed to open '%s'; "
-+	if (fd < 0)
-+		ksft_exit_fail_msg("Failed to open '%s'; "
- 			"check prerequisites are available\n", filename);
--		exit(1);
--	}
- 	return fd;
- }
- 
-@@ -162,8 +177,7 @@ static int check_execveat_pathmax(int root_dfd, const char *src, int is_script)
- 		char *cwd = getcwd(NULL, 0);
- 
- 		if (!cwd) {
--			printf("Failed to getcwd(), errno=%d (%s)\n",
--			       errno, strerror(errno));
-+			ksft_perror("Failed to getcwd()");
- 			return 2;
- 		}
- 		strcpy(longpath, cwd);
-@@ -193,12 +207,12 @@ static int check_execveat_pathmax(int root_dfd, const char *src, int is_script)
- 	 */
- 	fd = open(longpath, O_RDONLY);
- 	if (fd > 0) {
--		printf("Invoke copy of '%s' via filename of length %zu:\n",
--			src, strlen(longpath));
-+		ksft_print_msg("Invoke copy of '%s' via filename of length %zu:\n",
-+			       src, strlen(longpath));
- 		fail += check_execveat(fd, "", AT_EMPTY_PATH);
- 	} else {
--		printf("Failed to open length %zu filename, errno=%d (%s)\n",
--			strlen(longpath), errno, strerror(errno));
-+		ksft_print_msg("Failed to open length %zu filename, errno=%d (%s)\n",
-+			       strlen(longpath), errno, strerror(errno));
- 		fail++;
- 	}
- 
-@@ -405,28 +419,31 @@ int main(int argc, char **argv)
- 		const char *in_test = getenv("IN_TEST");
- 
- 		if (verbose) {
--			printf("  invoked with:");
-+			ksft_print_msg("invoked with:\n");
- 			for (ii = 0; ii < argc; ii++)
--				printf(" [%d]='%s'", ii, argv[ii]);
--			printf("\n");
-+				ksft_print_msg("\t[%d]='%s\n'", ii, argv[ii]);
- 		}
- 
- 		/* Check expected environment transferred. */
- 		if (!in_test || strcmp(in_test, "yes") != 0) {
--			printf("[FAIL] (no IN_TEST=yes in env)\n");
-+			ksft_print_msg("no IN_TEST=yes in env\n");
- 			return 1;
- 		}
- 
- 		/* Use the final argument as an exit code. */
- 		rc = atoi(argv[argc - 1]);
--		fflush(stdout);
-+		exit(rc);
- 	} else {
-+		ksft_print_header();
-+		ksft_set_plan(TESTS_EXPECTED);
- 		prerequisites();
- 		if (verbose)
- 			envp[1] = "VERBOSE=1";
- 		rc = run_tests();
- 		if (rc > 0)
- 			printf("%d tests failed\n", rc);
-+		ksft_finished();
- 	}
-+
- 	return rc;
- }
-
--- 
-2.39.2
-
+Sounds good to me.
