@@ -2,181 +2,164 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55F037B2550
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Sep 2023 20:32:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 236F57B2559
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Sep 2023 20:35:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231954AbjI1Sct (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 28 Sep 2023 14:32:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55888 "EHLO
+        id S230239AbjI1SfQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 28 Sep 2023 14:35:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231808AbjI1Scs (ORCPT
+        with ESMTP id S232102AbjI1SfO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 28 Sep 2023 14:32:48 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C01BF
-        for <linux-kselftest@vger.kernel.org>; Thu, 28 Sep 2023 11:32:46 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-59f6492b415so129033267b3.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 28 Sep 2023 11:32:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695925966; x=1696530766; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Jxxk4KCIHoo6Dl11XcD1x5o63Vws+jZntrILzyholQE=;
-        b=UkY4vzdXozB9ZJFGSbjgebOwQ1LygJA0jGrBxYJxpsbLawnG9ne71gNbNlc0kAYE0N
-         skHunvvJ1PUXj0tWU4gZGh7OcQeaCHf65o+WsJ/FMd3QL8bEEskMTAYflPqIsQ7l1wH9
-         96qL5qyltLTNKKZjyU9B+Q/Y1m13xBXzG/Z006Ms2PBCNC5OijELFGZdAXnR+EbALott
-         gvZBoWbSIwJnIctUav9/U4++Jp4a4KElBSu0jZdoCOxXr1a7aiwtx+f+aaOZSANJG18g
-         oiNQTYx+8q4y+OpYbF4C6y5YIvgwUa4rEU3LjqdgEKpMR8wvkStaEU9lJ0YaQb6hpA6z
-         coJQ==
+        Thu, 28 Sep 2023 14:35:14 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 673651AB
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 Sep 2023 11:34:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1695926065;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tHgQXBAFMtt2xjDagTnzi+QIWg4ufIaPSkBrUwwCR20=;
+        b=c+frV9aYUCZxINBBhgkusJi0oYAOXq/QDlqCjplcMjAbZarMLm6rahrVWGqcXqo5sdNLyU
+        UUtzw+NIkzajm2kpG1Jue4m8f1uk+zCO6mZLTpPuY/wbE67Z0DJdMTOCeQnmRjUJ1/g1mn
+        lmzTQ5xSBMn/el+6a6K4epwJR8kMp0U=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-590-nbQnDwgvOiqyu7yknItemA-1; Thu, 28 Sep 2023 14:34:24 -0400
+X-MC-Unique: nbQnDwgvOiqyu7yknItemA-1
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-774292de453so295269585a.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 28 Sep 2023 11:34:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695925966; x=1696530766;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Jxxk4KCIHoo6Dl11XcD1x5o63Vws+jZntrILzyholQE=;
-        b=a0jHNTvmlR9xJj24Ws2DRgjPVmaXAVVOmHeOiv5Xr6JOHveJnWlUrKG4I3UPl86Fnk
-         gIOVpTWxlbsSQHhUx4M/OBZQYdJ9w4GrbnqJ0N9y/KWDRtRRfZhpjaQewXyCWjsWZig1
-         1V2529oieRqGulGtm+FJbVoRmCdFrbziybSbVeqZAP1/LmPkGxfYZka440cjO6rwz59s
-         hfjNsr3/xkrzeZxRldqzWm6Tp5gacCwVXRkG1huvvMHiqxRg2b2KjS8kRR5RfBzCd86b
-         81HfUN81f3ddz20E9n+4bqIr+G2TU+BySJPc+b6RCe+XCow6UP7l5Ah0M+Sx9qx9QWh7
-         NQ0A==
-X-Gm-Message-State: AOJu0YwPWhb8KFbXtGf4imTuTPU7rkQUuf/qQ4AEWLchgMeD/GD6snm3
-        KusK3XtRhBXGt6xpcW+sWdoqVqSFEG8d+hxv0n6giA==
-X-Google-Smtp-Source: AGHT+IFfM9d+nT1mmRvr6ki53RDJdZHiPMVC0Gaj5ZkuC3q5HagWNj/atr1+n5ELXtzcXCs1Xh1khy8oHmcY41lS/ks=
-X-Received: by 2002:a0d:d84c:0:b0:56c:e480:2b2b with SMTP id
- a73-20020a0dd84c000000b0056ce4802b2bmr1604583ywe.12.1695925965774; Thu, 28
- Sep 2023 11:32:45 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230923013148.1390521-1-surenb@google.com> <20230923013148.1390521-3-surenb@google.com>
- <CAG48ez1N2kryy08eo0dcJ5a9O-3xMT8aOrgrcD+CqBN=cBfdDw@mail.gmail.com>
- <03f95e90-82bd-6ee2-7c0d-d4dc5d3e15ee@redhat.com> <CAJuCfpHf6BWaf_k5dBx7mAz49kF5BwBhW_mUxu4E_p2iAy9-iA@mail.gmail.com>
- <9101f70c-0c0a-845b-4ab7-82edf71c7bac@redhat.com>
-In-Reply-To: <9101f70c-0c0a-845b-4ab7-82edf71c7bac@redhat.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Thu, 28 Sep 2023 11:32:34 -0700
-Message-ID: <CAJuCfpFUVO_8OkEAiiqAD5J_MbNXnSEX2TKv+nz8SYCFMa6j-w@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] userfaultfd: UFFDIO_REMAP uABI
+        d=1e100.net; s=20230601; t=1695926063; x=1696530863;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tHgQXBAFMtt2xjDagTnzi+QIWg4ufIaPSkBrUwwCR20=;
+        b=dUMNcFLc+xRlxkGOMjlG1plienihn1l7V+N3IMpePxdeuYm+kzITiY3Rcjx7vHHJTW
+         V9SH63fnu9C5WEFlRJX73JfGP7sNugH489eBCl386y3gisM+UDw7i+UqFjhph5P7iY9b
+         buPR9JPjLUAtgr3xkoxcLVyG3nx4BJGvNxAZ2BszCKMoX3AYz1lyewJ6LCB0AXM/Oh/f
+         Q85oDxgmjq6Hg72qWUZKHhbVKOs5mcBZqWZXYVRX1oEQv0Cc0GV+mfeHPUdaSgs8IPf3
+         wu7ztmFzMQHHltRDXlgCZPKcS6u5M88ibw5vubjzrYTuLmI2jS7XQiq0waQApAlJG3WC
+         pBug==
+X-Gm-Message-State: AOJu0YyYXdRuwUzcwlcToEsPYCkCyJ3ZEE/XXPMZTru+6kfcKT+iIMZm
+        QlreLkWpM1b2GjmoKTaWUUHIHCYeDtrZ0Ol/mELhaU8BuBi2o5QbEjpBjaj9qP2dYeJcdtmADcK
+        8f9Rwlu2FRcpYBH2ZAKoYC8ZwsZ6U
+X-Received: by 2002:a05:620a:46a4:b0:773:ad1f:3d5b with SMTP id bq36-20020a05620a46a400b00773ad1f3d5bmr2297128qkb.0.1695926063522;
+        Thu, 28 Sep 2023 11:34:23 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEV57Cs3i99fylAO+fmIhSC7kjkZzQuC8SMTvaoqr4J38m/9B5Rlx8C4OeUA5D72OFiWkiufg==
+X-Received: by 2002:a05:620a:46a4:b0:773:ad1f:3d5b with SMTP id bq36-20020a05620a46a400b00773ad1f3d5bmr2297110qkb.0.1695926063230;
+        Thu, 28 Sep 2023 11:34:23 -0700 (PDT)
+Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
+        by smtp.gmail.com with ESMTPSA id e15-20020a05620a12cf00b007756d233fbdsm1857612qkl.37.2023.09.28.11.34.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Sep 2023 11:34:22 -0700 (PDT)
+Date:   Thu, 28 Sep 2023 14:34:19 -0400
+From:   Peter Xu <peterx@redhat.com>
 To:     David Hildenbrand <david@redhat.com>
-Cc:     Jann Horn <jannh@google.com>, akpm@linux-foundation.org,
-        viro@zeniv.linux.org.uk, brauner@kernel.org, shuah@kernel.org,
-        aarcange@redhat.com, lokeshgidra@google.com, peterx@redhat.com,
-        hughd@google.com, mhocko@suse.com, axelrasmussen@google.com,
-        rppt@kernel.org, willy@infradead.org, Liam.Howlett@oracle.com,
-        zhangpeng362@huawei.com, bgeffon@google.com,
-        kaleshsingh@google.com, ngeoffray@google.com, jdduke@google.com,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+Cc:     Jann Horn <jannh@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
+        brauner@kernel.org, shuah@kernel.org, aarcange@redhat.com,
+        lokeshgidra@google.com, hughd@google.com, mhocko@suse.com,
+        axelrasmussen@google.com, rppt@kernel.org, willy@infradead.org,
+        Liam.Howlett@oracle.com, zhangpeng362@huawei.com,
+        bgeffon@google.com, kaleshsingh@google.com, ngeoffray@google.com,
+        jdduke@google.com, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH v2 2/3] userfaultfd: UFFDIO_REMAP uABI
+Message-ID: <ZRXHK3hbdjfQvCCp@x1n>
+References: <20230923013148.1390521-1-surenb@google.com>
+ <20230923013148.1390521-3-surenb@google.com>
+ <CAG48ez1N2kryy08eo0dcJ5a9O-3xMT8aOrgrcD+CqBN=cBfdDw@mail.gmail.com>
+ <03f95e90-82bd-6ee2-7c0d-d4dc5d3e15ee@redhat.com>
+ <ZRWo1daWBnwNz0/O@x1n>
+ <98b21e78-a90d-8b54-3659-e9b890be094f@redhat.com>
+ <ZRW2CBUDNks9RGQJ@x1n>
+ <85e5390c-660c-ef9e-b415-00ee71bc5cbf@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <85e5390c-660c-ef9e-b415-00ee71bc5cbf@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Sep 28, 2023 at 10:15=E2=80=AFAM David Hildenbrand <david@redhat.co=
-m> wrote:
->
-> On 27.09.23 20:25, Suren Baghdasaryan wrote:
-> >>
-> >> I have some cleanups pending for page_move_anon_rmap(), that moves the
-> >> SetPageAnonExclusive hunk out. Here we should be using
-> >> page_move_anon_rmap() [or rather, folio_move_anon_rmap() after my clea=
-nups]
-> >>
-> >> I'll send them out soonish.
-> >
-> > Should I keep this as is in my next version until you post the
-> > cleanups? I can add a TODO comment to convert it to
-> > folio_move_anon_rmap() once it's ready.
->
-> You should just be able to use page_move_anon_rmap() and whatever gets
-> in first cleans it up :)
+On Thu, Sep 28, 2023 at 07:51:18PM +0200, David Hildenbrand wrote:
+> On 28.09.23 19:21, Peter Xu wrote:
+> > On Thu, Sep 28, 2023 at 07:05:40PM +0200, David Hildenbrand wrote:
+> > > As described as reply to v1, without fork() and KSM, the PAE bit should
+> > > stick around. If that's not the case, we should investigate why.
+> > > 
+> > > If we ever support the post-fork case (which the comment above remap_pages()
+> > > excludes) we'll need good motivation why we'd want to make this
+> > > overly-complicated feature even more complicated.
+> > 
+> > The problem is DONTFORK is only a suggestion, but not yet restricted.  If
+> > someone reaches on top of some !PAE page on src it'll never gonna proceed
+> > and keep failing, iiuc.
+> 
+> Yes. It won't work if you fork() and not use DONTFORK on the src VMA. We
+> should document that as a limitation.
+> 
+> For example, you could return an error to the user that can just call
+> UFFDIO_COPY. (or to the UFFDIO_COPY from inside uffd code, but that's
+> probably ugly as well).
 
-Ack.
+We could indeed provide some special errno perhaps upon the PAE check, then
+document it explicitly in the man page and suggest resolutions (like
+DONTFORK) when user hit it.
 
->
-> >
-> >>
-> >>>> +       WRITE_ONCE(src_folio->index, linear_page_index(dst_vma,
-> >>>> +                                                     dst_addr)); >>=
- +
-> >>>> +       orig_src_pte =3D ptep_clear_flush(src_vma, src_addr, src_pte=
-);
-> >>>> +       orig_dst_pte =3D mk_pte(&src_folio->page, dst_vma->vm_page_p=
-rot);
-> >>>> +       orig_dst_pte =3D maybe_mkwrite(pte_mkdirty(orig_dst_pte),
-> >>>> +                                    dst_vma);
-> >>>
-> >>> I think there's still a theoretical issue here that you could fix by
-> >>> checking for the AnonExclusive flag, similar to the huge page case.
-> >>>
-> >>> Consider the following scenario:
-> >>>
-> >>> 1. process P1 does a write fault in a private anonymous VMA, creating
-> >>> and mapping a new anonymous page A1
-> >>> 2. process P1 forks and creates two children P2 and P3. afterwards, A=
-1
-> >>> is mapped in P1, P2 and P3 as a COW page, with mapcount 3.
-> >>> 3. process P1 removes its mapping of A1, dropping its mapcount to 2.
-> >>> 4. process P2 uses vmsplice() to grab a reference to A1 with get_user=
-_pages()
-> >>> 5. process P2 removes its mapping of A1, dropping its mapcount to 1.
-> >>>
-> >>> If at this point P3 does a write fault on its mapping of A1, it will
-> >>> still trigger copy-on-write thanks to the AnonExclusive mechanism; an=
-d
-> >>> this is necessary to avoid P3 mapping A1 as writable and writing data
-> >>> into it that will become visible to P2, if P2 and P3 are in different
-> >>> security contexts.
-> >>>
-> >>> But if P3 instead moves its mapping of A1 to another address with
-> >>> remap_anon_pte() which only does a page mapcount check, the
-> >>> maybe_mkwrite() will directly make the mapping writable, circumventin=
-g
-> >>> the AnonExclusive mechanism.
-> >>>
-> >>
-> >> Yes, can_change_pte_writable() contains the exact logic when we can tu=
-rn
-> >> something easily writable even if it wasn't writable before. which
-> >> includes that PageAnonExclusive is set. (but with uffd-wp or softdirty
-> >> tracking, there is more to consider)
-> >
-> > For uffd_remap can_change_pte_writable() would fail it VM_WRITE is not
-> > set, but we want remapping to work for RO memory as well. Are you
->
-> In a VMA without VM_WRITE you certainly wouldn't want to make PTEs
-> writable :) That's why that function just does a sanity check that it is
-> not called in strange context. So one would only call it if VM_WRITE is s=
-et.
->
-> > saying that a PageAnonExclusive() check alone would not be enough
-> > here?
->
-> There are some interesting questions to ask here:
->
-> 1) What happens if the old VMA has VM_SOFTDIRTY set but the new one not?
-> You most probably have to mark the PTE softdirty and not make it writable=
-.
->
-> 2) VM_UFFD_WP requires similar care I assume? Peter might know.
+> 
+> > 
+> > do_wp_page() doesn't have that issue of accuracy only because one round of
+> > CoW will just allocate a new page with PAE set guaranteed, which is pretty
+> > much self-heal and unnoticed.
+> 
+> Yes. But it might have to copy, at which point the whole optimization of
+> remap is gone :)
 
-Let me look closer into these cases.
-I'll also double-check if we need to support uffd_remap for R/O vmas.
-I assumed we do but I actually never checked.
-Thanks!
+Right, but that's fine IMHO because it should still be very corner case,
+definitely not expected to be the majority to start impact the performance
+results.
 
->
-> --
-> Cheers,
->
-> David / dhildenb
->
+> 
+> > 
+> > So it'll be great if we can have similar self-heal way for PAE.  If not, I
+> > think it's still fine we just always fail on !PAE src pages, but then maybe
+> > we should let the user know what's wrong, e.g., the user can just forgot to
+> > apply DONTFORK then forked.  And then the user hits error and don't know
+> > what happened.  Probably at least we should document it well in man pages.
+> > 
+> Yes, exactly.
+> 
+> > Another option can be we keep using folio_mapcount() for pte, and another
+> > helper (perhaps: _nr_pages_mapped==COMPOUND_MAPPED && _entire_mapcount==1)
+> > for thp.  But I know that's not ideal either.
+> 
+> As long as we only set the pte writable if PAE is set, we're good from a CVE
+> perspective. The other part is just simplicity of avoiding all these
+> mapcount+swapcount games where possible.
+> 
+> (one day folio_mapcount() might be faster -- I'm still working on that patch
+> in the bigger picture of handling PTE-mapped THP better)
+
+Sure.
+
+For now as long as we're crystal clear on the possibility of inaccuracy of
+PAE, it never hits besides fork() && !DONTFORK, and properly document it,
+then sounds good here.
+
+Thanks,
+
+-- 
+Peter Xu
+
