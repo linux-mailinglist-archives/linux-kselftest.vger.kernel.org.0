@@ -2,79 +2,73 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC8047B0F17
-	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Sep 2023 00:49:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E1747B0FD6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 28 Sep 2023 02:20:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229991AbjI0WtW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 27 Sep 2023 18:49:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41232 "EHLO
+        id S229493AbjI1AUC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 27 Sep 2023 20:20:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229954AbjI0WtV (ORCPT
+        with ESMTP id S229437AbjI1AUB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 27 Sep 2023 18:49:21 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 017131B2
-        for <linux-kselftest@vger.kernel.org>; Wed, 27 Sep 2023 15:49:15 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1c6052422acso36575ad.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 27 Sep 2023 15:49:15 -0700 (PDT)
+        Wed, 27 Sep 2023 20:20:01 -0400
+Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2F87BF
+        for <linux-kselftest@vger.kernel.org>; Wed, 27 Sep 2023 17:19:59 -0700 (PDT)
+Received: by mail-pl1-x64a.google.com with SMTP id d9443c01a7336-1c6147ea811so87672985ad.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 27 Sep 2023 17:19:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1695854955; x=1696459755; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XIJKJLaNcL8GDk+Ht7dCkCTcNn0oTRzFCuMLCDfzqz0=;
-        b=AaSwqqVeTdv/v3H+H80PAcofpbSf4vm8a0iBx5kRp/QN8d5Q7k4kEMAwranTVwK5DI
-         zxl0b+yUVWrp0Bfvlh94o6xMQohl7MzeA82Jf1T4ZnXrId3OwMnWUSOv81jl/yDlNN6N
-         ZMZuQ5pA6WIGvyZBa+lsdo3b22ubzzpFXw1tL7kF821Ych4NmYLEtRXfXat12nJO9IIN
-         8l3as0d5Vmxdy1O4+XMmZg4ivZ4hoq922Q7UVY363liccm1ZO8yIfjh1PTvOWgfrohHx
-         jecj7jeBZcIFrywKs5pFQeQwFqnYXCe+vO6ZwSn2zFptJ6C1BHyAeY2bb7lNtHrasfpr
-         2oVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1695854955; x=1696459755;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=google.com; s=20230601; t=1695860399; x=1696465199; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=XIJKJLaNcL8GDk+Ht7dCkCTcNn0oTRzFCuMLCDfzqz0=;
-        b=U0SMGrnt1BFBUr4HHBDblJjAQzqco5ZnpscrpXWFYQus4alhYGNS0upfSK/ugzkMqX
-         lTp41bq5xRYQFKN8cNI7FJx8RGunsf/NECFOCQk5nFVtjtT5BO/TiuCasI5owNwFKy+E
-         theMKaQqRLkMrwlqEDCUUSimNLWXdiuS/xtlnrY9JQ+hlcZuDESxneZCKM7K2vd+mAvb
-         G6CsyAjhKixxorTU+D+M5JGD9ybiHBdeno5TeS09PAYBE/B2DuQAt6KNh8fw7kPBhJh5
-         r6BTASlXuH6SBS4bA/hEH3Uwm29hNPYNsxcRFik8vQnCafgxivpDlnm2LhBxi15hi9kI
-         wdPg==
-X-Gm-Message-State: AOJu0YzagLEKJ0Si5edFwllosLIjWNqYye9eDau8ZtHDt9ZQCuga+1SR
-        uXl8+/migJdicnYRz1+XQLbtESfc1ouZ1qNRWa5jNQ==
-X-Google-Smtp-Source: AGHT+IFg4xs/UWNT30KLKAXtF/O8kFcQ5dG9ij6JaTG86Q1zxSkGAbGJpi6P6KLyxdxnH8Dbwsd8eB1Rrn4s8EKe6hI=
-X-Received: by 2002:a17:902:e751:b0:1c6:112f:5ceb with SMTP id
- p17-20020a170902e75100b001c6112f5cebmr562761plf.25.1695854955102; Wed, 27 Sep
- 2023 15:49:15 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230923013148.1390521-1-surenb@google.com> <20230923013148.1390521-3-surenb@google.com>
- <CAG48ez1N2kryy08eo0dcJ5a9O-3xMT8aOrgrcD+CqBN=cBfdDw@mail.gmail.com>
- <CAJuCfpGb5Amo9Sk0yyruJt9NKaYe9-y+5jmU442NSf3+VT5-dA@mail.gmail.com>
- <CAG48ez2WNOMwPo4OMVUHbS4mirwbqHUY5qUaaZ9DTkXdkzrjiQ@mail.gmail.com>
- <CAJuCfpGcsBE2XqPJSVo1gdE_O96gzS5=ET=u0uSBSX3Lj56CtA@mail.gmail.com> <CAJuCfpHY5zhkS0OPxOK-twb6pDJg6OpXZnPquw_9wBmbjFiF9Q@mail.gmail.com>
-In-Reply-To: <CAJuCfpHY5zhkS0OPxOK-twb6pDJg6OpXZnPquw_9wBmbjFiF9Q@mail.gmail.com>
-From:   Jann Horn <jannh@google.com>
-Date:   Thu, 28 Sep 2023 00:48:37 +0200
-Message-ID: <CAG48ez3w7kbetfhEd7trLhOKJYPw4jSVBeOC+psZZR84d-hJaw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] userfaultfd: UFFDIO_REMAP uABI
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
-        brauner@kernel.org, shuah@kernel.org, aarcange@redhat.com,
-        lokeshgidra@google.com, peterx@redhat.com, david@redhat.com,
-        hughd@google.com, mhocko@suse.com, axelrasmussen@google.com,
-        rppt@kernel.org, willy@infradead.org, Liam.Howlett@oracle.com,
-        zhangpeng362@huawei.com, bgeffon@google.com,
-        kaleshsingh@google.com, ngeoffray@google.com, jdduke@google.com,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kernel-team@android.com
+        bh=JIhlczPTAFSXJtuz0kr4uNehhoedtrBaBEaYSQ3/D3w=;
+        b=mdqi3CV6ogd+sLjUE0adY1tjTK8dTH8aEdvxS0QxhkeHAFu0CEAbbBC4MFijtqP1Ly
+         sjZTGe4VhUUb/M9MK4TbEOatIHvLNoIhsPHiP350mptcWfo4FF6STM6mL/vMFyLsSZyT
+         X7mnnqlnhUEEmmE4L+2M7AdtXBciHMTjvxlqNP2WFYUccCbdj2AnNTB2KQ+x1ujJZcnr
+         njQZL90vUj2nrWJOTZk4TWrwQ3bo5KBupnlCZ83mzkdvD6qdy+qZcubw71mooKyD+WTp
+         KimIF/iFxfNWmiysn9zEBCwU46D+J9XKcW+HSFh4ADA1egulhRU8BSKJv9NvKUv5n9Gu
+         T7hA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1695860399; x=1696465199;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JIhlczPTAFSXJtuz0kr4uNehhoedtrBaBEaYSQ3/D3w=;
+        b=ZvZ1gXFfWRIb4RPnRDfuJh8x1V3YAo1jDV19PGfaq4LA6m7FgGqoM9HLzByXqHHsoL
+         D/whyZ4SRywW3LnYBCMmgck7Jwdiuc7zTYAHHsECZ+DAvPcGBPQkZ0tPuorCVtpbyWTI
+         mss/CoOpfnxJK/xzPdh9TwBdbpUY+9J1zKDnuNAgt2i896pqShP09xN8JHqI/IE0y0Q/
+         rx74SFi8/ieOtk4a8qe79/Tema8uF+GDw/w8DAHCsOeDEJcytFdMys9WiQrLBqyVHakf
+         kcVrgjUgX9rALgOJM/Ix0wkZ4bzwvVJL5Ae5UTBji1+iCZq3uJ/6rHOYYeSbCzIwh/+D
+         Wkng==
+X-Gm-Message-State: AOJu0YzXFnFVfETMK4WS9h6+AkiB1TV39Jl7sCMIvUN3UXK/7fUuxEoo
+        0vUqRihlMLSSAw9qjuJACOxa+XSjLdM=
+X-Google-Smtp-Source: AGHT+IGCbuN35ynl7FnkIb26JwfUSQivcI5ht12Lhq63ANf0P98cgnGB/yAMFxzlpCJU6VRv0zB+soGU8eE=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:903:604:b0:1c0:d418:8806 with SMTP id
+ kg4-20020a170903060400b001c0d4188806mr44172plb.12.1695860399477; Wed, 27 Sep
+ 2023 17:19:59 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Wed, 27 Sep 2023 17:19:51 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.42.0.582.g8ccd20d70d-goog
+Message-ID: <20230928001956.924301-1-seanjc@google.com>
+Subject: [PATCH 0/5] KVM: x86: Fix breakage in KVM_SET_XSAVE's ABI
+From:   Sean Christopherson <seanjc@google.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
+        Tyler Stachecki <stachecki.tyler@gmail.com>,
+        Leonardo Bras <leobras@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,62 +76,65 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Sep 27, 2023 at 11:08=E2=80=AFPM Suren Baghdasaryan <surenb@google.=
-com> wrote:
-> On Wed, Sep 27, 2023 at 1:42=E2=80=AFPM Suren Baghdasaryan <surenb@google=
-.com> wrote:
-> >
-> > On Wed, Sep 27, 2023 at 1:04=E2=80=AFPM Jann Horn <jannh@google.com> wr=
-ote:
-> > >
-> > > On Wed, Sep 27, 2023 at 8:08=E2=80=AFPM Suren Baghdasaryan <surenb@go=
-ogle.com> wrote:
-> > > > On Wed, Sep 27, 2023 at 5:47=E2=80=AFAM Jann Horn <jannh@google.com=
-> wrote:
-> > > > > On Sat, Sep 23, 2023 at 3:31=E2=80=AFAM Suren Baghdasaryan <suren=
-b@google.com> wrote:
-> > > > > > +               dst_pmdval =3D pmdp_get_lockless(dst_pmd);
-> > > > > > +               /*
-> > > > > > +                * If the dst_pmd is mapped as THP don't overri=
-de it and just
-> > > > > > +                * be strict. If dst_pmd changes into TPH after=
- this check, the
-> > > > > > +                * remap_pages_huge_pmd() will detect the chang=
-e and retry
-> > > > > > +                * while remap_pages_pte() will detect the chan=
-ge and fail.
-> > > > > > +                */
-> > > > > > +               if (unlikely(pmd_trans_huge(dst_pmdval))) {
-> > > > > > +                       err =3D -EEXIST;
-> > > > > > +                       break;
-> > > > > > +               }
-> > > > > > +
-> > > > > > +               ptl =3D pmd_trans_huge_lock(src_pmd, src_vma);
-> > > > > > +               if (ptl && !pmd_trans_huge(*src_pmd)) {
-> > > > > > +                       spin_unlock(ptl);
-> > > > > > +                       ptl =3D NULL;
-> > > > > > +               }
-> > > > >
-> > > > > This still looks wrong - we do still have to split_huge_pmd()
-> > > > > somewhere so that remap_pages_pte() works.
-> > > >
-> > > > Hmm, I guess this extra check is not even needed...
-> > >
-> > > Hm, and instead we'd bail at the pte_offset_map_nolock() in
-> > > remap_pages_pte()? I guess that's unusual but works...
-> >
-> > Yes, that's what I was thinking but I agree, that seems fragile. Maybe
-> > just bail out early if (ptl && !pmd_trans_huge())?
->
-> No, actually we can still handle is_swap_pmd() case by splitting it
-> and remapping the individual ptes. So, I can bail out only in case of
-> pmd_devmap().
+Rework how KVM limits guest-unsupported xfeatures to effectively hide
+only when saving state for userspace (KVM_GET_XSAVE), i.e. to let userspace
+load all host-supported xfeatures (via KVM_SET_XSAVE) irrespective of
+what features have been exposed to the guest.
 
-FWIW I only learned today that "real" swap PMDs don't actually exist -
-only migration entries, which are encoded as swap PMDs, exist. You can
-see that when you look through the cases that something like
-__split_huge_pmd() or zap_pmd_range() actually handles.
+The effect on KVM_SET_XSAVE was knowingly done by commit ad856280ddea
+("x86/kvm/fpu: Limit guest user_xfeatures to supported bits of XCR0"):
 
-So I think if you wanted to handle all the PMD types properly here
-without splitting, you could do that without _too_ much extra code.
-But idk if it's worth it.
+    As a bonus, it will also fail if userspace tries to set fpu features
+    (with the KVM_SET_XSAVE ioctl) that are not compatible to the guest
+    configuration.  Such features will never be returned by KVM_GET_XSAVE
+    or KVM_GET_XSAVE2.
+
+Peventing userspace from doing stupid things is usually a good idea, but in
+this case restricting KVM_SET_XSAVE actually exacerbated the problem that
+commit ad856280ddea was fixing.  As reported by Tyler, rejecting KVM_SET_XSAVE
+for guest-unsupported xfeatures breaks live migration from a kernel without
+commit ad856280ddea, to a kernel with ad856280ddea.  I.e. from a kernel that
+saves guest-unsupported xfeatures to a kernel that doesn't allow loading
+guest-unuspported xfeatures.
+
+To make matters even worse, QEMU doesn't terminate if KVM_SET_XSAVE fails,
+and so the end result is that the live migration results (possibly silent)
+guest data corruption instead of a failed migration.
+
+Patch 1 refactors the FPU code to let KVM pass in a mask of which xfeatures
+to save, patch 2 fixes KVM by passing in guest_supported_xcr0 instead of
+modifying user_xfeatures directly.
+
+Patches 3-5 are regression tests.
+
+I have no objection if anyone wants patches 1 and 2 squashed together, I
+split them purely to make review easier.
+
+Note, this doesn't fix the scenario where a guest is migrated from a "bad"
+to a "good" kernel and the target host doesn't support the over-saved set
+of xfeatures.  I don't see a way to safely handle that in the kernel without
+an opt-in, which more or less defeats the purpose of handling it in KVM.
+
+Sean Christopherson (5):
+  x86/fpu: Allow caller to constrain xfeatures when copying to uabi
+    buffer
+  KVM: x86: Constrain guest-supported xfeatures only at KVM_GET_XSAVE{2}
+  KVM: selftests: Touch relevant XSAVE state in guest for state test
+  KVM: selftests: Load XSAVE state into untouched vCPU during state test
+  KVM: selftests: Force load all supported XSAVE state in state test
+
+ arch/x86/include/asm/fpu/api.h                |   3 +-
+ arch/x86/kernel/fpu/core.c                    |   5 +-
+ arch/x86/kernel/fpu/xstate.c                  |  12 +-
+ arch/x86/kernel/fpu/xstate.h                  |   3 +-
+ arch/x86/kvm/cpuid.c                          |   8 --
+ arch/x86/kvm/x86.c                            |  37 +++---
+ .../selftests/kvm/include/x86_64/processor.h  |  23 ++++
+ .../testing/selftests/kvm/x86_64/state_test.c | 110 +++++++++++++++++-
+ 8 files changed, 168 insertions(+), 33 deletions(-)
+
+
+base-commit: 5804c19b80bf625c6a9925317f845e497434d6d3
+-- 
+2.42.0.582.g8ccd20d70d-goog
+
