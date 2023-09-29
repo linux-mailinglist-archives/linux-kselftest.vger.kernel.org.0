@@ -2,240 +2,299 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E7A627B2C33
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Sep 2023 08:09:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2831A7B2D35
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Sep 2023 09:49:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232651AbjI2GJ5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 29 Sep 2023 02:09:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38432 "EHLO
+        id S232606AbjI2HtV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 29 Sep 2023 03:49:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231894AbjI2GJ4 (ORCPT
+        with ESMTP id S231774AbjI2HtU (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 29 Sep 2023 02:09:56 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5226B92;
-        Thu, 28 Sep 2023 23:09:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695967795; x=1727503795;
-  h=date:from:to:cc:subject:message-id:references:
-   content-transfer-encoding:in-reply-to:mime-version;
-  bh=A1/SjQTZUfmptWMZTEA6dgw2SOuCsC0Wsknvpvd1xvg=;
-  b=UqmR7/+wosRWoLM24RdSjLWzFBlGRUdBwxZZMtfqYbBhfosVc4e8dguG
-   +q8gsw0w1lPpMi5W+OVuYFA1pp0JH/Ou8T1MhSF3k1diZCVgv2jIGN0Gk
-   JB6H/AocaWXRjotum3xcX+O4tcsI4CGV0RJuhkwD7u2LnkXqy0oTXeVW3
-   X4bc7AmkMBS5eu8nLWhKm0oNh9VxUdqCfVIUSw/H9Yc4s0KCDzTq3Nh8/
-   DrTLD53yAX+BoCGruLfFsbWkFC7oQ+wg7TxVlLu3CU3VErrINU50ybEJE
-   OZsIcgL0sreDrtqmknkggWetKopxvR1vOrwHhBNb2rlKxv2QZ02f/hleR
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10847"; a="361617700"
-X-IronPort-AV: E=Sophos;i="6.03,186,1694761200"; 
-   d="scan'208";a="361617700"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Sep 2023 23:09:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10847"; a="1080819289"
-X-IronPort-AV: E=Sophos;i="6.03,186,1694761200"; 
-   d="scan'208";a="1080819289"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga005.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 28 Sep 2023 23:09:54 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32; Thu, 28 Sep 2023 23:09:54 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32; Thu, 28 Sep 2023 23:09:53 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32 via Frontend Transport; Thu, 28 Sep 2023 23:09:53 -0700
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (104.47.51.49) by
- edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.32; Thu, 28 Sep 2023 23:09:50 -0700
+        Fri, 29 Sep 2023 03:49:20 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2059.outbound.protection.outlook.com [40.107.244.59])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E45D319F;
+        Fri, 29 Sep 2023 00:49:16 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mIWJwaHLQnebUBaYHNac2jINYOfsxtLGX5c8HVTnC3x8DSR0OwH1x6fQi6R25LGshGeEjmPoCeCdElNfGrTc6fyA2VJjiJmce/7J4Q08TAX9dNwKVORUEwQ0mVNdLbqtuDPBO366zFK/ErWBYruzfm8b0o264Z+0FHyG4r2vbzhwIlHB3F7SUso6sZ/ZKqJwomBW3CAGw+TkKiDMbqaXpJKXgs54gEVs284NNc/xpgq1UOFpGe8beNy5hTPk+UzGyPHK3inroz8OhifIUJuusJFkxTJMyQKCGaOENVHFHd1aZxaI0n3AaEDdSsOhT2J4AGKXoANeo4GX6TjjckCk4A==
+ b=Q94M+is7q3waojNwcQuWE2XeNChhs0GuC7BNl+0H6ujwbD3RILejKG3F88DL/Vjr6eOYfeF9qMMUqGc5pocWhBfY7rhU/r0cg6X++anChX/7J2chh3efBw6cTcpTZ9NLBcqBJe+6+5gjL5C5ZmdbHe354pzAUnnUNVbvFcSoafF8QC7nSt1ByMxTZRoR1ByAIWCt9FtUNM9q8Y9G9WGyTeldF9NgX35StF5SFGGih3JS5l//4iNAPuwO7tYIwExEkKDpdK+Vb4UGiZCStR0v9Z6c4ftYGxHx+1FryUahuFivkt+ZFj9pE1zSa9rOu7gbW7cD1PGEWiNTsDvbRc9quA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=oDe36qGbzEa9hdeEwApdbvJwyhjqtgASrzxLFwcjVBE=;
- b=oXXsc29HJu+zxADDD/uW0pWCRcWteayR3aQ1UHmMO7uMRce/RtziKTElZQnSxKi/VcFaEVHLkykVo02UFczGOnAfd3XF9GPbpesTCMmd6V8w1kMo+Z26NCb53DE33U5dLC4SfRj8KFO04dcQ3j3Ecj8uKfAeU4tNyNGVnq20Q/u5/pW5VU6H59zsA1AN7L5Lnp8esbVmHFQd1YvspwHYs+DTyStaoJuSLGA1hIQ1fdhj9wVv0RaRyhefhlP6BDWcF1j7r6fZZbXrQlAaqJ6vH7fETb6JY6Go1A/tcR5gQBDBPWuQQx/F+hLgYp+HtoWRMibSXKmKTWbqT58wmDdYfg==
+ bh=N2RdSw+xQvJS0O0O4bMwI1IERweMkCzXhgqJmmk6V4Y=;
+ b=jqIwjmEwUi7f4N2H5M/vPiGAudnrkhTe+m+8xU6Bmj2guIp6gvMIVLJobX/35EqJoYFRQbhBNCtI3TaTGpDDhSuxhZzwbIzFvPY0oMTh09PBXukl3HtUieeZ/Lh9VdbjdfP5+5poJC/XTp8W4eGqaU5yCcfLjRjoZVaVvJvN4vNSbQ+esDlGhAm9GFH5FcLfE0MXJ7stD4fhACPQQEIeWBk9gPhyzKnD1Z7lsTCeaahCLoR01yAogk1Q6eCyPOC/l6fFNc95eJtevktTE9tY8M8uzNFLuFdFp7bwXEHBXkGGKntycdFHJTvesMzVNCJAZMovsQ76/EI+Nmju1GkHYQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=N2RdSw+xQvJS0O0O4bMwI1IERweMkCzXhgqJmmk6V4Y=;
+ b=1t3r1rlmE+JI/08A50cGeRZpTeviPr8O2ijwBX80+ah2SDH6xVqjHQg9LsG9dZh/LgUH1R1/skva5d5nOdYxAYwFD1lvyyDWfVIKaU6uLqfVoc0idarNyKsPGjT4X7fZ2hizEbgPuHfdTgX7EPk/NnJCF0fQggUlgV3V0ygp1Es=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MN0PR11MB6231.namprd11.prod.outlook.com (2603:10b6:208:3c4::15)
- by DS0PR11MB7263.namprd11.prod.outlook.com (2603:10b6:8:13f::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6813.21; Fri, 29 Sep
- 2023 06:09:47 +0000
-Received: from MN0PR11MB6231.namprd11.prod.outlook.com
- ([fe80::fd1b:a3b7:11a6:4bc3]) by MN0PR11MB6231.namprd11.prod.outlook.com
- ([fe80::fd1b:a3b7:11a6:4bc3%5]) with mapi id 15.20.6838.024; Fri, 29 Sep 2023
- 06:09:47 +0000
-Date:   Fri, 29 Sep 2023 08:09:42 +0200
-From:   Maciej =?utf-8?Q?Wiecz=C3=B3r-Retman?= 
-        <maciej.wieczor-retman@intel.com>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-CC:     Fenghua Yu <fenghua.yu@intel.com>, Shuah Khan <shuah@kernel.org>,
-        <ilpo.jarvinen@linux.intel.com>, <linux-kernel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v4 1/2] selftests/resctrl: Fix schemata write error check
-Message-ID: <ga5vrewvoz2ijynaueycukmd6ipbg5ocbiwt6wlgjwsppx6b7b@ioo6xtrax2px>
-References: <cover.1695369120.git.maciej.wieczor-retman@intel.com>
- <5e17ed39ffb8d6bd530c057aa04e3ffb997573a9.1695369120.git.maciej.wieczor-retman@intel.com>
- <322fb9ff-f3f4-45df-9b3f-524125ca6101@intel.com>
- <mrhrlwtpquqqyzznzqru2m5tfbz7cmtk76zxtamq76ssqthz6g@njfi4qvjclih>
- <efcfa0a3-3350-74af-5aa7-8306ab206b56@intel.com>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DS7PR12MB6165.namprd12.prod.outlook.com (2603:10b6:8:9a::21) by
+ DM6PR12MB4529.namprd12.prod.outlook.com (2603:10b6:5:2ab::16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6838.26; Fri, 29 Sep 2023 07:49:11 +0000
+Received: from DS7PR12MB6165.namprd12.prod.outlook.com
+ ([fe80::495c:3afa:1762:efd5]) by DS7PR12MB6165.namprd12.prod.outlook.com
+ ([fe80::495c:3afa:1762:efd5%4]) with mapi id 15.20.6813.017; Fri, 29 Sep 2023
+ 07:49:11 +0000
+Message-ID: <438bb1f9-8663-690b-6696-15233b0ef100@amd.com>
+Date:   Fri, 29 Sep 2023 13:18:58 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2] selftests/amd-pstate: Fix broken paths to run
+ workloads in amd-pstate-ut
+To:     Mario Limonciello <mario.limonciello@amd.com>, ray.huang@amd.com,
+        shuah@kernel.org
+Cc:     sukrut.bellary@gmail.com, li.meng@amd.com, gautham.shenoy@amd.com,
+        wyes.karny@amd.com, Perry.Yuan@amd.com, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20230919103351.48681-1-swapnil.sapkal@amd.com>
+ <2d5a83d8-2101-4c36-ac37-be0375b0067f@amd.com>
+Content-Language: en-US
+From:   Swapnil Sapkal <Swapnil.Sapkal@amd.com>
+In-Reply-To: <2d5a83d8-2101-4c36-ac37-be0375b0067f@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <efcfa0a3-3350-74af-5aa7-8306ab206b56@intel.com>
-X-ClientProxiedBy: BE1P281CA0140.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:b10:7c::20) To MN0PR11MB6231.namprd11.prod.outlook.com
- (2603:10b6:208:3c4::15)
+X-ClientProxiedBy: PN2PR01CA0028.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:25::33) To DS7PR12MB6165.namprd12.prod.outlook.com
+ (2603:10b6:8:9a::21)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR11MB6231:EE_|DS0PR11MB7263:EE_
-X-MS-Office365-Filtering-Correlation-Id: dac442a3-6bf7-4989-cbb1-08dbc0b2aee3
+X-MS-TrafficTypeDiagnostic: DS7PR12MB6165:EE_|DM6PR12MB4529:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8bb92118-9b87-41ba-8e84-08dbc0c09136
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QDna8kaZMVQQcnVzcz5iHmYquHYUqfj7nu6IJnfD8MAIHm9V3O1ClhT28ksm9utkFfXlCN+7QIZXyYNCxV/IW2JseluCj5djKN7mTwrxf1MB38PXtAmg7aaVpvo5aZEIH0NGmDkapx2d9wx6DmazU+rQ7iyig56dowLUV9NCXlwGE7g7CZGJwxbKiNBqGMuDAdALOlakZPvT+E/fqIEhiGYbJvhBORZrMK/EV46xUbxls+EkfcHPHn/UsjXp1KzVK46JnGtQIKVTaLqnaFv9PNMjkZnvwaZ318wFak0qfISQg0uVfhio+l9EE4RTBx4u9m4hV737/bWg1sWecOqBN28u7WWkLmglGSe/Cj0qLnFs4jGb+Opc9wrCF4NTkZP3FY2kG78mYvHObT1Xnq1Rgj6gRXuozu4+v5M19OMifrXK84t9q3cwmQwtYy2niE1Tad5CdfclUtDBIFpLLSk/T70Do+an4cxzE/0XXmkg7PSsInJeStR190h9bK5ksAzqmkyySSRZeT1F+llkjBOtpokZiS4jgv5WIfSToZy4JqfIvk64EZnVDhRiTi9kPNa1
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6231.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(376002)(39860400002)(346002)(366004)(136003)(396003)(230922051799003)(451199024)(64100799003)(1800799009)(186009)(53546011)(38100700002)(6512007)(6506007)(6486002)(9686003)(6666004)(83380400001)(82960400001)(86362001)(33716001)(66574015)(26005)(54906003)(41300700001)(2906002)(66476007)(66556008)(8936002)(316002)(6636002)(5660300002)(4326008)(6862004)(66946007)(8676002)(478600001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: f0258XUeRSZzOnE3lzSDwQ2EnQReK7LflY/5GhB90U9iyxN7/0cGp7Ez06DkZduXnlKHOKbLF+Hbb5hfwfXCAKRN3zY/JEEs9UFoknc4ukrXU8sUywupjVLrewl+zcwOfwUYfDh2MqAasxmZ72pVndYJ1zJRviJlgJh9aaJM8OYTYEbs6TxExEODOrPX2WAt7cZD+R1gOYhNKAfV3sAOcjDtm8y5VZmNEC9zXXgEZWpGil4zsu6qcDQJxD3JO5fgNrR9nh6VSLw4SrLhnlhSioi6AlF40klHAos8U3CEVTjzDpcGLvXIK/4BxBuIcIa/+1SEYbPy4kv4sLpvW0WWmz+85IkzDByXQ4goSLefs11fULuWtQvTh9llmwH0AEV4G8pEFR1jjWNMWaI37xUW2L1dI9n8Avf199vvZTfFyRcAb8vmGIjKbpmlpXFmGpZ3E+jYhjoqNbaCPAB8bK3rMRrxB4eBgjz6R38R6Cp7tocqO74lX6XYZ2wjoZrimhT9EUHKAg5hhAvpQBIrRPSYTTd6qnJ2HbMpoKCilbQDkhRvUjtemOlOatfsVYV7I6EzenCLLBd+N8t/B9nXP2z9Z9rVDNsPrOzjMdbs+sxtzjgI5jZThNpW0Pbjlh3riDA9paEQdt1YZPTmVb1rz17svg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB6165.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(376002)(346002)(396003)(136003)(366004)(230922051799003)(186009)(64100799003)(1800799009)(451199024)(2906002)(5660300002)(31686004)(8936002)(4326008)(8676002)(26005)(36756003)(2616005)(41300700001)(66556008)(66946007)(66476007)(316002)(53546011)(6506007)(6666004)(83380400001)(6486002)(478600001)(6512007)(38100700002)(86362001)(31696002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?G8ckOqkfSNWxizSMHVHCI7dSyWhjhHcZaiUescN7hWHvT+l8XAABz/SO3i?=
- =?iso-8859-1?Q?zl/3T6KADGuv3a3g8FhqkinbzMi7VafczdCmGfhwKf1BkQeVZJEP1FeSLS?=
- =?iso-8859-1?Q?dZ0EwoTH9ly4D3IHn9cUl9y2YK2dr/OFIOUznU4ryJ165z7rJMq84KxXWE?=
- =?iso-8859-1?Q?PgDJaTxU0UILA481/W4WzRonFSTKCd3ofa1pESLxPYiz+Wzs9WW/Q5ucDz?=
- =?iso-8859-1?Q?7GUknChxe1NatgwaGNqZnIkzdoU6kpxp9aBoLepy98JbAclznc4LDUesi5?=
- =?iso-8859-1?Q?YzZJMHN1Fa8dPe85/AijcohzbcI4EJ2bdbVeBLok0+T29vu5QLLTGYwNoG?=
- =?iso-8859-1?Q?jeNpJ9lIKJO/xHmS31IzVzSYYm8Qp2HokyG2T6bngT24plLfYcebPyckAy?=
- =?iso-8859-1?Q?9FfSQRQm2iNo4jDoozi/U11HMPKJx3UxLdPK/BXWgmC7uqn4P1MspnH356?=
- =?iso-8859-1?Q?4avKr1K8XNRBDfoVkm3RezUsNrMy4VFCLOzPMWdTQN0IAIopbOz5cVOFvy?=
- =?iso-8859-1?Q?bwUtjzBOVinTxzsPiy++qAqWmbQUFTwmzDigjorl9bAkkRH5udBB0Q3q8R?=
- =?iso-8859-1?Q?s62EEi8XOybYCIyg1lW82z3uLkBqfxO8AyW80BEd/k5fQ4RUH401c0fINi?=
- =?iso-8859-1?Q?wcu9sz0Ac7zge/tUZiabXEwV0PyL6MbU/7a+0w128IZyb0eKSudB2/Z+k+?=
- =?iso-8859-1?Q?VPam0x9lAy6cwnSHOE0zoIQhvx3XyBfZjvNqgT3glt8NBBHuluTud4xrjU?=
- =?iso-8859-1?Q?Do2JuaR8T53yFmcl1yn3G+njBzyHKsEpiVz2Pm0fwuDCtaE/lkS2cb5cdm?=
- =?iso-8859-1?Q?tZzJMToejgCyYRxfGO+UplRtX2CV/aI8pF1LYKZDt1do2qUIZJOaxIY5Ss?=
- =?iso-8859-1?Q?AoYKTkJ4R2GFMFKn/JGkTXOrCjSKuGDtFbeK77SmLgfAC2UHTeYAoMOzSk?=
- =?iso-8859-1?Q?AbUXy7B1Mp7vEYILz18IHb6msVE/B8gG5s0eN+/4Ay/b3hXa8/NLggFnmC?=
- =?iso-8859-1?Q?JSW942tKnFShoHE9zubreRgWebYZ+9/LBRY2DHzmpYjmhRAQpis/PHJ3f1?=
- =?iso-8859-1?Q?5oovuCe0pYONpaXo7nzGnV3Vj1Ng46qHKvk/svvgTP9Jj+lFN6zern7CAk?=
- =?iso-8859-1?Q?KsMmkiCxYkYFrmCDopzaAUkUK8bFXWlAhTZ/Uz6LgT2EtamQxY6nvfsxIY?=
- =?iso-8859-1?Q?ersWZz3cExlUvJ3xrOZi5h26gPKl9prNkROPXobQUh4XtnMLH8B+1nwjDI?=
- =?iso-8859-1?Q?mheDG8oseH8AH4/Mac348jo1JrlpvZF7zRGXDz11bBXFZH2G+fD0pXGyxx?=
- =?iso-8859-1?Q?rvcwNVY8U3aLGf7NpMqPdHKue66HBT2TE3YS2RCissZnwXV52PqIQA1J6Q?=
- =?iso-8859-1?Q?nNyFQkQgH+28CKLAnrmEBinOmxBd/bZmRx3WhV7hpVQQ2kAAE4SwCwiWOA?=
- =?iso-8859-1?Q?pX9U5SpfhvoOMv3Y+xK+KNNC0vlSlXQ8mbA5PTJPxezmd0FdqNGSh248UE?=
- =?iso-8859-1?Q?RfFbvqiarZueuM/I4vg6cOZA71EM15DC2rlExDsWv2Ikr29+SY5pUrTZzx?=
- =?iso-8859-1?Q?ov5PN88F9G7Ys77P+OZF8PMXhJ/opo5TOgjtwcYEZn4BOHOYfkETbxjWrU?=
- =?iso-8859-1?Q?j74pvoH6IANM/B35weP6+KJJxde6F0y6SFp+sNlDsRzuMT7NtVsP7h3i8x?=
- =?iso-8859-1?Q?SCI9XDm2oEElyxZJZYE=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: dac442a3-6bf7-4989-cbb1-08dbc0b2aee3
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6231.namprd11.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aWVwYkxwdDZQVjlXS1o4NFZsOUp3WXNMd2Z3R0Ixc3kyN1haa1FnL2NDRlF1?=
+ =?utf-8?B?SS9tMm9sNHFXQ0NaaE1aK014Sk95RlpObmtIOTNySEpkd05WdUVwVnFSYTI3?=
+ =?utf-8?B?U25Mc1BydDBHZjIxYVRzSDgwMExoZm03amo5QkpjdjRqdHQ3Um5xdERLWFNF?=
+ =?utf-8?B?VDBhdHgvK2NweTBYbmhHV3dlN0FVUjF5S0NBcmpsRTNNc0FvQ0hWbEFyeXlN?=
+ =?utf-8?B?MHlhT04rNE0vM1dBTmJVYmtXS2VTbWFpZkNpZ2ZGbTYxWTVvT0IzRU9UVlYr?=
+ =?utf-8?B?VkdwWllSMHVpOTJwZVdIZnZPN3JMemx5WXY3aGpSTHlRek1MY1BMM3E5WXVs?=
+ =?utf-8?B?aDlid2NxM3Y4UU5vZWNDbG9BcUNUOXMvd25UdHB6ZXM5QzZSNVZBbmU2MFEw?=
+ =?utf-8?B?Z1RoRFlmNEhLcnZMMVRLSTgybkRhMTVKUS9oWEw3ekljb25RdjRicDAwZjAr?=
+ =?utf-8?B?L3I4akdjNUxDdmkva1JDWWdvUzBSTzFMZCtYRG5lbU1lMFJVNFpXa0VBNGxu?=
+ =?utf-8?B?LytFS3NSNTg0YklkWG9BWDc4UmtUMUlZMEEvbmZwalVONHprQnVIZkM2OTg0?=
+ =?utf-8?B?YWdUYk9keHMvc01rUVlIcTQ1VXl2Z1pQYzkzckNJVGdIc2I0QXZGSUJXVjIx?=
+ =?utf-8?B?VGxqZy8yS3RIbEpCTFJ5Y2ZVTFhPN04vaTJlYm5YeHUyQ0dGRFFRdXdTR2h0?=
+ =?utf-8?B?S0psdy8xb25DR1cvanUyR3JHK09MZEE0K0xmK1U3VXJ3bS94eUs2L2N6eXRF?=
+ =?utf-8?B?cmpVQTB3Rm1zTWtmb0tQN3ZockhOOEZKLzNkOHJESUVEK21CWDlFNzl0NEQx?=
+ =?utf-8?B?UkUzYUQwc1djVFl4Y1V0WW9RRW9CeTlLU2lZM0Uza21teTc0bU1XWHd5RFFV?=
+ =?utf-8?B?SkdmV3k2L0NNYTVNT3lBM3prNHdoK1I5OU9HMFRiRDIxdGJSVFl4S1pvT21s?=
+ =?utf-8?B?YzhiamZ5TEwxUHhVK2kvOWY0UGR1aERha05Md0NpUUdpbGh0Sk5QOUpCV0to?=
+ =?utf-8?B?cXQzK3NQMGs0end3cVlkOHFFeGZRVEx3enk4OXkwMUNPandpaklLM3c3NGJR?=
+ =?utf-8?B?UmFRclhjcE5nYTBFTDZOTTBnei9DVy83OTJjZzBKWnZ3WlYxTnJZc2dydnA5?=
+ =?utf-8?B?SkliR3dBVHZRRnJzU1hvSTdTYW4wSjgvcGZIdm1NM1FrUmJhOEtwcmFLYU91?=
+ =?utf-8?B?YnNuUHB4MFh3aS9XUWF0WXpWUVc4a0k0R3Baa2JIQmdEeUtSbVdWOW1USkx4?=
+ =?utf-8?B?cHV5L09JbnFDQ0RIVkVMR0tzcnFTNU9YcE5vRHVSRXBJdHVDcXU2eTlDV0FZ?=
+ =?utf-8?B?K2VnYlZUSXYrRWdSUGlicTV3MkoxMXdVc2Y1Wjl2WWNCekEwZnVxZzRWN3lx?=
+ =?utf-8?B?dDU0bG5aRGI2eUxsYTU3eG1sbytPb0NsYTZsbzkydWw5a2g1NlhWWHdrWUhR?=
+ =?utf-8?B?amhXbFMyZTlhcE1PMnI2ZnFNZy9zajhidEQ1MEN5WUZ0OFo2TTAyZnJoU0ZG?=
+ =?utf-8?B?Z0dsMUM4MlZXMEV4SWFYVWNhTnd0OXZZelpQekN3UFNVNmlwYlRzdCtyazc4?=
+ =?utf-8?B?ckw0c0p4N2RvTWdybnJ3WktzeS9ZSG9lRFNMZUhJNTh1NzhDN1VtdGcrRFFp?=
+ =?utf-8?B?Nk9iQmlyYXBTaGF1SkVUQVRiK3dWWUhuN3BXKzhZcVhnbHorb2tJS3VpWnN6?=
+ =?utf-8?B?L09oa2hLNHRUcXVxa1lCMlpXSWlCNmpHdU1KaXJKdlhFS0pOYUE4RXlSUmJ6?=
+ =?utf-8?B?a1E2bCt5VzhLaVdkWjdIUTZXQjM1M0hqMzRDd1BMVC93eVF1cHQxVjUxeG93?=
+ =?utf-8?B?MW5qVTFhMS9pajVpNWRnT3ZHdGJyQzVLekpJb1FRQTFZZ0dIaktndDAwVG5F?=
+ =?utf-8?B?ZDJVajNCTnNJVDhmWHVhU3cxVHNEbDJUN2hwWXYxT29WNUJTQm1uSFJiVVY2?=
+ =?utf-8?B?WDlQS2EwOVIrUStGZ2JOYmZhT3d1cW5JN3NDSXRVQVl5dFV1OFVWVmdJZFdG?=
+ =?utf-8?B?QXozaFgvZVdKTCtKeVJNMDlZUXpWUTNKQXFoeGNxK0ZlSjUwWWVDWHVYZ2dZ?=
+ =?utf-8?B?RjJFVVo0c1pjUnpwN1R1VzllTmVMY2NaSW03UG1wdW1HWC9jVndEVnU0VGQx?=
+ =?utf-8?Q?prpdCcttqKGwVj2dqDDWA2IVL?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8bb92118-9b87-41ba-8e84-08dbc0c09136
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB6165.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2023 06:09:47.5293
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2023 07:49:10.9006
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: EyLT3aUWveTxeaL+cPcgciCjoHkKvGEXHXNuSgXj/hZNVLPbRvYBRAPpcby86y0i3teSWYPJ+WBXdmx+Bln5vEYFy0tplp045wyts1YLsZI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB7263
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: AvVBS55XHhOVsU/sIwU8m6GqqgcsUTAIpG5sb7FZJzv3X0BD8oy3EhP0a3BinI8c40hCe4szq005AH5OqYlYWw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4529
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2023-09-28 at 14:25:23 -0700, Reinette Chatre wrote:
->Hi Maciej,
->
->On 9/27/2023 11:46 PM, Maciej Wiecz�r-Retman wrote:
->> On 2023-09-27 at 15:15:06 -0700, Reinette Chatre wrote:
->>> On 9/22/2023 1:10 AM, Maciej Wieczor-Retman wrote:
->
->>>> diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
->>>> index 3a8111362d26..edc8fc6e44b0 100644
->>>> --- a/tools/testing/selftests/resctrl/resctrlfs.c
->>>> +++ b/tools/testing/selftests/resctrl/resctrlfs.c
->>>> @@ -8,6 +8,7 @@
->>>>   *    Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>,
->>>>   *    Fenghua Yu <fenghua.yu@intel.com>
->>>>   */
->>>> +#include <fcntl.h>
->>>>  #include <limits.h>
->>>>  
->>>>  #include "resctrl.h"
->>>> @@ -490,9 +491,8 @@ int write_bm_pid_to_resctrl(pid_t bm_pid, char *ctrlgrp, char *mongrp,
->>>>   */
->>>>  int write_schemata(char *ctrlgrp, char *schemata, int cpu_no, char *resctrl_val)
->>>>  {
->>>> -	char controlgroup[1024], schema[1024], reason[64];
->>>> -	int resource_id, ret = 0;
->>>> -	FILE *fp;
->>>> +	char controlgroup[1024], schema[1024], reason[128];
->>>> +	int resource_id, fd, schema_len = -1, ret = 0;
->>>
->>> I am trying to understand the schema_len initialization. Could
->>> you please elaborate why you chose -1? I'm a bit concerned with
->>> the robustness here with it being used as an unsigned integer
->>> in write() and also the negative array index later.
->> 
->> My idea was that if the initial value for schema_len was 0, then if
->> resctrl_val wouldn't equal any of MBA_STR, MBM_STR, CAT_STR, CMT_STR
->
->Ensuring that resctrl_val is equal to one of these seems to be the
->first thing write_schemata() does.
+Hello Mario,
 
-Right, sorry, then I guess initializing it to zero isn't a problem.
+Thanks for taking a look at this patch.
 
->> values schema_len would stay zero and write nothing.
->
->Your alternative writes "-1". write() is declared as:
->	ssize_t write(int fd, const void *buf, size_t count);
->
->note that "count" is size_t, which is an unsigned value. Providing
->it -1 is thus a very large number and likely to cause overflow. In fact
->if I even try to compile a program where the compiler can figure out
->count will be -1 it fails the compile (stringop-overflow).
+On 9/23/2023 3:52 AM, Mario Limonciello wrote:
+> On 9/19/2023 05:33, Swapnil Sapkal wrote:
+>> In selftests/amd-pstate, tbench and gitsource microbenchmarks are used to
+>> compare the performance with different governors. In Current
+>> implementation relative path to run `amd_pstate_tracer.py`
+>> broken. Fixed this by using absolute paths.
+>> Also selftests/amd-pstate uses distro `perf` to capture stats while running
+>> these microbenchmarks. Distro `perf` is not working with upstream
+>> kernel. Fixed this by providing an option to give the perf binary path.
+>>
+> 
+> This should be multiple separate patches, at least two.
+> 
+Sure, I will update this in v3.
 
-I tried compiling and running by passing a value with scanf to write()
-(so the compiler doesn't know it's a negative one) just to check if
-it behaves and write() was returning a negative one. But yes, the fact
-it's unsigned means it's not a reliable way to catch this error.
+>> Signed-off-by: Swapnil Sapkal <swapnil.sapkal@amd.com>
+>> ---
+>>   .../x86/amd_pstate_tracer/amd_pstate_trace.py |  2 +-
+>>   .../testing/selftests/amd-pstate/gitsource.sh | 14 +++++++-----
+>>   tools/testing/selftests/amd-pstate/run.sh     | 22 +++++++++++++------
+>>   tools/testing/selftests/amd-pstate/tbench.sh  |  4 ++--
+>>   4 files changed, 27 insertions(+), 15 deletions(-)
+>>
+>> diff --git a/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py b/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
+>> index 904df0ea0a1e..2448bb07973f 100755
+>> --- a/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
+>> +++ b/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
+>> @@ -30,7 +30,7 @@ import getopt
+>>   import Gnuplot
+>>   from numpy import *
+>>   from decimal import *
+>> -sys.path.append('../intel_pstate_tracer')
+>> +sys.path.append(os.path.join(os.path.dirname(__file__), '../intel_pstate_tracer'))
+>>   #import intel_pstate_tracer
+>>   import intel_pstate_tracer as ipt
+>> diff --git a/tools/testing/selftests/amd-pstate/gitsource.sh b/tools/testing/selftests/amd-pstate/gitsource.sh
+>> index 5f2171f0116d..c327444d3506 100755
+>> --- a/tools/testing/selftests/amd-pstate/gitsource.sh
+>> +++ b/tools/testing/selftests/amd-pstate/gitsource.sh
+>> @@ -66,12 +66,15 @@ post_clear_gitsource()
+>>   install_gitsource()
+>>   {
+>> -    if [ ! -d $git_name ]; then
+>> +    if [ ! -d $SCRIPTDIR/$git_name ]; then
+>> +        BACKUP_DIR=$(pwd)
+>> +        cd $SCRIPTDIR
+>>           printf "Download gitsource, please wait a moment ...\n\n"
+>>           wget -O $git_tar $gitsource_url > /dev/null 2>&1
+>>           printf "Tar gitsource ...\n\n"
+>>           tar -xzf $git_tar
+>> +        cd $BACKUP_DIR
+>>       fi
+>>   }
+>> @@ -79,12 +82,13 @@ install_gitsource()
+>>   run_gitsource()
+>>   {
+>>       echo "Launching amd pstate tracer for $1 #$2 tracer_interval: $TRACER_INTERVAL"
+>> -    ./amd_pstate_trace.py -n tracer-gitsource-$1-$2 -i $TRACER_INTERVAL > /dev/null 2>&1 &
+>> +    $SCRIPTDIR/../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py -n tracer-gitsource-$1-$2 -i $TRACER_INTERVAL > /dev/null 2>&1 &
+>>       printf "Make and test gitsource for $1 #$2 make_cpus: $MAKE_CPUS\n"
+>> -    cd $git_name
+>> -    perf stat -a --per-socket -I 1000 -e power/energy-pkg/ /usr/bin/time -o ../$OUTFILE_GIT.time-gitsource-$1-$2.log make test -j$MAKE_CPUS > ../$OUTFILE_GIT-perf-$1-$2.log 2>&1
+>> -    cd ..
+>> +    BACKUP_DIR=$(pwd)
+>> +    cd $SCRIPTDIR/$git_name
+>> +    $PERF stat -a --per-socket -I 1000 -e power/energy-pkg/ /usr/bin/time -o $BACKUP_DIR/$OUTFILE_GIT.time-gitsource-$1-$2.log make test -j$MAKE_CPUS > $BACKUP_DIR/$OUTFILE_GIT-perf-$1-$2.log 2>&1
+>> +    cd $BACKUP_DIR
+>>       for job in `jobs -p`
+>>       do
+>> diff --git a/tools/testing/selftests/amd-pstate/run.sh b/tools/testing/selftests/amd-pstate/run.sh
+>> index de4d8e9c9565..0803e70b04da 100755
+>> --- a/tools/testing/selftests/amd-pstate/run.sh
+>> +++ b/tools/testing/selftests/amd-pstate/run.sh
+>> @@ -8,9 +8,11 @@ else
+>>       FILE_MAIN=DONE
+>>   fi
+>> -source basic.sh
+>> -source tbench.sh
+>> -source gitsource.sh
+>> +SCRIPTDIR=`dirname "$0"`
+>> +
+>> +source $SCRIPTDIR/basic.sh
+>> +source $SCRIPTDIR/tbench.sh
+>> +source $SCRIPTDIR/gitsource.sh
+> 
+> Rather than hardcoding $SCRIPTDIR/../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py in multiple places, how about you delcare a new variable here?
+> 
+> TRACER=$SCRIPTDIR/../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py
+> 
+> Then all the commands can be called with $TRACER instead.
+> 
+> Furthermore if there needs to be flexibility for multiple calling paths in the future (say in tree vs in filessytem) then you can easily add another case right here that is:
+> 
+> if [ ! -f $TRACER ]; then
+>      TRACER=foo/bar/baz
+> fi
+> 
+This is a good suggestion. I will update this in v3.
 
->> I think it would be difficult to debug such an error because even later
->> in ksft_print_msg the requested schema would get printed as if there was
->> no error. In the case I mentioned above the function will just error out
->> which I assume could be helpful.
->
->You seem to rely on write() to cleanly catch giving it bad data.
->
->> Other solutions that can accomplish the same goal would be checking
->> write() not only for negative values but also for zero (since in
->> here this is pretty much an error). Or checking schema_len for only
->> positive values after the block of code where it gets assigned a
->> value from sprintf.
->> 
->> Are any of the above safer or more logical in your opinion?
->
->There is no error checking on schema_len. After it has been initialized it
->can be checked for errors and write_schemata() can be exited immediately if
->an error was encountered without attempting the write().
-
-Okay, thanks a lot for pointing all this out. I'll do just a less than
-one check and move the initial value to zero.
-
--- 
-Kind regards
-Maciej Wiecz�r-Retman
+>>   # amd-pstate-ut only run on x86/x86_64 AMD systems.
+>>   ARCH=$(uname -m 2>/dev/null | sed -e 's/i.86/x86/' -e 's/x86_64/x86/')
+>> @@ -22,6 +24,7 @@ OUTFILE=selftest
+>>   OUTFILE_TBENCH="$OUTFILE.tbench"
+>>   OUTFILE_GIT="$OUTFILE.gitsource"
+>> +PERF=/usr/bin/perf
+>>   SYSFS=
+>>   CPUROOT=
+>>   CPUFREQROOT=
+>> @@ -149,8 +152,9 @@ help()
+>>            gitsource: Gitsource testing.>]
+>>       [-t <tbench time limit>]
+>>       [-p <tbench process number>]
+>> -    [-l <loop times for tbench>]
+>> +    [-l <loop times for tbench/gitsource>]
+>>       [-i <amd tracer interval>]
+>> +    [-b <perf binary>]
+>>       [-m <comparative test: acpi-cpufreq>]
+>>       \n"
+>>       exit 2
+>> @@ -158,7 +162,7 @@ help()
+>>   parse_arguments()
+>>   {
+>> -    while getopts ho:c:t:p:l:i:m: arg
+>> +    while getopts ho:c:t:p:l:i:b:m: arg
+>>       do
+>>           case $arg in
+>>               h) # --help
+>> @@ -189,6 +193,10 @@ parse_arguments()
+>>                   TRACER_INTERVAL=$OPTARG
+>>                   ;;
+>> +            b) # --perf-binary
+>> +                PERF=`realpath $OPTARG`
+>> +                ;;
+>> +
+>>               m) # --comparative-test
+>>                   COMPARATIVE_TEST=$OPTARG
+>>                   ;;
+>> @@ -202,8 +210,8 @@ parse_arguments()
+>>   command_perf()
+>>   {
+>> -    if ! command -v perf > /dev/null; then
+>> -        echo $msg please install perf. >&2
+>> +    if ! $PERF -v; then
+>> +        echo $msg please install perf or provide perf binary path as argument >&2
+>>           exit $ksft_skip
+>>       fi
+>>   }
+>> diff --git a/tools/testing/selftests/amd-pstate/tbench.sh b/tools/testing/selftests/amd-pstate/tbench.sh
+>> index 49c9850341f6..70e5863e74ea 100755
+>> --- a/tools/testing/selftests/amd-pstate/tbench.sh
+>> +++ b/tools/testing/selftests/amd-pstate/tbench.sh
+>> @@ -64,11 +64,11 @@ post_clear_tbench()
+>>   run_tbench()
+>>   {
+>>       echo "Launching amd pstate tracer for $1 #$2 tracer_interval: $TRACER_INTERVAL"
+>> -    ./amd_pstate_trace.py -n tracer-tbench-$1-$2 -i $TRACER_INTERVAL > /dev/null 2>&1 &
+>> +    $SCRIPTDIR/../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py -n tracer-tbench-$1-$2 -i $TRACER_INTERVAL > /dev/null 2>&1 &
+>>       printf "Test tbench for $1 #$2 time_limit: $TIME_LIMIT procs_num: $PROCESS_NUM\n"
+>>       tbench_srv > /dev/null 2>&1 &
+>> -    perf stat -a --per-socket -I 1000 -e power/energy-pkg/ tbench -t $TIME_LIMIT $PROCESS_NUM > $OUTFILE_TBENCH-perf-$1-$2.log 2>&1
+>> +    $PERF stat -a --per-socket -I 1000 -e power/energy-pkg/ tbench -t $TIME_LIMIT $PROCESS_NUM > $OUTFILE_TBENCH-perf-$1-$2.log 2>&1
+>>       pid=`pidof tbench_srv`
+>>       kill $pid
+> 
+--
+Thanks and Regards,
+Swapnil
