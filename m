@@ -2,57 +2,66 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F9787B3142
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Sep 2023 13:22:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C61E7B31F0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Sep 2023 14:00:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233082AbjI2LWJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 29 Sep 2023 07:22:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57626 "EHLO
+        id S233114AbjI2MAN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 29 Sep 2023 08:00:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233112AbjI2LWG (ORCPT
+        with ESMTP id S233120AbjI2MAM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 29 Sep 2023 07:22:06 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C3F9CC3;
-        Fri, 29 Sep 2023 04:22:05 -0700 (PDT)
+        Fri, 29 Sep 2023 08:00:12 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A1E81B7;
+        Fri, 29 Sep 2023 05:00:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695986525; x=1727522525;
+  t=1695988809; x=1727524809;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=sp0x4fJkDtvf5U3jrcchNzXDHSx4PqVE55/imOH1bT4=;
-  b=KtqU73ntjdlMA8bbKymzsMKOI+2StQ5rHpXz7sQWr0sgC6Ywwywwd7eF
-   7eCDUlAy4KlGz7ZxBOpRXQMq2i40VDMbxp8M3R7iN8mxFou2gu7icVKvO
-   pfrc7uMunmsNpCKmfTwsW2pb/mwBIIXluQJUDfikog0mPsDC0o+nSIAvR
-   1FMw9T8LvwkeRc8hyynMXWpVkOnQnnFu+9Gytct3hHVlUZAhnHWUOLpeb
-   I7i2iV5Kho1rAfDpa+QVVLbpw1kEoTap7wg/Fr6xPqc6BGbUNBWyk0YWN
-   EpmLf8SN7m+5jk5nfaFZlY8kjG51WVd7Wel2T4K5TDR6bVds3EJDvRxJt
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10847"; a="468558553"
+  bh=vqMu1eaMKLT320FeSo+Mfd/dosITNJtghbKV2Sdwp5A=;
+  b=lWdaErhmgUZsH/AZdgh+9wQtglvgutIPNO1PlQVAui0Md6+K9NFxCkrB
+   t3NxAJ5uLSrlr+69/wqv4Fbi4/VFUZeIw3DMCUCebbMCgnOPHT3RZ9Mey
+   0s0hYJjFqOjXrSv3NzLuEFfv1C5hXyhozyFhOi9Nyh7mB/L6We3mL4tRA
+   CMU50N5Yj0Um2xk8rIR36eSg5aGQzr1Vl6oBpHEUP9W+yW13s7w//xHcr
+   k2QJgDk+3YEOiHtITgtOeA0gZkcYluLokWwn9tXXBkQu979wa+TC5L2Dh
+   6oZEa08Q5itGEi+rZM/fkGgiNg/Rm2/0zFM37hQglGORxILRMjRQ9Jdkk
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10847"; a="362528251"
 X-IronPort-AV: E=Sophos;i="6.03,187,1694761200"; 
-   d="scan'208";a="468558553"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2023 04:22:04 -0700
+   d="scan'208";a="362528251"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2023 04:59:58 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10847"; a="923571201"
+X-IronPort-AV: E=McAfee;i="6600,9927,10847"; a="840254567"
 X-IronPort-AV: E=Sophos;i="6.03,187,1694761200"; 
-   d="scan'208";a="923571201"
+   d="scan'208";a="840254567"
 Received: from valeks2x-mobl.ger.corp.intel.com (HELO localhost) ([10.252.53.242])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2023 04:22:01 -0700
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2023 04:59:51 -0700
 From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        =?UTF-8?q?Maciej=20Wiecz=C3=B3r-Retman?= 
-        <maciej.wieczor-retman@intel.com>,
-        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v3 7/7] selftests/resctrl: Reduce failures due to outliers in MBA/MBM tests
-Date:   Fri, 29 Sep 2023 14:20:39 +0300
-Message-Id: <20230929112039.7488-8-ilpo.jarvinen@linux.intel.com>
+To:     linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Alexandru Gagniuc <mr.nuke.me@gmail.com>,
+        Krishna chaitanya chundru <quic_krichai@quicinc.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     Alex Deucher <alexdeucher@gmail.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Subject: [PATCH v3 10/10] selftests/pcie_bwctrl: Create selftests
+Date:   Fri, 29 Sep 2023 14:57:23 +0300
+Message-Id: <20230929115723.7864-11-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230929112039.7488-1-ilpo.jarvinen@linux.intel.com>
-References: <20230929112039.7488-1-ilpo.jarvinen@linux.intel.com>
+In-Reply-To: <20230929115723.7864-1-ilpo.jarvinen@linux.intel.com>
+References: <20230929115723.7864-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -65,59 +74,263 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The initial value of 5% chosen for the maximum allowed percentage
-difference between resctrl mbm value and IMC mbm value in commit
-06bd03a57f8c ("selftests/resctrl: Fix MBA/MBM results reporting
-format") was "randomly chosen value" (as admitted by the changelog).
+Create selftests for PCIe BW control through the PCIe cooling device
+sysfs interface.
 
-When running tests in our lab across a large number platforms, 5%
-difference upper bound for success seems a bit on the low side for the
-MBA and MBM tests. Some platforms produce outliers that are slightly
-above that, typically 6-7%, which leads MBA/MBM test frequently
-failing.
+First, the BW control selftest finds the PCIe port to test with. By
+default, the PCIe port with the highest bus speed is selected but
+another PCIe port can be provided with -d parameter.
 
-Replace the "randomly chosen value" with a success bound that is based
-on those measurements across large number of platforms by relaxing the
-MBA/MBM success bound to 8%. The relaxed bound removes the failures due
-the frequent outliers.
+The actual test steps the cur_state of the cooling device one-by-one
+from max_state to what the cur_state was initially. The speed change
+is confirmed by observing the current_link_speed for the corresponding
+PCIe port.
 
-Fixes: 06bd03a57f8c ("selftests/resctrl: Fix MBA/MBM results reporting format")
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Tested-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
-Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
-Reviewed-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
-Cc: <stable@vger.kernel.org>
 ---
- tools/testing/selftests/resctrl/mba_test.c | 2 +-
- tools/testing/selftests/resctrl/mbm_test.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ MAINTAINERS                                   |   1 +
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/pcie_bwctrl/Makefile  |   2 +
+ .../pcie_bwctrl/set_pcie_cooling_state.sh     | 122 ++++++++++++++++++
+ .../selftests/pcie_bwctrl/set_pcie_speed.sh   |  67 ++++++++++
+ 5 files changed, 193 insertions(+)
+ create mode 100644 tools/testing/selftests/pcie_bwctrl/Makefile
+ create mode 100755 tools/testing/selftests/pcie_bwctrl/set_pcie_cooling_state.sh
+ create mode 100755 tools/testing/selftests/pcie_bwctrl/set_pcie_speed.sh
 
-diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
-index cf8284dadcb2..d3bf4368341e 100644
---- a/tools/testing/selftests/resctrl/mba_test.c
-+++ b/tools/testing/selftests/resctrl/mba_test.c
-@@ -12,7 +12,7 @@
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 40dd7c0b154d..1a35f75323fd 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -16576,6 +16576,7 @@ S:	Supported
+ F:	drivers/pci/pcie/bwctrl.c
+ F:	drivers/thermal/pcie_cooling.c
+ F:	include/linux/pci-bwctrl.h
++F:	tools/testing/selftests/pcie_bwctrl/
  
- #define RESULT_FILE_NAME	"result_mba"
- #define NUM_OF_RUNS		5
--#define MAX_DIFF_PERCENT	5
-+#define MAX_DIFF_PERCENT	8
- #define ALLOCATION_MAX		100
- #define ALLOCATION_MIN		10
- #define ALLOCATION_STEP		10
-diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
-index 1ae131a2e246..d3c0d30c676a 100644
---- a/tools/testing/selftests/resctrl/mbm_test.c
-+++ b/tools/testing/selftests/resctrl/mbm_test.c
-@@ -11,7 +11,7 @@
- #include "resctrl.h"
- 
- #define RESULT_FILE_NAME	"result_mbm"
--#define MAX_DIFF_PERCENT	5
-+#define MAX_DIFF_PERCENT	8
- #define NUM_OF_RUNS		5
- 
- static int
+ PCIE DRIVER FOR AMAZON ANNAPURNA LABS
+ M:	Jonathan Chocron <jonnyc@amazon.com>
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 42806add0114..18ad9acd440a 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -59,6 +59,7 @@ TARGETS += net/mptcp
+ TARGETS += net/openvswitch
+ TARGETS += netfilter
+ TARGETS += nsfs
++TARGETS += pcie_bwctrl
+ TARGETS += perf_events
+ TARGETS += pidfd
+ TARGETS += pid_namespace
+diff --git a/tools/testing/selftests/pcie_bwctrl/Makefile b/tools/testing/selftests/pcie_bwctrl/Makefile
+new file mode 100644
+index 000000000000..3e84e26341d1
+--- /dev/null
++++ b/tools/testing/selftests/pcie_bwctrl/Makefile
+@@ -0,0 +1,2 @@
++TEST_PROGS = set_pcie_cooling_state.sh
++include ../lib.mk
+diff --git a/tools/testing/selftests/pcie_bwctrl/set_pcie_cooling_state.sh b/tools/testing/selftests/pcie_bwctrl/set_pcie_cooling_state.sh
+new file mode 100755
+index 000000000000..3a8f91f0309e
+--- /dev/null
++++ b/tools/testing/selftests/pcie_bwctrl/set_pcie_cooling_state.sh
+@@ -0,0 +1,122 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0-or-later
++
++SYSFS=
++# Kselftest framework requirement - SKIP code is 4.
++ksft_skip=4
++retval=0
++skipmsg="skip all tests:"
++
++PCIEPORTTYPE="PCIe_Port_Link_Speed"
++
++prerequisite()
++{
++	local ports
++
++	if [ $UID != 0 ]; then
++		echo $skipmsg must be run as root >&2
++		exit $ksft_skip
++	fi
++
++	SYSFS=`mount -t sysfs | head -1 | awk '{ print $3 }'`
++
++	if [ ! -d "$SYSFS" ]; then
++		echo $skipmsg sysfs is not mounted >&2
++		exit $ksft_skip
++	fi
++
++	if ! ls $SYSFS/class/thermal/cooling_device* > /dev/null 2>&1; then
++		echo $skipmsg thermal cooling devices missing >&2
++		exit $ksft_skip
++        fi
++
++	ports=`grep -e "^$PCIEPORTTYPE" $SYSFS/class/thermal/cooling_device*/type | wc -l`
++	if [ $ports -eq 0 ]; then
++		echo $skipmsg pcie cooling devices missing >&2
++		exit $ksft_skip
++	fi
++}
++
++testport=
++find_pcie_port()
++{
++	local patt="$1"
++	local pcieports
++	local max
++	local cur
++	local delta
++	local bestdelta=-1
++
++	pcieports=`grep -l -F -e "$patt" /sys/class/thermal/cooling_device*/type`
++	if [ -z "$pcieports" ]; then
++		return
++	fi
++	pcieports=${pcieports//\/type/}
++	# Find the port with the highest PCIe Link Speed
++	for port in $pcieports; do
++		max=`cat $port/max_state`
++		cur=`cat $port/cur_state`
++		delta=$((max-cur))
++		if [ $delta -gt $bestdelta ]; then
++			testport="$port"
++			bestdelta=$delta
++		fi
++	done
++}
++
++sysfspcidev=
++find_sysfs_pci_dev()
++{
++	local typefile="$1/type"
++	local pcidir
++
++	pcidir="$SYSFS/bus/pci/devices/`sed -e "s|^${PCIEPORTTYPE}_||g" $typefile`"
++
++	if [ -r "$pcidir/current_link_speed" ]; then
++		sysfspcidev="$pcidir/current_link_speed"
++	fi
++}
++
++usage()
++{
++	echo "Usage $0 [ -d dev ]"
++	echo -e "\t-d: PCIe port BDF string (e.g., 0000:00:04.0)"
++}
++
++pattern="$PCIEPORTTYPE"
++parse_arguments()
++{
++	while getopts d:h opt; do
++		case $opt in
++			h)
++				usage "$0"
++				exit 0
++				;;
++			d)
++				pattern="$PCIEPORTTYPE_$OPTARG"
++				;;
++			*)
++				usage "$0"
++				exit 0
++				;;
++		esac
++	done
++}
++
++parse_arguments "$@"
++prerequisite
++find_pcie_port "$pattern"
++if [ -z "$testport" ]; then
++	echo $skipmsg "pcie cooling device not found from sysfs" >&2
++	exit $ksft_skip
++fi
++find_sysfs_pci_dev "$testport"
++if [ -z "$sysfspcidev" ]; then
++	echo $skipmsg "PCIe port device not found from sysfs" >&2
++	exit $ksft_skip
++fi
++
++./set_pcie_speed.sh "$testport" "$sysfspcidev"
++retval=$?
++
++exit $retval
+diff --git a/tools/testing/selftests/pcie_bwctrl/set_pcie_speed.sh b/tools/testing/selftests/pcie_bwctrl/set_pcie_speed.sh
+new file mode 100755
+index 000000000000..584596949312
+--- /dev/null
++++ b/tools/testing/selftests/pcie_bwctrl/set_pcie_speed.sh
+@@ -0,0 +1,67 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0-or-later
++
++set -e
++
++TESTNAME=set_pcie_speed
++
++declare -a PCIELINKSPEED=(
++	"2.5 GT/s PCIe"
++	"5.0 GT/s PCIe"
++	"8.0 GT/s PCIe"
++	"16.0 GT/s PCIe"
++	"32.0 GT/s PCIe"
++	"64.0 GT/s PCIe"
++)
++
++# Kselftest framework requirement - SKIP code is 4.
++ksft_skip=4
++retval=0
++
++coolingdev="$1"
++statefile="$coolingdev/cur_state"
++maxfile="$coolingdev/max_state"
++linkspeedfile="$2"
++
++oldstate=`cat $statefile`
++maxstate=`cat $maxfile`
++
++set_state()
++{
++	local state=$1
++	local linkspeed
++	local expected_linkspeed
++
++	echo $state > $statefile
++
++	sleep 1
++
++	linkspeed="`cat $linkspeedfile`"
++	expected_linkspeed=$((maxstate-state))
++	expected_str="${PCIELINKSPEED[$expected_linkspeed]}"
++	if [ ! "${expected_str}" = "${linkspeed}" ]; then
++		echo "$TESTNAME failed: expected: ${expected_str}; got ${linkspeed}"
++		retval=1
++	fi
++}
++
++cleanup_skip ()
++{
++	set_state $oldstate
++	exit $ksft_skip
++}
++
++trap cleanup_skip EXIT
++
++echo "$TESTNAME: testing states $maxstate .. $oldstate with $coolingdev"
++for i in $(seq $maxstate -1 $oldstate); do
++	set_state "$i"
++done
++
++trap EXIT
++if [ $retval -eq 0 ]; then
++	echo "$TESTNAME [PASS]"
++else
++	echo "$TESTNAME [FAIL]"
++fi
++exit $retval
 -- 
 2.30.2
 
