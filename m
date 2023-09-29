@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D624A7B313E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Sep 2023 13:22:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F9787B3142
+	for <lists+linux-kselftest@lfdr.de>; Fri, 29 Sep 2023 13:22:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233088AbjI2LWE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 29 Sep 2023 07:22:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37968 "EHLO
+        id S233082AbjI2LWJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 29 Sep 2023 07:22:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233102AbjI2LWA (ORCPT
+        with ESMTP id S233112AbjI2LWG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 29 Sep 2023 07:22:00 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F109CD3;
-        Fri, 29 Sep 2023 04:21:55 -0700 (PDT)
+        Fri, 29 Sep 2023 07:22:06 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C3F9CC3;
+        Fri, 29 Sep 2023 04:22:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1695986515; x=1727522515;
+  t=1695986525; x=1727522525;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=5l0ZHuykukESFgWvvhf6YnavKoa3byGUAMZS0+yfFSI=;
-  b=HXE2UCMY2u3nmGx39Avlik5FQtNktHAMvCTOEW4nAKH+JPSGEnWxH4dk
-   7KeP9KcqhBiGpiwxpe4joj/D5ePcwU0TazNd5sEBwsceEwSc1zrgSEap1
-   htUbr3dCiuSm0zr1HG+NztHeLWaUXPc/2jc2hAF3oDECxO70z/+NwTTy+
-   +Il+8gMXE2kJhOiBlm4H4xr4r9mIZQ9HLAHEDpu4GS1cc6yRCOLAwENOt
-   1KlJ8fFecIKJCL62I+qSQ0tV55PbMf6uvlylJqNGsBgggdEo45cvC3U0t
-   2TLTBPO+J8Qh/LMWQ9ZrQiL57M2p1tLSiOOx5Tmr1UxO7/lInUGbHaIs+
+  bh=sp0x4fJkDtvf5U3jrcchNzXDHSx4PqVE55/imOH1bT4=;
+  b=KtqU73ntjdlMA8bbKymzsMKOI+2StQ5rHpXz7sQWr0sgC6Ywwywwd7eF
+   7eCDUlAy4KlGz7ZxBOpRXQMq2i40VDMbxp8M3R7iN8mxFou2gu7icVKvO
+   pfrc7uMunmsNpCKmfTwsW2pb/mwBIIXluQJUDfikog0mPsDC0o+nSIAvR
+   1FMw9T8LvwkeRc8hyynMXWpVkOnQnnFu+9Gytct3hHVlUZAhnHWUOLpeb
+   I7i2iV5Kho1rAfDpa+QVVLbpw1kEoTap7wg/Fr6xPqc6BGbUNBWyk0YWN
+   EpmLf8SN7m+5jk5nfaFZlY8kjG51WVd7Wel2T4K5TDR6bVds3EJDvRxJt
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10847"; a="361655039"
+X-IronPort-AV: E=McAfee;i="6600,9927,10847"; a="468558553"
 X-IronPort-AV: E=Sophos;i="6.03,187,1694761200"; 
-   d="scan'208";a="361655039"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2023 04:21:55 -0700
+   d="scan'208";a="468558553"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2023 04:22:04 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10847"; a="996901553"
+X-IronPort-AV: E=McAfee;i="6600,9927,10847"; a="923571201"
 X-IronPort-AV: E=Sophos;i="6.03,187,1694761200"; 
-   d="scan'208";a="996901553"
+   d="scan'208";a="923571201"
 Received: from valeks2x-mobl.ger.corp.intel.com (HELO localhost) ([10.252.53.242])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2023 04:21:51 -0700
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2023 04:22:01 -0700
 From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
         Reinette Chatre <reinette.chatre@intel.com>,
@@ -47,9 +47,9 @@ To:     linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
         Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
 Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
         =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v3 6/7] selftests/resctrl: Fix feature checks
-Date:   Fri, 29 Sep 2023 14:20:38 +0300
-Message-Id: <20230929112039.7488-7-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v3 7/7] selftests/resctrl: Reduce failures due to outliers in MBA/MBM tests
+Date:   Fri, 29 Sep 2023 14:20:39 +0300
+Message-Id: <20230929112039.7488-8-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230929112039.7488-1-ilpo.jarvinen@linux.intel.com>
 References: <20230929112039.7488-1-ilpo.jarvinen@linux.intel.com>
@@ -65,56 +65,59 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The MBA and CMT tests expect support of other features to be able to
-run.
+The initial value of 5% chosen for the maximum allowed percentage
+difference between resctrl mbm value and IMC mbm value in commit
+06bd03a57f8c ("selftests/resctrl: Fix MBA/MBM results reporting
+format") was "randomly chosen value" (as admitted by the changelog).
 
-When platform only supports MBA but not MBM, MBA test will fail with:
-Failed to open total bw file: No such file or directory
+When running tests in our lab across a large number platforms, 5%
+difference upper bound for success seems a bit on the low side for the
+MBA and MBM tests. Some platforms produce outliers that are slightly
+above that, typically 6-7%, which leads MBA/MBM test frequently
+failing.
 
-When platform only supports CMT but not CAT, CMT test will fail with:
-Failed to open bit mask file '/sys/fs/resctrl/info/L3/cbm_mask': No such file or directory
+Replace the "randomly chosen value" with a success bound that is based
+on those measurements across large number of platforms by relaxing the
+MBA/MBM success bound to 8%. The relaxed bound removes the failures due
+the frequent outliers.
 
-It leads to the test reporting test fail (even if no test was run at
-all).
-
-Extend feature checks to cover these two conditions to show these tests
-were skipped rather than failed.
-
-Fixes: ee0415681eb6 ("selftests/resctrl: Use resctrl/info for feature detection")
+Fixes: 06bd03a57f8c ("selftests/resctrl: Fix MBA/MBM results reporting format")
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 Tested-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
 Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
 Reviewed-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
-Cc: <stable@vger.kernel.org> # selftests/resctrl: Refactor feature check to use resource and feature name
+Cc: <stable@vger.kernel.org>
 ---
- tools/testing/selftests/resctrl/resctrl_tests.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ tools/testing/selftests/resctrl/mba_test.c | 2 +-
+ tools/testing/selftests/resctrl/mbm_test.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
-index 7836bf0655fe..063fc3e50e48 100644
---- a/tools/testing/selftests/resctrl/resctrl_tests.c
-+++ b/tools/testing/selftests/resctrl/resctrl_tests.c
-@@ -130,7 +130,9 @@ static void run_mba_test(const char * const *benchmark_cmd, int cpu_no)
- 		return;
- 	}
+diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
+index cf8284dadcb2..d3bf4368341e 100644
+--- a/tools/testing/selftests/resctrl/mba_test.c
++++ b/tools/testing/selftests/resctrl/mba_test.c
+@@ -12,7 +12,7 @@
  
--	if (!validate_resctrl_feature_request("MB", NULL) || (get_vendor() != ARCH_INTEL)) {
-+	if (!validate_resctrl_feature_request("MB", NULL) ||
-+	    !validate_resctrl_feature_request("L3_MON", "mbm_local_bytes") ||
-+	    (get_vendor() != ARCH_INTEL)) {
- 		ksft_test_result_skip("Hardware does not support MBA or MBA is disabled\n");
- 		goto cleanup;
- 	}
-@@ -153,7 +155,8 @@ static void run_cmt_test(const char * const *benchmark_cmd, int cpu_no)
- 		return;
- 	}
+ #define RESULT_FILE_NAME	"result_mba"
+ #define NUM_OF_RUNS		5
+-#define MAX_DIFF_PERCENT	5
++#define MAX_DIFF_PERCENT	8
+ #define ALLOCATION_MAX		100
+ #define ALLOCATION_MIN		10
+ #define ALLOCATION_STEP		10
+diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
+index 1ae131a2e246..d3c0d30c676a 100644
+--- a/tools/testing/selftests/resctrl/mbm_test.c
++++ b/tools/testing/selftests/resctrl/mbm_test.c
+@@ -11,7 +11,7 @@
+ #include "resctrl.h"
  
--	if (!validate_resctrl_feature_request("L3_MON", "llc_occupancy")) {
-+	if (!validate_resctrl_feature_request("L3_MON", "llc_occupancy") ||
-+	    !validate_resctrl_feature_request("L3", NULL)) {
- 		ksft_test_result_skip("Hardware does not support CMT or CMT is disabled\n");
- 		goto cleanup;
- 	}
+ #define RESULT_FILE_NAME	"result_mbm"
+-#define MAX_DIFF_PERCENT	5
++#define MAX_DIFF_PERCENT	8
+ #define NUM_OF_RUNS		5
+ 
+ static int
 -- 
 2.30.2
 
