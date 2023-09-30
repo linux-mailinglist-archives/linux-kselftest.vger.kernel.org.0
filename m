@@ -2,62 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 601607B3F8B
-	for <lists+linux-kselftest@lfdr.de>; Sat, 30 Sep 2023 10:58:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D20007B3F8C
+	for <lists+linux-kselftest@lfdr.de>; Sat, 30 Sep 2023 10:58:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229496AbjI3I6r (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 30 Sep 2023 04:58:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57694 "EHLO
+        id S229540AbjI3I6w (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 30 Sep 2023 04:58:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjI3I6r (ORCPT
+        with ESMTP id S229447AbjI3I6w (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 30 Sep 2023 04:58:47 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B1441A4
-        for <linux-kselftest@vger.kernel.org>; Sat, 30 Sep 2023 01:58:44 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-502f29ed596so2355e87.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 30 Sep 2023 01:58:44 -0700 (PDT)
+        Sat, 30 Sep 2023 04:58:52 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9D9D1A5
+        for <linux-kselftest@vger.kernel.org>; Sat, 30 Sep 2023 01:58:49 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-4063bfc6c03so40235e9.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 30 Sep 2023 01:58:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696064323; x=1696669123; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1696064328; x=1696669128; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=D3HZw8pQQX9v/v+10wsqTg4XPA7R57fH2Oo8wDB0Z7M=;
-        b=2WiUUhMvxE+XRYc7wsEEL2tMLvdwuDYsNqzj7vp8v+TP9ZdYm+ZX3ZvpW2Zab/A83R
-         reQYtZeLDlfBOp2ah7Gsew6KgXF8MiKnnCRbAPTA3kRWbcnApvhJgQWuZIZrNzKulNur
-         ZPWb78u/HJ/U6CbE+0y9r9KQs8BRf86lKNjU17g82tbnRdxRU9kDbaTxd2Hf+exUp7HY
-         bLCWVQ37RfPujUqRyo1hdDqoPV61iaUSdyLkliDxt+2cLyzNlixnFoMSD/lRZJMyS5pN
-         mD7Plb8exDTVao8IH8T/2hr1rVqffb9IGc0b7aSm6z9qDaBwmVvAsBxBf8sfViL3Wk/p
-         Z9Jg==
+        bh=2ka+59Az1AJnNzm9tN9A2lH0/cm3R3FlakeuVf7qxAc=;
+        b=U13FWhP2g0lAwbd3L7ihn6VVozLC67CzHi5Rx9oo42I2ujZfVkAruKhHAkIqEbSTlz
+         pMIRHRsc05ONHLTG6X3q9nFrzFqATKkeRjVN9BKnofyYNHH89zrujJq9FKdoAlKqfYUY
+         u5T0wAQafIMgX58rrWMHLVsZM4EUSWUnvXtzoJYqzQaP6RYe8sk7+7bqv5Gdg9np/Lj9
+         J9QBmmG9Msev2/T3J/IZ0NzMMVIvd9cWut+QOYMjzo0tVVZu+WWJwxHy8XJQTFjclHLX
+         FNSuD1XaOsYsApdMuXs+Tu3XJFD+GfdS10a5KQa4OUGe1AjOQ1tqH2n/vqIJGLLg3Jea
+         +LoA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696064323; x=1696669123;
+        d=1e100.net; s=20230601; t=1696064328; x=1696669128;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=D3HZw8pQQX9v/v+10wsqTg4XPA7R57fH2Oo8wDB0Z7M=;
-        b=JeOdQHl0DxkU7FVUL95HvUQiZ5vh9/7cTIuQnXLRKnqgjzAk/T7O6ESMoHffu9noJY
-         9hpxioZjlZkglFu7IC1wFKIHqj7DQqUi6pVMU1rrcb/gUOn/GMBoi1u4T7xK9x20E179
-         dXeVjw+54kDz/U0JlfAG51Zw3OD0p1UWYdVqaZKlYqfx65ACGR7UyVnuaY26PtNOLQrP
-         Xf/VsST/U5FptYwm5uAre9Borv2etHZaEfV8CDBJ9sI1EvwkWNevsKkv3CSMEVsXOUyK
-         7OFCO5QcX4HLwNclD02/Uh18n3xf7toQFwfeVRVYXJ4XNt2c9yj+rOVliQXbdrqW7Xic
-         SFdg==
-X-Gm-Message-State: AOJu0Yx5kUNpOzg5lDQDH3WzTyVwtJqf+ddhi1MRNDd5Dg0flzph/n7j
-        vkuNu0i+/szEVYiCsD2IfiiAo5X9VidJVvYjKNkZHw==
-X-Google-Smtp-Source: AGHT+IFxhb39q4JBTZZ3hg7MrAoivdSyjGobcv0TY4MZmG6o6DCJs0XGCPMuPEZv1M9HoiZyOiGUBSSyb1wdSlYNozo=
-X-Received: by 2002:ac2:46cc:0:b0:501:b029:1a47 with SMTP id
- p12-20020ac246cc000000b00501b0291a47mr7588lfo.1.1696064322589; Sat, 30 Sep
- 2023 01:58:42 -0700 (PDT)
+        bh=2ka+59Az1AJnNzm9tN9A2lH0/cm3R3FlakeuVf7qxAc=;
+        b=e2Y9QOHx/KCN/qUjX9LgjUOu0nna2zLjgqW71jL9WLXYf0pqYK0o3CU2bP3gN5RPQt
+         dgZyXZg693VISCd6ytuCpr1w96pgbfzvlr1KWeFjnUIWa3KdkdeQpFHY1RXbwe88Z5zs
+         eZJgojn/bFDqwGdF0X9M7mWhAa89ai5bgilptmrSEzuOp0LmHxJWRHbB4Q4wp03S55HS
+         2niD4ynj0cNRd9RmvWorN3qsKVF5nt4coUIEQSdTFRNqOiNavlczUkN0w/pmI6bAo6Qe
+         f4e3I93iv9Kc2DPjBGWMmj4N7jzsNFHxwIHzt68zT1qjnderXAD1rKuxroXVMVrIDEZN
+         cTRQ==
+X-Gm-Message-State: AOJu0YygKLpBWYzk/tusda3UQjKVn0evNkh3PHNfVu3u7Gi/J/rT1nXl
+        WcvYm5u2eZWMHRIuhGagjHZLLOHEtLN9iJ1oGHzggQ==
+X-Google-Smtp-Source: AGHT+IH1kZz2X2qDjjDOEJh8GArpoeRfEXPF0ki3+hn9Q0AWDG4h8uVV5/DESoahPYxVApFqg4Yqs9lCSnK5FSm8ukI=
+X-Received: by 2002:a7b:cd99:0:b0:406:4e80:b8ef with SMTP id
+ y25-20020a7bcd99000000b004064e80b8efmr33957wmj.6.1696064327951; Sat, 30 Sep
+ 2023 01:58:47 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230926220208.1423-1-michal.wajdeczko@intel.com>
-In-Reply-To: <20230926220208.1423-1-michal.wajdeczko@intel.com>
+References: <20230926220208.1423-1-michal.wajdeczko@intel.com> <20230926220208.1423-2-michal.wajdeczko@intel.com>
+In-Reply-To: <20230926220208.1423-2-michal.wajdeczko@intel.com>
 From:   David Gow <davidgow@google.com>
-Date:   Sat, 30 Sep 2023 16:58:28 +0800
-Message-ID: <CABVgOSkYSCDeNDqkvFR9nsBc+DeWkHZ1rrq4X6=B2ZZGZdN86w@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kunit: Add param generator macro for zero terminated arrays
+Date:   Sat, 30 Sep 2023 16:58:35 +0800
+Message-ID: <CABVgOSkchs02HpfHZWZWSXe6X5U6nfPTDM1_-RDKybm2oixnFw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] kunit: Allow to filter entries from zero terminated arrays
 To:     Michal Wajdeczko <michal.wajdeczko@intel.com>
 Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
         Rae Moar <rmoar@google.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000007f91c206068fbf89"
+        boundary="000000000000d0b0d806068fbfd9"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
@@ -69,39 +69,19 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---0000000000007f91c206068fbf89
+--000000000000d0b0d806068fbfd9
 Content-Type: text/plain; charset="UTF-8"
 
 On Wed, 27 Sept 2023 at 06:02, Michal Wajdeczko
 <michal.wajdeczko@intel.com> wrote:
 >
-> The existing macro KUNIT_ARRAY_PARAM can produce parameter
-> generator function but only when we fully know the definition
-> of the array. However, there might be cases where we would like
-> to generate test params based on externaly defined array, which
-> is defined as zero-terminated array, like pci_driver.id_table.
-
-Hmm... I like the idea of this, but am a little wary of dealing with
-zero-terminated arrays in a generic fashion. Some cases (pointers,
-where we can just != NULL) are obvious,
-but we could hit inconsistencies with things like padding, as things
-like pci_driver.id_table seem to mostly be iterated over with things
-like:
-while (ids->vendor || ids->subvendor || ids->class_mask)
-
-which not only ignores the padding, but also half of the fields. So
-there may be a consistency issue there.
-
-Though I suspect it's not likely to cause issues in practice.
-
-Thoughts?
--- David
->
-> Add helper macro KUNIT_ZERO_ARRAY_PARAM that can work with zero
-> terminated arrays and provide example how to use it.
+> In some cases we may want to generate params based on existing
+> zero terminated array, but with some entries filtered out.
+> Extend macro KUNIT_ZERO_ARRAY_PARAM to accept filter function
+> and provide example how to use it.
 >
 > $ ./tools/testing/kunit/kunit.py run \
->         --kunitconfig ./lib/kunit/.kunitconfig *.example_params*
+>     --kunitconfig ./lib/kunit/.kunitconfig *.example_params*
 >
 > [ ] Starting KUnit Kernel (1/1)...
 > [ ] ============================================================
@@ -117,23 +97,73 @@ Thoughts?
 > [ ] [PASSED] example value 2
 > [ ] [PASSED] example value 1
 > [ ] =============== [PASSED] example_params_test ===============
+> [ ] =================== example_params_test  ===================
+> [ ] [PASSED] example value 2
+> [ ] [PASSED] example value 1
+> [ ] =============== [PASSED] example_params_test ===============
 > [ ] ===================== [PASSED] example =====================
 > [ ] ============================================================
-> [ ] Testing complete. Ran 7 tests: passed: 4, skipped: 3
+> [ ] Testing complete. Ran 9 tests: passed: 6, skipped: 3
 >
 > Signed-off-by: Michal Wajdeczko <michal.wajdeczko@intel.com>
 > Cc: David Gow <davidgow@google.com>
 > Cc: Rae Moar <rmoar@google.com>
 > ---
->  include/kunit/test.h           | 22 ++++++++++++++++++++++
->  lib/kunit/kunit-example-test.c |  2 ++
->  2 files changed, 24 insertions(+)
+
+I tend to agree with Rae here that this is:
+a) starting to get quite specific, and might be better served by a
+per-test generator function than a generic helper here, and
+b) probably would need to be implemented for both  ZERO_ARRAY_PARAM
+and the regular ARRAY_PARAM, for consistency's sake.
+
+I'd probably err on the side of letting tests implement something like
+this themselves, and then reconsider a helper macro once there are
+several tests all using the same thing. If, for example, all the users
+of this are just checking PCI ids, or something, it may make more
+sense to just have a PCI-specific macro they can share.
+
+Regardless, I'd love to see a real-world example of this being used,
+which may make it seem less niche.
+
+Thanks,
+-- David
+
+>  include/kunit/test.h           | 19 +++++++++++++++++--
+>  lib/kunit/kunit-example-test.c |  9 +++++++++
+>  2 files changed, 26 insertions(+), 2 deletions(-)
 >
 > diff --git a/include/kunit/test.h b/include/kunit/test.h
-> index 20ed9f9275c9..280113ceb6a6 100644
+> index 280113ceb6a6..8a87d1ce37e0 100644
 > --- a/include/kunit/test.h
 > +++ b/include/kunit/test.h
-> @@ -1514,6 +1514,28 @@ do {                                                                            \
+> @@ -1515,20 +1515,24 @@ do {                                                                           \
+>         }
+>
+>  /**
+> - * KUNIT_ZERO_ARRAY_PARAM() - Define test parameter generator from a zero terminated array.
+> + * KUNIT_FILTERED_ZERO_ARRAY_PARAM() - Define test parameter generator from a zero terminated array.
+>   * @name:  prefix for the test parameter generator function.
+>   * @array: zero terminated array of test parameters.
+>   * @get_desc: function to convert param to description; NULL to use default
+> + * @filter: function to filter out unwanted params (like duplicates); can be NULL
+>   *
+>   * Define function @name_gen_params which uses zero terminated @array to generate parameters.
+>   */
+> -#define KUNIT_ZERO_ARRAY_PARAM(name, array, get_desc)                                          \
+> +#define KUNIT_FILTERED_ZERO_ARRAY_PARAM(name, array, get_desc, filter)                         \
+>         static const void *name##_gen_params(const void *prev, char *desc)                      \
+>         {                                                                                       \
+>                 typeof((array)[0]) *__prev = prev;                                              \
+>                 typeof(__prev) __next = __prev ? __prev + 1 : (array);                          \
+>                 void (*__get_desc)(typeof(__next), char *) = get_desc;                          \
+> +               bool (*__filter)(typeof(__prev), typeof(__next)) = filter;                      \
+>                 for (; memchr_inv(__next, 0, sizeof(*__next)); __prev = __next++) {             \
+> +                       if (__filter && !__filter(__prev, __next))                              \
+> +                               continue;                                                       \
+>                         if (__get_desc)                                                         \
+>                                 __get_desc(__next, desc);                                       \
+>                         return __next;                                                          \
+> @@ -1536,6 +1540,17 @@ do {                                                                            \
 >                 return NULL;                                                                    \
 >         }
 >
@@ -145,55 +175,60 @@ Thoughts?
 > + *
 > + * Define function @name_gen_params which uses zero terminated @array to generate parameters.
 > + */
-> +#define KUNIT_ZERO_ARRAY_PARAM(name, array, get_desc)                                          \
-> +       static const void *name##_gen_params(const void *prev, char *desc)                      \
-> +       {                                                                                       \
-> +               typeof((array)[0]) *__prev = prev;                                              \
-> +               typeof(__prev) __next = __prev ? __prev + 1 : (array);                          \
-> +               void (*__get_desc)(typeof(__next), char *) = get_desc;                          \
-> +               for (; memchr_inv(__next, 0, sizeof(*__next)); __prev = __next++) {             \
-
-Are there any places where this might interact awkwardly with padding?
-I _think_ it should be okay (variables with static lifetimes should
-have padding initialised to zero), but there could be a case I'm
-missing.
-
-
-> +                       if (__get_desc)                                                         \
-> +                               __get_desc(__next, desc);                                       \
-> +                       return __next;                                                          \
-> +               }                                                                               \
-> +               return NULL;                                                                    \
-> +       }
+> +#define KUNIT_ZERO_ARRAY_PARAM(name, array, get_desc)  \
+> +       KUNIT_FILTERED_ZERO_ARRAY_PARAM(name, array, get_desc, NULL)
 > +
 >  // TODO(dlatypov@google.com): consider eventually migrating users to explicitly
 >  // include resource.h themselves if they need it.
 >  #include <kunit/resource.h>
 > diff --git a/lib/kunit/kunit-example-test.c b/lib/kunit/kunit-example-test.c
-> index 6bb5c2ef6696..ad9ebcfd513e 100644
+> index ad9ebcfd513e..a3268754392c 100644
 > --- a/lib/kunit/kunit-example-test.c
 > +++ b/lib/kunit/kunit-example-test.c
-> @@ -202,6 +202,7 @@ static void example_param_get_desc(const struct example_param *p, char *desc)
+> @@ -201,8 +201,16 @@ static void example_param_get_desc(const struct example_param *p, char *desc)
+>         snprintf(desc, KUNIT_PARAM_DESC_SIZE, "example value %d", p->value);
 >  }
 >
+> +static bool example_param_filter(const struct example_param *prev,
+> +                                const struct example_param *next)
+> +{
+> +       return next->value < 3;
+> +}
+> +
 >  KUNIT_ARRAY_PARAM(example, example_params_array, example_param_get_desc);
-> +KUNIT_ZERO_ARRAY_PARAM(example_zero, example_params_array, example_param_get_desc);
+>  KUNIT_ZERO_ARRAY_PARAM(example_zero, example_params_array, example_param_get_desc);
+> +KUNIT_FILTERED_ZERO_ARRAY_PARAM(example_filter, example_params_array, example_param_get_desc,
+> +                               example_param_filter);
+
+I think we'd probably want some more comments around these examples,
+just to make it a little clearer what the difference between these
+features are and what results we should expect. The purpose the the
+'example_test' is basically documentation, so I think we'll want to
+either make this a clearer example of how/why you'd want to use this,
+or leave it out of the examples (and just document it in the
+documentation, and possibly test it in another kunit test).
+
+
 >
 >  /*
 >   * This test shows the use of params.
-> @@ -246,6 +247,7 @@ static struct kunit_case example_test_cases[] = {
->         KUNIT_CASE(example_all_expect_macros_test),
+> @@ -248,6 +256,7 @@ static struct kunit_case example_test_cases[] = {
 >         KUNIT_CASE(example_static_stub_test),
 >         KUNIT_CASE_PARAM(example_params_test, example_gen_params),
-> +       KUNIT_CASE_PARAM(example_params_test, example_zero_gen_params),
+>         KUNIT_CASE_PARAM(example_params_test, example_zero_gen_params),
+> +       KUNIT_CASE_PARAM(example_params_test, example_filter_gen_params),
 >         KUNIT_CASE_SLOW(example_slow_test),
 >         {}
 >  };
 > --
 > 2.25.1
 >
+> --
+> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20230926220208.1423-2-michal.wajdeczko%40intel.com.
 
---0000000000007f91c206068fbf89
+--000000000000d0b0d806068fbfd9
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -260,14 +295,14 @@ impZAng7ccvvK09K3ZuhwTIxJMsPXCZYsrXWORTw5sczRAP6XvKbPBJnsJoSTe5dFBPBHOQJOGhU
 qWfEfWnWMJPF3LxSGLpLFQXO3RwQqmxv08avwXfVPouh1xuB3FX7rpDabT8YDhu9JgIZkLEKko7L
 yQt6zWwng7k8YF/jGbiAta6VMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBD
-6FapkH0ULofEkxte3BMcwbgBqSmv76ucG50GMNcGTTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzA5MzAwODU4NDNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDr
+aIEUyctSER30M+/RgpIcvdaPVfkzEGvU2zkaOxhNQDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzA5MzAwODU4NDhaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAbD+tlU3C47DQ9d8CAlF9
-X9CEPsdlIEF6x3aGipakxqV9vGt12K0/1odIsLnnNROxYgheVh2hIzM9iB2udnNTDVM4GLYXfa6G
-GP1GuIhVmobasyL4xQFyp8bXZriHkg70VIS4/dFEUawYlIE8/JWtvntOC1Truu9HTkrlM6EDyYZm
-2fOVqU4b15+rphnVca24drkRKik4OevktWd31aCjKV5a2kSmRD2x/a3N7Vo3LxcS7srMpBiKt4yi
-oIGio04oNWublpMomxql4WqzfgJnzWM33E7boxPDWYuekFdP/sMsHucNA7pIcNllHb/wgvuis7q8
-aME2I0s7+Kl/E/aSBA==
---0000000000007f91c206068fbf89--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAExDeFbZeOCZHhTiMEv+E
+D5QRi1m6rKpa5koUPaO2IuHCplFyS0DcItRk2zik5Gu++awW2Lwtb6UKv9bCpFacHFDL+h+qoS1M
+7jsOGW2tpWVODJn09RMJrFOI2l76YzYtmw3i5j+JmyLKFZ4enIB+lw1OPQFXI8/REy9oTPlDXN4X
+WX+RBSoKYLBvdFqCe4E9rdAnR/NgU5klMsXYWmELX5vlcUi4J4S+EOSERHAmbw4RBDe5/gp50iNM
+nmIxTZ98941Tvxh/wX1esZbBJ0ilDm/L/ouFkRY/wBh2oZ1RYdwSku4ITEPqeP1HOa1fCDfHhcGR
+u5KFNFOaoM4IiEp1Rg==
+--000000000000d0b0d806068fbfd9--
