@@ -2,178 +2,287 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB78D7B3C9E
-	for <lists+linux-kselftest@lfdr.de>; Sat, 30 Sep 2023 00:32:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DDB8F7B3DE3
+	for <lists+linux-kselftest@lfdr.de>; Sat, 30 Sep 2023 05:45:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233634AbjI2WcN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 29 Sep 2023 18:32:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52788 "EHLO
+        id S233984AbjI3Dpi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 29 Sep 2023 23:45:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjI2WcN (ORCPT
+        with ESMTP id S233929AbjI3Dpg (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 29 Sep 2023 18:32:13 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A79681A8;
-        Fri, 29 Sep 2023 15:32:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696026731; x=1727562731;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=iDh660wBUOfQnpafRHFN0vuDlVvtG/noKhlPWILWQEQ=;
-  b=jA/6nJIta2lMOzfhrtL1G5QWVxz3vkp7iexIPljytDtIA0we+CQdU224
-   W3J2h9cbZ1letawugwyJ6/l3aNUdrHI0hsUaakfLdM7AadPlCo6jSS7kM
-   fgG6X1XtccckyOXgbjHXbV33C7OlaLfrhlyj64bJwhd9wRtTPWtVFU8PD
-   tYzUWR2MBu8l/VP5HvhM367czRdI4SQo2XFKctNqopWKIjfRKDhghx3wy
-   0BnGJKLw3ZNWbO+SVjElbpTQk8+yB2zGRJ1Q/iFLHfChmEIuFDS5ZTlwu
-   OQN6K/pM/yKeDYytpF5ebf1jMh2JzLSeQGX9TTK69HsyimDUiKBvm9yQE
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10848"; a="468675221"
-X-IronPort-AV: E=Sophos;i="6.03,188,1694761200"; 
-   d="scan'208";a="468675221"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Sep 2023 15:32:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10848"; a="753515848"
-X-IronPort-AV: E=Sophos;i="6.03,188,1694761200"; 
-   d="scan'208";a="753515848"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga007.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 29 Sep 2023 15:32:11 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32; Fri, 29 Sep 2023 15:32:10 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32 via Frontend Transport; Fri, 29 Sep 2023 15:32:10 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.107)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.32; Fri, 29 Sep 2023 15:32:09 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=X8sIP+fUHZvdabA3F7wtW6D1gWK2OK+xemZ4NZSNSe+BggIMWLuCvKUzDCyPzKUypjtilH5Ik86EOjCLGxtOoIEpYzEslAYGgBklwgjPTUduJfYYugDx8DAGsKCQxkS6OtElIkwhX25vvfYMXQfki9wlSuYmnB0Oj1Bkihz+diHtCpXhwsrmvvVYbtjj1vaKDDb9iscc/gKXeLWVjMihRXQUO3rMZALuTk5Y3Lnwc48UnsFbDNPzIghK0l49I1mCnN+pE6JECWBOAaiSjlS3/JVpka570l3eI0h/B0Ez8YbxiP7Ny49yo+s2swrgBWYuEB9v8Qr8w74i9aCLPujfEQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DsLXmBAPMDWWvqAl4d0C8Ocp2/ViKxvNCHMhOEIQXlI=;
- b=BmLjq5XzwsgvyfzfI0pMQwquzGIQK4jpdOMwD8Z6vZK6KJks9jeVjAgt6GAE0jOomQ5uNTC7w7h5wtDyvseA0P8OZVuRCVzvNKhUWPtHGaJShw+e6SLKds8rzCfVQFwzS86ISHq87nTeiAYt/pKqnA/KSFAgvrWNT2Ol0+EDB/EmVC1j1KexQVMBes5puIsN4DlS2m6iKlq1wu1R/9LdgJIa3Tha3C6lw0UdhBggvgmz/isdNUukEB2djoAoi/JY9mbH8yx12o1OyvHcTBiFpMsJmJfYlXQIuSr1EclS48G+Y4jRPRxsbas0e4oJ8djPYqh+Ng+vFttoKA5sZ2p3ng==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SJ2PR11MB7573.namprd11.prod.outlook.com (2603:10b6:a03:4d2::10)
- by MW3PR11MB4763.namprd11.prod.outlook.com (2603:10b6:303:2c::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6813.28; Fri, 29 Sep
- 2023 22:32:08 +0000
-Received: from SJ2PR11MB7573.namprd11.prod.outlook.com
- ([fe80::bd70:f215:4a97:c84e]) by SJ2PR11MB7573.namprd11.prod.outlook.com
- ([fe80::bd70:f215:4a97:c84e%6]) with mapi id 15.20.6813.017; Fri, 29 Sep 2023
- 22:32:08 +0000
-Message-ID: <813e7332-6a05-a80f-6460-d3fdbecc2305@intel.com>
-Date:   Fri, 29 Sep 2023 15:32:06 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.15.1
-Subject: Re: [PATCH v3 8/8] selftests/resctrl: Fix wrong format specifier
-Content-Language: en-US
-To:     Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
+        Fri, 29 Sep 2023 23:45:36 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9135ADB
+        for <linux-kselftest@vger.kernel.org>; Fri, 29 Sep 2023 20:44:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1696045489;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=zn4xqFs4rGY0oTQr3T07H0KV6gmXQ+zDOaROsq+w2v4=;
+        b=ddr1hOgyKT6Ukz7kcgIn+Fos25ONcFNuyuxDZFd1hhn0unDsc6heTpRc5TtFoqdQogBziZ
+        VZPoFb0KwSmaiH50rWl1VODaMPgsArVNVxgXrt805Oj1TiYYm4SrL5SUTG8xxs3yVRBx4w
+        YIcYVrBsmGHavcD23fRxvAycj1tr22M=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-530-3LdkRfShNZ-VxcbofFnY7g-1; Fri, 29 Sep 2023 23:44:44 -0400
+X-MC-Unique: 3LdkRfShNZ-VxcbofFnY7g-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 60B71101A529;
+        Sat, 30 Sep 2023 03:44:43 +0000 (UTC)
+Received: from llong.com (unknown [10.22.10.177])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 950AB10F1BE7;
+        Sat, 30 Sep 2023 03:44:42 +0000 (UTC)
+From:   Waiman Long <longman@redhat.com>
+To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
         Shuah Khan <shuah@kernel.org>
-CC:     <ilpo.jarvinen@linux.intel.com>, <linux-kernel@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>
-References: <cover.1695373131.git.maciej.wieczor-retman@intel.com>
- <1545d7dfb7dd73a7bb2b28fe2f643b87421bf20c.1695373131.git.maciej.wieczor-retman@intel.com>
-From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <1545d7dfb7dd73a7bb2b28fe2f643b87421bf20c.1695373131.git.maciej.wieczor-retman@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: MW4P221CA0025.NAMP221.PROD.OUTLOOK.COM
- (2603:10b6:303:8b::30) To SJ2PR11MB7573.namprd11.prod.outlook.com
- (2603:10b6:a03:4d2::10)
+Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Pierre Gondois <pierre.gondois@arm.com>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH-cgroup] cgroup/cpuset: Enable invalid to valid local partition transition
+Date:   Fri, 29 Sep 2023 23:44:02 -0400
+Message-Id: <20230930034402.2776278-1-longman@redhat.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ2PR11MB7573:EE_|MW3PR11MB4763:EE_
-X-MS-Office365-Filtering-Correlation-Id: b7b66e29-21fd-4dd6-a9b5-08dbc13bea43
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: CfrCYj9fr9GsrEu2uDzuMqixMEw1HO5jlCNhcdd2YtYq1r8s4yPF7+LJjkRpGmZXVdN4KD4CzuRLWMuiMQA1oU6yA2KozVM6twm5SSh/BLtQ6bZ3jLx1xyItUXdLPaVLjfBV8yTKYLAPTYvx7zHojVXOFoisltKG7WuWf0xest4ymmO30CBvHZVnwy1xf3Ze/AF1BnnxAu49ykoLQ6+1ui+gBVezHEvN59w7wGm+NVrT82oAJCGdWqNysv0JBQFqFHwN48XiG2TyNs8yuM3kUvtJWjxKmP2uTRzfM3hnxH1p/EMAeaTCojLk4E5onSBZ6AsYltNOEm4K68sweA2TGw9qAMm8FFttqHPHoGi02tlqc/GleT5mvyZ4JuJoh8/z9pJ0ekL8aTtWhUPb2jDWybgUa20U7hP16LwWAZLOBcJ1YnO4Mq4kTOhadXP7wlg1o/61J64ydJyU7Up02/cDUEuFbknIIduVRI+/IoVzQt8QPtWHpOBH57sXYl9gHTp+U6aquWAlo4nTg0I/uDPXDzVVAHpH45UN/7tie+qiUo1KecfDE+zBungQcLZpj1IO4/sco/6x7VJfWZPr9WyDbc69iZk1/FvNt4oDLNPLzCxd4XNMvq1X+S8h9KnCpxTzrMtMfky2OP/zkt/Vi3gn7g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7573.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(396003)(376002)(39860400002)(136003)(346002)(230922051799003)(64100799003)(186009)(451199024)(1800799009)(31686004)(4744005)(2906002)(110136005)(44832011)(5660300002)(478600001)(66556008)(66476007)(6512007)(53546011)(66946007)(2616005)(26005)(6506007)(6486002)(8676002)(316002)(4326008)(8936002)(41300700001)(36756003)(86362001)(82960400001)(38100700002)(31696002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bUczeUhTNk1mSVltU3pON3dYKzQ3OWxKc295dFBaVmxoZWhIUnlKR2hFQnM2?=
- =?utf-8?B?UTdjQ3ZrZXFwMFphR0VUNDlxUGFFaE5laXdzSHNrdTFLUlU3TWovdFNCRUY1?=
- =?utf-8?B?UWxZTDZleHlhajBFY3J2WjRWRDJuTS95Zm8wWjB4Mk5vU08wNTZqVkJybktx?=
- =?utf-8?B?TmZrYUVTMWhtQzJQNzQwQnc5L2hkSmRIWDV5UmZjdWRHc29vTmN4YnRoVGhM?=
- =?utf-8?B?czZsdFlTMHA0R2tnWk0zbXhmdUU1ZVNGeFBUS3E0SVAxa0c3WEd6OElNS1A5?=
- =?utf-8?B?Q3VkQklDSVRKbER5bzNJUFFweGVaUTlzRXlvZ1F3NXJldUVIMW9zVG5zK2xN?=
- =?utf-8?B?dHR1azRUYk1pQ3BiOGROVHhUWk4ycUNSSFVqQ2lmMXlaUGZ0b3d4Y2dyaWJS?=
- =?utf-8?B?TlRpSzJpVnI0RmRHanlxWUlJVGdjeFNBaHB0UHh6aDNzdEdpT29VR0NuWG9t?=
- =?utf-8?B?NjRwTEtnY09TSUtsMm1ucm5CY1FxZ2UrOURzWFZEalYrYitsb01HN1NLWWpB?=
- =?utf-8?B?VzdKU1pYcFhDMkZVQ1Mya1lIVUFqMEZlUW8vMzhNRVpUZlZhRDMyVW51Mm1K?=
- =?utf-8?B?ZlJiUGowcDh6K1FVckxmc1YrdUM0Yk15djk1SFJ0RUdTVEpqS1QwUmljNHRy?=
- =?utf-8?B?bHFrRkJVMnZjRHMzVmYvdDRqL01tTERMRUpnWVVWeVpCUHpaSHFhdWdwVDk3?=
- =?utf-8?B?MEM4Q01qWmJ5aW9sQTBlVmxEV01iN1Y2TXp2S1NZaDhPRW8zRUVmdTBKcHFo?=
- =?utf-8?B?T0lpZGpJY2xvbXd0NE5udktueG1Kd2pZQ0Rka3Nha20wQkJSaHUvQnd1VHVj?=
- =?utf-8?B?a1BhdXJ2TlZuZFl6bDBkcVlHTVBjOERpdk1MeWRxSjBvU1hlTVorelNhOWJK?=
- =?utf-8?B?YnVnQU1HYXkrMFpRUldLQkZFbWtYeXhCakE1dmFheTQ5d2NwOUdLTDhZREZN?=
- =?utf-8?B?d0o1VDcvZC9ZWWJmaisxMFpSOURIOGVNdzZkYmdybUhRczFJQmJaQVpYM2l3?=
- =?utf-8?B?b0cvaVBPbkNpVVBHRTBXSkwva0p1Y2M2akJmRUw0VG9jM0tLOWpQeDhtbGZN?=
- =?utf-8?B?eVRHK1MwQlB6L3VGRitsY2ttUVZJLzdNdW9XTVBvdnpQVk0wd1RjbEVJMVZP?=
- =?utf-8?B?TDFiRzhJZlZYMVArMURBbmxtSTFJQ3owTmRBbEFGN2x6VFJLRmZiSU5MN016?=
- =?utf-8?B?dVNhdE50MjQva2Z3bHR0cy9oelp4S0pHcEppSjdyK3IxcGdZNFlWOHgzdTVl?=
- =?utf-8?B?S2VtMG9uU2hZcldBZEtFNWZERGtmY25rZzgyWUI2SVo5dE9wcE5ERCtPUXl3?=
- =?utf-8?B?endydVQ4dWxQSzZjVlZDTmZVQ2dFREVMQnBkUWlvR0U0d3FwMHVZNWJtbGhX?=
- =?utf-8?B?S3RTNHNkdThiQjY4cmh2S3FZTDFYZENMWmk2Wk1rSjNJY3JGMzVSUTlHNWRt?=
- =?utf-8?B?Y0JTNDZQcHI1TDJHS2hJZXFQdG1KclB2elJOVUttMk43TEJTNFpkY3FwbjlU?=
- =?utf-8?B?REY3eDZLREpOdm9ZbG0zT2N5WHUrenNScCsrL09WcjhaMUg4VFFRK1lhbmRG?=
- =?utf-8?B?bVZQTmRpbnFIQk1BbmdZdXZzTVcvay9KOHQ2b2Y0U2N4cmV3bFR4ekZmUUM4?=
- =?utf-8?B?RFN0WEcvUk5xaDBLVkVCNHEyZkNrZkdMOGdSeUErTmFEV01GcHlzKys2R3NI?=
- =?utf-8?B?VFlTZDJ1ZG10WkE4eGRoRW45Z01lMk05V1Z3c0dYKzR4MTl3cXZ2VEg1R2h3?=
- =?utf-8?B?ek9RQzhGUTF6dFdIcWFaUlg2NmdxeVBnajhiWk9mMzJWNkhkRHZQekE5K2N6?=
- =?utf-8?B?QUpzdmJCSEswdkJhVk9BUDl0Y3UwU3BKQmd3bW1QQ1FOMENtTHVCdjRvT2N0?=
- =?utf-8?B?SEtrTmdoR1E2WGR1aVVzUkZFd0s2ZFFlQ3VxZTh0YzRqK3owN2g0OHJZQy9a?=
- =?utf-8?B?R3hZTjFMRWtVTEN2bVhERHcrWEc1bmxsMFR5dVpmaSs1N21ETERLcWtwYkhO?=
- =?utf-8?B?MlRzNkFoM3R1eUxlQjdrbU1PYzRtbVNNbHBoMUNnY1FpbThSbTF5S2tTbFFF?=
- =?utf-8?B?QWRxMXFSOTQzUWZNNit5cXo3anl2WFlNaGdPdGl1emp4WldSVXF5M051bWls?=
- =?utf-8?B?OEdXRDVCcndZZExZNUhRYVYvZUpGUzNoTjBEZzdWYnlaa1Fsbnhob2ZkQXpV?=
- =?utf-8?B?SlE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: b7b66e29-21fd-4dd6-a9b5-08dbc13bea43
-X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB7573.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Sep 2023 22:32:08.1570
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: wAW5haS9F/kzo4fVwy2JI8ZmKRPsc3d4Usg3lxB5KQXCad63t9C6RXgWqFLECBfu1syTSo63J3eKe0P0tPW4a6SW+Q/NVkQutcgwhyONHNU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR11MB4763
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Maciej,
+When a local partition becomes invalid, it won't transition back to
+valid partition automatically if a proper "cpuset.cpus.exclusive" or
+"cpuset.cpus" change is made. Instead, system administrators have to
+explicitly echo "root" or "isolated" into the "cpuset.cpus.partition"
+file at the partition root.
 
-On 9/22/2023 2:06 AM, Maciej Wieczor-Retman wrote:
-> A long unsigned int variable is passed to the ksft_print_msg() and the
-> format specifier used expects a variable of type int.
-> 
-> Change the format specifier to match the passed variable.
-> 
-> Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-> ---
+This patch now enables the automatic transition of an invalid local
+partition back to valid when there is a proper "cpuset.cpus.exclusive"
+or "cpuset.cpus" change.
 
-Thank you very much for this cleanup.
+Automatic transition of an invalid remote partition to a valid one,
+however, is not covered by this patch. They still need an explicit
+write to "cpuset.cpus.partition" to become valid again.
 
-Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
+The test_cpuset_prs.sh test script is updated to add new test cases to
+test this automatic state transition.
 
-Reinette
+Reported-by: Pierre Gondois <pierre.gondois@arm.com>
+Link: https://lore.kernel.org/lkml/9777f0d2-2fdf-41cb-bd01-19c52939ef42@arm.com
+Signed-off-by: Waiman Long <longman@redhat.com>
+---
+ kernel/cgroup/cpuset.c                        | 79 +++++++++++--------
+ .../selftests/cgroup/test_cpuset_prs.sh       | 17 ++--
+ 2 files changed, 59 insertions(+), 37 deletions(-)
+
+diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+index 15f399153a2e..93facdab513c 100644
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@ -1806,17 +1806,28 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
+ 		 *
+ 		 * Compute add/delete mask to/from effective_cpus
+ 		 *
+-		 * addmask = effective_xcpus & ~newmask & parent->effective_xcpus
+-		 * delmask = newmask & ~cs->effective_xcpus
+-		 *		     & parent->effective_xcpus
++		 * For valid partition:
++		 *   addmask = exclusive_cpus & ~newmask
++		 *			      & parent->effective_xcpus
++		 *   delmask = newmask & ~exclusive_cpus
++		 *		       & parent->effective_xcpus
++		 *
++		 * For invalid partition:
++		 *   delmask = newmask & parent->effective_xcpus
+ 		 */
+-		cpumask_andnot(tmp->addmask, xcpus, newmask);
+-		adding = cpumask_and(tmp->addmask, tmp->addmask,
+-				     parent->effective_xcpus);
++		if (is_prs_invalid(old_prs)) {
++			adding = false;
++			deleting = cpumask_and(tmp->delmask,
++					newmask, parent->effective_xcpus);
++		} else {
++			cpumask_andnot(tmp->addmask, xcpus, newmask);
++			adding = cpumask_and(tmp->addmask, tmp->addmask,
++					     parent->effective_xcpus);
+ 
+-		cpumask_andnot(tmp->delmask, newmask, xcpus);
+-		deleting = cpumask_and(tmp->delmask, tmp->delmask,
+-				       parent->effective_xcpus);
++			cpumask_andnot(tmp->delmask, newmask, xcpus);
++			deleting = cpumask_and(tmp->delmask, tmp->delmask,
++					       parent->effective_xcpus);
++		}
+ 		/*
+ 		 * Make partition invalid if parent's effective_cpus could
+ 		 * become empty and there are tasks in the parent.
+@@ -1910,9 +1921,11 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
+ 
+ 	/*
+ 	 * Transitioning between invalid to valid or vice versa may require
+-	 * changing CS_CPU_EXCLUSIVE.
++	 * changing CS_CPU_EXCLUSIVE. In the case of partcmd_update,
++	 * validate_change() has already been successfully called and
++	 * CPU lists in cs haven't been updated yet. So defer it to later.
+ 	 */
+-	if (old_prs != new_prs) {
++	if ((old_prs != new_prs) && (cmd != partcmd_update))  {
+ 		int err = update_partition_exclusive(cs, new_prs);
+ 
+ 		if (err)
+@@ -1960,6 +1973,9 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
+ 
+ 	spin_unlock_irq(&callback_lock);
+ 
++	if ((old_prs != new_prs) && (cmd == partcmd_update))
++		update_partition_exclusive(cs, new_prs);
++
+ 	if (adding || deleting) {
+ 		update_tasks_cpumask(parent, tmp->addmask);
+ 		update_sibling_cpumasks(parent, cs, tmp);
+@@ -2356,8 +2372,9 @@ static int update_cpumask(struct cpuset *cs, struct cpuset *trialcs,
+ 	if (alloc_cpumasks(NULL, &tmp))
+ 		return -ENOMEM;
+ 
+-	if (is_partition_valid(cs)) {
+-		if (cpumask_empty(trialcs->effective_xcpus)) {
++	if (old_prs) {
++		if (is_partition_valid(cs) &&
++		    cpumask_empty(trialcs->effective_xcpus)) {
+ 			invalidate = true;
+ 			cs->prs_err = PERR_INVCPUS;
+ 		} else if (prstate_housekeeping_conflict(old_prs, trialcs->effective_xcpus)) {
+@@ -2391,13 +2408,16 @@ static int update_cpumask(struct cpuset *cs, struct cpuset *trialcs,
+ 		 */
+ 		invalidate = true;
+ 		rcu_read_lock();
+-		cpuset_for_each_child(cp, css, parent)
++		cpuset_for_each_child(cp, css, parent) {
++			struct cpumask *xcpus = fetch_xcpus(trialcs);
++
+ 			if (is_partition_valid(cp) &&
+-			    cpumask_intersects(trialcs->effective_xcpus, cp->effective_xcpus)) {
++			    cpumask_intersects(xcpus, cp->effective_xcpus)) {
+ 				rcu_read_unlock();
+ 				update_parent_effective_cpumask(cp, partcmd_invalidate, NULL, &tmp);
+ 				rcu_read_lock();
+ 			}
++		}
+ 		rcu_read_unlock();
+ 		retval = 0;
+ 	}
+@@ -2405,18 +2425,24 @@ static int update_cpumask(struct cpuset *cs, struct cpuset *trialcs,
+ 	if (retval < 0)
+ 		goto out_free;
+ 
+-	if (is_partition_valid(cs)) {
++	if (is_partition_valid(cs) ||
++	   (is_partition_invalid(cs) && !invalidate)) {
++		struct cpumask *xcpus = trialcs->effective_xcpus;
++
++		if (cpumask_empty(xcpus) && is_partition_invalid(cs))
++			xcpus = trialcs->cpus_allowed;
++
+ 		/*
+ 		 * Call remote_cpus_update() to handle valid remote partition
+ 		 */
+ 		if (is_remote_partition(cs))
+-			remote_cpus_update(cs, trialcs->effective_xcpus, &tmp);
++			remote_cpus_update(cs, xcpus, &tmp);
+ 		else if (invalidate)
+ 			update_parent_effective_cpumask(cs, partcmd_invalidate,
+ 							NULL, &tmp);
+ 		else
+ 			update_parent_effective_cpumask(cs, partcmd_update,
+-						trialcs->effective_xcpus, &tmp);
++							xcpus, &tmp);
+ 	} else if (!cpumask_empty(cs->exclusive_cpus)) {
+ 		/*
+ 		 * Use trialcs->effective_cpus as a temp cpumask
+@@ -2493,7 +2519,7 @@ static int update_exclusive_cpumask(struct cpuset *cs, struct cpuset *trialcs,
+ 	if (retval)
+ 		return retval;
+ 
+-	if (is_partition_valid(cs)) {
++	if (old_prs) {
+ 		if (cpumask_empty(trialcs->effective_xcpus)) {
+ 			invalidate = true;
+ 			cs->prs_err = PERR_INVCPUS;
+@@ -2927,19 +2953,10 @@ static int update_prstate(struct cpuset *cs, int new_prs)
+ 		return 0;
+ 
+ 	/*
+-	 * For a previously invalid partition root with valid partition root
+-	 * parent, treat it as if it is a "member". Otherwise, reject it as
+-	 * remote partition cannot currently self-recover from an invalid
+-	 * state.
++	 * Treat a previously invalid partition root as if it is a "member".
+ 	 */
+-	if (new_prs && is_prs_invalid(old_prs)) {
+-		if (is_partition_valid(parent)) {
+-			old_prs = PRS_MEMBER;
+-		} else {
+-			cs->partition_root_state = -new_prs;
+-			return 0;
+-		}
+-	}
++	if (new_prs && is_prs_invalid(old_prs))
++		old_prs = PRS_MEMBER;
+ 
+ 	if (alloc_cpumasks(NULL, &tmpmask))
+ 		return -ENOMEM;
+diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+index 0f4f4a57ae12..243c4c926964 100755
+--- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
++++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+@@ -318,16 +318,18 @@ TEST_MATRIX=(
+ 	" C0-3:S+ C1-3:S+  C2      .    X2-3   X2-3   T:P2:O2=0 O2=1 0 A1:0-3,A2:1-3,A3:2 A1:P0,A3:P-2"
+ 
+ 	# cpus.exclusive.effective clearing test
+-	" C0-3:S+ C1-3:S+  C2      .   X2-3:X    .      .      .      0 A1:0-3,A2:1-3,A3:2,XA1:"
++	" C0-3:S+ C1-3:S+  C2      .   X2-3:X    .      .      .     0 A1:0-3,A2:1-3,A3:2,XA1:"
+ 
+-	# Invalid to valid remote partition indirect transition test via member
+-	" C0-3:S+   C1-3    .      .      .    X3:P2    .      .      0 A1:0-3,A2:1-3,XA2: A2:P-2"
++	# Invalid to valid remote partition transition test
++	" C0-3:S+   C1-3    .      .      .    X3:P2    .      .     0 A1:0-3,A2:1-3,XA2: A2:P-2"
+ 	" C0-3:S+ C1-3:X3:P2
+-			    .      .    X2-3   P0:P2    .      .      0 A1:0-2,A2:3,XA2:3 A2:P2 3"
++			    .      .    X2-3    P2      .      .     0 A1:0-2,A2:3,XA2:3 A2:P2 3"
+ 
+ 	# Invalid to valid local partition direct transition tests
+-	" C1-3:S+:P2 C2-3:X1:P2 .  .      .      .      .      .      0 A1:1-3,XA1:1-3,A2:2-3:XA2: A1:P2,A2:P-2 1-3"
+-	" C1-3:S+:P2 C2-3:X1:P2 .  .      .    X3:P2    .      .      0 A1:1-2,XA1:1-3,A2:3:XA2:3 A1:P2,A2:P2 1-3"
++	" C1-3:S+:P2 C2-3:X1:P2 .  .      .      .      .      .     0 A1:1-3,XA1:1-3,A2:2-3:XA2: A1:P2,A2:P-2 1-3"
++	" C1-3:S+:P2 C2-3:X1:P2 .  .      .    X3:P2    .      .     0 A1:1-2,XA1:1-3,A2:3:XA2:3 A1:P2,A2:P2 1-3"
++	"  C0-3:P2   .      .    C4-6   C0-4     .      .      .     0 A1:0-4,B1:4-6 A1:P-2,B1:P0"
++	"  C0-3:P2   .      .    C4-6 C0-4:C0-3  .      .      .     0 A1:0-3,B1:4-6 A1:P2,B1:P0 0-3"
+ 
+ 	# Local partition invalidation tests
+ 	" C0-3:X1-3:S+:P2 C1-3:X2-3:S+:P2 C2-3:X3:P2 \
+@@ -336,6 +338,9 @@ TEST_MATRIX=(
+ 				   .      .     X4      .      .     0 A1:1-3,A2:1-3,A3:2-3,XA2:,XA3: A1:P2,A2:P-2,A3:P-2 1-3"
+ 	" C0-3:X1-3:S+:P2 C1-3:X2-3:S+:P2 C2-3:X3:P2 \
+ 				   .      .     C4      .      .     0 A1:1-3,A2:1-3,A3:2-3,XA2:,XA3: A1:P2,A2:P-2,A3:P-2 1-3"
++	# Local partition CPU change tests
++	" C0-5:S+:P2 C4-5:S+:P1 .  .      .    C3-5     .      .     0 A1:0-2,A2:3-5 A1:P2,A2:P1 0-2"
++	" C0-5:S+:P2 C4-5:S+:P1 .  .    C1-5     .      .      .     0 A1:1-3,A2:4-5 A1:P2,A2:P1 1-3"
+ 
+ 	# cpus_allowed/exclusive_cpus update tests
+ 	" C0-3:X2-3:S+ C1-3:X2-3:S+ C2-3:X2-3 \
+-- 
+2.39.3
+
