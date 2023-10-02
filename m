@@ -2,70 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F9037B51AA
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Oct 2023 13:47:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A32807B5422
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Oct 2023 15:37:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231338AbjJBLrD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 2 Oct 2023 07:47:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51534 "EHLO
+        id S237278AbjJBNfo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 2 Oct 2023 09:35:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231305AbjJBLrC (ORCPT
+        with ESMTP id S236712AbjJBNfn (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 2 Oct 2023 07:47:02 -0400
-Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B2BC6;
-        Mon,  2 Oct 2023 04:46:59 -0700 (PDT)
-Received: by mail-oo1-xc2e.google.com with SMTP id 006d021491bc7-57b68555467so1098316eaf.0;
-        Mon, 02 Oct 2023 04:46:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696247219; x=1696852019; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tVk5KR1wNzlzQ39q1hN4Y07KLXpNDHXN5VrDHX49DM8=;
-        b=FkYu0tWPwKRwdK9ekVn2JAnV0Tg++0vDL4WO8vVNlT2UhT+XbwTe07T6xhF2BOmc1i
-         ioBHHzI0RS8E0CGh0yx8gEe/V2V9VKqZDoHKpSrHpGtsqFFMZbJg60yLwiF7LHqnDxhN
-         ALFDcGMMwbU6hEpHogF+0xAydCBRvz7sQ0gOloABU2kbEZqKbEMFxwwHTldPmTNnlvWs
-         pYz3cnKfLUNpXMwyZWAqvIbr7DThFrGeeQ4KUHuX5vr5f+2CCzbZsdLl2JoVovPnLMrh
-         DZTvEg/ytnVuLYh0IEyosIX2rmeAJWjzyd4YFn9pbi0c7IBZaPl0gRNWKxRKX6gpQBTE
-         MX1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696247219; x=1696852019;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tVk5KR1wNzlzQ39q1hN4Y07KLXpNDHXN5VrDHX49DM8=;
-        b=GL30be5RWl0ejqn3CP6YwPNb9aMK1jPkIytLjvy2Y2INeYLcOUZItEVaXJEdFAE+Tv
-         RwJu51dorYIXvJAmZF/WmcLhMTsugtqIaBbEE5r1D38BBW+0L9SHfsif1bf07vGxpTZd
-         NuquO41goHmpwwSjWqu0a9W1H9f0ZV7YjkFOw+dTb2aT3kIF9r6RvMVVdXFAUPzsZPE0
-         +vNny2d59aZF1w24AUdViJt3x6Eu/ujOXVrXalbeN576p3ekfPlJkmXDi1Y7n+J72Sch
-         NIiTvdGBLWD2Y3WtnpYGltF18CyUyTmnTCnHIzxIsIoNhzIrRpJ1HtUP8OUsILvm3WRT
-         aAOA==
-X-Gm-Message-State: AOJu0Yy1ahAZo4zd+Dslhl7lCP3PSKzyrMuYTbIMwJWOMN7fpXS02Alx
-        0jW1BaqyJMYF9KS3r91myVc=
-X-Google-Smtp-Source: AGHT+IEwUStqiKFWDnWMW5V5pmfpPcUGnYrlpxP9GZBVOUfS+hpnSkU74TkvIR7AkSVJzvljJSmRxA==
-X-Received: by 2002:a4a:2542:0:b0:57b:3b64:7ea5 with SMTP id v2-20020a4a2542000000b0057b3b647ea5mr9139908ooe.1.1696247218648;
-        Mon, 02 Oct 2023 04:46:58 -0700 (PDT)
-Received: from abhinav-IdeaPad-Slim-5-14ABR8.. ([103.75.161.210])
-        by smtp.googlemail.com with ESMTPSA id i187-20020a639dc4000000b0050f85ef50d1sm18876426pgd.26.2023.10.02.04.46.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 02 Oct 2023 04:46:58 -0700 (PDT)
-From:   Abhinav <singhabhinav9051571833@gmail.com>
-To:     shuah@kernel.org
-Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        Abhinav <singhabhinav9051571833@gmail.com>
-Subject: [PATCH v2] Added missing TARGETS in kselftest top level Makefile
-Date:   Mon,  2 Oct 2023 17:16:35 +0530
-Message-Id: <20231002114635.1567809-1-singhabhinav9051571833@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <2023100251-recycled-purist-1ea5@gregkh>
-References: <2023100251-recycled-purist-1ea5@gregkh>
+        Mon, 2 Oct 2023 09:35:43 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 574AF94;
+        Mon,  2 Oct 2023 06:35:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=Wy2Of61rUlzyI+pFa8Y/le0aXi5o8IldPty6dTsaa88=; b=n3XPwRh+pYFIp991kmLC7/C1cI
+        TeDjSZLzDPYHkM+ZXHmgDwrprHHUJUfJhEer4FglhsjsYxHkIfy1lYvB5zCO0QZUJ4nNrQxd28L+a
+        4frLs0TvlO9BBFeA3fo+6JIrDvR3DLhrZ6DflN3vUZeWrHsm9ekBkzE2Ip0DYfUUVmkfhg6xMQ1Tn
+        ajz0khZ2jLQwsR5VdoNaAIURpBWgedR9MpsiJ+p+KJJBvS2lOAqGXo92FB4MpLKO+bfBPtE82//Ut
+        RZ+2h8N+uEEIhVarIQS2zt1cLmHf0v7LuiKpEXCCcG8t8jONy0mnrQiIYfbfGr0agbXwa58SGPUab
+        d0rL4mkw==;
+Received: from sslproxy06.your-server.de ([78.46.172.3])
+        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1qnJ57-000PO7-05; Mon, 02 Oct 2023 15:35:29 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy06.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1qnJ56-000Auu-Fc; Mon, 02 Oct 2023 15:35:28 +0200
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Add pair_redir_to_connected
+ helper
+To:     Geliang Tang <geliang.tang@suse.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>,
+        Yonghong Song <yonghong.song@linux.dev>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
+Cc:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <cover.1695892503.git.geliang.tang@suse.com>
+ <1bc897b2603ebccabfa2a870977bde236714ded5.1695892503.git.geliang.tang@suse.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <a1a06dab-f0d5-b7c1-aaf5-dc8a033da06d@iogearbox.net>
+Date:   Mon, 2 Oct 2023 15:35:27 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <1bc897b2603ebccabfa2a870977bde236714ded5.1695892503.git.geliang.tang@suse.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.10/27049/Mon Oct  2 09:37:00 2023)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,70 +74,48 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Some tests like dma, ia64, etc. were not present in top level of
-selftest Makefile, so when someone ran 'make run_tests' they would miss
-these tests. This patches adds those left out tests.
+On 9/28/23 11:20 AM, Geliang Tang wrote:
+> Extract duplicate code from these four functions
+> 
+>   unix_redir_to_connected()
+>   udp_redir_to_connected()
+>   inet_unix_redir_to_connected()
+>   unix_inet_redir_to_connected()
+> 
+> to create a new helper pair_redir_to_connected(). Create the different
+> socketpair in these four functions, then pass the socketpair infos to
+> the new common helper to do the connections.
+> 
+> Signed-off-by: Geliang Tang <geliang.tang@suse.com>
+> ---
+>   .../selftests/bpf/prog_tests/sockmap_listen.c | 149 ++++--------------
+>   1 file changed, 30 insertions(+), 119 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+> index 8df8cbb447f1..fbdf7eb23c1b 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+> @@ -1336,27 +1336,17 @@ static void test_redir(struct test_sockmap_listen *skel, struct bpf_map *map,
+>   	}
+>   }
+>   
+> -static void unix_redir_to_connected(int sotype, int sock_mapfd,
+> -			       int verd_mapfd, enum redir_mode mode)
+> +static void pair_redir_to_connected(int c0, int p0, int c1, int p1,
+> +		int sock_mapfd, int verd_mapfd, enum redir_mode mode)
 
-Signed-off-by: Abhinav <singhabhinav9051571833@gmail.com>
----
+just nit: indent, and could we find sth more descriptive than {c,p}0 and {c,p}1?
 
-I removed sched, safesetid and filelock from the Makefile, because these
-tests were actually triggered when we run 'make run_tests' even though it
-has not been mentioned explicitly inside top level Makefile of selftest.
+otherwise, lgtm.
 
- tools/testing/selftests/Makefile | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 8d9b2341b79a..dc138c1dcb4b 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -13,6 +13,7 @@ TARGETS += core
- TARGETS += cpufreq
- TARGETS += cpu-hotplug
- TARGETS += damon
-+TARGETS += dma
- TARGETS += dmabuf-heaps
- TARGETS += drivers/dma-buf
- TARGETS += drivers/s390x/uvdevice
-@@ -32,17 +33,21 @@ TARGETS += ftrace
- TARGETS += futex
- TARGETS += gpio
- TARGETS += hid
-+TARGETS += ia64
- TARGETS += intel_pstate
- TARGETS += iommu
- TARGETS += ipc
- TARGETS += ir
- TARGETS += kcmp
- TARGETS += kexec
-+TARGETS += kmod
- TARGETS += kvm
- TARGETS += landlock
- TARGETS += lib
- TARGETS += livepatch
- TARGETS += lkdtm
-+TARGETS += locking
-+TARGETS += media_tests
- TARGETS += membarrier
- TARGETS += memfd
- TARGETS += memory-hotplug
-@@ -66,6 +71,7 @@ TARGETS += pid_namespace
- TARGETS += powerpc
- TARGETS += prctl
- TARGETS += proc
-+TARGETS += ptp
- TARGETS += pstore
- TARGETS += ptrace
- TARGETS += openat2
-@@ -99,6 +105,7 @@ TARGETS += user
- TARGETS += user_events
- TARGETS += vDSO
- TARGETS += mm
-+TARGETS += watchdog
- TARGETS += x86
- TARGETS += zram
- #Please keep the TARGETS list alphabetically sorted
--- 
-2.34.1
-
+>   {
+>   	const char *log_prefix = redir_mode_str(mode);
+> -	int c0, c1, p0, p1;
+>   	unsigned int pass;
+>   	int err, n;
+> -	int sfd[2];
+>   	u32 key;
+>   	char b;
+>   
+>   	zero_verdict_count(verd_mapfd);
+>   
