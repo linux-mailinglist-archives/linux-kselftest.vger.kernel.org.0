@@ -2,225 +2,157 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D15B7B5871
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Oct 2023 18:57:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 99F6E7B592A
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Oct 2023 19:42:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238453AbjJBQTs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 2 Oct 2023 12:19:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53402 "EHLO
+        id S231499AbjJBRbe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 2 Oct 2023 13:31:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238505AbjJBQTn (ORCPT
+        with ESMTP id S229576AbjJBRbd (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 2 Oct 2023 12:19:43 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 401771B8
-        for <linux-kselftest@vger.kernel.org>; Mon,  2 Oct 2023 09:19:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696263571; x=1727799571;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ygurDVhGKv+TzjXIv5LAIV75jB0n75sru77K8KD4nPU=;
-  b=MJ56BM3ixHoDusQ3TUmQFq29dWYrpU00c4aiU8e+N3TWq9gkaLjoU8C5
-   cWSuKjMAjBzABdJf+r0thGaJgADLOb2pkNwgtNYnZqtN9R2uZJIiNpzSm
-   TRUaA8gSRfT+yQ+p259mzqmh5QGwoIPa4EzedK0OG4FNo/oLyv/K3I1JL
-   pIu5CJ6sbTPP1hsauqSjXkODl2fyhV+N9vJ+rWSrXFqNMb3UMLI/rxKTn
-   HS2LFxG6oN1uWPl7eWrLFl7Rjap02ZJDptnRmCDdBSyLl3xVxNFOUSI4i
-   Zx17NF9tBBiN3cOrflPFrAe/hG11+093ZBjaXbB48QY+dKG/RP1Q+Qwot
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10851"; a="362949995"
-X-IronPort-AV: E=Sophos;i="6.03,194,1694761200"; 
-   d="scan'208";a="362949995"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2023 09:17:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10851"; a="816340379"
-X-IronPort-AV: E=Sophos;i="6.03,194,1694761200"; 
-   d="scan'208";a="816340379"
-Received: from irvmail002.ir.intel.com ([10.43.11.120])
-  by fmsmga008.fm.intel.com with ESMTP; 02 Oct 2023 09:17:34 -0700
-Received: from [10.249.132.112] (mwajdecz-MOBL.ger.corp.intel.com [10.249.132.112])
-        by irvmail002.ir.intel.com (Postfix) with ESMTP id 6F7C843C23;
-        Mon,  2 Oct 2023 17:17:33 +0100 (IST)
-Message-ID: <2430f74e-12ee-9c54-722a-ddfabcfe0f84@intel.com>
-Date:   Mon, 2 Oct 2023 18:17:32 +0200
+        Mon, 2 Oct 2023 13:31:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A758DA
+        for <linux-kselftest@vger.kernel.org>; Mon,  2 Oct 2023 10:30:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1696267840;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=1Zv0IPJYzYkiErG2s6ydEpQAC8u1zC0W3lAo3suRrzY=;
+        b=Oxn3zN+OxXJbPXNgHVQeWgFskNZtAygEb95VEtl8YLUyZ53UbsmGYFqbbB9a+CmT+voT05
+        /AULt6jQGfwXYKLZmczfxbBuegdrOedukv/0Dl960hSyQPXlUF1SWs2xm5PFEJx7HzET0G
+        JHQ2iKT69wc+kw2/qEqdnOY7CrAy9L4=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-260-hOvZY1AaMZWEBIQGu2S9AQ-1; Mon, 02 Oct 2023 13:30:38 -0400
+X-MC-Unique: hOvZY1AaMZWEBIQGu2S9AQ-1
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-32661ca30d9so49826f8f.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Oct 2023 10:30:38 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696267837; x=1696872637;
+        h=content-transfer-encoding:in-reply-to:subject:organization:from
+         :content-language:references:cc:to:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1Zv0IPJYzYkiErG2s6ydEpQAC8u1zC0W3lAo3suRrzY=;
+        b=BQqnrV+622HnFZE3jhKkzcx/NpZRos8iHs/yCZt18+flCTRrITeNC6KBqcELw5WNbY
+         uDCOop+E/zP0h0DjmSE6oB3DkzYzx1pjwxbLejUQgkAswrMoJp4ZYKoa55OXnaAShmpC
+         L5uenFpkBCumlk0YtkD8xcnprSwB64gemseCP4RfjwB3G3yM1rSV7SThVs0eu5h0AuV4
+         CgZZ2xt0yx2N8HP8NkC/+uQDKoOK+mRTU/wulYlV6XoUDJE4bAn+W91vWnpT7Q5K3Dpy
+         kg9YQdw6dpZiV+crK+eTstRHx2OoE4kz9NuZzZiH0QMab13a3v5nXCjfsTX1c/NAyP8U
+         h5fQ==
+X-Gm-Message-State: AOJu0YwUY0cGvuJ0gOskzHyLv/rWLQBkUdhAhYbYW1F3IYeXn68gbind
+        SIP0jQNsCSvfh80RySsg2L+B60TzPk7BWERZ6bA9AQyB2M1mx2xNkyH8zblGcYxThaYCYroYKBU
+        gQ5wGdsMhRVTdKRR7NnqqnvDbTnZI
+X-Received: by 2002:a5d:448c:0:b0:321:4d1c:425f with SMTP id j12-20020a5d448c000000b003214d1c425fmr10461718wrq.47.1696267837286;
+        Mon, 02 Oct 2023 10:30:37 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IH1s/Oh/sK26P/qhtJnkQ9pABgb0+Kto2RYoGCs5kChT5kKPuRRCO3dybkxiXNrHhCDhqfXMQ==
+X-Received: by 2002:a5d:448c:0:b0:321:4d1c:425f with SMTP id j12-20020a5d448c000000b003214d1c425fmr10461690wrq.47.1696267836848;
+        Mon, 02 Oct 2023 10:30:36 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c735:f200:cb49:cb8f:88fc:9446? (p200300cbc735f200cb49cb8f88fc9446.dip0.t-ipconnect.de. [2003:cb:c735:f200:cb49:cb8f:88fc:9446])
+        by smtp.gmail.com with ESMTPSA id r17-20020adfda51000000b00327c79ca7c6sm3612731wrl.80.2023.10.02.10.30.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Oct 2023 10:30:36 -0700 (PDT)
+Message-ID: <e5d41fbe-a91b-9491-7b93-733f67e75a54@redhat.com>
+Date:   Mon, 2 Oct 2023 19:30:35 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.15.1
-Subject: Re: [PATCH 1/2] kunit: Add param generator macro for zero terminated
- arrays
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
+        viro@zeniv.linux.org.uk, brauner@kernel.org, shuah@kernel.org,
+        aarcange@redhat.com, lokeshgidra@google.com, hughd@google.com,
+        mhocko@suse.com, axelrasmussen@google.com, rppt@kernel.org,
+        willy@infradead.org, Liam.Howlett@oracle.com, jannh@google.com,
+        zhangpeng362@huawei.com, bgeffon@google.com,
+        kaleshsingh@google.com, ngeoffray@google.com, jdduke@google.com,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kernel-team@android.com
+References: <20230923013148.1390521-1-surenb@google.com>
+ <20230923013148.1390521-2-surenb@google.com>
+ <27f177c9-1035-3277-cd62-dc81c12acec4@redhat.com> <ZRrgWVgjVfQu4RGX@x1n>
 Content-Language: en-US
-To:     David Gow <davidgow@google.com>
-Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        Rae Moar <rmoar@google.com>
-References: <20230926220208.1423-1-michal.wajdeczko@intel.com>
- <CABVgOSkYSCDeNDqkvFR9nsBc+DeWkHZ1rrq4X6=B2ZZGZdN86w@mail.gmail.com>
-From:   Michal Wajdeczko <michal.wajdeczko@intel.com>
-In-Reply-To: <CABVgOSkYSCDeNDqkvFR9nsBc+DeWkHZ1rrq4X6=B2ZZGZdN86w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+Subject: Re: [PATCH v2 1/3] userfaultfd: UFFDIO_REMAP: rmap preparation
+In-Reply-To: <ZRrgWVgjVfQu4RGX@x1n>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-
-
-On 30.09.2023 10:58, David Gow wrote:
-> On Wed, 27 Sept 2023 at 06:02, Michal Wajdeczko
-> <michal.wajdeczko@intel.com> wrote:
+On 02.10.23 17:23, Peter Xu wrote:
+> On Mon, Oct 02, 2023 at 04:42:50PM +0200, David Hildenbrand wrote:
+>> On 23.09.23 03:31, Suren Baghdasaryan wrote:
+>>> From: Andrea Arcangeli <aarcange@redhat.com>
+>>>
+>>> As far as the rmap code is concerned, UFFDIO_REMAP only alters the
+>>> page->mapping and page->index. It does it while holding the page
+>>> lock. However folio_referenced() is doing rmap walks without taking the
+>>> folio lock first, so folio_lock_anon_vma_read() must be updated to
+>>> re-check that the folio->mapping didn't change after we obtained the
+>>> anon_vma read lock.
 >>
->> The existing macro KUNIT_ARRAY_PARAM can produce parameter
->> generator function but only when we fully know the definition
->> of the array. However, there might be cases where we would like
->> to generate test params based on externaly defined array, which
->> is defined as zero-terminated array, like pci_driver.id_table.
+>> I'm curious: why don't we need this for existing users of
+>> page_move_anon_rmap()? What's special about UFFDIO_REMAP?
 > 
-> Hmm... I like the idea of this, but am a little wary of dealing with
-> zero-terminated arrays in a generic fashion. Some cases (pointers,
-> where we can just != NULL) are obvious,
-> but we could hit inconsistencies with things like padding, as things
-> like pci_driver.id_table seem to mostly be iterated over with things
-> like:
-> while (ids->vendor || ids->subvendor || ids->class_mask)
-> 
-> which not only ignores the padding, but also half of the fields. So
-> there may be a consistency issue there.
-> 
-> Though I suspect it's not likely to cause issues in practice.
-> 
-> Thoughts?
-> -- David
->>
->> Add helper macro KUNIT_ZERO_ARRAY_PARAM that can work with zero
->> terminated arrays and provide example how to use it.
->>
->> $ ./tools/testing/kunit/kunit.py run \
->>         --kunitconfig ./lib/kunit/.kunitconfig *.example_params*
->>
->> [ ] Starting KUnit Kernel (1/1)...
->> [ ] ============================================================
->> [ ] ========================= example  =========================
->> [ ] =================== example_params_test  ===================
->> [ ] [SKIPPED] example value 3
->> [ ] [PASSED] example value 2
->> [ ] [PASSED] example value 1
->> [ ] [SKIPPED] example value 0
->> [ ] =============== [PASSED] example_params_test ===============
->> [ ] =================== example_params_test  ===================
->> [ ] [SKIPPED] example value 3
->> [ ] [PASSED] example value 2
->> [ ] [PASSED] example value 1
->> [ ] =============== [PASSED] example_params_test ===============
->> [ ] ===================== [PASSED] example =====================
->> [ ] ============================================================
->> [ ] Testing complete. Ran 7 tests: passed: 4, skipped: 3
->>
->> Signed-off-by: Michal Wajdeczko <michal.wajdeczko@intel.com>
->> Cc: David Gow <davidgow@google.com>
->> Cc: Rae Moar <rmoar@google.com>
->> ---
->>  include/kunit/test.h           | 22 ++++++++++++++++++++++
->>  lib/kunit/kunit-example-test.c |  2 ++
->>  2 files changed, 24 insertions(+)
->>
->> diff --git a/include/kunit/test.h b/include/kunit/test.h
->> index 20ed9f9275c9..280113ceb6a6 100644
->> --- a/include/kunit/test.h
->> +++ b/include/kunit/test.h
->> @@ -1514,6 +1514,28 @@ do {                                                                            \
->>                 return NULL;                                                                    \
->>         }
->>
->> +/**
->> + * KUNIT_ZERO_ARRAY_PARAM() - Define test parameter generator from a zero terminated array.
->> + * @name:  prefix for the test parameter generator function.
->> + * @array: zero terminated array of test parameters.
->> + * @get_desc: function to convert param to description; NULL to use default
->> + *
->> + * Define function @name_gen_params which uses zero terminated @array to generate parameters.
->> + */
->> +#define KUNIT_ZERO_ARRAY_PARAM(name, array, get_desc)                                          \
->> +       static const void *name##_gen_params(const void *prev, char *desc)                      \
->> +       {                                                                                       \
->> +               typeof((array)[0]) *__prev = prev;                                              \
->> +               typeof(__prev) __next = __prev ? __prev + 1 : (array);                          \
->> +               void (*__get_desc)(typeof(__next), char *) = get_desc;                          \
->> +               for (; memchr_inv(__next, 0, sizeof(*__next)); __prev = __next++) {             \
-> 
-> Are there any places where this might interact awkwardly with padding?
-> I _think_ it should be okay (variables with static lifetimes should
-> have padding initialised to zero), but there could be a case I'm
-> missing.
+> Totally no expert on anon vma so I'm prone to errors, but IIUC the
+> difference here is root anon vma cannot change in page_move_anon_rmap(),
+> while UFFDIO_REMAP can.
 
-It looks that most of the existing code is relying on empty
-initialization with = { 0 } or = { }, the latter known to be zero
-initialized, including padding, in C23, so if we want to be pedantic we
-may allow to provide a pointer to a table specific "is_end()" function,
-that will detect end of the parameters array, which we could still
-default to memchr_inv if custom solution is not needed:
+That does sound reasonable, thanks.
 
-#define KUNIT_ZERO_ARRAY_PARAM(name, array, get_desc, is_end)	\
-...
-	bool (*__is_end)(typeof(__next)) = is_end;		\
-	for (; __is_end ? __is_end(__next) : 			\
-	     !!memchr_inv(__next, 0, sizeof(*__next));		\
-	     __prev = __next++) {       			\
+Probably we can do better with the patch description (once [1] is used 
+to move the folio to the other anon_vma).
+
+"mm/rmap: support move to different root anon_vma in folio_move_anon_rmap()
+
+For now, folio_move_anon_rmap() was only used to move a folio to a 
+different anon_vma after fork(), whereby the root anon_vma stayed 
+unchanged. For that, it was sufficient to hold the page lock when 
+calling folio_move_anon_rmap().
+
+However, we want to make use of folio_move_anon_rmap() to move folios 
+between VMAs that have a different root anon_vma. As folio_referenced() 
+performs an RMAP walk without holding the page lock but only holding the 
+anon_vma in read mode, holding the page lock is insufficient.
+
+When moving to an anon_vma with a different root anon_vma, we'll have to 
+hold both, the page lock and the anon_vma lock in write mode. 
+Consequently, whenever we succeeded in folio_lock_anon_vma_read() to 
+read-lock the anon_vma, we have to re-check if the mapping was changed 
+in the meantime. If that was the case, we have to retry.
+
+Note that folio_move_anon_rmap() must only be called if the anon page is 
+exclusive to a process, and must not be called on KSM folios.
+
+This is a preparation for UFFDIO_REMAP, which will hold the page lock, 
+the anon_vma lock in write mode, and the mmap_lock in read mode.
+"
+
+In addition, we should document these locking details for 
+folio_move_anon_rmap() and probably not mention UFFDIO_REMAP in the 
+comment in folio_lock_anon_vma_read(), but instead say 
+"folio_move_anon_rmap() might have changed the anon_vma as we might not 
+hold the page lock here."
 
 
-KUNIT_ZERO_ARRAY_PARAM(example_zero, example_params_array,
-			example_param_get_desc, NULL);
-or
+[1] https://lkml.kernel.org/r/20231002142949.235104-3-david@redhat.com
 
-static bool example_param_valid(const struct example_param *next)
-{
-	return next->value;
-}
+-- 
+Cheers,
 
-KUNIT_ZERO_ARRAY_PARAM(example_zero, example_params_array,
-			example_param_get_desc, example_param_valid);
+David / dhildenb
 
-then we shouldn't miss any case
-
-Michal
-
-> 
-> 
->> +                       if (__get_desc)                                                         \
->> +                               __get_desc(__next, desc);                                       \
->> +                       return __next;                                                          \
->> +               }                                                                               \
->> +               return NULL;                                                                    \
->> +       }
->> +
->>  // TODO(dlatypov@google.com): consider eventually migrating users to explicitly
->>  // include resource.h themselves if they need it.
->>  #include <kunit/resource.h>
->> diff --git a/lib/kunit/kunit-example-test.c b/lib/kunit/kunit-example-test.c
->> index 6bb5c2ef6696..ad9ebcfd513e 100644
->> --- a/lib/kunit/kunit-example-test.c
->> +++ b/lib/kunit/kunit-example-test.c
->> @@ -202,6 +202,7 @@ static void example_param_get_desc(const struct example_param *p, char *desc)
->>  }
->>
->>  KUNIT_ARRAY_PARAM(example, example_params_array, example_param_get_desc);
->> +KUNIT_ZERO_ARRAY_PARAM(example_zero, example_params_array, example_param_get_desc);
->>
->>  /*
->>   * This test shows the use of params.
->> @@ -246,6 +247,7 @@ static struct kunit_case example_test_cases[] = {
->>         KUNIT_CASE(example_all_expect_macros_test),
->>         KUNIT_CASE(example_static_stub_test),
->>         KUNIT_CASE_PARAM(example_params_test, example_gen_params),
->> +       KUNIT_CASE_PARAM(example_params_test, example_zero_gen_params),
->>         KUNIT_CASE_SLOW(example_slow_test),
->>         {}
->>  };
->> --
->> 2.25.1
->>
