@@ -2,199 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AC067B55BA
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Oct 2023 17:01:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 645937B5680
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Oct 2023 17:38:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237853AbjJBOsL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 2 Oct 2023 10:48:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49514 "EHLO
+        id S238109AbjJBPWS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 2 Oct 2023 11:22:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237823AbjJBOsK (ORCPT
+        with ESMTP id S238103AbjJBPWS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 2 Oct 2023 10:48:10 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9BD4F2;
-        Mon,  2 Oct 2023 07:48:06 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86C2DC433C7;
-        Mon,  2 Oct 2023 14:48:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696258086;
-        bh=HHXocg/UqDLTpBTms/VMzX03y/J3TDNJKoUjdrxZ1l0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SxqRp350bCXrlLYTCXAC17UQCCmm51+C+6kQ9mkjWoxlB9MTfh5N0bCKg2/EnnjcT
-         f885QQtuJrMdAMYs/2pQiLF6l+SU2plFx76+tNDHdskSW6EbAUq9cvw2VIB9dYBVMx
-         5dQfl2E/QIlaUl93d9aSRNJpP5epZTeelI9WF5qvUxTm2WMzSsxx1La69ysKCKBIhr
-         78VGgPpD3mrWViQouPWR/BU+gxZaAHtgnQU+D8CebnD30jJCzB8lfZ1rEwrlUorFPm
-         8nzsS3U0yc5+hj7igp3Ym6oyiNOUYyghmqaWqB08Blj1GEmCen4MWqnRBT+TQ6gL6X
-         bD9xQdW5ANvgQ==
-Date:   Mon, 2 Oct 2023 16:48:01 +0200
-From:   Benjamin Tissoires <bentiss@kernel.org>
-To:     Justin Stitt <justinstitt@google.com>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] selftests/hid: fix building for older kernels
-Message-ID: <lhb7u2lg7fv2wx3kzrboftqcdtmbjvbzz7zssfn5mho72hcrvj@i53fzzis7b4q>
-References: <20230908-kselftest-09-08-v2-0-0def978a4c1b@google.com>
- <CAFhGd8pEv32zp4RDsj_jeBjzP5hcsf4dP4Knueiw_UM8ZsqcKw@mail.gmail.com>
+        Mon, 2 Oct 2023 11:22:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1721A6
+        for <linux-kselftest@vger.kernel.org>; Mon,  2 Oct 2023 08:21:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1696260092;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=QlAybfgmV/uY/HzoMoKn7tEAOtApMgJqX5rJGiOaxmY=;
+        b=P5jzxLsY/3csGjRDYY/A0Uodii+d83ehfoandVnSyvyx9FHBt9AQt4Sod6OG/h7kbjBn20
+        9Ub2w5aRE+aLzsoZaA75MpBhnP3X3oh26cetx3yLiUlNW62hO3k8LiPvEfaw/TaLAwQoCc
+        k1PW9kuAvaiCTouFIzOanxN+MgzDDHw=
+Received: from mail-ua1-f70.google.com (mail-ua1-f70.google.com
+ [209.85.222.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-172-cImskmzXMLqB49ULbTeMCw-1; Mon, 02 Oct 2023 11:21:24 -0400
+X-MC-Unique: cImskmzXMLqB49ULbTeMCw-1
+Received: by mail-ua1-f70.google.com with SMTP id a1e0cc1a2514c-7a82b0a9d2cso1341823241.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 02 Oct 2023 08:21:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696260084; x=1696864884;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QlAybfgmV/uY/HzoMoKn7tEAOtApMgJqX5rJGiOaxmY=;
+        b=ZO0tod5adM7q5g4hEv4lfjzvgYcUCxt0jbCLpEMxoX3VELTwtRkNRGFLli7zjMSmWV
+         b/2l3jrc+YY0v9JfVZsb+iuHKsqrki183Q4Fzi+NJT2TdL/h9ygAOZFedG6lpX59Wynu
+         lnCUC3CkkJuKBbOrmqV9Re3qG0UMtIds+Zc0XdOMLkErB6CX1klnqXxQvCzM8Iu66jbE
+         jkzoIxDIniO0mSuQ/Y0M+XhdW8Ra2h0UeCxRBRnAOZmYzhnOpXaE33Ia9zh3RC0Ehr6I
+         QU+Ak6IiH7OtPc4WkDBmK5BOrKoLxICwjb2CVfYACFfTdgLKKetlJMCi0fMEKAUvli2q
+         INDQ==
+X-Gm-Message-State: AOJu0YwlvAhu3ZT64KiZAY0M0hBKpm2l1D1TiU/sH+dAKR3Hd+oQKVIs
+        fRgbBYkmjbpWDD9YdC7Nabu2NTBX1guIg5HzRd0OpiF1qhqvZQy63cyn0FUoga4NJJdAI89IgC7
+        AjQlTcfl30qaAspTKPwAOVe2mEeEU
+X-Received: by 2002:a05:6102:358e:b0:452:67eb:43cc with SMTP id h14-20020a056102358e00b0045267eb43ccmr5101336vsu.2.1696260084336;
+        Mon, 02 Oct 2023 08:21:24 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFn8glcUatTtqxL6ORAuKISgs+lhCwObGpl8dZ1+0G3Dbu/BgHizje+srQxQLZctE7w0kbPpw==
+X-Received: by 2002:a05:6102:358e:b0:452:67eb:43cc with SMTP id h14-20020a056102358e00b0045267eb43ccmr5101323vsu.2.1696260084067;
+        Mon, 02 Oct 2023 08:21:24 -0700 (PDT)
+Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
+        by smtp.gmail.com with ESMTPSA id f5-20020a0cf3c5000000b0065cfec43097sm4215956qvm.39.2023.10.02.08.21.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Oct 2023 08:21:23 -0700 (PDT)
+Date:   Mon, 2 Oct 2023 11:21:20 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Jann Horn <jannh@google.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
+        brauner@kernel.org, shuah@kernel.org, aarcange@redhat.com,
+        lokeshgidra@google.com, hughd@google.com, mhocko@suse.com,
+        axelrasmussen@google.com, rppt@kernel.org, willy@infradead.org,
+        Liam.Howlett@oracle.com, zhangpeng362@huawei.com,
+        bgeffon@google.com, kaleshsingh@google.com, ngeoffray@google.com,
+        jdduke@google.com, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH v2 2/3] userfaultfd: UFFDIO_REMAP uABI
+Message-ID: <ZRrf8NligMzwqx97@x1n>
+References: <20230923013148.1390521-1-surenb@google.com>
+ <20230923013148.1390521-3-surenb@google.com>
+ <CAG48ez1N2kryy08eo0dcJ5a9O-3xMT8aOrgrcD+CqBN=cBfdDw@mail.gmail.com>
+ <03f95e90-82bd-6ee2-7c0d-d4dc5d3e15ee@redhat.com>
+ <ZRWo1daWBnwNz0/O@x1n>
+ <98b21e78-a90d-8b54-3659-e9b890be094f@redhat.com>
+ <ZRW2CBUDNks9RGQJ@x1n>
+ <85e5390c-660c-ef9e-b415-00ee71bc5cbf@redhat.com>
+ <ZRXHK3hbdjfQvCCp@x1n>
+ <fc27ce41-bc97-91a7-deb6-67538689021c@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAFhGd8pEv32zp4RDsj_jeBjzP5hcsf4dP4Knueiw_UM8ZsqcKw@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <fc27ce41-bc97-91a7-deb6-67538689021c@redhat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sep 26 2023, Justin Stitt wrote:
-> Hey all,
+On Mon, Oct 02, 2023 at 10:00:03AM +0200, David Hildenbrand wrote:
+> In case we cannot simply remap the page, the fallback sequence (from the
+> cover letter) would be triggered.
 > 
-> Gentle ping on this patch. Looking to get this patch and [1] slated
-> for 6.7 wherein we can start getting cleaner kselftests builds.
+> 1) UFFDIO_COPY
+> 2) MADV_DONTNEED
 > 
-> I do not think I am able to successfully run the hid/bpf selftests due
-> to my kernel version being too low (and an inability to upgrade it as
-> I'm on a corp rolling release). I'd appreciate some insight on how to
-> get the tests running or if someone could actually build+run the tests
-> with this patch applied.
+> So we would just handle the operation internally without a fallback.
 
-I wanted to apply this series today, but it failed my own CI now with
-the enums being already defined:
-https://gitlab.freedesktop.org/bentiss/hid/-/jobs/49754306
+Note that I think there will be a slight difference on whole remap
+atomicity, on what happens if the page is modified after UFFDIO_COPY but
+before DONTNEED.
 
-I'll probably squash the following patch in 1/3, would you mind giving
-it a test?
+UFFDIO_REMAP guarantees full atomicity when moving the page, IOW, threads
+can be updating the pages when ioctl(UFFDIO_REMAP), data won't get lost
+during movement, and it will generate a missing event after moved, with
+latest data showing up on dest.
 
----
-From 37feca6c0e84705ad65e621643206c287b63bb0a Mon Sep 17 00:00:00 2001
-From: Benjamin Tissoires <bentiss@kernel.org>
-Date: Mon, 2 Oct 2023 15:37:18 +0200
-Subject: [PATCH] fix selftests/hid: ensure we can compile the tests on kernels
- pre-6.3
+I'm not sure that means such a fallback is a problem, Suren may know
+better with the use case.
 
-Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
----
- .../selftests/hid/progs/hid_bpf_helpers.h     | 30 ++++++++++++++++++-
- 1 file changed, 29 insertions(+), 1 deletion(-)
+Thanks,
 
-diff --git a/tools/testing/selftests/hid/progs/hid_bpf_helpers.h b/tools/testing/selftests/hid/progs/hid_bpf_helpers.h
-index ab3b18ba48c4..feed5a991e05 100644
---- a/tools/testing/selftests/hid/progs/hid_bpf_helpers.h
-+++ b/tools/testing/selftests/hid/progs/hid_bpf_helpers.h
-@@ -5,16 +5,44 @@
- #ifndef __HID_BPF_HELPERS_H
- #define __HID_BPF_HELPERS_H
- 
--/* "undefine" structs in vmlinux.h, because we "override" them below */
-+/* "undefine" structs and enums in vmlinux.h, because we "override" them below */
- #define hid_bpf_ctx hid_bpf_ctx___not_used
- #define hid_report_type hid_report_type___not_used
- #define hid_class_request hid_class_request___not_used
- #define hid_bpf_attach_flags hid_bpf_attach_flags___not_used
-+#define HID_INPUT_REPORT         HID_INPUT_REPORT___not_used
-+#define HID_OUTPUT_REPORT        HID_OUTPUT_REPORT___not_used
-+#define HID_FEATURE_REPORT       HID_FEATURE_REPORT___not_used
-+#define HID_REPORT_TYPES         HID_REPORT_TYPES___not_used
-+#define HID_REQ_GET_REPORT       HID_REQ_GET_REPORT___not_used
-+#define HID_REQ_GET_IDLE         HID_REQ_GET_IDLE___not_used
-+#define HID_REQ_GET_PROTOCOL     HID_REQ_GET_PROTOCOL___not_used
-+#define HID_REQ_SET_REPORT       HID_REQ_SET_REPORT___not_used
-+#define HID_REQ_SET_IDLE         HID_REQ_SET_IDLE___not_used
-+#define HID_REQ_SET_PROTOCOL     HID_REQ_SET_PROTOCOL___not_used
-+#define HID_BPF_FLAG_NONE        HID_BPF_FLAG_NONE___not_used
-+#define HID_BPF_FLAG_INSERT_HEAD HID_BPF_FLAG_INSERT_HEAD·___not_used
-+#define HID_BPF_FLAG_MAX         HID_BPF_FLAG_MAX___not_used
-+
- #include "vmlinux.h"
-+
- #undef hid_bpf_ctx
- #undef hid_report_type
- #undef hid_class_request
- #undef hid_bpf_attach_flags
-+#undef HID_INPUT_REPORT
-+#undef HID_OUTPUT_REPORT
-+#undef HID_FEATURE_REPORT
-+#undef HID_REPORT_TYPES
-+#undef HID_REQ_GET_REPORT
-+#undef HID_REQ_GET_IDLE
-+#undef HID_REQ_GET_PROTOCOL
-+#undef HID_REQ_SET_REPORT
-+#undef HID_REQ_SET_IDLE
-+#undef HID_REQ_SET_PROTOCOL
-+#undef HID_BPF_FLAG_NONE
-+#undef HID_BPF_FLAG_INSERT_HEAD
-+#undef HID_BPF_FLAG_MAX
- 
- #include <bpf/bpf_helpers.h>
- #include <bpf/bpf_tracing.h>
 -- 
-2.41.0
----
+Peter Xu
 
-Cheers,
-Benjamin
-
-> 
-> On Sat, Sep 9, 2023 at 7:22 AM Justin Stitt <justinstitt@google.com> wrote:
-> >
-> > Hi, I am sending this series on behalf of myself and Benjamin Tissoires. There
-> > existed an initial n=3 patch series which was later expanded to n=4 and
-> > is now back to n=3 with some fixes added in and rebased against
-> > mainline.
-> >
-> > This patch series aims to ensure that the hid/bpf selftests can be built
-> > without errors.
-> >
-> > Here's Benjamin's initial cover letter for context:
-> > |  These fixes have been triggered by [0]:
-> > |  basically, if you do not recompile the kernel first, and are
-> > |  running on an old kernel, vmlinux.h doesn't have the required
-> > |  symbols and the compilation fails.
-> > |
-> > |  The tests will fail if you run them on that very same machine,
-> > |  of course, but the binary should compile.
-> > |
-> > |  And while I was sorting out why it was failing, I realized I
-> > |  could do a couple of improvements on the Makefile.
-> > |
-> > |  [0] https://lore.kernel.org/linux-input/56ba8125-2c6f-a9c9-d498-0ca1c153dcb2@redhat.com/T/#t
-> >
-> > Changes from v1 -> v2:
-> > - roll Justin's fix into patch 1/3
-> > - add __attribute__((preserve_access_index)) (thanks Eduard)
-> > - rebased onto mainline (2dde18cd1d8fac735875f2e4987f11817cc0bc2c)
-> > - Link to v1: https://lore.kernel.org/all/20230825-wip-selftests-v1-0-c862769020a8@kernel.org/
-> >
-> > Link: https://github.com/ClangBuiltLinux/linux/issues/1698
-> > Link: https://github.com/ClangBuiltLinux/continuous-integration2/issues/61
-> > ---
-> > Benjamin Tissoires (3):
-> >       selftests/hid: ensure we can compile the tests on kernels pre-6.3
-> >       selftests/hid: do not manually call headers_install
-> >       selftests/hid: force using our compiled libbpf headers
-> >
-> >  tools/testing/selftests/hid/Makefile               | 10 ++---
-> >  tools/testing/selftests/hid/progs/hid.c            |  3 --
-> >  .../testing/selftests/hid/progs/hid_bpf_helpers.h  | 49 ++++++++++++++++++++++
-> >  3 files changed, 53 insertions(+), 9 deletions(-)
-> > ---
-> > base-commit: 2dde18cd1d8fac735875f2e4987f11817cc0bc2c
-> > change-id: 20230908-kselftest-09-08-56d7f4a8d5c4
-> >
-> > Best regards,
-> > --
-> > Justin Stitt <justinstitt@google.com>
-> >
-> 
-> [1]: https://lore.kernel.org/all/20230912-kselftest-param_test-c-v1-1-80a6cffc7374@google.com/
-> 
-> Thanks
-> Justin
