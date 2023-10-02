@@ -2,148 +2,86 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF1037B4D03
-	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Oct 2023 10:00:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAF927B4E95
+	for <lists+linux-kselftest@lfdr.de>; Mon,  2 Oct 2023 11:03:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235803AbjJBIA6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 2 Oct 2023 04:00:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37784 "EHLO
+        id S235972AbjJBJDx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 2 Oct 2023 05:03:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235768AbjJBIA6 (ORCPT
+        with ESMTP id S236032AbjJBJDs (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 2 Oct 2023 04:00:58 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6186AC6
-        for <linux-kselftest@vger.kernel.org>; Mon,  2 Oct 2023 01:00:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1696233608;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=2hMwBDQxPqEr2KGnCZRjOsa4DbxGMCcRw1+qHGhTgF8=;
-        b=dlkSa/MBKxMnCmVhC4xqTA85+AtEDORgMq5Z8lSyuaCZEaqeDXNDmbsVe33SdTvE7ohOEs
-        fDP2eG/2kdW7mWUujW39ujQqfr1nQSZXW0wt7PjZjjIUGdTOZRjbwHl7pBjSl9iVzt18+B
-        8lOO1BDF3YLZ5cKeBw6vblOVsWwD0l0=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-64-fbt6zRsoOriNbjK9L13zBg-1; Mon, 02 Oct 2023 04:00:06 -0400
-X-MC-Unique: fbt6zRsoOriNbjK9L13zBg-1
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-4065478afd3so25129355e9.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 02 Oct 2023 01:00:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696233605; x=1696838405;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2hMwBDQxPqEr2KGnCZRjOsa4DbxGMCcRw1+qHGhTgF8=;
-        b=wRozzkV6vmbrlntyE3d7SSO3kLN5TgQigHUVPdyG9go++Wi+gKRzOAhvVwQJv24xv6
-         g5ACoLRUD+hhcvu8Vf5YTRChwMSJWa625zc7j3wooWjCapjvoR+enNRfr++vTklQWSJX
-         eI1+TS44oNfOyFlqsAlgVLgDzB6TzdhvBRGG6GeHOinCaHEyic5wNTUuuwu+PdNN/9c3
-         nZ4xMuuAtgV2iIVTXfo64AR13mQ6s0PH6AGCGDh5pgWC22Yk2RepOE7wdG09cvRGfYoo
-         OBsjBAv4R8E0mvJy1qxh+7vpoUpZczQ2y85r1EQeByqjTVSkcVh6yqBPkg5GmH74sbtu
-         LJNw==
-X-Gm-Message-State: AOJu0Yzty0OoL6BlFJx1ECFSvyuyjBH+FTpHUdKnsDhdI2cXZMVKWE+o
-        SFCg27lMeLEKighyFo4SVTA4z4uNJJUqtYuwFXuvBqbkecAPfwgyj0hK4ve8ILitJxvVcKzTebr
-        r5BJ2R5M2A8HxPpJ8ht2sCk89xSxo
-X-Received: by 2002:a05:600c:ac1:b0:402:f501:447c with SMTP id c1-20020a05600c0ac100b00402f501447cmr9457522wmr.0.1696233605517;
-        Mon, 02 Oct 2023 01:00:05 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFLXTkL+9EEt3zHQk5ZsLeQprJDYGJsst31lbLdGGFpUez2Jqfmw0gPneDp6ON/b1DJjaaQzg==
-X-Received: by 2002:a05:600c:ac1:b0:402:f501:447c with SMTP id c1-20020a05600c0ac100b00402f501447cmr9457493wmr.0.1696233604995;
-        Mon, 02 Oct 2023 01:00:04 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c735:f200:cb49:cb8f:88fc:9446? (p200300cbc735f200cb49cb8f88fc9446.dip0.t-ipconnect.de. [2003:cb:c735:f200:cb49:cb8f:88fc:9446])
-        by smtp.gmail.com with ESMTPSA id 3-20020a05600c020300b004063cced50bsm6701171wmi.23.2023.10.02.01.00.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 02 Oct 2023 01:00:04 -0700 (PDT)
-Message-ID: <fc27ce41-bc97-91a7-deb6-67538689021c@redhat.com>
-Date:   Mon, 2 Oct 2023 10:00:03 +0200
+        Mon, 2 Oct 2023 05:03:48 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B410CCC7;
+        Mon,  2 Oct 2023 01:58:10 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1E7EC433C8;
+        Mon,  2 Oct 2023 08:58:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1696237090;
+        bh=8abm9OAu+6R2eeXjvqzEvTzOpfgxvqtX2BvAOig38Qc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=R3iroP1fgcPCfVuj+LKeoTyHLNnOW1uVwQiT1WrjNYg+BWp/TPOvIaG7m1vjEea9n
+         f1i0I0RO0TojNIyE2LzamXcwGlHYmuYAZSVRpu9dFBN8Nd2OWywNdtZBxplEoB3n9k
+         3vAAbta8hvhd0hnSSJwqg0kwzk5vjWWX98klWb5Q=
+Date:   Mon, 2 Oct 2023 10:58:08 +0200
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Abhinav <singhabhinav9051571833@gmail.com>
+Cc:     shuah@kernel.org, linux-kernel-mentees@lists.linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v2] Added missing TARGETS in kselftest top level Makefile
+Message-ID: <2023100251-recycled-purist-1ea5@gregkh>
+References: <2023100135-stiffen-depress-8121@gregkh>
+ <20231002072735.1566009-1-singhabhinav9051571833@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Jann Horn <jannh@google.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
-        brauner@kernel.org, shuah@kernel.org, aarcange@redhat.com,
-        lokeshgidra@google.com, hughd@google.com, mhocko@suse.com,
-        axelrasmussen@google.com, rppt@kernel.org, willy@infradead.org,
-        Liam.Howlett@oracle.com, zhangpeng362@huawei.com,
-        bgeffon@google.com, kaleshsingh@google.com, ngeoffray@google.com,
-        jdduke@google.com, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kernel-team@android.com
-References: <20230923013148.1390521-1-surenb@google.com>
- <20230923013148.1390521-3-surenb@google.com>
- <CAG48ez1N2kryy08eo0dcJ5a9O-3xMT8aOrgrcD+CqBN=cBfdDw@mail.gmail.com>
- <03f95e90-82bd-6ee2-7c0d-d4dc5d3e15ee@redhat.com> <ZRWo1daWBnwNz0/O@x1n>
- <98b21e78-a90d-8b54-3659-e9b890be094f@redhat.com> <ZRW2CBUDNks9RGQJ@x1n>
- <85e5390c-660c-ef9e-b415-00ee71bc5cbf@redhat.com> <ZRXHK3hbdjfQvCCp@x1n>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v2 2/3] userfaultfd: UFFDIO_REMAP uABI
-In-Reply-To: <ZRXHK3hbdjfQvCCp@x1n>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231002072735.1566009-1-singhabhinav9051571833@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 28.09.23 20:34, Peter Xu wrote:
-> On Thu, Sep 28, 2023 at 07:51:18PM +0200, David Hildenbrand wrote:
->> On 28.09.23 19:21, Peter Xu wrote:
->>> On Thu, Sep 28, 2023 at 07:05:40PM +0200, David Hildenbrand wrote:
->>>> As described as reply to v1, without fork() and KSM, the PAE bit should
->>>> stick around. If that's not the case, we should investigate why.
->>>>
->>>> If we ever support the post-fork case (which the comment above remap_pages()
->>>> excludes) we'll need good motivation why we'd want to make this
->>>> overly-complicated feature even more complicated.
->>>
->>> The problem is DONTFORK is only a suggestion, but not yet restricted.  If
->>> someone reaches on top of some !PAE page on src it'll never gonna proceed
->>> and keep failing, iiuc.
->>
->> Yes. It won't work if you fork() and not use DONTFORK on the src VMA. We
->> should document that as a limitation.
->>
->> For example, you could return an error to the user that can just call
->> UFFDIO_COPY. (or to the UFFDIO_COPY from inside uffd code, but that's
->> probably ugly as well).
+On Mon, Oct 02, 2023 at 12:57:35PM +0530, Abhinav wrote:
+> Some tests like dma, ia64, etc. were not present in top level of
+> selftest Makefile, so when someone ran 'make run_tests' they would miss
+> these tests. This patches adds those left out tests.
 > 
-> We could indeed provide some special errno perhaps upon the PAE check, then
-> document it explicitly in the man page and suggest resolutions (like
-> DONTFORK) when user hit it.
+> Signed-off-by: Abhinav <singhabhinav9051571833@gmail.com>
+> ---
+>  tools/testing/selftests/Makefile | 7 +++++++
+>  1 file changed, 7 insertions(+)
 > 
 
-Maybe it might be reasonable to consider an operation that moves the 
-page, even if it might do an internal copy. UFFDIO_MOVE might be a 
-better name for something like that.
+Hi,
 
-In case we cannot simply remap the page, the fallback sequence (from the 
-cover letter) would be triggered.
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-1) UFFDIO_COPY
-2) MADV_DONTNEED
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-So we would just handle the operation internally without a fallback.
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/process/submitting-patches.rst for what
+  needs to be done here to properly describe this.
 
-The recommendation to the user to make the overall operation as fast as 
-possible would be to not use KSM, to avoid fork(), or to use 
-MADV_DONTFORK when fork() must be used.
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
+thanks,
 
--- 
-Cheers,
-
-David / dhildenb
-
+greg k-h's patch email bot
