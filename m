@@ -2,83 +2,81 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C6E97B7303
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Oct 2023 23:05:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 58E537B730C
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Oct 2023 23:08:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241133AbjJCVFm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 3 Oct 2023 17:05:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59244 "EHLO
+        id S232343AbjJCVIy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 3 Oct 2023 17:08:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241138AbjJCVFg (ORCPT
+        with ESMTP id S232252AbjJCVIx (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 3 Oct 2023 17:05:36 -0400
+        Tue, 3 Oct 2023 17:08:53 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63540AC
-        for <linux-kselftest@vger.kernel.org>; Tue,  3 Oct 2023 14:04:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99BF3D3
+        for <linux-kselftest@vger.kernel.org>; Tue,  3 Oct 2023 14:08:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1696367085;
+        s=mimecast20190719; t=1696367292;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=9cUoqfdOw5XZHcgjUV+sI5thBgqq8pWph++w1cw0LK0=;
-        b=V5oJuZmflyMMDLjxeqdq+woSYfJDoiCVolX2fRnhmWZxaNxU4WHjQKk3VU1K3p0xpy5AdF
-        Sj1dXZgwoOVHnLnOZ+NZbN48132flXt9mWhOaOQ/bOrdRQvkcV+nPcYdXF8407iL0gJh5H
-        Yb+q2adXalkuIwSrVaz4Hi86K3+pm5A=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=iZqudPdFmsqAX0i25tQhq4N6QuLZbaMC0GnCxXAloB4=;
+        b=gd2fxX3Iejo3gGU7Kg/WaMegVwaibxWUg1mLiW2FwRuKvZKrHfW/aNDd6M15SWagIoupsG
+        JwuaZ2EANRy7iEG1ogR4n7FndVRWDTCqIGmK+53BI7Qz4+x+4hP4TrTJ4LfcgOavGCiZhu
+        rHp8ZwTpQM7qgBBIQltoXPUPm9RHPYg=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-588-_s_KYaSEN-uueQN4gbgcqA-1; Tue, 03 Oct 2023 17:04:42 -0400
-X-MC-Unique: _s_KYaSEN-uueQN4gbgcqA-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-4053a5c6a59so9768315e9.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Oct 2023 14:04:42 -0700 (PDT)
+ us-mta-440-HIIQcHnBMRawsPFbJ-HclA-1; Tue, 03 Oct 2023 17:08:11 -0400
+X-MC-Unique: HIIQcHnBMRawsPFbJ-HclA-1
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-4059475c174so11224975e9.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Oct 2023 14:08:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696367081; x=1696971881;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :content-language:references:cc:to:user-agent:mime-version:date
+        d=1e100.net; s=20230601; t=1696367290; x=1696972090;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=9cUoqfdOw5XZHcgjUV+sI5thBgqq8pWph++w1cw0LK0=;
-        b=pBRsO3y/S5m82M1uFzWwcXkXcZM6QhqiPVHAs7RL0AFZ6zx5e64rkZ+FV24bzVGob9
-         i2W9xy4AehNGwXx2C9ktuhXTtSpcB3vxf66S3YudZ0ECHvCqkQLr0T2UHg5VSJC6zOxm
-         pzGF/PKIvB7EIp1b2x6AjhliQke2o6d08Fxwe7UQOIX1tjq96huAidqhimLN3PFzri1z
-         L0sjMJwwkN4M8O3JD9F8HfLcMwOSIKN49noUpEgHZG7DvwrZTcbJ9EJ6OAULq6kP6kSU
-         B/S/e2Fzsmmb+6NO7cXIIfv9sCbiYfxpDgY9ZZ8cgpCBqWxfMjFDzDPTODJ7JmXnM5h7
-         X/aA==
-X-Gm-Message-State: AOJu0YwK7/6q+//ac4zuYXhGKgZlTI8iO/jtQf74F7HGTbajRKSNfwpF
-        Blq7WZckYsQZ4J7vP6pEeSScKyyPaaFnFgW//manYEZyfTX77XG9ov0CQvxtoTjWjTtUWx60aEc
-        G92r42La7wFysH+8aKlot0QuRbEyx
-X-Received: by 2002:a7b:cb8b:0:b0:3fb:e189:3532 with SMTP id m11-20020a7bcb8b000000b003fbe1893532mr591790wmi.20.1696367081199;
-        Tue, 03 Oct 2023 14:04:41 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGCEM3CW7oIUIpk49usru6wH655xRCmLet2S1OOC6d3hz6/2QR8k4YhBQDCY3vQccozPA5b7Q==
-X-Received: by 2002:a7b:cb8b:0:b0:3fb:e189:3532 with SMTP id m11-20020a7bcb8b000000b003fbe1893532mr591768wmi.20.1696367080771;
-        Tue, 03 Oct 2023 14:04:40 -0700 (PDT)
+        bh=iZqudPdFmsqAX0i25tQhq4N6QuLZbaMC0GnCxXAloB4=;
+        b=cltC//rZ/lUzDoV9nR9zwjqrEFhdTBvsLA8WUrWrdtMkQahSulYW35GVhXOBrVML9P
+         5+oJaZY8VmZC8gemqMczOORudRpzhOv89Rk0WKwPTRT3++2QS9iJnd2L9H/RY5eH2OX4
+         N3o29lTzqdzDJS7eX6mLn5Ao45XJ9IJCs6vSS7UPnLv87+yI8Xi6z7yCYgFGtTg6Qzhn
+         Pxnx+XHD8Q45aZMSLN0V9kLYxe9vbz7HN9Iy9CEiF1rZ4f6MXVNXjCc+W7JvRyW1o79+
+         vBICiTDdRVtI76h6VTIlt//Z5xKdBuhJbfbjThTc63g8go7PSRCJcszHAg/Ud9asTNx/
+         pk4A==
+X-Gm-Message-State: AOJu0Yz08swQI28s7lB4J3SrOxo7DMlxC+YhabsENzRGs4/64+/WiMnj
+        o+Hn1+0uIYFDyz56Yow+VM8AwlzBgnw2dFMCkaFNT22IjzOrTLX/2sOQXorgZ1U1KKLzq5PQ1o3
+        P0bWFphceOB1863NQsqQ1FA96eej9
+X-Received: by 2002:a7b:c451:0:b0:401:aa8f:7562 with SMTP id l17-20020a7bc451000000b00401aa8f7562mr649095wmi.11.1696367290208;
+        Tue, 03 Oct 2023 14:08:10 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IF3Eewd0OYhzLMEft9jgHfzauv7z/0zio9oUhdJ+EuXuDZ6P60kvlN4IwqdpM02c5om1hVGew==
+X-Received: by 2002:a7b:c451:0:b0:401:aa8f:7562 with SMTP id l17-20020a7bc451000000b00401aa8f7562mr649063wmi.11.1696367289788;
+        Tue, 03 Oct 2023 14:08:09 -0700 (PDT)
 Received: from ?IPV6:2003:cb:c736:1b00:e1fc:b01b:70f5:1985? (p200300cbc7361b00e1fcb01b70f51985.dip0.t-ipconnect.de. [2003:cb:c736:1b00:e1fc:b01b:70f5:1985])
-        by smtp.gmail.com with ESMTPSA id m11-20020a7bce0b000000b004064741f855sm23560wmc.47.2023.10.03.14.04.39
+        by smtp.gmail.com with ESMTPSA id z15-20020a1c4c0f000000b003fee6e170f9sm31441wmf.45.2023.10.03.14.08.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Oct 2023 14:04:40 -0700 (PDT)
-Message-ID: <2e2dfe74-8185-5f10-a5ce-5f6252ad0d42@redhat.com>
-Date:   Tue, 3 Oct 2023 23:04:38 +0200
+        Tue, 03 Oct 2023 14:08:09 -0700 (PDT)
+Message-ID: <c837fc02-3dbd-ba88-dacb-cf150272a4c4@redhat.com>
+Date:   Tue, 3 Oct 2023 23:08:07 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.15.1
-To:     Suren Baghdasaryan <surenb@google.com>,
-        Lokesh Gidra <lokeshgidra@google.com>
-Cc:     Peter Xu <peterx@redhat.com>, Jann Horn <jannh@google.com>,
-        akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
-        brauner@kernel.org, shuah@kernel.org, aarcange@redhat.com,
-        hughd@google.com, mhocko@suse.com, axelrasmussen@google.com,
-        rppt@kernel.org, willy@infradead.org, Liam.Howlett@oracle.com,
-        zhangpeng362@huawei.com, bgeffon@google.com,
-        kaleshsingh@google.com, ngeoffray@google.com, jdduke@google.com,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kernel-team@android.com
-References: <20230923013148.1390521-1-surenb@google.com>
- <20230923013148.1390521-3-surenb@google.com>
- <CAG48ez1N2kryy08eo0dcJ5a9O-3xMT8aOrgrcD+CqBN=cBfdDw@mail.gmail.com>
- <03f95e90-82bd-6ee2-7c0d-d4dc5d3e15ee@redhat.com> <ZRWo1daWBnwNz0/O@x1n>
- <98b21e78-a90d-8b54-3659-e9b890be094f@redhat.com> <ZRW2CBUDNks9RGQJ@x1n>
+Subject: Re: [PATCH v2 2/3] userfaultfd: UFFDIO_REMAP uABI
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>
+Cc:     Lokesh Gidra <lokeshgidra@google.com>,
+        Jann Horn <jannh@google.com>, akpm@linux-foundation.org,
+        viro@zeniv.linux.org.uk, brauner@kernel.org, shuah@kernel.org,
+        aarcange@redhat.com, hughd@google.com, mhocko@suse.com,
+        axelrasmussen@google.com, rppt@kernel.org, willy@infradead.org,
+        Liam.Howlett@oracle.com, zhangpeng362@huawei.com,
+        bgeffon@google.com, kaleshsingh@google.com, ngeoffray@google.com,
+        jdduke@google.com, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kernel-team@android.com
+References: <ZRW2CBUDNks9RGQJ@x1n>
  <85e5390c-660c-ef9e-b415-00ee71bc5cbf@redhat.com> <ZRXHK3hbdjfQvCCp@x1n>
  <fc27ce41-bc97-91a7-deb6-67538689021c@redhat.com> <ZRrf8NligMzwqx97@x1n>
  <CA+EESO5VtrfXv-kvDsotPLXcpMgOK5t5c+tbXZ7KWRU2O_0PBQ@mail.gmail.com>
@@ -86,134 +84,53 @@ References: <20230923013148.1390521-1-surenb@google.com>
  <9434ef94-15e8-889c-0c31-3e875060a2f7@redhat.com>
  <CA+EESO4GuDXZ6newN-oF43WOxrfsZ9Ejq8RJNF2wOYq571zmDA@mail.gmail.com>
  <CAJuCfpE_h7Bj41sBiADswkUfVCoLXANuQmctdYUEgYjn6fHSCw@mail.gmail.com>
-Content-Language: en-US
+ <ZRx31TKFDGRatoC8@x1n>
 From:   David Hildenbrand <david@redhat.com>
 Organization: Red Hat
-Subject: Re: [PATCH v2 2/3] userfaultfd: UFFDIO_REMAP uABI
-In-Reply-To: <CAJuCfpE_h7Bj41sBiADswkUfVCoLXANuQmctdYUEgYjn6fHSCw@mail.gmail.com>
+In-Reply-To: <ZRx31TKFDGRatoC8@x1n>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
         RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 03.10.23 22:04, Suren Baghdasaryan wrote:
-> On Mon, Oct 2, 2023 at 12:34 PM Lokesh Gidra <lokeshgidra@google.com> wrote:
->>
->> On Mon, Oct 2, 2023 at 6:43 PM David Hildenbrand <david@redhat.com> wrote:
->>>
->>> On 02.10.23 17:55, Lokesh Gidra wrote:
->>>> On Mon, Oct 2, 2023 at 4:46 PM Lokesh Gidra <lokeshgidra@google.com> wrote:
->>>>>
->>>>> On Mon, Oct 2, 2023 at 4:21 PM Peter Xu <peterx@redhat.com> wrote:
->>>>>>
->>>>>> On Mon, Oct 02, 2023 at 10:00:03AM +0200, David Hildenbrand wrote:
->>>>>>> In case we cannot simply remap the page, the fallback sequence (from the
->>>>>>> cover letter) would be triggered.
->>>>>>>
->>>>>>> 1) UFFDIO_COPY
->>>>>>> 2) MADV_DONTNEED
->>>>>>>
->>>>>>> So we would just handle the operation internally without a fallback.
->>>>>>
->>>>>> Note that I think there will be a slight difference on whole remap
->>>>>> atomicity, on what happens if the page is modified after UFFDIO_COPY but
->>>>>> before DONTNEED.
->>>>>>
->>>>>> UFFDIO_REMAP guarantees full atomicity when moving the page, IOW, threads
->>>>>> can be updating the pages when ioctl(UFFDIO_REMAP), data won't get lost
->>>>>> during movement, and it will generate a missing event after moved, with
->>>>>> latest data showing up on dest.
->>>>>>
->>>>>> I'm not sure that means such a fallback is a problem, Suren may know
->>>>>> better with the use case.
->>>>>
->>>>> Although there is no problem in using fallback with our use case but
->>>>> as a user of userfaultfd, I'd suggest leaving it to the developer.
->>>>> Failing with appropriate errno makes more sense. If handled in the
->>>>> kernel, then the user may assume at the end of the operation that the
->>>>> src vma is completely unmapped. And if not correctness issues, it
->>>>> could lead to memory leaks.
->>>>
->>>> I meant that in addition to the possibility of correctness issues due
->>>> to lack of atomicity, it could also lead to memory leaks, as the user
->>>> may assume that src vma is empty post-operation. IMHO, it's better to
->>>> fail with errno so that the user would fix the code with necessary
->>>> changes (like using DONTFORK, if forking).
->>>
->>> Leaving the atomicity discussion out because I think this can just be
->>> handled (e.g., the src_vma would always be empty post-operation):
->>>
->>> It might not necessarily be a good idea to only expose micro-operations
->>> to user space. If the user-space fallback will almost always be
->>> "UFFDIO_COPY+MADV_DONTNEED", then clearly the logical operation
->>> performed is moving data, ideally with zero-copy.
->>>
->> IMHO, such a fallback will be useful only if it's possible that only
->> some pages in the src vma fail due to this. But even then it would be
->> really useful to have a flag maybe like UFFDIO_REMAP_FALLBACK_COPY to
->> control if the user wants the fallback or not. OTOH, if this is
->> something that can be detected for the entire src vma, then failing
->> with errno is more appropriate.
->>
->> Given that the patch is already quite complicated, I humbly suggest
->> leaving the fallback for now as a TODO.
-
-I agree about the complexity, and I hope we can reduce that further. 
-Otherwise such things end up being a maintainance nightmare.
-
+On 03.10.23 22:21, Peter Xu wrote:
+> On Tue, Oct 03, 2023 at 01:04:44PM -0700, Suren Baghdasaryan wrote:
+>> Ok, I think it makes sense to implement the strict remap logic but in
+>> a way that we can easily add copy fallback if that's needed in the
+>> future. So, I'll change UFFDIO_REMAP to UFFDIO_MOVE and will return
+>> some unique error, like EBUSY when the page is not PAE. If we need to
+>> add a copy fallback in the future, we will add a
+>> UFFDIO_MOVE_MODE_ALLOW_COPY flag and will implement the copy
+>> mechanism. Does that sound good?
 > 
-> Ok, I think it makes sense to implement the strict remap logic but in
-> a way that we can easily add copy fallback if that's needed in the
+> For the clear failing approach, sounds all good here.
+> 
+> For the name, no strong opinion, but is there any strong one over MOVE?
 
-I think whatever we do, we should
+See my reply regarding MOVE (+zero-copy optimization) vs. REMAP. Just my 
+thoughts.
 
-a) never talk about any of the implementation details (mapcount, 
-swapcount, PAE) towards the users
+REMAP reminds me of mremap, which would never perform any copies, 
+because it can just do more expensive page remappings (modifying VMAs etc.).
 
-b) make it clear from the start that we might change the decision when 
-we fail (to the better or the worse); users should be prepared to 
-implement backup paths. We certainly don't want such behavior to be ABI.
+> MOVE is a fine name, however considering UFFDIO_REMAP's long history.. I
+> tend to prefer keeping it called as REMAP - it still sounds sane, and
+> anyone who knows REMAP will know this is exactly that.
 
-I'd suggest documenting something like the following
+Sorry I have to ask: has this ever been discussed on the list? I don't 
+see any pointers. If not, then probably the number of people that know 
+about the history can be counted with my two hands and that shouldn't be 
+the basis for making decisions.
 
-"The operation may fail for various reasons. Usually, remapping of pages 
-that are not exclusive to the given process fail; once KSM might 
-dedduplicate pages or fork() COW-shares pages during fork() with child 
-processes, they are no longer exclusive. Further, the kernel might only 
-perform lightweight checks for detecting whether the pages are 
-exclusive, and return -EWHATSOEVER in case that check fails. To make the 
-operation more likely to succeed, KSM should be disabled, fork() should 
-be avoided or MADV_DONTFORK should be configured for the source VMA 
-before fork()."
-
-> future. So, I'll change UFFDIO_REMAP to UFFDIO_MOVE and will return
-> some unique error, like EBUSY when the page is not PAE. If we need to
-> add a copy fallback in the future, we will add a
-> UFFDIO_MOVE_MODE_ALLOW_COPY flag and will implement the copy
-> mechanism. Does that sound good?
-
-To me, if we're talking about moving data, then zero-copy is the 
-optimization and copy+delete would be the (slower) default.
-
-If we're talking about remapping, then there is no copy; we're remapping 
-pages.
-
-
-So if we'd ever want to support the copy case, one combination would be
-
-UFFDIO_MOVE + UFFDIO_MOVE_ZERO_COPY_ONLY
-
-whereby we would fail if the latter is not specified.
-
-But just my thoughts.
+But again, remap vs. move is for me a semantical difference; and as I am 
+not a native speaker others might disagree and I might be just wrong.
 
 -- 
 Cheers,
