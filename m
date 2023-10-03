@@ -2,79 +2,87 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3EE27B673B
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Oct 2023 13:08:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36A7F7B6AB7
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Oct 2023 15:38:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231548AbjJCLIp convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 3 Oct 2023 07:08:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60458 "EHLO
+        id S235914AbjJCNiS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 3 Oct 2023 09:38:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230341AbjJCLIp (ORCPT
+        with ESMTP id S232653AbjJCNiQ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 3 Oct 2023 07:08:45 -0400
-X-Greylist: delayed 61 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 03 Oct 2023 04:08:42 PDT
-Received: from esa2.hc5620-63.iphmx.com (esa2.hc5620-63.iphmx.com [68.232.149.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A7E0DA7;
-        Tue,  3 Oct 2023 04:08:42 -0700 (PDT)
-X-CSE-ConnectionGUID: jLnj3MYBQYClfLk4CnQZ7g==
-X-CSE-MsgGUID: hoCopQJcRqiHMvncI9nkxg==
-Message-Id: <bc8e20$lfq6@esa2.hc5620-63.iphmx.com>
-X-IronPort-RemoteIP: 185.225.73.120
-X-IronPort-MID: 704326
-X-IronPort-Reputation: -5.6
-X-IronPort-Listener: MailFlow
-X-IronPort-SenderGroup: RELAY_O365
-X-IronPort-MailFlowPolicy: $RELAYED
-X-Amp-Result: SKIPPED(no attachment in message)
-X-Amp-File-Uploaded: False
-Received: from unknown (HELO [185.225.73.120]) ([185.225.73.120])
-  by esa2.hc5620-63.iphmx.com with ESMTP; 03 Oct 2023 07:07:37 -0400
-Content-Type: text/plain; charset="iso-8859-1"
+        Tue, 3 Oct 2023 09:38:16 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87F82A9;
+        Tue,  3 Oct 2023 06:38:13 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B35ABC433C7;
+        Tue,  3 Oct 2023 13:38:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1696340293;
+        bh=uwtqnUxTMKbAVfD+gZWXN+2nSoPSgsCGQxxJs5nbdeo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hmdjXMqXyZeGSvyuQRufMD+IbooZlHt4Fl+2QKKDFRxTKFWqLtibJL9fD2WNsXRqn
+         PpPdqOp7OhH7MsubfkpS6TMDyTKN/AeMfpIWAAhKiHBW6JEQ3eVUvzKQho+r0c73bq
+         uSoe4cVF/Qi/iaTEhllRcf5K1O5CZiHLBq7R6bewNsL3AMIX0hrDkyw4IamVbeEUVY
+         H7fYoWgMgUl9JjkhObUuvSdL4RBWAerpg148lOtgda7gOTMm7ojp6Djmbc+MxP93EK
+         lDx842uWlD4YM9qLneth2OoHkxGe3TPPF+PSAUpxItWZWQKpSHLSND54oimTw+6Bas
+         PVQHDSsJ52lWQ==
+Date:   Tue, 3 Oct 2023 14:38:02 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc:     "Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "maz@kernel.org" <maz@kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "james.morse@arm.com" <james.morse@arm.com>,
+        "debug@rivosinc.com" <debug@rivosinc.com>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "paul.walmsley@sifive.com" <paul.walmsley@sifive.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+        "oleg@redhat.com" <oleg@redhat.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "ebiederm@xmission.com" <ebiederm@xmission.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "suzuki.poulose@arm.com" <suzuki.poulose@arm.com>,
+        "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "oliver.upton@linux.dev" <oliver.upton@linux.dev>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>
+Subject: Re: [PATCH v4 03/36] arm64/gcs: Document the ABI for Guarded Control
+ Stacks
+Message-ID: <3985b0d8-e35e-4cd5-a2bd-6a16d7c7e559@sirena.org.uk>
+References: <f4cec4b3-c386-4873-aa1d-90528e062f2a@sirena.org.uk>
+ <ZN+qki9EaZ6f9XNi@arm.com>
+ <aaea542c-929c-4c9b-8caa-ca67e0eb9c1e@sirena.org.uk>
+ <ZOTnL1SDJWZjHPUW@arm.com>
+ <43ec219d-bf20-47b8-a5f8-32bc3b64d487@sirena.org.uk>
+ <ZOXa98SqwYPwxzNP@arm.com>
+ <ZOYFazB1gYjzDRdA@arm.com>
+ <ZRWw7aa3C0LlMPTH@arm.com>
+ <38edb5c3-367e-4ab7-8cb7-aa1a5c0e330c@sirena.org.uk>
+ <add914d6ad943139cd4a8f23fea7167b083a53db.camel@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: RE INVESTMENT OFFER
-To:     Recipients <test@mail2world.com>
-From:   "Mr. mohd" <test@mail2world.com>
-Date:   Tue, 03 Oct 2023 04:07:32 -0700
-Reply-To: abdulqaderaref115@gmail.com
-X-Spam-Status: Yes, score=5.6 required=5.0 tests=BAYES_50,FREEMAIL_FROM,
-        FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,HK_NAME_FM_MR_MRS,
-        MSGID_FROM_MTA_HEADER,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_SBL,SPF_FAIL,
-        SPF_HELO_PASS,SPOOFED_FREEMAIL,SPOOFED_FREEM_REPTO,SUBJ_ALL_CAPS,
-        TO_EQ_FM_DOM_SPF_FAIL,TO_EQ_FM_SPF_FAIL autolearn=no
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="VOYoYIe/0D3GI3W0"
+Content-Disposition: inline
+In-Reply-To: <add914d6ad943139cd4a8f23fea7167b083a53db.camel@intel.com>
+X-Cookie: Oh Dad!  We're ALL Devo!
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.0 RCVD_IN_DNSWL_BLOCKED RBL: ADMINISTRATOR NOTICE: The query to
-        *      DNSWL was blocked.  See
-        *      http://wiki.apache.org/spamassassin/DnsBlocklists#dnsbl-block
-        *      for more information.
-        *      [68.232.149.158 listed in list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5034]
-        *  0.1 RCVD_IN_SBL RBL: Received via a relay in Spamhaus SBL
-        *      [185.225.73.120 listed in zen.spamhaus.org]
-        *  0.0 SPF_FAIL SPF: sender does not match SPF record (fail)
-        *      [SPF failed: Please see http://www.openspf.org/Why?s=mfrom;id=test%40mail2world.com;ip=68.232.149.158;r=lindbergh.monkeyblade.net]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [abdulqaderaref115[at]gmail.com]
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        * -0.0 SPF_HELO_PASS SPF: HELO matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [test[at]mail2world.com]
-        *  0.0 MSGID_FROM_MTA_HEADER Message-Id was added by a relay
-        *  1.5 HK_NAME_FM_MR_MRS No description available.
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-        *  0.0 TO_EQ_FM_SPF_FAIL To == From and external SPF failed
-        *  0.0 TO_EQ_FM_DOM_SPF_FAIL To domain == From domain and external SPF
-        *       failed
-        *  0.4 SPOOFED_FREEMAIL No description available.
-        *  1.0 SPOOFED_FREEM_REPTO Forged freemail sender with freemail
-        *      reply-to
-X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -82,12 +90,47 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
-Dear
-My name is Mohamed Abdul I have the capacity to inject a considerable
-amount of capital in any viable project 
-1,cell phone number what-sap
-2,full name
+--VOYoYIe/0D3GI3W0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
+On Mon, Oct 02, 2023 at 09:43:25PM +0000, Edgecombe, Rick P wrote:
 
-yours truly
-Mohamed Abdul Ahmed
+> If ARM is thinking of doing things differently than x86, you might
+> think about how you weight those tradeoffs. Like, it might be silly to
+> worry about clone() support if something else ends up breaking
+> compatibility majorly. But, it might be worthwhile it you end up going
+> to the proposed extremes around signal alt stacks, to maximize
+> compatibility
+
+Yeah, I think Catalin's thinking here was that we're quite a way out
+=66rom actual hardware so it's much more tractable to fix up callers than
+it is for x86 where the hardware is widely available.
+
+> Also then maybe x86 could copy the ARM ABI some day, if it ends up
+> chasing the tradeoff people prefer. It probably goes without saying
+> that the closer these features behave from the app developer
+> perspective, the better. So a different ABI than x86 that also targets
+> a mix would be a bit unfortunate. (not the end of the world though)
+
+If nothing else even if we end up being stricter about things it would
+be extremely disappointing if we ended up with something where code for
+arm64 won't run when built for x86.
+
+--VOYoYIe/0D3GI3W0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmUcGToACgkQJNaLcl1U
+h9DGrwf/e1Q1mca/c+Y8gjB9uTmkbz6UTxEP5Ie+SQ8OHE0DeQjg4wUgWFKyhONR
+Gja5KPwSLlu7n1otNu8P3ztqCLwd3+sa1yM4Tzhq965l/wqp1cmwh3OcRJwWNO/w
+TzGqD8fnAAZY6EyfMg6oP8IcWvD1ru5jttF18YdJdekWjBGQyWI+aZaN8ERdT1hG
+8G2Jz0DOJCCRuMo4JWQQ7wyKmgXsaCsO0UeTLsniZYatysygBlZPnxwG+kSlwwrP
+jJwDtljE9WONcZZttwNT0Rn/dFpXj4cO5L0RjHX/HPvHmSwOgdnO4fBD2HSL53xL
+WSStamx5uiW/Ch8ilcxeRdcT+rL/Jw==
+=Wyj+
+-----END PGP SIGNATURE-----
+
+--VOYoYIe/0D3GI3W0--
