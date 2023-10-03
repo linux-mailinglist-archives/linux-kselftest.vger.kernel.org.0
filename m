@@ -2,131 +2,142 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 995547B649D
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Oct 2023 10:46:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B0677B6664
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Oct 2023 12:28:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239295AbjJCIqt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 3 Oct 2023 04:46:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54190 "EHLO
+        id S231616AbjJCK2v (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 3 Oct 2023 06:28:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231241AbjJCIqs (ORCPT
+        with ESMTP id S231570AbjJCK2u (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 3 Oct 2023 04:46:48 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 085FAA9;
-        Tue,  3 Oct 2023 01:46:45 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-99357737980so109225366b.2;
-        Tue, 03 Oct 2023 01:46:44 -0700 (PDT)
+        Tue, 3 Oct 2023 06:28:50 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E38CA6
+        for <linux-kselftest@vger.kernel.org>; Tue,  3 Oct 2023 03:28:46 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-9a9d82d73f9so124101566b.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Oct 2023 03:28:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696322803; x=1696927603; darn=vger.kernel.org;
+        d=ventanamicro.com; s=google; t=1696328924; x=1696933724; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lot+PIl65jzy5/2JCItynBOJq7O7D8RX8LS/ww72DFQ=;
-        b=fHw9fbmw+B5oQiU3XDCcpPDWmsjOYlp+YCQPpRLyQZ4UVDDVwg7JAm3/IaQnPUm9b0
-         zpl+yUfhCIVvtcadGWWCaYxukQ9GH7tmkWLw027TxPrzdZiR80NGZX9YjRL8C0mjUPsJ
-         GHEN+dCkrhVAel6jgqjx7+66HJjMsaXcrNHaHU5+K+w7JX+/G3L0ZOcXjLnNy6AGgxi1
-         nFzZ7p5oGerqmhQBmfH1/KRNEkYqnUi2gEBK9HmYMxbV1/axynklfGlVuE0Bzd5AthRW
-         nS0Ees/hZVM77qlq2xW6FWNr8x4vg4fwxNHDq9SabFs0xVvJ/VyUzqXxHNxv3ET5/vB4
-         qc5Q==
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XsdqrdEkDSj8N1JGo8GS+Y+t1N9Ffxo49rjL66LLWiU=;
+        b=AnijDntiuPAlvazd2otnRUr/eS5Rx8+nCMfjIoN2pNGVEWpMW1eIaGTuNPQo5lMZcY
+         3uDN84z7/CxAU2z0vhjs22weuKICOxhF7xp229U53IqDKWoljoj2qysJwphNIyc1dUip
+         EQhBPjIvyAFkiDpbDvopG0HFcJht+Mkh95OYUfUJtdLFVY3ZRZC+hEPZN4wLFPoQEicF
+         FQTo/Dhc9a/ySVVpF5z95os3QmtNrQYeTQl/M37TRvTPDO4luKYY1KzP+cweByzw3neE
+         uCrfdZNfm20LZiVUhLVDdFuY1IGh030qyzoWbnhkBxe56jlSBKaJHIIAOZ4piJs37Zzp
+         UTWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696322803; x=1696927603;
+        d=1e100.net; s=20230601; t=1696328924; x=1696933724;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lot+PIl65jzy5/2JCItynBOJq7O7D8RX8LS/ww72DFQ=;
-        b=DGrZFNShBKDL9hfZfhDYlTHnWsSUEbiFg9Lvn0z5U4uYXBRQMOuSTrJuWyaTRajVCV
-         lpzaoEE8LVyYvP24GqDoGERDQhenlVUY8inlXk/t1exzQ2XVbPM7I1u3tUzxd192qF7f
-         +x+H7U11aie8HqIGCjJixpihqdi1BC/oXrpxqU27gr3Kf2ByT4jg1VglrkTBafWSJTBv
-         HP42Pljx8UZ/gYnoqh8O1wpTEhFFzFThYBj4r71qEmfc3s/RhLLf8VUxQ93MWciNyNpj
-         fxjxVYCbTwF3mAbnFwQPC6U8SvRpy6sAzcLPFiaDKB3k97m7WxorT09GLb6BlI6HNDRs
-         W+bA==
-X-Gm-Message-State: AOJu0YxG5A4QZsAtDdxewgwJwPGDgiHgEJapP2csTXfEl/1YM1YUmuFe
-        iEXzbzcxb6v7qkPzXwWj5KO3lnNuxx4=
-X-Google-Smtp-Source: AGHT+IHjmxpbA5fgCSzJ/WMDVijr0iafoHDsoVCHAq0NZIsv4nXKNMLHq4dyk+q4nOAXld/4/Staow==
-X-Received: by 2002:a17:907:270e:b0:9b2:6db8:e0fa with SMTP id w14-20020a170907270e00b009b26db8e0famr11756939ejk.41.1696322803077;
-        Tue, 03 Oct 2023 01:46:43 -0700 (PDT)
-Received: from gmail.com (1F2EF530.nat.pool.telekom.hu. [31.46.245.48])
-        by smtp.gmail.com with ESMTPSA id s13-20020a170906168d00b00991e2b5a27dsm684939ejd.37.2023.10.03.01.46.42
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XsdqrdEkDSj8N1JGo8GS+Y+t1N9Ffxo49rjL66LLWiU=;
+        b=XDLgy/T+Peg2bdvsgONDgE4nqQh+JGWXqi2CFo8ZTArBpSp9t5rbwrjnguw8uPhSum
+         KKMHuY/JgwpVjHvcg4y7Eho1UxbtRAAA0+2tWkmQVP0dgMVvCwECZPpNXUlC0GrbqcW+
+         gm+AOcAYJ2xX8o+ixLQ/HAem7g474S3ASwdXugRqSkAluyY3XpEJ5UH/COsHY+1tp822
+         KjZq1DWOz9Pxj7TNF1/1zIhBRH2Zp3znpQ+fEba/283qC+MIgNCwOQ4OXsSPu9/DFP3Q
+         nzuC5UXD2ZKau9O2qeI4Kajcom3fjyyO020KQtY9qye+rZ2NcUxeFS23zvdfzJ3oG7rd
+         cRPw==
+X-Gm-Message-State: AOJu0Yzy3JG2YBV0HPN9DJWY92kyL7PvFVJld4mlJIZglGZjRWzTe49r
+        JqCCGWiungnWNluiYEML4okr3w==
+X-Google-Smtp-Source: AGHT+IG9ar/of5h3vBdRHdNrUbHgfPXCJHKRmFUO92+SzwFtgCwBykQiZdbI9ipIbOFvP0+0VOSg1w==
+X-Received: by 2002:a17:906:109e:b0:9ae:6d0:84f7 with SMTP id u30-20020a170906109e00b009ae06d084f7mr11197111eju.32.1696328924382;
+        Tue, 03 Oct 2023 03:28:44 -0700 (PDT)
+Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
+        by smtp.gmail.com with ESMTPSA id op19-20020a170906bcf300b009adc743340fsm822007ejb.197.2023.10.03.03.28.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Oct 2023 01:46:42 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Tue, 3 Oct 2023 10:46:40 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
-        Shuah Khan <shuah@kernel.org>, kernel@collabora.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 6/6] selftests: futex: remove duplicate unneeded defines
-Message-ID: <ZRvU8DXRWL9sgKug@gmail.com>
-References: <20230805073809.1753462-1-usama.anjum@collabora.com>
- <20230805073809.1753462-6-usama.anjum@collabora.com>
+        Tue, 03 Oct 2023 03:28:43 -0700 (PDT)
+Date:   Tue, 3 Oct 2023 12:28:42 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Haibo Xu <haibo1.xu@intel.com>
+Cc:     xiaobo55x@gmail.com, Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Aaron Lewis <aaronlewis@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        Thomas Huth <thuth@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvm-riscv@lists.infradead.org
+Subject: Re: [PATCH v3 2/9] KVM: selftests: Unify the makefile rule for split
+ targets
+Message-ID: <20231003-d44206f71d0b22e539833697@orel>
+References: <cover.1694421911.git.haibo1.xu@intel.com>
+ <cda6cc71c9bdde87fe87f6c2dec4f03ca249dd62.1694421911.git.haibo1.xu@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230805073809.1753462-6-usama.anjum@collabora.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <cda6cc71c9bdde87fe87f6c2dec4f03ca249dd62.1694421911.git.haibo1.xu@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-
-* Muhammad Usama Anjum <usama.anjum@collabora.com> wrote:
-
-> Kselftests are kernel tests and must be build with kernel headers from
-> same source version. These duplicate defines should automatically
-> picked up from kernel headers. Use KHDR_INCLUDES to add kernel header
-> files.
+On Thu, Sep 14, 2023 at 09:36:56AM +0800, Haibo Xu wrote:
+> A separate makefile rule was used for split targets which was added
+> in patch(KVM: arm64: selftests: Split get-reg-list test code). This
+> could be avoided by minor changes to the recipes of current rule.
 > 
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
 > ---
->  .../selftests/futex/include/futextest.h       | 22 -------------------
->  1 file changed, 22 deletions(-)
+>  tools/testing/selftests/kvm/Makefile | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/futex/include/futextest.h b/tools/testing/selftests/futex/include/futextest.h
-> index ddbcfc9b7bac4..59f66af3a6d10 100644
-> --- a/tools/testing/selftests/futex/include/futextest.h
-> +++ b/tools/testing/selftests/futex/include/futextest.h
-> @@ -25,28 +25,6 @@
->  typedef volatile u_int32_t futex_t;
->  #define FUTEX_INITIALIZER 0
+> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+> index a3bb36fb3cfc..7972269e8c5f 100644
+> --- a/tools/testing/selftests/kvm/Makefile
+> +++ b/tools/testing/selftests/kvm/Makefile
+> @@ -249,13 +249,10 @@ TEST_DEP_FILES += $(patsubst %.o, %.d, $(SPLIT_TESTS_OBJS))
+>  -include $(TEST_DEP_FILES)
 >  
-> -/* Define the newer op codes if the system header file is not up to date. */
-> -#ifndef FUTEX_WAIT_BITSET
-> -#define FUTEX_WAIT_BITSET		9
-> -#endif
-> -#ifndef FUTEX_WAKE_BITSET
-> -#define FUTEX_WAKE_BITSET		10
-> -#endif
-> -#ifndef FUTEX_WAIT_REQUEUE_PI
-> -#define FUTEX_WAIT_REQUEUE_PI		11
-> -#endif
-> -#ifndef FUTEX_CMP_REQUEUE_PI
-> -#define FUTEX_CMP_REQUEUE_PI		12
-> -#endif
-> -#ifndef FUTEX_WAIT_REQUEUE_PI_PRIVATE
-> -#define FUTEX_WAIT_REQUEUE_PI_PRIVATE	(FUTEX_WAIT_REQUEUE_PI | \
-> -					 FUTEX_PRIVATE_FLAG)
-> -#endif
-> -#ifndef FUTEX_REQUEUE_PI_PRIVATE
-> -#define FUTEX_CMP_REQUEUE_PI_PRIVATE	(FUTEX_CMP_REQUEUE_PI | \
-> -					 FUTEX_PRIVATE_FLAG)
-> -#endif
+>  $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED): %: %.o
+> -	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH) $< $(LIBKVM_OBJS) $(LDLIBS) -o $@
+> +	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH) $^ $(LDLIBS) -o $@
+>  $(TEST_GEN_OBJ): $(OUTPUT)/%.o: %.c
+>  	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
+>  
+> -$(SPLIT_TESTS_TARGETS): %: %.o $(SPLIT_TESTS_OBJS)
+> -	$(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH) $^ $(LDLIBS) -o $@
+> -
+>  EXTRA_CLEAN += $(LIBKVM_OBJS) $(TEST_DEP_FILES) $(TEST_GEN_OBJ) $(SPLIT_TESTS_OBJS) cscope.*
+>  
+>  x := $(shell mkdir -p $(sort $(dir $(LIBKVM_C_OBJ) $(LIBKVM_S_OBJ))))
+> @@ -274,6 +271,7 @@ $(LIBKVM_STRING_OBJ): $(OUTPUT)/%.o: %.c
+>  x := $(shell mkdir -p $(sort $(dir $(TEST_GEN_PROGS))))
+>  $(TEST_GEN_PROGS): $(LIBKVM_OBJS)
+>  $(TEST_GEN_PROGS_EXTENDED): $(LIBKVM_OBJS)
+> +$(SPLIT_TESTS_TARGETS): $(OUTPUT)/%: $(ARCH_DIR)/%.o
+>  
+>  cscope: include_paths = $(LINUX_TOOL_INCLUDE) $(LINUX_HDR_PATH) include lib ..
+>  cscope:
+> -- 
+> 2.34.1
+>
 
-AFAICT I cannot really pick this up into the locking tree as-is, as this patch
-relies on the KHDR_INCLUDES change in patch #1, so that all self-tests get the
-kernel headers included, correct?
+I just noticed that with and without this patch we're building the
+arch-specific part in tools/testing/selftests/kvm/riscv even when we have
+an $(OUTPUT) directory (e.g. O=build). Those build artifacts should be in
+build/kselftest/kvm/riscv instead.
 
 Thanks,
-
-	Ingo
+drew
