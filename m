@@ -2,72 +2,69 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 573947B741F
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Oct 2023 00:35:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 952EB7B743A
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Oct 2023 00:44:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbjJCWfP (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 3 Oct 2023 18:35:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37072 "EHLO
+        id S231189AbjJCWo5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 3 Oct 2023 18:44:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbjJCWfO (ORCPT
+        with ESMTP id S230421AbjJCWo4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 3 Oct 2023 18:35:14 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62F30B4
-        for <linux-kselftest@vger.kernel.org>; Tue,  3 Oct 2023 15:35:09 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-9adca291f99so259512866b.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Oct 2023 15:35:09 -0700 (PDT)
+        Tue, 3 Oct 2023 18:44:56 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A25468E
+        for <linux-kselftest@vger.kernel.org>; Tue,  3 Oct 2023 15:44:51 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-4063bfc6c03so33765e9.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Oct 2023 15:44:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696372508; x=1696977308; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1696373090; x=1696977890; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=It7Xi0oiD+rM83TcJHmcj911Rk0KwZSdh5qD12BcX2k=;
-        b=OwTDMkdDhx4AcJ5v2PF48k5IeFyXS0QQTqWYCrdXl4uUB2BsFQeDbs00rJZ/7x8SPk
-         5De0FQ1wHsCxVbiUQtze83KK/zqsdBQrcehqHoFD4kRzQoHI9NpJwEOXNVSZ9y9oGe7r
-         JoAK+EKmXEiCmv/i/2l8r1bPrAxcIu3nwbd6OZGNI7Sq1xF8QlSq6gwbKZKFxbRTi/LN
-         UXUGhFBN6O4yHCDSnbtbFzax9tzdoJY2ze8VaU3xLJXPWSa3fN3KIBW8o+xGL97aUg3i
-         CsQ7oRBaghLz78/RsEGhQHfmjDvsf7f82pscZUHSMMoetvlh10bcoBXS0hN3+BXr1KvH
-         gPfA==
+        bh=AJuVhq4AjiOW4/fVwzj17aeKZBP7xebx8EAai3VEEdc=;
+        b=iIihXQzlHU5GDyy454kzeK1awTUI03/Hitss8nWod74nJgLDN+U3SNsnz6dTtZO2uL
+         ix8HevhVU4kY1tuH2SrkRw8rSdIcF4AY7ZkDlZkR6uOrZDOiNo1uyEHqCjIrPQYpGYOq
+         9kDW7pSYzPKpFSxHrUUvXef+uOyyLvktZ83sJ98/bgp/4TtHrZksRQbSBALsclN1f2pX
+         GaQAXzzIC63LgPcmAcRJ6CYProRGzcOxlCBYdhH4gYn3tq7CbLSPc5B3rVT1GS8OPyru
+         /NROIXN73OeMFS8HluP6nSYEHK8Qj5d4GR1ufNxvYJuL093NytLEwhfybu8xN6nzxSWE
+         IH5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696372508; x=1696977308;
+        d=1e100.net; s=20230601; t=1696373090; x=1696977890;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=It7Xi0oiD+rM83TcJHmcj911Rk0KwZSdh5qD12BcX2k=;
-        b=PUHvUTrJHut0C2FC15j138aQUBxh3hj16SOBDZ0/yg/YbO591lyyy0QJJOV7+KJTJv
-         U1jgBPtoW2WIYUoaeeZJopnIlw/9FS4l3tSXRr3SXqObXHYeAeC7S/HPH4FfhS87SXRp
-         YZ+JbyFug5vZREg683jSrdqhqqxpDbufXYcMACTPYQHegvFG9TDsby2TfaLAEj4hx5Zx
-         vOKf8Wzt9QSp5iQ8R8YpuDbhRV9y0sz8ccM3f327dDr0Bg7NCG8mFaJU8FlZoXrLPSDN
-         caJ1PcgyZCxDlxK1hgxrSH5xU2BRPZ4cBTTRqTvE5hZPTkT4e8tNVTUTAEzkf/TlzlLi
-         2uWg==
-X-Gm-Message-State: AOJu0Yznqda4GdJAwRB+oLHtGW+qDn7Zisq3xWHe/3BOd+eUK9s4c2i7
-        V3lXR0+vcJq7roFgNkLACfO1fftbNpZx2/ObxIqJww==
-X-Google-Smtp-Source: AGHT+IHBY9DipGSWqL52LM/MHQoLGvY1Km3Touj8d7gcQ7WH3o0AQ6vExMuZKH7wROcqEwJcnojm86N5ig2Ram4x/34=
-X-Received: by 2002:a17:907:b1a:b0:9b6:5a86:2926 with SMTP id
- h26-20020a1709070b1a00b009b65a862926mr419738ejl.62.1696372507814; Tue, 03 Oct
- 2023 15:35:07 -0700 (PDT)
+        bh=AJuVhq4AjiOW4/fVwzj17aeKZBP7xebx8EAai3VEEdc=;
+        b=a6mN415tpnmpvCdFEakEvmuXqWLf8YDmelkLI57ZcmCZP9DuqPIUFoj2AzfATiBjea
+         ff/EHy2C4FErNIE0zun5jhZcMzIhXtAwxOemJ+CphUhvpJK3zKy/1sxl2XWHckhNEzql
+         56827g0Wm0y35ehzGOHNg1XsJs3r6mq1JtOhS9PlMxgtB1q2fbptdt0abwoxguzeRLZY
+         QcjdKZHWtSYRGC/vDJeAar5tk0tc6C/wq8E+KV1+PvntVp2xWkQGHX9FbMGincSlQqsi
+         zCr9F+wZTvd+jrnwqEUqMsCRLCjuOkkaX9q/SDAWVDtB2S18l0rrgOmQiIlJ2Mia6imN
+         CAvA==
+X-Gm-Message-State: AOJu0YwSmKefBlmsJSntC5iCcbMFmSd+eUeS897FiwuCtKXPZ5gx/I40
+        aO7Ue6lla7XNzH5rBjOFMR33eqf8022jk2IJBAnV3fwH8OIXeXtBkCblRg==
+X-Google-Smtp-Source: AGHT+IHnmahR39Mh3rxdrJfH23PUXACmCvx79AQ4ekvkJijEJ+mOTspgKu2sI6F5q1/CW3u4j0sP652R61RfBnnNbno=
+X-Received: by 2002:a05:600c:1e13:b0:405:35bf:7362 with SMTP id
+ ay19-20020a05600c1e1300b0040535bf7362mr43905wmb.0.1696373089587; Tue, 03 Oct
+ 2023 15:44:49 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230908-kselftest-09-08-v2-0-0def978a4c1b@google.com>
- <CAFhGd8pEv32zp4RDsj_jeBjzP5hcsf4dP4Knueiw_UM8ZsqcKw@mail.gmail.com> <lhb7u2lg7fv2wx3kzrboftqcdtmbjvbzz7zssfn5mho72hcrvj@i53fzzis7b4q>
-In-Reply-To: <lhb7u2lg7fv2wx3kzrboftqcdtmbjvbzz7zssfn5mho72hcrvj@i53fzzis7b4q>
-From:   Justin Stitt <justinstitt@google.com>
-Date:   Tue, 3 Oct 2023 15:34:54 -0700
-Message-ID: <CAFhGd8pTDfgQ+uTTQpMUnyfwbTgf_Hi7hv0ZQP4Vao_fqEvB5A@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] selftests/hid: fix building for older kernels
-To:     Benjamin Tissoires <bentiss@kernel.org>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org
+References: <20230925175733.1379-1-michal.wajdeczko@intel.com>
+ <20230925175733.1379-3-michal.wajdeczko@intel.com> <CA+GJov4tUcq5_JTm2yON1LZwMyP89_x=EbiqBqYpbVi=Vf9CCw@mail.gmail.com>
+ <120ba1d4-b64b-21ea-1fb3-49d5fcb5127a@intel.com>
+In-Reply-To: <120ba1d4-b64b-21ea-1fb3-49d5fcb5127a@intel.com>
+From:   Rae Moar <rmoar@google.com>
+Date:   Tue, 3 Oct 2023 18:44:37 -0400
+Message-ID: <CA+GJov5Nh920ekKMVJfCA=L3RSVGdszS8RtZdujBvjBc86oKTQ@mail.gmail.com>
+Subject: Re: [PATCH 2/4] kunit: Fix indentation level of suite messages
+To:     Michal Wajdeczko <michal.wajdeczko@intel.com>
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        David Gow <davidgow@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,178 +72,311 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Oct 2, 2023 at 7:48=E2=80=AFAM Benjamin Tissoires <bentiss@kernel.o=
-rg> wrote:
+On Mon, Oct 2, 2023 at 9:42=E2=80=AFAM Michal Wajdeczko
+<michal.wajdeczko@intel.com> wrote:
 >
-> On Sep 26 2023, Justin Stitt wrote:
-> > Hey all,
+>
+>
+> On 28.09.2023 22:52, Rae Moar wrote:
+> > On Mon, Sep 25, 2023 at 1:58=E2=80=AFPM Michal Wajdeczko
+> > <michal.wajdeczko@intel.com> wrote:
+> >>
+> >> A kunit suite is a top level test from the KTAP point of view but
+> >> all suite diagnostic messages are printed at the subtest level:
+> >>
+> >>     $ ./tools/testing/kunit/kunit.py run --raw_output \
+> >>         --kunitconfig ./lib/kunit/.kunitconfig "example.*simple*"
+> >>
+> >>     KTAP version 1
+> >>     1..1
+> >>         # example: initializing suite
+> >>         # example: failed to initialize (-ENODEV)
+> >>     not ok 1 example
+> >>
+> >>     KTAP version 1
+> >>     1..1
+> >>         # example: initializing suite
+> >>         KTAP version 1
+> >>         # Subtest: example
+> >>         # module: kunit_example_test
+> >>         1..1
+> >>         # example_simple_test: initializing
+> >>         # example_simple_test: cleaning up
+> >>         ok 1 example_simple_test
+> >>         # example: exiting suite
+> >>     ok 1 example
+> >>
+> >> Replace hardcoded indent in kunit_printk() with flexible
+> >> indentation based on the argument type (test or suite):
+> >>
+> >>     KTAP version 1
+> >>     1..1
+> >>     # example: initializing suite
+> >>     # example: failed to initialize (-ENODEV)
+> >>     not ok 1 example
+> >>
+> >>     KTAP version 1
+> >>     1..1
+> >>     # example: initializing suite
+> >>         KTAP version 1
+> >>         # Subtest: example
+> >>         # module: kunit_example_test
+> >>         1..1
+> >>         # example_simple_test: initializing
+> >>         # example_simple_test: cleaning up
+> >>         ok 1 example_simple_test
+> >>     # example: exiting suite
+> >>     ok 1 example
 > >
-> > Gentle ping on this patch. Looking to get this patch and [1] slated
-> > for 6.7 wherein we can start getting cleaner kselftests builds.
+> > Hi!
 > >
-> > I do not think I am able to successfully run the hid/bpf selftests due
-> > to my kernel version being too low (and an inability to upgrade it as
-> > I'm on a corp rolling release). I'd appreciate some insight on how to
-> > get the tests running or if someone could actually build+run the tests
-> > with this patch applied.
->
-> I wanted to apply this series today, but it failed my own CI now with
-> the enums being already defined:
-> https://gitlab.freedesktop.org/bentiss/hid/-/jobs/49754306
->
-> I'll probably squash the following patch in 1/3, would you mind giving
-> it a test?
+> > I am happy to see this change to improve the indentation of
+> > parameterized tests. It has been bugging me for a bit. This seems to
+> > be working well but I just had a few comments to potentially discuss.
+> >
+> > Thanks!
+> >
+> > -Rae
+> >
 
-Works for me with this incantation:
-$ make LLVM=3D1 -j128 ARCH=3Dx86_64 mrproper headers && make LLVM=3D1 -j128
-ARCH=3Dx86_64 -C tools/testing/selftests TARGETS=3Dhid
-...
----> BINARY   hid_bpf
+Hello!
 
-Although, the tests expectedly fail.
+Thanks for getting back to me.
 
-Looks good to me.
+> >>
+> >> Signed-off-by: Michal Wajdeczko <michal.wajdeczko@intel.com>
+> >> Cc: David Gow <davidgow@google.com>
+> >> Cc: Rae Moar <rmoar@google.com>
+> >> ---
+> >>  include/kunit/test.h | 24 ++++++++++++++++++++++--
+> >>  lib/kunit/test.c     |  7 -------
+> >>  2 files changed, 22 insertions(+), 9 deletions(-)
+> >>
+> >> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> >> index 20ed9f9275c9..158876c4cb43 100644
+> >> --- a/include/kunit/test.h
+> >> +++ b/include/kunit/test.h
+> >> @@ -509,6 +509,21 @@ void __printf(2, 3) kunit_log_append(struct strin=
+g_stream *log, const char *fmt,
+> >>                 kunit_try_catch_throw(&((test_or_suite)->try_catch)); =
+  \
+> >>         } while (0)
+> >>
+> >> +/* Currently supported test levels */
+> >> +enum {
+> >> +       KUNIT_LEVEL_SUITE =3D 0,
+> >> +       KUNIT_LEVEL_CASE,
+> >> +       KUNIT_LEVEL_CASE_PARAM,
+> >> +};
+> >
+> > I do find this slightly confusing to have a KUNIT_LEVEL_SUITE as the
+> > suite output occurs on multiple levels. Plus, I also don't see any
+> > uses of the SUITE level or the PARAM level anymore. Do you have any
+> > ideas on this?
+>
+> This enum was just promoted as-is from the test.c as I didn't want to
+> use magic 0 or 1 in below kunit_level() macro.
+>
+> Note that the KUNIT_LEVEL_SUITE is now used indirectly whenever you call
+> any of kunit_printk() with suite param like here:
+>
+> ./kunit-example-test.c:60:  kunit_info(suite, "initializing suite\n");
+> ./kunit-example-test.c:71:  kunit_info(suite, "exiting suite\n");
+>
+
+Oops sorry for missing this instance.
+
+> as this will result in calls to kunit_indent_level(suite) and
+> kunit_level(suite) macro.
+>
+> And KUNIT_LEVEL_CASE_PARAM is maybe a leftover, as now we change test
+> levels using direct increase/decrease statements, but still IMO this
+> enum nicely reflects what kind of levels we currently do support at this
+> point. But could be dropped if needed.
+
+Given the suite level is being used, I am on board with keeping the
+enum as is. Plus, although the param level is not explicitly being
+used, it does correspond with the value of the test->level field when
+running parameterized tests.
 
 >
-> ---
-> From 37feca6c0e84705ad65e621643206c287b63bb0a Mon Sep 17 00:00:00 2001
-> From: Benjamin Tissoires <bentiss@kernel.org>
-> Date: Mon, 2 Oct 2023 15:37:18 +0200
-> Subject: [PATCH] fix selftests/hid: ensure we can compile the tests on ke=
-rnels
->  pre-6.3
+> Regarding _"suite output occurs on multiple levels"_ I found that also
+> confusing, but IMO this is due to the kunit implementation details
+> and/or KTAP design decisions as it looks that "suite" is treated
+> sometimes as "subtest" and sometimes as a top level "test".
 >
-> Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
-> ---
->  .../selftests/hid/progs/hid_bpf_helpers.h     | 30 ++++++++++++++++++-
->  1 file changed, 29 insertions(+), 1 deletion(-)
+> That makes a little trouble while trying to implement printing in a
+> consistent manner.  Maybe we should consider introducing concept of the
+> "executor" with its own level attribute? Then mapping will be like this:
 >
-> diff --git a/tools/testing/selftests/hid/progs/hid_bpf_helpers.h b/tools/=
-testing/selftests/hid/progs/hid_bpf_helpers.h
-> index ab3b18ba48c4..feed5a991e05 100644
-> --- a/tools/testing/selftests/hid/progs/hid_bpf_helpers.h
-> +++ b/tools/testing/selftests/hid/progs/hid_bpf_helpers.h
-> @@ -5,16 +5,44 @@
->  #ifndef __HID_BPF_HELPERS_H
->  #define __HID_BPF_HELPERS_H
+> KTAP version 1                          <- kunit executor (level=3D0)
+> 1..1                                    <- kunit executor (level=3D0)
+> # Test: example                         <- kunit executor (level=3D0) ??
+> # module: kunit_example_test            <- kunit executor (level=3D0) ??
+> # example: initializing suite           <- suite (test level=3D0)
+>     KTAP version 1                      <- suite executor (level=3D1)
+>     # Subtest: example                  <- suite executor (level=3D1)
+>     # module: kunit_example_test        <- suite executor (level=3D1)
+>     1..2                                <- suite executor (level=3D1)
+>     # test_1: initializing              <- test_case (test level=3D1)
+>     # test_1: cleaning up               <- test_case (test level=3D1)
+>     # test_1: pass:1 fail:0 skip:0 tota <- suite executor (level=3D1)
+>     ok 1 test_1                         <- suite executor (level=3D1)
+>         KTAP version 1                  <- params executor (level=3D2)
+>         # Subtest: test_2               <- params executor (level=3D2)
+>         1..2                            <- params executor (level=3D2)
+>         # test_2: initializing          <- test_case (test level=3D2)
+>         # test_2: cleaning up           <- test_case (test level=3D2)
+>         ok 1 example value 1            <- params executor (level=3D2)
+>         # test_2: initializing          <- test_case (test level=3D2)
+>         # test_2: cleaning up           <- test_case (test level=3D2)
+>         ok 2 example value 0            <- params executor (level=3D2)
+>     # test_2: pass:2 fail:0 skip:0 tota <- suite executor (level=3D1)
+>     ok 2 test_2                         <- suite executor (level=3D1)
+> # example: exiting suite                <- suite (test level=3D0)
+> # example: pass:2 fail:0 skip:0 total:2 <- kunit executor (level=3D0)
+> # Totals: pass:3 fail:0 skip:0 total:3  <- kunit executor (level=3D0)
+> ok 1 example                            <- kunit executor (level=3D0)
 >
-> -/* "undefine" structs in vmlinux.h, because we "override" them below */
-> +/* "undefine" structs and enums in vmlinux.h, because we "override" them=
- below */
->  #define hid_bpf_ctx hid_bpf_ctx___not_used
->  #define hid_report_type hid_report_type___not_used
->  #define hid_class_request hid_class_request___not_used
->  #define hid_bpf_attach_flags hid_bpf_attach_flags___not_used
-> +#define HID_INPUT_REPORT         HID_INPUT_REPORT___not_used
-> +#define HID_OUTPUT_REPORT        HID_OUTPUT_REPORT___not_used
-> +#define HID_FEATURE_REPORT       HID_FEATURE_REPORT___not_used
-> +#define HID_REPORT_TYPES         HID_REPORT_TYPES___not_used
-> +#define HID_REQ_GET_REPORT       HID_REQ_GET_REPORT___not_used
-> +#define HID_REQ_GET_IDLE         HID_REQ_GET_IDLE___not_used
-> +#define HID_REQ_GET_PROTOCOL     HID_REQ_GET_PROTOCOL___not_used
-> +#define HID_REQ_SET_REPORT       HID_REQ_SET_REPORT___not_used
-> +#define HID_REQ_SET_IDLE         HID_REQ_SET_IDLE___not_used
-> +#define HID_REQ_SET_PROTOCOL     HID_REQ_SET_PROTOCOL___not_used
-> +#define HID_BPF_FLAG_NONE        HID_BPF_FLAG_NONE___not_used
-> +#define HID_BPF_FLAG_INSERT_HEAD HID_BPF_FLAG_INSERT_HEAD=C2=B7___not_us=
-ed
-> +#define HID_BPF_FLAG_MAX         HID_BPF_FLAG_MAX___not_used
-> +
->  #include "vmlinux.h"
-> +
->  #undef hid_bpf_ctx
->  #undef hid_report_type
->  #undef hid_class_request
->  #undef hid_bpf_attach_flags
-> +#undef HID_INPUT_REPORT
-> +#undef HID_OUTPUT_REPORT
-> +#undef HID_FEATURE_REPORT
-> +#undef HID_REPORT_TYPES
-> +#undef HID_REQ_GET_REPORT
-> +#undef HID_REQ_GET_IDLE
-> +#undef HID_REQ_GET_PROTOCOL
-> +#undef HID_REQ_SET_REPORT
-> +#undef HID_REQ_SET_IDLE
-> +#undef HID_REQ_SET_PROTOCOL
-> +#undef HID_BPF_FLAG_NONE
-> +#undef HID_BPF_FLAG_INSERT_HEAD
-> +#undef HID_BPF_FLAG_MAX
+> Then any suite and/or test level will be just based on executor.level
+> This could be done as follow-up improvement.
 >
->  #include <bpf/bpf_helpers.h>
->  #include <bpf/bpf_tracing.h>
-> --
-> 2.41.0
-> ---
+
+I like this concept of a general executor or test object. I would be
+interested in David's opinion on this.
+
+However, this may be a future task for when we change the overall
+KUnit test implementation to be more general (remove the strict
+concept of suite vs test case).
+
+Perhaps for now we should keep your current implementation.
+
+> >
+> > We could consider just using the test->level field introduced in the
+> > next patch to manage the levels. Or I wouldn't mind keeping this just
+> > for clarity?
 >
-> Cheers,
-> Benjamin
+> We still need some definition for initial level, no?
+> And at this point in series, we still need at least two defs.
+>
+
+To use the test->level field we would need to alter the overall KUnit
+implementation to use a general test structure. Since that is not our
+current structure, let's keep the original design.
+
+> >
+> >> +
+> >> +#define kunit_level(test_or_suite)                                   =
+  \
+> >> +       _Generic((test_or_suite),                                     =
+  \
+> >> +                struct kunit_suite * : KUNIT_LEVEL_SUITE,            =
+  \
+> >> +                struct kunit * : KUNIT_LEVEL_CASE)
+> >> +
+> >
+> > I am not super familiar with using _Generic so I would want David's opi=
+nion.
+> >
+> > Also I can think of cases where it would be helpful to add an option
+> > for struct kunit_case *, however, that may be an addition for the
+> > future.
+>
+> I had entry for struct kunit_test_case* but removed that as it was never
+> used in current code (no calls to kunit_log() with test_case)
+>
+
+That seems fine to me. We can always add this in later.
+
+> >
+> > And then additionally, this macro seems to be only used for the struct
+> > kunit * case. Will we plan to use this in the future for suites?
+>
+> As pointed above we already use it for test and suite:
+>
+> ./kunit-example-test.c:60:  kunit_info(suite, "initializing suite\n");
+> ./kunit-example-test.c:71:  kunit_info(suite, "exiting suite\n");
 >
 > >
-> > On Sat, Sep 9, 2023 at 7:22=E2=80=AFAM Justin Stitt <justinstitt@google=
-.com> wrote:
-> > >
-> > > Hi, I am sending this series on behalf of myself and Benjamin Tissoir=
-es. There
-> > > existed an initial n=3D3 patch series which was later expanded to n=
-=3D4 and
-> > > is now back to n=3D3 with some fixes added in and rebased against
-> > > mainline.
-> > >
-> > > This patch series aims to ensure that the hid/bpf selftests can be bu=
-ilt
-> > > without errors.
-> > >
-> > > Here's Benjamin's initial cover letter for context:
-> > > |  These fixes have been triggered by [0]:
-> > > |  basically, if you do not recompile the kernel first, and are
-> > > |  running on an old kernel, vmlinux.h doesn't have the required
-> > > |  symbols and the compilation fails.
-> > > |
-> > > |  The tests will fail if you run them on that very same machine,
-> > > |  of course, but the binary should compile.
-> > > |
-> > > |  And while I was sorting out why it was failing, I realized I
-> > > |  could do a couple of improvements on the Makefile.
-> > > |
-> > > |  [0] https://lore.kernel.org/linux-input/56ba8125-2c6f-a9c9-d498-0c=
-a1c153dcb2@redhat.com/T/#t
-> > >
-> > > Changes from v1 -> v2:
-> > > - roll Justin's fix into patch 1/3
-> > > - add __attribute__((preserve_access_index)) (thanks Eduard)
-> > > - rebased onto mainline (2dde18cd1d8fac735875f2e4987f11817cc0bc2c)
-> > > - Link to v1: https://lore.kernel.org/all/20230825-wip-selftests-v1-0=
--c862769020a8@kernel.org/
-> > >
-> > > Link: https://github.com/ClangBuiltLinux/linux/issues/1698
-> > > Link: https://github.com/ClangBuiltLinux/continuous-integration2/issu=
-es/61
-> > > ---
-> > > Benjamin Tissoires (3):
-> > >       selftests/hid: ensure we can compile the tests on kernels pre-6=
-.3
-> > >       selftests/hid: do not manually call headers_install
-> > >       selftests/hid: force using our compiled libbpf headers
-> > >
-> > >  tools/testing/selftests/hid/Makefile               | 10 ++---
-> > >  tools/testing/selftests/hid/progs/hid.c            |  3 --
-> > >  .../testing/selftests/hid/progs/hid_bpf_helpers.h  | 49 ++++++++++++=
-++++++++++
-> > >  3 files changed, 53 insertions(+), 9 deletions(-)
-> > > ---
-> > > base-commit: 2dde18cd1d8fac735875f2e4987f11817cc0bc2c
-> > > change-id: 20230908-kselftest-09-08-56d7f4a8d5c4
-> > >
-> > > Best regards,
-> > > --
-> > > Justin Stitt <justinstitt@google.com>
-> > >
+> >> +#define kunit_indent_level(test_or_suite)                            =
+  \
+> >> +       (KUNIT_INDENT_LEN * kunit_level(test_or_suite))
+> >> +
+> >>  /*
+> >>   * printk and log to per-test or per-suite log buffer.  Logging only =
+done
+> >>   * if CONFIG_KUNIT_DEBUGFS is 'y'; if it is 'n', no log is allocated/=
+used.
+> >> @@ -520,9 +535,14 @@ void __printf(2, 3) kunit_log_append(struct strin=
+g_stream *log, const char *fmt,
+> >>                                  ##__VA_ARGS__);                      =
+  \
+> >>         } while (0)
+> >>
+> >> +#define kunit_log_indent(lvl, test_or_suite, fmt, ...)               =
+  \
+> >> +       kunit_log(lvl, test_or_suite, "%*s" fmt,                      =
+  \
+> >> +                 kunit_indent_level(test_or_suite), "",              =
+  \
+> >> +                 ##__VA_ARGS__)
+> >> +
+> >>  #define kunit_printk(lvl, test, fmt, ...)                            =
+  \
+> >> -       kunit_log(lvl, test, KUNIT_SUBTEST_INDENT "# %s: " fmt,       =
+  \
+> >> -                 (test)->name, ##__VA_ARGS__)
+> >> +       kunit_log_indent(lvl, test, "# %s: " fmt,                     =
+  \
+> >> +                        (test)->name, ##__VA_ARGS__)
+> >>
 > >
-> > [1]: https://lore.kernel.org/all/20230912-kselftest-param_test-c-v1-1-8=
-0a6cffc7374@google.com/
+> > I wonder if we could consider removing the need to use
+> > KUNIT_SUBTEST_INDENT in all locations. I am primarily thinking about
+> > its uses in debugfs.c and test.c.
 > >
-> > Thanks
-> > Justin
+> > For example in debugfs.c:
+> > pr_info(KUNIT_SUBTEST_INDENT "KTAP version 1\n");
+> >
+> > Although, as this is a suite object that is printing at the test case
+> > level, I am not quite sure how to use the existing macros.
+>
+> We could add some wrapper like kunit_pr() that takes suite/test/executor
+> from which we can derive right indent level, but that would be another
+> follow up task once we agree on location and use of .level attribute.
+>
 
-Thanks
-Justin
+I think it would be great to offer the kunit_pr option or some general
+macro for formatting given the level.
+
+Thanks!
+-Rae
+
+> Michal
+>
+> >
+> >
+> >>  /**
+> >>   * kunit_info() - Prints an INFO level message associated with @test.
+> >> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> >> index fb5981ce578d..d10e6d610e20 100644
+> >> --- a/lib/kunit/test.c
+> >> +++ b/lib/kunit/test.c
+> >> @@ -135,13 +135,6 @@ size_t kunit_suite_num_test_cases(struct kunit_su=
+ite *suite)
+> >>  }
+> >>  EXPORT_SYMBOL_GPL(kunit_suite_num_test_cases);
+> >>
+> >> -/* Currently supported test levels */
+> >> -enum {
+> >> -       KUNIT_LEVEL_SUITE =3D 0,
+> >> -       KUNIT_LEVEL_CASE,
+> >> -       KUNIT_LEVEL_CASE_PARAM,
+> >> -};
+> >> -
+> >>  static void kunit_print_suite_start(struct kunit_suite *suite)
+> >>  {
+> >>         /*
+> >> --
+> >> 2.25.1
+> >>
