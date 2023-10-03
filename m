@@ -2,70 +2,77 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE8147B7068
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Oct 2023 19:56:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0503D7B722F
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Oct 2023 22:05:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240712AbjJCR4W (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 3 Oct 2023 13:56:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36450 "EHLO
+        id S231489AbjJCUFA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 3 Oct 2023 16:05:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240723AbjJCR4V (ORCPT
+        with ESMTP id S231717AbjJCUFA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 3 Oct 2023 13:56:21 -0400
-Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F4F8B8
-        for <linux-kselftest@vger.kernel.org>; Tue,  3 Oct 2023 10:56:17 -0700 (PDT)
-Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-5a22f9e2f40so14303097b3.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 03 Oct 2023 10:56:17 -0700 (PDT)
+        Tue, 3 Oct 2023 16:05:00 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB1BAA9
+        for <linux-kselftest@vger.kernel.org>; Tue,  3 Oct 2023 13:04:56 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-59f6767a15dso1924157b3.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 03 Oct 2023 13:04:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696355776; x=1696960576; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1696363496; x=1696968296; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4vl0fsz4J68Cnn2M5AWsY3O6OVBkAbz573ZVyP6v8RU=;
-        b=byIujj7LX5PdeWfGJNc840K2lhqEXxX9Prx44oyQiYxprBc+c79C24Yfsuy/14+W5i
-         3mLVJHJoBLxL3OHxgR0SzsZV37HwJ6PCKYVRLSYWkt/EcEIMYhXGm8vgNCqO9S99VBH0
-         RzAINzChqyw3qR0lUi1Hkp/hx+EERiZLtQr6hiGefnz/ySUbSHxK+BOC7rkEIpxvY+2D
-         smBTwwQLcQnnLubr3WJ5i3hp1wjn8p/PODzy5ynz4lZhyEwoPMHQBpVVw7wKVogXFB+Y
-         uw50S/J9pZG/pejizAewVKuznLAg/ueFWjPhZ/Hjw47icvKe4ddL5t+U46U8BFgPN0g1
-         Ho9g==
+        bh=T4HnvVJM5UhNryBKAzUQ7ExKjrQO05hotZm+y3hVwo0=;
+        b=NURDhA3b7C4JeZZhTHBBu9sB7DaPaUKiEoXQNEOorcexI32NygTtUV5Xztcf5X5ll+
+         s94JwDsShrDGr7PEN+MMB2xaYeaNdaNDwOchORERNgKAseI5q30K3nZXFiZQwPXvt2zT
+         kIr35/bhqOjZ5FZISY7f8uIs08n/V7xpiALFiujGsLzfqrWFyy1mi8mWTtWGoKaSooVB
+         U911aMxMlpLKelU5t+ICpYxwwo+7Qyzh38n8ma+6/N2CKWSddKw/Vrlwq+mNvphzzQGZ
+         Iiz9QNtylKDw9YUmANWimXxoKMbpc6POCU5CwWYiRAvN7WIakCfw6HxOSwahGlA1Q2N2
+         Epaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696355776; x=1696960576;
+        d=1e100.net; s=20230601; t=1696363496; x=1696968296;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4vl0fsz4J68Cnn2M5AWsY3O6OVBkAbz573ZVyP6v8RU=;
-        b=oB9q6+CCc+wV1XA2/5rNPvddwHvNkQRWyY9z7rrgjwVI/zSWldGPIs1OgnU5qQGl8Q
-         k0lhqoqfe3erIANH9SWEGR1DqS9hXcvRaarINKa/ZL/Ue3lWFbsb8sB37LiMjzylKajC
-         dMSX9CMRU00kElx7FIEDbzgBYa7aE4EgMdeBTL+BO0LsECfbP8HuREIJEiq+xRBP1JIm
-         w2QeAPAPd7K+tsGTobdVLQqQ5EPVfzyVSRltKUVAPYl3lbwWc7LuPr9QyAZJMgoHDx+1
-         jvlahuf635ykdrzF1QL9AI3I5lcEFD3ANxtUq6xQ3q8cRYQZ7Yc1wHA1ncTBlmXvNwHm
-         4/sA==
-X-Gm-Message-State: AOJu0YwY41g6LKjgC0Z1dyFgd+NW32dJ5ymb/8qzNqEa3QD2bqfj+ccs
-        AUdqalkNyPToZj+RpuHOlmyk7ZVCMpe0LR4aJdRHrg==
-X-Google-Smtp-Source: AGHT+IEifyQz0qts6gjrIdCK30AQEhCj5PiL6BEQwSEb2u68tS34wFFdTdChNXs/1KRYo9kZ+DiSyEy6xlNrljCDdCQ=
-X-Received: by 2002:a0d:df46:0:b0:5a0:c0d0:1c48 with SMTP id
- i67-20020a0ddf46000000b005a0c0d01c48mr331306ywe.6.1696355776271; Tue, 03 Oct
- 2023 10:56:16 -0700 (PDT)
+        bh=T4HnvVJM5UhNryBKAzUQ7ExKjrQO05hotZm+y3hVwo0=;
+        b=lId2TvA04LZ1kND/7Gz0XAQ0kvaG9p9k+oNyo2cLqU6PKl5apw/o52YI3fol+XGZFY
+         5F6yOHNueSaD8//rW1eZKuFeh6dqfDS9jG59xKyWNyI5j07z7IyjtYPBN8/FDnifQoH6
+         HBkymQJngRkpGFJKbITfWP1dGSOIlj2BMJGwOJd0T9KWymqWH7zQvO3+wqn89+fA+KhR
+         5xqTwmQA/zCIs1nArWZa93g9i/a6vgzQdkr0fFdK75xt8LJJASDPennO6QvDr3j0Hsya
+         e5wnqvTduzDBoOoh+9KnUJkkvf/1SGZdoCd4v8xlbYe6e2o43Rf/sUZUud6iJRHoEfYr
+         11lw==
+X-Gm-Message-State: AOJu0Yy0VPQIEC6OwdcJTLWUOzScHU1MtlvjGQbV90qkaMRJ6jkVitPG
+        5S2MowQIXQhG3n+W/gVUurhAQe1wMyvkt1DzJ5Mxug==
+X-Google-Smtp-Source: AGHT+IH9yT6ckHnJBiB5Cfo13hxaaAKxy5AR7WcWqkiDMh30P5bHjEM+Bte/4PVXH+TW9h5J6PjpHuiA2d0kgiAUOWA=
+X-Received: by 2002:a0d:d546:0:b0:583:9935:b8ba with SMTP id
+ x67-20020a0dd546000000b005839935b8bamr2961777ywd.6.1696363495623; Tue, 03 Oct
+ 2023 13:04:55 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230923013148.1390521-1-surenb@google.com> <20230923013148.1390521-2-surenb@google.com>
- <27f177c9-1035-3277-cd62-dc81c12acec4@redhat.com> <ZRrgWVgjVfQu4RGX@x1n> <e5d41fbe-a91b-9491-7b93-733f67e75a54@redhat.com>
-In-Reply-To: <e5d41fbe-a91b-9491-7b93-733f67e75a54@redhat.com>
+References: <20230923013148.1390521-1-surenb@google.com> <20230923013148.1390521-3-surenb@google.com>
+ <CAG48ez1N2kryy08eo0dcJ5a9O-3xMT8aOrgrcD+CqBN=cBfdDw@mail.gmail.com>
+ <03f95e90-82bd-6ee2-7c0d-d4dc5d3e15ee@redhat.com> <ZRWo1daWBnwNz0/O@x1n>
+ <98b21e78-a90d-8b54-3659-e9b890be094f@redhat.com> <ZRW2CBUDNks9RGQJ@x1n>
+ <85e5390c-660c-ef9e-b415-00ee71bc5cbf@redhat.com> <ZRXHK3hbdjfQvCCp@x1n>
+ <fc27ce41-bc97-91a7-deb6-67538689021c@redhat.com> <ZRrf8NligMzwqx97@x1n>
+ <CA+EESO5VtrfXv-kvDsotPLXcpMgOK5t5c+tbXZ7KWRU2O_0PBQ@mail.gmail.com>
+ <CA+EESO4W2jmBSpyHkkqZV0LHnA_OyWQcvwSkfPcWmWCsAF5UWw@mail.gmail.com>
+ <9434ef94-15e8-889c-0c31-3e875060a2f7@redhat.com> <CA+EESO4GuDXZ6newN-oF43WOxrfsZ9Ejq8RJNF2wOYq571zmDA@mail.gmail.com>
+In-Reply-To: <CA+EESO4GuDXZ6newN-oF43WOxrfsZ9Ejq8RJNF2wOYq571zmDA@mail.gmail.com>
 From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Tue, 3 Oct 2023 10:56:01 -0700
-Message-ID: <CAJuCfpEaz_6T0uShTYn-PMzNrs1waCRhCFceyYUn7rKZZGPAtQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/3] userfaultfd: UFFDIO_REMAP: rmap preparation
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Peter Xu <peterx@redhat.com>, akpm@linux-foundation.org,
+Date:   Tue, 3 Oct 2023 13:04:44 -0700
+Message-ID: <CAJuCfpE_h7Bj41sBiADswkUfVCoLXANuQmctdYUEgYjn6fHSCw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] userfaultfd: UFFDIO_REMAP uABI
+To:     Lokesh Gidra <lokeshgidra@google.com>
+Cc:     David Hildenbrand <david@redhat.com>, Peter Xu <peterx@redhat.com>,
+        Jann Horn <jannh@google.com>, akpm@linux-foundation.org,
         viro@zeniv.linux.org.uk, brauner@kernel.org, shuah@kernel.org,
-        aarcange@redhat.com, lokeshgidra@google.com, hughd@google.com,
-        mhocko@suse.com, axelrasmussen@google.com, rppt@kernel.org,
-        willy@infradead.org, Liam.Howlett@oracle.com, jannh@google.com,
-        zhangpeng362@huawei.com, bgeffon@google.com,
-        kaleshsingh@google.com, ngeoffray@google.com, jdduke@google.com,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kernel-team@android.com
+        aarcange@redhat.com, hughd@google.com, mhocko@suse.com,
+        axelrasmussen@google.com, rppt@kernel.org, willy@infradead.org,
+        Liam.Howlett@oracle.com, zhangpeng362@huawei.com,
+        bgeffon@google.com, kaleshsingh@google.com, ngeoffray@google.com,
+        jdduke@google.com, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kernel-team@android.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
@@ -79,84 +86,101 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Oct 2, 2023 at 10:30=E2=80=AFAM David Hildenbrand <david@redhat.com=
-> wrote:
+On Mon, Oct 2, 2023 at 12:34=E2=80=AFPM Lokesh Gidra <lokeshgidra@google.co=
+m> wrote:
 >
-> On 02.10.23 17:23, Peter Xu wrote:
-> > On Mon, Oct 02, 2023 at 04:42:50PM +0200, David Hildenbrand wrote:
-> >> On 23.09.23 03:31, Suren Baghdasaryan wrote:
-> >>> From: Andrea Arcangeli <aarcange@redhat.com>
-> >>>
-> >>> As far as the rmap code is concerned, UFFDIO_REMAP only alters the
-> >>> page->mapping and page->index. It does it while holding the page
-> >>> lock. However folio_referenced() is doing rmap walks without taking t=
-he
-> >>> folio lock first, so folio_lock_anon_vma_read() must be updated to
-> >>> re-check that the folio->mapping didn't change after we obtained the
-> >>> anon_vma read lock.
-> >>
-> >> I'm curious: why don't we need this for existing users of
-> >> page_move_anon_rmap()? What's special about UFFDIO_REMAP?
+> On Mon, Oct 2, 2023 at 6:43=E2=80=AFPM David Hildenbrand <david@redhat.co=
+m> wrote:
 > >
-> > Totally no expert on anon vma so I'm prone to errors, but IIUC the
-> > difference here is root anon vma cannot change in page_move_anon_rmap()=
-,
-> > while UFFDIO_REMAP can.
+> > On 02.10.23 17:55, Lokesh Gidra wrote:
+> > > On Mon, Oct 2, 2023 at 4:46=E2=80=AFPM Lokesh Gidra <lokeshgidra@goog=
+le.com> wrote:
+> > >>
+> > >> On Mon, Oct 2, 2023 at 4:21=E2=80=AFPM Peter Xu <peterx@redhat.com> =
+wrote:
+> > >>>
+> > >>> On Mon, Oct 02, 2023 at 10:00:03AM +0200, David Hildenbrand wrote:
+> > >>>> In case we cannot simply remap the page, the fallback sequence (fr=
+om the
+> > >>>> cover letter) would be triggered.
+> > >>>>
+> > >>>> 1) UFFDIO_COPY
+> > >>>> 2) MADV_DONTNEED
+> > >>>>
+> > >>>> So we would just handle the operation internally without a fallbac=
+k.
+> > >>>
+> > >>> Note that I think there will be a slight difference on whole remap
+> > >>> atomicity, on what happens if the page is modified after UFFDIO_COP=
+Y but
+> > >>> before DONTNEED.
+> > >>>
+> > >>> UFFDIO_REMAP guarantees full atomicity when moving the page, IOW, t=
+hreads
+> > >>> can be updating the pages when ioctl(UFFDIO_REMAP), data won't get =
+lost
+> > >>> during movement, and it will generate a missing event after moved, =
+with
+> > >>> latest data showing up on dest.
+> > >>>
+> > >>> I'm not sure that means such a fallback is a problem, Suren may kno=
+w
+> > >>> better with the use case.
+> > >>
+> > >> Although there is no problem in using fallback with our use case but
+> > >> as a user of userfaultfd, I'd suggest leaving it to the developer.
+> > >> Failing with appropriate errno makes more sense. If handled in the
+> > >> kernel, then the user may assume at the end of the operation that th=
+e
+> > >> src vma is completely unmapped. And if not correctness issues, it
+> > >> could lead to memory leaks.
+> > >
+> > > I meant that in addition to the possibility of correctness issues due
+> > > to lack of atomicity, it could also lead to memory leaks, as the user
+> > > may assume that src vma is empty post-operation. IMHO, it's better to
+> > > fail with errno so that the user would fix the code with necessary
+> > > changes (like using DONTFORK, if forking).
+> >
+> > Leaving the atomicity discussion out because I think this can just be
+> > handled (e.g., the src_vma would always be empty post-operation):
+> >
+> > It might not necessarily be a good idea to only expose micro-operations
+> > to user space. If the user-space fallback will almost always be
+> > "UFFDIO_COPY+MADV_DONTNEED", then clearly the logical operation
+> > performed is moving data, ideally with zero-copy.
+> >
+> IMHO, such a fallback will be useful only if it's possible that only
+> some pages in the src vma fail due to this. But even then it would be
+> really useful to have a flag maybe like UFFDIO_REMAP_FALLBACK_COPY to
+> control if the user wants the fallback or not. OTOH, if this is
+> something that can be detected for the entire src vma, then failing
+> with errno is more appropriate.
 >
-> That does sound reasonable, thanks.
->
-> Probably we can do better with the patch description (once [1] is used
-> to move the folio to the other anon_vma).
+> Given that the patch is already quite complicated, I humbly suggest
+> leaving the fallback for now as a TODO.
 
-I'll develop the next version with your patches in the baseline.
-Hopefully by the time of my posting your patches will be in the
-mm-unstable.
+Ok, I think it makes sense to implement the strict remap logic but in
+a way that we can easily add copy fallback if that's needed in the
+future. So, I'll change UFFDIO_REMAP to UFFDIO_MOVE and will return
+some unique error, like EBUSY when the page is not PAE. If we need to
+add a copy fallback in the future, we will add a
+UFFDIO_MOVE_MODE_ALLOW_COPY flag and will implement the copy
+mechanism. Does that sound good?
 
 >
-> "mm/rmap: support move to different root anon_vma in folio_move_anon_rmap=
-()
->
-> For now, folio_move_anon_rmap() was only used to move a folio to a
-> different anon_vma after fork(), whereby the root anon_vma stayed
-> unchanged. For that, it was sufficient to hold the page lock when
-> calling folio_move_anon_rmap().
->
-> However, we want to make use of folio_move_anon_rmap() to move folios
-> between VMAs that have a different root anon_vma. As folio_referenced()
-> performs an RMAP walk without holding the page lock but only holding the
-> anon_vma in read mode, holding the page lock is insufficient.
->
-> When moving to an anon_vma with a different root anon_vma, we'll have to
-> hold both, the page lock and the anon_vma lock in write mode.
-> Consequently, whenever we succeeded in folio_lock_anon_vma_read() to
-> read-lock the anon_vma, we have to re-check if the mapping was changed
-> in the meantime. If that was the case, we have to retry.
->
-> Note that folio_move_anon_rmap() must only be called if the anon page is
-> exclusive to a process, and must not be called on KSM folios.
->
-> This is a preparation for UFFDIO_REMAP, which will hold the page lock,
-> the anon_vma lock in write mode, and the mmap_lock in read mode.
-> "
-
-Thanks for taking time to write this up! Looks really clear to me.
-I'll reuse it.
-
->
-> In addition, we should document these locking details for
-> folio_move_anon_rmap() and probably not mention UFFDIO_REMAP in the
-> comment in folio_lock_anon_vma_read(), but instead say
-> "folio_move_anon_rmap() might have changed the anon_vma as we might not
-> hold the page lock here."
-
-Sounds good. Will add.
-
->
->
-> [1] https://lkml.kernel.org/r/20231002142949.235104-3-david@redhat.com
->
-> --
-> Cheers,
->
-> David / dhildenb
->
+> > [as said as reply to Peter, one could still have magic flags for users
+> > that really want to detect when zero-copy is impossible]
+> >
+> > With a logical MOVE API users like compaction [as given in the cover
+> > letter], not every such user has to eventually implement fallback paths=
+.
+> >
+> > But just my 2 cents, the UFFDIO_REMAP users probably can share what the
+> > exact use cases are and if fallbacks are required at all or if no-KSM +
+> > DONTFORK just does the trick.
+> >
+> > --
+> > Cheers,
+> >
+> > David / dhildenb
+> >
