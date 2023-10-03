@@ -2,300 +2,147 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A90617B6BFD
-	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Oct 2023 16:45:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 89AC97B6DE6
+	for <lists+linux-kselftest@lfdr.de>; Tue,  3 Oct 2023 18:01:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240118AbjJCOpX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 3 Oct 2023 10:45:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46292 "EHLO
+        id S240253AbjJCQB6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 3 Oct 2023 12:01:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231500AbjJCOpW (ORCPT
+        with ESMTP id S240272AbjJCQBy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 3 Oct 2023 10:45:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59542BD
-        for <linux-kselftest@vger.kernel.org>; Tue,  3 Oct 2023 07:44:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1696344275;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=VPxUpX5ttwO6GbR8TKDJ9qUBldBgRlK4eeZ7J20+rxc=;
-        b=NwtJRSwU1Be3yG/kLKDgey/F2D8ZEoxxsba01rMjRDft8fJuIExd1gxsLWTo8BmbwlCF/7
-        ohk2oxT3/cUl+SkpPnwFxUge5NxoqmDdb5JLTRr9+Wm9NlkG6EGMIJKJhECLF177LKQilg
-        z5NofnIesjek8UFBEBYkD603biO3BhI=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-423-IVCw3C5KP2KXQwEfOeq6gA-1; Tue, 03 Oct 2023 10:44:33 -0400
-X-MC-Unique: IVCw3C5KP2KXQwEfOeq6gA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5837729ABA3C;
-        Tue,  3 Oct 2023 14:44:32 +0000 (UTC)
-Received: from llong.com (unknown [10.22.10.176])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id BEE3740C6EA8;
-        Tue,  3 Oct 2023 14:44:31 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        Pierre Gondois <pierre.gondois@arm.com>,
-        Waiman Long <longman@redhat.com>
-Subject: [PATCH-cgroup v2] cgroup/cpuset: Enable invalid to valid local partition transition
-Date:   Tue,  3 Oct 2023 10:44:20 -0400
-Message-Id: <20231003144420.2895515-1-longman@redhat.com>
+        Tue, 3 Oct 2023 12:01:54 -0400
+Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B360BFF;
+        Tue,  3 Oct 2023 09:01:43 -0700 (PDT)
+Received: by mail-qv1-xf2d.google.com with SMTP id 6a1803df08f44-65afd746330so6746866d6.3;
+        Tue, 03 Oct 2023 09:01:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696348902; x=1696953702; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=/Yn+mPkDWk8ukHdhjqSSwg4e6I5pgHCsv8e3oIaemCg=;
+        b=UeuubfjOQDD7Twk7b21RnDZ3i8SAHZ7UHmUPVGiG31jxj5Gvcgis81YAkG5Es693kZ
+         UC2tBnj6nmkaf18JMkqiPlL+8F+T15MyQj4e3wMhNm5FPbAaeCvxQnkvOIJJZJyGhEDG
+         JpjO72HvSZqgV28CEgld8+AzKcuifds+XYRRiLnzQq/N7nxHpisTo4m4Qscjxvum5UA+
+         6VvJKT26a+SVfS0Pw86oRe8PAVXsQ93MoetWV5Oei84iAEyELuwOTYJ6wyIfUynPjXTR
+         tRVAOAWL8JkQFdHDbHptZJI6puIKmUhdaBQp9aVAWhxHZAibnwJSGJY1BaqWBcG1XmPY
+         eK+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696348902; x=1696953702;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/Yn+mPkDWk8ukHdhjqSSwg4e6I5pgHCsv8e3oIaemCg=;
+        b=gHMxdRC3Q5WPC64iHkbx4pHnqD2aK7G2TPXnjdaBdGTdOWeeeBmchdMBhRL+6fT6qH
+         r/+DbFV+ypor3zBV30HN9gGM4caVN/uKG+o5ZfpeVqcDOYR+UgK/QZNqzIPcD/n9n3w3
+         9L0zI4B+otbE64RZD31f7b4MRoK8bA51GWnZXVi3fOF604usbrtb5GOgwGZMNGeTE8eH
+         X8o7NRNXbVfeZx8WVBr86+gRNbbOhJAShtP+0SGg7wGuLuR8EFHL4OVGI82DWNgeN5aA
+         /ILYg2xz0C3isfeWM2HBsEIO1vVVnSK38A2sJJi/Hya4m4R3e9qfhxgKvGHW+ObXcuZj
+         T9HA==
+X-Gm-Message-State: AOJu0YzSpcf45kGOiE3GiPqYt7cWiVDGNQgS03ZDcoxa6zJBJU7GFhBI
+        ocr+qb/0pZBYdQQvXM7ZHfVNi1fNumrD247gIyU=
+X-Google-Smtp-Source: AGHT+IE40Wp2mYMdsH3mhinRxqTHhWvxUVnr8uEjAb68JoUzKmcI9syXU2mK2Ygisr2EqbHDyE6+qDRX8OUcWKKC3GA=
+X-Received: by 2002:a0c:db14:0:b0:656:3352:832f with SMTP id
+ d20-20020a0cdb14000000b006563352832fmr14086949qvk.32.1696348902101; Tue, 03
+ Oct 2023 09:01:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230820141354.29687-1-osmtendev@gmail.com>
+In-Reply-To: <20230820141354.29687-1-osmtendev@gmail.com>
+From:   Osama Muhammad <osmtendev@gmail.com>
+Date:   Tue, 3 Oct 2023 21:01:31 +0500
+Message-ID: <CAK6rUAO2hyt0tcXif=kbZj=vd4+O9h3o1quWSF2R6FMm70u_hA@mail.gmail.com>
+Subject: Re: [PATCH v2] selftests: prctl: Add prctl test for PR_GET_NAME
+To:     shuah@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When a local partition becomes invalid, it won't transition back to
-valid partition automatically if a proper "cpuset.cpus.exclusive" or
-"cpuset.cpus" change is made. Instead, system administrators have to
-explicitly echo "root" or "isolated" into the "cpuset.cpus.partition"
-file at the partition root.
+On Sun, 20 Aug 2023 at 19:14, Osama Muhammad <osmtendev@gmail.com> wrote:
+>
+> This patch covers the testing of PR_GET_NAME by
+> reading it's value from proc/self/task/pid/comm
+> and matching it with the value returned by PR_GET_NAME.
+> If the values are matched then it's successful, otherwise
+> it fails.
 
-This patch now enables the automatic transition of an invalid local
-partition back to valid when there is a proper "cpuset.cpus.exclusive"
-or "cpuset.cpus" change.
+Any Feedback on this patch?
 
-Automatic transition of an invalid remote partition to a valid one,
-however, is not covered by this patch. They still need an explicit
-write to "cpuset.cpus.partition" to become valid again.
-
-The test_cpuset_prs.sh test script is updated to add new test cases to
-test this automatic state transition.
-
-Reported-by: Pierre Gondois <pierre.gondois@arm.com>
-Link: https://lore.kernel.org/lkml/9777f0d2-2fdf-41cb-bd01-19c52939ef42@arm.com
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- kernel/cgroup/cpuset.c                        | 79 +++++++++++--------
- .../selftests/cgroup/test_cpuset_prs.sh       | 21 +++--
- 2 files changed, 62 insertions(+), 38 deletions(-)
-
- v2: Add documentation about the new X<l> designator in
- test_cpuset_prs.sh.
-
-diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-index 15f399153a2e..93facdab513c 100644
---- a/kernel/cgroup/cpuset.c
-+++ b/kernel/cgroup/cpuset.c
-@@ -1806,17 +1806,28 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
- 		 *
- 		 * Compute add/delete mask to/from effective_cpus
- 		 *
--		 * addmask = effective_xcpus & ~newmask & parent->effective_xcpus
--		 * delmask = newmask & ~cs->effective_xcpus
--		 *		     & parent->effective_xcpus
-+		 * For valid partition:
-+		 *   addmask = exclusive_cpus & ~newmask
-+		 *			      & parent->effective_xcpus
-+		 *   delmask = newmask & ~exclusive_cpus
-+		 *		       & parent->effective_xcpus
-+		 *
-+		 * For invalid partition:
-+		 *   delmask = newmask & parent->effective_xcpus
- 		 */
--		cpumask_andnot(tmp->addmask, xcpus, newmask);
--		adding = cpumask_and(tmp->addmask, tmp->addmask,
--				     parent->effective_xcpus);
-+		if (is_prs_invalid(old_prs)) {
-+			adding = false;
-+			deleting = cpumask_and(tmp->delmask,
-+					newmask, parent->effective_xcpus);
-+		} else {
-+			cpumask_andnot(tmp->addmask, xcpus, newmask);
-+			adding = cpumask_and(tmp->addmask, tmp->addmask,
-+					     parent->effective_xcpus);
- 
--		cpumask_andnot(tmp->delmask, newmask, xcpus);
--		deleting = cpumask_and(tmp->delmask, tmp->delmask,
--				       parent->effective_xcpus);
-+			cpumask_andnot(tmp->delmask, newmask, xcpus);
-+			deleting = cpumask_and(tmp->delmask, tmp->delmask,
-+					       parent->effective_xcpus);
-+		}
- 		/*
- 		 * Make partition invalid if parent's effective_cpus could
- 		 * become empty and there are tasks in the parent.
-@@ -1910,9 +1921,11 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
- 
- 	/*
- 	 * Transitioning between invalid to valid or vice versa may require
--	 * changing CS_CPU_EXCLUSIVE.
-+	 * changing CS_CPU_EXCLUSIVE. In the case of partcmd_update,
-+	 * validate_change() has already been successfully called and
-+	 * CPU lists in cs haven't been updated yet. So defer it to later.
- 	 */
--	if (old_prs != new_prs) {
-+	if ((old_prs != new_prs) && (cmd != partcmd_update))  {
- 		int err = update_partition_exclusive(cs, new_prs);
- 
- 		if (err)
-@@ -1960,6 +1973,9 @@ static int update_parent_effective_cpumask(struct cpuset *cs, int cmd,
- 
- 	spin_unlock_irq(&callback_lock);
- 
-+	if ((old_prs != new_prs) && (cmd == partcmd_update))
-+		update_partition_exclusive(cs, new_prs);
-+
- 	if (adding || deleting) {
- 		update_tasks_cpumask(parent, tmp->addmask);
- 		update_sibling_cpumasks(parent, cs, tmp);
-@@ -2356,8 +2372,9 @@ static int update_cpumask(struct cpuset *cs, struct cpuset *trialcs,
- 	if (alloc_cpumasks(NULL, &tmp))
- 		return -ENOMEM;
- 
--	if (is_partition_valid(cs)) {
--		if (cpumask_empty(trialcs->effective_xcpus)) {
-+	if (old_prs) {
-+		if (is_partition_valid(cs) &&
-+		    cpumask_empty(trialcs->effective_xcpus)) {
- 			invalidate = true;
- 			cs->prs_err = PERR_INVCPUS;
- 		} else if (prstate_housekeeping_conflict(old_prs, trialcs->effective_xcpus)) {
-@@ -2391,13 +2408,16 @@ static int update_cpumask(struct cpuset *cs, struct cpuset *trialcs,
- 		 */
- 		invalidate = true;
- 		rcu_read_lock();
--		cpuset_for_each_child(cp, css, parent)
-+		cpuset_for_each_child(cp, css, parent) {
-+			struct cpumask *xcpus = fetch_xcpus(trialcs);
-+
- 			if (is_partition_valid(cp) &&
--			    cpumask_intersects(trialcs->effective_xcpus, cp->effective_xcpus)) {
-+			    cpumask_intersects(xcpus, cp->effective_xcpus)) {
- 				rcu_read_unlock();
- 				update_parent_effective_cpumask(cp, partcmd_invalidate, NULL, &tmp);
- 				rcu_read_lock();
- 			}
-+		}
- 		rcu_read_unlock();
- 		retval = 0;
- 	}
-@@ -2405,18 +2425,24 @@ static int update_cpumask(struct cpuset *cs, struct cpuset *trialcs,
- 	if (retval < 0)
- 		goto out_free;
- 
--	if (is_partition_valid(cs)) {
-+	if (is_partition_valid(cs) ||
-+	   (is_partition_invalid(cs) && !invalidate)) {
-+		struct cpumask *xcpus = trialcs->effective_xcpus;
-+
-+		if (cpumask_empty(xcpus) && is_partition_invalid(cs))
-+			xcpus = trialcs->cpus_allowed;
-+
- 		/*
- 		 * Call remote_cpus_update() to handle valid remote partition
- 		 */
- 		if (is_remote_partition(cs))
--			remote_cpus_update(cs, trialcs->effective_xcpus, &tmp);
-+			remote_cpus_update(cs, xcpus, &tmp);
- 		else if (invalidate)
- 			update_parent_effective_cpumask(cs, partcmd_invalidate,
- 							NULL, &tmp);
- 		else
- 			update_parent_effective_cpumask(cs, partcmd_update,
--						trialcs->effective_xcpus, &tmp);
-+							xcpus, &tmp);
- 	} else if (!cpumask_empty(cs->exclusive_cpus)) {
- 		/*
- 		 * Use trialcs->effective_cpus as a temp cpumask
-@@ -2493,7 +2519,7 @@ static int update_exclusive_cpumask(struct cpuset *cs, struct cpuset *trialcs,
- 	if (retval)
- 		return retval;
- 
--	if (is_partition_valid(cs)) {
-+	if (old_prs) {
- 		if (cpumask_empty(trialcs->effective_xcpus)) {
- 			invalidate = true;
- 			cs->prs_err = PERR_INVCPUS;
-@@ -2927,19 +2953,10 @@ static int update_prstate(struct cpuset *cs, int new_prs)
- 		return 0;
- 
- 	/*
--	 * For a previously invalid partition root with valid partition root
--	 * parent, treat it as if it is a "member". Otherwise, reject it as
--	 * remote partition cannot currently self-recover from an invalid
--	 * state.
-+	 * Treat a previously invalid partition root as if it is a "member".
- 	 */
--	if (new_prs && is_prs_invalid(old_prs)) {
--		if (is_partition_valid(parent)) {
--			old_prs = PRS_MEMBER;
--		} else {
--			cs->partition_root_state = -new_prs;
--			return 0;
--		}
--	}
-+	if (new_prs && is_prs_invalid(old_prs))
-+		old_prs = PRS_MEMBER;
- 
- 	if (alloc_cpumasks(NULL, &tmpmask))
- 		return -ENOMEM;
-diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-index 0f4f4a57ae12..a6e9848189d6 100755
---- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-+++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-@@ -220,7 +220,8 @@ test_isolated()
- #      +- B1
- #
- #  P<v> = set cpus.partition (0:member, 1:root, 2:isolated)
--#  C<l> = add cpu-list
-+#  C<l> = add cpu-list to cpuset.cpus
-+#  X<l> = add cpu-list to cpuset.cpus.exclusive
- #  S<p> = use prefix in subtree_control
- #  T    = put a task into cgroup
- #  O<c>=<v> = Write <v> to CPU online file of <c>
-@@ -318,16 +319,19 @@ TEST_MATRIX=(
- 	" C0-3:S+ C1-3:S+  C2      .    X2-3   X2-3   T:P2:O2=0 O2=1 0 A1:0-3,A2:1-3,A3:2 A1:P0,A3:P-2"
- 
- 	# cpus.exclusive.effective clearing test
--	" C0-3:S+ C1-3:S+  C2      .   X2-3:X    .      .      .      0 A1:0-3,A2:1-3,A3:2,XA1:"
-+	" C0-3:S+ C1-3:S+  C2      .   X2-3:X    .      .      .     0 A1:0-3,A2:1-3,A3:2,XA1:"
- 
--	# Invalid to valid remote partition indirect transition test via member
--	" C0-3:S+   C1-3    .      .      .    X3:P2    .      .      0 A1:0-3,A2:1-3,XA2: A2:P-2"
-+	# Invalid to valid remote partition transition test
-+	" C0-3:S+   C1-3    .      .      .    X3:P2    .      .     0 A1:0-3,A2:1-3,XA2: A2:P-2"
- 	" C0-3:S+ C1-3:X3:P2
--			    .      .    X2-3   P0:P2    .      .      0 A1:0-2,A2:3,XA2:3 A2:P2 3"
-+			    .      .    X2-3    P2      .      .     0 A1:0-2,A2:3,XA2:3 A2:P2 3"
- 
- 	# Invalid to valid local partition direct transition tests
--	" C1-3:S+:P2 C2-3:X1:P2 .  .      .      .      .      .      0 A1:1-3,XA1:1-3,A2:2-3:XA2: A1:P2,A2:P-2 1-3"
--	" C1-3:S+:P2 C2-3:X1:P2 .  .      .    X3:P2    .      .      0 A1:1-2,XA1:1-3,A2:3:XA2:3 A1:P2,A2:P2 1-3"
-+	" C1-3:S+:P2 C2-3:X1:P2 .  .      .      .      .      .     0 A1:1-3,XA1:1-3,A2:2-3:XA2: A1:P2,A2:P-2 1-3"
-+	" C1-3:S+:P2 C2-3:X1:P2 .  .      .    X3:P2    .      .     0 A1:1-2,XA1:1-3,A2:3:XA2:3 A1:P2,A2:P2 1-3"
-+	"  C0-3:P2   .      .    C4-6   C0-4     .      .      .     0 A1:0-4,B1:4-6 A1:P-2,B1:P0"
-+	"  C0-3:P2   .      .    C4-6 C0-4:C0-3  .      .      .     0 A1:0-3,B1:4-6 A1:P2,B1:P0 0-3"
-+	"  C0-3:P2   .      .  C3-5:C4-5  .      .      .      .     0 A1:0-3,B1:4-5 A1:P2,B1:P0 0-3"
- 
- 	# Local partition invalidation tests
- 	" C0-3:X1-3:S+:P2 C1-3:X2-3:S+:P2 C2-3:X3:P2 \
-@@ -336,6 +340,9 @@ TEST_MATRIX=(
- 				   .      .     X4      .      .     0 A1:1-3,A2:1-3,A3:2-3,XA2:,XA3: A1:P2,A2:P-2,A3:P-2 1-3"
- 	" C0-3:X1-3:S+:P2 C1-3:X2-3:S+:P2 C2-3:X3:P2 \
- 				   .      .     C4      .      .     0 A1:1-3,A2:1-3,A3:2-3,XA2:,XA3: A1:P2,A2:P-2,A3:P-2 1-3"
-+	# Local partition CPU change tests
-+	" C0-5:S+:P2 C4-5:S+:P1 .  .      .    C3-5     .      .     0 A1:0-2,A2:3-5 A1:P2,A2:P1 0-2"
-+	" C0-5:S+:P2 C4-5:S+:P1 .  .    C1-5     .      .      .     0 A1:1-3,A2:4-5 A1:P2,A2:P1 1-3"
- 
- 	# cpus_allowed/exclusive_cpus update tests
- 	" C0-3:X2-3:S+ C1-3:X2-3:S+ C2-3:X2-3 \
--- 
-2.39.3
-
+>
+> changes since v1:
+>         - Handled fscanf,fopen error checking.
+>         - Defined MAX_PATH_LEN.
+>
+> Signed-off-by: Osama Muhammad <osmtendev@gmail.com>
+> ---
+>  .../selftests/prctl/set-process-name.c        | 32 +++++++++++++++++++
+>  1 file changed, 32 insertions(+)
+>
+> diff --git a/tools/testing/selftests/prctl/set-process-name.c b/tools/testing/selftests/prctl/set-process-name.c
+> index 3bc5e0e09..562f707ba 100644
+> --- a/tools/testing/selftests/prctl/set-process-name.c
+> +++ b/tools/testing/selftests/prctl/set-process-name.c
+> @@ -12,6 +12,7 @@
+>  #define CHANGE_NAME "changename"
+>  #define EMPTY_NAME ""
+>  #define TASK_COMM_LEN 16
+> +#define MAX_PATH_LEN 50
+>
+>  int set_name(char *name)
+>  {
+> @@ -47,6 +48,35 @@ int check_null_pointer(char *check_name)
+>         return res;
+>  }
+>
+> +int check_name(void)
+> +{
+> +
+> +       int pid;
+> +
+> +       pid = getpid();
+> +       FILE *fptr = NULL;
+> +       char path[MAX_PATH_LEN] = {};
+> +       char name[TASK_COMM_LEN] = {};
+> +       char output[TASK_COMM_LEN] = {};
+> +       int j;
+> +
+> +       j = snprintf(path, MAX_PATH_LEN, "/proc/self/task/%d/comm", pid);
+> +       fptr = fopen(path, "r");
+> +       if (!fptr)
+> +               return -EIO;
+> +
+> +       fscanf(fptr, "%s", output);
+> +       if (ferror(fptr))
+> +               return -EIO;
+> +
+> +       int res = prctl(PR_GET_NAME, name, NULL, NULL, NULL);
+> +
+> +       if (res < 0)
+> +               return -errno;
+> +
+> +       return !strcmp(output, name);
+> +}
+> +
+>  TEST(rename_process) {
+>
+>         EXPECT_GE(set_name(CHANGE_NAME), 0);
+> @@ -57,6 +87,8 @@ TEST(rename_process) {
+>
+>         EXPECT_GE(set_name(CHANGE_NAME), 0);
+>         EXPECT_LT(check_null_pointer(CHANGE_NAME), 0);
+> +
+> +       EXPECT_TRUE(check_name());
+>  }
+>
+>  TEST_HARNESS_MAIN
+> --
+> 2.34.1
+>
