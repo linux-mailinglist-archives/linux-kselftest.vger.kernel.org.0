@@ -2,210 +2,227 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C8D17B862A
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Oct 2023 19:12:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63DDF7B86D5
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Oct 2023 19:43:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243645AbjJDRMR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 4 Oct 2023 13:12:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43676 "EHLO
+        id S233819AbjJDRnS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 4 Oct 2023 13:43:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243627AbjJDRMR (ORCPT
+        with ESMTP id S233817AbjJDRnR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 Oct 2023 13:12:17 -0400
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B48B69E;
-        Wed,  4 Oct 2023 10:12:13 -0700 (PDT)
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-533d6a8d6b6so4526286a12.2;
-        Wed, 04 Oct 2023 10:12:13 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696439532; x=1697044332;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=v8ih6B2Rlcxp81srnkWek1jGwJ1l7RM9hd1ykDQtxDA=;
-        b=aY4OAPMk7QKIAcgujy1hvKphtahUrxQ3db6f4doHZDcErMnLwDIweCWgsM+dyS2vJt
-         Qn/6RJ63LHEH2tQHB4mBLs1SdrZ6o62iKwqCl514aMQzyQhy7dpf+ikMzvZzZpY8JSHA
-         WCSNLshvBEKbUXtu7vcBUcj0UktN986TogNh6bl+4GKZMatKKTQ0AQ1tj9YtAp1wWvHV
-         9Z9AR1c8jHfzFrjfZ6R8vF5hiyi9KAfZcxkQQiNbcnPUWRqGsn90Do87z49L+Ucn+pqI
-         I5Zw1skzwsmC1Zc+szeGs8o/gsQB0S06WeSKzFLmhEdqOIsUb23ttzmfPtzmbJamiTEc
-         FKNA==
-X-Gm-Message-State: AOJu0Yw6BQQmW6iX7YkB9zuz/Lsh/QxeGuh+2fWGwynNX4pdD6uMbDuC
-        Q1ug+61HnyZ9d7DrKGsb/1Y=
-X-Google-Smtp-Source: AGHT+IGBToqvNL/hEcJArvik0DADNV1zdswIJEVmop94ejSDsVbBAfm79zjk87sbIoIzygWd/MmBMQ==
-X-Received: by 2002:a17:906:309a:b0:9b7:1e26:e2de with SMTP id 26-20020a170906309a00b009b71e26e2demr2388918ejv.21.1696439532120;
-        Wed, 04 Oct 2023 10:12:12 -0700 (PDT)
-Received: from localhost (fwdproxy-cln-025.fbsv.net. [2a03:2880:31ff:19::face:b00c])
-        by smtp.gmail.com with ESMTPSA id g10-20020a170906348a00b0099bd0b5a2bcsm3108543ejb.101.2023.10.04.10.12.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Oct 2023 10:12:11 -0700 (PDT)
-From:   Breno Leitao <leitao@debian.org>
-To:     mike.kravetz@oracle.com, muchun.song@linux.dev,
-        akpm@linux-foundation.org, Shuah Khan <shuah@kernel.org>
-Cc:     linux-mm@kvack.org, riel@surriel.com,
-        linux-kernel@vger.kernel.org (open list),
-        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Subject: [PATCH 2/2] selftests/mm: Add a new test for madv and hugetlb
-Date:   Wed,  4 Oct 2023 10:11:26 -0700
-Message-Id: <20231004171127.106056-2-leitao@debian.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231004171127.106056-1-leitao@debian.org>
-References: <20231004171127.106056-1-leitao@debian.org>
-MIME-Version: 1.0
+        Wed, 4 Oct 2023 13:43:17 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D94AB8;
+        Wed,  4 Oct 2023 10:43:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696441392; x=1727977392;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=wusBh9D5/dwIr4VShsVPhbHzM/ThsQwHdFWuOQGmq1g=;
+  b=J/S8WyxobaAm5F+i5w3SI0zFBAIef4TgMdmEND1FlJcLb/oMinqdAyuh
+   HIBTlnpLvUJ9im9zre0aMAZE4DU7yUsE1FDyVUGkV2f+vq/mJYtL8BF4k
+   IIVhX2tG6S7+Br6tEdtRQtBCAZJGQ8IGWD6iX7FW+JKX1je5wLvDgyLRp
+   CCZCcaCcnx4afoQ2w9h2B2rfObdRNUUUrDG7w4FldRohD03zht6qCz1la
+   CvKsVSgcxVa5/dOdN7Gm9U8sShCLY7Vrhb6tGed7F3Ua0nmP43I0Db2Ug
+   Fu8J8NQpQdUXnBRGiU36FvoolW4FStqEX+NLyRLXiWab6o9dAMZA1034l
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="386075726"
+X-IronPort-AV: E=Sophos;i="6.03,200,1694761200"; 
+   d="scan'208";a="386075726"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Oct 2023 10:43:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10853"; a="745076022"
+X-IronPort-AV: E=Sophos;i="6.03,200,1694761200"; 
+   d="scan'208";a="745076022"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga007.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 04 Oct 2023 10:43:11 -0700
+Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32; Wed, 4 Oct 2023 10:43:11 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32; Wed, 4 Oct 2023 10:43:10 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32 via Frontend Transport; Wed, 4 Oct 2023 10:43:10 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.107)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.32; Wed, 4 Oct 2023 10:43:10 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bnBiZfc3ucQ86VeOAz5fPtYZAkcVIOVJX9ILv70efH+X925nHqVIogss3ip7DeEVAhi8KPII9NaW0i+sJ3SiSahUPaDBEsn1YYd8YEXqud1RzjUEcaaDQWYeTO79/Tz5BO5iuZdcxYAdaYJmtpocNbx2d8an20kUFqJ+cTeGCv8yDBi3W/yVcMAWaJnxAu3vK77u0X615Sk07VlUU319K6eu/pmoyzmhxZ93bOizTowuoq/B/IYCytFl1EUQ6JCf4sqLuMJmhT5OPyKoHczE7/2yLFTBkD9q+x6Bd3vClGMvSUmbT/K6UmAxojS429hJ2abrUvSdkJ+crV6OlbpDhA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PRQLfonJiS4Q7WUEqR4CaoXo3DBqEU4oYuH08nlsVrI=;
+ b=b5rWArY+d4tNe+5AJ8Kq8C35iLkOuWdxbIbT+5IqMV6T4jU4hRk6M/1PTFrPkJqy4pBuOphsjjtXwuI+CCd30FFeEnEqJGvLNuQcrj9h+QVO5vFjpvzbwXFs7acHL7IFYs9LJFYcqD+t/Z1zZ4Ia+W1wuzPa7yp//8dYED83u6K/oHa4qy6gODB6VaFSqMd+V+ZUYJefiGKFZoM2UCHs78aMAI8YlxzE2WUXBn6fkYKnS7MAy/d8gHNHiBziwqr75O/ivd641NlTGMztqCZ78YCwHYlYfEn4JEa0naMbYS2ovO6uxJFgq+BeDj9+/DUvQHDnysWULOAs5xa6HVeKyg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SJ2PR11MB7573.namprd11.prod.outlook.com (2603:10b6:a03:4d2::10)
+ by DM4PR11MB7254.namprd11.prod.outlook.com (2603:10b6:8:10e::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.33; Wed, 4 Oct
+ 2023 17:43:08 +0000
+Received: from SJ2PR11MB7573.namprd11.prod.outlook.com
+ ([fe80::bd70:f215:4a97:c84e]) by SJ2PR11MB7573.namprd11.prod.outlook.com
+ ([fe80::bd70:f215:4a97:c84e%6]) with mapi id 15.20.6838.033; Wed, 4 Oct 2023
+ 17:43:08 +0000
+Message-ID: <0033ee44-5383-4e69-b85d-ed88592bee94@intel.com>
+Date:   Wed, 4 Oct 2023 10:43:04 -0700
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/6] selftests/resctrl: Extend signal handler coverage
+ to unmount on receiving signal
+Content-Language: en-US
+To:     "Shaopeng Tan (Fujitsu)" <tan.shaopeng@fujitsu.com>,
+        =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        =?UTF-8?Q?Maciej_Wiecz=C3=B3r-Retman?= 
+        <maciej.wieczor-retman@intel.com>
+CC:     LKML <linux-kernel@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+References: <20230915154438.82931-1-ilpo.jarvinen@linux.intel.com>
+ <20230915154438.82931-2-ilpo.jarvinen@linux.intel.com>
+ <d2d94def-742d-7661-3632-b9f7e4996415@intel.com>
+ <TYAPR01MB6330F248767F48A2A649CDE58BC1A@TYAPR01MB6330.jpnprd01.prod.outlook.com>
+From:   Reinette Chatre <reinette.chatre@intel.com>
+In-Reply-To: <TYAPR01MB6330F248767F48A2A649CDE58BC1A@TYAPR01MB6330.jpnprd01.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: MW4PR03CA0330.namprd03.prod.outlook.com
+ (2603:10b6:303:dd::35) To SJ2PR11MB7573.namprd11.prod.outlook.com
+ (2603:10b6:a03:4d2::10)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ2PR11MB7573:EE_|DM4PR11MB7254:EE_
+X-MS-Office365-Filtering-Correlation-Id: 24f0b0be-e640-4c68-b086-08dbc5015ed9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: B+Fo5G8COUTHxN+U4eUvPU8wBC8wcSA4H3WdasYnpMQpmf0hwxF+HCvvyreF83JbKfnoYMpi9NcyimKDjMmCK9a0jS3DacuPpAmMelbQrls7rl0VK1C5Rhm/xaC9vScyfYB0pkqGPrIIIZAz/CVvKMtBATKLeqIwA0JoL6gX+zMqy5bndhAMQkA4PofgHgp8uAHVELwxvpvrAPJ1OWTb86sTyWJdJj3TGmluV+wJ5d85ycvldiTMtKMEvvBZucRqQhTE4l1npUapw424QWMCk3VYREZ87CSbfAcwQCS4T0t8A4AgygQhr3U8k8BwymP9JuVt2VWU79RZxHHi4Ndarq2cwrbCgJmGWJy+b8lqksmsUOvk/YQAvqdnnm9F1gyki/4GHvzc0U3Xcu2wzWDRXojbPVw8dzTIsq4tmdflBSEP6H3yHo1zpB18Kpo5FgHzJ0KTTxkwEkhjqCXZATFbv1dWTMYIZNpLhTQ84J4X0EitEO/xKKovHzP8pjEwn3VaFaQoDGTHa1w3HNeZvZgJpMLrTE/C8j1mnObSe3+PCBhY5yhCYU/XDbM4Ye48RMqV/mApHSx+lo5tQIS5CqFQ+8ydn6SZmGT7p6NAOHByYKbZmNi96lqDIdn1eRGpnWDx5rEsNrgxTGO8CJjSNfFI/Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7573.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(39860400002)(366004)(396003)(376002)(136003)(230922051799003)(1800799009)(186009)(64100799003)(451199024)(53546011)(6486002)(6506007)(6666004)(478600001)(83380400001)(6512007)(26005)(2906002)(110136005)(41300700001)(316002)(6636002)(66946007)(66476007)(54906003)(8936002)(5660300002)(66556008)(4326008)(44832011)(8676002)(38100700002)(36756003)(66574015)(82960400001)(86362001)(31696002)(2616005)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZkxCRmJDUjZMRVVaNkJacXczcXJ0TEx0YUMyaVhvSDUwNFFPbWZVam55Y1JK?=
+ =?utf-8?B?bFRZSW4zRnl1VTk4OU81bW9Sc0hYakFUeUdaaGM0V1V2SU0yMWxwbXFtdjJI?=
+ =?utf-8?B?V0NSMWtha1BSV0o0R1lMWUtUYkU3b3EvVmtPNW5MQW8rT24waG5JdlREeWhs?=
+ =?utf-8?B?a0pDQk5SUnh1aFAzMU9PWjUwRndiMXB3cnc1ZXdYM3Z4RG5Za2h4Sm9SYlUw?=
+ =?utf-8?B?YTBIYTNhR1RFMDVRZlhMejA5OEozV0dsQkdEV0FZTS8vaVIvTUNQS0lQZXhz?=
+ =?utf-8?B?amQycWNncWxROTRFYlo3eGlHOE1qL0FydUI1dkZmV0RsdTlaV3RXL3p1eU9t?=
+ =?utf-8?B?ZkhvdWtHTFJZS1NEWkdxUm1ybzdIUThkckl5bzNMUWpSQ25qQUU0OGVGUUho?=
+ =?utf-8?B?NGdWVHFYems0R1pOcFdiQlQ3TWlmNUNMemFvVUpMTFBLYnNGOEo1c2pDYTN2?=
+ =?utf-8?B?dUtqVzNHcHVFQU9sTFZSNXFQaUpJM0pzcVJzaE0xZndYUVNIaFl0aXE4SFJy?=
+ =?utf-8?B?ZzhKeWRDR3U2d2g4Mnk1WXVSbnF3ZXBXKzZKQkdtZHYxalZUTFdlUEloLzFE?=
+ =?utf-8?B?V1FNaTNFbitpM3pUVTdHM2tmb1NuWFdFUlhudGEyRDdOdVpISDdPMmZHcVlH?=
+ =?utf-8?B?M1hvTlh5S0pLdUdNZFhwN3Y2L2ZIRjBaeHRmRG9BR1N2Z3hBTGhHQmFPN2JD?=
+ =?utf-8?B?eFBhWDh4RGRpRXFpMjAzUldaaDVOZnZBRFBjQWNzdE1YTVBqN1pReWZ4Mlhi?=
+ =?utf-8?B?ZGhlTU8vR3Y0M25yTnBja1BsWi95YTNYUzJkVFhMMFAzOVluODNwdWROWTVx?=
+ =?utf-8?B?enVxTllDaDE3clJFajV1SHRUSUN6U0s3Y0tNdEI4eUVjSVgvclZ5R0dBY2Fq?=
+ =?utf-8?B?VXhmc2NwUExmSUVFLytMUXJpOTVMUUpGYjhOTUppNDRZbldveFBBNzJGUVJH?=
+ =?utf-8?B?K3ZWTHlxOU0ydU5adTJsOEVHZkFBU3A3NVJrNFhmSWg0dW9IZnh0VS8waE5B?=
+ =?utf-8?B?V3NZYTRCM0VvUlp1WHJESzVtT1Roa2ltZHVPbCtXVUs5RjZ5dDdCL0kvZWll?=
+ =?utf-8?B?QjZ6VzBMWE1SUVlociswNVh1UFNKUW50YkNHb3VFVW9CMkZ3TzdjQlQzQWlY?=
+ =?utf-8?B?aXZRV21XMXJLNTZkVVFFSkxFSW9reUpGVEJnREcvK2xQSHNYYjc0aVZWdkcv?=
+ =?utf-8?B?b3F5OU9xUDVTdG9ZL0ZEZjZCUHNyOUk0emNsREhIRUtteWx4U2JVTndoQlo1?=
+ =?utf-8?B?b0dpem1KZFIvNlMzejlYMGdhaTY1YjFIUnNqVUo1MTlLQ0pxMGhyb1kvTDBq?=
+ =?utf-8?B?U0ZnZGlRUEhGY01WZHlYc3d0aVhjc21KaGVDSGUzeGNsTE9ZMDE4YmN2MTJI?=
+ =?utf-8?B?WUpQTGhKNFErK2p3Mk0yTnR0UlJCNTVISm41bW02T0JWZ3N5NGh0Tm1ackZu?=
+ =?utf-8?B?YUpJM1NYTy9FSk1WcEhXRkNJaXh6THk1QVdVcURkUVZPZkRTQWhDalU2dGg1?=
+ =?utf-8?B?Uk5XV1VZQ0ZQdWhKeFJVQmQyRUttUVgzMWhINlptWE1NNGpxSkE5QTlpVkF4?=
+ =?utf-8?B?QnJyYU9pWEJhMTcyL0hOYTB5djBqN3RQT3RZbmtrNmFSanV5SDJXYXAxMHY0?=
+ =?utf-8?B?QUR2TXJpaTNkVFE4bXZLandFM3FyVUR3bFRuSUVlczM4cUpKYXMzQ0lPRnE5?=
+ =?utf-8?B?YTI0MVoxTmozTHNaa2ZIUGRkemdjMDZGc0ZXSzNrMDZueDBIeU1KWG05eUhX?=
+ =?utf-8?B?VCtUWDJTNzhFU1dmWmw5RU15RktMUnNFT1E2Q0wrS09vZjRLdGVLRnZiWHY5?=
+ =?utf-8?B?cjBlZktieXhTaUNCVS9aMlZpSXc4T0tXSVpmaXczeW55ZGhsQUd6eTN5anIz?=
+ =?utf-8?B?d2VCMFZvM1RGWUF3MklOSmtWMzQ2K1VXZlMwVlJGZzM5b3lqeEtoNFB0bEhF?=
+ =?utf-8?B?RmdxQVBqYU1NR2piVTNxK1JDUUx5VGR0WlZIbVhYZFlKWDRXM2p3WncwZDV4?=
+ =?utf-8?B?a3JrdTJrNlJzVU9NczhmYVc4b3g0TDZVUmxBK1pMSTFZa0dXZSs2OWZCK2tV?=
+ =?utf-8?B?M2JhTzJrS3JqZGE1RDcvdjNqSElhWFY5TUc0NjlObFJ6Ujk2VUYyZ1ZPY0dT?=
+ =?utf-8?B?bitVbTFCV2hBU3QwbEtsMHhjNEZXU3E4NDJCSU9oM1dmQUpzazRMc2JKcENV?=
+ =?utf-8?B?enc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 24f0b0be-e640-4c68-b086-08dbc5015ed9
+X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB7573.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Oct 2023 17:43:08.1885
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: kf8eAsUsntbNOr90fnxZsWi0ZRp0DczfWg+zUltBUaZlxYKDBZiRxd4fUwpONY5Shkme0NH+UzsvhsALQilmrR2VVgGuiG3AMwMVea1Pfto=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB7254
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Create a selftest that exercises the conflict between page faults and
-madvise(MADV_DONTNEED) in the same huge page. Do it by running two
-threads that touches the huge page and madvise(MADV_DONTNEED) at the same
-time.
+Hi Shaopeng,
 
-In case of a SIGBUS coming at pagefault, the test should fail, since we
-hit the bug.
+On 9/28/2023 1:10 AM, Shaopeng Tan (Fujitsu) wrote:
+>> On 9/15/2023 8:44 AM, Ilpo Järvinen wrote:
 
-The test doesn't have a signal handler, and if it fails, it fails like
-the following
+...
 
-  ----------------------------------
-  running ./hugetlb_fault_after_madv
-  ----------------------------------
-  ./run_vmtests.sh: line 186: 595563 Bus error    (core dumped) "$@"
-  [FAIL]
+>>> +static void run_mbm_test(const char * const *benchmark_cmd, int
+>>> +cpu_no) {
+>>> +	int res;
+>>> +
+>>> +	ksft_print_msg("Starting MBM BW change ...\n");
+>>> +
+>>> +	if (test_prepare())
+>>> +		return;
+>>>
+>>
+>> I am not sure about this. With this exit the kselftest machinery is not aware of
+>> the test passing or failing. I wonder if there should not rather be a "goto" here
+>> that triggers ksft_test_result()? This needs some more thought though. First,
+>> with this change test_prepare() officially gains responsibility to determine if a
+>> failure is transient (just a single test
+>> fails) or permanent (no use trying any other tests if this fails). For the former it
+>> would then be up to the caller to call ksft_test_result() and for the latter
+>> test_prepare() will call ksft_exit_fail_msg().
+>> Second, that SNC warning may be an inconvenience with a new goto. Here it
+>> may be ok to print that message before the test failure?
+> 
+> If a failure may be permanent, it may be best to detect it before running all tests, rather than in test_prepare().
+> Now some detections are completed before running all tests. For example:
+> 273         if (geteuid() != 0)
+> 274                 return ksft_exit_skip("Not running as root. Skipping...\n");
+> 275
+> 276         if (!check_resctrlfs_support())
+> 277                 return ksft_exit_skip("resctrl FS does not exist. Enable X86_CPU_RESCTRL config option.\n");
+> 278
+> 279         if (umount_resctrlfs())
+> 280                 return ksft_exit_skip("resctrl FS unmount failed.\n");
+> 
 
-This selftest goes together with the fix of the bug[1] itself.
+You are correct that the tests should aim to detect as early as possible if
+no test has a chance of succeeding. This is covered in the checks you mention.
+The purpose of test_prepare()/test_cleanup() pair is to perform actions that
+should be done for every test. For example, resctrl is mounted before each
+test and unmounted after each test. Since these actions are required to be done
+for every test it cannot be a single call before all tests are run.
 
-[1] https://lore.kernel.org/all/20231001005659.2185316-1-riel@surriel.com/#r
+It may be possible to add a test_prepare() directly followed by a test_cleanup()
+before any test is run to be more explicit about early detection but that
+does not seem necessary considering the checks would be done anyway when the
+first test is run. Even when doing so it would not eliminate the need for 
+test_prepare()/test_cleanup() to form part of every test run and needing to exit
+if, for example, a previous test triggered a fault preventing resctrl from
+being mounted.
 
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
- tools/testing/selftests/mm/Makefile           |  1 +
- .../selftests/mm/hugetlb_fault_after_madv.c   | 82 +++++++++++++++++++
- tools/testing/selftests/mm/run_vmtests.sh     |  4 +
- 3 files changed, 87 insertions(+)
- create mode 100644 tools/testing/selftests/mm/hugetlb_fault_after_madv.c
-
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index 6a9fc5693145..e71ec9910c62 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -68,6 +68,7 @@ TEST_GEN_FILES += split_huge_page_test
- TEST_GEN_FILES += ksm_tests
- TEST_GEN_FILES += ksm_functional_tests
- TEST_GEN_FILES += mdwe_test
-+TEST_GEN_FILES += hugetlb_fault_after_madv
- 
- ifneq ($(ARCH),arm64)
- TEST_GEN_PROGS += soft-dirty
-diff --git a/tools/testing/selftests/mm/hugetlb_fault_after_madv.c b/tools/testing/selftests/mm/hugetlb_fault_after_madv.c
-new file mode 100644
-index 000000000000..d6d38d443840
---- /dev/null
-+++ b/tools/testing/selftests/mm/hugetlb_fault_after_madv.c
-@@ -0,0 +1,82 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <pthread.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <sys/mman.h>
-+#include <sys/types.h>
-+#include <unistd.h>
-+
-+#include "vm_util.h"
-+
-+#define MMAP_SIZE (1 << 21)
-+#define INLOOP_ITER 100
-+
-+char *huge_ptr;
-+
-+/* Touch the memory while it is being madvised() */
-+void *touch(void *unused)
-+{
-+	char *ptr = (char *)huge_ptr;
-+
-+	if (!ptr) {
-+		fprintf(stderr, "Failed to allocate memory\n");
-+		perror("");
-+	}
-+
-+	for (int i = 0; i < INLOOP_ITER; i++)
-+		ptr[0] = '.';
-+
-+	return NULL;
-+}
-+
-+void *madv(void *unused)
-+{
-+	usleep(rand() % 10);
-+	if (!huge_ptr)
-+		return NULL;
-+
-+	for (int i = 0; i < INLOOP_ITER; i++)
-+		madvise(huge_ptr, MMAP_SIZE, MADV_DONTNEED);
-+
-+	return NULL;
-+}
-+
-+int main(void)
-+{
-+	unsigned long free_hugepages;
-+	pthread_t thread1, thread2;
-+	/*
-+	 * On kernel 6.4, we are able to reproduce the problem with ~1000
-+	 * interactions
-+	 */
-+	int max = 10000;
-+
-+	srand(getpid());
-+
-+	free_hugepages = get_free_hugepages();
-+	if (free_hugepages != 1) {
-+		fprintf(stderr,
-+			"This test needs one and only one page to execute. Got %lu\n",
-+			free_hugepages);
-+		exit(1);
-+	}
-+
-+	while (max--) {
-+		huge_ptr = mmap(NULL, MMAP_SIZE, PROT_READ | PROT_WRITE,
-+				MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB, -1, 0);
-+
-+		if ((unsigned long)huge_ptr == -1) {
-+			perror("Failed to allocate\n");
-+			continue;
-+		}
-+
-+		pthread_create(&thread1, NULL, madv, NULL);
-+		pthread_create(&thread2, NULL, touch, NULL);
-+
-+		pthread_join(thread1, NULL);
-+		pthread_join(thread2, NULL);
-+		munmap(huge_ptr, MMAP_SIZE);
-+	}
-+
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-index 3e2bc818d566..9f53f7318a38 100755
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -221,6 +221,10 @@ CATEGORY="hugetlb" run_test ./hugepage-mremap
- CATEGORY="hugetlb" run_test ./hugepage-vmemmap
- CATEGORY="hugetlb" run_test ./hugetlb-madvise
- 
-+# For this test, we need one and just one huge page
-+echo 1 > /proc/sys/vm/nr_hugepages
-+CATEGORY="hugetlb" run_test ./hugetlb_fault_after_madv
-+
- if test_selected "hugetlb"; then
- 	echo "NOTE: These hugetlb tests provide minimal coverage.  Use"
- 	echo "      https://github.com/libhugetlbfs/libhugetlbfs.git for"
--- 
-2.34.1
-
+Reinette
