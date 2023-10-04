@@ -2,102 +2,143 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33DA27B85E8
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Oct 2023 18:55:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F6167B8628
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Oct 2023 19:12:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243546AbjJDQzB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 4 Oct 2023 12:55:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50274 "EHLO
+        id S243633AbjJDRMN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 4 Oct 2023 13:12:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243511AbjJDQzB (ORCPT
+        with ESMTP id S243627AbjJDRMN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 Oct 2023 12:55:01 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85333AB
-        for <linux-kselftest@vger.kernel.org>; Wed,  4 Oct 2023 09:54:57 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-59f67676065so33540537b3.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Oct 2023 09:54:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696438497; x=1697043297; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=v1SpCSVBVkGWfR+UVpLKMyMdKYaLIo/4ycal5KL0JmU=;
-        b=BQCb8ij3zdhky/1vgEEKMhtBMsgfFAo6jps8xVr3wBICqOF/kjqhXaqdElAK2xI1bS
-         U3cgOrlMvtFG5ECDU0wbJX7io9/m+60G84oEVcyPXvW5l+c99C+nkhMcjqMG06lAs64J
-         JcsUd5KjOhbY3t9S2KlFc2Lqnf54zyOA4NMnRme9qoOxHc56ihSYzPgiCfXS1KTOHRLQ
-         7vqXSS9ZrMAqfViGVSYkaeO1rOdjaapK3UjLBKajtx9Ig7L9WIYQPNjuJczk7iHBYs5+
-         7Bb3NbuRQ1K4k+rGFvupZ64bfmUnyG8EH0+/Tr4Rp2z2ywod6gN4uoG6+3Y42syQheqN
-         al7g==
+        Wed, 4 Oct 2023 13:12:13 -0400
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B2395;
+        Wed,  4 Oct 2023 10:12:08 -0700 (PDT)
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-9a58dbd5daeso9467166b.2;
+        Wed, 04 Oct 2023 10:12:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696438497; x=1697043297;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=v1SpCSVBVkGWfR+UVpLKMyMdKYaLIo/4ycal5KL0JmU=;
-        b=o7mmGr/gELRGCLXuI+zPknHq82X+hqIO0VD9iHEVLez3CKzevADjRhRJ0GaISeSmK4
-         4HAfg1+2MhwYWK2WHKKKr+B95ez2Olpbi3JKWKhhEZJOkyfm4WxLokLV6mwxVq+bP1lU
-         q1LjjrtAIUaS4arNMF2bxUcXMKSL2DZ0tH7Rb/TWTFjrLdxMI4EXT8TfPkPCA7CK+VIS
-         c/pXEElcGSmvpmWWU+wadYcaCtecMJabABW9VnxVKHLoB2vRb+bPHuicrS9w2V4OBs6P
-         wdaTNy5erMsuli2jOQ8XAoL6v6k8ck9sidRbKpfTI9LCjGp++lZ8LFiXcGY5xY0Yo8VD
-         GWqQ==
-X-Gm-Message-State: AOJu0YyhPauI+8XkUDMA5iLom8U/usB23KI+0YPC8GOJfKpbkiykVkbD
-        hZ04xRcfjfpjQetv53CaRB1LNi0YfI8=
-X-Google-Smtp-Source: AGHT+IF4i+oQKJd8u1V+TB1VPIOAogrhPtMWZdEvSZy8rU+jM1S65yQ94jKQ9NyvjRiXgJ/MLji9dcyTwZ4=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:a909:0:b0:59b:e97e:f7e3 with SMTP id
- g9-20020a81a909000000b0059be97ef7e3mr53564ywh.2.1696438496733; Wed, 04 Oct
- 2023 09:54:56 -0700 (PDT)
-Date:   Wed, 4 Oct 2023 09:54:55 -0700
-In-Reply-To: <ZR2EyUULbRpXW8wK@luigi.stachecki.net>
-Mime-Version: 1.0
-References: <20230928001956.924301-1-seanjc@google.com> <ZR0QOGo5DftkRWsr@redhat.com>
- <ZR1Yt6Z+dhMbn/FJ@luigi.stachecki.net> <ZR175enUCh3KkAU6@google.com> <ZR2EyUULbRpXW8wK@luigi.stachecki.net>
-Message-ID: <ZR2Y34hFpLmCYsUr@google.com>
-Subject: Re: [PATCH 0/5] KVM: x86: Fix breakage in KVM_SET_XSAVE's ABI
-From:   Sean Christopherson <seanjc@google.com>
-To:     Tyler Stachecki <stachecki.tyler@gmail.com>
-Cc:     Leonardo Bras <leobras@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        d=1e100.net; s=20230601; t=1696439527; x=1697044327;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CXe2b1SQetsxvQIMHBxAgfGGNR39eEXqqOWXi1pgTdY=;
+        b=dIBrDsv/omajYDcjt1S5VMcxAxF4ASg9WRLTFh/+Py2WjDs5Icqm2AeLklLYUJh1O8
+         OX+siDAx/6jYsJw4zOhsVPopKGaL3jzX90IEN9LIUIzJkXVqr4fS80l2gkXi3KIAiDoz
+         U7UKYlxZRhcuqeS8jNLAUgWLvwtNSBc+D9Pop29+x00Ys4M306b3dXRn2Dv9tycxEnr2
+         Y/CdeNtWF6kCzihYNqnPlBmInZ6lSTWLTnYeowS/uL0aowYKrYJpHS/krP9koy+YgZW9
+         VINY4byV0dbQea91wMtJ+VASfFjlS0qWyldYmnWHRtWPf4PDY5ozfWEkZwOl0uRb/7M7
+         oLkA==
+X-Gm-Message-State: AOJu0Yynvpmr7y/ZV5NlusQqLY8AJKQrgf6VITN2SaS+B4AOAlXcRKoY
+        KX9pbut6iGAQwp5BeWj9P04ZaoiqxXo=
+X-Google-Smtp-Source: AGHT+IFSa2P2Gwxf/j1Dt3ypULeuCrhYVFeB7pwFaxDrjEa6p1Xue5WukYkOwB88lN0rbcYG+AQzYw==
+X-Received: by 2002:a17:906:5357:b0:9ae:7681:f62a with SMTP id j23-20020a170906535700b009ae7681f62amr3072085ejo.44.1696439527012;
+        Wed, 04 Oct 2023 10:12:07 -0700 (PDT)
+Received: from localhost (fwdproxy-cln-006.fbsv.net. [2a03:2880:31ff:6::face:b00c])
+        by smtp.gmail.com with ESMTPSA id z25-20020a1709067e5900b0099bccb03eadsm3064093ejr.205.2023.10.04.10.12.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 04 Oct 2023 10:12:06 -0700 (PDT)
+From:   Breno Leitao <leitao@debian.org>
+To:     mike.kravetz@oracle.com, muchun.song@linux.dev,
+        akpm@linux-foundation.org, Shuah Khan <shuah@kernel.org>
+Cc:     linux-mm@kvack.org, riel@surriel.com,
+        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK),
+        linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH 1/2] selftests/mm: export get_free_hugepages()
+Date:   Wed,  4 Oct 2023 10:11:25 -0700
+Message-Id: <20231004171127.106056-1-leitao@debian.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Oct 04, 2023, Tyler Stachecki wrote:
-> On Wed, Oct 04, 2023 at 07:51:17AM -0700, Sean Christopherson wrote:
+get_free_hugepages() is helpful for other hugepage tests. Export it to
+the common file (vm_util.c) to be reused.
+
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+ tools/testing/selftests/mm/hugetlb-madvise.c | 19 -------------------
+ tools/testing/selftests/mm/vm_util.c         | 19 +++++++++++++++++++
+ tools/testing/selftests/mm/vm_util.h         |  1 +
+ 3 files changed, 20 insertions(+), 19 deletions(-)
+
+diff --git a/tools/testing/selftests/mm/hugetlb-madvise.c b/tools/testing/selftests/mm/hugetlb-madvise.c
+index d55322df4b73..f32d99565c5e 100644
+--- a/tools/testing/selftests/mm/hugetlb-madvise.c
++++ b/tools/testing/selftests/mm/hugetlb-madvise.c
+@@ -36,25 +36,6 @@
+ unsigned long huge_page_size;
+ unsigned long base_page_size;
  
-> > It's not about removing features.  The change you're asking for is to have KVM
-> > *silently* drop data.  Aside from the fact that such a change would break KVM's
-> > ABI, silently ignoring data that userspace has explicitly requested be loaded for
-> > a vCPU is incredibly dangerous.
-> 
-> Sorry if it came off that way
+-unsigned long get_free_hugepages(void)
+-{
+-	unsigned long fhp = 0;
+-	char *line = NULL;
+-	size_t linelen = 0;
+-	FILE *f = fopen("/proc/meminfo", "r");
+-
+-	if (!f)
+-		return fhp;
+-	while (getline(&line, &linelen, f) > 0) {
+-		if (sscanf(line, "HugePages_Free:      %lu", &fhp) == 1)
+-			break;
+-	}
+-
+-	free(line);
+-	fclose(f);
+-	return fhp;
+-}
+-
+ void write_fault_pages(void *addr, unsigned long nr_pages)
+ {
+ 	unsigned long i;
+diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
+index 558c9cd8901c..3082b40492dd 100644
+--- a/tools/testing/selftests/mm/vm_util.c
++++ b/tools/testing/selftests/mm/vm_util.c
+@@ -269,3 +269,22 @@ int uffd_unregister(int uffd, void *addr, uint64_t len)
+ 
+ 	return ret;
+ }
++
++unsigned long get_free_hugepages(void)
++{
++	unsigned long fhp = 0;
++	char *line = NULL;
++	size_t linelen = 0;
++	FILE *f = fopen("/proc/meminfo", "r");
++
++	if (!f)
++		return fhp;
++	while (getline(&line, &linelen, f) > 0) {
++		if (sscanf(line, "HugePages_Free:      %lu", &fhp) == 1)
++			break;
++	}
++
++	free(line);
++	fclose(f);
++	return fhp;
++}
+diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
+index c7fa61f0dff8..c02990bbd56f 100644
+--- a/tools/testing/selftests/mm/vm_util.h
++++ b/tools/testing/selftests/mm/vm_util.h
+@@ -51,6 +51,7 @@ int uffd_register(int uffd, void *addr, uint64_t len,
+ int uffd_unregister(int uffd, void *addr, uint64_t len);
+ int uffd_register_with_ioctls(int uffd, void *addr, uint64_t len,
+ 			      bool miss, bool wp, bool minor, uint64_t *ioctls);
++unsigned long get_free_hugepages(void);
+ 
+ /*
+  * On ppc64 this will only work with radix 2M hugepage size
+-- 
+2.34.1
 
-No need to apologise, you got bit by a nasty kernel bug and are trying to find a
-solution.  There's nothing wrong with that.
-
-> I fully understand and am resigned to the "you
-> break it, you keep both halves" nature of what I had initially proposed and
-> that it is not a generally tractable solution.
-
-Yeah, the crux of the matter is that we have no control or even knowledge of who
-all is using KVM, with what userspace VMM, on what hardware, etc.  E.g. if this
-bug were affecting our fleet and for some reason we couldn't address the problem
-in userspace, carrying a hack in KVM in our internal kernel would probably be a
-viable option because we can do a proper risk assessment.  E.g. we know and control
-exactly what userspace we're running, the underlying hardware in affected pools,
-what features are exposed to the guest, etc.  And we could revert the hack once
-all affected VMs had been sanitized.
