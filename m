@@ -2,99 +2,124 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92C167B814A
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Oct 2023 15:48:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AFE797B8214
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Oct 2023 16:18:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242663AbjJDNr5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 4 Oct 2023 09:47:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37106 "EHLO
+        id S232997AbjJDOS1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 4 Oct 2023 10:18:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242652AbjJDNrx (ORCPT
+        with ESMTP id S242825AbjJDOHS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 Oct 2023 09:47:53 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5D19B;
-        Wed,  4 Oct 2023 06:47:49 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-9b1ebc80d0aso387874966b.0;
-        Wed, 04 Oct 2023 06:47:49 -0700 (PDT)
+        Wed, 4 Oct 2023 10:07:18 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD5F9DD
+        for <linux-kselftest@vger.kernel.org>; Wed,  4 Oct 2023 07:07:14 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-6907e44665bso1695378b3a.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Oct 2023 07:07:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696427268; x=1697032068; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+        d=dabbelt-com.20230601.gappssmtp.com; s=20230601; t=1696428434; x=1697033234; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=I1zr3QyrRab34YjbDoJeZTwZ877wt83ubKCahPs2NWU=;
-        b=lzqMmUI4R+ERWIc7zl1GyhnLuWeI/ZTAUvyejRIEL6jPzshOwy8Rfrfx5h839kJQb7
-         EN02cer0HTBhKm1MS9/wbNv9Utk1+kXiwF8i7hl8jEKbJNV//DPKOjHC7pCzWRoor4Q4
-         w4NRM9h7yleW2/Jj80rHhgrqMl5YYLT6vzEQ98HcPIkNu1bulX9qtTS96cfM/We2hh2D
-         S0XXixR79feHFoqhZtbwNqRqvDarsBkoWcUm0x6Ga/4MJfdb/3VfEzN5c0JRv4UYsxEP
-         8ilG4xUZh4mIhxtB0jvYcSjjUSMtpn5DYu277iJk/+YEA0SqEYV93CgNG/LZ9pfJz/ZM
-         yp6A==
+        bh=0z/r1d+J5gtLqP5W7ywKcBZnz9e1tR93kK5cuzURK+U=;
+        b=cL7TMIHvZGILyvQKlG8/69OWPtzvqfwMYHT6bhdpd0Xiot1qkWGebg+HONm1NJG2T1
+         FXl8d6+z6Vp+L6nK1TfmMDLmwFgbnxEdG55WthmMNNUaBqS9t6Znn9UhaW5jUb30CgzU
+         c7NEhpH9UYLE3ds2I61eoIMWuYcekbZbxlylI3faAyahjtr4B3uX8IWjYJlgyvtefOpa
+         kJ6LgbtfM6AMJxux3ptSYePlndpQIsfEJwPwvJITYfUfRyw9SV/QyTNuci2tyzVws7UW
+         CsVx+DMQtR2H0XQrTIGOjGA4j4odKJM/nTThLTYyH9KUUsyHv3Py9Kt5pFEwdozlN6LJ
+         Mi6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696427268; x=1697032068;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=I1zr3QyrRab34YjbDoJeZTwZ877wt83ubKCahPs2NWU=;
-        b=IHmcaCreh7oZop+6cgpXt8ZE1Xzg1neaU7CLYMtwPNdpvau+icLRyZ4jJqQdZb7Ibk
-         9vKQkCePk+BmtAVUvfvcFeQJTbQpO74moSRh6dYB+UpcOAd4/a2mrPOdkGIVaMOyyr5V
-         PzEb3YaO5Cq0ZLKqVDqu/o8aRJrEqVhY/1PJU9+KbNkkAoeqHdmPES6zoDokdw0lTq4u
-         k4vmrtGEQJO2Pda4MP6wl8xJbLx5exPSNqZUVeZmrT40uoacCQ5pnaa6v/PfuIUZuWSE
-         5ctXEZbjtDjpgu3D5I+UbRim7fcpavwsyce0y5ZWgGenECyRPbgEYPynGsiTclwyBbIW
-         M18g==
-X-Gm-Message-State: AOJu0YyTsXKK8D57uEgam9OQbbTFZeSydofwN+GiHgDW1y8GFlT20JAW
-        cA7Wn3nGiAQp/iJ5zwS+uJamfPqnCgADHw==
-X-Google-Smtp-Source: AGHT+IG1GU5Q6WEANAwSOY2AZD1N1CUddHWMbtHL0AB4CjDFJX6kewEa3vy3b/WzbqjYm9gTewmnTQ==
-X-Received: by 2002:a17:907:2723:b0:9a5:d657:47ee with SMTP id d3-20020a170907272300b009a5d65747eemr1999081ejl.58.1696427267908;
-        Wed, 04 Oct 2023 06:47:47 -0700 (PDT)
-Received: from [127.0.1.1] (91-118-163-37.static.upcbusiness.at. [91.118.163.37])
-        by smtp.gmail.com with ESMTPSA id kf1-20020a17090776c100b00992f2befcbcsm2805593ejc.180.2023.10.04.06.47.47
+        d=1e100.net; s=20230601; t=1696428434; x=1697033234;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0z/r1d+J5gtLqP5W7ywKcBZnz9e1tR93kK5cuzURK+U=;
+        b=j3cafrTGcZupMi0sCXYAsFpokbxaN3FO1Do5JO9recHEdUNKn4yLbnw2wPYMtYePjr
+         U6h1Gxc5zVS1dTMreK2S61qWpmNn55nttGIEGDTIxVJlrOS9Q9P8VdDASeefI4qEkCyS
+         +2emsLsAZCgCo6zRX5x3cqems4NVb4BVSmK1he2vNcQx4LGPvb8B5s5STMANDZpTNoSF
+         OxICNs4xGRjzgHD1BoIXxUqAPY0m4BOYno1SEAznM4OrxDRgKDM8sns3Lc56uVsvIZr/
+         aod5z1JN++kOR4LXp1xEnSOvTp9TC4GezOrY0dGAlAQkDMJh+ooZ4R7HxBM67d1sqBCh
+         s11Q==
+X-Gm-Message-State: AOJu0YyFed3Q7IhoiSFwHp5AL1+ZIC/wFjzv7NH2KiKD86hV7b87qiWe
+        i6NvBjZuFh2hCaG+KciFh7O5Hw==
+X-Google-Smtp-Source: AGHT+IF0Ml8pf6AjMo5zAtun1w9ROsE0vABhFnVNgCEYK5oMomt4HYMJTvQ3YEhZmBv+2hEuxsmApA==
+X-Received: by 2002:a05:6a00:b8b:b0:68f:d1a7:1a3a with SMTP id g11-20020a056a000b8b00b0068fd1a71a3amr2957250pfj.8.1696428432808;
+        Wed, 04 Oct 2023 07:07:12 -0700 (PDT)
+Received: from localhost ([192.184.165.199])
+        by smtp.gmail.com with ESMTPSA id bm2-20020a056a00320200b0068a13b0b300sm3384998pfb.11.2023.10.04.07.07.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Oct 2023 06:47:47 -0700 (PDT)
-From:   Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Date:   Wed, 04 Oct 2023 15:47:43 +0200
-Subject: [PATCH 3/3] selftests/dmabuf-heaps: add gitignore file
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231004-topic-selftest_gitignore-v1-3-40689bcd23e2@gmail.com>
-References: <20231004-topic-selftest_gitignore-v1-0-40689bcd23e2@gmail.com>
-In-Reply-To: <20231004-topic-selftest_gitignore-v1-0-40689bcd23e2@gmail.com>
-To:     Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Javier Carrasco <javier.carrasco.cruz@gmail.com>
-X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1696427264; l=515;
- i=javier.carrasco.cruz@gmail.com; s=20230509; h=from:subject:message-id;
- bh=Fy8e2jpbkway7o2jXZz31LU68r9YzhJywXlYBNMd5AQ=;
- b=g8xKt1P8ziu97cszgQhL9lABHnX0LODN8p2+cGK2lnngVUPymvVwVS+wiKUsJ3u88vwM6UL7w
- mtdGOlsjjMqClnYnc5PvcdXGpFps8A/sjwdnf1pBrKYQixVyQluWECp
-X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
- pk=tIGJV7M+tCizagNijF0eGMBGcOsPD+0cWGfKjl4h6K8=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 04 Oct 2023 07:07:11 -0700 (PDT)
+Date:   Wed, 04 Oct 2023 07:07:11 -0700 (PDT)
+X-Google-Original-Date: Wed, 04 Oct 2023 07:07:09 PDT (-0700)
+Subject:     Re: [PATCH v3 2/6] RISC-V: Detect Zicond from ISA string
+In-Reply-To: <20231003035226.1945725-3-apatel@ventanamicro.com>
+CC:     pbonzini@redhat.com, atishp@atishpatra.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Conor Dooley <conor@kernel.org>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shuah@kernel.org,
+        ajones@ventanamicro.com, mchitale@ventanamicro.com,
+        devicetree@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        apatel@ventanamicro.com, Conor Dooley <conor.dooley@microchip.com>
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     apatel@ventanamicro.com
+Message-ID: <mhng-4ec1093a-4542-429e-a9f0-8a976cff9ac4@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-dmabuf-heaps builds a dmabuf-heap binary that can be ignored by git.
+On Mon, 02 Oct 2023 20:52:22 PDT (-0700), apatel@ventanamicro.com wrote:
+> The RISC-V integer conditional (Zicond) operation extension defines
+> standard conditional arithmetic and conditional-select/move operations
+> which are inspired from the XVentanaCondOps extension. In fact, QEMU
+> RISC-V also has support for emulating Zicond extension.
+>
+> Let us detect Zicond extension from ISA string available through
+> DT or ACPI.
+>
+> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> ---
+>  arch/riscv/include/asm/hwcap.h | 1 +
+>  arch/riscv/kernel/cpufeature.c | 1 +
+>  2 files changed, 2 insertions(+)
+>
+> diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hwcap.h
+> index 0f520f7d058a..6fc51c1b34cf 100644
+> --- a/arch/riscv/include/asm/hwcap.h
+> +++ b/arch/riscv/include/asm/hwcap.h
+> @@ -59,6 +59,7 @@
+>  #define RISCV_ISA_EXT_ZIFENCEI		41
+>  #define RISCV_ISA_EXT_ZIHPM		42
+>  #define RISCV_ISA_EXT_SMSTATEEN		43
+> +#define RISCV_ISA_EXT_ZICOND		44
+>
+>  #define RISCV_ISA_EXT_MAX		64
+>
+> diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeature.c
+> index 3755a8c2a9de..e3803822ab5a 100644
+> --- a/arch/riscv/kernel/cpufeature.c
+> +++ b/arch/riscv/kernel/cpufeature.c
+> @@ -167,6 +167,7 @@ const struct riscv_isa_ext_data riscv_isa_ext[] = {
+>  	__RISCV_ISA_EXT_DATA(zicbom, RISCV_ISA_EXT_ZICBOM),
+>  	__RISCV_ISA_EXT_DATA(zicboz, RISCV_ISA_EXT_ZICBOZ),
+>  	__RISCV_ISA_EXT_DATA(zicntr, RISCV_ISA_EXT_ZICNTR),
+> +	__RISCV_ISA_EXT_DATA(zicond, RISCV_ISA_EXT_ZICOND),
+>  	__RISCV_ISA_EXT_DATA(zicsr, RISCV_ISA_EXT_ZICSR),
+>  	__RISCV_ISA_EXT_DATA(zifencei, RISCV_ISA_EXT_ZIFENCEI),
+>  	__RISCV_ISA_EXT_DATA(zihintpause, RISCV_ISA_EXT_ZIHINTPAUSE),
 
-Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
----
- tools/testing/selftests/dmabuf-heaps/.gitignore | 1 +
- 1 file changed, 1 insertion(+)
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
 
-diff --git a/tools/testing/selftests/dmabuf-heaps/.gitignore b/tools/testing/selftests/dmabuf-heaps/.gitignore
-new file mode 100644
-index 000000000000..b500e76b9045
---- /dev/null
-+++ b/tools/testing/selftests/dmabuf-heaps/.gitignore
-@@ -0,0 +1 @@
-+dmabuf-heap
-
--- 
-2.39.2
-
+Can we do a shared tag, though?  These will conflict.
