@@ -2,64 +2,84 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 672DD7B794E
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Oct 2023 09:59:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0EB27B7DD0
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Oct 2023 13:09:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241595AbjJDH73 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 4 Oct 2023 03:59:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49734 "EHLO
+        id S233041AbjJDLJW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 4 Oct 2023 07:09:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241654AbjJDH72 (ORCPT
+        with ESMTP id S233001AbjJDLJV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 Oct 2023 03:59:28 -0400
-X-Greylist: delayed 499 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 04 Oct 2023 00:59:25 PDT
-Received: from mail.citycodes.pl (mail.citycodes.pl [158.255.215.195])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27B79B8
-        for <linux-kselftest@vger.kernel.org>; Wed,  4 Oct 2023 00:59:24 -0700 (PDT)
-Received: by mail.citycodes.pl (Postfix, from userid 1001)
-        id 5545D1F68D; Wed,  4 Oct 2023 09:50:43 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=citycodes.pl; s=mail;
-        t=1696405864; bh=mMhfBvhM53FtUQl1P3lyeSY5aDBQYiR8qQBy6YFQHi0=;
-        h=Date:From:To:Subject:From;
-        b=T3HTAO9Yn2do4Uq5G9oHKu15lLzCn1AJWOOBHZrxk0DR9hBiPNGE0hWhKSa5FqmT9
-         NCTb0335CaGBjzyJ2VkHbH4b/8/Xl2QvfYPDUIavkQe5yuneBaTl8SdLekj/evB1QQ
-         KdRYr0toAU/4Vq3pijDJXbXDfKECmpt3SNz/T5c2ZnXHqijGVpY7ZZ59PU2Cx+ylL6
-         ABV/wst7EfTCUZrYr4bvLup7jlkGx2sYs0W5jOezpHehghPGjtZe1CUtom+D2p4SVj
-         oSQqn1WesMbDqcFB5y8yCGNBWBBv3HtVWP6dl+0BKFW+ADMGpOyCxLobkhFu/VQcxX
-         BO6E9ygmHJ6yw==
-Received: by mail.citycodes.pl for <linux-kselftest@vger.kernel.org>; Wed,  4 Oct 2023 07:50:33 GMT
-Message-ID: <20231004084500-0.1.7v.j1sb.0.6i6rlfn2jm@citycodes.pl>
-Date:   Wed,  4 Oct 2023 07:50:33 GMT
-From:   "Kamil Lasek" <kamil.lasek@citycodes.pl>
-To:     <linux-kselftest@vger.kernel.org>
-Subject: =?UTF-8?Q?Rozszerzenie_Programu_M=C3=B3j_Pr=C4=85d_5.0?=
-X-Mailer: mail.citycodes.pl
+        Wed, 4 Oct 2023 07:09:21 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 321B5A6;
+        Wed,  4 Oct 2023 04:09:18 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6769C433C8;
+        Wed,  4 Oct 2023 11:09:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1696417757;
+        bh=cIK310loNJ2BR+OPVmSjuH3dT9aW28cXGyvHv5GQJRE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=muwOzbM7de19wBjNPm7pS7dN1UXW5jDvXiLqXtvzchKcHh0MWe/X2SJBDFaNpEBvn
+         kVMxYvRRRgFvMWDy7+y/0WAds3A8G/wTXLEJUl5JwrjoXoYauzn6OPDf8FToABW7QY
+         1VT4MZbaYqzFwyM4XHz9gaUOQlt9bDFBinO1bpeN01cu3vA90N7/MuCrzrVOe25Bg1
+         AqM/9ZU4iCK9KlnreyzpwIYryhNSoY7Ik9irx7HpWG9Nlzk4BL/crso/RNm7CMXTJ3
+         alCfUILE+coHx5L51sKHdCJerv7xXTTn9O8jrlmxX2zntD2wI+HXOJw80AuWf0RhMP
+         5GWhkKhFuBhyQ==
+From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org
+Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sami Tolvanen <samitolvanen@google.com>
+Subject: [PATCH bpf 0/3] libbpf/selftests syscall wrapper fixes for RISC-V
+Date:   Wed,  4 Oct 2023 13:09:02 +0200
+Message-Id: <20231004110905.49024-1-bjorn@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Szanowni Pa=C5=84stwo!
+From: Björn Töpel <bjorn@rivosinc.com>
 
-W ramach nowej edycji programu M=C3=B3j Pr=C4=85d mog=C4=85 otrzyma=C4=87=
- Pa=C5=84stwo dofinansowanie na zakup i monta=C5=BC fotowoltaiki i/lub ma=
-gazynu energii. Maksymalna kwota dofinansowania wynosi 58 tys. z=C5=82.=20
+Commit 08d0ce30e0e4 ("riscv: Implement syscall wrappers") introduced
+some regressions in libbpf, and the kselftests BPF suite, which are
+fixed with these three patches.
 
-Jako firma wyspecjalizowana w tym zakresie zajmiemy si=C4=99 Pa=C5=84stwa=
- wnioskiem o dofinansowanie oraz instalacj=C4=85 i serwisem dopasowanych =
-do Pa=C5=84stwa budynku paneli s=C5=82onecznych.
-
-B=C4=99d=C4=99 wdzi=C4=99czny za informacj=C4=99 czy s=C4=85 Pa=C5=84stwo=
- zainteresowani.
+Note that there's an outstanding fix [1] for ftrace syscall tracing
+which is also a fallout from the commit above.
 
 
-Pozdrawiam,
-Kamil Lasek
+Björn
+
+[1] https://lore.kernel.org/linux-riscv/20231003182407.32198-1-alexghiti@rivosinc.com/
+
+Alexandre Ghiti (1):
+  libbpf: Fix syscall access arguments on riscv
+
+Björn Töpel (2):
+  selftests/bpf: Define SYS_PREFIX for riscv
+  selftests/bpf: Define SYS_NANOSLEEP_KPROBE_NAME for riscv
+
+ tools/lib/bpf/bpf_tracing.h                  | 2 --
+ tools/testing/selftests/bpf/progs/bpf_misc.h | 3 +++
+ tools/testing/selftests/bpf/test_progs.h     | 2 ++
+ 3 files changed, 5 insertions(+), 2 deletions(-)
+
+
+base-commit: 9077fc228f09c9f975c498c55f5d2e882cd0da59
+-- 
+2.39.2
+
