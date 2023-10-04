@@ -2,73 +2,72 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7F957B8143
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Oct 2023 15:47:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50A947B8144
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Oct 2023 15:47:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233255AbjJDNrv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 4 Oct 2023 09:47:51 -0400
+        id S242614AbjJDNrw (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 4 Oct 2023 09:47:52 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233066AbjJDNru (ORCPT
+        with ESMTP id S233300AbjJDNrv (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 Oct 2023 09:47:50 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C0259B;
-        Wed,  4 Oct 2023 06:47:46 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-9a645e54806so391646566b.0;
-        Wed, 04 Oct 2023 06:47:46 -0700 (PDT)
+        Wed, 4 Oct 2023 09:47:51 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C3BEA1;
+        Wed,  4 Oct 2023 06:47:47 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-9b275afb6abso212103766b.1;
+        Wed, 04 Oct 2023 06:47:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696427265; x=1697032065; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=egYHGEuBl8zKyk92amOjilTnvvJywQYkpCyOuM9tLHY=;
-        b=KBEUNWx2P4To1zKYcEtQW2nnl6I+bFiYRTDMTGTBqZK7ySyhbdwpIA4PZrK0hkg4to
-         f9nirExV+pLGUi1mpIsmRknWKDQ2MThvop3ydz2Pk20K2dX1HxPW8rs14h4H/KCvHqU3
-         gJR6XrrajYkvmVZdJAgCm9KAcWS+rk3G6P/+rktF2BrOiCYlK5S7n0mvW2MDIyhY8WVV
-         52Y62zqWScOrxIgmxPFrASdAul7cD2zKS/JD+SUHUyZMh7oBZdtNsuSs2Osxx6mDFk1r
-         hbaSH3qa7K2TBfSQz1zQBZ2thoLXOdrI2259vjAqBnahWowD+7MNSkvcHpvQza+eygxy
-         S/aA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696427265; x=1697032065;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1696427266; x=1697032066; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=egYHGEuBl8zKyk92amOjilTnvvJywQYkpCyOuM9tLHY=;
-        b=kz73KRpW3Uf2jFRNuOrloP6TLwrQZhe2nUcoJFB9bHPXdhWsGIGblhzTc8BdB/vd0i
-         Ll4wlrnY0saMbYnRumZg2BYiypvcG3RyBMOECKCGE3hcqUAptivMsbE2rQTiYvdZXTda
-         4hyQFeFqF66f4cHqAok+6fdX2KKZW3TG8ANV+Ne84FpKSHDalrHVOX0/RW7B8hwb7vr+
-         QtS3cDDAWTb3wIGKgh9T+8fx5awP0mpei25EFK9UK7QDHzCR6QwM7lsxPw3eCZ/agJdd
-         QCoaBVzA+BzIMzXk+mEoIxAjb9aNWAwpOg9lLQkHYvjn2ZzqpakdRDxDugHnAuj+Hmz5
-         kJBg==
-X-Gm-Message-State: AOJu0YyGOH6et95ey0tnMmTayATdM14DGC427ZW2j62ZxVBXoWbWsxEo
-        SxFKCRl1MG5W6/h1rJjpB+NAoA4MiADNCA==
-X-Google-Smtp-Source: AGHT+IFWtJm+2TsFh7qSvpmY+DpsY9a8CA5z2wDlH2swnDl0IPK1nYdCBableT2ajMPRWuXbuQnsqw==
-X-Received: by 2002:a17:907:7711:b0:9b2:a96c:9290 with SMTP id kw17-20020a170907771100b009b2a96c9290mr2067154ejc.33.1696427264915;
-        Wed, 04 Oct 2023 06:47:44 -0700 (PDT)
+        bh=m4F2v4nK3N7gfvShfOgXb7DHl4c9Ihx7GZf6uMjYMfQ=;
+        b=Hoj0CpmIhKHKg3hHIRo7rPMLWBIgNSg4/Fk79K4qlgYCeA20IzrzK/H1mY9kPWScAN
+         FMmrNlj6ukMYUXmVXACQJy9zFvpyGpJKirsEanBTODMHNLziGub0e8aPGKFYQJy4xo6e
+         rYDoHpuCHf9cUIyvEgbY9XTtt9eniOG/WdyR0GWbLPok5fupdy437FmSr+VwiSqB9CC7
+         dRuzL4bKaiG2vlFPqwowItz3wUFfTcChkLQftGVlFp6XeUel0n4rmDqkWyDB407L+BK6
+         7z17nEP1c0pEFvIoy1zgzMrrgrgxCjvFDjtn13vNlOwyMH2PtSk4mu21H3zwHwWv0/iR
+         G/DA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696427266; x=1697032066;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=m4F2v4nK3N7gfvShfOgXb7DHl4c9Ihx7GZf6uMjYMfQ=;
+        b=rkfwcLMw3KgLTeMaFMDzxhpipKWEx70KiLA1kln09zUHOrMCDHEGcFxjN6G+/UNuIt
+         YQheuUObx5NBn7dqY9rCgd2S9iXbO29ZB85/IgAAFS4ADqD+/UkRnfYyup0lAU/im5vW
+         SsuaesoJkVk6GDNjIh+4MqKrgUsVp50NKf8nqKNX485uc02gZM4Qoiyszx7gzNE1Kp9Z
+         5Lgi3u67PmofO6rj88fsAhXPP/VF8XijJvyz2XMuWRswA+B/DKlevrHX28hsLnrz9bxg
+         7BVdAT2wWUrBTdvUUx0/UV99VB4nOLE9VzxrvhNASz0s37LSyHgJu44JvGXlqeRi23WA
+         SzQA==
+X-Gm-Message-State: AOJu0YyOwuXKTjDglmb1KNwt9ACBoXqJ8Mh7vNH/COLTImjxMAigUfSx
+        HF2gdKKQc01eleIMhQczDZU=
+X-Google-Smtp-Source: AGHT+IH2qgOky0OB0XAqyBea3yxDMhBPgIycS0J05kPj4JPa6f2C5SQu7LsGej0e/Z7PG9F/kSvSpQ==
+X-Received: by 2002:a17:906:c104:b0:9aa:1dc9:1474 with SMTP id do4-20020a170906c10400b009aa1dc91474mr4935556ejc.33.1696427265959;
+        Wed, 04 Oct 2023 06:47:45 -0700 (PDT)
 Received: from [127.0.1.1] (91-118-163-37.static.upcbusiness.at. [91.118.163.37])
-        by smtp.gmail.com with ESMTPSA id kf1-20020a17090776c100b00992f2befcbcsm2805593ejc.180.2023.10.04.06.47.44
+        by smtp.gmail.com with ESMTPSA id kf1-20020a17090776c100b00992f2befcbcsm2805593ejc.180.2023.10.04.06.47.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Oct 2023 06:47:44 -0700 (PDT)
+        Wed, 04 Oct 2023 06:47:45 -0700 (PDT)
 From:   Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Subject: [PATCH 0/3] selftests: add gitignore files to user_events, tdx and
- dmabuf-heaps
-Date:   Wed, 04 Oct 2023 15:47:40 +0200
-Message-Id: <20231004-topic-selftest_gitignore-v1-0-40689bcd23e2@gmail.com>
+Date:   Wed, 04 Oct 2023 15:47:41 +0200
+Subject: [PATCH 1/3] selftests/user_events: add gitignore file
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAPxsHWUC/x2NSwrDMAxErxK0rsG/RelVSimOKzuC1g6SCIWQu
- 9fp8jHzZnYQZEKB27QD40ZCvQ1wlwnyklpFQ6/B4K0PztpotK+UjeC7KIo+KynV1hlNwKsvMcT
- RcjD0OQmamVPLyznwSaLIZ7AyFvr+P++P4/gBxV9BX4MAAAA=
+Message-Id: <20231004-topic-selftest_gitignore-v1-1-40689bcd23e2@gmail.com>
+References: <20231004-topic-selftest_gitignore-v1-0-40689bcd23e2@gmail.com>
+In-Reply-To: <20231004-topic-selftest_gitignore-v1-0-40689bcd23e2@gmail.com>
 To:     Shuah Khan <shuah@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Javier Carrasco <javier.carrasco.cruz@gmail.com>
 X-Mailer: b4 0.12.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1696427264; l=764;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1696427264; l=550;
  i=javier.carrasco.cruz@gmail.com; s=20230509; h=from:subject:message-id;
- bh=hNbMKfIZ1/m8KY1PFlvjO0yUr1I8QIssp/js5MXQ574=;
- b=g/ReUmVPGJgmxo9JKp6VBvkYMKYssACExpLenQAI2FcwzZNA9AABwJQNlnXmlQeJaOGR1GGOi
- iDlm8NwZfm2D8W35N5xXPoc0IkuUp5hH+wet4eSAwNb4drVYGy60nyg
+ bh=+vdIh2L0R4kZPGAoxXRb3zvnIdlxqlliv1CyY7HvSfQ=;
+ b=ZVhJK016F08gfEKPd/zpQS56H/+WD1dnc72ua3BJJzMFJSO+OA+LSNG6tSlXbH/mtgepJjMJl
+ x7NQ8MDLmmrBB1G348XYPQtKZoobMi83ga6wx5JVaxfDgmPVZoFPWSb
 X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
  pk=tIGJV7M+tCizagNijF0eGMBGcOsPD+0cWGfKjl4h6K8=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,25 +80,24 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-user_events, tdx and dmabuf-heaps build a series of binaries that can be
-safely ignored by git as it is done by other selftests.
+user_events builds a series of binaries that can be ignored by git.
 
 Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
 ---
-Javier Carrasco (3):
-      selftests/user_events: add gitignore file
-      selftests/tdx: add gitignore file
-      selftests/dmabuf-heaps: add gitignore file
+ tools/testing/selftests/user_events/.gitignore | 4 ++++
+ 1 file changed, 4 insertions(+)
 
- tools/testing/selftests/dmabuf-heaps/.gitignore | 1 +
- tools/testing/selftests/tdx/.gitignore          | 1 +
- tools/testing/selftests/user_events/.gitignore  | 4 ++++
- 3 files changed, 6 insertions(+)
----
-base-commit: cbf3a2cb156a2c911d8f38d8247814b4c07f49a2
-change-id: 20231004-topic-selftest_gitignore-3e82f4341001
+diff --git a/tools/testing/selftests/user_events/.gitignore b/tools/testing/selftests/user_events/.gitignore
+new file mode 100644
+index 000000000000..f570febd211b
+--- /dev/null
++++ b/tools/testing/selftests/user_events/.gitignore
+@@ -0,0 +1,4 @@
++abi_test
++dyn_test
++ftrace_test
++perf_test
 
-Best regards,
 -- 
-Javier Carrasco <javier.carrasco.cruz@gmail.com>
+2.39.2
 
