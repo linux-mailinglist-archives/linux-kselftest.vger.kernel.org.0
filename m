@@ -2,79 +2,78 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CABB77B800C
-	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Oct 2023 15:00:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7F957B8143
+	for <lists+linux-kselftest@lfdr.de>; Wed,  4 Oct 2023 15:47:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233110AbjJDNAO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 4 Oct 2023 09:00:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55448 "EHLO
+        id S233255AbjJDNrv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 4 Oct 2023 09:47:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232939AbjJDNAN (ORCPT
+        with ESMTP id S233066AbjJDNru (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 Oct 2023 09:00:13 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2400EA1;
-        Wed,  4 Oct 2023 06:00:10 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-9b974955474so12661466b.1;
-        Wed, 04 Oct 2023 06:00:10 -0700 (PDT)
+        Wed, 4 Oct 2023 09:47:50 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C0259B;
+        Wed,  4 Oct 2023 06:47:46 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-9a645e54806so391646566b.0;
+        Wed, 04 Oct 2023 06:47:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696424408; x=1697029208; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=9LA3z81dm8x/8yLvFD8FRfA0jwHx+VnSKrEfLe84ZDY=;
-        b=eP73tx2G+BpzSdyKlvYxvg3APQWb6H8s1JT3FCiMI7BCF3wMINdbB9lFYVlhPcra00
-         iOjl2vWm5GAstFYnQTGBvSMDtPoeBYc2BNj79+KP9TrLU8K1IpUf7i6NEhYei5fim1Ia
-         y6D6aME3ScHMEJ8makvD5wIV8Ug2k9snoILdggtwhpVtXlh1v2vZGXT9DXN1BuLYhlEq
-         mvI8rc153zzfYgfwUGyd8Bd2TBeNGwbvHAVKG+JkWvSSd7yGKGcbUVv7ll9gMYIL7jxB
-         jbB/tOG0iteJowgZrJrXULI4/0HihVjYcrPVt2ZO/h7gYcWN6pqrY3hEDwChMfZw/ok6
-         UQvg==
+        d=gmail.com; s=20230601; t=1696427265; x=1697032065; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=egYHGEuBl8zKyk92amOjilTnvvJywQYkpCyOuM9tLHY=;
+        b=KBEUNWx2P4To1zKYcEtQW2nnl6I+bFiYRTDMTGTBqZK7ySyhbdwpIA4PZrK0hkg4to
+         f9nirExV+pLGUi1mpIsmRknWKDQ2MThvop3ydz2Pk20K2dX1HxPW8rs14h4H/KCvHqU3
+         gJR6XrrajYkvmVZdJAgCm9KAcWS+rk3G6P/+rktF2BrOiCYlK5S7n0mvW2MDIyhY8WVV
+         52Y62zqWScOrxIgmxPFrASdAul7cD2zKS/JD+SUHUyZMh7oBZdtNsuSs2Osxx6mDFk1r
+         hbaSH3qa7K2TBfSQz1zQBZ2thoLXOdrI2259vjAqBnahWowD+7MNSkvcHpvQza+eygxy
+         S/aA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696424408; x=1697029208;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9LA3z81dm8x/8yLvFD8FRfA0jwHx+VnSKrEfLe84ZDY=;
-        b=rq0oqqbfNKYM5PpZBQ4kzvypyzAvsEeJGldOxZ4gsTZQDxoaSU6P29aYBjJx5DvMcF
-         DYPi6gu5RO0wrc+HnnJV6SRjk7PEI5IhyU19K14XwmRq0/24RoZaP5YClte414NKU6D3
-         JkM6KHsBZh1KSLg95qLHvbLsMNlGSNOixP86UrdKKeuEcq5Xeh7Rd4L/dQW5M249cakQ
-         N/8Mhl0cHr7+7Wf8ztxjQDOy0vxkcUIp+XDvya119PO4FfWJJ6LDe2naxIjHZUYBdkmb
-         SG9qnnTxIgSHR+BottoCzIDQo0OVPPPjaAc2m+8lf9gQqK0je/Oz3D1TiVpXEEKXsRh9
-         SU4Q==
-X-Gm-Message-State: AOJu0Yxe6zl3LdxXDQdhLUedI3ZRSIf3J9Egakar2heH/OWIkJwom1U2
-        jJtdEKhZLUhGZFGaEBE9NhM=
-X-Google-Smtp-Source: AGHT+IH8tyx7NrLsAWfLrTeFsQplGLPzPMsVk0D0fv5EBxxMQvFsWQwUjjUbM7H5o4zX0h2jhoXOiw==
-X-Received: by 2002:a17:907:7850:b0:9a2:474:4aa0 with SMTP id lb16-20020a170907785000b009a204744aa0mr2184081ejc.48.1696424408174;
-        Wed, 04 Oct 2023 06:00:08 -0700 (PDT)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id vi13-20020a170907d40d00b009b8a4f9f20esm1067025ejc.102.2023.10.04.06.00.07
+        d=1e100.net; s=20230601; t=1696427265; x=1697032065;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=egYHGEuBl8zKyk92amOjilTnvvJywQYkpCyOuM9tLHY=;
+        b=kz73KRpW3Uf2jFRNuOrloP6TLwrQZhe2nUcoJFB9bHPXdhWsGIGblhzTc8BdB/vd0i
+         Ll4wlrnY0saMbYnRumZg2BYiypvcG3RyBMOECKCGE3hcqUAptivMsbE2rQTiYvdZXTda
+         4hyQFeFqF66f4cHqAok+6fdX2KKZW3TG8ANV+Ne84FpKSHDalrHVOX0/RW7B8hwb7vr+
+         QtS3cDDAWTb3wIGKgh9T+8fx5awP0mpei25EFK9UK7QDHzCR6QwM7lsxPw3eCZ/agJdd
+         QCoaBVzA+BzIMzXk+mEoIxAjb9aNWAwpOg9lLQkHYvjn2ZzqpakdRDxDugHnAuj+Hmz5
+         kJBg==
+X-Gm-Message-State: AOJu0YyGOH6et95ey0tnMmTayATdM14DGC427ZW2j62ZxVBXoWbWsxEo
+        SxFKCRl1MG5W6/h1rJjpB+NAoA4MiADNCA==
+X-Google-Smtp-Source: AGHT+IFWtJm+2TsFh7qSvpmY+DpsY9a8CA5z2wDlH2swnDl0IPK1nYdCBableT2ajMPRWuXbuQnsqw==
+X-Received: by 2002:a17:907:7711:b0:9b2:a96c:9290 with SMTP id kw17-20020a170907771100b009b2a96c9290mr2067154ejc.33.1696427264915;
+        Wed, 04 Oct 2023 06:47:44 -0700 (PDT)
+Received: from [127.0.1.1] (91-118-163-37.static.upcbusiness.at. [91.118.163.37])
+        by smtp.gmail.com with ESMTPSA id kf1-20020a17090776c100b00992f2befcbcsm2805593ejc.180.2023.10.04.06.47.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Oct 2023 06:00:07 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Wed, 4 Oct 2023 15:00:05 +0200
-To:     =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@kernel.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, bpf@vger.kernel.org,
-        netdev@vger.kernel.org,
-        =?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH bpf-next 3/3] selftests/bpf: Add uprobe_multi to gen_tar
- target
-Message-ID: <ZR1h1ZWrsH9dtCLN@krava>
-References: <20231004122721.54525-1-bjorn@kernel.org>
- <20231004122721.54525-4-bjorn@kernel.org>
+        Wed, 04 Oct 2023 06:47:44 -0700 (PDT)
+From:   Javier Carrasco <javier.carrasco.cruz@gmail.com>
+Subject: [PATCH 0/3] selftests: add gitignore files to user_events, tdx and
+ dmabuf-heaps
+Date:   Wed, 04 Oct 2023 15:47:40 +0200
+Message-Id: <20231004-topic-selftest_gitignore-v1-0-40689bcd23e2@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20231004122721.54525-4-bjorn@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPxsHWUC/x2NSwrDMAxErxK0rsG/RelVSimOKzuC1g6SCIWQu
+ 9fp8jHzZnYQZEKB27QD40ZCvQ1wlwnyklpFQ6/B4K0PztpotK+UjeC7KIo+KynV1hlNwKsvMcT
+ RcjD0OQmamVPLyznwSaLIZ7AyFvr+P++P4/gBxV9BX4MAAAA=
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Javier Carrasco <javier.carrasco.cruz@gmail.com>
+X-Mailer: b4 0.12.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1696427264; l=764;
+ i=javier.carrasco.cruz@gmail.com; s=20230509; h=from:subject:message-id;
+ bh=hNbMKfIZ1/m8KY1PFlvjO0yUr1I8QIssp/js5MXQ574=;
+ b=g/ReUmVPGJgmxo9JKp6VBvkYMKYssACExpLenQAI2FcwzZNA9AABwJQNlnXmlQeJaOGR1GGOi
+ iDlm8NwZfm2D8W35N5xXPoc0IkuUp5hH+wet4eSAwNb4drVYGy60nyg
+X-Developer-Key: i=javier.carrasco.cruz@gmail.com; a=ed25519;
+ pk=tIGJV7M+tCizagNijF0eGMBGcOsPD+0cWGfKjl4h6K8=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,38 +81,25 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Oct 04, 2023 at 02:27:21PM +0200, Björn Töpel wrote:
-> From: Björn Töpel <bjorn@rivosinc.com>
-> 
-> The uprobe_multi program was not picked up for the gen_tar target. Fix
-> by adding it to TEST_GEN_FILES.
-> 
-> Signed-off-by: Björn Töpel <bjorn@rivosinc.com>
+user_events, tdx and dmabuf-heaps build a series of binaries that can be
+safely ignored by git as it is done by other selftests.
 
-Acked-by: Jiri Olsa <jolsa@kernel.org>
+Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+---
+Javier Carrasco (3):
+      selftests/user_events: add gitignore file
+      selftests/tdx: add gitignore file
+      selftests/dmabuf-heaps: add gitignore file
 
-thanks,
-jirka
+ tools/testing/selftests/dmabuf-heaps/.gitignore | 1 +
+ tools/testing/selftests/tdx/.gitignore          | 1 +
+ tools/testing/selftests/user_events/.gitignore  | 4 ++++
+ 3 files changed, 6 insertions(+)
+---
+base-commit: cbf3a2cb156a2c911d8f38d8247814b4c07f49a2
+change-id: 20231004-topic-selftest_gitignore-3e82f4341001
 
+Best regards,
+-- 
+Javier Carrasco <javier.carrasco.cruz@gmail.com>
 
-> ---
->  tools/testing/selftests/bpf/Makefile | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index 098e32c684d5..07ac73cc339d 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -104,7 +104,7 @@ TEST_GEN_PROGS_EXTENDED = test_sock_addr test_skb_cgroup_id_user \
->  	xskxceiver xdp_redirect_multi xdp_synproxy veristat xdp_hw_metadata \
->  	xdp_features
->  
-> -TEST_GEN_FILES += liburandom_read.so urandom_read sign-file
-> +TEST_GEN_FILES += liburandom_read.so urandom_read sign-file uprobe_multi
->  
->  # Emit succinct information message describing current building step
->  # $1 - generic step name (e.g., CC, LINK, etc);
-> -- 
-> 2.39.2
-> 
-> 
