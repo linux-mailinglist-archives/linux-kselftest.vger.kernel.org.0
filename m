@@ -2,106 +2,141 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BD147B999B
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Oct 2023 03:30:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 003C27B9F77
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Oct 2023 16:25:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243996AbjJEBaK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 4 Oct 2023 21:30:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59530 "EHLO
+        id S229948AbjJEOYv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 5 Oct 2023 10:24:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233891AbjJEBaJ (ORCPT
+        with ESMTP id S234498AbjJEOXZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 4 Oct 2023 21:30:09 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8BFEE
-        for <linux-kselftest@vger.kernel.org>; Wed,  4 Oct 2023 18:30:04 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-59f8188b718so5523467b3.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 04 Oct 2023 18:30:04 -0700 (PDT)
+        Thu, 5 Oct 2023 10:23:25 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6DE59FE
+        for <linux-kselftest@vger.kernel.org>; Wed,  4 Oct 2023 22:51:00 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id 98e67ed59e1d1-279013f9875so424241a91.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 04 Oct 2023 22:51:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696469403; x=1697074203; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xqc981CBMLWk+FQW6EA7FJZRSQfVRhbIKI7MGCKnNEk=;
-        b=T6h5sEE9DJdh1aGUjFcv1tEmbSk8YF6vXZMe+fIu4/y0nb3hXT9242HxPQJe+GaUvu
-         F083OG5cxSbrvrk/Sx90Kx5XWNJdj9nCfGq5lrvvLjIzTf9O9GjIzIxotDa/E4MfiITA
-         xnnXkAvudwSbQDhkvt3yFwnvzQLF0pwztwuqLYmF9HP8+mFMbgCgxpEA/z1N6mT+i1Si
-         wI8Jh+1/OQgSxcmDY59N10sDegx/JUJP/HV+1Ts58jlh8aCyMgHPyUVHjw7aN9FrIp1Z
-         hvWPxscALaRXQ398nwOXrcQhz7/NvKSH+8j4E3LNUcnodxchqSNvulRaDLMSKvpavAtt
-         gb4w==
+        d=brainfault-org.20230601.gappssmtp.com; s=20230601; t=1696485060; x=1697089860; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IAn7kTF76MX4baCsjz/DD87LgbEJOFPnszS1gD87MLo=;
+        b=ZXubW7/QRu9lfTWrHyJPGHvyKFEbmAjEGsA43lpb7Aa1B5q0XjQmR8aY6/JMLTFW6d
+         LPSWr2Ds4/22GFtcQ/9KzR28OoFbFkzZuaf/Cr1iE7cPrQre79m0GookUWiIvChHBIyD
+         nwi6+MkCNAcKtTcb18oWw9GtyZ4cxW2Or03HqHrNSE3OY4b777U/GoD/PFu5kxxK0VQi
+         bFuyj6U47r4kUsPOlP4MYPFSubLZEb0fCnFgIByCYMoXS79N9lpdNH5AftJZuOuRPM3l
+         bpY9o14EBhXWKmB5o1ri0uEmRyy+3BYQPNVsmgKJoz2UgwcKGHU96ndyPlbaFh5YHpaU
+         ge2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696469403; x=1697074203;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xqc981CBMLWk+FQW6EA7FJZRSQfVRhbIKI7MGCKnNEk=;
-        b=en5NaAMc7yN6Odtk2pZqspbSe/yvg/8DdyRChmHv1JlkCssOFg5YdQguoeBmp0Sbj/
-         pzU3POQUgEUKEDQD2RvXNHRoTvBr7voycg9MaoKumwcq6jqO/W3daYbNPzAoxAjw9qfl
-         PwU1Je2QwRJpAzeNOdqDY9Ja313SAJlzRWom2ae5Es2akOW1XODBZrB81StiL63IIybm
-         HcDNUjQ5hkTdI6w5kBR5pr1j7XuwIaD9mWf5TRe0A73dvbHFGY4ry65UUOgsF+QD92R8
-         BMNYDSnqZwcnp0ooeJdRYq8DrGVzvo4e9guvA80M/kn7sqmsziq7o5lCqQ0En+/FuDMs
-         Edxg==
-X-Gm-Message-State: AOJu0Ywu66oXGJZu//uzjsyCAwu8GQUvL2m06/oMblKocXt9KEuHZMui
-        sOXkNaZvERQqwXzF1vpjutcsWynRa5o=
-X-Google-Smtp-Source: AGHT+IFqbf0gkO9Qoa4YBFhqDgjc+6TQ/LCF7VPFui1r6bU6n9f4cTS1dfvkOaHDVedFUeqKKjsNdPOL4Qc=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:431d:0:b0:59b:e684:3c76 with SMTP id
- q29-20020a81431d000000b0059be6843c76mr66748ywa.2.1696469403561; Wed, 04 Oct
- 2023 18:30:03 -0700 (PDT)
-Date:   Wed,  4 Oct 2023 18:29:23 -0700
-In-Reply-To: <20230928001956.924301-1-seanjc@google.com>
-Mime-Version: 1.0
-References: <20230928001956.924301-1-seanjc@google.com>
-X-Mailer: git-send-email 2.42.0.582.g8ccd20d70d-goog
-Message-ID: <169644980223.2754169.1786296654866171118.b4-ty@google.com>
-Subject: Re: [PATCH 0/5] KVM: x86: Fix breakage in KVM_SET_XSAVE's ABI
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, llvm@lists.linux.dev,
-        Tyler Stachecki <stachecki.tyler@gmail.com>,
-        Leonardo Bras <leobras@redhat.com>
-Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        d=1e100.net; s=20230601; t=1696485060; x=1697089860;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IAn7kTF76MX4baCsjz/DD87LgbEJOFPnszS1gD87MLo=;
+        b=DfLbolYpA7vFvJRAkDfmIG1rPzGTCAUBLpyr6yVYq8daj45SOZIgsUmNAVsutIKBUp
+         qKau6B7mI1tf/FVkDC7t40acwWYF+u2ET3ks8TlKPuS10afsDOQMgLytv4HFzpiFYbDI
+         oeJAk8gmYAmy7QFk3mH/J9l2+g5cJRaSixtdl3+LSDoBiJjiP4W6mzAt5MgdlU01sAMo
+         VAiSafivql1AU2fQFStjDGfCIMsXyS+Bu4n44jGTU04y/W3k6cLj/u6/rCCDJJQ6zzlc
+         fgkZId8h53jugsROheA2X6jorXq1BVTklzNU/EixbbQ4ZSpvBZdnPREpkmgEekOdVxR2
+         KrYg==
+X-Gm-Message-State: AOJu0YyuGhf73kIa31W9kzLexhe5OiMtBTzzRAor8aSZZvt/pgvML/c/
+        b9HukCbBncZ9REXdDK54keJ6KwLNwljYDolV6DozMQ==
+X-Google-Smtp-Source: AGHT+IEtGbIHdTfL2yZTTDLPgQj3me/hsvVuKvB4XaXv1nNxUCov3SGcpN7sdI1I388p/AKgKTr/0lfdATge9YktJw8=
+X-Received: by 2002:a17:90b:a04:b0:26d:416a:b027 with SMTP id
+ gg4-20020a17090b0a0400b0026d416ab027mr4208863pjb.31.1696485059836; Wed, 04
+ Oct 2023 22:50:59 -0700 (PDT)
+MIME-Version: 1.0
+References: <20231003035226.1945725-3-apatel@ventanamicro.com> <mhng-4ec1093a-4542-429e-a9f0-8a976cff9ac4@palmer-ri-x1c9>
+In-Reply-To: <mhng-4ec1093a-4542-429e-a9f0-8a976cff9ac4@palmer-ri-x1c9>
+From:   Anup Patel <anup@brainfault.org>
+Date:   Thu, 5 Oct 2023 11:20:48 +0530
+Message-ID: <CAAhSdy2CxWw9ny7vdBoEzsXkm_J882NGKTDQ7BfykrjuB1QR+w@mail.gmail.com>
+Subject: Re: [PATCH v3 2/6] RISC-V: Detect Zicond from ISA string
+To:     Palmer Dabbelt <palmer@dabbelt.com>
+Cc:     apatel@ventanamicro.com, pbonzini@redhat.com,
+        atishp@atishpatra.org, Paul Walmsley <paul.walmsley@sifive.com>,
+        Conor Dooley <conor@kernel.org>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shuah@kernel.org,
+        ajones@ventanamicro.com, mchitale@ventanamicro.com,
+        devicetree@vger.kernel.org, kvm@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Conor Dooley <conor.dooley@microchip.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 27 Sep 2023 17:19:51 -0700, Sean Christopherson wrote:
-> Rework how KVM limits guest-unsupported xfeatures to effectively hide
-> only when saving state for userspace (KVM_GET_XSAVE), i.e. to let userspace
-> load all host-supported xfeatures (via KVM_SET_XSAVE) irrespective of
-> what features have been exposed to the guest.
-> 
-> The effect on KVM_SET_XSAVE was knowingly done by commit ad856280ddea
-> ("x86/kvm/fpu: Limit guest user_xfeatures to supported bits of XCR0"):
-> 
-> [...]
+On Wed, Oct 4, 2023 at 7:37=E2=80=AFPM Palmer Dabbelt <palmer@dabbelt.com> =
+wrote:
+>
+> On Mon, 02 Oct 2023 20:52:22 PDT (-0700), apatel@ventanamicro.com wrote:
+> > The RISC-V integer conditional (Zicond) operation extension defines
+> > standard conditional arithmetic and conditional-select/move operations
+> > which are inspired from the XVentanaCondOps extension. In fact, QEMU
+> > RISC-V also has support for emulating Zicond extension.
+> >
+> > Let us detect Zicond extension from ISA string available through
+> > DT or ACPI.
+> >
+> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> > Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+> > Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> > ---
+> >  arch/riscv/include/asm/hwcap.h | 1 +
+> >  arch/riscv/kernel/cpufeature.c | 1 +
+> >  2 files changed, 2 insertions(+)
+> >
+> > diff --git a/arch/riscv/include/asm/hwcap.h b/arch/riscv/include/asm/hw=
+cap.h
+> > index 0f520f7d058a..6fc51c1b34cf 100644
+> > --- a/arch/riscv/include/asm/hwcap.h
+> > +++ b/arch/riscv/include/asm/hwcap.h
+> > @@ -59,6 +59,7 @@
+> >  #define RISCV_ISA_EXT_ZIFENCEI               41
+> >  #define RISCV_ISA_EXT_ZIHPM          42
+> >  #define RISCV_ISA_EXT_SMSTATEEN              43
+> > +#define RISCV_ISA_EXT_ZICOND         44
+> >
+> >  #define RISCV_ISA_EXT_MAX            64
+> >
+> > diff --git a/arch/riscv/kernel/cpufeature.c b/arch/riscv/kernel/cpufeat=
+ure.c
+> > index 3755a8c2a9de..e3803822ab5a 100644
+> > --- a/arch/riscv/kernel/cpufeature.c
+> > +++ b/arch/riscv/kernel/cpufeature.c
+> > @@ -167,6 +167,7 @@ const struct riscv_isa_ext_data riscv_isa_ext[] =3D=
+ {
+> >       __RISCV_ISA_EXT_DATA(zicbom, RISCV_ISA_EXT_ZICBOM),
+> >       __RISCV_ISA_EXT_DATA(zicboz, RISCV_ISA_EXT_ZICBOZ),
+> >       __RISCV_ISA_EXT_DATA(zicntr, RISCV_ISA_EXT_ZICNTR),
+> > +     __RISCV_ISA_EXT_DATA(zicond, RISCV_ISA_EXT_ZICOND),
+> >       __RISCV_ISA_EXT_DATA(zicsr, RISCV_ISA_EXT_ZICSR),
+> >       __RISCV_ISA_EXT_DATA(zifencei, RISCV_ISA_EXT_ZIFENCEI),
+> >       __RISCV_ISA_EXT_DATA(zihintpause, RISCV_ISA_EXT_ZIHINTPAUSE),
+>
+> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+>
+> Can we do a shared tag, though?  These will conflict.
 
-Applied to kvm-x86 fpu, even though there is still ongoing discussion.  I want
-to get this exposure in -next sooner than later.  I'll keep this in its own
-branch so it'll be easier to rewrite/discard if necessary.
+Thanks Palmer.
 
-[1/5] x86/fpu: Allow caller to constrain xfeatures when copying to uabi buffer
-      https://github.com/kvm-x86/linux/commit/2d287ec65e79
-[2/5] KVM: x86: Constrain guest-supported xfeatures only at KVM_GET_XSAVE{2}
-      https://github.com/kvm-x86/linux/commit/27526efb5cff
-[3/5] KVM: selftests: Touch relevant XSAVE state in guest for state test
-      https://github.com/kvm-x86/linux/commit/ff0654c71fb6
-[4/5] KVM: selftests: Load XSAVE state into untouched vCPU during state test
-      https://github.com/kvm-x86/linux/commit/d7b8762ec4a3
-[5/5] KVM: selftests: Force load all supported XSAVE state in state test
-      https://github.com/kvm-x86/linux/commit/afb2c7e27a7f
+I will provide a shared tag based on 6.6-rc5 sometime
+next week. I hope this is okay for you.
 
---
-https://github.com/kvm-x86/linux/tree/next
+Regards,
+Anup
+
+>
+> --
+> kvm-riscv mailing list
+> kvm-riscv@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/kvm-riscv
