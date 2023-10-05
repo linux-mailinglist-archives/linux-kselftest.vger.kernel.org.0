@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8721E7BA2D8
-	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Oct 2023 17:48:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 174D67B9EC4
+	for <lists+linux-kselftest@lfdr.de>; Thu,  5 Oct 2023 16:12:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234307AbjJEPso (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 5 Oct 2023 11:48:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60892 "EHLO
+        id S232180AbjJEOME (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 5 Oct 2023 10:12:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233658AbjJEPsD (ORCPT
+        with ESMTP id S233175AbjJEOKD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 5 Oct 2023 11:48:03 -0400
+        Thu, 5 Oct 2023 10:10:03 -0400
 Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on20611.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e1b::611])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26C467A97;
-        Thu,  5 Oct 2023 00:21:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A217A99;
+        Thu,  5 Oct 2023 00:21:08 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fekz4rfvdjDE5w3f28kP5ng2Yf+2XVTItCEbITWF0Mfe2JW/9n9pFu/ethT0VxHxC2NFWwUT7BoPWjYO7G0LWptmjSQ7Gg9nNqpADBb4KkPoBu1cXOVZ6S2qJKAkDilkjqc85rxCZc/5AeQ3mMtStoHDXNdzUdKVZPbArtETmoe6Q3ri+hjICCs+QNqGCSYiBdApX8GVe/wojEN8cR9Tt9t24UHkGN8u6wUVVUROkw7pj5FhBPEJoW0xB97bQ8A45SMk+mVndjnlNgGpkhQsLstIBXlmdbSYin9nd1yZ+1zv92BauJUlqIy6CSPjSEMD9Wl+yQ/3xT4G3WEw8Ecrmg==
+ b=KomtQwP09lqvn773I1ccdxOyI3YjboPtOFK0qjfRBjOpmZMDuQvW4ppRHklWZU6hwFsYscui6FHNclWuT3pCneG368KXb90ShEpYmKzgbDH3F9+rbpyqlyZpI5eGqlfalsx8HdmlVporecuzknys/j6R28xJvgUnHgvO0dgUI0wXQSwWTcc/XxxBFnTCUWhdLFKeOWDOzMIN81CFRJN2lFbm7teIkNGdyTY/ZV5RqPsqhIcZGDZLJR0x3pTJro5HcvmRCSuPJmoAgpgFGMlo0KnZXGr5xmWMke2eOarUVH5zHh/oYDuPMQHgGtNcILPZKr/Tf4FjcHcxdhn4E2wRMA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kVMQuwoQO5/3D87+dmoupZKTye3tTF6lYcDqr6ZiP3Y=;
- b=IuIH3gmk/nK7Nz1SK743gZM6lVCo56CXCZ9FQhRzG60iUht0sTXK1CDBv6t9zHlke7pOuGqiOfiBivf8nP4YdBUtHZLZsLBu1v+tVqvC0xNcQIhs4JJVpKVi3kxfNcm3B+czDmasaWYSYed57Gr8aNymQ+jizJmUkog+uvjCuXaFcS/5yvgDMRv6uqaJJKMJxcjSGHA8+fDF0wXvHIwNBntXv7mAX55ja77cxgaIgrVUW9gRug9GQUOjt3YVgIWKxWAWnefKDywxRalIfdbmK2gBPQAMiZKFDzORczu8785kbO5w3GdtpcnweeF6yhuFc7gybptFnBPu63Snv7QDlg==
+ bh=vC/ykFCS881o3zURptxnd9lelpRrII1MeWykA1KuiHE=;
+ b=kR6zd9MVyBiIqvtcij9sQCtREnwgui6VmRqGZ113FKrg/EWNQeSjOR0MteZpaZmD4X29uylKxFsIQWa/o0OLvYgHdJFYIDMD4QLnviS/8+5SMLl6GBGr8QkSm6AA0H4hjVWSKNhVoiGoR5xwL5ApfgkrFa5PpKUPlAYBa9LvaxsDwYMQIQ7e/Stj+JHG2eaCbZuY+dOEAudYyctVAGXt9/NPl4IaFqfvkhUCdpaGBj6yyxS62SmWTG6De6WRSZKEe/e8s048m6ih0mkAK+3UUXFo6T0godxyVjFWR6M7ogTgwYSR4q9Uyku6V1to0iwKsT5tMQYIhIE6ZnT1KwKZuQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=suse.com; dmarc=pass action=none header.from=suse.com;
  dkim=pass header.d=suse.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kVMQuwoQO5/3D87+dmoupZKTye3tTF6lYcDqr6ZiP3Y=;
- b=HdEEZr1so1glWio8mYRNKtb+uwbdy9fSzt6mxjos+HQMwgF0kNttAUdKrL+wUWcItOjDdLY1VbCTSmqYt5Hv70tGPcFPo/BXTa/cHx0YuvlSUJn+ZYlu0S65tcJm8uc51+D2jX1bBxgKmCqAm0gqd09wYC/fx/i4ZPSyE44x8m7qR4UimMUPKX9TXJTAMTwSX7IC8oO1If/ChkkaXeHFJpqkmB2t23zc/IbA3sNbyAJoSXXkx92MMAIMERwt0QiBo1NXPijPQTKX4DFvBjlwHvi34Q28yyr8143l8QHZ8vCRmEXU0bzhJVBRbcZ1PSm3A7J6IJG+qESUK3Ww3Qu/Rw==
+ bh=vC/ykFCS881o3zURptxnd9lelpRrII1MeWykA1KuiHE=;
+ b=5LOOBFFwP3MDIQzK5Wm8YDupGMNVOg8zPFd61A9eWjvdx93XGXc2Bws9bCE22J3OE7ymVI0rZpBGzjLFZHsLmmqOSRQZ7UJKzCYkuWk8FaNaacOGBeIlX7yuzr+28G/HWqqUYi9tZ522jFF6PbCU1baWboPoNN9Q3I2MBbx29aXWWldIIw4y5/8KCW/aGmJRe2ZDOXiPz/yo5YrlJ70E2llR9eO3TfDejE8mlteq+NBWqaVfims+HeejBi0PTH0BvDyGFBUiExJGVI3uM9j+iWhqSJ+mDl41LcuoI2wuLIY/sOvx0jUN13hYqQC8Aln5e6k9qnj4bcjvdtIC6LTioQ==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=suse.com;
 Received: from HE1PR0402MB3497.eurprd04.prod.outlook.com (2603:10a6:7:83::14)
  by DU2PR04MB8999.eurprd04.prod.outlook.com (2603:10a6:10:2e2::16) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.33; Thu, 5 Oct
- 2023 07:20:56 +0000
+ 2023 07:21:03 +0000
 Received: from HE1PR0402MB3497.eurprd04.prod.outlook.com
  ([fe80::3852:4f89:9891:73c8]) by HE1PR0402MB3497.eurprd04.prod.outlook.com
  ([fe80::3852:4f89:9891:73c8%3]) with mapi id 15.20.6838.030; Thu, 5 Oct 2023
- 07:20:56 +0000
+ 07:21:03 +0000
 From:   Geliang Tang <geliang.tang@suse.com>
 To:     Andrii Nakryiko <andrii@kernel.org>,
         Mykola Lysenko <mykolal@fb.com>,
@@ -54,63 +54,63 @@ To:     Andrii Nakryiko <andrii@kernel.org>,
         Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
 Cc:     Geliang Tang <geliang.tang@suse.com>, bpf@vger.kernel.org,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v2 1/2] selftests/bpf: Enable CONFIG_VSOCKETS in config
-Date:   Thu,  5 Oct 2023 15:21:51 +0800
-Message-Id: <472e73d285db2ea59aca9bbb95eb5d4048327588.1696490003.git.geliang.tang@suse.com>
+Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Add pairs_redir_to_connected helper
+Date:   Thu,  5 Oct 2023 15:21:52 +0800
+Message-Id: <10920edc470974553e66e2391400dfa81ec03d47.1696490003.git.geliang.tang@suse.com>
 X-Mailer: git-send-email 2.35.3
 In-Reply-To: <cover.1696490003.git.geliang.tang@suse.com>
 References: <cover.1696490003.git.geliang.tang@suse.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: SG2PR04CA0169.apcprd04.prod.outlook.com (2603:1096:4::31)
+X-ClientProxiedBy: SG2PR04CA0167.apcprd04.prod.outlook.com (2603:1096:4::29)
  To HE1PR0402MB3497.eurprd04.prod.outlook.com (2603:10a6:7:83::14)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: HE1PR0402MB3497:EE_|DU2PR04MB8999:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4c967514-082f-44e8-63f5-08dbc5739d99
+X-MS-Office365-Filtering-Correlation-Id: e0ff3839-f8f0-401d-dea5-08dbc573a1f9
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Ug+pWSZAvqLfeHbSGLXqsc+sNZEOCXzRCkH+Wo6IWpS9/ARkM5v0YuQQ8l+Hm8e/iDtQdxWgmxhjg/PCZBi5A4vkepNythMd0xVXZp/s+U7PcGDjP7Yv4gXW7AI0mQwFiHqbpdpfH9tS53YCkuMt/NNF5SERn7Gc17VILsAzFyroEJFdBUMWg8r9Y+OtrEeAvJmzpOBucS4aiuSTkM+xa2gAj7F4WCZWtxP5wmFFJtX6ZU2HTLnrK3y5P1CmTYGIkvO66vISIc/cBu9Zicj+oZs3u3r8Ntie0WQ4SrgfXpEjs86VWDdtMGP3szZuUwCSSErhHr5uVQvvw3/Tp3FlY0+ZlxOVTQhwP5y8MVtkif/Y/nsqkXuxNl6Qo+CQsLRx2cM0CcMJLkvZC0PjezPhzmIy7vn3Y03d1H0PPdu4xDuWmR2LrvVedGtqKTGWCVuAHA4BcnqBFrXrhF6fuE1xuIz+sb/RZlLSHEWJc4WCSSKLRM1BAH4IxliLUSFZsvxKB3e8WUv7hvGfvZijDLBQ5x7PcDJReF+MZB8vGMZXFinXpjE16WvxLq+7RFD3pUHo07tH8i7r5nOkwjPYyO6nzp58WsHGG8ggY7rJfoYEiP1IBMe3NWukGYOkpOViJUdE
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0402MB3497.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(376002)(396003)(346002)(366004)(39860400002)(230922051799003)(186009)(64100799003)(451199024)(1800799009)(44832011)(5660300002)(2906002)(7416002)(4744005)(6666004)(38100700002)(6506007)(6512007)(921005)(478600001)(86362001)(6486002)(36756003)(26005)(8676002)(8936002)(4326008)(66476007)(41300700001)(110136005)(66946007)(66556008)(316002)(2616005)(13296009);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 7Wl/SZYpA4Xz3Bp5qyjZE+nObBGOPhPoJ2adQxlZtusyD9pO1Cow1T9bR9MS1Z3+PZDXNOoU0nRsq8cwU+dSr/4IBQSGt4fUFCuKxJFkSMX5hPloIawW3d0nOeFuFojDZ6W6+OAk4igj038G72qorjkb70/ITkKuWLo/HphZmZtxLpTKRCA15MHhvJee2SLy7YTCpF6jL4A4N00upAn09oAPnr2b1bP54gm6Lb/IfzMdw8BXum/o/wOX5cXQlGofvO93d5jw++35NNq5tYIUQeyY3fqt0IMIYdPhULbKkyazBHXrNprwp/VDXNsAReGA9zws8klZ4XM+/EWMTwKrENRoPSxZA3K8c/AvCjYZacsLgO87GydP60uWADaB8+RcqvW7fYxOLcXYkPM7E8XPxE5Ef18441wkDM5AkWRVRV9GbbxbYIlvFUUCwXO447fKiry4Yic/5FlDkT8PBma4mal+2IA+9fXAtRnJ4J9TSC77TbbfBeSC8srWLnk8BPU8Bo6ogi7gmLIxoVmexlPGYOJb3vPYHMgoCnXVJTzlu4tXwSEYzlIXzNw9swTBZrCijSVxp77xkX07I40D/02yBC8RUFWqBlYdrfWfIAi2T0uga5Xr+9HbTSij/SieIzK/
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0402MB3497.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(376002)(396003)(346002)(366004)(39860400002)(230922051799003)(186009)(64100799003)(451199024)(1800799009)(44832011)(83380400001)(5660300002)(2906002)(7416002)(6666004)(38100700002)(6506007)(6512007)(921005)(478600001)(86362001)(6486002)(36756003)(26005)(8676002)(8936002)(4326008)(66476007)(41300700001)(110136005)(66946007)(66556008)(316002)(2616005)(13296009);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jCq1n8fMhECiPnuU04tlBz/DFCli93L0EMM1RINcvaeUMgWoubaXbXxg3Okp?=
- =?us-ascii?Q?4DJ230YSuox0GXl+ncMQCJDHWUg1vDmRKJMPF6lP6uS+EkwdlxCsTA6geOn4?=
- =?us-ascii?Q?sxB1rMusxhK8zcHz1aY4uo3jHOa1mOzyK2IhJWBr9Z71fKSzxDW1mvsEGiSW?=
- =?us-ascii?Q?M/aEljwhc0lEbIoUa3zuRQgGrPc86h5XyfmTvd9oYBSwBtfbQ8r5Rk5Oo3xY?=
- =?us-ascii?Q?e6RctV+jeNBdbD5QW1apmX0FFwc6k/lvrmn9EjeEIs5yNlQ4VQfRKaT5GbjV?=
- =?us-ascii?Q?0+T97PXoedrEI/WLnslIYcJMScDNp/MdnGVsupphzTxSDYX6XEzQ/dKfDhG2?=
- =?us-ascii?Q?jUEnofWypNaz5tbte/t4/8fZiUVqnYIa84mq/yh4tQxUfmtmdDKnluhmQ+Qy?=
- =?us-ascii?Q?pIjhzzuXdJTg7hVHAiekocmH038ptuRIwz5O1zWM4OQRrfv05j8RIJxXIZ4I?=
- =?us-ascii?Q?xRcR3ZnGAGzIc8aI/47zI/dubTsbdZtktsQzM+tQVPNLEy9l3U/uCRGjosyK?=
- =?us-ascii?Q?bRsZxVxbiMkZOu2z9CsPIUFDVceU0paOThLmenIsohYQbzMHquRW6VNyGwZ8?=
- =?us-ascii?Q?KMeOBITBlIa/AyMbNHanXnpOjAsjTZ0o+XQObM6Av56TZehUr2aIhysjoRMc?=
- =?us-ascii?Q?MWTJ0Fvo+jJE7IBVWy+W+1TJBgNqHwgIg8KO4EmDnDh5+LrKSf2DK0EL9yVY?=
- =?us-ascii?Q?cQzcQQ6OLm/gwVPinUTXkTJY0p2s2eDd0k3sMLJCE0yLM44ocxjhs+NX9TLT?=
- =?us-ascii?Q?N62xuL9HZ1QnR/YMRSydzfhkygLVjDhD9EeqWhVfoiIy1lpbDSxA+pA/BZyi?=
- =?us-ascii?Q?Gqc8RNQ8kze/pGW6LkqQyfyoYxLl6Mb4+V+y9qaVqXJl2L5AyAy4p8ktsPbK?=
- =?us-ascii?Q?c+ppzerTxG+bUkW7V+IVBvCdoBeey6HjuK0Oxu+GdzfFXcSZqdj69BXY/9tu?=
- =?us-ascii?Q?t071khFGaLLAGKtpmBMlTHs+1A4Bk355swEk4h1obOHwo6YF+QOUrCE52V9D?=
- =?us-ascii?Q?AHcPylu/Ttquai1GO8HNZQhr+iFoDTBces2z3G6ws8glpxRtPn4pgoJ+r9nr?=
- =?us-ascii?Q?3MP4jPl+dLsg3ESE/KPXgLBy6kldIG3yniX+fK5ZCNaKJOWBHLfWZf46WPfZ?=
- =?us-ascii?Q?JO35WfrS8rUQgEktsisIos6ymJ7qFI+7ZeBHUEonrkFSHmxNBFgRuTv8x9Ks?=
- =?us-ascii?Q?/aq/Uwp+YSTwjyENLLqsN2q8lWWrA2lFBE7X0FGIIcDFCw3mCNBj04OizZqM?=
- =?us-ascii?Q?xSg+r1ikP1Z6OekZ7BZqRUkYqd9Degq/nXG0/wkrL+nU4KWJTAEI+UJcQ7J5?=
- =?us-ascii?Q?idS8Eh8nxIdnn1eLDMdhRrAtBjEIRIcZfxn4azuLrR12SY08fs1ks3bG2CUX?=
- =?us-ascii?Q?cGxyLwhN/r7VUWcuZHPRHPHdM9XEjNO1rFbYxGtavwR0mfFgpYmUl/laBu1O?=
- =?us-ascii?Q?hDZFxQ8+dQqkgnfxsGomfM4P1eJ10f4o8+dQzcxpie1lEnXtD0FWRdjiGIm0?=
- =?us-ascii?Q?kVYTpqcoyjvHHqeO3zjajQYewNDLcs/mcWTg447msJ0C3w/0vPT4uFuyaWuC?=
- =?us-ascii?Q?XtXah0bjWCGurRm5S9K00aocsEg0edk99btCMCAl?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xWEN02iXPciCQ3mliZ564GsV8DlkVxjibFpyeZRoAY9gAtRVfAH6fU6/Jcg4?=
+ =?us-ascii?Q?UixGWHr79tDGFCHrRjuhRg1UAaYyAhe0Zn9d7QOZjj/74WxilyesEOg7DmdZ?=
+ =?us-ascii?Q?l2dOzwbCuXkGYaShei6SK2hQ5YxG+MXg21LNo5dtJ1PeflaB3jfyWqeNqRUn?=
+ =?us-ascii?Q?BTLeyAuN9bZ6gW8d/Ohn/o5kUgIc32tQ0GkrOwgjehQ172yWPH8mql1xPXau?=
+ =?us-ascii?Q?fXtnvMESM8MeFvkYVJDDkfSTmpSSuTBovMeTxNcwlY/GGn7KNPPRWdtEhA6Z?=
+ =?us-ascii?Q?H0aNJE05aYzlGl/Z4+BqbS/UUqAkNAf5WKeKi0hI/0BoZJUVh+qfh6azMbiM?=
+ =?us-ascii?Q?YK7+DMi+oGAYWa4nNKuSGs4T4l2oYfApMUE4SRqQiB6fVnPr2mUSa4BYuGsq?=
+ =?us-ascii?Q?fM4vNP9zXzcrLZCAz7uL2XdCAudnl/vwhcHLNOcvxdy4RXra0fy4i4pq5FhK?=
+ =?us-ascii?Q?2Y8M971inmi0iVCpfo3Fw3kpUlvZo/rgRfZsDg90C7p7GsysOZ4PN314TMZK?=
+ =?us-ascii?Q?tQKCbs7zsx7u338POqOXNN7gIb00UI0oFb74tme+ZqkvkF+ickor+D8Okvkx?=
+ =?us-ascii?Q?ThsIwjbAO80MlPnZkZLTo3tUNElyD9Qxb9KPuXM3hJ79P2tHmlsV1XtXHC20?=
+ =?us-ascii?Q?knkwr+WgYLyF3l8g3ygHCaPkkT8HtEKaMU/ivQEp4BRBmr1XLMQb4dFBrZs9?=
+ =?us-ascii?Q?VVTCChx6dVZN1Plzz6P3zgWgqwjXyK8Z3kz1GSNzzGfVj07jwD9iFUOUg7rj?=
+ =?us-ascii?Q?5e3aGEwviRV+qjOdZLx1oj3Z+Ri0+FSsCQFo31jqAUgL5Qjrq0XrJPTmW8Bf?=
+ =?us-ascii?Q?b7p2B76Ny6PPu3Tuczcletm1d0bmI0LauAtfMQXYmZxzGND/a5s/sfDYeZY1?=
+ =?us-ascii?Q?zN8Jcaq0xN3eaNucD0XAU8/IA9cG8za5IbklyoAffnkN1CfEeE0ySoUFMVW7?=
+ =?us-ascii?Q?k5AuEeVxZvVaBQF8DJ1J9C0gyZO0WDBXSSJPnFjKzrTUT0PQ+PxxmVvraYRZ?=
+ =?us-ascii?Q?sD7+bm7SlohiUI1SlcvSqUifHP+rxpFb7sTb7S3VE/R3zJsGDMsDgKt5twqR?=
+ =?us-ascii?Q?zeLjm8N03bOUtPjMxrCoCF8c0kMzkfrm053F9fgN4o7AgVoNrVfTPpCs5buW?=
+ =?us-ascii?Q?2TGhFkne7EX/PFVZhtpJo4i3S9UND+QwRRehCsYSTMhEy30iQNBfJpeE8Oem?=
+ =?us-ascii?Q?3zJ2YebME3yUaNJig+QAl9yO6KHLfptGgfS3nZCmIgGEQYYhU/Vt/2l+w6zz?=
+ =?us-ascii?Q?f81zG84w/x6VmSPzQ6zRYpEIexdXJxRQIUtJh+ZUFbjbxxIzV9sX4KOOZSOz?=
+ =?us-ascii?Q?fOSl/aZddGMFUDu4EP1tdejYxxvZCwPD5QJsF5t0j68LxTP3JjLb8wEavdhV?=
+ =?us-ascii?Q?1qWbJTRjBuuV6PlpX9E3aHs5/WZ165PKmTFYpowLheU2/qhmYMEmcBC3wZzq?=
+ =?us-ascii?Q?7e2otcIFwHwjh0kaJ0jhqNAEiIWCmrEl+khw9tF68SZIJ4tF4vW1i4JSUJFW?=
+ =?us-ascii?Q?kMWL+7HEAg1Yl49ox0Q6z8QcG4fxl/BxeEI1bA0cExFnAO7TePGcSbpaXDLB?=
+ =?us-ascii?Q?fzFufRzMi10TYntXlk9p+aZcQNUjx0hHioyCKRz3?=
 X-OriginatorOrg: suse.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4c967514-082f-44e8-63f5-08dbc5739d99
+X-MS-Exchange-CrossTenant-Network-Message-Id: e0ff3839-f8f0-401d-dea5-08dbc573a1f9
 X-MS-Exchange-CrossTenant-AuthSource: HE1PR0402MB3497.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Oct 2023 07:20:56.0428
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Oct 2023 07:21:03.5079
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: f7a17af6-1c5c-4a36-aa8b-f5be247aa4ba
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: tt3SaHrCC/z+lY68r/RgCE/7t7ihi/PCZ6uDf7a/zAsSpX5ci+XunO14+AyFy7wdLXiEvuQC3kp1aZcWH+LK7g==
+X-MS-Exchange-CrossTenant-UserPrincipalName: WjqX7GXh0wMkTek3uHVFjm8Q4M3X6caG6tspNk4N9Lu/9I/5cDkeNWekw+NY2H4/4HXP7ipCtD7APQah8f/5Ww==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8999
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
@@ -122,32 +122,271 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-CONFIG_VSOCKETS is required by BPF selftests, otherwise we get errors
-like this:
+Extract duplicate code from these four functions
 
-    ./test_progs:socket_loopback_reuseport:386: socket:
-		Address family not supported by protocol
-    socket_loopback_reuseport:FAIL:386
-    ./test_progs:vsock_unix_redir_connectible:1496:
-		vsock_socketpair_connectible() failed
-    vsock_unix_redir_connectible:FAIL:1496
+ unix_redir_to_connected()
+ udp_redir_to_connected()
+ inet_unix_redir_to_connected()
+ unix_inet_redir_to_connected()
 
-So this patch enables it in tools/testing/selftests/bpf/config.
+to create a new helper pairs_redir_to_connected(). Create the different
+socketpairs in these four functions, then pass the socketpairs info to
+the new common helper to do the connections.
 
 Signed-off-by: Geliang Tang <geliang.tang@suse.com>
 ---
- tools/testing/selftests/bpf/config | 1 +
- 1 file changed, 1 insertion(+)
+ .../selftests/bpf/prog_tests/sockmap_listen.c | 159 ++++--------------
+ 1 file changed, 35 insertions(+), 124 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index e41eb33b2704..02dd4409200e 100644
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -84,3 +84,4 @@ CONFIG_USERFAULTFD=y
- CONFIG_VXLAN=y
- CONFIG_XDP_SOCKETS=y
- CONFIG_XFRM_INTERFACE=y
-+CONFIG_VSOCKETS=y
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+index 8df8cbb447f1..74cbce11e22a 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+@@ -1336,32 +1336,22 @@ static void test_redir(struct test_sockmap_listen *skel, struct bpf_map *map,
+ 	}
+ }
+ 
+-static void unix_redir_to_connected(int sotype, int sock_mapfd,
+-			       int verd_mapfd, enum redir_mode mode)
++static void pairs_redir_to_connected(int cli0, int peer0, int cli1, int peer1,
++				     int sock_mapfd, int verd_mapfd, enum redir_mode mode)
+ {
+ 	const char *log_prefix = redir_mode_str(mode);
+-	int c0, c1, p0, p1;
+ 	unsigned int pass;
+ 	int err, n;
+-	int sfd[2];
+ 	u32 key;
+ 	char b;
+ 
+ 	zero_verdict_count(verd_mapfd);
+ 
+-	if (socketpair(AF_UNIX, sotype | SOCK_NONBLOCK, 0, sfd))
+-		return;
+-	c0 = sfd[0], p0 = sfd[1];
+-
+-	if (socketpair(AF_UNIX, sotype | SOCK_NONBLOCK, 0, sfd))
+-		goto close0;
+-	c1 = sfd[0], p1 = sfd[1];
+-
+-	err = add_to_sockmap(sock_mapfd, p0, p1);
++	err = add_to_sockmap(sock_mapfd, peer0, peer1);
+ 	if (err)
+ 		goto close;
+ 
+-	n = write(c1, "a", 1);
++	n = write(cli1, "a", 1);
+ 	if (n < 0)
+ 		FAIL_ERRNO("%s: write", log_prefix);
+ 	if (n == 0)
+@@ -1376,16 +1366,34 @@ static void unix_redir_to_connected(int sotype, int sock_mapfd,
+ 	if (pass != 1)
+ 		FAIL("%s: want pass count 1, have %d", log_prefix, pass);
+ 
+-	n = recv_timeout(mode == REDIR_INGRESS ? p0 : c0, &b, 1, 0, IO_TIMEOUT_SEC);
++	n = recv_timeout(mode == REDIR_INGRESS ? peer0 : cli0, &b, 1, 0, IO_TIMEOUT_SEC);
+ 	if (n < 0)
+ 		FAIL_ERRNO("%s: recv_timeout", log_prefix);
+ 	if (n == 0)
+ 		FAIL("%s: incomplete recv", log_prefix);
+ 
+ close:
+-	xclose(c1);
+-	xclose(p1);
+-close0:
++	xclose(cli1);
++	xclose(peer1);
++}
++
++static void unix_redir_to_connected(int sotype, int sock_mapfd,
++			       int verd_mapfd, enum redir_mode mode)
++{
++	int c0, c1, p0, p1;
++	int sfd[2];
++
++	if (socketpair(AF_UNIX, sotype | SOCK_NONBLOCK, 0, sfd))
++		return;
++	c0 = sfd[0], p0 = sfd[1];
++
++	if (socketpair(AF_UNIX, sotype | SOCK_NONBLOCK, 0, sfd))
++		goto close;
++	c1 = sfd[0], p1 = sfd[1];
++
++	pairs_redir_to_connected(c0, p0, c1, p1, sock_mapfd, verd_mapfd, mode);
++
++close:
+ 	xclose(c0);
+ 	xclose(p0);
+ }
+@@ -1661,51 +1669,19 @@ static int inet_socketpair(int family, int type, int *s, int *c)
+ static void udp_redir_to_connected(int family, int sock_mapfd, int verd_mapfd,
+ 				   enum redir_mode mode)
+ {
+-	const char *log_prefix = redir_mode_str(mode);
+ 	int c0, c1, p0, p1;
+-	unsigned int pass;
+-	int err, n;
+-	u32 key;
+-	char b;
+-
+-	zero_verdict_count(verd_mapfd);
++	int err;
+ 
+ 	err = inet_socketpair(family, SOCK_DGRAM, &p0, &c0);
+ 	if (err)
+ 		return;
+ 	err = inet_socketpair(family, SOCK_DGRAM, &p1, &c1);
+ 	if (err)
+-		goto close_cli0;
+-
+-	err = add_to_sockmap(sock_mapfd, p0, p1);
+-	if (err)
+-		goto close_cli1;
+-
+-	n = write(c1, "a", 1);
+-	if (n < 0)
+-		FAIL_ERRNO("%s: write", log_prefix);
+-	if (n == 0)
+-		FAIL("%s: incomplete write", log_prefix);
+-	if (n < 1)
+-		goto close_cli1;
+-
+-	key = SK_PASS;
+-	err = xbpf_map_lookup_elem(verd_mapfd, &key, &pass);
+-	if (err)
+-		goto close_cli1;
+-	if (pass != 1)
+-		FAIL("%s: want pass count 1, have %d", log_prefix, pass);
++		goto close;
+ 
+-	n = recv_timeout(mode == REDIR_INGRESS ? p0 : c0, &b, 1, 0, IO_TIMEOUT_SEC);
+-	if (n < 0)
+-		FAIL_ERRNO("%s: recv_timeout", log_prefix);
+-	if (n == 0)
+-		FAIL("%s: incomplete recv", log_prefix);
++	pairs_redir_to_connected(c0, p0, c1, p1, sock_mapfd, verd_mapfd, mode);
+ 
+-close_cli1:
+-	xclose(c1);
+-	xclose(p1);
+-close_cli0:
++close:
+ 	xclose(c0);
+ 	xclose(p0);
+ }
+@@ -1747,15 +1723,9 @@ static void test_udp_redir(struct test_sockmap_listen *skel, struct bpf_map *map
+ static void inet_unix_redir_to_connected(int family, int type, int sock_mapfd,
+ 					int verd_mapfd, enum redir_mode mode)
+ {
+-	const char *log_prefix = redir_mode_str(mode);
+ 	int c0, c1, p0, p1;
+-	unsigned int pass;
+-	int err, n;
+ 	int sfd[2];
+-	u32 key;
+-	char b;
+-
+-	zero_verdict_count(verd_mapfd);
++	int err;
+ 
+ 	if (socketpair(AF_UNIX, SOCK_DGRAM | SOCK_NONBLOCK, 0, sfd))
+ 		return;
+@@ -1765,34 +1735,8 @@ static void inet_unix_redir_to_connected(int family, int type, int sock_mapfd,
+ 	if (err)
+ 		goto close;
+ 
+-	err = add_to_sockmap(sock_mapfd, p0, p1);
+-	if (err)
+-		goto close_cli1;
+-
+-	n = write(c1, "a", 1);
+-	if (n < 0)
+-		FAIL_ERRNO("%s: write", log_prefix);
+-	if (n == 0)
+-		FAIL("%s: incomplete write", log_prefix);
+-	if (n < 1)
+-		goto close_cli1;
++	pairs_redir_to_connected(c0, p0, c1, p1, sock_mapfd, verd_mapfd, mode);
+ 
+-	key = SK_PASS;
+-	err = xbpf_map_lookup_elem(verd_mapfd, &key, &pass);
+-	if (err)
+-		goto close_cli1;
+-	if (pass != 1)
+-		FAIL("%s: want pass count 1, have %d", log_prefix, pass);
+-
+-	n = recv_timeout(mode == REDIR_INGRESS ? p0 : c0, &b, 1, 0, IO_TIMEOUT_SEC);
+-	if (n < 0)
+-		FAIL_ERRNO("%s: recv_timeout", log_prefix);
+-	if (n == 0)
+-		FAIL("%s: incomplete recv", log_prefix);
+-
+-close_cli1:
+-	xclose(c1);
+-	xclose(p1);
+ close:
+ 	xclose(c0);
+ 	xclose(p0);
+@@ -1827,56 +1771,23 @@ static void inet_unix_skb_redir_to_connected(struct test_sockmap_listen *skel,
+ static void unix_inet_redir_to_connected(int family, int type, int sock_mapfd,
+ 					int verd_mapfd, enum redir_mode mode)
+ {
+-	const char *log_prefix = redir_mode_str(mode);
+ 	int c0, c1, p0, p1;
+-	unsigned int pass;
+-	int err, n;
+ 	int sfd[2];
+-	u32 key;
+-	char b;
+-
+-	zero_verdict_count(verd_mapfd);
++	int err;
+ 
+ 	err = inet_socketpair(family, SOCK_DGRAM, &p0, &c0);
+ 	if (err)
+ 		return;
+ 
+ 	if (socketpair(AF_UNIX, SOCK_DGRAM | SOCK_NONBLOCK, 0, sfd))
+-		goto close_cli0;
+-	c1 = sfd[0], p1 = sfd[1];
+-
+-	err = add_to_sockmap(sock_mapfd, p0, p1);
+-	if (err)
+-		goto close;
+-
+-	n = write(c1, "a", 1);
+-	if (n < 0)
+-		FAIL_ERRNO("%s: write", log_prefix);
+-	if (n == 0)
+-		FAIL("%s: incomplete write", log_prefix);
+-	if (n < 1)
+ 		goto close;
++	c1 = sfd[0], p1 = sfd[1];
+ 
+-	key = SK_PASS;
+-	err = xbpf_map_lookup_elem(verd_mapfd, &key, &pass);
+-	if (err)
+-		goto close;
+-	if (pass != 1)
+-		FAIL("%s: want pass count 1, have %d", log_prefix, pass);
+-
+-	n = recv_timeout(mode == REDIR_INGRESS ? p0 : c0, &b, 1, 0, IO_TIMEOUT_SEC);
+-	if (n < 0)
+-		FAIL_ERRNO("%s: recv_timeout", log_prefix);
+-	if (n == 0)
+-		FAIL("%s: incomplete recv", log_prefix);
++	pairs_redir_to_connected(c0, p0, c1, p1, sock_mapfd, verd_mapfd, mode);
+ 
+ close:
+-	xclose(c1);
+-	xclose(p1);
+-close_cli0:
+ 	xclose(c0);
+ 	xclose(p0);
+-
+ }
+ 
+ static void unix_inet_skb_redir_to_connected(struct test_sockmap_listen *skel,
 -- 
 2.35.3
 
