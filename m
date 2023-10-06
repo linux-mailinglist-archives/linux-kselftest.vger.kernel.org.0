@@ -2,109 +2,117 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C6467BB49F
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Oct 2023 11:56:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C21F7BB4C8
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Oct 2023 12:08:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231539AbjJFJ4b (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 6 Oct 2023 05:56:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36944 "EHLO
+        id S231559AbjJFKIF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 6 Oct 2023 06:08:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231535AbjJFJ4a (ORCPT
+        with ESMTP id S231207AbjJFKIE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 6 Oct 2023 05:56:30 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF19AD;
-        Fri,  6 Oct 2023 02:56:27 -0700 (PDT)
+        Fri, 6 Oct 2023 06:08:04 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD3EF9F;
+        Fri,  6 Oct 2023 03:08:02 -0700 (PDT)
 Received: from localhost.localdomain (unknown [39.34.184.141])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C78E76612212;
-        Fri,  6 Oct 2023 10:56:22 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 54FB96612212;
+        Fri,  6 Oct 2023 11:07:59 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1696586185;
-        bh=cAPdTDO9l0OljwiXmnH2mEX0mLjZo06Oo9SZMhEPWy8=;
+        s=mail; t=1696586880;
+        bh=/P0lxjquv/ZpR7Ni5SUJUUznYG0dkXXtdTFeHTzDUQo=;
         h=From:To:Cc:Subject:Date:From;
-        b=id+xbwaR+mi0oM79N7gUk028gNKm6zbI0LnzEC9D9a9zZrVQKy60rY+qf7YhoVVtp
-         s5IHS2XvlKSRVaYZCwrqzBnSVCoYgO9aFzN9wadyCL52UXbRol1qRboKogx4OL7LuQ
-         fTw2cfFtt1Lw3oERf8lA+P3yesqd5Qf2NAfqBFzJvgdOR9dVUBBd1XthOSoohMCAME
-         Xf7bdUN6+ltsEqxNsH6RNEcm4GCMOSxBmY+SY7DFeGCQN1wWmsy3fYECOzu3Eqacof
-         II0X9TRVUXpptg3P3cIFSOyQ8O1e1MMMsr60tht9JLRmqKBjhR3os3HphZ3KXqa8Fp
-         f+SNBlEPXiyAQ==
+        b=jrP5aWqxBLjtDs2aLqN/U/f8VbG2WqcULJYTBjKFFBLvQDcjBxW9tvMx6p7w+1JAI
+         YuIUBqH82skD1jce04v3XMOqMpvQuJti0FPhIq7t4WmHefpTEs8zenu2WlkPt5t3hs
+         xqkLrHYJWvUwuG823jb8wcDLQHpHWaQxG7GuEw1dj0ZCNPCFEOqygjGknF1ymBKqUV
+         RARjFl5dV3h89NAmZJJJwK6YyUbgHuOXt4sGsEvfUHctB9Hug6dgMbl8LfyMsI4+8r
+         1G/0/hdMZjLgeobtBZQEPNbfhDueSeGxy3rXvbyYgceMhjNZHbGoBmcNsi1WoIbEFC
+         ZsT5y5Q6PwJXg==
 From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-To:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
-        Shuah Khan <shuah@kernel.org>,
+To:     Shuah Khan <shuah@kernel.org>,
         Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH v2] selftests: futex: remove duplicate unneeded defines
-Date:   Fri,  6 Oct 2023 14:55:37 +0500
-Message-Id: <20231006095539.1601385-1-usama.anjum@collabora.com>
+Cc:     kernel@collabora.com, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/4] selftests: capabilities: remove duplicate unneeded defines
+Date:   Fri,  6 Oct 2023 15:07:35 +0500
+Message-Id: <20231006100743.1631334-1-usama.anjum@collabora.com>
 X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Kselftests are kernel tests and must be build with kernel headers from
-same source version. The kernel headers are already being included
-correctly in futex selftest Makefile with the help of KHDR_INCLUDE. In
-this patch, only the dead code is being removed. No functional change is
-intended.
+These duplicate defines should automatically be picked up from kernel
+headers. Use KHDR_INCLUDES to add kernel header files.
 
 Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 ---
-Changes since v1:
-- Make the explanation correct
----
- .../selftests/futex/include/futextest.h       | 22 -------------------
- 1 file changed, 22 deletions(-)
+ tools/testing/selftests/capabilities/Makefile       | 2 +-
+ tools/testing/selftests/capabilities/test_execve.c  | 8 --------
+ tools/testing/selftests/capabilities/validate_cap.c | 8 --------
+ 3 files changed, 1 insertion(+), 17 deletions(-)
 
-diff --git a/tools/testing/selftests/futex/include/futextest.h b/tools/testing/selftests/futex/include/futextest.h
-index ddbcfc9b7bac4..59f66af3a6d10 100644
---- a/tools/testing/selftests/futex/include/futextest.h
-+++ b/tools/testing/selftests/futex/include/futextest.h
-@@ -25,28 +25,6 @@
- typedef volatile u_int32_t futex_t;
- #define FUTEX_INITIALIZER 0
+diff --git a/tools/testing/selftests/capabilities/Makefile b/tools/testing/selftests/capabilities/Makefile
+index 6e9d98d457d5b..411ac098308f1 100644
+--- a/tools/testing/selftests/capabilities/Makefile
++++ b/tools/testing/selftests/capabilities/Makefile
+@@ -2,7 +2,7 @@
+ TEST_GEN_FILES := validate_cap
+ TEST_GEN_PROGS := test_execve
  
--/* Define the newer op codes if the system header file is not up to date. */
--#ifndef FUTEX_WAIT_BITSET
--#define FUTEX_WAIT_BITSET		9
--#endif
--#ifndef FUTEX_WAKE_BITSET
--#define FUTEX_WAKE_BITSET		10
--#endif
--#ifndef FUTEX_WAIT_REQUEUE_PI
--#define FUTEX_WAIT_REQUEUE_PI		11
--#endif
--#ifndef FUTEX_CMP_REQUEUE_PI
--#define FUTEX_CMP_REQUEUE_PI		12
--#endif
--#ifndef FUTEX_WAIT_REQUEUE_PI_PRIVATE
--#define FUTEX_WAIT_REQUEUE_PI_PRIVATE	(FUTEX_WAIT_REQUEUE_PI | \
--					 FUTEX_PRIVATE_FLAG)
--#endif
--#ifndef FUTEX_REQUEUE_PI_PRIVATE
--#define FUTEX_CMP_REQUEUE_PI_PRIVATE	(FUTEX_CMP_REQUEUE_PI | \
--					 FUTEX_PRIVATE_FLAG)
+-CFLAGS += -O2 -g -std=gnu99 -Wall
++CFLAGS += -O2 -g -std=gnu99 -Wall $(KHDR_INCLUDES)
+ LDLIBS += -lcap-ng -lrt -ldl
+ 
+ include ../lib.mk
+diff --git a/tools/testing/selftests/capabilities/test_execve.c b/tools/testing/selftests/capabilities/test_execve.c
+index df0ef02b40367..e3a352b020a79 100644
+--- a/tools/testing/selftests/capabilities/test_execve.c
++++ b/tools/testing/selftests/capabilities/test_execve.c
+@@ -20,14 +20,6 @@
+ 
+ #include "../kselftest.h"
+ 
+-#ifndef PR_CAP_AMBIENT
+-#define PR_CAP_AMBIENT			47
+-# define PR_CAP_AMBIENT_IS_SET		1
+-# define PR_CAP_AMBIENT_RAISE		2
+-# define PR_CAP_AMBIENT_LOWER		3
+-# define PR_CAP_AMBIENT_CLEAR_ALL	4
 -#endif
 -
- /**
-  * futex() - SYS_futex syscall wrapper
-  * @uaddr:	address of first futex
+ static int nerrs;
+ static pid_t mpid;	/*  main() pid is used to avoid duplicate test counts */
+ 
+diff --git a/tools/testing/selftests/capabilities/validate_cap.c b/tools/testing/selftests/capabilities/validate_cap.c
+index cdfc94268fe6e..60b4e7b716a75 100644
+--- a/tools/testing/selftests/capabilities/validate_cap.c
++++ b/tools/testing/selftests/capabilities/validate_cap.c
+@@ -9,14 +9,6 @@
+ 
+ #include "../kselftest.h"
+ 
+-#ifndef PR_CAP_AMBIENT
+-#define PR_CAP_AMBIENT			47
+-# define PR_CAP_AMBIENT_IS_SET		1
+-# define PR_CAP_AMBIENT_RAISE		2
+-# define PR_CAP_AMBIENT_LOWER		3
+-# define PR_CAP_AMBIENT_CLEAR_ALL	4
+-#endif
+-
+ #if __GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 19)
+ # define HAVE_GETAUXVAL
+ #endif
 -- 
 2.40.1
 
