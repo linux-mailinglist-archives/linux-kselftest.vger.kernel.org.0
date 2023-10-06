@@ -2,94 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 053417BB35E
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Oct 2023 10:39:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C6467BB49F
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Oct 2023 11:56:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231180AbjJFIjp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 6 Oct 2023 04:39:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50162 "EHLO
+        id S231539AbjJFJ4b (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 6 Oct 2023 05:56:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231136AbjJFIjp (ORCPT
+        with ESMTP id S231535AbjJFJ4a (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 6 Oct 2023 04:39:45 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB0B393;
-        Fri,  6 Oct 2023 01:39:42 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-99357737980so332159866b.2;
-        Fri, 06 Oct 2023 01:39:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696581581; x=1697186381; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Vn7Qi+HY8GjmOyb6Lxc2nxB3hB8z+OBMeLaUb2Xph7E=;
-        b=lebrlE73Xpb9lliRZlsYq979kYVCMwa9JHO9WQItWoZHLk4Yw5WqEpB4NYwHXGIHdP
-         P3G10yX86aRN3HF8Cr4MDs8eBG03RHPJxHR2uv8YSgfhYA2VuGDJpry/20SIp3WUY1T5
-         h5sBMQMyyK51SD+iS5IyNp4AH4IPTAm6y4Jbb2hnOo80oyqDcBV//V+9sbbtzL6eizEn
-         r5TdPQffPX3mZupyXakAs/OpHuwDmVwB/1A7QmKkAXeca2NaooMpHKWlyj+arw6wVTSQ
-         EpBhR4NSyXTxzDtUeCvSD331njdkw3wymJsP2TlhooovY+pmxUlv/QCkNjU49K90aTOi
-         23kQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696581581; x=1697186381;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Vn7Qi+HY8GjmOyb6Lxc2nxB3hB8z+OBMeLaUb2Xph7E=;
-        b=E0Hzpebm2ox04WbBgVm+mA9rSgSg/dXuJDGaBItzTZl4WKibLSE2AL9rrBn0BNxD87
-         SDDzBIAIGXprHdOgsmoVrz9w9rt4p8JyfvdqXVQyQnIpN64dH0/D0mMuYQAAhYVCBDmb
-         gQrg0CuHdWzO+1/hXkr7pkE9ncL/mGNCZRn2xlbP1msI8Wa7oCBhigpGP/3G3BSm9WLp
-         fQJF48XgstCcRR8SUqBfQkpWWPWV48rYy1f6oXHpZwxy/wxON7ZD9AJto1JfUdGLOkIO
-         zBOayi2+KJPkafk13V0AcBhyhjCMP+wwRtKMrUaGiPRk5H0TndoF2YgUwpESLhTmOOjG
-         cz0w==
-X-Gm-Message-State: AOJu0Yx+Eq0c0KlJlvI1N2VyLtqE/31Cw/It28dYOCjnLKr1aTn/pv6s
-        74ZhHgwr01Tzx11PVicf89A=
-X-Google-Smtp-Source: AGHT+IHJtLZ21KkLtdxr9jpnW5HZ58MVC3B7Ri11QeI2zyTQ0rzF1nwjkGYHbiDcp130fMQ6PWYq+w==
-X-Received: by 2002:a17:906:518b:b0:9b2:b9a7:2a30 with SMTP id y11-20020a170906518b00b009b2b9a72a30mr6306662ejk.67.1696581581076;
-        Fri, 06 Oct 2023 01:39:41 -0700 (PDT)
-Received: from gmail.com (1F2EF530.nat.pool.telekom.hu. [31.46.245.48])
-        by smtp.gmail.com with ESMTPSA id i11-20020a170906a28b00b009737b8d47b6sm2477863ejz.203.2023.10.06.01.39.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 06 Oct 2023 01:39:40 -0700 (PDT)
-Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
-Date:   Fri, 6 Oct 2023 10:39:38 +0200
-From:   Ingo Molnar <mingo@kernel.org>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Fri, 6 Oct 2023 05:56:30 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BF19AD;
+        Fri,  6 Oct 2023 02:56:27 -0700 (PDT)
+Received: from localhost.localdomain (unknown [39.34.184.141])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id C78E76612212;
+        Fri,  6 Oct 2023 10:56:22 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1696586185;
+        bh=cAPdTDO9l0OljwiXmnH2mEX0mLjZo06Oo9SZMhEPWy8=;
+        h=From:To:Cc:Subject:Date:From;
+        b=id+xbwaR+mi0oM79N7gUk028gNKm6zbI0LnzEC9D9a9zZrVQKy60rY+qf7YhoVVtp
+         s5IHS2XvlKSRVaYZCwrqzBnSVCoYgO9aFzN9wadyCL52UXbRol1qRboKogx4OL7LuQ
+         fTw2cfFtt1Lw3oERf8lA+P3yesqd5Qf2NAfqBFzJvgdOR9dVUBBd1XthOSoohMCAME
+         Xf7bdUN6+ltsEqxNsH6RNEcm4GCMOSxBmY+SY7DFeGCQN1wWmsy3fYECOzu3Eqacof
+         II0X9TRVUXpptg3P3cIFSOyQ8O1e1MMMsr60tht9JLRmqKBjhR3os3HphZ3KXqa8Fp
+         f+SNBlEPXiyAQ==
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
         Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
         Darren Hart <dvhart@infradead.org>,
         Davidlohr Bueso <dave@stgolabs.net>,
-        =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
-        Shuah Khan <shuah@kernel.org>, kernel@collabora.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 6/6] selftests: futex: remove duplicate unneeded defines
-Message-ID: <ZR/HypmZYM58IRj/@gmail.com>
-References: <20230805073809.1753462-1-usama.anjum@collabora.com>
- <20230805073809.1753462-6-usama.anjum@collabora.com>
- <ZRvU8DXRWL9sgKug@gmail.com>
- <51273ffa-e323-44e8-8a93-bc04ee356df0@collabora.com>
- <ZR8bn/UDLypbUhJT@gmail.com>
- <b017f3e0-6682-401e-b20c-8264cd788d6f@collabora.com>
+        =?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH v2] selftests: futex: remove duplicate unneeded defines
+Date:   Fri,  6 Oct 2023 14:55:37 +0500
+Message-Id: <20231006095539.1601385-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b017f3e0-6682-401e-b20c-8264cd788d6f@collabora.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Kselftests are kernel tests and must be build with kernel headers from
+same source version. The kernel headers are already being included
+correctly in futex selftest Makefile with the help of KHDR_INCLUDE. In
+this patch, only the dead code is being removed. No functional change is
+intended.
 
-* Muhammad Usama Anjum <usama.anjum@collabora.com> wrote:
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+---
+Changes since v1:
+- Make the explanation correct
+---
+ .../selftests/futex/include/futextest.h       | 22 -------------------
+ 1 file changed, 22 deletions(-)
 
-> Sorry, so the working of the change-log isn't clear enough. I'll send the 
-> patch separately and with better wording.
+diff --git a/tools/testing/selftests/futex/include/futextest.h b/tools/testing/selftests/futex/include/futextest.h
+index ddbcfc9b7bac4..59f66af3a6d10 100644
+--- a/tools/testing/selftests/futex/include/futextest.h
++++ b/tools/testing/selftests/futex/include/futextest.h
+@@ -25,28 +25,6 @@
+ typedef volatile u_int32_t futex_t;
+ #define FUTEX_INITIALIZER 0
+ 
+-/* Define the newer op codes if the system header file is not up to date. */
+-#ifndef FUTEX_WAIT_BITSET
+-#define FUTEX_WAIT_BITSET		9
+-#endif
+-#ifndef FUTEX_WAKE_BITSET
+-#define FUTEX_WAKE_BITSET		10
+-#endif
+-#ifndef FUTEX_WAIT_REQUEUE_PI
+-#define FUTEX_WAIT_REQUEUE_PI		11
+-#endif
+-#ifndef FUTEX_CMP_REQUEUE_PI
+-#define FUTEX_CMP_REQUEUE_PI		12
+-#endif
+-#ifndef FUTEX_WAIT_REQUEUE_PI_PRIVATE
+-#define FUTEX_WAIT_REQUEUE_PI_PRIVATE	(FUTEX_WAIT_REQUEUE_PI | \
+-					 FUTEX_PRIVATE_FLAG)
+-#endif
+-#ifndef FUTEX_REQUEUE_PI_PRIVATE
+-#define FUTEX_CMP_REQUEUE_PI_PRIVATE	(FUTEX_CMP_REQUEUE_PI | \
+-					 FUTEX_PRIVATE_FLAG)
+-#endif
+-
+ /**
+  * futex() - SYS_futex syscall wrapper
+  * @uaddr:	address of first futex
+-- 
+2.40.1
 
-Thank you!
-
-	Ingo
