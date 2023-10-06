@@ -2,206 +2,148 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18B467BB128
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Oct 2023 07:18:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90D7E7BB326
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Oct 2023 10:27:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230050AbjJFFSj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 6 Oct 2023 01:18:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34282 "EHLO
+        id S230266AbjJFI1v (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 6 Oct 2023 04:27:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbjJFFSh (ORCPT
+        with ESMTP id S230076AbjJFI1u (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 6 Oct 2023 01:18:37 -0400
-Received: from out-193.mta0.migadu.com (out-193.mta0.migadu.com [IPv6:2001:41d0:1004:224b::c1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB576CA
-        for <linux-kselftest@vger.kernel.org>; Thu,  5 Oct 2023 22:18:35 -0700 (PDT)
-Message-ID: <1124e2ba-2856-41c7-713f-5a4b4ffd3ec5@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1696569509;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=I6FIhk3CVKDciV5afGmTwULasUwhSwoj3cfp90UAl38=;
-        b=xpgC48eG7s8e5z7dO/gh8e7FX2WhT5alwGx3sV/dVLcWnOwpB3AkKzNELYQRJPhEljYX9N
-        equgtyyLlb0gfvOSpGVgeNyGcasCkqIyQ0YnH/DS5WJNv+YgC5KQ0oYw0rfmrCv9/06CBX
-        Q1FnBzvfWDEppcxQ8kDyqrWHYIntmnc=
-Date:   Thu, 5 Oct 2023 22:18:21 -0700
+        Fri, 6 Oct 2023 04:27:50 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1664983;
+        Fri,  6 Oct 2023 01:27:49 -0700 (PDT)
+Received: from [192.168.100.7] (unknown [39.34.184.141])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: usama.anjum)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id B364E6607328;
+        Fri,  6 Oct 2023 09:27:41 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1696580867;
+        bh=+Ey03HI15N0Ln/6zDu0UdYMqi8eS+Mq55B6eCM6aGUs=;
+        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+        b=eUwRk7hHA0Y4xP9R1VvAcOdZRrYt9j01JL66N/jHl7jRxAajsyxZVkl4KOVKMjTpP
+         CQJXDx8Chr1/syaCBv5ETuV9w7xSzPafaAdkpg+O7oxyjXl6fFBu9O/BQ+eh4I84U+
+         FDq9oSoh3aUpdka7rhADpbxasrRkEv/vmgn6vrQtEe6ATfkOC3/lLPbtzWaJoAdE8b
+         giWEs/cxMfy7mEjh4SGXjqE+YlYy41+HLSUOUy8/Z0pxoOolM84KJBtVxjAQl0l4Gf
+         B9b/F6zYkOEVB6SnFbAhdvkti4WpHpAnYmnFStIJ+Z+Pi+/JdS0QLjOI6aEHTQeolH
+         LBcSWT+BtiVWA==
+Message-ID: <b017f3e0-6682-401e-b20c-8264cd788d6f@collabora.com>
+Date:   Fri, 6 Oct 2023 13:27:22 +0500
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Add
- pairs_redir_to_connected helper
+User-Agent: Mozilla Thunderbird
+Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        =?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>,
+        Shuah Khan <shuah@kernel.org>, kernel@collabora.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 6/6] selftests: futex: remove duplicate unneeded defines
 Content-Language: en-US
-To:     Geliang Tang <geliang.tang@suse.com>
-Cc:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Song Liu <song@kernel.org>,
-        Yonghong Song <yonghong.song@linux.dev>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>
-References: <cover.1696490003.git.geliang.tang@suse.com>
- <10920edc470974553e66e2391400dfa81ec03d47.1696490003.git.geliang.tang@suse.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Martin KaFai Lau <martin.lau@linux.dev>
-In-Reply-To: <10920edc470974553e66e2391400dfa81ec03d47.1696490003.git.geliang.tang@suse.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Ingo Molnar <mingo@kernel.org>
+References: <20230805073809.1753462-1-usama.anjum@collabora.com>
+ <20230805073809.1753462-6-usama.anjum@collabora.com>
+ <ZRvU8DXRWL9sgKug@gmail.com>
+ <51273ffa-e323-44e8-8a93-bc04ee356df0@collabora.com>
+ <ZR8bn/UDLypbUhJT@gmail.com>
+From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <ZR8bn/UDLypbUhJT@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10/5/23 12:21 AM, Geliang Tang wrote:
-> --- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-> @@ -1336,32 +1336,22 @@ static void test_redir(struct test_sockmap_listen *skel, struct bpf_map *map,
->   	}
->   }
->   
-> -static void unix_redir_to_connected(int sotype, int sock_mapfd,
-> -			       int verd_mapfd, enum redir_mode mode)
-> +static void pairs_redir_to_connected(int cli0, int peer0, int cli1, int peer1,
-> +				     int sock_mapfd, int verd_mapfd, enum redir_mode mode)
->   {
->   	const char *log_prefix = redir_mode_str(mode);
-> -	int c0, c1, p0, p1;
->   	unsigned int pass;
->   	int err, n;
-> -	int sfd[2];
->   	u32 key;
->   	char b;
->   
->   	zero_verdict_count(verd_mapfd);
->   
-> -	if (socketpair(AF_UNIX, sotype | SOCK_NONBLOCK, 0, sfd))
-> -		return;
-> -	c0 = sfd[0], p0 = sfd[1];
-> -
-> -	if (socketpair(AF_UNIX, sotype | SOCK_NONBLOCK, 0, sfd))
-> -		goto close0;
-> -	c1 = sfd[0], p1 = sfd[1];
-> -
-> -	err = add_to_sockmap(sock_mapfd, p0, p1);
-> +	err = add_to_sockmap(sock_mapfd, peer0, peer1);
->   	if (err)
->   		goto close;
->   
-> -	n = write(c1, "a", 1);
-> +	n = write(cli1, "a", 1);
->   	if (n < 0)
->   		FAIL_ERRNO("%s: write", log_prefix);
->   	if (n == 0)
-> @@ -1376,16 +1366,34 @@ static void unix_redir_to_connected(int sotype, int sock_mapfd,
->   	if (pass != 1)
->   		FAIL("%s: want pass count 1, have %d", log_prefix, pass);
->   
-> -	n = recv_timeout(mode == REDIR_INGRESS ? p0 : c0, &b, 1, 0, IO_TIMEOUT_SEC);
-> +	n = recv_timeout(mode == REDIR_INGRESS ? peer0 : cli0, &b, 1, 0, IO_TIMEOUT_SEC);
->   	if (n < 0)
->   		FAIL_ERRNO("%s: recv_timeout", log_prefix);
->   	if (n == 0)
->   		FAIL("%s: incomplete recv", log_prefix);
->   
->   close:
-> -	xclose(c1);
-> -	xclose(p1);
-> -close0:
-> +	xclose(cli1);
-> +	xclose(peer1);
-> +}
-> +
-> +static void unix_redir_to_connected(int sotype, int sock_mapfd,
-> +			       int verd_mapfd, enum redir_mode mode)
-> +{
-> +	int c0, c1, p0, p1;
-> +	int sfd[2];
-> +
-> +	if (socketpair(AF_UNIX, sotype | SOCK_NONBLOCK, 0, sfd))
-> +		return;
-> +	c0 = sfd[0], p0 = sfd[1];
-> +
-> +	if (socketpair(AF_UNIX, sotype | SOCK_NONBLOCK, 0, sfd))
-> +		goto close;
-> +	c1 = sfd[0], p1 = sfd[1];
-> +
-> +	pairs_redir_to_connected(c0, p0, c1, p1, sock_mapfd, verd_mapfd, mode);
-> +
-> +close:
->   	xclose(c0);
->   	xclose(p0);
->   }
-> @@ -1661,51 +1669,19 @@ static int inet_socketpair(int family, int type, int *s, int *c)
->   static void udp_redir_to_connected(int family, int sock_mapfd, int verd_mapfd,
->   				   enum redir_mode mode)
->   {
-> -	const char *log_prefix = redir_mode_str(mode);
->   	int c0, c1, p0, p1;
-> -	unsigned int pass;
-> -	int err, n;
-> -	u32 key;
-> -	char b;
-> -
-> -	zero_verdict_count(verd_mapfd);
-> +	int err;
->   
->   	err = inet_socketpair(family, SOCK_DGRAM, &p0, &c0);
->   	if (err)
->   		return;
->   	err = inet_socketpair(family, SOCK_DGRAM, &p1, &c1);
->   	if (err)
-> -		goto close_cli0;
-> -
-> -	err = add_to_sockmap(sock_mapfd, p0, p1);
-> -	if (err)
-> -		goto close_cli1;
-> -
-> -	n = write(c1, "a", 1);
-> -	if (n < 0)
-> -		FAIL_ERRNO("%s: write", log_prefix);
-> -	if (n == 0)
-> -		FAIL("%s: incomplete write", log_prefix);
-> -	if (n < 1)
-> -		goto close_cli1;
-> -
-> -	key = SK_PASS;
-> -	err = xbpf_map_lookup_elem(verd_mapfd, &key, &pass);
-> -	if (err)
-> -		goto close_cli1;
-> -	if (pass != 1)
-> -		FAIL("%s: want pass count 1, have %d", log_prefix, pass);
-> +		goto close;
->   
-> -	n = recv_timeout(mode == REDIR_INGRESS ? p0 : c0, &b, 1, 0, IO_TIMEOUT_SEC);
-> -	if (n < 0)
-> -		FAIL_ERRNO("%s: recv_timeout", log_prefix);
-> -	if (n == 0)
-> -		FAIL("%s: incomplete recv", log_prefix);
-> +	pairs_redir_to_connected(c0, p0, c1, p1, sock_mapfd, verd_mapfd, mode);
->   
-> -close_cli1:
-> -	xclose(c1);
-> -	xclose(p1);
-> -close_cli0:
-> +close:
->   	xclose(c0);
->   	xclose(p0);
+On 10/6/23 1:25 AM, Ingo Molnar wrote:
+> 
+> * Muhammad Usama Anjum <usama.anjum@collabora.com> wrote:
+> 
+>> On 10/3/23 1:46 PM, Ingo Molnar wrote:
+>>>
+>>> * Muhammad Usama Anjum <usama.anjum@collabora.com> wrote:
+>>>
+>>>> Kselftests are kernel tests and must be build with kernel headers from
+>>>> same source version. These duplicate defines should automatically
+>>>> picked up from kernel headers. Use KHDR_INCLUDES to add kernel header
+>>>> files.
+>>>>
+>>>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+>>>> ---
+>>>>  .../selftests/futex/include/futextest.h       | 22 -------------------
+>>>>  1 file changed, 22 deletions(-)
+>>>>
+>>>> diff --git a/tools/testing/selftests/futex/include/futextest.h b/tools/testing/selftests/futex/include/futextest.h
+>>>> index ddbcfc9b7bac4..59f66af3a6d10 100644
+>>>> --- a/tools/testing/selftests/futex/include/futextest.h
+>>>> +++ b/tools/testing/selftests/futex/include/futextest.h
+>>>> @@ -25,28 +25,6 @@
+>>>>  typedef volatile u_int32_t futex_t;
+>>>>  #define FUTEX_INITIALIZER 0
+>>>>  
+>>>> -/* Define the newer op codes if the system header file is not up to date. */
+>>>> -#ifndef FUTEX_WAIT_BITSET
+>>>> -#define FUTEX_WAIT_BITSET		9
+>>>> -#endif
+>>>> -#ifndef FUTEX_WAKE_BITSET
+>>>> -#define FUTEX_WAKE_BITSET		10
+>>>> -#endif
+>>>> -#ifndef FUTEX_WAIT_REQUEUE_PI
+>>>> -#define FUTEX_WAIT_REQUEUE_PI		11
+>>>> -#endif
+>>>> -#ifndef FUTEX_CMP_REQUEUE_PI
+>>>> -#define FUTEX_CMP_REQUEUE_PI		12
+>>>> -#endif
+>>>> -#ifndef FUTEX_WAIT_REQUEUE_PI_PRIVATE
+>>>> -#define FUTEX_WAIT_REQUEUE_PI_PRIVATE	(FUTEX_WAIT_REQUEUE_PI | \
+>>>> -					 FUTEX_PRIVATE_FLAG)
+>>>> -#endif
+>>>> -#ifndef FUTEX_REQUEUE_PI_PRIVATE
+>>>> -#define FUTEX_CMP_REQUEUE_PI_PRIVATE	(FUTEX_CMP_REQUEUE_PI | \
+>>>> -					 FUTEX_PRIVATE_FLAG)
+>>>> -#endif
+>>>
+>>> AFAICT I cannot really pick this up into the locking tree as-is, as this patch
+>>> relies on the KHDR_INCLUDES change in patch #1, so that all self-tests get the
+>>> kernel headers included, correct?
+>> No this patch is self contained and doesn't depend on the patch #1.
+>> KHDR_INCLUDES was included several releases back in kselftest's Makefile
+>> and in kselftests of futex. Correct headers are being included already. In
+>> this patch, I'm removing just the un-needed dead code. Other patches were
+>> already picked up by other maintainers.
+> 
+> So the changelog does not match that characterization, it talks about 
+> KHDR_INCLUDES in the present tense, and patch #1 adds the KHDR_INCLUDES, 
+> which further suggested a dependency to me:
+Sorry, so the working of the change-log isn't clear enough. I'll send the
+patch separately and with better wording.
 
-Patch 1 is applied. Thanks.
+> 
+>>>> Kselftests are kernel tests and must be build with kernel headers from
+>>>> same source version. These duplicate defines should automatically
+>>>> picked up from kernel headers. Use KHDR_INCLUDES to add kernel header
+>                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+>>>> files.
+>      ^^^^^^
+> 
+> Could you please re-send it with the changelog updated that makes it clear 
+> that this patch works fine standalone against current mainline kernels?
+> 
+> Thanks,
+> 
+> 	Ingo
 
-In patch 2, the xclose() here is confusing after this change. It is also 
-inconsistent from how other tests in sockmap_listen.c is doing it. c0/p0 and 
-c1/p1 are opened here but only c0/p0 is closed here and c1/p1 is closed in the 
-pairs_redir_to_connected() above instead.
-
-
-
+-- 
+BR,
+Muhammad Usama Anjum
