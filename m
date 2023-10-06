@@ -2,58 +2,100 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D8727BC0EE
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Oct 2023 23:05:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43C947BC308
+	for <lists+linux-kselftest@lfdr.de>; Sat,  7 Oct 2023 01:45:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233616AbjJFVFx convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 6 Oct 2023 17:05:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51988 "EHLO
+        id S233696AbjJFXp5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 6 Oct 2023 19:45:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233624AbjJFVFw (ORCPT
+        with ESMTP id S233434AbjJFXp4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 6 Oct 2023 17:05:52 -0400
-X-Greylist: delayed 1033 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 06 Oct 2023 14:05:51 PDT
-Received: from ms-fb02.so-net.ne.jp (ms-fb02.so-net.ne.jp [202.238.84.156])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E691BE
-        for <linux-kselftest@vger.kernel.org>; Fri,  6 Oct 2023 14:05:51 -0700 (PDT)
-Received: from ms-mxout02.so-net.ne.jp (ms-mxout02.plus.so-net.ne.jp [10.240.82.18])
-        by ms-fb02.so-net.ne.jp  with ESMTP id 396GUFcZ027046
-        for <linux-kselftest@vger.kernel.org>; Sat, 7 Oct 2023 05:48:38 +0900
-Received: from mail.xantia.ddo.jp ([150.246.217.119])
-        by ms-mxout02.so-net.ne.jp with ESMTPA
-        id orkTq586K20zborkTqhXN8; Sat, 07 Oct 2023 05:48:37 +0900
-Message-ID: <1696625317.orkTq586K20zborkTqhXN8@ms-mxout02.so-net.ne.jp>
-Received: from [94.156.6.108] (unknown [94.156.6.108])
-        by mail.xantia.ddo.jp (Postfix) with ESMTPA id 21198BA1390
-        for <linux-kselftest@vger.kernel.org>; Tue,  3 Oct 2023 12:05:49 +0900 (JST)
-Content-Type: text/plain; charset="iso-8859-1"
+        Fri, 6 Oct 2023 19:45:56 -0400
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C85BD
+        for <linux-kselftest@vger.kernel.org>; Fri,  6 Oct 2023 16:45:55 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id ca18e2360f4ac-7748ca56133so24019939f.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 06 Oct 2023 16:45:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1696635954; x=1697240754; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FwALpqDQCcQrYqpE5W+6VpYG6KweS9qs1qffrleQgRE=;
+        b=Sk6wduMOPc4rUCfR9JV68tjr+9g9zE97VrGGvcQ20hpouKphJCceLXzyXd4hyR1WiV
+         DP/x/lqBIYsiz9/Qp8eVz7/eihgRTxsjvlMxkpFBM7IdHbSGqDnnC3f6UsyF+iMer9xJ
+         AqrCDxmOyMH8dGKS95XjmmKLtZF29G8U6mCA0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696635954; x=1697240754;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FwALpqDQCcQrYqpE5W+6VpYG6KweS9qs1qffrleQgRE=;
+        b=u1SQWIkpPixFOgr4BgejS29lZrjMdMF4CLd5Eqm5YeUHI4z8rKdSk+hSOeRe7lSrcD
+         5tlGweLtQIX0Gi/P6HaCMrWjO8IMujBfxpXase1ApkSxN4I62aAE3RRdBIlKwqLhWY3g
+         2EpI5DI6A7Dff/dOU3KbgnDH3H+HXYwMOiGrNiIza1QGHey10o3x8NiZ5DgWdP9V4jTC
+         bFC4sq4vDQDuFbLFm6na1xag1Rs9gEQJa3Q8eqBV/XKP6S9JQhwH8w0o1OvEjaMDrlHq
+         ZukgjgMUnjsw201Gq+yy/nsn95IclI01+qZJvQ1OsV4Ckn8ULK2EPhY9/zDKgPuPI1/U
+         Ddmg==
+X-Gm-Message-State: AOJu0YyjFcfQYQ670l48OPGM4xyrLYUnFks28RiXUOmtkaI3H4eeOwHg
+        HTngeVul1q/UuVzErHguxl2S3g==
+X-Google-Smtp-Source: AGHT+IFWjgCfteMJKA7Ko5UEmiUhVCiC4lvGalS8vluElZp3adwfyiwGFZhGgdVb2pxwbng2ZkTthQ==
+X-Received: by 2002:a05:6602:3a05:b0:792:6be4:3dcb with SMTP id by5-20020a0566023a0500b007926be43dcbmr9810780iob.2.1696635954574;
+        Fri, 06 Oct 2023 16:45:54 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id q10-20020a056638040a00b0042b03d40279sm697231jap.80.2023.10.06.16.45.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Oct 2023 16:45:54 -0700 (PDT)
+Message-ID: <d663a8f5-c91c-404e-b866-dc6a6188bc8a@linuxfoundation.org>
+Date:   Fri, 6 Oct 2023 17:45:53 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Description: Mail message body
-Subject: Letter of Intent (LOI) (03-10-2023)
-To:     linux-kselftest@vger.kernel.org
-From:   "Ahmad R Deeb" <rahmed@pobox.com>
-Date:   Mon, 02 Oct 2023 20:05:48 -0700
-Reply-To: investorrelations@alhaitham-investment.com
-X-Spam-Status: No, score=1.7 required=5.0 tests=BAYES_50,MSGID_FROM_MTA_HEADER,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_SBL,SPF_HELO_NONE,SPF_NEUTRAL
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/6] selftests: capabilities: remove duplicate unneeded
+ defines
+Content-Language: en-US
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Cc:     kernel@collabora.com, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20230805073809.1753462-1-usama.anjum@collabora.com>
+ <95fc0e92-79ed-4748-a565-a82469d087f6@collabora.com>
+ <9c0dae5b-a7ee-4399-abf3-883a5946f2f6@collabora.com>
+ <1c0ce608-20a4-4b72-8d5e-5308e119959b@collabora.com>
+ <369f876c-be07-41d9-b2fb-ec7d629f2d9b@collabora.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <369f876c-be07-41d9-b2fb-ec7d629f2d9b@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Attn: linux-kselftest@vger.kernel.org
-Date: 03-10-2023
-Subject: Letter of Intent (LOI) (03-10-2023)
+On 10/6/23 04:09, Muhammad Usama Anjum wrote:
+> On 10/6/23 1:33 PM, Muhammad Usama Anjum wrote:
+>> On 9/4/23 3:48 PM, Muhammad Usama Anjum wrote:
+>>> On 8/22/23 1:57 PM, Muhammad Usama Anjum wrote:
+>>>> Hi Shuah,
+>>>>
+>>>> Christian Brauner had picked [PATCH 4/6]. Others are still not picked.
+>>>> Please have a look.
+>> Shuah, I thought you had picked up these patches. But I'm unable to find
+>> them in the linux-next. I'll be re-sending 6th patch separately. Can you
+>> please pick up patch number 1, 2, 3 and 5 to your tree?
 
-This is a Letter of Intent concerning my Board of investors intent to fund some of your available investment projects.
+I though I picked these up. Looks like I didn't.
 
-If this is of any interest to you then kindly advise.
+> Sent v2 for your ease. It has same patches.
+> https://lore.kernel.org/all/20231006100743.1631334-1-usama.anjum@collabora.com
+> 
 
-Yours Faithfully,
-Ahmad R. Deeb
-Head of Investment Team
+Thank you. They are now in linux-kselftest next.
+
+-- Shuah
+
