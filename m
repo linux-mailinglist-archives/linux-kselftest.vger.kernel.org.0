@@ -2,145 +2,94 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EABCC7BB348
-	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Oct 2023 10:33:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 053417BB35E
+	for <lists+linux-kselftest@lfdr.de>; Fri,  6 Oct 2023 10:39:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231165AbjJFId3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 6 Oct 2023 04:33:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42248 "EHLO
+        id S231180AbjJFIjp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 6 Oct 2023 04:39:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230076AbjJFId2 (ORCPT
+        with ESMTP id S231136AbjJFIjp (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 6 Oct 2023 04:33:28 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 146DB83;
-        Fri,  6 Oct 2023 01:33:27 -0700 (PDT)
-Received: from [192.168.100.7] (unknown [39.34.184.141])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id DA7EE6612212;
-        Fri,  6 Oct 2023 09:33:23 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1696581205;
-        bh=B0KoqE5O/bPzO7yms7B1HC++2lsYZnDIX/VCD0yX2f4=;
-        h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-        b=PBOdEP0+hdTLeuud1StLfgQFkLt5/Y0N+gEPjQzyV4N3+v+tgLOjBEXrm2PT46UGo
-         A8tAbjWuO23n9rJATgzn5Km70ZNW7jUx2cB0bFZayk0FAKaTHqMDk8Xz2/MEgNNdKn
-         yw53URKIWz75Ca7fs/HoGC7AdKZra7Y0pYqcH6ogo3HLPJSpl6gEYIIRdwbrCurOzr
-         /xaKNA2eYHxqBm+j5sFAkswm+i5l0XeUARCnrk00ATouXfLmEghdaCO9moWCxpl81f
-         wNrSt8JdwAzpVbAqkXcOsyknhmp+24pWNvtYxbVubZiKYaNT+omSVhj1aHLfG0OZas
-         DXuRlJCl3UIRA==
-Message-ID: <1c0ce608-20a4-4b72-8d5e-5308e119959b@collabora.com>
-Date:   Fri, 6 Oct 2023 13:33:17 +0500
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        kernel@collabora.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/6] selftests: capabilities: remove duplicate unneeded
- defines
-Content-Language: en-US
-To:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+        Fri, 6 Oct 2023 04:39:45 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB0B393;
+        Fri,  6 Oct 2023 01:39:42 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-99357737980so332159866b.2;
+        Fri, 06 Oct 2023 01:39:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696581581; x=1697186381; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Vn7Qi+HY8GjmOyb6Lxc2nxB3hB8z+OBMeLaUb2Xph7E=;
+        b=lebrlE73Xpb9lliRZlsYq979kYVCMwa9JHO9WQItWoZHLk4Yw5WqEpB4NYwHXGIHdP
+         P3G10yX86aRN3HF8Cr4MDs8eBG03RHPJxHR2uv8YSgfhYA2VuGDJpry/20SIp3WUY1T5
+         h5sBMQMyyK51SD+iS5IyNp4AH4IPTAm6y4Jbb2hnOo80oyqDcBV//V+9sbbtzL6eizEn
+         r5TdPQffPX3mZupyXakAs/OpHuwDmVwB/1A7QmKkAXeca2NaooMpHKWlyj+arw6wVTSQ
+         EpBhR4NSyXTxzDtUeCvSD331njdkw3wymJsP2TlhooovY+pmxUlv/QCkNjU49K90aTOi
+         23kQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696581581; x=1697186381;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Vn7Qi+HY8GjmOyb6Lxc2nxB3hB8z+OBMeLaUb2Xph7E=;
+        b=E0Hzpebm2ox04WbBgVm+mA9rSgSg/dXuJDGaBItzTZl4WKibLSE2AL9rrBn0BNxD87
+         SDDzBIAIGXprHdOgsmoVrz9w9rt4p8JyfvdqXVQyQnIpN64dH0/D0mMuYQAAhYVCBDmb
+         gQrg0CuHdWzO+1/hXkr7pkE9ncL/mGNCZRn2xlbP1msI8Wa7oCBhigpGP/3G3BSm9WLp
+         fQJF48XgstCcRR8SUqBfQkpWWPWV48rYy1f6oXHpZwxy/wxON7ZD9AJto1JfUdGLOkIO
+         zBOayi2+KJPkafk13V0AcBhyhjCMP+wwRtKMrUaGiPRk5H0TndoF2YgUwpESLhTmOOjG
+         cz0w==
+X-Gm-Message-State: AOJu0Yx+Eq0c0KlJlvI1N2VyLtqE/31Cw/It28dYOCjnLKr1aTn/pv6s
+        74ZhHgwr01Tzx11PVicf89A=
+X-Google-Smtp-Source: AGHT+IHJtLZ21KkLtdxr9jpnW5HZ58MVC3B7Ri11QeI2zyTQ0rzF1nwjkGYHbiDcp130fMQ6PWYq+w==
+X-Received: by 2002:a17:906:518b:b0:9b2:b9a7:2a30 with SMTP id y11-20020a170906518b00b009b2b9a72a30mr6306662ejk.67.1696581581076;
+        Fri, 06 Oct 2023 01:39:41 -0700 (PDT)
+Received: from gmail.com (1F2EF530.nat.pool.telekom.hu. [31.46.245.48])
+        by smtp.gmail.com with ESMTPSA id i11-20020a170906a28b00b009737b8d47b6sm2477863ejz.203.2023.10.06.01.39.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Oct 2023 01:39:40 -0700 (PDT)
+Sender: Ingo Molnar <mingo.kernel.org@gmail.com>
+Date:   Fri, 6 Oct 2023 10:39:38 +0200
+From:   Ingo Molnar <mingo@kernel.org>
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        =?iso-8859-1?Q?Andr=E9?= Almeida <andrealmeid@igalia.com>,
+        Shuah Khan <shuah@kernel.org>, kernel@collabora.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 6/6] selftests: futex: remove duplicate unneeded defines
+Message-ID: <ZR/HypmZYM58IRj/@gmail.com>
 References: <20230805073809.1753462-1-usama.anjum@collabora.com>
- <95fc0e92-79ed-4748-a565-a82469d087f6@collabora.com>
- <9c0dae5b-a7ee-4399-abf3-883a5946f2f6@collabora.com>
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <9c0dae5b-a7ee-4399-abf3-883a5946f2f6@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+ <20230805073809.1753462-6-usama.anjum@collabora.com>
+ <ZRvU8DXRWL9sgKug@gmail.com>
+ <51273ffa-e323-44e8-8a93-bc04ee356df0@collabora.com>
+ <ZR8bn/UDLypbUhJT@gmail.com>
+ <b017f3e0-6682-401e-b20c-8264cd788d6f@collabora.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b017f3e0-6682-401e-b20c-8264cd788d6f@collabora.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 9/4/23 3:48 PM, Muhammad Usama Anjum wrote:
-> On 8/22/23 1:57 PM, Muhammad Usama Anjum wrote:
->> Hi Shuah,
->>
->> Christian Brauner had picked [PATCH 4/6]. Others are still not picked.
->> Please have a look.
-Shuah, I thought you had picked up these patches. But I'm unable to find
-them in the linux-next. I'll be re-sending 6th patch separately. Can you
-please pick up patch number 1, 2, 3 and 5 to your tree?
 
-Thanks
+* Muhammad Usama Anjum <usama.anjum@collabora.com> wrote:
 
-> Soft reminder
-> 
->>
->> Thanks,
->> Usama
->>
->> On 8/5/23 12:37 PM, Muhammad Usama Anjum wrote:
->>> These duplicate defines should automatically be picked up from kernel
->>> headers. Use KHDR_INCLUDES to add kernel header files.
->>>
->>> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
->>> ---
->>>  tools/testing/selftests/capabilities/Makefile       | 2 +-
->>>  tools/testing/selftests/capabilities/test_execve.c  | 8 --------
->>>  tools/testing/selftests/capabilities/validate_cap.c | 8 --------
->>>  3 files changed, 1 insertion(+), 17 deletions(-)
->>>
->>> diff --git a/tools/testing/selftests/capabilities/Makefile b/tools/testing/selftests/capabilities/Makefile
->>> index 6e9d98d457d5b..411ac098308f1 100644
->>> --- a/tools/testing/selftests/capabilities/Makefile
->>> +++ b/tools/testing/selftests/capabilities/Makefile
->>> @@ -2,7 +2,7 @@
->>>  TEST_GEN_FILES := validate_cap
->>>  TEST_GEN_PROGS := test_execve
->>>  
->>> -CFLAGS += -O2 -g -std=gnu99 -Wall
->>> +CFLAGS += -O2 -g -std=gnu99 -Wall $(KHDR_INCLUDES)
->>>  LDLIBS += -lcap-ng -lrt -ldl
->>>  
->>>  include ../lib.mk
->>> diff --git a/tools/testing/selftests/capabilities/test_execve.c b/tools/testing/selftests/capabilities/test_execve.c
->>> index df0ef02b40367..e3a352b020a79 100644
->>> --- a/tools/testing/selftests/capabilities/test_execve.c
->>> +++ b/tools/testing/selftests/capabilities/test_execve.c
->>> @@ -20,14 +20,6 @@
->>>  
->>>  #include "../kselftest.h"
->>>  
->>> -#ifndef PR_CAP_AMBIENT
->>> -#define PR_CAP_AMBIENT			47
->>> -# define PR_CAP_AMBIENT_IS_SET		1
->>> -# define PR_CAP_AMBIENT_RAISE		2
->>> -# define PR_CAP_AMBIENT_LOWER		3
->>> -# define PR_CAP_AMBIENT_CLEAR_ALL	4
->>> -#endif
->>> -
->>>  static int nerrs;
->>>  static pid_t mpid;	/*  main() pid is used to avoid duplicate test counts */
->>>  
->>> diff --git a/tools/testing/selftests/capabilities/validate_cap.c b/tools/testing/selftests/capabilities/validate_cap.c
->>> index cdfc94268fe6e..60b4e7b716a75 100644
->>> --- a/tools/testing/selftests/capabilities/validate_cap.c
->>> +++ b/tools/testing/selftests/capabilities/validate_cap.c
->>> @@ -9,14 +9,6 @@
->>>  
->>>  #include "../kselftest.h"
->>>  
->>> -#ifndef PR_CAP_AMBIENT
->>> -#define PR_CAP_AMBIENT			47
->>> -# define PR_CAP_AMBIENT_IS_SET		1
->>> -# define PR_CAP_AMBIENT_RAISE		2
->>> -# define PR_CAP_AMBIENT_LOWER		3
->>> -# define PR_CAP_AMBIENT_CLEAR_ALL	4
->>> -#endif
->>> -
->>>  #if __GLIBC__ > 2 || (__GLIBC__ == 2 && __GLIBC_MINOR__ >= 19)
->>>  # define HAVE_GETAUXVAL
->>>  #endif
->>
-> 
+> Sorry, so the working of the change-log isn't clear enough. I'll send the 
+> patch separately and with better wording.
 
--- 
-BR,
-Muhammad Usama Anjum
+Thank you!
+
+	Ingo
