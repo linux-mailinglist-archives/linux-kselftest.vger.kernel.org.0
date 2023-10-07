@@ -2,62 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A1BD7BC65F
-	for <lists+linux-kselftest@lfdr.de>; Sat,  7 Oct 2023 11:14:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 062C97BC665
+	for <lists+linux-kselftest@lfdr.de>; Sat,  7 Oct 2023 11:19:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbjJGJOS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 7 Oct 2023 05:14:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33946 "EHLO
+        id S232558AbjJGJTA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 7 Oct 2023 05:19:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234167AbjJGJOR (ORCPT
+        with ESMTP id S229757AbjJGJTA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 7 Oct 2023 05:14:17 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07CFBC
-        for <linux-kselftest@vger.kernel.org>; Sat,  7 Oct 2023 02:14:15 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-40662119cd0so22735e9.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 07 Oct 2023 02:14:15 -0700 (PDT)
+        Sat, 7 Oct 2023 05:19:00 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61037BF
+        for <linux-kselftest@vger.kernel.org>; Sat,  7 Oct 2023 02:18:58 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-4063bfc6c03so40315e9.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 07 Oct 2023 02:18:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696670054; x=1697274854; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1696670337; x=1697275137; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=3GaDRXRWcxuu5QjZRNL2N0HgC8HmFF9Iv9xnE2AuCXE=;
-        b=B73iIwewBxLjxqFGzSAqrvA69ex4uw9WCxkvZzvhpyDAPfglJ7OGSoffXDXEadAFYX
-         8nD/Bdae2telrCmBW47VUuglj9CmpoyEEHHEW6pa0i40+jXt1O0kfOMg2Xd4kNKm2xnt
-         0JvWv5cXggMi37XfHFkPG6E3T8RnsfTnz1Abjecpci77v7g6HvXn1pYytGaEGNA6RqIE
-         6jekM7D/6ERF+B3vil5CE8jv7sx4ZkPzvg8YxDoYUeMZCddvCZF3MRX4BGyqH9jaj+pJ
-         MUR+8eGrP0Pm6lJkkUEFW56NYtXFQD923MR51Xc2ldtgUxQqo0mvTSgE6emyZ5e5PyO/
-         zccw==
+        bh=oDrWRofpCVnidHuLeVHXmO/1YM2DEmHjwMRa5DQBOAU=;
+        b=G4255i8z05EBISAvgVgRbbqTEMtLW6QXWZX57KHeWkmgDxmVr6WZWSTW2C8fGNCxps
+         Y1KCmXpO/Vs4rLX62sg5/MJVSpGZtMFYdbI8U30RszDbzk/PqEStKuP7qrK/ZJ/EDqrr
+         A9u86yMqi235qQ9Cckve4ZcQfr2EKx4P0nfj3mi7z9Hufv2Q7+UnM2GaibJdcfjzKVuQ
+         yLE28k+I+S9YbUzzJ5mqAFaegUqDHLXtSJgLoNt8slJmsHEWTJJwqg0tLJBEjw6JkIkR
+         r/XL8mnGf7LYMhLwnNkAeNinxdUM40pWltlctMQwSfHNoEwArrgaEyg8ONCcsY0LqVqv
+         vmUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696670054; x=1697274854;
+        d=1e100.net; s=20230601; t=1696670337; x=1697275137;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=3GaDRXRWcxuu5QjZRNL2N0HgC8HmFF9Iv9xnE2AuCXE=;
-        b=bMg9C0szy87FA6vJce6czBZ2eD8BQ7pwYMeV5hMwoWSgGuR7IcKALf/N+v+lJc7UG3
-         6ge+YFHb0LTC+VwKiNDC47WxtBwevAS00NZOEKCjkprPcozLfcW4iSW/7hv8K2EiY8aM
-         R6Ol7fIE9mPwQFPZNzXUHkeaBDJ5NKcI9B0cAYmILUKKjfan3Qnjbyo1fWi7cimvgHCK
-         YixVNaeT8hspVxi2xid1jqGNtJLINwRR1ovJ7/sxMAd+1guyMBXhqX8H9ALlFQ2+/atc
-         mH8UL08QKC6rg0FNh1BH9akNzVlzq7/HnvB1H0HXLIzT3axuuRtiV1UpX8WqE9SaAo0d
-         7wGg==
-X-Gm-Message-State: AOJu0YxowAovgx4uq+Gq+g51ONiEFcXpJBiMuD84qLAcf50OrJD7g36f
-        SnWjXgV+o9aAj9qK0oMR72r8ZYaxPmnoi2ZSUIiSCw==
-X-Google-Smtp-Source: AGHT+IGhWSSF7SngKDWyfv2Z0sy5ARW1GXjPjxIJiGQ2iGnilCQHzimluoHoHr6nj8ef8XgQCGhBJW++ENj2ti6YM5w=
-X-Received: by 2002:a05:600c:3414:b0:3f4:fb7:48d4 with SMTP id
- y20-20020a05600c341400b003f40fb748d4mr238386wmp.3.1696670054234; Sat, 07 Oct
- 2023 02:14:14 -0700 (PDT)
+        bh=oDrWRofpCVnidHuLeVHXmO/1YM2DEmHjwMRa5DQBOAU=;
+        b=bDfIOejsyEKEaxvM7ULiSqKvPpM0c/kq/lbQGWAhmljPYsT0z1cQH7YmtrY6rtHm0Z
+         yWc+1H9yq9BSOtYq1jQ1UoYL1c6xYA2IZphkgJTfCBS1S6JSBf1ah77vZBR915tjPg+U
+         1fN+Poiz8iSd6OLZkSMojRqkcmJzIiC2+xXC8No/kt0UcwqrmyvLQClZYJyLEdRMerz3
+         KKfux+chKx8e8S3FEGC6qcsioK38I/Bi/o1EzZ57A6JCtKS3gj25wX/NNFJJakaSqjlt
+         jBwfmjDBFrzzAb+RiCWhiiPlKDWJZGBFnH+XczPa7ZZ47OGYhlw5oItwOLb3lTMaRWlJ
+         5zaA==
+X-Gm-Message-State: AOJu0Yyz4suVHBDE8CRJIM4gnFE0gL039mqn5J88vuzfTUrUfsYRi7TN
+        r/veEca2iESUniDW3JOxmmrR2BkJ7NEE/nqinayC2A==
+X-Google-Smtp-Source: AGHT+IH39YxRUWWTlcQJ6yPBbb8VCIaOaQZbd/NpKrMcLKUj/qTn3VZjdnKje1LzMfToZuZAeV/8bf0U3UCaaykcT2U=
+X-Received: by 2002:a05:600c:3b8f:b0:3fe:e9ea:9653 with SMTP id
+ n15-20020a05600c3b8f00b003fee9ea9653mr242570wms.4.1696670336704; Sat, 07 Oct
+ 2023 02:18:56 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230925175733.1379-1-michal.wajdeczko@intel.com> <20230925175733.1379-2-michal.wajdeczko@intel.com>
-In-Reply-To: <20230925175733.1379-2-michal.wajdeczko@intel.com>
+References: <20230925175733.1379-1-michal.wajdeczko@intel.com> <20230925175733.1379-3-michal.wajdeczko@intel.com>
+In-Reply-To: <20230925175733.1379-3-michal.wajdeczko@intel.com>
 From:   David Gow <davidgow@google.com>
-Date:   Sat, 7 Oct 2023 17:14:02 +0800
-Message-ID: <CABVgOS=TkwtRua40hgog1nBGT5=veUiHjX_1LM3T2eL670x_tw@mail.gmail.com>
-Subject: Re: [PATCH 1/4] kunit: Drop redundant text from suite init failure message
+Date:   Sat, 7 Oct 2023 17:18:41 +0800
+Message-ID: <CABVgOSmwxdw4h4GBnJ0iB=0BzrQCR=rOLBFvFmwUTPaKrSxjbA@mail.gmail.com>
+Subject: Re: [PATCH 2/4] kunit: Fix indentation level of suite messages
 To:     Michal Wajdeczko <michal.wajdeczko@intel.com>
 Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
         Rae Moar <rmoar@google.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000e6aa7c06071cc7c2"
+        boundary="000000000000bf0fff06071cd89f"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
@@ -69,30 +69,17 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---000000000000e6aa7c06071cc7c2
+--000000000000bf0fff06071cd89f
 Content-Type: text/plain; charset="UTF-8"
 
 On Tue, 26 Sept 2023 at 01:58, Michal Wajdeczko
 <michal.wajdeczko@intel.com> wrote:
 >
-> If a suite initialization fails, then our diagnostic message
-> will include redundant indent and hash sign as all this was
-> already added by the kunit_printk() used by kunit_err() macro.
+> A kunit suite is a top level test from the KTAP point of view but
+> all suite diagnostic messages are printed at the subtest level:
 >
-> This could be easily seen if we force some error in our example
-> test by modyfing example_test_init_suite() and running:
->
-> $ ./tools/testing/kunit/kunit.py run --raw_output \
->         --kunitconfig ./lib/kunit/.kunitconfig "example.*"
->
->     KTAP version 1
->     1..1
->         # example: initializing suite
->         # example:     # failed to initialize (-19)
->     not ok 1 example
->
-> Fix that and while around improve error code reporting by using
-> error pointer format %pe that gives more user friendly output:
+>     $ ./tools/testing/kunit/kunit.py run --raw_output \
+>         --kunitconfig ./lib/kunit/.kunitconfig "example.*simple*"
 >
 >     KTAP version 1
 >     1..1
@@ -100,42 +87,136 @@ On Tue, 26 Sept 2023 at 01:58, Michal Wajdeczko
 >         # example: failed to initialize (-ENODEV)
 >     not ok 1 example
 >
+>     KTAP version 1
+>     1..1
+>         # example: initializing suite
+>         KTAP version 1
+>         # Subtest: example
+>         # module: kunit_example_test
+>         1..1
+>         # example_simple_test: initializing
+>         # example_simple_test: cleaning up
+>         ok 1 example_simple_test
+>         # example: exiting suite
+>     ok 1 example
+>
+> Replace hardcoded indent in kunit_printk() with flexible
+> indentation based on the argument type (test or suite):
+>
+>     KTAP version 1
+>     1..1
+>     # example: initializing suite
+>     # example: failed to initialize (-ENODEV)
+>     not ok 1 example
+>
+>     KTAP version 1
+>     1..1
+>     # example: initializing suite
+>         KTAP version 1
+>         # Subtest: example
+>         # module: kunit_example_test
+>         1..1
+>         # example_simple_test: initializing
+>         # example_simple_test: cleaning up
+>         ok 1 example_simple_test
+>     # example: exiting suite
+>     ok 1 example
+>
 > Signed-off-by: Michal Wajdeczko <michal.wajdeczko@intel.com>
 > Cc: David Gow <davidgow@google.com>
 > Cc: Rae Moar <rmoar@google.com>
 > ---
 
-Nice catch!
+I think this is looking pretty good overall. It'll need rebasing on
+the current kselftest/kunit branch, though.
 
-Reviewed-by: David Gow <davidgow@google.com>
+As Rae points out, some of this will probably need reworking if we
+start to support more arbitrary nesting. Equally, we probably need a
+name for the 'top level' container (of which suites are effectively
+subtests). To add to the name bikeshedding, while 'executor' works
+well enough, I think the (K)TAP spec refers to this as the 'test
+document'. Is that right, Rae?
 
-Cheers,
--- David
-
-
->  lib/kunit/test.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>  include/kunit/test.h | 24 ++++++++++++++++++++++--
+>  lib/kunit/test.c     |  7 -------
+>  2 files changed, 22 insertions(+), 9 deletions(-)
 >
+> diff --git a/include/kunit/test.h b/include/kunit/test.h
+> index 20ed9f9275c9..158876c4cb43 100644
+> --- a/include/kunit/test.h
+> +++ b/include/kunit/test.h
+> @@ -509,6 +509,21 @@ void __printf(2, 3) kunit_log_append(struct string_stream *log, const char *fmt,
+>                 kunit_try_catch_throw(&((test_or_suite)->try_catch));   \
+>         } while (0)
+>
+> +/* Currently supported test levels */
+> +enum {
+> +       KUNIT_LEVEL_SUITE = 0,
+> +       KUNIT_LEVEL_CASE,
+> +       KUNIT_LEVEL_CASE_PARAM,
+> +};
+> +
+> +#define kunit_level(test_or_suite)                                     \
+> +       _Generic((test_or_suite),                                       \
+> +                struct kunit_suite * : KUNIT_LEVEL_SUITE,              \
+> +                struct kunit * : KUNIT_LEVEL_CASE)
+> +
+> +#define kunit_indent_level(test_or_suite)                              \
+> +       (KUNIT_INDENT_LEN * kunit_level(test_or_suite))
+> +
+
+This looks good to me. I like the use of _Generic() -- I suspect there
+might be one or two other places in the KUnit code it could be useful
+in the future.
+
+I don't think we need to handle kunit_case here: once a test is
+actually being run (and therefore able to log anything), it's already
+got a struct kunit*.
+
+
+>  /*
+>   * printk and log to per-test or per-suite log buffer.  Logging only done
+>   * if CONFIG_KUNIT_DEBUGFS is 'y'; if it is 'n', no log is allocated/used.
+> @@ -520,9 +535,14 @@ void __printf(2, 3) kunit_log_append(struct string_stream *log, const char *fmt,
+>                                  ##__VA_ARGS__);                        \
+>         } while (0)
+>
+> +#define kunit_log_indent(lvl, test_or_suite, fmt, ...)                 \
+> +       kunit_log(lvl, test_or_suite, "%*s" fmt,                        \
+> +                 kunit_indent_level(test_or_suite), "",                \
+> +                 ##__VA_ARGS__)
+> +
+>  #define kunit_printk(lvl, test, fmt, ...)                              \
+> -       kunit_log(lvl, test, KUNIT_SUBTEST_INDENT "# %s: " fmt,         \
+> -                 (test)->name, ##__VA_ARGS__)
+> +       kunit_log_indent(lvl, test, "# %s: " fmt,                       \
+> +                        (test)->name, ##__VA_ARGS__)
+>
+>  /**
+>   * kunit_info() - Prints an INFO level message associated with @test.
 > diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> index f2eb71f1a66c..fb5981ce578d 100644
+> index fb5981ce578d..d10e6d610e20 100644
 > --- a/lib/kunit/test.c
 > +++ b/lib/kunit/test.c
-> @@ -568,8 +568,8 @@ int kunit_run_tests(struct kunit_suite *suite)
->         if (suite->suite_init) {
->                 suite->suite_init_err = suite->suite_init(suite);
->                 if (suite->suite_init_err) {
-> -                       kunit_err(suite, KUNIT_SUBTEST_INDENT
-> -                                 "# failed to initialize (%d)", suite->suite_init_err);
-> +                       kunit_err(suite, "failed to initialize (%pe)",
-> +                                 ERR_PTR(suite->suite_init_err));
->                         goto suite_end;
->                 }
->         }
+> @@ -135,13 +135,6 @@ size_t kunit_suite_num_test_cases(struct kunit_suite *suite)
+>  }
+>  EXPORT_SYMBOL_GPL(kunit_suite_num_test_cases);
+>
+> -/* Currently supported test levels */
+> -enum {
+> -       KUNIT_LEVEL_SUITE = 0,
+> -       KUNIT_LEVEL_CASE,
+> -       KUNIT_LEVEL_CASE_PARAM,
+> -};
+> -
+>  static void kunit_print_suite_start(struct kunit_suite *suite)
+>  {
+>         /*
 > --
 > 2.25.1
 >
 
---000000000000e6aa7c06071cc7c2
+--000000000000bf0fff06071cd89f
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -202,14 +283,14 @@ impZAng7ccvvK09K3ZuhwTIxJMsPXCZYsrXWORTw5sczRAP6XvKbPBJnsJoSTe5dFBPBHOQJOGhU
 qWfEfWnWMJPF3LxSGLpLFQXO3RwQqmxv08avwXfVPouh1xuB3FX7rpDabT8YDhu9JgIZkLEKko7L
 yQt6zWwng7k8YF/jGbiAta6VMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCC6
-EIg1nEWx5CHOIIsfswQUYKxJ4Xo9K/+GigK70+hZfTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzEwMDcwOTE0MTRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAa
+SG0Wr4xRc72L1THCO13PGInOwF4UwapZQgAoW02QBTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzEwMDcwOTE4NTdaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAgr9mtXZonl0xm19NDMj3
-5Fzl/PQTJajc9zohbypZruiuxZZnJ19Zou/J+/rvd1B0DkSZCuKbUbd9j0gE3gYmjiWmUEBjwqv8
-sdaGROvebhRiYEYgzmpXPs61A3jiSeYIj9sMSahsMQRPJRf7AykQlqO/CRkTcVp/TK81Mj+UW2kO
-goP+CwP9BX13gt1cDcFm4xjftbMgQOdjG6rrB4u9q7vVi/CxV9SaRJsrkP+lUioP+tKNgol0D5eR
-6m9B8EnMsJyVfDvHdjpuzPoJOa8EmBM/u5Pl1qHo/SjGzRFXHp3PJP+ShPjK9FIsWFZRsl5u8ERq
-GZ0yizcmHyq5ZxF8jA==
---000000000000e6aa7c06071cc7c2--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAT5zIR2Q3y8W9iTl7H7Oq
+0yKK5kZS9qKyPGsNVCgZczbxsIlDmOPKgRGrztOOWvp7aZ/NzKB5od+Dec/SsK/9TGoF20jp2qfm
+/P/bGvmG2TxyjSFmFjsEyOvCoyHghwSajf+sNMyy5I3wNbxo+s+2jB5j03wmNW4qugNhsRLCSp8d
+phh7jIyH1EHY4cHyVAFUR5+/E8873tMpDfOTu4LzR9a1ZnmWEy1vfv0M0GIUUbYho0AWFl3pEaod
+cU2X3/0EYlxDq3cl/I3DAbqKRM1wFV7fQyRqDIF2X1kiFeVWwZAM9Hq8JGIXPF/GslAVnetd83X0
+7oOeMIuNkXGnoIGpwg==
+--000000000000bf0fff06071cd89f--
