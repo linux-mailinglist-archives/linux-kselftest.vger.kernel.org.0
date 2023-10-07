@@ -2,64 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10F8E7BC65E
-	for <lists+linux-kselftest@lfdr.de>; Sat,  7 Oct 2023 11:14:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A1BD7BC65F
+	for <lists+linux-kselftest@lfdr.de>; Sat,  7 Oct 2023 11:14:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234164AbjJGJON (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 7 Oct 2023 05:14:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56240 "EHLO
+        id S229757AbjJGJOS (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 7 Oct 2023 05:14:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbjJGJOM (ORCPT
+        with ESMTP id S234167AbjJGJOR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 7 Oct 2023 05:14:12 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D8EB9
-        for <linux-kselftest@vger.kernel.org>; Sat,  7 Oct 2023 02:14:11 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-4053f24c900so23205e9.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 07 Oct 2023 02:14:11 -0700 (PDT)
+        Sat, 7 Oct 2023 05:14:17 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C07CFBC
+        for <linux-kselftest@vger.kernel.org>; Sat,  7 Oct 2023 02:14:15 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-40662119cd0so22735e9.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 07 Oct 2023 02:14:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696670050; x=1697274850; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1696670054; x=1697274854; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=GtK8odGjbOVHYY+Xok+8TgiA1aXPluw7HxWyIj8DzCk=;
-        b=aCQ+UIEYRmdZt7ihCqFe427EXXxjBFlktIDHarmz612JmPXam54m2C369g7UTvvX1r
-         kEtR48WKzccR8LqobC4B8WgEEAaek4lKZNT87wUbi62UBE3KPtJQOo+OapkPv7eQDmX0
-         3jj3hR5GpD2YmbWUotq3goOL9QtE0/TfDRbGBUk/T9ihLbHkYQuC99DmE34GknFV8n/A
-         eOPeWrADHWTEB9lIknxmtikvBmVLAVjBTd6W4SlZPm1kpnsnpVOU1BBHHOskhaFYFSK8
-         Zad/5BGN66u/KtjVufc0anAGSPloOovAY4KWngAYlvikEQqwaMZGk6vxzUtqNcHSreQK
-         okug==
+        bh=3GaDRXRWcxuu5QjZRNL2N0HgC8HmFF9Iv9xnE2AuCXE=;
+        b=B73iIwewBxLjxqFGzSAqrvA69ex4uw9WCxkvZzvhpyDAPfglJ7OGSoffXDXEadAFYX
+         8nD/Bdae2telrCmBW47VUuglj9CmpoyEEHHEW6pa0i40+jXt1O0kfOMg2Xd4kNKm2xnt
+         0JvWv5cXggMi37XfHFkPG6E3T8RnsfTnz1Abjecpci77v7g6HvXn1pYytGaEGNA6RqIE
+         6jekM7D/6ERF+B3vil5CE8jv7sx4ZkPzvg8YxDoYUeMZCddvCZF3MRX4BGyqH9jaj+pJ
+         MUR+8eGrP0Pm6lJkkUEFW56NYtXFQD923MR51Xc2ldtgUxQqo0mvTSgE6emyZ5e5PyO/
+         zccw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696670050; x=1697274850;
+        d=1e100.net; s=20230601; t=1696670054; x=1697274854;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=GtK8odGjbOVHYY+Xok+8TgiA1aXPluw7HxWyIj8DzCk=;
-        b=uNx2WE0SDizbJ3wvP4ukhTt2iMz4Vl5BhKh+OSp53qAlzW2ug4+ireDJPJgsgCZvC9
-         scQsnzQt+DVYLVORAYnvibkmouSoFxSa1AnRrIySjIGGP+w8FCe5OycrbWA07ZNDRtku
-         qkmAnjVugqPviSj3WjSXdsPHh/UmdUJsf5zcgY580sjvQ1t5lJ4/M9rVuJuMTCcGvkY4
-         E17czuF7Akd989OKaji+nL8praZKmtdN0hYMUgji6I9Ymbk92NqMjCSyljhsSLOeg7Eb
-         79m/OqoeghvRCY4IT74YhoO7FldoC/xJLmtElpXJOTo+U9E3XIsc4jzn0TkswB0ItpCl
-         kyNg==
-X-Gm-Message-State: AOJu0Yx4h0NTWa5ynPPAgrGI5MBWXgv08Y4ksYNGkvN5pZOsx91sMc1h
-        hTr97GKvDA2HznjnsFYukHp18DtHrOfM9otjtaUmaQ==
-X-Google-Smtp-Source: AGHT+IFk9ixRvMJ8hcSwY+SG2LWnK+meGNUgF/XXA9tamWtwiC+Ru0d6qSS3+1LXK+cQgsvlgbxChxJDZ7+n/or8h+M=
-X-Received: by 2002:a05:600c:2182:b0:404:7462:1f87 with SMTP id
- e2-20020a05600c218200b0040474621f87mr245670wme.6.1696670049821; Sat, 07 Oct
- 2023 02:14:09 -0700 (PDT)
+        bh=3GaDRXRWcxuu5QjZRNL2N0HgC8HmFF9Iv9xnE2AuCXE=;
+        b=bMg9C0szy87FA6vJce6czBZ2eD8BQ7pwYMeV5hMwoWSgGuR7IcKALf/N+v+lJc7UG3
+         6ge+YFHb0LTC+VwKiNDC47WxtBwevAS00NZOEKCjkprPcozLfcW4iSW/7hv8K2EiY8aM
+         R6Ol7fIE9mPwQFPZNzXUHkeaBDJ5NKcI9B0cAYmILUKKjfan3Qnjbyo1fWi7cimvgHCK
+         YixVNaeT8hspVxi2xid1jqGNtJLINwRR1ovJ7/sxMAd+1guyMBXhqX8H9ALlFQ2+/atc
+         mH8UL08QKC6rg0FNh1BH9akNzVlzq7/HnvB1H0HXLIzT3axuuRtiV1UpX8WqE9SaAo0d
+         7wGg==
+X-Gm-Message-State: AOJu0YxowAovgx4uq+Gq+g51ONiEFcXpJBiMuD84qLAcf50OrJD7g36f
+        SnWjXgV+o9aAj9qK0oMR72r8ZYaxPmnoi2ZSUIiSCw==
+X-Google-Smtp-Source: AGHT+IGhWSSF7SngKDWyfv2Z0sy5ARW1GXjPjxIJiGQ2iGnilCQHzimluoHoHr6nj8ef8XgQCGhBJW++ENj2ti6YM5w=
+X-Received: by 2002:a05:600c:3414:b0:3f4:fb7:48d4 with SMTP id
+ y20-20020a05600c341400b003f40fb748d4mr238386wmp.3.1696670054234; Sat, 07 Oct
+ 2023 02:14:14 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230925175733.1379-1-michal.wajdeczko@intel.com>
- <20230925175733.1379-5-michal.wajdeczko@intel.com> <CA+GJov4o9ixrbSma-9SABH4n88AXFD=nDG6+C=wfVVMgzLoprA@mail.gmail.com>
- <80c0f713-662a-9cdb-e430-88c854ab2192@intel.com>
-In-Reply-To: <80c0f713-662a-9cdb-e430-88c854ab2192@intel.com>
+References: <20230925175733.1379-1-michal.wajdeczko@intel.com> <20230925175733.1379-2-michal.wajdeczko@intel.com>
+In-Reply-To: <20230925175733.1379-2-michal.wajdeczko@intel.com>
 From:   David Gow <davidgow@google.com>
-Date:   Sat, 7 Oct 2023 17:13:58 +0800
-Message-ID: <CABVgOSnWk69_QO1ec3H698asAGvBBigVOD428u1H0Rckt188rA@mail.gmail.com>
-Subject: Re: [PATCH 4/4] kunit: Prepare test plan for parameterized subtests
+Date:   Sat, 7 Oct 2023 17:14:02 +0800
+Message-ID: <CABVgOS=TkwtRua40hgog1nBGT5=veUiHjX_1LM3T2eL670x_tw@mail.gmail.com>
+Subject: Re: [PATCH 1/4] kunit: Drop redundant text from suite init failure message
 To:     Michal Wajdeczko <michal.wajdeczko@intel.com>
-Cc:     Rae Moar <rmoar@google.com>, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com
+Cc:     linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        Rae Moar <rmoar@google.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="000000000000a6185c06071cc7ee"
+        boundary="000000000000e6aa7c06071cc7c2"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
@@ -71,76 +69,73 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---000000000000a6185c06071cc7ee
+--000000000000e6aa7c06071cc7c2
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, 2 Oct 2023 at 21:55, Michal Wajdeczko
+On Tue, 26 Sept 2023 at 01:58, Michal Wajdeczko
 <michal.wajdeczko@intel.com> wrote:
 >
+> If a suite initialization fails, then our diagnostic message
+> will include redundant indent and hash sign as all this was
+> already added by the kunit_printk() used by kunit_err() macro.
 >
+> This could be easily seen if we force some error in our example
+> test by modyfing example_test_init_suite() and running:
 >
-> On 28.09.2023 22:54, Rae Moar wrote:
-> > On Mon, Sep 25, 2023 at 1:58=E2=80=AFPM Michal Wajdeczko
-> > <michal.wajdeczko@intel.com> wrote:
-> >>
-> >> In case of parameterized tests we are not providing a test plan
-> >> so we can't detect if any result is missing.
-> >>
-> >> Count available params using the same generator as during a test
-> >> execution
-> >>
-> >> Signed-off-by: Michal Wajdeczko <michal.wajdeczko@intel.com>
-> >> Cc: David Gow <davidgow@google.com>
-> >> Cc: Rae Moar <rmoar@google.com>
-> >> ---
-
-<...snip...>
-
-> >
-> > Hello!
-> >
-> > This change largely looks good to me. However, I am not 100 percent
-> > confident that the function to generate parameters always produces the
-> > same output (or same number of test cases). I would be interested in
-> > David's opinion on this.
+> $ ./tools/testing/kunit/kunit.py run --raw_output \
+>         --kunitconfig ./lib/kunit/.kunitconfig "example.*"
 >
-> Right, it's not explicitly specified in KUNIT_CASE_PARAM nor
-> test_case.generate_params documentation, but I would assume that while
-> generating different output could be fine (and harmless to this patch),
-> like based on a random seed, but IMO at the same time it should be
-> prohibited to generate different number of params, as this would make
-> harder to compare each execution for regression.
-
-There are definitely some valid cases for parameterised tests to
-generate different numbers of tests in different configs /
-environments (e.g., there are some where the number of parameters
-depends on the number of CPUs). That being said, it shouldn't be a
-problem in a relatively standard test environment with any of the
-tests we currently have.
-
-Some of these issues can be got around by having tests be generated
-regardless, but having those tests be skipped if required.
-
+>     KTAP version 1
+>     1..1
+>         # example: initializing suite
+>         # example:     # failed to initialize (-19)
+>     not ok 1 example
 >
-> Alternatively we can introduce some flag to indicate whether provided
-> param generator is stable or not and then provide test plan only for the
-> former.
+> Fix that and while around improve error code reporting by using
+> error pointer format %pe that gives more user friendly output:
+>
+>     KTAP version 1
+>     1..1
+>         # example: initializing suite
+>         # example: failed to initialize (-ENODEV)
+>     not ok 1 example
+>
+> Signed-off-by: Michal Wajdeczko <michal.wajdeczko@intel.com>
+> Cc: David Gow <davidgow@google.com>
+> Cc: Rae Moar <rmoar@google.com>
+> ---
 
-I think this sounds like a good idea, and a use for the KUnit
-attributes system. I'd thought that a 'deterministic' attribute would
-make sense, but it may make sense to split it into a 'deterministic'
-and 'fixed structure' flag (the latter only requiring that the number,
-order, names, etc of tests and subtests be the same).
+Nice catch!
 
-There have been a couple of people asking for a feature to
-deliberately randomise test ordering, too. We'd want to clear these
-flags if that's in use.
-Of course, ideally anyone doing regression testing would be able to
-use the test/parameter name/description instead of test number, so
-ordering of tests shouldn't matter unless tests were buggy.
+Reviewed-by: David Gow <davidgow@google.com>
 
---000000000000a6185c06071cc7ee
+Cheers,
+-- David
+
+
+>  lib/kunit/test.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> index f2eb71f1a66c..fb5981ce578d 100644
+> --- a/lib/kunit/test.c
+> +++ b/lib/kunit/test.c
+> @@ -568,8 +568,8 @@ int kunit_run_tests(struct kunit_suite *suite)
+>         if (suite->suite_init) {
+>                 suite->suite_init_err = suite->suite_init(suite);
+>                 if (suite->suite_init_err) {
+> -                       kunit_err(suite, KUNIT_SUBTEST_INDENT
+> -                                 "# failed to initialize (%d)", suite->suite_init_err);
+> +                       kunit_err(suite, "failed to initialize (%pe)",
+> +                                 ERR_PTR(suite->suite_init_err));
+>                         goto suite_end;
+>                 }
+>         }
+> --
+> 2.25.1
+>
+
+--000000000000e6aa7c06071cc7c2
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -207,14 +202,14 @@ impZAng7ccvvK09K3ZuhwTIxJMsPXCZYsrXWORTw5sczRAP6XvKbPBJnsJoSTe5dFBPBHOQJOGhU
 qWfEfWnWMJPF3LxSGLpLFQXO3RwQqmxv08avwXfVPouh1xuB3FX7rpDabT8YDhu9JgIZkLEKko7L
 yQt6zWwng7k8YF/jGbiAta6VMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBs
-XtrZlss9IfwGzntRLXQ/v4VCH7pW1Pp+Nhdzu5dRgDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzEwMDcwOTE0MTBaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCC6
+EIg1nEWx5CHOIIsfswQUYKxJ4Xo9K/+GigK70+hZfTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzEwMDcwOTE0MTRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAkh0mH0nC3A1IwU9A9bcR
-4nhijR5OKglzcUP9XTFreuNew95CqS8mWf0AaOpEAS/jnTfWnN2SHSdGnaGP1xdZf0ivJWKtlKkM
-0IAeCOdRkuOtLjhmb11uG0ASRefTEviQ5NGMGFEMrmLPqKcYsg1Wlh9FEqYctwPJcGahNiOA4LV0
-WW3TmDFuXh6r/Frf/X7oq77mZHXZxIsK2kY5Y+uq4K6WL/x2uc8OI0Yi5bSmiaCRyFKWKSCzSc/s
-COuNWQDMuAmU1FlJoQCSYumldFw+mvvYuONuZsOYMPnrZ+1SGRvUYcWwNQlctFlQWzXzVZUD0etD
-yW52hmrNY2EHMT8rrw==
---000000000000a6185c06071cc7ee--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAgr9mtXZonl0xm19NDMj3
+5Fzl/PQTJajc9zohbypZruiuxZZnJ19Zou/J+/rvd1B0DkSZCuKbUbd9j0gE3gYmjiWmUEBjwqv8
+sdaGROvebhRiYEYgzmpXPs61A3jiSeYIj9sMSahsMQRPJRf7AykQlqO/CRkTcVp/TK81Mj+UW2kO
+goP+CwP9BX13gt1cDcFm4xjftbMgQOdjG6rrB4u9q7vVi/CxV9SaRJsrkP+lUioP+tKNgol0D5eR
+6m9B8EnMsJyVfDvHdjpuzPoJOa8EmBM/u5Pl1qHo/SjGzRFXHp3PJP+ShPjK9FIsWFZRsl5u8ERq
+GZ0yizcmHyq5ZxF8jA==
+--000000000000e6aa7c06071cc7c2--
