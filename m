@@ -2,174 +2,107 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DC217BCF30
-	for <lists+linux-kselftest@lfdr.de>; Sun,  8 Oct 2023 17:49:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ABA8B7BCF96
+	for <lists+linux-kselftest@lfdr.de>; Sun,  8 Oct 2023 20:37:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344919AbjJHPte (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 8 Oct 2023 11:49:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46874 "EHLO
+        id S234257AbjJHShf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 8 Oct 2023 14:37:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344920AbjJHPtd (ORCPT
+        with ESMTP id S229945AbjJHShf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 8 Oct 2023 11:49:33 -0400
-X-Greylist: delayed 573 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 08 Oct 2023 08:49:31 PDT
-Received: from out-200.mta1.migadu.com (out-200.mta1.migadu.com [95.215.58.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C187EC5
-        for <linux-kselftest@vger.kernel.org>; Sun,  8 Oct 2023 08:49:31 -0700 (PDT)
-Date:   Sun, 8 Oct 2023 08:39:46 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1696779593;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QEqs1Sw8E7P0dy9p9WLRazNx8byzw02+pGjh+FjuPzI=;
-        b=ODSESEx1Ssd5JrDmbh0EXH1OGEyKJZlGJp4qFMxwqj7mA30oo3dR66TjnTDl1DeCX9wXKk
-        Si5n5Q8FgZjVIBLM7aGALdzS9U7EqPpy0N0ZJ/m0vWsyry0FKOKtH9483C34GWNcOodHb8
-        HkN0s1pUmwwfnsCNoPQ62uoUll2+fEY=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>, lkft-triage@lists.linaro.org,
-        Lucas Karpinski <lkarpins@redhat.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Shuah Khan <shuah@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Dan Carpenter <dan.carpenter@linaro.org>
-Subject: Re: selftests: cgroup: test_core - Unable to handle kernel NULL
- pointer dereference at virtual address
-Message-ID: <ZSLNQjzoYcLq1hEo@P9FQF9L96D>
-References: <CA+G9fYsJA4fkLCDdXfCdjqJz3q3K0TErgKjypuLmPZ=EU3MbDg@mail.gmail.com>
+        Sun, 8 Oct 2023 14:37:35 -0400
+Received: from mail-vk1-xa29.google.com (mail-vk1-xa29.google.com [IPv6:2607:f8b0:4864:20::a29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6230AC;
+        Sun,  8 Oct 2023 11:37:33 -0700 (PDT)
+Received: by mail-vk1-xa29.google.com with SMTP id 71dfb90a1353d-49618e09f16so1256513e0c.2;
+        Sun, 08 Oct 2023 11:37:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1696790253; x=1697395053; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XeJ1AX0Emm0B1MNXW9ufDQ+zSWl6WDvAagaRLQUTatk=;
+        b=bw2CaHJV30W1P8hD9Sxix6Raciuwqe4hW0Uk0mlEYlzd4OnuO5uc7GuIHkz0hbHfTK
+         RQNJ7ycAjlpUYPmJ7Zp4Vo6l/OEQfi1YZkMhxrDvsNUL6B5C6GdunbC/oAcekOHT/AIO
+         RT+yUssx6Vta3fHXs+lPFlhJ5PIZtHmw7Fj7/hicQDhLH7xSJyLZXBX7Twj2ZIzm08Xp
+         XvnSmZZG5yoXH+BiOry4Pzc/k1Dq3tdrCIm21aw4kTB7pR1B91fzk/s9sUZGhDtoUVre
+         i3g8QculUQYsY7ufD/DfMtzkzPBGw3IMo9OKizsufXdIasJuD8Z0y1K0EzMp/PQrhNuH
+         ziGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696790253; x=1697395053;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XeJ1AX0Emm0B1MNXW9ufDQ+zSWl6WDvAagaRLQUTatk=;
+        b=wD3nZzd6qpSJKuO+gHs5SSVQPdeZLT8WTQRqz57JgzF3OkHlXF2tJZS4DPDBbAAn6N
+         lshIHjgGFM6mU9ol6e0j7S0wO27xQQ7xPAx3iwkb3+Zj0nWfbmV6jLXk0FI6aWfaAQZ4
+         WhtnG4+IIQpxe0tMlv4V/E1vE+QJ/0ryp+XOctTn2vxf2AOcnpzK4F5AJMuXG24DQga/
+         /hQRx3P8LyaE0+qQ/rIDGAYaWXDpmfSnzpyAoIgORaVUY57LKpOulF46onLPniZvoDYj
+         vy1XKWwMxBQM3zbY2eGOHMlkJjfJ4e5SEQ0eCyh8Az3QIfnmFD38YLExsmie7SDWaX8E
+         cHIA==
+X-Gm-Message-State: AOJu0Yy6D2HJI+U6iNnEEBUaFx6vEJV446fVJ30B9k5ikROq8oJBMw8r
+        240EpahogR6axyPvsHI7f/2yo91KyMbGyc0kg/U=
+X-Google-Smtp-Source: AGHT+IHSB43dF0pLQwl5fSHzzvgSOaQuNELTv/vnarvg9JxIB3dWUKmxutdHnh4vUjKSphH5Pexh5TnlfPVFyCr7FY4=
+X-Received: by 2002:a1f:e641:0:b0:48f:8891:29d9 with SMTP id
+ d62-20020a1fe641000000b0048f889129d9mr10186430vkh.13.1696790252736; Sun, 08
+ Oct 2023 11:37:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYsJA4fkLCDdXfCdjqJz3q3K0TErgKjypuLmPZ=EU3MbDg@mail.gmail.com>
-X-Migadu-Flow: FLOW_OUT
+References: <20231008052101.144422-1-akihiko.odaki@daynix.com>
+In-Reply-To: <20231008052101.144422-1-akihiko.odaki@daynix.com>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Sun, 8 Oct 2023 20:36:56 +0200
+Message-ID: <CAF=yD-LnqYQ2qdiV+oygfHq5ZQb7QaSZ81XikzKjY8unfCTGRQ@mail.gmail.com>
+Subject: Re: [RFC PATCH 0/7] tun: Introduce virtio-net hashing feature
+To:     Akihiko Odaki <akihiko.odaki@daynix.com>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+        davem@davemloft.net, kuba@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, rdunlap@infradead.org, willemb@google.com,
+        gustavoars@kernel.org, herbert@gondor.apana.org.au,
+        steffen.klassert@secunet.com, nogikh@google.com,
+        pablo@netfilter.org, decui@microsoft.com, cai@lca.pw,
+        jakub@cloudflare.com, elver@google.com, pabeni@redhat.com,
+        Yuri Benditovich <yuri.benditovich@daynix.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Oct 08, 2023 at 11:30:52AM +0530, Naresh Kamboju wrote:
-> While running selftests: cgroup: test_kmem on FVP following kernel crash
-> noticed on Linux next 6.6.0-rc4-next-20231006.
+On Sun, Oct 8, 2023 at 7:21=E2=80=AFAM Akihiko Odaki <akihiko.odaki@daynix.=
+com> wrote:
+>
+> virtio-net have two usage of hashes: one is RSS and another is hash
+> reporting. Conventionally the hash calculation was done by the VMM.
+> However, computing the hash after the queue was chosen defeats the
+> purpose of RSS.
+>
+> Another approach is to use eBPF steering program. This approach has
+> another downside: it cannot report the calculated hash due to the
+> restrictive nature of eBPF.
+>
+> Introduce the code to compute hashes to the kernel in order to overcome
+> thse challenges.
+>
+> An alternative solution is to extend the eBPF steering program so that it
+> will be able to report to the userspace, but it makes little sense to
+> allow to implement different hashing algorithms with eBPF since the hash
+> value reported by virtio-net is strictly defined by the specification.
 
-Hi Naresh!
+But using the existing BPF steering may have the benefit of requiring
+a lot less new code.
 
-Thank you for the report!
-
-I've tried to reproduce it, but wasn't successful so far: I've run test_kmem
-for several hundred times and haven't seen the crash.
-
-Can you, please, provide some additional information?
-How easy to reproduce it? Do you see it every time or with some probability?
-Do you see it on other platforms?
-Can you, please, check where exactly the crash happens using addr2line?
-
-Thanks!
-
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> 
-> Boot log:
-> [    0.000000] Booting Linux on physical CPU 0x0000000000 [0x410fd0f0]
-> [    0.000000] Linux version 6.6.0-rc4-next-20231006 (tuxmake@tuxmake)
-> (aarch64-linux-gnu-gcc (Debian 13.2.0-2) 13.2.0, GNU ld (GNU Binutils
-> for Debian) 2.41) #1 SMP PREEMPT @1696592107
-> [    0.000000] KASLR enabled
-> [    0.000000] Machine model: FVP Base RevC
-> ...
-> 
-> Running selftests: cgroup
-> 
-> # selftests: cgroup: test_kmem
-> # ok 1 test_kmem_basic
-> #
-> not ok 2 selftests: cgroup: test_kmem # TIMEOUT 45 seconds
-> # timeout set to 45
-> # selftests: cgroup: test_core
-> # ok 1 test_cgcore_internal_process_constraint
-> # ok 2 test_cgcore_top_down_constraint_enable
-> # ok 3 test_cgcore_top_down_constraint_disable
-> # ok 4 test_cgcore_no_internal_process_constraint_on_threads
-> # ok 5 test_cgcore_parent_becomes_threaded
-> # ok 6 test_cgcore_invalid_domain
-> # ok 7 test_cgcore_populated
-> # ok 8 test_cgcore_proc_migration
-> # ok 9 test_cgcore_thread_migration
-> # ok 10 test_cgcore_destroy
-> # ok 11 test_cgcore_lesser_euid_open
-> # ok 12 test_cgcore_lesser_ns_open
-> [  400.108176] Unable to handle kernel NULL pointer dereference at
-> virtual address 0000000000000000
-> [  400.108404] Mem abort info:
-> [  400.108523]   ESR = 0x0000000096000004
-> [  400.108656]   EC = 0x25: DABT (current EL), IL = 32 bits
-> [  400.108810]   SET = 0, FnV = 0
-> [  400.108942]   EA = 0, S1PTW = 0
-> [  400.109074]   FSC = 0x04: level 0 translation fault
-> [  400.109219] Data abort info:
-> [  400.109338]   ISV = 0, ISS = 0x00000004, ISS2 = 0x00000000
-> [  400.109488]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
-> ok 3 selftests: cgroup: test_core
-> [  400.109644]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
-> [  400.109802] user pgtable: 4k pages, 48-bit VAs, pgdp=00000008898f3000
-> [  400.109969] [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
-> [  400.110267] Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
-> [  400.110372] Modules linked in: pl111_drm drm_dma_helper arm_spe_pmu
-> panel_simple crct10dif_ce drm_kms_helper fuse drm backlight dm_mod
-> ip_tables x_tables
-> [  400.110872] CPU: 4 PID: 131 Comm: kworker/4:2 Not tainted
-> 6.6.0-rc4-next-20231006 #1
-> [  400.111010] Hardware name: FVP Base RevC (DT)
-> [  400.111093] Workqueue: cgroup_destroy css_free_rwork_fn
-> [  400.111238] pstate: 03402009 (nzcv daif +PAN -UAO +TCO +DIT -SSBS BTYPE=--)
-> [  400.111380] pc : percpu_ref_put_many.constprop.0+0xa0/0xf0
-> [  400.111540] lr : percpu_ref_put_many.constprop.0+0x18/0xf0
-> [  400.111700] sp : ffff800080713ca0
-> [  400.111774] x29: ffff800080713ca0 x28: 0000000000000000 x27: 0000000000000000
-> [  400.111970] x26: ffff00087f779d28 x25: ffff000800a3f700 x24: ffff0008003c2205
-> [  400.112173] x23: 0000000000000036 x22: ffffd7c64df6a000 x21: ffffd7c64df6cb70
-> [  400.112373] x20: ffff0008094d2000 x19: ffff000806dfa4c0 x18: ffff800083893c48
-> [  400.112575] x17: 0000000000000000 x16: 0000000000000001 x15: 0000000000000001
-> [  400.112765] x14: 0000000000000004 x13: ffffd7c64df87258 x12: 0000000000000000
-> [  400.112964] x11: ffff000800402e60 x10: ffff000800402da0 x9 : ffffd7c64b786a90
-> [  400.113166] x8 : ffff800080713b68 x7 : 0000000000000000 x6 : 0000000000000001
-> [  400.113360] x5 : ffffd7c64df6a000 x4 : ffffd7c64df6a288 x3 : 0000000000000000
-> [  400.113558] x2 : ffff0008044e0000 x1 : 0000000000000000 x0 : ffffffffffffffff
-> [  400.113756] Call trace:
-> [  400.113819]  percpu_ref_put_many.constprop.0+0xa0/0xf0
-> [  400.113980]  __mem_cgroup_free+0x2c/0xe8
-> [  400.114129]  mem_cgroup_css_free+0x16c/0x1e8
-> [  400.114281]  css_free_rwork_fn+0x54/0x370
-> [  400.114408]  process_one_work+0x148/0x3b8
-> [  400.114530]  worker_thread+0x32c/0x450
-> [  400.114650]  kthread+0x104/0x118
-> [  400.114797]  ret_from_fork+0x10/0x20
-> [  400.114954] Code: d65f03c0 f9400661 d503201f 92800000 (f8e00020)
-> [  400.115051] ---[ end trace 0000000000000000 ]---
-> 
-> 
-> Links:
->  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20231006/testrun/20279395/suite/log-parser-test/test/check-kernel-oops/log
->  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20231006/testrun/20279395/suite/log-parser-test/tests/
->  - https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/tests/2WO7SlYRh87RbfNXUbvVZx2HBL8
->  - https://storage.tuxsuite.com/public/linaro/lkft/builds/2WO7RIllBsiwSAbiLChz9w6KXn8/
-> - https://storage.tuxsuite.com/public/linaro/lkft/builds/2WO7RIllBsiwSAbiLChz9w6KXn8/config
-> https://storage.tuxsuite.com/public/linaro/lkft/builds/2WO7RIllBsiwSAbiLChz9w6KXn8/tuxmake_reproducer.sh
-> 
-> --
-> Linaro LKFT
-> https://lkft.linaro.org
+There is ample precedence for BPF programs that work this way. The
+flow dissector comes to mind.
