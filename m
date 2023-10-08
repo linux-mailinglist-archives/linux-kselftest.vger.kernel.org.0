@@ -2,70 +2,89 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BF367BC8B3
-	for <lists+linux-kselftest@lfdr.de>; Sat,  7 Oct 2023 17:43:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBF077BCBC8
+	for <lists+linux-kselftest@lfdr.de>; Sun,  8 Oct 2023 04:59:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343934AbjJGPn2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 7 Oct 2023 11:43:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48982 "EHLO
+        id S1344312AbjJHC7N (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 7 Oct 2023 22:59:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234187AbjJGPn1 (ORCPT
+        with ESMTP id S229793AbjJHC7M (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 7 Oct 2023 11:43:27 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B44B5BA;
-        Sat,  7 Oct 2023 08:43:25 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1c77449a6daso27020795ad.0;
-        Sat, 07 Oct 2023 08:43:25 -0700 (PDT)
+        Sat, 7 Oct 2023 22:59:12 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F8EBC;
+        Sat,  7 Oct 2023 19:59:10 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-50433d8385cso4576979e87.0;
+        Sat, 07 Oct 2023 19:59:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696693405; x=1697298205; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=t/XmnQ8BulCB8LjvQmFruCYlEAR5yQvD41aixSO30z8=;
-        b=e/5qMkfcA8WoEgJ2BfnfymOgeHfE4M3jvRX5qKVz0UrPtvG5BvmRc0qweYVBWGd6cw
-         mF4kFmODBZRowxTqvBTjgbsTuoxC/Cn9HHU8RgIl2B8lrzksZP9ObV94/RUaHZXbbOnW
-         3aLQ1VCNr5uPIrILWOYyX4BR3eTTuwRVoZ4aYJJq4JZvdmkSNGJTAHQpn1EB3TaZrZZS
-         OmQ3h1sXTlLo/vfjNtZ9CCigoEZp7T45dPBgO5y8CUN8DAG0r9Sw5HheXcP8R2gc0Z0c
-         YkA0GHiSzXg2P1xNRp3oqsA4+RZgVgVafBDG4e/03tzyE6xelDJLlESzPTPP7kk7nguk
-         jy9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696693405; x=1697298205;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1696733949; x=1697338749; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=t/XmnQ8BulCB8LjvQmFruCYlEAR5yQvD41aixSO30z8=;
-        b=tRjStFhqk4MIEyNbJt9OsbNu0jZGSCNXG92m67iAaaLjYe8LDAw5/7on98pdaMdhfg
-         EzAfOxMGvRMYXlVQDLneoSCLuJyRm1zGmGn251GADlISCt4AMe/kVls43M5gOVFtIWZp
-         P98YNBfNbj17b75UspLns5WpQMALt4gtVixfsNtuDekhdCv5oo+03Sny4+j2vkxxMn73
-         /SbxozKElSRzG7nPq67tvBmRWOIQJs1GK2/XTvSJgRU8vCsdj9+w8HGG1sLqUyzdghEm
-         aM7ZY8JPlVYaUl5bg70CKQE3k1OV5chMfcKadDH9w/wjQejgSJ9apY8E6/Rkpy/onkV6
-         V64Q==
-X-Gm-Message-State: AOJu0Yxs/UJM9NfUHCINvDhElKJznboptiATAvrx5OVw+6slO79C9BRT
-        NoQvHKVP8Ur3HjFmSq6t/+U=
-X-Google-Smtp-Source: AGHT+IHZV4+w0lDRBs5HTW4DdFO5OTdaorE0aKrM46lFABN999Y0bQFFk+WF6LoIW0B0OVpRzvXT1g==
-X-Received: by 2002:a17:902:8f8b:b0:1c5:f0fd:51be with SMTP id z11-20020a1709028f8b00b001c5f0fd51bemr10068331plo.69.1696693405079;
-        Sat, 07 Oct 2023 08:43:25 -0700 (PDT)
-Received: from atom0118 ([2405:201:c009:52e1:f940:d30d:8b60:5b64])
-        by smtp.gmail.com with ESMTPSA id l4-20020a170902eb0400b001b9d7c8f44dsm6053629plb.182.2023.10.07.08.43.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 07 Oct 2023 08:43:24 -0700 (PDT)
-Date:   Sat, 7 Oct 2023 21:13:18 +0530
-From:   Atul Kumar Pant <atulpant.linux@gmail.com>
-To:     a.zummo@towertech.it, alexandre.belloni@bootlin.com
-Cc:     shuah@kernel.org, linux-kernel-mentees@lists.linuxfoundation.org,
-        linux-rtc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6] selftests: rtc: Fixes rtctest error handling.
-Message-ID: <20231007154318.GC20160@atom0118>
-References: <20230817091401.72674-1-atulpant.linux@gmail.com>
- <20230923173652.GC159038@atom0118>
+        bh=ScEsw5kRuBSyCrQaTmCBYUka5dQTvwb6RwilZml22rc=;
+        b=hVVbDEWLLxEn0JCbIiru9h3H94b7ftOGKPB4SA/lFZcxADytR2YlVdOwCs5qRQ+qHS
+         LLHHf6XKzMeHIxuW35mielGI2OzqBYirS3nIZvTkrnnFia5gMxG+xxSV/5PvCMARl6N5
+         IGegdjwnd1Q2oQ0J8D1tbwH/QsALrSoFU4YQ/jOAUFgdM+pcgEm2IuTkmIMKNjSAWqDn
+         TYd3l8eOHaD5UKxBgaOHDqUeolzjonvbfl7cA6UshfULvZOZ5SE4OXKBAiGgypRmbJVo
+         khyfus8VKzusezhY9lctlRu7VsJXEURO1nfPi4NtTAxxdqv8B/8i50IIM751mUyVRJ2L
+         1rIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1696733949; x=1697338749;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ScEsw5kRuBSyCrQaTmCBYUka5dQTvwb6RwilZml22rc=;
+        b=MnZvIkjwONI0yUy4cIGOzv92xwv0zof9A3bZLnTtfXJr0O0PB1G89opAm0MS870OOH
+         wTI5UkUCpJienes0sRzj2Aqgl5lsDwY+YKzoBkLqoLtCOSPI/ek3Ceb8OgDpX9JQBB5z
+         PorDqQH9lUkcoNUHSZ60lMou7/R83Vb09k42Ay14iNdiEVe9c01d60W3ZWiFCkMy9l76
+         Dp6gUJqHleK4SlWODHmizb4tQS3dQfwKU25Re/JG77oTn5SkMZDExW7IG1JtYBfYQVYd
+         fOp+HYidOvyLcAE6njqG3CuZryTYoop48B5632Z20AOe7n/BayXaYfDvZhsUaxaB+q6D
+         WdnQ==
+X-Gm-Message-State: AOJu0Yyzf44wFoMr3WtG9fO4bMW6/QidFLD8tUDMMJ0vRQMsj8MefL+r
+        4QNhHX7tg4yrpJz4ueZHQOh39XZTwrJbegd3GKE=
+X-Google-Smtp-Source: AGHT+IEpb2yeFTzMhQ8mODQ9bJzzgKP4xcGT3Fdr1mnHynSEwgLk6lyxwCFHJcwsd6qGQGzx5r8I8XmeCKBxhv85QXI=
+X-Received: by 2002:a05:6512:1154:b0:501:bd43:3b9c with SMTP id
+ m20-20020a056512115400b00501bd433b9cmr11192604lfg.23.1696733948681; Sat, 07
+ Oct 2023 19:59:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230923173652.GC159038@atom0118>
+References: <cover.1694421911.git.haibo1.xu@intel.com> <cda6cc71c9bdde87fe87f6c2dec4f03ca249dd62.1694421911.git.haibo1.xu@intel.com>
+ <20231003-d44206f71d0b22e539833697@orel>
+In-Reply-To: <20231003-d44206f71d0b22e539833697@orel>
+From:   Haibo Xu <xiaobo55x@gmail.com>
+Date:   Sun, 8 Oct 2023 10:58:57 +0800
+Message-ID: <CAJve8o=Q74U0Z3PayrzY7heNc0qeTw5VYS+tdkpm=aJdefQEbQ@mail.gmail.com>
+Subject: Re: [PATCH v3 2/9] KVM: selftests: Unify the makefile rule for split targets
+To:     Andrew Jones <ajones@ventanamicro.com>
+Cc:     Haibo Xu <haibo1.xu@intel.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Sean Christopherson <seanjc@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Aaron Lewis <aaronlewis@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        Thomas Huth <thuth@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvm-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,62 +92,66 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sat, Sep 23, 2023 at 11:06:58PM +0530, Atul Kumar Pant wrote:
-> On Thu, Aug 17, 2023 at 02:44:01PM +0530, Atul Kumar Pant wrote:
-> > Adds a check to verify if the rtc device file is valid or not
-> > and prints a useful error message if the file is not accessible.
-> > 
-> > Signed-off-by: Atul Kumar Pant <atulpant.linux@gmail.com>
+On Tue, Oct 3, 2023 at 6:28=E2=80=AFPM Andrew Jones <ajones@ventanamicro.co=
+m> wrote:
+>
+> On Thu, Sep 14, 2023 at 09:36:56AM +0800, Haibo Xu wrote:
+> > A separate makefile rule was used for split targets which was added
+> > in patch(KVM: arm64: selftests: Split get-reg-list test code). This
+> > could be avoided by minor changes to the recipes of current rule.
+> >
+> > Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
 > > ---
-> > 
-> > changes since v5:
-> >     Updated error message to use strerror().
-> > 	If the rtc file is invalid, the skip the test.
-> > 
-> > changes since v4:
-> >     Updated the commit message.
-> > 
-> > changes since v3:
-> >     Added Linux-kselftest and Linux-kernel mailing lists.
-> > 
-> > changes since v2:
-> >     Changed error message when rtc file does not exist.
-> > 
-> > changes since v1:
-> >     Removed check for uid=0
-> >     If rtc file is invalid, then exit the test.
-> > 
-> >  tools/testing/selftests/rtc/rtctest.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/tools/testing/selftests/rtc/rtctest.c b/tools/testing/selftests/rtc/rtctest.c
-> > index 630fef735c7e..27b466111885 100644
-> > --- a/tools/testing/selftests/rtc/rtctest.c
-> > +++ b/tools/testing/selftests/rtc/rtctest.c
-> > @@ -15,6 +15,7 @@
-> >  #include <sys/types.h>
-> >  #include <time.h>
-> >  #include <unistd.h>
-> > +#include <error.h>
-> >  
-> >  #include "../kselftest_harness.h"
-> >  #include "../kselftest.h"
-> > @@ -437,7 +438,7 @@ int main(int argc, char **argv)
-> >  	if (access(rtc_file, F_OK) == 0)
-> >  		ret = test_harness_run(argc, argv);
-> >  	else
-> > -		ksft_exit_fail_msg("[ERROR]: Cannot access rtc file %s - Exiting\n", rtc_file);
-> > +		ksft_exit_skip("%s: %s\n", rtc_file, strerror(errno));
-> >  
-> >  	return ret;
-> >  }
-> > -- 
-> > 2.25.1
-> > 
-> 
-> 	Hi Shuah, I have made the changes as per your comments. Can you please
-> 	review the changes ?
+> >  tools/testing/selftests/kvm/Makefile | 6 ++----
+> >  1 file changed, 2 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selft=
+ests/kvm/Makefile
+> > index a3bb36fb3cfc..7972269e8c5f 100644
+> > --- a/tools/testing/selftests/kvm/Makefile
+> > +++ b/tools/testing/selftests/kvm/Makefile
+> > @@ -249,13 +249,10 @@ TEST_DEP_FILES +=3D $(patsubst %.o, %.d, $(SPLIT_=
+TESTS_OBJS))
+> >  -include $(TEST_DEP_FILES)
+> >
+> >  $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED): %: %.o
+> > -     $(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH) $< $(LIBKVM=
+_OBJS) $(LDLIBS) -o $@
+> > +     $(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH) $^ $(LDLIBS=
+) -o $@
+> >  $(TEST_GEN_OBJ): $(OUTPUT)/%.o: %.c
+> >       $(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
+> >
+> > -$(SPLIT_TESTS_TARGETS): %: %.o $(SPLIT_TESTS_OBJS)
+> > -     $(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH) $^ $(LDLIBS=
+) -o $@
+> > -
+> >  EXTRA_CLEAN +=3D $(LIBKVM_OBJS) $(TEST_DEP_FILES) $(TEST_GEN_OBJ) $(SP=
+LIT_TESTS_OBJS) cscope.*
+> >
+> >  x :=3D $(shell mkdir -p $(sort $(dir $(LIBKVM_C_OBJ) $(LIBKVM_S_OBJ)))=
+)
+> > @@ -274,6 +271,7 @@ $(LIBKVM_STRING_OBJ): $(OUTPUT)/%.o: %.c
+> >  x :=3D $(shell mkdir -p $(sort $(dir $(TEST_GEN_PROGS))))
+> >  $(TEST_GEN_PROGS): $(LIBKVM_OBJS)
+> >  $(TEST_GEN_PROGS_EXTENDED): $(LIBKVM_OBJS)
+> > +$(SPLIT_TESTS_TARGETS): $(OUTPUT)/%: $(ARCH_DIR)/%.o
+> >
+> >  cscope: include_paths =3D $(LINUX_TOOL_INCLUDE) $(LINUX_HDR_PATH) incl=
+ude lib ..
+> >  cscope:
+> > --
+> > 2.34.1
+> >
+>
+> I just noticed that with and without this patch we're building the
+> arch-specific part in tools/testing/selftests/kvm/riscv even when we have
+> an $(OUTPUT) directory (e.g. O=3Dbuild). Those build artifacts should be =
+in
+> build/kselftest/kvm/riscv instead.
+>
 
-	Hi Shuah, can you please review the changes and provide comments ?
-	It has been quite sometime since I uploaded the change. If something
-	is to be improved, I'll gladly do it.
+Thanks for pointing it out. I will have a look in next week!
+
+> Thanks,
+> drew
