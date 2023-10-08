@@ -2,156 +2,173 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBF077BCBC8
-	for <lists+linux-kselftest@lfdr.de>; Sun,  8 Oct 2023 04:59:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CE3B7BCC7C
+	for <lists+linux-kselftest@lfdr.de>; Sun,  8 Oct 2023 08:01:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344312AbjJHC7N (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 7 Oct 2023 22:59:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39006 "EHLO
+        id S1344419AbjJHGBJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 8 Oct 2023 02:01:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbjJHC7M (ORCPT
+        with ESMTP id S1344414AbjJHGBI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 7 Oct 2023 22:59:12 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2F8EBC;
-        Sat,  7 Oct 2023 19:59:10 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-50433d8385cso4576979e87.0;
-        Sat, 07 Oct 2023 19:59:10 -0700 (PDT)
+        Sun, 8 Oct 2023 02:01:08 -0400
+Received: from mail-ua1-x92d.google.com (mail-ua1-x92d.google.com [IPv6:2607:f8b0:4864:20::92d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F635C5
+        for <linux-kselftest@vger.kernel.org>; Sat,  7 Oct 2023 23:01:05 -0700 (PDT)
+Received: by mail-ua1-x92d.google.com with SMTP id a1e0cc1a2514c-7b07548b084so1124076241.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 07 Oct 2023 23:01:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1696733949; x=1697338749; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ScEsw5kRuBSyCrQaTmCBYUka5dQTvwb6RwilZml22rc=;
-        b=hVVbDEWLLxEn0JCbIiru9h3H94b7ftOGKPB4SA/lFZcxADytR2YlVdOwCs5qRQ+qHS
-         LLHHf6XKzMeHIxuW35mielGI2OzqBYirS3nIZvTkrnnFia5gMxG+xxSV/5PvCMARl6N5
-         IGegdjwnd1Q2oQ0J8D1tbwH/QsALrSoFU4YQ/jOAUFgdM+pcgEm2IuTkmIMKNjSAWqDn
-         TYd3l8eOHaD5UKxBgaOHDqUeolzjonvbfl7cA6UshfULvZOZ5SE4OXKBAiGgypRmbJVo
-         khyfus8VKzusezhY9lctlRu7VsJXEURO1nfPi4NtTAxxdqv8B/8i50IIM751mUyVRJ2L
-         1rIA==
+        d=linaro.org; s=google; t=1696744864; x=1697349664; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=gTFi6T6hp86aembs7r35hWj2AG1dkdBFbTPFt+6s00M=;
+        b=opm5j0n5ms+cUvmzyj2hTkOZ20We3f1ZL3RFv6XDLZMHHUjbaPiU3Sk6u6ndC3xK7c
+         06nWWiqBFCgkWorTmRJaSu9BQanUL7AGoGSP6q6CRLQvfeS6zBCXi0azVLndnqtS3faV
+         Oa+CRMiAB64zT4gXNpj/lwFCOitgm84x3KNuXKklvRZuFGDafN75F5wPGDY8++aN7aRS
+         J4b5NG1hGlQldfIYz08g947jNmerlIaUZK2WMtR2s11WdbUPNFL7jRgEjPLW9MkYfkEs
+         f4xBUhyA9AgpV2TQOI0l9f73cl/e5sIM5WatqJ+4xG6x8GTkVeB9+lKE+WEj4MSjm/oq
+         v8KQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696733949; x=1697338749;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ScEsw5kRuBSyCrQaTmCBYUka5dQTvwb6RwilZml22rc=;
-        b=MnZvIkjwONI0yUy4cIGOzv92xwv0zof9A3bZLnTtfXJr0O0PB1G89opAm0MS870OOH
-         wTI5UkUCpJienes0sRzj2Aqgl5lsDwY+YKzoBkLqoLtCOSPI/ek3Ceb8OgDpX9JQBB5z
-         PorDqQH9lUkcoNUHSZ60lMou7/R83Vb09k42Ay14iNdiEVe9c01d60W3ZWiFCkMy9l76
-         Dp6gUJqHleK4SlWODHmizb4tQS3dQfwKU25Re/JG77oTn5SkMZDExW7IG1JtYBfYQVYd
-         fOp+HYidOvyLcAE6njqG3CuZryTYoop48B5632Z20AOe7n/BayXaYfDvZhsUaxaB+q6D
-         WdnQ==
-X-Gm-Message-State: AOJu0Yyzf44wFoMr3WtG9fO4bMW6/QidFLD8tUDMMJ0vRQMsj8MefL+r
-        4QNhHX7tg4yrpJz4ueZHQOh39XZTwrJbegd3GKE=
-X-Google-Smtp-Source: AGHT+IEpb2yeFTzMhQ8mODQ9bJzzgKP4xcGT3Fdr1mnHynSEwgLk6lyxwCFHJcwsd6qGQGzx5r8I8XmeCKBxhv85QXI=
-X-Received: by 2002:a05:6512:1154:b0:501:bd43:3b9c with SMTP id
- m20-20020a056512115400b00501bd433b9cmr11192604lfg.23.1696733948681; Sat, 07
- Oct 2023 19:59:08 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1696744864; x=1697349664;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gTFi6T6hp86aembs7r35hWj2AG1dkdBFbTPFt+6s00M=;
+        b=GA8Rm4mdRtZNkridbxzDHSiJ/CNk8itV2Tcx/PA9S9uyz9CpB7C1KrtbTxh0jHB26n
+         sCApTLAOodH6P1B8KNMP+NCvqkXApHNw5e+el7qryod/pOL7MPq/UeQ2s079VCqO63j6
+         7dWTHH9tEoEcChuqMGasx9zQ26pHEiOYB9O52iWGrKT7V3GSneceVoxibg9bcXalwfzv
+         9Foxfp6kLEqbL070ZWrsryQQ6maLfL4+WB26Fu5fRIxKZ7Sn/LiNLeWLZRBbcQQAjwBv
+         LTbeEyV4if7oEMlXW+6OfO5+ecXHOMvyqeCcWKiKvkqwje5l1+HXZoUWTE/arv/BnueM
+         nCDQ==
+X-Gm-Message-State: AOJu0Yzz8Tot6wEqmEeToZCwWE2cVrpNQQInbxX5LdfVR5pQ8rUrRT5C
+        2dbzsm53a/4PCWAbaTWG6rvV4+dJYAh5ty9WgwU0TeUT4VzgjHZaiDpz6w==
+X-Google-Smtp-Source: AGHT+IEisY4ALnTRd3SdmOhu9pGYxl2VC9A5R1BecJDnPHTBXfNgrIOf02rkq3XPdXvjXLYQOx2mmGTI2Av1gxmQ46k=
+X-Received: by 2002:a05:6122:1822:b0:495:e530:5155 with SMTP id
+ ay34-20020a056122182200b00495e5305155mr12374254vkb.3.1696744864072; Sat, 07
+ Oct 2023 23:01:04 -0700 (PDT)
 MIME-Version: 1.0
-References: <cover.1694421911.git.haibo1.xu@intel.com> <cda6cc71c9bdde87fe87f6c2dec4f03ca249dd62.1694421911.git.haibo1.xu@intel.com>
- <20231003-d44206f71d0b22e539833697@orel>
-In-Reply-To: <20231003-d44206f71d0b22e539833697@orel>
-From:   Haibo Xu <xiaobo55x@gmail.com>
-Date:   Sun, 8 Oct 2023 10:58:57 +0800
-Message-ID: <CAJve8o=Q74U0Z3PayrzY7heNc0qeTw5VYS+tdkpm=aJdefQEbQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/9] KVM: selftests: Unify the makefile rule for split targets
-To:     Andrew Jones <ajones@ventanamicro.com>
-Cc:     Haibo Xu <haibo1.xu@intel.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Sean Christopherson <seanjc@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Aaron Lewis <aaronlewis@google.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        Thomas Huth <thuth@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvm-riscv@lists.infradead.org
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Sun, 8 Oct 2023 11:30:52 +0530
+Message-ID: <CA+G9fYsJA4fkLCDdXfCdjqJz3q3K0TErgKjypuLmPZ=EU3MbDg@mail.gmail.com>
+Subject: selftests: cgroup: test_core - Unable to handle kernel NULL pointer
+ dereference at virtual address
+To:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        Cgroups <cgroups@vger.kernel.org>, lkft-triage@lists.linaro.org
+Cc:     Lucas Karpinski <lkarpins@redhat.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Muchun Song <muchun.song@linux.dev>,
+        Shuah Khan <shuah@kernel.org>, Tejun Heo <tj@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mark Brown <broonie@kernel.org>,
+        Dan Carpenter <dan.carpenter@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Oct 3, 2023 at 6:28=E2=80=AFPM Andrew Jones <ajones@ventanamicro.co=
-m> wrote:
->
-> On Thu, Sep 14, 2023 at 09:36:56AM +0800, Haibo Xu wrote:
-> > A separate makefile rule was used for split targets which was added
-> > in patch(KVM: arm64: selftests: Split get-reg-list test code). This
-> > could be avoided by minor changes to the recipes of current rule.
-> >
-> > Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
-> > ---
-> >  tools/testing/selftests/kvm/Makefile | 6 ++----
-> >  1 file changed, 2 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selft=
-ests/kvm/Makefile
-> > index a3bb36fb3cfc..7972269e8c5f 100644
-> > --- a/tools/testing/selftests/kvm/Makefile
-> > +++ b/tools/testing/selftests/kvm/Makefile
-> > @@ -249,13 +249,10 @@ TEST_DEP_FILES +=3D $(patsubst %.o, %.d, $(SPLIT_=
-TESTS_OBJS))
-> >  -include $(TEST_DEP_FILES)
-> >
-> >  $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED): %: %.o
-> > -     $(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH) $< $(LIBKVM=
-_OBJS) $(LDLIBS) -o $@
-> > +     $(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH) $^ $(LDLIBS=
-) -o $@
-> >  $(TEST_GEN_OBJ): $(OUTPUT)/%.o: %.c
-> >       $(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
-> >
-> > -$(SPLIT_TESTS_TARGETS): %: %.o $(SPLIT_TESTS_OBJS)
-> > -     $(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH) $^ $(LDLIBS=
-) -o $@
-> > -
-> >  EXTRA_CLEAN +=3D $(LIBKVM_OBJS) $(TEST_DEP_FILES) $(TEST_GEN_OBJ) $(SP=
-LIT_TESTS_OBJS) cscope.*
-> >
-> >  x :=3D $(shell mkdir -p $(sort $(dir $(LIBKVM_C_OBJ) $(LIBKVM_S_OBJ)))=
-)
-> > @@ -274,6 +271,7 @@ $(LIBKVM_STRING_OBJ): $(OUTPUT)/%.o: %.c
-> >  x :=3D $(shell mkdir -p $(sort $(dir $(TEST_GEN_PROGS))))
-> >  $(TEST_GEN_PROGS): $(LIBKVM_OBJS)
-> >  $(TEST_GEN_PROGS_EXTENDED): $(LIBKVM_OBJS)
-> > +$(SPLIT_TESTS_TARGETS): $(OUTPUT)/%: $(ARCH_DIR)/%.o
-> >
-> >  cscope: include_paths =3D $(LINUX_TOOL_INCLUDE) $(LINUX_HDR_PATH) incl=
-ude lib ..
-> >  cscope:
-> > --
-> > 2.34.1
-> >
->
-> I just noticed that with and without this patch we're building the
-> arch-specific part in tools/testing/selftests/kvm/riscv even when we have
-> an $(OUTPUT) directory (e.g. O=3Dbuild). Those build artifacts should be =
-in
-> build/kselftest/kvm/riscv instead.
->
+While running selftests: cgroup: test_kmem on FVP following kernel crash
+noticed on Linux next 6.6.0-rc4-next-20231006.
 
-Thanks for pointing it out. I will have a look in next week!
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-> Thanks,
-> drew
+Boot log:
+[    0.000000] Booting Linux on physical CPU 0x0000000000 [0x410fd0f0]
+[    0.000000] Linux version 6.6.0-rc4-next-20231006 (tuxmake@tuxmake)
+(aarch64-linux-gnu-gcc (Debian 13.2.0-2) 13.2.0, GNU ld (GNU Binutils
+for Debian) 2.41) #1 SMP PREEMPT @1696592107
+[    0.000000] KASLR enabled
+[    0.000000] Machine model: FVP Base RevC
+...
+
+Running selftests: cgroup
+
+# selftests: cgroup: test_kmem
+# ok 1 test_kmem_basic
+#
+not ok 2 selftests: cgroup: test_kmem # TIMEOUT 45 seconds
+# timeout set to 45
+# selftests: cgroup: test_core
+# ok 1 test_cgcore_internal_process_constraint
+# ok 2 test_cgcore_top_down_constraint_enable
+# ok 3 test_cgcore_top_down_constraint_disable
+# ok 4 test_cgcore_no_internal_process_constraint_on_threads
+# ok 5 test_cgcore_parent_becomes_threaded
+# ok 6 test_cgcore_invalid_domain
+# ok 7 test_cgcore_populated
+# ok 8 test_cgcore_proc_migration
+# ok 9 test_cgcore_thread_migration
+# ok 10 test_cgcore_destroy
+# ok 11 test_cgcore_lesser_euid_open
+# ok 12 test_cgcore_lesser_ns_open
+[  400.108176] Unable to handle kernel NULL pointer dereference at
+virtual address 0000000000000000
+[  400.108404] Mem abort info:
+[  400.108523]   ESR = 0x0000000096000004
+[  400.108656]   EC = 0x25: DABT (current EL), IL = 32 bits
+[  400.108810]   SET = 0, FnV = 0
+[  400.108942]   EA = 0, S1PTW = 0
+[  400.109074]   FSC = 0x04: level 0 translation fault
+[  400.109219] Data abort info:
+[  400.109338]   ISV = 0, ISS = 0x00000004, ISS2 = 0x00000000
+[  400.109488]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
+ok 3 selftests: cgroup: test_core
+[  400.109644]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
+[  400.109802] user pgtable: 4k pages, 48-bit VAs, pgdp=00000008898f3000
+[  400.109969] [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
+[  400.110267] Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
+[  400.110372] Modules linked in: pl111_drm drm_dma_helper arm_spe_pmu
+panel_simple crct10dif_ce drm_kms_helper fuse drm backlight dm_mod
+ip_tables x_tables
+[  400.110872] CPU: 4 PID: 131 Comm: kworker/4:2 Not tainted
+6.6.0-rc4-next-20231006 #1
+[  400.111010] Hardware name: FVP Base RevC (DT)
+[  400.111093] Workqueue: cgroup_destroy css_free_rwork_fn
+[  400.111238] pstate: 03402009 (nzcv daif +PAN -UAO +TCO +DIT -SSBS BTYPE=--)
+[  400.111380] pc : percpu_ref_put_many.constprop.0+0xa0/0xf0
+[  400.111540] lr : percpu_ref_put_many.constprop.0+0x18/0xf0
+[  400.111700] sp : ffff800080713ca0
+[  400.111774] x29: ffff800080713ca0 x28: 0000000000000000 x27: 0000000000000000
+[  400.111970] x26: ffff00087f779d28 x25: ffff000800a3f700 x24: ffff0008003c2205
+[  400.112173] x23: 0000000000000036 x22: ffffd7c64df6a000 x21: ffffd7c64df6cb70
+[  400.112373] x20: ffff0008094d2000 x19: ffff000806dfa4c0 x18: ffff800083893c48
+[  400.112575] x17: 0000000000000000 x16: 0000000000000001 x15: 0000000000000001
+[  400.112765] x14: 0000000000000004 x13: ffffd7c64df87258 x12: 0000000000000000
+[  400.112964] x11: ffff000800402e60 x10: ffff000800402da0 x9 : ffffd7c64b786a90
+[  400.113166] x8 : ffff800080713b68 x7 : 0000000000000000 x6 : 0000000000000001
+[  400.113360] x5 : ffffd7c64df6a000 x4 : ffffd7c64df6a288 x3 : 0000000000000000
+[  400.113558] x2 : ffff0008044e0000 x1 : 0000000000000000 x0 : ffffffffffffffff
+[  400.113756] Call trace:
+[  400.113819]  percpu_ref_put_many.constprop.0+0xa0/0xf0
+[  400.113980]  __mem_cgroup_free+0x2c/0xe8
+[  400.114129]  mem_cgroup_css_free+0x16c/0x1e8
+[  400.114281]  css_free_rwork_fn+0x54/0x370
+[  400.114408]  process_one_work+0x148/0x3b8
+[  400.114530]  worker_thread+0x32c/0x450
+[  400.114650]  kthread+0x104/0x118
+[  400.114797]  ret_from_fork+0x10/0x20
+[  400.114954] Code: d65f03c0 f9400661 d503201f 92800000 (f8e00020)
+[  400.115051] ---[ end trace 0000000000000000 ]---
+
+
+Links:
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20231006/testrun/20279395/suite/log-parser-test/test/check-kernel-oops/log
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20231006/testrun/20279395/suite/log-parser-test/tests/
+ - https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/tests/2WO7SlYRh87RbfNXUbvVZx2HBL8
+ - https://storage.tuxsuite.com/public/linaro/lkft/builds/2WO7RIllBsiwSAbiLChz9w6KXn8/
+- https://storage.tuxsuite.com/public/linaro/lkft/builds/2WO7RIllBsiwSAbiLChz9w6KXn8/config
+https://storage.tuxsuite.com/public/linaro/lkft/builds/2WO7RIllBsiwSAbiLChz9w6KXn8/tuxmake_reproducer.sh
+
+--
+Linaro LKFT
+https://lkft.linaro.org
