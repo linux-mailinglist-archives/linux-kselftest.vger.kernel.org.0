@@ -2,243 +2,314 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C18A27BD8D6
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Oct 2023 12:38:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F39267BD8E6
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Oct 2023 12:44:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345916AbjJIKi3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 9 Oct 2023 06:38:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49342 "EHLO
+        id S1345853AbjJIKoo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 9 Oct 2023 06:44:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345931AbjJIKi2 (ORCPT
+        with ESMTP id S1345755AbjJIKon (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 9 Oct 2023 06:38:28 -0400
-Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ED31BA
-        for <linux-kselftest@vger.kernel.org>; Mon,  9 Oct 2023 03:38:25 -0700 (PDT)
-Received: by mail-vs1-xe2b.google.com with SMTP id ada2fe7eead31-457899d5bf6so85573137.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 09 Oct 2023 03:38:25 -0700 (PDT)
+        Mon, 9 Oct 2023 06:44:43 -0400
+Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA00A99;
+        Mon,  9 Oct 2023 03:44:40 -0700 (PDT)
+Received: by mail-vs1-xe30.google.com with SMTP id ada2fe7eead31-457819ae142so184285137.2;
+        Mon, 09 Oct 2023 03:44:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1696847904; x=1697452704; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=TC96PcHwbVa6mXdy6p1iyfYaO6sKkhGaSgd90ZPbnyA=;
-        b=D1X4y7sO/NA1Ou5clX3aC41yjk1UiPaxJXbHdpWwAqLk0DghaAr0tHhvYQiLFlcVL7
-         m5IcfUUXxql2ydEWpJtdtRbBQphusG+GMqP6Bex84a8jgYHYeIyh1BYlsPTz+OnaCup4
-         fTxlXkXFEtMwlqkBi4yTLHVhhrHwIzCO0XDHrAHLu6MR/0PvxytyCHkPzn+3hEBQc9Vq
-         r2uM2WvsJQBon6/HRj79mE5T1wmSXhpCYbOqSuisaIFBwEPb81e+L8ZfPeqYiU/Yrdei
-         5a9QS2Hoau8YzQLGxeoR8HKTl5W8hdwe4IWlr3bYfTVpCZSZq7DkGFnJ1fVPNyZytOjv
-         /0lQ==
+        d=gmail.com; s=20230601; t=1696848280; x=1697453080; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tZfDDDyR3J4c0sRpvZrHdEKwScc/uj3otb8uW8DACqc=;
+        b=ezdtJst2/PeL+Qw1xL8mNbgvhLzLgn+3COw1rbrNJD1c0Q1TWTCr+9Qshx1CbdS8jA
+         v9zj75ZzxE4EU229jpU7cMbveiJoBjOsbjI38ZKv5+guqZvP5vOp54s1w0TzxC7GhmIX
+         XdePex6MMutnSCmm6G2jxMZqjXFHXgYZKOtS9+EXW9+iQo5bU4/GYVcKZ3QWDYciCdt5
+         Z0p11XShJlcyP3pEXa251c9du05SCD9xCUGNr2vLdCB1i9Gfth5noHnU1keA+gMrIDIb
+         5/B8YW9NGuzUSgUYpq7K5Ibhv5TM+eTgeqR5oj7thMJixt6z3y04IESZMDLQ2xLIz+T9
+         joPQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696847904; x=1697452704;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TC96PcHwbVa6mXdy6p1iyfYaO6sKkhGaSgd90ZPbnyA=;
-        b=LfTC5X7wN8FoO3ZfINH/r3r/88j/BcL2JQFViC49K9NIcfOKg9KC0/9klCXd4GXU36
-         IBBzI584p8Wp4bsnnW3x1jMU3+w0G/VwJSjZ5kdgK/8gwtLNza8ww2eWg1JRs2mmWCdm
-         FlBHKJiuRQAfiAHwF+wZwRlbYaAe3268Adn929b78+sVfrDMM71hrWbmWth7V1BPxI+l
-         VMaLssa4flRYVwsKGh1zx5DzGcnxrUwkqpeeWCg47SpK3x+MX1UZrOnIGIoK0dhHDAR4
-         S5O1C8Y8ubMpeR83LNXThxivMqHuLAC8eFtGhsIUcghI4uptWv+BIXCzLatDECIPGP7K
-         rR3w==
-X-Gm-Message-State: AOJu0YxwoJoOiv79WPuEtWHYnBROsCRryoFYh2v5WaeCMl+7AFkEBvRA
-        9OVPPZ4EZwK8OmlNjsBLdB8Do69Mla59+kSlIk9zgg==
-X-Google-Smtp-Source: AGHT+IFcTYb2v0rxujleX8LbqmPAp49m2hsL23BGGbGneKo8PgPvR5ypkpt01khlJ670YgDjXuhfzyVscrJsINq+H+4=
-X-Received: by 2002:a67:fe10:0:b0:44d:55a4:226d with SMTP id
- l16-20020a67fe10000000b0044d55a4226dmr12690142vsr.4.1696847904580; Mon, 09
- Oct 2023 03:38:24 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1696848280; x=1697453080;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tZfDDDyR3J4c0sRpvZrHdEKwScc/uj3otb8uW8DACqc=;
+        b=pmmIoBbShy5coduMZ48SY2NkOePvIja/KohpMwZKqPWTOTwgQK/7whcWvGioh+3m4C
+         HsArrCRhswbseLKaEOJ9mvhJggkLsE+U76l/r4PotjxH3fCq4kBYtSL3CXwSqnsOER5/
+         JbyMYJzzHNyRnSSJkK7lQPN4vnOuCec1rLOQiXS1Cj/kmoOy9kkgBmFil4FaCqT+VZZJ
+         p5yCxSEsfcv3pXo3cKoljKDb5qHY+zhOKbNy6xzS4HV1o7CjjPrkWotrpkc58bBCrF/p
+         ErlqvGK7rjYOM4+i672mRr5dKvTIp49wLqCWwhPKRlfMAXVKm5FjL9RDtLx8FkGhPffS
+         9BPA==
+X-Gm-Message-State: AOJu0YyMZ/rCfHDQO+uUovEbM3VwuaUhat5X3QcCrml11ktHZpL41K30
+        sb2FHIV3mR4HHEcYOxLk5ggUHnFhtQAiV4epkEA=
+X-Google-Smtp-Source: AGHT+IHdVSLqpm5a7q+FPq0bViPBRQxnxSBBt7yXnKtf0gbG7NjRdo6eAfOzEB6RN85TxmaRlRS5dgKuQuNOEQCU+XA=
+X-Received: by 2002:a67:f141:0:b0:44d:4d5f:79a4 with SMTP id
+ t1-20020a67f141000000b0044d4d5f79a4mr11681355vsm.20.1696848279804; Mon, 09
+ Oct 2023 03:44:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <CA+G9fYsJA4fkLCDdXfCdjqJz3q3K0TErgKjypuLmPZ=EU3MbDg@mail.gmail.com>
- <ZSLNQjzoYcLq1hEo@P9FQF9L96D>
-In-Reply-To: <ZSLNQjzoYcLq1hEo@P9FQF9L96D>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 9 Oct 2023 16:08:13 +0530
-Message-ID: <CA+G9fYuH_-fRHS2Kjvc8FcoV=pz9jBtYvXHOcsvUgcAHOeqXWA@mail.gmail.com>
-Subject: Re: selftests: cgroup: test_core - Unable to handle kernel NULL
- pointer dereference at virtual address
-To:     Roman Gushchin <roman.gushchin@linux.dev>
-Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>, lkft-triage@lists.linaro.org,
-        Lucas Karpinski <lkarpins@redhat.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Shuah Khan <shuah@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        David Rientjes <rientjes@google.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>
+References: <20231008052101.144422-1-akihiko.odaki@daynix.com>
+ <20231008052101.144422-6-akihiko.odaki@daynix.com> <CAF=yD-LdwcXKK66s5gvJNOH8qCWRt3SvEL-GkkVif=kkOaYGhg@mail.gmail.com>
+ <8f4ad5bc-b849-4ef4-ac1f-8d5a796205e9@daynix.com> <CAF=yD-+DjDqE9iBu+PvbeBby=C4CCwG=fMFONQONrsErmps3ww@mail.gmail.com>
+ <286508a3-3067-456d-8bbf-176b00dcc0c6@daynix.com> <CAF=yD-+syCSJz_wp25rEaHTXMFRHgLh1M-uTdNWPb4fnrKgpFw@mail.gmail.com>
+ <8711b549-094d-4be2-b7af-bd93b7516c05@daynix.com> <CAF=yD-+M75o2=yDy5d03fChuNTeeTRkUU7rPRG1i6O9aZGhLmQ@mail.gmail.com>
+ <695a0611-2b19-49f9-8d32-cfea3b7df0b2@daynix.com> <CAF=yD-+_PLPt9qfXy1Ljr=Lou0W8hCJLi6HwPcZYCjJy+SKtbA@mail.gmail.com>
+ <5baab0cf-7adf-475d-8968-d46ddd179f9a@daynix.com>
+In-Reply-To: <5baab0cf-7adf-475d-8968-d46ddd179f9a@daynix.com>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Mon, 9 Oct 2023 03:44:01 -0700
+Message-ID: <CAF=yD-KjvycgFrfKu5CgGGWU-3HbyXt_APQy4tqZgNtJwAUKzg@mail.gmail.com>
+Subject: Re: [RFC PATCH 5/7] tun: Introduce virtio-net hashing feature
+To:     Akihiko Odaki <akihiko.odaki@daynix.com>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+        davem@davemloft.net, kuba@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, rdunlap@infradead.org, willemb@google.com,
+        gustavoars@kernel.org, herbert@gondor.apana.org.au,
+        steffen.klassert@secunet.com, nogikh@google.com,
+        pablo@netfilter.org, decui@microsoft.com, jakub@cloudflare.com,
+        elver@google.com, pabeni@redhat.com,
+        Yuri Benditovich <yuri.benditovich@daynix.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, 8 Oct 2023 at 21:09, Roman Gushchin <roman.gushchin@linux.dev> wrote:
+On Mon, Oct 9, 2023 at 3:12=E2=80=AFAM Akihiko Odaki <akihiko.odaki@daynix.=
+com> wrote:
 >
-> On Sun, Oct 08, 2023 at 11:30:52AM +0530, Naresh Kamboju wrote:
-> > While running selftests: cgroup: test_kmem on FVP following kernel crash
-> > noticed on Linux next 6.6.0-rc4-next-20231006.
+> On 2023/10/09 19:06, Willem de Bruijn wrote:
+> > On Mon, Oct 9, 2023 at 3:02=E2=80=AFAM Akihiko Odaki <akihiko.odaki@day=
+nix.com> wrote:
+> >>
+> >> On 2023/10/09 18:57, Willem de Bruijn wrote:
+> >>> On Mon, Oct 9, 2023 at 3:57=E2=80=AFAM Akihiko Odaki <akihiko.odaki@d=
+aynix.com> wrote:
+> >>>>
+> >>>> On 2023/10/09 17:04, Willem de Bruijn wrote:
+> >>>>> On Sun, Oct 8, 2023 at 3:46=E2=80=AFPM Akihiko Odaki <akihiko.odaki=
+@daynix.com> wrote:
+> >>>>>>
+> >>>>>> On 2023/10/09 5:08, Willem de Bruijn wrote:
+> >>>>>>> On Sun, Oct 8, 2023 at 10:04=E2=80=AFPM Akihiko Odaki <akihiko.od=
+aki@daynix.com> wrote:
+> >>>>>>>>
+> >>>>>>>> On 2023/10/09 4:07, Willem de Bruijn wrote:
+> >>>>>>>>> On Sun, Oct 8, 2023 at 7:22=E2=80=AFAM Akihiko Odaki <akihiko.o=
+daki@daynix.com> wrote:
+> >>>>>>>>>>
+> >>>>>>>>>> virtio-net have two usage of hashes: one is RSS and another is=
+ hash
+> >>>>>>>>>> reporting. Conventionally the hash calculation was done by the=
+ VMM.
+> >>>>>>>>>> However, computing the hash after the queue was chosen defeats=
+ the
+> >>>>>>>>>> purpose of RSS.
+> >>>>>>>>>>
+> >>>>>>>>>> Another approach is to use eBPF steering program. This approac=
+h has
+> >>>>>>>>>> another downside: it cannot report the calculated hash due to =
+the
+> >>>>>>>>>> restrictive nature of eBPF.
+> >>>>>>>>>>
+> >>>>>>>>>> Introduce the code to compute hashes to the kernel in order to=
+ overcome
+> >>>>>>>>>> thse challenges. An alternative solution is to extend the eBPF=
+ steering
+> >>>>>>>>>> program so that it will be able to report to the userspace, bu=
+t it makes
+> >>>>>>>>>> little sense to allow to implement different hashing algorithm=
+s with
+> >>>>>>>>>> eBPF since the hash value reported by virtio-net is strictly d=
+efined by
+> >>>>>>>>>> the specification.
+> >>>>>>>>>>
+> >>>>>>>>>> The hash value already stored in sk_buff is not used and compu=
+ted
+> >>>>>>>>>> independently since it may have been computed in a way not con=
+formant
+> >>>>>>>>>> with the specification.
+> >>>>>>>>>>
+> >>>>>>>>>> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+> >>>>>>>>>> ---
+> >>>>>>>>>
+> >>>>>>>>>> +static const struct tun_vnet_hash_cap tun_vnet_hash_cap =3D {
+> >>>>>>>>>> +       .max_indirection_table_length =3D
+> >>>>>>>>>> +               TUN_VNET_HASH_MAX_INDIRECTION_TABLE_LENGTH,
+> >>>>>>>>>> +
+> >>>>>>>>>> +       .types =3D VIRTIO_NET_SUPPORTED_HASH_TYPES
+> >>>>>>>>>> +};
+> >>>>>>>>>
+> >>>>>>>>> No need to have explicit capabilities exchange like this? Tun e=
+ither
+> >>>>>>>>> supports all or none.
+> >>>>>>>>
+> >>>>>>>> tun does not support VIRTIO_NET_RSS_HASH_TYPE_IP_EX,
+> >>>>>>>> VIRTIO_NET_RSS_HASH_TYPE_TCP_EX, and VIRTIO_NET_RSS_HASH_TYPE_UD=
+P_EX.
+> >>>>>>>>
+> >>>>>>>> It is because the flow dissector does not support IPv6 extension=
+s. The
+> >>>>>>>> specification is also vague, and does not tell how many TLVs sho=
+uld be
+> >>>>>>>> consumed at most when interpreting destination option header so =
+I chose
+> >>>>>>>> to avoid adding code for these hash types to the flow dissector.=
+ I doubt
+> >>>>>>>> anyone will complain about it since nobody complains for Linux.
+> >>>>>>>>
+> >>>>>>>> I'm also adding this so that we can extend it later.
+> >>>>>>>> max_indirection_table_length may grow for systems with 128+ CPUs=
+, or
+> >>>>>>>> types may have other bits for new protocols in the future.
+> >>>>>>>>
+> >>>>>>>>>
+> >>>>>>>>>>              case TUNSETSTEERINGEBPF:
+> >>>>>>>>>> -               ret =3D tun_set_ebpf(tun, &tun->steering_prog,=
+ argp);
+> >>>>>>>>>> +               bpf_ret =3D tun_set_ebpf(tun, &tun->steering_p=
+rog, argp);
+> >>>>>>>>>> +               if (IS_ERR(bpf_ret))
+> >>>>>>>>>> +                       ret =3D PTR_ERR(bpf_ret);
+> >>>>>>>>>> +               else if (bpf_ret)
+> >>>>>>>>>> +                       tun->vnet_hash.flags &=3D ~TUN_VNET_HA=
+SH_RSS;
+> >>>>>>>>>
+> >>>>>>>>> Don't make one feature disable another.
+> >>>>>>>>>
+> >>>>>>>>> TUNSETSTEERINGEBPF and TUNSETVNETHASH are mutually exclusive
+> >>>>>>>>> functions. If one is enabled the other call should fail, with E=
+BUSY
+> >>>>>>>>> for instance.
+> >>>>>>>>>
+> >>>>>>>>>> +       case TUNSETVNETHASH:
+> >>>>>>>>>> +               len =3D sizeof(vnet_hash);
+> >>>>>>>>>> +               if (copy_from_user(&vnet_hash, argp, len)) {
+> >>>>>>>>>> +                       ret =3D -EFAULT;
+> >>>>>>>>>> +                       break;
+> >>>>>>>>>> +               }
+> >>>>>>>>>> +
+> >>>>>>>>>> +               if (((vnet_hash.flags & TUN_VNET_HASH_REPORT) =
+&&
+> >>>>>>>>>> +                    (tun->vnet_hdr_sz < sizeof(struct virtio_=
+net_hdr_v1_hash) ||
+> >>>>>>>>>> +                     !tun_is_little_endian(tun))) ||
+> >>>>>>>>>> +                    vnet_hash.indirection_table_mask >=3D
+> >>>>>>>>>> +                    TUN_VNET_HASH_MAX_INDIRECTION_TABLE_LENGT=
+H) {
+> >>>>>>>>>> +                       ret =3D -EINVAL;
+> >>>>>>>>>> +                       break;
+> >>>>>>>>>> +               }
+> >>>>>>>>>> +
+> >>>>>>>>>> +               argp =3D (u8 __user *)argp + len;
+> >>>>>>>>>> +               len =3D (vnet_hash.indirection_table_mask + 1)=
+ * 2;
+> >>>>>>>>>> +               if (copy_from_user(vnet_hash_indirection_table=
+, argp, len)) {
+> >>>>>>>>>> +                       ret =3D -EFAULT;
+> >>>>>>>>>> +                       break;
+> >>>>>>>>>> +               }
+> >>>>>>>>>> +
+> >>>>>>>>>> +               argp =3D (u8 __user *)argp + len;
+> >>>>>>>>>> +               len =3D virtio_net_hash_key_length(vnet_hash.t=
+ypes);
+> >>>>>>>>>> +
+> >>>>>>>>>> +               if (copy_from_user(vnet_hash_key, argp, len)) =
+{
+> >>>>>>>>>> +                       ret =3D -EFAULT;
+> >>>>>>>>>> +                       break;
+> >>>>>>>>>> +               }
+> >>>>>>>>>
+> >>>>>>>>> Probably easier and less error-prone to define a fixed size con=
+trol
+> >>>>>>>>> struct with the max indirection table size.
+> >>>>>>>>
+> >>>>>>>> I made its size variable because the indirection table and key m=
+ay grow
+> >>>>>>>> in the future as I wrote above.
+> >>>>>>>>
+> >>>>>>>>>
+> >>>>>>>>> Btw: please trim the CC: list considerably on future patches.
+> >>>>>>>>
+> >>>>>>>> I'll do so in the next version with the TUNSETSTEERINGEBPF chang=
+e you
+> >>>>>>>> proposed.
+> >>>>>>>
+> >>>>>>> To be clear: please don't just resubmit with that one change.
+> >>>>>>>
+> >>>>>>> The skb and cb issues are quite fundamental issues that need to b=
+e resolved.
+> >>>>>>>
+> >>>>>>> I'd like to understand why adjusting the existing BPF feature for=
+ this
+> >>>>>>> exact purpose cannot be amended to return the key it produced.
+> >>>>>>
+> >>>>>> eBPF steering program is not designed for this particular problem =
+in my
+> >>>>>> understanding. It was introduced to derive hash values with an
+> >>>>>> understanding of application-specific semantics of packets instead=
+ of
+> >>>>>> generic IP/TCP/UDP semantics.
+> >>>>>>
+> >>>>>> This problem is rather different in terms that the hash derivation=
+ is
+> >>>>>> strictly defined by virtio-net. I don't think it makes sense to
+> >>>>>> introduce the complexity of BPF when you always run the same code.
+> >>>>>>
+> >>>>>> It can utilize the existing flow dissector and also make it easier=
+ to
+> >>>>>> use for the userspace by implementing this in the kernel.
+> >>>>>
+> >>>>> Ok. There does appear to be overlap in functionality. But it might =
+be
+> >>>>> easier to deploy to just have standard Toeplitz available without
+> >>>>> having to compile and load an eBPF program.
+> >>>>>
+> >>>>> As for the sk_buff and cb[] changes. The first is really not needed=
+.
+> >>>>> sk_buff simply would not scale if every edge case needs a few bits.
+> >>>>
+> >>>> An alternative is to move the bit to cb[] and clear it for every cod=
+e
+> >>>> paths that lead to ndo_start_xmit(), but I'm worried that it is erro=
+r-prone.
+> >>>>
+> >>>> I think we can put the bit in sk_buff for now. We can implement the
+> >>>> alternative when we are short of bits.
+> >>>
+> >>> I disagree. sk_buff fields add a cost to every code path. They cannot
+> >>> be added for every edge case.
+> >>
+> >> It only takes an unused bit and does not grow the sk_buff size so I
+> >> think it has practically no cost for now.
+> >
+> > The problem is that that thinking leads to death by a thousand cuts.
+> >
+> > "for now" forces the cost of having to think hard how to avoid growing
+> > sk_buff onto the next person. Let's do it right from the start.
 >
-> Hi Naresh!
->
-> Thank you for the report!
->
-> I've tried to reproduce it, but wasn't successful so far: I've run test_kmem
-> for several hundred times and haven't seen the crash.
+> I see. I described an alternative to move the bit to cb[] and clear it
+> in all code paths that leads to ndo_start_xmit() earlier. Does that
+> sound good to you?
 
-If you look at the problematic test case is
-selftests: cgroup: test_core
+If you use the control block to pass information between
+__dev_queue_xmit on the tun device and tun_net_xmit, using gso_skb_cb,
+the field can be left undefined in all non-tun paths. tun_select_queue
+can initialize.
 
-I recommend to run
-./run_kselftest.sh -c cgroup
-
->
-> Can you, please, provide some additional information?
-> How easy to reproduce it?
-
-It is always reproducible on qemu-arm64, FVP, x86 with a given config.
-
-> Do you see it every time or with some probability?
-
-Always with selftests: cgroup: test_core.
-I generally run all selftests: cgroup: *
-
-> Do you see it on other platforms?
-qemu-arm64, FVP, x86.
-
-> Can you, please, check where exactly the crash happens using addr2line?
-
-I have provided links to build, test logs and steps to reproduce scripts.
-
-Is this an interesting log ?
-
-# selftests: cgroup: test_core
-# ok 1 test_cgcore_internal_process_constraint
-# ok 2 test_cgcore_top_down_constraint_enable
-# ok 3 test_cgcore_top_down_constraint_disable
-# ok 4 test_cgcore_no_internal_process_constraint_on_threads
-# ok 5 test_cgcore_parent_becomes_threaded
-# ok 6 test_cgcore_invalid_domain
-# ok 7 test_cgcore_populated
-# ok 8 test_cgcore_proc_migration
-# ok 9 test_cgcore_thread_migration
-# ok 10 test_cgcore_destroy
-# ok 11 test_cgcore_lesser_euid_open
-# ok 12 test_cgcore_lesser_ns_open
-<1>[  188.504854] Unable to handle kernel NULL pointer dereference at
-virtual address 0000000000000000
-<1>[  188.505724] Mem abort info:
-<1>[  188.506036]   ESR = 0x0000000096000044
-<1>[  188.507539]   EC = 0x25: DABT (current EL), IL = 32 bits
-<1>[  188.508268]   SET = 0, FnV = 0
-<1>[  188.508895]   EA = 0, S1PTW = 0
-<1>[  188.509517]   FSC = 0x04: level 0 translation fault
-<1>[  188.510279] Data abort info:
-<1>[  188.511513]   ISV = 0, ISS = 0x00000044, ISS2 = 0x00000000
-<1>[  188.512757]   CM = 0, WnR = 1, TnD = 0, TagAccess = 0
-<1>[  188.513333]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
-<1>[  188.514316] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000104934000
-<1>[  188.516277] [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
-<0>[  188.517886] Internal error: Oops: 0000000096000044 [#1] PREEMPT SMP
-<4>[  188.518838] Modules linked in: crct10dif_ce sm3_ce sm3 sha3_ce
-sha512_ce sha512_arm64 fuse drm backlight dm_mod ip_tables x_tables
-<4>[  188.521105] CPU: 0 PID: 57 Comm: kworker/0:2 Not tainted
-6.6.0-rc4-next-20231006 #1
-<4>[  188.521750] Hardware name: linux,dummy-virt (DT)
-<4>[  188.522915] Workqueue: cgroup_destroy css_free_rwork_fn
-<4>[  188.523572] pstate: 03400009 (nzcv daif +PAN -UAO +TCO +DIT
--SSBS BTYPE=--)
-<4>[ 188.524569] pc : percpu_ref_put_many.constprop.0
-(arch/arm64/include/asm/atomic_lse.h:169 (discriminator 1)
-arch/arm64/include/asm/atomic_lse.h:184 (discriminator 1)
-arch/arm64/include/asm/atomic_lse.h:204 (discriminator 1)
-arch/arm64/include/asm/atomic.h:92 (discriminator 1)
-include/linux/atomic/atomic-arch-fallback.h:2886 (discriminator 1)
-include/linux/atomic/atomic-arch-fallback.h:4351 (discriminator 1)
-include/linux/atomic/atomic-long.h:1543 (discriminator 1)
-include/linux/atomic/atomic-instrumented.h:4486 (discriminator 1)
-include/linux/percpu-refcount.h:334 (discriminator 1))
-<4>[ 188.525451] lr : percpu_ref_put_many.constprop.0
-(include/linux/percpu-refcount.h:174 (discriminator 2)
-include/linux/percpu-refcount.h:332 (discriminator 2))
-<4>[  188.526230] sp : ffff8000803d3ca0
-<4>[  188.526902] x29: ffff8000803d3ca0 x28: 0000000000000000 x27:
-0000000000000000
-<4>[  188.527976] x26: 0000000000000000 x25: ffff0000c1112e80 x24:
-ffff0000c002da05
-<4>[  188.528965] x23: 0000000000000030 x22: ffffafd0c976a000 x21:
-ffffafd0c976cb70
-<4>[  188.529927] x20: ffff0000d67fa000 x19: ffff0000d32f44c0 x18:
-0000000000000000
-<4>[  188.531096] x17: 0000000000000000 x16: 0000000000000000 x15:
-0000000000000000
-<4>[  188.532244] x14: 0000000000000004 x13: ffffafd0c9787258 x12:
-0000000000000000
-<4>[  188.533548] x11: ffff0000c0402e58 x10: ffff0000c0402db0 x9 :
-ffffafd0c6f86a90
-<4>[  188.535274] x8 : ffff8000803d3b68 x7 : 0000000000000000 x6 :
-0000000000000001
-<4>[  188.536318] x5 : ffffafd0c976a000 x4 : ffffafd0c976a288 x3 :
-0000000000000000
-<4>[  188.537144] x2 : ffff0000c0acbe00 x1 : 0000000000000000 x0 :
-ffffffffffffffff
-<4>[  188.538091] Call trace:
-<4>[ 188.538883] percpu_ref_put_many.constprop.0
-(arch/arm64/include/asm/atomic_lse.h:169 (discriminator 1)
-arch/arm64/include/asm/atomic_lse.h:184 (discriminator 1)
-arch/arm64/include/asm/atomic_lse.h:204 (discriminator 1)
-arch/arm64/include/asm/atomic.h:92 (discriminator 1)
-include/linux/atomic/atomic-arch-fallback.h:2886 (discriminator 1)
-include/linux/atomic/atomic-arch-fallback.h:4351 (discriminator 1)
-include/linux/atomic/atomic-long.h:1543 (discriminator 1)
-include/linux/atomic/atomic-instrumented.h:4486 (discriminator 1)
-include/linux/percpu-refcount.h:334 (discriminator 1))
-<4>[ 188.539208] __mem_cgroup_free (include/linux/find.h:203
-include/linux/nodemask.h:266 mm/memcontrol.c:5446)
-<4>[ 188.539559] mem_cgroup_css_free (mm/memcontrol.c:5682)
-<4>[ 188.543093] css_free_rwork_fn (include/linux/spinlock.h:356
-kernel/cgroup/cgroup.c:350 kernel/cgroup/cgroup.c:5377)
-<4>[ 188.544324] process_one_work (kernel/workqueue.c:2635)
-<4>[ 188.545045] worker_thread (kernel/workqueue.c:2697 (discriminator
-2) kernel/workqueue.c:2784 (discriminator 2))
-<4>[ 188.545710] kthread (kernel/kthread.c:388)
-<4>[ 188.546690] ret_from_fork (arch/arm64/kernel/entry.S:858)
-<0>[ 188.547769] Code: d65f03c0 f9400661 d503201f 92800000 (f8e00020)
-All code
-========
-   0: d65f03c0 ret
-   4: f9400661 ldr x1, [x19, #8]
-   8: d503201f nop
-   c: 92800000 mov x0, #0xffffffffffffffff    // #-1
-  10:* f8e00020 ldaddal x0, x0, [x1] <-- trapping instruction
-
-Code starting with the faulting instruction
-===========================================
-   0: f8e00020 ldaddal x0, x0, [x1]
-<4>[  188.549059] ---[ end trace 0000000000000000 ]---
-ok 3 selftests: cgroup: test_core
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-
-Links:
-logs: https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/naresh/tests/2WWLlrB6hfNAc0btHy8LPxuQefp
-
-Build: https://storage.tuxsuite.com/public/linaro/naresh/builds/2WWGnN6pGnGdueSyID8ZTdS5EVv/
-Config: https://storage.tuxsuite.com/public/linaro/naresh/builds/2WWGnN6pGnGdueSyID8ZTdS5EVv/config
-
-Steps to reproduce:
-- https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/naresh/tests/2WWLlrB6hfNAc0btHy8LPxuQefp/reproducer
-
-- Naresh
+I would still use skb->hash to encode the hash. That hash type of that
+field is not strictly defined. It can be siphash from ___skb_get_hash
+or a device hash, which most likely also uses Toeplitz. Then you also
+don't run into the problem of growing the struct size.
