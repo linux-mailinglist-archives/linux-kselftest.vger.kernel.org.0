@@ -2,272 +2,163 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FE8F7BE65F
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Oct 2023 18:29:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A30C7BE6B6
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Oct 2023 18:41:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377181AbjJIQ30 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 9 Oct 2023 12:29:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56452 "EHLO
+        id S1377303AbjJIQlY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 9 Oct 2023 12:41:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377179AbjJIQ3Z (ORCPT
+        with ESMTP id S1376962AbjJIQlX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 9 Oct 2023 12:29:25 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17FAAAC
-        for <linux-kselftest@vger.kernel.org>; Mon,  9 Oct 2023 09:29:23 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-32003aae100so3525660f8f.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 09 Oct 2023 09:29:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696868961; x=1697473761; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=n9uxnDjj5RsOcAN+RF0ynO6xdWSr/KBmzmP+ARysPwQ=;
-        b=bzknRyENyCX43KOi5mzPbUiU3uf2+7Ruiku1yomFUMIf8Pj1+NQk6nQ40aJi6/djLl
-         COd/P9S3AabzMxTQQQexSgQ+PqzU4Xajk75Fe6OW4EVQWhVaBHf7onlEw7rm9MzwZY15
-         ZlhP3AnlljENRL3p/Uqfz0Z1yyIHlcscCHuaUB69h7F4mpZBLqW6XRUs45M0Twihf7Zf
-         86lYSXibmt9ixAT5fZCzgqgRltLgPcg7zpjVKGCTOlen4PuQVpb6Ui3M/qJCJFfkWBSl
-         RpLiTRgiUdL5D7tSiIj4wDhMsRug935ToshteoMxm7VoqMbYNdI/HW968qTvMSRxS3Tm
-         jZpw==
+        Mon, 9 Oct 2023 12:41:23 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38E46AF
+        for <linux-kselftest@vger.kernel.org>; Mon,  9 Oct 2023 09:40:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1696869641;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=+YpXHXo6RBy8CnTiTObZdU28mMjUq9Z4XmoNn8CdwOg=;
+        b=LLo4D7hwm/+U6MJgO7V9MHv388IkIHapHhOi3kWgTpDxX3a+VvtQIBiBH0epTTP9lEjPCr
+        wypmBcuNErTokw7IuAe8O0VRHVrqUUO55mhrAWZ32LoUxtLCquOu+RMAODIi6Xyd49TTBz
+        vkQaoVay1N/4O3ZICu93/9jz2MiRSqs=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-587-0fxD4TP7MRyZcwebxMrdqg-1; Mon, 09 Oct 2023 12:40:40 -0400
+X-MC-Unique: 0fxD4TP7MRyZcwebxMrdqg-1
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-4067f186094so30413675e9.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 09 Oct 2023 09:40:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696868961; x=1697473761;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=n9uxnDjj5RsOcAN+RF0ynO6xdWSr/KBmzmP+ARysPwQ=;
-        b=YNB4dd0LFgKXzQuEJAsoorsfmXF1rHiYwmp6XLsU+/NyGKH0E6JS/fN7/36LLJOe2R
-         xXhNbquako5GiVb/TD16YDJ5T3MUhYhkvFjUPu3BVFOfrEH4NqGJxeBfuP+OgkQcdc1p
-         AIsuyUz+znrsLiq7usGyJ2tyQ6pIiMDeTcH+cK4yH4WQWrqYnP9h8aTyR3BdD59o/cvS
-         8Z/PIpK2iZl73ytV8RiN1N+LqKMa//aXjdo3AQj8knczQNIBZQ/Cdpe6aKwWJLgybi0g
-         PkcWpssO18L1T7EbRF/IddujeStOpLQXrH+mkZeQF3W5diS68VAD+2/8QztPwRF4pOKu
-         IBkg==
-X-Gm-Message-State: AOJu0YxM1tt6SOAzV4gcMIikbNJ+hat/gHSXGww6o+HXR0j19eWJdsic
-        vwxF4uxp8zjWPq9K7EyWA6yOjFP1LB01AbX+dj6vAA==
-X-Google-Smtp-Source: AGHT+IH6PLI2drC54PV9B3H88bFGBQmIanwb3EneliHOPBj95HFQUfNM0nOikUEz5pJHMri6gAV4G1Mzu6DEnQh8dhI=
-X-Received: by 2002:adf:ff88:0:b0:319:5234:5c92 with SMTP id
- j8-20020adfff88000000b0031952345c92mr9481043wrr.35.1696868961196; Mon, 09 Oct
- 2023 09:29:21 -0700 (PDT)
-MIME-Version: 1.0
-References: <20231009064230.2952396-1-surenb@google.com> <20231009064230.2952396-3-surenb@google.com>
- <214b78ed-3842-5ba1-fa9c-9fa719fca129@redhat.com> <CAJuCfpHzSm+z9b6uxyYFeqr5b5=6LehE9O0g192DZdJnZqmQEw@mail.gmail.com>
- <478697aa-f55c-375a-6888-3abb343c6d9d@redhat.com>
-In-Reply-To: <478697aa-f55c-375a-6888-3abb343c6d9d@redhat.com>
-From:   Lokesh Gidra <lokeshgidra@google.com>
-Date:   Mon, 9 Oct 2023 17:29:08 +0100
-Message-ID: <CA+EESO5nvzka0KzFGzdGgiCWPLg7XD-8jA9=NTUOKFy-56orUg@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] userfaultfd: UFFDIO_MOVE uABI
-To:     David Hildenbrand <david@redhat.com>
-Cc:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
-        viro@zeniv.linux.org.uk, brauner@kernel.org, shuah@kernel.org,
-        aarcange@redhat.com, peterx@redhat.com, hughd@google.com,
-        mhocko@suse.com, axelrasmussen@google.com, rppt@kernel.org,
-        willy@infradead.org, Liam.Howlett@oracle.com, jannh@google.com,
-        zhangpeng362@huawei.com, bgeffon@google.com,
-        kaleshsingh@google.com, ngeoffray@google.com, jdduke@google.com,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kernel-team@android.com
+        d=1e100.net; s=20230601; t=1696869638; x=1697474438;
+        h=content-transfer-encoding:mime-version:user-agent:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+YpXHXo6RBy8CnTiTObZdU28mMjUq9Z4XmoNn8CdwOg=;
+        b=eGlLJ+4hfE2b7duShgurjA5pgoNB9T7gFqyGnDMl8agKCkYJPoH73M2PfbxTxgN72P
+         QFsl3zJy2B6L0Sn8pCyYTG1RHLjHhy7WX5OkMbyV6t2opNZxP+wS6DvVbugxr6kS+CeI
+         tTjjMYT89FfANrT0DJ0Va227plL8pvo6gKeq8sbCHZWDz8LxHLsbRRLDQhcDZbXqC6Yj
+         0tChB2TnrN5YD2bhabA7aJsu44nGx8aD0CBN+Lj4ZijdVScW4wrCuv3DwuoTc0/SYwa7
+         YJe/AtZ/c0/1HccYu6TKsdGNovIIwSO3GTSitH2SWGw7I0//Y4Nds6w8myC+f9AMGQI3
+         oN1Q==
+X-Gm-Message-State: AOJu0Yw5dW3MgxPsGJRTe5v8Q4h05pPSUdhO5JUgWI+H9NvZCPvAVbou
+        7VfBOLlWBOVOCtfJj01XLD3H4huLAJDR8+QCbLTHKuzTsNp4lY8I6i7cPoInTxWLNSqz9NXp8SI
+        zblcIg8iacq7sl4MVEvN+EU8iBLwX0UZ5nF2obh0=
+X-Received: by 2002:a05:600c:2949:b0:405:82c0:d9d9 with SMTP id n9-20020a05600c294900b0040582c0d9d9mr14896207wmd.41.1696869638576;
+        Mon, 09 Oct 2023 09:40:38 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEMgAs2OFs3TPKIXUcqwEYEgUj8NhgbOlPIyIMA79idAa9Hjf42+dP6kuPpgcF+X3v1F7p9tg==
+X-Received: by 2002:a05:600c:2949:b0:405:82c0:d9d9 with SMTP id n9-20020a05600c294900b0040582c0d9d9mr14896162wmd.41.1696869638060;
+        Mon, 09 Oct 2023 09:40:38 -0700 (PDT)
+Received: from starship ([89.237.100.246])
+        by smtp.gmail.com with ESMTPSA id bd5-20020a05600c1f0500b004030e8ff964sm14033430wmb.34.2023.10.09.09.40.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Oct 2023 09:40:37 -0700 (PDT)
+Message-ID: <907b351fee183609891a4d0cfb0a79bad85577a0.camel@redhat.com>
+Subject: Re: [RFC PATCH v2 14/20] x86/kvm: Make kvm_async_pf_enabled
+ __ro_after_init
+From:   Maxim Levitsky <mlevitsk@redhat.com>
+To:     Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, kvm@vger.kernel.org, linux-mm@kvack.org,
+        bpf@vger.kernel.org, x86@kernel.org, rcu@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Zqiang <qiang.zhang1211@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jason Baron <jbaron@akamai.com>,
+        Kees Cook <keescook@chromium.org>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Juerg Haefliger <juerg.haefliger@canonical.com>,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Nadav Amit <namit@vmware.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Chuang Wang <nashuiliang@gmail.com>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        Petr Mladek <pmladek@suse.com>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>, Song Liu <song@kernel.org>,
+        Julian Pidancet <julian.pidancet@oracle.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Dionna Glaze <dionnaglaze@google.com>,
+        Thomas =?ISO-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Yair Podemsky <ypodemsk@redhat.com>
+Date:   Mon, 09 Oct 2023 19:40:31 +0300
+In-Reply-To: <20230720163056.2564824-15-vschneid@redhat.com>
+References: <20230720163056.2564824-1-vschneid@redhat.com>
+         <20230720163056.2564824-15-vschneid@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Evolution 3.36.5 (3.36.5-2.fc32) 
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Oct 9, 2023 at 5:24=E2=80=AFPM David Hildenbrand <david@redhat.com>=
- wrote:
->
-> On 09.10.23 18:21, Suren Baghdasaryan wrote:
-> > On Mon, Oct 9, 2023 at 7:38=E2=80=AFAM David Hildenbrand <david@redhat.=
-com> wrote:
-> >>
-> >> On 09.10.23 08:42, Suren Baghdasaryan wrote:
-> >>> From: Andrea Arcangeli <aarcange@redhat.com>
-> >>>
-> >>> Implement the uABI of UFFDIO_MOVE ioctl.
-> >>> UFFDIO_COPY performs ~20% better than UFFDIO_MOVE when the applicatio=
-n
-> >>> needs pages to be allocated [1]. However, with UFFDIO_MOVE, if pages =
-are
-> >>> available (in userspace) for recycling, as is usually the case in hea=
-p
-> >>> compaction algorithms, then we can avoid the page allocation and memc=
-py
-> >>> (done by UFFDIO_COPY). Also, since the pages are recycled in the
-> >>> userspace, we avoid the need to release (via madvise) the pages back =
-to
-> >>> the kernel [2].
-> >>> We see over 40% reduction (on a Google pixel 6 device) in the compact=
-ing
-> >>> thread=E2=80=99s completion time by using UFFDIO_MOVE vs. UFFDIO_COPY=
-. This was
-> >>> measured using a benchmark that emulates a heap compaction implementa=
-tion
-> >>> using userfaultfd (to allow concurrent accesses by application thread=
-s).
-> >>> More details of the usecase are explained in [2].
-> >>> Furthermore, UFFDIO_MOVE enables moving swapped-out pages without
-> >>> touching them within the same vma. Today, it can only be done by mrem=
-ap,
-> >>> however it forces splitting the vma.
-> >>>
-> >>> [1] https://lore.kernel.org/all/1425575884-2574-1-git-send-email-aarc=
-ange@redhat.com/
-> >>> [2] https://lore.kernel.org/linux-mm/CA+EESO4uO84SSnBhArH4HvLNhaUQ5nZ=
-KNKXqxRCyjniNVjp0Aw@mail.gmail.com/
-> >>>
-> >>> Update for the ioctl_userfaultfd(2)  manpage:
-> >>>
-> >>>      UFFDIO_MOVE
-> >>>          (Since Linux xxx)  Move a continuous memory chunk into the
-> >>>          userfault registered range and optionally wake up the blocke=
-d
-> >>>          thread. The source and destination addresses and the number =
-of
-> >>>          bytes to move are specified by the src, dst, and len fields =
-of
-> >>>          the uffdio_move structure pointed to by argp:
-> >>>
-> >>>              struct uffdio_move {
-> >>>                  __u64 dst;    /* Destination of move */
-> >>>                  __u64 src;    /* Source of move */
-> >>>                  __u64 len;    /* Number of bytes to move */
-> >>>                  __u64 mode;   /* Flags controlling behavior of move =
-*/
-> >>>                  __s64 move;   /* Number of bytes moved, or negated e=
-rror */
-> >>>              };
-> >>>
-> >>>          The following value may be bitwise ORed in mode to change th=
-e
-> >>>          behavior of the UFFDIO_MOVE operation:
-> >>>
-> >>>          UFFDIO_MOVE_MODE_DONTWAKE
-> >>>                 Do not wake up the thread that waits for page-fault
-> >>>                 resolution
-> >>>
-> >>>          UFFDIO_MOVE_MODE_ALLOW_SRC_HOLES
-> >>>                 Allow holes in the source virtual range that is being=
- moved.
-> >>>                 When not specified, the holes will result in ENOENT e=
-rror.
-> >>>                 When specified, the holes will be accounted as succes=
-sfully
-> >>>                 moved memory. This is mostly useful to move hugepage =
-aligned
-> >>>                 virtual regions without knowing if there are transpar=
-ent
-> >>>                 hugepages in the regions or not, but preventing the r=
-isk of
-> >>>                 having to split the hugepage during the operation.
-> >>>
-> >>>          The move field is used by the kernel to return the number of
-> >>>          bytes that was actually moved, or an error (a negated errno-
-> >>>          style value).  If the value returned in move doesn't match t=
-he
-> >>>          value that was specified in len, the operation fails with th=
-e
-> >>>          error EAGAIN.  The move field is output-only; it is not read=
- by
-> >>>          the UFFDIO_MOVE operation.
-> >>>
-> >>>          The operation may fail for various reasons. Usually, remappi=
-ng of
-> >>>          pages that are not exclusive to the given process fail; once=
- KSM
-> >>>          might deduplicate pages or fork() COW-shares pages during fo=
-rk()
-> >>>          with child processes, they are no longer exclusive. Further,=
- the
-> >>>          kernel might only perform lightweight checks for detecting w=
-hether
-> >>>          the pages are exclusive, and return -EBUSY in case that chec=
-k fails.
-> >>>          To make the operation more likely to succeed, KSM should be
-> >>>          disabled, fork() should be avoided or MADV_DONTFORK should b=
-e
-> >>>          configured for the source VMA before fork().
-> >>>
-> >>>          This ioctl(2) operation returns 0 on success.  In this case,=
- the
-> >>>          entire area was moved.  On error, -1 is returned and errno i=
-s
-> >>>          set to indicate the error.  Possible errors include:
-> >>>
-> >>>          EAGAIN The number of bytes moved (i.e., the value returned i=
-n
-> >>>                 the move field) does not equal the value that was
-> >>>                 specified in the len field.
-> >>>
-> >>>          EINVAL Either dst or len was not a multiple of the system pa=
-ge
-> >>>                 size, or the range specified by src and len or dst an=
-d len
-> >>>                 was invalid.
-> >>>
-> >>>          EINVAL An invalid bit was specified in the mode field.
-> >>>
-> >>>          ENOENT
-> >>>                 The source virtual memory range has unmapped holes an=
-d
-> >>>                 UFFDIO_MOVE_MODE_ALLOW_SRC_HOLES is not set.
-> >>>
-> >>>          EEXIST
-> >>>                 The destination virtual memory range is fully or part=
-ially
-> >>>                 mapped.
-> >>>
-> >>>          EBUSY
-> >>>                 The pages in the source virtual memory range are not
-> >>>                 exclusive to the process. The kernel might only perfo=
-rm
-> >>>                 lightweight checks for detecting whether the pages ar=
-e
-> >>>                 exclusive. To make the operation more likely to succe=
-ed,
-> >>>                 KSM should be disabled, fork() should be avoided or
-> >>>                 MADV_DONTFORK should be configured for the source vir=
-tual
-> >>>                 memory area before fork().
-> >>>
-> >>>          ENOMEM Allocating memory needed for the operation failed.
-> >>>
-> >>>          ESRCH
-> >>>                 The faulting process has exited at the time of a
-> >>>                 UFFDIO_MOVE operation.
-> >>>
-> >>
-> >> A general comment simply because I realized that just now: does anythi=
-ng
-> >> speak against limiting the operations now to a single MM?
-> >>
-> >> The use cases I heard so far don't need it. If ever required, we could
-> >> consider extending it.
-> >>
-> >> Let's reduce complexity and KIS unless really required.
-> >
-> > Let me check if there are use cases that require moves between MMs.
-> > Andrea seems to have put considerable effort to make it work between
-> > MMs and it would be a pity to lose that. I can send a follow-up patch
-> > to recover that functionality and even if it does not get merged, it
-> > can be used in the future as a reference. But first let me check if we
-> > can drop it.
+У чт, 2023-07-20 у 17:30 +0100, Valentin Schneider пише:
+> objtool now warns about it:
+> 
+>   vmlinux.o: warning: objtool: exc_page_fault+0x2a: Non __ro_after_init static key "kvm_async_pf_enabled" in .noinstr section
+> 
+> The key can only be enabled (and not disabled) in the __init function
+> kvm_guest_init(), so mark it as __ro_after_init.
+> 
+> Signed-off-by: Valentin Schneider <vschneid@redhat.com>
+> ---
+>  arch/x86/kernel/kvm.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kernel/kvm.c b/arch/x86/kernel/kvm.c
+> index 1cceac5984daa..319460090a836 100644
+> --- a/arch/x86/kernel/kvm.c
+> +++ b/arch/x86/kernel/kvm.c
+> @@ -44,7 +44,7 @@
+>  #include <asm/svm.h>
+>  #include <asm/e820/api.h>
+>  
+> -DEFINE_STATIC_KEY_FALSE(kvm_async_pf_enabled);
+> +DEFINE_STATIC_KEY_FALSE_RO(kvm_async_pf_enabled);
+>  
+>  static int kvmapf = 1;
+>  
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
 
-For the compaction use case that we have it's fine to limit it to
-single MM. However, for general use I think Peter will have a better
-idea.
->
-> Yes, that sounds reasonable. Unless the big important use cases requires
-> moving pages between processes, let's leave that as future work for now.
->
-> --
-> Cheers,
->
-> David / dhildenb
->
+Best regards,
+	Maxim Levitsky
+
