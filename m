@@ -2,50 +2,51 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8AA17BD89E
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Oct 2023 12:31:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 004457BD8A3
+	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Oct 2023 12:32:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346097AbjJIKbv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 9 Oct 2023 06:31:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53160 "EHLO
+        id S1345910AbjJIKcC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 9 Oct 2023 06:32:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345825AbjJIKbo (ORCPT
+        with ESMTP id S1345888AbjJIKbu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 9 Oct 2023 06:31:44 -0400
+        Mon, 9 Oct 2023 06:31:50 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E08BA;
-        Mon,  9 Oct 2023 03:31:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C5409C;
+        Mon,  9 Oct 2023 03:31:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1696847499; x=1728383499;
+  t=1696847505; x=1728383505;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=w0rSpTX77wKswH6vd54/bHP7hpBLDH5K7yc41Vt6tdc=;
-  b=hzjXJ8/4jdMQWf46fXBDt9BitedPS1ZIOdd91LcQsM9t/iPOuW0nii7h
-   0oBVu/yK2siir1qCFwwzVOG6d3GXg/rhcFsWKdfNIF8UVE4ClZGgxos1C
-   Sg61iTCGR0rOzkCKPjU6w5WCbkkdBAITRXq62yL5MqKILJkOkirLYNwnc
-   G9ueC8DvV5EYb9MzcMh0k+JUcWjnpzgoyK1Jq846jkWH7oiNK+u5Vq9Rn
-   cSwdp29p+gkFVBWp6McJsbki5qOaZGdcr01LlmYNH7uAZiVxOsRULpn1R
-   RjSu5U8X5fnHU6CvQ7kwBnx/L4mUNRUE9BroYU2SDscGCUcFfXguPIAYe
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10857"; a="363468462"
+  bh=VXxoZYWc1k9TebbKU7+nIiD46KUiapqhrZ8TkPNyZG4=;
+  b=mD9m564DnVBZmiC/YkQt1k7PfqExGiimQHYnx6QveiIyRLq+4KaqXL3d
+   H0KblwdqDmj7AxfnkuZRE8Uk2GGAGsmAAu7hq90MWEuuFztm5E+x6ZMMM
+   eyRXbkTuHc2E58RQhmY0qQTn8BvHRLKqy86PzBr1jhoMuY9JiFXljxDsg
+   zmMvR8bgyepm7/Wxku6RFiLedgHDT24Zg/wyQRJSwQIDGkiPtdElMFnY9
+   nlPz62RQL27i5iz5HHyuF6s1I5fFvzmgMyAXV1aTt/BEUSSMwbaZPlp+a
+   nTKbN04ryDKvQWHnpiBwOFVYwaseNoytCSSqfNeFArU/EHP5f+K1ySPXk
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10857"; a="363468470"
 X-IronPort-AV: E=Sophos;i="6.03,210,1694761200"; 
-   d="scan'208";a="363468462"
+   d="scan'208";a="363468470"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2023 03:31:39 -0700
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2023 03:31:44 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10857"; a="926718731"
+X-IronPort-AV: E=McAfee;i="6600,9927,10857"; a="926718745"
 X-IronPort-AV: E=Sophos;i="6.03,210,1694761200"; 
-   d="scan'208";a="926718731"
+   d="scan'208";a="926718745"
 Received: from kkensic-mobl1.ger.corp.intel.com (HELO wieczorr-mobl1.intel.com) ([10.213.30.239])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2023 03:31:36 -0700
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2023 03:31:41 -0700
 From:   Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>
-Cc:     ilpo.jarvinen@linux.intel.com, kvm@vger.kernel.org,
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     ilpo.jarvinen@linux.intel.com, linux-mm@kvack.org,
         linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 6/8] selftests/kvm: Replace attribute with macro
-Date:   Mon,  9 Oct 2023 12:30:40 +0200
-Message-ID: <21ff6c67519d6471a25e4dc94022bfbe1b1da441.1696846568.git.maciej.wieczor-retman@intel.com>
+Subject: [PATCH v4 7/8] selftests/mm: Substitute attribute with a macro
+Date:   Mon,  9 Oct 2023 12:30:41 +0200
+Message-ID: <288075f2e0d9c34e5789165f688b2fbbc212b56c.1696846568.git.maciej.wieczor-retman@intel.com>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <cover.1696846568.git.maciej.wieczor-retman@intel.com>
 References: <cover.1696846568.git.maciej.wieczor-retman@intel.com>
@@ -61,48 +62,49 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The __printf() macro is used in many tools in the linux kernel to
-validate the format specifiers in functions that use printf. The kvm
-selftest uses it without putting it in a macro definition while it
-also imports the kselftests.h header.
+The mm selftest uses the printf attribute in its full form. Since the
+header file that uses it also includes kselftests.h it can use the macro
+defined there.
 
-Use __printf() from kselftests.h instead of the full attribute.
+Use __printf() included with kselftests.h instead of the full attribute.
+
+Fix a wrong format specifier in ksft_print_msg().
 
 Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 ---
 Changelog v2:
-- Reword patch message.
-- Use __printf() on test_assert().
+- Added this patch to the series.
 
- tools/testing/selftests/kvm/include/test_util.h | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ tools/testing/selftests/mm/mremap_test.c  | 2 +-
+ tools/testing/selftests/mm/pkey-helpers.h | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/include/test_util.h b/tools/testing/selftests/kvm/include/test_util.h
-index 7e614adc6cf4..8e5f413a593d 100644
---- a/tools/testing/selftests/kvm/include/test_util.h
-+++ b/tools/testing/selftests/kvm/include/test_util.h
-@@ -33,7 +33,7 @@ static inline int _no_printf(const char *format, ...) { return 0; }
- #define pr_info(...) _no_printf(__VA_ARGS__)
+diff --git a/tools/testing/selftests/mm/mremap_test.c b/tools/testing/selftests/mm/mremap_test.c
+index 5c3773de9f0f..1dbfcf6df255 100644
+--- a/tools/testing/selftests/mm/mremap_test.c
++++ b/tools/testing/selftests/mm/mremap_test.c
+@@ -338,7 +338,7 @@ static long long remap_region(struct config c, unsigned int threshold_mb,
+ 		char c = (char) rand();
+ 
+ 		if (((char *) dest_addr)[i] != c) {
+-			ksft_print_msg("Data after remap doesn't match at offset %d\n",
++			ksft_print_msg("Data after remap doesn't match at offset %llu\n",
+ 				       i);
+ 			ksft_print_msg("Expected: %#x\t Got: %#x\n", c & 0xff,
+ 					((char *) dest_addr)[i] & 0xff);
+diff --git a/tools/testing/selftests/mm/pkey-helpers.h b/tools/testing/selftests/mm/pkey-helpers.h
+index 92f3be3dd8e5..1af3156a9db8 100644
+--- a/tools/testing/selftests/mm/pkey-helpers.h
++++ b/tools/testing/selftests/mm/pkey-helpers.h
+@@ -34,7 +34,7 @@ extern int test_nr;
+ extern int iteration_nr;
+ 
+ #ifdef __GNUC__
+-__attribute__((format(printf, 1, 2)))
++__printf(1, 2)
  #endif
- 
--void print_skip(const char *fmt, ...) __attribute__((format(printf, 1, 2)));
-+void __printf(1, 2) print_skip(const char *fmt, ...);
- #define __TEST_REQUIRE(f, fmt, ...)				\
- do {								\
- 	if (!(f))						\
-@@ -46,9 +46,9 @@ ssize_t test_write(int fd, const void *buf, size_t count);
- ssize_t test_read(int fd, void *buf, size_t count);
- int test_seq_read(const char *path, char **bufp, size_t *sizep);
- 
--void test_assert(bool exp, const char *exp_str,
--		 const char *file, unsigned int line, const char *fmt, ...)
--		__attribute__((format(printf, 5, 6)));
-+void __printf(5, 6) test_assert(bool exp, const char *exp_str,
-+				const char *file, unsigned int line,
-+				const char *fmt, ...);
- 
- #define TEST_ASSERT(e, fmt, ...) \
- 	test_assert((e), #e, __FILE__, __LINE__, fmt, ##__VA_ARGS__)
+ static inline void sigsafe_printf(const char *format, ...)
+ {
 -- 
 2.42.0
 
