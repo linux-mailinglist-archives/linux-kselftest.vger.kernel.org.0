@@ -2,239 +2,199 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 884287BED81
-	for <lists+linux-kselftest@lfdr.de>; Mon,  9 Oct 2023 23:43:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB5EB7BEF21
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Oct 2023 01:33:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1378786AbjJIVnq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 9 Oct 2023 17:43:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44984 "EHLO
+        id S234617AbjJIXdy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 9 Oct 2023 19:33:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378776AbjJIVnp (ORCPT
+        with ESMTP id S234610AbjJIXdw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 9 Oct 2023 17:43:45 -0400
-Received: from out-198.mta1.migadu.com (out-198.mta1.migadu.com [95.215.58.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45D4499
-        for <linux-kselftest@vger.kernel.org>; Mon,  9 Oct 2023 14:43:43 -0700 (PDT)
-Date:   Mon, 9 Oct 2023 14:43:34 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1696887821;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=1A4XKHpL4U37Y/3uWnlttIXwNnAiPoRHRzYT8xs8nBY=;
-        b=KFlvIrsLSr17ZzklTQ2tvr9mLaQwlNb0kyXDcwJ1Vc11nKinmN11/CZM4ZcKaoXmRFgQ+e
-        VaOSfJuXEeBXVhflxnpmi1pii8pqifhnhmFZ6lwrlMu92HUjN60SQW3fO/z4zwAt6Vv1Ob
-        +r/xIziKw4lVpmR5cZAL2tFwU9YyiWA=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Roman Gushchin <roman.gushchin@linux.dev>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Cgroups <cgroups@vger.kernel.org>, lkft-triage@lists.linaro.org,
-        Lucas Karpinski <lkarpins@redhat.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Shuah Khan <shuah@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mark Brown <broonie@kernel.org>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        David Rientjes <rientjes@google.com>,
-        Dennis Zhou <dennis@kernel.org>,
-        Vlastimil Babka <vbabka@suse.cz>
-Subject: Re: selftests: cgroup: test_core - Unable to handle kernel NULL
- pointer dereference at virtual address
-Message-ID: <ZSR0BlS164-Y--ib@P9FQF9L96D>
-References: <CA+G9fYsJA4fkLCDdXfCdjqJz3q3K0TErgKjypuLmPZ=EU3MbDg@mail.gmail.com>
- <ZSLNQjzoYcLq1hEo@P9FQF9L96D>
- <CA+G9fYuH_-fRHS2Kjvc8FcoV=pz9jBtYvXHOcsvUgcAHOeqXWA@mail.gmail.com>
+        Mon, 9 Oct 2023 19:33:52 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5DE2B4;
+        Mon,  9 Oct 2023 16:33:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696894430; x=1728430430;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=LBFBe4wSRIRKO5P0QX9Hw3klraLnxEdNgZzz/M2ttuA=;
+  b=fn7rqCdGslqi+Z7dVGaDlV0SMZ0zCzx9DANGD+k3Rr3eZqjmktuD4fxw
+   YY5RwJ9VmM5ntTRBAtN30bzSz1qgKRNHYq7VMlcNIKnsIF04C395YJQiJ
+   EXb6fl5TXRfQDbdwKvXewi8C3uMMdaq2LVxTszYp2/icc1j860WyUbM9I
+   anTqU4aTUoOZ5D4uPQiqy18n83BhkBfqWGa6jdPftWCw2OVggx+/oGRLC
+   zke82tO2iOHppfcML0mbvb5LvAJZbxbZC35c7GLh+o3Mx0fAlyQZVKk8y
+   oenqPQ8VBHDRmC/c46EMmYbcBdz4nRsCI1IHGwFrr+XubLE2dGj+L4QIb
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10858"; a="363623568"
+X-IronPort-AV: E=Sophos;i="6.03,211,1694761200"; 
+   d="scan'208";a="363623568"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2023 16:33:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10858"; a="819003348"
+X-IronPort-AV: E=Sophos;i="6.03,211,1694761200"; 
+   d="scan'208";a="819003348"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga008.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 09 Oct 2023 16:33:49 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32; Mon, 9 Oct 2023 16:33:48 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32; Mon, 9 Oct 2023 16:33:48 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32 via Frontend Transport; Mon, 9 Oct 2023 16:33:48 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.100)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.32; Mon, 9 Oct 2023 16:33:47 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=lGn57lQRk6CKGMGkBvcyg6Y/MMEbp5s9aOOGFGZwZQaP6/zIUX7cbt2qQStxPoqC8GFjN1hLIBtcqDR+YOuP9VAzDZMuxv8ZViUc12uZKUwzKI46mUwqApG+untTHe9ymYN8cw4FLmBiVRnWfUsuYj0uTyYlxdulc/WV8LOnm/v+joPFlZm3iwCyan+R9NETe4ajuAy10kdUEcv3ld0ZJvp3DuCiBlamZ3NQTBD2IYdA7GqaHgPYttMbvvL/elDphFjPrDUSXmmqs51qXMr0tjKe7q05V8uVpFHf+1q87KpTZCfRxd1sLJH6Afxg4BcaRTXfqwvjogZUokJBrzvKMg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LBFBe4wSRIRKO5P0QX9Hw3klraLnxEdNgZzz/M2ttuA=;
+ b=Xx3z/j30Znph4e/zQ6Cfr6pyzD23dhPIRTXyD38AqHJG9sjX4EIkWdDcWu+i4WlmgYbqdoa1bbVhsokaltiW9MGRQVjN99fudX/I716nLzFGXndbkszzExEaT+vJ85D9WP72Xb49OeAbyuHgKPoUMDi/cXjrcQOKp59LgxdVQtvh+ZL/tqCfeACVjJXFZQerA4OwQ2AsjOhqpfywdOc1xtrNyfv9YtxRWzch3g5fjHqzKSqjFkaJt0q2FpKDL6k09Z58JV8xDzpdK+aGlm9cYg0ykRc9+fVN6IMyKTJKRN5pofkxMBxfYZ/OqE5a+NGuibtEUH1tDWK5f+OYhlJg1w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by MN0PR11MB6058.namprd11.prod.outlook.com (2603:10b6:208:376::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.36; Mon, 9 Oct
+ 2023 23:33:44 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::7116:9866:8367:95b4]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::7116:9866:8367:95b4%3]) with mapi id 15.20.6863.032; Mon, 9 Oct 2023
+ 23:33:44 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>, "Liu, Yi L" <yi.l.liu@intel.com>
+CC:     "joro@8bytes.org" <joro@8bytes.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
+        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "jasowang@redhat.com" <jasowang@redhat.com>,
+        "shameerali.kolothum.thodi@huawei.com" 
+        <shameerali.kolothum.thodi@huawei.com>,
+        "lulu@redhat.com" <lulu@redhat.com>,
+        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>,
+        "Martins, Joao" <joao.m.martins@oracle.com>
+Subject: RE: [RFC 0/7] Add SIOV virtual device support
+Thread-Topic: [RFC 0/7] Add SIOV virtual device support
+Thread-Index: AQHZ+o3OMaCbtqkNIEu5l1gzwLPcX7BBcdmAgACn7HA=
+Date:   Mon, 9 Oct 2023 23:33:43 +0000
+Message-ID: <BN9PR11MB5276A19AC2CA9DA2B528822F8CCEA@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20231009085123.463179-1-yi.l.liu@intel.com>
+ <20231009132115.GA3952@nvidia.com>
+In-Reply-To: <20231009132115.GA3952@nvidia.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|MN0PR11MB6058:EE_
+x-ms-office365-filtering-correlation-id: b1096b94-0d0d-40a6-0a66-08dbc9202d5c
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ZvfKMfF+O2Kjh+XckE/FZ1V9KuJs1AaozjrsObF/7MAqhDhhU9mG4Au7PUeGvb7FjceoLBlL+bp17n2BjleAgpqBeG5rJEV3aNSr8EXGCDXgrBPMVXrle/rPsQw7GxS+htMhUGvtUdBdgtU3OXSsNyKKgyawht6NX+2zzbJGqekuo6eA7k6HcfQdtehWreMagPDdqsxP7M5zvjr5fcZ2DxNs2T5az61GNeLADKliQxTA3FkJlHfNnFDzw+GFmwSXwYOospzVx6FXteLCtQwoOMEnLpOJ4dmiZ7fTR/IOwCW1I/4ayKXXGvus3oHjppIgtt7NnZ5JQXIPQFl/j09Cu0ixY1iQLgAOlO7IqHoFqvq2xfOAuyWUByjRZevk+v7SMybLb0aL+13YN0TVfvh0w6nP/XUi+T8E2lt7Nau5HsK4SgTp85nRo7lKBNfVI/qS33WJD5ukMoaSjXA+SI/8ZvoQly9XyqnjuqjbY+lR/YQ9g/gG8ikYXOpzHIoKiVjytVTjILUNKc1fluO7kjyaD4P1z4rpeGMEGhVmVmPIGqUwijl9QTk/jErLRUB32s7w+Hcd4OB1C8vM1GjnhEfYo8vdufhAFuEtLrnW+fL2yRQ20DMq1RIHIXsOtAnv4mRV
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(39860400002)(376002)(366004)(346002)(396003)(230922051799003)(186009)(64100799003)(451199024)(1800799009)(9686003)(26005)(71200400001)(55016003)(82960400001)(33656002)(38070700005)(86362001)(38100700002)(122000001)(8936002)(6506007)(7416002)(4326008)(4744005)(8676002)(2906002)(478600001)(7696005)(66556008)(52536014)(41300700001)(316002)(6636002)(5660300002)(66446008)(110136005)(54906003)(64756008)(76116006)(66476007)(66946007);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NWJoN2NyRGY1MmllUGdzRXY0aHdEdWxTVlVHaXZZamdRdENzTVl0L09JMndI?=
+ =?utf-8?B?RHZTcHJpTENiNnozOG05OFJUYTlpRjhUNDg4QmlFUGVLaGNzQTJyTDljbDVT?=
+ =?utf-8?B?R3dBV2ZSRmZnMS8zR3lnZHFXak9WSERvMlFPL25RVXFpQU5ya3MzbGN4dnZH?=
+ =?utf-8?B?b1E1NThDMmJ2c1o1S3ZkNFNSN3lHbTJRWjJndG1sd0ovUERBN04rN1huTkhU?=
+ =?utf-8?B?K2JuSmVUN0pGVHp2R21sNEVyL091dmV0LzJOWUxwOHJnRGY2QXFXRmdWTkN2?=
+ =?utf-8?B?RDVBcS9OcWo1RFZNVFM0M3p6Nm4vVVNqTkdnaDlyb3ZMWjhmaGU4RTVyemJB?=
+ =?utf-8?B?WW1icTgrYnNSdGFsTDlJOThyK01lTG9nUUFKbkgxemJEN25yc2pacmJQbk9R?=
+ =?utf-8?B?Y2pZYXRObkVrMyszSFBCQW5kbG5YdkFDMzExc1ZZN2lmeGR6QnY5TzlIUE96?=
+ =?utf-8?B?Z3p6cE1RWEdyNVZ6TzZFazlLNDhmNGl6WnFhandMVkVjbVphL2daT0Z0eEx4?=
+ =?utf-8?B?VWhlSnBqMFFvRXhwRk9zbStzbmNlUEt6OVZRb3BZK3ZxNXJhOWM1YlBneHhR?=
+ =?utf-8?B?SVNXdkpLR24zZjhxSTZodWxJOHVHdFp0NzR2VFBVSUs3Y0pycnpoY25yKzA4?=
+ =?utf-8?B?NGZmTENzQ2VKT2V2UWJNN0NLemM2SStGOGFBQkpkUlRzQlVjZHhkSjFYMEdv?=
+ =?utf-8?B?ZXAxRGI4UTM1cTV3bWtocThzYWoxcEZkZEdCemZ0dnRUU2Jxb3B1M2t6bVp0?=
+ =?utf-8?B?ZEtuRWhsd2hzbDh1MXJFZnF6Z3RqMGU2SjllQmVsSlczeXB4TzVrQ1dVQ2NT?=
+ =?utf-8?B?T1M0VDY5N2dPekc1eFhsRWRVTURqejdnMHdkbG1GNmNZTlBnNWd6Y1JsdlJQ?=
+ =?utf-8?B?RkNWMk1JT3crVkd0c2IxRER3OTd1Q1RmUklYMzJMZWlyMkpOZ3BRMldJbTVu?=
+ =?utf-8?B?aTFjdktIZWViRFJ0bDZRZ3dEa2xZL001NGtkeVJhbWx2RTBlb0pRM3diY296?=
+ =?utf-8?B?QXBWMFVZNjdXQlJhN2M3Y0lneWZnaHo5MDFUbTZQeHR2QTluemJqZE9BWWM5?=
+ =?utf-8?B?Uno5ZWF0N0E1MjJ6REMvM29rdUZlR29NT0FkdjhmS2FPVmVzamJEOUtDbzFE?=
+ =?utf-8?B?NlF0MEZQUC9IZk4zL3RvTlZSRW43VXhKODhhTEMwZUZnNWo3TmFXbHlTSkNp?=
+ =?utf-8?B?WHhORDJTbm5ZTWVBSzRjN3k5cDIzYW1OQTA2YnBrNXZOR3JOUllwa2tKUXhy?=
+ =?utf-8?B?WE1mMFJ4SEUwTnFqZlhPeUJMQjRSa3BOZU44a3p5ZGdBa3BPbXlCclowY2dM?=
+ =?utf-8?B?YVFEaVM2UThmb3NXYSs1NGd5VnBlQlBYQmRhODBjbU1hc3gvVFpXQmQvT2dk?=
+ =?utf-8?B?ZGJBUlN6UWxxMWlzNFhFdW9OdC9ja1ErUkVCb3UzMzBnMFV5T1JHQjZTOU10?=
+ =?utf-8?B?ZDZFSU1vYXN3MTdyZTlkNmw5WmNYSDh2QkNNOFNYWlAyRXo4VytSVm4zc1R4?=
+ =?utf-8?B?NVZiN203a2NJb3F6aVNidFhWL2RyemRFZmhDUVg3QW9JRERFYUxQYmx3ekE1?=
+ =?utf-8?B?b0JDR1NTbzJhYkJBK3grNUttTEpkNWhVbVdPZkE3VlhEMHk4Mld4ZWRPNXdw?=
+ =?utf-8?B?eHJiRjBQTnlXUVpyNEsrOERJU0pBdks1cExWUVZQdnQ2aHpqSEM2VzZHeTBl?=
+ =?utf-8?B?ajNsT3ZESHYyWEhqVXN3cjZPanJsN01NT3dCRzJKTk1FK0RqS3huUmdJR3N3?=
+ =?utf-8?B?UC9sQzMwZzVqbkJycGVVUEZFL1JneEdGUWxSYk9CY21kSUVlM3crSW1PSHdY?=
+ =?utf-8?B?Q1J3dkdaN3JpblZPWFJKeVpvMEs4NS9aZXZqbmVhdTdRTWxEbTBsVzlGclRY?=
+ =?utf-8?B?dVBaVjJxMDUrV0tZcTJVeUVpZXM4R0t3NzRIZjRPL24rdzVpL3AxUjhOZnNV?=
+ =?utf-8?B?VlJWRHJjWnBVMUhRMk1ockpha084R1UrSTRQMTU1em1QMnRjQzg4TTJySmd5?=
+ =?utf-8?B?K2lJVnRjdlIwUGxidFZORnNhMzFxSjBHTktVVzRBS09ncEs2amV5TnRCcHha?=
+ =?utf-8?B?QURBZFZiZ25CMnlxbGZqWEYyU2psdWRRT2xBaWpNNjNMZ29PcGVEZStpUTJq?=
+ =?utf-8?Q?rZ6QjQRHWJd8y3pq7C0FBFlpV?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYuH_-fRHS2Kjvc8FcoV=pz9jBtYvXHOcsvUgcAHOeqXWA@mail.gmail.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b1096b94-0d0d-40a6-0a66-08dbc9202d5c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Oct 2023 23:33:44.0056
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: ojzoTM9SbUDfFtd/9s43t60he7sqbdM6Mk+KQhglZClAS28458V4r7DkHFsu1NKikWCRr9lRnJhCUIl1mMEswQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR11MB6058
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Oct 09, 2023 at 04:08:13PM +0530, Naresh Kamboju wrote:
-> On Sun, 8 Oct 2023 at 21:09, Roman Gushchin <roman.gushchin@linux.dev> wrote:
-> >
-> > On Sun, Oct 08, 2023 at 11:30:52AM +0530, Naresh Kamboju wrote:
-> > > While running selftests: cgroup: test_kmem on FVP following kernel crash
-> > > noticed on Linux next 6.6.0-rc4-next-20231006.
-> >
-> > Hi Naresh!
-> >
-> > Thank you for the report!
-> >
-> > I've tried to reproduce it, but wasn't successful so far: I've run test_kmem
-> > for several hundred times and haven't seen the crash.
-> 
-> If you look at the problematic test case is
-> selftests: cgroup: test_core
-
-Ah, got it, and immediately reproduced (and fixed).
-Thank you once again for all your effort!
-
-The problem happens because some kernel allocations happen after
-mem_cgroup_exit(), which was dropping the reference to task->objcg,
-but not zeroing the pointer, so it eventually caused a double-free.
-
-I gonna post an updated version of my patchset, which introduced the issue,
-with the fix merged (and some other minor changes).
-
-Thanks!
-
-
-> 
-> I recommend to run
-> ./run_kselftest.sh -c cgroup
-> 
-> >
-> > Can you, please, provide some additional information?
-> > How easy to reproduce it?
-> 
-> It is always reproducible on qemu-arm64, FVP, x86 with a given config.
-> 
-> > Do you see it every time or with some probability?
-> 
-> Always with selftests: cgroup: test_core.
-> I generally run all selftests: cgroup: *
-> 
-> > Do you see it on other platforms?
-> qemu-arm64, FVP, x86.
-> 
-> > Can you, please, check where exactly the crash happens using addr2line?
-> 
-> I have provided links to build, test logs and steps to reproduce scripts.
-> 
-> Is this an interesting log ?
-> 
-> # selftests: cgroup: test_core
-> # ok 1 test_cgcore_internal_process_constraint
-> # ok 2 test_cgcore_top_down_constraint_enable
-> # ok 3 test_cgcore_top_down_constraint_disable
-> # ok 4 test_cgcore_no_internal_process_constraint_on_threads
-> # ok 5 test_cgcore_parent_becomes_threaded
-> # ok 6 test_cgcore_invalid_domain
-> # ok 7 test_cgcore_populated
-> # ok 8 test_cgcore_proc_migration
-> # ok 9 test_cgcore_thread_migration
-> # ok 10 test_cgcore_destroy
-> # ok 11 test_cgcore_lesser_euid_open
-> # ok 12 test_cgcore_lesser_ns_open
-> <1>[  188.504854] Unable to handle kernel NULL pointer dereference at
-> virtual address 0000000000000000
-> <1>[  188.505724] Mem abort info:
-> <1>[  188.506036]   ESR = 0x0000000096000044
-> <1>[  188.507539]   EC = 0x25: DABT (current EL), IL = 32 bits
-> <1>[  188.508268]   SET = 0, FnV = 0
-> <1>[  188.508895]   EA = 0, S1PTW = 0
-> <1>[  188.509517]   FSC = 0x04: level 0 translation fault
-> <1>[  188.510279] Data abort info:
-> <1>[  188.511513]   ISV = 0, ISS = 0x00000044, ISS2 = 0x00000000
-> <1>[  188.512757]   CM = 0, WnR = 1, TnD = 0, TagAccess = 0
-> <1>[  188.513333]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
-> <1>[  188.514316] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000104934000
-> <1>[  188.516277] [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
-> <0>[  188.517886] Internal error: Oops: 0000000096000044 [#1] PREEMPT SMP
-> <4>[  188.518838] Modules linked in: crct10dif_ce sm3_ce sm3 sha3_ce
-> sha512_ce sha512_arm64 fuse drm backlight dm_mod ip_tables x_tables
-> <4>[  188.521105] CPU: 0 PID: 57 Comm: kworker/0:2 Not tainted
-> 6.6.0-rc4-next-20231006 #1
-> <4>[  188.521750] Hardware name: linux,dummy-virt (DT)
-> <4>[  188.522915] Workqueue: cgroup_destroy css_free_rwork_fn
-> <4>[  188.523572] pstate: 03400009 (nzcv daif +PAN -UAO +TCO +DIT
-> -SSBS BTYPE=--)
-> <4>[ 188.524569] pc : percpu_ref_put_many.constprop.0
-> (arch/arm64/include/asm/atomic_lse.h:169 (discriminator 1)
-> arch/arm64/include/asm/atomic_lse.h:184 (discriminator 1)
-> arch/arm64/include/asm/atomic_lse.h:204 (discriminator 1)
-> arch/arm64/include/asm/atomic.h:92 (discriminator 1)
-> include/linux/atomic/atomic-arch-fallback.h:2886 (discriminator 1)
-> include/linux/atomic/atomic-arch-fallback.h:4351 (discriminator 1)
-> include/linux/atomic/atomic-long.h:1543 (discriminator 1)
-> include/linux/atomic/atomic-instrumented.h:4486 (discriminator 1)
-> include/linux/percpu-refcount.h:334 (discriminator 1))
-> <4>[ 188.525451] lr : percpu_ref_put_many.constprop.0
-> (include/linux/percpu-refcount.h:174 (discriminator 2)
-> include/linux/percpu-refcount.h:332 (discriminator 2))
-> <4>[  188.526230] sp : ffff8000803d3ca0
-> <4>[  188.526902] x29: ffff8000803d3ca0 x28: 0000000000000000 x27:
-> 0000000000000000
-> <4>[  188.527976] x26: 0000000000000000 x25: ffff0000c1112e80 x24:
-> ffff0000c002da05
-> <4>[  188.528965] x23: 0000000000000030 x22: ffffafd0c976a000 x21:
-> ffffafd0c976cb70
-> <4>[  188.529927] x20: ffff0000d67fa000 x19: ffff0000d32f44c0 x18:
-> 0000000000000000
-> <4>[  188.531096] x17: 0000000000000000 x16: 0000000000000000 x15:
-> 0000000000000000
-> <4>[  188.532244] x14: 0000000000000004 x13: ffffafd0c9787258 x12:
-> 0000000000000000
-> <4>[  188.533548] x11: ffff0000c0402e58 x10: ffff0000c0402db0 x9 :
-> ffffafd0c6f86a90
-> <4>[  188.535274] x8 : ffff8000803d3b68 x7 : 0000000000000000 x6 :
-> 0000000000000001
-> <4>[  188.536318] x5 : ffffafd0c976a000 x4 : ffffafd0c976a288 x3 :
-> 0000000000000000
-> <4>[  188.537144] x2 : ffff0000c0acbe00 x1 : 0000000000000000 x0 :
-> ffffffffffffffff
-> <4>[  188.538091] Call trace:
-> <4>[ 188.538883] percpu_ref_put_many.constprop.0
-> (arch/arm64/include/asm/atomic_lse.h:169 (discriminator 1)
-> arch/arm64/include/asm/atomic_lse.h:184 (discriminator 1)
-> arch/arm64/include/asm/atomic_lse.h:204 (discriminator 1)
-> arch/arm64/include/asm/atomic.h:92 (discriminator 1)
-> include/linux/atomic/atomic-arch-fallback.h:2886 (discriminator 1)
-> include/linux/atomic/atomic-arch-fallback.h:4351 (discriminator 1)
-> include/linux/atomic/atomic-long.h:1543 (discriminator 1)
-> include/linux/atomic/atomic-instrumented.h:4486 (discriminator 1)
-> include/linux/percpu-refcount.h:334 (discriminator 1))
-> <4>[ 188.539208] __mem_cgroup_free (include/linux/find.h:203
-> include/linux/nodemask.h:266 mm/memcontrol.c:5446)
-> <4>[ 188.539559] mem_cgroup_css_free (mm/memcontrol.c:5682)
-> <4>[ 188.543093] css_free_rwork_fn (include/linux/spinlock.h:356
-> kernel/cgroup/cgroup.c:350 kernel/cgroup/cgroup.c:5377)
-> <4>[ 188.544324] process_one_work (kernel/workqueue.c:2635)
-> <4>[ 188.545045] worker_thread (kernel/workqueue.c:2697 (discriminator
-> 2) kernel/workqueue.c:2784 (discriminator 2))
-> <4>[ 188.545710] kthread (kernel/kthread.c:388)
-> <4>[ 188.546690] ret_from_fork (arch/arm64/kernel/entry.S:858)
-> <0>[ 188.547769] Code: d65f03c0 f9400661 d503201f 92800000 (f8e00020)
-> All code
-> ========
->    0: d65f03c0 ret
->    4: f9400661 ldr x1, [x19, #8]
->    8: d503201f nop
->    c: 92800000 mov x0, #0xffffffffffffffff    // #-1
->   10:* f8e00020 ldaddal x0, x0, [x1] <-- trapping instruction
-> 
-> Code starting with the faulting instruction
-> ===========================================
->    0: f8e00020 ldaddal x0, x0, [x1]
-> <4>[  188.549059] ---[ end trace 0000000000000000 ]---
-> ok 3 selftests: cgroup: test_core
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> Reported-by: Naresh Kamboju <naresh.kamboju@linaro.org>
-> 
-> Links:
-> logs: https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/naresh/tests/2WWLlrB6hfNAc0btHy8LPxuQefp
-> 
-> Build: https://storage.tuxsuite.com/public/linaro/naresh/builds/2WWGnN6pGnGdueSyID8ZTdS5EVv/
-> Config: https://storage.tuxsuite.com/public/linaro/naresh/builds/2WWGnN6pGnGdueSyID8ZTdS5EVv/config
-> 
-> Steps to reproduce:
-> - https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/naresh/tests/2WWLlrB6hfNAc0btHy8LPxuQefp/reproducer
-> 
-> - Naresh
+PiBGcm9tOiBKYXNvbiBHdW50aG9ycGUgPGpnZ0BudmlkaWEuY29tPg0KPiBTZW50OiBNb25kYXks
+IE9jdG9iZXIgOSwgMjAyMyA5OjIxIFBNDQo+IA0KPiBPbiBNb24sIE9jdCAwOSwgMjAyMyBhdCAw
+MTo1MToxNkFNIC0wNzAwLCBZaSBMaXUgd3JvdGU6DQo+ID4gSW50ZWwgU0lPViBhbGxvd3MgY3Jl
+YXRpbmcgdmlydHVhbCBkZXZpY2VzIG9mIHdoaWNoIHRoZSB2UklEIGlzDQo+ID4gcmVwcmVzZW50
+ZWQgYnkgYSBwYXNpZCBvZiBhIHBoeXNpY2FsIGRldmljZS4gSXQgaXMgY2FsbGVkIGFzIFNJT1YN
+Cj4gPiB2aXJ0dWFsIGRldmljZSBpbiB0aGlzIHNlcmllcy4gU3VjaCBkZXZpY2VzIGNhbiBiZSBi
+b3VuZCB0byBhbiBpb21tdWZkDQo+ID4gYXMgcGh5c2ljYWwgZGV2aWNlIGRvZXMgYW5kIHRoZW4g
+bGF0ZXIgYmUgYXR0YWNoZWQgdG8gYW4gSU9BUy9od3B0DQo+ID4gdXNpbmcgdGhhdCBwYXNpZC4g
+U3VjaCBQQVNJRHMgYXJlIGNhbGxlZCBhcyBkZWZhdWx0IHBhc2lkLg0KPiANCj4gSSB3b3VsZCB3
+YW50IHRvIHNlZSB0aGUgaWR4ZCBpbXBsZW1lbnRhdGlvbiB0b28uLg0KPiANCg0KSXQgc3RpbGwg
+bmVlZHMgc29tZSB0aW1lIChhbmQgdW5mb3J0dW5hdGVseSB0aGUgZ3V5IHdvcmtpbmcgb24gaWR4
+ZA0KaXMgY3VycmVudGx5IG9uIGEgbG9uZyB2YWNhdGlvbikuDQoNCkluc3RlYWQgb2Ygd2FpdGlu
+ZyB3ZSB3YW50IHRvIHNlZWsgZWFybHkgY29tbWVudHMgb24gdGhlIGlvbW11ZmQNCmNoYW5nZXMg
+Z2l2ZW4gdGhhdCBwYXJ0IGlzIHJlbGF0aXZlbHkgc2VsZi1jb250YWluZWQuIFNhbWUgYXMgd2hh
+dA0KUmVpbmV0dGUgaXMgZG9pbmcgZm9yIElNUy4NCg0KQ2VydGFpbmx5IHRoaXMgaXMgbm90IGZv
+ciBtZXJnaW5nIHcvbyBoYXZpbmcgYSBkcml2ZXIgdXNlci4g8J+Yig0K
