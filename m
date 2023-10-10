@@ -2,101 +2,101 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BDFB7BFA70
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Oct 2023 13:56:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 570F37BFB8F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Oct 2023 14:34:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231523AbjJJL4i (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 10 Oct 2023 07:56:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34356 "EHLO
+        id S231941AbjJJMeT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 10 Oct 2023 08:34:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230122AbjJJL4h (ORCPT
+        with ESMTP id S231927AbjJJMeR (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 Oct 2023 07:56:37 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F125AC;
-        Tue, 10 Oct 2023 04:56:36 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24079C433CA;
-        Tue, 10 Oct 2023 11:56:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1696938996;
-        bh=0AsCbMCrI7tvcpSVF4Jgy/rDJw8pbCcpiPc+/XLXw0Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cFRk+rVPpc3FOAiT8Od45wyxyPPnbtz6S5U823POW2R56qGu9e5slu/QdzGo7C0yk
-         HzIqkLZiq0iLFTmVAoQd2fjlG4KUg6hDtcsj+Au2jf+fj7jGWREV83JqoBAbb1Mx6O
-         LdWAD542yHPL097UbVE19BP0g4frWS6u2Yv7SlTZJ6zQFVWPnVuotU9R9DBTh2HtxX
-         1O9AOOKrdUENiTO+CmeKJiCvYXEgTBI8SYyzFDG021IGOu9VK1c22yWoy/fqVaZt+x
-         VT16pRttM5pCyAD719k+ohC3ndo2qph8Ziy23+LMwk3w9jQnoq63rzplfWD9784xzA
-         KghZr/QCYAsTQ==
-Date:   Tue, 10 Oct 2023 12:56:30 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     Joey Gouly <joey.gouly@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, nd@arm.com,
-        akpm@linux-foundation.org, aneesh.kumar@linux.ibm.com,
-        catalin.marinas@arm.com, dave.hansen@linux.intel.com,
-        maz@kernel.org, oliver.upton@linux.dev, shuah@kernel.org,
-        will@kernel.org, kvmarm@lists.linux.dev,
-        linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v1 15/20] arm64: add POE signal support
-Message-ID: <88728437-2486-43c3-9fdb-fcd14ff39f11@sirena.org.uk>
-References: <20230927140123.5283-1-joey.gouly@arm.com>
- <20230927140123.5283-16-joey.gouly@arm.com>
- <a6e6c8a3-15b1-48e3-84fa-810ce575c09a@sirena.org.uk>
- <20231010095702.GB2098677@e124191.cambridge.arm.com>
+        Tue, 10 Oct 2023 08:34:17 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8824116;
+        Tue, 10 Oct 2023 05:34:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1696941245;
+        bh=xz9AlPCf/z9+9TDfxkF37vrowjGHyQ40QbM+LPmN6os=;
+        h=From:Subject:Date:To:Cc:From;
+        b=oXUzPnSAYh2LiwGrAzzO0xJa6M9hD8I9THxfvMpWrJGPknP/aLt40dBsAJu2op+cV
+         k4p1p3ZJpmaNKZFmNvDTyl8Sp8xL8z5T6MlYpCQPzlrGDj3k7y2TOi7RvewJkBPzz0
+         BjpB20L/cDI85LTB8JHTFOJYP625B5uM9AyQInQg=
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Subject: [PATCH 0/5] selftests/nolibc: various build improvements
+Date:   Tue, 10 Oct 2023 14:33:55 +0200
+Message-Id: <20231010-nolibc-out-of-tree-v1-0-b6a263859596@weissschuh.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="L3OvJ2NHt06D34tb"
-Content-Disposition: inline
-In-Reply-To: <20231010095702.GB2098677@e124191.cambridge.arm.com>
-X-Cookie: I feel partially hydrogenated!
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIALNEJWUC/x3MQQqAIBBA0avErBvQDImuEi1qGmsgNLQiCO+et
+ HyL/19IHIUT9NULkW9JEnyBriugbfIroyzF0KjGaKUV+rDLTBiuE4PDMzLjbG3XkiWn2EAJj8h
+ Onn86jDl/NR3GN2QAAAA=
+To:     Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
+Cc:     Zhangjin Wu <falcon@tinylab.org>, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1696941244; l=2014;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=xz9AlPCf/z9+9TDfxkF37vrowjGHyQ40QbM+LPmN6os=;
+ b=CrPfvVlqiWfhjmAup1YvUArcIdL1+aNanpjgYlEzkGRyXr2XiDKZOwWKIrC1g30WkaYlTUNUI
+ 4wl7NN/QdAoDzxQK+h6kJvWHLvhU4G6w4xAl16iiJF3/AY2Mc6QtcPG
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+With the out-of-tree builds it's possible do incremental tests fairly fast:
 
---L3OvJ2NHt06D34tb
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+$ time ./run-tests.sh
+i386:          160 test(s): 160 passed,   0 skipped,   0 failed => status: success
+x86_64:        160 test(s): 160 passed,   0 skipped,   0 failed => status: success
+arm64:         160 test(s): 160 passed,   0 skipped,   0 failed => status: success
+arm:           160 test(s): 160 passed,   0 skipped,   0 failed => status: success
+mips:          160 test(s): 159 passed,   1 skipped,   0 failed => status: warning
+ppc:           160 test(s): 160 passed,   0 skipped,   0 failed => status: success
+ppc64:         160 test(s): 160 passed,   0 skipped,   0 failed => status: success
+ppc64le:       160 test(s): 160 passed,   0 skipped,   0 failed => status: success
+riscv:         160 test(s): 160 passed,   0 skipped,   0 failed => status: success
+s390:          160 test(s): 159 passed,   1 skipped,   0 failed => status: warning
+loongarch:     160 test(s): 159 passed,   1 skipped,   0 failed => status: warning
 
-On Tue, Oct 10, 2023 at 10:57:02AM +0100, Joey Gouly wrote:
-> On Thu, Oct 05, 2023 at 03:34:29PM +0100, Mark Brown wrote:
-> > On Wed, Sep 27, 2023 at 03:01:18PM +0100, Joey Gouly wrote:
+real    3m11.735s
+user    4m20.354s
+sys     1m11.880s
 
-> > > Add PKEY support to signals, by saving and restoring POR_EL0 from the stackframe.
+This is with an incremental kernel rebuild and testrun inside qemu.
 
-> > It'd be nice to have at least a basic test that validates that we
-> > generate a POE signal frame when expected, though that should be a very
-> > minor thing which is unlikely to ever actually spot anything.
+Note:
 
-> The selftests/mm/protection_keys.c looks for the POE signal frame, do you think
-> we need a separate test?
+"selftests/nolibc: use qemu-system-ppc64 also for ppc64le" was already
+submitted standalone but I included it here again for easier testing and
+review.
 
-Like I say it'd be a very minor thing to have one - it is more just a
-thing you'd go looking for in the signals tests rather than something
-that's absolutely essential.  For trivial things like TPIDR2 I've just
-added a trivial thing that verifies that the frame is present iff the
-matching HWCAP is set.  Having the test in the mm tests is probably fine
-though.
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
+Thomas Weißschuh (5):
+      selftests/nolibc: use qemu-system-ppc64 also for ppc64le
+      selftests/nolibc: use EFI -bios for LoongArch qemu
+      selftests/nolibc: anchor paths in $(srcdir) if possible
+      selftests/nolibc: support out-of-tree builds
+      selftests/nolibc: generate config automatically
 
---L3OvJ2NHt06D34tb
-Content-Type: application/pgp-signature; name="signature.asc"
+ tools/testing/selftests/nolibc/Makefile | 36 +++++++++++++++++++++------------
+ 1 file changed, 23 insertions(+), 13 deletions(-)
+---
+base-commit: d423dcd4ac21041618ab83455c09440d76dbc099
+change-id: 20231010-nolibc-out-of-tree-b6684c6cf0e3
 
------BEGIN PGP SIGNATURE-----
+Best regards,
+-- 
+Thomas Weißschuh <linux@weissschuh.net>
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmUlO+0ACgkQJNaLcl1U
-h9ALhQf+MAF7Qb061DA3jMKL8gAGgi2jobi8C9/WrJz95wSSl4KzgskqrM2Kxh8d
-ZLh0UpnLrsEk9Qze9IOzzdnbbn/VD6ENZ/vDRlWzvih8xVZxpoL1MiLqBSRsU78W
-WANs6c4fPBTQMLGlFEzz3YwYXcwQEqUyY4xmp8O8jbCzu1GYU29kafcXb6aypmgT
-YIPw2K8RecnKlhbjZRULjPa1TPZrGiq0/6zR1BhauqiJmVoYwcpvqc+WK4ZBSb+w
-5Td1tJT8KYSK43lBFqHY8gUk2s6M+BtANBsGCgyDjGlPjsvgusWNevKkaZ/l9mRO
-M9fyqG5gtyPbIU7dRP51Mnw19dgsxw==
-=hd/I
------END PGP SIGNATURE-----
-
---L3OvJ2NHt06D34tb--
