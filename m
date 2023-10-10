@@ -2,259 +2,309 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B7A17BF12B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Oct 2023 05:01:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43FF87BF161
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Oct 2023 05:24:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1441862AbjJJDBj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 9 Oct 2023 23:01:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48250 "EHLO
+        id S1441984AbjJJDY1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 9 Oct 2023 23:24:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1379344AbjJJDBi (ORCPT
+        with ESMTP id S1441995AbjJJDYZ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 9 Oct 2023 23:01:38 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2047.outbound.protection.outlook.com [40.107.220.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1679893;
-        Mon,  9 Oct 2023 20:01:35 -0700 (PDT)
+        Mon, 9 Oct 2023 23:24:25 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 109A8CF;
+        Mon,  9 Oct 2023 20:24:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696908262; x=1728444262;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=/ZyTRtEBcZL9Y+8+G6h3FpsBxdhtGk9ASAEH1AMNBOU=;
+  b=m7D5/lAtqc8zLi28ZpHd7TThVS/18tTd9Ol1wazjGDsNNyFFWwKFSQ14
+   DqibzJfnjPenIJ5uqq8s2/mjFgiML+bJdHtXJRdNXOT0nm4o7gmD7g9bC
+   nURXDB/+Mu1YOCNkVDAtbOvMQMAVWJ/BZlFk2m7MVMzrsDmtO+buvhuKk
+   8fsumgGZ5PoD2V+bifjqzcNMBAqXxkCrJEQ3daJmrdGtITEjm01GuvPcC
+   cd7Axm/IpHjQZ2snOxrTmrTT7OttR2/91M7pTGLxvKKse+fCBd7NnSD5j
+   K62iC3zOdbzm33mPdu0w/Yte6oXzEC9CnG5ARg4Mkja3Z7Y2aDQAzXsa3
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10858"; a="5856967"
+X-IronPort-AV: E=Sophos;i="6.03,211,1694761200"; 
+   d="scan'208";a="5856967"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2023 20:24:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10858"; a="877060380"
+X-IronPort-AV: E=Sophos;i="6.03,211,1694761200"; 
+   d="scan'208";a="877060380"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orsmga004.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 09 Oct 2023 20:24:21 -0700
+Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32; Mon, 9 Oct 2023 20:24:20 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32 via Frontend Transport; Mon, 9 Oct 2023 20:24:20 -0700
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.168)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.32; Mon, 9 Oct 2023 20:24:20 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MXxIImbw1xsz/RHqjjqX6YTfu0U/aYo/CG4OluZJtLBRrrwhTVUQsRiANtr/+DQ+KOJDN8V0QgX2Tt8LT9tAN1eSdT8KRthQbUM+svn48Ss2KdWIbiRMjslAkb7i61tlCuSdQdJS022gfhCGrKrpdMlcEyi6bHZw7ZYP5WnjQ72tpj2IwzSRU5l8Wd/+sfjPqbCbH+1PGF8SSip0FKke7zPJLbv19VIMYajLUrXmgG1K1pirr9Ztbq0W3eSNfiptDC7hiheE7Nz+SUSbIl6lIPkkfh0/VkiDfO0vANLHcg7WS1itKq8On8NBC8/AROFFxAWG4gEN+LQ6+0lF56fiJA==
+ b=bSaglG9AO/dVzUAOJkWaXkQV1aw3k5hx0OW0Uq2LOzb1XlCyam2jZh4+NlxvLHwgLVnbiM63/n/CE5Pp08xnG3ixiXAYsJk/k9a+MIjZJzlY1DPzr3nJgNTICDSh444SZr9OfGfW16patnFvT/F4hyLSaKOGwrJwTbhxMNSrLamFbcjyhYF0cDaUZrPRO6yq4bUAWAQqDYgQX/p5Znv7VY8EL1ll1yr4il7kq7VzNImg5behzOQfZpvXXrsdgVHqmFxOURZ7GOLmL1dR95FiQtBiJ39YBHnbh5lCRF+/IGMwQZFAH93OKuWkbLOh58Cu2niCKmLFys7dLNSB4QqOew==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rP/hXxBV7bCDmW3pWuGpChFJbfVT4XqHO0ps8ptxoAc=;
- b=jD7WZ+LfVaMf18htUT9TcNUe5dZmzP4SBJeeuTucLF1zQcFOg3rNU+xpKxQPmlPzOogvCJSG+Zb9w8KTgI/tOKnnvDasbgF7OVtQaCA5QwgsCONmAip+16uA0oEPsBovaaJdkww5ZBM3b945aERTuKbPghm75ff0LJQin2P+ufcRCKmvgosmtMgaYJuFse+LozgwblWNn8s5wtJyYe5sn8G8XkKhPm1PMSS4tjDvXVdzCzfcyhTdp6w7+EfRyd6FwNzWC9OpIvGiijFaRTPIGvpB1QW5NOnP517u9M/p3OYOyPC+t/cUiaSQOKn5pf2CEJE4J2ApYMWzQE1cqTx3Rg==
+ bh=0/dUtY7Y6mbppVawRZE362CC3xz3pq5J8VoUG2iYOns=;
+ b=XCE+nt7lmf4Tu02bgo+/zSWlPVLQQnUOIj3ekPQOvMsDoLuk2CTG1ucYJ6T26cz33fhu4wu7/CxPgjcnPerB42en9G4CarRVmg4Urr4SdNjn+ywHsEjcbYqw4+b58vp42Peck4tUePzhe8D/1ieNz6wtM/7bs7VRHc0UqFiAr1YgUFxuVqZHN5khhose9VBiEXaoK3hV2rDOCrWxsgzVUVajUofQ8vVjJdLnaLlpXIElbE4j6J5oUp1DJvMfxpd4s9XuvM5ZBtTuwmRMtIWkI6Tk5vFRJolcYPFwc2UseAVJrgK6mtGO1r5BZEtVIHAcEgLEbw+l57RsTxprWDgjKw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rP/hXxBV7bCDmW3pWuGpChFJbfVT4XqHO0ps8ptxoAc=;
- b=lTyY9qjWMZHEO8uPqCXCGZ7rFjB6pmi7vzPwgk7mqJ61Fx23u+pCrskJH4exLVXB6YC95FYYmmEP9ESOq1V4sp+6FRTLgo1BXRzRH73lUy0NlMO4pxqxMsS24Re6/Mk8EJRpnQsDPKpyuWdfRGYWoMRdURejLWbG+AmUbmUlPLY=
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from SJ2PR12MB8690.namprd12.prod.outlook.com (2603:10b6:a03:540::10)
- by SA0PR12MB4382.namprd12.prod.outlook.com (2603:10b6:806:9a::14) with
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DS0PR11MB7529.namprd11.prod.outlook.com (2603:10b6:8:141::20)
+ by CY5PR11MB6236.namprd11.prod.outlook.com (2603:10b6:930:23::9) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.38; Tue, 10 Oct
- 2023 03:01:32 +0000
-Received: from SJ2PR12MB8690.namprd12.prod.outlook.com
- ([fe80::c3b:811:fd1d:c33e]) by SJ2PR12MB8690.namprd12.prod.outlook.com
- ([fe80::c3b:811:fd1d:c33e%6]) with mapi id 15.20.6863.032; Tue, 10 Oct 2023
- 03:01:32 +0000
-Date:   Tue, 10 Oct 2023 11:01:09 +0800
-From:   Huang Rui <ray.huang@amd.com>
-To:     Meng Li <li.meng@amd.com>
-Cc:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
-        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
-        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
-        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
-        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
-        "Yuan, Perry" <Perry.Yuan@amd.com>,
-        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Borislav Petkov <bp@alien8.de>
-Subject: Re: [PATCH V8 0/7] amd-pstate preferred core
-Message-ID: <ZSS+dZKdAGyTbCex@amd.com>
-References: <20231009024932.2563622-1-li.meng@amd.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231009024932.2563622-1-li.meng@amd.com>
-X-ClientProxiedBy: SG2P153CA0009.APCP153.PROD.OUTLOOK.COM (2603:1096::19) To
- SJ2PR12MB8690.namprd12.prod.outlook.com (2603:10b6:a03:540::10)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.36; Tue, 10 Oct
+ 2023 03:24:18 +0000
+Received: from DS0PR11MB7529.namprd11.prod.outlook.com
+ ([fe80::f8f4:bed2:b2f8:cb6b]) by DS0PR11MB7529.namprd11.prod.outlook.com
+ ([fe80::f8f4:bed2:b2f8:cb6b%3]) with mapi id 15.20.6863.032; Tue, 10 Oct 2023
+ 03:24:18 +0000
+Message-ID: <1b27b31a-3eaa-0acc-b9ae-756605170220@intel.com>
+Date:   Tue, 10 Oct 2023 11:26:37 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.13.0
+Subject: Re: [PATCH v4 03/17] iommufd: Unite all kernel-managed members into a
+ struct
+Content-Language: en-US
+To:     Yan Zhao <yan.y.zhao@intel.com>
+CC:     <joro@8bytes.org>, <alex.williamson@redhat.com>, <jgg@nvidia.com>,
+        <kevin.tian@intel.com>, <robin.murphy@arm.com>,
+        <baolu.lu@linux.intel.com>, <cohuck@redhat.com>,
+        <eric.auger@redhat.com>, <nicolinc@nvidia.com>,
+        <kvm@vger.kernel.org>, <mjrosato@linux.ibm.com>,
+        <chao.p.peng@linux.intel.com>, <yi.y.sun@linux.intel.com>,
+        <peterx@redhat.com>, <jasowang@redhat.com>,
+        <shameerali.kolothum.thodi@huawei.com>, <lulu@redhat.com>,
+        <suravee.suthikulpanit@amd.com>, <iommu@lists.linux.dev>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <zhenzhong.duan@intel.com>, <joao.m.martins@oracle.com>
+References: <20230921075138.124099-1-yi.l.liu@intel.com>
+ <20230921075138.124099-4-yi.l.liu@intel.com>
+ <ZSEuBcLaSq4NjoC8@yzhao56-desk.sh.intel.com>
+ <c299567a-5be8-f65f-d8ec-ffd3fa183b03@intel.com>
+ <ZSOMCXBzUMRujp89@yzhao56-desk.sh.intel.com>
+From:   Yi Liu <yi.l.liu@intel.com>
+In-Reply-To: <ZSOMCXBzUMRujp89@yzhao56-desk.sh.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: KL1PR01CA0115.apcprd01.prod.exchangelabs.com
+ (2603:1096:820:3::31) To DS0PR11MB7529.namprd11.prod.outlook.com
+ (2603:10b6:8:141::20)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ2PR12MB8690:EE_|SA0PR12MB4382:EE_
-X-MS-Office365-Filtering-Correlation-Id: 74a5cfa9-77a7-4f71-d901-08dbc93d3508
+X-MS-TrafficTypeDiagnostic: DS0PR11MB7529:EE_|CY5PR11MB6236:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7695727c-eb2b-4158-1f14-08dbc940634c
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2l/5HqSXUk830Rhu2LcurVEn/xChZielfOdLccDszb5o04toE4OAcEZZlTc+OXcAiQAraSEeTLQdlDZ4ou8p68Lr15H9TB4K0kk/hTgmYehwsUPmDjsHbdrkPvV2Yjlx29qQZF+6f4zBcszGEHFB74ZAC9I8P+k253BXXqIN1kaRuM2y3pPPT+oTqg0OeeN+oWMor7LCOBWWMDmFwzcWimaUeC6wtNGfaqgx84TAcVLvrSQltGdGo9ICXyECzflKl6bdCPMulCz93RCp9JRbykSdBtlIztm9deV8tQQr+l1YkEwAC3998DOUI9JxiuVMUiOxC752F9xLhL+GwNefPmJg0Pj4qVwNsZeJZ955ej8L7Pl25n3LaX7xmUJUxZwLe4Xk/T9yFOqcAPLuWjVSKFMrgVySPARDntrai1K12/ZyxqlPuAY4TqJ40Q9w+NCNEslDV6oPa3paGUoq7KcklodK44fnu850x420T+OjUeIHk9L3LyWI6zTpvFkewKtPHNk29vnK7+b1SmqwlS0pPi1WA3wHgNkjcWztJEJTKAERgWAjE3/QcrM9BquM+IjOujNxP0GdEa3cQJerVHEKY4cfsRwqHHHI308RGcslhF0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR12MB8690.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(39860400002)(396003)(366004)(376002)(346002)(230922051799003)(64100799003)(451199024)(1800799009)(186009)(6636002)(2616005)(316002)(83380400001)(26005)(66946007)(66556008)(66476007)(54906003)(37006003)(41300700001)(6862004)(8676002)(4326008)(6666004)(6506007)(8936002)(478600001)(2906002)(6486002)(6512007)(5660300002)(36756003)(38100700002)(86362001)(67856001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 5ZYEM5s1ZGhy2bMVYofB3oHGbjPyfs2cz74wcDFKNUJRXidLGQ4ePDLeBUFq59IL/NjxUadBLhBjc6VVQDPB+PRJ1/yPyNMhlVvsgdtEkkj/oHoEpLyiU6AzyEXZONGsNV3cGO0Z9SHrVOR0je706NZBhR1esDoS/ekj1/DAj+5arFfhdZHc2aVrsJ9lUcpYW5ttmTwnJ/bIiRCfiEXuWcaqogF25PMFKY5ABIcaz+0hUnA1oAXX1OH7gk/xXYYYd96hbCnT6oPCLYDDwUlO/dz2vmsYDEZNfcN4UnI09NwGhB/KbYU17ErULN6QIidbSRVRrTiNt5wnHPOVTDSMq06jcoJxFa1pPqcOUNVUfahlIqCIB32RaadL/pQ3NvRGRSguDLNAruoUD5ELJz3HJNmOFg0BOl2t728nmNQC0oF6paHRhRcv6Decfu4L0zT/5hkVlk1IFo5kGAQy2T5aKB+JyLVQCZFzoDGVK/EWlG3cEUMx2QxuQE8MYqxzcuYj2UF/kpL8IehCrYOEllegQBCNB0IUGYZBr37jgADNDkQzcS7hm07WW8zvhdHBStU/2zPVOVWlEfkGshYmwG4Trb52zHqLD4m5z3P3kV314pDvZY645a96rkTOL/MDwpqcUcJSDU7R2TbNB3A3xJ2VnQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB7529.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(366004)(396003)(376002)(39860400002)(136003)(230922051799003)(64100799003)(186009)(1800799009)(451199024)(26005)(2616005)(53546011)(6666004)(8676002)(6512007)(83380400001)(6862004)(7416002)(2906002)(6506007)(478600001)(4326008)(66946007)(66556008)(66476007)(6486002)(5660300002)(8936002)(316002)(37006003)(41300700001)(6636002)(38100700002)(82960400001)(31696002)(86362001)(36756003)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?2NANINmLvcE8i5FAQeVpxV+2zdRKIoT/MVoLDeI697ZJ5CwhqK1LXbB+p24F?=
- =?us-ascii?Q?MjBomvLYz5eJ/Xr+k8nL7Yrc1Tl4SfvjVIcC8U6Ak71RMeMZrWvD3iJfYKAB?=
- =?us-ascii?Q?sb4JTyTdh1w5xeOrU0P2V7GAoGiJMsd4BPIOnwBZLCw1Uw8vC+rPqfP1YWFb?=
- =?us-ascii?Q?weBtFZ+QgzeSAFubd4aJkOOuGvyZZJQ0iCQqJF6Vax4P/NnL54AV9bEHQgo3?=
- =?us-ascii?Q?eGjeEMnIGU1tSH93qMt4ArWLYCs+A3CKR8OO2rOuOxK+IrexsOHrdmP7NnAZ?=
- =?us-ascii?Q?EsytyGn3b+yq/CWOyTcQ2KUpdJV3oEaHOq+PbLo0OJg050caPDhzWJWt+ihs?=
- =?us-ascii?Q?Fzgd0hyBTCHaXeDkKR8Zucsyw0H87faUDC42xF9CC0Ik1fqKGqNtwwjdh7xi?=
- =?us-ascii?Q?r2U3PHHbIGZVJ05e1lWBESgp80f48V7b5ZPNFWVplK5grFgyRn8Mhijo0q95?=
- =?us-ascii?Q?nxwjRDBPUTNjMp02NUW9mx0FE3XYrjv9Z0+S8XDoXJG7xUzj3FQ1l3xoMycT?=
- =?us-ascii?Q?0ibOm7yBNrcC5i9UT20fr7mBSpLD0oBtdd4KuFKD217tWe+unIH2lgSFPtp4?=
- =?us-ascii?Q?HhH4IEPkDHd/E7ZBqMfWGv9eJz47cAkWbwf7doZrq7i7BfdJpWCKrnQPSnt1?=
- =?us-ascii?Q?/h9zSydA8fy+AKw0TGQuYeLTB5nHEQ2qjIZ/F3YrSLipGUAQbrLlCMhF2nI9?=
- =?us-ascii?Q?Tup3490ppjdXon5hGM+wBRV7zK2dXDf84dO5WbxzAypOj1jXb3kOBioHtLys?=
- =?us-ascii?Q?M+p8+shyScOjP1eotuHggSsQvKhLJuw89I47HvM4B9r9t4y6NZ3TD7mUibbV?=
- =?us-ascii?Q?ZnkZkskHycEZgkoAI4Pu6RIICWTdQ1XfKFFe8TT89EJUgT495a1pwO6qniWo?=
- =?us-ascii?Q?LzD+3b5LCgRR+h/pjO7P2f9wK2TxML9tlDclr1S4MdyoQnzGQDpVTP6RcJXR?=
- =?us-ascii?Q?6oH7r3ZO8bgrlP5eUIIPy7yMHsiRNIRp8yQOGBxPFq7czxtOUiIkeWo83R8h?=
- =?us-ascii?Q?T0k234yJ33dEDZh3arbd1rKtuTcLuxzL9L5K0dFH+dQuUsbuffwPw55jyefj?=
- =?us-ascii?Q?GNxQj+IBpVQfLmQNcAY9CEEqFzCa4ut0l4IFdX1bO/vlSSjjnHubL69MZPfz?=
- =?us-ascii?Q?ax8UmwlRECNDep35yw1Hvxr1hUlcj68Ba421YIOiuZVlByUZib9FGoVQ/n/a?=
- =?us-ascii?Q?+jTAQVCA1eoOy5pTeXbSfp778/Tm8zJLIRoqiLnHJiqV4o5UqSAj23JogQo7?=
- =?us-ascii?Q?WcqanxtZ/8xXbxNCJP9nUzTWn2ZQ0MiB24Yyy5ZDOQNkx8YdsupHvQ92Jirn?=
- =?us-ascii?Q?u5U1Sh7ieUPbrcWVNP1AhnQCn/YP/CVvtqn0v8zJ8Gm8YeXAz9Q3hM+yLaCm?=
- =?us-ascii?Q?sOVLf8UZzNKO+xBLfn+zl026rA9BzcR3MUE30bj4imltCtsZRuthXYvJg1jm?=
- =?us-ascii?Q?uHnWoYTtDeNvKQj5gsWabBuZdZxV4jOzBBy3OE7z5FasxeweThcjQgsjvHsN?=
- =?us-ascii?Q?QcFXwBDd+DaK7IrXSaRXhvALknXFZXIUXE8XnGmC2X6djOHDv14qe8yPwa2d?=
- =?us-ascii?Q?YMlLYa0u851GYzNJnFErD2zU5MoSkFt7ewNjpwdF?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 74a5cfa9-77a7-4f71-d901-08dbc93d3508
-X-MS-Exchange-CrossTenant-AuthSource: SJ2PR12MB8690.namprd12.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NVZJUXNQOS8vVnRDMG1WTkp3OS9oYml2a3dCSDdXeG1rM2dNaU8wcFZJTWYz?=
+ =?utf-8?B?QUx4VXNWYk43Nk13QmRaei93ekpSSVFwZzdYeGZpTURqQmJvc24xRmdZV0lU?=
+ =?utf-8?B?NmdBUnRHSmVUaGJoaTZRSzZzVHNqaE96OFdyZlBPOCtreC9QWEF6K3RzZmha?=
+ =?utf-8?B?cmVjdjNxaHdEVVVMUXpLK0lOcHRuL0RWdThwZHNLMjE1SFBweWFOdGQ5UnRp?=
+ =?utf-8?B?QVVlVm9kcHJ3UzRxV2MzMDlKKy9zOGFYRUxYOHBRbTNLR1ZMOURqVnU2dDZy?=
+ =?utf-8?B?NVczeEo3TXViUjN3UWQxL3lIWitzcTFvVEVkZkZ4SUk1V1pXNWQrWmVIRUxz?=
+ =?utf-8?B?aHBzbm04L0dFQ1F6bnlrZk9WK29iTkcwR1Y4d1pKbHVUb3lVR3VuS1Azekc1?=
+ =?utf-8?B?TnZrenc2V0xwVHNjNllhOGtsRlpuekRnQnZ3aEFNOGlRNDJUVFBkWGRyV09h?=
+ =?utf-8?B?d3pPSnFsK3RCOHprVmhRVWNWenZocjhVL1pZdnE4eEdheVFVNnZoSGw2MTla?=
+ =?utf-8?B?MTBUWVVxTTJObm1YeDZCcnhVbFRCejd5cW9FN0ZKYnRZWDBVNVAzOHl1UnIx?=
+ =?utf-8?B?TEVjV0EwUTRYUGczZUdwTzRkeVp0bWF2SmxNWGp4Z09xMHQyTzc0TWdZR0VH?=
+ =?utf-8?B?dEVHbmxrK1FYL3Vzdnc3TWdvL0QvK2FvMitSUHJVWGdIa1VOSmg3MHhPbW9J?=
+ =?utf-8?B?QXZaMDZOYU9XNDllcWtqclRFaUp3RG44U3l2NzloOExTNDBnNlJYOWFOZjhj?=
+ =?utf-8?B?ZGdJTHR1d3V2cEVLekxqR0lhYllrbCtXeXhLMEdRSmF5aEgxeDhiaDZFRmVZ?=
+ =?utf-8?B?WnJ3TzlJaWtWWS9DbmN4WWRpdlRRd0NnWHhuSUh2YStPYW9BbjlVaHFZZHNY?=
+ =?utf-8?B?emlJL1UyQm1EaUtGQThHeW5zUVhrL0U0bXNsUm9Qa2FFVHN6aVpmTTBaMWtR?=
+ =?utf-8?B?MDROVXNtUmU3czQwbDRnRGo2eHl2WVlQMTdHWHFJSFlWRkdLMkhNNVQ5cjQv?=
+ =?utf-8?B?M1hkdmpwUktVODJBQVZ6alBlZUh0NitJMllsSHltanJZeWJ1K3l5SGJvMlUz?=
+ =?utf-8?B?TDI0VEN4WEFLTStVRnViNnR3dm0wYjdHUlI0UWFWRlVPZ3Fxc0U2OStWdWh3?=
+ =?utf-8?B?a3hINDdQRGlYS0tBY3p4YnYycWU0OTJOZFZOYXJWcVZjTFA4bXozNngweHJU?=
+ =?utf-8?B?WmYrUjN1RGI2bS80c3U2RDFLVXFlbUZPYmxGaitoOWFxNXlUeTdSbGdvU3Fp?=
+ =?utf-8?B?YXJ1ZVp0bWdUMmdWamluOVFWQmxlVGpxeGdDMFVGWUVzWTUxaTVsRlNMOE1p?=
+ =?utf-8?B?cFhBSlJrdXNHV0ZKeVY4VHhoUHVMZGVWbDYyZ3JWOGVuS0YvcEQ0ODlYeHVQ?=
+ =?utf-8?B?WWs0R0pnUlROb2ZvQWJPL0JtdFd4UndwRmUzYTYyWVdVd0VHQWg4dDh6VzRr?=
+ =?utf-8?B?R3hFbUVLVG5FWTliMnF1NkwwZlNRZzBlSmJoNlcwTHVSN1dRUGM4ME05ckU4?=
+ =?utf-8?B?eG1pcFBTdGRselFDN2c0UWJiNVlwTUpPQzFqOFNXbVBQVW82VVJKSUtCZmpy?=
+ =?utf-8?B?NGxlb3hqNVNFSk9URFNEVitiL0V0WFNjRXI3UkszRWdKbCswWlE3ZGM0UWRL?=
+ =?utf-8?B?SUx1TjNsaE1qazBTU0gyemlVVjJkVkk5WXlTU1RZRVFqbTU4cUJ3TEVlUUtP?=
+ =?utf-8?B?cStUY2pzai9TdlZmak1pelp3MnFpVmNuWlBDUFVsRnl1eFQyTkpUUGlRRlhT?=
+ =?utf-8?B?U2RsMDZNTGMyTTRnNE9tQnJNOTl1enQ1MjArZml4enlTR3Q5UGcrbktmTGxi?=
+ =?utf-8?B?dyttM1JTSUtMdjdVUk0rZHdGck5DT0tyQUM4TldxTmlrUjc0eVZyQmJpSTE4?=
+ =?utf-8?B?OXRMTHFHT2x2NHRKU1VUVnN5SmNGbHhycGhsK2tNVVhiTmVaUzVXNHgzRlg1?=
+ =?utf-8?B?dFQ5YVl6NzVyQTd4Y2ZCMDlKcWtmTmpVTVUvZ05Bc0p0S0ZUd1VIQ2dBb0pa?=
+ =?utf-8?B?SWlBcGsxbllobU9tUEhPRUErSndIVFpIeU80SVVNSldkU1FkbGdCVDBPdmVa?=
+ =?utf-8?B?UFFUU2NITnY2M0tOZGRUTkdUM0pDR2k0SFBJallBdmVKeEpLNi9rRnBQMHpM?=
+ =?utf-8?Q?NSnDEYJhAzIsLJRHMxaS+S4XZ?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7695727c-eb2b-4158-1f14-08dbc940634c
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB7529.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Oct 2023 03:01:32.4466
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Oct 2023 03:24:18.7637
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: QzW7lFjUsGRFH1RjhkIVRTxu/29KR0WDWihlJ0LYzhwSitx2TCToyomIBWePQUaaYaskehQuQ50vcQxm0wSn7Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4382
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: uq50BBWCLhpS/PsIAASEOY+8fcYxfdBBo+lFYOPINjYXwYGS2AOTbzNYvZk4xQwelt+RZAHdV4V1nKWAF3kGaQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR11MB6236
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Oct 09, 2023 at 10:49:25AM +0800, Meng Li wrote:
-> Hi all:
-> 
-> The core frequency is subjected to the process variation in semiconductors.
-> Not all cores are able to reach the maximum frequency respecting the
-> infrastructure limits. Consequently, AMD has redefined the concept of
-> maximum frequency of a part. This means that a fraction of cores can reach
-> maximum frequency. To find the best process scheduling policy for a given
-> scenario, OS needs to know the core ordering informed by the platform through
-> highest performance capability register of the CPPC interface.
-> 
-> Earlier implementations of amd-pstate preferred core only support a static
-> core ranking and targeted performance. Now it has the ability to dynamically
-> change the preferred core based on the workload and platform conditions and
-> accounting for thermals and aging.
-> 
-> Amd-pstate driver utilizes the functions and data structures provided by
-> the ITMT architecture to enable the scheduler to favor scheduling on cores
-> which can be get a higher frequency with lower voltage.
-> We call it amd-pstate preferred core.
-> 
-> Here sched_set_itmt_core_prio() is called to set priorities and
-> sched_set_itmt_support() is called to enable ITMT feature.
-> Amd-pstate driver uses the highest performance value to indicate
-> the priority of CPU. The higher value has a higher priority.
-> 
-> Amd-pstate driver will provide an initial core ordering at boot time.
-> It relies on the CPPC interface to communicate the core ranking to the
-> operating system and scheduler to make sure that OS is choosing the cores
-> with highest performance firstly for scheduling the process. When amd-pstate
-> driver receives a message with the highest performance change, it will
-> update the core ranking.
-> 
-> Changes form V7->V8:
-> - all:
-> - - pick up Review-By flag added by Mario and Ray.
-> - cpufreq: amd-pstate:
-> - - use hw_prefcore embeds into cpudata structure.
-> - - delete preferred core init from cpu online/off.
+On 2023/10/9 13:13, Yan Zhao wrote:
+> On Mon, Oct 09, 2023 at 12:13:52PM +0800, Yi Liu wrote:
+>> On 2023/10/7 18:08, Yan Zhao wrote:
+>>> On Thu, Sep 21, 2023 at 12:51:24AM -0700, Yi Liu wrote:
+>>>> From: Nicolin Chen <nicolinc@nvidia.com>
+>>>>
+>>>> The struct iommufd_hw_pagetable has been representing a kernel-managed
+>>>> HWPT, yet soon will be reused to represent a user-managed HWPT. These
+>>>> two types of HWPTs has the same IOMMUFD object type and an iommu_domain
+>>>> object, but have quite different attributes/members.
+>>>>
+>>>> Add a union in struct iommufd_hw_pagetable and group all the existing
+>>>> kernel-managed members. One of the following patches will add another
+>>>> struct for user-managed members.
+>>>>
+>>>> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+>>>> Signed-off-by: Yi Liu <yi.l.liu@intel.com>
+>>>> ---
+>>>>    drivers/iommu/iommufd/iommufd_private.h | 17 +++++++++++------
+>>>>    1 file changed, 11 insertions(+), 6 deletions(-)
+>>>>
+>>>> diff --git a/drivers/iommu/iommufd/iommufd_private.h b/drivers/iommu/iommufd/iommufd_private.h
+>>>> index 3064997a0181..947a797536e3 100644
+>>>> --- a/drivers/iommu/iommufd/iommufd_private.h
+>>>> +++ b/drivers/iommu/iommufd/iommufd_private.h
+>>>> @@ -231,13 +231,18 @@ int iommufd_vfio_ioas(struct iommufd_ucmd *ucmd);
+>>>>     */
+>>>>    struct iommufd_hw_pagetable {
+>>>>    	struct iommufd_object obj;
+>>>> -	struct iommufd_ioas *ioas;
+>>>>    	struct iommu_domain *domain;
+>>>> -	bool auto_domain : 1;
+>>>> -	bool enforce_cache_coherency : 1;
+>>>> -	bool msi_cookie : 1;
+>>>> -	/* Head at iommufd_ioas::hwpt_list */
+>>>> -	struct list_head hwpt_item;
+>>>> +
+>>>> +	union {
+>>>> +		struct { /* kernel-managed */
+>>>> +			struct iommufd_ioas *ioas;
+>>>> +			bool auto_domain : 1;
+>>> Will iommufd_hw_pagetable_put() also be called on non-kernel-managed domain?
+>>
+>> yes.
+>>
+>>> If yes, hwpt->user_managed needs to be checked in iommufd_hw_pagetable_put(),
+>>> (e.g. as below).
+>>> Otherwise, this union will lead to hwpt->ioas and hwpt->auto_domain still being
+>>> accessible though invalid.
+>>
+>> not quite get this sentence.
+> I mean with this union, hwpt->auto_domain or hwpt->ioas should only be accessed if and
+> only if hwpt type is kernel-managed.
 
-Thanks!
+ok, I get this part. just not sure about the missing words in your prior 
+comment.
 
-Series are Reviewed-by: Huang Rui <ray.huang@amd.com>
+> So, any unconditional access, as in iommufd_hw_pagetable_put() pasted below, is buggy.
+> 
+> Therefore, do you think it's better to add a filed like "bool kernel_managed : 1",
+> and access the union fields under  /* kernel-managed */ only when hwpt->kernel_managed
+> is true.
+> 
+> 
+>>
+>>>
+>>>    static inline void iommufd_hw_pagetable_put(struct iommufd_ctx *ictx,
+>>>                                               struct iommufd_hw_pagetable *hwpt)
+>>>    {
+>>> -       lockdep_assert_not_held(&hwpt->ioas->mutex);
+>>> -       if (hwpt->auto_domain)
+>>> +       if (!hwpt->user_managed)
+>>> +               lockdep_assert_not_held(&hwpt->ioas->mutex);
+>>
+>> this is true. this assert is not needed when hwpt is not kernel managed domain.
+>>
+>>> +
+>>> +       if (!hwpt->user_managed && hwpt->auto_domain)
+>>
+>> actually, checking auto_domain is more precise. There is hwpt which is
+>> neither user managed nor auto.
+> 
+> auto_domain is under union fields marked with kernel-managed only.
+> Access it without type checking is invalid.
 
+I see. yes, should check user_managed as well. :)
+
+> struct iommufd_hw_pagetable {
+>          struct iommufd_object obj;
+>          struct iommu_domain *domain;
 > 
-> Changes form V6->V7:
-> - x86:
-> - - Modify kconfig about X86_AMD_PSTATE.
-> - cpufreq: amd-pstate:
-> - - modify incorrect comments about scheduler_work().
-> - - convert highest_perf data type.
-> - - modify preferred core init when cpu init and online.
-> - acpi: cppc:
-> - - modify link of CPPC highest performance.
-> - cpufreq:
-> - - modify link of CPPC highest performance changed.
+>          void (*abort)(struct iommufd_object *obj);
+>          void (*destroy)(struct iommufd_object *obj);
 > 
-> Changes form V5->V6:
-> - cpufreq: amd-pstate:
-> - - modify the wrong tag order.
-> - - modify warning about hw_prefcore sysfs attribute.
-> - - delete duplicate comments.
-> - - modify the variable name cppc_highest_perf to prefcore_ranking.
-> - - modify judgment conditions for setting highest_perf.
-> - - modify sysfs attribute for CPPC highest perf to pr_debug message.
-> - Documentation: amd-pstate:
-> - - modify warning: title underline too short.
+>          bool user_managed : 1;
+>          union {
+>                  struct { /* user-managed */
+>                          struct iommufd_hw_pagetable *parent;
+>                  };
+>                  struct { /* kernel-managed */
+>                          struct iommufd_ioas *ioas;
+>                          struct mutex mutex;
+>                          bool auto_domain : 1;
+>                          bool enforce_cache_coherency : 1;
+>                          bool msi_cookie : 1;
+>                          bool nest_parent : 1;
+>                          /* Head at iommufd_ioas::hwpt_list */
+>                          struct list_head hwpt_item;
+>                  };
+>          };
+> };
 > 
-> Changes form V4->V5:
-> - cpufreq: amd-pstate:
-> - - modify sysfs attribute for CPPC highest perf.
-> - - modify warning about comments
-> - - rebase linux-next
-> - cpufreq: 
-> - - Moidfy warning about function declarations.
-> - Documentation: amd-pstate:
-> - - align with ``amd-pstat``
-> 
-> Changes form V3->V4:
-> - Documentation: amd-pstate:
-> - - Modify inappropriate descriptions.
-> 
-> Changes form V2->V3:
-> - x86:
-> - - Modify kconfig and description.
-> - cpufreq: amd-pstate: 
-> - - Add Co-developed-by tag in commit message.
-> - cpufreq:
-> - - Modify commit message.
-> - Documentation: amd-pstate:
-> - - Modify inappropriate descriptions.
-> 
-> Changes form V1->V2:
-> - acpi: cppc:
-> - - Add reference link.
-> - cpufreq:
-> - - Moidfy link error.
-> - cpufreq: amd-pstate: 
-> - - Init the priorities of all online CPUs
-> - - Use a single variable to represent the status of preferred core.
-> - Documentation:
-> - - Default enabled preferred core.
-> - Documentation: amd-pstate: 
-> - - Modify inappropriate descriptions.
-> - - Default enabled preferred core.
-> - - Use a single variable to represent the status of preferred core.
-> 
-> Meng Li (7):
->   x86: Drop CPU_SUP_INTEL from SCHED_MC_PRIO for the expansion.
->   acpi: cppc: Add get the highest performance cppc control
->   cpufreq: amd-pstate: Enable amd-pstate preferred core supporting.
->   cpufreq: Add a notification message that the highest perf has changed
->   cpufreq: amd-pstate: Update amd-pstate preferred core ranking
->     dynamically
->   Documentation: amd-pstate: introduce amd-pstate preferred core
->   Documentation: introduce amd-pstate preferrd core mode kernel command
->     line options
-> 
->  .../admin-guide/kernel-parameters.txt         |   5 +
->  Documentation/admin-guide/pm/amd-pstate.rst   |  59 +++++-
->  arch/x86/Kconfig                              |   5 +-
->  drivers/acpi/cppc_acpi.c                      |  13 ++
->  drivers/acpi/processor_driver.c               |   6 +
->  drivers/cpufreq/amd-pstate.c                  | 186 ++++++++++++++++--
->  drivers/cpufreq/cpufreq.c                     |  13 ++
->  include/acpi/cppc_acpi.h                      |   5 +
->  include/linux/amd-pstate.h                    |  10 +
->  include/linux/cpufreq.h                       |   5 +
->  10 files changed, 285 insertions(+), 22 deletions(-)
-> 
-> -- 
-> 2.34.1
-> 
+>>
+>>>                   iommufd_object_deref_user(ictx, &hwpt->obj);
+>>>           else
+>>>                   refcount_dec(&hwpt->obj.users);
+>>> }
+>>>
+>>>> +			bool enforce_cache_coherency : 1;
+>>>> +			bool msi_cookie : 1;
+>>>> +			/* Head at iommufd_ioas::hwpt_list */
+>>>> +			struct list_head hwpt_item;
+>>>> +		};
+>>>> +	};
+>>>>    };
+>>>>    struct iommufd_hw_pagetable *
+>>>> -- 
+>>>> 2.34.1
+>>>>
+>>
+>> -- 
+>> Regards,
+>> Yi Liu
+
+-- 
+Regards,
+Yi Liu
