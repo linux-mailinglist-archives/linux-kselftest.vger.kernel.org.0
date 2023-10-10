@@ -2,92 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA58A7BF263
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Oct 2023 07:46:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC807BF269
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Oct 2023 07:46:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1442155AbjJJFqY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 10 Oct 2023 01:46:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42542 "EHLO
+        id S1442152AbjJJFqo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 10 Oct 2023 01:46:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1442137AbjJJFqX (ORCPT
+        with ESMTP id S1442162AbjJJFql (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 10 Oct 2023 01:46:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B43DB0
-        for <linux-kselftest@vger.kernel.org>; Mon,  9 Oct 2023 22:45:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1696916738;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=P+I2EY4NGx452ATYzw4Kz0XF6aTAAXvBTqSjZlE93qM=;
-        b=Uuqe6AfoYOHSyb45yKHP6PH1Ba/iVQGYW9UcK7GxCKyuF2aJnkm68nBMOXrswXKlXh/YrX
-        GwjJFw+jHAbFVT48dSW48GjPwWLOGA41HQ/cBD17G7ivJi1WC6nwX0cMLrQ7/sL4zK+fM7
-        2PeM76vtrcpFPnk/ZrOZE88gXwt3c54=
-Received: from mail-lf1-f69.google.com (mail-lf1-f69.google.com
- [209.85.167.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-551-BSMmArFuMWqgUglgF0tieg-1; Tue, 10 Oct 2023 01:45:26 -0400
-X-MC-Unique: BSMmArFuMWqgUglgF0tieg-1
-Received: by mail-lf1-f69.google.com with SMTP id 2adb3069b0e04-5056cc81e30so4605602e87.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 09 Oct 2023 22:45:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696916725; x=1697521525;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=P+I2EY4NGx452ATYzw4Kz0XF6aTAAXvBTqSjZlE93qM=;
-        b=HDpr3tvHqV40zL3J/m7K2cXjr/ehQ/7Gzr1gyE92vhP2oUjhz9YVV7TCqS8GQiaqqU
-         wuR/fkLVtkcSnWCj3Fsi6sLO60IIuehxcX3ZgMI8PwV0//ZduUR+O5Get8AgE7AH3M1y
-         LQqJZk5I0xrTCEhWTWXEMsmAlw/SCAVMhrPieEqPEWNTI3UcPIT7FnY8lad5nAv/VIsD
-         FG+O4Www0XbJ7eB9w+C4UJ1JE5udt5Ujxc851u65rAN01gl6oCMrCIeZbP8jG9+LhYve
-         D0NLvlJrCedteEK2fHajvwb+Lh9If7r5Nrdhj9Is4DBUWXpawg6mhfpaHOzah2+BmPJS
-         SBag==
-X-Gm-Message-State: AOJu0YxOOdAf4V/KMaZ6czr6wwBD+Gq3rYLAEo3xEmAt+uAnusD7xrbx
-        dNgv1axzZK5sm1RzM6iV8AE0H98zU3OeQlJJ3OWQz3oX4ZfDrzFMGFR1hVA0RR8ZuFIW8pjgfFO
-        mbWaJJFdpW7FEvosGXHPUaJBuqOU+Fdz5DEpi8D/0HDRg
-X-Received: by 2002:a05:6512:ea9:b0:500:b2f6:592 with SMTP id bi41-20020a0565120ea900b00500b2f60592mr18281187lfb.50.1696916725102;
-        Mon, 09 Oct 2023 22:45:25 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IF+pwNtTVbI2Ms4EjKlIUtAy5k+rLiIL3TUr1dcb8YFsqYJmXGlmcetJxkpWxQ3ditYPytVqKZpNg5+JzyWzwk=
-X-Received: by 2002:a05:6512:ea9:b0:500:b2f6:592 with SMTP id
- bi41-20020a0565120ea900b00500b2f60592mr18281158lfb.50.1696916724673; Mon, 09
- Oct 2023 22:45:24 -0700 (PDT)
+        Tue, 10 Oct 2023 01:46:41 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C6511A;
+        Mon,  9 Oct 2023 22:46:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1696916797; x=1728452797;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=ueFvf7JJaks5mJOm09moID6hWZ9bgKShkkmMs8XC9kA=;
+  b=VROw0XHmop17NRiaefiA8M6kbbI7dvEEB08QWgNZJPNLvvAoOj1TmFJE
+   U+7dAY3HQYSAhENS6EipftzB0XiQAe0fBLuZNxqB1nM57t02N62H91NTD
+   b1/Z/a8HQa61Na7RTNYEns7IfUpWS8F1cdsAWUvZ1CLXSbpcsMyQyEGWx
+   B4lhESJHkQHnwZF11M9Q5ZJSYc7h6DUdvOBr1An6BI0rV1fMESGqQkwfn
+   VZGxpLkB6QVBa7pCWwxzLl0O3ozk469eRQJ8xHdU91x3WX3ausavh19qJ
+   rNTcJyYtBgW70Lzh6tnsywNccn223oeQpOm86Rtl/x3q81aVVy3OwiQgf
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10858"; a="381574063"
+X-IronPort-AV: E=Sophos;i="6.03,211,1694761200"; 
+   d="scan'208";a="381574063"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2023 22:46:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10858"; a="843990705"
+X-IronPort-AV: E=Sophos;i="6.03,211,1694761200"; 
+   d="scan'208";a="843990705"
+Received: from geigerri-mobl.ger.corp.intel.com (HELO box.shutemov.name) ([10.252.41.165])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Oct 2023 22:46:34 -0700
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id A273310A196; Tue, 10 Oct 2023 08:46:31 +0300 (+03)
+Date:   Tue, 10 Oct 2023 08:46:31 +0300
+From:   kirill.shutemov@linux.intel.com
+To:     Binbin Wu <binbin.wu@linux.intel.com>
+Cc:     dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
+        shuah@kernel.org, linux-kselftest@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org, weihong.zhang@intel.com
+Subject: Re: [PATCH] selftests/x86/lam: Zero out buffer for readlink()
+Message-ID: <20231010054631.kud3zvv57je2buad@box.shutemov.name>
+References: <20230923233346.12726-1-binbin.wu@linux.intel.com>
+ <20230927110219.b5n3fbbwrxtcwtzp@box.shutemov.name>
+ <1793b780-cd15-b6a3-f951-c19a14a1310c@linux.intel.com>
 MIME-Version: 1.0
-References: <20231008052101.144422-1-akihiko.odaki@daynix.com>
- <20231008052101.144422-6-akihiko.odaki@daynix.com> <CAF=yD-LdwcXKK66s5gvJNOH8qCWRt3SvEL-GkkVif=kkOaYGhg@mail.gmail.com>
- <8f4ad5bc-b849-4ef4-ac1f-8d5a796205e9@daynix.com> <CAF=yD-+DjDqE9iBu+PvbeBby=C4CCwG=fMFONQONrsErmps3ww@mail.gmail.com>
- <286508a3-3067-456d-8bbf-176b00dcc0c6@daynix.com> <CAF=yD-+syCSJz_wp25rEaHTXMFRHgLh1M-uTdNWPb4fnrKgpFw@mail.gmail.com>
- <8711b549-094d-4be2-b7af-bd93b7516c05@daynix.com> <CAF=yD-+M75o2=yDy5d03fChuNTeeTRkUU7rPRG1i6O9aZGhLmQ@mail.gmail.com>
- <695a0611-2b19-49f9-8d32-cfea3b7df0b2@daynix.com> <CAF=yD-+_PLPt9qfXy1Ljr=Lou0W8hCJLi6HwPcZYCjJy+SKtbA@mail.gmail.com>
- <5baab0cf-7adf-475d-8968-d46ddd179f9a@daynix.com> <CAF=yD-KjvycgFrfKu5CgGGWU-3HbyXt_APQy4tqZgNtJwAUKzg@mail.gmail.com>
- <8f3ed081-134c-45a0-9208-c1cab29cdf37@daynix.com>
-In-Reply-To: <8f3ed081-134c-45a0-9208-c1cab29cdf37@daynix.com>
-From:   Jason Wang <jasowang@redhat.com>
-Date:   Tue, 10 Oct 2023 13:45:11 +0800
-Message-ID: <CACGkMEv0tpn4YsJhXXnoispYx2-VBimFAtFmf85Uo=5=6taVuw@mail.gmail.com>
-Subject: Re: [RFC PATCH 5/7] tun: Introduce virtio-net hashing feature
-To:     Akihiko Odaki <akihiko.odaki@daynix.com>
-Cc:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        "Michael S. Tsirkin" <mst@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
-        davem@davemloft.net, kuba@kernel.org, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
-        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, rdunlap@infradead.org, willemb@google.com,
-        gustavoars@kernel.org, herbert@gondor.apana.org.au,
-        steffen.klassert@secunet.com, nogikh@google.com,
-        pablo@netfilter.org, decui@microsoft.com, jakub@cloudflare.com,
-        elver@google.com, pabeni@redhat.com,
-        Yuri Benditovich <yuri.benditovich@daynix.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1793b780-cd15-b6a3-f951-c19a14a1310c@linux.intel.com>
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -95,257 +67,44 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Oct 10, 2023 at 9:52=E2=80=AFAM Akihiko Odaki <akihiko.odaki@daynix=
-.com> wrote:
->
-> On 2023/10/09 19:44, Willem de Bruijn wrote:
-> > On Mon, Oct 9, 2023 at 3:12=E2=80=AFAM Akihiko Odaki <akihiko.odaki@day=
-nix.com> wrote:
-> >>
-> >> On 2023/10/09 19:06, Willem de Bruijn wrote:
-> >>> On Mon, Oct 9, 2023 at 3:02=E2=80=AFAM Akihiko Odaki <akihiko.odaki@d=
-aynix.com> wrote:
-> >>>>
-> >>>> On 2023/10/09 18:57, Willem de Bruijn wrote:
-> >>>>> On Mon, Oct 9, 2023 at 3:57=E2=80=AFAM Akihiko Odaki <akihiko.odaki=
-@daynix.com> wrote:
-> >>>>>>
-> >>>>>> On 2023/10/09 17:04, Willem de Bruijn wrote:
-> >>>>>>> On Sun, Oct 8, 2023 at 3:46=E2=80=AFPM Akihiko Odaki <akihiko.oda=
-ki@daynix.com> wrote:
-> >>>>>>>>
-> >>>>>>>> On 2023/10/09 5:08, Willem de Bruijn wrote:
-> >>>>>>>>> On Sun, Oct 8, 2023 at 10:04=E2=80=AFPM Akihiko Odaki <akihiko.=
-odaki@daynix.com> wrote:
-> >>>>>>>>>>
-> >>>>>>>>>> On 2023/10/09 4:07, Willem de Bruijn wrote:
-> >>>>>>>>>>> On Sun, Oct 8, 2023 at 7:22=E2=80=AFAM Akihiko Odaki <akihiko=
-.odaki@daynix.com> wrote:
-> >>>>>>>>>>>>
-> >>>>>>>>>>>> virtio-net have two usage of hashes: one is RSS and another =
-is hash
-> >>>>>>>>>>>> reporting. Conventionally the hash calculation was done by t=
-he VMM.
-> >>>>>>>>>>>> However, computing the hash after the queue was chosen defea=
-ts the
-> >>>>>>>>>>>> purpose of RSS.
-> >>>>>>>>>>>>
-> >>>>>>>>>>>> Another approach is to use eBPF steering program. This appro=
-ach has
-> >>>>>>>>>>>> another downside: it cannot report the calculated hash due t=
-o the
-> >>>>>>>>>>>> restrictive nature of eBPF.
-> >>>>>>>>>>>>
-> >>>>>>>>>>>> Introduce the code to compute hashes to the kernel in order =
-to overcome
-> >>>>>>>>>>>> thse challenges. An alternative solution is to extend the eB=
-PF steering
-> >>>>>>>>>>>> program so that it will be able to report to the userspace, =
-but it makes
-> >>>>>>>>>>>> little sense to allow to implement different hashing algorit=
-hms with
-> >>>>>>>>>>>> eBPF since the hash value reported by virtio-net is strictly=
- defined by
-> >>>>>>>>>>>> the specification.
-> >>>>>>>>>>>>
-> >>>>>>>>>>>> The hash value already stored in sk_buff is not used and com=
-puted
-> >>>>>>>>>>>> independently since it may have been computed in a way not c=
-onformant
-> >>>>>>>>>>>> with the specification.
-> >>>>>>>>>>>>
-> >>>>>>>>>>>> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
-> >>>>>>>>>>>> ---
-> >>>>>>>>>>>
-> >>>>>>>>>>>> +static const struct tun_vnet_hash_cap tun_vnet_hash_cap =3D=
- {
-> >>>>>>>>>>>> +       .max_indirection_table_length =3D
-> >>>>>>>>>>>> +               TUN_VNET_HASH_MAX_INDIRECTION_TABLE_LENGTH,
-> >>>>>>>>>>>> +
-> >>>>>>>>>>>> +       .types =3D VIRTIO_NET_SUPPORTED_HASH_TYPES
-> >>>>>>>>>>>> +};
-> >>>>>>>>>>>
-> >>>>>>>>>>> No need to have explicit capabilities exchange like this? Tun=
- either
-> >>>>>>>>>>> supports all or none.
-> >>>>>>>>>>
-> >>>>>>>>>> tun does not support VIRTIO_NET_RSS_HASH_TYPE_IP_EX,
-> >>>>>>>>>> VIRTIO_NET_RSS_HASH_TYPE_TCP_EX, and VIRTIO_NET_RSS_HASH_TYPE_=
-UDP_EX.
-> >>>>>>>>>>
-> >>>>>>>>>> It is because the flow dissector does not support IPv6 extensi=
-ons. The
-> >>>>>>>>>> specification is also vague, and does not tell how many TLVs s=
-hould be
-> >>>>>>>>>> consumed at most when interpreting destination option header s=
-o I chose
-> >>>>>>>>>> to avoid adding code for these hash types to the flow dissecto=
-r. I doubt
-> >>>>>>>>>> anyone will complain about it since nobody complains for Linux=
-.
-> >>>>>>>>>>
-> >>>>>>>>>> I'm also adding this so that we can extend it later.
-> >>>>>>>>>> max_indirection_table_length may grow for systems with 128+ CP=
-Us, or
-> >>>>>>>>>> types may have other bits for new protocols in the future.
-> >>>>>>>>>>
-> >>>>>>>>>>>
-> >>>>>>>>>>>>               case TUNSETSTEERINGEBPF:
-> >>>>>>>>>>>> -               ret =3D tun_set_ebpf(tun, &tun->steering_pro=
-g, argp);
-> >>>>>>>>>>>> +               bpf_ret =3D tun_set_ebpf(tun, &tun->steering=
-_prog, argp);
-> >>>>>>>>>>>> +               if (IS_ERR(bpf_ret))
-> >>>>>>>>>>>> +                       ret =3D PTR_ERR(bpf_ret);
-> >>>>>>>>>>>> +               else if (bpf_ret)
-> >>>>>>>>>>>> +                       tun->vnet_hash.flags &=3D ~TUN_VNET_=
-HASH_RSS;
-> >>>>>>>>>>>
-> >>>>>>>>>>> Don't make one feature disable another.
-> >>>>>>>>>>>
-> >>>>>>>>>>> TUNSETSTEERINGEBPF and TUNSETVNETHASH are mutually exclusive
-> >>>>>>>>>>> functions. If one is enabled the other call should fail, with=
- EBUSY
-> >>>>>>>>>>> for instance.
-> >>>>>>>>>>>
-> >>>>>>>>>>>> +       case TUNSETVNETHASH:
-> >>>>>>>>>>>> +               len =3D sizeof(vnet_hash);
-> >>>>>>>>>>>> +               if (copy_from_user(&vnet_hash, argp, len)) {
-> >>>>>>>>>>>> +                       ret =3D -EFAULT;
-> >>>>>>>>>>>> +                       break;
-> >>>>>>>>>>>> +               }
-> >>>>>>>>>>>> +
-> >>>>>>>>>>>> +               if (((vnet_hash.flags & TUN_VNET_HASH_REPORT=
-) &&
-> >>>>>>>>>>>> +                    (tun->vnet_hdr_sz < sizeof(struct virti=
-o_net_hdr_v1_hash) ||
-> >>>>>>>>>>>> +                     !tun_is_little_endian(tun))) ||
-> >>>>>>>>>>>> +                    vnet_hash.indirection_table_mask >=3D
-> >>>>>>>>>>>> +                    TUN_VNET_HASH_MAX_INDIRECTION_TABLE_LEN=
-GTH) {
-> >>>>>>>>>>>> +                       ret =3D -EINVAL;
-> >>>>>>>>>>>> +                       break;
-> >>>>>>>>>>>> +               }
-> >>>>>>>>>>>> +
-> >>>>>>>>>>>> +               argp =3D (u8 __user *)argp + len;
-> >>>>>>>>>>>> +               len =3D (vnet_hash.indirection_table_mask + =
-1) * 2;
-> >>>>>>>>>>>> +               if (copy_from_user(vnet_hash_indirection_tab=
-le, argp, len)) {
-> >>>>>>>>>>>> +                       ret =3D -EFAULT;
-> >>>>>>>>>>>> +                       break;
-> >>>>>>>>>>>> +               }
-> >>>>>>>>>>>> +
-> >>>>>>>>>>>> +               argp =3D (u8 __user *)argp + len;
-> >>>>>>>>>>>> +               len =3D virtio_net_hash_key_length(vnet_hash=
-.types);
-> >>>>>>>>>>>> +
-> >>>>>>>>>>>> +               if (copy_from_user(vnet_hash_key, argp, len)=
-) {
-> >>>>>>>>>>>> +                       ret =3D -EFAULT;
-> >>>>>>>>>>>> +                       break;
-> >>>>>>>>>>>> +               }
-> >>>>>>>>>>>
-> >>>>>>>>>>> Probably easier and less error-prone to define a fixed size c=
-ontrol
-> >>>>>>>>>>> struct with the max indirection table size.
-> >>>>>>>>>>
-> >>>>>>>>>> I made its size variable because the indirection table and key=
- may grow
-> >>>>>>>>>> in the future as I wrote above.
-> >>>>>>>>>>
-> >>>>>>>>>>>
-> >>>>>>>>>>> Btw: please trim the CC: list considerably on future patches.
-> >>>>>>>>>>
-> >>>>>>>>>> I'll do so in the next version with the TUNSETSTEERINGEBPF cha=
-nge you
-> >>>>>>>>>> proposed.
-> >>>>>>>>>
-> >>>>>>>>> To be clear: please don't just resubmit with that one change.
-> >>>>>>>>>
-> >>>>>>>>> The skb and cb issues are quite fundamental issues that need to=
- be resolved.
-> >>>>>>>>>
-> >>>>>>>>> I'd like to understand why adjusting the existing BPF feature f=
-or this
-> >>>>>>>>> exact purpose cannot be amended to return the key it produced.
-> >>>>>>>>
-> >>>>>>>> eBPF steering program is not designed for this particular proble=
-m in my
-> >>>>>>>> understanding. It was introduced to derive hash values with an
-> >>>>>>>> understanding of application-specific semantics of packets inste=
-ad of
-> >>>>>>>> generic IP/TCP/UDP semantics.
-> >>>>>>>>
-> >>>>>>>> This problem is rather different in terms that the hash derivati=
-on is
-> >>>>>>>> strictly defined by virtio-net. I don't think it makes sense to
-> >>>>>>>> introduce the complexity of BPF when you always run the same cod=
-e.
-> >>>>>>>>
-> >>>>>>>> It can utilize the existing flow dissector and also make it easi=
-er to
-> >>>>>>>> use for the userspace by implementing this in the kernel.
-> >>>>>>>
-> >>>>>>> Ok. There does appear to be overlap in functionality. But it migh=
-t be
-> >>>>>>> easier to deploy to just have standard Toeplitz available without
-> >>>>>>> having to compile and load an eBPF program.
-> >>>>>>>
-> >>>>>>> As for the sk_buff and cb[] changes. The first is really not need=
-ed.
-> >>>>>>> sk_buff simply would not scale if every edge case needs a few bit=
-s.
-> >>>>>>
-> >>>>>> An alternative is to move the bit to cb[] and clear it for every c=
-ode
-> >>>>>> paths that lead to ndo_start_xmit(), but I'm worried that it is er=
-ror-prone.
-> >>>>>>
-> >>>>>> I think we can put the bit in sk_buff for now. We can implement th=
-e
-> >>>>>> alternative when we are short of bits.
-> >>>>>
-> >>>>> I disagree. sk_buff fields add a cost to every code path. They cann=
-ot
-> >>>>> be added for every edge case.
-> >>>>
-> >>>> It only takes an unused bit and does not grow the sk_buff size so I
-> >>>> think it has practically no cost for now.
-> >>>
-> >>> The problem is that that thinking leads to death by a thousand cuts.
-> >>>
-> >>> "for now" forces the cost of having to think hard how to avoid growin=
-g
-> >>> sk_buff onto the next person. Let's do it right from the start.
-> >>
-> >> I see. I described an alternative to move the bit to cb[] and clear it
-> >> in all code paths that leads to ndo_start_xmit() earlier. Does that
-> >> sound good to you?
-> >
-> > If you use the control block to pass information between
-> > __dev_queue_xmit on the tun device and tun_net_xmit, using gso_skb_cb,
-> > the field can be left undefined in all non-tun paths. tun_select_queue
-> > can initialize.
->
-> The problem is that tun_select_queue() is not always called.
-> netdev_core_pick_tx() ensures dev->real_num_tx_queues !=3D 1 before
-> calling it, but this variable may change later and result in a race
-> condition. Another case is that XDP with predefined queue.
->
-> >
-> > I would still use skb->hash to encode the hash. That hash type of that
-> > field is not strictly defined. It can be siphash from ___skb_get_hash
-> > or a device hash, which most likely also uses Toeplitz. Then you also
-> > don't run into the problem of growing the struct size.
->
-> I'm concerned exactly because it's not strictly defined. Someone may
-> decide to overwrite it later if we are not cautious enough. qdisc_skb_cb
-> also has sufficient space to contain both of the hash value and type.
+On Tue, Oct 10, 2023 at 11:51:32AM +0800, Binbin Wu wrote:
+> 
+> 
+> On 9/27/2023 7:02 PM, kirill.shutemov@linux.intel.com wrote:
+> > On Sun, Sep 24, 2023 at 07:33:46AM +0800, Binbin Wu wrote:
+> > > Zero out the buffer for readlink() since readlink() does not append a
+> > > terminating null byte to the buffer.
+> > > 
+> > > Fixes: 833c12ce0f430 ("selftests/x86/lam: Add inherit test cases for linear-address masking")
+> > > 
+> > > Signed-off-by: Binbin Wu <binbin.wu@linux.intel.com>
+> > > ---
+> > >   tools/testing/selftests/x86/lam.c | 2 +-
+> > >   1 file changed, 1 insertion(+), 1 deletion(-)
+> > > 
+> > > diff --git a/tools/testing/selftests/x86/lam.c b/tools/testing/selftests/x86/lam.c
+> > > index eb0e46905bf9..9f06942a8e25 100644
+> > > --- a/tools/testing/selftests/x86/lam.c
+> > > +++ b/tools/testing/selftests/x86/lam.c
+> > > @@ -680,7 +680,7 @@ static int handle_execve(struct testcases *test)
+> > >   		perror("Fork failed.");
+> > >   		ret = 1;
+> > >   	} else if (pid == 0) {
+> > > -		char path[PATH_MAX];
+> > > +		char path[PATH_MAX] = {0};
+> > Shouldn't it be PATH_MAX+1 to handle the case when readlink(2) stores
+> > exactly PATH_MAX bytes into the buffer?
+> According to the definition of PATH_MAX in include/uapi/linux/limits.h
+> #define PATH_MAX        4096    /* # chars in a path name including nul */
+> 
+> IIUC, Linux limits the path length to 4095 and PATH_MAX includes the
+> terminating nul.
 
-How about using skb extensions?
+Consider the case when kernel bump PATH_MAX to 8192. The binary that
+compiled from lam.c against the older kernel headers will get compromised.
 
-Thanks
+Increase the size of the buffer by one or pass PATH_MAX - 1 as buffer size
+to readlink(2).
 
->
-
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
