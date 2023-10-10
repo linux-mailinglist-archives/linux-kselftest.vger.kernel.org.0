@@ -2,306 +2,286 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FA4E7BF07C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Oct 2023 03:49:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3043E7BF07F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 10 Oct 2023 03:52:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1379347AbjJJBtv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 9 Oct 2023 21:49:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51310 "EHLO
+        id S1378764AbjJJBwT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 9 Oct 2023 21:52:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1378764AbjJJBtu (ORCPT
+        with ESMTP id S1379327AbjJJBwS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 9 Oct 2023 21:49:50 -0400
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FF8F8F
-        for <linux-kselftest@vger.kernel.org>; Mon,  9 Oct 2023 18:49:48 -0700 (PDT)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-5a7af20c488so9723267b3.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 09 Oct 2023 18:49:48 -0700 (PDT)
+        Mon, 9 Oct 2023 21:52:18 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27F6BA7
+        for <linux-kselftest@vger.kernel.org>; Mon,  9 Oct 2023 18:52:15 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1c60778a3bfso42872375ad.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 09 Oct 2023 18:52:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1696902587; x=1697507387; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tq3aYBssSknCkELoDWL5PONaJce6offpoVO2OC5YbY0=;
-        b=bpSA1VLhlw5jjQub43JPpykYIBsjO9ylgy3lSoIATzwr148A1ze5tzehAYKJRBb5Eu
-         EJCXBbGRoiqqWvKeIFmrdaDKnfnl8iAaG69NQIlIeVcMffY18UbSdQ0iAp/SHMVp4jPH
-         XXPpT8oGSIF9mvhaph4kPQUOvuS7yyf6Gx3V7eSwISxGt67UNmeAt4xPJ2EbFasytu6J
-         d0UY6Xpx1urkjc+6KnOYHhJfvo6OE0thX9OapWxZAQmW8KiDoDLp7YACFERsYkFyNTyy
-         ajh8DZ0mWi8DbYZ4uPhBrGGXyMG1I21WOlasY8FgxMDIdrYMCi/M02dxPZ+9EJvnhUOD
-         k4Nw==
+        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1696902734; x=1697507534; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0N+qtjCdT5KqAaFNfTB2Q9o+cOzK8F08JC506D0GMuU=;
+        b=X813j2vE677apHAbpkPiOpchHKLnTzQy7EBEyufsfSKeGGPLnl+9ED/JYupcnJJtYA
+         j1ZEukQFNU02Gd8ahFQKCQHDYCzH/UQN2CkSQrvUNl8zXDTg9M25QlLJ7gMNtcWpJRBk
+         F463kO56vPi2BDgfOihwf+yVx3nwxngmzOx4P/CGZewUsEwDttQKi7igicA+2a5wx/rt
+         AOx071l/5dT6Uue/uNC8Mm0ellMBRkgRDqa2SYCuZMSYGOEkxUWhPAGkD1BjEmpowICX
+         qur/8AMo9SWtlhrq69zSTWPSfy+yptmtlni1sYRZJXaLJUCWZ1FefpTbRzmCopiiRjnC
+         QiyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1696902587; x=1697507387;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tq3aYBssSknCkELoDWL5PONaJce6offpoVO2OC5YbY0=;
-        b=oxN31+4KNRDwJhpu+OCDM784Ur7DbQIYmTNEiiyq+TrgdXsoZksfdCZ9MGeeTdpv6T
-         KWykXkXvO8fiu4/b3rUuQnEPWNYckNNjQIZuhoBGRbhFRLNNT53y0mnGQYuSIgar38Gx
-         MBzHDzzXgXLKxvElELQmQCHf0/7wmvQxaFYJGhZAb6jhDk0Hm33OoKoVwDLGmPSxQYhm
-         PBty0CCyrlA1J803QTZGEZcTPGFayWR8X+0/3zemg0GEhipSmihgD1cmOqnN0IkELv64
-         r4eDN3rU7yF5q9SKK+zOLIwoe5Y40ldO0/sAp7bcDQLogvfJxcwGQvbXZusdffHcklhs
-         x3VA==
-X-Gm-Message-State: AOJu0YxoUNzRyfBJelL2SI01Kzc3krMw17ng9bHWbTD4Udfbyas3geyA
-        MrH9AnQQoSnu7U8hbE8UwFAXA57MSx8PHHNb2x/T4g==
-X-Google-Smtp-Source: AGHT+IF1wzf0z81f9XNeq7rMtn3vscHxfdIyiAWjbj9uunHLA7KUVtOoWE/ISwjSWxumTn33b/64kTrbRsvxcQHvgQw=
-X-Received: by 2002:a81:9182:0:b0:59c:6ef:cd55 with SMTP id
- i124-20020a819182000000b0059c06efcd55mr18343288ywg.8.1696902587307; Mon, 09
- Oct 2023 18:49:47 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1696902734; x=1697507534;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0N+qtjCdT5KqAaFNfTB2Q9o+cOzK8F08JC506D0GMuU=;
+        b=fj4ItVbrPH42JUGUE68M1NuRzJ7D0TAQzjHY8OMSknl9jiicCqFuE0LK66H4+VLkAz
+         QFz4xqc8wWrMCaj4y0ACKihHOCowEfARzEwGiEmqWzrJwSASFKOacZn4dP1CwTHwTROB
+         Ul2Mx7UB0KdzNenPoJg5evsHyTwH8/6GEZ727nbOIbfeVpz+9pzN4QTbjaP1D8CfmAXS
+         NvfA6tuAC4PB49Qxv1oe8PsLOm080dCuPx7+d9cxeuxCsCWtxeJL9DFqeaeGbatwOVFg
+         U7CjPS+GqZtanK7mzbrExElx/h+0w1xEVGgY7iSVhRshju5BJ7NefRYEwRhPTMsp1Wit
+         y1+Q==
+X-Gm-Message-State: AOJu0YzXo1s1UCqFMAnuN6xaj3QLZXVP0SJApMqKA5tk17SjXKgmJHSu
+        dpSajHZzke9Hr/N/Gi26wDEnvA==
+X-Google-Smtp-Source: AGHT+IFHTkZq+Y4UBZhoqTKNtQa6pvxyQ8XKUDqZz6vogu20gwkBWflb7DlCWFxTEqlYekrh3buMBg==
+X-Received: by 2002:a17:902:c212:b0:1c9:aac5:df0f with SMTP id 18-20020a170902c21200b001c9aac5df0fmr1181969pll.55.1696902734530;
+        Mon, 09 Oct 2023 18:52:14 -0700 (PDT)
+Received: from ?IPV6:2400:4050:a840:1e00:78d2:b862:10a7:d486? ([2400:4050:a840:1e00:78d2:b862:10a7:d486])
+        by smtp.gmail.com with ESMTPSA id x6-20020a170902820600b001c99b3a1e45sm3140229pln.84.2023.10.09.18.52.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 09 Oct 2023 18:52:14 -0700 (PDT)
+Message-ID: <8f3ed081-134c-45a0-9208-c1cab29cdf37@daynix.com>
+Date:   Tue, 10 Oct 2023 10:52:06 +0900
 MIME-Version: 1.0
-References: <20231009064230.2952396-1-surenb@google.com> <20231009064230.2952396-3-surenb@google.com>
- <214b78ed-3842-5ba1-fa9c-9fa719fca129@redhat.com> <CAJuCfpHzSm+z9b6uxyYFeqr5b5=6LehE9O0g192DZdJnZqmQEw@mail.gmail.com>
- <478697aa-f55c-375a-6888-3abb343c6d9d@redhat.com> <CA+EESO5nvzka0KzFGzdGgiCWPLg7XD-8jA9=NTUOKFy-56orUg@mail.gmail.com>
- <CA+EESO47LqwMwGgkHQdx1cBdcn_+FWqda8OPcBU-skk9yML_qA@mail.gmail.com>
-In-Reply-To: <CA+EESO47LqwMwGgkHQdx1cBdcn_+FWqda8OPcBU-skk9yML_qA@mail.gmail.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Tue, 10 Oct 2023 01:49:36 +0000
-Message-ID: <CAJuCfpH9hBRnUM1S8NL=QDwfn227uyz4ZYPxRYngG=WNKkCk2g@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] userfaultfd: UFFDIO_MOVE uABI
-To:     Lokesh Gidra <lokeshgidra@google.com>
-Cc:     David Hildenbrand <david@redhat.com>, akpm@linux-foundation.org,
-        viro@zeniv.linux.org.uk, brauner@kernel.org, shuah@kernel.org,
-        aarcange@redhat.com, peterx@redhat.com, hughd@google.com,
-        mhocko@suse.com, axelrasmussen@google.com, rppt@kernel.org,
-        willy@infradead.org, Liam.Howlett@oracle.com, jannh@google.com,
-        zhangpeng362@huawei.com, bgeffon@google.com,
-        kaleshsingh@google.com, ngeoffray@google.com, jdduke@google.com,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 5/7] tun: Introduce virtio-net hashing feature
+To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc:     Jason Wang <jasowang@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kselftest@vger.kernel.org, bpf@vger.kernel.org,
+        davem@davemloft.net, kuba@kernel.org, ast@kernel.org,
+        daniel@iogearbox.net, andrii@kernel.org, kafai@fb.com,
+        songliubraving@fb.com, yhs@fb.com, john.fastabend@gmail.com,
+        kpsingh@kernel.org, rdunlap@infradead.org, willemb@google.com,
+        gustavoars@kernel.org, herbert@gondor.apana.org.au,
+        steffen.klassert@secunet.com, nogikh@google.com,
+        pablo@netfilter.org, decui@microsoft.com, jakub@cloudflare.com,
+        elver@google.com, pabeni@redhat.com,
+        Yuri Benditovich <yuri.benditovich@daynix.com>
+References: <20231008052101.144422-1-akihiko.odaki@daynix.com>
+ <20231008052101.144422-6-akihiko.odaki@daynix.com>
+ <CAF=yD-LdwcXKK66s5gvJNOH8qCWRt3SvEL-GkkVif=kkOaYGhg@mail.gmail.com>
+ <8f4ad5bc-b849-4ef4-ac1f-8d5a796205e9@daynix.com>
+ <CAF=yD-+DjDqE9iBu+PvbeBby=C4CCwG=fMFONQONrsErmps3ww@mail.gmail.com>
+ <286508a3-3067-456d-8bbf-176b00dcc0c6@daynix.com>
+ <CAF=yD-+syCSJz_wp25rEaHTXMFRHgLh1M-uTdNWPb4fnrKgpFw@mail.gmail.com>
+ <8711b549-094d-4be2-b7af-bd93b7516c05@daynix.com>
+ <CAF=yD-+M75o2=yDy5d03fChuNTeeTRkUU7rPRG1i6O9aZGhLmQ@mail.gmail.com>
+ <695a0611-2b19-49f9-8d32-cfea3b7df0b2@daynix.com>
+ <CAF=yD-+_PLPt9qfXy1Ljr=Lou0W8hCJLi6HwPcZYCjJy+SKtbA@mail.gmail.com>
+ <5baab0cf-7adf-475d-8968-d46ddd179f9a@daynix.com>
+ <CAF=yD-KjvycgFrfKu5CgGGWU-3HbyXt_APQy4tqZgNtJwAUKzg@mail.gmail.com>
+Content-Language: en-US
+From:   Akihiko Odaki <akihiko.odaki@daynix.com>
+In-Reply-To: <CAF=yD-KjvycgFrfKu5CgGGWU-3HbyXt_APQy4tqZgNtJwAUKzg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Oct 9, 2023 at 5:57=E2=80=AFPM Lokesh Gidra <lokeshgidra@google.com=
-> wrote:
->
-> On Mon, Oct 9, 2023 at 9:29=E2=80=AFAM Lokesh Gidra <lokeshgidra@google.c=
-om> wrote:
-> >
-> > On Mon, Oct 9, 2023 at 5:24=E2=80=AFPM David Hildenbrand <david@redhat.=
-com> wrote:
-> > >
-> > > On 09.10.23 18:21, Suren Baghdasaryan wrote:
-> > > > On Mon, Oct 9, 2023 at 7:38=E2=80=AFAM David Hildenbrand <david@red=
-hat.com> wrote:
-> > > >>
-> > > >> On 09.10.23 08:42, Suren Baghdasaryan wrote:
-> > > >>> From: Andrea Arcangeli <aarcange@redhat.com>
-> > > >>>
-> > > >>> Implement the uABI of UFFDIO_MOVE ioctl.
-> > > >>> UFFDIO_COPY performs ~20% better than UFFDIO_MOVE when the applic=
-ation
-> > > >>> needs pages to be allocated [1]. However, with UFFDIO_MOVE, if pa=
-ges are
-> > > >>> available (in userspace) for recycling, as is usually the case in=
- heap
-> > > >>> compaction algorithms, then we can avoid the page allocation and =
-memcpy
-> > > >>> (done by UFFDIO_COPY). Also, since the pages are recycled in the
-> > > >>> userspace, we avoid the need to release (via madvise) the pages b=
-ack to
-> > > >>> the kernel [2].
-> > > >>> We see over 40% reduction (on a Google pixel 6 device) in the com=
-pacting
-> > > >>> thread=E2=80=99s completion time by using UFFDIO_MOVE vs. UFFDIO_=
-COPY. This was
-> > > >>> measured using a benchmark that emulates a heap compaction implem=
-entation
-> > > >>> using userfaultfd (to allow concurrent accesses by application th=
-reads).
-> > > >>> More details of the usecase are explained in [2].
-> > > >>> Furthermore, UFFDIO_MOVE enables moving swapped-out pages without
-> > > >>> touching them within the same vma. Today, it can only be done by =
-mremap,
-> > > >>> however it forces splitting the vma.
-> > > >>>
-> > > >>> [1] https://lore.kernel.org/all/1425575884-2574-1-git-send-email-=
-aarcange@redhat.com/
-> > > >>> [2] https://lore.kernel.org/linux-mm/CA+EESO4uO84SSnBhArH4HvLNhaU=
-Q5nZKNKXqxRCyjniNVjp0Aw@mail.gmail.com/
-> > > >>>
-> > > >>> Update for the ioctl_userfaultfd(2)  manpage:
-> > > >>>
-> > > >>>      UFFDIO_MOVE
-> > > >>>          (Since Linux xxx)  Move a continuous memory chunk into t=
-he
-> > > >>>          userfault registered range and optionally wake up the bl=
-ocked
-> > > >>>          thread. The source and destination addresses and the num=
-ber of
-> > > >>>          bytes to move are specified by the src, dst, and len fie=
-lds of
-> > > >>>          the uffdio_move structure pointed to by argp:
-> > > >>>
-> > > >>>              struct uffdio_move {
-> > > >>>                  __u64 dst;    /* Destination of move */
-> > > >>>                  __u64 src;    /* Source of move */
-> > > >>>                  __u64 len;    /* Number of bytes to move */
-> > > >>>                  __u64 mode;   /* Flags controlling behavior of m=
-ove */
-> > > >>>                  __s64 move;   /* Number of bytes moved, or negat=
-ed error */
-> > > >>>              };
-> > > >>>
-> > > >>>          The following value may be bitwise ORed in mode to chang=
-e the
-> > > >>>          behavior of the UFFDIO_MOVE operation:
-> > > >>>
-> > > >>>          UFFDIO_MOVE_MODE_DONTWAKE
-> > > >>>                 Do not wake up the thread that waits for page-fau=
-lt
-> > > >>>                 resolution
-> > > >>>
-> > > >>>          UFFDIO_MOVE_MODE_ALLOW_SRC_HOLES
-> > > >>>                 Allow holes in the source virtual range that is b=
-eing moved.
-> > > >>>                 When not specified, the holes will result in ENOE=
-NT error.
-> > > >>>                 When specified, the holes will be accounted as su=
-ccessfully
-> > > >>>                 moved memory. This is mostly useful to move hugep=
-age aligned
-> > > >>>                 virtual regions without knowing if there are tran=
-sparent
-> > > >>>                 hugepages in the regions or not, but preventing t=
-he risk of
-> > > >>>                 having to split the hugepage during the operation=
-.
-> > > >>>
-> > > >>>          The move field is used by the kernel to return the numbe=
-r of
-> > > >>>          bytes that was actually moved, or an error (a negated er=
-rno-
-> > > >>>          style value).  If the value returned in move doesn't mat=
-ch the
-> > > >>>          value that was specified in len, the operation fails wit=
-h the
-> > > >>>          error EAGAIN.  The move field is output-only; it is not =
-read by
-> > > >>>          the UFFDIO_MOVE operation.
-> > > >>>
-> > > >>>          The operation may fail for various reasons. Usually, rem=
-apping of
-> > > >>>          pages that are not exclusive to the given process fail; =
-once KSM
-> > > >>>          might deduplicate pages or fork() COW-shares pages durin=
-g fork()
-> > > >>>          with child processes, they are no longer exclusive. Furt=
-her, the
-> > > >>>          kernel might only perform lightweight checks for detecti=
-ng whether
-> > > >>>          the pages are exclusive, and return -EBUSY in case that =
-check fails.
-> > > >>>          To make the operation more likely to succeed, KSM should=
- be
-> > > >>>          disabled, fork() should be avoided or MADV_DONTFORK shou=
-ld be
-> > > >>>          configured for the source VMA before fork().
-> > > >>>
-> > > >>>          This ioctl(2) operation returns 0 on success.  In this c=
-ase, the
-> > > >>>          entire area was moved.  On error, -1 is returned and err=
-no is
-> > > >>>          set to indicate the error.  Possible errors include:
-> > > >>>
-> > > >>>          EAGAIN The number of bytes moved (i.e., the value return=
-ed in
-> > > >>>                 the move field) does not equal the value that was
-> > > >>>                 specified in the len field.
-> > > >>>
-> > > >>>          EINVAL Either dst or len was not a multiple of the syste=
-m page
-> > > >>>                 size, or the range specified by src and len or ds=
-t and len
-> > > >>>                 was invalid.
-> > > >>>
-> > > >>>          EINVAL An invalid bit was specified in the mode field.
-> > > >>>
-> > > >>>          ENOENT
-> > > >>>                 The source virtual memory range has unmapped hole=
-s and
-> > > >>>                 UFFDIO_MOVE_MODE_ALLOW_SRC_HOLES is not set.
-> > > >>>
-> > > >>>          EEXIST
-> > > >>>                 The destination virtual memory range is fully or =
-partially
-> > > >>>                 mapped.
-> > > >>>
-> > > >>>          EBUSY
-> > > >>>                 The pages in the source virtual memory range are =
-not
-> > > >>>                 exclusive to the process. The kernel might only p=
-erform
-> > > >>>                 lightweight checks for detecting whether the page=
-s are
-> > > >>>                 exclusive. To make the operation more likely to s=
-ucceed,
-> > > >>>                 KSM should be disabled, fork() should be avoided =
-or
-> > > >>>                 MADV_DONTFORK should be configured for the source=
- virtual
-> > > >>>                 memory area before fork().
-> > > >>>
-> > > >>>          ENOMEM Allocating memory needed for the operation failed=
-.
-> > > >>>
-> > > >>>          ESRCH
-> > > >>>                 The faulting process has exited at the time of a
-> > > >>>                 UFFDIO_MOVE operation.
-> > > >>>
-> > > >>
-> > > >> A general comment simply because I realized that just now: does an=
-ything
-> > > >> speak against limiting the operations now to a single MM?
-> > > >>
-> > > >> The use cases I heard so far don't need it. If ever required, we c=
-ould
-> > > >> consider extending it.
-> > > >>
-> > > >> Let's reduce complexity and KIS unless really required.
-> > > >
-> > > > Let me check if there are use cases that require moves between MMs.
-> > > > Andrea seems to have put considerable effort to make it work betwee=
-n
-> > > > MMs and it would be a pity to lose that. I can send a follow-up pat=
-ch
-> > > > to recover that functionality and even if it does not get merged, i=
-t
-> > > > can be used in the future as a reference. But first let me check if=
- we
-> > > > can drop it.
-> >
-> > For the compaction use case that we have it's fine to limit it to
-> > single MM. However, for general use I think Peter will have a better
-> > idea.
-> > >
-> > > Yes, that sounds reasonable. Unless the big important use cases requi=
-res
-> > > moving pages between processes, let's leave that as future work for n=
-ow.
-> > >
-> > > --
-> > > Cheers,
-> > >
-> > > David / dhildenb
-> > >
->
-> While going through mremap's move_page_tables code, which is pretty
-> similar to what we do here, I noticed that cache is flushed as well,
-> whereas we are not doing that here. Is that OK? I'm not a MM expert by
-> any means, so it's a question rather than a comment :)
+On 2023/10/09 19:44, Willem de Bruijn wrote:
+> On Mon, Oct 9, 2023 at 3:12 AM Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
+>>
+>> On 2023/10/09 19:06, Willem de Bruijn wrote:
+>>> On Mon, Oct 9, 2023 at 3:02 AM Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
+>>>>
+>>>> On 2023/10/09 18:57, Willem de Bruijn wrote:
+>>>>> On Mon, Oct 9, 2023 at 3:57 AM Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
+>>>>>>
+>>>>>> On 2023/10/09 17:04, Willem de Bruijn wrote:
+>>>>>>> On Sun, Oct 8, 2023 at 3:46 PM Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
+>>>>>>>>
+>>>>>>>> On 2023/10/09 5:08, Willem de Bruijn wrote:
+>>>>>>>>> On Sun, Oct 8, 2023 at 10:04 PM Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
+>>>>>>>>>>
+>>>>>>>>>> On 2023/10/09 4:07, Willem de Bruijn wrote:
+>>>>>>>>>>> On Sun, Oct 8, 2023 at 7:22 AM Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
+>>>>>>>>>>>>
+>>>>>>>>>>>> virtio-net have two usage of hashes: one is RSS and another is hash
+>>>>>>>>>>>> reporting. Conventionally the hash calculation was done by the VMM.
+>>>>>>>>>>>> However, computing the hash after the queue was chosen defeats the
+>>>>>>>>>>>> purpose of RSS.
+>>>>>>>>>>>>
+>>>>>>>>>>>> Another approach is to use eBPF steering program. This approach has
+>>>>>>>>>>>> another downside: it cannot report the calculated hash due to the
+>>>>>>>>>>>> restrictive nature of eBPF.
+>>>>>>>>>>>>
+>>>>>>>>>>>> Introduce the code to compute hashes to the kernel in order to overcome
+>>>>>>>>>>>> thse challenges. An alternative solution is to extend the eBPF steering
+>>>>>>>>>>>> program so that it will be able to report to the userspace, but it makes
+>>>>>>>>>>>> little sense to allow to implement different hashing algorithms with
+>>>>>>>>>>>> eBPF since the hash value reported by virtio-net is strictly defined by
+>>>>>>>>>>>> the specification.
+>>>>>>>>>>>>
+>>>>>>>>>>>> The hash value already stored in sk_buff is not used and computed
+>>>>>>>>>>>> independently since it may have been computed in a way not conformant
+>>>>>>>>>>>> with the specification.
+>>>>>>>>>>>>
+>>>>>>>>>>>> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+>>>>>>>>>>>> ---
+>>>>>>>>>>>
+>>>>>>>>>>>> +static const struct tun_vnet_hash_cap tun_vnet_hash_cap = {
+>>>>>>>>>>>> +       .max_indirection_table_length =
+>>>>>>>>>>>> +               TUN_VNET_HASH_MAX_INDIRECTION_TABLE_LENGTH,
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +       .types = VIRTIO_NET_SUPPORTED_HASH_TYPES
+>>>>>>>>>>>> +};
+>>>>>>>>>>>
+>>>>>>>>>>> No need to have explicit capabilities exchange like this? Tun either
+>>>>>>>>>>> supports all or none.
+>>>>>>>>>>
+>>>>>>>>>> tun does not support VIRTIO_NET_RSS_HASH_TYPE_IP_EX,
+>>>>>>>>>> VIRTIO_NET_RSS_HASH_TYPE_TCP_EX, and VIRTIO_NET_RSS_HASH_TYPE_UDP_EX.
+>>>>>>>>>>
+>>>>>>>>>> It is because the flow dissector does not support IPv6 extensions. The
+>>>>>>>>>> specification is also vague, and does not tell how many TLVs should be
+>>>>>>>>>> consumed at most when interpreting destination option header so I chose
+>>>>>>>>>> to avoid adding code for these hash types to the flow dissector. I doubt
+>>>>>>>>>> anyone will complain about it since nobody complains for Linux.
+>>>>>>>>>>
+>>>>>>>>>> I'm also adding this so that we can extend it later.
+>>>>>>>>>> max_indirection_table_length may grow for systems with 128+ CPUs, or
+>>>>>>>>>> types may have other bits for new protocols in the future.
+>>>>>>>>>>
+>>>>>>>>>>>
+>>>>>>>>>>>>               case TUNSETSTEERINGEBPF:
+>>>>>>>>>>>> -               ret = tun_set_ebpf(tun, &tun->steering_prog, argp);
+>>>>>>>>>>>> +               bpf_ret = tun_set_ebpf(tun, &tun->steering_prog, argp);
+>>>>>>>>>>>> +               if (IS_ERR(bpf_ret))
+>>>>>>>>>>>> +                       ret = PTR_ERR(bpf_ret);
+>>>>>>>>>>>> +               else if (bpf_ret)
+>>>>>>>>>>>> +                       tun->vnet_hash.flags &= ~TUN_VNET_HASH_RSS;
+>>>>>>>>>>>
+>>>>>>>>>>> Don't make one feature disable another.
+>>>>>>>>>>>
+>>>>>>>>>>> TUNSETSTEERINGEBPF and TUNSETVNETHASH are mutually exclusive
+>>>>>>>>>>> functions. If one is enabled the other call should fail, with EBUSY
+>>>>>>>>>>> for instance.
+>>>>>>>>>>>
+>>>>>>>>>>>> +       case TUNSETVNETHASH:
+>>>>>>>>>>>> +               len = sizeof(vnet_hash);
+>>>>>>>>>>>> +               if (copy_from_user(&vnet_hash, argp, len)) {
+>>>>>>>>>>>> +                       ret = -EFAULT;
+>>>>>>>>>>>> +                       break;
+>>>>>>>>>>>> +               }
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +               if (((vnet_hash.flags & TUN_VNET_HASH_REPORT) &&
+>>>>>>>>>>>> +                    (tun->vnet_hdr_sz < sizeof(struct virtio_net_hdr_v1_hash) ||
+>>>>>>>>>>>> +                     !tun_is_little_endian(tun))) ||
+>>>>>>>>>>>> +                    vnet_hash.indirection_table_mask >=
+>>>>>>>>>>>> +                    TUN_VNET_HASH_MAX_INDIRECTION_TABLE_LENGTH) {
+>>>>>>>>>>>> +                       ret = -EINVAL;
+>>>>>>>>>>>> +                       break;
+>>>>>>>>>>>> +               }
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +               argp = (u8 __user *)argp + len;
+>>>>>>>>>>>> +               len = (vnet_hash.indirection_table_mask + 1) * 2;
+>>>>>>>>>>>> +               if (copy_from_user(vnet_hash_indirection_table, argp, len)) {
+>>>>>>>>>>>> +                       ret = -EFAULT;
+>>>>>>>>>>>> +                       break;
+>>>>>>>>>>>> +               }
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +               argp = (u8 __user *)argp + len;
+>>>>>>>>>>>> +               len = virtio_net_hash_key_length(vnet_hash.types);
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +               if (copy_from_user(vnet_hash_key, argp, len)) {
+>>>>>>>>>>>> +                       ret = -EFAULT;
+>>>>>>>>>>>> +                       break;
+>>>>>>>>>>>> +               }
+>>>>>>>>>>>
+>>>>>>>>>>> Probably easier and less error-prone to define a fixed size control
+>>>>>>>>>>> struct with the max indirection table size.
+>>>>>>>>>>
+>>>>>>>>>> I made its size variable because the indirection table and key may grow
+>>>>>>>>>> in the future as I wrote above.
+>>>>>>>>>>
+>>>>>>>>>>>
+>>>>>>>>>>> Btw: please trim the CC: list considerably on future patches.
+>>>>>>>>>>
+>>>>>>>>>> I'll do so in the next version with the TUNSETSTEERINGEBPF change you
+>>>>>>>>>> proposed.
+>>>>>>>>>
+>>>>>>>>> To be clear: please don't just resubmit with that one change.
+>>>>>>>>>
+>>>>>>>>> The skb and cb issues are quite fundamental issues that need to be resolved.
+>>>>>>>>>
+>>>>>>>>> I'd like to understand why adjusting the existing BPF feature for this
+>>>>>>>>> exact purpose cannot be amended to return the key it produced.
+>>>>>>>>
+>>>>>>>> eBPF steering program is not designed for this particular problem in my
+>>>>>>>> understanding. It was introduced to derive hash values with an
+>>>>>>>> understanding of application-specific semantics of packets instead of
+>>>>>>>> generic IP/TCP/UDP semantics.
+>>>>>>>>
+>>>>>>>> This problem is rather different in terms that the hash derivation is
+>>>>>>>> strictly defined by virtio-net. I don't think it makes sense to
+>>>>>>>> introduce the complexity of BPF when you always run the same code.
+>>>>>>>>
+>>>>>>>> It can utilize the existing flow dissector and also make it easier to
+>>>>>>>> use for the userspace by implementing this in the kernel.
+>>>>>>>
+>>>>>>> Ok. There does appear to be overlap in functionality. But it might be
+>>>>>>> easier to deploy to just have standard Toeplitz available without
+>>>>>>> having to compile and load an eBPF program.
+>>>>>>>
+>>>>>>> As for the sk_buff and cb[] changes. The first is really not needed.
+>>>>>>> sk_buff simply would not scale if every edge case needs a few bits.
+>>>>>>
+>>>>>> An alternative is to move the bit to cb[] and clear it for every code
+>>>>>> paths that lead to ndo_start_xmit(), but I'm worried that it is error-prone.
+>>>>>>
+>>>>>> I think we can put the bit in sk_buff for now. We can implement the
+>>>>>> alternative when we are short of bits.
+>>>>>
+>>>>> I disagree. sk_buff fields add a cost to every code path. They cannot
+>>>>> be added for every edge case.
+>>>>
+>>>> It only takes an unused bit and does not grow the sk_buff size so I
+>>>> think it has practically no cost for now.
+>>>
+>>> The problem is that that thinking leads to death by a thousand cuts.
+>>>
+>>> "for now" forces the cost of having to think hard how to avoid growing
+>>> sk_buff onto the next person. Let's do it right from the start.
+>>
+>> I see. I described an alternative to move the bit to cb[] and clear it
+>> in all code paths that leads to ndo_start_xmit() earlier. Does that
+>> sound good to you?
+> 
+> If you use the control block to pass information between
+> __dev_queue_xmit on the tun device and tun_net_xmit, using gso_skb_cb,
+> the field can be left undefined in all non-tun paths. tun_select_queue
+> can initialize.
 
-Good question. I'll have to look closer into it. Unfortunately I'll be
-travelling starting tomorrow and be back next week. Will try my best
-to answer questions in a timely manner but depends on my connection
-and availability.
-Thanks!
+The problem is that tun_select_queue() is not always called. 
+netdev_core_pick_tx() ensures dev->real_num_tx_queues != 1 before 
+calling it, but this variable may change later and result in a race 
+condition. Another case is that XDP with predefined queue.
+
+> 
+> I would still use skb->hash to encode the hash. That hash type of that
+> field is not strictly defined. It can be siphash from ___skb_get_hash
+> or a device hash, which most likely also uses Toeplitz. Then you also
+> don't run into the problem of growing the struct size.
+
+I'm concerned exactly because it's not strictly defined. Someone may 
+decide to overwrite it later if we are not cautious enough. qdisc_skb_cb 
+also has sufficient space to contain both of the hash value and type.
