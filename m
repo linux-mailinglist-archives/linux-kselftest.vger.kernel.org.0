@@ -2,89 +2,84 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18A7C7C5DBD
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Oct 2023 21:41:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D63C67C5DD4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Oct 2023 21:50:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233170AbjJKTlT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 11 Oct 2023 15:41:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43270 "EHLO
+        id S233170AbjJKTue (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 11 Oct 2023 15:50:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32796 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233119AbjJKTlS (ORCPT
+        with ESMTP id S233125AbjJKTud (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 11 Oct 2023 15:41:18 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36BCE94;
-        Wed, 11 Oct 2023 12:41:16 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80806C433C7;
-        Wed, 11 Oct 2023 19:41:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1697053275;
-        bh=wyUZr0T2KKwwXCDYer3RRt6Sel9/hsansQuF2CNrmtU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=I9ADnPXsjFXvnmubhrjROigjHerM0TGu995M83tV13RmcZYKfisoONeqOnjXipMNM
-         wZsPfYrMC4OC3hq0HKKKG0r/nvT2gp5LXVOr9fLAcylOnOcNvVKzPoaQiOvU7LWvxd
-         Las82HeLIh7OIh5e2bSB0zQ8yFNqJuUkMTp1svH+AbFlMZvPC8AnqL/xBHYWfkJuvW
-         Nv4OdhY5aBOPZP/1k8LZmqZBTW6mCv7BnKwNvTPmtQH2oc6ieAHgPgTKLZ0XLzWHVC
-         BSi6fjq6Syn2H2ohjmQ3ia3FGlwN5ftnr5FSiNK0bUzYyer3UvjiI7l194BfwT69Sw
-         Vj+e8JUiCla1A==
-Message-ID: <a2a5cb05-8604-4303-9802-573359c68368@kernel.org>
-Date:   Wed, 11 Oct 2023 13:40:48 -0600
+        Wed, 11 Oct 2023 15:50:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D0D94
+        for <linux-kselftest@vger.kernel.org>; Wed, 11 Oct 2023 12:49:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1697053782;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=dBw9jQqyC4NTEUrlFCMr+yRaRJ2fHw1SppPxUk03e4k=;
+        b=cLJqCcqhfphFicNXORiMvWuQB9FpDLPNC1ECYs3Q+McBEyPfmVEa1QnvNKzYWhhzXLuwlQ
+        v8+ytCUocvbCrpcFzyHcG612G1pfRifOIADdcUwUQquKLHa0QrQm+02HMlWzuOw9UTrrXy
+        bI0PfyYitu1eyo0+uUUqlL8kpAiuJ8g=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-625-8nc4PH9ONs2n_JXZ4hQRYw-1; Wed, 11 Oct 2023 15:49:41 -0400
+X-MC-Unique: 8nc4PH9ONs2n_JXZ4hQRYw-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 69BEE832D33;
+        Wed, 11 Oct 2023 19:49:40 +0000 (UTC)
+Received: from RHTPC1VM0NT.lan (unknown [10.22.34.140])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id A511A1C060B5;
+        Wed, 11 Oct 2023 19:49:39 +0000 (UTC)
+From:   Aaron Conole <aconole@redhat.com>
+To:     netdev@vger.kernel.org
+Cc:     dev@openvswitch.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Pravin B Shelar <pshelar@ovn.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Adrian Moreno <amorenoz@redhat.com>,
+        Eelco Chaudron <echaudro@redhat.com>, shuah@kernel.org
+Subject: [PATCH net v2 0/4] selftests: openvswitch: Minor fixes for some systems
+Date:   Wed, 11 Oct 2023 15:49:35 -0400
+Message-ID: <20231011194939.704565-1-aconole@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 1/8] selftests: Add printf attribute to kselftest
- prints
-Content-Language: en-US
-To:     Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-Cc:     ilpo.jarvinen@linux.intel.com,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        shuah <shuah@kernel.org>
-References: <cover.1697012398.git.maciej.wieczor-retman@intel.com>
- <13a47130763d109aa40de153ecbee9ede22d8356.1697012398.git.maciej.wieczor-retman@intel.com>
-From:   Shuah <shuah@kernel.org>
-In-Reply-To: <13a47130763d109aa40de153ecbee9ede22d8356.1697012398.git.maciej.wieczor-retman@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10/11/23 02:23, Maciej Wieczor-Retman wrote:
-> Kselftest header defines multiple variadic functions that use printf
-> along with other logic.
-> 
-> There is no format checking for the variadic functions that use
-> printing inside kselftest.h. Because of this the compiler won't
-> be able to catch instances of mismatched printf formats and debugging
-> tests might be more difficult.
-> 
-> Add the common __printf attribute macro to kselftest.h.
-> 
-> Add __printf attribute to every function using formatted printing with
-> variadic arguments.
-> 
-> Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-> Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
-> ---
-> Changelog v4:
-> - Fix typo in patch subject. (Reinette)
-> - Add Reinette's reviewed-by tag.
-> 
+A number of corner cases were caught when trying to run the selftests on
+older systems.  Missed skip conditions, some error cases, and outdated
+python setups would all report failures but the issue would actually be
+related to some other condition rather than the selftest suite.
 
-I still need information on how you found these problems. Please
-add it to change log for each of these patches.
+Address these individual cases.
 
-I am seeing checkpatch warning:
+Aaron Conole (4):
+  selftests: openvswitch: Add version check for pyroute2
+  selftests: openvswitch: Catch cases where the tests are killed
+  selftests: openvswitch: Skip drop testing on older kernels
+  selftests: openvswitch: Fix the ct_tuple for v4
 
-WARNING: Prefer __printf(a, b) over __attribute__((format(printf, a, b)))
-#102: FILE: tools/testing/selftests/kselftest.h:81:
-+#define __printf(a, b)   __attribute__((format(printf, a, b)))
+ .../selftests/net/openvswitch/openvswitch.sh  | 21 +++++++-
+ .../selftests/net/openvswitch/ovs-dpctl.py    | 48 ++++++++++++++++++-
+ 2 files changed, 66 insertions(+), 3 deletions(-)
 
-thanks,
--- Shuah
+-- 
+2.41.0
+
