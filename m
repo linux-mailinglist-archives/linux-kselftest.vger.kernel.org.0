@@ -2,142 +2,176 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F9DC7C4CFD
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Oct 2023 10:24:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C453F7C4D02
+	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Oct 2023 10:24:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbjJKIYF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 11 Oct 2023 04:24:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38518 "EHLO
+        id S230253AbjJKIYk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 11 Oct 2023 04:24:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229846AbjJKIYF (ORCPT
+        with ESMTP id S229846AbjJKIYk (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 11 Oct 2023 04:24:05 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03B2F98;
-        Wed, 11 Oct 2023 01:24:03 -0700 (PDT)
+        Wed, 11 Oct 2023 04:24:40 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD7BD93;
+        Wed, 11 Oct 2023 01:24:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697012644; x=1728548644;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=3x9GAp5cDvGnLg+Fycea/9UNsfwyKD8QpuehWluv3WI=;
-  b=H1rpGgWookqps3M7iaHPqiIPC0yAgbl4mzfR62AXxTUp9xkc3Vx2eguM
-   EI9XsK9K0pz7FvOjxSGVslpGAPlYZr4/t7Cq6Di1sSbUdquHXfurRMWWI
-   gbxCjkjSk3KZpf6HP7rjAL3qBI+bdVFtELMx4Ww/yuCTsMILNXClWtC1K
-   kcRLccWRY8znXmlhGlOucSJrbanjEmZUWyQggW6PzkTKdp8Au9WuJKYhu
-   Oeo1Rfa1SXAQSHEPQ3BasdoqGZLZwxP8zQFygIhNISzcUB1Vn1ZvRu22y
-   7WEb6/gKQTA3XxEapGPOfBbgGTtAkmG8/gUlafbd8+AY4rv+2xmaITmQM
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10859"; a="387450904"
+  t=1697012678; x=1728548678;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=DODJjFottlxEJu0e1tIrYsECssXJAlmKZEBekFL0/ME=;
+  b=VUSvqqpetOYSh100vMYFNrQW+PR5VadePHTwFfqAOYJOyDgV5YVgKYd4
+   MjBc9ik3VMhGRa05RCnbvEESFl6Nr/aYKuI4ZjJb5gMo6So/5hYpd0MnW
+   BmCxbmeqKRFoCDUjXSfnOTqzBh1GWXGY7Tfk0b/85BgsLF12hBMijcK+U
+   UTng9DGuFMdaUsoF4FMGGL+jvAcaOXiWpbQ1QzIXtIbdwRmZt/hIGXtCN
+   fn6YWeOkJt5SAvj+qkmXqbmOZY5TH7Sq8f2BSjI1SzeITgE7uylrgbduR
+   Q6NaB72egmrHXoPRzvhPLH2lOXV4Y1cMXUogS4WTTDa3a6OjTDPw4T9aS
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10859"; a="3200696"
 X-IronPort-AV: E=Sophos;i="6.03,214,1694761200"; 
-   d="scan'208";a="387450904"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2023 01:24:02 -0700
+   d="scan'208";a="3200696"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2023 01:24:29 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10859"; a="819606024"
+X-IronPort-AV: E=McAfee;i="6600,9927,10859"; a="730411561"
 X-IronPort-AV: E=Sophos;i="6.03,214,1694761200"; 
-   d="scan'208";a="819606024"
+   d="scan'208";a="730411561"
 Received: from bmatwiej-mobl.ger.corp.intel.com (HELO wieczorr-mobl1.intel.com) ([10.213.17.119])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2023 01:23:56 -0700
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Oct 2023 01:24:26 -0700
 From:   Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-To:     akpm@linux-foundation.org, christian@kellner.me,
-        fenghua.yu@intel.com, keescook@chromium.org,
-        ndesaulniers@google.com, coltonlewis@google.com,
-        dmatlack@google.com, vipinsh@google.com, seanjc@google.com,
-        brauner@kernel.org, pbonzini@redhat.com, shuah@kernel.org,
-        hannes@cmpxchg.org, nphamcs@gmail.com, reinette.chatre@intel.com
-Cc:     ilpo.jarvinen@linux.intel.com, linux-kselftest@vger.kernel.org,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: [PATCH v5 0/8] Add printf attribute to kselftest functions
-Date:   Wed, 11 Oct 2023 10:23:42 +0200
-Message-ID: <cover.1697012398.git.maciej.wieczor-retman@intel.com>
+To:     Shuah Khan <shuah@kernel.org>
+Cc:     ilpo.jarvinen@linux.intel.com,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v5 1/8] selftests: Add printf attribute to kselftest prints
+Date:   Wed, 11 Oct 2023 10:23:57 +0200
+Message-ID: <13a47130763d109aa40de153ecbee9ede22d8356.1697012398.git.maciej.wieczor-retman@intel.com>
 X-Mailer: git-send-email 2.42.0
+In-Reply-To: <cover.1697012398.git.maciej.wieczor-retman@intel.com>
+References: <cover.1697012398.git.maciej.wieczor-retman@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kselftest.h declares many variadic functions that can print some
-formatted message while also executing selftest logic. These
-declarations don't have any compiler mechanism to verify if passed
-arguments are valid in comparison with format specifiers used in
-printf() calls.
+Kselftest header defines multiple variadic functions that use printf
+along with other logic.
 
-Attribute addition can make debugging easier, the code more consistent
-and prevent mismatched or missing variables.
+There is no format checking for the variadic functions that use
+printing inside kselftest.h. Because of this the compiler won't
+be able to catch instances of mismatched printf formats and debugging
+tests might be more difficult.
 
-The first patch adds __printf() macro and applies it to all functions
-in kselftest.h that use printf format specifiers. After compiling all
-selftests using:
-	make -C tools/testing/selftests
-many instances of format specifier mismatching are exposed in the form
-of -Wformat warnings.
+Add the common __printf attribute macro to kselftest.h.
 
-Fix the mismatched format specifiers caught by __printf() attribute in
-multiple tests.
+Add __printf attribute to every function using formatted printing with
+variadic arguments.
 
-Series is based on kselftests next branch.
-
-Changelog v5:
-- Mention in the cover letter what methodology was used to find the
-  mismatched format specifiers.
-- No functional changes in the patches.
-
+Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
+---
 Changelog v4:
-- Fix patch 1/8 subject typo.
-- Add Reinette's reviewed-by tags.
-- Rebase onto new kselftest/next patches.
+- Fix typo in patch subject. (Reinette)
+- Add Reinette's reviewed-by tag.
 
-Changelog v3:
-- Changed git signature from Wieczor-Retman Maciej to Maciej
-  Wieczor-Retman.
-- Added one review tag.
-- Rebased onto updated kselftests next branch.
+ tools/testing/selftests/kselftest.h | 18 ++++++++++--------
+ 1 file changed, 10 insertions(+), 8 deletions(-)
 
-Changelog v2:
-- Add review and fixes tags to patches.
-- Add two patches with mismatch fixes.
-- Fix missed attribute in selftests/kvm. (Andrew)
-- Fix previously missed issues in selftests/mm (Ilpo)
-
-[v3] https://lore.kernel.org/all/cover.1695373131.git.maciej.wieczor-retman@intel.com/
-[v2] https://lore.kernel.org/all/cover.1693829810.git.maciej.wieczor-retman@intel.com/
-[v1] https://lore.kernel.org/all/cover.1693216959.git.maciej.wieczor-retman@intel.com/
-
-Maciej Wieczor-Retman (8):
-  selftests: Add printf attribute to kselftest prints
-  selftests/cachestat: Fix print_cachestat format
-  selftests/openat2: Fix wrong format specifier
-  selftests/pidfd: Fix ksft print formats
-  selftests/sigaltstack: Fix wrong format specifier
-  selftests/kvm: Replace attribute with macro
-  selftests/mm: Substitute attribute with a macro
-  selftests/resctrl: Fix wrong format specifier
-
- .../selftests/cachestat/test_cachestat.c       |  2 +-
- tools/testing/selftests/kselftest.h            | 18 ++++++++++--------
- .../testing/selftests/kvm/include/test_util.h  |  8 ++++----
- tools/testing/selftests/mm/mremap_test.c       |  2 +-
- tools/testing/selftests/mm/pkey-helpers.h      |  2 +-
- tools/testing/selftests/openat2/openat2_test.c |  2 +-
- .../selftests/pidfd/pidfd_fdinfo_test.c        |  2 +-
- tools/testing/selftests/pidfd/pidfd_test.c     | 12 ++++++------
- tools/testing/selftests/resctrl/cache.c        |  2 +-
- tools/testing/selftests/sigaltstack/sas.c      |  2 +-
- 10 files changed, 27 insertions(+), 25 deletions(-)
-
-
-base-commit: 2531f374f922e77ba51f24d1aa6fa11c7f4c36b8
+diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
+index af9f1202d423..5696199c16f9 100644
+--- a/tools/testing/selftests/kselftest.h
++++ b/tools/testing/selftests/kselftest.h
+@@ -78,6 +78,8 @@
+ #define KSFT_XPASS 3
+ #define KSFT_SKIP  4
+ 
++#define __printf(a, b)   __attribute__((format(printf, a, b)))
++
+ /* counters */
+ struct ksft_count {
+ 	unsigned int ksft_pass;
+@@ -144,7 +146,7 @@ static inline void ksft_print_cnts(void)
+ 		ksft_cnt.ksft_xskip, ksft_cnt.ksft_error);
+ }
+ 
+-static inline void ksft_print_msg(const char *msg, ...)
++static inline __printf(1, 2) void ksft_print_msg(const char *msg, ...)
+ {
+ 	int saved_errno = errno;
+ 	va_list args;
+@@ -169,7 +171,7 @@ static inline void ksft_perror(const char *msg)
+ #endif
+ }
+ 
+-static inline void ksft_test_result_pass(const char *msg, ...)
++static inline __printf(1, 2) void ksft_test_result_pass(const char *msg, ...)
+ {
+ 	int saved_errno = errno;
+ 	va_list args;
+@@ -183,7 +185,7 @@ static inline void ksft_test_result_pass(const char *msg, ...)
+ 	va_end(args);
+ }
+ 
+-static inline void ksft_test_result_fail(const char *msg, ...)
++static inline __printf(1, 2) void ksft_test_result_fail(const char *msg, ...)
+ {
+ 	int saved_errno = errno;
+ 	va_list args;
+@@ -209,7 +211,7 @@ static inline void ksft_test_result_fail(const char *msg, ...)
+ 		ksft_test_result_fail(fmt, ##__VA_ARGS__);\
+ 	} while (0)
+ 
+-static inline void ksft_test_result_xfail(const char *msg, ...)
++static inline __printf(1, 2) void ksft_test_result_xfail(const char *msg, ...)
+ {
+ 	int saved_errno = errno;
+ 	va_list args;
+@@ -223,7 +225,7 @@ static inline void ksft_test_result_xfail(const char *msg, ...)
+ 	va_end(args);
+ }
+ 
+-static inline void ksft_test_result_skip(const char *msg, ...)
++static inline __printf(1, 2) void ksft_test_result_skip(const char *msg, ...)
+ {
+ 	int saved_errno = errno;
+ 	va_list args;
+@@ -238,7 +240,7 @@ static inline void ksft_test_result_skip(const char *msg, ...)
+ }
+ 
+ /* TODO: how does "error" differ from "fail" or "skip"? */
+-static inline void ksft_test_result_error(const char *msg, ...)
++static inline __printf(1, 2) void ksft_test_result_error(const char *msg, ...)
+ {
+ 	int saved_errno = errno;
+ 	va_list args;
+@@ -285,7 +287,7 @@ static inline int ksft_exit_fail(void)
+ 		  ksft_cnt.ksft_xfail +	\
+ 		  ksft_cnt.ksft_xskip)
+ 
+-static inline int ksft_exit_fail_msg(const char *msg, ...)
++static inline __printf(1, 2) int ksft_exit_fail_msg(const char *msg, ...)
+ {
+ 	int saved_errno = errno;
+ 	va_list args;
+@@ -312,7 +314,7 @@ static inline int ksft_exit_xpass(void)
+ 	exit(KSFT_XPASS);
+ }
+ 
+-static inline int ksft_exit_skip(const char *msg, ...)
++static inline __printf(1, 2) int ksft_exit_skip(const char *msg, ...)
+ {
+ 	int saved_errno = errno;
+ 	va_list args;
 -- 
 2.42.0
 
