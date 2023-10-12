@@ -2,105 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 150577C5DDB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 11 Oct 2023 21:51:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 019147C6277
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Oct 2023 03:52:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233151AbjJKTvW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 11 Oct 2023 15:51:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60948 "EHLO
+        id S234003AbjJLBww (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 11 Oct 2023 21:52:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233419AbjJKTvU (ORCPT
+        with ESMTP id S233989AbjJLBww (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 11 Oct 2023 15:51:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B67CAB7
-        for <linux-kselftest@vger.kernel.org>; Wed, 11 Oct 2023 12:49:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1697053789;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=KKHk9hX32NvUAjpB6c62OJCCjOws1Nm9GPb/DcDj7CQ=;
-        b=gkAr48PNdX3KqywXoyiPItiVGVbfLlsXOItLRLRTITnRZfcOsmxcmjFP2FpvcFOc80sc8X
-        RQ3fnn4ojhRPIWv0PwE9wCrxlKMLJtMEIACgxBX07aPNyxLvC8HVoIZ/ubyz8W1inm7dbp
-        thLzWia41eFskUwljqk5C7Gf6KyhTAs=
-Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
- by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-690-8gTFy7U0MGaSpUNUzKimcQ-1; Wed, 11 Oct 2023 15:49:45 -0400
-X-MC-Unique: 8gTFy7U0MGaSpUNUzKimcQ-1
-Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E0BC41C0BB40;
-        Wed, 11 Oct 2023 19:49:44 +0000 (UTC)
-Received: from RHTPC1VM0NT.lan (unknown [10.22.34.140])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 284E01C060B5;
-        Wed, 11 Oct 2023 19:49:44 +0000 (UTC)
-From:   Aaron Conole <aconole@redhat.com>
-To:     netdev@vger.kernel.org
-Cc:     dev@openvswitch.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Pravin B Shelar <pshelar@ovn.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Adrian Moreno <amorenoz@redhat.com>,
-        Eelco Chaudron <echaudro@redhat.com>, shuah@kernel.org
-Subject: [PATCH net v2 4/4] selftests: openvswitch: Fix the ct_tuple for v4
-Date:   Wed, 11 Oct 2023 15:49:39 -0400
-Message-ID: <20231011194939.704565-5-aconole@redhat.com>
-In-Reply-To: <20231011194939.704565-1-aconole@redhat.com>
-References: <20231011194939.704565-1-aconole@redhat.com>
+        Wed, 11 Oct 2023 21:52:52 -0400
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A09A5B6;
+        Wed, 11 Oct 2023 18:52:45 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8BxJvFsUSdl2zoxAA--.29454S3;
+        Thu, 12 Oct 2023 09:52:44 +0800 (CST)
+Received: from [10.130.0.149] (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cxzt5pUSdlsjYhAA--.6621S3;
+        Thu, 12 Oct 2023 09:52:41 +0800 (CST)
+Subject: Re: [PATCH v2 0/2] Modify vDSO selftests
+To:     Shuah Khan <shuah@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+References: <1689069425-17414-1-git-send-email-yangtiezhu@loongson.cn>
+ <6aafe4f7-5b20-e791-12c1-413f2db3417b@loongson.cn>
+Cc:     linux-kselftest@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
+        Andrew Morton <akpm@linux-foundation.org>
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <379c1f53-3e32-0033-3658-6689f43e7f1f@loongson.cn>
+Date:   Thu, 12 Oct 2023 09:52:41 +0800
+User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
+ Thunderbird/45.4.0
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <6aafe4f7-5b20-e791-12c1-413f2db3417b@loongson.cn>
+Content-Type: text/plain; charset=windows-1252; format=flowed
+Content-Transfer-Encoding: 7bit
+X-CM-TRANSID: AQAAf8Cxzt5pUSdlsjYhAA--.6621S3
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBj9xXoWrtr1ftw4xKryDXw45KFW5CFX_yoWfurbE9a
+        y8uas3tws7ZF9xAF4Sgw13ZryDJayIyr4UKr17Way7Xry3ZFWUWF4kur48u3WrWa17trZ2
+        yF4UZasavryDXosvyTuYvTs0mTUanT9S1TB71UUUUj7qnTZGkaVYY2UrUUUUj1kv1TuYvT
+        s0mT0YCTnIWjqI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUI
+        cSsGvfJTRUUUbDAYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20x
+        vaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxS
+        w2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxV
+        W8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+        Gr0_Gr1UM2kKe7AKxVWUAVWUtwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYI
+        kI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUAVWU
+        twAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI48JMx
+        k0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l
+        4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxV
+        WUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI
+        7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r
+        1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI
+        42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j5o7tUUUUU=
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The ct_tuple v4 data structure decode / encode routines were using
-the v6 IP address decode and relying on default encode. This could
-cause exceptions during encode / decode depending on how a ct4
-tuple would appear in a netlink message.
+Cc: Andrew Morton <akpm@linux-foundation.org>
 
-Caught during code review.
+On 08/17/2023 03:20 PM, Tiezhu Yang wrote:
+> Hi Shuah,
+>
+> On 07/11/2023 05:57 PM, Tiezhu Yang wrote:
+>> v2: Rebase on 6.5-rc1 and update the commit message
+>>
+>> Tiezhu Yang (2):
+>>   selftests/vDSO: Add support for LoongArch
+>>   selftests/vDSO: Get version and name for all archs
+>>
+>>  tools/testing/selftests/vDSO/vdso_config.h         |  6 ++++-
+>>  tools/testing/selftests/vDSO/vdso_test_getcpu.c    | 16 +++++--------
+>>  .../selftests/vDSO/vdso_test_gettimeofday.c        | 26
+>> ++++++----------------
+>>  3 files changed, 18 insertions(+), 30 deletions(-)
+>>
+>
+> Any comments? I guess this should go through the linux-kselftest tree.
+>
+> Thanks,
+> Tiezhu
+>
 
-Fixes: e52b07aa1a54 ("selftests: openvswitch: add flow dump support")
-Signed-off-by: Aaron Conole <aconole@redhat.com>
----
-v2: More detailed explanation for fix.
+What are the status of these patches?
 
- tools/testing/selftests/net/openvswitch/ovs-dpctl.py | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+https://lore.kernel.org/lkml/1689069425-17414-1-git-send-email-yangtiezhu@loongson.cn/
 
-diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-index 10b8f31548f84..b97e621face95 100644
---- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-+++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-@@ -1119,12 +1119,14 @@ class ovskey(nla):
-                 "src",
-                 lambda x: str(ipaddress.IPv4Address(x)),
-                 int,
-+                convert_ipv4,
-             ),
-             (
-                 "dst",
-                 "dst",
--                lambda x: str(ipaddress.IPv6Address(x)),
-+                lambda x: str(ipaddress.IPv4Address(x)),
-                 int,
-+                convert_ipv4,
-             ),
-             ("tp_src", "tp_src", "%d", int),
-             ("tp_dst", "tp_dst", "%d", int),
--- 
-2.41.0
+This is a ping message, maybe you have forgot them?
+
+Thanks,
+Tiezhu
 
