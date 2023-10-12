@@ -2,123 +2,123 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0AA37C6445
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Oct 2023 07:00:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C4597C6453
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Oct 2023 07:05:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229510AbjJLFAu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 12 Oct 2023 01:00:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40994 "EHLO
+        id S234099AbjJLFFD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 12 Oct 2023 01:05:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233938AbjJLFAs (ORCPT
+        with ESMTP id S229510AbjJLFFC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 12 Oct 2023 01:00:48 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2086.outbound.protection.outlook.com [40.107.212.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB4E90;
-        Wed, 11 Oct 2023 22:00:45 -0700 (PDT)
+        Thu, 12 Oct 2023 01:05:02 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2078.outbound.protection.outlook.com [40.107.243.78])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 011B890;
+        Wed, 11 Oct 2023 22:04:59 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=IU8I12sTUcnQ0ofSKXN5itn+jxlsc4uGKkS7tLaVFbJEu+/s9l2dZ8vCRKnEoJG8KJyF44kjcE5TFOPc1u1k+Y3nnvNd+0pk40lmub4P76Djjhad+516jJjjoRZ/v091uNoTTSZJYgoyo5XLIzuFQ9JZ8NGsfqnMK1SX5yufPiBLYyXDfK3CDrzxdIZxlm28F3dRcNaXwjdX5MnZEGJMoAu8zftLSYVTTJCi0tcozE/rtvp/as2RutImxMrqzgHxVuzEfO4YGQz56fRCjA8EkNhJ80j2HQy98ED7uMXFjuSSJjYIE+TmQBkU9M7aGcPUlqjy+ZMiMylnoQcOkls+uw==
+ b=ZMHTzrTfWwsIHaMxQZ2MvAZc4aItkbClwEWF+X7DntT2k7EOSu0puwCqiEkmVBj/Hrz1o6hInwJrAgvQdroiPSHqDy+3SgkuSdf7J98ozOvDIQJpPING4qZdf1+jeWn+aRTBi7CiOxZEe6+57rcu2IYspGiLNPK5EJ3f+v1l73CwWWdXwHkXJNrFQpJbdkJTuf8uJhj3K6KUYqHdjSOo8gWydX6viexAsRFGqnknXlN8z07vId9trBOtStrxNyNpjNyCRdCGSZcnOZcFeT7+IZyGcMDzLaT6HU7plGfPiI7NNV3cIu1avwTN4yjG/0TqMdV9CHjpkwvyITOKZjwtQA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SMnLpjJmtW1tvJtYlghDYEhnpJDQm+EmXnqUIHuxy/g=;
- b=Zn0hloJmVXKDwPLHnCZRBrhPPTuHOUumRGmDaIY2pRsfbmgr04bFgW/RGKf04SHT7maDi6XAgCV9HHmeDk9u16Gk/XlNVytzOIlwF3kaDuamH5EhJpOvP+l90e3NDRj/bbalXP72w2EdpA7DFYPTCbcntNFTqtaXRMSLuozhI1ybZbgXb6JHfC7leizIYuRJ75B2tmD26rb+sGS/5sI0rhfgpkCOmhac65FBawosu4LKTHA2SYX1qMP5MnzGt2KzASpStM+bVbkj/5+SO0HfB35udzVg8ebC1d5ESDcKngPFT4otRdJAX2j8gDjaTm/AND17etlmHBl4ZoW5KlgC+A==
+ bh=qVYHf2twcBJh65WAu0x2OWgWkBgkUdvbSHlb/lwKn8w=;
+ b=OgpnK3bGFk+frUpGvnuD8skNCmW/SDc1POuK95s/GuB7nbl6Im2XfYZCT7SIwDttQq2rWvPirCIKnFJwmQ3peVQgnMrWm2cgLroTxqkaxk1Pql/ADNiXW9hPsfqdfBXKX28RXrO5x3ptcZa3UzzeAN2sIRkkK7EmxGzuDOgZfBfZYbb47WVAex7DFwyu+WNQ0wxfN7ugq5l9Lp819oBF9RxKjbSueP9uU8hri66MvQ15bNCJRtEkRdlTp9/fRJphxnSOOW3TGmAJtyyxIZWPBjLTIMWS/hT20cpnBvJJv+qkMmOUugU2YIUqVGMgeoc63NLQJzbbOxDM+hrOXOfAtA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SMnLpjJmtW1tvJtYlghDYEhnpJDQm+EmXnqUIHuxy/g=;
- b=SGJjVlpvpMgR8chTDEpYBYdK5cgixXqcfCfNUum5p/EXI5GA/s/Drw6DdzlcUZE6HJIu5uOCzDfJt3YE5UDTegG8kudCVYoVlFE2mfR8jZ+pCw4/fNRvYa+t9OaKir9cvKQ5Sa6VX9NnAg9V3dqAG3XEghiBL9bKdTFyZEZf36E=
+ bh=qVYHf2twcBJh65WAu0x2OWgWkBgkUdvbSHlb/lwKn8w=;
+ b=ApPH3Ryq29ceU6Dvid3ilNqIvJI7wXR5aMkGKSedaY00qAoyNbjVopRUxN9JBwRr0EvgR83Wg/Z6p+5Mxx5r4oS4LHg0C/gwk2Osat9cF5K1clg/j2ABN5lczGZaGxE1U4lUapPCWSsswrW3Tsg4MLalVZyST4eRYdC5zdlbMJY=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
 Received: from DS7PR12MB6165.namprd12.prod.outlook.com (2603:10b6:8:9a::21) by
- IA1PR12MB6260.namprd12.prod.outlook.com (2603:10b6:208:3e4::17) with
+ MN0PR12MB5836.namprd12.prod.outlook.com (2603:10b6:208:37b::14) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.38; Thu, 12 Oct
- 2023 05:00:42 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.45; Thu, 12 Oct
+ 2023 05:04:57 +0000
 Received: from DS7PR12MB6165.namprd12.prod.outlook.com
  ([fe80::495c:3afa:1762:efd5]) by DS7PR12MB6165.namprd12.prod.outlook.com
  ([fe80::495c:3afa:1762:efd5%4]) with mapi id 15.20.6863.032; Thu, 12 Oct 2023
- 05:00:42 +0000
-Message-ID: <983f78b0-3461-7ecc-b1d4-652aa554fff0@amd.com>
-Date:   Thu, 12 Oct 2023 10:30:29 +0530
+ 05:04:57 +0000
+Message-ID: <c780c60d-0957-0931-ef01-f940899f59c9@amd.com>
+Date:   Thu, 12 Oct 2023 10:34:44 +0530
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.6.1
-Subject: Re: [PATCH v3 1/2] selftests/amd-pstate: Fix broken paths to run
- workloads in amd-pstate-ut
+Subject: Re: [PATCH v3 2/2] selftests/amd-pstate: Added option to provide perf
+ binary path
+Content-Language: en-US
 To:     Mario Limonciello <mario.limonciello@amd.com>, ray.huang@amd.com,
         shuah@kernel.org
 Cc:     sukrut.bellary@gmail.com, li.meng@amd.com, gautham.shenoy@amd.com,
         wyes.karny@amd.com, Perry.Yuan@amd.com, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 References: <20231003051006.6343-1-swapnil.sapkal@amd.com>
- <20231003051006.6343-2-swapnil.sapkal@amd.com>
- <81dd0b57-107a-4954-966b-c2f98d4b1bec@amd.com>
-Content-Language: en-US
+ <20231003051006.6343-3-swapnil.sapkal@amd.com>
+ <33271bcf-66fd-42e9-9b19-0c1547814f38@amd.com>
 From:   Swapnil Sapkal <Swapnil.Sapkal@amd.com>
-In-Reply-To: <81dd0b57-107a-4954-966b-c2f98d4b1bec@amd.com>
+In-Reply-To: <33271bcf-66fd-42e9-9b19-0c1547814f38@amd.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: PN3PR01CA0134.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:bf::22) To DS7PR12MB6165.namprd12.prod.outlook.com
+X-ClientProxiedBy: PN2PR01CA0234.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:eb::6) To DS7PR12MB6165.namprd12.prod.outlook.com
  (2603:10b6:8:9a::21)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB6165:EE_|IA1PR12MB6260:EE_
-X-MS-Office365-Filtering-Correlation-Id: ed9eeb07-5c4d-4870-77cb-08dbcae02f57
+X-MS-TrafficTypeDiagnostic: DS7PR12MB6165:EE_|MN0PR12MB5836:EE_
+X-MS-Office365-Filtering-Correlation-Id: c31c2146-7fb3-4fdb-a008-08dbcae0c761
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 6ZKhj5tinXH74B0JaVmKWn/hjhaIhH+c69jPVUWCqsSRL7YkiNgjDpvqB+BgpwaaehftKNfwmHeReNLJtWaG3+f+vCVzW2gZ5V34X8NZ+M8WNJU7LPVZnWKepe25ZcT+7xnqIxUDVqesKyMEXwSqnohmnya0SHDcAVLq667DkDyovVjQGFU6SR/bBj44FF4YjrZFlhbohDGNh9DG00VfCqceileeDJq/7b2yzQwmQ8PpnhtIE8nT5FRRdX68LxiQqFybm2RiifCN1tDFto5BhqdGXXmF4ibDPQB8yDOv06POeWPLDyCApWTbnbBkHOffnea1fjDYJNyW1s+SQXUNi9rIsFF7tHxoUtttIInkS3FE+wwvQgtBFsP9HfOOucEgO1ExD5XIj90fRqQDltAmGIBw6r/vjUwvmJrZArY9HqjFBJzmBh0blLYoSkobP/UGqjcJGrXd4zbXgceHtvEAHbNnau/5e1TBY1BYEcykKOiUWu7ld+ix+GLJF66cqjiQJ6GmN5w05SnGURu3UdP0H5JMUg5zcs7bxTgyG24ESbR1CKLemYYbDCBSBSaUoFXEMOjbazsbCVmQpdhqp3yJa//5D6bUuvL5IzOynra1n7WLtigh1VRHe1BVBVlZc41KG6+ghmsb0JXsYh+4A3HvDg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB6165.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(396003)(366004)(39860400002)(136003)(376002)(230922051799003)(451199024)(186009)(64100799003)(1800799009)(26005)(2616005)(5660300002)(6486002)(36756003)(6506007)(478600001)(6512007)(31696002)(6666004)(86362001)(53546011)(66946007)(38100700002)(66476007)(316002)(4326008)(2906002)(8936002)(8676002)(41300700001)(66556008)(31686004)(83380400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: pcXnbDvoP09gdXN3ZgylpBXDJd5+PTaRg5jFnhAzwQurUDgAIJCz+srCi4naiLR1Ul0zlGf/GwM2QR/3YTeEEbYXD8bZ48/265qE/qRCGvAaW0GS6/i1My2/k/gohs4/nL7uzXuEV+TfpAu+atxSDGykvHIqIjfSiJvqnaumm6HtT74SGAS7/FqjBya4MBGDAU8ViJiqIkCblPItmk0J4ti9KpBYvPMx77n4tKIJmzEanjI5It82CAd15ygkPk0F4Q8R7zYKyR2Dm4O8VnX2enp4iGkAEHZHMN28UIgmN0/3aT4+Vf9aAcNrcK0/V6YHZKgjiXNLFcR6BUjSeICiV9rDjqp778HRnKfiaUPDKBJoHSQUNLh3Dp44ckb+Ded37jlnPKIF7wRZey1aB+8g51w9rBnNbknfV480Zc4Ra6388S3EdH6TtfHHDLxwD1c3PzyJuiCsKAvOGrv7uLjEIRYdAeJlHNVDDymXOy1yEv/UNXL00pcviXqlvi7jzWuWpVvNJxapJJTku2mcCS3JMB9Teppv3INP4u+gfVWJtDGwcoBOmqJi/R6oL0jGBy9GXgXg9NghdbQuHBfIfg61c+o7iEeefwEvy8mptCLtiHza36uze5dCsXhtZWCJq7M1XNFL8t6qEfvJMPwIiutU9w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB6165.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(39860400002)(136003)(366004)(346002)(376002)(230922051799003)(451199024)(186009)(64100799003)(1800799009)(5660300002)(41300700001)(4326008)(8936002)(8676002)(31696002)(86362001)(2906002)(478600001)(53546011)(6512007)(6506007)(6666004)(31686004)(83380400001)(36756003)(2616005)(26005)(316002)(66556008)(66476007)(66946007)(38100700002)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RVZvdmNqNis3M1d2bjltcHNQb0Irb0lZNkh1ZW9BeEcxcEhjTWdsVGlwYStv?=
- =?utf-8?B?WVVkb0JXZXdXMHpwSk1BZm5YN09IdlA4aTVtMkYwbnYxZEczVDFIbi9hejIx?=
- =?utf-8?B?b1gwTGJIU2xhclB3TWZDQjRad2NRSVRHdisyNkxQZTdLMjNHTnllR0Qwa0NX?=
- =?utf-8?B?UjIzNThON1BldXdDanBPTjRBSHNjNmJsWFZhaFFXeTF5OTVDNklBSVBLSEVP?=
- =?utf-8?B?OFZuWWJUWGFNZFhoSHNJVWRKU0hxb1pKVUF5ZHRBcU9BQ0F2T2Q4S0pmcHBp?=
- =?utf-8?B?bkdkbmxFV21SeDhQQ3VodVkyZ00rZERDTWl3WUVNWmZWbWc0WTB3TmpBY1F5?=
- =?utf-8?B?UEdHc0s1SHdaZ2xzN2FNTmJvT0JSTEkzcDdRY2Z6eHErd2s3ZDkzeWEyRjRx?=
- =?utf-8?B?UkxBMmFTbVJQajgzTmNjL0Y5VVNtVzhCbi9xL0NNSmlmUUFROU9VaFRXV3Y5?=
- =?utf-8?B?V0t2YXp0WkQxTXJEQnFjNnYwbTNlWXNWVEtQTVd5TjZQU0txY3dEV25UTW1J?=
- =?utf-8?B?SlI2a2Jpa2ljZ1VCNDl1N20zYXd0U1dkQmxVM0svRFpISTdVdkJ0VnJWNzdo?=
- =?utf-8?B?MFZUSEhyQ3FwK1BxajlYN01DbmhSR05vcmpHK0w3anpxZkxYQmMxU3gwZzZB?=
- =?utf-8?B?WVMxRFBnajE1aXVBSzIxbStydGtWWDRCbHBkQjBTVWZ3eUhRRm8waWg1c096?=
- =?utf-8?B?UXhBbjRTUEhCWW9jOHByZHIvTnRTamxYZFZkMFdVWXJOSlB1WjN1R1oxN21R?=
- =?utf-8?B?WmQ0K3VaZzVocHVNY09oNGJYNmlvK3JlM1VuTUFRdkVLTDdhUDYydVd3cU96?=
- =?utf-8?B?aGdvbFptYlhDSmlMQ0w2ZDRZZU5SYnI2L2xXMjZIT2NsM0ZjQXZ5UTRYMytn?=
- =?utf-8?B?OUJwL1dxV2RVV29uZTdDVUJlWXRuUEF6WlV5NHJCWVNueC9nV2tvdjhXb1I5?=
- =?utf-8?B?NUZwdFptYmFnV1J6MElUcnBFWVJQbkpFZFB5c2hKU0dPRDhGWldYY1FlVWtY?=
- =?utf-8?B?NkFmMVZvZEtGTmNSS0dlVzNSN0NZTzhkNERrVjhqZEZaazZpdExFK3ZyQ0Rz?=
- =?utf-8?B?dzdDazZvczFJdkV4ZFgwSTdPWElYb1Z6eVpqOHcrSlNVUTJ3dXpoMDQ4Uklw?=
- =?utf-8?B?c3czUWhpWlUyTzYyaWQ4SDhlOE04am5YMkpJRk9HUUwrbU9RRGRJeXZCYisr?=
- =?utf-8?B?eHowdjdiT2l4MExYT3pMdEM2bGxHOHlsb1AwLzBha1J0WHRlWExkT0hpb0FH?=
- =?utf-8?B?eHVEeG8xekNPaGxVNDd4NDVHWTYyanNObHcrczMrNWhWNHpReDJOMjJaN3hN?=
- =?utf-8?B?Z05VRUxBNTA5TWI2K3RoVWxvTldaSnRsdXM4UTB2bnp1UzF6cWNoTDlpZkJl?=
- =?utf-8?B?WHA2VnhDWGxZU29weU4ydVNyc0FhTk4vZ0k1dXhTM0FLQ20yTkt2enBSbU5i?=
- =?utf-8?B?YTlacUNYdW81QTRqOUtrcWt6ZWRYeldzUFZtUGZPL3Z6dGFLY3UyZkhEMVhB?=
- =?utf-8?B?dTZ4YUJ3VUpqYUxjcmhMQnFkeVZVRUJkYkdYcDJ3VldjMzFkM09Pa2xZWlJj?=
- =?utf-8?B?NWFPSWU2UFpyeFV3R1pyM0s3bnh6YnFHSENmbUw1RUlyYzVMb3ZTUXpPZ3V1?=
- =?utf-8?B?MmtyeTl1ZS9KbTB2Skh4cWFjSzQyREQySjRlSzZPOUdBNlFRWWhBRGJnZzNB?=
- =?utf-8?B?UW9kTHp2cmpvV2J3ZmJTVTFSeDU5VFpYS0lXUGxRdnlLa0tRZGNoVEl2Tmo2?=
- =?utf-8?B?Smk5aGEwVXdqUkNDNkFma0ZTYnQ3a21PMVJmSkJEUHV6NVkzTVFvTU9oZkJI?=
- =?utf-8?B?ZHBLc2xKbU50L1hHYkN1MTNDcFhsYjFsOVFuZUwyT2RYK25McWhEenZ5WHdC?=
- =?utf-8?B?UVlqUGxrUE1JeTh5WkVYS1ptWTNRckVzWC9VbWtDWDQyWHZKUUU3WU9hbEdh?=
- =?utf-8?B?eHJtNktrT1l3TGVRN0lCZjNWMFhINXhkZGh2bVhyQ0ZjakpGeW8zTVIvUWJG?=
- =?utf-8?B?cHRVYXdDeDhhRnJ0enVMTWQ0dWM5ZmN0NzlnTzdrNmh5eEpTVnowL1ExOGNG?=
- =?utf-8?B?WkZHOWI1ci9TK0ZJZWVRLyt6cXEzamxxM1RMWVBURmFFTzJXaytSL2UyajRT?=
- =?utf-8?Q?sZfVw4MeHlPzxYH3E3WqeDAXF?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Yk5wcHBFT3FxNFBJV1NBREhPTVRwaFpFSWtjZlNTSnNmZ24ydmlXZ01STnow?=
+ =?utf-8?B?RXIzVVB6ajczVGw5ZjNNdDJuL2MwY01yS2RIU1o1UVpTQUY0ZTd0SkgyblFa?=
+ =?utf-8?B?NVNIZVowS1czSThZVnROck5aSE5tZGJBNDFFd1pRdDFTVTZEN0JOdDVLcmFV?=
+ =?utf-8?B?cjRXNmlYLzF4MEhJVHhOY3RFRlBMVS8remVHR09nYkVpSEcyV1ZzNTUwK0Rw?=
+ =?utf-8?B?dmNaS0RtSERaRzhXNThFeWZrTXVPU2QvNm1hRkw4TTRHKzRiS0lWb0dsaEJG?=
+ =?utf-8?B?ZjcvZTYrTWhuWGVmREE1WkpHYkZYaXZHcU0zeE9hRHpDbE53UkJjc3I5UTIx?=
+ =?utf-8?B?dUs2YUs2T2VWait5Q2pFS091SElEWjBuajFVY0pZRFNUYjVjWU1MeTlwSjZY?=
+ =?utf-8?B?bmlDcGVRSG8ydkV1VG9aMmRhV1RCbjcyZ21IRXArU2tYU25kTW1MdUU0dDBx?=
+ =?utf-8?B?Zk5kbW1BaGQ4OGNUWmI2ckwzbk1ybzRyZ1JnUDZkMUJJVVQ3dDU4WXRIR0la?=
+ =?utf-8?B?MzNLSjVoKzcwY1FBT1VUdFozdnJDcGZHckNtNERkOUVyTDFLaTZZTXdOVEE2?=
+ =?utf-8?B?WGkyMXRYNHJWSlhBS1pSMU9Tc2lqelB0ZEI4cjJpdTZxcURJSFRhclljSXFO?=
+ =?utf-8?B?NlJzS3hvMnVqVEc0elpSNlZRb01XN1pIdU5qcjBObnRTN2hndDFBSXJsSkRr?=
+ =?utf-8?B?TEhkQldEUkdlYUh4cFZ1M1RXWkp1SDVMdXdIR2FqWDNLMGliK2VKTE1OU3JR?=
+ =?utf-8?B?b1hKckErQU1QSWZySmlhaFlKQStmQ2VEUHowdG9kc1ZxSEhyczFxU1kyMTdP?=
+ =?utf-8?B?T2UyQ2dueG14SmptU2NTZEc0N1ZXN0xiaFlwR0FvSkNzTjZ5Um1vY2Vrajhm?=
+ =?utf-8?B?QzdmRk43ay9DNkFKRUlwMU1JekhpcVpNSzhISFM2aFhBazROSEM4c2swZ1hK?=
+ =?utf-8?B?Q0dQeHVSMFNzTWFVWjZtamxvY2VJVFZDREtLaVdlcDlxTThmUTJXWVZENHJV?=
+ =?utf-8?B?YUtRRjEyc2RYMU1hYWdVdVRKMFo2K0ZVd3YrSzl2WWFzSUljK0ErcHoyQ1V6?=
+ =?utf-8?B?TU1iWE5XRitpZzlzR3hMaDFpOFZUUXIzbURwaXBER0F6bmJDSlNMWWpJdytY?=
+ =?utf-8?B?NHYrU1cyQzVRK0xtaUlia01KWXAyWHoxRVJWNUdJRHdWUFI4dHZzOWJmV2dX?=
+ =?utf-8?B?WGduams0UjJVeDJSa3ZpbE1BWGRVVmQvMWtPRFFOVkZTdWVxYWNPZ1ZTczZK?=
+ =?utf-8?B?eDlJUFdrSk93U09VVFhGZ1E5SmZ2dXpySjNzcnFDTjUxVFIrbUplYUc0YWo0?=
+ =?utf-8?B?RTc5amZjQWRuYTNSOEhMSzVxbG9vbFduZ1pObXl6MnRDSDA0cDhvanBFemho?=
+ =?utf-8?B?N2R3VFVUeHdXTDQ5VmozK1VoTUVBWWZkSThyaFJYb3V4Y3kwQlA0NDFtUmxY?=
+ =?utf-8?B?cjJGM294R3FFSHpzUytwTGVaM0VvSHJZRFplWDV3WVRjLzNxbGd5a1ZYU2Q5?=
+ =?utf-8?B?TVIrMlQ3dmgza1l4TFFVSTd4YlRJZEJoZDg4QTMwQ3BQS1VUN2loanNyUlow?=
+ =?utf-8?B?RkV5eWtxa0l4UXBSRjgxL1JxTXVuR3JzK1UyWFRPV0RxaEMxb1ptTmdyQ3cw?=
+ =?utf-8?B?Y3cwVUVRY3U2WU1UcW93UWNsS0FRODVOYzBKRThPQ2ZDUXBNWCsrK2pRQUZ2?=
+ =?utf-8?B?dy9CT1VreUlRdEEralR0VXRrK1V2Q3drS2luaC8wdU9zTEJqK0RkN251a3Nt?=
+ =?utf-8?B?bnZuUDB3RVZnaUwwWFh4dHN2UHh3MXNFWExNUGpXNVRYK2tDTkpWamoyT0l5?=
+ =?utf-8?B?V3REVDRFcnpGbVpuK0JUMXdtNFJsdTkyWWpnYWd4dU0ySzNnNUNUeW04NXFU?=
+ =?utf-8?B?M2tkaWtrK1hTem93ZXhGOEpkVjVFV0lCQ29GWUZWS2ViY1R5My9FVUoxZ0l2?=
+ =?utf-8?B?UGVpbm5iQUdleG9Jd0FBOEsvZlU3R1UydVhKajFFbXJXbWUvS252emdBS0h3?=
+ =?utf-8?B?SzNkM1FhcGVZMjVaM3hlZFRRVmdHZUMySUsvaGJXczFnN1lqenV3NDJGdmNu?=
+ =?utf-8?B?ZzNuaDFiRDdTN3gzc0Z6VWtQVWVHT3ppWURNcnIxTU0yS3RGK0hmczdQVXk2?=
+ =?utf-8?Q?d3ysqu+6FAE27qKsn6Q/uVteL?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: ed9eeb07-5c4d-4870-77cb-08dbcae02f57
+X-MS-Exchange-CrossTenant-Network-Message-Id: c31c2146-7fb3-4fdb-a008-08dbcae0c761
 X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB6165.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Oct 2023 05:00:42.2325
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Oct 2023 05:04:57.2760
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: nLuCy2W//bMQ1sap4HJ4EmPjA9r+zChIee3WI1JVNNQMEc/daPnGlHHxcHn5WjfU0f16MzrU1mI5fU3HpOBZXg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6260
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9f0tWF7VWSA7xhVf/gSVgKTgfBqyg6Gqei+ISauhKfGkN1vfP0UwY0SKgkn8SW+/F/ItqldKMPLOwE1KGiuhsg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5836
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         NICE_REPLY_A,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
@@ -131,143 +131,106 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 Hello Mario,
 
-Thanks for reviewing.
-
-On 10/7/2023 12:35 AM, Mario Limonciello wrote:
+On 10/7/2023 12:29 AM, Mario Limonciello wrote:
 > On 10/3/2023 00:10, Swapnil Sapkal wrote:
->> In selftests/amd-pstate, tbench and gitsource microbenchmarks are
->> used to compare the performance with different governors. In Current
-> 
-> s/Current/current/
-> 
-I will fix this.
-
->> implementation relative path to run `amd_pstate_tracer.py` are broken.
-> 
-> The plurality of this sentence needs some work.  I suggest:
-> 
-> s,relative,the relative,
-> s,are broken,is broken,
-> 
-I will fix this.
-
->> Fixed this by using absolute paths.
-> 
-> The tense is wrong.
-> 
-> s,Fixed,Fix/,
->
-I will fix this.
-  
+>> In selftests/amd-pstate, distro `perf` is used to capture `perf stat`
+>> while running microbenchmarks. Distro `perf` is not working with
+>> upstream kernel. Fixed this by providing an option to give the perf
+>> binary path.
 >>
 >> Signed-off-by: Swapnil Sapkal <swapnil.sapkal@amd.com>
 >> ---
->>   .../x86/amd_pstate_tracer/amd_pstate_trace.py      |  2 +-
->>   tools/testing/selftests/amd-pstate/gitsource.sh    | 14 +++++++++-----
->>   tools/testing/selftests/amd-pstate/run.sh          |  9 ++++++---
->>   tools/testing/selftests/amd-pstate/tbench.sh       |  2 +-
->>   4 files changed, 17 insertions(+), 10 deletions(-)
+> 
+> One small nit, otherwise:
+> 
+> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+> 
+I will include the tag in next version.
+
+>>   tools/testing/selftests/amd-pstate/gitsource.sh |  2 +-
+>>   tools/testing/selftests/amd-pstate/run.sh       | 14 ++++++++++----
+>>   tools/testing/selftests/amd-pstate/tbench.sh    |  2 +-
+>>   3 files changed, 12 insertions(+), 6 deletions(-)
 >>
->> diff --git a/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py b/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
->> index 904df0ea0a1e..2448bb07973f 100755
->> --- a/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
->> +++ b/tools/power/x86/amd_pstate_tracer/amd_pstate_trace.py
->> @@ -30,7 +30,7 @@ import getopt
->>   import Gnuplot
->>   from numpy import *
->>   from decimal import *
->> -sys.path.append('../intel_pstate_tracer')
->> +sys.path.append(os.path.join(os.path.dirname(__file__), '../intel_pstate_tracer'))
-> 
-> If you're using os.path.join, shouldn't you not be hardcoding a "/" in there?
-> 
-> IE it should be:
-> 
-> sys.path.append(os.path.join(os.path.dirname(__file__), "..", "intel_pstate_tracer"))
-> 
-I will fix this in next version.
-
->>   #import intel_pstate_tracer
-> 
-> I think another patch should remove this commented line, it conveys zero information.
-> 
-I will remove this line.
-
->>   import intel_pstate_tracer as ipt
 >> diff --git a/tools/testing/selftests/amd-pstate/gitsource.sh b/tools/testing/selftests/amd-pstate/gitsource.sh
->> index 5f2171f0116d..d0ad2ed5ba9d 100755
+>> index d0ad2ed5ba9d..5acc065e9e3e 100755
 >> --- a/tools/testing/selftests/amd-pstate/gitsource.sh
 >> +++ b/tools/testing/selftests/amd-pstate/gitsource.sh
->> @@ -66,12 +66,15 @@ post_clear_gitsource()
->>   install_gitsource()
->>   {
->> -    if [ ! -d $git_name ]; then
->> +    if [ ! -d $SCRIPTDIR/$git_name ]; then
->> +        BACKUP_DIR=$(pwd)
->> +        cd $SCRIPTDIR
->>           printf "Download gitsource, please wait a moment ...\n\n"
->>           wget -O $git_tar $gitsource_url > /dev/null 2>&1
->>           printf "Tar gitsource ...\n\n"
->>           tar -xzf $git_tar
->> +        cd $BACKUP_DIR
-> 
-> If you change to /bin/bash instead of /bin/sh you could use pushd/popd instead.  If your goal is to keep compatibility with things like /bin/dash then this makes ense.
-> I will update this in next version.
-
->>       fi
->>   }
->> @@ -79,12 +82,13 @@ install_gitsource()
->>   run_gitsource()
->>   {
->>       echo "Launching amd pstate tracer for $1 #$2 tracer_interval: $TRACER_INTERVAL"
->> -    ./amd_pstate_trace.py -n tracer-gitsource-$1-$2 -i $TRACER_INTERVAL > /dev/null 2>&1 &
->> +    $TRACER -n tracer-gitsource-$1-$2 -i $TRACER_INTERVAL > /dev/null 2>&1 &
+>> @@ -87,7 +87,7 @@ run_gitsource()
 >>       printf "Make and test gitsource for $1 #$2 make_cpus: $MAKE_CPUS\n"
->> -    cd $git_name
->> -    perf stat -a --per-socket -I 1000 -e power/energy-pkg/ /usr/bin/time -o ../$OUTFILE_GIT.time-gitsource-$1-$2.log make test -j$MAKE_CPUS > ../$OUTFILE_GIT-perf-$1-$2.log 2>&1
->> -    cd ..
->> +    BACKUP_DIR=$(pwd)
->> +    cd $SCRIPTDIR/$git_name
->> +    perf stat -a --per-socket -I 1000 -e power/energy-pkg/ /usr/bin/time -o $BACKUP_DIR/$OUTFILE_GIT.time-gitsource-$1-$2.log make test -j$MAKE_CPUS > $BACKUP_DIR/$OUTFILE_GIT-perf-$1-$2.log 2>&1
->> +    cd $BACKUP_DIR
-> 
-> Similar pushd/popd comment could apply here.
-
-I will update this in next version.
-
+>>       BACKUP_DIR=$(pwd)
+>>       cd $SCRIPTDIR/$git_name
+>> -    perf stat -a --per-socket -I 1000 -e power/energy-pkg/ /usr/bin/time -o $BACKUP_DIR/$OUTFILE_GIT.time-gitsource-$1-$2.log make test -j$MAKE_CPUS > $BACKUP_DIR/$OUTFILE_GIT-perf-$1-$2.log 2>&1
+>> +    $PERF stat -a --per-socket -I 1000 -e power/energy-pkg/ /usr/bin/time -o $BACKUP_DIR/$OUTFILE_GIT.time-gitsource-$1-$2.log make test -j$MAKE_CPUS > $BACKUP_DIR/$OUTFILE_GIT-perf-$1-$2.log 2>&1
+>>       cd $BACKUP_DIR
 >>       for job in `jobs -p`
->>       do
 >> diff --git a/tools/testing/selftests/amd-pstate/run.sh b/tools/testing/selftests/amd-pstate/run.sh
->> index de4d8e9c9565..279d073c5728 100755
+>> index 279d073c5728..b87cdc5bfe4a 100755
 >> --- a/tools/testing/selftests/amd-pstate/run.sh
 >> +++ b/tools/testing/selftests/amd-pstate/run.sh
->> @@ -8,9 +8,12 @@ else
->>       FILE_MAIN=DONE
->>   fi
->> -source basic.sh
->> -source tbench.sh
->> -source gitsource.sh
->> +SCRIPTDIR=`dirname "$0"`
->> +TRACER=$SCRIPTDIR/../../../power/x86/amd_pstate_tracer/amd_pstate_trace.py
+>> @@ -25,6 +25,7 @@ OUTFILE=selftest
+>>   OUTFILE_TBENCH="$OUTFILE.tbench"
+>>   OUTFILE_GIT="$OUTFILE.gitsource"
+>> +PERF=/usr/bin/perf
+>>   SYSFS=
+>>   CPUROOT=
+>>   CPUFREQROOT=
+>> @@ -152,8 +153,9 @@ help()
+>>            gitsource: Gitsource testing.>]
+>>       [-t <tbench time limit>]
+>>       [-p <tbench process number>]
+>> -    [-l <loop times for tbench>]
+>> +    [-l <loop times for tbench/gitsource>]
+> 
+> This looks like unrelated change.
+
+I will remove this change.
+> 
+>>       [-i <amd tracer interval>]
+>> +    [-b <perf binary>]
+>>       [-m <comparative test: acpi-cpufreq>]
+>>       \n"
+>>       exit 2
+>> @@ -161,7 +163,7 @@ help()
+>>   parse_arguments()
+>>   {
+>> -    while getopts ho:c:t:p:l:i:m: arg
+>> +    while getopts ho:c:t:p:l:i:b:m: arg
+>>       do
+>>           case $arg in
+>>               h) # --help
+>> @@ -192,6 +194,10 @@ parse_arguments()
+>>                   TRACER_INTERVAL=$OPTARG
+>>                   ;;
+>> +            b) # --perf-binary
+>> +                PERF=`realpath $OPTARG`
+>> +                ;;
 >> +
->> +source $SCRIPTDIR/basic.sh
->> +source $SCRIPTDIR/tbench.sh
->> +source $SCRIPTDIR/gitsource.sh
->>   # amd-pstate-ut only run on x86/x86_64 AMD systems.
->>   ARCH=$(uname -m 2>/dev/null | sed -e 's/i.86/x86/' -e 's/x86_64/x86/')
+>>               m) # --comparative-test
+>>                   COMPARATIVE_TEST=$OPTARG
+>>                   ;;
+>> @@ -205,8 +211,8 @@ parse_arguments()
+>>   command_perf()
+>>   {
+>> -    if ! command -v perf > /dev/null; then
+>> -        echo $msg please install perf. >&2
+>> +    if ! $PERF -v; then
+>> +        echo $msg please install perf or provide perf binary path as argument >&2
+>>           exit $ksft_skip
+>>       fi
+>>   }
 >> diff --git a/tools/testing/selftests/amd-pstate/tbench.sh b/tools/testing/selftests/amd-pstate/tbench.sh
->> index 49c9850341f6..4d2e8ce2da3b 100755
+>> index 4d2e8ce2da3b..2a98d9c9202e 100755
 >> --- a/tools/testing/selftests/amd-pstate/tbench.sh
 >> +++ b/tools/testing/selftests/amd-pstate/tbench.sh
->> @@ -64,7 +64,7 @@ post_clear_tbench()
->>   run_tbench()
->>   {
->>       echo "Launching amd pstate tracer for $1 #$2 tracer_interval: $TRACER_INTERVAL"
->> -    ./amd_pstate_trace.py -n tracer-tbench-$1-$2 -i $TRACER_INTERVAL > /dev/null 2>&1 &
->> +    $TRACER -n tracer-tbench-$1-$2 -i $TRACER_INTERVAL > /dev/null 2>&1 &
+>> @@ -68,7 +68,7 @@ run_tbench()
 >>       printf "Test tbench for $1 #$2 time_limit: $TIME_LIMIT procs_num: $PROCESS_NUM\n"
 >>       tbench_srv > /dev/null 2>&1 &
+>> -    perf stat -a --per-socket -I 1000 -e power/energy-pkg/ tbench -t $TIME_LIMIT $PROCESS_NUM > $OUTFILE_TBENCH-perf-$1-$2.log 2>&1
+>> +    $PERF stat -a --per-socket -I 1000 -e power/energy-pkg/ tbench -t $TIME_LIMIT $PROCESS_NUM > $OUTFILE_TBENCH-perf-$1-$2.log 2>&1
+>>       pid=`pidof tbench_srv`
+>>       kill $pid
 > 
 --
-Thanks and regards,
+Thanks and Regards,
 Swapnil
