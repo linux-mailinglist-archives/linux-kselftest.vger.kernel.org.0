@@ -2,67 +2,96 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 370807C627D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Oct 2023 03:57:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 201897C6435
+	for <lists+linux-kselftest@lfdr.de>; Thu, 12 Oct 2023 06:51:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234029AbjJLB5r (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 11 Oct 2023 21:57:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43952 "EHLO
+        id S1347049AbjJLEvQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 12 Oct 2023 00:51:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233797AbjJLB5r (ORCPT
+        with ESMTP id S1347042AbjJLEvP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 11 Oct 2023 21:57:47 -0400
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D82C6A9;
-        Wed, 11 Oct 2023 18:57:43 -0700 (PDT)
-Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8Cxh+iWUidlHDsxAA--.59104S3;
-        Thu, 12 Oct 2023 09:57:42 +0800 (CST)
-Received: from [10.130.0.149] (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxeuSTUidlFTghAA--.6471S3;
-        Thu, 12 Oct 2023 09:57:39 +0800 (CST)
-Subject: Re: [PATCH v6] selftests/clone3: Fix broken test under
- !CONFIG_TIME_NS
-To:     Shuah Khan <shuah@kernel.org>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-References: <1689066814-13295-1-git-send-email-yangtiezhu@loongson.cn>
- <0560a851-5e8c-d82a-8445-a16a92b967c9@loongson.cn>
-Cc:     linux-kselftest@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn,
-        Andrew Morton <akpm@linux-foundation.org>
-From:   Tiezhu Yang <yangtiezhu@loongson.cn>
-Message-ID: <1c3a0544-d7fe-1a34-e61a-2f06f5758a81@loongson.cn>
-Date:   Thu, 12 Oct 2023 09:57:38 +0800
-User-Agent: Mozilla/5.0 (X11; Linux mips64; rv:45.0) Gecko/20100101
- Thunderbird/45.4.0
-MIME-Version: 1.0
-In-Reply-To: <0560a851-5e8c-d82a-8445-a16a92b967c9@loongson.cn>
-Content-Type: text/plain; charset=windows-1252; format=flowed
+        Thu, 12 Oct 2023 00:51:15 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33D7DBA;
+        Wed, 11 Oct 2023 21:51:13 -0700 (PDT)
+Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 39C4iLLo025899;
+        Thu, 12 Oct 2023 04:50:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : in-reply-to : references : content-type : date :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=4dRq0+qrMW79vqCmIh3c+89lFEC0oEWqBR9f44r+nC0=;
+ b=N6d44qlWX88K3KDvz1RgMB3loG9x3oKHvzFgvhaTYZRZJ3wmB1Ma50T30horlkljv91N
+ KAEReLY3rseMDpawJgNVrGOJaruy2CUL+T0bInN/GOpNU6dcB/7dTOz+CHPnwwgAwMkY
+ BV3/5DIqGKl3h+zAx9hIoDlpmZlaNC3ZUM1Fz2ARRlMaGVpxllDiRxxjWQMhnRHOQdQ4
+ bZcDA7aH9nXSoyGdq2ajH53LawTCQmfpasLypY9ZLfYHQhLz7h6v34V3LnbUcJVZSZQq
+ cg+LPVEH53VNDKe18oMqvmRwGLrPlQlsWHwUSvR+eh9VqRA627SOU+dYl2KNu47TjvFb 4g== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tpa1jr63j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 Oct 2023 04:50:56 +0000
+Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 39C4jPwF030786;
+        Thu, 12 Oct 2023 04:50:56 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3tpa1jr638-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 Oct 2023 04:50:55 +0000
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+        by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 39C2L8xQ001270;
+        Thu, 12 Oct 2023 04:50:55 GMT
+Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
+        by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3tkkvk4rts-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 12 Oct 2023 04:50:55 +0000
+Received: from smtpav01.dal12v.mail.ibm.com (smtpav01.dal12v.mail.ibm.com [10.241.53.100])
+        by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 39C4osou25559758
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 12 Oct 2023 04:50:54 GMT
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BDAF758059;
+        Thu, 12 Oct 2023 04:50:54 +0000 (GMT)
+Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5DE7E58058;
+        Thu, 12 Oct 2023 04:50:49 +0000 (GMT)
+Received: from li-34d1fccc-27cd-11b2-a85c-c167793e56f7.ibm.com (unknown [9.171.22.41])
+        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Thu, 12 Oct 2023 04:50:49 +0000 (GMT)
+Message-ID: <09b5de78a39277400a1198f1120448e95e9855cd.camel@linux.vnet.ibm.com>
+Subject: Re: [RFC v3 0/2] CPU-Idle latency selftest framework
+From:   Aboorva Devarajan <aboorvad@linux.vnet.ibm.com>
+To:     20230911053620.87973-1-aboorvad@linux.vnet.ibm.com,
+        mpe@ellerman.id.au, rafael@kernel.org, daniel.lezcano@linaro.org,
+        linux-pm@vger.kernel.org
+Cc:     sshegde@linux.vnet.ibm.com, srikar@linux.vnet.ibm.com,
+        npiggin@gmail.com, rmclure@linux.ibm.com, arnd@arndb.de,
+        joel@jms.id.au, shuah@kernel.org, linux-kselftest@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        pratik.r.sampat@gmail.com
+In-Reply-To: <2725211932028cf24ab34da9eb9d19190848cceb.camel@linux.vnet.ibm.com>
+References: <20230911053620.87973-1-aboorvad@linux.vnet.ibm.com>
+         <2725211932028cf24ab34da9eb9d19190848cceb.camel@linux.vnet.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Date:   Thu, 12 Oct 2023 10:18:06 +0530
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: PfVY_pCpedc4FtHJmE7cPhhLepKrOzBD
+X-Proofpoint-ORIG-GUID: _WLu91LP65pqIpal-zDbWIbGnwHhKy5-
 Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: AQAAf8CxeuSTUidlFTghAA--.6471S3
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoW7uw1fZrW7Kr4kury5tw1DurX_yoW8Gr47pF
-        W8ZF4UKFs5W347Aa9rG34DWFy5tws5JFy8ZFW8Z3srJryrX3ZYqr48Ka48uFyjgr1vv34F
-        y3WxGFs8uF1UA3gCm3ZEXasCq-sJn29KB7ZKAUJUUUU3529EdanIXcx71UUUUU7KY7ZEXa
-        sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-        0xBIdaVrnRJUUUP2b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-        IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-        e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-        0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv6xkF7I0E14v2
-        6r4j6r4UJwAaw2AFwI0_JF0_Jw1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0c
-        Ia020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Jw0_
-        WrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrw
-        CYjI0SjxkI62AI1cAE67vIY487MxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7VAKI48J
-        MxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI
-        0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y
-        0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r4j6ryUMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
-        W8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1l
-        IxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7IU8_gA5UUUU
-        U==
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.267,Aquarius:18.0.980,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-10-12_02,2023-10-11_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 phishscore=0 lowpriorityscore=0 adultscore=0
+ mlxlogscore=999 mlxscore=0 clxscore=1011 malwarescore=0 spamscore=0
+ bulkscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2309180000 definitions=main-2310120040
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,51 +99,151 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Cc: Andrew Morton <akpm@linux-foundation.org>
+On Mon, 2023-09-25 at 10:36 +0530, Aboorva Devarajan wrote:
 
-On 08/17/2023 03:22 PM, Tiezhu Yang wrote:
-> Hi Shuah,
->
-> On 07/11/2023 05:13 PM, Tiezhu Yang wrote:
->> When execute the following command to test clone3 under !CONFIG_TIME_NS:
->>
->>   # make headers && cd tools/testing/selftests/clone3 && make && ./clone3
->>
->> we can see the following error info:
->>
->>   # [7538] Trying clone3() with flags 0x80 (size 0)
->>   # Invalid argument - Failed to create new process
->>   # [7538] clone3() with flags says: -22 expected 0
->>   not ok 18 [7538] Result (-22) is different than expected (0)
->>   ...
->>   # Totals: pass:18 fail:1 xfail:0 xpass:0 skip:0 error:0
-...
->>
->> Fixes: 515bddf0ec41 ("selftests/clone3: test clone3 with CLONE_NEWTIME")
->> Suggested-by: Thomas Gleixner <tglx@linutronix.de>
->> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
->> ---
->>
->> v6: Rebase on 6.5-rc1 and update the commit message
->>
->>  tools/testing/selftests/clone3/clone3.c | 7 ++++++-
->>  1 file changed, 6 insertions(+), 1 deletion(-)
->>
->
-> Hi Shuah,
->
-> Any comments? I guess this should go through the linux-kselftest tree.
->
-> Thanks,
-> Tiezhu
->
+Gentle ping to check if there are any feedback or comments on this
+patch-set.
 
-What is the status of this patch?
+Thanks
+Aboorva
 
-https://lore.kernel.org/lkml/1689066814-13295-1-git-send-email-yangtiezhu@loongson.cn/
-
-This is a ping message, maybe you have forgot them?
-
-Thanks,
-Tiezhu
+> On Mon, 2023-09-11 at 11:06 +0530, Aboorva Devarajan wrote:
+> 
+> CC'ing CPUidle lists and maintainers,
+> 
+> Patch Summary:
+> 
+> The patchset introduces a kernel module and userspace driver designed
+> for estimating the wakeup latency experienced when waking up from
+> various CPU idle states. It primarily measures latencies related to
+> two
+> types of events: Inter-Processor Interrupts (IPIs) and Timers.
+> 
+> Background:
+> 
+> Initially, these patches were introduced as a generic self-test.
+> However, it was later discovered that Intel platforms incorporate
+> timer-based wakeup optimizations. These optimizations allow CPUs to
+> perform a pre-wakeup, which limits the effectiveness of latency
+> observation in certain scenarios because it only measures the
+> optimized
+> wakeup latency [1]. 
+> 
+> Therefore, in this RFC, the self-test is specifically integrated into
+> PowerPC, as it has been tested and used in PowerPC so far.
+> 
+> Another proposal is to introduce these patches as a generic cpuilde
+> IPI
+> and timer wake-up test. While this method may not give us an exact
+> measurement of latency variations at the hardware level, it can still
+> help us assess this metric from a software observability standpoint.
+> 
+> Looking forward to hearing what you think and any suggestions you may
+> have regarding this. Thanks.
+> 
+> [1] 
+> https://lore.kernel.org/linux-pm/20200914174625.GB25628@in.ibm.com/T/#m5c004b9b1a918f669e91b3d0f33e2e3500923234
+> 
+> > Changelog: v2 -> v3
+> > 
+> > * Minimal code refactoring
+> > * Rebased on v6.6-rc1
+> > 
+> > RFC v1: 
+> > https://lore.kernel.org/all/20210611124154.56427-1-psampat@linux.ibm.com/
+> > 
+> > RFC v2:
+> > https://lore.kernel.org/all/20230828061530.126588-2-aboorvad@linux.vnet.ibm.com/
+> > 
+> > Other related RFC:
+> > https://lore.kernel.org/all/20210430082804.38018-1-psampat@linux.ibm.com/
+> > 
+> > Userspace selftest:
+> > https://lkml.org/lkml/2020/9/2/356
+> > 
+> > ----
+> > 
+> > A kernel module + userspace driver to estimate the wakeup latency
+> > caused by going into stop states. The motivation behind this
+> > program
+> > is
+> > to find significant deviations behind advertised latency and
+> > residency
+> > values.
+> > 
+> > The patchset measures latencies for two kinds of events. IPIs and
+> > Timers
+> > As this is a software-only mechanism, there will be additional
+> > latencies
+> > of the kernel-firmware-hardware interactions. To account for that,
+> > the
+> > program also measures a baseline latency on a 100 percent loaded
+> > CPU
+> > and the latencies achieved must be in view relative to that.
+> > 
+> > To achieve this, we introduce a kernel module and expose its
+> > control
+> > knobs through the debugfs interface that the selftests can engage
+> > with.
+> > 
+> > The kernel module provides the following interfaces within
+> > /sys/kernel/debug/powerpc/latency_test/ for,
+> > 
+> > IPI test:
+> >     ipi_cpu_dest = Destination CPU for the IPI
+> >     ipi_cpu_src = Origin of the IPI
+> >     ipi_latency_ns = Measured latency time in ns
+> > Timeout test:
+> >     timeout_cpu_src = CPU on which the timer to be queued
+> >     timeout_expected_ns = Timer duration
+> >     timeout_diff_ns = Difference of actual duration vs expected
+> > timer
+> > 
+> > Sample output is as follows:
+> > 
+> > # --IPI Latency Test---
+> > # Baseline Avg IPI latency(ns): 2720
+> > # Observed Avg IPI latency(ns) - State snooze: 2565
+> > # Observed Avg IPI latency(ns) - State stop0_lite: 3856
+> > # Observed Avg IPI latency(ns) - State stop0: 3670
+> > # Observed Avg IPI latency(ns) - State stop1: 3872
+> > # Observed Avg IPI latency(ns) - State stop2: 17421
+> > # Observed Avg IPI latency(ns) - State stop4: 1003922
+> > # Observed Avg IPI latency(ns) - State stop5: 1058870
+> > #
+> > # --Timeout Latency Test--
+> > # Baseline Avg timeout diff(ns): 1435
+> > # Observed Avg timeout diff(ns) - State snooze: 1709
+> > # Observed Avg timeout diff(ns) - State stop0_lite: 2028
+> > # Observed Avg timeout diff(ns) - State stop0: 1954
+> > # Observed Avg timeout diff(ns) - State stop1: 1895
+> > # Observed Avg timeout diff(ns) - State stop2: 14556
+> > # Observed Avg timeout diff(ns) - State stop4: 873988
+> > # Observed Avg timeout diff(ns) - State stop5: 959137
+> > 
+> > Aboorva Devarajan (2):
+> >   powerpc/cpuidle: cpuidle wakeup latency based on IPI and timer
+> > events
+> >   powerpc/selftest: Add support for cpuidle latency measurement
+> > 
+> >  arch/powerpc/Kconfig.debug                    |  10 +
+> >  arch/powerpc/kernel/Makefile                  |   1 +
+> >  arch/powerpc/kernel/test_cpuidle_latency.c    | 154 ++++++
+> >  tools/testing/selftests/powerpc/Makefile      |   1 +
+> >  .../powerpc/cpuidle_latency/.gitignore        |   2 +
+> >  .../powerpc/cpuidle_latency/Makefile          |   6 +
+> >  .../cpuidle_latency/cpuidle_latency.sh        | 443
+> > ++++++++++++++++++
+> >  .../powerpc/cpuidle_latency/settings          |   1 +
+> >  8 files changed, 618 insertions(+)
+> >  create mode 100644 arch/powerpc/kernel/test_cpuidle_latency.c
+> >  create mode 100644
+> > tools/testing/selftests/powerpc/cpuidle_latency/.gitignore
+> >  create mode 100644
+> > tools/testing/selftests/powerpc/cpuidle_latency/Makefile
+> >  create mode 100755
+> > tools/testing/selftests/powerpc/cpuidle_latency/cpuidle_latency.sh
+> >  create mode 100644
+> > tools/testing/selftests/powerpc/cpuidle_latency/settings
+> > 
 
