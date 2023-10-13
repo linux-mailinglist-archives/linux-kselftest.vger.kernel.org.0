@@ -2,41 +2,41 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E5157C8CDC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Oct 2023 20:12:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C18A77C8CE1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Oct 2023 20:12:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231443AbjJMSMm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 13 Oct 2023 14:12:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50768 "EHLO
+        id S231468AbjJMSMs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 13 Oct 2023 14:12:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229958AbjJMSMm (ORCPT
+        with ESMTP id S231492AbjJMSMq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 13 Oct 2023 14:12:42 -0400
+        Fri, 13 Oct 2023 14:12:46 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7B7CA
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 Oct 2023 11:11:53 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C797D6
+        for <linux-kselftest@vger.kernel.org>; Fri, 13 Oct 2023 11:11:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
         s=mimecast20190719; t=1697220713;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=nolWi3aqBikqVy187I9lW2xbSl+2rIWALGYPILniGBo=;
-        b=cOHryA/eIb1Nf5W7UK9/hlmAu4lqIxaHUytSoEHDoV14rwfKVNefdbqMB+1GgPEI5rZuFR
-        F2VRlxDwCzOUxtUDe7l9Fa8wVzuHn39Ltp8D0auFr+oteCh8sMzeiIEEZ3/SfaVlQgqqHR
-        NUY5WE5qUNrZxXZHRf7GoiNDHotzqC0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-88-Ar3Y8fhFM3iF4CHeOZYpwQ-1; Fri, 13 Oct 2023 14:11:49 -0400
-X-MC-Unique: Ar3Y8fhFM3iF4CHeOZYpwQ-1
+        bh=nT8mn+CYHK0/rYux6OcfYs1wPw2RH0li5fDfUDzstNM=;
+        b=i7GZhD1+mNZqfA+4/iQol1P3/uXr4oSjEcy5rXZcVW7/RLXx2TRnLBf9B1m2XNf0j0QhUs
+        jK4Iougbpu3acZSeLhyPdp6w6v6I58Y6DrBQn/B6ci5795DbvqbnYzyXg3SUzWO4Dc89oM
+        Pfo+NqtfiIx4Y0iH2tHTpdS76+UOYBo=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-126-vaEAS-0aOmyl2sINyVIXPw-1; Fri, 13 Oct 2023 14:11:50 -0400
+X-MC-Unique: vaEAS-0aOmyl2sINyVIXPw-1
 Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C94FC862DFD;
-        Fri, 13 Oct 2023 18:11:48 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 66AE81C0650E;
+        Fri, 13 Oct 2023 18:11:49 +0000 (UTC)
 Received: from llong.com (unknown [10.22.17.138])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 46A3020296DB;
+        by smtp.corp.redhat.com (Postfix) with ESMTP id D81BE2026831;
         Fri, 13 Oct 2023 18:11:48 +0000 (UTC)
 From:   Waiman Long <longman@redhat.com>
 To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
@@ -47,9 +47,9 @@ To:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
 Cc:     cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         Waiman Long <longman@redhat.com>
-Subject: [PATCH-cgroup 1/4] workqueue: Add workqueue_unbound_exclude_cpumask() to exclude CPUs from wq_unbound_cpumask
-Date:   Fri, 13 Oct 2023 14:11:19 -0400
-Message-Id: <20231013181122.3518610-2-longman@redhat.com>
+Subject: [PATCH-cgroup 2/4] selftests/cgroup: Minor code cleanup and reorganization of test_cpuset_prs.sh
+Date:   Fri, 13 Oct 2023 14:11:20 -0400
+Message-Id: <20231013181122.3518610-3-longman@redhat.com>
 In-Reply-To: <20231013181122.3518610-1-longman@redhat.com>
 References: <20231013181122.3518610-1-longman@redhat.com>
 MIME-Version: 1.0
@@ -66,137 +66,201 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When the "isolcpus" boot command line option is used to add a set
-of isolated CPUs, those CPUs will be excluded automatically from
-wq_unbound_cpumask to avoid running work functions from unbound
-workqueues.
-
-Recently cpuset has been extended to allow the creation of partitions
-of isolated CPUs dynamically. To make it closer to the "isolcpus"
-in functionality, the CPUs in those isolated cpuset partitions should be
-excluded from wq_unbound_cpumask as well. This can be done currently by
-explicitly writing to the workqueue's cpumask sysfs file after creating
-the isolated partitions. However, this process can be error prone.
-Ideally, the cpuset code should be allowed to request the workqueue code
-to exclude those isolated CPUs from wq_unbound_cpumask so that this
-operation can be done automatically and the isolated CPUs will be returned
-back to wq_unbound_cpumask after the destructions of the isolated
-cpuset partitions.
-
-This patch adds a new workqueue_unbound_exclude_cpumask() to enable
-that. This new function will exclude the specified isolated CPUs
-from wq_unbound_cpumask. To be able to restore those isolated CPUs
-back after the destruction of isolated cpuset partitions, a new
-wq_user_unbound_cpumask is added to store the user provided unbound
-cpumask either from the boot command line options or from writing to
-the cpumask sysfs file. This new cpumask provides the basis for CPU
-exclusion.
+Minor cleanup of test matrix and relocation of test_isolated() function
+to prepare for the next patch. There is no functional change.
 
 Signed-off-by: Waiman Long <longman@redhat.com>
 ---
- include/linux/workqueue.h |  2 +-
- kernel/workqueue.c        | 42 ++++++++++++++++++++++++++++++++++++++-
- 2 files changed, 42 insertions(+), 2 deletions(-)
+ .../selftests/cgroup/test_cpuset_prs.sh       | 142 +++++++++---------
+ 1 file changed, 71 insertions(+), 71 deletions(-)
 
-diff --git a/include/linux/workqueue.h b/include/linux/workqueue.h
-index 1c1d06804d45..a936460ccc7e 100644
---- a/include/linux/workqueue.h
-+++ b/include/linux/workqueue.h
-@@ -483,7 +483,7 @@ struct workqueue_attrs *alloc_workqueue_attrs(void);
- void free_workqueue_attrs(struct workqueue_attrs *attrs);
- int apply_workqueue_attrs(struct workqueue_struct *wq,
- 			  const struct workqueue_attrs *attrs);
--int workqueue_set_unbound_cpumask(cpumask_var_t cpumask);
-+extern int workqueue_unbound_exclude_cpumask(cpumask_var_t cpumask);
- 
- extern bool queue_work_on(int cpu, struct workqueue_struct *wq,
- 			struct work_struct *work);
-diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-index 010b674b02a7..19d403aa41b0 100644
---- a/kernel/workqueue.c
-+++ b/kernel/workqueue.c
-@@ -381,6 +381,9 @@ static bool workqueue_freezing;		/* PL: have wqs started freezing? */
- /* PL&A: allowable cpus for unbound wqs and work items */
- static cpumask_var_t wq_unbound_cpumask;
- 
-+/* PL: user-provided unbound cpumask via sysfs */
-+static cpumask_var_t wq_user_unbound_cpumask;
-+
- /* for further constrain wq_unbound_cpumask by cmdline parameter*/
- static struct cpumask wq_cmdline_cpumask __initdata;
- 
-@@ -5825,7 +5828,7 @@ static int workqueue_apply_unbound_cpumask(const cpumask_var_t unbound_cpumask)
-  *  		-EINVAL	- Invalid @cpumask
-  *  		-ENOMEM	- Failed to allocate memory for attrs or pwqs.
-  */
--int workqueue_set_unbound_cpumask(cpumask_var_t cpumask)
-+static int workqueue_set_unbound_cpumask(cpumask_var_t cpumask)
- {
- 	int ret = -EINVAL;
- 
-@@ -5836,6 +5839,7 @@ int workqueue_set_unbound_cpumask(cpumask_var_t cpumask)
- 	cpumask_and(cpumask, cpumask, cpu_possible_mask);
- 	if (!cpumask_empty(cpumask)) {
- 		apply_wqattrs_lock();
-+		cpumask_copy(wq_user_unbound_cpumask, cpumask);
- 		if (cpumask_equal(cpumask, wq_unbound_cpumask)) {
- 			ret = 0;
- 			goto out_unlock;
-@@ -5850,6 +5854,40 @@ int workqueue_set_unbound_cpumask(cpumask_var_t cpumask)
- 	return ret;
+diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+index a6e9848189d6..2b825019f806 100755
+--- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
++++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+@@ -146,71 +146,6 @@ test_add_proc()
+ 	echo $$ > $CGROUP2/cgroup.procs	# Move out the task
  }
  
-+/**
-+ * workqueue_unbound_exclude_cpumask - Exclude given CPUs from unbound cpumask
-+ * @exclude_cpumask: the cpumask to be excluded from wq_unbound_cpumask
-+ *
-+ * This function can be called from cpuset code to provide a set of isolated
-+ * CPUs that should be excluded from wq_unbound_cpumask.
-+ */
-+int workqueue_unbound_exclude_cpumask(cpumask_var_t exclude_cpumask)
+-#
+-# Testing the new "isolated" partition root type
+-#
+-test_isolated()
+-{
+-	cd $CGROUP2/test
+-	echo 2-3 > cpuset.cpus
+-	TYPE=$(cat cpuset.cpus.partition)
+-	[[ $TYPE = member ]] || echo member > cpuset.cpus.partition
+-
+-	console_msg "Change from member to root"
+-	test_partition root
+-
+-	console_msg "Change from root to isolated"
+-	test_partition isolated
+-
+-	console_msg "Change from isolated to member"
+-	test_partition member
+-
+-	console_msg "Change from member to isolated"
+-	test_partition isolated
+-
+-	console_msg "Change from isolated to root"
+-	test_partition root
+-
+-	console_msg "Change from root to member"
+-	test_partition member
+-
+-	#
+-	# Testing partition root with no cpu
+-	#
+-	console_msg "Distribute all cpus to child partition"
+-	echo +cpuset > cgroup.subtree_control
+-	test_partition root
+-
+-	mkdir A1
+-	cd A1
+-	echo 2-3 > cpuset.cpus
+-	test_partition root
+-	test_effective_cpus 2-3
+-	cd ..
+-	test_effective_cpus ""
+-
+-	console_msg "Moving task to partition test"
+-	test_add_proc "No space left"
+-	cd A1
+-	test_add_proc ""
+-	cd ..
+-
+-	console_msg "Shrink and expand child partition"
+-	cd A1
+-	echo 2 > cpuset.cpus
+-	cd ..
+-	test_effective_cpus 3
+-	cd A1
+-	echo 2-3 > cpuset.cpus
+-	cd ..
+-	test_effective_cpus ""
+-
+-	# Cleaning up
+-	console_msg "Cleaning up"
+-	echo $$ > $CGROUP2/cgroup.procs
+-	[[ -d A1 ]] && rmdir A1
+-}
+-
+ #
+ # Cpuset controller state transition test matrix.
+ #
+@@ -304,7 +239,7 @@ TEST_MATRIX=(
+ 								       A1:P0,A2:P2,A3:P1 2-4"
+ 	" C0-4:X2-4:S+ C1-4:X2-4:S+:P2 C2-4:X4:P1 \
+ 				   .      .      X5      .      .    0 A1:0-4,A2:1-4,A3:2-4 \
+-								       A1:P0,A2:P-2,A3:P-1 ."
++								       A1:P0,A2:P-2,A3:P-1"
+ 	" C0-4:X2-4:S+ C1-4:X2-4:S+:P2 C2-4:X4:P1 \
+ 				   .      .      .      X1      .    0 A1:0-1,A2:2-4,A3:2-4 \
+ 								       A1:P0,A2:P2,A3:P-1 2-4"
+@@ -347,10 +282,10 @@ TEST_MATRIX=(
+ 	# cpus_allowed/exclusive_cpus update tests
+ 	" C0-3:X2-3:S+ C1-3:X2-3:S+ C2-3:X2-3 \
+ 				   .     C4      .      P2     .     0 A1:4,A2:4,XA2:,XA3:,A3:4 \
+-								       A1:P0,A3:P-2 ."
++								       A1:P0,A3:P-2"
+ 	" C0-3:X2-3:S+ C1-3:X2-3:S+ C2-3:X2-3 \
+ 				   .     X1      .      P2     .     0 A1:0-3,A2:1-3,XA1:1,XA2:,XA3:,A3:2-3 \
+-								       A1:P0,A3:P-2 ."
++								       A1:P0,A3:P-2"
+ 	" C0-3:X2-3:S+ C1-3:X2-3:S+ C2-3:X2-3 \
+ 				   .      .     C3      P2     .     0 A1:0-2,A2:0-2,XA2:3,XA3:3,A3:3 \
+ 								       A1:P0,A3:P2 3"
+@@ -359,13 +294,13 @@ TEST_MATRIX=(
+ 								       A1:P0,A3:P2 3"
+ 	" C0-3:X2-3:S+ C1-3:X2-3:S+ C2-3:X2-3:P2 \
+ 				   .      .     X3      .      .     0 A1:0-3,A2:1-3,XA2:3,XA3:3,A3:2-3 \
+-								       A1:P0,A3:P-2 ."
++								       A1:P0,A3:P-2"
+ 	" C0-3:X2-3:S+ C1-3:X2-3:S+ C2-3:X2-3:P2 \
+ 				   .      .     C3      .      .     0 A1:0-3,A2:3,XA2:3,XA3:3,A3:3 \
+-								       A1:P0,A3:P-2 ."
++								       A1:P0,A3:P-2"
+ 	" C0-3:X2-3:S+ C1-3:X2-3:S+ C2-3:X2-3:P2 \
+ 				   .     C4      .      .      .     0 A1:4,A2:4,A3:4,XA1:,XA2:,XA3 \
+-								       A1:P0,A3:P-2 ."
++								       A1:P0,A3:P-2"
+ 
+ 	#  old-A1 old-A2 old-A3 old-B1 new-A1 new-A2 new-A3 new-B1 fail ECPUs Pstate ISOLCPUS
+ 	#  ------ ------ ------ ------ ------ ------ ------ ------ ---- ----- ------ --------
+@@ -804,6 +739,71 @@ run_state_test()
+ 	echo "All $I tests of $TEST PASSED."
+ }
+ 
++#
++# Testing the new "isolated" partition root type
++#
++test_isolated()
 +{
-+	cpumask_var_t cpumask;
-+	int ret = 0;
++	cd $CGROUP2/test
++	echo 2-3 > cpuset.cpus
++	TYPE=$(cat cpuset.cpus.partition)
++	[[ $TYPE = member ]] || echo member > cpuset.cpus.partition
 +
-+	if (!zalloc_cpumask_var(&cpumask, GFP_KERNEL))
-+		return -ENOMEM;
++	console_msg "Change from member to root"
++	test_partition root
 +
-+	/*
-+	 * The caller of this function may have called cpus_read_lock(),
-+	 * use cpus_read_trylock() to avoid potential deadlock.
-+	 */
-+	if (!cpus_read_trylock())
-+		return -EBUSY;
-+	mutex_lock(&wq_pool_mutex);
++	console_msg "Change from root to isolated"
++	test_partition isolated
 +
-+	if (!cpumask_andnot(cpumask, wq_user_unbound_cpumask, exclude_cpumask))
-+		ret = -EINVAL;	/* The new cpumask can't be empty */
-+	else if (!cpumask_equal(cpumask, wq_unbound_cpumask))
-+		ret = workqueue_apply_unbound_cpumask(cpumask);
++	console_msg "Change from isolated to member"
++	test_partition member
 +
-+	mutex_unlock(&wq_pool_mutex);
-+	cpus_read_unlock();
-+	free_cpumask_var(cpumask);
-+	return ret;
++	console_msg "Change from member to isolated"
++	test_partition isolated
++
++	console_msg "Change from isolated to root"
++	test_partition root
++
++	console_msg "Change from root to member"
++	test_partition member
++
++	#
++	# Testing partition root with no cpu
++	#
++	console_msg "Distribute all cpus to child partition"
++	echo +cpuset > cgroup.subtree_control
++	test_partition root
++
++	mkdir A1
++	cd A1
++	echo 2-3 > cpuset.cpus
++	test_partition root
++	test_effective_cpus 2-3
++	cd ..
++	test_effective_cpus ""
++
++	console_msg "Moving task to partition test"
++	test_add_proc "No space left"
++	cd A1
++	test_add_proc ""
++	cd ..
++
++	console_msg "Shrink and expand child partition"
++	cd A1
++	echo 2 > cpuset.cpus
++	cd ..
++	test_effective_cpus 3
++	cd A1
++	echo 2-3 > cpuset.cpus
++	cd ..
++	test_effective_cpus ""
++
++	# Cleaning up
++	console_msg "Cleaning up"
++	echo $$ > $CGROUP2/cgroup.procs
++	[[ -d A1 ]] && rmdir A1
 +}
 +
- static int parse_affn_scope(const char *val)
- {
- 	int i;
-@@ -6520,11 +6558,13 @@ void __init workqueue_init_early(void)
- 	BUILD_BUG_ON(__alignof__(struct pool_workqueue) < __alignof__(long long));
- 
- 	BUG_ON(!alloc_cpumask_var(&wq_unbound_cpumask, GFP_KERNEL));
-+	BUG_ON(!alloc_cpumask_var(&wq_user_unbound_cpumask, GFP_KERNEL));
- 	cpumask_copy(wq_unbound_cpumask, housekeeping_cpumask(HK_TYPE_WQ));
- 	cpumask_and(wq_unbound_cpumask, wq_unbound_cpumask, housekeeping_cpumask(HK_TYPE_DOMAIN));
- 
- 	if (!cpumask_empty(&wq_cmdline_cpumask))
- 		cpumask_and(wq_unbound_cpumask, wq_unbound_cpumask, &wq_cmdline_cpumask);
-+	cpumask_copy(wq_user_unbound_cpumask, wq_unbound_cpumask);
- 
- 	pwq_cache = KMEM_CACHE(pool_workqueue, SLAB_PANIC);
- 
+ #
+ # Wait for inotify event for the given file and read it
+ # $1: cgroup file to wait for
 -- 
 2.39.3
 
