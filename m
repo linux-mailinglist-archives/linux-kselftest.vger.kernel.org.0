@@ -2,190 +2,165 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B3587C7E6C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Oct 2023 09:13:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3116F7C7F5F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Oct 2023 10:05:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229869AbjJMHNq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 13 Oct 2023 03:13:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41776 "EHLO
+        id S229947AbjJMIFE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 13 Oct 2023 04:05:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229843AbjJMHNp (ORCPT
+        with ESMTP id S230001AbjJMIFD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 13 Oct 2023 03:13:45 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAC14BC;
-        Fri, 13 Oct 2023 00:13:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697181219; x=1728717219;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=W0K5Jafa9S+IdKSMWcjxJxq1wqlzrzKdBkyM0/jUeRA=;
-  b=ldIHTFVPnfM6ogzZHQuL3dK0xWzDlrrozAVmYf3wF/rvKc6fTMlwYzeU
-   1srikYgsSSIrVG2dgSiKz+TXEdMSGwii3pxuXY4XGIJJnfWv1w+cx/hv2
-   T4GcDguQtLfqwNyFCQvRcfM0K+Xco+WVyV0Fk+p17iTUItorxM+QEMTbD
-   mFZSyd00SiXZXvDuYhHI0cFvphAooF7AOXfTK9yB7zDT03ER1QybVw0BP
-   r2tNe5riXQjExduWZ9EyEjmGHF5OZBASRBdUIWeRCsMGlnHwmmCfIPdPb
-   UOGkoeNZg5rzX45Gb1a/3TxUo92u1j7+lafL68Ms5UdnsBjiSfDKDB25T
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="451599405"
-X-IronPort-AV: E=Sophos;i="6.03,221,1694761200"; 
-   d="scan'208";a="451599405"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Oct 2023 00:13:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10861"; a="704517280"
-X-IronPort-AV: E=Sophos;i="6.03,221,1694761200"; 
-   d="scan'208";a="704517280"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga003.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 13 Oct 2023 00:13:38 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32; Fri, 13 Oct 2023 00:13:38 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32; Fri, 13 Oct 2023 00:13:38 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32 via Frontend Transport; Fri, 13 Oct 2023 00:13:38 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.100)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.32; Fri, 13 Oct 2023 00:13:38 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=P15OZ4BRKmIO6uD3TBkz/eSa77RgI1lL1f2kZ5defHcg55M09Y3NGKATSnzbxc6GzfEhSO32R9bZ+saT/qVJUixmydKCwb5bxc585ec0/5mn1xvastA9B+tq3+TKmyCs+YmifTztG5hT612QBIIQWW7T35v0Zq0WfeQXc6z8kyzDHzSiSEbSvovq3uE0dprKzK1gjS4ti1lGIdpuALUznqViqor8sRVWqeJjhApMrlnFhd4rZcw+VRofX37/Axng11NM1focrBGKqaPey9ZQoI2nYuQc+RUo5yPstw0awcsWk38RkmAkATw2yhCLopYLr348adOTj1VsVcSSCjnLAQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=W0K5Jafa9S+IdKSMWcjxJxq1wqlzrzKdBkyM0/jUeRA=;
- b=Z6/RWoqqOzRDg2A0HexJq5ZTv9/w04P/tXaRIEY7loiiv9XzrVVPdv+k3Bxxs8p/rXWVo8bQi3idPyUI0jqgqzX2AY6Q4dSXqQJtnemPNux1bV8bfA8zsum79ObJvyZPUHkwv4b/H8lK/oLbCoRlCdeFdnLySpOV1U/vxP2iLOnZq0hOzrdYGR4TCkubjRXCWn1OcNT2ty/qTn+J4OZcWqGodSqGUMmTOg25MqiWfpOuprzDOiDfg5PbYebTcxOlrgWF7ypeAlxtmJSIkUzdRtbeifweVkuuLGsi7cQPjCW/A91y6XLo1Dvwh8tw6WPpwv6++cJeWG2y4AY++XmC+Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by SN7PR11MB7020.namprd11.prod.outlook.com (2603:10b6:806:2af::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6838.32; Fri, 13 Oct
- 2023 07:13:35 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::7116:9866:8367:95b4]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::7116:9866:8367:95b4%3]) with mapi id 15.20.6863.043; Fri, 13 Oct 2023
- 07:13:34 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>, "Liu, Yi L" <yi.l.liu@intel.com>
-CC:     "joro@8bytes.org" <joro@8bytes.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>,
-        "Martins, Joao" <joao.m.martins@oracle.com>
-Subject: RE: [PATCH v4 05/17] iommufd: Separate kernel-managed HWPT
- alloc/destroy/abort functions
-Thread-Topic: [PATCH v4 05/17] iommufd: Separate kernel-managed HWPT
- alloc/destroy/abort functions
-Thread-Index: AQHZ7GCN3k0pHsaUpUaqL7OxTm+gurBDfEEAgAMqP4CAAMh40A==
-Date:   Fri, 13 Oct 2023 07:13:34 +0000
-Message-ID: <BN9PR11MB5276A55B59EAE44DE058DDF58CD2A@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20230921075138.124099-1-yi.l.liu@intel.com>
- <20230921075138.124099-6-yi.l.liu@intel.com>
- <20231010184932.GT3952@nvidia.com> <20231012190931.GO3952@nvidia.com>
-In-Reply-To: <20231012190931.GO3952@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|SN7PR11MB7020:EE_
-x-ms-office365-filtering-correlation-id: d7538333-58b7-428a-ba7c-08dbcbbbe99f
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 0zCFRGNwpDHXHVmqkn8Gywju2gI05Som3GrkoxH+hezXAUOryC12eRSYS6sQj+eZ3lfH2czwg+fBx9gaaE7R0B4UArwPbYRBmdSUeGIm55sWttwavyfiMPFrG1BCYfK0IwuctMNSCThoHNJguwbjcj9/RyBmRgeTBzNB9YSw/UlZNuDMERUAOBwnDWAsI4U1+ny6GS4+xGsmxwkVrm8oAxFXGRhe/VitMQQI+2inJB2zdkiacmOBBMz1mRs+WqMa/OmdEVyNHtvX/fWXpRGw68Tn9s6v9hQQe65ZMY2E8J9pqzxY5CoawVBttsjM02UoP3ZhjeObpGTz5bipyfxviVnD9sAXGjqvpQe9UNRcvmWatiPCdz43azWvXQixRDc/KYz/JXaN7/bV6boTjtZR23JNHnOVzRG4hVVdGzfM3oT4rkZjW3s5zzJzuf+EtXcO8Ehvo5O1n0j8Vm45uCaf5ZB9ExuMG/NAxBK3vg3BelKPxyy6yIe74zvRQXpm/CNyz7b0HoHJHSiBNCF8NLO4ekljcCTg1wXPTh3UrFZzerRg267ct2AxF6bLtnBzchddGQG09+X4e3DTc+X8sSYE9WNvoglRV98sssL0Gq3bUm+41zmiH3C3uokTzBuexvXt
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(39860400002)(396003)(136003)(376002)(346002)(230922051799003)(451199024)(1800799009)(186009)(64100799003)(6506007)(55016003)(66899024)(478600001)(7696005)(110136005)(71200400001)(9686003)(83380400001)(2906002)(86362001)(38100700002)(76116006)(7416002)(66556008)(38070700005)(316002)(66446008)(82960400001)(52536014)(122000001)(64756008)(8676002)(26005)(5660300002)(4326008)(41300700001)(66476007)(8936002)(66946007)(54906003)(6636002)(33656002)(4744005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?orE3jFe8lFAvmyDnLD6Mf/HaFg2GzohiDSQtf9RGl/jGq+j35hy0bFuVRnp3?=
- =?us-ascii?Q?TtvDxEmFVvPW6fzf1FxDM0oHsDoB+G28AI7AvYm0ovcInMOCDTADj8d1MrHZ?=
- =?us-ascii?Q?6r57VUInVwidUAO1ggtqigxW0qcDPWhyMdsTWYsNGZeg0qdTtidoIKGJQtUh?=
- =?us-ascii?Q?foofSi58vTxs7SkHz1y/mG4gmGqnc6PzPuSfmX6Cf79j0QjGkd/hIIhtd2DF?=
- =?us-ascii?Q?oIH+r8NV7dzLvMKFNi5hrzrHEBT3SF+GMYWIaYsP2DLBaZOjgWYUwSoWNKgz?=
- =?us-ascii?Q?hBkwRYnSdsDA47e5IlHOcO1MQ6+F6XdPki3brvUvkr5Js0NkHsDdblH7t5u5?=
- =?us-ascii?Q?wQJxIt0EM6kGT2lgBgZfj/OxjcsqzxmZrnQeSpTSe2AU2w6EqwQ/fTPatrGJ?=
- =?us-ascii?Q?zDsKgWkYHHC/taTNhINwnm9AjLUJmpC2gY8dmeeeQbBiQZT5dxq7E7mi0oKX?=
- =?us-ascii?Q?1SQ3JsrqY9Dd2H7piY58OgCetrL63c6xTCV2FoovF3VVltTxYZACrsFTgCbz?=
- =?us-ascii?Q?H9dFCzgy+IKhCXO3UKzJABgv4RQXpkPezr2lxpHRnKwL8tfl/taxgSZbNKaG?=
- =?us-ascii?Q?OVMzuR9yItGI+yeFXGgoTXvPX+20FZv1hKh/jV2FE89ZQmKCyroXuDR8McAf?=
- =?us-ascii?Q?wvcyvGsWiNQ5B9++Wu5bvFalt1vT3TOWfvKuzh5qDnChyzB6aCDwE9w6BcLX?=
- =?us-ascii?Q?w/FAdI1fJIgTUOKPzkV5ZdzgKq8B98vPdNDkGzs4K9MVBe9n92xNaE1Tdp/C?=
- =?us-ascii?Q?pNhQWcbirVW3M7wOgb1guMsT8GiBjwaiqZ13K62p43AR/pCfvpGxHyhvOOj8?=
- =?us-ascii?Q?F+VZYIc6+q/A9gGwO1L22ZtZs8pPrd5A8hA4kPdR7Pnbl7VOV/PnVXwZ78zO?=
- =?us-ascii?Q?dg78BN4UUrJ/WCy7MYwuwT1igcxG0RaIMC0z9eoqkLoGdMumX4pBBUGySIKF?=
- =?us-ascii?Q?3NQBumx3K1UAHYtCb+hrjVAAI9fMk7E+YrODioesl5jNytfloX/kSLgns/R6?=
- =?us-ascii?Q?gsx3t6mS7m94xV6g3/8WMDTXRb9KReei57b/6FabjIKg5uAtzsS2uu2GWbgA?=
- =?us-ascii?Q?f01nbw46VcU/XfGPbPKUhrectRb4F6d6SZ5Jn/rO+9q83P+iZtx/dypgKjLw?=
- =?us-ascii?Q?WukJDu537xlnL6TSvkjFQBbBeKqdhsVPYOFrSQMUNzGRiaArlcmdhTuBaXuX?=
- =?us-ascii?Q?+vl4g/RWLZ6l8eakvHCMi8EXiI+DAxzpdaiiu0PP9EiTIzVQSt3GWwTXcixU?=
- =?us-ascii?Q?Yi2AQ52k4UkP2OFSJEM0seqeYj96XzECYTtA5+yLZ+AMwT6bGTRkSghPvFa+?=
- =?us-ascii?Q?1rLPAfuckD8LX30XskrbmoTUEnDUnxRmoo+Qy/GxlOdpso1NshWvHu0Jg+0W?=
- =?us-ascii?Q?AHRU0KfUdvG7Lw7D0DBzHCHm9e3MBjCtN4kzBJwQ2W3F+4zdEIFLLDgw55fq?=
- =?us-ascii?Q?IjWmlwvzcrRdN1R+OeFcHptd68Mi7NAtoemRD4Q5Up9LrNmed0cw1CgKPrfh?=
- =?us-ascii?Q?hICZjXKaL14/eUYr+9YrR0Hw6+uXr4UXjbOSdbuJksqfG7u8zRtSTyN44A3g?=
- =?us-ascii?Q?fGFE+Jygc/EIyqkU6mweM0H/AOiKS4K36s6bX9iW?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 13 Oct 2023 04:05:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E76D5C9
+        for <linux-kselftest@vger.kernel.org>; Fri, 13 Oct 2023 01:04:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1697184258;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Jnw6CV1in12hPMuWpKYAfFREANvgubRLaHRIuqtezJI=;
+        b=MMAb/LPYjNSLIkM2RDgXyaGsae9bF2uIZ9WmTojalLO8CFb6SHmcbqiP5/C094IATsmO8+
+        D3wqUDApM8JiM1bio/9ude+YIA3lxXrvs9IJtU0aOqgA9jnUlbAOzIBlWRSPLVPGJwc6ko
+        ISs8PHrEKMiG4IOo6loqRJPCiqv+IZU=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-490-hg1VQnP-OtqGtEudE54YpQ-1; Fri, 13 Oct 2023 04:04:16 -0400
+X-MC-Unique: hg1VQnP-OtqGtEudE54YpQ-1
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-3296bd73d91so1076629f8f.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 13 Oct 2023 01:04:16 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697184255; x=1697789055;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Jnw6CV1in12hPMuWpKYAfFREANvgubRLaHRIuqtezJI=;
+        b=bei+ksAyEJTAPD7wvmJQlmcYP+LM1jtrRhghQXmm7M59jfDLDsTFDst5YjybnqkbKB
+         R9T3xDNmOzGp2R6Lb5ZwAN5Gq75b+C0AfDxMDwG46Wx4G3RPQnhu84KteZq9WP8Exb1Q
+         s7p+/4Q2ViHiq4K6OvDXRLMC2DjCy+e4skSIPdIeGuRtihMgpysasGfCb0L55JOCqHB/
+         Z8jAniF8npP23b3jla3ZKVtJwYc2fycWv8tCgNmaN6fgZl5YAUlkdqwTXe6+svxy6nMl
+         UkxDJEqWnR3I1225hOQiv0oIBKPML4LykAk+e4Dl7EBlA9VzarUvi+PdzCd7rDpmWQiv
+         jlMQ==
+X-Gm-Message-State: AOJu0YyYjsQ67Ud33n/w7kg83L+RRiz6cOYlgcT3BHjsJxNViDZICLld
+        66qmYZBXOkrE4fxLFkex79Xj+zzR6CJC4Bk3Jgclj5skUXGHEOm5zIie8mciRFdSDS1yTVHu5yn
+        JRfwOCAh1SSqv6p4KuulvST/vLS1m
+X-Received: by 2002:a05:6000:68d:b0:32d:88fd:5c65 with SMTP id bo13-20020a056000068d00b0032d88fd5c65mr7476694wrb.1.1697184255431;
+        Fri, 13 Oct 2023 01:04:15 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFD0RaO/ot8dyeG7Uo8SggGQU+QRrkA+qeVDmJJk2llvQffd95k8QMI2UC91Kh+CNR4GjHY2g==
+X-Received: by 2002:a05:6000:68d:b0:32d:88fd:5c65 with SMTP id bo13-20020a056000068d00b0032d88fd5c65mr7476648wrb.1.1697184254961;
+        Fri, 13 Oct 2023 01:04:14 -0700 (PDT)
+Received: from [192.168.3.108] (p5b0c6028.dip0.t-ipconnect.de. [91.12.96.40])
+        by smtp.gmail.com with ESMTPSA id g7-20020adfe407000000b003232d122dbfsm20377154wrm.66.2023.10.13.01.04.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Oct 2023 01:04:14 -0700 (PDT)
+Message-ID: <7495754c-9267-74af-b943-9b0f86619b5d@redhat.com>
+Date:   Fri, 13 Oct 2023 10:04:12 +0200
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d7538333-58b7-428a-ba7c-08dbcbbbe99f
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Oct 2023 07:13:34.1864
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: vvu6HpkP3Y0ykNjHnEbHMZ1z/EoosmyKhSad+0GAT5M/r8GF9AnffJCb+m/Cl1nFE4bjI0tvtGgs3grM+3w9SQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR11MB7020
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH v3 1/3] mm/rmap: support move to different root anon_vma
+ in folio_move_anon_rmap()
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>
+Cc:     akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
+        brauner@kernel.org, shuah@kernel.org, aarcange@redhat.com,
+        lokeshgidra@google.com, hughd@google.com, mhocko@suse.com,
+        axelrasmussen@google.com, rppt@kernel.org, willy@infradead.org,
+        Liam.Howlett@oracle.com, jannh@google.com, zhangpeng362@huawei.com,
+        bgeffon@google.com, kaleshsingh@google.com, ngeoffray@google.com,
+        jdduke@google.com, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kernel-team@android.com
+References: <20231009064230.2952396-1-surenb@google.com>
+ <20231009064230.2952396-2-surenb@google.com> <ZShswW2rkKTwnrV3@x1n>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <ZShswW2rkKTwnrV3@x1n>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> From: Jason Gunthorpe <jgg@nvidia.com>
-> Sent: Friday, October 13, 2023 3:10 AM
->=20
-> Also, we probably should feed enforce_cache_coherency through the
-> alloc_hwpt uapi and not try to autodetect it..
->=20
+On 13.10.23 00:01, Peter Xu wrote:
+> On Sun, Oct 08, 2023 at 11:42:26PM -0700, Suren Baghdasaryan wrote:
+>> From: Andrea Arcangeli <aarcange@redhat.com>
+>>
+>> For now, folio_move_anon_rmap() was only used to move a folio to a
+>> different anon_vma after fork(), whereby the root anon_vma stayed
+>> unchanged. For that, it was sufficient to hold the folio lock when
+>> calling folio_move_anon_rmap().
+>>
+>> However, we want to make use of folio_move_anon_rmap() to move folios
+>> between VMAs that have a different root anon_vma. As folio_referenced()
+>> performs an RMAP walk without holding the folio lock but only holding the
+>> anon_vma in read mode, holding the folio lock is insufficient.
+>>
+>> When moving to an anon_vma with a different root anon_vma, we'll have to
+>> hold both, the folio lock and the anon_vma lock in write mode.
+>> Consequently, whenever we succeeded in folio_lock_anon_vma_read() to
+>> read-lock the anon_vma, we have to re-check if the mapping was changed
+>> in the meantime. If that was the case, we have to retry.
+>>
+>> Note that folio_move_anon_rmap() must only be called if the anon page is
+>> exclusive to a process, and must not be called on KSM folios.
+>>
+>> This is a preparation for UFFDIO_MOVE, which will hold the folio lock,
+>> the anon_vma lock in write mode, and the mmap_lock in read mode.
+>>
+>> Signed-off-by: Andrea Arcangeli <aarcange@redhat.com>
+>> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+>> ---
+>>   mm/rmap.c | 24 ++++++++++++++++++++++++
+>>   1 file changed, 24 insertions(+)
+>>
+>> diff --git a/mm/rmap.c b/mm/rmap.c
+>> index c1f11c9dbe61..f9ddc50269d2 100644
+>> --- a/mm/rmap.c
+>> +++ b/mm/rmap.c
+>> @@ -542,7 +542,9 @@ struct anon_vma *folio_lock_anon_vma_read(struct folio *folio,
+>>   	struct anon_vma *root_anon_vma;
+>>   	unsigned long anon_mapping;
+>>   
+>> +retry:
+>>   	rcu_read_lock();
+>> +retry_under_rcu:
+>>   	anon_mapping = (unsigned long)READ_ONCE(folio->mapping);
+>>   	if ((anon_mapping & PAGE_MAPPING_FLAGS) != PAGE_MAPPING_ANON)
+>>   		goto out;
+>> @@ -552,6 +554,16 @@ struct anon_vma *folio_lock_anon_vma_read(struct folio *folio,
+>>   	anon_vma = (struct anon_vma *) (anon_mapping - PAGE_MAPPING_ANON);
+>>   	root_anon_vma = READ_ONCE(anon_vma->root);
+>>   	if (down_read_trylock(&root_anon_vma->rwsem)) {
+>> +		/*
+>> +		 * folio_move_anon_rmap() might have changed the anon_vma as we
+>> +		 * might not hold the folio lock here.
+>> +		 */
+>> +		if (unlikely((unsigned long)READ_ONCE(folio->mapping) !=
+>> +			     anon_mapping)) {
+>> +			up_read(&root_anon_vma->rwsem);
+>> +			goto retry_under_rcu;
+> 
+> Is adding this specific label worthwhile?  How about rcu unlock and goto
+> retry (then it'll also be clear that we won't hold rcu read lock for
+> unpredictable time)?
 
-In the past we had a long discussion about this with the conclusion
-that user opt is the ideal model but it's fine to stay with autodetect
-and existing vfio/kvm contract for coherency detection until we
-see a real demand for user opt.
++1, sounds good to me
 
-Is there anything new which changes your mind to have user opt now?
+-- 
+Cheers,
+
+David / dhildenb
+
