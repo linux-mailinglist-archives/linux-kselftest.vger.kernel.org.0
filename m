@@ -2,250 +2,250 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7071D7C7B93
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Oct 2023 04:26:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C5197C7BC1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Oct 2023 04:58:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229499AbjJMCZv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 12 Oct 2023 22:25:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34134 "EHLO
+        id S229441AbjJMC6I (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 12 Oct 2023 22:58:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbjJMCZu (ORCPT
+        with ESMTP id S229436AbjJMC6H (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 12 Oct 2023 22:25:50 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 410AB95;
-        Thu, 12 Oct 2023 19:25:47 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-53e08e439c7so2360259a12.0;
-        Thu, 12 Oct 2023 19:25:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1697163946; x=1697768746; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IfucaFtMygn+o6ygSaKBL+1oTA+kLVzBXGrUlL7E3ws=;
-        b=QNReD1WEoCP5SO8nc6lGawnOlt8ZqVQtcy4QRoJ0J8bcJnMGHeSwDlHRYywkDA1y3+
-         NZ+RzYpzfAqJ1mcJ8rLyfRSuI2HhegNOyH71XctXkCuCeFf5jN8wgkYDXHk0pNEyEiYT
-         ukabfqkCOA2UuqtA8ougKXxbAO7ZWV7VLdqkIy4etQ7kXrPqocI0O77vH1cbZ0J5o0nX
-         rnWS7xV22IDEOxhFc3Iz3IDUl0xh5gw0hiZtpLZEnaF8QLO7quRF5+S5ryRKPx2ffcva
-         h1eptEPweBqdieEEBPOsqaOsPOxzAt+et/VrS5B0PpXYqZNMS4MFvDgrv5YaW4mrgKav
-         3G5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697163946; x=1697768746;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IfucaFtMygn+o6ygSaKBL+1oTA+kLVzBXGrUlL7E3ws=;
-        b=YOE0grijcuoo2tFKVTtsYmTRwLetCMYJ/KQTK+n0+UIxtHhnPQONaoNygQalwvfbkm
-         Dz36O/bMlB2nsoQONenLHHE7K8n6BIpU82T4G1kx2YFk2wt8MEb9VNmI+t+pL2Y+JiqL
-         oJcnqbFJ+SC3Fpy/Jov8mVEM/wVNGMNde7oNCYTy6SFMzh5iIia/gg+ve11Rk5HTaHvl
-         lC1UOfz2A7hs/dLmVGd0IsyHFRFKA6titIzVUrRYFAKEG/cwZLikyHY/kdVqHrrrWDHG
-         7vsRGCVgOKYy38n3+e50LMejwWpkDu5Prq3dLCYjzTBqQ6sj7YDNFURwTuucBYt9wW4u
-         ksOQ==
-X-Gm-Message-State: AOJu0YzS8oh2JeBQq5Dn+fvv+XqLCcjr+mtc6WpUQUEWovbgPuKXIaPX
-        WsIQbolkB+ocqfTa67eW43YBg4ojqsjRu/b7wf1X97pQ2Zc=
-X-Google-Smtp-Source: AGHT+IGfKKqTIbSVTOh52xqnpR+OlWaleG0kq0XcH8t6hx7zfyC0t1UjxReyCGYOyF7baEXemAgzpmeiJEGLoTxoxIE=
-X-Received: by 2002:a05:6402:b0f:b0:536:aead:3486 with SMTP id
- bm15-20020a0564020b0f00b00536aead3486mr18332831edb.40.1697163945415; Thu, 12
- Oct 2023 19:25:45 -0700 (PDT)
+        Thu, 12 Oct 2023 22:58:07 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2057.outbound.protection.outlook.com [40.107.93.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0113391;
+        Thu, 12 Oct 2023 19:58:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=aMVkLzaQ+G96RW/ej6J9jWDlS5W20QiozP7OLXsf/OnkVgk89AvGhNcvop9j6vQNbnk8YWdVH0FR3RaE9t1AFBzC7hFYHpulnUQOs6w+mMbOJFYM46Ol5o6ckdgBZAoS6Nuwj/ZcRIRaq3mfVooP8LFrUCRum+n6deIn3OFERDQkwP3dHJDinEK7m6xysOznrKee1+Tgx14BLvsSOBWARvE8EwI9Bdadcc6X4VDnIl3JxYAHCGpU4JR//atwFU7W8wu2c2bUwSesnCa7l8wBqxpdNBYs/F0cs85FuD68ssleU66H+juUhf4LEeSrv5F1xC0VzPUeFtVtZVAUtYpiug==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uiWgNhl01VvplaAyf2iuYByBio3MNffw7BQYB+fLP9o=;
+ b=I6hS9jEXKcoqpPrxhv/dT+3RIUkgpFotTRrrmQJaqGVdNaA14q0jNu3sXBDlLU34sdu1SFDbt3aTYBSlYnT9MNX4cCg3kVikvWYdtYakUbC24rliChui96dR8nj6al9R+WpccHT5XNnpo4OblnHMKNI0bzf+kzht1QCBYGKMhIj6FgXgq02lVo52/N+ZHyZt+lGpTI9Cl9vPAUHGYdms0NTAm7+JMQsnxEbsPWY+EvrSYMonOoigc7g0sQg+ehprOygFFtNtQ69/CO4G4Im8eGM3Rou8l06qq7vlOJhwDczJUO/ZJlKlyl9ZlfQpy5Gv5TXe50X9+QksASKxplx67g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uiWgNhl01VvplaAyf2iuYByBio3MNffw7BQYB+fLP9o=;
+ b=MJybBHnk1pwBgSxCypbCmhiT9nKp3UdKvmgAOG6YcVStHWqFDBpaUSmasigHJ/kLvqYun7ncNd+t9VdSS3Pybsl2gLVuZSn0BxvLIX3OKn5ZW4wi/CRNORS792nwzFUMOnQ03tNbhNNsTOVySP48qaqP+e2bfYWBceXV3Z1DKaE=
+Received: from MW4PR03CA0216.namprd03.prod.outlook.com (2603:10b6:303:b9::11)
+ by PH7PR12MB9068.namprd12.prod.outlook.com (2603:10b6:510:1f4::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.45; Fri, 13 Oct
+ 2023 02:58:03 +0000
+Received: from CO1PEPF000044EF.namprd05.prod.outlook.com
+ (2603:10b6:303:b9:cafe::61) by MW4PR03CA0216.outlook.office365.com
+ (2603:10b6:303:b9::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6886.30 via Frontend
+ Transport; Fri, 13 Oct 2023 02:58:02 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1PEPF000044EF.mail.protection.outlook.com (10.167.241.69) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6838.22 via Frontend Transport; Fri, 13 Oct 2023 02:58:02 +0000
+Received: from jasmine-meng.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Thu, 12 Oct
+ 2023 21:57:56 -0500
+From:   Meng Li <li.meng@amd.com>
+To:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Huang Rui <ray.huang@amd.com>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <x86@kernel.org>, <linux-acpi@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        <linux-kselftest@vger.kernel.org>,
+        "Nathan Fontenot" <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Shimmer Huang <shimmer.huang@amd.com>,
+        "Perry Yuan" <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>,
+        "Oleksandr Natalenko" <oleksandr@natalenko.name>,
+        Meng Li <li.meng@amd.com>
+Subject: [PATCH V9 0/7] amd-pstate preferred core
+Date:   Fri, 13 Oct 2023 10:57:34 +0800
+Message-ID: <20231013025741.3332520-1-li.meng@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20231013013536.2047-1-zhujun2@cmss.chinamobile.com>
-In-Reply-To: <20231013013536.2047-1-zhujun2@cmss.chinamobile.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 12 Oct 2023 19:25:34 -0700
-Message-ID: <CAEf4BzbPMWy4Zxg6Tc-qcWjncW6qK+G=i0wC+nd0MLXiSMiBig@mail.gmail.com>
-Subject: Re: [PATCH] selftests: bpf: remove unused variables
-To:     zhujun2 <zhujun2@cmss.chinamobile.com>
-Cc:     shuah@kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        andrii@kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF000044EF:EE_|PH7PR12MB9068:EE_
+X-MS-Office365-Filtering-Correlation-Id: cce2dd7d-4fba-4693-1daa-08dbcb98377b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Pcl96cheZuqlefl/QDxZES5F0wCqL4ZRnfKDcwIY/Gu4XoRM5r/5SPjEWhT+OL3IkU6FOaHp/B/VwHlk8tXTINuDH5Nqy6MDYRiYcyAl5Fk+yn6NL/sZfGx5oTSzEoP6BjUxzsBIaqM7PVOImS2qX8eLRKVh6lrY5AcCyYcOVORl8Di6sb0Rqnr0x0s48aM+usJj9iLVQPldww7Nr8TPQKWuFXqgQZmnrkB89PoG5p/5U03n7poKvMhJE/EBEIUr3l4V/z7JFR+NOEP/6h+XUEa3KsXPQ0m8XdGxrf8CvP1xCZFkHikydj5J8syEkxWm6PJYiHy3+yLBvbJbCRliP5DWrqAbBds0+K/nyozGenpwCncq4smn6WAyYCFaH54kfGsd1SbOEy6RgVXH9y3+8fXXUAVaAALVKFuhzZ4aDxuXOBK/hjX8uYPiNTfLfkxA85z9j9jcWArbZdH2myxDMG+uO/BPuCqaaEQE93fSM5/MFmQYR+fwtg2p7D2KW8m50YQuRUJ9gpuMgzuXEU3VankGg1Urin4PgD43P4IzgtPVOHJ/wiQOsWQz7sWHnCZ7YXon5mxR1QI607YJEOctit3uDVffhfGMpVlyFq/fMLHF7bRtW7jFSeSNdlBrQJZqIlH3Yc/t30jp2uqJBogSaOusrNs14hxhkJnyGUJFLGhYsqXxqbF7cO2Va0l5+dxMg0M5yhlXD4x6AcPq5AF3K9jeGBcWuOm0OXzTbSYHvj2QL9WAMdWMyqRw9CiqZZbd2YZHbYo2ItRHHK+z8y/raw==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(39860400002)(376002)(346002)(396003)(136003)(230922051799003)(451199024)(82310400011)(64100799003)(1800799009)(186009)(36840700001)(40470700004)(46966006)(40480700001)(16526019)(40460700003)(26005)(336012)(426003)(81166007)(2616005)(82740400003)(356005)(1076003)(478600001)(5660300002)(86362001)(8936002)(8676002)(4326008)(110136005)(7416002)(2906002)(6636002)(70586007)(36756003)(70206006)(54906003)(41300700001)(316002)(6666004)(7696005)(47076005)(36860700001)(83380400001)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Oct 2023 02:58:02.7777
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: cce2dd7d-4fba-4693-1daa-08dbcb98377b
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF000044EF.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB9068
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Oct 12, 2023 at 6:35=E2=80=AFPM zhujun2 <zhujun2@cmss.chinamobile.c=
-om> wrote:
->
-> These variables are never referenced in the code, just remove them.
->
-> Signed-off-by: zhujun2 <zhujun2@cmss.chinamobile.com>
-> ---
+Hi all:
 
-  Why do you stubbornly keep submitting the same untested and broken
-patch, ignoring the feedback ([0])? Your changes don't even compile
-successfully ([1]).
+The core frequency is subjected to the process variation in semiconductors.
+Not all cores are able to reach the maximum frequency respecting the
+infrastructure limits. Consequently, AMD has redefined the concept of
+maximum frequency of a part. This means that a fraction of cores can reach
+maximum frequency. To find the best process scheduling policy for a given
+scenario, OS needs to know the core ordering informed by the platform through
+highest performance capability register of the CPPC interface.
 
-  [0] https://lore.kernel.org/bpf/2e4c17ac-9a61-4901-8f98-c783242eec28@ioge=
-arbox.net/
-  [1] https://github.com/kernel-patches/bpf/actions/runs/6502998724/job/176=
-62867681
+Earlier implementations of amd-pstate preferred core only support a static
+core ranking and targeted performance. Now it has the ability to dynamically
+change the preferred core based on the workload and platform conditions and
+accounting for thermals and aging.
 
->  tools/testing/selftests/bpf/prog_tests/atomic_bounds.c      | 1 -
->  tools/testing/selftests/bpf/prog_tests/kfree_skb.c          | 2 --
->  tools/testing/selftests/bpf/prog_tests/perf_branches.c      | 6 +-----
->  .../testing/selftests/bpf/prog_tests/probe_read_user_str.c  | 4 ++--
->  tools/testing/selftests/bpf/prog_tests/test_overhead.c      | 4 ++--
->  tools/testing/selftests/bpf/prog_tests/xdp_synproxy.c       | 1 -
->  6 files changed, 5 insertions(+), 13 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/atomic_bounds.c b/too=
-ls/testing/selftests/bpf/prog_tests/atomic_bounds.c
-> index 69bd7853e..4715cde38 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/atomic_bounds.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/atomic_bounds.c
-> @@ -7,7 +7,6 @@
->  void test_atomic_bounds(void)
->  {
->         struct atomic_bounds *skel;
-> -       __u32 duration =3D 0;
->
->         skel =3D atomic_bounds__open_and_load();
->         if (CHECK(!skel, "skel_load", "couldn't load program\n"))
-> diff --git a/tools/testing/selftests/bpf/prog_tests/kfree_skb.c b/tools/t=
-esting/selftests/bpf/prog_tests/kfree_skb.c
-> index c07991544..b0992a9ed 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/kfree_skb.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/kfree_skb.c
-> @@ -20,7 +20,6 @@ static void on_sample(void *ctx, int cpu, void *data, _=
-_u32 size)
->  {
->         struct meta *meta =3D (struct meta *)data;
->         struct ipv6_packet *pkt_v6 =3D data + sizeof(*meta);
-> -       int duration =3D 0;
->
->         if (CHECK(size !=3D 72 + sizeof(*meta), "check_size", "size %u !=
-=3D %zu\n",
->                   size, 72 + sizeof(*meta)))
-> @@ -65,7 +64,6 @@ void serial_test_kfree_skb(void)
->         struct perf_buffer *pb =3D NULL;
->         int err, prog_fd;
->         bool passed =3D false;
-> -       __u32 duration =3D 0;
->         const int zero =3D 0;
->         bool test_ok[2];
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/perf_branches.c b/too=
-ls/testing/selftests/bpf/prog_tests/perf_branches.c
-> index bc24f8333..0942b9891 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/perf_branches.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/perf_branches.c
-> @@ -13,7 +13,6 @@ static void check_good_sample(struct test_perf_branches=
- *skel)
->         int required_size =3D skel->bss->required_size_out;
->         int written_stack =3D skel->bss->written_stack_out;
->         int pbe_size =3D sizeof(struct perf_branch_entry);
-> -       int duration =3D 0;
->
->         if (CHECK(!skel->bss->valid, "output not valid",
->                  "no valid sample from prog"))
-> @@ -43,7 +42,6 @@ static void check_bad_sample(struct test_perf_branches =
-*skel)
->         int written_global =3D skel->bss->written_global_out;
->         int required_size =3D skel->bss->required_size_out;
->         int written_stack =3D skel->bss->written_stack_out;
-> -       int duration =3D 0;
->
->         if (CHECK(!skel->bss->valid, "output not valid",
->                  "no valid sample from prog"))
-> @@ -61,7 +59,7 @@ static void test_perf_branches_common(int perf_fd,
->                                       void (*cb)(struct test_perf_branche=
-s *))
->  {
->         struct test_perf_branches *skel;
-> -       int err, i, duration =3D 0;
-> +       int err, i;
->         bool detached =3D false;
->         struct bpf_link *link;
->         volatile int j =3D 0;
-> @@ -102,7 +100,6 @@ static void test_perf_branches_common(int perf_fd,
->  static void test_perf_branches_hw(void)
->  {
->         struct perf_event_attr attr =3D {0};
-> -       int duration =3D 0;
->         int pfd;
->
->         /* create perf event */
-> @@ -143,7 +140,6 @@ static void test_perf_branches_hw(void)
->  static void test_perf_branches_no_hw(void)
->  {
->         struct perf_event_attr attr =3D {0};
-> -       int duration =3D 0;
->         int pfd;
->
->         /* create perf event */
-> diff --git a/tools/testing/selftests/bpf/prog_tests/probe_read_user_str.c=
- b/tools/testing/selftests/bpf/prog_tests/probe_read_user_str.c
-> index e41929813..a7c6ad8d6 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/probe_read_user_str.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/probe_read_user_str.c
-> @@ -9,7 +9,7 @@ static const char str3[] =3D "mestringblubblubblubblubblu=
-b";
->  static int test_one_str(struct test_probe_read_user_str *skel, const cha=
-r *str,
->                         size_t len)
->  {
-> -       int err, duration =3D 0;
-> +       int err;
->         char buf[256];
->
->         /* Ensure bytes after string are ones */
-> @@ -44,7 +44,7 @@ static int test_one_str(struct test_probe_read_user_str=
- *skel, const char *str,
->  void test_probe_read_user_str(void)
->  {
->         struct test_probe_read_user_str *skel;
-> -       int err, duration =3D 0;
-> +       int err;
->
->         skel =3D test_probe_read_user_str__open_and_load();
->         if (CHECK(!skel, "test_probe_read_user_str__open_and_load",
-> diff --git a/tools/testing/selftests/bpf/prog_tests/test_overhead.c b/too=
-ls/testing/selftests/bpf/prog_tests/test_overhead.c
-> index f27013e38..6161009df 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/test_overhead.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/test_overhead.c
-> @@ -17,7 +17,7 @@ static __u64 time_get_ns(void)
->
->  static int test_task_rename(const char *prog)
->  {
-> -       int i, fd, duration =3D 0, err;
-> +       int i, fd, err;
->         char buf[] =3D "test_overhead";
->         __u64 start_time;
->
-> @@ -66,7 +66,7 @@ void test_test_overhead(void)
->         struct bpf_program *fentry_prog, *fexit_prog;
->         struct bpf_object *obj;
->         struct bpf_link *link;
-> -       int err, duration =3D 0;
-> +       int err;
->         char comm[16] =3D {};
->
->         if (CHECK_FAIL(prctl(PR_GET_NAME, comm, 0L, 0L, 0L)))
-> diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_synproxy.c b/tool=
-s/testing/selftests/bpf/prog_tests/xdp_synproxy.c
-> index 8b50a992d..5af434353 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/xdp_synproxy.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/xdp_synproxy.c
-> @@ -40,7 +40,6 @@ static bool expect_str(char *buf, size_t size, const ch=
-ar *str, const char *name
->  {
->         static char escbuf_expected[CMD_OUT_BUF_SIZE * 4];
->         static char escbuf_actual[CMD_OUT_BUF_SIZE * 4];
-> -       static int duration =3D 0;
->         bool ok;
->
->         ok =3D size =3D=3D strlen(str) && !memcmp(buf, str, size);
-> --
-> 2.17.1
->
->
->
->
+Amd-pstate driver utilizes the functions and data structures provided by
+the ITMT architecture to enable the scheduler to favor scheduling on cores
+which can be get a higher frequency with lower voltage.
+We call it amd-pstate preferred core.
+
+Here sched_set_itmt_core_prio() is called to set priorities and
+sched_set_itmt_support() is called to enable ITMT feature.
+Amd-pstate driver uses the highest performance value to indicate
+the priority of CPU. The higher value has a higher priority.
+
+Amd-pstate driver will provide an initial core ordering at boot time.
+It relies on the CPPC interface to communicate the core ranking to the
+operating system and scheduler to make sure that OS is choosing the cores
+with highest performance firstly for scheduling the process. When amd-pstate
+driver receives a message with the highest performance change, it will
+update the core ranking.
+
+Changes form V8->V9:
+- all:
+- - pick up Tested-By flag added by Oleksandr.
+- cpufreq: amd-pstate:
+- - pick up Review-By flag added by Wyes.
+- - ignore modification of bug.
+- - add a attribute of prefcore_ranking.
+- - modify data type conversion from u32 to int.
+- Documentation: amd-pstate:
+- - pick up Review-By flag added by Wyes.
+
+Changes form V7->V8:
+- all:
+- - pick up Review-By flag added by Mario and Ray.
+- cpufreq: amd-pstate:
+- - use hw_prefcore embeds into cpudata structure.
+- - delete preferred core init from cpu online/off.
+
+Changes form V6->V7:
+- x86:
+- - Modify kconfig about X86_AMD_PSTATE.
+- cpufreq: amd-pstate:
+- - modify incorrect comments about scheduler_work().
+- - convert highest_perf data type.
+- - modify preferred core init when cpu init and online.
+- acpi: cppc:
+- - modify link of CPPC highest performance.
+- cpufreq:
+- - modify link of CPPC highest performance changed.
+
+Changes form V5->V6:
+- cpufreq: amd-pstate:
+- - modify the wrong tag order.
+- - modify warning about hw_prefcore sysfs attribute.
+- - delete duplicate comments.
+- - modify the variable name cppc_highest_perf to prefcore_ranking.
+- - modify judgment conditions for setting highest_perf.
+- - modify sysfs attribute for CPPC highest perf to pr_debug message.
+- Documentation: amd-pstate:
+- - modify warning: title underline too short.
+
+Changes form V4->V5:
+- cpufreq: amd-pstate:
+- - modify sysfs attribute for CPPC highest perf.
+- - modify warning about comments
+- - rebase linux-next
+- cpufreq: 
+- - Moidfy warning about function declarations.
+- Documentation: amd-pstate:
+- - align with ``amd-pstat``
+
+Changes form V3->V4:
+- Documentation: amd-pstate:
+- - Modify inappropriate descriptions.
+
+Changes form V2->V3:
+- x86:
+- - Modify kconfig and description.
+- cpufreq: amd-pstate: 
+- - Add Co-developed-by tag in commit message.
+- cpufreq:
+- - Modify commit message.
+- Documentation: amd-pstate:
+- - Modify inappropriate descriptions.
+
+Changes form V1->V2:
+- acpi: cppc:
+- - Add reference link.
+- cpufreq:
+- - Moidfy link error.
+- cpufreq: amd-pstate: 
+- - Init the priorities of all online CPUs
+- - Use a single variable to represent the status of preferred core.
+- Documentation:
+- - Default enabled preferred core.
+- Documentation: amd-pstate: 
+- - Modify inappropriate descriptions.
+- - Default enabled preferred core.
+- - Use a single variable to represent the status of preferred core.
+
+Meng Li (7):
+  x86: Drop CPU_SUP_INTEL from SCHED_MC_PRIO for the expansion.
+  acpi: cppc: Add get the highest performance cppc control
+  cpufreq: amd-pstate: Enable amd-pstate preferred core supporting.
+  cpufreq: Add a notification message that the highest perf has changed
+  cpufreq: amd-pstate: Update amd-pstate preferred core ranking
+    dynamically
+  Documentation: amd-pstate: introduce amd-pstate preferred core
+  Documentation: introduce amd-pstate preferrd core mode kernel command
+    line options
+
+ .../admin-guide/kernel-parameters.txt         |   5 +
+ Documentation/admin-guide/pm/amd-pstate.rst   |  59 ++++-
+ arch/x86/Kconfig                              |   5 +-
+ drivers/acpi/cppc_acpi.c                      |  13 ++
+ drivers/acpi/processor_driver.c               |   6 +
+ drivers/cpufreq/amd-pstate.c                  | 204 ++++++++++++++++--
+ drivers/cpufreq/cpufreq.c                     |  13 ++
+ include/acpi/cppc_acpi.h                      |   5 +
+ include/linux/amd-pstate.h                    |  10 +
+ include/linux/cpufreq.h                       |   5 +
+ 10 files changed, 305 insertions(+), 20 deletions(-)
+
+-- 
+2.34.1
+
