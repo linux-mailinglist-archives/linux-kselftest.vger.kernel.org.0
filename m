@@ -2,149 +2,274 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDBC77C8874
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Oct 2023 17:19:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C97FB7C8903
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Oct 2023 17:45:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232315AbjJMPTb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 13 Oct 2023 11:19:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59104 "EHLO
+        id S232372AbjJMPpi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 13 Oct 2023 11:45:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232270AbjJMPTa (ORCPT
+        with ESMTP id S232434AbjJMPph (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 13 Oct 2023 11:19:30 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2085.outbound.protection.outlook.com [40.107.93.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C150195;
-        Fri, 13 Oct 2023 08:19:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=jtBtWrYWOz0QUjKzMqMUJ6IeGt3t++dgAdJdgYmBHOSggEXx/u2UGkg2o/0f2J/nfJbtjh3G09bCS1jPLvB7PanRGAfdvsmIQtf0Njm9PoNUVUZFt+WAMfNs/sBa8AOTV1whr6hQrKSg32L1MgXD1iKYNzj//5Gy9I21oSSc85l2tZts2/JpJWiCsg3UwFYdXyCuU8rwo426FmmIu08bnHnRor+TaUFJ7pftT5zODzlqueB9e33p2Enot8pF0ZQlCk8u1s0bOivHpLB/yNxLGvRUeUJZt74/L6gMviOCPQUpTLxZaBiE5vx4zKCIQxGX44+zsQPwSWK+tsy4bvFE+A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zgcIl48qCBFV4P/QIC5nngJPL3QF+MQ7aqeL0zTG+xQ=;
- b=OllgO0HBUWGGIy63QqrYFaMxgJNiDcAaYnXtTOzh1n30XCbvMz1oqjPxYFRXEiXw2N4SgVq7CDw9SKDp++zGqj+6RCebkgSQ9BhXoJPmVebeNlhPln2YqMzlpSk9EddPRjgExv4FZjfBgm6AJLeXeC1XqhRjFxgEGPhIYOLlJRtfxsCd99Ccv6cguL+qKZWfDCzjyA4tyGZ9ZNz2Ul/zjUb+a9fohfPxYiEGL9wyY6nDl3MvT6HsGRBaVlLoCtq98UTc1XWaH295XP7GO/HqZ3lkHHvgoBrSl7AG+m7R2tEBOFg0J1jW/b9h+gRra/3S8CZKu7PsYjC4T2nBWyPBdA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=zgcIl48qCBFV4P/QIC5nngJPL3QF+MQ7aqeL0zTG+xQ=;
- b=QKR/VbH9601HnsLGy/BIAQVtEWb+dzcIoVnIgOW75tavpF7JN0YS+q6V1xpQkHdS42n79rljWMqPSLtNoUolq1QNNBIt4ukdwrMFa6ZwuktcCPXKTzP59Agbf427/4O/QgPKKG4C3NH9N6SI67GEl9+Io/DpoTlwbckWioE/p8W+OX/h2/rCZfVY4sHIE0xHmW7MQHPiWToJgCvnak/OwfLdA7BpdLpAVR2a4qe2EbJhAQIFXy48FFHvZtGj+UuTm027wS7kViToQMwQeUAxIv6VigGduFTKXjeKnjgZ3pw/atP8VZ8hyBIoPxwR95uKdq/nBepEwt85CL2XKxrwFw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by DM4PR12MB5963.namprd12.prod.outlook.com (2603:10b6:8:6a::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6863.45; Fri, 13 Oct 2023 15:19:25 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::3f66:c2b6:59eb:78c2]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::3f66:c2b6:59eb:78c2%6]) with mapi id 15.20.6863.046; Fri, 13 Oct 2023
- 15:19:25 +0000
-Date:   Fri, 13 Oct 2023 12:19:23 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Yi Liu <yi.l.liu@intel.com>
-Cc:     joro@8bytes.org, alex.williamson@redhat.com, kevin.tian@intel.com,
-        robin.murphy@arm.com, baolu.lu@linux.intel.com, cohuck@redhat.com,
-        eric.auger@redhat.com, nicolinc@nvidia.com, kvm@vger.kernel.org,
-        mjrosato@linux.ibm.com, chao.p.peng@linux.intel.com,
-        yi.y.sun@linux.intel.com, peterx@redhat.com, jasowang@redhat.com,
-        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
-        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        zhenzhong.duan@intel.com, joao.m.martins@oracle.com
-Subject: Re: [PATCH v4 10/17] iommufd: Support IOMMU_HWPT_ALLOC allocation
- with user data
-Message-ID: <20231013151923.GV3952@nvidia.com>
-References: <20230921075138.124099-1-yi.l.liu@intel.com>
- <20230921075138.124099-11-yi.l.liu@intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230921075138.124099-11-yi.l.liu@intel.com>
-X-ClientProxiedBy: BL0PR05CA0013.namprd05.prod.outlook.com
- (2603:10b6:208:91::23) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Fri, 13 Oct 2023 11:45:37 -0400
+Received: from vulcan.natalenko.name (vulcan.natalenko.name [IPv6:2001:19f0:6c00:8846:5400:ff:fe0c:dfa0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34ABCF;
+        Fri, 13 Oct 2023 08:45:33 -0700 (PDT)
+Received: from spock.localnet (unknown [94.142.239.106])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by vulcan.natalenko.name (Postfix) with ESMTPSA id C2C75153EFD9;
+        Fri, 13 Oct 2023 17:45:25 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=natalenko.name;
+        s=dkim-20170712; t=1697211926;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=GF/P3UK58QtWzAMZuYI1b/cNsajjo8+2kJ1HkJvuQz4=;
+        b=JD3mEtxLUQ2J2+Vax0UJsf2QngVA5PWdjV1VljOvAyCGii8cy2yagHAHAi7XWDiTGqWY2k
+        mkMK1Yi5RV8+SVfY7T6h0rcenpAfUiVhBXsWd1q2Ccg7A4GNQXEUz73SfA/02LkLwm70Zg
+        qlmCzCurmIH+zK8G92v+FW1Cs5Iu2L8=
+From:   Oleksandr Natalenko <oleksandr@natalenko.name>
+To:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Huang Rui <ray.huang@amd.com>, Meng Li <li.meng@amd.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        x86@kernel.org, linux-acpi@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        linux-kselftest@vger.kernel.org,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Shimmer Huang <shimmer.huang@amd.com>,
+        Perry Yuan <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>, Meng Li <li.meng@amd.com>
+Subject: Re: [RESEND PATCH V9 0/7] amd-pstate preferred core
+Date:   Fri, 13 Oct 2023 17:45:15 +0200
+Message-ID: <12303526.O9o76ZdvQC@natalenko.name>
+In-Reply-To: <20231013033118.3759311-1-li.meng@amd.com>
+References: <20231013033118.3759311-1-li.meng@amd.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DM4PR12MB5963:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1b420ae5-05da-4ffc-cdd3-08dbcbffc8d9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +uZD0cd7pKDj8XfXnhJaLmlXRk85ddtJIxmc0pau55MFVBlAf42Wyfzby+M9whUwu2KgjcBhqlabiFkLQwcFpgeTXUEe2KTYH4qvlDn9gXLOmceERI9CVxZaoGXUCXdhQW2qSVivl/rvJptyFxEWpX6CXD9OQnB8wTfHRWQEq/4YMdC5I6Lq919MlvW82Kya1SJYsRFuTFLV5G2qNxZZsVwC0tke3bGGR9iVH7Yvk4gVcLRAB9WSNjW7bGDIp4OrnUB82PKKjVWNWHLlI167ttoO754GbdQsLAXG2SVS4Cpw35kddC3GUe434H35TBOJphUHBRjEcJZIMe1MydHxi1tLyX+E34d2zFVWfB2D1f8MHh7IxnqA9AvnceE86Z1s0DG37TnwGfa7dGQgR/WHL4onMv1Uk7pajDPHeoLywiDYXSn7+8OJ2Fy92S7cTXTW8qrNrE2F/nSvjujWrDCxKLG4Joe3iFgvnLYPKHVr0rUwvqLsRAVW3I3EcJ6vxJSzI4uYIQCVOrv2hMoCDVoAgC1iLAvPlHIDBVnhzZNGVSVjtzoY5MUs6+xDzD3Nf5OG
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(366004)(136003)(346002)(376002)(396003)(230922051799003)(64100799003)(1800799009)(186009)(451199024)(6486002)(2616005)(6512007)(1076003)(478600001)(41300700001)(83380400001)(7416002)(6916009)(66476007)(5660300002)(66556008)(66946007)(26005)(8676002)(8936002)(316002)(2906002)(4326008)(38100700002)(86362001)(36756003)(6506007)(33656002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?r1qUX7mgEy2cLFmQVMoTKwnThiHryRvGRJfVcufocTVSzubuj5z+t5ffRWed?=
- =?us-ascii?Q?itu5AmbGVOuN0nmc0+E79lFHhgXCNWpqP3ZCu+XtEEMCz+fQmG1SHKzsHFXP?=
- =?us-ascii?Q?SBvyyTh+1XnCD5vPzFilP3D7eBgYD9WNUJqw53s6iDDiup45Qpqsu2dLC8OC?=
- =?us-ascii?Q?ElqtvBy1qKEBtknzOet1f8OSsH8uWTBz/R+Pbf193woJujBX64COGvl2I0Wd?=
- =?us-ascii?Q?SG7ACeOmP2R0pLXpryt6xIRJLwnSg3Oe7U5e7h9CBnJ+pOqX/HnKz0ByMgbK?=
- =?us-ascii?Q?4SZzzLfBZp2WK6XfjMJHHEefKO7VUd0siQkwVpUPBgj8sFJXKLX22O5V/WA1?=
- =?us-ascii?Q?Iqhjg4D4tv82j8f17WitQAxtHdoq64y4NIMb3Vo+KUtqf8SndOBBDciuwFOi?=
- =?us-ascii?Q?uK1cnpXXa2pxoEiJzNP3+jHb++kkfADRoNAIoLgG0nqiTlMGCpYKjR/hxh5B?=
- =?us-ascii?Q?wAkeHQypEYojTzDxNJ+g4MwgNlMZfjkmGh+dcGr1Y4W9axJW5SDRuVYabgFO?=
- =?us-ascii?Q?zrz6nGRcDa531zOOr/A3XOwOlNdGyiKRt4AQG3ZCbZDgLRUT9u3G1N77K++8?=
- =?us-ascii?Q?bTZO7tZtHGahJ11/dWSZ4LjnasMp7Xj9cxPMYAcTJrUPVTACMj3qvOk0MEy3?=
- =?us-ascii?Q?ZZjBkVnplNKSS2UCaUcq53L6qkwgkT//0rAja8ms4uXPPmtGebGIKvTugEYl?=
- =?us-ascii?Q?vE8t17sS7CAduZskkE7C3Ez/5oklifSxKXTEZ4k37TpZTX35V0qZTUme6xLu?=
- =?us-ascii?Q?mlBX67AJufsF/jsHXFmgccKhLQ7gpgqTRCawGGka9d+vJHA8GrH3Yd3QMgda?=
- =?us-ascii?Q?3edMHhzjZDw62jl8mJ7QR+xmocfGSflTVocjZwZgggTRArWGfL5ciaHLb3aU?=
- =?us-ascii?Q?AXw+UOkEiACra2yr7khjqMxEwJhyjt4bKSYAx5ppA8DCRA9couNYJUyxcjqh?=
- =?us-ascii?Q?8exD0j0ZIZPXMb9KBcag0NP4WIOw+uQAp1XyrTM1vwrHxMuft2QZmxdG2s5P?=
- =?us-ascii?Q?KgEKJU/og92Txbd93ZMQ7gH4zueSt+SxTTbnq7N3wo3Od242aSpxhzFSaSNO?=
- =?us-ascii?Q?sc6YetsxOmT+rTo8vt9hZPki5RvIuWFDDEUXFd3VqLdhmxxSmQtsBEinR2m0?=
- =?us-ascii?Q?JGxcPnKX3Q8+u0r476dlIa7yUH8Z3W54Y4YiRUPgnhkDzm/TXqPu8BjTkJTJ?=
- =?us-ascii?Q?/hdx4Es1eK34m0jfitEtS6hlNqwtxbQzBYaZde9Lm6QRIcA1P/sVM9j3sCIA?=
- =?us-ascii?Q?6C6V6d89iqm/9n9RdGtQWRqW71NvwDFDSbm1arRMtjiygmS7Ou8oqtxGLmrA?=
- =?us-ascii?Q?WgwJOR1+2Qf7sYzsvvbGmoC1sA+aMKj9QABIE+fOGIlqT+752Asu2+BxP+R6?=
- =?us-ascii?Q?8GO/bicxrq/yr/2GWhJQ9vi2c2pvganjmJ1vOf/NNmozThrHKYjwMSdcRlA/?=
- =?us-ascii?Q?SKV3LJFTQmvvEUdRxSq+8iI+YOCxWm26wCLMnCujTowUiJ7G7ztNdwZwP+PS?=
- =?us-ascii?Q?wwjSrHWlTdX8fkM+I20hcV1ZP/6jhnnDep1NLo79XC4FHHbMuHjmIRzkOihB?=
- =?us-ascii?Q?2YYjSZWacyMOvc1mxsgOSyekDZLj4ogYFG7TO3hB?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1b420ae5-05da-4ffc-cdd3-08dbcbffc8d9
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Oct 2023 15:19:25.1334
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bAIkwM7oJgohn8JJtkBigh0P/TIOpaaokapjSIyLOLaJkENPJhRr3oF0xcfHRUFq
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5963
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="nextPart5719407.DvuYhMxLoT";
+ micalg="pgp-sha256"; protocol="application/pgp-signature"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Sep 21, 2023 at 12:51:31AM -0700, Yi Liu wrote:
-> IOMMU_HWPT_ALLOC already supports iommu_domain allocation for usersapce.
-> But it can only allocate a hw_pagetable that associates to a given IOAS,
-> i.e. only a kernel-managed hw_pagetable of IOMMU_HWPT_TYPE_DEFAULT type.
-> 
-> IOMMU drivers can now support user-managed hw_pagetables, for two-stage
-> translation use cases, that require user data input from the user space.
-> 
-> Extend the IOMMU_HWPT_ALLOC ioctl to accept non-default hwpt_type with a
-> type specified user data. Also, update the @pt_id to accept hwpt_id too
-> besides an ioas_id. Then, pass them to the downstream alloc_fn().
-> 
-> Co-developed-by: Nicolin Chen <nicolinc@nvidia.com>
-> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-> Signed-off-by: Yi Liu <yi.l.liu@intel.com>
-> ---
->  drivers/iommu/iommufd/hw_pagetable.c | 19 ++++++++++++++++++-
->  include/uapi/linux/iommufd.h         | 23 +++++++++++++++++++++--
->  2 files changed, 39 insertions(+), 3 deletions(-)
+--nextPart5719407.DvuYhMxLoT
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"; protected-headers="v1"
+From: Oleksandr Natalenko <oleksandr@natalenko.name>
+Subject: Re: [RESEND PATCH V9 0/7] amd-pstate preferred core
+Date: Fri, 13 Oct 2023 17:45:15 +0200
+Message-ID: <12303526.O9o76ZdvQC@natalenko.name>
+In-Reply-To: <20231013033118.3759311-1-li.meng@amd.com>
+References: <20231013033118.3759311-1-li.meng@amd.com>
+MIME-Version: 1.0
 
-Can we also come with a small vt-d patch that does implement an op for
-this? Or is it too big?
+Hello.
 
-It would be nice if we could wrap IOMMU_HWPT_ALLOC into one
-self-contained series and another series for invalidate.
+On p=C3=A1tek 13. =C5=99=C3=ADjna 2023 5:31:11 CEST Meng Li wrote:
+> Hi all:
+>=20
+> The core frequency is subjected to the process variation in semiconductor=
+s.
+> Not all cores are able to reach the maximum frequency respecting the
+> infrastructure limits. Consequently, AMD has redefined the concept of
+> maximum frequency of a part. This means that a fraction of cores can reach
+> maximum frequency. To find the best process scheduling policy for a given
+> scenario, OS needs to know the core ordering informed by the platform thr=
+ough
+> highest performance capability register of the CPPC interface.
+>=20
+> Earlier implementations of amd-pstate preferred core only support a static
+> core ranking and targeted performance. Now it has the ability to dynamica=
+lly
+> change the preferred core based on the workload and platform conditions a=
+nd
+> accounting for thermals and aging.
+>=20
+> Amd-pstate driver utilizes the functions and data structures provided by
+> the ITMT architecture to enable the scheduler to favor scheduling on cores
+> which can be get a higher frequency with lower voltage.
+> We call it amd-pstate preferred core.
+>=20
+> Here sched_set_itmt_core_prio() is called to set priorities and
+> sched_set_itmt_support() is called to enable ITMT feature.
+> Amd-pstate driver uses the highest performance value to indicate
+> the priority of CPU. The higher value has a higher priority.
+>=20
+> Amd-pstate driver will provide an initial core ordering at boot time.
+> It relies on the CPPC interface to communicate the core ranking to the
+> operating system and scheduler to make sure that OS is choosing the cores
+> with highest performance firstly for scheduling the process. When amd-pst=
+ate
+> driver receives a message with the highest performance change, it will
+> update the core ranking.
+>=20
+> Changes form V8->V9:
+> - all:
+> - - pick up Tested-By flag added by Oleksandr.
+> - cpufreq: amd-pstate:
+> - - pick up Review-By flag added by Wyes.
+> - - ignore modification of bug.
 
-Jason
+Thanks for this submission.
+
+The bug you refer to, I assume it should have been fixed by this hunk:
+
+```
+=2D-- a/drivers/cpufreq/amd-pstate.c
++++ b/drivers/cpufreq/amd-pstate.c
+@@ -542,7 +542,7 @@ static void amd_pstate_adjust_perf(unsigned int cpu,
+ 	if (target_perf < capacity)
+ 		des_perf =3D DIV_ROUND_UP(cap_perf * target_perf, capacity);
+=20
+=2D	min_perf =3D READ_ONCE(cpudata->highest_perf);
++	min_perf =3D READ_ONCE(cpudata->lowest_perf);
+ 	if (_min_perf < capacity)
+ 		min_perf =3D DIV_ROUND_UP(cap_perf * _min_perf, capacity);
+```
+
+which is now missing from this patchset as it was suggested to send it as a=
+ separate patch.
+
+Am I correct? If so, are you going to send it as a separate patch within th=
+e next round of this patchset, or it will be sent separately (if it hasn't =
+yet)?
+
+> - - add a attribute of prefcore_ranking.
+> - - modify data type conversion from u32 to int.
+> - Documentation: amd-pstate:
+> - - pick up Review-By flag added by Wyes.
+>=20
+> Changes form V7->V8:
+> - all:
+> - - pick up Review-By flag added by Mario and Ray.
+> - cpufreq: amd-pstate:
+> - - use hw_prefcore embeds into cpudata structure.
+> - - delete preferred core init from cpu online/off.
+>=20
+> Changes form V6->V7:
+> - x86:
+> - - Modify kconfig about X86_AMD_PSTATE.
+> - cpufreq: amd-pstate:
+> - - modify incorrect comments about scheduler_work().
+> - - convert highest_perf data type.
+> - - modify preferred core init when cpu init and online.
+> - acpi: cppc:
+> - - modify link of CPPC highest performance.
+> - cpufreq:
+> - - modify link of CPPC highest performance changed.
+>=20
+> Changes form V5->V6:
+> - cpufreq: amd-pstate:
+> - - modify the wrong tag order.
+> - - modify warning about hw_prefcore sysfs attribute.
+> - - delete duplicate comments.
+> - - modify the variable name cppc_highest_perf to prefcore_ranking.
+> - - modify judgment conditions for setting highest_perf.
+> - - modify sysfs attribute for CPPC highest perf to pr_debug message.
+> - Documentation: amd-pstate:
+> - - modify warning: title underline too short.
+>=20
+> Changes form V4->V5:
+> - cpufreq: amd-pstate:
+> - - modify sysfs attribute for CPPC highest perf.
+> - - modify warning about comments
+> - - rebase linux-next
+> - cpufreq:=20
+> - - Moidfy warning about function declarations.
+> - Documentation: amd-pstate:
+> - - align with ``amd-pstat``
+>=20
+> Changes form V3->V4:
+> - Documentation: amd-pstate:
+> - - Modify inappropriate descriptions.
+>=20
+> Changes form V2->V3:
+> - x86:
+> - - Modify kconfig and description.
+> - cpufreq: amd-pstate:=20
+> - - Add Co-developed-by tag in commit message.
+> - cpufreq:
+> - - Modify commit message.
+> - Documentation: amd-pstate:
+> - - Modify inappropriate descriptions.
+>=20
+> Changes form V1->V2:
+> - acpi: cppc:
+> - - Add reference link.
+> - cpufreq:
+> - - Moidfy link error.
+> - cpufreq: amd-pstate:=20
+> - - Init the priorities of all online CPUs
+> - - Use a single variable to represent the status of preferred core.
+> - Documentation:
+> - - Default enabled preferred core.
+> - Documentation: amd-pstate:=20
+> - - Modify inappropriate descriptions.
+> - - Default enabled preferred core.
+> - - Use a single variable to represent the status of preferred core.
+>=20
+> Meng Li (7):
+>   x86: Drop CPU_SUP_INTEL from SCHED_MC_PRIO for the expansion.
+>   acpi: cppc: Add get the highest performance cppc control
+>   cpufreq: amd-pstate: Enable amd-pstate preferred core supporting.
+>   cpufreq: Add a notification message that the highest perf has changed
+>   cpufreq: amd-pstate: Update amd-pstate preferred core ranking
+>     dynamically
+>   Documentation: amd-pstate: introduce amd-pstate preferred core
+>   Documentation: introduce amd-pstate preferrd core mode kernel command
+>     line options
+>=20
+>  .../admin-guide/kernel-parameters.txt         |   5 +
+>  Documentation/admin-guide/pm/amd-pstate.rst   |  59 ++++-
+>  arch/x86/Kconfig                              |   5 +-
+>  drivers/acpi/cppc_acpi.c                      |  13 ++
+>  drivers/acpi/processor_driver.c               |   6 +
+>  drivers/cpufreq/amd-pstate.c                  | 204 ++++++++++++++++--
+>  drivers/cpufreq/cpufreq.c                     |  13 ++
+>  include/acpi/cppc_acpi.h                      |   5 +
+>  include/linux/amd-pstate.h                    |  10 +
+>  include/linux/cpufreq.h                       |   5 +
+>  10 files changed, 305 insertions(+), 20 deletions(-)
+>=20
+>=20
+
+
+=2D-=20
+Oleksandr Natalenko (post-factum)
+--nextPart5719407.DvuYhMxLoT
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part.
+Content-Transfer-Encoding: 7Bit
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEZUOOw5ESFLHZZtOKil/iNcg8M0sFAmUpZgsACgkQil/iNcg8
+M0saeQ/+ITtu+L9VzE+fm2PU5Ym/icfRCnp0TME5PQY+YNAnWNKMJeeyP+IVIsGK
+mC/Yru7gP4UxbWz8Ex/eKV+J3B7Afe5V7Z5vrVjRyJVAwU5RbuKLYvxZPQSDuy16
+8gK75tCK639bYViG9q0zWgZulc0qtjt7zsS5lRM0m+XRbEbvNR4Sr0gh2c1lHOa+
+nA5DwkUDbEtmCgebyEbBHidtklha9yTuhEVL38BpiNra+KjzC81A+Acc+VyPCTP0
+hgYf/NHtI6jzZo+f/Jvg1Y4bEvjsn8VDruUQ7GHuvAGshunkqLUsHJwAUfUJZbPX
+tjuFyp/ah2861e+Q1/kyjMr2tsfglBu2ISxsM51P5KN2s/bqdws2+mv+CMLj8iph
+6Jrp3aDgPainEwyMXONsyZRcNvMQtFGLZOLosOJOZ7N98B8cN+EnyAoLC02S1VAO
+U31S9O0Xef5bancSf/0VsKQ0opD1Rw9Vn5orSWJIRXm5u+bN+8SFIroz77dHuokZ
++t+bD/3KnmUHzKG8PDaS96yE65Jd9ZS1f460lKQ0Au82rSpdMWCW3AbdJw57TpAa
+9lqMSnbRos75cPc3T455e1XTnwiiIqsygu53x9chZF+mU+w8+SZoMCmeKXhQ5qtk
+M1x9isx4WxZ4M2MJKCVkbIz3gBTflv1YW9laJJ2WrDOU79KuCn8=
+=GFQL
+-----END PGP SIGNATURE-----
+
+--nextPart5719407.DvuYhMxLoT--
+
+
+
