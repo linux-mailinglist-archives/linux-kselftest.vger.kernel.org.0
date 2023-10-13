@@ -2,180 +2,195 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B94A7C7AE1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Oct 2023 02:35:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B6A07C7B34
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Oct 2023 03:35:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345391AbjJMAfQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 12 Oct 2023 20:35:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33294 "EHLO
+        id S229437AbjJMBfv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 12 Oct 2023 21:35:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1344236AbjJMAfP (ORCPT
+        with ESMTP id S229436AbjJMBfu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 12 Oct 2023 20:35:15 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2082.outbound.protection.outlook.com [40.107.93.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36DA3C9;
-        Thu, 12 Oct 2023 17:35:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CV8xqwOfBTwssmHYrspq6B1iPyq+HTt2mg0VLAGUtY+rf+MxdQpnOUjIHkKTR9t/7iC8qlwTJJaD51IWBSVJU5c1ghEGvxh9e5Oer5LCdwCV+wL7qv750WCzhYTL1NHj5qifcsrzb8HQ+GwMCZsIk/lv0aFf82Uy1j624TE+OivU+j4KA3/mA6b6SQMh0KspQsxu/XUbDjjsyK/Cj9+3gggbRO+MTHanoqYejNuMzaHsLhWjrNDyE/GG9VGsy3fhdwKle3oGGvVlKV5QX6rqJe5xxwsZt/smo9gwlCQbehUxTYLWDlb7jEjWLLD5AXc2aTE2TfipiC2hAOxCHQCHqA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hNEXYbjLytbPYGfQyrLnhrdf2Lqf8MoWSFGSCBGkAtQ=;
- b=Tb8uRxC6xnASuTzRhjCNhHvYcteY0UFjbuWVXn1Rk9W6PWO77xatf6TAeoRD3oYr2aQykFgGddShTay/w91C8eRmKeH3DQeFwUUk+D6Z1aqGAlPla7xlY1nr4YTdwccO7tc2IWsQPpZkeF5uOHjyYkMEO7h/OPXX6bs8+prCD0+scQ9TjbpTOUCDZdeGKRJwwAW/YTwUoQcmifc7Be677DKSlCtKUmOvuZy0ai9YIYDOiNuAB2G8iDxpglaV5wJtjkWMsgX39ZnPNBNYVFv59Iyp8bBrL1SDSlx6uaaduiHlM27lBAZt9M4iyqrGuLOb7/X+3x7p1SoP4dbd7ivBKA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.232) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hNEXYbjLytbPYGfQyrLnhrdf2Lqf8MoWSFGSCBGkAtQ=;
- b=ACnJGjQojWv3Gds4C2Q0Mdw2q+vj74mUTiqig+KcdHmz8uHoFDgrNnLHx0wk2C7TEaxcBRP0ECxbDmF/j9B64vFIIbu6JBnrIRQVgH9AheJabnte3py6Z5iNvs/U1EgYbcEc/L0t8MSMukmI6Z237BWMM55TQzctC/wrO7GOz+5DiGOGWQzIbrEqdru8dgRtTjANyk6bTf2097BzcEJHsyKdDiliB8q5t20G4HVt1BSLD0Uhrkll7RPEHrTW/SpbWPMjKfPn5SMFue03NZitGLGZDyJfaaslNSknU/1Wt+J3FxRyrnIRLmnR257yd1Y4M9/eHT9ilXgCVBBzR+yhww==
-Received: from MW4PR03CA0232.namprd03.prod.outlook.com (2603:10b6:303:b9::27)
- by DM6PR12MB4091.namprd12.prod.outlook.com (2603:10b6:5:222::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.38; Fri, 13 Oct
- 2023 00:35:12 +0000
-Received: from MWH0EPF000971E8.namprd02.prod.outlook.com
- (2603:10b6:303:b9:cafe::f0) by MW4PR03CA0232.outlook.office365.com
- (2603:10b6:303:b9::27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6886.27 via Frontend
- Transport; Fri, 13 Oct 2023 00:35:12 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.232) by
- MWH0EPF000971E8.mail.protection.outlook.com (10.167.243.68) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6838.22 via Frontend Transport; Fri, 13 Oct 2023 00:35:12 +0000
-Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
- (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Thu, 12 Oct
- 2023 17:35:01 -0700
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Thu, 12 Oct 2023 17:35:01 -0700
-Received: from Asurada-Nvidia (10.127.8.11) by mail.nvidia.com
- (10.126.190.180) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41 via Frontend
- Transport; Thu, 12 Oct 2023 17:35:00 -0700
-Date:   Thu, 12 Oct 2023 17:34:58 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-CC:     Yi Liu <yi.l.liu@intel.com>, <joro@8bytes.org>,
-        <alex.williamson@redhat.com>, <kevin.tian@intel.com>,
-        <robin.murphy@arm.com>, <baolu.lu@linux.intel.com>,
-        <cohuck@redhat.com>, <eric.auger@redhat.com>,
-        <kvm@vger.kernel.org>, <mjrosato@linux.ibm.com>,
-        <chao.p.peng@linux.intel.com>, <yi.y.sun@linux.intel.com>,
-        <peterx@redhat.com>, <jasowang@redhat.com>,
-        <shameerali.kolothum.thodi@huawei.com>, <lulu@redhat.com>,
-        <suravee.suthikulpanit@amd.com>, <iommu@lists.linux.dev>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <zhenzhong.duan@intel.com>, <joao.m.martins@oracle.com>
-Subject: Re: [PATCH v4 01/17] iommu: Add hwpt_type with user_data for
- domain_alloc_user op
-Message-ID: <ZSiPH4WlGrbKpdfp@Asurada-Nvidia>
-References: <20230921075138.124099-1-yi.l.liu@intel.com>
- <20230921075138.124099-2-yi.l.liu@intel.com>
- <20231010165844.GQ3952@nvidia.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20231010165844.GQ3952@nvidia.com>
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWH0EPF000971E8:EE_|DM6PR12MB4091:EE_
-X-MS-Office365-Filtering-Correlation-Id: 065b1a56-fadf-4029-3284-08dbcb8442f6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: wXgt8JghJe32Q9eoKh6pKhRX3xMXmh3gT0rP3j3rIWl8iIN0kSqWvUeIegxqkZV59pGT6qr3XOoABzoiYtZT4cyE1/qrI593bf9FH0Tz6QeBW5A45z9VJjvm1H4b3Vcdojka2uV1vQAwE6OQS9Gt0GnkXANU7sbN7aDvnPDuWqJpb1t8sXNXsA3XcubXfFezT/iKfteGMCNb+AkGn1ehjb7BPdg8XPV3HA0wJeSrduVFuCSbe2xwj/WvUxvNSEumKi0sf5xFSKVo2g25jLRKZMBDuoSkzxYEYGZl89akDgZgzf+EmXFO2ur308O8YpY9KRwhl2wmU6Bc8qhQ6oghDR8zdajA1lxpySQvLe2pL1Ap0hg0dgeLv/7sSQ+MXAtNllFpSIc94nxt2L2hELKUz05Fhi5G+Dq2Y0cTZQV1EjDxUdwvuOoi03hTBxJ/7wkoy2zmKw4p9sTZTchH52yqx1Lo64gwlupGErO8HCaZsSCAkP6InbwHmPEm0SvaVPWVNeTz5t0NGLI0foUDVth9JS73su5d8WUz7yoh3iNWjypIfxoYdRm88evUUEmTH8X6Vywfj6rSAK7EJ2Oih5VlSca2ei8igrVw944yayvDmqUyJD0Ji8ullf7AgliAAPzdeWUsPHinB0t4kC2JSufA01nIWhml4RrEqeBEYD39B5AXykd6AOCKd5L46A5kJ/d2IQ4wmGUxTg4o5fFUZ6gZWYbaPQJEny/xN5rKQAYiBY8+AmyttLGYoelSqfmCDA5H
-X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230031)(4636009)(376002)(136003)(396003)(39860400002)(346002)(230922051799003)(451199024)(1800799009)(64100799003)(82310400011)(186009)(36840700001)(46966006)(40470700004)(9686003)(336012)(7636003)(26005)(426003)(356005)(40460700003)(86362001)(55016003)(82740400003)(4326008)(8676002)(7416002)(478600001)(6862004)(36860700001)(2906002)(83380400001)(5660300002)(47076005)(8936002)(41300700001)(316002)(40480700001)(6636002)(70586007)(70206006)(33716001)(54906003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Oct 2023 00:35:12.1828
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 065b1a56-fadf-4029-3284-08dbcb8442f6
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: MWH0EPF000971E8.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4091
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+        Thu, 12 Oct 2023 21:35:50 -0400
+Received: from cmccmta1.chinamobile.com (cmccmta2.chinamobile.com [111.22.67.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1C9FDC0;
+        Thu, 12 Oct 2023 18:35:44 -0700 (PDT)
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG: 00000000
+Received: from spf.mail.chinamobile.com (unknown[10.188.0.87])
+        by rmmx-syy-dmz-app03-12003 (RichMail) with SMTP id 2ee365289eec415-eec04;
+        Fri, 13 Oct 2023 09:35:40 +0800 (CST)
+X-RM-TRANSID: 2ee365289eec415-eec04
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG: 00000000
+Received: from ubuntu.localdomain (unknown[10.54.5.252])
+        by rmsmtp-syy-appsvr09-12009 (RichMail) with SMTP id 2ee965289eeb0e4-051a9;
+        Fri, 13 Oct 2023 09:35:40 +0800 (CST)
+X-RM-TRANSID: 2ee965289eeb0e4-051a9
+From:   zhujun2 <zhujun2@cmss.chinamobile.com>
+To:     shuah@kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, andrii@kernel.org,
+        linux-kernel@vger.kernel.org, zhujun2@cmss.chinamobile.com
+Subject: [PATCH] selftests: bpf: remove unused variables
+Date:   Thu, 12 Oct 2023 18:35:36 -0700
+Message-Id: <20231013013536.2047-1-zhujun2@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Oct 10, 2023 at 01:58:44PM -0300, Jason Gunthorpe wrote:
-> On Thu, Sep 21, 2023 at 12:51:22AM -0700, Yi Liu wrote:
-> > diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-> > index 660dc1931dc9..12e12e5563e6 100644
-> > --- a/include/linux/iommu.h
-> > +++ b/include/linux/iommu.h
-> > @@ -14,6 +14,7 @@
-> >  #include <linux/err.h>
-> >  #include <linux/of.h>
-> >  #include <uapi/linux/iommu.h>
-> > +#include <uapi/linux/iommufd.h>
-> 
-> Oh we should definately avoid doing that!
->   
-> Maybe this is a good moment to start a new header file exclusively for
-> iommu drivers and core subsystem to include?
-> 
->  include/linux/iommu-driver.h
-> 
-> ?
-> 
-> Put iommu_copy_user_data() and  struct iommu_user_data in there
-> 
-> Avoid this include in this file.
+These variables are never referenced in the code, just remove them.
 
-By looking closer, it seems that we included the uapi header for:
-+	struct iommu_domain *(*domain_alloc_user)(struct device *dev, u32 flags,
-+						  enum iommu_hwpt_data_type data_type,
-+						  struct iommu_domain *parent,
-+						  const struct iommu_user_data *user_data);
+Signed-off-by: zhujun2 <zhujun2@cmss.chinamobile.com>
+---
+ tools/testing/selftests/bpf/prog_tests/atomic_bounds.c      | 1 -
+ tools/testing/selftests/bpf/prog_tests/kfree_skb.c          | 2 --
+ tools/testing/selftests/bpf/prog_tests/perf_branches.c      | 6 +-----
+ .../testing/selftests/bpf/prog_tests/probe_read_user_str.c  | 4 ++--
+ tools/testing/selftests/bpf/prog_tests/test_overhead.c      | 4 ++--
+ tools/testing/selftests/bpf/prog_tests/xdp_synproxy.c       | 1 -
+ 6 files changed, 5 insertions(+), 13 deletions(-)
 
-So we could drop the include, and instead add this next to structs:
-+enum iommu_hwpt_data_type;
+diff --git a/tools/testing/selftests/bpf/prog_tests/atomic_bounds.c b/tools/testing/selftests/bpf/prog_tests/atomic_bounds.c
+index 69bd7853e..4715cde38 100644
+--- a/tools/testing/selftests/bpf/prog_tests/atomic_bounds.c
++++ b/tools/testing/selftests/bpf/prog_tests/atomic_bounds.c
+@@ -7,7 +7,6 @@
+ void test_atomic_bounds(void)
+ {
+ 	struct atomic_bounds *skel;
+-	__u32 duration = 0;
+ 
+ 	skel = atomic_bounds__open_and_load();
+ 	if (CHECK(!skel, "skel_load", "couldn't load program\n"))
+diff --git a/tools/testing/selftests/bpf/prog_tests/kfree_skb.c b/tools/testing/selftests/bpf/prog_tests/kfree_skb.c
+index c07991544..b0992a9ed 100644
+--- a/tools/testing/selftests/bpf/prog_tests/kfree_skb.c
++++ b/tools/testing/selftests/bpf/prog_tests/kfree_skb.c
+@@ -20,7 +20,6 @@ static void on_sample(void *ctx, int cpu, void *data, __u32 size)
+ {
+ 	struct meta *meta = (struct meta *)data;
+ 	struct ipv6_packet *pkt_v6 = data + sizeof(*meta);
+-	int duration = 0;
+ 
+ 	if (CHECK(size != 72 + sizeof(*meta), "check_size", "size %u != %zu\n",
+ 		  size, 72 + sizeof(*meta)))
+@@ -65,7 +64,6 @@ void serial_test_kfree_skb(void)
+ 	struct perf_buffer *pb = NULL;
+ 	int err, prog_fd;
+ 	bool passed = false;
+-	__u32 duration = 0;
+ 	const int zero = 0;
+ 	bool test_ok[2];
+ 
+diff --git a/tools/testing/selftests/bpf/prog_tests/perf_branches.c b/tools/testing/selftests/bpf/prog_tests/perf_branches.c
+index bc24f8333..0942b9891 100644
+--- a/tools/testing/selftests/bpf/prog_tests/perf_branches.c
++++ b/tools/testing/selftests/bpf/prog_tests/perf_branches.c
+@@ -13,7 +13,6 @@ static void check_good_sample(struct test_perf_branches *skel)
+ 	int required_size = skel->bss->required_size_out;
+ 	int written_stack = skel->bss->written_stack_out;
+ 	int pbe_size = sizeof(struct perf_branch_entry);
+-	int duration = 0;
+ 
+ 	if (CHECK(!skel->bss->valid, "output not valid",
+ 		 "no valid sample from prog"))
+@@ -43,7 +42,6 @@ static void check_bad_sample(struct test_perf_branches *skel)
+ 	int written_global = skel->bss->written_global_out;
+ 	int required_size = skel->bss->required_size_out;
+ 	int written_stack = skel->bss->written_stack_out;
+-	int duration = 0;
+ 
+ 	if (CHECK(!skel->bss->valid, "output not valid",
+ 		 "no valid sample from prog"))
+@@ -61,7 +59,7 @@ static void test_perf_branches_common(int perf_fd,
+ 				      void (*cb)(struct test_perf_branches *))
+ {
+ 	struct test_perf_branches *skel;
+-	int err, i, duration = 0;
++	int err, i;
+ 	bool detached = false;
+ 	struct bpf_link *link;
+ 	volatile int j = 0;
+@@ -102,7 +100,6 @@ static void test_perf_branches_common(int perf_fd,
+ static void test_perf_branches_hw(void)
+ {
+ 	struct perf_event_attr attr = {0};
+-	int duration = 0;
+ 	int pfd;
+ 
+ 	/* create perf event */
+@@ -143,7 +140,6 @@ static void test_perf_branches_hw(void)
+ static void test_perf_branches_no_hw(void)
+ {
+ 	struct perf_event_attr attr = {0};
+-	int duration = 0;
+ 	int pfd;
+ 
+ 	/* create perf event */
+diff --git a/tools/testing/selftests/bpf/prog_tests/probe_read_user_str.c b/tools/testing/selftests/bpf/prog_tests/probe_read_user_str.c
+index e41929813..a7c6ad8d6 100644
+--- a/tools/testing/selftests/bpf/prog_tests/probe_read_user_str.c
++++ b/tools/testing/selftests/bpf/prog_tests/probe_read_user_str.c
+@@ -9,7 +9,7 @@ static const char str3[] = "mestringblubblubblubblubblub";
+ static int test_one_str(struct test_probe_read_user_str *skel, const char *str,
+ 			size_t len)
+ {
+-	int err, duration = 0;
++	int err;
+ 	char buf[256];
+ 
+ 	/* Ensure bytes after string are ones */
+@@ -44,7 +44,7 @@ static int test_one_str(struct test_probe_read_user_str *skel, const char *str,
+ void test_probe_read_user_str(void)
+ {
+ 	struct test_probe_read_user_str *skel;
+-	int err, duration = 0;
++	int err;
+ 
+ 	skel = test_probe_read_user_str__open_and_load();
+ 	if (CHECK(!skel, "test_probe_read_user_str__open_and_load",
+diff --git a/tools/testing/selftests/bpf/prog_tests/test_overhead.c b/tools/testing/selftests/bpf/prog_tests/test_overhead.c
+index f27013e38..6161009df 100644
+--- a/tools/testing/selftests/bpf/prog_tests/test_overhead.c
++++ b/tools/testing/selftests/bpf/prog_tests/test_overhead.c
+@@ -17,7 +17,7 @@ static __u64 time_get_ns(void)
+ 
+ static int test_task_rename(const char *prog)
+ {
+-	int i, fd, duration = 0, err;
++	int i, fd, err;
+ 	char buf[] = "test_overhead";
+ 	__u64 start_time;
+ 
+@@ -66,7 +66,7 @@ void test_test_overhead(void)
+ 	struct bpf_program *fentry_prog, *fexit_prog;
+ 	struct bpf_object *obj;
+ 	struct bpf_link *link;
+-	int err, duration = 0;
++	int err;
+ 	char comm[16] = {};
+ 
+ 	if (CHECK_FAIL(prctl(PR_GET_NAME, comm, 0L, 0L, 0L)))
+diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_synproxy.c b/tools/testing/selftests/bpf/prog_tests/xdp_synproxy.c
+index 8b50a992d..5af434353 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xdp_synproxy.c
++++ b/tools/testing/selftests/bpf/prog_tests/xdp_synproxy.c
+@@ -40,7 +40,6 @@ static bool expect_str(char *buf, size_t size, const char *str, const char *name
+ {
+ 	static char escbuf_expected[CMD_OUT_BUF_SIZE * 4];
+ 	static char escbuf_actual[CMD_OUT_BUF_SIZE * 4];
+-	static int duration = 0;
+ 	bool ok;
+ 
+ 	ok = size == strlen(str) && !memcmp(buf, str, size);
+-- 
+2.17.1
 
-Then it's not that necessary to have a new header? We could mark a
-section of "driver exclusively functions" in iommu.h, I think.
 
-> >  #define IOMMU_READ	(1 << 0)
-> >  #define IOMMU_WRITE	(1 << 1)
-> > @@ -227,6 +228,41 @@ struct iommu_iotlb_gather {
-> >  	bool			queued;
-> >  };
-> >  
-> > +/**
-> > + * struct iommu_user_data - iommu driver specific user space data info
-> > + * @uptr: Pointer to the user buffer for copy_from_user()
-> > + * @len: The length of the user buffer in bytes
-> > + *
-> > + * A user space data is an uAPI that is defined in include/uapi/linux/iommufd.h
-> > + * Both @uptr and @len should be just copied from an iommufd core uAPI structure
-> > + */
-> > +struct iommu_user_data {
-> > +	void __user *uptr;
-> > +	size_t len;
-> > +};
-> 
-> Put the "hwpt_type" in here and just call it type
 
-Ah, then domain_alloc_user can omit the enum iommu_hwpt_data_type.
-
-Thanks!
-Nic
