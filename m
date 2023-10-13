@@ -2,270 +2,202 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 234237C8BF4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Oct 2023 19:07:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FFE07C8CA3
+	for <lists+linux-kselftest@lfdr.de>; Fri, 13 Oct 2023 19:57:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbjJMRHN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 13 Oct 2023 13:07:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39440 "EHLO
+        id S229958AbjJMR5N (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 13 Oct 2023 13:57:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbjJMRHM (ORCPT
+        with ESMTP id S229518AbjJMR5L (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 13 Oct 2023 13:07:12 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 283DCB7
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 Oct 2023 10:06:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1697216786;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=4anTAcj47QphqCTa0VlpuuQqLbvMYpkABh/3zdt7Xbg=;
-        b=PKi7DIq61xr7vpdyZMO88Gp+/eXqtIFUEJ7R1K1fnWqYXy2oax7sWzP/K++CUZ1uIG0yRx
-        lwIMFhPgAQI4Hbv5xzZHeJH7Gt1aGnDrMsz1WKQRcFHcew0W5M0jJuWadq7pP8xA8xRmCd
-        4WuAvW3uBVENZoSsxFTRwdKq2eJRPsg=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-592-yoqdPe-IOByfPN2sWR6Ovw-1; Fri, 13 Oct 2023 13:06:22 -0400
-X-MC-Unique: yoqdPe-IOByfPN2sWR6Ovw-1
-Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-65623d0075aso4326046d6.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 13 Oct 2023 10:06:17 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697216774; x=1697821574;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4anTAcj47QphqCTa0VlpuuQqLbvMYpkABh/3zdt7Xbg=;
-        b=KJfgxkMH6PzQehxNdYMaGyWf8XQaH9nBKCIrXLFFmDVc8LaFGd/03wILhZODkEupfQ
-         QZF2N4IcepHXLW3psM9cXGvuOf0bnPD11n/yLRWudsD33sGMWsxWvWgwsFjNyVMm9g0+
-         0yZI3bLaE51E9XkCQLJhynbKYox6reUvy5Apsf2hVOrEndsPAeEaq7FCFRW+CuMLD5l1
-         7l9NQ2dt/QfuNxH+FlViPQrBf0nQsvEdQw+vjX1Eu0Y/wJ5Z/GnXqN3Kk6tHgJHMZ+eJ
-         WyErBtahStHFQ4DW1PTLcOKJWXjx4dVkGCNmpCc7jVxHOadbw4i97yRG1La6zmHKZ29X
-         F2XQ==
-X-Gm-Message-State: AOJu0Yz3JpkIHNWPngJ/Ft34RXyPbsntzzluhNKu0FCFyhYNX177/q7v
-        IGJeWIhG/LrhUGqjrML7yznHzorO2XZZh/r/F4if6BbTavYKMxdbIeTFFuqgWl+/gvS0hZPJDDo
-        bNpHdVcVJ3v681RyBG1HUpsa9tlQu
-X-Received: by 2002:a05:6214:519b:b0:65d:482:9989 with SMTP id kl27-20020a056214519b00b0065d04829989mr29618064qvb.5.1697216773817;
-        Fri, 13 Oct 2023 10:06:13 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFRH784LNJizEjykvGovSKOhkhcLbazKwKyVKKk+ujLDPqfsEAe8jFxGjwEXZeiVmuU0mCpCg==
-X-Received: by 2002:a05:6214:519b:b0:65d:482:9989 with SMTP id kl27-20020a056214519b00b0065d04829989mr29618034qvb.5.1697216773382;
-        Fri, 13 Oct 2023 10:06:13 -0700 (PDT)
-Received: from x1n (cpe5c7695f3aee0-cm5c7695f3aede.cpe.net.cable.rogers.com. [99.254.144.39])
-        by smtp.gmail.com with ESMTPSA id j12-20020a0ce00c000000b0065b1f90ff8csm812307qvk.40.2023.10.13.10.06.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Oct 2023 10:06:13 -0700 (PDT)
-Date:   Fri, 13 Oct 2023 13:05:55 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Lokesh Gidra <lokeshgidra@google.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
-        brauner@kernel.org, shuah@kernel.org, aarcange@redhat.com,
-        hughd@google.com, mhocko@suse.com, axelrasmussen@google.com,
-        rppt@kernel.org, willy@infradead.org, Liam.Howlett@oracle.com,
-        jannh@google.com, zhangpeng362@huawei.com, bgeffon@google.com,
-        kaleshsingh@google.com, ngeoffray@google.com, jdduke@google.com,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kernel-team@android.com
-Subject: Re: [PATCH v3 2/3] userfaultfd: UFFDIO_MOVE uABI
-Message-ID: <ZSl488I/W4mz4gnM@x1n>
-References: <20231009064230.2952396-1-surenb@google.com>
- <20231009064230.2952396-3-surenb@google.com>
- <214b78ed-3842-5ba1-fa9c-9fa719fca129@redhat.com>
- <CAJuCfpHzSm+z9b6uxyYFeqr5b5=6LehE9O0g192DZdJnZqmQEw@mail.gmail.com>
- <478697aa-f55c-375a-6888-3abb343c6d9d@redhat.com>
- <CA+EESO5nvzka0KzFGzdGgiCWPLg7XD-8jA9=NTUOKFy-56orUg@mail.gmail.com>
- <ZShS3UT+cjJFmtEy@x1n>
- <205abf01-9699-ff1c-3e4e-621913ada64e@redhat.com>
- <ZSlragGjFEw9QS1Y@x1n>
- <CA+EESO5ESxxricWx2EFneizLGj2Cb5tuM3kbAicc0ggA4Wh2oQ@mail.gmail.com>
+        Fri, 13 Oct 2023 13:57:11 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2084.outbound.protection.outlook.com [40.107.102.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C25783;
+        Fri, 13 Oct 2023 10:57:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Jg4oczWE+X5MQZMB9UtVYOQOzWNQvNnq+GM7CkRcScDIpLhkbCUqHSlbQ8qYxdfBku5AZrALuj8Gu+SL904AOlZ9S5U66MG5FdrvabSQ2zgNwH9AptSC0WDyx2FOzpXdTj9jx+R42tOP4j0qRWG6QCg5hb8uMS1/FqWC9gmvrh2VrDqx1FsLDqRIXSHBytyxAv9h2YMwZgqz0KRFIXDGBW/LjX3eP0wziMKebWSkOnC+5y3BFKUiF57/Fb5cnvjWM/ggAgJ6jwcfHTJ3HT+t9blfNpXYOAB4qL2XvlqwvPZ+fKNUB6nloToJusKMhOesvt1qfehnjuMkZilqeWSbDA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=IU7v3bKAag+fXwMeLevyenwh9wI3QSilzimF+wgn0oA=;
+ b=ZHh8QPkW4dF1LpeQ2ViOb3kg8wqfsmTVR70VdwjC5JOzb3Q9pegJQ3Kw1BaQ7USbQPF+CD6LCSYAQvv9ddxQJ9bqgVjzWoRwnaCyC1pPG2OqdJublyfjjhPjq4RdBmrOAgAsYcaFkB4+VLqAVJsUN0uet+MZQTfV1/AMqVzI19O/KtCgJluBtIwecYkB6DH26NGzUYXyFF10e4tGSEIAnZHuvB+UhOnjF+jdgTw5FmJkuYnos1PJaH/yyKoagpCT1A9QoGaqrXWObuGcQcUAVwJWh64WkXxUKStlE4z50pmAfnY1jrsn3KmVSb5SsBQPEQxgJaUqPjaPWEF0VnoGjQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.118.233) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=IU7v3bKAag+fXwMeLevyenwh9wI3QSilzimF+wgn0oA=;
+ b=kLDpSAtuVL6WO9B+oTSPT1342xJXgqJuM8MwJ9OHIEey9HG3T5hEO9oZMHDqlFwvoU9V86/hZciwImxYt82+xFJi0MBTKOYAFDTdHf9Y549EiozmkXKxZiuvNaHbRg4L5X9JBIlWtEiPCS3NcRniAI9RQWwjobtgmjbHTWFUlMzQFo4iZOwAUjCsusFGZjDZt9VWVMNzSSRlCE6UvGyNUEk7i+Rr+h0VMzYNv1O6ADp3jaqCpibP1HwlMCP0nJAk62IaZ54CoF1AndBAmsJJxX3Dpuy/uF68rTFN8mxMILvXpD/46GR+hz5PkMIZrELoay2FOUaqSaTijJNUb5TLBA==
+Received: from DS7PR03CA0010.namprd03.prod.outlook.com (2603:10b6:5:3b8::15)
+ by SA1PR12MB7150.namprd12.prod.outlook.com (2603:10b6:806:2b4::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.45; Fri, 13 Oct
+ 2023 17:57:08 +0000
+Received: from DS1PEPF0001708E.namprd03.prod.outlook.com
+ (2603:10b6:5:3b8:cafe::a4) by DS7PR03CA0010.outlook.office365.com
+ (2603:10b6:5:3b8::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6886.30 via Frontend
+ Transport; Fri, 13 Oct 2023 17:57:08 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.118.233) by
+ DS1PEPF0001708E.mail.protection.outlook.com (10.167.17.134) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6838.22 via Frontend Transport; Fri, 13 Oct 2023 17:57:07 +0000
+Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
+ (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 13 Oct
+ 2023 10:57:01 -0700
+Received: from drhqmail202.nvidia.com (10.126.190.181) by
+ drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Fri, 13 Oct 2023 10:57:01 -0700
+Received: from Asurada-Nvidia (10.127.8.11) by mail.nvidia.com
+ (10.126.190.181) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41 via Frontend
+ Transport; Fri, 13 Oct 2023 10:57:00 -0700
+Date:   Fri, 13 Oct 2023 10:56:58 -0700
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+CC:     Yi Liu <yi.l.liu@intel.com>, <joro@8bytes.org>,
+        <alex.williamson@redhat.com>, <kevin.tian@intel.com>,
+        <robin.murphy@arm.com>, <baolu.lu@linux.intel.com>,
+        <cohuck@redhat.com>, <eric.auger@redhat.com>,
+        <kvm@vger.kernel.org>, <mjrosato@linux.ibm.com>,
+        <chao.p.peng@linux.intel.com>, <yi.y.sun@linux.intel.com>,
+        <peterx@redhat.com>, <jasowang@redhat.com>,
+        <shameerali.kolothum.thodi@huawei.com>, <lulu@redhat.com>,
+        <suravee.suthikulpanit@amd.com>, <iommu@lists.linux.dev>,
+        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <zhenzhong.duan@intel.com>, <joao.m.martins@oracle.com>
+Subject: Re: [PATCH v4 01/17] iommu: Add hwpt_type with user_data for
+ domain_alloc_user op
+Message-ID: <ZSmE6unIukqJ3GKu@Asurada-Nvidia>
+References: <20230921075138.124099-1-yi.l.liu@intel.com>
+ <20230921075138.124099-2-yi.l.liu@intel.com>
+ <20231010165844.GQ3952@nvidia.com>
+ <03ba68e9-33ef-35c1-5720-8f559f94f8a1@intel.com>
+ <20231012133917.GL3952@nvidia.com>
+ <3659d9a7-d9e9-bb73-daf5-41c765e99c8c@intel.com>
+ <20231013140456.GR3952@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+EESO5ESxxricWx2EFneizLGj2Cb5tuM3kbAicc0ggA4Wh2oQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20231013140456.GR3952@nvidia.com>
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS1PEPF0001708E:EE_|SA1PR12MB7150:EE_
+X-MS-Office365-Filtering-Correlation-Id: 386e13bd-37df-4f3f-19ce-08dbcc15d144
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5B+cdDL5Xes3XYaArUtr2me7OKXjwxXEsEycebXJge/1cTEsE6c7+akRVxr299qrPlq1d7UAaW2shDxHOjx4y5rfWY/5HoAbjGD0uR+5qFt4U0eIVU05xmRhD8zEsaCzUUFYItN6Z/Lyztrg3Nco9XlHZtnZ+TC00PnNaTWo1CSdZhDz6pYi++z5b7BlGp5S+IfAK+bya4Hf0HA6m2QIlJcWuXdnCkEranVlFKSgMYYf60b8YXsQIVudfYaAGwt9LvIcHsOzcAkJP4H4Yn+0huJAS5UQnhlXp/kmTRPzEFf7t4GuPDmubRIzvsjsrGWKl0TgEW2C0YE4JeEBAyqsxSs7gllVUIRGJuIJi0ECrilfPgtVdR1416gNHX4oHw/M7HtMknTmSsP5n8mFUBTJr/5zO3fVA8b2X2QLm3Xy8xCDLRxnfTlWBVAT5coU3K5O6ni4oCkTmmFALdaszeUduFk9/NCNZ5meNFBfdPwe59y0cHRzhsJWssKuxMBMSMmFPxcPs1bRzcGxoyzVw8QfyI9Al27Zpm/+IGE3I3ChUNvBjBWvGywYvQVZDffDf3wXIH4+YuLvnJ+y2/cifEAU7IUaIlxmPJBGMVi9KNweGzdUvuYn0AXgxVC8ryWDKtnSDWOatLfBDwdVSEwQBW3VRH/UaqMQX2WnIU6+U2vSWLfFQyET8QO5XXc54a9AHqgQfF0bEMMXU6uBxBCOPlfEjxRuDL2B3WSEMspJZo1aQHvQrQN/XjN+MNr1Jt6SQD+f
+X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230031)(4636009)(39860400002)(376002)(136003)(346002)(396003)(230922051799003)(451199024)(186009)(1800799009)(82310400011)(64100799003)(40470700004)(46966006)(36840700001)(55016003)(8676002)(8936002)(4326008)(6862004)(41300700001)(40460700003)(5660300002)(7416002)(2906002)(47076005)(86362001)(83380400001)(33716001)(356005)(7636003)(36860700001)(336012)(426003)(26005)(40480700001)(6636002)(82740400003)(316002)(478600001)(70206006)(70586007)(54906003)(9686003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Oct 2023 17:57:07.8931
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 386e13bd-37df-4f3f-19ce-08dbcc15d144
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DS1PEPF0001708E.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7150
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Oct 13, 2023 at 09:49:10AM -0700, Lokesh Gidra wrote:
-> On Fri, Oct 13, 2023 at 9:08 AM Peter Xu <peterx@redhat.com> wrote:
-> >
-> > On Fri, Oct 13, 2023 at 11:56:31AM +0200, David Hildenbrand wrote:
-> > > Hi Peter,
-> >
-> > Hi, David,
-> >
-> > >
-> > > > I used to have the same thought with David on whether we can simplify the
-> > > > design to e.g. limit it to single mm.  Then I found that the trickiest is
-> > > > actually patch 1 together with the anon_vma manipulations, and the problem
-> > > > is that's not avoidable even if we restrict the api to apply on single mm.
-> > > >
-> > > > What else we can benefit from single mm?  One less mmap read lock, but
-> > > > probably that's all we can get; IIUC we need to keep most of the rest of
-> > > > the code, e.g. pgtable walks, double pgtable lockings, etc.
-> > >
-> > > No existing mechanisms move anon pages between unrelated processes, that
-> > > naturally makes me nervous if we're doing it "just because we can".
-> >
-> > IMHO that's also the potential, when guarded with userfaultfd descriptor
-> > being shared between two processes.
-> >
-> > See below with more comment on the raised concerns.
-> >
-> > >
-> > > >
-> > > > Actually, even though I have no solid clue, but I had a feeling that there
-> > > > can be some interesting way to leverage this across-mm movement, while
-> > > > keeping things all safe (by e.g. elaborately requiring other proc to create
-> > > > uffd and deliver to this proc).
-> > >
-> > > Okay, but no real use cases yet.
-> >
-> > I can provide a "not solid" example.  I didn't mention it because it's
-> > really something that just popped into my mind when thinking cross-mm, so I
-> > never discussed with anyone yet nor shared it anywhere.
-> >
-> > Consider VM live upgrade in a generic form (e.g., no VFIO), we can do that
-> > very efficiently with shmem or hugetlbfs, but not yet anonymous.  We can do
-> > extremely efficient postcopy live upgrade now with anonymous if with REMAP.
-> >
-> > Basically I see it a potential way of moving memory efficiently especially
-> > with thp.
-> >
-> > >
-> > > >
-> > > > Considering Andrea's original version already contains those bits and all
-> > > > above, I'd vote that we go ahead with supporting two MMs.
-> > >
-> > > You can do nasty things with that, as it stands, on the upstream codebase.
-> > >
-> > > If you pin the page in src_mm and move it to dst_mm, you successfully broke
-> > > an invariant that "exclusive" means "no other references from other
-> > > processes". That page is marked exclusive but it is, in fact, not exclusive.
-> >
-> > It is still exclusive to the dst mm?  I see your point, but I think you're
-> > taking exclusiveness altogether with pinning, and IMHO that may not be
-> > always necessary?
-> >
-> > >
-> > > Once you achieved that, you can easily have src_mm not have MMF_HAS_PINNED,
-> >
-> > (I suppose you meant dst_mm here)
-> >
-> > > so you can just COW-share that page. Now you successfully broke the
-> > > invariant that COW-shared pages must not be pinned. And you can even trigger
-> > > VM_BUG_ONs, like in sanity_check_pinned_pages().
-> >
-> > Yeah, that's really unfortunate.  But frankly, I don't think it's the fault
-> > of this new feature, but the rest.
-> >
-> > Let's imagine if the MMF_HAS_PINNED wasn't proposed as a per-mm flag, but
-> > per-vma, which I don't see why we can't because it's simply a hint so far.
-> > Then if we apply the same rule here, UFFDIO_REMAP won't even work for
-> > single-mm as long as cross-vma. Then UFFDIO_REMAP as a whole feature will
-> > be NACKed simply because of this..
-> >
-> > And I don't think anyone can guarantee a per-vma MMF_HAS_PINNED can never
-> > happen, or any further change to pinning solution that may affect this.  So
-> > far it just looks unsafe to remap a pin page to me.
-> >
-> > I don't have a good suggestion here if this is a risk.. I'd think it risky
-> > then to do REMAP over pinned pages no matter cross-mm or single-mm.  It
-> > means probably we just rule them out: folio_maybe_dma_pinned() may not even
-> > be enough to be safe with fast-gup.  We may need page_needs_cow_for_dma()
-> > with proper write_protect_seq no matter cross-mm or single-mm?
-> >
-> > >
-> > > Can it all be fixed? Sure, with more complexity. For something without clear
-> > > motivation, I'll have to pass.
-> >
-> > I think what you raised is a valid concern, but IMHO it's better fixed no
-> > matter cross-mm or single-mm.  What do you think?
-> >
-> > In general, pinning lose its whole point here to me for an userspace either
-> > if it DONTNEEDs it or REMAP it.  What would be great to do here is we unpin
-> > it upon DONTNEED/REMAP/whatever drops the page, because it loses its
-> > coherency anyway, IMHO.
-> >
-> > >
-> > > Once there is real demand, we can revisit it and explore what else we would
-> > > have to take care of (I don't know how memcg behaves when moving between
-> > > completely unrelated processes, maybe that works as expected, I don't know
-> > > and I have no time to spare on reviewing features with no real use cases)
-> > > and announce it as a new feature.
-> >
-> > Good point.  memcg is probably needed..
-> >
-> > So you reminded me to do a more thorough review against zap/fault paths, I
-> > think what's missing are (besides page pinning):
-> >
-> >   - mem_cgroup_charge()/mem_cgroup_uncharge():
-> >
-> >     (side note: I think folio_throttle_swaprate() is only for when
-> >      allocating new pages, so not needed here)
-> >
-> >   - check_stable_address_space() (under pgtable lock)
-> >
-> >   - tlb flush
-> >
-> >     Hmm???????????????? I can't see anywhere we did tlb flush, batched or
-> >     not, either single-mm or cross-mm should need it.  Is this missing?
-> >
-> IIUC, ptep_clear_flush() flushes tlb entry. So I think we are doing
-> unbatched flushing. Possibly a nice performance improvement later on
-> would be to try doing it batched. Suren can throw more light on it.
-
-Oh yeah.. thanks.
-
+On Fri, Oct 13, 2023 at 11:04:56AM -0300, Jason Gunthorpe wrote:
+> On Fri, Oct 13, 2023 at 12:33:13PM +0800, Yi Liu wrote:
 > 
-> One thing I was wondering is don't we need cache flush for the src
-> pages? mremap's move_page_tables() does it. IMHO, it's required here
-> as well.
-
-I commented in my reply, I also think it's needed.  Otherwise for some
-arches I think we can have page containing stall data if not fully flushed
-before the movement.  x86 is probably fine, though.
-
+> > not really. Below the users of the struct iommu_user_data in my current
+> > iommufd_nesting branch. Only the domain_alloc_user op has type as there
+> > can be multiple vendor specific alloc data types. Basically, I'm ok to
+> > make the change you suggested, just not sure if it is good to add type
+> > as it is only needed by one path.
 > 
-> > >
-> > >
-> > > Note: that (with only reading the documentation) it also kept me wondering
-> > > how the MMs are even implied from
-> > >
-> > >        struct uffdio_move {
-> > >            __u64 dst;    /* Destination of move */
-> > >            __u64 src;    /* Source of move */
-> > >            __u64 len;    /* Number of bytes to move */
-> > >            __u64 mode;   /* Flags controlling behavior of move */
-> > >            __s64 move;   /* Number of bytes moved, or negated error */
-> > >        };
-> > >
-> > > That probably has to be documented as well, in which address space dst and
-> > > src reside.
-> >
-> > Agreed, some better documentation will never hurt.  Dst should be in the mm
-> > address space that was bound to the userfault descriptor.  Src should be in
-> > the current mm address space.
-> >
-> > Thanks,
-> >
-> > --
-> > Peter Xu
-> >
-> 
+> I don't think we should ever have an opaque data blob without a type
+> tag..
 
--- 
-Peter Xu
+I can add those "missing" data types, and then a driver will be
+responsible for sanitizing the type along with the data_len.
 
+I notice that the enum iommu_hwpt_data_type in the posted patch
+is confined to the alloc_user uAPI. Perhaps we should share it
+with invalidate too:
+
+/**
+ * enum iommu_hwpt_data_type - IOMMU HWPT Data Type
+ * @IOMMU_HWPT_DATA_NONE: no data
+ * @IOMMU_HWPT_DATA_VTD_S1: Intel VT-d stage-1 page table
+ * @IOMMU_HWPT_DATA_ARM_SMMUV3: ARM SMMUv3 Context Descriptor Table
+ */
+enum iommu_hwpt_data_type {
+	IOMMU_HWPT_DATA_NONE,
+	IOMMU_HWPT_DATA_VTD_S1,
+	IOMMU_HWPT_DATA_ARM_SMMUV3,
+};
+
+Though inevitably we'd have to define a separate data group for
+things like set_dev_data that is related to idev v.s. hwpt:
+
+// IOMMU_DEV_DATA_TYPE sounds like an IOMMU device, other than a
+// passthrough device, so renaming to "_IDEV_" here. And perhaps
+// "set_dev_data" could be "set_idev_data" too? Any better name?
+
+/**
+ * enum iommu_idev_data_type - Data Type for a Device behind an IOMMU
+ * @IOMMU_IDEV_DATA_NONE: no data
+ * @IOMMU_IDEV_DATA_ARM_SMMUV3: ARM SMMUv3 specific device data
+ */
+enum iommu_idev_data_type {
+	IOMMU_IDEV_DATA_NONE,
+	IOMMU_IDEV_DATA_ARM_SMMUV3,
+};
+
+/**
+ * struct iommu_idev_data_arm_smmuv3 - ARM SMMUv3 specific device data
+ * @sid: The Stream ID that is assigned in the user space
+ *
+ * The SMMUv3 specific user space data for a device that is behind an SMMU HW.
+ * The guest-level user data should be linked to the host-level kernel data,
+ * which will be used by user space cache invalidation commands.
+ */
+struct iommu_idev_data_arm_smmuv3 {
+	__u32 sid;
+};
+
+/**
+ * struct iommu_set_idev_data - ioctl(IOMMU_SET_IDEV_DATA)
+ * @size: sizeof(struct iommu_set_idev_data)
+ * @dev_id: The device to set an iommu specific device data
+ * @data_uptr: User pointer of the device user data
+ * @data_len: Length of the device user data
+ *
+ * The device data must be unset using ioctl(IOMMU_UNSET_IDEV_DATA), before
+ * another ioctl(IOMMU_SET_IDEV_DATA) call or before the device itself gets
+ * unbind'd from the iommufd context.
+ */
+struct iommu_set_idev_data {
+	__u32 size;
+	__u32 dev_id;
+	__aligned_u64 data_uptr;
+	__u32 data_len;
+};
+
+Thanks
+Nic
