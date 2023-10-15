@@ -2,55 +2,59 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03F1F7C998A
-	for <lists+linux-kselftest@lfdr.de>; Sun, 15 Oct 2023 16:18:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04CC07C99E2
+	for <lists+linux-kselftest@lfdr.de>; Sun, 15 Oct 2023 18:08:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230451AbjJOOSZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 15 Oct 2023 10:18:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58222 "EHLO
+        id S230114AbjJOQIF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 15 Oct 2023 12:08:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230306AbjJOOSS (ORCPT
+        with ESMTP id S229522AbjJOQIE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 15 Oct 2023 10:18:18 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9371F126
-        for <linux-kselftest@vger.kernel.org>; Sun, 15 Oct 2023 07:18:05 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1c894e4573bso23378245ad.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 15 Oct 2023 07:18:05 -0700 (PDT)
+        Sun, 15 Oct 2023 12:08:04 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F890AB;
+        Sun, 15 Oct 2023 09:08:02 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-405361bb9f7so37616635e9.2;
+        Sun, 15 Oct 2023 09:08:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1697379485; x=1697984285; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1697386081; x=1697990881; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kdDWVt4lpIJYL5Xl2mxJffHYtHkpJSxptvcjLCGS28w=;
-        b=vOunXOCAmhMrt01hw74atFbAd6bVGAiWLvDrdCbXJjlBzkMWgXfaIB5fDVUNcEAWq8
-         la16JOSET2/HsegMXZJF2JrV+P/PefDWO2djWugpobLWpsLU3DfLkcss9jXpnd6n4o6S
-         N55H+J0qnvWixOMkCAoJdbX2EphnaKK5N+2RdKLH4lR8DtI7yqAzrbqthAnclBtbYnCY
-         1jiEA09MyYiLYBJiTBQTE7JaxXxFm8hiY7xGXCB26uHC6u7mvecJwz2q1Q7Ke/sEO6iS
-         /M3dD2pwIBeQDmzXKFc6462IUsJW9DxODVx3nCyGfmHYQ5f5Ct4ZQJ13OeMkUVSFdfGp
-         dXzg==
+        bh=XujhMv/8pwB8H+Ij7K6MZPspXyDbpmJ+2p7uc4kDFNk=;
+        b=AB0lTmfgWQPvnHMkCiiWckdZn655ocvhrgppqgLxkhdTtwrpGmKdX5OlL7LRqQgsar
+         W0/tqUa0MwCJhoUYSEYT4JKpkPZ85CihR/cFynoarQUC7EQmqYCvI+zVEhfafO8IkZk3
+         OdGseues4F2kE6jkll6PNZwS+P1N+RlyLqj+feAiLi9DwNrflBQoYNTjUA354IwQtHW1
+         VXkquQAgLutmqTIl8sN9a5V0KlEeDbmXbvIkBXhgCvjUdrLFQrb4e5jS51jnNBQLwzhQ
+         F9vDxn3IDLUlSr7enAuvRJ+dTVPM/zji9On94hMGlEDbkDetLtBIIWZmfqBaXB+8ftTe
+         iruA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697379485; x=1697984285;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1697386081; x=1697990881;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kdDWVt4lpIJYL5Xl2mxJffHYtHkpJSxptvcjLCGS28w=;
-        b=QLh/0LMNPnacGwCTtpcK6BivRttOoDb98jRqUlCEU+LpcMUZD5cVINO50+3HLOKvQt
-         jFbTCMqkf2awIbmheP2skA2airKbwcy4Od5Ik0xNxYBhRw/rS34c8UVceQfGw+9aHGNd
-         UeKO+Z0khE2auOLiyozgRMebEc6Q879zHrYkvmt2ke1myRxPSWUkFuTliMzMAEPJhR5a
-         UF7aZaIP5XuO7UPKlMpOaDMrzO6wPtyQ7nLBeF4X+CNm3nkQONqnSEF57SIxnXzPcJnu
-         jCwTrs/x+x0+PwyqxVFbNcx0TVA05ZOdWbBUEb32DicAbFvv+yvjZUcv/hy03MIADgMO
-         JXPQ==
-X-Gm-Message-State: AOJu0Yx/pRYy33VbGw3TJACJOHliCRX6QsMCflB2uuBwU8A0hCFWoBrp
-        rh9vKeFneArMXfkVtfhFFT5UrQ==
-X-Google-Smtp-Source: AGHT+IFOz3sSjM+TcbSSo8tYhnjasdIBbaMqi0ORUeBs87fmsaclhgIAt0gLsvqEr6XRlFwAo5iIlA==
-X-Received: by 2002:a05:6a20:42a2:b0:15a:290:d83d with SMTP id o34-20020a056a2042a200b0015a0290d83dmr33077200pzj.41.1697379484772;
-        Sun, 15 Oct 2023 07:18:04 -0700 (PDT)
-Received: from localhost ([2400:4050:a840:1e00:78d2:b862:10a7:d486])
-        by smtp.gmail.com with UTF8SMTPSA id p4-20020a170902eac400b001b9da8b4eb7sm6859498pld.35.2023.10.15.07.17.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 15 Oct 2023 07:18:04 -0700 (PDT)
-From:   Akihiko Odaki <akihiko.odaki@daynix.com>
+        bh=XujhMv/8pwB8H+Ij7K6MZPspXyDbpmJ+2p7uc4kDFNk=;
+        b=cRvsQPwBYqsnjYiH1pZ7OzD+KEMb/kUIjWbQagaML1qHhIZhSEFkLz+ktcMtU8WyD1
+         nZJVcYIGk7Fwjx25l+CTkEzQVWRkGvRw8YwZz9oRheWFHLGN7ZRjnTxNT2+0aFPSQgVi
+         UotJJjZTNDQt3bt2y8hqdKlNzHwyzdch0V8LtiDNaYCQ1AzxSp4Hk4ngjsHK2Q2vru4E
+         k1aCAIYAy4XqcfmHHh8o1yDcHD+MNZtvJsqiENZkEvBKFD0knrl4XgK4BrJEWLElVqA5
+         0+P+5H6sdinR6KeF5SPpBEUvcsf8UDvlsmysMPPOTnT4JNUeC1HvqujKeI4VCOPmk+4C
+         E3PQ==
+X-Gm-Message-State: AOJu0YxN8czhQqsqjN9By13+sUH02C13lipa2rZJgo2ChPweHXiJZmv3
+        pmI1McKaHnqP3MXHSkV7Fo7LohqFu+nO3nJmKGU=
+X-Google-Smtp-Source: AGHT+IHRwQ5bE3hW1waPm3vlZF7IYRIPl+hr17w3AEC3uTMy8O1jLNp9Skrcd0Po7vdFsljBETR6eKnURnRLMkMbVyQ=
+X-Received: by 2002:a05:600c:21d1:b0:405:3ae6:2413 with SMTP id
+ x17-20020a05600c21d100b004053ae62413mr28009964wmj.25.1697386080580; Sun, 15
+ Oct 2023 09:08:00 -0700 (PDT)
+MIME-Version: 1.0
+References: <20231015141644.260646-1-akihiko.odaki@daynix.com> <20231015141644.260646-2-akihiko.odaki@daynix.com>
+In-Reply-To: <20231015141644.260646-2-akihiko.odaki@daynix.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Sun, 15 Oct 2023 09:07:49 -0700
+Message-ID: <CAADnVQLfUDmgYng8Cw1hiZOMfWNWLjbn7ZGc4yOEz-XmeFEz5Q@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 1/7] bpf: Introduce BPF_PROG_TYPE_VNET_HASH
+To:     Akihiko Odaki <akihiko.odaki@daynix.com>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         Andrii Nakryiko <andrii@kernel.org>,
@@ -71,85 +75,62 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         "Michael S. Tsirkin" <mst@redhat.com>,
         Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
         Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        bpf@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf <bpf@vger.kernel.org>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Network Development <netdev@vger.kernel.org>,
         kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        linux-kselftest@vger.kernel.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>,
         Yuri Benditovich <yuri.benditovich@daynix.com>,
-        Andrew Melnychenko <andrew@daynix.com>,
-        Akihiko Odaki <akihiko.odaki@daynix.com>
-Subject: [RFC PATCH v2 7/7] vhost_net: Support VIRTIO_NET_F_HASH_REPORT
-Date:   Sun, 15 Oct 2023 23:16:35 +0900
-Message-ID: <20231015141644.260646-8-akihiko.odaki@daynix.com>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231015141644.260646-1-akihiko.odaki@daynix.com>
-References: <20231015141644.260646-1-akihiko.odaki@daynix.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Andrew Melnychenko <andrew@daynix.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-VIRTIO_NET_F_HASH_REPORT allows to report hash values calculated on the
-host. When VHOST_NET_F_VIRTIO_NET_HDR is employed, it will report no
-hash values (i.e., the hash_report member is always set to
-VIRTIO_NET_HASH_REPORT_NONE). Otherwise, the values reported by the
-underlying socket will be reported.
+On Sun, Oct 15, 2023 at 7:17=E2=80=AFAM Akihiko Odaki <akihiko.odaki@daynix=
+.com> wrote:
+>
+> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> index 0448700890f7..298634556fab 100644
+> --- a/include/uapi/linux/bpf.h
+> +++ b/include/uapi/linux/bpf.h
+> @@ -988,6 +988,7 @@ enum bpf_prog_type {
+>         BPF_PROG_TYPE_SK_LOOKUP,
+>         BPF_PROG_TYPE_SYSCALL, /* a program that can execute syscalls */
+>         BPF_PROG_TYPE_NETFILTER,
+> +       BPF_PROG_TYPE_VNET_HASH,
 
-VIRTIO_NET_F_HASH_REPORT requires VIRTIO_F_VERSION_1.
+Sorry, we do not add new stable program types anymore.
 
-Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
----
- drivers/vhost/net.c | 16 ++++++++++++----
- 1 file changed, 12 insertions(+), 4 deletions(-)
+> @@ -6111,6 +6112,10 @@ struct __sk_buff {
+>         __u8  tstamp_type;
+>         __u32 :24;              /* Padding, future use. */
+>         __u64 hwtstamp;
+> +
+> +       __u32 vnet_hash_value;
+> +       __u16 vnet_hash_report;
+> +       __u16 vnet_rss_queue;
+>  };
 
-diff --git a/drivers/vhost/net.c b/drivers/vhost/net.c
-index f2ed7167c848..6a31d450fae2 100644
---- a/drivers/vhost/net.c
-+++ b/drivers/vhost/net.c
-@@ -73,6 +73,7 @@ enum {
- 	VHOST_NET_FEATURES = VHOST_FEATURES |
- 			 (1ULL << VHOST_NET_F_VIRTIO_NET_HDR) |
- 			 (1ULL << VIRTIO_NET_F_MRG_RXBUF) |
-+			 (1ULL << VIRTIO_NET_F_HASH_REPORT) |
- 			 (1ULL << VIRTIO_F_ACCESS_PLATFORM) |
- 			 (1ULL << VIRTIO_F_RING_RESET)
- };
-@@ -1634,10 +1635,13 @@ static int vhost_net_set_features(struct vhost_net *n, u64 features)
- 	size_t vhost_hlen, sock_hlen, hdr_len;
- 	int i;
- 
--	hdr_len = (features & ((1ULL << VIRTIO_NET_F_MRG_RXBUF) |
--			       (1ULL << VIRTIO_F_VERSION_1))) ?
--			sizeof(struct virtio_net_hdr_mrg_rxbuf) :
--			sizeof(struct virtio_net_hdr);
-+	if (features & (1ULL << VIRTIO_NET_F_HASH_REPORT))
-+		hdr_len = sizeof(struct virtio_net_hdr_v1_hash);
-+	else if (features & ((1ULL << VIRTIO_NET_F_MRG_RXBUF) |
-+			     (1ULL << VIRTIO_F_VERSION_1)))
-+		hdr_len = sizeof(struct virtio_net_hdr_mrg_rxbuf);
-+	else
-+		hdr_len = sizeof(struct virtio_net_hdr);
- 	if (features & (1 << VHOST_NET_F_VIRTIO_NET_HDR)) {
- 		/* vhost provides vnet_hdr */
- 		vhost_hlen = hdr_len;
-@@ -1718,6 +1722,10 @@ static long vhost_net_ioctl(struct file *f, unsigned int ioctl,
- 			return -EFAULT;
- 		if (features & ~VHOST_NET_FEATURES)
- 			return -EOPNOTSUPP;
-+		if ((features & ((1ULL << VIRTIO_F_VERSION_1) |
-+				 (1ULL << VIRTIO_NET_F_HASH_REPORT))) ==
-+		    (1ULL << VIRTIO_NET_F_HASH_REPORT))
-+			return -EINVAL;
- 		return vhost_net_set_features(n, features);
- 	case VHOST_GET_BACKEND_FEATURES:
- 		features = VHOST_NET_BACKEND_FEATURES;
--- 
-2.42.0
+we also do not add anything to uapi __sk_buff.
 
+> +const struct bpf_verifier_ops vnet_hash_verifier_ops =3D {
+> +       .get_func_proto         =3D sk_filter_func_proto,
+> +       .is_valid_access        =3D sk_filter_is_valid_access,
+> +       .convert_ctx_access     =3D bpf_convert_ctx_access,
+> +       .gen_ld_abs             =3D bpf_gen_ld_abs,
+> +};
+
+and we don't do ctx rewrites like this either.
+
+Please see how hid-bpf and cgroup rstat are hooking up bpf
+in _unstable_ way.
