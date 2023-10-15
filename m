@@ -2,58 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DED407C992C
-	for <lists+linux-kselftest@lfdr.de>; Sun, 15 Oct 2023 15:39:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C7027C995F
+	for <lists+linux-kselftest@lfdr.de>; Sun, 15 Oct 2023 16:17:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbjJONj1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 15 Oct 2023 09:39:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49656 "EHLO
+        id S229614AbjJOORO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 15 Oct 2023 10:17:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbjJONj0 (ORCPT
+        with ESMTP id S229555AbjJOORN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 15 Oct 2023 09:39:26 -0400
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30C7CA6
-        for <linux-kselftest@vger.kernel.org>; Sun, 15 Oct 2023 06:39:25 -0700 (PDT)
-Received: by mail-ot1-x335.google.com with SMTP id 46e09a7af769-6c7ce16ddfaso2583800a34.3
-        for <linux-kselftest@vger.kernel.org>; Sun, 15 Oct 2023 06:39:25 -0700 (PDT)
+        Sun, 15 Oct 2023 10:17:13 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF815C1
+        for <linux-kselftest@vger.kernel.org>; Sun, 15 Oct 2023 07:17:11 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-6b77ab73c6fso1086101b3a.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 15 Oct 2023 07:17:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1697377164; x=1697981964; darn=vger.kernel.org;
+        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1697379431; x=1697984231; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZzrY7VrqbAXMDQ/An7uucXcUyYeK5QX4Iy/EeDSFw9Q=;
-        b=07gmkEyYlTje7KG4Pz5zn2csjnguffsHbs6sjyxvUXef52O04NwLi36J6q96N/nNCz
-         4lZgjiityXknQhYcWWuiVh2Rq30roM/XevjSLRfylPmjpmeYThXqXQvvjKYmUApX6cov
-         7gW5sjN1zTtBM9Eomqq2VAEq935rjGlT/LMNJvjK7nKA2roxhZ0RTUsgwEQ25qvlODgS
-         /kl/x1FF/gg7rRSI3fC+rxaSWCAOGcU4zpR9ddBiKHYtI4hrn5OJ1mtukZo+X6ko+4+O
-         oXjTLXFYQCySrFAHX19yeA6RwV575NJEEcACZHZZSEN8KvgUiOM0NjTHHmTvVFeTr27w
-         +XIg==
+        bh=Z+b0dEMOY183z9dPBZcXWdZ+T7lbIwplG3M4Qto5H1o=;
+        b=oOKWrKzvXwy6Iss50tPht/+1c1HJyTCKCwA46I9tiPP/IHCgdCNzKNIcGQ0J6Gv3M+
+         VHM2g+vzcIOHQrwnU8mEKqiJsjbflHEdg2GpV1SwawE+py0vyHW0/oFH+02d4tKUGAu1
+         6Q+y6T7ZRoJj+E5/pxcm7XtkwaavFP54+G5/l5ZxbmraAuPggemAJtmYWlfFyKkcNDVC
+         XA/piv1AsZaMtRWAZuG7ytz49tnZLSw1zvZZ0OUqa8d6kBcpELJ+wpuO47U+QAGqw5+Q
+         53T+VH0nTLUy0nP9Ac8/nlxctORyojWWh+uL661MD3da5xDNKlPHV+z+5WZBepDGf54s
+         88DA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697377164; x=1697981964;
+        d=1e100.net; s=20230601; t=1697379431; x=1697984231;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ZzrY7VrqbAXMDQ/An7uucXcUyYeK5QX4Iy/EeDSFw9Q=;
-        b=Wx/Lvus29TJKDuV4twhU9kNuh5ul63Z2VRlTIbZ8mmtcJDOwHp++jx1t+7Y5O1ITUd
-         vdKt7P3cz9lItPARgkucHcjrq4B50beUfmCHRCIJh5Tjg2izbTccdXVgHAV9oYrqYZdS
-         sDnqObFY7HceER9RRSdPxTMJPT0Pp6fq7tRG3HABfhsN15DPaizML4TZhhDj/nDhJE9V
-         PPzLFUiGni+tMdhMJJxej+FJsE50CenaiWAfLKY4yBEMXUQE4MArb5FQ6WX4LNOH5lnK
-         EOusFDEUUto7bsFKF5cPxx2x4UWChYf4JimYx3dFgZxTqg5Cj+w3iUcMKqtMigR216Ey
-         lD4w==
-X-Gm-Message-State: AOJu0Yyloog1K1KZY6DpNwFrhCYYa5SSzvXBl8y2VE6vOiWjW1SPF5et
-        KEwOqkc/M6mMzKjK0lw28/zsqg==
-X-Google-Smtp-Source: AGHT+IHMn+MWkXPiN2PFxj8eGoPs4OSA1Ena1/nrJQ5EuTY6OU4nQm29Q9sWZwur4SV4dUon/ktE5w==
-X-Received: by 2002:a9d:7751:0:b0:6b9:ba85:a5fa with SMTP id t17-20020a9d7751000000b006b9ba85a5famr37027847otl.5.1697377164515;
-        Sun, 15 Oct 2023 06:39:24 -0700 (PDT)
+        bh=Z+b0dEMOY183z9dPBZcXWdZ+T7lbIwplG3M4Qto5H1o=;
+        b=OD59wmVVEjwq1AX7gsB1ztX0wgSP0uxNJ8P/iq5t/kuWWdd/e5qjqEhTU66Q9NBtUF
+         77pltaS6CGo2RARrO744YPMuBn2CoIqdk12GtPlGIjomTYY0YmyvLXa3EcLNuOV5tN1e
+         zIAiaHP/kLvv7JXVVJqGTF4Um8/Ot/RltiXJhZnieJyp+qOKrK8Eh+e0v8OnFgeojLQs
+         HIpUFUwtd8AsfKDtUokp+j2s8Z4olSUdeEdw3qCg1OQXci0G+pXoj0I7yD5GFy6xKQaO
+         5sFIbLXiB0XOiEVsAqMoH0gSbbGVpqHEb4zxUjAuXtLS8TZSj9XuXzOsF4spdIsKp9m/
+         pl6A==
+X-Gm-Message-State: AOJu0YxaEvaQwFbBnaXVesB5AAJ2DSMzw2HruKdOoivG+msSvz4rtrtT
+        WHQweHxlPquoZn9iZhXrYW4EJQ==
+X-Google-Smtp-Source: AGHT+IF8ctbxzi/yLoYKR8nfTMdLlPrANNX0a4fFaaxK61sDbvY5BiX2bAhQb9DCFQvUS99Sir6h0g==
+X-Received: by 2002:a05:6a21:6d92:b0:13a:dd47:c31a with SMTP id wl18-20020a056a216d9200b0013add47c31amr6752797pzb.20.1697379431188;
+        Sun, 15 Oct 2023 07:17:11 -0700 (PDT)
 Received: from localhost ([2400:4050:a840:1e00:78d2:b862:10a7:d486])
-        by smtp.gmail.com with UTF8SMTPSA id h9-20020a654689000000b005af08f65227sm2518837pgr.80.2023.10.15.06.39.20
+        by smtp.gmail.com with UTF8SMTPSA id x6-20020aa78f06000000b006b3dc56c944sm3993752pfr.133.2023.10.15.07.17.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 15 Oct 2023 06:39:24 -0700 (PDT)
+        Sun, 15 Oct 2023 07:17:10 -0700 (PDT)
 From:   Akihiko Odaki <akihiko.odaki@daynix.com>
-Cc:     Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
+Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
         Martin KaFai Lau <martin.lau@linux.dev>,
         Song Liu <song@kernel.org>,
         Yonghong Song <yonghong.song@linux.dev>,
@@ -61,13 +60,26 @@ Cc:     Andrii Nakryiko <andrii@kernel.org>,
         KP Singh <kpsingh@kernel.org>,
         Stanislav Fomichev <sdf@google.com>,
         Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, Nick Terrell <terrelln@fb.com>,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
+        Jonathan Corbet <corbet@lwn.net>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Jason Wang <jasowang@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        bpf@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        linux-kselftest@vger.kernel.org,
+        Yuri Benditovich <yuri.benditovich@daynix.com>,
+        Andrew Melnychenko <andrew@daynix.com>,
         Akihiko Odaki <akihiko.odaki@daynix.com>
-Subject: [PATCH bpf-next] selftests/bpf: Use pkg-config to determine ld flags
-Date:   Sun, 15 Oct 2023 22:39:14 +0900
-Message-ID: <20231015133916.257197-1-akihiko.odaki@daynix.com>
+Subject: [RFC PATCH v2 0/7] tun: Introduce virtio-net hashing feature
+Date:   Sun, 15 Oct 2023 23:16:28 +0900
+Message-ID: <20231015141644.260646-1-akihiko.odaki@daynix.com>
 X-Mailer: git-send-email 2.42.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -81,50 +93,62 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-When linking statically, libraries may require other dependencies to be
-included to ld flags. In particular, libelf may require libzstd. Use
-pkg-config to determine such dependencies.
+virtio-net have two usage of hashes: one is RSS and another is hash
+reporting. Conventionally the hash calculation was done by the VMM.
+However, computing the hash after the queue was chosen defeats the
+purpose of RSS.
 
-Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
----
- tools/testing/selftests/bpf/Makefile   | 3 ++-
- tools/testing/selftests/bpf/README.rst | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+Another approach is to use eBPF steering program. This approach has
+another downside: it cannot report the calculated hash due to the
+restrictive nature of eBPF.
 
-diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-index caede9b574cb..833134aa2eda 100644
---- a/tools/testing/selftests/bpf/Makefile
-+++ b/tools/testing/selftests/bpf/Makefile
-@@ -4,6 +4,7 @@ include ../../../scripts/Makefile.arch
- include ../../../scripts/Makefile.include
- 
- CXX ?= $(CROSS_COMPILE)g++
-+PKG_CONFIG ?= $(CROSS_COMPILE)pkg-config
- 
- CURDIR := $(abspath .)
- TOOLSDIR := $(abspath ../../..)
-@@ -31,7 +32,7 @@ CFLAGS += -g -O0 -rdynamic -Wall -Werror $(GENFLAGS) $(SAN_CFLAGS)	\
- 	  -I$(CURDIR) -I$(INCLUDE_DIR) -I$(GENDIR) -I$(LIBDIR)		\
- 	  -I$(TOOLSINCDIR) -I$(APIDIR) -I$(OUTPUT)
- LDFLAGS += $(SAN_LDFLAGS)
--LDLIBS += -lelf -lz -lrt -lpthread
-+LDLIBS += $(shell $(PKG_CONFIG) --libs libelf zlib) -lrt -lpthread
- 
- ifneq ($(LLVM),)
- # Silence some warnings when compiled with clang
-diff --git a/tools/testing/selftests/bpf/README.rst b/tools/testing/selftests/bpf/README.rst
-index cb9b95702ac6..9af79c7a9b58 100644
---- a/tools/testing/selftests/bpf/README.rst
-+++ b/tools/testing/selftests/bpf/README.rst
-@@ -77,7 +77,7 @@ In case of linker errors when running selftests, try using static linking:
- 
- .. code-block:: console
- 
--  $ LDLIBS=-static vmtest.sh
-+  $ LDLIBS=-static PKG_CONFIG='pkg-config --static' vmtest.sh
- 
- .. note:: Some distros may not support static linking.
- 
+Extend the steering program feature by introducing a dedicated program
+type: BPF_PROG_TYPE_VNET_HASH. This program type is capable to report
+the hash value and the queue to use at the same time.
+
+This is a rewrite of a RFC patch series submitted by Yuri Benditovich that
+incorporates feedbacks for the series and V1 of this series:
+https://lore.kernel.org/lkml/20210112194143.1494-1-yuri.benditovich@daynix.com/
+
+QEMU patched to use this new feature is available at:
+https://github.com/daynix/qemu/tree/akihikodaki/bpf
+
+The QEMU patches will soon be submitted to the upstream as RFC too.
+
+V1 -> V2:
+  Changed to introduce a new BPF program type.
+
+Akihiko Odaki (7):
+  bpf: Introduce BPF_PROG_TYPE_VNET_HASH
+  bpf: Add vnet_hash members to __sk_buff
+  skbuff: Introduce SKB_EXT_TUN_VNET_HASH
+  virtio_net: Add virtio_net_hdr_v1_hash_from_skb()
+  tun: Support BPF_PROG_TYPE_VNET_HASH
+  selftests/bpf: Test BPF_PROG_TYPE_VNET_HASH
+  vhost_net: Support VIRTIO_NET_F_HASH_REPORT
+
+ Documentation/bpf/bpf_prog_run.rst            |   1 +
+ Documentation/bpf/libbpf/program_types.rst    |   2 +
+ drivers/net/tun.c                             | 158 +++++--
+ drivers/vhost/net.c                           |  16 +-
+ include/linux/bpf_types.h                     |   2 +
+ include/linux/filter.h                        |   7 +
+ include/linux/skbuff.h                        |  10 +
+ include/linux/virtio_net.h                    |  22 +
+ include/uapi/linux/bpf.h                      |   5 +
+ kernel/bpf/verifier.c                         |   6 +
+ net/core/filter.c                             |  86 +++-
+ net/core/skbuff.c                             |   3 +
+ tools/include/uapi/linux/bpf.h                |   5 +
+ tools/lib/bpf/libbpf.c                        |   2 +
+ tools/testing/selftests/bpf/config            |   1 +
+ tools/testing/selftests/bpf/config.aarch64    |   1 -
+ .../selftests/bpf/prog_tests/vnet_hash.c      | 385 ++++++++++++++++++
+ tools/testing/selftests/bpf/progs/vnet_hash.c |  16 +
+ 18 files changed, 681 insertions(+), 47 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/vnet_hash.c
+ create mode 100644 tools/testing/selftests/bpf/progs/vnet_hash.c
+
 -- 
 2.42.0
 
