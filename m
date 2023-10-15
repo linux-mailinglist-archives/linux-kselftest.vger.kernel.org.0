@@ -2,54 +2,54 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C4797C9963
-	for <lists+linux-kselftest@lfdr.de>; Sun, 15 Oct 2023 16:17:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A6697C996A
+	for <lists+linux-kselftest@lfdr.de>; Sun, 15 Oct 2023 16:17:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbjJOORX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 15 Oct 2023 10:17:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56198 "EHLO
+        id S230089AbjJOORc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 15 Oct 2023 10:17:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230010AbjJOORW (ORCPT
+        with ESMTP id S230127AbjJOORa (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 15 Oct 2023 10:17:22 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD819D6
-        for <linux-kselftest@vger.kernel.org>; Sun, 15 Oct 2023 07:17:19 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id 5614622812f47-3b2b1af964dso1674428b6e.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 15 Oct 2023 07:17:19 -0700 (PDT)
+        Sun, 15 Oct 2023 10:17:30 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0226F2
+        for <linux-kselftest@vger.kernel.org>; Sun, 15 Oct 2023 07:17:27 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id 98e67ed59e1d1-27d1aee5aa1so2627136a91.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 15 Oct 2023 07:17:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1697379439; x=1697984239; darn=vger.kernel.org;
+        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1697379447; x=1697984247; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vJDsjXY27F9/4dBjdxEGWiwFVrUuGxBuoNe9PuwHdgE=;
-        b=LVT7RCZPtopGXV//N4v4QN95y36OxVqgNowFvlze0sLrLO6AY+UvV9ebmW/jbHqqz5
-         syaPrA/jTPvstEgSyV7MUrKLU5cc8gvdKqrpSs+FZqg0+F08lBoecmRKgjy3SGj6z4Df
-         c1gK+WN1vot1KINHaRYaIIPfCDJG5xfoNI6KC/8BSWZJ9cekPIS0RRk4lJGIQO1hSweq
-         fIT8uUk5BJgOpRIqBOX+2UaVvj4kc1NDz/SC6ScCnWsT/dLO2ENyI/uuVypmQTOL5XNz
-         wIuPFy27DGo+1w5a45UyzNi3LtvB1x6w005GeF5ZEtqC02b7axpYyCnZ8DElySmOMhZy
-         ggYw==
+        bh=jQwvcEuaD8qtq8qMfxzrYYiBWg40WGS1Tav8Ug6Qb8c=;
+        b=ORNweTq+hN8tIEGYz2Vh0NJm1ki9R7JBN3Cu7ygENFKSagrHe+sAFwymK43LlQYa4O
+         pLfz9slfiNG+0RRNCLeHSjE+nyvEweNcGW3N8QA8RS+QCC2EJBSl89uH74wr50EZjDBQ
+         qMH/MRuL2GKqqeqq05HhbaVjeHaIApagYTdWuktKVf8XUonk8y1u/5Fi/N7r2Paq9Tvv
+         fWhH4IsQgBXGx2w2rhz85AFWC8auPi6xNe0j1xyobcWyhLfpAek8oLyYRD3sVYOCyMy9
+         DKBaKw+P5myUp+r6VCr+hSQ4skR9tM0S71bbnuzW2GeH8chz4EMyEJ1Q13HJ4LiZx35F
+         5HOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697379439; x=1697984239;
+        d=1e100.net; s=20230601; t=1697379447; x=1697984247;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=vJDsjXY27F9/4dBjdxEGWiwFVrUuGxBuoNe9PuwHdgE=;
-        b=p0Pcy9pmbNgAcbYI7IUarKrs4O3gYXKAiuiYbaPI5CQr2kAa3daP83c3BD8NnKn5oQ
-         df+z2UCAyadeiMR2k3T4GDWr13t5O6tPuQtjgmNMqA9FU1LnWxrc7gKGiV23fGygg8kq
-         BtNHVFSrLL6kLnd2Phe6DKix3WPJpVqT4b2jX1nk7Afg8ntkPOtW6tL3Ny1MrymU8O1z
-         pTSxinXkK8LdzIk0nB5CS+9kkw5hZzhrLzJQ9EM75NWClolxy/PI/Z2kmTX6yxZqmtN8
-         JiK1PX6RlMgt7t/wOMN6CQqZzDcQ2ADxsqdetFrfR2/WahEAmjp+3YnR35c6kz8EjZIH
-         I1bw==
-X-Gm-Message-State: AOJu0YzkTy/QaXG8VPHAolJ/+TDjTxrIlktqlHF1wnNs/cVUC8Wwa7Pj
-        pyBl0WHPH9rTAhd83nRAx+GP4A==
-X-Google-Smtp-Source: AGHT+IGpU5uszWRjUzIjT7iHtowuf/PL2ks/58t0JISif6Khaqfb5QST4TqfG3bPtfy8oiUe2eIlIQ==
-X-Received: by 2002:a05:6808:210b:b0:3a7:2456:6af6 with SMTP id r11-20020a056808210b00b003a724566af6mr39723966oiw.31.1697379439071;
-        Sun, 15 Oct 2023 07:17:19 -0700 (PDT)
+        bh=jQwvcEuaD8qtq8qMfxzrYYiBWg40WGS1Tav8Ug6Qb8c=;
+        b=aZ1dWEnoh1DymlGINPsPfe+utaaSRpi9jiWeIUaeuoaUEO9EjhASW7uOCxrAkRCbA9
+         OZg/8UY5jiSoDRQzUGnCjHSXnJj/ARWaBa5XXVHnYdyzbjGI6ebdBH39fdJxeUcewI5Q
+         Ox1ZyEU33FkRx+O+NQLzXOUKsQjV0KMIwsFHjrWr2nJkvix8sypX3sLGmhD8CSi+xJBI
+         m62mmwVc4Thze1pxwMoHpwNjruz89qSGNsIaFIGSvOFMsW6Fx85Wpvdk2KPwWPgucbBl
+         FslUUd2m1a0E6JAl8qn6wMkAKRzFmF8VTJ5qhHrLxJSF0EnV/sc0CZCIVEtxE5twEUd0
+         tRJA==
+X-Gm-Message-State: AOJu0YxtGxdhCu48YrqjiAuoqA1+E00gTBtPNqDP4vKz5bcRM6NNhokt
+        qtN512Gk2RWvCfQWH7o7gFEMSQ==
+X-Google-Smtp-Source: AGHT+IHrFfjiox44OQRQFnZKdtFPkv5leUtQZcmEzH7FMdsenMLqiF2Tonpvh4fiH6sOm3mXPp3izQ==
+X-Received: by 2002:a17:90b:124f:b0:27d:886:e2d2 with SMTP id gx15-20020a17090b124f00b0027d0886e2d2mr7855719pjb.7.1697379447008;
+        Sun, 15 Oct 2023 07:17:27 -0700 (PDT)
 Received: from localhost ([2400:4050:a840:1e00:78d2:b862:10a7:d486])
-        by smtp.gmail.com with UTF8SMTPSA id c14-20020a63724e000000b005897bfc2ed3sm6234231pgn.93.2023.10.15.07.17.13
+        by smtp.gmail.com with UTF8SMTPSA id k3-20020a17090a910300b0027722832498sm2987862pjo.52.2023.10.15.07.17.21
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 15 Oct 2023 07:17:18 -0700 (PDT)
+        Sun, 15 Oct 2023 07:17:26 -0700 (PDT)
 From:   Akihiko Odaki <akihiko.odaki@daynix.com>
 Cc:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
@@ -78,17 +78,17 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Yuri Benditovich <yuri.benditovich@daynix.com>,
         Andrew Melnychenko <andrew@daynix.com>,
         Akihiko Odaki <akihiko.odaki@daynix.com>
-Subject: [RFC PATCH v2 1/7] bpf: Introduce BPF_PROG_TYPE_VNET_HASH
-Date:   Sun, 15 Oct 2023 23:16:29 +0900
-Message-ID: <20231015141644.260646-2-akihiko.odaki@daynix.com>
+Subject: [RFC PATCH v2 2/7] bpf: Add vnet_hash members to __sk_buff
+Date:   Sun, 15 Oct 2023 23:16:30 +0900
+Message-ID: <20231015141644.260646-3-akihiko.odaki@daynix.com>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231015141644.260646-1-akihiko.odaki@daynix.com>
 References: <20231015141644.260646-1-akihiko.odaki@daynix.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 To:     unlisted-recipients:; (no To-header on input)
@@ -96,73 +96,194 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This new program type will be used by tun to determine the queues to
+They will be used only by BPF_PROG_TYPE_VNET_HASH to tell the queues to
 deliver packets and the hash values and types reported with virtio-net
 headers.
 
 Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
 ---
- Documentation/bpf/bpf_prog_run.rst         |  1 +
- Documentation/bpf/libbpf/program_types.rst |  2 ++
- include/linux/bpf_types.h                  |  2 ++
- include/uapi/linux/bpf.h                   |  5 +++++
- kernel/bpf/verifier.c                      |  6 ++++++
- net/core/filter.c                          | 11 +++++++++++
- tools/include/uapi/linux/bpf.h             |  1 +
- tools/lib/bpf/libbpf.c                     |  2 ++
- 8 files changed, 30 insertions(+)
+ include/linux/filter.h         |  7 ++++
+ net/core/filter.c              | 77 +++++++++++++++++++++++++++++++++-
+ tools/include/uapi/linux/bpf.h |  4 ++
+ 3 files changed, 86 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/bpf/bpf_prog_run.rst b/Documentation/bpf/bpf_prog_run.rst
-index 4868c909df5c..0d108d867c03 100644
---- a/Documentation/bpf/bpf_prog_run.rst
-+++ b/Documentation/bpf/bpf_prog_run.rst
-@@ -39,6 +39,7 @@ following types:
- - ``BPF_PROG_TYPE_STRUCT_OPS``
- - ``BPF_PROG_TYPE_RAW_TRACEPOINT``
- - ``BPF_PROG_TYPE_SYSCALL``
-+- ``BPF_PROG_TYPE_VNET_HASH``
- 
- When using the ``BPF_PROG_RUN`` command, userspace supplies an input context
- object and (for program types operating on network packets) a buffer containing
-diff --git a/Documentation/bpf/libbpf/program_types.rst b/Documentation/bpf/libbpf/program_types.rst
-index ad4d4d5eecb0..6be53201f91b 100644
---- a/Documentation/bpf/libbpf/program_types.rst
-+++ b/Documentation/bpf/libbpf/program_types.rst
-@@ -171,6 +171,8 @@ described in more detail in the footnotes.
- +                                           +----------------------------------------+----------------------------------+-----------+
- |                                           | ``BPF_TRACE_RAW_TP``                   | ``tp_btf+`` [#fentry]_           |           |
- +-------------------------------------------+----------------------------------------+----------------------------------+-----------+
-+| ``BPF_PROG_TYPE_VNET_HASH``               |                                        | ``vnet_hash``                    |           |
-++-------------------------------------------+----------------------------------------+----------------------------------+-----------+
- | ``BPF_PROG_TYPE_XDP``                     | ``BPF_XDP_CPUMAP``                     | ``xdp.frags/cpumap``             |           |
- +                                           +                                        +----------------------------------+-----------+
- |                                           |                                        | ``xdp/cpumap``                   |           |
-diff --git a/include/linux/bpf_types.h b/include/linux/bpf_types.h
-index fc0d6f32c687..dec83d495e82 100644
---- a/include/linux/bpf_types.h
-+++ b/include/linux/bpf_types.h
-@@ -34,6 +34,8 @@ BPF_PROG_TYPE(BPF_PROG_TYPE_SK_MSG, sk_msg,
- 	      struct sk_msg_md, struct sk_msg)
- BPF_PROG_TYPE(BPF_PROG_TYPE_FLOW_DISSECTOR, flow_dissector,
- 	      struct __sk_buff, struct bpf_flow_dissector)
-+BPF_PROG_TYPE(BPF_PROG_TYPE_VNET_HASH, vnet_hash,
-+	      struct __sk_buff, struct sk_buff)
- #endif
- #ifdef CONFIG_BPF_EVENTS
- BPF_PROG_TYPE(BPF_PROG_TYPE_KPROBE, kprobe,
-diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-index 0448700890f7..298634556fab 100644
---- a/include/uapi/linux/bpf.h
-+++ b/include/uapi/linux/bpf.h
-@@ -988,6 +988,7 @@ enum bpf_prog_type {
- 	BPF_PROG_TYPE_SK_LOOKUP,
- 	BPF_PROG_TYPE_SYSCALL, /* a program that can execute syscalls */
- 	BPF_PROG_TYPE_NETFILTER,
-+	BPF_PROG_TYPE_VNET_HASH,
+diff --git a/include/linux/filter.h b/include/linux/filter.h
+index bf7ad887943c..d10afe92ee45 100644
+--- a/include/linux/filter.h
++++ b/include/linux/filter.h
+@@ -643,6 +643,13 @@ struct bpf_skb_data_end {
+ 	void *data_end;
  };
  
- enum bpf_attach_type {
-@@ -6111,6 +6112,10 @@ struct __sk_buff {
++struct bpf_skb_vnet_hash_end {
++	struct qdisc_skb_cb qdisc_cb;
++	u32 hash_value;
++	u16 hash_report;
++	u16 rss_queue;
++};
++
+ struct bpf_nh_params {
+ 	u32 nh_family;
+ 	union {
+diff --git a/net/core/filter.c b/net/core/filter.c
+index 867edbc628de..35bc60b71722 100644
+--- a/net/core/filter.c
++++ b/net/core/filter.c
+@@ -8435,9 +8435,15 @@ static bool bpf_skb_is_valid_access(int off, int size, enum bpf_access_type type
+ 	case bpf_ctx_range(struct __sk_buff, data):
+ 	case bpf_ctx_range(struct __sk_buff, data_meta):
+ 	case bpf_ctx_range(struct __sk_buff, data_end):
++	case bpf_ctx_range(struct __sk_buff, vnet_hash_value):
+ 		if (size != size_default)
+ 			return false;
+ 		break;
++	case bpf_ctx_range(struct __sk_buff, vnet_hash_report):
++	case bpf_ctx_range(struct __sk_buff, vnet_rss_queue):
++		if (size != sizeof(__u16))
++			return false;
++		break;
+ 	case bpf_ctx_range_ptr(struct __sk_buff, flow_keys):
+ 		return false;
+ 	case bpf_ctx_range(struct __sk_buff, hwtstamp):
+@@ -8473,7 +8479,7 @@ static bool bpf_skb_is_valid_access(int off, int size, enum bpf_access_type type
+ 	return true;
+ }
+ 
+-static bool sk_filter_is_valid_access(int off, int size,
++static bool vnet_hash_is_valid_access(int off, int size,
+ 				      enum bpf_access_type type,
+ 				      const struct bpf_prog *prog,
+ 				      struct bpf_insn_access_aux *info)
+@@ -8493,6 +8499,9 @@ static bool sk_filter_is_valid_access(int off, int size,
+ 	if (type == BPF_WRITE) {
+ 		switch (off) {
+ 		case bpf_ctx_range_till(struct __sk_buff, cb[0], cb[4]):
++		case bpf_ctx_range(struct __sk_buff, vnet_hash_value):
++		case bpf_ctx_range(struct __sk_buff, vnet_hash_report):
++		case bpf_ctx_range(struct __sk_buff, vnet_rss_queue):
+ 			break;
+ 		default:
+ 			return false;
+@@ -8502,6 +8511,21 @@ static bool sk_filter_is_valid_access(int off, int size,
+ 	return bpf_skb_is_valid_access(off, size, type, prog, info);
+ }
+ 
++static bool sk_filter_is_valid_access(int off, int size,
++				      enum bpf_access_type type,
++				      const struct bpf_prog *prog,
++				      struct bpf_insn_access_aux *info)
++{
++	switch (off) {
++	case bpf_ctx_range(struct __sk_buff, vnet_hash_value):
++	case bpf_ctx_range(struct __sk_buff, vnet_hash_report):
++	case bpf_ctx_range(struct __sk_buff, vnet_rss_queue):
++		return false;
++	}
++
++	return vnet_hash_is_valid_access(off, size, type, prog, info);
++}
++
+ static bool cg_skb_is_valid_access(int off, int size,
+ 				   enum bpf_access_type type,
+ 				   const struct bpf_prog *prog,
+@@ -8511,6 +8535,9 @@ static bool cg_skb_is_valid_access(int off, int size,
+ 	case bpf_ctx_range(struct __sk_buff, tc_classid):
+ 	case bpf_ctx_range(struct __sk_buff, data_meta):
+ 	case bpf_ctx_range(struct __sk_buff, wire_len):
++	case bpf_ctx_range(struct __sk_buff, vnet_hash_value):
++	case bpf_ctx_range(struct __sk_buff, vnet_hash_report):
++	case bpf_ctx_range(struct __sk_buff, vnet_rss_queue):
+ 		return false;
+ 	case bpf_ctx_range(struct __sk_buff, data):
+ 	case bpf_ctx_range(struct __sk_buff, data_end):
+@@ -8558,6 +8585,9 @@ static bool lwt_is_valid_access(int off, int size,
+ 	case bpf_ctx_range(struct __sk_buff, tstamp):
+ 	case bpf_ctx_range(struct __sk_buff, wire_len):
+ 	case bpf_ctx_range(struct __sk_buff, hwtstamp):
++	case bpf_ctx_range(struct __sk_buff, vnet_hash_value):
++	case bpf_ctx_range(struct __sk_buff, vnet_hash_report):
++	case bpf_ctx_range(struct __sk_buff, vnet_rss_queue):
+ 		return false;
+ 	}
+ 
+@@ -8799,6 +8829,10 @@ static bool tc_cls_act_is_valid_access(int off, int size,
+ 	}
+ 
+ 	switch (off) {
++	case bpf_ctx_range(struct __sk_buff, vnet_hash_value):
++	case bpf_ctx_range(struct __sk_buff, vnet_hash_report):
++	case bpf_ctx_range(struct __sk_buff, vnet_rss_queue):
++		return false;
+ 	case bpf_ctx_range(struct __sk_buff, data):
+ 		info->reg_type = PTR_TO_PACKET;
+ 		break;
+@@ -9117,6 +9151,9 @@ static bool sk_skb_is_valid_access(int off, int size,
+ 	case bpf_ctx_range(struct __sk_buff, tstamp):
+ 	case bpf_ctx_range(struct __sk_buff, wire_len):
+ 	case bpf_ctx_range(struct __sk_buff, hwtstamp):
++	case bpf_ctx_range(struct __sk_buff, vnet_hash_value):
++	case bpf_ctx_range(struct __sk_buff, vnet_hash_report):
++	case bpf_ctx_range(struct __sk_buff, vnet_rss_queue):
+ 		return false;
+ 	}
+ 
+@@ -9727,6 +9764,42 @@ static u32 bpf_convert_ctx_access(enum bpf_access_type type,
+ 						     hwtstamps, 8,
+ 						     target_size));
+ 		break;
++
++	case offsetof(struct __sk_buff, vnet_hash_value):
++		BUILD_BUG_ON(sizeof_field(struct bpf_skb_vnet_hash_end, hash_value) != 4);
++
++		off = offsetof(struct sk_buff, cb) +
++		      offsetof(struct bpf_skb_vnet_hash_end, hash_value);
++
++		if (type == BPF_WRITE)
++			*insn++ = BPF_EMIT_STORE(BPF_W, si, off);
++		else
++			*insn++ = BPF_LDX_MEM(BPF_W, si->dst_reg, si->src_reg, off);
++		break;
++
++	case offsetof(struct __sk_buff, vnet_hash_report):
++		BUILD_BUG_ON(sizeof_field(struct bpf_skb_vnet_hash_end, hash_report) != 2);
++
++		off = offsetof(struct sk_buff, cb) +
++		      offsetof(struct bpf_skb_vnet_hash_end, hash_report);
++
++		if (type == BPF_WRITE)
++			*insn++ = BPF_EMIT_STORE(BPF_H, si, off);
++		else
++			*insn++ = BPF_LDX_MEM(BPF_H, si->dst_reg, si->src_reg, off);
++		break;
++
++	case offsetof(struct __sk_buff, vnet_rss_queue):
++		BUILD_BUG_ON(sizeof_field(struct bpf_skb_vnet_hash_end, rss_queue) != 2);
++
++		off = offsetof(struct sk_buff, cb) +
++		      offsetof(struct bpf_skb_vnet_hash_end, rss_queue);
++
++		if (type == BPF_WRITE)
++			*insn++ = BPF_EMIT_STORE(BPF_H, si, off);
++		else
++			*insn++ = BPF_LDX_MEM(BPF_H, si->dst_reg, si->src_reg, off);
++		break;
+ 	}
+ 
+ 	return insn - insn_buf;
+@@ -10969,7 +11042,7 @@ const struct bpf_prog_ops flow_dissector_prog_ops = {
+ 
+ const struct bpf_verifier_ops vnet_hash_verifier_ops = {
+ 	.get_func_proto		= sk_filter_func_proto,
+-	.is_valid_access	= sk_filter_is_valid_access,
++	.is_valid_access	= vnet_hash_is_valid_access,
+ 	.convert_ctx_access	= bpf_convert_ctx_access,
+ 	.gen_ld_abs		= bpf_gen_ld_abs,
+ };
+diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
+index 60976fe86247..298634556fab 100644
+--- a/tools/include/uapi/linux/bpf.h
++++ b/tools/include/uapi/linux/bpf.h
+@@ -6112,6 +6112,10 @@ struct __sk_buff {
  	__u8  tstamp_type;
  	__u32 :24;		/* Padding, future use. */
  	__u64 hwtstamp;
@@ -173,84 +294,6 @@ index 0448700890f7..298634556fab 100644
  };
  
  struct bpf_tunnel_key {
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index bb78212fa5b2..fd6d842635d2 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -14373,6 +14373,7 @@ static bool may_access_skb(enum bpf_prog_type type)
- 	case BPF_PROG_TYPE_SOCKET_FILTER:
- 	case BPF_PROG_TYPE_SCHED_CLS:
- 	case BPF_PROG_TYPE_SCHED_ACT:
-+	case BPF_PROG_TYPE_VNET_HASH:
- 		return true;
- 	default:
- 		return false;
-@@ -16973,6 +16974,11 @@ static int check_map_prog_compatibility(struct bpf_verifier_env *env,
- 			return -EINVAL;
- 		}
- 
-+		if (prog_type == BPF_PROG_TYPE_VNET_HASH) {
-+			verbose(env, "vnet hash progs cannot use bpf_spin_lock yet\n");
-+			return -EINVAL;
-+		}
-+
- 		if (is_tracing_prog_type(prog_type)) {
- 			verbose(env, "tracing progs cannot use bpf_spin_lock yet\n");
- 			return -EINVAL;
-diff --git a/net/core/filter.c b/net/core/filter.c
-index a094694899c9..867edbc628de 100644
---- a/net/core/filter.c
-+++ b/net/core/filter.c
-@@ -10967,6 +10967,17 @@ const struct bpf_prog_ops flow_dissector_prog_ops = {
- 	.test_run		= bpf_prog_test_run_flow_dissector,
- };
- 
-+const struct bpf_verifier_ops vnet_hash_verifier_ops = {
-+	.get_func_proto		= sk_filter_func_proto,
-+	.is_valid_access	= sk_filter_is_valid_access,
-+	.convert_ctx_access	= bpf_convert_ctx_access,
-+	.gen_ld_abs		= bpf_gen_ld_abs,
-+};
-+
-+const struct bpf_prog_ops vnet_hash_prog_ops = {
-+	.test_run		= bpf_prog_test_run_skb,
-+};
-+
- int sk_detach_filter(struct sock *sk)
- {
- 	int ret = -ENOENT;
-diff --git a/tools/include/uapi/linux/bpf.h b/tools/include/uapi/linux/bpf.h
-index 0448700890f7..60976fe86247 100644
---- a/tools/include/uapi/linux/bpf.h
-+++ b/tools/include/uapi/linux/bpf.h
-@@ -988,6 +988,7 @@ enum bpf_prog_type {
- 	BPF_PROG_TYPE_SK_LOOKUP,
- 	BPF_PROG_TYPE_SYSCALL, /* a program that can execute syscalls */
- 	BPF_PROG_TYPE_NETFILTER,
-+	BPF_PROG_TYPE_VNET_HASH,
- };
- 
- enum bpf_attach_type {
-diff --git a/tools/lib/bpf/libbpf.c b/tools/lib/bpf/libbpf.c
-index 96ff1aa4bf6a..e74d136eae07 100644
---- a/tools/lib/bpf/libbpf.c
-+++ b/tools/lib/bpf/libbpf.c
-@@ -209,6 +209,7 @@ static const char * const prog_type_name[] = {
- 	[BPF_PROG_TYPE_SK_LOOKUP]		= "sk_lookup",
- 	[BPF_PROG_TYPE_SYSCALL]			= "syscall",
- 	[BPF_PROG_TYPE_NETFILTER]		= "netfilter",
-+	[BPF_PROG_TYPE_VNET_HASH]		= "vnet_hash",
- };
- 
- static int __base_pr(enum libbpf_print_level level, const char *format,
-@@ -8858,6 +8859,7 @@ static const struct bpf_sec_def section_defs[] = {
- 	SEC_DEF("struct_ops.s+",	STRUCT_OPS, 0, SEC_SLEEPABLE),
- 	SEC_DEF("sk_lookup",		SK_LOOKUP, BPF_SK_LOOKUP, SEC_ATTACHABLE),
- 	SEC_DEF("netfilter",		NETFILTER, BPF_NETFILTER, SEC_NONE),
-+	SEC_DEF("vnet_hash",		VNET_HASH, 0, SEC_NONE),
- };
- 
- int libbpf_register_prog_handler(const char *sec,
 -- 
 2.42.0
 
