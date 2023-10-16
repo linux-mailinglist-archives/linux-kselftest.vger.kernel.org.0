@@ -2,303 +2,159 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 024097CB16A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Oct 2023 19:35:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36D4C7CB182
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Oct 2023 19:46:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231302AbjJPRfR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 16 Oct 2023 13:35:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37364 "EHLO
+        id S231611AbjJPRqc (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 16 Oct 2023 13:46:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbjJPRfQ (ORCPT
+        with ESMTP id S230271AbjJPRqb (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Oct 2023 13:35:16 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F2189F
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Oct 2023 10:35:14 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1c9c496c114so19025ad.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Oct 2023 10:35:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1697477713; x=1698082513; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1IE7ste/9K+MPz1i72hcvVlvzxuJt/UnGYdWTniw0P0=;
-        b=pbg3q/DTfSMo00CJe4tDhXCU+XNbURrWCmshNZ9V2CBp64Eo7SY/dBB6VCzNsYtcfF
-         VWjZV9MXVmxewx3QXk1RuyC2NewXCj7ONTmBK7fkLUD8NnQuB/ss87xF+K8N1jmYR1he
-         8pTPaKz5T6BDMLAQEWFPDOfmP/hnRFouH1cy9bcbAMik+fNuBxhZdRuaNulkEsdwT5f7
-         LNqVM21FkQ4Nzb5nxzNVAGRP8QVrV+vwKjRSEEJF5qt7is27i3NnkI9dgV9p2+ELubs2
-         br2NcanM23XYiEyzWC1oou0tvBJHevDKzqrovku2+JEg0DJLLyFhaHQ+zqSUzDu/m24G
-         gV/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697477713; x=1698082513;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1IE7ste/9K+MPz1i72hcvVlvzxuJt/UnGYdWTniw0P0=;
-        b=oaP5RrE/36M2VZIvPekIPMkTJDHUs3cFwxwGn9sMKPHgsur19odufQKe3xH5tFq74Z
-         gqwSzDp4N6QnqgkuT2B7yvJNF8r1XknTb3QW4HqIBG+AC0sC6rCbjOQ1/Cwropz1FgFV
-         PpemX1JBtg5exh+c8qle4qx/+8V65C0Jdq55bX3hdTD4qbF0iOujH3zDkmalvw3dY8TL
-         MAX+VBnhTwo/8F3os6BxQ5KZ+jzHI6EqIMylBOlSDIJ7xumxArWqjQoW0eL6hNrh4rQe
-         tySBgvDTBMYZbYPAw6tAer35xRJ/T37zefgHfuFZvebexJdMRbjA+0xjG4HUMJarkPbv
-         cuKw==
-X-Gm-Message-State: AOJu0YzWQmUTwKDtpGG2WaXfFoJRb7tGP92EH0PDX0PlIK2p2bZXVH+S
-        AZ+pujjNgCM9VOAg4wZM+GreikL2suHyQd7em8DHxw==
-X-Google-Smtp-Source: AGHT+IHpLOQh8gGngPY81BrIpOn4V6KnmdVdaoL70Npuo2h09JrCSwDur1o0CQrQETq8n/zCk+qOPTnzOoAPcHQBU44=
-X-Received: by 2002:a17:902:f60e:b0:1b8:b564:b528 with SMTP id
- n14-20020a170902f60e00b001b8b564b528mr321729plg.7.1697477713183; Mon, 16 Oct
- 2023 10:35:13 -0700 (PDT)
+        Mon, 16 Oct 2023 13:46:31 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2066.outbound.protection.outlook.com [40.107.243.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 248889F;
+        Mon, 16 Oct 2023 10:46:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZOPlksfz7hYbLFVufRRDspDkQWoIPWJkp929ZOb36sJL0OxW4d6WNfELsTpjYUmBW19TsI+Qqdn+gaf79k/S5c+6bUxncuqFCAJXd1Gi08fl26N9syElcUdP+hwWZAowaeXHg/D1eWsiJ9FDpfeIBoeGgRlR0I/46+jrYYRsK3YV9srL6W5xYeZYpS2b1cv+n0Zb4gYWSy7BTfmH740VeZJTcMazSdCJXVc3aaC8kbXJFaUp5i1QEkciLRZ5ehQM/WZZJotRqz/OV0iYndHN+wobJ/qNUM6g9QdakuzCjiInEO7z3JGPZn9deArLIv39T7OueRpoPoFFBVAEIy/ztQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=15uE4DSkg2AyvMelVDkZH4tovHTZJdm2K71GECmLDu4=;
+ b=cS8WASBCwfA5zhSGbpM3hcmN8AMFtmhrtN86AxgXps/VODmkD9vdTbNrE/JnsYxWDUtj8fVJw8Nw+T/iLenlgnHORh1oPU0qv2wpfWH5+MmRkS28Zaztm9N7JClIPlqmQQVaMH7hVk6Ilc4ZWqjKSWNywKWVnWRhMcYYLhtII04r8wmwJA89fkDEo9pogzBYYBemk8yBB4gxqRKEKKzpZmFeKJ+aU0hOerVqRPlhCBAlnPsEeBkNDHeBN7UXHBJjSX3Vu/W2HCQdDtyCkdXOozkjAzqy8rkzD+r+h1llBsbKm9/wDuy2pd9G4WgkTsWEcugCDiTddVu3c/nUAQ8GJg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=15uE4DSkg2AyvMelVDkZH4tovHTZJdm2K71GECmLDu4=;
+ b=VEiIKzB0CJrIM3nD4O1EgM7wr5e6uegutDC11YQS5UGNOwse3M9hyVZzZuZNIWFuL68/PdGPiuttY5MUzwEiYu4COsqRK/hmDP/a855BhPpiEYM1HCTDWRwGYml04QVq+0mDHEHuvsfDSrJlIpnFfMedlIYojkIeFFhkw5mHtGmVyty+ARimF+Y4MAkfeHni2q1/WTJ75gcWnIOHV7zPf+Xc4vgSQt379B2B+6HaMpV+zp4JyYZdWSxCzmSz0Evq7TUPfGhE1OFtlAtmsgsPyOH5+/DcwUZ6pLrWItzhvYgKAiD+Hbfq36iNdHDEkCoLNKaSHqEF/Fat7AqQeBwEbQ==
+Received: from DM6PR02CA0112.namprd02.prod.outlook.com (2603:10b6:5:1b4::14)
+ by BL1PR12MB5142.namprd12.prod.outlook.com (2603:10b6:208:312::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6886.36; Mon, 16 Oct
+ 2023 17:46:27 +0000
+Received: from DS3PEPF000099E2.namprd04.prod.outlook.com
+ (2603:10b6:5:1b4:cafe::b6) by DM6PR02CA0112.outlook.office365.com
+ (2603:10b6:5:1b4::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.36 via Frontend
+ Transport; Mon, 16 Oct 2023 17:46:26 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ DS3PEPF000099E2.mail.protection.outlook.com (10.167.17.201) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6838.22 via Frontend Transport; Mon, 16 Oct 2023 17:46:26 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 16 Oct
+ 2023 10:46:13 -0700
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail203.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 16 Oct
+ 2023 10:46:13 -0700
+Received: from Asurada-Nvidia (10.127.8.9) by mail.nvidia.com (10.129.68.7)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41 via Frontend
+ Transport; Mon, 16 Oct 2023 10:46:12 -0700
+Date:   Mon, 16 Oct 2023 10:46:10 -0700
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     Jason Gunthorpe <jgg@nvidia.com>
+CC:     Yi Liu <yi.l.liu@intel.com>, "joro@8bytes.org" <joro@8bytes.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "kevin.tian@intel.com" <kevin.tian@intel.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
+        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "jasowang@redhat.com" <jasowang@redhat.com>,
+        "shameerali.kolothum.thodi@huawei.com" 
+        <shameerali.kolothum.thodi@huawei.com>,
+        "lulu@redhat.com" <lulu@redhat.com>,
+        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "zhenzhong.duan@intel.com" <zhenzhong.duan@intel.com>,
+        "joao.m.martins@oracle.com" <joao.m.martins@oracle.com>
+Subject: Re: [PATCH v2 1/6] iommu: Add new iommu op to create domains owned
+ by userspace
+Message-ID: <ZS124n0LYj4kl/4c@Asurada-Nvidia>
+References: <20230928071528.26258-1-yi.l.liu@intel.com>
+ <20230928071528.26258-2-yi.l.liu@intel.com>
+ <ZSuROTyaxePoVFA+@Asurada-Nvidia>
+ <20231016120454.GS3952@nvidia.com>
 MIME-Version: 1.0
-References: <20231016143828.647848-1-jeffxu@chromium.org>
-In-Reply-To: <20231016143828.647848-1-jeffxu@chromium.org>
-From:   Jann Horn <jannh@google.com>
-Date:   Mon, 16 Oct 2023 19:34:37 +0200
-Message-ID: <CAG48ez3ShUYey+ZAFsU2i1RpQn0a5eOs2hzQ426FkcgnfUGLvA@mail.gmail.com>
-Subject: Re: [RFC PATCH v1 0/8] Introduce mseal() syscall
-To:     jeffxu@chromium.org
-Cc:     akpm@linux-foundation.org, keescook@chromium.org,
-        sroettger@google.com, jeffxu@google.com, jorgelo@chromium.org,
-        groeck@chromium.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        surenb@google.com, alex.sierra@amd.com, apopple@nvidia.com,
-        aneesh.kumar@linux.ibm.com, axelrasmussen@google.com,
-        ben@decadent.org.uk, catalin.marinas@arm.com, david@redhat.com,
-        dwmw@amazon.co.uk, ying.huang@intel.com, hughd@google.com,
-        joey.gouly@arm.com, corbet@lwn.net, wangkefeng.wang@huawei.com,
-        Liam.Howlett@oracle.com, torvalds@linux-foundation.org,
-        lstoakes@gmail.com, willy@infradead.org, mawupeng1@huawei.com,
-        linmiaohe@huawei.com, namit@vmware.com, peterx@redhat.com,
-        peterz@infradead.org, ryan.roberts@arm.com, shr@devkernel.io,
-        vbabka@suse.cz, xiujianfeng@huawei.com, yu.ma@intel.com,
-        zhangpeng362@huawei.com, dave.hansen@intel.com, luto@kernel.org,
-        linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20231016120454.GS3952@nvidia.com>
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS3PEPF000099E2:EE_|BL1PR12MB5142:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5d3ce442-29b6-4531-eb0c-08dbce6fd251
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: cVOR8PcYm+gaXAOJv3Thn+1sfMsAxjdQ0ilQPJNakSL9agIkDRGDt+mYIBgIaXURzXX8SX7mCaL7J054SjUivuihzMUUffj4GLqfzeGp/cuoStGIE5ECX+mLXlZ158n2M2joD6R1Kysz9Xdi/eBe7ZlOBr/yue4tC7QLOwEyk+TR1QdFs0VUbh8936mVa3r+h1ALZMaTAu38i8vaPPD9GGHJtWk391QLFHLUW05kRBHVZ/sF7Bp/TYiRIQqAkD8aBCQfg7EdzUtHHSOX58U5oiiHMlfNDNkicYYmrwzY/opFTKKI4WgIRSQodqEbq+kFPfu2SQbhgw9Xdm4VHjcXG8iRYeYEIinQPV4LECtDhfLootnPGp/CtpGpbEXBW5LsbQ4PGuCsMTa0eVBk05CvbhMayRo/E5EpY1y47OUy+l/ndCuPi8KaYIiOm4APEUZHihyELseNXcl3Viuf8cght4qfFKmhLAx7LZ9PoXvaRQ5TsIr4Iq7MwVKIzipEg/aM0RqQ3xhJdXTYDkRWlhX/JnIQ0B1ygmAlO1gDTHiI3rtVV8errAwIgNIxtbAJTm4BlXN1Raj06mA1tlUCXz/AJjMqVYrqwF3i5+XpiF+meqdumBAAdYGWaIREbT0lmJ5ZnTWS1B6CNI5WGVohB1yM7ZLvOfUGNva9rrx8e9hpwpdovqZNw1cLvf15Wx2cBg7kFOIeVboYfH5LA9B0ekpMSBqR2J2LTWva+WvWaq9vnt7B/qSi23r0/O1Bw/vA0MHD
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230031)(4636009)(376002)(136003)(396003)(346002)(39860400002)(230922051799003)(1800799009)(64100799003)(186009)(451199024)(82310400011)(40470700004)(46966006)(36840700001)(83380400001)(336012)(26005)(426003)(5660300002)(4326008)(41300700001)(6862004)(8676002)(8936002)(40460700003)(86362001)(7636003)(356005)(40480700001)(55016003)(82740400003)(36860700001)(33716001)(47076005)(2906002)(478600001)(316002)(7416002)(54906003)(6636002)(70206006)(70586007)(9686003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Oct 2023 17:46:26.6926
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5d3ce442-29b6-4531-eb0c-08dbce6fd251
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DS3PEPF000099E2.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5142
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Oct 16, 2023 at 4:38=E2=80=AFPM <jeffxu@chromium.org> wrote:
->
-> From: Jeff Xu <jeffxu@google.com>
->
-> This patchset proposes a new mseal() syscall for the Linux kernel.
->
-> Modern CPUs support memory permissions such as RW and NX bits. Linux has
-> supported NX since the release of kernel version 2.6.8 in August 2004 [1]=
-.
-> The memory permission feature improves security stance on memory
-> corruption bugs, i.e. the attacker can=E2=80=99t just write to arbitrary =
-memory
-> and point the code to it, the memory has to be marked with X bit, or
-> else an exception will happen.
->
-> Memory sealing additionally protects the mapping itself against
-> modifications. This is useful to mitigate memory corruption issues where
-> a corrupted pointer is passed to a memory management syscall. For example=
-,
-> such an attacker primitive can break control-flow integrity guarantees
-> since read-only memory that is supposed to be trusted can become writable
-> or .text pages can get remapped. Memory sealing can automatically be
-> applied by the runtime loader to seal .text and .rodata pages and
-> applications can additionally seal security critical data at runtime.
-> A similar feature already exists in the XNU kernel with the
-> VM_FLAGS_PERMANENT [3] flag and on OpenBSD with the mimmutable syscall [4=
-].
-> Also, Chrome wants to adopt this feature for their CFI work [2] and this
-> patchset has been designed to be compatible with the Chrome use case.
->
-> The new mseal() is an architecture independent syscall, and with
-> following signature:
->
-> mseal(void addr, size_t len, unsigned int types, unsigned int flags)
+On Mon, Oct 16, 2023 at 09:04:54AM -0300, Jason Gunthorpe wrote:
+> On Sun, Oct 15, 2023 at 12:14:01AM -0700, Nicolin Chen wrote:
+> > On Thu, Sep 28, 2023 at 12:15:23AM -0700, Yi Liu wrote:
+> > 
+> > > diff --git a/include/uapi/linux/iommufd.h b/include/uapi/linux/iommufd.h
+> > > index b4ba0c0cbab6..4a7c5c8fdbb4 100644
+> > > --- a/include/uapi/linux/iommufd.h
+> > > +++ b/include/uapi/linux/iommufd.h
+> > > @@ -347,10 +347,20 @@ struct iommu_vfio_ioas {
+> > >  };
+> > >  #define IOMMU_VFIO_IOAS _IO(IOMMUFD_TYPE, IOMMUFD_CMD_VFIO_IOAS)
+> > > 
+> > > +/**
+> > > + * enum iommufd_hwpt_alloc_flags - Flags for HWPT allocation
+> > > + * @IOMMU_HWPT_ALLOC_NEST_PARENT: If set, allocate a domain which can serve
+> > > + *                                as the parent domain in the nesting
+> > > + *                                configuration.
+> > 
+> > I just noticed a nit here: we should probably align with other
+> > parts of this file by using "HWPT" v.s. "domain"? I.e.
+> > 
+> > + * @IOMMU_HWPT_ALLOC_NEST_PARENT: If set, allocate a HWPT which can serve
+> > + *                                as the parent HWPT in the nesting
+> > + *                                configuration.
+> 
+> Yes
 
-Is the plan that the VMAs you need to protect would be created and
-mseal()'ed while you expect that attacker code can not (yet) be
-running concurrently?
-
-Do you expect to be using sealed memory for shadow stacks (in x86 CET
-/ arm64 GCS) to prevent an attacker from mixing those up by moving
-pages inside a shadow stack or between different shadow stacks or
-such? (If that's even possible, I think it is but I haven't tried.)
-
-> addr/len: memory range.  Must be continuous/allocated memory, or else
-> mseal() will fail and no VMA is updated. For details on acceptable
-> arguments, please refer to comments in mseal.c. Those are also fully
-> covered by the selftest.
-> types: bit mask to specify which syscall to seal, currently they are:
-> MM_SEAL_MSEAL 0x1
-> MM_SEAL_MPROTECT 0x2
-> MM_SEAL_MUNMAP 0x4
-> MM_SEAL_MMAP 0x8
-> MM_SEAL_MREMAP 0x10
-
-You'd probably also want to block destructive madvise() operations
-that can effectively alter region contents by discarding pages and
-such, in particular MADV_FREE, MADV_DONTNEED, MADV_DONTNEED_LOCKED;
-probably also MADV_REMOVE, MADV_DONTFORK, MADV_WIPEONFORK. Maybe you'd
-want to just block all madvise() for sealed VMAs? Or rename
-process_madvise_behavior_valid() to something like
-"madvise_is_nondestructive()" and use that.
-
-The following comments probably mostly don't matter in practice if
-this feature is used in a context that is heavily seccomp-sandboxed
-(like Desktop Linux Chrome), but should maybe be addressed to make
-this feature more usable for other users. (Including Android Chrome,
-which has a weaker sandbox...)
-
-FWIW, it is also possible to write to read-only memory through the
-/proc/self/mem interface (or through ptrace commands like
-PTRACE_POKETEXT) because of FOLL_FORCE, depending on kernel
-configuration, seccomp policy, and what the LSMs do. (I think Android
-Chrome would allow /proc/self/mem writes, but would block
-PTRACE_POKETEXT with RestrictPtrace() in the sandbox code?)
-
-I had a related ancient patch series in 2016 with an attempt to allow
-SELinux to prevent bypassing W^X protections with this, but I never
-followed through with getting that landed...
-(https://lore.kernel.org/linux-mm/1475103281-7989-1-git-send-email-jann@the=
-jh.net/)
-
-I guess the question there is what the right semantics for this kind
-of protected memory are when a debugger is active. The simple solution
-that might break some debugging would be "just deny all FOLL_FORCE
-write access for this memory" (which would prevent debuggers from
-being able to place breakpoints, which would maybe not be great). But
-maybe it makes more sense to consider this to be an independent
-concern and solve it with a new SELinux feature or something like that
-instead, and then document that mseal() requires some complement to
-prevent forced writes to read-only private memory? (For which the
-simplest solution would be "don't grant filesystem access or ptrace()
-access to the sandboxed code".)
-
-
-What is the intended interaction with userfaultfd, which I believe by
-design permits arbitrary data into unpopulated areas of anonymous
-VMAs? If the intention is that the process should otherwise be
-sandboxed to not have access to userfaultfd, that should maybe be
-documented. (Alternatively I guess you could theoretically remove the
-VM_MAYWRITE bit from marked VMAs, but that might be more strict than
-we want, since it'd also block all FOLL_FORCE writes.)
-
-
-There are also some interfaces like AIO or the X86 Shadow Stacks
-interface that indirectly unmap memory through the kernel and look
-like they could perhaps be tricked into racily unmapping a
-just-created sealed VMA. You'd probably have to make sure that they
-can't do that and essentially treat their unmap operations as if they
-came from userspace, I guess? What Linus just wrote.
-
-
-I think either way this feature needs some documentation on what kind
-of context it's supposed to run in.
-
-
-> Each bit represents sealing for one specific syscall type, e.g.
-> MM_SEAL_MPROTECT will deny mprotect syscall. The consideration of bitmask
-> is that the API is extendable, i.e. when needed, the sealing can be
-> extended to madvise, mlock, etc. Backward compatibility is also easy.
->
-> The kernel will remember which seal types are applied, and the applicatio=
-n
-> doesn=E2=80=99t need to repeat all existing seal types in the next mseal(=
-).  Once
-> a seal type is applied, it can=E2=80=99t be unsealed. Call mseal() on an =
-existing
-> seal type is a no-action, not a failure.
->
-> MM_SEAL_MSEAL will deny mseal() calls that try to add a new seal type.
->
-> Internally, vm_area_struct adds a new field vm_seals, to store the bit
-> masks.
->
-> For the affected syscalls, such as mprotect, a check(can_modify_mm) for
-> sealing is added, this usually happens at the early point of the syscall,
-> before any update is made to VMAs. The effect of that is: if any of the
-> VMAs in the given address range fails the sealing check, none of the VMA
-> will be updated. It might be worth noting that this is different from the
-> rest of mprotect(), where some updates can happen even when mprotect
-> returns fail. Consider can_modify_mm only checks vm_seals in
-> vm_area_struct, and it is not going deeper in the page table or updating
-> any HW, success or none behavior might fit better here. I would like to
-> listen to the community's feedback on this.
->
-> The idea that inspired this patch comes from Stephen R=C3=B6ttger=E2=80=
-=99s work in
-> V8 CFI [5],  Chrome browser in ChromeOS will be the first user of this AP=
-I.
->
-> In addition, Stephen is working on glibc change to add sealing support
-> into the dynamic linker to seal all non-writable segments at startup. Whe=
-n
-> that work is completed, all applications can automatically benefit from
-> these new protections.
->
-> [1] https://kernelnewbies.org/Linux_2_6_8
-> [2] https://v8.dev/blog/control-flow-integrity
-> [3] https://github.com/apple-oss-distributions/xnu/blob/1031c584a5e37aff1=
-77559b9f69dbd3c8c3fd30a/osfmk/mach/vm_statistics.h#L274
-> [4] https://man.openbsd.org/mimmutable.2
-> [5] https://docs.google.com/document/d/1O2jwK4dxI3nRcOJuPYkonhTkNQfbmwdvx=
-QMyXgeaRHo/edit#heading=3Dh.bvaojj9fu6hc
->
-> Jeff Xu (8):
->   Add mseal syscall
->   Wire up mseal syscall
->   mseal: add can_modify_mm and can_modify_vma
->   mseal: seal mprotect
->   mseal munmap
->   mseal mremap
->   mseal mmap
->   selftest mm/mseal mprotect/munmap/mremap/mmap
->
->  arch/alpha/kernel/syscalls/syscall.tbl      |    1 +
->  arch/arm/tools/syscall.tbl                  |    1 +
->  arch/arm64/include/asm/unistd.h             |    2 +-
->  arch/arm64/include/asm/unistd32.h           |    2 +
->  arch/ia64/kernel/syscalls/syscall.tbl       |    1 +
->  arch/m68k/kernel/syscalls/syscall.tbl       |    1 +
->  arch/microblaze/kernel/syscalls/syscall.tbl |    1 +
->  arch/mips/kernel/syscalls/syscall_n32.tbl   |    1 +
->  arch/mips/kernel/syscalls/syscall_n64.tbl   |    1 +
->  arch/mips/kernel/syscalls/syscall_o32.tbl   |    1 +
->  arch/parisc/kernel/syscalls/syscall.tbl     |    1 +
->  arch/powerpc/kernel/syscalls/syscall.tbl    |    1 +
->  arch/s390/kernel/syscalls/syscall.tbl       |    1 +
->  arch/sh/kernel/syscalls/syscall.tbl         |    1 +
->  arch/sparc/kernel/syscalls/syscall.tbl      |    1 +
->  arch/x86/entry/syscalls/syscall_32.tbl      |    1 +
->  arch/x86/entry/syscalls/syscall_64.tbl      |    1 +
->  arch/xtensa/kernel/syscalls/syscall.tbl     |    1 +
->  fs/aio.c                                    |    5 +-
->  include/linux/mm.h                          |   55 +-
->  include/linux/mm_types.h                    |    7 +
->  include/linux/syscalls.h                    |    2 +
->  include/uapi/asm-generic/unistd.h           |    5 +-
->  include/uapi/linux/mman.h                   |    6 +
->  ipc/shm.c                                   |    3 +-
->  kernel/sys_ni.c                             |    1 +
->  mm/Kconfig                                  |    8 +
->  mm/Makefile                                 |    1 +
->  mm/internal.h                               |    4 +-
->  mm/mmap.c                                   |   49 +-
->  mm/mprotect.c                               |    6 +
->  mm/mremap.c                                 |   19 +-
->  mm/mseal.c                                  |  328 +++++
->  mm/nommu.c                                  |    6 +-
->  mm/util.c                                   |    8 +-
->  tools/testing/selftests/mm/Makefile         |    1 +
->  tools/testing/selftests/mm/mseal_test.c     | 1428 +++++++++++++++++++
->  37 files changed, 1934 insertions(+), 28 deletions(-)
->  create mode 100644 mm/mseal.c
->  create mode 100644 tools/testing/selftests/mm/mseal_test.c
->
-> --
-> 2.42.0.609.gbb76f46606-goog
->
+Should we resend? Or would it be possible for you to update it
+in your for-next tree?
