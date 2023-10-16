@@ -2,149 +2,217 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB83E7CAAFD
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Oct 2023 16:09:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41EC67CABAB
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Oct 2023 16:38:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233594AbjJPOJ2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 16 Oct 2023 10:09:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43332 "EHLO
+        id S231321AbjJPOi5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 16 Oct 2023 10:38:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233627AbjJPOJ2 (ORCPT
+        with ESMTP id S232143AbjJPOi4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Oct 2023 10:09:28 -0400
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2059.outbound.protection.outlook.com [40.107.102.59])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33EEBEE
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Oct 2023 07:09:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=h8av4e9fVTWu0GDGxQKZDi+HQea99d/a/y7u1d/TPUAAl/Jl/CqqEn8VN5TmfQzbeSWVFhu0zWknh6Jm1go90HuJjCW0B6atcjg+2UTwLXqb5eRvcA+1KbdMDTSqF9f0Cnj0u3dGduA0Zf/SLUAtRLA2lSeMV57SQh3yDe2yMv5Hthg144MND+ciexM0YAvda1c5N1O2f9roZkfUMpD1tbWMT3rmUqHaGro7Oy9bD2YBA6uqL2hioTaWjH1wjg3jp2SuK+vzo5AKLyHhb9IpA22MC0LgyoHwdzQ+TWkG7mCeAdEVv3U3aDWMVvsA8KDiWFzE3xBQKOUOcVbCEXjtUQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=II/lVz5/1IiN0/LRYxzSU6oVkOfytZj2uKMoGnLOuqY=;
- b=OWJi1RG/21y1u+2zJdspuFs8CvFQwFwy6rQq1KkOf/SYMsIuS17fKqtunUaMBY13j+VeYXtnflv2IAtpkolP1IUm+uXFh6dCSjRVqdhvnA5XICQq7woHTllR41spYzx54+CWzNVS6aX0pbxMkNx8gGnR97kjkYOKgoUaky08GhnoIubXBOcDFPqaOV8QHANPe0uY9odyU4VJA3TnlMJ9gB0R4XF0niq/sq1Acq4+IVqAdRTGBmT8cGFr6WIUN1KhEHg0QDeKFxQ7tW07n1dVrkvVToLdJPNVu8we+MwzcFpl83NFdOrl/XiqrG0WDtbF9uwz/OhaPOxVeQ90Gwxm1Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=II/lVz5/1IiN0/LRYxzSU6oVkOfytZj2uKMoGnLOuqY=;
- b=ek+ZHIl5Qdz7iAy2afx1eXG9+ttjgLFJ+lcdTMPFgGUALFryAO1k00BpqLX0/JuIf7yUCoQW7DzM2jGZh+aBCa1rlfDf8xK1BJozCg9NkzWV3bWcnFVFLIhC5kxPu6TsZbpkHJESaur2zbCn7SuKMZ4NiLNgnzUgo1+lEKqo93tagFzXbUskU7jICO1Nvh4hOSJ0J0k9s8E/5HWSyZ0HHj2nrYStlJcT7evBFfx/537RjnS7QeR3IHgQNIEaTkfBqdhssXZZZDGAoOWsQzZ9W/Tecia8Zk/OylCncq5XWJbHFLnvTQXLPr5rlqRLKMuDzaAWCqgked2ZzOPrWkDsdw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by DS0PR12MB8816.namprd12.prod.outlook.com (2603:10b6:8:14f::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6886.35; Mon, 16 Oct
- 2023 14:09:24 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::3f66:c2b6:59eb:78c2]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::3f66:c2b6:59eb:78c2%6]) with mapi id 15.20.6863.046; Mon, 16 Oct 2023
- 14:09:24 +0000
-Date:   Mon, 16 Oct 2023 11:09:21 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Nicolin Chen <nicolinc@nvidia.com>
-Cc:     kevin.tian@intel.com, yi.l.liu@intel.com, shuah@kernel.org,
-        iommu@lists.linux.dev, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] iommufd/selftest: Rework TEST_LENGTH to test min_size
- explicitly
-Message-ID: <20231016140921.GU3952@nvidia.com>
-References: <20231015074648.24185-1-nicolinc@nvidia.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231015074648.24185-1-nicolinc@nvidia.com>
-X-ClientProxiedBy: SJ0PR03CA0218.namprd03.prod.outlook.com
- (2603:10b6:a03:39f::13) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+        Mon, 16 Oct 2023 10:38:56 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F76DEB
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Oct 2023 07:38:54 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-6bd0e1b1890so1199763b3a.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Oct 2023 07:38:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1697467134; x=1698071934; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OG3B8TvIG+IjDlegATi+HkokBbcU++AzacD+iwBqjGw=;
+        b=XLCypQYzDshaK7W8lkeVjd2GjCscUOT/q2KVS25jvmwe7bFeXvR2KAGXlqx15Urigp
+         irxzR/xov0n3BGTsXTGgpY4Q3BgZjgI+lzXpjAxZQ3qH4Za9oe6vDPJIh85zMu/2BbCk
+         MITuaFCXv/UxfAZeVC+4IkdSH8nWjxCbAnJmg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697467134; x=1698071934;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OG3B8TvIG+IjDlegATi+HkokBbcU++AzacD+iwBqjGw=;
+        b=mpv7QBXVB3Q2/+kKt9Rq/dApKC/2AelVf8CQt2RHAGXJItmSvVpsogR9AWqw9I1JW6
+         DPpwcOykY9OohAcgLld3gS0s3DJ40Gb3QMr8W/DMXUm7ZlLuL/a1cnnhwjGEoN4tb2rk
+         n6GnMMgiixs2g7t/B/TwJcJYGvDGntkN49YVFwKQpDA+TZo+wKey/d1AgYEfbIfQLAmZ
+         upkO7nSfZHRiJj1aw4zio5pm20tGLigr/1fdJlO2YcpijRzINgL8e7whZ/CTKn+5+0H1
+         XL0B3p1fPgLF56scGFH32K01outrhXQGLWLqoB813h/s51v9nH8i5EN2/wsF3RT6b79A
+         Acdw==
+X-Gm-Message-State: AOJu0YzmLjPER+8Ig+O5RFiIuwW0pVamP9wS5QkHYgf/klbi9DldvEy/
+        dZ7/t6UHwSFaRMyFej5FMWyGxw==
+X-Google-Smtp-Source: AGHT+IH9aWlYzhBaTPVLTRWv5Tf9e7BovSSNCFQrVwMGVHwa/T0CfgnjC+Zci9bojL5+5c4/ATIZOA==
+X-Received: by 2002:a05:6a20:4287:b0:16b:aad0:effe with SMTP id o7-20020a056a20428700b0016baad0effemr27827286pzj.62.1697467133493;
+        Mon, 16 Oct 2023 07:38:53 -0700 (PDT)
+Received: from localhost (9.184.168.34.bc.googleusercontent.com. [34.168.184.9])
+        by smtp.gmail.com with UTF8SMTPSA id s20-20020a63af54000000b005b6c1972c99sm2697786pgo.7.2023.10.16.07.38.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 16 Oct 2023 07:38:53 -0700 (PDT)
+From:   jeffxu@chromium.org
+To:     akpm@linux-foundation.org, keescook@chromium.org,
+        sroettger@google.com
+Cc:     jeffxu@google.com, jorgelo@chromium.org, groeck@chromium.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, jannh@google.com, surenb@google.com,
+        alex.sierra@amd.com, apopple@nvidia.com,
+        aneesh.kumar@linux.ibm.com, axelrasmussen@google.com,
+        ben@decadent.org.uk, catalin.marinas@arm.com, david@redhat.com,
+        dwmw@amazon.co.uk, ying.huang@intel.com, hughd@google.com,
+        joey.gouly@arm.com, corbet@lwn.net, wangkefeng.wang@huawei.com,
+        Liam.Howlett@oracle.com, torvalds@linux-foundation.org,
+        lstoakes@gmail.com, willy@infradead.org, mawupeng1@huawei.com,
+        linmiaohe@huawei.com, namit@vmware.com, peterx@redhat.com,
+        peterz@infradead.org, ryan.roberts@arm.com, shr@devkernel.io,
+        vbabka@suse.cz, xiujianfeng@huawei.com, yu.ma@intel.com,
+        zhangpeng362@huawei.com, dave.hansen@intel.com, luto@kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: [RFC PATCH v1 0/8] Introduce mseal() syscall
+Date:   Mon, 16 Oct 2023 14:38:19 +0000
+Message-ID: <20231016143828.647848-1-jeffxu@chromium.org>
+X-Mailer: git-send-email 2.42.0.655.g421f12c284-goog
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|DS0PR12MB8816:EE_
-X-MS-Office365-Filtering-Correlation-Id: c6ba6b9e-9288-42d1-7dc8-08dbce518036
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: dBzSqJhgMjQESj6XvWoIZQ2kr80sedp1QB+Vgsk2PXptLe0TS45bontRuoJ34AJy2nMiOYmkpiwPeuMK+bxP4faeAxnnV8Op5S6waonjY5yTlU9+tOCZ4wc7e80qlQpHoQw8t1kw9MAJ1ZsmkFNpZ3wr959AVOoUqUjXc+tEpdGLyPWw4Ap9eScC7t4vqF5m/A9J1hl3NjX/VEZBszBnQxlKShbpLg7PRxiGOVfLs8Ki8LXqZQc/TvSXGS9Q5tOsIePSNAawNZ68dqUcbCfrEE1Ig+fnL/PkTzef/62YfQEyQYMDw16Vdhr11cg/RAYyivYs3WjThJDoerQGDKA0NsN0ZKxRT31+cJUMwiirV0ni0tNCxd5TqiU66ePgHkqrx/zo1tFxfxpWpb35vhs5MvwQH/EiUjiDDIy73u31qv5wjAPz1PURtd5mD0e6B+SOPjmTVFOEN3sDZzxoV3dYWc9JbNISTA1hI4OpivT63Cc8fL8BTc5Q9Ssum2R8NTZXKQKp7nAny6Xr0w9ZNnPQa5/oI70OTe5IxpMm7/M3MYs7e9WYJ9OFSH4jxFXo0ZQW0oZY6fLkmf0RFpvdp+JVvVettm/9+SoiaXIPx2zdk2A=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(376002)(366004)(136003)(346002)(396003)(230922051799003)(1800799009)(186009)(64100799003)(451199024)(966005)(6486002)(37006003)(6636002)(2616005)(66476007)(66556008)(66946007)(478600001)(316002)(1076003)(26005)(6512007)(6506007)(5660300002)(6862004)(8676002)(8936002)(4326008)(2906002)(41300700001)(86362001)(33656002)(6666004)(36756003)(38100700002)(83380400001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?dxikN5OVeuivqs++DlVlq2MSI0qL8+UUm+PIRQeeJ7yORmXd0ow78nUMQ135?=
- =?us-ascii?Q?hY6s4OBs7Gt3/1id+gKK75u/aAqsA50ULqDRlg3TS2hMQlS30PfkPTiOa+k+?=
- =?us-ascii?Q?QsNhK2UvA28ZGdkyrONBHPwXmNXVBa0AhEx633CsI3QMUFEfg7tJeHrePphO?=
- =?us-ascii?Q?iEfVBn+KKGHbjD73ZrTCl7j8o6doJvcbTQE728PURT70UlBg+XZ3JkQX61uz?=
- =?us-ascii?Q?ZGQ/bf8qeK2RfJ5X+5aAgdvnXky0HrdOsq+Z0MRXz7gFmMJ/TCRyGnD61yHV?=
- =?us-ascii?Q?t2sVdiGhgEDBT8YVD87tEO+RJR7q7a+bB0NjAKyjMzBgeHLZ0MvB6IcznNv5?=
- =?us-ascii?Q?JmTUa45CMcSJrXmo2WC8H5hqvsUSHT7xLLQTKyaYbFUJUr8/mOKWVy5Jzpgy?=
- =?us-ascii?Q?CrN8+r3oWHvZSOs1nBo9tTmbTQHHQSu6qMy5Aw2O7DlaOtNdtPOiNnCv1qOb?=
- =?us-ascii?Q?1H7d0QoGIs8ldHitVTQtHsNQ8a34hUuj3wu59nCsTRTOWC0aFNRYKTayVKQZ?=
- =?us-ascii?Q?rGdDALHrLM0VA4dRsS5Eflzr6uDnz1VHyXeOguOeSUf2iyaqtwPsK69kZD20?=
- =?us-ascii?Q?FEoh8fD5ixSu3FrYmyZsIBFLU+dPw8T/AdtKvGKc/NuP9MQ3re9tECX/tVl3?=
- =?us-ascii?Q?ySAQBIFPVuL4Ja4UEvAPMtdCShxAstHY9U4yze1iqkjstzIt2BdxIioxRLQF?=
- =?us-ascii?Q?TUDRz3N8nQQ9BHve6PTOj/txUHWwK8k1TAYPXPOVS1BiaksUKjoKEoIN4E2T?=
- =?us-ascii?Q?FABbq1NoqpVPoydAf6esYySrpEQvdXFvNMBEwz1zgSuNDlKug1YaYrZsd/eT?=
- =?us-ascii?Q?ZZ5OJRqK9HzWie+MWsx0If6BcpGh1g1mFyyWsrjOVP7yfAdB++gWu56qRDqO?=
- =?us-ascii?Q?DSaEzH+TmeYSDhE+8NHQXicz2Q0/hoOkCJ537IAlWkCynKv1ppNYQUjDHuX7?=
- =?us-ascii?Q?/cZPy7yX2UBC2uGPVF84TVK+u/ooNBgVgeuqdJWA3b6L3u0vL13tfAjGqMfB?=
- =?us-ascii?Q?/AXF3YJL2v79wFWccV9UDqegXRzkGLL3FxtLVPvGFNiBhKlIaM5IRftGnyCv?=
- =?us-ascii?Q?30Aa2IZTT6qlZjvi3CzXMPD2fNBznFs6WzZJsPOtfG1/rxPEDnDml6zf2Cd2?=
- =?us-ascii?Q?M+WqZkJqgwvPkXJVwOSkjnPGNQJjCufknJc6VcihV2cPilhRzwD/iTkZc/jW?=
- =?us-ascii?Q?8D+U44O7GF99EqoZCWextBVPHyll57CGXScohJBh/QP3TdkAOA4eL39G/Rxq?=
- =?us-ascii?Q?ha6tLyrbeZBhVIhaVPC7+pBD+uBB4M9u+op0GEj5kJZT7tr6buHLbFoWOrKP?=
- =?us-ascii?Q?tfKgm9gTLUwxDUXPR52vV4sVDXm7xOjBvsJmQN7l6J+cAiDvrxh6lllLKfz6?=
- =?us-ascii?Q?su+xBSmAq8jo/UC6TzK/AhG5/HSz4DEmOozoLhq/LdXjorlwaeIlUq3lEMA0?=
- =?us-ascii?Q?LBgk8zITz8di+zPIyiXnmpIAQPdcdARQY+V6+EKhVEPeqYX5ccauM2UXBwPm?=
- =?us-ascii?Q?gkT0BDplcZHrYxesg4AjEk2rRlvFNiruwy98nQrros3Y98nYvYg2r4RHCHKr?=
- =?us-ascii?Q?3fkrvBGtqkpsHeBCLOmnpqhHuIEyLk+owAZ7bfuy?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c6ba6b9e-9288-42d1-7dc8-08dbce518036
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Oct 2023 14:09:24.3360
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: uPfRprF+NjzvPlkx7Idu8KhUTn1PhKg6uHhhq42z/UVm+OB/gjwxOxE9h7jWBAXv
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8816
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, Oct 15, 2023 at 12:46:48AM -0700, Nicolin Chen wrote:
-> TEST_LENGTH passing ".size = sizeof(struct _struct) - 1" expects -EINVAL
-> from "if (ucmd.user_size < op->min_size)" check in iommufd_fops_ioctl().
-> This has been working when min_size is exactly the size of the structure.
-> 
-> However, if the size of the structure becomes larger than min_size, i.e.
-> the passing size above is larger than min_size, that min_size sanity no
-> longer works.
-> 
-> Since the first test in TEST_LENGTH() was to test that min_size sanity
-> routine, rework it to support a min_size calculation, rather than using
-> the full size of the structure.
-> 
-> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-> ---
-> Hi Jason/Kevin,
-> 
-> This was a part of the nesting series. Its link in v4:
-> https://lore.kernel.org/linux-iommu/20230921075138.124099-13-yi.l.liu@intel.com/
-> 
-> I just realized that this should go in prior to the nesting series.
-> One of the nesting patches changes the IOMMU_HWPT_ALLOC structure,
-> which would break the cmd_length test without this patch.
-> 
-> Thanks!
-> Nicolin
-> 
->  tools/testing/selftests/iommu/iommufd.c | 29 ++++++++++++++-----------
->  1 file changed, 16 insertions(+), 13 deletions(-)
+From: Jeff Xu <jeffxu@google.com>
 
-Applied to iommufd for-next
+This patchset proposes a new mseal() syscall for the Linux kernel. 
 
-Thanks,
-Jason
+Modern CPUs support memory permissions such as RW and NX bits. Linux has
+supported NX since the release of kernel version 2.6.8 in August 2004 [1].
+The memory permission feature improves security stance on memory
+corruption bugs, i.e. the attacker can’t just write to arbitrary memory
+and point the code to it, the memory has to be marked with X bit, or
+else an exception will happen.
+
+Memory sealing additionally protects the mapping itself against
+modifications. This is useful to mitigate memory corruption issues where
+a corrupted pointer is passed to a memory management syscall. For example,
+such an attacker primitive can break control-flow integrity guarantees
+since read-only memory that is supposed to be trusted can become writable
+or .text pages can get remapped. Memory sealing can automatically be
+applied by the runtime loader to seal .text and .rodata pages and
+applications can additionally seal security critical data at runtime.
+A similar feature already exists in the XNU kernel with the
+VM_FLAGS_PERMANENT [3] flag and on OpenBSD with the mimmutable syscall [4].
+Also, Chrome wants to adopt this feature for their CFI work [2] and this
+patchset has been designed to be compatible with the Chrome use case.
+
+The new mseal() is an architecture independent syscall, and with
+following signature:
+
+mseal(void addr, size_t len, unsigned int types, unsigned int flags)
+
+addr/len: memory range.  Must be continuous/allocated memory, or else
+mseal() will fail and no VMA is updated. For details on acceptable
+arguments, please refer to comments in mseal.c. Those are also fully
+covered by the selftest.
+
+types: bit mask to specify which syscall to seal, currently they are:
+MM_SEAL_MSEAL 0x1
+MM_SEAL_MPROTECT 0x2
+MM_SEAL_MUNMAP 0x4
+MM_SEAL_MMAP 0x8
+MM_SEAL_MREMAP 0x10
+
+Each bit represents sealing for one specific syscall type, e.g.
+MM_SEAL_MPROTECT will deny mprotect syscall. The consideration of bitmask
+is that the API is extendable, i.e. when needed, the sealing can be
+extended to madvise, mlock, etc. Backward compatibility is also easy.
+
+The kernel will remember which seal types are applied, and the application
+doesn’t need to repeat all existing seal types in the next mseal().  Once
+a seal type is applied, it can’t be unsealed. Call mseal() on an existing
+seal type is a no-action, not a failure.
+
+MM_SEAL_MSEAL will deny mseal() calls that try to add a new seal type.
+
+Internally, vm_area_struct adds a new field vm_seals, to store the bit
+masks. 
+
+For the affected syscalls, such as mprotect, a check(can_modify_mm) for
+sealing is added, this usually happens at the early point of the syscall,
+before any update is made to VMAs. The effect of that is: if any of the
+VMAs in the given address range fails the sealing check, none of the VMA
+will be updated. It might be worth noting that this is different from the
+rest of mprotect(), where some updates can happen even when mprotect
+returns fail. Consider can_modify_mm only checks vm_seals in
+vm_area_struct, and it is not going deeper in the page table or updating
+any HW, success or none behavior might fit better here. I would like to
+listen to the community's feedback on this.
+
+The idea that inspired this patch comes from Stephen Röttger’s work in
+V8 CFI [5],  Chrome browser in ChromeOS will be the first user of this API.
+
+In addition, Stephen is working on glibc change to add sealing support
+into the dynamic linker to seal all non-writable segments at startup. When
+that work is completed, all applications can automatically benefit from
+these new protections.
+
+[1] https://kernelnewbies.org/Linux_2_6_8
+[2] https://v8.dev/blog/control-flow-integrity
+[3] https://github.com/apple-oss-distributions/xnu/blob/1031c584a5e37aff177559b9f69dbd3c8c3fd30a/osfmk/mach/vm_statistics.h#L274
+[4] https://man.openbsd.org/mimmutable.2
+[5] https://docs.google.com/document/d/1O2jwK4dxI3nRcOJuPYkonhTkNQfbmwdvxQMyXgeaRHo/edit#heading=h.bvaojj9fu6hc
+
+Jeff Xu (8):
+  Add mseal syscall
+  Wire up mseal syscall
+  mseal: add can_modify_mm and can_modify_vma
+  mseal: seal mprotect
+  mseal munmap
+  mseal mremap
+  mseal mmap
+  selftest mm/mseal mprotect/munmap/mremap/mmap
+
+ arch/alpha/kernel/syscalls/syscall.tbl      |    1 +
+ arch/arm/tools/syscall.tbl                  |    1 +
+ arch/arm64/include/asm/unistd.h             |    2 +-
+ arch/arm64/include/asm/unistd32.h           |    2 +
+ arch/ia64/kernel/syscalls/syscall.tbl       |    1 +
+ arch/m68k/kernel/syscalls/syscall.tbl       |    1 +
+ arch/microblaze/kernel/syscalls/syscall.tbl |    1 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl   |    1 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl   |    1 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl   |    1 +
+ arch/parisc/kernel/syscalls/syscall.tbl     |    1 +
+ arch/powerpc/kernel/syscalls/syscall.tbl    |    1 +
+ arch/s390/kernel/syscalls/syscall.tbl       |    1 +
+ arch/sh/kernel/syscalls/syscall.tbl         |    1 +
+ arch/sparc/kernel/syscalls/syscall.tbl      |    1 +
+ arch/x86/entry/syscalls/syscall_32.tbl      |    1 +
+ arch/x86/entry/syscalls/syscall_64.tbl      |    1 +
+ arch/xtensa/kernel/syscalls/syscall.tbl     |    1 +
+ fs/aio.c                                    |    5 +-
+ include/linux/mm.h                          |   55 +-
+ include/linux/mm_types.h                    |    7 +
+ include/linux/syscalls.h                    |    2 +
+ include/uapi/asm-generic/unistd.h           |    5 +-
+ include/uapi/linux/mman.h                   |    6 +
+ ipc/shm.c                                   |    3 +-
+ kernel/sys_ni.c                             |    1 +
+ mm/Kconfig                                  |    8 +
+ mm/Makefile                                 |    1 +
+ mm/internal.h                               |    4 +-
+ mm/mmap.c                                   |   49 +-
+ mm/mprotect.c                               |    6 +
+ mm/mremap.c                                 |   19 +-
+ mm/mseal.c                                  |  328 +++++
+ mm/nommu.c                                  |    6 +-
+ mm/util.c                                   |    8 +-
+ tools/testing/selftests/mm/Makefile         |    1 +
+ tools/testing/selftests/mm/mseal_test.c     | 1428 +++++++++++++++++++
+ 37 files changed, 1934 insertions(+), 28 deletions(-)
+ create mode 100644 mm/mseal.c
+ create mode 100644 tools/testing/selftests/mm/mseal_test.c
+
+-- 
+2.42.0.609.gbb76f46606-goog
+
