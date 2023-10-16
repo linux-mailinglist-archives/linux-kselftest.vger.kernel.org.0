@@ -2,85 +2,181 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 981967CB146
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Oct 2023 19:23:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E12347CB14D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Oct 2023 19:27:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231302AbjJPRXx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 16 Oct 2023 13:23:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34892 "EHLO
+        id S231675AbjJPR1T (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 16 Oct 2023 13:27:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbjJPRXw (ORCPT
+        with ESMTP id S232295AbjJPR1S (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Oct 2023 13:23:52 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2FDA83
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Oct 2023 10:23:49 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-522bd411679so8080717a12.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Oct 2023 10:23:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1697477028; x=1698081828; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ziSfOVrFPUUVHeu10UoweKHdhwL95UR6sSsnqfpXK6Q=;
-        b=HvQ5YeEvctA8aifKS1VFX6xfbbx3IvuRPYON1jqKEBTH/bGZoyl+ixbQ0pO/NV8/qo
-         mmFUbag82baeh5YBFHMbS9NPswSRTxJHRdQzDT3KOuLGvJT/ax9grdYcH6LWLn6vA1+O
-         45Dpj4bm/uHXzQR0DF8WMsXZyfeJGo20EZUq0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697477028; x=1698081828;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ziSfOVrFPUUVHeu10UoweKHdhwL95UR6sSsnqfpXK6Q=;
-        b=QzxmR1xJ75gfZLbawe65WxsmRioF7F1jH+eQ1Hmm1WGGp0qrrP/Q9iGDsTKPU1r3BL
-         qzySv46SIO99OOT4rRhF/jazFw/y1CCEejLNCI8fIh8/5KP1NVXCBEdLzDnf6aQspv6E
-         +2xKqdy0NUUYGm9+b/CitOuF/WdCTy84PmlnCoJVXAtUfVMk3k4UIbiGMnbcxbnYZyRG
-         TdUBovne3IcFPK6QVYi3aDv6CPsICyV4hat0TV2wPjcmVeRc3bmJ0UqODw5DU6A45+U2
-         y+AbYdRiS9l43hrEpuh/JQO4/eSoa33waN1NCIwyPazxBA1fzleRDC1mehAnV+GAVbFu
-         lxMQ==
-X-Gm-Message-State: AOJu0Yxjzq6xad1wcjzrcTg6XZKSf1w7JyCSL8pCquw2gOC3lbuPkP5r
-        tvuzu8SNbPHglOzzjSHeJTV25+dJzgINbUqUFJcLwA==
-X-Google-Smtp-Source: AGHT+IFuQGqMn3tbsg9t1AIDrfNioaLFSoCI8Aysl9x6e/Ypcb9eOvBgsYCpUVQaJKAfGo8ewpkxpg==
-X-Received: by 2002:a05:6402:43c9:b0:53d:d913:d3cb with SMTP id p9-20020a05640243c900b0053dd913d3cbmr12314341edc.28.1697477028202;
-        Mon, 16 Oct 2023 10:23:48 -0700 (PDT)
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com. [209.85.218.49])
-        by smtp.gmail.com with ESMTPSA id y8-20020a056402270800b0053defc8c15asm186455edd.51.2023.10.16.10.23.47
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Oct 2023 10:23:47 -0700 (PDT)
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-9be7e3fa1daso384813066b.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Oct 2023 10:23:47 -0700 (PDT)
-X-Received: by 2002:a17:907:78a:b0:9bd:a662:c066 with SMTP id
- xd10-20020a170907078a00b009bda662c066mr9387285ejb.76.1697477026848; Mon, 16
- Oct 2023 10:23:46 -0700 (PDT)
+        Mon, 16 Oct 2023 13:27:18 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ADD3A2;
+        Mon, 16 Oct 2023 10:27:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1697477237; x=1729013237;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=FLb/iaBsDgmtPKRnNCTcAPNw9W60fhMt+PB23hULpi8=;
+  b=ifJCNV9sc7WAHA2pWJFUCpZ/Bz26wgbWBBHNAbaOA/hAip9A4Yk9rAdz
+   Yi7Rf9LxUwOcgxEDEv6ckOGB1cOSQAESAX3xSIX9tN/rwTiWQcr/dDpPV
+   NGpINEhvOivpVfPRcOnMzBOHmvMkkTnfn22w6KNC6eX76txSiFQxueNdc
+   noMkAbiINVuUkDEZeOJqI4JstVJ5JcLzKAcbJMJnnaTshD7DXmr4RbacZ
+   7a8jT1w4z1Hzmaj7HV8E6QtT2VxbSv0t2ReHZrg1naVBouagS1s2W3TND
+   PK9LZDbxLorhpYKueSsOwhAaGZDvXBgYDsNIaccg4rSesRMFThaXk9mDf
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10865"; a="7163216"
+X-IronPort-AV: E=Sophos;i="6.03,229,1694761200"; 
+   d="scan'208";a="7163216"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2023 10:27:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10865"; a="821647830"
+X-IronPort-AV: E=Sophos;i="6.03,229,1694761200"; 
+   d="scan'208";a="821647830"
+Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
+  by fmsmga008.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 16 Oct 2023 10:27:16 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32; Mon, 16 Oct 2023 10:27:15 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32; Mon, 16 Oct 2023 10:27:15 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32 via Frontend Transport; Mon, 16 Oct 2023 10:27:15 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.100)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.32; Mon, 16 Oct 2023 10:27:13 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QfC3NNC6297nqqedtvpjKoTZCCe+K7a3HOO+lEr4/2UFVF2WyOKrZLqgopgKtpzHKWAhEq5j1X6WE/YD9gieLk6FftQ8IRfN29/iEtc1kksNuqFhfHWOjpuIsEp0bp8MggWoBTyucoLx0Yr3efiC/7SMEiZit7vBaElq7R5aJo96JAWaSocRH6T5bVx5G5sfipj5FFgdQUgkYUYflx5IoZ/Ce9FxZ7WaupstoV1U2N+eS7KAgvB1oyYA+Juwr8j6OADoD6NcNJKHpojM9qhrIzKEMD8wOV2wrQ5bm1jZWCi4MKNXopGQ2/BdZMJ90wUYoGw4uy7UkkPF3EbZst5zWg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SzkO46YvHGWdujnr43Gw5LuPBto2TBqZe84AnZwXrPo=;
+ b=On+fGsvP4rMyDY3wMrf+tRtk5BuPzbrK5BffBU/UuF2xtkCT/JfcK48k5fq+oTnU2eYQes7kwM2uy0ExR+2UQ5JABrKp1nuX2zcTYlf3gxVct/lnKSa5ERiQCdQPXHFVf40yIofzUGsPcHLn7SFFrtxWMyX8RSIfBYrEQWhCHA13RpU7+q9JE0qiE/zqHnimyJQtj8evRj9TVU4k8/o2lDCghv9Eww8jDl4IMklwAy+nlpSrwSHo6V98XGCp69TFArQxwKjicvsIpLoVIv23RbEHUBjpGtt0QzqPNRoFKG/qSW+mJ35HRvRXVQYKOiw5rLmoCUmKmOj0RHWf7LsI8Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from MW5PR11MB5810.namprd11.prod.outlook.com (2603:10b6:303:192::22)
+ by BL1PR11MB6027.namprd11.prod.outlook.com (2603:10b6:208:392::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6863.45; Mon, 16 Oct
+ 2023 17:27:11 +0000
+Received: from MW5PR11MB5810.namprd11.prod.outlook.com
+ ([fe80::e420:d67c:ef82:cb64]) by MW5PR11MB5810.namprd11.prod.outlook.com
+ ([fe80::e420:d67c:ef82:cb64%4]) with mapi id 15.20.6863.046; Mon, 16 Oct 2023
+ 17:27:11 +0000
+Message-ID: <e82fc689-5cc3-d799-6e5f-a9e4ac98e26f@intel.com>
+Date:   Mon, 16 Oct 2023 19:27:03 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [RESEND PATCH V9 3/7] cpufreq: amd-pstate: Enable amd-pstate
+ preferred core supporting.
+Content-Language: en-US
+To:     Peter Zijlstra <peterz@infradead.org>,
+        "Meng, Li (Jassmine)" <Li.Meng@amd.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+CC:     "Huang, Ray" <Ray.Huang@amd.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
+        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
+        "Yuan, Perry" <Perry.Yuan@amd.com>,
+        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+        "Viresh Kumar" <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>,
+        "Oleksandr Natalenko" <oleksandr@natalenko.name>,
+        "Karny, Wyes" <Wyes.Karny@amd.com>
+References: <20231013033118.3759311-1-li.meng@amd.com>
+ <20231013033118.3759311-4-li.meng@amd.com>
+ <20231013160128.GB36211@noisy.programming.kicks-ass.net>
+ <DM4PR12MB6351E2E9504B57BD40DAE985F7D7A@DM4PR12MB6351.namprd12.prod.outlook.com>
+ <20231016105845.GA33217@noisy.programming.kicks-ass.net>
+From:   "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>
+In-Reply-To: <20231016105845.GA33217@noisy.programming.kicks-ass.net>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: WA0P291CA0001.POLP291.PROD.OUTLOOK.COM
+ (2603:10a6:1d0:1::27) To MW5PR11MB5810.namprd11.prod.outlook.com
+ (2603:10b6:303:192::22)
 MIME-Version: 1.0
-References: <20231016143828.647848-1-jeffxu@chromium.org>
-In-Reply-To: <20231016143828.647848-1-jeffxu@chromium.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 16 Oct 2023 10:23:29 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whFZoap+DBTYvJx6ohqPwn11Puzh7q4huFWDX9vBwXHgg@mail.gmail.com>
-Message-ID: <CAHk-=whFZoap+DBTYvJx6ohqPwn11Puzh7q4huFWDX9vBwXHgg@mail.gmail.com>
-Subject: Re: [RFC PATCH v1 0/8] Introduce mseal() syscall
-To:     jeffxu@chromium.org
-Cc:     akpm@linux-foundation.org, keescook@chromium.org,
-        sroettger@google.com, jeffxu@google.com, jorgelo@chromium.org,
-        groeck@chromium.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        jannh@google.com, surenb@google.com, alex.sierra@amd.com,
-        apopple@nvidia.com, aneesh.kumar@linux.ibm.com,
-        axelrasmussen@google.com, ben@decadent.org.uk,
-        catalin.marinas@arm.com, david@redhat.com, dwmw@amazon.co.uk,
-        ying.huang@intel.com, hughd@google.com, joey.gouly@arm.com,
-        corbet@lwn.net, wangkefeng.wang@huawei.com,
-        Liam.Howlett@oracle.com, lstoakes@gmail.com, willy@infradead.org,
-        mawupeng1@huawei.com, linmiaohe@huawei.com, namit@vmware.com,
-        peterx@redhat.com, peterz@infradead.org, ryan.roberts@arm.com,
-        shr@devkernel.io, vbabka@suse.cz, xiujianfeng@huawei.com,
-        yu.ma@intel.com, zhangpeng362@huawei.com, dave.hansen@intel.com,
-        luto@kernel.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MW5PR11MB5810:EE_|BL1PR11MB6027:EE_
+X-MS-Office365-Filtering-Correlation-Id: 86243206-5069-4e18-7e11-08dbce6d2179
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hGbw8wvQvXOHLgqb58ufbsl4j2pxsxmCL8VS1lEV+DdTq6tlFqGd8rvihsctrGOsz3vKE7VYvJT4NBaVJjuEYcL30We1z5QsE1sVixs+/NgQzgrTOEESDLfk4ruTaNNFKEH6Phn446utGpwXva7j2EOpWzbGt/P+cOZqT7gz7j6EVV+/XAJOmz4r22RZe9wjb0Gq1fy1sLzuTa6sY0Wnzivaj8AK1TFXRrzbuYjzaim385HlpWhO1MG43ODEnw+T8CPmMYk+Cp0vqlB2Wg6rnaMxdoiBeP3Ebt7OynHOZXZJ3Eube9j1EO3Z9cEUvpx5NovLmEHFBwL2agRkZ4A3QC0XbBmKG/bhtuF+kjuzVhIBv0NZalfIAMh4LEtPjbDm2ve+TCqqFhe7YUOv04xDGFXYin/JX0FfrIi2HaANc3leCCcZE+lse7FhBhwhotJdAmS2YyimsI7WrkbfTQbN/ly9sTaAK19jUvehpXyITuo0ZVHaEZwTUv+WBUAQEGfucAnKrgsPQFn4MnQ38xmU56/byAnfBpLS3kcqRjCcxb51vsiGgrsC5nzz5nzc7bYBo0+D90/cWjmFGL8i1m0Zs/CwO8PEjSUKQS7xxkVRevSglrgEWI9PCg4AGyktqBF/CKJXmNv+e1Xv2O0iD5W7BA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW5PR11MB5810.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(39860400002)(136003)(346002)(366004)(376002)(230922051799003)(64100799003)(451199024)(186009)(1800799009)(316002)(66476007)(66556008)(54906003)(110136005)(66946007)(2906002)(36756003)(38100700002)(7416002)(86362001)(31696002)(82960400001)(41300700001)(4326008)(8936002)(5660300002)(8676002)(6512007)(2616005)(6666004)(6506007)(53546011)(26005)(31686004)(478600001)(6486002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Qzl1VE00UzFKeXRtdU00L3J3MjduK0gvTTlpSm5aL1plL2VmTjY1U1lISHQ5?=
+ =?utf-8?B?NjFadDN4aWRYQUNQQ3VwRzkycEVaS3lZWjExUHhrWmtIaTlLSjEyRzJRcjRi?=
+ =?utf-8?B?akF2dkhNajc5aDVOM2pPdU5aN25kaGJPMGwvc0FqWTJZUjRIbG15Y3I0aTlE?=
+ =?utf-8?B?bFd1Z0orcFB0d0UwTEVKdExJc1lBRVo2ZGJ6VFQySi9GRlJvZEN1ZUZYdS9P?=
+ =?utf-8?B?cjlSUkg2WEsyWTBRNlZzUEZhWWxEa0dxRkZNSXhmcjd2TEQzdkJIWVJRVzA3?=
+ =?utf-8?B?R3NSNno1NFJPVlgwNTcwaEF0ZVREeldVcktSL2xOSDNpMEdPQm9Cc2t5U0pZ?=
+ =?utf-8?B?Rk5nczE4STJERm12N2YydDMrTWxKNzVzUlF6Wnh3Mk5iclEwc25La01oQ0Rj?=
+ =?utf-8?B?cUJ1QktEb0NxM0E4ekh6dlhMMGczUkxvUkRBRTF6Z3VrYThMdkE0YW9WWWJm?=
+ =?utf-8?B?dEV0K0ZaV3F4dHo1ZzFvU3VVblpUQmRBNEtzT2tweVRaQytWU09qZ1poak5t?=
+ =?utf-8?B?aGNSczErOVI3elk2dmdiZzluQWtHb1hlelVhYTI5WXVTT25weEdrNThHTnhV?=
+ =?utf-8?B?RjBoRE1oTCswZENiaW92aFkxRm1SdmtzejRXNjdRZCsyeXRFd1E5WktsS2dG?=
+ =?utf-8?B?OFhoamFpenpwaTVKKzBmMi9iRUZRTzBvNlkxclkzejNLRm4wYi9QN2labldr?=
+ =?utf-8?B?dE1WTEgyMWNlWUw0Z2prTzhZdnVXR0lFMnhGRXp4TFdadVltaitrZHJCVlBo?=
+ =?utf-8?B?K1hoRzBwT0h4bGp5MUR5TVhNb205TVhxc0tTRWZUSHZYUUNtdVdwSzR4SUEx?=
+ =?utf-8?B?blBCQk1tL3dtTDVaMk9CclhhRUdaN0x4OCt4em84d3ZnczREd2ZMYjE3SW9h?=
+ =?utf-8?B?ZGdwMlZjdWF3TE5hQXlPYVVlR294b3Q2M0Q2Vm43WFF4bHl6YUVLWmY4K292?=
+ =?utf-8?B?NllFWXRUR2F5OFJ1ZTg3OWo1RTF1YTkxQWFnbnNDOE1odEpuWHc2WHlpLzVr?=
+ =?utf-8?B?bDdPQlNTS2hZVGdKdjNrZ3RVTVQ5bWxZUElCampydnAyWlVqRXlqUFpBM3hh?=
+ =?utf-8?B?ODRPckN2NVdyazZDMlJ6T0QwUFhWRGpzelA0Q2h0WDRodndLemZXNHJQM2lK?=
+ =?utf-8?B?Y1ptNW9BLytGZEplTHFqRmp4YTIwZXZoM1VzemNWa2NMdDdTenE2OWdDNFM1?=
+ =?utf-8?B?eW5KWU9BbzRlYU1WL29JbUZPL1R4enVzN0dpSG4zYUF5VEpBM3JmeHBrc093?=
+ =?utf-8?B?RTV6OFowTDRHZDE5NDNpOHpLZHUreHZIZkprU3Fsem9sWHM4QVJyZkVlUHZ4?=
+ =?utf-8?B?SXFwMEVESWQrVmJ0ajg2VUt1ZDhWMjE5TDFzSDMyNm5sM0E1dVhaaDJvK3lG?=
+ =?utf-8?B?a1d2dGx4NFdIUEdWc1Bwa3RHNFZrMmlWbEpVNWxIWHIvaG96Vm9BQ3hqenBP?=
+ =?utf-8?B?QzNGYkRuc2w1QktNajN5M1B1Qjh1bjY4R0EraWwyY0liNklyQnpyWndHVG5k?=
+ =?utf-8?B?MXdEeW5VUFo3Nm5hNndvMFZHT0ZWeUZPQm5kUzZSMTNUK2JBZlBCRjh1dnFC?=
+ =?utf-8?B?ZFd4WC9hNTU2M09SMTVhdjVVM29WZDlMQlpkRGYxd3N2SlJSc1RYbnhWR1F4?=
+ =?utf-8?B?Q0s1a3ZOL3IzVEZicUlMRjFQK05oMDBUQ3BZWlNNbE9CSFVUcHpXWHJPVGdW?=
+ =?utf-8?B?QzZUc1RzMWY3K1RXS0Zmam1ySU4yQWpoU1NGTDFIcmwrRmxwZ3dOQzFzenIz?=
+ =?utf-8?B?eVBFRy9FbUlVTUhKZnRxdWFuWlZhNHJtRW85RWFpVWpMUUgrL1h6eWtRVWZK?=
+ =?utf-8?B?QWNtY3AxSkFvVGJyWlFLRXpndnlLZ1o5cnZhZzlNU1RrbE5ZUWJ5cjV0bUtD?=
+ =?utf-8?B?SXlEVzhGYzFVLzJzcm04blFmMENHUk5FSUY1RWRGYkQ0K0p4NnpyQU5hRmZ6?=
+ =?utf-8?B?cDhSaG90YitoY2xwdzFBTFJoTzFYMHFRaU1nVlo0VzFtZTZzd2ZhUzBpYUN3?=
+ =?utf-8?B?d0dzdHZKOEhhN3VDOWVrOTg1UXYxQTVRUnhnQ052VnNZNlZOdmNITXJ4bDRl?=
+ =?utf-8?B?TlVJWUNLdTVwd05uTmQzb0VUYmFJYlIvSnlZWXV5ckRMaWhJcDg0TWQxOFJs?=
+ =?utf-8?B?NTYvc2plT3hHbnBDZWs1VkdZV0hlMUNCY3RhQmZDTkx6Y3dZMlNndEpDTHpU?=
+ =?utf-8?B?aXc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 86243206-5069-4e18-7e11-08dbce6d2179
+X-MS-Exchange-CrossTenant-AuthSource: MW5PR11MB5810.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Oct 2023 17:27:11.4062
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3eTYn9fFAa7Ho1BShqUDYB/7sZLJANQzse8ADU1C/bDdw4+QUTTl3He4U17EyWxd+V+iGdqwUlsbyvoZplgtwG5wBkrkA33ocJn5UtcJaSo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB6027
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,139 +184,48 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, 16 Oct 2023 at 07:38, <jeffxu@chromium.org> wrote:
+On 10/16/2023 12:58 PM, Peter Zijlstra wrote:
+> On Mon, Oct 16, 2023 at 06:20:53AM +0000, Meng, Li (Jassmine) wrote:
+>>>> +static void amd_pstate_init_prefcore(struct amd_cpudata *cpudata) {
+>>>> +     int ret, prio;
+>>>> +     u32 highest_perf;
+>>>> +     static u32 max_highest_perf = 0, min_highest_perf = U32_MAX;
+>>> What serializes these things?
+>>>
+>>> Also, *why* are you using u32 here, what's wrong with something like:
+>>>
+>>>          int max_hp = INT_MIN, min_hp = INT_MAX;
+>>>
+>> [Meng, Li (Jassmine)]
+>> We use ITMT architecture to utilize preferred core features.
+>> Therefore, we need to try to be consistent with Intel's implementation
+>> as much as possible.  For details, please refer to the
+>> intel_pstate_set_itmt_prio function in file intel_pstate.c. (Line 355)
+>>
+>> I think using the data type of u32 is consistent with the data
+>> structures of cppc_perf_ctrls and amd_cpudata etc.
+> Rafael, should we fix intel_pstate too?
+
+Srinivas should be more familiar with this code than I am, so adding him.
+
+
+> The point is, that sched_asym_prefer(), the final consumer of these
+> values uses int and thus an explicitly signed compare.
 >
-> This patchset proposes a new mseal() syscall for the Linux kernel.
-
-So I have no objections to adding some kind of "lock down memory
-mappings" model, but this isn't it.
-
-First off, the simple stuff: the commit messages are worthless. Having
-
-   check seal for mmap(2)
-
-as the commit message is not even remotely acceptable, to pick one
-random example from the series (7/8).
-
-But that doesn't matter much, since I think the more fundamental
-problems are much worse:
-
- - the whole "ON_BEHALF_OF_KERNEL" and "ON_BEHALF_OF_USERSPACE" is
-just complete noise and totally illogical. The whole concept needs to
-be redone.
-
-Example of complete nonsense (again, picking 7/8, but that's again
-just a random example):
-
-> @@ -3017,8 +3022,8 @@ SYSCALL_DEFINE5(remap_file_pages,
->                 flags |= MAP_LOCKED;
+> Using u32 and U32_MAX anywhere near the setting the priority makes
+> absolutely no sense.
 >
->         file = get_file(vma->vm_file);
-> -       ret = do_mmap(vma->vm_file, start, size,
-> -                       prot, flags, pgoff, &populate, NULL);
-> +       ret = do_mmap(vma->vm_file, start, size, prot, flags, pgoff,
-> +                       &populate, NULL, ON_BEHALF_OF_KERNEL);
->         fput(file);
->  out:
->         mmap_write_unlock(mm);
+> If you were to have the high bit set, things do not behave as expected.
 
-Christ. That's *literally* the remap_file_pages() system call
-definition. No way in hell does "ON_BEHALF_OF_KERNEL" make any sense
-in this context.
+Right, but in practice these values are always between 0 and 255 
+inclusive AFAICS.
 
-It's not the only situation. "mremap() as the same thing. vm_munmap()
-has the same thing. vm_brk_flags() has the same thing. None of them
-make any sense.
+It would have been better to use u8 I suppose.
 
-But even if those obvious kinds of complete mis-designs were to be
-individually fixed, the whole naming and concept is bogus. The
-"ON_BEHALF_OF_KERNEL" thing seems to actually just mean "don't check
-sealing". Naming should describe what the thing *means*, not some
-random policy thing that may or may not be at all relevant.
 
- - the whole MM_SEAL_xx vs VM_SEAL_xx artificial distinction needs to go away.
+> Also, same question as to the amd folks; what serializes those static
+> variables?
 
-Not only is it unacceptable to pointlessly create two different name
-spaces for no obvious reason, code like this (from 1/8) should not
-exist:
+That's a good one.
 
-> +       if (types & MM_SEAL_MSEAL)
-> +               newtypes |= VM_SEAL_MSEAL;
-> +
-> +       if (types & MM_SEAL_MPROTECT)
-> +               newtypes |= VM_SEAL_MPROTECT;
-> +
-> +       if (types & MM_SEAL_MUNMAP)
-> +               newtypes |= VM_SEAL_MUNMAP;
-> +
-> +       if (types & MM_SEAL_MMAP)
-> +               newtypes |= VM_SEAL_MMAP;
-> +
-> +       if (types & MM_SEAL_MREMAP)
-> +               newtypes |= VM_SEAL_MREMAP;
 
-Sure, we have that in some cases when there was a *reason* for
-namespacing imposed on us from an API standpoint (ie the "open()"
-flags that get turned into FMODE_xyz flags, or the MS_xyz mount flags
-being turned into MNT_xyz flags), but those tend to be signs of
-problems in the system call API where some mixup made it impossible to
-use the flags directly (most commonly because there is some extended
-internal representation of said things).
-
-For example, the MS_xyz namespace is a combination of "these are flags
-for the new mount" (like MS_RDONLY) and "this is how you should mount
-it" (like MS_REMOUNT), and so the user interface has that odd mixing
-of different things, and the MNT_xyz namespace is a distillation of
-the former.
-
-But we certainly should not strive to introduce *new* interfaces that
-start out with this kind of mixup and pointless "translate from one
-bit to another" code.
-
- - And finally (for now), I hate that MM_ACTION_xyz thing too!
-
-Why do we have MM_ACTION_MREMAP, and pointless like this (from 3/8):
-
-> +       switch (action) {
-> +       case MM_ACTION_MPROTECT:
-> +               if (vma->vm_seals & VM_SEAL_MPROTECT)
-> +                       return false;
-> +               break;
-
-when the sane thing to do is to use the *same* MM_SEAL_xyz bitmask and
-sealing bitmask and just say
-
-        if (vma->vm_seal & vm_action)
-                return -EPERM;
-
-IOW, you have pointlessly introduced not *two* different namespaces,
-but *three*. All doing the exact same thing, and all just causing
-pointless and ugly code to "translate" the actions of one into the
-model of another.
-
-So get rid of the "MM_ACTION_xyz" thing. Get rid of ther "VM_SEAL_xyz"
-thing. Use *one* single "these are the sealing bits".
-
-And get rid of "enum caller_origin" entirely. I don't know what the
-right model for that thing is, but that isn't it.
-
-*Maybe* the right model is some MM_SEAL_OVERRIDE bit that user space
-cannot set, but that the kernel can use internally - and if that is
-the right model, then dammit, the *uses* should be very very obvious
-why the override is fine, because that remap_file_pages() use sure as
-hell was *not* obvious.
-
-In fact, it's not at all obvious why anything should override the
-sealing bits - EVER. So I'm not convinced that the right model is
-"replace ON_BEHALF_OF_KERNEL with MM_SEAL_OVERRIDE". Why would we
-*ever* want to override sealing? It sounds like complete garbage. Most
-of the users seem to be things like "execve()", which is nonsensical,
-since the VM wouldn't have been sealed at that point _anyway_, so
-having a "don't bother checking sealing bits" flag seems entirely
-useless.
-
-Anyway, this is all a resounding NAK on this series in this form. My
-complaints are not some kind of small "fix this up". These are
-fundamental issues.
-
-            Linus
