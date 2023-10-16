@@ -2,51 +2,51 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A06427CABBA
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Oct 2023 16:39:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 404BF7CABAE
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Oct 2023 16:39:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232635AbjJPOjF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 16 Oct 2023 10:39:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59082 "EHLO
+        id S232375AbjJPOjG (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 16 Oct 2023 10:39:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232375AbjJPOjC (ORCPT
+        with ESMTP id S232509AbjJPOjE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Oct 2023 10:39:02 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00A3BB4
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Oct 2023 07:38:59 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id e9e14a558f8ab-352a22e1471so18671535ab.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Oct 2023 07:38:59 -0700 (PDT)
+        Mon, 16 Oct 2023 10:39:04 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 474A7ED
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Oct 2023 07:39:02 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1c871a095ceso30574015ad.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 16 Oct 2023 07:39:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1697467139; x=1698071939; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1697467142; x=1698071942; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FAzDyUE3yfBlink0mV0CQJEoxlm4tCcqZDEi5jvmYQc=;
-        b=D5KNs7SkxA/Vd3/p6FAlp2aC6GnDg0MlKnCjRX3rk6+ll1rRRYv+kdTE8g76D5G1eH
-         MXJaQUvRjEIuQiTUjlqprAxN3w+IAlTezl2McflzNXqCMl9hzJQEA3gNAj8ySRwRC9+M
-         1VdA5eBtMF0VWD8iEZJtMKG9uqGp+WVzMh4P0=
+        bh=Xej43+CxxYh9a3blA/g52Ig4N3aDI9kSsEpUlToUGyY=;
+        b=LwyrXl3vTxEDzbakDcTvG61WdDGcXTTnloGXmbWRhKmUm3qPzWzDAYM16vBObq/pc5
+         2oxGoOIBvqBsRWNfoJ12MqAPYo2DUq9eYoEFrVFogm5YiLsMajMzJdm5UHCMnCKQmzw6
+         YK/8I3KFIKpiCJvPwMlTyO6aIQ6/2HuWpkTOc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697467139; x=1698071939;
+        d=1e100.net; s=20230601; t=1697467142; x=1698071942;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FAzDyUE3yfBlink0mV0CQJEoxlm4tCcqZDEi5jvmYQc=;
-        b=AraKgOj8tO1MFwAcee/PUdZ/rY0AA6X/9Hjec7j64v4CLA2HJG8ZQgezBjKhINmj0Q
-         LME/CGn+abxhLvM8r8xpHI1BFCC/0Eg3VD4YYyZL8iIilhe0UroV3NHu7NACAIeqENQn
-         KFYAhz0FXxaC9z9NP6H9mOP8z+lV4KUu5nmPwPW5kGvOdnfsEGPhWlpmHE9brZvbFVlD
-         G77cWYQVCRE9LkN+XbDZTUAxmQhHKlaGZIH+SkAKvxqYWbATeTdRCfOEBjIseJGOejAL
-         zMECVx/oKMAvZFGzpyRlCrA485sQuzf0cYR/DDWVTnys/kEF+75XG64b6wYd1tek3U+D
-         73Ug==
-X-Gm-Message-State: AOJu0YySMzxFH81b8w8AQEM54Lt10t48v0AxnF4q/ITkLNOXhucNV6hZ
-        sZXvf4uKWMsUb9XuYhbDIVJ3YA==
-X-Google-Smtp-Source: AGHT+IGqQDdVFlQs+IXW0yxPTymooU2TCQvu0xd2lG+Ye+SZzKGp5LnWA6dNZS4kCl0/6d0DeHSH7w==
-X-Received: by 2002:a05:6e02:12c5:b0:357:745a:9e79 with SMTP id i5-20020a056e0212c500b00357745a9e79mr7506574ilm.26.1697467139329;
-        Mon, 16 Oct 2023 07:38:59 -0700 (PDT)
+        bh=Xej43+CxxYh9a3blA/g52Ig4N3aDI9kSsEpUlToUGyY=;
+        b=AT4P+CNGyei0yoLmjBgGWoVJ4N/SfYlgnakQJ8A1ay21/JOEZ6lUi1w8TZ7HOwvdt2
+         BY74KmoScvuWbrXs06DwmEKJPei7B+tc165fh0ypFMDBAaqk6aUurarCb+BJvqEwwc9z
+         84sIgYrlmVSFcDPkEtCGizdDr/gmtnoIszJR8zQxoAWU/KFTnk1LFoJKIMPbW/H6FQwb
+         eUGmib2hM+woWJ7ynngDoLKHCQI2f7B2Rfuhf5AGh8If3XgcWnSQQ6id4yPboJ0Cm5OM
+         BrxbxIAQS9gUext7EsuV6ZmljjzzICCv9G4TestH+2iFhCsI3NqSJhnT306GcPoWWVcY
+         iIxQ==
+X-Gm-Message-State: AOJu0Ywcg/OzzWmzTAH6CpAPt88skob2+/PDxZQadv9DzSMnFkSqT9jV
+        MO3KIaDJKYeL58BMn+4PrjPzbw==
+X-Google-Smtp-Source: AGHT+IGUzUb5v0t/3MkBLk3yxGa4HPz1kX3xlLqN5hhkqcb5wVyzEHQXpSYW2jltVLkxXX+Emd4ILg==
+X-Received: by 2002:a17:903:294b:b0:1c9:d143:e9e with SMTP id li11-20020a170903294b00b001c9d1430e9emr10728383plb.18.1697467141766;
+        Mon, 16 Oct 2023 07:39:01 -0700 (PDT)
 Received: from localhost (9.184.168.34.bc.googleusercontent.com. [34.168.184.9])
-        by smtp.gmail.com with UTF8SMTPSA id u5-20020aa78385000000b0068c90e1ec84sm18266164pfm.167.2023.10.16.07.38.58
+        by smtp.gmail.com with UTF8SMTPSA id ju1-20020a170903428100b001b9d335223csm8556065plb.26.2023.10.16.07.39.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Oct 2023 07:38:58 -0700 (PDT)
+        Mon, 16 Oct 2023 07:39:01 -0700 (PDT)
 From:   jeffxu@chromium.org
 To:     akpm@linux-foundation.org, keescook@chromium.org,
         sroettger@google.com
@@ -65,9 +65,9 @@ Cc:     jeffxu@google.com, jorgelo@chromium.org, groeck@chromium.org,
         vbabka@suse.cz, xiujianfeng@huawei.com, yu.ma@intel.com,
         zhangpeng362@huawei.com, dave.hansen@intel.com, luto@kernel.org,
         linux-hardening@vger.kernel.org
-Subject: [RFC PATCH v1 2/8] Wire up mseal syscall
-Date:   Mon, 16 Oct 2023 14:38:21 +0000
-Message-ID: <20231016143828.647848-3-jeffxu@chromium.org>
+Subject: [RFC PATCH v1 3/8] mseal: add can_modify_mm and can_modify_vma
+Date:   Mon, 16 Oct 2023 14:38:22 +0000
+Message-ID: <20231016143828.647848-4-jeffxu@chromium.org>
 X-Mailer: git-send-email 2.42.0.655.g421f12c284-goog
 In-Reply-To: <20231016143828.647848-1-jeffxu@chromium.org>
 References: <20231016143828.647848-1-jeffxu@chromium.org>
@@ -75,7 +75,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,221 +85,141 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Jeff Xu <jeffxu@google.com>
 
-Wire up mseal syscall for all architectures.
+can_modify_mm:
+ checks sealing flags for given memory range.
+
+can_modify_vma:
+  checks sealing flags for given vma.
 
 Signed-off-by: Jeff Xu <jeffxu@google.com>
 ---
- arch/alpha/kernel/syscalls/syscall.tbl      | 1 +
- arch/arm/tools/syscall.tbl                  | 1 +
- arch/arm64/include/asm/unistd.h             | 2 +-
- arch/arm64/include/asm/unistd32.h           | 2 ++
- arch/ia64/kernel/syscalls/syscall.tbl       | 1 +
- arch/m68k/kernel/syscalls/syscall.tbl       | 1 +
- arch/microblaze/kernel/syscalls/syscall.tbl | 1 +
- arch/mips/kernel/syscalls/syscall_n32.tbl   | 1 +
- arch/mips/kernel/syscalls/syscall_n64.tbl   | 1 +
- arch/mips/kernel/syscalls/syscall_o32.tbl   | 1 +
- arch/parisc/kernel/syscalls/syscall.tbl     | 1 +
- arch/powerpc/kernel/syscalls/syscall.tbl    | 1 +
- arch/s390/kernel/syscalls/syscall.tbl       | 1 +
- arch/sh/kernel/syscalls/syscall.tbl         | 1 +
- arch/sparc/kernel/syscalls/syscall.tbl      | 1 +
- arch/x86/entry/syscalls/syscall_32.tbl      | 1 +
- arch/x86/entry/syscalls/syscall_64.tbl      | 1 +
- arch/xtensa/kernel/syscalls/syscall.tbl     | 1 +
- include/uapi/asm-generic/unistd.h           | 5 ++++-
- 19 files changed, 23 insertions(+), 2 deletions(-)
+ include/linux/mm.h | 34 ++++++++++++++++++++++++++
+ mm/mseal.c         | 60 ++++++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 94 insertions(+)
 
-diff --git a/arch/alpha/kernel/syscalls/syscall.tbl b/arch/alpha/kernel/syscalls/syscall.tbl
-index ad37569d0507..b5847d53102a 100644
---- a/arch/alpha/kernel/syscalls/syscall.tbl
-+++ b/arch/alpha/kernel/syscalls/syscall.tbl
-@@ -492,3 +492,4 @@
- 560	common	set_mempolicy_home_node		sys_ni_syscall
- 561	common	cachestat			sys_cachestat
- 562	common	fchmodat2			sys_fchmodat2
-+563	common  mseal				sys_mseal
-diff --git a/arch/arm/tools/syscall.tbl b/arch/arm/tools/syscall.tbl
-index c572d6c3dee0..b50c5ca5047d 100644
---- a/arch/arm/tools/syscall.tbl
-+++ b/arch/arm/tools/syscall.tbl
-@@ -466,3 +466,4 @@
- 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
- 451	common	cachestat			sys_cachestat
- 452	common	fchmodat2			sys_fchmodat2
-+453	common	mseal				sys_mseal
-diff --git a/arch/arm64/include/asm/unistd.h b/arch/arm64/include/asm/unistd.h
-index bd77253b62e0..6a28fb91b85d 100644
---- a/arch/arm64/include/asm/unistd.h
-+++ b/arch/arm64/include/asm/unistd.h
-@@ -39,7 +39,7 @@
- #define __ARM_NR_compat_set_tls		(__ARM_NR_COMPAT_BASE + 5)
- #define __ARM_NR_COMPAT_END		(__ARM_NR_COMPAT_BASE + 0x800)
- 
--#define __NR_compat_syscalls		453
-+#define __NR_compat_syscalls		454
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index e790b91a0cd4..aafdb68950f8 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -257,6 +257,18 @@ extern struct rw_semaphore nommu_region_sem;
+ extern unsigned int kobjsize(const void *objp);
  #endif
  
- #define __ARCH_WANT_SYS_CLONE
-diff --git a/arch/arm64/include/asm/unistd32.h b/arch/arm64/include/asm/unistd32.h
-index 78b68311ec81..1e9b3c098a8e 100644
---- a/arch/arm64/include/asm/unistd32.h
-+++ b/arch/arm64/include/asm/unistd32.h
-@@ -911,6 +911,8 @@ __SYSCALL(__NR_set_mempolicy_home_node, sys_set_mempolicy_home_node)
- __SYSCALL(__NR_cachestat, sys_cachestat)
- #define __NR_fchmodat2 452
- __SYSCALL(__NR_fchmodat2, sys_fchmodat2)
-+#define __NR_mseal 453
-+__SYSCALL(__NR_mseal, sys_mseal)
- 
- /*
-  * Please add new compat syscalls above this comment and update
-diff --git a/arch/ia64/kernel/syscalls/syscall.tbl b/arch/ia64/kernel/syscalls/syscall.tbl
-index 83d8609aec03..babe34d221ee 100644
---- a/arch/ia64/kernel/syscalls/syscall.tbl
-+++ b/arch/ia64/kernel/syscalls/syscall.tbl
-@@ -373,3 +373,4 @@
- 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
- 451	common	cachestat			sys_cachestat
- 452	common	fchmodat2			sys_fchmodat2
-+453	common	mseal 				sys_mseal
-diff --git a/arch/m68k/kernel/syscalls/syscall.tbl b/arch/m68k/kernel/syscalls/syscall.tbl
-index 259ceb125367..27cd3f7dbd5e 100644
---- a/arch/m68k/kernel/syscalls/syscall.tbl
-+++ b/arch/m68k/kernel/syscalls/syscall.tbl
-@@ -452,3 +452,4 @@
- 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
- 451	common	cachestat			sys_cachestat
- 452	common	fchmodat2			sys_fchmodat2
-+453	common	mseal				sys_mseal
-diff --git a/arch/microblaze/kernel/syscalls/syscall.tbl b/arch/microblaze/kernel/syscalls/syscall.tbl
-index a3798c2637fd..e49861f7c61f 100644
---- a/arch/microblaze/kernel/syscalls/syscall.tbl
-+++ b/arch/microblaze/kernel/syscalls/syscall.tbl
-@@ -458,3 +458,4 @@
- 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
- 451	common	cachestat			sys_cachestat
- 452	common	fchmodat2			sys_fchmodat2
-+453	common	mseal				sys_mseal
-diff --git a/arch/mips/kernel/syscalls/syscall_n32.tbl b/arch/mips/kernel/syscalls/syscall_n32.tbl
-index 152034b8e0a0..78d15010cd77 100644
---- a/arch/mips/kernel/syscalls/syscall_n32.tbl
-+++ b/arch/mips/kernel/syscalls/syscall_n32.tbl
-@@ -391,3 +391,4 @@
- 450	n32	set_mempolicy_home_node		sys_set_mempolicy_home_node
- 451	n32	cachestat			sys_cachestat
- 452	n32	fchmodat2			sys_fchmodat2
-+453	n32	mseal				sys_mseal
-diff --git a/arch/mips/kernel/syscalls/syscall_n64.tbl b/arch/mips/kernel/syscalls/syscall_n64.tbl
-index cb5e757f6621..813614fedb72 100644
---- a/arch/mips/kernel/syscalls/syscall_n64.tbl
-+++ b/arch/mips/kernel/syscalls/syscall_n64.tbl
-@@ -367,3 +367,4 @@
- 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
- 451	n64	cachestat			sys_cachestat
- 452	n64	fchmodat2			sys_fchmodat2
-+453	n64	mseal				sys_mseal
-diff --git a/arch/mips/kernel/syscalls/syscall_o32.tbl b/arch/mips/kernel/syscalls/syscall_o32.tbl
-index 1a646813afdc..01d88d3a6f3e 100644
---- a/arch/mips/kernel/syscalls/syscall_o32.tbl
-+++ b/arch/mips/kernel/syscalls/syscall_o32.tbl
-@@ -440,3 +440,4 @@
- 450	o32	set_mempolicy_home_node		sys_set_mempolicy_home_node
- 451	o32	cachestat			sys_cachestat
- 452	o32	fchmodat2			sys_fchmodat2
-+453	o32	mseal				sys_mseal
-diff --git a/arch/parisc/kernel/syscalls/syscall.tbl b/arch/parisc/kernel/syscalls/syscall.tbl
-index e97c175b56f9..d52d08f0a1ea 100644
---- a/arch/parisc/kernel/syscalls/syscall.tbl
-+++ b/arch/parisc/kernel/syscalls/syscall.tbl
-@@ -451,3 +451,4 @@
- 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
- 451	common	cachestat			sys_cachestat
- 452	common	fchmodat2			sys_fchmodat2
-+453	common	mseal				sys_mseal
-diff --git a/arch/powerpc/kernel/syscalls/syscall.tbl b/arch/powerpc/kernel/syscalls/syscall.tbl
-index 20e50586e8a2..d38deba73a7b 100644
---- a/arch/powerpc/kernel/syscalls/syscall.tbl
-+++ b/arch/powerpc/kernel/syscalls/syscall.tbl
-@@ -539,3 +539,4 @@
- 450 	nospu	set_mempolicy_home_node		sys_set_mempolicy_home_node
- 451	common	cachestat			sys_cachestat
- 452	common	fchmodat2			sys_fchmodat2
-+453	common	mseal				sys_mseal
-diff --git a/arch/s390/kernel/syscalls/syscall.tbl b/arch/s390/kernel/syscalls/syscall.tbl
-index 0122cc156952..cf3243c2978b 100644
---- a/arch/s390/kernel/syscalls/syscall.tbl
-+++ b/arch/s390/kernel/syscalls/syscall.tbl
-@@ -455,3 +455,4 @@
- 450  common	set_mempolicy_home_node	sys_set_mempolicy_home_node	sys_set_mempolicy_home_node
- 451  common	cachestat		sys_cachestat			sys_cachestat
- 452  common	fchmodat2		sys_fchmodat2			sys_fchmodat2
-+453  common	mseal			sys_mseal			sys_mseal
-diff --git a/arch/sh/kernel/syscalls/syscall.tbl b/arch/sh/kernel/syscalls/syscall.tbl
-index e90d585c4d3e..76f1cd33adaa 100644
---- a/arch/sh/kernel/syscalls/syscall.tbl
-+++ b/arch/sh/kernel/syscalls/syscall.tbl
-@@ -455,3 +455,4 @@
- 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
- 451	common	cachestat			sys_cachestat
- 452	common	fchmodat2			sys_fchmodat2
-+453	common	mseal				sys_mseal
-diff --git a/arch/sparc/kernel/syscalls/syscall.tbl b/arch/sparc/kernel/syscalls/syscall.tbl
-index 4ed06c71c43f..d7728695d780 100644
---- a/arch/sparc/kernel/syscalls/syscall.tbl
-+++ b/arch/sparc/kernel/syscalls/syscall.tbl
-@@ -498,3 +498,4 @@
- 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
- 451	common	cachestat			sys_cachestat
- 452	common	fchmodat2			sys_fchmodat2
-+453	common	mseal 				sys_mseal
-diff --git a/arch/x86/entry/syscalls/syscall_32.tbl b/arch/x86/entry/syscalls/syscall_32.tbl
-index 2d0b1bd866ea..6d4cc386df22 100644
---- a/arch/x86/entry/syscalls/syscall_32.tbl
-+++ b/arch/x86/entry/syscalls/syscall_32.tbl
-@@ -457,3 +457,4 @@
- 450	i386	set_mempolicy_home_node		sys_set_mempolicy_home_node
- 451	i386	cachestat		sys_cachestat
- 452	i386	fchmodat2		sys_fchmodat2
-+453	i386	mseal 			sys_mseal
-diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
-index 814768249eae..73dcfc43d921 100644
---- a/arch/x86/entry/syscalls/syscall_64.tbl
-+++ b/arch/x86/entry/syscalls/syscall_64.tbl
-@@ -374,6 +374,7 @@
- 450	common	set_mempolicy_home_node	sys_set_mempolicy_home_node
- 451	common	cachestat		sys_cachestat
- 452	common	fchmodat2		sys_fchmodat2
-+453 	common  mseal			sys_mseal
- 
- #
- # Due to a historical design error, certain syscalls are numbered differently
-diff --git a/arch/xtensa/kernel/syscalls/syscall.tbl b/arch/xtensa/kernel/syscalls/syscall.tbl
-index fc1a4f3c81d9..e8fd3bf35d73 100644
---- a/arch/xtensa/kernel/syscalls/syscall.tbl
-+++ b/arch/xtensa/kernel/syscalls/syscall.tbl
-@@ -423,3 +423,4 @@
- 450	common	set_mempolicy_home_node		sys_set_mempolicy_home_node
- 451	common	cachestat			sys_cachestat
- 452	common	fchmodat2			sys_fchmodat2
-+453	common	mseal 				sys_mseal
-diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
-index abe087c53b4b..0c945a798208 100644
---- a/include/uapi/asm-generic/unistd.h
-+++ b/include/uapi/asm-generic/unistd.h
-@@ -823,8 +823,11 @@ __SYSCALL(__NR_cachestat, sys_cachestat)
- #define __NR_fchmodat2 452
- __SYSCALL(__NR_fchmodat2, sys_fchmodat2)
- 
-+#define __NR_mseal 453
-+__SYSCALL(__NR_mseal, sys_mseal)
++enum caller_origin {
++	ON_BEHALF_OF_KERNEL = 0,
++	ON_BEHALF_OF_USERSPACE,
++};
 +
- #undef __NR_syscalls
--#define __NR_syscalls 453
-+#define __NR_syscalls 454
- 
++enum mm_action {
++	MM_ACTION_MPROTECT,
++	MM_ACTION_MUNMAP,
++	MM_ACTION_MREMAP,
++	MM_ACTION_MMAP,
++};
++
  /*
-  * 32 bit systems traditionally used different
+  * vm_seals in vm_area_struct, see mm_types.h.
+  */
+@@ -3302,6 +3314,28 @@ static inline void mm_populate(unsigned long addr, unsigned long len)
+ static inline void mm_populate(unsigned long addr, unsigned long len) {}
+ #endif
+ 
++#ifdef CONFIG_MSEAL
++extern bool can_modify_mm(struct mm_struct *mm, unsigned long start,
++			  unsigned long end, enum mm_action action,
++			  enum caller_origin called);
++
++extern bool can_modify_vma(struct vm_area_struct *vma, enum mm_action action,
++		    enum caller_origin called);
++#else
++static inline bool can_modify_mm(struct mm_struct *mm, unsigned long start,
++			  unsigned long end, enum mm_action action,
++			  enum caller_origin called)
++{
++	return true;
++}
++
++static inline bool can_modify_vma(struct vm_area_struct *vma, enum mm_action action,
++		    enum caller_origin called)
++{
++	return true;
++}
++#endif
++
+ /* These take the mm semaphore themselves */
+ extern int __must_check vm_brk(unsigned long, unsigned long);
+ extern int __must_check vm_brk_flags(unsigned long, unsigned long, unsigned long);
+diff --git a/mm/mseal.c b/mm/mseal.c
+index 615b6e06ab44..3285ef6b95a6 100644
+--- a/mm/mseal.c
++++ b/mm/mseal.c
+@@ -36,6 +36,66 @@ static bool can_do_mseal(unsigned int types, unsigned int flags)
+ 	return true;
+ }
+ 
++/*
++ * check if a vma is sealed for modification.
++ * return true, if modification is allowed.
++ */
++bool can_modify_vma(struct vm_area_struct *vma, enum mm_action action,
++		    enum caller_origin called)
++{
++	if (called == ON_BEHALF_OF_KERNEL)
++		return true;
++
++	switch (action) {
++	case MM_ACTION_MPROTECT:
++		if (vma->vm_seals & VM_SEAL_MPROTECT)
++			return false;
++		break;
++
++	case MM_ACTION_MUNMAP:
++		if (vma->vm_seals & VM_SEAL_MUNMAP)
++			return false;
++		break;
++
++	case MM_ACTION_MREMAP:
++		if (vma->vm_seals & VM_SEAL_MREMAP)
++			return false;
++		break;
++
++	case MM_ACTION_MMAP:
++		if (vma->vm_seals & VM_SEAL_MMAP)
++			return false;
++		break;
++	}
++
++	return true;
++}
++
++/*
++ * Check if the vmas of a memory range are allowed to be modified.
++ * the memory ranger can have a gap (unallocated memory).
++ * return true, if it is allowed.
++ */
++bool can_modify_mm(struct mm_struct *mm, unsigned long start, unsigned long end,
++		   enum mm_action action, enum caller_origin called)
++{
++	struct vm_area_struct *vma;
++
++	VMA_ITERATOR(vmi, mm, start);
++
++	if (called == ON_BEHALF_OF_KERNEL)
++		return true;
++
++	/* going through each vma to check */
++	for_each_vma_range(vmi, vma, end) {
++		if (!can_modify_vma(vma, action, called))
++			return false;
++	}
++
++	/* Allow by default. */
++	return true;
++}
++
+ /*
+  * Check if a seal type can be added to VMA.
+  */
 -- 
 2.42.0.609.gbb76f46606-goog
 
