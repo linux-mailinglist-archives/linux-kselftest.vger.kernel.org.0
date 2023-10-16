@@ -2,201 +2,262 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE4497C9EB9
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Oct 2023 07:28:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EAFB7C9F68
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Oct 2023 08:21:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229680AbjJPF26 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 16 Oct 2023 01:28:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42782 "EHLO
+        id S229791AbjJPGVC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 16 Oct 2023 02:21:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjJPF25 (ORCPT
+        with ESMTP id S229831AbjJPGU7 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Oct 2023 01:28:57 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB107DC;
-        Sun, 15 Oct 2023 22:28:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697434136; x=1728970136;
-  h=date:from:to:cc:subject:message-id:references:
-   content-transfer-encoding:in-reply-to:mime-version;
-  bh=3HbN/fkDj4tXmG+zWOVCT3Xu+4DiX6ZKaYLrMeHvf/0=;
-  b=LQ/TXn7n0cYKFVBsVT8jL+S3+bqe23N0vaUnqUccLwSdsjvzcoB8/ycW
-   oblgykiJw6B1Ksz5vEVVTpcaDfaHr+BNj9nmvJqtueWmG+LHjTL3u0hls
-   yiKHQK+7np3v4kj689hArvIRdHXspdgsqjEDsEM8CUn7rOLp2XqO6dY1W
-   3x7sZLr4rzYapLHUqhCR0iZbwi6xdhs85PAzTEeQFg6y2yd2Lynxd/IhA
-   kxAWEypCxzn/vBQxgcsgHV0/WmjmkgBRxcWCy8mJfU97EIvxL/9X9ZeCu
-   Fa3PNgy7fqETULL017OYPO7QEED+3HeyBA1DYRcjQpCYqdXF8ebVhmK4T
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10863"; a="389307700"
-X-IronPort-AV: E=Sophos;i="6.03,228,1694761200"; 
-   d="scan'208";a="389307700"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Oct 2023 22:28:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10863"; a="784969729"
-X-IronPort-AV: E=Sophos;i="6.03,228,1694761200"; 
-   d="scan'208";a="784969729"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga008.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 15 Oct 2023 22:28:53 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32; Sun, 15 Oct 2023 22:28:52 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.32 via Frontend Transport; Sun, 15 Oct 2023 22:28:52 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.168)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.32; Sun, 15 Oct 2023 22:28:52 -0700
+        Mon, 16 Oct 2023 02:20:59 -0400
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2080.outbound.protection.outlook.com [40.107.100.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 510A0DE;
+        Sun, 15 Oct 2023 23:20:57 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=l8eXSyxSuvVp0KHM2E3o/X4jrbKiP19d9A8sSLfYiUXeFJ4LIMrR2FIFDXdiOOmdfH25lNjn65RoBOH1vSTk4zaKH/6JJx4IP0LkOPb7Wwbg4eY79Lbd/L9CmVdP42erAR8danSy9Ioyba3NgU7e4yT5ducbYRWT7DgVvptxL5jjR5yRt09UO6Dt5Ujlkdb6CKraOq2SBuYBGiuk/hRE901Rcha9WHTGbnwWOVG5wiE8kDgzf5UxFcoWV8hEoVjNEyGFPuoN3wFI/zUWpiyl6wj7ImzpN9pSLGRZrnXfSv+7nKiPT+7wyReY6z/Ch+btImlTE/RSip0es9AfBDuNvA==
+ b=TVbBGAGyuE7Du2gjCYIuHRxp6/xLB0bFwcUATtZXuDoiPLbEIjJnneSNWB6z4E1NRFH0LkxkMeSpO3c98XrboulHX3Yc319wHn3JyldpQ68E8ClgI9QIg/5sn5YMbrZzWEsnxrRy79ChdzAGW5l43I97jddVSiEOhUxbBrAClxBHX7pWwkIaraoytPjKSDJjqQ31SYm3iW+uzsYWiptdmaFqaykJXNmuf+Ub3m2VoFvu036kMZkHUTyfry9Nf/kpHJGGvyiqGmhviSpTL9xPx1hpRk/aEhoUSOerPBdH3yG+/CVDPOE5eaYTGqe0SHKzqcy/juOJ1xLfb/7m4C/IiQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=arJ/CAYlaXGZnptd6jeqcQNwr+B8KHmbFqXGV2bx/R4=;
- b=cIZACD9qJWRWZs1pHPNd52a+EbJ3ekgoM9+AzDKGEffOTdzbINdwkMwlxmQgeld4MMKdMvQ8CzDmq4wsstAZCwdB/t45xeOh2XbcdyvkMrg+5khx8sBUmKHhxbKvaenJGx/1bw6VFyDdD0dREWJ+W6GS1K2Q/RCMyc6cLuNs7WR9SmRrgK3byDtIV8PiRDaVOv/wJd8ItzvvqAAuen+RXrCWCnmI2RL9U8wctz9Z2AUiAr/AZ4c9pcD/psle5XMrnjvGVvfywBufCYXz5q1n2nGozWEP5vLPufKu1GZJfPXmmFapD/AWAq4a0ACU7SdEkzxnSHHpuZcmWBJbWsBzwQ==
+ bh=0to1Y74iDYiIcR2d00Kj/QV5Tycqv3J6eClhO1rtbGI=;
+ b=iox9WHNgSzgwjr4giLYPq8kTOh2XpYfh6ruHzbnM4g/q/WYcwCAEIlBbh/hKCPjIkpcUqNaYvr0pBMePlMfZT/JR5yLlmnBAlIu4cET8DC4LROK0xW/SGtR6o38q5Lk7ZX2FkcBAMvnfDCupQdwBvzWZ6VHse3t1IH5X+IwssVCpon9VmalY/vndLAzkGsmVUjAfvZsG57LairJoqZtueZyQxHAPyJmE2bG8LeiOyk5BxuDx2GAiYbtUDtlhkX9mcZ94ALc6d26e1DUVf0QWtNJWErZNBllxWD8++P3VbHtBIXridOu+9nNVqoa1odO6oga3jxYNUVOfxGGdWHOp1Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MN0PR11MB6231.namprd11.prod.outlook.com (2603:10b6:208:3c4::15)
- by IA0PR11MB7792.namprd11.prod.outlook.com (2603:10b6:208:409::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6886.34; Mon, 16 Oct
- 2023 05:28:50 +0000
-Received: from MN0PR11MB6231.namprd11.prod.outlook.com
- ([fe80::fd1b:a3b7:11a6:4bc3]) by MN0PR11MB6231.namprd11.prod.outlook.com
- ([fe80::fd1b:a3b7:11a6:4bc3%6]) with mapi id 15.20.6886.034; Mon, 16 Oct 2023
- 05:28:50 +0000
-Date:   Mon, 16 Oct 2023 07:28:44 +0200
-From:   Maciej =?utf-8?Q?Wiecz=C3=B3r-Retman?= 
-        <maciej.wieczor-retman@intel.com>
-To:     Shuah <shuah@kernel.org>
-CC:     <akpm@linux-foundation.org>, <christian@kellner.me>,
-        <fenghua.yu@intel.com>, <keescook@chromium.org>,
-        <ndesaulniers@google.com>, <coltonlewis@google.com>,
-        <dmatlack@google.com>, <vipinsh@google.com>, <seanjc@google.com>,
-        <brauner@kernel.org>, <pbonzini@redhat.com>, <hannes@cmpxchg.org>,
-        <nphamcs@gmail.com>, <reinette.chatre@intel.com>,
-        <ilpo.jarvinen@linux.intel.com>, <linux-kselftest@vger.kernel.org>,
-        <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-mm@kvack.org>, Shuah Khan <skhan@linuxfoundation.org>
-Subject: Re: [PATCH v6 0/8] Add printf attribute to kselftest functions
-Message-ID: <s3wj75zwkwwmvllobuevhf7nbkhyn2a2kwis7oyt3nwsnl5j36@ju5xzn6pw5p5>
-References: <cover.1697196663.git.maciej.wieczor-retman@intel.com>
- <0efe3ba3-b62f-4447-a195-2447e1152a22@kernel.org>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <0efe3ba3-b62f-4447-a195-2447e1152a22@kernel.org>
-X-ClientProxiedBy: VI1PR04CA0068.eurprd04.prod.outlook.com
- (2603:10a6:802:2::39) To MN0PR11MB6231.namprd11.prod.outlook.com
- (2603:10b6:208:3c4::15)
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0to1Y74iDYiIcR2d00Kj/QV5Tycqv3J6eClhO1rtbGI=;
+ b=0RuzXhWsGDMeVwEKntnYVRTKc/LWHDFw7+97HYdKzdOtcVpa8mdJwyc3X5rj6ofPuyax025gjrwZEigsP5+r5GT+WMJiAj7KWummbXAlpd77pVXmCHgpbOjN3su5ebz2D/Vuu9asH6OXI14fs1JgEx3xhJcn/Q0hrHc0/Yz0HTY=
+Received: from DM4PR12MB6351.namprd12.prod.outlook.com (2603:10b6:8:a2::6) by
+ CH2PR12MB4309.namprd12.prod.outlook.com (2603:10b6:610:a4::17) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6863.37; Mon, 16 Oct 2023 06:20:54 +0000
+Received: from DM4PR12MB6351.namprd12.prod.outlook.com
+ ([fe80::4ead:d69:799a:281e]) by DM4PR12MB6351.namprd12.prod.outlook.com
+ ([fe80::4ead:d69:799a:281e%5]) with mapi id 15.20.6886.034; Mon, 16 Oct 2023
+ 06:20:53 +0000
+From:   "Meng, Li (Jassmine)" <Li.Meng@amd.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+CC:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        "Huang, Ray" <Ray.Huang@amd.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
+        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
+        "Yuan, Perry" <Perry.Yuan@amd.com>,
+        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        "Karny, Wyes" <Wyes.Karny@amd.com>
+Subject: RE: [RESEND PATCH V9 3/7] cpufreq: amd-pstate: Enable amd-pstate
+ preferred core supporting.
+Thread-Topic: [RESEND PATCH V9 3/7] cpufreq: amd-pstate: Enable amd-pstate
+ preferred core supporting.
+Thread-Index: AQHZ/YXbRWpJHuQ860GMQa8yy6kr3rBH4gAAgAQJJqA=
+Date:   Mon, 16 Oct 2023 06:20:53 +0000
+Message-ID: <DM4PR12MB6351E2E9504B57BD40DAE985F7D7A@DM4PR12MB6351.namprd12.prod.outlook.com>
+References: <20231013033118.3759311-1-li.meng@amd.com>
+ <20231013033118.3759311-4-li.meng@amd.com>
+ <20231013160128.GB36211@noisy.programming.kicks-ass.net>
+In-Reply-To: <20231013160128.GB36211@noisy.programming.kicks-ass.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=e6678eaf-d33b-42cf-98d4-434d2b994a9a;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=0;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2023-10-16T05:39:14Z;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM4PR12MB6351:EE_|CH2PR12MB4309:EE_
+x-ms-office365-filtering-correlation-id: 06743fe4-0c6f-470f-60b7-08dbce100d19
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: DHxrkRwtKRRWPjD/2ERXtlOiTEXx9220LhlIBZHLcgInK0VFiwft4+1fkQqwhUuBb1164OW6tunmHVStQXKVKkDXSSat0oIa8bAWvahNIKRIW0ONu/DJ7h33pRrOKRTDO3OspzE3bTPTPpPmVk2VgXQE1OoV0yMuIhJvF9vPeC78oStVojLa1seFDBWDnApPzqxPSJERHPnY0S3Xsyv7+oWKXnWUXe1sUK9oO+hmXaVP4ojm6/SZpTZi5en6NWp/UmSs/Prhv4iPIYMuL9P+zA17u6zaNUf5Tt4a+njSGP+g6SU4k79QGMGhyWw1d07VJSF2K0r4hp2MM0TnOMGOldE3SGRabitTmlII8wi8SrT4L2SQkazXg/h4qeuHFfeTxkiHUO9p22rTzka6I9zKqjsBhSwhGY12VZ0+D4xkF8PPgtMoFrxTlBMaS9NxdZfeR1bxO9+Y/2dvtBNxrJrqr+W5pE7nZMfx4MCrd3WUm3Wyreu+l47tRy778Wo+ej8T2HcCgJX7IBYhOql7YQV66RVQbZ6zG+risns7az2SnBPgLjv3WUPDSXbqHwWHFzsQ4s4Pcp+Krf7T1zmI7r41lADFSmhQq3aPJ3ey3ZlRCsX4gMj5QmdIizB9vUMUCxnz
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6351.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(376002)(366004)(136003)(396003)(39860400002)(230922051799003)(451199024)(1800799009)(64100799003)(186009)(7696005)(6506007)(9686003)(53546011)(55016003)(33656002)(86362001)(122000001)(38070700005)(38100700002)(316002)(7416002)(71200400001)(66556008)(41300700001)(478600001)(76116006)(2906002)(83380400001)(66946007)(26005)(8936002)(4326008)(5660300002)(66476007)(6916009)(52536014)(8676002)(64756008)(54906003)(66446008);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?QGdK9mmCuCsZQYJgbOgRNMiiwDh47aZpNNEY8LKs8SqpBnrDxbKYdcgvN0f+?=
+ =?us-ascii?Q?GQxzf3b0q2a9I01/Wu6fPoxMkrTusu632G/gBRszbqBctORAGJNQZXzI1oE1?=
+ =?us-ascii?Q?Uj1leN0xnsuthrHlSEE22iCRVHmz8SJXS0pfunt2MYU6ehtg23GVYndWZVur?=
+ =?us-ascii?Q?hnE1EVDO948o/exFGYOEzk7yZ5qk+h6AXT8Spm3W0mULGUy0rYDs4bW6Xfn2?=
+ =?us-ascii?Q?v1qwfBHBehGUSmkMLDTM0DbTMW1NEU3Bsfvb9bxkMOL7fyEMPSENrLBCiY/D?=
+ =?us-ascii?Q?bUeOrKqDyQh/cH3bSIWWIpVFg+cals76zUefLVhp21nQt0sEjER60Ks/B4uQ?=
+ =?us-ascii?Q?MZ5ed2xDscDVG270Su1RiJiJc0BbKziE9dxBFNsjby5HlbESrYlnM8owCeiM?=
+ =?us-ascii?Q?Jgf2QYmgdPRlAyHE2DMYjMBnqB/9gKdssiZLs2+4EYReH2rHCeu+Dr2GUw4F?=
+ =?us-ascii?Q?e08/NMLpakjYqU1SgZYdao34X4Me4HWJnaF/pMSck3Ai9ypYl0Z+oH7l1j+k?=
+ =?us-ascii?Q?hAiFnvklnMEVE0t5f6l/H2HQjtARlTAscy9hAvMdM8NTUY2Zpd0mstrM8VU0?=
+ =?us-ascii?Q?PiuH/a6c/nZykVFcmm/BPNidUS0Vbbe27/mcmWo+0UEtsvayZ05/USlv58EC?=
+ =?us-ascii?Q?Z9jX7CjtgcDjfelLMmWke/5QrbI3PZu+HAmrGYd2loYVNh7txxxwEE55QHXk?=
+ =?us-ascii?Q?997Tssq2AaXs6FhlKdv4EadEOozptB1RQPHkkB4AAgjO+C9b8EExUwk0RA0Q?=
+ =?us-ascii?Q?34EkxTpnBtSr1BcNxeO3UfCU1rbU04ijDZxsMAm6PHROzH69L1DDzsJKgnhS?=
+ =?us-ascii?Q?jO5n48qgA3jahs1V5sJL+qazq6orwQYRTC7OpREf9kNE58au5zH7jnVyXAB6?=
+ =?us-ascii?Q?QLD3J1UpvcS0L7ndjrCYejSUgx7zD9ZuLQRbRVVVilf3UGOD07LlxZVHN/W+?=
+ =?us-ascii?Q?skdtGcTvqw/a0sAeArkdiNPZnsNmGTbmn+zInPwBLa5T77jBvwWSXNvbHZHi?=
+ =?us-ascii?Q?g5qyTjw0mHyHrfJrAk8DEEAME0Io21l5Ki4YtIGOF8XKV7+yEoa7IJ0nY+RK?=
+ =?us-ascii?Q?umNi6/30vaLz3uChSQGVVyHrn08xSVVBZ/2JvsA9pAltgmzebETIyo+LdLNc?=
+ =?us-ascii?Q?31OiDrKtDRNH/uHIq1BeboWYDKTstLwjiCQzR/BX269wQghayEk3+PpuEcEd?=
+ =?us-ascii?Q?xQlFCTQMjedMHIHmUJuVbqPKsYOjbUVblPSuzxXJDyaGRGWT2QORFt/hRZtB?=
+ =?us-ascii?Q?4EGD8+f2c1hwTwdkwfjCFpRe+qI2NFrjvbuYGg6P4XIWyiiE9p9KEJpUQB7H?=
+ =?us-ascii?Q?sUty1xWhngch5aZ0lnk4U8ZBhmfFOm0V/F1HRuoAFxgWrg1tNj4BBJAWRHp/?=
+ =?us-ascii?Q?eAzNewsLKsM6fvjCpxQr2B9t6KTe6QsCsux3zbjlH62pEpIfxVnum0nfjLMF?=
+ =?us-ascii?Q?aV4Au2m9M8QPm0wJEOzYNQaJ5vR/ivcO2lZDBEaUZqtM139k7oNneHoARIaE?=
+ =?us-ascii?Q?vqgvM7HyqepJVhXBGKRsraI+Tcq6z92fPD4q4il5kxfkmicC+AmsbzLmO+Pt?=
+ =?us-ascii?Q?/4126AE6H+lRaTORZyk=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR11MB6231:EE_|IA0PR11MB7792:EE_
-X-MS-Office365-Filtering-Correlation-Id: 162bbef3-ee24-4a2a-cfa0-08dbce08c738
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nlzNYtMMZbvA+EQVvfTFtP1LuJit8jEHAOExcUlHL1cKs/Ra63dz1xN/1Q0H72zm3sDjV3E0chcl/sB4k1iQH81ks/GZLJYwYQQmX9T2yV5yKm0TwcE4RCP3XUcCMusuP3CUfVzP4SzxP0GoagoNttkNG4NW2wDLvogbZBORYYWXX8el3TgEZt9kZrBGl5P4yLpI4EFU3MXpyteA2SWtwTws7dgQ/Gr8gOHhkodlj6H9PkPpGY/DexCMPtlqLZ4Ilr/CggTAnFehyEYhXoP4iaVpw0PlMSFcV9WDwOO1gCn4SU8ff3XQUsO87EY4C+VWMynfrUwGmilzU4KFpIA64XUiAV5B3OzkFqsYxMU2PajwAK4CpzJ+nkHooFusVjtKKhhUIGSX6KiNW8x4jNyCvLhMwFvrENO1h5Ys3bFh1XA1Hs8xCjYJh9O5Yo3ZYS4IxP5ytjrCNoKbErxSklPtgfbPscg2j+BLrzc/o179F0E0i/ubDWA8o4wgGHoRP82ZPYeN1E0+r39eoHZjBuBRfbOUXDMp7fojHw9A1Zo/0xMnIyHx3RBXFnX/tON/9ViHM8So6ejtgf6iKC6iD5kc8A==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6231.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(366004)(376002)(39860400002)(396003)(136003)(346002)(230922051799003)(451199024)(64100799003)(1800799009)(186009)(7416002)(4001150100001)(2906002)(5660300002)(41300700001)(8936002)(4326008)(8676002)(6916009)(316002)(66946007)(33716001)(478600001)(966005)(6486002)(6506007)(6666004)(83380400001)(53546011)(66556008)(66476007)(66574015)(26005)(86362001)(82960400001)(6512007)(9686003)(38100700002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?hyIJdKOvU+OFrneiR80DQuiFXRzagUv4SWP/JC0xkqt/p+g3LI+tDJPfhq?=
- =?iso-8859-1?Q?yZp94L+MW4TfIONkP8hODmxzKi9cbAk+16nw1MSs+YkP6+KYv0eLRj8B9e?=
- =?iso-8859-1?Q?bw6Un2AGW7goIgZsyarPQsC9EFLikTN7ytay58cUoeV1RwC9FuO/b1iqs7?=
- =?iso-8859-1?Q?ZNMJ+7WjoO/Mbyqn0mn6h8mSVbxfkuU2AmkG57Mh4/OujxHC5q7QYkSLnZ?=
- =?iso-8859-1?Q?HiMUEUqrKMVdP4UvTjSGIsABEn2szmPsoFuG7vTKPWngft2WLyYOXZeLwJ?=
- =?iso-8859-1?Q?fXpC50iEjDupfwsR3noPeeEsYDqbSiz+mMAPtl23sOg4mKEr9MsZshTHKu?=
- =?iso-8859-1?Q?NbBH0HgwLG5Kn7T2oapjCqdYPVNK7PGam20NawF+8dT51+z3NXu0IzvY9N?=
- =?iso-8859-1?Q?Xd+6th2UCgJ3lERCdmhqYVCLAL5LdMxoRs8ZPUyTh8WgXPKx7UlM0JUGXZ?=
- =?iso-8859-1?Q?7MBmui5ZGT+UOBlS8MJAZteHfj1Cy02YK+BbYpmOEL7O67bp/iS3CwWZmV?=
- =?iso-8859-1?Q?IDhp54SWP7IL5Hzu5Q8Yrb4jv592PktBeWLOhL6GDKWHPuZH9QLgW3x3xG?=
- =?iso-8859-1?Q?NMEDtlFUsVIZZ3pLaCd+PkBl/cb2zICq7rRjJKCQoGS0q88PwMt3dh1Nvk?=
- =?iso-8859-1?Q?Cy7SuHVs3WmCxPJGpriV5x0il5Zbpy4KVhRAjPpJFnfriSQXmzc/TK7qjP?=
- =?iso-8859-1?Q?N1HBjIr5qfLi+igF/y9Eo3umf1TD+AwaVPGy8mtMzFWUNeBtWaNfdd6gOX?=
- =?iso-8859-1?Q?UlvngY4SuEMRW0NEsg/3bZnQ8COwnRIW4wekQyg/Emqd3ETSsod5mAXolG?=
- =?iso-8859-1?Q?BM7LlOHdaEgHhtgnskXIWSwAmS8xHA647BRx6+0YeX1XbZ4IB/8BJq2tNo?=
- =?iso-8859-1?Q?1ypAuol8gvMcqOJQAKOvE8FJajZbUVfESD6g7pV2M/XASZ6lfbpMjoZ5T5?=
- =?iso-8859-1?Q?DZK2oiHYkc8JV47+ZIH4vgYOuLCfqGbgmHawgmU0ukDYHiDH/428B0qh1D?=
- =?iso-8859-1?Q?pilDjxOPMvknWG/eSLmnVa3vEZE3AiQHjsnG+/xSaBTSOzjXtG7omVy0jE?=
- =?iso-8859-1?Q?wgi7SXeSgNdBpISEhQhUGc33vZlEOwOnVHnfNq79enfrGrYiURWm06OpDP?=
- =?iso-8859-1?Q?r6IrI4TxYFgwAafN96C2Ulvy6eXQRyJTm7OxHjgzHf1jGawz1ueVvz+Fio?=
- =?iso-8859-1?Q?zdOkqhRSf0SaNSEwmVxpyaeaZU7/X339CvDf7YaP07yN+Z2MWIbLjGf0tD?=
- =?iso-8859-1?Q?mfLFk89FEdXhKaGBR0SHNxYOreQzaob2MINCOrKBl8EXVGpbFq77Q5oG4L?=
- =?iso-8859-1?Q?Uq1i9C2XBcqmliSA5EtYFUvybxUHw+KEFXYJYrxADoA9wOjj1lgme0sGeU?=
- =?iso-8859-1?Q?4awgf07YDVjvMkzbcfNVwBt5/BPJsCQTV4oqjDKi//RFVK3L3+MZ4jgQlJ?=
- =?iso-8859-1?Q?7CbBSMAkp7qzBfvbQXz+dSXfnuPvQhAI7ABLgE9AMbfF1goIGj8g7w+5Kk?=
- =?iso-8859-1?Q?UaFsF5kmXnkmZ8ESvkSM53w5ynVdMomBo/UaK0JUtyGCQlXxh7CLduCFDR?=
- =?iso-8859-1?Q?6pmqeRFiFEMTqRybduWqSwvG4e/VvB8e9v3fmKzvchCpUNHYrx6+ShImAm?=
- =?iso-8859-1?Q?qcvf5vxxOsjy5sR4bTSWCoD44eC49kmIQnarG9Jx2QbzGFh38WpMz7WFPq?=
- =?iso-8859-1?Q?Mj+/PIMwdWbjyVcQrA8=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 162bbef3-ee24-4a2a-cfa0-08dbce08c738
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6231.namprd11.prod.outlook.com
+X-OriginatorOrg: amd.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Oct 2023 05:28:50.2254
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6351.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 06743fe4-0c6f-470f-60b7-08dbce100d19
+X-MS-Exchange-CrossTenant-originalarrivaltime: 16 Oct 2023 06:20:53.7431
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kE1/4gHUp7rnKRIrp9TZLldNX2vMv+3fk+2janYi0C46itN5rXV3vv1+l0/UKwWfRTatLo9bRKCHph4pqawSpCNQZFvRt4bdh2+cqS4JzLo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR11MB7792
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: SeYG/ZPDRscy+Yk9lC81HACEfOiAOE5DQGYhbNol0fZxLiVgPgWMXGkeJlbnd6XDo4w09tqfsX1YE9tycA9YgQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4309
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2023-10-13 at 15:03:11 -0600, Shuah wrote:
->On 10/13/23 05:36, Maciej Wieczor-Retman wrote:
->> kselftest.h declares many variadic functions that can print some
->> formatted message while also executing selftest logic. These
->> declarations don't have any compiler mechanism to verify if passed
->> arguments are valid in comparison with format specifiers used in
->> printf() calls.
->> 
->> Attribute addition can make debugging easier, the code more consistent
->> and prevent mismatched or missing variables.
->> 
->> The first patch adds __printf() macro and applies it to all functions
->> in kselftest.h that use printf format specifiers. After compiling all
->> selftests using:
->> 	make -C tools/testing/selftests
->> many instances of format specifier mismatching are exposed in the form
->> of -Wformat warnings.
->> 
->> Fix the mismatched format specifiers caught by __printf() attribute in
->> multiple tests.
->> 
->> Series is based on kselftests next branch.
->> 
->> Changelog v6:
->> - Add methodology notes to all patches.
->> - No functional changes in the patches.
->> 
->
->Applied this series and the following three - all 25 patches are
->in linux-kselftest next for Linux 6.7-rc1.
->
->[1] https://lore.kernel.org/all/cover.1696932728.git.maciej.wieczor-retman@intel.com/
->[2] https://lore.kernel.org/all/20231002094813.6633-1-ilpo.jarvinen@linux.intel.com/
->[3] https://lore.kernel.org/all/20230904095339.11321-1-ilpo.jarvinen@linux.intel.com/
->
->thanks,
->-- Shuah
->
+[AMD Official Use Only - General]
 
-Thank you!
+Hi Peter:
 
--- 
-Kind regards
-Maciej Wieczór-Retman
+> -----Original Message-----
+> From: Peter Zijlstra <peterz@infradead.org>
+> Sent: Saturday, October 14, 2023 12:01 AM
+> To: Meng, Li (Jassmine) <Li.Meng@amd.com>
+> Cc: Rafael J . Wysocki <rafael.j.wysocki@intel.com>; Huang, Ray
+> <Ray.Huang@amd.com>; linux-pm@vger.kernel.org; linux-
+> kernel@vger.kernel.org; x86@kernel.org; linux-acpi@vger.kernel.org; Shuah
+> Khan <skhan@linuxfoundation.org>; linux-kselftest@vger.kernel.org;
+> Fontenot, Nathan <Nathan.Fontenot@amd.com>; Sharma, Deepak
+> <Deepak.Sharma@amd.com>; Deucher, Alexander
+> <Alexander.Deucher@amd.com>; Limonciello, Mario
+> <Mario.Limonciello@amd.com>; Huang, Shimmer
+> <Shimmer.Huang@amd.com>; Yuan, Perry <Perry.Yuan@amd.com>; Du,
+> Xiaojian <Xiaojian.Du@amd.com>; Viresh Kumar <viresh.kumar@linaro.org>;
+> Borislav Petkov <bp@alien8.de>; Oleksandr Natalenko
+> <oleksandr@natalenko.name>; Karny, Wyes <Wyes.Karny@amd.com>
+> Subject: Re: [RESEND PATCH V9 3/7] cpufreq: amd-pstate: Enable amd-
+> pstate preferred core supporting.
+>
+> Caution: This message originated from an External Source. Use proper
+> caution when opening attachments, clicking links, or responding.
+>
+>
+> On Fri, Oct 13, 2023 at 11:31:14AM +0800, Meng Li wrote:
+>
+> > +#define AMD_PSTATE_PREFCORE_THRESHOLD        166
+> > +#define AMD_PSTATE_MAX_CPPC_PERF     255
+>
+> > +static void amd_pstate_init_prefcore(struct amd_cpudata *cpudata) {
+> > +     int ret, prio;
+> > +     u32 highest_perf;
+> > +     static u32 max_highest_perf =3D 0, min_highest_perf =3D U32_MAX;
+>
+> What serializes these things?
+>
+> Also, *why* are you using u32 here, what's wrong with something like:
+>
+>         int max_hp =3D INT_MIN, min_hp =3D INT_MAX;
+>
+[Meng, Li (Jassmine)]
+We use ITMT architecture to utilize preferred core features.
+Therefore, we need to try to be consistent with Intel's implementation as m=
+uch as possible.
+For details, please refer to the intel_pstate_set_itmt_prio function in fil=
+e intel_pstate.c. (Line 355)
+
+I think using the data type of u32 is consistent with the data structures o=
+f cppc_perf_ctrls and amd_cpudata etc.
+
+> > +
+> > +     ret =3D amd_pstate_get_highest_perf(cpudata->cpu, &highest_perf);
+> > +     if (ret)
+> > +             return;
+> > +
+> > +     cpudata->hw_prefcore =3D true;
+> > +     /* check if CPPC preferred core feature is enabled*/
+> > +     if (highest_perf =3D=3D AMD_PSTATE_MAX_CPPC_PERF) {
+>
+> Which effectively means <255 (also, seems to suggest MAX_CPPC_PERF
+> might not be the best name, hmm?)
+>
+> Should you not write '>=3D 255' then? Just in case something 'funny'
+> happens?
+>
+[Meng, Li (Jassmine)]
+OK, I will modify these.
+
+> > +             pr_debug("AMD CPPC preferred core is unsupported!\n");
+> > +             cpudata->hw_prefcore =3D false;
+> > +             return;
+> > +     }
+> > +
+> > +     if (!amd_pstate_prefcore)
+> > +             return;
+> > +
+> > +     /* The maximum value of highest perf is 255 */
+> > +     prio =3D (int)(highest_perf & 0xff);
+>
+> If for some weird reason you get 0x1ff or whatever above (dodgy BIOS neve=
+r
+> happens, right) then this makes sense how?
+>
+> Perhaps stop sending patches at break-nek speed and think for a little wh=
+ile
+> on how to write this and not be confused?
+>
+[Meng, Li (Jassmine)]
+If I use '>=3D 255' to check, the issue mentioned will not exist.
+Because it will be returned when highest_perff>0xff.
+>
+> > +     /*
+> > +      * The priorities can be set regardless of whether or not
+> > +      * sched_set_itmt_support(true) has been called and it is valid t=
+o
+> > +      * update them at any time after it has been called.
+> > +      */
+> > +     sched_set_itmt_core_prio(prio, cpudata->cpu);
+> > +
+> > +     if (max_highest_perf <=3D min_highest_perf) {
+> > +             if (highest_perf > max_highest_perf)
+> > +                     max_highest_perf =3D highest_perf;
+> > +
+> > +             if (highest_perf < min_highest_perf)
+> > +                     min_highest_perf =3D highest_perf;
+> > +
+> > +             if (max_highest_perf > min_highest_perf) {
+> > +                     /*
+> > +                      * This code can be run during CPU online under t=
+he
+> > +                      * CPU hotplug locks, so sched_set_itmt_support()
+> > +                      * cannot be called from here.  Queue up a work i=
+tem
+> > +                      * to invoke it.
+> > +                      */
+> > +                     schedule_work(&sched_prefcore_work);
+> > +             }
+> > +     }
+>
+> Not a word about what serializes these variables.
+>
+> > +}
