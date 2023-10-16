@@ -2,174 +2,175 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 505047CB2D7
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Oct 2023 20:44:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 227677CB2FB
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Oct 2023 20:50:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234060AbjJPSos (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 16 Oct 2023 14:44:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53392 "EHLO
+        id S231478AbjJPSuv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 16 Oct 2023 14:50:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjJPSor (ORCPT
+        with ESMTP id S229952AbjJPSuu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Oct 2023 14:44:47 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1956F2;
-        Mon, 16 Oct 2023 11:44:43 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CMu9vQI2vjI86PbOFjXp4W8Vop5WhcgX+R3tEh9wpCLdQj2IQV4At4edqvuxMVv6lS17zxjjc2wHXgVbfkD5x7QcIde5jQ3IxSQ8GrfXgRUZ2viBKZbyafkD+K9A6ItTbKikV1KcTZoPJ94O9vufYa62R+u3IyWA+XsjzIB7ifF1uWKOoexaZ7X1VMyOSiH8oLmrvAUnzsT53niQ03LnyOLHYt7YomcBiih66N590lOEm0rJOue3hDnvOYKsjp9PpokMe4dG4u+eiqQ+eZwYaa9gTg1RKUHQxu9nbt7RmM5CA269DIclKnrpDSR18gMJ9RxYzrbU5hoeCSWfGtXElQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=U9vZm9PB9ER5WdLPH3mvcIPSiDOJi2/FBlIt+m8svIQ=;
- b=RS6o3sCKkyGiOr2oijuVm1vHw4zrpkXIM7ZbY6S8MQupq8fXRd1oibDn7a+Zf5n0xYzT7eE3OXgC3Ht2NuJGRbie1DyCKs66TfLnv3c+YHWK5CTRUQ7GmtL8sPZNyZ1TIH/3YP0rnXbJv2iHXyLHOE/YaN7xQamsxqwe2i+dmcHPBVMMoACmqTKSCjvU4YAtrqW3TiwcI8yAIt6bGJtiDhr5PmSZLxgczonDmKv8/aJ/bx9oYFCGhDEACyG/LrEqVK3qzJ2pOo1YsvEwAflCFBGo7zygFuY6RXP+G0r3c/ZM7tlh9EvNUbCJh7kyAxOC+Frp6Ytnj0KsH85AYkNzug==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.232) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=U9vZm9PB9ER5WdLPH3mvcIPSiDOJi2/FBlIt+m8svIQ=;
- b=qwp1HCLYO8jETT5c61CYYn0PGOk0QS0HJv0dqhmaH/Pr81Vtc3yg+bbjGCCMq7waE3eKLMm/KpQDnZ3vfj4ciMmCx0JuDos0HmiRd6tL5XdOZ6TQIXo5PPJ90ZnMhUYHXRS31qyR/MGVWaaPRjir8emth1gqxKa43qY73OoysZ+kxXFaN+xvONghlwoHMO5h46hC0gvYwR+C2thGMUv+ptqndgoYAYt7FgZ1zdsAtxP+SLV2nGsgU98X/qsFEySaS39eJHjTfCiT9S4+4kNGVIDApz/3iCRt9beaflwlpsUArIUhm/eKRRQPR+Zhpw7SnsSzFomXPiRwp/ZE6GoRDQ==
-Received: from SJ0PR03CA0279.namprd03.prod.outlook.com (2603:10b6:a03:39e::14)
- by CH2PR12MB4906.namprd12.prod.outlook.com (2603:10b6:610:6a::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6886.36; Mon, 16 Oct
- 2023 18:44:41 +0000
-Received: from CO1PEPF000042AE.namprd03.prod.outlook.com
- (2603:10b6:a03:39e:cafe::68) by SJ0PR03CA0279.outlook.office365.com
- (2603:10b6:a03:39e::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6886.35 via Frontend
- Transport; Mon, 16 Oct 2023 18:44:41 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.232) by
- CO1PEPF000042AE.mail.protection.outlook.com (10.167.243.43) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6838.22 via Frontend Transport; Mon, 16 Oct 2023 18:44:40 +0000
-Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
- (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 16 Oct
- 2023 11:44:29 -0700
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Mon, 16 Oct 2023 11:44:29 -0700
-Received: from Asurada-Nvidia (10.127.8.9) by mail.nvidia.com (10.126.190.180)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41 via Frontend
- Transport; Mon, 16 Oct 2023 11:44:28 -0700
-Date:   Mon, 16 Oct 2023 11:44:26 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-CC:     Yi Liu <yi.l.liu@intel.com>, <joro@8bytes.org>,
-        <alex.williamson@redhat.com>, <kevin.tian@intel.com>,
-        <robin.murphy@arm.com>, <baolu.lu@linux.intel.com>,
-        <cohuck@redhat.com>, <eric.auger@redhat.com>,
-        <kvm@vger.kernel.org>, <mjrosato@linux.ibm.com>,
-        <chao.p.peng@linux.intel.com>, <yi.y.sun@linux.intel.com>,
-        <peterx@redhat.com>, <jasowang@redhat.com>,
-        <shameerali.kolothum.thodi@huawei.com>, <lulu@redhat.com>,
-        <suravee.suthikulpanit@amd.com>, <iommu@lists.linux.dev>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <zhenzhong.duan@intel.com>, <joao.m.martins@oracle.com>
-Subject: Re: [PATCH v4 10/17] iommufd: Support IOMMU_HWPT_ALLOC allocation
- with user data
-Message-ID: <ZS2Eisb94o3inW7V@Asurada-Nvidia>
-References: <20230921075138.124099-1-yi.l.liu@intel.com>
- <20230921075138.124099-11-yi.l.liu@intel.com>
- <20231013151923.GV3952@nvidia.com>
- <ZSmvkxuEq7M13KYE@Asurada-Nvidia>
- <20231014000709.GL3952@nvidia.com>
- <ZSnmId5g2m/UnxKY@Asurada-Nvidia>
- <bd6c6a0f-3b7e-ca7c-468f-d8fe7fb382fb@intel.com>
- <20231016115907.GQ3952@nvidia.com>
+        Mon, 16 Oct 2023 14:50:50 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E34D95;
+        Mon, 16 Oct 2023 11:50:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1697482249; x=1729018249;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=Iulu54IDYUFpU+iC/guD05U9rT3+qcojMqimF0BvD7c=;
+  b=jhD4+rZJQNVsfSUT8UJbDT9HLUwyecBBVj4HRHrMfkfg1XVUwMobtE7g
+   BDbSxTsuduPB3ueu+4/gbXnRR7LiIlQBsM8Kk5DLQL/o+ZIiZ2UkNXJpH
+   E0lmz2GC/CmNWjuizonjcZQzsofBdAzzlVIKTOmsRXUYjaskdYlywWfKM
+   3a1uDfYzdcLPy3hDe4UrQahcYbCygR1spbZ9lOf6OgtTyyAubZUaJii4D
+   Gs8E0g+WbUYpm4AdTxDkxyxm+rS/I98xApjEg3FgqxCiYmCtlFQjrVM3B
+   42gcHaJxs4mJ9ejKau+ZO1M7qGULAUeyvN7/jI8evUwxRtu0hVsqDUH8P
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10865"; a="7182384"
+X-IronPort-AV: E=Sophos;i="6.03,230,1694761200"; 
+   d="scan'208";a="7182384"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2023 11:50:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10865"; a="826131454"
+X-IronPort-AV: E=Sophos;i="6.03,230,1694761200"; 
+   d="scan'208";a="826131454"
+Received: from spandruv-desk1.amr.corp.intel.com ([10.209.124.179])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Oct 2023 11:50:34 -0700
+Message-ID: <eeb77ec34d2002e507c09949aac9110d8b8eff4a.camel@linux.intel.com>
+Subject: Re: [RESEND PATCH V9 3/7] cpufreq: amd-pstate: Enable amd-pstate
+ preferred core supporting.
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Meng, Li (Jassmine)" <Li.Meng@amd.com>
+Cc:     "Huang, Ray" <Ray.Huang@amd.com>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
+        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
+        "Yuan, Perry" <Perry.Yuan@amd.com>,
+        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        "Karny, Wyes" <Wyes.Karny@amd.com>
+Date:   Mon, 16 Oct 2023 11:50:34 -0700
+In-Reply-To: <e82fc689-5cc3-d799-6e5f-a9e4ac98e26f@intel.com>
+References: <20231013033118.3759311-1-li.meng@amd.com>
+         <20231013033118.3759311-4-li.meng@amd.com>
+         <20231013160128.GB36211@noisy.programming.kicks-ass.net>
+         <DM4PR12MB6351E2E9504B57BD40DAE985F7D7A@DM4PR12MB6351.namprd12.prod.outlook.com>
+         <20231016105845.GA33217@noisy.programming.kicks-ass.net>
+         <e82fc689-5cc3-d799-6e5f-a9e4ac98e26f@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20231016115907.GQ3952@nvidia.com>
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1PEPF000042AE:EE_|CH2PR12MB4906:EE_
-X-MS-Office365-Filtering-Correlation-Id: 03f48c29-ca15-4679-c824-08dbce77f4ee
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7MAUEtxx1IMMFiAe9xyeJ0rAV99fKkOuF9UdU92s1ZaJNSEJW/Q+TJLLZga80FoyXbJNtjQ6tBJd4tTaVrBvUJrdz4Hlc4woqsKkr9gRgdbtkOGS4ZIsvxGgSO+fsLG3R1TUEhHF7EREgxJ0k5uPoiyhgcVCi/D5L60VD4vArS0F2sIcuLed30HLMiWWEcT/dN90NB+RmIk3CgUACLs6HHF1iBvinuOfa67cEt7KY4LQEZS7bzSxTwnOv61/qfAic2kcb6rkogPtb/FDweIoVcMj6DY+FwHgQAwXoFxFZmLj2DABB0eqW1OOpULL3qhvKtI4RetaFFnqb0zMkv1PRDFQd9nUcgdEMRz7eJXbu9VPeHrk1fRqginjjRVMjgR8e9kezcnM1F4tklmJiL+y9rq6nWD0ayJduDVx2tOp40ll86Ap/dYOnI/uvM/6brloWw8rlp8DVwoloZTco8jbwAs/9TPUAZmka571n+6z8dwihzO2u5Ozlu2ZDn/kvPsclchBUUB1zOX+NFQiXFSmY1SNYIiDbryif1o9s+U5OygnUr800R+BJFjqYXAZCd80PvTpu2FzCEf6QnfZJsxT2/o18Dy7YcppVbsYqB3rAXlHCnhGEg5Ym9ErTA5rrpSd3X20Amb58bsl9wwjEES0FH4tJt1xeptbvhrbWlbRW0ZzhhN55/NstNV/c4zoSr21TYMYuSaEUaENvpTpNbFFkyxWXKki/5AfvbmSLynK0A0uKgtEWuW6RCyicC/N0eP1
-X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230031)(4636009)(376002)(39860400002)(396003)(136003)(346002)(230922051799003)(1800799009)(82310400011)(64100799003)(451199024)(186009)(36840700001)(46966006)(40470700004)(26005)(356005)(8676002)(4326008)(6862004)(82740400003)(8936002)(40460700003)(41300700001)(36860700001)(55016003)(9686003)(5660300002)(86362001)(7636003)(40480700001)(7416002)(2906002)(47076005)(70206006)(54906003)(70586007)(6636002)(336012)(426003)(83380400001)(316002)(478600001)(33716001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Oct 2023 18:44:40.7839
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 03f48c29-ca15-4679-c824-08dbce77f4ee
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1PEPF000042AE.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4906
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Oct 16, 2023 at 08:59:07AM -0300, Jason Gunthorpe wrote:
-> On Mon, Oct 16, 2023 at 03:03:04PM +0800, Yi Liu wrote:
-> > Current nesting series actually extends HWPT_ALLOC ioctl to accept user
-> > data for allocating domain with vendor specific data. Nested translation
-> > happens to be the usage of it. But nesting requires invalidation. If we
-> > want to do further split, then this new series would be just "extending
-> > HWPT_ALLOC to accept vendor specific data from userspace". But it will
-> > lack of a user if nesting is separated. Is this acceptable? @Jason
-> 
-> I'd still like to include the nesting allocation and attach parts
-> though, even if they are not usable without invalidation ..
+On Mon, 2023-10-16 at 19:27 +0200, Wysocki, Rafael J wrote:
+> On 10/16/2023 12:58 PM, Peter Zijlstra wrote:
+> > On Mon, Oct 16, 2023 at 06:20:53AM +0000, Meng, Li (Jassmine)
+> > wrote:
+> > > > > +static void amd_pstate_init_prefcore(struct amd_cpudata
+> > > > > *cpudata) {
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0 int ret, prio;
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0 u32 highest_perf;
+> > > > > +=C2=A0=C2=A0=C2=A0=C2=A0 static u32 max_highest_perf =3D 0, min_=
+highest_perf =3D
+> > > > > U32_MAX;
+> > > > What serializes these things?
+> > > >=20
+> > > > Also, *why* are you using u32 here, what's wrong with something
+> > > > like:
+> > > >=20
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int max_hp =3D INT=
+_MIN, min_hp =3D INT_MAX;
+> > > >=20
+> > > [Meng, Li (Jassmine)]
+> > > We use ITMT architecture to utilize preferred core features.
+> > > Therefore, we need to try to be consistent with Intel's
+> > > implementation
+> > > as much as possible.=C2=A0 For details, please refer to the
+> > > intel_pstate_set_itmt_prio function in file intel_pstate.c. (Line
+> > > 355)
+> > >=20
+> > > I think using the data type of u32 is consistent with the data
+> > > structures of cppc_perf_ctrls and amd_cpudata etc.
+> > Rafael, should we fix intel_pstate too?
+>=20
+> Srinivas should be more familiar with this code than I am, so adding
+> him.
+>=20
+If we make
+	static u32 max_highest_perf =3D 0, min_highest_perf =3D U32_MAX;
+to
+	static int max_highest_perf =3D INT_MIN, min_highest_perf =3D
+INT_MAX;
 
-This is the latest series that I reworked (in bottom-up order):
- iommu: Add a pair of helper to copy struct iommu_user_data{_array}
- iommufd: Add IOMMU_HWPT_INVALIDATE
- iommufd: Add a nested HW pagetable object
- iommufd: Share iommufd_hwpt_alloc with IOMMUFD_OBJ_HWPT_NESTED
- iommufd: Derive iommufd_hwpt_paging from iommufd_hw_pagetable
- iommufd: Rename IOMMUFD_OBJ_HW_PAGETABLE to IOMMUFD_OBJ_HWPT_PAGING
- iommufd/device: Add helpers to enforce/remove device reserved regions
- iommu: Add IOMMU_DOMAIN_NESTED and cache_invalidate_user op
- iommu: Pass in parent domain with user_data to domain_alloc_user op
+Then in intel_pstate we will compare signed vs unsigned comparison as
+cppc_perf.highest_perf is u32.
 
-Perhaps we can have a preparatory series to merge first:
- iommufd: Share iommufd_hwpt_alloc with IOMMUFD_OBJ_HWPT_NESTED
- iommufd: Derive iommufd_hwpt_paging from iommufd_hw_pagetable
- iommufd: Rename IOMMUFD_OBJ_HW_PAGETABLE to IOMMUFD_OBJ_HWPT_PAGING
- iommufd/device: Add helpers to enforce/remove device reserved regions
 
-Then next cycle would be basically 4 patches + selftests:
- iommufd: Add IOMMU_HWPT_INVALIDATE
- iommufd: Add a nested HW pagetable object
- iommu: Add IOMMU_DOMAIN_NESTED and cache_invalidate_user op
- iommu: Pass in parent domain with user_data to domain_alloc_user op
+In reality this will be fine to change to "int" as we will never reach
+u32 max as performance on any Intel platform.
 
-The preparatory series doesn't involve functional changes yet have
-a good amount of pieces to simplify the "nested HW pagetable" that
-is basically nested_alloc/abort/destroy.
+>=20
+> > The point is, that sched_asym_prefer(), the final consumer of these
+> > values uses int and thus an explicitly signed compare.
+> >=20
+> > Using u32 and U32_MAX anywhere near the setting the priority makes
+> > absolutely no sense.
+> >=20
+> > If you were to have the high bit set, things do not behave as
+> > expected.
+>=20
+> Right, but in practice these values are always between 0 and 255=20
+> inclusive AFAICS.
+>=20
+> It would have been better to use u8 I suppose.
+Should be fine as over clocked parts will set to max 0xff.
 
-> > BTW. Do we still have unsolved issue on the invalidation path?
-> 
-> I'm not sure, there were so many different versions of it we need to
-> go back over it and check the dirver implementations again
+>=20
+>=20
+> > Also, same question as to the amd folks; what serializes those
+> > static
+> > variables?
+>=20
+> That's a good one.
 
-Only this v4 has the latest array-based invalidation design. And
-it should be straightforward for drivers to define entry/request
-structures. It might be a bit rush to review/finalize it at the
-stage of rc6 though.
+This function which is checking static variables is called from cpufreq
+->init callback. Which in turn is called from a function which is
+passed as startup() function pointer to
+cpuhp_setup_state_nocalls_cpuslocked().
 
-Thanks
-Nic
+I see that startup() callbacks are called under a mutex
+cpuhp_state_mutex for each present CPUs. So if some tear down happen,
+that is also protected by the same mutex. The assumption is here is
+that cpuhp_invoke_callback() in hotplug state machine is not called in
+parallel on two CPUs by the hotplug state machine. But I see activity
+on parallel bringup, so this is questionable now.
+
+Thanks,
+Srinivas
+
+>=20
+>=20
+
