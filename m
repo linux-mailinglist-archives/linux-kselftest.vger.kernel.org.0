@@ -2,392 +2,674 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 058F97CAA26
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Oct 2023 15:45:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F78E7CAAD7
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Oct 2023 16:02:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234001AbjJPNpm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 16 Oct 2023 09:45:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58324 "EHLO
+        id S233933AbjJPOCl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 16 Oct 2023 10:02:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233694AbjJPNpj (ORCPT
+        with ESMTP id S233794AbjJPOCN (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Oct 2023 09:45:39 -0400
-Received: from mail.avm.de (mail.avm.de [212.42.244.94])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69BAB13E;
-        Mon, 16 Oct 2023 06:45:34 -0700 (PDT)
-Received: from mail-auth.avm.de (dovecot-mx-01.avm.de [212.42.244.71])
-        by mail.avm.de (Postfix) with ESMTPS;
-        Mon, 16 Oct 2023 15:45:33 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
-        t=1697463933; bh=izObkuWYieNPEzOpLEXnNiKd9Ga6Rekym0GPM8tGX2Q=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-        b=FmHrLZiKk3d6UUmVQdFy+QqddN2VaJv0R4C2WygAbLT1TIEr5sE/m2hH/MKYNPPAc
-         Pxnx4hOQf3QT5+2Pu9OSfBHSN2Rg0xnAbyAkgOwaBifoUL64dkVMbkwkltdrJ/DrYF
-         2PJzUeltsc8zA/NXK5qfU/p07GJ0ImSxhaDntJv4=
-Received: from localhost (unknown [172.17.88.63])
-        by mail-auth.avm.de (Postfix) with ESMTPSA id CA92380A2D;
-        Mon, 16 Oct 2023 15:45:32 +0200 (CEST)
-From:   Johannes Nixdorf <jnixdorf-oss@avm.de>
-Date:   Mon, 16 Oct 2023 15:27:24 +0200
-Subject: [PATCH net-next v5 5/5] selftests: forwarding:
- bridge_fdb_learning_limit: Add a new selftest
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231016-fdb_limit-v5-5-32cddff87758@avm.de>
-References: <20231016-fdb_limit-v5-0-32cddff87758@avm.de>
-In-Reply-To: <20231016-fdb_limit-v5-0-32cddff87758@avm.de>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Andrew Lunn <andrew@lunn.ch>, David Ahern <dsahern@gmail.com>,
+        Mon, 16 Oct 2023 10:02:13 -0400
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CAA7135;
+        Mon, 16 Oct 2023 07:02:04 -0700 (PDT)
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-99c3d3c3db9so729111266b.3;
+        Mon, 16 Oct 2023 07:02:04 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697464923; x=1698069723;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SfV5ews/VmW9YW7ToLjXL1Db+Ad3infUQzYV78GPNNA=;
+        b=kNQLkFny7tsAK3msTPqW1OPHN5kHNMTqH4m7UxuHbKMra7y9LSCo9dpXmqcxbE1xMH
+         bkITyFkRGF7R+/B39LA1qT4GXXbkCQE/woLw7i+Chs2yXk3dboqXKz3H+LnvAxut/wGl
+         +L+uVSTMo63Bpi94XyINXKiNLOUSbJ8ek808lq2/Nu42uMEFGKrhCCmH8UvBvNVRQ4uK
+         V80HfTyNmPqjCPky5QJRRK2FUHHO/7lvAuNV78mMmz9xU1NqoQ67ft1DM/C7BuxGvfEn
+         kMReD6OAKGbVksVvEi8vk0jq1Ftks7WVcex+nT2fGkQwt4XQI7X4DQs0yjHU1nznJ26n
+         4uIA==
+X-Gm-Message-State: AOJu0YxS28i3SA82m1ypdPkszktYaQdrn/IQR4VwrOZNF7Un27utSwzl
+        X4VlQfRJAT0TBUYwa1xLhrw=
+X-Google-Smtp-Source: AGHT+IGefvqUkZIpMi5smsTwU4Djg5nyVrll30fDZwbs2RC1t6/HEFBaJsCZ1WPheSfBh03yut07uQ==
+X-Received: by 2002:a17:906:7389:b0:9ae:406c:3420 with SMTP id f9-20020a170906738900b009ae406c3420mr28494156ejl.30.1697464922870;
+        Mon, 16 Oct 2023 07:02:02 -0700 (PDT)
+Received: from localhost (fwdproxy-cln-119.fbsv.net. [2a03:2880:31ff:77::face:b00c])
+        by smtp.gmail.com with ESMTPSA id y23-20020a170906519700b009b947aacb4bsm4182512ejk.191.2023.10.16.07.02.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 16 Oct 2023 07:02:02 -0700 (PDT)
+From:   Breno Leitao <leitao@debian.org>
+To:     sdf@google.com, axboe@kernel.dk, asml.silence@gmail.com,
+        willemdebruijn.kernel@gmail.com, kuba@kernel.org,
+        pabeni@redhat.com, martin.lau@linux.dev, krisman@suse.de,
+        "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ido Schimmel <idosch@nvidia.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Nikolay Aleksandrov <razor@blackwall.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     bridge@lists.linux-foundation.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Johannes Nixdorf <jnixdorf-oss@avm.de>
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1697462840; l=7339;
- i=jnixdorf-oss@avm.de; s=20230906; h=from:subject:message-id;
- bh=izObkuWYieNPEzOpLEXnNiKd9Ga6Rekym0GPM8tGX2Q=;
- b=J92g9W980J4VvlbuvBioz6YU5/+tYwVHJQ0IhRZQGe6GT/3YLYb6+gGkYmvFZ50q3O/YMVGRi
- 6H5xTyTYYDECeStELimbjoFCVmMvjTSFnIa2EbFzppuklrImuIqxDCS
-X-Developer-Key: i=jnixdorf-oss@avm.de; a=ed25519;
- pk=KMraV4q7ANHRrwjf9EVhvU346JsqGGNSbPKeNILOQfo=
-X-purgate-ID: 149429::1697463933-43E2D79D-59FC9709/0/0
-X-purgate-type: clean
-X-purgate-size: 7341
-X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
-X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
-X-purgate: clean
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Shuah Khan <shuah@kernel.org>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, io-uring@vger.kernel.org,
+        linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
+Subject: [PATCH v7 07/11] selftests/net: Extract uring helpers to be reusable
+Date:   Mon, 16 Oct 2023 06:47:45 -0700
+Message-Id: <20231016134750.1381153-8-leitao@debian.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231016134750.1381153-1-leitao@debian.org>
+References: <20231016134750.1381153-1-leitao@debian.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add a suite covering the fdb_n_learned and fdb_max_learned bridge
-features, touching all special cases in accounting at least once.
+Instead of defining basic io_uring functions in the test case, move them
+to a common directory, so, other tests can use them.
 
-Acked-by: Nikolay Aleksandrov <razor@blackwall.org>
-Signed-off-by: Johannes Nixdorf <jnixdorf-oss@avm.de>
+This simplify the test code and reuse the common liburing
+infrastructure. This is basically a copy of what we have in
+io_uring_zerocopy_tx with some minor improvements to make checkpatch
+happy.
+
+A follow-up test will use the same helpers in a BPF sockopt test.
+
+Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
- tools/testing/selftests/net/forwarding/Makefile    |   3 +-
- .../net/forwarding/bridge_fdb_learning_limit.sh    | 283 +++++++++++++++++++++
- 2 files changed, 285 insertions(+), 1 deletion(-)
+ tools/include/io_uring/mini_liburing.h        | 282 ++++++++++++++++++
+ tools/testing/selftests/net/Makefile          |   1 +
+ .../selftests/net/io_uring_zerocopy_tx.c      | 268 +----------------
+ 3 files changed, 285 insertions(+), 266 deletions(-)
+ create mode 100644 tools/include/io_uring/mini_liburing.h
 
-diff --git a/tools/testing/selftests/net/forwarding/Makefile b/tools/testing/selftests/net/forwarding/Makefile
-index 74e754e266c3..df593b7b3e6b 100644
---- a/tools/testing/selftests/net/forwarding/Makefile
-+++ b/tools/testing/selftests/net/forwarding/Makefile
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0+ OR MIT
- 
--TEST_PROGS = bridge_igmp.sh \
-+TEST_PROGS = bridge_fdb_learning_limit.sh \
-+	bridge_igmp.sh \
- 	bridge_locked_port.sh \
- 	bridge_mdb.sh \
- 	bridge_mdb_host.sh \
-diff --git a/tools/testing/selftests/net/forwarding/bridge_fdb_learning_limit.sh b/tools/testing/selftests/net/forwarding/bridge_fdb_learning_limit.sh
-new file mode 100755
-index 000000000000..0760a34b7114
+diff --git a/tools/include/io_uring/mini_liburing.h b/tools/include/io_uring/mini_liburing.h
+new file mode 100644
+index 000000000000..9ccb16074eb5
 --- /dev/null
-+++ b/tools/testing/selftests/net/forwarding/bridge_fdb_learning_limit.sh
-@@ -0,0 +1,283 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
++++ b/tools/include/io_uring/mini_liburing.h
+@@ -0,0 +1,282 @@
++/* SPDX-License-Identifier: MIT */
 +
-+# ShellCheck incorrectly believes that most of the code here is unreachable
-+# because it's invoked by variable name following ALL_TESTS.
-+#
-+# shellcheck disable=SC2317
++#include <linux/io_uring.h>
++#include <sys/mman.h>
++#include <sys/syscall.h>
++#include <stdio.h>
++#include <string.h>
++#include <unistd.h>
 +
-+ALL_TESTS="check_accounting check_limit"
-+NUM_NETIFS=6
-+source lib.sh
++struct io_sq_ring {
++	unsigned int *head;
++	unsigned int *tail;
++	unsigned int *ring_mask;
++	unsigned int *ring_entries;
++	unsigned int *flags;
++	unsigned int *array;
++};
 +
-+TEST_MAC_BASE=de:ad:be:ef:42:
++struct io_cq_ring {
++	unsigned int *head;
++	unsigned int *tail;
++	unsigned int *ring_mask;
++	unsigned int *ring_entries;
++	struct io_uring_cqe *cqes;
++};
 +
-+NUM_PKTS=16
-+FDB_LIMIT=8
++struct io_uring_sq {
++	unsigned int *khead;
++	unsigned int *ktail;
++	unsigned int *kring_mask;
++	unsigned int *kring_entries;
++	unsigned int *kflags;
++	unsigned int *kdropped;
++	unsigned int *array;
++	struct io_uring_sqe *sqes;
 +
-+FDB_TYPES=(
-+	# name		is counted?	overrides learned?
-+	'learned	1		0'
-+	'static		0		1'
-+	'user		0		1'
-+	'extern_learn	0		1'
-+	'local		0		1'
-+)
++	unsigned int sqe_head;
++	unsigned int sqe_tail;
 +
-+mac()
++	size_t ring_sz;
++};
++
++struct io_uring_cq {
++	unsigned int *khead;
++	unsigned int *ktail;
++	unsigned int *kring_mask;
++	unsigned int *kring_entries;
++	unsigned int *koverflow;
++	struct io_uring_cqe *cqes;
++
++	size_t ring_sz;
++};
++
++struct io_uring {
++	struct io_uring_sq sq;
++	struct io_uring_cq cq;
++	int ring_fd;
++};
++
++#if defined(__x86_64) || defined(__i386__)
++#define read_barrier()	__asm__ __volatile__("":::"memory")
++#define write_barrier()	__asm__ __volatile__("":::"memory")
++#else
++#define read_barrier()	__sync_synchronize()
++#define write_barrier()	__sync_synchronize()
++#endif
++
++static inline int io_uring_mmap(int fd, struct io_uring_params *p,
++				struct io_uring_sq *sq, struct io_uring_cq *cq)
 +{
-+	printf "${TEST_MAC_BASE}%02x" "$1"
++	size_t size;
++	void *ptr;
++	int ret;
++
++	sq->ring_sz = p->sq_off.array + p->sq_entries * sizeof(unsigned int);
++	ptr = mmap(0, sq->ring_sz, PROT_READ | PROT_WRITE,
++		   MAP_SHARED | MAP_POPULATE, fd, IORING_OFF_SQ_RING);
++	if (ptr == MAP_FAILED)
++		return -errno;
++	sq->khead = ptr + p->sq_off.head;
++	sq->ktail = ptr + p->sq_off.tail;
++	sq->kring_mask = ptr + p->sq_off.ring_mask;
++	sq->kring_entries = ptr + p->sq_off.ring_entries;
++	sq->kflags = ptr + p->sq_off.flags;
++	sq->kdropped = ptr + p->sq_off.dropped;
++	sq->array = ptr + p->sq_off.array;
++
++	size = p->sq_entries * sizeof(struct io_uring_sqe);
++	sq->sqes = mmap(0, size, PROT_READ | PROT_WRITE,
++			MAP_SHARED | MAP_POPULATE, fd, IORING_OFF_SQES);
++	if (sq->sqes == MAP_FAILED) {
++		ret = -errno;
++err:
++		munmap(sq->khead, sq->ring_sz);
++		return ret;
++	}
++
++	cq->ring_sz = p->cq_off.cqes + p->cq_entries * sizeof(struct io_uring_cqe);
++	ptr = mmap(0, cq->ring_sz, PROT_READ | PROT_WRITE,
++		   MAP_SHARED | MAP_POPULATE, fd, IORING_OFF_CQ_RING);
++	if (ptr == MAP_FAILED) {
++		ret = -errno;
++		munmap(sq->sqes, p->sq_entries * sizeof(struct io_uring_sqe));
++		goto err;
++	}
++	cq->khead = ptr + p->cq_off.head;
++	cq->ktail = ptr + p->cq_off.tail;
++	cq->kring_mask = ptr + p->cq_off.ring_mask;
++	cq->kring_entries = ptr + p->cq_off.ring_entries;
++	cq->koverflow = ptr + p->cq_off.overflow;
++	cq->cqes = ptr + p->cq_off.cqes;
++	return 0;
 +}
 +
-+H1_DEFAULT_MAC=$(mac 42)
-+
-+switch_create()
++static inline int io_uring_setup(unsigned int entries,
++				 struct io_uring_params *p)
 +{
-+	ip link add dev br0 type bridge
-+
-+	ip link set dev "$swp1" master br0
-+	ip link set dev "$swp2" master br0
-+	# swp3 is used to add local MACs, so do not add it to the bridge yet.
-+
-+	# swp2 is only used for replying when learning on swp1, its MAC should not be learned.
-+	ip link set dev "$swp2" type bridge_slave learning off
-+
-+	ip link set dev br0 up
-+
-+	ip link set dev "$swp1" up
-+	ip link set dev "$swp2" up
-+	ip link set dev "$swp3" up
++	return syscall(__NR_io_uring_setup, entries, p);
 +}
 +
-+switch_destroy()
++static inline int io_uring_enter(int fd, unsigned int to_submit,
++				 unsigned int min_complete,
++				 unsigned int flags, sigset_t *sig)
 +{
-+	ip link set dev "$swp3" down
-+	ip link set dev "$swp2" down
-+	ip link set dev "$swp1" down
-+
-+	ip link del dev br0
++	return syscall(__NR_io_uring_enter, fd, to_submit, min_complete,
++		       flags, sig, _NSIG / 8);
 +}
 +
-+h_create()
++static inline int io_uring_queue_init(unsigned int entries,
++				      struct io_uring *ring,
++				      unsigned int flags)
 +{
-+	ip link set "$h1" addr "$H1_DEFAULT_MAC"
++	struct io_uring_params p;
++	int fd, ret;
 +
-+	simple_if_init "$h1" 192.0.2.1/24
-+	simple_if_init "$h2" 192.0.2.2/24
++	memset(ring, 0, sizeof(*ring));
++	memset(&p, 0, sizeof(p));
++	p.flags = flags;
++
++	fd = io_uring_setup(entries, &p);
++	if (fd < 0)
++		return fd;
++	ret = io_uring_mmap(fd, &p, &ring->sq, &ring->cq);
++	if (!ret)
++		ring->ring_fd = fd;
++	else
++		close(fd);
++	return ret;
 +}
 +
-+h_destroy()
++/* Get a sqe */
++static inline struct io_uring_sqe *io_uring_get_sqe(struct io_uring *ring)
 +{
-+	simple_if_fini "$h1" 192.0.2.1/24
-+	simple_if_fini "$h2" 192.0.2.2/24
++	struct io_uring_sq *sq = &ring->sq;
++
++	if (sq->sqe_tail + 1 - sq->sqe_head > *sq->kring_entries)
++		return NULL;
++	return &sq->sqes[sq->sqe_tail++ & *sq->kring_mask];
 +}
 +
-+setup_prepare()
++static inline int io_uring_wait_cqe(struct io_uring *ring,
++				    struct io_uring_cqe **cqe_ptr)
 +{
-+	h1=${NETIFS[p1]}
-+	swp1=${NETIFS[p2]}
++	struct io_uring_cq *cq = &ring->cq;
++	const unsigned int mask = *cq->kring_mask;
++	unsigned int head = *cq->khead;
++	int ret;
 +
-+	h2=${NETIFS[p3]}
-+	swp2=${NETIFS[p4]}
++	*cqe_ptr = NULL;
++	do {
++		read_barrier();
++		if (head != *cq->ktail) {
++			*cqe_ptr = &cq->cqes[head & mask];
++			break;
++		}
++		ret = io_uring_enter(ring->ring_fd, 0, 1,
++				     IORING_ENTER_GETEVENTS, NULL);
++		if (ret < 0)
++			return -errno;
++	} while (1);
 +
-+	swp3=${NETIFS[p6]}
-+
-+	vrf_prepare
-+
-+	h_create
-+
-+	switch_create
++	return 0;
 +}
 +
-+cleanup()
++static inline int io_uring_submit(struct io_uring *ring)
 +{
-+	pre_cleanup
++	struct io_uring_sq *sq = &ring->sq;
++	const unsigned int mask = *sq->kring_mask;
++	unsigned int ktail, submitted, to_submit;
++	int ret;
 +
-+	switch_destroy
++	read_barrier();
++	if (*sq->khead != *sq->ktail) {
++		submitted = *sq->kring_entries;
++		goto submit;
++	}
++	if (sq->sqe_head == sq->sqe_tail)
++		return 0;
 +
-+	h_destroy
++	ktail = *sq->ktail;
++	to_submit = sq->sqe_tail - sq->sqe_head;
++	for (submitted = 0; submitted < to_submit; submitted++) {
++		read_barrier();
++		sq->array[ktail++ & mask] = sq->sqe_head++ & mask;
++	}
++	if (!submitted)
++		return 0;
 +
-+	vrf_cleanup
++	if (*sq->ktail != ktail) {
++		write_barrier();
++		*sq->ktail = ktail;
++		write_barrier();
++	}
++submit:
++	ret = io_uring_enter(ring->ring_fd, submitted, 0,
++			     IORING_ENTER_GETEVENTS, NULL);
++	return ret < 0 ? -errno : ret;
 +}
 +
-+fdb_get_n_learned()
++static inline void io_uring_queue_exit(struct io_uring *ring)
 +{
-+	ip -d -j link show dev br0 type bridge | \
-+		jq '.[]["linkinfo"]["info_data"]["fdb_n_learned"]'
++	struct io_uring_sq *sq = &ring->sq;
++
++	munmap(sq->sqes, *sq->kring_entries * sizeof(struct io_uring_sqe));
++	munmap(sq->khead, sq->ring_sz);
++	close(ring->ring_fd);
 +}
 +
-+fdb_get_n_mac()
++/* Prepare and send the SQE */
++static inline void io_uring_prep_cmd(struct io_uring_sqe *sqe, int op,
++				     int sockfd,
++				     int level, int optname,
++				     const void *optval,
++				     int optlen)
 +{
-+	local mac=${1}
++	memset(sqe, 0, sizeof(*sqe));
++	sqe->opcode = (__u8)IORING_OP_URING_CMD;
++	sqe->fd = sockfd;
++	sqe->cmd_op = op;
 +
-+	bridge -j fdb show br br0 | \
-+		jq "map(select(.mac == \"${mac}\" and (has(\"vlan\") | not))) | length"
++	sqe->level = level;
++	sqe->optname = optname;
++	sqe->optval = (unsigned long long)optval;
++	sqe->optlen = optlen;
 +}
 +
-+fdb_fill_learned()
++static inline int io_uring_register_buffers(struct io_uring *ring,
++					    const struct iovec *iovecs,
++					    unsigned int nr_iovecs)
 +{
-+	local i
++	int ret;
 +
-+	for i in $(seq 1 "$NUM_PKTS"); do
-+		fdb_add learned "$(mac "$i")"
-+	done
++	ret = syscall(__NR_io_uring_register, ring->ring_fd,
++		      IORING_REGISTER_BUFFERS, iovecs, nr_iovecs);
++	return (ret < 0) ? -errno : ret;
 +}
 +
-+fdb_reset()
++static inline void io_uring_prep_send(struct io_uring_sqe *sqe, int sockfd,
++				      const void *buf, size_t len, int flags)
 +{
-+	bridge fdb flush dev br0
-+
-+	# Keep the default MAC address of h1 in the table. We set it to a different one when
-+	# testing dynamic learning.
-+	bridge fdb add "$H1_DEFAULT_MAC" dev "$swp1" master static use
++	memset(sqe, 0, sizeof(*sqe));
++	sqe->opcode = (__u8)IORING_OP_SEND;
++	sqe->fd = sockfd;
++	sqe->addr = (unsigned long)buf;
++	sqe->len = len;
++	sqe->msg_flags = (__u32)flags;
 +}
 +
-+fdb_add()
++static inline void io_uring_prep_sendzc(struct io_uring_sqe *sqe, int sockfd,
++					const void *buf, size_t len, int flags,
++					unsigned int zc_flags)
 +{
-+	local type=$1 mac=$2
-+
-+	case "$type" in
-+		learned)
-+			ip link set "$h1" addr "$mac"
-+			# Wait for a reply so we implicitly wait until after the forwarding
-+			# code finished and the FDB entry was created.
-+			PING_COUNT=1 ping_do "$h1" 192.0.2.2
-+			check_err $? "Failed to ping another bridge port"
-+			ip link set "$h1" addr "$H1_DEFAULT_MAC"
-+			;;
-+		local)
-+			ip link set dev "$swp3" addr "$mac" && ip link set "$swp3" master br0
-+			;;
-+		static)
-+			bridge fdb replace "$mac" dev "$swp1" master static
-+			;;
-+		user)
-+			bridge fdb replace "$mac" dev "$swp1" master static use
-+			;;
-+		extern_learn)
-+			bridge fdb replace "$mac" dev "$swp1" master extern_learn
-+			;;
-+	esac
-+
-+	check_err $? "Failed to add a FDB entry of type ${type}"
++	io_uring_prep_send(sqe, sockfd, buf, len, flags);
++	sqe->opcode = (__u8)IORING_OP_SEND_ZC;
++	sqe->ioprio = zc_flags;
 +}
 +
-+fdb_del()
++static inline void io_uring_cqe_seen(struct io_uring *ring)
 +{
-+	local type=$1 mac=$2
-+
-+	case "$type" in
-+		local)
-+			ip link set "$swp3" nomaster
-+			;;
-+		*)
-+			bridge fdb del "$mac" dev "$swp1" master
-+			;;
-+	esac
-+
-+	check_err $? "Failed to remove a FDB entry of type ${type}"
++	*(&ring->cq)->khead += 1;
++	write_barrier();
 +}
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index 61939a695f95..4adfe2186f39 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -99,6 +99,7 @@ $(OUTPUT)/reuseport_bpf_numa: LDLIBS += -lnuma
+ $(OUTPUT)/tcp_mmap: LDLIBS += -lpthread -lcrypto
+ $(OUTPUT)/tcp_inq: LDLIBS += -lpthread
+ $(OUTPUT)/bind_bhash: LDLIBS += -lpthread
++$(OUTPUT)/io_uring_zerocopy_tx: CFLAGS += -I../../../include/
+ 
+ # Rules to generate bpf obj nat6to4.o
+ CLANG ?= clang
+diff --git a/tools/testing/selftests/net/io_uring_zerocopy_tx.c b/tools/testing/selftests/net/io_uring_zerocopy_tx.c
+index 154287740172..76e604e4810e 100644
+--- a/tools/testing/selftests/net/io_uring_zerocopy_tx.c
++++ b/tools/testing/selftests/net/io_uring_zerocopy_tx.c
+@@ -36,6 +36,8 @@
+ #include <sys/un.h>
+ #include <sys/wait.h>
+ 
++#include <io_uring/mini_liburing.h>
 +
-+check_accounting_one_type()
-+{
-+	local type=$1 is_counted=$2 overrides_learned=$3
-+	shift 3
-+	RET=0
-+
-+	fdb_reset
-+	fdb_add "$type" "$(mac 0)"
-+	learned=$(fdb_get_n_learned)
-+	[ "$learned" -ne "$is_counted" ]
-+	check_fail $? "Inserted FDB type ${type}: Expected the count ${is_counted}, but got ${learned}"
-+
-+	fdb_del "$type" "$(mac 0)"
-+	learned=$(fdb_get_n_learned)
-+	[ "$learned" -ne 0 ]
-+	check_fail $? "Removed FDB type ${type}: Expected the count 0, but got ${learned}"
-+
-+	if [ "$overrides_learned" -eq 1 ]; then
-+		fdb_reset
-+		fdb_add learned "$(mac 0)"
-+		fdb_add "$type" "$(mac 0)"
-+		learned=$(fdb_get_n_learned)
-+		[ "$learned" -ne "$is_counted" ]
-+		check_fail $? "Set a learned entry to FDB type ${type}: Expected the count ${is_counted}, but got ${learned}"
-+		fdb_del "$type" "$(mac 0)"
-+	fi
-+
-+	log_test "FDB accounting interacting with FDB type ${type}"
-+}
-+
-+check_accounting()
-+{
-+	local type_args learned
-+	RET=0
-+
-+	fdb_reset
-+	learned=$(fdb_get_n_learned)
-+	[ "$learned" -ne 0 ]
-+	check_fail $? "Flushed the FDB table: Expected the count 0, but got ${learned}"
-+
-+	fdb_fill_learned
-+	sleep 1
-+
-+	learned=$(fdb_get_n_learned)
-+	[ "$learned" -ne "$NUM_PKTS" ]
-+	check_fail $? "Filled the FDB table: Expected the count ${NUM_PKTS}, but got ${learned}"
-+
-+	log_test "FDB accounting"
-+
-+	for type_args in "${FDB_TYPES[@]}"; do
-+		# This is intentional use of word splitting.
-+		# shellcheck disable=SC2086
-+		check_accounting_one_type $type_args
-+	done
-+}
-+
-+check_limit_one_type()
-+{
-+	local type=$1 is_counted=$2
-+	local n_mac expected=$((1 - is_counted))
-+	RET=0
-+
-+	fdb_reset
-+	fdb_fill_learned
-+
-+	fdb_add "$type" "$(mac 0)"
-+	n_mac=$(fdb_get_n_mac "$(mac 0)")
-+	[ "$n_mac" -ne "$expected" ]
-+	check_fail $? "Inserted FDB type ${type} at limit: Expected the count ${expected}, but got ${n_mac}"
-+
-+	log_test "FDB limits interacting with FDB type ${type}"
-+}
-+
-+check_limit()
-+{
-+	local learned
-+	RET=0
-+
-+	ip link set br0 type bridge fdb_max_learned "$FDB_LIMIT"
-+
-+	fdb_reset
-+	fdb_fill_learned
-+
-+	learned=$(fdb_get_n_learned)
-+	[ "$learned" -ne "$FDB_LIMIT" ]
-+	check_fail $? "Filled the limited FDB table: Expected the count ${FDB_LIMIT}, but got ${learned}"
-+
-+	log_test "FDB limits"
-+
-+	for type_args in "${FDB_TYPES[@]}"; do
-+		# This is intentional use of word splitting.
-+		# shellcheck disable=SC2086
-+		check_limit_one_type $type_args
-+	done
-+}
-+
-+trap cleanup EXIT
-+
-+setup_prepare
-+
-+tests_run
-+
-+exit $EXIT_STATUS
-
+ #define NOTIF_TAG 0xfffffffULL
+ #define NONZC_TAG 0
+ #define ZC_TAG 1
+@@ -60,272 +62,6 @@ static struct sockaddr_storage cfg_dst_addr;
+ 
+ static char payload[IP_MAXPACKET] __attribute__((aligned(4096)));
+ 
+-struct io_sq_ring {
+-	unsigned *head;
+-	unsigned *tail;
+-	unsigned *ring_mask;
+-	unsigned *ring_entries;
+-	unsigned *flags;
+-	unsigned *array;
+-};
+-
+-struct io_cq_ring {
+-	unsigned *head;
+-	unsigned *tail;
+-	unsigned *ring_mask;
+-	unsigned *ring_entries;
+-	struct io_uring_cqe *cqes;
+-};
+-
+-struct io_uring_sq {
+-	unsigned *khead;
+-	unsigned *ktail;
+-	unsigned *kring_mask;
+-	unsigned *kring_entries;
+-	unsigned *kflags;
+-	unsigned *kdropped;
+-	unsigned *array;
+-	struct io_uring_sqe *sqes;
+-
+-	unsigned sqe_head;
+-	unsigned sqe_tail;
+-
+-	size_t ring_sz;
+-};
+-
+-struct io_uring_cq {
+-	unsigned *khead;
+-	unsigned *ktail;
+-	unsigned *kring_mask;
+-	unsigned *kring_entries;
+-	unsigned *koverflow;
+-	struct io_uring_cqe *cqes;
+-
+-	size_t ring_sz;
+-};
+-
+-struct io_uring {
+-	struct io_uring_sq sq;
+-	struct io_uring_cq cq;
+-	int ring_fd;
+-};
+-
+-#ifdef __alpha__
+-# ifndef __NR_io_uring_setup
+-#  define __NR_io_uring_setup		535
+-# endif
+-# ifndef __NR_io_uring_enter
+-#  define __NR_io_uring_enter		536
+-# endif
+-# ifndef __NR_io_uring_register
+-#  define __NR_io_uring_register	537
+-# endif
+-#else /* !__alpha__ */
+-# ifndef __NR_io_uring_setup
+-#  define __NR_io_uring_setup		425
+-# endif
+-# ifndef __NR_io_uring_enter
+-#  define __NR_io_uring_enter		426
+-# endif
+-# ifndef __NR_io_uring_register
+-#  define __NR_io_uring_register	427
+-# endif
+-#endif
+-
+-#if defined(__x86_64) || defined(__i386__)
+-#define read_barrier()	__asm__ __volatile__("":::"memory")
+-#define write_barrier()	__asm__ __volatile__("":::"memory")
+-#else
+-
+-#define read_barrier()	__sync_synchronize()
+-#define write_barrier()	__sync_synchronize()
+-#endif
+-
+-static int io_uring_setup(unsigned int entries, struct io_uring_params *p)
+-{
+-	return syscall(__NR_io_uring_setup, entries, p);
+-}
+-
+-static int io_uring_enter(int fd, unsigned int to_submit,
+-			  unsigned int min_complete,
+-			  unsigned int flags, sigset_t *sig)
+-{
+-	return syscall(__NR_io_uring_enter, fd, to_submit, min_complete,
+-			flags, sig, _NSIG / 8);
+-}
+-
+-static int io_uring_register_buffers(struct io_uring *ring,
+-				     const struct iovec *iovecs,
+-				     unsigned nr_iovecs)
+-{
+-	int ret;
+-
+-	ret = syscall(__NR_io_uring_register, ring->ring_fd,
+-		      IORING_REGISTER_BUFFERS, iovecs, nr_iovecs);
+-	return (ret < 0) ? -errno : ret;
+-}
+-
+-static int io_uring_mmap(int fd, struct io_uring_params *p,
+-			 struct io_uring_sq *sq, struct io_uring_cq *cq)
+-{
+-	size_t size;
+-	void *ptr;
+-	int ret;
+-
+-	sq->ring_sz = p->sq_off.array + p->sq_entries * sizeof(unsigned);
+-	ptr = mmap(0, sq->ring_sz, PROT_READ | PROT_WRITE,
+-		   MAP_SHARED | MAP_POPULATE, fd, IORING_OFF_SQ_RING);
+-	if (ptr == MAP_FAILED)
+-		return -errno;
+-	sq->khead = ptr + p->sq_off.head;
+-	sq->ktail = ptr + p->sq_off.tail;
+-	sq->kring_mask = ptr + p->sq_off.ring_mask;
+-	sq->kring_entries = ptr + p->sq_off.ring_entries;
+-	sq->kflags = ptr + p->sq_off.flags;
+-	sq->kdropped = ptr + p->sq_off.dropped;
+-	sq->array = ptr + p->sq_off.array;
+-
+-	size = p->sq_entries * sizeof(struct io_uring_sqe);
+-	sq->sqes = mmap(0, size, PROT_READ | PROT_WRITE,
+-			MAP_SHARED | MAP_POPULATE, fd, IORING_OFF_SQES);
+-	if (sq->sqes == MAP_FAILED) {
+-		ret = -errno;
+-err:
+-		munmap(sq->khead, sq->ring_sz);
+-		return ret;
+-	}
+-
+-	cq->ring_sz = p->cq_off.cqes + p->cq_entries * sizeof(struct io_uring_cqe);
+-	ptr = mmap(0, cq->ring_sz, PROT_READ | PROT_WRITE,
+-			MAP_SHARED | MAP_POPULATE, fd, IORING_OFF_CQ_RING);
+-	if (ptr == MAP_FAILED) {
+-		ret = -errno;
+-		munmap(sq->sqes, p->sq_entries * sizeof(struct io_uring_sqe));
+-		goto err;
+-	}
+-	cq->khead = ptr + p->cq_off.head;
+-	cq->ktail = ptr + p->cq_off.tail;
+-	cq->kring_mask = ptr + p->cq_off.ring_mask;
+-	cq->kring_entries = ptr + p->cq_off.ring_entries;
+-	cq->koverflow = ptr + p->cq_off.overflow;
+-	cq->cqes = ptr + p->cq_off.cqes;
+-	return 0;
+-}
+-
+-static int io_uring_queue_init(unsigned entries, struct io_uring *ring,
+-			       unsigned flags)
+-{
+-	struct io_uring_params p;
+-	int fd, ret;
+-
+-	memset(ring, 0, sizeof(*ring));
+-	memset(&p, 0, sizeof(p));
+-	p.flags = flags;
+-
+-	fd = io_uring_setup(entries, &p);
+-	if (fd < 0)
+-		return fd;
+-	ret = io_uring_mmap(fd, &p, &ring->sq, &ring->cq);
+-	if (!ret)
+-		ring->ring_fd = fd;
+-	else
+-		close(fd);
+-	return ret;
+-}
+-
+-static int io_uring_submit(struct io_uring *ring)
+-{
+-	struct io_uring_sq *sq = &ring->sq;
+-	const unsigned mask = *sq->kring_mask;
+-	unsigned ktail, submitted, to_submit;
+-	int ret;
+-
+-	read_barrier();
+-	if (*sq->khead != *sq->ktail) {
+-		submitted = *sq->kring_entries;
+-		goto submit;
+-	}
+-	if (sq->sqe_head == sq->sqe_tail)
+-		return 0;
+-
+-	ktail = *sq->ktail;
+-	to_submit = sq->sqe_tail - sq->sqe_head;
+-	for (submitted = 0; submitted < to_submit; submitted++) {
+-		read_barrier();
+-		sq->array[ktail++ & mask] = sq->sqe_head++ & mask;
+-	}
+-	if (!submitted)
+-		return 0;
+-
+-	if (*sq->ktail != ktail) {
+-		write_barrier();
+-		*sq->ktail = ktail;
+-		write_barrier();
+-	}
+-submit:
+-	ret = io_uring_enter(ring->ring_fd, submitted, 0,
+-				IORING_ENTER_GETEVENTS, NULL);
+-	return ret < 0 ? -errno : ret;
+-}
+-
+-static inline void io_uring_prep_send(struct io_uring_sqe *sqe, int sockfd,
+-				      const void *buf, size_t len, int flags)
+-{
+-	memset(sqe, 0, sizeof(*sqe));
+-	sqe->opcode = (__u8) IORING_OP_SEND;
+-	sqe->fd = sockfd;
+-	sqe->addr = (unsigned long) buf;
+-	sqe->len = len;
+-	sqe->msg_flags = (__u32) flags;
+-}
+-
+-static inline void io_uring_prep_sendzc(struct io_uring_sqe *sqe, int sockfd,
+-				        const void *buf, size_t len, int flags,
+-				        unsigned zc_flags)
+-{
+-	io_uring_prep_send(sqe, sockfd, buf, len, flags);
+-	sqe->opcode = (__u8) IORING_OP_SEND_ZC;
+-	sqe->ioprio = zc_flags;
+-}
+-
+-static struct io_uring_sqe *io_uring_get_sqe(struct io_uring *ring)
+-{
+-	struct io_uring_sq *sq = &ring->sq;
+-
+-	if (sq->sqe_tail + 1 - sq->sqe_head > *sq->kring_entries)
+-		return NULL;
+-	return &sq->sqes[sq->sqe_tail++ & *sq->kring_mask];
+-}
+-
+-static int io_uring_wait_cqe(struct io_uring *ring, struct io_uring_cqe **cqe_ptr)
+-{
+-	struct io_uring_cq *cq = &ring->cq;
+-	const unsigned mask = *cq->kring_mask;
+-	unsigned head = *cq->khead;
+-	int ret;
+-
+-	*cqe_ptr = NULL;
+-	do {
+-		read_barrier();
+-		if (head != *cq->ktail) {
+-			*cqe_ptr = &cq->cqes[head & mask];
+-			break;
+-		}
+-		ret = io_uring_enter(ring->ring_fd, 0, 1,
+-					IORING_ENTER_GETEVENTS, NULL);
+-		if (ret < 0)
+-			return -errno;
+-	} while (1);
+-
+-	return 0;
+-}
+-
+-static inline void io_uring_cqe_seen(struct io_uring *ring)
+-{
+-	*(&ring->cq)->khead += 1;
+-	write_barrier();
+-}
+-
+ static unsigned long gettimeofday_ms(void)
+ {
+ 	struct timeval tv;
 -- 
-2.42.0
+2.34.1
 
