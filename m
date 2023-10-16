@@ -2,83 +2,73 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE1C57CA8D1
-	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Oct 2023 15:08:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B13B7CAA28
+	for <lists+linux-kselftest@lfdr.de>; Mon, 16 Oct 2023 15:45:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232764AbjJPNI3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 16 Oct 2023 09:08:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48750 "EHLO
+        id S234023AbjJPNpn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 16 Oct 2023 09:45:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231508AbjJPNI2 (ORCPT
+        with ESMTP id S233911AbjJPNpj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 16 Oct 2023 09:08:28 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3E1D9
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Oct 2023 06:08:26 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1c9daca2b85so32681515ad.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 16 Oct 2023 06:08:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1697461706; x=1698066506; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tfy1ziPitTIKCgP7hgWatYcJeB1MWA1vHtQFUnRwmZU=;
-        b=O80akG8HMtlEwCSfu7ToJqjUfOBwqyuB/N+7UgY2tM3TzKU7F6JMqdayHK08mRe1rJ
-         ZqykConvOfOciejVhe/MZC35rkgQglss+K+TZ+9Q0wejP2hmeOqWxhOyNu/Bm7HLNt2V
-         8JbCWQ1waGDllker+kN9OIaTzuy/WmHtUgZnNEunIiZrYsD1YwO6d1BpOPddFcNDyJHC
-         ANjTrg9cc8Zyi3QF4klfPamU0rvLrTxDLAiJKXa1OiYdjaGwFsY7YTLcLKYGaEF1x4A6
-         h7CBSD4vG/YN5WGOQTqxkjfW2lhj5QQ2Phux001IEBE0+xMfD56ym/mljoVRpijgfpQc
-         W7vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697461706; x=1698066506;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tfy1ziPitTIKCgP7hgWatYcJeB1MWA1vHtQFUnRwmZU=;
-        b=OAzrfSA2tE3NN8fEBf1pc+W4MqPmfkUk+vpJZsON+wY6y/ERT4v+CYSjiAiq49TdS5
-         TwNpcWe4Yh1TUWy+Ul6s58yogfUAiHr5bhwRdWZ7fHr0UYbX1MLw6sEtQk3uX2QQAdAg
-         n5Lk22eA1aa9EtI+/VJNfGV2Glm7Qqeqx7jy9GSfiH3oKanuxj25Smfan4Veah2ZZ97Z
-         Q17kK+jeDsm1xQEs9fiE5rMEmrYIX74zQkXiaurvDTZoIdzknN9poSbyXRUdnJM1A9ES
-         Vbyq2w+sTzAlqz1gNNujn37+3l4/n4cdT+6jKIwXb46BVobS0PDO8ykYJ9aZRPdDfE5i
-         naxA==
-X-Gm-Message-State: AOJu0Yzr00SdYucEBgk1gXaaohQs1Q+EjvQkRlzoPgrPdV0H1hTHtWO9
-        06gbuBL+IWxCSpzPVJbYlx89og==
-X-Google-Smtp-Source: AGHT+IEFoc6AGYZwR5/ObdpuzM9hbI7UWGokG/QIvGghVbavGZhqHMPuFgH+U+30ml7a/ChTLmr1wA==
-X-Received: by 2002:a17:903:1ce:b0:1c7:27a1:a9e5 with SMTP id e14-20020a17090301ce00b001c727a1a9e5mr10234801plh.33.1697461706303;
-        Mon, 16 Oct 2023 06:08:26 -0700 (PDT)
-Received: from ?IPV6:2400:4050:a840:1e00:78d2:b862:10a7:d486? ([2400:4050:a840:1e00:78d2:b862:10a7:d486])
-        by smtp.gmail.com with ESMTPSA id l13-20020a170902eb0d00b001b890009634sm8420579plb.139.2023.10.16.06.08.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 16 Oct 2023 06:08:26 -0700 (PDT)
-Message-ID: <ecb37173-4b49-466b-b92d-4ff710eee998@daynix.com>
-Date:   Mon, 16 Oct 2023 22:08:21 +0900
+        Mon, 16 Oct 2023 09:45:39 -0400
+Received: from mail.avm.de (mail.avm.de [IPv6:2001:bf0:244:244::94])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8976D4D;
+        Mon, 16 Oct 2023 06:45:34 -0700 (PDT)
+Received: from mail-auth.avm.de (unknown [IPv6:2001:bf0:244:244::71])
+        by mail.avm.de (Postfix) with ESMTPS;
+        Mon, 16 Oct 2023 15:45:31 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=avm.de; s=mail;
+        t=1697463932; bh=08Dvz0QFTs4OyvvRDlnOtPaPl5qSnuRfuQVMRHMhHkA=;
+        h=From:Subject:Date:To:Cc:From;
+        b=McwRIq5qpwhMJaK+85p9Jw3VryqwG94fI4ulJEbNT24ZBCWsJZTB/X1Gpb2mXw4+W
+         kSL2pMBmMg3DT9sALq22oRwOt9n0bqNlWGvDAJLAxXhalq5+j8QRfcoHJGO4Ul8XMw
+         R1WpqO/juZZ5PbtmbsxeTC/KSnKNCyiEaszqCM8c=
+Received: from localhost (unknown [172.17.88.63])
+        by mail-auth.avm.de (Postfix) with ESMTPSA id C205680463;
+        Mon, 16 Oct 2023 15:45:31 +0200 (CEST)
+From:   Johannes Nixdorf <jnixdorf-oss@avm.de>
+Subject: [PATCH net-next v5 0/5] bridge: Add a limit on learned FDB entries
+Date:   Mon, 16 Oct 2023 15:27:19 +0200
+Message-Id: <20231016-fdb_limit-v5-0-32cddff87758@avm.de>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3] selftests/bpf: Use pkg-config to determine ld
- flags
-To:     Daniel Borkmann <daniel@iogearbox.net>
-Cc:     Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>,
-        Yonghong Song <yonghong.song@linux.dev>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Shuah Khan <shuah@kernel.org>, Nick Terrell <terrelln@fb.com>,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20231016124313.60220-1-akihiko.odaki@daynix.com>
- <f44993c9-1934-746f-aa3a-a1005459320a@iogearbox.net>
-Content-Language: en-US
-From:   Akihiko Odaki <akihiko.odaki@daynix.com>
-In-Reply-To: <f44993c9-1934-746f-aa3a-a1005459320a@iogearbox.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+X-B4-Tracking: v=1; b=H4sIADc6LWUC/02N0QrCIBiFXyW8znA6m3bVe0SEzt/2Q3OhIouxd
+ 09GxC4P53zfWUiCiJDI5bCQCAUTTqEGeTyQfjDhCRRdzYQzLphmLfXOPl44YqbegLTWN+deKVL
+ 37wge5811IwEyDTBncq/NgClP8bOdFLH1P5/c+YqgjHZSd72TjBnFr6aMJweborQ7rNF7rK2Y0
+ J5xLRTrrPpj67p+AVCVD3DgAAAA
+To:     "David S. Miller" <davem@davemloft.net>,
+        Andrew Lunn <andrew@lunn.ch>, David Ahern <dsahern@gmail.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Ido Schimmel <idosch@nvidia.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Nikolay Aleksandrov <razor@blackwall.org>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Roopa Prabhu <roopa@nvidia.com>, Shuah Khan <shuah@kernel.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>
+Cc:     bridge@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Johannes Nixdorf <jnixdorf-oss@avm.de>
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1697462840; l=4409;
+ i=jnixdorf-oss@avm.de; s=20230906; h=from:subject:message-id;
+ bh=jRXgK5ZH/w4lHTfrhCUHYB60Fh5G5zEcM7p6ySP/Z6I=;
+ b=bp/r4y77usO54PIMIxMpSariTGgSj4kzB04SDFJzspTpMVOoW9G8orJeC5HwS6BQmlDI7mx3S
+ JQkrHpcnQlXBKQM8wzCEkYBHvO5Ce35CI60QILs3F971HYRr0RQNTez
+X-Developer-Key: i=jnixdorf-oss@avm.de; a=ed25519;
+ pk=KMraV4q7ANHRrwjf9EVhvU346JsqGGNSbPKeNILOQfo=
+X-purgate-ID: 149429::1697463931-7263A42D-C323E2BA/0/0
+X-purgate-type: clean
+X-purgate-size: 4444
+X-purgate-Ad: Categorized by eleven eXpurgate (R) http://www.eleven.de
+X-purgate: This mail is considered clean (visit http://www.eleven.de for further information)
+X-purgate: clean
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,30 +76,99 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2023/10/16 21:52, Daniel Borkmann wrote:
-> On 10/16/23 2:43 PM, Akihiko Odaki wrote:
->> When linking statically, libraries may require other dependencies to be
->> included to ld flags. In particular, libelf may require libzstd. Use
->> pkg-config to determine such dependencies.
->>
->> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
->> ---
->> V2 -> V3: Added missing "echo".
->> V1 -> V2: Implemented fallback, referring to HOSTPKG_CONFIG.
-> 
-> Same issue in v3. Please don't resend your patches too quickly, but 
-> properly set up an
-> environment where you can test that this fallback works first :
-> 
-> https://github.com/kernel-patches/bpf/actions/runs/6533309175/job/17738285759
+Introduce a limit on the amount of learned FDB entries on a bridge,
+configured by netlink with a build time default on bridge creation in
+the kernel config.
 
-I think you are looking at a wrong run. The run checks out:
-https://github.com/kernel-patches/bpf/commit/0c184cb0b561d2fb60b2dc79c2917cd7ff8cd8a2
+For backwards compatibility the kernel config default is disabling the
+limit (0).
 
-This is v2. I think the correct one is:
-https://github.com/kernel-patches/bpf/actions/runs/6533797864
+Without any limit a malicious actor may OOM a kernel by spamming packets
+with changing MAC addresses on their bridge port, so allow the bridge
+creator to limit the number of entries.
 
-That said, I found spurious error messages with the run. I tested it by 
-setting PKG_CONFIG=false, but I should have tested it with 
-PKG_CONFIG=a-command-that-does-not-exist. Now I sent v4, which does no 
-longer emit noisy error messages and is properly tested.
+Currently the manual entries are identified by the bridge flags
+BR_FDB_LOCAL or BR_FDB_ADDED_BY_USER, atomically bundled under the new
+flag BR_FDB_DYNAMIC_LEARNED. This means the limit also applies to
+entries created with BR_FDB_ADDED_BY_EXT_LEARN but none of BR_FDB_LOCAL
+or BR_FDB_ADDED_BY_USER, e.g. ones added by SWITCHDEV_FDB_ADD_TO_BRIDGE.
+
+Link to the corresponding iproute2 changes:
+https://lore.kernel.org/r/20230919-fdb_limit-v4-1-b4d2dc4df30f@avm.de
+
+Signed-off-by: Johannes Nixdorf <jnixdorf-oss@avm.de>
+---
+Changes in v5:
+ - Set IFLA_BR_FDB_N_LEARNED to NLA_REJECT (from review)
+ - Moved the strict_start_type-commit after the netlink change, used
+   the new attribute. (from review)
+ - Dropped the new build time config option. (from review)
+ - Link to v4: https://lore.kernel.org/r/20230919-fdb_limit-v4-0-39f0293807b8@avm.de
+
+Changes in v4:
+ - Added the new test to the Makefile. (from review)
+ - Removed _entries from the names. (from iproute2 review, in some places
+   only for consistency)
+ - Wrapped the lines at 80 chars, except when longer lines are consistent
+   with neighbouring code. (from review)
+ - Fixed a race in fdb_delete. (from review)
+ - Link to v3: https://lore.kernel.org/r/20230905-fdb_limit-v3-0-7597cd500a82@avm.de
+
+Changes in v3:
+ - Fixed the flags for fdb_create in fdb_add_entry to use
+   BIT(...). Previously we passed garbage. (from review)
+ - Set strict_start_type for br_policy. (from review)
+ - Split out the combined accounting and limit patch, and the netlink
+   patch from the combined patch in v2. (from review)
+ - Count atomically, remove the newly introduced lock. (from review)
+ - Added the new attributes to br_policy. (from review)
+ - Added a selftest for the new feature. (from review)
+ - Link to v2: https://lore.kernel.org/netdev/20230619071444.14625-1-jnixdorf-oss@avm.de/
+
+Changes in v2:
+ - Added BR_FDB_ADDED_BY_USER earlier in fdb_add_entry to ensure the
+   limit is not applied.
+ - Do not initialize fdb_*_entries to 0. (from review)
+ - Do not skip decrementing on 0. (from review)
+ - Moved the counters to a conditional hole in struct net_bridge to
+   avoid growing the struct. (from review, it still grows the struct as
+   there are 2 32-bit values)
+ - Add IFLA_BR_FDB_CUR_LEARNED_ENTRIES (from review)
+ - Fix br_get_size() with the added attributes.
+ - Only limit learned entries, rename to
+   *_(CUR|MAX)_LEARNED_ENTRIES. (from review)
+ - Added a default limit in Kconfig. (deemed acceptable in review
+   comments, helps with embedded use-cases where a special purpose kernel
+   is built anyways)
+ - Added an iproute2 patch for easier testing.
+ - Link to v1: https://lore.kernel.org/netdev/20230515085046.4457-1-jnixdorf-oss@avm.de/
+
+Obsolete v1 review comments:
+ - Return better errors to users: Due to limiting the limit to
+   automatically created entries, netlink fdb add requests and changing
+   bridge ports are never rejected, so they do not yet need a more
+   friendly error returned.
+
+---
+Johannes Nixdorf (5):
+      net: bridge: Set BR_FDB_ADDED_BY_USER early in fdb_add_entry
+      net: bridge: Track and limit dynamically learned FDB entries
+      net: bridge: Add netlink knobs for number / max learned FDB entries
+      net: bridge: Set strict_start_type for br_policy
+      selftests: forwarding: bridge_fdb_learning_limit: Add a new selftest
+
+ include/uapi/linux/if_link.h                       |   2 +
+ net/bridge/br_fdb.c                                |  42 ++-
+ net/bridge/br_netlink.c                            |  17 +-
+ net/bridge/br_private.h                            |   4 +
+ tools/testing/selftests/net/forwarding/Makefile    |   3 +-
+ .../net/forwarding/bridge_fdb_learning_limit.sh    | 283 +++++++++++++++++++++
+ 6 files changed, 344 insertions(+), 7 deletions(-)
+---
+base-commit: 58720809f52779dc0f08e53e54b014209d13eebb
+change-id: 20230904-fdb_limit-fae5bbf16c88
+
+Best regards,
+-- 
+Johannes Nixdorf <jnixdorf-oss@avm.de>
+
