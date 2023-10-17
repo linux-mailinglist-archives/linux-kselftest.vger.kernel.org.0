@@ -2,418 +2,156 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28AD17CD02E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Oct 2023 01:02:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 940997CD053
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Oct 2023 01:21:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233940AbjJQXCO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 Oct 2023 19:02:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58376 "EHLO
+        id S232568AbjJQXV4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 Oct 2023 19:21:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235038AbjJQXCM (ORCPT
+        with ESMTP id S230219AbjJQXVz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Oct 2023 19:02:12 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43D91119;
-        Tue, 17 Oct 2023 16:02:09 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F511C433C8;
-        Tue, 17 Oct 2023 23:02:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1697583728;
-        bh=08Z7nfsNuUeGcZqJevhbDVWfnyFzmgKni4CQnDVUlWE=;
-        h=From:Date:Subject:To:Cc:From;
-        b=MpBpXvBRPsYNsSdXre9jY3VKJaIqz+umB0rmjNmBopI9FgEUOTyapIDf/o9tBNfvH
-         5o/ZXk5HhhDr0VfLFf122yFAW+/JZZbDsrBEWsI1JqZsdxzEKKQCk2zaWrlbtjxYJ+
-         U74sx+tJX/bl1yeVzbEEvSDfOl4U0fFl2LGEcO1VtISNJwyY+LPFqd2pvndNeOuQmI
-         zWS6CXSsnFiJljv5QVPBt3d13XcXNQS5XjBfmkX+c/3QiZ5rVJJlyb0gKXsW8DRVid
-         B9958LzqoIwpr1WB8lh/by9byC/CEuCJ8svN5Q9SoTCJaKKlqAYzWcdnuODHKWEjkl
-         hiEl7ZTJ/S1dg==
-From:   Mark Brown <broonie@kernel.org>
-Date:   Wed, 18 Oct 2023 00:01:56 +0100
-Subject: [PATCH] selftests/clone3: Report descriptive test names
+        Tue, 17 Oct 2023 19:21:55 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF04892;
+        Tue, 17 Oct 2023 16:21:53 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1c9b1e3a809so41668775ad.2;
+        Tue, 17 Oct 2023 16:21:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1697584913; x=1698189713; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=AsfyhFO7p0RUOzLnEBAeg12shRu5DCBIJmIbrYlrbQQ=;
+        b=ns0iD/hOCcWTWTlQVQcycHbUcZ1ZD0Zc7E/uQqm9vO7D5+obLV9YL1e3z+5O4fivBr
+         ZGamCI/SjnI3p1jNIjAl8wcr0g0HKHa9IMdInrIhKwHebYsDbzQ5tfU9CXLE6JTqKW6W
+         piq/BFsAS81fPEl5uP29w9DhrWzxWu2+MqjAArHrccfIQxG2EUOj2zglF1rizE6epjjm
+         o2cYoowY0/Yzwp+xRL4+7HM5QvDb1lWc6oKSmwuhEKYDYh84vKhlve8SE9FGBVTfgLlA
+         7bYcui2qM6+/Esh74ufzBrzPjXVsKMWW+P1BITsXDkZB35QWJ1gXKCfSlC2xJo59OdgM
+         3S6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697584913; x=1698189713;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=AsfyhFO7p0RUOzLnEBAeg12shRu5DCBIJmIbrYlrbQQ=;
+        b=s30EHQe2I0FXHeqUTCjhlHRnKvL9Lzzhc/F9xYcMay5g2eKec+8UgFjkS0jisvYPOR
+         BXZQQqZsFJr90A2AtjOuN4Rti/GO9HIVKmBmBV0AOmNwtohl1ow+e0i0LFAUJU3Uj7kk
+         spndV4uOM0PdCYgMjks+lB8J8CKVm/fnS26DmSaS18WuN0BD7HNweIGyZgMSS3L8Dg85
+         ZQBe5guM7Ozsp1lehBqyObWnBcs4qStROLHod9biv845nqj8fFN7ZRWCwC43+5yvI//p
+         6a1j+URdx9AoGTO4Aons06MiRsOxdZAMI4JBa3ADc2mMbCg01K4UESX+xR4mGaiT6Qmc
+         LcfA==
+X-Gm-Message-State: AOJu0YxmXurtUOtrBI4HlSGACj14D/imKIuTPN7b9X3153ylya1uP9F5
+        bo844juf2woMBT8ngSYe2TQ=
+X-Google-Smtp-Source: AGHT+IEB1bkpliZr4/0wwEWk35bjMHS8jcWP7je173r3nrnISt5OHU2yyH0fIdSym0BtiLsCs5IyAQ==
+X-Received: by 2002:a17:902:e5c6:b0:1ca:8abd:6b52 with SMTP id u6-20020a170902e5c600b001ca8abd6b52mr4311445plf.69.1697584913016;
+        Tue, 17 Oct 2023 16:21:53 -0700 (PDT)
+Received: from localhost (fwdproxy-prn-003.fbsv.net. [2a03:2880:ff:3::face:b00c])
+        by smtp.gmail.com with ESMTPSA id t9-20020a1709028c8900b001b8a00d4f7asm2126736plo.9.2023.10.17.16.21.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Oct 2023 16:21:52 -0700 (PDT)
+From:   Nhat Pham <nphamcs@gmail.com>
+To:     akpm@linux-foundation.org
+Cc:     hannes@cmpxchg.org, cerasuolodomenico@gmail.com,
+        yosryahmed@google.com, sjenning@redhat.com, ddstreet@ieee.org,
+        vitaly.wool@konsulko.com, mhocko@kernel.org,
+        roman.gushchin@linux.dev, shakeelb@google.com,
+        muchun.song@linux.dev, linux-mm@kvack.org, kernel-team@meta.com,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+Subject: [PATCH v3 0/5] workload-specific and memory pressure-driven zswap writeback
+Date:   Tue, 17 Oct 2023 16:21:47 -0700
+Message-Id: <20231017232152.2605440-1-nphamcs@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231018-kselftest-clone3-output-v1-1-12b7c50ea2cf@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAGMSL2UC/x3MQQqDMBBG4avIrDtgomjxKtJFo786VBLJxCKId
- ze4/BbvnaSIAqWuOCniLyrBZ5hXQcPy9TNYxmyypa1MaVr+KdYpQRMPa/CoOOxp2xO3eLumbqw
- bjaNcbxGTHM+5/1zXDbjttx9pAAAA
-To:     Christian Brauner <brauner@kernel.org>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.13-dev-0438c
-X-Developer-Signature: v=1; a=openpgp-sha256; l=10722; i=broonie@kernel.org;
- h=from:subject:message-id; bh=08Z7nfsNuUeGcZqJevhbDVWfnyFzmgKni4CQnDVUlWE=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBlLxJuD9cdI9dJO3/6fxga8NFfD+cuYtVTpIPpktlO
- MTe3p3+JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZS8SbgAKCRAk1otyXVSH0Ev4B/
- 482LyXZkFlSPGw4LPM886+T7oIf4xwjFY3HgH2vVSINf9YBzTDtM2FwUSZLI0Cca2ojJ5obM2yAkid
- 65taxBdS6x+O1CabS+X4HNJIRZ6I6J2U1wOc2WrZ4mHecNvmtnftuZT8gMeWF9uU+mLYyKHOk6YOAk
- qq/mdvvl0GrXkxeaF7WzVvz9j0AAW90nRGKO6YmiEl6btXT/V1HzOZqaMpFJVxNKeQbtfGuVuSzxCO
- 1jLcZuX4zdAw/nK7U+Q+HPuPCB3lIncJ+V+e7ttKCZdm+vHavntzbJAZ2CrtYjnC43uTxD+ur4hFPD
- D/Wv5pbhtXiXiYuF3ygb8WsodIC0Zi
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The clone3() selftests currently report test results in a format that does
-not mesh entirely well with automation. They log output for each test such
-as:
+Changelog:
+v3:
+   * Add a patch to export per-cgroup zswap writeback counters
+   * Add a patch to update zswap's kselftest
+   * Separate the new list_lru functions into its own prep patch
+   * Do not start from the top of the hierarchy when encounter a memcg
+     that is not online for the global limit zswap writeback (patch 2)
+     (suggested by Yosry Ahmed)
+   * Do not remove the swap entry from list_lru in
+     __read_swapcache_async() (patch 2) (suggested by Yosry Ahmed)
+   * Removed a redundant zswap pool getting (patch 2)
+     (reported by Ryan Roberts)
+   * Use atomic for the nr_zswap_protected (instead of lruvec's lock)
+     (patch 5) (suggested by Yosry Ahmed)
+   * Remove the per-cgroup zswap shrinker knob (patch 5)
+     (suggested by Yosry Ahmed)
+v2:
+   * Fix loongarch compiler errors
+   * Use pool stats instead of memcg stats when !CONFIG_MEMCG_KEM
 
-  # [1382411] Trying clone3() with flags 0 (size 0)
-  # I am the parent (1382411). My child's pid is 1382412
-  # I am the child, my PID is 1382412
-  # [1382411] clone3() with flags says: 0 expected 0
-  ok 1 [1382411] Result (0) matches expectation (0)
+There are currently several issues with zswap writeback:
 
-This is not ideal for automated parsers since the text after the "ok 1" is
-treated as the test name when comparing runs by a lot of automation (tests
-routinely get renumbered due to things like new tests being added based on
-logical groupings). The PID means that the test names will frequently vary
-and the rest of the name being a description of results means several tests
-have identical text there.
+1. There is only a single global LRU for zswap, making it impossible to
+   perform worload-specific shrinking - an memcg under memory pressure
+   cannot determine which pages in the pool it owns, and often ends up
+   writing pages from other memcgs. This issue has been previously
+   observed in practice and mitigated by simply disabling
+   memcg-initiated shrinking:
 
-Address this by refactoring things so that we have a static descriptive
-name for each test which we use when logging passes, failures and skips
-and since we now have a stable name for the test to hand log that before
-starting the test to address the common issue reading logs where the test
-name is only printed after any diagnostics. The result is:
+   https://lore.kernel.org/all/20230530232435.3097106-1-nphamcs@gmail.com/T/#u
 
- # Running test 'simple clone3()'
- # [1562777] Trying clone3() with flags 0 (size 0)
- # I am the parent (1562777). My child's pid is 1562778
- # I am the child, my PID is 1562778
- # [1562777] clone3() with flags says: 0 expected 0
- ok 1 simple clone3()
+   But this solution leaves a lot to be desired, as we still do not
+   have an avenue for an memcg to free up its own memory locked up in
+   the zswap pool.
 
-In order to handle skips a bit more neatly this is done in a moderately
-invasive fashion where we move from a sequence of function calls to having
-an array of test parameters. This hopefully also makes it a little easier
-to see what the tests are doing when looking at both the source and the
-logs.
+2. We only shrink the zswap pool when the user-defined limit is hit.
+   This means that if we set the limit too high, cold data that are
+   unlikely to be used again will reside in the pool, wasting precious
+   memory. It is hard to predict how much zswap space will be needed
+   ahead of time, as this depends on the workload (specifically, on
+   factors such as memory access patterns and compressibility of the
+   memory pages).
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/clone3/clone3.c | 265 +++++++++++++++++++++++---------
- 1 file changed, 192 insertions(+), 73 deletions(-)
+This patch series solves these issues by separating the global zswap
+LRU into per-memcg and per-NUMA LRUs, and performs workload-specific
+(i.e memcg- and NUMA-aware) zswap writeback under memory pressure. The
+new shrinker does not have any parameter that must be tuned by the
+user, and can be opted in or out on a per-memcg basis.
 
-diff --git a/tools/testing/selftests/clone3/clone3.c b/tools/testing/selftests/clone3/clone3.c
-index e60cf4da8fb0..9429d361059e 100644
---- a/tools/testing/selftests/clone3/clone3.c
-+++ b/tools/testing/selftests/clone3/clone3.c
-@@ -7,6 +7,7 @@
- #include <inttypes.h>
- #include <linux/types.h>
- #include <linux/sched.h>
-+#include <stdbool.h>
- #include <stdint.h>
- #include <stdio.h>
- #include <stdlib.h>
-@@ -103,8 +104,8 @@ static int call_clone3(uint64_t flags, size_t size, enum test_mode test_mode)
- 	return 0;
- }
- 
--static void test_clone3(uint64_t flags, size_t size, int expected,
--		       enum test_mode test_mode)
-+static bool test_clone3(uint64_t flags, size_t size, int expected,
-+			enum test_mode test_mode)
- {
- 	int ret;
- 
-@@ -114,92 +115,210 @@ static void test_clone3(uint64_t flags, size_t size, int expected,
- 	ret = call_clone3(flags, size, test_mode);
- 	ksft_print_msg("[%d] clone3() with flags says: %d expected %d\n",
- 			getpid(), ret, expected);
--	if (ret != expected)
--		ksft_test_result_fail(
-+	if (ret != expected) {
-+		ksft_print_msg(
- 			"[%d] Result (%d) is different than expected (%d)\n",
- 			getpid(), ret, expected);
--	else
--		ksft_test_result_pass(
--			"[%d] Result (%d) matches expectation (%d)\n",
--			getpid(), ret, expected);
--}
--
--int main(int argc, char *argv[])
--{
--	uid_t uid = getuid();
--
--	ksft_print_header();
--	ksft_set_plan(19);
--	test_clone3_supported();
--
--	/* Just a simple clone3() should return 0.*/
--	test_clone3(0, 0, 0, CLONE3_ARGS_NO_TEST);
--
--	/* Do a clone3() in a new PID NS.*/
--	if (uid == 0)
--		test_clone3(CLONE_NEWPID, 0, 0, CLONE3_ARGS_NO_TEST);
--	else
--		ksft_test_result_skip("Skipping clone3() with CLONE_NEWPID\n");
--
--	/* Do a clone3() with CLONE_ARGS_SIZE_VER0. */
--	test_clone3(0, CLONE_ARGS_SIZE_VER0, 0, CLONE3_ARGS_NO_TEST);
--
--	/* Do a clone3() with CLONE_ARGS_SIZE_VER0 - 8 */
--	test_clone3(0, CLONE_ARGS_SIZE_VER0 - 8, -EINVAL, CLONE3_ARGS_NO_TEST);
--
--	/* Do a clone3() with sizeof(struct clone_args) + 8 */
--	test_clone3(0, sizeof(struct __clone_args) + 8, 0, CLONE3_ARGS_NO_TEST);
--
--	/* Do a clone3() with exit_signal having highest 32 bits non-zero */
--	test_clone3(0, 0, -EINVAL, CLONE3_ARGS_INVAL_EXIT_SIGNAL_BIG);
-+		return false;
-+	}
- 
--	/* Do a clone3() with negative 32-bit exit_signal */
--	test_clone3(0, 0, -EINVAL, CLONE3_ARGS_INVAL_EXIT_SIGNAL_NEG);
-+	return true;
-+}
- 
--	/* Do a clone3() with exit_signal not fitting into CSIGNAL mask */
--	test_clone3(0, 0, -EINVAL, CLONE3_ARGS_INVAL_EXIT_SIGNAL_CSIG);
-+typedef bool (*filter_function)(void);
-+typedef size_t (*size_function)(void);
- 
--	/* Do a clone3() with NSIG < exit_signal < CSIG */
--	test_clone3(0, 0, -EINVAL, CLONE3_ARGS_INVAL_EXIT_SIGNAL_NSIG);
-+static bool not_root(void)
-+{
-+	if (getuid() != 0) {
-+		ksft_print_msg("Not running as root\n");
-+		return true;
-+	}
- 
--	test_clone3(0, sizeof(struct __clone_args) + 8, 0, CLONE3_ARGS_ALL_0);
-+	return false;
-+}
- 
--	test_clone3(0, sizeof(struct __clone_args) + 16, -E2BIG,
--			CLONE3_ARGS_ALL_0);
-+static size_t page_size_plus_8(void)
-+{
-+	return getpagesize() + 8;
-+}
- 
--	test_clone3(0, sizeof(struct __clone_args) * 2, -E2BIG,
--			CLONE3_ARGS_ALL_0);
-+struct test {
-+	const char *name;
-+	uint64_t flags;
-+	size_t size;
-+	size_function size_function;
-+	int expected;
-+	enum test_mode test_mode;
-+	filter_function filter;
-+};
- 
--	/* Do a clone3() with > page size */
--	test_clone3(0, getpagesize() + 8, -E2BIG, CLONE3_ARGS_NO_TEST);
-+static const struct test tests[] = {
-+	{
-+		.name = "simple clone3()",
-+		.flags = 0,
-+		.size = 0,
-+		.expected = 0,
-+		.test_mode = CLONE3_ARGS_NO_TEST,
-+	},
-+	{
-+		.name = "clone3() in a new PID_NS",
-+		.flags = CLONE_NEWPID,
-+		.size = 0,
-+		.expected = 0,
-+		.test_mode = CLONE3_ARGS_NO_TEST,
-+		.filter = not_root,
-+	},
-+	{
-+		.name = "CLONE_ARGS_SIZE_VER0",
-+		.flags = 0,
-+		.size = CLONE_ARGS_SIZE_VER0,
-+		.expected = 0,
-+		.test_mode = CLONE3_ARGS_NO_TEST,
-+	},
-+	{
-+		.name = "CLONE_ARGS_SIZE_VER0 - 8",
-+		.flags = 0,
-+		.size = CLONE_ARGS_SIZE_VER0 - 8,
-+		.expected = -EINVAL,
-+		.test_mode = CLONE3_ARGS_NO_TEST,
-+	},
-+	{
-+		.name = "sizeof(struct clone_args) + 8",
-+		.flags = 0,
-+		.size = sizeof(struct __clone_args) + 8,
-+		.expected = 0,
-+		.test_mode = CLONE3_ARGS_NO_TEST,
-+	},
-+	{
-+		.name = "exit_signal with highest 32 bits non-zero",
-+		.flags = 0,
-+		.size = 0,
-+		.expected = -EINVAL,
-+		.test_mode = CLONE3_ARGS_INVAL_EXIT_SIGNAL_BIG,
-+	},
-+	{
-+		.name = "negative 32-bit exit_signal",
-+		.flags = 0,
-+		.size = 0,
-+		.expected = -EINVAL,
-+		.test_mode = CLONE3_ARGS_INVAL_EXIT_SIGNAL_NEG,
-+	},
-+	{
-+		.name = "exit_signal not fitting into CSIGNAL mask",
-+		.flags = 0,
-+		.size = 0,
-+		.expected = -EINVAL,
-+		.test_mode = CLONE3_ARGS_INVAL_EXIT_SIGNAL_CSIG,
-+	},
-+	{
-+		.name = "NSIG < exit_signal < CSIG",
-+		.flags = 0,
-+		.size = 0,
-+		.expected = -EINVAL,
-+		.test_mode = CLONE3_ARGS_INVAL_EXIT_SIGNAL_NSIG,
-+	},
-+	{
-+		.name = "Arguments sizeof(struct clone_args) + 8",
-+		.flags = 0,
-+		.size = sizeof(struct __clone_args) + 8,
-+		.expected = 0,
-+		.test_mode = CLONE3_ARGS_ALL_0,
-+	},
-+	{
-+		.name = "Arguments sizeof(struct clone_args) + 16",
-+		.flags = 0,
-+		.size = sizeof(struct __clone_args) + 16,
-+		.expected = -E2BIG,
-+		.test_mode = CLONE3_ARGS_ALL_0,
-+	},
-+	{
-+		.name = "Arguments sizeof(struct clone_arg) * 2",
-+		.flags = 0,
-+		.size = sizeof(struct __clone_args) + 16,
-+		.expected = -E2BIG,
-+		.test_mode = CLONE3_ARGS_ALL_0,
-+	},
-+	{
-+		.name = "Arguments > page size",
-+		.flags = 0,
-+		.size_function = page_size_plus_8,
-+		.expected = -E2BIG,
-+		.test_mode = CLONE3_ARGS_NO_TEST,
-+	},
-+	{
-+		.name = "CLONE_ARGS_SIZE_VER0 in a new PID NS",
-+		.flags = CLONE_NEWPID,
-+		.size = CLONE_ARGS_SIZE_VER0,
-+		.expected = 0,
-+		.test_mode = CLONE3_ARGS_NO_TEST,
-+		.filter = not_root,
-+	},
-+	{
-+		.name = "CLONE_ARGS_SIZE_VER0 - 8 in a new PID NS",
-+		.flags = CLONE_NEWPID,
-+		.size = CLONE_ARGS_SIZE_VER0 - 8,
-+		.expected = -EINVAL,
-+		.test_mode = CLONE3_ARGS_NO_TEST,
-+	},
-+	{
-+		.name = "sizeof(struct clone_args) + 8 in a new PID NS",
-+		.flags = CLONE_NEWPID,
-+		.size = sizeof(struct __clone_args) + 8,
-+		.expected = 0,
-+		.test_mode = CLONE3_ARGS_NO_TEST,
-+		.filter = not_root,
-+	},
-+	{
-+		.name = "Arguments > page size in a new PID NS",
-+		.flags = CLONE_NEWPID,
-+		.size_function = page_size_plus_8,
-+		.expected = -E2BIG,
-+		.test_mode = CLONE3_ARGS_NO_TEST,
-+	},
-+	{
-+		.name = "New time NS",
-+		.flags = CLONE_NEWTIME,
-+		.size = 0,
-+		.expected = 0,
-+		.test_mode = CLONE3_ARGS_NO_TEST,
-+	},
-+	{
-+		.name = "exit signal (SIGCHLD) in flags",
-+		.flags = SIGCHLD,
-+		.size = 0,
-+		.expected = -EINVAL,
-+		.test_mode = CLONE3_ARGS_NO_TEST,
-+	},
-+};
- 
--	/* Do a clone3() with CLONE_ARGS_SIZE_VER0 in a new PID NS. */
--	if (uid == 0)
--		test_clone3(CLONE_NEWPID, CLONE_ARGS_SIZE_VER0, 0,
--				CLONE3_ARGS_NO_TEST);
--	else
--		ksft_test_result_skip("Skipping clone3() with CLONE_NEWPID\n");
-+int main(int argc, char *argv[])
-+{
-+	size_t size;
-+	int i;
- 
--	/* Do a clone3() with CLONE_ARGS_SIZE_VER0 - 8 in a new PID NS */
--	test_clone3(CLONE_NEWPID, CLONE_ARGS_SIZE_VER0 - 8, -EINVAL,
--			CLONE3_ARGS_NO_TEST);
-+	ksft_print_header();
-+	ksft_set_plan(ARRAY_SIZE(tests));
-+	test_clone3_supported();
- 
--	/* Do a clone3() with sizeof(struct clone_args) + 8 in a new PID NS */
--	if (uid == 0)
--		test_clone3(CLONE_NEWPID, sizeof(struct __clone_args) + 8, 0,
--				CLONE3_ARGS_NO_TEST);
--	else
--		ksft_test_result_skip("Skipping clone3() with CLONE_NEWPID\n");
-+	for (i = 0; i < ARRAY_SIZE(tests); i++) {
-+		if (tests[i].filter && tests[i].filter()) {
-+			ksft_test_result_skip("%s\n", tests[i].name);
-+			continue;
-+		}
- 
--	/* Do a clone3() with > page size in a new PID NS */
--	test_clone3(CLONE_NEWPID, getpagesize() + 8, -E2BIG,
--			CLONE3_ARGS_NO_TEST);
-+		if (tests[i].size_function)
-+			size = tests[i].size_function();
-+		else
-+			size = tests[i].size;
- 
--	/* Do a clone3() in a new time namespace */
--	test_clone3(CLONE_NEWTIME, 0, 0, CLONE3_ARGS_NO_TEST);
-+		ksft_print_msg("Running test '%s'\n", tests[i].name);
- 
--	/* Do a clone3() with exit signal (SIGCHLD) in flags */
--	test_clone3(SIGCHLD, 0, -EINVAL, CLONE3_ARGS_NO_TEST);
-+		ksft_test_result(test_clone3(tests[i].flags, size,
-+					     tests[i].expected,
-+					     tests[i].test_mode),
-+				 "%s\n", tests[i].name);
-+	}
- 
- 	ksft_finished();
- }
+As a proof of concept, we ran the following synthetic benchmark:
+build the linux kernel in a memory-limited cgroup, and allocate some
+cold data in tmpfs to see if the shrinker could write them out and
+improved the overall performance. Depending on the amount of cold data
+generated, we observe from 14% to 35% reduction in kernel CPU time used
+in the kernel builds.
 
----
-base-commit: 6465e260f48790807eef06b583b38ca9789b6072
-change-id: 20231017-kselftest-clone3-output-7e8b6462bd1b
+Domenico Cerasuolo (3):
+  zswap: make shrinking memcg-aware
+  mm: memcg: add per-memcg zswap writeback stat
+  selftests: cgroup: update per-memcg zswap writeback selftest
 
-Best regards,
+Nhat Pham (2):
+  mm: list_lru: allow external numa node and cgroup tracking
+  zswap: shrinks zswap pool based on memory pressure
+
+ Documentation/admin-guide/mm/zswap.rst      |   7 +
+ include/linux/list_lru.h                    |  38 +++
+ include/linux/memcontrol.h                  |   7 +
+ include/linux/mmzone.h                      |  14 +
+ mm/list_lru.c                               |  43 ++-
+ mm/memcontrol.c                             |  15 +
+ mm/mmzone.c                                 |   3 +
+ mm/swap.h                                   |   3 +-
+ mm/swap_state.c                             |  38 ++-
+ mm/zswap.c                                  | 335 ++++++++++++++++----
+ tools/testing/selftests/cgroup/test_zswap.c |  74 +++--
+ 11 files changed, 485 insertions(+), 92 deletions(-)
+
 -- 
-Mark Brown <broonie@kernel.org>
-
+2.34.1
