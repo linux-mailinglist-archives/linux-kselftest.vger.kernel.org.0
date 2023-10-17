@@ -2,59 +2,58 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65DE57CD0CE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Oct 2023 01:34:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2ECD57CD0D2
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Oct 2023 01:35:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234650AbjJQXe5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 Oct 2023 19:34:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45684 "EHLO
+        id S234843AbjJQXf3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 Oct 2023 19:35:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230219AbjJQXe4 (ORCPT
+        with ESMTP id S234793AbjJQXf2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Oct 2023 19:34:56 -0400
-Received: from mail-io1-xd2a.google.com (mail-io1-xd2a.google.com [IPv6:2607:f8b0:4864:20::d2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E997892;
-        Tue, 17 Oct 2023 16:34:54 -0700 (PDT)
-Received: by mail-io1-xd2a.google.com with SMTP id ca18e2360f4ac-7a25040faffso266991339f.1;
-        Tue, 17 Oct 2023 16:34:54 -0700 (PDT)
+        Tue, 17 Oct 2023 19:35:28 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD1F92;
+        Tue, 17 Oct 2023 16:35:26 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id e9e14a558f8ab-357a354e616so459015ab.1;
+        Tue, 17 Oct 2023 16:35:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1697585694; x=1698190494; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1697585726; x=1698190526; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/RUVRQvIEB8Ness9Y/D/FOyjF48X8zrSw0Y9Wp3BIKk=;
-        b=RrQZJlXuJuvvxEmql7X5ypEXu4AO2BNyLCdl4Fu3w/pl2aAZY3WZzTZ6AC+bcg00Hl
-         zvSvKIEnKZYwyEk4IRJcZ3kg+I9XCa+jhrmDF9arvuPwz+XPGBquFWM8erzEZmBR0GNC
-         DHRSzxHBL0zkx33O4kfJw0TO+7bCUdbwLEAWVCKbqQZgi/yJNoaKZLsgXPgPnp9870ub
-         zByP8gvx6NVbhiRcd0r7lkjV93k7pzHcg77q2VDarffHUueeEUeweA44FU+4rzqwY464
-         Eb8/SNdZzux0mDDkpM0VXvN3wNDeZcJwinnV05aIxaQUPQ6TJNRW4VA7jBA/m7x5gxql
-         Evew==
+        bh=tdTkOsSZlVefGaBdezW5bHhWJDivZZTWywSdxQVCUN4=;
+        b=ClogTTP278oipxTPG9O7Cg50jfqHyHDmJ539pX7Qpn8I1sJ+za8PStycD9RJZ0ZxTt
+         S+xgXkPak20IVtZs5+8uQTbQZTZalCkNnK8XlN9Ama67Dtnx+ArUeVFijxtpKwmnCzT/
+         nqhqVfEfg80t5r1Lze4rdsIjDd30W+d2GTI4Gy7rhB3r4C2VPc2k5XugMy1HmuuXk2fu
+         VZiBWrhFoV/VKZ1w4KnXOG7Ens4kXORVM9vRdaPM0E3ka8OC7UZrlQGuRQHzPTiujj97
+         6e6uV8bdN4ksFkpRSQ0S733DKpttHGr1zRCnff02xW0TYLrmwa3kVqpXik3QCngoA/HB
+         Njng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697585694; x=1698190494;
+        d=1e100.net; s=20230601; t=1697585726; x=1698190526;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/RUVRQvIEB8Ness9Y/D/FOyjF48X8zrSw0Y9Wp3BIKk=;
-        b=w9epMkKfrN+rwBzqUPcqmH2N6W63+jPFkhItv7+q5yYvl5G9H1r1l3Q1I1tpvJIIA+
-         iANPzRO3yuFRet6z9/oRBZSE2VubTJY8Lgs0tu1PLln6/gZteSoPv6iKgH7PWELZY/io
-         pFKUXkrsQLAY+oU5nGQm0gTKRMOv5SoNDFECIKiJjXBoQwoYg/pupSBqkIn26pLoFfJ7
-         Va0P8rhtDUnalk1VdP6Tc9ldT7Mz9bkQQgnR9VUhyMMLplQLgaKmMZgLkcwlWwWbJKE2
-         knE0BbyxTRlveJYz/oird2Un14/XIJwU3MXNYtKkzKZu+z/0vUJdjSdwB95y/CqXF7J/
-         Ui+Q==
-X-Gm-Message-State: AOJu0YwSwug7Rd14EIxOnulqQFlMsJVqx9oJWseKpKW3NKUasHUjK329
-        2L4qhrDCFU2YKuE9lMr1uHCj43u0gAud0ooau+6Ah9Bq4TZq2GEB
-X-Google-Smtp-Source: AGHT+IHNpjwYivjfLnBuHyeXolttmsdPz2+T48nLOGhSe/Xrd/3V5FFzq9IYPm46z13Xje7ZyST4TBhWn+nExI6QDOU=
-X-Received: by 2002:a05:6602:2dcd:b0:791:16ba:d764 with SMTP id
- l13-20020a0566022dcd00b0079116bad764mr5165267iow.16.1697585694198; Tue, 17
- Oct 2023 16:34:54 -0700 (PDT)
+        bh=tdTkOsSZlVefGaBdezW5bHhWJDivZZTWywSdxQVCUN4=;
+        b=Ib8+16QNMpQE4JDexPBPuebZKtFXOLRImLSTzn4QK6wM3pbClmjcJh0bdilXogsUcE
+         /72Xsfkz9NuAvLrWRkmBLvkvJhAziwwayjCaDqW0Uqf8C7Ma34glISrzaLJBVelNUpK5
+         WJd8A33hVrd43mOnK5j+cbXPQ5txugwBMc4y3SP0NNCEkjgxBpnTPltuvB4+NYZy5flw
+         XBsvQfG8k17WBKQFkgxKwsPkRAO+v25643zTyuNWN1EWmdHY7qAvU0d6l063pmuX7bgg
+         dvUc32duGRUpxufex0rlS8k1TKOC9t2ZUMnN3lKfXeEhT3YYXvouzNM2w1Xgu9qbgLfJ
+         SC8Q==
+X-Gm-Message-State: AOJu0YzVc77N3kg23Ua2RNLrxQ32GB6esbKJOSYfFCFrfylMmcqyB62J
+        vvzxuAULZ+HtWzx8kaifs/esKHKdW74rs8UYUeo=
+X-Google-Smtp-Source: AGHT+IGNULEr1VCr1CogtesXNMKtN++yHXc6oz2Eu5RJNdWzMlS7JszuvVJ5xImYIQMrxF4YcuRnvOv4uLbYQJgZsbg=
+X-Received: by 2002:a05:6e02:3205:b0:351:375f:2a31 with SMTP id
+ cd5-20020a056e02320500b00351375f2a31mr3101949ilb.6.1697585726148; Tue, 17 Oct
+ 2023 16:35:26 -0700 (PDT)
 MIME-Version: 1.0
-References: <20231017232152.2605440-1-nphamcs@gmail.com> <20231017232152.2605440-5-nphamcs@gmail.com>
-In-Reply-To: <20231017232152.2605440-5-nphamcs@gmail.com>
+References: <20231017232152.2605440-1-nphamcs@gmail.com> <20231017232152.2605440-4-nphamcs@gmail.com>
+In-Reply-To: <20231017232152.2605440-4-nphamcs@gmail.com>
 From:   Nhat Pham <nphamcs@gmail.com>
-Date:   Tue, 17 Oct 2023 16:34:41 -0700
-Message-ID: <CAKEwX=N+z779m2mdniiccs=+24XRBDZjqZbE7FAUm6vfnjG+qQ@mail.gmail.com>
-Subject: Re: [PATCH v3 4/5] selftests: cgroup: update per-memcg zswap
- writeback selftest
+Date:   Tue, 17 Oct 2023 16:35:13 -0700
+Message-ID: <CAKEwX=NgsbJ6MQJdJoOTDiGyhjhRA8KJdYe5GzV5iK1bRADfuQ@mail.gmail.com>
+Subject: Re: [PATCH v3 3/5] mm: memcg: add per-memcg zswap writeback stat
 To:     akpm@linux-foundation.org
 Cc:     hannes@cmpxchg.org, cerasuolodomenico@gmail.com,
         yosryahmed@google.com, sjenning@redhat.com, ddstreet@ieee.org,
@@ -81,10 +80,10 @@ On Tue, Oct 17, 2023 at 4:21=E2=80=AFPM Nhat Pham <nphamcs@gmail.com> wrote=
 >
 > From: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
 >
-> The memcg-zswap self test is updated to adjust to the behavior change
-> implemented by commit 87730b165089 ("zswap: make shrinking memcg-aware"),
-> where zswap performs writeback for specific memcg.
+> Since zswap now writes back pages from memcg-specific LRUs, we now need a
+> new stat to show writebacks count for each memcg.
 >
+> Suggested-by: Nhat Pham <nphamcs@gmail.com>
 > Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
 > Signed-off-by: Nhat Pham <nphamcs@gmail.com>
 
@@ -93,132 +92,94 @@ This is Domenico's work :) I used the wrong tag here. Should be:
 Acked-by: Nhat Pham <nphamcs@gmail.com>
 
 > ---
->  tools/testing/selftests/cgroup/test_zswap.c | 74 ++++++++++++++-------
->  1 file changed, 50 insertions(+), 24 deletions(-)
+>  include/linux/memcontrol.h |  2 ++
+>  mm/memcontrol.c            | 15 +++++++++++++++
+>  mm/zswap.c                 |  3 +++
+>  3 files changed, 20 insertions(+)
 >
-> diff --git a/tools/testing/selftests/cgroup/test_zswap.c b/tools/testing/=
-selftests/cgroup/test_zswap.c
-> index 49def87a909b..11271fabeffc 100644
-> --- a/tools/testing/selftests/cgroup/test_zswap.c
-> +++ b/tools/testing/selftests/cgroup/test_zswap.c
-> @@ -50,9 +50,9 @@ static int get_zswap_stored_pages(size_t *value)
->         return read_int("/sys/kernel/debug/zswap/stored_pages", value);
->  }
+> diff --git a/include/linux/memcontrol.h b/include/linux/memcontrol.h
+> index 3de10fabea0f..7868b1e00bf5 100644
+> --- a/include/linux/memcontrol.h
+> +++ b/include/linux/memcontrol.h
+> @@ -38,6 +38,7 @@ enum memcg_stat_item {
+>         MEMCG_KMEM,
+>         MEMCG_ZSWAP_B,
+>         MEMCG_ZSWAPPED,
+> +       MEMCG_ZSWAP_WB,
+>         MEMCG_NR_STAT,
+>  };
 >
-> -static int get_zswap_written_back_pages(size_t *value)
-> +static int get_cg_wb_count(const char *cg)
+> @@ -1884,6 +1885,7 @@ static inline void count_objcg_event(struct obj_cgr=
+oup *objcg,
+>  bool obj_cgroup_may_zswap(struct obj_cgroup *objcg);
+>  void obj_cgroup_charge_zswap(struct obj_cgroup *objcg, size_t size);
+>  void obj_cgroup_uncharge_zswap(struct obj_cgroup *objcg, size_t size);
+> +void obj_cgroup_report_zswap_wb(struct obj_cgroup *objcg);
+>  #else
+>  static inline bool obj_cgroup_may_zswap(struct obj_cgroup *objcg)
 >  {
-> -       return read_int("/sys/kernel/debug/zswap/written_back_pages", val=
-ue);
-> +       return cg_read_key_long(cg, "memory.stat", "zswap_wb");
+> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+> index 1bde67b29287..a9118871e5a6 100644
+> --- a/mm/memcontrol.c
+> +++ b/mm/memcontrol.c
+> @@ -1505,6 +1505,7 @@ static const struct memory_stat memory_stats[] =3D =
+{
+>  #if defined(CONFIG_MEMCG_KMEM) && defined(CONFIG_ZSWAP)
+>         { "zswap",                      MEMCG_ZSWAP_B                   }=
+,
+>         { "zswapped",                   MEMCG_ZSWAPPED                  }=
+,
+> +       { "zswap_wb",                   MEMCG_ZSWAP_WB                  }=
+,
+>  #endif
+>         { "file_mapped",                NR_FILE_MAPPED                  }=
+,
+>         { "file_dirty",                 NR_FILE_DIRTY                   }=
+,
+> @@ -1541,6 +1542,7 @@ static int memcg_page_state_unit(int item)
+>         switch (item) {
+>         case MEMCG_PERCPU_B:
+>         case MEMCG_ZSWAP_B:
+> +       case MEMCG_ZSWAP_WB:
+>         case NR_SLAB_RECLAIMABLE_B:
+>         case NR_SLAB_UNRECLAIMABLE_B:
+>         case WORKINGSET_REFAULT_ANON:
+> @@ -7861,6 +7863,19 @@ void obj_cgroup_uncharge_zswap(struct obj_cgroup *=
+objcg, size_t size)
+>         rcu_read_unlock();
 >  }
 >
->  static int allocate_bytes(const char *cgroup, void *arg)
-> @@ -68,45 +68,71 @@ static int allocate_bytes(const char *cgroup, void *a=
-rg)
->         return 0;
->  }
->
-> +static char *setup_test_group_1M(const char *root, const char *name)
+> +void obj_cgroup_report_zswap_wb(struct obj_cgroup *objcg)
 > +{
-> +       char *group_name =3D cg_name(root, name);
+> +       struct mem_cgroup *memcg;
 > +
-> +       if (!group_name)
-> +               return NULL;
-> +       if (cg_create(group_name))
-> +               goto fail;
-> +       if (cg_write(group_name, "memory.max", "1M")) {
-> +               cg_destroy(group_name);
-> +               goto fail;
-> +       }
-> +       return group_name;
-> +fail:
-> +       free(group_name);
-> +       return NULL;
+> +       if (!cgroup_subsys_on_dfl(memory_cgrp_subsys))
+> +               return;
+> +
+> +       rcu_read_lock();
+> +       memcg =3D obj_cgroup_memcg(objcg);
+> +       mod_memcg_state(memcg, MEMCG_ZSWAP_WB, 1);
+> +       rcu_read_unlock();
 > +}
 > +
->  /*
->   * When trying to store a memcg page in zswap, if the memcg hits its mem=
-ory
-> - * limit in zswap, writeback should not be triggered.
-> - *
-> - * This was fixed with commit 0bdf0efa180a("zswap: do not shrink if cgro=
-up may
-> - * not zswap"). Needs to be revised when a per memcg writeback mechanism=
- is
-> - * implemented.
-> + * limit in zswap, writeback should affect only the zswapped pages of th=
-at
-> + * memcg.
->   */
->  static int test_no_invasive_cgroup_shrink(const char *root)
+>  static u64 zswap_current_read(struct cgroup_subsys_state *css,
+>                               struct cftype *cft)
 >  {
-> -       size_t written_back_before, written_back_after;
->         int ret =3D KSFT_FAIL;
-> -       char *test_group;
-> +       size_t control_allocation_size =3D MB(10);
-> +       char *control_allocation, *wb_group =3D NULL, *control_group =3D =
-NULL;
+> diff --git a/mm/zswap.c b/mm/zswap.c
+> index d2989ad11814..15485427e3fa 100644
+> --- a/mm/zswap.c
+> +++ b/mm/zswap.c
+> @@ -704,6 +704,9 @@ static enum lru_status shrink_memcg_cb(struct list_he=
+ad *item, struct list_lru_o
+>         }
+>         zswap_written_back_pages++;
 >
->         /* Set up */
-> -       test_group =3D cg_name(root, "no_shrink_test");
-> -       if (!test_group)
-> -               goto out;
-> -       if (cg_create(test_group))
-> +       wb_group =3D setup_test_group_1M(root, "per_memcg_wb_test1");
-> +       if (!wb_group)
-> +               return KSFT_FAIL;
-> +       if (cg_write(wb_group, "memory.zswap.max", "10K"))
->                 goto out;
-> -       if (cg_write(test_group, "memory.max", "1M"))
-> +       control_group =3D setup_test_group_1M(root, "per_memcg_wb_test2")=
-;
-> +       if (!control_group)
->                 goto out;
-> -       if (cg_write(test_group, "memory.zswap.max", "10K"))
+> +       if (entry->objcg)
+> +               obj_cgroup_report_zswap_wb(entry->objcg);
 > +
-> +       /* Push some test_group2 memory into zswap */
-> +       if (cg_enter_current(control_group))
->                 goto out;
-> -       if (get_zswap_written_back_pages(&written_back_before))
-> +       control_allocation =3D malloc(control_allocation_size);
-> +       for (int i =3D 0; i < control_allocation_size; i +=3D 4095)
-> +               control_allocation[i] =3D 'a';
-> +       if (cg_read_key_long(control_group, "memory.stat", "zswapped") < =
-1)
->                 goto out;
->
-> -       /* Allocate 10x memory.max to push memory into zswap */
-> -       if (cg_run(test_group, allocate_bytes, (void *)MB(10)))
-> +       /* Allocate 10x memory.max to push wb_group memory into zswap and=
- trigger wb */
-> +       if (cg_run(wb_group, allocate_bytes, (void *)MB(10)))
->                 goto out;
->
-> -       /* Verify that no writeback happened because of the memcg allocat=
-ion */
-> -       if (get_zswap_written_back_pages(&written_back_after))
-> -               goto out;
-> -       if (written_back_after =3D=3D written_back_before)
-> +       /* Verify that only zswapped memory from gwb_group has been writt=
-en back */
-> +       if (get_cg_wb_count(wb_group) > 0 && get_cg_wb_count(control_grou=
-p) =3D=3D 0)
->                 ret =3D KSFT_PASS;
->  out:
-> -       cg_destroy(test_group);
-> -       free(test_group);
-> +       cg_enter_current(root);
-> +       if (control_group) {
-> +               cg_destroy(control_group);
-> +               free(control_group);
-> +       }
-> +       cg_destroy(wb_group);
-> +       free(wb_group);
-> +       if (control_allocation)
-> +               free(control_allocation);
->         return ret;
->  }
->
+>         /*
+>          * Writeback started successfully, the page now belongs to the
+>          * swapcache. Drop the entry from zswap - unless invalidate alrea=
+dy
 > --
 > 2.34.1
