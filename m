@@ -2,179 +2,292 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2E427CCC54
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Oct 2023 21:32:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4226E7CCC70
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Oct 2023 21:40:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344006AbjJQTcz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 Oct 2023 15:32:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55012 "EHLO
+        id S235063AbjJQTk3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 Oct 2023 15:40:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235062AbjJQTcs (ORCPT
+        with ESMTP id S235050AbjJQTk2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Oct 2023 15:32:48 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2046.outbound.protection.outlook.com [40.107.93.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C459D47;
-        Tue, 17 Oct 2023 12:32:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=YV6OCqHG3IdT6OYUD6a9kphL+T2BQ0rp9Wo6uPHNIZ0aNzaYZUgaI2a8hviAQ9P7Fl7P9EyVsr0OnfEgJ/40xJXpDUgFzrbjUP8uvdllgh7h+memK9Jcy3y/AJQhx0ppH/Do7sUIBA3rfJprRsNNCo0rdtTkhGdABHfbrHQRhieQtofoCv6QC7ZuToJJSNAmcIGp3+2e7UgnTzO/4mGlnoaCVqFi7mMoVF+ihxtPa67540Nylt/nVyv1yzRdXrRn18ei5XIbEOyY4ka7y4OIEiXHn2MqkcmS7VMsW9wnsVB3Hx0VZqdD47Aesr/JYP519E5hudFBUzDBHx3eMz9Tlg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hLjtO4tNUBPKdkKIUQ0xseAPQOm+USwxVaHVT1CFQd8=;
- b=Xcl7B41WNdIvQp6hzICvu6HZmUAeGBY6QQB6y4LTScz51jPCuWHyZ+ohOACEEe2eCZ/JMBKMj/a6FWr1I6uGfm/1MLPVMXUydODJhi1d9IfdHSS0rhbSyF9c+yXbWMP589AwodMHOu0XyR3JOxTy+BcWtHvSKRl99Y8wV3BM0GD/v9K6n5qmCzzE3fo62pcLSYQvmTkmqir5Y6qDdu7EDC/VEk1ln1aMypx0O0PJV7mpF6nXeWk4u4iAb0aapiEQziVdXWh9yTkphMNamYU41KmuJ8qzVfA+QavR1xASpUe4UwhoAyc6rxKSmM68Vxh5QXrb5L23WAr5WvClGs+PIg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.232) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hLjtO4tNUBPKdkKIUQ0xseAPQOm+USwxVaHVT1CFQd8=;
- b=C0vykurxgWUxOV4gtWLqzNmUffDDArrppH6zuiDLpK2mRwFqya3d0CO/rjRfJolukJYmGmUwZE+P2mAAGIXDO6P/n87Cq9Lydiso37m3Qo5MmweHfjwbgn/ytbJ1t5CpiclJSzOJvO1HKjFF9DHlKaZCnpeAcaRhWOc2JMw0yhnRNZSjydE8OeBAfWVsOu2X61t21GwbsR9aDVPiJSWCNqThMmb+dOLtmPmq6j0jE/GtYdjD3OcWZ3JRlfRE3NOo80c6Ga4ELQR4yPtI1+c3tGyERUxgvwCOU2YOEYeEdaDsfKgvjXiShed48eYHgNH6hm5ajkrOYe6FKGC++0Ke+Q==
-Received: from CY5PR15CA0234.namprd15.prod.outlook.com (2603:10b6:930:88::24)
- by SA1PR12MB6751.namprd12.prod.outlook.com (2603:10b6:806:258::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6886.34; Tue, 17 Oct
- 2023 19:32:39 +0000
-Received: from CY4PEPF0000EDD5.namprd03.prod.outlook.com
- (2603:10b6:930:88:cafe::2b) by CY5PR15CA0234.outlook.office365.com
- (2603:10b6:930:88::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6907.21 via Frontend
- Transport; Tue, 17 Oct 2023 19:32:39 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.232) by
- CY4PEPF0000EDD5.mail.protection.outlook.com (10.167.241.209) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6838.22 via Frontend Transport; Tue, 17 Oct 2023 19:32:39 +0000
-Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
- (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 17 Oct
- 2023 12:32:33 -0700
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Tue, 17 Oct 2023 12:32:33 -0700
-Received: from Asurada-Nvidia (10.127.8.13) by mail.nvidia.com
- (10.126.190.180) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41 via Frontend
- Transport; Tue, 17 Oct 2023 12:32:32 -0700
-Date:   Tue, 17 Oct 2023 12:32:31 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-CC:     Yi Liu <yi.l.liu@intel.com>, <joro@8bytes.org>,
-        <alex.williamson@redhat.com>, <kevin.tian@intel.com>,
-        <robin.murphy@arm.com>, <baolu.lu@linux.intel.com>,
-        <cohuck@redhat.com>, <eric.auger@redhat.com>,
-        <kvm@vger.kernel.org>, <mjrosato@linux.ibm.com>,
-        <chao.p.peng@linux.intel.com>, <yi.y.sun@linux.intel.com>,
-        <peterx@redhat.com>, <jasowang@redhat.com>,
-        <shameerali.kolothum.thodi@huawei.com>, <lulu@redhat.com>,
-        <suravee.suthikulpanit@amd.com>, <iommu@lists.linux.dev>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <zhenzhong.duan@intel.com>, <joao.m.martins@oracle.com>
-Subject: Re: [PATCH v4 10/17] iommufd: Support IOMMU_HWPT_ALLOC allocation
- with user data
-Message-ID: <ZS7hT+DVNbvP1TgS@Asurada-Nvidia>
-References: <20230921075138.124099-11-yi.l.liu@intel.com>
- <20231013151923.GV3952@nvidia.com>
- <ZSmvkxuEq7M13KYE@Asurada-Nvidia>
- <20231014000709.GL3952@nvidia.com>
- <ZSnmId5g2m/UnxKY@Asurada-Nvidia>
- <bd6c6a0f-3b7e-ca7c-468f-d8fe7fb382fb@intel.com>
- <20231016115907.GQ3952@nvidia.com>
- <ZS2Eisb94o3inW7V@Asurada-Nvidia>
- <36725a11-b74c-da8e-b621-1a4f8055d779@intel.com>
- <20231017155011.GG3952@nvidia.com>
+        Tue, 17 Oct 2023 15:40:28 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50ACE10B;
+        Tue, 17 Oct 2023 12:40:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1697571625; x=1729107625;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=bjdG+Xo/Zz+jbXvAWOg/Uza7joNoZT1tkJb7TwZwpQ8=;
+  b=ic02+qwcJ5NmsIi1NpPUMzMbl9ias8jxUbynWg4rzX5aAZAJgqvFA6EQ
+   JzdrF7eWuz5FA09zZFWiulPyubLQRed6Uxmy1aa0f8wFqb2DGQh22ekhL
+   V+27G4wA0dlZzdV8hfiP20p5IrFLUL67yqq/DeV9s3mBzfCGB1SBT5KDw
+   CFpYlQ9cwhPyukuhqhf7HnxXdTdEjH6Il7kTuC5I3FgFBSCCV4RI9428Z
+   WMDvphEFYObanXnEb9XsngIYnC4aDqaEPGUiN+xpe2E6p6E1L0A1KtIMr
+   KnDXD1W+2GqGXMCWjDzkdicc6SEqhJFFiNx+nyqG+W6HutLkOn6tipMvX
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10866"; a="452344459"
+X-IronPort-AV: E=Sophos;i="6.03,233,1694761200"; 
+   d="scan'208";a="452344459"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2023 12:40:24 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10866"; a="1003468960"
+X-IronPort-AV: E=Sophos;i="6.03,233,1694761200"; 
+   d="scan'208";a="1003468960"
+Received: from lkp-server02.sh.intel.com (HELO f64821696465) ([10.239.97.151])
+  by fmsmga006.fm.intel.com with ESMTP; 17 Oct 2023 12:40:18 -0700
+Received: from kbuild by f64821696465 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qspvL-000A0w-0G;
+        Tue, 17 Oct 2023 19:40:15 +0000
+Date:   Wed, 18 Oct 2023 03:39:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
+Cc:     oe-kbuild-all@lists.linux.dev, viro@zeniv.linux.org.uk,
+        brauner@kernel.org, shuah@kernel.org, aarcange@redhat.com,
+        lokeshgidra@google.com, peterx@redhat.com, david@redhat.com,
+        hughd@google.com, mhocko@suse.com, axelrasmussen@google.com,
+        rppt@kernel.org, willy@infradead.org, Liam.Howlett@oracle.com,
+        jannh@google.com, zhangpeng362@huawei.com, bgeffon@google.com,
+        kaleshsingh@google.com, ngeoffray@google.com, jdduke@google.com,
+        surenb@google.com, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH v3 2/3] userfaultfd: UFFDIO_MOVE uABI
+Message-ID: <202310180338.zTpcYECK-lkp@intel.com>
+References: <20231009064230.2952396-3-surenb@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231017155011.GG3952@nvidia.com>
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000EDD5:EE_|SA1PR12MB6751:EE_
-X-MS-Office365-Filtering-Correlation-Id: 319533bd-777b-4f5e-e94f-08dbcf47d362
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: uYwYhkTBqx7MW85LaiuIcBe3pbrdA9nUpEYBjXzzD6UmWjfBV5lGhTpRwPuCsOFbb7bFh2h+mpsLIb0hd2GHmD8rha0IQ3MMWj4SRgcPawC1pfnol62TB+2wEVLiE9Dy1Lsbds5YfLo/+D8+axzfLnZRccjdkpn1Y7kLUI6IHqozVZS1oHssub1eRp/EKMIFEPwXdxZmpfStEA1gbSFrJ7Gqryz/IQauj0XJDkJG8IhZlIBgKjEtzgA/MX2aoJqhpwT0FB6aMONk1dbB2dFPFFSA1xRDh6G6/WOuSjJR41e2EObCOWj/vZ1hc0zeH/QKsY4gTKEckfIjcjFGJtcZzWAfzV0fbB/WgV6T+gYY7T4e1rldx6ddOM3qKYZ09bJms2/YRXCLu6jjk0E2I9k8D4Lpvye4yZ52npffWHuw5d2eChGj3OV5npI01t4WFKfSSvBSij73ZKQPZ9LXTsDxfU1BDZHN5Jzu4ceh71Fc2yqMt6EUHTx8hxoVgeYbFX2Z/6iwDCc3UaWch9Mu5lwLtZmw2E2l81cEA78vgcJk9vnCUs4tn7NuItAq0PsYrcWiiftIOqZKaS3HIWBKlYbUMHv/SxCZOgy2jZ1PKo+hCRU46qKigeFm8pPuG5s1o3USTyOaLV8NYdQTVnfmz49jXa4dAu/mbEAO6vit4lVvoGxPtqxdorJ0AtkXRV4170NrOrAaVi1N+jLtxJrrSgirnwX+nO2xHrQMUrmbkPKsQ0IQVcRZ8dEX0AcNQxrLqLx0wDMIE1DYH2+S3Sp33yMtxitRdqCFt0HJcKH08F9c6UiitPhRVvEH+8i18Q4cFMk5
-X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230031)(4636009)(39860400002)(396003)(376002)(346002)(136003)(230922051799003)(82310400011)(451199024)(186009)(1800799009)(64100799003)(36840700001)(46966006)(40470700004)(6636002)(316002)(54906003)(41300700001)(70206006)(55016003)(40480700001)(36860700001)(2906002)(70586007)(7416002)(33716001)(86362001)(356005)(7636003)(82740400003)(40460700003)(8936002)(4326008)(6862004)(5660300002)(8676002)(9686003)(53546011)(26005)(336012)(83380400001)(426003)(478600001)(47076005)(966005)(67856001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Oct 2023 19:32:39.8065
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 319533bd-777b-4f5e-e94f-08dbcf47d362
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000EDD5.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6751
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20231009064230.2952396-3-surenb@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Oct 17, 2023 at 12:50:11PM -0300, Jason Gunthorpe wrote:
-> On Tue, Oct 17, 2023 at 04:55:12PM +0800, Yi Liu wrote:
-> > On 2023/10/17 02:44, Nicolin Chen wrote:
-> > > On Mon, Oct 16, 2023 at 08:59:07AM -0300, Jason Gunthorpe wrote:
-> > > > On Mon, Oct 16, 2023 at 03:03:04PM +0800, Yi Liu wrote:
-> > > > > Current nesting series actually extends HWPT_ALLOC ioctl to accept user
-> > > > > data for allocating domain with vendor specific data. Nested translation
-> > > > > happens to be the usage of it. But nesting requires invalidation. If we
-> > > > > want to do further split, then this new series would be just "extending
-> > > > > HWPT_ALLOC to accept vendor specific data from userspace". But it will
-> > > > > lack of a user if nesting is separated. Is this acceptable? @Jason
-> > > > 
-> > > > I'd still like to include the nesting allocation and attach parts
-> > > > though, even if they are not usable without invalidation ..
-> > > 
-> > > This is the latest series that I reworked (in bottom-up order):
-> > >   iommu: Add a pair of helper to copy struct iommu_user_data{_array}
-> > >   iommufd: Add IOMMU_HWPT_INVALIDATE
-> > >   iommufd: Add a nested HW pagetable object
-> > >   iommufd: Share iommufd_hwpt_alloc with IOMMUFD_OBJ_HWPT_NESTED
-> > >   iommufd: Derive iommufd_hwpt_paging from iommufd_hw_pagetable
-> > >   iommufd: Rename IOMMUFD_OBJ_HW_PAGETABLE to IOMMUFD_OBJ_HWPT_PAGING
-> > >   iommufd/device: Add helpers to enforce/remove device reserved regions
-> > >   iommu: Add IOMMU_DOMAIN_NESTED and cache_invalidate_user op
-> > >   iommu: Pass in parent domain with user_data to domain_alloc_user op
-> > 
-> > following Jason's comment, it looks like we can just split the cache
-> > invalidation path out. Then the above looks good after removing
-> > "iommufd: Add IOMMU_HWPT_INVALIDATE" and also the cache_invalidate_user
-> > callback in "iommu: Add IOMMU_DOMAIN_NESTED and cache_invalidate_user op".
-> > Is it? @Jason
-> 
-> If it can make sense, sure. It would be nice to be finished with the
-> alloc path
+Hi Suren,
 
-I can do the split today. Shall we have a domain_alloc_user op
-in VT-d driver? Can we accept a core series only? I understood
-it's better to have though...
+kernel test robot noticed the following build warnings:
 
-> > > Only this v4 has the latest array-based invalidation design. And
-> > > it should be straightforward for drivers to define entry/request
-> > > structures. It might be a bit rush to review/finalize it at the
-> > > stage of rc6 though.
-> > 
-> > yes, before v4, the cache invalidation path is simple and vendor
-> > drivers have their own handling.
-> 
-> Have driver implementations of v4 been done to look at?
+[auto build test WARNING on akpm-mm/mm-everything]
+[also build test WARNING on next-20231017]
+[cannot apply to linus/master v6.6-rc6]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I think so:
-https://lore.kernel.org/linux-iommu/20230921075431.125239-10-yi.l.liu@intel.com/
+url:    https://github.com/intel-lab-lkp/linux/commits/Suren-Baghdasaryan/mm-rmap-support-move-to-different-root-anon_vma-in-folio_move_anon_rmap/20231009-144552
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20231009064230.2952396-3-surenb%40google.com
+patch subject: [PATCH v3 2/3] userfaultfd: UFFDIO_MOVE uABI
+config: i386-randconfig-141-20231017 (https://download.01.org/0day-ci/archive/20231018/202310180338.zTpcYECK-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce: (https://download.01.org/0day-ci/archive/20231018/202310180338.zTpcYECK-lkp@intel.com/reproduce)
 
-Thanks
-Nicolin
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310180338.zTpcYECK-lkp@intel.com/
+
+smatch warnings:
+mm/userfaultfd.c:1380 remap_pages() warn: unsigned 'src_start + len - src_addr' is never less than zero.
+
+vim +1380 mm/userfaultfd.c
+
+  1195	
+  1196	/**
+  1197	 * remap_pages - remap arbitrary anonymous pages of an existing vma
+  1198	 * @dst_start: start of the destination virtual memory range
+  1199	 * @src_start: start of the source virtual memory range
+  1200	 * @len: length of the virtual memory range
+  1201	 *
+  1202	 * remap_pages() remaps arbitrary anonymous pages atomically in zero
+  1203	 * copy. It only works on non shared anonymous pages because those can
+  1204	 * be relocated without generating non linear anon_vmas in the rmap
+  1205	 * code.
+  1206	 *
+  1207	 * It provides a zero copy mechanism to handle userspace page faults.
+  1208	 * The source vma pages should have mapcount == 1, which can be
+  1209	 * enforced by using madvise(MADV_DONTFORK) on src vma.
+  1210	 *
+  1211	 * The thread receiving the page during the userland page fault
+  1212	 * will receive the faulting page in the source vma through the network,
+  1213	 * storage or any other I/O device (MADV_DONTFORK in the source vma
+  1214	 * avoids remap_pages() to fail with -EBUSY if the process forks before
+  1215	 * remap_pages() is called), then it will call remap_pages() to map the
+  1216	 * page in the faulting address in the destination vma.
+  1217	 *
+  1218	 * This userfaultfd command works purely via pagetables, so it's the
+  1219	 * most efficient way to move physical non shared anonymous pages
+  1220	 * across different virtual addresses. Unlike mremap()/mmap()/munmap()
+  1221	 * it does not create any new vmas. The mapping in the destination
+  1222	 * address is atomic.
+  1223	 *
+  1224	 * It only works if the vma protection bits are identical from the
+  1225	 * source and destination vma.
+  1226	 *
+  1227	 * It can remap non shared anonymous pages within the same vma too.
+  1228	 *
+  1229	 * If the source virtual memory range has any unmapped holes, or if
+  1230	 * the destination virtual memory range is not a whole unmapped hole,
+  1231	 * remap_pages() will fail respectively with -ENOENT or -EEXIST. This
+  1232	 * provides a very strict behavior to avoid any chance of memory
+  1233	 * corruption going unnoticed if there are userland race conditions.
+  1234	 * Only one thread should resolve the userland page fault at any given
+  1235	 * time for any given faulting address. This means that if two threads
+  1236	 * try to both call remap_pages() on the same destination address at the
+  1237	 * same time, the second thread will get an explicit error from this
+  1238	 * command.
+  1239	 *
+  1240	 * The command retval will return "len" is successful. The command
+  1241	 * however can be interrupted by fatal signals or errors. If
+  1242	 * interrupted it will return the number of bytes successfully
+  1243	 * remapped before the interruption if any, or the negative error if
+  1244	 * none. It will never return zero. Either it will return an error or
+  1245	 * an amount of bytes successfully moved. If the retval reports a
+  1246	 * "short" remap, the remap_pages() command should be repeated by
+  1247	 * userland with src+retval, dst+reval, len-retval if it wants to know
+  1248	 * about the error that interrupted it.
+  1249	 *
+  1250	 * The UFFDIO_MOVE_MODE_ALLOW_SRC_HOLES flag can be specified to
+  1251	 * prevent -ENOENT errors to materialize if there are holes in the
+  1252	 * source virtual range that is being remapped. The holes will be
+  1253	 * accounted as successfully remapped in the retval of the
+  1254	 * command. This is mostly useful to remap hugepage naturally aligned
+  1255	 * virtual regions without knowing if there are transparent hugepage
+  1256	 * in the regions or not, but preventing the risk of having to split
+  1257	 * the hugepmd during the remap.
+  1258	 *
+  1259	 * If there's any rmap walk that is taking the anon_vma locks without
+  1260	 * first obtaining the folio lock (the only current instance is
+  1261	 * folio_referenced), they will have to verify if the folio->mapping
+  1262	 * has changed after taking the anon_vma lock. If it changed they
+  1263	 * should release the lock and retry obtaining a new anon_vma, because
+  1264	 * it means the anon_vma was changed by remap_pages() before the lock
+  1265	 * could be obtained. This is the only additional complexity added to
+  1266	 * the rmap code to provide this anonymous page remapping functionality.
+  1267	 */
+  1268	ssize_t remap_pages(struct mm_struct *dst_mm, struct mm_struct *src_mm,
+  1269			    unsigned long dst_start, unsigned long src_start,
+  1270			    unsigned long len, __u64 mode)
+  1271	{
+  1272		struct vm_area_struct *src_vma, *dst_vma;
+  1273		unsigned long src_addr, dst_addr;
+  1274		pmd_t *src_pmd, *dst_pmd;
+  1275		long err = -EINVAL;
+  1276		ssize_t moved = 0;
+  1277	
+  1278		/*
+  1279		 * Sanitize the command parameters:
+  1280		 */
+  1281		BUG_ON(src_start & ~PAGE_MASK);
+  1282		BUG_ON(dst_start & ~PAGE_MASK);
+  1283		BUG_ON(len & ~PAGE_MASK);
+  1284	
+  1285		/* Does the address range wrap, or is the span zero-sized? */
+  1286		BUG_ON(src_start + len <= src_start);
+  1287		BUG_ON(dst_start + len <= dst_start);
+  1288	
+  1289		/*
+  1290		 * Because these are read sempahores there's no risk of lock
+  1291		 * inversion.
+  1292		 */
+  1293		mmap_read_lock(dst_mm);
+  1294		if (dst_mm != src_mm)
+  1295			mmap_read_lock(src_mm);
+  1296	
+  1297		/*
+  1298		 * Make sure the vma is not shared, that the src and dst remap
+  1299		 * ranges are both valid and fully within a single existing
+  1300		 * vma.
+  1301		 */
+  1302		src_vma = find_vma(src_mm, src_start);
+  1303		if (!src_vma || (src_vma->vm_flags & VM_SHARED))
+  1304			goto out;
+  1305		if (src_start < src_vma->vm_start ||
+  1306		    src_start + len > src_vma->vm_end)
+  1307			goto out;
+  1308	
+  1309		dst_vma = find_vma(dst_mm, dst_start);
+  1310		if (!dst_vma || (dst_vma->vm_flags & VM_SHARED))
+  1311			goto out;
+  1312		if (dst_start < dst_vma->vm_start ||
+  1313		    dst_start + len > dst_vma->vm_end)
+  1314			goto out;
+  1315	
+  1316		err = validate_remap_areas(src_vma, dst_vma);
+  1317		if (err)
+  1318			goto out;
+  1319	
+  1320		for (src_addr = src_start, dst_addr = dst_start;
+  1321		     src_addr < src_start + len;) {
+  1322			spinlock_t *ptl;
+  1323			pmd_t dst_pmdval;
+  1324			unsigned long step_size;
+  1325	
+  1326			BUG_ON(dst_addr >= dst_start + len);
+  1327			/*
+  1328			 * Below works because anonymous area would not have a
+  1329			 * transparent huge PUD. If file-backed support is added,
+  1330			 * that case would need to be handled here.
+  1331			 */
+  1332			src_pmd = mm_find_pmd(src_mm, src_addr);
+  1333			if (unlikely(!src_pmd)) {
+  1334				if (!(mode & UFFDIO_MOVE_MODE_ALLOW_SRC_HOLES)) {
+  1335					err = -ENOENT;
+  1336					break;
+  1337				}
+  1338				src_pmd = mm_alloc_pmd(src_mm, src_addr);
+  1339				if (unlikely(!src_pmd)) {
+  1340					err = -ENOMEM;
+  1341					break;
+  1342				}
+  1343			}
+  1344			dst_pmd = mm_alloc_pmd(dst_mm, dst_addr);
+  1345			if (unlikely(!dst_pmd)) {
+  1346				err = -ENOMEM;
+  1347				break;
+  1348			}
+  1349	
+  1350			dst_pmdval = pmdp_get_lockless(dst_pmd);
+  1351			/*
+  1352			 * If the dst_pmd is mapped as THP don't override it and just
+  1353			 * be strict. If dst_pmd changes into TPH after this check, the
+  1354			 * remap_pages_huge_pmd() will detect the change and retry
+  1355			 * while remap_pages_pte() will detect the change and fail.
+  1356			 */
+  1357			if (unlikely(pmd_trans_huge(dst_pmdval))) {
+  1358				err = -EEXIST;
+  1359				break;
+  1360			}
+  1361	
+  1362			ptl = pmd_trans_huge_lock(src_pmd, src_vma);
+  1363			if (ptl) {
+  1364				if (pmd_devmap(*src_pmd)) {
+  1365					spin_unlock(ptl);
+  1366					err = -ENOENT;
+  1367					break;
+  1368				}
+  1369	
+  1370				/*
+  1371				 * Check if we can move the pmd without
+  1372				 * splitting it. First check the address
+  1373				 * alignment to be the same in src/dst.  These
+  1374				 * checks don't actually need the PT lock but
+  1375				 * it's good to do it here to optimize this
+  1376				 * block away at build time if
+  1377				 * CONFIG_TRANSPARENT_HUGEPAGE is not set.
+  1378				 */
+  1379				if ((src_addr & ~HPAGE_PMD_MASK) || (dst_addr & ~HPAGE_PMD_MASK) ||
+> 1380				    src_start + len - src_addr < HPAGE_PMD_SIZE || !pmd_none(dst_pmdval)) {
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
