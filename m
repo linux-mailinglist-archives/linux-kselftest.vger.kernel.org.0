@@ -2,112 +2,146 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C2EA7CC3CD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Oct 2023 14:57:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F40C87CC5B5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Oct 2023 16:16:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234991AbjJQM5I (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 Oct 2023 08:57:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48268 "EHLO
+        id S235018AbjJQOQT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 Oct 2023 10:16:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235052AbjJQM4p (ORCPT
+        with ESMTP id S233670AbjJQOQS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Oct 2023 08:56:45 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29FFE10DE;
-        Tue, 17 Oct 2023 05:56:24 -0700 (PDT)
+        Tue, 17 Oct 2023 10:16:18 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51ED8FC;
+        Tue, 17 Oct 2023 07:16:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=TjP165kdnXnZeWEs6lPqJmTemVZVmWMQm34b8bWqLdI=; b=ltmteh5Hzny7tVZzXlOFG8QS/p
-        3YJ7eG9UUk08wyDbfGAQhMuh2NIvNEbkORJg36P/Z7x/CSuUN8nmmbED0vYf4sl03v59vYlxP/X56
-        2IZmlUzb6CRzr140Z+kAr+DxyJ17yI+1JpUe3xicV5+2NDhzq5HzvC/R6iouB6ETf/v1gXWHAIFCH
-        eVGww/Mle6QpVDNH85gRMu4l6/FE6AUSDZ+f+b0HK1tDYdEsZFCwvS6bG5VLA5xOUHXHLu+N5j9U9
-        5nBRieVWKifUAdaMytJ9HB7s5/cAbKTWuOuMvWb5e3CAuDCvwAIXQKJMb3syDXVkZ15gMj+ez9pPd
-        w5et+yUA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1qsjcJ-00CQmQ-7n; Tue, 17 Oct 2023 12:56:11 +0000
-Date:   Tue, 17 Oct 2023 13:56:11 +0100
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Jeff Xu <jeffxu@google.com>
-Cc:     jeffxu@chromium.org, akpm@linux-foundation.org,
-        keescook@chromium.org, sroettger@google.com, jorgelo@chromium.org,
-        groeck@chromium.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        jannh@google.com, surenb@google.com, alex.sierra@amd.com,
-        apopple@nvidia.com, aneesh.kumar@linux.ibm.com,
-        axelrasmussen@google.com, ben@decadent.org.uk,
-        catalin.marinas@arm.com, david@redhat.com, dwmw@amazon.co.uk,
-        ying.huang@intel.com, hughd@google.com, joey.gouly@arm.com,
-        corbet@lwn.net, wangkefeng.wang@huawei.com,
-        Liam.Howlett@oracle.com, torvalds@linux-foundation.org,
-        lstoakes@gmail.com, mawupeng1@huawei.com, linmiaohe@huawei.com,
-        namit@vmware.com, peterx@redhat.com, peterz@infradead.org,
-        ryan.roberts@arm.com, shr@devkernel.io, vbabka@suse.cz,
-        xiujianfeng@huawei.com, yu.ma@intel.com, zhangpeng362@huawei.com,
-        dave.hansen@intel.com, luto@kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [RFC PATCH v1 0/8] Introduce mseal() syscall
-Message-ID: <ZS6Ea4/KI0mKiRMv@casper.infradead.org>
-References: <20231016143828.647848-1-jeffxu@chromium.org>
- <ZS1URCBgwGGj9JtM@casper.infradead.org>
- <CALmYWFu58LYuSn8DqiU8NjPJzTQuLXu4mg7dHaP1ZW2z3jaaXQ@mail.gmail.com>
+        d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+        In-Reply-To:MIME-Version:Date:Message-ID:From:References:Cc:To:Subject:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+        bh=Q+r0YJdNDr2EzgW36tfo5n3UbihfP1ZD+Us+ZNdmkg4=; b=PlK5Sr5TIgr3qnZKUOY1DjXGhp
+        GXeakFKWobePvv+gL61glnyqmJFQRRXulIzU+8zPHN3Udf9ne5lYTJVj67JEuAE54kYCYVfZZyNPP
+        ZKEh1fMUr5aM0A3XKMLkTtgiwvLMQlOyjowrV/mBMyNw8/kM2IKpdRjhfgfIBxs4lmpWvg+3mdRen
+        eE/jLDe86gPN6gfCE6ceMMlWWLbGuh79vNtqo6TWIkl1NyCpnNzXxWkXcZFvwh5+CwF0iwB/3bx8S
+        EOYYwKIbX8YzWXebc9aOR0JJdSrWFTrZDJHh6CHWkD8HYg2ZSgZ1Ta/wYmopHLHzJxYSPDyNasQYH
+        GoU3cB8w==;
+Received: from sslproxy05.your-server.de ([78.46.172.2])
+        by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1qskrX-000AkD-D9; Tue, 17 Oct 2023 16:15:59 +0200
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy05.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1qskrW-000MP3-OH; Tue, 17 Oct 2023 16:15:58 +0200
+Subject: Re: [PATCH bpf-next v4] selftests/bpf: Use pkg-config to determine ld
+ flags
+To:     Akihiko Odaki <akihiko.odaki@daynix.com>
+Cc:     Andrii Nakryiko <andrii@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>,
+        Yonghong Song <yonghong.song@linux.dev>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Shuah Khan <shuah@kernel.org>, Nick Terrell <terrelln@fb.com>,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bjorn@kernel.org
+References: <20231016130307.35104-1-akihiko.odaki@daynix.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <4037a83a-c6b6-6eab-1cb1-93339686c4e5@iogearbox.net>
+Date:   Tue, 17 Oct 2023 16:15:57 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CALmYWFu58LYuSn8DqiU8NjPJzTQuLXu4mg7dHaP1ZW2z3jaaXQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20231016130307.35104-1-akihiko.odaki@daynix.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.10/27064/Tue Oct 17 10:11:10 2023)
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Oct 17, 2023 at 01:34:35AM -0700, Jeff Xu wrote:
-> > > types: bit mask to specify which syscall to seal, currently they are:
-> > > MM_SEAL_MSEAL 0x1
-> > > MM_SEAL_MPROTECT 0x2
-> > > MM_SEAL_MUNMAP 0x4
-> > > MM_SEAL_MMAP 0x8
-> > > MM_SEAL_MREMAP 0x10
-> >
-> > I don't understand why we want this level of granularity.  The OpenBSD
-> > and XNU examples just say "This must be immutable*".  For values of
-> > immutable that allow downgrading access (eg RW to RO or RX to RO),
-> > but not upgrading access (RW->RX, RO->*, RX->RW).
-> >
-> > > Each bit represents sealing for one specific syscall type, e.g.
-> > > MM_SEAL_MPROTECT will deny mprotect syscall. The consideration of bitmask
-> > > is that the API is extendable, i.e. when needed, the sealing can be
-> > > extended to madvise, mlock, etc. Backward compatibility is also easy.
-> >
-> > Honestly, it feels too flexible.  Why not just two flags to mprotect()
-> > -- PROT_IMMUTABLE and PROT_DOWNGRADABLE.  I can see a use for that --
-> > maybe for some things we want to be able to downgrade and for other
-> > things, we don't.
-> >
-> Having a seal type per syscall type helps to add the feature incrementally.
-> Applications also know exactly what is sealed.
+On 10/16/23 3:03 PM, Akihiko Odaki wrote:
+> When linking statically, libraries may require other dependencies to be
+> included to ld flags. In particular, libelf may require libzstd. Use
+> pkg-config to determine such dependencies.
+> 
+> Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+> ---
+> V3 -> V4: Added "2> /dev/null".
+> V2 -> V3: Added missing "echo".
+> V1 -> V2: Implemented fallback, referring to HOSTPKG_CONFIG.
+> 
+>   tools/testing/selftests/bpf/Makefile   | 4 +++-
+>   tools/testing/selftests/bpf/README.rst | 2 +-
+>   2 files changed, 4 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index caede9b574cb..009e907a8abe 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -4,6 +4,7 @@ include ../../../scripts/Makefile.arch
+>   include ../../../scripts/Makefile.include
+>   
+>   CXX ?= $(CROSS_COMPILE)g++
+> +PKG_CONFIG ?= $(CROSS_COMPILE)pkg-config
+>   
+>   CURDIR := $(abspath .)
+>   TOOLSDIR := $(abspath ../../..)
+> @@ -31,7 +32,8 @@ CFLAGS += -g -O0 -rdynamic -Wall -Werror $(GENFLAGS) $(SAN_CFLAGS)	\
+>   	  -I$(CURDIR) -I$(INCLUDE_DIR) -I$(GENDIR) -I$(LIBDIR)		\
+>   	  -I$(TOOLSINCDIR) -I$(APIDIR) -I$(OUTPUT)
+>   LDFLAGS += $(SAN_LDFLAGS)
+> -LDLIBS += -lelf -lz -lrt -lpthread
+> +LDLIBS += $(shell $(PKG_CONFIG) --libs libelf zlib 2> /dev/null || echo -lelf -lz)	\
+> +	  -lrt -lpthread
+>   
+>   ifneq ($(LLVM),)
+>   # Silence some warnings when compiled with clang
 
-You're trying to portray a disadvantage as an advantage,  This is the
-seccomp disease, only worse because you're trying to deny individual
-syscalls instead of building up a list of permitted syscalls.  If we
-introduce a new syscall tomorrow which can affect VMAs, we'll then
-make it the application's fault for not disabling that new syscall.
-That's terrible design!
+Staring at tools/bpf/resolve_btfids/Makefile, I'm trying to understand why we
+cannot replicate something similar for BPF selftests?
 
-> I'm not against types such as IMMUTABLE and DOWNGRADEABLE, if we
-> can define what it seals precisely. As Jann pointed out, there have
-> other scenarios that potentially affect IMMUTABLE. Implementing all thoses
-> will take time. And if we missed a case, we could introduce backward
-> compatibility issues to the application. Bitmask will solve this nicely, i.e.
-> application will need to apply the newly added sealing type explicitly.
+For example, with your patch, why is it necessary to now have PKG_CONFIG and
+another HOSTPKG_CONFIG var?
 
-It is your job to do this.  You seem to have taken the attitude that you
-will give the Chrome team exactly what they asked for instead of trying
-to understand their requirements and give them what they need.
+What about the below?
 
-And don't send a v2 before discussion of v1 has come to an end.  It
-uselessly fragments the discussion.
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 4225f975fce3..62166d2f937d 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -29,13 +29,17 @@ SAN_CFLAGS  ?=
+  SAN_LDFLAGS    ?= $(SAN_CFLAGS)
+  RELEASE                ?=
+  OPT_FLAGS      ?= $(if $(RELEASE),-O2,-O0)
++
++LIBELF_FLAGS   := $(shell $(HOSTPKG_CONFIG) libelf --cflags 2>/dev/null)
++LIBELF_LIBS    := $(shell $(HOSTPKG_CONFIG) libelf --libs 2>/dev/null || echo -lelf)
++
+  CFLAGS += -g $(OPT_FLAGS) -rdynamic                                    \
+           -Wall -Werror                                                 \
+-         $(GENFLAGS) $(SAN_CFLAGS)                                     \
++         $(GENFLAGS) $(SAN_CFLAGS) $(LIBELF_FLAGS)                     \
+           -I$(CURDIR) -I$(INCLUDE_DIR) -I$(GENDIR) -I$(LIBDIR)          \
+           -I$(TOOLSINCDIR) -I$(APIDIR) -I$(OUTPUT)
+  LDFLAGS += $(SAN_LDFLAGS)
+-LDLIBS += -lelf -lz -lrt -lpthread
++LDLIBS += $(LIBELF_LIBS) -lz -lrt -lpthread
+
+  ifneq ($(LLVM),)
+  # Silence some warnings when compiled with clang
