@@ -2,51 +2,51 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 562A67CBE81
+	by mail.lfdr.de (Postfix) with ESMTP id C768A7CBE82
 	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Oct 2023 11:08:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234839AbjJQJI3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 Oct 2023 05:08:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59618 "EHLO
+        id S234820AbjJQJIa (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 Oct 2023 05:08:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234820AbjJQJIY (ORCPT
+        with ESMTP id S234741AbjJQJI0 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Oct 2023 05:08:24 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399D4100
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Oct 2023 02:08:23 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-27d0251d305so3045948a91.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Oct 2023 02:08:23 -0700 (PDT)
+        Tue, 17 Oct 2023 05:08:26 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98460B0
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Oct 2023 02:08:24 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1c9bca1d96cso35812335ad.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Oct 2023 02:08:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1697533702; x=1698138502; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1697533704; x=1698138504; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=4llBoLvRHSRPhxaAVX+Xew1tpI9xPqxP9ssy5QguIl8=;
-        b=VDQppkk8b9oCirBVlMxquQtLBR6oq+NEIUW991fieiIzfnXy0uSyhDmOQ/pFCxsfTk
-         vNq0/t+GaIHx3RbgU+O+OsbqxmLJ+QfIBiRFL8ZupoXc2g2kM3tDfchfxPLkpoUW6Cks
-         mSwqs/n3UF4MnYQ4QiXTGmby2Ib/D07ubXtK8=
+        bh=UgKgE+zT4qoDlXNN6kCnypBqiPQ8What3ncvSi+XOyU=;
+        b=n1mo1aJuGTLRP9LqdXT5JaqP7Ux8onQMy/2kn0hSVfY4o77wCT0KthiY+6Crj4OlD1
+         HBSgBcmrimtMJzoQ4E1jhAPX1ahsq5lL47+B4JdwmXA23OUPstkaFiWrlv5vn9k0FvWG
+         p5eISgISH8F/Q3/Crv2QAhmxaqHzeVjhyDSjw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697533702; x=1698138502;
+        d=1e100.net; s=20230601; t=1697533704; x=1698138504;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=4llBoLvRHSRPhxaAVX+Xew1tpI9xPqxP9ssy5QguIl8=;
-        b=uiVN/kSkwHmpDw7jYECEtwhH7jH3hAU/VR6khTVbYwTg7ZPyKidgzf4AD8yNNnTO9m
-         sb7kah1CBrm8yRd42iuAxjgBQp2FAFOjRPvjF0+FzT6kSfM84vf6XzLbfEsDiGbZSnAE
-         Pb4P4Wo5d7Z2Y4ewrJ0Un618W6hRYx8cAz6J8GvDcu/OlSmy1oxezq5eZ6t0RzXJSm29
-         AEaU/mHbbTO8v0qkJ4kfpnZPZ0dNa8ZwTqocmLx8JjqoWXYl/i1hconjrZI5UMmBbs+T
-         kvA6gFG6aDQ5FekwRerx22H4I6m/3UPEGosz9c93QemFt39dJLSPq0oNeq4OhQiRHVGJ
-         cFYw==
-X-Gm-Message-State: AOJu0YxQUwRRlmP7R94rxtKXDL3eKWAM4TTdL/83Rn+3/WlVLHe9B5v1
-        9z0kvjDcWr6oil4T5wB9Uf+bjA==
-X-Google-Smtp-Source: AGHT+IGY8Ka5xTN+9aN+5JwGnYHZ3aFuu39VQWy4bG7nyYFZ0P/8XqDQIp2idGjzoHOlr8sq9RvLbg==
-X-Received: by 2002:a17:90b:124a:b0:27c:f21b:6342 with SMTP id gx10-20020a17090b124a00b0027cf21b6342mr1443714pjb.22.1697533702687;
-        Tue, 17 Oct 2023 02:08:22 -0700 (PDT)
+        bh=UgKgE+zT4qoDlXNN6kCnypBqiPQ8What3ncvSi+XOyU=;
+        b=pEWGVv2lkN/ItXYnSdA+YpK8LM56MIZdqZ1SW+zfEEB41kgqdbo1y+vUn4yKC4X7LP
+         TA26j7y6SD1EC0zYjMzpSflRptgoUy/dN2et/B3QGnmuHPl0Jj+wurX6hupTwOuoUFcR
+         cPXBiWUQwyEYFqkBjL7M9/NNt+F9cJeI0Q3qkucARo1t6JQ5GUEOkfg9WW1XsE7S7/Tt
+         Vhqz8zJQFq0uv5Uz1sUS2O1jNZZuqIv0zg+CGQAwsZ3isSfyp8jPn8CwTDA/wMIkk3RF
+         5GZg6arpdTrA5LYmozbLROXYjmsgDO2mB+Bc8R4vwjdn1ckQQ0fsaxkqpw1E6mhtb/9r
+         kYww==
+X-Gm-Message-State: AOJu0YwMiz/i5xJpiuqc6Ad6GvrvIkQF/eurC83ruelK/yEKNGvzSNsa
+        s2AqWYuFoqZsZhv6AjxXETw4Aw==
+X-Google-Smtp-Source: AGHT+IHCYocrm1n4yld0Gd8Vj3vGZcQMpjkWq5rvV/TBCHu6MN2SKOy6Ffa2J/O1CuQzRvjFk/JD+Q==
+X-Received: by 2002:a17:903:4295:b0:1c6:2780:3adc with SMTP id ju21-20020a170903429500b001c627803adcmr1780065plb.24.1697533704140;
+        Tue, 17 Oct 2023 02:08:24 -0700 (PDT)
 Received: from localhost (9.184.168.34.bc.googleusercontent.com. [34.168.184.9])
-        by smtp.gmail.com with UTF8SMTPSA id t13-20020a17090ae50d00b00277326038dasm868586pjy.39.2023.10.17.02.08.22
+        by smtp.gmail.com with UTF8SMTPSA id t7-20020a170902e84700b001bc21222e34sm995141plg.285.2023.10.17.02.08.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Oct 2023 02:08:22 -0700 (PDT)
+        Tue, 17 Oct 2023 02:08:23 -0700 (PDT)
 From:   jeffxu@chromium.org
 To:     akpm@linux-foundation.org, keescook@chromium.org, jannh@google.com,
         sroettger@google.com, willy@infradead.org,
@@ -65,9 +65,9 @@ Cc:     jeffxu@google.com, jorgelo@chromium.org, groeck@chromium.org,
         vbabka@suse.cz, xiujianfeng@huawei.com, yu.ma@intel.com,
         zhangpeng362@huawei.com, dave.hansen@intel.com, luto@kernel.org,
         linux-hardening@vger.kernel.org
-Subject: [RFC PATCH v2 4/8] mseal: Check seal flag for mprotect(2)
-Date:   Tue, 17 Oct 2023 09:08:11 +0000
-Message-ID: <20231017090815.1067790-5-jeffxu@chromium.org>
+Subject: [RFC PATCH v2 5/8] mseal: Check seal flag for munmap(2)
+Date:   Tue, 17 Oct 2023 09:08:12 +0000
+Message-ID: <20231017090815.1067790-6-jeffxu@chromium.org>
 X-Mailer: git-send-email 2.42.0.655.g421f12c284-goog
 In-Reply-To: <20231017090815.1067790-1-jeffxu@chromium.org>
 References: <20231017090815.1067790-1-jeffxu@chromium.org>
@@ -75,7 +75,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,62 +85,163 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Jeff Xu <jeffxu@google.com>
 
-mprotect(2) changes protection of VMAs in the given address
-range. Sealing will prevent unintended mprotect call.
+munmap(2) unmap VMAs in the given address range.
+Sealing will prevent unintended munmap(2) call.
 
 What this patch does:
-When a mprotect(2) is invoked, if one of its VMAs has MM_SEAL_MPROTECT
-set from previous mseal(2) call, this mprotect(2) will fail, without
-any VMA modified.
+When a munmap(2) is invoked, if one of its VMAs has MM_SEAL_MUNMAP
+set from previous mseal(2) call, this munmap(2) will fail,
+without any VMA modified.
 
 This patch is based on following:
-1. do_mprotect_pkey() currently called in two places:
-SYSCALL_DEFINE3(mprotect,...)
-SYSCALL_DEFINE4(pkey_mprotect, ...)
-and not in any other places, therefore omit changing the signature of
-do_mprotect_pkey(), i.e. not passing checkSeals flag.
+1. At syscall entry point: SYSCALL_DEFINE2(munmap, ...)
+Pass checkSeals = MM_SEAL_MUNMAP into __vm_munmap(),
+in turn, to do_vmi_munmap().
 
-2. In do_mprotect_pkey(), calls can_modify_mm() before any
-update is made on the VMAs.
+Of all the call paths that call into do_vmi_munmap(),
+this is the only place where checkSeals = MM_SEAL_MUNMAP.
+The rest has checkSeals = 0.
+
+2. In do_vmi_munmap(), calls can_modify_mm() before any
+update is made to VMAs.
 
 Signed-off-by: Jeff Xu <jeffxu@google.com>
 ---
- mm/mprotect.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ include/linux/mm.h |  2 +-
+ mm/mmap.c          | 21 +++++++++++++--------
+ mm/mremap.c        |  5 +++--
+ 3 files changed, 17 insertions(+), 11 deletions(-)
 
-diff --git a/mm/mprotect.c b/mm/mprotect.c
-index 130db91d3a8c..6321c4d0aa3f 100644
---- a/mm/mprotect.c
-+++ b/mm/mprotect.c
-@@ -32,6 +32,7 @@
- #include <linux/sched/sysctl.h>
- #include <linux/userfaultfd_k.h>
- #include <linux/memory-tiers.h>
-+#include <uapi/linux/mman.h>
- #include <asm/cacheflush.h>
- #include <asm/mmu_context.h>
- #include <asm/tlbflush.h>
-@@ -753,6 +754,20 @@ static int do_mprotect_pkey(unsigned long start, size_t len,
- 		}
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index b09df8501987..f2f316522f2a 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -3279,7 +3279,7 @@ extern unsigned long do_mmap(struct file *file, unsigned long addr,
+ 	unsigned long pgoff, unsigned long *populate, struct list_head *uf);
+ extern int do_vmi_munmap(struct vma_iterator *vmi, struct mm_struct *mm,
+ 			 unsigned long start, size_t len, struct list_head *uf,
+-			 bool unlock);
++			 bool unlock, unsigned long checkSeals);
+ extern int do_munmap(struct mm_struct *, unsigned long, size_t,
+ 		     struct list_head *uf);
+ extern int do_madvise(struct mm_struct *mm, unsigned long start, size_t len_in, int behavior);
+diff --git a/mm/mmap.c b/mm/mmap.c
+index 414ac31aa9fa..62d592f16f45 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -2601,6 +2601,7 @@ do_vmi_align_munmap(struct vma_iterator *vmi, struct vm_area_struct *vma,
+  * @len: The length of the range to munmap
+  * @uf: The userfaultfd list_head
+  * @unlock: set to true if the user wants to drop the mmap_lock on success
++ * @checkSeals: seal type to check.
+  *
+  * This function takes a @mas that is either pointing to the previous VMA or set
+  * to MA_START and sets it up to remove the mapping(s).  The @len will be
+@@ -2611,7 +2612,7 @@ do_vmi_align_munmap(struct vma_iterator *vmi, struct vm_area_struct *vma,
+  */
+ int do_vmi_munmap(struct vma_iterator *vmi, struct mm_struct *mm,
+ 		  unsigned long start, size_t len, struct list_head *uf,
+-		  bool unlock)
++		  bool unlock, unsigned long checkSeals)
+ {
+ 	unsigned long end;
+ 	struct vm_area_struct *vma;
+@@ -2623,6 +2624,9 @@ int do_vmi_munmap(struct vma_iterator *vmi, struct mm_struct *mm,
+ 	if (end == start)
+ 		return -EINVAL;
+ 
++	if (!can_modify_mm(mm, start, end, checkSeals))
++		return -EACCES;
++
+ 	 /* arch_unmap() might do unmaps itself.  */
+ 	arch_unmap(mm, start, end);
+ 
+@@ -2650,7 +2654,7 @@ int do_munmap(struct mm_struct *mm, unsigned long start, size_t len,
+ {
+ 	VMA_ITERATOR(vmi, mm, start);
+ 
+-	return do_vmi_munmap(&vmi, mm, start, len, uf, false);
++	return do_vmi_munmap(&vmi, mm, start, len, uf, false, 0);
+ }
+ 
+ unsigned long mmap_region(struct file *file, unsigned long addr,
+@@ -2684,7 +2688,7 @@ unsigned long mmap_region(struct file *file, unsigned long addr,
  	}
  
-+       /*
-+	* do_mprotect_pkey() currently called from two places:
-+	* SYSCALL_DEFINE3(mprotect,...)
-+	* SYSCALL_DEFINE4(pkey_mprotect, ...)
-+	* and not from other places.
-+	* Therefore, omit changing the signature of do_mprotect_pkey().
-+	* Otherwise, we might need to add checkSeals and pass it
-+	* from all callers of do_mprotect_pkey().
-+	*/
-+	if (!can_modify_mm(current->mm, start, end, MM_SEAL_MPROTECT)) {
-+		error = -EACCES;
-+		goto out;
-+	}
-+
- 	prev = vma_prev(&vmi);
- 	if (start > vma->vm_start)
- 		prev = vma;
+ 	/* Unmap any existing mapping in the area */
+-	if (do_vmi_munmap(&vmi, mm, addr, len, uf, false))
++	if (do_vmi_munmap(&vmi, mm, addr, len, uf, false, 0))
+ 		return -ENOMEM;
+ 
+ 	/*
+@@ -2909,7 +2913,8 @@ unsigned long mmap_region(struct file *file, unsigned long addr,
+ 	return error;
+ }
+ 
+-static int __vm_munmap(unsigned long start, size_t len, bool unlock)
++static int __vm_munmap(unsigned long start, size_t len, bool unlock,
++			unsigned long checkSeals)
+ {
+ 	int ret;
+ 	struct mm_struct *mm = current->mm;
+@@ -2919,7 +2924,7 @@ static int __vm_munmap(unsigned long start, size_t len, bool unlock)
+ 	if (mmap_write_lock_killable(mm))
+ 		return -EINTR;
+ 
+-	ret = do_vmi_munmap(&vmi, mm, start, len, &uf, unlock);
++	ret = do_vmi_munmap(&vmi, mm, start, len, &uf, unlock, checkSeals);
+ 	if (ret || !unlock)
+ 		mmap_write_unlock(mm);
+ 
+@@ -2929,14 +2934,14 @@ static int __vm_munmap(unsigned long start, size_t len, bool unlock)
+ 
+ int vm_munmap(unsigned long start, size_t len)
+ {
+-	return __vm_munmap(start, len, false);
++	return __vm_munmap(start, len, false, 0);
+ }
+ EXPORT_SYMBOL(vm_munmap);
+ 
+ SYSCALL_DEFINE2(munmap, unsigned long, addr, size_t, len)
+ {
+ 	addr = untagged_addr(addr);
+-	return __vm_munmap(addr, len, true);
++	return __vm_munmap(addr, len, true, MM_SEAL_MUNMAP);
+ }
+ 
+ 
+@@ -3168,7 +3173,7 @@ int vm_brk_flags(unsigned long addr, unsigned long request, unsigned long flags)
+ 	if (ret)
+ 		goto limits_failed;
+ 
+-	ret = do_vmi_munmap(&vmi, mm, addr, len, &uf, 0);
++	ret = do_vmi_munmap(&vmi, mm, addr, len, &uf, 0, 0);
+ 	if (ret)
+ 		goto munmap_failed;
+ 
+diff --git a/mm/mremap.c b/mm/mremap.c
+index 056478c106ee..ac363937f8c4 100644
+--- a/mm/mremap.c
++++ b/mm/mremap.c
+@@ -715,7 +715,8 @@ static unsigned long move_vma(struct vm_area_struct *vma,
+ 	}
+ 
+ 	vma_iter_init(&vmi, mm, old_addr);
+-	if (!do_vmi_munmap(&vmi, mm, old_addr, old_len, uf_unmap, false)) {
++	if (!do_vmi_munmap(&vmi, mm, old_addr, old_len, uf_unmap, false,
++				0)) {
+ 		/* OOM: unable to split vma, just get accounts right */
+ 		if (vm_flags & VM_ACCOUNT && !(flags & MREMAP_DONTUNMAP))
+ 			vm_acct_memory(old_len >> PAGE_SHIFT);
+@@ -1009,7 +1010,7 @@ SYSCALL_DEFINE5(mremap, unsigned long, addr, unsigned long, old_len,
+ 		}
+ 
+ 		ret = do_vmi_munmap(&vmi, mm, addr + new_len, old_len - new_len,
+-				    &uf_unmap, true);
++				    &uf_unmap, true, 0);
+ 		if (ret)
+ 			goto out;
+ 
 -- 
 2.42.0.655.g421f12c284-goog
 
