@@ -2,51 +2,51 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB2E47CBE87
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Oct 2023 11:08:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33B1A7CBE8A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Oct 2023 11:08:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234871AbjJQJIl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 Oct 2023 05:08:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59608 "EHLO
+        id S234893AbjJQJIp (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 Oct 2023 05:08:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234826AbjJQJI1 (ORCPT
+        with ESMTP id S234836AbjJQJI2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Oct 2023 05:08:27 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95BC08E
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Oct 2023 02:08:25 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1c9fa869a63so21563405ad.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Oct 2023 02:08:25 -0700 (PDT)
+        Tue, 17 Oct 2023 05:08:28 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EAF7B0
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Oct 2023 02:08:26 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1c0ecb9a075so35841655ad.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Oct 2023 02:08:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1697533705; x=1698138505; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1697533706; x=1698138506; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ViNyz7MVEy68sAHHL0LA4TbUsB4+tEyuC2ph9hmOQwY=;
-        b=eUt6x8c7KkXZ6wN1e7NR9BuLhPGz14nQ98uqvgdiAE5956JN2tlMEA/Ra7D3QOs6ZG
-         EBqemBDAwsmpjH2KdA4kA3VrQe/qchiL/lq99AZFosULW+7TkUlEO/lEnfkRMOiID13G
-         OGiAWRfOdVM4TNRhDpDdXH3MMNqF6qJ4TcbSQ=
+        bh=y4l+64vDxS/g2eoGFpPCE9LGtKZAVDbLXZ7/tGX4pxw=;
+        b=m8yHCrg7o8r/tDjSKF4frFq9pxrYkckaZV6S1FbfJbvZad0/pHcUoVlyRkm+JI3eOV
+         4oxBs2Lzplx0L3c+HVCR1FnYTS7adD5tvCWt+KFCU6psnsjKEygnoowJUXg6gCnDEltG
+         SGkqQk+yswiMDGy2ilS2eNZE24YvsE+gAM9Aw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697533705; x=1698138505;
+        d=1e100.net; s=20230601; t=1697533706; x=1698138506;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ViNyz7MVEy68sAHHL0LA4TbUsB4+tEyuC2ph9hmOQwY=;
-        b=NzOotPVMPity391QM34l3ZCyij9l9J5myiX8+UCRWDO+V0vJnQpoeH9TmSTNcuLoUD
-         SCNLvb75yhK/Yc38nfgElR+BrNM/XQRcZTvW4bQp4w/tjhchVCdePV4lX/SpsB5HbMzz
-         xoTHKnzF1u68x2RNcWgNqM/XxYkTuTQK1Vc29SwtCYMN7hMprolZ2ntC/7+xhInGf7Rz
-         Uo2Jwn4vRs977Mok/DpcgSWg8N7eCwrAvadQtaBBP4D88dm90uwMI6jlektqlqszlYxk
-         Z4HSTBe0ViCq1Mo1aC27zkSurGyPRmqNJ2gTh8MCflbSowSSPCIN/CWVy7wUx9/H/zeK
-         Kgsg==
-X-Gm-Message-State: AOJu0Yy+OwEHWFhdOmoIC8iFw/TRV8AWOD1gGDtGf+S5pyg4mF3dEnWD
-        7Tx4Y8wy9uonKO5DbzLOD93Y5A==
-X-Google-Smtp-Source: AGHT+IHMQjs3CP1M6u0EHjQpywUiPuYTFdj8fIiwHgzFn3k/gAIRbOULG1q5OcNoW72tl/neYPQw3A==
-X-Received: by 2002:a17:902:e749:b0:1c9:b187:4d84 with SMTP id p9-20020a170902e74900b001c9b1874d84mr2075293plf.14.1697533704959;
-        Tue, 17 Oct 2023 02:08:24 -0700 (PDT)
+        bh=y4l+64vDxS/g2eoGFpPCE9LGtKZAVDbLXZ7/tGX4pxw=;
+        b=Qp3QxX70dh6YeItMu/OOyC5wXb+aPkUsuvSCQXg9oPuKWwb2ywz1GgSRhzCxwCiKLq
+         4TxI67I78u+C+lk/2SdbnMcbPVYe1qBkQR0dNxPvTWKAk/C3kzbJtG+X1lyb+V35n+uU
+         FB9h8wnbzeLC5IAySurYnAubOPRRvoh9+7HuSQSmukxJ4R759y8qHrjx0TWJk62AkCAU
+         pCskY1EF59ko/6/To7kgER9G+2cmyslptY73lwXCbDUlTlUWoTrQ2Y/xGopBj2jnnnIK
+         6AiBVVvqA+oq1s/4/J3Ufl5EuTNmytPlKgCCnlnG214Ldgm62IGjqWEIyVmaKJmtQvF4
+         21qg==
+X-Gm-Message-State: AOJu0Yw5XA6iLEHCPudAqDYS98XqBWAQgDru/yNT61lwaXrvg6rERuIB
+        q88FKGk3U/eSMtxbzznpAnM0Ug==
+X-Google-Smtp-Source: AGHT+IH3ijh2spAMvSfaaAyElvlHfpC0/idOO3bXawN0BNxN5uSfUsaSC/pvKljbIONUXHU4GOlTmA==
+X-Received: by 2002:a17:902:da83:b0:1b2:4852:9a5f with SMTP id j3-20020a170902da8300b001b248529a5fmr1721130plx.54.1697533706010;
+        Tue, 17 Oct 2023 02:08:26 -0700 (PDT)
 Received: from localhost (9.184.168.34.bc.googleusercontent.com. [34.168.184.9])
-        by smtp.gmail.com with UTF8SMTPSA id ij25-20020a170902ab5900b001b890b3bbb1sm1019372plb.211.2023.10.17.02.08.24
+        by smtp.gmail.com with UTF8SMTPSA id k13-20020a170902760d00b001acae9734c0sm986537pll.266.2023.10.17.02.08.25
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Oct 2023 02:08:24 -0700 (PDT)
+        Tue, 17 Oct 2023 02:08:25 -0700 (PDT)
 From:   jeffxu@chromium.org
 To:     akpm@linux-foundation.org, keescook@chromium.org, jannh@google.com,
         sroettger@google.com, willy@infradead.org,
@@ -65,9 +65,9 @@ Cc:     jeffxu@google.com, jorgelo@chromium.org, groeck@chromium.org,
         vbabka@suse.cz, xiujianfeng@huawei.com, yu.ma@intel.com,
         zhangpeng362@huawei.com, dave.hansen@intel.com, luto@kernel.org,
         linux-hardening@vger.kernel.org
-Subject: [RFC PATCH v2 6/8] mseal: Check seal flag for mremap(2)
-Date:   Tue, 17 Oct 2023 09:08:13 +0000
-Message-ID: <20231017090815.1067790-7-jeffxu@chromium.org>
+Subject: [RFC PATCH v2 7/8] mseal:Check seal flag for mmap(2)
+Date:   Tue, 17 Oct 2023 09:08:14 +0000
+Message-ID: <20231017090815.1067790-8-jeffxu@chromium.org>
 X-Mailer: git-send-email 2.42.0.655.g421f12c284-goog
 In-Reply-To: <20231017090815.1067790-1-jeffxu@chromium.org>
 References: <20231017090815.1067790-1-jeffxu@chromium.org>
@@ -85,85 +85,222 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Jeff Xu <jeffxu@google.com>
 
-mremap(2) can shrink/expand a VMA, or move a VMA to a fixed
-address and overwriting or existing VMA. Sealing will
-prevent unintended mremap(2) call.
+mmap(2) can change a protection of existing VMAs.
+Sealing will prevent unintended mmap(2) call.
 
 What this patch does:
-When a mremap(2) is invoked, if one of its VMAs has MM_SEAL_MREMAP
-set from previous mseal(2) call, this mremap(2) will fail, without
-any VMA modified.
+When a mmap(2) is invoked, if one of its VMAs has MM_SEAL_MMAP set
+from previous mseal(2) call, the mmap(2) will fail, without any
+VMAs modified.
 
-This patch is based on following:
-1. At syscall entry point: SYSCALL_DEFINE5(mremap,...)
-There are two cases:
-a. going into mremap_to().
-b. not going into mremap_to().
+The patch is based on following:
+There are two cases: with MMU, NO MMU.
 
-2. For mremap_to() case.
-Since mremap_to() is called only from SYSCALL_DEFINE5(mremap,..),
-omit changing signature of mremap_to(), i.e. not passing
-checkSeals flag.
-In mremap_to(), it calls can_modify_mm() for src address and
-dst address (when MREMAP_FIXED is used), before any update is
-made to the VMAs.
+For MMU case:
+1. ksys_mmap_pgoff() currently are called in 2 places:
+SYSCALL_DEFINE1(old_mmap, ...)
+SYSCALL_DEFINE6(mmap_pgoff,...)
+Since both are syscall entry point, omit adding
+checkSeals in the signature of ksys_mmap_pgoff().
 
-3. For non mremap_to() case.
-It is still part of SYSCALL_DEFINE5(mremap,...).
-It calls can_modify_mm() to check sealing in the src address,
-before any update is made to src VMAs.
-Check for dest address is not needed, because dest memory is
-allocated in current mremap(2) call.
+2. ksys_mmap_pgoff() calls vm_mmap_pgoff() with
+checkSeals = MM_SEAL_MMAP, in turn, checkSeals flag is
+passed into do_mmap(),
+Note: Of all the call paths that goes into do_mmap(),
+ksys_mmap_pgoff() is the only place where
+checkSeals = MM_SEAL_MMAP. The rest has checkSeals = 0.
+
+3. In do_mmap(), call can_modify_mm() before any update
+is maded to the VMAs.
+
+For NON-MMU case:
+Set checkSeals = 0 for all cases.
 
 Signed-off-by: Jeff Xu <jeffxu@google.com>
 ---
- mm/mremap.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+ fs/aio.c           |  5 +++--
+ include/linux/mm.h |  5 ++++-
+ ipc/shm.c          |  3 ++-
+ mm/internal.h      |  4 ++--
+ mm/mmap.c          | 22 ++++++++++++++++++----
+ mm/nommu.c         |  6 ++++--
+ mm/util.c          |  8 +++++---
+ 7 files changed, 38 insertions(+), 15 deletions(-)
 
-diff --git a/mm/mremap.c b/mm/mremap.c
-index ac363937f8c4..691fc32d37e4 100644
---- a/mm/mremap.c
-+++ b/mm/mremap.c
-@@ -836,7 +836,27 @@ static unsigned long mremap_to(unsigned long addr, unsigned long old_len,
- 	if ((mm->map_count + 2) >= sysctl_max_map_count - 3)
- 		return -ENOMEM;
- 
-+	/*
-+	 * Check src address for sealing.
-+	 *
-+	 * Note: mremap_to() currently called from one place:
-+	 * SYSCALL_DEFINE4(pkey_mprotect, ...)
-+	 * and not in any other places.
-+	 * Therefore, omit changing the signature of mremap_to()
-+	 * Otherwise, we might need to add checkSeals and pass it
-+	 * from all callers of mremap_to().
-+	 */
-+	if (!can_modify_mm(mm, addr, addr + old_len, MM_SEAL_MREMAP))
-+		return -EACCES;
-+
- 	if (flags & MREMAP_FIXED) {
-+		/*
-+		 * Check dest address for sealing.
-+		 */
-+		if (!can_modify_mm(mm, new_addr, new_addr + new_len,
-+				   MM_SEAL_MREMAP))
-+			return -EACCES;
-+
- 		ret = do_munmap(mm, new_addr, new_len, uf_unmap_early);
- 		if (ret)
- 			goto out;
-@@ -995,6 +1015,11 @@ SYSCALL_DEFINE5(mremap, unsigned long, addr, unsigned long, old_len,
- 		goto out;
+diff --git a/fs/aio.c b/fs/aio.c
+index b3174da80ff6..7f4863d0082d 100644
+--- a/fs/aio.c
++++ b/fs/aio.c
+@@ -557,8 +557,9 @@ static int aio_setup_ring(struct kioctx *ctx, unsigned int nr_events)
  	}
  
-+	if (!can_modify_mm(mm, addr, addr + old_len, MM_SEAL_MREMAP)) {
-+		ret = -EACCES;
-+		goto out;
-+	}
+ 	ctx->mmap_base = do_mmap(ctx->aio_ring_file, 0, ctx->mmap_size,
+-				 PROT_READ | PROT_WRITE,
+-				 MAP_SHARED, 0, &unused, NULL);
++				PROT_READ | PROT_WRITE, MAP_SHARED, 0, &unused,
++				NULL, 0);
 +
- 	/*
- 	 * Always allow a shrinking remap: that just unmaps
- 	 * the unnecessary pages..
+ 	mmap_write_unlock(mm);
+ 	if (IS_ERR((void *)ctx->mmap_base)) {
+ 		ctx->mmap_size = 0;
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index f2f316522f2a..9f496c9f2970 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -3274,9 +3274,12 @@ extern unsigned long get_unmapped_area(struct file *, unsigned long, unsigned lo
+ extern unsigned long mmap_region(struct file *file, unsigned long addr,
+ 	unsigned long len, vm_flags_t vm_flags, unsigned long pgoff,
+ 	struct list_head *uf);
++
+ extern unsigned long do_mmap(struct file *file, unsigned long addr,
+ 	unsigned long len, unsigned long prot, unsigned long flags,
+-	unsigned long pgoff, unsigned long *populate, struct list_head *uf);
++	unsigned long pgoff, unsigned long *populate, struct list_head *uf,
++	unsigned long checkSeals);
++
+ extern int do_vmi_munmap(struct vma_iterator *vmi, struct mm_struct *mm,
+ 			 unsigned long start, size_t len, struct list_head *uf,
+ 			 bool unlock, unsigned long checkSeals);
+diff --git a/ipc/shm.c b/ipc/shm.c
+index 60e45e7045d4..3660f522ecba 100644
+--- a/ipc/shm.c
++++ b/ipc/shm.c
+@@ -1662,7 +1662,8 @@ long do_shmat(int shmid, char __user *shmaddr, int shmflg,
+ 			goto invalid;
+ 	}
+ 
+-	addr = do_mmap(file, addr, size, prot, flags, 0, &populate, NULL);
++	addr = do_mmap(file, addr, size, prot, flags, 0, &populate, NULL,
++			0);
+ 	*raddr = addr;
+ 	err = 0;
+ 	if (IS_ERR_VALUE(addr))
+diff --git a/mm/internal.h b/mm/internal.h
+index d1d4bf4e63c0..2c074d8c6abd 100644
+--- a/mm/internal.h
++++ b/mm/internal.h
+@@ -800,8 +800,8 @@ extern u64 hwpoison_filter_memcg;
+ extern u32 hwpoison_filter_enable;
+ 
+ extern unsigned long  __must_check vm_mmap_pgoff(struct file *, unsigned long,
+-        unsigned long, unsigned long,
+-        unsigned long, unsigned long);
++	unsigned long, unsigned long, unsigned long, unsigned long,
++	unsigned long checkSeals);
+ 
+ extern void set_pageblock_order(void);
+ unsigned long reclaim_pages(struct list_head *folio_list);
+diff --git a/mm/mmap.c b/mm/mmap.c
+index 62d592f16f45..edcadd2bb394 100644
+--- a/mm/mmap.c
++++ b/mm/mmap.c
+@@ -1197,7 +1197,8 @@ static inline bool file_mmap_ok(struct file *file, struct inode *inode,
+ unsigned long do_mmap(struct file *file, unsigned long addr,
+ 			unsigned long len, unsigned long prot,
+ 			unsigned long flags, unsigned long pgoff,
+-			unsigned long *populate, struct list_head *uf)
++			unsigned long *populate, struct list_head *uf,
++			unsigned long checkSeals)
+ {
+ 	struct mm_struct *mm = current->mm;
+ 	vm_flags_t vm_flags;
+@@ -1365,6 +1366,9 @@ unsigned long do_mmap(struct file *file, unsigned long addr,
+ 			vm_flags |= VM_NORESERVE;
+ 	}
+ 
++	if (!can_modify_mm(mm, addr, addr + len, MM_SEAL_MMAP))
++		return -EACCES;
++
+ 	addr = mmap_region(file, addr, len, vm_flags, pgoff, uf);
+ 	if (!IS_ERR_VALUE(addr) &&
+ 	    ((vm_flags & VM_LOCKED) ||
+@@ -1411,7 +1415,17 @@ unsigned long ksys_mmap_pgoff(unsigned long addr, unsigned long len,
+ 			return PTR_ERR(file);
+ 	}
+ 
+-	retval = vm_mmap_pgoff(file, addr, len, prot, flags, pgoff);
++	/*
++	 * vm_mmap_pgoff() currently called from two places:
++	 * SYSCALL_DEFINE1(old_mmap, ...)
++	 * SYSCALL_DEFINE6(mmap_pgoff,...)
++	 * and not in any other places.
++	 * Therefore, omit changing the signature of vm_mmap_pgoff()
++	 * Otherwise, we might need to add checkSeals and pass it
++	 * from all callers of vm_mmap_pgoff().
++	 */
++	retval = vm_mmap_pgoff(file, addr, len, prot, flags, pgoff,
++				MM_SEAL_MMAP);
+ out_fput:
+ 	if (file)
+ 		fput(file);
+@@ -3016,8 +3030,8 @@ SYSCALL_DEFINE5(remap_file_pages, unsigned long, start, unsigned long, size,
+ 		flags |= MAP_LOCKED;
+ 
+ 	file = get_file(vma->vm_file);
+-	ret = do_mmap(vma->vm_file, start, size,
+-			prot, flags, pgoff, &populate, NULL);
++	ret = do_mmap(vma->vm_file, start, size, prot, flags, pgoff,
++			&populate, NULL, 0);
+ 	fput(file);
+ out:
+ 	mmap_write_unlock(mm);
+diff --git a/mm/nommu.c b/mm/nommu.c
+index 8dba41cfc44d..dc83651ee777 100644
+--- a/mm/nommu.c
++++ b/mm/nommu.c
+@@ -1018,7 +1018,8 @@ unsigned long do_mmap(struct file *file,
+ 			unsigned long flags,
+ 			unsigned long pgoff,
+ 			unsigned long *populate,
+-			struct list_head *uf)
++			struct list_head *uf,
++			unsigned long checkSeals)
+ {
+ 	struct vm_area_struct *vma;
+ 	struct vm_region *region;
+@@ -1262,7 +1263,8 @@ unsigned long ksys_mmap_pgoff(unsigned long addr, unsigned long len,
+ 			goto out;
+ 	}
+ 
+-	retval = vm_mmap_pgoff(file, addr, len, prot, flags, pgoff);
++	retval = vm_mmap_pgoff(file, addr, len, prot, flags, pgoff,
++				0);
+ 
+ 	if (file)
+ 		fput(file);
+diff --git a/mm/util.c b/mm/util.c
+index 4ed8b9b5273c..ca9d8c69267c 100644
+--- a/mm/util.c
++++ b/mm/util.c
+@@ -532,7 +532,8 @@ EXPORT_SYMBOL_GPL(account_locked_vm);
+ 
+ unsigned long vm_mmap_pgoff(struct file *file, unsigned long addr,
+ 	unsigned long len, unsigned long prot,
+-	unsigned long flag, unsigned long pgoff)
++	unsigned long flag, unsigned long pgoff,
++	unsigned long checkseals)
+ {
+ 	unsigned long ret;
+ 	struct mm_struct *mm = current->mm;
+@@ -544,7 +545,7 @@ unsigned long vm_mmap_pgoff(struct file *file, unsigned long addr,
+ 		if (mmap_write_lock_killable(mm))
+ 			return -EINTR;
+ 		ret = do_mmap(file, addr, len, prot, flag, pgoff, &populate,
+-			      &uf);
++			      &uf, checkseals);
+ 		mmap_write_unlock(mm);
+ 		userfaultfd_unmap_complete(mm, &uf);
+ 		if (populate)
+@@ -562,7 +563,8 @@ unsigned long vm_mmap(struct file *file, unsigned long addr,
+ 	if (unlikely(offset_in_page(offset)))
+ 		return -EINVAL;
+ 
+-	return vm_mmap_pgoff(file, addr, len, prot, flag, offset >> PAGE_SHIFT);
++	return vm_mmap_pgoff(file, addr, len, prot, flag, offset >> PAGE_SHIFT,
++				0);
+ }
+ EXPORT_SYMBOL(vm_mmap);
+ 
 -- 
 2.42.0.655.g421f12c284-goog
 
