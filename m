@@ -2,61 +2,61 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E099B7CBF7F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Oct 2023 11:33:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F77F7CBF82
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Oct 2023 11:33:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234964AbjJQJd2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 Oct 2023 05:33:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50834 "EHLO
+        id S1343534AbjJQJdm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 Oct 2023 05:33:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234804AbjJQJdM (ORCPT
+        with ESMTP id S1343545AbjJQJdX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Oct 2023 05:33:12 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10FB1199D
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Oct 2023 02:31:41 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2c5028e5b88so57322611fa.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Oct 2023 02:31:41 -0700 (PDT)
+        Tue, 17 Oct 2023 05:33:23 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FBB51703
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Oct 2023 02:32:05 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-4065f29e933so57993755e9.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Oct 2023 02:32:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=blackwall-org.20230601.gappssmtp.com; s=20230601; t=1697535100; x=1698139900; darn=vger.kernel.org;
+        d=blackwall-org.20230601.gappssmtp.com; s=20230601; t=1697535124; x=1698139924; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=fsrKPD/7qupxjLmT8Mi5PT6TYfrkzaLblWhZdBHfHxE=;
-        b=OmC2ctuyf4EpEhDr2vGENxl4NdGoytJEkDc/RFkkAW/bc+s6KDd8LBDne6867rE+FT
-         rvpoHYNpUF5xUK8RQcB5e8gM6RbKULDSm5d6Lb31qpI9eaY3HRoFu1/3oYgbk5r56rwR
-         kk7OA4LzeSLCqasHCHX9umQ1+OFKFS/KczcIm3X0dgVXMEEvcAwzjxkE1oE7I+vINVI5
-         8Rx0nra3c69UEvNqPkuTCYw40TN4FX9AWRJ6E6G4d1SDqzIwZkdFe5ejN6tvVdlUqZhU
-         V39MZmWw6FApHfbmc7bLJtO8N4JfaqXLnCIckD1Pk00NpAgAwsFO8GEgjGDvRrSuWa84
-         hF8A==
+        bh=3kgbT4HUwVO3dRrS+UXwvsR6kcnDepF12o+Z+tvmQWQ=;
+        b=nxYSMDGOG9w29F2QiHmTHFiVkSFhxzTaskRmdCtMRrx6+16AQGUg/9P4k2ltm4iCGN
+         lfeFGx5l7OqyrmMDClilNNQ/4//TWTAJFw1JqrMtSmDR1pNvChrAMmgGIuAtMfcYLlnY
+         3LaTB1d8q5tSmdRdB8y3londsOy8T/nqxOfFOWOxkjJJmOjEmaAOwM6LrzRR5oRfwlRt
+         y4IRUtrGZqjE34l35jhL0Koeo1T+Ugud3B90ZqcCegN2h5MvfrQv936h1TRxq0xLblcS
+         nU5qJBd8s3/MF7oh7EfrqhmvetYJVnRVFgBJWlTCn6yEygHz2RLYeTAqsXWScAaqRZo6
+         tF1g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697535100; x=1698139900;
+        d=1e100.net; s=20230601; t=1697535124; x=1698139924;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fsrKPD/7qupxjLmT8Mi5PT6TYfrkzaLblWhZdBHfHxE=;
-        b=K8Wjv0tqTmEniE0SiT7539wurEoZ+p/7bsyl29hLTNeoFIKfWa0B/AtPmelF3Ddkmk
-         WI/gT4jwdhjU6Fk0ToARUw4Wp+62uJVKfpEZaQs61CmCLyj7iwa02jsMzJa2ikr1RLUm
-         5/SYLOp5PV/lxtUy7XAxmUO65535xuXmC2nUXAJhH6VVfn4lNPC6vE2QPz348GAEo2jc
-         3q9b5Qlz4FAlV1ZdK5nFoJ4jF6IO3xM1XZNFrhokFUhwJCeeTbd/JaLqqX7E/rGtwSQd
-         lfNn4DQ/zkNQl/71h6KxFU6mVn2DqgbxN9x5qI2b7h1BCy8YGGxCQ0XaMKw07wPL/0/C
-         cbpw==
-X-Gm-Message-State: AOJu0YyRQca4P/x+1HRsr/F6pIb+MAqHawfITwW0tRpm9aq2uwwN8e6v
-        RdNtXofNgLO4h2aeY4/MB8TSlA==
-X-Google-Smtp-Source: AGHT+IGzWf/WEPHpLeoowdpeEwKEiGcC14iNGScA2CK7eBKsOPCa8z2I7ioO6L1QMCV6+SIZy+/6yQ==
-X-Received: by 2002:a2e:3c08:0:b0:2c5:1900:47a4 with SMTP id j8-20020a2e3c08000000b002c5190047a4mr1310758lja.0.1697535100199;
-        Tue, 17 Oct 2023 02:31:40 -0700 (PDT)
+        bh=3kgbT4HUwVO3dRrS+UXwvsR6kcnDepF12o+Z+tvmQWQ=;
+        b=JCW1G2aIezFaoCFd8PE8P1dflJ39Tk6JdeeGCfh6vgJd06Rr+jrGP39z0K8TjqN4wx
+         XAUYY2cEjwpvOV3Jbdx0TEoHLsnWfO0hI7XyLP7LWTdlngpnnyZ00QZE9AKQkPfvu8h/
+         P7L8q0FEE2fyje7c8RwaR5/kGnhLxUFH95jVZRW9W+6Gmb287SLezR98W+8ORdiQk2ZA
+         6KK8INbuJY9WHvK3UjDtE7+8sASya42ieiNsWjcz/Ph+ciVS1N4ms1rBvAH/vkACBa/5
+         voDxIQLFppQmZGYBIMevWbXQQbXxy/yRiO+YfFs7FIhZ8a9gwZdpZ0QDWRe7XF+XUoX6
+         FZpA==
+X-Gm-Message-State: AOJu0YzWx3TiBG3NYoLHq1XngHIxKroygAVX8EDIwa5HOmN3RTknt41e
+        yYODrP1KrLr8llXZyVLTXmCKXSh45m8dn4253tz9nMd7lRtv4w==
+X-Google-Smtp-Source: AGHT+IEFCAFLbJTRsa9Q+OR2Uc4qdYh8ECcQZKGv69/zvXpR+D7cI+ScKKATcZsdrGR677hHJRW8VA==
+X-Received: by 2002:a05:600c:3595:b0:3ff:ca80:eda3 with SMTP id p21-20020a05600c359500b003ffca80eda3mr1240848wmq.10.1697535123998;
+        Tue, 17 Oct 2023 02:32:03 -0700 (PDT)
 Received: from [192.168.0.106] (haunt.prize.volia.net. [93.72.109.136])
-        by smtp.gmail.com with ESMTPSA id t7-20020a1c7707000000b0040586360a36sm9267266wmi.17.2023.10.17.02.31.38
+        by smtp.gmail.com with ESMTPSA id a6-20020a05600c348600b0040652e8ca13sm9406919wmq.43.2023.10.17.02.32.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Oct 2023 02:31:39 -0700 (PDT)
-Message-ID: <6f679d47-f099-7345-0d97-6e07bfd7ceec@blackwall.org>
-Date:   Tue, 17 Oct 2023 12:31:38 +0300
+        Tue, 17 Oct 2023 02:32:03 -0700 (PDT)
+Message-ID: <f4657a17-1b81-f8e3-a781-714f1dc5174f@blackwall.org>
+Date:   Tue, 17 Oct 2023 12:32:01 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.5.0
-Subject: Re: [PATCH net-next v5 3/5] net: bridge: Add netlink knobs for number
- / max learned FDB entries
+Subject: Re: [PATCH net-next v5 4/5] net: bridge: Set strict_start_type for
+ br_policy
 Content-Language: en-US
 To:     Johannes Nixdorf <jnixdorf-oss@avm.de>,
         "David S. Miller" <davem@davemloft.net>,
@@ -72,9 +72,9 @@ To:     Johannes Nixdorf <jnixdorf-oss@avm.de>,
 Cc:     bridge@lists.linux-foundation.org, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 References: <20231016-fdb_limit-v5-0-32cddff87758@avm.de>
- <20231016-fdb_limit-v5-3-32cddff87758@avm.de>
+ <20231016-fdb_limit-v5-4-32cddff87758@avm.de>
 From:   Nikolay Aleksandrov <razor@blackwall.org>
-In-Reply-To: <20231016-fdb_limit-v5-3-32cddff87758@avm.de>
+In-Reply-To: <20231016-fdb_limit-v5-4-32cddff87758@avm.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -87,38 +87,28 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On 10/16/23 16:27, Johannes Nixdorf wrote:
-> The previous patch added accounting and a limit for the number of
-> dynamically learned FDB entries per bridge. However it did not provide
-> means to actually configure those bounds or read back the count. This
-> patch does that.
-> 
-> Two new netlink attributes are added for the accounting and limit of
-> dynamically learned FDB entries:
->   - IFLA_BR_FDB_N_LEARNED (RO) for the number of entries accounted for
->     a single bridge.
->   - IFLA_BR_FDB_MAX_LEARNED (RW) for the configured limit of entries for
->     the bridge.
-> 
-> The new attributes are used like this:
-> 
->   # ip link add name br up type bridge fdb_max_learned 256
->   # ip link add name v1 up master br type veth peer v2
->   # ip link set up dev v2
->   # mausezahn -a rand -c 1024 v2
->   0.01 seconds (90877 packets per second
->   # bridge fdb | grep -v permanent | wc -l
->   256
->   # ip -d link show dev br
->   13: br: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 [...]
->       [...] fdb_n_learned 256 fdb_max_learned 256
+> Set any new attributes added to br_policy to be parsed strictly, to
+> prevent userspace from passing garbage.
 > 
 > Signed-off-by: Johannes Nixdorf <jnixdorf-oss@avm.de>
 > ---
->   include/uapi/linux/if_link.h |  2 ++
->   net/bridge/br_netlink.c      | 15 ++++++++++++++-
->   2 files changed, 16 insertions(+), 1 deletion(-)
+>   net/bridge/br_netlink.c | 2 ++
+>   1 file changed, 2 insertions(+)
+> 
+> diff --git a/net/bridge/br_netlink.c b/net/bridge/br_netlink.c
+> index 0c3cf6e6dea2..5ad4abfcb7ba 100644
+> --- a/net/bridge/br_netlink.c
+> +++ b/net/bridge/br_netlink.c
+> @@ -1229,6 +1229,8 @@ static size_t br_port_get_slave_size(const struct net_device *brdev,
+>   }
+>   
+>   static const struct nla_policy br_policy[IFLA_BR_MAX + 1] = {
+> +	[IFLA_BR_UNSPEC]	= { .strict_start_type =
+> +				    IFLA_BR_FDB_N_LEARNED },
+>   	[IFLA_BR_FORWARD_DELAY]	= { .type = NLA_U32 },
+>   	[IFLA_BR_HELLO_TIME]	= { .type = NLA_U32 },
+>   	[IFLA_BR_MAX_AGE]	= { .type = NLA_U32 },
 > 
 
 Acked-by: Nikolay Aleksandrov <razor@blackwall.org>
-
 
