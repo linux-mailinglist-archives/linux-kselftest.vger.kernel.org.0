@@ -2,82 +2,84 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 342367CD00E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Oct 2023 00:35:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46B967CD02C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Oct 2023 01:02:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232593AbjJQWfq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 Oct 2023 18:35:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45644 "EHLO
+        id S235057AbjJQXCD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 Oct 2023 19:02:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58438 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjJQWfp (ORCPT
+        with ESMTP id S234909AbjJQXCA (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Oct 2023 18:35:45 -0400
-Received: from mail-ua1-x92a.google.com (mail-ua1-x92a.google.com [IPv6:2607:f8b0:4864:20::92a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 231C1D3;
-        Tue, 17 Oct 2023 15:35:43 -0700 (PDT)
-Received: by mail-ua1-x92a.google.com with SMTP id a1e0cc1a2514c-7b652e785dbso1670703241.0;
-        Tue, 17 Oct 2023 15:35:43 -0700 (PDT)
+        Tue, 17 Oct 2023 19:02:00 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716B211C
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Oct 2023 16:01:52 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id d75a77b69052e-41b813f0a29so64991cf.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Oct 2023 16:01:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1697582142; x=1698186942; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1697583711; x=1698188511; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wdeKf2/h6eRXVjrIhtW4p5eKxKczJ25w9PIDmoQxibo=;
-        b=kz9JnNxIUjf6OO+HO6ozFGxWY9E3XWxXqtZBmDfSzNx4d2FAWGHTk0r8Kh+sMBdVGN
-         RR8dH13ai0vJx+omnUDA34J94KuTaWGgk7v50Hv4V/Dntj8JhkpctybYPrm5yRd7hUbo
-         BX3GBr+CIOwpy2ZExkt+XzgE8Zp0CKqgZa5MuTANqZvvEYo2sm2waZ8kFh0pwAQgl6fp
-         knqmhchJa0ZehJRzuKH3I7buMxUY/Sk0Y8BtIOQv8zRTlRFvqyD/hEmAy2Xl5G7mVymS
-         fkVw/9y0R0TZ33LE6oAedBlbOH6JHJ25aYnq0CSbFjhVIuaUMkPLzfWjzGH/uHPxyZ65
-         ytKQ==
+        bh=ImnM3gTgvQUDZbbKNrv2s4PovNIFWxZGTx+tFBxEKCA=;
+        b=A7yO6MSch9D1Y7KGob8X8JTG8G9ij12MKR7I7utx1DUsTtuuQWiuYuFCPD/qg/hq0E
+         edj2wqPSVvbGNpHCl9278UUmDyxBzdgwkINhWwXbB1lYZ+pTcQbqOWFZLLqF2nbX+8k/
+         j4llB2vEaFCGO5SETUEoIzd6x1zdt4U8wkYTniL8fsrXJ/mAfFWF6igxbRUysywevlBs
+         QhzlhES29vTjn26T6zpTxlwPR0Wdke62227H/gnmSwAqLc4y2MvnRMLGWkEKAXhkKKhw
+         H6ULLh0h55BWIxoPVIGTeuYChQLfhXUY0/w3pfQeW4QLBS7nlyKHB2ltDx8v1Ib+YkWb
+         zcHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697582142; x=1698186942;
+        d=1e100.net; s=20230601; t=1697583711; x=1698188511;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wdeKf2/h6eRXVjrIhtW4p5eKxKczJ25w9PIDmoQxibo=;
-        b=ef14aSyDOaG/WdbkyvrOi2P0Sh50+f8oFeixGt2X7B6zfV9+ex3w6ypSrq6yZ+kGSl
-         Jz+8YmAZGpXLhRx/bQoNsfqv1g9MwMQndBIOxdnmltiYdr2nhf+Li6QdM0akFmL9N1Sz
-         xw7lRk12enTysdSFvJgpCqDnSIy3/xXvW+e+BiXfW3UFnreyp/H48Co/sipstfEThMTM
-         ScogehiUrX5S3CldeUOqOGsqL5foU/hNFTS6v35AU9Mnxm9pB4KJr2+5a5tAnnCYOFGf
-         uhAYR5VlUYFmDz4VNeTb2N6HsFaPIvsE9TzC/w6TobHzjM22oLiv7q1ppuWXU0ZNUtGZ
-         X2/Q==
-X-Gm-Message-State: AOJu0YwHWt/x23qSjeB4ZQfqolSZvjL2umELKC0rW7kuUpKg6H48KNpJ
-        qsI+UvmeooRgzcT/IbYF/KLZxyUzgod+lSjAp/w=
-X-Google-Smtp-Source: AGHT+IH5j9aX5uFG6qIm/ceWB+MagtIHZd+LHx139RfrZUAJXvcGu6hpgvKLuHEaHwGfMDIBoSSU12wdggts1ghINmc=
-X-Received: by 2002:a67:cc15:0:b0:452:60c5:20b with SMTP id
- q21-20020a67cc15000000b0045260c5020bmr3720336vsl.15.1697582142134; Tue, 17
- Oct 2023 15:35:42 -0700 (PDT)
+        bh=ImnM3gTgvQUDZbbKNrv2s4PovNIFWxZGTx+tFBxEKCA=;
+        b=GAyDWHPsRvqHjL3LNYC8Df9EWK1Ohi5YupLwoJCsvL9Yc2KaY/P3nHOvzzj0Vj151F
+         lm0PySrXvY6lgrWYrpoJVYSGigOeqBMuVzP4lEXdV7FH/AnjFZj9f4mFv6hJ/Jv/EgVk
+         hpZv7+TEJ9d3uxXSBdauS3lPxX8aQClLceWOwZHGj/KO/dcronRL0ib4cJ/BRyvMMytx
+         bSK8C+o5qfhi1mKKRwONn4wsesqYRUmUbAeOAy9obSM5cKTkyUqbM4JSNkl8CrQ1ikJc
+         sk95aADn5JZASWDn8JRxK8/cHZuSQl2iAIfuNoHrV8ecIawSkS2fcSbJAl0CaThkPzNk
+         VXBg==
+X-Gm-Message-State: AOJu0Yxxy44yWRD8inwdpaZyQwYPf6Rg8lThlt9lDFiCnYqQAC3MavEV
+        LqPju7v6MPc0uEt7v+BrC8DoXUBZDo3uCa40PRMSMg==
+X-Google-Smtp-Source: AGHT+IFRiCphE8SGRZza9wFnaYv5dtjuDGiQxMHSXLNnXD68r7Tsnp6XlmaQHLEDn/NPKGLCG14R2gjFx0iFXzfE8zw=
+X-Received: by 2002:a05:622a:a047:b0:41b:ef8f:dcbc with SMTP id
+ ju7-20020a05622aa04700b0041bef8fdcbcmr149648qtb.0.1697583710994; Tue, 17 Oct
+ 2023 16:01:50 -0700 (PDT)
 MIME-Version: 1.0
-References: <20231016143828.647848-1-jeffxu@chromium.org> <ZS1URCBgwGGj9JtM@casper.infradead.org>
- <CAKbZUD2A+=bp_sd+Q0Yif7NJqMu8p__eb4yguq0agEcmLH8SDQ@mail.gmail.com> <CALmYWFtOgMAQDGNoM6k2Ev4kMHD396wwH+rVDODaSjsyVMDogg@mail.gmail.com>
-In-Reply-To: <CALmYWFtOgMAQDGNoM6k2Ev4kMHD396wwH+rVDODaSjsyVMDogg@mail.gmail.com>
-From:   Pedro Falcato <pedro.falcato@gmail.com>
-Date:   Tue, 17 Oct 2023 23:35:30 +0100
-Message-ID: <CAKbZUD2j1jbomCAVxUX_JmG1rfa8udc=5SqVOpDgc-3GnSTbAQ@mail.gmail.com>
+References: <20231016143828.647848-1-jeffxu@chromium.org> <CAHk-=whFZoap+DBTYvJx6ohqPwn11Puzh7q4huFWDX9vBwXHgg@mail.gmail.com>
+ <CALmYWFtTDAb_kpZdAe_xspqwNgK1NWJmjTxaTC=jDEMzfe297Q@mail.gmail.com>
+ <CAHk-=wj87GMTH=5901ob=SjQqegAm2JYBE7E4J7skJzE64U-wQ@mail.gmail.com> <55960.1697566804@cvs.openbsd.org>
+In-Reply-To: <55960.1697566804@cvs.openbsd.org>
+From:   Jeff Xu <jeffxu@google.com>
+Date:   Tue, 17 Oct 2023 16:01:13 -0700
+Message-ID: <CALmYWFs81T=XnT=AXQTo0+9FXo=OBAV_4rrYPSn9-16O-gBTZg@mail.gmail.com>
 Subject: Re: [RFC PATCH v1 0/8] Introduce mseal() syscall
-To:     Jeff Xu <jeffxu@google.com>
-Cc:     Matthew Wilcox <willy@infradead.org>, jeffxu@chromium.org,
-        akpm@linux-foundation.org, keescook@chromium.org,
-        sroettger@google.com, jorgelo@chromium.org, groeck@chromium.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, jannh@google.com, surenb@google.com,
-        alex.sierra@amd.com, apopple@nvidia.com,
-        aneesh.kumar@linux.ibm.com, axelrasmussen@google.com,
-        ben@decadent.org.uk, catalin.marinas@arm.com, david@redhat.com,
-        dwmw@amazon.co.uk, ying.huang@intel.com, hughd@google.com,
-        joey.gouly@arm.com, corbet@lwn.net, wangkefeng.wang@huawei.com,
-        Liam.Howlett@oracle.com, torvalds@linux-foundation.org,
-        lstoakes@gmail.com, mawupeng1@huawei.com, linmiaohe@huawei.com,
-        namit@vmware.com, peterx@redhat.com, peterz@infradead.org,
-        ryan.roberts@arm.com, shr@devkernel.io, vbabka@suse.cz,
-        xiujianfeng@huawei.com, yu.ma@intel.com, zhangpeng362@huawei.com,
-        dave.hansen@intel.com, luto@kernel.org,
-        linux-hardening@vger.kernel.org
+To:     Theo de Raadt <deraadt@openbsd.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        jeffxu@chromium.org, akpm@linux-foundation.org,
+        keescook@chromium.org, sroettger@google.com, jorgelo@chromium.org,
+        groeck@chromium.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        jannh@google.com, surenb@google.com, alex.sierra@amd.com,
+        apopple@nvidia.com, aneesh.kumar@linux.ibm.com,
+        axelrasmussen@google.com, ben@decadent.org.uk,
+        catalin.marinas@arm.com, david@redhat.com, dwmw@amazon.co.uk,
+        ying.huang@intel.com, hughd@google.com, joey.gouly@arm.com,
+        corbet@lwn.net, wangkefeng.wang@huawei.com,
+        Liam.Howlett@oracle.com, lstoakes@gmail.com, willy@infradead.org,
+        mawupeng1@huawei.com, linmiaohe@huawei.com, namit@vmware.com,
+        peterx@redhat.com, peterz@infradead.org, ryan.roberts@arm.com,
+        shr@devkernel.io, vbabka@suse.cz, xiujianfeng@huawei.com,
+        yu.ma@intel.com, zhangpeng362@huawei.com, dave.hansen@intel.com,
+        luto@kernel.org, linux-hardening@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,145 +87,160 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Oct 17, 2023 at 10:34=E2=80=AFPM Jeff Xu <jeffxu@google.com> wrote:
+On Tue, Oct 17, 2023 at 11:20=E2=80=AFAM Theo de Raadt <deraadt@openbsd.org=
+> wrote:
 >
-> On Tue, Oct 17, 2023 at 8:30=E2=80=AFAM Pedro Falcato <pedro.falcato@gmai=
-l.com> wrote:
-> >
-> > On Mon, Oct 16, 2023 at 4:18=E2=80=AFPM Matthew Wilcox <willy@infradead=
-.org> wrote:
-> > >
-> > > On Mon, Oct 16, 2023 at 02:38:19PM +0000, jeffxu@chromium.org wrote:
-> > > > Modern CPUs support memory permissions such as RW and NX bits. Linu=
-x has
-> > > > supported NX since the release of kernel version 2.6.8 in August 20=
-04 [1].
-> > >
-> > > This seems like a confusing way to introduce the subject.  Here, you'=
-re
-> > > talking about page permissions, whereas (as far as I can tell), mseal=
-() is
-> > > about making _virtual_ addresses immutable, for some value of immutab=
-le.
-> > >
-> > > > Memory sealing additionally protects the mapping itself against
-> > > > modifications. This is useful to mitigate memory corruption issues =
-where
-> > > > a corrupted pointer is passed to a memory management syscall. For e=
-xample,
-> > > > such an attacker primitive can break control-flow integrity guarant=
-ees
-> > > > since read-only memory that is supposed to be trusted can become wr=
-itable
-> > > > or .text pages can get remapped. Memory sealing can automatically b=
-e
-> > > > applied by the runtime loader to seal .text and .rodata pages and
-> > > > applications can additionally seal security critical data at runtim=
-e.
-> > > > A similar feature already exists in the XNU kernel with the
-> > > > VM_FLAGS_PERMANENT [3] flag and on OpenBSD with the mimmutable sysc=
-all [4].
-> > > > Also, Chrome wants to adopt this feature for their CFI work [2] and=
- this
-> > > > patchset has been designed to be compatible with the Chrome use cas=
-e.
-> > >
-> > > This [2] seems very generic and wide-ranging, not helpful.  [5] was m=
-ore
-> > > useful to understand what you're trying to do.
-> > >
-> > > > The new mseal() is an architecture independent syscall, and with
-> > > > following signature:
-> > > >
-> > > > mseal(void addr, size_t len, unsigned int types, unsigned int flags=
-)
-> > > >
-> > > > addr/len: memory range.  Must be continuous/allocated memory, or el=
-se
-> > > > mseal() will fail and no VMA is updated. For details on acceptable
-> > > > arguments, please refer to comments in mseal.c. Those are also full=
-y
-> > > > covered by the selftest.
-> > >
-> > > Mmm.  So when you say "continuous/allocated" what you really mean is
-> > > "Must have contiguous VMAs" rather than "All pages in this range must
-> > > be populated", yes?
-> > >
-> > > > types: bit mask to specify which syscall to seal, currently they ar=
-e:
-> > > > MM_SEAL_MSEAL 0x1
-> > > > MM_SEAL_MPROTECT 0x2
-> > > > MM_SEAL_MUNMAP 0x4
-> > > > MM_SEAL_MMAP 0x8
-> > > > MM_SEAL_MREMAP 0x10
-> > >
-> > > I don't understand why we want this level of granularity.  The OpenBS=
-D
-> > > and XNU examples just say "This must be immutable*".  For values of
-> > > immutable that allow downgrading access (eg RW to RO or RX to RO),
-> > > but not upgrading access (RW->RX, RO->*, RX->RW).
-> > >
-> > > > Each bit represents sealing for one specific syscall type, e.g.
-> > > > MM_SEAL_MPROTECT will deny mprotect syscall. The consideration of b=
-itmask
-> > > > is that the API is extendable, i.e. when needed, the sealing can be
-> > > > extended to madvise, mlock, etc. Backward compatibility is also eas=
-y.
-> > >
-> > > Honestly, it feels too flexible.  Why not just two flags to mprotect(=
-)
-> > > -- PROT_IMMUTABLE and PROT_DOWNGRADABLE.  I can see a use for that --
-> > > maybe for some things we want to be able to downgrade and for other
-> > > things, we don't.
-> >
-> > I think it's worth pointing out that this suggestion (with PROT_*)
-> > could easily integrate with mmap() and as such allow for one-shot
-> > mmap() + mseal().
-> > If we consider the common case as 'addr =3D mmap(...); mseal(addr);', i=
-t
-> > definitely sounds like a performance win as we halve the number of
-> > syscalls for a sealed mapping. And if we trivially look at e.g OpenBSD
-> > ld.so code, mmap() + mimmutable() and mprotect() + mimmutable() seem
-> > like common patterns.
-> >
-> Yes. mmap() can support sealing as well, and memory is allocated as
-> immutable from begining.
-> This is orthogonal to mseal() though.
-
-I don't see how this can be orthogonal to mseal().
-In the case we opt for adding PROT_ bits, we should more or less only
-need to adapt calc_vm_prot_bits(), and the rest should work without
-issues.
-vma merging won't merge vmas with different prots. The current
-interfaces (mmap and mprotect) would work just fine.
-In this case, mseal() or mimmutable() would only be needed if you need
-to set immutability over a range of VMAs with different permissions.
-
-Note: modifications should look kinda like this: https://godbolt.org/z/Tbjj=
-d14Pe
-The only annoying wrench in my plans here is that we have effectively
-run out of vm_flags bits in 32-bit architectures, so this approach as
-I described is not compatible with 32-bit.
-
-> In case of ld.so, iiuc, memory can be first allocated as W, then later
-> changed to RO, for example, during symbol resolution.
-> The important point is that the application can decide what type of
-> sealing it wants, and when to apply it.  There needs to be an api(),
-> that can be mseal() or mprotect2() or mimmutable(), the naming is not
-> important to me.
+> Linus Torvalds <torvalds@linux-foundation.org> wrote:
 >
-> mprotect() in linux have the following signature:
-> int mprotect(void addr[.len], size_t len, int prot);
-> the prot bitmasks are all taken here.
-> I have not checked the prot field in mmap(), there might be bits left,
-> even not, we could have mmap2(), so that is not an issue.
+> > On Tue, 17 Oct 2023 at 02:08, Jeff Xu <jeffxu@google.com> wrote:
+> > >
+> > > It is probably worth noting that I choose to check one and only
+> > > one sealing type per syscall. i.e. munmap(2) checks
+> > > MM_SEAL_MUNMAP only.
+> >
+> > Yeah, this is wrong.
+> >
+> > It's wrong exactly because other system calls will unmap things too.
+> >
+> > Using mmap() to over-map something will unmap the old one.
+> >
+> > Same goes for mremap() to move over an existing mapping.
+> >
+> > So the whole "do things by the name of the system call" is not workable=
+.
+> >
+> > All that matters is what the system calls *do*, not what their name is.
+>
+> I agree completely...
+>
+> mseal() is a clone of mimmutable(2), but with an extremely
+> over-complicated API based upon dubious arguments.
+>
+> I designed mimmutable(2) [1] in OpenBSD, it took about a year to get all
+> the components working correctly.  There were many intermediate API
+> during development, but in the end the API is simply:
+>
+>      int mimmutable(void *addr, size_t len);
+>
+> The kernel code for mimmutable() traverses the specified VA range.  In
+> that range, it will find unmapped sub-regions (which are are ignored)
+> and mapped sub-regions. For these mapped regions, it does not care what
+> the permissions are, it just marks each sub-region as immutable.
+>
+> Later on, when any VM operation request upon a VA range attempts to
+>       (1) change the permissions
+>       (2) to re-map on top
+>       (3) or dispose of the mapping,
+> that operation is refused with errno EPERM.  We don't care where the
+> request comes from (ie. what system call).  It is a behaviour of the
+> VM system, when asked to act upon a VA sub-range mapping.
+>
+> Very simple semantics.
+>
+> The only case where the immutable marker is ignored is during address spa=
+ce
+> teardown as a result of process termination.
+>
+May I ask, for BSD's implementation of immutable(), do you cover
+things such as mlock(),
+madvice() ? or just the protection bit (WRX) + remap() + unmap().
 
-I don't see what you mean. We have plenty of prot bits left (32-bits,
-and we seem to have around 8 different bits used).
-And even if we didn't, prot is the same in mprotect and mmap and mmap2 :)
+In other words:
+Is BSD's definition of immutable equivalent to
+MM_SEAL_MPROTECT|MM_SEAL_MUNMAP|MM_SEAL_MREMAP|MM_SEAL_MMAP, of this patch =
+set ?
 
-The only issue seems to be that 32-bit ran out of vm_flags, but that
-can probably be worked around if need be.
+I hesitate to introduce the concept of immutable into linux because I don't=
+ know
+all the scenarios present in linux where VMAs's metadata can be
+modified. As Jann's email pointed out,
+There could be quite a few things we still need to deal with, to
+completely block the possibility,
+e.g. malicious code attempting to write to a RO memory or change RW
+memory to RWX.
 
---=20
-Pedro
+If, as part of immutable, I also block madvice(), mlock(), which also updat=
+es
+VMA's metadata, so by definition, I could.  What if the user wants the
+features in
+madvice() and at the same time, also wants their .text protected ?
+
+Also, if linux introduces a new syscall that depends on a new metadata of V=
+MA,
+say msecret(), (for discussion purpose), should immutable
+automatically support that ?
+
+Without those questions answered, I couldn't choose the route of
+immutable() yet.
+
+-Jeff
+
+
+
+>
+> In his submission of this API, Jeff Xu makes three claims I find dubious;
+>
+> > Also, Chrome wants to adopt this feature for their CFI work [2] and thi=
+s
+> > patchset has been designed to be compatible with the Chrome use case.
+>
+> I specifically designed mimmutable(2) with chrome in mind, and the
+> chrome binary running on OpenBSD is full of immutable mappings.  All the
+> library regions automatically become immutable because ld.so can infer
+> it and do the mimmutable calls for the right subregions.
+>
+> So this chrome work has already been done by OpenBSD, and it is dead
+> simple.  During early development I thought mimmutable(2) would be
+> called by applications or libraries, but I was dead wrong: 99.9% of
+> calls are from ld.so, and no applications need to call it, these are the
+> two exceptions:
+>
+> In OpenBSD, mimmutable() is used in libc malloc() to lock-down some data
+> structures at initialization time, so they canoot be attacked to create
+> an invariant for use in ROP return-to-libc style methods.
+>
+> In Chrome, there is a v8_flags variable rounded out to a full page, and
+> placed in .data.  Chrome initialized this variable, and wants to mprotect
+> PROT_READ, but .data has been made immutable by ld.so.  So we force this
+> page into a new ELF section called "openbsd.mutable" which also behaves R=
+W
+> like .data.  Where chrome does the mprotect  PROT_READ, it now also perfo=
+rms
+> mimmutable() on that page.
+>
+> > Having a seal type per syscall type helps to add the feature incrementa=
+lly.
+>
+> Yet, somehow OpenBSD didn't do it per syscall, and we managed to make our
+> entire base operating system and 10,000+ applications automatically recei=
+ve
+> the benefits.  In one year's effort.  The only application which cared ab=
+out
+> it was chrome, described in the previous paragraph.
+>
+> I think Jeff's idea here is super dangerous.  What will actually happen
+> is people will add a few mseal() sub-operations and think the job is done=
+.
+> It isn't done.  They need all the mseal() requests, or the mapping are
+> not safe.
+>
+> It is very counterproductive to provide developers a complex API that has
+> insecure suboperations.
+>
+> > Applications also know exactly what is sealed.
+>
+> Actually applicatins won't know because there is no tooling to inspect th=
+is --
+> but I will argue further that applications don't need to know.  Immutable
+> marking is a system decision, not a program decision.
+>
+>
+> I'll close by asking for a new look at the mimmutable(2) API we settled
+> on for OpenBSD.  I think there is nothing wrong with it.  I'm willing to
+> help guide glibc / ld.so / musl teams through the problems they may find
+> along the way, I know where the skeletons are buried.  Two in
+> particular: -znow RELRO already today, and xonly-text in the future.
+>
+>
+> [1] https://man.openbsd.org/mimmutable.2
+>
