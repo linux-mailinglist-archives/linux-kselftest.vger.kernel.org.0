@@ -2,141 +2,114 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D3A27CC96F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Oct 2023 19:05:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 338CC7CC9C5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Oct 2023 19:22:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233493AbjJQRFR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 Oct 2023 13:05:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55846 "EHLO
+        id S234304AbjJQRWU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 Oct 2023 13:22:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232644AbjJQRFQ (ORCPT
+        with ESMTP id S229848AbjJQRWT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Oct 2023 13:05:16 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D99EAB
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Oct 2023 10:05:14 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-9c603e235d1so150102766b.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Oct 2023 10:05:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1697562312; x=1698167112; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8E8o2x2e8DzqPr/PksD/TO2/JNV/3RJFF1TJnJk/P9E=;
-        b=XBe8V4YdGbmwAIXpFbv6jSV+X95YhiQ4nqUfjkeicXO0AlbXxpyNl+2JK5Cdvo8mu7
-         B8qOhfQwvBcR0wvjybPHX8GIT/F8BHjnr1qzQwDbyQr4YFkcN2sp/dr8S8JElabXeqon
-         LiDMGbdLehPXA5DYj/7WomQKJNgW57N/Lh2RY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697562312; x=1698167112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8E8o2x2e8DzqPr/PksD/TO2/JNV/3RJFF1TJnJk/P9E=;
-        b=MVFB3HiGJogwP3dfgcLgYWM5uM7wiHaBQjYEG/hZLJtKPRWaFV7M4TswNMdLkEdAoe
-         sNriL9Bsk2VmGzqbbpem2DeGObEGomxGKJe4KmdIRE83lRwH9/yfGu4SKOX5cydgYq8z
-         X+d03CE7ia0EtbgKU8dUiHO47lnbsFf+eWmEDnGuGuruyUq4nuwFAC7JvhfuLpfDujM9
-         jUkuemWV8hD8xfm+DWNsCjGm+VXjhuWs36HGSE1axrafUqvuv9X34+BRLvWL1haYAfn1
-         dzpKzla5gCo1lLoLuPrlQ70wactnUQN5xB4e8ptnBC9r9cdV0X9Vto47DGq2Br4FL+fr
-         S03A==
-X-Gm-Message-State: AOJu0YxPV2zEyVpeoHvnwinE3XIeogTbuZSn+heF0DGtfQaf3lxwl5pz
-        D9h5IE3Zvtz3L7jZ7jB2AHY8E6SF5gsEnUNtR+UYKsLz
-X-Google-Smtp-Source: AGHT+IGK+Z6i5uidq9jTn1sveO/cYF1mQE24lzvlhFAbze8pOYYySRvVr2fitrfLITjSVAx0jiZbhA==
-X-Received: by 2002:a17:906:dacb:b0:9a1:aea2:d18d with SMTP id xi11-20020a170906dacb00b009a1aea2d18dmr2107682ejb.48.1697562312670;
-        Tue, 17 Oct 2023 10:05:12 -0700 (PDT)
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com. [209.85.218.42])
-        by smtp.gmail.com with ESMTPSA id me8-20020a170906aec800b009928b4e3b9fsm133655ejb.114.2023.10.17.10.05.11
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Oct 2023 10:05:12 -0700 (PDT)
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-9b95622c620so1034355166b.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Oct 2023 10:05:11 -0700 (PDT)
-X-Received: by 2002:a17:907:d1c:b0:9b2:b2f8:85dd with SMTP id
- gn28-20020a1709070d1c00b009b2b2f885ddmr2808664ejc.34.1697562311687; Tue, 17
- Oct 2023 10:05:11 -0700 (PDT)
+        Tue, 17 Oct 2023 13:22:19 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D5994;
+        Tue, 17 Oct 2023 10:22:18 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1DDEC433C7;
+        Tue, 17 Oct 2023 17:22:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1697563338;
+        bh=AqQvqXpBdDwQ1bSutr+7JjsmD9aFJQI9wkzLVRowwi4=;
+        h=From:Date:Subject:To:Cc:From;
+        b=p1azuokVOEAWEJdrYmvKxX0sn1rYFF2CFBrJOlyv+k1ZcOYVlvMngX7VJKOzq0r3h
+         eRev0ON4tkw/z3lUf/be+0sRlGXalz4Dk6nFPQ75rtNK5hq33f6GsvWRjxGsRnySUX
+         8YebPiV6t5F7eAUyNjm0apondcJKDTuFtPfWEai1qcsSuP0UnmMcvDuAmwC/vys3kx
+         L5cYLC6I21b7yQBz573ZlPH96K8sNLzpQR1NfAXa1llYEE/vSqSbqolHWd8R8Gyuxh
+         bFHoVN5S+j+zMi9u+BIBL9gKclwN3yusCM4lrYrjFqAT6wXA6755j739vNrtGnCTku
+         KoSwjoeAruK0w==
+From:   Mark Brown <broonie@kernel.org>
+Date:   Tue, 17 Oct 2023 18:22:01 +0100
+Subject: [PATCH v2] KVM: selftests: Initialise dynamically allocated
+ configuration names
 MIME-Version: 1.0
-References: <20231017090815.1067790-1-jeffxu@chromium.org> <20231017090815.1067790-8-jeffxu@chromium.org>
-In-Reply-To: <20231017090815.1067790-8-jeffxu@chromium.org>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 17 Oct 2023 10:04:54 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wh+6n6f0zuezKem+W=aytHMv2bib6Fbrg-xnWOoujFb6g@mail.gmail.com>
-Message-ID: <CAHk-=wh+6n6f0zuezKem+W=aytHMv2bib6Fbrg-xnWOoujFb6g@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 7/8] mseal:Check seal flag for mmap(2)
-To:     jeffxu@chromium.org
-Cc:     akpm@linux-foundation.org, keescook@chromium.org, jannh@google.com,
-        sroettger@google.com, willy@infradead.org,
-        gregkh@linuxfoundation.org, jeffxu@google.com,
-        jorgelo@chromium.org, groeck@chromium.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, surenb@google.com, alex.sierra@amd.com,
-        apopple@nvidia.com, aneesh.kumar@linux.ibm.com,
-        axelrasmussen@google.com, ben@decadent.org.uk,
-        catalin.marinas@arm.com, david@redhat.com, dwmw@amazon.co.uk,
-        ying.huang@intel.com, hughd@google.com, joey.gouly@arm.com,
-        corbet@lwn.net, wangkefeng.wang@huawei.com,
-        Liam.Howlett@oracle.com, lstoakes@gmail.com, mawupeng1@huawei.com,
-        linmiaohe@huawei.com, namit@vmware.com, peterx@redhat.com,
-        peterz@infradead.org, ryan.roberts@arm.com, shr@devkernel.io,
-        vbabka@suse.cz, xiujianfeng@huawei.com, yu.ma@intel.com,
-        zhangpeng362@huawei.com, dave.hansen@intel.com, luto@kernel.org,
-        linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20231017-kvm-get-reg-list-str-init-v2-1-ee30b1df3e50@kernel.org>
+X-B4-Tracking: v=1; b=H4sIALjCLmUC/32NzQ6CMBCEX4X07Jr+EEBPvofhgLAtG7CQbdNoC
+ O9uJfHq8ZvMfLOJgEwYxLXYBGOiQIvPoE+F6MfOOwQaMgsttVFSaZjSExxGYHQwU4gQIgN5ilB
+ XfYNDieoyVCLvV0ZLr8N9bzOPub3w+7hK6pv+rOaPNSlQIE1pTS2tbbrHbUL2OJ8XdqLd9/0D1
+ /s0g8MAAAA=
+To:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Haibo Xu <haibo1.xu@intel.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Anup Patel <anup@brainfault.org>
+Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.13-dev-0438c
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1595; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=AqQvqXpBdDwQ1bSutr+7JjsmD9aFJQI9wkzLVRowwi4=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBlLsLGqB2SxRIjasfLDomMD3wyf0dEHwGneDeBeeGt
+ 1upbc0iJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZS7CxgAKCRAk1otyXVSH0N5eB/
+ sEcJpkSMLVRTIa8dZjGtSsrneIR07N4VVGdxY/8NuKNsBOyYifRdrL+bQ9oJaFbOM4ixxcGxBxxGqW
+ qGOxZIOPrHQ00IE46XNnvVRKR93Mf8MgDFqjfNjL37sfB8i7GSmE22XXmQCdrGk+BosOIV+U41+KAL
+ deH/BJL6KwLSbj4jmqUOK7Ww1ft1J9qex7wHrYX/XfEErR4ZzE59Rf3YySzpVAYRqOruNw7AJFvssP
+ VfdOIqu9riy+T0eLH8WGhIptLiZPc5za7GG3MY94Qyj/PQqFH2yJe9xKxyqOwUNhp8PnOF6Trmy+uO
+ +GsaaE5m/KV7L9jN93tJdi9ZbCOt35
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 17 Oct 2023 at 02:08, <jeffxu@chromium.org> wrote:
->
-> Note: Of all the call paths that goes into do_mmap(),
-> ksys_mmap_pgoff() is the only place where
-> checkSeals = MM_SEAL_MMAP. The rest has checkSeals = 0.
+When we dynamically generate a name for a configuration in get-reg-list
+we use strcat() to append to a buffer allocated using malloc() but we
+never initialise that buffer. Since malloc() offers no guarantees
+regarding the contents of the memory it returns this can lead to us
+corrupting, and likely overflowing, the buffer:
 
-Again, this is all completely nonsensical.
+  vregs: PASS
+  vregs+pmu: PASS
+  sve: PASS
+  sve+pmu: PASS
+  vregs+pauth_address+pauth_generic: PASS
+  X�vr+gspauth_addre+spauth_generi+pmu: PASS
 
-First off, since seals only exist on existing vma's, the "MMAP seal"
-makes no sense to begin with. You cannot mmap twice - and mmap'ing
-over an existing mapping involves unmapping the old one.
+Initialise the buffer to an empty string to avoid this.
 
-So a "mmap seal" is nonsensical. What should protect a mapping is "you
-cannot unmap this". That automatically means that you cannot mmap over
-it.
+Fixes: 2f9ace5d4557 ("KVM: arm64: selftests: get-reg-list: Introduce vcpu configs")
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+Changes in v2:
+- Update Fixes: tag.
+- Link to v1: https://lore.kernel.org/r/20231013-kvm-get-reg-list-str-init-v1-1-034f370ff8ab@kernel.org
+---
+ tools/testing/selftests/kvm/get-reg-list.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-In other words, all these sealing flag semantics are completely random
-noise. None of this makes sense.
+diff --git a/tools/testing/selftests/kvm/get-reg-list.c b/tools/testing/selftests/kvm/get-reg-list.c
+index be7bf5224434..dd62a6976c0d 100644
+--- a/tools/testing/selftests/kvm/get-reg-list.c
++++ b/tools/testing/selftests/kvm/get-reg-list.c
+@@ -67,6 +67,7 @@ static const char *config_name(struct vcpu_reg_list *c)
+ 
+ 	c->name = malloc(len);
+ 
++	c->name[0] = '\0';
+ 	len = 0;
+ 	for_each_sublist(c, s) {
+ 		if (!strcmp(s->name, "base"))
 
-You need to EXPLAIN what the concept is.
+---
+base-commit: 6465e260f48790807eef06b583b38ca9789b6072
+change-id: 20231012-kvm-get-reg-list-str-init-76c8ed4e19d6
 
-Honestly, there is only two kinds of sealing that makes sense:
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
 
- - you cannot change the permissions of some area
-
- - you cannot unmap an area
-
-where that first version might then have sub-cases (maybe you can make
-permissions _stricter_, but not the other way)?
-
-And dammit, once something is sealed, it is SEALED. None of this crazy
-"one place honors the sealing, random other places do not".
-
-I do *NOT* want to see another random patch series tomorrow that
-modifies something small here.
-
-I want to get an EXPLANATION and the whole "what the f*ck is the
-concept". No more random rules. No more nonsensical code. No more of
-this "one place honors seals, another one does not".
-
-Seriously. As long as this is chock-full of these kinds of random
-"this makes no sense", please don't send any patches AT ALL. Explain
-the high-level rules first, and if you cannot explain why one random
-place does something different from all the other random places, don't
-even bother.
-
-No more random code. No more random seals. None of this crazy "you
-ostensibly can't unmap a vma, but you you can actually unmap it by
-mmap'ing over it and then unmapping the new one".
-
-             Linus
