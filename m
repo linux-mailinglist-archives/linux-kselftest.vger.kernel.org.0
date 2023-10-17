@@ -2,1544 +2,225 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEFB37CBE8C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Oct 2023 11:08:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E899F7CBF54
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Oct 2023 11:29:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234835AbjJQJIq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 Oct 2023 05:08:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47888 "EHLO
+        id S1343607AbjJQJ3r (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 Oct 2023 05:29:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234843AbjJQJIb (ORCPT
+        with ESMTP id S234958AbjJQJ3e (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Oct 2023 05:08:31 -0400
-Received: from mail-ot1-x333.google.com (mail-ot1-x333.google.com [IPv6:2607:f8b0:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C4FFB
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Oct 2023 02:08:27 -0700 (PDT)
-Received: by mail-ot1-x333.google.com with SMTP id 46e09a7af769-6bd04558784so3853221a34.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Oct 2023 02:08:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1697533707; x=1698138507; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Hw+0mxkbjnBoJCM8uU/OaiCIRT4UXTb1F5SYS+HPWzk=;
-        b=PB2e3ZJYIrE9huGrhbzx+681uSsmze1qSILo4ns3z08Duww/3AEyAcLL5EMFolBrQ4
-         FKYjsAXfp1eWJKZgLu1b+JURA9MgAURcF71lBmujDm+H4ROCj4eP94vlDWW+a2efz891
-         Pu2N2BrndkQlHz/dqgAsoUQNIvrmSSF0WRXTY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697533707; x=1698138507;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Hw+0mxkbjnBoJCM8uU/OaiCIRT4UXTb1F5SYS+HPWzk=;
-        b=aHGHGIS/qZAqjQpX+P/eZSAyWimV9VOjpmpm/ARAqP9Pru3DBoZHh9fWLP9y+anoSy
-         6tmX2KQUSj8eyaAjE6MotbsKOYhEv9QjwOObm41ICFeJLKIzMUfrMgM0lUsALdHQbcql
-         5o/goywVtXVDOsMGXiZgczsNt0j8TOwKxKYLu6cHzKZsBa7UQXvG2pr0DH6xthTV6xT3
-         ZlAA1dMAKCKytQEqpREAcU6+xrjozr6y/HmyyGZVDiff9aZlMOJn0PMxPRH2mm4voaMJ
-         VCGIb2aCO70u5U5KrPjROxXnEVsipNaOdDTzK1E+Kq5ofakAGyElb0f1s6hs2sp4YMT7
-         SUxQ==
-X-Gm-Message-State: AOJu0YzpVwZXbfSFoT4T3o2XwoXr+Vs946Lygv76fU6l4a//gF9YWCJb
-        cToGfQSihP2WJXt7QjwGKmh8AQ==
-X-Google-Smtp-Source: AGHT+IFXhSMVGLhauO9iE6Cgr5PhQTBiD3CUppRAftHWUoSBh6pyOmcT1t+6ZwTY+m3LG5c4FLirfw==
-X-Received: by 2002:a05:6870:1708:b0:1e9:8ab9:11cd with SMTP id h8-20020a056870170800b001e98ab911cdmr1939010oae.45.1697533707066;
-        Tue, 17 Oct 2023 02:08:27 -0700 (PDT)
-Received: from localhost (9.184.168.34.bc.googleusercontent.com. [34.168.184.9])
-        by smtp.gmail.com with UTF8SMTPSA id z19-20020a63e113000000b005b7e3eddb87sm946431pgh.61.2023.10.17.02.08.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Oct 2023 02:08:26 -0700 (PDT)
-From:   jeffxu@chromium.org
-To:     akpm@linux-foundation.org, keescook@chromium.org, jannh@google.com,
-        sroettger@google.com, willy@infradead.org,
-        gregkh@linuxfoundation.org, torvalds@linux-foundation.org
-Cc:     jeffxu@google.com, jorgelo@chromium.org, groeck@chromium.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, surenb@google.com, alex.sierra@amd.com,
-        apopple@nvidia.com, aneesh.kumar@linux.ibm.com,
-        axelrasmussen@google.com, ben@decadent.org.uk,
-        catalin.marinas@arm.com, david@redhat.com, dwmw@amazon.co.uk,
-        ying.huang@intel.com, hughd@google.com, joey.gouly@arm.com,
-        corbet@lwn.net, wangkefeng.wang@huawei.com,
-        Liam.Howlett@oracle.com, lstoakes@gmail.com, mawupeng1@huawei.com,
-        linmiaohe@huawei.com, namit@vmware.com, peterx@redhat.com,
-        peterz@infradead.org, ryan.roberts@arm.com, shr@devkernel.io,
-        vbabka@suse.cz, xiujianfeng@huawei.com, yu.ma@intel.com,
-        zhangpeng362@huawei.com, dave.hansen@intel.com, luto@kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: [RFC PATCH v2 8/8] selftest mm/mseal mprotect/munmap/mremap/mmap
-Date:   Tue, 17 Oct 2023 09:08:15 +0000
-Message-ID: <20231017090815.1067790-9-jeffxu@chromium.org>
-X-Mailer: git-send-email 2.42.0.655.g421f12c284-goog
-In-Reply-To: <20231017090815.1067790-1-jeffxu@chromium.org>
-References: <20231017090815.1067790-1-jeffxu@chromium.org>
+        Tue, 17 Oct 2023 05:29:34 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDDFE19A3;
+        Tue, 17 Oct 2023 02:28:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1697534933; x=1729070933;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=RL1aNBhAi8Of6uCxhRzuiehyjjf7OYTMx2EPf1bb4ZE=;
+  b=AOJH78cRtuIscMgk3GR1cUyacCGQp35+fMC0ixACzceU1eon2+9qwwnP
+   jZmx6Issa8KZGX0gz8BfbE1JcuneK8CaQzSh8tQ1EO434yW5iRIC1xAeE
+   2oaWT2MQPlTEu2hQvMBo9Iuv0C68SQ4O2rVUx+UsPpN0R4ALUyV+zyW0f
+   F7njzo2cShnA1fZ/8zNIPesYstRV9OHvpP/wJmiUKNNfajbU1D8mWIIKk
+   w6jfkytRA+f0NVe+h8WwQv4UtihZ2HjIgkg2jC2SI1kwMq2ipetEAklii
+   yp+tpKstTgqRcFPeU4BCShJMooVK/MQ0XDQ+SCKExRtWw0SNuH3Aq+1Sy
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10865"; a="471964695"
+X-IronPort-AV: E=Sophos;i="6.03,231,1694761200"; 
+   d="scan'208";a="471964695"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Oct 2023 02:28:51 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10865"; a="1087436189"
+X-IronPort-AV: E=Sophos;i="6.03,231,1694761200"; 
+   d="scan'208";a="1087436189"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by fmsmga005.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 17 Oct 2023 02:28:50 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32; Tue, 17 Oct 2023 02:28:51 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.32 via Frontend Transport; Tue, 17 Oct 2023 02:28:51 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.101)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.32; Tue, 17 Oct 2023 02:28:51 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=I+odTH6a3X4t2mqX5UJPSUGllBWpcyI3vc/IPdnjyhiA6rZ279uQOwfaK9hfyJ/wIGOoa0iVkw+Qjfr1INyZD01sgzvWRksYinmWnw8hycsj99fnRegTPLGbkrLT0wAgsdliPaXxaVdDdIsP6GTl7NZ3bn/LLW+B85L10azpe2VsaXi18v+SKYuH09z+VIMfSLm2Wf8vZFmHm+aQOZ/o0CU03q2/KJfnIVsdAGIfc6OwxSnGn7NnCUUzkZRZDWVGLZnl4bGLgBmRt1tEhOsKJC6nZT8O87XNvhwHvmkganLzoDS1ZaimSvkhvV5lkRQhd0v4NdDLOluOuOTLJOjpQA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RL1aNBhAi8Of6uCxhRzuiehyjjf7OYTMx2EPf1bb4ZE=;
+ b=Mn4u2r+tb/+03rr4FzY2rBekirIzWJ6u4daE/1i9OiBcNhuImgeY02g8HwUxYv+WEXUXwcxb82NzTml97AjsUKnKKBHk98RwwLsF1zFs+OhrPw+zLUgBTPFQVFbHMdBZsdXATn6Rkhn+BYBVV7bdaP/gHp9kTBImspkI9HuLkhl3m6Udh7fUDEw/9eHAha0uQ5T5RZxTZOioE/vt56flTR50DE8WmXYFJbeI71qHC55PAuNNgWml/ja53tej9C9J++iIavY7+/PZdrgHwCpuOttIK1mvs96s9qOKgCx6dts9ZAAR+B/D/jCif2EV4JSsWL3dQCGPB1mhqlQS+COQbA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by BL1PR11MB5335.namprd11.prod.outlook.com (2603:10b6:208:31b::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6886.36; Tue, 17 Oct
+ 2023 09:28:48 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::7116:9866:8367:95b4]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::7116:9866:8367:95b4%3]) with mapi id 15.20.6886.034; Tue, 17 Oct 2023
+ 09:28:48 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     "Liu, Yi L" <yi.l.liu@intel.com>,
+        Nicolin Chen <nicolinc@nvidia.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+CC:     "joro@8bytes.org" <joro@8bytes.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
+        "cohuck@redhat.com" <cohuck@redhat.com>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
+        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "jasowang@redhat.com" <jasowang@redhat.com>,
+        "shameerali.kolothum.thodi@huawei.com" 
+        <shameerali.kolothum.thodi@huawei.com>,
+        "lulu@redhat.com" <lulu@redhat.com>,
+        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>,
+        "Martins, Joao" <joao.m.martins@oracle.com>
+Subject: RE: [PATCH v4 01/17] iommu: Add hwpt_type with user_data for
+ domain_alloc_user op
+Thread-Topic: [PATCH v4 01/17] iommu: Add hwpt_type with user_data for
+ domain_alloc_user op
+Thread-Index: AQHZ7GCQqMA2D6hFIkG8of68DC8uNLBDXUwAgAKiBoCAAErqgIAA+cOAgACfvQCAAEDUAIADxEeAgACNVoCAAGs9AIAA9B4AgAAJZrA=
+Date:   Tue, 17 Oct 2023 09:28:48 +0000
+Message-ID: <BN9PR11MB527671149ECD3DF3696A39988CD6A@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20230921075138.124099-1-yi.l.liu@intel.com>
+ <20230921075138.124099-2-yi.l.liu@intel.com>
+ <20231010165844.GQ3952@nvidia.com>
+ <03ba68e9-33ef-35c1-5720-8f559f94f8a1@intel.com>
+ <20231012133917.GL3952@nvidia.com>
+ <3659d9a7-d9e9-bb73-daf5-41c765e99c8c@intel.com>
+ <20231013140456.GR3952@nvidia.com> <ZSmE6unIukqJ3GKu@Asurada-Nvidia>
+ <79f0cab5-39ad-3d98-3896-6e1ba7b8db21@intel.com>
+ <20231016115407.GO3952@nvidia.com> <ZS1+VMEo+0bCecui@Asurada-Nvidia>
+ <2a86074f-94a9-667d-6e94-c582d49b7588@intel.com>
+In-Reply-To: <2a86074f-94a9-667d-6e94-c582d49b7588@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|BL1PR11MB5335:EE_
+x-ms-office365-filtering-correlation-id: 9fe81958-5622-4b54-8d06-08dbcef377d3
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: /guwPkzOxIvmv+LbgkSL0zg0OivaDD11FIpDKWYOg23Al6ZEhiqdU9STL2Q6MrZEPQ7PQ2J7/HaVPiWiGeiwVQc/iLlsFYaXyGAkH1VuDBO9b6HjZ74X0MHUpb8fslizZrd908j1SQrXDDPTJbHh9GlektbXaDE4ddYR821MrRoO5SXTnwqL0l2zV5S9piYuegBnGBTK8q3+gmPmV5b/8pQ/Rj8I7q20vwwWP7RRiZQtjmEVus8wUflAc7Noe7/Pixz5+Pe/vbgsrHqfhvNbv8Uf0czFfbCb30Dzkc7X3da3PuaA2S+w6CROkggxeTyQ8LeWFxNLfg2M+IGH+2AazGbiZLEb0w+Fy6rGqSgP3OQG2EHQAgDrtXFC8CCMw7VmLkYuB5WgfWq1TSMEErDqSltmkyT4bEZaCl1U+tWDnHCWXEU0zuYzOcYyPTReJbkJEySqiSBQozvreNGXj/N1yo5fWdIZHaQEa3FmGdfJbGsv8TqKQL1+pfGniS4vTF6cjsUzlwNnu5Q50pnnSr2TyUYsDN9xFLoEcWnmgqz7KdML36zGfe33ZRw6nGtlgxjeGzIiIHSpJTvZJJPfY6ZSyBLfaEEqkqy4NO6sGG60ZDx++nhpyecdlmNZW8m19Qun
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(39860400002)(366004)(376002)(396003)(136003)(230922051799003)(1800799009)(451199024)(64100799003)(186009)(33656002)(41300700001)(7416002)(55016003)(4326008)(8676002)(5660300002)(8936002)(52536014)(2906002)(86362001)(38100700002)(7696005)(82960400001)(26005)(6506007)(53546011)(478600001)(38070700005)(9686003)(83380400001)(316002)(122000001)(66446008)(64756008)(66476007)(66556008)(54906003)(71200400001)(110136005)(76116006)(66946007);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NTU0VUtpaDVuQ0xnT1NsRkxBRUpOT1FaSTZzWHpsY1FwcUVsc0l4cmFmS1BI?=
+ =?utf-8?B?UExMbEdCWFdaN3g1bzJZM0gxcDAxTEJybFB2eC9XZzlTclRKSjZYQnp6dHg4?=
+ =?utf-8?B?RDlVeW5maTBEWGloZGNLU2QwTzNzWGNsZEJNWWFNeGY1T1l5eUFIbHVZZW5P?=
+ =?utf-8?B?U0crd2VhUWE0QkpudFdtN0tyWXNWM0ZpRGV1S255OEE3bk56cHdGNEpSVXht?=
+ =?utf-8?B?UE1EMDZNQWxpeVdkeklNajNNNyt5ME1mTVNXSWErUW1oaGhCWnBNNHpieTF5?=
+ =?utf-8?B?SmEzMDlBUFc0RDZvOVRnOGd5V1V6Y3g5cjhHM1djRDdJV0ljNkZ0dWtSZDNn?=
+ =?utf-8?B?NXlaWVBiYXNCdEdZL1BPcEJFR2VlMEV0Vm43V2V1c29lTHFsU2JMOVpQOE53?=
+ =?utf-8?B?ZnVJSWNVbnNTbXRJVHVOMXhnS0NxcGVTSDBsYVRHamQ4VW1TYXp6NlRKNWVx?=
+ =?utf-8?B?anZHenlnb09aOFgvdHZhWDVBUnJ0d09xTUI3eW5IOXZFZWhJbkJTSXFFTkpz?=
+ =?utf-8?B?Zmo2U0hKVEt5V1kxSUJvUmFWVnhuN25jOVNwWFZxaXhKaEY5ckFDZEF4KzVm?=
+ =?utf-8?B?ZFVWZWVoamE0SFUyanl6ZW16TVJaMzY3OWRsbFFYNU1RZXMyYzJYb3BsTTBJ?=
+ =?utf-8?B?MWdBZmNSNytXSlRidUttWGhkbWNhWnZFck5rTE5rUk91bUVVa1hINnZLeDds?=
+ =?utf-8?B?bzFiWHVlNGNzZFJHa0k5bng3WWErYW9lU2VIVDRoWWhmSWFva1VFN3l2U0FT?=
+ =?utf-8?B?SC9waDBidGd5dUJFNTN3SWg1NHNybENOUFhtSTJUdjNZWE5tR2Q3Z0R5Ym5n?=
+ =?utf-8?B?NS9GbmhvQU9UZ2Qxck96a2ZYRFVnNUNDNWcwbWw0b01Fc1ZXQU9FQ0xaMmdR?=
+ =?utf-8?B?SG5rbjJyQnV4enllc0x4TDR2RVRoRVp6WHVyY2FuSk1UeXlRRXUyZlg1UU9s?=
+ =?utf-8?B?NGluWk8rTU5EZU1CRlJpdzJpVE81WGxIYk1vVGNTSTVRNmRiYjYrR1F5bjFK?=
+ =?utf-8?B?QWdlYzdkRy9QNStkWlFWSGUzcm5uQTVaYnZmdzRXL3dZVC82a2tWc3FYa2Rx?=
+ =?utf-8?B?SGZEbnJWMFhDd2tYM3QrZDBzdUVtbXcrTzZUVHFCZ1NBWTVpSTQzVlNiakhl?=
+ =?utf-8?B?N3V1K2FzZXNKZjUvL042YlM4aG9wRmk5Y0NTTVNZK1hlNFA2NzRZSVdBWjBI?=
+ =?utf-8?B?RkdxMHViQmw1QnNMMjY5QkNMS1UwVFJraytXUmtIRGZDeGdDUGQwSWFoL2Ev?=
+ =?utf-8?B?RTRSQ2pqUG9UYmpMb2Z1Y2NtTmdUbFR2eCtJRkFzQWdHd3BjTUM1VzBUQjBH?=
+ =?utf-8?B?cFI1ajN1ZkV6RlAvR1B1TzhoUlROM2NDTVBHdUViOW9rcnVJU3hUMCsvLzB6?=
+ =?utf-8?B?clJyQm4yUmVKMmd1eDJORW1QWFh6NVhIeUpxY01UQk9rc1d6YVJ2cS8rOXNU?=
+ =?utf-8?B?Q2hUTnRtbC9hdklxU1FvaSs5a3IzczMzc093dHJjRURRN2E5MndMd2NNYWJ6?=
+ =?utf-8?B?cllpai85UUt3ekNMaUdBM1ltUWJaaG5JZkplbWk5b21pRmdpYVF6czFvL2sy?=
+ =?utf-8?B?TFdGN3N4M3lnL0pPN1BGODJOQmJFQ21RU3Ird1prWC91VFc1U29xS3N1WlJm?=
+ =?utf-8?B?akgxV3J2RFVGU0pJWnBaYzdoN2w2b0I0alhsbVRDUUtId2FNcEpqdmZwOFZJ?=
+ =?utf-8?B?QzBjemdzNTVWaGdubHhSK1FwTDVZYU5YU3ZicGE0VGVJOC9hQVBFcXFIRmxx?=
+ =?utf-8?B?S09aYWpMdU9lRFQwNy9LY1ZqWEttN2lqUi9jdkpUcWlrS21EWUNRZWx0blJi?=
+ =?utf-8?B?TG9hMEd5UmpWd0UycG1JOFdmcFN3RnltWFlHSXNTbDRPNzZTbFVWYnhzbVN5?=
+ =?utf-8?B?NU1DM0ZoY2JDZ2dQdS9VSFZwRnpNLy9KZFpkVDZYTXMxVU9peDJqOWFWU3Jr?=
+ =?utf-8?B?NVM2K2RxdTliYzZUNWtGQVo0a1lydjR2bWRhclBtckVSd2FHZjlJMmUvbDZk?=
+ =?utf-8?B?MUJjT09XQkdrZ2IyRUt3eWVIN0VtelJCZ1dCV0FleFZjTGhnVU5HeUZpNXM0?=
+ =?utf-8?B?Z0k3SCtCNFR1clNWL2MzU2E5eGVSd1JVMHRmWmdJMzJYdjBFWEhsODBuaW9h?=
+ =?utf-8?Q?img+AhsISu9rLUyiU0yCMPf/c?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9fe81958-5622-4b54-8d06-08dbcef377d3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Oct 2023 09:28:48.5336
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Knx3Y7Yogpe6OLjooQYwaktmIGUk25urpujw9ITd+Gu3ZS8iYZhbD5He56x5VR9n1MeVcvXXck5pZLqrn6csRA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5335
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Jeff Xu <jeffxu@google.com>
-
-selftest for sealing mprotect/munmap/mremap/mmap
-
-Signed-off-by: Jeff Xu <jeffxu@google.com>
----
- tools/testing/selftests/mm/Makefile     |    1 +
- tools/testing/selftests/mm/mseal_test.c | 1428 +++++++++++++++++++++++
- 2 files changed, 1429 insertions(+)
- create mode 100644 tools/testing/selftests/mm/mseal_test.c
-
-diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index 6a9fc5693145..0c086cecc093 100644
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -59,6 +59,7 @@ TEST_GEN_FILES += mlock2-tests
- TEST_GEN_FILES += mrelease_test
- TEST_GEN_FILES += mremap_dontunmap
- TEST_GEN_FILES += mremap_test
-+TEST_GEN_FILES += mseal_test
- TEST_GEN_FILES += on-fault-limit
- TEST_GEN_FILES += thuge-gen
- TEST_GEN_FILES += transhuge-stress
-diff --git a/tools/testing/selftests/mm/mseal_test.c b/tools/testing/selftests/mm/mseal_test.c
-new file mode 100644
-index 000000000000..d6ae09729394
---- /dev/null
-+++ b/tools/testing/selftests/mm/mseal_test.c
-@@ -0,0 +1,1428 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
-+#include <sys/mman.h>
-+#include <stdint.h>
-+#include <unistd.h>
-+#include <string.h>
-+#include <sys/time.h>
-+#include <sys/resource.h>
-+#include <stdbool.h>
-+#include "../kselftest.h"
-+#include <syscall.h>
-+#include <errno.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <assert.h>
-+
-+#ifndef MM_SEAL_MSEAL
-+#define MM_SEAL_MSEAL 0x1
-+#endif
-+
-+#ifndef MM_SEAL_MPROTECT
-+#define MM_SEAL_MPROTECT 0x2
-+#endif
-+
-+#ifndef MM_SEAL_MUNMAP
-+#define MM_SEAL_MUNMAP 0x4
-+#endif
-+
-+#ifndef MM_SEAL_MMAP
-+#define MM_SEAL_MMAP 0x8
-+#endif
-+
-+#ifndef MM_SEAL_MREMAP
-+#define MM_SEAL_MREMAP 0x10
-+#endif
-+
-+#ifndef DEBUG
-+#define LOG_TEST_ENTER()	{}
-+#else
-+#define LOG_TEST_ENTER()	{ printf("%s\n", __func__); }
-+#endif
-+
-+static int sys_mseal(void *start, size_t len, int types)
-+{
-+	int sret;
-+
-+	errno = 0;
-+	sret = syscall(__NR_mseal, start, len, types, 0);
-+	return sret;
-+}
-+
-+int sys_mprotect(void *ptr, size_t size, unsigned long prot)
-+{
-+	int sret;
-+
-+	errno = 0;
-+	sret = syscall(SYS_mprotect, ptr, size, prot);
-+	return sret;
-+}
-+
-+int sys_munmap(void *ptr, size_t size)
-+{
-+	int sret;
-+
-+	errno = 0;
-+	sret = syscall(SYS_munmap, ptr, size);
-+	return sret;
-+}
-+
-+static int sys_madvise(void *start, size_t len, int types)
-+{
-+	int sret;
-+
-+	errno = 0;
-+	sret = syscall(__NR_madvise, start, len, types);
-+	return sret;
-+}
-+
-+void *addr1 = (void *)0x50000000;
-+void *addr2 = (void *)0x50004000;
-+void *addr3 = (void *)0x50008000;
-+void setup_single_address(int size, void **ptrOut)
-+{
-+	void *ptr;
-+
-+	ptr = mmap(NULL, size, PROT_READ, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
-+	assert(ptr != (void *)-1);
-+	*ptrOut = ptr;
-+}
-+
-+void setup_single_fixed_address(int size, void **ptrOut)
-+{
-+	void *ptr;
-+
-+	ptr = mmap(addr1, size, PROT_READ, MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
-+	assert(ptr == (void *)addr1);
-+
-+	*ptrOut = ptr;
-+}
-+
-+void clean_single_address(void *ptr, int size)
-+{
-+	int ret;
-+
-+	ret = munmap(ptr, size);
-+	assert(!ret);
-+}
-+
-+void seal_mprotect_single_address(void *ptr, int size)
-+{
-+	int ret;
-+
-+	ret = sys_mseal(ptr, size, MM_SEAL_MPROTECT);
-+	assert(!ret);
-+}
-+
-+static void test_seal_addseals(void)
-+{
-+	LOG_TEST_ENTER();
-+	int ret;
-+	void *ptr;
-+	unsigned long page_size = getpagesize();
-+	unsigned long size = 4 * page_size;
-+
-+	setup_single_address(size, &ptr);
-+
-+	/* adding seal one by one */
-+	ret = sys_mseal(ptr, size, MM_SEAL_MPROTECT);
-+	assert(!ret);
-+
-+	ret = sys_mseal(ptr, size, MM_SEAL_MMAP);
-+	assert(!ret);
-+
-+	ret = sys_mseal(ptr, size, MM_SEAL_MREMAP);
-+	assert(!ret);
-+
-+	ret = sys_mseal(ptr, size, MM_SEAL_MSEAL);
-+	assert(!ret);
-+
-+	clean_single_address(ptr, size);
-+}
-+
-+static void test_seal_addseals_combined(void)
-+{
-+	LOG_TEST_ENTER();
-+	int ret;
-+	void *ptr;
-+	unsigned long page_size = getpagesize();
-+	unsigned long size = 4 * page_size;
-+
-+	setup_single_address(size, &ptr);
-+
-+	ret = sys_mseal(ptr, size, MM_SEAL_MPROTECT);
-+	assert(!ret);
-+
-+	/* adding multiple seals */
-+	ret = sys_mseal(ptr, size,
-+			MM_SEAL_MPROTECT | MM_SEAL_MMAP | MM_SEAL_MREMAP |
-+			MM_SEAL_MSEAL);
-+	assert(!ret);
-+
-+	/* not adding more seal type, so ok. */
-+	ret = sys_mseal(ptr, size,
-+			MM_SEAL_MMAP | MM_SEAL_MREMAP | MM_SEAL_MSEAL);
-+	assert(!ret);
-+
-+	/* not adding more seal type, so ok. */
-+	ret = sys_mseal(ptr, size, MM_SEAL_MSEAL);
-+	assert(!ret);
-+
-+	clean_single_address(ptr, size);
-+}
-+
-+static void test_seal_addseals_reject(void)
-+{
-+	LOG_TEST_ENTER();
-+	int ret;
-+	void *ptr;
-+	unsigned long page_size = getpagesize();
-+	unsigned long size = 4 * page_size;
-+
-+	setup_single_address(size, &ptr);
-+
-+	ret = sys_mseal(ptr, size, MM_SEAL_MPROTECT | MM_SEAL_MSEAL);
-+	assert(!ret);
-+
-+	ret = sys_mseal(ptr, size, MM_SEAL_MPROTECT);
-+	assert(!ret);
-+
-+	/* MM_SEAL_MSEAL is set, so not allow new seal type . */
-+	ret = sys_mseal(ptr, size,
-+			MM_SEAL_MPROTECT | MM_SEAL_MMAP | MM_SEAL_MSEAL);
-+	assert(ret < 0);
-+
-+	ret = sys_mseal(ptr, size, MM_SEAL_MMAP);
-+	assert(ret < 0);
-+
-+	ret = sys_mseal(ptr, size, MM_SEAL_MMAP | MM_SEAL_MSEAL);
-+	assert(ret < 0);
-+
-+	clean_single_address(ptr, size);
-+}
-+
-+static void test_seal_unmapped_start(void)
-+{
-+	LOG_TEST_ENTER();
-+	int ret;
-+	void *ptr;
-+	unsigned long page_size = getpagesize();
-+	unsigned long size = 4 * page_size;
-+
-+	setup_single_address(size, &ptr);
-+
-+	// munmap 2 pages from ptr.
-+	ret = sys_munmap(ptr, 2 * page_size);
-+	assert(!ret);
-+
-+	// mprotect will fail because 2 pages from ptr are unmapped.
-+	ret = sys_mprotect(ptr, size, PROT_READ | PROT_WRITE);
-+	assert(ret < 0);
-+
-+	// mseal will fail because 2 pages from ptr are unmapped.
-+	ret = sys_mseal(ptr, size, MM_SEAL_MSEAL);
-+	assert(ret < 0);
-+
-+	ret = sys_mseal(ptr + 2 * page_size, 2 * page_size, MM_SEAL_MSEAL);
-+	assert(!ret);
-+
-+	clean_single_address(ptr, size);
-+}
-+
-+static void test_seal_unmapped_middle(void)
-+{
-+	LOG_TEST_ENTER();
-+	int ret;
-+	void *ptr;
-+	unsigned long page_size = getpagesize();
-+	unsigned long size = 4 * page_size;
-+
-+	setup_single_address(size, &ptr);
-+
-+	// munmap 2 pages from ptr + page.
-+	ret = sys_munmap(ptr + page_size, 2 * page_size);
-+	assert(!ret);
-+
-+	// mprotect will fail, since size is 4 pages.
-+	ret = sys_mprotect(ptr, size, PROT_READ | PROT_WRITE);
-+	assert(ret < 0);
-+
-+	// mseal will fail as well.
-+	ret = sys_mseal(ptr, size, MM_SEAL_MSEAL);
-+	assert(ret < 0);
-+
-+	/* we still can add seal to the first page and last page*/
-+	ret = sys_mseal(ptr, page_size, MM_SEAL_MSEAL | MM_SEAL_MPROTECT);
-+	assert(!ret);
-+
-+	ret = sys_mseal(ptr + 3 * page_size, page_size,
-+			MM_SEAL_MSEAL | MM_SEAL_MPROTECT);
-+	assert(!ret);
-+
-+	clean_single_address(ptr, size);
-+}
-+
-+static void test_seal_unmapped_end(void)
-+{
-+	LOG_TEST_ENTER();
-+	int ret;
-+	void *ptr;
-+	unsigned long page_size = getpagesize();
-+	unsigned long size = 4 * page_size;
-+
-+	setup_single_address(size, &ptr);
-+
-+	// unmap last 2 pages.
-+	ret = sys_munmap(ptr + 2 * page_size, 2 * page_size);
-+	assert(!ret);
-+
-+	//mprotect will fail since last 2 pages are unmapped.
-+	ret = sys_mprotect(ptr, size, PROT_READ | PROT_WRITE);
-+	assert(ret < 0);
-+
-+	//mseal will fail as well.
-+	ret = sys_mseal(ptr, size, MM_SEAL_MSEAL);
-+	assert(ret < 0);
-+
-+	/* The first 2 pages is not sealed, and can add seals */
-+	ret = sys_mseal(ptr, 2 * page_size, MM_SEAL_MSEAL | MM_SEAL_MPROTECT);
-+	assert(!ret);
-+
-+	clean_single_address(ptr, size);
-+}
-+
-+static void test_seal_multiple_vmas(void)
-+{
-+	LOG_TEST_ENTER();
-+	int ret;
-+	void *ptr;
-+	unsigned long page_size = getpagesize();
-+	unsigned long size = 4 * page_size;
-+
-+	setup_single_address(size, &ptr);
-+
-+	// use mprotect to split the vma into 3.
-+	ret = sys_mprotect(ptr + page_size, 2 * page_size,
-+			PROT_READ | PROT_WRITE);
-+	assert(!ret);
-+
-+	// mprotect will get applied to all 4 pages - 3 VMAs.
-+	ret = sys_mprotect(ptr, size, PROT_READ);
-+	assert(!ret);
-+
-+	// use mprotect to split the vma into 3.
-+	ret = sys_mprotect(ptr + page_size, 2 * page_size,
-+			PROT_READ | PROT_WRITE);
-+	assert(!ret);
-+
-+	// mseal get applied to all 4 pages - 3 VMAs.
-+	ret = sys_mseal(ptr, size, MM_SEAL_MSEAL);
-+	assert(!ret);
-+
-+	// verify additional seal type will fail after MM_SEAL_MSEAL set.
-+	ret = sys_mseal(ptr, page_size, MM_SEAL_MSEAL | MM_SEAL_MPROTECT);
-+	assert(ret < 0);
-+
-+	ret = sys_mseal(ptr + page_size, 2 * page_size,
-+			MM_SEAL_MSEAL | MM_SEAL_MPROTECT);
-+	assert(ret < 0);
-+
-+	ret = sys_mseal(ptr + 3 * page_size, page_size,
-+			MM_SEAL_MSEAL | MM_SEAL_MPROTECT);
-+	assert(ret < 0);
-+
-+	clean_single_address(ptr, size);
-+}
-+
-+static void test_seal_split_start(void)
-+{
-+	LOG_TEST_ENTER();
-+	int ret;
-+	void *ptr;
-+	unsigned long page_size = getpagesize();
-+	unsigned long size = 4 * page_size;
-+
-+	setup_single_address(size, &ptr);
-+
-+	/* use mprotect to split at middle */
-+	ret = sys_mprotect(ptr, 2 * page_size, PROT_READ | PROT_WRITE);
-+	assert(!ret);
-+
-+	/* seal the first page, this will split the VMA */
-+	ret = sys_mseal(ptr, page_size, MM_SEAL_MSEAL);
-+	assert(!ret);
-+
-+	/* can't add seal to the first page */
-+	ret = sys_mseal(ptr, page_size, MM_SEAL_MSEAL | MM_SEAL_MPROTECT);
-+	assert(ret < 0);
-+
-+	/* add seal to the remain 3 pages */
-+	ret = sys_mseal(ptr + page_size, 3 * page_size,
-+			MM_SEAL_MSEAL | MM_SEAL_MPROTECT);
-+	assert(!ret);
-+
-+	clean_single_address(ptr, size);
-+}
-+
-+static void test_seal_split_end(void)
-+{
-+	LOG_TEST_ENTER();
-+	int ret;
-+	void *ptr;
-+	unsigned long page_size = getpagesize();
-+	unsigned long size = 4 * page_size;
-+
-+	setup_single_fixed_address(size, &ptr);
-+
-+	/* use mprotect to split at middle */
-+	ret = sys_mprotect(ptr, 2 * page_size, PROT_READ | PROT_WRITE);
-+	assert(!ret);
-+
-+	/* seal the last page */
-+	ret = sys_mseal(ptr + 3 * page_size, page_size, MM_SEAL_MSEAL);
-+	assert(!ret);
-+
-+	/* adding seal to the last page is rejected. */
-+	ret = sys_mseal(ptr + 3 * page_size, page_size,
-+			MM_SEAL_MSEAL | MM_SEAL_MPROTECT);
-+	assert(ret < 0);
-+
-+	/* Adding seals to the first 3 pages */
-+	ret = sys_mseal(ptr, 3 * page_size, MM_SEAL_MSEAL | MM_SEAL_MPROTECT);
-+	assert(!ret);
-+
-+	clean_single_address(ptr, size);
-+}
-+
-+static void test_seal_invalid_input(void)
-+{
-+	LOG_TEST_ENTER();
-+	void *ptr;
-+	unsigned long page_size = getpagesize();
-+	unsigned long size = 4 * page_size;
-+	int ret;
-+
-+	setup_single_fixed_address(size, &ptr);
-+
-+	/* invalid flag */
-+	ret = sys_mseal(ptr, size, 0x20);
-+	assert(ret < 0);
-+
-+	ret = sys_mseal(ptr, size, 0x31);
-+	assert(ret < 0);
-+
-+	ret = sys_mseal(ptr, size, 0x3F);
-+	assert(ret < 0);
-+
-+	/* unaligned address */
-+	ret = sys_mseal(ptr + 1, 2 * page_size, MM_SEAL_MSEAL);
-+	assert(ret < 0);
-+
-+	/* length too big */
-+	ret = sys_mseal(ptr, 5 * page_size, MM_SEAL_MSEAL);
-+	assert(ret < 0);
-+
-+	/* start is not in a valid VMA */
-+	ret = sys_mseal(ptr - page_size, 5 * page_size, MM_SEAL_MSEAL);
-+	assert(ret < 0);
-+
-+	clean_single_address(ptr, size);
-+}
-+
-+static void test_seal_zero_length(void)
-+{
-+	LOG_TEST_ENTER();
-+	void *ptr;
-+	unsigned long page_size = getpagesize();
-+	unsigned long size = 4 * page_size;
-+	int ret;
-+
-+	setup_single_address(size, &ptr);
-+
-+	ret = sys_mprotect(ptr, 0, PROT_READ | PROT_WRITE);
-+	assert(!ret);
-+
-+	/* seal 0 length will be OK, same as mprotect */
-+	ret = sys_mseal(ptr, 0, MM_SEAL_MPROTECT);
-+	assert(!ret);
-+
-+	// verify the 4 pages are not sealed by previous call.
-+	ret = sys_mprotect(ptr, size, PROT_READ | PROT_WRITE);
-+	assert(!ret);
-+
-+	clean_single_address(ptr, size);
-+}
-+
-+static void test_seal_twice(void)
-+{
-+	LOG_TEST_ENTER();
-+	int ret;
-+	void *ptr;
-+	unsigned long page_size = getpagesize();
-+	unsigned long size = 4 * page_size;
-+
-+	setup_single_address(size, &ptr);
-+
-+	ret = sys_mseal(ptr, size, MM_SEAL_MPROTECT);
-+	assert(!ret);
-+
-+	// apply the same seal will be OK. idempotent.
-+	ret = sys_mseal(ptr, size, MM_SEAL_MPROTECT);
-+	assert(!ret);
-+
-+	ret = sys_mseal(ptr, size,
-+			MM_SEAL_MPROTECT | MM_SEAL_MMAP | MM_SEAL_MREMAP |
-+			MM_SEAL_MSEAL);
-+	assert(!ret);
-+
-+	ret = sys_mseal(ptr, size,
-+			MM_SEAL_MPROTECT | MM_SEAL_MMAP | MM_SEAL_MREMAP |
-+			MM_SEAL_MSEAL);
-+	assert(!ret);
-+
-+	ret = sys_mseal(ptr, size, MM_SEAL_MSEAL);
-+	assert(!ret);
-+
-+	clean_single_address(ptr, size);
-+}
-+
-+static void test_seal_mprotect(bool seal)
-+{
-+	LOG_TEST_ENTER();
-+	void *ptr;
-+	unsigned long page_size = getpagesize();
-+	unsigned long size = 4 * page_size;
-+	int ret;
-+
-+	setup_single_address(size, &ptr);
-+
-+	if (seal)
-+		seal_mprotect_single_address(ptr, size);
-+
-+	ret = sys_mprotect(ptr, size, PROT_READ | PROT_WRITE);
-+	if (seal)
-+		assert(ret < 0);
-+	else
-+		assert(!ret);
-+
-+	clean_single_address(ptr, size);
-+}
-+
-+static void test_seal_start_mprotect(bool seal)
-+{
-+	LOG_TEST_ENTER();
-+	void *ptr;
-+	unsigned long page_size = getpagesize();
-+	unsigned long size = 4 * page_size;
-+	int ret;
-+
-+	setup_single_address(size, &ptr);
-+
-+	if (seal)
-+		seal_mprotect_single_address(ptr, page_size);
-+
-+	// the first page is sealed.
-+	ret = sys_mprotect(ptr, page_size, PROT_READ | PROT_WRITE);
-+	if (seal)
-+		assert(ret < 0);
-+	else
-+		assert(!ret);
-+
-+	// pages after the first page is not sealed.
-+	ret = sys_mprotect(ptr + page_size, page_size * 3,
-+			PROT_READ | PROT_WRITE);
-+	assert(!ret);
-+
-+	clean_single_address(ptr, size);
-+}
-+
-+static void test_seal_end_mprotect(bool seal)
-+{
-+	LOG_TEST_ENTER();
-+	void *ptr;
-+	unsigned long page_size = getpagesize();
-+	unsigned long size = 4 * page_size;
-+	int ret;
-+
-+	setup_single_address(size, &ptr);
-+
-+	if (seal)
-+		seal_mprotect_single_address(ptr + page_size, 3 * page_size);
-+
-+	/* first page is not sealed */
-+	ret = sys_mprotect(ptr, page_size, PROT_READ | PROT_WRITE);
-+	assert(!ret);
-+
-+	/* last 3 page are sealed */
-+	ret = sys_mprotect(ptr + page_size, page_size * 3,
-+			PROT_READ | PROT_WRITE);
-+	if (seal)
-+		assert(ret < 0);
-+	else
-+		assert(!ret);
-+
-+	clean_single_address(ptr, size);
-+}
-+
-+static void test_seal_mprotect_unalign_len(bool seal)
-+{
-+	LOG_TEST_ENTER();
-+	void *ptr;
-+	unsigned long page_size = getpagesize();
-+	unsigned long size = 4 * page_size;
-+	int ret;
-+
-+	setup_single_address(size, &ptr);
-+
-+	if (seal)
-+		seal_mprotect_single_address(ptr, page_size * 2 - 1);
-+
-+	// 2 pages are sealed.
-+	ret = sys_mprotect(ptr, page_size * 2, PROT_READ | PROT_WRITE);
-+	if (seal)
-+		assert(ret < 0);
-+	else
-+		assert(!ret);
-+
-+	ret = sys_mprotect(ptr + page_size * 2, page_size,
-+			PROT_READ | PROT_WRITE);
-+	assert(!ret);
-+
-+	clean_single_address(ptr, size);
-+}
-+
-+static void test_seal_mprotect_unalign_len_variant_2(bool seal)
-+{
-+	LOG_TEST_ENTER();
-+	void *ptr;
-+	unsigned long page_size = getpagesize();
-+	unsigned long size = 4 * page_size;
-+	int ret;
-+
-+	setup_single_address(size, &ptr);
-+	if (seal)
-+		seal_mprotect_single_address(ptr, page_size * 2 + 1);
-+
-+	// 3 pages are sealed.
-+	ret = sys_mprotect(ptr, page_size * 3, PROT_READ | PROT_WRITE);
-+	if (seal)
-+		assert(ret < 0);
-+	else
-+		assert(!ret);
-+
-+	ret = sys_mprotect(ptr + page_size * 3, page_size,
-+			PROT_READ | PROT_WRITE);
-+	assert(!ret);
-+
-+	clean_single_address(ptr, size);
-+}
-+
-+static void test_seal_mprotect_two_vma(bool seal)
-+{
-+	LOG_TEST_ENTER();
-+	void *ptr;
-+	unsigned long page_size = getpagesize();
-+	unsigned long size = 4 * page_size;
-+	int ret;
-+
-+	setup_single_address(size, &ptr);
-+
-+	/* use mprotect to split */
-+	ret = sys_mprotect(ptr, page_size * 2, PROT_READ | PROT_WRITE);
-+	assert(!ret);
-+
-+	if (seal)
-+		seal_mprotect_single_address(ptr, page_size * 4);
-+
-+	ret = sys_mprotect(ptr, page_size * 2, PROT_READ | PROT_WRITE);
-+	if (seal)
-+		assert(ret < 0);
-+	else
-+		assert(!ret);
-+
-+	ret = sys_mprotect(ptr + page_size * 2, page_size * 2,
-+			PROT_READ | PROT_WRITE);
-+	if (seal)
-+		assert(ret < 0);
-+	else
-+		assert(!ret);
-+
-+	clean_single_address(ptr, size);
-+}
-+
-+static void test_seal_mprotect_two_vma_with_split(bool seal)
-+{
-+	LOG_TEST_ENTER();
-+	void *ptr;
-+	unsigned long page_size = getpagesize();
-+	unsigned long size = 4 * page_size;
-+	int ret;
-+
-+	setup_single_address(size, &ptr);
-+
-+	// use mprotect to split as two vma.
-+	ret = sys_mprotect(ptr, page_size * 2, PROT_READ | PROT_WRITE);
-+	assert(!ret);
-+
-+	// mseal can apply across 2 vma, also split them.
-+	if (seal)
-+		seal_mprotect_single_address(ptr + page_size, page_size * 2);
-+
-+	// the first page is not sealed.
-+	ret = sys_mprotect(ptr, page_size, PROT_READ | PROT_WRITE);
-+	assert(!ret);
-+
-+	// the second page is sealed.
-+	ret = sys_mprotect(ptr + page_size, page_size, PROT_READ | PROT_WRITE);
-+	if (seal)
-+		assert(ret < 0);
-+	else
-+		assert(!ret);
-+
-+	// the third page is sealed.
-+	ret = sys_mprotect(ptr + 2 * page_size, page_size,
-+			PROT_READ | PROT_WRITE);
-+	if (seal)
-+		assert(ret < 0);
-+	else
-+		assert(!ret);
-+
-+	// the fouth page is not sealed.
-+	ret = sys_mprotect(ptr + 3 * page_size, page_size,
-+			PROT_READ | PROT_WRITE);
-+	assert(!ret);
-+
-+	clean_single_address(ptr, size);
-+}
-+
-+static void test_seal_mprotect_partial_mprotect(bool seal)
-+{
-+	LOG_TEST_ENTER();
-+	void *ptr;
-+	unsigned long page_size = getpagesize();
-+	unsigned long size = 4 * page_size;
-+	int ret;
-+
-+	setup_single_address(size, &ptr);
-+
-+	// seal one page.
-+	if (seal)
-+		seal_mprotect_single_address(ptr, page_size);
-+
-+	// mprotect first 2 page will fail, since the first page are sealed.
-+	ret = sys_mprotect(ptr, 2 * page_size, PROT_READ | PROT_WRITE);
-+	if (seal)
-+		assert(ret < 0);
-+	else
-+		assert(!ret);
-+
-+	clean_single_address(ptr, size);
-+}
-+
-+static void test_seal_mprotect_two_vma_with_gap(bool seal)
-+{
-+	LOG_TEST_ENTER();
-+	void *ptr;
-+	unsigned long page_size = getpagesize();
-+	unsigned long size = 4 * page_size;
-+	int ret;
-+
-+	setup_single_address(size, &ptr);
-+
-+	// use mprotect to split.
-+	ret = sys_mprotect(ptr, page_size, PROT_READ | PROT_WRITE);
-+	assert(!ret);
-+
-+	// use mprotect to split.
-+	ret = sys_mprotect(ptr + 3 * page_size, page_size,
-+			PROT_READ | PROT_WRITE);
-+	assert(!ret);
-+
-+	// use munmap to free two pages in the middle
-+	ret = sys_munmap(ptr + page_size, 2 * page_size);
-+	assert(!ret);
-+
-+	// mprotect will fail, because there is a gap in the address.
-+	// notes, internally mprotect still updated the first page.
-+	ret = sys_mprotect(ptr, 4 * page_size, PROT_READ);
-+	assert(ret < 0);
-+
-+	// mseal will fail as well.
-+	ret = sys_mseal(ptr, 4 * page_size, MM_SEAL_MPROTECT);
-+	assert(ret < 0);
-+
-+	// unlike mprotect, the first page is not sealed.
-+	ret = sys_mprotect(ptr, page_size, PROT_READ);
-+	assert(ret == 0);
-+
-+	// the last page is not sealed.
-+	ret = sys_mprotect(ptr + 3 * page_size, page_size, PROT_READ);
-+	assert(ret == 0);
-+
-+	clean_single_address(ptr, size);
-+}
-+
-+static void test_seal_mprotect_split(bool seal)
-+{
-+	LOG_TEST_ENTER();
-+	void *ptr;
-+	unsigned long page_size = getpagesize();
-+	unsigned long size = 4 * page_size;
-+	int ret;
-+
-+	setup_single_address(size, &ptr);
-+
-+	//use mprotect to split.
-+	ret = sys_mprotect(ptr, page_size, PROT_READ | PROT_WRITE);
-+	assert(!ret);
-+
-+	//seal all 4 pages.
-+	if (seal) {
-+		ret = sys_mseal(ptr, 4 * page_size, MM_SEAL_MPROTECT);
-+		assert(!ret);
-+	}
-+
-+	//madvice is OK.
-+	ret = sys_madvise(ptr, page_size * 2, MADV_WILLNEED);
-+	assert(!ret);
-+
-+	//mprotect is sealed.
-+	ret = sys_mprotect(ptr, 2 * page_size, PROT_READ);
-+	if (seal)
-+		assert(ret < 0);
-+	else
-+		assert(!ret);
-+
-+
-+	ret = sys_mprotect(ptr + 2 * page_size, 2 * page_size, PROT_READ);
-+	if (seal)
-+		assert(ret < 0);
-+	else
-+		assert(!ret);
-+
-+	clean_single_address(ptr, size);
-+}
-+
-+static void test_seal_mprotect_merge(bool seal)
-+{
-+	LOG_TEST_ENTER();
-+	void *ptr;
-+	unsigned long page_size = getpagesize();
-+	unsigned long size = 4 * page_size;
-+	int ret;
-+
-+	setup_single_address(size, &ptr);
-+
-+	// use mprotect to split one page.
-+	ret = sys_mprotect(ptr, page_size, PROT_READ | PROT_WRITE);
-+	assert(!ret);
-+
-+	// seal first two pages.
-+	if (seal) {
-+		ret = sys_mseal(ptr, 2 * page_size, MM_SEAL_MPROTECT);
-+		assert(!ret);
-+	}
-+
-+	ret = sys_madvise(ptr, page_size, MADV_WILLNEED);
-+	assert(!ret);
-+
-+	// 2 pages are sealed.
-+	ret = sys_mprotect(ptr, 2 * page_size, PROT_READ);
-+	if (seal)
-+		assert(ret < 0);
-+	else
-+		assert(!ret);
-+
-+	// last 2 pages are not sealed.
-+	ret = sys_mprotect(ptr + 2 * page_size, 2 * page_size, PROT_READ);
-+	assert(ret == 0);
-+
-+	clean_single_address(ptr, size);
-+}
-+
-+static void test_seal_munmap(bool seal)
-+{
-+	LOG_TEST_ENTER();
-+	void *ptr;
-+	unsigned long page_size = getpagesize();
-+	unsigned long size = 4 * page_size;
-+	int ret;
-+
-+	setup_single_address(size, &ptr);
-+
-+	if (seal) {
-+		ret = sys_mseal(ptr, size, MM_SEAL_MUNMAP);
-+		assert(!ret);
-+	}
-+
-+	// 4 pages are sealed.
-+	ret = sys_munmap(ptr, size);
-+	if (seal)
-+		assert(ret < 0);
-+	else
-+		assert(!ret);
-+}
-+
-+/*
-+ * allocate 4 pages,
-+ * use mprotect to split it as two VMAs
-+ * seal the whole range
-+ * munmap will fail on both
-+ */
-+static void test_seal_munmap_two_vma(bool seal)
-+{
-+	LOG_TEST_ENTER();
-+	void *ptr;
-+	unsigned long page_size = getpagesize();
-+	unsigned long size = 4 * page_size;
-+	int ret;
-+
-+	setup_single_address(size, &ptr);
-+
-+	/* use mprotect to split */
-+	ret = sys_mprotect(ptr, page_size * 2, PROT_READ | PROT_WRITE);
-+	assert(!ret);
-+
-+	if (seal) {
-+		ret = sys_mseal(ptr, size, MM_SEAL_MUNMAP);
-+		assert(!ret);
-+	}
-+
-+	ret = sys_munmap(ptr, page_size * 2);
-+	if (seal)
-+		assert(ret < 0);
-+	else
-+		assert(!ret);
-+
-+	ret = sys_munmap(ptr + page_size, page_size * 2);
-+	if (seal)
-+		assert(ret < 0);
-+	else
-+		assert(!ret);
-+}
-+
-+/*
-+ * allocate a VMA with 4 pages.
-+ * munmap the middle 2 pages.
-+ * seal the whole 4 pages, will fail.
-+ * note: one of the pages are sealed
-+ * munmap the first page will be OK.
-+ * munmap the last page will be OK.
-+ */
-+static void test_seal_munmap_vma_with_gap(bool seal)
-+{
-+	LOG_TEST_ENTER();
-+	void *ptr;
-+	unsigned long page_size = getpagesize();
-+	unsigned long size = 4 * page_size;
-+	int ret;
-+
-+	setup_single_address(size, &ptr);
-+
-+	ret = sys_munmap(ptr + page_size, page_size * 2);
-+	assert(!ret);
-+
-+	if (seal) {
-+		// can't have gap in the middle.
-+		ret = sys_mseal(ptr, size, MM_SEAL_MUNMAP);
-+		assert(ret < 0);
-+	}
-+
-+	ret = sys_munmap(ptr, page_size);
-+	assert(!ret);
-+
-+	ret = sys_munmap(ptr + page_size * 2, page_size);
-+	assert(!ret);
-+
-+	ret = sys_munmap(ptr, size);
-+	assert(!ret);
-+}
-+
-+static void test_munmap_start_freed(bool seal)
-+{
-+	LOG_TEST_ENTER();
-+	void *ptr;
-+	unsigned long page_size = getpagesize();
-+	unsigned long size = 4 * page_size;
-+	int ret;
-+
-+	setup_single_address(size, &ptr);
-+
-+	// unmap the first page.
-+	ret = sys_munmap(ptr, page_size);
-+	assert(!ret);
-+
-+	// seal the last 3 pages.
-+	if (seal) {
-+		ret = sys_mseal(ptr + page_size, 3 * page_size, MM_SEAL_MUNMAP);
-+		assert(!ret);
-+	}
-+
-+	// unmap from the first page.
-+	ret = sys_munmap(ptr, size);
-+	if (seal) {
-+		assert(ret < 0);
-+
-+		// use mprotect to verify page is not unmapped.
-+		ret = sys_mprotect(ptr + page_size, 3 * page_size, PROT_READ);
-+		assert(!ret);
-+	} else
-+		// note: this will be OK, even the first page is
-+		// already unmapped.
-+		assert(!ret);
-+}
-+
-+static void test_munmap_end_freed(bool seal)
-+{
-+	LOG_TEST_ENTER();
-+	void *ptr;
-+	unsigned long page_size = getpagesize();
-+	unsigned long size = 4 * page_size;
-+	int ret;
-+
-+	setup_single_address(size, &ptr);
-+	// unmap last page.
-+	ret = sys_munmap(ptr + page_size * 3, page_size);
-+	assert(!ret);
-+
-+	// seal the first 3 pages.
-+	if (seal) {
-+		ret = sys_mseal(ptr, 3 * page_size, MM_SEAL_MUNMAP);
-+		assert(!ret);
-+	}
-+
-+	// unmap all pages.
-+	ret = sys_munmap(ptr, size);
-+	if (seal) {
-+		assert(ret < 0);
-+
-+		// use mprotect to verify page is not unmapped.
-+		ret = sys_mprotect(ptr, 3 * page_size, PROT_READ);
-+		assert(!ret);
-+	} else
-+		assert(!ret);
-+}
-+
-+static void test_munmap_middle_freed(bool seal)
-+{
-+	LOG_TEST_ENTER();
-+	void *ptr;
-+	unsigned long page_size = getpagesize();
-+	unsigned long size = 4 * page_size;
-+	int ret;
-+
-+	setup_single_address(size, &ptr);
-+	// unmap 2 pages in the middle.
-+	ret = sys_munmap(ptr + page_size, page_size * 2);
-+	assert(!ret);
-+
-+	// seal the first page.
-+	if (seal) {
-+		ret = sys_mseal(ptr, page_size, MM_SEAL_MUNMAP);
-+		assert(!ret);
-+	}
-+
-+	// munmap all 4 pages.
-+	ret = sys_munmap(ptr, size);
-+	if (seal) {
-+		assert(ret < 0);
-+
-+		// use mprotect to verify page is not unmapped.
-+		ret = sys_mprotect(ptr, page_size, PROT_READ);
-+		assert(!ret);
-+	} else
-+		assert(!ret);
-+}
-+
-+void test_seal_mremap_shrink(bool seal)
-+{
-+	LOG_TEST_ENTER();
-+	void *ptr;
-+	unsigned long page_size = getpagesize();
-+	unsigned long size = 4 * page_size;
-+	int ret;
-+	void *ret2;
-+
-+	setup_single_address(size, &ptr);
-+
-+	if (seal) {
-+		ret = sys_mseal(ptr, size, MM_SEAL_MREMAP);
-+		assert(!ret);
-+	}
-+
-+	// shrink from 4 pages to 2 pages.
-+	ret2 = mremap(ptr, size, 2 * page_size, 0, 0);
-+	if (seal) {
-+		assert(ret2 == MAP_FAILED);
-+		assert(errno == EACCES);
-+	} else {
-+		assert(ret2 != MAP_FAILED);
-+		clean_single_address(ret2, 2 * page_size);
-+	}
-+	clean_single_address(ptr, size);
-+}
-+
-+void test_seal_mremap_expand(bool seal)
-+{
-+	LOG_TEST_ENTER();
-+	void *ptr;
-+	unsigned long page_size = getpagesize();
-+	unsigned long size = 4 * page_size;
-+	int ret;
-+	void *ret2;
-+
-+	setup_single_address(size, &ptr);
-+	// ummap last 2 pages.
-+	ret = sys_munmap(ptr + 2 * page_size, 2 * page_size);
-+	assert(!ret);
-+
-+	if (seal) {
-+		ret = sys_mseal(ptr, 2 * page_size, MM_SEAL_MREMAP);
-+		assert(!ret);
-+	}
-+
-+	// expand from 2 page to 4 pages.
-+	ret2 = mremap(ptr, 2 * page_size, 4 * page_size, 0, 0);
-+	if (seal) {
-+		assert(ret2 == MAP_FAILED);
-+		assert(errno == EACCES);
-+	} else {
-+		assert(ret2 == ptr);
-+		clean_single_address(ret2, 4 * page_size);
-+	}
-+	clean_single_address(ptr, size);
-+}
-+
-+void test_seal_mremap_move(bool seal)
-+{
-+	LOG_TEST_ENTER();
-+	void *ptr;
-+	unsigned long page_size = getpagesize();
-+	unsigned long size = page_size;
-+	int ret;
-+	void *ret2;
-+
-+	setup_single_address(size, &ptr);
-+	if (seal) {
-+		ret = sys_mseal(ptr, size, MM_SEAL_MREMAP);
-+		assert(!ret);
-+	}
-+
-+	// move from ptr to fixed address.
-+	ret2 = mremap(ptr, size, size, MREMAP_MAYMOVE | MREMAP_FIXED, addr1);
-+	if (seal) {
-+		assert(ret2 == MAP_FAILED);
-+		assert(errno == EACCES);
-+	} else {
-+		assert(ret2 != MAP_FAILED);
-+		clean_single_address(ret2, size);
-+	}
-+	clean_single_address(ptr, size);
-+}
-+
-+void test_seal_mmap_overwrite_prot(bool seal)
-+{
-+	LOG_TEST_ENTER();
-+	void *ptr;
-+	unsigned long page_size = getpagesize();
-+	unsigned long size = page_size;
-+	int ret;
-+	void *ret2;
-+
-+	setup_single_address(size, &ptr);
-+
-+	if (seal) {
-+		ret = sys_mseal(ptr, size, MM_SEAL_MMAP);
-+		assert(!ret);
-+	}
-+
-+	// use mmap to change protection.
-+	ret2 = mmap(ptr, size, PROT_NONE,
-+			MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED, -1, 0);
-+	if (seal) {
-+		assert(ret2 == MAP_FAILED);
-+		assert(errno == EACCES);
-+	} else
-+		assert(ret2 == ptr);
-+
-+	clean_single_address(ptr, size);
-+}
-+
-+void test_seal_mremap_shrink_fixed(bool seal)
-+{
-+	LOG_TEST_ENTER();
-+	void *ptr;
-+	void *newAddr;
-+	unsigned long page_size = getpagesize();
-+	unsigned long size = 4 * page_size;
-+	int ret;
-+	void *ret2;
-+
-+	setup_single_address(size, &ptr);
-+	setup_single_fixed_address(size, &newAddr);
-+
-+	if (seal) {
-+		ret = sys_mseal(ptr, size, MM_SEAL_MREMAP);
-+		assert(!ret);
-+	}
-+
-+	// mremap to move and shrink to fixed address
-+	ret2 = mremap(ptr, size, 2 * page_size, MREMAP_MAYMOVE | MREMAP_FIXED,
-+			newAddr);
-+	if (seal) {
-+		assert(ret2 == MAP_FAILED);
-+		assert(errno == EACCES);
-+	} else
-+		assert(ret2 == newAddr);
-+
-+	clean_single_address(ptr, size);
-+	clean_single_address(newAddr, size);
-+}
-+
-+void test_seal_mremap_expand_fixed(bool seal)
-+{
-+	LOG_TEST_ENTER();
-+	void *ptr;
-+	void *newAddr;
-+	unsigned long page_size = getpagesize();
-+	unsigned long size = 4 * page_size;
-+	int ret;
-+	void *ret2;
-+
-+	setup_single_address(page_size, &ptr);
-+	setup_single_fixed_address(size, &newAddr);
-+
-+	if (seal) {
-+		ret = sys_mseal(newAddr, size, MM_SEAL_MREMAP);
-+		assert(!ret);
-+	}
-+
-+	// mremap to move and expand to fixed address
-+	ret2 = mremap(ptr, page_size, size, MREMAP_MAYMOVE | MREMAP_FIXED,
-+			newAddr);
-+	if (seal) {
-+		assert(ret2 == MAP_FAILED);
-+		assert(errno == EACCES);
-+	} else
-+		assert(ret2 == newAddr);
-+
-+	clean_single_address(ptr, page_size);
-+	clean_single_address(newAddr, size);
-+}
-+
-+void test_seal_mremap_move_fixed(bool seal)
-+{
-+	LOG_TEST_ENTER();
-+	void *ptr;
-+	void *newAddr;
-+	unsigned long page_size = getpagesize();
-+	unsigned long size = 4 * page_size;
-+	int ret;
-+	void *ret2;
-+
-+	setup_single_address(size, &ptr);
-+	setup_single_fixed_address(size, &newAddr);
-+
-+	if (seal) {
-+		ret = sys_mseal(newAddr, size, MM_SEAL_MREMAP);
-+		assert(!ret);
-+	}
-+
-+	// mremap to move to fixed address
-+	ret2 = mremap(ptr, size, size, MREMAP_MAYMOVE | MREMAP_FIXED, newAddr);
-+	if (seal) {
-+		assert(ret2 == MAP_FAILED);
-+		assert(errno == EACCES);
-+	} else
-+		assert(ret2 == newAddr);
-+
-+	clean_single_address(ptr, page_size);
-+	clean_single_address(newAddr, size);
-+}
-+
-+void test_seal_mremap_move_fixed_zero(bool seal)
-+{
-+	LOG_TEST_ENTER();
-+	void *ptr;
-+	void *newAddr;
-+	unsigned long page_size = getpagesize();
-+	unsigned long size = 4 * page_size;
-+	int ret;
-+	void *ret2;
-+
-+	setup_single_address(size, &ptr);
-+
-+	if (seal) {
-+		ret = sys_mseal(ptr, size, MM_SEAL_MREMAP);
-+		assert(!ret);
-+	}
-+
-+	/*
-+	 * MREMAP_FIXED can move the mapping to zero address
-+	 */
-+	ret2 = mremap(ptr, size, 2 * page_size, MREMAP_MAYMOVE | MREMAP_FIXED,
-+			0);
-+	if (seal) {
-+		assert(ret2 == MAP_FAILED);
-+		assert(errno == EACCES);
-+	} else {
-+		assert(ret2 == 0);
-+		clean_single_address(ret2, 2 * page_size);
-+	}
-+	clean_single_address(ptr, size);
-+}
-+
-+void test_seal_mremap_move_dontunmap(bool seal)
-+{
-+	LOG_TEST_ENTER();
-+	void *ptr;
-+	void *newAddr;
-+	unsigned long page_size = getpagesize();
-+	unsigned long size = 4 * page_size;
-+	int ret;
-+	void *ret2;
-+
-+	setup_single_address(size, &ptr);
-+
-+	if (seal) {
-+		ret = sys_mseal(ptr, size, MM_SEAL_MREMAP);
-+		assert(!ret);
-+	}
-+
-+	// mremap to move, and don't unmap src addr.
-+	ret2 = mremap(ptr, size, size, MREMAP_MAYMOVE | MREMAP_DONTUNMAP, 0);
-+	if (seal) {
-+		assert(ret2 == MAP_FAILED);
-+		assert(errno == EACCES);
-+	} else {
-+		assert(ret2 != MAP_FAILED);
-+		clean_single_address(ret2, size);
-+	}
-+
-+	clean_single_address(ptr, page_size);
-+}
-+
-+void test_seal_mremap_move_dontunmap_anyaddr(bool seal)
-+{
-+	LOG_TEST_ENTER();
-+	void *ptr;
-+	void *newAddr;
-+	unsigned long page_size = getpagesize();
-+	unsigned long size = 4 * page_size;
-+	int ret;
-+	void *ret2;
-+
-+	setup_single_address(size, &ptr);
-+
-+	if (seal) {
-+		ret = sys_mseal(ptr, size, MM_SEAL_MREMAP);
-+		assert(!ret);
-+	}
-+
-+	/*
-+	 * The 0xdeaddead should not have effect on dest addr
-+	 * when MREMAP_DONTUNMAP is set.
-+	 */
-+	ret2 = mremap(ptr, size, size, MREMAP_MAYMOVE | MREMAP_DONTUNMAP,
-+			0xdeaddead);
-+	if (seal) {
-+		assert(ret2 == MAP_FAILED);
-+		assert(errno == EACCES);
-+	} else {
-+		assert(ret2 != MAP_FAILED);
-+		assert((long)ret2 != 0xdeaddead);
-+		clean_single_address(ret2, size);
-+	}
-+
-+	clean_single_address(ptr, page_size);
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	test_seal_invalid_input();
-+	test_seal_addseals();
-+	test_seal_addseals_combined();
-+	test_seal_addseals_reject();
-+	test_seal_unmapped_start();
-+	test_seal_unmapped_middle();
-+	test_seal_unmapped_end();
-+	test_seal_multiple_vmas();
-+	test_seal_split_start();
-+	test_seal_split_end();
-+
-+	test_seal_zero_length();
-+	test_seal_twice();
-+
-+	test_seal_mprotect(false);
-+	test_seal_mprotect(true);
-+
-+	test_seal_start_mprotect(false);
-+	test_seal_start_mprotect(true);
-+
-+	test_seal_end_mprotect(false);
-+	test_seal_end_mprotect(true);
-+
-+	test_seal_mprotect_unalign_len(false);
-+	test_seal_mprotect_unalign_len(true);
-+
-+	test_seal_mprotect_unalign_len_variant_2(false);
-+	test_seal_mprotect_unalign_len_variant_2(true);
-+
-+	test_seal_mprotect_two_vma(false);
-+	test_seal_mprotect_two_vma(true);
-+
-+	test_seal_mprotect_two_vma_with_split(false);
-+	test_seal_mprotect_two_vma_with_split(true);
-+
-+	test_seal_mprotect_partial_mprotect(false);
-+	test_seal_mprotect_partial_mprotect(true);
-+
-+	test_seal_mprotect_two_vma_with_gap(false);
-+	test_seal_mprotect_two_vma_with_gap(true);
-+
-+	test_seal_mprotect_merge(false);
-+	test_seal_mprotect_merge(true);
-+
-+	test_seal_mprotect_split(false);
-+	test_seal_mprotect_split(true);
-+
-+	test_seal_munmap(false);
-+	test_seal_munmap(true);
-+	test_seal_munmap_two_vma(false);
-+	test_seal_munmap_two_vma(true);
-+	test_seal_munmap_vma_with_gap(false);
-+	test_seal_munmap_vma_with_gap(true);
-+
-+	test_munmap_start_freed(false);
-+	test_munmap_start_freed(true);
-+	test_munmap_middle_freed(false);
-+	test_munmap_middle_freed(true);
-+	test_munmap_end_freed(false);
-+	test_munmap_end_freed(true);
-+
-+	test_seal_mremap_shrink(false);
-+	test_seal_mremap_shrink(true);
-+	test_seal_mremap_expand(false);
-+	test_seal_mremap_expand(true);
-+	test_seal_mremap_move(false);
-+	test_seal_mremap_move(true);
-+
-+	test_seal_mremap_shrink_fixed(false);
-+	test_seal_mremap_shrink_fixed(true);
-+	test_seal_mremap_expand_fixed(false);
-+	test_seal_mremap_expand_fixed(true);
-+	test_seal_mremap_move_fixed(false);
-+	test_seal_mremap_move_fixed(true);
-+	test_seal_mremap_move_dontunmap(false);
-+	test_seal_mremap_move_dontunmap(true);
-+	test_seal_mremap_move_fixed_zero(false);
-+	test_seal_mremap_move_fixed_zero(true);
-+	test_seal_mremap_move_dontunmap_anyaddr(false);
-+	test_seal_mremap_move_dontunmap_anyaddr(true);
-+
-+	test_seal_mmap_overwrite_prot(false);
-+	test_seal_mmap_overwrite_prot(true);
-+
-+	printf("OK\n");
-+	return 0;
-+}
--- 
-2.42.0.655.g421f12c284-goog
-
+PiBGcm9tOiBMaXUsIFlpIEwgPHlpLmwubGl1QGludGVsLmNvbT4NCj4gU2VudDogVHVlc2RheSwg
+T2N0b2JlciAxNywgMjAyMyA0OjUyIFBNDQo+IA0KPiBPbiAyMDIzLzEwLzE3IDAyOjE3LCBOaWNv
+bGluIENoZW4gd3JvdGU6DQo+ID4gT24gTW9uLCBPY3QgMTYsIDIwMjMgYXQgMDg6NTQ6MDdBTSAt
+MDMwMCwgSmFzb24gR3VudGhvcnBlIHdyb3RlOg0KPiA+PiBPbiBNb24sIE9jdCAxNiwgMjAyMyBh
+dCAxMToyODoxNUFNICswODAwLCBZaSBMaXUgd3JvdGU6DQo+ID4+PiBPbiAyMDIzLzEwLzE0IDAx
+OjU2LCBOaWNvbGluIENoZW4gd3JvdGU6DQo+ID4+Pj4gT24gRnJpLCBPY3QgMTMsIDIwMjMgYXQg
+MTE6MDQ6NTZBTSAtMDMwMCwgSmFzb24gR3VudGhvcnBlIHdyb3RlOg0KPiA+Pj4+PiBPbiBGcmks
+IE9jdCAxMywgMjAyMyBhdCAxMjozMzoxM1BNICswODAwLCBZaSBMaXUgd3JvdGU6DQo+ID4+Pj4+
+DQo+ID4+Pj4+PiBub3QgcmVhbGx5LiBCZWxvdyB0aGUgdXNlcnMgb2YgdGhlIHN0cnVjdCBpb21t
+dV91c2VyX2RhdGEgaW4gbXkNCj4gY3VycmVudA0KPiA+Pj4+Pj4gaW9tbXVmZF9uZXN0aW5nIGJy
+YW5jaC4gT25seSB0aGUgZG9tYWluX2FsbG9jX3VzZXIgb3AgaGFzIHR5cGUgYXMNCj4gdGhlcmUN
+Cj4gPj4+Pj4+IGNhbiBiZSBtdWx0aXBsZSB2ZW5kb3Igc3BlY2lmaWMgYWxsb2MgZGF0YSB0eXBl
+cy4gQmFzaWNhbGx5LCBJJ20gb2sgdG8NCj4gPj4+Pj4+IG1ha2UgdGhlIGNoYW5nZSB5b3Ugc3Vn
+Z2VzdGVkLCBqdXN0IG5vdCBzdXJlIGlmIGl0IGlzIGdvb2QgdG8gYWRkIHR5cGUNCj4gPj4+Pj4+
+IGFzIGl0IGlzIG9ubHkgbmVlZGVkIGJ5IG9uZSBwYXRoLg0KPiA+Pj4+Pg0KPiA+Pj4+PiBJIGRv
+bid0IHRoaW5rIHdlIHNob3VsZCBldmVyIGhhdmUgYW4gb3BhcXVlIGRhdGEgYmxvYiB3aXRob3V0
+IGEgdHlwZQ0KPiA+Pj4+PiB0YWcuLg0KPiA+Pj4+DQo+ID4+Pj4gSSBjYW4gYWRkIHRob3NlICJt
+aXNzaW5nIiBkYXRhIHR5cGVzLCBhbmQgdGhlbiBhIGRyaXZlciB3aWxsIGJlDQo+ID4+Pj4gcmVz
+cG9uc2libGUgZm9yIHNhbml0aXppbmcgdGhlIHR5cGUgYWxvbmcgd2l0aCB0aGUgZGF0YV9sZW4u
+DQo+ID4+Pj4NCj4gPj4+PiBJIG5vdGljZSB0aGF0IHRoZSBlbnVtIGlvbW11X2h3cHRfZGF0YV90
+eXBlIGluIHRoZSBwb3N0ZWQgcGF0Y2gNCj4gPj4+PiBpcyBjb25maW5lZCB0byB0aGUgYWxsb2Nf
+dXNlciB1QVBJLiBQZXJoYXBzIHdlIHNob3VsZCBzaGFyZSBpdA0KPiA+Pj4+IHdpdGggaW52YWxp
+ZGF0ZSB0b286DQo+ID4+Pg0KPiA+Pj4gaW52YWxpZGF0aW9uIHBhdGggZG9lcyBub3QgbmVlZCBh
+IHR5cGUgZmllbGQgdG9kYXkgYXMgdGhlIGRhdGENCj4gPj4+IHR5cGUgaXMgdmVuZG9yIHNwZWNp
+ZmljLCB2ZW5kb3IgZHJpdmVyIHNob3VsZCBrbm93IHRoZSBkYXRhIHR5cGUNCj4gPj4+IHdoZW4g
+Y2FsbHMgaW4uDQo+ID4+DQo+ID4+IEknbSBub3Qga2VlbiBvbiB0aGF0LCB3aGF0IGlmIGEgZHJp
+dmVyIG5lZWRzIGFub3RoZXIgdHlwZSBpbiB0aGUNCj4gPj4gZnV0dXJlPyAgWW91J2Qgd2FudCB0
+byBtYWtlIHRoZSBpbnZhbGlkYXRpb24gZGF0YSBmb3JtYXQgcGFydCBvZiB0aGUNCj4gPj4gZG9t
+YWluIGFsbG9jYXRpb24/DQo+ID4NCj4gPiBUaGUgaW52YWxpZGF0aW9uIGRhdGEgaGFzIGh3cHRf
+aWQgc28gaXQncyB0aWVkIHRvIGEgaHdwdCBhbmQgaXRzDQo+ID4gaHdwdC0+ZG9tYWluLiBXb3Vs
+ZCBpdCBiZSByZWFzb25hYmxlIHRvIGhhdmUgYSBkaWZmZXJlbnQgdHlwZSBvZg0KPiA+IGludmFs
+aWRhdGlvbiBkYXRhIGZvciB0aGUgc2FtZSB0eXBlIG9mIGh3cHQ/DQo+IA0KPiB0aGlzIHNlZW1z
+IGxpa2Ugd2hhdCBKYXNvbiBhc2tzLiBBIHR5cGUgb2YgaHdwdCBjYW4gaGF2ZSB0d28ga2luZHMN
+Cj4gb2YgaW52YWxpZGF0aW9uIGRhdGEgdHlwZXMuIElzIGl0IHJlYWxseSBwb3NzaWJsZT8NCj4g
+DQoNCmUuZy4gdmhvc3QtaW9tbXUgbWF5IHdhbnQgaXRzIG93biB2ZW5kb3ItYWdub3N0aWMgZm9y
+bWF0IGZyb20NCnByZXZpb3VzIGRpc2N1c3Npb24uLi4NCg==
