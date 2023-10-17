@@ -2,97 +2,107 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 001C67CC7CE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Oct 2023 17:46:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BD017CC7D6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 17 Oct 2023 17:46:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344176AbjJQPqV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 Oct 2023 11:46:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32996 "EHLO
+        id S235088AbjJQPq6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 Oct 2023 11:46:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235111AbjJQPp7 (ORCPT
+        with ESMTP id S235132AbjJQPqu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Oct 2023 11:45:59 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C952A19B;
-        Tue, 17 Oct 2023 08:45:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=HqpYto28NsMabgIUb0zwF/UIwjSPedBpjPncERhM0sc=; b=OiWj523wh1qqOURtI8D0fP9yhq
-        BpKtVJH7f5xAmh2kV4g4NT4z4JCMxhFGYGPOrZCkl4DqWtTsCqR2kAJKLehXRyjoJy8IBgRrRJNEh
-        8NrJ34NME2vvCbPyOhJfxLbveH0Nxa9Vokt6hgrKueEQQ3VqlTDXoHQ4nvsG1nhBM1rxXqRLHPiQB
-        ZJ6LG7BelIHi3Fd0NmRghWkmDZR2/bHfaZ+7B/ddgE/8+nXlP3aL+OWbawfYnKCqgSTyy7mbP4CMk
-        LBoMUXzHKzYsa4du5552XOyNkQ/99AV1qORCdGhqM1+87tmw7wkoXKQV8Qmx2GFCNOM4J8KfFinUY
-        RYs6oXpA==;
-Received: from [50.53.46.231] (helo=[192.168.254.15])
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1qsmGI-00Cm99-1U;
-        Tue, 17 Oct 2023 15:45:38 +0000
-Message-ID: <cba3771f-09bb-4b2b-af13-00dd2f9c4e64@infradead.org>
-Date:   Tue, 17 Oct 2023 08:45:36 -0700
+        Tue, 17 Oct 2023 11:46:50 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E19DC13D
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Oct 2023 08:46:48 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id ca18e2360f4ac-7a66555061eso4346839f.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 17 Oct 2023 08:46:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1697557608; x=1698162408; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qifLUWrkmypuE1HSNNdyFzpD4fELvix1NB9KRDxZL6k=;
+        b=K2yfEisqlKZqRVCJlCswRZR7ZE34IYOmxwd2QVY71uccQEJomx59oVxDDvMC57KEQb
+         aN2noaz0bVQEOiLrXr2PAbCwSlqoPOpu7jxnXmuNEQfbSZ1lJf+sh1A7B7vMrM6TT0iN
+         voMHn4nQw5YpOrun58BVrnQ24SmYg3aymmboE=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697557608; x=1698162408;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qifLUWrkmypuE1HSNNdyFzpD4fELvix1NB9KRDxZL6k=;
+        b=JWa36lDNqTh9F58P4B+daqiprWNQPcR0KMS3jhdqJSrM7g2HKqXxaF0/mVti6AqjFv
+         NQNseJqL5dseiFpsUU28YuJepVNCirzgJg+mX7lXiKG20yRCpJOjbKKoKIsUkOBBDvvj
+         iHLVy+G8/j6E6ARWZhN269DFtpO074feK7YJEvRSIEVD7ORvi2aWtIxaY6sgU5amUEp2
+         OadzpvBhVkLFWTRy0nNTx/vDG1A3k7KCL7p8IiDtL8G+9p61xucepAgar311kF/mWoyt
+         UKmB0EzDnwalSs1jmeHJ/hms0LbmjDFaaBgcFskdlcZqwwK0byHe4E+NindoMiyHDmmL
+         KSiQ==
+X-Gm-Message-State: AOJu0YwM8kgeDHlg6PRAt/6wWtZrQJ9q7i0P5/yXTVIRJB8Hnk1jBwJJ
+        qC3vLfhrbg2kf3WbklNlkZrBqzh0KRp7D/sOcjY=
+X-Google-Smtp-Source: AGHT+IHgKOfjvzKSAB0scid4I1mm3aq4oFWhBwPqa9mWSsIQTAzX4p9v9j6dSadUHlBM2ou8xWXtnw==
+X-Received: by 2002:a05:6602:1513:b0:79f:a8c2:290d with SMTP id g19-20020a056602151300b0079fa8c2290dmr3348129iow.0.1697557608211;
+        Tue, 17 Oct 2023 08:46:48 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.45.1])
+        by smtp.gmail.com with ESMTPSA id x22-20020a056638249600b0042acf389acesm556725jat.71.2023.10.17.08.46.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Oct 2023 08:46:47 -0700 (PDT)
+Message-ID: <2a96e3a8-48a5-46ae-9a0c-b5f2def0a257@linuxfoundation.org>
+Date:   Tue, 17 Oct 2023 09:46:47 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2 1/8] mseal: Add mseal(2) syscall.
+Subject: Re: [PATCH] selftests/efivarfs: create-read: fix a resource leak
 Content-Language: en-US
-To:     jeffxu@chromium.org, akpm@linux-foundation.org,
-        keescook@chromium.org, jannh@google.com, sroettger@google.com,
-        willy@infradead.org, gregkh@linuxfoundation.org,
-        torvalds@linux-foundation.org
-Cc:     jeffxu@google.com, jorgelo@chromium.org, groeck@chromium.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, surenb@google.com, alex.sierra@amd.com,
-        apopple@nvidia.com, aneesh.kumar@linux.ibm.com,
-        axelrasmussen@google.com, ben@decadent.org.uk,
-        catalin.marinas@arm.com, david@redhat.com, dwmw@amazon.co.uk,
-        ying.huang@intel.com, hughd@google.com, joey.gouly@arm.com,
-        corbet@lwn.net, wangkefeng.wang@huawei.com,
-        Liam.Howlett@oracle.com, lstoakes@gmail.com, mawupeng1@huawei.com,
-        linmiaohe@huawei.com, namit@vmware.com, peterx@redhat.com,
-        peterz@infradead.org, ryan.roberts@arm.com, shr@devkernel.io,
-        vbabka@suse.cz, xiujianfeng@huawei.com, yu.ma@intel.com,
-        zhangpeng362@huawei.com, dave.hansen@intel.com, luto@kernel.org,
-        linux-hardening@vger.kernel.org
-References: <20231017090815.1067790-1-jeffxu@chromium.org>
- <20231017090815.1067790-2-jeffxu@chromium.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20231017090815.1067790-2-jeffxu@chromium.org>
-Content-Type: text/plain; charset=UTF-8
+To:     zhujun2 <zhujun2@cmss.chinamobile.com>, shuah@kernel.org
+Cc:     linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20231017023335.7874-1-zhujun2@cmss.chinamobile.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20231017023335.7874-1-zhujun2@cmss.chinamobile.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-nit:
+On 10/16/23 20:33, zhujun2 wrote:
+> The opened file should be closed in main(), otherwise resource
+> leak will occur
+> 
 
-On 10/17/23 02:08, jeffxu@chromium.org wrote:
+Did you find this by code reading or by any other means. Please
+add how you found the problem to the change log.
 
-| diff --git a/mm/Kconfig b/mm/Kconfig
-| index 264a2df5ecf5..db8a567cb4d3 100644
-| --- a/mm/Kconfig
-| +++ b/mm/Kconfig
-| @@ -1258,6 +1258,14 @@ config LOCK_MM_AND_FIND_VMA
-|  	bool
-|  	depends on !STACK_GROWSUP
-|  
-| +config MSEAL
-| +	default n
-| +	bool "Enable mseal() system call"
-| +	depends on MMU
-| +	help
-| +	  Enable the mseal() system call. Make memory areas's metadata immutable
+> Signed-off-by: zhujun2 <zhujun2@cmss.chinamobile.com>
+> ---
+>   tools/testing/selftests/efivarfs/create-read.c | 3 +++
+>   1 file changed, 3 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/efivarfs/create-read.c b/tools/testing/selftests/efivarfs/create-read.c
+> index 9674a1939..6812104a5 100644
+> --- a/tools/testing/selftests/efivarfs/create-read.c
+> +++ b/tools/testing/selftests/efivarfs/create-read.c
+> @@ -32,8 +32,11 @@ int main(int argc, char **argv)
+>   	rc = read(fd, buf, sizeof(buf));
+>   	if (rc != 0) {
+>   		fprintf(stderr, "Reading a new var should return EOF\n");
+> +		close(fd);
+>   		return EXIT_FAILURE;
+>   	}
+>   
+> +	close(fd);
+> +
 
-	                                              areas'
+No need for this extra line here.
 
-$search_engine is your friend.
+>   	return EXIT_SUCCESS;
+>   }
 
-| +	  by selected system calls, i.e. mprotect(), munmap(), mremap(), mmap().
-
-
--- 
-~Randy
+thanks,
+-- Shuah
