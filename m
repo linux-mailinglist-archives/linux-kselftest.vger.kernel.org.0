@@ -2,245 +2,418 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46B967CD02C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Oct 2023 01:02:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 28AD17CD02E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Oct 2023 01:02:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235057AbjJQXCD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 Oct 2023 19:02:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58438 "EHLO
+        id S233940AbjJQXCO (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 Oct 2023 19:02:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234909AbjJQXCA (ORCPT
+        with ESMTP id S235038AbjJQXCM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Oct 2023 19:02:00 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716B211C
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Oct 2023 16:01:52 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id d75a77b69052e-41b813f0a29so64991cf.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 17 Oct 2023 16:01:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1697583711; x=1698188511; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ImnM3gTgvQUDZbbKNrv2s4PovNIFWxZGTx+tFBxEKCA=;
-        b=A7yO6MSch9D1Y7KGob8X8JTG8G9ij12MKR7I7utx1DUsTtuuQWiuYuFCPD/qg/hq0E
-         edj2wqPSVvbGNpHCl9278UUmDyxBzdgwkINhWwXbB1lYZ+pTcQbqOWFZLLqF2nbX+8k/
-         j4llB2vEaFCGO5SETUEoIzd6x1zdt4U8wkYTniL8fsrXJ/mAfFWF6igxbRUysywevlBs
-         QhzlhES29vTjn26T6zpTxlwPR0Wdke62227H/gnmSwAqLc4y2MvnRMLGWkEKAXhkKKhw
-         H6ULLh0h55BWIxoPVIGTeuYChQLfhXUY0/w3pfQeW4QLBS7nlyKHB2ltDx8v1Ib+YkWb
-         zcHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697583711; x=1698188511;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ImnM3gTgvQUDZbbKNrv2s4PovNIFWxZGTx+tFBxEKCA=;
-        b=GAyDWHPsRvqHjL3LNYC8Df9EWK1Ohi5YupLwoJCsvL9Yc2KaY/P3nHOvzzj0Vj151F
-         lm0PySrXvY6lgrWYrpoJVYSGigOeqBMuVzP4lEXdV7FH/AnjFZj9f4mFv6hJ/Jv/EgVk
-         hpZv7+TEJ9d3uxXSBdauS3lPxX8aQClLceWOwZHGj/KO/dcronRL0ib4cJ/BRyvMMytx
-         bSK8C+o5qfhi1mKKRwONn4wsesqYRUmUbAeOAy9obSM5cKTkyUqbM4JSNkl8CrQ1ikJc
-         sk95aADn5JZASWDn8JRxK8/cHZuSQl2iAIfuNoHrV8ecIawSkS2fcSbJAl0CaThkPzNk
-         VXBg==
-X-Gm-Message-State: AOJu0Yxxy44yWRD8inwdpaZyQwYPf6Rg8lThlt9lDFiCnYqQAC3MavEV
-        LqPju7v6MPc0uEt7v+BrC8DoXUBZDo3uCa40PRMSMg==
-X-Google-Smtp-Source: AGHT+IFRiCphE8SGRZza9wFnaYv5dtjuDGiQxMHSXLNnXD68r7Tsnp6XlmaQHLEDn/NPKGLCG14R2gjFx0iFXzfE8zw=
-X-Received: by 2002:a05:622a:a047:b0:41b:ef8f:dcbc with SMTP id
- ju7-20020a05622aa04700b0041bef8fdcbcmr149648qtb.0.1697583710994; Tue, 17 Oct
- 2023 16:01:50 -0700 (PDT)
+        Tue, 17 Oct 2023 19:02:12 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43D91119;
+        Tue, 17 Oct 2023 16:02:09 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F511C433C8;
+        Tue, 17 Oct 2023 23:02:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1697583728;
+        bh=08Z7nfsNuUeGcZqJevhbDVWfnyFzmgKni4CQnDVUlWE=;
+        h=From:Date:Subject:To:Cc:From;
+        b=MpBpXvBRPsYNsSdXre9jY3VKJaIqz+umB0rmjNmBopI9FgEUOTyapIDf/o9tBNfvH
+         5o/ZXk5HhhDr0VfLFf122yFAW+/JZZbDsrBEWsI1JqZsdxzEKKQCk2zaWrlbtjxYJ+
+         U74sx+tJX/bl1yeVzbEEvSDfOl4U0fFl2LGEcO1VtISNJwyY+LPFqd2pvndNeOuQmI
+         zWS6CXSsnFiJljv5QVPBt3d13XcXNQS5XjBfmkX+c/3QiZ5rVJJlyb0gKXsW8DRVid
+         B9958LzqoIwpr1WB8lh/by9byC/CEuCJ8svN5Q9SoTCJaKKlqAYzWcdnuODHKWEjkl
+         hiEl7ZTJ/S1dg==
+From:   Mark Brown <broonie@kernel.org>
+Date:   Wed, 18 Oct 2023 00:01:56 +0100
+Subject: [PATCH] selftests/clone3: Report descriptive test names
 MIME-Version: 1.0
-References: <20231016143828.647848-1-jeffxu@chromium.org> <CAHk-=whFZoap+DBTYvJx6ohqPwn11Puzh7q4huFWDX9vBwXHgg@mail.gmail.com>
- <CALmYWFtTDAb_kpZdAe_xspqwNgK1NWJmjTxaTC=jDEMzfe297Q@mail.gmail.com>
- <CAHk-=wj87GMTH=5901ob=SjQqegAm2JYBE7E4J7skJzE64U-wQ@mail.gmail.com> <55960.1697566804@cvs.openbsd.org>
-In-Reply-To: <55960.1697566804@cvs.openbsd.org>
-From:   Jeff Xu <jeffxu@google.com>
-Date:   Tue, 17 Oct 2023 16:01:13 -0700
-Message-ID: <CALmYWFs81T=XnT=AXQTo0+9FXo=OBAV_4rrYPSn9-16O-gBTZg@mail.gmail.com>
-Subject: Re: [RFC PATCH v1 0/8] Introduce mseal() syscall
-To:     Theo de Raadt <deraadt@openbsd.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        jeffxu@chromium.org, akpm@linux-foundation.org,
-        keescook@chromium.org, sroettger@google.com, jorgelo@chromium.org,
-        groeck@chromium.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        jannh@google.com, surenb@google.com, alex.sierra@amd.com,
-        apopple@nvidia.com, aneesh.kumar@linux.ibm.com,
-        axelrasmussen@google.com, ben@decadent.org.uk,
-        catalin.marinas@arm.com, david@redhat.com, dwmw@amazon.co.uk,
-        ying.huang@intel.com, hughd@google.com, joey.gouly@arm.com,
-        corbet@lwn.net, wangkefeng.wang@huawei.com,
-        Liam.Howlett@oracle.com, lstoakes@gmail.com, willy@infradead.org,
-        mawupeng1@huawei.com, linmiaohe@huawei.com, namit@vmware.com,
-        peterx@redhat.com, peterz@infradead.org, ryan.roberts@arm.com,
-        shr@devkernel.io, vbabka@suse.cz, xiujianfeng@huawei.com,
-        yu.ma@intel.com, zhangpeng362@huawei.com, dave.hansen@intel.com,
-        luto@kernel.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20231018-kselftest-clone3-output-v1-1-12b7c50ea2cf@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAGMSL2UC/x3MQQqDMBBG4avIrDtgomjxKtJFo786VBLJxCKId
+ ze4/BbvnaSIAqWuOCniLyrBZ5hXQcPy9TNYxmyypa1MaVr+KdYpQRMPa/CoOOxp2xO3eLumbqw
+ bjaNcbxGTHM+5/1zXDbjttx9pAAAA
+To:     Christian Brauner <brauner@kernel.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.13-dev-0438c
+X-Developer-Signature: v=1; a=openpgp-sha256; l=10722; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=08Z7nfsNuUeGcZqJevhbDVWfnyFzmgKni4CQnDVUlWE=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBlLxJuD9cdI9dJO3/6fxga8NFfD+cuYtVTpIPpktlO
+ MTe3p3+JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZS8SbgAKCRAk1otyXVSH0Ev4B/
+ 482LyXZkFlSPGw4LPM886+T7oIf4xwjFY3HgH2vVSINf9YBzTDtM2FwUSZLI0Cca2ojJ5obM2yAkid
+ 65taxBdS6x+O1CabS+X4HNJIRZ6I6J2U1wOc2WrZ4mHecNvmtnftuZT8gMeWF9uU+mLYyKHOk6YOAk
+ qq/mdvvl0GrXkxeaF7WzVvz9j0AAW90nRGKO6YmiEl6btXT/V1HzOZqaMpFJVxNKeQbtfGuVuSzxCO
+ 1jLcZuX4zdAw/nK7U+Q+HPuPCB3lIncJ+V+e7ttKCZdm+vHavntzbJAZ2CrtYjnC43uTxD+ur4hFPD
+ D/Wv5pbhtXiXiYuF3ygb8WsodIC0Zi
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Oct 17, 2023 at 11:20=E2=80=AFAM Theo de Raadt <deraadt@openbsd.org=
-> wrote:
->
-> Linus Torvalds <torvalds@linux-foundation.org> wrote:
->
-> > On Tue, 17 Oct 2023 at 02:08, Jeff Xu <jeffxu@google.com> wrote:
-> > >
-> > > It is probably worth noting that I choose to check one and only
-> > > one sealing type per syscall. i.e. munmap(2) checks
-> > > MM_SEAL_MUNMAP only.
-> >
-> > Yeah, this is wrong.
-> >
-> > It's wrong exactly because other system calls will unmap things too.
-> >
-> > Using mmap() to over-map something will unmap the old one.
-> >
-> > Same goes for mremap() to move over an existing mapping.
-> >
-> > So the whole "do things by the name of the system call" is not workable=
-.
-> >
-> > All that matters is what the system calls *do*, not what their name is.
->
-> I agree completely...
->
-> mseal() is a clone of mimmutable(2), but with an extremely
-> over-complicated API based upon dubious arguments.
->
-> I designed mimmutable(2) [1] in OpenBSD, it took about a year to get all
-> the components working correctly.  There were many intermediate API
-> during development, but in the end the API is simply:
->
->      int mimmutable(void *addr, size_t len);
->
-> The kernel code for mimmutable() traverses the specified VA range.  In
-> that range, it will find unmapped sub-regions (which are are ignored)
-> and mapped sub-regions. For these mapped regions, it does not care what
-> the permissions are, it just marks each sub-region as immutable.
->
-> Later on, when any VM operation request upon a VA range attempts to
->       (1) change the permissions
->       (2) to re-map on top
->       (3) or dispose of the mapping,
-> that operation is refused with errno EPERM.  We don't care where the
-> request comes from (ie. what system call).  It is a behaviour of the
-> VM system, when asked to act upon a VA sub-range mapping.
->
-> Very simple semantics.
->
-> The only case where the immutable marker is ignored is during address spa=
-ce
-> teardown as a result of process termination.
->
-May I ask, for BSD's implementation of immutable(), do you cover
-things such as mlock(),
-madvice() ? or just the protection bit (WRX) + remap() + unmap().
+The clone3() selftests currently report test results in a format that does
+not mesh entirely well with automation. They log output for each test such
+as:
 
-In other words:
-Is BSD's definition of immutable equivalent to
-MM_SEAL_MPROTECT|MM_SEAL_MUNMAP|MM_SEAL_MREMAP|MM_SEAL_MMAP, of this patch =
-set ?
+  # [1382411] Trying clone3() with flags 0 (size 0)
+  # I am the parent (1382411). My child's pid is 1382412
+  # I am the child, my PID is 1382412
+  # [1382411] clone3() with flags says: 0 expected 0
+  ok 1 [1382411] Result (0) matches expectation (0)
 
-I hesitate to introduce the concept of immutable into linux because I don't=
- know
-all the scenarios present in linux where VMAs's metadata can be
-modified. As Jann's email pointed out,
-There could be quite a few things we still need to deal with, to
-completely block the possibility,
-e.g. malicious code attempting to write to a RO memory or change RW
-memory to RWX.
+This is not ideal for automated parsers since the text after the "ok 1" is
+treated as the test name when comparing runs by a lot of automation (tests
+routinely get renumbered due to things like new tests being added based on
+logical groupings). The PID means that the test names will frequently vary
+and the rest of the name being a description of results means several tests
+have identical text there.
 
-If, as part of immutable, I also block madvice(), mlock(), which also updat=
-es
-VMA's metadata, so by definition, I could.  What if the user wants the
-features in
-madvice() and at the same time, also wants their .text protected ?
+Address this by refactoring things so that we have a static descriptive
+name for each test which we use when logging passes, failures and skips
+and since we now have a stable name for the test to hand log that before
+starting the test to address the common issue reading logs where the test
+name is only printed after any diagnostics. The result is:
 
-Also, if linux introduces a new syscall that depends on a new metadata of V=
-MA,
-say msecret(), (for discussion purpose), should immutable
-automatically support that ?
+ # Running test 'simple clone3()'
+ # [1562777] Trying clone3() with flags 0 (size 0)
+ # I am the parent (1562777). My child's pid is 1562778
+ # I am the child, my PID is 1562778
+ # [1562777] clone3() with flags says: 0 expected 0
+ ok 1 simple clone3()
 
-Without those questions answered, I couldn't choose the route of
-immutable() yet.
+In order to handle skips a bit more neatly this is done in a moderately
+invasive fashion where we move from a sequence of function calls to having
+an array of test parameters. This hopefully also makes it a little easier
+to see what the tests are doing when looking at both the source and the
+logs.
 
--Jeff
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ tools/testing/selftests/clone3/clone3.c | 265 +++++++++++++++++++++++---------
+ 1 file changed, 192 insertions(+), 73 deletions(-)
 
+diff --git a/tools/testing/selftests/clone3/clone3.c b/tools/testing/selftests/clone3/clone3.c
+index e60cf4da8fb0..9429d361059e 100644
+--- a/tools/testing/selftests/clone3/clone3.c
++++ b/tools/testing/selftests/clone3/clone3.c
+@@ -7,6 +7,7 @@
+ #include <inttypes.h>
+ #include <linux/types.h>
+ #include <linux/sched.h>
++#include <stdbool.h>
+ #include <stdint.h>
+ #include <stdio.h>
+ #include <stdlib.h>
+@@ -103,8 +104,8 @@ static int call_clone3(uint64_t flags, size_t size, enum test_mode test_mode)
+ 	return 0;
+ }
+ 
+-static void test_clone3(uint64_t flags, size_t size, int expected,
+-		       enum test_mode test_mode)
++static bool test_clone3(uint64_t flags, size_t size, int expected,
++			enum test_mode test_mode)
+ {
+ 	int ret;
+ 
+@@ -114,92 +115,210 @@ static void test_clone3(uint64_t flags, size_t size, int expected,
+ 	ret = call_clone3(flags, size, test_mode);
+ 	ksft_print_msg("[%d] clone3() with flags says: %d expected %d\n",
+ 			getpid(), ret, expected);
+-	if (ret != expected)
+-		ksft_test_result_fail(
++	if (ret != expected) {
++		ksft_print_msg(
+ 			"[%d] Result (%d) is different than expected (%d)\n",
+ 			getpid(), ret, expected);
+-	else
+-		ksft_test_result_pass(
+-			"[%d] Result (%d) matches expectation (%d)\n",
+-			getpid(), ret, expected);
+-}
+-
+-int main(int argc, char *argv[])
+-{
+-	uid_t uid = getuid();
+-
+-	ksft_print_header();
+-	ksft_set_plan(19);
+-	test_clone3_supported();
+-
+-	/* Just a simple clone3() should return 0.*/
+-	test_clone3(0, 0, 0, CLONE3_ARGS_NO_TEST);
+-
+-	/* Do a clone3() in a new PID NS.*/
+-	if (uid == 0)
+-		test_clone3(CLONE_NEWPID, 0, 0, CLONE3_ARGS_NO_TEST);
+-	else
+-		ksft_test_result_skip("Skipping clone3() with CLONE_NEWPID\n");
+-
+-	/* Do a clone3() with CLONE_ARGS_SIZE_VER0. */
+-	test_clone3(0, CLONE_ARGS_SIZE_VER0, 0, CLONE3_ARGS_NO_TEST);
+-
+-	/* Do a clone3() with CLONE_ARGS_SIZE_VER0 - 8 */
+-	test_clone3(0, CLONE_ARGS_SIZE_VER0 - 8, -EINVAL, CLONE3_ARGS_NO_TEST);
+-
+-	/* Do a clone3() with sizeof(struct clone_args) + 8 */
+-	test_clone3(0, sizeof(struct __clone_args) + 8, 0, CLONE3_ARGS_NO_TEST);
+-
+-	/* Do a clone3() with exit_signal having highest 32 bits non-zero */
+-	test_clone3(0, 0, -EINVAL, CLONE3_ARGS_INVAL_EXIT_SIGNAL_BIG);
++		return false;
++	}
+ 
+-	/* Do a clone3() with negative 32-bit exit_signal */
+-	test_clone3(0, 0, -EINVAL, CLONE3_ARGS_INVAL_EXIT_SIGNAL_NEG);
++	return true;
++}
+ 
+-	/* Do a clone3() with exit_signal not fitting into CSIGNAL mask */
+-	test_clone3(0, 0, -EINVAL, CLONE3_ARGS_INVAL_EXIT_SIGNAL_CSIG);
++typedef bool (*filter_function)(void);
++typedef size_t (*size_function)(void);
+ 
+-	/* Do a clone3() with NSIG < exit_signal < CSIG */
+-	test_clone3(0, 0, -EINVAL, CLONE3_ARGS_INVAL_EXIT_SIGNAL_NSIG);
++static bool not_root(void)
++{
++	if (getuid() != 0) {
++		ksft_print_msg("Not running as root\n");
++		return true;
++	}
+ 
+-	test_clone3(0, sizeof(struct __clone_args) + 8, 0, CLONE3_ARGS_ALL_0);
++	return false;
++}
+ 
+-	test_clone3(0, sizeof(struct __clone_args) + 16, -E2BIG,
+-			CLONE3_ARGS_ALL_0);
++static size_t page_size_plus_8(void)
++{
++	return getpagesize() + 8;
++}
+ 
+-	test_clone3(0, sizeof(struct __clone_args) * 2, -E2BIG,
+-			CLONE3_ARGS_ALL_0);
++struct test {
++	const char *name;
++	uint64_t flags;
++	size_t size;
++	size_function size_function;
++	int expected;
++	enum test_mode test_mode;
++	filter_function filter;
++};
+ 
+-	/* Do a clone3() with > page size */
+-	test_clone3(0, getpagesize() + 8, -E2BIG, CLONE3_ARGS_NO_TEST);
++static const struct test tests[] = {
++	{
++		.name = "simple clone3()",
++		.flags = 0,
++		.size = 0,
++		.expected = 0,
++		.test_mode = CLONE3_ARGS_NO_TEST,
++	},
++	{
++		.name = "clone3() in a new PID_NS",
++		.flags = CLONE_NEWPID,
++		.size = 0,
++		.expected = 0,
++		.test_mode = CLONE3_ARGS_NO_TEST,
++		.filter = not_root,
++	},
++	{
++		.name = "CLONE_ARGS_SIZE_VER0",
++		.flags = 0,
++		.size = CLONE_ARGS_SIZE_VER0,
++		.expected = 0,
++		.test_mode = CLONE3_ARGS_NO_TEST,
++	},
++	{
++		.name = "CLONE_ARGS_SIZE_VER0 - 8",
++		.flags = 0,
++		.size = CLONE_ARGS_SIZE_VER0 - 8,
++		.expected = -EINVAL,
++		.test_mode = CLONE3_ARGS_NO_TEST,
++	},
++	{
++		.name = "sizeof(struct clone_args) + 8",
++		.flags = 0,
++		.size = sizeof(struct __clone_args) + 8,
++		.expected = 0,
++		.test_mode = CLONE3_ARGS_NO_TEST,
++	},
++	{
++		.name = "exit_signal with highest 32 bits non-zero",
++		.flags = 0,
++		.size = 0,
++		.expected = -EINVAL,
++		.test_mode = CLONE3_ARGS_INVAL_EXIT_SIGNAL_BIG,
++	},
++	{
++		.name = "negative 32-bit exit_signal",
++		.flags = 0,
++		.size = 0,
++		.expected = -EINVAL,
++		.test_mode = CLONE3_ARGS_INVAL_EXIT_SIGNAL_NEG,
++	},
++	{
++		.name = "exit_signal not fitting into CSIGNAL mask",
++		.flags = 0,
++		.size = 0,
++		.expected = -EINVAL,
++		.test_mode = CLONE3_ARGS_INVAL_EXIT_SIGNAL_CSIG,
++	},
++	{
++		.name = "NSIG < exit_signal < CSIG",
++		.flags = 0,
++		.size = 0,
++		.expected = -EINVAL,
++		.test_mode = CLONE3_ARGS_INVAL_EXIT_SIGNAL_NSIG,
++	},
++	{
++		.name = "Arguments sizeof(struct clone_args) + 8",
++		.flags = 0,
++		.size = sizeof(struct __clone_args) + 8,
++		.expected = 0,
++		.test_mode = CLONE3_ARGS_ALL_0,
++	},
++	{
++		.name = "Arguments sizeof(struct clone_args) + 16",
++		.flags = 0,
++		.size = sizeof(struct __clone_args) + 16,
++		.expected = -E2BIG,
++		.test_mode = CLONE3_ARGS_ALL_0,
++	},
++	{
++		.name = "Arguments sizeof(struct clone_arg) * 2",
++		.flags = 0,
++		.size = sizeof(struct __clone_args) + 16,
++		.expected = -E2BIG,
++		.test_mode = CLONE3_ARGS_ALL_0,
++	},
++	{
++		.name = "Arguments > page size",
++		.flags = 0,
++		.size_function = page_size_plus_8,
++		.expected = -E2BIG,
++		.test_mode = CLONE3_ARGS_NO_TEST,
++	},
++	{
++		.name = "CLONE_ARGS_SIZE_VER0 in a new PID NS",
++		.flags = CLONE_NEWPID,
++		.size = CLONE_ARGS_SIZE_VER0,
++		.expected = 0,
++		.test_mode = CLONE3_ARGS_NO_TEST,
++		.filter = not_root,
++	},
++	{
++		.name = "CLONE_ARGS_SIZE_VER0 - 8 in a new PID NS",
++		.flags = CLONE_NEWPID,
++		.size = CLONE_ARGS_SIZE_VER0 - 8,
++		.expected = -EINVAL,
++		.test_mode = CLONE3_ARGS_NO_TEST,
++	},
++	{
++		.name = "sizeof(struct clone_args) + 8 in a new PID NS",
++		.flags = CLONE_NEWPID,
++		.size = sizeof(struct __clone_args) + 8,
++		.expected = 0,
++		.test_mode = CLONE3_ARGS_NO_TEST,
++		.filter = not_root,
++	},
++	{
++		.name = "Arguments > page size in a new PID NS",
++		.flags = CLONE_NEWPID,
++		.size_function = page_size_plus_8,
++		.expected = -E2BIG,
++		.test_mode = CLONE3_ARGS_NO_TEST,
++	},
++	{
++		.name = "New time NS",
++		.flags = CLONE_NEWTIME,
++		.size = 0,
++		.expected = 0,
++		.test_mode = CLONE3_ARGS_NO_TEST,
++	},
++	{
++		.name = "exit signal (SIGCHLD) in flags",
++		.flags = SIGCHLD,
++		.size = 0,
++		.expected = -EINVAL,
++		.test_mode = CLONE3_ARGS_NO_TEST,
++	},
++};
+ 
+-	/* Do a clone3() with CLONE_ARGS_SIZE_VER0 in a new PID NS. */
+-	if (uid == 0)
+-		test_clone3(CLONE_NEWPID, CLONE_ARGS_SIZE_VER0, 0,
+-				CLONE3_ARGS_NO_TEST);
+-	else
+-		ksft_test_result_skip("Skipping clone3() with CLONE_NEWPID\n");
++int main(int argc, char *argv[])
++{
++	size_t size;
++	int i;
+ 
+-	/* Do a clone3() with CLONE_ARGS_SIZE_VER0 - 8 in a new PID NS */
+-	test_clone3(CLONE_NEWPID, CLONE_ARGS_SIZE_VER0 - 8, -EINVAL,
+-			CLONE3_ARGS_NO_TEST);
++	ksft_print_header();
++	ksft_set_plan(ARRAY_SIZE(tests));
++	test_clone3_supported();
+ 
+-	/* Do a clone3() with sizeof(struct clone_args) + 8 in a new PID NS */
+-	if (uid == 0)
+-		test_clone3(CLONE_NEWPID, sizeof(struct __clone_args) + 8, 0,
+-				CLONE3_ARGS_NO_TEST);
+-	else
+-		ksft_test_result_skip("Skipping clone3() with CLONE_NEWPID\n");
++	for (i = 0; i < ARRAY_SIZE(tests); i++) {
++		if (tests[i].filter && tests[i].filter()) {
++			ksft_test_result_skip("%s\n", tests[i].name);
++			continue;
++		}
+ 
+-	/* Do a clone3() with > page size in a new PID NS */
+-	test_clone3(CLONE_NEWPID, getpagesize() + 8, -E2BIG,
+-			CLONE3_ARGS_NO_TEST);
++		if (tests[i].size_function)
++			size = tests[i].size_function();
++		else
++			size = tests[i].size;
+ 
+-	/* Do a clone3() in a new time namespace */
+-	test_clone3(CLONE_NEWTIME, 0, 0, CLONE3_ARGS_NO_TEST);
++		ksft_print_msg("Running test '%s'\n", tests[i].name);
+ 
+-	/* Do a clone3() with exit signal (SIGCHLD) in flags */
+-	test_clone3(SIGCHLD, 0, -EINVAL, CLONE3_ARGS_NO_TEST);
++		ksft_test_result(test_clone3(tests[i].flags, size,
++					     tests[i].expected,
++					     tests[i].test_mode),
++				 "%s\n", tests[i].name);
++	}
+ 
+ 	ksft_finished();
+ }
 
+---
+base-commit: 6465e260f48790807eef06b583b38ca9789b6072
+change-id: 20231017-kselftest-clone3-output-7e8b6462bd1b
 
->
-> In his submission of this API, Jeff Xu makes three claims I find dubious;
->
-> > Also, Chrome wants to adopt this feature for their CFI work [2] and thi=
-s
-> > patchset has been designed to be compatible with the Chrome use case.
->
-> I specifically designed mimmutable(2) with chrome in mind, and the
-> chrome binary running on OpenBSD is full of immutable mappings.  All the
-> library regions automatically become immutable because ld.so can infer
-> it and do the mimmutable calls for the right subregions.
->
-> So this chrome work has already been done by OpenBSD, and it is dead
-> simple.  During early development I thought mimmutable(2) would be
-> called by applications or libraries, but I was dead wrong: 99.9% of
-> calls are from ld.so, and no applications need to call it, these are the
-> two exceptions:
->
-> In OpenBSD, mimmutable() is used in libc malloc() to lock-down some data
-> structures at initialization time, so they canoot be attacked to create
-> an invariant for use in ROP return-to-libc style methods.
->
-> In Chrome, there is a v8_flags variable rounded out to a full page, and
-> placed in .data.  Chrome initialized this variable, and wants to mprotect
-> PROT_READ, but .data has been made immutable by ld.so.  So we force this
-> page into a new ELF section called "openbsd.mutable" which also behaves R=
-W
-> like .data.  Where chrome does the mprotect  PROT_READ, it now also perfo=
-rms
-> mimmutable() on that page.
->
-> > Having a seal type per syscall type helps to add the feature incrementa=
-lly.
->
-> Yet, somehow OpenBSD didn't do it per syscall, and we managed to make our
-> entire base operating system and 10,000+ applications automatically recei=
-ve
-> the benefits.  In one year's effort.  The only application which cared ab=
-out
-> it was chrome, described in the previous paragraph.
->
-> I think Jeff's idea here is super dangerous.  What will actually happen
-> is people will add a few mseal() sub-operations and think the job is done=
-.
-> It isn't done.  They need all the mseal() requests, or the mapping are
-> not safe.
->
-> It is very counterproductive to provide developers a complex API that has
-> insecure suboperations.
->
-> > Applications also know exactly what is sealed.
->
-> Actually applicatins won't know because there is no tooling to inspect th=
-is --
-> but I will argue further that applications don't need to know.  Immutable
-> marking is a system decision, not a program decision.
->
->
-> I'll close by asking for a new look at the mimmutable(2) API we settled
-> on for OpenBSD.  I think there is nothing wrong with it.  I'm willing to
-> help guide glibc / ld.so / musl teams through the problems they may find
-> along the way, I know where the skeletons are buried.  Two in
-> particular: -znow RELRO already today, and xonly-text in the future.
->
->
-> [1] https://man.openbsd.org/mimmutable.2
->
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
+
