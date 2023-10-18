@@ -2,133 +2,281 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C21767CE9E7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Oct 2023 23:19:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52FF17CEB2D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Oct 2023 00:27:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231792AbjJRVT7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 18 Oct 2023 17:19:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51656 "EHLO
+        id S232067AbjJRW1X (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 18 Oct 2023 18:27:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231470AbjJRVT6 (ORCPT
+        with ESMTP id S231704AbjJRW1V (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 18 Oct 2023 17:19:58 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED1E79B;
-        Wed, 18 Oct 2023 14:19:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1697663997; x=1729199997;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NIu9z+tFwfzAtcAyz0GEBJOPGiC9oJKOaIE8fTDqMVE=;
-  b=b9xA82EqKOXvy8OmG1j8PperUGbNkURCwc5VCt4Rgy2OxvBylFeG5XLo
-   b+7ciyi3n8KaT5R6Q9GKxsoxfKNIa5QlTYJtRDv5r6cw9ooaFwyTpdKIa
-   rLeMv0c882yLS2adydOmvG+C81WfUn5bZ4o5gNje/qUXKYBIkT8YcvTbE
-   /wDu6z42y94wi3GeD3hSavrLwEBvCxbYkHbBwzAuibEtiILoXR4rp5ghK
-   nxB167ZeBjK8/lVHLMrmvpNkTSi8jcqrY52ptpBrAaQKONjTunfFdYtF6
-   UGc3RJRu7IvZvkVXJNvSTn09OpuuXowSx9/WZSD/oom6pAL9+IK8YLZV1
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10867"; a="7665636"
-X-IronPort-AV: E=Sophos;i="6.03,236,1694761200"; 
-   d="scan'208";a="7665636"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2023 14:15:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10867"; a="827072602"
-X-IronPort-AV: E=Sophos;i="6.03,236,1694761200"; 
-   d="scan'208";a="827072602"
-Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 18 Oct 2023 14:15:25 -0700
-Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1qtDsx-00014C-1U;
-        Wed, 18 Oct 2023 21:15:23 +0000
-Date:   Thu, 19 Oct 2023 05:14:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Marco Pagani <marpagan@redhat.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Jinjie Ruan <ruanjinjie@huawei.com>
-Cc:     oe-kbuild-all@lists.linux.dev, Marco Pagani <marpagan@redhat.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] kunit: run test suites only after module initialization
- completes
-Message-ID: <202310190514.uKp3bS5Q-lkp@intel.com>
-References: <20231016203548.21993-1-marpagan@redhat.com>
+        Wed, 18 Oct 2023 18:27:21 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9935A120
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Oct 2023 15:27:17 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-9b95622c620so1263903966b.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Oct 2023 15:27:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1697668035; x=1698272835; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YKT0DhFzK/7HUpXkHzrCihZCJECXU9c5i5HWV8bW/EM=;
+        b=NN9SmvU2TJg1k06b6OhM/X5iwrPshR8TgLX6IJE3eX0j3o+09mvNILuymNT79an4W8
+         P9ydNx9uyvbwNLcxsxn3g6y0PIuEu3eBntnwumN/LCjLn2l9TkMM1NmYKmhFjrgV+sBV
+         Fff59sWtx76MOYelgYUQ3k1pJQaHhMtRSsTGfbO+hBURUS/spU54kcswDZfBX3ARL27L
+         bSo+TfB7IyONgQihkJjJoTyM8wA4iUkgo5MQH5PlMwB6zrBkZnAjujrfx554nQSvmeln
+         DMUrGHv3uxd2v7VCtqc4t0QH1bOn39Jeu4pkdFH8JwdwNDyBd4N06WalJ2OeY7zafjwM
+         QZPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697668035; x=1698272835;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=YKT0DhFzK/7HUpXkHzrCihZCJECXU9c5i5HWV8bW/EM=;
+        b=TJgpLZx4mjvr8NRFjCvowVWEFvXEpzeTtG6RA/1ZI7pnsgueQqUALBJl+VpLuDWFsc
+         UxXduAs36hHsjMxtWtwtQUb0HwIUE7b19n9A/1C2xL5I1PEgXJjd6GvrNDOevQgrWyvX
+         KPKwUw/6tMlpMOWz3set/A/vx3YaBywMHSGVPBuN+cnMoqxewuSdzgK8D+o1snyp9xC6
+         1Dym2Yz6vqKn6+rtzVa2RmZhCiOM6LVRBjwnT27oaM84LPusEhLCLtHbKlinUIrfTL6h
+         zbP5aPuMb2jSzytM2LmqyzcjewT0BRjHyzCD+DFW9eTj6LaL4DPhL5Mv4SD5J+HJEC+m
+         8rVA==
+X-Gm-Message-State: AOJu0YxaMIWY1B5VXVrfGL7TyxrVNbexNRm61c7kfnH5OgOU6QeNTSpl
+        7uyNERuehrYA30rap83BjWWK0OiBuzTQy8Bkk8RwXQ==
+X-Google-Smtp-Source: AGHT+IHKpl2ijlZQSO51cM+Z8COTkTH4QpJBSq+LXSmEO/uccV7vxTLmHx/TF2yPMZHolRigJcKqb7McemsGrQI829g=
+X-Received: by 2002:a17:907:3f13:b0:9ae:69b8:322b with SMTP id
+ hq19-20020a1709073f1300b009ae69b8322bmr426010ejc.60.1697668034993; Wed, 18
+ Oct 2023 15:27:14 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231016203548.21993-1-marpagan@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20231017232152.2605440-1-nphamcs@gmail.com> <20231017232152.2605440-2-nphamcs@gmail.com>
+In-Reply-To: <20231017232152.2605440-2-nphamcs@gmail.com>
+From:   Yosry Ahmed <yosryahmed@google.com>
+Date:   Wed, 18 Oct 2023 15:26:36 -0700
+Message-ID: <CAJD7tkYAvi_WfzPb_zaq174FB+-kftmcqtUrHirTeB2NMhFcbA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/5] mm: list_lru: allow external numa node and cgroup tracking
+To:     Nhat Pham <nphamcs@gmail.com>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org,
+        cerasuolodomenico@gmail.com, sjenning@redhat.com,
+        ddstreet@ieee.org, vitaly.wool@konsulko.com, mhocko@kernel.org,
+        roman.gushchin@linux.dev, shakeelb@google.com,
+        muchun.song@linux.dev, linux-mm@kvack.org, kernel-team@meta.com,
+        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Marco,
+On Tue, Oct 17, 2023 at 4:21=E2=80=AFPM Nhat Pham <nphamcs@gmail.com> wrote=
+:
+>
+> The interface of list_lru is based on the assumption that objects are
+> allocated on the correct node/memcg, with this change it is introduced th=
+e
+> possibility to explicitly specify numa node and memcgroup when adding and
+> removing objects. This is so that users of list_lru can track node/memcg
+> of the items outside of the list_lru, like in zswap, where the allocation=
+s
+> can be made by kswapd for data that's charged to a different cgroup.
+>
+> Signed-off-by: Nhat Pham <nphamcs@gmail.com>
 
-kernel test robot noticed the following build errors:
+I prefer what Johannes suggested, making list_lru_add() and friends
+take in the memcg and nid, and add list_lru_add_obj() (or similar) and
+friends that assume the object is on the right node and memcg. This is
+clearer and more explicit imo. I am not very familiar with list_lrus
+though, so I'll leave this to folks who actually are.
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.6-rc6 next-20231018]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Marco-Pagani/kunit-run-test-suites-only-after-module-initialization-completes/20231017-161611
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20231016203548.21993-1-marpagan%40redhat.com
-patch subject: [PATCH] kunit: run test suites only after module initialization completes
-config: arm-randconfig-004-20231019 (https://download.01.org/0day-ci/archive/20231019/202310190514.uKp3bS5Q-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 13.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231019/202310190514.uKp3bS5Q-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202310190514.uKp3bS5Q-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from arch/arm/include/asm/page.h:188,
-                    from arch/arm/include/asm/thread_info.h:14,
-                    from include/linux/thread_info.h:60,
-                    from include/asm-generic/preempt.h:5,
-                    from ./arch/arm/include/generated/asm/preempt.h:1,
-                    from include/linux/preempt.h:79,
-                    from include/linux/spinlock.h:56,
-                    from include/linux/kref.h:16,
-                    from include/kunit/test.h:22,
-                    from include/kunit/resource.h:12,
-                    from lib/kunit/test.c:9:
-   lib/kunit/test.c: In function 'kunit_module_exit':
->> arch/arm/include/asm/memory.h:391:116: error: 'high_memory' undeclared (first use in this function)
-     391 | #define virt_addr_valid(kaddr)  (((unsigned long)(kaddr) >= PAGE_OFFSET && (unsigned long)(kaddr) < (unsigned long)high_memory) \
-         |                                                                                                                    ^~~~~~~~~~~
-   lib/kunit/test.c:772:34: note: in expansion of macro 'virt_addr_valid'
-     772 |         if (!suite_set.start || !virt_addr_valid(suite_set.start))
-         |                                  ^~~~~~~~~~~~~~~
-   arch/arm/include/asm/memory.h:391:116: note: each undeclared identifier is reported only once for each function it appears in
-     391 | #define virt_addr_valid(kaddr)  (((unsigned long)(kaddr) >= PAGE_OFFSET && (unsigned long)(kaddr) < (unsigned long)high_memory) \
-         |                                                                                                                    ^~~~~~~~~~~
-   lib/kunit/test.c:772:34: note: in expansion of macro 'virt_addr_valid'
-     772 |         if (!suite_set.start || !virt_addr_valid(suite_set.start))
-         |                                  ^~~~~~~~~~~~~~~
-
-
-vim +/high_memory +391 arch/arm/include/asm/memory.h
-
-05944d74bc28ff include/asm-arm/memory.h      Russell King   2006-11-30  389  
-e26a9e00afc482 arch/arm/include/asm/memory.h Russell King   2014-03-25  390  #define virt_to_page(kaddr)	pfn_to_page(virt_to_pfn(kaddr))
-efea3403d4b7c6 arch/arm/include/asm/memory.h Laura Abbott   2013-12-21 @391  #define virt_addr_valid(kaddr)	(((unsigned long)(kaddr) >= PAGE_OFFSET && (unsigned long)(kaddr) < (unsigned long)high_memory) \
-e26a9e00afc482 arch/arm/include/asm/memory.h Russell King   2014-03-25  392  					&& pfn_valid(virt_to_pfn(kaddr)))
-^1da177e4c3f41 include/asm-arm/memory.h      Linus Torvalds 2005-04-16  393  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> ---
+>  include/linux/list_lru.h | 38 +++++++++++++++++++++++++++++++++++
+>  mm/list_lru.c            | 43 +++++++++++++++++++++++++++++++++++-----
+>  2 files changed, 76 insertions(+), 5 deletions(-)
+>
+> diff --git a/include/linux/list_lru.h b/include/linux/list_lru.h
+> index b35968ee9fb5..0f5f39cacbbb 100644
+> --- a/include/linux/list_lru.h
+> +++ b/include/linux/list_lru.h
+> @@ -89,6 +89,24 @@ void memcg_reparent_list_lrus(struct mem_cgroup *memcg=
+, struct mem_cgroup *paren
+>   */
+>  bool list_lru_add(struct list_lru *lru, struct list_head *item);
+>
+> +/**
+> + * __list_lru_add: add an element to a specific sublist.
+> + * @list_lru: the lru pointer
+> + * @item: the item to be added.
+> + * @memcg: the cgroup of the sublist to add the item to.
+> + * @nid: the node id of the sublist to add the item to.
+> + *
+> + * This function is similar to list_lru_add(), but it allows the caller =
+to
+> + * specify the sublist to which the item should be added. This can be us=
+eful
+> + * when the list_head node is not necessarily in the same cgroup and NUM=
+A node
+> + * as the data it represents, such as zswap, where the list_head node co=
+uld be
+> + * from kswapd and the data from a different cgroup altogether.
+> + *
+> + * Return value: true if the list was updated, false otherwise
+> + */
+> +bool __list_lru_add(struct list_lru *lru, struct list_head *item, int ni=
+d,
+> +                   struct mem_cgroup *memcg);
+> +
+>  /**
+>   * list_lru_del: delete an element to the lru list
+>   * @list_lru: the lru pointer
+> @@ -102,6 +120,18 @@ bool list_lru_add(struct list_lru *lru, struct list_=
+head *item);
+>   */
+>  bool list_lru_del(struct list_lru *lru, struct list_head *item);
+>
+> +/**
+> + * __list_lru_del: delete an element from a specific sublist.
+> + * @list_lru: the lru pointer
+> + * @item: the item to be deleted.
+> + * @memcg: the cgroup of the sublist to delete the item from.
+> + * @nid: the node id of the sublist to delete the item from.
+> + *
+> + * Return value: true if the list was updated, false otherwise.
+> + */
+> +bool __list_lru_del(struct list_lru *lru, struct list_head *item, int ni=
+d,
+> +                   struct mem_cgroup *memcg);
+> +
+>  /**
+>   * list_lru_count_one: return the number of objects currently held by @l=
+ru
+>   * @lru: the lru pointer.
+> @@ -136,6 +166,14 @@ static inline unsigned long list_lru_count(struct li=
+st_lru *lru)
+>  void list_lru_isolate(struct list_lru_one *list, struct list_head *item)=
+;
+>  void list_lru_isolate_move(struct list_lru_one *list, struct list_head *=
+item,
+>                            struct list_head *head);
+> +/*
+> + * list_lru_putback: undo list_lru_isolate.
+> + *
+> + * Since we might have dropped the LRU lock in between, recompute list_l=
+ru_one
+> + * from the node's id and memcg.
+> + */
+> +void list_lru_putback(struct list_lru *lru, struct list_head *item, int =
+nid,
+> +                     struct mem_cgroup *memcg);
+>
+>  typedef enum lru_status (*list_lru_walk_cb)(struct list_head *item,
+>                 struct list_lru_one *list, spinlock_t *lock, void *cb_arg=
+);
+> diff --git a/mm/list_lru.c b/mm/list_lru.c
+> index a05e5bef3b40..63b75163c6ad 100644
+> --- a/mm/list_lru.c
+> +++ b/mm/list_lru.c
+> @@ -119,13 +119,22 @@ list_lru_from_kmem(struct list_lru *lru, int nid, v=
+oid *ptr,
+>  bool list_lru_add(struct list_lru *lru, struct list_head *item)
+>  {
+>         int nid =3D page_to_nid(virt_to_page(item));
+> +       struct mem_cgroup *memcg =3D list_lru_memcg_aware(lru) ?
+> +               mem_cgroup_from_slab_obj(item) : NULL;
+> +
+> +       return __list_lru_add(lru, item, nid, memcg);
+> +}
+> +EXPORT_SYMBOL_GPL(list_lru_add);
+> +
+> +bool __list_lru_add(struct list_lru *lru, struct list_head *item, int ni=
+d,
+> +                   struct mem_cgroup *memcg)
+> +{
+>         struct list_lru_node *nlru =3D &lru->node[nid];
+> -       struct mem_cgroup *memcg;
+>         struct list_lru_one *l;
+>
+>         spin_lock(&nlru->lock);
+>         if (list_empty(item)) {
+> -               l =3D list_lru_from_kmem(lru, nid, item, &memcg);
+> +               l =3D list_lru_from_memcg_idx(lru, nid, memcg_kmem_id(mem=
+cg));
+>                 list_add_tail(item, &l->list);
+>                 /* Set shrinker bit if the first element was added */
+>                 if (!l->nr_items++)
+> @@ -138,17 +147,27 @@ bool list_lru_add(struct list_lru *lru, struct list=
+_head *item)
+>         spin_unlock(&nlru->lock);
+>         return false;
+>  }
+> -EXPORT_SYMBOL_GPL(list_lru_add);
+> +EXPORT_SYMBOL_GPL(__list_lru_add);
+>
+>  bool list_lru_del(struct list_lru *lru, struct list_head *item)
+>  {
+>         int nid =3D page_to_nid(virt_to_page(item));
+> +       struct mem_cgroup *memcg =3D list_lru_memcg_aware(lru) ?
+> +               mem_cgroup_from_slab_obj(item) : NULL;
+> +
+> +       return __list_lru_del(lru, item, nid, memcg);
+> +}
+> +EXPORT_SYMBOL_GPL(list_lru_del);
+> +
+> +bool __list_lru_del(struct list_lru *lru, struct list_head *item, int ni=
+d,
+> +                   struct mem_cgroup *memcg)
+> +{
+>         struct list_lru_node *nlru =3D &lru->node[nid];
+>         struct list_lru_one *l;
+>
+>         spin_lock(&nlru->lock);
+>         if (!list_empty(item)) {
+> -               l =3D list_lru_from_kmem(lru, nid, item, NULL);
+> +               l =3D list_lru_from_memcg_idx(lru, nid, memcg_kmem_id(mem=
+cg));
+>                 list_del_init(item);
+>                 l->nr_items--;
+>                 nlru->nr_items--;
+> @@ -158,7 +177,7 @@ bool list_lru_del(struct list_lru *lru, struct list_h=
+ead *item)
+>         spin_unlock(&nlru->lock);
+>         return false;
+>  }
+> -EXPORT_SYMBOL_GPL(list_lru_del);
+> +EXPORT_SYMBOL_GPL(__list_lru_del);
+>
+>  void list_lru_isolate(struct list_lru_one *list, struct list_head *item)
+>  {
+> @@ -175,6 +194,20 @@ void list_lru_isolate_move(struct list_lru_one *list=
+, struct list_head *item,
+>  }
+>  EXPORT_SYMBOL_GPL(list_lru_isolate_move);
+>
+> +void list_lru_putback(struct list_lru *lru, struct list_head *item, int =
+nid,
+> +                     struct mem_cgroup *memcg)
+> +{
+> +       struct list_lru_one *list =3D
+> +               list_lru_from_memcg_idx(lru, nid, memcg_kmem_id(memcg));
+> +
+> +       if (list_empty(item)) {
+> +               list_add_tail(item, &list->list);
+> +               if (!list->nr_items++)
+> +                       set_shrinker_bit(memcg, nid, lru_shrinker_id(lru)=
+);
+> +       }
+> +}
+> +EXPORT_SYMBOL_GPL(list_lru_putback);
+> +
+>  unsigned long list_lru_count_one(struct list_lru *lru,
+>                                  int nid, struct mem_cgroup *memcg)
+>  {
+> --
+> 2.34.1
