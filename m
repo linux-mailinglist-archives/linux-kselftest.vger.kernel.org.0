@@ -2,122 +2,101 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F28F7CE753
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Oct 2023 21:07:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66C097CE758
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Oct 2023 21:08:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231230AbjJRTHd (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 18 Oct 2023 15:07:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54206 "EHLO
+        id S230491AbjJRTIF (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 18 Oct 2023 15:08:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230284AbjJRTHc (ORCPT
+        with ESMTP id S230499AbjJRTIE (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 18 Oct 2023 15:07:32 -0400
-Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89304119
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Oct 2023 12:07:30 -0700 (PDT)
-Received: by mail-io1-xd2e.google.com with SMTP id ca18e2360f4ac-7a66bf80fa3so18854239f.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Oct 2023 12:07:30 -0700 (PDT)
+        Wed, 18 Oct 2023 15:08:04 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2E0F11D
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Oct 2023 12:08:02 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id ca18e2360f4ac-79fab2caf70so59109839f.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Oct 2023 12:08:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1697656050; x=1698260850; darn=vger.kernel.org;
+        d=linuxfoundation.org; s=google; t=1697656082; x=1698260882; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=/7T63UFHo2QxZQJJnC9K/ZprAjRwwywsiaee/Wxi3/8=;
-        b=OiQgogza0racz/81GhemwyeUfek2BI7m5m/yEPl381PAlvEq36CtB35Q9SqC/rgfr8
-         Pf0U3Pzz1FDA/J5xeRheFcdFCHap+xwBc1SBnowR71PgaHYYvsfWvrkj2ayS5s68Rsh8
-         IvV1VHc1AnXnBR1VcneGrjiCqS1lBnhIFYlws=
+        bh=cEDDXOwUBOTP0ob0yPcID6lS1qUx48BjXcmqRUbCC3Q=;
+        b=WGbJ8L3Rl+jtKoPsUhVoxw9U2g8NQtg8V9iaudGEQ3gnDn6j9PW+TpKRQIhGBFYma9
+         r6S1iiHcKRyNu1Zd+0IHesiyXRMaiCsFdHoisgCBrwyxXMaTqJ5cMdhRY4+dA2H9JC03
+         fv8U1e0y9HTgRCgy8WWC9ZHUXNVDsGGPJKNEw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697656050; x=1698260850;
+        d=1e100.net; s=20230601; t=1697656082; x=1698260882;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/7T63UFHo2QxZQJJnC9K/ZprAjRwwywsiaee/Wxi3/8=;
-        b=N9va4hmqUMZqLNpaU6RXW7rWfK+QUhkyK72dJzQ5wkq2Cbq4oNLOAEwTSgvIcfZ9uW
-         dK42BmiZhntShB7SfBVFoiGbHynATuG8Ef6cVw3Eb/N+xNnQaNgC/SRIT7QUIcmXN/SU
-         A17jCCmxmprR3k99KV5sGHiLnkMQy71Wz/SF+vHYVTaBFdzEspNlNop10PwkjT8Lwnv3
-         WaYEqq2NvtG+/n/LU2gE5QiQQ+eM2t7fBVsiMqsEl+EqHe8pEjovm7Af1nlRf7lnPUZk
-         oRdYg+1t46rSYsPysgC+cH7eXfJRKBJfONmHx3hqEgLo40Ub+dOYc/MEYi5qCfdN/SAx
-         rJOw==
-X-Gm-Message-State: AOJu0YyciXHfOt3wbvFFQSaWRND7jvGn9lPzf7Qi4sSBGTv+13AGfVFA
-        9UDnikI2/ImwH8DYGyTNgc1hJw==
-X-Google-Smtp-Source: AGHT+IHCjWF0kEx5u5i8Nu4z+5QEo0u28FkahGZqewYvMftykH8QjzHzfdOaLODX9xhoe2VSG3/H0Q==
-X-Received: by 2002:a6b:5801:0:b0:79f:a8c2:290d with SMTP id m1-20020a6b5801000000b0079fa8c2290dmr234365iob.0.1697656049907;
-        Wed, 18 Oct 2023 12:07:29 -0700 (PDT)
+        bh=cEDDXOwUBOTP0ob0yPcID6lS1qUx48BjXcmqRUbCC3Q=;
+        b=lZVQ32QAviSQ+k8HZulLfAtIFWDQ7RM8DucAKedfIMSltkB2KsPN/HBmGnAQ/yryka
+         GKEAQLFNyDqTUUlu0BNM+jEWSPoq8tpm1Y85zd26t8kB8vWMP1NhLAyD47RpvtNIeaMl
+         F9fHGxGGPRlbYR8bT8g0VwkTcwYA9uhWOv+yBGXbtg3OdM4pRvNw2331/BOAEzPfeeMX
+         +W+mTrvMqz6NRFJIrPXwke937k1Mvao6fIwDsib9zHR4Jt6XXMMCfvr65TWjltoHHdBf
+         lpsisgAActOUwDfFsiVDazKS9OjpcQcQigIdu9zLraOtyxlIzROmwxPijEF/itmNmzWO
+         1KvA==
+X-Gm-Message-State: AOJu0Ywh2FXAytKyNCNXnR6JhoM4Q49kltNfYhs0LIZgq55eDYM3IChH
+        nlBJsw8sPQ9dUdqFaUa3qQ2Ieg==
+X-Google-Smtp-Source: AGHT+IEb8K9JivIiDdJvTYkRWVcFRkSMFzysZi9fbNS8GC7PoRIcGsS4IE+VR539cbz5D00A4ZwqQQ==
+X-Received: by 2002:a6b:671b:0:b0:7a5:cd6b:7581 with SMTP id b27-20020a6b671b000000b007a5cd6b7581mr203528ioc.2.1697656082045;
+        Wed, 18 Oct 2023 12:08:02 -0700 (PDT)
 Received: from [192.168.1.128] ([38.15.45.1])
-        by smtp.gmail.com with ESMTPSA id 9-20020a5d9c09000000b0079199e52035sm269584ioe.52.2023.10.18.12.07.28
+        by smtp.gmail.com with ESMTPSA id 9-20020a5d9c09000000b0079199e52035sm269584ioe.52.2023.10.18.12.08.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Oct 2023 12:07:29 -0700 (PDT)
-Message-ID: <2ec50632-15ae-44c3-9851-02660584dd05@linuxfoundation.org>
-Date:   Wed, 18 Oct 2023 13:07:28 -0600
+        Wed, 18 Oct 2023 12:08:00 -0700 (PDT)
+Message-ID: <662a7ca4-beee-4ea3-b77e-4d5af1462f13@linuxfoundation.org>
+Date:   Wed, 18 Oct 2023 13:08:00 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/1] selftests/resctrl: Fix MBM test failure when MBA
- unavailable
+Subject: Re: [PATCH] selftests/efivarfs: create-read: fix a resource leak
 Content-Language: en-US
-To:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org, Fenghua Yu <fenghua.yu@intel.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20231018075526.2251-1-ilpo.jarvinen@linux.intel.com>
- <9965dc22-16fb-cadc-2b5f-ff7c2c91a173@linux.intel.com>
+To:     zhujun2 <zhujun2@cmss.chinamobile.com>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <2a96e3a8-48a5-46ae-9a0c-b5f2def0a257@linuxfoundation.org>
+ <20231018015921.16890-1-zhujun2@cmss.chinamobile.com>
 From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <9965dc22-16fb-cadc-2b5f-ff7c2c91a173@linux.intel.com>
+In-Reply-To: <20231018015921.16890-1-zhujun2@cmss.chinamobile.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 10/18/23 02:10, Ilpo Järvinen wrote:
-> On Wed, 18 Oct 2023, Ilpo Järvinen wrote:
+On 10/17/23 19:59, zhujun2 wrote:
+> The opened file should be closed in main(), otherwise resource
+> leak will occur that this problem was discovered by code reading
 > 
->> Commit 20d96b25cc4c ("selftests/resctrl: Fix schemata write error
->> check") exposed a problem in feature detection logic in MBM selftest.
->> If schemata does not support MB:x=x entries, the schemata write to
->> initialize 100% memory bandwidth allocation in mbm_setup() will now
->> fail with -EINVAL due to the error handling corrected by the commit
->> 20d96b25cc4c ("selftests/resctrl: Fix schemata write error check").
->> That commit just uncovers the failed write, it is not wrong itself.
->>
->> If MB:x=x is not supported by schemata, it is safe to assume 100%
->> memory bandwidth is always set. Therefore, the previously ignored error
->> does not make the MBM test itself wrong.
->>
->> Restore the previous behavior of MBM test by checking MB support before
->> attempting to write it into schemata which results in behavior
->> equivalent to ignoring the write error.
->>
->> Fixes: 20d96b25cc4c ("selftests/resctrl: Fix schemata write error check")
->> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
->> Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
->> ---
+> Signed-off-by: zhujun2 <zhujun2@cmss.chinamobile.com>
+> ---
+>   tools/testing/selftests/efivarfs/create-read.c | 2 ++
+>   1 file changed, 2 insertions(+)
 > 
-> It seems it's too early morning for me so I entirely forgot to describe
-> the changes I made... doh. So here it is (nothing earth-shattering here
-> really):
-> 
-> v2:
-> - Make checkpatch --strict happy.
->    - Remove () that --strict called "extra".
->    - Duplicate the referenced commit description in the changelog
->      to follow the commit formatting guidelines.
->    - Alter the wording at one of the references into the commit
->      20d96b25cc4c in order to avoid having to copy the description
->      there too.
-> - Added Reinette's rev-by.
-> 
+> diff --git a/tools/testing/selftests/efivarfs/create-read.c b/tools/testing/selftests/efivarfs/create-read.c
+> index 9674a1939..7bc7af4eb 100644
+> --- a/tools/testing/selftests/efivarfs/create-read.c
+> +++ b/tools/testing/selftests/efivarfs/create-read.c
+> @@ -32,8 +32,10 @@ int main(int argc, char **argv)
+>   	rc = read(fd, buf, sizeof(buf));
+>   	if (rc != 0) {
+>   		fprintf(stderr, "Reading a new var should return EOF\n");
+> +		close(fd);
+>   		return EXIT_FAILURE;
+>   	}
+>   
+> +	close(fd);
+>   	return EXIT_SUCCESS;
+>   }
 
-
-Thank you. Applied to linux-kselftest next for Linux 6.7-rc1
+Thank you. Applied to linux-kselftest next for Linux 6.7-c1.
 
 thanks,
 -- Shuah
