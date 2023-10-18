@@ -2,90 +2,75 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4F687CD18A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Oct 2023 03:00:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4465C7CD212
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Oct 2023 03:59:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233849AbjJRBAe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 17 Oct 2023 21:00:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45268 "EHLO
+        id S229475AbjJRB7q (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 17 Oct 2023 21:59:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbjJRBAd (ORCPT
+        with ESMTP id S229451AbjJRB7p (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 17 Oct 2023 21:00:33 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB81AFA;
-        Tue, 17 Oct 2023 18:00:30 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 82988C433C8;
-        Wed, 18 Oct 2023 01:00:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1697590830;
-        bh=K2deq/2Shw6UljQTvW98Mv2vAHt3FhdhO48jhYtDOe0=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=ieSaQVIw+2LuuWrOLgLuT6P47pVmVQWtB8kbHsCga2zN1FQ/8Rl3JpJilDrPGIPqA
-         5NUO9MQ4dFBc5vNL2F6LMf75HlvClX9LqGCDaxVWOXtZKHZqonemfs7CKX3s55QLVw
-         J6DOPhXgp83P39Jkzj3QQRt6ny65alLAjPSP7MdCBRXoYkhSGp1YzGfXLDi7AXkJTT
-         /DVnVUXuAwJVL9gOwGF0wYqwUcwv3akELOxAum53WRBmSOA0Ndjc7mpSCCXAwbaXou
-         du4HVJ+vF++TDFWu6730dICpFCQ2ja/IUnyl2baBWDn7DMbWXLdL8+yH0WC7/R+Rs7
-         8iCA+NUI/quxw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 6ACB9E4E9DD;
-        Wed, 18 Oct 2023 01:00:30 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v5 0/5] bridge: Add a limit on learned FDB entries
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <169759083043.18882.3734658950123094755.git-patchwork-notify@kernel.org>
-Date:   Wed, 18 Oct 2023 01:00:30 +0000
-References: <20231016-fdb_limit-v5-0-32cddff87758@avm.de>
-In-Reply-To: <20231016-fdb_limit-v5-0-32cddff87758@avm.de>
-To:     Johannes Nixdorf <jnixdorf-oss@avm.de>
-Cc:     davem@davemloft.net, andrew@lunn.ch, dsahern@gmail.com,
-        edumazet@google.com, f.fainelli@gmail.com, idosch@nvidia.com,
-        kuba@kernel.org, razor@blackwall.org, linux@rempel-privat.de,
-        pabeni@redhat.com, roopa@nvidia.com, shuah@kernel.org,
-        vladimir.oltean@nxp.com, bridge@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 17 Oct 2023 21:59:45 -0400
+Received: from cmccmta1.chinamobile.com (cmccmta6.chinamobile.com [111.22.67.139])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3BCE4C6;
+        Tue, 17 Oct 2023 18:59:25 -0700 (PDT)
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG: 00000000
+Received: from spf.mail.chinamobile.com (unknown[10.188.0.87])
+        by rmmx-syy-dmz-app01-12001 (RichMail) with SMTP id 2ee1652f3bf940a-0bcd8;
+        Wed, 18 Oct 2023 09:59:24 +0800 (CST)
+X-RM-TRANSID: 2ee1652f3bf940a-0bcd8
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG: 00000000
+Received: from ubuntu.localdomain (unknown[10.54.5.255])
+        by rmsmtp-syy-appsvr06-12006 (RichMail) with SMTP id 2ee6652f3bf9f61-4301e;
+        Wed, 18 Oct 2023 09:59:23 +0800 (CST)
+X-RM-TRANSID: 2ee6652f3bf9f61-4301e
+From:   zhujun2 <zhujun2@cmss.chinamobile.com>
+To:     skhan@linuxfoundation.org
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        shuah@kernel.org, zhujun2@cmss.chinamobile.com
+Subject: [PATCH] selftests/efivarfs: create-read: fix a resource leak
+Date:   Tue, 17 Oct 2023 18:59:21 -0700
+Message-Id: <20231018015921.16890-1-zhujun2@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <2a96e3a8-48a5-46ae-9a0c-b5f2def0a257@linuxfoundation.org>
+References: <2a96e3a8-48a5-46ae-9a0c-b5f2def0a257@linuxfoundation.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+The opened file should be closed in main(), otherwise resource
+leak will occur that this problem was discovered by code reading
 
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+Signed-off-by: zhujun2 <zhujun2@cmss.chinamobile.com>
+---
+ tools/testing/selftests/efivarfs/create-read.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-On Mon, 16 Oct 2023 15:27:19 +0200 you wrote:
-> Introduce a limit on the amount of learned FDB entries on a bridge,
-> configured by netlink with a build time default on bridge creation in
-> the kernel config.
-> 
-> For backwards compatibility the kernel config default is disabling the
-> limit (0).
-> 
-> [...]
-
-Here is the summary with links:
-  - [net-next,v5,1/5] net: bridge: Set BR_FDB_ADDED_BY_USER early in fdb_add_entry
-    https://git.kernel.org/netdev/net-next/c/cbf51acbc5d5
-  - [net-next,v5,2/5] net: bridge: Track and limit dynamically learned FDB entries
-    https://git.kernel.org/netdev/net-next/c/bdb4dfda3b41
-  - [net-next,v5,3/5] net: bridge: Add netlink knobs for number / max learned FDB entries
-    https://git.kernel.org/netdev/net-next/c/ddd1ad68826d
-  - [net-next,v5,4/5] net: bridge: Set strict_start_type for br_policy
-    https://git.kernel.org/netdev/net-next/c/19297c3ab23c
-  - [net-next,v5,5/5] selftests: forwarding: bridge_fdb_learning_limit: Add a new selftest
-    https://git.kernel.org/netdev/net-next/c/6f84090333bb
-
-You are awesome, thank you!
+diff --git a/tools/testing/selftests/efivarfs/create-read.c b/tools/testing/selftests/efivarfs/create-read.c
+index 9674a1939..7bc7af4eb 100644
+--- a/tools/testing/selftests/efivarfs/create-read.c
++++ b/tools/testing/selftests/efivarfs/create-read.c
+@@ -32,8 +32,10 @@ int main(int argc, char **argv)
+ 	rc = read(fd, buf, sizeof(buf));
+ 	if (rc != 0) {
+ 		fprintf(stderr, "Reading a new var should return EOF\n");
++		close(fd);
+ 		return EXIT_FAILURE;
+ 	}
+ 
++	close(fd);
+ 	return EXIT_SUCCESS;
+ }
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+2.17.1
+
 
 
