@@ -2,87 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D7EF7CE82C
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Oct 2023 21:52:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DADEE7CE919
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Oct 2023 22:36:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbjJRTwB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 18 Oct 2023 15:52:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38152 "EHLO
+        id S231952AbjJRUgU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 18 Oct 2023 16:36:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231522AbjJRTv7 (ORCPT
+        with ESMTP id S231986AbjJRUgT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 18 Oct 2023 15:51:59 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB9B5126
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Oct 2023 12:51:57 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5a7ed6903a6so109927237b3.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Oct 2023 12:51:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1697658717; x=1698263517; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XxNGxplnRcKicvl9elf0eksz/zUsfRFCHbPYJJi0Jms=;
-        b=2yFIUvemrMyQm7Mwh38tlhfmlAxzJ2OfKBn3/8z+JtN7GNwqrXv54F3bPq15iwT+SY
-         8NhXN9/F9PSyhXvwa69SrJbUdcVLINYe+OGJgIDIOPJpMMKuv/76KK0d4JrcMEYzCWfO
-         3CqjxMvrZCs4CaLleVEQLIOgyTnyMdEH1AZ6/hP2YLb3ewL1rmZYSr7wIOMa4ekJncUm
-         yTaMjrYkt5AsIYeVXU1voTziy0bAYLOSJspMaFVjufZ3aClWT95nDU3r6anJBefmkRPD
-         FkY4rHLX5GA2uWO32l8HBumbczZWr2hJz3JIo8o35w5FxLgxFdHc4OqTIgD/EL+v83jn
-         oIuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697658717; x=1698263517;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XxNGxplnRcKicvl9elf0eksz/zUsfRFCHbPYJJi0Jms=;
-        b=YZyb8UmV7HhotfViQiDytZtrGiwD1D1HN6TQckVQn2EogWjJpq5Nlex3ksBQ7/R8R+
-         PBMi2HnXhbeiGy3/TgeboABE/mfq2HQJh+UXCEpKPgndjJdsvWZ3N7izJFjRDWjZK9Od
-         8zxRfAdzkVnXIg8ChZnr+r+ach/KAZgK50IZMQinxj3tq0Yki5R8MeLV05Hnl6XarLgg
-         L35/CeBtybz6GWgPQQaqP3LEwRE/iIaQZRtpIoRzdzksKkfchOkq1SRqzJP1nFoErABJ
-         UGRHfIQt2gT7iUEOTcycSZiGxFbg21GGzZpizYS7OgQ1KyZOX/q2DeGaUwiQ1Oo96UT1
-         eWBg==
-X-Gm-Message-State: AOJu0YzQpExqI7svTdQBOh5uWbqu6xdSidfGpxchGmwVZKIupSMGY0Px
-        /zjmkfNTOvCTYloMmCTir6qc6DRSfI8=
-X-Google-Smtp-Source: AGHT+IH8mbsoOPbifI+g5j5HdKo44HJUpSWqmP9rWHO11K+B582hq0O9pfInmGEi9RtDTPn5LrNYMVrFwwg=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a0d:ca46:0:b0:5a2:3de0:24a9 with SMTP id
- m67-20020a0dca46000000b005a23de024a9mr7443ywd.1.1697658717103; Wed, 18 Oct
- 2023 12:51:57 -0700 (PDT)
-Date:   Wed, 18 Oct 2023 12:51:55 -0700
-In-Reply-To: <20231006175715.105517-1-dongli.zhang@oracle.com>
-Mime-Version: 1.0
-References: <20231006175715.105517-1-dongli.zhang@oracle.com>
-Message-ID: <ZTA3W-f4sOX3LHfi@google.com>
-Subject: Re: [PATCH 1/1] selftests: KVM: add test to print boottime wallclock
-From:   Sean Christopherson <seanjc@google.com>
-To:     Dongli Zhang <dongli.zhang@oracle.com>
-Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pbonzini@redhat.com,
-        shuah@kernel.org, dwmw2@infradead.org, joe.jin@oracle.com
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 18 Oct 2023 16:36:19 -0400
+Received: from cvs.openbsd.org (cvs.openbsd.org [199.185.137.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C760E9F;
+        Wed, 18 Oct 2023 13:36:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; s=selector1; bh=QWshJ3q0CW
+        z66rkm4YqP7BTMbsMVrEYYbR/yILapp8Q=; h=date:references:in-reply-to:
+        subject:cc:to:from; d=openbsd.org; b=ZQX3DGaSR+jOPuhULTujDPgl6aQpN9KuN
+        gkvVNbu/uJzrcaVSBOPHJ6dvubIemeu4UDb7Lz4jF9Xxgu0aYinyXtirWEjOpnIn6eYy7W
+        LdYoAlcHB28FhisY6YPTtKjbgfs16deat7bmpxb8RQYqu18SAa/XEuW4yqilS7oyycVzh4
+        4ZnQPden+AqQCDDCbKPo5vkMNkrQN/bfHbJzjkc+kwZbUzhlabKs6r622pTPH1p3QoQHx+
+        oLEzpQ+VIfeFw1AXzvqe4JsvLglRoDkc6FGrcvBBsEQivtO8T0yA9JL72qY4VIj/v6gCMx
+        +hK54KiqMvQIZIeJKJk6cfh7eXZAA==
+Received: from cvs.openbsd.org (localhost [127.0.0.1])
+        by cvs.openbsd.org (OpenSMTPD) with ESMTP id 681028d6;
+        Wed, 18 Oct 2023 14:36:13 -0600 (MDT)
+From:   "Theo de Raadt" <deraadt@openbsd.org>
+To:     Jeff Xu <jeffxu@google.com>
+cc:     Matthew Wilcox <willy@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        jeffxu@chromium.org, akpm@linux-foundation.org,
+        keescook@chromium.org, sroettger@google.com, jorgelo@chromium.org,
+        groeck@chromium.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        jannh@google.com, surenb@google.com, alex.sierra@amd.com,
+        apopple@nvidia.com, aneesh.kumar@linux.ibm.com,
+        axelrasmussen@google.com, ben@decadent.org.uk,
+        catalin.marinas@arm.com, david@redhat.com, dwmw@amazon.co.uk,
+        ying.huang@intel.com, hughd@google.com, joey.gouly@arm.com,
+        corbet@lwn.net, wangkefeng.wang@huawei.com,
+        Liam.Howlett@oracle.com, lstoakes@gmail.com, mawupeng1@huawei.com,
+        linmiaohe@huawei.com, namit@vmware.com, peterx@redhat.com,
+        peterz@infradead.org, ryan.roberts@arm.com, shr@devkernel.io,
+        vbabka@suse.cz, xiujianfeng@huawei.com, yu.ma@intel.com,
+        zhangpeng362@huawei.com, dave.hansen@intel.com, luto@kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [RFC PATCH v1 0/8] Introduce mseal() syscall
+In-reply-to: <CALmYWFu_uY=cWzAQaLtS0CdNrm+cO7tKz4sY2Ff02WQ8mGUUXw@mail.gmail.com>
+References: <20231016143828.647848-1-jeffxu@chromium.org> <CAHk-=whFZoap+DBTYvJx6ohqPwn11Puzh7q4huFWDX9vBwXHgg@mail.gmail.com> <CALmYWFtTDAb_kpZdAe_xspqwNgK1NWJmjTxaTC=jDEMzfe297Q@mail.gmail.com> <CAHk-=wj87GMTH=5901ob=SjQqegAm2JYBE7E4J7skJzE64U-wQ@mail.gmail.com> <55960.1697566804@cvs.openbsd.org> <CALmYWFs81T=XnT=AXQTo0+9FXo=OBAV_4rrYPSn9-16O-gBTZg@mail.gmail.com> <95482.1697587015@cvs.openbsd.org> <CALmYWFtQX57Z7ttKxrdXQH4QupFn4vi5KfizUBH9NkmP-S1JDw@mail.gmail.com> <ZS/3GCKvNn5qzhC4@casper.infradead.org> <CALmYWFu_uY=cWzAQaLtS0CdNrm+cO7tKz4sY2Ff02WQ8mGUUXw@mail.gmail.com>
+Comments: In-reply-to Jeff Xu <jeffxu@google.com>
+   message dated "Wed, 18 Oct 2023 11:54:22 -0700."
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+Date:   Wed, 18 Oct 2023 14:36:13 -0600
+Message-ID: <7071.1697661373@cvs.openbsd.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, Oct 06, 2023, Dongli Zhang wrote:
-> As inspired by the discussion in [1], the boottime wallclock may drift due
-> to the fact that the masterclock (or host monotonic clock) and kvmclock are
-> calculated based on the algorithms in different domains.
-> 
-> This is to introduce a testcase to print the boottime wallclock
-> periodically to help diagnose the wallclock drift issue in the future.
-> 
-> The idea is to wrmsr the MSR_KVM_WALL_CLOCK_NEW, and read the boottime
-> wallclock nanoseconds immediately.
+Jeff Xu <jeffxu@google.com> wrote:
 
-This doesn't actually test anything of interest though.  IIUC, it requires a human
-looking at the output for it to provide any value.  And it requires a manual
-cancelation, which makes it even less suitable for selftests.
+> On Wed, Oct 18, 2023 at 8:17=E2=80=AFAM Matthew Wilcox <willy@infradead.o=
+rg> wrote:
+> >
+> > Let's start with the purpose.  The point of mimmutable/mseal/whatever is
+> > to fix the mapping of an address range to its underlying object, be it
+> > a particular file mapping or anonymous memory.  After the call succeeds,
+> > it must not be possible to make any address in that virtual range point
+> > into any other object.
+> >
+> > The secondary purpose is to lock down permissions on that range.
+> > Possibly to fix them where they are, possibly to allow RW->RO transitio=
+ns.
+> >
+> > With those purposes in mind, you should be able to deduce for any sysca=
+ll
+> > or any madvise(), ... whether it should be allowed.
+> >
+> I got it.
+>=20
+> IMO: The approaches mimmutable() and mseal() took are different, but
+> we all want to seal the memory from attackers and make the linux
+> application safer.
 
-I like the idea, e.g. I bet there are more utilities that could be written that
-utilize the selftests infrastructure, just not sure what to do with this (assuming
-it can't be massaged into an actual test).
+I think you are building mseal for chrome, and chrome alone.
+
+I do not think this will work out for the rest of the application space
+because
+
+1) it is too complicated
+2) experience with mimmutable() says that applications don't do any of it
+   themselves, it is all in execve(), libc initialization, and ld.so.
+   You don't strike me as an execve, libc, or ld.so developer.
+
+
