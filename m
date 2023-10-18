@@ -2,73 +2,71 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28B2E7CE665
-	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Oct 2023 20:27:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A2667CE73C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 18 Oct 2023 20:55:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231601AbjJRS1d (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 18 Oct 2023 14:27:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32924 "EHLO
+        id S229963AbjJRSzC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 18 Oct 2023 14:55:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231992AbjJRS1b (ORCPT
+        with ESMTP id S229447AbjJRSzB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 18 Oct 2023 14:27:31 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D3EB120
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Oct 2023 11:27:28 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-9a58dbd5daeso1155506066b.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Oct 2023 11:27:27 -0700 (PDT)
+        Wed, 18 Oct 2023 14:55:01 -0400
+Received: from mail-qt1-x82a.google.com (mail-qt1-x82a.google.com [IPv6:2607:f8b0:4864:20::82a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8941B11A
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Oct 2023 11:54:59 -0700 (PDT)
+Received: by mail-qt1-x82a.google.com with SMTP id d75a77b69052e-41b813f0a29so51371cf.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 18 Oct 2023 11:54:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1697653646; x=1698258446; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4LSW7ZRKgP1lLxQuTMsxLUqNOunePLnj/+UPZS75Rc0=;
-        b=hcZXq2UhksD+Hh6t/eVWNVE2q+i+SJbnCiZv1j87hLr7Q8rBBnKAcFBcimRX+KK/d+
-         Qgc33tayiY/lhVxSjqpMDVcb6awdrbLqeuRi3xJJyC9VjLh7baGPXAQhM2RixXb0O1lP
-         m3LmCV7STOwysb6+YrGH22/ZuOoExylCYkI70=
+        d=google.com; s=20230601; t=1697655298; x=1698260098; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NFJlA+mQhi+0DERBwp78bB/+mqro8rSJvhQZ9F+v2NE=;
+        b=WlSvcMi5F/jYXxVjjQcOVuG7FVY9JhBio0abDr6dtY+dGMzncWxQZdEqvyjdLwY3H5
+         mgSRekPrWheEXYi4QVxifQo8Z8b5FxJZX4fDGDhXv4Tv8OGRmSnFFAf8HoZceAyu5r63
+         J9k7UcPcoJgm4g8JjwCTAsoSkgVTa9J7OCIIK3G+XQrp8okByvd4G44x5Cntvz5V8Vgq
+         ZYmUuQTUEhhOxagJPOZYcS3LbvLUJtxj7KL7Tz4KP2f4EWQK1U9/pZk5m/NAuWfoQg2i
+         5bLKP4tBEULzUa5+vGvAyBdxYUxjJa+ue2vgWmh4WBa9NQcelU9GLW7N50/6hxDU90kA
+         H0yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697653646; x=1698258446;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4LSW7ZRKgP1lLxQuTMsxLUqNOunePLnj/+UPZS75Rc0=;
-        b=CrYasUOarcnRwp++Kc0FopogJsG5ObTHhvd7Xp1sfd/D6sGL5wbUFCK+95GxwVCwO8
-         z3jyQVaqYC/N9CeJOUb7sAGyDEJH5VBDkp7i1Y1wU5VmeAv3UGbsUcgh/zNfvkmHX77F
-         QuMLEvCzjSdcsjuzsD0uNL2tdcyZ/PD2uE260F6r6wJhByHFJ1kd1W3KmUf3BS0PgMQJ
-         aVZF9mMz4F+R3Cn7Eylv6NrZ/ONBuvffbJBfXSSwb9/YASnJ7JT7o3I0yMD+9rroTBiz
-         p1PbFTtSd+mn76KbgMaV8zgxbPiS6vINPmK8Jtz3j5+rNxmBOnBDcLqyZTYFP3MZTJ8n
-         39ww==
-X-Gm-Message-State: AOJu0YyE7/FF4p0SCPj994vSynXsHwHG0TSZkwHhSn+LLkiSNAbsqhm/
-        I3RK2npwnw3dt5lyYpGXeHeME2+3ZJWIzagcj8CS4RhW
-X-Google-Smtp-Source: AGHT+IErbeCVMpLiAczfWoMgIz4V7qPF1XmCNemMu8+RaZjtGdiRh2a2kSde6xaIsgFBeavfbhDxsQ==
-X-Received: by 2002:a17:907:9284:b0:9be:9d5f:6967 with SMTP id bw4-20020a170907928400b009be9d5f6967mr34293ejc.69.1697653646276;
-        Wed, 18 Oct 2023 11:27:26 -0700 (PDT)
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com. [209.85.218.53])
-        by smtp.gmail.com with ESMTPSA id 9-20020a170906024900b009b2b9af0784sm2132685ejl.110.2023.10.18.11.27.25
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 18 Oct 2023 11:27:25 -0700 (PDT)
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-9ae2cc4d17eso1156252266b.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 18 Oct 2023 11:27:25 -0700 (PDT)
-X-Received: by 2002:a17:907:8687:b0:9c5:2806:72e9 with SMTP id
- qa7-20020a170907868700b009c5280672e9mr50945ejc.34.1697653645201; Wed, 18 Oct
- 2023 11:27:25 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1697655298; x=1698260098;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NFJlA+mQhi+0DERBwp78bB/+mqro8rSJvhQZ9F+v2NE=;
+        b=hLhOUuoAQqe3gLhFltUgAs69tvnD7A9ZyqmXgfSjNIwqBlg8SZ2SkS6ABSXpbP4G1X
+         oK7KnVS6T0Ba0upGIDmi2rzU6nYvbDRKTrU+VpSrPVol5kGBUHeGXzWqy3ywUzSUoUFz
+         YUGB39mPt7271cXnBFL1tUgUBbkc3t7cPrp7WfOR9Cmtgew68ZMztDSEf77JGM3ZXHDw
+         vghd+cWIGgvYCNMjgNnKOR2UbS6lxCQolgzyYTTNnw9WcUh2P8m+flWaoaSdQf+AyAUN
+         iCjaolgi2gk6mjQELhMtMRpZRdsU05YwJN3Uo4r2K+IfaJxq4M9IUlnmpw2NQPddoF5P
+         uYuA==
+X-Gm-Message-State: AOJu0YyhVFWLeYxoxh7E2plVqAQ8krD+K8UBbXYyuuXQHz2bdajCfwS3
+        z1z4YKdpoTVffITyFlaS8s/gtz1CwS7yyvcJDTLeiQ==
+X-Google-Smtp-Source: AGHT+IGjizzkFJ61gHRpVi03W6jxKFHsg7oR29EE+XHiKGg+Nd1AGPkE/bY4MhXNSrPSxo096Ldf5GQvn/xYA+BV/to=
+X-Received: by 2002:a05:622a:668a:b0:419:77b7:da5f with SMTP id
+ hx10-20020a05622a668a00b0041977b7da5fmr39818qtb.11.1697655298459; Wed, 18 Oct
+ 2023 11:54:58 -0700 (PDT)
 MIME-Version: 1.0
-References: <20231017090815.1067790-1-jeffxu@chromium.org> <20231017090815.1067790-6-jeffxu@chromium.org>
- <CAHk-=wgwdHzOY_mT3y9gDHSMXZ8Xb5OYrK40-u9uRXLv25fNPA@mail.gmail.com>
- <CALmYWFux2m=9189Gs0o8-xhPNW4dnFvtqj7ptcT5QvzxVgfvYQ@mail.gmail.com> <CALmYWFvgM7DOihdUpUC5SREhUMn9t53HYCX+YioeHHhLSD1KHw@mail.gmail.com>
-In-Reply-To: <CALmYWFvgM7DOihdUpUC5SREhUMn9t53HYCX+YioeHHhLSD1KHw@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Wed, 18 Oct 2023 11:27:08 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wixGw88-OzcFbCLEuAzSe53oUUozdM-E_RJwvejgY6ySA@mail.gmail.com>
-Message-ID: <CAHk-=wixGw88-OzcFbCLEuAzSe53oUUozdM-E_RJwvejgY6ySA@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 5/8] mseal: Check seal flag for munmap(2)
-To:     Jeff Xu <jeffxu@google.com>
-Cc:     jeffxu@chromium.org, akpm@linux-foundation.org,
-        keescook@chromium.org, jannh@google.com, sroettger@google.com,
-        willy@infradead.org, gregkh@linuxfoundation.org,
-        jorgelo@chromium.org, groeck@chromium.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, surenb@google.com, alex.sierra@amd.com,
+References: <20231016143828.647848-1-jeffxu@chromium.org> <CAHk-=whFZoap+DBTYvJx6ohqPwn11Puzh7q4huFWDX9vBwXHgg@mail.gmail.com>
+ <CALmYWFtTDAb_kpZdAe_xspqwNgK1NWJmjTxaTC=jDEMzfe297Q@mail.gmail.com>
+ <CAHk-=wj87GMTH=5901ob=SjQqegAm2JYBE7E4J7skJzE64U-wQ@mail.gmail.com>
+ <55960.1697566804@cvs.openbsd.org> <CALmYWFs81T=XnT=AXQTo0+9FXo=OBAV_4rrYPSn9-16O-gBTZg@mail.gmail.com>
+ <95482.1697587015@cvs.openbsd.org> <CALmYWFtQX57Z7ttKxrdXQH4QupFn4vi5KfizUBH9NkmP-S1JDw@mail.gmail.com>
+ <ZS/3GCKvNn5qzhC4@casper.infradead.org>
+In-Reply-To: <ZS/3GCKvNn5qzhC4@casper.infradead.org>
+From:   Jeff Xu <jeffxu@google.com>
+Date:   Wed, 18 Oct 2023 11:54:22 -0700
+Message-ID: <CALmYWFu_uY=cWzAQaLtS0CdNrm+cO7tKz4sY2Ff02WQ8mGUUXw@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 0/8] Introduce mseal() syscall
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Theo de Raadt <deraadt@openbsd.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        jeffxu@chromium.org, akpm@linux-foundation.org,
+        keescook@chromium.org, sroettger@google.com, jorgelo@chromium.org,
+        groeck@chromium.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+        jannh@google.com, surenb@google.com, alex.sierra@amd.com,
         apopple@nvidia.com, aneesh.kumar@linux.ibm.com,
         axelrasmussen@google.com, ben@decadent.org.uk,
         catalin.marinas@arm.com, david@redhat.com, dwmw@amazon.co.uk,
@@ -81,9 +79,11 @@ Cc:     jeffxu@chromium.org, akpm@linux-foundation.org,
         zhangpeng362@huawei.com, dave.hansen@intel.com, luto@kernel.org,
         linux-hardening@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,37 +91,36 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 18 Oct 2023 at 10:14, Jeff Xu <jeffxu@google.com> wrote:
+On Wed, Oct 18, 2023 at 8:17=E2=80=AFAM Matthew Wilcox <willy@infradead.org=
+> wrote:
 >
-> There is also alternative approach:
+> Let's start with the purpose.  The point of mimmutable/mseal/whatever is
+> to fix the mapping of an address range to its underlying object, be it
+> a particular file mapping or anonymous memory.  After the call succeeds,
+> it must not be possible to make any address in that virtual range point
+> into any other object.
 >
-> For all the places that call do_vmi_munmap(), find out which
-> case should ignore the sealing flag legitimately,
+> The secondary purpose is to lock down permissions on that range.
+> Possibly to fix them where they are, possibly to allow RW->RO transitions=
+.
+>
+> With those purposes in mind, you should be able to deduce for any syscall
+> or any madvise(), ... whether it should be allowed.
+>
+I got it.
 
-NO.
+IMO: The approaches mimmutable() and mseal() took are different, but
+we all want to seal the memory from attackers and make the linux
+application safer.
 
-Christ.
+mimmutable() started  with "none of updates to the sealed address is
+allowed once marked as immutable", this includes from within kernel space
+including driver, or any new syscalls. It is reasonable to me.
 
-THERE ARE NO LEGITIMATE CASES OF IGNORING SEALING FLAGS.
+mseal() starts with 4 syscalls from userspace, which is just a way (among m=
+any
+other ways) to demo what memory operation can be sealed, which happens
+to meet what Chome wants.  This is an RFC, I appreciate your input.
 
-If you ignore a sealing flag, it's not a sealing flag. It's random
-crap, and claiming that it has *anything* to do with security is just
-a cruel joke.
-
-Really.
-
-Stop this. I do not want to hear your excuses for garbage any more.
-We're done. If I hear any more arguments for this sh*t, I will
-literally put you in my ignore file, and will auto-NAK any future
-patches.
-
-This is simply not up for discussion. Any flag for "ignore sealing" is wrong.
-
-We do have one special "unmap" case, namely "unmap_vmas()' called at
-last mmput() -> __mmput() -> exit_mmap().
-
-And yes, that is called at munmap() time too, but that's after the
-point of no return after we've already removed the vma's from the VM
-lists. So it's long after any error cases have been checked.
-
-             Linus
+Best regards,
+-Jeff
