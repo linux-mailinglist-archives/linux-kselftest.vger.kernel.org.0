@@ -2,62 +2,66 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 257137CF1DB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Oct 2023 10:00:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1DD87CF290
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Oct 2023 10:29:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232710AbjJSIAx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 19 Oct 2023 04:00:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41708 "EHLO
+        id S235279AbjJSI27 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 19 Oct 2023 04:28:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231948AbjJSIAw (ORCPT
+        with ESMTP id S1344890AbjJSI2x (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 19 Oct 2023 04:00:52 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6565F126
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Oct 2023 01:00:49 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-9bf0ac97fdeso762679666b.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Oct 2023 01:00:49 -0700 (PDT)
+        Thu, 19 Oct 2023 04:28:53 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79013129
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Oct 2023 01:28:49 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-99357737980so1263673366b.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Oct 2023 01:28:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1697702448; x=1698307248; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1697704128; x=1698308928; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=SDw31twqTrK6hSI6eOTn7FpLVN3vHRArFvp8XVwo1T0=;
-        b=YXX7TTsz/J0sfHncDUz7Qi8RqeKMvpaq7Hjq491cRiM0A8yQ1dCJjMjWNenyrguo1g
-         Xj0nN1oXpx/jFpY/opEVYT2YIS6kI0JYIZLEPkrGw7mwLpv/q6y2S+FSWzea9UkmjPvh
-         x9O+JqptRk5eGuiApXlJWbZN4F3O3W1rchO6IR+MnjTZpbFJS0Mf7464AqCI9bG7ioFW
-         3Eji/jYcJb4Aabv0Ro+I3GvAsO4x9kiOaeskSI4MpScNfOEJEzU3LY2uXglPDleevNS0
-         T1Pe8LyF6/z2ZsWd1Vs2eJDk57v1lGDUnNHpXLLSbXRAGqIZbQcADzykwb1atQ9+W01S
-         /2wg==
+        bh=7GJXloPJDUNPf1NIE4APgKI8yuRKIGnSV0wrTenmKfk=;
+        b=yJpIhpshDUbXkwH4NHh25OOwXbBDAnAVf6cubwz25ccEa/CNI63cylrw3qAYw2yPrh
+         Dg5KITC7k6RG1T1c5Jkdt3GFc4zMQO355cypI1jh9SapHcrol2vnZl13sDJYVLUHBBs+
+         pc7MoeQFm/wRss5MRMKssQ6RVk4bp4TNzBvd9g5FK6WUTAYQdtvNxGaAmeFqJiF+LfP8
+         PF55rfOEnY5//0xEIT+iIIi7wIWuTEX3rmRJYWR49iJ5rEGYkLkQ8XB0UomNkVNxS3JW
+         h0HskYBLhq06vLs0KZ655gje4aYNiAzd+F5pSpjsxzihIm2RWjWDZAwwWnuWrPKqO5gg
+         5qvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697702448; x=1698307248;
+        d=1e100.net; s=20230601; t=1697704128; x=1698308928;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=SDw31twqTrK6hSI6eOTn7FpLVN3vHRArFvp8XVwo1T0=;
-        b=P+WzN1MDKgw8cjHt1IeMyobT5gAODNkZ4IuEzj7y4ChKKQ113su8n4SxYrQuPEVcAB
-         5cImZAurbd0UkHR5KrYyQe3fDTR1WdNL2rP9bOjEdGwdKnCEk9fkgUUQ8YOJ0Kid45r2
-         eaZLrvw5gFCesA7+NxlWyg0QIAqCs4VpcwSPw7vRu20x69K/mXpeuQfaTNOWFTPQ44oI
-         Dh720TL1wEugOF6jDPZxciGj3aFIvVI5svFv/dkMRBgbCk5TdtmGjjvvEPurlFIgR3MX
-         6xy/+F0a2ufUDSpJbcjhB7EEVDHHRUZh9YznV+kN1eHcAuAwq8qwxYbajghpKfrav3jf
-         pmYQ==
-X-Gm-Message-State: AOJu0YxptSKQpnp66BZEvFsSQU6u+5M3woUBvKPrZ0gi2IfY+vPN3CuT
-        MPGkm0yv02DZmYnZ0fiupv9hX1y75bFJ4d1Y+hyXMA==
-X-Google-Smtp-Source: AGHT+IGvvBAOXddF5owRwRHOfUfE25ctm4Piy/qlWCUDwS2bRynHrk5Ji3mZ1+oA2JFNfhdLg+9pNtGTmYzliW9xAww=
-X-Received: by 2002:a17:907:786:b0:9be:834a:f80b with SMTP id
- xd6-20020a170907078600b009be834af80bmr1206934ejb.75.1697702447293; Thu, 19
- Oct 2023 01:00:47 -0700 (PDT)
+        bh=7GJXloPJDUNPf1NIE4APgKI8yuRKIGnSV0wrTenmKfk=;
+        b=C+HvL0+DgKYuZRoW8x1e07ZwxqVsJA0TRaIlWUFAdwhmLb+em6qwdBvlUxwE71/ojg
+         RcKy4shH7ybdbVfJOThgu1rz7Kxcb7kF9lRM37e/oIvArzB9xcDu+lCh/d/3F6P6Spno
+         DbtG+65BDoljAJkCyRmeWCA7+htJi2umYeKpepQd4sePdkH2YpjtXq3L1Xq0UD1rE2fu
+         +X9sTG9aLWq1i/lv9kFwDKbf+hi7YJwJqP3Mdd1x71yqqKIHQ3YGt4Ylxx62BK1oyvWu
+         2BgUzn6gt8GcvAA0NF6igock7zVAzVz507rVbaBt9eLdtnQEqO6mynlBT5ROQoFxKin0
+         wszA==
+X-Gm-Message-State: AOJu0YywmuBn2tP5j9J3aEq8EYMWn1mMgcaqMdRlHbymjnhREdGQ4Yv5
+        Z89Cd0Hmlqjo2GQZfQbRChE35Kl+xo0jYpVzJ+f8PA==
+X-Google-Smtp-Source: AGHT+IH7E2FmlBTzpRteQDk+hDLSK7kOdRA2fpg7JZn3vIczrsCBy6izaVZ3GrO0E1/IgeAz22mjsQeaPCnhTYZyymw=
+X-Received: by 2002:a17:907:7e94:b0:9bf:10f3:e435 with SMTP id
+ qb20-20020a1709077e9400b009bf10f3e435mr1350365ejc.1.1697704127553; Thu, 19
+ Oct 2023 01:28:47 -0700 (PDT)
 MIME-Version: 1.0
 References: <20231016143828.647848-1-jeffxu@chromium.org> <CAHk-=whFZoap+DBTYvJx6ohqPwn11Puzh7q4huFWDX9vBwXHgg@mail.gmail.com>
  <CALmYWFtTDAb_kpZdAe_xspqwNgK1NWJmjTxaTC=jDEMzfe297Q@mail.gmail.com>
  <CAHk-=wj87GMTH=5901ob=SjQqegAm2JYBE7E4J7skJzE64U-wQ@mail.gmail.com>
- <55960.1697566804@cvs.openbsd.org> <CAHk-=wjS=xg12RVQdTNxEurjo21eXQBQO0D5My6Aox4LCfsO1A@mail.gmail.com>
-In-Reply-To: <CAHk-=wjS=xg12RVQdTNxEurjo21eXQBQO0D5My6Aox4LCfsO1A@mail.gmail.com>
+ <55960.1697566804@cvs.openbsd.org> <CALmYWFs81T=XnT=AXQTo0+9FXo=OBAV_4rrYPSn9-16O-gBTZg@mail.gmail.com>
+ <95482.1697587015@cvs.openbsd.org> <CALmYWFtQX57Z7ttKxrdXQH4QupFn4vi5KfizUBH9NkmP-S1JDw@mail.gmail.com>
+ <ZS/3GCKvNn5qzhC4@casper.infradead.org> <CALmYWFu_uY=cWzAQaLtS0CdNrm+cO7tKz4sY2Ff02WQ8mGUUXw@mail.gmail.com>
+ <7071.1697661373@cvs.openbsd.org>
+In-Reply-To: <7071.1697661373@cvs.openbsd.org>
 From:   =?UTF-8?Q?Stephen_R=C3=B6ttger?= <sroettger@google.com>
-Date:   Thu, 19 Oct 2023 10:00:33 +0200
-Message-ID: <CAEAAPHYgg49WtpE7Jdq6HDecFp5RHPhdxtPTUaNF12RONu5aDA@mail.gmail.com>
+Date:   Thu, 19 Oct 2023 10:28:32 +0200
+Message-ID: <CAEAAPHbB0yZfpXGMib4bbH8z5diKfur5M6mAfZuB6qi9UVpcPw@mail.gmail.com>
 Subject: Re: [RFC PATCH v1 0/8] Introduce mseal() syscall
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Theo de Raadt <deraadt@openbsd.org>, Jeff Xu <jeffxu@google.com>,
+To:     Theo de Raadt <deraadt@openbsd.org>
+Cc:     Jeff Xu <jeffxu@google.com>, Matthew Wilcox <willy@infradead.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
         jeffxu@chromium.org, akpm@linux-foundation.org,
         keescook@chromium.org, jorgelo@chromium.org, groeck@chromium.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
@@ -67,18 +71,18 @@ Cc:     Theo de Raadt <deraadt@openbsd.org>, Jeff Xu <jeffxu@google.com>,
         ben@decadent.org.uk, catalin.marinas@arm.com, david@redhat.com,
         dwmw@amazon.co.uk, ying.huang@intel.com, hughd@google.com,
         joey.gouly@arm.com, corbet@lwn.net, wangkefeng.wang@huawei.com,
-        Liam.Howlett@oracle.com, lstoakes@gmail.com, willy@infradead.org,
-        mawupeng1@huawei.com, linmiaohe@huawei.com, namit@vmware.com,
-        peterx@redhat.com, peterz@infradead.org, ryan.roberts@arm.com,
-        shr@devkernel.io, vbabka@suse.cz, xiujianfeng@huawei.com,
-        yu.ma@intel.com, zhangpeng362@huawei.com, dave.hansen@intel.com,
-        luto@kernel.org, linux-hardening@vger.kernel.org
+        Liam.Howlett@oracle.com, lstoakes@gmail.com, mawupeng1@huawei.com,
+        linmiaohe@huawei.com, namit@vmware.com, peterx@redhat.com,
+        peterz@infradead.org, ryan.roberts@arm.com, shr@devkernel.io,
+        vbabka@suse.cz, xiujianfeng@huawei.com, yu.ma@intel.com,
+        zhangpeng362@huawei.com, dave.hansen@intel.com, luto@kernel.org,
+        linux-hardening@vger.kernel.org
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000005a409a06080d27e9"
+        boundary="0000000000007e12c406080d8b16"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,29 +90,36 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---0000000000005a409a06080d27e9
+--0000000000007e12c406080d8b16
 Content-Type: text/plain; charset="UTF-8"
 
-> I do like us starting with just "mimmutable()", since it already
-> exists. Particularly if chrome already knows how to use it.
+> > IMO: The approaches mimmutable() and mseal() took are different, but
+> > we all want to seal the memory from attackers and make the linux
+> > application safer.
 >
-> Maybe add a flag field (require it to be zero initially) just to allow
-> any future expansion. Maybe the chrome team has *wanted* to have some
-> finer granularity thing and currently doesn't use mimmutable() in some
-> case?
+> I think you are building mseal for chrome, and chrome alone.
+>
+> I do not think this will work out for the rest of the application space
+> because
+>
+> 1) it is too complicated
+> 2) experience with mimmutable() says that applications don't do any of it
+>    themselves, it is all in execve(), libc initialization, and ld.so.
+>    You don't strike me as an execve, libc, or ld.so developer.
 
-Yes, we do have a use case in Chrome to split the sealing into unmap and
-mprotect which will allow us to seal additional pages that we can't seal with
-pure mimmutable().
-For example, we have pkey-tagged RWX memory that we want to seal. Since
-the memory is already RWX and the pkey controls write access, we don't care
-about permission changes but sometimes we do need to mprotect data only
-pages.
-But the munmap sealing will provide protection against implicit changes of the
-pkey in this case which would happen if a page gets unmapped and another
-mapped in its place.
+We do want to build this in a way that it can be applied automatically by ld.so
+and we appreciate all your feedback on this. The intention of
+splitting the sealing
+by syscall was to provide flexibility while still allowing ld.so to
+seal all operations.
+But it's clear from the feedback that both the fine grained split and
+the per-syscall
+approach are not the right way to go.
+Does Linus' proposal to just split munmap / mprotect sealing address your
+complexity concerns? ld.so would always use both flags which should then behave
+similar to mimmutable().
 
---0000000000005a409a06080d27e9
+--0000000000007e12c406080d8b16
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -176,13 +187,13 @@ EXefUessFdMqMUSfGI6rUaZTfU0SRfdrVHW4IE8onI30/UVurbGlFiugNF3LbDMXdqzs2/eTsLiD
 8Dv1+pt7SJqI4zNhzZFOpvBPVIkxggJqMIICZgIBATBoMFQxCzAJBgNVBAYTAkJFMRkwFwYDVQQK
 ExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFzIFIzIFNNSU1FIENB
 IDIwMjACEAFp/vXw/R/y8Lw9a5440YEwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIE
-IPi898HIh9BIwdhETZ7/O7Dh3D+SsJLi3hgcuaXknxYwMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0B
-BwEwHAYJKoZIhvcNAQkFMQ8XDTIzMTAxOTA4MDA0OFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgB
+IPHNM1FLRZJiedGV78LWIbLcfhG44YthXIWK+1QlQlPyMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0B
+BwEwHAYJKoZIhvcNAQkFMQ8XDTIzMTAxOTA4Mjg0OFowaQYJKoZIhvcNAQkPMVwwWjALBglghkgB
 ZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQow
-CwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQCACRrA1YHg0GXVfTMP
-AlyEWaAdsa+ss9zi/tIw51t/LdwW7Fp+IRIz9STuIGXfkqGx1trEPxxRwmePgy2P7w4B+CnwE4Ky
-HoYZGJty2JFNuwrzi8grYs4vEdj0jZo4aoYhdsiZhE8jeJvcg2zj6YZ1rXIludmdHzuZN1KjXod2
-MCOuidycQu85E5ykNun/tEaCIeNI1QAW9nwJqLSGM+wUS6RmvI2u3J2gnyqrizvZEr4hTRl5okVi
-PTa4Lonz6hVcZaDoOdya5xuAN4gUNMo5pu6bmJcSbYVLtO1uAjAk/XqHSFNcX1PPk2jh+Oc25yqB
-gSmjGc4bCxnMyjE4lS2w
---0000000000005a409a06080d27e9--
+CwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQClgRkBURnQbzqSbTnU
+T7G/1KuIehcwYLsoU5DQD7ft8qGZJSJeywY20n6aEYRrkGXXvXQtzKPFRyZeW/yY7fCKR7vH7KQn
+v5W5UlbY4C/JNiLRQ3ET8sGcdowV+0SJOxZozLKCH2tcMry7L8+0+O4Vm/zTxlq67ISc6O6ieRg3
+JhOqXkH71KV4tx/RITrBrVKtAZucJxJMNvfWWXAjuY29a3XEkFnfIVs1GHxNBKNMk1bSGNrBWOxv
+ufUq/0Yszi4X/VgSRKHRSUyCQeeK76dWZ+u0t2qcSTFBD7dEHFMT8ZofzEI6TB0xTLIYcVvplyis
+Rxsy+CLwqIHgibltIWG/
+--0000000000007e12c406080d8b16--
