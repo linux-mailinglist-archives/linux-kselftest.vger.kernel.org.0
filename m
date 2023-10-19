@@ -2,70 +2,357 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D81B7D0048
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Oct 2023 19:12:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 480417D0088
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Oct 2023 19:30:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233273AbjJSRMH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 19 Oct 2023 13:12:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34618 "EHLO
+        id S235492AbjJSRaL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 19 Oct 2023 13:30:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232930AbjJSRMH (ORCPT
+        with ESMTP id S235491AbjJSRaJ (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 19 Oct 2023 13:12:07 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E85A9CA;
-        Thu, 19 Oct 2023 10:12:05 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D07CFC433C7;
-        Thu, 19 Oct 2023 17:12:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1697735525;
-        bh=iCAlzJOz5As2YBNfu33bAM6oWeWAG5tVTYiluUL9E/k=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=IldT7onLI/yGS+hbpdK1tfaZCkJkGq1In9vATKNbQXBmzmudox1TAV7DxrLBPQxac
-         Nmw6D383OryGicrO28YWMkTEP0gA+YtR3Sa3oC+EPE3UlseYpiMd2iCX+FdDuzU5sB
-         Lvq4VUUQQlB6pSMITesivcWcnRWM0aD0Al+BtNhg=
-Date:   Thu, 19 Oct 2023 10:12:04 -0700
-From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Nhat Pham <nphamcs@gmail.com>
-Cc:     hannes@cmpxchg.org, cerasuolodomenico@gmail.com,
-        yosryahmed@google.com, sjenning@redhat.com, ddstreet@ieee.org,
-        vitaly.wool@konsulko.com, mhocko@kernel.org,
-        roman.gushchin@linux.dev, shakeelb@google.com,
-        muchun.song@linux.dev, linux-mm@kvack.org, kernel-team@meta.com,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org, Hugh Dickins <hughd@google.com>
-Subject: Re: [PATCH v3 0/5] workload-specific and memory pressure-driven
- zswap writeback
-Message-Id: <20231019101204.179a9a1d2c7a05b604dad182@linux-foundation.org>
-In-Reply-To: <20231017232152.2605440-1-nphamcs@gmail.com>
-References: <20231017232152.2605440-1-nphamcs@gmail.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 19 Oct 2023 13:30:09 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57FF5116
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Oct 2023 10:30:07 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-99c1c66876aso1340430166b.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Oct 2023 10:30:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1697736605; x=1698341405; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FAurVaDY4Y7iKpcdCWtd8DcvDhclHUigROPGt0DwP4I=;
+        b=W3MxB/RcgWqrP0X6LIzTAA609jUI0QOm/pyOz3XJw3ND9NrTrVVlGGvQ0v00eOGfuR
+         K71Quu7r/tZxj1OFYUFRkEdg56F2laXYmIWn37pWNmWDdMK+m+MpSbhUvv+Fdr8+NNtO
+         ZYnYs8XVTrpQLhTX6c6J+o3Gz245BQfE2eOdUb4dV4xL+gIJE34VkZJ+iAGYai4cio+N
+         LVaMlg6m9Fwomn9vb1f0T2qkCWJ6G9vsIhvnCf9AUJvaORVlp/++NVbQjv6pnHABUC4v
+         rFKv4tjdf2Vnw/Tnudqk84I6VKZDg50bQoCb+vGeL5zrXB6W9l0WOqvwjxh0ZiNJiEXi
+         QIqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1697736605; x=1698341405;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FAurVaDY4Y7iKpcdCWtd8DcvDhclHUigROPGt0DwP4I=;
+        b=tQfGTSu4ondwXz+3e3idrmq19aiEsxNUrKbzGeHdthCYKzhsNjW+GURDNH4RhC5XBi
+         kvzzCCfcRkNM4gNUjz/tADN6R/CDP1EGf88saDwg+WDscFFPB1RE1/KSkmwlO9UAlUFR
+         fKAXTwuFkRUcoVG9+hRsJYlRqSnjAbp9m4uvNDpbyHICz+PA44dxZCXpUXaX7Rq4lK1Z
+         I0qRplBwb6bBK+/nFfrfX+u9EliVWAHHwSDm/8jxIQ95sD4Q6gBWVMBOroc8INLCPeel
+         1nDRRezGE7euBO4XJiKoq3bOKyUTIpDv8GYKIkvOWMwISZXyHUBV918GDf/6dmzrs0KM
+         iHug==
+X-Gm-Message-State: AOJu0YzapHlDZngOmkhUROqyJlREP3OwXBwxqrere4UCRiv5lHasMtMN
+        aXGGgB+EQyyM3a9xCoYL4SMH+MaWio6bRnl4+eQNrg==
+X-Google-Smtp-Source: AGHT+IHSZri8nXlKAjUkj+Rn1zxVvwP9rVjfWLt21urXdgubxJwwllu1ZEhXZeg6mDIzbPAa3WiOaM+FoK+uOXkcy60=
+X-Received: by 2002:a17:907:3687:b0:9ae:57b8:ad1b with SMTP id
+ bi7-20020a170907368700b009ae57b8ad1bmr2090783ejc.21.1697736605364; Thu, 19
+ Oct 2023 10:30:05 -0700 (PDT)
+MIME-Version: 1.0
+References: <20231009064230.2952396-1-surenb@google.com> <20231009064230.2952396-4-surenb@google.com>
+ <ZShzSvrN7FgdXi71@x1n> <CAJuCfpE2SmiF6C6xh93ruCxQd_rBK5Vb8jCpKT=y2LSdgHpjgQ@mail.gmail.com>
+In-Reply-To: <CAJuCfpE2SmiF6C6xh93ruCxQd_rBK5Vb8jCpKT=y2LSdgHpjgQ@mail.gmail.com>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Thu, 19 Oct 2023 10:29:27 -0700
+Message-ID: <CAJHvVchpKHBBNYGYCiGmpHbax2_oKkmEoqE0NnY9ChowC+tPEA@mail.gmail.com>
+Subject: Re: [PATCH v3 3/3] selftests/mm: add UFFDIO_MOVE ioctl test
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Peter Xu <peterx@redhat.com>, akpm@linux-foundation.org,
+        viro@zeniv.linux.org.uk, brauner@kernel.org, shuah@kernel.org,
+        aarcange@redhat.com, lokeshgidra@google.com, david@redhat.com,
+        hughd@google.com, mhocko@suse.com, rppt@kernel.org,
+        willy@infradead.org, Liam.Howlett@oracle.com, jannh@google.com,
+        zhangpeng362@huawei.com, bgeffon@google.com,
+        kaleshsingh@google.com, ngeoffray@google.com, jdduke@google.com,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 17 Oct 2023 16:21:47 -0700 Nhat Pham <nphamcs@gmail.com> wrote:
+On Thu, Oct 19, 2023 at 8:43=E2=80=AFAM Suren Baghdasaryan <surenb@google.c=
+om> wrote:
+>
+> On Thu, Oct 12, 2023 at 3:29=E2=80=AFPM Peter Xu <peterx@redhat.com> wrot=
+e:
+> >
+> > On Sun, Oct 08, 2023 at 11:42:28PM -0700, Suren Baghdasaryan wrote:
+> > > Add a test for new UFFDIO_MOVE ioctl which uses uffd to move source
+> > > into destination buffer while checking the contents of both after
+> > > remapping. After the operation the content of the destination buffer
+> > > should match the original source buffer's content while the source
+> > > buffer should be zeroed.
+> > >
+> > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> > > ---
+> > >  tools/testing/selftests/mm/uffd-common.c     | 41 ++++++++++++-
+> > >  tools/testing/selftests/mm/uffd-common.h     |  1 +
+> > >  tools/testing/selftests/mm/uffd-unit-tests.c | 62 ++++++++++++++++++=
+++
+> > >  3 files changed, 102 insertions(+), 2 deletions(-)
+> > >
+> > > diff --git a/tools/testing/selftests/mm/uffd-common.c b/tools/testing=
+/selftests/mm/uffd-common.c
+> > > index 02b89860e193..ecc1244f1c2b 100644
+> > > --- a/tools/testing/selftests/mm/uffd-common.c
+> > > +++ b/tools/testing/selftests/mm/uffd-common.c
+> > > @@ -52,6 +52,13 @@ static int anon_allocate_area(void **alloc_area, b=
+ool is_src)
+> > >               *alloc_area =3D NULL;
+> > >               return -errno;
+> > >       }
+> > > +
+> > > +     /* Prevent source pages from collapsing into THPs */
+> > > +     if (madvise(*alloc_area, nr_pages * page_size, MADV_NOHUGEPAGE)=
+) {
+> > > +             *alloc_area =3D NULL;
+> > > +             return -errno;
+> > > +     }
+> >
+> > Can we move this to test specific code?
+>
+> Ack. I think that's doable.
+>
+> >
+> > > +
+> > >       return 0;
+> > >  }
+> > >
+> > > @@ -484,8 +491,14 @@ void uffd_handle_page_fault(struct uffd_msg *msg=
+, struct uffd_args *args)
+> > >               offset =3D (char *)(unsigned long)msg->arg.pagefault.ad=
+dress - area_dst;
+> > >               offset &=3D ~(page_size-1);
+> > >
+> > > -             if (copy_page(uffd, offset, args->apply_wp))
+> > > -                     args->missing_faults++;
+> > > +             /* UFFD_MOVE is supported for anon non-shared mappings.=
+ */
+> > > +             if (uffd_test_ops =3D=3D &anon_uffd_test_ops && !map_sh=
+ared) {
+> >
+> > IIUC this means move_page() will start to run on many other tests... as
+> > long as anonymous & private.  Probably not wanted, because not all test=
+s
+> > may need this MOVE test, and it also means UFFDIO_COPY is never tested =
+on
+> > anonymous..
+> >
+> > You can overwrite uffd_args.handle_fault().  Axel just added a hook whi=
+ch
+> > seems also usable here.  See 99aa77215ad02.
+>
+> Yes, I was thinking about adding a completely new set of tests for
+> UFFDIO_MOVE but was not sure. With your confirmation I'll follow that
+> path so that UFFDIO_COPY tests stay the same.
+>
+> >
+> > > +                     if (move_page(uffd, offset))
+> > > +                             args->missing_faults++;
+> > > +             } else {
+> > > +                     if (copy_page(uffd, offset, args->apply_wp))
+> > > +                             args->missing_faults++;
+> > > +             }
+> > >       }
+> > >  }
+> > >
+> > > @@ -620,6 +633,30 @@ int copy_page(int ufd, unsigned long offset, boo=
+l wp)
+> > >       return __copy_page(ufd, offset, false, wp);
+> > >  }
+> > >
+> > > +int move_page(int ufd, unsigned long offset)
+> > > +{
+> > > +     struct uffdio_move uffdio_move;
+> > > +
+> > > +     if (offset >=3D nr_pages * page_size)
+> > > +             err("unexpected offset %lu\n", offset);
+> > > +     uffdio_move.dst =3D (unsigned long) area_dst + offset;
+> > > +     uffdio_move.src =3D (unsigned long) area_src + offset;
+> > > +     uffdio_move.len =3D page_size;
+> > > +     uffdio_move.mode =3D UFFDIO_MOVE_MODE_ALLOW_SRC_HOLES;
+> > > +     uffdio_move.move =3D 0;
+> > > +     if (ioctl(ufd, UFFDIO_MOVE, &uffdio_move)) {
+> > > +             /* real retval in uffdio_move.move */
+> > > +             if (uffdio_move.move !=3D -EEXIST)
+> > > +                     err("UFFDIO_MOVE error: %"PRId64,
+> > > +                         (int64_t)uffdio_move.move);
+> > > +             wake_range(ufd, uffdio_move.dst, page_size);
+> > > +     } else if (uffdio_move.move !=3D page_size) {
+> > > +             err("UFFDIO_MOVE error: %"PRId64, (int64_t)uffdio_move.=
+move);
+> > > +     } else
+> > > +             return 1;
+> > > +     return 0;
+> > > +}
+> > > +
+> > >  int uffd_open_dev(unsigned int flags)
+> > >  {
+> > >       int fd, uffd;
+> > > diff --git a/tools/testing/selftests/mm/uffd-common.h b/tools/testing=
+/selftests/mm/uffd-common.h
+> > > index 7c4fa964c3b0..f4d79e169a3d 100644
+> > > --- a/tools/testing/selftests/mm/uffd-common.h
+> > > +++ b/tools/testing/selftests/mm/uffd-common.h
+> > > @@ -111,6 +111,7 @@ void wp_range(int ufd, __u64 start, __u64 len, bo=
+ol wp);
+> > >  void uffd_handle_page_fault(struct uffd_msg *msg, struct uffd_args *=
+args);
+> > >  int __copy_page(int ufd, unsigned long offset, bool retry, bool wp);
+> > >  int copy_page(int ufd, unsigned long offset, bool wp);
+> > > +int move_page(int ufd, unsigned long offset);
+> > >  void *uffd_poll_thread(void *arg);
+> > >
+> > >  int uffd_open_dev(unsigned int flags);
+> > > diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/tes=
+ting/selftests/mm/uffd-unit-tests.c
+> > > index 2709a34a39c5..f0ded3b34367 100644
+> > > --- a/tools/testing/selftests/mm/uffd-unit-tests.c
+> > > +++ b/tools/testing/selftests/mm/uffd-unit-tests.c
+> > > @@ -824,6 +824,10 @@ static void uffd_events_test_common(bool wp)
+> > >       char c;
+> > >       struct uffd_args args =3D { 0 };
+> > >
+> > > +     /* Prevent source pages from being mapped more than once */
+> > > +     if (madvise(area_src, nr_pages * page_size, MADV_DONTFORK))
+> > > +             err("madvise(MADV_DONTFORK) failed");
+> >
+> > Modifying events test is weird.. I assume you don't need this anymore a=
+fter
+> > you switch to the handle_fault() hook.
+>
+> I think so but let me try first and I'll get back on that.
+>
+> >
+> > > +
+> > >       fcntl(uffd, F_SETFL, uffd_flags | O_NONBLOCK);
+> > >       if (uffd_register(uffd, area_dst, nr_pages * page_size,
+> > >                         true, wp, false))
+> > > @@ -1062,6 +1066,58 @@ static void uffd_poison_test(uffd_test_args_t =
+*targs)
+> > >       uffd_test_pass();
+> > >  }
+> > >
+> > > +static void uffd_move_test(uffd_test_args_t *targs)
+> > > +{
+> > > +     unsigned long nr;
+> > > +     pthread_t uffd_mon;
+> > > +     char c;
+> > > +     unsigned long long count;
+> > > +     struct uffd_args args =3D { 0 };
+> > > +
+> > > +     if (uffd_register(uffd, area_dst, nr_pages * page_size,
+> > > +                       true, false, false))
+> > > +             err("register failure");
+> > > +
+> > > +     if (pthread_create(&uffd_mon, NULL, uffd_poll_thread, &args))
+> > > +             err("uffd_poll_thread create");
+> > > +
+> > > +     /*
+> > > +      * Read each of the pages back using the UFFD-registered mappin=
+g. We
+> > > +      * expect that the first time we touch a page, it will result i=
+n a missing
+> > > +      * fault. uffd_poll_thread will resolve the fault by remapping =
+source
+> > > +      * page to destination.
+> > > +      */
+> > > +     for (nr =3D 0; nr < nr_pages; nr++) {
+> > > +             /* Check area_src content */
+> > > +             count =3D *area_count(area_src, nr);
+> > > +             if (count !=3D count_verify[nr])
+> > > +                     err("nr %lu source memory invalid %llu %llu\n",
+> > > +                         nr, count, count_verify[nr]);
+> > > +
+> > > +             /* Faulting into area_dst should remap the page */
+> > > +             count =3D *area_count(area_dst, nr);
+> > > +             if (count !=3D count_verify[nr])
+> > > +                     err("nr %lu memory corruption %llu %llu\n",
+> > > +                         nr, count, count_verify[nr]);
+> > > +
+> > > +             /* Re-check area_src content which should be empty */
+> > > +             count =3D *area_count(area_src, nr);
+> > > +             if (count !=3D 0)
+> > > +                     err("nr %lu move failed %llu %llu\n",
+> > > +                         nr, count, count_verify[nr]);
+> >
+> > All of above should see zeros, right?  Because I don't think anyone boo=
+sted
+> > the counter at all..
+> >
+> > Maybe set some non-zero values to it?  Then the re-check can make more
+> > sense.
+>
+> I thought uffd_test_ctx_init() is initializing area_count(area_src,
+> nr), so the source pages should contain non-zero data before the move.
+> Am I missing something?
 
-> Subject: [PATCH v3 0/5] workload-specific and memory pressure-driven zswap writeback
+You're correct, uffd_test_ctx_init() fills in some data in area_src.
 
-We're at -rc6 and I'd prefer to drop this series from mm.git, have
-another go during the next cycle.
-
-However Hugh's v2 series "mempolicy: cleanups leading to NUMA mpol
-without vma" has syntactic dependencies on this series and will need
-rework, so I'd like to make that decision soon.
-
-Do we feel that this series can be made into a mergeable state within
-the next few days?
-
-Thanks.
+>
+> >
+> > If you want, I think we can also make uffd-stress.c test to cover MOVE =
+too,
+> > basically replacing all UFFDIO_COPY when e.g. user specified from cmdli=
+ne.
+> > Optional, and may need some touch ups here and there, though.
+>
+> That's a good idea. I'll add that in the next version.
+> Thanks,
+> Suren.
+>
+> >
+> > Thanks,
+> >
+> > > +     }
+> > > +
+> > > +     if (write(pipefd[1], &c, sizeof(c)) !=3D sizeof(c))
+> > > +             err("pipe write");
+> > > +     if (pthread_join(uffd_mon, NULL))
+> > > +             err("join() failed");
+> > > +
+> > > +     if (args.missing_faults !=3D nr_pages || args.minor_faults !=3D=
+ 0)
+> > > +             uffd_test_fail("stats check error");
+> > > +     else
+> > > +             uffd_test_pass();
+> > > +}
+> > > +
+> > >  /*
+> > >   * Test the returned uffdio_register.ioctls with different register =
+modes.
+> > >   * Note that _UFFDIO_ZEROPAGE is tested separately in the zeropage t=
+est.
+> > > @@ -1139,6 +1195,12 @@ uffd_test_case_t uffd_tests[] =3D {
+> > >               .mem_targets =3D MEM_ALL,
+> > >               .uffd_feature_required =3D 0,
+> > >       },
+> > > +     {
+> > > +             .name =3D "move",
+> > > +             .uffd_fn =3D uffd_move_test,
+> > > +             .mem_targets =3D MEM_ANON,
+> > > +             .uffd_feature_required =3D UFFD_FEATURE_MOVE,
+> > > +     },
+> > >       {
+> > >               .name =3D "wp-fork",
+> > >               .uffd_fn =3D uffd_wp_fork_test,
+> > > --
+> > > 2.42.0.609.gbb76f46606-goog
+> > >
+> >
+> > --
+> > Peter Xu
+> >
+> > --
+> > To unsubscribe from this group and stop receiving emails from it, send =
+an email to kernel-team+unsubscribe@android.com.
+> >
