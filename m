@@ -2,75 +2,85 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 020197D0441
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Oct 2023 23:56:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 596A07D052F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Oct 2023 00:56:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235547AbjJSVzv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 19 Oct 2023 17:55:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54342 "EHLO
+        id S233357AbjJSW44 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 19 Oct 2023 18:56:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235556AbjJSVzu (ORCPT
+        with ESMTP id S233286AbjJSW4z (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 19 Oct 2023 17:55:50 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F6A131
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Oct 2023 14:55:47 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id 5614622812f47-3ae2896974bso147873b6e.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Oct 2023 14:55:47 -0700 (PDT)
+        Thu, 19 Oct 2023 18:56:55 -0400
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5F5A115;
+        Thu, 19 Oct 2023 15:56:53 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id af79cd13be357-7743448d88eso9015485a.2;
+        Thu, 19 Oct 2023 15:56:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1697752546; x=1698357346; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1697756213; x=1698361013; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5x7fNAgUclW/dZ4C+FeTd/4bXpjT6wASJvd5Y6Sz4mA=;
-        b=jTE3SHMz01xzXOensSAUJynCpEfA70ZE8uOuQDgusVhItT6aHNDvtysTPGwNmHKaT+
-         SHRLuHBg4LdgCwWxbDGG+t0T4o/7A4YcEqMD5cxIIv+NPnfgyiDn5uvkelwxnj61eIrp
-         lr1nNHEEPw9gDOVYXNQaeZR7cMdPtXoQmkpuvnqFN0PSegK2Pe0sCR7k+FLkXGaIs14I
-         5/el+oz3f6gxIzqx/wvIKCqHjLOoFULZqpDy8QZMRwOD23vf2N2pZu7BKTYOoNmZn2bB
-         IHNv4+xR/bIn5bYVUQMKcu0eIK9Pk3tll8HuuWE043H4z4o1fFFi8gMtr8BEeKqzqPEZ
-         VWNg==
+        bh=CP2THLW7eHytlPbt5BfwCcXMf/R2fQdouS9d2T2WxRc=;
+        b=k8pWnrd2XDBKSQrZsOce0wWmdWD4NuuoM8713NzvK44dqGORSZwgwP/iRYlXBD7ztf
+         28d2Mj2PSMgKP4PTzjcmODUViGyazUSa9DYfRsBoNYWFXpVPxNQBPxWGkcIzsG5MC5N6
+         UvGNaeO+zVzgcnZOFFxp5nmDDJ8i+jqGkgEdzNaZ6PYiBgpSk3bGNoJuF05ZxU+kjzEO
+         VJXBlXSSIZfbCRGDHg53bnpQH0HN7KasO+IDYPkMztqXV6HsG09WTPRKoEu3+oSHo+YZ
+         uERz2J7lIHb4eVh1Cyn6qpbxoHJIBOuwmoaZAqimfPh45XKDsqWRRYiGMnKCCsE/dNeg
+         W2vg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697752546; x=1698357346;
+        d=1e100.net; s=20230601; t=1697756213; x=1698361013;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5x7fNAgUclW/dZ4C+FeTd/4bXpjT6wASJvd5Y6Sz4mA=;
-        b=kYYyZPvlO/vDUxO1J+D9sPCSl0McHlw7Wk0D/hr7f5lV5bi0P5iCV5pwUIpvqeMXvR
-         k/fg0pgBaLTJ23NJvAUFTa3Lr9HLzk457RC5r4FYmsWzZr5r8ZH7c7sHCS1+ZIs/RqKN
-         JdsY/mJwsRqkaKz2n1tlJvXxOiOH1sjsru0zAXKraka0jxY27Rob4aHfTqE/CS1wp0nE
-         uxj7dF8D3ZGkjy3mfFPZDTIpaZPydhH51c9g8dxu1mqSt2DibtD8wuDXx9Xgop0XIejn
-         eLMuXgT2TxE4u8haUOW/LBgTS1f+eEl5tWFZv9Hxs7Iwbm9YOqT23Po5WV4+ifu2iz7x
-         9jBA==
-X-Gm-Message-State: AOJu0Yx9RT0YNG11xwJpNPF+xVuxLs3IfKFRF1bPhdHVLffv3oTl3/t+
-        AJSkRIlnLOZEuY4lCbr3WArL4VhIX+wpo3RQqNFzqg==
-X-Google-Smtp-Source: AGHT+IGYe5PPblYRslLf/6Giq5qmRtofbqAqD6yTJcwBO8AmHbJNL6wScpZJknUFQpZpPCr8BQbJVOqomYJTWvZPT7g=
-X-Received: by 2002:aca:d0d:0:b0:3b2:e649:b5fb with SMTP id
- 13-20020aca0d0d000000b003b2e649b5fbmr95719oin.15.1697752546123; Thu, 19 Oct
- 2023 14:55:46 -0700 (PDT)
+        bh=CP2THLW7eHytlPbt5BfwCcXMf/R2fQdouS9d2T2WxRc=;
+        b=S3DwZoibSaSzHs6BdJhjjUc4/abysR/XgIpfbhTE0UIQ3EUMDdFt3eCbprIS3054FO
+         UDpm4zCqcvMPqrRmOGKhAWXQ/6Si6ory2caAkymXgNThqprZqYtTwyimUieXo3v5k/3s
+         C58bvq8JA48psnHa16MVe/Dy2ULApv6JHflCuowCwivXtxF/TXPdjFqHg/zCilp6CTsL
+         PlfBXBnP06JzTdodCoYbdQZxTOoPKr9atbfHoihFvthsbBW1CeNwh0DN60Vx8Y+OjpPT
+         DJnV1Vd5fwPGQPw0JAvSDYmTXoaGEWBydkwHHN0HDxW4+NAeyllhcr48klHNi15O+L6i
+         cBtA==
+X-Gm-Message-State: AOJu0YxT7XqaXYdmIIBKWZnp0n3KQx75AFH0z5/iDEk2I7ayKfYrfjDk
+        jJDk3C2FzU2EMZ5SLjLll1iNWbnTkV7Ep6EX0Tu4kSG1jcsPyg==
+X-Google-Smtp-Source: AGHT+IHciFs/BQ6U6a7rjOnDJ2Xq+ukEzpkuMKRLiU5U69JMH0j5zohwipplwWO5SP4nlGF81WuRLROHWoNhvgHtxmc=
+X-Received: by 2002:a67:a209:0:b0:457:b85e:a9fe with SMTP id
+ l9-20020a67a209000000b00457b85ea9femr91187vse.27.1697755677500; Thu, 19 Oct
+ 2023 15:47:57 -0700 (PDT)
 MIME-Version: 1.0
-References: <20231009064230.2952396-3-surenb@google.com> <202310180338.zTpcYECK-lkp@intel.com>
-In-Reply-To: <202310180338.zTpcYECK-lkp@intel.com>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Thu, 19 Oct 2023 14:55:31 -0700
-Message-ID: <CAJuCfpGJqzuJqfH42=f5LXxkf4uCNmUUh2zXyzodczP29O6_hQ@mail.gmail.com>
-Subject: Re: [PATCH v3 2/3] userfaultfd: UFFDIO_MOVE uABI
-To:     kernel test robot <lkp@intel.com>
-Cc:     akpm@linux-foundation.org, oe-kbuild-all@lists.linux.dev,
-        viro@zeniv.linux.org.uk, brauner@kernel.org, shuah@kernel.org,
-        aarcange@redhat.com, lokeshgidra@google.com, peterx@redhat.com,
-        david@redhat.com, hughd@google.com, mhocko@suse.com,
-        axelrasmussen@google.com, rppt@kernel.org, willy@infradead.org,
-        Liam.Howlett@oracle.com, jannh@google.com, zhangpeng362@huawei.com,
-        bgeffon@google.com, kaleshsingh@google.com, ngeoffray@google.com,
-        jdduke@google.com, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kernel-team@android.com
+References: <20231016143828.647848-1-jeffxu@chromium.org> <ZS1URCBgwGGj9JtM@casper.infradead.org>
+ <CAKbZUD2A+=bp_sd+Q0Yif7NJqMu8p__eb4yguq0agEcmLH8SDQ@mail.gmail.com>
+ <CALmYWFtOgMAQDGNoM6k2Ev4kMHD396wwH+rVDODaSjsyVMDogg@mail.gmail.com>
+ <CAKbZUD2j1jbomCAVxUX_JmG1rfa8udc=5SqVOpDgc-3GnSTbAQ@mail.gmail.com>
+ <CALmYWFv7jzOj5HPcYct=UzYKPrwwvtN1EQeHioQHDPwGFvL5Ug@mail.gmail.com> <CALmYWFt71Vi6ySiZhW+tmE-LZL7Tnu-dQ1uMO10DUkASUTxzKA@mail.gmail.com>
+In-Reply-To: <CALmYWFt71Vi6ySiZhW+tmE-LZL7Tnu-dQ1uMO10DUkASUTxzKA@mail.gmail.com>
+From:   Pedro Falcato <pedro.falcato@gmail.com>
+Date:   Thu, 19 Oct 2023 23:47:46 +0100
+Message-ID: <CAKbZUD12pEaDCLysOpT3yL3064=P28Pm3c=UBqhOZYeBP026WA@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 0/8] Introduce mseal() syscall
+To:     Jeff Xu <jeffxu@google.com>
+Cc:     Matthew Wilcox <willy@infradead.org>, jeffxu@chromium.org,
+        akpm@linux-foundation.org, keescook@chromium.org,
+        sroettger@google.com, jorgelo@chromium.org, groeck@chromium.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, jannh@google.com, surenb@google.com,
+        alex.sierra@amd.com, apopple@nvidia.com,
+        aneesh.kumar@linux.ibm.com, axelrasmussen@google.com,
+        ben@decadent.org.uk, catalin.marinas@arm.com, david@redhat.com,
+        dwmw@amazon.co.uk, ying.huang@intel.com, hughd@google.com,
+        joey.gouly@arm.com, corbet@lwn.net, wangkefeng.wang@huawei.com,
+        Liam.Howlett@oracle.com, torvalds@linux-foundation.org,
+        lstoakes@gmail.com, mawupeng1@huawei.com, linmiaohe@huawei.com,
+        namit@vmware.com, peterx@redhat.com, peterz@infradead.org,
+        ryan.roberts@arm.com, shr@devkernel.io, vbabka@suse.cz,
+        xiujianfeng@huawei.com, yu.ma@intel.com, zhangpeng362@huawei.com,
+        dave.hansen@intel.com, luto@kernel.org,
+        linux-hardening@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,302 +88,141 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Oct 17, 2023 at 12:40=E2=80=AFPM kernel test robot <lkp@intel.com> =
-wrote:
+On Thu, Oct 19, 2023 at 6:30=E2=80=AFPM Jeff Xu <jeffxu@google.com> wrote:
 >
-> Hi Suren,
+> Hi Pedro
 >
-> kernel test robot noticed the following build warnings:
+> Some followup on mmap() + mprotect():
 >
-> [auto build test WARNING on akpm-mm/mm-everything]
-> [also build test WARNING on next-20231017]
-> [cannot apply to linus/master v6.6-rc6]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
->
-> url:    https://github.com/intel-lab-lkp/linux/commits/Suren-Baghdasaryan=
-/mm-rmap-support-move-to-different-root-anon_vma-in-folio_move_anon_rmap/20=
-231009-144552
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-ev=
-erything
-> patch link:    https://lore.kernel.org/r/20231009064230.2952396-3-surenb%=
-40google.com
-> patch subject: [PATCH v3 2/3] userfaultfd: UFFDIO_MOVE uABI
-> config: i386-randconfig-141-20231017 (https://download.01.org/0day-ci/arc=
-hive/20231018/202310180338.zTpcYECK-lkp@intel.com/config)
-> compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-> reproduce: (https://download.01.org/0day-ci/archive/20231018/202310180338=
-.zTpcYECK-lkp@intel.com/reproduce)
->
-> If you fix the issue in a separate patch/commit (i.e. not just a new vers=
-ion of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202310180338.zTpcYECK-lkp=
-@intel.com/
->
-> smatch warnings:
-> mm/userfaultfd.c:1380 remap_pages() warn: unsigned 'src_start + len - src=
-_addr' is never less than zero.
-
-Hmm. I think this warning is correct only when
-CONFIG_TRANSPARENT_HUGEPAGE=3Dn. I guess I'll have to add an "ifdef
-CONFIG_TRANSPARENT_HUGEPAGE" here after all, which lets us move these
-checks before locking PTL.
-
->
-> vim +1380 mm/userfaultfd.c
->
->   1195
->   1196  /**
->   1197   * remap_pages - remap arbitrary anonymous pages of an existing v=
-ma
->   1198   * @dst_start: start of the destination virtual memory range
->   1199   * @src_start: start of the source virtual memory range
->   1200   * @len: length of the virtual memory range
->   1201   *
->   1202   * remap_pages() remaps arbitrary anonymous pages atomically in z=
-ero
->   1203   * copy. It only works on non shared anonymous pages because thos=
-e can
->   1204   * be relocated without generating non linear anon_vmas in the rm=
-ap
->   1205   * code.
->   1206   *
->   1207   * It provides a zero copy mechanism to handle userspace page fau=
-lts.
->   1208   * The source vma pages should have mapcount =3D=3D 1, which can =
-be
->   1209   * enforced by using madvise(MADV_DONTFORK) on src vma.
->   1210   *
->   1211   * The thread receiving the page during the userland page fault
->   1212   * will receive the faulting page in the source vma through the n=
-etwork,
->   1213   * storage or any other I/O device (MADV_DONTFORK in the source v=
-ma
->   1214   * avoids remap_pages() to fail with -EBUSY if the process forks =
-before
->   1215   * remap_pages() is called), then it will call remap_pages() to m=
-ap the
->   1216   * page in the faulting address in the destination vma.
->   1217   *
->   1218   * This userfaultfd command works purely via pagetables, so it's =
-the
->   1219   * most efficient way to move physical non shared anonymous pages
->   1220   * across different virtual addresses. Unlike mremap()/mmap()/mun=
-map()
->   1221   * it does not create any new vmas. The mapping in the destinatio=
-n
->   1222   * address is atomic.
->   1223   *
->   1224   * It only works if the vma protection bits are identical from th=
-e
->   1225   * source and destination vma.
->   1226   *
->   1227   * It can remap non shared anonymous pages within the same vma to=
-o.
->   1228   *
->   1229   * If the source virtual memory range has any unmapped holes, or =
-if
->   1230   * the destination virtual memory range is not a whole unmapped h=
-ole,
->   1231   * remap_pages() will fail respectively with -ENOENT or -EEXIST. =
-This
->   1232   * provides a very strict behavior to avoid any chance of memory
->   1233   * corruption going unnoticed if there are userland race conditio=
-ns.
->   1234   * Only one thread should resolve the userland page fault at any =
-given
->   1235   * time for any given faulting address. This means that if two th=
-reads
->   1236   * try to both call remap_pages() on the same destination address=
- at the
->   1237   * same time, the second thread will get an explicit error from t=
-his
->   1238   * command.
->   1239   *
->   1240   * The command retval will return "len" is successful. The comman=
+> On Wed, Oct 18, 2023 at 11:20=E2=80=AFAM Jeff Xu <jeffxu@google.com> wrot=
+e:
+> >
+> > On Tue, Oct 17, 2023 at 3:35=E2=80=AFPM Pedro Falcato <pedro.falcato@gm=
+ail.com> wrote:
+> > >
+> > > > >
+> > > > > I think it's worth pointing out that this suggestion (with PROT_*=
+)
+> > > > > could easily integrate with mmap() and as such allow for one-shot
+> > > > > mmap() + mseal().
+> > > > > If we consider the common case as 'addr =3D mmap(...); mseal(addr=
+);', it
+> > > > > definitely sounds like a performance win as we halve the number o=
+f
+> > > > > syscalls for a sealed mapping. And if we trivially look at e.g Op=
+enBSD
+> > > > > ld.so code, mmap() + mimmutable() and mprotect() + mimmutable() s=
+eem
+> > > > > like common patterns.
+> > > > >
+> > > > Yes. mmap() can support sealing as well, and memory is allocated as
+> > > > immutable from begining.
+> > > > This is orthogonal to mseal() though.
+> > >
+> > > I don't see how this can be orthogonal to mseal().
+> > > In the case we opt for adding PROT_ bits, we should more or less only
+> > > need to adapt calc_vm_prot_bits(), and the rest should work without
+> > > issues.
+> > > vma merging won't merge vmas with different prots. The current
+> > > interfaces (mmap and mprotect) would work just fine.
+> > > In this case, mseal() or mimmutable() would only be needed if you nee=
 d
->   1241   * however can be interrupted by fatal signals or errors. If
->   1242   * interrupted it will return the number of bytes successfully
->   1243   * remapped before the interruption if any, or the negative error=
- if
->   1244   * none. It will never return zero. Either it will return an erro=
-r or
->   1245   * an amount of bytes successfully moved. If the retval reports a
->   1246   * "short" remap, the remap_pages() command should be repeated by
->   1247   * userland with src+retval, dst+reval, len-retval if it wants to=
- know
->   1248   * about the error that interrupted it.
->   1249   *
->   1250   * The UFFDIO_MOVE_MODE_ALLOW_SRC_HOLES flag can be specified to
->   1251   * prevent -ENOENT errors to materialize if there are holes in th=
-e
->   1252   * source virtual range that is being remapped. The holes will be
->   1253   * accounted as successfully remapped in the retval of the
->   1254   * command. This is mostly useful to remap hugepage naturally ali=
-gned
->   1255   * virtual regions without knowing if there are transparent hugep=
-age
->   1256   * in the regions or not, but preventing the risk of having to sp=
-lit
->   1257   * the hugepmd during the remap.
->   1258   *
->   1259   * If there's any rmap walk that is taking the anon_vma locks wit=
-hout
->   1260   * first obtaining the folio lock (the only current instance is
->   1261   * folio_referenced), they will have to verify if the folio->mapp=
-ing
->   1262   * has changed after taking the anon_vma lock. If it changed they
->   1263   * should release the lock and retry obtaining a new anon_vma, be=
-cause
->   1264   * it means the anon_vma was changed by remap_pages() before the =
-lock
->   1265   * could be obtained. This is the only additional complexity adde=
-d to
->   1266   * the rmap code to provide this anonymous page remapping functio=
-nality.
->   1267   */
->   1268  ssize_t remap_pages(struct mm_struct *dst_mm, struct mm_struct *s=
-rc_mm,
->   1269                      unsigned long dst_start, unsigned long src_st=
-art,
->   1270                      unsigned long len, __u64 mode)
->   1271  {
->   1272          struct vm_area_struct *src_vma, *dst_vma;
->   1273          unsigned long src_addr, dst_addr;
->   1274          pmd_t *src_pmd, *dst_pmd;
->   1275          long err =3D -EINVAL;
->   1276          ssize_t moved =3D 0;
->   1277
->   1278          /*
->   1279           * Sanitize the command parameters:
->   1280           */
->   1281          BUG_ON(src_start & ~PAGE_MASK);
->   1282          BUG_ON(dst_start & ~PAGE_MASK);
->   1283          BUG_ON(len & ~PAGE_MASK);
->   1284
->   1285          /* Does the address range wrap, or is the span zero-sized=
-? */
->   1286          BUG_ON(src_start + len <=3D src_start);
->   1287          BUG_ON(dst_start + len <=3D dst_start);
->   1288
->   1289          /*
->   1290           * Because these are read sempahores there's no risk of l=
-ock
->   1291           * inversion.
->   1292           */
->   1293          mmap_read_lock(dst_mm);
->   1294          if (dst_mm !=3D src_mm)
->   1295                  mmap_read_lock(src_mm);
->   1296
->   1297          /*
->   1298           * Make sure the vma is not shared, that the src and dst =
-remap
->   1299           * ranges are both valid and fully within a single existi=
-ng
->   1300           * vma.
->   1301           */
->   1302          src_vma =3D find_vma(src_mm, src_start);
->   1303          if (!src_vma || (src_vma->vm_flags & VM_SHARED))
->   1304                  goto out;
->   1305          if (src_start < src_vma->vm_start ||
->   1306              src_start + len > src_vma->vm_end)
->   1307                  goto out;
->   1308
->   1309          dst_vma =3D find_vma(dst_mm, dst_start);
->   1310          if (!dst_vma || (dst_vma->vm_flags & VM_SHARED))
->   1311                  goto out;
->   1312          if (dst_start < dst_vma->vm_start ||
->   1313              dst_start + len > dst_vma->vm_end)
->   1314                  goto out;
->   1315
->   1316          err =3D validate_remap_areas(src_vma, dst_vma);
->   1317          if (err)
->   1318                  goto out;
->   1319
->   1320          for (src_addr =3D src_start, dst_addr =3D dst_start;
->   1321               src_addr < src_start + len;) {
->   1322                  spinlock_t *ptl;
->   1323                  pmd_t dst_pmdval;
->   1324                  unsigned long step_size;
->   1325
->   1326                  BUG_ON(dst_addr >=3D dst_start + len);
->   1327                  /*
->   1328                   * Below works because anonymous area would not h=
-ave a
->   1329                   * transparent huge PUD. If file-backed support i=
-s added,
->   1330                   * that case would need to be handled here.
->   1331                   */
->   1332                  src_pmd =3D mm_find_pmd(src_mm, src_addr);
->   1333                  if (unlikely(!src_pmd)) {
->   1334                          if (!(mode & UFFDIO_MOVE_MODE_ALLOW_SRC_H=
-OLES)) {
->   1335                                  err =3D -ENOENT;
->   1336                                  break;
->   1337                          }
->   1338                          src_pmd =3D mm_alloc_pmd(src_mm, src_addr=
-);
->   1339                          if (unlikely(!src_pmd)) {
->   1340                                  err =3D -ENOMEM;
->   1341                                  break;
->   1342                          }
->   1343                  }
->   1344                  dst_pmd =3D mm_alloc_pmd(dst_mm, dst_addr);
->   1345                  if (unlikely(!dst_pmd)) {
->   1346                          err =3D -ENOMEM;
->   1347                          break;
->   1348                  }
->   1349
->   1350                  dst_pmdval =3D pmdp_get_lockless(dst_pmd);
->   1351                  /*
->   1352                   * If the dst_pmd is mapped as THP don't override=
- it and just
->   1353                   * be strict. If dst_pmd changes into TPH after t=
-his check, the
->   1354                   * remap_pages_huge_pmd() will detect the change =
-and retry
->   1355                   * while remap_pages_pte() will detect the change=
- and fail.
->   1356                   */
->   1357                  if (unlikely(pmd_trans_huge(dst_pmdval))) {
->   1358                          err =3D -EEXIST;
->   1359                          break;
->   1360                  }
->   1361
->   1362                  ptl =3D pmd_trans_huge_lock(src_pmd, src_vma);
->   1363                  if (ptl) {
->   1364                          if (pmd_devmap(*src_pmd)) {
->   1365                                  spin_unlock(ptl);
->   1366                                  err =3D -ENOENT;
->   1367                                  break;
->   1368                          }
->   1369
->   1370                          /*
->   1371                           * Check if we can move the pmd without
->   1372                           * splitting it. First check the address
->   1373                           * alignment to be the same in src/dst.  =
-These
->   1374                           * checks don't actually need the PT lock=
- but
->   1375                           * it's good to do it here to optimize th=
-is
->   1376                           * block away at build time if
->   1377                           * CONFIG_TRANSPARENT_HUGEPAGE is not set=
-.
->   1378                           */
->   1379                          if ((src_addr & ~HPAGE_PMD_MASK) || (dst_=
-addr & ~HPAGE_PMD_MASK) ||
-> > 1380                              src_start + len - src_addr < HPAGE_PM=
-D_SIZE || !pmd_none(dst_pmdval)) {
+> > > to set immutability over a range of VMAs with different permissions.
+> > >
+> > Agreed. By orthogonal, I meant we can have two APIs:
+> > mmap() and mseal()/mprotect()
+> > i.e. we can't just rely on mmap() only without mseal()/mprotect()/mimmu=
+table().
+> > Sealing can be applied after initial memory creation.
+> >
+> > > Note: modifications should look kinda like this: https://godbolt.org/=
+z/Tbjjd14Pe
+> > > The only annoying wrench in my plans here is that we have effectively
+> > > run out of vm_flags bits in 32-bit architectures, so this approach as
+> > > I described is not compatible with 32-bit.
+> > >
+> > > > In case of ld.so, iiuc, memory can be first allocated as W, then la=
+ter
+> > > > changed to RO, for example, during symbol resolution.
+> > > > The important point is that the application can decide what type of
+> > > > sealing it wants, and when to apply it.  There needs to be an api()=
+,
+> > > > that can be mseal() or mprotect2() or mimmutable(), the naming is n=
+ot
+> > > > important to me.
+> > > >
+> > > > mprotect() in linux have the following signature:
+> > > > int mprotect(void addr[.len], size_t len, int prot);
+> > > > the prot bitmasks are all taken here.
+> > > > I have not checked the prot field in mmap(), there might be bits le=
+ft,
+> > > > even not, we could have mmap2(), so that is not an issue.
+> > >
+> > > I don't see what you mean. We have plenty of prot bits left (32-bits,
+> > > and we seem to have around 8 different bits used).
+> > > And even if we didn't, prot is the same in mprotect and mmap and mmap=
+2 :)
+> > >
+> > > The only issue seems to be that 32-bit ran out of vm_flags, but that
+> > > can probably be worked around if need be.
+> > >
+> > Ah, you are right about this. vm_flags is full, and prot in mprotect() =
+is not.
+> > Apology that I was wrong previously and caused confusion.
+> >
+> > There is a slight difference in the syntax of mprotect and mseal.
+> > Each time when mprotect() is called, the kernel takes all of RWX bits
+> > and updates vm_flags,
+> > In other words, the application sets/unset each RWX, and kernel takes i=
+t.
+> >
+> > In the mseal() case, the kernel will remember which seal types were
+> > applied previously, and the application doesn=E2=80=99t need to repeat =
+all
+> > existing seal types in the next mseal().  Once a seal type is applied,
+> > it can=E2=80=99t be unsealed.
+> >
+> > So if we want to use mprotect() for sealing, developers need to think
+> > of sealing bits differently than the rest of prot bits. It is a
+> > different programming model, might or might not be an obvious concept
+> > to developers.
+> >
+> This probably doesn't matter much to developers.
+> We can enforce the sealing bit to be the same as the rest of PROT bits.
+> If mprotect() tries to unset sealing, it will fail.
+
+Yep. Erroneous or malicious mprotects would all be caught. However, if
+we add a PROT_DOWNGRADEABLE (that could let you, lets say, mprotect()
+to less permissions or even downright munmap()) you'd want some care
+to preserve that bit when setting permissions.
+
 >
-> --
-> 0-DAY CI Kernel Test Service
-> https://github.com/intel/lkp-tests/wiki
+> > There is a difference in input check and error handling as well.
+> > for mseal(), if a given address range has a gap (unallocated memory),
+> > or if one of VMA is sealed with MM_SEAL_SEAL flag, none of VMAs is
+> > updated.
+> > For mprotect(), some VMAs can be updated, till an error happens to a VM=
+A.
+> >
+> This difference doesn't matter much.
 >
-> --
-> To unsubscribe from this group and stop receiving emails from it, send an=
- email to kernel-team+unsubscribe@android.com.
->
+> For mprotect()/mmap(), is Linux implementation limited by POSIX ?
+
+No. POSIX works merely as a baseline that UNIX systems aim towards.
+You can (and very frequently do) extend POSIX interfaces (in fact,
+it's how most of POSIX was written, through sheer
+"design-by-committee" on a bunch of UNIX systems' extensions).
+
+> This can be made backward compatible.
+> If there is no objection to adding linux specific values in mmap() and
+> mprotect(),
+> This works for me.
+
+Linux already has system-specific values for PROT_ (PROT_BTI,
+PROT_MTE, PROT_GROWSUP, PROT_GROWSDOWN, etc).
+Whether this is the right interface is another question. I do like it
+a lot, but there's of course value in being compatible with existing
+solutions (like mimmutable()).
+
+--=20
+Pedro
