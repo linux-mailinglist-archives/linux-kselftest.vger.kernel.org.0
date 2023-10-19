@@ -2,76 +2,85 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 480417D0088
-	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Oct 2023 19:30:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C9D6D7D008C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 19 Oct 2023 19:31:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235492AbjJSRaL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 19 Oct 2023 13:30:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59658 "EHLO
+        id S233283AbjJSRbC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 19 Oct 2023 13:31:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235491AbjJSRaJ (ORCPT
+        with ESMTP id S235482AbjJSRbB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 19 Oct 2023 13:30:09 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57FF5116
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Oct 2023 10:30:07 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-99c1c66876aso1340430166b.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 19 Oct 2023 10:30:07 -0700 (PDT)
+        Thu, 19 Oct 2023 13:31:01 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45334116
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Oct 2023 10:30:59 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id d75a77b69052e-419b53acc11so27291cf.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 19 Oct 2023 10:30:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1697736605; x=1698341405; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1697736658; x=1698341458; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=FAurVaDY4Y7iKpcdCWtd8DcvDhclHUigROPGt0DwP4I=;
-        b=W3MxB/RcgWqrP0X6LIzTAA609jUI0QOm/pyOz3XJw3ND9NrTrVVlGGvQ0v00eOGfuR
-         K71Quu7r/tZxj1OFYUFRkEdg56F2laXYmIWn37pWNmWDdMK+m+MpSbhUvv+Fdr8+NNtO
-         ZYnYs8XVTrpQLhTX6c6J+o3Gz245BQfE2eOdUb4dV4xL+gIJE34VkZJ+iAGYai4cio+N
-         LVaMlg6m9Fwomn9vb1f0T2qkCWJ6G9vsIhvnCf9AUJvaORVlp/++NVbQjv6pnHABUC4v
-         rFKv4tjdf2Vnw/Tnudqk84I6VKZDg50bQoCb+vGeL5zrXB6W9l0WOqvwjxh0ZiNJiEXi
-         QIqQ==
+        bh=Z1N5zlDoHQ+2HyvPpTZq9l5rRGfyzCE+KDCZYbiZxaQ=;
+        b=xsxW01ZwgIoQaakdguqbSTLEXeI2s7+1AXkq70fUWuCRPUyZtvAJTw3nPmDHtcGFBB
+         OgyM+/gf458ALHn674o4CmyWvMNXjETdC3RvZzsCBXWen+xDOjNL4+yEhGFV2p179u9V
+         M1vqzXVWg8ewhCSMduiYf4v8t0WfUqhfrGrLO4NkrsyNIe+PL9x5Fy6MTOzFXez3NsWz
+         1xk5A4p0Bkgss3neSEhv7EOhYVVu/upTKDEPTHhRz2m2zaw9UtHxq3ZaWvbZS1FzZbGX
+         DZrMJSKhrItIpm7omJwatOrVOoI7GyUOVWmB/1QyKRqtsjCOSEZ7NbmAsLAY6UL1OQF7
+         di2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697736605; x=1698341405;
+        d=1e100.net; s=20230601; t=1697736658; x=1698341458;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=FAurVaDY4Y7iKpcdCWtd8DcvDhclHUigROPGt0DwP4I=;
-        b=tQfGTSu4ondwXz+3e3idrmq19aiEsxNUrKbzGeHdthCYKzhsNjW+GURDNH4RhC5XBi
-         kvzzCCfcRkNM4gNUjz/tADN6R/CDP1EGf88saDwg+WDscFFPB1RE1/KSkmwlO9UAlUFR
-         fKAXTwuFkRUcoVG9+hRsJYlRqSnjAbp9m4uvNDpbyHICz+PA44dxZCXpUXaX7Rq4lK1Z
-         I0qRplBwb6bBK+/nFfrfX+u9EliVWAHHwSDm/8jxIQ95sD4Q6gBWVMBOroc8INLCPeel
-         1nDRRezGE7euBO4XJiKoq3bOKyUTIpDv8GYKIkvOWMwISZXyHUBV918GDf/6dmzrs0KM
-         iHug==
-X-Gm-Message-State: AOJu0YzapHlDZngOmkhUROqyJlREP3OwXBwxqrere4UCRiv5lHasMtMN
-        aXGGgB+EQyyM3a9xCoYL4SMH+MaWio6bRnl4+eQNrg==
-X-Google-Smtp-Source: AGHT+IHSZri8nXlKAjUkj+Rn1zxVvwP9rVjfWLt21urXdgubxJwwllu1ZEhXZeg6mDIzbPAa3WiOaM+FoK+uOXkcy60=
-X-Received: by 2002:a17:907:3687:b0:9ae:57b8:ad1b with SMTP id
- bi7-20020a170907368700b009ae57b8ad1bmr2090783ejc.21.1697736605364; Thu, 19
- Oct 2023 10:30:05 -0700 (PDT)
+        bh=Z1N5zlDoHQ+2HyvPpTZq9l5rRGfyzCE+KDCZYbiZxaQ=;
+        b=jeQB1IdmzLcxOuKTrK0zjjLxxg80Gd2oIXFGnV631qnDkuylni9CwplFN68X3Xs01Q
+         eaD1lhJ3LWu+eEWsBZcjJjX6MVAiWfgiW2P4EZmEIgK0ZBVd3NpI4ZyFagpe9/BA0xqb
+         HfF2ReM1ksfmD264I5F3lvqTv4AcTo7H6zgEOEl4knBjM62nUI6pYA4hLmYQ3rj4/eho
+         a4NgUgkvgq/0dL2bAUHzihkb9UUOhc2hJv85qvS5S4R+W7uSlG/xHj1VLoQrNbJX/hE/
+         eLkmifXkD9qwId+2ghZflZLJXlvldniC87bAuU5Zssv2VGUJ7EUz1R6xkMs42fUZ1wCK
+         0O9A==
+X-Gm-Message-State: AOJu0Yy7iZ6s1OYP5xoSGo5YaDQJWm6StAjhuTdxMq0HtxFkHmJ3xSKH
+        babh6D1ffSf1Hm7aKTesKNfSSy9sNOShxUfwM3oGug==
+X-Google-Smtp-Source: AGHT+IEon0kv5nVW5ivsYs0TMVy/aup60ceSgksHiRzY/CZIUuTRYj4l6InpkOkHG7IoPubyjBnMxKq9Y68vWbNjl3Y=
+X-Received: by 2002:a05:622a:a020:b0:41c:bd34:7e44 with SMTP id
+ jt32-20020a05622aa02000b0041cbd347e44mr369701qtb.6.1697736658106; Thu, 19 Oct
+ 2023 10:30:58 -0700 (PDT)
 MIME-Version: 1.0
-References: <20231009064230.2952396-1-surenb@google.com> <20231009064230.2952396-4-surenb@google.com>
- <ZShzSvrN7FgdXi71@x1n> <CAJuCfpE2SmiF6C6xh93ruCxQd_rBK5Vb8jCpKT=y2LSdgHpjgQ@mail.gmail.com>
-In-Reply-To: <CAJuCfpE2SmiF6C6xh93ruCxQd_rBK5Vb8jCpKT=y2LSdgHpjgQ@mail.gmail.com>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Thu, 19 Oct 2023 10:29:27 -0700
-Message-ID: <CAJHvVchpKHBBNYGYCiGmpHbax2_oKkmEoqE0NnY9ChowC+tPEA@mail.gmail.com>
-Subject: Re: [PATCH v3 3/3] selftests/mm: add UFFDIO_MOVE ioctl test
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     Peter Xu <peterx@redhat.com>, akpm@linux-foundation.org,
-        viro@zeniv.linux.org.uk, brauner@kernel.org, shuah@kernel.org,
-        aarcange@redhat.com, lokeshgidra@google.com, david@redhat.com,
-        hughd@google.com, mhocko@suse.com, rppt@kernel.org,
-        willy@infradead.org, Liam.Howlett@oracle.com, jannh@google.com,
-        zhangpeng362@huawei.com, bgeffon@google.com,
-        kaleshsingh@google.com, ngeoffray@google.com, jdduke@google.com,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+References: <20231016143828.647848-1-jeffxu@chromium.org> <ZS1URCBgwGGj9JtM@casper.infradead.org>
+ <CAKbZUD2A+=bp_sd+Q0Yif7NJqMu8p__eb4yguq0agEcmLH8SDQ@mail.gmail.com>
+ <CALmYWFtOgMAQDGNoM6k2Ev4kMHD396wwH+rVDODaSjsyVMDogg@mail.gmail.com>
+ <CAKbZUD2j1jbomCAVxUX_JmG1rfa8udc=5SqVOpDgc-3GnSTbAQ@mail.gmail.com> <CALmYWFv7jzOj5HPcYct=UzYKPrwwvtN1EQeHioQHDPwGFvL5Ug@mail.gmail.com>
+In-Reply-To: <CALmYWFv7jzOj5HPcYct=UzYKPrwwvtN1EQeHioQHDPwGFvL5Ug@mail.gmail.com>
+From:   Jeff Xu <jeffxu@google.com>
+Date:   Thu, 19 Oct 2023 10:30:20 -0700
+Message-ID: <CALmYWFt71Vi6ySiZhW+tmE-LZL7Tnu-dQ1uMO10DUkASUTxzKA@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 0/8] Introduce mseal() syscall
+To:     Pedro Falcato <pedro.falcato@gmail.com>
+Cc:     Matthew Wilcox <willy@infradead.org>, jeffxu@chromium.org,
+        akpm@linux-foundation.org, keescook@chromium.org,
+        sroettger@google.com, jorgelo@chromium.org, groeck@chromium.org,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kernel-team@android.com
+        linux-mm@kvack.org, jannh@google.com, surenb@google.com,
+        alex.sierra@amd.com, apopple@nvidia.com,
+        aneesh.kumar@linux.ibm.com, axelrasmussen@google.com,
+        ben@decadent.org.uk, catalin.marinas@arm.com, david@redhat.com,
+        dwmw@amazon.co.uk, ying.huang@intel.com, hughd@google.com,
+        joey.gouly@arm.com, corbet@lwn.net, wangkefeng.wang@huawei.com,
+        Liam.Howlett@oracle.com, torvalds@linux-foundation.org,
+        lstoakes@gmail.com, mawupeng1@huawei.com, linmiaohe@huawei.com,
+        namit@vmware.com, peterx@redhat.com, peterz@infradead.org,
+        ryan.roberts@arm.com, shr@devkernel.io, vbabka@suse.cz,
+        xiujianfeng@huawei.com, yu.ma@intel.com, zhangpeng362@huawei.com,
+        dave.hansen@intel.com, luto@kernel.org,
+        linux-hardening@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,280 +88,113 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Oct 19, 2023 at 8:43=E2=80=AFAM Suren Baghdasaryan <surenb@google.c=
-om> wrote:
->
-> On Thu, Oct 12, 2023 at 3:29=E2=80=AFPM Peter Xu <peterx@redhat.com> wrot=
-e:
-> >
-> > On Sun, Oct 08, 2023 at 11:42:28PM -0700, Suren Baghdasaryan wrote:
-> > > Add a test for new UFFDIO_MOVE ioctl which uses uffd to move source
-> > > into destination buffer while checking the contents of both after
-> > > remapping. After the operation the content of the destination buffer
-> > > should match the original source buffer's content while the source
-> > > buffer should be zeroed.
-> > >
-> > > Signed-off-by: Suren Baghdasaryan <surenb@google.com>
-> > > ---
-> > >  tools/testing/selftests/mm/uffd-common.c     | 41 ++++++++++++-
-> > >  tools/testing/selftests/mm/uffd-common.h     |  1 +
-> > >  tools/testing/selftests/mm/uffd-unit-tests.c | 62 ++++++++++++++++++=
-++
-> > >  3 files changed, 102 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/tools/testing/selftests/mm/uffd-common.c b/tools/testing=
-/selftests/mm/uffd-common.c
-> > > index 02b89860e193..ecc1244f1c2b 100644
-> > > --- a/tools/testing/selftests/mm/uffd-common.c
-> > > +++ b/tools/testing/selftests/mm/uffd-common.c
-> > > @@ -52,6 +52,13 @@ static int anon_allocate_area(void **alloc_area, b=
-ool is_src)
-> > >               *alloc_area =3D NULL;
-> > >               return -errno;
-> > >       }
-> > > +
-> > > +     /* Prevent source pages from collapsing into THPs */
-> > > +     if (madvise(*alloc_area, nr_pages * page_size, MADV_NOHUGEPAGE)=
-) {
-> > > +             *alloc_area =3D NULL;
-> > > +             return -errno;
-> > > +     }
-> >
-> > Can we move this to test specific code?
->
-> Ack. I think that's doable.
->
-> >
-> > > +
-> > >       return 0;
-> > >  }
-> > >
-> > > @@ -484,8 +491,14 @@ void uffd_handle_page_fault(struct uffd_msg *msg=
-, struct uffd_args *args)
-> > >               offset =3D (char *)(unsigned long)msg->arg.pagefault.ad=
-dress - area_dst;
-> > >               offset &=3D ~(page_size-1);
-> > >
-> > > -             if (copy_page(uffd, offset, args->apply_wp))
-> > > -                     args->missing_faults++;
-> > > +             /* UFFD_MOVE is supported for anon non-shared mappings.=
- */
-> > > +             if (uffd_test_ops =3D=3D &anon_uffd_test_ops && !map_sh=
-ared) {
-> >
-> > IIUC this means move_page() will start to run on many other tests... as
-> > long as anonymous & private.  Probably not wanted, because not all test=
-s
-> > may need this MOVE test, and it also means UFFDIO_COPY is never tested =
-on
-> > anonymous..
-> >
-> > You can overwrite uffd_args.handle_fault().  Axel just added a hook whi=
-ch
-> > seems also usable here.  See 99aa77215ad02.
->
-> Yes, I was thinking about adding a completely new set of tests for
-> UFFDIO_MOVE but was not sure. With your confirmation I'll follow that
-> path so that UFFDIO_COPY tests stay the same.
->
-> >
-> > > +                     if (move_page(uffd, offset))
-> > > +                             args->missing_faults++;
-> > > +             } else {
-> > > +                     if (copy_page(uffd, offset, args->apply_wp))
-> > > +                             args->missing_faults++;
-> > > +             }
-> > >       }
-> > >  }
-> > >
-> > > @@ -620,6 +633,30 @@ int copy_page(int ufd, unsigned long offset, boo=
-l wp)
-> > >       return __copy_page(ufd, offset, false, wp);
-> > >  }
-> > >
-> > > +int move_page(int ufd, unsigned long offset)
-> > > +{
-> > > +     struct uffdio_move uffdio_move;
-> > > +
-> > > +     if (offset >=3D nr_pages * page_size)
-> > > +             err("unexpected offset %lu\n", offset);
-> > > +     uffdio_move.dst =3D (unsigned long) area_dst + offset;
-> > > +     uffdio_move.src =3D (unsigned long) area_src + offset;
-> > > +     uffdio_move.len =3D page_size;
-> > > +     uffdio_move.mode =3D UFFDIO_MOVE_MODE_ALLOW_SRC_HOLES;
-> > > +     uffdio_move.move =3D 0;
-> > > +     if (ioctl(ufd, UFFDIO_MOVE, &uffdio_move)) {
-> > > +             /* real retval in uffdio_move.move */
-> > > +             if (uffdio_move.move !=3D -EEXIST)
-> > > +                     err("UFFDIO_MOVE error: %"PRId64,
-> > > +                         (int64_t)uffdio_move.move);
-> > > +             wake_range(ufd, uffdio_move.dst, page_size);
-> > > +     } else if (uffdio_move.move !=3D page_size) {
-> > > +             err("UFFDIO_MOVE error: %"PRId64, (int64_t)uffdio_move.=
-move);
-> > > +     } else
-> > > +             return 1;
-> > > +     return 0;
-> > > +}
-> > > +
-> > >  int uffd_open_dev(unsigned int flags)
-> > >  {
-> > >       int fd, uffd;
-> > > diff --git a/tools/testing/selftests/mm/uffd-common.h b/tools/testing=
-/selftests/mm/uffd-common.h
-> > > index 7c4fa964c3b0..f4d79e169a3d 100644
-> > > --- a/tools/testing/selftests/mm/uffd-common.h
-> > > +++ b/tools/testing/selftests/mm/uffd-common.h
-> > > @@ -111,6 +111,7 @@ void wp_range(int ufd, __u64 start, __u64 len, bo=
-ol wp);
-> > >  void uffd_handle_page_fault(struct uffd_msg *msg, struct uffd_args *=
-args);
-> > >  int __copy_page(int ufd, unsigned long offset, bool retry, bool wp);
-> > >  int copy_page(int ufd, unsigned long offset, bool wp);
-> > > +int move_page(int ufd, unsigned long offset);
-> > >  void *uffd_poll_thread(void *arg);
-> > >
-> > >  int uffd_open_dev(unsigned int flags);
-> > > diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/tes=
-ting/selftests/mm/uffd-unit-tests.c
-> > > index 2709a34a39c5..f0ded3b34367 100644
-> > > --- a/tools/testing/selftests/mm/uffd-unit-tests.c
-> > > +++ b/tools/testing/selftests/mm/uffd-unit-tests.c
-> > > @@ -824,6 +824,10 @@ static void uffd_events_test_common(bool wp)
-> > >       char c;
-> > >       struct uffd_args args =3D { 0 };
-> > >
-> > > +     /* Prevent source pages from being mapped more than once */
-> > > +     if (madvise(area_src, nr_pages * page_size, MADV_DONTFORK))
-> > > +             err("madvise(MADV_DONTFORK) failed");
-> >
-> > Modifying events test is weird.. I assume you don't need this anymore a=
-fter
-> > you switch to the handle_fault() hook.
->
-> I think so but let me try first and I'll get back on that.
->
-> >
-> > > +
-> > >       fcntl(uffd, F_SETFL, uffd_flags | O_NONBLOCK);
-> > >       if (uffd_register(uffd, area_dst, nr_pages * page_size,
-> > >                         true, wp, false))
-> > > @@ -1062,6 +1066,58 @@ static void uffd_poison_test(uffd_test_args_t =
-*targs)
-> > >       uffd_test_pass();
-> > >  }
-> > >
-> > > +static void uffd_move_test(uffd_test_args_t *targs)
-> > > +{
-> > > +     unsigned long nr;
-> > > +     pthread_t uffd_mon;
-> > > +     char c;
-> > > +     unsigned long long count;
-> > > +     struct uffd_args args =3D { 0 };
-> > > +
-> > > +     if (uffd_register(uffd, area_dst, nr_pages * page_size,
-> > > +                       true, false, false))
-> > > +             err("register failure");
-> > > +
-> > > +     if (pthread_create(&uffd_mon, NULL, uffd_poll_thread, &args))
-> > > +             err("uffd_poll_thread create");
-> > > +
-> > > +     /*
-> > > +      * Read each of the pages back using the UFFD-registered mappin=
-g. We
-> > > +      * expect that the first time we touch a page, it will result i=
-n a missing
-> > > +      * fault. uffd_poll_thread will resolve the fault by remapping =
-source
-> > > +      * page to destination.
-> > > +      */
-> > > +     for (nr =3D 0; nr < nr_pages; nr++) {
-> > > +             /* Check area_src content */
-> > > +             count =3D *area_count(area_src, nr);
-> > > +             if (count !=3D count_verify[nr])
-> > > +                     err("nr %lu source memory invalid %llu %llu\n",
-> > > +                         nr, count, count_verify[nr]);
-> > > +
-> > > +             /* Faulting into area_dst should remap the page */
-> > > +             count =3D *area_count(area_dst, nr);
-> > > +             if (count !=3D count_verify[nr])
-> > > +                     err("nr %lu memory corruption %llu %llu\n",
-> > > +                         nr, count, count_verify[nr]);
-> > > +
-> > > +             /* Re-check area_src content which should be empty */
-> > > +             count =3D *area_count(area_src, nr);
-> > > +             if (count !=3D 0)
-> > > +                     err("nr %lu move failed %llu %llu\n",
-> > > +                         nr, count, count_verify[nr]);
-> >
-> > All of above should see zeros, right?  Because I don't think anyone boo=
-sted
-> > the counter at all..
-> >
-> > Maybe set some non-zero values to it?  Then the re-check can make more
-> > sense.
->
-> I thought uffd_test_ctx_init() is initializing area_count(area_src,
-> nr), so the source pages should contain non-zero data before the move.
-> Am I missing something?
+Hi Pedro
 
-You're correct, uffd_test_ctx_init() fills in some data in area_src.
+Some followup on mmap() + mprotect():
 
+On Wed, Oct 18, 2023 at 11:20=E2=80=AFAM Jeff Xu <jeffxu@google.com> wrote:
 >
+> On Tue, Oct 17, 2023 at 3:35=E2=80=AFPM Pedro Falcato <pedro.falcato@gmai=
+l.com> wrote:
 > >
-> > If you want, I think we can also make uffd-stress.c test to cover MOVE =
-too,
-> > basically replacing all UFFDIO_COPY when e.g. user specified from cmdli=
-ne.
-> > Optional, and may need some touch ups here and there, though.
+> > > >
+> > > > I think it's worth pointing out that this suggestion (with PROT_*)
+> > > > could easily integrate with mmap() and as such allow for one-shot
+> > > > mmap() + mseal().
+> > > > If we consider the common case as 'addr =3D mmap(...); mseal(addr);=
+', it
+> > > > definitely sounds like a performance win as we halve the number of
+> > > > syscalls for a sealed mapping. And if we trivially look at e.g Open=
+BSD
+> > > > ld.so code, mmap() + mimmutable() and mprotect() + mimmutable() see=
+m
+> > > > like common patterns.
+> > > >
+> > > Yes. mmap() can support sealing as well, and memory is allocated as
+> > > immutable from begining.
+> > > This is orthogonal to mseal() though.
+> >
+> > I don't see how this can be orthogonal to mseal().
+> > In the case we opt for adding PROT_ bits, we should more or less only
+> > need to adapt calc_vm_prot_bits(), and the rest should work without
+> > issues.
+> > vma merging won't merge vmas with different prots. The current
+> > interfaces (mmap and mprotect) would work just fine.
+> > In this case, mseal() or mimmutable() would only be needed if you need
+> > to set immutability over a range of VMAs with different permissions.
+> >
+> Agreed. By orthogonal, I meant we can have two APIs:
+> mmap() and mseal()/mprotect()
+> i.e. we can't just rely on mmap() only without mseal()/mprotect()/mimmuta=
+ble().
+> Sealing can be applied after initial memory creation.
 >
-> That's a good idea. I'll add that in the next version.
-> Thanks,
-> Suren.
->
+> > Note: modifications should look kinda like this: https://godbolt.org/z/=
+Tbjjd14Pe
+> > The only annoying wrench in my plans here is that we have effectively
+> > run out of vm_flags bits in 32-bit architectures, so this approach as
+> > I described is not compatible with 32-bit.
 > >
-> > Thanks,
-> >
-> > > +     }
-> > > +
-> > > +     if (write(pipefd[1], &c, sizeof(c)) !=3D sizeof(c))
-> > > +             err("pipe write");
-> > > +     if (pthread_join(uffd_mon, NULL))
-> > > +             err("join() failed");
-> > > +
-> > > +     if (args.missing_faults !=3D nr_pages || args.minor_faults !=3D=
- 0)
-> > > +             uffd_test_fail("stats check error");
-> > > +     else
-> > > +             uffd_test_pass();
-> > > +}
-> > > +
-> > >  /*
-> > >   * Test the returned uffdio_register.ioctls with different register =
-modes.
-> > >   * Note that _UFFDIO_ZEROPAGE is tested separately in the zeropage t=
-est.
-> > > @@ -1139,6 +1195,12 @@ uffd_test_case_t uffd_tests[] =3D {
-> > >               .mem_targets =3D MEM_ALL,
-> > >               .uffd_feature_required =3D 0,
-> > >       },
-> > > +     {
-> > > +             .name =3D "move",
-> > > +             .uffd_fn =3D uffd_move_test,
-> > > +             .mem_targets =3D MEM_ANON,
-> > > +             .uffd_feature_required =3D UFFD_FEATURE_MOVE,
-> > > +     },
-> > >       {
-> > >               .name =3D "wp-fork",
-> > >               .uffd_fn =3D uffd_wp_fork_test,
-> > > --
-> > > 2.42.0.609.gbb76f46606-goog
+> > > In case of ld.so, iiuc, memory can be first allocated as W, then late=
+r
+> > > changed to RO, for example, during symbol resolution.
+> > > The important point is that the application can decide what type of
+> > > sealing it wants, and when to apply it.  There needs to be an api(),
+> > > that can be mseal() or mprotect2() or mimmutable(), the naming is not
+> > > important to me.
 > > >
+> > > mprotect() in linux have the following signature:
+> > > int mprotect(void addr[.len], size_t len, int prot);
+> > > the prot bitmasks are all taken here.
+> > > I have not checked the prot field in mmap(), there might be bits left=
+,
+> > > even not, we could have mmap2(), so that is not an issue.
 > >
-> > --
-> > Peter Xu
+> > I don't see what you mean. We have plenty of prot bits left (32-bits,
+> > and we seem to have around 8 different bits used).
+> > And even if we didn't, prot is the same in mprotect and mmap and mmap2 =
+:)
 > >
-> > --
-> > To unsubscribe from this group and stop receiving emails from it, send =
-an email to kernel-team+unsubscribe@android.com.
+> > The only issue seems to be that 32-bit ran out of vm_flags, but that
+> > can probably be worked around if need be.
 > >
+> Ah, you are right about this. vm_flags is full, and prot in mprotect() is=
+ not.
+> Apology that I was wrong previously and caused confusion.
+>
+> There is a slight difference in the syntax of mprotect and mseal.
+> Each time when mprotect() is called, the kernel takes all of RWX bits
+> and updates vm_flags,
+> In other words, the application sets/unset each RWX, and kernel takes it.
+>
+> In the mseal() case, the kernel will remember which seal types were
+> applied previously, and the application doesn=E2=80=99t need to repeat al=
+l
+> existing seal types in the next mseal().  Once a seal type is applied,
+> it can=E2=80=99t be unsealed.
+>
+> So if we want to use mprotect() for sealing, developers need to think
+> of sealing bits differently than the rest of prot bits. It is a
+> different programming model, might or might not be an obvious concept
+> to developers.
+>
+This probably doesn't matter much to developers.
+We can enforce the sealing bit to be the same as the rest of PROT bits.
+If mprotect() tries to unset sealing, it will fail.
+
+> There is a difference in input check and error handling as well.
+> for mseal(), if a given address range has a gap (unallocated memory),
+> or if one of VMA is sealed with MM_SEAL_SEAL flag, none of VMAs is
+> updated.
+> For mprotect(), some VMAs can be updated, till an error happens to a VMA.
+>
+This difference doesn't matter much.
+
+For mprotect()/mmap(), is Linux implementation limited by POSIX ?
+This can be made backward compatible.
+If there is no objection to adding linux specific values in mmap() and
+mprotect(),
+This works for me.
+
+Thanks for your input.
+-Jeff
