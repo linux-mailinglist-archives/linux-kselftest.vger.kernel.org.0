@@ -2,147 +2,188 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4C5C7D125D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Oct 2023 17:13:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 892677D127F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 20 Oct 2023 17:21:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377781AbjJTPNl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 20 Oct 2023 11:13:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34680 "EHLO
+        id S1377643AbjJTPVn (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 20 Oct 2023 11:21:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1377735AbjJTPN0 (ORCPT
+        with ESMTP id S1377626AbjJTPVm (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 20 Oct 2023 11:13:26 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C52E410F2
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Oct 2023 08:13:16 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id 41be03b00d2f7-5a1d89ff4b9so611738a12.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 20 Oct 2023 08:13:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernelci-org.20230601.gappssmtp.com; s=20230601; t=1697814796; x=1698419596; darn=vger.kernel.org;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ek3qY9JriUX2rXMLjtFZ5F489ykd4cE4z6cWqM3LL2M=;
-        b=dI6OX/09YQ1ojgM3bZC/4zbuZNNQm5HnDrBGMg71s+kpz7iXTx6PspDZJ+eFccXwLw
-         gZtXoIjgdf/6FreCSoTOQdiQcgKHrzKnjSUWkYLM5vg6dNrKPUmpB+eGn7OWWHfaQsrs
-         5IbGs6NxoKDEP205t/mvnibzbd+R97W7lAo0jiM1X4xKiYrbQZZtPM98TfCn2yAHiwqd
-         7le2GW8ZNC0EWpB0F+GZ2+tH8+L27STZDt8MGgSXxE8RLHMB5W93eqkG+t8QDu0YrXWR
-         48yrVXmtgMZQOE2w6WhF3OkHX2ktCdy4q8DFhqi8+uP8R+zLA7rtQGrYAAoQm9pl8uke
-         FHbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1697814796; x=1698419596;
-        h=from:to:subject:content-transfer-encoding:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ek3qY9JriUX2rXMLjtFZ5F489ykd4cE4z6cWqM3LL2M=;
-        b=qCjga2x5WzNDewJhFk1AEKCpAxyKH+PosNYowE9BqQvVKutXK4x97GDByba58TCkX0
-         mPXNXFIuPqxP8IDJ/SMvrEZH9UfVg02nu1mme/+pINIMCXMBSaX1Z5ILRFJJFaiieAcO
-         KVQK0LACezkBQoW79k8D7m5xcFgi+uJzWMuaC03d53d8HVcNmK820ucXCZZMTz0+aTv5
-         BxnKbz7RpnHCymvU2HzBK/I+qVIvr/092Gge3NhFE9NptwzJJ32jtaLTNC13BgOPu0bI
-         doEmmQBqnQ1tjfDlPUMn7UV4Wq6M7IN5T69LwyN+3W2WYTokGGzvi6OKhtIzUtRL+L4e
-         zv/w==
-X-Gm-Message-State: AOJu0YxBvId/0lNd6xK8qxO025LXD7REKmGxaibSm9rY3Mvosn96BNP8
-        e2fsJqE4yYUTb724p6G9jlXDAg==
-X-Google-Smtp-Source: AGHT+IGH7U89YYOsUe15zH4rRMip5A/q+bfBuyt/DZUAuPRrNuO+OogOZ9WPMS42cExKsIiyTAWaIg==
-X-Received: by 2002:a17:90a:4d:b0:27d:76e2:ab18 with SMTP id 13-20020a17090a004d00b0027d76e2ab18mr2394556pjb.9.1697814795955;
-        Fri, 20 Oct 2023 08:13:15 -0700 (PDT)
-Received: from kernelci-production.internal.cloudapp.net ([20.171.243.82])
-        by smtp.gmail.com with ESMTPSA id ft3-20020a17090b0f8300b00263dfe9b972sm3408454pjb.0.2023.10.20.08.13.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Oct 2023 08:13:15 -0700 (PDT)
-Message-ID: <6532990b.170a0220.87626.b3c7@mx.google.com>
-Date:   Fri, 20 Oct 2023 08:13:15 -0700 (PDT)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 20 Oct 2023 11:21:42 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ADA218F;
+        Fri, 20 Oct 2023 08:21:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
+        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=6PIymKpCzutqaHaWNdHhzhcnAgOLyag0aKZOk6zqC9g=; b=Bc6HjdW0xZqsl/x3fuc47ILN4W
+        8kvB1RfMErntTBy8R7vmm+YkGvgZj+WWAMJCY0mIK6wD2CbWkyPQraVhd0XdU06gOtA3dtZr+9xPF
+        FMlOEaKaoiLlwHKlpEybO/g2nnd4csm9cLcAgVf013qNx9lhrRUw638K0sWNe8wxTpztDNK1+/IGK
+        Lf0VmAJBDEsKbPIWcg6AbBng/luMnloLmWHOHl8qR72ALdbqV0jLezARvSPVLXakwp9zSyVxanSuD
+        L/tfa2Tz9VeF7NDPChIa3WUQ0tE6cj/sTY+UX0Cz1DBlRFSXDIMZ/HZpiQyowfLJAZ1whOQk/rTg1
+        U0AGLfPA==;
+Received: from [2001:8b0:10b:5:f7e9:453b:fc3b:2f6] (helo=u3832b3a9db3152.ant.amazon.com)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1qtrJf-00Dqma-Jz; Fri, 20 Oct 2023 15:21:35 +0000
+Message-ID: <7a5bf7b384b1e4f0a6a4f8fca9b6c854a4ab69ef.camel@infradead.org>
+Subject: Re: [PATCH 1/1] selftests: KVM: add test to print boottime wallclock
+From:   David Woodhouse <dwmw2@infradead.org>
+To:     Dongli Zhang <dongli.zhang@oracle.com>,
+        Andrew Jones <ajones@ventanamicro.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pbonzini@redhat.com,
+        shuah@kernel.org, joe.jin@oracle.com
+Date:   Fri, 20 Oct 2023 16:21:35 +0100
+In-Reply-To: <bbddbf1f-33c1-cdae-9e0a-a05403bf44bd@oracle.com>
+References: <20231006175715.105517-1-dongli.zhang@oracle.com>
+         <ZTA3W-f4sOX3LHfi@google.com> <20231019-f96a45af9c235d89be644e67@orel>
+         <bbddbf1f-33c1-cdae-9e0a-a05403bf44bd@oracle.com>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+        boundary="=-erN0Rv09gIsXPJiK+omV"
+User-Agent: Evolution 3.44.4-0ubuntu2 
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Kernelci-Kernel: v6.6-rc2-51-g5247e6dbed00
-X-Kernelci-Report-Type: build
-X-Kernelci-Branch: next
-X-Kernelci-Tree: kselftest
-Subject: kselftest/next build: 6 builds: 0 failed, 6 passed,
- 1 warning (v6.6-rc2-51-g5247e6dbed00)
-To:     kernelci-results@groups.io, linux-kselftest@vger.kernel.org,
-        shuah@kernel.org
-From:   "kernelci.org bot" <bot@kernelci.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-kselftest/next build: 6 builds: 0 failed, 6 passed, 1 warning (v6.6-rc2-51-=
-g5247e6dbed00)
 
-Full Build Summary: https://kernelci.org/build/kselftest/branch/next/kernel=
-/v6.6-rc2-51-g5247e6dbed00/
+--=-erN0Rv09gIsXPJiK+omV
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Tree: kselftest
-Branch: next
-Git Describe: v6.6-rc2-51-g5247e6dbed00
-Git Commit: 5247e6dbed0041147a83137f89cd45043301de5c
-Git URL: https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselft=
-est.git
-Built: 4 unique architectures
+On Fri, 2023-10-20 at 07:39 -0700, Dongli Zhang wrote:
+>=20
+> 1. Capture boottime_wallclock_01.
+> 2. Wait for 10-second by default (configurable, e.g., max 60-second)
+> 3. Capture boottime_wallclock_02.
+> 4. Report error if drift.
+>=20
+>=20
+> I have another pvclock vCPU hotplug test with the same flow.
 
-Warnings Detected:
+Wallclock, or CLOCK_TAI? You'll going to get the odd one-second jump
+with the former.=20
 
-arm64:
+--=-erN0Rv09gIsXPJiK+omV
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
 
-arm:
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
+ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
+EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
+FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
+aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
+EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
+VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
+aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
+ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
+QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
+rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
+ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
+U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
+DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
+BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
+dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
+BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
+QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
+CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
+xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
+IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
+kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
+eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
+KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
+1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
+OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
+x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
+5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
+DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
+VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
+UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
+MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
+ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
+oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
+SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
+xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
+RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
+bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
+NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
+KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
+5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
+C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
+gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
+VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
+MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
+by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
+b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
+BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
+QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
+c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
+AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
+qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
+v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
+Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
+tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
+Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
+YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
+ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
+IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
+ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
+GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
+h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
+9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
+P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
+2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
+BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
+7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
+lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
+lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
+AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
+Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
+FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
+BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
+cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
+aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
+LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
+BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
+cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
+Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
+lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
+WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
+hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
+IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
+dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
+NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
+xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMjMxMDIwMTUyMTM1WjAvBgkqhkiG9w0BCQQxIgQgdjS/s6fT
+sNH1qY6KKei/MiiyDN2H4TuAK8hOSzoHIh0wgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
+BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
+A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
+dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
+DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
+MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
+Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
+lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgAj8aRewpsyUshkpNej2WPgkZmkm7opM/mO
+bQBOKTH0VYTW+O1iFrdN/K4VCA000bx439wUFfPdSFQAm31tuqIK8lL3aHX4HuXi9hBe0J9vnX7l
+SjNotoYYlUe6oiBWxMEeyW9yMFYF4zU4CMzyCLuvgV+Mhm4g2Y/jXPRepEsKOjgjvP0VaG1gNGNc
+i8ERqerWBe/qgNg9bS5TPQNEBU+69uRT5Ajkp+AQaXk1rDAoGF39Yz2s+JqU7H9/ZpJG84LNReP6
+Jm8Ty0PqrAabgMqmN8KWOaUx3oZlPXmivLgYT1vnViQcFlduZmOn+1CzL7qtAIi8CoIOOCuP8QZh
+QHLjHsZ5kPOgexZ1U5NnZ8zwxBTNJKq+hdGTzhNu0uCMh5MBvy7gZoQFNgqC26KAaVWcmRW0YxcS
+Fir0oveCqw735fNm39Vo3hGyktqhtZjJJITNotvVnhq4F4qBJ0TOKxZOvb5R3jlEvjuFgr/tqBsZ
+eLpDjXl01L+drJoDXK5rhcYCcVBfDVd3fXj5BpXUgsJ9qveRpVGvozfDqszk3Fgt+LQQm4/Bf2II
+9aL5IHW6KW2kodBbSyIO2a3khCj4w1sUezf+FPO1fKWEg1aSchoZB4aK1CTow3lk4ruE0eqdu0M1
++4t+dt/jmygjTxfDe7NSaB//FHWWttHldDoEgUT2gwAAAAAAAA==
 
-i386:
 
-x86_64:
-    x86_64_defconfig+kselftest (clang-16): 1 warning
-
-
-Warnings summary:
-
-    1    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to=
- !ENDBR: .text+0x13950b
-
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D
-
-Detailed per-defconfig build reports:
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest (arm64, gcc-10) =E2=80=94 PASS, 0 errors, 0 warnings, 0=
- section mismatches
-
----------------------------------------------------------------------------=
------
-defconfig+kselftest+arm64-chromebook (arm64, gcc-10) =E2=80=94 PASS, 0 erro=
-rs, 0 warnings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-i386_defconfig+kselftest (i386, gcc-10) =E2=80=94 PASS, 0 errors, 0 warning=
-s, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-multi_v7_defconfig+kselftest (arm, gcc-10) =E2=80=94 PASS, 0 errors, 0 warn=
-ings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, gcc-10) =E2=80=94 PASS, 0 errors, 0 war=
-nings, 0 section mismatches
-
----------------------------------------------------------------------------=
------
-x86_64_defconfig+kselftest (x86_64, clang-16) =E2=80=94 PASS, 0 errors, 1 w=
-arning, 0 section mismatches
-
-Warnings:
-    vmlinux.o: warning: objtool: set_ftrace_ops_ro+0x23: relocation to !END=
-BR: .text+0x13950b
-
----
-For more info write to <info@kernelci.org>
+--=-erN0Rv09gIsXPJiK+omV--
