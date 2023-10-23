@@ -2,151 +2,169 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26DA07D36C3
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Oct 2023 14:34:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 29EAC7D37ED
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Oct 2023 15:25:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233131AbjJWMeh (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 23 Oct 2023 08:34:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57826 "EHLO
+        id S233005AbjJWNZl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 23 Oct 2023 09:25:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233161AbjJWMeg (ORCPT
+        with ESMTP id S232511AbjJWNZO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 23 Oct 2023 08:34:36 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52934FF;
-        Mon, 23 Oct 2023 05:34:34 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1cace3e142eso16473355ad.3;
-        Mon, 23 Oct 2023 05:34:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698064474; x=1698669274; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cCfeGAPmI/1C6hVy3j5HY6SeWT2q6xH+8rq3JEHka0s=;
-        b=L5ixgswJLEDr2m2u2dG+LgKdftPbLwF2n2vApNX6Ci+Hv2f9LBwaXVXQU2LAhWasFD
-         oXP0a8+C0jJOB2jtB9C56tkdt/CkaDOdGJcjLm7bUxoenMznTXHf4R/w9i6ITH/eliB/
-         vHUY9VB7AmiSZRWmAosbXlfg3f8rS+szw74e9GVCfia6WLJ7Av96tQePL37SnuIhI/Qv
-         HB8OHqWG+bdcpWEz9V7F2Z2EACXnHi/ZmzL7JNyhSgcdfPv5zSp332jvxdvaC09jVsJK
-         2yt4TJhlkAziJNCpB6w/Tj8yZXpxMLsLUEgdyCUkw7mEj1iSUiNtWvuPPfmlB4gUaE13
-         ZzkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698064474; x=1698669274;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cCfeGAPmI/1C6hVy3j5HY6SeWT2q6xH+8rq3JEHka0s=;
-        b=rtkY/MKMWIRrx3WJFeqKA8YzcYLaG0BtKPz1YLpOGNfK9CckGTJ70iAInMqgw+2ytb
-         n0FXWq2hUSJTtzIT83XCW1JsTV13uplUWHb6uiRQsyW6TEJifB0PUOq+QMsVJn/K7ZKj
-         waXgQTc//HvALlGSxqYhfimxicGND/aeREdORGqx6/DTtqoL0pWe3Ggi7Hd0diQoSIeM
-         tTQwjoNZ2tUjkOQ+3W/Am/F6vU+VkPlbr3h5UnOKlAjGqBQtUueQ8zovoPie+FM8YEUd
-         O7Ex6l6RLZZurLhnyH8uPkjudXbfC/bmlFNgMKhmXkcqDf5rqHYK/kFIVHCQTFZKzpqn
-         VTaA==
-X-Gm-Message-State: AOJu0YyWbi3LeyJVIN6ay8ogZIfqOFOMCEaycmK2HQqZAdnKaoa62nCs
-        hnrWhhZrBm/PGmKLfice/zQ=
-X-Google-Smtp-Source: AGHT+IH1wbasmBNgondsuKTvzLHD5UV7liWemEtyM+fqBb/NsiHuIK/oggwkA7jK0980y2/7I2tSkw==
-X-Received: by 2002:a17:902:efd1:b0:1c9:ba77:b27e with SMTP id ja17-20020a170902efd100b001c9ba77b27emr6801484plb.46.1698064473560;
-        Mon, 23 Oct 2023 05:34:33 -0700 (PDT)
-Received: from swarup-virtual-machine.localdomain ([171.76.85.44])
-        by smtp.gmail.com with ESMTPSA id c24-20020a170902d91800b001c9ab91d3d7sm5799275plz.37.2023.10.23.05.34.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Oct 2023 05:34:33 -0700 (PDT)
-From:   Swarup Laxman Kotiaklapudi <swarupkotikalapudi@gmail.com>
-To:     davem@davemloft.net, jiri@resnulli.us, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Cc:     Swarup Laxman Kotiaklapudi <swarupkotikalapudi@gmail.com>
-Subject: [PATCH v2] selftests:net change ifconfig with ip command
-Date:   Mon, 23 Oct 2023 18:04:22 +0530
-Message-Id: <20231023123422.2895-1-swarupkotikalapudi@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <ZTYc04N9VK7EarHY@nanopsycho>
-References: <ZTYc04N9VK7EarHY@nanopsycho>
+        Mon, 23 Oct 2023 09:25:14 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46F8A270C;
+        Mon, 23 Oct 2023 06:23:27 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF2B8C433C9;
+        Mon, 23 Oct 2023 13:23:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1698067406;
+        bh=WuXo+hl017On/dv4mXs2jfRGaw2UtVf9077Uy1SbwGI=;
+        h=From:Subject:Date:To:Cc:From;
+        b=opVAdzew2cj23GxSoUDjFLwrfwYXiZMmeiEu7MJBKUIZwRain6lhHn0qy3Be+OVDv
+         PtYkQIUsxaVUiSikZkpuQVqibgAg7UYGeOGLbSOcHHSZ6STOoQcFbYxU3TM7P1Nh/b
+         kFEbukMHw92d/8nZ2U4bd7JtRhxOgjWoHedD8uemMn5Nxu73jmD7Scxbcs6C8+P7KM
+         WJPcr/oOsDCigWnaTcs6JVcJm8FQeszUnqpAxzW+y+PsliKtuurpPdRF1fZgYyKR1H
+         KlD4/WIXHu3XOMNFnjVnrtNIsB+0rHzcWgc8kWWiAiU3QfwyJ+1YEybwrP9S+GIuk4
+         uyRWETRpIB8/g==
+From:   Mark Brown <broonie@kernel.org>
+Subject: [PATCH RFC RFT 0/5] fork: Support shadow stacks in clone3()
+Date:   Mon, 23 Oct 2023 14:20:39 +0100
+Message-Id: <20231023-clone3-shadow-stack-v1-0-d867d0b5d4d0@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAChzNmUC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI2NDA0NL3eSc/LxUY93ijMSU/HLd4pLE5GxdQ9MUE4MUo6Q0U2MzJaDOgqL
+ UtMwKsKnRSkFuziCxILcQpdjaWgBkqKSUcQAAAA==
+To:     "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+        Deepak Gupta <debug@rivosinc.com>,
+        Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+        "H.J. Lu" <hjl.tools@gmail.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, linux-kselftest@vger.kernel.org,
+        linux-api@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        David Hildenbrand <david@redhat.com>
+X-Mailer: b4 0.13-dev-0438c
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4488; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=WuXo+hl017On/dv4mXs2jfRGaw2UtVf9077Uy1SbwGI=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBlNnPC6R+tB0Xy00AJDIdmFhiDw43xBruz0mgu1aUK
+ 0yMkzauJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZTZzwgAKCRAk1otyXVSH0L2nB/
+ sGH3e076WCR4fBGI26gY30gODX/A7H4HzZA5XzxsBALw1UpV7dYno2Et+pFxbiE+ixbTiLhye7903K
+ K1Vu8vqZqaWnK8jDCAdr/jaKNcQJ8fDSiFQHOFWymYl9t8zPZ2GsZD10Z5vAjCqpUm5lBtNqIBPSg+
+ xNYOcuABDCGtrHefdjECAXpWIhlTabVtfFfzT4tJHjpAJiiYrpjydxnq8kvPK/y/bdG5DJQLDmpvju
+ Bev+TPPk/d5yfKaDBF373iRut9QbrE44b8PIFxc4b85sEcSO5SyJgbV/AlNAtvpdsEnx98xJYMfynb
+ AENS0iX2NSUY+bqi6Lt+Yu/RjY574v
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Change ifconfig with ip command,
-on a system where ifconfig is
-not used this script will not
-work correcly.
+The kernel has recently added support for shadow stacks, currently
+x86 only using their CET feature but both arm64 and RISC-V have
+equivalent features (GCS and Zisslpcfi respectively), I am actively
+working on GCS[1].  With shadow stacks the hardware maintains an
+additional stack containing only the return addresses for branch
+instructions which is not generally writeable by userspace and ensures
+that any returns are to the recorded addresses.  This provides some
+protection against ROP attacks and making it easier to collect call
+stacks.  These shadow stacks are allocated in the address space of the
+userspace process.
 
-Test result with this patchset:
+Our API for shadow stacks does not currently offer userspace any
+flexiblity for managing the allocation of shadow stacks for newly
+created threads, instead the kernel allocates a new shadow stack with
+the same size as the normal stack whenever a thread is created with the
+feature enabled.  The stacks allocated in this way are freed by the
+kernel when the thread exits or shadow stacks are disabled for the
+thread.  This lack of flexibility and control isn't ideal, in the vast
+majority of cases the shadow stack will be over allocated and the
+implicit allocation and deallocation is not consistent with other
+interfaces.  As far as I can tell the interface is done in this manner
+mainly because the shadow stack patches were in development since before
+clone3() was implemented.
 
-sudo make TARGETS="net" kselftest
-....
-TAP version 13
-1..1
- timeout set to 1500
- selftests: net: route_localnet.sh
- run arp_announce test
- net.ipv4.conf.veth0.route_localnet = 1
- net.ipv4.conf.veth1.route_localnet = 1
- net.ipv4.conf.veth0.arp_announce = 2
- net.ipv4.conf.veth1.arp_announce = 2
- PING 127.25.3.14 (127.25.3.14) from 127.25.3.4 veth0: 56(84)
-  bytes of data.
- 64 bytes from 127.25.3.14: icmp_seq=1 ttl=64 time=0.038 ms
- 64 bytes from 127.25.3.14: icmp_seq=2 ttl=64 time=0.068 ms
- 64 bytes from 127.25.3.14: icmp_seq=3 ttl=64 time=0.068 ms
- 64 bytes from 127.25.3.14: icmp_seq=4 ttl=64 time=0.068 ms
- 64 bytes from 127.25.3.14: icmp_seq=5 ttl=64 time=0.068 ms
+Since clone3() is readily extensible let's add support for specifying a
+shadow stack when creating a new thread or process in a similar manner
+to how the normal stack is specified, keeping the current implicit
+allocation behaviour if one is not specified either with clone3() or
+through the use of clone().  When the shadow stack is specified
+explicitly the kernel will not free it, the inconsistency with
+implicitly allocated shadow stacks is a bit awkward but that's existing
+ABI so we can't change it.
 
- --- 127.25.3.14 ping statistics ---
- 5 packets transmitted, 5 received, 0% packet loss, time 4073ms
- rtt min/avg/max/mdev = 0.038/0.062/0.068/0.012 ms
- ok
- run arp_ignore test
- net.ipv4.conf.veth0.route_localnet = 1
- net.ipv4.conf.veth1.route_localnet = 1
- net.ipv4.conf.veth0.arp_ignore = 3
- net.ipv4.conf.veth1.arp_ignore = 3
- PING 127.25.3.14 (127.25.3.14) from 127.25.3.4 veth0: 56(84)
-  bytes of data.
- 64 bytes from 127.25.3.14: icmp_seq=1 ttl=64 time=0.032 ms
- 64 bytes from 127.25.3.14: icmp_seq=2 ttl=64 time=0.065 ms
- 64 bytes from 127.25.3.14: icmp_seq=3 ttl=64 time=0.066 ms
- 64 bytes from 127.25.3.14: icmp_seq=4 ttl=64 time=0.065 ms
- 64 bytes from 127.25.3.14: icmp_seq=5 ttl=64 time=0.065 ms
+The memory provided must have been allocated for use as a shadow stack,
+the expectation is that this will be done using the map_shadow_stack()
+syscall.  I opted not to add validation for this in clone3() since it
+will be enforced by hardware anyway.
 
- --- 127.25.3.14 ping statistics ---
- 5 packets transmitted, 5 received, 0% packet loss, time 4092ms
- rtt min/avg/max/mdev = 0.032/0.058/0.066/0.013 ms
- ok
-ok 1 selftests: net: route_localnet.sh
-...
+Please note that the x86 portions of this code are build tested only, I
+don't appear to have a system that can run CET avaible to me, I have
+done testing with an integration into my pending work for GCS.  There is
+some possibility that the arm64 implementation may require the use of
+clone3() and explicit userspace allocation of shadow stacks, this is
+still under discussion.
 
-Signed-off-by: Swarup Laxman Kotiaklapudi <swarupkotikalapudi@gmail.com>
+A new architecture feature Kconfig option for shadow stacks is added as
+here, this was suggested as part of the review comments for the arm64
+GCS series and since we need to detect if shadow stacks are supported it
+seemed sensible to roll it in here.
+
+The selftest portions of this depend on 34dce23f7e40 ("selftests/clone3:
+Report descriptive test names") in -next[2].
+
+[1] https://lore.kernel.org/r/20231009-arm64-gcs-v6-0-78e55deaa4dd@kernel.org/
+[2] https://lore.kernel.org/r/20231018-kselftest-clone3-output-v1-1-12b7c50ea2cf@kernel.org
+
+Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- tools/testing/selftests/net/route_localnet.sh | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Mark Brown (5):
+      mm: Introduce ARCH_HAS_USER_SHADOW_STACK
+      fork: Add shadow stack support to clone3()
+      selftests/clone3: Factor more of main loop into test_clone3()
+      selftests/clone3: Allow tests to flag if -E2BIG is a valid error code
+      kselftest/clone3: Test shadow stack support
 
-diff --git a/tools/testing/selftests/net/route_localnet.sh b/tools/testing/selftests/net/route_localnet.sh
-index 116bfeab72fa..e08701c750e3 100755
---- a/tools/testing/selftests/net/route_localnet.sh
-+++ b/tools/testing/selftests/net/route_localnet.sh
-@@ -18,8 +18,10 @@ setup() {
-     ip route del 127.0.0.0/8 dev lo table local
-     ip netns exec "${PEER_NS}" ip route del 127.0.0.0/8 dev lo table local
- 
--    ifconfig veth0 127.25.3.4/24 up
--    ip netns exec "${PEER_NS}" ifconfig veth1 127.25.3.14/24 up
-+    ip address add 127.25.3.4/24 dev veth0
-+    ip link set dev veth0 up
-+    ip netns exec "${PEER_NS}" ip address add 127.25.3.14/24 dev veth1
-+    ip netns exec "${PEER_NS}" ip link set dev veth1 up
- 
-     ip route flush cache
-     ip netns exec "${PEER_NS}" ip route flush cache
+ arch/x86/Kconfig                                  |   1 +
+ arch/x86/include/asm/shstk.h                      |  11 +-
+ arch/x86/kernel/process.c                         |   2 +-
+ arch/x86/kernel/shstk.c                           |  36 ++++-
+ fs/proc/task_mmu.c                                |   2 +-
+ include/linux/mm.h                                |   2 +-
+ include/linux/sched/task.h                        |   2 +
+ include/uapi/linux/sched.h                        |  17 +-
+ kernel/fork.c                                     |  40 ++++-
+ mm/Kconfig                                        |   6 +
+ tools/testing/selftests/clone3/clone3.c           | 180 +++++++++++++++++-----
+ tools/testing/selftests/clone3/clone3_selftests.h |   5 +
+ 12 files changed, 247 insertions(+), 57 deletions(-)
+---
+base-commit: 80ab9b52e8d4add7735abdfb935877354b69edb6
+change-id: 20231019-clone3-shadow-stack-15d40d2bf536
+
+Best regards,
 -- 
-2.34.1
+Mark Brown <broonie@kernel.org>
 
