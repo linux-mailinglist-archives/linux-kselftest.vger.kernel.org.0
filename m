@@ -2,166 +2,204 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A8DF7D3F87
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Oct 2023 20:49:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B04A97D3FA2
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Oct 2023 20:57:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229491AbjJWSts (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 23 Oct 2023 14:49:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37916 "EHLO
+        id S230198AbjJWS5J (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 23 Oct 2023 14:57:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231161AbjJWStr (ORCPT
+        with ESMTP id S230374AbjJWS5I (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 23 Oct 2023 14:49:47 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2060.outbound.protection.outlook.com [40.107.95.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EE63FD;
-        Mon, 23 Oct 2023 11:49:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=P6xCCOKiAYLd0bdtrSnif/GKcqKdEVy7qnI4Lrj1tjygH6UOkf+i4Wndofq2RVyONKyRqQX3gKZv8MHJtZHiOoZJ2ZmBwCUv+qn+IqNeE+Lxn89C2vTq9URTSaK0CisK7e7rmRzeA5N2eGzAYMQecNMt1eTRhQIzWUQiOs1CjfTUvvygdvUfbAeqSyYZul8ubKVl85JVIjUxiNMxeFx+Xv4+S2+Q320haz/VNzvcuaxI2bmuD3tGYoOi3/qLe/iqRJ73tLm5ST3g+BnBabLr5+Kz54I0Xtmvq5PP3WK1r7J4hLu1FI6jo9BTLJoQ+l7j+0Ey/YjN7zFvvL6NrKK9pQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SAl5PSEGoZlEZcc34i218lRQ9ZVl6cwd8yOd0bcIzOc=;
- b=IKK6w9m9D3zTWnFuhJ9fX52kscYs6S3JoWkROD8yATl1k/LQLGs5Es1vWuxR965z+nehBcNmriSOWivq6USfT7eyuDAxHycgYUhQeokM26d1ASD3bZHzEwA8mwTlHO94Vn8c9JjqUC0sBTLf269AFGH9nE31LAwDhYYvkwRqqFo7iU9uEp3/WmFWJN315nFQy8IxRl3JNkIFve9dM0OnIG1heFY9DBzynGw60v43rUBRaWzOw/Kp8Uv82GOTRu18r7qMLCVlL9Uei+O2AmMhAGBi8Qdx/BBGkiMUwVcMcy9mtn61+06GDuIO8a8SfbJ4kewCkDMOvE6OQwnZAVP7sg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.232) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SAl5PSEGoZlEZcc34i218lRQ9ZVl6cwd8yOd0bcIzOc=;
- b=Yzft1Yvaxv4qEHKFF8oX6YhNcrRAS4RoJyf+qsx0WRFyftR9yVf2JHQrax8o2wNeCkwUG+mUPVp6Nm+h4LAfrhzpy1c0Oq8sre0I4Vv8zxfpRRFesRYzfAp7ENo8hLxIC6G0q9puEqHv0VOmF5LqZPUWDJ7+znsBzgZEMv4SLrG52jWPIaGEo0gnWbKr89IJQqI7cWndGfiE75ki+R/6CYb55bDhG4vZy/FLcM8XwAwk1VX9UeZ5EKGO1bCUMj6z4xmleL9R/WSmcNlIrLXOLDumANC2QbCiGC6ktl9z+wumn1VlcWKbU9ccDai6dLZsbYRVHSI1IJqBIWQXBcqi2g==
-Received: from CH2PR16CA0015.namprd16.prod.outlook.com (2603:10b6:610:50::25)
- by DS7PR12MB6192.namprd12.prod.outlook.com (2603:10b6:8:97::6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6907.33; Mon, 23 Oct 2023 18:49:42 +0000
-Received: from DS3PEPF000099E0.namprd04.prod.outlook.com
- (2603:10b6:610:50:cafe::f0) by CH2PR16CA0015.outlook.office365.com
- (2603:10b6:610:50::25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6907.33 via Frontend
- Transport; Mon, 23 Oct 2023 18:49:42 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.232) by
- DS3PEPF000099E0.mail.protection.outlook.com (10.167.17.203) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6933.18 via Frontend Transport; Mon, 23 Oct 2023 18:49:41 +0000
-Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
- (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 23 Oct
- 2023 11:49:25 -0700
-Received: from drhqmail202.nvidia.com (10.126.190.181) by
- drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Mon, 23 Oct 2023 11:49:20 -0700
-Received: from Asurada-Nvidia (10.127.8.12) by mail.nvidia.com
- (10.126.190.181) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41 via Frontend
- Transport; Mon, 23 Oct 2023 11:49:19 -0700
-Date:   Mon, 23 Oct 2023 11:49:18 -0700
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-CC:     "Tian, Kevin" <kevin.tian@intel.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>,
-        "Martins, Joao" <joao.m.martins@oracle.com>
-Subject: Re: [PATCH v4 08/17] iommufd: Always setup MSI and anforce cc on
- kernel-managed domains
-Message-ID: <ZTbALk+6Qd4Q8TXn@Asurada-Nvidia>
-References: <ZS7nb+mKanGFXhZY@Asurada-Nvidia>
- <20231018165113.GB3952@nvidia.com>
- <BN9PR11MB5276B9994AD06E91E07B7EF08CD4A@BN9PR11MB5276.namprd11.prod.outlook.com>
- <20231019235350.GY3952@nvidia.com>
- <BN9PR11MB5276A64DA68586AEFB6561148CDBA@BN9PR11MB5276.namprd11.prod.outlook.com>
- <20231020135501.GG3952@nvidia.com>
- <ZTLOAQK/KcjAJb3y@Asurada-Nvidia>
- <20231021163804.GL3952@nvidia.com>
- <ZTWabb6AbOTFNgaw@Asurada-Nvidia>
- <20231023135935.GW3952@nvidia.com>
+        Mon, 23 Oct 2023 14:57:08 -0400
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E96D7B
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Oct 2023 11:57:05 -0700 (PDT)
+Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-d9abc069c8bso2802996276.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Oct 2023 11:57:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1698087424; x=1698692224; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2yqqvVSxSrZk5/pIhCtZC81tg5RVxwkjwG9586NW/1Y=;
+        b=Wk56tLmfhHoxYX77HGCVbTeFROiZFFkVFLPcQwJQqM7BSRIW5v2qGxIfsFGfv+S5Dl
+         I6UG48TfQ2ovJu1bMLmhY6Vz+0bCVJZLIgOnDbqP9k6zR/m4irt4Xspx34KpmENbUwu4
+         3Iqo6d9SQi5BwpCxcuwIs6Dv2KT2qvRSjXLSQrEx73ALQskoJb+MTSnGVSDQCkOucYnH
+         HElD7bALWRZusECe9Xqm7C1LHY6frbnASp7V9UvKr9VjrEtQyBkbpqSsh/iQRhKj3XHI
+         CsmLjh53BW9oEqb4p+5mDigjDFG3gl1LVJS36sNkRjt8nHAp+L3WcQFpW9PcisW37yth
+         wHzw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698087424; x=1698692224;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2yqqvVSxSrZk5/pIhCtZC81tg5RVxwkjwG9586NW/1Y=;
+        b=l5hUhVashCU4Y/+I2lbgHlIJsS44ucLStnwX3X171/JjfLU+pqVP2fpjj2GksJwJ1t
+         nb5A5wcgHySD0xyQzNXK/nf1zt7C/mVZPLgJgXmg+YSr/gve8YQIYxG36Lzfb1Qyc2+P
+         PR4PVVR9ZfUJvNmvZvt50lIwKZvkKKM5ze0r+TiMZ6ht1o/5x3DFxSCRzL/JqB0KEFgu
+         iFPhPXNEFtCm3Nv/z3sgd5cKplkKepsBQlGjYOAZsJsj1xSL8ad+IcSvLN7lYK1hMVUt
+         7fFIGizo0kDlKaV3u0YJqNRYpvYRv98yNClohEjmmGC9JGisgK58WeAmAJto4w2GbOvJ
+         QzcQ==
+X-Gm-Message-State: AOJu0YzaD8f5+1uaVAWjNAqmCcBXclmDCgV3l90O7moAEetkIxxl7ed6
+        H5PlndpNCPi/j0iJCpvPTWSrdXccXduCjOGnr+r6Bg==
+X-Google-Smtp-Source: AGHT+IHNQUEfjaARExOLomnsfHsumATRv6sH0Qq1Lhf5GhWbo8qoEifZvXPrlpQp8hcXTGjjpDeRLsUE+mhmHgPPud4=
+X-Received: by 2002:a25:410e:0:b0:d9c:a3b8:f39d with SMTP id
+ o14-20020a25410e000000b00d9ca3b8f39dmr8025930yba.65.1698087424379; Mon, 23
+ Oct 2023 11:57:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20231023135935.GW3952@nvidia.com>
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS3PEPF000099E0:EE_|DS7PR12MB6192:EE_
-X-MS-Office365-Filtering-Correlation-Id: 038f2012-21bb-4bcc-218c-08dbd3f8d158
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: QWWN4DGzWwY4qHoBM4BEEpErYliPdPVZoRh+oUUlzz1qSVZUUMYGmL9DYMTrCO2qsFvfeCwjUlfG4NNIs/Pr+pQH8XkYJVsL31VBWRDA5PJrCocgEmAZGwihkqQ9d/coNwUoQ205OXcJTb5iaUX5jtBWpecD79RFKKFJa7w172cK44bF7yGGfSCvm0/2EhExiJEIpsq3X/q0RZ5qTDVYzL9w37rsEaNCBHArVzgyQNYy8LDESuRspyq8ndBF6rfjBmwWJ/yjYj1WbVz/kZFGClsICSRciMnl73P6xJwaPZNHrT7m01lh+DcJZqLvpe/PmkehBGAs5KlRJt+WzhS7wEttdtreotFrmqTdpP6BZC+jzdIOqXfN7YAODVrTDb6HY7cVBGoBvcGkreGMMhpWAyRERADye0YjOwmC6ZSmphyDfd+GjzSbc4tj4nLMDCEzfGDUqyjmKVYKWBRMG4j5l2iP6e9A9WRi51JIEO0s0dmfBqNmnr78RQWQnbQr2GtfRh/8RzboUSucHvtGY/NiNaHhAzjEjy5c5DogMTY5VkhS9pWzLqmsKv/9sIh2EldCz4oSZrTbFGrckP3ZNP2xEIEO2cunbsUuZMif/3fTRRhxe6X89ecpfa3wAqwqdCh11m4ihRaVI+g6kntafgjC1L3pOdZz2Qtf7GYygXHaO12ZknzM1izkT/x71fItk9Y4agrddSKptkcxPo+RbOsRc3LDhQ6bLBigHyebId/lVKWzlcFMQkUEerkrfH18vdKn4xAoKk+buB4WYivL8ut+KQ==
-X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230031)(4636009)(376002)(136003)(39860400002)(396003)(346002)(230922051799003)(82310400011)(1800799009)(451199024)(186009)(64100799003)(36840700001)(46966006)(40470700004)(26005)(33716001)(41300700001)(2906002)(55016003)(86362001)(40460700003)(6862004)(7416002)(5660300002)(36860700001)(8676002)(8936002)(4326008)(70206006)(478600001)(7636003)(356005)(54906003)(82740400003)(316002)(70586007)(6636002)(40480700001)(9686003)(336012)(426003)(47076005)(67856001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Oct 2023 18:49:41.9214
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 038f2012-21bb-4bcc-218c-08dbd3f8d158
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DS3PEPF000099E0.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB6192
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <20231009064230.2952396-1-surenb@google.com> <20231009064230.2952396-3-surenb@google.com>
+ <721366d0-7909-45c9-ae49-f652c8369b9d@redhat.com>
+In-Reply-To: <721366d0-7909-45c9-ae49-f652c8369b9d@redhat.com>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Mon, 23 Oct 2023 11:56:50 -0700
+Message-ID: <CAJuCfpErrAqZuiiU5uthVU87Sa=yztRRqnTszezFCMQgBEawCg@mail.gmail.com>
+Subject: Re: [PATCH v3 2/3] userfaultfd: UFFDIO_MOVE uABI
+To:     David Hildenbrand <david@redhat.com>
+Cc:     akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
+        brauner@kernel.org, shuah@kernel.org, aarcange@redhat.com,
+        lokeshgidra@google.com, peterx@redhat.com, hughd@google.com,
+        mhocko@suse.com, axelrasmussen@google.com, rppt@kernel.org,
+        willy@infradead.org, Liam.Howlett@oracle.com, jannh@google.com,
+        zhangpeng362@huawei.com, bgeffon@google.com,
+        kaleshsingh@google.com, ngeoffray@google.com, jdduke@google.com,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Oct 23, 2023 at 10:59:35AM -0300, Jason Gunthorpe wrote:
-> On Sun, Oct 22, 2023 at 05:18:03PM -0700, Nicolin Chen wrote:
-> 
-> > > > And where should we add this comment? Kdoc of
-> > > > the alloc uAPI?
-> > > 
-> > > Maybe right in front of the only enforce_cc op callback?
-> > 
-> > OK. How about this? Might be a bit verbose though:
-> > 	/*
-> > 	 * enforce_cache_coherenc must be determined during the HWPT allocation.
-> > 	 * Note that a HWPT (non-CC) created for a device (non-CC) can be later
-> > 	 * reused by another device (either non-CC or CC). However, A HWPT (CC)
-> > 	 * created for a device (CC) cannot be reused by another device (non-CC)
-> > 	 * but only devices (CC). Instead user space in this case would need to
-> > 	 * allocate a separate HWPT (non-CC).
-> > 	 */
-> 
-> Ok, fix the spello in enforce_cache_coherenc
+On Mon, Oct 23, 2023 at 5:29=E2=80=AFAM David Hildenbrand <david@redhat.com=
+> wrote:
+>
+> Focusing on validate_remap_areas():
+>
+> > +
+> > +static int validate_remap_areas(struct vm_area_struct *src_vma,
+> > +                             struct vm_area_struct *dst_vma)
+> > +{
+> > +     /* Only allow remapping if both have the same access and protecti=
+on */
+> > +     if ((src_vma->vm_flags & VM_ACCESS_FLAGS) !=3D (dst_vma->vm_flags=
+ & VM_ACCESS_FLAGS) ||
+> > +         pgprot_val(src_vma->vm_page_prot) !=3D pgprot_val(dst_vma->vm=
+_page_prot))
+> > +             return -EINVAL;
+>
+> Makes sense. I do wonder about pkey and friends and if we even have to
+> so anything special.
 
-Oops.
+I don't see anything special done for mremap. Do you have something in mind=
+?
 
-I also found the existing piece sorta says a similar thing:
-         * Set the coherency mode before we do iopt_table_add_domain() as some
-         * iommus have a per-PTE bit that controls it and need to decide before
-         * doing any maps. 
+>
+> > +
+> > +     /* Only allow remapping if both are mlocked or both aren't */
+> > +     if ((src_vma->vm_flags & VM_LOCKED) !=3D (dst_vma->vm_flags & VM_=
+LOCKED))
+> > +             return -EINVAL;
+> > +
+> > +     if (!(src_vma->vm_flags & VM_WRITE) || !(dst_vma->vm_flags & VM_W=
+RITE))
+> > +             return -EINVAL;
+>
+> Why does one of both need VM_WRITE? If one really needs it, then the
+> destination (where we're moving stuff to).
 
-So, did this and sending v3:
--        * enforce_cache_coherenc must be determined during the HWPT allocation.
-+        * The cache coherency mode must be configured here and unchanged later.
+As you noticed later, both should have VM_WRITE.
+
+>
+> > +
+> > +     /*
+> > +      * Be strict and only allow remap_pages if either the src or
+> > +      * dst range is registered in the userfaultfd to prevent
+> > +      * userland errors going unnoticed. As far as the VM
+> > +      * consistency is concerned, it would be perfectly safe to
+> > +      * remove this check, but there's no useful usage for
+> > +      * remap_pages ouside of userfaultfd registered ranges. This
+> > +      * is after all why it is an ioctl belonging to the
+> > +      * userfaultfd and not a syscall.
+>
+> I think the last sentence is the important bit and the comment can
+> likely be reduced.
+
+Ok, I'll look into shortening it.
+
+>
+> > +      *
+> > +      * Allow both vmas to be registered in the userfaultfd, just
+> > +      * in case somebody finds a way to make such a case useful.
+> > +      * Normally only one of the two vmas would be registered in
+> > +      * the userfaultfd.
+>
+> Should we just check the destination? That makes most sense to me,
+> because with uffd we are resolving uffd-events. And just like
+> copy/zeropage we want to resolve a page fault ("userfault") of a
+> non-present page on the destination.
+
+I think that makes sense. Not sure why the original implementation
+needed the check for source too. Seems unnecessary.
+
+>
+>
+> > +      */
+> > +     if (!dst_vma->vm_userfaultfd_ctx.ctx &&
+> > +         !src_vma->vm_userfaultfd_ctx.ctx)
+> > +             return -EINVAL;
+>
+>
+>
+> > +
+> > +     /*
+> > +      * FIXME: only allow remapping across anonymous vmas,
+> > +      * tmpfs should be added.
+> > +      */
+> > +     if (!vma_is_anonymous(src_vma) || !vma_is_anonymous(dst_vma))
+> > +             return -EINVAL;
+>
+> Why a FIXME here? Just drop the comment completely or replace it with
+> "We only allow to remap anonymous folios accross anonymous VMAs".
+
+Will do. I guess Andrea had plans to cover tmpfs as well.
+
+>
+> > +
+> > +     /*
+> > +      * Ensure the dst_vma has a anon_vma or this page
+> > +      * would get a NULL anon_vma when moved in the
+> > +      * dst_vma.
+> > +      */
+> > +     if (unlikely(anon_vma_prepare(dst_vma)))
+> > +             return -ENOMEM;
+>
+> Makes sense.
+>
+> > +
+> > +     return 0;
+> > +}
+>
+>
+
+Thanks,
+Suren.
+
+
+> --
+> Cheers,
+>
+> David / dhildenb
+>
+> --
+> To unsubscribe from this group and stop receiving emails from it, send an=
+ email to kernel-team+unsubscribe@android.com.
+>
