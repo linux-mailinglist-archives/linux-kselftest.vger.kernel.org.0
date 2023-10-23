@@ -2,199 +2,323 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A0A47D3CB1
-	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Oct 2023 18:37:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D52A77D3D0C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 23 Oct 2023 19:06:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229714AbjJWQhQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 23 Oct 2023 12:37:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42222 "EHLO
+        id S229476AbjJWRGk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 23 Oct 2023 13:06:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbjJWQhP (ORCPT
+        with ESMTP id S229662AbjJWRGj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 23 Oct 2023 12:37:15 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 781B38F
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Oct 2023 09:36:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1698078986;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-        bh=bPiDJtM89jSenAR/Vf9MLQS+0UWrEcUcrVIZ4BtSNrc=;
-        b=TmsLeLIGS+BZk9n/mUKIb/jUz3MdOmbxWk54Os0/r/L21N4aVo9tWxE9K5yoE/h6Xahp4Y
-        zfmb7jTIzEOoQEfTeEqKBUuBdtgmBzwl1HCyKLobcOMowR+GqoOz73MMIY36j4ICpU7hnG
-        X9rJCRY87Wt/x4v81pHCKps9vMKTq7A=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-383-RGPLvkNrObi0Nya5dsBE4w-1; Mon, 23 Oct 2023 12:36:20 -0400
-X-MC-Unique: RGPLvkNrObi0Nya5dsBE4w-1
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-402cd372b8bso24662355e9.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 23 Oct 2023 09:36:20 -0700 (PDT)
+        Mon, 23 Oct 2023 13:06:39 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A6FC10B;
+        Mon, 23 Oct 2023 10:06:37 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-53e3e7e478bso5348483a12.0;
+        Mon, 23 Oct 2023 10:06:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1698080796; x=1698685596; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lJnSbiIkK3dVrsPXMQL0xhdSPBzrcP+C+2hGQ/sSqgE=;
+        b=jb7T0z8qpVqq2cbORZFsqP6T5XZUJ+a3Q+F66hRAHnI+QOnRIX/FbUWXHN3CqzAJbV
+         xY1h1QyMCXp9fAJ/2sPlQMtoF4R5lareAe9sgayhGajizcIt05X08TiprZaAjX/J9xEq
+         JnZAnNW3rhCmMyc5Cl063RBtO6lmPdcq4MXyMRjmJH+9nCVMK8TgzkEkX31L506FJyj6
+         ChrFeufb1QXNGzHc1+7k7+IIE7ZiGxpHFjC5rMWF32apkpHRYuJ8uxe347OuBc+lL3pj
+         XsNBmbE45I5mtba0KjP4wEIkJhb0BXhbV0lY5O5FQVSIZ/V5A5nSWkVwi8CzYUUbPq9D
+         RnJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698078979; x=1698683779;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt
-         :references:cc:to:from:content-language:subject:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=bPiDJtM89jSenAR/Vf9MLQS+0UWrEcUcrVIZ4BtSNrc=;
-        b=XjGjMM71LZbP+5lrKIew4jqGALdCdYfgPj3GzIgF2Bmj7w2n43CXfeC6i5+r2Fm4Qr
-         +0lmacWqqhdH2nPD+Ph+vHhjnvs03azGZ6NtjsKdj332PfL6Hj/YjsP8AZCtLGLXe5Ah
-         hDCSutfPCJWfpg+dHWt64XgsxbgZB3AGSnhv/uYQRKRFRBO83AGFDMwnEF/N+rJvXQ7j
-         +KiQkphViICR63+7npAx+eAUVcb94jJCXZZfGavdZkYwdHwXsVsGgSX8Frs74zOoRfEq
-         lDQR5GsgLtx1JOu/TiMp3MTxH3Muwjvvp1eCmRH/zkByZGSrj1B/mOdENS3CwneWIGjC
-         Zppw==
-X-Gm-Message-State: AOJu0Yzcfw5N1wtWtq54BTn04xQtvhFAHS+vfXkYIFfKTQZBJgFBYHr6
-        73NVyhA4iPBWtqGO1/u8dWbPlRzj3rzCrL1mRb7ifmDNW1BD3zimxorteCiMcaG9nnmTFQj2hgj
-        OUHduCUu1fmjX9+4mJ9lan0TimT7R
-X-Received: by 2002:a05:600c:5247:b0:401:db82:3edf with SMTP id fc7-20020a05600c524700b00401db823edfmr7218446wmb.39.1698078979122;
-        Mon, 23 Oct 2023 09:36:19 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGFiu1PKt56rYcdGr3G/LTpA9GAgKmQ19nPfcfMRPWQeiQKlKSKWX7+AvElPrWy601J7SQcwQ==
-X-Received: by 2002:a05:600c:5247:b0:401:db82:3edf with SMTP id fc7-20020a05600c524700b00401db823edfmr7218423wmb.39.1698078978642;
-        Mon, 23 Oct 2023 09:36:18 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c738:1900:b6ea:5b9:62c0:34e? (p200300cbc7381900b6ea05b962c0034e.dip0.t-ipconnect.de. [2003:cb:c738:1900:b6ea:5b9:62c0:34e])
-        by smtp.gmail.com with ESMTPSA id x22-20020a05600c189600b004083a105f27sm14361777wmp.26.2023.10.23.09.36.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 23 Oct 2023 09:36:18 -0700 (PDT)
-Message-ID: <96899aa6-700b-41b9-ab11-2cae48d75549@redhat.com>
-Date:   Mon, 23 Oct 2023 18:36:16 +0200
+        d=1e100.net; s=20230601; t=1698080796; x=1698685596;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lJnSbiIkK3dVrsPXMQL0xhdSPBzrcP+C+2hGQ/sSqgE=;
+        b=FOYP+ZCd5PjYtKpvwzP0ErK2VtamZHtJ4LLdlGcw3WlQyRFK1R8KltvJ1oA2yX3bEf
+         tDmj8Zdhqc1S4Cd1SCVH2YmQ7VlGmM6tDtj6TdUhT33KX6BdxFc2zjaU9BO2CIXkKvln
+         TMuLrCRMYQ8Hti8RyG+cfC/iS9ndNssoCYsot3YfrTQngrZj76XC6+VyVstPZx1H91XY
+         9200gHYPvY+hFjY9k+e9Algw3MjG8BSo447yuzRpazNZxGbgsUCyAUFxJmB0arNdV644
+         4QxmDmrB1uw0fGOykhCu8sPRx1SBVJi89t87Y2H5RFZo2dk1AWf3JFQjug+sSCzPvNCP
+         WDOQ==
+X-Gm-Message-State: AOJu0Ywmv54amzngY6+eRep5jzInRdlO5B8ZgM2KuKnLL6ZaGMS9rPKJ
+        UYdxzefSUZ19EWB2WL2FFRqMQVgqYqahpb3zP6U=
+X-Google-Smtp-Source: AGHT+IEQE6+bXc56pBFh8wTO2DkHpBKnca5f0xfWp3/i7aZIDB/AtV38Yv6TZ5Gv9detr3xgO/iKKDdgSaakMXqRV+k=
+X-Received: by 2002:a50:cc9e:0:b0:53e:fa55:8e0e with SMTP id
+ q30-20020a50cc9e000000b0053efa558e0emr8318186edi.24.1698080795692; Mon, 23
+ Oct 2023 10:06:35 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/3] userfaultfd: UFFDIO_MOVE uABI
-Content-Language: en-US
-From:   David Hildenbrand <david@redhat.com>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     Suren Baghdasaryan <surenb@google.com>,
-        Lokesh Gidra <lokeshgidra@google.com>,
-        akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
-        brauner@kernel.org, shuah@kernel.org, aarcange@redhat.com,
-        hughd@google.com, mhocko@suse.com, axelrasmussen@google.com,
-        rppt@kernel.org, willy@infradead.org, Liam.Howlett@oracle.com,
-        jannh@google.com, zhangpeng362@huawei.com, bgeffon@google.com,
-        kaleshsingh@google.com, ngeoffray@google.com, jdduke@google.com,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kernel-team@android.com
-References: <ZSlragGjFEw9QS1Y@x1n>
- <12588295-2616-eb11-43d2-96a3c62bd181@redhat.com> <ZS2IjEP479WtVdMi@x1n>
- <8d187891-f131-4912-82d8-13112125b210@redhat.com> <ZS7ZqztMbhrG52JQ@x1n>
- <d40b8c86-6163-4529-ada4-d2b3c1065cba@redhat.com> <ZTGJHesvkV84c+l6@x1n>
- <81cf0943-e258-494c-812a-0c00b11cf807@redhat.com>
- <CAJuCfpHZWfjW530CvQCFx-PYNSaeQwkh-+Z6KgdfFyZHRGSEDQ@mail.gmail.com>
- <d34dfe82-3e31-4f85-8405-c582a0650688@redhat.com> <ZTVD18RgBfITsQC4@x1n>
- <1156ad46-1952-4892-8092-bfbb8588c3f3@redhat.com>
-Autocrypt: addr=david@redhat.com; keydata=
- xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
- dBrn+lhhOYjjNefFQou6478faXE6o2AhmebqT4KiQoUQFV4R7y1KMEKoSyy8hQaK1umALTdL
- QZLQMzNE74ap+GDK0wnacPQFpcG1AE9RMq3aeErY5tujekBS32jfC/7AnH7I0v1v1TbbK3Gp
- XNeiN4QroO+5qaSr0ID2sz5jtBLRb15RMre27E1ImpaIv2Jw8NJgW0k/D1RyKCwaTsgRdwuK
- Kx/Y91XuSBdz0uOyU/S8kM1+ag0wvsGlpBVxRR/xw/E8M7TEwuCZQArqqTCmkG6HGcXFT0V9
- PXFNNgV5jXMQRwU0O/ztJIQqsE5LsUomE//bLwzj9IVsaQpKDqW6TAPjcdBDPLHvriq7kGjt
- WhVhdl0qEYB8lkBEU7V2Yb+SYhmhpDrti9Fq1EsmhiHSkxJcGREoMK/63r9WLZYI3+4W2rAc
- UucZa4OT27U5ZISjNg3Ev0rxU5UH2/pT4wJCfxwocmqaRr6UYmrtZmND89X0KigoFD/XSeVv
- jwBRNjPAubK9/k5NoRrYqztM9W6sJqrH8+UWZ1Idd/DdmogJh0gNC0+N42Za9yBRURfIdKSb
- B3JfpUqcWwE7vUaYrHG1nw54pLUoPG6sAA7Mehl3nd4pZUALHwARAQABzSREYXZpZCBIaWxk
- ZW5icmFuZCA8ZGF2aWRAcmVkaGF0LmNvbT7CwZgEEwEIAEICGwMGCwkIBwMCBhUIAgkKCwQW
- AgMBAh4BAheAAhkBFiEEG9nKrXNcTDpGDfzKTd4Q9wD/g1oFAl8Ox4kFCRKpKXgACgkQTd4Q
- 9wD/g1oHcA//a6Tj7SBNjFNM1iNhWUo1lxAja0lpSodSnB2g4FCZ4R61SBR4l/psBL73xktp
- rDHrx4aSpwkRP6Epu6mLvhlfjmkRG4OynJ5HG1gfv7RJJfnUdUM1z5kdS8JBrOhMJS2c/gPf
- wv1TGRq2XdMPnfY2o0CxRqpcLkx4vBODvJGl2mQyJF/gPepdDfcT8/PY9BJ7FL6Hrq1gnAo4
- 3Iv9qV0JiT2wmZciNyYQhmA1V6dyTRiQ4YAc31zOo2IM+xisPzeSHgw3ONY/XhYvfZ9r7W1l
- pNQdc2G+o4Di9NPFHQQhDw3YTRR1opJaTlRDzxYxzU6ZnUUBghxt9cwUWTpfCktkMZiPSDGd
- KgQBjnweV2jw9UOTxjb4LXqDjmSNkjDdQUOU69jGMUXgihvo4zhYcMX8F5gWdRtMR7DzW/YE
- BgVcyxNkMIXoY1aYj6npHYiNQesQlqjU6azjbH70/SXKM5tNRplgW8TNprMDuntdvV9wNkFs
- 9TyM02V5aWxFfI42+aivc4KEw69SE9KXwC7FSf5wXzuTot97N9Phj/Z3+jx443jo2NR34XgF
- 89cct7wJMjOF7bBefo0fPPZQuIma0Zym71cP61OP/i11ahNye6HGKfxGCOcs5wW9kRQEk8P9
- M/k2wt3mt/fCQnuP/mWutNPt95w9wSsUyATLmtNrwccz63XOwU0EVcufkQEQAOfX3n0g0fZz
- Bgm/S2zF/kxQKCEKP8ID+Vz8sy2GpDvveBq4H2Y34XWsT1zLJdvqPI4af4ZSMxuerWjXbVWb
- T6d4odQIG0fKx4F8NccDqbgHeZRNajXeeJ3R7gAzvWvQNLz4piHrO/B4tf8svmRBL0ZB5P5A
- 2uhdwLU3NZuK22zpNn4is87BPWF8HhY0L5fafgDMOqnf4guJVJPYNPhUFzXUbPqOKOkL8ojk
- CXxkOFHAbjstSK5Ca3fKquY3rdX3DNo+EL7FvAiw1mUtS+5GeYE+RMnDCsVFm/C7kY8c2d0G
- NWkB9pJM5+mnIoFNxy7YBcldYATVeOHoY4LyaUWNnAvFYWp08dHWfZo9WCiJMuTfgtH9tc75
- 7QanMVdPt6fDK8UUXIBLQ2TWr/sQKE9xtFuEmoQGlE1l6bGaDnnMLcYu+Asp3kDT0w4zYGsx
- 5r6XQVRH4+5N6eHZiaeYtFOujp5n+pjBaQK7wUUjDilPQ5QMzIuCL4YjVoylWiBNknvQWBXS
- lQCWmavOT9sttGQXdPCC5ynI+1ymZC1ORZKANLnRAb0NH/UCzcsstw2TAkFnMEbo9Zu9w7Kv
- AxBQXWeXhJI9XQssfrf4Gusdqx8nPEpfOqCtbbwJMATbHyqLt7/oz/5deGuwxgb65pWIzufa
- N7eop7uh+6bezi+rugUI+w6DABEBAAHCwXwEGAEIACYCGwwWIQQb2cqtc1xMOkYN/MpN3hD3
- AP+DWgUCXw7HsgUJEqkpoQAKCRBN3hD3AP+DWrrpD/4qS3dyVRxDcDHIlmguXjC1Q5tZTwNB
- boaBTPHSy/Nksu0eY7x6HfQJ3xajVH32Ms6t1trDQmPx2iP5+7iDsb7OKAb5eOS8h+BEBDeq
- 3ecsQDv0fFJOA9ag5O3LLNk+3x3q7e0uo06XMaY7UHS341ozXUUI7wC7iKfoUTv03iO9El5f
- XpNMx/YrIMduZ2+nd9Di7o5+KIwlb2mAB9sTNHdMrXesX8eBL6T9b+MZJk+mZuPxKNVfEQMQ
- a5SxUEADIPQTPNvBewdeI80yeOCrN+Zzwy/Mrx9EPeu59Y5vSJOx/z6OUImD/GhX7Xvkt3kq
- Er5KTrJz3++B6SH9pum9PuoE/k+nntJkNMmQpR4MCBaV/J9gIOPGodDKnjdng+mXliF3Ptu6
- 3oxc2RCyGzTlxyMwuc2U5Q7KtUNTdDe8T0uE+9b8BLMVQDDfJjqY0VVqSUwImzTDLX9S4g/8
- kC4HRcclk8hpyhY2jKGluZO0awwTIMgVEzmTyBphDg/Gx7dZU1Xf8HFuE+UZ5UDHDTnwgv7E
- th6RC9+WrhDNspZ9fJjKWRbveQgUFCpe1sa77LAw+XFrKmBHXp9ZVIe90RMe2tRL06BGiRZr
- jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <1156ad46-1952-4892-8092-bfbb8588c3f3@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20231020155842.130257-1-tao.lyu@epfl.ch> <CAEf4BzaqOt8DyB781geXYfrosmgQCkzDOCOH8WBVmCAPs+wQBw@mail.gmail.com>
+ <966735dbb75c46a5a73cbbaaeb31bc99@epfl.ch>
+In-Reply-To: <966735dbb75c46a5a73cbbaaeb31bc99@epfl.ch>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 23 Oct 2023 10:06:24 -0700
+Message-ID: <CAEf4BzZ1VWD6BUWpSzf5Ny-6ptgypppvEjcWV68J6N2MJcA3ag@mail.gmail.com>
+Subject: Re: [PATCH] Incorrect backtracking for load/store or atomic ops
+To:     Tao Lyu <tao.lyu@epfl.ch>
+Cc:     "ast@kernel.org" <ast@kernel.org>,
+        "daniel@iogearbox.net" <daniel@iogearbox.net>,
+        "john.fastabend@gmail.com" <john.fastabend@gmail.com>,
+        "andrii@kernel.org" <andrii@kernel.org>,
+        "martin.lau@linux.dev" <martin.lau@linux.dev>,
+        "song@kernel.org" <song@kernel.org>,
+        "yonghong.song@linux.dev" <yonghong.song@linux.dev>,
+        "kpsingh@kernel.org" <kpsingh@kernel.org>,
+        "sdf@google.com" <sdf@google.com>,
+        "haoluo@google.com" <haoluo@google.com>,
+        "jolsa@kernel.org" <jolsa@kernel.org>,
+        "mykolal@fb.com" <mykolal@fb.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "security@kernel.org" <security@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "bpf@vger.kernel.org" <bpf@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        Sanidhya Kashyap <sanidhya.kashyap@epfl.ch>,
+        "mathias.payer@nebelwelt.net" <mathias.payer@nebelwelt.net>,
+        "meng.xu.cs@uwaterloo.ca" <meng.xu.cs@uwaterloo.ca>,
+        Kumar Kartikeya Dwivedi <kartikeya.dwivedi@epfl.ch>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 23.10.23 14:03, David Hildenbrand wrote:
-> On 22.10.23 17:46, Peter Xu wrote:
->> On Fri, Oct 20, 2023 at 07:16:19PM +0200, David Hildenbrand wrote:
->>> These are rather the vibes I'm getting from Peter. "Why rename it, could
->>> confuse people because the original patches are old", "Why exclude it if it
->>> has been included in the original patches". Not the kind of reasoning I can
->>> relate to when it comes to upstreaming some patches.
->>
->> You can't blame anyone if you misunderstood and biased the question.
->>
->> The first question is definitely valid, even until now.  You guys still
->> prefer to rename it, which I'm totally fine with.
->>
->> The 2nd question is wrong from your interpretation.  That's not my point,
->> at least not starting from a few replies already.  What I was asking for is
->> why such page movement between mm is dangerous.  I don't think I get solid
->> answers even until now.
->>
->> Noticing "memcg is missing" is not an argument for "cross-mm is dangerous",
->> it's a review comment.  Suren can address that.
->>
->> You'll propose a new feature that may tag an mm is not an argument either,
->> if it's not merged yet.  We can also address that depending on what it is,
->> also on which lands earlier.
->>
->> It'll be good to discuss these details even in a single-mm support.  Anyone
->> would like to add that can already refer to discussion in this thread.
->>
->> I hope I'm clear.
->>
-> 
-> I said everything I had to say, go read what I wrote.
+On Mon, Oct 23, 2023 at 3:12=E2=80=AFAM Tao Lyu <tao.lyu@epfl.ch> wrote:
+>
+> >
+> > On Fri, Oct 20, 2023 at 9:06=E2=80=AFAM Tao Lyu <tao.lyu@epfl.ch> wrote=
+:
+> >>
+> >> Hi,
+> >>
+> >> I found the backtracking logic of the eBPF verifier is flawed
+> >> when meeting 1) normal load and store instruction or
+> >> 2) atomic memory instructions.
+> >>
+> >> # Normal load and store
+> >>
+> >> Here, I show one case about the normal load and store instructions,
+> >> which can be exploited to achieve arbitrary read and write with two re=
+quirements:
+> >> 1) The uploading program should have at least CAP_BPF, which is requir=
+ed for most eBPF applications.
+> >> 2) Disable CPU mitigations by adding "mitigations=3Doff" in the kernel=
+ booting command line. Otherwise,
+> >> the Spectre mitigation in the eBPF verifier will prevent exploitation.
+> >>
+> >>                                    1: r3 =3D r10 (stack pointer)
+> >>                                    3:           if cond
+> >>                                                  /           \
+> >>                                                /                \
+> >>         4: *(u64 *)(r3 -120) =3D 200      6: *(u64 *)(r3 -120) =3D arb=
+itrary offset to r2
+> >>                  verification state 1                  verification st=
+ate 2 (prune point)
+> >>                                               \                  /
+> >>                                                 \              /
+> >>                                       7:  r6 =3D *(u64 *)(r1 -120)
+> >>                                                          ...
+> >>                                     17:    r7 =3D a map pointer
+> >>                                     18:            r7 +=3D r6
+> >>                          // Out-of-bound access from the right side pa=
+th
+> >>
+> >> Give an eBPF program (tools/testing/selftests/bpf/test_precise.c)
+> >> whose simplified control flow graph looks like the above.
+> >> When the verifier goes through the first (left-side) path and reaches =
+insn 18,
+> >> it will backtrack on register 6 like below.
+> >>
+> >> 18: (0f) r7 +=3D r6
+> >> mark_precise: frame0: last_idx 18 first_idx 17 subseq_idx -1
+> >> mark_precise: frame0: regs=3Dr6 stack=3D before 17: (bf) r7 =3D r0
+> >> ...
+> >> mark_precise: frame0: regs=3Dr6 stack=3D before 7: (79) r6 =3D *(u64 *=
+)(r3 -120)
+> >>
+> >> However, the backtracking process is problematic when it reaches insn =
+7.
+> >> Insn 7 is to load a value from the stack, but the stack pointer is rep=
+resented by r3 instead of r10.
+> >> ** In this case, the verifier (as shown below) will reset the precisio=
+n on r6 and not mark the precision on the stack. **
+> >> Afterward, the backtracking finishes without annotating any registers =
+in any verifier states.
+> >>
+> >>     else if (class =3D=3D BPF_LDX) {
+> >>         if (!bt_is_reg_set(bt, dreg))
+> >>             return 0;
+> >>         bt_clear_reg(bt, dreg);
+> >>         if (insn->src_reg !=3D BPF_REG_FP)
+> >>             return 0;
+> >>         ...
+> >>    }
+> >>
+> >> Finally, when the second (left-side) path reaches insn 7 again,
+> >> it will compare the verifier states with the previous one.
+> >> However, it realizes these two states are equal because no precision i=
+s on r6,
+> >> thus the eBPF program an easily pass the verifier
+> >> although the second path contains an invalid access offset.
+> >> We have successfully exploited this bug for getting the root privilege=
+.
+> >> If needed, we can share the exploitation.
+> >> BTW, when using the similar instructions in sub_prog can also trigger =
+an assertion in the verifier:
+> >> "[ 1510.165537] verifier backtracking bug
+> >> [ 1510.165582] WARNING: CPU: 2 PID: 382 at kernel/bpf/verifier.c:3626 =
+__mark_chain_precision+0x4568/0x4e50"
+> >>
+> >>
+> >>
+> >> IMO, to fully patch this bug, we need to know whether the insn->src_re=
+g is an alias of BPF_REG_FP.
+> >
+> > Yes!
+> >
+> >> However, it might need too much code addition.
+> >
+> > No :) I don't think it's a lot of code. I've been meaning to tackle
+> > this for a while, but perhaps the time is now.
+> >
+> > The plan is to use jmp_history to record an extra flags for some
+> > instructions (even if they are not jumps). Like in this case, we can
+> > remember for LDX and STX instructions that they were doing register
+> > load/spill, and take that into account during backtrack_insn() without
+> > having to guess based on r10.
+> >
+> > I have part of this ready locally, I'll try to finish this up in a
+> > next week or two. Stay tuned (unless you want to tackle that
+> > yourself).
+>
+> Great! I'll keep focus on this.
+>
+> >
+> >> Or we just do not clear the precision on the src register.
+> >>
+> >> # Atomic memory instructions
+> >>
+> >> Then, I show that the backtracking on atomic load and store is also fl=
+awed.
+> >> As shown below, when the backtrack_insn() function in the verifier mee=
+ts store instructions,
+> >> it checks if the stack slot is set with precision or not. If not, just=
+ return.
+> >>
+> >>             if (!bt_is_slot_set(bt, spi))
+> >>                 return 0;
+> >>             bt_clear_slot(bt, spi);
+> >>             if (class =3D=3D BPF_STX)
+> >>                 bt_set_reg(bt, sreg);
+> >>
+> >> Assume we have an atomic_fetch_or instruction (tools/testing/selftests=
+/bpf/verifier/atomic_precision.c) shown below.
+> >>
+> >> 7: (4c) w7 |=3D w3
+> >> mark_precise: frame1: last_idx 7 first_idx 0 subseq_idx -1
+> >> mark_precise: frame1: regs=3Dr7 stack=3D before 6: (c3) r7 =3D atomic_=
+fetch_or((u32 *)(r10 -120), r7)
+> >> mark_precise: frame1: regs=3Dr7 stack=3D before 5: (bf) r7 =3D r10
+> >> mark_precise: frame1: regs=3Dr10 stack=3D before 4: (7b) *(u64 *)(r3 -=
+120) =3D r1
+> >> mark_precise: frame1: regs=3Dr10 stack=3D before 3: (bf) r3 =3D r10
+> >> mark_precise: frame1: regs=3Dr10 stack=3D before 2: (b7) r1 =3D 1000
+> >> mark_precise: frame1: regs=3Dr10 stack=3D before 0: (85) call pc+1
+> >> BUG regs 400
+> >>
+> >> Before backtracking to it, r7 has already been marked as precise.
+> >> Since the value of r7 after atomic_fecth_or comes from r10-120,
+> >> it should propagate the precision to r10-120.
+> >> However, because the stack slot r10-120 is not marked,
+> >> it doesn't satisfy bt_is_slot_set(bt, spi) condition shown above.
+> >> Finally, it just returns without marking r10-120 as precise.
+> >
+> > this seems like the same issue with not recognizing stack access
+> > through any other register but r10?
+> >
+> > Or is there something specific to atomic instructions here? I'm not
+> > very familiar with them, so I'll need to analyse the code first.
+>
+> The non-recognizing stack access through other non-r10 registers can also=
+ affect atomic instructions as atomic instructions are also memory store in=
+structions.
+>
+> But there is another aspect, that atomi ops has much complex/different se=
+mantic compared to memory store instructions. However, the backtracking log=
+ic didn't take care of it.
+>
+> For example, insn r7 =3D atomic_fetch_or((u32 *)(r10 -120), r7) will load=
+ the original value at r10-120 to the final r7, and store the "or" result o=
+f the value at r10-120 and original r7.
+>
+> Case 1: Assume r7 is marked as precise and then the backtracking code mee=
+ts this instruction, it should propagate the precision to the stack slot r1=
+0-120.
+>
+> Case 2: Assume r10-120 is marked as precise, after this instruction, r10-=
+120 and r7 should both be marked precise.
+>
 
-Re-read your message after flying over first couple of paragraphs 
-previously a bit quick too quickly (can easily happen when I'm told that 
-I misunderstand questions and read them in a "biased" way).
+So generally speaking atomic operation's memory argument can't be
+precise as it is supposed to be modified by other CPUs simultaneously,
+so we can never be sure about its actual value.
 
-I'll happy to discuss cross-mm support once we actually need it. I just 
-don't see the need to spend any energy on that right now, without any 
-users on the horizon.
+But using stack pointer is kind of a special case where atomicity
+doesn't matter because no one should be accessing stack from another
+CPU. So perhaps we can special case this.
 
-[(a) I didn't blame anybody, I said that I don't understand the 
-reasoning. (b) I hope I made it clear that this is added complexity (and 
-not just currently dangerous) and so far I haven't heard a compelling 
-argument why we should do any of that or even spend our time discussing 
-that. (c) I never used "memcg is missing" as an argument for "cross-mm 
-is dangerous", all about added complexity without actual users. (d) "it 
-easily shows that there are cases  where this will require extra work -- 
-without any current benefits" -- is IMHO a perfectly fine argument 
-against complexity that currently nobody needs]
+Either way, I'm going to concentrate on more generally recognize stack
+access for any instruction, and we can work on fixing atomic-specific
+semantics on top of that separately.
 
--- 
-Cheers,
+> >
+> >>
+> >> This bug can lead to the verifier's assertion as well:
+> >> "[ 1510.165537] verifier backtracking bug
+> >> [ 1510.165582] WARNING: CPU: 2 PID: 382 at kernel/bpf/verifier.c:3626 =
+__mark_chain_precision+0x4568/0x4e50"
+> >>
+> >> I've attached the patch for correctly propagating the precision on ato=
+mic instructions.
+> >> But it still can't solve the problem that the stack slot is expressed =
+with other registers instead of r10.
+> >
+> > I can try to solve stack access through non-r10, but it would be very
+> > useful if you could provide tests that trigger the above situations
+> > you described. Your test_precise.c test below is not the right way to
+> > add tests, it adds a new binary and generally doesn't fit into
+> > existing set of tests inside test_progs. Please see
+> > progs/verifier_xadd.c and prog_tests/verifier.c and try to convert
+> > your tests into that form (you also will be able to use inline
+> > assembly instead of painful BPF_xxx() instruction macros).
+> >
+> > Thanks.
+>
+> Sure. I'll re-construct the test case may the end of this week because I'=
+m attending a conference SOSP this week.
 
-David / dhildenb
+Sounds good, thanks.
 
+>
+> >
+> >>
+> >> Signed-off-by: Tao Lyu <tao.lyu@epfl.ch>
+> >> ---
+> >>  kernel/bpf/verifier.c                         |  58 +++++-
+> >>  tools/testing/selftests/bpf/Makefile          |   6 +-
+> >>  tools/testing/selftests/bpf/test_precise.c    | 186 +++++++++++++++++=
++
+> >>  .../selftests/bpf/verifier/atomic_precision.c |  19 ++
+> >>  4 files changed, 263 insertions(+), 6 deletions(-)
+> >>  create mode 100644 tools/testing/selftests/bpf/test_precise.c
+> >>  create mode 100644 tools/testing/selftests/bpf/verifier/atomic_precis=
+ion.c
+> >>
+> >
+> >[...]
