@@ -2,105 +2,114 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8E1F7D45E7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Oct 2023 05:26:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2C427D4604
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Oct 2023 05:34:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232011AbjJXD0N (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 23 Oct 2023 23:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37474 "EHLO
+        id S232070AbjJXDeg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 23 Oct 2023 23:34:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbjJXD0L (ORCPT
+        with ESMTP id S232011AbjJXDef (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 23 Oct 2023 23:26:11 -0400
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 447D183;
-        Mon, 23 Oct 2023 20:26:09 -0700 (PDT)
-Received: by mail-qk1-x731.google.com with SMTP id af79cd13be357-77891c236fcso311438285a.3;
-        Mon, 23 Oct 2023 20:26:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698117968; x=1698722768; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5owIIMWHjveV3iNUQ2MkLe82JwsUOoqZbf2HycPTaSY=;
-        b=YPPLaUHfbzGt5SFjkw2ZCi59ja2dWTp0HegmhLNtlCysXHNSFmqaZ1emb3Rqx9Jve9
-         TYUvkfQkKddOEn4UcVf5Puf5ocRAKjASGxKOpy2b9KWocq7/gT9/9fdnB64Z6yGAWr/c
-         udz4j8y//jxAykzDvcq3Par/W8ihNnpi6AJd9jwGmb2hJf700WBgUtfBnpDNBI0O94ip
-         RDFhxui824SsF5Lmd2WfHyAdLzRKv62hsPupZB7UdRgNdaBI7rd1u64bVJWG2FDSmXlQ
-         S2FNDwhZNQuhJXesIuP0f2rlyvSjElu/87MLMe+HbLy/yO8zsgpeAoCc34hp1CZiV2Tt
-         BKaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698117968; x=1698722768;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5owIIMWHjveV3iNUQ2MkLe82JwsUOoqZbf2HycPTaSY=;
-        b=Nkask539xEFMz/h2HAUJkHcE7xweiMWr5e2DVSDGthGf8QFrIuW6a/YgMM8FqCrFMs
-         9XuuXVTcQ1PYF85GZFqu5PPVIYwyAh3b5j5UkcQe1v6OOslKnreILnGQWnjBa3TsZxsk
-         T9bph+B4+3Sp5AqhKEvEOi9NC+ab1ZV+PskwPRTPJu/ISTI7m1roZbRiNcrpHGdEgQ0S
-         w5/UL2omHfbXWjXUjO3QP7DFhtnnAGNTe0TWimmrAIVFiGGUSHbwqpfmguBVprPYk6mE
-         GJ6Erdqc+snXmfPbCcsCMEgK/A0aZ6SmRCS5kVevr8JSJd/u2xdIJyuzEUZV4KORPBV9
-         aHmw==
-X-Gm-Message-State: AOJu0Yzk4YeFse0QHFc82hBr72jnomDp0865jf1YBomj5DLfYwe1WDz5
-        7JS4EKMIk5XphpLvKC8oMVZw7QvvX/Y=
-X-Google-Smtp-Source: AGHT+IHAqHRftchKIIm+zyE5nIYAlvq5MPiTMBcP8i5hwCmJXUwc8mYNL/w2F6CO4hJEhTWStLucIw==
-X-Received: by 2002:a05:620a:388f:b0:778:96ec:661 with SMTP id qp15-20020a05620a388f00b0077896ec0661mr10769454qkn.73.1698117968265;
-        Mon, 23 Oct 2023 20:26:08 -0700 (PDT)
-Received: from localhost ([205.220.129.17])
-        by smtp.gmail.com with ESMTPSA id i5-20020a05620a074500b0077434d0f06esm1534578qki.52.2023.10.23.20.26.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Oct 2023 20:26:07 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 23 Oct 2023 17:25:57 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH-cgroup 3/4] cgroup/cpuset: Keep track of CPUs in isolated
- partitions
-Message-ID: <ZTc5RXWemIhfrAlS@mtj.duckdns.org>
-References: <20231013181122.3518610-1-longman@redhat.com>
- <20231013181122.3518610-4-longman@redhat.com>
- <ZS-kt6X5Dd1lktAw@slm.duckdns.org>
- <9e2772e3-f615-5e80-6922-5a2dd06a8b07@redhat.com>
- <ZTAfM0msp8Cg-qLy@slm.duckdns.org>
- <59448803-ac86-0762-d828-c3eba431ceb4@redhat.com>
+        Mon, 23 Oct 2023 23:34:35 -0400
+X-Greylist: delayed 358 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 23 Oct 2023 20:34:32 PDT
+Received: from out-191.mta1.migadu.com (out-191.mta1.migadu.com [IPv6:2001:41d0:203:375::bf])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5145B7
+        for <linux-kselftest@vger.kernel.org>; Mon, 23 Oct 2023 20:34:32 -0700 (PDT)
+Message-ID: <0a142924-633c-44e6-9a92-2dc019656bf2@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1698118109;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=fvextBqAqP7MtW5YqhYrMlGtzS9D2lHRuhU2o1fRKMM=;
+        b=xeCU9FUK0o+eESj+4RG20o15X/2aPBvnjwYW+dJh5lq5NhFZeiZX/B7EXUX9tX6e2MYDlz
+        2Wr1jQb2OwypvCulURHq/N3Oq+tozXh+mZQE7LRtbsZZLiQeGCf4fwqXuNpHaZyit9rnqg
+        +HNw9g5QsgDx1bFyL27fkN1BU2isqhA=
+Date:   Mon, 23 Oct 2023 20:28:21 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <59448803-ac86-0762-d828-c3eba431ceb4@redhat.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Subject: Re: [PATCH] selftests: bpf: add malloc failures checks in bpf_iter
+Content-Language: en-GB
+To:     Yuran Pereira <yuran.pereira@hotmail.com>, shuah@kernel.org
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, mykolal@fb.com, brauner@kernel.org,
+        iii@linux.ibm.com, kuifeng@meta.com, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <DB3PR10MB683506E8DCCB073A2B75BB10E8DFA@DB3PR10MB6835.EURPRD10.PROD.OUTLOOK.COM>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <DB3PR10MB683506E8DCCB073A2B75BB10E8DFA@DB3PR10MB6835.EURPRD10.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello, Waiman.
 
-On Wed, Oct 18, 2023 at 02:24:00PM -0400, Waiman Long wrote:
-> If you mean saving the exclusion cpumask no matter who the caller is, we can
-> add another exclusion cpumask to save it and expose it to sysfs. This should
-> be done in the first workqueue patch, not as part of this patch. I expose
-> this isolated cpumask for testing purpose to be checked by the
-> test_cpuset_prs.sh script for correctness. As said, I can expose it without
-> cgroup_debug if you think the information is useful in general.
+On 10/23/23 7:59 PM, Yuran Pereira wrote:
+> Since some malloc calls in bpf_iter may at times fail,
+> this patch adds the appropriate fail checks, and ensures that
+> any previously allocated resource is appropriately destroyed
+> before returning the function.
+>
+> Signed-off-by: Yuran Pereira <yuran.pereira@hotmail.com>
+> ---
+>   tools/testing/selftests/bpf/prog_tests/bpf_iter.c | 10 ++++++++++
+>   1 file changed, 10 insertions(+)
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+> index 1f02168103dd..6d47ea9211a4 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+> @@ -878,6 +878,11 @@ static void test_bpf_percpu_hash_map(void)
+>   
+>   	skel->rodata->num_cpus = bpf_num_possible_cpus();
+>   	val = malloc(8 * bpf_num_possible_cpus());
+> +	if (CHECK(!val, "malloc", "memory allocation failed: %s",
+> +				strerror(errno))) {
+> +		bpf_iter_bpf_percpu_hash_map__destroy(skel);
+> +		return;
+> +	}
 
-I don't really care where the cpumask is in the source tree. I just want all
-the workqueue cpumasks presented to the userspace in a single place. Also, I
-think it makes sense to publish it to userspace in an easily accessible
-manner as what the eventual configuration ends up being can be confusing and
-the effect it has on the system subtle.
 
-Thanks.
+Could you use !ASSERT_OK_PTR(...) instead of CHECK? bpf selftest
+prefers to use ASSERT_* series of macros instead of CHECK.
+In the above example, printing out strerror is not required,
+see some other examples in the same folder.
 
--- 
-tejun
+Also bpf_iter.c has some other usages of CHECK macro.
+Since you are touching this file, could you convert all
+CHECK macros to ASSERT_* macros?
+
+Basically you need two patches:
+   patch 1: convert existing CHECK macros to ASSERT_* macros in bpf_iter.c.
+            this should not check any functionality except error messages.
+   patch 2: your patch with ASSERT_* macros.
+
+You can use the following as your subject line:
+   [PATCH bpf-next] selftests/bpf: Add malloc failure checks in bpf_iter
+
+>   
+>   	err = bpf_iter_bpf_percpu_hash_map__load(skel);
+>   	if (!ASSERT_OK_PTR(skel, "bpf_iter_bpf_percpu_hash_map__load"))
+> @@ -1057,6 +1062,11 @@ static void test_bpf_percpu_array_map(void)
+>   
+>   	skel->rodata->num_cpus = bpf_num_possible_cpus();
+>   	val = malloc(8 * bpf_num_possible_cpus());
+> +	if (CHECK(!val, "malloc", "memory allocation failed: %s",
+> +				strerror(errno))) {
+> +		bpf_iter_bpf_percpu_hash_map__destroy(skel);
+> +		return;
+> +	}
+>   
+>   	err = bpf_iter_bpf_percpu_array_map__load(skel);
+>   	if (!ASSERT_OK_PTR(skel, "bpf_iter_bpf_percpu_array_map__load"))
