@@ -2,43 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F83B7D4C46
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Oct 2023 11:29:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ED8C7D4C4B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Oct 2023 11:29:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234193AbjJXJ3g (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 24 Oct 2023 05:29:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51530 "EHLO
+        id S234323AbjJXJ3p (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 24 Oct 2023 05:29:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234237AbjJXJ3R (ORCPT
+        with ESMTP id S234327AbjJXJ31 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 Oct 2023 05:29:17 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E8F01712;
-        Tue, 24 Oct 2023 02:28:37 -0700 (PDT)
+        Tue, 24 Oct 2023 05:29:27 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FFE12127;
+        Tue, 24 Oct 2023 02:28:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698139718; x=1729675718;
+  t=1698139726; x=1729675726;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=mFZKHeamlLZ+ycNh2qTCIXTUBPT6HqNoVKwHnY1lXRs=;
-  b=gkd7rTTjEWHFcjw3PQX9QHOR96ApYFhZfM/48N+xOXLiHn73RFRl5RkH
-   rk8xxg46uPqZBp+YDWqTPGmOyChal6ptypxcLIbbCb0voIENOiGCsQOm6
-   uA6FPdTtolC428z8R9XsANL+aR8BiKWzSp5cLVK5dHGTON50nA7kxVyyh
-   pLnNxOEj9r5aQ5YNOcOvLn2af236un9f1DgvLldlhsWD4XHqdReAhI9c5
-   /Ez8AoBknJXY8hexvcqlBEF32HBALQ7bfYh6zWuk2J5LOtYAscJ4Q9UAI
-   6x6cGBIh+nkdGPmEBY8ltxVUm4bkfogauEuhpweZ2ATOBFQ36STRgRsYu
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="386829582"
+  bh=oOoE9qnQgl0vvUYTiHnIQ0tgq/pyCy/rUFRqG5gIceQ=;
+  b=RGv06/RbvmSrMuXdBq0Ei1EYmiA0Tm1ZM2eMGbaHBRDS5HihlUia4FJU
+   y3lvQTHXl3AwrZtGe16+HWBh3eswrN0+5qoOpFe+LXdxEwCN4RxM5PYU/
+   +DWZfD4GaEqiNDKZx1kyGHnP3d5frq6hXNnmxSu5CL5xESwDx7p/Vv2vy
+   wzVajT7YOpjUTXHvLmhugDZk7I5VqMkBbus9ilXJcAAsRdEdcfcbpAPNj
+   i4v1KTszbiEJHCNSky9UM0Nc1m6suakuW0k8Fw88Uvp3Ydw6obXd5P2I0
+   /+HNLmtLjRs2ceUkIHENTDTyuZBE/L+Kd9J3cNOoUl6C5oEmISBSNfZm1
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="384218894"
 X-IronPort-AV: E=Sophos;i="6.03,247,1694761200"; 
-   d="scan'208";a="386829582"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 02:28:37 -0700
+   d="scan'208";a="384218894"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 02:28:46 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="828754688"
 X-IronPort-AV: E=Sophos;i="6.03,247,1694761200"; 
-   d="scan'208";a="828754688"
+   d="scan'208";a="6397763"
 Received: from hprosing-mobl.ger.corp.intel.com (HELO localhost) ([10.249.40.219])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 02:28:34 -0700
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 02:28:36 -0700
 From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     linux-kselftest@vger.kernel.org,
         Reinette Chatre <reinette.chatre@intel.com>,
@@ -49,9 +48,9 @@ To:     linux-kselftest@vger.kernel.org,
         Fenghua Yu <fenghua.yu@intel.com>
 Cc:     linux-kernel@vger.kernel.org,
         =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 13/24] selftests/resctrl: Convert perf related globals to locals
-Date:   Tue, 24 Oct 2023 12:26:23 +0300
-Message-Id: <20231024092634.7122-14-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 14/24] selftests/resctrl: Move cat_val() to cat_test.c and rename to cat_test()
+Date:   Tue, 24 Oct 2023 12:26:24 +0300
+Message-Id: <20231024092634.7122-15-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20231024092634.7122-1-ilpo.jarvinen@linux.intel.com>
 References: <20231024092634.7122-1-ilpo.jarvinen@linux.intel.com>
@@ -67,166 +66,276 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Perf related variables pea_llc_miss, pe_read, and pe_fd are globals in
-cache.c.
+The main CAT test function is called cat_val() and resides in cache.c
+which is illogical.
 
-Convert them to locals for better scoping and make pea_llc_miss simpler
-by renaming it to pea. Make close(pe_fd) handling easier to understand
-by doing it inside cat_val().
-
-Make also sizeof()s use safer way determine the right struct.
+Rename the function to cat_test() and move it into cat_test.c.
 
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- tools/testing/selftests/resctrl/cache.c | 69 ++++++++++++++-----------
- 1 file changed, 38 insertions(+), 31 deletions(-)
+ tools/testing/selftests/resctrl/cache.c    | 90 ++--------------------
+ tools/testing/selftests/resctrl/cat_test.c | 73 +++++++++++++++++-
+ tools/testing/selftests/resctrl/resctrl.h  | 14 +++-
+ 3 files changed, 90 insertions(+), 87 deletions(-)
 
 diff --git a/tools/testing/selftests/resctrl/cache.c b/tools/testing/selftests/resctrl/cache.c
-index a84679a4ac0c..a65e2e35c33c 100644
+index a65e2e35c33c..c4cb3cb8c2c9 100644
 --- a/tools/testing/selftests/resctrl/cache.c
 +++ b/tools/testing/selftests/resctrl/cache.c
-@@ -10,36 +10,35 @@ struct perf_event_read {
- 	} values[2];
- };
+@@ -3,16 +3,9 @@
+ #include <stdint.h>
+ #include "resctrl.h"
  
--static struct perf_event_attr pea_llc_miss;
--static struct perf_event_read pe_read;
--static int pe_fd;
+-struct perf_event_read {
+-	__u64 nr;			/* The number of events */
+-	struct {
+-		__u64 value;		/* The value of the event */
+-	} values[2];
+-};
+-
  char llc_occup_path[1024];
  
--static void perf_event_attr_initialize(__u64 config)
-+static void perf_event_attr_initialize(struct perf_event_attr *pea, __u64 config)
+-static void perf_event_attr_initialize(struct perf_event_attr *pea, __u64 config)
++void perf_event_attr_initialize(struct perf_event_attr *pea, __u64 config)
  {
--	memset(&pea_llc_miss, 0, sizeof(struct perf_event_attr));
--	pea_llc_miss.type = PERF_TYPE_HARDWARE;
--	pea_llc_miss.size = sizeof(struct perf_event_attr);
--	pea_llc_miss.read_format = PERF_FORMAT_GROUP;
--	pea_llc_miss.exclude_kernel = 1;
--	pea_llc_miss.exclude_hv = 1;
--	pea_llc_miss.exclude_idle = 1;
--	pea_llc_miss.exclude_callchain_kernel = 1;
--	pea_llc_miss.inherit = 1;
--	pea_llc_miss.exclude_guest = 1;
--	pea_llc_miss.disabled = 1;
--	pea_llc_miss.config = config;
-+	memset(pea, 0, sizeof(*pea));
-+	pea->type = PERF_TYPE_HARDWARE;
-+	pea->size = sizeof(struct perf_event_attr);
-+	pea->read_format = PERF_FORMAT_GROUP;
-+	pea->exclude_kernel = 1;
-+	pea->exclude_hv = 1;
-+	pea->exclude_idle = 1;
-+	pea->exclude_callchain_kernel = 1;
-+	pea->inherit = 1;
-+	pea->exclude_guest = 1;
-+	pea->disabled = 1;
-+	pea->config = config;
+ 	memset(pea, 0, sizeof(*pea));
+ 	pea->type = PERF_TYPE_HARDWARE;
+@@ -28,13 +21,13 @@ static void perf_event_attr_initialize(struct perf_event_attr *pea, __u64 config
+ 	pea->config = config;
  }
  
--static void perf_event_initialize_read_format(void)
-+static void perf_event_initialize_read_format(struct perf_event_read *pe_read)
+-static void perf_event_initialize_read_format(struct perf_event_read *pe_read)
++void perf_event_initialize_read_format(struct perf_event_read *pe_read)
  {
--	memset(&pe_read, 0, sizeof(struct perf_event_read));
--	pe_read.nr = 1;
-+	memset(pe_read, 0, sizeof(*pe_read));
-+	pe_read->nr = 1;
+ 	memset(pe_read, 0, sizeof(*pe_read));
+ 	pe_read->nr = 1;
  }
  
--static int perf_event_reset_enable(pid_t pid, int cpu_no)
-+static int perf_event_reset_enable(struct perf_event_attr *pea, pid_t pid, int cpu_no)
+-static int perf_event_reset_enable(struct perf_event_attr *pea, pid_t pid, int cpu_no)
++int perf_event_reset_enable(struct perf_event_attr *pea, pid_t pid, int cpu_no)
  {
--	pe_fd = perf_event_open(&pea_llc_miss, pid, cpu_no, -1, PERF_FLAG_FD_CLOEXEC);
-+	int pe_fd;
-+
-+	pe_fd = perf_event_open(pea, pid, cpu_no, -1, PERF_FLAG_FD_CLOEXEC);
- 	if (pe_fd == -1) {
- 		perror("Error opening leader");
- 		ctrlc_handler(0, NULL, NULL);
-@@ -50,7 +49,7 @@ static int perf_event_reset_enable(pid_t pid, int cpu_no)
- 	ioctl(pe_fd, PERF_EVENT_IOC_RESET, 0);
- 	ioctl(pe_fd, PERF_EVENT_IOC_ENABLE, 0);
+ 	int pe_fd;
  
--	return 0;
-+	return pe_fd;
- }
- 
- /*
-@@ -124,21 +123,21 @@ static int print_results_cache(char *filename, int bm_pid, __u64 llc_value)
+@@ -123,8 +116,8 @@ static int print_results_cache(char *filename, int bm_pid, __u64 llc_value)
   *
   * Return: =0 on success.  <0 on failure.
   */
--static int perf_event_measure(struct resctrl_val_param *param, int bm_pid)
-+static int perf_event_measure(int pe_fd, struct perf_event_read *pe_read,
-+			      struct resctrl_val_param *param, int bm_pid)
+-static int perf_event_measure(int pe_fd, struct perf_event_read *pe_read,
+-			      struct resctrl_val_param *param, int bm_pid)
++int perf_event_measure(int pe_fd, struct perf_event_read *pe_read,
++		       struct resctrl_val_param *param, int bm_pid)
  {
  	int ret;
  
- 	/* Stop counters after one span to get miss rate */
- 	ioctl(pe_fd, PERF_EVENT_IOC_DISABLE, 0);
- 
--	ret = read(pe_fd, &pe_read, sizeof(struct perf_event_read));
--	close(pe_fd);
-+	ret = read(pe_fd, pe_read, sizeof(*pe_read));
- 	if (ret == -1) {
- 		perror("Could not get perf value");
- 		return -1;
- 	}
- 
--	return print_results_cache(param->filename, bm_pid, pe_read.values[0].value);
-+	return print_results_cache(param->filename, bm_pid, pe_read->values[0].value);
+@@ -156,79 +149,6 @@ int measure_llc_resctrl(struct resctrl_val_param *param, int bm_pid)
+ 	return ret;
  }
  
- int measure_llc_resctrl(struct resctrl_val_param *param, int bm_pid)
-@@ -169,7 +168,10 @@ int cat_val(struct resctrl_val_param *param, size_t span)
- {
- 	int memflush = 1, operation = 0, ret = 0;
- 	char *resctrl_val = param->resctrl_val;
+-/*
+- * cache_val:		execute benchmark and measure LLC occupancy resctrl
+- * and perf cache miss for the benchmark
+- * @param:		parameters passed to cache_val()
+- * @span:		buffer size for the benchmark
+- *
+- * Return:		0 on success. non-zero on failure.
+- */
+-int cat_val(struct resctrl_val_param *param, size_t span)
+-{
+-	int memflush = 1, operation = 0, ret = 0;
+-	char *resctrl_val = param->resctrl_val;
+-	static struct perf_event_read pe_read;
+-	struct perf_event_attr pea;
+-	pid_t bm_pid;
+-	int pe_fd;
+-
+-	if (strcmp(param->filename, "") == 0)
+-		sprintf(param->filename, "stdio");
+-
+-	bm_pid = getpid();
+-
+-	/* Taskset benchmark to specified cpu */
+-	ret = taskset_benchmark(bm_pid, param->cpu_no);
+-	if (ret)
+-		return ret;
+-
+-	/* Write benchmark to specified con_mon grp, mon_grp in resctrl FS*/
+-	ret = write_bm_pid_to_resctrl(bm_pid, param->ctrlgrp, param->mongrp,
+-				      resctrl_val);
+-	if (ret)
+-		return ret;
+-
+-	perf_event_attr_initialize(&pea, PERF_COUNT_HW_CACHE_MISSES);
+-	perf_event_initialize_read_format(&pe_read);
+-
+-	/* Test runs until the callback setup() tells the test to stop. */
+-	while (1) {
+-		ret = param->setup(param);
+-		if (ret == END_OF_TESTS) {
+-			ret = 0;
+-			break;
+-		}
+-		if (ret < 0)
+-			break;
+-
+-		pe_fd = perf_event_reset_enable(&pea, bm_pid, param->cpu_no);
+-		if (pe_fd < 0) {
+-			ret = -1;
+-			break;
+-		}
+-
+-		if (run_fill_buf(span, memflush, operation, true)) {
+-			fprintf(stderr, "Error-running fill buffer\n");
+-			ret = -1;
+-			goto pe_close;
+-		}
+-
+-		sleep(1);
+-		ret = perf_event_measure(pe_fd, &pe_read, param, bm_pid);
+-		if (ret)
+-			goto pe_close;
+-
+-		close(pe_fd);
+-	}
+-
+-	return ret;
+-
+-pe_close:
+-	close(pe_fd);
+-	return ret;
+-}
+-
+ /*
+  * show_cache_info:	show generic cache test information
+  * @no_of_bits:		number of bits
+diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
+index 2106cc3601d9..e71690a9bbb3 100644
+--- a/tools/testing/selftests/resctrl/cat_test.c
++++ b/tools/testing/selftests/resctrl/cat_test.c
+@@ -111,6 +111,77 @@ void cat_test_cleanup(void)
+ 	remove(RESULT_FILE_NAME2);
+ }
+ 
++/*
++ * cat_test:	execute CAT benchmark and measure LLC cache misses
++ * @param:	parameters passed to cat_test()
++ * @span:	buffer size for the benchmark
++ *
++ * Return:	0 on success. non-zero on failure.
++ */
++static int cat_test(struct resctrl_val_param *param, size_t span)
++{
++	int memflush = 1, operation = 0, ret = 0;
++	char *resctrl_val = param->resctrl_val;
 +	static struct perf_event_read pe_read;
 +	struct perf_event_attr pea;
- 	pid_t bm_pid;
++	pid_t bm_pid;
 +	int pe_fd;
- 
- 	if (strcmp(param->filename, "") == 0)
- 		sprintf(param->filename, "stdio");
-@@ -187,8 +189,8 @@ int cat_val(struct resctrl_val_param *param, size_t span)
- 	if (ret)
- 		return ret;
- 
--	perf_event_attr_initialize(PERF_COUNT_HW_CACHE_MISSES);
--	perf_event_initialize_read_format();
++
++	if (strcmp(param->filename, "") == 0)
++		sprintf(param->filename, "stdio");
++
++	bm_pid = getpid();
++
++	/* Taskset benchmark to specified cpu */
++	ret = taskset_benchmark(bm_pid, param->cpu_no);
++	if (ret)
++		return ret;
++
++	/* Write benchmark to specified con_mon grp, mon_grp in resctrl FS*/
++	ret = write_bm_pid_to_resctrl(bm_pid, param->ctrlgrp, param->mongrp,
++				      resctrl_val);
++	if (ret)
++		return ret;
++
 +	perf_event_attr_initialize(&pea, PERF_COUNT_HW_CACHE_MISSES);
 +	perf_event_initialize_read_format(&pe_read);
- 
- 	/* Test runs until the callback setup() tells the test to stop. */
- 	while (1) {
-@@ -199,9 +201,12 @@ int cat_val(struct resctrl_val_param *param, size_t span)
- 		}
- 		if (ret < 0)
- 			break;
--		ret = perf_event_reset_enable(bm_pid, param->cpu_no);
--		if (ret)
 +
++	/* Test runs until the callback setup() tells the test to stop. */
++	while (1) {
++		ret = param->setup(param);
++		if (ret == END_OF_TESTS) {
++			ret = 0;
++			break;
++		}
++		if (ret < 0)
++			break;
 +		pe_fd = perf_event_reset_enable(&pea, bm_pid, param->cpu_no);
 +		if (pe_fd < 0) {
 +			ret = -1;
- 			break;
++			break;
 +		}
- 
- 		if (run_fill_buf(span, memflush, operation, true)) {
- 			fprintf(stderr, "Error-running fill buffer\n");
-@@ -210,9 +215,11 @@ int cat_val(struct resctrl_val_param *param, size_t span)
- 		}
- 
- 		sleep(1);
--		ret = perf_event_measure(param, bm_pid);
++
++		if (run_fill_buf(span, memflush, operation, true)) {
++			fprintf(stderr, "Error-running fill buffer\n");
++			ret = -1;
++			goto pe_close;
++		}
++
++		sleep(1);
 +		ret = perf_event_measure(pe_fd, &pe_read, param, bm_pid);
- 		if (ret)
- 			goto pe_close;
++		if (ret)
++			goto pe_close;
 +
 +		close(pe_fd);
- 	}
++	}
++
++	return ret;
++
++pe_close:
++	close(pe_fd);
++	return ret;
++}
++
+ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
+ {
+ 	unsigned long l_mask, l_mask_1;
+@@ -196,7 +267,7 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
  
- 	return ret;
+ 	remove(param.filename);
+ 
+-	ret = cat_val(&param, span);
++	ret = cat_test(&param, span);
+ 	if (ret == 0)
+ 		ret = check_results(&param, span);
+ 
+diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
+index 033c49784581..ee3cee74a69c 100644
+--- a/tools/testing/selftests/resctrl/resctrl.h
++++ b/tools/testing/selftests/resctrl/resctrl.h
+@@ -67,6 +67,13 @@ struct resctrl_val_param {
+ 	int		(*setup)(struct resctrl_val_param *param);
+ };
+ 
++struct perf_event_read {
++	__u64 nr;			/* The number of events */
++	struct {
++		__u64 value;		/* The value of the event */
++	} values[2];
++};
++
+ #define MBM_STR			"mbm"
+ #define MBA_STR			"mba"
+ #define CMT_STR			"cmt"
+@@ -107,13 +114,18 @@ int get_cache_size(int cpu_no, const char *cache_type, unsigned long *cache_size
+ void ctrlc_handler(int signum, siginfo_t *info, void *ptr);
+ int signal_handler_register(void);
+ void signal_handler_unregister(void);
+-int cat_val(struct resctrl_val_param *param, size_t span);
+ void cat_test_cleanup(void);
+ int cat_perf_miss_val(int cpu_no, int no_of_bits, char *cache_type);
+ int cmt_resctrl_val(int cpu_no, int n, const char * const *benchmark_cmd);
+ unsigned int count_bits(unsigned long n);
+ void cmt_test_cleanup(void);
+ int get_core_sibling(int cpu_no);
++
++void perf_event_attr_initialize(struct perf_event_attr *pea, __u64 config);
++void perf_event_initialize_read_format(struct perf_event_read *pe_read);
++int perf_event_reset_enable(struct perf_event_attr *pea, pid_t pid, int cpu_no);
++int perf_event_measure(int pe_fd, struct perf_event_read *pe_read,
++		       struct resctrl_val_param *param, int bm_pid);
+ int measure_llc_resctrl(struct resctrl_val_param *param, int bm_pid);
+ void show_cache_info(int no_of_bits, __u64 avg_llc_val, size_t cache_span, bool lines);
+ 
 -- 
 2.30.2
 
