@@ -2,70 +2,72 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCC327D5BB5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Oct 2023 21:41:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 76F607D5C69
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Oct 2023 22:33:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234912AbjJXTlv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 24 Oct 2023 15:41:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48512 "EHLO
+        id S1343881AbjJXUdH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 24 Oct 2023 16:33:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234821AbjJXTlu (ORCPT
+        with ESMTP id S234576AbjJXUdG (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 Oct 2023 15:41:50 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2A4010A
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Oct 2023 12:41:47 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-53f98cbcd76so2a12.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 24 Oct 2023 12:41:47 -0700 (PDT)
+        Tue, 24 Oct 2023 16:33:06 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A344FE8;
+        Tue, 24 Oct 2023 13:33:04 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1cacde97002so29295885ad.2;
+        Tue, 24 Oct 2023 13:33:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1698176506; x=1698781306; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hRzA/IZOuzI29NSKstVbB17mcLz9Ekp9gOm2EMMOm3k=;
-        b=E9buZADaRmBQT4R8hKA+IEcvGechukfOoe4iepswqI/ZoVWwnc0G9OGupgJoI9gjuY
-         fdtdkzSLh4l2lzd/tdz8l/xYRxnmwsrhEzy0Ay6Amn1so5JgRUw726UpAQ2oopvDIiLc
-         HsB1UnCMFdzNdZa6OmQvk9gOBRtNpSVNR/go9YA0IvdPhT5Kj9SlowPzYjIgNU/Bqfh/
-         gqbWFW2sIPqvSUbCjZgMlrAJRi6/z+9KF2bSu/yiR4D6SjO4N8365qqQ8NVvz2g7fh0S
-         b9QMbLDQ+NrWEh3zmJWrGt0dKpvCIrVvQ9/3FtXZ+X1mKsQE0oyDjbABNuSiCqto4FQM
-         6A2w==
+        d=gmail.com; s=20230601; t=1698179584; x=1698784384; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Cxd8yIiWNp4SN7aWyP2DJ3W2qpks9IKgGTIB0vbrgeM=;
+        b=QSmwtJ/TnaWCy2x/1vrRGRv3cNL6OfMROTM3LJE5UppBSDaXynWgxPV4XOLgZYhHhS
+         4mzUYsQvehxlRBiLhapb6/qfOWo/fDCt7xW3cfIgpmZqGVN4jZcrAYYDVCkmtc6/0cVF
+         oI5kF8zh1D/YpOyt8hPmGKHvCuWNp911E27z8oDb8ghLq8IHNvgO62nNquSY79IYcucn
+         TlzusmvAoPkA8LNAopK/KrdhZ/XzwVF9fd7ydcjonBLfnstG737nq4azxLCf1By2HLnC
+         Ey74SkjM2C/mgfpM43Lu3WcFu5JOX2/AemC2NfEheILg6EJEaIY4oGrnqgxstPy1UpmW
+         7XlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698176506; x=1698781306;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hRzA/IZOuzI29NSKstVbB17mcLz9Ekp9gOm2EMMOm3k=;
-        b=knyPic74u4QyDe/cbcsazuv2qec+AQVp7d4hzqj0X3dYFKGOXuMS5kS/Lspiv6NQQK
-         RQVWZArtWJS5SP47E66AeSeQW40lun4j3nW4ZgkbTW6KAQOEIOszkLmOOjTHjBtayJS/
-         ADlQ3FphviVIl48Q6g/uwIGUlHj2CL8Oka9Ct7WY/mz/J7+ODUHC8saTmhenqyamfAUE
-         isVyoIb+bK639AnV1myRmw0PsPtdMiemHmQ03/VEn+zgr88fhJOHpJ9tfCPb/yaVEHhq
-         3IKSEPCgmzpn//vGNKCq3OtMVLBhgW7piTNBfcXI5v2nSUHKWAdZYot4Z0STWIxJwj5X
-         Q51Q==
-X-Gm-Message-State: AOJu0YyYF/g6udaRM9QVwcIxITB7iR7IorJtAVf9qlooI6nCzZjMeItD
-        dEsXYuCrHIidAffgPhtP5WM4qksT07khuAIOwgSG+A==
-X-Google-Smtp-Source: AGHT+IEPIU+kYIVhHwrvwUjZxXuZlwCFBoZ6R3V9YsifmVQOw/OC9L8FQJw/1zkBycfz+i9X5qIFfw4rvRWE5EMm9TQ=
-X-Received: by 2002:a05:600c:4746:b0:408:3e63:f457 with SMTP id
- w6-20020a05600c474600b004083e63f457mr3058wmo.2.1698176505660; Tue, 24 Oct
- 2023 12:41:45 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1698179584; x=1698784384;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Cxd8yIiWNp4SN7aWyP2DJ3W2qpks9IKgGTIB0vbrgeM=;
+        b=BN1vWc8xlnNjwXQzmbQyVmKR6y5fG8PjFQ1/TrdmFmXq2vCGedND/oCaMFBRRwMjKJ
+         OtHOnXi+GJTX4AHMHY71jFZrkBbR0i+J26UiwCu9ygWtCDZmQRnHOTAF8Ue7TklyeEAS
+         Iu4uO2FotGrL9u+FJXC/TCN9AE0YiT6rDBvPCBzOe6vi/eFAGDKR8Sv7fpMqfW9fbHQb
+         nlgZTPfQW8sHek/5np7y5S1B4h1DiSsqvvPHibHbj3G9/B9v1j0ShjQCFq27vKWMaBt+
+         9GicMjqi/K2BohtXTgqeRg9r9Dz0RU4+QjTDiWUXsLEV34Dd0ZCxohM7cN04CMwVoDjM
+         Jhgg==
+X-Gm-Message-State: AOJu0YyZdkfzfcKMxNHNph7DSyeFs5SnYnV2t4LBLoSfg4jFF2UxwCbt
+        ZJRTAoAq0cfqCmxHBTTyB9M=
+X-Google-Smtp-Source: AGHT+IEztSTrjikFmnkLIpiilubvgm2U1b8XxGpaC5cbdcAdlNaHKoR1ds3ApUoqcuA1b/ZOqMDgaQ==
+X-Received: by 2002:a17:902:e3c1:b0:1ca:2c3b:7747 with SMTP id r1-20020a170902e3c100b001ca2c3b7747mr9349501ple.20.1698179583985;
+        Tue, 24 Oct 2023 13:33:03 -0700 (PDT)
+Received: from localhost (fwdproxy-prn-004.fbsv.net. [2a03:2880:ff:4::face:b00c])
+        by smtp.gmail.com with ESMTPSA id i17-20020a17090332d100b001c32fd9e412sm7776395plr.58.2023.10.24.13.33.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Oct 2023 13:33:03 -0700 (PDT)
+From:   Nhat Pham <nphamcs@gmail.com>
+To:     akpm@linux-foundation.org
+Cc:     hannes@cmpxchg.org, cerasuolodomenico@gmail.com,
+        yosryahmed@google.com, sjenning@redhat.com, ddstreet@ieee.org,
+        vitaly.wool@konsulko.com, mhocko@kernel.org,
+        roman.gushchin@linux.dev, shakeelb@google.com,
+        muchun.song@linux.dev, chrisl@kernel.org, linux-mm@kvack.org,
+        kernel-team@meta.com, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, shuah@kernel.org
+Subject: [PATCH v4 0/5] workload-specific and memory pressure-driven zswap writeback
+Date:   Tue, 24 Oct 2023 13:32:57 -0700
+Message-Id: <20231024203302.1920362-1-nphamcs@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230920084903.1522728-1-mripard@kernel.org>
-In-Reply-To: <20230920084903.1522728-1-mripard@kernel.org>
-From:   Rae Moar <rmoar@google.com>
-Date:   Tue, 24 Oct 2023 15:41:33 -0400
-Message-ID: <CA+GJov6YQ2YcfqudffKzAKmcwbgCvuXpd8HzKnwSuytF-ozvww@mail.gmail.com>
-Subject: Re: [PATCH v2] kunit: Warn if tests are slow
-To:     Maxime Ripard <mripard@kernel.org>
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,130 +75,106 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Sep 20, 2023 at 4:49=E2=80=AFAM Maxime Ripard <mripard@kernel.org> =
-wrote:
->
-> Kunit recently gained support to setup attributes, the first one being
-> the speed of a given test, then allowing to filter out slow tests.
->
-> A slow test is defined in the documentation as taking more than one
-> second. There's an another speed attribute called "super slow" but whose
-> definition is less clear.
->
-> Add support to the test runner to check the test execution time, and
-> report tests that should be marked as slow but aren't.
->
-> Signed-off-by: Maxime Ripard <mripard@kernel.org>
->
+Changelog:
+v4:
+   * Rename list_lru_add to list_lru_add_obj and __list_lru_add to
+     list_lru_add (patch 1) (suggested by Johannes Weiner and
+	 Yosry Ahmed)
+   * Some cleanups on the memcg aware LRU patch (patch 2)
+     (suggested by Yosry Ahmed)
+   * Use event interface for the new per-cgroup writeback counters.
+     (patch 3) (suggested by Yosry Ahmed)
+   * Abstract zswap's lruvec states and handling into 
+     zswap_lruvec_state (patch 5) (suggested by Yosry Ahmed)
+v3:
+   * Add a patch to export per-cgroup zswap writeback counters
+   * Add a patch to update zswap's kselftest
+   * Separate the new list_lru functions into its own prep patch
+   * Do not start from the top of the hierarchy when encounter a memcg
+     that is not online for the global limit zswap writeback (patch 2)
+     (suggested by Yosry Ahmed)
+   * Do not remove the swap entry from list_lru in
+     __read_swapcache_async() (patch 2) (suggested by Yosry Ahmed)
+   * Removed a redundant zswap pool getting (patch 2)
+     (reported by Ryan Roberts)
+   * Use atomic for the nr_zswap_protected (instead of lruvec's lock)
+     (patch 5) (suggested by Yosry Ahmed)
+   * Remove the per-cgroup zswap shrinker knob (patch 5)
+     (suggested by Yosry Ahmed)
+v2:
+   * Fix loongarch compiler errors
+   * Use pool stats instead of memcg stats when !CONFIG_MEMCG_KEM
 
-Hello!
+There are currently several issues with zswap writeback:
 
-Thanks for following up! Sorry for the delay in this response.
+1. There is only a single global LRU for zswap, making it impossible to
+   perform worload-specific shrinking - an memcg under memory pressure
+   cannot determine which pages in the pool it owns, and often ends up
+   writing pages from other memcgs. This issue has been previously
+   observed in practice and mitigated by simply disabling
+   memcg-initiated shrinking:
 
-This looks great to me. I do have one comment below regarding the
-KUNIT_SPEED_SLOW_THRESHOLD_S macro but other than that I would be
-happy with this patch.
+   https://lore.kernel.org/all/20230530232435.3097106-1-nphamcs@gmail.com/T/#u
 
-This patch does bring up the question of how to handle KUnit warnings
-as mentioned before. But I am happy to approach that in a future
-patch.
+   But this solution leaves a lot to be desired, as we still do not
+   have an avenue for an memcg to free up its own memory locked up in
+   the zswap pool.
 
-And I do still have concerns with this being annoying for those on
-slower architectures but again that would depend on how we deal with
-KUnit warnings.
+2. We only shrink the zswap pool when the user-defined limit is hit.
+   This means that if we set the limit too high, cold data that are
+   unlikely to be used again will reside in the pool, wasting precious
+   memory. It is hard to predict how much zswap space will be needed
+   ahead of time, as this depends on the workload (specifically, on
+   factors such as memory access patterns and compressibility of the
+   memory pages).
 
-Thanks!
--Rae
+This patch series solves these issues by separating the global zswap
+LRU into per-memcg and per-NUMA LRUs, and performs workload-specific
+(i.e memcg- and NUMA-aware) zswap writeback under memory pressure. The
+new shrinker does not have any parameter that must be tuned by the
+user, and can be opted in or out on a per-memcg basis.
 
-> ---
->
-> To: Brendan Higgins <brendan.higgins@linux.dev>
-> To: David Gow <davidgow@google.com>
-> Cc: Jani Nikula <jani.nikula@linux.intel.com>
-> Cc: Rae Moar <rmoar@google.com>
-> Cc: linux-kselftest@vger.kernel.org
-> Cc: kunit-dev@googlegroups.com
-> Cc: linux-kernel@vger.kernel.org
->
-> Changes from v1:
-> - Split the patch out of the series
-> - Change to trigger the warning only if the runtime is twice the
->   threshold (Jani, Rae)
-> - Split the speed check into a separate function (Rae)
-> - Link: https://lore.kernel.org/all/20230911-kms-slow-tests-v1-0-d3800a69=
-a1a1@kernel.org/
-> ---
->  lib/kunit/test.c | 27 +++++++++++++++++++++++++++
->  1 file changed, 27 insertions(+)
->
-> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> index 49698a168437..a1d5dd2bf87d 100644
-> --- a/lib/kunit/test.c
-> +++ b/lib/kunit/test.c
-> @@ -372,6 +372,25 @@ void kunit_init_test(struct kunit *test, const char =
-*name, char *log)
->  }
->  EXPORT_SYMBOL_GPL(kunit_init_test);
->
-> +#define KUNIT_SPEED_SLOW_THRESHOLD_S   1
-> +
-> +static void kunit_run_case_check_speed(struct kunit *test,
-> +                                      struct kunit_case *test_case,
-> +                                      struct timespec64 duration)
-> +{
-> +       enum kunit_speed speed =3D test_case->attr.speed;
-> +
-> +       if (duration.tv_sec < (2 * KUNIT_SPEED_SLOW_THRESHOLD_S))
+As a proof of concept, we ran the following synthetic benchmark:
+build the linux kernel in a memory-limited cgroup, and allocate some
+cold data in tmpfs to see if the shrinker could write them out and
+improved the overall performance. Depending on the amount of cold data
+generated, we observe from 14% to 35% reduction in kernel CPU time used
+in the kernel builds.
 
-I think I would prefer that KUNIT_SPEED_SLOW_THRESHOLD_S is instead
-set to 2 rather than using 2 as the multiplier. I realize the actual
-threshold for the attributes is 1 sec but for the practical use of
-this warning it is 2 sec.
+Domenico Cerasuolo (3):
+  zswap: make shrinking memcg-aware
+  mm: memcg: add per-memcg zswap writeback stat
+  selftests: cgroup: update per-memcg zswap writeback selftest
 
-Also I would still be open to this being 1 sec depending on others
-opinions. David, what are your thoughts on this?
+Nhat Pham (2):
+  list_lru: allows explicit memcg and NUMA node selection
+  zswap: shrinks zswap pool based on memory pressure
 
-> +               return;
-> +
-> +       if (speed =3D=3D KUNIT_SPEED_VERY_SLOW || speed =3D=3D KUNIT_SPEE=
-D_SLOW)
-> +               return;
-> +
-> +       kunit_warn(test,
-> +                  "Test should be marked slow (runtime: %lld.%09lds)",
-> +                  duration.tv_sec, duration.tv_nsec);
-> +}
-> +
->  /*
->   * Initializes and runs test case. Does not clean up or do post validati=
-ons.
->   */
-> @@ -379,6 +398,8 @@ static void kunit_run_case_internal(struct kunit *tes=
-t,
->                                     struct kunit_suite *suite,
->                                     struct kunit_case *test_case)
->  {
-> +       struct timespec64 start, end;
-> +
->         if (suite->init) {
->                 int ret;
->
-> @@ -390,7 +411,13 @@ static void kunit_run_case_internal(struct kunit *te=
-st,
->                 }
->         }
->
-> +       ktime_get_ts64(&start);
-> +
->         test_case->run_case(test);
-> +
-> +       ktime_get_ts64(&end);
-> +
-> +       kunit_run_case_check_speed(test, test_case, timespec64_sub(end, s=
-tart));
->  }
->
->  static void kunit_case_internal_cleanup(struct kunit *test)
-> --
-> 2.41.0
->
+ Documentation/admin-guide/mm/zswap.rst      |   7 +
+ drivers/android/binder_alloc.c              |   5 +-
+ fs/dcache.c                                 |   8 +-
+ fs/gfs2/quota.c                             |   6 +-
+ fs/inode.c                                  |   4 +-
+ fs/nfs/nfs42xattr.c                         |   8 +-
+ fs/nfsd/filecache.c                         |   4 +-
+ fs/xfs/xfs_buf.c                            |   6 +-
+ fs/xfs/xfs_dquot.c                          |   2 +-
+ fs/xfs/xfs_qm.c                             |   2 +-
+ include/linux/list_lru.h                    |  46 ++-
+ include/linux/memcontrol.h                  |   5 +
+ include/linux/mmzone.h                      |   2 +
+ include/linux/vm_event_item.h               |   1 +
+ include/linux/zswap.h                       |  25 +-
+ mm/list_lru.c                               |  48 ++-
+ mm/memcontrol.c                             |   1 +
+ mm/mmzone.c                                 |   1 +
+ mm/swap.h                                   |   3 +-
+ mm/swap_state.c                             |  25 +-
+ mm/vmstat.c                                 |   1 +
+ mm/workingset.c                             |   4 +-
+ mm/zswap.c                                  | 365 ++++++++++++++++----
+ tools/testing/selftests/cgroup/test_zswap.c |  74 ++--
+ 24 files changed, 526 insertions(+), 127 deletions(-)
+
+-- 
+2.34.1
