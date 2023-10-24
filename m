@@ -2,119 +2,121 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7488D7D59BE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Oct 2023 19:30:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2DDD7D59C7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Oct 2023 19:31:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234423AbjJXRaT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 24 Oct 2023 13:30:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44928 "EHLO
+        id S234862AbjJXRbr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 24 Oct 2023 13:31:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234851AbjJXRaS (ORCPT
+        with ESMTP id S234315AbjJXRbq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 Oct 2023 13:30:18 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2081.outbound.protection.outlook.com [40.107.220.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E027128;
-        Tue, 24 Oct 2023 10:30:16 -0700 (PDT)
+        Tue, 24 Oct 2023 13:31:46 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2058.outbound.protection.outlook.com [40.107.94.58])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CC92D7D;
+        Tue, 24 Oct 2023 10:31:44 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=X+wIzI6FzmKxRJxeE3Xbm1R1pIz4rwMwmAPGOtrj7/ccU4OO05MUKyRf/fflq3ZD3FrnQaXijEWrqYWxBfnOa0TA18e3Gg8Ki9wTTj0Z+5BXf3ykNaondKU5ZqF4J5Rp0NaaOq3mRho88FwvLsAGwz/EMaFI6YH2rMZaTmJ9PQ6DOGt+fQFK/orFewzhBUb33LuNaNWsx7fOiwkEkcmUzgPPqtNB9ddiiFzVj0c86jf2NWl0RCvCAUj1IqcyEZFZdluYkSzGFRxFSgLLilmjMiffXQborAf9MaRqMscqHGIR8V0cWpnvgy1u0wQ1Jy6aiCI8hDhLx6gI2tgAQiIThg==
+ b=KGrWlZae08AOu94au2o7efy6gCMwCPMfQwv0iGaFgfCCe/NfNPdmZLXnF+uUKfIhyBb/rEolXiADrwfyUrsYuJhEyhjy7wHiSWgbWEROZPmSBEJBpnwhpiAf634CD9pBtzWCjfSbhWHDTZ3CgcpjUMqYLl/LbTjl2DHWEQJ79VpoJ4rx0Wb5oKFgXJ0BmJZcxfp17pfYjYykEI1b+BKiQdFkD/UcyeBtEnrvVHC4l5X4CqvvhlcP6jtAZu56gj4aSxqf2AqEHbU0vKGTxw6JMk9Ciq4DaCeLq7Sj5sWTR7qjOOntNHgG78tBx7QchQj8C5KrTvNmvja3CmVZgbxO3A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=uu0uU2uCK/pY7ypAzAmqIaCaIodkqur1kAMksV6LIJk=;
- b=lf8fTACoL1wiyho+2fokrh3vvrn51IT9dVdsuzf81TEjVxfSXB+LSwi9U6Df1hbhM2ozfx05IX/ulYeLa9kewv0VXLahhGPyw6QL8fiPO81Yz8/jvQWihI1fIdh1LKQyog24v54X4fTWcHA16643PxFnlLoHTWP5vPTzLobSMkyMQXmOervGb6tTZT1jXAzpnCWj7gbPhW/VR4S1aOBWsllH7ld9/1nJSLgLZcIun6EQlqb8MyKHMZR1USF86fs5trmP8nGKnxhfS/UeDAV+KXUHcWHvZPFNG5UK+SMcIk0oMqeumde6RQGNyFbWqzv3SxjW3EdNPdPjgWz7/0ldiw==
+ bh=MauixGajZ9Q60mUaB9rigzIIOaumrxQ8SeAgqJ49zcw=;
+ b=T/VBuQkaSk9YBPADkHgxHaMuBOPDTLMed7xmroviVYNYhS03yddKh33sVc/QN4FZFm3flPhNrMQn2qcsIAsxdjVIkbd2zLFdR3k0qCmxFswNnEBAk+bx7DwLNIcMDJ5yZ/tj5Gc0hVMt2yYhQimxaL+Xsht5OTMKOd3bU3QzeE3oLCjwlrws5+veJ2kCQa8hX2AHx3/Yzy1uNW/leiIpVAWyhES3izoc5A910b56/LZWz9HEShRh3umRZPdT4fqfPxPBIkuTMubk1q4JdmfBo8WJXhvAg3koK2O6lfcDHaogum+SAvXVLn7tEVLAUhp7idd7n5cRKuanO0vCKG4JmA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=uu0uU2uCK/pY7ypAzAmqIaCaIodkqur1kAMksV6LIJk=;
- b=op/Nxw+E/T9ZxWnVOZ/0egBvTqLeuiYKIqJbJKY8aYEt+M66TzsjL7BhSdypOMxst7IqCJh4EAA7BVsoX0LWaA6XHHy45yMK0A4aknQt2kZ/4l5SuhisqwfjiD7VVytWq9AREvpUC3VoeLFA0pYxyPybIRULDa4geH0JfKPGn2eiYFTMvqnTVc2ih9CZsPM1jkJat2rBAZyfSfrtFw0Y31fAyU8QCuqYMsX5MSiiZXqxtos/fuQ7WAv0xbAtKEA5b2zOw60tEHd5EcPkBvqUDwPtFi/pWSmNIwJdwNjrnVx5ngjd0pG9xpwFSsLZQher/vOmISiwJjKK/9xudjxUKA==
+ bh=MauixGajZ9Q60mUaB9rigzIIOaumrxQ8SeAgqJ49zcw=;
+ b=VF0Pxr5wphgff0ShlwqSJEcGB5lZyNtbz3Aa420R1gLWWlhNsykRpcqsmyyAPi9QZbnF5BhK9P0UaS2eAxoMcFiZwibVG6oH4UqfG+egV6sqRR0YW6UpqRbZPO2rhwM/fTC07T+Py+I7HiRveH/NXOK3A7bagWWr7udGVN+0ZZaQQ+G6MowU0VCTBhQ+FSX4OZhyfSfvIfZzHPozzc4gp241KFd+scZUdMiQ9bJo+1JFe+0bveGXkspKWszX3ddHnwQ0Fvv7pX6187T3TdtkIxdK5CSVQ3oZT9z66b0MK7l6/H+T33UucZ9Yk8Z0eZkaiT72lGr+GiD9db7P4eN5jg==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by BY5PR12MB5013.namprd12.prod.outlook.com (2603:10b6:a03:1dc::9) with
+ by SJ1PR12MB6073.namprd12.prod.outlook.com (2603:10b6:a03:488::14) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6907.33; Tue, 24 Oct
- 2023 17:30:12 +0000
+ 2023 17:31:40 +0000
 Received: from LV2PR12MB5869.namprd12.prod.outlook.com
  ([fe80::3f66:c2b6:59eb:78c2]) by LV2PR12MB5869.namprd12.prod.outlook.com
  ([fe80::3f66:c2b6:59eb:78c2%6]) with mapi id 15.20.6886.034; Tue, 24 Oct 2023
- 17:30:12 +0000
-Date:   Tue, 24 Oct 2023 14:30:09 -0300
+ 17:31:40 +0000
+Date:   Tue, 24 Oct 2023 14:31:39 -0300
 From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     Yi Liu <yi.l.liu@intel.com>
-Cc:     joro@8bytes.org, alex.williamson@redhat.com, kevin.tian@intel.com,
+To:     Nicolin Chen <nicolinc@nvidia.com>
+Cc:     Yi Liu <yi.l.liu@intel.com>, joro@8bytes.org,
+        alex.williamson@redhat.com, kevin.tian@intel.com,
         robin.murphy@arm.com, baolu.lu@linux.intel.com, cohuck@redhat.com,
-        eric.auger@redhat.com, nicolinc@nvidia.com, kvm@vger.kernel.org,
-        mjrosato@linux.ibm.com, chao.p.peng@linux.intel.com,
-        yi.y.sun@linux.intel.com, peterx@redhat.com, jasowang@redhat.com,
+        eric.auger@redhat.com, kvm@vger.kernel.org, mjrosato@linux.ibm.com,
+        chao.p.peng@linux.intel.com, yi.y.sun@linux.intel.com,
+        peterx@redhat.com, jasowang@redhat.com,
         shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
         suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         zhenzhong.duan@intel.com, joao.m.martins@oracle.com
 Subject: Re: [PATCH v6 07/10] iommufd: Add a nested HW pagetable object
-Message-ID: <20231024173009.GQ3952@nvidia.com>
+Message-ID: <20231024173139.GR3952@nvidia.com>
 References: <20231024150609.46884-1-yi.l.liu@intel.com>
  <20231024150609.46884-8-yi.l.liu@intel.com>
  <20231024171810.GO3952@nvidia.com>
+ <ZTf+zWJE2qlgkf1M@Asurada-Nvidia>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231024171810.GO3952@nvidia.com>
-X-ClientProxiedBy: SA9PR13CA0094.namprd13.prod.outlook.com
- (2603:10b6:806:24::9) To LV2PR12MB5869.namprd12.prod.outlook.com
+In-Reply-To: <ZTf+zWJE2qlgkf1M@Asurada-Nvidia>
+X-ClientProxiedBy: SN7PR04CA0211.namprd04.prod.outlook.com
+ (2603:10b6:806:127::6) To LV2PR12MB5869.namprd12.prod.outlook.com
  (2603:10b6:408:176::16)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BY5PR12MB5013:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1bdc8cd3-154a-4380-463f-08dbd4b6e091
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SJ1PR12MB6073:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2ead23ae-cb08-47cf-dc76-08dbd4b71566
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Oiu73f5+O2w18C2oVeIDRZXah9QQfCsVa7GiV8o6f4AU/USKBazzis8i0jpPUmjlYL9BGhOBPXHLkTLHN0zcdDXRflkGjMN9T1064f81qJ9R52Lxmom/bY4UiuaR4XWufMftqfSuxXWhxi4IPk+M9PksRVYEc3scuwsXpC2BHU3iOABEpY2rGOccmvgStvHnX0J+wtoViivR81VWBLOTcQL7H2j3Fwrn+2FAkD7DhutWu3U/b+4PF1I1AYYyw9c1grfOMFVWadqmcnXHJxWPJiaGc3w841N1sVaF2OzBPuwnQKvTtqmIQwk3slYc/FWULMa59Jm0iBrqLx1YE4/7t5u9vQnBxe0S60fO2ACxdo3UsO1+KPjzg7GZ/LgJjX5nnQVT3HPDzwlx3nDIz8NSOSg+IfQrzHYO5brwaAM6dXEt5hyxbvlXK2HeQU3Nz90k/XsLjpG2y/nX4oxQ5MF74XvSzMzmWzfOMXsAoAXd9PodzWW0A41rMknzVNl0WdmEa8eMHmbQSEWhqWQ5gKVSwAhlPdlODWsGzuyonbZhGGHVtG6CK5cQzBvl20B1tt2k
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(376002)(346002)(396003)(39860400002)(366004)(230922051799003)(451199024)(64100799003)(186009)(1800799009)(478600001)(6506007)(6512007)(6666004)(2616005)(1076003)(26005)(5660300002)(86362001)(33656002)(4326008)(8676002)(8936002)(83380400001)(7416002)(2906002)(66946007)(66556008)(66476007)(38100700002)(6916009)(316002)(36756003)(6486002)(41300700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: 0YhvoZnzcIpm1Bf75/Ko0qJTZ0AvI0n3tSyEZAVZ47beOemJfTJPB0/OscASbyPF922N5tx3ywHYJrWsTcnQCVcxFealEIfySAoN44DF7xiJB3RzWjgeC4TobuF1TtJO33b9g7Fe32xLj/4fXrtbD3VjXuOkV7SgrSBVcgz6+fhrTwMw27jj9gV/Rv0yYDvVqpSFJd04gqJF2+EJigRuQpHIatD2k/TqRMuoceBI6YTD4VoxfIxJrwkfUQNjniAee071b6SV4/2ymyTfzTepeCNoFCtci8rSrADB49DVvoda4Pj9jJOrg/ZrTkuoI6OgeI5x+6msWpyOUVta+EAvl1fv9GBdQysPakC0lBLErHfPpJbci1+yjDzpHR4AmTuF67AkvSK2IBT1+Oxs9+uL/YxJrZavlI6lTkQo0p2wWI8TQjnUH10f8e23TpjqLAqlG7M4awH8lxOMmRSOVne1KgT7aG8JjoKVqMUAhi4bllxp4rj0cGagLM1luXP/r91+ZA+vwYBy+HhTFabnfYPCa11JdC8apTKrbRUSal79js1KclMmxcm9hjVvBR/nWGFK
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(39860400002)(346002)(136003)(376002)(396003)(230922051799003)(64100799003)(186009)(451199024)(1800799009)(37006003)(86362001)(1076003)(2906002)(38100700002)(41300700001)(66476007)(316002)(66946007)(66556008)(478600001)(6636002)(2616005)(6506007)(6512007)(6486002)(83380400001)(4326008)(36756003)(7416002)(5660300002)(33656002)(6862004)(8676002)(8936002)(26005);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?WnbVGYyAN5L17PNis2xkbtYoStVeAmv7bKy7L5rOxgTFh+BR3BItPAv/Y/LY?=
- =?us-ascii?Q?gG+Bk6PBP+r7Pxr69jyJxfvjarYiZWyHv8unJPjLlMjbUeji5Ya0y6VkH3jv?=
- =?us-ascii?Q?4S/gDyPkVNt9eZoaKut8daWetyOCYSIujAeTvh0PvYsjspBk0w02sk8QW6Va?=
- =?us-ascii?Q?72dU9p8677N0bBbniyc+9SQFsABCWaojk4kNJ9GQFRd2/V7mPOddRJ94nww3?=
- =?us-ascii?Q?EAIe3msIjJzs4xPxD+bg/IC62+KCktTNb262xneF6PiLxOhnbYMzR1GTNdd0?=
- =?us-ascii?Q?yheljzhMcCxkoDtHrKps0DAnNTljycAjhHhTV/woKt70tuA/Zu/UiwFCd2R7?=
- =?us-ascii?Q?M3IyySh7slU6pMnjvHl0c+Z5sq9TERLdeyw+7wmJY/zgqCEA3U/SIihwMtbE?=
- =?us-ascii?Q?hdJHt5ADrHJa8YkFsTqjEsybt90uq7q1nE89nWUIla2Gbaf/u5tzPvbpKmwC?=
- =?us-ascii?Q?3CxbxFDs3mvYm7VFhLtcaxfoe6BTd/MQbOhfJ9WcZyFhX3PYNbXFwXIajUxx?=
- =?us-ascii?Q?Ix5iW4aoXjF26DhGNdOApwtbUM42nhP6sUibB0uYaebnQIO1RAteInXuXnpZ?=
- =?us-ascii?Q?T2z0Hy6oXb/tk6RL3VGs/vW29va1tQTuE9EdAt03EJ24wCmu9By5wdeynOad?=
- =?us-ascii?Q?o7TaZT9cLm6jHovyNlCFEVeODSOutq/L1tyFozEe7M0ZzIh64/czjQDtkJOK?=
- =?us-ascii?Q?quN31s1uM6xnqE7O7u6pI1Nhupb+f11LPyQ0OaVdc/mjLZhu1hCVJ5rPb6Ed?=
- =?us-ascii?Q?D5voubDkBXsa4Qyb8k50LLLHpewHASYQG2U7dhZnQcbJ8WrxeujYz2KLQied?=
- =?us-ascii?Q?puydezkfO4tTq8D5ccHbZZW6nyUG19+in93dCUmnOrtoU+lwfND5dtobyASS?=
- =?us-ascii?Q?TAw5UXFWEUHB3ij4MEzSBQ7H2wI5dBhSRqwAE1vVD+ptbQrcBAwU2NMq3JQn?=
- =?us-ascii?Q?KnbOm1thC78gJo5IiKQOLAHHkL2kjFoI8z3dlGhpi103+RWFWVrRZHW44ahj?=
- =?us-ascii?Q?Xv2C2j7H3c+R0FDOEaJBqWnr39PyzNMvsPW0qpIz6qWIlRSYBDr9lt0JFnIG?=
- =?us-ascii?Q?BUEPyE+kjQ1wTXMv13LS1qMCMOERTYsTgZwfsyetlj3yYFeRNDTwQhvnnHH0?=
- =?us-ascii?Q?tTYuR2Y3LURUixznqLsEqX78jf1UlZUCL8Y9/VPUCkGQKSAtNT1mlHMwcEdc?=
- =?us-ascii?Q?oC6NNjhVt1Zcnmzaeuk+rpNw8NWDCeAXcBcFM9dMZDTk7lZXk2597umNBaac?=
- =?us-ascii?Q?9DlLtwxcyGYoE3jseF+Mvey7hWU6UsOBHYo1I8XdpZ24TRg4KL46AwpObO8c?=
- =?us-ascii?Q?xupWxX+OYQsmSwTupmIT/ZBERc/uMLW/wGM8sD5Fe3AWJpcbYx4al82IqnKj?=
- =?us-ascii?Q?Ckga02hHSCQXULM9J/zPsz+wxxOcXDJMzzyH9FrFuCwwSr0sK3P7wngE/Vq5?=
- =?us-ascii?Q?+TRETzKHjrnwyYePBwDGgX52YG2P4K2YnDyK5gLFfV9+y1UIg7RUCbwrFq6H?=
- =?us-ascii?Q?WS/nVi53TDkABjUGa7T6kiUs4tyEstXsRVnpNEJK+QmulfM78dp+vbgicsKT?=
- =?us-ascii?Q?bqiPMWCz47gS4R9WJi10o3WCk//bOuz0GGA/XYg4?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?fw0IQDE30H2WgmPiM9fNcE+pqTqC3OsLMDc9KxPA8BrJ1IbNTHBgWSSmqCMP?=
+ =?us-ascii?Q?hUYWtaW4b3EK7zv+P7tOpWh+NM7Qb3l023s2EBXaj2On1iPg8yT74RsM8/jd?=
+ =?us-ascii?Q?lGhDpLNwOEJu3p2u7DS27ZbfaAQHM3MV41OSKVekolJqE0CRqkEuDfCg2jmP?=
+ =?us-ascii?Q?G2eghn1qf/Aqb/O9W1t4vIzjgg6J2xSgBPfjPhjhuXqoQMq9/K+3EJW49h0G?=
+ =?us-ascii?Q?3kC8sK6tH1Dga6KIU98wXevCO65QLUFYnhA6ks6dC6M8EulVdv/wMAgA3QoF?=
+ =?us-ascii?Q?5q/sO8NfJvi8tUSdkoHzNtMIQltzRzKzqs7ISuKi75Ysrz2781cUC1aNHy/a?=
+ =?us-ascii?Q?xBcEOglarZeb+z1ZvVemQ09uu3Ew34NXDBjwYdkVesVFtvOUx8SImO04lgU6?=
+ =?us-ascii?Q?ADFeA1L/Pe/MsurGBKlQaCTFXfdcBHiEV0XkfFXXe21RM4DWhqv8NWnH1SiZ?=
+ =?us-ascii?Q?MquhkH7EvGOP2g6Y6ZOraTOHGqcTyrSM3ARBYdEXtwf8QhMwbBVNkqDgSl2Q?=
+ =?us-ascii?Q?VCTRZZkLNsJ2k+671seKIAg1aCjzdvPjSVLCcprk8w0mXli+ze86gbkgSjyn?=
+ =?us-ascii?Q?ZltC9siPLmERHPTNG7k33S21w/vKfshuNvvRpB+LONpUPYaB3LRjl4OF3tdP?=
+ =?us-ascii?Q?1UgVNQ7WuPa8FB74i7MqGESdAYKol1/PXjHTWRgUQLioqsCQTTpijvH+G+xw?=
+ =?us-ascii?Q?RF8EqYT+4MIv6V6JWOCRbsAJAfiFkdyKZOLKkd03dA52mv4JqXgOJ291WUIB?=
+ =?us-ascii?Q?8YP1qYcGcn99vflEX1XlxQ35Sr9uvGFu3DbCLiZ/wYgNEY8yq9lZ2tXi/NXS?=
+ =?us-ascii?Q?Fpnstq2K7ymDaxFXNYH3z4rMYH1RBmkFjfOcJZAw2/gEE6YtsX7VI97tDl2D?=
+ =?us-ascii?Q?jrcRswfLY1v8BK/KsXlMdZdOr8GN9W3Jyb7SHzOErYmg2Vgs7ZaWIzgE4xhM?=
+ =?us-ascii?Q?qDi3sP+M4HARCmrQOoxHInakJ1GDV7fInAzFd4AHP+Nv4MhMuFX6L/A8eAig?=
+ =?us-ascii?Q?95SPKUit5A139NImd/RMf0BAgYe5c28fv4q4oFiAfI90+uVOqRXLp009nWJA?=
+ =?us-ascii?Q?nUgRVvvlbNf9bRvLlqALdyS+2cFEl55RHS2Bl8G3ATFJ/N4/X7ysIP9n/d/K?=
+ =?us-ascii?Q?P2VQnDcMTtpvXgNDcijljMCQtzyAM3fF784TUrlh5j25LAncmeXtEuEq/sq8?=
+ =?us-ascii?Q?8Pr6nxd47VQMptsB+o/0mO90fN3aKeJhaVBxIZEfTGviaLlSumKBRsCEyRvR?=
+ =?us-ascii?Q?nxJF7rWi7RymICT0+55dV5sbpfRnQs6zadzpG8ejrW/P2XHpmKcFC//Sw9lB?=
+ =?us-ascii?Q?pPSXZR6+a8w8zjTKafYrHS9kgd4U0eY2ZyvMf5kkX+Z4AerFMB5/NASVHDOx?=
+ =?us-ascii?Q?UTngTlsTSxYcCPtz8uz9N5jT19U2d6/99NFcyuq3BOnsEYxINLsKf8fvUJOQ?=
+ =?us-ascii?Q?6JdXEcYX5kQVIfdrlNGVAWdoaj7GoBD/FGrUmy8tXZCekGE0kzfMhFgVU4jE?=
+ =?us-ascii?Q?YHGhEl292OWv+8j2Tic2OVh1FQYoysQM/HYos++dYM/e/oVvAq5E8ABa+Qju?=
+ =?us-ascii?Q?MNWqFs69hUlahrxHzJ3hDzGrBbcTPkgpDvmvPtOH?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1bdc8cd3-154a-4380-463f-08dbd4b6e091
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2ead23ae-cb08-47cf-dc76-08dbd4b71566
 X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2023 17:30:12.1094
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Oct 2023 17:31:40.7884
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Mk3aWtafGyt1zbblbBqH4rLMOAYIN0fiyFdgQuHcoDvYuwCATp5DEs95k8J7YMLd
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB5013
+X-MS-Exchange-CrossTenant-UserPrincipalName: ORpauZtNgZOfPOwoyKITNG9N/ezjp1y4Lfo0pYEMDiRnTaDHVHGvlgD8pGL6oFsb
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6073
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
         autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -122,141 +124,36 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Oct 24, 2023 at 02:18:10PM -0300, Jason Gunthorpe wrote:
-> On Tue, Oct 24, 2023 at 08:06:06AM -0700, Yi Liu wrote:
-> > @@ -195,6 +279,10 @@ int iommufd_hwpt_alloc(struct iommufd_ucmd *ucmd)
-> >  	if (pt_obj->type == IOMMUFD_OBJ_IOAS) {
-> >  		struct iommufd_hwpt_paging *hwpt_paging;
-> >  
-> > +		if (cmd->data_type != IOMMU_HWPT_DATA_NONE) {
-> > +			rc = -EINVAL;
-> > +			goto out_put_pt;
-> > +		}
-> >  		ioas = container_of(pt_obj, struct iommufd_ioas, obj);
-> >  		mutex_lock(&ioas->mutex);
-> >  		hwpt_paging = iommufd_hwpt_paging_alloc(ucmd->ictx, ioas, idev,
+On Tue, Oct 24, 2023 at 10:28:45AM -0700, Nicolin Chen wrote:
+> On Tue, Oct 24, 2023 at 02:18:10PM -0300, Jason Gunthorpe wrote:
+> > On Tue, Oct 24, 2023 at 08:06:06AM -0700, Yi Liu wrote:
+> > > @@ -195,6 +279,10 @@ int iommufd_hwpt_alloc(struct iommufd_ucmd *ucmd)
+> > >  	if (pt_obj->type == IOMMUFD_OBJ_IOAS) {
+> > >  		struct iommufd_hwpt_paging *hwpt_paging;
+> > >  
+> > > +		if (cmd->data_type != IOMMU_HWPT_DATA_NONE) {
+> > > +			rc = -EINVAL;
+> > > +			goto out_put_pt;
+> > > +		}
+> > >  		ioas = container_of(pt_obj, struct iommufd_ioas, obj);
+> > >  		mutex_lock(&ioas->mutex);
+> > >  		hwpt_paging = iommufd_hwpt_paging_alloc(ucmd->ictx, ioas, idev,
+> > 
+> > ?? What is this?
+> > 
+> > Ah something went wrong earlier in "iommu: Pass in parent domain with
+> > user_data to domain_alloc_user op"
+> > 
+> > Once we added the user_data we should flow it through to the op
+> > always.
 > 
-> ?? What is this?
-> 
-> Ah something went wrong earlier in "iommu: Pass in parent domain with
-> user_data to domain_alloc_user op"
+> Hmm, iommufd_hwpt_paging_alloc doesn't take (or need) user_data,
+> but we could pass in a dummy one if that looks better?
 
-Bah, I got confused because that had half the uapi, so in this pathc
- 
-> Once we added the user_data we should flow it through to the op
-> always.
+The point is for the user_data to always be available, the driver
+needs to check it if it is passed.
 
-Like this:
+This should all be plumbed to allow drivers to also customize their
+paging domains too.
 
-diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
-index 92859b907bb93c..a3382811af8a81 100644
---- a/drivers/iommu/iommufd/device.c
-+++ b/drivers/iommu/iommufd/device.c
-@@ -586,8 +586,8 @@ iommufd_device_auto_get_domain(struct iommufd_device *idev,
- 		goto out_unlock;
- 	}
- 
--	hwpt_paging = iommufd_hwpt_paging_alloc(idev->ictx, ioas, idev,
--						 0, immediate_attach);
-+	hwpt_paging = iommufd_hwpt_paging_alloc(idev->ictx, ioas, idev, 0,
-+						immediate_attach, NULL);
- 	if (IS_ERR(hwpt_paging)) {
- 		destroy_hwpt = ERR_CAST(hwpt_paging);
- 		goto out_unlock;
-diff --git a/drivers/iommu/iommufd/hw_pagetable.c b/drivers/iommu/iommufd/hw_pagetable.c
-index cfd85df693d7b2..324a6d73f032ee 100644
---- a/drivers/iommu/iommufd/hw_pagetable.c
-+++ b/drivers/iommu/iommufd/hw_pagetable.c
-@@ -96,7 +96,8 @@ iommufd_hwpt_paging_enforce_cc(struct iommufd_hwpt_paging *hwpt_paging)
- struct iommufd_hwpt_paging *
- iommufd_hwpt_paging_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
- 			  struct iommufd_device *idev, u32 flags,
--			  bool immediate_attach)
-+			  bool immediate_attach,
-+			  const struct iommu_user_data *user_data)
- {
- 	const u32 valid_flags = IOMMU_HWPT_ALLOC_NEST_PARENT |
- 				IOMMU_HWPT_ALLOC_DIRTY_TRACKING;
-@@ -107,7 +108,7 @@ iommufd_hwpt_paging_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
- 
- 	lockdep_assert_held(&ioas->mutex);
- 
--	if (flags && !ops->domain_alloc_user)
-+	if ((flags || user_data) && !ops->domain_alloc_user)
- 		return ERR_PTR(-EOPNOTSUPP);
- 	if (flags & ~valid_flags)
- 		return ERR_PTR(-EOPNOTSUPP);
-@@ -127,7 +128,7 @@ iommufd_hwpt_paging_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
- 
- 	if (ops->domain_alloc_user) {
- 		hwpt->domain = ops->domain_alloc_user(idev->dev, flags,
--						      NULL, NULL);
-+						      NULL, user_data);
- 		if (IS_ERR(hwpt->domain)) {
- 			rc = PTR_ERR(hwpt->domain);
- 			hwpt->domain = NULL;
-@@ -210,8 +211,7 @@ iommufd_hwpt_nested_alloc(struct iommufd_ctx *ictx,
- 	struct iommufd_hw_pagetable *hwpt;
- 	int rc;
- 
--	if (flags || user_data->type == IOMMU_HWPT_DATA_NONE ||
--	    !ops->domain_alloc_user)
-+	if (flags || !user_data->len || !ops->domain_alloc_user)
- 		return ERR_PTR(-EOPNOTSUPP);
- 	if (parent->auto_domain || !parent->nest_parent)
- 		return ERR_PTR(-EINVAL);
-@@ -249,6 +249,11 @@ iommufd_hwpt_nested_alloc(struct iommufd_ctx *ictx,
- int iommufd_hwpt_alloc(struct iommufd_ucmd *ucmd)
- {
- 	struct iommu_hwpt_alloc *cmd = ucmd->cmd;
-+	const struct iommu_user_data user_data = {
-+		.type = cmd->data_type,
-+		.uptr = u64_to_user_ptr(cmd->data_uptr),
-+		.len = cmd->data_len,
-+	};
- 	struct iommufd_hw_pagetable *hwpt;
- 	struct iommufd_ioas *ioas = NULL;
- 	struct iommufd_object *pt_obj;
-@@ -273,25 +278,17 @@ int iommufd_hwpt_alloc(struct iommufd_ucmd *ucmd)
- 	if (pt_obj->type == IOMMUFD_OBJ_IOAS) {
- 		struct iommufd_hwpt_paging *hwpt_paging;
- 
--		if (cmd->data_type != IOMMU_HWPT_DATA_NONE) {
--			rc = -EINVAL;
--			goto out_put_pt;
--		}
- 		ioas = container_of(pt_obj, struct iommufd_ioas, obj);
- 		mutex_lock(&ioas->mutex);
--		hwpt_paging = iommufd_hwpt_paging_alloc(ucmd->ictx, ioas, idev,
--							cmd->flags, false);
-+		hwpt_paging = iommufd_hwpt_paging_alloc(
-+			ucmd->ictx, ioas, idev, cmd->flags, false,
-+			user_data.len ? &user_data : NULL);
- 		if (IS_ERR(hwpt_paging)) {
- 			rc = PTR_ERR(hwpt_paging);
- 			goto out_unlock;
- 		}
- 		hwpt = &hwpt_paging->common;
- 	} else if (pt_obj->type == IOMMUFD_OBJ_HWPT_PAGING) {
--		const struct iommu_user_data user_data = {
--			.type = cmd->data_type,
--			.uptr = u64_to_user_ptr(cmd->data_uptr),
--			.len = cmd->data_len,
--		};
- 		struct iommufd_hwpt_nested *hwpt_nested;
- 		struct iommufd_hwpt_paging *parent;
- 
-diff --git a/drivers/iommu/iommufd/iommufd_private.h b/drivers/iommu/iommufd/iommufd_private.h
-index 6fdad56893af4d..24e5a36fc875e0 100644
---- a/drivers/iommu/iommufd/iommufd_private.h
-+++ b/drivers/iommu/iommufd/iommufd_private.h
-@@ -290,7 +290,8 @@ int iommufd_hwpt_get_dirty_bitmap(struct iommufd_ucmd *ucmd);
- struct iommufd_hwpt_paging *
- iommufd_hwpt_paging_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
- 			  struct iommufd_device *idev, u32 flags,
--			  bool immediate_attach);
-+			  bool immediate_attach,
-+			  const struct iommu_user_data *user_data);
- int iommufd_hw_pagetable_attach(struct iommufd_hw_pagetable *hwpt,
- 				struct iommufd_device *idev);
- struct iommufd_hw_pagetable *
+Jason
