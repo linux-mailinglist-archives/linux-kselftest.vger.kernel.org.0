@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4E977D4C1D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Oct 2023 11:27:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E87EE7D4C22
+	for <lists+linux-kselftest@lfdr.de>; Tue, 24 Oct 2023 11:27:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234141AbjJXJ1V (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 24 Oct 2023 05:27:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48800 "EHLO
+        id S233988AbjJXJ1e (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 24 Oct 2023 05:27:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234186AbjJXJ1K (ORCPT
+        with ESMTP id S234149AbjJXJ1V (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 24 Oct 2023 05:27:10 -0400
+        Tue, 24 Oct 2023 05:27:21 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AA5019A6;
-        Tue, 24 Oct 2023 02:26:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 984771FE1;
+        Tue, 24 Oct 2023 02:26:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698139607; x=1729675607;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=TXQG/j4qvhoKkDk8zRyUy/euiPkSzK5kqiV3iWJ9S1Y=;
-  b=RFEXQ/AYIOS/RiDk6JGKMcvoA3YzCcG+JXhz96sMGgzF92w9XpaCUnIU
-   edzrgXuKle4BmlsntaRsHl+dwZgFEllZs7E6CYbRYKjQ3+GzbkzfLAJ1Q
-   LoeUB+OErMiKTZ1HkkUk1lnC3F/HG0A6E08yanw7u/b09Zs9OII/qzKb4
-   +tIXB6tn496RVF4Ez8arf/xodWzzPYWtyjkdvIMuf8Vs/98KvgHH8kZrm
-   GiMMs8tiqb/9dg+O+wAGs+JYES6ZEL3rfQfF27Z3uqZ1+0u0Y3ZKcHjIv
-   lKI+PlbXkAxBDxzX2gqVrwXhXHkYwyazUs1jh/Q3FCCkuAWXMDBcoUnL5
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="8570058"
+  t=1698139618; x=1729675618;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=JMN9aahDdQAcKor/PtXdQYhZXLxsC0uS+tKkhuZPS0s=;
+  b=i6+7XX4KggrwIiaXnGqRjcB0BrTvLhTJdYbWiWrNMJ0/YRtg95uWHEt2
+   0WydlUJFDEyGi6SudwC4h3NvbNd+9VC5qkJbrOyg2UukpT/uVjlrXtnFn
+   cTtu11M8Cv98Qt2jiEuLaJ/Ez5qfVTHG7mPemQgN5DOZenhCaZbAEie52
+   ieapV7ODL5O/3PRBkovwb17BFic151e/CDB6hJr2UgctjmjklBt+lJtVr
+   6WCDtbMWMbZBKRUAg+3m2QXq65YMRu3ZMQUuHRfNc7GkMaogvcmEC+66V
+   Bs+nURVqwTXYbV6nmm1FdtGWODMi6nNjcAqNQuERroM8HZ10W9ocIHBwB
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="8570095"
 X-IronPort-AV: E=Sophos;i="6.03,247,1694761200"; 
-   d="scan'208";a="8570058"
+   d="scan'208";a="8570095"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 02:26:46 -0700
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 02:26:57 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="708223410"
+X-IronPort-AV: E=McAfee;i="6600,9927,10872"; a="708223418"
 X-IronPort-AV: E=Sophos;i="6.03,247,1694761200"; 
-   d="scan'208";a="708223410"
+   d="scan'208";a="708223418"
 Received: from hprosing-mobl.ger.corp.intel.com (HELO localhost) ([10.249.40.219])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 02:26:41 -0700
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Oct 2023 02:26:53 -0700
 From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     linux-kselftest@vger.kernel.org,
         Reinette Chatre <reinette.chatre@intel.com>,
@@ -49,10 +49,12 @@ To:     linux-kselftest@vger.kernel.org,
         Fenghua Yu <fenghua.yu@intel.com>
 Cc:     linux-kernel@vger.kernel.org,
         =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 00/24] selftests/resctrl: CAT test improvements & generalized test framework
-Date:   Tue, 24 Oct 2023 12:26:10 +0300
-Message-Id: <20231024092634.7122-1-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 01/24] selftests/resctrl: Split fill_buf to allow tests finer-grained control
+Date:   Tue, 24 Oct 2023 12:26:11 +0300
+Message-Id: <20231024092634.7122-2-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20231024092634.7122-1-ilpo.jarvinen@linux.intel.com>
+References: <20231024092634.7122-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -65,67 +67,81 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi all,
+MBM, MBA and CMT test cases use run_fill_buf() to loop indefinitely
+around the buffer. CAT test case is different and doesn't want to loop
+around the buffer continuously.
 
-Here's a series to improve resctrl selftests. It contains following
-improvements:
+Split fill_cache() so that both the use cases are easier to control by
+creating separate functions for buffer allocation and looping around
+the buffer. Make those functions available for tests. The new interface
+is based on returning/passing pointers instead of the startptr global
+pointer variable that can now be removed. The deallocation can use
+free() directly.
 
-- Excludes shareable bits from CAT test allocation to avoid interference
-- Alters read pattern to defeat HW prefetcher optimizations
-- Rewrites CAT test to make the CAT test reliable and truly measure
-  if CAT is working or not
-- Introduces generalized test framework making easier to add new tests
-- Adds L2 CAT test
-- Lots of other cleanups & refactoring
+This change is part of preparation for new CAT test which allocates a
+buffer and does multiple passes over the same buffer (but not in an
+infinite loop).
 
-The patches up to CAT test rewrite have been earlier on the mailing list.
-I've tried to address all the comments made against them back then.
+Co-developed-by: Fenghua Yu <fenghua.yu@intel.com>
+Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+---
+ tools/testing/selftests/resctrl/fill_buf.c | 26 +++++++++++++---------
+ 1 file changed, 15 insertions(+), 11 deletions(-)
 
-This series have been tested across a large number of systems from
-different generations.
-
-Ilpo Järvinen (24):
-  selftests/resctrl: Split fill_buf to allow tests finer-grained control
-  selftests/resctrl: Refactor fill_buf functions
-  selftests/resctrl: Refactor get_cbm_mask()
-  selftests/resctrl: Mark get_cache_size() cache_type const
-  selftests/resctrl: Create cache_size() helper
-  selftests/resctrl: Exclude shareable bits from schemata in CAT test
-  selftests/resctrl: Split measure_cache_vals() function
-  selftests/resctrl: Split show_cache_info() to test specific and
-    generic parts
-  selftests/resctrl: Remove unnecessary __u64 -> unsigned long
-    conversion
-  selftests/resctrl: Remove nested calls in perf event handling
-  selftests/resctrl: Consolidate naming of perf event related things
-  selftests/resctrl: Improve perf init
-  selftests/resctrl: Convert perf related globals to locals
-  selftests/resctrl: Move cat_val() to cat_test.c and rename to
-    cat_test()
-  selftests/resctrl: Read in less obvious order to defeat prefetch
-    optimizations
-  selftests/resctrl: Rewrite Cache Allocation Technology (CAT) test
-  selftests/resctrl: Create struct for input parameter
-  selftests/resctrl: Introduce generalized test framework
-  selftests/resctrl: Pass write_schemata() resource instead of test name
-  selftests/resctrl: Add helper to convert L2/3 to integer
-  selftests/resctrl: Get resource id from cache id
-  selftests/resctrl: Add test groups and name L3 CAT test L3_CAT
-  selftests/resctrl: Add L2 CAT test
-  selftests/resctrl: Ignore failures from L2 CAT test with <= 2 bits
-
- tools/testing/selftests/resctrl/cache.c       | 263 +++---------
- tools/testing/selftests/resctrl/cat_test.c    | 386 ++++++++++++------
- tools/testing/selftests/resctrl/cmt_test.c    |  72 +++-
- tools/testing/selftests/resctrl/fill_buf.c    | 114 +++---
- tools/testing/selftests/resctrl/mba_test.c    |  24 +-
- tools/testing/selftests/resctrl/mbm_test.c    |  26 +-
- tools/testing/selftests/resctrl/resctrl.h     | 102 ++++-
- .../testing/selftests/resctrl/resctrl_tests.c | 202 ++++-----
- tools/testing/selftests/resctrl/resctrl_val.c |   6 +-
- tools/testing/selftests/resctrl/resctrlfs.c   | 234 +++++++----
- 10 files changed, 807 insertions(+), 622 deletions(-)
-
+diff --git a/tools/testing/selftests/resctrl/fill_buf.c b/tools/testing/selftests/resctrl/fill_buf.c
+index 0d425f26583a..f9893edda869 100644
+--- a/tools/testing/selftests/resctrl/fill_buf.c
++++ b/tools/testing/selftests/resctrl/fill_buf.c
+@@ -135,33 +135,37 @@ static int fill_cache_write(unsigned char *buf, size_t buf_size, bool once)
+ 	return 0;
+ }
+ 
+-static int fill_cache(size_t buf_size, int memflush, int op, bool once)
++static unsigned char *alloc_buffer(size_t buf_size, int memflush)
+ {
+ 	unsigned char *buf;
+-	int ret;
+ 
+ 	buf = malloc_and_init_memory(buf_size);
+ 	if (!buf)
+-		return -1;
++		return NULL;
+ 
+ 	/* Flush the memory before using to avoid "cache hot pages" effect */
+ 	if (memflush)
+ 		mem_flush(buf, buf_size);
+ 
++	return buf;
++}
++
++static int fill_cache(size_t buf_size, int memflush, int op, bool once)
++{
++	unsigned char *buf;
++	int ret;
++
++	buf = alloc_buffer(buf_size, memflush);
++	if (buf == NULL)
++		return -1;
++
+ 	if (op == 0)
+ 		ret = fill_cache_read(buf, buf_size, once);
+ 	else
+ 		ret = fill_cache_write(buf, buf_size, once);
+-
+ 	free(buf);
+ 
+-	if (ret) {
+-		printf("\n Error in fill cache read/write...\n");
+-		return -1;
+-	}
+-
+-
+-	return 0;
++	return ret;
+ }
+ 
+ int run_fill_buf(size_t span, int memflush, int op, bool once)
 -- 
 2.30.2
 
