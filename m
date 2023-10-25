@@ -2,57 +2,57 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5D6F7D64FA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Oct 2023 10:26:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A2E27D6507
+	for <lists+linux-kselftest@lfdr.de>; Wed, 25 Oct 2023 10:28:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234082AbjJYI0W (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 25 Oct 2023 04:26:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52460 "EHLO
+        id S233846AbjJYI2S (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 25 Oct 2023 04:28:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234083AbjJYI0P (ORCPT
+        with ESMTP id S232657AbjJYI2Q (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 25 Oct 2023 04:26:15 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 252CA1B5
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Oct 2023 01:26:12 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-507a5edc2ebso1823e87.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 25 Oct 2023 01:26:12 -0700 (PDT)
+        Wed, 25 Oct 2023 04:28:16 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70AD5123
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Oct 2023 01:28:13 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-53f647c84d4so10061a12.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 25 Oct 2023 01:28:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1698222370; x=1698827170; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1698222492; x=1698827292; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/lU+zDQXQsYPuw7klkrJD8s2EBZZ4C+3JO/Fwm5JnVQ=;
-        b=BMs3nCgkVis2m+zLVl3KNVbLBSl8i4CjlhAZr2POfV13pJiA80LZbmsOEuAHS2QLMr
-         W9GBpq2m+iGBljeT2ZGBtvarq4o8RET3Zqi+FytUKi9U+mTPt1psv1uc2LLu42dtvcAa
-         kn3w/rqAXQLh3QZtPD2ED8f4tNxxHDjEDw+OKVIIexc7chOm2X+vHMHFqln3+1citQ3m
-         /pMWGVQDoOArh6HcSa1ksdJAKu5nM5MujYDTNuWNDjBzmw7n8IBithv9yWd+vysz4Sly
-         kVpDT6/2dwqkcbu6ayRWx08SEEpwq4vRzDqLL1Iohs8MXpTyOAVv9CGDZgX1gUrWFixF
-         LV0g==
+        bh=VHM4SCWe3/XXLSAwUTJPBuYCx7NhoMHgEMjDru8RA9I=;
+        b=OQtl28TUoqM7DH0mpTo68fOqHRMgphYPSbXcpFgc3nplCrnz1WjEKSpHPzYpDoc3Kf
+         o6AtxEyvNRisjVAMWVNx4YWIzTNaCLQ4GDYcoDK3EG/oxHTglX7bcyxCWJILoLqAh2SC
+         J3+wYWcv7g1bTGgB0BCTB/q0DIbYxp/uhFI1f0DTRACeELG00C+gJVwL8RQ37hxQyM+Z
+         4inPvkYEMn3rYd+HnyIcOZIl5r0DQEGIeKf797vwBcIf07CfxzZV2bKghmz/V8sQru06
+         O+XzxkbLSs+7zJZ4B38QvQ0GcCOOENFydkkdNvGDzJuWsm25GAcMpLAPwybkk/BC1Pjl
+         CsMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698222370; x=1698827170;
+        d=1e100.net; s=20230601; t=1698222492; x=1698827292;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/lU+zDQXQsYPuw7klkrJD8s2EBZZ4C+3JO/Fwm5JnVQ=;
-        b=wtsgrKKY4Oy4Glz9tZsbnjFFNKFrfkCyuX9piSTKUwsRG8hH0oUtfa9WsV7UEXCNI3
-         lKl7SebIaLR+ZpCNEvMUBWDETEWcT+xeeGNAS7BlrplMx8GLs8bXAfOjq19WqzF6OzzI
-         dXAIZ41/VWSoT7H4no6FFdF91lCLPzW/Cz5D9SCjZFHGNBMzYotIQOY8Mk8gVSNSE+ou
-         tfFwfpmyYA+exmeHE5nikF8/8w+RygJdxX/aYQnYsgitjkZ0Y4XU4adHPaIpZnL0EjTQ
-         k+Yv8ZVcFwcNma7Vl2TvusPuOAib3wjT00fyvap+f8xJBnNGBndNeQMAurhWeOjO+pVz
-         OdtQ==
-X-Gm-Message-State: AOJu0YyPP+z00Pq+8ucMSzufndRWGgxwJ0IYmZ4tFwT4K8d0id3zezsk
-        ZRE6jIfusrpNM2TtLKmGDV0014zsC6Zx9r3ja4I0/w==
-X-Google-Smtp-Source: AGHT+IF/rYB9uBwRt5ihdafPLPHHTfnRuOAoVcDD3FPa0qs9exb9AU4/jb4MyiT19uSM96dQ88vkxWk4GVlD2gwuZpc=
-X-Received: by 2002:a05:6512:360e:b0:501:b029:1a47 with SMTP id
- f14-20020a056512360e00b00501b0291a47mr27931lfs.1.1698222370101; Wed, 25 Oct
- 2023 01:26:10 -0700 (PDT)
+        bh=VHM4SCWe3/XXLSAwUTJPBuYCx7NhoMHgEMjDru8RA9I=;
+        b=MZc3BXRLn1z/uQREtJNy2+uyRFy7uiI0/gqECWSEb8eV7dpuU/5416BIvJ75rkjGOJ
+         Gvlxwvbvmq0dJAr40dCVcjkmn2UUPnSekHBIObGAb5Dl127jgj1mKSX+reXv7UhsSkpa
+         Z3KIZ8jJGWdisgOlHM8kn2Ddvcplr3zCruDsPVnm4FZkPHILPU8/fHAQmGq7Ezyd+4i6
+         gPFVfGlxGbxkqqv1m0BRSunt088nrYEI2pOu89dqBlW8Df/mQs+jo65/dl0fKEIJKxuG
+         LpRz2xSbTucq1/kmh5C6sIipVnmZ29toVVY2ltgp0EyJ5rkL4+uPC0I9qAA+5a7NcqdP
+         cVTw==
+X-Gm-Message-State: AOJu0YxeYhr8yqriDN7l6cR97t3Ju4ul7KlX94Hu4hUe7jVYB4ZHNWLQ
+        Yd8w0oMgegJMyNt3+y/jISWxkrWO2D+QTuMhbnfakRKHz8qIabV9O98=
+X-Google-Smtp-Source: AGHT+IEGWYWNiIaqzN0vKzJIergvl6YCOlgENn+C6j4e2PoYyktLfG6YdN6lCeAVIv9hI2dGc+44QeqOJT29mHIu4wQ=
+X-Received: by 2002:aa7:c0cf:0:b0:540:f047:29f8 with SMTP id
+ j15-20020aa7c0cf000000b00540f04729f8mr18579edp.0.1698222491756; Wed, 25 Oct
+ 2023 01:28:11 -0700 (PDT)
 MIME-Version: 1.0
-References: <20231020092159.2486063-1-michal.winiarski@intel.com> <20231020092159.2486063-2-michal.winiarski@intel.com>
-In-Reply-To: <20231020092159.2486063-2-michal.winiarski@intel.com>
+References: <20231020092159.2486063-1-michal.winiarski@intel.com> <20231020092159.2486063-3-michal.winiarski@intel.com>
+In-Reply-To: <20231020092159.2486063-3-michal.winiarski@intel.com>
 From:   David Gow <davidgow@google.com>
-Date:   Wed, 25 Oct 2023 16:25:56 +0800
-Message-ID: <CABVgOS=S9w7cTTNO+JjXoBCYe8RJ=tRkEfdZiWhPbbUk52SHNQ@mail.gmail.com>
-Subject: Re: [PATCH 1/2] arch: um: Add Clang coverage support
+Date:   Wed, 25 Oct 2023 16:28:00 +0800
+Message-ID: <CABVgOS=yMiadnA=tWWWJ6WgOAHvWSNJXcXCh9jxeb3qyDM0J0g@mail.gmail.com>
+Subject: Re: [PATCH 2/2] Documentation: kunit: Add clang UML coverage example
 To:     =?UTF-8?Q?Micha=C5=82_Winiarski?= <michal.winiarski@intel.com>
 Cc:     llvm@lists.linux.dev, linux-um@lists.infradead.org,
         linux-doc@vger.kernel.org, kunit-dev@googlegroups.com,
@@ -65,10 +65,10 @@ Cc:     llvm@lists.linux.dev, linux-um@lists.infradead.org,
         Jonathan Corbet <corbet@lwn.net>,
         Brendan Higgins <brendan.higgins@linux.dev>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="0000000000002724df0608863513"
+        boundary="0000000000006611980608863c64"
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
         USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -77,56 +77,83 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
---0000000000002724df0608863513
+--0000000000006611980608863c64
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
 On Fri, 20 Oct 2023 at 17:22, Micha=C5=82 Winiarski
 <michal.winiarski@intel.com> wrote:
 >
-> Clang uses a different set of command line arguments for enabling
-> coverage.
+> LLVM-based toolchain is using a different set of tools for coverage.
+> Add an example that produces output in lcov format.
 >
 > Signed-off-by: Micha=C5=82 Winiarski <michal.winiarski@intel.com>
 > ---
 
-This works brilliantly here -- I'm very glad to finally be able to use
-something newer than gcc 6!
+This looks good to me, minus a couple of very, very minor typos, and
+the fact that this whole section could probably do with some tidying
+up. We'll deal with that separately, though.
 
-I assume this will go in via the UML tree, but if you want, we can
-take it via KUnit.
+UML folks: do you want to take this via the UML branch (alongside
+patch 1), or should we take one or both of them via KUnit? (Or, this
+could go via the docs tree, too, I suppose.) There shouldn't be any
+merge conflicts on our side.
 
-Tested-by: David Gow <davidgow@google.com>
+Reviewed-by: David Gow <davidgow@google.com>
 
 Cheers,
 -- David
 
+>  Documentation/dev-tools/kunit/running_tips.rst | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+>
+> diff --git a/Documentation/dev-tools/kunit/running_tips.rst b/Documentati=
+on/dev-tools/kunit/running_tips.rst
+> index 766f9cdea0fa..9f69c122dee7 100644
+> --- a/Documentation/dev-tools/kunit/running_tips.rst
+> +++ b/Documentation/dev-tools/kunit/running_tips.rst
+> @@ -139,6 +139,17 @@ If your installed version of gcc doesn't work, you c=
+an tweak the steps:
+>         $ ./tools/testing/kunit/kunit.py run --make_options=3DCC=3D/usr/b=
+in/gcc-6
+>         $ lcov -t "my_kunit_tests" -o coverage.info -c -d .kunit/ --gcov-=
+tool=3D/usr/bin/gcov-6
+>
+> +Alternatively, LLVM-based toolchain can also be used:
 
->  arch/um/Makefile-skas | 5 +++++
->  1 file changed, 5 insertions(+)
->
-> diff --git a/arch/um/Makefile-skas b/arch/um/Makefile-skas
-> index ac35de5316a6..67323b028999 100644
-> --- a/arch/um/Makefile-skas
-> +++ b/arch/um/Makefile-skas
-> @@ -4,7 +4,12 @@
->  #
->
->  GPROF_OPT +=3D -pg
+Nit: should this be "an LLVM-based toolchain" or "LLVM-based toolchains"?
+
 > +
-> +ifdef CONFIG_CC_IS_CLANG
-> +GCOV_OPT +=3D -fprofile-instr-generate -fcoverage-mapping
-> +else
->  GCOV_OPT +=3D -fprofile-arcs -ftest-coverage
-> +endif
+> +.. code-block:: bash
+> +
+> +       # Build with LLVM and append coverage options to the current conf=
+ig
+> +       $ $ ./tools/testing/kunit/kunit.py run --make_options LLVM=3D1 --=
+kunitconfig=3D.kunit/ --kunitconfig=3Dtools/testing/kunit/configs/coverage_=
+uml.config
+
+I'm not a big fan of the --kunitconfig=3D.kunit/ bit here, but since
+we're doing it in the gcc version above, let's leave it for now for
+consistency.
+
+Also, Nit: two '$' starting the line.
+
+
+> +       $ llvm-profdata merge -sparse default.profraw -o default.profdata
+> +       $ llvm-cov export --format=3Dlcov .kunit/vmlinux -instr-profile d=
+efault.profdata > coverage.info
+> +       # The coverage.info file is in lcov-compatible format and it can =
+be used to e.g. generate HTML report
+> +       $ genhtml -o /tmp/coverage_html coverage.info
+> +
 >
->  CFLAGS-$(CONFIG_GCOV) +=3D $(GCOV_OPT)
->  CFLAGS-$(CONFIG_GPROF) +=3D $(GPROF_OPT)
+>  Running tests manually
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 > --
 > 2.42.0
 >
 
---0000000000002724df0608863513
+--0000000000006611980608863c64
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -193,14 +220,14 @@ impZAng7ccvvK09K3ZuhwTIxJMsPXCZYsrXWORTw5sczRAP6XvKbPBJnsJoSTe5dFBPBHOQJOGhU
 qWfEfWnWMJPF3LxSGLpLFQXO3RwQqmxv08avwXfVPouh1xuB3FX7rpDabT8YDhu9JgIZkLEKko7L
 yQt6zWwng7k8YF/jGbiAta6VMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCA
-Kbl0OArAsicGesxw5A96aDQhgmtxcstgUmFzU4CJYjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzEwMjUwODI2MTBaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAk
+APQo7UrF/Ip75RUpS/LcNrsGP4Wv1t/Yb+9hJ5yRQDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzEwMjUwODI4MTJaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAcuKWEqPM1Vz8G0NChftg
-1Y07dtfcGbraVTIC9jMfNQ1H/pw1dNKizG6/RnzCnt/TIcyG4lEGIEmRKF3vh6vWWCqqN/cHddkO
-+LuutMyjW0mMP4tyJtabSgy06VUFEyj3FRmked8LtPKnCoKEvbXo1kKuCcfgTQ0FtwHZyXknepBa
-lakNG76KvRfnKd8aKLOigzXb1xQjnSuWk5J7TooXnAas69PIlyg3OqSu70MYes/yml70bEYsuVtE
-lTJu0hvZLdnKZv5W4YWh6vJT3jvVd/CSkhBKxR364du0hgq5nTgXYMOoDcH9wIyiy6m3rTYotUco
-LHpqHasTollzrazz6Q==
---0000000000002724df0608863513--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAmw5BZlv9DCxXCRgOAbi0
+F4NRFNwyGJuieziG3TxDcMuJ8plZXTi6AOMT4U6EBLIFdhQoCgvnD0oNyg2AWHClpVG6M4nKqadK
+gjXkC6LVxbIXURMH7wNgB+HhwjsIMUg99LAJ+SbQYPcO3a97eyw0Nr22rMDtntXCA8hZ+5EuTRVq
+OxciqD/bl9VXCtQka7ADDgWrjHPSy9ugt3Y8lxNoegsghG6b5lAhbsClpoczZ0HQj5Fvsgn/rSyB
+PRvlG232jRwzh8JeFK0WJjhlmReVPdOLsU8/FPewqIlRghFx5afpii+mmoWBpjspzPrMbnOhBVqM
+iQOzmDH3ecbXXUHEOQ==
+--0000000000006611980608863c64--
