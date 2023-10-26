@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 575667D7B9E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Oct 2023 06:40:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B6EF87D7BA6
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Oct 2023 06:40:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344119AbjJZEkD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 26 Oct 2023 00:40:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55310 "EHLO
+        id S1343780AbjJZEkL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 26 Oct 2023 00:40:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343709AbjJZEjz (ORCPT
+        with ESMTP id S1343747AbjJZEjz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Thu, 26 Oct 2023 00:39:55 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 137EB199;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6238519B;
         Wed, 25 Oct 2023 21:39:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698295191; x=1729831191;
+  t=1698295192; x=1729831192;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=aSH3E8hLAKJHAaGomN3035I8KujEFt92c5kdITF4+n4=;
-  b=PJ+0KqokgKsph6j0KwneF4qZazSaW9uKHKLhWPBoYMK1+gvLCyureoS2
-   YlDxuF5+6298sRx8Fi6ZtqLOsEWJBs+D2pMv7Tzt2aPKuCnKinOBUOFij
-   TGDTaTZyQbiCo3JtvaqGo96qxpU4c79UiAF0F/HnlSWJn1RkNdQXQ5soo
-   j1hntkl55L+UQ+t8acSP88Fb2L2nvwZT1/pCxl+v7qnz9ouHggX62gmTV
-   WGuPZ21CDQEPjjhVR4rUINKJQ15eA/ctHLdPTkIz1DrkkOIk5kRc0gun/
-   /G2yI1jthsS+5TMgsNx/vQqiIw5g5gM9wPjFdnuqMcz+Ws9BQ6JQwKscm
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10874"; a="9014534"
+  bh=tIlDI+TOoEYttxgziTULUrFI3lalGYq1P19XU+bQUIM=;
+  b=fePg+4/dfiKjtAt8YWhQE7xyWMxAV8118A3vHpZJ0sedHxbZDIWLaOYW
+   dUhGcYZHk8iuapoeCJEAhovrtyE60SRGXHzYIoOD86lh8Lzq0EhOWODYq
+   we3zQWMzpf+8b8buDlSoyQ7o+82oIPHXZt4CI5kYt4X3F0w1spV3HDJoy
+   1aV5FHJpyWvfMXGuZNsZ017utixg1882+yJBmBPir70ImD2AXjAHTkWsk
+   PlxqlNs1NVEzd6hqTfiKXllEntrGGlVgAQAnzHeTOZLEs0BE0DwTYkEfo
+   ih7dIWQvUg4HedA+V5taqoiQuXMfds5Cg894rs7LyILF0TtoNmEHHnMWX
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10874"; a="9014537"
 X-IronPort-AV: E=Sophos;i="6.03,252,1694761200"; 
-   d="scan'208";a="9014534"
+   d="scan'208";a="9014537"
 Received: from orsmga003.jf.intel.com ([10.7.209.27])
   by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2023 21:39:47 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10874"; a="708931342"
+X-IronPort-AV: E=McAfee;i="6600,9927,10874"; a="708931349"
 X-IronPort-AV: E=Sophos;i="6.03,252,1694761200"; 
-   d="scan'208";a="708931342"
+   d="scan'208";a="708931349"
 Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by orsmga003.jf.intel.com with ESMTP; 25 Oct 2023 21:39:45 -0700
+  by orsmga003.jf.intel.com with ESMTP; 25 Oct 2023 21:39:46 -0700
 From:   Yi Liu <yi.l.liu@intel.com>
 To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
         kevin.tian@intel.com, robin.murphy@arm.com,
@@ -52,9 +52,9 @@ Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
         linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
         zhenzhong.duan@intel.com, joao.m.martins@oracle.com,
         xin.zeng@intel.com
-Subject: [PATCH v7 08/10] iommu: Add iommu_copy_struct_from_user helper
-Date:   Wed, 25 Oct 2023 21:39:36 -0700
-Message-Id: <20231026043938.63898-9-yi.l.liu@intel.com>
+Subject: [PATCH v7 09/10] iommufd/selftest: Add nested domain allocation for mock domain
+Date:   Wed, 25 Oct 2023 21:39:37 -0700
+Message-Id: <20231026043938.63898-10-yi.l.liu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231026043938.63898-1-yi.l.liu@intel.com>
 References: <20231026043938.63898-1-yi.l.liu@intel.com>
@@ -72,71 +72,270 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 From: Nicolin Chen <nicolinc@nvidia.com>
 
-Wrap up the data type/pointer/len sanity and a copy_struct_from_user call
-for iommu drivers to copy driver specific data via struct iommu_user_data.
-And expect it to be used in the domain_alloc_user op for example.
+Add nested domain support in the ->domain_alloc_user op with some proper
+sanity checks. Then, add a domain_nested_ops for all nested domains and
+split the get_md_pagetable helper into paging and nested helpers.
+
+Also, add an iotlb as a testing property of a nested domain.
 
 Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-Co-developed-by: Yi Liu <yi.l.liu@intel.com>
 Signed-off-by: Yi Liu <yi.l.liu@intel.com>
 Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
 ---
- include/linux/iommu.h | 40 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
+ drivers/iommu/iommufd/iommufd_test.h |  18 ++++
+ drivers/iommu/iommufd/selftest.c     | 152 +++++++++++++++++++++------
+ 2 files changed, 140 insertions(+), 30 deletions(-)
 
-diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-index 2ddd99f55471..8fb1b41b4d15 100644
---- a/include/linux/iommu.h
-+++ b/include/linux/iommu.h
-@@ -280,6 +280,46 @@ struct iommu_user_data {
- 	size_t len;
+diff --git a/drivers/iommu/iommufd/iommufd_test.h b/drivers/iommu/iommufd/iommufd_test.h
+index 1f2e93d3d4e8..7910fbe1962d 100644
+--- a/drivers/iommu/iommufd/iommufd_test.h
++++ b/drivers/iommu/iommufd/iommufd_test.h
+@@ -46,6 +46,11 @@ enum {
+ 	MOCK_FLAGS_DEVICE_NO_DIRTY = 1 << 0,
  };
  
++enum {
++	MOCK_NESTED_DOMAIN_IOTLB_ID_MAX = 3,
++	MOCK_NESTED_DOMAIN_IOTLB_NUM = 4,
++};
++
+ struct iommu_test_cmd {
+ 	__u32 size;
+ 	__u32 op;
+@@ -130,4 +135,17 @@ struct iommu_test_hw_info {
+ 	__u32 test_reg;
+ };
+ 
++/* Should not be equal to any defined value in enum iommu_hwpt_data_type */
++#define IOMMU_HWPT_DATA_SELFTEST 0xdead
++#define IOMMU_TEST_IOTLB_DEFAULT 0xbadbeef
++
 +/**
-+ * __iommu_copy_struct_from_user - Copy iommu driver specific user space data
-+ * @dst_data: Pointer to an iommu driver specific user data that is defined in
-+ *            include/uapi/linux/iommufd.h
-+ * @src_data: Pointer to a struct iommu_user_data for user space data info
-+ * @data_type: The data type of the @dst_data. Must match with @src_data.type
-+ * @data_len: Length of current user data structure, i.e. sizeof(struct _dst)
-+ * @min_len: Initial length of user data structure for backward compatibility.
-+ *           This should be offsetofend using the last member in the user data
-+ *           struct that was initially added to include/uapi/linux/iommufd.h
++ * struct iommu_hwpt_selftest
++ *
++ * @iotlb: default mock iotlb value, IOMMU_TEST_IOTLB_DEFAULT
 + */
-+static inline int __iommu_copy_struct_from_user(
-+	void *dst_data, const struct iommu_user_data *src_data,
-+	unsigned int data_type, size_t data_len, size_t min_len)
++struct iommu_hwpt_selftest {
++	__u32 iotlb;
++};
++
+ #endif
+diff --git a/drivers/iommu/iommufd/selftest.c b/drivers/iommu/iommufd/selftest.c
+index d71007234896..6684ab4cdc7a 100644
+--- a/drivers/iommu/iommufd/selftest.c
++++ b/drivers/iommu/iommufd/selftest.c
+@@ -93,6 +93,12 @@ struct mock_iommu_domain {
+ 	struct xarray pfns;
+ };
+ 
++struct mock_iommu_domain_nested {
++	struct iommu_domain domain;
++	struct mock_iommu_domain *parent;
++	u32 iotlb[MOCK_NESTED_DOMAIN_IOTLB_NUM];
++};
++
+ enum selftest_obj_type {
+ 	TYPE_IDEV,
+ };
+@@ -217,54 +223,99 @@ const struct iommu_dirty_ops dirty_ops = {
+ };
+ 
+ static const struct iommu_ops mock_ops;
++static struct iommu_domain_ops domain_nested_ops;
+ 
+-static struct iommu_domain *mock_domain_alloc(unsigned int iommu_domain_type)
++static struct iommu_domain *
++__mock_domain_alloc_paging(unsigned int iommu_domain_type, bool needs_dirty_ops)
+ {
+ 	struct mock_iommu_domain *mock;
+ 
+-	if (iommu_domain_type == IOMMU_DOMAIN_BLOCKED)
+-		return &mock_blocking_domain;
+-
+-	if (iommu_domain_type != IOMMU_DOMAIN_UNMANAGED)
+-		return NULL;
+-
+ 	mock = kzalloc(sizeof(*mock), GFP_KERNEL);
+ 	if (!mock)
+-		return NULL;
++		return ERR_PTR(-ENOMEM);
+ 	mock->domain.geometry.aperture_start = MOCK_APERTURE_START;
+ 	mock->domain.geometry.aperture_end = MOCK_APERTURE_LAST;
+ 	mock->domain.pgsize_bitmap = MOCK_IO_PAGE_SIZE;
+ 	mock->domain.ops = mock_ops.default_domain_ops;
++	if (needs_dirty_ops)
++		mock->domain.dirty_ops = &dirty_ops;
+ 	mock->domain.type = iommu_domain_type;
+ 	xa_init(&mock->pfns);
+ 	return &mock->domain;
+ }
+ 
++static struct iommu_domain *
++__mock_domain_alloc_nested(struct mock_iommu_domain *mock_parent,
++			   const struct iommu_hwpt_selftest *user_cfg)
 +{
-+	if (src_data->type != data_type)
-+		return -EINVAL;
-+	if (WARN_ON(!dst_data || !src_data))
-+		return -EINVAL;
-+	if (src_data->len < min_len || data_len < src_data->len)
-+		return -EINVAL;
-+	return copy_struct_from_user(dst_data, data_len, src_data->uptr,
-+				     src_data->len);
++	struct mock_iommu_domain_nested *mock_nested;
++	int i;
++
++	mock_nested = kzalloc(sizeof(*mock_nested), GFP_KERNEL);
++	if (!mock_nested)
++		return ERR_PTR(-ENOMEM);
++	mock_nested->parent = mock_parent;
++	mock_nested->domain.ops = &domain_nested_ops;
++	mock_nested->domain.type = IOMMU_DOMAIN_NESTED;
++	for (i = 0; i < MOCK_NESTED_DOMAIN_IOTLB_NUM; i++)
++		mock_nested->iotlb[i] = user_cfg->iotlb;
++	return &mock_nested->domain;
 +}
 +
-+/**
-+ * iommu_copy_struct_from_user - Copy iommu driver specific user space data
-+ * @kdst: Pointer to an iommu driver specific user data that is defined in
-+ *        include/uapi/linux/iommufd.h
-+ * @user_data: Pointer to a struct iommu_user_data for user space data info
-+ * @data_type: The data type of the @kdst. Must match with @user_data->type
-+ * @min_last: The last memember of the data structure @kdst points in the
-+ *            initial version.
-+ * Return 0 for success, otherwise -error.
-+ */
-+#define iommu_copy_struct_from_user(kdst, user_data, data_type, min_last) \
-+	__iommu_copy_struct_from_user(kdst, user_data, data_type,         \
-+				      sizeof(*kdst),                      \
-+				      offsetofend(typeof(*kdst), min_last))
++static struct iommu_domain *mock_domain_alloc(unsigned int iommu_domain_type)
++{
++	struct iommu_domain *domain;
 +
- /**
-  * struct iommu_ops - iommu ops and capabilities
-  * @capable: check capability
++	if (iommu_domain_type == IOMMU_DOMAIN_BLOCKED)
++		return &mock_blocking_domain;
++	if (iommu_domain_type != IOMMU_DOMAIN_UNMANAGED)
++		return NULL;
++	domain = __mock_domain_alloc_paging(iommu_domain_type, false);
++	if (IS_ERR(domain))
++		domain = NULL;
++	return domain;
++}
++
+ static struct iommu_domain *
+ mock_domain_alloc_user(struct device *dev, u32 flags,
+ 		       struct iommu_domain *parent,
+ 		       const struct iommu_user_data *user_data)
+ {
+-	struct mock_dev *mdev = container_of(dev, struct mock_dev, dev);
+-	struct iommu_domain *domain;
++	struct mock_iommu_domain *mock_parent;
++	struct iommu_hwpt_selftest user_cfg;
++	int rc;
+ 
+-	if (flags &
+-	    (~(IOMMU_HWPT_ALLOC_NEST_PARENT | IOMMU_HWPT_ALLOC_DIRTY_TRACKING)))
+-		return ERR_PTR(-EOPNOTSUPP);
++	/* must be mock_domain */
++	if (!parent) {
++		struct mock_dev *mdev = container_of(dev, struct mock_dev, dev);
++		bool has_dirty_flag = flags & IOMMU_HWPT_ALLOC_DIRTY_TRACKING;
++		bool no_dirty_ops = mdev->flags & MOCK_FLAGS_DEVICE_NO_DIRTY;
++
++		if (flags & (~(IOMMU_HWPT_ALLOC_NEST_PARENT |
++			       IOMMU_HWPT_ALLOC_DIRTY_TRACKING)))
++			return ERR_PTR(-EOPNOTSUPP);
++		if (user_data || (has_dirty_flag && no_dirty_ops))
++			return ERR_PTR(-EOPNOTSUPP);
++		return __mock_domain_alloc_paging(IOMMU_DOMAIN_UNMANAGED,
++						  has_dirty_flag);
++	}
+ 
+-	if (parent || user_data)
++	/* must be mock_domain_nested */
++	if (user_data->type != IOMMU_HWPT_DATA_SELFTEST || flags)
+ 		return ERR_PTR(-EOPNOTSUPP);
++	if (!parent || parent->ops != mock_ops.default_domain_ops)
++		return ERR_PTR(-EINVAL);
+ 
+-	if ((flags & IOMMU_HWPT_ALLOC_DIRTY_TRACKING) &&
+-	    (mdev->flags & MOCK_FLAGS_DEVICE_NO_DIRTY))
+-		return ERR_PTR(-EOPNOTSUPP);
++	mock_parent = container_of(parent, struct mock_iommu_domain, domain);
++	if (!mock_parent)
++		return ERR_PTR(-EINVAL);
+ 
+-	domain = mock_domain_alloc(IOMMU_DOMAIN_UNMANAGED);
+-	if (domain && !(mdev->flags & MOCK_FLAGS_DEVICE_NO_DIRTY))
+-		domain->dirty_ops = &dirty_ops;
+-	if (!domain)
+-		domain = ERR_PTR(-ENOMEM);
+-	return domain;
++	rc = iommu_copy_struct_from_user(&user_cfg, user_data,
++					 IOMMU_HWPT_DATA_SELFTEST, iotlb);
++	if (rc)
++		return ERR_PTR(rc);
++
++	return __mock_domain_alloc_nested(mock_parent, &user_cfg);
+ }
+ 
+ static void mock_domain_free(struct iommu_domain *domain)
+@@ -434,19 +485,41 @@ static const struct iommu_ops mock_ops = {
+ 		},
+ };
+ 
++static void mock_domain_free_nested(struct iommu_domain *domain)
++{
++	struct mock_iommu_domain_nested *mock_nested =
++		container_of(domain, struct mock_iommu_domain_nested, domain);
++
++	kfree(mock_nested);
++}
++
++static struct iommu_domain_ops domain_nested_ops = {
++	.free = mock_domain_free_nested,
++	.attach_dev = mock_domain_nop_attach,
++};
++
+ static inline struct iommufd_hw_pagetable *
+-get_md_pagetable(struct iommufd_ucmd *ucmd, u32 mockpt_id,
+-		 struct mock_iommu_domain **mock)
++__get_md_pagetable(struct iommufd_ucmd *ucmd, u32 mockpt_id, u32 hwpt_type)
+ {
+-	struct iommufd_hw_pagetable *hwpt;
+ 	struct iommufd_object *obj;
+ 
+-	obj = iommufd_get_object(ucmd->ictx, mockpt_id,
+-				 IOMMUFD_OBJ_HWPT_PAGING);
++	obj = iommufd_get_object(ucmd->ictx, mockpt_id, hwpt_type);
+ 	if (IS_ERR(obj))
+ 		return ERR_CAST(obj);
+-	hwpt = container_of(obj, struct iommufd_hw_pagetable, obj);
+-	if (hwpt->domain->ops != mock_ops.default_domain_ops) {
++	return container_of(obj, struct iommufd_hw_pagetable, obj);
++}
++
++static inline struct iommufd_hw_pagetable *
++get_md_pagetable(struct iommufd_ucmd *ucmd, u32 mockpt_id,
++		 struct mock_iommu_domain **mock)
++{
++	struct iommufd_hw_pagetable *hwpt;
++
++	hwpt = __get_md_pagetable(ucmd, mockpt_id, IOMMUFD_OBJ_HWPT_PAGING);
++	if (IS_ERR(hwpt))
++		return hwpt;
++	if (hwpt->domain->type != IOMMU_DOMAIN_UNMANAGED ||
++	    hwpt->domain->ops != mock_ops.default_domain_ops) {
+ 		iommufd_put_object(&hwpt->obj);
+ 		return ERR_PTR(-EINVAL);
+ 	}
+@@ -454,6 +527,25 @@ get_md_pagetable(struct iommufd_ucmd *ucmd, u32 mockpt_id,
+ 	return hwpt;
+ }
+ 
++static inline struct iommufd_hw_pagetable *
++get_md_pagetable_nested(struct iommufd_ucmd *ucmd, u32 mockpt_id,
++			struct mock_iommu_domain_nested **mock_nested)
++{
++	struct iommufd_hw_pagetable *hwpt;
++
++	hwpt = __get_md_pagetable(ucmd, mockpt_id, IOMMUFD_OBJ_HWPT_NESTED);
++	if (IS_ERR(hwpt))
++		return hwpt;
++	if (hwpt->domain->type != IOMMU_DOMAIN_NESTED ||
++	    hwpt->domain->ops != &domain_nested_ops) {
++		iommufd_put_object(&hwpt->obj);
++		return ERR_PTR(-EINVAL);
++	}
++	*mock_nested = container_of(hwpt->domain,
++				    struct mock_iommu_domain_nested, domain);
++	return hwpt;
++}
++
+ struct mock_bus_type {
+ 	struct bus_type bus;
+ 	struct notifier_block nb;
 -- 
 2.34.1
 
