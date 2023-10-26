@@ -2,43 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B26BE7D7B13
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Oct 2023 04:53:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44ECE7D7B14
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Oct 2023 04:54:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232946AbjJZCxv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 25 Oct 2023 22:53:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35964 "EHLO
+        id S233222AbjJZCx5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 25 Oct 2023 22:53:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233081AbjJZCxt (ORCPT
+        with ESMTP id S234602AbjJZCxz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 25 Oct 2023 22:53:49 -0400
+        Wed, 25 Oct 2023 22:53:55 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C69B2186;
-        Wed, 25 Oct 2023 19:53:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36C331AB;
+        Wed, 25 Oct 2023 19:53:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698288826; x=1729824826;
+  t=1698288831; x=1729824831;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=/AnHd0glJLhM4XWEU5B7l7tvLBpqBEBmveUVtvBe6W0=;
-  b=fzHyIcLJpQ2GAWi6Eat5XdrDBRNXGNeGoK/lPlGioH9CkbnuY/0WlZmZ
-   NLNG+wzl1ccozNQjydzCS4yWfPXAx8CDr92Rb1ZRYient1CT2goIitYik
-   nNd2Yd+748anTFP1v7x99akpfYt8XS759Eh36PZ1EurcFZ/pPKLD3IJt5
-   e/9QYgmfPKH2a3XVtZH+jwiIEF1U4LskD4r/NbNDzlGm61R4SYdCZZZkt
-   GOL7M5H8UTiVjMgZaNqbHt2LnEiKMKokP53X+3QVkkvbdNqI1yfLXKXz1
-   nR/I2+MS6s5bK+FI37KI75yj9dLsW9zPB9R0+2rIrcKMEpnj8Uf9GBy2k
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10874"; a="391316173"
+  bh=SXBnjgZAYdAreHu7Ix6g3uSQoirCPPblBK4F+Kofnoo=;
+  b=ebV8JrX/CiZAh9I3JYl1q/BDVZxzNeCHEtT5X3EmbB1b6QlelHJDExHj
+   2laAcu7dPDFeLmhL4ELg5BEnpCd+bC2YBJRaJ9ZingpX9Opb+HqvoUX5E
+   xPyopKwV5U+QgFjLzptyMjlZcPyklWSFUhmVVqlBEDgURj1RfRIC9A051
+   zaTyLdZ45jGnMva2LsBtXGovmBDg5gqE4Ze8qpPQSh5TPVoC4ggan1uld
+   HtHX9uzwauuH4WSav15f26PGvhGl/3ZYF9+CDoWZLwlFkn85+Ifa7VEit
+   LW+Ez+GAl8y+HbI56zOjbbEnWBBLUg8Do4n2IT6l+OCnK6sjHC+VQ4vDT
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10874"; a="391316188"
 X-IronPort-AV: E=Sophos;i="6.03,252,1694761200"; 
-   d="scan'208";a="391316173"
+   d="scan'208";a="391316188"
 Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2023 19:53:46 -0700
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2023 19:53:50 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10874"; a="735604532"
+X-IronPort-AV: E=McAfee;i="6600,9927,10874"; a="735604545"
 X-IronPort-AV: E=Sophos;i="6.03,252,1694761200"; 
-   d="scan'208";a="735604532"
+   d="scan'208";a="735604545"
 Received: from allen-box.sh.intel.com ([10.239.159.127])
-  by orsmga006.jf.intel.com with ESMTP; 25 Oct 2023 19:53:42 -0700
+  by orsmga006.jf.intel.com with ESMTP; 25 Oct 2023 19:53:46 -0700
 From:   Lu Baolu <baolu.lu@linux.intel.com>
 To:     Jason Gunthorpe <jgg@ziepe.ca>, Kevin Tian <kevin.tian@intel.com>,
         Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
@@ -50,9 +50,9 @@ To:     Jason Gunthorpe <jgg@ziepe.ca>, Kevin Tian <kevin.tian@intel.com>,
 Cc:     iommu@lists.linux.dev, linux-kselftest@vger.kernel.org,
         virtualization@lists.linux-foundation.org,
         linux-kernel@vger.kernel.org, Lu Baolu <baolu.lu@linux.intel.com>
-Subject: [PATCH v2 3/6] iommufd: Initializing and releasing IO page fault data
-Date:   Thu, 26 Oct 2023 10:49:27 +0800
-Message-Id: <20231026024930.382898-4-baolu.lu@linux.intel.com>
+Subject: [PATCH v2 4/6] iommufd: Deliver fault messages to user space
+Date:   Thu, 26 Oct 2023 10:49:28 +0800
+Message-Id: <20231026024930.382898-5-baolu.lu@linux.intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231026024930.382898-1-baolu.lu@linux.intel.com>
 References: <20231026024930.382898-1-baolu.lu@linux.intel.com>
@@ -67,292 +67,289 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add some housekeeping code for IO page fault dilivery. Add a fault field
-in the iommufd_hw_pagetable structure to store pending IO page faults and
-other related data.
+Add the file interface that provides a simple and efficient way for
+userspace to handle page faults. The file interface allows userspace
+to read fault messages sequentially, and to respond to the handling
+result by writing to the same file.
 
-The fault field is allocated and initialized when an IOPF-capable user
-HWPT is allocated. It is indicated by the IOMMU_HWPT_ALLOC_IOPF_CAPABLE
-flag being set in the allocation user data. The fault field exists until
-the HWPT is destroyed. This also means that you can determine whether a
-HWPT is IOPF-capable by checking the fault field.
+Userspace applications are recommended to use io_uring to speed up read
+and write efficiency.
 
-When an IOPF-capable HWPT is attached to a device (could also be a PASID of
-a device in the future), the iommufd device pointer is saved for the pasid
-of the device. The pointer is recalled and all pending iopf groups are
-discarded after the HWPT is detached from the device.
+With this done, allow userspace application to allocate a hw page table
+with IOMMU_HWPT_ALLOC_IOPF_CAPABLE flag set.
 
 Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 ---
- include/linux/iommu.h                   |  6 +++
- drivers/iommu/iommufd/iommufd_private.h | 10 ++++
- drivers/iommu/iommufd/device.c          | 69 +++++++++++++++++++++++--
- drivers/iommu/iommufd/hw_pagetable.c    | 56 +++++++++++++++++++-
- 4 files changed, 137 insertions(+), 4 deletions(-)
+ drivers/iommu/iommufd/iommufd_private.h |   2 +
+ drivers/iommu/iommufd/hw_pagetable.c    | 204 +++++++++++++++++++++++-
+ 2 files changed, 205 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-index 615d8a5f9dee..600ca3842c8a 100644
---- a/include/linux/iommu.h
-+++ b/include/linux/iommu.h
-@@ -130,6 +130,12 @@ struct iopf_group {
- 	struct work_struct work;
- 	struct device *dev;
- 	struct iommu_domain *domain;
-+
-+	/*
-+	 * Used by iopf handlers, like iommufd, to hook the iopf group
-+	 * on its own lists.
-+	 */
-+	struct list_head node;
- };
- 
- /**
 diff --git a/drivers/iommu/iommufd/iommufd_private.h b/drivers/iommu/iommufd/iommufd_private.h
-index 1bd412cff2d6..0dbaa2dc5b22 100644
+index 0dbaa2dc5b22..ff063bc48150 100644
 --- a/drivers/iommu/iommufd/iommufd_private.h
 +++ b/drivers/iommu/iommufd/iommufd_private.h
-@@ -230,6 +230,15 @@ int iommufd_option_rlimit_mode(struct iommu_option *cmd,
+@@ -237,6 +237,8 @@ struct hw_pgtable_fault {
+ 	struct mutex mutex;
+ 	struct list_head deliver;
+ 	struct list_head response;
++	struct file *fault_file;
++	int fault_fd;
+ };
  
- int iommufd_vfio_ioas(struct iommufd_ucmd *ucmd);
- 
-+struct hw_pgtable_fault {
-+	struct iommufd_ctx *ictx;
-+	struct iommufd_hw_pagetable *hwpt;
-+	/* Protect below iopf lists. */
-+	struct mutex mutex;
-+	struct list_head deliver;
-+	struct list_head response;
-+};
-+
  /*
-  * A HW pagetable is called an iommu_domain inside the kernel. This user object
-  * allows directly creating and inspecting the domains. Domains that have kernel
-@@ -239,6 +248,7 @@ int iommufd_vfio_ioas(struct iommufd_ucmd *ucmd);
- struct iommufd_hw_pagetable {
- 	struct iommufd_object obj;
- 	struct iommu_domain *domain;
-+	struct hw_pgtable_fault *fault;
- 
- 	void (*abort)(struct iommufd_object *obj);
- 	void (*destroy)(struct iommufd_object *obj);
-diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
-index 645ab5d290fe..0a8e03d5e7c5 100644
---- a/drivers/iommu/iommufd/device.c
-+++ b/drivers/iommu/iommufd/device.c
-@@ -456,6 +456,16 @@ int iommufd_hw_pagetable_attach(struct iommufd_hw_pagetable *hwpt,
- 	if (rc)
- 		goto err_unlock;
- 
-+	if (hwpt->fault) {
-+		void *curr;
-+
-+		curr = iopf_pasid_cookie_set(idev->dev, IOMMU_NO_PASID, idev);
-+		if (IS_ERR(curr)) {
-+			rc = PTR_ERR(curr);
-+			goto err_unresv;
-+		}
-+	}
-+
- 	/*
- 	 * Only attach to the group once for the first device that is in the
- 	 * group. All the other devices will follow this attachment. The user
-@@ -466,17 +476,20 @@ int iommufd_hw_pagetable_attach(struct iommufd_hw_pagetable *hwpt,
- 	if (list_empty(&idev->igroup->device_list)) {
- 		rc = iommufd_group_setup_msi(idev->igroup, hwpt);
- 		if (rc)
--			goto err_unresv;
-+			goto err_unset;
- 
- 		rc = iommu_attach_group(hwpt->domain, idev->igroup->group);
- 		if (rc)
--			goto err_unresv;
-+			goto err_unset;
- 		idev->igroup->hwpt = hwpt;
- 	}
- 	refcount_inc(&hwpt->obj.users);
- 	list_add_tail(&idev->group_item, &idev->igroup->device_list);
- 	mutex_unlock(&idev->igroup->lock);
- 	return 0;
-+err_unset:
-+	if (hwpt->fault)
-+		iopf_pasid_cookie_set(idev->dev, IOMMU_NO_PASID, NULL);
- err_unresv:
- 	iommufd_device_remove_rr(idev, hwpt);
- err_unlock:
-@@ -484,6 +497,30 @@ int iommufd_hw_pagetable_attach(struct iommufd_hw_pagetable *hwpt,
- 	return rc;
- }
- 
-+/*
-+ * Discard all pending page faults. Called when a hw pagetable is detached
-+ * from a device. The iommu core guarantees that all page faults have been
-+ * responded, hence there's no need to respond it again.
-+ */
-+static void iommufd_hw_pagetable_discard_iopf(struct iommufd_hw_pagetable *hwpt)
-+{
-+	struct iopf_group *group, *next;
-+
-+	if (!hwpt->fault)
-+		return;
-+
-+	mutex_lock(&hwpt->fault->mutex);
-+	list_for_each_entry_safe(group, next, &hwpt->fault->deliver, node) {
-+		list_del(&group->node);
-+		iopf_free_group(group);
-+	}
-+	list_for_each_entry_safe(group, next, &hwpt->fault->response, node) {
-+		list_del(&group->node);
-+		iopf_free_group(group);
-+	}
-+	mutex_unlock(&hwpt->fault->mutex);
-+}
-+
- struct iommufd_hw_pagetable *
- iommufd_hw_pagetable_detach(struct iommufd_device *idev)
- {
-@@ -491,6 +528,8 @@ iommufd_hw_pagetable_detach(struct iommufd_device *idev)
- 
- 	mutex_lock(&idev->igroup->lock);
- 	list_del(&idev->group_item);
-+	if (hwpt->fault)
-+		iopf_pasid_cookie_set(idev->dev, IOMMU_NO_PASID, NULL);
- 	if (list_empty(&idev->igroup->device_list)) {
- 		iommu_detach_group(hwpt->domain, idev->igroup->group);
- 		idev->igroup->hwpt = NULL;
-@@ -498,6 +537,8 @@ iommufd_hw_pagetable_detach(struct iommufd_device *idev)
- 	iommufd_device_remove_rr(idev, hwpt);
- 	mutex_unlock(&idev->igroup->lock);
- 
-+	iommufd_hw_pagetable_discard_iopf(hwpt);
-+
- 	/* Caller must destroy hwpt */
- 	return hwpt;
- }
-@@ -563,9 +604,24 @@ iommufd_device_do_replace(struct iommufd_device *idev,
- 	if (rc)
- 		goto err_unresv;
- 
-+	if (old_hwpt->fault) {
-+		iommufd_hw_pagetable_discard_iopf(old_hwpt);
-+		iopf_pasid_cookie_set(idev->dev, IOMMU_NO_PASID, NULL);
-+	}
-+
-+	if (hwpt->fault) {
-+		void *curr;
-+
-+		curr = iopf_pasid_cookie_set(idev->dev, IOMMU_NO_PASID, idev);
-+		if (IS_ERR(curr)) {
-+			rc = PTR_ERR(curr);
-+			goto err_unresv;
-+		}
-+	}
-+
- 	rc = iommu_group_replace_domain(igroup->group, hwpt->domain);
- 	if (rc)
--		goto err_unresv;
-+		goto err_unset;
- 
- 	if (iommufd_hw_pagetable_compare_ioas(old_hwpt, hwpt)) {
- 		list_for_each_entry(cur, &igroup->device_list, group_item)
-@@ -583,8 +639,15 @@ iommufd_device_do_replace(struct iommufd_device *idev,
- 					      &old_hwpt->obj.users));
- 	mutex_unlock(&idev->igroup->lock);
- 
-+	iommufd_hw_pagetable_discard_iopf(old_hwpt);
-+
- 	/* Caller must destroy old_hwpt */
- 	return old_hwpt;
-+err_unset:
-+	if (hwpt->fault)
-+		iopf_pasid_cookie_set(idev->dev, IOMMU_NO_PASID, NULL);
-+	if (old_hwpt->fault)
-+		iopf_pasid_cookie_set(idev->dev, IOMMU_NO_PASID, idev);
- err_unresv:
- 	if (iommufd_hw_pagetable_compare_ioas(old_hwpt, hwpt)) {
- 		list_for_each_entry(cur, &igroup->device_list, group_item)
 diff --git a/drivers/iommu/iommufd/hw_pagetable.c b/drivers/iommu/iommufd/hw_pagetable.c
-index 72c46de1396b..9f94c824cf86 100644
+index 9f94c824cf86..f0aac1bb2d2d 100644
 --- a/drivers/iommu/iommufd/hw_pagetable.c
 +++ b/drivers/iommu/iommufd/hw_pagetable.c
-@@ -38,9 +38,38 @@ static void iommufd_kernel_managed_hwpt_destroy(struct iommufd_object *obj)
+@@ -3,6 +3,8 @@
+  * Copyright (c) 2021-2022, NVIDIA CORPORATION & AFFILIATES
+  */
+ #include <linux/iommu.h>
++#include <linux/file.h>
++#include <linux/anon_inodes.h>
+ #include <uapi/linux/iommufd.h>
+ 
+ #include "../iommu-priv.h"
+@@ -38,9 +40,198 @@ static void iommufd_kernel_managed_hwpt_destroy(struct iommufd_object *obj)
  	refcount_dec(&hwpt->ioas->obj.users);
  }
  
-+static struct hw_pgtable_fault *hw_pagetable_fault_alloc(void)
++static int iommufd_compose_fault_message(struct iommu_fault *fault,
++					 struct iommu_hwpt_pgfault *hwpt_fault,
++					 struct device *dev)
 +{
-+	struct hw_pgtable_fault *fault;
++	struct iommufd_device *idev = iopf_pasid_cookie_get(dev, IOMMU_NO_PASID);
 +
-+	fault = kzalloc(sizeof(*fault), GFP_KERNEL);
-+	if (!fault)
-+		return ERR_PTR(-ENOMEM);
++	if (!idev)
++		return -ENODEV;
 +
-+	INIT_LIST_HEAD(&fault->deliver);
-+	INIT_LIST_HEAD(&fault->response);
-+	mutex_init(&fault->mutex);
++	if (IS_ERR(idev))
++		return PTR_ERR(idev);
 +
-+	return fault;
-+}
-+
-+static void hw_pagetable_fault_free(struct hw_pgtable_fault *fault)
-+{
-+	WARN_ON(!list_empty(&fault->deliver));
-+	WARN_ON(!list_empty(&fault->response));
-+
-+	kfree(fault);
-+}
-+
- void iommufd_hw_pagetable_destroy(struct iommufd_object *obj)
- {
--	container_of(obj, struct iommufd_hw_pagetable, obj)->destroy(obj);
-+	struct iommufd_hw_pagetable *hwpt =
-+		container_of(obj, struct iommufd_hw_pagetable, obj);
-+
-+	if (hwpt->fault)
-+		hw_pagetable_fault_free(hwpt->fault);
-+
-+	hwpt->destroy(obj);
- }
- 
- static void iommufd_user_managed_hwpt_abort(struct iommufd_object *obj)
-@@ -289,6 +318,17 @@ iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx,
- 	return ERR_PTR(rc);
- }
- 
-+static int iommufd_hw_pagetable_iopf_handler(struct iopf_group *group)
-+{
-+	struct iommufd_hw_pagetable *hwpt = group->domain->fault_data;
-+
-+	mutex_lock(&hwpt->fault->mutex);
-+	list_add_tail(&group->node, &hwpt->fault->deliver);
-+	mutex_unlock(&hwpt->fault->mutex);
++	hwpt_fault->size = sizeof(*hwpt_fault);
++	hwpt_fault->flags = fault->prm.flags;
++	hwpt_fault->dev_id = idev->obj.id;
++	hwpt_fault->pasid = fault->prm.pasid;
++	hwpt_fault->grpid = fault->prm.grpid;
++	hwpt_fault->perm = fault->prm.perm;
++	hwpt_fault->addr = fault->prm.addr;
++	hwpt_fault->private_data[0] = fault->prm.private_data[0];
++	hwpt_fault->private_data[1] = fault->prm.private_data[1];
 +
 +	return 0;
 +}
 +
- int iommufd_hwpt_alloc(struct iommufd_ucmd *ucmd)
- {
- 	struct iommufd_hw_pagetable *(*alloc_fn)(
-@@ -364,6 +404,20 @@ int iommufd_hwpt_alloc(struct iommufd_ucmd *ucmd)
- 		goto out_unlock;
- 	}
- 
-+	if (cmd->flags & IOMMU_HWPT_ALLOC_IOPF_CAPABLE) {
-+		hwpt->fault = hw_pagetable_fault_alloc();
-+		if (IS_ERR(hwpt->fault)) {
-+			rc = PTR_ERR(hwpt->fault);
-+			hwpt->fault = NULL;
-+			goto out_hwpt;
++static ssize_t hwpt_fault_fops_read(struct file *filep, char __user *buf,
++				    size_t count, loff_t *ppos)
++{
++	size_t fault_size = sizeof(struct iommu_hwpt_pgfault);
++	struct hw_pgtable_fault *fault = filep->private_data;
++	struct iommu_hwpt_pgfault data;
++	struct iopf_group *group;
++	struct iopf_fault *iopf;
++	size_t done = 0;
++	int rc;
++
++	if (*ppos || count % fault_size)
++		return -ESPIPE;
++
++	mutex_lock(&fault->mutex);
++	while (!list_empty(&fault->deliver) && count > done) {
++		group = list_first_entry(&fault->deliver,
++					 struct iopf_group, node);
++
++		if (list_count_nodes(&group->faults) * fault_size > count - done)
++			break;
++
++		list_for_each_entry(iopf, &group->faults, list) {
++			rc = iommufd_compose_fault_message(&iopf->fault,
++							   &data, group->dev);
++			if (rc)
++				goto err_unlock;
++			rc = copy_to_user(buf + done, &data, fault_size);
++			if (rc)
++				goto err_unlock;
++			done += fault_size;
 +		}
 +
-+		hwpt->fault->ictx = ucmd->ictx;
-+		hwpt->fault->hwpt = hwpt;
-+		hwpt->domain->iopf_handler = iommufd_hw_pagetable_iopf_handler;
-+		hwpt->domain->fault_data = hwpt;
++		list_move_tail(&group->node, &fault->response);
++	}
++	mutex_unlock(&fault->mutex);
++
++	return done;
++err_unlock:
++	mutex_unlock(&fault->mutex);
++	return rc;
++}
++
++static ssize_t hwpt_fault_fops_write(struct file *filep,
++				     const char __user *buf,
++				     size_t count, loff_t *ppos)
++{
++	size_t response_size = sizeof(struct iommu_hwpt_page_response);
++	struct hw_pgtable_fault *fault = filep->private_data;
++	struct iommu_hwpt_page_response response;
++	struct iommufd_hw_pagetable *hwpt;
++	struct iopf_group *iter, *group;
++	struct iommufd_device *idev;
++	size_t done = 0;
++	int rc = 0;
++
++	if (*ppos || count % response_size)
++		return -ESPIPE;
++
++	mutex_lock(&fault->mutex);
++	while (!list_empty(&fault->response) && count > done) {
++		rc = copy_from_user(&response, buf + done, response_size);
++		if (rc)
++			break;
++
++		/* Get the device that this response targets at. */
++		idev = container_of(iommufd_get_object(fault->ictx,
++						       response.dev_id,
++						       IOMMUFD_OBJ_DEVICE),
++				    struct iommufd_device, obj);
++		if (IS_ERR(idev)) {
++			rc = PTR_ERR(idev);
++			break;
++		}
++
++		/*
++		 * Get the hw page table that this response was generated for.
++		 * It must match the one stored in the fault data.
++		 */
++		hwpt = container_of(iommufd_get_object(fault->ictx,
++						       response.hwpt_id,
++						       IOMMUFD_OBJ_HW_PAGETABLE),
++				    struct iommufd_hw_pagetable, obj);
++		if (IS_ERR(hwpt)) {
++			iommufd_put_object(&idev->obj);
++			rc = PTR_ERR(hwpt);
++			break;
++		}
++
++		if (hwpt != fault->hwpt) {
++			rc = -EINVAL;
++			goto put_obj;
++		}
++
++		group = NULL;
++		list_for_each_entry(iter, &fault->response, node) {
++			if (response.grpid != iter->last_fault.fault.prm.grpid)
++				continue;
++
++			if (idev->dev != iter->dev)
++				continue;
++
++			if ((iter->last_fault.fault.prm.flags &
++			     IOMMU_FAULT_PAGE_REQUEST_PASID_VALID) &&
++			    response.pasid != iter->last_fault.fault.prm.pasid)
++				continue;
++
++			group = iter;
++			break;
++		}
++
++		if (!group) {
++			rc = -ENODEV;
++			goto put_obj;
++		}
++
++		rc = iopf_group_response(group, response.code);
++		if (rc)
++			goto put_obj;
++
++		list_del(&group->node);
++		iopf_free_group(group);
++		done += response_size;
++put_obj:
++		iommufd_put_object(&hwpt->obj);
++		iommufd_put_object(&idev->obj);
++		if (rc)
++			break;
++	}
++	mutex_unlock(&fault->mutex);
++
++	return (rc < 0) ? rc : done;
++}
++
++static const struct file_operations hwpt_fault_fops = {
++	.owner		= THIS_MODULE,
++	.read		= hwpt_fault_fops_read,
++	.write		= hwpt_fault_fops_write,
++};
++
++static int hw_pagetable_get_fault_fd(struct hw_pgtable_fault *fault)
++{
++	struct file *filep;
++	int fdno;
++
++	fdno = get_unused_fd_flags(O_CLOEXEC);
++	if (fdno < 0)
++		return fdno;
++
++	filep = anon_inode_getfile("[iommufd-pgfault]", &hwpt_fault_fops,
++				   fault, O_RDWR);
++	if (IS_ERR(filep)) {
++		put_unused_fd(fdno);
++		return PTR_ERR(filep);
 +	}
 +
++	fd_install(fdno, filep);
++	fault->fault_file = filep;
++	fault->fault_fd = fdno;
++
++	return 0;
++}
++
+ static struct hw_pgtable_fault *hw_pagetable_fault_alloc(void)
+ {
+ 	struct hw_pgtable_fault *fault;
++	int rc;
+ 
+ 	fault = kzalloc(sizeof(*fault), GFP_KERNEL);
+ 	if (!fault)
+@@ -50,6 +241,12 @@ static struct hw_pgtable_fault *hw_pagetable_fault_alloc(void)
+ 	INIT_LIST_HEAD(&fault->response);
+ 	mutex_init(&fault->mutex);
+ 
++	rc = hw_pagetable_get_fault_fd(fault);
++	if (rc) {
++		kfree(fault);
++		return ERR_PTR(rc);
++	}
++
+ 	return fault;
+ }
+ 
+@@ -58,6 +255,8 @@ static void hw_pagetable_fault_free(struct hw_pgtable_fault *fault)
+ 	WARN_ON(!list_empty(&fault->deliver));
+ 	WARN_ON(!list_empty(&fault->response));
+ 
++	fput(fault->fault_file);
++	put_unused_fd(fault->fault_fd);
+ 	kfree(fault);
+ }
+ 
+@@ -347,7 +546,9 @@ int iommufd_hwpt_alloc(struct iommufd_ucmd *ucmd)
+ 	struct mutex *mutex;
+ 	int rc;
+ 
+-	if (cmd->flags & ~IOMMU_HWPT_ALLOC_NEST_PARENT || cmd->__reserved)
++	if ((cmd->flags & ~(IOMMU_HWPT_ALLOC_NEST_PARENT |
++			    IOMMU_HWPT_ALLOC_IOPF_CAPABLE)) ||
++	    cmd->__reserved)
+ 		return -EOPNOTSUPP;
+ 	if (!cmd->data_len && cmd->hwpt_type != IOMMU_HWPT_TYPE_DEFAULT)
+ 		return -EINVAL;
+@@ -416,6 +617,7 @@ int iommufd_hwpt_alloc(struct iommufd_ucmd *ucmd)
+ 		hwpt->fault->hwpt = hwpt;
+ 		hwpt->domain->iopf_handler = iommufd_hw_pagetable_iopf_handler;
+ 		hwpt->domain->fault_data = hwpt;
++		cmd->out_fault_fd = hwpt->fault->fault_fd;
+ 	}
+ 
  	cmd->out_hwpt_id = hwpt->obj.id;
- 	rc = iommufd_ucmd_respond(ucmd, sizeof(*cmd));
- 	if (rc)
 -- 
 2.34.1
 
