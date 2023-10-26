@@ -2,61 +2,148 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 992BE7D802B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Oct 2023 12:01:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86D707D82E0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Oct 2023 14:46:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbjJZKBA (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 26 Oct 2023 06:01:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38306 "EHLO
+        id S230330AbjJZMqf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 26 Oct 2023 08:46:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229518AbjJZKA7 (ORCPT
+        with ESMTP id S230105AbjJZMqf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 26 Oct 2023 06:00:59 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5D0191;
-        Thu, 26 Oct 2023 03:00:56 -0700 (PDT)
-Received: from localhost.localdomain (unknown [IPv6:2001:b07:646b:e2:e4be:399f:af39:e0db])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: laura.nao)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 10EB86607355;
-        Thu, 26 Oct 2023 11:00:54 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1698314454;
-        bh=0zvIs54+PRjllX9x3XurRLHuEuegL1M0PLHQ0nYXW18=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XlIqLy8KEXz7h0a36Mxj4EOtZN0xePqBpeqxfZUuDkaJOh3VO7uCXKdIWLDCUG6Pu
-         r3KgbgWbDlAPmrMgbtzHnOWlp2f4S8LM0gPzIMIS0HRAQku2vm5/FZ6xW9vmWK/Cbz
-         WVwhQdl7Cj7Nzi/s8+kUbQHea5rX7b8ocZQk09C2PSwzrfaKlJVIB/dCJSimaJrivD
-         Im59CpwRflcXRr8PSW7MYdUoyuAgDvozv4PYlK4C953moX7RPvL7v3GOQ42KqMK7I3
-         OZFYESqVEStEIeLeJV7RgeNyKCd7suqNZbjtAoDYTe6HkpFy7M7ivWuv9++db/Rm4q
-         wQF+VsQLRRPFQ==
-From:   Laura Nao <laura.nao@collabora.com>
-To:     laura.nao@collabora.com
-Cc:     broonie@kernel.org, groeck@chromium.org, kernel@collabora.com,
-        kernelci@lists.linux.dev, lenb@kernel.org,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, rafael@kernel.org,
-        robh+dt@kernel.org, shuah@kernel.org
-Subject: Re: [RFC PATCH 0/2]  Add a test to verify device probing on ACPI platforms
-Date:   Thu, 26 Oct 2023 12:00:50 +0200
-Message-Id: <20231026100050.30704-1-laura.nao@collabora.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230925155806.1812249-1-laura.nao@collabora.com>
-References: <20230925155806.1812249-1-laura.nao@collabora.com>
+        Thu, 26 Oct 2023 08:46:35 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBA6110E;
+        Thu, 26 Oct 2023 05:46:32 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C53E9C433C7;
+        Thu, 26 Oct 2023 12:46:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1698324392;
+        bh=o9jyzv53TdbTQ/JvbB6Pk8C3vEljuK7P7LZdyPhUN88=;
+        h=From:Subject:Date:To:Cc:From;
+        b=gz6qPi/5JL4iQYlYffY1glVPzhZWf6mcDmcHo2LK6FbvaJIEwSQSiAuZ0q36tug+Y
+         viIGWSww7LN5yP6PggCkyPU1NAAzVWxqbU5PPTX/PRK5uBsYd8QH0a8AOm2dJ9UoNa
+         szNuLjLm6SVwHROLU7bQhHu1zKSVbquQPUdyBPfztrifR0Qb7AdwYvYZrcWNpLtGT4
+         p+tklhhfLNk3fo2pu0bs/zPh6MgPMgMkHqvDGu4aBaunoXXcsOgzsWqCyio2/BzYsm
+         AcGQ5w2+QgMKxDVNRgdc2hmk7JQQJA76Te4heiZ9go+bnRd2ZKiVXefc8hxW0AulSP
+         FZ7EF5Gcs665w==
+From:   Mark Brown <broonie@kernel.org>
+Subject: [PATCH 00/21] arm64: Support for 2023 DPISA extensions
+Date:   Thu, 26 Oct 2023 13:44:14 +0100
+Message-Id: <20231026-arm64-2023-dpisa-v1-0-8470dd989bb2@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAB5fOmUC/x3MTQqAIBBA4avErBvwL4WuEi0kx5pFJgoRRHfPW
+ n6L926oVJgqjN0NhU6ufKQG2XewbD6thByaQQmlpRAafdmtwY8YMlePKuqgBmescQZalgtFvv7
+ lND/PC71mQf9iAAAA
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kvmarm@lists.linux.dev, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.13-dev-0438c
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4266; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=o9jyzv53TdbTQ/JvbB6Pk8C3vEljuK7P7LZdyPhUN88=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBlOl+UIx/5I6oPhxFmpNY8nGgSlVbxt2/Z5y6RQ2DI
+ 6MU1O5uJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZTpflAAKCRAk1otyXVSH0APsB/
+ 99XK8I3xOVs2O6LCrgWk38xQ/nVjwx/1RkJCdMy4iAmj+jJGIUWFzRLiY2yFMu6aAyZWtRgwyL5vs7
+ Tiey4Om12GAwXq2rw142vqUwmoVlfK5ZI9l//AeScOQ20D4ODHuo3ibOC9jGBZBCgZEr9SeapP4A5T
+ O6ZbyPhmybKATmRrTRRWZOszQLrvkHUvNwKhxUcA2ZV8e+bt4WOVCFoUDtIpqJMrSxEa/saZxWB38h
+ j08o8gPZsw16VWtZ5EaMM4x2lbIDOJv2IQinmuzxQMBdQRhbaA9C15Hytw9OOz2bKWwHQEcruE2A3f
+ EQnCBd8FUyX8JjsBH1DLmoFTQwVmZG
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Gentle ping to check if there are any feedback or comments on this series.
+This series enables support for the data processing extensions in the
+newly released 2023 architecture, this is mainly support for 8 bit
+floating point formats.  Most of the extensions only introduce new
+instructions and therefore only require hwcaps but there is a new EL0
+visible control register FPMR used to control the 8 bit floating point
+formats, we need to manage traps for this and context switch it.
 
-Thanks,
-Laura
+The sharing of floating point save code between the host and guest
+kernels slightly complicates the introduction of KVM support, we first
+introduce host support with some placeholders for KVM then replace those
+with the actual KVM support.
+
+I've not added test coverage for ptrace, I've got a not quite finished
+test program which exercises all the FP ptrace interfaces and their
+interactions together, my plan is to cover it there rather than add
+another tiny test program that duplicates the boilerplace for tracing a
+target and doesn't actually run the traced program.
+
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+Mark Brown (21):
+      arm64/sysreg: Add definition for ID_AA64PFR2_EL1
+      arm64/sysreg: Update ID_AA64ISAR2_EL1 defintion for DDI0601 2023-09
+      arm64/sysreg: Add definition for ID_AA64ISAR3_EL1
+      arm64/sysreg: Add definition for ID_AA64FPFR0_EL1
+      arm64/sysreg: Update ID_AA64SMFR0_EL1 definition for DDI0601 2023-09
+      arm64/sysreg: Update SCTLR_EL1 for DDI0601 2023-09
+      arm64/sysreg: Update HCRX_EL2 definition for DDI0601 2023-09
+      arm64/sysreg: Add definition for FPMR
+      arm64/cpufeature: Hook new identification registers up to cpufeature
+      arm64/fpsimd: Enable host kernel access to FPMR
+      arm64/fpsimd: Support FEAT_FPMR
+      arm64/signal: Add FPMR signal handling
+      arm64/ptrace: Expose FPMR via ptrace
+      KVM: arm64: Add newly allocated ID registers to register descriptions
+      KVM: arm64: Support FEAT_FPMR for guests
+      arm64/hwcap: Define hwcaps for 2023 DPISA features
+      kselftest/arm64: Handle FPMR context in generic signal frame parser
+      kselftest/arm64: Add basic FPMR test
+      kselftest/arm64: Add 2023 DPISA hwcap test coverage
+      KVM: arm64: selftests: Document feature registers added in 2023 extensions
+      KVM: arm64: selftests: Teach get-reg-list about FPMR
+
+ Documentation/arch/arm64/elf_hwcaps.rst            |  49 +++++
+ arch/arm64/include/asm/cpu.h                       |   3 +
+ arch/arm64/include/asm/cpufeature.h                |   5 +
+ arch/arm64/include/asm/fpsimd.h                    |   2 +
+ arch/arm64/include/asm/hwcap.h                     |  15 ++
+ arch/arm64/include/asm/kvm_arm.h                   |   4 +-
+ arch/arm64/include/asm/kvm_host.h                  |   3 +
+ arch/arm64/include/asm/processor.h                 |   2 +
+ arch/arm64/include/uapi/asm/hwcap.h                |  15 ++
+ arch/arm64/include/uapi/asm/sigcontext.h           |   8 +
+ arch/arm64/kernel/cpufeature.c                     |  72 +++++++
+ arch/arm64/kernel/cpuinfo.c                        |  18 ++
+ arch/arm64/kernel/fpsimd.c                         |  13 ++
+ arch/arm64/kernel/ptrace.c                         |  42 ++++
+ arch/arm64/kernel/signal.c                         |  59 ++++++
+ arch/arm64/kvm/fpsimd.c                            |  19 +-
+ arch/arm64/kvm/hyp/include/hyp/switch.h            |   7 +-
+ arch/arm64/kvm/sys_regs.c                          |  17 +-
+ arch/arm64/tools/cpucaps                           |   1 +
+ arch/arm64/tools/sysreg                            | 153 ++++++++++++++-
+ include/uapi/linux/elf.h                           |   1 +
+ tools/testing/selftests/arm64/abi/hwcap.c          | 217 +++++++++++++++++++++
+ tools/testing/selftests/arm64/signal/.gitignore    |   1 +
+ .../arm64/signal/testcases/fpmr_siginfo.c          |  82 ++++++++
+ .../selftests/arm64/signal/testcases/testcases.c   |   8 +
+ .../selftests/arm64/signal/testcases/testcases.h   |   1 +
+ tools/testing/selftests/kvm/aarch64/get-reg-list.c |  11 +-
+ 27 files changed, 810 insertions(+), 18 deletions(-)
+---
+base-commit: 05d3ef8bba77c1b5f98d941d8b2d4aeab8118ef1
+change-id: 20231003-arm64-2023-dpisa-2f3d25746474
+
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
+
