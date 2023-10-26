@@ -2,188 +2,145 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49A1F7D87D5
-	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Oct 2023 19:53:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C3057D8840
+	for <lists+linux-kselftest@lfdr.de>; Thu, 26 Oct 2023 20:28:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbjJZRxt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 26 Oct 2023 13:53:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36458 "EHLO
+        id S229649AbjJZS2u (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 26 Oct 2023 14:28:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229649AbjJZRxs (ORCPT
+        with ESMTP id S229815AbjJZS2s (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 26 Oct 2023 13:53:48 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E742A90;
-        Thu, 26 Oct 2023 10:53:46 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE63CC433C8;
-        Thu, 26 Oct 2023 17:53:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1698342826;
-        bh=SZ0M7biq3ctrIFy2BWuggF9UsMOeq6C1UVNJ4cOuuUg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=OGFdh8AURIfxMKoMX5B2YfL/20hAhEtWjX2wiIpH3DeD6X5z+BJkIuSGsBEkoXoDw
-         hSpM7YlvMC1N/mQY2Ran98Bm9cp+OrvOnwS93xXhhwCJec299N3itFbocP0LIr02rz
-         MQZDfvJk3VjKM9ORdXx+4GNckAZyURx3DnYagBKOdYfNoLUIVgxQqAP0zr68ivzube
-         44DMSl38ad0QvL2sJgCaGATcQYf20Yi/8cuaP+I37HCvsY5dpMiMQWcMNBlzSk6wrI
-         UkTzD5yGKKUdytgm+vKcsqYOVTjJEhgQ2+JiTd6ZXQtHFk8YW5nMCIWXFsQLIELMy/
-         +r4b/tW5x+sqg==
-Date:   Thu, 26 Oct 2023 18:53:37 +0100
-From:   Mark Brown <broonie@kernel.org>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
-        "brauner@kernel.org" <brauner@kernel.org>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "mgorman@suse.de" <mgorman@suse.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "vschneid@redhat.com" <vschneid@redhat.com>,
-        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-        "bristot@redhat.com" <bristot@redhat.com>,
-        "will@kernel.org" <will@kernel.org>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "jannh@google.com" <jannh@google.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "bsegall@google.com" <bsegall@google.com>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "juri.lelli@redhat.com" <juri.lelli@redhat.com>
-Subject: Re: [PATCH RFC RFT 2/5] fork: Add shadow stack support to clone3()
-Message-ID: <807a8142-7a8e-4563-9859-8e928156d7e5@sirena.org.uk>
-References: <20231023-clone3-shadow-stack-v1-0-d867d0b5d4d0@kernel.org>
- <20231023-clone3-shadow-stack-v1-2-d867d0b5d4d0@kernel.org>
- <dc9a3dd544bbf859142c5582011a924b1c1bf6ed.camel@intel.com>
- <8b0c9332-ba56-4259-a71f-9789d28391f1@sirena.org.uk>
- <2ec0be71ade109873445a95f3f3c107711bb0943.camel@intel.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="q+DyIvg4AWqTL3GB"
+        Thu, 26 Oct 2023 14:28:48 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2054.outbound.protection.outlook.com [40.107.94.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B877192;
+        Thu, 26 Oct 2023 11:28:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iKQFbS77apq99tTOiHalZC0vpXNmNPDZbm4LncNiAc+WkmuViIyeD6YSPt6fPRGYJTBd0U8BeLOaQi+XgYp4mxGnF8AqSPThJfjTeN2N1F1imDIZtEMLbR2/OuIcbmD41/Mt4cJLYMIDWNt6SiyvvUatnkvVA+SiQIpAp94rEKQIExAlHREopNil1UF1EAgRcR7oEqLAd6v6WnukhRsvH1R6u5HwM834BoJ4AhmMuf50Z34+OuRZ42EVS5Nw3mMksg9nOLJBihXnokVJSSU9I8cKrXzlwB8vZerBjsjV6CfL+A5+0sou2ybt6eDzn2EzwakTjbJ6UBiUwVlDF3Kt9A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yvt4AxRp0YOZYUUyEC6uDhVDSCEbs2JZ0PZsIqymznk=;
+ b=Hmh+BmJkvWxVMManaGLJL4Ixl2ZP2nHNYhPRMmwhYNRrKqCJC4YOrqLIA/aUeHF6sj5ejbQg0LMTP+ST5qPxSSSwQg7f/SjHYeIdao3RAGIjv/f7PVkvb+JzdO9DnLKyOXhtQjz1R3jDINFLMJXUgiVCC9qO8j1sfeHbURcxCRhiKwLRlgJco834JpRp2No85ezSDdvnEynPvuM7UY0J5b6xGKo5QDVPgMS8dPtS+wILOZRB6K/kgA0fd80Kpri7h6KHRlol3eWIxNu0hYWxmMW9VeKI9uQ39uRaSZy3NIFAqNSAHu2lcCB0qTyTe9J+8UvWFVeOu1cv3Z2+04/3KA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yvt4AxRp0YOZYUUyEC6uDhVDSCEbs2JZ0PZsIqymznk=;
+ b=QzUdLHjxmqhkYpehdqYy989EspwwYYuAY5RxAABtBA//TId8MqzSgaKXNvKzh59nG3XRjk9GSbWooaZZ7EoO64F1APMSjndb0fxgas4ydjUrT0n6b/Cpv8DHAF+Y8PoY+iMtG88PginMTH3Sb3bAuR938r/IwoPZNlDj0EXEOoGIJoncXMCSFYlHRDlpiOQmS6hFKDyIUra7XzfG0W02XLXsincMyLpHncjFxViWoZxnNTzfUmgFQ8TuKnJCupw0BWlejgIXne7hkrRW6Cn4IUQbMvy9+9thbZ7DoRabSXrXwj0YtxeHt76PXTO0sw4KrfGEUZ6Nc8UvMCEUYj54tg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by PH0PR12MB7094.namprd12.prod.outlook.com (2603:10b6:510:21d::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6907.33; Thu, 26 Oct
+ 2023 18:28:42 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::11a1:b0c7:7c88:9480]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::11a1:b0c7:7c88:9480%4]) with mapi id 15.20.6933.022; Thu, 26 Oct 2023
+ 18:28:42 +0000
+Date:   Thu, 26 Oct 2023 15:28:41 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Yi Liu <yi.l.liu@intel.com>
+Cc:     joro@8bytes.org, alex.williamson@redhat.com, kevin.tian@intel.com,
+        robin.murphy@arm.com, baolu.lu@linux.intel.com, cohuck@redhat.com,
+        eric.auger@redhat.com, nicolinc@nvidia.com, kvm@vger.kernel.org,
+        mjrosato@linux.ibm.com, chao.p.peng@linux.intel.com,
+        yi.y.sun@linux.intel.com, peterx@redhat.com, jasowang@redhat.com,
+        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
+        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        zhenzhong.duan@intel.com, joao.m.martins@oracle.com,
+        xin.zeng@intel.com
+Subject: Re: [PATCH v7 00/10] iommufd: Add nesting infrastructure (part 1/2)
+Message-ID: <20231026182841.GR3952@nvidia.com>
+References: <20231026043938.63898-1-yi.l.liu@intel.com>
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2ec0be71ade109873445a95f3f3c107711bb0943.camel@intel.com>
-X-Cookie: I'm also against BODY-SURFING!!
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20231026043938.63898-1-yi.l.liu@intel.com>
+X-ClientProxiedBy: SN6PR05CA0030.namprd05.prod.outlook.com
+ (2603:10b6:805:de::43) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|PH0PR12MB7094:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7b06d299-7d82-4c79-8f73-08dbd65161e3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mUSpQfgmo6y0zVQ4lv2Ik1ljxZIanRP3X02nh4NVKqzfyYC8RPEIBL2Z1FgURs67hwmR2i/jK0PNn146rC4WXNTf8mqEMbCQoJA8vOGO4bBJ4vyWmrYuRsnBLm2PvT39YTm3SX1Ku+SIE5e+wAWqh3tGx2jaZrOX3z90852sTOp4AvOt42IRiwPhjVZedvlu6owE6DujRVmtz8xSuLCacFy1MJXvBDsutTrUd0G/9ra+RjEMmVnPtiVYrbw96jWs07NqFIe+GiIqU6ke0gXHINReoNFbdKitamI3llusveNTVNAA0Z2B9HJccm2LKBDy+EYliJo610tnzXbYdosw+0gLx88jYJk+JA3O4XWKCNo0xHPiU2bj83MMsjwI3ax82szn1Ku/WVMlGdIYoxPCCz5LxMTXOqDR8gvp1FIZ9tJn0oB2qUa89sCXVWWpPhFIEUnBiJYo1uuhFKg7U8dk3ij0VDY8OW3/Xe8lucbUBvJcFnfOeOyQQteZSt2G3OyJnm3XzYtwIbfDIu1tm2reu+oK48wyV7jitUHS48AkTZdkp2+KembOeXXW6s7koRqM
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(39860400002)(376002)(366004)(396003)(136003)(230922051799003)(186009)(451199024)(1800799009)(64100799003)(6512007)(2616005)(1076003)(26005)(36756003)(33656002)(38100700002)(86362001)(83380400001)(6916009)(8936002)(316002)(66556008)(66476007)(66946007)(4744005)(2906002)(41300700001)(5660300002)(7416002)(8676002)(4326008)(6506007)(478600001)(6486002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?DkryHO4WtrHosTPoeWstLMrhKp6j8l5B9BNOB1/M6xxbw7zeAn3OT1wmTBY3?=
+ =?us-ascii?Q?VLUKRRIEmelxq7SRCz5Xtf5PR4n3kKG3lsssh27r8h0jHRhP1/EXFlWDiO6r?=
+ =?us-ascii?Q?fuhMI35SVibjhdOeUu+TiUQjWDiIlmmNE8SdRRZGNqb+JiKuBcSa6aa8pEnl?=
+ =?us-ascii?Q?IligODp3sh0g3txRkCDoBY2CNKfSrESeI1UX56DI/saifZbHk9FMiU4zQcYV?=
+ =?us-ascii?Q?6ZUmy3NkWWLVSsO9gfNdVGJ6gNyO83DiB7Ag8t+4uoc6BND27EUfnu9k9x86?=
+ =?us-ascii?Q?GN7vGXMLzCrUPqnxnpU3yCpGxUGErDal8C/GXfzAbsSVA9DFagtMSnXA5VkV?=
+ =?us-ascii?Q?Vv5hgj3EqKQQJRnmACl+fTgCnGoM2JRpyZzjAZZj/yCanv/fSxLC+ToIhP7w?=
+ =?us-ascii?Q?RpAbkteCBXf3dm/jjM8eg+QoFqG2FzSnNnQbY0jrSyd/Ju/Dkqq/EkE0rPVd?=
+ =?us-ascii?Q?bZCzTVX43na90RmWZfa3uhzDweIyYNPaXAoufM4V5CY0akOufdMQaq+Kr0uc?=
+ =?us-ascii?Q?8zFmLy06Op3m0sV8ROaeMVHgX2qh4v8Sv8HZlDi8pz9+EoD2tOf9irsiVg0r?=
+ =?us-ascii?Q?HbK56QcXfFnqZUtejGlHQHMEDjjfNOkyVMAfhc5O8aH+YJRmxeolkjlS07rk?=
+ =?us-ascii?Q?PU+oFQejLxVuSvVBMKIRinVKiZd0URvKTdJl77nLJkXoP+D6wNyIk6kJdoVC?=
+ =?us-ascii?Q?GLnxnC3dW1Zo+aqI/zatzUnEyKhzgBNhMkYkC42fwhxICpmnP+tQuoLInuan?=
+ =?us-ascii?Q?lfWt8Mb9ovBpSY7bGGfSZkn9ajVAfkDq4Hha/lnYHh3lhu0G4+N/P3DcNl/i?=
+ =?us-ascii?Q?gjtkU5TpC8x0iiVlXmH/v+3hNNCoHKksSBd+u9Gw9EEaBY22e42MqZ+dcemc?=
+ =?us-ascii?Q?554bUlgaU9xo7JsPUdpxbq6akt5Y+TlDOZiW406rPFUJS5vDTDWZG36h1fKF?=
+ =?us-ascii?Q?WNwjyM1qqU8LpYbjfg5Pw7NktiAZvzHGarJrsTNt2e2yo3i09UJmSJ2zym5e?=
+ =?us-ascii?Q?QWx9zlQbsuAlNPCiOzqXN6Mx0EWD5ePxAEUkMQ69rXGYCdPiYmVi08TC5UHP?=
+ =?us-ascii?Q?6CkvHUNcAYnO7i1HPdzqN5YZTYIG20+tkMKL2okxmW5EpgtyrjALE/oht9aV?=
+ =?us-ascii?Q?ztP9XOOudUO3CsW12dIrPzVI9TD+s1gcxL72VUXhg76vT4TSnznzu5ZtsrNi?=
+ =?us-ascii?Q?ursTjNK9b/W9RScX1WacaFdl7gdbWjTpcYQV+5iGfuiqs36PzhXbRPOt2kWp?=
+ =?us-ascii?Q?JeeTSv1y+Mg7PE8Jc3cVKMBvM6CkzNJsAKjUgstFV8IKMC2Ezic4POiHhi6M?=
+ =?us-ascii?Q?T15Kw2kyOfcf7ivIMcFmTA309LqKEQx7sfjN4jkmko3GiXi+T0As6xg0DRmE?=
+ =?us-ascii?Q?gsz1vo+8ICvvgBXCPRt8Qjg8XKykYeFVuEE5lSU58wFjJrKZkxyEb2/C0XVW?=
+ =?us-ascii?Q?h4tti3YTzSmOZQvRIFiI4hBqC6zN8F7i4KJapbcRvdkDUpvQGiTACXYEQEKC?=
+ =?us-ascii?Q?GmSd4aR9aWZSIk/4PbUQtltWVvHJa1x4tOulsq/F9fYTDqXv1LMJN6OdBZ9Q?=
+ =?us-ascii?Q?MmH8qPPvj3Dv4Z6aYZs=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7b06d299-7d82-4c79-8f73-08dbd65161e3
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Oct 2023 18:28:42.7779
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: JdWRBqxIjq8FgwLvGsEKdHufvfBtNaH4Kv/6btJENvMrEw2EQZKybmoBOMafaqbr
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7094
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Wed, Oct 25, 2023 at 09:39:28PM -0700, Yi Liu wrote:
 
---q+DyIvg4AWqTL3GB
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Jason Gunthorpe (2):
+>   iommufd: Rename IOMMUFD_OBJ_HW_PAGETABLE to IOMMUFD_OBJ_HWPT_PAGING
+>   iommufd/device: Wrap IOMMUFD_OBJ_HWPT_PAGING-only configurations
+> 
+> Lu Baolu (1):
+>   iommu: Add IOMMU_DOMAIN_NESTED
+> 
+> Nicolin Chen (6):
+>   iommufd: Derive iommufd_hwpt_paging from iommufd_hw_pagetable
+>   iommufd: Share iommufd_hwpt_alloc with IOMMUFD_OBJ_HWPT_NESTED
+>   iommufd: Add a nested HW pagetable object
+>   iommu: Add iommu_copy_struct_from_user helper
+>   iommufd/selftest: Add nested domain allocation for mock domain
+>   iommufd/selftest: Add coverage for IOMMU_HWPT_ALLOC with nested HWPTs
+> 
+> Yi Liu (1):
+>   iommu: Pass in parent domain with user_data to domain_alloc_user op
 
-On Thu, Oct 26, 2023 at 05:10:47PM +0000, Edgecombe, Rick P wrote:
-> On Mon, 2023-10-23 at 19:32 +0100, Mark Brown wrote:
+Updated, thanks
 
-> > Right.=A0 We're already adding the cost of the extra map_shadow_stack()
-> > so
-> > it doesn't seem that out of scope.=A0 We could also allow clone3() to
-> > be
-> > used for allocation, potentially removing the ability to specify the
-> > address entirely and only specifying the size.=A0 I did consider that
-> > option but it felt awkward in the API, though equally the whole
-> > shadow
-> > stack allocation thing is a bit that way.=A0 That would avoid concerns
-> > about placing and validating tokens entirely but gives less control
-> > to
-> > userspace.
-
-> There is also cost in the form of extra complexity. Not to throw FUD,
-> but GUP has been the source of thorny problems. And here we would be
-> doing it around security races. We're probably helped that shadow stack
-> is only private/anonymous memory, so maybe it's enough of a normal case
-> to not worry about it.
-
-> Still, there is some extra complexity, and I'm not sure if we really
-> need it. The justification seems to mostly be that it's not as flexible
-> as normal stacks with clone3.
-
-I definitely agree on the complexity, trying to valdiate a token is
-going to be more code doing fiddly things and there's always the risk
-that something will change around it and invalidate assumptions the code
-makes.  Particularly given my inability to test x86 I'm certainly way
-more happy pushing this series forward implementing size only than I am
-doing token validation.
-
-> I don't understand why doing size-only is awkward. Just because it
-> doesn't match the regular stack clone3 semantics?
-
-Basically, yes - we don't allocate userpace pages in clone3() for the
-normal stack and we do offer userspace control over where to place
-things.  There was some grumbling about this in the current ABI from the
-arm64 side, though the limited control of the size is more of the issue
-really.
-
-I'm not sure placement control is essential but the other bit of it is
-the freeing of the shadow stack, especially if userspace is doing stack
-switches the current behaviour where we free the stack when the thread
-is exiting doesn't feel great exactly.  It's mainly an issue for
-programs that pivot stacks which isn't the common case but it is a
-general sharp edge.
-
-> > This also doesn't do anything to stop anyone trying to allocate sub
-> > page
-> > shadow stacks if they're trying to save memory with all the lack of
-> > overrun protection that implies, though that seems to me to be much
-> > more
-> > of a deliberate decision that people might make, a token would
-> > prevent
-> > that too unless write access to the shadow stack is enabled.
-
-> Sorry, I'm not following. Sub-page shadow stacks?
-
-If someone decides to allocate a page of shadow stack then point thread
-A at the first half of the page and thread B at the second half of the
-page nothing would stop them.  There are obvious issues with this but I
-can see someone trying to do it in a system that creates lots of
-threads and has memory constraints.
-
-> > > > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0/*
-> > > > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 * This doesn't valid=
-ate that the addresses are
-> > > > mapped
-> > > > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 * VM_SHADOW_STACK, j=
-ust that they're mapped at
-> > > > all.
-> > > > +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 */
-
-> > > It just checks the range, right?
-
-> > Yes, same check as for the normal stack.
-
-> What looked wrong is that the comment says that it checks if the
-> addresses are mapped, but the code just does access_ok(). It's a minor
-> thing in any case.
-
-Oh, I see, yes.
-
---q+DyIvg4AWqTL3GB
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmU6p6AACgkQJNaLcl1U
-h9A3Pwf8Cx/yHRC+zQt/rkwSj4HCvlwTPerplXmFQCQIJbiMf9oFaplULq2JmsMf
-S7lCREV/wMKQp1Un90F2iD/bXWYS651zMAVyRlXbh634djAnhskeZTUvaY9b/mbw
-XEUzmNy1dpC/iXuwaRs2tEklKHafXECgZtFl5pAh0E9QyeDRHOz34ufb4CLZmzq8
-SuPL/3JX/DbzUGJAgArtSeNahcye2wD6nbokdyxa4R/ytUCFQET9eAqvOhx8v1eY
-K2OuWJqVL+NA4s2d4PeYqsLQ025iH7trmG30AoDllM2WH9sVlRwqPzWWnRb9FZjC
-NFKUl2laCh1gdAk1KF6MASZLdehqPQ==
-=wVjo
------END PGP SIGNATURE-----
-
---q+DyIvg4AWqTL3GB--
+Jason
