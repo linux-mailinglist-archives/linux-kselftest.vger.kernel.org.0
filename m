@@ -2,136 +2,139 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76CDF7D99D8
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Oct 2023 15:30:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AB887D9C81
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Oct 2023 17:05:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345882AbjJ0Naq (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 27 Oct 2023 09:30:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41834 "EHLO
+        id S1346139AbjJ0PFi (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 27 Oct 2023 11:05:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345688AbjJ0Nap (ORCPT
+        with ESMTP id S231791AbjJ0PFh (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Oct 2023 09:30:45 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E762CC9;
-        Fri, 27 Oct 2023 06:30:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698413442; x=1729949442;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=QCDoj2tqsubRZPmLxziPZaPfWsoY1N+hG+KAi9DSmew=;
-  b=erdwTc4jdJWcHDkizPryviQfbnJY/J50pYNwh3v167MeFEooQC8MgNlV
-   X8hK7tpUjuQr/xmvVSem5Ojo1DDY6NpqU9qs8G0dwcaMyNrEJ4JNr92Nb
-   UrPMUtEBvwhTirIM8sBKITvtvNaZA1OmZMWezeAqOdTdgZRIuclclTPvP
-   rM/PQa3nvTPOr5y3ZwqTbVqsYuDfEWQkreMQiAqYOrcNuDHnu7elybOeN
-   OqY0w4S/j8uvDi/Njp2hR+Zy2A/FFjsvSSLtZ+PF+LeCtJ2gTTSM9FXEW
-   GCYO7fro9KOcQnf7W92AWaEDLaN5mCqwz7kg8ITMHVZVWTufxKvZfgS9f
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10876"; a="387588301"
-X-IronPort-AV: E=Sophos;i="6.03,256,1694761200"; 
-   d="scan'208";a="387588301"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2023 06:30:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10876"; a="825338480"
-X-IronPort-AV: E=Sophos;i="6.03,256,1694761200"; 
-   d="scan'208";a="825338480"
-Received: from scoltan-mobl.ger.corp.intel.com ([10.252.33.159])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Oct 2023 06:30:40 -0700
-Date:   Fri, 27 Oct 2023 16:30:38 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     =?ISO-8859-15?Q?Maciej_Wiecz=F3r-Retman?= 
-        <maciej.wieczor-retman@intel.com>
-cc:     linux-kselftest@vger.kernel.org,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 21/24] selftests/resctrl: Get resource id from cache id
-In-Reply-To: <cb2ctfignowlom7lb2t5zhdgtm4s2jlzlvtumlnvxecwwtjk34@ysgepmgkv6bb>
-Message-ID: <ab4c6aa5-ea49-363a-ff7b-2215665f185d@linux.intel.com>
-References: <20231024092634.7122-1-ilpo.jarvinen@linux.intel.com> <20231024092634.7122-22-ilpo.jarvinen@linux.intel.com> <cb2ctfignowlom7lb2t5zhdgtm4s2jlzlvtumlnvxecwwtjk34@ysgepmgkv6bb>
+        Fri, 27 Oct 2023 11:05:37 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C40FC4;
+        Fri, 27 Oct 2023 08:05:35 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DFB2C433C7;
+        Fri, 27 Oct 2023 15:05:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1698419135;
+        bh=6DZb3YA47Tj4rWwCUYdaQTqFi0PaTzEpzyXKXZEANKI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IldsEiFBj4G8bFlHXmKFlE+eUMVgVikT3NgQFmOcR8SacS3pqo7bvRekw039Esax4
+         3FgDWRcqT/4xdsUDIjm7LOKo6qObo+FUmOq51f+MAJA1gKNTg1BnC5z36Wt/PKhy42
+         /ppg7WET2RC5CucQufQLZr22UiIlTyhqFBqK+z7DIx4VLRa9H4xaQPEnmdt09GyX38
+         tUazlq8ar5etBziJs7z0JrfekI/2+hI1TasBwBeZPlQTlmryXjGSAaehyY/TkZFFRn
+         2HXCfwSOI3JMe+sUZEAhZMJGXenQ+N0DsEJFsciTf4envhDeTVMWpTkWI+5EJIquX/
+         DlVueeyZDnC2A==
+Date:   Fri, 27 Oct 2023 16:05:28 +0100
+From:   Mark Brown <broonie@kernel.org>
+To:     "Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>
+Cc:     Deepak Gupta <debug@rivosinc.com>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "brauner@kernel.org" <brauner@kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "mgorman@suse.de" <mgorman@suse.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "vschneid@redhat.com" <vschneid@redhat.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "bristot@redhat.com" <bristot@redhat.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "jannh@google.com" <jannh@google.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "bsegall@google.com" <bsegall@google.com>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "juri.lelli@redhat.com" <juri.lelli@redhat.com>
+Subject: Re: [PATCH RFC RFT 2/5] fork: Add shadow stack support to clone3()
+Message-ID: <ZTvRuK1uxbfjjWyr@finisterre.sirena.org.uk>
+References: <20231023-clone3-shadow-stack-v1-0-d867d0b5d4d0@kernel.org>
+ <20231023-clone3-shadow-stack-v1-2-d867d0b5d4d0@kernel.org>
+ <dc9a3dd544bbf859142c5582011a924b1c1bf6ed.camel@intel.com>
+ <8b0c9332-ba56-4259-a71f-9789d28391f1@sirena.org.uk>
+ <2ec0be71ade109873445a95f3f3c107711bb0943.camel@intel.com>
+ <807a8142-7a8e-4563-9859-8e928156d7e5@sirena.org.uk>
+ <ZTrOw97NFjUpANMg@debug.ba.rivosinc.com>
+ <ZTuj565SqIb9KjQr@arm.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323329-1571728692-1698412161=:2740"
-Content-ID: <966c938-5a3a-e5ed-cbb-b79630fb836a@linux.intel.com>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="iYamXeVK/ZDq+CMx"
+Content-Disposition: inline
+In-Reply-To: <ZTuj565SqIb9KjQr@arm.com>
+X-Cookie: Save energy:  Drive a smaller shell.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
 
---8323329-1571728692-1698412161=:2740
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-Content-ID: <a6d0bdae-c091-16e4-f178-c374f5edad8b@linux.intel.com>
+--iYamXeVK/ZDq+CMx
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, 27 Oct 2023, Maciej Wieczór-Retman wrote:
+On Fri, Oct 27, 2023 at 12:49:59PM +0100, Szabolcs.Nagy@arm.com wrote:
+> The 10/26/2023 13:40, Deepak Gupta wrote:
 
-> On 2023-10-24 at 12:26:31 +0300, Ilpo Järvinen wrote:
-> >Resource id is acquired differently depending on CPU. AMD tests use id
-> >from L3 cache, whereas CPUs from other vendors base the id on topology
-> >package id. In order to support L2 CAT test, this has to be
-> >generalized.
-> >
-> >The driver side code seems to get the resource ids from cache ids so
-> >the approach used by the AMD branch seems to match the kernel-side
-> >code. It will also work with L2 resource IDs as long as the cache level
-> >is generalized.
-> >
-> >Using the topology id was always fragile due to mismatch with the
-> >kernel-side way to acquire the resource id. It got incorrect resource
-> >id, e.g., when Cluster-on-Die (CoD) is enabled for CPU (but CoD is not
-> >well suited for resctrl in the first place so it has not been a big
-> >issues if test don't work correctly with it).
-> 
-> "not been a big issues" -> "not been a big issue"?
-> 
-> "if test don't work correctly" -> "if test doesn't work correctly" / "if tests
-> don't work correctly"?
-> 
-> >
-> >Taking all the above into account, generalize the resource id
-> >calculation by taking it from the cache id and do not hard-code the
-> >cache level.
-> 
-> In x86/resctrl files group of CPUs sharing a resctrl resource is called a
-> domain. Because of that I think "resource id" terms should be substituted with
-> "domain id" to match core resctrl code.
+> > In general, I am assuming such placement requirements emanate because
+> > regular stack holds data (local args, etc) as well and thus software may
+> > make assumptions about how stack frame is prepared and may worry about
+> > layout and such. In case of shadow stack, it can only hold return
 
-Okay, I was just using the terminology which pre-existed in the selftest 
-code.
+> no. the lifetime is the issue: a stack in principle can outlive
+> a thread and resumed even after the original thread exited.
+> for that to work the shadow stack has to outlive the thread too.
 
-I've really tried to look how I should call it but things were quite 
-inconsistent. The selftest uses resource id and reads it from cache id.
-Documentation uses "instances of that resource" or "cache id" or "domain 
-x".
+> (or the other way around: a stack can be freed before the thread
+> exits, if the thread pivots away from that stack.)
 
+> posix threads etc. don't allow this, but the linux syscall abi
+> (clone) does allow it.
 
-Documentation/arch/x86/resctrl.rst is very misleading btw and should be 
-IMHO updated:
+> i think it is reasonable to tie the shadow stack lifetime to the
+> thread lifetime, but this clearly introduces a limitation on how
+> the clone api can be used. such constraint on the userspace
+> programming model is normally a bad decision, but given that most
+> software (including all posix conforming code) is not affected,
+> i think it is acceptable for an opt-in feature like shadow stack.
 
-Memory bandwidth Allocation (default mode)
-------------------------------------------
+I tend to agree - software that's doing a lot of stack pivoting could do
+something like allocate a small stack with clone3() and then immediately
+pivoting away from it so they never actually use the stack that's tied
+to the thread.  It's a bit clunky and wasteful but should work.
 
-Memory b/w domain is L3 cache.
-::
+Since everyone seems OK with dealing with the placement issues by
+specifying size only I'm planning on sending a new version that does
+that after the merge window, assuming nobody else raises concerns.
 
-        MB:<cache_id0>=bandwidth0;<cache_id1>=bandwidth1;...
+--iYamXeVK/ZDq+CMx
+Content-Type: application/pgp-signature; name="signature.asc"
 
-It claims "domain" is L3 cache (and the value we're talking about is 
-called "cache_id" here which is what you just called "domain id"). I 
-suppose it should say "b/w resource is L3 cache"?
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmU70bUACgkQJNaLcl1U
+h9D6DQf8DwMUjt+7+yvXg6kbkMf4F05kvLRL/c3h4p7Kqy6K8wQ78rycdYFYqE/3
+cKDlS5Y2Cu8antdFPldSlObYFxJo7VAgGC0IL1IkJay2J+uerz3BzNReTuvLU82J
+NL04R/znP08P8RUxbclaEjGQ/cfkYqLj+aNO3vLQyxscA7a3VkeZsdagcsB18tH7
+OfivqAaI2+umntU0jJ7ixfVv0Xt/WlgHYyEPD9bLY8lCA6wHPnZ0RQ6NYDW0jhpg
+L/7Nx/pdtVtogt+ko1IfiPmBKVdipTArRVGuc1nj2Ru3u6p0hexzZC25PsbViBNv
+r0s5BMFEAuzQzv2Gs0866iKwfAY+gA==
+=6Vdn
+-----END PGP SIGNATURE-----
 
--- 
- i.
---8323329-1571728692-1698412161=:2740--
+--iYamXeVK/ZDq+CMx--
