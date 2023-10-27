@@ -2,68 +2,68 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF1457DA0EF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Oct 2023 20:47:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1BE77DA0F5
+	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Oct 2023 20:47:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346393AbjJ0SrN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 27 Oct 2023 14:47:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38402 "EHLO
+        id S1346580AbjJ0SrZ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 27 Oct 2023 14:47:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346571AbjJ0Sqz (ORCPT
+        with ESMTP id S1346617AbjJ0Sq4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Oct 2023 14:46:55 -0400
+        Fri, 27 Oct 2023 14:46:56 -0400
 Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49004128;
-        Fri, 27 Oct 2023 11:46:48 -0700 (PDT)
-Received: from compute7.internal (compute7.nyi.internal [10.202.2.48])
-        by mailout.nyi.internal (Postfix) with ESMTP id 8FA965C0225;
-        Fri, 27 Oct 2023 14:46:47 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 532B01B3;
+        Fri, 27 Oct 2023 11:46:49 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 8E54B5C0206;
+        Fri, 27 Oct 2023 14:46:48 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute7.internal (MEProxy); Fri, 27 Oct 2023 14:46:47 -0400
+  by compute5.internal (MEProxy); Fri, 27 Oct 2023 14:46:48 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
         :cc:content-transfer-encoding:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1698432407; x=
-        1698518807; bh=2fjiakLITSCXGyl83edKCDEBKH//aAV9purn7c7fwtY=; b=B
-        zISbJzdokjCVKc7AaNFqcoQ4CyM1uafVunTRXmeK/8SkZGJYHuIh3gGYjYvelhia
-        8FAks34jTt9U9RatVynlmEMQN/2kN1DtFeaYkmMs4Y1/TOBk03leFmd20ezAi3tf
-        8nsyW7UCooG0IJm3iyFsBHHbWVU+FooruSGAEskYu54TttWAT4/CMSJYK9HyoMwM
-        o7yMgqBdnQKOXfM/7qb6c2AG3PzuvMU/DqD+zTlTKDQNTu3UQhQXYwYyafOa+/lp
-        DYs0vYJMNPXs2eYjcdvQlFmyPoNuOxoabGjAcJYemYWsOoJW+/1YYkEvf72SLzDV
-        KIdlHZ2p8tsIUCa/9URKg==
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1698432408; x=
+        1698518808; bh=cBgckGsvKO9J1GK/znjl6iHoBSLcZiVLBKbXHE7afz0=; b=Y
+        jRCiU4V215Xa8DKjdZo2ika/BjTj4xklEkFzkgP93hYTijzwxkVXL9tF60nFe83W
+        Qrn+W5Sj7xtT8E5/x/WUlHV+ddJPUFCcIdt4OTuq9j+F9CS5yahxs6UEwq8iqXik
+        SGEHHURyAwnrJxYe3Kf9e+uwkaWTmlihnZ3jUBBUWlZ8usKt1CTf+BAHH3AV8nT6
+        f63x4mEUAgW+mdf8h0VUtZsb+3L0j3BIhH+IVgS5QjVVmZqVv0YqbGuJ6M0HE3ZO
+        igoWSJ1GSPW1+Ct1JIEexA11JqTPur9K9nAg3dfSXmDXbwfofgKWpbOgQ/ASMVDT
+        ZvntYTRKuBU1tWSDbtT9g==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
         :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1698432407; x=
-        1698518807; bh=2fjiakLITSCXGyl83edKCDEBKH//aAV9purn7c7fwtY=; b=K
-        9RaMJh603U0B8Q69kyC5341nRwbxYA9Nybte5ysHVXdILhCt0FPX5F28sRfPTFqs
-        ISw6GWa1I+V5Ue54wE0Kg+g+naF+LD3ROAqO3SJug/qc/bUhhl+/9EYSwZhQyxkH
-        HIxOys7H+PY587lYNWGw3hvC3/zvNJlGajrooOzHXPNxbrrrlb4FC40vV9UV+Cgo
-        DY/75ZBXO8MQcNHW60a0Xnpjv9tA0RP4nqCWMtNLfNoF5v73CcaB3pwqBI1Q2Aku
-        05Y9m9Lr8brTQvrC3zSB7SnxCT/Bc6V4unoTRbN7eJniEpW1bgoowDGjvKrF1pEh
-        qbWqJJ3hvq5lcmLY/8DWA==
-X-ME-Sender: <xms:lwU8ZW11Yb53VW8nwcboQllEhYYXHIi9cjPnB_W4K0uJc2gqzNqfew>
-    <xme:lwU8ZZEJca1vbGDUpWFoO-gdk9bn9VvMwrNgJVpSXOf5VsoUtiUeCfwX7TdZuzYA3
-    _naQ1SnI3HRJBJKsw>
-X-ME-Received: <xmr:lwU8Ze6wxe57-VVBYZ9aM7Fu6T50KOoaEENjz3J3kLNtWm_B4JMPEL80E-WnnK5Ka3xzGo8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrleeggddufedtucetufdoteggodetrfdotf
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1698432408; x=
+        1698518808; bh=cBgckGsvKO9J1GK/znjl6iHoBSLcZiVLBKbXHE7afz0=; b=r
+        9sLQcd/vGuZhTvGL4HgcjRmG5DXVLQMrZVMTs4gtWUaYMudPB408F2NQQVJt78L/
+        KfQYuEXplYpv9ZlAqwNl7ofwcmC+rR1zW8tqknbb4o4qslFupVYwuNBTddQ1wYVi
+        x9tL7GF05vyndB+xBkA67Ao0qj9iWpySLxFJC4p1kIExSawJUDuq0jWU2+TI4OJN
+        3F0y2+l4ammfusvtHyWHrr0PgrD8yAAWzZgWOvxUlF5W6zZq/xDhNPgw7wMkMi1H
+        50JTLd7LT/swuqxqlEWSUlT8qFfTmrL+TQITXviTZmCUiT2qi8GRxBQBkTTywueO
+        fFpbRhZwNFbUAX8jY1c9Q==
+X-ME-Sender: <xms:mAU8ZZ-Z1bOxDKBCWtbh8kAQCqs48tqQL5bMoMcRcjfR0OiEv5LUCg>
+    <xme:mAU8ZdtegUI-vUq8LZd_aaZJ3B-t21qmRk_KXZ8yX9MIOfoS0SrXCO02V4Oy-QMBt
+    lJunHOQO_hFEtkAJA>
+X-ME-Received: <xmr:mAU8ZXB9kt-kJGQHmF3bXiNiwau133_kIwCQn1lXUqHIt_jcSyc4VWRUtZYN1-0HAgLe8tg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrleeggdduvdelucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
     uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdljedtmdenucfjughrpefhvf
     evufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeffrghnihgvlhcuighuuceo
     ugiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepgfefgfegjefhudeike
     dvueetffelieefuedvhfehjeeljeejkefgffeghfdttdetnecuvehluhhsthgvrhfuihii
     vgeptdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
-X-ME-Proxy: <xmx:lwU8ZX2VbQsiIgTBheTuvICIJe68E5tEBA4pVY3q6Da731U0a4S-VA>
-    <xmx:lwU8ZZG4dsNEZlqgVDYYYu_RIT16vxyFd7fnhB_siJ-kPRrQuOmBDw>
-    <xmx:lwU8ZQ948Ufy_gZuNetNO_cIcQwWi1D9nxrSBOtObhAVqX4bz7Q26g>
-    <xmx:lwU8ZSLby36rDG6CqP6RAHymEk3-hhM7IYekSVELxjDiuJ6LXMMqTw>
+X-ME-Proxy: <xmx:mAU8Zdd0NdYz3eZGZMM_rb8KfbtRvYsQLffrJD8U07uCfL7kFdfYTA>
+    <xmx:mAU8ZeOtM6DoQNKQagm0CQ16MZPYGrb79UentwTMjAem5zoAW9ofTA>
+    <xmx:mAU8ZfmXZUzxB-TYbJM9lG3j3zkWabIo86ycyiIHrUMwEUIOM1p3dw>
+    <xmx:mAU8ZTzmHxfbvjmKtgTXHsfXSRFhWXCTIF5tGhCGjpH7jhHpweuHcw>
 Feedback-ID: i6a694271:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 27 Oct 2023 14:46:46 -0400 (EDT)
+ 27 Oct 2023 14:46:47 -0400 (EDT)
 From:   Daniel Xu <dxu@dxuuu.xyz>
-To:     andrii@kernel.org, ast@kernel.org, shuah@kernel.org,
+To:     ast@kernel.org, andrii@kernel.org, shuah@kernel.org,
         daniel@iogearbox.net, steffen.klassert@secunet.com,
         antony.antony@secunet.com
 Cc:     martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
@@ -71,9 +71,9 @@ Cc:     martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
         haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
         bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org, devel@linux-ipsec.org
-Subject: [RFC bpf-next 3/6] bpf: selftests: test_tunnel: Mount bpffs if necessary
-Date:   Fri, 27 Oct 2023 12:46:19 -0600
-Message-ID: <f72e76f4fcfb6498562ce859b6d2e6f15e2bd435.1698431765.git.dxu@dxuuu.xyz>
+Subject: [RFC bpf-next 4/6] bpf: selftests: test_tunnel: Use vmlinux.h declarations
+Date:   Fri, 27 Oct 2023 12:46:20 -0600
+Message-ID: <15604344a2cf67a756eda4e37145fe46ce551afd.1698431765.git.dxu@dxuuu.xyz>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <cover.1698431765.git.dxu@dxuuu.xyz>
 References: <cover.1698431765.git.dxu@dxuuu.xyz>
@@ -89,50 +89,102 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Previously, if bpffs was not already mounted, then the test suite would
-fail during object file pinning steps. Fix by mounting bpffs if
-necessary.
+vmlinux.h declarations are more ergnomic, especially when working with
+kfuncs. The uapi headers are often incomplete for kfunc definitions.
 
 Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
 ---
- tools/testing/selftests/bpf/test_tunnel.sh | 13 ++++++++++++-
- 1 file changed, 12 insertions(+), 1 deletion(-)
+ .../selftests/bpf/progs/bpf_tracing_net.h     |  1 +
+ .../selftests/bpf/progs/test_tunnel_kern.c    | 48 ++++---------------
+ 2 files changed, 9 insertions(+), 40 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/test_tunnel.sh b/tools/testing/selftests/bpf/test_tunnel.sh
-index 85ba39992461..dd3c79129e87 100755
---- a/tools/testing/selftests/bpf/test_tunnel.sh
-+++ b/tools/testing/selftests/bpf/test_tunnel.sh
-@@ -46,7 +46,8 @@
- # 6) Forward the packet to the overlay tnl dev
+diff --git a/tools/testing/selftests/bpf/progs/bpf_tracing_net.h b/tools/testing/selftests/bpf/progs/bpf_tracing_net.h
+index 0b793a102791..1bdc680b0e0e 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_tracing_net.h
++++ b/tools/testing/selftests/bpf/progs/bpf_tracing_net.h
+@@ -26,6 +26,7 @@
+ #define IPV6_AUTOFLOWLABEL	70
  
- BPF_FILE="test_tunnel_kern.bpf.o"
--BPF_PIN_TUNNEL_DIR="/sys/fs/bpf/tc/tunnel"
-+BPF_FS="/sys/fs/bpf"
-+BPF_PIN_TUNNEL_DIR="${BPF_FS}/tc/tunnel"
- PING_ARG="-c 3 -w 10 -q"
- ret=0
- GREEN='\033[0;92m'
-@@ -668,10 +669,20 @@ check_err()
- 	fi
- }
+ #define TC_ACT_UNSPEC		(-1)
++#define TC_ACT_OK		0
+ #define TC_ACT_SHOT		2
  
-+mount_bpffs()
-+{
-+	if ! mount | grep "bpf on /sys/fs/bpf" &>/dev/null; then
-+		mount -t bpf bpf "$BPF_FS"
-+	fi
-+}
-+
- bpf_tunnel_test()
- {
- 	local errors=0
+ #define SOL_TCP			6
+diff --git a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
+index f66af753bbbb..3065a716544d 100644
+--- a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
++++ b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
+@@ -6,62 +6,30 @@
+  * modify it under the terms of version 2 of the GNU General Public
+  * License as published by the Free Software Foundation.
+  */
+-#include <stddef.h>
+-#include <string.h>
+-#include <arpa/inet.h>
+-#include <linux/bpf.h>
+-#include <linux/if_ether.h>
+-#include <linux/if_packet.h>
+-#include <linux/if_tunnel.h>
+-#include <linux/ip.h>
+-#include <linux/ipv6.h>
+-#include <linux/icmp.h>
+-#include <linux/types.h>
+-#include <linux/socket.h>
+-#include <linux/pkt_cls.h>
+-#include <linux/erspan.h>
+-#include <linux/udp.h>
++#include "vmlinux.h"
+ #include <bpf/bpf_helpers.h>
+ #include <bpf/bpf_endian.h>
++#include "bpf_kfuncs.h"
++#include "bpf_tracing_net.h"
  
-+	echo "Mounting bpffs..."
-+	mount_bpffs
-+
- 	echo "Testing GRE tunnel..."
- 	test_gre
- 	errors=$(( $errors + $? ))
+ #define log_err(__ret) bpf_printk("ERROR line:%d ret:%d\n", __LINE__, __ret)
+ 
+-#define VXLAN_UDP_PORT 4789
++#define VXLAN_UDP_PORT		4789
++#define ETH_P_IP		0x0800
++#define PACKET_HOST		0
++#define TUNNEL_CSUM		bpf_htons(0x01)
++#define TUNNEL_KEY		bpf_htons(0x04)
+ 
+ /* Only IPv4 address assigned to veth1.
+  * 172.16.1.200
+  */
+ #define ASSIGNED_ADDR_VETH1 0xac1001c8
+ 
+-struct geneve_opt {
+-	__be16	opt_class;
+-	__u8	type;
+-	__u8	length:5;
+-	__u8	r3:1;
+-	__u8	r2:1;
+-	__u8	r1:1;
+-	__u8	opt_data[8]; /* hard-coded to 8 byte */
+-};
+-
+ struct vxlanhdr {
+ 	__be32 vx_flags;
+ 	__be32 vx_vni;
+ } __attribute__((packed));
+ 
+-struct vxlan_metadata {
+-	__u32     gbp;
+-};
+-
+-struct bpf_fou_encap {
+-	__be16 sport;
+-	__be16 dport;
+-};
+-
+-enum bpf_fou_encap_type {
+-	FOU_BPF_ENCAP_FOU,
+-	FOU_BPF_ENCAP_GUE,
+-};
+-
+ int bpf_skb_set_fou_encap(struct __sk_buff *skb_ctx,
+ 			  struct bpf_fou_encap *encap, int type) __ksym;
+ int bpf_skb_get_fou_encap(struct __sk_buff *skb_ctx,
 -- 
 2.42.0
 
