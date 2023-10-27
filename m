@@ -2,69 +2,68 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43FC87DA0ED
+	by mail.lfdr.de (Postfix) with ESMTP id EF1457DA0EF
 	for <lists+linux-kselftest@lfdr.de>; Fri, 27 Oct 2023 20:47:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346420AbjJ0SrM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 27 Oct 2023 14:47:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38364 "EHLO
+        id S1346393AbjJ0SrN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 27 Oct 2023 14:47:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346427AbjJ0Sqy (ORCPT
+        with ESMTP id S1346571AbjJ0Sqz (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Oct 2023 14:46:54 -0400
+        Fri, 27 Oct 2023 14:46:55 -0400
 Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68220192;
-        Fri, 27 Oct 2023 11:46:47 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 99A295C01F8;
-        Fri, 27 Oct 2023 14:46:46 -0400 (EDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49004128;
+        Fri, 27 Oct 2023 11:46:48 -0700 (PDT)
+Received: from compute7.internal (compute7.nyi.internal [10.202.2.48])
+        by mailout.nyi.internal (Postfix) with ESMTP id 8FA965C0225;
+        Fri, 27 Oct 2023 14:46:47 -0400 (EDT)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Fri, 27 Oct 2023 14:46:46 -0400
+  by compute7.internal (MEProxy); Fri, 27 Oct 2023 14:46:47 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
         :cc:content-transfer-encoding:content-type:date:date:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1698432406; x=
-        1698518806; bh=r9QySCSR1RQvS3mDA4gvRgEb3+CSuEqmuwH7tokfHzY=; b=n
-        cOlPQs+q45zUZEihzWQ/aMVtQqZR9I30SWvUsKooSNJMWN6KgbGeBZSU07rd0QkT
-        lvrnjsOv+yLTL1T3Is1X5QzHayCAwvmagp8k5h4h05OXofmHcG8I4p9Wg6aeBTVn
-        ePZhIVjnXM7UPeaNBraSSGDraQmxc1bKBJ0YWsG+M0Bb2yOhI3LI6kUHRz88lB5p
-        EyMxqwXOUrUXzLGgO9yF/ZlcERjG/r0TpI0XDhhluIKww1n3/ShDv5pDHhY9GJnx
-        YagX4UMxlEoc3BWmUbyVbCFFSLuNAYj9o1CUg4BI5mC3ay6o7Qj+CUAv6MitI2Ae
-        j4VkIVwXur8a4dda0oSlw==
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1698432407; x=
+        1698518807; bh=2fjiakLITSCXGyl83edKCDEBKH//aAV9purn7c7fwtY=; b=B
+        zISbJzdokjCVKc7AaNFqcoQ4CyM1uafVunTRXmeK/8SkZGJYHuIh3gGYjYvelhia
+        8FAks34jTt9U9RatVynlmEMQN/2kN1DtFeaYkmMs4Y1/TOBk03leFmd20ezAi3tf
+        8nsyW7UCooG0IJm3iyFsBHHbWVU+FooruSGAEskYu54TttWAT4/CMSJYK9HyoMwM
+        o7yMgqBdnQKOXfM/7qb6c2AG3PzuvMU/DqD+zTlTKDQNTu3UQhQXYwYyafOa+/lp
+        DYs0vYJMNPXs2eYjcdvQlFmyPoNuOxoabGjAcJYemYWsOoJW+/1YYkEvf72SLzDV
+        KIdlHZ2p8tsIUCa/9URKg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
         messagingengine.com; h=cc:cc:content-transfer-encoding
         :content-type:date:date:feedback-id:feedback-id:from:from
         :in-reply-to:in-reply-to:message-id:mime-version:references
         :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1698432406; x=
-        1698518806; bh=r9QySCSR1RQvS3mDA4gvRgEb3+CSuEqmuwH7tokfHzY=; b=h
-        oEWc5JX+w2LE9ddRlsklXy7ua4Va1ZkFGY05uMGLBMc2exl9x4qrFA0FOSQ0/c54
-        Y3YBk27G77cOIWK0iYJcSRu2B1iL/1ZRCfwwLvx2a/MuJpVBRyubsi0vZzTC4Q3Y
-        QuDxqfSWTfoptAZBhArBQbbTOo9Bq5IyJahdWxBlPbKnwfRpRzTaDkjbOP57wbRD
-        eEx8V6pUDFQOaw80PCWzXNZUR0o7oabZyTL4M5XSWVHWFbjQu25GNA4hDPzI5d7I
-        ZPiBcGDV5SqjPiuopbbVZoQ6wxLoIZ4vuyAKAqrJuKXCVixRuP27N92EoUD/R1C2
-        PeehHoht+iIaL8leC6ZbQ==
-X-ME-Sender: <xms:lgU8ZZ0KX-edKk3G9UNqTsTeTrj8JZFzosoKnm17GicjJC7PaU6k9w>
-    <xme:lgU8ZQGvsh3UJIazZv-VKGavK0zoKqRgukMLouXrgnoNv65LbPxzYAwQL5QvZQZqn
-    rtZdX9dj-MEkKqcYQ>
-X-ME-Received: <xmr:lgU8ZZ7Bm1i68V3p-e8AWxlm4vttv6HO1ywsc3z8SD_WMHYbEsdIM2nXfLxgCh05rQnCes0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrleeggdduvdelucetufdoteggodetrfdotf
+        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1698432407; x=
+        1698518807; bh=2fjiakLITSCXGyl83edKCDEBKH//aAV9purn7c7fwtY=; b=K
+        9RaMJh603U0B8Q69kyC5341nRwbxYA9Nybte5ysHVXdILhCt0FPX5F28sRfPTFqs
+        ISw6GWa1I+V5Ue54wE0Kg+g+naF+LD3ROAqO3SJug/qc/bUhhl+/9EYSwZhQyxkH
+        HIxOys7H+PY587lYNWGw3hvC3/zvNJlGajrooOzHXPNxbrrrlb4FC40vV9UV+Cgo
+        DY/75ZBXO8MQcNHW60a0Xnpjv9tA0RP4nqCWMtNLfNoF5v73CcaB3pwqBI1Q2Aku
+        05Y9m9Lr8brTQvrC3zSB7SnxCT/Bc6V4unoTRbN7eJniEpW1bgoowDGjvKrF1pEh
+        qbWqJJ3hvq5lcmLY/8DWA==
+X-ME-Sender: <xms:lwU8ZW11Yb53VW8nwcboQllEhYYXHIi9cjPnB_W4K0uJc2gqzNqfew>
+    <xme:lwU8ZZEJca1vbGDUpWFoO-gdk9bn9VvMwrNgJVpSXOf5VsoUtiUeCfwX7TdZuzYA3
+    _naQ1SnI3HRJBJKsw>
+X-ME-Received: <xmr:lwU8Ze6wxe57-VVBYZ9aM7Fu6T50KOoaEENjz3J3kLNtWm_B4JMPEL80E-WnnK5Ka3xzGo8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrleeggddufedtucetufdoteggodetrfdotf
     fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdlfeehmdenucfjughrpefhvf
+    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdljedtmdenucfjughrpefhvf
     evufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeffrghnihgvlhcuighuuceo
-    ugiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepvedtkeejffekgfefhf
-    evffeftefgueeuuedtteejudduheehieffvdeghffhvefhnecuffhomhgrihhnpehgihht
-    hhhusgdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpegugihusegugihuuhhurdighiii
-X-ME-Proxy: <xmx:lgU8ZW3Q0HAoMvAxKEbW0Ei844tlHQzO-b1hjGzTZBxWzHpSbyqGcg>
-    <xmx:lgU8ZcFw6ooSp0iK6S4wIt6lspIVY1Yrp9or8eaWOO-5AHQLUzB2Fw>
-    <xmx:lgU8ZX8E8pc89QmZN4FiW28B7Pn4Cr4WkuuRrPfx7jVQXnodHKYphA>
-    <xmx:lgU8ZRKgXYRXxxx0FkGThgbBOFwHabBzYuus6Po56S-1sIYez3kegA>
+    ugiguhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepgfefgfegjefhudeike
+    dvueetffelieefuedvhfehjeeljeejkefgffeghfdttdetnecuvehluhhsthgvrhfuihii
+    vgeptdenucfrrghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
+X-ME-Proxy: <xmx:lwU8ZX2VbQsiIgTBheTuvICIJe68E5tEBA4pVY3q6Da731U0a4S-VA>
+    <xmx:lwU8ZZG4dsNEZlqgVDYYYu_RIT16vxyFd7fnhB_siJ-kPRrQuOmBDw>
+    <xmx:lwU8ZQ948Ufy_gZuNetNO_cIcQwWi1D9nxrSBOtObhAVqX4bz7Q26g>
+    <xmx:lwU8ZSLby36rDG6CqP6RAHymEk3-hhM7IYekSVELxjDiuJ6LXMMqTw>
 Feedback-ID: i6a694271:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 27 Oct 2023 14:46:45 -0400 (EDT)
+ 27 Oct 2023 14:46:46 -0400 (EDT)
 From:   Daniel Xu <dxu@dxuuu.xyz>
-To:     ast@kernel.org, andrii@kernel.org, shuah@kernel.org,
+To:     andrii@kernel.org, ast@kernel.org, shuah@kernel.org,
         daniel@iogearbox.net, steffen.klassert@secunet.com,
         antony.antony@secunet.com
 Cc:     martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
@@ -72,9 +71,9 @@ Cc:     martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
         haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
         bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org, devel@linux-ipsec.org
-Subject: [RFC bpf-next 2/6] bpf: selftests: test_tunnel: Use ping -6 over ping6
-Date:   Fri, 27 Oct 2023 12:46:18 -0600
-Message-ID: <1cc959a4173b60dd18f4eec64214fc3198e95164.1698431765.git.dxu@dxuuu.xyz>
+Subject: [RFC bpf-next 3/6] bpf: selftests: test_tunnel: Mount bpffs if necessary
+Date:   Fri, 27 Oct 2023 12:46:19 -0600
+Message-ID: <f72e76f4fcfb6498562ce859b6d2e6f15e2bd435.1698431765.git.dxu@dxuuu.xyz>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <cover.1698431765.git.dxu@dxuuu.xyz>
 References: <cover.1698431765.git.dxu@dxuuu.xyz>
@@ -90,84 +89,50 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-The ping6 binary went away over 7 years ago [0].
-
-[0]: https://github.com/iputils/iputils/commit/ebad35fee3de851b809c7b72ccc654a72b6af61d
+Previously, if bpffs was not already mounted, then the test suite would
+fail during object file pinning steps. Fix by mounting bpffs if
+necessary.
 
 Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
 ---
- tools/testing/selftests/bpf/test_tunnel.sh | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+ tools/testing/selftests/bpf/test_tunnel.sh | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/bpf/test_tunnel.sh b/tools/testing/selftests/bpf/test_tunnel.sh
-index 2dec7dbf29a2..85ba39992461 100755
+index 85ba39992461..dd3c79129e87 100755
 --- a/tools/testing/selftests/bpf/test_tunnel.sh
 +++ b/tools/testing/selftests/bpf/test_tunnel.sh
-@@ -295,13 +295,13 @@ test_ip6gre()
- 	add_ip6gretap_tunnel
- 	attach_bpf $DEV ip6gretap_set_tunnel ip6gretap_get_tunnel
- 	# underlay
--	ping6 $PING_ARG ::11
-+	ping -6 $PING_ARG ::11
- 	# overlay: ipv4 over ipv6
- 	ip netns exec at_ns0 ping $PING_ARG 10.1.1.200
- 	ping $PING_ARG 10.1.1.100
- 	check_err $?
- 	# overlay: ipv6 over ipv6
--	ip netns exec at_ns0 ping6 $PING_ARG fc80::200
-+	ip netns exec at_ns0 ping -6 $PING_ARG fc80::200
- 	check_err $?
- 	cleanup
+@@ -46,7 +46,8 @@
+ # 6) Forward the packet to the overlay tnl dev
  
-@@ -324,13 +324,13 @@ test_ip6gretap()
- 	add_ip6gretap_tunnel
- 	attach_bpf $DEV ip6gretap_set_tunnel ip6gretap_get_tunnel
- 	# underlay
--	ping6 $PING_ARG ::11
-+	ping -6 $PING_ARG ::11
- 	# overlay: ipv4 over ipv6
- 	ip netns exec at_ns0 ping $PING_ARG 10.1.1.200
- 	ping $PING_ARG 10.1.1.100
- 	check_err $?
- 	# overlay: ipv6 over ipv6
--	ip netns exec at_ns0 ping6 $PING_ARG fc80::200
-+	ip netns exec at_ns0 ping -6 $PING_ARG fc80::200
- 	check_err $?
- 	cleanup
+ BPF_FILE="test_tunnel_kern.bpf.o"
+-BPF_PIN_TUNNEL_DIR="/sys/fs/bpf/tc/tunnel"
++BPF_FS="/sys/fs/bpf"
++BPF_PIN_TUNNEL_DIR="${BPF_FS}/tc/tunnel"
+ PING_ARG="-c 3 -w 10 -q"
+ ret=0
+ GREEN='\033[0;92m'
+@@ -668,10 +669,20 @@ check_err()
+ 	fi
+ }
  
-@@ -376,7 +376,7 @@ test_ip6erspan()
- 	config_device
- 	add_ip6erspan_tunnel $1
- 	attach_bpf $DEV ip4ip6erspan_set_tunnel ip4ip6erspan_get_tunnel
--	ping6 $PING_ARG ::11
-+	ping -6 $PING_ARG ::11
- 	ip netns exec at_ns0 ping $PING_ARG 10.1.1.200
- 	check_err $?
- 	cleanup
-@@ -474,7 +474,7 @@ test_ipip6()
- 	ip link set dev veth1 mtu 1500
- 	attach_bpf $DEV ipip6_set_tunnel ipip6_get_tunnel
- 	# underlay
--	ping6 $PING_ARG ::11
-+	ping -6 $PING_ARG ::11
- 	# ip4 over ip6
- 	ping $PING_ARG 10.1.1.100
- 	check_err $?
-@@ -502,11 +502,11 @@ test_ip6ip6()
- 	ip link set dev veth1 mtu 1500
- 	attach_bpf $DEV ip6ip6_set_tunnel ip6ip6_get_tunnel
- 	# underlay
--	ping6 $PING_ARG ::11
-+	ping -6 $PING_ARG ::11
- 	# ip6 over ip6
--	ping6 $PING_ARG 1::11
-+	ping -6 $PING_ARG 1::11
- 	check_err $?
--	ip netns exec at_ns0 ping6 $PING_ARG 1::22
-+	ip netns exec at_ns0 ping -6 $PING_ARG 1::22
- 	check_err $?
- 	cleanup
++mount_bpffs()
++{
++	if ! mount | grep "bpf on /sys/fs/bpf" &>/dev/null; then
++		mount -t bpf bpf "$BPF_FS"
++	fi
++}
++
+ bpf_tunnel_test()
+ {
+ 	local errors=0
  
++	echo "Mounting bpffs..."
++	mount_bpffs
++
+ 	echo "Testing GRE tunnel..."
+ 	test_gre
+ 	errors=$(( $errors + $? ))
 -- 
 2.42.0
 
