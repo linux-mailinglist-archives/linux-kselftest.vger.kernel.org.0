@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 116287DA52F
+	by mail.lfdr.de (Postfix) with ESMTP id 695417DA530
 	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Oct 2023 07:25:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbjJ1FZH (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 28 Oct 2023 01:25:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54574 "EHLO
+        id S233053AbjJ1FZK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 28 Oct 2023 01:25:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjJ1FZE (ORCPT
+        with ESMTP id S229539AbjJ1FZI (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 28 Oct 2023 01:25:04 -0400
-Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-db5eur01olkn2081.outbound.protection.outlook.com [40.92.64.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F6DE10A;
-        Fri, 27 Oct 2023 22:25:01 -0700 (PDT)
+        Sat, 28 Oct 2023 01:25:08 -0400
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-db5eur01olkn2077.outbound.protection.outlook.com [40.92.64.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63BDA10A;
+        Fri, 27 Oct 2023 22:25:06 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Zk5tVOCnZ9Kvf2CX5Ss9Cn1X1EuI8gjiHv38JoWbq1Aba87P1u7vaZ8S4bXc2I7No71XWbl9YuO3Xb8ub9niaQ5n6mWdnBA1d9uOW9Y5ZNnsksQvYNfPeH3rvOLR/q0fnVFtydjzEF//SRR1ta8Pb72ghcjeEnxf9LauTZdRBzxSSljvYCPmqiGdRPdArSedvzUjAqWmZyW59NGxyyIbSkyXZNfKdBjL+k2LpzLDq337CisPxHV2kzQaV6yMXY5i5BmI9uHO44hmAhHiH2mydN9zsW2FnqFrFWBE7HZsalmOdCWtJAQNXO8Mqn6AvxCM2ExLbHfWZcLvnnCgpElRog==
+ b=cb66q/VcmBHwC5yjQtggg5XnHBL5MSMJUhVMH5aT+C+MHb3GKCCiB4wzchUwzOn0G7JXFLax8xn5NcXXY8xVe02GTNwcc5gZyl0eS9ggaOKRAIf68pcxxlYRL7gdWoHxexHKpHINSedmQ2ew5LsfOsY47qirAgC8bsmQlJiEHoUvWejtWaapwMrmntcCQOmA/c8H9VY/slMWbsYDJq1bo/359y42fYZhDkPN6IyyoNlnYyCWzbuGL4XQzyx54tnvQnqQafqURMNXV2ca2mgCbN41c4yw4Jfhs5C57v6z+wMPojgqOlxYBMEsWLpiBfxL9PeIvowiHe2wRUs9kAotVw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rkMMJIKLLa9scNNNpEqFq8LsXi/MEpLqvzyrhZptJ/I=;
- b=j+peqdTzcfe2sfrFeUewAyh5YRpJmKOR7kb1a2gT9OPpou2BETLlGOYV/m5I31V3r3V0ZOrzSIHG171SupYMUsNKvtureABcjWKgtJyxkxmYtti2IyvjXRi49GjiwhVTCuv+WsyGZ1GkwmD9tk0PUoe8yHWmFrtXlm9+f5K2I5+D6BfubMv8gtkgLunB0M7fC7C6NNx52Ui4PRY80MUNZNGDTDD1ncb3fXCODVRmuNoNa6lPoOxYAISvRGr0k0vGW/wt44hI8ULtCEWk/feahg17WrkyUmsREKibUkGgWpeZcB0m38dZP5k9tYQi+dyI8+P8meSxMLWcGfjYom6mEA==
+ bh=J0vU6QzwY0KgWTyrQQqWM9stWEifz+KR6QYp41Wr3/w=;
+ b=WE2Z0feQkqxi6+kOdFT7TcagHRiQrRdxFWxjciCCi4rkPEtgUuL/fDKGBs6d4mwXSW61yVRWqoDs1khOxArctMpv2D2D+HPAGeA7BV7TSTPFiHa+02BBsoeTzuAobEJ7XBLFDfYmt8WIJ+zQBpCZtkdJciwenVbkuQvDWJKnzEaZMGddw++DzPTCPEbC25loE5LdU0y/KgoUInYzsAa31Cjqbga4l/5ugdomONQz0L/jkgXlbnC2ET4W54iZL5IlZk/5QeEivSHMde7y3nHqCTLPvjODIkZ4mB/y+02pzBoRzPp3VQ2mDaoP9S89QZj9a5Hf1P7ZMnmTxWqUX2EiVw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rkMMJIKLLa9scNNNpEqFq8LsXi/MEpLqvzyrhZptJ/I=;
- b=nXMYgTFXYHosUoQTqEkUndiOdqCcLcUwVuaZAvgrx/g6X5cpPUg4KMlrpOe/BhW12Cn0s/gFlklw7WuMxz4/5FCUS2993Uz4ASk1cMQSgshMngRg4hWfD2ovUFxAZBMmDtgNrfl697ZWk+NIhePyivGtlHYCbGqu/1lJELf/s3gxNNs0+BZvpN3nQtZH7WIJwhJnWSclFut+tREpI5GrRMRcBhyJ3BPRQdiso9fgQVMwf2XfKdvHx5rpKdoxCxpxYCWZNcUUj5ZYPrO7HhBSJYd4DBgX3sTOo3FdWfFx7b0v6OWr8VwoBMe/13MLnKzsmyW0poUSBksv23bGdZJFFQ==
+ bh=J0vU6QzwY0KgWTyrQQqWM9stWEifz+KR6QYp41Wr3/w=;
+ b=hjPae80bnwFnSF5Roo4ym/Z9+S0O9J0aFtcVMyoSmsaAi+0oLZqRhiTO5s/UjDEf7Juosp3wogtOSPrwuEeB/4BBAIDrNAx1/2ANX4jlml9gfLl9dR746Q1lRPynhpYzZcy7LUhhUhD0pfGSMgJJFP0t8/60fs/aWsJioDaz1ELm7pBGdlVdW+sifh9BFBzssQ5vqJu+yS+Ok9grr3wCjn+f5IfVmCvnN6H9iUu0I/lHsZEzWQbnj3MZ5n4jgJAyHIYHLYfJFCHSjcPKTvWAMGrJaD5Uz80xKt6qzI2X3tTH0TsI54SpC2Z6lGdtvdEV5aoKt5Q9rFrCgx0fSmMd5w==
 Received: from DB3PR10MB6835.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:42a::7)
  by DU0PR10MB6367.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:40d::14) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6933.22; Sat, 28 Oct
- 2023 05:24:58 +0000
+ 2023 05:25:04 +0000
 Received: from DB3PR10MB6835.EURPRD10.PROD.OUTLOOK.COM
  ([fe80::e2b0:8d7e:e293:bd97]) by DB3PR10MB6835.EURPRD10.PROD.OUTLOOK.COM
  ([fe80::e2b0:8d7e:e293:bd97%7]) with mapi id 15.20.6933.024; Sat, 28 Oct 2023
- 05:24:58 +0000
+ 05:25:04 +0000
 From:   Yuran Pereira <yuran.pereira@hotmail.com>
 To:     bpf@vger.kernel.org, yonghong.song@linux.dev
 Cc:     sinquersw@gmail.com, ast@kernel.org, brauner@kernel.org,
@@ -48,53 +48,53 @@ Cc:     sinquersw@gmail.com, ast@kernel.org, brauner@kernel.org,
         shuah@kernel.org, song@kernel.org,
         linux-kernel-mentees@lists.linuxfoundation.org,
         Yuran Pereira <yuran.pereira@hotmail.com>
-Subject: [PATCH bpf-next v3 1/2] selftests/bpf: Convert CHECK macros to ASSERT_* macros in bpf_iter
-Date:   Sat, 28 Oct 2023 10:54:13 +0530
-Message-ID: <DB3PR10MB6835E9C8DFCA226DD6FEF914E8A3A@DB3PR10MB6835.EURPRD10.PROD.OUTLOOK.COM>
+Subject: [PATCH bpf-next v3 2/2] selftests/bpf: Add malloc failure checks in bpf_iter
+Date:   Sat, 28 Oct 2023 10:54:14 +0530
+Message-ID: <DB3PR10MB6835F0ECA792265FA41FC39BE8A3A@DB3PR10MB6835.EURPRD10.PROD.OUTLOOK.COM>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <cover.1698461732.git.yuran.pereira@hotmail.com>
 References: <cover.1698461732.git.yuran.pereira@hotmail.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-TMN:  [c8mzXXAkR16MnI/vr+kLqDt/5BpbCkl+]
+X-TMN:  [bEIWiwKQSCkoEmLKktPbRwGxn5+fMSHi]
 X-ClientProxiedBy: JN3P275CA0002.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:70::6)
  To DB3PR10MB6835.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:42a::7)
-X-Microsoft-Original-Message-ID: <602a18b1ff49bb8cc32f0d8de6e4bcaf5d404eed.1698461732.git.yuran.pereira@hotmail.com>
+X-Microsoft-Original-Message-ID: <5f3b9bdf9b22e0b3bfd5e73a0ef15b68db3a381e.1698461732.git.yuran.pereira@hotmail.com>
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: DB3PR10MB6835:EE_|DU0PR10MB6367:EE_
-X-MS-Office365-Filtering-Correlation-Id: e78cc38e-20af-4fd1-9147-08dbd7763a23
+X-MS-Office365-Filtering-Correlation-Id: fbb9c629-068e-4bad-937f-08dbd7763d50
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: nQeBAWUp0JqcYPOoLufCSWKsxkAVX8lGnmAxiLbzYxn/IF5ASdTECN1gxJWGq5EnGEH8Zqmq2vnHVxt+bJlvGaH3aIdkTALnHgonN1BXhENNjkv3nOnIf+bYNGfE7em+h4TbuL+qfs/SAM1bcP8IlpBCN3w/nwunM5D0A9J6X23xUssdA7hSO1EO+WJvC2vrenZizN7dWrqn+29302+/BX3jQ13XBTZ+CZ2CNbPdyC0k1zbuOZn/ob+Zmh+n2ja94w//4s4GimF7Yw03OMOUttLLnjZhglsmv0IEstA+10UQwPUhjJr/DmsmK2qa3/+2xa9+O9aSwqactJWU7wVsn3IL3E5QhU+LD1AvkT3gx41cWyHxoBViugqppQ5YzUBIgjnZLmoTVtWGLAoNThDikFz4fP8FStqlBgXprloF0SlDbCM9Rx31OLu8KqUpTqKJExb8TM6b/eKdsgOJHLHo9yVtC5Mvdnjihog7hCMPUX4oA6u+bMuEicfkL9GP8JAdcJbFztIkwdYj8lNDi7Eqik2gCKpf2SBIXZJVvEz0VOnp7VDbXFt1htIt+uPLpLjFbuT2hyS3V5Bmj4bsLmO6LDwMccALhrfFs6BKFp4lcXSy7nuic7JG/ETcSasfQacp
+X-Microsoft-Antispam-Message-Info: r1NgmA2FUg5Tr4C2YXh42Qef/ei7y8PCWjdvVnKgtrbOc13N1p6ZwSn9Rgxzqi4N12/Nk2GUinZu2qtnOXZB3ZK6hNCFbRCt+I4NSBp8EwZ8i/nagu1kDvqRwVRs66/5pRsvN942KEOQH7H4ygMi2BwtVYDXrZrO1H1OOu4h9TsnF14j2j0H2nzQHo/w/pgusUnucESqgzlciydWjZ5QB8/IOnObnoIE6Z4m97Mqhis3MT/ELeSj9oB6ZpsSDAOAHu3soY3NH9TqVWWPjyBFNSMNofb1MfFAt6Vw0Fhum4lJ37yPgmjrhJ2jkOU3yNq6yB+oYtBd7RqoEKw1CX2aZTBHzqRklKW09QiHibkA3BBb1Uf4ilZrzsorxsCxW6P57J2I18ZQ9/+6BdsFxS8yUAz8c8HfPZlzJwviB0w5NzTgjhJgOie3qa0CF6HAddc0hOmC7MCzW+0evJiLbBAv41DsnqAaeGUxmYLE5Is0LMrL5ew3Y1lvc8chmD5oVmEW8+lxLCv1GzabIZdCWVntcCfIEKcBMvyB26FxzBpPzra2TJZGtXnkk2LeeZa30MDMqZfvf+CMmNPwK1fmb2q0q+6BHaIX8EjH8DcBNmqUrX4DnqAG8kN7wDPqjYRRGfGB
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?qSSZSs8EN2DJk27fG0J4ZaLUICdrRYf/e/x/roSrlJiD/OvOXU2mBBLwFI5B?=
- =?us-ascii?Q?i3R01ni6bQJQhyosu1Xe7cprYVZRQRO2AFoPiZqugia8QK4pz0Uz/4l8AfXx?=
- =?us-ascii?Q?e1m3zyTy4AyvH+lSkgr2Q0YhC4ABKvq84vMy+UKxTT+6kJKobYhfZueNdWbI?=
- =?us-ascii?Q?iFumYQmQUF92i/b9UPEniD3mqP5ZAVcBbUnTpzev811WM4zmqrgZUDDkh+4t?=
- =?us-ascii?Q?mtymi96KZa8Rs+m7PXGiPWEuu9l45w/H5qUC+x3LeLshiA0Kvmr7DtoYQh9V?=
- =?us-ascii?Q?7RWCNYJrMBMNnsCvTEeWDM3KaFuCEUyLej87GYsl250v/qfRdR+Y//h5f764?=
- =?us-ascii?Q?fSkSauWouOT+xKwU0+Pn7ZeF5YzdkeePc6BLOOmGTA9A04MozzEwgmMAG+Tu?=
- =?us-ascii?Q?iu4jZVqghKqkQtWgSKb1yxiVeRJE5bCuVClEjSM4dAsruEiTLhITxdXOKPTC?=
- =?us-ascii?Q?F13s41TqcH1IUPVzZt4r3wlk8Yp3/XRo1F7+xMkot4ukapFiQTtZR35QSyoL?=
- =?us-ascii?Q?uMD0DvYZT2FGtEMGc6WtlEVOIKNCwhdPjEI1iBQHjzGN0MTQx+ITsNPZk9WO?=
- =?us-ascii?Q?vRh2v9cNT4PKjZwK4ArXkaQwyW/XvgrundSieOQfafRv+I4jQNihDwMM85qx?=
- =?us-ascii?Q?ACwJywU9wjrid05sftWpcCXNgQF41RtHV9KAeFFbdVrkl9PRKb19ExuQQyfQ?=
- =?us-ascii?Q?ULA+43FdtjRGM4CzoxbjSLaSZW1mOcustleLwQgRO6HCz/iBUKXd2rHMKjRs?=
- =?us-ascii?Q?Gmzq7jYg2FyqZiF6MKBFy/mnuoNst/B7YSD0v4F5eWWnIkVAQtTHiZjUvXWJ?=
- =?us-ascii?Q?YNEqVsnPKmObbDSg5o43RxeQPlOtcW8xK7vs2dmRNIkEEuvameBIuAzRNQ7u?=
- =?us-ascii?Q?NN+aczNfDfkACwzR7h51tbO99T1rAsz/WGxevBqVWeHkDjfvylj1n3gLYZYN?=
- =?us-ascii?Q?J5GrT1xmZXJGReS6Zi1gjB445QKYzKHSwrfmCFdBNcu8yhvsOo7IxYIeNf1Q?=
- =?us-ascii?Q?zriACsZSTj6WnuwPy3Pce4H3rBFjoGUK5BAw7+3KSYDBE7e0CI3mGNbPduvU?=
- =?us-ascii?Q?bvPdeQDMeisQSbNAzboEB6tpq4fIX+54XYVQKYjHJ+GIF68v44liOjinwP47?=
- =?us-ascii?Q?lfr8z4AWv/xB0mg0q+Qc8jJo6NRR6y/p4isSMKhF0kU0q24kSFGUuJn+mzde?=
- =?us-ascii?Q?OO5kPWkgGaEnStlMnH4JzIjYrAtDaixWTonNNvYEiCW13tOHp39FGTY/O7Y?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?GX+9YO9hYVqgbPNybZEr4+PlJnAVmBHWMLr1AKk+lERQiQgIzZMMK77EeTPT?=
+ =?us-ascii?Q?pvucvkpdZRosjkKSpOQ3YgELYr01tD0qfJGYdExYGjkcx71Z8I4A86fWO2bh?=
+ =?us-ascii?Q?lKoZfuDAXG0PXZh5zo+eS+O6MA5QqAu+Ypkvh64oLaiYTDuC03H5ig4IJmsP?=
+ =?us-ascii?Q?BtBKc35dTZ1QIdqd7rnWvPqD+oiCweRmGS9rXJviVl4HCS1cfp9iZzYxkVbs?=
+ =?us-ascii?Q?kE8ACoWguWLG/NrkLCdYSp4Bsk2POhOQBuhDQ3vIf8wvMOsbdT6nbxqKPvQw?=
+ =?us-ascii?Q?zM846zvaDhzxrJM3p7RAEwtx3d7kKh1eZi36SyTuEgQvL2LTnn8zuv2ke+3+?=
+ =?us-ascii?Q?YT1GhtNrIeTghgx7DHkAZmXLBYX5aGItNcSTY4gMX6/rG1B8vB+MyjhKfZiw?=
+ =?us-ascii?Q?nl5HPugsjmmwOJMcJz3G10oXoxcVwtfn0mGrQtYm9hDsHY6iKVM/I22Gmdko?=
+ =?us-ascii?Q?1RN8zXsUnic3XtgBvhJ2vJEF91J2QD/HuIYx3X+PboeEbJPoj7Ds2M/eDWIr?=
+ =?us-ascii?Q?CnQZdOdiT7hIlG9lvVJ7GIAn+Ea2bfVdWt7q+H4OMx7tDFX5pyIAUTjGn2T8?=
+ =?us-ascii?Q?L7kMSJ6cUE634KoaZEA4WkCKXhxLQxTXz93qEDQuDGWIIB2tWBhndohrpPgi?=
+ =?us-ascii?Q?KqANdT2kRnlIFXu6ndVsPxn0PIcpEytxjdJpkdoFHcU39PPZgyrkMlyXOOoy?=
+ =?us-ascii?Q?D1q7xzmsABZbp+jEZkiqYaIU5HTlF11fRU3fX9XJN+oYGfRi8ZwZ4HNX4oOz?=
+ =?us-ascii?Q?hb49RZnVU4tuMe2b2N1er1dz4sDPI3gQ7mTuaRjgVpBp3yOENeVZdlLx9BEN?=
+ =?us-ascii?Q?PzAFFl91gPFTWHRhMZk6FdiOM2rdtR9TjZH4Y/LnpYdYlaSr2a2EscEFbdHA?=
+ =?us-ascii?Q?Wom6dzCPnj1olagFZ+tH3r6rr/S1maLuDVGu7Id8uCP74Q+DqoEVQiy4U6uI?=
+ =?us-ascii?Q?/TTS7/5uJhB6OFoIKxF4atvi/YQ4rt8Q5y+tKl/tbJ6uojKW9UjHtuLI8XHc?=
+ =?us-ascii?Q?tOQVBsR6EeNJd9QuICwRlSD/xuPl+9ec7+R9t+TuVFFIvSDvjcwF5M29n6+I?=
+ =?us-ascii?Q?Zg5Kqgebbcq2k5Irkkq1XQYBHBbSG6tp71KmllGb2Oko6LE6x5Sn8HPPCAfh?=
+ =?us-ascii?Q?FITBJkJSz3QfT0GhhGESktpxGMsgOiJB+wCb3j5G/cXJJ/qPMvW/KPS8PJAV?=
+ =?us-ascii?Q?rMvdfrAgV3F7vZaIG8ePw0kuETHyWlnBc6a5QZx3JY2IXl8lULEc/mLRIeU?=
  =?us-ascii?Q?=3D?=
 X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-6b909.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: e78cc38e-20af-4fd1-9147-08dbd7763a23
+X-MS-Exchange-CrossTenant-Network-Message-Id: fbb9c629-068e-4bad-937f-08dbd7763d50
 X-MS-Exchange-CrossTenant-AuthSource: DB3PR10MB6835.EURPRD10.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2023 05:24:58.7414
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2023 05:25:04.0864
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
@@ -110,256 +110,47 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-As it was pointed out by Yonghong Song [1], in the bpf selftests the use
-of the ASSERT_* series of macros is preferred over the CHECK macro.
-This patch replaces all CHECK calls in bpf_iter with the appropriate
-ASSERT_* macros.
+Since some malloc calls in bpf_iter may at times fail,
+this patch adds the appropriate fail checks, and ensures that
+any previously allocated resource is appropriately destroyed
+before returning the function.
 
-[1] https://lore.kernel.org/lkml/0a142924-633c-44e6-9a92-2dc019656bf2@linux.dev
-
-Suggested-by: Yonghong Song <yonghong.song@linux.dev>
 Signed-off-by: Yuran Pereira <yuran.pereira@hotmail.com>
 ---
- .../selftests/bpf/prog_tests/bpf_iter.c       | 79 ++++++++-----------
- 1 file changed, 35 insertions(+), 44 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/bpf_iter.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-index 1f02168103dd..123a3502b8f0 100644
+index 123a3502b8f0..1e02d1ba1c18 100644
 --- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
 +++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-@@ -34,8 +34,6 @@
- #include "bpf_iter_ksym.skel.h"
- #include "bpf_iter_sockmap.skel.h"
- 
--static int duration;
--
- static void test_btf_id_or_null(void)
- {
- 	struct bpf_iter_test_kern3 *skel;
-@@ -64,7 +62,7 @@ static void do_dummy_read_opts(struct bpf_program *prog, struct bpf_iter_attach_
- 	/* not check contents, but ensure read() ends without error */
- 	while ((len = read(iter_fd, buf, sizeof(buf))) > 0)
- 		;
--	CHECK(len < 0, "read", "read failed: %s\n", strerror(errno));
-+	ASSERT_GE(len, 0, "read");
- 
- 	close(iter_fd);
- 
-@@ -413,7 +411,7 @@ static int do_btf_read(struct bpf_iter_task_btf *skel)
- 		goto free_link;
- 	}
- 
--	if (CHECK(err < 0, "read", "read failed: %s\n", strerror(errno)))
-+	if (!ASSERT_GE(err, 0, "read"))
+@@ -698,7 +698,7 @@ static void test_overflow(bool test_e2big_overflow, bool ret1)
  		goto free_link;
  
- 	ASSERT_HAS_SUBSTR(taskbuf, "(struct task_struct)",
-@@ -526,11 +524,11 @@ static int do_read_with_fd(int iter_fd, const char *expected,
- 	start = 0;
- 	while ((len = read(iter_fd, buf + start, read_buf_len)) > 0) {
- 		start += len;
--		if (CHECK(start >= 16, "read", "read len %d\n", len))
-+		if (!ASSERT_LT(start, 16, "read"))
- 			return -1;
- 		read_buf_len = read_one_char ? 1 : 16 - start;
- 	}
--	if (CHECK(len < 0, "read", "read failed: %s\n", strerror(errno)))
-+	if (!ASSERT_GE(len, 0, "read"))
- 		return -1;
- 
- 	if (!ASSERT_STREQ(buf, expected, "read"))
-@@ -571,8 +569,7 @@ static int do_read(const char *path, const char *expected)
- 	int err, iter_fd;
- 
- 	iter_fd = open(path, O_RDONLY);
--	if (CHECK(iter_fd < 0, "open", "open %s failed: %s\n",
--		  path, strerror(errno)))
-+	if (!ASSERT_GE(iter_fd, 0, "open"))
- 		return -1;
- 
- 	err = do_read_with_fd(iter_fd, expected, false);
-@@ -600,7 +597,7 @@ static void test_file_iter(void)
- 	unlink(path);
- 
- 	err = bpf_link__pin(link, path);
--	if (CHECK(err, "pin_iter", "pin_iter to %s failed: %d\n", path, err))
-+	if (!ASSERT_OK(err, "pin_iter"))
- 		goto free_link;
- 
- 	err = do_read(path, "abcd");
-@@ -651,12 +648,10 @@ static void test_overflow(bool test_e2big_overflow, bool ret1)
- 	 * overflow and needs restart.
- 	 */
- 	map1_fd = bpf_map_create(BPF_MAP_TYPE_ARRAY, NULL, 4, 8, 1, NULL);
--	if (CHECK(map1_fd < 0, "bpf_map_create",
--		  "map_creation failed: %s\n", strerror(errno)))
-+	if (!ASSERT_GE(map1_fd, 0, "bpf_map_create"))
- 		goto out;
- 	map2_fd = bpf_map_create(BPF_MAP_TYPE_ARRAY, NULL, 4, 8, 1, NULL);
--	if (CHECK(map2_fd < 0, "bpf_map_create",
--		  "map_creation failed: %s\n", strerror(errno)))
-+	if (!ASSERT_GE(map2_fd, 0, "bpf_map_create"))
- 		goto free_map1;
- 
- 	/* bpf_seq_printf kernel buffer is 8 pages, so one map
-@@ -685,14 +680,12 @@ static void test_overflow(bool test_e2big_overflow, bool ret1)
- 	/* setup filtering map_id in bpf program */
- 	map_info_len = sizeof(map_info);
- 	err = bpf_map_get_info_by_fd(map1_fd, &map_info, &map_info_len);
--	if (CHECK(err, "get_map_info", "get map info failed: %s\n",
--		  strerror(errno)))
-+	if (!ASSERT_OK(err, "get_map_info"))
- 		goto free_map2;
- 	skel->bss->map1_id = map_info.id;
- 
- 	err = bpf_map_get_info_by_fd(map2_fd, &map_info, &map_info_len);
--	if (CHECK(err, "get_map_info", "get map info failed: %s\n",
--		  strerror(errno)))
-+	if (!ASSERT_OK(err, "get_map_info"))
- 		goto free_map2;
- 	skel->bss->map2_id = map_info.id;
- 
-@@ -714,16 +707,14 @@ static void test_overflow(bool test_e2big_overflow, bool ret1)
- 		while ((len = read(iter_fd, buf, expected_read_len)) > 0)
- 			total_read_len += len;
- 
--		CHECK(len != -1 || errno != E2BIG, "read",
--		      "expected ret -1, errno E2BIG, but get ret %d, error %s\n",
--			  len, strerror(errno));
-+		ASSERT_EQ(len, -1, "read");
-+		ASSERT_EQ(errno, E2BIG, "read");
- 		goto free_buf;
- 	} else if (!ret1) {
- 		while ((len = read(iter_fd, buf, expected_read_len)) > 0)
- 			total_read_len += len;
- 
--		if (CHECK(len < 0, "read", "read failed: %s\n",
--			  strerror(errno)))
-+		if (!ASSERT_GE(len, 0, "read"))
- 			goto free_buf;
- 	} else {
- 		do {
-@@ -732,8 +723,7 @@ static void test_overflow(bool test_e2big_overflow, bool ret1)
- 				total_read_len += len;
- 		} while (len > 0 || len == -EAGAIN);
- 
--		if (CHECK(len < 0, "read", "read failed: %s\n",
--			  strerror(errno)))
-+		if (!ASSERT_GE(len, 0, "read"))
- 			goto free_buf;
- 	}
- 
-@@ -836,7 +826,7 @@ static void test_bpf_hash_map(void)
- 	/* do some tests */
- 	while ((len = read(iter_fd, buf, sizeof(buf))) > 0)
- 		;
--	if (CHECK(len < 0, "read", "read failed: %s\n", strerror(errno)))
-+	if (!ASSERT_GE(len, 0, "read"))
+ 	buf = malloc(expected_read_len);
+-	if (!buf)
++	if (!ASSERT_OK_PTR(buf, "malloc"))
  		goto close_iter;
  
- 	/* test results */
-@@ -917,7 +907,7 @@ static void test_bpf_percpu_hash_map(void)
- 	/* do some tests */
- 	while ((len = read(iter_fd, buf, sizeof(buf))) > 0)
- 		;
--	if (CHECK(len < 0, "read", "read failed: %s\n", strerror(errno)))
-+	if (!ASSERT_GE(len, 0, "read"))
- 		goto close_iter;
+ 	/* do read */
+@@ -868,6 +868,8 @@ static void test_bpf_percpu_hash_map(void)
  
- 	/* test results */
-@@ -983,17 +973,14 @@ static void test_bpf_array_map(void)
- 	start = 0;
- 	while ((len = read(iter_fd, buf + start, sizeof(buf) - start)) > 0)
- 		start += len;
--	if (CHECK(len < 0, "read", "read failed: %s\n", strerror(errno)))
-+	if (!ASSERT_GE(len, 0, "read"))
- 		goto close_iter;
+ 	skel->rodata->num_cpus = bpf_num_possible_cpus();
+ 	val = malloc(8 * bpf_num_possible_cpus());
++	if (!ASSERT_OK_PTR(val, "malloc"))
++		goto out;
  
- 	/* test results */
- 	res_first_key = *(__u32 *)buf;
- 	res_first_val = *(__u64 *)(buf + sizeof(__u32));
--	if (CHECK(res_first_key != 0 || res_first_val != first_val,
--		  "bpf_seq_write",
--		  "seq_write failure: first key %u vs expected 0, "
--		  " first value %llu vs expected %llu\n",
--		  res_first_key, res_first_val, first_val))
-+	if (!ASSERT_EQ(res_first_key, 0, "bpf_seq_write") ||
-+			!ASSERT_EQ(res_first_val, first_val, "bpf_seq_write"))
- 		goto close_iter;
+ 	err = bpf_iter_bpf_percpu_hash_map__load(skel);
+ 	if (!ASSERT_OK_PTR(skel, "bpf_iter_bpf_percpu_hash_map__load"))
+@@ -1044,6 +1046,8 @@ static void test_bpf_percpu_array_map(void)
  
- 	if (!ASSERT_EQ(skel->bss->key_sum, expected_key, "key_sum"))
-@@ -1092,7 +1079,7 @@ static void test_bpf_percpu_array_map(void)
- 	/* do some tests */
- 	while ((len = read(iter_fd, buf, sizeof(buf))) > 0)
- 		;
--	if (CHECK(len < 0, "read", "read failed: %s\n", strerror(errno)))
-+	if (!ASSERT_GE(len, 0, "read"))
- 		goto close_iter;
+ 	skel->rodata->num_cpus = bpf_num_possible_cpus();
+ 	val = malloc(8 * bpf_num_possible_cpus());
++	if (!ASSERT_OK_PTR(val, "malloc"))
++		goto out;
  
- 	/* test results */
-@@ -1131,6 +1118,7 @@ static void test_bpf_sk_storage_delete(void)
- 	sock_fd = socket(AF_INET6, SOCK_STREAM, 0);
- 	if (!ASSERT_GE(sock_fd, 0, "socket"))
- 		goto out;
-+
- 	err = bpf_map_update_elem(map_fd, &sock_fd, &val, BPF_NOEXIST);
- 	if (!ASSERT_OK(err, "map_update"))
- 		goto out;
-@@ -1151,14 +1139,19 @@ static void test_bpf_sk_storage_delete(void)
- 	/* do some tests */
- 	while ((len = read(iter_fd, buf, sizeof(buf))) > 0)
- 		;
--	if (CHECK(len < 0, "read", "read failed: %s\n", strerror(errno)))
-+	if (!ASSERT_GE(len, 0, "read"))
- 		goto close_iter;
- 
- 	/* test results */
- 	err = bpf_map_lookup_elem(map_fd, &sock_fd, &val);
--	if (CHECK(!err || errno != ENOENT, "bpf_map_lookup_elem",
--		  "map value wasn't deleted (err=%d, errno=%d)\n", err, errno))
--		goto close_iter;
-+
-+	 /* Note: The following assertions serve to ensure
-+	  * the value was deleted. It does so by asserting
-+	  * that bpf_map_lookup_elem has failed. This might
-+	  * seem counterintuitive at first.
-+	  */
-+	ASSERT_ERR(err, "bpf_map_lookup_elem");
-+	ASSERT_EQ(errno, ENOENT, "bpf_map_lookup_elem");
- 
- close_iter:
- 	close(iter_fd);
-@@ -1203,17 +1196,15 @@ static void test_bpf_sk_storage_get(void)
- 	do_dummy_read(skel->progs.fill_socket_owner);
- 
- 	err = bpf_map_lookup_elem(map_fd, &sock_fd, &val);
--	if (CHECK(err || val != getpid(), "bpf_map_lookup_elem",
--	    "map value wasn't set correctly (expected %d, got %d, err=%d)\n",
--	    getpid(), val, err))
-+	if (!ASSERT_OK(err, "bpf_map_lookup_elem") ||
-+			!ASSERT_EQ(val, getpid(), "bpf_map_lookup_elem"))
- 		goto close_socket;
- 
- 	do_dummy_read(skel->progs.negate_socket_local_storage);
- 
- 	err = bpf_map_lookup_elem(map_fd, &sock_fd, &val);
--	CHECK(err || val != -getpid(), "bpf_map_lookup_elem",
--	      "map value wasn't set correctly (expected %d, got %d, err=%d)\n",
--	      -getpid(), val, err);
-+	ASSERT_OK(err, "bpf_map_lookup_elem");
-+	ASSERT_EQ(val, -getpid(), "bpf_map_lookup_elem");
- 
- close_socket:
- 	close(sock_fd);
-@@ -1290,7 +1281,7 @@ static void test_bpf_sk_storage_map(void)
- 	/* do some tests */
- 	while ((len = read(iter_fd, buf, sizeof(buf))) > 0)
- 		;
--	if (CHECK(len < 0, "read", "read failed: %s\n", strerror(errno)))
-+	if (!ASSERT_GE(len, 0, "read"))
- 		goto close_iter;
- 
- 	/* test results */
+ 	err = bpf_iter_bpf_percpu_array_map__load(skel);
+ 	if (!ASSERT_OK_PTR(skel, "bpf_iter_bpf_percpu_array_map__load"))
 -- 
 2.25.1
 
