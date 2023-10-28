@@ -2,155 +2,190 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 695417DA530
-	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Oct 2023 07:25:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C432F7DA583
+	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Oct 2023 09:44:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233053AbjJ1FZK (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sat, 28 Oct 2023 01:25:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50632 "EHLO
+        id S229581AbjJ1HoY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sat, 28 Oct 2023 03:44:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjJ1FZI (ORCPT
+        with ESMTP id S229458AbjJ1HoX (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sat, 28 Oct 2023 01:25:08 -0400
-Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-db5eur01olkn2077.outbound.protection.outlook.com [40.92.64.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63BDA10A;
-        Fri, 27 Oct 2023 22:25:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cb66q/VcmBHwC5yjQtggg5XnHBL5MSMJUhVMH5aT+C+MHb3GKCCiB4wzchUwzOn0G7JXFLax8xn5NcXXY8xVe02GTNwcc5gZyl0eS9ggaOKRAIf68pcxxlYRL7gdWoHxexHKpHINSedmQ2ew5LsfOsY47qirAgC8bsmQlJiEHoUvWejtWaapwMrmntcCQOmA/c8H9VY/slMWbsYDJq1bo/359y42fYZhDkPN6IyyoNlnYyCWzbuGL4XQzyx54tnvQnqQafqURMNXV2ca2mgCbN41c4yw4Jfhs5C57v6z+wMPojgqOlxYBMEsWLpiBfxL9PeIvowiHe2wRUs9kAotVw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=J0vU6QzwY0KgWTyrQQqWM9stWEifz+KR6QYp41Wr3/w=;
- b=WE2Z0feQkqxi6+kOdFT7TcagHRiQrRdxFWxjciCCi4rkPEtgUuL/fDKGBs6d4mwXSW61yVRWqoDs1khOxArctMpv2D2D+HPAGeA7BV7TSTPFiHa+02BBsoeTzuAobEJ7XBLFDfYmt8WIJ+zQBpCZtkdJciwenVbkuQvDWJKnzEaZMGddw++DzPTCPEbC25loE5LdU0y/KgoUInYzsAa31Cjqbga4l/5ugdomONQz0L/jkgXlbnC2ET4W54iZL5IlZk/5QeEivSHMde7y3nHqCTLPvjODIkZ4mB/y+02pzBoRzPp3VQ2mDaoP9S89QZj9a5Hf1P7ZMnmTxWqUX2EiVw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=J0vU6QzwY0KgWTyrQQqWM9stWEifz+KR6QYp41Wr3/w=;
- b=hjPae80bnwFnSF5Roo4ym/Z9+S0O9J0aFtcVMyoSmsaAi+0oLZqRhiTO5s/UjDEf7Juosp3wogtOSPrwuEeB/4BBAIDrNAx1/2ANX4jlml9gfLl9dR746Q1lRPynhpYzZcy7LUhhUhD0pfGSMgJJFP0t8/60fs/aWsJioDaz1ELm7pBGdlVdW+sifh9BFBzssQ5vqJu+yS+Ok9grr3wCjn+f5IfVmCvnN6H9iUu0I/lHsZEzWQbnj3MZ5n4jgJAyHIYHLYfJFCHSjcPKTvWAMGrJaD5Uz80xKt6qzI2X3tTH0TsI54SpC2Z6lGdtvdEV5aoKt5Q9rFrCgx0fSmMd5w==
-Received: from DB3PR10MB6835.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:42a::7)
- by DU0PR10MB6367.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:40d::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6933.22; Sat, 28 Oct
- 2023 05:25:04 +0000
-Received: from DB3PR10MB6835.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::e2b0:8d7e:e293:bd97]) by DB3PR10MB6835.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::e2b0:8d7e:e293:bd97%7]) with mapi id 15.20.6933.024; Sat, 28 Oct 2023
- 05:25:04 +0000
-From:   Yuran Pereira <yuran.pereira@hotmail.com>
-To:     bpf@vger.kernel.org, yonghong.song@linux.dev
-Cc:     sinquersw@gmail.com, ast@kernel.org, brauner@kernel.org,
-        daniel@iogearbox.net, haoluo@google.com, iii@linux.ibm.com,
-        john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org,
-        kuifeng@meta.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, mykolal@fb.com, sdf@google.com,
-        shuah@kernel.org, song@kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        Yuran Pereira <yuran.pereira@hotmail.com>
-Subject: [PATCH bpf-next v3 2/2] selftests/bpf: Add malloc failure checks in bpf_iter
-Date:   Sat, 28 Oct 2023 10:54:14 +0530
-Message-ID: <DB3PR10MB6835F0ECA792265FA41FC39BE8A3A@DB3PR10MB6835.EURPRD10.PROD.OUTLOOK.COM>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1698461732.git.yuran.pereira@hotmail.com>
-References: <cover.1698461732.git.yuran.pereira@hotmail.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TMN:  [bEIWiwKQSCkoEmLKktPbRwGxn5+fMSHi]
-X-ClientProxiedBy: JN3P275CA0002.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:70::6)
- To DB3PR10MB6835.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:42a::7)
-X-Microsoft-Original-Message-ID: <5f3b9bdf9b22e0b3bfd5e73a0ef15b68db3a381e.1698461732.git.yuran.pereira@hotmail.com>
+        Sat, 28 Oct 2023 03:44:23 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD22AEB;
+        Sat, 28 Oct 2023 00:44:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1698479061; x=1730015061;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=465OdnQqbfHuFli76mKkKaH0MNO+Oh+EJdtspDJbpzo=;
+  b=P0elTMKtLHBLIWqzXIH6QeBB2lsJqlUvfUFA0puKzVXiwB1WtGJoObEA
+   1kHT5CqraLLz7nlB6FYvwA/PbcCWVxwV3nPV2B+bv3HRPidQARhXJEtqZ
+   Yccxv6QJmgsGpLW0vLHxWnrWkmTzL/0d7WkX32GniFQp3WYJ1L6Dq6NMt
+   dKOsqEcerWMAnoqNTqNlwyeJF73tld5Jq4Db8yY5CtEdkF4A0LLv5D8O6
+   i5k5MW7+x0UgR2yo71Isaz/M8SzPlmXSvdk5+CM/sD+dAGZMYW9zAvkTf
+   z6uSYqZLzyst/h8/JcfiW+Tug8CwhzqnAgj5+J8NqDFhKoP/xeiZmdEFk
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10876"; a="682963"
+X-IronPort-AV: E=Sophos;i="6.03,258,1694761200"; 
+   d="scan'208";a="682963"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2023 00:44:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10876"; a="903506551"
+X-IronPort-AV: E=Sophos;i="6.03,258,1694761200"; 
+   d="scan'208";a="903506551"
+Received: from lkp-server01.sh.intel.com (HELO 8917679a5d3e) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 28 Oct 2023 00:41:43 -0700
+Received: from kbuild by 8917679a5d3e with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1qwdzP-000BYv-31;
+        Sat, 28 Oct 2023 07:44:11 +0000
+Date:   Sat, 28 Oct 2023 15:43:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
+Cc:     oe-kbuild-all@lists.linux.dev, viro@zeniv.linux.org.uk,
+        brauner@kernel.org, shuah@kernel.org, aarcange@redhat.com,
+        lokeshgidra@google.com, peterx@redhat.com, david@redhat.com,
+        hughd@google.com, mhocko@suse.com, axelrasmussen@google.com,
+        rppt@kernel.org, willy@infradead.org, Liam.Howlett@oracle.com,
+        jannh@google.com, zhangpeng362@huawei.com, bgeffon@google.com,
+        kaleshsingh@google.com, ngeoffray@google.com, jdduke@google.com,
+        surenb@google.com, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, kernel-team@android.com
+Subject: Re: [PATCH v4 2/5] userfaultfd: UFFDIO_MOVE uABI
+Message-ID: <202310281500.latmtbJs-lkp@intel.com>
+References: <20231028003819.652322-3-surenb@google.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DB3PR10MB6835:EE_|DU0PR10MB6367:EE_
-X-MS-Office365-Filtering-Correlation-Id: fbb9c629-068e-4bad-937f-08dbd7763d50
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: r1NgmA2FUg5Tr4C2YXh42Qef/ei7y8PCWjdvVnKgtrbOc13N1p6ZwSn9Rgxzqi4N12/Nk2GUinZu2qtnOXZB3ZK6hNCFbRCt+I4NSBp8EwZ8i/nagu1kDvqRwVRs66/5pRsvN942KEOQH7H4ygMi2BwtVYDXrZrO1H1OOu4h9TsnF14j2j0H2nzQHo/w/pgusUnucESqgzlciydWjZ5QB8/IOnObnoIE6Z4m97Mqhis3MT/ELeSj9oB6ZpsSDAOAHu3soY3NH9TqVWWPjyBFNSMNofb1MfFAt6Vw0Fhum4lJ37yPgmjrhJ2jkOU3yNq6yB+oYtBd7RqoEKw1CX2aZTBHzqRklKW09QiHibkA3BBb1Uf4ilZrzsorxsCxW6P57J2I18ZQ9/+6BdsFxS8yUAz8c8HfPZlzJwviB0w5NzTgjhJgOie3qa0CF6HAddc0hOmC7MCzW+0evJiLbBAv41DsnqAaeGUxmYLE5Is0LMrL5ew3Y1lvc8chmD5oVmEW8+lxLCv1GzabIZdCWVntcCfIEKcBMvyB26FxzBpPzra2TJZGtXnkk2LeeZa30MDMqZfvf+CMmNPwK1fmb2q0q+6BHaIX8EjH8DcBNmqUrX4DnqAG8kN7wDPqjYRRGfGB
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?GX+9YO9hYVqgbPNybZEr4+PlJnAVmBHWMLr1AKk+lERQiQgIzZMMK77EeTPT?=
- =?us-ascii?Q?pvucvkpdZRosjkKSpOQ3YgELYr01tD0qfJGYdExYGjkcx71Z8I4A86fWO2bh?=
- =?us-ascii?Q?lKoZfuDAXG0PXZh5zo+eS+O6MA5QqAu+Ypkvh64oLaiYTDuC03H5ig4IJmsP?=
- =?us-ascii?Q?BtBKc35dTZ1QIdqd7rnWvPqD+oiCweRmGS9rXJviVl4HCS1cfp9iZzYxkVbs?=
- =?us-ascii?Q?kE8ACoWguWLG/NrkLCdYSp4Bsk2POhOQBuhDQ3vIf8wvMOsbdT6nbxqKPvQw?=
- =?us-ascii?Q?zM846zvaDhzxrJM3p7RAEwtx3d7kKh1eZi36SyTuEgQvL2LTnn8zuv2ke+3+?=
- =?us-ascii?Q?YT1GhtNrIeTghgx7DHkAZmXLBYX5aGItNcSTY4gMX6/rG1B8vB+MyjhKfZiw?=
- =?us-ascii?Q?nl5HPugsjmmwOJMcJz3G10oXoxcVwtfn0mGrQtYm9hDsHY6iKVM/I22Gmdko?=
- =?us-ascii?Q?1RN8zXsUnic3XtgBvhJ2vJEF91J2QD/HuIYx3X+PboeEbJPoj7Ds2M/eDWIr?=
- =?us-ascii?Q?CnQZdOdiT7hIlG9lvVJ7GIAn+Ea2bfVdWt7q+H4OMx7tDFX5pyIAUTjGn2T8?=
- =?us-ascii?Q?L7kMSJ6cUE634KoaZEA4WkCKXhxLQxTXz93qEDQuDGWIIB2tWBhndohrpPgi?=
- =?us-ascii?Q?KqANdT2kRnlIFXu6ndVsPxn0PIcpEytxjdJpkdoFHcU39PPZgyrkMlyXOOoy?=
- =?us-ascii?Q?D1q7xzmsABZbp+jEZkiqYaIU5HTlF11fRU3fX9XJN+oYGfRi8ZwZ4HNX4oOz?=
- =?us-ascii?Q?hb49RZnVU4tuMe2b2N1er1dz4sDPI3gQ7mTuaRjgVpBp3yOENeVZdlLx9BEN?=
- =?us-ascii?Q?PzAFFl91gPFTWHRhMZk6FdiOM2rdtR9TjZH4Y/LnpYdYlaSr2a2EscEFbdHA?=
- =?us-ascii?Q?Wom6dzCPnj1olagFZ+tH3r6rr/S1maLuDVGu7Id8uCP74Q+DqoEVQiy4U6uI?=
- =?us-ascii?Q?/TTS7/5uJhB6OFoIKxF4atvi/YQ4rt8Q5y+tKl/tbJ6uojKW9UjHtuLI8XHc?=
- =?us-ascii?Q?tOQVBsR6EeNJd9QuICwRlSD/xuPl+9ec7+R9t+TuVFFIvSDvjcwF5M29n6+I?=
- =?us-ascii?Q?Zg5Kqgebbcq2k5Irkkq1XQYBHBbSG6tp71KmllGb2Oko6LE6x5Sn8HPPCAfh?=
- =?us-ascii?Q?FITBJkJSz3QfT0GhhGESktpxGMsgOiJB+wCb3j5G/cXJJ/qPMvW/KPS8PJAV?=
- =?us-ascii?Q?rMvdfrAgV3F7vZaIG8ePw0kuETHyWlnBc6a5QZx3JY2IXl8lULEc/mLRIeU?=
- =?us-ascii?Q?=3D?=
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-6b909.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: fbb9c629-068e-4bad-937f-08dbd7763d50
-X-MS-Exchange-CrossTenant-AuthSource: DB3PR10MB6835.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2023 05:25:04.0864
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR10MB6367
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231028003819.652322-3-surenb@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Since some malloc calls in bpf_iter may at times fail,
-this patch adds the appropriate fail checks, and ensures that
-any previously allocated resource is appropriately destroyed
-before returning the function.
+Hi Suren,
 
-Signed-off-by: Yuran Pereira <yuran.pereira@hotmail.com>
----
- tools/testing/selftests/bpf/prog_tests/bpf_iter.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+kernel test robot noticed the following build warnings:
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-index 123a3502b8f0..1e02d1ba1c18 100644
---- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-+++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
-@@ -698,7 +698,7 @@ static void test_overflow(bool test_e2big_overflow, bool ret1)
- 		goto free_link;
- 
- 	buf = malloc(expected_read_len);
--	if (!buf)
-+	if (!ASSERT_OK_PTR(buf, "malloc"))
- 		goto close_iter;
- 
- 	/* do read */
-@@ -868,6 +868,8 @@ static void test_bpf_percpu_hash_map(void)
- 
- 	skel->rodata->num_cpus = bpf_num_possible_cpus();
- 	val = malloc(8 * bpf_num_possible_cpus());
-+	if (!ASSERT_OK_PTR(val, "malloc"))
-+		goto out;
- 
- 	err = bpf_iter_bpf_percpu_hash_map__load(skel);
- 	if (!ASSERT_OK_PTR(skel, "bpf_iter_bpf_percpu_hash_map__load"))
-@@ -1044,6 +1046,8 @@ static void test_bpf_percpu_array_map(void)
- 
- 	skel->rodata->num_cpus = bpf_num_possible_cpus();
- 	val = malloc(8 * bpf_num_possible_cpus());
-+	if (!ASSERT_OK_PTR(val, "malloc"))
-+		goto out;
- 
- 	err = bpf_iter_bpf_percpu_array_map__load(skel);
- 	if (!ASSERT_OK_PTR(skel, "bpf_iter_bpf_percpu_array_map__load"))
+[auto build test WARNING on akpm-mm/mm-everything]
+[also build test WARNING on next-20231027]
+[cannot apply to linus/master v6.6-rc7]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Suren-Baghdasaryan/mm-rmap-support-move-to-different-root-anon_vma-in-folio_move_anon_rmap/20231028-084120
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20231028003819.652322-3-surenb%40google.com
+patch subject: [PATCH v4 2/5] userfaultfd: UFFDIO_MOVE uABI
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20231028/202310281500.latmtbJs-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231028/202310281500.latmtbJs-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202310281500.latmtbJs-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> mm/userfaultfd.c:1289: warning: Function parameter or member 'ctx' not described in 'move_pages'
+>> mm/userfaultfd.c:1289: warning: Function parameter or member 'mm' not described in 'move_pages'
+>> mm/userfaultfd.c:1289: warning: Function parameter or member 'mode' not described in 'move_pages'
+
+
+vim +1289 mm/userfaultfd.c
+
+  1211	
+  1212	/**
+  1213	 * move_pages - move arbitrary anonymous pages of an existing vma
+  1214	 * @dst_start: start of the destination virtual memory range
+  1215	 * @src_start: start of the source virtual memory range
+  1216	 * @len: length of the virtual memory range
+  1217	 *
+  1218	 * Must be called with mmap_lock held for read.
+  1219	 *
+  1220	 * move_pages() remaps arbitrary anonymous pages atomically in zero
+  1221	 * copy. It only works on non shared anonymous pages because those can
+  1222	 * be relocated without generating non linear anon_vmas in the rmap
+  1223	 * code.
+  1224	 *
+  1225	 * It provides a zero copy mechanism to handle userspace page faults.
+  1226	 * The source vma pages should have mapcount == 1, which can be
+  1227	 * enforced by using madvise(MADV_DONTFORK) on src vma.
+  1228	 *
+  1229	 * The thread receiving the page during the userland page fault
+  1230	 * will receive the faulting page in the source vma through the network,
+  1231	 * storage or any other I/O device (MADV_DONTFORK in the source vma
+  1232	 * avoids move_pages() to fail with -EBUSY if the process forks before
+  1233	 * move_pages() is called), then it will call move_pages() to map the
+  1234	 * page in the faulting address in the destination vma.
+  1235	 *
+  1236	 * This userfaultfd command works purely via pagetables, so it's the
+  1237	 * most efficient way to move physical non shared anonymous pages
+  1238	 * across different virtual addresses. Unlike mremap()/mmap()/munmap()
+  1239	 * it does not create any new vmas. The mapping in the destination
+  1240	 * address is atomic.
+  1241	 *
+  1242	 * It only works if the vma protection bits are identical from the
+  1243	 * source and destination vma.
+  1244	 *
+  1245	 * It can remap non shared anonymous pages within the same vma too.
+  1246	 *
+  1247	 * If the source virtual memory range has any unmapped holes, or if
+  1248	 * the destination virtual memory range is not a whole unmapped hole,
+  1249	 * move_pages() will fail respectively with -ENOENT or -EEXIST. This
+  1250	 * provides a very strict behavior to avoid any chance of memory
+  1251	 * corruption going unnoticed if there are userland race conditions.
+  1252	 * Only one thread should resolve the userland page fault at any given
+  1253	 * time for any given faulting address. This means that if two threads
+  1254	 * try to both call move_pages() on the same destination address at the
+  1255	 * same time, the second thread will get an explicit error from this
+  1256	 * command.
+  1257	 *
+  1258	 * The command retval will return "len" is successful. The command
+  1259	 * however can be interrupted by fatal signals or errors. If
+  1260	 * interrupted it will return the number of bytes successfully
+  1261	 * remapped before the interruption if any, or the negative error if
+  1262	 * none. It will never return zero. Either it will return an error or
+  1263	 * an amount of bytes successfully moved. If the retval reports a
+  1264	 * "short" remap, the move_pages() command should be repeated by
+  1265	 * userland with src+retval, dst+reval, len-retval if it wants to know
+  1266	 * about the error that interrupted it.
+  1267	 *
+  1268	 * The UFFDIO_MOVE_MODE_ALLOW_SRC_HOLES flag can be specified to
+  1269	 * prevent -ENOENT errors to materialize if there are holes in the
+  1270	 * source virtual range that is being remapped. The holes will be
+  1271	 * accounted as successfully remapped in the retval of the
+  1272	 * command. This is mostly useful to remap hugepage naturally aligned
+  1273	 * virtual regions without knowing if there are transparent hugepage
+  1274	 * in the regions or not, but preventing the risk of having to split
+  1275	 * the hugepmd during the remap.
+  1276	 *
+  1277	 * If there's any rmap walk that is taking the anon_vma locks without
+  1278	 * first obtaining the folio lock (the only current instance is
+  1279	 * folio_referenced), they will have to verify if the folio->mapping
+  1280	 * has changed after taking the anon_vma lock. If it changed they
+  1281	 * should release the lock and retry obtaining a new anon_vma, because
+  1282	 * it means the anon_vma was changed by move_pages() before the lock
+  1283	 * could be obtained. This is the only additional complexity added to
+  1284	 * the rmap code to provide this anonymous page remapping functionality.
+  1285	 */
+  1286	ssize_t move_pages(struct userfaultfd_ctx *ctx, struct mm_struct *mm,
+  1287			   unsigned long dst_start, unsigned long src_start,
+  1288			   unsigned long len, __u64 mode)
+> 1289	{
+
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
