@@ -2,119 +2,84 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B071F7DA4D6
-	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Oct 2023 04:33:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9061C7DA507
+	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Oct 2023 05:34:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232009AbjJ1Cdu (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 27 Oct 2023 22:33:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45668 "EHLO
+        id S229507AbjJ1DeU (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 27 Oct 2023 23:34:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229446AbjJ1Cdt (ORCPT
+        with ESMTP id S229481AbjJ1DeT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Oct 2023 22:33:49 -0400
+        Fri, 27 Oct 2023 23:34:19 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BCBCC0;
-        Fri, 27 Oct 2023 19:33:47 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12903C433C8;
-        Sat, 28 Oct 2023 02:33:45 +0000 (UTC)
-Date:   Fri, 27 Oct 2023 22:33:44 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-trace-kernel@vger.kernel.org, lkft-triage@lists.linaro.org,
-        Mark Brown <broonie@kernel.org>,
-        Zheng Yejian <zhengyejian1@huawei.com>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>
-Subject: Re: selftests: user_events: ftrace_test - RIP:
- 0010:tracing_update_buffers (kernel/trace/trace.c:6470)
-Message-ID: <20231027223344.3854ac1f@rorschach.local.home>
-In-Reply-To: <20231027183640.2529ab68@gandalf.local.home>
-References: <CA+G9fYuDP3hVQ3t7FfrBAjd_WFVSurMgCepTxunSJf=MTe=6aA@mail.gmail.com>
-        <20231027192011.GA436-beaub@linux.microsoft.com>
-        <20231027183640.2529ab68@gandalf.local.home>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CDC2106
+        for <linux-kselftest@vger.kernel.org>; Fri, 27 Oct 2023 20:34:17 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BE39C433C7;
+        Sat, 28 Oct 2023 03:34:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1698464056;
+        bh=GSCg8MotGa6UfxyDTlFmyiyhwNgWtF3ruxwlA0Hr0wQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=uLYxybp8qzfs3zZKcm40jtkuui2m6uv/ZU/cCNRwQnlpWRCDcr5YpdMycqRhhyGOO
+         frv14rnFL8o5KvYRD6kKK0qeknBW8hxTo08XGgzUM+3x9fRafKz5bX3GLuujjEE+/A
+         IuOZvbwtzk/98H237798PTm0kiYylLeThZS9wQ9isTUOO58yeuP6Z43oJVFVOQbOAY
+         z6AqXaQMSYg+cpEV3oGtRGU+HGV8bTYZNwBa1xuB5KZv+hkJ4nmmlsNjP/xsjWr281
+         6JjeSbI3+ImF0m28cOhqu9m3iiN1amU29qtB/7pGtAhdeHdozClxB+hP5JnBn/ajxv
+         l8RTfu4oGLapA==
+From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Shuah Khan <skhan@linuxfoundation.org>
+Cc:     Andrii Nakryiko <andrii@kernel.org>,
+        linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        Francis Laniel <flaniel@linux.microsoft.com>,
+        linux-kselftest@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Subject: [PATCH] selftests/ftrace: Add test case for a symbol in a module without module name
+Date:   Sat, 28 Oct 2023 12:34:12 +0900
+Message-Id: <169846405196.88147.17766692778800222203.stgit@devnote2>
+X-Mailer: git-send-email 2.34.1
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Fri, 27 Oct 2023 18:36:40 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-> On Fri, 27 Oct 2023 12:20:11 -0700
-> Beau Belgrave <beaub@linux.microsoft.com> wrote:
-> 
-> > On Fri, Oct 27, 2023 at 05:38:41PM +0530, Naresh Kamboju wrote:  
-> > > Following kernel crash noticed on x86_64 while running selftests: user_events:
-> > > ftrace_test running 6.6.0-rc7-next-20231026.
-> > > 
-> > > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> > > 
-> > > kselftest: Running tests in user_events
-> > > TAP version 13
-> > > 1..4
-> > > # timeout set to 90
-> > > # selftests: user_events: ftrace_test
-> > > [ 2391.606817] general protection fault, probably for non-canonical
-> > > address 0x6b6b6b6b6b6b8a83: 0000 [#1] PREEMPT SMP PTI
-> > > [ 2391.617519] CPU: 1 PID: 34662 Comm: ftrace_test Not tainted
-> > > 6.6.0-rc7-next-20231026 #1
-> > > [ 2391.625428] Hardware name: Supermicro SYS-5019S-ML/X11SSH-F, BIOS
-> > > 2.7 12/07/2021
-> > > [ 2391.632811] RIP: 0010:tracing_update_buffers (kernel/trace/trace.c:6470)
-> > > [ 2391.637952] Code: 90 90 90 90 90 90 90 90 90 90 90 90 66 0f 1f 00
-> > > 55 31 f6 48 89 e5 41 55 41 54 53 48 89 fb 48 c7 c7 40 8c 61 94 e8 92
-> > > d3 5a 01 <44> 0f b6 a3 18 1f 00 00 41 80 fc 01 0f 87 c8 dc 4e 01 45 31  
-> 
-> 
-> 
-> > Warning is from this code:
-> > static void __trace_array_put(struct trace_array *this_tr)
-> > {
-> >         WARN_ON(!this_tr->ref);
-> >         this_tr->ref--;
-> > }
-> > 
-> > It seems like there might be a timing window or an incorrect call to
-> > trace_array_put() somewhere. Do you think this is related to the eventfs
-> > work?  
-> 
-> No, I think this is was probably introduced by:
-> 
->   a1f157c7a3bb ("tracing: Expand all ring buffers individually")
-> 
-> Or possibly a mixture of the two changes? But anyway I think I need to look
-> at this one first.
+Add a test case for probing on a symbol in a module without module name.
+When probing on a symbol in a module, ftrace accepts both the syntax that
+<MODNAME>:<SYMBOL> and <SYMBOL>. Current test case only checks the former
+syntax. This adds a test for the latter one.
 
-Not sure if the bug Beau hit is the same as this one, but the one Beau
-hit I think is fixed by this:
+Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+---
+ .../ftrace/test.d/kprobe/kprobe_module.tc          |    6 ++++++
+ 1 file changed, 6 insertions(+)
 
--- Steve
-
-diff --git a/fs/tracefs/event_inode.c b/fs/tracefs/event_inode.c
-index 4d2da7480e5f..4a54493b8419 100644
---- a/fs/tracefs/event_inode.c
-+++ b/fs/tracefs/event_inode.c
-@@ -234,6 +234,10 @@ create_file_dentry(struct eventfs_inode *ei, struct dentry **e_dentry,
- 	bool invalidate = false;
+diff --git a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_module.tc b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_module.tc
+index 7e74ee11edf9..4b32e1b9a8d3 100644
+--- a/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_module.tc
++++ b/tools/testing/selftests/ftrace/test.d/kprobe/kprobe_module.tc
+@@ -13,6 +13,12 @@ fi
+ MOD=trace_printk
+ FUNC=trace_printk_irq_work
  
- 	mutex_lock(&eventfs_mutex);
-+	if (ei->is_freed) {
-+		mutex_unlock(&eventfs_mutex);
-+		return NULL;
-+	}
- 	/* If the e_dentry already has a dentry, use it */
- 	if (*e_dentry) {
- 		/* lookup does not need to up the ref count */
++:;: "Add an event on a module function without module name" ;:
++
++echo "p:event0 $FUNC" > kprobe_events
++test -d events/kprobes/event0 || exit_failure
++echo "-:kprobes/event0" >> kprobe_events
++
+ :;: "Add an event on a module function without specifying event name" ;:
+ 
+ echo "p $MOD:$FUNC" > kprobe_events
 
