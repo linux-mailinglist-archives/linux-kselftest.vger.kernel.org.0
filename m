@@ -2,299 +2,165 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC1487DA478
-	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Oct 2023 02:40:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 608137DA490
+	for <lists+linux-kselftest@lfdr.de>; Sat, 28 Oct 2023 03:16:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235179AbjJ1Ait (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 27 Oct 2023 20:38:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58306 "EHLO
+        id S229712AbjJ1BQX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 27 Oct 2023 21:16:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232907AbjJ1Aip (ORCPT
+        with ESMTP id S229446AbjJ1BQW (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 27 Oct 2023 20:38:45 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB500D47
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Oct 2023 17:38:34 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5afa86b8d66so11063297b3.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 27 Oct 2023 17:38:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1698453514; x=1699058314; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DPstGiI3zb7PZzW8m1s/TtyE02RR3fMaWMy1rl5jbQE=;
-        b=BeSptafSteAJ1GLueLN5Xs0S9464cQ+bGDix6+RjP+34ekltXa3wkWpIdTTHJr6Oxi
-         hQzW97G8IwhN0NY11Y7fCf3o9LT4dD7Iezc3c1emKdNj6lwrdY87tw/pS7mo8uxFimEp
-         TmWkXce2ZJWeP4ZCaeAm3jljkHHEiaAqRdwFQz52vos3qsswhARr34RI3opDXCU15+KL
-         q2PS8XEks8jIskgBxTYOxTKIF8+uZ6u4GkXUv6tMt24+/3mqL8wSzgyalnx8b4UIBPbO
-         hYFSq88kZ1QITcexW1GNbwenyIP6sdIlk4OhYOr2HD2zpx26YmvwCx85VVStEYvKDI/9
-         V+bQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698453514; x=1699058314;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DPstGiI3zb7PZzW8m1s/TtyE02RR3fMaWMy1rl5jbQE=;
-        b=kjsCBJdVgw+moYCAg+92RvhsEKRmAgMdrJENw9ZljLn2HI+E9Peo1YXiBg0kLcaN4P
-         NADC/VHRcPjZKAcaJBEjfgEkZrios9KiddAchWb7H3s/M3iUOjH9/5xUntVyKfcaEi5T
-         Di13pjrLluAizhQ/aVC3oThSyY/tJKeAn5koGhJMzZiBUaTM/W24/Y42Z98r91fMeQLY
-         v+6NNPjB4+efkWIhEZqqKsq4fhv5oN939AY7V5/KWorZFBDF/0ijsV7mYIKPh8flHKJi
-         Y9P5ieXEdDARmwKy3CX5xTmBvBjtERGsPvlWxLbbDrp6rnOG6M9kUQKJJVVGfAs/S/R2
-         KPlQ==
-X-Gm-Message-State: AOJu0Yz4aonU3rGA7iJtAGEhsZGN03XRdrWBcfq2yelOMSG5C8hsV8qa
-        bdpEhulCp6OhUWSVhzi8HOI3jw6K/gc=
-X-Google-Smtp-Source: AGHT+IHkyagOv7vQjaKfa8YJr6CBe53G6nlWj5O4BlA1iQSMbHSpme2yM6964WYBoEz45GQ9XcUSJSde3/4=
-X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:cba3:7e7f:79e4:fa57])
- (user=surenb job=sendgmr) by 2002:a81:6d17:0:b0:59b:c6bb:babb with SMTP id
- i23-20020a816d17000000b0059bc6bbbabbmr87372ywc.6.1698453513868; Fri, 27 Oct
- 2023 17:38:33 -0700 (PDT)
-Date:   Fri, 27 Oct 2023 17:38:15 -0700
-In-Reply-To: <20231028003819.652322-1-surenb@google.com>
-Mime-Version: 1.0
-References: <20231028003819.652322-1-surenb@google.com>
-X-Mailer: git-send-email 2.42.0.820.g83a721a137-goog
-Message-ID: <20231028003819.652322-6-surenb@google.com>
-Subject: [PATCH v4 5/5] selftests/mm: add UFFDIO_MOVE ioctl test
-From:   Suren Baghdasaryan <surenb@google.com>
-To:     akpm@linux-foundation.org
-Cc:     viro@zeniv.linux.org.uk, brauner@kernel.org, shuah@kernel.org,
-        aarcange@redhat.com, lokeshgidra@google.com, peterx@redhat.com,
-        david@redhat.com, hughd@google.com, mhocko@suse.com,
-        axelrasmussen@google.com, rppt@kernel.org, willy@infradead.org,
-        Liam.Howlett@oracle.com, jannh@google.com, zhangpeng362@huawei.com,
-        bgeffon@google.com, kaleshsingh@google.com, ngeoffray@google.com,
-        jdduke@google.com, surenb@google.com, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, kernel-team@android.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 27 Oct 2023 21:16:22 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05olkn2103.outbound.protection.outlook.com [40.92.89.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E658116;
+        Fri, 27 Oct 2023 18:16:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mGnP3soB1RBBMiQw1QmFgWbZSCEOjVtAyIIcY3lpHWn7cjy4V9u5NKuA1McAhbH9OGt+1Xp4O+LlyFBPWMX+Yyk8N9zePZCYFZZsKMi+Vph3WrZTQf/epd5DFmZYu9nAbMKmex0gu6c34lN5feKjleTk7Lm0djhZYXgdOzmbcwXCqQbfXAZCHcWpJoZrFIgw0ZG2FqbRH7rypmJkZsIzAi1By9ncSvHUPreJSAEkMaCI1mbbItMU1mzvNiI1RuvJ/k88zay3mdVHnUrWY3cnPn+l2XDdRqBMv0S2dNSJEeK9/+YLoU55U4UlqOTpLHvnvABTOkg21BueHG/mqwDPhA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=i7WUzJ7kr1/39hE6hxmLlu+QI6SQsCt5YRuHWaP9kjE=;
+ b=VRBO6uaKqLb1IjnBOnV6YVbh1nulm3qxmYbVVz5uLNRX7Jt5/Etzk9PeIhfZX5dAF5Bq1A2kMak+NCDKLfIYFLEefmWe4Foa/ZTiVjssQpqHxkeJyI8HDnEEGyhAMh/GUikUQTNsYz12HlTlVnYYxH3gSje6fiJoWs2AM4uLoKMsSIXDrBUT3dEW987tDqj+uhgKIVSqpObzNJQmMHjXEUfkQ649LumikCCvXrer9xfpmFpYAZ3Jr3tlpfmyDcVswt3FPtwUhDJ+9aXhcMxPTwDedzxS5sJ0T6jMzXn4EfJH6U823IpVIX3GQ8HKsfkxGEeRSJD32PykjbVsD1wIxg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=i7WUzJ7kr1/39hE6hxmLlu+QI6SQsCt5YRuHWaP9kjE=;
+ b=NDhtJ6qA/NctWcoQh3Zmbmyo358lnH+F2a0BVPmxQ5CLnmWgRZrwoY24j8R+xvv26pFn+DTUVmqIbiqLN+sEQ904/rLZmMJvveqzWHaDfw+i5BHcjKCH8wHGHMQ18XIem0Pk9NlNrsxSnKk1+srqJWmDvr4bKhz17uFvr6eU6Zl13oSfcjq3APGqklnuLR4PtATU5oQi/GVOCfbI6EhaM2AwXFxuSujGFxy1g8QKHCGO6x+s07oLKkuG9KSBObiFg1dRXzJdypJkyxGaCpzQJzUHb4uyL9ysizPs1Hf8RJUWH7LcmlIpyAioE5A84nZgroVC8fnxtzPQ+8QCu2Lvew==
+Received: from DB3PR10MB6835.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:42a::7)
+ by GV2PR10MB6741.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:150:ba::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6933.19; Sat, 28 Oct
+ 2023 01:16:17 +0000
+Received: from DB3PR10MB6835.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::e2b0:8d7e:e293:bd97]) by DB3PR10MB6835.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::e2b0:8d7e:e293:bd97%7]) with mapi id 15.20.6933.024; Sat, 28 Oct 2023
+ 01:16:17 +0000
+Date:   Sat, 28 Oct 2023 06:46:06 +0530
+From:   Yuran Pereira <yuran.pereira@hotmail.com>
+To:     Kui-Feng Lee <sinquersw@gmail.com>
+Cc:     bpf@vger.kernel.org, yonghong.song@linux.dev, shuah@kernel.org,
+        ast@kernel.org, daniel@iogearbox.net, song@kernel.org,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, mykolal@fb.com,
+        brauner@kernel.org, iii@linux.ibm.com, kuifeng@meta.com,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2 0/2] selftests/bpf: Replaces CHECK macros and
+ adds malloc failure checks to bpf_iter
+Message-ID: <DB3PR10MB683516C89C063FEC4D94D45BE8A3A@DB3PR10MB6835.EURPRD10.PROD.OUTLOOK.COM>
+References: <DB3PR10MB6835598B901975BEAEBA8601E8DDA@DB3PR10MB6835.EURPRD10.PROD.OUTLOOK.COM>
+ <563d1ae7-8d1f-48d5-b742-989ce482c4f1@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <563d1ae7-8d1f-48d5-b742-989ce482c4f1@gmail.com>
+X-TMN:  [4HdNbtbKo7XXj822lfe06GbG0v8M3hMA]
+X-ClientProxiedBy: JN3P275CA0010.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:70::11)
+ To DB3PR10MB6835.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:42a::7)
+X-Microsoft-Original-Message-ID: <20231028011606.GD1301832@nmj-network>
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB3PR10MB6835:EE_|GV2PR10MB6741:EE_
+X-MS-Office365-Filtering-Correlation-Id: 663dbcf2-a07c-4010-0544-08dbd7537c01
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 2h7dN9zDgoKYKD/RRgNfzd9pBTu/eop+gpT8qIevFwrW7//NUuGBvssaVITFjiSX+ZvTS+iBUSp+R182zd0DdjemU4pLcNHUZlCLBTjkJxwby8SNTwE4bpNaj8bL0JXj/do8Cq5sqM3CQCRUB0WdynhdpVJBFknyeQN9n/o695pI5UI+4FEWUlj8gQ1FBQeqH71uQeUWxNsO4h36qR0jjHS3mUxjOA8UZytp/l6d3NLOy3ZgqXRbp22DwRNMl6PqUQtNI3+jLIO/0NVO2p/ZHKtbnU3wJ+nEFwYnYBsDcovdceitSzmW+EjATUcFDgVlUoBTgMkwPDMQra681Q/cxyqbKRSTtOAMXHkfFGhucbJWIjZ489c5p6wVoY7ZbrEwG+5r7bjKmDW6vfQ74mhRT0uurYspTfH47O56k4G1t9NBFFkb4t0ARVfeUd1958tO2/Vlp6QrYzRK9QbFGWojb3gpQFfesxwOG4FOmfdWeLxNbubZc1ohxbjUwGdRHk5O7yTFPEuQ5rLtC4OaKvHBTVdus5ogWsMGLqX/307CVTskq/Ho4iSoKroNTHeMzRRGjOfBeHhHfw3T3Zmz6nIDP2PN3O4ZU2cX+W9gy6mzI+hQg5QaRdbU3u/lgdZndmgYAzmuexdxFgLyD4QAnkfyuA==
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?leT5kOuzGx6hnpiBEm9OSSpsPxqWJ5023hU2Mga2G99ghZ2nUHs/TLUyAfR8?=
+ =?us-ascii?Q?Ktp8YeYYzxVM5YjZAFOrL4hZS3LgQoY8N5DAU8IKv5QvVf6mIeVA9uH2TXAe?=
+ =?us-ascii?Q?yFUOa9qAEN2tfttowoN3SmVpFAzR59da3hmFQw1upbNTy5r7bp24bbyGKNW/?=
+ =?us-ascii?Q?TiVNjPyHbuYhozy39q5M2ai6nteZgmHjE7OxPOOgCt4EAhhVB+J9NvHMH7/J?=
+ =?us-ascii?Q?iFjm5ooX7H+ddWEPuaCaxLWEEMuIok90bBzoLLLQ7x27REm/w393l/hh4lLi?=
+ =?us-ascii?Q?hUDk/Y6y5IMVOI3Q3fqaEjRRV8zn8dG8kNHjOxQ9oMQraDU5sh+fGEMNmuXz?=
+ =?us-ascii?Q?IyOLIQHk3JEgNeaRyQfIFW+9lVuvkrDF3dnBxTNHKPA120ekUyNM2TjHr0Bz?=
+ =?us-ascii?Q?M10VAqCfTY8vwo6ZTJW0TMdM87UftwQItHsv0sXI3ssHiprIZcI9oItagXdO?=
+ =?us-ascii?Q?UG2i+MMvH4DGlc/fkUSjrCfOw2ENUlsx0jjSFQbm/cfzI5n1YJ0do1I9JfAm?=
+ =?us-ascii?Q?vLBDHr+k7rvCaGmUBxA69UOcoO1OiX3CWpQWaCVdom5DxU96T7lu7rRtASz1?=
+ =?us-ascii?Q?WcIIwBXEksxDGRBVZmXTXKJE9BHWOqoWfd0C9z0mHOcebnvqXvyDPl8EwTKK?=
+ =?us-ascii?Q?C/9vjL3F79lPU1fjuaGxvxyIuGBSnfx2NJVMRdBeQWiqUyUOdOWuCuq48MA+?=
+ =?us-ascii?Q?wHhz4XTpdncAeHo3uHVZxrFeslxF3wak2M0dD42PBLeBgexxwp4ok3V8vpe8?=
+ =?us-ascii?Q?tD3YdM/wS9u/U89SUj4BD00dYQsyLWAFI2lO2eG1U2ya11bbT3+dKlI0aUpN?=
+ =?us-ascii?Q?le3dduhuYc+tO/Z59d+y8XaunXkmpuVsLIQcgTTh8S8KHnwDtgvZlrjlpAFh?=
+ =?us-ascii?Q?uGRHi1rp8MbXZEeTAvbfiSj6mY6EVRlEzUMO8e5P0rQlMopOHkZRFy2rqXSm?=
+ =?us-ascii?Q?OeUiIbuq9vCIdweZHWdhJojax9lZ8P83upXvnHipAFqDs2APIpFdg85zfZd6?=
+ =?us-ascii?Q?gzW/gcXPuI4rVKAxGV2ocRGN+FYN/yZo7Yn+YDtbDIpO9STR9IH8uBuXzGu4?=
+ =?us-ascii?Q?1b4DwhiidW5S1dsWyGmTUvZYN6ByXWJgxS/NBNCjKc0uQNTTixcJ98h3xN1d?=
+ =?us-ascii?Q?c2cAmraCPKQME0sZ++UIXIWEn48qviQNQxH6Q/CQE5x3yavyELQP72slI1We?=
+ =?us-ascii?Q?eA9e0wC52iMG3GNjDcsw0S+6ZE3IlbN2yBKKOF0bLpaqGmN6iC5hVyz+9CQ?=
+ =?us-ascii?Q?=3D?=
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-6b909.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: 663dbcf2-a07c-4010-0544-08dbd7537c01
+X-MS-Exchange-CrossTenant-AuthSource: DB3PR10MB6835.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Oct 2023 01:16:16.9451
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV2PR10MB6741
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add tests for new UFFDIO_MOVE ioctl which uses uffd to move source
-into destination buffer while checking the contents of both after
-the move. After the operation the content of the destination buffer
-should match the original source buffer's content while the source
-buffer should be zeroed. Separate tests are designed for PMD aligned and
-unaligned cases because they utilize different code paths in the kernel.
+On Wed, Oct 25, 2023 at 09:37:44PM -0700, Kui-Feng Lee wrote:
+> 
+> 
+> On 10/25/23 19:03, Yuran Pereira wrote:
+> > This patch series contains the following updates:
+> > - Replaces the usage of all the CHECK macros in bpf_iter
+> >    to the appropriate ASSERT_* macro calls
+> > - Adds appropriate malloc failure checks to bpf_iter
+> > 
+> > Changes in v2:
+> > - Removed unused "duration" variable which caused compilation error
+> >    as reported by Yonghong Song [1]
+> > - Improved malloc failure handling as suggested by Kui-Feng Lee [2]
+> > - Ensured propper patch formatting (i.e. sending it as a set instead
+> >    of two distinct patches)
+> > 
+> > [1] https://lore.kernel.org/lkml/3531360b-c933-4c5f-a84c-17edf0592519@linux.dev/
+> > [2] https://lore.kernel.org/lkml/7d703c4c-1a24-4806-a483-c02efb666059@gmail.com
+> > 
+> > 
+> > Previous version:
+> > v1 - https://lore.kernel.org/lkml/DB3PR10MB683589A5F705C6CA5BE0D325E8DFA@DB3PR10MB6835.EURPRD10.PROD.OUTLOOK.COM
+> >     - https://lore.kernel.org/lkml/DB3PR10MB68356D7CDF6005480BE5876CE8DEA@DB3PR10MB6835.EURPRD10.PROD.OUTLOOK.COM
+> > 
+> > Yuran Pereira (2):
+> >    selftests/bpf: Convert CHECK macros to ASSERT_* macros in bpf_iter
+> >    selftests/bpf: Add malloc failure checks in bpf_iter
+> > 
+> >   .../selftests/bpf/prog_tests/bpf_iter.c       | 88 +++++++++----------
+> >   1 file changed, 44 insertions(+), 44 deletions(-)
+> > 
+> 
+> 
+> For the cover letter, you can just put it at the same directory of
+> patch 1 and 2 and sent them with "git send-email" at once. All of them
+> will be in the same thread.
+> 
+> "git format-patch --cover-letter ..." will generate a template
+> of the cover letter along with patches. FYI
+>
+Hello Kui-Feng, thanks for the feedback.
 
-Signed-off-by: Suren Baghdasaryan <surenb@google.com>
----
- tools/testing/selftests/mm/uffd-common.c     |  24 ++++
- tools/testing/selftests/mm/uffd-common.h     |   1 +
- tools/testing/selftests/mm/uffd-unit-tests.c | 141 +++++++++++++++++++
- 3 files changed, 166 insertions(+)
+So I did use "git format-patch --cover-letter", but for some reason
+"git send-email /path-to-patches/" seems to be deliberately sending
+the cover letter on a separate thread. IDK why.
 
-diff --git a/tools/testing/selftests/mm/uffd-common.c b/tools/testing/selftests/mm/uffd-common.c
-index 69e6653ad255..98957fd788d8 100644
---- a/tools/testing/selftests/mm/uffd-common.c
-+++ b/tools/testing/selftests/mm/uffd-common.c
-@@ -643,6 +643,30 @@ int copy_page(int ufd, unsigned long offset, bool wp)
- 	return __copy_page(ufd, offset, false, wp);
- }
- 
-+int move_page(int ufd, unsigned long offset)
-+{
-+	struct uffdio_move uffdio_move;
-+
-+	if (offset >= nr_pages * page_size)
-+		err("unexpected offset %lu\n", offset);
-+	uffdio_move.dst = (unsigned long) area_dst + offset;
-+	uffdio_move.src = (unsigned long) area_src + offset;
-+	uffdio_move.len = page_size;
-+	uffdio_move.mode = UFFDIO_MOVE_MODE_ALLOW_SRC_HOLES;
-+	uffdio_move.move = 0;
-+	if (ioctl(ufd, UFFDIO_MOVE, &uffdio_move)) {
-+		/* real retval in uffdio_move.move */
-+		if (uffdio_move.move != -EEXIST)
-+			err("UFFDIO_MOVE error: %"PRId64,
-+			    (int64_t)uffdio_move.move);
-+		wake_range(ufd, uffdio_move.dst, page_size);
-+	} else if (uffdio_move.move != page_size) {
-+		err("UFFDIO_MOVE error: %"PRId64, (int64_t)uffdio_move.move);
-+	} else
-+		return 1;
-+	return 0;
-+}
-+
- int uffd_open_dev(unsigned int flags)
- {
- 	int fd, uffd;
-diff --git a/tools/testing/selftests/mm/uffd-common.h b/tools/testing/selftests/mm/uffd-common.h
-index 19930fd6682b..c9526b2cb6b3 100644
---- a/tools/testing/selftests/mm/uffd-common.h
-+++ b/tools/testing/selftests/mm/uffd-common.h
-@@ -121,6 +121,7 @@ void wp_range(int ufd, __u64 start, __u64 len, bool wp);
- void uffd_handle_page_fault(struct uffd_msg *msg, struct uffd_args *args);
- int __copy_page(int ufd, unsigned long offset, bool retry, bool wp);
- int copy_page(int ufd, unsigned long offset, bool wp);
-+int move_page(int ufd, unsigned long offset);
- void *uffd_poll_thread(void *arg);
- 
- int uffd_open_dev(unsigned int flags);
-diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
-index debc423bdbf4..89e9529ce941 100644
---- a/tools/testing/selftests/mm/uffd-unit-tests.c
-+++ b/tools/testing/selftests/mm/uffd-unit-tests.c
-@@ -1064,6 +1064,133 @@ static void uffd_poison_test(uffd_test_args_t *targs)
- 	uffd_test_pass();
- }
- 
-+static void uffd_move_handle_fault(
-+	struct uffd_msg *msg, struct uffd_args *args)
-+{
-+	unsigned long offset;
-+
-+	if (msg->event != UFFD_EVENT_PAGEFAULT)
-+		err("unexpected msg event %u", msg->event);
-+
-+	if (msg->arg.pagefault.flags &
-+	    (UFFD_PAGEFAULT_FLAG_WP | UFFD_PAGEFAULT_FLAG_MINOR | UFFD_PAGEFAULT_FLAG_WRITE))
-+		err("unexpected fault type %llu", msg->arg.pagefault.flags);
-+
-+	offset = (char *)(unsigned long)msg->arg.pagefault.address - area_dst;
-+	offset &= ~(page_size-1);
-+
-+	if (move_page(uffd, offset))
-+		args->missing_faults++;
-+}
-+
-+static void uffd_move_test(uffd_test_args_t *targs)
-+{
-+	unsigned long nr;
-+	pthread_t uffd_mon;
-+	char c;
-+	unsigned long long count;
-+	struct uffd_args args = { 0 };
-+
-+	/* Prevent source pages from being mapped more than once */
-+	if (madvise(area_src, nr_pages * page_size, MADV_DONTFORK))
-+		err("madvise(MADV_DONTFORK) failure");
-+
-+	if (uffd_register(uffd, area_dst, nr_pages * page_size,
-+			  true, false, false))
-+		err("register failure");
-+
-+	args.handle_fault = uffd_move_handle_fault;
-+	if (pthread_create(&uffd_mon, NULL, uffd_poll_thread, &args))
-+		err("uffd_poll_thread create");
-+
-+	/*
-+	 * Read each of the pages back using the UFFD-registered mapping. We
-+	 * expect that the first time we touch a page, it will result in a missing
-+	 * fault. uffd_poll_thread will resolve the fault by moving source
-+	 * page to destination.
-+	 */
-+	for (nr = 0; nr < nr_pages; nr++) {
-+		/* Check area_src content */
-+		count = *area_count(area_src, nr);
-+		if (count != count_verify[nr])
-+			err("nr %lu source memory invalid %llu %llu\n",
-+			    nr, count, count_verify[nr]);
-+
-+		/* Faulting into area_dst should move the page */
-+		count = *area_count(area_dst, nr);
-+		if (count != count_verify[nr])
-+			err("nr %lu memory corruption %llu %llu\n",
-+			    nr, count, count_verify[nr]);
-+
-+		/* Re-check area_src content which should be empty */
-+		count = *area_count(area_src, nr);
-+		if (count != 0)
-+			err("nr %lu move failed %llu %llu\n",
-+			    nr, count, count_verify[nr]);
-+	}
-+
-+	if (write(pipefd[1], &c, sizeof(c)) != sizeof(c))
-+		err("pipe write");
-+	if (pthread_join(uffd_mon, NULL))
-+		err("join() failed");
-+
-+	if (args.missing_faults != nr_pages || args.minor_faults != 0)
-+		uffd_test_fail("stats check error");
-+	else
-+		uffd_test_pass();
-+}
-+
-+static int prevent_hugepages(void)
-+{
-+	/* This should be done before source area is populated */
-+	if (madvise(area_src, nr_pages * page_size, MADV_NOHUGEPAGE)) {
-+		/* Ignore if CONFIG_TRANSPARENT_HUGEPAGE=n */
-+		if (errno != EINVAL)
-+			return -errno;
-+	}
-+	return 0;
-+}
-+
-+struct uffd_test_case_ops uffd_move_test_case_ops = {
-+	.post_alloc = prevent_hugepages,
-+};
-+
-+#define ALIGN_UP(x, align_to) \
-+	(__typeof__(x))((((unsigned long)(x)) + ((align_to)-1)) & ~((align_to)-1))
-+
-+static char *orig_area_src, *orig_area_dst;
-+static int pmd_align_areas(void)
-+{
-+	orig_area_src = area_src;
-+	orig_area_dst = area_dst;
-+	area_src = ALIGN_UP(area_src, page_size);
-+	area_dst = ALIGN_UP(area_dst, page_size);
-+	nr_pages--;
-+
-+	return 0;
-+}
-+
-+static void pmd_restore_areas(void)
-+{
-+	area_src = orig_area_src;
-+	area_dst = orig_area_dst;
-+	nr_pages++;
-+}
-+
-+static int adjust_page_size(void)
-+{
-+	page_size = default_huge_page_size();
-+	nr_pages = UFFD_TEST_MEM_SIZE / page_size;
-+
-+	return 0;
-+}
-+
-+struct uffd_test_case_ops uffd_move_pmd_test_case_ops = {
-+	.pre_alloc = adjust_page_size,
-+	.post_alloc = pmd_align_areas,
-+	.pre_release = pmd_restore_areas,
-+};
-+
- /*
-  * Test the returned uffdio_register.ioctls with different register modes.
-  * Note that _UFFDIO_ZEROPAGE is tested separately in the zeropage test.
-@@ -1141,6 +1268,20 @@ uffd_test_case_t uffd_tests[] = {
- 		.mem_targets = MEM_ALL,
- 		.uffd_feature_required = 0,
- 	},
-+	{
-+		.name = "move",
-+		.uffd_fn = uffd_move_test,
-+		.mem_targets = MEM_ANON,
-+		.uffd_feature_required = UFFD_FEATURE_MOVE,
-+		.test_case_ops = &uffd_move_test_case_ops,
-+	},
-+	{
-+		.name = "move-pmd",
-+		.uffd_fn = uffd_move_test,
-+		.mem_targets = MEM_ANON,
-+		.uffd_feature_required = UFFD_FEATURE_MOVE,
-+		.test_case_ops = &uffd_move_pmd_test_case_ops,
-+	},
- 	{
- 		.name = "wp-fork",
- 		.uffd_fn = uffd_wp_fork_test,
--- 
-2.42.0.820.g83a721a137-goog
+But "git send-email --compose" seems to be working as expected, so
+I'll use that and manually copy the cover letter generated by
+format-patch to ensure it's all on the same thread.
 
+Since I already butchered this thread, I will send v3 series on a 
+separate thread. But I'll ensure to reference this thread on the 
+cover letter.
+
+I'll be more careful with future patches.
