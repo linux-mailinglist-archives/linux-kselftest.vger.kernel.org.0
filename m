@@ -2,153 +2,252 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6DD87DAE7F
-	for <lists+linux-kselftest@lfdr.de>; Sun, 29 Oct 2023 22:23:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C17967DAF59
+	for <lists+linux-kselftest@lfdr.de>; Sun, 29 Oct 2023 23:59:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230325AbjJ2VXl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 29 Oct 2023 17:23:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52776 "EHLO
+        id S231460AbjJ2W7D (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 29 Oct 2023 18:59:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbjJ2VXk (ORCPT
+        with ESMTP id S231453AbjJ2W67 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 29 Oct 2023 17:23:40 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04olkn2058.outbound.protection.outlook.com [40.92.75.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F13197;
-        Sun, 29 Oct 2023 14:23:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JwBUCHu3Xg/cmieRr8RM3bIqXlJzMtkJ5CXUQrXvn1kt/dzP5mCoTDCJwyHh9h8kNUS52cIhvSQByRDVZ/dkuvmlxfODdnlpmXqIQ37MRcneikN4/tcdt9bPIQ29+gPdyDIp7BGQw0uh0mPmczp/B8k4LUCK9V8LZWasAwfAGDM4985nHOu8Q46kYd9LPVdVammrmsS++7Fqqxt7ZyXQzzZ891oy3VgNSgfeedA3h3MYkgj9rdyS1Thmp3SZoM3Ov2Jv9M8GdYnpcCgN4nZcI83x5JZP5n/k3cfXzohXQ4W30iGJWuSVBnSYbV1CScbb+vsP+zqyVxn2/pCWMiufqA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6M0B9NbUlgDJsAPGo584eNpJCi4+0ld3rxL+zjZdXFI=;
- b=JhV+WnxQmzSwrRKNcwR+AcpcbwKTO/CHgUD6Qbs8mnUTcoxJfj9m7XipoVVAFm+cz1y6yPZ/1NW/MWmHo4mKxbXQruond4InvpboI5PKkJbv8N1H8kaK1rLtpan8hC2ZYfskel/01bILnudzzR4L+Fe/0HA9hWBur0ChrQojgg+09kCQR0HtlD5RI+Tvcqacp+PwrVkfNEWxRPQ2ZlRi+vgy9fqC2Ql8+3TsAo1tOfVEdhm0ahUKHA5N27vEN9/CFU5qnwbCKw/SvlU60txEGACUlKir17zUz3WCJD8zP5STCfloGngtn7MI7C3OcvrH6DbVN7kI0yEoLK/d7ci3wA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6M0B9NbUlgDJsAPGo584eNpJCi4+0ld3rxL+zjZdXFI=;
- b=e6FVjIVacPzOb624JMFzfESIvfwGGKlZDJcEhl5pXVcDC5ll0/qTV2Qf90RP4eTVWujG8wbPunpNFrVoJI/FlSLgBJ9+wqFgpNc3hutn+Pideha5XwQSH/ycwPjGYv8UkCKAOB5loITsQtKAuS58A+Fw4tRwIz6TLBBuB5ymAUTd/IgBO5pv19fEVhURmwLa7Fu0jpvw3HgAdFWV221fcO2c74hM/ZYov5fUizz7z1BW/gQG88hQIG+17GoMHdhY+GssoLCBfpmdf/cJ8eX7Z1MM9jRyn3b2ZZizolEsYOeSalNFKLoL6lqEqg2G6UZOucQ6PMjrwfYh3GnuLD5zjQ==
-Received: from VI1P193MB0752.EURP193.PROD.OUTLOOK.COM (2603:10a6:800:32::19)
- by DB9P193MB1931.EURP193.PROD.OUTLOOK.COM (2603:10a6:10:24e::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6933.27; Sun, 29 Oct
- 2023 21:23:35 +0000
-Received: from VI1P193MB0752.EURP193.PROD.OUTLOOK.COM
- ([fe80::2db3:2c11:bb43:c6e]) by VI1P193MB0752.EURP193.PROD.OUTLOOK.COM
- ([fe80::2db3:2c11:bb43:c6e%5]) with mapi id 15.20.6933.027; Sun, 29 Oct 2023
- 21:23:35 +0000
-Message-ID: <VI1P193MB0752CD67E1432A1CDE48F86D99A2A@VI1P193MB0752.EURP193.PROD.OUTLOOK.COM>
-Date:   Mon, 30 Oct 2023 05:23:34 +0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/cgroup: Fix awk usage in test_cpuset_prs.sh
- that may cause error
-To:     Waiman Long <longman@redhat.com>, lizefan.x@bytedance.com,
-        tj@kernel.org, hannes@cmpxchg.org, shuah@kernel.org
-Cc:     cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-References: <VI1P193MB07522BFC89B6B6DC5A89153999FCA@VI1P193MB0752.EURP193.PROD.OUTLOOK.COM>
- <ed2993f2-4bdc-19c5-5a0f-1e96da44fb24@redhat.com>
-From:   Juntong Deng <juntong.deng@outlook.com>
-In-Reply-To: <ed2993f2-4bdc-19c5-5a0f-1e96da44fb24@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TMN:  [zdfF4qpzxzr+6SiiYHdzaUZF2YASsHQ+]
-X-ClientProxiedBy: CWLP123CA0111.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:401:5f::27) To VI1P193MB0752.EURP193.PROD.OUTLOOK.COM
- (2603:10a6:800:32::19)
-X-Microsoft-Original-Message-ID: <d6daf8c0-c827-400f-87d8-5b69eae09e62@outlook.com>
+        Sun, 29 Oct 2023 18:58:59 -0400
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6305D3AB8;
+        Sun, 29 Oct 2023 15:57:49 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2B50C433AB;
+        Sun, 29 Oct 2023 22:56:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1698620219;
+        bh=SCtWr7+8UMHl8srmLn1eZameEahtVuQeGPynEFCLA1o=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=Av/wgg5hH+lqDUrxgU8OE5Buk37gRRQC4QwPzYjTIWC8dfk+479h9pX2Ar7WnL4yV
+         6x82Et8vugyLkS3zTqgvfmPMybz1PjoXYvTcnnupZMPCKfVj25Ku1+enbURpXpiCdu
+         vN/Od+oIbQ7xShtwntCM/Epkd5IT5Ik0bewJnJFfLug4iiqqUVn2Jsyx0cXyM5qz7W
+         6dLYx+R39RaWpnB8LiLF3wHg6ZTKMf0P2WVmlHyP3lvsc/I500QAeDw42hFsaZv0o4
+         KM7YsSdL4KPKxZMiJyx8X4scjrrGNUXWkZ/PRoFTjdlFt3H5I8aoHUblhrotHl8JMW
+         PPoy5q8+S9+YA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Phil Sutter <phil@nwl.cc>, Richard Guy Briggs <rgb@redhat.com>,
+        Paul Moore <paul@paul-moore.com>,
+        Florian Westphal <fw@strlen.de>,
+        Sasha Levin <sashal@kernel.org>, pablo@netfilter.org,
+        kadlec@netfilter.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.5 47/52] netfilter: nf_tables: audit log object reset once per table
+Date:   Sun, 29 Oct 2023 18:53:34 -0400
+Message-ID: <20231029225441.789781-47-sashal@kernel.org>
+X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20231029225441.789781-1-sashal@kernel.org>
+References: <20231029225441.789781-1-sashal@kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1P193MB0752:EE_|DB9P193MB1931:EE_
-X-MS-Office365-Filtering-Correlation-Id: a36c9e27-601f-4d41-6a56-08dbd8c54f37
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 27CvvH7Z26NIY5nxCE8+eLM+zNYGonPlm5/329EfLOM0aMfZugofsKKL5BAnStSGipZJWNCM04CszHvQ2pFsujnl7e/MirMBW5aPFxVZLyjXxm6UDJMC8zIGSw0Sf7oDiGEkNsjLf9pqswOgB1eHIPr4xXyuXqKE4R6jF7Wgg4FzA3mwFkVhrgL67KjEul4p+BtcREd90t5ccyXnldUXi24cZt5endn0wq/4423NS3jKCw7ywGnQ8Gi9sTTVig+YMnJyE1c5cn+xRbuz7cM7HXU2mWMFfPp/cugdSc2YhMYAubrX4wDwaO9DJBm3Ty7RxZwiMOYLzdnCazE+/d6SoVcKH4xDExHEjYUuy3hoHcEKGaLoC7gN7NiA/nGamlVPIPaisfC/QL+49JMsnJEGBlsqkpmwfnuq56oDGnfydxuK7vVXm7STU34LdShEOiSZauTvKOO5eHYJwrYUTMu7dqmSaNXhFhFOTGCFMaug0o4xTMhMRvZj14KY0mVzARU/LXFoKx+xvEz4ODgYD9UrCpSfoAQXh2KXCeNP0ypiyaYcnxZeOJC0ugaLrKkls2W8
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bmlhMkhWd2N2MHVla0hNTWI1b2xuR0NjcTBXRFNTQ2FmOTBhVjY3Z1NtL2Zj?=
- =?utf-8?B?QXIweVF4cVFvdHJJM3dTUkUxR2EzajVxSGZRUTZWVEd5MElUaUVOQ3kvOUZS?=
- =?utf-8?B?elhqbGswMnZqTTR0UU8yQWNzREhXczhkRzJrZlRvcE5VQUFVTTJNUmVTTmVo?=
- =?utf-8?B?WGlzN2wzUjZJZjBldHlGSUNLZUZQczRJSHl3RFhlK3drdVRIRTdYcElOTmM0?=
- =?utf-8?B?ZU5XejN4OFFodjBxVG44TUIvUmVESFBENUcydmpaQkhwSWd0OUFEbjdYNnhK?=
- =?utf-8?B?dkdQaUFDSVYrMHFtTGZTL3VMVldlcTE5clZ2bWlINXZEYTRlK3BXQ2krVVJk?=
- =?utf-8?B?N3hGZ29YNTBLbkwwWUFobjYvQ2ZhZi9USjBkb29FbzNEb3RpVklEVWhQNGUy?=
- =?utf-8?B?OU9oUy9XWmw4eEtOdVZ0emlLc2JWZHM2V2hpbGZSamUzQkJ4TUR0WjJhNkZS?=
- =?utf-8?B?Zk5YTy83MDVuWEVaRDNkc084NE1PM0VCdVFVL1g2cG1xM1ErZWJqa3R4MnlC?=
- =?utf-8?B?L29TQ3RMdXJidTR0eWhUbFR5bkRyaXNOMDBKb1BVZGZabzVrUEZ1V2VIYmlL?=
- =?utf-8?B?U0prVFJsYVdNaW1Hckk3SFBGa1NvN2ZNUnE5cXJFNnVtc1BsL1BDTWVzRmZu?=
- =?utf-8?B?ZVpwM3J4WmdjMnl5bTVJcGVDR1VLWC9OMVdxWXh0eFRTbHd3b3AyUHJNeUpr?=
- =?utf-8?B?dXJHSXFsWXVySkQ2WWNTNmdBQXVDSlgwaENlMDVOblE3QXd6T3FlaHEvcHkz?=
- =?utf-8?B?cytqU3A3TzY5Z3BRSWtZMGFaTGZxQ1pPQ1I0THNQVVFINWpueWZIaHZ5Sjc3?=
- =?utf-8?B?cHJ2R1p5K2Rvc2lGWkplYXVlWDVMdmJXclNvRk9DS1FzL0xxMVZrWXR6NGx5?=
- =?utf-8?B?SGtJcDhOSDlOZDdXRmwwQ2U4SUI4cWZzYzNkbldJK1FYWU9zSUtiMWFRemRC?=
- =?utf-8?B?a21VTkRLYVNCeGZYV0ZHaTJBc09qcXppaVdZNVZEVFkzWVFnRThNY1J0Tll0?=
- =?utf-8?B?bk9qRVhRNHZWVldyMzhWeVRVTUNIbEJlbzhmK1JuWEFCR1Zrc3E0SlhPWmxL?=
- =?utf-8?B?TEZXN1F0ZEZSdGdKb0lRV29RaFhpKzhhTzEzWWxWdjByR3NSeDdGaUlhaExl?=
- =?utf-8?B?c3J5RGdIRnVINVlmbDNZc2xiNmtYRzdHMWlnYU9xMUhiZStQbXBMTStYbTI2?=
- =?utf-8?B?Mkxxb0pCaWdNdDI0MTdVb0pQbExSTGZET0kxS1FabEdzbU81aTN4MWsxdjZm?=
- =?utf-8?B?Z2tlajdTZFFJV3ZBWWxRTCtBc25FWU55a2llSkMxN2Z4WjZOU0xIMnVlem10?=
- =?utf-8?B?bG5UOG5rQnRmT283U3JldFdpWUVMcTI1Yk9NTDM5OHBXZE1IUkpHekgxckZX?=
- =?utf-8?B?Z2VHZzIvUDByNDhOR0FRbkNlT0RsaDdReGZxbTdJREF3RW52YzJzbDBSczY3?=
- =?utf-8?B?U3JOVllCMWdKazRtbC9JL3kvK2JGSjQvb2ZhUldtSjZKUzNVeXhBb2RHMEEr?=
- =?utf-8?B?V3BvV0RQTzlqWlM3RjlQTEJFUWM3VUJHMHAzZjlWdGtERk9HbGxEWjd4T0xk?=
- =?utf-8?B?S3djS0VBb1V3YmFjd3E4eHk3Zyt4Ny9WV0pyUHZ2Mko2bTNXM2ZrSzMzVG9p?=
- =?utf-8?Q?F/ZOhMeutXh5GCw9T/Fzr6vWR8y1WTK0IPkZ6TqzDg2s=3D?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a36c9e27-601f-4d41-6a56-08dbd8c54f37
-X-MS-Exchange-CrossTenant-AuthSource: VI1P193MB0752.EURP193.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Oct 2023 21:23:35.4898
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9P193MB1931
-X-Spam-Status: No, score=0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.5.9
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2023/9/26 20:18, Waiman Long wrote:
-> On 9/25/23 15:38, Juntong Deng wrote:
->> According to the awk manual, the -e option does not need to be specified
->> in front of 'program' (unless you need to mix program-file).
->>
->> The redundant -e option can cause error when users use awk tools other
->> than gawk (for example, mawk does not support the -e option).
->>
->> Error Example:
->> awk: not an option: -e
->> Cgroup v2 mount point not found!
->>
->> Signed-off-by: Juntong Deng <juntong.deng@outlook.com>
->> ---
->>   tools/testing/selftests/cgroup/test_cpuset_prs.sh | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh 
->> b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
->> index 4afb132e4e4f..6820653e8432 100755
->> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
->> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
->> @@ -20,7 +20,7 @@ skip_test() {
->>   WAIT_INOTIFY=$(cd $(dirname $0); pwd)/wait_inotify
->>   # Find cgroup v2 mount point
->> -CGROUP2=$(mount -t cgroup2 | head -1 | awk -e '{print $3}')
->> +CGROUP2=$(mount -t cgroup2 | head -1 | awk '{print $3}')
->>   [[ -n "$CGROUP2" ]] || skip_test "Cgroup v2 mount point not found!"
->>   CPUS=$(lscpu | grep "^CPU(s):" | sed -e "s/.*:[[:space:]]*//")
-> 
-> Yes, the -e option is redundant. Thanks for catching that.
-> 
-> Acked-by: Waiman Long <longman@redhat.com>
-> 
+From: Phil Sutter <phil@nwl.cc>
 
-Hi Shuah, this patch has been acked but does not seem to have been
-applied yet.
+[ Upstream commit 1baf0152f7707c6c7e4ea815dcc1f431c0e603f9 ]
+
+When resetting multiple objects at once (via dump request), emit a log
+message per table (or filled skb) and resurrect the 'entries' parameter
+to contain the number of objects being logged for.
+
+To test the skb exhaustion path, perform some bulk counter and quota
+adds in the kselftest.
+
+Signed-off-by: Phil Sutter <phil@nwl.cc>
+Reviewed-by: Richard Guy Briggs <rgb@redhat.com>
+Acked-by: Paul Moore <paul@paul-moore.com> (Audit)
+Signed-off-by: Florian Westphal <fw@strlen.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ net/netfilter/nf_tables_api.c                 | 50 +++++++++++--------
+ .../testing/selftests/netfilter/nft_audit.sh  | 46 +++++++++++++++++
+ 2 files changed, 74 insertions(+), 22 deletions(-)
+
+diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
+index be5869366c7d3..bddf68f364fb5 100644
+--- a/net/netfilter/nf_tables_api.c
++++ b/net/netfilter/nf_tables_api.c
+@@ -7612,6 +7612,16 @@ static int nf_tables_fill_obj_info(struct sk_buff *skb, struct net *net,
+ 	return -1;
+ }
+ 
++static void audit_log_obj_reset(const struct nft_table *table,
++				unsigned int base_seq, unsigned int nentries)
++{
++	char *buf = kasprintf(GFP_ATOMIC, "%s:%u", table->name, base_seq);
++
++	audit_log_nfcfg(buf, table->family, nentries,
++			AUDIT_NFT_OP_OBJ_RESET, GFP_ATOMIC);
++	kfree(buf);
++}
++
+ struct nft_obj_filter {
+ 	char		*table;
+ 	u32		type;
+@@ -7626,8 +7636,10 @@ static int nf_tables_dump_obj(struct sk_buff *skb, struct netlink_callback *cb)
+ 	struct net *net = sock_net(skb->sk);
+ 	int family = nfmsg->nfgen_family;
+ 	struct nftables_pernet *nft_net;
++	unsigned int entries = 0;
+ 	struct nft_object *obj;
+ 	bool reset = false;
++	int rc = 0;
+ 
+ 	if (NFNL_MSG_TYPE(cb->nlh->nlmsg_type) == NFT_MSG_GETOBJ_RESET)
+ 		reset = true;
+@@ -7640,6 +7652,7 @@ static int nf_tables_dump_obj(struct sk_buff *skb, struct netlink_callback *cb)
+ 		if (family != NFPROTO_UNSPEC && family != table->family)
+ 			continue;
+ 
++		entries = 0;
+ 		list_for_each_entry_rcu(obj, &table->objects, list) {
+ 			if (!nft_is_active(net, obj))
+ 				goto cont;
+@@ -7655,34 +7668,27 @@ static int nf_tables_dump_obj(struct sk_buff *skb, struct netlink_callback *cb)
+ 			    filter->type != NFT_OBJECT_UNSPEC &&
+ 			    obj->ops->type->type != filter->type)
+ 				goto cont;
+-			if (reset) {
+-				char *buf = kasprintf(GFP_ATOMIC,
+-						      "%s:%u",
+-						      table->name,
+-						      nft_net->base_seq);
+-
+-				audit_log_nfcfg(buf,
+-						family,
+-						obj->handle,
+-						AUDIT_NFT_OP_OBJ_RESET,
+-						GFP_ATOMIC);
+-				kfree(buf);
+-			}
+ 
+-			if (nf_tables_fill_obj_info(skb, net, NETLINK_CB(cb->skb).portid,
+-						    cb->nlh->nlmsg_seq,
+-						    NFT_MSG_NEWOBJ,
+-						    NLM_F_MULTI | NLM_F_APPEND,
+-						    table->family, table,
+-						    obj, reset) < 0)
+-				goto done;
++			rc = nf_tables_fill_obj_info(skb, net,
++						     NETLINK_CB(cb->skb).portid,
++						     cb->nlh->nlmsg_seq,
++						     NFT_MSG_NEWOBJ,
++						     NLM_F_MULTI | NLM_F_APPEND,
++						     table->family, table,
++						     obj, reset);
++			if (rc < 0)
++				break;
+ 
++			entries++;
+ 			nl_dump_check_consistent(cb, nlmsg_hdr(skb));
+ cont:
+ 			idx++;
+ 		}
++		if (reset && entries)
++			audit_log_obj_reset(table, nft_net->base_seq, entries);
++		if (rc < 0)
++			break;
+ 	}
+-done:
+ 	rcu_read_unlock();
+ 
+ 	cb->args[0] = idx;
+@@ -7787,7 +7793,7 @@ static int nf_tables_getobj(struct sk_buff *skb, const struct nfnl_info *info,
+ 
+ 		audit_log_nfcfg(buf,
+ 				family,
+-				obj->handle,
++				1,
+ 				AUDIT_NFT_OP_OBJ_RESET,
+ 				GFP_ATOMIC);
+ 		kfree(buf);
+diff --git a/tools/testing/selftests/netfilter/nft_audit.sh b/tools/testing/selftests/netfilter/nft_audit.sh
+index bb34329e02a7f..e94a80859bbdb 100755
+--- a/tools/testing/selftests/netfilter/nft_audit.sh
++++ b/tools/testing/selftests/netfilter/nft_audit.sh
+@@ -93,6 +93,12 @@ do_test 'nft add counter t1 c1' \
+ do_test 'nft add counter t2 c1; add counter t2 c2' \
+ 'table=t2 family=2 entries=2 op=nft_register_obj'
+ 
++for ((i = 3; i <= 500; i++)); do
++	echo "add counter t2 c$i"
++done >$rulefile
++do_test "nft -f $rulefile" \
++'table=t2 family=2 entries=498 op=nft_register_obj'
++
+ # adding/updating quotas
+ 
+ do_test 'nft add quota t1 q1 { 10 bytes }' \
+@@ -101,6 +107,12 @@ do_test 'nft add quota t1 q1 { 10 bytes }' \
+ do_test 'nft add quota t2 q1 { 10 bytes }; add quota t2 q2 { 10 bytes }' \
+ 'table=t2 family=2 entries=2 op=nft_register_obj'
+ 
++for ((i = 3; i <= 500; i++)); do
++	echo "add quota t2 q$i { 10 bytes }"
++done >$rulefile
++do_test "nft -f $rulefile" \
++'table=t2 family=2 entries=498 op=nft_register_obj'
++
+ # changing the quota value triggers obj update path
+ do_test 'nft add quota t1 q1 { 20 bytes }' \
+ 'table=t1 family=2 entries=1 op=nft_register_obj'
+@@ -150,6 +162,40 @@ done
+ do_test 'nft reset set t1 s' \
+ 'table=t1 family=2 entries=3 op=nft_reset_setelem'
+ 
++# resetting counters
++
++do_test 'nft reset counter t1 c1' \
++'table=t1 family=2 entries=1 op=nft_reset_obj'
++
++do_test 'nft reset counters t1' \
++'table=t1 family=2 entries=1 op=nft_reset_obj'
++
++do_test 'nft reset counters t2' \
++'table=t2 family=2 entries=342 op=nft_reset_obj
++table=t2 family=2 entries=158 op=nft_reset_obj'
++
++do_test 'nft reset counters' \
++'table=t1 family=2 entries=1 op=nft_reset_obj
++table=t2 family=2 entries=341 op=nft_reset_obj
++table=t2 family=2 entries=159 op=nft_reset_obj'
++
++# resetting quotas
++
++do_test 'nft reset quota t1 q1' \
++'table=t1 family=2 entries=1 op=nft_reset_obj'
++
++do_test 'nft reset quotas t1' \
++'table=t1 family=2 entries=1 op=nft_reset_obj'
++
++do_test 'nft reset quotas t2' \
++'table=t2 family=2 entries=315 op=nft_reset_obj
++table=t2 family=2 entries=185 op=nft_reset_obj'
++
++do_test 'nft reset quotas' \
++'table=t1 family=2 entries=1 op=nft_reset_obj
++table=t2 family=2 entries=314 op=nft_reset_obj
++table=t2 family=2 entries=186 op=nft_reset_obj'
++
+ # deleting rules
+ 
+ readarray -t handles < <(nft -a list chain t1 c1 | \
+-- 
+2.42.0
+
