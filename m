@@ -2,68 +2,73 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A9417DAD6A
-	for <lists+linux-kselftest@lfdr.de>; Sun, 29 Oct 2023 18:07:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67C227DAE75
+	for <lists+linux-kselftest@lfdr.de>; Sun, 29 Oct 2023 22:13:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230235AbjJ2RHy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 29 Oct 2023 13:07:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43158 "EHLO
+        id S230299AbjJ2VNf (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 29 Oct 2023 17:13:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230237AbjJ2RHx (ORCPT
+        with ESMTP id S229512AbjJ2VNf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 29 Oct 2023 13:07:53 -0400
-Received: from out-177.mta1.migadu.com (out-177.mta1.migadu.com [IPv6:2001:41d0:203:375::b1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F362C6
-        for <linux-kselftest@vger.kernel.org>; Sun, 29 Oct 2023 10:07:51 -0700 (PDT)
-Message-ID: <1b463b8a-eac0-4894-b265-da1d3e51c674@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1698599269;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=CwjmesJBPd77RraX0VXEJ5fpmp3TmiDHUFN/EhxgGxI=;
-        b=XQbDmpBOLN53bjspOhw7G4X/xCSZRhmYT6bEkgzQPOdJunYr9MryJGIPcEh+IqVd7xcMBO
-        yQDcR7W+7lzew3Fqf6oH1O8YsfSoVeHubyMyd8WtA58cBWSly5DedTyPSSpnnhx4LiaCCZ
-        wuToRNnwdmOb4VSSDe+mmdFeStEb5JI=
-Date:   Sun, 29 Oct 2023 10:07:44 -0700
+        Sun, 29 Oct 2023 17:13:35 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E529C0
+        for <linux-kselftest@vger.kernel.org>; Sun, 29 Oct 2023 14:13:32 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-322-P37uwYhsMfGigzGfDc7VcA-1; Sun, 29 Oct 2023 21:13:29 +0000
+X-MC-Unique: P37uwYhsMfGigzGfDc7VcA-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Sun, 29 Oct
+ 2023 21:13:41 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.048; Sun, 29 Oct 2023 21:13:41 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'David Woodhouse' <dwmw2@infradead.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
+CC:     Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] KVM: selftests: add -MP to CFLAGS
+Thread-Topic: [PATCH] KVM: selftests: add -MP to CFLAGS
+Thread-Index: AQHaCdXc3e78bpbjnkOmWxrFAzERRLBhRPEw
+Date:   Sun, 29 Oct 2023 21:13:41 +0000
+Message-ID: <3fa5bdded7504d6582cf01f4db4cd6b4@AcuMS.aculab.com>
+References: <9fc8b5395321abbfcaf5d78477a9a7cd350b08e4.camel@infradead.org>
+In-Reply-To: <9fc8b5395321abbfcaf5d78477a9a7cd350b08e4.camel@infradead.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: Add malloc failure checks
- in bpf_iter
-Content-Language: en-GB
-To:     Yuran Pereira <yuran.pereira@hotmail.com>, bpf@vger.kernel.org
-Cc:     sinquersw@gmail.com, ast@kernel.org, brauner@kernel.org,
-        daniel@iogearbox.net, haoluo@google.com, iii@linux.ibm.com,
-        john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org,
-        kuifeng@meta.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, mykolal@fb.com, sdf@google.com,
-        shuah@kernel.org, song@kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-References: <cover.1698461732.git.yuran.pereira@hotmail.com>
- <DB3PR10MB6835F0ECA792265FA41FC39BE8A3A@DB3PR10MB6835.EURPRD10.PROD.OUTLOOK.COM>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <DB3PR10MB6835F0ECA792265FA41FC39BE8A3A@DB3PR10MB6835.EURPRD10.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-2.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H5,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-
-On 10/27/23 10:24 PM, Yuran Pereira wrote:
-> Since some malloc calls in bpf_iter may at times fail,
-> this patch adds the appropriate fail checks, and ensures that
-> any previously allocated resource is appropriately destroyed
-> before returning the function.
->
-> Signed-off-by: Yuran Pereira <yuran.pereira@hotmail.com>
-
-Acked-by: Yonghong Song <yonghong.song@linux.dev>
+RnJvbTogRGF2aWQgV29vZGhvdXNlDQo+IFNlbnQ6IDI4IE9jdG9iZXIgMjAyMyAyMDozNQ0KPiAN
+Cj4gVXNpbmcgLU1EIHdpdGhvdXQgLU1QIGNhdXNlcyBidWlsZCBmYWlsdXJlcyB3aGVuIGEgaGVh
+ZGVyIGZpbGUgaXMgZGVsZXRlZA0KPiBvciBtb3ZlZC4gV2l0aCAtTVAsIHRoZSBjb21waWxlciB3
+aWxsIGVtaXQgcGhvbnkgdGFyZ2V0cyBmb3IgdGhlIGhlYWRlcg0KPiBmaWxlcyBpdCBsaXN0cyBh
+cyBkZXBlbmRlbmNpZXMsIGFuZCB0aGUgTWFrZWZpbGVzIHdvbid0IHJlZnVzZSB0byBhdHRlbXB0
+DQo+IHRvIHJlYnVpbGQgYSBDIHVuaXQgd2hpY2ggbm8gbG9uZ2VyIGluY2x1ZGVzIHRoZSBkZWxl
+dGVkIGhlYWRlci4NCg0KV29uJ3QgYSBwaG9ueSB0YXJnZXQgc3RvcCBhIGhlYWRlciBiZWluZyBi
+dWlsdCBpZiB0aGVyZSBpcw0KYW4gYWN0dWFsIHJ1bGUgdG8gYnVpbGQgaXQ/DQoNCkkgdXN1YWxs
+eSBhZGQ6DQoNCiUuaDoNCgllY2hvICJJZ25vcmluZyBzdGFsZSBkZXBlbmRlbmN5IGZvciAkQCIN
+Cg0KV2hpY2ggb25seSBhcHBsaWVzIGlmIHRoZXJlIGlzbid0IGFuIGV4cGxpY2l0IHJ1bGUuDQoN
+CglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkgUm9hZCwg
+TW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlvbiBObzog
+MTM5NzM4NiAoV2FsZXMpDQo=
 
