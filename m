@@ -2,31 +2,31 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C17967DAF59
-	for <lists+linux-kselftest@lfdr.de>; Sun, 29 Oct 2023 23:59:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E54E57DAFD0
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Oct 2023 00:00:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231460AbjJ2W7D (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Sun, 29 Oct 2023 18:59:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34066 "EHLO
+        id S231610AbjJ2XAX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Sun, 29 Oct 2023 19:00:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231453AbjJ2W67 (ORCPT
+        with ESMTP id S231663AbjJ2W7e (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Sun, 29 Oct 2023 18:58:59 -0400
+        Sun, 29 Oct 2023 18:59:34 -0400
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6305D3AB8;
-        Sun, 29 Oct 2023 15:57:49 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2B50C433AB;
-        Sun, 29 Oct 2023 22:56:57 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA7F810C2;
+        Sun, 29 Oct 2023 15:58:58 -0700 (PDT)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EEC65C116B3;
+        Sun, 29 Oct 2023 22:58:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1698620219;
-        bh=SCtWr7+8UMHl8srmLn1eZameEahtVuQeGPynEFCLA1o=;
+        s=k20201202; t=1698620332;
+        bh=QwfpkMu8hEX1oGwTIu/sT+qOKjgyXtxLOPnbP6puEvE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Av/wgg5hH+lqDUrxgU8OE5Buk37gRRQC4QwPzYjTIWC8dfk+479h9pX2Ar7WnL4yV
-         6x82Et8vugyLkS3zTqgvfmPMybz1PjoXYvTcnnupZMPCKfVj25Ku1+enbURpXpiCdu
-         vN/Od+oIbQ7xShtwntCM/Epkd5IT5Ik0bewJnJFfLug4iiqqUVn2Jsyx0cXyM5qz7W
-         6dLYx+R39RaWpnB8LiLF3wHg6ZTKMf0P2WVmlHyP3lvsc/I500QAeDw42hFsaZv0o4
-         KM7YsSdL4KPKxZMiJyx8X4scjrrGNUXWkZ/PRoFTjdlFt3H5I8aoHUblhrotHl8JMW
-         PPoy5q8+S9+YA==
+        b=ugz4oPdd4SoLnTjPJ1JUDqagq3GL7YUeH7AgrHGvLOVWd8YSFatwufjWs1pBbsDwR
+         JEbykFG0KHP7oEma8jbOs0AE3u6B99llNHwIt3zBJ2ztRjpxu7URieTrDXtoqWAKTe
+         M1HCldPpV4T21bRTTCGx6Ls9uzfLf0xZRcqNpuyxov6YEM2DBqfsY10Lexi/E2loib
+         KCGA+Zs5eStQ+4mGxyLh16HQ/LwewIm9K9BdYolhLTNkoFCb+FOUHPaUxYuR8O+4rk
+         kcgznITlAZLu9sw0vTzCmdVF6HICbuTxe4Uy3lkvU3+kGNnk+SuHs2JGq6zvrwiN/v
+         t17QV4jqlk9Sw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
 Cc:     Phil Sutter <phil@nwl.cc>, Richard Guy Briggs <rgb@redhat.com>,
@@ -37,16 +37,16 @@ Cc:     Phil Sutter <phil@nwl.cc>, Richard Guy Briggs <rgb@redhat.com>,
         kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
         netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
         netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.5 47/52] netfilter: nf_tables: audit log object reset once per table
-Date:   Sun, 29 Oct 2023 18:53:34 -0400
-Message-ID: <20231029225441.789781-47-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.1 35/39] netfilter: nf_tables: audit log object reset once per table
+Date:   Sun, 29 Oct 2023 18:57:07 -0400
+Message-ID: <20231029225740.790936-35-sashal@kernel.org>
 X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231029225441.789781-1-sashal@kernel.org>
-References: <20231029225441.789781-1-sashal@kernel.org>
+In-Reply-To: <20231029225740.790936-1-sashal@kernel.org>
+References: <20231029225740.790936-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.5.9
+X-stable-base: Linux 6.1.60
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -80,10 +80,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 74 insertions(+), 22 deletions(-)
 
 diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
-index be5869366c7d3..bddf68f364fb5 100644
+index 5e3dbe2652dbd..5c783199b4999 100644
 --- a/net/netfilter/nf_tables_api.c
 +++ b/net/netfilter/nf_tables_api.c
-@@ -7612,6 +7612,16 @@ static int nf_tables_fill_obj_info(struct sk_buff *skb, struct net *net,
+@@ -7324,6 +7324,16 @@ static int nf_tables_fill_obj_info(struct sk_buff *skb, struct net *net,
  	return -1;
  }
  
@@ -100,7 +100,7 @@ index be5869366c7d3..bddf68f364fb5 100644
  struct nft_obj_filter {
  	char		*table;
  	u32		type;
-@@ -7626,8 +7636,10 @@ static int nf_tables_dump_obj(struct sk_buff *skb, struct netlink_callback *cb)
+@@ -7338,8 +7348,10 @@ static int nf_tables_dump_obj(struct sk_buff *skb, struct netlink_callback *cb)
  	struct net *net = sock_net(skb->sk);
  	int family = nfmsg->nfgen_family;
  	struct nftables_pernet *nft_net;
@@ -111,7 +111,7 @@ index be5869366c7d3..bddf68f364fb5 100644
  
  	if (NFNL_MSG_TYPE(cb->nlh->nlmsg_type) == NFT_MSG_GETOBJ_RESET)
  		reset = true;
-@@ -7640,6 +7652,7 @@ static int nf_tables_dump_obj(struct sk_buff *skb, struct netlink_callback *cb)
+@@ -7352,6 +7364,7 @@ static int nf_tables_dump_obj(struct sk_buff *skb, struct netlink_callback *cb)
  		if (family != NFPROTO_UNSPEC && family != table->family)
  			continue;
  
@@ -119,7 +119,7 @@ index be5869366c7d3..bddf68f364fb5 100644
  		list_for_each_entry_rcu(obj, &table->objects, list) {
  			if (!nft_is_active(net, obj))
  				goto cont;
-@@ -7655,34 +7668,27 @@ static int nf_tables_dump_obj(struct sk_buff *skb, struct netlink_callback *cb)
+@@ -7367,34 +7380,27 @@ static int nf_tables_dump_obj(struct sk_buff *skb, struct netlink_callback *cb)
  			    filter->type != NFT_OBJECT_UNSPEC &&
  			    obj->ops->type->type != filter->type)
  				goto cont;
@@ -168,7 +168,7 @@ index be5869366c7d3..bddf68f364fb5 100644
  	rcu_read_unlock();
  
  	cb->args[0] = idx;
-@@ -7787,7 +7793,7 @@ static int nf_tables_getobj(struct sk_buff *skb, const struct nfnl_info *info,
+@@ -7499,7 +7505,7 @@ static int nf_tables_getobj(struct sk_buff *skb, const struct nfnl_info *info,
  
  		audit_log_nfcfg(buf,
  				family,
