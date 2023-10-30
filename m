@@ -2,632 +2,257 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44B4E7DB2C2
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Oct 2023 06:20:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 746197DB360
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Oct 2023 07:34:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229620AbjJ3FUt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 30 Oct 2023 01:20:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45984 "EHLO
+        id S231426AbjJ3Ge4 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 30 Oct 2023 02:34:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjJ3FUs (ORCPT
+        with ESMTP id S229514AbjJ3Ge4 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 30 Oct 2023 01:20:48 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05olkn2090.outbound.protection.outlook.com [40.92.89.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DEEAA9;
-        Sun, 29 Oct 2023 22:20:44 -0700 (PDT)
+        Mon, 30 Oct 2023 02:34:56 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2082.outbound.protection.outlook.com [40.107.92.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12AE4A7;
+        Sun, 29 Oct 2023 23:34:53 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Pkpj1QqPCZRUDj1Vj9GhFAVaNOosWjQxYMQ3qwV1Ywv5I9Ix+eHWY14gIRGHqoC9Dv82d2vgfx0FHto6VVruE35dq8RSJJR/QDSMNLiuhO48aIiePS6nrtrYE5LfdyD0gTuq6M1prz6gTaM+3PWnBE4tYRFG74wHJ7cmL1VPZlM1X3TGDoYBgPqDUsbzqmXZtrSuxTLxPQWKjd9quh/PLy6eAeDSKc+E52WnmUaT+QU5QPWUaXeIUqH9QA/jYX3/8FrQ6/Lpqg+aDPc/q4rSbLwwfiPK2UCIPgf2DKqS4MzajQZxskNZSOdiXSOnUJJIRPkhdJf7yZSimelMaPrD5w==
+ b=hjs5exTgzBfHuV5+faTNgFTPfntwn9CS/Uv6o/fnXUYkDs0YO48uMLBcs+tc2TBBI4uQ5NEngDC2nTWZeVhdpCjP0aRbLRYiTv/HTURb47j2Ip4DtVOUIZOfmCiRvSXN2Cri3GVnAtdU8j2GKjDVJipXDPtUv+VTuTwhrKtemX0riKNELQxv5WoQvND4CSm9C6Pk4Oy60yqzvYBHy/LcqV5ccVjuQ0pqGSCbUSisx1rGB68G2XctLTljvZdorXs7Qpl8uufDOEjfJnCIMziybYfQs2q1eRwtiiscpu5GsJ2n/6s0b8aJw1DO3FaqvyXwCtpHsg0AJsz2dOZQKIOqNA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gFQ6SUWoRtb1QCrUsYGC9VhNKNQd/LjfvED3AKRgEk0=;
- b=WtgbkrP3WZ70baVzf7SXotsicbzwfP1q0iK+7mEVyBdYDHhSJH11iRI6aaaQ+JkQ5wkylShjQe+gquAvoGUxl0tdPtXSzmRIAqxiGaK0blxcWe68x9GOIqU8F09WR4oeVR+mCTKUdYas2W9ePqccvjufmv/DtAwEa5FNGEXFhfWnrch43i3T1oXmGeEDVNIZqN7zHmFYYuo7tCsZJAH5yy3pB6qdBxPasaQvUn/vFq2h0xBXDmW173fza5X2jAnNORa9OZnQ+3aCE8LkdUqcVfrzou8zESWkTM6FlApQIPt2QgqS+ajZSqKuewoGROdfCf+8gevTkuSAlU6WXUaLuA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from AS8P193MB1285.EURP193.PROD.OUTLOOK.COM (2603:10a6:20b:333::21)
- by AS8P193MB1606.EURP193.PROD.OUTLOOK.COM (2603:10a6:20b:39f::15) with
+ bh=mWW3xn6If36pYqgPGKypcbtKbqciRvqtlNV/5LHVWH8=;
+ b=M12hC7Xm/HO5MAxSLa/i7YYUj36KJtM/7e6hE9vL3ATch9VH9PwVhJNVNWmAE1BbdcieWp8OBZax/aFRtUrw9t1e2Ob+X0txlAbpeQavP8wXIfvlJOpAsECAhCjrZ891ubgpGJdaRYxzqRpcVJvEqNtozF/lSApy0rl39yO9eG7SNVbp+5YvsEiAfHDnOQUnLhZmVGsdTckfox75XlO+683zVvWKSo/4Vj2tKEEFvQ0CyPlMIkspavUDzZXp2TIBOTWPfOCpO0pnAHm4xiVf6aUq6Z7fUNqxJE7WOhikBqWQ93/rS3VnMkrWnpruU/lOZE+NA5kYcMsQkzF57EieYA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=mWW3xn6If36pYqgPGKypcbtKbqciRvqtlNV/5LHVWH8=;
+ b=dElRPVjtpoo93NIo+8dI1y9wPtcrAxufsIqSfJ/ING/TICwZtPhZ2b+3oBYsS8q+VJs8Wmp5vkjSr68aGryVC3X+qSUSD4BLGoFX0mu1Toc8VhaQBcbjGibTEpNien56PtVRfSUNaYZhWC116OH6YMvg3TnksXlGgptJkNpdheQ=
+Received: from BL1PR13CA0071.namprd13.prod.outlook.com (2603:10b6:208:2b8::16)
+ by CYYPR12MB8963.namprd12.prod.outlook.com (2603:10b6:930:c3::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6933.27; Mon, 30 Oct
- 2023 05:20:42 +0000
-Received: from AS8P193MB1285.EURP193.PROD.OUTLOOK.COM
- ([fe80::b89e:5e18:1a08:409d]) by AS8P193MB1285.EURP193.PROD.OUTLOOK.COM
- ([fe80::b89e:5e18:1a08:409d%6]) with mapi id 15.20.6933.027; Mon, 30 Oct 2023
- 05:20:42 +0000
-Message-ID: <AS8P193MB1285DF698D7524EDE22ABFA1E4A1A@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
-Date:   Mon, 30 Oct 2023 06:20:51 +0100
-User-Agent: Mozilla Thunderbird
-Subject: [PATCH v12] exec: Fix dead-lock in de_thread with ptrace_attach
-From:   Bernd Edlinger <bernd.edlinger@hotmail.de>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>,
-        Christian Brauner <christian.brauner@ubuntu.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Serge Hallyn <serge@hallyn.com>,
-        James Morris <jamorris@linux.microsoft.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        YiFei Zhu <yifeifz2@illinois.edu>,
-        Yafang Shao <laoar.shao@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Adrian Reber <areber@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jens Axboe <axboe@kernel.dk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        tiozhang <tiozhang@didiglobal.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        "Paulo Alcantara (SUSE)" <pc@manguebit.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Stefan Roesch <shr@devkernel.io>, Chao Yu <chao@kernel.org>,
-        xu xin <xu.xin16@zte.com.cn>, Jeff Layton <jlayton@kernel.org>,
-        Jan Kara <jack@suse.cz>, David Hildenbrand <david@redhat.com>,
-        Dave Chinner <dchinner@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Zheng Yejian <zhengyejian1@huawei.com>
-References: <AM8PR10MB470801D01A0CF24BC32C25E7E40E9@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
- <AM8PR10MB470875B22B4C08BEAEC3F77FE4169@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
-Content-Language: en-US
-In-Reply-To: <AM8PR10MB470875B22B4C08BEAEC3F77FE4169@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TMN:  [M6UUeJHu0Zej9vCxa5AMPrUq6jF464P1RxnK7JM5faY4p/9sANXi9ArfRA2SQfi+]
-X-ClientProxiedBy: FR4P281CA0144.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:b8::20) To AS8P193MB1285.EURP193.PROD.OUTLOOK.COM
- (2603:10a6:20b:333::21)
-X-Microsoft-Original-Message-ID: <4022bbc4-4c4d-43d5-ae50-80aa9d9ecd12@hotmail.de>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6933.28; Mon, 30 Oct
+ 2023 06:34:50 +0000
+Received: from BL6PEPF0001AB78.namprd02.prod.outlook.com
+ (2603:10b6:208:2b8:cafe::8) by BL1PR13CA0071.outlook.office365.com
+ (2603:10b6:208:2b8::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.14 via Frontend
+ Transport; Mon, 30 Oct 2023 06:34:50 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ BL6PEPF0001AB78.mail.protection.outlook.com (10.167.242.171) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6933.15 via Frontend Transport; Mon, 30 Oct 2023 06:34:50 +0000
+Received: from jasmine-meng.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.32; Mon, 30 Oct
+ 2023 01:34:37 -0500
+From:   Meng Li <li.meng@amd.com>
+To:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Huang Rui <ray.huang@amd.com>
+CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <x86@kernel.org>, <linux-acpi@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        <linux-kselftest@vger.kernel.org>,
+        "Nathan Fontenot" <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Shimmer Huang <shimmer.huang@amd.com>,
+        "Perry Yuan" <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>,
+        "Oleksandr Natalenko" <oleksandr@natalenko.name>,
+        Meng Li <li.meng@amd.com>
+Subject: [PATCH V10 0/7] amd-pstate preferred core
+Date:   Mon, 30 Oct 2023 14:33:56 +0800
+Message-ID: <20231030063403.3502816-1-li.meng@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS8P193MB1285:EE_|AS8P193MB1606:EE_
-X-MS-Office365-Filtering-Correlation-Id: fd3a8721-537b-4faf-633c-08dbd907f5c2
+X-MS-TrafficTypeDiagnostic: BL6PEPF0001AB78:EE_|CYYPR12MB8963:EE_
+X-MS-Office365-Filtering-Correlation-Id: b578659c-867b-4efb-04b5-08dbd91251af
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: L5fcoESXHgAxgYbnth3HJIjo2svo1xI3WgOs+3vd8TdkK2yZ9lmSWEi/AN3X9baBAXfDCqvxXXvGywk/qlq0IUa8CdHR44+bM6Z04KBRDHH0+hjEAtTagLxCRvjVIdPvbXJRVRcH1+EcSJAh1pDmqG/KcLhxZQHWt+prChbplDSM3TkkSe3gbQzfkb614fhPRUW9SzxlysUiuBnGGYtquw/9NOixqgAiY+JpF0ZL8kAf7S3BEQkIDeWczRom1rB+0catnqcmzjddyK0pGtDJQQKojJNKWOp9+nRwUgzcdvWaMxCz3xSBgc89Yww+rqt1cbvH944IuVDQhjlwcn4hUEnmGNHKjyHxNB30TzmpmY0jEBiu+dzTwh+tfcRLxAQzOhuS7sL5fOdq3vaz/eU6OBj8vu9fDGT8vJWBmndUhIiLkoa2G87QcTSk9tzXi6UZ8Rx8EJLItqnI9Ev8LvSIiCdJ7qcnmLgfj8Xl2brB1hfcOSRfcAbxBSraA+Klk90goFqBYwxPISFNsBTHm8PaOu9aaxrwweNk8Xh9WoxCvv80syXclXNuqd1tiZ7V79gCoOdg5RMYvnhKpAkmmWgTDt5L8k/g2NzphNp1dmTuLoU=
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?SWdpYXFCWi9aa2U5empJNnJlaXZTNWhZSnN3Z1NBVGFyVFRqZVBCbDcvSlZJ?=
- =?utf-8?B?UVkwOHNMeWN6UUdTNmU2Zm9zS1phODJqd0tjSllLMTVISGpUOHUrSmtpdWY2?=
- =?utf-8?B?Nm9OMnhXZkZGWEJ4WDdMUWhobEZPYndVNnVsQ3NqUGs2Y1F2YkxmeXB6R0p1?=
- =?utf-8?B?L25mUVgwZXVBb0ZNbkdVb3JFMXNVSkVqNnE0ei93a2NoekRxVVVwWnBqNnNR?=
- =?utf-8?B?MWhraVRiL0VsZFNPVWtVUnU4QWtOK3RRVU5EaGJzVktrYlU5OUIydUhlaFF0?=
- =?utf-8?B?MjVIUFU3Rnp6RElkS0VUa01YT2w5dThVYUtXSDNCbTN5ME5WVmJpNzZGUVpO?=
- =?utf-8?B?cTJxb09zYjFILzZRWFZleFNldVpnMjdSNTR2MHZQbThYaEIxU3JFWnZ1RThR?=
- =?utf-8?B?UWlYSGVhYWt0Q05RMS9GaVJibHZmdWZFbzYxbjRDZDNSa25NenZwSFhvNWh1?=
- =?utf-8?B?azFsR200OFlkSVMyb3BRTDkxY0wzMXlubDFKVnlzYWhKdS91NDVmYjJKWGJo?=
- =?utf-8?B?aG1odVUzSnRIV2REWHdsbnhJVmhXT0gwMjFLWWVHZXJwYkhaNjVVQ0FscDdT?=
- =?utf-8?B?SUpBcGhxRXg2MEtxWHZOcjd6S1Axc2ZGK1oyTGRrcm1OZ0N3STA1RUFBTGR2?=
- =?utf-8?B?blRzVGFRQ2hSVzNMcVo2aFpndG5ZeVlxOGFDU2Y3Zkk2Sm1WOUErM0FXdEFE?=
- =?utf-8?B?R1FNWVRIUDJ1aVBXUEZleldab2JvY2ZIMjJobHlZU1AwLzI5UXJiYXdRTHBK?=
- =?utf-8?B?VURvbmZnWGVKdDVvQkZLOXBOdlM5TFR5RmJ0L05Md21zQ2NxamxpY2U0cC9C?=
- =?utf-8?B?T2E4bVh2L0pSQjNFM1dYSDVRdlVCVXVqRHNxYU9oNFA3RHFtOGlOZ1hmZkFZ?=
- =?utf-8?B?RnpIVzIwS2VCQk80MEh4RU52NVJSMElSNG1ITmRLNVB1a3lHQ1c5RCtwSTlF?=
- =?utf-8?B?VDlQSUVVK0RTdHFtVWp3c1JiSTZHQURZMDVjN1ZReHRrUnhrWnFQQTNHL2E3?=
- =?utf-8?B?OFVVZ21HdEVBRFdEVWdrbGZJSkN5SU9sWkZkSnF6YUVqTDVoV1lzQVBzeXk2?=
- =?utf-8?B?bFYvTGtnaFE0T0I1RjF0ZjhoL3NKR0JJVFpEYjM0NlB2d1NpWkdLS3hPaEl1?=
- =?utf-8?B?MmRGM3dla3p6SWRUckYwTGc3NHVaSThnc2pYL292cTV0VXFkMU5LS1NuQm5N?=
- =?utf-8?B?ZVh3UjdFWWVzRXJVTklvc2J5c2FRRm4wQXlIRXBKTElsUGQ0Um1CYlhrYXd6?=
- =?utf-8?B?KzMvQ3luRmNBUnNGS1hWMUk2MUpid01Ld3NGc2JMSzNYZHl0VDRudXgzamNn?=
- =?utf-8?B?bEd3SVRYRGxXZTU0Myt2RmdHSHdabmtEREl3YUc2clZ6cHJVZVk5aWZmaHlO?=
- =?utf-8?B?RHpzUlZkUXFiSmQ0bktIVlg5ei9LaTk3c3NkZ2dheHBQdGlQdHV4ZVNiY0Rj?=
- =?utf-8?B?NHphSTZwUDBKMXJRcEJNOHRyK0pUNytHVWtpVHFGOXJFUnpya0NxSU9PZ1FR?=
- =?utf-8?B?RFh5ajJDcjZUOU5iNG9SdGN2Ny9BVkw1K0JmMFdQaVdOK2RaVEVoekVHZkxT?=
- =?utf-8?B?bzNCTDNjckZDWDg3cWxDeGFVVEkyelZkR3NsSVRqakIySDE3eGFpY1RrTzFK?=
- =?utf-8?B?Sm9LTHdoZzBxcHlId3lFVU9VZERDSVVtNEhsOHRQckpHT0w1TC9YbFgzSXhJ?=
- =?utf-8?B?WnNCVlpMSVZSYkZuR1IxNHluODJHcWEydlZQQjBuYThhdU5rWGliQjFBNjMw?=
- =?utf-8?Q?WsCVodipmTGTssWmTg=3D?=
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-80ceb.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: fd3a8721-537b-4faf-633c-08dbd907f5c2
-X-MS-Exchange-CrossTenant-AuthSource: AS8P193MB1285.EURP193.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Oct 2023 05:20:41.8858
+X-Microsoft-Antispam-Message-Info: 2fsOsjhzEKQK1KTYaxidoPswNiWIeTjkOCO6rQF2QCvjGK20dcgmtUtUgraXD0bMCgjD9loxhjJGjaoaY1b+M1AAYxtdeFQKK5tEpZut7vuzjaX0+LdEFTyKNdPe0racUQgrMb2HmD9dMuNuY/K6Wvkiy6gPC0/B7qdB5sD9A/7Lgs2/3F8fE+7MGlD4Sc8z0NadkdwepLaNRNSogODzv4RBeaXmtryAqiIT6CdEmJlgTIur5xLVkuqVxJJafMi5JbUA0siokarWoHL/iFslyPa0EzbDqswDW+AGk+JmBv5dpA8r3zl/eZaY1H21lgHtieZkMrzyBhKEKHwzAcB3dOry9T3eG2n02RQOVzA4yNKN+7PjhyppaabV3aBgCuQTqREZCd9iCip6QBpbFN+550t6XDPhu1JCD2yVyEc7C5CM49lrgj4pIq61xnMZvoUpiLWd10HPbCps+KQke4ZZ0XkwlqXrcsy4+oP+mAwlxjtaJ5wrZQ7KsJmfSVng2UVgGa+pWgr8NlA9TyT5nzhETqBJbNC04/wj2GnvmwpLIt9iY0zDswXvrvq12rHllZGN9m+7eE+VviITKk7L7RRKNDH77AgVJqQU3AJ51hktzgtOXF6TJKhjknW9iVehZCTvu2fTQoueGBb/pcwqlKk7+ekSczZXKEZLxH63TndB86MukNwX5/rFhX+H1OaFIRAjfRqe/6gAOZscgcintEf9y/n7DVx0mcGvW/kufIeSvOVA9N9ocHXRDyh12ZasA21PkBClHCKCxZ6fuu57dfhzVK5J5FmxB9tpKLEEKfTHHfleWv8wIKIqAeVlX+xGoD3D
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(376002)(396003)(39860400002)(136003)(346002)(230273577357003)(230922051799003)(230173577357003)(64100799003)(82310400011)(186009)(1800799009)(451199024)(46966006)(36840700001)(40470700004)(7696005)(6666004)(478600001)(83380400001)(16526019)(47076005)(26005)(2616005)(1076003)(336012)(426003)(2906002)(5660300002)(7416002)(41300700001)(54906003)(316002)(6636002)(70206006)(110136005)(4326008)(8676002)(8936002)(70586007)(36860700001)(86362001)(36756003)(81166007)(356005)(82740400003)(40480700001)(40460700003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Oct 2023 06:34:50.5651
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8P193MB1606
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,FORGED_MUA_MOZILLA,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: b578659c-867b-4efb-04b5-08dbd91251af
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BL6PEPF0001AB78.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYYPR12MB8963
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This introduces signal->exec_bprm, which is used to
-fix the case when at least one of the sibling threads
-is traced, and therefore the trace process may dead-lock
-in ptrace_attach, but de_thread will need to wait for the
-tracer to continue execution.
+Hi all:
 
-The solution is to detect this situation and allow
-ptrace_attach to continue by temporarily releasing the
-cred_guard_mutex, while de_thread() is still waiting for
-traced zombies to be eventually released by the tracer.
-In the case of the thread group leader we only have to wait
-for the thread to become a zombie, which may also need
-co-operation from the tracer due to PTRACE_O_TRACEEXIT.
+The core frequency is subjected to the process variation in semiconductors.
+Not all cores are able to reach the maximum frequency respecting the
+infrastructure limits. Consequently, AMD has redefined the concept of
+maximum frequency of a part. This means that a fraction of cores can reach
+maximum frequency. To find the best process scheduling policy for a given
+scenario, OS needs to know the core ordering informed by the platform through
+highest performance capability register of the CPPC interface.
 
-When a tracer wants to ptrace_attach a task that already
-is in execve, we simply retry the ptrace_may_access
-check while temporarily installing the new credentials
-and dumpability which are about to be used after execve
-completes.  If the ptrace_attach happens on a thread that
-is a sibling-thread of the thread doing execve, it is
-sufficient to check against the old credentials, as this
-thread will be waited for, before the new credentials are
-installed.
+Earlier implementations of amd-pstate preferred core only support a static
+core ranking and targeted performance. Now it has the ability to dynamically
+change the preferred core based on the workload and platform conditions and
+accounting for thermals and aging.
 
-Other threads die quickly since the cred_guard_mutex is
-released, but a deadly signal is already pending.  In case
-the mutex_lock_killable misses the signal, the non-zero
-current->signal->exec_bprm makes sure they release the
-mutex immediately and return with -ERESTARTNOINTR.
+Amd-pstate driver utilizes the functions and data structures provided by
+the ITMT architecture to enable the scheduler to favor scheduling on cores
+which can be get a higher frequency with lower voltage.
+We call it amd-pstate preferred core.
 
-This means there is no API change, unlike the previous
-version of this patch which was discussed here:
+Here sched_set_itmt_core_prio() is called to set priorities and
+sched_set_itmt_support() is called to enable ITMT feature.
+Amd-pstate driver uses the highest performance value to indicate
+the priority of CPU. The higher value has a higher priority.
 
-https://lore.kernel.org/lkml/b6537ae6-31b1-5c50-f32b-8b8332ace882@hotmail.de/
+Amd-pstate driver will provide an initial core ordering at boot time.
+It relies on the CPPC interface to communicate the core ranking to the
+operating system and scheduler to make sure that OS is choosing the cores
+with highest performance firstly for scheduling the process. When amd-pstate
+driver receives a message with the highest performance change, it will
+update the core ranking.
 
-See tools/testing/selftests/ptrace/vmaccess.c
-for a test case that gets fixed by this change.
+Changes from V9->V10:
+- cpufreq: amd-pstate:
+- - add judgement for highest_perf. When it is less than 255, the
+  preferred core feature is enabled. And it will set the priority.
+- - deleset "static u32 max_highest_perf" etc, because amd p-state
+  perferred coe does not require specail process for hotpulg.
 
-Note that since the test case was originally designed to
-test the ptrace_attach returning an error in this situation,
-the test expectation needed to be adjusted, to allow the
-API to succeed at the first attempt.
+Changes form V8->V9:
+- all:
+- - pick up Tested-By flag added by Oleksandr.
+- cpufreq: amd-pstate:
+- - pick up Review-By flag added by Wyes.
+- - ignore modification of bug.
+- - add a attribute of prefcore_ranking.
+- - modify data type conversion from u32 to int.
+- Documentation: amd-pstate:
+- - pick up Review-By flag added by Wyes.
 
-Signed-off-by: Bernd Edlinger <bernd.edlinger@hotmail.de>
----
- fs/exec.c                                 | 69 ++++++++++++++++-------
- fs/proc/base.c                            |  6 ++
- include/linux/cred.h                      |  1 +
- include/linux/sched/signal.h              | 18 ++++++
- kernel/cred.c                             | 28 +++++++--
- kernel/ptrace.c                           | 32 +++++++++++
- kernel/seccomp.c                          | 12 +++-
- tools/testing/selftests/ptrace/vmaccess.c | 23 +++++---
- 8 files changed, 155 insertions(+), 34 deletions(-)
+Changes form V7->V8:
+- all:
+- - pick up Review-By flag added by Mario and Ray.
+- cpufreq: amd-pstate:
+- - use hw_prefcore embeds into cpudata structure.
+- - delete preferred core init from cpu online/off.
 
-v10: Changes to previous version, make the PTRACE_ATTACH
-retun -EAGAIN, instead of execve return -ERESTARTSYS.
-Added some lessions learned to the description.
+Changes form V6->V7:
+- x86:
+- - Modify kconfig about X86_AMD_PSTATE.
+- cpufreq: amd-pstate:
+- - modify incorrect comments about scheduler_work().
+- - convert highest_perf data type.
+- - modify preferred core init when cpu init and online.
+- acpi: cppc:
+- - modify link of CPPC highest performance.
+- cpufreq:
+- - modify link of CPPC highest performance changed.
 
-v11: Check old and new credentials in PTRACE_ATTACH again without
-changing the API.
+Changes form V5->V6:
+- cpufreq: amd-pstate:
+- - modify the wrong tag order.
+- - modify warning about hw_prefcore sysfs attribute.
+- - delete duplicate comments.
+- - modify the variable name cppc_highest_perf to prefcore_ranking.
+- - modify judgment conditions for setting highest_perf.
+- - modify sysfs attribute for CPPC highest perf to pr_debug message.
+- Documentation: amd-pstate:
+- - modify warning: title underline too short.
 
-Note: I got actually one response from an automatic checker to the v11 patch,
+Changes form V4->V5:
+- cpufreq: amd-pstate:
+- - modify sysfs attribute for CPPC highest perf.
+- - modify warning about comments
+- - rebase linux-next
+- cpufreq: 
+- - Moidfy warning about function declarations.
+- Documentation: amd-pstate:
+- - align with ``amd-pstat``
 
-https://lore.kernel.org/lkml/202107121344.wu68hEPF-lkp@intel.com/
+Changes form V3->V4:
+- Documentation: amd-pstate:
+- - Modify inappropriate descriptions.
 
-which is complaining about:
+Changes form V2->V3:
+- x86:
+- - Modify kconfig and description.
+- cpufreq: amd-pstate: 
+- - Add Co-developed-by tag in commit message.
+- cpufreq:
+- - Modify commit message.
+- Documentation: amd-pstate:
+- - Modify inappropriate descriptions.
 
->> kernel/ptrace.c:425:26: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct cred const *old_cred @@     got struct cred const [noderef] __rcu *real_cred @@
+Changes form V1->V2:
+- acpi: cppc:
+- - Add reference link.
+- cpufreq:
+- - Moidfy link error.
+- cpufreq: amd-pstate: 
+- - Init the priorities of all online CPUs
+- - Use a single variable to represent the status of preferred core.
+- Documentation:
+- - Default enabled preferred core.
+- Documentation: amd-pstate: 
+- - Modify inappropriate descriptions.
+- - Default enabled preferred core.
+- - Use a single variable to represent the status of preferred core.
 
-   417			struct linux_binprm *bprm = task->signal->exec_bprm;
-   418			const struct cred *old_cred;
-   419			struct mm_struct *old_mm;
-   420	
-   421			retval = down_write_killable(&task->signal->exec_update_lock);
-   422			if (retval)
-   423				goto unlock_creds;
-   424			task_lock(task);
- > 425			old_cred = task->real_cred;
+Meng Li (7):
+  x86: Drop CPU_SUP_INTEL from SCHED_MC_PRIO for the expansion.
+  acpi: cppc: Add get the highest performance cppc control
+  cpufreq: amd-pstate: Enable amd-pstate preferred core supporting.
+  cpufreq: Add a notification message that the highest perf has changed
+  cpufreq: amd-pstate: Update amd-pstate preferred core ranking
+    dynamically
+  Documentation: amd-pstate: introduce amd-pstate preferred core
+  Documentation: introduce amd-pstate preferrd core mode kernel command
+    line options
 
-v12: Essentially identical to v11.
+ .../admin-guide/kernel-parameters.txt         |   5 +
+ Documentation/admin-guide/pm/amd-pstate.rst   |  59 +++++-
+ arch/x86/Kconfig                              |   5 +-
+ drivers/acpi/cppc_acpi.c                      |  13 ++
+ drivers/acpi/processor_driver.c               |   6 +
+ drivers/cpufreq/amd-pstate.c                  | 187 ++++++++++++++++--
+ drivers/cpufreq/cpufreq.c                     |  13 ++
+ include/acpi/cppc_acpi.h                      |   5 +
+ include/linux/amd-pstate.h                    |  10 +
+ include/linux/cpufreq.h                       |   5 +
+ 10 files changed, 288 insertions(+), 20 deletions(-)
 
-- Fixed a minor merge conflict in linux v5.17, and fixed the
-above mentioned nit by adding __rcu to the declaration.
-
-- re-tested the patch with all linux versions from v5.11 to v6.6
-
-v10 was an alternative approach which did imply an API change.
-But I would prefer to avoid such an API change.
-
-The difficult part is getting the right dumpability flags assigned
-before de_thread starts, hope you like this version.
-If not, the v10 is of course also acceptable.
-
-
-Thanks
-Bernd.
-
-diff --git a/fs/exec.c b/fs/exec.c
-index 2f2b0acec4f0..902d3b230485 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -1041,11 +1041,13 @@ static int exec_mmap(struct mm_struct *mm)
- 	return 0;
- }
- 
--static int de_thread(struct task_struct *tsk)
-+static int de_thread(struct task_struct *tsk, struct linux_binprm *bprm)
- {
- 	struct signal_struct *sig = tsk->signal;
- 	struct sighand_struct *oldsighand = tsk->sighand;
- 	spinlock_t *lock = &oldsighand->siglock;
-+	struct task_struct *t = tsk;
-+	bool unsafe_execve_in_progress = false;
- 
- 	if (thread_group_empty(tsk))
- 		goto no_thread_group;
-@@ -1068,6 +1070,19 @@ static int de_thread(struct task_struct *tsk)
- 	if (!thread_group_leader(tsk))
- 		sig->notify_count--;
- 
-+	while_each_thread(tsk, t) {
-+		if (unlikely(t->ptrace)
-+		    && (t != tsk->group_leader || !t->exit_state))
-+			unsafe_execve_in_progress = true;
-+	}
-+
-+	if (unlikely(unsafe_execve_in_progress)) {
-+		spin_unlock_irq(lock);
-+		sig->exec_bprm = bprm;
-+		mutex_unlock(&sig->cred_guard_mutex);
-+		spin_lock_irq(lock);
-+	}
-+
- 	while (sig->notify_count) {
- 		__set_current_state(TASK_KILLABLE);
- 		spin_unlock_irq(lock);
-@@ -1158,6 +1173,11 @@ static int de_thread(struct task_struct *tsk)
- 		release_task(leader);
- 	}
- 
-+	if (unlikely(unsafe_execve_in_progress)) {
-+		mutex_lock(&sig->cred_guard_mutex);
-+		sig->exec_bprm = NULL;
-+	}
-+
- 	sig->group_exec_task = NULL;
- 	sig->notify_count = 0;
- 
-@@ -1169,6 +1189,11 @@ static int de_thread(struct task_struct *tsk)
- 	return 0;
- 
- killed:
-+	if (unlikely(unsafe_execve_in_progress)) {
-+		mutex_lock(&sig->cred_guard_mutex);
-+		sig->exec_bprm = NULL;
-+	}
-+
- 	/* protects against exit_notify() and __exit_signal() */
- 	read_lock(&tasklist_lock);
- 	sig->group_exec_task = NULL;
-@@ -1253,6 +1278,24 @@ int begin_new_exec(struct linux_binprm * bprm)
- 	if (retval)
- 		return retval;
- 
-+	/* If the binary is not readable then enforce mm->dumpable=0 */
-+	would_dump(bprm, bprm->file);
-+	if (bprm->have_execfd)
-+		would_dump(bprm, bprm->executable);
-+
-+	/*
-+	 * Figure out dumpability. Note that this checking only of current
-+	 * is wrong, but userspace depends on it. This should be testing
-+	 * bprm->secureexec instead.
-+	 */
-+	if (bprm->interp_flags & BINPRM_FLAGS_ENFORCE_NONDUMP ||
-+	    is_dumpability_changed(current_cred(), bprm->cred) ||
-+	    !(uid_eq(current_euid(), current_uid()) &&
-+	      gid_eq(current_egid(), current_gid())))
-+		set_dumpable(bprm->mm, suid_dumpable);
-+	else
-+		set_dumpable(bprm->mm, SUID_DUMP_USER);
-+
- 	/*
- 	 * Ensure all future errors are fatal.
- 	 */
-@@ -1261,7 +1304,7 @@ int begin_new_exec(struct linux_binprm * bprm)
- 	/*
- 	 * Make this the only thread in the thread group.
- 	 */
--	retval = de_thread(me);
-+	retval = de_thread(me, bprm);
- 	if (retval)
- 		goto out;
- 
-@@ -1284,11 +1327,6 @@ int begin_new_exec(struct linux_binprm * bprm)
- 	if (retval)
- 		goto out;
- 
--	/* If the binary is not readable then enforce mm->dumpable=0 */
--	would_dump(bprm, bprm->file);
--	if (bprm->have_execfd)
--		would_dump(bprm, bprm->executable);
--
- 	/*
- 	 * Release all of the old mmap stuff
- 	 */
-@@ -1350,18 +1388,6 @@ int begin_new_exec(struct linux_binprm * bprm)
- 
- 	me->sas_ss_sp = me->sas_ss_size = 0;
- 
--	/*
--	 * Figure out dumpability. Note that this checking only of current
--	 * is wrong, but userspace depends on it. This should be testing
--	 * bprm->secureexec instead.
--	 */
--	if (bprm->interp_flags & BINPRM_FLAGS_ENFORCE_NONDUMP ||
--	    !(uid_eq(current_euid(), current_uid()) &&
--	      gid_eq(current_egid(), current_gid())))
--		set_dumpable(current->mm, suid_dumpable);
--	else
--		set_dumpable(current->mm, SUID_DUMP_USER);
--
- 	perf_event_exec();
- 	__set_task_comm(me, kbasename(bprm->filename), true);
- 
-@@ -1480,6 +1506,11 @@ static int prepare_bprm_creds(struct linux_binprm *bprm)
- 	if (mutex_lock_interruptible(&current->signal->cred_guard_mutex))
- 		return -ERESTARTNOINTR;
- 
-+	if (unlikely(current->signal->exec_bprm)) {
-+		mutex_unlock(&current->signal->cred_guard_mutex);
-+		return -ERESTARTNOINTR;
-+	}
-+
- 	bprm->cred = prepare_exec_creds();
- 	if (likely(bprm->cred))
- 		return 0;
-diff --git a/fs/proc/base.c b/fs/proc/base.c
-index ffd54617c354..0da9adfadb48 100644
---- a/fs/proc/base.c
-+++ b/fs/proc/base.c
-@@ -2788,6 +2788,12 @@ static ssize_t proc_pid_attr_write(struct file * file, const char __user * buf,
- 	if (rv < 0)
- 		goto out_free;
- 
-+	if (unlikely(current->signal->exec_bprm)) {
-+		mutex_unlock(&current->signal->cred_guard_mutex);
-+		rv = -ERESTARTNOINTR;
-+		goto out_free;
-+	}
-+
- 	rv = security_setprocattr(PROC_I(inode)->op.lsm,
- 				  file->f_path.dentry->d_name.name, page,
- 				  count);
-diff --git a/include/linux/cred.h b/include/linux/cred.h
-index f923528d5cc4..b01e309f5686 100644
---- a/include/linux/cred.h
-+++ b/include/linux/cred.h
-@@ -159,6 +159,7 @@ extern const struct cred *get_task_cred(struct task_struct *);
- extern struct cred *cred_alloc_blank(void);
- extern struct cred *prepare_creds(void);
- extern struct cred *prepare_exec_creds(void);
-+extern bool is_dumpability_changed(const struct cred *, const struct cred *);
- extern int commit_creds(struct cred *);
- extern void abort_creds(struct cred *);
- extern const struct cred *override_creds(const struct cred *);
-diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
-index 0014d3adaf84..14df7073a0a8 100644
---- a/include/linux/sched/signal.h
-+++ b/include/linux/sched/signal.h
-@@ -234,9 +234,27 @@ struct signal_struct {
- 	struct mm_struct *oom_mm;	/* recorded mm when the thread group got
- 					 * killed by the oom killer */
- 
-+	struct linux_binprm *exec_bprm;	/* Used to check ptrace_may_access
-+					 * against new credentials while
-+					 * de_thread is waiting for other
-+					 * traced threads to terminate.
-+					 * Set while de_thread is executing.
-+					 * The cred_guard_mutex is released
-+					 * after de_thread() has called
-+					 * zap_other_threads(), therefore
-+					 * a fatal signal is guaranteed to be
-+					 * already pending in the unlikely
-+					 * event, that
-+					 * current->signal->exec_bprm happens
-+					 * to be non-zero after the
-+					 * cred_guard_mutex was acquired.
-+					 */
-+
- 	struct mutex cred_guard_mutex;	/* guard against foreign influences on
- 					 * credential calculations
- 					 * (notably. ptrace)
-+					 * Held while execve runs, except when
-+					 * a sibling thread is being traced.
- 					 * Deprecated do not use in new code.
- 					 * Use exec_update_lock instead.
- 					 */
-diff --git a/kernel/cred.c b/kernel/cred.c
-index 98cb4eca23fb..586cb6c7cf6b 100644
---- a/kernel/cred.c
-+++ b/kernel/cred.c
-@@ -433,6 +433,28 @@ static bool cred_cap_issubset(const struct cred *set, const struct cred *subset)
- 	return false;
- }
- 
-+/**
-+ * is_dumpability_changed - Will changing creds from old to new
-+ * affect the dumpability in commit_creds?
-+ *
-+ * Return: false - dumpability will not be changed in commit_creds.
-+ * Return: true  - dumpability will be changed to non-dumpable.
-+ *
-+ * @old: The old credentials
-+ * @new: The new credentials
-+ */
-+bool is_dumpability_changed(const struct cred *old, const struct cred *new)
-+{
-+	if (!uid_eq(old->euid, new->euid) ||
-+	    !gid_eq(old->egid, new->egid) ||
-+	    !uid_eq(old->fsuid, new->fsuid) ||
-+	    !gid_eq(old->fsgid, new->fsgid) ||
-+	    !cred_cap_issubset(old, new))
-+		return true;
-+
-+	return false;
-+}
-+
- /**
-  * commit_creds - Install new credentials upon the current task
-  * @new: The credentials to be assigned
-@@ -467,11 +489,7 @@ int commit_creds(struct cred *new)
- 	get_cred(new); /* we will require a ref for the subj creds too */
- 
- 	/* dumpability changes */
--	if (!uid_eq(old->euid, new->euid) ||
--	    !gid_eq(old->egid, new->egid) ||
--	    !uid_eq(old->fsuid, new->fsuid) ||
--	    !gid_eq(old->fsgid, new->fsgid) ||
--	    !cred_cap_issubset(old, new)) {
-+	if (is_dumpability_changed(old, new)) {
- 		if (task->mm)
- 			set_dumpable(task->mm, suid_dumpable);
- 		task->pdeath_signal = 0;
-diff --git a/kernel/ptrace.c b/kernel/ptrace.c
-index 443057bee87c..eb1c450bb7d7 100644
---- a/kernel/ptrace.c
-+++ b/kernel/ptrace.c
-@@ -20,6 +20,7 @@
- #include <linux/pagemap.h>
- #include <linux/ptrace.h>
- #include <linux/security.h>
-+#include <linux/binfmts.h>
- #include <linux/signal.h>
- #include <linux/uio.h>
- #include <linux/audit.h>
-@@ -435,6 +436,28 @@ static int ptrace_attach(struct task_struct *task, long request,
- 	if (retval)
- 		goto unlock_creds;
- 
-+	if (unlikely(task->in_execve)) {
-+		struct linux_binprm *bprm = task->signal->exec_bprm;
-+		const struct cred __rcu *old_cred;
-+		struct mm_struct *old_mm;
-+
-+		retval = down_write_killable(&task->signal->exec_update_lock);
-+		if (retval)
-+			goto unlock_creds;
-+		task_lock(task);
-+		old_cred = task->real_cred;
-+		old_mm = task->mm;
-+		rcu_assign_pointer(task->real_cred, bprm->cred);
-+		task->mm = bprm->mm;
-+		retval = __ptrace_may_access(task, PTRACE_MODE_ATTACH_REALCREDS);
-+		rcu_assign_pointer(task->real_cred, old_cred);
-+		task->mm = old_mm;
-+		task_unlock(task);
-+		up_write(&task->signal->exec_update_lock);
-+		if (retval)
-+			goto unlock_creds;
-+	}
-+
- 	write_lock_irq(&tasklist_lock);
- 	retval = -EPERM;
- 	if (unlikely(task->exit_state))
-@@ -508,6 +531,14 @@ static int ptrace_traceme(void)
- {
- 	int ret = -EPERM;
- 
-+	if (mutex_lock_interruptible(&current->signal->cred_guard_mutex))
-+		return -ERESTARTNOINTR;
-+
-+	if (unlikely(current->signal->exec_bprm)) {
-+		mutex_unlock(&current->signal->cred_guard_mutex);
-+		return -ERESTARTNOINTR;
-+	}
-+
- 	write_lock_irq(&tasklist_lock);
- 	/* Are we already being traced? */
- 	if (!current->ptrace) {
-@@ -523,6 +554,7 @@ static int ptrace_traceme(void)
- 		}
- 	}
- 	write_unlock_irq(&tasklist_lock);
-+	mutex_unlock(&current->signal->cred_guard_mutex);
- 
- 	return ret;
- }
-diff --git a/kernel/seccomp.c b/kernel/seccomp.c
-index 255999ba9190..b29bbfa0b044 100644
---- a/kernel/seccomp.c
-+++ b/kernel/seccomp.c
-@@ -1955,9 +1955,15 @@ static long seccomp_set_mode_filter(unsigned int flags,
- 	 * Make sure we cannot change seccomp or nnp state via TSYNC
- 	 * while another thread is in the middle of calling exec.
- 	 */
--	if (flags & SECCOMP_FILTER_FLAG_TSYNC &&
--	    mutex_lock_killable(&current->signal->cred_guard_mutex))
--		goto out_put_fd;
-+	if (flags & SECCOMP_FILTER_FLAG_TSYNC) {
-+		if (mutex_lock_killable(&current->signal->cred_guard_mutex))
-+			goto out_put_fd;
-+
-+		if (unlikely(current->signal->exec_bprm)) {
-+			mutex_unlock(&current->signal->cred_guard_mutex);
-+			goto out_put_fd;
-+		}
-+	}
- 
- 	spin_lock_irq(&current->sighand->siglock);
- 
-diff --git a/tools/testing/selftests/ptrace/vmaccess.c b/tools/testing/selftests/ptrace/vmaccess.c
-index 4db327b44586..3b7d81fb99bb 100644
---- a/tools/testing/selftests/ptrace/vmaccess.c
-+++ b/tools/testing/selftests/ptrace/vmaccess.c
-@@ -39,8 +39,15 @@ TEST(vmaccess)
- 	f = open(mm, O_RDONLY);
- 	ASSERT_GE(f, 0);
- 	close(f);
--	f = kill(pid, SIGCONT);
--	ASSERT_EQ(f, 0);
-+	f = waitpid(-1, NULL, 0);
-+	ASSERT_NE(f, -1);
-+	ASSERT_NE(f, 0);
-+	ASSERT_NE(f, pid);
-+	f = waitpid(-1, NULL, 0);
-+	ASSERT_EQ(f, pid);
-+	f = waitpid(-1, NULL, 0);
-+	ASSERT_EQ(f, -1);
-+	ASSERT_EQ(errno, ECHILD);
- }
- 
- TEST(attach)
-@@ -57,22 +64,24 @@ TEST(attach)
- 
- 	sleep(1);
- 	k = ptrace(PTRACE_ATTACH, pid, 0L, 0L);
--	ASSERT_EQ(errno, EAGAIN);
--	ASSERT_EQ(k, -1);
-+	ASSERT_EQ(k, 0);
- 	k = waitpid(-1, &s, WNOHANG);
- 	ASSERT_NE(k, -1);
- 	ASSERT_NE(k, 0);
- 	ASSERT_NE(k, pid);
- 	ASSERT_EQ(WIFEXITED(s), 1);
- 	ASSERT_EQ(WEXITSTATUS(s), 0);
--	sleep(1);
--	k = ptrace(PTRACE_ATTACH, pid, 0L, 0L);
-+	k = waitpid(-1, &s, 0);
-+	ASSERT_EQ(k, pid);
-+	ASSERT_EQ(WIFSTOPPED(s), 1);
-+	ASSERT_EQ(WSTOPSIG(s), SIGTRAP);
-+	k = ptrace(PTRACE_CONT, pid, 0L, 0L);
- 	ASSERT_EQ(k, 0);
- 	k = waitpid(-1, &s, 0);
- 	ASSERT_EQ(k, pid);
- 	ASSERT_EQ(WIFSTOPPED(s), 1);
- 	ASSERT_EQ(WSTOPSIG(s), SIGSTOP);
--	k = ptrace(PTRACE_DETACH, pid, 0L, 0L);
-+	k = ptrace(PTRACE_CONT, pid, 0L, 0L);
- 	ASSERT_EQ(k, 0);
- 	k = waitpid(-1, &s, 0);
- 	ASSERT_EQ(k, pid);
 -- 
-2.39.2
+2.34.1
 
