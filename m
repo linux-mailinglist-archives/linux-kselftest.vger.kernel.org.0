@@ -2,237 +2,163 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6B2F7DBF99
-	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Oct 2023 19:16:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 104347DBFC6
+	for <lists+linux-kselftest@lfdr.de>; Mon, 30 Oct 2023 19:21:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231694AbjJ3SQ5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 30 Oct 2023 14:16:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40268 "EHLO
+        id S234002AbjJ3SVm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 30 Oct 2023 14:21:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232556AbjJ3SQz (ORCPT
+        with ESMTP id S233549AbjJ3SVO (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 30 Oct 2023 14:16:55 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44459FE
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Oct 2023 11:16:48 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-9d465d1c86bso156542166b.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Oct 2023 11:16:48 -0700 (PDT)
+        Mon, 30 Oct 2023 14:21:14 -0400
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6185C18F
+        for <linux-kselftest@vger.kernel.org>; Mon, 30 Oct 2023 11:20:50 -0700 (PDT)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-1e98e97c824so2959002fac.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 30 Oct 2023 11:20:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1698689806; x=1699294606; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XNAE/3aC2lNL4lcg+U/6tDVAD81XY3dhOt1l+j+r1Y0=;
-        b=CsgCQ/aRSI8oeNykPd1H3Vw1bU3hAd9V8Wgmag9klY8oNhYgz805J8JB47fDUwaLNy
-         /d97sxUTzOdvBGXWrjqNCjbs5gkrwKk9OAA4Q5hNCGEExXMa22xCOIb6u3dkEopYKV74
-         R6HBUhdiFKu9uzNeIFwK/gf3UWp4xFTK0GqC41YRi9e6YF+qx30rFlWi9pkB7dgvJchg
-         j2ZuJmzoVwMacN0Jty1kpB4FL2im4MnaYBGOOzmwi4YOEOi0oCtZMMY4clJvlSAoeiZH
-         FwQg8IjyNGeNCkc5/7lQh0SruYqybExeJhC1fKZVW6xATsAmY4xnI1z77m+dsUszz20j
-         jeWA==
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1698690049; x=1699294849; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=e1J6ayX3xWRXn3jFh+UicP6oQyrfRWq421uUTUoQ+rs=;
+        b=bBy2NxYWbwO7tQIC3nMLGdzixXNd3xOpds5eS8prDVpLJz9ofQCUOHTGSyUmKbzFuH
+         WkfzgbVtEdulu2nPLgPCmSRlDIsLVwLRasR9ARP0iplb4WnGuUjtqe39Ul3hXsF2WfGh
+         g+4XiVDv5wMwfZejki/dmmYBYICd0uCT65hgLkXPEiYRcEeGScfOJR+9zFh2Rhrgd6sH
+         PvKN47ufMIkKjaV7Gtxvk2a6kOMv3szBVRXqsumjb4u0AsGiaPk2ZY7Jl1dtYPjpCIZw
+         cKGBZkAG5tCCOs0kysQOR9p3I61B5WoOUXOwzLjQFBT1cFJT1Fq4H89QzMdiyZFAFYoi
+         DGSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698689806; x=1699294606;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XNAE/3aC2lNL4lcg+U/6tDVAD81XY3dhOt1l+j+r1Y0=;
-        b=Rp6q1RjN0t55gqx9UR8mere1rLTLzUOWUOWQtl/77dei1hzHgIz4NxhnfyIPwVP8Lh
-         j2wdhKmOamybv2Dk4ifqs+QdVtS7jkqOPXmcSMPNJEiqoWBNmO+LUItqpQ/r1XvTQdG/
-         yaVeM2uwe5MZRrZi8w8cGs8lxDJMwMVqytX0V6Esy/9j0pGpMeEQHnZMa+8SMKCzndDR
-         HtMMdkijPI0EyXG3biweAJQsCgoE3Or7aPUl2j5enCjeG891b/r1ZyrM0otEzDfQHGtN
-         zUyIqi6WGEqv/7kETWybK0EyS68tm/eXtBkwraIw2iZImZCwUMw1SBil9eBD2wV/HYZb
-         Lmhg==
-X-Gm-Message-State: AOJu0Yyo00wv3gel9TAIioJJsz44i0QpcxF979kwRD6ZS5pxasomVuVw
-        jiBB+PEyBrnQ+nnZeeBUdiQP0GoOKvInXbpRXVVMtw==
-X-Google-Smtp-Source: AGHT+IENwS1N7Hx+TRzjhWYcV0enr0HvAOm8fD5bZdSc53hLpUYyGMmqwwxUWxQxThG/uKP/3FP8UjKuG236SN4+FF0=
-X-Received: by 2002:a17:907:3f20:b0:9be:e278:4d47 with SMTP id
- hq32-20020a1709073f2000b009bee2784d47mr9500540ejc.27.1698689806504; Mon, 30
- Oct 2023 11:16:46 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1698690049; x=1699294849;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=e1J6ayX3xWRXn3jFh+UicP6oQyrfRWq421uUTUoQ+rs=;
+        b=EvYapvdYg+Rw3yjkqbo5cTb4XBBWms+jqLvotPEAk3t8fq67n8wTE6JEqzr3n+eDbu
+         HUlcbc6e0SbdXbzhc0Frm+VpZkNkB1beuQGp0coiVymiq65TWr+8kNgfchz2ttKAxTAq
+         HX8DH+vOKqPb3XznCxlkZWT3muiLOUsU+0YjK3YJWZ0kmZ78JY5ZXZ564YBCnYnO+ymT
+         T26n+zSmidxenopQSQgR4lmnDEUF/BiGPpi5DGReBHkuxD7nI07XPUyqCPCdK8JbrHpH
+         vZ1jpeGY0BiyF2KdjMBpBVL2C4GKFymWothZpHL70YHMutxvf8vsm4p7S7z2Oa6cna6b
+         B4sQ==
+X-Gm-Message-State: AOJu0YxCo0VhUgpUQENOswgyG8b/Xx/OQVlFhhwNT28jruI/93KKXd5m
+        2cflm6CuZoyOLErXx3ot9JQc9A==
+X-Google-Smtp-Source: AGHT+IE/wYH2nJOygVOxBR+Ydhxd4KaPiyeEuu6mze9iI9opDdaANSiaRAOS6fPZKFMVz8Mg6Vx1WA==
+X-Received: by 2002:a05:6870:b689:b0:1e9:8bd9:7aaa with SMTP id cy9-20020a056870b68900b001e98bd97aaamr276774oab.12.1698690048774;
+        Mon, 30 Oct 2023 11:20:48 -0700 (PDT)
+Received: from debug.ba.rivosinc.com ([64.71.180.162])
+        by smtp.gmail.com with ESMTPSA id m3-20020a9d4c83000000b006b87f593877sm1503470otf.37.2023.10.30.11.20.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Oct 2023 11:20:48 -0700 (PDT)
+Date:   Mon, 30 Oct 2023 11:20:45 -0700
+From:   Deepak Gupta <debug@rivosinc.com>
+To:     "Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>
+Cc:     Mark Brown <broonie@kernel.org>,
+        "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "brauner@kernel.org" <brauner@kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "mgorman@suse.de" <mgorman@suse.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "fweimer@redhat.com" <fweimer@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
+        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "vschneid@redhat.com" <vschneid@redhat.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "bristot@redhat.com" <bristot@redhat.com>,
+        "will@kernel.org" <will@kernel.org>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "jannh@google.com" <jannh@google.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "bsegall@google.com" <bsegall@google.com>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "juri.lelli@redhat.com" <juri.lelli@redhat.com>, nd@arm.com
+Subject: Re: [PATCH RFC RFT 2/5] fork: Add shadow stack support to clone3()
+Message-ID: <ZT/z/b9P8KLuZEFh@debug.ba.rivosinc.com>
+References: <20231023-clone3-shadow-stack-v1-0-d867d0b5d4d0@kernel.org>
+ <20231023-clone3-shadow-stack-v1-2-d867d0b5d4d0@kernel.org>
+ <dc9a3dd544bbf859142c5582011a924b1c1bf6ed.camel@intel.com>
+ <8b0c9332-ba56-4259-a71f-9789d28391f1@sirena.org.uk>
+ <2ec0be71ade109873445a95f3f3c107711bb0943.camel@intel.com>
+ <807a8142-7a8e-4563-9859-8e928156d7e5@sirena.org.uk>
+ <ZTrOw97NFjUpANMg@debug.ba.rivosinc.com>
+ <ZTuj565SqIb9KjQr@arm.com>
+ <ZTxGovqKdhA5hYMz@debug.ba.rivosinc.com>
+ <ZT+V5VlXg/PsIfpM@arm.com>
 MIME-Version: 1.0
-References: <20231024203302.1920362-1-nphamcs@gmail.com> <20231024203302.1920362-3-nphamcs@gmail.com>
- <CAJD7tkZM4aOAwc4nRiU1PHofxHeZmV-NNGP5-E7X88ivRC7Pgw@mail.gmail.com> <CAKEwX=Nr7xJYpL2nE_ob0dWg9rnfoz67OMe_wvGsKjxboo1H+A@mail.gmail.com>
-In-Reply-To: <CAKEwX=Nr7xJYpL2nE_ob0dWg9rnfoz67OMe_wvGsKjxboo1H+A@mail.gmail.com>
-From:   Yosry Ahmed <yosryahmed@google.com>
-Date:   Mon, 30 Oct 2023 11:16:10 -0700
-Message-ID: <CAJD7tkZ7PPQmWu9UVH7WS3KFjmNW3q=JoMASmYtUb-Uy702iJg@mail.gmail.com>
-Subject: Re: [PATCH v4 2/5] zswap: make shrinking memcg-aware
-To:     Nhat Pham <nphamcs@gmail.com>
-Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org,
-        cerasuolodomenico@gmail.com, sjenning@redhat.com,
-        ddstreet@ieee.org, vitaly.wool@konsulko.com, mhocko@kernel.org,
-        roman.gushchin@linux.dev, shakeelb@google.com,
-        muchun.song@linux.dev, chrisl@kernel.org, linux-mm@kvack.org,
-        kernel-team@meta.com, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, shuah@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <ZT+V5VlXg/PsIfpM@arm.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-> > [..]
-> > > +/*********************************
-> > > +* lru functions
-> > > +**********************************/
-> > > +static bool zswap_lru_add(struct list_lru *list_lru, struct zswap_entry *entry)
-> > > +{
-> > > +       struct mem_cgroup *memcg = get_mem_cgroup_from_entry(entry);
-> > > +       int nid = entry_to_nid(entry);
-> > > +       bool added = list_lru_add(list_lru, &entry->lru, nid, memcg);
-> > > +
-> > > +       mem_cgroup_put(memcg);
-> >
-> > Still not fond of the get/put pattern but okay..
+On Mon, Oct 30, 2023 at 11:39:17AM +0000, Szabolcs.Nagy@arm.com wrote:
+>The 10/27/2023 16:24, Deepak Gupta wrote:
+>> On Fri, Oct 27, 2023 at 12:49:59PM +0100, Szabolcs.Nagy@arm.com wrote:
+>> > no. the lifetime is the issue: a stack in principle can outlive
+>> > a thread and resumed even after the original thread exited.
+>> > for that to work the shadow stack has to outlive the thread too.
+>>
+>> I understand an application can pre-allocate a pool of stack and re-use
+>> them whenever it's spawning new threads using clone3 system call.
+>>
+>> However, once a new thread has been spawned how can it resume?
 >
-> Actually, Johannes and I took another look to see if we can replace
-> the memcg reference getting with just rcu_read_lock().
+>a thread can getcontext then exit. later another thread
+>can setcontext and execute on the stack of the exited
+>thread and return to a previous stack frame there.
 >
-> It seems there might be a race between zswap LRU manipulation
-> and memcg offlining - not just with the rcu_read_lock() idea, but also
-> with our current implementation!
->
-> I'll shoot another email with more details later when I'm sure of it
-> one way or another...
->
+>(unlikely to work on runtimes where tls or thread id is
+>exposed and thus may be cached on the stack. so not for
+>posix.. but e.g. a go runtime could do this)
 
-Interesting, well at least something came out of my complaining :)
-
-> > [..]
-> > > @@ -652,28 +679,37 @@ static int zswap_reclaim_entry(struct zswap_pool *pool)
-> > >          */
-> > >         swpoffset = swp_offset(entry->swpentry);
-> > >         tree = zswap_trees[swp_type(entry->swpentry)];
-> > > -       spin_unlock(&pool->lru_lock);
-> > > +       list_lru_isolate(l, item);
-> > > +       /*
-> > > +        * It's safe to drop the lock here because we return either
-> > > +        * LRU_REMOVED_RETRY or LRU_RETRY.
-> > > +        */
-> > > +       spin_unlock(lock);
-> > >
-> > >         /* Check for invalidate() race */
-> > >         spin_lock(&tree->lock);
-> > > -       if (entry != zswap_rb_search(&tree->rbroot, swpoffset)) {
-> > > -               ret = -EAGAIN;
-> > > +       if (entry != zswap_rb_search(&tree->rbroot, swpoffset))
-> > >                 goto unlock;
-> > > -       }
-> > > +
-> > >         /* Hold a reference to prevent a free during writeback */
-> > >         zswap_entry_get(entry);
-> > >         spin_unlock(&tree->lock);
-> > >
-> > > -       ret = zswap_writeback_entry(entry, tree);
-> > > +       writeback_result = zswap_writeback_entry(entry, tree);
-> > >
-> > >         spin_lock(&tree->lock);
-> > > -       if (ret) {
-> > > -               /* Writeback failed, put entry back on LRU */
-> > > -               spin_lock(&pool->lru_lock);
-> > > -               list_move(&entry->lru, &pool->lru);
-> > > -               spin_unlock(&pool->lru_lock);
-> > > +       if (writeback_result) {
-> > > +               zswap_reject_reclaim_fail++;
-> > > +               memcg = get_mem_cgroup_from_entry(entry);
-> >
-> > Can this return NULL? Seems like we don't check the return in most/all places.
->
-> I believe so, but memcg experts should fact check me on this.
-
-If that's the case, there should be NULL checks, no?
-
-> It's roughly the same pattern as zswap charging/uncharging:
->
-> obj_cgroup_uncharge_zswap(entry->objcg, entry->length)
-> -> getting memcg (under rcu_read_lock())
->
-> >
-> > > +               spin_lock(lock);
-> > > +               /* we cannot use zswap_lru_add here, because it increments node's lru count */
-> > > +               list_lru_putback(&entry->pool->list_lru, item, entry_to_nid(entry), memcg);
-> >
-> > Perhaps we can move this call with the memcg get/put to a helper like
-> > add/del? (e.g. zswap_lru_putback)
-> >
-> > We would need to move get_mem_cgroup_from_entry() into the lock but I
-> > think that's okay.
->
-> We probably could, but that sounds like extra code for not a lot of gains, no?
-
-I don't feel strongly, just a fan of consistency.
+Aah then as you mentioned, we basically need clear lifetime rules around
+their creation and deletion.
+Because `getcontext/swapcontext/setcontext` can be updated to save shadow
+stack token on stack itself and use that to resume. It's just lifetime
+that needs to be managed.
 
 >
-> >
-> > > +               spin_unlock(lock);
-> > > +               mem_cgroup_put(memcg);
-> > > +               ret = LRU_RETRY;
-> > >                 goto put_unlock;
-> > >         }
-> > > +       zswap_written_back_pages++;
-> > >
-> > >         /*
-> > >          * Writeback started successfully, the page now belongs to the
-[..]
-> > > @@ -696,15 +759,17 @@ static void shrink_worker(struct work_struct *w)
-> > >                                                 shrink_work);
-> > >         int ret, failures = 0;
-> > >
-> > > +       /* global reclaim will select cgroup in a round-robin fashion. */
-> > >         do {
-> > > -               ret = zswap_reclaim_entry(pool);
-> > > -               if (ret) {
-> > > -                       zswap_reject_reclaim_fail++;
-> > > -                       if (ret != -EAGAIN)
-> > > -                               break;
-> > > -                       if (++failures == MAX_RECLAIM_RETRIES)
-> > > -                               break;
-> > > -               }
-> > > +               pool->next_shrink = mem_cgroup_iter(NULL, pool->next_shrink, NULL);
-> >
-> > I think this can be a problem. We hold a ref to a memcg here until the
-> > next time we shrink, which can be a long time IIUC. This can cause the
-> > memcg to linger as a zombie. I understand it is one memcg per-zswap
-> > pool, but I am still unsure about it.
-> >
-> > MGLRU maintains a memcg LRU for global reclaim that gets properly
-> > cleaned up when a memcg is going away, so that's one option, although
-> > complicated.
-> >
-> > A second option would be to hold a pointer to the objcg instead, which
-> > should be less problematic (although we are still holding that objcg
-> > hostage indefinitely). The problem here is that if the objcg gets
-> > reparented, next time we will start at the parent of the memcg we
-> > stopped at last time, which tbh doesn't sound bad at all to me.
-> >
-> > A third option would be to flag the memcg such that when it is getting
-> > offlined we can call into zswap to reset pool->next_shrink (or move it
-> > to the parent) and drop the ref. Although synchronization can get
-> > hairy when racing with offlining.
-> >
-> > Not sure what's the right solution, but I prefer we don't hold any
-> > memcgs hostages indefinitely. I also think if we end up using
-> > mem_cgroup_iter() then there should be a mem_cgroup_iter_break()
-> > somewhere if/when breaking the iteration.
-> >
+>> By resume I mean consume the callstack context from an earlier thread.
+>> Or you meant something else by `resume` here?
+>>
+>> Can you give an example of such an application or runtime where a newly
+>> created thread consumes callstack context created by going away thread?
 >
-> I'm not sure if this is that big of a problem in the first place, but
-> if it is, doing something similar to MGLRU is probably the cleanest:
-> when the memcg is freed, trigger the zswap_exit_memcg() callback,
-> which will loop through all the zswap pools and update pool->next_shrink
-> where appropriate.
+>my claim was not that existing runtimes are doing this,
+>but that the linux interface contract allows this and
+>tieing the stack lifetime to the thread is a change of
+>contract.
 >
-> Note that we only have one pool per (compression algorithm x allocator)
-> combinations, so there cannot be that many pools, correct?
+>> > (or the other way around: a stack can be freed before the thread
+>> > exits, if the thread pivots away from that stack.)
+>>
+>> This is simply a thread saying that I am moving to a different stack.
+>> Again, interested in learning why would a thread do that. If I've to
+>> speculate on reasons, I could think of user runtime managing it's own
+>> pool of worker items (some people call them green threads) or current
+>> stack became too small.
 >
-> Johannes suggests this idea to me (my apologies if I butcher it)
-> during one of our conversations. That sounds relatively easy IIUC.
+>switching stack is common, freeing the original stack may not be,
+>but there is nothing that prevents this and then the corresponding
+>shadow stack is clearly leaked if the kernel manages it. the amount
+>of leak is proportional to the number of live threads and the sum
+>of their original stack size which can be big.
+>
+>but as i said i think this lifetime issue is minor compared
+>to other shadow stack issues, so it is ok if the shadow stack
+>is kernel managed.
 
-Be careful that there will be a race between memcg offlining and
-zswap's usage of pool->next_shrink. AFAICT there is no lock to prevent
-offlining so there will have to be some sort of dance here to make
-sure everything works correctly.
