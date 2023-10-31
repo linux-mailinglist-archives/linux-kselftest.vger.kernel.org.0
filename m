@@ -2,256 +2,102 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA8FF7DCFB1
-	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Oct 2023 15:54:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5B557DCFB7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Oct 2023 15:55:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235106AbjJaOp7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 31 Oct 2023 10:45:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40130 "EHLO
+        id S1344520AbjJaOuk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 31 Oct 2023 10:50:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235751AbjJaOp6 (ORCPT
+        with ESMTP id S1344545AbjJaOuj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 31 Oct 2023 10:45:58 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34F85F3;
-        Tue, 31 Oct 2023 07:45:55 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BFD4C433C8;
-        Tue, 31 Oct 2023 14:45:53 +0000 (UTC)
-Date:   Tue, 31 Oct 2023 10:45:51 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Beau Belgrave <beaub@linux.microsoft.com>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-trace-kernel@vger.kernel.org, lkft-triage@lists.linaro.org,
-        Mark Brown <broonie@kernel.org>,
-        Zheng Yejian <zhengyejian1@huawei.com>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        stable <stable@vger.kernel.org>
-Subject: Re: selftests: user_events: ftrace_test - RIP:
- 0010:tracing_update_buffers (kernel/trace/trace.c:6470)
-Message-ID: <20231031104551.6e0f3620@gandalf.local.home>
-In-Reply-To: <20231031000031.1e705592@gandalf.local.home>
-References: <CA+G9fYuDP3hVQ3t7FfrBAjd_WFVSurMgCepTxunSJf=MTe=6aA@mail.gmail.com>
-        <20231027192011.GA436-beaub@linux.microsoft.com>
-        <20231027183640.2529ab68@gandalf.local.home>
-        <20231027223344.3854ac1f@rorschach.local.home>
-        <20231030163102.GA1853-beaub@linux.microsoft.com>
-        <20231030124223.4e4ddeb8@gandalf.local.home>
-        <20231030173151.0631169b@gandalf.local.home>
-        <20231031002707.GA107-beaub@linux.microsoft.com>
-        <20231031000031.1e705592@gandalf.local.home>
-X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Tue, 31 Oct 2023 10:50:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 954CAE8
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Oct 2023 07:49:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1698763790;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=wC70NjzSUr4LvW8CC2+ZDGZgQqRztYwHl/WFtd4ZzKQ=;
+        b=W6xGdnp+NZrX3XnWnClDT7ZKWRYiqIFD7LgZH4OPjQbqwMtSd5aHV8iypJDmQxJAurdy+o
+        KseLHRM4OZgEEx20EsUWjsk4bzuFx+Br5ORl2NjG+JsX+cAamueEyMlzf0BTWwkUnrE9Lj
+        xw8byqRJtb/bV6XBcLw7zrQormqznRo=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-37-rkv4lCDxMZG-XCCTpxy-Hw-1; Tue, 31 Oct 2023 10:49:49 -0400
+X-MC-Unique: rkv4lCDxMZG-XCCTpxy-Hw-1
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-41e1899175eso13690911cf.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 31 Oct 2023 07:49:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698763788; x=1699368588;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wC70NjzSUr4LvW8CC2+ZDGZgQqRztYwHl/WFtd4ZzKQ=;
+        b=YYMYa4M+kCJxcYWAJC45gqu/+u3SgUlpNFNyPZrqNiFeDcaH7kPWK8ygJ3PqIgv/XU
+         qkzJWH43ebOV6HOlHJdLE0AKqcahLMDzpSTe5wRSTGTuCG2gcpJ3J5w1yBd1uzY+REWT
+         gc204V7zufPXx4Vne55I3lzbgG9axoGs5Hp+o7TQWta1ylvas1AVMys3DTdX99CCy4BN
+         rds1QCNhFcPjX90xNNDqVQhVm572afvF6ytSb2J1i6EM/WIgId3z+ho1m+U53S7UpP2C
+         8qYdGgOQzKr+N+iuyn0lOg+Bcjz88Tfu2Vuwk+Gy6UXg/LbuYX1OWGIbOH3TlUuYaoJm
+         TeUg==
+X-Gm-Message-State: AOJu0Yyh8FwVSHRdAgCCLzHbo4I9mD2PuxlRUf/flrSzDOFyKbXzy2oe
+        MXXbtmNIIXcPrb6qNy+9WFzILSISdN9C8PfGAkTH3A/tM9OEKMoyE1SghmNJVpCDLLG6JlqeDXo
+        oj+DaY5XqItQPOXl7UG0020S9J1q5
+X-Received: by 2002:ac8:7f55:0:b0:412:3189:9fd6 with SMTP id g21-20020ac87f55000000b0041231899fd6mr17244331qtk.5.1698763788684;
+        Tue, 31 Oct 2023 07:49:48 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IERjLWjRB1kJMdKCpg3B7l9DrSVVOpzcHbJPKkiapAIsGI8t+/ULpCGqcZBZO9DVV9mcj7SuA==
+X-Received: by 2002:ac8:7f55:0:b0:412:3189:9fd6 with SMTP id g21-20020ac87f55000000b0041231899fd6mr17244308qtk.5.1698763788353;
+        Tue, 31 Oct 2023 07:49:48 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-227-179.dyn.eolo.it. [146.241.227.179])
+        by smtp.gmail.com with ESMTPSA id jt21-20020a05622aa01500b0041b3deef647sm558815qtb.8.2023.10.31.07.49.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Oct 2023 07:49:48 -0700 (PDT)
+Message-ID: <c1f3236d0a2a2f540f65815633e709accdbc197a.camel@redhat.com>
+Subject: Re: [PATCH v2] selftests/net: synchronize udpgso_bench rx and tx
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Lucas Karpinski <lkarpins@redhat.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        shuah@kernel.org, netdev@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 31 Oct 2023 15:49:45 +0100
+In-Reply-To: <vzz3qfbfq52qja24y25lopif27sdwyvz3jmmcbx5wm6jc5l53b@fy7ym6xk4zsb>
+References: <6ceki76bcv7qz6de5rxc26ot6aezdmeoz2g4ubtve7qwozmyyw@zibbg64wsdjp>
+         <e8a55d0518da5c1f9aba739359150cad58c03b2b.camel@redhat.com>
+         <vzz3qfbfq52qja24y25lopif27sdwyvz3jmmcbx5wm6jc5l53b@fy7ym6xk4zsb>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, 31 Oct 2023 00:00:31 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
+On Tue, 2023-10-31 at 09:26 -0400, Lucas Karpinski wrote:
+> > Since you wrote the same function verbatim in 3 different files, I
+> > think it would be better place it in separate, new, net_helper.sh
+> > file
+> > and include such file from the various callers. Possibly
+> > additionally
+> > rename the function as wait_local_udp_port_listen.
+> >=20
+> Thanks, I'll move it over. I think it would be best though to leave
+> udp out of the name and to just pass the protocol as an argument.
 
-> But the I applied:
-> 
->   f5ca233e2e66d ("tracing: Increase trace array ref count on enable and filter files")
-> 
-> And do the above commands again and BOOM! it crashes with:
+Indeed. I suggested the other option just to keep it the simpler, but
+if you have time and will, please go ahead!
 
-The below patch appears to solve this. Care to test it?
+Cheers,
 
--- Steve
-
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- include/linux/trace_events.h       |  4 ++++
- kernel/trace/trace.c               | 15 +++++++++++++++
- kernel/trace/trace.h               |  4 ++++
- kernel/trace/trace_events.c        | 29 +++++++++++++++++++++++++----
- kernel/trace/trace_events_filter.c |  3 +++
- 5 files changed, 51 insertions(+), 4 deletions(-)
-
-diff --git a/include/linux/trace_events.h b/include/linux/trace_events.h
-index 12207dc6722d..696f8dc4aa53 100644
---- a/include/linux/trace_events.h
-+++ b/include/linux/trace_events.h
-@@ -492,6 +492,7 @@ enum {
- 	EVENT_FILE_FL_TRIGGER_COND_BIT,
- 	EVENT_FILE_FL_PID_FILTER_BIT,
- 	EVENT_FILE_FL_WAS_ENABLED_BIT,
-+	EVENT_FILE_FL_FREED_BIT,
- };
- 
- extern struct trace_event_file *trace_get_event_file(const char *instance,
-@@ -630,6 +631,7 @@ extern int __kprobe_event_add_fields(struct dynevent_cmd *cmd, ...);
-  *  TRIGGER_COND  - When set, one or more triggers has an associated filter
-  *  PID_FILTER    - When set, the event is filtered based on pid
-  *  WAS_ENABLED   - Set when enabled to know to clear trace on module removal
-+ *  FREED         - File descriptor is freed, all fields should be considered invalid
-  */
- enum {
- 	EVENT_FILE_FL_ENABLED		= (1 << EVENT_FILE_FL_ENABLED_BIT),
-@@ -643,6 +645,7 @@ enum {
- 	EVENT_FILE_FL_TRIGGER_COND	= (1 << EVENT_FILE_FL_TRIGGER_COND_BIT),
- 	EVENT_FILE_FL_PID_FILTER	= (1 << EVENT_FILE_FL_PID_FILTER_BIT),
- 	EVENT_FILE_FL_WAS_ENABLED	= (1 << EVENT_FILE_FL_WAS_ENABLED_BIT),
-+	EVENT_FILE_FL_FREED		= (1 << EVENT_FILE_FL_FREED_BIT),
- };
- 
- struct trace_event_file {
-@@ -671,6 +674,7 @@ struct trace_event_file {
- 	 * caching and such. Which is mostly OK ;-)
- 	 */
- 	unsigned long		flags;
-+	atomic_t		ref;	/* ref count for opened files */
- 	atomic_t		sm_ref;	/* soft-mode reference counter */
- 	atomic_t		tm_ref;	/* trigger-mode reference counter */
- };
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index 2539cfc20a97..9aebf904ff97 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -4978,6 +4978,20 @@ int tracing_open_file_tr(struct inode *inode, struct file *filp)
- 	if (ret)
- 		return ret;
- 
-+	mutex_lock(&event_mutex);
-+
-+	/* Fail if the file is marked for removal */
-+	if (file->flags & EVENT_FILE_FL_FREED) {
-+		trace_array_put(file->tr);
-+		ret = -ENODEV;
-+	} else {
-+		event_file_get(file);
-+	}
-+
-+	mutex_unlock(&event_mutex);
-+	if (ret)
-+		return ret;
-+
- 	filp->private_data = inode->i_private;
- 
- 	return 0;
-@@ -4988,6 +5002,7 @@ int tracing_release_file_tr(struct inode *inode, struct file *filp)
- 	struct trace_event_file *file = inode->i_private;
- 
- 	trace_array_put(file->tr);
-+	event_file_put(file);
- 
- 	return 0;
- }
-diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
-index 0e1405abf4f7..4fcd293ecbd4 100644
---- a/kernel/trace/trace.h
-+++ b/kernel/trace/trace.h
-@@ -1669,6 +1669,10 @@ extern void event_trigger_unregister(struct event_command *cmd_ops,
- 				     char *glob,
- 				     struct event_trigger_data *trigger_data);
- 
-+extern void event_file_get(struct trace_event_file *file);
-+extern void event_file_put(struct trace_event_file *file);
-+
-+
- /**
-  * struct event_trigger_ops - callbacks for trace event triggers
-  *
-diff --git a/kernel/trace/trace_events.c b/kernel/trace/trace_events.c
-index 70a029ae3c65..ec86f4894455 100644
---- a/kernel/trace/trace_events.c
-+++ b/kernel/trace/trace_events.c
-@@ -990,13 +990,33 @@ static void remove_subsystem(struct trace_subsystem_dir *dir)
- 	}
- }
- 
-+void event_file_get(struct trace_event_file *file)
-+{
-+	atomic_inc(&file->ref);
-+}
-+
-+void event_file_put(struct trace_event_file *file)
-+{
-+	if (WARN_ON_ONCE(!atomic_read(&file->ref))) {
-+		if (file->flags & EVENT_FILE_FL_FREED)
-+			kmem_cache_free(file_cachep, file);
-+		return;
-+	}
-+
-+	if (atomic_dec_and_test(&file->ref) &&
-+	    (file->flags & EVENT_FILE_FL_FREED)) {
-+		kmem_cache_free(file_cachep, file);
-+	}
-+}
-+
- static void remove_event_file_dir(struct trace_event_file *file)
- {
- 	eventfs_remove_dir(file->ei);
- 	list_del(&file->list);
- 	remove_subsystem(file->system);
- 	free_event_filter(file->filter);
--	kmem_cache_free(file_cachep, file);
-+	file->flags |= EVENT_FILE_FL_FREED;
-+	event_file_put(file);
- }
- 
- /*
-@@ -1369,7 +1389,7 @@ event_enable_read(struct file *filp, char __user *ubuf, size_t cnt,
- 		flags = file->flags;
- 	mutex_unlock(&event_mutex);
- 
--	if (!file)
-+	if (!file || flags & EVENT_FILE_FL_FREED)
- 		return -ENODEV;
- 
- 	if (flags & EVENT_FILE_FL_ENABLED &&
-@@ -1404,7 +1424,7 @@ event_enable_write(struct file *filp, const char __user *ubuf, size_t cnt,
- 		ret = -ENODEV;
- 		mutex_lock(&event_mutex);
- 		file = event_file_data(filp);
--		if (likely(file)) {
-+		if (likely(file && !(file->flags & EVENT_FILE_FL_FREED))) {
- 			printk("update file = %px\n", file);
- 			printk("update tr = %px\n", file->tr);
- 			ret = tracing_update_buffers(file->tr);
-@@ -1686,7 +1706,7 @@ event_filter_read(struct file *filp, char __user *ubuf, size_t cnt,
- 
- 	mutex_lock(&event_mutex);
- 	file = event_file_data(filp);
--	if (file)
-+	if (file && !(file->flags & EVENT_FILE_FL_FREED))
- 		print_event_filter(file, s);
- 	mutex_unlock(&event_mutex);
- 
-@@ -2905,6 +2925,7 @@ trace_create_new_event(struct trace_event_call *call,
- 	atomic_set(&file->tm_ref, 0);
- 	INIT_LIST_HEAD(&file->triggers);
- 	list_add(&file->list, &tr->events);
-+	event_file_get(file);
- 
- 	return file;
- }
-diff --git a/kernel/trace/trace_events_filter.c b/kernel/trace/trace_events_filter.c
-index 33264e510d16..0c611b281a5b 100644
---- a/kernel/trace/trace_events_filter.c
-+++ b/kernel/trace/trace_events_filter.c
-@@ -2349,6 +2349,9 @@ int apply_event_filter(struct trace_event_file *file, char *filter_string)
- 	struct event_filter *filter = NULL;
- 	int err;
- 
-+	if (file->flags & EVENT_FILE_FL_FREED)
-+		return -ENODEV;
-+
- 	if (!strcmp(strstrip(filter_string), "0")) {
- 		filter_disable(file);
- 		filter = event_filter(file);
--- 
-2.42.0
+Paolo
 
