@@ -2,123 +2,114 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDA4E7DC580
-	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Oct 2023 05:42:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 264417DC685
+	for <lists+linux-kselftest@lfdr.de>; Tue, 31 Oct 2023 07:26:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236897AbjJaEmM (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 31 Oct 2023 00:42:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34316 "EHLO
+        id S233004AbjJaG0L (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 31 Oct 2023 02:26:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236899AbjJaEmJ (ORCPT
+        with ESMTP id S229517AbjJaG0K (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 31 Oct 2023 00:42:09 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B03E311F
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Oct 2023 21:41:58 -0700 (PDT)
-Received: from mail-oa1-f69.google.com (mail-oa1-f69.google.com [209.85.160.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 22E643F1D9
-        for <linux-kselftest@vger.kernel.org>; Tue, 31 Oct 2023 04:41:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1698727315;
-        bh=uv/lM9witRa5tHyiuyBCkKsQR6Hn/YYuwsXCZMESZLo=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=u+ZV+oLSGJfulZo5rqIQNu1X43MqdNZgDLFivGItYEA/sp1/xwOmMTUuLfCIno1U3
-         7loG0YazLLp4/5WhOf+JGYHNMMrmNnAs5lhtFH4OuKxT/00/ftIVhjnwR+xbNjZF7T
-         O03vowO8gCAmEiz65T+Dm1RyzCT/qvaGdKgoO1sUT+ylgjvfV3a0MDa21E5l4dtMbw
-         UdcPadp4nQju9M7KKloX1y9LIGziPu6V0EWQs7MuH5v4MIFBeJRR64TamuwCFrtOp4
-         KAvnPEo1xYQaRTHTb2VBfs+ynPpW+c6oiUIyzOHmLpriweBwaq6tcz6pl+2+u6z+w/
-         tLLyV9+RkQG/w==
-Received: by mail-oa1-f69.google.com with SMTP id 586e51a60fabf-1ef4f8d294aso7954095fac.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 30 Oct 2023 21:41:55 -0700 (PDT)
+        Tue, 31 Oct 2023 02:26:10 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 983FE91;
+        Mon, 30 Oct 2023 23:26:08 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-9d0b4dfd60dso533469166b.1;
+        Mon, 30 Oct 2023 23:26:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1698733567; x=1699338367; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H890dxrJWN3yT/xHp1vZtLZXjq98ozy2u9aQnWRZfHI=;
+        b=BUkr4v6X8D/3UNbdm2kgS0BbnUAfIG8AouOLgv/RP4j6kyNe3duEmZY5/hgRzxXx51
+         z8FmdPh57/aJr+QyYefUb6ht3KmjNum2fa8MNhfiY2TjquhF9AbMYVAW6Bvf1KaEcDPl
+         Y/EQbqncW4X4ZOkpdljnQRduzQoqYlw1a2cAihnTte0sfXIU8OGl1wmDvE+cTrhb8OHv
+         3Z+UaPtBGL91Sz0OGzyckzQY3COP+s5LhdCY+WAqalo9ZBpvAbLIEIP4rh4Kk4/sz+2D
+         U3VDqmlmT9l65RGvrpZy/V1Ar8lPBhNoQGNQ0/jS4gShNHI+D484MvblEVW9ZMxeB5uP
+         Jg2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698727313; x=1699332113;
+        d=1e100.net; s=20230601; t=1698733567; x=1699338367;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=uv/lM9witRa5tHyiuyBCkKsQR6Hn/YYuwsXCZMESZLo=;
-        b=iuq5uH6MdCbFS10+gytxJEAaP8Gq5dojmevTYRF8DRO+WLNZyHTc89wyjo1Y6jUUno
-         wnS7Y0TF8dq6GHWQr9uQXH/9RQLjIVHAwYP0qnPxnahISczR3Jnc145wlAfDiwgMCSVx
-         GmjM9mubQuYJSRWCic19l9l6a5126PNwEgRckldON99selIOXofviPPEDjF9zjJsxd0Y
-         RRh/1oxylfwHrMG1BEZlgpo05WGY7tzu+A8dxu20wUQuOiBg2mEnH3lj6ox4ezQIL9YJ
-         tqk86k/beoqm2hjwW2jvrGyL0m4/VyEPrh5pS2frnKAKK+ZvuUss7b3jod+3NXc3zw4U
-         rj6Q==
-X-Gm-Message-State: AOJu0YxVDfY466B+DbAeOPAZdNwWrzJC3/VDDbRmsqJvn/Lw0qNLniPV
-        C3MsT69CJEKqwUqEgEswYrHkQ8njNuCl/m5s6Bm7FZKaOLF97dlbgFYotTnzk+9EdFXQkJSSkxJ
-        KjKsM1Eo/B9uPL75Vf0u7k29EozHDRCmUjRxUtZxxxgUJ5lwwYGDggTv8wgoL
-X-Received: by 2002:a05:6871:4309:b0:1e9:9537:c1a9 with SMTP id lu9-20020a056871430900b001e99537c1a9mr16749914oab.12.1698727313735;
-        Mon, 30 Oct 2023 21:41:53 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEbJSmYuKlbce0BSqZJOFxdZgSWDwei5lHL5IXFbYRxVoZerDOoqfteskWEqOA52Yc62D7dONA8v+uHeqbbqMs=
-X-Received: by 2002:a05:6871:4309:b0:1e9:9537:c1a9 with SMTP id
- lu9-20020a056871430900b001e99537c1a9mr16749907oab.12.1698727313457; Mon, 30
- Oct 2023 21:41:53 -0700 (PDT)
+        bh=H890dxrJWN3yT/xHp1vZtLZXjq98ozy2u9aQnWRZfHI=;
+        b=TUBJhjQlozXi96pn/MOVQCN6LL62mH+i6aPEOLfuSc5B7yV27gM5carrV/XGt7Y6ZY
+         DjAMpgt1e1HMZfqYzuNELQneIE627RRrbz7TPtypJl2qj4SnkwIQTWFESaO8iPXKIUtt
+         C+kUg39KDTEXZqHysKOEJaqmbBCIA58IcvPs83GPW2VeSo4t1pyFCYH5Damm74JnXUp9
+         zjX4rJ4+A3fyfSAG0tF4P5sI46yrSbFyQE/RFpzoQRrHzYvDd9TeUeSfk9DmCcf8rUU3
+         Zv4aDhUxB+obMLa+ZhzI6VJx23m4AJnctX/f86E25osi9rzMuFN/S12qjEJs7bqQYIl8
+         yfaw==
+X-Gm-Message-State: AOJu0YxedJSAl51F9JwGO/LT6DLHYuaD9WdY6vtRxVfjKDsHLwQaSLeK
+        vSIu0ZiVbaitYYnpU3YI1maCjQWKDF05yCE7l1E=
+X-Google-Smtp-Source: AGHT+IF+gc0G3FlWAx0H5RVu7XzgkaKBL6c1il+hT0y9NF8CYvljdR4Q38DSOqYaHY5fHlhxHbfUfy8QJ1D7/ADlMFY=
+X-Received: by 2002:a17:906:7146:b0:9d3:afe1:b3e5 with SMTP id
+ z6-20020a170906714600b009d3afe1b3e5mr3595874ejj.75.1698733567002; Mon, 30 Oct
+ 2023 23:26:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20231031034732.3531008-1-liuhangbin@gmail.com>
-In-Reply-To: <20231031034732.3531008-1-liuhangbin@gmail.com>
-From:   Po-Hsu Lin <po-hsu.lin@canonical.com>
-Date:   Tue, 31 Oct 2023 12:41:42 +0800
-Message-ID: <CAMy_GT-kMCE1pbkSxg+O2Ev8h49KWneX6xDy4KHn30njHxK=OQ@mail.gmail.com>
-Subject: Re: [PATCHv2 net] selftests: pmtu.sh: fix result checking
-To:     Hangbin Liu <liuhangbin@gmail.com>
-Cc:     netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        David Ahern <dsahern@kernel.org>,
-        linux-kselftest@vger.kernel.org
+References: <cover.1698431765.git.dxu@dxuuu.xyz> <111a64c3e6ccda6b8a2826491715d4e8a645e384.1698431765.git.dxu@dxuuu.xyz>
+ <CAEf4BzbwHZmCJHe8WiV0WeUV1XC+cDB4d4v8YLJh+ZL_k7yB1g@mail.gmail.com> <73xnkgitatvymw2bqwo6elqmdpsvj2atmh6ugrityvqyegguq7@cjos2bsw2ico>
+In-Reply-To: <73xnkgitatvymw2bqwo6elqmdpsvj2atmh6ugrityvqyegguq7@cjos2bsw2ico>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Mon, 30 Oct 2023 23:25:55 -0700
+Message-ID: <CAEf4BzZWFfJFpp6UvYNj-i5PFU42rUD_U4B0c_Qa7DYV0Rme=A@mail.gmail.com>
+Subject: Re: [RFC bpf-next 5/6] bpf: selftests: test_tunnel: Disable CO-RE relocations
+To:     Daniel Xu <dxu@dxuuu.xyz>
+Cc:     ast@kernel.org, andrii@kernel.org, shuah@kernel.org,
+        daniel@iogearbox.net, steffen.klassert@secunet.com,
+        antony.antony@secunet.com, mykolal@fb.com, martin.lau@linux.dev,
+        song@kernel.org, yonghong.song@linux.dev, john.fastabend@gmail.com,
+        kpsingh@kernel.org, sdf@google.com, haoluo@google.com,
+        jolsa@kernel.org, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devel@linux-ipsec.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Tue, Oct 31, 2023 at 11:47=E2=80=AFAM Hangbin Liu <liuhangbin@gmail.com>=
- wrote:
+On Sun, Oct 29, 2023 at 4:22=E2=80=AFPM Daniel Xu <dxu@dxuuu.xyz> wrote:
 >
-> In the PMTU test, when all previous tests are skipped and the new test
-> passes, the exit code is set to 0. However, the current check mistakenly
-> treats this as an assignment, causing the check to pass every time.
+> On Fri, Oct 27, 2023 at 01:33:09PM -0700, Andrii Nakryiko wrote:
+> > On Fri, Oct 27, 2023 at 11:46=E2=80=AFAM Daniel Xu <dxu@dxuuu.xyz> wrot=
+e:
+> > >
+> > > Switching to vmlinux.h definitions seems to make the verifier very
+> > > unhappy with bitfield accesses. The error is:
+> > >
+> > >     ; md.u.md2.dir =3D direction;
+> > >     33: (69) r1 =3D *(u16 *)(r2 +11)
+> > >     misaligned stack access off (0x0; 0x0)+-64+11 size 2
+> > >
+> > > It looks like disabling CO-RE relocations seem to make the error go
+> > > away.
+> > >
+> >
+> > for accessing bitfields libbpf provides
+> > BPF_CORE_READ_BITFIELD_PROBED() and BPF_CORE_READ_BITFIELD() macros
 >
-> Consequently, regardless of how many tests have failed, if the latest tes=
-t
-> passes, the PMTU test will report a pass.
+> In this case the code in question is:
 >
-> Fixes: 2a9d3716b810 ("selftests: pmtu.sh: improve the test result process=
-ing")
-> Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
-> ---
-> v2: use "-eq" instead of "=3D" to make less error-prone
-> ---
->  tools/testing/selftests/net/pmtu.sh | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>         __u8 direction =3D 0;
+>         md.u.md2.dir =3D direction;
 >
-> diff --git a/tools/testing/selftests/net/pmtu.sh b/tools/testing/selftest=
-s/net/pmtu.sh
-> index f838dd370f6a..b3b2dc5a630c 100755
-> --- a/tools/testing/selftests/net/pmtu.sh
-> +++ b/tools/testing/selftests/net/pmtu.sh
-> @@ -2048,7 +2048,7 @@ run_test() {
->         case $ret in
->                 0)
->                         all_skipped=3Dfalse
-> -                       [ $exitcode=3D$ksft_skip ] && exitcode=3D0
-> +                       [ $exitcode -eq $ksft_skip ] && exitcode=3D0
->                 ;;
->                 $ksft_skip)
->                         [ $all_skipped =3D true ] && exitcode=3D$ksft_ski=
-p
-> --
-> 2.41.0
+> IOW the problem is assigning to bitfields, not reading from them.
 >
-Acked-by: Po-Hsu Lin <po-hsu.lin@canonical.com>
+> Is that something that libbpf needs to support as well?
 
-Looking good to me, thanks!
+Ah, I missed that this is a write into a struct. I think we can
+support BPF_CORE_WRITE_BITFIELD() (not the PROBED version, though)
+using all the same CO-RE relocations. It's probably a very niche case,
+but BPF_CORE_READ_BITFIELD() is niche as well (though an absolute
+necessity when the need does come up).
+
+>
+> Thanks,
+> Daniel
