@@ -2,62 +2,65 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D81B7DE0B6
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Nov 2023 13:21:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BA4B7DE10B
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Nov 2023 13:37:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235053AbjKAMTC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 1 Nov 2023 08:19:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44682 "EHLO
+        id S235135AbjKAMeE (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 1 Nov 2023 08:34:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231611AbjKAMTC (ORCPT
+        with ESMTP id S231519AbjKAMeD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 1 Nov 2023 08:19:02 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D364BDC;
-        Wed,  1 Nov 2023 05:18:59 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id 3f1490d57ef6-da2b9234a9fso4386038276.3;
-        Wed, 01 Nov 2023 05:18:59 -0700 (PDT)
+        Wed, 1 Nov 2023 08:34:03 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B06DC;
+        Wed,  1 Nov 2023 05:34:00 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-4084e49a5e5so55502355e9.3;
+        Wed, 01 Nov 2023 05:34:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698841139; x=1699445939; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0NLvuE8hMShXvppTBTSIa8TeTIaP61N5ISRy0nYOCZU=;
-        b=d1Fbbmr+FvdhLT1FtN6VsqoVfEckcnXS17f+VmVKBQvh3rCQo13wrInTSL4y4jmRvO
-         xH7f5m4L61NJ5V/EJc0oLC5UlHqLJeAdHVTEJMQin2tMtwdAfGqEOwwGb2K9kAzGR1DV
-         XPw33i+X1VMIzp156JlGI6Gyzc+rv7to6mDgNfaYgWtoUnP0l56iABsooGLcscB9xK9y
-         qH8xIA40rSuXlD6Mg3pL0MpG9BeHAVNjz7SNf1DCKKjXFrLMTgM1Y5m2uKEnaMwnqYhj
-         BHhwhF4b8hNcViv+OIlJKFBLRWk2EfDdDJOzdB1UFl8stNkkjuLw9NwBR9oswZwmDiDK
-         eOxw==
+        d=gmail.com; s=20230601; t=1698842038; x=1699446838; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=j0HGql/B87mI38HpufuxtQHzy9hkZZUidYFckvwt7Pc=;
+        b=l0Hr7hNm5zlepONXZAUGzIguo/Bc9mAjHUrixECPBQOnhjFEepqxNttIbsEC2pB6uR
+         k1vxN1o1CcGqyeS27HM2grH0AfLQ5/HAhFhaoROSUbraeuSrRlbXKVah6a3659gd1/GM
+         8O5xSIRauWURt5skKEkMj2Rm+LjudAez6k6l/201pHkcgAOk9a6Hd1TtNwX8/j8D6evw
+         NOWlHmPrllZKV9zdiDVpDZkqWaCkEA38r5UJmpGVFaZ/nkhYDNgHADjfLgX4Sbygqqqn
+         8jLq+uipku7osLdWsoWAbcrWVD6sM5kKHnO7ejfWSiXZff3UgTWxmiFehgOoN5s42ino
+         6z+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698841139; x=1699445939;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0NLvuE8hMShXvppTBTSIa8TeTIaP61N5ISRy0nYOCZU=;
-        b=JDWb+jrcfd7N6aNHWV+8m3hgCsW0I9Nm7LHr6PdlSrNf/a3n5U4N/49ZmvTxhvPmHv
-         2fU0g+OVbWNbuNaYi0vWigHsdLY+J1Dju3wTwgSOJ0C5rSf16/vaseSWGYJfac7HuWnN
-         K/KgF0GDWT2hbKh2B2N4eWWU8GY1r3ZkGLHZhJTvNjsN2Sex0exgCgXc8NIiK6KNhfXm
-         WI0gDWDP4xxFqzCpj1RVKpNwTn1gDNpJwTkIJ/pCAc7VGkjsJuyNrJ6R7FJihf+MJM3t
-         33KY9WJm3AL0uw2+qhce8xupHqPyyJgmv7ZQoVU4U31jtutue6kS4SFk7N7kicnHybfh
-         smqw==
-X-Gm-Message-State: AOJu0Yy+MqPweDFhsbTmB4wU4j9TLvN/FvAnlCZc2Kl3pV5nhqu53dhk
-        e6DmMIBcqaPip3AMbRsMoUBEEodObLlo2Pl0yg==
-X-Google-Smtp-Source: AGHT+IE7BGTDtp93hL2jxi07tWJW+FENBcpmfXQ2TibaIe1A07FkgwiDBfviEoOzeji0VM29sDtR3nkJBTY8YTimSS4=
-X-Received: by 2002:a25:ac07:0:b0:d9a:fd15:82a3 with SMTP id
- w7-20020a25ac07000000b00d9afd1582a3mr14611012ybi.24.1698841138886; Wed, 01
- Nov 2023 05:18:58 -0700 (PDT)
-MIME-Version: 1.0
-References: <20231101-fix-check-stack-write-v2-0-cb7c17b869b0@gmail.com>
- <20231101-fix-check-stack-write-v2-2-cb7c17b869b0@gmail.com> <4ec86365668f6c3b4242232506e896a17aa2af4c.camel@gmail.com>
-In-Reply-To: <4ec86365668f6c3b4242232506e896a17aa2af4c.camel@gmail.com>
+        d=1e100.net; s=20230601; t=1698842038; x=1699446838;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=j0HGql/B87mI38HpufuxtQHzy9hkZZUidYFckvwt7Pc=;
+        b=edn1pxykyAcXV1iIIGHfYqJr9jtd5q1ePuoB594o7KwGogNPRk4H1syyxjDA5kFHvT
+         YP7HHf/5wK2D22XGKulRQpj7W2JKBIjc30HB866107HA2guvKOT/azRdPf0cmfilxXLS
+         XnZNw2JE8/nh59gDI+aT1RngQeEhzCL+xZSF4+c5Mn+u3AUMmonSU7LXEE+Xk8F5nXPY
+         7HWG7y+7KEcH7AFGs/PF6vJBLvHSFQiPxCjSO15RMee5NbhowQMZBU/bsTxzmPxXFLBV
+         1fgH7lo0guzY7a5gEH4zwab8I86zIh4BrnqfU6mPd10napDyLV6YneAUmqtSeBgaeYrL
+         RMmQ==
+X-Gm-Message-State: AOJu0YzDC4FLNDoTRJDLWgGA2F7XVzm0kzbrK3nlkgcMcPegjDq303is
+        2Rsn4sFO+F+JngnJH9fXtg==
+X-Google-Smtp-Source: AGHT+IEzRnpvupbJqurKPYdvU+myaEym12O4RXMuH1rWvhgrbrgYScghO9HRhp/aqYPhEjbD85XmRg==
+X-Received: by 2002:a05:600c:4fcb:b0:405:367d:4656 with SMTP id o11-20020a05600c4fcb00b00405367d4656mr13435076wmq.29.1698842038162;
+        Wed, 01 Nov 2023 05:33:58 -0700 (PDT)
+Received: from amdsuplus2.inf.ethz.ch (amdsuplus2.inf.ethz.ch. [129.132.31.88])
+        by smtp.gmail.com with ESMTPSA id fk15-20020a05600c0ccf00b0040849ce7116sm1453505wmb.43.2023.11.01.05.33.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 01 Nov 2023 05:33:57 -0700 (PDT)
 From:   Hao Sun <sunhao.th@gmail.com>
-Date:   Wed, 1 Nov 2023 13:18:47 +0100
-Message-ID: <CACkBjsbu2aMUrhMazvVnJw9MBuOrapv2vYaJEnjCg-BEuFPh4g@mail.gmail.com>
-Subject: Re: [PATCH bpf v2 2/2] selftests/bpf: Add test for immediate spilled
- to stack
-To:     Eduard Zingerman <eddyz87@gmail.com>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
+Subject: [PATCH bpf v3 0/2] bpf: Fix incorrect immediate spill
+Date:   Wed, 01 Nov 2023 13:33:50 +0100
+Message-Id: <20231101-fix-check-stack-write-v3-0-f05c2b1473d5@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAK5FQmUC/4XNyQ7CIBAG4FdpOIthqVQ8+R7GA9ChnWiXQIOap
+ u8u4aIX42WSf5ZvVhIhIERyqlYSIGHEacxB7iriejN2QLHNmQgmJGdCUY9P6npwNxoXk+sj4AL
+ U1UxrpXTdekPy7RwgLxb3QuzsyTU3e4zLFF7lV+Jl9IdNnDKqrBQH8NJBA+duMHjfu2koYhIfh
+ TP+SxFZcbZxvLFHpS37VrZtewPZ+MbMBQEAAA==
+To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         John Fastabend <john.fastabend@gmail.com>,
         Andrii Nakryiko <andrii@kernel.org>,
@@ -68,13 +71,22 @@ Cc:     Alexei Starovoitov <ast@kernel.org>,
         Stanislav Fomichev <sdf@google.com>,
         Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
         Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-        Shung-Hsi Yu <shung-hsi.yu@suse.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+        Eduard Zingerman <eddyz87@gmail.com>,
+        Shung-Hsi Yu <shung-hsi.yu@suse.com>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Hao Sun <sunhao.th@gmail.com>,
+        stable@vger.kernel.org
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1698842036; l=1098;
+ i=sunhao.th@gmail.com; s=20231009; h=from:subject:message-id;
+ bh=CUeu8WtS2D2jLPuVS3vfrplsl4FSe1lavxbwEiYGSdE=;
+ b=31NfOkAbG9wCe0NTj/U14t+isRdZEBPMletRT483lLPjeWK1EvT0v7pnKiE1KcstOSA3w+VK6
+ UXAb+dCiOJwBiayfTUzgCWQqDfoUFtFPCGp/loEHzQdEeHSTbBswodu
+X-Developer-Key: i=sunhao.th@gmail.com; a=ed25519;
+ pk=AHFxrImGtyqXOuw4f5xTNh4PGReb7hzD86ayyTZCXd4=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,97 +94,34 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Nov 1, 2023 at 12:05=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com=
-> wrote:
->
-> On Wed, 2023-11-01 at 08:33 +0100, Hao Sun wrote:
-> > Add a test to check if the verifier correctly reason about the sign
-> > of an immediate spilled to stack by BPF_ST instruction.
-> >
-> > Signed-off-by: Hao Sun <sunhao.th@gmail.com>
-> > ---
-> >  tools/testing/selftests/bpf/verifier/bpf_st_mem.c | 32 +++++++++++++++=
-++++++++
-> >  1 file changed, 32 insertions(+)
-> >
-> > diff --git a/tools/testing/selftests/bpf/verifier/bpf_st_mem.c b/tools/=
-testing/selftests/bpf/verifier/bpf_st_mem.c
-> > index 3af2501082b2..0ba23807c46c 100644
-> > --- a/tools/testing/selftests/bpf/verifier/bpf_st_mem.c
-> > +++ b/tools/testing/selftests/bpf/verifier/bpf_st_mem.c
-> > @@ -65,3 +65,35 @@
-> >       .expected_attach_type =3D BPF_SK_LOOKUP,
-> >       .runs =3D -1,
-> >  },
-> > +{
-> > +     "BPF_ST_MEM stack imm sign",
-> > +     /* Check if verifier correctly reasons about sign of an
-> > +      * immediate spilled to stack by BPF_ST instruction.
-> > +      *
-> > +      *   fp[-8] =3D -44;
-> > +      *   r0 =3D fp[-8];
-> > +      *   if r0 s< 0 goto ret0;
-> > +      *   r0 =3D -1;
-> > +      *   exit;
-> > +      * ret0:
-> > +      *   r0 =3D 0;
-> > +      *   exit;
-> > +      */
-> > +     .insns =3D {
-> > +     BPF_ST_MEM(BPF_DW, BPF_REG_10, -8, -44),
-> > +     BPF_LDX_MEM(BPF_DW, BPF_REG_0, BPF_REG_10, -8),
-> > +     BPF_JMP_IMM(BPF_JSLT, BPF_REG_0, 0, 2),
-> > +     BPF_MOV64_IMM(BPF_REG_0, -1),
-> > +     BPF_EXIT_INSN(),
-> > +     BPF_MOV64_IMM(BPF_REG_0, 0),
-> > +     BPF_EXIT_INSN(),
-> > +     },
-> > +     /* Use prog type that requires return value in range [0, 1] */
-> > +     .prog_type =3D BPF_PROG_TYPE_SK_LOOKUP,
-> > +     .expected_attach_type =3D BPF_SK_LOOKUP,
-> > +     .result =3D VERBOSE_ACCEPT,
-> > +     .runs =3D -1,
-> > +     .errstr =3D "0: (7a) *(u64 *)(r10 -8) =3D -44        ; R10=3Dfp0 =
-fp-8_w=3D-44\
-> > +     2: (c5) if r0 s< 0x0 goto pc+2\
-> > +     2: R0_w=3D-44",
-> > +},
-> >
->
-> Please note that this test case fails on CI [0], full log below:
->
-> 2023-11-01T07:49:51.2841702Z #116/p BPF_ST_MEM stack imm sign FAIL
-> 2023-11-01T07:49:51.2843456Z Unexpected verifier log!
-> 2023-11-01T07:49:51.2844968Z EXP: 2: R0_w=3D-44
-> 2023-11-01T07:49:51.2845583Z RES:
-> 2023-11-01T07:49:51.2846693Z func#0 @0
-> 2023-11-01T07:49:51.2848932Z 0: R1=3Dctx(off=3D0,imm=3D0) R10=3Dfp0
-> 2023-11-01T07:49:51.2853045Z 0: (7a) *(u64 *)(r10 -8) =3D -44        ; R1=
-0=3Dfp0 fp-8_w=3D-44
-> 2023-11-01T07:49:51.2857391Z 1: (79) r0 =3D *(u64 *)(r10 -8)         ; R0=
-_w=3D-44 R10=3Dfp0 fp-8_w=3D-44
-> 2023-11-01T07:49:51.2859127Z 2: (c5) if r0 s< 0x0 goto pc+2
-> 2023-11-01T07:49:51.2862943Z mark_precise: frame0: last_idx 2 first_idx 0=
- subseq_idx -1
-> 2023-11-01T07:49:51.2867511Z mark_precise: frame0: regs=3Dr0 stack=3D bef=
-ore 1: (79) r0 =3D *(u64 *)(r10 -8)
-> 2023-11-01T07:49:51.2872217Z mark_precise: frame0: regs=3D stack=3D-8 bef=
-ore 0: (7a) *(u64 *)(r10 -8) =3D -44
-> 2023-11-01T07:49:51.2872816Z 5: R0_w=3D-44
-> 2023-11-01T07:49:51.2875653Z 5: (b7) r0 =3D 0                        ; R0=
-_w=3D0
-> 2023-11-01T07:49:51.2876493Z 6: (95) exit
->
-> I suspect that after recent logging fixes instruction number printed
-> after jump changed and that's why test case no longer passes.
->
+Immediate is incorrectly cast to u32 before being spilled, losing sign
+information. The range information is incorrect after load again. Fix
+immediate spill by remove the cast. The second patch add a test case
+for this.
 
-Yes, so I guess we can just drop the line number there, will send patch v3.
+Signed-off-by: Hao Sun <sunhao.th@gmail.com>
+---
+Changes in v3:
+- Change the expected log to fix the test case
+- Link to v2: https://lore.kernel.org/r/20231101-fix-check-stack-write-v2-0-cb7c17b869b0@gmail.com
 
-> Note: you can check CI status for submitted patch-sets using link [1].
->
-> [0] https://github.com/kernel-patches/bpf/actions/runs/6717053909/job/182=
-54330860
-> [1] https://patchwork.kernel.org/project/netdevbpf/list/
+Changes in v2:
+- Add fix and cc tags.
+- Link to v1: https://lore.kernel.org/r/20231026-fix-check-stack-write-v1-0-6b325ef3ce7e@gmail.com
 
-Thanks.
+---
+Hao Sun (2):
+      bpf: Fix check_stack_write_fixed_off() to correctly spill imm
+      selftests/bpf: Add test for immediate spilled to stack
+
+ kernel/bpf/verifier.c                             |  2 +-
+ tools/testing/selftests/bpf/verifier/bpf_st_mem.c | 32 +++++++++++++++++++++++
+ 2 files changed, 33 insertions(+), 1 deletion(-)
+---
+base-commit: f2fbb908112311423b09cd0d2b4978f174b99585
+change-id: 20231026-fix-check-stack-write-c40996694dfa
+
+Best regards,
+-- 
+Hao Sun <sunhao.th@gmail.com>
+
