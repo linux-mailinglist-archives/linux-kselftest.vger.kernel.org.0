@@ -2,64 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0036E7DDD40
-	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Nov 2023 08:34:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A74137DDD49
+	for <lists+linux-kselftest@lfdr.de>; Wed,  1 Nov 2023 08:34:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230350AbjKAHeI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 1 Nov 2023 03:34:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45156 "EHLO
+        id S231169AbjKAHeL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 1 Nov 2023 03:34:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230206AbjKAHeI (ORCPT
+        with ESMTP id S230206AbjKAHeK (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 1 Nov 2023 03:34:08 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD8CC2;
-        Wed,  1 Nov 2023 00:34:05 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-40859c466efso49778055e9.3;
-        Wed, 01 Nov 2023 00:34:05 -0700 (PDT)
+        Wed, 1 Nov 2023 03:34:10 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 270D7E4;
+        Wed,  1 Nov 2023 00:34:08 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2c514cbbe7eso90076371fa.1;
+        Wed, 01 Nov 2023 00:34:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1698824044; x=1699428844; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=eNER9LrxazZc1unOxuOkdAcLGVcUlD990LvgBax6cfQ=;
-        b=U+Eo8//ImwAm/xb63bBv6qIlYM3zMC/rkrDMlqqBeO54o2g5cqmsbdig4klgxWEGQS
-         4zx9FBa20bH3R1JXVldkJLacEoZPtaKfRbVmtEE0CImaDcLqVerOQLDFc1WavANtLvfN
-         jR7N3/Kp/ORZc5NrLnJfpoIg5Xjkm1ObjvBOgmszTf1TlBAPDK0RUHk6pUQO2nw9Sks9
-         BWUdIkuHe7gUHhyO+j0qFyUbmtD8W7POZfyJn9OH8nsGqZ96+zuzC3qJP1yXd8Aggww6
-         whzx1yigwp7ChAlNxg2Md7a+9Pjq8qEQAaBaGJuMOnTpIXxQfRNqBqtZDCVAMVcNcLdo
-         fbGg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698824044; x=1699428844;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1698824046; x=1699428846; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=eNER9LrxazZc1unOxuOkdAcLGVcUlD990LvgBax6cfQ=;
-        b=hPGy7MCVat8ZiMXQxKMkqd3+IeLeeSdMN5cvGW5Oi5mca8fedGmRx00QVUNY9hhjoV
-         o9vOKUfK82viRLzItA61ysVfOSZYlZcTkzimT3/blAbphCni2/25U+/g5mDChLrPRah7
-         eA9L+g6r/3piUAl8Sj+xYR2foUJz319QnStMsmJc9w66Islw1YXyjeRjHffXhp6vypc/
-         7u7beHF+NrKHyVWqyeL6Upb5cKoxMYnahynJCv9CT1Bs80vpZJL7JAv1i5n9cxfnx1V8
-         wFXcEnVr2M7yRnYa9Jpml6z0tHb2D/p0n65D42WoiHoKd+nQuxKQeDh2X01t9FuUYtJ7
-         WUyQ==
-X-Gm-Message-State: AOJu0YyYkZ4NGbosLI40uT8OVlE69sg4fUcyfiG4kMa+4gjCaPyvVx7a
-        BiIfF0bx+2vIgyNmv4i8qw==
-X-Google-Smtp-Source: AGHT+IE6y1ECsS1CldkeqwBwwBTEcRnocbIRQ9ScNQbDZ/g+HAVE/8uaVRMAhit/TRF95hut2FnPhg==
-X-Received: by 2002:a5d:4dd0:0:b0:31f:bdbc:d762 with SMTP id f16-20020a5d4dd0000000b0031fbdbcd762mr10362561wru.44.1698824043971;
-        Wed, 01 Nov 2023 00:34:03 -0700 (PDT)
+        bh=K8hgrjlDvFMKSVzJkLU39O15qC5sfoG0Arowg8Wk8LM=;
+        b=Gt0Hk+jgxbM8Pc/LxlG+Ik0K+FOr5UxAj1G0rCxbg8/9O50Lgk8nPA3yCPZUrejQPd
+         C9Ysej+PmDG30BQJvyosS88IyTeR58fJoGb/vBayrcteLYIxeEfV7mIs8svMRJ8+0BzQ
+         FiARKKib/XkfqRRGAwAWJZHsics5swhtL9RL/363l6XjwwDlLzVwxT1RBNGwp3zW4Lo9
+         blh2UlqbgJJuxzoonkev5A1DiO40MHmdSkTvO7BKaTnZ0/Qu7tbbimLRQzVauUr2JUrF
+         53oIX5nLlXKDXE9LV4qomMBD4JuC8HS60rGjo/4aHK89LTVAJtghwLDOLcVxgoRIMKcM
+         C+kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698824046; x=1699428846;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=K8hgrjlDvFMKSVzJkLU39O15qC5sfoG0Arowg8Wk8LM=;
+        b=mBnkWg2q60w9zG//M7eIuMe3DGYxFNOyN98G2kJEiQFmbkNjNvH13Up64b/2OkOFW+
+         aUQszAgnVj70zxlFCQVJGyERm4Ods8Ba+xWLCy5JrPHaM3gjo7JJ2xc+w5qBdHXz+XLc
+         T4xCPsjGMPinm7sb2JSvNnWMRKkyZrl99JRw7HqvNP3aLAvt9XlC3w1ecNR7P9uRwFfV
+         IzRilPjije1dgQU3cA0krnDMRZwWgs7LYv2Opct3Lo8RvVvvAjVLaOxTBVGOo3nDXGVA
+         8I1scgU+X8CDFs1rb2qA+qLavj04BsVtMNwxgRN84iR6G2A+99Nr1esIUSsTonbEURT5
+         ZACw==
+X-Gm-Message-State: AOJu0Yz8oUbgxyY+iTft464xrK+JtQo1i6+waOrG/1XyadROSCdhtgZ+
+        Ljydv7sZ13LDbfTa07keBA==
+X-Google-Smtp-Source: AGHT+IGmiYnbW7O7QqVgPinskC/MOx+ZrZXVgtqkcIXnimyAQpFooWC8s+gQWZXLiarAuM5VnNThjg==
+X-Received: by 2002:a05:6512:3ba8:b0:509:3785:fd98 with SMTP id g40-20020a0565123ba800b005093785fd98mr3049466lfv.44.1698824045756;
+        Wed, 01 Nov 2023 00:34:05 -0700 (PDT)
 Received: from amdsuplus2.inf.ethz.ch (amdsuplus2.inf.ethz.ch. [129.132.31.88])
-        by smtp.gmail.com with ESMTPSA id i18-20020adff312000000b0032d893d8dc8sm3401810wro.2.2023.11.01.00.34.02
+        by smtp.gmail.com with ESMTPSA id i18-20020adff312000000b0032d893d8dc8sm3401810wro.2.2023.11.01.00.34.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 01 Nov 2023 00:34:02 -0700 (PDT)
+        Wed, 01 Nov 2023 00:34:04 -0700 (PDT)
 From:   Hao Sun <sunhao.th@gmail.com>
-Subject: [PATCH bpf v2 0/2] bpf: Fix incorrect immediate spill
-Date:   Wed, 01 Nov 2023 08:33:21 +0100
-Message-Id: <20231101-fix-check-stack-write-v2-0-cb7c17b869b0@gmail.com>
+Date:   Wed, 01 Nov 2023 08:33:22 +0100
+Subject: [PATCH bpf v2 1/2] bpf: Fix check_stack_write_fixed_off() to
+ correctly spill imm
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAEH/QWUC/4VNSw6CMBC9Cpm1Y0rBmrryHoZFKVM6UShpG9QQ7
- m7DBdy85P03SBSZEtyqDSKtnDjMhchTBdabeSTkoXCQQja1kAodf9B6sk9M2RR8R86EthVaK6X
- bwRko3SVSCR67D+gXB10RPacc4vf4WuvD+jO71ihQ9Y28kGssXek+ToZfZxsm6PZ9/wGmKn28v
- wAAAA==
+Message-Id: <20231101-fix-check-stack-write-v2-1-cb7c17b869b0@gmail.com>
+References: <20231101-fix-check-stack-write-v2-0-cb7c17b869b0@gmail.com>
+In-Reply-To: <20231101-fix-check-stack-write-v2-0-cb7c17b869b0@gmail.com>
 To:     Alexei Starovoitov <ast@kernel.org>,
         Daniel Borkmann <daniel@iogearbox.net>,
         John Fastabend <john.fastabend@gmail.com>,
@@ -77,11 +77,11 @@ Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, Hao Sun <sunhao.th@gmail.com>,
         stable@vger.kernel.org
 X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1698824042; l=932;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1698824042; l=2043;
  i=sunhao.th@gmail.com; s=20231009; h=from:subject:message-id;
- bh=ThUo/m341SAJSMmR2TyDAT9X66kZjyxv8buNFFdDyPk=;
- b=jRSllAPO4dRAxroXA8lhNYVdg4dJk1qH6cH/WAifC4BTdStaARj0dl001Z/g8eSOcGNdFZDqd
- Klvb9C7V63JC+K1JYP/uosvqd+iyfCNQj7Mh9tue4iiL1yr7U0CnhUL
+ bh=ul85j3F8ehQe8EUMkKWv7wQfGIECOmyaTKwskzJcVEc=;
+ b=a9SceJhCUVsYqeRF9Abk77k9yz7T72uAeX43PMew3+zfC1bN990ouVGTwaY4tBccnBb5o0ula
+ 9RkuD00PzovBipIYuBXsJcm9knM4amjzhnO5T82h4DLs9TEJNt5PueX
 X-Developer-Key: i=sunhao.th@gmail.com; a=ed25519;
  pk=AHFxrImGtyqXOuw4f5xTNh4PGReb7hzD86ayyTZCXd4=
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -94,30 +94,63 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Immediate is incorrectly cast to u32 before being spilled, losing sign
-information. The range information is incorrect after load again. Fix
-immediate spill by remove the cast. The second patch add a test case
-for this.
+In check_stack_write_fixed_off(), imm value is cast to u32 before being
+spilled to the stack. Therefore, the sign information is lost, and the
+range information is incorrect when load from the stack again.
 
+For the following prog:
+0: r2 = r10
+1: *(u64*)(r2 -40) = -44
+2: r0 = *(u64*)(r2 - 40)
+3: if r0 s<= 0xa goto +2
+4: r0 = 1
+5: exit
+6: r0  = 0
+7: exit
+
+The verifier gives:
+func#0 @0
+0: R1=ctx(off=0,imm=0) R10=fp0
+0: (bf) r2 = r10                      ; R2_w=fp0 R10=fp0
+1: (7a) *(u64 *)(r2 -40) = -44        ; R2_w=fp0 fp-40_w=4294967252
+2: (79) r0 = *(u64 *)(r2 -40)         ; R0_w=4294967252 R2_w=fp0
+fp-40_w=4294967252
+3: (c5) if r0 s< 0xa goto pc+2
+mark_precise: frame0: last_idx 3 first_idx 0 subseq_idx -1
+mark_precise: frame0: regs=r0 stack= before 2: (79) r0 = *(u64 *)(r2 -40)
+3: R0_w=4294967252
+4: (b7) r0 = 1                        ; R0_w=1
+5: (95) exit
+verification time 7971 usec
+stack depth 40
+processed 6 insns (limit 1000000) max_states_per_insn 0 total_states 0
+peak_states 0 mark_read 0
+
+So remove the incorrect cast, since imm field is declared as s32, and
+__mark_reg_known() takes u64, so imm would be correctly sign extended
+by compiler.
+
+Fixes: ecdf985d7615 ("bpf: track immediate values written to stack by BPF_ST instruction")
+Cc: stable@vger.kernel.org
 Signed-off-by: Hao Sun <sunhao.th@gmail.com>
 ---
-Changes in v2:
-- Add fix and cc tags.
-- Link to v1: https://lore.kernel.org/r/20231026-fix-check-stack-write-v1-0-6b325ef3ce7e@gmail.com
+ kernel/bpf/verifier.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
----
-Hao Sun (2):
-      bpf: Fix check_stack_write_fixed_off() to correctly spill imm
-      selftests/bpf: Add test for immediate spilled to stack
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 857d76694517..44af69ce1301 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -4674,7 +4674,7 @@ static int check_stack_write_fixed_off(struct bpf_verifier_env *env,
+ 		   insn->imm != 0 && env->bpf_capable) {
+ 		struct bpf_reg_state fake_reg = {};
+ 
+-		__mark_reg_known(&fake_reg, (u32)insn->imm);
++		__mark_reg_known(&fake_reg, insn->imm);
+ 		fake_reg.type = SCALAR_VALUE;
+ 		save_register_state(state, spi, &fake_reg, size);
+ 	} else if (reg && is_spillable_regtype(reg->type)) {
 
- kernel/bpf/verifier.c                             |  2 +-
- tools/testing/selftests/bpf/verifier/bpf_st_mem.c | 32 +++++++++++++++++++++++
- 2 files changed, 33 insertions(+), 1 deletion(-)
----
-base-commit: f1c73396133cb3d913e2075298005644ee8dfade
-change-id: 20231026-fix-check-stack-write-c40996694dfa
-
-Best regards,
 -- 
-Hao Sun <sunhao.th@gmail.com>
+2.34.1
 
