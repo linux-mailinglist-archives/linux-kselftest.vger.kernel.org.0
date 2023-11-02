@@ -2,41 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4E847DF7A9
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Nov 2023 17:33:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CC6D7DF7AC
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Nov 2023 17:33:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229519AbjKBQdN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 2 Nov 2023 12:33:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33010 "EHLO
+        id S235503AbjKBQdQ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 2 Nov 2023 12:33:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229458AbjKBQdM (ORCPT
+        with ESMTP id S229458AbjKBQdP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 2 Nov 2023 12:33:12 -0400
+        Thu, 2 Nov 2023 12:33:15 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CBF2123;
-        Thu,  2 Nov 2023 09:33:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93B6112D;
+        Thu,  2 Nov 2023 09:33:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698942787; x=1730478787;
-  h=from:to:cc:subject:date:message-id;
-  bh=cdPiSKd/31m3AqChZgVeKDRUhuu5sQ7j4sET0CgQF7k=;
-  b=Th0d6+eUPgQLiytFXHm+dPltt4U6RNigxg9+JNUpSjWu/5mc+8YlUDT5
-   pMWr+2LE8bIRfT/Pbbp40TsUml8rrcssG7z/hmDk6aekPD1XpocxJ6njk
-   dIpRLKUVCADRi/TtBocaJ9LJ7ir2FiGxZoGuLlqO/ODEDyBC7S9XxYFpp
-   oqRzrFuyQcS1jTliWVgajmB22NLFX/yZaJYx9RKDgr6855mRaxYOd6F9l
-   Fd2+MfXVKlU/Wv0Vus1GlAi/RpwWL/lEZTJKu0YjLyqcVCdWfltkGRgdX
-   CgqvFFwXEDv1OZ09aVTpOrubX3mGS8rAEoMJ1LIaCtKNk1f5fdyFzFyvM
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10882"; a="388570836"
+  t=1698942789; x=1730478789;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references;
+  bh=Rx30kV34VqF67UIAymgDYBdZ21FZrZga0jsqNzydYSw=;
+  b=enG+SBUbE0KOboWt7gQc6gkZDyOD1sRILsQ9TlqOeJL66CoI8i70NCi/
+   8zbHWNiHCg4WGnr3nh796Uf2d/1GEWYo6S38TKKxCYs1wv1ltaJp0kP4P
+   L/mLsqZNeVkQkwnqe1R93r/bCB7HcWi5sYPfHDC/QavfNue5WKcuKFO4d
+   cf9JDgpdiIvs3zR7FHRFl2PxPiJ2AXJPVMH16BgbD7epKu9EMF9t2Rsdj
+   1KH0XYcD7VmBI67kJKbUnOQBcFImwmUsktxbNboRsuyO9eS0dtYUomQ9m
+   sdoAILDqSOAQpTXM4IcUeK0GUhqJ4VYAd/6XLFunYutgs/iQ2HlRfvXHZ
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10882"; a="388570853"
 X-IronPort-AV: E=Sophos;i="6.03,272,1694761200"; 
-   d="scan'208";a="388570836"
+   d="scan'208";a="388570853"
 Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2023 09:33:06 -0700
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2023 09:33:09 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.03,272,1694761200"; 
-   d="scan'208";a="9448383"
+   d="scan'208";a="9448403"
 Received: from arthur-vostro-3668.sh.intel.com ([10.239.159.65])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2023 09:33:00 -0700
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2023 09:33:04 -0700
 From:   Zeng Guang <guang.zeng@intel.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
@@ -52,10 +53,12 @@ Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         kvmarm@lists.linux.dev, kvm-riscv@lists.infradead.org,
         linux-riscv@lists.infradead.org, Zeng Guang <guang.zeng@intel.com>
-Subject: [RFC PATCH v1 0/8] KVM: seftests: Support guest user mode execution and running
-Date:   Thu,  2 Nov 2023 23:51:03 +0800
-Message-Id: <20231102155111.28821-1-guang.zeng@intel.com>
+Subject: [RFC PATCH v1 1/8] KVM: selftests: x86: Fix bug in addr_arch_gva2gpa()
+Date:   Thu,  2 Nov 2023 23:51:04 +0800
+Message-Id: <20231102155111.28821-2-guang.zeng@intel.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20231102155111.28821-1-guang.zeng@intel.com>
+References: <20231102155111.28821-1-guang.zeng@intel.com>
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -66,53 +69,43 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This patch series give a proposal to support guest VM running
-in user mode and in canonical linear address organization as
-well.
+Fix the approach to get page map from gva to gpa.
 
-First design to parition the 64-bit canonical linear address space
-into two half parts belonging to user-mode and supervisor-mode
-respectively, similar as the organization of linear addresses used
-in linux OS. Currently the linear addresses use 48-bit canonical
-format in which bits 63:47 of the address are identical.
+If gva maps a 4-KByte page, current implementation of addr_arch_gva2gpa()
+will obtain wrong page size and cannot derive correct offset from the guest
+virtual address.
 
-Secondly setup page table mapping the same guest physical address
-of test code and data segment onto both user-mode and supervisor-mode
-address space. It allows guest in different runtime mode, i.e.
-user or supervisor, can run one code base in the corresponding
-linear address space.
+Meanwhile using HUGEPAGE_MASK(x) to calculate the offset within page
+(1G/2M/4K) mistakenly incorporates the upper part of 64-bit canonical
+linear address. That will work out improper guest physical address if
+translating guest virtual address in supervisor-mode address space.
 
-Also provide the runtime environment setup API for switching to
-user mode execution.     
+Signed-off-by: Zeng Guang <guang.zeng@intel.com>
+---
+ tools/testing/selftests/kvm/lib/x86_64/processor.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-
-Zeng Guang (8):
-  KVM: selftests: x86: Fix bug in addr_arch_gva2gpa()
-  KVM: selftests: x86: Support guest running on canonical linear-address
-    organization
-  KVM: selftests: Add virt_arch_ucall_prealloc() arch specific
-    implementation
-  KVM : selftests : Adapt selftest cases to kernel canonical linear
-    address
-  KVM: selftests: x86: Prepare setup for user mode support
-  KVM: selftests: x86: Allow user to access user-mode address and I/O
-    address space
-  KVM: selftests: x86: Support vcpu run in user mode
-  KVM: selftests: x86: Add KVM forced emulation prefix capability
-
- .../selftests/kvm/include/kvm_util_base.h     |  20 ++-
- .../selftests/kvm/include/x86_64/processor.h  |  48 ++++++-
- .../selftests/kvm/lib/aarch64/processor.c     |   5 +
- tools/testing/selftests/kvm/lib/kvm_util.c    |   6 +-
- .../selftests/kvm/lib/riscv/processor.c       |   5 +
- .../selftests/kvm/lib/s390x/processor.c       |   5 +
- .../testing/selftests/kvm/lib/ucall_common.c  |   2 +
- .../selftests/kvm/lib/x86_64/processor.c      | 117 ++++++++++++++----
- .../selftests/kvm/set_memory_region_test.c    |  13 +-
- .../testing/selftests/kvm/x86_64/debug_regs.c |   2 +-
- .../kvm/x86_64/userspace_msr_exit_test.c      |   9 +-
- 11 files changed, 195 insertions(+), 37 deletions(-)
-
+diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+index d8288374078e..9f4b8c47edce 100644
+--- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
++++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+@@ -293,6 +293,7 @@ uint64_t *__vm_get_page_table_entry(struct kvm_vm *vm, uint64_t vaddr,
+ 	if (vm_is_target_pte(pde, level, PG_LEVEL_2M))
+ 		return pde;
+ 
++	*level = PG_LEVEL_4K;
+ 	return virt_get_pte(vm, pde, vaddr, PG_LEVEL_4K);
+ }
+ 
+@@ -496,7 +497,7 @@ vm_paddr_t addr_arch_gva2gpa(struct kvm_vm *vm, vm_vaddr_t gva)
+ 	 * No need for a hugepage mask on the PTE, x86-64 requires the "unused"
+ 	 * address bits to be zero.
+ 	 */
+-	return PTE_GET_PA(*pte) | (gva & ~HUGEPAGE_MASK(level));
++	return PTE_GET_PA(*pte) | (gva & (HUGEPAGE_SIZE(level) - 1));
+ }
+ 
+ static void kvm_setup_gdt(struct kvm_vm *vm, struct kvm_dtable *dt)
 -- 
 2.21.3
 
