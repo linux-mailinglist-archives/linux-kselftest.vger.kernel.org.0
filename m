@@ -2,234 +2,114 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16D487DF268
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Nov 2023 13:30:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42DB57DF2B2
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Nov 2023 13:47:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347434AbjKBMaC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 2 Nov 2023 08:30:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43564 "EHLO
+        id S1346479AbjKBMrv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 2 Nov 2023 08:47:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347457AbjKBMaB (ORCPT
+        with ESMTP id S1344822AbjKBMru (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 2 Nov 2023 08:30:01 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 234EE182;
-        Thu,  2 Nov 2023 05:29:57 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1D909C15;
-        Thu,  2 Nov 2023 05:30:39 -0700 (PDT)
-Received: from [10.1.33.173] (XHFQ2J9959.cambridge.arm.com [10.1.33.173])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B73F63F67D;
-        Thu,  2 Nov 2023 05:29:55 -0700 (PDT)
-Message-ID: <84df3b17-6f3d-4e9b-94e0-88ba186207e2@arm.com>
-Date:   Thu, 2 Nov 2023 12:29:54 +0000
+        Thu, 2 Nov 2023 08:47:50 -0400
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8E13136
+        for <linux-kselftest@vger.kernel.org>; Thu,  2 Nov 2023 05:47:44 -0700 (PDT)
+Received: by mail-qk1-x72e.google.com with SMTP id af79cd13be357-7788f513872so49318385a.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 02 Nov 2023 05:47:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1698929264; x=1699534064; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WQ+GdWawOo3FT7vEf5mwevTBQUu7eDKWKnvNYW/PsMc=;
+        b=RXTyY7wDU4x4iB6OujNA3beW5vSwCd6azk6x6EU2aFxiLSrJbCSBJBbO7EPE+Oj952
+         kpTouEdpnwwzMD/XiitOudEkbhmnG/tbel0f6nrq2uSTcsOaAY1ygVMlW0deX3cN/fKa
+         fxWDCP6j5r2AV/RLZ1CrCPQvfyQhfSsNjVNHpja4vTRs0tLR+Z0w5Hy7v+88xUoUpGeY
+         k90/FTZR0PLoV5jTUIcMjkHao8ajvtvFNTXjAt/zI7Lw0RmEWqa6tdkPwDsbOIW0XaNh
+         8vfrMm2M/G+V0Q8cf/32u0AFAvkoxoPHNLXkl0f+uOyJ0ezRy9TwzG7s+CW/BBM0ACgi
+         zY0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698929264; x=1699534064;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WQ+GdWawOo3FT7vEf5mwevTBQUu7eDKWKnvNYW/PsMc=;
+        b=INnKs03uCWyjIoG/KNwKBPrndBvuwXSG0gd+U358i+x8U/+dcDlaHrmSKirGbhRjMg
+         kdglBgF1hhK0XJ6v6ikyYtTvdgZoIflKTjFGsLCIGl4iy3ZeEA3ohCDwG7pN9lBr6tJ/
+         Irld8AJ5lhCTLZpOWs93eBGm0smhaOoxpIVmx40kzS2D8uAdx7vCZGj4t0IsY0IEuY2v
+         CsqIM8a4TA3G5CRSmMP0nMnJAqvskkW5sC7Og+ns9hu6TUiDYEQVr9rr1t/PQE/V9121
+         HzcYfAcj3jIBFFsByeHrRqTqJtCYW3KnEUp9NmQvRP3k8ztqchB3T5pIT3j+/pb3dbu6
+         Yyvg==
+X-Gm-Message-State: AOJu0YyC+/kDCF7nU9yqWo7hIgLfdEhIVXqOJlXIurEcBOm6VRliif2O
+        GCXIBvafhz064lrknqnvxIaefg==
+X-Google-Smtp-Source: AGHT+IFxFiOR7UXzaPpwFSzkWqw0zJo0m72p87r7wZ2km12vbMwY4rfJeHI3ydNPhYo9BA85V7lP4Q==
+X-Received: by 2002:a05:620a:35e:b0:775:9bb1:9ac4 with SMTP id t30-20020a05620a035e00b007759bb19ac4mr18012659qkm.61.1698929263726;
+        Thu, 02 Nov 2023 05:47:43 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-142-68-26-201.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.26.201])
+        by smtp.gmail.com with ESMTPSA id r18-20020a05620a299200b007770673e757sm2291720qkp.94.2023.11.02.05.47.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Nov 2023 05:47:43 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1qyX6s-0004kn-JW;
+        Thu, 02 Nov 2023 09:47:42 -0300
+Date:   Thu, 2 Nov 2023 09:47:42 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Lu Baolu <baolu.lu@linux.intel.com>
+Cc:     Kevin Tian <kevin.tian@intel.com>, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        Nicolin Chen <nicolinc@nvidia.com>,
+        Yi Liu <yi.l.liu@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        iommu@lists.linux.dev, linux-kselftest@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/6] IOMMUFD: Deliver IO page faults to user space
+Message-ID: <20231102124742.GA4634@ziepe.ca>
+References: <20231026024930.382898-1-baolu.lu@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] selftests/mm: Add a new test for madv and hugetlb
-Content-Language: en-GB
-From:   Ryan Roberts <ryan.roberts@arm.com>
-To:     Breno Leitao <leitao@debian.org>, mike.kravetz@oracle.com,
-        muchun.song@linux.dev, akpm@linux-foundation.org,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-mm@kvack.org, riel@surriel.com,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>
-References: <20231005163922.87568-1-leitao@debian.org>
- <20231005163922.87568-3-leitao@debian.org>
- <662df57e-47f1-4c15-9b84-f2f2d587fc5c@arm.com>
-In-Reply-To: <662df57e-47f1-4c15-9b84-f2f2d587fc5c@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231026024930.382898-1-baolu.lu@linux.intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 02/11/2023 12:24, Ryan Roberts wrote:
-> Hi Breno,
+On Thu, Oct 26, 2023 at 10:49:24AM +0800, Lu Baolu wrote:
+> Hi folks,
 > 
-> 
-> On 05/10/2023 17:39, Breno Leitao wrote:
->> Create a selftest that exercises the race between page faults and
->> madvise(MADV_DONTNEED) in the same huge page. Do it by running two
->> threads that touches the huge page and madvise(MADV_DONTNEED) at the same
->> time.
->>
->> In case of a SIGBUS coming at pagefault, the test should fail, since we
->> hit the bug.
->>
->> The test doesn't have a signal handler, and if it fails, it fails like
->> the following
->>
->>   ----------------------------------
->>   running ./hugetlb_fault_after_madv
->>   ----------------------------------
->>   ./run_vmtests.sh: line 186: 595563 Bus error    (core dumped) "$@"
->>   [FAIL]
->>
->> This selftest goes together with the fix of the bug[1] itself.
->>
->> [1] https://lore.kernel.org/all/20231001005659.2185316-1-riel@surriel.com/#r
->>
->> Signed-off-by: Breno Leitao <leitao@debian.org>
->> ---
->>  tools/testing/selftests/mm/Makefile           |  1 +
->>  .../selftests/mm/hugetlb_fault_after_madv.c   | 73 +++++++++++++++++++
->>  tools/testing/selftests/mm/run_vmtests.sh     |  4 +
->>  3 files changed, 78 insertions(+)
->>  create mode 100644 tools/testing/selftests/mm/hugetlb_fault_after_madv.c
->>
->> diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
->> index 6a9fc5693145..e71ec9910c62 100644
->> --- a/tools/testing/selftests/mm/Makefile
->> +++ b/tools/testing/selftests/mm/Makefile
->> @@ -68,6 +68,7 @@ TEST_GEN_FILES += split_huge_page_test
->>  TEST_GEN_FILES += ksm_tests
->>  TEST_GEN_FILES += ksm_functional_tests
->>  TEST_GEN_FILES += mdwe_test
->> +TEST_GEN_FILES += hugetlb_fault_after_madv
->>  
->>  ifneq ($(ARCH),arm64)
->>  TEST_GEN_PROGS += soft-dirty
->> diff --git a/tools/testing/selftests/mm/hugetlb_fault_after_madv.c b/tools/testing/selftests/mm/hugetlb_fault_after_madv.c
->> new file mode 100644
->> index 000000000000..73b81c632366
->> --- /dev/null
->> +++ b/tools/testing/selftests/mm/hugetlb_fault_after_madv.c
->> @@ -0,0 +1,73 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +#include <pthread.h>
->> +#include <stdio.h>
->> +#include <stdlib.h>
->> +#include <sys/mman.h>
->> +#include <sys/types.h>
->> +#include <unistd.h>
->> +
->> +#include "vm_util.h"
->> +#include "../kselftest.h"
->> +
->> +#define MMAP_SIZE (1 << 21)
->> +#define INLOOP_ITER 100
->> +
->> +char *huge_ptr;
->> +
->> +/* Touch the memory while it is being madvised() */
->> +void *touch(void *unused)
->> +{
->> +	char *ptr = (char *)huge_ptr;
->> +
->> +	for (int i = 0; i < INLOOP_ITER; i++)
->> +		ptr[0] = '.';
->> +
->> +	return NULL;
->> +}
->> +
->> +void *madv(void *unused)
->> +{
->> +	usleep(rand() % 10);
->> +
->> +	for (int i = 0; i < INLOOP_ITER; i++)
->> +		madvise(huge_ptr, MMAP_SIZE, MADV_DONTNEED);
->> +
->> +	return NULL;
->> +}
->> +
->> +int main(void)
->> +{
->> +	unsigned long free_hugepages;
->> +	pthread_t thread1, thread2;
->> +	/*
->> +	 * On kernel 6.4, we are able to reproduce the problem with ~1000
->> +	 * interactions
->> +	 */
->> +	int max = 10000;
->> +
->> +	srand(getpid());
->> +
->> +	free_hugepages = get_free_hugepages();
->> +	if (free_hugepages != 1) {
->> +		ksft_exit_skip("This test needs one and only one page to execute. Got %lu\n",
->> +			       free_hugepages);
->> +	}
->> +
->> +	while (max--) {
->> +		huge_ptr = mmap(NULL, MMAP_SIZE, PROT_READ | PROT_WRITE,
->> +				MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB,
->> +				-1, 0);
->> +
->> +		if ((unsigned long)huge_ptr == -1)
->> +			ksft_exit_skip("Failed to allocated huge page\n");
->> +
->> +		pthread_create(&thread1, NULL, madv, NULL);
->> +		pthread_create(&thread2, NULL, touch, NULL);
->> +
->> +		pthread_join(thread1, NULL);
->> +		pthread_join(thread2, NULL);
->> +		munmap(huge_ptr, MMAP_SIZE);
->> +	}
->> +
->> +	return KSFT_PASS;
->> +}
->> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
->> index 3e2bc818d566..9f53f7318a38 100755
->> --- a/tools/testing/selftests/mm/run_vmtests.sh
->> +++ b/tools/testing/selftests/mm/run_vmtests.sh
->> @@ -221,6 +221,10 @@ CATEGORY="hugetlb" run_test ./hugepage-mremap
->>  CATEGORY="hugetlb" run_test ./hugepage-vmemmap
->>  CATEGORY="hugetlb" run_test ./hugetlb-madvise
->>  
->> +# For this test, we need one and just one huge page
->> +echo 1 > /proc/sys/vm/nr_hugepages
-> 
-> I've noticed that this change breaks some of the uffd-stress tests further down
-> the file, because you have freed previously reserved hugepages that the test
-> requires to run. I notice that the patch is already in mm-stable, so perhaps its
-> possible to submit a patch that does a save and restore?
-> 
-> Although I'm not sure if that might be tricky because the previous reservation
-> is per-size and per-node (our CI does this on the kernel command line), and I
-> suspect if you want just 1 huge page in the entire system you won't be able to
-> get back to the previous state by just restoring this value?
+> This series implements the functionality of delivering IO page faults to
+> user space through the IOMMUFD framework for nested translation. Nested
+> translation is a hardware feature that supports two-stage translation
+> tables for IOMMU. The second-stage translation table is managed by the
+> host VMM, while the first-stage translation table is owned by user
+> space. This allows user space to control the IOMMU mappings for its
+> devices.
 
-Actually on closer inspection, I don't think this will be a problem; simply
-saving and restoring the value around the test will be sufficient.
+Having now looked more closely at the ARM requirements it seems we
+will need generic events, not just page fault events to have a
+complete emulation.
 
-I also notice that the binary for the new test is not added to the .gitignore,
-which is a minor annoyance.
+So I'd like to see this generalized into a channel to carry any
+events..
 
-Thanks,
-Ryan
+> User space indicates its capability of handling IO page faults by
+> setting the IOMMU_HWPT_ALLOC_IOPF_CAPABLE flag when allocating a
+> hardware page table (HWPT). IOMMUFD will then set up its infrastructure
+> for page fault delivery. On a successful return of HWPT allocation, the
+> user can retrieve and respond to page faults by reading and writing to
+> the file descriptor (FD) returned in out_fault_fd.
 
-> 
-> These are the failing tests for reference:
-> 
-> # ------------------------------------
-> # running ./uffd-stress hugetlb 128 32
-> # ------------------------------------
-> # nr_pages: 64, nr_pages_per_cpu: 8
-> # ERROR: context init failed (errno=12, @uffd-stress.c:254)
-> # [FAIL]
-> # --------------------------------------------
-> # running ./uffd-stress hugetlb-private 128 32
-> # --------------------------------------------
-> # nr_pages: 64, nr_pages_per_cpu: 8
-> # ERROR: context init failed (errno=12, @uffd-stress.c:254)
-> # [FAIL]
-> 
-> Thanks,
-> Ryan
-> 
-> 
-> 
->> +CATEGORY="hugetlb" run_test ./hugetlb_fault_after_madv
->> +
->>  if test_selected "hugetlb"; then
->>  	echo "NOTE: These hugetlb tests provide minimal coverage.  Use"
->>  	echo "      https://github.com/libhugetlbfs/libhugetlbfs.git for"
-> 
+This is the right way to approach it, and more broadly this shouldn't
+be an iommufd specific thing. Kernel drivers will also need to create
+fault capable PAGING iommu domains.
 
+Jason
