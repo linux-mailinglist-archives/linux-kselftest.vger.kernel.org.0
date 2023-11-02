@@ -2,42 +2,42 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 067F27DF7B5
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Nov 2023 17:34:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A561F7DF7B4
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Nov 2023 17:34:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235554AbjKBQd1 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 2 Nov 2023 12:33:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42270 "EHLO
+        id S1376923AbjKBQd3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 2 Nov 2023 12:33:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235587AbjKBQdZ (ORCPT
+        with ESMTP id S1376921AbjKBQd2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 2 Nov 2023 12:33:25 -0400
+        Thu, 2 Nov 2023 12:33:28 -0400
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1CD913D;
-        Thu,  2 Nov 2023 09:33:18 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27EA8182;
+        Thu,  2 Nov 2023 09:33:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698942798; x=1730478798;
+  t=1698942803; x=1730478803;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references;
-  bh=Y/7/R0T7sdWEW0G4FlYJVCB4cGKVbltohN+8VyJwxuQ=;
-  b=n5lZzrvIkY3+/gIF+yIt2C12k7jCcJesKF4pD7rxFb2GcILtqkfmC0JO
-   Pi3g1NG8WhQDRzMP5ftWOqD3JxeLhCJqbZRmMtDjyJGixbV3kTsO9BF66
-   WM6iVSbMmbocClaq9sTDj6n/+KssUEkWeEYb0IkVsm1OIw2OaBCKjrrGt
-   c1DBitNHTRk3LuUTmQqt6/3fJCfNswpmbjlOa7XMHz0pXnerS8YaPc8t0
-   uDX3VfknsiSjbVNqeHk8IM/J0h0JjQyaWzQkMKUFo5YS/Ywvsm8tWT15T
-   gvqDAeFQRr+zV8/uFgNOOTaT3kOND0SwFMZd/2r8eTLl7vSDcCPlGqMZc
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10882"; a="388570922"
+  bh=8/hRJyUBNjvleQKE+JOCe0b2zCgJ7MkC7xPhxYSrynY=;
+  b=WhL8CXQKbYppnwN6dlgSBJTRe56iJM19HinxDuAV9PF+g7O0lMoEkFU+
+   sEuw/tDk38OHGeqVHMWV9RrgVKsIbGYX8dOIayqoDecnsQt6qafmhZZRn
+   ZhXmf8fpnH9qpSFy7HowjfBz3W1h1w99IZbmPfJnzpwykbkxn6ec7yXLF
+   6DLgIsoa1BtPm5MVqPbl4sHZSG1QjsO+UWNXduk4IksWFGk29Yh3vBjWJ
+   J09WSVoIKGkmu3Va+b+i/HE32WwxytIlqS4IGvhTTehh2DJZsHItfBFDe
+   JIsl9jbggoCtl+gEAEdNC4tIwrUM4vZ6EHlxmmunYXi+uA4ObacDCUfb1
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10882"; a="388570958"
 X-IronPort-AV: E=Sophos;i="6.03,272,1694761200"; 
-   d="scan'208";a="388570922"
+   d="scan'208";a="388570958"
 Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2023 09:33:18 -0700
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2023 09:33:22 -0700
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.03,272,1694761200"; 
-   d="scan'208";a="9448464"
+   d="scan'208";a="9448494"
 Received: from arthur-vostro-3668.sh.intel.com ([10.239.159.65])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2023 09:33:14 -0700
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2023 09:33:18 -0700
 From:   Zeng Guang <guang.zeng@intel.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
@@ -53,9 +53,9 @@ Cc:     kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         kvmarm@lists.linux.dev, kvm-riscv@lists.infradead.org,
         linux-riscv@lists.infradead.org, Zeng Guang <guang.zeng@intel.com>
-Subject: [RFC PATCH v1 3/8] KVM: selftests: Add virt_arch_ucall_prealloc() arch specific implementation
-Date:   Thu,  2 Nov 2023 23:51:06 +0800
-Message-Id: <20231102155111.28821-4-guang.zeng@intel.com>
+Subject: [RFC PATCH v1 4/8] KVM : selftests : Adapt selftest cases to kernel canonical linear address
+Date:   Thu,  2 Nov 2023 23:51:07 +0800
+Message-Id: <20231102155111.28821-5-guang.zeng@intel.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20231102155111.28821-1-guang.zeng@intel.com>
 References: <20231102155111.28821-1-guang.zeng@intel.com>
@@ -69,137 +69,92 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Add virt_arch_ucall_prealloc() which allows to preprocess the memory
-allocated to ucall_pool as per arch specific requirement.
+Adapt RIP to kernel canonical linear address in test cases
+set_memory_region_test/debug_regs/userspace_msr_exit_test.
 
-For X86 platform, it needs to adjust the address to corresponding
-address space based on the operation mode, i.e. user or supervisor
-mode, at runtime.
-
-There is no change for other platforms(aarch64/riscv/s390x).
+No functional change intended.
 
 Signed-off-by: Zeng Guang <guang.zeng@intel.com>
 ---
- .../selftests/kvm/include/kvm_util_base.h       | 17 +++++++++++++++++
- .../selftests/kvm/lib/aarch64/processor.c       |  5 +++++
- .../testing/selftests/kvm/lib/riscv/processor.c |  5 +++++
- .../testing/selftests/kvm/lib/s390x/processor.c |  5 +++++
- tools/testing/selftests/kvm/lib/ucall_common.c  |  2 ++
- .../selftests/kvm/lib/x86_64/processor.c        | 12 ++++++++++++
- 6 files changed, 46 insertions(+)
+ .../testing/selftests/kvm/set_memory_region_test.c  | 13 ++++++++++---
+ tools/testing/selftests/kvm/x86_64/debug_regs.c     |  2 +-
+ .../selftests/kvm/x86_64/userspace_msr_exit_test.c  |  9 +++++----
+ 3 files changed, 16 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-index a18db6a7b3cf..dbaa2cf83c1c 100644
---- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-@@ -917,6 +917,23 @@ static inline void virt_dump(FILE *stream, struct kvm_vm *vm, uint8_t indent)
- 	virt_arch_dump(stream, vm, indent);
- }
+diff --git a/tools/testing/selftests/kvm/set_memory_region_test.c b/tools/testing/selftests/kvm/set_memory_region_test.c
+index b32960189f5f..8ab897bae3e0 100644
+--- a/tools/testing/selftests/kvm/set_memory_region_test.c
++++ b/tools/testing/selftests/kvm/set_memory_region_test.c
+@@ -31,6 +31,12 @@
+ #define MEM_REGION_GPA		0xc0000000
+ #define MEM_REGION_SLOT		10
  
 +/*
-+ * Virtual UCALL memory pre-processing
-+ *
-+ * Input Args:
-+ *   ucall_gva - Guest virtual address point to memory of ucall pool
-+ *
-+ * Output Args: None
-+ *
-+ * Return:
-+ *   Processed guest virtual address point to memory of ucall pool
++ * Offset to execute code at kernel address space
 + */
-+void *virt_arch_ucall_prealloc(uint64_t ucall_gva);
++#define KERNEL_LNA_OFFSET	0xffff800000000000
++#define CAST_TO_KERN(x)		(x | KERNEL_LNA_OFFSET)
 +
-+static inline void *virt_ucall_prealloc(uint64_t ucall_gva)
-+{
-+	return virt_arch_ucall_prealloc(ucall_gva);
-+}
+ static const uint64_t MMIO_VAL = 0xbeefull;
  
- static inline int __vm_disable_nx_huge_pages(struct kvm_vm *vm)
+ extern const uint64_t final_rip_start;
+@@ -300,10 +306,11 @@ static void test_delete_memory_region(void)
+ 	 * so the instruction pointer would point to the reset vector.
+ 	 */
+ 	if (run->exit_reason == KVM_EXIT_INTERNAL_ERROR)
+-		TEST_ASSERT(regs.rip >= final_rip_start &&
+-			    regs.rip < final_rip_end,
++		TEST_ASSERT(regs.rip >= CAST_TO_KERN(final_rip_start) &&
++			    regs.rip < CAST_TO_KERN(final_rip_end),
+ 			    "Bad rip, expected 0x%lx - 0x%lx, got 0x%llx\n",
+-			    final_rip_start, final_rip_end, regs.rip);
++			    CAST_TO_KERN(final_rip_start), CAST_TO_KERN(final_rip_end),
++			    regs.rip);
+ 
+ 	kvm_vm_free(vm);
+ }
+diff --git a/tools/testing/selftests/kvm/x86_64/debug_regs.c b/tools/testing/selftests/kvm/x86_64/debug_regs.c
+index f6b295e0b2d2..73ce373e3299 100644
+--- a/tools/testing/selftests/kvm/x86_64/debug_regs.c
++++ b/tools/testing/selftests/kvm/x86_64/debug_regs.c
+@@ -64,7 +64,7 @@ static void guest_code(void)
+ 	GUEST_DONE();
+ }
+ 
+-#define  CAST_TO_RIP(v)  ((unsigned long long)&(v))
++#define  CAST_TO_RIP(v)  ((unsigned long long)&(v) | KERNEL_LNA_OFFSET)
+ 
+ static void vcpu_skip_insn(struct kvm_vcpu *vcpu, int insn_len)
  {
-diff --git a/tools/testing/selftests/kvm/lib/aarch64/processor.c b/tools/testing/selftests/kvm/lib/aarch64/processor.c
-index 3a0259e25335..3a1827cce615 100644
---- a/tools/testing/selftests/kvm/lib/aarch64/processor.c
-+++ b/tools/testing/selftests/kvm/lib/aarch64/processor.c
-@@ -238,6 +238,11 @@ void virt_arch_dump(FILE *stream, struct kvm_vm *vm, uint8_t indent)
+diff --git a/tools/testing/selftests/kvm/x86_64/userspace_msr_exit_test.c b/tools/testing/selftests/kvm/x86_64/userspace_msr_exit_test.c
+index 3533dc2fbfee..ab6b3f88352f 100644
+--- a/tools/testing/selftests/kvm/x86_64/userspace_msr_exit_test.c
++++ b/tools/testing/selftests/kvm/x86_64/userspace_msr_exit_test.c
+@@ -18,6 +18,7 @@
+ static int fep_available = 1;
+ 
+ #define MSR_NON_EXISTENT 0x474f4f00
++#define CAST_TO_KERN(x)  (x | KERNEL_LNA_OFFSET)
+ 
+ static u64 deny_bits = 0;
+ struct kvm_msr_filter filter_allow = {
+@@ -363,12 +364,12 @@ static void __guest_gp_handler(struct ex_regs *regs,
+ 			       char *r_start, char *r_end,
+ 			       char *w_start, char *w_end)
+ {
+-	if (regs->rip == (uintptr_t)r_start) {
+-		regs->rip = (uintptr_t)r_end;
++	if (regs->rip == CAST_TO_KERN((uintptr_t)r_start)) {
++		regs->rip = CAST_TO_KERN((uintptr_t)r_end);
+ 		regs->rax = 0;
+ 		regs->rdx = 0;
+-	} else if (regs->rip == (uintptr_t)w_start) {
+-		regs->rip = (uintptr_t)w_end;
++	} else if (regs->rip == CAST_TO_KERN((uintptr_t)w_start)) {
++		regs->rip = CAST_TO_KERN((uintptr_t)w_end);
+ 	} else {
+ 		GUEST_ASSERT(!"RIP is at an unknown location!");
  	}
- }
- 
-+void *virt_arch_ucall_prealloc(uint64_t ucall_gva)
-+{
-+	return (void *)ucall_gva;
-+}
-+
- void aarch64_vcpu_setup(struct kvm_vcpu *vcpu, struct kvm_vcpu_init *init)
- {
- 	struct kvm_vcpu_init default_init = { .target = -1, };
-diff --git a/tools/testing/selftests/kvm/lib/riscv/processor.c b/tools/testing/selftests/kvm/lib/riscv/processor.c
-index d146ca71e0c0..d3f7eed84195 100644
---- a/tools/testing/selftests/kvm/lib/riscv/processor.c
-+++ b/tools/testing/selftests/kvm/lib/riscv/processor.c
-@@ -180,6 +180,11 @@ void virt_arch_dump(FILE *stream, struct kvm_vm *vm, uint8_t indent)
- 	}
- }
- 
-+void *virt_arch_ucall_prealloc(uint64_t ucall_gva)
-+{
-+	return (void *)ucall_gva;
-+}
-+
- void riscv_vcpu_mmu_setup(struct kvm_vcpu *vcpu)
- {
- 	struct kvm_vm *vm = vcpu->vm;
-diff --git a/tools/testing/selftests/kvm/lib/s390x/processor.c b/tools/testing/selftests/kvm/lib/s390x/processor.c
-index 15945121daf1..b7c86649807d 100644
---- a/tools/testing/selftests/kvm/lib/s390x/processor.c
-+++ b/tools/testing/selftests/kvm/lib/s390x/processor.c
-@@ -155,6 +155,11 @@ void virt_arch_dump(FILE *stream, struct kvm_vm *vm, uint8_t indent)
- 	virt_dump_region(stream, vm, indent, vm->pgd);
- }
- 
-+void *virt_arch_ucall_prealloc(uint64_t ucall_gva)
-+{
-+	return (void *)ucall_gva;
-+}
-+
- struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, uint32_t vcpu_id,
- 				  void *guest_code)
- {
-diff --git a/tools/testing/selftests/kvm/lib/ucall_common.c b/tools/testing/selftests/kvm/lib/ucall_common.c
-index 816a3fa109bf..5afa32d77427 100644
---- a/tools/testing/selftests/kvm/lib/ucall_common.c
-+++ b/tools/testing/selftests/kvm/lib/ucall_common.c
-@@ -51,6 +51,8 @@ static struct ucall *ucall_alloc(void)
- 	if (!ucall_pool)
- 		goto ucall_failed;
- 
-+	ucall_pool = (struct ucall_header *)virt_ucall_prealloc((uint64_t)ucall_pool);
-+
- 	for (i = 0; i < KVM_MAX_VCPUS; ++i) {
- 		if (!test_and_set_bit(i, ucall_pool->in_use)) {
- 			uc = &ucall_pool->ucalls[i];
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index 6f4295a13d00..525b714ee13c 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -388,6 +388,18 @@ void virt_arch_dump(FILE *stream, struct kvm_vm *vm, uint8_t indent)
- 	}
- }
- 
-+void *virt_arch_ucall_prealloc(uint64_t ucall_gva)
-+{
-+	unsigned short desc_cs;
-+
-+	asm volatile ("mov %%cs,%0" :  "=r" (desc_cs));
-+
-+	if (desc_cs & 0x3)
-+		return (void *)(ucall_gva & ~KERNEL_LNA_OFFSET);
-+	else
-+		return (void *)(ucall_gva | KERNEL_LNA_OFFSET);
-+}
-+
- /*
-  * Set Unusable Segment
-  *
 -- 
 2.21.3
 
