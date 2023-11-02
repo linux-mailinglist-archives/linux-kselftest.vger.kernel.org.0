@@ -2,134 +2,109 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D385E7DF0F9
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Nov 2023 12:14:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB2787DF191
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Nov 2023 12:46:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229732AbjKBLOs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 2 Nov 2023 07:14:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38454 "EHLO
+        id S229992AbjKBLqT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 2 Nov 2023 07:46:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjKBLOr (ORCPT
+        with ESMTP id S229483AbjKBLqT (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 2 Nov 2023 07:14:47 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBA6C132
-        for <linux-kselftest@vger.kernel.org>; Thu,  2 Nov 2023 04:14:37 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id 38308e7fff4ca-2c50fbc218bso9975391fa.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 02 Nov 2023 04:14:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1698923676; x=1699528476; darn=vger.kernel.org;
-        h=user-agent:in-reply-to:content-transfer-encoding
-         :content-disposition:mime-version:references:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=o58wFnf6szPGgzlryUFb1pArzVhpE+Bc8B/ye0mh1Ic=;
-        b=U53jqP9VsUBak53Y5BfKYfegk3kaVH4KZAkUP0KAhHPKM/eAbu3Dhyy2tSC/G70F16
-         pLEfg6e/NzHbe30i0hvgPA2D0qvph/Iza4vRoYLPLavuHyAUlz21bQsaWMWWffq31Y/u
-         BLEEulyy+BSJz7zVF24Xj6Se21AQ9seOR9HcWAhMTrGE4tC6zAS1BN7rRb2XDSOze1MP
-         Ggox8NcFXFQVfDLjqcbHTzinBsBtnaRybKmPymlBwQRt74BVx6uM/mwSMWFg5aCzr23Q
-         L4yJLhnYyNYhwmgWa8c4VKYmMz+sT5S266ehiOmXNS09PIS+a+sOHgXWTOI3UMvwe4yK
-         Fkrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1698923676; x=1699528476;
-        h=user-agent:in-reply-to:content-transfer-encoding
-         :content-disposition:mime-version:references:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=o58wFnf6szPGgzlryUFb1pArzVhpE+Bc8B/ye0mh1Ic=;
-        b=MicEBGHQbJpQXn/F/sIwfhDXZU0ga3U9jKP8K+BSbRfjdCz80+b3U6qRRNU29RPtq5
-         12I2xLIYWuJSYvhGrokzRk7Lq89HSl3gg37h12iw+zsQ386btXxUKIKLa1iBjDa2t8qA
-         2OtP7GohzI7+hxFQJZNTWWJZKFig+Qg9Y+1x5g67d6wQK7YR4sVqe97/gHK66ge5W12x
-         5ouYs0nD/2wWl8BWaCHfOlQAjPDcCVu3IjFBx4rlHDmmkvR7kXYCDYAJqLPnbr1vjovf
-         TZsUXmxW5c8FX1SeOn6FWRx/fdPCHT6b/wlxeJGB2A/KMmgaWaJBIFanC2JVKvFocyrK
-         CzJw==
-X-Gm-Message-State: AOJu0Yxop4SO9GDRN5qKEGY0Q7p4zRckxuYTncw0qtlg83VBjlDqpCFU
-        wRDjSseZVXaz7DTMc/f/d7zcQg==
-X-Google-Smtp-Source: AGHT+IH9UK7cZnl9aI1aNQH4ht0Hk9DmI3/B0c72F9p/BRC6XUjOOYp1gCJA1VqoiNTczqzaa+kmgQ==
-X-Received: by 2002:a2e:be10:0:b0:2c4:fdc9:c8a3 with SMTP id z16-20020a2ebe10000000b002c4fdc9c8a3mr16743697ljq.50.1698923676107;
-        Thu, 02 Nov 2023 04:14:36 -0700 (PDT)
-Received: from mutt (c-9b0ee555.07-21-73746f28.bbcust.telenor.se. [85.229.14.155])
-        by smtp.gmail.com with ESMTPSA id bd4-20020a05651c168400b002c6ee08c2casm215421ljb.105.2023.11.02.04.14.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Nov 2023 04:14:35 -0700 (PDT)
-Date:   Thu, 2 Nov 2023 12:14:33 +0100
-From:   Anders Roxell <anders.roxell@linaro.org>
-To:     =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-Cc:     Andrii Nakryiko <andrii@kernel.org>,
-        Mykola Lysenko <mykolal@fb.com>, bpf@vger.kernel.org,
-        Daniel Borkmann <daniel@iogearbox.net>, netdev@vger.kernel.org,
-        =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Larysa Zaremba <larysa.zaremba@intel.com>
-Subject: Re: [PATCH bpf] selftests/bpf: Fix broken build where char is
- unsigned
-Message-ID: <20231102111433.GA364395@mutt>
-References: <20231102103537.247336-1-bjorn@kernel.org>
+        Thu, 2 Nov 2023 07:46:19 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E15A2D47;
+        Thu,  2 Nov 2023 04:45:43 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 99B702F4;
+        Thu,  2 Nov 2023 04:46:25 -0700 (PDT)
+Received: from [10.1.33.173] (XHFQ2J9959.cambridge.arm.com [10.1.33.173])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DD83A3F67D;
+        Thu,  2 Nov 2023 04:45:38 -0700 (PDT)
+Message-ID: <f8463381-2697-49e9-9460-9dc73452830d@arm.com>
+Date:   Thu, 2 Nov 2023 11:45:37 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20231102103537.247336-1-bjorn@kernel.org>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v33 6/6] selftests: mm: add pagemap ioctl tests
+Content-Language: en-GB
+To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
+        Peter Xu <peterx@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
+        Andrei Vagin <avagin@gmail.com>,
+        Danylo Mocherniuk <mdanylo@google.com>,
+        Paul Gofman <pgofman@codeweavers.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Shuah Khan <shuah@kernel.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Yang Shi <shy828301@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@Oracle.com>,
+        Yun Zhou <yun.zhou@windriver.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Alex Sierra <alex.sierra@amd.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
+        David Hildenbrand <david@redhat.com>
+References: <20230821141518.870589-1-usama.anjum@collabora.com>
+ <20230821141518.870589-7-usama.anjum@collabora.com>
+From:   Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <20230821141518.870589-7-usama.anjum@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2023-11-02 11:35, Björn Töpel wrote:
-> From: Björn Töpel <bjorn@rivosinc.com>
-> 
-> There are architectures where char is not signed. If so, the following
-> error is triggered:
-> 
->   | xdp_hw_metadata.c:435:42: error: result of comparison of constant -1 \
->   |   with expression of type 'char' is always true \
->   |   [-Werror,-Wtautological-constant-out-of-range-compare]
->   |   435 |         while ((opt = getopt(argc, argv, "mh")) != -1) {
->   |       |                ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ^  ~~
->   | 1 error generated.
-> 
-> Correct by changing the char to int.
-> 
-> Fixes: bb6a88885fde ("selftests/bpf: Add options and frags to xdp_hw_metadata")
-> Signed-off-by: Björn Töpel <bjorn@rivosinc.com>
+On 21/08/2023 15:15, Muhammad Usama Anjum wrote:
 
-Thank you for the patch.
-I saw the same failure when I built selftests/bpf for arm64.
+[...]
 
-With this patch ontop of today's next-20231102, fixes that build issue.
+> +
+> +
+> +int init_uffd(void)
+> +{
+> +	struct uffdio_api uffdio_api;
+> +
+> +	uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK | UFFD_USER_MODE_ONLY);
+> +	if (uffd == -1)
+> +		ksft_exit_fail_msg("uffd syscall failed\n");
+> +
+> +	uffdio_api.api = UFFD_API;
+> +	uffdio_api.features = UFFD_FEATURE_WP_UNPOPULATED | UFFD_FEATURE_WP_ASYNC |
+> +			      UFFD_FEATURE_WP_HUGETLBFS_SHMEM;
+> +	if (ioctl(uffd, UFFDIO_API, &uffdio_api))
+> +		ksft_exit_fail_msg("UFFDIO_API\n");
+> +
+> +	if (!(uffdio_api.api & UFFDIO_REGISTER_MODE_WP) ||
+> +	    !(uffdio_api.features & UFFD_FEATURE_WP_UNPOPULATED) ||
+> +	    !(uffdio_api.features & UFFD_FEATURE_WP_ASYNC) ||
+> +	    !(uffdio_api.features & UFFD_FEATURE_WP_HUGETLBFS_SHMEM))
+> +		ksft_exit_fail_msg("UFFDIO_API error %llu\n", uffdio_api.api);
 
-Tested-by: Anders Roxell <anders.roxell@linaro.org>
+Hi,
 
+I've just noticed that this fails on arm64 because the required features are not
+available. It's common practice to skip instead of fail for this sort of
+condition (and that's how all the other uffd tests work). The current fail
+approach creates noise in our CI.
 
-Cheers,
-Anders
+I see this is already in mm-stable so perhaps we can add a patch to fix on top?
 
-> ---
->  tools/testing/selftests/bpf/xdp_hw_metadata.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/xdp_hw_metadata.c b/tools/testing/selftests/bpf/xdp_hw_metadata.c
-> index 17c0f92ff160..c3ba40d0b9de 100644
-> --- a/tools/testing/selftests/bpf/xdp_hw_metadata.c
-> +++ b/tools/testing/selftests/bpf/xdp_hw_metadata.c
-> @@ -430,7 +430,7 @@ static void print_usage(void)
->  
->  static void read_args(int argc, char *argv[])
->  {
-> -	char opt;
-> +	int opt;
->  
->  	while ((opt = getopt(argc, argv, "mh")) != -1) {
->  		switch (opt) {
-> 
-> base-commit: cb3c6a58be50c65014296aa3455cae0fa1e82eac
-> -- 
-> 2.40.1
-> 
+Thanks,
+Ryan
+
 
