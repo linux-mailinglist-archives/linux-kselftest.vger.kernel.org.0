@@ -2,147 +2,221 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29E097DF211
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Nov 2023 13:11:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D1D07DF247
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Nov 2023 13:24:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbjKBMLv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 2 Nov 2023 08:11:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58898 "EHLO
+        id S1346859AbjKBMYz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 2 Nov 2023 08:24:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233356AbjKBMLu (ORCPT
+        with ESMTP id S1346094AbjKBMYy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 2 Nov 2023 08:11:50 -0400
+        Thu, 2 Nov 2023 08:24:54 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BC8081A6;
-        Thu,  2 Nov 2023 05:11:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6DEAF136;
+        Thu,  2 Nov 2023 05:24:50 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9F8AA2F4;
-        Thu,  2 Nov 2023 05:12:26 -0700 (PDT)
-Received: from [10.1.25.180] (R90XJLFY.arm.com [10.1.25.180])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DDB113F67D;
-        Thu,  2 Nov 2023 05:11:42 -0700 (PDT)
-Message-ID: <e90cb52f-d55b-d3ba-3933-6cc7b43fcfbc@arm.com>
-Date:   Thu, 2 Nov 2023 12:11:41 +0000
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 64CA42F4;
+        Thu,  2 Nov 2023 05:25:32 -0700 (PDT)
+Received: from [10.1.33.173] (XHFQ2J9959.cambridge.arm.com [10.1.33.173])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0D7C33F67D;
+        Thu,  2 Nov 2023 05:24:48 -0700 (PDT)
+Message-ID: <662df57e-47f1-4c15-9b84-f2f2d587fc5c@arm.com>
+Date:   Thu, 2 Nov 2023 12:24:47 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH v3 3/3] kselftest: Add new test for detecting unprobed
- Devicetree devices
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>
-Cc:     Mark Brown <broonie@kernel.org>, kernelci@lists.linux.dev,
-        kernel@collabora.com, Guenter Roeck <groeck@chromium.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/2] selftests/mm: Add a new test for madv and hugetlb
+Content-Language: en-GB
+To:     Breno Leitao <leitao@debian.org>, mike.kravetz@oracle.com,
+        muchun.song@linux.dev, akpm@linux-foundation.org,
         Shuah Khan <shuah@kernel.org>
-References: <20230828211424.2964562-1-nfraprado@collabora.com>
- <20230828211424.2964562-4-nfraprado@collabora.com>
-Content-Language: en-US
-From:   Aishwarya TCV <aishwarya.tcv@arm.com>
-In-Reply-To: <20230828211424.2964562-4-nfraprado@collabora.com>
+Cc:     linux-mm@kvack.org, riel@surriel.com,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>
+References: <20231005163922.87568-1-leitao@debian.org>
+ <20231005163922.87568-3-leitao@debian.org>
+From:   Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <20231005163922.87568-3-leitao@debian.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+Hi Breno,
 
 
-On 28/08/2023 22:13, Nícolas F. R. A. Prado wrote:
-> Introduce a new kselftest to detect devices that were declared in the
-> Devicetree, and are expected to be probed by a driver, but weren't.
+On 05/10/2023 17:39, Breno Leitao wrote:
+> Create a selftest that exercises the race between page faults and
+> madvise(MADV_DONTNEED) in the same huge page. Do it by running two
+> threads that touches the huge page and madvise(MADV_DONTNEED) at the same
+> time.
 > 
-> The test uses two lists: a list of compatibles that can match a
-> Devicetree device to a driver, and a list of compatibles that should be
-> ignored. The first is automatically generated by the
-> dt-extract-compatibles script, and is run as part of building this test.
-> The list of compatibles to ignore is a hand-crafted list to capture the
-> few exceptions of compatibles that are expected to match a driver but
-> not be bound to it.
+> In case of a SIGBUS coming at pagefault, the test should fail, since we
+> hit the bug.
 > 
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+> The test doesn't have a signal handler, and if it fails, it fails like
+> the following
 > 
+>   ----------------------------------
+>   running ./hugetlb_fault_after_madv
+>   ----------------------------------
+>   ./run_vmtests.sh: line 186: 595563 Bus error    (core dumped) "$@"
+>   [FAIL]
+> 
+> This selftest goes together with the fix of the bug[1] itself.
+> 
+> [1] https://lore.kernel.org/all/20231001005659.2185316-1-riel@surriel.com/#r
+> 
+> Signed-off-by: Breno Leitao <leitao@debian.org>
+> ---
+>  tools/testing/selftests/mm/Makefile           |  1 +
+>  .../selftests/mm/hugetlb_fault_after_madv.c   | 73 +++++++++++++++++++
+>  tools/testing/selftests/mm/run_vmtests.sh     |  4 +
+>  3 files changed, 78 insertions(+)
+>  create mode 100644 tools/testing/selftests/mm/hugetlb_fault_after_madv.c
+> 
+> diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+> index 6a9fc5693145..e71ec9910c62 100644
+> --- a/tools/testing/selftests/mm/Makefile
+> +++ b/tools/testing/selftests/mm/Makefile
+> @@ -68,6 +68,7 @@ TEST_GEN_FILES += split_huge_page_test
+>  TEST_GEN_FILES += ksm_tests
+>  TEST_GEN_FILES += ksm_functional_tests
+>  TEST_GEN_FILES += mdwe_test
+> +TEST_GEN_FILES += hugetlb_fault_after_madv
+>  
+>  ifneq ($(ARCH),arm64)
+>  TEST_GEN_PROGS += soft-dirty
+> diff --git a/tools/testing/selftests/mm/hugetlb_fault_after_madv.c b/tools/testing/selftests/mm/hugetlb_fault_after_madv.c
+> new file mode 100644
+> index 000000000000..73b81c632366
+> --- /dev/null
+> +++ b/tools/testing/selftests/mm/hugetlb_fault_after_madv.c
+> @@ -0,0 +1,73 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <pthread.h>
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <sys/mman.h>
+> +#include <sys/types.h>
+> +#include <unistd.h>
+> +
+> +#include "vm_util.h"
+> +#include "../kselftest.h"
+> +
+> +#define MMAP_SIZE (1 << 21)
+> +#define INLOOP_ITER 100
+> +
+> +char *huge_ptr;
+> +
+> +/* Touch the memory while it is being madvised() */
+> +void *touch(void *unused)
+> +{
+> +	char *ptr = (char *)huge_ptr;
+> +
+> +	for (int i = 0; i < INLOOP_ITER; i++)
+> +		ptr[0] = '.';
+> +
+> +	return NULL;
+> +}
+> +
+> +void *madv(void *unused)
+> +{
+> +	usleep(rand() % 10);
+> +
+> +	for (int i = 0; i < INLOOP_ITER; i++)
+> +		madvise(huge_ptr, MMAP_SIZE, MADV_DONTNEED);
+> +
+> +	return NULL;
+> +}
+> +
+> +int main(void)
+> +{
+> +	unsigned long free_hugepages;
+> +	pthread_t thread1, thread2;
+> +	/*
+> +	 * On kernel 6.4, we are able to reproduce the problem with ~1000
+> +	 * interactions
+> +	 */
+> +	int max = 10000;
+> +
+> +	srand(getpid());
+> +
+> +	free_hugepages = get_free_hugepages();
+> +	if (free_hugepages != 1) {
+> +		ksft_exit_skip("This test needs one and only one page to execute. Got %lu\n",
+> +			       free_hugepages);
+> +	}
+> +
+> +	while (max--) {
+> +		huge_ptr = mmap(NULL, MMAP_SIZE, PROT_READ | PROT_WRITE,
+> +				MAP_PRIVATE | MAP_ANONYMOUS | MAP_HUGETLB,
+> +				-1, 0);
+> +
+> +		if ((unsigned long)huge_ptr == -1)
+> +			ksft_exit_skip("Failed to allocated huge page\n");
+> +
+> +		pthread_create(&thread1, NULL, madv, NULL);
+> +		pthread_create(&thread2, NULL, touch, NULL);
+> +
+> +		pthread_join(thread1, NULL);
+> +		pthread_join(thread2, NULL);
+> +		munmap(huge_ptr, MMAP_SIZE);
+> +	}
+> +
+> +	return KSFT_PASS;
+> +}
+> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+> index 3e2bc818d566..9f53f7318a38 100755
+> --- a/tools/testing/selftests/mm/run_vmtests.sh
+> +++ b/tools/testing/selftests/mm/run_vmtests.sh
+> @@ -221,6 +221,10 @@ CATEGORY="hugetlb" run_test ./hugepage-mremap
+>  CATEGORY="hugetlb" run_test ./hugepage-vmemmap
+>  CATEGORY="hugetlb" run_test ./hugetlb-madvise
+>  
+> +# For this test, we need one and just one huge page
+> +echo 1 > /proc/sys/vm/nr_hugepages
 
-Hi Nicolas,
+I've noticed that this change breaks some of the uffd-stress tests further down
+the file, because you have freed previously reserved hugepages that the test
+requires to run. I notice that the patch is already in mm-stable, so perhaps its
+possible to submit a patch that does a save and restore?
 
-Currently when building kselftest against next-master and
-mainline-master the below build error is observed. A bisect (full log
-below) identified this patch as introducing the failure.
+Although I'm not sure if that might be tricky because the previous reservation
+is per-size and per-node (our CI does this on the kernel command line), and I
+suspect if you want just 1 huge page in the entire system you won't be able to
+get back to the previous state by just restoring this value?
 
-Full log from a failure:
+These are the failing tests for reference:
 
-https://storage.kernelci.org/mainline/master/v6.6-9152-gdeefd5024f07/arm64/defconfig%2Bkselftest/gcc-10/logs/kselftest.log
-
-make[4]: Entering directory '/tmp/kci/linux/tools/testing/selftests/dt'
-/tmp/kci/linux/tools/testing/selftests/../../../scripts/dtc/dt-extract-compatibles
--d /tmp/kci/linux/tools/testing/selftests/../../.. >
-/tmp/kci/linux/build/kselftest/dt/compatible_list
-Traceback (most recent call last):
-  File
-"/tmp/kci/linux/tools/testing/selftests/../../../scripts/dtc/dt-extract-compatibles",
-line 107, in <module>
-    compat_ignore_list.extend(parse_compatibles_to_ignore(f))
-  File
-"/tmp/kci/linux/tools/testing/selftests/../../../scripts/dtc/dt-extract-compatibles",
-line 67, in parse_compatibles_to_ignore
-    with open(file, 'r', encoding='utf-8') as f:
-OSError: [Errno 40] Too many levels of symbolic links:
-'/tmp/kci/linux/tools/testing/selftests/../../../build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/tools/testing/selftests/powerpc/vphn/vphn.c'
-make[4]: *** [Makefile:12:
-/tmp/kci/linux/build/kselftest/dt/compatible_list] Error 1
-make[4]: Leaving directory '/tmp/kci/linux/tools/testing/selftests/dt'
-
-
-The bisect log:
-
-git bisect start
-# good: [f9a7eda4d73d44dc1d17d05cdc9aeb9fc5660740] Merge tag
-'hwmon-for-v6.7' of
-git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging
-git bisect good f9a7eda4d73d44dc1d17d05cdc9aeb9fc5660740
-# bad: [8bc9e6515183935fa0cccaf67455c439afe4982b] Merge tag
-'devicetree-for-6.7' of
-git://git.kernel.org/pub/scm/linux/kernel/git/robh/linux
-git bisect bad 8bc9e6515183935fa0cccaf67455c439afe4982b
-# good: [0a6d7f8275f255eda823c0f0b61d024f6f5b483d] Merge branch
-'clk-cleanup' into clk-next
-git bisect good 0a6d7f8275f255eda823c0f0b61d024f6f5b483d
-# good: [fe4ae2fab00b4751265580c5865fdf23b62d80b3] Merge tag
-'clk-for-linus' of git://git.kernel.org/pub/scm/linux/kernel/git/clk/linux
-git bisect good fe4ae2fab00b4751265580c5865fdf23b62d80b3
-# good: [fc7b34ae1347f4eb36f065458e53d6065cd85928] power: supply:
-wm831x_backup: Convert to platform remove callback returning void
-git bisect good fc7b34ae1347f4eb36f065458e53d6065cd85928
-# bad: [f2147371a83c6de1128093c163dc17bc61096362] dt-bindings: soc: fsl:
-cpm_qe: cpm1-scc-qmc: Fix example property name
-git bisect bad f2147371a83c6de1128093c163dc17bc61096362
-# bad: [22c3888e55bf5c86be536a3d9e06a50e7bf3a39f] dt-bindings: watchdog:
-atmel,at91rm9200-wdt: convert txt to yaml
-git bisect bad 22c3888e55bf5c86be536a3d9e06a50e7bf3a39f
-# bad: [780967feb626c6f4efa1e4b3532f1be83884cd76] dt-bindings: Add
-Marantec vendor prefix
-git bisect bad 780967feb626c6f4efa1e4b3532f1be83884cd76
-# bad: [bc17fd92c1eb7589f1f3df1893e9f62bb35b8cc8] dt-bindings:
-interrupt-controller: qcom,pdc: document qcom,sm4450-pdc
-git bisect bad bc17fd92c1eb7589f1f3df1893e9f62bb35b8cc8
-# good: [365ba0c7a73cce407bf40cdf9900b86b945d4acb] dt:
-dt-extract-compatibles: Add flag for driver matching compatibles
-git bisect good 365ba0c7a73cce407bf40cdf9900b86b945d4acb
-# bad: [14571ab1ad213de59b3726a40aea7ca0365bf445] kselftest: Add new
-test for detecting unprobed Devicetree devices
-git bisect bad 14571ab1ad213de59b3726a40aea7ca0365bf445
-# first bad commit: [14571ab1ad213de59b3726a40aea7ca0365bf445]
-kselftest: Add new test for detecting unprobed Devicetree devices
-
+# ------------------------------------
+# running ./uffd-stress hugetlb 128 32
+# ------------------------------------
+# nr_pages: 64, nr_pages_per_cpu: 8
+# ERROR: context init failed (errno=12, @uffd-stress.c:254)
+# [FAIL]
+# --------------------------------------------
+# running ./uffd-stress hugetlb-private 128 32
+# --------------------------------------------
+# nr_pages: 64, nr_pages_per_cpu: 8
+# ERROR: context init failed (errno=12, @uffd-stress.c:254)
+# [FAIL]
 
 Thanks,
-Aishwarya
+Ryan
+
+
+
+> +CATEGORY="hugetlb" run_test ./hugetlb_fault_after_madv
+> +
+>  if test_selected "hugetlb"; then
+>  	echo "NOTE: These hugetlb tests provide minimal coverage.  Use"
+>  	echo "      https://github.com/libhugetlbfs/libhugetlbfs.git for"
 
