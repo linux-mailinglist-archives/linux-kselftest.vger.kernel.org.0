@@ -2,121 +2,147 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AF307DF1FC
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Nov 2023 13:07:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29E097DF211
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Nov 2023 13:11:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235605AbjKBMHC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 2 Nov 2023 08:07:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41960 "EHLO
+        id S229661AbjKBMLv (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 2 Nov 2023 08:11:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235599AbjKBMGl (ORCPT
+        with ESMTP id S233356AbjKBMLu (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 2 Nov 2023 08:06:41 -0400
+        Thu, 2 Nov 2023 08:11:50 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 04854112;
-        Thu,  2 Nov 2023 05:04:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id BC8081A6;
+        Thu,  2 Nov 2023 05:11:44 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E6C8B2F4;
-        Thu,  2 Nov 2023 05:05:27 -0700 (PDT)
-Received: from [10.1.33.173] (XHFQ2J9959.cambridge.arm.com [10.1.33.173])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1A1A93F67D;
-        Thu,  2 Nov 2023 05:04:41 -0700 (PDT)
-Message-ID: <9edbf5f2-efce-40f1-ae7c-34607d9700ce@arm.com>
-Date:   Thu, 2 Nov 2023 12:04:40 +0000
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9F8AA2F4;
+        Thu,  2 Nov 2023 05:12:26 -0700 (PDT)
+Received: from [10.1.25.180] (R90XJLFY.arm.com [10.1.25.180])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DDB113F67D;
+        Thu,  2 Nov 2023 05:11:42 -0700 (PDT)
+Message-ID: <e90cb52f-d55b-d3ba-3933-6cc7b43fcfbc@arm.com>
+Date:   Thu, 2 Nov 2023 12:11:41 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v33 6/6] selftests: mm: add pagemap ioctl tests
-Content-Language: en-GB
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Peter Xu <peterx@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?UTF-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@Oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, Nadav Amit <namit@vmware.com>,
-        David Hildenbrand <david@redhat.com>
-References: <20230821141518.870589-1-usama.anjum@collabora.com>
- <20230821141518.870589-7-usama.anjum@collabora.com>
- <f8463381-2697-49e9-9460-9dc73452830d@arm.com>
- <a9abc532-2d56-4da9-a016-419e8ae57ac4@collabora.com>
-From:   Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <a9abc532-2d56-4da9-a016-419e8ae57ac4@collabora.com>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH v3 3/3] kselftest: Add new test for detecting unprobed
+ Devicetree devices
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>
+Cc:     Mark Brown <broonie@kernel.org>, kernelci@lists.linux.dev,
+        kernel@collabora.com, Guenter Roeck <groeck@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>,
+        Shuah Khan <shuah@kernel.org>
+References: <20230828211424.2964562-1-nfraprado@collabora.com>
+ <20230828211424.2964562-4-nfraprado@collabora.com>
+Content-Language: en-US
+From:   Aishwarya TCV <aishwarya.tcv@arm.com>
+In-Reply-To: <20230828211424.2964562-4-nfraprado@collabora.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 02/11/2023 11:49, Muhammad Usama Anjum wrote:
-> On 11/2/23 4:45 PM, Ryan Roberts wrote:
->> On 21/08/2023 15:15, Muhammad Usama Anjum wrote:
->>
->> [...]
->>
->>> +
->>> +
->>> +int init_uffd(void)
->>> +{
->>> +	struct uffdio_api uffdio_api;
->>> +
->>> +	uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK | UFFD_USER_MODE_ONLY);
->>> +	if (uffd == -1)
->>> +		ksft_exit_fail_msg("uffd syscall failed\n");
->>> +
->>> +	uffdio_api.api = UFFD_API;
->>> +	uffdio_api.features = UFFD_FEATURE_WP_UNPOPULATED | UFFD_FEATURE_WP_ASYNC |
->>> +			      UFFD_FEATURE_WP_HUGETLBFS_SHMEM;
->>> +	if (ioctl(uffd, UFFDIO_API, &uffdio_api))
->>> +		ksft_exit_fail_msg("UFFDIO_API\n");
->>> +
->>> +	if (!(uffdio_api.api & UFFDIO_REGISTER_MODE_WP) ||
->>> +	    !(uffdio_api.features & UFFD_FEATURE_WP_UNPOPULATED) ||
->>> +	    !(uffdio_api.features & UFFD_FEATURE_WP_ASYNC) ||
->>> +	    !(uffdio_api.features & UFFD_FEATURE_WP_HUGETLBFS_SHMEM))
->>> +		ksft_exit_fail_msg("UFFDIO_API error %llu\n", uffdio_api.api);
->>
->> Hi,
->>
->> I've just noticed that this fails on arm64 because the required features are not
->> available. It's common practice to skip instead of fail for this sort of
->> condition (and that's how all the other uffd tests work). The current fail
->> approach creates noise in our CI.
->>
->> I see this is already in mm-stable so perhaps we can add a patch to fix on top?
-> Yeah, we can add a patch to skip all the tests instead of failing here. Let
-> me send a patch this week.
 
-Thats great - thanks for the fast response!
 
+On 28/08/2023 22:13, Nícolas F. R. A. Prado wrote:
+> Introduce a new kselftest to detect devices that were declared in the
+> Devicetree, and are expected to be probed by a driver, but weren't.
 > 
->>
->> Thanks,
->> Ryan
->>
->>
+> The test uses two lists: a list of compatibles that can match a
+> Devicetree device to a driver, and a list of compatibles that should be
+> ignored. The first is automatically generated by the
+> dt-extract-compatibles script, and is run as part of building this test.
+> The list of compatibles to ignore is a hand-crafted list to capture the
+> few exceptions of compatibles that are expected to match a driver but
+> not be bound to it.
 > 
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+> 
+
+Hi Nicolas,
+
+Currently when building kselftest against next-master and
+mainline-master the below build error is observed. A bisect (full log
+below) identified this patch as introducing the failure.
+
+Full log from a failure:
+
+https://storage.kernelci.org/mainline/master/v6.6-9152-gdeefd5024f07/arm64/defconfig%2Bkselftest/gcc-10/logs/kselftest.log
+
+make[4]: Entering directory '/tmp/kci/linux/tools/testing/selftests/dt'
+/tmp/kci/linux/tools/testing/selftests/../../../scripts/dtc/dt-extract-compatibles
+-d /tmp/kci/linux/tools/testing/selftests/../../.. >
+/tmp/kci/linux/build/kselftest/dt/compatible_list
+Traceback (most recent call last):
+  File
+"/tmp/kci/linux/tools/testing/selftests/../../../scripts/dtc/dt-extract-compatibles",
+line 107, in <module>
+    compat_ignore_list.extend(parse_compatibles_to_ignore(f))
+  File
+"/tmp/kci/linux/tools/testing/selftests/../../../scripts/dtc/dt-extract-compatibles",
+line 67, in parse_compatibles_to_ignore
+    with open(file, 'r', encoding='utf-8') as f:
+OSError: [Errno 40] Too many levels of symbolic links:
+'/tmp/kci/linux/tools/testing/selftests/../../../build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/build/source/tools/testing/selftests/powerpc/vphn/vphn.c'
+make[4]: *** [Makefile:12:
+/tmp/kci/linux/build/kselftest/dt/compatible_list] Error 1
+make[4]: Leaving directory '/tmp/kci/linux/tools/testing/selftests/dt'
+
+
+The bisect log:
+
+git bisect start
+# good: [f9a7eda4d73d44dc1d17d05cdc9aeb9fc5660740] Merge tag
+'hwmon-for-v6.7' of
+git://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging
+git bisect good f9a7eda4d73d44dc1d17d05cdc9aeb9fc5660740
+# bad: [8bc9e6515183935fa0cccaf67455c439afe4982b] Merge tag
+'devicetree-for-6.7' of
+git://git.kernel.org/pub/scm/linux/kernel/git/robh/linux
+git bisect bad 8bc9e6515183935fa0cccaf67455c439afe4982b
+# good: [0a6d7f8275f255eda823c0f0b61d024f6f5b483d] Merge branch
+'clk-cleanup' into clk-next
+git bisect good 0a6d7f8275f255eda823c0f0b61d024f6f5b483d
+# good: [fe4ae2fab00b4751265580c5865fdf23b62d80b3] Merge tag
+'clk-for-linus' of git://git.kernel.org/pub/scm/linux/kernel/git/clk/linux
+git bisect good fe4ae2fab00b4751265580c5865fdf23b62d80b3
+# good: [fc7b34ae1347f4eb36f065458e53d6065cd85928] power: supply:
+wm831x_backup: Convert to platform remove callback returning void
+git bisect good fc7b34ae1347f4eb36f065458e53d6065cd85928
+# bad: [f2147371a83c6de1128093c163dc17bc61096362] dt-bindings: soc: fsl:
+cpm_qe: cpm1-scc-qmc: Fix example property name
+git bisect bad f2147371a83c6de1128093c163dc17bc61096362
+# bad: [22c3888e55bf5c86be536a3d9e06a50e7bf3a39f] dt-bindings: watchdog:
+atmel,at91rm9200-wdt: convert txt to yaml
+git bisect bad 22c3888e55bf5c86be536a3d9e06a50e7bf3a39f
+# bad: [780967feb626c6f4efa1e4b3532f1be83884cd76] dt-bindings: Add
+Marantec vendor prefix
+git bisect bad 780967feb626c6f4efa1e4b3532f1be83884cd76
+# bad: [bc17fd92c1eb7589f1f3df1893e9f62bb35b8cc8] dt-bindings:
+interrupt-controller: qcom,pdc: document qcom,sm4450-pdc
+git bisect bad bc17fd92c1eb7589f1f3df1893e9f62bb35b8cc8
+# good: [365ba0c7a73cce407bf40cdf9900b86b945d4acb] dt:
+dt-extract-compatibles: Add flag for driver matching compatibles
+git bisect good 365ba0c7a73cce407bf40cdf9900b86b945d4acb
+# bad: [14571ab1ad213de59b3726a40aea7ca0365bf445] kselftest: Add new
+test for detecting unprobed Devicetree devices
+git bisect bad 14571ab1ad213de59b3726a40aea7ca0365bf445
+# first bad commit: [14571ab1ad213de59b3726a40aea7ca0365bf445]
+kselftest: Add new test for detecting unprobed Devicetree devices
+
+
+Thanks,
+Aishwarya
 
