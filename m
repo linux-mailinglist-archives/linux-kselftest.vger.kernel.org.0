@@ -2,86 +2,107 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FFC07DECB4
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Nov 2023 07:00:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38A827DEDA6
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Nov 2023 08:50:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232540AbjKBGA3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 2 Nov 2023 02:00:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35350 "EHLO
+        id S233153AbjKBHup (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 2 Nov 2023 03:50:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231876AbjKBGA2 (ORCPT
+        with ESMTP id S229644AbjKBHul (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 2 Nov 2023 02:00:28 -0400
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC7A312E;
-        Wed,  1 Nov 2023 23:00:25 -0700 (PDT)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 902FEC116AE;
-        Thu,  2 Nov 2023 06:00:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1698904825;
-        bh=TT6oGmKBvrWb94S/vP7d37OfMVFkbdfOksx84tXkYIk=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=b6XE/ZHBMLjtASbMMN8/6ByBnKKdvtKquvR6CelIrF5eOPLQ8DMZAOljjerNhqK//
-         SutgZS76sJlX+YETNSZXTJTqy8c3q2u3lb17gARz9MFjCsGwwqwmH/Rg+hVnE3k2uf
-         BIyhuXDqs/yAfTMz46fKjaTrmdAg1ORe1IJmNNKRfzYjKqUtK3nTLAmQcgUj4K8vyr
-         9i9B2Px7LEdG4kVIAu2smrPUR+glDlm5BjBdpgL/5sJj4EWiIhriRTMpFSjTkmnxMc
-         gTvY/j+3BPwSaeLlhATqdyOBH8/X+GKt0yjy2UfkBw8fXDy5Pj18C3ruQYFsshW5/x
-         poDJL7QpB4Nfw==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 7A7F3C43168;
-        Thu,  2 Nov 2023 06:00:25 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Thu, 2 Nov 2023 03:50:41 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D589B116
+        for <linux-kselftest@vger.kernel.org>; Thu,  2 Nov 2023 00:50:30 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1cc3388621cso14420995ad.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 02 Nov 2023 00:50:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1698911429; x=1699516229; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Acc6wXDvPM6YXuWFiWqejrBU9UJ2gcJGWMsAnskhSnc=;
+        b=U5fuf/76j4QchkCYe/smVCmdyFeV4oAJat+z2RoUQEyzADyBG3JgpICkJrXJQlDnZb
+         BTVp1UnbgMxhtIN8ds2YRvwr4HMC038cb/+MuUdx5SBnBpHWVECx3OqN1e9UQ9SELl82
+         8q00nIvxyS/hp7x2aUhmlY/Gua0DGfVqWZQb9CfjSxo8CIOnX41EdtYY+C7YVUoT5v9Z
+         rASlu0auKA84/CR2ZvW3Nlm6nzpdAd4UbJ73uaxHA7uITaqaz+f1u5ZhuJoBTOJnp+BH
+         6ZDjy38u3B51nqQ01M6ZyTqN+kvKYnUWpnjiWqj7cne/vqkxWQzdIfDG/DHAELF03MPv
+         MIBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1698911429; x=1699516229;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Acc6wXDvPM6YXuWFiWqejrBU9UJ2gcJGWMsAnskhSnc=;
+        b=n7gfCS7a/HgUwdExJ50VotALWE4Ww77EKy1fkyIRnEfE/2zzBXQ/AGUt7deNTeJV92
+         dgbESWnT3MHOJO5TkIvymLXatPmneeSxixoJul2vfHe+E8M6Z47mvIBG/0brrvlzxSl8
+         LUzeXZJYgtwZABk/mdGvDaQVqSL5Wk4TkKLOJ8ZeUepjUYRCALwecsICvP9CjzsVZU4t
+         V3+qaJPTnxRHVTG+wQEKczYbG4V4kaxnoKAfGwT65pmF0qLE01WRUXipKFb9lplrKWrB
+         B6pE5A9W2y7OfzNB+ESjwRS9RiYtH8Lb02OcaoZ+ZOnCB3Me6g7i4ucIWwLlKzXVm0PS
+         HfsQ==
+X-Gm-Message-State: AOJu0YwRPJmSm98+iz1w1KaQqeiXRkpvI2wRpt0MkuhQp/p9tkfxl+3i
+        YqqJ+wwbSXw6j8OJPsWxjS4XMgh3rCHoKw==
+X-Google-Smtp-Source: AGHT+IE6eMC1aQQy00VxDfH3VeS9UxbvjVFh2/kEqdOQtbbtMrrFya3Sqbp4guGDtSVIJwuG7J5Ibw==
+X-Received: by 2002:a17:90a:884:b0:27d:5568:e867 with SMTP id v4-20020a17090a088400b0027d5568e867mr11395931pjc.9.1698911429399;
+        Thu, 02 Nov 2023 00:50:29 -0700 (PDT)
+Received: from Laptop-X1.redhat.com ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id ci18-20020a17090afc9200b0027d0a60b9c9sm1913647pjb.28.2023.11.02.00.50.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Nov 2023 00:50:28 -0700 (PDT)
+From:   Hangbin Liu <liuhangbin@gmail.com>
+To:     linux-kselftest@vger.kernel.org
+Cc:     Shuah Khan <shuah@kernel.org>, Kees Cook <keescook@chromium.org>,
+        Hangbin Liu <liuhangbin@gmail.com>
+Subject: [PATCH] kselftests: add per_test_log support
+Date:   Thu,  2 Nov 2023 15:50:17 +0800
+Message-ID: <20231102075017.4060991-1-liuhangbin@gmail.com>
+X-Mailer: git-send-email 2.41.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v3 1/2] selftests/bpf: Convert CHECK macros to
- ASSERT_* macros in bpf_iter
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <169890482549.9002.3230353368904918414.git-patchwork-notify@kernel.org>
-Date:   Thu, 02 Nov 2023 06:00:25 +0000
-References: <DB3PR10MB6835E9C8DFCA226DD6FEF914E8A3A@DB3PR10MB6835.EURPRD10.PROD.OUTLOOK.COM>
-In-Reply-To: <DB3PR10MB6835E9C8DFCA226DD6FEF914E8A3A@DB3PR10MB6835.EURPRD10.PROD.OUTLOOK.COM>
-To:     Yuran Pereira <yuran.pereira@hotmail.com>
-Cc:     bpf@vger.kernel.org, yonghong.song@linux.dev, sinquersw@gmail.com,
-        ast@kernel.org, brauner@kernel.org, daniel@iogearbox.net,
-        haoluo@google.com, iii@linux.ibm.com, john.fastabend@gmail.com,
-        jolsa@kernel.org, kpsingh@kernel.org, kuifeng@meta.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        mykolal@fb.com, sdf@google.com, shuah@kernel.org, song@kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hello:
+By default, all the test output will be printed to stdout or output.log if
+-s supplied. The kselftest/runner.sh also supports per test log if the
+variable per_test_logging is set. So add new option -p to set this
+veriable. Note the -p option is conflict with -s option.
 
-This series was applied to bpf/bpf-next.git (master)
-by Alexei Starovoitov <ast@kernel.org>:
+Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+---
+ tools/testing/selftests/run_kselftest.sh | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-On Sat, 28 Oct 2023 10:54:13 +0530 you wrote:
-> As it was pointed out by Yonghong Song [1], in the bpf selftests the use
-> of the ASSERT_* series of macros is preferred over the CHECK macro.
-> This patch replaces all CHECK calls in bpf_iter with the appropriate
-> ASSERT_* macros.
-> 
-> [1] https://lore.kernel.org/lkml/0a142924-633c-44e6-9a92-2dc019656bf2@linux.dev
-> 
-> [...]
-
-Here is the summary with links:
-  - [bpf-next,v3,1/2] selftests/bpf: Convert CHECK macros to ASSERT_* macros in bpf_iter
-    https://git.kernel.org/bpf/bpf-next/c/ed47cb27586d
-  - [bpf-next,v3,2/2] selftests/bpf: Add malloc failure checks in bpf_iter
-    https://git.kernel.org/bpf/bpf-next/c/cb3c6a58be50
-
-You are awesome, thank you!
+diff --git a/tools/testing/selftests/run_kselftest.sh b/tools/testing/selftests/run_kselftest.sh
+index 92743980e553..965220a314ce 100755
+--- a/tools/testing/selftests/run_kselftest.sh
++++ b/tools/testing/selftests/run_kselftest.sh
+@@ -20,7 +20,8 @@ usage()
+ {
+ 	cat <<EOF
+ Usage: $0 [OPTIONS]
+-  -s | --summary		Print summary with detailed log in output.log
++  -s | --summary		Print summary with detailed log in output.log (conflict with -p)
++  -p | --per_test_log		Print test log in /tmp with each test name (conflict with -s)
+   -t | --test COLLECTION:TEST	Run TEST from COLLECTION
+   -c | --collection COLLECTION	Run all tests from COLLECTION
+   -l | --list			List the available collection:test entries
+@@ -41,6 +42,9 @@ while true; do
+ 			logfile="$BASE_DIR"/output.log
+ 			cat /dev/null > $logfile
+ 			shift ;;
++		-p | --per_test_log)
++			per_test_logging=1
++			shift ;;
+ 		-t | --test)
+ 			TESTS="$TESTS $2"
+ 			shift 2 ;;
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.41.0
 
