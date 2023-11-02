@@ -2,85 +2,84 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CCEC7DF92C
-	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Nov 2023 18:49:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 643417DF92F
+	for <lists+linux-kselftest@lfdr.de>; Thu,  2 Nov 2023 18:51:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233906AbjKBRtx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 2 Nov 2023 13:49:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53214 "EHLO
+        id S231339AbjKBRvs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 2 Nov 2023 13:51:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234256AbjKBRtw (ORCPT
+        with ESMTP id S229461AbjKBRvr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 2 Nov 2023 13:49:52 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE1BB1A4;
-        Thu,  2 Nov 2023 10:49:36 -0700 (PDT)
+        Thu, 2 Nov 2023 13:51:47 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 148EE111;
+        Thu,  2 Nov 2023 10:51:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1698947377; x=1730483377;
+  t=1698947502; x=1730483502;
   h=message-id:date:subject:to:cc:references:from:
    in-reply-to:content-transfer-encoding:mime-version;
-  bh=JJIHGNodwk5uhYavh1SaLxeRr5MCoS4CFZsvvLgZPfI=;
-  b=AAfgFlVtmwNyjJc73Ee0/j0kWkrV0eL77HDOW18BBzKrOrZsJ0jugRop
-   oZW1GroaZn88fHBBxL+AU5af9sFwDomaROHqei5/QwHhLNtBa5x9UBcXb
-   iIIEmyH1LKHTIo9q3vmeHMK/5N9ANUVF2vDPTEeGQ5a7wO34CEj2cj/Yu
-   d4EORkto0d5K5w+rG4NP/XCvBc6JLJQ4nwDcvZ9Bu5qTXRrPimrxZd0OA
-   vsU0CJDAWquq88vUEmTx2T7n/h7oQbA1QPO/UjIMrrZYMkGsGwh6Lb+Co
-   G+f5f5qUwoT809Au9jVrmvrjGol5QNT/lXaBwNsBPjLWpBFfJ/1lpgHis
+  bh=oD5XJX8xl1C7D8wkoE5sJQ11davkP3nC1h0ev2L35Dw=;
+  b=JBGURh4u6A9o8HSvyDStEFJBAkY4Kc/GR7FbGHQgNwkp5C7bB+bZ03f5
+   7oUREk/GAuEVawQzgOejhLDE1w+smZuobVefvFPFGaLTXi/XLva3ZIEBP
+   KOz9XdGtbLhl2o0103HUXbb+7JFDw/DyKmibsLekIluyh1IHds+RNNWjf
+   c5nY52ST1NRI/K4oBW1uQ5nHtvO5Q/GXBXPLONHUp7LX59CBPNHve4oI7
+   uCUKkhq+fYZ7iLHw94YHn2R9POEN7WkfqQXDf5E7qN/ywFWVU2ANs4eVF
+   idroP6K53U4GoUNY3VVB+G8FDmoZp4QKFiiJuOGpXM2WDJBo9cyH0BT8o
    g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10882"; a="1650337"
+X-IronPort-AV: E=McAfee;i="6600,9927,10882"; a="7413448"
 X-IronPort-AV: E=Sophos;i="6.03,272,1694761200"; 
-   d="scan'208";a="1650337"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2023 10:49:36 -0700
+   d="scan'208";a="7413448"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2023 10:51:40 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10882"; a="878337302"
 X-IronPort-AV: E=Sophos;i="6.03,272,1694761200"; 
-   d="scan'208";a="878337302"
-Received: from fmsmsx603.amr.corp.intel.com ([10.18.126.83])
-  by fmsmga002.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 02 Nov 2023 10:49:36 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+   d="scan'208";a="2631798"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmviesa002.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 02 Nov 2023 10:51:39 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Thu, 2 Nov 2023 10:49:36 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ 15.1.2507.34; Thu, 2 Nov 2023 10:51:32 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Thu, 2 Nov 2023 10:49:35 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ 15.1.2507.34; Thu, 2 Nov 2023 10:51:31 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34 via Frontend Transport; Thu, 2 Nov 2023 10:49:35 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.101)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ 15.1.2507.34 via Frontend Transport; Thu, 2 Nov 2023 10:51:31 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.168)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.34; Thu, 2 Nov 2023 10:49:34 -0700
+ 15.1.2507.34; Thu, 2 Nov 2023 10:51:31 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HQQAx8D1XuBMW9X+oBr4Xu6zbokrLPUYNHOsjSpNFYzo9WuHKd/7wMGGvVRe3MI3P3c5esRApUlpbAVZAYneFrRwzzBXfYdyVKrUzwgRIwg0bF/qt8/fTxixFunISydb6t+KW1c5sUwuIUFZCMC6pansZffC4UXU48ze8WOfgsEvekDPercjnOLgBY+MNjXYN3EG9cf9fcB0pQCsMWxXaz8lcvkMckpvZ73u3NryVyq/mdhflHMB2qjZeDaPoMHzABKiodgf3I4tYdCM7TkGsoNmpRu/vYD4BONjfl7M50E7SbShY4hNzmzvEcaiihq413YkvbmYEelwakCAY+At6Q==
+ b=oO+3S9AISb7pzPdPKoxjjMIs/p5gGhzRf8vKmYYuQkqCGw37mwyztwvcURUdprb49+U98CLIsJep9mV/9vT2vRsVg8ciHVdaSh4ftLyWLjy32n2ZecCvtK7KM/g8owN2BIJgpLpbEtxhuCC+e1Y6Kf83VWIuuZPTmG5lcGlwvCahOiu+KAOVWRdgPxU3Br8gvglgjiF4mNk/8+vPvHokpiZBVMkRE3XGx/lYgBrPoOViIY1KCw0HfbvlX+LC1FwYkz8hCi4OPYvgYUXeiFPREAfD4WI3amCJ3nvk0iH9hcmdT6Xi5FSeisHOKMu4ccbz1ymxNGIygh4hMDdAtWoEWg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DGuquBCWMPXaKfCVj9EW+uyk1OMN4v9QQPLSCzAoM9s=;
- b=JPfAIPgREqcdZRG9GT1qLfn4xHQ3W/0g0b4CZx54JIQDBum0yCyfF9347dz7BAygyabS7oX87NLq8Pm4xdHuUUTFbxYmXSUQQ6zGkcrTsa5EIFay67t6vNuHj+RQSk+0q7NMVW+CDFU7pGhfnMHoUjQx2ObFTBFzB0fHjxgL6OBvU8D1xOkfEm+llFjKRwpQz7X0lnJPGE4Mx51dwoqaSJtcDardd/PeOMrGBrIQZIhegVRhtDc4m4yPzsrell4cMbftT9K7VKpBO+eG6+dy56TMRGpko4eeI1Cs830DzR4kOBkcBf+5DIiyPoVJash7UtvHE4rbRrVHZn5Ki037Ug==
+ bh=kbktBlHTBCvvPsHqbVMquWxoCF7aHT8foX7VW4NWKnU=;
+ b=ZzR0aSQLYn8+tZ3xD9NfaToTUEIy3ScHKubvUJnKuRx21F+PdW/bda7GDBbNYYl+5SnVKBSAbztwO7h1yLlY65HHJW2O8MwYcrl85ti/Fph1UPqF7tsgVHeHibHngXFVjqTugJXdqWBhZw8n8fQSnuU4JzxSmRyFiclBpAxLZsZxnK3h57Na29oELnp0nO+ngzvVNUj7N9SW1BB0TLcSZ35PFxn8qZLnCMktFZYc/S7IQ1pxasPF1H6eKcsOIYOd5Mc36WoVxQhAXPNEpTTWpSKhvPHkOPHC52k3nuWV2SrdW6lqooFCaVeM/mbqeqA6Pxa05G0qcbgxaqlOsvtp+g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=intel.com;
 Received: from SJ2PR11MB7573.namprd11.prod.outlook.com (2603:10b6:a03:4d2::10)
- by CH3PR11MB7250.namprd11.prod.outlook.com (2603:10b6:610:149::12) with
+ by CH3PR11MB8361.namprd11.prod.outlook.com (2603:10b6:610:172::5) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.21; Thu, 2 Nov
- 2023 17:49:28 +0000
+ 2023 17:51:29 +0000
 Received: from SJ2PR11MB7573.namprd11.prod.outlook.com
  ([fe80::6710:537d:b74:f1e5]) by SJ2PR11MB7573.namprd11.prod.outlook.com
  ([fe80::6710:537d:b74:f1e5%5]) with mapi id 15.20.6954.019; Thu, 2 Nov 2023
- 17:49:28 +0000
-Message-ID: <93113f94-9663-4cbb-962f-c415bc975f12@intel.com>
-Date:   Thu, 2 Nov 2023 10:49:26 -0700
+ 17:51:29 +0000
+Message-ID: <fe5284f7-c27a-4ec3-b12f-f3556a9bb456@intel.com>
+Date:   Thu, 2 Nov 2023 10:51:27 -0700
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 10/24] selftests/resctrl: Remove nested calls in perf
- event handling
+Subject: Re: [PATCH 16/24] selftests/resctrl: Rewrite Cache Allocation
+ Technology (CAT) test
 Content-Language: en-US
 To:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
         <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
@@ -90,71 +89,71 @@ To:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
         Fenghua Yu <fenghua.yu@intel.com>
 CC:     <linux-kernel@vger.kernel.org>
 References: <20231024092634.7122-1-ilpo.jarvinen@linux.intel.com>
- <20231024092634.7122-11-ilpo.jarvinen@linux.intel.com>
+ <20231024092634.7122-17-ilpo.jarvinen@linux.intel.com>
 From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <20231024092634.7122-11-ilpo.jarvinen@linux.intel.com>
+In-Reply-To: <20231024092634.7122-17-ilpo.jarvinen@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: MW4PR04CA0314.namprd04.prod.outlook.com
- (2603:10b6:303:82::19) To SJ2PR11MB7573.namprd11.prod.outlook.com
+X-ClientProxiedBy: MW4PR03CA0359.namprd03.prod.outlook.com
+ (2603:10b6:303:dc::34) To SJ2PR11MB7573.namprd11.prod.outlook.com
  (2603:10b6:a03:4d2::10)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ2PR11MB7573:EE_|CH3PR11MB7250:EE_
-X-MS-Office365-Filtering-Correlation-Id: 129f7573-5bcc-4c44-6a8a-08dbdbcc0f30
+X-MS-TrafficTypeDiagnostic: SJ2PR11MB7573:EE_|CH3PR11MB8361:EE_
+X-MS-Office365-Filtering-Correlation-Id: b6c856b2-a0d2-427a-52fe-08dbdbcc57aa
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: aK+XcwOQs6RhiFz2xMcJ/sWDJ7x13keAswWPWiXVnvueX9A0SbhyRTAVdL9CNJ6FyaRnGhFR3i+vzVIuYmRzZ+IEOGVhK/emkzvKCqgotmH1NRMiorTOwlE1MYjr1kqLt5tWjmAqz18z9zI4q1KlBg8Qgt1smqBzTmWsglRmN0S0kEi4P/ApKy8myRBwQHjiNNHc/+9r+zorjU1Uv0F6G4/a2LC4KZ/dfr1s2sHOdMY1g0QMF4uid0X/41cZP+QVGyNMYuAI560Vbc2i8iy/oCJKBUZd9FLzK0r3GOEhNrocPI/Hlrq7rTr976TfwjJ98GVArtuwsICKE1mjjsVAWhgSFJw/wqVs8Jd14sAZvVW51nVLyYn8qteMlw3c6F12R7TfuSy8rcmvTe0/0H7ePhpIWrk8OC6N/hOUuUP/7R5VQNOYvj+Dr9pxe+Aguz094RsBnmrVcEAFzToV+miMNITuKM7ltD8grFvwZHiPQOnD6IGTomkTSspF6VX7CatHpFQ53mWW4/gUTMzTBi8pTeOfe7v2YvvF/V6iZAxhl56BRCMQCBu4uVyoRgQah61z2Zw5Mb3VNsmTlHSEjCnV/qQIb2rTDuDGYlMyG9uvNj8DjFkos0zY+e6hU+5p0AX4j5LUYNUbt0wEoNkZ9S6WxQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7573.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(376002)(396003)(136003)(346002)(366004)(230922051799003)(451199024)(64100799003)(186009)(1800799009)(6512007)(2616005)(66574015)(82960400001)(26005)(6486002)(44832011)(8676002)(36756003)(4326008)(5660300002)(8936002)(31696002)(2906002)(86362001)(41300700001)(66946007)(66556008)(6636002)(66476007)(316002)(110136005)(53546011)(6506007)(478600001)(38100700002)(31686004)(83380400001)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: bTxG9nfWOyEws8DEapJ2XYK2v1S4evDiPEHe4yZHXjnSyqurAp4HgbH22sYVTlSSjvls8uOgmm2Yyt+0adjMQOrisA4At9nbbjC86VpFPb6zlM48E1egKg7WSo7N0z60PeStZ9d5CWjmFK3FJJ+cpk66V4xH+EwdluvW9alqdnCVcUf1K9LooKCZNj9CQBXRxHkHuJ4l+bGGU3WrPZ3V+g2sShKM6QSn5yt0RfR7omKxivoTosYb20OOugOVK9OSolYg1xZnMyIFeK9srL/RwW+VDoPIVwTRht0my1Jw7fcmwtjwtPzW77X97nhXyrOXCKyxeLFfyq0sWGYiXLGddlLvm1yW+2abLD2Qkfwo0yutkb5R8XK+Lt+O1lqtmw5ZofSdHatGedYnI63IS4YGxkIfz8vgJ/CPeDVCTSj4Ffaw6+8xe1A93BivP6ST5eWFxhibP5TU4Xk7GRzy7XpbFVmsVKhHcY8p7wNJTlahkGS7SMIqBds93Lf6XzZvSUaOeVUtRth7iezXtv5wMd45mAFUF4AJpInsipZjLlIEzaqJbsN1KfEA8WZ3MnG3FRG6QINjATXrIlCUyXytBAAuhYOP0Jucwaa7oLwscGnzYM38IHc0Wi2V89/o6KB23e4dZ0NFuSNfKYmxGnZP0T7H/w==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7573.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(136003)(346002)(376002)(39860400002)(366004)(230922051799003)(451199024)(1800799009)(64100799003)(186009)(2906002)(36756003)(6512007)(6506007)(53546011)(26005)(86362001)(2616005)(31696002)(38100700002)(83380400001)(478600001)(66574015)(82960400001)(41300700001)(6486002)(31686004)(316002)(6636002)(110136005)(66556008)(66946007)(66476007)(8676002)(4326008)(44832011)(8936002)(5660300002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dnIyckdpaTA0cW1XTnJ3MUU2QlhSMzhlWCtzYWNKaWhmYzE1MVRWM2psYjVT?=
- =?utf-8?B?WVFqT2pOcjFtOWNUdVl6U2JUaW0zanN6dUYreXNhcmswVXlFeUFocFBNL0Mw?=
- =?utf-8?B?d1gveFRYaUV1Y0s4cEZpWm81dXVpd21DdklKYW1LZWlhSkRTRU9YT0tXZnBR?=
- =?utf-8?B?YlUwTEUwSGZpNTdKdHJYWlpROG40VmwyT2NGcy9BOXZaRlhTRGdKUkNGcEpi?=
- =?utf-8?B?Z00xUlM2WnFlWnBxZHo3bHY5ek1LbjZ4TjU3OEV1bmdPZDNreEFFQ0RUeExl?=
- =?utf-8?B?OFp0TmlVaHZ3dm1BTjFPMFE5R2U5NFF0WXVpcVlVZ0pVRnNqQVdhS005dEhz?=
- =?utf-8?B?OXBCQkNhYjVWWGpqZUJ5cTFFWU9HcjR6UEhHRFNZVW9QUDNYSzEyc1psNXZW?=
- =?utf-8?B?R1hPemZKWWg0UVNLV3pvUDdWRWE3WnBhWVFEeFBjZU9Wd05Xc0V0bXhVM0ZF?=
- =?utf-8?B?ZmNOakVnUk5aYkVWbVR1L1dBaWdxdnRYWlRzM0FFRlV5U0Y1cE1Nd215OHZU?=
- =?utf-8?B?TFJ1YzI2MC9tcHZtbTV4SmZvN3lUQjYvemo2WmxjSDRmYXBqRy9YcUhrTzhO?=
- =?utf-8?B?RkFxSVM1bnJpT2tFOHdxUVVSaWlzcXIvNnZDUnVYZFRrSGZNVVZLUW9FdGNK?=
- =?utf-8?B?N3NxNHg2eGhxOGp5MTlqMkFCQi9RU0M3ZDJ2WEJ0L1YvckFVRGovNmN5aFpS?=
- =?utf-8?B?WXo5eCtFMmo4cjFxd21LZE5tZlhrQ21xTndCM2FsUVdncFNXcS9HWllnRmps?=
- =?utf-8?B?dTVUeUttZE8wN21LTllJUGROWVVxWWFWNWozRmt6TnNTcExjOEJkSFhUWEpT?=
- =?utf-8?B?aUt1N3EzSmZ3aEdEVElodk5DVGltUU5CcENrL2Y5UE1DQmdvL3cyNE41TEs2?=
- =?utf-8?B?dHJUcnRxQysyMnd1OU9NME1HSEIwMStxMGN3Nnk5c01vOXRCNmJSbzBwa3Na?=
- =?utf-8?B?R1ltVmRKQ2VBVkYyNmlkVHpwOExVVTM3L0RWV29sN1ZSRUdCdENmbWJpcFVh?=
- =?utf-8?B?cW1DdXUvYmt3MlVPQ2xoNkxTanBpd0taTVdWWjlqNElQK0JUZ2pzWW5rMTZP?=
- =?utf-8?B?Y1g0eVVsMlNzR0dUWXJtTi9RWnl3V0w2VEN1MFdTK3Fhb0tScFcxckhYSnFr?=
- =?utf-8?B?UXhBQit6WTN0UVVpQWVNNFF1WGlYaHZnUmtvVUVaZnhiV2VMZmlUYmhMS2NP?=
- =?utf-8?B?ekFZanFwbFdXNTUyaXM1a0FCOC9BblVWKytDbnJ4V3FWbHYxUldoNVdyczdM?=
- =?utf-8?B?Wjg0U3VoaEp0eVFIMWM5ZElUdnRwSU1jWjhZZ3pIL3pHSGhycnd0aVo5Mmk1?=
- =?utf-8?B?YWhSMmcvTm5EZC9qV2RqWE1MVVN6UUJ1VkdaS3NzNEc0S3lNWmdidExpS1pu?=
- =?utf-8?B?U2QvamkvRGZzbmRiYWNOWlRNZ2x2UDd4bTJvb3dQT1hSdGVhOTdGSm9aU3Z1?=
- =?utf-8?B?ZUg4Y0JuL25QQkE1NWJsa25GSktXNmVXekR1UTE3aFJZeERyWjE1clV4Ty90?=
- =?utf-8?B?K2N1WE45UDRaWXA0YUZ0ekNDVXZZdldITEdXOUV3MDJ4VDQ1RjBaNmFESWxF?=
- =?utf-8?B?RVd2c2s0dlkwb0NLVExaUmNzSkNtWElkR3QzYTIxaElkRXhlVlRhUGR6Kzdm?=
- =?utf-8?B?VU1NdlUxcXBqc0FRTElQVXV1bUhHUzJyKzhCMjNjWWRTSzdrWlVZZ1B5ZmZY?=
- =?utf-8?B?blovZEhOc28yNnY1NlIraUw2K05ySG1HQmV1SzZpaVdsVy9vWG1FM2Q5c3VT?=
- =?utf-8?B?bXRVRnlVV0xYei8xUFUxQ3c2OHZTdEJpL0Y0U05DZHRmZ2Vhd3Ixc2s3MHlw?=
- =?utf-8?B?RW5RZ3dqci9rUzRHazhoUFFkckxpN3BkSHVsSEEzWDl6emJHa0VQV25CTXRU?=
- =?utf-8?B?cnRXSlh6eHo3MWt0bDc0SU1MSDJRSW90S0lMMjRTdVJhNmZ6Sll4WEtSWHk1?=
- =?utf-8?B?K1FnTUZOTHFFZ3NyQThCRG01RVQ4R2FlUU0reCtLWkdYQ244VDREYjRHNDBm?=
- =?utf-8?B?RVVrOGZGVjJXWnpqS3NVdXRlN016bjRKOGJ3WGU0NkRjWEF1T1hoeWVQUDFM?=
- =?utf-8?B?Y0gvSXZITFpVYlRHNmFkYi9EdHBMalFscTFMV25nYzhRS2pqVW5MUnNiUWlS?=
- =?utf-8?B?N1h5RE1IVnVmcG1aUTFKeU1oV3dNWHBQRmhvV3EyVUJUSVZhNUNWNVBRbWtn?=
- =?utf-8?B?SVE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 129f7573-5bcc-4c44-6a8a-08dbdbcc0f30
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aGFNeGd1NWYxN0lDSHpHMWdsTzg1NGh5bU9abGdUbjkwbm1XWW9tOGZWVEx4?=
+ =?utf-8?B?cFNnUTlKM0RqRk52NWRKWVJISktVNks5UjNIUkdwL0cyYVUwd1RQeWR0VjhE?=
+ =?utf-8?B?SWpWVkRxb004M0wrajZMS21tMUxDRXhlaFFidUh5SC9Dc2hURkdvNVg3aFYv?=
+ =?utf-8?B?WTBsTmRJSkNFUjRONzhBUWtlRGJRSzVGUVNzKzdPSHgyMFM4cXc3OVh1dVhs?=
+ =?utf-8?B?WlFHUjZUeXlwL3BjTXhFbG1rdGtHa00vU0ZweE12ZlNva3MycWpjblpjOHpl?=
+ =?utf-8?B?WktCbVJCUnp0U0hhSVllTmpwYnJSc0J5dkxHRFoyYkhod3dhTG90alJ3UWZI?=
+ =?utf-8?B?ZmtDZlhnSmdKRlI3ZVlCYWpvUDVjcllyN0NhWEIySGlROUVzR2VmWURkbUQx?=
+ =?utf-8?B?OVB1dkRYOUl2OU0zNHRtVEhPL3RIZHZUOURxZ3dYclBmV3JrRGY0LzcybEFV?=
+ =?utf-8?B?QXZVT1FObEFYU3NyTFV6eTZDRFJXMlgvcnNFZlI5VVhQTnBoRi9uazQvNXQ1?=
+ =?utf-8?B?N2lmMTlLVjhKeHdvK1V2UVhOQ3dnSDl6cmUyb0s2R0xJWS9CemxUeUV2SitB?=
+ =?utf-8?B?ejdURllMdUZIVTRRSDdFUWNxenh4eWpHQUt5VXFuSDlVc3dvUkwxc0pHVVFD?=
+ =?utf-8?B?ZlMrZStQTlpEVWk0VG5WVitQd3UveGlFcmdVcXpBZkxpZmFEZTJwWlVWS0JG?=
+ =?utf-8?B?TDA3RGg1VjJiWTQwbkJIeEU2M2ZoS2FpNThZWUh6eHVyL1kwRUt6d21Sejdv?=
+ =?utf-8?B?LzN2QmpPOHpqRFJaZTJBRzhLUUxxNVFoMjExdHQ5eDhKdzh6QlJoOFJnYVVs?=
+ =?utf-8?B?L0VaWVd3SlZlUmJzOXdyTFlLOUx2djBhVlppTjZNMmtVYWpKVDF0bnNVZGJH?=
+ =?utf-8?B?amtRYVkvY3hLcDBzeHoraWdEMmhxd3BGWHBvNVZicmE4RmFuUUxhM1pOZkN6?=
+ =?utf-8?B?NjZKWkYyYlNaNXFGbnBVSStpN1FSMlpqZDVtcEE3RkRUeUZPRlRGVDRiN3F6?=
+ =?utf-8?B?RG1pOGh0NDZGNyttSDN5R3h3R3BhN1NLSlNvd1NjR0t2c045RDdHZXZoRzJV?=
+ =?utf-8?B?aWVaeGxpRlhLZnRVVkloalU4LzN4WE9ZdDhuK0ZVNk13a3dNQU1Kd1RuL083?=
+ =?utf-8?B?QjROTFhtMXp0YS9HUEdONGFPcGoyS2lkSndkcHhqVFMxTVFaNkNFdHowYlVF?=
+ =?utf-8?B?S05GcytrQTRwTEs1Ti9OV2VqQkVHVEhxaEdTb3NJUjdzRzNOQWxzQlZzOHhn?=
+ =?utf-8?B?YkY3RlYwR1drMHBzL3dUZTc3SGRIL0ZXSzl4bzU3WUFObER2ZHkvc3g0RG96?=
+ =?utf-8?B?UFRJUSsrWTFlYTFVVHI1M0JDMEtUOVh3Q2gycGpSVmh5b0RUV2VDQ3VZdnhR?=
+ =?utf-8?B?Nitxci9JQWJ2UGh5ekJ1VCtnak5MRlBsTFppL1ZiMjF6RW5LanFyVjNVeWNL?=
+ =?utf-8?B?bnZjWGREZkh6OHpLNWs0OTRRSlU5YVFHb1dYRVl4YUJ5VSs3S0hsWllsOHhG?=
+ =?utf-8?B?SmFyZTUxU3I5dnFGK0wySHJNMmt0dmVOR3gyL3FrZnBCMkdyQTgxZEVyVmdp?=
+ =?utf-8?B?cFZ2cWVkZm9vQlRPRUxrUm5jUS9Fa21zam43UkpIeUdFV2hKVzR3T3JlcU1i?=
+ =?utf-8?B?U0xrdTVZYTdoQTljMy8rTkdxZ1FDTkpVaG41V25jQ2VkM3lJVlB0MGhvMmlo?=
+ =?utf-8?B?OHZscU02WURtZkkrU0xNSE5xbmVVM2picXh4Z29zNkZndWM2VFlWZHhqU0xm?=
+ =?utf-8?B?eDR4bkZsYlg0ZWlhTFJXb3ZEck8xWHg0WmF2ZmxlRjBBU1J3QXIxekJoN2F1?=
+ =?utf-8?B?dGRFazUzOXRzb3hLL09ERFEwNVpybU9UaHBVSWc0RFF6aWVVb0JMQUlNS1BQ?=
+ =?utf-8?B?eVQxNXpzbEIrT1NscXBRTGFYd294d0wrZFlIRWk4bGc3YzBvTWMzY0JpYjRC?=
+ =?utf-8?B?bGZxcTVTOS9MRko0ZHA3dWNQVVlOd2ZmbUVnWTVwMnBsMEtVVlFsbjdFeElr?=
+ =?utf-8?B?ZGpJcmlYc3lLbmhDVWdvQ2VYTUdnWmhIQjYrMTdBQmR5czcyNHlUOWJhcTJN?=
+ =?utf-8?B?dlQ5NVNzQVE1MmhLRUgvVHNsZk95WFhQTENLd3J3TU5YQWFDUDNFbzlQVitS?=
+ =?utf-8?B?eThuKzVaNXRRb2g3Tk12VGVpSlNMSnZERGpTQjdHNU12ei9iclJuQVl6TWVu?=
+ =?utf-8?B?Tnc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: b6c856b2-a0d2-427a-52fe-08dbdbcc57aa
 X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB7573.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Nov 2023 17:49:27.9170
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Nov 2023 17:51:29.4936
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: BX6gpBVMhQvh2OLnO+WpIMIeMBupuAWNiJJA39rTR2GcMm6xyGZ9yaBrNil6QqZeCrHjiUADy7DV0aj4CSGBWZRwmH/iZiG7CTVjqAisN1c=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR11MB7250
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4x+EcQmpPw3R0onsoCe2VwB++i00WYMGzXchEeOJYJl+I9EnuJCKbF6AGp568kgrrfLRW652Lr+YWNRyoXN74M4jAOviatrMECILn7hTPTE=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR11MB8361
 X-OriginatorOrg: intel.com
 X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
@@ -169,165 +168,205 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 Hi Ilpo,
 
 On 10/24/2023 2:26 AM, Ilpo Järvinen wrote:
-> Perf event handling has functions that are the sole caller of another
-> perf event handling related function:
->   - reset_enable_llc_perf() calls perf_event_open_llc_miss()
->   - reset_enable_llc_perf() calls ioctl_perf_event_ioc_reset_enable()
->   - measure_llc_perf() calls get_llc_perf()
+> CAT test spawns two processes into two different control groups with
+> exclusive schemata. Both the processes alloc a buffer from memory
+> matching their allocated LLC block size and flush the entire buffer out
+> of caches. Since the processes are reading through the buffer only once
+> during the measurement and initially all the buffer was flushed, the
+> test isn't testing CAT.
 > 
-> Remove the extra layer of calls to make the code easier to follow by
-> moving the code into the calling function.
+> Rewrite the CAT test to allocate a buffer sized to half of LLC. Then
+> perform a sequence of tests with different LLC alloc sizes starting
+> from half of the CBM bits down to 1-bit CBM. Flush the buffer before
+> each test and read the buffer twice. Observe the LLC misses on the
+> second read through the buffer. As the allocated LLC block gets smaller
+> and smaller, the LLC misses will become larger and larger giving a
+> strong signal on CAT working properly.
 > 
-> In addition, converts print_results_cache() unsigned long parameter to
-> __u64 that matches the type coming from perf.
+> The new CAT test is using only a single process because it relies on
+> measured effect against another run of itself rather than another
+> process adding noise. The rest of the system is allocated the CBM bits
+> not used by the CAT test to keep the test isolated.
+> 
+> Replace count_bits() with count_contiguous_bits() to get the first bit
+> position in order to be able to calculate masks based on it.
+> 
+> This change has been tested with a number of systems from different
+> generations.
 
-Is this referring to work from previous patch?
+Thank you very much for doing this.
 
 > 
+> Suggested-by: Reinette Chatre <reinette.chatre@intel.com>
 > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 > ---
->  tools/testing/selftests/resctrl/cache.c | 86 +++++++------------------
->  1 file changed, 25 insertions(+), 61 deletions(-)
+>  tools/testing/selftests/resctrl/cat_test.c  | 286 +++++++++-----------
+>  tools/testing/selftests/resctrl/fill_buf.c  |   6 +-
+>  tools/testing/selftests/resctrl/resctrl.h   |   5 +-
+>  tools/testing/selftests/resctrl/resctrlfs.c |  44 +--
+>  4 files changed, 137 insertions(+), 204 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/resctrl/cache.c b/tools/testing/selftests/resctrl/cache.c
-> index d39ef4eebc37..208af1ecae28 100644
-> --- a/tools/testing/selftests/resctrl/cache.c
-> +++ b/tools/testing/selftests/resctrl/cache.c
-> @@ -29,25 +29,6 @@ static void initialize_perf_event_attr(void)
->  	pea_llc_miss.disabled = 1;
->  }
+> diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
+> index e71690a9bbb3..7518c520c5cc 100644
+> --- a/tools/testing/selftests/resctrl/cat_test.c
+> +++ b/tools/testing/selftests/resctrl/cat_test.c
+> @@ -11,65 +11,68 @@
+>  #include "resctrl.h"
+>  #include <unistd.h>
 >  
-> -static void ioctl_perf_event_ioc_reset_enable(void)
-> -{
-> -	ioctl(fd_lm, PERF_EVENT_IOC_RESET, 0);
-> -	ioctl(fd_lm, PERF_EVENT_IOC_ENABLE, 0);
-> -}
-> -
-> -static int perf_event_open_llc_miss(pid_t pid, int cpu_no)
-> -{
-> -	fd_lm = perf_event_open(&pea_llc_miss, pid, cpu_no, -1,
-> -				PERF_FLAG_FD_CLOEXEC);
-> -	if (fd_lm == -1) {
-> -		perror("Error opening leader");
-> -		ctrlc_handler(0, NULL, NULL);
-> -		return -1;
-> -	}
-> -
-> -	return 0;
-> -}
-> -
->  static void initialize_llc_perf(void)
->  {
->  	memset(&pea_llc_miss, 0, sizeof(struct perf_event_attr));
-> @@ -63,42 +44,16 @@ static void initialize_llc_perf(void)
+> -#define RESULT_FILE_NAME1	"result_cat1"
+> -#define RESULT_FILE_NAME2	"result_cat2"
+> +#define RESULT_FILE_NAME	"result_cat"
+>  #define NUM_OF_RUNS		5
+> -#define MAX_DIFF_PERCENT	4
+> -#define MAX_DIFF		1000000
 >  
->  static int reset_enable_llc_perf(pid_t pid, int cpu_no)
+>  /*
+> - * Change schemata. Write schemata to specified
+> - * con_mon grp, mon_grp in resctrl FS.
+> - * Run 5 times in order to get average values.
+> + * Minimum difference in LLC misses between a test with n+1 bits CBM mask to
+> + * the test with n bits. With e.g. 5 vs 4 bits in the CBM mask, the minimum
+> + * difference must be at least MIN_DIFF_PERCENT_PER_BIT * (4 - 1) = 3 percent.
+
+This formula is not clear to me. In the code the formula is always:
+MIN_DIFF_PERCENT_PER_BIT * (bits - 1) ... is the "-1" because it always
+decrements the number of bits tested by one? So, for example, if testing
+5 then 3 bits it would be  MIN_DIFF_PERCENT_PER_BIT * (3 - 2)?
+Would above example thus be:
+MIN_DIFF_PERCENT_PER_BIT * (4 - (5 - 4)) = 3 ?
+
+
+
+> + *
+> + * The relationship between number of used CBM bits and difference in LLC
+> + * misses is not expected to be linear. With a small number of bits, the
+> + * margin is smaller than with larger number of bits. For selftest purposes,
+> + * however, linear approach is enough because ultimately only pass/fail
+> + * decision has to be made and distinction between strong and stronger
+> + * signal is irrelevant.
+>   */
+
+...
+
+>  /*
+>   * cat_test:	execute CAT benchmark and measure LLC cache misses
+>   * @param:	parameters passed to cat_test()
+>   * @span:	buffer size for the benchmark
+> + * @current_mask	start mask for the first iteration
+> + *
+> + * Run CAT test, bits are removed one-by-one from the current_mask for each
+> + * subsequent test.
+>   *
+
+Could this please be expanded to provide more details about how test works,
+measurements taken, and how pass/fail is determined?
+
+> - * Return:	0 on success. non-zero on failure.
+> + * Return:		0 on success. non-zero on failure.
+
+Is non-zero specific enough? Does that mean that <0 and >0 are failure?
+
+>   */
+> -static int cat_test(struct resctrl_val_param *param, size_t span)
+> +static int cat_test(struct resctrl_val_param *param, size_t span, unsigned long current_mask)
 >  {
-> -	int ret = 0;
-> -
-> -	ret = perf_event_open_llc_miss(pid, cpu_no);
-> -	if (ret < 0)
-> -		return ret;
-> -
-> -	/* Start counters to log values */
-> -	ioctl_perf_event_ioc_reset_enable();
-> -
-> -	return 0;
-> -}
-> -
-> -/*
-> - * get_llc_perf:	llc cache miss through perf events
-> - * @llc_perf_miss:	LLC miss counter that is filled on success
-> - *
-> - * Perf events like HW_CACHE_MISSES could be used to validate number of
-> - * cache lines allocated.
-> - *
-> - * Return: =0 on success.  <0 on failure.
-> - */
-> -static int get_llc_perf(__u64 *llc_perf_miss)
-> -{
-> -	int ret;
-> -
-> -	/* Stop counters after one span to get miss rate */
-> -
-> -	ioctl(fd_lm, PERF_EVENT_IOC_DISABLE, 0);
-> -
-> -	ret = read(fd_lm, &rf_cqm, sizeof(struct read_format));
-> -	if (ret == -1) {
-> -		perror("Could not get llc misses through perf");
-> +	fd_lm = perf_event_open(&pea_llc_miss, pid, cpu_no, -1, PERF_FLAG_FD_CLOEXEC);
-> +	if (fd_lm == -1) {
-> +		perror("Error opening leader");
-> +		ctrlc_handler(0, NULL, NULL);
+> -	int memflush = 1, operation = 0, ret = 0;
+>  	char *resctrl_val = param->resctrl_val;
+>  	static struct perf_event_read pe_read;
+>  	struct perf_event_attr pea;
+> +	unsigned char *buf;
+> +	char schemata[64];
+> +	int ret, i, pe_fd;
+>  	pid_t bm_pid;
+> -	int pe_fd;
+>  
+>  	if (strcmp(param->filename, "") == 0)
+>  		sprintf(param->filename, "stdio");
+> @@ -143,54 +168,64 @@ static int cat_test(struct resctrl_val_param *param, size_t span)
+>  	if (ret)
+>  		return ret;
+>  
+> +	buf = alloc_buffer(span, 1);
+> +	if (buf == NULL)
+> +		return -1;
+> +
+>  	perf_event_attr_initialize(&pea, PERF_COUNT_HW_CACHE_MISSES);
+>  	perf_event_initialize_read_format(&pe_read);
+>  
+> -	/* Test runs until the callback setup() tells the test to stop. */
+> -	while (1) {
+> -		ret = param->setup(param);
+> -		if (ret == END_OF_TESTS) {
+> -			ret = 0;
+> -			break;
+> -		}
+> -		if (ret < 0)
+> -			break;
+> -		pe_fd = perf_event_reset_enable(&pea, bm_pid, param->cpu_no);
+> -		if (pe_fd < 0) {
+> -			ret = -1;
+> -			break;
+> -		}
+> +	while (current_mask) {
+> +		snprintf(schemata, sizeof(schemata), "%lx", param->mask & ~current_mask);
+> +		ret = write_schemata("", schemata, param->cpu_no, param->resctrl_val);
+> +		if (ret)
+> +			goto free_buf;
+> +		snprintf(schemata, sizeof(schemata), "%lx", current_mask);
+> +		ret = write_schemata(param->ctrlgrp, schemata, param->cpu_no, param->resctrl_val);
+> +		if (ret)
+> +			goto free_buf;
+> +
+> +		for (i = 0; i < NUM_OF_RUNS; i++) {
+> +			mem_flush(buf, span);
+> +			ret = fill_cache_read(buf, span, true);
+> +			if (ret)
+> +				goto free_buf;
+> +
+> +			pe_fd = perf_event_reset_enable(&pea, bm_pid, param->cpu_no);
+> +			if (pe_fd < 0) {
+> +				ret = -1;
+> +				goto free_buf;
+> +			}
 
-I understand you just copied the code here ... but it is not clear to me
-why this particular error handling deserves a ctrlc_handler().
+It seems to me that the perf counters are reconfigured at every iteration.
+Can it not just be configured once and then the counters just reset and
+enabled at each iteration? I'd expect this additional work to impact
+values measured.
 
->  		return -1;
+>  
+> -		if (run_fill_buf(span, memflush, operation, true)) {
+> -			fprintf(stderr, "Error-running fill buffer\n");
+> -			ret = -1;
+> -			goto pe_close;
+> -		}
+> +			fill_cache_read(buf, span, true);
+>  
+> -		sleep(1);
+> -		ret = perf_event_measure(pe_fd, &pe_read, param, bm_pid);
+> -		if (ret)
+> -			goto pe_close;
+> +			ret = perf_event_measure(pe_fd, &pe_read, param, bm_pid);
+> +			if (ret)
+> +				goto pe_close;
+>  
+> -		close(pe_fd);
+> +			close(pe_fd);
+> +		}
+> +		current_mask = next_mask(current_mask);
 >  	}
 >  
-> -	*llc_perf_miss = rf_cqm.values[0].value;
-> +	/* Start counters to log values */
-> +	ioctl(fd_lm, PERF_EVENT_IOC_RESET, 0);
-> +	ioctl(fd_lm, PERF_EVENT_IOC_ENABLE, 0);
->  
->  	return 0;
->  }
-> @@ -166,20 +121,29 @@ static int print_results_cache(char *filename, int bm_pid, __u64 llc_value)
->  	return 0;
->  }
->  
-> +/*
-> + * measure_llc_perf:	measure perf events
-> + * @bm_pid:	child pid that runs benchmark
-
-I expected "bm_pid" to reflect a "benchmark pid" that
-is not unique to the child. Are both parent and child
-not running the benchmark?
-
-Missing doc of a parameter here.
-
-> + *
-> + * Measure things like cache misses from perf events.
-
-"things like cache misses" is vague. The function's name 
-still contains "llc" which makes me think it is not quite
-generic yet.
-
-
-
-> + *
-> + * Return: =0 on success.  <0 on failure.
-> + */
->  static int measure_llc_perf(struct resctrl_val_param *param, int bm_pid)
->  {
-> -	__u64 llc_perf_miss = 0;
->  	int ret;
->  
-> -	/*
-> -	 * Measure cache miss from perf.
-> -	 */
-> -	ret = get_llc_perf(&llc_perf_miss);
-> -	if (ret < 0)
-> -		return ret;
-> +	/* Stop counters after one span to get miss rate */
-> +	ioctl(fd_lm, PERF_EVENT_IOC_DISABLE, 0);
->  
-> -	ret = print_results_cache(param->filename, bm_pid, llc_perf_miss);
-> -	return ret;
-> +	ret = read(fd_lm, &rf_cqm, sizeof(struct read_format));
-> +	close(fd_lm);
-
-I am not able to tell where this close() moved from.
-
-> +	if (ret == -1) {
-> +		perror("Could not get perf value");
-> +		return -1;
-> +	}
+> +free_buf:
+> +	free(buf);
 > +
-> +	return print_results_cache(param->filename, bm_pid, rf_cqm.values[0].value);
+>  	return ret;
+>  
+>  pe_close:
+>  	close(pe_fd);
+> -	return ret;
+> +	goto free_buf;
 >  }
 >  
->  int measure_llc_resctrl(struct resctrl_val_param *param, int bm_pid)
 
 Reinette
