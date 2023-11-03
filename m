@@ -2,44 +2,44 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 599197E022C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Nov 2023 12:24:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 476957E0298
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Nov 2023 13:10:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1346919AbjKCLY6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 3 Nov 2023 07:24:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53866 "EHLO
+        id S1346671AbjKCMKD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 3 Nov 2023 08:10:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1346918AbjKCLY6 (ORCPT
+        with ESMTP id S1346673AbjKCMKC (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 3 Nov 2023 07:24:58 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 480D8134;
-        Fri,  3 Nov 2023 04:24:52 -0700 (PDT)
+        Fri, 3 Nov 2023 08:10:02 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D74C5A2;
+        Fri,  3 Nov 2023 05:09:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699010692; x=1730546692;
+  t=1699013396; x=1730549396;
   h=date:from:to:cc:subject:in-reply-to:message-id:
    references:mime-version;
-  bh=EExSE5kMyxSHF8UhIPZ9SnLdv7qwCLGarLJ+9vT1VuA=;
-  b=jaxhAuAXTdDLYy2Ym8nu1a4NdLZslrrZxTvBIfvCjiECYyrmkMBpEvLn
-   uQvHvhZlsktFh9frvuYjt3GdAIL0pnum3+uARKRjG8D/0Xaa3foAfKvyz
-   YzRacNcCnH4qeWjJbHh/CPi4uvOR6eGUfpL5G2u01q2JYcp3Gzdhm1aUY
-   2MsZmRnv8QCUDx+xMlzaFRHqAWlpqOFvDSZqXXb7bK2eobQ+l4Iasbzmj
-   tMemi4YXl+ez5DPavUcEzZigdS97k/TEBSaiyxPi8gdIrCnaA0DfNS1RF
-   RiCADA8EwxZq5LOARR9YjUQAQQOSOR0XkpAzucilAy1mZmYAwf4qwbezE
+  bh=ZyAO1NfYqvuM2pcUqTrAtWeSTSyLXfDA+sye3MrCqIk=;
+  b=Nya2q8m6VseUzuM38zhzMU7HtaRKpetlbsUDVKlwcTJFX+/PVxKuEZVn
+   S/IloHECatZD7eiJY6vnkHek006d5BgDAJ/DAjgFOX6BnH5GPlWLcwVI9
+   /65YVHt7gSiWRqYy3Zph0BfOVJBcuyyVVpDeSz9MzOtgLRS12CX3y9/dm
+   +r27E8eruKMd0Vu39j9Wh+15Ets1Dn60okkU5f7L+DziItsf2pLah5NT9
+   wIAghL4I6M4b8Oc+M/0TrCnfONv88DCYaUw+2VFzJwZ4K+Xtn04+zUBNJ
+   +eBpqn3tqehwL1VR8l4piB3mqsqaYMwFisi++VTJoGGMN2NWzFZDMR3zn
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10882"; a="379328287"
+X-IronPort-AV: E=McAfee;i="6600,9927,10882"; a="388761204"
 X-IronPort-AV: E=Sophos;i="6.03,273,1694761200"; 
-   d="scan'208";a="379328287"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2023 04:24:51 -0700
+   d="scan'208";a="388761204"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2023 05:09:56 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10882"; a="905312869"
+X-IronPort-AV: E=McAfee;i="6600,9927,10882"; a="761597682"
 X-IronPort-AV: E=Sophos;i="6.03,273,1694761200"; 
-   d="scan'208";a="905312869"
+   d="scan'208";a="761597682"
 Received: from pors-mobl3.ger.corp.intel.com ([10.252.35.38])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2023 04:24:49 -0700
-Date:   Fri, 3 Nov 2023 13:24:47 +0200 (EET)
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2023 05:09:53 -0700
+Date:   Fri, 3 Nov 2023 14:09:50 +0200 (EET)
 From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     Reinette Chatre <reinette.chatre@intel.com>
 cc:     linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
@@ -48,17 +48,16 @@ cc:     linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
         <maciej.wieczor-retman@intel.com>,
         Fenghua Yu <fenghua.yu@intel.com>,
         LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 17/24] selftests/resctrl: Create struct for input
- parameter
-In-Reply-To: <d22a4ce2-9e81-4d65-8381-e5ab5fa706ed@intel.com>
-Message-ID: <2e266bb-653f-2fe2-9dbc-db8388f6aff1@linux.intel.com>
-References: <20231024092634.7122-1-ilpo.jarvinen@linux.intel.com> <20231024092634.7122-18-ilpo.jarvinen@linux.intel.com> <d22a4ce2-9e81-4d65-8381-e5ab5fa706ed@intel.com>
+Subject: Re: [PATCH 03/24] selftests/resctrl: Refactor get_cbm_mask()
+In-Reply-To: <575b4c53-34c4-48ed-906d-b9dedb80e0ef@intel.com>
+Message-ID: <964f1078-7e36-7e39-9bbe-687d5b2458de@linux.intel.com>
+References: <20231024092634.7122-1-ilpo.jarvinen@linux.intel.com> <20231024092634.7122-4-ilpo.jarvinen@linux.intel.com> <575b4c53-34c4-48ed-906d-b9dedb80e0ef@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1829071547-1699010691=:1725"
+Content-Type: multipart/mixed; boundary="8323329-1072741397-1699013395=:1725"
 X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -68,65 +67,71 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
   This message is in MIME format.  The first part should be readable text,
   while the remaining parts are likely unreadable without MIME-aware tools.
 
---8323329-1829071547-1699010691=:1725
+--8323329-1072741397-1699013395=:1725
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8BIT
 
 On Thu, 2 Nov 2023, Reinette Chatre wrote:
 > On 10/24/2023 2:26 AM, Ilpo Järvinen wrote:
 > 
-> > diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
-> > index d3bf4368341e..5157a3f74fee 100644
-> > --- a/tools/testing/selftests/resctrl/mba_test.c
-> > +++ b/tools/testing/selftests/resctrl/mba_test.c
-> > @@ -141,13 +141,13 @@ void mba_test_cleanup(void)
-> >  	remove(RESULT_FILE_NAME);
+> > @@ -229,6 +228,31 @@ int get_cbm_mask(char *cache_type, char *cbm_mask)
+> >  	return 0;
 > >  }
 > >  
-> > -int mba_schemata_change(int cpu_no, const char * const *benchmark_cmd)
-> > +int mba_schemata_change(const struct user_params *uparams)
-> >  {
-> >  	struct resctrl_val_param param = {
-> >  		.resctrl_val	= MBA_STR,
-> >  		.ctrlgrp	= "c1",
-> >  		.mongrp		= "m1",
-> > -		.cpu_no		= cpu_no,
-> > +		.cpu_no		= uparams->cpu,
-> >  		.filename	= RESULT_FILE_NAME,
-> >  		.bw_report	= "reads",
-> >  		.setup		= mba_setup
-> > @@ -156,7 +156,7 @@ int mba_schemata_change(int cpu_no, const char * const *benchmark_cmd)
-> >  
-> >  	remove(RESULT_FILE_NAME);
-> >  
-> > -	ret = resctrl_val(benchmark_cmd, &param);
-> > +	ret = resctrl_val(uparams->benchmark_cmd, &param);
-> >  	if (ret)
-> >  		goto out;
-> >  
+> > +/*
+> > + * get_cbm_mask - Get cbm bit mask
 > 
-> How about a new member of struct resctrl_val_param that points to 
-> uparams? That would remove cpu_no from resctrl_val_param
-> and have everything available when a test needs to run ... not copying
-> some user parameters into struct resctrl_val_param and passing
-> others as parameters.
+> I know you just copied code here but please keep an eye out for acronyms
+> to be written in caps.
 
-I'm a bit allergic to adding more stuff into resctrl_val_param. It seems 
-a structure where random stuff has been thrown at just because it exists.
-In general, your point is very valid though because the members of 
-resctrl_val_param should be auditted through to see how many of them are 
-even useful after adding uparams and struct resctrl_test.
+Yeah, Maciej also commented on this. I've already made some changes but 
+I'll incorporate some of your suggestions too.
 
-I could get rid of copying parameters from uparams to params and just 
-passing uparams instead of benchmark_cmd into resctrl_val(). Would you be 
-okay with that?
+> This needs not be named to reflect verbatim what the function does.
+> Looking ahead I wonder if "get_full_mask()/get_max_mask()" may not be a
+> clear indication of what this does?
+>
+> Something like:
+> 	get_full_mask()/get_max_mask()  Get maximum Cache Bit Mask (CBM) 
 
-Oh, and I really should rename resctrl_val() one day to something more 
-meaningful too. :-) (but it won't be part of this series and will likely 
-be another conflicty nightmare because resctrl_val_param too needs to 
-be renamed...).
+Having max in the name sounds useful.
+
+Also related to this, the local variables called long_mask should be 
+renamed but perhaps not in this series to not block Maciej's work with 
+neverending stream of cleanups :-).
+
+> 	@cache_type:	Cache level(? or should this be "type") as "L2" or L3".
+> 	@mask:		Full/Maximum portion of cache available for
+> 			allocation represented by bit mask
+> 			returned as unsigned long.
+> 	
+> 
+> > + * @cache_type:		Cache level L2/L3
+> > + * @mask:		cbm_mask returned as unsigned long
+> > + *
+> > + * Return: = 0 on success, < 0 on failure.
+> > + */
+> > +int get_cbm_mask(const char *cache_type, unsigned long *mask)
+> > +{
+> > +	char cbm_mask_path[1024];
+> > +	int ret;
+> > +
+> > +	if (!cache_type)
+> > +		return -1;
+> 
+> Just to confirm ... error checking on mask is intentionally deferred 
+> until get_bit_mask()?
+
+I tried to put as much as possible into get_bit_mask() since every caller 
+will have to do the same things anyway. I cannot avoid checking cache_type 
+here because snprintf() is using it.
+
+
+Once again, very superb review of the whole series, thank you very much 
+for all the effort! It's really appreciated!
+
 
 -- 
  i.
 
---8323329-1829071547-1699010691=:1725--
+--8323329-1072741397-1699013395=:1725--
