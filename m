@@ -2,54 +2,67 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 796B37E080A
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Nov 2023 19:24:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB25D7E0AF4
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Nov 2023 23:09:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234003AbjKCSYW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 3 Nov 2023 14:24:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44618 "EHLO
+        id S230169AbjKCWJ2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 3 Nov 2023 18:09:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232839AbjKCSYV (ORCPT
+        with ESMTP id S230076AbjKCWJ1 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 3 Nov 2023 14:24:21 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA33BD4B;
-        Fri,  3 Nov 2023 11:24:14 -0700 (PDT)
-Received: from localhost.localdomain (cola.collaboradmins.com [195.201.22.229])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: usama.anjum)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1B42766073FA;
-        Fri,  3 Nov 2023 18:24:10 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1699035853;
-        bh=zZ6D4S//ld77lgzABD77wPrEQjiD6EF4YGN4GV6oW3k=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UK+rwuDoLmLNFBxK4lEbQO01Bq3NHepvIVRwzLmuijGgo4M8iwfsElqUx9DMG3HHd
-         h6FB5QUSjyVBUJy373ftc4aYNJESqrnQg8iQuq74rbJPWbFmbKx1GTtcLz2rM+NkRo
-         PIatxO/V1jTO8bngRtJSU1gZlXiB12rV44xmI32EkUbcFLuUINcxjZVxvUhLCOiIOk
-         6nDMmd4Cq0W6mz75AQxv3775F5C/xIueom1Hl72Y9KYzQT5eeVfvhJWxWEoe1AS1O5
-         sWwSl1sjk6up9is9zekIvWxNDipaK7E2Vqu99lJ/xMWHhs2Ju68v8Up8cpWYy2J/ch
-         DTkI6KAaclD4g==
-From:   Muhammad Usama Anjum <usama.anjum@collabora.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     kernel@collabora.com, linux-mm@kvack.org,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] selftests: mm: fix some build warnings
-Date:   Fri,  3 Nov 2023 23:23:42 +0500
-Message-ID: <20231103182343.2874015-2-usama.anjum@collabora.com>
+        Fri, 3 Nov 2023 18:09:27 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EE3E1BF
+        for <linux-kselftest@vger.kernel.org>; Fri,  3 Nov 2023 15:09:24 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-509109104e2so3194298e87.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 03 Nov 2023 15:09:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1699049363; x=1699654163; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WBuN7gYl2f9j4m13qRB4taTG381QaiJck5wqiJSvm24=;
+        b=Kl18rAdFdNLsVWkmO4CE+2DJxLKEZO3W9ip3AWB1iI/8o/S9zZetNzjLA8NQFzWeyI
+         5u4MZob6E3jrCN06YvF4CcIX39eI+q/ztbs+goAjfn2SX8NdUc5w1wG5X0XrLqg7uocL
+         TYkVknq3xFszyevjYiGL78ILbUkqxX7DdJdHq4Ki6jR9REa2GGNmUKhaHhcDRieNL2ft
+         M81ytNCiLUKC+It/Rv+dQD8AoFbp4dawsFjgU0spB5qE91x7ajRHAcFR272zxGkoSOOt
+         4TswZhJxyF92Qvso3gWOKwc4zrgWL3FCgtfab0z8azuLB104TYjg3cKjKbAkYNVBdROF
+         7IWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699049363; x=1699654163;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WBuN7gYl2f9j4m13qRB4taTG381QaiJck5wqiJSvm24=;
+        b=mp9blevRO/W0Np7dh+LotZo1wcomkNXBEEO/2eU7ySjSRRfVktiUenN9GKt8yKORZ6
+         tqRUsMcw6WG8JL3kJcx5hKNS718XA7u+eAfX4KQ3sJmbMX/uLYohwJhEKfHkqCpc0rnX
+         Q0H5H9DHPDsWWwEZ1x5tDbGKoP5RFOXOLCeOwlT/yDc3dZeodlQR06blrELm8XDmGgJj
+         mdxXJYkClrsQkQOoM0s8l/Nt3ptILH2/h2szxLFfr4fvbCnGOV5hfPnEVqkrFO03RxVK
+         TBb6iHn5Vo7q+mYuD3d5RVMf7dFoUt5iNsknYKlrmS+BoPeWrtcij91SGjjcdmuONh2L
+         14Nw==
+X-Gm-Message-State: AOJu0YwXVQUGgHp0Y3LCHoS/S3O9Xb7JdeMWU10kCZ609XbGp+yL8hYp
+        l3HXx1UIYGm7gSTfNrWMiU1TwA==
+X-Google-Smtp-Source: AGHT+IEr6GbDZ4s+E8RGXMnC70xlRgNiPkcHdcJp3VSEFy36sZoLWuW438sdEFKZIJ2wEB7kwesPVg==
+X-Received: by 2002:ac2:5925:0:b0:507:9fc1:ca7a with SMTP id v5-20020ac25925000000b005079fc1ca7amr16708313lfi.9.1699049362665;
+        Fri, 03 Nov 2023 15:09:22 -0700 (PDT)
+Received: from localhost (c-9b0ee555.07-21-73746f28.bbcust.telenor.se. [85.229.14.155])
+        by smtp.gmail.com with ESMTPSA id m11-20020ac24acb000000b00507cf5fa20esm327760lfp.97.2023.11.03.15.09.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Nov 2023 15:09:22 -0700 (PDT)
+From:   Anders Roxell <anders.roxell@linaro.org>
+To:     andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net
+Cc:     mykolal@fb.com, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, shuah@kernel.org,
+        Anders Roxell <anders.roxell@linaro.org>
+Subject: [PATCH] selftests: bpf: config.aarch64: disable CONFIG_DEBUG_INFO_REDUCED
+Date:   Fri,  3 Nov 2023 23:09:12 +0100
+Message-ID: <20231103220912.333930-1-anders.roxell@linaro.org>
 X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231103182343.2874015-1-usama.anjum@collabora.com>
-References: <20231103182343.2874015-1-usama.anjum@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,68 +70,29 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Fix build warnings:
-pagemap_ioctl.c:1154:38: warning: format ‘%s’ expects a matching ‘char *’ argument [-Wformat=]
-pagemap_ioctl.c:1162:51: warning: format ‘%ld’ expects argument of type ‘long int’, but argument 2 has type ‘int’ [-Wformat=]
-pagemap_ioctl.c:1192:51: warning: format ‘%ld’ expects argument of type ‘long int’, but argument 2 has type ‘int’ [-Wformat=]
-pagemap_ioctl.c:1600:51: warning: format ‘%ld’ expects argument of type ‘long int’, but argument 2 has type ‘int’ [-Wformat=]
-pagemap_ioctl.c:1628:51: warning: format ‘%ld’ expects argument of type ‘long int’, but argument 2 has type ‘int’ [-Wformat=]
+Building an arm64 kernel and seftests/bpf with defconfig +
+selftests/bpf/config and selftests/bpf/config.aarch64 the fragment
+CONFIG_DEBUG_INFO_REDUCED is enabled in arm64's defconfig, it should be
+disabled in file sefltests/bpf/config.aarch64 since if its not disabled
+CONFIG_DEBUG_INFO_BTF wont be enabled.
 
-Fixes: 46fd75d4a3c9 ("selftests: mm: add pagemap ioctl tests")
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Signed-off-by: Anders Roxell <anders.roxell@linaro.org>
 ---
- tools/testing/selftests/mm/pagemap_ioctl.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ tools/testing/selftests/bpf/config.aarch64 | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/mm/pagemap_ioctl.c b/tools/testing/selftests/mm/pagemap_ioctl.c
-index f8685a2ea07e6..befab43719bad 100644
---- a/tools/testing/selftests/mm/pagemap_ioctl.c
-+++ b/tools/testing/selftests/mm/pagemap_ioctl.c
-@@ -1151,7 +1151,7 @@ int sanity_tests(void)
- 	/* 9. Memory mapped file */
- 	fd = open(__FILE__, O_RDONLY);
- 	if (fd < 0)
--		ksft_exit_fail_msg("%s Memory mapped file\n");
-+		ksft_exit_fail_msg("%s Memory mapped file\n", __func__);
- 
- 	ret = stat(__FILE__, &sbuf);
- 	if (ret < 0)
-@@ -1159,7 +1159,7 @@ int sanity_tests(void)
- 
- 	fmem = mmap(NULL, sbuf.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
- 	if (fmem == MAP_FAILED)
--		ksft_exit_fail_msg("error nomem %ld %s\n", errno, strerror(errno));
-+		ksft_exit_fail_msg("error nomem %d %s\n", errno, strerror(errno));
- 
- 	tmp_buf = malloc(sbuf.st_size);
- 	memcpy(tmp_buf, fmem, sbuf.st_size);
-@@ -1189,7 +1189,7 @@ int sanity_tests(void)
- 
- 	fmem = mmap(NULL, buf_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
- 	if (fmem == MAP_FAILED)
--		ksft_exit_fail_msg("error nomem %ld %s\n", errno, strerror(errno));
-+		ksft_exit_fail_msg("error nomem %d %s\n", errno, strerror(errno));
- 
- 	wp_init(fmem, buf_size);
- 	wp_addr_range(fmem, buf_size);
-@@ -1596,7 +1596,7 @@ int main(void)
- 
- 	fmem = mmap(NULL, sbuf.st_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
- 	if (fmem == MAP_FAILED)
--		ksft_exit_fail_msg("error nomem %ld %s\n", errno, strerror(errno));
-+		ksft_exit_fail_msg("error nomem %d %s\n", errno, strerror(errno));
- 
- 	wp_init(fmem, sbuf.st_size);
- 	wp_addr_range(fmem, sbuf.st_size);
-@@ -1624,7 +1624,7 @@ int main(void)
- 
- 	fmem = mmap(NULL, buf_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
- 	if (fmem == MAP_FAILED)
--		ksft_exit_fail_msg("error nomem %ld %s\n", errno, strerror(errno));
-+		ksft_exit_fail_msg("error nomem %d %s\n", errno, strerror(errno));
- 
- 	wp_init(fmem, buf_size);
- 	wp_addr_range(fmem, buf_size);
+diff --git a/tools/testing/selftests/bpf/config.aarch64 b/tools/testing/selftests/bpf/config.aarch64
+index 253821494884..7b6e1d48c309 100644
+--- a/tools/testing/selftests/bpf/config.aarch64
++++ b/tools/testing/selftests/bpf/config.aarch64
+@@ -37,6 +37,7 @@ CONFIG_CRYPTO_USER_API_SKCIPHER=y
+ CONFIG_DEBUG_ATOMIC_SLEEP=y
+ CONFIG_DEBUG_INFO_BTF=y
+ CONFIG_DEBUG_INFO_DWARF4=y
++CONFIG_DEBUG_INFO_REDUCED=n
+ CONFIG_DEBUG_LIST=y
+ CONFIG_DEBUG_LOCKDEP=y
+ CONFIG_DEBUG_NOTIFIERS=y
 -- 
 2.42.0
 
