@@ -2,68 +2,69 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11F9F7E033F
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Nov 2023 14:00:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A6307E0346
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Nov 2023 14:01:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230108AbjKCNAX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 3 Nov 2023 09:00:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51638 "EHLO
+        id S1376513AbjKCNBs (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 3 Nov 2023 09:01:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbjKCNAW (ORCPT
+        with ESMTP id S1376499AbjKCNBr (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 3 Nov 2023 09:00:22 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14747111
-        for <linux-kselftest@vger.kernel.org>; Fri,  3 Nov 2023 05:59:33 -0700 (PDT)
+        Fri, 3 Nov 2023 09:01:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFC871B2
+        for <linux-kselftest@vger.kernel.org>; Fri,  3 Nov 2023 06:00:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1699016373;
+        s=mimecast20190719; t=1699016453;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-        bh=qGvxE1TdNLz4iTVDTpQ4IJBdvLBoFmJbY/H0N64mqPQ=;
-        b=Woe4l9GXVUntfIIMgqTHlq7NJErmG2WYOp0ISVR3Z4g+AReaOWUsdJKAg3JMgbSEszijOV
-        s2AvZAnUpLqFZmcB8zjFx/MBkD8lbtk6X/AuLUhWlbU62+N3Fo/+9l3R0yok3kklG0BYr5
-        mMZsJaBYLhxXNPmzbWReak7gL5T3bMk=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=o1BM5IVdx/zIlfdQnRWSMCxZ58YWny/OCvugL0oU/YQ=;
+        b=YpNXmMjgiZzFofb2N492FfmxYZiJQbi3BhVHzCExLyjq8QzSFH/ozBdctPMeH+Ok4vpjCi
+        upyfVxVYKMMeNepWdes+gJD82s96C7y2u4b/XnB2Ft5yPlExMe6LAtJQLpdoAn45yZbEqW
+        zvwa7BX7/iiXQP5s6PuwrUvVVRvGteQ=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-255-2uz0lDdgPaqleyQL3OkecQ-1; Fri, 03 Nov 2023 08:59:31 -0400
-X-MC-Unique: 2uz0lDdgPaqleyQL3OkecQ-1
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-32d9751ca2cso926154f8f.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 03 Nov 2023 05:59:31 -0700 (PDT)
+ us-mta-144--PIQSk6YMPGSjzPc_U2Egw-1; Fri, 03 Nov 2023 09:00:49 -0400
+X-MC-Unique: -PIQSk6YMPGSjzPc_U2Egw-1
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-40855a91314so13441095e9.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 03 Nov 2023 06:00:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699016370; x=1699621170;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :references:cc:to:content-language:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qGvxE1TdNLz4iTVDTpQ4IJBdvLBoFmJbY/H0N64mqPQ=;
-        b=GGP0tV5q5AOElmo5zv61DNNmDMQdjXTP9+LcVB5Gdw39lCI6RgZ9FbaBbCSlUXw4A+
-         PisQ4AxRiBMPDVuh2F3AFOyxQviNd2JljmUYVqbEnSieB+Xt6jHKsNpUQchvySYp/Y6r
-         DUZbyj9Zh2eHYYVZXxVf+2VX4SUibn7/uWLejnaLRMNvWe8NPDlpkf5VSjXYdUyqfF7U
-         ELLJjNytj8excZ/20ICImLpCMxt1a/ydDtBxSU2LSYDYXuIFBnXPJNSFQTHkVDzkAGO4
-         nt0goRbcM0NQnnSDJ6uf6ka+cUC3+3IJ/94F423vayS40Tgp8hUSWUz5eT6HJID6IjmN
-         MhQg==
-X-Gm-Message-State: AOJu0YzN6HDwhU1r1hKsFBEFAj9Ze3i6KVHwY/0xJm9m2Q8qhffBldfO
-        iLB1vM5oDfFolXSmPJu9oiQmdicN2tj2y6T263RwOnNC+XCOtI66n5CHqWLIu6BHMfhChduXqUz
-        WA8Z5t9QiWGIh5FYBTMI9YVWwHaRV
-X-Received: by 2002:adf:d1ed:0:b0:32f:810e:8a3f with SMTP id g13-20020adfd1ed000000b0032f810e8a3fmr16714950wrd.14.1699016370649;
-        Fri, 03 Nov 2023 05:59:30 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFyBS6Z00CC8vwD2VjTJLhG+y55gMeontkOP+IPGK1FAnt0REikOBq2K+D/yLhaFXGK4BHSoA==
-X-Received: by 2002:adf:d1ed:0:b0:32f:810e:8a3f with SMTP id g13-20020adfd1ed000000b0032f810e8a3fmr16714925wrd.14.1699016370211;
-        Fri, 03 Nov 2023 05:59:30 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1699016448; x=1699621248;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :references:cc:to:from:content-language:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=o1BM5IVdx/zIlfdQnRWSMCxZ58YWny/OCvugL0oU/YQ=;
+        b=abBDLqWucivb28P+zX8rgNOeRvQQd0J2qk3418xOmWdqrhy/dzGR1b/471VVwhbxIq
+         /W/OAApv09WvWsSgL3rD/fYYGfRVNVdwhfKPx+5t5msUOBjIuWv7/3iZRdMXzi7MsBnx
+         vQ5CR+F84XbW201Hc2lxr19ULim/uVnedslOyc7SzN6bFZzuTwgm2GVxo2JXKwasWDe8
+         Q252f8pz+nH98Ty80KpE0U7dyyAtHloR8+hxi1JuXp8xrmyfZ6XdQguzghSes4hJ5DDL
+         0EkWsFTZRWrKCMdxCz7ZPSKkVBX6gq/+/1UZPFwHniegVgz6bpc3gQRURGGBjU0YHSda
+         iRlA==
+X-Gm-Message-State: AOJu0YwN9RykA7uew6F8gd+KfboHnclLc5Q89MAOALIosXh8LGsuaDYt
+        WQw1ooWf1rx9VB4fcqntgnEoDa8Rm+OPjmnM/fTpY8pRskf7xMpW6Mb7DCaAk/QItJCXcBXNvBl
+        osyI/4SJji+iMZoaLBEC83Frn/KyI
+X-Received: by 2002:a05:600c:3103:b0:407:3e94:bcca with SMTP id g3-20020a05600c310300b004073e94bccamr3308309wmo.1.1699016448141;
+        Fri, 03 Nov 2023 06:00:48 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGAykxIm6bwpaq29e3TYATQQiLzDOYI4Xh8bqnHUKgIvBnT2/LIC0KVtx75alsLuqxiMxigag==
+X-Received: by 2002:a05:600c:3103:b0:407:3e94:bcca with SMTP id g3-20020a05600c310300b004073e94bccamr3308242wmo.1.1699016447664;
+        Fri, 03 Nov 2023 06:00:47 -0700 (PDT)
 Received: from ?IPV6:2003:cb:c70a:a600:bc48:cd31:d01f:f468? (p200300cbc70aa600bc48cd31d01ff468.dip0.t-ipconnect.de. [2003:cb:c70a:a600:bc48:cd31:d01f:f468])
-        by smtp.gmail.com with ESMTPSA id j5-20020adfe505000000b0031fd849e797sm1398010wrm.105.2023.11.03.05.59.29
+        by smtp.gmail.com with ESMTPSA id j5-20020adfe505000000b0031fd849e797sm1398010wrm.105.2023.11.03.06.00.46
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Nov 2023 05:59:29 -0700 (PDT)
-Message-ID: <15ff806d-59ab-46ab-8891-05ab917a1528@redhat.com>
-Date:   Fri, 3 Nov 2023 13:59:28 +0100
+        Fri, 03 Nov 2023 06:00:47 -0700 (PDT)
+Message-ID: <3897f319-916f-4862-88d0-24db46c10b5b@redhat.com>
+Date:   Fri, 3 Nov 2023 14:00:46 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v3 11/11] selftests: error out if kernel header files are
  not yet built
 Content-Language: en-US
+From:   David Hildenbrand <david@redhat.com>
 To:     Peter Zijlstra <peterz@infradead.org>
 Cc:     John Hubbard <jhubbard@nvidia.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
@@ -79,7 +80,7 @@ References: <20230606071637.267103-1-jhubbard@nvidia.com>
  <20231103121652.GA6217@noisy.programming.kicks-ass.net>
  <a002f903-723f-40ae-8d7a-421ab2e082e2@redhat.com>
  <20231103124606.GB8262@noisy.programming.kicks-ass.net>
-From:   David Hildenbrand <david@redhat.com>
+ <15ff806d-59ab-46ab-8891-05ab917a1528@redhat.com>
 Autocrypt: addr=david@redhat.com; keydata=
  xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
  dBrn+lhhOYjjNefFQou6478faXE6o2AhmebqT4KiQoUQFV4R7y1KMEKoSyy8hQaK1umALTdL
@@ -125,12 +126,12 @@ Autocrypt: addr=david@redhat.com; keydata=
  jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
  WNyWQQ==
 Organization: Red Hat
-In-Reply-To: <20231103124606.GB8262@noisy.programming.kicks-ass.net>
+In-Reply-To: <15ff806d-59ab-46ab-8891-05ab917a1528@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H4,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -139,54 +140,59 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 03.11.23 13:46, Peter Zijlstra wrote:
-> On Fri, Nov 03, 2023 at 01:22:54PM +0100, David Hildenbrand wrote:
->> On 03.11.23 13:16, Peter Zijlstra wrote:
->>> On Tue, Jun 06, 2023 at 12:16:37AM -0700, John Hubbard wrote:
->>>> As per a discussion with Muhammad Usama Anjum [1], the following is how
->>>> one is supposed to build selftests:
+On 03.11.23 13:59, David Hildenbrand wrote:
+> On 03.11.23 13:46, Peter Zijlstra wrote:
+>> On Fri, Nov 03, 2023 at 01:22:54PM +0100, David Hildenbrand wrote:
+>>> On 03.11.23 13:16, Peter Zijlstra wrote:
+>>>> On Tue, Jun 06, 2023 at 12:16:37AM -0700, John Hubbard wrote:
+>>>>> As per a discussion with Muhammad Usama Anjum [1], the following is how
+>>>>> one is supposed to build selftests:
+>>>>>
+>>>>>        make headers && make -C tools/testing/selftests/mm
+>>>>>
+>>>>> Change the selftest build system's lib.mk to fail out with a helpful
+>>>>> message if that prerequisite "make headers" has not been done yet.
+>>>>>
 >>>>
->>>>       make headers && make -C tools/testing/selftests/mm
+>>>> NAK NAK NAK
 >>>>
->>>> Change the selftest build system's lib.mk to fail out with a helpful
->>>> message if that prerequisite "make headers" has not been done yet.
+>>>> This now means I can no longer run selftests, I thank you very much! :-/
 >>>>
+>>>> root@spr:/usr/src/linux-2.6# make O=defconfig-build/ -j64
+>>>> make[1]: Entering directory '/usr/src/linux-2.6/defconfig-build'
+>>>> ***
+>>>> *** The source tree is not clean, please run 'make mrproper'
+>>>> *** in /usr/src/linux-2.6
+>>>>
+>>>>
+>>>> I've always done:
+>>>>
+>>>>      cd tools/testing/selftests/x86; make
+>>>>
+>>>> and that has always worked
+>>>>
+>>>> Now I can't bloody well build *any* selftest or risk not being able to
+>>>> do builds.
 >>>
->>> NAK NAK NAK
->>>
->>> This now means I can no longer run selftests, I thank you very much! :-/
->>>
->>> root@spr:/usr/src/linux-2.6# make O=defconfig-build/ -j64
->>> make[1]: Entering directory '/usr/src/linux-2.6/defconfig-build'
->>> ***
->>> *** The source tree is not clean, please run 'make mrproper'
->>> *** in /usr/src/linux-2.6
->>>
->>>
->>> I've always done:
->>>
->>>     cd tools/testing/selftests/x86; make
->>>
->>> and that has always worked
->>>
->>> Now I can't bloody well build *any* selftest or risk not being able to
->>> do builds.
+>>> This change landed in 6.5, no? And 6.6 was just released. Just curious why
+>>> you notice that now.
 >>
->> This change landed in 6.5, no? And 6.6 was just released. Just curious why
->> you notice that now.
+>> Dunno, last time I edited the selftests and needed to recompile was a
+>> few weeks ago.
 > 
-> Dunno, last time I edited the selftests and needed to recompile was a
-> few weeks ago.
+> Okay. the question is if your workflow can be easily adjusted, or if we
+> can improve that header handling as a whole.
+> 
+> The problem I had with this recently: just because we did a "make
+> headers" once in a git tree doesn't mean that it is still up-to-date.
+> 
+> So once some selftest changes showed up that require newer headers,
+> building the selftests again fails without a hint that another round of
+> "make headers" would be required.
 
-Okay. the question is if your workflow can be easily adjusted, or if we 
-can improve that header handling as a whole.
-
-The problem I had with this recently: just because we did a "make 
-headers" once in a git tree doesn't mean that it is still up-to-date.
-
-So once some selftest changes showed up that require newer headers, 
-building the selftests again fails without a hint that another round of 
-"make headers" would be required.
+To clarify: maybe some kind of a warning would be better, ideally that 
+the headers might be outdated and that another "make headers" would be 
+required in case there are any build errors.
 
 -- 
 Cheers,
