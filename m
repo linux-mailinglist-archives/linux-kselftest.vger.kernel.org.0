@@ -2,62 +2,66 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5F207E0B5B
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Nov 2023 23:59:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EA0F7E0B6C
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Nov 2023 23:59:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1377252AbjKCWxe (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 3 Nov 2023 18:53:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37260 "EHLO
+        id S1377274AbjKCWx7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 3 Nov 2023 18:53:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230326AbjKCWxd (ORCPT
+        with ESMTP id S1377760AbjKCWxy (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 3 Nov 2023 18:53:33 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FE0818B;
-        Fri,  3 Nov 2023 15:53:31 -0700 (PDT)
+        Fri, 3 Nov 2023 18:53:54 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DB72D65;
+        Fri,  3 Nov 2023 15:53:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699052011; x=1730588011;
+  t=1699052031; x=1730588031;
   h=message-id:date:subject:to:cc:references:from:
    in-reply-to:content-transfer-encoding:mime-version;
-  bh=AF06BjmO1AFpyMsQGfaqinxs0LNvmUJHuWK9ucwjtvo=;
-  b=fDav7fzTBTCCU2DHa2t9XLvomsQ/a9HJ4myNjyFisSZK9UFP1mSjX55+
-   Mh5OHKdDbHuwitVoq3OIggV3DngCphHZaa4NY0zAbyR/QWGXKtDZOAcD6
-   Cx8je3bIdafloFsg932d9XmgfgzJc4oHVsBt/mheDEQgd7/rgMKXLsnlo
-   hLFn7I9KrB0XFwFxDw7kOl8DWtSj7AEjIcqyHR2yUiI0EJYYV0eMjydMi
-   W70CbC3dtRWq2+Pi1mpjLYXMRTfYgRStNM38qQ1ReXSyDoTSXPD/ZgRPg
-   tPeAO9XT+bM10Z//NTqsVNhrmsqw0owihnO7+c8DksQJ/BrB3ysSmdx7W
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10883"; a="10572617"
+  bh=/JhAaR9IO457t2BSocK3AeyFQFpdJcFavDx6zb3/3kY=;
+  b=PLQ1NKFqDMkbG4oropp/ZG2leyjz5KJlG2Rl8MVLZsQzZybY7+sfq3U4
+   cufeVrz2J72M2Swlojs1T4123IJqZzWzvPuiFhkbE/NikDa4g5FBp7sI9
+   EfQVSOanzgcZ8W8fsN3nfcf2x527YwH9qzQEGqslr7dxc8rmXKn1xmxgJ
+   Nfyru4o2Ik/eyNHM/kzbCOhYBhi80DD3POGPSvOLh2eRnU12lRuJRUVi9
+   +oAhr/IB7AhHsK1uWlFOj9QQ1KXYPnKoMgvQrCaxkTPEqmgQf4CkaIwP+
+   LBHWYyWE/MUArG5FtIvItq1PxxpCAyWmI2/BxkIWEqpBVZcyzMrrGwqgU
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10883"; a="453339289"
 X-IronPort-AV: E=Sophos;i="6.03,275,1694761200"; 
-   d="scan'208";a="10572617"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2023 15:53:31 -0700
+   d="scan'208";a="453339289"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2023 15:53:50 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10883"; a="765399306"
+X-IronPort-AV: E=McAfee;i="6600,9927,10883"; a="885342224"
 X-IronPort-AV: E=Sophos;i="6.03,275,1694761200"; 
-   d="scan'208";a="765399306"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga007.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 03 Nov 2023 15:53:30 -0700
+   d="scan'208";a="885342224"
+Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
+  by orsmga004.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 03 Nov 2023 15:53:50 -0700
 Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Fri, 3 Nov 2023 15:53:30 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ 15.1.2507.34; Fri, 3 Nov 2023 15:53:50 -0700
+Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
+ ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34 via Frontend Transport; Fri, 3 Nov 2023 15:53:30 -0700
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.168)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ 15.1.2507.34; Fri, 3 Nov 2023 15:53:50 -0700
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.34 via Frontend Transport; Fri, 3 Nov 2023 15:53:50 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.168)
+ by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.34; Fri, 3 Nov 2023 15:53:27 -0700
+ 15.1.2507.34; Fri, 3 Nov 2023 15:53:49 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ll4+CGxgTCZzrP47YwL5E3INLPilr61edORwAPd1pau3yVl4vx2lTHJFpdFXhxbv8CpdnUdxuN+HOVZujB0jGIqc7ydiLy1G54t9zE0tVEuchPkBPq32MTimA7vJdCBYG40jhR8Yd5NQLgW7IG23YMsT5ariPs+UMDNlHvVHP9vRirw1BsIPXhwqVsRtnlMPsMZAr8r8NlRLYwdqm2m2R/I17lIBeyxymNvZ+KfemRBnZf28NyurvNlEJ8GLnri3vQS9Ym0YdUvwjHacv8jND2IhJPZvn0LU/p7X5IEL24XrpBs/kUQkoN+hw+l8ehF5BUUM9q4RKJ1fwmASuyjqGw==
+ b=fVkZjAjUQM6T9WoPLvl8T3uTzgNhqSfhyd9Uuds4/FzWI5HYp+Y4Sp+SWheQJoe0piKC3yaEDraWNcp5GOO5PFhP56M1tVSqQ9SGRzk1vxwcEFfoJgEijmCnzmbt7dDEewFisC9RPdxprl+xK3IhziuYQ1nf1WK9zvCLwtO5r3T7BkEqxFrQJ7Y9Pqf1P1vgiUz53CLXB5p1hnE4bwWScezSiLCi89StHX6OG/Hl/nFMHT4sm0GKGNcHLjQ4udGAxdGsWf0DZhFHQFKj+1hfYYhYg8Sm2Uzy3Cch0avPmREQGF9tjtKLZx+2LKABZuvOtYxXv31vIoP2aNEZRn+cSw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Wg85Sc5N/7yEuJyuKl9QiX4ZpiBWNmU0PmyXk5fk/RE=;
- b=jsLOYGe0iASCP/xv1UYETJjUK4sThHPuwGJI1VHk87su1JPJpWQSHF3KWRChm7sb5kIz+bHvaglLAEYEIgTWZeKqSzfgf7V/juTmUn72ygreti2nW1ldasfzrQfhPBBTYC4NbjiCZ8lsKVkjuqCo+GbcGfTxxbjL9ZEaJY2vnxqvJir4Kp2fjsX1/9QfEIxZ6OPaTZBifEVqyWBBRftsnS9PBIMMLK2lSRf1DF0V36Zjb6/TT6mfwrjb11ZxZB0yab29J42qTr38MGzOiBCNQUPEkr7UyBUrNQQuyWXNUAsPIaP4wSNS+tntMTC5BO+IwzHvLFaIdmL3JH17gLakaQ==
+ bh=pqZqEIgmFBpJlgDaZfANMc8q7fxdiLAdnFveguW+Urs=;
+ b=Zp/b8SujNDKivcLJjkKdRmUBBU/FPa094Q6yuPJoV00bnO50/oUSkdDxHzaVBDjRBdWRWnp2MacKYhgIj2V6I3ADX3rO1dYAjL44xJCB0mWxWaj0d9Bmjj61tFCeNL1WXb78wmwY4HIDjGdeTvj8tZ3mWmi7ixEf52ZOVrXS9mHRceXS2/OcXvSX2ASlJygyWPtq2yOUoonOs14/HQuFDfUtV8cpz8r/vi+bUBxY0xJZsUC8LyeEPl/i5vkLqpeG5Bv5hS+QpwBJRT3qrseBIfqBbPpJWy2cuJFLcsf3Ju3WT0CIq4QxKvtm356Z9uPn4ICDt+9mXnnJLJI4CcVStQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
@@ -67,29 +71,30 @@ Received: from SJ2PR11MB7573.namprd11.prod.outlook.com (2603:10b6:a03:4d2::10)
  by LV8PR11MB8723.namprd11.prod.outlook.com (2603:10b6:408:1f8::14) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.24; Fri, 3 Nov
- 2023 22:53:25 +0000
+ 2023 22:53:42 +0000
 Received: from SJ2PR11MB7573.namprd11.prod.outlook.com
  ([fe80::6710:537d:b74:f1e5]) by SJ2PR11MB7573.namprd11.prod.outlook.com
  ([fe80::6710:537d:b74:f1e5%5]) with mapi id 15.20.6954.024; Fri, 3 Nov 2023
- 22:53:25 +0000
-Message-ID: <48c6795b-554a-4019-bb8d-a2ca0f6fbb2b@intel.com>
-Date:   Fri, 3 Nov 2023 15:53:23 -0700
+ 22:53:42 +0000
+Message-ID: <721c6735-dab9-49c7-bdb2-b34388144e21@intel.com>
+Date:   Fri, 3 Nov 2023 15:53:41 -0700
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 23/24] selftests/resctrl: Add L2 CAT test
+Subject: Re: [PATCH 24/24] selftests/resctrl: Ignore failures from L2 CAT test
+ with <= 2 bits
 Content-Language: en-US
 To:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 CC:     <linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>,
-        "Shaopeng Tan" <tan.shaopeng@jp.fujitsu.com>,
+        Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
         =?UTF-8?Q?Maciej_Wiecz=C3=B3r-Retman?= 
         <maciej.wieczor-retman@intel.com>,
         Fenghua Yu <fenghua.yu@intel.com>,
         LKML <linux-kernel@vger.kernel.org>
 References: <20231024092634.7122-1-ilpo.jarvinen@linux.intel.com>
- <20231024092634.7122-24-ilpo.jarvinen@linux.intel.com>
- <8051f3ef-1126-41fb-b6cc-f48441936dd7@intel.com>
- <2514e73e-2419-7c88-3f22-469db4b2fa25@linux.intel.com>
+ <20231024092634.7122-25-ilpo.jarvinen@linux.intel.com>
+ <a5160a37-7778-49ff-8c25-92846d42e87e@intel.com>
+ <6426a6be-5e92-6c5d-7025-6308c1f3c24@linux.intel.com>
 From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <2514e73e-2419-7c88-3f22-469db4b2fa25@linux.intel.com>
+In-Reply-To: <6426a6be-5e92-6c5d-7025-6308c1f3c24@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
 X-ClientProxiedBy: MW4PR03CA0208.namprd03.prod.outlook.com
@@ -98,59 +103,59 @@ X-ClientProxiedBy: MW4PR03CA0208.namprd03.prod.outlook.com
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: SJ2PR11MB7573:EE_|LV8PR11MB8723:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2106a968-572d-4f03-ef48-08dbdcbfafdf
+X-MS-Office365-Filtering-Correlation-Id: e92b0024-d8d1-4680-ce1a-08dbdcbfb9db
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 83Ul6Q40omOR8rRv5I5RmuUT8aCoyQknu+pdexiV4N3h+NnLF6427srb1QCWmDECoBThcDIjIJsz4QGTHbtFpMIJi7H/dqPh7cDUszW0uZrQhcL4qxcEBzqghAKnRcAztIoq9yUk3uXlt5+E57vlGLMs1876jOj45xjI3DGCuvJgWKMY0OW1GRGxWRL12po27hC8H+cE0/hlbNdSRbDos6ASWQgGdfLcEakMPyo2JID/ksh3fP15HwtfA5azPdz5GyrLBwbuQN8EJ9JrudjJKJ8GNkFALw2+NIcOaKXPDHf1Q38oTMcDWWqEiYVr+QSJs+LFbAZmLQjNvfs4tqXC+K+0TAmkOqkH/ckYSjbVZAEd+7Rj5tWt4pdQ/PO4Is1j78Z+e6NiqJ0iUc2PGeclsqaxYw+wg9fboDH7r37CImwognnyLtSXlrl0Bv5s/ZHg6WyNXSAeJIfJeB+KaFbQhnYbRjshFf1+rUxt/Emmq6Mk4+zJ3H+q/2b76PexHI6Tluxw0xnhj9eMwbtP2jr6mP0tkTr7DCgF9yWgzNnHJXGPrkPiImG4ITMeG5cCgx7iygj9rJQ+1C+2KVcNpuFwUFgWCYZ5oNeaPhiqxzgkbMJ48fj7BVpDScVEaclTKBhH//xIY5dHoCz7B4oUYymo2j0HAu8klFn9qLnqPKNJAx/7Eqc0AC86ahzKEPpGkoSC
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7573.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(396003)(366004)(376002)(39860400002)(346002)(230273577357003)(230922051799003)(230173577357003)(186009)(451199024)(64100799003)(1800799009)(53546011)(6506007)(478600001)(54906003)(26005)(6486002)(31696002)(2906002)(66556008)(66946007)(66476007)(2616005)(31686004)(82960400001)(36756003)(6512007)(38100700002)(66574015)(41300700001)(316002)(44832011)(5660300002)(6916009)(66899024)(83380400001)(86362001)(4326008)(8676002)(8936002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: GlV9c3BJg4In0mDLU24LKXO0sQPDjs2Qy9xfh83szG8Qdjvd5aJ4ggbCVK5b5P1Hxq//miGLKSeLPIWgGiVlHPUwXfH10wLxdHY2R8BEqriwiHDtK7zRIHHfGac0ln9mNdDzfFO8GO3sMcTbmoWgLxygoB4x2bHoVkbUb+Qar9dM2pi9sx6lYrlwnR9Sj7hNonmWgkyi4SD3z+2JkZmtx4Jm5AaqRVug8q3B/YaOO4MoeZ0rNjb9llOx2NqC7w/xqBtgBBnOO02P16JLtJuiwp15PN1TmIUb3Y3i6XfqSPz25wSH3ivVSe4GJnczjCBwD7RwVPN/mzGhLZ9KZPO2BmkXwn3wI4LmzvEfmKsnQETskuoa/KulJCC52aHqIh50Z0EjS7ZouJQcVyJZ0ZjQ/XsQDDctKONL/45VonQhogTJ3F41gKdxrzp8YfRzUBunkU4rB2CYrC9ekNLUtF7b6sD6VsL6Ro+HPrdzkFZuDwz3qB2kJfRJhuC6gXj1Xb6Lr0pyGgZ6geexDswJ9wIw857nYHoMsUsoUnelrA7FNPaFOKa7FTWmBiFE2RnYTGIJnZDgeGsxa3ZAj7Lcaf7P0EM1bXE94hMbfxNNb5+UnKbPxhQWKDzUbfN33m/F4TQ4kreRbdnNmCOLdM/R+jdP6Q==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7573.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(396003)(366004)(376002)(39860400002)(346002)(230922051799003)(186009)(451199024)(64100799003)(1800799009)(53546011)(6506007)(478600001)(54906003)(26005)(6486002)(31696002)(2906002)(66556008)(66946007)(66476007)(2616005)(31686004)(82960400001)(36756003)(6512007)(38100700002)(41300700001)(316002)(44832011)(5660300002)(6916009)(66899024)(83380400001)(86362001)(4326008)(8676002)(8936002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bnI5OWNZdElTck02VlNUdGpxaHRneFJVajFIZnZwSktQeTNxNXZ5VnBrRHJJ?=
- =?utf-8?B?R0ZyZ1RLY1dxVFA3VzJWdWhvRXBEajdFYVFZeVFvV2JKbkFEN0pBdzFvZnFv?=
- =?utf-8?B?TjRmK0JEN3lhMko1VEpMQWZyWmNQc0E1Q3JEN0NaQWlzbWZZQVlrOEx5YUdY?=
- =?utf-8?B?UjF0LzVJMWdUOWh3YzQ5Q1ZrU0NIcCtuK0lzai8wYXpGWWUzRjBzQzdtandS?=
- =?utf-8?B?MDEyM243alEramxDaEczSmRvTjhkRmRrUWgycHpvM3AxMlB1RXFWSlBMRU5P?=
- =?utf-8?B?bDZuc3p0OVJKOWE5RHMyM3M5WHZLNEpMUnJpV3NiQ0Q2bTVRakdIcmU4UGN3?=
- =?utf-8?B?ZS8wU0dVRXZ5OUlRZ0E3dEk0TW1EdXdJc3p6bEFNZDM1QTVueFdZaXRQTHll?=
- =?utf-8?B?QUIvcXJva09lM3NZU0RHbnJhMkhiNkozditwNTZSeG9UKy91cmMyOHF5MHhC?=
- =?utf-8?B?RlZhNGcwU0RoU3BzNDBkQVB1TTlURFUwTnpWMlU2V041K3NGQlRkdGFUV1Fl?=
- =?utf-8?B?M3lyQmUxUEdETHozN2xZQkI1ek16bUtJekRVdDJmbGM3K0tYVmcxWEpiWWJj?=
- =?utf-8?B?YlY1SFVHcVEwU1kxUGIycDVqTmMvUlpBMWdHRGZmUjBWU1REZWRhR29pMUln?=
- =?utf-8?B?RS9XNEpRdGdUekhpcGNPVGRsYUJNUnVJWWNWNjAzTzZFRzRYNG01akNseXhI?=
- =?utf-8?B?ejhtQXpiVjZyNG9hUkdvdTJpY2kva2Z6MkltditycUo0c2tsMWZVazVCd095?=
- =?utf-8?B?dGVaMUdOWlFjZi9uN1BTUEE2VGJLZmgzdWVJcDR3ZGVrUFArbmFNK25LZXM4?=
- =?utf-8?B?N2hIUkFpRkk5NjBHdGlHN0toUXpxekxSWTg1aVBoK1g4TmtHblZ5Vm1OTWgv?=
- =?utf-8?B?eGpnUDVvNnBzL1ZHQ0grOGRrQTZqRE1MQWV4Yjg5TWZ1b3lvU2NsWHhLSUE0?=
- =?utf-8?B?SXlpR3BpTVEvMk1OZEJxSjdQTC84UjU0MFpFZW1PNHVSQ2VoZFFnZzNrUmpS?=
- =?utf-8?B?ZHlFY205bHRlb295UTM1RVVVRlEyVkFla0hNWWhDR09DSm5zbVhLc1dFeERF?=
- =?utf-8?B?WWRLc0lJZlI0UDhtMmZjeHFWUlcyNnRVeFFlYnJwVzRmbUhHQ3RnT2xEREZD?=
- =?utf-8?B?S3lvWkZRaU9OM0E2dSsxRUVHSS9qU1Q4d3pHUkZMV3pRMmxuNndjUG9ZVnpy?=
- =?utf-8?B?bE9OWW53OG0wMlNTbmRnOE1LMTRvTzNVOTVDNlhBKzhiYkRwYjNTN28waERy?=
- =?utf-8?B?WkpsRXkyZVVPRVM4REJEQ21KUS9RWXJVRlcxV2R4NVFrODIyYXFZSzllTjR6?=
- =?utf-8?B?bEFxdTN2WlpNZTEvZHpST3V2Vm1SYlFTcVRydkNKYUNpV2hSWWZTRlBjM0dJ?=
- =?utf-8?B?YjVUWHY3R2pFb0xSTjlhdzBLTGxLSzFVczhxSkRkNjR1K0VzSjZ6ZWc3d2hZ?=
- =?utf-8?B?bGpmUXR3Mlp4bGU2aExXaGRaN1I2MXZ6TlhoczhRQVJnM0NvbUl0T1hGeWVH?=
- =?utf-8?B?STFLRS9RNWZtVzFnYnRmNndHTlRzRHJvTFJVTXpFR3pJS2FHOE01UkNoMFRu?=
- =?utf-8?B?bDlrQk9LK21UNi9NQTNaZXJVcTBHallJbVB1ZnI1cWxWdTV6dkdBRlQwVEdt?=
- =?utf-8?B?RnZkcnNiV1djazE1OURka1hCWkVXVXBWazJqSnZVdzlJNlMwWUxnZUVUZmQy?=
- =?utf-8?B?NjdsSE1vTmhaVGxtR2QxcysrRGU4RmNnY2ZlUGZPM3RZbFFyWFpFM0cwaDNm?=
- =?utf-8?B?Q1JlT25YNjdUVTNDN0RIbFo2WGlIWlNES25pbGJGSzJDamo0SjU0TEIwUmJJ?=
- =?utf-8?B?NStlV0plZk8zWVdLWUl2Y2phcDBCNU1YbEI2bEhTWEhRY0ZSNDFaK2QycXdP?=
- =?utf-8?B?SXpRUC9rWWh2RDc0NDhsUzRCZnhsUFJPRHhLbzN0SjFrV1hZcHVtOWhQVnFS?=
- =?utf-8?B?bFVERnNZamI2ZlZ4cEY4RFE2SVZycHZBSFoyRDlaVFVlZnBHdEhFbitEN2Q4?=
- =?utf-8?B?d3VMTEgvTnVRaDJtb3hSM3dCdXFiSmNqQ1c1VXBKMFNnNE41cU1Ec2pnbzdY?=
- =?utf-8?B?VlNNZVovaC9pcEpPQzhhVXVzZlNnelZabzQ3a2pjSlFMa2ltODVhSkNoaTJh?=
- =?utf-8?B?RnFJcmt1YzRlRC94K2xLZi9iS1lkdmN1QzM5MDYrTWVJeUpFUStIdDY0bG5C?=
- =?utf-8?B?TVE9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2106a968-572d-4f03-ef48-08dbdcbfafdf
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UWlWWFdicGJZSWc3bThwUzIraDlXQ1JhMXJ3VGFJbXhzTlhKQWxMVVpEamVK?=
+ =?utf-8?B?TTRSd3d3aTVnV08xQ2cycmVxR2FlUVZGSFhGUWU3STduVTl3RVlMQmYwRUFT?=
+ =?utf-8?B?T2k1VTUvRlcrU2ppTks3eGI0U0E0cFJFSGx0RWhhTkRVSnVtdTBHcUJHZjJT?=
+ =?utf-8?B?c05ZNXFCOXB2dUtaOWxIb1hFNnE2RmhzamRDTzQxbEFsY1E2bXFocWNZaEJW?=
+ =?utf-8?B?bi9BRFBTYno2QnRrZS9MNnlnc3BDZUQrZVpHMkxYbjhpcXZUbGYzRGRhUkE0?=
+ =?utf-8?B?RE9oVm0zaGk2dnY1OG5CSElKYjV3MVRNWE9yUEFnVmlzTjhrQ3JBU2NTQUNB?=
+ =?utf-8?B?YUp3R2hZZ28ySUFldjZOTElaWEg1RmxFV3cwZnBJVDdBVDU5dnpjU1hKbERi?=
+ =?utf-8?B?Z01tVTc2U1UzZFU2VGRoWFBabTc1ZjZhTGRFeFpobmVrQldwOE13eDBFcFZG?=
+ =?utf-8?B?VFV3amwrdzM0WE5vbW5JcTcyQ1dtOE92V044SzFSVG5oc0Fsa2d3cVkxRENN?=
+ =?utf-8?B?czhBWUJQYWZIUFRWWTU5VDM2RHZkV0F3MGY2VDBUR2dvZmFDS3BHNGRSakpL?=
+ =?utf-8?B?TEduNGpGdGZ3ZG5kWDV5UjhEdEFBbHljaE1GWkZISXpLUmh2V0d3bHBRY2VG?=
+ =?utf-8?B?QThaYkEzRVo4bk9TNGFhcmxhOUF6cjd4MXlBVytxVlAySUZzS3Rvb3BJaVRu?=
+ =?utf-8?B?cUdvRUYwdGJUVGMrWUJHWHdFZFhmZzlMVUViUHNNOFpHYndqVE1XbHlSeTV4?=
+ =?utf-8?B?MGVBOFlrYWIwd2E5M2VudGJoY1c3T0hwamhReWp6TGV4RUpJY1Qrc0QzL0JL?=
+ =?utf-8?B?bXlPQk92VHQ1WnMwTGRFN3F5a0NhRVFoQTNRdlJFcTE5Q2IvdE5Fa0hRVDJs?=
+ =?utf-8?B?TnZJdnR1QlZncjRTcFlKcmoyK082anR0UkhPa3NhdENwTFFnVzE2U2pTRUR6?=
+ =?utf-8?B?VFlQakRrUGw0STNYVlJmVGkxQzJqUXl6dThUWTdWdnI3QjZ4MzBBS1I2dFU0?=
+ =?utf-8?B?c2lRUWhWRHdtd2lHL1NtdE80NWd6dk5ZSE5RRkJhRkhycCt3T2h1Y1NITkF0?=
+ =?utf-8?B?b25rQ2xFNkZPcWlsT3NMOXY1dDBwcnljaGhtNXY0OEI4cWxHRVNRWmRsa3pM?=
+ =?utf-8?B?bGUxc3VXWG1sRzMwUExWTzRXdVZwTEFZaDdlVWZiZHRuRjZoV3JkaE1lNUhU?=
+ =?utf-8?B?SE1qN20vL3hSK2ZrbHUydmtNOW5rRlAvZlJ0K2Z5OFJtZURDRTIzOEFlb0h3?=
+ =?utf-8?B?dUE1WCt4STdOblAzODlSZ2d2d0ptalRRdlR3UldSZVRWaWQ2VER4SzNtbHps?=
+ =?utf-8?B?Rm14cU83bENnYmdreEZiWVFDMFU3UkFkdnVGSWFxNko3MDhNUHBadmlNeE05?=
+ =?utf-8?B?THhMLzhBK0pyWHF4eTBMMVNLRk1HNjJ4Y3NxaW4vZFZ6Q2RlOVV3NHEzVDJT?=
+ =?utf-8?B?V05wK3V0NTdpeUxjV1Q3QVcyRlBZWE9HSGtWWG5kdEhQQjZ2QmxDTDhvb21p?=
+ =?utf-8?B?RUdWM0hBcDB3ZGE3SjJhTDV1MGpGZmpXUWNRTnUxWjd2WmhsQkdkQTljcXhs?=
+ =?utf-8?B?RnVHVFlGN3Ava09KY1hKQ3daRXFzOWJ4L2tsZVdFZGhoZUsyNnFIcFYydG9E?=
+ =?utf-8?B?dnVxMURDd0dwQXd0Z0cyYzNKanFSUTZ1OElMWVVzUC9nK2I0SGgwQVFQV0Vv?=
+ =?utf-8?B?UTU3SFRYMkEyYXowZXN3UnpXNFlhcllMWU1DSXpLcUgzQVNJa1QrMXBkc3Bh?=
+ =?utf-8?B?bWdEMzhRYVY0Q2tiVXlVVUorU3h4SDA0YVZTTUoyN3BDMXFUdGZnNnhOa1k0?=
+ =?utf-8?B?TWVHelQ3Ukk0YzVIcFB0MitSV3FvQmlJTjB1UnU4R3RNUU8yVW5NYzJWMEVG?=
+ =?utf-8?B?aHd6bnludTNndUdMZWtqN3lwVTRqNUZxbFQ1VHBwQVhRTkpyTXlEYjRlYlNO?=
+ =?utf-8?B?cVNRM0NmcTJTdlpjcllDNE4zZFNmaDhwdktjMVVzTDdLcklJZnRzWE55RVRz?=
+ =?utf-8?B?YW9nRTc5Tm1LNjRwMytNalBCRWtKTzB2VEp0dDF5M1pNemZxaFF0TkxlMGhI?=
+ =?utf-8?B?Z080S0xZRWhaTFJSOUdxa1JjaVdYODhSM3ZvZXZldjlhbVZvcHFuMW5LU29B?=
+ =?utf-8?B?L1J0b0NDSlBvWElyYlFTSitNK096dVpFZnFtU2NWUmMxdTNGczFwTzZWWjdy?=
+ =?utf-8?B?Q1E9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: e92b0024-d8d1-4680-ce1a-08dbdcbfb9db
 X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB7573.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Nov 2023 22:53:25.1608
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Nov 2023 22:53:41.9399
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: jSVGVSemYu7jMXAKAQu4WBvVsxv/Gk53dDBLlmZb62Pbs8njKhEAQvU6mXgzjs6ClEJywww74rdaKxLFfdgr4qeqyYmToRtlGwKU5olD4b4=
+X-MS-Exchange-CrossTenant-UserPrincipalName: FDFFbaKA+E2oIIu9ql4DwqrD7d7lOyzigiqe3n1OBR9Ae3fl52KwXtbYvbwu0+CkxX8aBmUQPDmydGVfL5a9hPi1seT8T3ZG4GPz/Qb1hTQ=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR11MB8723
 X-OriginatorOrg: intel.com
 X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -165,78 +170,53 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 Hi Ilpo,
 
-On 11/3/2023 3:39 AM, Ilpo Järvinen wrote:
+On 11/3/2023 3:24 AM, Ilpo Järvinen wrote:
 > On Thu, 2 Nov 2023, Reinette Chatre wrote:
 >> On 10/24/2023 2:26 AM, Ilpo Järvinen wrote:
-> 
->>> Add L2 CAT selftest. As measuring L2 misses is not easily available
->>> with perf, use L3 accesses as a proxy for L2 CAT working or not.
->>
->> I understand the exact measurement is not available but I do notice some
->> L2 related symbolic counters when I run "perf list". l2_rqsts.all_demand_miss
->> looks promising.
-> 
-> Okay, I was under impression that L2 misses are not available. Both based 
-> on what you mentioned to me half an year ago and because of what flags I 
-> found from the header. But I'll take another look into it.
-
-You are correct that when I did L2 testing a long time ago I used
-the model specific L2 miss counts. I was hoping that things have improved
-so that model specific counters are not needed, as you have tried here.
-I found the l2_rqsts symbol while looking for alternatives but I am not
-familiar enough with perf to know how these symbolic names are mapped.
-I was hoping that they could be a simple drop-in replacement to
-experiment with.
-
-> 
->> L3 cannot be relied on for those systems, like Apollo lake, that do
->> not have an L3.
-> 
-> Do you happen know what perf will report for such CPUs, will it return 
-> L2 as LLC?
-
-I don't know.
-
-> 
->>> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
->>> ---
->>>  tools/testing/selftests/resctrl/cat_test.c    | 68 +++++++++++++++++--
->>>  tools/testing/selftests/resctrl/resctrl.h     |  1 +
->>>  .../testing/selftests/resctrl/resctrl_tests.c |  1 +
->>>  3 files changed, 63 insertions(+), 7 deletions(-)
+>>> L2 CAT test with low number of bits tends to occasionally fail because
+>>> of what seems random variation. The margin is quite small to begin with
+>>> for <= 2 bits in CBM. At times, the result can even become negative.
+>>> While it would be possible to allow negative values for those cases, it
+>>> would be more confusing to user.
 >>>
->>> diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
->>> index 48a96acd9e31..a9c72022bb5a 100644
->>> --- a/tools/testing/selftests/resctrl/cat_test.c
->>> +++ b/tools/testing/selftests/resctrl/cat_test.c
->>> @@ -131,8 +131,47 @@ void cat_test_cleanup(void)
->>>  	remove(RESULT_FILE_NAME);
->>>  }
->>>  
->>> +/*
->>> + * L2 CAT test measures L2 misses indirectly using L3 accesses as a proxy
->>> + * because perf cannot directly provide the number of L2 misses (there are
->>> + * only platform specific ways to get the number of L2 misses).
->>> + *
->>> + * This function sets up L3 CAT to reduce noise from other processes during
->>> + * L2 CAT test.
+>>> Ignore failures from the tests where <= 2 were used to avoid false
+>>> negative results.
+>>>
 >>
->> This motivation is not clear to me. Does the same isolation used during 
->> L3 CAT testing not work? I expected it to follow the same idea with the 
->> L2 cache split in two, the test using one part and the rest of the 
->> system using the other. Is that not enough isolation?
+>> I think the core message is that 2 or fewer bits should not be used. Instead
+>> of running the test and ignoring the results the test should perhaps just not
+>> be run.
 > 
-> Isolation for L2 is done very same way as with L3 and I think it itself 
-> works just fine.
+> I considered that but it often does work so it felt shame to now present
+> them when they're successful. Then I just had to decide how to deal with
+> the cases where they failed.
 > 
-> However, because L2 CAT selftest as is measures L3 accesses that in ideal 
-> world equals to L2 misses, isolating selftest related L3 accesses from the 
-> rest of the system should reduce noise in the # of L3 accesses. It's not 
-> mandatory though so if L3 CAT is not available the function just prints a 
-> warning about the potential noise and does setup nothing for L3.
+> Also, if I make it to not run down to 1 bit, those numbers will never ever 
+> be seen by anyone. It doesn't say 2 and 1 bit results don't contain any 
+> information to a human reader who is able to do more informed decisions 
+> whether something is truly working or not. We could, hypothetically, have 
+> a HW issue one day which makes 1-bit L2 mask to misbehave and if the 
+> number is never seen by anyone, it's extremely unlikely to be caught 
+> easily.
+> 
+> They are just reliable enough for simple automated threshold currently. 
+> Maybe something else than average value would be, it would need to be 
+> explored but I suspect also the memory address of the buffer might affect 
+> the value, with L3 it definitely should because of how the things work but 
+> I don't know if that holds for L2 too. I have earlier tried playing with 
+> the buffer addresses with L3 but as I didn't immediately yield positive 
+> outcome to guard against outliers, I postponed that investigation (e.g., 
+> my alloc pattern might have been too straightforward and didn't provide 
+> enough entropy into the buffer start address because I just alloc'ed n x 
+> buf_size buffers back-to-back).
+> 
+> But I don't have very strong opinion on this so if you prefer I just stop 
+> at 3 bits, I can change it?
+> 
 
-This is not clear to me. If the read misses L2 and then accesses L3 then
-it should not matter which part of L3 cache the work is isolated to. What noise
-do you have in mind?
+We seem to have different users in mind when thinking about this. I was
+considering the users that just run the selftest to get a pass/fail. You
+seem to also consider folks using this for validation. I'm ok with keeping
+this change to accommodate both.
 
 Reinette
