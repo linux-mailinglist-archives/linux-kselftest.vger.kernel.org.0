@@ -2,44 +2,43 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B0C77E012E
-	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Nov 2023 11:31:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9DDD7E0123
+	for <lists+linux-kselftest@lfdr.de>; Fri,  3 Nov 2023 11:31:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1347309AbjKCJpo (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 3 Nov 2023 05:45:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56662 "EHLO
+        id S1347474AbjKCJzN (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Fri, 3 Nov 2023 05:55:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1347166AbjKCJpn (ORCPT
+        with ESMTP id S1347549AbjKCJzM (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 3 Nov 2023 05:45:43 -0400
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D009D42;
-        Fri,  3 Nov 2023 02:45:37 -0700 (PDT)
+        Fri, 3 Nov 2023 05:55:12 -0400
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B035BD49;
+        Fri,  3 Nov 2023 02:55:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699004737; x=1730540737;
+  t=1699005304; x=1730541304;
   h=date:from:to:cc:subject:in-reply-to:message-id:
    references:mime-version;
-  bh=vlF3S9N1W0zguAYvyFDi0DyELIRHNl9kTQEQgEsQL0U=;
-  b=Ck1FEVDCFy/FLPoyGhxsCa8vnETcp/6CZOWRpLCE2umvjTNs8sGvG2NP
-   Iru2eeVso5lRC+0mmjuU5ccPTvEh/PhwXw9QlMe4VSyFK1TF4AAx0fqqm
-   Hw6Kdl7xnda2nFFYkDznu6pgTjMyHPO50ArcjzhaQcKvuiDBmdNMbfuTc
-   xg+IiQPfqK14hfDCX4M2iy9Hxtce/GrgUgQiKcR5PMkjo1a9QD50IAgEu
-   ZauwusiD4mes7FmDpvQ3r59C149Bg62XHLFzhzChraVcd36wLhLkQgoRN
-   ZUc/FBuRNFWpeUUwok1HFuNu97YxmakPhrdYLVwStbIk+u+h18FF8O52K
+  bh=NSyd2tFqpwQi+DzpKhIJTBw3g3F0f78dLo/zLH6QgjA=;
+  b=HuUl+btO67zZ4+uIqb5CLMI1MUe0jL5ybZKh9L8W+ArzQRHgHnekXvgi
+   S2cK4ox+trYT/WELJPdH5+dR9CauNYrHCZaokwZ3pqjQe166eJUdcPf28
+   VXR+k9QgElm2zZScZEcQf2UsQNCwSp4LcsDKcETrbEjVzLIQzFNt2pjst
+   qXnXoXrXnQzdxwW5GyhkNJoRstODl7K8d47EWyX7LRsLi7Qt/K3wbNbZP
+   PiH/CAVSbo6zFPcdRc7AXeq0vIIRpl19AXWzPl4HZkV9jq/K4Tgpr3IpL
+   zV6OGbx5PJl5/4rKaTnbbrrBTCLQ59f2mBbiYvc2fIzKmNpVVWBQ4uTvj
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10882"; a="373955879"
+X-IronPort-AV: E=McAfee;i="6600,9927,10882"; a="10451100"
 X-IronPort-AV: E=Sophos;i="6.03,273,1694761200"; 
-   d="scan'208";a="373955879"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2023 02:45:36 -0700
+   d="scan'208";a="10451100"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2023 02:55:04 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10882"; a="790708773"
 X-IronPort-AV: E=Sophos;i="6.03,273,1694761200"; 
-   d="scan'208";a="790708773"
+   d="scan'208";a="9321815"
 Received: from pors-mobl3.ger.corp.intel.com ([10.252.35.38])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2023 02:45:34 -0700
-Date:   Fri, 3 Nov 2023 11:45:31 +0200 (EET)
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2023 02:55:01 -0700
+Date:   Fri, 3 Nov 2023 11:54:59 +0200 (EET)
 From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To:     Reinette Chatre <reinette.chatre@intel.com>
 cc:     linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
@@ -48,13 +47,13 @@ cc:     linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
         <maciej.wieczor-retman@intel.com>,
         Fenghua Yu <fenghua.yu@intel.com>,
         LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 10/24] selftests/resctrl: Remove nested calls in perf
- event handling
-In-Reply-To: <93113f94-9663-4cbb-962f-c415bc975f12@intel.com>
-Message-ID: <aae1ad6f-4c31-7fb6-255d-7011fb67a784@linux.intel.com>
-References: <20231024092634.7122-1-ilpo.jarvinen@linux.intel.com> <20231024092634.7122-11-ilpo.jarvinen@linux.intel.com> <93113f94-9663-4cbb-962f-c415bc975f12@intel.com>
+Subject: Re: [PATCH 18/24] selftests/resctrl: Introduce generalized test
+ framework
+In-Reply-To: <56769c01-e21d-4775-94f0-ef9f863c1e92@intel.com>
+Message-ID: <ffdeb9a9-c066-19c-9898-c2bdf632cef1@linux.intel.com>
+References: <20231024092634.7122-1-ilpo.jarvinen@linux.intel.com> <20231024092634.7122-19-ilpo.jarvinen@linux.intel.com> <56769c01-e21d-4775-94f0-ef9f863c1e92@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-935771429-1699004736=:1725"
+Content-Type: multipart/mixed; boundary="8323329-2039173404-1699005303=:1725"
 X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -67,141 +66,68 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
   This message is in MIME format.  The first part should be readable text,
   while the remaining parts are likely unreadable without MIME-aware tools.
 
---8323329-935771429-1699004736=:1725
+--8323329-2039173404-1699005303=:1725
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8BIT
 
 On Thu, 2 Nov 2023, Reinette Chatre wrote:
-
-> Hi Ilpo,
-> 
 > On 10/24/2023 2:26 AM, Ilpo Järvinen wrote:
-> > Perf event handling has functions that are the sole caller of another
-> > perf event handling related function:
-> >   - reset_enable_llc_perf() calls perf_event_open_llc_miss()
-> >   - reset_enable_llc_perf() calls ioctl_perf_event_ioc_reset_enable()
-> >   - measure_llc_perf() calls get_llc_perf()
-> > 
-> > Remove the extra layer of calls to make the code easier to follow by
-> > moving the code into the calling function.
-> > 
-> > In addition, converts print_results_cache() unsigned long parameter to
-> > __u64 that matches the type coming from perf.
+> ...
+> > diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
+> > index ec6efd36f60a..e017adf1390d 100644
 > 
-> Is this referring to work from previous patch?
-
-Yes, this got split into own patch and it unfortunately lingered on in the 
-changelog. I'll remove it.
-
-> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com> ---
-> >
-> >  1 file changed, 25 insertions(+), 61 deletions(-)
-> > 
-> > diff --git a/tools/testing/selftests/resctrl/cache.c b/tools/testing/selftests/resctrl/cache.c
-> > index d39ef4eebc37..208af1ecae28 100644
-> > --- a/tools/testing/selftests/resctrl/cache.c
-> > +++ b/tools/testing/selftests/resctrl/cache.c
-
-> > -/*
-> > - * get_llc_perf:	llc cache miss through perf events
-> > - * @llc_perf_miss:	LLC miss counter that is filled on success
-> > - *
-> > - * Perf events like HW_CACHE_MISSES could be used to validate number of
-> > - * cache lines allocated.
-> > - *
-> > - * Return: =0 on success.  <0 on failure.
-> > - */
-> > -static int get_llc_perf(__u64 *llc_perf_miss)
-> > -{
-> > -	int ret;
-> > -
-> > -	/* Stop counters after one span to get miss rate */
-> > -
-> > -	ioctl(fd_lm, PERF_EVENT_IOC_DISABLE, 0);
-> > -
-> > -	ret = read(fd_lm, &rf_cqm, sizeof(struct read_format));
-> > -	if (ret == -1) {
-> > -		perror("Could not get llc misses through perf");
-> > +	fd_lm = perf_event_open(&pea_llc_miss, pid, cpu_no, -1, PERF_FLAG_FD_CLOEXEC);
-> > +	if (fd_lm == -1) {
-> > +		perror("Error opening leader");
-> > +		ctrlc_handler(0, NULL, NULL);
-> 
-> I understand you just copied the code here ... but it is not clear to me
-> why this particular error handling deserves a ctrlc_handler().
-
-Good catch! It's first time I even notice this line.
-
-It certainly looks a bit too big hammer for error handling. I'll try to 
-create a separate patch which properly removes it (I suspect all error 
-handling rollbacks are there already so it can just be removed but I'll 
-have to confirm that).
-
-> >  		return -1;
-> >  	}
+> > @@ -233,25 +183,26 @@ int main(int argc, char **argv)
+> >  		case 't':
+> >  			token = strtok(optarg, ",");
 > >  
-> > -	*llc_perf_miss = rf_cqm.values[0].value;
-> > +	/* Start counters to log values */
-> > +	ioctl(fd_lm, PERF_EVENT_IOC_RESET, 0);
-> > +	ioctl(fd_lm, PERF_EVENT_IOC_ENABLE, 0);
-> >  
-> >  	return 0;
-> >  }
-> > @@ -166,20 +121,29 @@ static int print_results_cache(char *filename, int bm_pid, __u64 llc_value)
-> >  	return 0;
-> >  }
-> >  
-> > +/*
-> > + * measure_llc_perf:	measure perf events
-> > + * @bm_pid:	child pid that runs benchmark
+> > -			mbm_test = false;
+> > -			mba_test = false;
+> > -			cmt_test = false;
+> > -			cat_test = false;
+> > +			if (!test_param_seen) {
+> > +				for (i = 0; i < ARRAY_SIZE(resctrl_tests); i++)
+> > +					resctrl_tests[i]->disabled = true;
+> > +				tests = 0;
+> > +				test_param_seen = true;
+> > +			}
+> >  			while (token) {
+> > -				if (!strncmp(token, MBM_STR, sizeof(MBM_STR))) {
+> > -					mbm_test = true;
+> > -					tests++;
+> > -				} else if (!strncmp(token, MBA_STR, sizeof(MBA_STR))) {
+> > -					mba_test = true;
+> > -					tests++;
+> > -				} else if (!strncmp(token, CMT_STR, sizeof(CMT_STR))) {
+> > -					cmt_test = true;
+> > -					tests++;
+> > -				} else if (!strncmp(token, CAT_STR, sizeof(CAT_STR))) {
+> > -					cat_test = true;
+> > -					tests++;
+> > -				} else {
+> > -					printf("invalid argument\n");
+> > +				bool found = false;
+> > +
+> > +				for (i = 0; i < ARRAY_SIZE(resctrl_tests); i++) {
+> > +					if (!strcasecmp(token, resctrl_tests[i]->name)) {
+> > +						if (resctrl_tests[i]->disabled)
+> > +							tests++;
+> > +						resctrl_tests[i]->disabled = false;
+> > +						found = true;
+> > +					}
+> > +				}
 > 
-> I expected "bm_pid" to reflect a "benchmark pid" that
-> is not unique to the child. Are both parent and child
-> not running the benchmark?
-> 
-> Missing doc of a parameter here.
-> 
-> > + *
-> > + * Measure things like cache misses from perf events.
-> 
-> "things like cache misses" is vague. The function's name 
-> still contains "llc" which makes me think it is not quite
-> generic yet.
+> Could providing multiple "-t" result in the test count not
+> matching the number of tests run?
 
-I suppose I tried to be intentionally vague because I knew I was going to 
-use it measure also LLC accesses in the case of L2 CAT test. I'll see if I 
-can improve this wording somehow.
+bool test_param_seen covers the case with more than one -t parameter.
+Because of it, the code above resets tests and ->disabled only when the 
+first -t is encountered. tests++ is only done when ->disabled is set from 
+true to false.
 
-> > + *
-> > + * Return: =0 on success.  <0 on failure.
-> > + */
-> >  static int measure_llc_perf(struct resctrl_val_param *param, int bm_pid)
-> >  {
-> > -	__u64 llc_perf_miss = 0;
-> >  	int ret;
-> >  
-> > -	/*
-> > -	 * Measure cache miss from perf.
-> > -	 */
-> > -	ret = get_llc_perf(&llc_perf_miss);
-> > -	if (ret < 0)
-> > -		return ret;
-> > +	/* Stop counters after one span to get miss rate */
-> > +	ioctl(fd_lm, PERF_EVENT_IOC_DISABLE, 0);
-> >  
-> > -	ret = print_results_cache(param->filename, bm_pid, llc_perf_miss);
-> > -	return ret;
-> > +	ret = read(fd_lm, &rf_cqm, sizeof(struct read_format));
-> > +	close(fd_lm);
-> 
-> I am not able to tell where this close() moved from.
-
-Another good catch.
-
-It seems to be a conflict resolution fallout from the time when I changed 
-to close() logic in that fix patch related to this fd.
+I don't see how they could get out of sync but if you had a more specific 
+case in mind, just let me know.
 
 -- 
  i.
 
---8323329-935771429-1699004736=:1725--
+--8323329-2039173404-1699005303=:1725--
