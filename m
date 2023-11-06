@@ -2,636 +2,566 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 356937E1A4C
-	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Nov 2023 07:41:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C6397E1BBE
+	for <lists+linux-kselftest@lfdr.de>; Mon,  6 Nov 2023 09:15:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230312AbjKFGlX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 6 Nov 2023 01:41:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55386 "EHLO
+        id S231138AbjKFIPl (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 Nov 2023 03:15:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230216AbjKFGlW (ORCPT
+        with ESMTP id S231166AbjKFIPj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 Nov 2023 01:41:22 -0500
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04olkn2036.outbound.protection.outlook.com [40.92.75.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F9C4100;
-        Sun,  5 Nov 2023 22:41:17 -0800 (PST)
+        Mon, 6 Nov 2023 03:15:39 -0500
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2043.outbound.protection.outlook.com [40.107.101.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C4D8E0;
+        Mon,  6 Nov 2023 00:15:33 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Rpct1UekjIKqpMlEb5rTdAbAeFeGlWmsGmUcXYn3ikRVGEaypU7zV6TFwNx7Kvb6AbtTnkB+8kRUlI9P+Vp9sTkeQ4z0kW/6HirPbjp4Gl+nsdUD+dfGC9obnu1SOY/h15j/iDUeI/vh771X4R/DtgZY/JQnhMebWPZXCAnn6KKrrKor4R5S2l1YrO4bA9fK7b9MiOFA8I6exBNAQzCYFZtF2mFMVW5pCvKfkv2QArBvjffFVWIpNKvj3QVIFDmst8a2sy7T9pJJ6c050Vpj6TpD801velRHFioQmqhwSnpFUgL+wbotWoxYCm9kjhrErXepWSBgldnBHCP9c9zsig==
+ b=dPerrCNnbQFZSJ5bzniAP00lUN57MUMeuIN6jkXRvPHe1qJXA1VzqhvypAptkthH3jDv0gRUqBx0yNGIrmQA9gFBh80YU/I0eJWOuNMAgQlv5bzY7WKPWYVmFsCcoQxvTpc0xiylJzlZzF60T41WFUn/iUujI3uAWuVxe31QWd9lNhLi/zbLzaFR83YCk2yiqyvgy6UN9IP44NlMOm/YFSXtdfSOp6AihXIlVfpUrUwQSyD+MGamQIXA/NdvBWZNsOoAY/1Hf9ZT/z5/3SAK1pv97j1RsBUFIe3sUJ6fMZ5Omle8mEheZWcwh8EQg788xVLhdlOvXCMXlPi+Rc8G1A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+PPxTL5n7UVLVIbLtmo22EhAcBnb2iqOTpf3Ygq1wA8=;
- b=eGK7WpzCf0yW1FLQfxkZeYKMofLjWH475hvG6ZMgLkwGRJT8gi2yNcJSa7WdVESLZJLYfR8M/9o1ASf2fxqVe9zaK9+V7XFsyY2fEhFQm/FQH83tn0aQdEFgU9sYIPJB4uJywQn7aX1QcIIbnQj9QUJKnqmnbfpVhMsaVIo0XAXOCN6gOYaoyov52YnVZCMWxTWcj+o/HrwSihry2mj/DX7YcaUnkSTges+Jsiw2jMP82gBWIwb2b+fQ3LMULPhUVwY/l9FxvXXrt/BQUx7bLk3yAX45dQuXjYPod0IFpT78ub5y1kxc49fYBMigEmtj9sQTiz6+RdZF56zMOyuxHg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-Received: from AS8P193MB1285.EURP193.PROD.OUTLOOK.COM (2603:10a6:20b:333::21)
- by AS8P193MB2127.EURP193.PROD.OUTLOOK.COM (2603:10a6:20b:448::16) with
+ bh=C2YKcAnwhYN3PZEGVOAknljmkoirsz7U05OjRjEbclE=;
+ b=AhugW9IWavcUfdh/HXrJhQ7IntGlq6tsIPevCOCsGK/beB9TeVVnCrx3zze9L/1vNUfgZPEghdQt0w4t5mtICvROf4b6FrfvTvFWaX71pA47GMAA+OJacEqC1eB+tYuD1ouOcSwFyLwAGfrqp+gDExAapjioUjYgRIX+L/dXGr0hDv/USpHFM0nuaqrWN8ajr8vaopfGDYUrjsl8p2naDOVK7uY85uA4hJm8G+ltOvkaEDiWLlqXxF1/qHws8yDDI6dzu/DHDf3EJS8nZ/No59xrgE1OHRr6aFW79ym2diXZ9N7Lfty2bicskpwelnYVb4BJp8GmlrPpT0YoL2I0MA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=C2YKcAnwhYN3PZEGVOAknljmkoirsz7U05OjRjEbclE=;
+ b=3LFefN2c8koEcLdKPpm5nMxaqA6waN/44BBQSHMiBJREz8N59EaoHfgnJJa8gz+miw2VumBcxOQd17agVVX9CQ+U9rHivhSsqZM6X74LE6qRFXnylEuP3xtF09teQD1Fi0wbe+22qTKaj+GUxzD2HxozYXlOzkL9HbS5FelLUrE=
+Received: from IA1PR12MB6332.namprd12.prod.outlook.com (2603:10b6:208:3e2::13)
+ by DM6PR12MB4156.namprd12.prod.outlook.com (2603:10b6:5:218::17) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.28; Mon, 6 Nov
- 2023 06:41:14 +0000
-Received: from AS8P193MB1285.EURP193.PROD.OUTLOOK.COM
- ([fe80::b89e:5e18:1a08:409d]) by AS8P193MB1285.EURP193.PROD.OUTLOOK.COM
- ([fe80::b89e:5e18:1a08:409d%7]) with mapi id 15.20.6954.028; Mon, 6 Nov 2023
- 06:41:14 +0000
-Message-ID: <AS8P193MB12851AC1F862B97FCE9B3F4FE4AAA@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
-Date:   Mon, 6 Nov 2023 07:41:28 +0100
-User-Agent: Mozilla Thunderbird
-Subject: [PATCH v13] exec: Fix dead-lock in de_thread with ptrace_attach
-From:   Bernd Edlinger <bernd.edlinger@hotmail.de>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>,
-        Kees Cook <keescook@chromium.org>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Will Drewry <wad@chromium.org>,
-        Christian Brauner <christian.brauner@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Michal Hocko <mhocko@suse.com>,
-        Serge Hallyn <serge@hallyn.com>,
-        James Morris <jamorris@linux.microsoft.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Yafang Shao <laoar.shao@gmail.com>,
-        Helge Deller <deller@gmx.de>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Adrian Reber <areber@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jens Axboe <axboe@kernel.dk>,
-        Alexei Starovoitov <ast@kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+ 2023 08:15:29 +0000
+Received: from IA1PR12MB6332.namprd12.prod.outlook.com
+ ([fe80::43ed:468d:3105:4071]) by IA1PR12MB6332.namprd12.prod.outlook.com
+ ([fe80::43ed:468d:3105:4071%4]) with mapi id 15.20.6954.027; Mon, 6 Nov 2023
+ 08:15:28 +0000
+From:   "Meng, Li (Jassmine)" <Li.Meng@amd.com>
+To:     "Yuan, Perry" <Perry.Yuan@amd.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        "Huang, Ray" <Ray.Huang@amd.com>
+CC:     "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
-        tiozhang <tiozhang@didiglobal.com>,
-        Luis Chamberlain <mcgrof@kernel.org>,
-        "Paulo Alcantara (SUSE)" <pc@manguebit.com>,
-        Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        YueHaibing <yuehaibing@huawei.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Aleksa Sarai <cyphar@cyphar.com>,
-        Stefan Roesch <shr@devkernel.io>, Chao Yu <chao@kernel.org>,
-        xu xin <xu.xin16@zte.com.cn>, Jeff Layton <jlayton@kernel.org>,
-        Jan Kara <jack@suse.cz>, David Hildenbrand <david@redhat.com>,
-        Dave Chinner <dchinner@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Zheng Yejian <zhengyejian1@huawei.com>
-References: <AM8PR10MB470801D01A0CF24BC32C25E7E40E9@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
- <AM8PR10MB470875B22B4C08BEAEC3F77FE4169@AM8PR10MB4708.EURPRD10.PROD.OUTLOOK.COM>
- <AS8P193MB1285DF698D7524EDE22ABFA1E4A1A@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
+        "x86@kernel.org" <x86@kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "Fontenot, Nathan" <Nathan.Fontenot@amd.com>,
+        "Sharma, Deepak" <Deepak.Sharma@amd.com>,
+        "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+        "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        "Huang, Shimmer" <Shimmer.Huang@amd.com>,
+        "Du, Xiaojian" <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>,
+        "Karny, Wyes" <Wyes.Karny@amd.com>
+Subject: RE: [PATCH V10 3/7] cpufreq: amd-pstate: Enable amd-pstate preferred
+ core supporting.
+Thread-Topic: [PATCH V10 3/7] cpufreq: amd-pstate: Enable amd-pstate preferred
+ core supporting.
+Thread-Index: AQHaCvtEZLeRkIqFlEuvYO4YF3DfDbBmwYGAgAY6fDA=
+Date:   Mon, 6 Nov 2023 08:15:27 +0000
+Message-ID: <IA1PR12MB6332765961C9DE1544DD6D5EF7AAA@IA1PR12MB6332.namprd12.prod.outlook.com>
+References: <20231030063403.3502816-1-li.meng@amd.com>
+ <20231030063403.3502816-4-li.meng@amd.com>
+ <CYYPR12MB86553FEBDCEB730FF606D2549CA6A@CYYPR12MB8655.namprd12.prod.outlook.com>
+In-Reply-To: <CYYPR12MB86553FEBDCEB730FF606D2549CA6A@CYYPR12MB8655.namprd12.prod.outlook.com>
+Accept-Language: en-US
 Content-Language: en-US
-In-Reply-To: <AS8P193MB1285DF698D7524EDE22ABFA1E4A1A@AS8P193MB1285.EURP193.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TMN:  [kZtRcjYreHl9NUx5duaTrdw7vAxwIsIYmnYZLThPxhf5o8u8oKyyjw8qI1RyNLBG]
-X-ClientProxiedBy: BE0P281CA0006.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:b10:a::16) To AS8P193MB1285.EURP193.PROD.OUTLOOK.COM
- (2603:10a6:20b:333::21)
-X-Microsoft-Original-Message-ID: <f44d3bac-d5df-4315-8301-d96c80c2b793@hotmail.de>
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=962b80e8-47c8-4d0d-8d77-9d49e308844c;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=0;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2023-11-02T08:58:03Z;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: IA1PR12MB6332:EE_|DM6PR12MB4156:EE_
+x-ms-office365-filtering-correlation-id: e32ef18c-5dfe-4f12-d092-08dbdea088dd
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: Q6fM2qlXJHY5/f1Zqg23r+ELA8hVeyfjDGZTBvCcluzsVkZut7jR5RAW33mD3vsLmuEHGsF8R7VbvPF8xCyCx+gdamB7KYAxggJ98ScR38MSYlmrb2J3I55n6q2yjE/kLi5ZX+4FjL/Y4nFIJzsFOhP9A9v1m3JmPy5JH7txaB3+pTwJ1jgTKXTWzrIpCdYybwa4045AlMFOefQ+Vz+BQuGkR+PCh/jZBvxbz+CE6kcjJn7xeQYYRMTG1SWqckiRwHUyX6Fy+lNIxW4p0LRIRADqq/dDnSHAYH2pCRHFC5CqQIQgyabaWDvyxA2NSvbXLmaQss/6eZTf44qIbOS0HhUsPP2SiizDEkLleQlPU2F+81XWwlxTZf/9WK19GfWpMynFMgCT8JSvmZUqNhRZg1jb/YXiNPhxKB5pVd6LBiHFhcj/X+vkYhg0zqXdfSCIi11+V5wKY5G3/1lmXmpS0stwP/ANamS3ZLtRK0vWDknweEovWHinajHi3WFERhk66cepPA/67a+01wDCzqv8M/5lPLBcN3Aw3tTtDiLSHdacUfbt/W+ZcAt6cbhb476eSCRQRgxoBg8R1zrT3CW/lxSz0wFardjeXChyK2s5mnEtIUqn+5ndwCu2W/cxgfTp
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR12MB6332.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(376002)(396003)(366004)(39860400002)(136003)(230922051799003)(451199024)(1800799009)(186009)(64100799003)(316002)(64756008)(66446008)(66556008)(66476007)(66946007)(54906003)(76116006)(6636002)(110136005)(71200400001)(7696005)(6506007)(9686003)(53546011)(26005)(38070700009)(38100700002)(122000001)(83380400001)(33656002)(86362001)(478600001)(5660300002)(41300700001)(8936002)(8676002)(52536014)(4326008)(2906002)(30864003)(7416002)(55016003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-2022-jp?B?SlNJOC9XMjIwRUdPdEY2Q2lDWDVZaFdwWVZGdDN4SDJqWU5veFN3b3hL?=
+ =?iso-2022-jp?B?S01hMFkzOHREcDduSlFqRkFpc1lOYURYbGFGSVJjdmtYYitmNTNLL3Ay?=
+ =?iso-2022-jp?B?aFc3WUZLd2hkODhlZzNHcHd4MG1YMmp3d2ZGV0ZmcHU5VVI0cmtXcDRD?=
+ =?iso-2022-jp?B?M3NPZzJNNHJvYmVhL1NkeitSeG5nMUx6SWI2SUtiTDZELzE5RjBTNTZY?=
+ =?iso-2022-jp?B?TzNqaU11SDJ2elNVSzBKbnk1YTI3d0Qxb1FZeS9taStvT3BsVEhRNm4v?=
+ =?iso-2022-jp?B?cWsyd0Z0NE9hRGFUVUlGZE9WUmFvM1BMc0JzMElNNHJiT0xVTWo4RnZp?=
+ =?iso-2022-jp?B?VXV5cVRkOFk4R1F5eG1haDFsdnRjQ3FTY2tMM3ZEM3hnUG9OK3lNT29V?=
+ =?iso-2022-jp?B?SUxyc3RVQjNJdkxONWlPUHZMUDRwZjYyQ0hzZlB6OHFJeFc4WGpIOUt0?=
+ =?iso-2022-jp?B?N1JvNjIyU241SDJWSlgxVXFuSXN2elhVSFpVVmJIKzZ3REUzTEUzRHRw?=
+ =?iso-2022-jp?B?YkhzVi9RbXRtOVhyQkFQRlZpTDhwbllQTWhvZ2E1TnU3aTBSVW4wd3dR?=
+ =?iso-2022-jp?B?UWVURElNRWQyb3ptaDhvbi94SU9HYTkxL09BL2VNVHE3dG92Y21JdTJ1?=
+ =?iso-2022-jp?B?ZGpPakt1VG9MQ3hQZ0svWVZmNnBVaHdCZ2J6elVoQWRHcHdxampXMFBw?=
+ =?iso-2022-jp?B?dm4xWlZqeC9oTUJFYnpzK2FHWjl6TmZhTU02OGNmUWE5Rkx6M051WWto?=
+ =?iso-2022-jp?B?b3ljZG9SSE5Zc3lYOGVkYldWZ2J6eDZlcWFvOXNwUzI2V280WDBNcUVJ?=
+ =?iso-2022-jp?B?QTZFYkczbFZCL2FNTkduZDFCY1I0V3VtdjFYREVuOGFHcmsyOTd2bzUw?=
+ =?iso-2022-jp?B?emFHaGx6WHI5TmFma0ZGUWtUNzVtdHhKSnlSaHRUK1lQSHVhcGh1MFBY?=
+ =?iso-2022-jp?B?R1BoS0E2SXRTNG5VU1poL2MzMzZ3L2R1dmYreG0rYmI2QmpZcFJtK2h2?=
+ =?iso-2022-jp?B?Zmx5V08vVG9iU2hKR3hxL3BaOVpUQytWWmtCMUNsbmRLdGdjV2F2M3Bn?=
+ =?iso-2022-jp?B?dmVWNmp1OFE2RG9uVWpLY2VOamQwK1FvUVEwekp5bytNeWhLSDhMV0VF?=
+ =?iso-2022-jp?B?TGptUXFOTkdrYm4zMXhJNjRIVkhtenBsS1loWW9Ub1VFM0JuOG56M0F1?=
+ =?iso-2022-jp?B?aTVYTmpOYyt1V0krSEYxZ3A0a0EwNFU5SDV1ZjhiSlBtclZ5aHBmUzV6?=
+ =?iso-2022-jp?B?YWNVSUNYR0VVSHZTd3VzZHVNK3M2VHFKdmVweU0yaHhQcmFUWVVhcWJB?=
+ =?iso-2022-jp?B?ZlFMTTIvTWlXaFg2eElZeEZnUXlqVGQ1MUxJNGMxYjZSWlFrRU5QUnFq?=
+ =?iso-2022-jp?B?ZzEvZXpkN1dJdkN3M3RuU1l5Q1FUN1h1OGhvOGJld00rRlltMGs4U3lE?=
+ =?iso-2022-jp?B?SDMvYTMzb2lWSjZTWEJYQ0F4ZWNHMmhObk9xd05wQjJGanRuMFVNQjVJ?=
+ =?iso-2022-jp?B?aDErQklSa2dla1BRMVRoVnBJcVlKakxvZ2FGYUk4RTBFU0JLNTRQS0c0?=
+ =?iso-2022-jp?B?a0MrbkdBYWljbWxBNENaTVhXQVVnQ0NvaWFBVmt3bEtKakJ6UDJHWGY1?=
+ =?iso-2022-jp?B?NHlrVTk2ZWdUV2FscTJaZTJ5K2NKclB6UWJHbk5nOWlrNkN0aUd3TVFQ?=
+ =?iso-2022-jp?B?STArekt6b3RDWTJLLzRncFd5Vlk3dCtKU01ScVROKzZreFpCcWZ1ZElt?=
+ =?iso-2022-jp?B?cWcyMDlUWFJvSWVPUVUzUUZIU2RnbXJFbGZKa0hGOUVMUE81OC9vYXhZ?=
+ =?iso-2022-jp?B?elRHMVBHNFhhU0NSS1hmNVFZU3M0SGljdVFSOXI1MkN6STYxd2lXckVk?=
+ =?iso-2022-jp?B?V1p3L2YwMVNlR0w2TXdwU2g4TldKbVVuRDU3bVBpeXNsMWFLRlQweHBu?=
+ =?iso-2022-jp?B?WERIZ3FnWFVQSUVPc0RvaWlqRHBQSFRrRjQ0RkZBdHJ0TGs4UjhUZDNH?=
+ =?iso-2022-jp?B?ME92TEl6TWVVODNQd0VPOWRUQXRkR2FKVlVMdmNuaXB3NjhnV200QWdX?=
+ =?iso-2022-jp?B?aVU5K25WTm1vdjVUYjhZa1BxM0J2Uk1xV2hWUG9hME4rL04vNTU2cXl2?=
+ =?iso-2022-jp?B?aGV6YVNMalc3L1hLUWRPMXZxUnRkY2hRSWsrVGEwU0ptUGZPcHZuRWlj?=
+ =?iso-2022-jp?B?MzFRaGUxcGxJZyt5dmllYW82RW55S1MwZ2U3SWRvMU1hMXdvd3BQVTRY?=
+ =?iso-2022-jp?B?d1I4cm56SlhZUlI1NVE2NytpKzNIRXIvST0=?=
+Content-Type: text/plain; charset="iso-2022-jp"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS8P193MB1285:EE_|AS8P193MB2127:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3391394e-122c-4a2b-c2d5-08dbde935efa
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: kC/BTSPGzT7D8/mP0F1puBPejArIpT9m/JCzDIajdWDGkT2/dFWP/MdPUnA/ngg9cSvPAKV62jhRw5PROpxfgKIHkIv+xTwBs6l2IGo2VY2aMp2lwCdEubUdzBxReOPiU+LiYwB6soZDCcePLG44Fggl2tmy8oIZ8ZmTJjm53bp1MJpt+8bGpcH0b2hRR+Trl+q+20utZ4XsY0hgpwKYa3nbIlD68jg6DBj3c7lKRGhb72I4eQZYDcO2wgpddxSs/C2zmu3ldfYtFZPJmBwos2SGQPFA2Kr042reJBXWqi3TufSL2AxeoQk38pfwMOuzrE5BHwmUOXLeyurr99MDMZNR6y5M9vixoIcsb5r5soWRlFqZAl4zXuCZvC+b4feoggqu4LqgC/PT8r9vTGJus6fe6019LEVzfScoBR+ApqPPAe4RncCu5oaA9k/KoiwlNmbICDikjH3uY7gluBpoRtPiMCHU1jO+pa4kTttL4GZs6qyexHBGVIfAkW3e8Z7QDGlWSdyCrrul1gAN6jTfTlhi3ILrrR/Hn8G3dfe3gCuYoeCKcsOCpqXoY/+bSE6kwSaXbr0UzyJvBGMYoAOHAWf9nzCH8mHDufzLDuy3Kl8=
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RUluY3pMS2FXNnAvNzRLRy9pR0U3VE4rL3prajJNSGErZjVYRitrZVo5d29E?=
- =?utf-8?B?WENzTGJxQXBVYnZnWm8vUCsvL2o2UkI3dEFvMTBPYVpZMWh4QXprSEk2Mm0z?=
- =?utf-8?B?MkhCK2RqRWZqa0M3YmZYcTkzdHdRdGpmNkJPQ0ZBL0grc3FYaTAwM2gvRURC?=
- =?utf-8?B?aWNqcFViOG1UbkJvREY1Qk52Wk5CWEpUMVczeGpMa2dMbEszN0p1NmdMWVF2?=
- =?utf-8?B?ekJidktrNnNwNU9TSW5aK1BMSjFWQTd2RWxQQ0FyR0VseHBzblpPRW9XV1ky?=
- =?utf-8?B?amlxS0FEQUFXY2lrMFcrWlY2WlpJRzUzRHNzSUtQWnBHUlJTb1lMajRvdm5v?=
- =?utf-8?B?ZHNsMDdqS1VYNm51eGRLMVFVRUhXYkFjNjdSQW5aZVpCSGNXdkh0YkJna2di?=
- =?utf-8?B?MWxsNEgrcUJyTktXWlNqclR1SEJQSUdGMzlFRCtNVC9pSVo2a1BGMFQ2d010?=
- =?utf-8?B?K3RMZlVZNnVKNmNQKzhzMlJLeVFVVi9QRDRsZSsxMDZmRGhReEtDSXlGeTlO?=
- =?utf-8?B?N21VT2RTQUZWSTJYQzFRT0dJNy9YVDlvNUNJbGU2OUVQcTNLejZwSDdZK01t?=
- =?utf-8?B?OGxRVlB1c29lUE5ZYXpnQjVCLzYweElxdXBiaHJQVmlITFNkcjN3YVNiOTc2?=
- =?utf-8?B?VTVvTEJpLzBSVzQ4Z2JtRHJUMW9iclp5a3U4RFZXODFVUmhyblNaSk0wOUdP?=
- =?utf-8?B?MzJ4QXEvMEZhcUs0aU9seFFkclhDdzlnMEpkWU4wT2ZIYnBZcTQ4OWRSM3lM?=
- =?utf-8?B?UHY2VSswbzk1c01nejR2Ym1peVRPa2RCT2xXaFBLWmVoM1Y0cTJPbWRzSDF0?=
- =?utf-8?B?QncxTnJuVFZVNFlNOC9VZHU3NHFCTmJNMTgvanNNeFpHNFNWRk02Zkg4eFdn?=
- =?utf-8?B?Q29uRVJkOU94ZDR2YkdBdG8vdlJ0YU5wVTVJMnBPMkhXSEJPWUZhR1ZVaHFz?=
- =?utf-8?B?L1ZVT29FWGlCd2gxY05tdStoT2pUcldVdG9Xd0lvTk0rcWJHVHRWb0xxZno3?=
- =?utf-8?B?UGw1blYvb2VJcUtOQSt1dEdPa0FlL2RJSzRHRE1zNzhERGVxQTJ3VFdxdnhk?=
- =?utf-8?B?ZDhuL3BvL0FVejhPVW1yajZXNGYzWGI1QzVKak8xa2xvU2Q3cGJ0T3kxKzli?=
- =?utf-8?B?RHhrOENaRDZ1MWpOM3VWQkdmd2pOcDhUUGdsYVFwWElPSFZZZkFabWdJWi9W?=
- =?utf-8?B?cFozRDhySXZHbG1VVzkyNTJYZUZOQk55Z2JiS3IxNVRtTFJzVjdmZDhSUWlv?=
- =?utf-8?B?RlIwZE9ObGRxNkZKc2trK3dtam9xYXlEVENpOHhibWRHSS9DZVhDQ2hRdUdm?=
- =?utf-8?B?UXN5dlhkWTBSOFliNVVINkU5YjEwQjNWaGM2WWpaUEN2YmhvK2tTR21aWnZN?=
- =?utf-8?B?ZnVQWGVVYUNZWGJtWE90SDc5VlFkVDVIOENrL29TSVVkd2pJUldDOG9EWk9C?=
- =?utf-8?B?bmV0aFNMN3orS0FqNC9WRCtYTkhwYWxwT0QrRFhwcmVkc3YxUE5xUFowdjBk?=
- =?utf-8?B?b1hhem5QWjM1aWZKb2hBbmszWE9uVCtBRDFOak00d1RwdHJJOUxwTmRCWTl0?=
- =?utf-8?B?MzZ0cDRyL0ZHdDYzSTl2NlhGUW9NbnZWcTFjRlNwZE0xdFpaNnYvMCs4bHlx?=
- =?utf-8?B?eDFDMHJwY1pwL0FYbWV5RWhrOU0rRkp2R3pGMnhock03ajNNaHQrM0U3R2Nr?=
- =?utf-8?B?Vnd0dTFDWWhKMVE3dUVxWG95S01jTUdVVVlod1B1UkNGTXdsQ05RMmpPR21E?=
- =?utf-8?Q?BCVZyD4eksmUzoq1e4=3D?=
-X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-80ceb.templateTenant
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3391394e-122c-4a2b-c2d5-08dbde935efa
-X-MS-Exchange-CrossTenant-AuthSource: AS8P193MB1285.EURP193.PROD.OUTLOOK.COM
+X-OriginatorOrg: amd.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Nov 2023 06:41:14.6657
+X-MS-Exchange-CrossTenant-AuthSource: IA1PR12MB6332.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e32ef18c-5dfe-4f12-d092-08dbdea088dd
+X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Nov 2023 08:15:27.5059
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8P193MB2127
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,FORGED_MUA_MOZILLA,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: dF2L7Pcg6c2pW2PR85VTLrmPbOggl8sqwl5bhwJunemgUkRe3QgfrSqFS4y1SgIEZ9U1RGAVAV3585AQ+O16Mg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4156
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-This introduces signal->exec_bprm, which is used to
-fix the case when at least one of the sibling threads
-is traced, and therefore the trace process may dead-lock
-in ptrace_attach, but de_thread will need to wait for the
-tracer to continue execution.
+[AMD Official Use Only - General]
 
-The solution is to detect this situation and allow
-ptrace_attach to continue by temporarily releasing the
-cred_guard_mutex, while de_thread() is still waiting for
-traced zombies to be eventually released by the tracer.
-In the case of the thread group leader we only have to wait
-for the thread to become a zombie, which may also need
-co-operation from the tracer due to PTRACE_O_TRACEEXIT.
+Hi perry=1B$B!'=1B(B
 
-When a tracer wants to ptrace_attach a task that already
-is in execve, we simply retry the ptrace_may_access
-check while temporarily installing the new credentials
-and dumpability which are about to be used after execve
-completes.  If the ptrace_attach happens on a thread that
-is a sibling-thread of the thread doing execve, it is
-sufficient to check against the old credentials, as this
-thread will be waited for, before the new credentials are
-installed.
-
-Other threads die quickly since the cred_guard_mutex is
-released, but a deadly signal is already pending.  In case
-the mutex_lock_killable misses the signal, the non-zero
-current->signal->exec_bprm makes sure they release the
-mutex immediately and return with -ERESTARTNOINTR.
-
-This means there is no API change, unlike the previous
-version of this patch which was discussed here:
-
-https://lore.kernel.org/lkml/b6537ae6-31b1-5c50-f32b-8b8332ace882@hotmail.de/
-
-See tools/testing/selftests/ptrace/vmaccess.c
-for a test case that gets fixed by this change.
-
-Note that since the test case was originally designed to
-test the ptrace_attach returning an error in this situation,
-the test expectation needed to be adjusted, to allow the
-API to succeed at the first attempt.
-
-Signed-off-by: Bernd Edlinger <bernd.edlinger@hotmail.de>
----
- fs/exec.c                                 | 69 ++++++++++++++++-------
- fs/proc/base.c                            |  6 ++
- include/linux/cred.h                      |  1 +
- include/linux/sched/signal.h              | 18 ++++++
- kernel/cred.c                             | 28 +++++++--
- kernel/ptrace.c                           | 32 +++++++++++
- kernel/seccomp.c                          | 12 +++-
- tools/testing/selftests/ptrace/vmaccess.c | 23 +++++---
- 8 files changed, 155 insertions(+), 34 deletions(-)
-
-v10: Changes to previous version, make the PTRACE_ATTACH
-retun -EAGAIN, instead of execve return -ERESTARTSYS.
-Added some lessions learned to the description.
-
-v11: Check old and new credentials in PTRACE_ATTACH again without
-changing the API.
-
-Note: I got actually one response from an automatic checker to the v11 patch,
-
-https://lore.kernel.org/lkml/202107121344.wu68hEPF-lkp@intel.com/
-
-which is complaining about:
-
->> kernel/ptrace.c:425:26: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct cred const *old_cred @@     got struct cred const [noderef] __rcu *real_cred @@
-
-   417			struct linux_binprm *bprm = task->signal->exec_bprm;
-   418			const struct cred *old_cred;
-   419			struct mm_struct *old_mm;
-   420	
-   421			retval = down_write_killable(&task->signal->exec_update_lock);
-   422			if (retval)
-   423				goto unlock_creds;
-   424			task_lock(task);
- > 425			old_cred = task->real_cred;
-
-v12: Essentially identical to v11.
-
-- Fixed a minor merge conflict in linux v5.17, and fixed the
-above mentioned nit by adding __rcu to the declaration.
-
-- re-tested the patch with all linux versions from v5.11 to v6.6
-
-v10 was an alternative approach which did imply an API change.
-But I would prefer to avoid such an API change.
-
-The difficult part is getting the right dumpability flags assigned
-before de_thread starts, hope you like this version.
-If not, the v10 is of course also acceptable.
-
-v13: Fixed duplicated Return section in function header of
-is_dumpability_changed which was reported by the kernel test robot
-
-
-Thanks
-Bernd.
-
-diff --git a/fs/exec.c b/fs/exec.c
-index 2f2b0acec4f0..902d3b230485 100644
---- a/fs/exec.c
-+++ b/fs/exec.c
-@@ -1041,11 +1041,13 @@ static int exec_mmap(struct mm_struct *mm)
- 	return 0;
- }
- 
--static int de_thread(struct task_struct *tsk)
-+static int de_thread(struct task_struct *tsk, struct linux_binprm *bprm)
- {
- 	struct signal_struct *sig = tsk->signal;
- 	struct sighand_struct *oldsighand = tsk->sighand;
- 	spinlock_t *lock = &oldsighand->siglock;
-+	struct task_struct *t = tsk;
-+	bool unsafe_execve_in_progress = false;
- 
- 	if (thread_group_empty(tsk))
- 		goto no_thread_group;
-@@ -1068,6 +1070,19 @@ static int de_thread(struct task_struct *tsk)
- 	if (!thread_group_leader(tsk))
- 		sig->notify_count--;
- 
-+	while_each_thread(tsk, t) {
-+		if (unlikely(t->ptrace)
-+		    && (t != tsk->group_leader || !t->exit_state))
-+			unsafe_execve_in_progress = true;
-+	}
-+
-+	if (unlikely(unsafe_execve_in_progress)) {
-+		spin_unlock_irq(lock);
-+		sig->exec_bprm = bprm;
-+		mutex_unlock(&sig->cred_guard_mutex);
-+		spin_lock_irq(lock);
-+	}
-+
- 	while (sig->notify_count) {
- 		__set_current_state(TASK_KILLABLE);
- 		spin_unlock_irq(lock);
-@@ -1158,6 +1173,11 @@ static int de_thread(struct task_struct *tsk)
- 		release_task(leader);
- 	}
- 
-+	if (unlikely(unsafe_execve_in_progress)) {
-+		mutex_lock(&sig->cred_guard_mutex);
-+		sig->exec_bprm = NULL;
-+	}
-+
- 	sig->group_exec_task = NULL;
- 	sig->notify_count = 0;
- 
-@@ -1169,6 +1189,11 @@ static int de_thread(struct task_struct *tsk)
- 	return 0;
- 
- killed:
-+	if (unlikely(unsafe_execve_in_progress)) {
-+		mutex_lock(&sig->cred_guard_mutex);
-+		sig->exec_bprm = NULL;
-+	}
-+
- 	/* protects against exit_notify() and __exit_signal() */
- 	read_lock(&tasklist_lock);
- 	sig->group_exec_task = NULL;
-@@ -1253,6 +1278,24 @@ int begin_new_exec(struct linux_binprm * bprm)
- 	if (retval)
- 		return retval;
- 
-+	/* If the binary is not readable then enforce mm->dumpable=0 */
-+	would_dump(bprm, bprm->file);
-+	if (bprm->have_execfd)
-+		would_dump(bprm, bprm->executable);
-+
-+	/*
-+	 * Figure out dumpability. Note that this checking only of current
-+	 * is wrong, but userspace depends on it. This should be testing
-+	 * bprm->secureexec instead.
-+	 */
-+	if (bprm->interp_flags & BINPRM_FLAGS_ENFORCE_NONDUMP ||
-+	    is_dumpability_changed(current_cred(), bprm->cred) ||
-+	    !(uid_eq(current_euid(), current_uid()) &&
-+	      gid_eq(current_egid(), current_gid())))
-+		set_dumpable(bprm->mm, suid_dumpable);
-+	else
-+		set_dumpable(bprm->mm, SUID_DUMP_USER);
-+
- 	/*
- 	 * Ensure all future errors are fatal.
- 	 */
-@@ -1261,7 +1304,7 @@ int begin_new_exec(struct linux_binprm * bprm)
- 	/*
- 	 * Make this the only thread in the thread group.
- 	 */
--	retval = de_thread(me);
-+	retval = de_thread(me, bprm);
- 	if (retval)
- 		goto out;
- 
-@@ -1284,11 +1327,6 @@ int begin_new_exec(struct linux_binprm * bprm)
- 	if (retval)
- 		goto out;
- 
--	/* If the binary is not readable then enforce mm->dumpable=0 */
--	would_dump(bprm, bprm->file);
--	if (bprm->have_execfd)
--		would_dump(bprm, bprm->executable);
--
- 	/*
- 	 * Release all of the old mmap stuff
- 	 */
-@@ -1350,18 +1388,6 @@ int begin_new_exec(struct linux_binprm * bprm)
- 
- 	me->sas_ss_sp = me->sas_ss_size = 0;
- 
--	/*
--	 * Figure out dumpability. Note that this checking only of current
--	 * is wrong, but userspace depends on it. This should be testing
--	 * bprm->secureexec instead.
--	 */
--	if (bprm->interp_flags & BINPRM_FLAGS_ENFORCE_NONDUMP ||
--	    !(uid_eq(current_euid(), current_uid()) &&
--	      gid_eq(current_egid(), current_gid())))
--		set_dumpable(current->mm, suid_dumpable);
--	else
--		set_dumpable(current->mm, SUID_DUMP_USER);
--
- 	perf_event_exec();
- 	__set_task_comm(me, kbasename(bprm->filename), true);
- 
-@@ -1480,6 +1506,11 @@ static int prepare_bprm_creds(struct linux_binprm *bprm)
- 	if (mutex_lock_interruptible(&current->signal->cred_guard_mutex))
- 		return -ERESTARTNOINTR;
- 
-+	if (unlikely(current->signal->exec_bprm)) {
-+		mutex_unlock(&current->signal->cred_guard_mutex);
-+		return -ERESTARTNOINTR;
-+	}
-+
- 	bprm->cred = prepare_exec_creds();
- 	if (likely(bprm->cred))
- 		return 0;
-diff --git a/fs/proc/base.c b/fs/proc/base.c
-index ffd54617c354..0da9adfadb48 100644
---- a/fs/proc/base.c
-+++ b/fs/proc/base.c
-@@ -2788,6 +2788,12 @@ static ssize_t proc_pid_attr_write(struct file * file, const char __user * buf,
- 	if (rv < 0)
- 		goto out_free;
- 
-+	if (unlikely(current->signal->exec_bprm)) {
-+		mutex_unlock(&current->signal->cred_guard_mutex);
-+		rv = -ERESTARTNOINTR;
-+		goto out_free;
-+	}
-+
- 	rv = security_setprocattr(PROC_I(inode)->op.lsm,
- 				  file->f_path.dentry->d_name.name, page,
- 				  count);
-diff --git a/include/linux/cred.h b/include/linux/cred.h
-index f923528d5cc4..b01e309f5686 100644
---- a/include/linux/cred.h
-+++ b/include/linux/cred.h
-@@ -159,6 +159,7 @@ extern const struct cred *get_task_cred(struct task_struct *);
- extern struct cred *cred_alloc_blank(void);
- extern struct cred *prepare_creds(void);
- extern struct cred *prepare_exec_creds(void);
-+extern bool is_dumpability_changed(const struct cred *, const struct cred *);
- extern int commit_creds(struct cred *);
- extern void abort_creds(struct cred *);
- extern const struct cred *override_creds(const struct cred *);
-diff --git a/include/linux/sched/signal.h b/include/linux/sched/signal.h
-index 0014d3adaf84..14df7073a0a8 100644
---- a/include/linux/sched/signal.h
-+++ b/include/linux/sched/signal.h
-@@ -234,9 +234,27 @@ struct signal_struct {
- 	struct mm_struct *oom_mm;	/* recorded mm when the thread group got
- 					 * killed by the oom killer */
- 
-+	struct linux_binprm *exec_bprm;	/* Used to check ptrace_may_access
-+					 * against new credentials while
-+					 * de_thread is waiting for other
-+					 * traced threads to terminate.
-+					 * Set while de_thread is executing.
-+					 * The cred_guard_mutex is released
-+					 * after de_thread() has called
-+					 * zap_other_threads(), therefore
-+					 * a fatal signal is guaranteed to be
-+					 * already pending in the unlikely
-+					 * event, that
-+					 * current->signal->exec_bprm happens
-+					 * to be non-zero after the
-+					 * cred_guard_mutex was acquired.
-+					 */
-+
- 	struct mutex cred_guard_mutex;	/* guard against foreign influences on
- 					 * credential calculations
- 					 * (notably. ptrace)
-+					 * Held while execve runs, except when
-+					 * a sibling thread is being traced.
- 					 * Deprecated do not use in new code.
- 					 * Use exec_update_lock instead.
- 					 */
-diff --git a/kernel/cred.c b/kernel/cred.c
-index 98cb4eca23fb..586cb6c7cf6b 100644
---- a/kernel/cred.c
-+++ b/kernel/cred.c
-@@ -433,6 +433,28 @@ static bool cred_cap_issubset(const struct cred *set, const struct cred *subset)
- 	return false;
- }
- 
-+/**
-+ * is_dumpability_changed - Will changing creds from old to new
-+ * affect the dumpability in commit_creds?
-+ *
-+ * Return: false - dumpability will not be changed in commit_creds.
-+ *         true  - dumpability will be changed to non-dumpable.
-+ *
-+ * @old: The old credentials
-+ * @new: The new credentials
-+ */
-+bool is_dumpability_changed(const struct cred *old, const struct cred *new)
-+{
-+	if (!uid_eq(old->euid, new->euid) ||
-+	    !gid_eq(old->egid, new->egid) ||
-+	    !uid_eq(old->fsuid, new->fsuid) ||
-+	    !gid_eq(old->fsgid, new->fsgid) ||
-+	    !cred_cap_issubset(old, new))
-+		return true;
-+
-+	return false;
-+}
-+
- /**
-  * commit_creds - Install new credentials upon the current task
-  * @new: The credentials to be assigned
-@@ -467,11 +489,7 @@ int commit_creds(struct cred *new)
- 	get_cred(new); /* we will require a ref for the subj creds too */
- 
- 	/* dumpability changes */
--	if (!uid_eq(old->euid, new->euid) ||
--	    !gid_eq(old->egid, new->egid) ||
--	    !uid_eq(old->fsuid, new->fsuid) ||
--	    !gid_eq(old->fsgid, new->fsgid) ||
--	    !cred_cap_issubset(old, new)) {
-+	if (is_dumpability_changed(old, new)) {
- 		if (task->mm)
- 			set_dumpable(task->mm, suid_dumpable);
- 		task->pdeath_signal = 0;
-diff --git a/kernel/ptrace.c b/kernel/ptrace.c
-index 443057bee87c..eb1c450bb7d7 100644
---- a/kernel/ptrace.c
-+++ b/kernel/ptrace.c
-@@ -20,6 +20,7 @@
- #include <linux/pagemap.h>
- #include <linux/ptrace.h>
- #include <linux/security.h>
-+#include <linux/binfmts.h>
- #include <linux/signal.h>
- #include <linux/uio.h>
- #include <linux/audit.h>
-@@ -435,6 +436,28 @@ static int ptrace_attach(struct task_struct *task, long request,
- 	if (retval)
- 		goto unlock_creds;
- 
-+	if (unlikely(task->in_execve)) {
-+		struct linux_binprm *bprm = task->signal->exec_bprm;
-+		const struct cred __rcu *old_cred;
-+		struct mm_struct *old_mm;
-+
-+		retval = down_write_killable(&task->signal->exec_update_lock);
-+		if (retval)
-+			goto unlock_creds;
-+		task_lock(task);
-+		old_cred = task->real_cred;
-+		old_mm = task->mm;
-+		rcu_assign_pointer(task->real_cred, bprm->cred);
-+		task->mm = bprm->mm;
-+		retval = __ptrace_may_access(task, PTRACE_MODE_ATTACH_REALCREDS);
-+		rcu_assign_pointer(task->real_cred, old_cred);
-+		task->mm = old_mm;
-+		task_unlock(task);
-+		up_write(&task->signal->exec_update_lock);
-+		if (retval)
-+			goto unlock_creds;
-+	}
-+
- 	write_lock_irq(&tasklist_lock);
- 	retval = -EPERM;
- 	if (unlikely(task->exit_state))
-@@ -508,6 +531,14 @@ static int ptrace_traceme(void)
- {
- 	int ret = -EPERM;
- 
-+	if (mutex_lock_interruptible(&current->signal->cred_guard_mutex))
-+		return -ERESTARTNOINTR;
-+
-+	if (unlikely(current->signal->exec_bprm)) {
-+		mutex_unlock(&current->signal->cred_guard_mutex);
-+		return -ERESTARTNOINTR;
-+	}
-+
- 	write_lock_irq(&tasklist_lock);
- 	/* Are we already being traced? */
- 	if (!current->ptrace) {
-@@ -523,6 +554,7 @@ static int ptrace_traceme(void)
- 		}
- 	}
- 	write_unlock_irq(&tasklist_lock);
-+	mutex_unlock(&current->signal->cred_guard_mutex);
- 
- 	return ret;
- }
-diff --git a/kernel/seccomp.c b/kernel/seccomp.c
-index 255999ba9190..b29bbfa0b044 100644
---- a/kernel/seccomp.c
-+++ b/kernel/seccomp.c
-@@ -1955,9 +1955,15 @@ static long seccomp_set_mode_filter(unsigned int flags,
- 	 * Make sure we cannot change seccomp or nnp state via TSYNC
- 	 * while another thread is in the middle of calling exec.
- 	 */
--	if (flags & SECCOMP_FILTER_FLAG_TSYNC &&
--	    mutex_lock_killable(&current->signal->cred_guard_mutex))
--		goto out_put_fd;
-+	if (flags & SECCOMP_FILTER_FLAG_TSYNC) {
-+		if (mutex_lock_killable(&current->signal->cred_guard_mutex))
-+			goto out_put_fd;
-+
-+		if (unlikely(current->signal->exec_bprm)) {
-+			mutex_unlock(&current->signal->cred_guard_mutex);
-+			goto out_put_fd;
-+		}
-+	}
- 
- 	spin_lock_irq(&current->sighand->siglock);
- 
-diff --git a/tools/testing/selftests/ptrace/vmaccess.c b/tools/testing/selftests/ptrace/vmaccess.c
-index 4db327b44586..3b7d81fb99bb 100644
---- a/tools/testing/selftests/ptrace/vmaccess.c
-+++ b/tools/testing/selftests/ptrace/vmaccess.c
-@@ -39,8 +39,15 @@ TEST(vmaccess)
- 	f = open(mm, O_RDONLY);
- 	ASSERT_GE(f, 0);
- 	close(f);
--	f = kill(pid, SIGCONT);
--	ASSERT_EQ(f, 0);
-+	f = waitpid(-1, NULL, 0);
-+	ASSERT_NE(f, -1);
-+	ASSERT_NE(f, 0);
-+	ASSERT_NE(f, pid);
-+	f = waitpid(-1, NULL, 0);
-+	ASSERT_EQ(f, pid);
-+	f = waitpid(-1, NULL, 0);
-+	ASSERT_EQ(f, -1);
-+	ASSERT_EQ(errno, ECHILD);
- }
- 
- TEST(attach)
-@@ -57,22 +64,24 @@ TEST(attach)
- 
- 	sleep(1);
- 	k = ptrace(PTRACE_ATTACH, pid, 0L, 0L);
--	ASSERT_EQ(errno, EAGAIN);
--	ASSERT_EQ(k, -1);
-+	ASSERT_EQ(k, 0);
- 	k = waitpid(-1, &s, WNOHANG);
- 	ASSERT_NE(k, -1);
- 	ASSERT_NE(k, 0);
- 	ASSERT_NE(k, pid);
- 	ASSERT_EQ(WIFEXITED(s), 1);
- 	ASSERT_EQ(WEXITSTATUS(s), 0);
--	sleep(1);
--	k = ptrace(PTRACE_ATTACH, pid, 0L, 0L);
-+	k = waitpid(-1, &s, 0);
-+	ASSERT_EQ(k, pid);
-+	ASSERT_EQ(WIFSTOPPED(s), 1);
-+	ASSERT_EQ(WSTOPSIG(s), SIGTRAP);
-+	k = ptrace(PTRACE_CONT, pid, 0L, 0L);
- 	ASSERT_EQ(k, 0);
- 	k = waitpid(-1, &s, 0);
- 	ASSERT_EQ(k, pid);
- 	ASSERT_EQ(WIFSTOPPED(s), 1);
- 	ASSERT_EQ(WSTOPSIG(s), SIGSTOP);
--	k = ptrace(PTRACE_DETACH, pid, 0L, 0L);
-+	k = ptrace(PTRACE_CONT, pid, 0L, 0L);
- 	ASSERT_EQ(k, 0);
- 	k = waitpid(-1, &s, 0);
- 	ASSERT_EQ(k, pid);
--- 
-2.39.2
+> -----Original Message-----
+> From: Yuan, Perry <Perry.Yuan@amd.com>
+> Sent: Thursday, November 2, 2023 5:06 PM
+> To: Meng, Li (Jassmine) <Li.Meng@amd.com>; Rafael J . Wysocki
+> <rafael.j.wysocki@intel.com>; Huang, Ray <Ray.Huang@amd.com>
+> Cc: linux-pm@vger.kernel.org; linux-kernel@vger.kernel.org;
+> x86@kernel.org; linux-acpi@vger.kernel.org; Shuah Khan
+> <skhan@linuxfoundation.org>; linux-kselftest@vger.kernel.org; Fontenot,
+> Nathan <Nathan.Fontenot@amd.com>; Sharma, Deepak
+> <Deepak.Sharma@amd.com>; Deucher, Alexander
+> <Alexander.Deucher@amd.com>; Limonciello, Mario
+> <Mario.Limonciello@amd.com>; Huang, Shimmer
+> <Shimmer.Huang@amd.com>; Du, Xiaojian <Xiaojian.Du@amd.com>; Viresh
+> Kumar <viresh.kumar@linaro.org>; Borislav Petkov <bp@alien8.de>;
+> Oleksandr Natalenko <oleksandr@natalenko.name>; Karny, Wyes
+> <Wyes.Karny@amd.com>
+> Subject: RE: [PATCH V10 3/7] cpufreq: amd-pstate: Enable amd-pstate
+> preferred core supporting.
+>
+> [AMD Official Use Only - General]
+>
+> Hi meng Li,
+>
+>
+> > -----Original Message-----
+> > From: Meng, Li (Jassmine) <Li.Meng@amd.com>
+> > Sent: Monday, October 30, 2023 2:34 PM
+> > To: Rafael J . Wysocki <rafael.j.wysocki@intel.com>; Huang, Ray
+> > <Ray.Huang@amd.com>
+> > Cc: linux-pm@vger.kernel.org; linux-kernel@vger.kernel.org;
+> > x86@kernel.org; linux-acpi@vger.kernel.org; Shuah Khan
+> > <skhan@linuxfoundation.org>; linux- kselftest@vger.kernel.org;
+> > Fontenot, Nathan <Nathan.Fontenot@amd.com>; Sharma, Deepak
+> > <Deepak.Sharma@amd.com>; Deucher, Alexander
+> > <Alexander.Deucher@amd.com>; Limonciello, Mario
+> > <Mario.Limonciello@amd.com>; Huang, Shimmer
+> <Shimmer.Huang@amd.com>;
+> > Yuan, Perry <Perry.Yuan@amd.com>; Du, Xiaojian
+> <Xiaojian.Du@amd.com>;
+> > Viresh Kumar <viresh.kumar@linaro.org>; Borislav Petkov
+> > <bp@alien8.de>; Oleksandr Natalenko <oleksandr@natalenko.name>;
+> Meng,
+> > Li (Jassmine) <Li.Meng@amd.com>; Karny, Wyes <Wyes.Karny@amd.com>
+> > Subject: [PATCH V10 3/7] cpufreq: amd-pstate: Enable amd-pstate
+> > preferred core supporting.
+> >
+> > amd-pstate driver utilizes the functions and data structures provided
+> > by the ITMT architecture to enable the scheduler to favor scheduling
+> > on cores which can be get a higher frequency with lower voltage. We
+> > call it amd-pstate preferrred core.
+> >
+> > Here sched_set_itmt_core_prio() is called to set priorities and
+> > sched_set_itmt_support() is called to enable ITMT feature.
+> > amd-pstate driver uses the highest performance value to indicate the
+> > priority of CPU. The higher value has a higher priority.
+> >
+> > The initial core rankings are set up by amd-pstate when the system boot=
+s.
+> >
+> > Add a variable hw_prefcore in cpudata structure. It will check if the
+> > processor and power firmware support preferred core feature.
+> >
+> > Add one new early parameter `disable` to allow user to disable the
+> > preferred core.
+> >
+> > Only when hardware supports preferred core and user set `enabled` in
+> > early parameter, amd pstate driver supports preferred core featue.
+> >
+> > Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+> > Reviewed-by: Huang Rui <ray.huang@amd.com>
+> > Reviewed-by: Wyes Karny <wyes.karny@amd.com>
+> > Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+> > Co-developed-by: Perry Yuan <Perry.Yuan@amd.com>
+> > Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
+> > Signed-off-by: Meng Li <li.meng@amd.com>
+> > ---
+> >  drivers/cpufreq/amd-pstate.c | 141
+> > +++++++++++++++++++++++++++++++----
+> >  include/linux/amd-pstate.h   |   4 +
+> >  2 files changed, 129 insertions(+), 16 deletions(-)
+> >
+> > diff --git a/drivers/cpufreq/amd-pstate.c
+> > b/drivers/cpufreq/amd-pstate.c index 9a1e194d5cf8..2033e5e70017 100644
+> > --- a/drivers/cpufreq/amd-pstate.c
+> > +++ b/drivers/cpufreq/amd-pstate.c
+> > @@ -37,6 +37,7 @@
+> >  #include <linux/uaccess.h>
+> >  #include <linux/static_call.h>
+> >  #include <linux/amd-pstate.h>
+> > +#include <linux/topology.h>
+> >
+> >  #include <acpi/processor.h>
+> >  #include <acpi/cppc_acpi.h>
+> > @@ -49,6 +50,7 @@
+> >
+> >  #define AMD_PSTATE_TRANSITION_LATENCY        20000
+> >  #define AMD_PSTATE_TRANSITION_DELAY  1000
+> > +#define AMD_PSTATE_PREFCORE_THRESHOLD        166
+> >
+> >  /*
+> >   * TODO: We need more time to fine tune processors with shared memory
+> > solution @@ -64,6 +66,7 @@ static struct cpufreq_driver
+> > amd_pstate_driver; static struct cpufreq_driver amd_pstate_epp_driver;
+> > static int cppc_state =3D AMD_PSTATE_UNDEFINED;  static bool
+> > cppc_enabled;
+> > +static bool amd_pstate_prefcore =3D true;
+> >
+> >  /*
+> >   * AMD Energy Preference Performance (EPP) @@ -290,23 +293,21 @@
+> > static inline int amd_pstate_enable(bool enable)  static int
+> > pstate_init_perf(struct amd_cpudata *cpudata)  {
+> >       u64 cap1;
+> > -     u32 highest_perf;
+> >
+> >       int ret =3D rdmsrl_safe_on_cpu(cpudata->cpu, MSR_AMD_CPPC_CAP1,
+> >                                    &cap1);
+> >       if (ret)
+> >               return ret;
+> >
+> > -     /*
+> > -      * TODO: Introduce AMD specific power feature.
+> > -      *
+> > -      * CPPC entry doesn't indicate the highest performance in some AS=
+ICs.
+> > +     /* For platforms that do not support the preferred core feature, =
+the
+> > +      * highest_pef may be configured with 166 or 255, to avoid max
+> > frequency
+> > +      * calculated wrongly. we take the AMD_CPPC_HIGHEST_PERF(cap1)
+> > value as
+> > +      * the default max perf.
+> >        */
+> > -     highest_perf =3D amd_get_highest_perf();
+> > -     if (highest_perf > AMD_CPPC_HIGHEST_PERF(cap1))
+> > -             highest_perf =3D AMD_CPPC_HIGHEST_PERF(cap1);
+> > -
+> > -     WRITE_ONCE(cpudata->highest_perf, highest_perf);
+> > +     if (cpudata->hw_prefcore)
+> > +             WRITE_ONCE(cpudata->highest_perf,
+> > AMD_PSTATE_PREFCORE_THRESHOLD);
+> > +     else
+> > +             WRITE_ONCE(cpudata->highest_perf,
+> > AMD_CPPC_HIGHEST_PERF(cap1));
+> >
+> >       WRITE_ONCE(cpudata->nominal_perf,
+> AMD_CPPC_NOMINAL_PERF(cap1));
+> >       WRITE_ONCE(cpudata->lowest_nonlinear_perf,
+> > AMD_CPPC_LOWNONLIN_PERF(cap1)); @@ -318,17 +319,15 @@ static int
+> > pstate_init_perf(struct amd_cpudata *cpudata)  static int
+> > cppc_init_perf(struct amd_cpudata *cpudata)  {
+> >       struct cppc_perf_caps cppc_perf;
+> > -     u32 highest_perf;
+> >
+> >       int ret =3D cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
+> >       if (ret)
+> >               return ret;
+> >
+> > -     highest_perf =3D amd_get_highest_perf();
+> > -     if (highest_perf > cppc_perf.highest_perf)
+> > -             highest_perf =3D cppc_perf.highest_perf;
+> > -
+> > -     WRITE_ONCE(cpudata->highest_perf, highest_perf);
+> > +     if (cpudata->hw_prefcore)
+> > +             WRITE_ONCE(cpudata->highest_perf,
+> > AMD_PSTATE_PREFCORE_THRESHOLD);
+> > +     else
+> > +             WRITE_ONCE(cpudata->highest_perf,
+> > cppc_perf.highest_perf);
+> >
+> >       WRITE_ONCE(cpudata->nominal_perf, cppc_perf.nominal_perf);
+> >       WRITE_ONCE(cpudata->lowest_nonlinear_perf,
+> > @@ -676,6 +675,80 @@ static void amd_perf_ctl_reset(unsigned int cpu)
+> >       wrmsrl_on_cpu(cpu, MSR_AMD_PERF_CTL, 0);  }
+> >
+> > +/*
+> > + * Set amd-pstate preferred core enable can't be done directly from
+> > +cpufreq callbacks
+> > + * due to locking, so queue the work for later.
+> > + */
+> > +static void amd_pstste_sched_prefcore_workfn(struct work_struct
+> > +*work) {
+> > +     sched_set_itmt_support();
+> > +}
+> > +static DECLARE_WORK(sched_prefcore_work,
+> > +amd_pstste_sched_prefcore_workfn);
+> > +
+> > +/*
+> > + * Get the highest performance register value.
+> > + * @cpu: CPU from which to get highest performance.
+> > + * @highest_perf: Return address.
+> > + *
+> > + * Return: 0 for success, -EIO otherwise.
+> > + */
+> > +static int amd_pstate_get_highest_perf(int cpu, u32 *highest_perf) {
+> > +     int ret;
+> > +
+> > +     if (boot_cpu_has(X86_FEATURE_CPPC)) {
+> > +             u64 cap1;
+> > +
+> > +             ret =3D rdmsrl_safe_on_cpu(cpu, MSR_AMD_CPPC_CAP1,
+> > &cap1);
+> > +             if (ret)
+> > +                     return ret;
+> > +             WRITE_ONCE(*highest_perf,
+> > AMD_CPPC_HIGHEST_PERF(cap1));
+> > +     } else {
+> > +             u64 cppc_highest_perf;
+> > +
+> > +             ret =3D cppc_get_highest_perf(cpu, &cppc_highest_perf);
+> > +             if (ret)
+> > +                     return ret;
+> > +             WRITE_ONCE(*highest_perf, cppc_highest_perf);
+> > +     }
+> > +
+> > +     return (ret);
+> > +}
+> > +
+> > +#define CPPC_MAX_PERF        U8_MAX
+> > +
+> > +static void amd_pstate_init_prefcore(struct amd_cpudata *cpudata) {
+> > +     int ret, prio;
+> > +     u32 highest_perf;
+> > +
+> > +     ret =3D amd_pstate_get_highest_perf(cpudata->cpu, &highest_perf);
+> > +     if (ret)
+> > +             return;
+> > +
+> > +     cpudata->hw_prefcore =3D true;
+> > +     /* check if CPPC preferred core feature is enabled*/
+> > +     if (highest_perf < CPPC_MAX_PERF)
+> > +             prio =3D (int)highest_perf;
+> > +     else {
+> > +             pr_debug("AMD CPPC preferred core is unsupported!\n");
+> > +             cpudata->hw_prefcore =3D false;
+> > +             return;
+> > +     }
+> > +
+> > +     if (!amd_pstate_prefcore)
+> > +             return;
+>
+> Move the feature state check to earlier before you call
+> amd_pstate_get_highest_perf().
+> If the feature is not enabled, you have no need to read highest perf.
+>
+[Meng, Li (Jassmine)] I need to set hw_prefcore by highest_perf.
+Therefore, the judgment condition =1B$B!H=1B(Bamd_pstate_prefcore=1B$B!I=1B=
+(B cannot be moved forward.
+>
+> > +
+> > +     /*
+> > +      * The priorities can be set regardless of whether or not
+> > +      * sched_set_itmt_support(true) has been called and it is valid t=
+o
+> > +      * update them at any time after it has been called.
+> > +      */
+> > +     sched_set_itmt_core_prio(prio, cpudata->cpu);
+> > +
+> > +     schedule_work(&sched_prefcore_work);
+> > +}
+> > +
+> >  static int amd_pstate_cpu_init(struct cpufreq_policy *policy)  {
+> >       int min_freq, max_freq, nominal_freq, lowest_nonlinear_freq,
+> > ret; @@ -697,6 +770,8 @@ static int amd_pstate_cpu_init(struct
+> > cpufreq_policy
+> > *policy)
+> >
+> >       cpudata->cpu =3D policy->cpu;
+> >
+> > +     amd_pstate_init_prefcore(cpudata);
+> > +
+> >       ret =3D amd_pstate_init_perf(cpudata);
+> >       if (ret)
+> >               goto free_cpudata1;
+> > @@ -845,6 +920,17 @@ static ssize_t
+> > show_amd_pstate_highest_perf(struct
+> > cpufreq_policy *policy,
+> >       return sysfs_emit(buf, "%u\n", perf);  }
+> >
+> > +static ssize_t show_amd_pstate_hw_prefcore(struct cpufreq_policy
+> *policy,
+> > +                                        char *buf) {
+> > +     bool hw_prefcore;
+> > +     struct amd_cpudata *cpudata =3D policy->driver_data;
+> > +
+> > +     hw_prefcore =3D READ_ONCE(cpudata->hw_prefcore);
+> > +
+> > +     return sysfs_emit(buf, "%s\n", hw_prefcore ? "supported" :
+> > +"unsupported"); }
+>
+> Replace the string with str_enabled_disabled() function that is defined a=
+s
+> below.
+>
+> include/linux/string_helpers.h
+>
+> static inline const char *str_enabled_disabled(bool v) {
+>         return v ? "enabled" : "disabled"; }
+>
+> Perry.
+>
+> > +
+> >  static ssize_t show_energy_performance_available_preferences(
+> >                               struct cpufreq_policy *policy, char
+> > *buf) { @@ -1037,18 +1123,27 @@ static ssize_t status_store(struct
+> > device *a, struct device_attribute *b,
+> >       return ret < 0 ? ret : count;
+> >  }
+> >
+> > +static ssize_t prefcore_show(struct device *dev,
+> > +                          struct device_attribute *attr, char *buf) {
+> > +     return sysfs_emit(buf, "%s\n", amd_pstate_prefcore ? "enabled" :
+> > +"disabled"); }
+>
+> Replace the string with str_enabled_disabled() function that is defined a=
+s
+> below.
+>
+> include/linux/string_helpers.h
+>
+>
+> > +
+> >  cpufreq_freq_attr_ro(amd_pstate_max_freq);
+> >  cpufreq_freq_attr_ro(amd_pstate_lowest_nonlinear_freq);
+> >
+> >  cpufreq_freq_attr_ro(amd_pstate_highest_perf);
+> > +cpufreq_freq_attr_ro(amd_pstate_hw_prefcore);
+> >  cpufreq_freq_attr_rw(energy_performance_preference);
+> >  cpufreq_freq_attr_ro(energy_performance_available_preferences);
+> >  static DEVICE_ATTR_RW(status);
+> > +static DEVICE_ATTR_RO(prefcore);
+> >
+> >  static struct freq_attr *amd_pstate_attr[] =3D {
+> >       &amd_pstate_max_freq,
+> >       &amd_pstate_lowest_nonlinear_freq,
+> >       &amd_pstate_highest_perf,
+> > +     &amd_pstate_hw_prefcore,
+> >       NULL,
+> >  };
+> >
+> > @@ -1056,6 +1151,7 @@ static struct freq_attr *amd_pstate_epp_attr[] =
+=3D
+> {
+> >       &amd_pstate_max_freq,
+> >       &amd_pstate_lowest_nonlinear_freq,
+> >       &amd_pstate_highest_perf,
+> > +     &amd_pstate_hw_prefcore,
+> >       &energy_performance_preference,
+> >       &energy_performance_available_preferences,
+> >       NULL,
+> > @@ -1063,6 +1159,7 @@ static struct freq_attr *amd_pstate_epp_attr[] =
+=3D
+> > {
+> >
+> >  static struct attribute *pstate_global_attributes[] =3D {
+> >       &dev_attr_status.attr,
+> > +     &dev_attr_prefcore.attr,
+> >       NULL
+> >  };
+> >
+> > @@ -1114,6 +1211,8 @@ static int amd_pstate_epp_cpu_init(struct
+> > cpufreq_policy *policy)
+> >       cpudata->cpu =3D policy->cpu;
+> >       cpudata->epp_policy =3D 0;
+> >
+> > +     amd_pstate_init_prefcore(cpudata);
+> > +
+> >       ret =3D amd_pstate_init_perf(cpudata);
+> >       if (ret)
+> >               goto free_cpudata1;
+> > @@ -1527,7 +1626,17 @@ static int __init amd_pstate_param(char *str)
+> >
+> >       return amd_pstate_set_driver(mode_idx);  }
+> > +
+> > +static int __init amd_prefcore_param(char *str) {
+> > +     if (!strcmp(str, "disable"))
+> > +             amd_pstate_prefcore =3D false;
+> > +
+> > +     return 0;
+> > +}
+> > +
+> >  early_param("amd_pstate", amd_pstate_param);
+> > +early_param("amd_prefcore", amd_prefcore_param);
+> >
+> >  MODULE_AUTHOR("Huang Rui <ray.huang@amd.com>");
+> > MODULE_DESCRIPTION("AMD Processor P-state Frequency Driver"); diff
+> > --git a/include/linux/amd-pstate.h b/include/linux/amd-pstate.h index
+> > 446394f84606..87e140e9e6db 100644
+> > --- a/include/linux/amd-pstate.h
+> > +++ b/include/linux/amd-pstate.h
+> > @@ -52,6 +52,9 @@ struct amd_aperf_mperf {
+> >   * @prev: Last Aperf/Mperf/tsc count value read from register
+> >   * @freq: current cpu frequency value
+> >   * @boost_supported: check whether the Processor or SBIOS supports
+> > boost mode
+> > + * @hw_prefcore: check whether HW supports preferred core featue.
+> > + *             Only when hw_prefcore and early prefcore param are true=
+,
+> > + *             AMD P-State driver supports preferred core featue.
+> >   * @epp_policy: Last saved policy used to set energy-performance
+> preference
+> >   * @epp_cached: Cached CPPC energy-performance preference value
+> >   * @policy: Cpufreq policy value
+> > @@ -81,6 +84,7 @@ struct amd_cpudata {
+> >
+> >       u64     freq;
+> >       bool    boost_supported;
+> > +     bool    hw_prefcore;
+> >
+> >       /* EPP feature related attributes*/
+> >       s16     epp_policy;
+> > --
+> > 2.34.1
+>
 
