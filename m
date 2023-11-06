@@ -2,51 +2,73 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7E027E3116
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Nov 2023 00:17:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C17307E3163
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Nov 2023 00:28:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233755AbjKFXR6 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 6 Nov 2023 18:17:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35924 "EHLO
+        id S233903AbjKFX2U (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 Nov 2023 18:28:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233143AbjKFXRj (ORCPT
+        with ESMTP id S234141AbjKFX2H (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 Nov 2023 18:17:39 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B98626BF;
-        Mon,  6 Nov 2023 15:16:02 -0800 (PST)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE9AFC433D9;
-        Mon,  6 Nov 2023 23:16:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1699312561;
-        bh=O7HSFgEhnx5j7BpbVRWe3VcvdK1akaOH6gwOipqU6eE=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=I4lM8voy8CHQBSzCWEvm9EpHbNXiIq3vKXjUDl6jXeH/KXTbG6Kl3Q9ZapzoqP5HT
-         m458aPShdOLW3fC6PLU/PJVgT+dPclAG3NuT1o48WlL82b6WgTE5uIdaKsY7fKGPZ/
-         rNIzOnuJwxSsv1ulbjbZT5MVm2pRVtdilgMgBK2Of9EnIvcSnWavWjgFDPBHZ9ZNLN
-         bdGARym8i9UnhDpy/BMlLawHlPPchWFUKB+1yM9D/ub7HsMQiRxNZOjfzVjm07zPoq
-         BR8fQPhPxYlBxrfKbR+4Ga9aFUvm7svpifIr6+Mpz3LHH16W0+CkJg6R/b/Hhz+V8P
-         VRIphjj/rZ/PA==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     =?UTF-8?q?Ricardo=20Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>,
-        Kees Cook <keescook@chromium.org>,
-        Sasha Levin <sashal@kernel.org>, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 04/11] selftests/lkdtm: Disable CONFIG_UBSAN_TRAP in test config
-Date:   Mon,  6 Nov 2023 18:15:38 -0500
-Message-ID: <20231106231553.3735366-4-sashal@kernel.org>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231106231553.3735366-1-sashal@kernel.org>
-References: <20231106231553.3735366-1-sashal@kernel.org>
+        Mon, 6 Nov 2023 18:28:07 -0500
+Received: from mail-io1-xd2c.google.com (mail-io1-xd2c.google.com [IPv6:2607:f8b0:4864:20::d2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09A54468D;
+        Mon,  6 Nov 2023 15:25:16 -0800 (PST)
+Received: by mail-io1-xd2c.google.com with SMTP id ca18e2360f4ac-7ad501764f4so65940939f.3;
+        Mon, 06 Nov 2023 15:25:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1699313116; x=1699917916; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pFohItga9X0xPgYLEfr2XqF9MUnkolAn3ELAIha/bdg=;
+        b=nX5c+gTlHMYV21PjHlvnvYaZFgZYyzDBFJIqd4monilmsST+GssoWBQVzdj/pF9DH7
+         YTxxMbUmLQ8XiJg3D9EhKkq1uvFtYzcfNZlYeepw3yKW+laVZh71fX4OmS7ttY4K9UIc
+         l/0fOQPcSJYFs2A7d27k9wEOkHhVYQ7vdvxJN/uOj4tmbWzq2oCQoNxNCIGeXaDiZTjU
+         uN3XrxPXaMgi1hpKZ2dbkeuTKZZYc7Q1ar06JMt7l1H2sQPFQGQQX5X/ZweowuVLMjD0
+         fNt3C2WaK/ElpG/+HCvZHdt9Lu94RfAv/TPUgn04dbPIOw4rOVMaY5a0iNn/UzfRXtp4
+         6Gaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699313116; x=1699917916;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pFohItga9X0xPgYLEfr2XqF9MUnkolAn3ELAIha/bdg=;
+        b=KcX4VSuIgr0wrkLccqMrymRLpFnwjJVxfuUD5tG3lHcn3bZ2g+dhfUAHrrW7uqndAE
+         bWCHhpwGC53+5WJEY+oiitHoZMJOWZXSfzUtoZda1C7V0LulfmEa4gMzfLIz5bM2rE9j
+         BqaKcozJQnryN62rovO9MvI27XwAtODffkjHuJ8uZK7lfc9be4ykSjqIyuD/xXP063Ih
+         YcJd+mBYeuc1frYtoMudGbT5/SuPLqQahA5Sch0GJ6QsNF8eZLw++G/SUEdJSWx6IIzt
+         fMYNK9nwDC2sW6YPcjfyan80CdmTS3JlByQldTja/XzbDKLq5g1PiTQp1LVlz+01LYlB
+         w1Lw==
+X-Gm-Message-State: AOJu0Yx66tM6fQyUvTYWlYq5PAwYu4/WmWek4UVzpsXpCxGArKbKgSDi
+        TAyISlrlK/cBCVeaKjVDV+z8M9VkDz71p2aosVM=
+X-Google-Smtp-Source: AGHT+IGV4V0e5c01c8hD3mfdr+jQQ1UjrMZTmWDKErBTA6rVC/kSi+zmq1aFfKbKyQjXxH2oaq8dispeOxZwGbnP91E=
+X-Received: by 2002:a05:6602:2b91:b0:79f:d4e6:5175 with SMTP id
+ r17-20020a0566022b9100b0079fd4e65175mr41047243iov.16.1699313116030; Mon, 06
+ Nov 2023 15:25:16 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.61
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+References: <20231106183159.3562879-1-nphamcs@gmail.com> <20231106183159.3562879-4-nphamcs@gmail.com>
+ <CAJD7tkYcEc03d+6kwkXu8M_fd9ZDzh6B5G+VjmFXx+H09mhfmg@mail.gmail.com>
+ <CAKEwX=PU3z7CseAZHE6v-q_yKQn0PtZqtfsfyKy5KOJpnNiE9Q@mail.gmail.com> <CAJD7tkY+qdYytVKUjdgPypZthWA57gVKuEtjowuVPMpcOmpdLQ@mail.gmail.com>
+In-Reply-To: <CAJD7tkY+qdYytVKUjdgPypZthWA57gVKuEtjowuVPMpcOmpdLQ@mail.gmail.com>
+From:   Nhat Pham <nphamcs@gmail.com>
+Date:   Mon, 6 Nov 2023 15:25:05 -0800
+Message-ID: <CAKEwX=Outf_hz_4UrzqKTbxxQD7y-Wm1cv9tOWC5J3V1ZmSiaA@mail.gmail.com>
+Subject: Re: [PATCH v5 3/6] zswap: make shrinking memcg-aware
+To:     Yosry Ahmed <yosryahmed@google.com>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org,
+        cerasuolodomenico@gmail.com, sjenning@redhat.com,
+        ddstreet@ieee.org, vitaly.wool@konsulko.com, mhocko@kernel.org,
+        roman.gushchin@linux.dev, shakeelb@google.com,
+        muchun.song@linux.dev, chrisl@kernel.org, linux-mm@kvack.org,
+        kernel-team@meta.com, linux-kernel@vger.kernel.org,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, shuah@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,63 +77,91 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Ricardo Cañuelo <ricardo.canuelo@collabora.com>
+On Mon, Nov 6, 2023 at 12:58=E2=80=AFPM Yosry Ahmed <yosryahmed@google.com>=
+ wrote:
+>
+> > >
+> > > This lock is only needed to synchronize updating pool->next_shrink,
+> > > right? Can we just use atomic operations instead? (e.g. cmpxchg()).
+> >
+> > I'm not entirely sure. I think in the pool destroy path, we have to als=
+o
+> > put the next_shrink memcg, so there's that.
+>
+> We can use xchg() to replace it with NULL, then put the memcg ref, no?
+>
+> We can also just hold zswap_pools_lock while shrinking the memcg
+> perhaps? It's not a contended lock anyway. It just feels weird to add
+> a spinlock to protect one pointer.
 
-[ Upstream commit cf77bf698887c3b9ebed76dea492b07a3c2c7632 ]
+Ah this sounds good to me I guess. I'm not opposed to this simplification
+of the concurrency scheme.
 
-The lkdtm selftest config fragment enables CONFIG_UBSAN_TRAP to make the
-ARRAY_BOUNDS test kill the calling process when an out-of-bound access
-is detected by UBSAN. However, after this [1] commit, UBSAN is triggered
-under many new scenarios that weren't detected before, such as in struct
-definitions with fixed-size trailing arrays used as flexible arrays. As
-a result, CONFIG_UBSAN_TRAP=y has become a very aggressive option to
-enable except for specific situations.
-
-`make kselftest-merge` applies CONFIG_UBSAN_TRAP=y to the kernel config
-for all selftests, which makes many of them fail because of system hangs
-during boot.
-
-This change removes the config option from the lkdtm kselftest and
-configures the ARRAY_BOUNDS test to look for UBSAN reports rather than
-relying on the calling process being killed.
-
-[1] commit 2d47c6956ab3 ("ubsan: Tighten UBSAN_BOUNDS on GCC")'
-
-Signed-off-by: Ricardo Cañuelo <ricardo.canuelo@collabora.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Link: https://lore.kernel.org/r/20230802063252.1917997-1-ricardo.canuelo@collabora.com
-Signed-off-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- tools/testing/selftests/lkdtm/config    | 1 -
- tools/testing/selftests/lkdtm/tests.txt | 2 +-
- 2 files changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/lkdtm/config b/tools/testing/selftests/lkdtm/config
-index 5d52f64dfb430..7afe05e8c4d79 100644
---- a/tools/testing/selftests/lkdtm/config
-+++ b/tools/testing/selftests/lkdtm/config
-@@ -9,7 +9,6 @@ CONFIG_INIT_ON_FREE_DEFAULT_ON=y
- CONFIG_INIT_ON_ALLOC_DEFAULT_ON=y
- CONFIG_UBSAN=y
- CONFIG_UBSAN_BOUNDS=y
--CONFIG_UBSAN_TRAP=y
- CONFIG_STACKPROTECTOR_STRONG=y
- CONFIG_SLUB_DEBUG=y
- CONFIG_SLUB_DEBUG_ON=y
-diff --git a/tools/testing/selftests/lkdtm/tests.txt b/tools/testing/selftests/lkdtm/tests.txt
-index 607b8d7e3ea34..2f3a1b96da6e3 100644
---- a/tools/testing/selftests/lkdtm/tests.txt
-+++ b/tools/testing/selftests/lkdtm/tests.txt
-@@ -7,7 +7,7 @@ EXCEPTION
- #EXHAUST_STACK Corrupts memory on failure
- #CORRUPT_STACK Crashes entire system on success
- #CORRUPT_STACK_STRONG Crashes entire system on success
--ARRAY_BOUNDS
-+ARRAY_BOUNDS call trace:|UBSAN: array-index-out-of-bounds
- CORRUPT_LIST_ADD list_add corruption
- CORRUPT_LIST_DEL list_del corruption
- STACK_GUARD_PAGE_LEADING
--- 
-2.42.0
-
+>
+> >
+> > >
+> > > > +               if (pool->next_shrink =3D=3D memcg)
+> > > > +                       pool->next_shrink =3D
+> > > > +                               mem_cgroup_iter(NULL, pool->next_sh=
+rink, NULL, true);
+> > > > +               spin_unlock(&pool->next_shrink_lock);
+> > > > +       }
+> > > > +       spin_unlock(&zswap_pools_lock);
+> > > > +}
+> > > > +
+> > > >  /*********************************
+> > > >  * zswap entry functions
+> > > >  **********************************/
+> > > >  static struct kmem_cache *zswap_entry_cache;
+> > > >
+> > > > -static struct zswap_entry *zswap_entry_cache_alloc(gfp_t gfp)
+> > > > +static struct zswap_entry *zswap_entry_cache_alloc(gfp_t gfp, int =
+nid)
+> > > >  {
+> > > >         struct zswap_entry *entry;
+> > > > -       entry =3D kmem_cache_alloc(zswap_entry_cache, gfp);
+> > > > +       entry =3D kmem_cache_alloc_node(zswap_entry_cache, gfp, nid=
+);
+> > > >         if (!entry)
+> > > >                 return NULL;
+> > > >         entry->refcount =3D 1;
+> > > [..]
+> > > > @@ -1233,15 +1369,15 @@ bool zswap_store(struct folio *folio)
+> > > >                 zswap_invalidate_entry(tree, dupentry);
+> > > >         }
+> > > >         spin_unlock(&tree->lock);
+> > > > -
+> > > > -       /*
+> > > > -        * XXX: zswap reclaim does not work with cgroups yet. Witho=
+ut a
+> > > > -        * cgroup-aware entry LRU, we will push out entries system-=
+wide based on
+> > > > -        * local cgroup limits.
+> > > > -        */
+> > > >         objcg =3D get_obj_cgroup_from_folio(folio);
+> > > > -       if (objcg && !obj_cgroup_may_zswap(objcg))
+> > > > -               goto reject;
+> > > > +       if (objcg && !obj_cgroup_may_zswap(objcg)) {
+> > > > +               memcg =3D get_mem_cgroup_from_objcg(objcg);
+> > > > +               if (shrink_memcg(memcg)) {
+> > > > +                       mem_cgroup_put(memcg);
+> > > > +                       goto reject;
+> > > > +               }
+> > > > +               mem_cgroup_put(memcg);
+> > >
+> > > Can we just use RCU here as well? (same around memcg_list_lru_alloc()
+> > > call below).
+> >
+> > For memcg_list_lru_alloc(): there's potentially sleeping in that piece =
+of
+> > code I believe? I believe at the very least we'll have to use this gfp_=
+t
+> > flag for it to be rcu-safe:
+> >
+> > GFP_KERNEL | __GFP_NORETRY | __GFP_NOMEMALLOC | __GFP_NOWARN
+> > not sure the
+> >
+> > Same go for this particular place IIRC - there's some sleeping done
+> > in zswap_writeback_entry(), correct?
+>
+> Ah right, I missed this. My bad.
