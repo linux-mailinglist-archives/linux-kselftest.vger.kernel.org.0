@@ -2,174 +2,108 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A5507E3231
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Nov 2023 01:24:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79C8F7E3239
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Nov 2023 01:31:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233102AbjKGAYL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 6 Nov 2023 19:24:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55896 "EHLO
+        id S229646AbjKGAbT (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 Nov 2023 19:31:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232848AbjKGAYK (ORCPT
+        with ESMTP id S229517AbjKGAbS (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 Nov 2023 19:24:10 -0500
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 582BC184
-        for <linux-kselftest@vger.kernel.org>; Mon,  6 Nov 2023 16:24:04 -0800 (PST)
-Received: by mail-vs1-xe32.google.com with SMTP id ada2fe7eead31-45da9f949aaso1264085137.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 06 Nov 2023 16:24:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1699316643; x=1699921443; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VpkgociZWtNmHNqup8fc4OP6m9kvy0WIbsUu3JqjrFo=;
-        b=GaVApw0hOud1Xw6db4glBTFJo8iBe1OqNQoGimb+Dtp+ClwWvIbxnPmHJakYWqO+nk
-         3LOPE8evloiG3m1Pd5se8xet9e5/WYduh1HWtdb2sFo8NMQdTVmqqsXWVeY0MwtqsQZi
-         gB3NNIn71w9awI2qYBu2Myc1kvU4uf1TI5DGSk7x6aASQCpqONOGkSpWiqpW/NFSs2IQ
-         usMwoNyRZMjfyhLcoW8a9IWrmKwglyEw+wwAMfQ6HTTvr6mIoZ3CEMf3JiUqWgFP7Sse
-         yZXJQLVIB87K6smWXXP7X5aKZQsVpqTJ0C413h8hgLX7qnkz2MGnj6u9e1+qzgH1phWZ
-         4Haw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699316643; x=1699921443;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VpkgociZWtNmHNqup8fc4OP6m9kvy0WIbsUu3JqjrFo=;
-        b=GnbEqrGsoyCXrL4T50cEV+taj65KC4s5caFGaWRmv3+6LL+xDHYRliEa/3Qhgiv2Mb
-         uz4DaD/sSjx1COePs3PtORDah325huPaOLSW63UYdQkaMiR1be+PxJzUtuzyqNIQt+8E
-         zv8ozjWvzpPPbCvd+7fm7oDcBd05UfsuNRW25XzkrhoGChNIcRptIvR+Orsk5bO5Nn5X
-         V+Qu5yu54IHLAIxmDmutRSCp+aMn+4vhX4KKVT22jdgrxqRyUqBKA7fVx3xBhEk73wY0
-         Jh9lM3EgZQStxxYV0MvtyyGyYIIlmm0DH/oobj+nrDtQBDRJxGBlaYTq0rojZzUV3z/w
-         6wUw==
-X-Gm-Message-State: AOJu0YwM4ZnTwhzq+oAkVDJHMyUi11JldFCOKhPCzIfwT9NiAb3151S7
-        mbYZZsJZajHKqNhjSUCiMduvB+l6cY6W+ntx12AiGg==
-X-Google-Smtp-Source: AGHT+IETMKyQIhhyycP7VfpcyOAP+36Ndh1eORahNjRPB1IML5/P0pzLe4lyVRhYqpQBeNyazLdIIUZ8jHzBSAAkKuo=
-X-Received: by 2002:a05:6102:2049:b0:45f:642e:41c with SMTP id
- q9-20020a056102204900b0045f642e041cmr2136927vsr.13.1699316643304; Mon, 06 Nov
- 2023 16:24:03 -0800 (PST)
+        Mon, 6 Nov 2023 19:31:18 -0500
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8E11BC;
+        Mon,  6 Nov 2023 16:31:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1699317075; x=1730853075;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xrYiHM38iLQfDGM/2a1djaILuHvKZlmSend6LuJdjRk=;
+  b=Ei5GJVF2ifIgfr7Mo+9yidTkCfFZTsf+ETtVyC1oZQWn3ZFWQCDopPjm
+   gL4hqNbkSqGZ2358gqlkdB3vUuBM//+llWnEDeGM9rJoYeffnDFwyan7J
+   GrAAn31gB/GWY+BC7N0ODc7Vssot//xN1bOxkwZ/e4sCnITChKGIIH2qw
+   Kr8K/WRql9VjS0Nkt0LJZm5LmRYrM08+QuGan9KaJEWVaKq5qIW5dlfVG
+   Y69B0uz/nC9w91C6srj59cCnaqduyOl7L7GeWGAyGmxYuj3W0KuVQShO3
+   0lhYptBXHhV8FIzLEckwFhoctGLVxl0bazGYi2gwPzHAs4rmiO5ZpYUcT
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10886"; a="389204528"
+X-IronPort-AV: E=Sophos;i="6.03,282,1694761200"; 
+   d="scan'208";a="389204528"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2023 16:31:15 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10886"; a="766122984"
+X-IronPort-AV: E=Sophos;i="6.03,282,1694761200"; 
+   d="scan'208";a="766122984"
+Received: from lkp-server01.sh.intel.com (HELO 17d9e85e5079) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 06 Nov 2023 16:31:11 -0800
+Received: from kbuild by 17d9e85e5079 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1r09zp-0006qY-2J;
+        Tue, 07 Nov 2023 00:31:09 +0000
+Date:   Tue, 7 Nov 2023 08:30:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Sergio =?iso-8859-1?Q?Gonz=E1lez?= Collado 
+        <sergio.collado@gmail.com>, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Cc:     oe-kbuild-all@lists.linux.dev, Boqun Feng <boqun.feng@gmail.com>,
+        Gary Guo <gary@garyguo.net>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Benno Lossin <benno.lossin@proton.me>,
+        Andreas Hindborg <a.hindborg@samsung.com>,
+        Alice Ryhl <aliceryhl@google.com>,
+        rust-for-linux@vger.kernel.org
+Subject: Re: [PATCH] Kunit to check the longest symbol length
+Message-ID: <202311070705.7aFWz7q4-lkp@intel.com>
+References: <20231105184010.49194-1-sergio.collado@gmail.com>
 MIME-Version: 1.0
-References: <20231106024413.2801438-1-almasrymina@google.com>
- <20231106024413.2801438-10-almasrymina@google.com> <fa44c3d1-92b9-4686-ab3b-4fcda257aafd@kernel.org>
-In-Reply-To: <fa44c3d1-92b9-4686-ab3b-4fcda257aafd@kernel.org>
-From:   Mina Almasry <almasrymina@google.com>
-Date:   Mon, 6 Nov 2023 16:23:52 -0800
-Message-ID: <CAHS8izPW++mf1rq2XdezvXJpxhc6Ey1-_2nbpEymm5KThV18yw@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 09/12] net: add support for skbs with unreadable frags
-To:     David Ahern <dsahern@kernel.org>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Jeroen de Borst <jeroendb@google.com>,
-        Praveen Kaligineedi <pkaligineedi@google.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Kaiyuan Zhang <kaiyuanz@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231105184010.49194-1-sergio.collado@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Mon, Nov 6, 2023 at 4:16=E2=80=AFPM David Ahern <dsahern@kernel.org> wro=
-te:
->
-> On 11/5/23 7:44 PM, Mina Almasry wrote:
-> > diff --git a/net/core/datagram.c b/net/core/datagram.c
-> > index 176eb5834746..cdd4fb129968 100644
-> > --- a/net/core/datagram.c
-> > +++ b/net/core/datagram.c
-> > @@ -425,6 +425,9 @@ static int __skb_datagram_iter(const struct sk_buff=
- *skb, int offset,
-> >                       return 0;
-> >       }
-> >
-> > +     if (skb_frags_not_readable(skb))
-> > +             goto short_copy;
-> > +
-> >       /* Copy paged appendix. Hmm... why does this look so complicated?=
- */
-> >       for (i =3D 0; i < skb_shinfo(skb)->nr_frags; i++) {
-> >               int end;
-> > @@ -616,6 +619,9 @@ int __zerocopy_sg_from_iter(struct msghdr *msg, str=
-uct sock *sk,
-> >  {
-> >       int frag;
-> >
-> > +     if (skb_frags_not_readable(skb))
-> > +             return -EFAULT;
->
-> This check ....
-> > +
-> >       if (msg && msg->msg_ubuf && msg->sg_from_iter)
-> >               return msg->sg_from_iter(sk, skb, from, length);
->
->
-> ... should go here. That allows custome sg_from_iter to have access to
-> the skb. What matters is not expecting struct page (e.g., refcounting);
-> if the custom iter does not do that then all is well. io_uring's iter
-> does not look at the pages, so all good.
->
-> >
-> > diff --git a/net/core/gro.c b/net/core/gro.c
-> > index 42d7f6755f32..56046d65386a 100644
-> > --- a/net/core/gro.c
-> > +++ b/net/core/gro.c
-> > @@ -390,6 +390,9 @@ static void gro_pull_from_frag0(struct sk_buff *skb=
-, int grow)
-> >  {
-> >       struct skb_shared_info *pinfo =3D skb_shinfo(skb);
-> >
-> > +     if (WARN_ON_ONCE(skb_frags_not_readable(skb)))
-> > +             return;
-> > +
-> >       BUG_ON(skb->end - skb->tail < grow);
-> >
-> >       memcpy(skb_tail_pointer(skb), NAPI_GRO_CB(skb)->frag0, grow);
-> > @@ -411,7 +414,7 @@ static void gro_try_pull_from_frag0(struct sk_buff =
-*skb)
-> >  {
-> >       int grow =3D skb_gro_offset(skb) - skb_headlen(skb);
-> >
-> > -     if (grow > 0)
-> > +     if (grow > 0 && !skb_frags_not_readable(skb))
-> >               gro_pull_from_frag0(skb, grow);
-> >  }
-> >
-> > diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-> > index 13eca4fd25e1..f01673ed2eff 100644
-> > --- a/net/core/skbuff.c
-> > +++ b/net/core/skbuff.c
-> > @@ -1230,6 +1230,14 @@ void skb_dump(const char *level, const struct sk=
-_buff *skb, bool full_pkt)
-> >               struct page *p;
-> >               u8 *vaddr;
-> >
-> > +             if (skb_frag_is_page_pool_iov(frag)) {
->
-> Why skb_frag_is_page_pool_iov here vs skb_frags_not_readable?
+Hi Sergio,
 
-Seems like a silly choice on my end. I should probably check
-skb_frags_not_readable() and not kmap any frags in that case. Will do.
+kernel test robot noticed the following build errors:
 
---=20
-Thanks,
-Mina
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.6 next-20231106]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Sergio-Gonz-lez-Collado/Kunit-to-check-the-longest-symbol-length/20231106-024653
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20231105184010.49194-1-sergio.collado%40gmail.com
+patch subject: [PATCH] Kunit to check the longest symbol length
+config: i386-randconfig-014-20231106 (https://download.01.org/0day-ci/archive/20231107/202311070705.7aFWz7q4-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231107/202311070705.7aFWz7q4-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311070705.7aFWz7q4-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> arch/x86/tools/insn_decoder_test: error: malformed line 1810458:
+   7nnnnng1h2i3j4k5l6m7ng1h2i3j4k5l6m7nng1h2i3j4k5l6m7ng1h2i3j4k5l6m7nnng1h2i3j4k5l6m7ng1h2i3j4k5l6m7nng1h2i3j4k5l6m7ng1h2i3j4k5l6m7nnnng1h2i3j4k5l6m7ng1h2i3j4k5l6m7nng1h2i3j4k5l6m7ng1h2i3j4k5l6m7nnng1h2i3j4k5l6m7ng1h2i3j4k5l6m7nng1h2i3j4k5l6m7ng1h2i3j4k5l6m
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
