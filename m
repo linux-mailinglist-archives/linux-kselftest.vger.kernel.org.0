@@ -2,75 +2,89 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 543AE7E323D
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Nov 2023 01:31:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 872F27E3270
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Nov 2023 02:00:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232821AbjKGAb7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Mon, 6 Nov 2023 19:31:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57898 "EHLO
+        id S232527AbjKGA74 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Mon, 6 Nov 2023 19:59:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjKGAbz (ORCPT
+        with ESMTP id S230208AbjKGA7z (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Mon, 6 Nov 2023 19:31:55 -0500
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF25F1BC;
-        Mon,  6 Nov 2023 16:31:52 -0800 (PST)
-Received: by mail-oi1-x22f.google.com with SMTP id 5614622812f47-3b566bc6daaso3065100b6e.1;
-        Mon, 06 Nov 2023 16:31:52 -0800 (PST)
+        Mon, 6 Nov 2023 19:59:55 -0500
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89FF2103
+        for <linux-kselftest@vger.kernel.org>; Mon,  6 Nov 2023 16:59:51 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-da2b87dd614so6496744276.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 06 Nov 2023 16:59:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1699317112; x=1699921912; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=d0WGY/AKCQE6ND37JA3v4q+xJaxjKD8rC8TyYg2oDtg=;
-        b=kXi5j4PvnHRHpDvoYPCuO5niV0KTAwb4TtNVwRp02PQD0++Ls5T8GtgCxnfpuoxxVT
-         TCyy77AyIXyFCwxzojDSy/Q1Hd/rc5PKKhgTqIbkYBVCS2CaBYRBSxHix69rAuBOhbTY
-         OZhyDEsRjzAoFTCtfM5iMKFyD5FM7SqPvfykGiyaRPRclVdKYBbdRIbN8E8NvIB4S0Tx
-         FyNuKjoeXWYsdDuNaVcUD2NUQiEJYBDQLYmJmNoIuJNWeImDtI51LBnwLtO6+lf6nNs7
-         qwcvJr/AIA53s1sJr/Lbl7QPT61klltRGwPw6LuvLVRROxH+j/H5q6THe1NVi+Nwj0vY
-         uZYQ==
+        d=google.com; s=20230601; t=1699318791; x=1699923591; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RZq0cHGbwdf8rCqfne97OVdbRaVIcE6Mnc7us/EVmVk=;
+        b=0jjAwiPyWy0XCqTfLUFK8aKNcEv8b+zDJKefYDw5pPmy1wLP2GtRqZlNEyaDlzD7i1
+         i4pVAMOW3n+QFG5OZ84DdST2xwJpkP1De4PXpR5XwAaaKWoZbFH7aFYrRZu+5hK4yvPc
+         51LrlTC+y8lRouvrJTHR0fuAYqQiFSM/BbQQ3E6q3Yq3LWFKFbtteG27whne1a9rm6El
+         EP9dqb1VOE33ppfchxbu/X1Ob+fdZSVsr9xfzhrXHuBQThF2QJunLLI/vrGQrKOs5Rah
+         8UNGEqh2zCvTEuysjJjsuztI9v1FuAJeQxK1eA2qxVPUdntMsoLVGEs6YVwTwI+iOmVi
+         Q7TQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699317112; x=1699921912;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=d0WGY/AKCQE6ND37JA3v4q+xJaxjKD8rC8TyYg2oDtg=;
-        b=mVRmMLBwlFWv7W+GZrTFinFFfiVX5AA2eq+dH0zzsA3dGmTxR53AsldsyRKk2VSuzn
-         Rt+os4lySNYuNWRoPhq/kBG3WEaKx7JYXmSXmBrbL90ZTYnuYnIyPjYVAhOLKDBQxH7P
-         PI8i5nKcPSmKWFbsGm3Q2Blsc8Di6z9WXnqLdpegRE7MArI/MaQu34vkdOulY5daVJF1
-         ZBTwdQ8ZxuaSpfE1hasGITeIdGFD3ZN7urFq2TQhgxfcI3cFXhEOQm6gfjmklDG+AMoC
-         IOtovpmCh5jRTQWW9MynMUDTtHYZXqDYTqHznJ/IiN83l7fqXuRBr7d6kYC3v+pyH4la
-         J6ow==
-X-Gm-Message-State: AOJu0Yzp+4yvHDID1lhxBKRxVNGxsX584B5wU42kgrbubf6CV3WwQ1sk
-        izcrSdkTlW42sjpORtV4Xlg=
-X-Google-Smtp-Source: AGHT+IFLDk2laxdyQ5ieeG3Edwclvst8+hE+8U16b+m5kSoKdpGwnzW/8zTX4A4zOu0NFtZPrk5Wxw==
-X-Received: by 2002:a05:6808:210d:b0:3ac:aae1:6d64 with SMTP id r13-20020a056808210d00b003acaae16d64mr37640029oiw.2.1699317111933;
-        Mon, 06 Nov 2023 16:31:51 -0800 (PST)
-Received: from localhost (fwdproxy-prn-004.fbsv.net. [2a03:2880:ff:4::face:b00c])
-        by smtp.gmail.com with ESMTPSA id fb24-20020a056a002d9800b006c3488498bbsm3732085pfb.44.2023.11.06.16.31.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Nov 2023 16:31:51 -0800 (PST)
-From:   Nhat Pham <nphamcs@gmail.com>
-To:     akpm@linux-foundation.org
-Cc:     hannes@cmpxchg.org, cerasuolodomenico@gmail.com,
-        yosryahmed@google.com, sjenning@redhat.com, ddstreet@ieee.org,
-        vitaly.wool@konsulko.com, mhocko@kernel.org,
-        roman.gushchin@linux.dev, shakeelb@google.com,
-        muchun.song@linux.dev, chrisl@kernel.org, linux-mm@kvack.org,
-        kernel-team@meta.com, linux-kernel@vger.kernel.org,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, shuah@kernel.org
-Subject: [PATCH v5 3/6] zswap: make shrinking memcg-aware (fix)
-Date:   Mon,  6 Nov 2023 16:31:51 -0800
-Message-Id: <20231107003151.724860-1-nphamcs@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231106183159.3562879-4-nphamcs@gmail.com>
-References: <20231106183159.3562879-4-nphamcs@gmail.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        d=1e100.net; s=20230601; t=1699318791; x=1699923591;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=RZq0cHGbwdf8rCqfne97OVdbRaVIcE6Mnc7us/EVmVk=;
+        b=DlzOOQEqCjpoaKszb2IbzBeS80lwsu6tVaAx2zuIDpdsYzaG5masOpqSxmsTsg6AMn
+         pWUBb705kjXZ6WgOxVA6XnOPtkS5apKRiPNu+1FGyPzFUFXPRexc8b282i4JLeLgGTca
+         6Umsi7tT7EcBChNnYE7DvHZQbOdTRG58XQ70/bxeZ/BBgFbUHWq+9IOQIdc8bEKy+TyK
+         CnNQjlOdzaNkDMLtf23juo4QY+ivI0ycdUIGdyjVIFRR9t6M2rLzNyeiKgiQFm/TmPA/
+         A+U2mhHWJaMf5QdhzdAW4da9T3LaeORR8wSr3w6dzaDRfrpD/fRwmP9uTu+wkIbdX6Hy
+         agyw==
+X-Gm-Message-State: AOJu0Ywu8m9O+f168a5gwoAAPfluoylBhluucbgp8ZjMoHpBJ773OaMF
+        vnd02vVGkzZU/ueIZhFH5siHJSU=
+X-Google-Smtp-Source: AGHT+IHuen4u0ItSSrCJw8SOFK44gqEr5RTLeMcW7sFtezbGV+wdpAVS+dKsyIjzjG0vGnh0CeV67fw=
+X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
+ (user=sdf job=sendgmr) by 2002:a25:add5:0:b0:d9a:4f4c:961b with SMTP id
+ d21-20020a25add5000000b00d9a4f4c961bmr566975ybe.1.1699318790828; Mon, 06 Nov
+ 2023 16:59:50 -0800 (PST)
+Date:   Mon, 6 Nov 2023 16:59:49 -0800
+In-Reply-To: <ZUmBf7E8ZoTQwThL@google.com>
+Mime-Version: 1.0
+References: <ZUk03DhWxV-bOFJL@google.com> <19129763-6f74-4b04-8a5f-441255b76d34@kernel.org>
+ <CAHS8izMrnVUfbbS=OcJ6JT9SZRRfZ2MC7UnggthpZT=zf2BGLA@mail.gmail.com>
+ <ZUlhu4hlTaqR3CTh@google.com> <CAHS8izMaAhoae5ChnzO4gny1cYYnqV1cB8MC2cAF3eoyt+Sf4A@mail.gmail.com>
+ <ZUlvzm24SA3YjirV@google.com> <CAHS8izMQ5Um_ScY0VgAjaEaT-hRh4tFoTgc6Xr9Tj5rEj0fijA@mail.gmail.com>
+ <CAKH8qBsbh8qYxNHZ6111RQFFpNWbWZtg0LDXkn15xcsbAq4R6w@mail.gmail.com>
+ <CAF=yD-+BuKXoVL8UF+No1s0TsHSzBTz7UrB1Djt_BrM74uLLcg@mail.gmail.com> <ZUmBf7E8ZoTQwThL@google.com>
+Message-ID: <ZUmMBZpLPQkRS9bg@google.com>
+Subject: Re: [RFC PATCH v3 09/12] net: add support for skbs with unreadable frags
+From:   Stanislav Fomichev <sdf@google.com>
+To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc:     Mina Almasry <almasrymina@google.com>,
+        David Ahern <dsahern@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        "Christian =?utf-8?B?S8O2bmln?=" <christian.koenig@amd.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Jeroen de Borst <jeroendb@google.com>,
+        Praveen Kaligineedi <pkaligineedi@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Kaiyuan Zhang <kaiyuanz@google.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,120 +92,267 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Rename get_mem_cgroup_from_entry() to mem_cgroup_from_entry() and use
-the zswap_pools_lock for next_shrink update.
+On 11/06, Stanislav Fomichev wrote:
+> On 11/06, Willem de Bruijn wrote:
+> > On Mon, Nov 6, 2023 at 3:55=E2=80=AFPM Stanislav Fomichev <sdf@google.c=
+om> wrote:
+> > >
+> > > On Mon, Nov 6, 2023 at 3:27=E2=80=AFPM Mina Almasry <almasrymina@goog=
+le.com> wrote:
+> > > >
+> > > > On Mon, Nov 6, 2023 at 2:59=E2=80=AFPM Stanislav Fomichev <sdf@goog=
+le.com> wrote:
+> > > > >
+> > > > > On 11/06, Mina Almasry wrote:
+> > > > > > On Mon, Nov 6, 2023 at 1:59=E2=80=AFPM Stanislav Fomichev <sdf@=
+google.com> wrote:
+> > > > > > >
+> > > > > > > On 11/06, Mina Almasry wrote:
+> > > > > > > > On Mon, Nov 6, 2023 at 11:34=E2=80=AFAM David Ahern <dsaher=
+n@kernel.org> wrote:
+> > > > > > > > >
+> > > > > > > > > On 11/6/23 11:47 AM, Stanislav Fomichev wrote:
+> > > > > > > > > > On 11/05, Mina Almasry wrote:
+> > > > > > > > > >> For device memory TCP, we expect the skb headers to be=
+ available in host
+> > > > > > > > > >> memory for access, and we expect the skb frags to be i=
+n device memory
+> > > > > > > > > >> and unaccessible to the host. We expect there to be no=
+ mixing and
+> > > > > > > > > >> matching of device memory frags (unaccessible) with ho=
+st memory frags
+> > > > > > > > > >> (accessible) in the same skb.
+> > > > > > > > > >>
+> > > > > > > > > >> Add a skb->devmem flag which indicates whether the fra=
+gs in this skb
+> > > > > > > > > >> are device memory frags or not.
+> > > > > > > > > >>
+> > > > > > > > > >> __skb_fill_page_desc() now checks frags added to skbs =
+for page_pool_iovs,
+> > > > > > > > > >> and marks the skb as skb->devmem accordingly.
+> > > > > > > > > >>
+> > > > > > > > > >> Add checks through the network stack to avoid accessin=
+g the frags of
+> > > > > > > > > >> devmem skbs and avoid coalescing devmem skbs with non =
+devmem skbs.
+> > > > > > > > > >>
+> > > > > > > > > >> Signed-off-by: Willem de Bruijn <willemb@google.com>
+> > > > > > > > > >> Signed-off-by: Kaiyuan Zhang <kaiyuanz@google.com>
+> > > > > > > > > >> Signed-off-by: Mina Almasry <almasrymina@google.com>
+> > > > > > > > > >>
+> > > > > > > > > >> ---
+> > > > > > > > > >>  include/linux/skbuff.h | 14 +++++++-
+> > > > > > > > > >>  include/net/tcp.h      |  5 +--
+> > > > > > > > > >>  net/core/datagram.c    |  6 ++++
+> > > > > > > > > >>  net/core/gro.c         |  5 ++-
+> > > > > > > > > >>  net/core/skbuff.c      | 77 +++++++++++++++++++++++++=
++++++++++++------
+> > > > > > > > > >>  net/ipv4/tcp.c         |  6 ++++
+> > > > > > > > > >>  net/ipv4/tcp_input.c   | 13 +++++--
+> > > > > > > > > >>  net/ipv4/tcp_output.c  |  5 ++-
+> > > > > > > > > >>  net/packet/af_packet.c |  4 +--
+> > > > > > > > > >>  9 files changed, 115 insertions(+), 20 deletions(-)
+> > > > > > > > > >>
+> > > > > > > > > >> diff --git a/include/linux/skbuff.h b/include/linux/sk=
+buff.h
+> > > > > > > > > >> index 1fae276c1353..8fb468ff8115 100644
+> > > > > > > > > >> --- a/include/linux/skbuff.h
+> > > > > > > > > >> +++ b/include/linux/skbuff.h
+> > > > > > > > > >> @@ -805,6 +805,8 @@ typedef unsigned char *sk_buff_dat=
+a_t;
+> > > > > > > > > >>   *  @csum_level: indicates the number of consecutive =
+checksums found in
+> > > > > > > > > >>   *          the packet minus one that have been verif=
+ied as
+> > > > > > > > > >>   *          CHECKSUM_UNNECESSARY (max 3)
+> > > > > > > > > >> + *  @devmem: indicates that all the fragments in this=
+ skb are backed by
+> > > > > > > > > >> + *          device memory.
+> > > > > > > > > >>   *  @dst_pending_confirm: need to confirm neighbour
+> > > > > > > > > >>   *  @decrypted: Decrypted SKB
+> > > > > > > > > >>   *  @slow_gro: state present at GRO time, slower prep=
+are step required
+> > > > > > > > > >> @@ -991,7 +993,7 @@ struct sk_buff {
+> > > > > > > > > >>  #if IS_ENABLED(CONFIG_IP_SCTP)
+> > > > > > > > > >>      __u8                    csum_not_inet:1;
+> > > > > > > > > >>  #endif
+> > > > > > > > > >> -
+> > > > > > > > > >> +    __u8                    devmem:1;
+> > > > > > > > > >>  #if defined(CONFIG_NET_SCHED) || defined(CONFIG_NET_X=
+GRESS)
+> > > > > > > > > >>      __u16                   tc_index;       /* traffi=
+c control index */
+> > > > > > > > > >>  #endif
+> > > > > > > > > >> @@ -1766,6 +1768,12 @@ static inline void skb_zcopy_do=
+wngrade_managed(struct sk_buff *skb)
+> > > > > > > > > >>              __skb_zcopy_downgrade_managed(skb);
+> > > > > > > > > >>  }
+> > > > > > > > > >>
+> > > > > > > > > >> +/* Return true if frags in this skb are not readable =
+by the host. */
+> > > > > > > > > >> +static inline bool skb_frags_not_readable(const struc=
+t sk_buff *skb)
+> > > > > > > > > >> +{
+> > > > > > > > > >> +    return skb->devmem;
+> > > > > > > > > >
+> > > > > > > > > > bikeshedding: should we also rename 'devmem' sk_buff fl=
+ag to 'not_readable'?
+> > > > > > > > > > It better communicates the fact that the stack shouldn'=
+t dereference the
+> > > > > > > > > > frags (because it has 'devmem' fragments or for some ot=
+her potential
+> > > > > > > > > > future reason).
+> > > > > > > > >
+> > > > > > > > > +1.
+> > > > > > > > >
+> > > > > > > > > Also, the flag on the skb is an optimization - a high lev=
+el signal that
+> > > > > > > > > one or more frags is in unreadable memory. There is no re=
+quirement that
+> > > > > > > > > all of the frags are in the same memory type.
+> > > > > > >
+> > > > > > > David: maybe there should be such a requirement (that they al=
+l are
+> > > > > > > unreadable)? Might be easier to support initially; we can rel=
+ax later
+> > > > > > > on.
+> > > > > > >
+> > > > > >
+> > > > > > Currently devmem =3D=3D not_readable, and the restriction is th=
+at all the
+> > > > > > frags in the same skb must be either all readable or all unread=
+able
+> > > > > > (all devmem or all non-devmem).
+> > > > > >
+> > > > > > > > The flag indicates that the skb contains all devmem dma-buf=
+ memory
+> > > > > > > > specifically, not generic 'not_readable' frags as the comme=
+nt says:
+> > > > > > > >
+> > > > > > > > + *     @devmem: indicates that all the fragments in this s=
+kb are backed by
+> > > > > > > > + *             device memory.
+> > > > > > > >
+> > > > > > > > The reason it's not a generic 'not_readable' flag is becaus=
+e handing
+> > > > > > > > off a generic not_readable skb to the userspace is semantic=
+ally not
+> > > > > > > > what we're doing. recvmsg() is augmented in this patch seri=
+es to
+> > > > > > > > return a devmem skb to the user via a cmsg_devmem struct wh=
+ich refers
+> > > > > > > > specifically to the memory in the dma-buf. recvmsg() in thi=
+s patch
+> > > > > > > > series is not augmented to give any 'not_readable' skb to t=
+he
+> > > > > > > > userspace.
+> > > > > > > >
+> > > > > > > > IMHO skb->devmem + an skb_frags_not_readable() as implement=
+ed is
+> > > > > > > > correct. If a new type of unreadable skbs are introduced to=
+ the stack,
+> > > > > > > > I imagine the stack would implement:
+> > > > > > > >
+> > > > > > > > 1. new header flag: skb->newmem
+> > > > > > > > 2.
+> > > > > > > >
+> > > > > > > > static inline bool skb_frags_not_readable(const struct skb_=
+buff *skb)
+> > > > > > > > {
+> > > > > > > >     return skb->devmem || skb->newmem;
+> > > > > > > > }
+> > > > > > > >
+> > > > > > > > 3. tcp_recvmsg_devmem() would handle skb->devmem skbs is in=
+ this patch
+> > > > > > > > series, but tcp_recvmsg_newmem() would handle skb->newmem s=
+kbs.
+> > > > > > >
+> > > > > > > You copy it to the userspace in a special way because your fr=
+ags
+> > > > > > > are page_is_page_pool_iov(). I agree with David, the skb bit =
+is
+> > > > > > > just and optimization.
+> > > > > > >
+> > > > > > > For most of the core stack, it doesn't matter why your skb is=
+ not
+> > > > > > > readable. For a few places where it matters (recvmsg?), you c=
+an
+> > > > > > > double-check your frags (all or some) with page_is_page_pool_=
+iov.
+> > > > > > >
+> > > > > >
+> > > > > > I see, we can do that then. I.e. make the header flag 'not_read=
+able'
+> > > > > > and check the frags to decide to delegate to tcp_recvmsg_devmem=
+() or
+> > > > > > something else. We can even assume not_readable =3D=3D devmem b=
+ecause
+> > > > > > currently devmem is the only type of unreadable frag currently.
+> > > > > >
+> > > > > > > Unrelated: we probably need socket to dmabuf association as w=
+ell (via
+> > > > > > > netlink or something).
+> > > > > >
+> > > > > > Not sure this is possible. The dma-buf is bound to the rx-queue=
+, and
+> > > > > > any packets that land on that rx-queue are bound to that dma-bu=
+f,
+> > > > > > regardless of which socket that packet belongs to. So the assoc=
+iation
+> > > > > > IMO must be rx-queue to dma-buf, not socket to dma-buf.
+> > > > >
+> > > > > But there is still always 1 dmabuf to 1 socket association (on rx=
+), right?
+> > > > > Because otherwise, there is no way currently to tell, at recvmsg,=
+ which
+> > > > > dmabuf the received token belongs to.
+> > > > >
+> > > >
+> > > > Yes, but this 1 dma-buf to 1 socket association happens because the
+> > > > user binds the dma-buf to an rx-queue and configures flow steering =
+of
+> > > > the socket to that rx-queue.
+> > >
+> > > It's still fixed and won't change during the socket lifetime, right?
+> > > And the socket has to know this association; otherwise those tokens
+> > > are useless since they don't carry anything to identify the dmabuf.
+> > >
+> > > I think my other issue with MSG_SOCK_DEVMEM being on recvmsg is that
+> > > it somehow implies that I have an option of passing or not passing it
+> > > for an individual system call.
+> > > If we know that we're going to use dmabuf with the socket, maybe we
+> > > should move this flag to the socket() syscall?
+> > >
+> > > fd =3D socket(AF_INET6, SOCK_STREAM, SOCK_DEVMEM);
+> > >
+> > > ?
+> >=20
+> > I think it should then be a setsockopt called before any data is
+> > exchanged, with no change of modifying mode later. We generally use
+> > setsockopts for the mode of a socket. This use of the protocol field
+> > in socket() for setting a mode would be novel. Also, it might miss
+> > passively opened connections, or be overly restrictive: one approach
+> > for all accepted child sockets.
+>=20
+> I was thinking this is similar to SOCK_CLOEXEC or SOCK_NONBLOCK? There
+> are plenty of bits we can grab. But setsockopt works as well!
 
-Suggested-by: Yosry Ahmed <yosryahmed@google.com>
-Signed-off-by: Nhat Pham <nphamcs@gmail.com>
----
- mm/zswap.c | 22 +++++++++-------------
- 1 file changed, 9 insertions(+), 13 deletions(-)
+To follow up: if we have this flag on a socket, not on a per-message
+basis, can we also use recvmsg for the recycling part maybe?
 
-diff --git a/mm/zswap.c b/mm/zswap.c
-index 2654b0d214cc..f1998dbd3519 100644
---- a/mm/zswap.c
-+++ b/mm/zswap.c
-@@ -174,7 +174,6 @@ struct zswap_pool {
- 	struct hlist_node node;
- 	char tfm_name[CRYPTO_MAX_ALG_NAME];
- 	struct list_lru list_lru;
--	spinlock_t next_shrink_lock;
- 	struct mem_cgroup *next_shrink;
- };
- 
-@@ -292,7 +291,7 @@ static void zswap_update_total_size(void)
- }
- 
- /* should be called under RCU */
--static inline struct mem_cgroup *get_mem_cgroup_from_entry(struct zswap_entry *entry)
-+static inline struct mem_cgroup *mem_cgroup_from_entry(struct zswap_entry *entry)
- {
- 	return entry->objcg ? obj_cgroup_memcg(entry->objcg) : NULL;
- }
-@@ -309,11 +308,9 @@ void zswap_memcg_offline_cleanup(struct mem_cgroup *memcg)
- 	/* lock out zswap pools list modification */
- 	spin_lock(&zswap_pools_lock);
- 	list_for_each_entry(pool, &zswap_pools, list) {
--		spin_lock(&pool->next_shrink_lock);
- 		if (pool->next_shrink == memcg)
- 			pool->next_shrink =
- 				mem_cgroup_iter(NULL, pool->next_shrink, NULL, true);
--		spin_unlock(&pool->next_shrink_lock);
- 	}
- 	spin_unlock(&zswap_pools_lock);
- }
-@@ -360,7 +357,7 @@ static void zswap_lru_add(struct list_lru *list_lru, struct zswap_entry *entry)
- 	 * Similar reasoning holds for list_lru_del() and list_lru_putback().
- 	 */
- 	rcu_read_lock();
--	memcg = get_mem_cgroup_from_entry(entry);
-+	memcg = mem_cgroup_from_entry(entry);
- 	/* will always succeed */
- 	list_lru_add(list_lru, &entry->lru, nid, memcg);
- 	rcu_read_unlock();
-@@ -372,7 +369,7 @@ static void zswap_lru_del(struct list_lru *list_lru, struct zswap_entry *entry)
- 	struct mem_cgroup *memcg;
- 
- 	rcu_read_lock();
--	memcg = get_mem_cgroup_from_entry(entry);
-+	memcg = mem_cgroup_from_entry(entry);
- 	/* will always succeed */
- 	list_lru_del(list_lru, &entry->lru, nid, memcg);
- 	rcu_read_unlock();
-@@ -386,7 +383,7 @@ static void zswap_lru_putback(struct list_lru *list_lru,
- 	struct mem_cgroup *memcg;
- 
- 	rcu_read_lock();
--	memcg = get_mem_cgroup_from_entry(entry);
-+	memcg = mem_cgroup_from_entry(entry);
- 	spin_lock(lock);
- 	/* we cannot use list_lru_add here, because it increments node's lru count */
- 	list_lru_putback(list_lru, &entry->lru, nid, memcg);
-@@ -806,13 +803,13 @@ static void shrink_worker(struct work_struct *w)
- 
- 	/* global reclaim will select cgroup in a round-robin fashion. */
- 	do {
--		spin_lock(&pool->next_shrink_lock);
-+		spin_lock(&zswap_pools_lock);
- 		memcg = pool->next_shrink =
- 			mem_cgroup_iter(NULL, pool->next_shrink, NULL, true);
- 
- 		/* full round trip */
- 		if (!memcg) {
--			spin_unlock(&pool->next_shrink_lock);
-+			spin_unlock(&zswap_pools_lock);
- 			if (++failures == MAX_RECLAIM_RETRIES)
- 				break;
- 
-@@ -824,7 +821,7 @@ static void shrink_worker(struct work_struct *w)
- 		 * original reference is dropped by the zswap offlining callback.
- 		 */
- 		css_get(&memcg->css);
--		spin_unlock(&pool->next_shrink_lock);
-+		spin_unlock(&zswap_pools_lock);
- 
- 		ret = shrink_memcg(memcg);
- 		mem_cgroup_put(memcg);
-@@ -898,7 +895,6 @@ static struct zswap_pool *zswap_pool_create(char *type, char *compressor)
- 	INIT_WORK(&pool->shrink_work, shrink_worker);
- 
- 	zswap_pool_debug("created", pool);
--	spin_lock_init(&pool->next_shrink_lock);
- 
- 	return pool;
- 
-@@ -963,10 +959,10 @@ static void zswap_pool_destroy(struct zswap_pool *pool)
- 	free_percpu(pool->acomp_ctx);
- 	list_lru_destroy(&pool->list_lru);
- 
--	spin_lock(&pool->next_shrink_lock);
-+	spin_lock(&zswap_pools_lock);
- 	mem_cgroup_put(pool->next_shrink);
- 	pool->next_shrink = NULL;
--	spin_unlock(&pool->next_shrink_lock);
-+	spin_unlock(&zswap_pools_lock);
- 
- 	for (i = 0; i < ZSWAP_NR_ZPOOLS; i++)
- 		zpool_destroy_pool(pool->zpools[i]);
--- 
-2.34.1
+while (true) {
+	memset(msg, 0, ...);
+
+	/* receive the tokens */
+	ret =3D recvmsg(fd, &msg, 0);
+
+	/* recycle the tokens from the above recvmsg() */
+	ret =3D recvmsg(fd, &msg, MSG_RECYCLE);
+}
+
+recvmsg + MSG_RECYCLE can parse the same format that regular recvmsg
+exports (SO_DEVMEM_OFFSET) and we can also add extra cmsg option
+to recycle a range.
+
+Will this be more straightforward than a setsockopt(SO_DEVMEM_DONTNEED)?
+Or is it more confusing?
