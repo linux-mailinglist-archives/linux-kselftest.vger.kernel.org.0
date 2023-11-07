@@ -2,59 +2,64 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B37E07E41B4
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Nov 2023 15:21:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D4147E41EA
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Nov 2023 15:36:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233904AbjKGOVL (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Nov 2023 09:21:11 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55644 "EHLO
+        id S231774AbjKGOgI (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Nov 2023 09:36:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229643AbjKGOVK (ORCPT
+        with ESMTP id S229789AbjKGOgH (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Nov 2023 09:21:10 -0500
+        Tue, 7 Nov 2023 09:36:07 -0500
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52925B7;
-        Tue,  7 Nov 2023 06:21:07 -0800 (PST)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F933C433C7;
-        Tue,  7 Nov 2023 14:21:06 +0000 (UTC)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 769C9101;
+        Tue,  7 Nov 2023 06:36:05 -0800 (PST)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87E2EC433C7;
+        Tue,  7 Nov 2023 14:36:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1699366866;
-        bh=oL93HJzpAT5M6ibMccnDW34R4kx/Q/0Z2ASQPR81UGo=;
+        s=k20201202; t=1699367765;
+        bh=Wo+OkR2SJcTjqFCSIGnmQqSy64cw3QrZuHtNre/B8bI=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RmpbhgvsWefzf51B9DDxwQKN9U/TNApUnAAHDRZ1yAUaDae4gtLu1JrQpX3Yjudep
-         So0E0IeedKaPD4owcK1Wb3a3UxVv/LpB+cHTCGo2OyJed1HOlT1yUMfLC4Zyry7BcF
-         1BpdHY8dEApXz1nRreh8O3YAMQLOW2i6kwr9UTqvEjarCyHbPF+Z5wu8bXZ9VgmDrv
-         AL6Tjjb4BQ+rixW0FEyk5nBKvVTTW4Ksi0HD9gTxBBYp3fg70jS+2OgvJcYiVhn8nC
-         ywWpnNOu4FPHlu8NL/KgQVgS3h50PX3SiIbyUkmqQs7JT3SydR6IyA635+rlsXb2lt
-         N6NrIzobCPwCQ==
-Date:   Tue, 7 Nov 2023 14:21:04 +0000
+        b=tscldE+NLcdAAiT/hy775GjoAKr9qz5Bu31hJqKNOw0pBBJGCTEAU4ZKRpFSh5/Fa
+         WfdtPQE4Ghpt9hguNoCBCtTgizgLOeg5e8u9TpSDxrXGiCTX/lXzhzBBvScOt+FwJ+
+         S73pX/e/42xjy3fAm6tBy7AYbreeF4SPI/H+EFxuw0ZfJ75kxFs/li8S8pNw7MVIzX
+         fgg5EbE6QWg/SlFTKOqMm8CUDokKrArJSDLKoO3o3xiHVbc7Pbx9JOQ+ekqWAqdccp
+         pQFWBrl1ZrIZ5CTOLggpLWvgnvKZcptbbUHV2enzuQ1hDz+1N14bsAE0C3UcLTdXZd
+         1TgCxjCH7IaAA==
+Date:   Tue, 7 Nov 2023 14:36:01 +0000
 From:   Mark Brown <broonie@kernel.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     linux-stable <stable@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        lkft-triage@lists.linaro.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>
-Subject: Re: selftests: arm64: fp-stress: Unable to handle kernel paging
- request at virtual address
-Message-ID: <ZUpH0FNTYAl9Z+L6@finisterre.sirena.org.uk>
-References: <CA+G9fYsrLTbFkz-LJmAY9efDyEr-8bHcxivBDPToPjBxjStoDg@mail.gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado 
+        <nfraprado@collabora.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Aishwarya TCV <aishwarya.tcv@arm.com>,
+        kernelci@lists.linux.dev, kernel@collabora.com,
+        Guenter Roeck <groeck@chromium.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org,
+        Frank Rowand <frowand.list@gmail.com>,
+        Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH v3 3/3] kselftest: Add new test for detecting unprobed
+ Devicetree devices
+Message-ID: <ZUpLUd+Q0MyYC6io@finisterre.sirena.org.uk>
+References: <20230828211424.2964562-1-nfraprado@collabora.com>
+ <20230828211424.2964562-4-nfraprado@collabora.com>
+ <e90cb52f-d55b-d3ba-3933-6cc7b43fcfbc@arm.com>
+ <CA+G9fYsbq28w7m-sf6LhMscXHdPs0cGXU7kK6YzjKdUFKuQ+6A@mail.gmail.com>
+ <e72e144a-c617-4a9e-adfb-e25ddabeb4c7@sirena.org.uk>
+ <CAL_JsqL-3O6omPf4HcPFctgid+br04QW5p81qDx0CPMqh_eXTg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="fLQGTjRKWSVU8dDo"
+        protocol="application/pgp-signature"; boundary="FfS63bym1dSwnNAk"
 Content-Disposition: inline
-In-Reply-To: <CA+G9fYsrLTbFkz-LJmAY9efDyEr-8bHcxivBDPToPjBxjStoDg@mail.gmail.com>
+In-Reply-To: <CAL_JsqL-3O6omPf4HcPFctgid+br04QW5p81qDx0CPMqh_eXTg@mail.gmail.com>
 X-Cookie: Slow day.  Practice crawling.
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -62,68 +67,33 @@ List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
 
---fLQGTjRKWSVU8dDo
+--FfS63bym1dSwnNAk
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Tue, Nov 07, 2023 at 06:43:25PM +0530, Naresh Kamboju wrote:
+On Mon, Nov 06, 2023 at 11:09:44AM -0600, Rob Herring wrote:
 
-> # # SVE-VL-64-0: Expected
-> [3904000039044000390480003904c0003904000139044001390480013904c0013904000239044002390480023904c0023904000339044003390480033904c003]
-> <>
+> A simple solution would be instead of passing the source tree root to
+> dt-extract-compatibles, pass 'arch', 'drivers', and 'sound' instead.
+> There shouldn't be compatibles anywhere else.
 
-You've elided *lots* of error reports from the actual test which suggest
-that there is substantial memory corruption, it looks like tearing part
-way through loading or saving the values - the start of the vectors
-looks fine but at some point they get what looks like a related process'
-data, eg:
+This does seem like a reasonable quick fix that avoids the issue for
+now - nothing would stop someone implementing a more complete solution
+later.
 
-# # SVE-VL-64-0: 	Expected [3904000039044000390480003904c0003904000139044001390480013904c0013904000239044002390480023904c0023904000339044003390480033904c003]
-# # SVE-VL-64-0: 	Got      [3904000039044000390480003904c000390480003904c00039040001390440013904000139044001390480013904c001390480013904c0013904000239044002]
-
-This only appears to affect SVE and SME, I didn't spot any FPSIMD
-corruption but then that is the smallest case (and I didn't notice any
-VL 16 cases either).  It looks like the corruption is on the first thing
-we check each time (either register 0 or the highest ZA.H vector for
-ZA), all the values do look lke they were plausibly generated by
-fp-stress test programs.
-
-Then we get what looks like memory corruption:
-
-> # # SVE-VL-256-<1>[   88.160313] Unable to handle kernel paging
-> request at virtual address 00550f0344550f02
-
-> <4>[   88.195706] Call trace:
-> <4>[ 88.196098] percpu_ref_get_many
-> (include/linux/percpu-refcount.h:174 (discriminator 2)
-> include/linux/percpu-refcount.h:204 (discriminator 2))
-> <4>[ 88.196815] refill_obj_stock (mm/memcontrol.c:3339 (discriminator 2))
-> <4>[ 88.197367] obj_cgroup_uncharge (mm/memcontrol.c:3406)
-> <4>[ 88.197835] kmem_cache_free (include/linux/mm.h:1630
-> include/linux/mm.h:1849 include/linux/mm.h:1859 mm/slab.h:208
-> mm/slab.h:572 mm/slub.c:3804 mm/slub.c:3831)
-> <4>[ 88.198407] put_pid.part.0 (kernel/pid.c:118)
-> <4>[ 88.198870] delayed_put_pid (kernel/pid.c:127)
-> <4>[ 88.200527] rcu_core (arch/arm64/include/asm/preempt.h:13
-> (discriminator 1) kernel/rcu/tree.c:2146 (discriminator 1)
-> kernel/rcu/tree.c:2403 (discriminator 1))
-
-This all seems very surprising, especially given that AFAICT there are
-no changes in stable-6.6-rc for arch/arm64.
-
---fLQGTjRKWSVU8dDo
+--FfS63bym1dSwnNAk
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVKR88ACgkQJNaLcl1U
-h9BNwQf/RZc+/koVFJe4V6Im9MpkZRwMTrrLKvXMX/e0ddQK8TUhhdLYg+sdxcsh
-6LaknBCRYCvvpPvPK3qvh4bcak+WuoUSzYe3gXvtNT/zDMvMPSFjqqIhB3XKG8nQ
-skzAdnXEBDi+BZdrc2CGCF8+jpnK8tDhwUneEAL0Y9csAc/wAtM0CeBnnFrotxxI
-DMFKe+GMi3fGHqSFYMCHjJP1yE9xRVD7mmN5V3cMgO4RWlJPDOaqdrAVyE5Ts7+y
-y07DZET2Gec7S/rGV62LSv60jQgPE9zrxFzS1NlQ+27y+hekZx/ACNotUKB4MvLA
-t/QZDDp31um63zx1Padboe0IxB1mTg==
-=y8Tl
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVKS1EACgkQJNaLcl1U
+h9D+Bgf9HspkikyOl/hR8HPz+Oo8/wKTHACheiwhnT4RkfFcAbXX+kDJBjHC3b8R
+F/dsfrL9G/LEvf1MoPIqr7LxmrGDUeVz/oirAlIsoJoRYJPPTwKE6zwH9S2AVU9x
+1GFd84WdvTRSHRvPvxFe/EnyxfbL4InoEiG0c3qiI2pXze3EkdW5X/JSZ1hhvUsX
+kqMN/TltmRFQAbDrIklsnkpU17Fae9Mi6tNe1xtcOlRfGlJicuOwReFSkanW50nH
+ki2kXTbaLboOHmHXi3lSmMj4tMpHCtgfi3pVNsgwhOR9k2yW4/MrEGtQ9dSnKcUP
+V5hhqjVNMF3TOOPlbEuEbTTjZMpULw==
+=ALf9
 -----END PGP SIGNATURE-----
 
---fLQGTjRKWSVU8dDo--
+--FfS63bym1dSwnNAk--
