@@ -2,97 +2,77 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 000317E468C
-	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Nov 2023 18:10:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 65DF17E4693
+	for <lists+linux-kselftest@lfdr.de>; Tue,  7 Nov 2023 18:11:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234130AbjKGRKX (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Nov 2023 12:10:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49416 "EHLO
+        id S234538AbjKGRL5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Nov 2023 12:11:57 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231201AbjKGRKW (ORCPT
+        with ESMTP id S229458AbjKGRL5 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Nov 2023 12:10:22 -0500
-Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C85DF
-        for <linux-kselftest@vger.kernel.org>; Tue,  7 Nov 2023 09:10:20 -0800 (PST)
-Received: by mail-ua1-x92e.google.com with SMTP id a1e0cc1a2514c-7afc13d58c6so2093113241.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 07 Nov 2023 09:10:20 -0800 (PST)
+        Tue, 7 Nov 2023 12:11:57 -0500
+Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBA02101
+        for <linux-kselftest@vger.kernel.org>; Tue,  7 Nov 2023 09:11:54 -0800 (PST)
+Received: by mail-vk1-xa31.google.com with SMTP id 71dfb90a1353d-49dc95be8c3so2331699e0c.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Nov 2023 09:11:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1699377019; x=1699981819; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1699377113; x=1699981913; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=5B3xt+TAu4pFRHAyTC3xHUtVUIvM518CKJZsirqrIvg=;
-        b=FDre5BUWMbluRkS5PkIPLL+JrLHjIUeMrJFUVMo6z/CCVU30QDCrUw7xrhA7ZPzZut
-         8LxyAUEVihd9pKqBzTCVPDCt+G7SDUc3zk2p2QqkWGpZ1ycQiP7uy8uSF27sPOJ0uQtp
-         1Jzb/woBSUrOmw/5LJuKHXCa+Vj5nfqd/axC3MXeLII+Zp3NmUu9Kalig4BclxvDwa6T
-         SYJ3f+Y2J1uusbLuzbKSEA1Yiy3VORp5ynBPursCqI/ru/uHQn7qFTWgxo9poaE0ox3n
-         N8ShfbHGxDzySfe11U75moThrad619mb1HQ/J3kccwyVVmgxuwd2kYlnrkALmQDoeHBC
-         8Qlg==
+        bh=4QENmxdgfuk+x+B3cGimHDh/NlILJUpwyA1oIPFw8pg=;
+        b=ZF/q/74rYgymTn94qdOR5t5PMX/YoJBM33OSzL2fawFedIGcBy5uvBsNNG1NxKijX4
+         ubtzqbvphnqMiZGdxpvfYEFzxTkra1wichVO84vqETNsRTPnRu/DUwJ7bM+ya1rDCgxR
+         7RYvhZAkl+9xU9HG6uLceVzX/x6S6ByGkr3dWzkZWsGG9U8l/kRfbMD6eX8w9re99d1M
+         Kh6WmKvM2cYimvtnHLDRpwtAi7EquGKnJa1aGUUEyAyRQ31sJeIdUU+SMj0Vd8cJs9c0
+         gO1JyVZBhe10GxSAVzwhMzWQ9sftEL0mB7vqgDFGW0S0xJX+mTXKeSBMAMja2JeNfAOi
+         cdcQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699377019; x=1699981819;
+        d=1e100.net; s=20230601; t=1699377113; x=1699981913;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=5B3xt+TAu4pFRHAyTC3xHUtVUIvM518CKJZsirqrIvg=;
-        b=dMV0QVGxDlBecetbkYD08XWuBQm/a/nE5CJxjK3YSQYtGok2VD8I7qIVrp/vVV8R9g
-         lVGWiYfIiupJt5TQTwjjGRPwGGN10kjV+wrkYjVcrZK7hIH5BsDxgUiFDBtSwDgmkwX3
-         rv7pmcGI+e3C4p4oiV0XkcbBpFtgbCTg7lPHf1MPa5y6hqIjs7s7FZp6MC0xDFrg2+kh
-         uFPyNqEyfKafNZJiA8i5zN4TrXwBYQySZ7OGgm6E2wagE0jDarpgTr9rz2+Xa37chdR3
-         m8Frz1QGW91XXzRP/ADhQUQcxdThi7x4fV6BM1Awna0MXDF09rC+jxAaXXZ13vba8e2t
-         +wUg==
-X-Gm-Message-State: AOJu0Yxajz4w8DeW/ubL37Sy1ldSLAhswRHSAiNLwxqpj15TfkfzFNtu
-        rtzLcLGNQMUQ6nVpyMbiBOKUK/S9aGCgnJnVAtLjJQ==
-X-Google-Smtp-Source: AGHT+IHHLjLZNx461l95CH5j88c0qIdP29a5XEHIywb0uRZjCTZu8h74GPpAYdKJVoKlL7K3lvtZ3zUex753wv62pcc=
-X-Received: by 2002:a05:6102:20cc:b0:45f:8ceb:ce13 with SMTP id
- i12-20020a05610220cc00b0045f8cebce13mr1344535vsr.5.1699377019563; Tue, 07 Nov
- 2023 09:10:19 -0800 (PST)
+        bh=4QENmxdgfuk+x+B3cGimHDh/NlILJUpwyA1oIPFw8pg=;
+        b=MpldDmxyRi5+S+mI4gYSp3GrMe+0krafXeCZ4ErxLK5KBDGjCLgF/kZH0Me8OhMgeB
+         ymvGYOxYa8ooL/WiEGHO8j+kTfT0H4To6GbXmhX2sRv9A9ctRVuGLwQXAaVj6zng+iWk
+         y4FWiSE/CfBegWiuvCPl+eKNCVQ6n6TDIqUMdz9N9g0prjTpyiCf7rDT/3mhJrbdxInl
+         uVX/RPu/xzx91kk7cbrooki7DU5cMZRb2oOyRF69/Jp92uHdzYVig5Rs6wf7A584IXho
+         xcuTC2d1yG8OGXWjNnYPBGWkbE++s07PZQk4RpwJTKhnnbYd1CQMaGE2GI1Zi9m3ESHi
+         Bm3w==
+X-Gm-Message-State: AOJu0YxoBKL9oV6BX3hgUopE989O2pbBOfRb4QZ6iaGV7GnQGiGjM7r9
+        AC6MCWl0tY/hiEouHk1SNhoSMapxcGfTGIsFgug8LvMc5DXbqSKsleE=
+X-Google-Smtp-Source: AGHT+IEJNvdPeBUp+NJYfjA3rf7NwnCO74+6cg7WigXZidT4CAsxPzLequLqBpsFozlD42ASbmJtbY1WRA0sjdtFlvk=
+X-Received: by 2002:a1f:b201:0:b0:493:3491:ce89 with SMTP id
+ b1-20020a1fb201000000b004933491ce89mr21830541vkf.14.1699377113412; Tue, 07
+ Nov 2023 09:11:53 -0800 (PST)
 MIME-Version: 1.0
-References: <CA+G9fYsrLTbFkz-LJmAY9efDyEr-8bHcxivBDPToPjBxjStoDg@mail.gmail.com>
- <ZUpH0FNTYAl9Z+L6@finisterre.sirena.org.uk> <CA+G9fYta5cUpFArGfON3R+HUGxJRyEsc9zdTwwk5Un+wHqLN8g@mail.gmail.com>
- <ZUpgZ65SYqKVeQoo@finisterre.sirena.org.uk>
-In-Reply-To: <ZUpgZ65SYqKVeQoo@finisterre.sirena.org.uk>
+References: <CA+G9fYuOpsQpwwM4CC13ayc2e_e0cTJTrQSOgy=OZOBs_6aGHg@mail.gmail.com>
+In-Reply-To: <CA+G9fYuOpsQpwwM4CC13ayc2e_e0cTJTrQSOgy=OZOBs_6aGHg@mail.gmail.com>
 From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 7 Nov 2023 22:40:07 +0530
-Message-ID: <CA+G9fYu=9qH+9f1bv0NqUTi-VTTzhBNUYiWjwSmrdDtuhAo69w@mail.gmail.com>
-Subject: Re: selftests: arm64: fp-stress: Unable to handle kernel paging
- request at virtual address
-To:     Mark Brown <broonie@kernel.org>
-Cc:     linux-stable <stable@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        lkft-triage@lists.linaro.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
+Date:   Tue, 7 Nov 2023 22:41:42 +0530
+Message-ID: <CA+G9fYsOQbdJJ=pAezrfqRT3wrwXyo6TX=rbCRgj2BcYTOdtdw@mail.gmail.com>
+Subject: Re: selftests: arm64: za-fork - ZA state invalid in child
+To:     "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, lkft-triage@lists.linaro.org
+Cc:     Mark Brown <broonie@kernel.org>,
         Catalin Marinas <catalin.marinas@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sasha Levin <sashal@kernel.org>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Shuah Khan <shuah@kernel.org>,
         =?UTF-8?B?QWxleCBCZW5uw6ll?= <alex.bennee@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Hi Mark,
+On Tue, 7 Nov 2023 at 14:39, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+>
+> Following selftests: arm64: za-fork test failures noticed on qemu-arm64.
+> But the same test passed on FVP and Juno-r2.
+>
+> Are we missing something on qemu-arm64 ?
+> qemu-system-arm installed at version: 8.1
 
-On Tue, 7 Nov 2023 at 21:37, Mark Brown <broonie@kernel.org> wrote:
->
-> On Tue, Nov 07, 2023 at 08:14:59PM +0530, Naresh Kamboju wrote:
-> > On Tue, 7 Nov 2023 at 19:51, Mark Brown <broonie@kernel.org> wrote:
->
-> > > This all seems very surprising, especially given that AFAICT there are
-> > > no changes in stable-6.6-rc for arch/arm64.
->
-> > We do not see on the mainline and next.
-> > Is this reported problems on stable-rc 6.6 and 6.5 are due to running
-> > latest kselftest on older kernels ?
->
-> There's also no backports I can see in the selftests (at all, never mind
-> just arm64).  There were a small number of selftest changes for arm64
-> went in during the merge window but nothing that looks super relevant.
-
-The Qemu version got updated from v8.0 to v8.1 and started getting these
-test failures.
+The Qemu version got updated from v8.0 to v8.1 and this test failed.
 
 - Naresh
