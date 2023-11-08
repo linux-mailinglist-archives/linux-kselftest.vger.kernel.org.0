@@ -2,407 +2,205 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 437B67E5DC5
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Nov 2023 20:01:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 309FF7E5ED3
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Nov 2023 20:46:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233434AbjKHTA7 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Nov 2023 14:00:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56748 "EHLO
+        id S229506AbjKHTqg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Nov 2023 14:46:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232807AbjKHTAg (ORCPT
+        with ESMTP id S229566AbjKHTqf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Nov 2023 14:00:36 -0500
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25BDD2125;
-        Wed,  8 Nov 2023 11:00:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699470030; x=1731006030;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=WncAUid6KO1Ivbzdf2tCq4CfgWTAb6KTypc2P94NIhE=;
-  b=KDc9GfIymhcVTqwrY9TVJlJj9eScoUCT6lrh6K35oBCrWidV9QyypQJj
-   s1Kkiha9B3U9kh2dxasEK1vU/Z6tWxFUoThAs6SLr05XHqHJ4mBUiYK9i
-   Ey0q3LsRWNSFewdpse/O6kEeG5mhOw0wZizByZVRJTBAx/MdvMJea523b
-   fOnDfQb7jtSndVgeXwmpK9g6TiWZvQm0Nyh1xwSGcuypWsiA2xZo/+mva
-   8cc4nSiZ4J9jc7BQnd+7akMS0hOh+9GldHFsWuzmUe1Bj+w/gtV9hZn9I
-   EKa1PTjJsSDP/NAEtuuH9abrZ+m5uJon1kODytrvhHIp58W/mXFWl8ce1
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10888"; a="8486478"
-X-IronPort-AV: E=Sophos;i="6.03,287,1694761200"; 
-   d="scan'208";a="8486478"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2023 11:00:29 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.03,287,1694761200"; 
-   d="scan'208";a="10892522"
-Received: from unknown (HELO fred..) ([172.25.112.68])
-  by orviesa001.jf.intel.com with ESMTP; 08 Nov 2023 11:00:28 -0800
-From:   Xin Li <xin3.li@intel.com>
-To:     kvm@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Cc:     seanjc@google.com, pbonzini@redhat.com, corbet@lwn.net,
-        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, vkuznets@redhat.com, peterz@infradead.org,
-        ravi.v.shankar@intel.com
-Subject: [PATCH v1 23/23] KVM: selftests: Add fred exception tests
-Date:   Wed,  8 Nov 2023 10:30:03 -0800
-Message-ID: <20231108183003.5981-24-xin3.li@intel.com>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231108183003.5981-1-xin3.li@intel.com>
-References: <20231108183003.5981-1-xin3.li@intel.com>
+        Wed, 8 Nov 2023 14:46:35 -0500
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EA442118
+        for <linux-kselftest@vger.kernel.org>; Wed,  8 Nov 2023 11:46:33 -0800 (PST)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13C7BC4339A
+        for <linux-kselftest@vger.kernel.org>; Wed,  8 Nov 2023 19:46:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1699472793;
+        bh=YINR+xn2kpfl6uzkjS9RJbv6oX776g7fQYmfKSYDiKQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=jScmJUFauJ90F24mz5IExJRJYcceWrAzg85YbZCIOjA1APtE9w1T73H/BqkPeKOE8
+         JGHfhYWtf2/hFv1cVRiGRlw4ETNcDN+NOsdt6z31SdrF5hQu+UJJ1i8grwzAgcduS+
+         Cex7bisT55EAOhIggke5dNA/DQa5NgvnCd0jN4cBkiQSzEUPoeWTAMEZ9WBpNP6RLC
+         QEc6iqkNkKevLVqRwqtKoq+KBdBxOThrIQb+q8UHYHWNNrwkHsOTZABguFL1ukmSRg
+         BtGQKhWSok+zVcwfVImU+bilOTo5YxU2F1GzRUguwuNLyTdpMxrcOqF6mY6GvLKQ3l
+         XnhEo1Dc/ccfA==
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-2809414efa9so33874a91.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 08 Nov 2023 11:46:33 -0800 (PST)
+X-Gm-Message-State: AOJu0YxDoi2ne5us0WIktuK0qSk57T7ukewVrFlBPJT4WHSMcYHa0S5p
+        PEQfnhCvW7PO/vNGHKRffCeGQn6dV3DAPk5GRhEjZA==
+X-Google-Smtp-Source: AGHT+IFM+aRvsYeowp3+mfT2sb8EaWBpV+G26oNb9+NL57CiC2qZwMd08rgn/3taWt8x9hi+rhSfSDQvjz9bUAm6qjM=
+X-Received: by 2002:a17:90b:38c1:b0:280:48d4:1eb3 with SMTP id
+ nn1-20020a17090b38c100b0028048d41eb3mr2919828pjb.8.1699472791978; Wed, 08 Nov
+ 2023 11:46:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20231106183159.3562879-1-nphamcs@gmail.com>
+In-Reply-To: <20231106183159.3562879-1-nphamcs@gmail.com>
+From:   Chris Li <chrisl@kernel.org>
+Date:   Wed, 8 Nov 2023 11:46:20 -0800
+X-Gmail-Original-Message-ID: <CAF8kJuMsXUm9=kiL8qPNVfYPzfyq-JWYSH3KraZadjF+myW-2A@mail.gmail.com>
+Message-ID: <CAF8kJuMsXUm9=kiL8qPNVfYPzfyq-JWYSH3KraZadjF+myW-2A@mail.gmail.com>
+Subject: Re: [PATCH v5 0/6] workload-specific and memory pressure-driven zswap writeback
+To:     Nhat Pham <nphamcs@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Domenico Cerasuolo <cerasuolodomenico@gmail.com>,
+        Yosry Ahmed <yosryahmed@google.com>,
+        Seth Jennings <sjenning@redhat.com>,
+        Dan Streetman <ddstreet@ieee.org>,
+        Vitaly Wool <vitaly.wool@konsulko.com>, mhocko@kernel.org,
+        roman.gushchin@linux.dev, Shakeel Butt <shakeelb@google.com>,
+        muchun.song@linux.dev, linux-mm <linux-mm@kvack.org>,
+        kernel-team@meta.com, LKML <linux-kernel@vger.kernel.org>,
+        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, shuah@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-From: Shan Kang <shan.kang@intel.com>
+Hi Nhat,
 
-Add tests for FRED event data and VMX nested-exception.
+Sorry for being late to the party. I want to take a look at your patches se=
+ries.
+However I wasn't able to "git am" your patches series cleanly on current
+mm-stable, mm-unstable or linux tip.
 
-FRED is designed to save a complete event context in its stack frame,
-e.g., FRED saves the faulting linear address of a #PF into a 64-bit
-event data field defined in FRED stack frame.  As such, FRED VMX adds
-event data handling during VMX transitions.
+$ git am patches/v5_20231106_nphamcs_workload_specific_and_memory_pressure_=
+driven_zswap_writeback.mbx
+Applying: list_lru: allows explicit memcg and NUMA node selection
+Applying: memcontrol: allows mem_cgroup_iter() to check for onlineness
+Applying: zswap: make shrinking memcg-aware (fix)
+error: patch failed: mm/zswap.c:174
+error: mm/zswap.c: patch does not apply
+Patch failed at 0003 zswap: make shrinking memcg-aware (fix)
 
-FRED introduces event stack levels to dispatch an event handler onto a
-stack baesd on current stack level and stack levels defined in
-IA32_FRED_STKLVLS MSR for each exception vector.  VMX nested-exception
-support ensures a correct event stack level is chosen when a VM entry
-injects a nested exception, which is "regarded" as occurred in ring 0.
+What is the base of your patches? A git hash or a branch I can pull
+from would be
+nice.
 
-Signed-off-by: Shan Kang <shan.kang@intel.com>
-Co-developed-by: Xin Li <xin3.li@intel.com>
-Signed-off-by: Xin Li <xin3.li@intel.com>
----
- tools/testing/selftests/kvm/Makefile          |   1 +
- .../selftests/kvm/include/x86_64/processor.h  |  29 ++
- .../testing/selftests/kvm/x86_64/fred_test.c  | 262 ++++++++++++++++++
- 3 files changed, 292 insertions(+)
- create mode 100644 tools/testing/selftests/kvm/x86_64/fred_test.c
+Thanks
 
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index a5963ab9215b..06d16e59aa3c 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -76,6 +76,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/get_msr_index_features
- TEST_GEN_PROGS_x86_64 += x86_64/exit_on_emulation_failure_test
- TEST_GEN_PROGS_x86_64 += x86_64/fix_hypercall_test
- TEST_GEN_PROGS_x86_64 += x86_64/hwcr_msr_test
-+TEST_GEN_PROGS_x86_64 += x86_64/fred_test
- TEST_GEN_PROGS_x86_64 += x86_64/hyperv_clock
- TEST_GEN_PROGS_x86_64 += x86_64/hyperv_cpuid
- TEST_GEN_PROGS_x86_64 += x86_64/hyperv_evmcs
-diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-index 165d21fd1577..9c26705aa320 100644
---- a/tools/testing/selftests/kvm/include/x86_64/processor.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-@@ -1260,4 +1260,33 @@ void virt_map_level(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr,
- #define PFERR_GUEST_PAGE_MASK	BIT_ULL(PFERR_GUEST_PAGE_BIT)
- #define PFERR_IMPLICIT_ACCESS	BIT_ULL(PFERR_IMPLICIT_ACCESS_BIT)
- 
-+/*
-+ * FRED related data structures and functions
-+ */
-+struct fred_stack {
-+	u64 r15;
-+	u64 r14;
-+	u64 r13;
-+	u64 r12;
-+	u64 bp;
-+	u64 bx;
-+	u64 r11;
-+	u64 r10;
-+	u64 r9;
-+	u64 r8;
-+	u64 ax;
-+	u64 cx;
-+	u64 dx;
-+	u64 si;
-+	u64 di;
-+	u64 error_code;
-+	u64 ip;
-+	u64 csx;
-+	u64 flags;
-+	u64 sp;
-+	u64 ssx;
-+	u64 event_data;
-+	u64 reserved;
-+};
-+
- #endif /* SELFTEST_KVM_PROCESSOR_H */
-diff --git a/tools/testing/selftests/kvm/x86_64/fred_test.c b/tools/testing/selftests/kvm/x86_64/fred_test.c
-new file mode 100644
-index 000000000000..ed117db017cd
---- /dev/null
-+++ b/tools/testing/selftests/kvm/x86_64/fred_test.c
-@@ -0,0 +1,262 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * FRED nested exception tests
-+ *
-+ * Copyright (C) 2023, Intel, Inc.
-+ */
-+#define _GNU_SOURCE /* for program_invocation_short_name */
-+#include <fcntl.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/ioctl.h>
-+#include <asm/msr-index.h>
-+
-+#include "kvm_util.h"
-+#include "test_util.h"
-+#include "guest_modes.h"
-+#include "processor.h"
-+
-+#define FRED_STKLVL(v,l)		(_AT(unsigned long, l) << (2 * (v)))
-+#define FRED_CONFIG_ENTRYPOINT(p)	_AT(unsigned long, (p))
-+
-+/* This address is already mapped in guest page table. */
-+#define FRED_VALID_RSP			0x8000
-+
-+/*
-+ * The following addresses are not yet mapped in both EPT and guest page
-+ * tables at the beginning.  As a result, it causes an EPT violation VM
-+ * exit with an original guest #PF to access any of them for the first
-+ * time.
-+ *
-+ * Use these addresses as guest FRED RSP0 to generate nested #PFs to test
-+ * if event data are properly virtualized.
-+ */
-+static unsigned long fred_invalid_rsp[4] = {
-+	0x0,
-+	0xf0000000,
-+	0xe0000000,
-+	0xd0000000,
-+};
-+
-+extern char asm_user_wrmsr[];
-+extern char asm_user_ud[];
-+extern char asm_done_fault[];
-+
-+extern void asm_test_fault(int test);
-+
-+/*
-+ * user level code for triggering faults.
-+ */
-+asm(".pushsection .text\n"
-+    ".type asm_user_wrmsr, @function\n"
-+    ".align 4096\n"
-+    "asm_user_wrmsr:\n"
-+    /* Trigger a #GP */
-+    "wrmsr\n"
-+
-+    ".fill asm_user_ud - ., 1, 0xcc\n"
-+
-+    ".type asm_user_ud, @function\n"
-+    ".org asm_user_wrmsr + 16\n"
-+    "asm_user_ud:\n"
-+    /* Trigger a #UD */
-+    "ud2\n"
-+
-+    ".align 4096, 0xcc\n"
-+    ".popsection");
-+
-+/* Send current stack level and #PF address */
-+#define GUEST_SYNC_CSL_FA(__stage, __pf_address)		\
-+	GUEST_SYNC_ARGS(__stage, __pf_address, 0, 0, 0)
-+
-+void fred_entry_from_user(struct fred_stack *stack)
-+{
-+	u32 current_stack_level = rdmsr(MSR_IA32_FRED_CONFIG) & 0x3;
-+
-+	GUEST_SYNC_CSL_FA(current_stack_level, stack->event_data);
-+
-+	/* Do NOT go back to user level, continue the next test instead */
-+	stack->ssx = 0x18;
-+	stack->csx = 0x10;
-+	stack->ip = (u64)&asm_done_fault;
-+}
-+
-+void fred_entry_from_kernel(struct fred_stack *stack)
-+{
-+	TEST_FAIL("kernel events not allowed in FRED tests.");
-+}
-+
-+#define PUSH_REGS	\
-+	"push %rdi\n"	\
-+	"push %rsi\n"	\
-+	"push %rdx\n"	\
-+	"push %rcx\n"	\
-+	"push %rax\n"	\
-+	"push %r8\n"	\
-+	"push %r9\n"	\
-+	"push %r10\n"	\
-+	"push %r11\n"	\
-+	"push %rbx\n"	\
-+	"push %rbp\n"	\
-+	"push %r12\n"	\
-+	"push %r13\n"	\
-+	"push %r14\n"	\
-+	"push %r15\n"
-+
-+#define POP_REGS	\
-+	"pop %r15\n"	\
-+	"pop %r14\n"	\
-+	"pop %r13\n"	\
-+	"pop %r12\n"	\
-+	"pop %rbp\n"	\
-+	"pop %rbx\n"	\
-+	"pop %r11\n"	\
-+	"pop %r10\n"	\
-+	"pop %r9\n"	\
-+	"pop %r8\n"	\
-+	"pop %rax\n"	\
-+	"pop %rcx\n"	\
-+	"pop %rdx\n"	\
-+	"pop %rsi\n"	\
-+	"pop %rdi\n"
-+
-+/*
-+ * FRED entry points.
-+ */
-+asm(".pushsection .text\n"
-+    ".type asm_fred_entrypoint_user, @function\n"
-+    ".align 4096\n"
-+    "asm_fred_entrypoint_user:\n"
-+    "endbr64\n"
-+    PUSH_REGS
-+    "movq %rsp, %rdi\n"
-+    "call fred_entry_from_user\n"
-+    POP_REGS
-+    /* Do NOT go back to user level, continue the next test instead */
-+    ".byte 0xf2,0x0f,0x01,0xca\n"	/* ERETS */
-+
-+    ".fill asm_fred_entrypoint_kernel - ., 1, 0xcc\n"
-+
-+    ".type asm_fred_entrypoint_kernel, @function\n"
-+    ".org asm_fred_entrypoint_user + 256\n"
-+    "asm_fred_entrypoint_kernel:\n"
-+    "endbr64\n"
-+    PUSH_REGS
-+    "movq %rsp, %rdi\n"
-+    "call fred_entry_from_kernel\n"
-+    POP_REGS
-+    ".byte 0xf2,0x0f,0x01,0xca\n"	/* ERETS */
-+    ".align 4096, 0xcc\n"
-+    ".popsection");
-+
-+extern char asm_fred_entrypoint_user[];
-+
-+/*
-+ * Prepare a FRED stack frame for ERETU to run user level code, WRMSR or UD,
-+ * which causes a #GP or #UD.  However because FRED RSP0 is not yet mapped
-+ * in guest page table, the delivery of the #GP or #UD causes a nested #PF,
-+ * which is then delivered on FRED RSPx (x is 1, 2 or 3, determinated by MSR
-+ * FRED_STKLVL(PF_VECTOR)).
-+ *
-+ * If FRED RSPx is also not yet mapped in guest page table, a triple fault is
-+ * generated.
-+ */
-+asm(".pushsection .text\n"
-+    ".type asm_test_fault, @function\n"
-+    ".align 4096\n"
-+    "asm_test_fault:\n"
-+    "endbr64\n"
-+    "push %rbp\n"
-+    "mov %rsp, %rbp\n"
-+    "and $(~0x3f), %rsp\n"
-+    "push $0\n"
-+    "push $0\n"
-+    "mov $0x2b, %rax\n"
-+    "bts $57, %rax\n"
-+    "push %rax\n"
-+    /* The FRED user level test code does NOT need a stack. */
-+    "push $0\n"
-+    "pushf\n"
-+    "mov $0x33, %rax\n"
-+    "push %rax\n"
-+    "cmp $0, %edi\n"
-+    "jne 1f\n"
-+    "lea asm_user_wrmsr(%rip), %rax\n"
-+    "jmp 2f\n"
-+    "1: lea asm_user_ud(%rip), %rax\n"
-+    "2: push %rax\n"
-+    "push $0\n"
-+    /* ERETU to user level code to generate a fault immediately */
-+    ".byte 0xf3,0x0f,0x01,0xca\n"
-+    "asm_done_fault:\n"
-+    "mov %rbp, %rsp\n"
-+    "pop %rbp\n"
-+    "ret\n"
-+    ".align 4096, 0xcc\n"
-+    ".popsection");
-+
-+static void guest_code(void)
-+{
-+	wrmsr(MSR_IA32_FRED_CONFIG,
-+	      FRED_CONFIG_ENTRYPOINT(asm_fred_entrypoint_user));
-+
-+	wrmsr(MSR_IA32_FRED_RSP1, FRED_VALID_RSP);
-+	wrmsr(MSR_IA32_FRED_RSP2, FRED_VALID_RSP);
-+	wrmsr(MSR_IA32_FRED_RSP3, FRED_VALID_RSP);
-+
-+	/* Enable FRED */
-+	set_cr4(get_cr4() | X86_CR4_FRED);
-+
-+	wrmsr(MSR_IA32_FRED_STKLVLS, FRED_STKLVL(PF_VECTOR, 1));
-+	wrmsr(MSR_IA32_FRED_RSP0, fred_invalid_rsp[1]);
-+	/* 0: wrmsr to generate #GP */
-+	asm_test_fault(0);
-+
-+	wrmsr(MSR_IA32_FRED_STKLVLS, FRED_STKLVL(PF_VECTOR, 2));
-+	wrmsr(MSR_IA32_FRED_RSP0, fred_invalid_rsp[2]);
-+	/* 1: ud2 to generate #UD */
-+	asm_test_fault(1);
-+
-+	wrmsr(MSR_IA32_FRED_STKLVLS, FRED_STKLVL(PF_VECTOR, 3));
-+	wrmsr(MSR_IA32_FRED_RSP0, fred_invalid_rsp[3]);
-+	/* 0: wrmsr to generate #GP */
-+	asm_test_fault(0);
-+
-+	GUEST_DONE();
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+	struct ucall uc;
-+	uint64_t expected_current_stack_level = 1;
-+
-+	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_FRED));
-+
-+	vm = __vm_create_with_vcpus(VM_MODE_PXXV48_4K_USER, 1, 0,
-+				    guest_code, &vcpu);
-+
-+	while (true) {
-+		uint64_t r;
-+
-+		vcpu_run(vcpu);
-+
-+		r = get_ucall(vcpu, &uc);
-+
-+		if (r == UCALL_DONE)
-+			break;
-+
-+		if (r == UCALL_SYNC) {
-+			TEST_ASSERT((uc.args[1] == expected_current_stack_level) &&
-+				    (uc.args[2] == fred_invalid_rsp[expected_current_stack_level] - 1),
-+				    "Incorrect stack level %lx and #PF address %lx\n",
-+				    uc.args[1], uc.args[2]);
-+			expected_current_stack_level++;
-+		}
-+	}
-+
-+	kvm_vm_free(vm);
-+	return 0;
-+}
--- 
-2.42.0
+Chris
 
+On Mon, Nov 6, 2023 at 10:32=E2=80=AFAM Nhat Pham <nphamcs@gmail.com> wrote=
+:
+>
+> Changelog:
+> v5:
+>    * Replace reference getting with an rcu_read_lock() section for
+>      zswap lru modifications (suggested by Yosry)
+>    * Add a new prep patch that allows mem_cgroup_iter() to return
+>      online cgroup.
+>    * Add a callback that updates pool->next_shrink when the cgroup is
+>      offlined (suggested by Yosry Ahmed, Johannes Weiner)
+> v4:
+>    * Rename list_lru_add to list_lru_add_obj and __list_lru_add to
+>      list_lru_add (patch 1) (suggested by Johannes Weiner and
+>          Yosry Ahmed)
+>    * Some cleanups on the memcg aware LRU patch (patch 2)
+>      (suggested by Yosry Ahmed)
+>    * Use event interface for the new per-cgroup writeback counters.
+>      (patch 3) (suggested by Yosry Ahmed)
+>    * Abstract zswap's lruvec states and handling into
+>      zswap_lruvec_state (patch 5) (suggested by Yosry Ahmed)
+> v3:
+>    * Add a patch to export per-cgroup zswap writeback counters
+>    * Add a patch to update zswap's kselftest
+>    * Separate the new list_lru functions into its own prep patch
+>    * Do not start from the top of the hierarchy when encounter a memcg
+>      that is not online for the global limit zswap writeback (patch 2)
+>      (suggested by Yosry Ahmed)
+>    * Do not remove the swap entry from list_lru in
+>      __read_swapcache_async() (patch 2) (suggested by Yosry Ahmed)
+>    * Removed a redundant zswap pool getting (patch 2)
+>      (reported by Ryan Roberts)
+>    * Use atomic for the nr_zswap_protected (instead of lruvec's lock)
+>      (patch 5) (suggested by Yosry Ahmed)
+>    * Remove the per-cgroup zswap shrinker knob (patch 5)
+>      (suggested by Yosry Ahmed)
+> v2:
+>    * Fix loongarch compiler errors
+>    * Use pool stats instead of memcg stats when !CONFIG_MEMCG_KEM
+>
+> There are currently several issues with zswap writeback:
+>
+> 1. There is only a single global LRU for zswap, making it impossible to
+>    perform worload-specific shrinking - an memcg under memory pressure
+>    cannot determine which pages in the pool it owns, and often ends up
+>    writing pages from other memcgs. This issue has been previously
+>    observed in practice and mitigated by simply disabling
+>    memcg-initiated shrinking:
+>
+>    https://lore.kernel.org/all/20230530232435.3097106-1-nphamcs@gmail.com=
+/T/#u
+>
+>    But this solution leaves a lot to be desired, as we still do not
+>    have an avenue for an memcg to free up its own memory locked up in
+>    the zswap pool.
+>
+> 2. We only shrink the zswap pool when the user-defined limit is hit.
+>    This means that if we set the limit too high, cold data that are
+>    unlikely to be used again will reside in the pool, wasting precious
+>    memory. It is hard to predict how much zswap space will be needed
+>    ahead of time, as this depends on the workload (specifically, on
+>    factors such as memory access patterns and compressibility of the
+>    memory pages).
+>
+> This patch series solves these issues by separating the global zswap
+> LRU into per-memcg and per-NUMA LRUs, and performs workload-specific
+> (i.e memcg- and NUMA-aware) zswap writeback under memory pressure. The
+> new shrinker does not have any parameter that must be tuned by the
+> user, and can be opted in or out on a per-memcg basis.
+>
+> As a proof of concept, we ran the following synthetic benchmark:
+> build the linux kernel in a memory-limited cgroup, and allocate some
+> cold data in tmpfs to see if the shrinker could write them out and
+> improved the overall performance. Depending on the amount of cold data
+> generated, we observe from 14% to 35% reduction in kernel CPU time used
+> in the kernel builds.
+>
+> Domenico Cerasuolo (3):
+>   zswap: make shrinking memcg-aware
+>   mm: memcg: add per-memcg zswap writeback stat
+>   selftests: cgroup: update per-memcg zswap writeback selftest
+>
+> Nhat Pham (3):
+>   list_lru: allows explicit memcg and NUMA node selection
+>   memcontrol: allows mem_cgroup_iter() to check for onlineness
+>   zswap: shrinks zswap pool based on memory pressure
+>
+>  Documentation/admin-guide/mm/zswap.rst      |   7 +
+>  drivers/android/binder_alloc.c              |   5 +-
+>  fs/dcache.c                                 |   8 +-
+>  fs/gfs2/quota.c                             |   6 +-
+>  fs/inode.c                                  |   4 +-
+>  fs/nfs/nfs42xattr.c                         |   8 +-
+>  fs/nfsd/filecache.c                         |   4 +-
+>  fs/xfs/xfs_buf.c                            |   6 +-
+>  fs/xfs/xfs_dquot.c                          |   2 +-
+>  fs/xfs/xfs_qm.c                             |   2 +-
+>  include/linux/list_lru.h                    |  46 ++-
+>  include/linux/memcontrol.h                  |   9 +-
+>  include/linux/mmzone.h                      |   2 +
+>  include/linux/vm_event_item.h               |   1 +
+>  include/linux/zswap.h                       |  27 +-
+>  mm/list_lru.c                               |  48 ++-
+>  mm/memcontrol.c                             |  20 +-
+>  mm/mmzone.c                                 |   1 +
+>  mm/shrinker.c                               |   4 +-
+>  mm/swap.h                                   |   3 +-
+>  mm/swap_state.c                             |  26 +-
+>  mm/vmscan.c                                 |  26 +-
+>  mm/vmstat.c                                 |   1 +
+>  mm/workingset.c                             |   4 +-
+>  mm/zswap.c                                  | 430 +++++++++++++++++---
+>  tools/testing/selftests/cgroup/test_zswap.c |  74 ++--
+>  26 files changed, 625 insertions(+), 149 deletions(-)
+>
+> --
+> 2.34.1
+>
