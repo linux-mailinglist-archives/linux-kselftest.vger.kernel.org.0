@@ -2,248 +2,202 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81E2C7E524F
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Nov 2023 10:01:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B7FB7E5497
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Nov 2023 11:57:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235384AbjKHJB5 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Nov 2023 04:01:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32926 "EHLO
+        id S235601AbjKHK5A (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Nov 2023 05:57:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235505AbjKHJBv (ORCPT
+        with ESMTP id S235663AbjKHK4a (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Nov 2023 04:01:51 -0500
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A9F71730;
-        Wed,  8 Nov 2023 01:01:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699434109; x=1730970109;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=JrKd/FpYYdxtRgSOfkdwfAITwFk9FYcdWxpQYPKkCSI=;
-  b=aO4FP1SHBe7+kFZU/dgwnk9GZQIbWNuJsZGrV5EFj4X7sc6S0Qflu1Jo
-   2sBJnDgTazVDPjC1N86ZacfiNFcYirr8roREu98uu0NJmtVKIox6so34q
-   v5HVqjZNSYAXTBmHb0VsqoW5HzMK1gee/VbOeY2bxYQj0JCil2yzT6b65
-   3dkwU7laMQ7/E/Qv595UIiqui7krX/xC2pBZm0KUJuoOWMFVFeV+ZYnMV
-   higTckHbq6xX1jgzQ/GEeUyKqCSE7Euw6S+vtE+XLxbRcvBlE/DsZUU1m
-   Kg+QkzZ25X9+YN3m+ErKgeOqEtVOE2GY/CruwP5eYE8tqeEsTD7c9Qc60
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10887"; a="369925996"
-X-IronPort-AV: E=Sophos;i="6.03,285,1694761200"; 
-   d="scan'208";a="369925996"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2023 01:01:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.03,285,1694761200"; 
-   d="scan'208";a="11124743"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmviesa001.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 08 Nov 2023 01:01:30 -0800
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Wed, 8 Nov 2023 01:01:30 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Wed, 8 Nov 2023 01:01:30 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34 via Frontend Transport; Wed, 8 Nov 2023 01:01:30 -0800
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.41) by
- edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.34; Wed, 8 Nov 2023 01:01:29 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=crsk3O94y5KwBSJJdNW7nPFm8Kju0PLpnFnVnBjxYTIuUUxnNsnQJaL4KnYWwBINr+JDr1JQbDadRU9s4fekfeY2VB0lf0Cvq4RDAhyAd3hsByWIiaeIhv2dkFxstJUjKAI3X7RsOv4pDSoid/Qa/xzmqB6AxqFOEEEwjmgWaY/PgprCVogA52Y3xbmx8o4fmJ2zzxetEtJrN6ORJLWCFpFbJ/FI6tdbmpDy3achdvgHBFDp0GIeloDDHk5ooloUij8HSQuqjDFAjwXVcHRkmAfOoiJc0lpBHNipQqlMy0cqIoGJdbMTPPG1lagI9gXz7lgX8FcWs9W0a8eAGW3Pew==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IMA2lIXg8511KNRRObnvfdydJiBlSLzUuINzr+tLvgg=;
- b=lpBQGKtYw1Ze3y0/iDWojpJ2qrAcwErOxJIFBfCKnevAfmbJNLkz182TKwCdTKlpI4tARP9Z8L8Iowh45T2ADHRcjpUDhMX8xW1sh7+alQLEaNNUhHMDyZTJcGk15nnxiEUAh2IMGumOJ/pZqVkOhfpo1mZwEsUMvjMPWlCGegW5iHhwe+yCx9Wb+EQYLVtLHO8bBFnLDRU2Umw+ZwOUyTdwStYc4jh5i/XX6lS+QOjalGOaJj1Lwg2bxsomo1aQjN+LiC6N4pnovF3vU0y5X1PhxbTFYOeqJjfxGbdvqpmdc7roJ6ZCuX94wuIeIm6d4vvuBnV6GjU85W4uB5ayiw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DS0PR11MB7529.namprd11.prod.outlook.com (2603:10b6:8:141::20)
- by PH8PR11MB7118.namprd11.prod.outlook.com (2603:10b6:510:216::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.28; Wed, 8 Nov
- 2023 09:01:27 +0000
-Received: from DS0PR11MB7529.namprd11.prod.outlook.com
- ([fe80::e4ae:3948:1f55:547d]) by DS0PR11MB7529.namprd11.prod.outlook.com
- ([fe80::e4ae:3948:1f55:547d%4]) with mapi id 15.20.6954.024; Wed, 8 Nov 2023
- 09:01:27 +0000
-Message-ID: <8aa35b4e-6bf1-461b-8d7a-5331dfdc3934@intel.com>
-Date:   Wed, 8 Nov 2023 17:03:55 +0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC 3/7] iommufd: Add iommufd_device_bind_pasid()
-Content-Language: en-US
-To:     "Tian, Kevin" <kevin.tian@intel.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "jgg@nvidia.com" <jgg@nvidia.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>
-CC:     "cohuck@redhat.com" <cohuck@redhat.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>,
-        "Martins, Joao" <joao.m.martins@oracle.com>
-References: <20231009085123.463179-1-yi.l.liu@intel.com>
- <20231009085123.463179-4-yi.l.liu@intel.com>
- <BN9PR11MB5276BCF486E9E4F24913883E8CCDA@BN9PR11MB5276.namprd11.prod.outlook.com>
- <0ea819d9-1169-48b1-8579-3a054a0bd077@intel.com>
- <BN9PR11MB5276A47616E386F00AC50D728CA8A@BN9PR11MB5276.namprd11.prod.outlook.com>
-From:   Yi Liu <yi.l.liu@intel.com>
-In-Reply-To: <BN9PR11MB5276A47616E386F00AC50D728CA8A@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SI2PR01CA0011.apcprd01.prod.exchangelabs.com
- (2603:1096:4:191::6) To DS0PR11MB7529.namprd11.prod.outlook.com
- (2603:10b6:8:141::20)
+        Wed, 8 Nov 2023 05:56:30 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E5A019A5;
+        Wed,  8 Nov 2023 02:56:16 -0800 (PST)
+Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4SQMSz45TJzfb2h;
+        Wed,  8 Nov 2023 18:56:03 +0800 (CST)
+Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
+ (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Wed, 8 Nov
+ 2023 18:56:12 +0800
+Subject: Re: [RFC PATCH v3 07/12] page-pool: device memory support
+To:     Mina Almasry <almasrymina@google.com>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arch@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <linaro-mm-sig@lists.linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Ahern <dsahern@kernel.org>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Jeroen de Borst <jeroendb@google.com>,
+        Praveen Kaligineedi <pkaligineedi@google.com>
+References: <20231106024413.2801438-1-almasrymina@google.com>
+ <20231106024413.2801438-8-almasrymina@google.com>
+ <4a0e9d53-324d-e19b-2a30-ba86f9e5569e@huawei.com>
+ <CAHS8izNbw7vAGo2euQGA+TF9CgQ8zwrDqTVGsOSxh22_uo0R1w@mail.gmail.com>
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+Message-ID: <d4309392-711a-75b0-7bf0-9e7de8fd527e@huawei.com>
+Date:   Wed, 8 Nov 2023 18:56:11 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR11MB7529:EE_|PH8PR11MB7118:EE_
-X-MS-Office365-Filtering-Correlation-Id: 39c55044-e394-4175-29b2-08dbe0394a43
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LjIpLP0lfOsHPtgzyGo7hNSnKUVxOv953Fa8eobJI1ssf72lwYmRg9vG8hFFcBOw5WwwxG1RoKKht69x7iN5JgPYOxHHkt9s/rjOYFbXMqlMVyHnQAReL2w/s1vyMBPywyGrYlX+yE8P3Kcr93gdkGDnjibxklTkVUfeWgMtdc0MAVIAM2gAlqC0VskiaZpI8QYt5/w1FE7uDDUAWl90dAavBM62REtC2p93lc7PN1JaLIeKy+72C/zwFQQen4YRlO58zLaUnpLr/mxMFsagUrWb3Xytw4aB+WCIJh5NJUWww9iw0Q0S5YMb8d1voAs+DO04NihWgbpIRnosVIq9KQIXpcB47WeUmg1aT3V1kA2pmeLO7QAgqMFyfPfoHSG9WKFXqvKahVNhwo/txe3HRACgFZE+twge8SBoasXEP3+IHEOPy38MaDPJROExdm7UGRSDJXdTjAN8+iKbh0RH0LR/1BRBy8Kw0GVoltw2gwcvXvUL4j/X8y9/eH1KF4ZplaW16p8u1eBopFS8j2iIobMirjowzMhkyhX3YuNl6l45clIFKWANrUSKmTUHHpojJo/aWY6a2FegEiAgdUqGE+XLUac444MDVht+HX+EF9++18Hy7QB53mAXGncEd65CN9swx8R/oskVwKBiD1Q7uw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB7529.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(366004)(39860400002)(376002)(346002)(136003)(230922051799003)(186009)(64100799003)(451199024)(1800799009)(6666004)(6486002)(6506007)(53546011)(6512007)(83380400001)(2616005)(26005)(2906002)(7416002)(5660300002)(66556008)(66946007)(41300700001)(8936002)(66476007)(316002)(478600001)(54906003)(110136005)(4326008)(8676002)(31696002)(38100700002)(36756003)(86362001)(82960400001)(66899024)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aEMzWnQxd2NwQnlkTmF5cERXS1B4UWJDekIzNnRHS3JtL2g3bmdMQUFkNEk0?=
- =?utf-8?B?YVdwd056Q0dPRWdaUWtKaXlyc3cyclJSRkdWTWJOQWtadFFMNjlmNXRDTkdJ?=
- =?utf-8?B?aVpocitqaHkwQ1ozZTVuZHd2NDBGbWFFZmd4ZFArcXN6MkF6K2lPT1YwL01O?=
- =?utf-8?B?ODVPQm51bTAwTmJUd08wKzRYVTk3ckFKS2wyeDZLK3g2ZE8xZExiMEFVVWp3?=
- =?utf-8?B?eUVsSWRFOG1JeVBOSHI1YitpQTBBTXJLcGY0KzBZb3QweWh3MVplZWFEanFS?=
- =?utf-8?B?VDgyS0lPRmJsSzNoMi96NXBqRFArem0rcEtUVmkwZ0hGQjc2bGxabzdKaS9G?=
- =?utf-8?B?Z3Z4b25MUzdIOWVFTTJMZUY2eTBwSnExU3ZtRUV4N2l2TU8wMWoxYk1lYzJk?=
- =?utf-8?B?Ry9qSXFvT2pDbmpuSHdVWGQxeFRCcUlTSE1aQlAwaS9BaHl2ZjhaUGxpM3NP?=
- =?utf-8?B?VHdDUTR1Mmk4WjBLUmdEdDRGb1hKSm4wcFJIcjFWVHlGM09ZS3RWTGdzM2lp?=
- =?utf-8?B?blZQNDZyd1VGeEQvUHB0dHlXMDAwU1Blcm9sVy9VcXVFak1Ubmh4YXAvUGhy?=
- =?utf-8?B?VDkxUE9yMUd0SUV5SmtFWkxKMjFXem5tc3VIZW81WXk3MHpJU09GZnBuZm84?=
- =?utf-8?B?MFFYbjhJbHZnT0wrbzFNbklyWmhBWFpvVkN1eGJmVkk5MFFybFRBLytrL2tt?=
- =?utf-8?B?WHdaeGRETmVQQ0hnL3dpSUZ6cDhVK0VTSFl1N1NpMm9EaVBTa2JMc3VkOWF5?=
- =?utf-8?B?VGxCeHNrZGJBeTdhM25abUtrRVBSV3Z6L3FORlVGQlRPMmlCbVQxVnNnWHVn?=
- =?utf-8?B?RDhzQUpHT3dQYnBSbVFBdVNWNlpSV3EyQ0lBVFlXM09vL3RBSFphK2Z1b3I3?=
- =?utf-8?B?NVhaYnpab2lxd0hWU1E5YkZjbmlNWlhucWh6QTBQYllSYjBRUXlsM0hLc3BQ?=
- =?utf-8?B?MkRjUjR2MVhScE9JY3V1MjN4M2hpaWdEMGRRNjgvYzBXQU1JRTdQRmRwMWRa?=
- =?utf-8?B?aU1SbVFrMmZvbm4rL0tQVTFUcTZWSUhiVGxUZEpEUzlUTEJQVlJmREZsRW9Z?=
- =?utf-8?B?NFQwMHIvVVdIZTRLU3c2TFBDOXFiZGpPV2UvejF6dmdBYTNZbTJOYUxUL25Q?=
- =?utf-8?B?NHVmRjBRa01mUUJqcnNab1BYekdxYjI4NVVUMW5oL1VIanh2MHpLRXN3YzFS?=
- =?utf-8?B?WDcvTno1ZnY5ZHQzN3VDWlpRaFpqUzEvSUt5U0dLWUVYYis4cHd6UHFTdjRv?=
- =?utf-8?B?Lys5Sk4zbTBnQTVVQ29zOEV3THlSbDRZc0t5Q3B0dGNod3ZsY0txV0FyL3lV?=
- =?utf-8?B?bzJqV05XSThVM1lGSjFtRVlEREtZU0oxQW1WY2FDTjZBNk5RdE9oZ3dyMzNQ?=
- =?utf-8?B?MDJ4ZmtIZlVMY2tscFl6bDlrNmxNUEFUL0g5cm1HbjZYZ1NXelUwZnJwNVor?=
- =?utf-8?B?ZEk3VVBBRmxLZkNxWXBKb29MZXdMdUxEc0pJMEFic01qOGRWY01pSHpoZTFr?=
- =?utf-8?B?NjFoRjBoUnRiWnVkQjczSlQwT21VdDFBZkh0WDZ5ZjMzZUQ1S3RmVkVPdjhM?=
- =?utf-8?B?MXREZE9NTkNCTm8xN3dkdndUdnIycHgrZEhHRlYxWEJhdTFLUkZjUmVTWXZD?=
- =?utf-8?B?MlptNFpobXNZSW1EL2kvV3dDSWdVUFBCL1Bad01MZXYyYk5WcmtiWnRsSHBY?=
- =?utf-8?B?aER5cFZxTVpSRkZGWjFhWFRUSEFoRWVVeTFZNXlJcFhySjlCeXJVR3JVRFJi?=
- =?utf-8?B?YmpIVnhtUXdZOGd5VDN6L24xdW5rcmdtTlZiRmhndm9Od0lmY0xBcnB1b0sv?=
- =?utf-8?B?Q2NqK1M3eGlGTHY4K1lNZXdSbEF2S2l0c3plUG55djlzdzBkTlRtV05sdXNR?=
- =?utf-8?B?VnUyVXNralI1TUFoY1BFaGt6bzFVanZLd1V5bnJmajZPNHZJM0ZDbUxBZGl6?=
- =?utf-8?B?QUNjejIyWU1lQzVNQ0dKeXpkU0YyRVVHMWV5allrQUU1TFFoTlArNHROKzNM?=
- =?utf-8?B?TFBudVJqTXpablR1elVsaHRqNVlMSWhmb1grZDRyaEk5UmVXeDQ2em9mN1cw?=
- =?utf-8?B?UWRDM21rRGFPMThpZUpxVWNPTU1GZWk5TUpjRi80ZmY0amNNUnVLd2xVWGFP?=
- =?utf-8?Q?F/t/mTzCoqYHoB3N96Wwg/AY9?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 39c55044-e394-4175-29b2-08dbe0394a43
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB7529.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Nov 2023 09:01:26.9837
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: prWrS1vKi6NKdXO1NkZhGN4fs/lTkPpdia/74JFTycIK4XNxN4P/9Lq/usVFLgqZvIzwRAgTt/5d0D4mxHFkLQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR11MB7118
-X-OriginatorOrg: intel.com
+In-Reply-To: <CAHS8izNbw7vAGo2euQGA+TF9CgQ8zwrDqTVGsOSxh22_uo0R1w@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.69.30.204]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2023/11/8 16:46, Tian, Kevin wrote:
->> From: Liu, Yi L <yi.l.liu@intel.com>
->> Sent: Wednesday, November 8, 2023 3:45 PM
+On 2023/11/8 5:56, Mina Almasry wrote:
+> On Tue, Nov 7, 2023 at 12:00 AM Yunsheng Lin <linyunsheng@huawei.com> wrote:
 >>
->> On 2023/10/10 16:19, Tian, Kevin wrote:
->>>> From: Liu, Yi L <yi.l.liu@intel.com>
->>>> Sent: Monday, October 9, 2023 4:51 PM
->>>>
->>>> +struct iommufd_device *iommufd_device_bind_pasid(struct
->> iommufd_ctx
->>>> *ictx,
->>>> +						 struct device *dev,
->>>> +						 u32 pasid, u32 *id)
->>>> +{
->>>> +	struct iommufd_device *idev;
->>>> +	int rc;
->>>> +
->>>> +	/*
->>>> +	 * iommufd always sets IOMMU_CACHE because we offer no way for
->>>> userspace
->>>> +	 * to restore cache coherency.
->>>> +	 */
->>>> +	if (!device_iommu_capable(dev, IOMMU_CAP_CACHE_COHERENCY))
->>>> +		return ERR_PTR(-EINVAL);
->>>> +
->>>> +	/*
->>>> +	 * No iommu supports pasid-granular msi message today. Here we
->>>> +	 * just check whether the parent device can do safe interrupts.
->>>> +	 * Isolation between virtual devices within the parent device
->>>> +	 * relies on the parent driver to enforce.
->>>> +	 */
->>>> +	if (!iommufd_selftest_is_mock_dev(dev) &&
->>>> +	    !msi_device_has_isolated_msi(dev)) {
->>>> +		rc = iommufd_allow_unsafe_interrupts(dev);
->>>> +		if (rc)
->>>> +			return ERR_PTR(rc);
->>>> +	}
->>>> +
+>> On 2023/11/6 10:44, Mina Almasry wrote:
+>>> Overload the LSB of struct page* to indicate that it's a page_pool_iov.
 >>>
->>> Only MemWr w/o pasid can be interpreted as an interrupt message
->>> then we need msi isolation to protect.
->>
->> yes.
->>
+>>> Refactor mm calls on struct page* into helpers, and add page_pool_iov
+>>> handling on those helpers. Modify callers of these mm APIs with calls to
+>>> these helpers instead.
 >>>
->>> But for SIOV all MemWr's are tagged with a pasid hence can never
->>> trigger an interrupt. From this angle looks this check is unnecessary.
+>>> In areas where struct page* is dereferenced, add a check for special
+>>> handling of page_pool_iov.
+>>>
+>>> Signed-off-by: Mina Almasry <almasrymina@google.com>
+>>>
+>>> ---
+>>>  include/net/page_pool/helpers.h | 74 ++++++++++++++++++++++++++++++++-
+>>>  net/core/page_pool.c            | 63 ++++++++++++++++++++--------
+>>>  2 files changed, 118 insertions(+), 19 deletions(-)
+>>>
+>>> diff --git a/include/net/page_pool/helpers.h b/include/net/page_pool/helpers.h
+>>> index b93243c2a640..08f1a2cc70d2 100644
+>>> --- a/include/net/page_pool/helpers.h
+>>> +++ b/include/net/page_pool/helpers.h
+>>> @@ -151,6 +151,64 @@ static inline struct page_pool_iov *page_to_page_pool_iov(struct page *page)
+>>>       return NULL;
+>>>  }
+>>>
+>>> +static inline int page_pool_page_ref_count(struct page *page)
+>>> +{
+>>> +     if (page_is_page_pool_iov(page))
+>>> +             return page_pool_iov_refcount(page_to_page_pool_iov(page));
 >>
->> But the interrupts out from a SIOV virtual device do not have pasid (at
->> least today). Seems still need a check here if we consider this bind for
->> a SIOV virtual device just like binding a physical device.
->>
+>> We have added a lot of 'if' for the devmem case, it would be better to
+>> make it more generic so that we can have more unified metadata handling
+>> for normal page and devmem. If we add another memory type here, do we
+>> need another 'if' here?
 > 
-> this check assumes the device is trusted. as long as there is no way
-> for malicious guest to generate arbitrary interrupt messages then
-> it's fine.
+> Maybe, not sure. I'm guessing new memory types will either be pages or
+> iovs, so maybe no new if statements needed.
 > 
-> for physical device a MemWr can be interpreted as interrupt so
-> we need msi isolation.
+>> That is part of the reason I suggested using a more unified metadata for
+>> all the types of memory chunks used by page_pool.
 > 
-> for SIOV all MemWr has pasid then we don't have such worry.
-> IMS is under host's control so interrupt messages are already
-> sanitized.
+> I think your suggestion was to use struct pages for devmem. That was
+> thoroughly considered and intensely argued about in the initial
+> conversations regarding devmem and the initial RFC, and from the
+> conclusions there it's extremely clear to me that devmem struct pages
+> are categorically a no-go.
 
-sure. this makes sense to me now.:)
+Not exactly, I was wondering if adding a more abstract structure specificly
+for page pool makes any sense, and each mem type can add its own specific
+fields, net stack only see and handle the common fields so that it does not
+care about specific mem type, and each provider only see the and handle the
+specific fields belonging to it most of the time.
 
--- 
-Regards,
-Yi Liu
+Ideally something like beleow:
+
+struct netmem {
+	/* common fields */
+	refcount_t refcount;
+	struct page_pool *pp;
+	......
+
+	union {
+		struct devmem{
+			struct dmabuf_genpool_chunk_owner *owner;
+		};
+
+		struct other_mem{
+			...
+			...
+		};
+	};
+};
+
+But untill we completely decouple the 'struct page' from the net stack,
+the above seems undoable in the near term.
+But we might be able to do something as folio is doing now, mm subsystem
+is still seeing 'struct folio/page', but other subsystem like slab is using
+'struct slab', and there is still some common fields shared between
+'struct folio' and 'struct slab'.
+
+As the netmem patchset, is devmem able to reuse the below 'struct netmem'
+and rename it to 'struct page_pool_iov'? So that 'struct page' for normal
+memory and 'struct page_pool_iov' for devmem share the common fields used
+by page pool and net stack? And we might be able to reuse the 'flags',
+'_pp_mapping_pad' and '_mapcount' for specific mem provider, which is enough
+for the devmem only requiring a single pointer to point to it's
+owner?
+
+https://lkml.kernel.org/netdev/20230105214631.3939268-2-willy@infradead.org/
+
++/**
++ * struct netmem - A memory allocation from a &struct page_pool.
++ * @flags: The same as the page flags.  Do not use directly.
++ * @pp_magic: Magic value to avoid recycling non page_pool allocated pages.
++ * @pp: The page pool this netmem was allocated from.
++ * @dma_addr: Call netmem_get_dma_addr() to read this value.
++ * @dma_addr_upper: Might need to be 64-bit on 32-bit architectures.
++ * @pp_frag_count: For frag page support, not supported in 32-bit
++ *   architectures with 64-bit DMA.
++ * @_mapcount: Do not access this member directly.
++ * @_refcount: Do not access this member directly.  Read it using
++ *   netmem_ref_count() and manipulate it with netmem_get() and netmem_put().
++ *
++ * This struct overlays struct page for now.  Do not modify without a
++ * good understanding of the issues.
++ */
++struct netmem {
++	unsigned long flags;
++	unsigned long pp_magic;
++	struct page_pool *pp;
++	/* private: no need to document this padding */
++	unsigned long _pp_mapping_pad;	/* aliases with folio->mapping */
++	/* public: */
++	unsigned long dma_addr;
++	union {
++		unsigned long dma_addr_upper;
++		atomic_long_t pp_frag_count;
++	};
++	atomic_t _mapcount;
++	atomic_t _refcount;
++};
+
+If we do that, it seems we might be able to allow net stack and page pool to see
+the metadata for devmem chunk as 'struct page', and may be able to aovid most of
+the 'if' checking in net stack and page pool?
+
+> 
+> --
+> Thanks,
+> Mina
+> 
+> .
+> 
