@@ -2,40 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EE8C7E5D9D
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Nov 2023 20:00:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABAAE7E5D99
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Nov 2023 20:00:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232400AbjKHTAY (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Nov 2023 14:00:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53188 "EHLO
+        id S231177AbjKHTA0 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Nov 2023 14:00:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231881AbjKHTAV (ORCPT
+        with ESMTP id S231961AbjKHTAV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
         Wed, 8 Nov 2023 14:00:21 -0500
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87EF62114;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C52DB2115;
         Wed,  8 Nov 2023 11:00:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1699470020; x=1731006020;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=LsNdQwHiUrqX8YGCdaIq6LWa12llh8k5EG8vDmKHiu8=;
-  b=daAhlHBxchoiTN8bjik8yPpdqIhe8fREln3IrJxPdS3X1zhctcYywsN0
-   k130ZolIxhm/fAXfSlILBSl5bjHGX1z0K9famlaDxwqnIiZ7TOFLVjM09
-   1hJK56xAJztRN6gcLPYJl5+IAF2/hBSXMaGKBb7EpWmxwvILAVfjdIVKX
-   UWDgwaTBHPV87KPFiRhq88eubxjD/sn1DJEir8nIQMaQs9Rok/wOtCE0b
-   i+0UsKSfgQjsZWx2X3DFIvtf+TZ2j2PjClNho4loRDaDP3UnHD7sJitte
-   Rea3pJPISpGODW+ObIGRgam18dogG8eeXiaruqoHXTF+iMWwzylLnM12U
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10888"; a="8486254"
+  bh=IRPQ5ioteqwh4CfCqIjfG/Rnvw8uAQhRAapN4CI6IQw=;
+  b=eX3fdQK8JsApP9z8bxI4pPxxR05RM8YyOiRfWXbjw2rJEqxlm7zRdp9W
+   pQbg8cgk1w2aSDFDt5Y4anHI8VTAaBNkINTyhDQb/1mE+LlI8/TzxAfab
+   GcHEJgtZTmsFsgDJ74D8FrD7720XbMkvK2pNziOaqqiYfvo7KQ+c6+ZAo
+   06tssZmc1nDnA3IQAvb7maZv28mcRfP0B7eIOzcT/aDpfeX3JaRsUWD0y
+   uQYc0Y3h7d7v+D7RTtTxkal8uOfy9RKjxXpDSuDPe0UHamVYQhigFf+/4
+   HixVkH5BZq+xFt5qkdY89sd433ufE0dX1ansoz59eZeHG/a+AhtPv+QvK
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10888"; a="8486267"
 X-IronPort-AV: E=Sophos;i="6.03,287,1694761200"; 
-   d="scan'208";a="8486254"
+   d="scan'208";a="8486267"
 Received: from orviesa001.jf.intel.com ([10.64.159.141])
   by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2023 11:00:19 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.03,287,1694761200"; 
-   d="scan'208";a="10892428"
+   d="scan'208";a="10892433"
 Received: from unknown (HELO fred..) ([172.25.112.68])
   by orviesa001.jf.intel.com with ESMTP; 08 Nov 2023 11:00:18 -0800
 From:   Xin Li <xin3.li@intel.com>
@@ -48,9 +48,9 @@ Cc:     seanjc@google.com, pbonzini@redhat.com, corbet@lwn.net,
         bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
         hpa@zytor.com, vkuznets@redhat.com, peterz@infradead.org,
         ravi.v.shankar@intel.com
-Subject: [PATCH v1 05/23] KVM: VMX: Initialize FRED VM entry/exit controls in vmcs_config
-Date:   Wed,  8 Nov 2023 10:29:45 -0800
-Message-ID: <20231108183003.5981-6-xin3.li@intel.com>
+Subject: [PATCH v1 06/23] KVM: VMX: Defer enabling FRED MSRs save/load until after set CPUID
+Date:   Wed,  8 Nov 2023 10:29:46 -0800
+Message-ID: <20231108183003.5981-7-xin3.li@intel.com>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231108183003.5981-1-xin3.li@intel.com>
 References: <20231108183003.5981-1-xin3.li@intel.com>
@@ -60,106 +60,86 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Setup the global vmcs_config for FRED:
-1) Add VM_ENTRY_LOAD_IA32_FRED to KVM_OPTIONAL_VMX_VM_ENTRY_CONTROLS to
-   have a FRED CPU load guest FRED MSRs from VMCS upon VM entry.
-2) Add SECONDARY_VM_EXIT_SAVE_IA32_FRED to
-   KVM_OPTIONAL_VMX_SECONDARY_VM_EXIT_CONTROLS to have a FRED CPU save
-   guest FRED MSRs to VMCS during VM exit.
-3) add SECONDARY_VM_EXIT_LOAD_IA32_FRED to
-   KVM_OPTIONAL_VMX_SECONDARY_VM_EXIT_CONTROLS to have a FRED CPU load
-   host FRED MSRs from VMCS during VM exit.
+Clear FRED VM entry/exit controls when initializing a vCPU, and set
+these controls only if FRED is enumerated after set CPUID.
 
-Also add sanity checks to make sure FRED VM entry/exit controls can be
-set on a FRED CPU.
+FRED VM entry/exit controls need to be set to establish context
+sufficient to support FRED event delivery immediately after VM entry
+and exit.  However it is not required to save/load FRED MSRs for
+a non-FRED guest, which aren't supposed to access FRED MSRs.
+
+A non-FRED guest should get #GP upon accessing FRED MSRs, otherwise
+it corrupts host FRED MSRs.
 
 Tested-by: Shan Kang <shan.kang@intel.com>
 Signed-off-by: Xin Li <xin3.li@intel.com>
 ---
- arch/x86/include/asm/vmx.h |  3 +++
- arch/x86/kvm/vmx/vmx.c     | 19 ++++++++++++++++++-
- arch/x86/kvm/vmx/vmx.h     |  7 +++++--
- 3 files changed, 26 insertions(+), 3 deletions(-)
+ arch/x86/kvm/vmx/vmx.c | 34 +++++++++++++++++++++++++++++++++-
+ 1 file changed, 33 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/vmx.h b/arch/x86/include/asm/vmx.h
-index 4d4177ec802c..41796a733bc9 100644
---- a/arch/x86/include/asm/vmx.h
-+++ b/arch/x86/include/asm/vmx.h
-@@ -106,6 +106,8 @@
- #define VM_EXIT_PT_CONCEAL_PIP			0x01000000
- #define VM_EXIT_CLEAR_IA32_RTIT_CTL		0x02000000
- #define VM_EXIT_ACTIVATE_SECONDARY_CONTROLS	0x80000000
-+#define SECONDARY_VM_EXIT_SAVE_IA32_FRED	0x00000001
-+#define SECONDARY_VM_EXIT_LOAD_IA32_FRED	0x00000002
- 
- #define VM_EXIT_ALWAYSON_WITHOUT_TRUE_MSR	0x00036dff
- 
-@@ -119,6 +121,7 @@
- #define VM_ENTRY_LOAD_BNDCFGS                   0x00010000
- #define VM_ENTRY_PT_CONCEAL_PIP			0x00020000
- #define VM_ENTRY_LOAD_IA32_RTIT_CTL		0x00040000
-+#define VM_ENTRY_LOAD_IA32_FRED			0x00800000
- 
- #define VM_ENTRY_ALWAYSON_WITHOUT_TRUE_MSR	0x000011ff
- 
 diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index df769207cbe0..9186f41974ab 100644
+index 9186f41974ab..5d4786812664 100644
 --- a/arch/x86/kvm/vmx/vmx.c
 +++ b/arch/x86/kvm/vmx/vmx.c
-@@ -2694,10 +2694,27 @@ static int setup_vmcs_config(struct vmcs_config *vmcs_conf,
- 		_vmexit_control &= ~x_ctrl;
- 	}
+@@ -4423,6 +4423,9 @@ static u32 vmx_vmentry_ctrl(void)
+ 	if (cpu_has_perf_global_ctrl_bug())
+ 		vmentry_ctrl &= ~VM_ENTRY_LOAD_IA32_PERF_GLOBAL_CTRL;
  
--	if (_vmexit_control & VM_EXIT_ACTIVATE_SECONDARY_CONTROLS)
-+	if (_vmexit_control & VM_EXIT_ACTIVATE_SECONDARY_CONTROLS) {
- 		_secondary_vmexit_control =
- 			adjust_vmx_controls64(KVM_OPTIONAL_VMX_SECONDARY_VM_EXIT_CONTROLS,
- 					      MSR_IA32_VMX_EXIT_CTLS2);
-+		if (cpu_feature_enabled(X86_FEATURE_FRED) &&
-+		    !(_secondary_vmexit_control & SECONDARY_VM_EXIT_SAVE_IA32_FRED &&
-+		      _secondary_vmexit_control & SECONDARY_VM_EXIT_LOAD_IA32_FRED)) {
-+			pr_warn_once("FRED enabled but no VMX VM-Exit {SAVE,LOAD}_IA32_FRED controls: %llx\n",
-+				     _secondary_vmexit_control);
-+			if (error_on_inconsistent_vmcs_config)
-+				return -EIO;
-+		}
-+	}
++	/* Whether to load guest FRED MSRs is deferred until after set CPUID */
++	vmentry_ctrl &= ~VM_ENTRY_LOAD_IA32_FRED;
 +
-+	if (cpu_feature_enabled(X86_FEATURE_FRED) &&
-+	    !(_vmentry_control & VM_ENTRY_LOAD_IA32_FRED)) {
-+		pr_warn_once("FRED enabled but no VMX VM-Entry LOAD_IA32_FRED control: %x\n",
-+			     _vmentry_control);
-+		if (error_on_inconsistent_vmcs_config)
-+			return -EIO;
-+	}
+ 	return vmentry_ctrl;
+ }
  
- 	rdmsrl(MSR_IA32_VMX_BASIC, basic_msr);
+@@ -4458,7 +4461,13 @@ static u32 vmx_vmexit_ctrl(void)
  
-diff --git a/arch/x86/kvm/vmx/vmx.h b/arch/x86/kvm/vmx/vmx.h
-index 99a0f6783085..f8c02bd37069 100644
---- a/arch/x86/kvm/vmx/vmx.h
-+++ b/arch/x86/kvm/vmx/vmx.h
-@@ -480,7 +480,8 @@ static inline u8 vmx_get_rvi(void)
- 	 VM_ENTRY_LOAD_IA32_EFER |					\
- 	 VM_ENTRY_LOAD_BNDCFGS |					\
- 	 VM_ENTRY_PT_CONCEAL_PIP |					\
--	 VM_ENTRY_LOAD_IA32_RTIT_CTL)
-+	 VM_ENTRY_LOAD_IA32_RTIT_CTL |					\
-+	 VM_ENTRY_LOAD_IA32_FRED)
+ static u64 vmx_secondary_vmexit_ctrl(void)
+ {
+-	return vmcs_config.secondary_vmexit_ctrl;
++	u64 secondary_vmexit_ctrl = vmcs_config.secondary_vmexit_ctrl;
++
++	/* Whether to save/load FRED MSRs is deferred until after set CPUID */
++	secondary_vmexit_ctrl &= ~(SECONDARY_VM_EXIT_SAVE_IA32_FRED |
++				   SECONDARY_VM_EXIT_LOAD_IA32_FRED);
++
++	return secondary_vmexit_ctrl;
+ }
  
- #define __KVM_REQUIRED_VMX_VM_EXIT_CONTROLS				\
- 	(VM_EXIT_SAVE_DEBUG_CONTROLS |					\
-@@ -506,7 +507,9 @@ static inline u8 vmx_get_rvi(void)
- 	       VM_EXIT_ACTIVATE_SECONDARY_CONTROLS)
+ static void vmx_refresh_apicv_exec_ctrl(struct kvm_vcpu *vcpu)
+@@ -7785,10 +7794,33 @@ static void update_intel_pt_cfg(struct kvm_vcpu *vcpu)
+ 		vmx->pt_desc.ctl_bitmask &= ~(0xfULL << (32 + i * 4));
+ }
  
- #define KVM_REQUIRED_VMX_SECONDARY_VM_EXIT_CONTROLS (0)
--#define KVM_OPTIONAL_VMX_SECONDARY_VM_EXIT_CONTROLS (0)
-+#define KVM_OPTIONAL_VMX_SECONDARY_VM_EXIT_CONTROLS			\
-+	     (SECONDARY_VM_EXIT_SAVE_IA32_FRED |			\
-+	      SECONDARY_VM_EXIT_LOAD_IA32_FRED)
++static void vmx_vcpu_config_fred_after_set_cpuid(struct kvm_vcpu *vcpu)
++{
++	struct vcpu_vmx *vmx = to_vmx(vcpu);
++
++	if (!cpu_feature_enabled(X86_FEATURE_FRED) ||
++	    !guest_cpuid_has(vcpu, X86_FEATURE_FRED))
++		return;
++
++	/* Enable loading guest FRED MSRs from VMCS */
++	vm_entry_controls_setbit(vmx, VM_ENTRY_LOAD_IA32_FRED);
++
++	/*
++	 * Enable saving guest FRED MSRs into VMCS and loading host FRED MSRs
++	 * from VMCS.
++	 */
++	vm_exit_controls_setbit(vmx, VM_EXIT_ACTIVATE_SECONDARY_CONTROLS);
++	secondary_vm_exit_controls_setbit(vmx,
++					  SECONDARY_VM_EXIT_SAVE_IA32_FRED |
++					  SECONDARY_VM_EXIT_LOAD_IA32_FRED);
++}
++
+ static void vmx_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
+ {
+ 	struct vcpu_vmx *vmx = to_vmx(vcpu);
  
- #define KVM_REQUIRED_VMX_PIN_BASED_VM_EXEC_CONTROL			\
- 	(PIN_BASED_EXT_INTR_MASK |					\
++	vmx_vcpu_config_fred_after_set_cpuid(vcpu);
++
+ 	/*
+ 	 * XSAVES is effectively enabled if and only if XSAVE is also exposed
+ 	 * to the guest.  XSAVES depends on CR4.OSXSAVE, and CR4.OSXSAVE can be
 -- 
 2.42.0
 
