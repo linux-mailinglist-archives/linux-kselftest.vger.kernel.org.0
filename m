@@ -2,50 +2,73 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B497F7E4DA7
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Nov 2023 01:01:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B36E7E4DAC
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Nov 2023 01:02:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229844AbjKHABj (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Tue, 7 Nov 2023 19:01:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53298 "EHLO
+        id S231192AbjKHACx (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Tue, 7 Nov 2023 19:02:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbjKHABg (ORCPT
+        with ESMTP id S229650AbjKHACw (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Tue, 7 Nov 2023 19:01:36 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14977184;
-        Tue,  7 Nov 2023 16:01:34 -0800 (PST)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1F53C433C7;
-        Wed,  8 Nov 2023 00:01:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1699401693;
-        bh=ZHtciTNgsUKF6h2xCcZzk1Hy/iOAMt95pG8G48nG9MQ=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=VdR6Sn+yzn4HJkCT7ERErPRgqd0OhG/SC1iSeLCu0QG0d1cEEL45/lg/ixwH07EGU
-         Gs6AYaYh6qJi+lnZfDezSroX+je6273IKUeKlNyCAdBnjHduua4LEapel4aFqp0/OY
-         66e8RqD4PDDbexVbVMP+nYQYfwuTqE2chkq5GdhblvqvyZrm7Wov+RgdoAN7mfPLtt
-         lxFDPl3DkbmZplSeAG5p29r1sTPf8+J24E97vO3JXI9ohDz58hASz4Ucmxc2wTYf0Y
-         ZmyBoJUjFDeKA1uz8w9tOuWVpKN9dGKpBUMVhCjj8KoGthz6Mxt57uaDiW/3PWZPoy
-         sPVAiqoqRi6Mw==
-Message-ID: <7ce2d027-1e02-4a63-afb7-7304fbfbdf90@kernel.org>
-Date:   Tue, 7 Nov 2023 17:01:31 -0700
+        Tue, 7 Nov 2023 19:02:52 -0500
+Received: from mail-vs1-xe2f.google.com (mail-vs1-xe2f.google.com [IPv6:2607:f8b0:4864:20::e2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6754B184
+        for <linux-kselftest@vger.kernel.org>; Tue,  7 Nov 2023 16:02:50 -0800 (PST)
+Received: by mail-vs1-xe2f.google.com with SMTP id ada2fe7eead31-45f08657f0bso1244140137.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 07 Nov 2023 16:02:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1699401769; x=1700006569; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qhGCgNMMnqKk3D3DcXRS957yq5a/Kz42rRw6Zd9CW+U=;
+        b=1PSMIJXl9RupistbaT8e/WtduGUftDhNnA3/ee/wMeOwhoMNOOj9ofAuaMycpyNXZu
+         zQJU9nyZMQr5dKjNqV6QRFNriGNno6PhYtvUVv76CQ0jp2z/+gRiYrUcxHn0vMZ5lbSI
+         LJfi6+7WUffhmSpa6GLqI8h0oOayhDKapd1MPeFnCq7HvpuJYKbIqQlR0WIekKHgRCRO
+         TyTisICSI9vyzZMvq852e3Dv7udplOnciSR2hLACULPoRb5HPZduAarn+m0UNTX50gND
+         HHzJG45PV7yNkrIObg3EkvqXVeL3k3AO+ADdYal7GVMDi7pR3lsFUmopzGIaERRw2PCl
+         hnOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699401769; x=1700006569;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qhGCgNMMnqKk3D3DcXRS957yq5a/Kz42rRw6Zd9CW+U=;
+        b=ZocByPhDYYn/kPzE4SRuvrebGH0o5lzoqC0QKhWLLx52zWLMXUMjVzdLugLioFGdyS
+         Vm8JHxCwK19FsA3/QRJOpcGUBHtbWzxNNWJysunMvazh6CZh4by6PZFRUxJZ0UgXU5Gy
+         p1dkESyI3L7P/bwxAsxwFz5xE9/ONxDI9Rboph6k82IveGycXlH7DEg0eze2Qs6Qkj30
+         pacYJXnGqXKggIqMeKyHGGqhkJjqzOn0Y0UATggGSw5fVwClkjVcekDIZQ9doZsGtQiK
+         6cKDUgGJMH4QFRKIphS1RyayINx7YY9XodfHKUrNyFeIq88Yu871jlOZY+tsCYquy0RI
+         p/aw==
+X-Gm-Message-State: AOJu0YxqorqzKfTXLaTSc9GDGCa9rtq8Jndn3wI7/GWaymUyOZFLqQGP
+        wk/zCoMkVp5/NzmWTU0ttdMR3nywhwhKxco+jtrFAw==
+X-Google-Smtp-Source: AGHT+IFms8ZvtGXtemkp+mi4ABPteesfsjhExnDKjmFJ+Eb3POz3AZg+/vWO+o8o1uY0zVVc5E9w65kScoa/ixFh4MU=
+X-Received: by 2002:a05:6102:20de:b0:45f:57b4:c20d with SMTP id
+ i30-20020a05610220de00b0045f57b4c20dmr259111vsr.2.1699401769314; Tue, 07 Nov
+ 2023 16:02:49 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v3 10/12] tcp: RX path for devmem TCP
-Content-Language: en-US
-To:     Mina Almasry <almasrymina@google.com>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc:     Stanislav Fomichev <sdf@google.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+References: <20231106024413.2801438-1-almasrymina@google.com>
+ <20231106024413.2801438-7-almasrymina@google.com> <583db67b-96c6-4e17-bea0-b5a14799db4a@kernel.org>
+In-Reply-To: <583db67b-96c6-4e17-bea0-b5a14799db4a@kernel.org>
+From:   Mina Almasry <almasrymina@google.com>
+Date:   Tue, 7 Nov 2023 16:02:38 -0800
+Message-ID: <CAHS8izME7NixQrrh+qKnMR4+FyTzKW=B2pYyNffJ+igiehe-7g@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 06/12] memory-provider: dmabuf devmem memory provider
+To:     David Ahern <dsahern@kernel.org>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
         Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
         Sumit Semwal <sumit.semwal@linaro.org>,
         =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
         Shakeel Butt <shakeelb@google.com>,
@@ -53,73 +76,94 @@ Cc:     Stanislav Fomichev <sdf@google.com>, netdev@vger.kernel.org,
         Praveen Kaligineedi <pkaligineedi@google.com>,
         Willem de Bruijn <willemb@google.com>,
         Kaiyuan Zhang <kaiyuanz@google.com>
-References: <20231106024413.2801438-1-almasrymina@google.com>
- <20231106024413.2801438-11-almasrymina@google.com>
- <ZUk0FGuJ28s1d9OX@google.com>
- <CAHS8izNFv7r6vqYR_TYqcCuDO61F+nnNMhsSu=DrYWSr3sVgrA@mail.gmail.com>
- <CAF=yD-+MFpO5Hdqn+Q9X54SBpgcBeJvKTRD53X2oM4s8uVqnAQ@mail.gmail.com>
- <ZUlp8XutSAScKs_0@google.com>
- <CAF=yD-JZ88j+44MYgX-=oYJngz4Z0zw6Y0V3nHXisZJtNu7q6A@mail.gmail.com>
- <CAKH8qBueYgpxQTvTwngOs6RNjy9yvLF92s1p5nFrobw_UprNMQ@mail.gmail.com>
- <93eb6a2b-a991-40ca-8f26-f520c986729a@kernel.org>
- <CAF=yD-Ln4v8orUne8E7D2_eHu39PWPCrMR3Qtuh312pCu=erng@mail.gmail.com>
- <CAHS8izOU06ceKyc5oVZhdCKJqmeRdcRyJBFpjGe=u2yh=V52dQ@mail.gmail.com>
-From:   David Ahern <dsahern@kernel.org>
-In-Reply-To: <CAHS8izOU06ceKyc5oVZhdCKJqmeRdcRyJBFpjGe=u2yh=V52dQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 11/7/23 4:55 PM, Mina Almasry wrote:
-> On Mon, Nov 6, 2023 at 4:03 PM Willem de Bruijn
-> <willemdebruijn.kernel@gmail.com> wrote:
->>
->> On Mon, Nov 6, 2023 at 3:55 PM David Ahern <dsahern@kernel.org> wrote:
->>>
->>> On 11/6/23 4:32 PM, Stanislav Fomichev wrote:
->>>>> The concise notification API returns tokens as a range for
->>>>> compression, encoding as two 32-bit unsigned integers start + length.
->>>>> It allows for even further batching by returning multiple such ranges
->>>>> in a single call.
->>>>
->>>> Tangential: should tokens be u64? Otherwise we can't have more than
->>>> 4gb unacknowledged. Or that's a reasonable constraint?
->>>>
->>>
->>> Was thinking the same and with bits reserved for a dmabuf id to allow
->>> multiple dmabufs in a single rx queue (future extension, but build the
->>> capability in now). e.g., something like a 37b offset (128GB dmabuf
->>> size), 19b length (large GRO), 8b dmabuf id (lots of dmabufs to a queue).
->>
->> Agreed. Converting to 64b now sounds like a good forward looking revision.
-> 
-> The concept of IDing a dma-buf came up in a couple of different
-> contexts. First, in the context of us giving the dma-buf ID to the
-> user on recvmsg() to tell the user the data is in this specific
-> dma-buf. The second context is here, to bind dma-bufs with multiple
-> user-visible IDs to an rx queue.
-> 
-> My issue here is that I don't see anything in the struct dma_buf that
-> can practically serve as an ID:
-> 
-> https://elixir.bootlin.com/linux/v6.6-rc7/source/include/linux/dma-buf.h#L302
-> 
-> Actually, from the userspace, only the name of the dma-buf seems
-> queryable. That's only unique if the user sets it as such. The dmabuf
-> FD can't serve as an ID. For our use case we need to support 1 process
-> doing the dma-buf bind via netlink, sharing the dma-buf FD to another
-> process, and that process receives the data.  In this case the FDs
-> shown by the 2 processes may be different. Converting to 64b is a
-> trivial change I can make now, but I'm not sure how to ID these
-> dma-bufs. Suggestions welcome. I'm not sure the dma-buf guys will
-> allow adding a new ID + APIs to query said dma-buf ID.
-> 
+On Mon, Nov 6, 2023 at 1:02=E2=80=AFPM Stanislav Fomichev <sdf@google.com> =
+wrote:
+>
+> On 11/05, Mina Almasry wrote:
+> > +static inline bool page_is_page_pool_iov(const struct page *page)
+> > +{
+> > +     return (unsigned long)page & PP_DEVMEM;
+> > +}
+>
+> Speaking of bpf: one thing that might be problematic with this PP_DEVMEM
+> bit is that it will make debugging with bpftrace a bit (more)
+> complicated. If somebody were trying to get to that page_pool_iov from
+> the frags, they will have to do the equivalent of page_is_page_pool_iov,
+> but probably not a big deal? (thinking out loud)
 
-The API can be unique to this usage: e.g., add a dmabuf id to the
-netlink API. Userspace manages the ids (tells the kernel what value to
-use with an instance), the kernel validates no 2 dmabufs have the same
-id and then returns the value here.
+Good point, but that doesn't only apply to bpf I think. I'm guessing
+even debugger drgn access to the bv_page in the frag will have trouble
+if it's actually accessing an iov with LSB set.
+
+But this is not specific to this use for LSB pointer trick. I think
+all code that currently uses LSB pointer trick will have similar
+troubles. In this context my humble vote is that we get such big
+upside from reducing code churn that it's reasonable to tolerate such
+side effects.
+
+I could alleviate some of the issues by teaching drgn to do the right
+thing for devmem/iovs... time permitting.
+
+On Mon, Nov 6, 2023 at 3:49=E2=80=AFPM David Ahern <dsahern@kernel.org> wro=
+te:
+>
+> On 11/5/23 7:44 PM, Mina Almasry wrote:
+> > diff --git a/include/net/page_pool/helpers.h b/include/net/page_pool/he=
+lpers.h
+> > index 78cbb040af94..b93243c2a640 100644
+> > --- a/include/net/page_pool/helpers.h
+> > +++ b/include/net/page_pool/helpers.h
+> > @@ -111,6 +112,45 @@ page_pool_iov_binding(const struct page_pool_iov *=
+ppiov)
+> >       return page_pool_iov_owner(ppiov)->binding;
+> >  }
+> >
+> > +static inline int page_pool_iov_refcount(const struct page_pool_iov *p=
+piov)
+> > +{
+> > +     return refcount_read(&ppiov->refcount);
+> > +}
+> > +
+> > +static inline void page_pool_iov_get_many(struct page_pool_iov *ppiov,
+> > +                                       unsigned int count)
+> > +{
+> > +     refcount_add(count, &ppiov->refcount);
+> > +}
+> > +
+> > +void __page_pool_iov_free(struct page_pool_iov *ppiov);
+> > +
+> > +static inline void page_pool_iov_put_many(struct page_pool_iov *ppiov,
+> > +                                       unsigned int count)
+> > +{
+> > +     if (!refcount_sub_and_test(count, &ppiov->refcount))
+> > +             return;
+> > +
+> > +     __page_pool_iov_free(ppiov);
+> > +}
+> > +
+> > +/* page pool mm helpers */
+> > +
+> > +static inline bool page_is_page_pool_iov(const struct page *page)
+> > +{
+> > +     return (unsigned long)page & PP_DEVMEM;
+>
+> This is another one where the code can be more generic to not force a
+> lot changes later.  e.g., PP_CUSTOM or PP_NO_PAGE. Then io_uring use
+> case with host memory can leverage the iov pool in a similar manner.
+>
+> That does mean skb->devmem needs to be a flag on the page pool and not
+> just assume iov =3D=3D device memory.
+>
+>
+>
 
 
+--=20
+Thanks,
+Mina
