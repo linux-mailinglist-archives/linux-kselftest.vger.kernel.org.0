@@ -2,40 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4E597E5DB9
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Nov 2023 20:00:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24A077E5DBA
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Nov 2023 20:00:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233284AbjKHTAt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        id S232790AbjKHTAt (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
         Wed, 8 Nov 2023 14:00:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56830 "EHLO
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232582AbjKHTAb (ORCPT
+        with ESMTP id S232702AbjKHTAc (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Nov 2023 14:00:31 -0500
+        Wed, 8 Nov 2023 14:00:32 -0500
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EA72213C;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 593B1213D;
         Wed,  8 Nov 2023 11:00:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
   t=1699470029; x=1731006029;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=f/CpZWB+KHZLSvqt26TggdKx4NNWrmqcMmgPoU9+LJM=;
-  b=Ycn0Ro25JI8o5xAG9w+wR0NrFzDdkBzImNyZXz/bk4btqnPPUt1pvyVC
-   kNGJKIb/weUCRa09u1HJGatN//Kt/gkmN/4FuMKJknIg0dhU4GuX38H/w
-   S1VtDj1iCSBG2WMUvxsSFzWD3yuAW9e9dI0CfzJb4MbgX8tbRKkK0VLW8
-   qtehg2+cJJWCk+/5oRg8X/Ucczf53njUbRE0vxMuPjFvi3J+DWPfTewvI
-   P8WX4Vm0E7CUd4St1KLyhv1QJhXXOjErRnyKRzk6Lcpsi0svJC+7n8LZV
-   vpmjkEx5ysBC1AgBconP6rUSvoSkkdm7wrxM21yOj2cS2FjGcSud/CDfX
+  bh=Ze9yHJfjDYrnDYjpHoXVOqA9CFbTZQF3q6E6RV+EKNU=;
+  b=ajcAuu0GP+h2NuPBedt2fQCQQCy9HCQRcGkijDMQqcfGE5OybX3sPs7p
+   nqa0PIUQPg2r4eksHL9L5v+0lTGuHjNUR+1DmGbkAUvlN11L2UJtOAV8u
+   ox9I/KyG3yh/mArk18arK7cJKPoOXMsxxfG7xZlVwla/rodddMSskv1/4
+   zDE/Eh8iXmSPlG++Jgh+WUzs5TcBeTClwa4EOlHTdKCXJ+LdgXHdY1sYN
+   zpivHYgWILHCFqB+/vRYNhwKimetf6T8a47XHqYdlooIlskqvycMFyXGr
+   9BwgCvulVL/jaBzboWJm7wmXE2pQ8/+FFVzWvEISelCTuskwK4If4Tyvn
    Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10888"; a="8486456"
+X-IronPort-AV: E=McAfee;i="6600,9927,10888"; a="8486466"
 X-IronPort-AV: E=Sophos;i="6.03,287,1694761200"; 
-   d="scan'208";a="8486456"
+   d="scan'208";a="8486466"
 Received: from orviesa001.jf.intel.com ([10.64.159.141])
   by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2023 11:00:28 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.03,287,1694761200"; 
-   d="scan'208";a="10892515"
+   d="scan'208";a="10892519"
 Received: from unknown (HELO fred..) ([172.25.112.68])
   by orviesa001.jf.intel.com with ESMTP; 08 Nov 2023 11:00:27 -0800
 From:   Xin Li <xin3.li@intel.com>
@@ -48,9 +48,9 @@ Cc:     seanjc@google.com, pbonzini@redhat.com, corbet@lwn.net,
         bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
         hpa@zytor.com, vkuznets@redhat.com, peterz@infradead.org,
         ravi.v.shankar@intel.com
-Subject: [PATCH v1 21/23] KVM: selftests: Run debug_regs test with FRED enabled
-Date:   Wed,  8 Nov 2023 10:30:01 -0800
-Message-ID: <20231108183003.5981-22-xin3.li@intel.com>
+Subject: [PATCH v1 22/23] KVM: selftests: Add a new VM guest mode to run user level code
+Date:   Wed,  8 Nov 2023 10:30:02 -0800
+Message-ID: <20231108183003.5981-23-xin3.li@intel.com>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231108183003.5981-1-xin3.li@intel.com>
 References: <20231108183003.5981-1-xin3.li@intel.com>
@@ -60,132 +60,143 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Run another round of debug_regs test with FRED enabled if FRED is
-available.
+Add a new VM guest mode VM_MODE_PXXV48_4K_USER to set the user bit of
+guest page table entries, thus allow user level code to run in guests.
 
+Suggested-by: Sean Christopherson <seanjc@google.com>
 Signed-off-by: Xin Li <xin3.li@intel.com>
 ---
- .../selftests/kvm/include/x86_64/processor.h  |  4 ++
- .../testing/selftests/kvm/x86_64/debug_regs.c | 50 ++++++++++++++-----
- 2 files changed, 41 insertions(+), 13 deletions(-)
+ .../testing/selftests/kvm/include/kvm_util_base.h |  1 +
+ tools/testing/selftests/kvm/lib/kvm_util.c        |  5 ++++-
+ .../testing/selftests/kvm/lib/x86_64/processor.c  | 15 ++++++++++-----
+ tools/testing/selftests/kvm/lib/x86_64/vmx.c      |  4 ++--
+ 4 files changed, 17 insertions(+), 8 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-index 25bc61dac5fb..165d21fd1577 100644
---- a/tools/testing/selftests/kvm/include/x86_64/processor.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-@@ -47,6 +47,7 @@ extern bool host_cpu_is_amd;
- #define X86_CR4_SMEP		(1ul << 20)
- #define X86_CR4_SMAP		(1ul << 21)
- #define X86_CR4_PKE		(1ul << 22)
-+#define X86_CR4_FRED		(1ul << 32)
+diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
+index a18db6a7b3cf..1d2922447978 100644
+--- a/tools/testing/selftests/kvm/include/kvm_util_base.h
++++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
+@@ -185,6 +185,7 @@ enum vm_guest_mode {
+ 	VM_MODE_P36V48_16K,
+ 	VM_MODE_P36V48_64K,
+ 	VM_MODE_P36V47_16K,
++	VM_MODE_PXXV48_4K_USER,	/* For 48bits VA but ANY bits PA with USER bit set */
+ 	NUM_VM_MODES,
+ };
  
- struct xstate_header {
- 	u64				xstate_bv;
-@@ -163,6 +164,9 @@ struct kvm_x86_cpu_feature {
- #define	X86_FEATURE_SPEC_CTRL		KVM_X86_CPU_FEATURE(0x7, 0, EDX, 26)
- #define	X86_FEATURE_ARCH_CAPABILITIES	KVM_X86_CPU_FEATURE(0x7, 0, EDX, 29)
- #define	X86_FEATURE_PKS			KVM_X86_CPU_FEATURE(0x7, 0, ECX, 31)
-+#define	X86_FEATURE_FRED		KVM_X86_CPU_FEATURE(0x7, 1, EAX, 17)
-+#define	X86_FEATURE_LKGS		KVM_X86_CPU_FEATURE(0x7, 1, EAX, 18)
-+#define	X86_FEATURE_WRMSRNS		KVM_X86_CPU_FEATURE(0x7, 1, EAX, 19)
- #define	X86_FEATURE_XTILECFG		KVM_X86_CPU_FEATURE(0xD, 0, EAX, 17)
- #define	X86_FEATURE_XTILEDATA		KVM_X86_CPU_FEATURE(0xD, 0, EAX, 18)
- #define	X86_FEATURE_XSAVES		KVM_X86_CPU_FEATURE(0xD, 1, EAX, 3)
-diff --git a/tools/testing/selftests/kvm/x86_64/debug_regs.c b/tools/testing/selftests/kvm/x86_64/debug_regs.c
-index f6b295e0b2d2..69055e764f15 100644
---- a/tools/testing/selftests/kvm/x86_64/debug_regs.c
-+++ b/tools/testing/selftests/kvm/x86_64/debug_regs.c
-@@ -20,7 +20,7 @@ uint32_t guest_value;
- 
- extern unsigned char sw_bp, hw_bp, write_data, ss_start, bd_start;
- 
--static void guest_code(void)
-+static void guest_test_code(void)
- {
- 	/* Create a pending interrupt on current vCPU */
- 	x2apic_enable();
-@@ -61,6 +61,15 @@ static void guest_code(void)
- 
- 	/* DR6.BD test */
- 	asm volatile("bd_start: mov %%dr0, %%rax" : : : "rax");
-+}
-+
-+static void guest_code(void)
-+{
-+	guest_test_code();
-+
-+	if (get_cr4() & X86_CR4_FRED)
-+		guest_test_code();
-+
- 	GUEST_DONE();
- }
- 
-@@ -75,19 +84,15 @@ static void vcpu_skip_insn(struct kvm_vcpu *vcpu, int insn_len)
- 	vcpu_regs_set(vcpu, &regs);
- }
- 
--int main(void)
-+void run_test(struct kvm_vcpu *vcpu)
- {
- 	struct kvm_guest_debug debug;
-+	struct kvm_run *run = vcpu->run;
- 	unsigned long long target_dr6, target_rip;
--	struct kvm_vcpu *vcpu;
--	struct kvm_run *run;
--	struct kvm_vm *vm;
--	struct ucall uc;
--	uint64_t cmd;
- 	int i;
- 	/* Instruction lengths starting at ss_start */
- 	int ss_size[6] = {
--		1,		/* sti*/
-+		1,		/* sti */
- 		2,		/* xor */
- 		2,		/* cpuid */
- 		5,		/* mov */
-@@ -95,11 +100,6 @@ int main(void)
- 		1,		/* cli */
+diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+index 7a8af1821f5d..36f2acb378b6 100644
+--- a/tools/testing/selftests/kvm/lib/kvm_util.c
++++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+@@ -162,6 +162,7 @@ const char *vm_guest_mode_string(uint32_t i)
+ 		[VM_MODE_P36V48_16K]	= "PA-bits:36,  VA-bits:48, 16K pages",
+ 		[VM_MODE_P36V48_64K]	= "PA-bits:36,  VA-bits:48, 64K pages",
+ 		[VM_MODE_P36V47_16K]	= "PA-bits:36,  VA-bits:47, 16K pages",
++		[VM_MODE_PXXV48_4K_USER]	= "PA-bits:ANY, VA-bits:48,  4K user pages",
  	};
+ 	_Static_assert(sizeof(strings)/sizeof(char *) == NUM_VM_MODES,
+ 		       "Missing new mode strings?");
+@@ -187,6 +188,7 @@ const struct vm_guest_mode_params vm_guest_mode_params[] = {
+ 	[VM_MODE_P36V48_16K]	= { 36, 48,  0x4000, 14 },
+ 	[VM_MODE_P36V48_64K]	= { 36, 48, 0x10000, 16 },
+ 	[VM_MODE_P36V47_16K]	= { 36, 47,  0x4000, 14 },
++	[VM_MODE_PXXV48_4K_USER]	= {  0,  0,  0x1000, 12 },
+ };
+ _Static_assert(sizeof(vm_guest_mode_params)/sizeof(struct vm_guest_mode_params) == NUM_VM_MODES,
+ 	       "Missing new mode params?");
+@@ -260,6 +262,7 @@ struct kvm_vm *____vm_create(enum vm_guest_mode mode)
+ 		vm->pgtable_levels = 3;
+ 		break;
+ 	case VM_MODE_PXXV48_4K:
++	case VM_MODE_PXXV48_4K_USER:
+ #ifdef __x86_64__
+ 		kvm_get_cpu_address_width(&vm->pa_bits, &vm->va_bits);
+ 		/*
+@@ -275,7 +278,7 @@ struct kvm_vm *____vm_create(enum vm_guest_mode mode)
+ 		vm->pgtable_levels = 4;
+ 		vm->va_bits = 48;
+ #else
+-		TEST_FAIL("VM_MODE_PXXV48_4K not supported on non-x86 platforms");
++		TEST_FAIL("VM_MODE_PXXV48_4K(_USER) not supported on non-x86 platforms");
+ #endif
+ 		break;
+ 	case VM_MODE_P47V64_4K:
+diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+index d8288374078e..a8e60641df53 100644
+--- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
++++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+@@ -124,8 +124,8 @@ bool kvm_is_tdp_enabled(void)
  
--	TEST_REQUIRE(kvm_has_cap(KVM_CAP_SET_GUEST_DEBUG));
--
--	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
--	run = vcpu->run;
--
- 	/* Test software BPs - int3 */
- 	memset(&debug, 0, sizeof(debug));
- 	debug.control = KVM_GUESTDBG_ENABLE | KVM_GUESTDBG_USE_SW_BP;
-@@ -202,6 +202,30 @@ int main(void)
- 	/* Disable all debug controls, run to the end */
- 	memset(&debug, 0, sizeof(debug));
- 	vcpu_guest_debug_set(vcpu, &debug);
-+}
-+
-+int main(void)
-+{
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+	struct ucall uc;
-+	uint64_t cmd;
-+
-+	TEST_REQUIRE(kvm_has_cap(KVM_CAP_SET_GUEST_DEBUG));
-+
-+	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
-+
-+	run_test(vcpu);
-+
-+	if (kvm_cpu_has(X86_FEATURE_FRED)) {
-+		struct kvm_sregs sregs;
-+
-+		vcpu_sregs_get(vcpu, &sregs);
-+		sregs.cr4 |= X86_CR4_FRED;
-+		vcpu_sregs_set(vcpu, &sregs);
-+
-+		run_test(vcpu);
-+	}
+ void virt_arch_pgd_alloc(struct kvm_vm *vm)
+ {
+-	TEST_ASSERT(vm->mode == VM_MODE_PXXV48_4K, "Attempt to use "
+-		"unknown or unsupported guest mode, mode: 0x%x", vm->mode);
++	TEST_ASSERT((vm->mode == VM_MODE_PXXV48_4K) || (vm->mode == VM_MODE_PXXV48_4K_USER),
++		"Attempt to use unknown or unsupported guest mode, mode: 0x%x", vm->mode);
  
- 	vcpu_run(vcpu);
- 	TEST_ASSERT_KVM_EXIT_REASON(vcpu, KVM_EXIT_IO);
+ 	/* If needed, create page map l4 table. */
+ 	if (!vm->pgd_created) {
+@@ -159,6 +159,8 @@ static uint64_t *virt_create_upper_pte(struct kvm_vm *vm,
+ 
+ 	if (!(*pte & PTE_PRESENT_MASK)) {
+ 		*pte = PTE_PRESENT_MASK | PTE_WRITABLE_MASK;
++		if (vm->mode == VM_MODE_PXXV48_4K_USER)
++			*pte |= PTE_USER_MASK;
+ 		if (current_level == target_level)
+ 			*pte |= PTE_LARGE_MASK | (paddr & PHYSICAL_PAGE_MASK);
+ 		else
+@@ -185,7 +187,7 @@ void __virt_pg_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr, int level)
+ 	uint64_t *pml4e, *pdpe, *pde;
+ 	uint64_t *pte;
+ 
+-	TEST_ASSERT(vm->mode == VM_MODE_PXXV48_4K,
++	TEST_ASSERT((vm->mode == VM_MODE_PXXV48_4K) || (vm->mode == VM_MODE_PXXV48_4K_USER),
+ 		    "Unknown or unsupported guest mode, mode: 0x%x", vm->mode);
+ 
+ 	TEST_ASSERT((vaddr % pg_size) == 0,
+@@ -222,6 +224,8 @@ void __virt_pg_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr, int level)
+ 	TEST_ASSERT(!(*pte & PTE_PRESENT_MASK),
+ 		    "PTE already present for 4k page at vaddr: 0x%lx\n", vaddr);
+ 	*pte = PTE_PRESENT_MASK | PTE_WRITABLE_MASK | (paddr & PHYSICAL_PAGE_MASK);
++	if (vm->mode == VM_MODE_PXXV48_4K_USER)
++		*pte |= PTE_USER_MASK;
+ }
+ 
+ void virt_arch_pg_map(struct kvm_vm *vm, uint64_t vaddr, uint64_t paddr)
+@@ -268,8 +272,8 @@ uint64_t *__vm_get_page_table_entry(struct kvm_vm *vm, uint64_t vaddr,
+ 	TEST_ASSERT(*level >= PG_LEVEL_NONE && *level < PG_LEVEL_NUM,
+ 		    "Invalid PG_LEVEL_* '%d'", *level);
+ 
+-	TEST_ASSERT(vm->mode == VM_MODE_PXXV48_4K, "Attempt to use "
+-		"unknown or unsupported guest mode, mode: 0x%x", vm->mode);
++	TEST_ASSERT((vm->mode == VM_MODE_PXXV48_4K) || (vm->mode == VM_MODE_PXXV48_4K_USER),
++		"Attempt to use unknown or unsupported guest mode, mode: 0x%x", vm->mode);
+ 	TEST_ASSERT(sparsebit_is_set(vm->vpages_valid,
+ 		(vaddr >> vm->page_shift)),
+ 		"Invalid virtual address, vaddr: 0x%lx",
+@@ -536,6 +540,7 @@ static void vcpu_setup(struct kvm_vm *vm, struct kvm_vcpu *vcpu)
+ 
+ 	switch (vm->mode) {
+ 	case VM_MODE_PXXV48_4K:
++	case VM_MODE_PXXV48_4K_USER:
+ 		sregs.cr0 = X86_CR0_PE | X86_CR0_NE | X86_CR0_PG;
+ 		sregs.cr4 |= X86_CR4_PAE | X86_CR4_OSFXSR;
+ 		sregs.efer |= (EFER_LME | EFER_LMA | EFER_NX);
+diff --git a/tools/testing/selftests/kvm/lib/x86_64/vmx.c b/tools/testing/selftests/kvm/lib/x86_64/vmx.c
+index 59d97531c9b1..65147de6f9c0 100644
+--- a/tools/testing/selftests/kvm/lib/x86_64/vmx.c
++++ b/tools/testing/selftests/kvm/lib/x86_64/vmx.c
+@@ -403,8 +403,8 @@ void __nested_pg_map(struct vmx_pages *vmx, struct kvm_vm *vm,
+ 	struct eptPageTableEntry *pt = vmx->eptp_hva, *pte;
+ 	uint16_t index;
+ 
+-	TEST_ASSERT(vm->mode == VM_MODE_PXXV48_4K, "Attempt to use "
+-		    "unknown or unsupported guest mode, mode: 0x%x", vm->mode);
++	TEST_ASSERT((vm->mode == VM_MODE_PXXV48_4K) || (vm->mode == VM_MODE_PXXV48_4K_USER),
++		    "Attempt to use unknown or unsupported guest mode, mode: 0x%x", vm->mode);
+ 
+ 	TEST_ASSERT((nested_paddr >> 48) == 0,
+ 		    "Nested physical address 0x%lx requires 5-level paging",
 -- 
 2.42.0
 
