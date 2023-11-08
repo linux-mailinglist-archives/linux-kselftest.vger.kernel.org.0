@@ -2,40 +2,40 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E5117E5D91
-	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Nov 2023 20:00:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E6867E5D93
+	for <lists+linux-kselftest@lfdr.de>; Wed,  8 Nov 2023 20:00:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231630AbjKHTAV (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Nov 2023 14:00:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53128 "EHLO
+        id S229610AbjKHTAW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Nov 2023 14:00:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbjKHTAU (ORCPT
+        with ESMTP id S231177AbjKHTAV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Nov 2023 14:00:20 -0500
+        Wed, 8 Nov 2023 14:00:21 -0500
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA524210E;
-        Wed,  8 Nov 2023 11:00:18 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1148B2110;
+        Wed,  8 Nov 2023 11:00:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699470019; x=1731006019;
+  t=1699470020; x=1731006020;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=QfMz9C2KeVUd51LirDmeyeSpcRfMGUSn7faCKNIe7JM=;
-  b=jh8feKaL0FJGiHL+G8jGg4vJd5Of+WyMN9cP9Pa2vI7im7w9PXgLhz6f
-   E3OcjPEMzTbRw9DGY7RdEpNRuNbhFsVIC+ILVfA0jrfvqG4bx7PSqBC0A
-   plVBSWgNtMtcv5znCCW+ESRXkUA18qC6N7ERmtqEKg9TQh6sfAztw5+uC
-   6HhBLc4ABAgkTTjHrWI9gU+5Iv0pKRDxPExckLK6ybxIsU/tn2v+BXH3H
-   t+qX69/bZbZwTjvZSyInF/O+vAY2HQTHF+Q9w09WX6SUrkAkRl/U6sJpT
-   esS/GH/gyJTRmcaX3ZITWvEWIwqDrviQZBIyUhgjnK4T0YMx/qG7rBNeY
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10888"; a="8486214"
+  bh=fdY+4UiWU7txxIIX8tQBBVkqeGakHWhQSqAUgojOiL0=;
+  b=RPWI7BFk37C/2hEoMC9bqzVfePnZfCWyRbG6RYrcI7MteDYIcu3JxDG0
+   952orTVp6ckzlMi9ZM/CITecWeapafsJ1hec4bPn7K0LOcnrEi/8RCKy4
+   5lWc31tEPmfTgVwLVoufOBodXZhOpvVyUWXuUPes25CeMKqTLaCDu64eI
+   9y/SDQ8XZnFdu5QWzT61i4Is2N+MCwmDG+b2DIdqgthUQ08GVlbvNna+P
+   yn8xmzVHIZcZl4Dh6PHuauXBm7XdOGswRmH/2OjKm3725jFySbnOdjX5h
+   VcR53C50EhthdCAy1fCVqF4t6k60QZM6xTwkSp+Zetu/a5G3WZ4tKD8qI
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10888"; a="8486227"
 X-IronPort-AV: E=Sophos;i="6.03,287,1694761200"; 
-   d="scan'208";a="8486214"
+   d="scan'208";a="8486227"
 Received: from orviesa001.jf.intel.com ([10.64.159.141])
   by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2023 11:00:18 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.03,287,1694761200"; 
-   d="scan'208";a="10892406"
+   d="scan'208";a="10892415"
 Received: from unknown (HELO fred..) ([172.25.112.68])
   by orviesa001.jf.intel.com with ESMTP; 08 Nov 2023 11:00:15 -0800
 From:   Xin Li <xin3.li@intel.com>
@@ -48,9 +48,9 @@ Cc:     seanjc@google.com, pbonzini@redhat.com, corbet@lwn.net,
         bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
         hpa@zytor.com, vkuznets@redhat.com, peterz@infradead.org,
         ravi.v.shankar@intel.com
-Subject: [PATCH v1 01/23] KVM: VMX: Cleanup VMX basic information defines and usages
-Date:   Wed,  8 Nov 2023 10:29:41 -0800
-Message-ID: <20231108183003.5981-2-xin3.li@intel.com>
+Subject: [PATCH v1 02/23] KVM: VMX: Cleanup VMX misc information defines and usages
+Date:   Wed,  8 Nov 2023 10:29:42 -0800
+Message-ID: <20231108183003.5981-3-xin3.li@intel.com>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231108183003.5981-1-xin3.li@intel.com>
 References: <20231108183003.5981-1-xin3.li@intel.com>
@@ -60,285 +60,205 @@ Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Define VMX basic information fields with BIT_ULL()/GENMASK_ULL(), and
-replace hardcoded VMX basic numbers with these field macros.
+Define VMX misc information fields with BIT_ULL()/GENMASK_ULL(), and move
+VMX misc field macros to vmx.h if used in multiple files or where they are
+used only once.
 
-Per Sean's ask, save the full/raw value of MSR_IA32_VMX_BASIC in the
-global vmcs_config as type u64 to get rid of the hi/lo crud, and then
-use VMX_BASIC helpers to extract info as needed.
-
-Tested-by: Shan Kang <shan.kang@intel.com>
 Signed-off-by: Xin Li <xin3.li@intel.com>
 ---
-
-Changes since v2:
-* Simply save the full/raw value of MSR_IA32_VMX_BASIC in the global
-  vmcs_config, and then use the helpers to extract info from it as
-  needed (Sean Christopherson).
-* Move all VMX_MISC related changes to the second patch (Kai Huang).
-* Commonize memory type definitions used in the VMX files, as memory
-  types are architectural.
-
-Changes since v1:
-* Don't add field shift macros unless it's really needed, extra layer
-  of indirect makes it harder to read (Sean Christopherson).
-* Add a static_assert() to ensure that VMX_BASIC_FEATURES_MASK doesn't
-  overlap with VMX_BASIC_RESERVED_BITS (Sean Christopherson).
-* read MSR_IA32_VMX_BASIC into an u64 rather than 2 u32 (Sean
-  Christopherson).
-* Add 2 new functions for extracting fields from VMX basic (Sean
-  Christopherson).
-* Drop the tools header update (Sean Christopherson).
-* Move VMX basic field macros to arch/x86/include/asm/vmx.h.
----
- arch/x86/include/asm/msr-index.h |  9 ---------
- arch/x86/include/asm/vmx.h       | 15 +++++++++++++--
- arch/x86/kvm/vmx/capabilities.h  |  6 ++----
- arch/x86/kvm/vmx/nested.c        | 31 +++++++++++++++++++++----------
- arch/x86/kvm/vmx/vmx.c           | 24 ++++++++++--------------
- 5 files changed, 46 insertions(+), 39 deletions(-)
+ arch/x86/include/asm/msr-index.h |  5 -----
+ arch/x86/include/asm/vmx.h       | 12 +++++------
+ arch/x86/kvm/vmx/capabilities.h  |  4 ++--
+ arch/x86/kvm/vmx/nested.c        | 34 ++++++++++++++++++++++++--------
+ arch/x86/kvm/vmx/nested.h        |  2 +-
+ arch/x86/kvm/vmx/vmx.c           |  8 +++-----
+ 6 files changed, 37 insertions(+), 28 deletions(-)
 
 diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-index d1d6b3c3e6bd..68c75c299300 100644
+index 68c75c299300..d7d4eace5dae 100644
 --- a/arch/x86/include/asm/msr-index.h
 +++ b/arch/x86/include/asm/msr-index.h
-@@ -1110,15 +1110,6 @@
- #define MSR_IA32_VMX_VMFUNC             0x00000491
- #define MSR_IA32_VMX_PROCBASED_CTLS3	0x00000492
+@@ -1126,11 +1126,6 @@
+ #define MSR_IA32_SMBA_BW_BASE		0xc0000280
+ #define MSR_IA32_EVT_CFG_BASE		0xc0000400
  
--/* VMX_BASIC bits and bitmasks */
--#define VMX_BASIC_VMCS_SIZE_SHIFT	32
--#define VMX_BASIC_TRUE_CTLS		(1ULL << 55)
--#define VMX_BASIC_64		0x0001000000000000LLU
--#define VMX_BASIC_MEM_TYPE_SHIFT	50
--#define VMX_BASIC_MEM_TYPE_MASK	0x003c000000000000LLU
--#define VMX_BASIC_MEM_TYPE_WB	6LLU
--#define VMX_BASIC_INOUT		0x0040000000000000LLU
+-/* MSR_IA32_VMX_MISC bits */
+-#define MSR_IA32_VMX_MISC_INTEL_PT                 (1ULL << 14)
+-#define MSR_IA32_VMX_MISC_VMWRITE_SHADOW_RO_FIELDS (1ULL << 29)
+-#define MSR_IA32_VMX_MISC_PREEMPTION_TIMER_SCALE   0x1F
 -
- /* Resctrl MSRs: */
- /* - Intel: */
- #define MSR_IA32_L3_QOS_CFG		0xc81
+ /* AMD-V MSRs */
+ #define MSR_VM_CR                       0xc0010114
+ #define MSR_VM_IGNNE                    0xc0010115
 diff --git a/arch/x86/include/asm/vmx.h b/arch/x86/include/asm/vmx.h
-index 4dba17363008..273960225a3b 100644
+index 273960225a3b..5771c5751e7e 100644
 --- a/arch/x86/include/asm/vmx.h
 +++ b/arch/x86/include/asm/vmx.h
-@@ -121,6 +121,14 @@
+@@ -129,12 +129,10 @@
+ #define VMX_BASIC_32BIT_PHYS_ADDR_ONLY		BIT_ULL(48)
+ #define VMX_BASIC_INOUT				BIT_ULL(54)
  
- #define VM_ENTRY_ALWAYSON_WITHOUT_TRUE_MSR	0x000011ff
+-#define VMX_MISC_PREEMPTION_TIMER_RATE_MASK	0x0000001f
+-#define VMX_MISC_SAVE_EFER_LMA			0x00000020
+-#define VMX_MISC_ACTIVITY_HLT			0x00000040
+-#define VMX_MISC_ACTIVITY_WAIT_SIPI		0x00000100
+-#define VMX_MISC_ZERO_LEN_INS			0x40000000
+-#define VMX_MISC_MSR_LIST_MULTIPLIER		512
++/* VMX_MISC bits and bitmasks */
++#define VMX_MISC_INTEL_PT			BIT_ULL(14)
++#define VMX_MISC_VMWRITE_SHADOW_RO_FIELDS	BIT_ULL(29)
++#define VMX_MISC_ZERO_LEN_INS			BIT_ULL(30)
  
-+/* x86 memory types, explicitly used in VMX only */
-+#define MEM_TYPE_WB				0x6ULL
-+#define MEM_TYPE_UC				0x0ULL
-+
-+/* VMX_BASIC bits and bitmasks */
-+#define VMX_BASIC_32BIT_PHYS_ADDR_ONLY		BIT_ULL(48)
-+#define VMX_BASIC_INOUT				BIT_ULL(54)
-+
- #define VMX_MISC_PREEMPTION_TIMER_RATE_MASK	0x0000001f
- #define VMX_MISC_SAVE_EFER_LMA			0x00000020
- #define VMX_MISC_ACTIVITY_HLT			0x00000040
-@@ -144,6 +152,11 @@ static inline u32 vmx_basic_vmcs_size(u64 vmx_basic)
- 	return (vmx_basic & GENMASK_ULL(44, 32)) >> 32;
- }
+ /* VMFUNC functions */
+ #define VMFUNC_CONTROL_BIT(x)	BIT((VMX_FEATURE_##x & 0x1f) - 28)
+@@ -159,7 +157,7 @@ static inline u32 vmx_basic_vmcs_mem_type(u64 vmx_basic)
  
-+static inline u32 vmx_basic_vmcs_mem_type(u64 vmx_basic)
-+{
-+	return (vmx_basic & GENMASK_ULL(53, 50)) >> 50;
-+}
-+
  static inline int vmx_misc_preemption_timer_rate(u64 vmx_misc)
  {
- 	return vmx_misc & VMX_MISC_PREEMPTION_TIMER_RATE_MASK;
-@@ -506,8 +519,6 @@ enum vmcs_field {
- #define VMX_EPTP_PWL_5				0x20ull
- #define VMX_EPTP_AD_ENABLE_BIT			(1ull << 6)
- #define VMX_EPTP_MT_MASK			0x7ull
--#define VMX_EPTP_MT_WB				0x6ull
--#define VMX_EPTP_MT_UC				0x0ull
- #define VMX_EPT_READABLE_MASK			0x1ull
- #define VMX_EPT_WRITABLE_MASK			0x2ull
- #define VMX_EPT_EXECUTABLE_MASK			0x4ull
+-	return vmx_misc & VMX_MISC_PREEMPTION_TIMER_RATE_MASK;
++	return vmx_misc & GENMASK_ULL(4, 0);
+ }
+ 
+ static inline int vmx_misc_cr3_count(u64 vmx_misc)
 diff --git a/arch/x86/kvm/vmx/capabilities.h b/arch/x86/kvm/vmx/capabilities.h
-index 41a4533f9989..86ce8bb96bed 100644
+index 86ce8bb96bed..cb6588238f46 100644
 --- a/arch/x86/kvm/vmx/capabilities.h
 +++ b/arch/x86/kvm/vmx/capabilities.h
-@@ -54,9 +54,7 @@ struct nested_vmx_msrs {
- };
- 
- struct vmcs_config {
--	int size;
--	u32 basic_cap;
--	u32 revision_id;
-+	u64 basic;
- 	u32 pin_based_exec_ctrl;
- 	u32 cpu_based_exec_ctrl;
- 	u32 cpu_based_2nd_exec_ctrl;
-@@ -76,7 +74,7 @@ extern struct vmx_capability vmx_capability __ro_after_init;
- 
- static inline bool cpu_has_vmx_basic_inout(void)
+@@ -223,7 +223,7 @@ static inline bool cpu_has_vmx_vmfunc(void)
+ static inline bool cpu_has_vmx_shadow_vmcs(void)
  {
--	return	(((u64)vmcs_config.basic_cap << 32) & VMX_BASIC_INOUT);
-+	return	vmcs_config.basic & VMX_BASIC_INOUT;
- }
+ 	/* check if the cpu supports writing r/o exit information fields */
+-	if (!(vmcs_config.misc & MSR_IA32_VMX_MISC_VMWRITE_SHADOW_RO_FIELDS))
++	if (!(vmcs_config.misc & VMX_MISC_VMWRITE_SHADOW_RO_FIELDS))
+ 		return false;
  
- static inline bool cpu_has_virtual_nmis(void)
+ 	return vmcs_config.cpu_based_2nd_exec_ctrl &
+@@ -365,7 +365,7 @@ static inline bool cpu_has_vmx_invvpid_global(void)
+ 
+ static inline bool cpu_has_vmx_intel_pt(void)
+ {
+-	return (vmcs_config.misc & MSR_IA32_VMX_MISC_INTEL_PT) &&
++	return (vmcs_config.misc & VMX_MISC_INTEL_PT) &&
+ 		(vmcs_config.cpu_based_2nd_exec_ctrl & SECONDARY_EXEC_PT_USE_GPA) &&
+ 		(vmcs_config.vmentry_ctrl & VM_ENTRY_LOAD_IA32_RTIT_CTL);
+ }
 diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index c5ec0ef51ff7..23704f8d9035 100644
+index 23704f8d9035..ff07d6e736a2 100644
 --- a/arch/x86/kvm/vmx/nested.c
 +++ b/arch/x86/kvm/vmx/nested.c
-@@ -1201,23 +1201,34 @@ static bool is_bitwise_subset(u64 superset, u64 subset, u64 mask)
- 	return (superset | subset) == superset;
+@@ -886,6 +886,8 @@ static int nested_vmx_store_msr_check(struct kvm_vcpu *vcpu,
+ 	return 0;
  }
  
-+#define VMX_BASIC_VMCS_SIZE_SHIFT		32
-+#define VMX_BASIC_DUAL_MONITOR_TREATMENT	BIT_ULL(49)
-+#define VMX_BASIC_MEM_TYPE_SHIFT		50
-+#define VMX_BASIC_TRUE_CTLS			BIT_ULL(55)
++#define VMX_MISC_MSR_LIST_MULTIPLIER	512
 +
-+#define VMX_BASIC_FEATURES_MASK			\
-+	(VMX_BASIC_DUAL_MONITOR_TREATMENT |	\
-+	 VMX_BASIC_INOUT |			\
-+	 VMX_BASIC_TRUE_CTLS)
-+
-+#define VMX_BASIC_RESERVED_BITS			\
-+	(GENMASK_ULL(63, 56) | GENMASK_ULL(47, 45) | BIT_ULL(31))
-+
- static int vmx_restore_vmx_basic(struct vcpu_vmx *vmx, u64 data)
+ static u32 nested_vmx_max_atomic_switch_msrs(struct kvm_vcpu *vcpu)
  {
--	const u64 feature_and_reserved =
--		/* feature (except bit 48; see below) */
--		BIT_ULL(49) | BIT_ULL(54) | BIT_ULL(55) |
--		/* reserved */
--		BIT_ULL(31) | GENMASK_ULL(47, 45) | GENMASK_ULL(63, 56);
- 	u64 vmx_basic = vmcs_config.nested.basic;
+ 	struct vcpu_vmx *vmx = to_vmx(vcpu);
+@@ -1295,18 +1297,34 @@ vmx_restore_control_msr(struct vcpu_vmx *vmx, u32 msr_index, u64 data)
+ 	return 0;
+ }
  
--	if (!is_bitwise_subset(vmx_basic, data, feature_and_reserved))
-+	static_assert(!(VMX_BASIC_FEATURES_MASK & VMX_BASIC_RESERVED_BITS));
++#define VMX_MISC_SAVE_EFER_LMA		BIT_ULL(5)
++#define VMX_MISC_ACTIVITY_STATE_BITMAP	GENMASK_ULL(8, 6)
++#define VMX_MISC_ACTIVITY_HLT		BIT_ULL(6)
++#define VMX_MISC_ACTIVITY_WAIT_SIPI	BIT_ULL(8)
++#define VMX_MISC_RDMSR_IN_SMM		BIT_ULL(15)
++#define VMX_MISC_VMXOFF_BLOCK_SMI	BIT_ULL(28)
 +
-+	if (!is_bitwise_subset(vmx_basic, data,
-+			       VMX_BASIC_FEATURES_MASK | VMX_BASIC_RESERVED_BITS))
++#define VMX_MISC_FEATURES_MASK			\
++	(VMX_MISC_SAVE_EFER_LMA |		\
++	 VMX_MISC_ACTIVITY_STATE_BITMAP |	\
++	 VMX_MISC_INTEL_PT |			\
++	 VMX_MISC_RDMSR_IN_SMM |		\
++	 VMX_MISC_VMXOFF_BLOCK_SMI |		\
++	 VMX_MISC_VMWRITE_SHADOW_RO_FIELDS |	\
++	 VMX_MISC_ZERO_LEN_INS)
++
++#define VMX_MISC_RESERVED_BITS			\
++	(BIT_ULL(31) | GENMASK_ULL(13, 9))
++
+ static int vmx_restore_vmx_misc(struct vcpu_vmx *vmx, u64 data)
+ {
+-	const u64 feature_and_reserved_bits =
+-		/* feature */
+-		BIT_ULL(5) | GENMASK_ULL(8, 6) | BIT_ULL(14) | BIT_ULL(15) |
+-		BIT_ULL(28) | BIT_ULL(29) | BIT_ULL(30) |
+-		/* reserved */
+-		GENMASK_ULL(13, 9) | BIT_ULL(31);
+ 	u64 vmx_misc = vmx_control_msr(vmcs_config.nested.misc_low,
+ 				       vmcs_config.nested.misc_high);
+ 
+-	if (!is_bitwise_subset(vmx_misc, data, feature_and_reserved_bits))
++	static_assert(!(VMX_MISC_FEATURES_MASK & VMX_MISC_RESERVED_BITS));
++
++	if (!is_bitwise_subset(vmx_misc, data,
++			       VMX_MISC_FEATURES_MASK | VMX_MISC_RESERVED_BITS))
  		return -EINVAL;
  
- 	/*
- 	 * KVM does not emulate a version of VMX that constrains physical
- 	 * addresses of VMX structures (e.g. VMCS) to 32-bits.
- 	 */
--	if (data & BIT_ULL(48))
-+	if (data & VMX_BASIC_32BIT_PHYS_ADDR_ONLY)
- 		return -EINVAL;
+ 	if ((vmx->nested.msrs.pinbased_ctls_high &
+@@ -6956,7 +6974,7 @@ static void nested_vmx_setup_misc_data(struct vmcs_config *vmcs_conf,
+ {
+ 	msrs->misc_low = (u32)vmcs_conf->misc & VMX_MISC_SAVE_EFER_LMA;
+ 	msrs->misc_low |=
+-		MSR_IA32_VMX_MISC_VMWRITE_SHADOW_RO_FIELDS |
++		VMX_MISC_VMWRITE_SHADOW_RO_FIELDS |
+ 		VMX_MISC_EMULATED_PREEMPTION_TIMER_RATE |
+ 		VMX_MISC_ACTIVITY_HLT |
+ 		VMX_MISC_ACTIVITY_WAIT_SIPI;
+diff --git a/arch/x86/kvm/vmx/nested.h b/arch/x86/kvm/vmx/nested.h
+index b4b9d51438c6..24ff4df509b6 100644
+--- a/arch/x86/kvm/vmx/nested.h
++++ b/arch/x86/kvm/vmx/nested.h
+@@ -108,7 +108,7 @@ static inline unsigned nested_cpu_vmx_misc_cr3_count(struct kvm_vcpu *vcpu)
+ static inline bool nested_cpu_has_vmwrite_any_field(struct kvm_vcpu *vcpu)
+ {
+ 	return to_vmx(vcpu)->nested.msrs.misc_low &
+-		MSR_IA32_VMX_MISC_VMWRITE_SHADOW_RO_FIELDS;
++		VMX_MISC_VMWRITE_SHADOW_RO_FIELDS;
+ }
  
- 	if (vmx_basic_vmcs_revision_id(vmx_basic) !=
-@@ -2690,11 +2701,11 @@ static bool nested_vmx_check_eptp(struct kvm_vcpu *vcpu, u64 new_eptp)
- 
- 	/* Check for memory type validity */
- 	switch (new_eptp & VMX_EPTP_MT_MASK) {
--	case VMX_EPTP_MT_UC:
-+	case MEM_TYPE_UC:
- 		if (CC(!(vmx->nested.msrs.ept_caps & VMX_EPTP_UC_BIT)))
- 			return false;
- 		break;
--	case VMX_EPTP_MT_WB:
-+	case MEM_TYPE_WB:
- 		if (CC(!(vmx->nested.msrs.ept_caps & VMX_EPTP_WB_BIT)))
- 			return false;
- 		break;
-@@ -6964,7 +6975,7 @@ static void nested_vmx_setup_basic(struct nested_vmx_msrs *msrs)
- 		VMCS12_REVISION |
- 		VMX_BASIC_TRUE_CTLS |
- 		((u64)VMCS12_SIZE << VMX_BASIC_VMCS_SIZE_SHIFT) |
--		(VMX_BASIC_MEM_TYPE_WB << VMX_BASIC_MEM_TYPE_SHIFT);
-+		(MEM_TYPE_WB << VMX_BASIC_MEM_TYPE_SHIFT);
- 
- 	if (cpu_has_vmx_basic_inout())
- 		msrs->basic |= VMX_BASIC_INOUT;
+ static inline bool nested_cpu_has_zero_length_injection(struct kvm_vcpu *vcpu)
 diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index ba5cd26137e0..6b3b2df11cea 100644
+index 6b3b2df11cea..396a806bf2b2 100644
 --- a/arch/x86/kvm/vmx/vmx.c
 +++ b/arch/x86/kvm/vmx/vmx.c
-@@ -2569,13 +2569,13 @@ static u64 adjust_vmx_controls64(u64 ctl_opt, u32 msr)
- static int setup_vmcs_config(struct vmcs_config *vmcs_conf,
- 			     struct vmx_capability *vmx_cap)
- {
--	u32 vmx_msr_low, vmx_msr_high;
- 	u32 _pin_based_exec_control = 0;
- 	u32 _cpu_based_exec_control = 0;
- 	u32 _cpu_based_2nd_exec_control = 0;
- 	u64 _cpu_based_3rd_exec_control = 0;
+@@ -2576,7 +2576,6 @@ static int setup_vmcs_config(struct vmcs_config *vmcs_conf,
  	u32 _vmexit_control = 0;
  	u32 _vmentry_control = 0;
-+	u64 basic_msr;
- 	u64 misc_msr;
+ 	u64 basic_msr;
+-	u64 misc_msr;
  	int i;
  
-@@ -2694,29 +2694,25 @@ static int setup_vmcs_config(struct vmcs_config *vmcs_conf,
- 		_vmexit_control &= ~x_ctrl;
- 	}
- 
--	rdmsr(MSR_IA32_VMX_BASIC, vmx_msr_low, vmx_msr_high);
-+	rdmsrl(MSR_IA32_VMX_BASIC, basic_msr);
- 
- 	/* IA-32 SDM Vol 3B: VMCS size is never greater than 4kB. */
--	if ((vmx_msr_high & 0x1fff) > PAGE_SIZE)
-+	if ((vmx_basic_vmcs_size(basic_msr) > PAGE_SIZE))
+ 	/*
+@@ -2710,8 +2709,6 @@ static int setup_vmcs_config(struct vmcs_config *vmcs_conf,
+ 	if (vmx_basic_vmcs_mem_type(basic_msr) != MEM_TYPE_WB)
  		return -EIO;
  
- #ifdef CONFIG_X86_64
- 	/* IA-32 SDM Vol 3B: 64-bit CPUs always have VMX_BASIC_MSR[48]==0. */
--	if (vmx_msr_high & (1u<<16))
-+	if (basic_msr & VMX_BASIC_32BIT_PHYS_ADDR_ONLY)
- 		return -EIO;
- #endif
- 
- 	/* Require Write-Back (WB) memory type for VMCS accesses. */
--	if (((vmx_msr_high >> 18) & 15) != 6)
-+	if (vmx_basic_vmcs_mem_type(basic_msr) != MEM_TYPE_WB)
- 		return -EIO;
- 
- 	rdmsrl(MSR_IA32_VMX_MISC, misc_msr);
- 
--	vmcs_conf->size = vmx_msr_high & 0x1fff;
--	vmcs_conf->basic_cap = vmx_msr_high & ~0x1fff;
+-	rdmsrl(MSR_IA32_VMX_MISC, misc_msr);
 -
--	vmcs_conf->revision_id = vmx_msr_low;
--
-+	vmcs_conf->basic = basic_msr;
+ 	vmcs_conf->basic = basic_msr;
  	vmcs_conf->pin_based_exec_ctrl = _pin_based_exec_control;
  	vmcs_conf->cpu_based_exec_ctrl = _cpu_based_exec_control;
- 	vmcs_conf->cpu_based_2nd_exec_ctrl = _cpu_based_2nd_exec_control;
-@@ -2866,13 +2862,13 @@ struct vmcs *alloc_vmcs_cpu(bool shadow, int cpu, gfp_t flags)
- 	if (!pages)
- 		return NULL;
- 	vmcs = page_address(pages);
--	memset(vmcs, 0, vmcs_config.size);
-+	memset(vmcs, 0, vmx_basic_vmcs_size(vmcs_config.basic));
+@@ -2719,7 +2716,8 @@ static int setup_vmcs_config(struct vmcs_config *vmcs_conf,
+ 	vmcs_conf->cpu_based_3rd_exec_ctrl = _cpu_based_3rd_exec_control;
+ 	vmcs_conf->vmexit_ctrl         = _vmexit_control;
+ 	vmcs_conf->vmentry_ctrl        = _vmentry_control;
+-	vmcs_conf->misc	= misc_msr;
++
++	rdmsrl(MSR_IA32_VMX_MISC, vmcs_conf->misc);
  
- 	/* KVM supports Enlightened VMCS v1 only */
- 	if (kvm_is_using_evmcs())
- 		vmcs->hdr.revision_id = KVM_EVMCS_VERSION;
- 	else
--		vmcs->hdr.revision_id = vmcs_config.revision_id;
-+		vmcs->hdr.revision_id = vmx_basic_vmcs_revision_id(vmcs_config.basic);
+ #if IS_ENABLED(CONFIG_HYPERV)
+ 	if (enlightened_vmcs)
+@@ -8555,7 +8553,7 @@ static __init int hardware_setup(void)
+ 		u64 use_timer_freq = 5000ULL * 1000 * 1000;
  
- 	if (shadow)
- 		vmcs->hdr.shadow_vmcs = 1;
-@@ -2965,7 +2961,7 @@ static __init int alloc_kvm_area(void)
- 		 * physical CPU.
- 		 */
- 		if (kvm_is_using_evmcs())
--			vmcs->hdr.revision_id = vmcs_config.revision_id;
-+			vmcs->hdr.revision_id = vmx_basic_vmcs_revision_id(vmcs_config.basic);
+ 		cpu_preemption_timer_multi =
+-			vmcs_config.misc & VMX_MISC_PREEMPTION_TIMER_RATE_MASK;
++			vmx_misc_preemption_timer_rate(vmcs_config.misc);
  
- 		per_cpu(vmxarea, cpu) = vmcs;
- 	}
-@@ -3367,7 +3363,7 @@ static int vmx_get_max_ept_level(void)
- 
- u64 construct_eptp(struct kvm_vcpu *vcpu, hpa_t root_hpa, int root_level)
- {
--	u64 eptp = VMX_EPTP_MT_WB;
-+	u64 eptp = MEM_TYPE_WB;
- 
- 	eptp |= (root_level == 5) ? VMX_EPTP_PWL_5 : VMX_EPTP_PWL_4;
- 
+ 		if (tsc_khz)
+ 			use_timer_freq = (u64)tsc_khz * 1000;
 -- 
 2.42.0
 
