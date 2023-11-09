@@ -2,235 +2,137 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 529627E730B
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Nov 2023 21:47:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 858DB7E7469
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Nov 2023 23:37:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345221AbjKIUrz (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Nov 2023 15:47:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53420 "EHLO
+        id S230377AbjKIWhg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Nov 2023 17:37:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1345212AbjKIUru (ORCPT
+        with ESMTP id S229629AbjKIWhf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Nov 2023 15:47:50 -0500
-Received: from snail.cherry.relay.mailchannels.net (snail.cherry.relay.mailchannels.net [23.83.223.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE6544A4
-        for <linux-kselftest@vger.kernel.org>; Thu,  9 Nov 2023 12:47:48 -0800 (PST)
+        Thu, 9 Nov 2023 17:37:35 -0500
+Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43A393C01
+        for <linux-kselftest@vger.kernel.org>; Thu,  9 Nov 2023 14:37:33 -0800 (PST)
 X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
 Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id D0F7C82BA7
-        for <linux-kselftest@vger.kernel.org>; Thu,  9 Nov 2023 20:42:16 +0000 (UTC)
-Received: from pdx1-sub0-mail-a263.dreamhost.com (unknown [127.0.0.6])
+        by relay.mailchannels.net (Postfix) with ESMTP id 9B5C881138
+        for <linux-kselftest@vger.kernel.org>; Thu,  9 Nov 2023 22:37:32 +0000 (UTC)
+Received: from pdx1-sub0-mail-a219.dreamhost.com (unknown [127.0.0.6])
         (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 84AAF82419
-        for <linux-kselftest@vger.kernel.org>; Thu,  9 Nov 2023 20:42:16 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1699562536; a=rsa-sha256;
+        by relay.mailchannels.net (Postfix) with ESMTPA id 54CED8110B
+        for <linux-kselftest@vger.kernel.org>; Thu,  9 Nov 2023 22:37:32 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1699569452; a=rsa-sha256;
         cv=none;
-        b=auswKw8dVK/jCdGg02/Rcln6MrpkEddTzJK0pNm/qJ2XhCkNlyZAMqfF4Qc6qyYJvrbmNK
-        oOKi7MolQvuvDcwuv6xqT0y+j85WhOYy5VYBSqrkMWTUYw54NaR47eo9IRf10c9cReOorO
-        AADr2pELJq6cU159o02xwTYYz/xBQ5fDTv5S3yXDGjxzWgRk2e36evJKK8pcItgQgrA6bU
-        VatUgj5gazC+1OMqsPZjtXmyiftpkjJNFFrpmY1Wgt+nB0v/DH98IR3OBtEVKMEZdpuuEo
-        JUvJguzFjP13Z+AGRGrx88Bs0YwH6YxLlwPjfDLdbHAks/nyb/DAfSLb3DZlqA==
+        b=U2RcfznFVgIvhl6kZTKXZ9DN1XgvhUHNM6QbeN0xjfFwITLHYzns+6uRsv8Xef2UGZYQyt
+        07YTQ6K5dT8yYpH2H4jLYps5A+trZkabkSvP+QHto4L/kxXrPkTdULQ2cNS2cIQhE4r3Nn
+        Pz1pTG/F/mVKANY3ZxG98WHgS/X0TK6x9w6q9aeGUeXdEeFwy0nx3ScGBMfLhSjZrIBKIV
+        Vq8ICvezJnSNOpOJ/X6mVzxB7vGJ4o674N2ClAtct6Krqz7LCevOF3SLnvxSmcgAh6jLRw
+        gB22n3LWw+bRotWrh2VlXlkoPm8zwCfs7xsGeai9hW65FSaT9fhHl11JOPAvAQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
  d=mailchannels.net;
-        s=arc-2022; t=1699562536;
+        s=arc-2022; t=1699569452;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=J8TgSKzVzW+2WUx6Pek4Go1CxyUWJVIsDKQsrukMIJs=;
-        b=5X/b1E0oR3XHm4+dblGhS3IUfcL+5gjxh7LYP/z7g7FGB+zB/4ADZ0/ZOBuDXC8Yum7oKf
-        JU9YkEW4xSeK9QLGU+uhzDta1YyxBvEGI8nbP70TkBwRzmVA+NEmzIA1DBPxeHQcCXAUqO
-        7G8eAIqfGtKFarFJ7DoOq4v8Rbi0rtdNL3IEgVoiSRdOtcfAallNKXCX9zAwPqjgyb3c+S
-        K4lBcLft9xeqF6b0FO26IbkdFsqbVw5724YU/lKHKQN9D3TSx+WhKow55qTbUcX5bcHRJ1
-        U19bwBHJvUMP7/8sgUpL7l+s2NUqlhx/Zjqg7hHK69fQnSZ9T4nU+D7S6emmuA==
+         dkim-signature; bh=8YwB9PBpFMCaeiI6zpE8rWC2hSXeSpyA9B0exPLdmbY=;
+        b=Ok41G6Fuv7ouQgtTNrwYuXSxVK6FGrjLZKCB/BL2rq6dJAZOMfn9GN3WQzp6/S7oB3jvh0
+        JvYttw8ww4mIkvbh8QRCXP1HFx27IpNhH/QQ69LCpFtPS0kaKjyXPjTarJ8CKqgInkWhem
+        Teq04kfz0MfPlkbOoPBCMUsFP45O3FtaqFsEOHn3EA9ELRnDFw90RP5W3P550kmc2wc2g2
+        /+BEjm+GI10l0ikzyZ5FI8XgJlPBFPT0gKP+X3RZA5Cu5Prh5oJYofnOsoPrna9H6oxcDn
+        XbmfCf296iqs7/5PTfR+X+y13WvFeLWnKhfVUXKEezdCo14JKvm19fDZ9/6CbA==
 ARC-Authentication-Results: i=1;
-        rspamd-6f98f74948-7mt7d;
+        rspamd-6f98f74948-h8z6f;
         auth=pass smtp.auth=dreamhost smtp.mailfrom=kjlx@templeofstupid.com
 X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
 X-MC-Relay: Neutral
 X-MailChannels-SenderId: dreamhost|x-authsender|kjlx@templeofstupid.com
 X-MailChannels-Auth-Id: dreamhost
-X-Scare-Shelf: 1d2ff2825fc8b656_1699562536676_1768340824
-X-MC-Loop-Signature: 1699562536676:552910827
-X-MC-Ingress-Time: 1699562536676
-Received: from pdx1-sub0-mail-a263.dreamhost.com (pop.dreamhost.com
+X-Desert-Bitter: 279e1ad44747d895_1699569452461_2622677825
+X-MC-Loop-Signature: 1699569452461:1796348722
+X-MC-Ingress-Time: 1699569452461
+Received: from pdx1-sub0-mail-a219.dreamhost.com (pop.dreamhost.com
  [64.90.62.162])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.112.106.240 (trex/6.9.2);
-        Thu, 09 Nov 2023 20:42:16 +0000
+        by 100.127.137.45 (trex/6.9.2);
+        Thu, 09 Nov 2023 22:37:32 +0000
 Received: from kmjvbox.templeofstupid.com (c-73-231-176-24.hsd1.ca.comcast.net [73.231.176.24])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: kjlx@templeofstupid.com)
-        by pdx1-sub0-mail-a263.dreamhost.com (Postfix) with ESMTPSA id 4SRDQv6wd4zj2
-        for <linux-kselftest@vger.kernel.org>; Thu,  9 Nov 2023 12:42:15 -0800 (PST)
+        by pdx1-sub0-mail-a219.dreamhost.com (Postfix) with ESMTPSA id 4SRGzv39FRz11y
+        for <linux-kselftest@vger.kernel.org>; Thu,  9 Nov 2023 14:37:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=templeofstupid.com;
-        s=dreamhost; t=1699562536;
-        bh=J8TgSKzVzW+2WUx6Pek4Go1CxyUWJVIsDKQsrukMIJs=;
+        s=dreamhost; t=1699569451;
+        bh=8YwB9PBpFMCaeiI6zpE8rWC2hSXeSpyA9B0exPLdmbY=;
         h=Date:From:To:Cc:Subject:Content-Type;
-        b=JPnFqUnvsQeyLmYwG6HfPSbbu2a3Qf7YWOiAsDIX9oaAXK2t0TKH6RCQKeSDYvKcu
-         0UBPD1uAsSUMWzrVCPjZfjyWZkP0EON//sgwrz6xosgz9YZNK266udEwNmDW/uTZQo
-         IIn2zQ3mwZindzPSIo3TWXN4aw5aDzL/u4emtUaWjo9Lz6HLmI9EEZMBM1qB6IOR1+
-         GzFOUeJimK8+tBg+iy2Zl1YGd2A3P/TmwoCLAnJkB8Nd1KOyVccpUBMwJ0hvx0yahS
-         K5qKXqMe5WabCqC7GNz6gwVqTxN8TbV6JcYRkasmL2mMRSQtlJKsYS7R8lWXJAgZl4
-         azjUa73WbnRBQ==
+        b=iXdBe3QqD7hYZNkR3gTX16NMfS0osjVYrWrrlW8DpMru9YBAnHLloxIKsO8SV603N
+         MOIz6lOQprbztIl3bFRxvSl9ypsW7G7Gkr8dA2R94UNg+zcTr+bLNDcdJoYITKVL/w
+         tq9BS9p/FqpsbsjtTbs/7b8aSRyNK1W977KkkOuaTUSaB1Qe2hvqbMjUv63N+yqhgT
+         sgZwk0cVlbCuwyMF2NS9FTBmi/UeYF4/SLgdCgvd1L58tdp0DrTGGny+No6gJ0uaFD
+         0xELaaZPVi72foXlwG+c4GacYIbH93Maub+Lg5+xXyy1Sbd1qOnHRwA25f79d18+bW
+         Sn91mwHOfiGYQ==
 Received: from johansen (uid 1000)
         (envelope-from kjlx@templeofstupid.com)
         id e0044
         by kmjvbox.templeofstupid.com (DragonFly Mail Agent v0.12);
-        Thu, 09 Nov 2023 12:41:54 -0800
-Date:   Thu, 9 Nov 2023 12:41:54 -0800
+        Thu, 09 Nov 2023 14:36:57 -0800
+Date:   Thu, 9 Nov 2023 14:36:57 -0800
 From:   Krister Johansen <kjlx@templeofstupid.com>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     linux-fsdevel@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>,
-        lkft-triage@lists.linaro.org,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>, regressions@lists.linux.dev,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        Krister Johansen <kjlx@templeofstupid.com>,
-        Dan Carpenter <dan.carpenter@linaro.org>
-Subject: Re: selftests: memfd: run_fuse_test.sh - fuse_evict_inode -
- fs/fuse/inode.c:162 - panic
-Message-ID: <20231109204154.GB2073@templeofstupid.com>
-References: <CA+G9fYue-dV7t-NrOhWwGshvyboXjb2B6HpCDVDe3bgG7fbnsg@mail.gmail.com>
+To:     Miklos Szeredi <miklos@szeredi.hu>, linux-fsdevel@vger.kernel.org
+Cc:     Miklos Szeredi <mszeredi@redhat.com>, linux-kernel@vger.kernel.org,
+        German Maglione <gmaglione@redhat.com>,
+        Greg Kurz <groug@kaod.org>, Max Reitz <mreitz@redhat.com>,
+        Bernd Schubert <bernd.schubert@fastmail.fm>,
+        "Borah, Chaitanya Kumar" <chaitanya.kumar.borah@intel.com>,
+        Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        "Kurmi, Suresh Kumar" <suresh.kumar.kurmi@intel.com>,
+        "Saarinen, Jani" <jani.saarinen@intel.com>,
+        lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
+        regressions@lists.linux.dev, intel-gfx@lists.freedesktop.org
+Subject: [PATCH 0/2] Fuse submount_lookup needs to be initialized
+Message-ID: <cover.1699564053.git.kjlx@templeofstupid.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+G9fYue-dV7t-NrOhWwGshvyboXjb2B6HpCDVDe3bgG7fbnsg@mail.gmail.com>
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Nov 09, 2023 at 06:34:24PM +0530, Naresh Kamboju wrote:
-> Following kernel panic noticed while running selftests: memfd: run_fuse_test.sh
-> on arm64 Juno-r2 and x86 devices running Linux next-20231109.
-> 
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> 
-> log:
-> ---
-> # timeout set to 45
-> # selftests: memfd: run_fuse_test.sh
-> # opening: ./mnt/memfd
-> # fuse: DONE
-> [ 1931.860330] Unable to handle kernel paging request at virtual
-> address 005a5a5a5a5a5a5a
-> [ 1931.868645] Mem abort info:
-> [ 1931.871505]   ESR = 0x0000000096000021
-> [ 1931.875311]   EC = 0x25: DABT (current EL), IL = 32 bits
-> [ 1931.880805]   SET = 0, FnV = 0
-> [ 1931.883924]   EA = 0, S1PTW = 0
-> [ 1931.887563]   FSC = 0x21: alignment fault
-> [ 1931.891618] Data abort info:
-> [ 1931.894542]   ISV = 0, ISS = 0x00000021, ISS2 = 0x00000000
-> [ 1931.900219]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
-> [ 1931.905305]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
-> [ 1931.910692] [005a5a5a5a5a5a5a] address between user and kernel address ranges
-> [ 1931.918091] Internal error: Oops: 0000000096000021 [#1] PREEMPT SMP
-> [ 1931.924375] Modules linked in: gpio_sim onboard_usb_hub tda998x
-> hdlcd crct10dif_ce cec drm_dma_helper dm_mod [last unloaded:
-> gpio_mockup]
-> [ 1931.936789] CPU: 1 PID: 20739 Comm: fusermount Not tainted
-> 6.6.0-next-20231109 #1
-> [ 1931.944295] Hardware name: ARM Juno development board (r2) (DT)
-> [ 1931.950224] pstate: 40000005 (nZcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> [ 1931.957205] pc : fuse_evict_inode
-> (arch/arm64/include/asm/atomic_ll_sc.h:96 (discriminator 3)
-> arch/arm64/include/asm/atomic.h:51 (discriminator 3)
-> include/linux/atomic/atomic-arch-fallback.h:944 (discriminator 3)
-> include/linux/atomic/atomic-instrumented.h:401 (discriminator 3)
-> include/linux/refcount.h:272 (discriminator 3)
-> include/linux/refcount.h:315 (discriminator 3)
-> include/linux/refcount.h:333 (discriminator 3) fs/fuse/inode.c:137
-> (discriminator 3) fs/fuse/inode.c:166 (discriminator 3))
-> [ 1931.961586] lr : fuse_evict_inode (fs/fuse/inode.c:162)
-> [ 1931.965868] sp : ffff80008792ba90
-> [ 1931.969189] x29: ffff80008792ba90 x28: ffff000800b58040 x27: 0000000000000000
-> [ 1931.976358] x26: 0000000000000000 x25: ffff800080508f98 x24: ffff80008316a008
-> [ 1931.983519] x23: ffff80008316a008 x22: ffff80008424a020 x21: ffff00082a514c00
-> [ 1931.990679] x20: 5a5a5a5a5a5a5a5a x19: ffff000838828780 x18: 0000000000000000
-> [ 1931.997840] x17: ffff80008050e610 x16: ffff80008050e5bc x15: ffff80008050e3e8
-> [ 1932.005003] x14: ffff80008050df10 x13: ffff800080769c60 x12: ffff8000851f6388
-> [ 1932.012165] x11: 0000000000000645 x10: 0000000000000645 x9 : ffff800081c0e0b4
-> [ 1932.019332] x8 : ffff80008792b988 x7 : 0000000000000000 x6 : ffff800084a75fe8
-> [ 1932.026495] x5 : 0000000000000000 x4 : 0000000000000001 x3 : ffff80008424a968
-> [ 1932.033659] x2 : 0000000000000002 x1 : ffff000800b58040 x0 : 0000000000000001
-> [ 1932.040820] Call trace:
-> [ 1932.043272] fuse_evict_inode
-> (arch/arm64/include/asm/atomic_ll_sc.h:96 (discriminator 3)
-> arch/arm64/include/asm/atomic.h:51 (discriminator 3)
-> include/linux/atomic/atomic-arch-fallback.h:944 (discriminator 3)
-> include/linux/atomic/atomic-instrumented.h:401 (discriminator 3)
-> include/linux/refcount.h:272 (discriminator 3)
-> include/linux/refcount.h:315 (discriminator 3)
-> include/linux/refcount.h:333 (discriminator 3) fs/fuse/inode.c:137
-> (discriminator 3) fs/fuse/inode.c:166 (discriminator 3))
-> [ 1932.047296] evict (fs/inode.c:669)
-> [ 1932.050279] iput_final (fs/inode.c:1776)
-> [ 1932.053694] iput.part.0 (fs/inode.c:1803)
-> [ 1932.057280] iput (fs/inode.c:1803)
-> [ 1932.060085] dentry_unlink_inode (fs/dcache.c:402)
-> [ 1932.064281] __dentry_kill (arch/arm64/include/asm/current.h:19
-> arch/arm64/include/asm/preempt.h:47 fs/dcache.c:610)
-> [ 1932.067956] shrink_dentry_list (include/linux/list.h:373
-> (discriminator 2) fs/dcache.c:1179 (discriminator 2))
-> [ 1932.072067] shrink_dcache_parent (fs/dcache.c:1652)
-> [ 1932.076433] shrink_dcache_for_umount (fs/dcache.c:1682 fs/dcache.c:1698)
-> [ 1932.081062] generic_shutdown_super (fs/super.c:647)
-> [ 1932.085518] kill_anon_super (fs/super.c:1254)
-> [ 1932.089277] fuse_kill_sb_anon (fs/fuse/fuse_i.h:895 fs/fuse/inode.c:1912)
-> [ 1932.093298] deactivate_locked_super (fs/super.c:489)
-> [ 1932.097753] deactivate_super (fs/super.c:522)
-> [ 1932.101599] cleanup_mnt (fs/namespace.c:139 fs/namespace.c:1257)
-> [ 1932.105097] __cleanup_mnt (fs/namespace.c:1264)
-> [ 1932.108680] task_work_run (kernel/task_work.c:182)
-> [ 1932.112266] do_notify_resume (include/linux/resume_user_mode.h:49
-> arch/arm64/kernel/signal.c:1305)
-> [ 1932.116283] el0_svc (arch/arm64/kernel/entry-common.c:137
-> arch/arm64/kernel/entry-common.c:144
-> arch/arm64/kernel/entry-common.c:679)
-> [ 1932.119345] el0t_64_sync_handler (arch/arm64/kernel/entry-common.c:697)
-> [ 1932.123710] el0t_64_sync (arch/arm64/kernel/entry.S:595)
-> [ 1932.127383] Code: f9026a7f 17ffffd9 52800020 f9800291 (885f7e81)
-> All code
-> ========
->    0: f9026a7f str xzr, [x19, #1232]
->    4: 17ffffd9 b 0xffffffffffffff68
->    8: 52800020 mov w0, #0x1                    // #1
->    c: f9800291 prfm pstl1strm, [x20]
->   10:* 885f7e81 ldxr w1, [x20] <-- trapping instruction
-> 
-> Code starting with the faulting instruction
-> ===========================================
->    0: 885f7e81 ldxr w1, [x20]
-> [ 1932.133486] ---[ end trace 0000000000000000 ]---
-> [ 1932.138111] Kernel panic - not syncing: Oops: Fatal exception
-> [ 1932.143867] SMP: stopping secondary CPUs
-> [ 1932.148008] Kernel Offset: disabled
-> [ 1932.151498] CPU features: 0x1,0000020c,3c020000,0100421b
-> [ 1932.156820] Memory Limit: none
-> [ 1932.159880] ---[ end Kernel panic - not syncing: Oops: Fatal exception ]---
-> 
-> 
-> Links:
-> - https://lkft.validation.linaro.org/scheduler/job/7006578#L6164
-> - https://lkft.validation.linaro.org/scheduler/job/7006482#L9235
-> 
-> metadata:
-> git_ref: master
-> git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
-> git_sha: b622d91ca201bf97582e9b09ebbaab005ecee86f
-> git_describe: next-20231109
-> kernel_version: 6.6.0
-> kernel-config:
-> https://storage.tuxsuite.com/public/linaro/lkft/builds/2Xv92VPrzXNNmQil9l8bJV2RQHs/config
-> artifact-location:
-> https://storage.tuxsuite.com/public/linaro/lkft/builds/2Xv92VPrzXNNmQil9l8bJV2RQHs/
-> toolchain: gcc-13
+Hi Miklos,
+I got a couple of bug reports[1][2] this morning from teams that are
+tracking regresssions in linux-next.  My patch 513dfacefd71 ("fuse:
+share lookup state between submount and its parent") is causing panics
+in the fuse unmount path.  The reports came from users with SLUB_DEBUG
+enabled, and the additional debug sanitization catches the fact that the
+submount_lookup field isn't getting initialized which could lead to a
+subsequently bogus attempt to access the submount_lookup structure and
+adjust its refcount.
 
-Thanks for this report and apologies for the trouble this caused you.
-I'm in the process of preparing patch with a fix to send to Miklos.
-Hoping to send that out a little later today.
+I've added SLUB_DEBUG to my testing kconfig, and have reproduced the
+problem using the memfd self-test that was triggering the problem for
+both reporters.  With the fix that follows this e-mail, I see no more
+erroneous accesses of poisoned slub memory.
+
+I'm a bit unsure of the desired approach for fixing these kinds of
+problems.  I'm also away from the office on Nov 10th and Nov 13th, but
+expect to be back on the console on the Nov 14th.  Given the gap, I've
+prepared a pair of patches, but we only need one.
+
+The first is simply a followup fix that addresses the problem in a
+subsequent one-line commit.
+
+If you'd rather revert the entire bad patch and go again, the second
+patch in the series is a v5 of the original with the submount_lookup
+initialization added.
+
+Either should do, but I wasn't sure which approach was preferable.
+
+Thanks, and my apologies for the inconvenience.
 
 -K
+
+[1] https://lore.kernel.org/linux-fsdevel/CA+G9fYue-dV7t-NrOhWwGshvyboXjb2B6HpCDVDe3bgG7fbnsg@mail.gmail.com/T/#u
+[2] https://lore.kernel.org/intel-gfx/SJ1PR11MB6129508509896AD7D0E03114B9AFA@SJ1PR11MB6129.namprd11.prod.outlook.com/T/#u
