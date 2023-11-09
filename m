@@ -2,359 +2,210 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B5667E7482
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Nov 2023 23:45:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1C1F7E754C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Nov 2023 00:50:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234739AbjKIWpm (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Nov 2023 17:45:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59806 "EHLO
+        id S1345363AbjKIXuy (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Nov 2023 18:50:54 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231191AbjKIWpl (ORCPT
+        with ESMTP id S229629AbjKIXux (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Nov 2023 17:45:41 -0500
-X-Greylist: delayed 455 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 09 Nov 2023 14:45:39 PST
-Received: from cheetah.elm.relay.mailchannels.net (cheetah.elm.relay.mailchannels.net [23.83.212.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C04420B
-        for <linux-kselftest@vger.kernel.org>; Thu,  9 Nov 2023 14:45:39 -0800 (PST)
-X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 967F8942162
-        for <linux-kselftest@vger.kernel.org>; Thu,  9 Nov 2023 22:38:21 +0000 (UTC)
-Received: from pdx1-sub0-mail-a219.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 426E9941F86
-        for <linux-kselftest@vger.kernel.org>; Thu,  9 Nov 2023 22:38:21 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1699569501; a=rsa-sha256;
-        cv=none;
-        b=CUP4a9oOB/VVnvq7UMbiCyVrt8rWPU2Ji8nKyYEkzNdpUAnbJiOm0rGLrHARD20NrwAmYm
-        CfWQMou8Ph8lDdscAIiHhG5sHrKoMpGiBLG+fUH9VHm3aJ4RlQCmM7iPvMT7dmeDC+W7Oy
-        472ti+SV6+SSY8ZBPyTyAue6pFbdpXQBn3J+9jIFwpF4IGezFPZszN89AYbaaVbGuBOYXU
-        3vmkKS5X8d8Wcy/DkXnHXwVaH1ToUzh7rPIp5QQPLw9QFIpXZPftGAEhe4EbCLqh+Xt49v
-        eNhUxlonPLtJ2LFDxnaOvrSNbDQNRAaC0v2t4wWOm6Mppl6rZOPI4M0wHSN3Cw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1699569501;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=6HuS5Rvj2HRh01mLHyf14Nt/w5Z/py+pjFLszKB3Vss=;
-        b=r4g/lSX6FHZQ2tPXpYQdCBRgnt3a+oTJVRbHyEq3yMzrGPxBckz4QsL7dWE5nbUdG5tqP0
-        nYNo8VMp4aK1vvI8YzFqHYDgRuQC16ORgBrZdMRohjz6euT39iUu1cwWEklUzBOyVMQeal
-        dFAZE8YdVpLZWm5ba3FcDUHabf+c+3skTTnla01aYfnG/cOkRqU9EfW/ptXtLSp4V5yrU6
-        sPDour5hZd42kfAzaY5Tzdg+aj6dwyO3Ebpaww/95uBxTSpu7LyNbGVB5IsprFFZA5K2mA
-        t5U1bfaG6b0w+bN+MV6GM9bwK0qc3kZCciwlxX3HJPe3+Bi1BYb2a5VM07F8KQ==
-ARC-Authentication-Results: i=1;
-        rspamd-6f98f74948-hmzgl;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=kjlx@templeofstupid.com
-X-Sender-Id: dreamhost|x-authsender|kjlx@templeofstupid.com
-X-MC-Relay: Good
-X-MailChannels-SenderId: dreamhost|x-authsender|kjlx@templeofstupid.com
-X-MailChannels-Auth-Id: dreamhost
-X-Print-Hysterical: 2763c34348bc9a1b_1699569501459_332248691
-X-MC-Loop-Signature: 1699569501459:1783408249
-X-MC-Ingress-Time: 1699569501458
-Received: from pdx1-sub0-mail-a219.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.101.67.125 (trex/6.9.2);
-        Thu, 09 Nov 2023 22:38:21 +0000
-Received: from kmjvbox.templeofstupid.com (c-73-231-176-24.hsd1.ca.comcast.net [73.231.176.24])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kjlx@templeofstupid.com)
-        by pdx1-sub0-mail-a219.dreamhost.com (Postfix) with ESMTPSA id 4SRH0r2yzkzwj
-        for <linux-kselftest@vger.kernel.org>; Thu,  9 Nov 2023 14:38:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=templeofstupid.com;
-        s=dreamhost; t=1699569500;
-        bh=6HuS5Rvj2HRh01mLHyf14Nt/w5Z/py+pjFLszKB3Vss=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=fw9zGrQ3T3QBcm2P5Kks2tD1GUIW4o++D/7EzC1M9SwMjXLpXOz+dpbbaLym5aGdD
-         G2DcniL+EtmyocoX1/Fh41RPNlNrJCyNaRxx4oEtB9Y+yNqvlq22Os01b0mwGZPOCW
-         f11OBLRa9xSX7Mt1mZrZLKS7+X+q+HCoUgVZqOwoTM+1/pR18teYbrLGtp41kGiSGq
-         yDSns2possAdqbTC2VBFi6QwEaZi0xHQnZSyMx/dyRUpB2zbZXS7x5Oyu92m5ff2Ec
-         Pl72gYrysK2drx2Nre1U9Z5VYPgfa3fPqYRtrMH6YqhWEIeFBGwz1ILipy2JUef+GD
-         bmYvxjiAxkMoA==
-Received: from johansen (uid 1000)
-        (envelope-from kjlx@templeofstupid.com)
-        id e0044
-        by kmjvbox.templeofstupid.com (DragonFly Mail Agent v0.12);
-        Thu, 09 Nov 2023 14:37:46 -0800
-Date:   Thu, 9 Nov 2023 14:37:46 -0800
-From:   Krister Johansen <kjlx@templeofstupid.com>
-To:     Miklos Szeredi <miklos@szeredi.hu>, linux-fsdevel@vger.kernel.org
-Cc:     Miklos Szeredi <mszeredi@redhat.com>, linux-kernel@vger.kernel.org,
-        German Maglione <gmaglione@redhat.com>,
-        Greg Kurz <groug@kaod.org>, Max Reitz <mreitz@redhat.com>,
-        Bernd Schubert <bernd.schubert@fastmail.fm>,
-        "Borah, Chaitanya Kumar" <chaitanya.kumar.borah@intel.com>,
-        Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        "Kurmi, Suresh Kumar" <suresh.kumar.kurmi@intel.com>,
-        "Saarinen, Jani" <jani.saarinen@intel.com>,
-        lkft-triage@lists.linaro.org, linux-kselftest@vger.kernel.org,
-        regressions@lists.linux.dev, intel-gfx@lists.freedesktop.org
-Subject: [v5 PATCH 2/2] fuse: share lookup state between submount and its
- parent
-Message-ID: <20231109223746.GC2073@templeofstupid.com>
-References: <cover.1699564053.git.kjlx@templeofstupid.com>
+        Thu, 9 Nov 2023 18:50:53 -0500
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B97D13868;
+        Thu,  9 Nov 2023 15:50:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1699573851; x=1731109851;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=vRiO16edNZkgPzULuOQ/IUBTwsOBdUZa0yBNmPFTM/s=;
+  b=AHvnPBCQxvsUGQu/mI86LxhIoUTMXaxlnj+vCI61dK7meJFo2PEx9Gbs
+   BZDgyHJfOo4rTibMXqCVtlKB7lvay7Yf3aOsBNS8V6LQrMfKMV4r442h0
+   tnPCQ4XZXgYQOWLrwb5e6VpBAJN1oPdE4Qv991c4EikDYN6Xn+yEas3DQ
+   StDMMED8zbliBUifb1A0aBGm1wuT47Bo6FfvzsxsRtmS1y/n52TI3P/Be
+   iFCwbld+TTjhkkJkFdtQuE4gT36mVEUMWeHaKRW7xNlb9Juy1dwn16bhp
+   OCq1jocGbhFIRjkAAaKtdiHDdBUGM8HPtA1cLecmLoQoizn9yKQYZh+cq
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10889"; a="375137973"
+X-IronPort-AV: E=Sophos;i="6.03,290,1694761200"; 
+   d="scan'208";a="375137973"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2023 15:50:51 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10889"; a="937013280"
+X-IronPort-AV: E=Sophos;i="6.03,290,1694761200"; 
+   d="scan'208";a="937013280"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orsmga005.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 09 Nov 2023 15:50:50 -0800
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.34; Thu, 9 Nov 2023 15:50:50 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.34; Thu, 9 Nov 2023 15:50:50 -0800
+Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.34 via Frontend Transport; Thu, 9 Nov 2023 15:50:50 -0800
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.100)
+ by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.34; Thu, 9 Nov 2023 15:50:49 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=TRk2xY8Id/Hd1LZISO+XVI3JM91XmGylm54g2K5muQ6Eu/o2L6FlRay/BbDXl2GTlWd7lJMBpVTgxcOEeyh+Qr4/E03z4b9pbmMBytQpU660oYVxVlaEZtFA1CN4ksrMq6HeUNE+s5VBND1QW+YsH4EzternyfToX4fjMjTUckEc9ARIvMOHxSbJOYhcQ8/WC3ZMPY56glIachLlgs7wCM2Af0+cR8oaDLMXcaSG+I0dZTS6sremcwkB+RrX8oYDmHxVXV0vobcyiFknbkZJvxZIqobmeRJUTWVFJisez5pZBAFz/AlfJeoCAM+Qzpqjcu8EcFIlQtGe5ibHWIVTQQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=HsmRsGEOB0ofWifvbx9SbeXYhmkrLGcTIbMgegTwUCM=;
+ b=GegR1BOF+1YQibQYXsrQuypUSxih/fvKBn5BfO86jsTzB40BIjVrp6qZi8Zr5FDOVit+JrUC9PwtRsJJrW15TJMcb2YfsSLvg4OJ0EZiHQlU1Uaff2tmgLfehutAiOFoPzRUc6GRVKhjOicIcNVGNVLMNPNkDnc859mwbq2yF91BfcvGxCSYjB5ps9HChYWquAz9bI+QxmUBe/rKoK0Eh6OPPztNdEVBYxhn4TRseGKKYuY+HozwPLRtfa2nNej5qQJPVj565pXma4H6ytwg1mVARr4cSBVWqMaDq16QFiOEC7rJA3xZSMxOgHb70gi6KQZ01uyzfeRbXRzVK02FjA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from SA1PR11MB6734.namprd11.prod.outlook.com (2603:10b6:806:25d::22)
+ by MW4PR11MB7056.namprd11.prod.outlook.com (2603:10b6:303:21a::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.28; Thu, 9 Nov
+ 2023 23:50:37 +0000
+Received: from SA1PR11MB6734.namprd11.prod.outlook.com
+ ([fe80::3d98:6afd:a4b2:49e3]) by SA1PR11MB6734.namprd11.prod.outlook.com
+ ([fe80::3d98:6afd:a4b2:49e3%6]) with mapi id 15.20.6954.028; Thu, 9 Nov 2023
+ 23:50:37 +0000
+From:   "Li, Xin3" <xin3.li@intel.com>
+To:     "Gao, Chao" <chao.gao@intel.com>
+CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "corbet@lwn.net" <corbet@lwn.net>,
+        "kys@microsoft.com" <kys@microsoft.com>,
+        "haiyangz@microsoft.com" <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        "Cui, Dexuan" <decui@microsoft.com>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>
+Subject: RE: [PATCH v1 06/23] KVM: VMX: Defer enabling FRED MSRs save/load
+ until after set CPUID
+Thread-Topic: [PATCH v1 06/23] KVM: VMX: Defer enabling FRED MSRs save/load
+ until after set CPUID
+Thread-Index: AQHaEnYK31xdVTOu4kKzxsXb22qo7rBxtbMAgADxRyA=
+Date:   Thu, 9 Nov 2023 23:50:37 +0000
+Message-ID: <SA1PR11MB67347A31E38D604FDF2BD606A8AFA@SA1PR11MB6734.namprd11.prod.outlook.com>
+References: <20231108183003.5981-1-xin3.li@intel.com>
+ <20231108183003.5981-7-xin3.li@intel.com> <ZUyjPtaxOgDQQUwA@chao-email>
+In-Reply-To: <ZUyjPtaxOgDQQUwA@chao-email>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SA1PR11MB6734:EE_|MW4PR11MB7056:EE_
+x-ms-office365-filtering-correlation-id: 62a8b1ca-2883-42e1-37a4-08dbe17eac51
+x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: hRoT+4q+CdYe3skxZmKFFatTNU8ocIK+CXcIoh0+YUkP24g5/Ccpp7fClYnduv6dPm+vpSeQJCLpdbbjuILZ/j2RNJaqAz3vHJc7ijQqNPVfc1KL87rtO7sa9hqKuQLBzgDSHCrSV7izjMR0p1bjOvDW9mWn7mg4+VudjaOD0dNstV7L0un1oono9thxrdM1LZbYQ7fqMDR2SSH19KVFrbUzP63wNXghSW8Thzf4QAihgsJNkNAkW+YC9NA+uCzaQ5fx5GffCNQsVWI1GdCDfQUHMOeR4jZuee8/ml+0Apx7LPjXS/0cQu+8wFSxPawfrr4WNWXtD1NMWAGXftR4pRTuHEtUK1F3A6V3P/zt31PD3mvOXmC5OQIbOfVzoCSRBIVDkFoOTATWnAHTMBu/uUV2SG+slS8owxnctmZBEaJs6oJ4s9Mo1TqQKyzBFTBfZ3y5+WzVcI8Uc28wMUvRSV4id3A373SQvC++zBRE+P7zE/vPVjcDf4Leq8Gi4Q76se+Vy3Vcj0eLTKj8Bfx/SiroyuLb4Xj431aI7gGMDhXR/tXkdmgazxZz2PKGSnXXrpztqVbvq4fdKnSooQI6/MyBQSCP91/Qi7lgbualsMI=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6734.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(396003)(366004)(136003)(39860400002)(376002)(230922051799003)(186009)(1800799009)(64100799003)(451199024)(4326008)(8936002)(9686003)(64756008)(122000001)(52536014)(82960400001)(316002)(478600001)(26005)(966005)(66476007)(66556008)(66446008)(6636002)(66946007)(54906003)(6506007)(7696005)(71200400001)(38070700009)(5660300002)(8676002)(76116006)(55016003)(2906002)(83380400001)(38100700002)(6862004)(41300700001)(33656002)(7416002)(86362001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?bRhrnBH8UNe8mS0h/D4sNVpa8Ty4dYYpk82unXQvVxDYP7Wf38jQAXbuoeXj?=
+ =?us-ascii?Q?NHWuAhsl8jIuAzz5g64RHy1MCPvW164TiZweU+rD+qrmbMtyI4ozGpH3G9QQ?=
+ =?us-ascii?Q?q9dFiwY60+CW51uT2IMDBTE5TjdRDkhVMcs6s0BZ4ymHKwM4vi3DdUe2pFX3?=
+ =?us-ascii?Q?tff48OnayUMTnTwFMSHMTh29uJsLRvwda4yrusPTuMEkKTof03yAWvtxN4Qu?=
+ =?us-ascii?Q?gbqA5U8oKofJxxInqbbChFI56VCa8m18ACcBm2lHhnKLWqOdgLhbOQ/aylD9?=
+ =?us-ascii?Q?T8tJz27C7vqKvupJNFA7Up1REv7Mh+jKYTyaqwfHCsQmlZ1+Ip16qw4fHzSl?=
+ =?us-ascii?Q?SyGcDNeVvBWV24SRAp2wYJo7JvEVMJrU7MjYM2QNzZRKI08JCW8quFCG7/Sy?=
+ =?us-ascii?Q?hHnPs8RVM4es1pfJswRHNJsjXDQcRc2msxmJxWYHn0AQf8w8r6u+VN6tmGti?=
+ =?us-ascii?Q?orM+k+ZWKIJBN5dqnWqhdt96F6NpqC1FV82QQhLg9F4h+OiAmsHZW/056eHJ?=
+ =?us-ascii?Q?zv1/0WNhE3UGWggumqjOOW7/2dgqyRXiZiIqBS+x7kUn/NVguJDme5kRemRJ?=
+ =?us-ascii?Q?pf/2J4uqJfx+ruuTva1Twn/NItjoaa7dkZHX4g7FL1NncJMLpicozs10mDLD?=
+ =?us-ascii?Q?0dheiDKlsd+URP0/Ng3phVZxNGaXZATjkG0DVwePT1ms9YljJ2HkttLBrBnP?=
+ =?us-ascii?Q?NkaJUDt8zeR6i4PE24Lu0Osm8ADl+VRfsIGffRd8FoNhAnRu0sIpAW64+wfa?=
+ =?us-ascii?Q?dx8gc6wWWMJ1p2E/uKbaveIYCzVi6QE2dmfegNZRULdRCm/TZ17aoAbyXIjF?=
+ =?us-ascii?Q?O0uWKQVtkG6fOBLVoG8W/IMlM1lmdNPVeeIEFMahuwmU70u06vlGUNU2GfjB?=
+ =?us-ascii?Q?/k0R/wc8GpArxq48apx3o5pZEVAQQEEQTIkErRhz+F0WyvJaReqMaB85ShR4?=
+ =?us-ascii?Q?MQ6gD43kBOSspdNhxaV6cpiA93dTHxnJ4uJ9dJc9uUnl4KSmj2yarg11F9kX?=
+ =?us-ascii?Q?vk4NKXscUMO+Psl49TG2lV5smantkh08eZA8/18NFO/VeH0FA0Yj0DJD1TC9?=
+ =?us-ascii?Q?dG/9/Hn2S0vafCWxbYBe3Ug4lkWrAXqHY5hLFqI7EDOax2VdHKt973Jrs4Ht?=
+ =?us-ascii?Q?YDj7qt/feiyKUf8Ef729nzihCzLxEJV7gtX4uEuV1hm1XbasVIJ1LM0F1J39?=
+ =?us-ascii?Q?JD1hkRCEjxkk/Nqm/ydcGjiaImK7el6NBWFe7YeWVcWaqMiWjQn/ub/cZSys?=
+ =?us-ascii?Q?DGb0YwkFqqA7k2OoRH9nj6M1oI59S6mrF8Pv9bT2WBjICStEKm3CgJwLtL8O?=
+ =?us-ascii?Q?xPJ5szgAQrEnVuwFmPw4W1YCVzrjO3UH1hAzpxVnfq3OYP2yWfGp/vLErQQ0?=
+ =?us-ascii?Q?cPae7C2OJaBIbtZYyvAoXY4G/p4AREkScxpvK4NbcjG2ECRwy8j0GcAeqVLy?=
+ =?us-ascii?Q?vCYqEDQqw/hQxt5YnAYxStFb33Wz3+Nr6cVXtTQZrN6ObwoHwM5fi6RsL5bu?=
+ =?us-ascii?Q?uWlo9kjLcWcnSFt8Dy+L83cNOUisO1UnwOfP0prLHWLK61++wiAHBaMgskot?=
+ =?us-ascii?Q?WxIdKCl5Jg26RaKxEI4=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1699564053.git.kjlx@templeofstupid.com>
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6734.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 62a8b1ca-2883-42e1-37a4-08dbe17eac51
+X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Nov 2023 23:50:37.5903
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: JTNXHg7RtycSq4dq2y+fWW6h9M9nsCgk9myfgYYjP7f4ikcJkEWmQu+VkdPepyUfUxmSXIMoy3b3uaARtmy1ig==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB7056
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Fuse submounts do not perform a lookup for the nodeid that they inherit
-from their parent.  Instead, the code decrements the nlookup on the
-submount's fuse_inode when it is instantiated, and no forget is
-performed when a submount root is evicted.
+> >+static void vmx_vcpu_config_fred_after_set_cpuid(struct kvm_vcpu *vcpu)
+> >+{
+> >+	struct vcpu_vmx *vmx =3D to_vmx(vcpu);
+> >+
+> >+	if (!cpu_feature_enabled(X86_FEATURE_FRED) ||
+> >+	    !guest_cpuid_has(vcpu, X86_FEATURE_FRED))
+> >+		return;
+> >+
+> >+	/* Enable loading guest FRED MSRs from VMCS */
+> >+	vm_entry_controls_setbit(vmx, VM_ENTRY_LOAD_IA32_FRED);
+> >+
+> >+	/*
+> >+	 * Enable saving guest FRED MSRs into VMCS and loading host FRED MSRs
+> >+	 * from VMCS.
+> >+	 */
+> >+	vm_exit_controls_setbit(vmx,
+> VM_EXIT_ACTIVATE_SECONDARY_CONTROLS);
+> >+	secondary_vm_exit_controls_setbit(vmx,
+> >+					  SECONDARY_VM_EXIT_SAVE_IA32_FRED
+> |
+> >+
+> SECONDARY_VM_EXIT_LOAD_IA32_FRED);
+>=20
+> all above vmcs controls need to be cleared if guest doesn't enumerate FRE=
+D, see
+>=20
+> https://lore.kernel.org/all/ZJYzPn7ipYfO0fLZ@google.com/
 
-Trouble arises when the submount's parent is evicted despite the
-submount itself being in use.  In this author's case, the submount was
-in a container and deatched from the initial mount namespace via a
-MNT_DEATCH operation.  When memory pressure triggered the shrinker, the
-inode from the parent was evicted, which triggered enough forgets to
-render the submount's nodeid invalid.
+Good point, the user space could set cpuid multiple times...
+=20
+> Clearing VM_EXIT_ACTIVATE_SECONDARY_CONTROLS may be problematic when
+> new bits are added to secondary vmcs controls. Why not keep
+> VM_EXIT_ACTIVATE_SECONDARY_CONTROLS always on if it is supported? or you
+> see any perf impact?
 
-Since submounts should still function, even if their parent goes away,
-solve this problem by sharing refcounted state between the parent and
-its submount.  When all of the references on this shared state reach
-zero, it's safe to forget the final lookup of the fuse nodeid.
+I think it from the other way, why keeps hw loading it on every vmentry
+even if it's not used by a guest?
 
-Signed-off-by: Krister Johansen <kjlx@templeofstupid.com>
-Cc: stable@vger.kernel.org
-Fixes: 1866d779d5d2 ("fuse: Allow fuse_fill_super_common() for submounts")
----
-Changes since v4:
+Different CPUs may implement it in different ways, which we can't assume.
 
-- Ensure that submount_lookup is NULL initialized in fuse_alloc_inode.
-  (Feedback from Naresh Kamboju and Chaitanya Kumar Borah)
-
-Changes since v3:
-
-- Remove rcu head from lookup tracking struct along with unnecessary
-  kfree_rcu call. (Feedback from Miklos Szeredi)
-- Make nlookup one implicitly.  Remove from struct and simplify places
-  where it was being used. (Feedback from Miklos Szeredi)
-- Remove unnecessary spinlock acquisition. (Feedback from Miklos
-  Szeredi)
-- Add a WARN_ON if the lookup tracking cookie cannot be found during
-  fuse_fill_super_submount.  (Feedback from Miklos Szeredi)
-
-Changes since v2:
-
-- Move to an approach where the lookup is shared between the submount's
-  parent and children.  Use a reference counted lookup cookie to decide
-  when it is safe to perform the forget of the final reference.
-  (Feedback from Miklos Szeredi)
-
-Changes since v1:
-
-- Cleanups to pacify test robot
-
-Changes since RFC:
-
-- Modified fuse_fill_super_submount to always fail if dentry cannot be
-  revalidated.  (Feedback from Bernd Schubert)
-- Fixed up an edge case where looked up but subsequently declared
-  invalid dentries were not correctly tracking nlookup.  (Error was
-  introduced in my RFC).
----
- fs/fuse/fuse_i.h | 15 ++++++++++
- fs/fuse/inode.c  | 75 ++++++++++++++++++++++++++++++++++++++++++++++--
- 2 files changed, 87 insertions(+), 3 deletions(-)
-
-diff --git a/fs/fuse/fuse_i.h b/fs/fuse/fuse_i.h
-index 405252bb51f2..9377c46f14c4 100644
---- a/fs/fuse/fuse_i.h
-+++ b/fs/fuse/fuse_i.h
-@@ -63,6 +63,19 @@ struct fuse_forget_link {
- 	struct fuse_forget_link *next;
- };
- 
-+/* Submount lookup tracking */
-+struct fuse_submount_lookup {
-+	/** Refcount */
-+	refcount_t count;
-+
-+	/** Unique ID, which identifies the inode between userspace
-+	 * and kernel */
-+	u64 nodeid;
-+
-+	/** The request used for sending the FORGET message */
-+	struct fuse_forget_link *forget;
-+};
-+
- /** FUSE inode */
- struct fuse_inode {
- 	/** Inode data */
-@@ -158,6 +171,8 @@ struct fuse_inode {
- 	 */
- 	struct fuse_inode_dax *dax;
- #endif
-+	/** Submount specific lookup tracking */
-+	struct fuse_submount_lookup *submount_lookup;
- };
- 
- /** FUSE inode state bits */
-diff --git a/fs/fuse/inode.c b/fs/fuse/inode.c
-index 444418e240c8..d7ebc322e55b 100644
---- a/fs/fuse/inode.c
-+++ b/fs/fuse/inode.c
-@@ -68,6 +68,24 @@ struct fuse_forget_link *fuse_alloc_forget(void)
- 	return kzalloc(sizeof(struct fuse_forget_link), GFP_KERNEL_ACCOUNT);
- }
- 
-+static struct fuse_submount_lookup *fuse_alloc_submount_lookup(void)
-+{
-+	struct fuse_submount_lookup *sl;
-+
-+	sl = kzalloc(sizeof(struct fuse_submount_lookup), GFP_KERNEL_ACCOUNT);
-+	if (!sl)
-+		return NULL;
-+	sl->forget = fuse_alloc_forget();
-+	if (!sl->forget)
-+		goto out_free;
-+
-+	return sl;
-+
-+out_free:
-+	kfree(sl);
-+	return NULL;
-+}
-+
- static struct inode *fuse_alloc_inode(struct super_block *sb)
- {
- 	struct fuse_inode *fi;
-@@ -85,6 +103,7 @@ static struct inode *fuse_alloc_inode(struct super_block *sb)
- 	fi->state = 0;
- 	mutex_init(&fi->mutex);
- 	spin_lock_init(&fi->lock);
-+	fi->submount_lookup = NULL;
- 	fi->forget = fuse_alloc_forget();
- 	if (!fi->forget)
- 		goto out_free;
-@@ -113,6 +132,17 @@ static void fuse_free_inode(struct inode *inode)
- 	kmem_cache_free(fuse_inode_cachep, fi);
- }
- 
-+static void fuse_cleanup_submount_lookup(struct fuse_conn *fc,
-+					 struct fuse_submount_lookup *sl)
-+{
-+	if (!refcount_dec_and_test(&sl->count))
-+		return;
-+
-+	fuse_queue_forget(fc, sl->forget, sl->nodeid, 1);
-+	sl->forget = NULL;
-+	kfree(sl);
-+}
-+
- static void fuse_evict_inode(struct inode *inode)
- {
- 	struct fuse_inode *fi = get_fuse_inode(inode);
-@@ -132,6 +162,11 @@ static void fuse_evict_inode(struct inode *inode)
- 					  fi->nlookup);
- 			fi->forget = NULL;
- 		}
-+
-+		if (fi->submount_lookup) {
-+			fuse_cleanup_submount_lookup(fc, fi->submount_lookup);
-+			fi->submount_lookup = NULL;
-+		}
- 	}
- 	if (S_ISREG(inode->i_mode) && !fuse_is_bad(inode)) {
- 		WARN_ON(!list_empty(&fi->write_files));
-@@ -332,6 +367,13 @@ void fuse_change_attributes(struct inode *inode, struct fuse_attr *attr,
- 		fuse_dax_dontcache(inode, attr->flags);
- }
- 
-+static void fuse_init_submount_lookup(struct fuse_submount_lookup *sl,
-+				      u64 nodeid)
-+{
-+	sl->nodeid = nodeid;
-+	refcount_set(&sl->count, 1);
-+}
-+
- static void fuse_init_inode(struct inode *inode, struct fuse_attr *attr,
- 			    struct fuse_conn *fc)
- {
-@@ -395,12 +437,22 @@ struct inode *fuse_iget(struct super_block *sb, u64 nodeid,
- 	 */
- 	if (fc->auto_submounts && (attr->flags & FUSE_ATTR_SUBMOUNT) &&
- 	    S_ISDIR(attr->mode)) {
-+		struct fuse_inode *fi;
-+
- 		inode = new_inode(sb);
- 		if (!inode)
- 			return NULL;
- 
- 		fuse_init_inode(inode, attr, fc);
--		get_fuse_inode(inode)->nodeid = nodeid;
-+		fi = get_fuse_inode(inode);
-+		fi->nodeid = nodeid;
-+		fi->submount_lookup = fuse_alloc_submount_lookup();
-+		if (!fi->submount_lookup) {
-+			iput(inode);
-+			return NULL;
-+		}
-+		/* Sets nlookup = 1 on fi->submount_lookup->nlookup */
-+		fuse_init_submount_lookup(fi->submount_lookup, nodeid);
- 		inode->i_flags |= S_AUTOMOUNT;
- 		goto done;
- 	}
-@@ -423,11 +475,11 @@ struct inode *fuse_iget(struct super_block *sb, u64 nodeid,
- 		iput(inode);
- 		goto retry;
- 	}
--done:
- 	fi = get_fuse_inode(inode);
- 	spin_lock(&fi->lock);
- 	fi->nlookup++;
- 	spin_unlock(&fi->lock);
-+done:
- 	fuse_change_attributes(inode, attr, NULL, attr_valid, attr_version);
- 
- 	return inode;
-@@ -1465,6 +1517,8 @@ static int fuse_fill_super_submount(struct super_block *sb,
- 	struct super_block *parent_sb = parent_fi->inode.i_sb;
- 	struct fuse_attr root_attr;
- 	struct inode *root;
-+	struct fuse_submount_lookup *sl;
-+	struct fuse_inode *fi;
- 
- 	fuse_sb_defaults(sb);
- 	fm->sb = sb;
-@@ -1487,12 +1541,27 @@ static int fuse_fill_super_submount(struct super_block *sb,
- 	 * its nlookup should not be incremented.  fuse_iget() does
- 	 * that, though, so undo it here.
- 	 */
--	get_fuse_inode(root)->nlookup--;
-+	fi = get_fuse_inode(root);
-+	fi->nlookup--;
-+
- 	sb->s_d_op = &fuse_dentry_operations;
- 	sb->s_root = d_make_root(root);
- 	if (!sb->s_root)
- 		return -ENOMEM;
- 
-+	/*
-+	 * Grab the parent's submount_lookup pointer and take a
-+	 * reference on the shared nlookup from the parent.  This is to
-+	 * prevent the last forget for this nodeid from getting
-+	 * triggered until all users have finished with it.
-+	 */
-+	sl = parent_fi->submount_lookup;
-+	WARN_ON(!sl);
-+	if (sl) {
-+		refcount_inc(&sl->count);
-+		fi->submount_lookup = sl;
-+	}
-+
- 	return 0;
- }
- 
--- 
-2.25.1
+Other features needing it should set it separately, say with a refcount.
 
