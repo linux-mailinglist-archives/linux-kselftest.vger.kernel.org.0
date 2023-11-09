@@ -2,318 +2,195 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A6FC7E6A6A
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Nov 2023 13:20:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3BB17E6AE8
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Nov 2023 14:04:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbjKIMU3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Nov 2023 07:20:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53546 "EHLO
+        id S230225AbjKINEk (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Nov 2023 08:04:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbjKIMU2 (ORCPT
+        with ESMTP id S230055AbjKINEj (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Nov 2023 07:20:28 -0500
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB45A270C
-        for <linux-kselftest@vger.kernel.org>; Thu,  9 Nov 2023 04:20:25 -0800 (PST)
-Received: by mail-vs1-xe36.google.com with SMTP id ada2fe7eead31-457c6267818so322911137.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Nov 2023 04:20:25 -0800 (PST)
+        Thu, 9 Nov 2023 08:04:39 -0500
+Received: from mail-ua1-x92b.google.com (mail-ua1-x92b.google.com [IPv6:2607:f8b0:4864:20::92b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139DD2D7B
+        for <linux-kselftest@vger.kernel.org>; Thu,  9 Nov 2023 05:04:37 -0800 (PST)
+Received: by mail-ua1-x92b.google.com with SMTP id a1e0cc1a2514c-7b6cd2afaf2so386110241.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Nov 2023 05:04:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1699532425; x=1700137225; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BPcS64LNsr6Re9WYBQ3Sfo6KPTli043xINsR6eR0oWU=;
-        b=CGuM6wOVAZlujMOXHQNeku1AE6QvAmM2iij+iJLrYAQC+V2esDVnIAL/n2CqDR+dqw
-         LZLkwCzUOcD6ZOE98OaiHbINwIwhVP+/r20yI5s5s9Y4dHeksn6jU+kH9OwcOmCdzqn4
-         a9TS+wGPZLS+49mbMhxQ8FLGxePOcPtOAVjnR1W+87oWfDtTzBGDHzvMKwQkcHzR2Eul
-         SlduiTaCIla+dHwQ2FFGc6rByWzCsKo75/cfx63kjxyJC4w5gFD4bI1m82CmKxzo+xQM
-         CHHfiiqGZ6EGC6jUCM9FjKX6z7wzgAi9KojyMSWa4c7tEoIDOObdG3DCBNcrb2+uzDx3
-         v3dg==
+        d=linaro.org; s=google; t=1699535076; x=1700139876; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=rJHV5wjvEmu0+H0pswwKbUsYcGzXtjcRUmurBVcTMsY=;
+        b=OCN1jmCBXsiBSD+mwIzfmHx5YKhJ66D9CNptirK9Mcc9yOFraci2K5ZY5A4eZm+4Oa
+         CdINqhxA9XFRmiD/scENxGkc1pjhx2ZoFiSCJPP6697Rrhl9Xm1K+do+qVR9K+uPdBZG
+         ZCyAMLjFX5ucuWvH1nivqWmz/kZCwLVTkbwk7FF5sjDbMFFPL+bbnxBcRbDKiAu6WQ83
+         NyIw6UEJWxmg+JKyYGQxXwwmWw8sAJkKApFG8HuT78d8k8cAFSSIR/LI7tKCJ37NCRY+
+         UJ1Bpks+mp1pCaWi9PseRcd6KO08IYr3zLYSQvSzTDI+ibyRjwOVBeJ2qlJNCBzWfPYV
+         CQ1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699532425; x=1700137225;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BPcS64LNsr6Re9WYBQ3Sfo6KPTli043xINsR6eR0oWU=;
-        b=kdUJrl2TXQvf5Zp2TYmMBuRwlVC14Ma/+grYl6FLow2aZjMDxWngB+rfu5ITbLnFRb
-         FDzCABHhkFUiDcjkju48HTOpDy8i0DOxBIKWx0fE+p6NUZP9LLCpchLfQlLpOx8DIbxY
-         /9zEITxgs/Yy5Jsm0pT4wvd+UfCQrhvB2xfRLxN7yaT5JPhUP+EmItUkc7QEumN1SSwb
-         1xSDN5aqwqTxiV/tFBy4aycfG3pRdRdPh8AbsDpS7+Qu0CXBTgccJ+Op5/DEixz1+tfx
-         oLiFJUI0MI+hyaz1FD1PALAVtbmLO2BR+Vae6nhh4KU+jfc8hytXjyl+tDL9CZV047pR
-         neEQ==
-X-Gm-Message-State: AOJu0YxmKIfpb5vCAa2Y2RK6+JvVAevp9ZFNTi9IZ53NpBE7i5p6wPsF
-        N19f1+fsj7Bmfe57tH4zqJ+4ZEwlk2X/K8tY7UpVKA==
-X-Google-Smtp-Source: AGHT+IFfFl922mscmOxZBJu/cgw+xUG99huJKamj4SvfI8CIyJ6yJO0CbXCAJJce1KiW6D25ou0quO0lgo5uh+PiKfc=
-X-Received: by 2002:a67:ef5e:0:b0:45d:b022:9835 with SMTP id
- k30-20020a67ef5e000000b0045db0229835mr4061147vsr.22.1699532424738; Thu, 09
- Nov 2023 04:20:24 -0800 (PST)
+        d=1e100.net; s=20230601; t=1699535076; x=1700139876;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rJHV5wjvEmu0+H0pswwKbUsYcGzXtjcRUmurBVcTMsY=;
+        b=D9gAK64QbQbTgioXEQgYn1FZQgqsf1Bx7Yq+g/CEYlBp1AnGvFD0n7WBHmnQYYEeXn
+         ghSArLEPc1fU/NZ2YjiU+eGQo/HMTgkvyl5uY7f0Hd+sY/NKYAcl4AeLIVzZO4KYEGq6
+         3SEg5EiF622QMckhxHxJ4cFKciiYEBGaMtPEoYqDpTG/XPKLw/Z91tfJiyNNQa6vbgFT
+         NrpfntwAJJH6kd46x5tC3327yKjdjmPTLxLOTuTXolWU3rs6dkdedDc89D/Lz7ky3FqW
+         Arps+07FxlGNgN9aGbDTmJsYyKFx0K83MoXjgiwmuvTO5zjiVy0OpyeVozqTVwSU3yS1
+         Ev5w==
+X-Gm-Message-State: AOJu0YycgXTbaT1axLFhA7VqU3tOc21Q8dGG4YNxglK65sxpbod/4Pmv
+        E+2+S4pd192sYNUrvX1oTwCoTt22/TrnIeg9z72ycw==
+X-Google-Smtp-Source: AGHT+IG9nwtGQRIOzqK10AkgRk7c+flhGsr/w/ZJgOnvHz+uB1IeZ5JtclgUH4I84oq/WNIfY/7UjG0NLcht5wwj2yQ=
+X-Received: by 2002:a1f:6e4e:0:b0:49d:fab:fa37 with SMTP id
+ j75-20020a1f6e4e000000b0049d0fabfa37mr1381042vkc.4.1699535076016; Thu, 09 Nov
+ 2023 05:04:36 -0800 (PST)
 MIME-Version: 1.0
-References: <20231106024413.2801438-1-almasrymina@google.com>
- <20231106024413.2801438-8-almasrymina@google.com> <4a0e9d53-324d-e19b-2a30-ba86f9e5569e@huawei.com>
- <CAHS8izNbw7vAGo2euQGA+TF9CgQ8zwrDqTVGsOSxh22_uo0R1w@mail.gmail.com>
- <d4309392-711a-75b0-7bf0-9e7de8fd527e@huawei.com> <CAHS8izM1P6d8jgyWE9wFJUJah2YFsjHP2uikDwA0vR=3QA+BXQ@mail.gmail.com>
- <a8ae22dc-5b85-9efe-16c7-d95d455828fa@huawei.com>
-In-Reply-To: <a8ae22dc-5b85-9efe-16c7-d95d455828fa@huawei.com>
-From:   Mina Almasry <almasrymina@google.com>
-Date:   Thu, 9 Nov 2023 04:20:11 -0800
-Message-ID: <CAHS8izOh8yC7q9yJN+RAKGs=AgsEf13MnFDmG46=EU05ynnLKw@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 07/12] page-pool: device memory support
-To:     Yunsheng Lin <linyunsheng@huawei.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Ahern <dsahern@kernel.org>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Jeroen de Borst <jeroendb@google.com>,
-        Praveen Kaligineedi <pkaligineedi@google.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 9 Nov 2023 18:34:24 +0530
+Message-ID: <CA+G9fYue-dV7t-NrOhWwGshvyboXjb2B6HpCDVDe3bgG7fbnsg@mail.gmail.com>
+Subject: selftests: memfd: run_fuse_test.sh - fuse_evict_inode -
+ fs/fuse/inode.c:162 - panic
+To:     linux-fsdevel@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        lkft-triage@lists.linaro.org,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, regressions@lists.linux.dev
+Cc:     Miklos Szeredi <mszeredi@redhat.com>,
+        Krister Johansen <kjlx@templeofstupid.com>,
+        Dan Carpenter <dan.carpenter@linaro.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Nov 9, 2023 at 1:30=E2=80=AFAM Yunsheng Lin <linyunsheng@huawei.com=
-> wrote:
->
-> On 2023/11/9 11:20, Mina Almasry wrote:
-> > On Wed, Nov 8, 2023 at 2:56=E2=80=AFAM Yunsheng Lin <linyunsheng@huawei=
-.com> wrote:
->
-> >
-> > Agreed everything above is undoable.
-> >
-> >> But we might be able to do something as folio is doing now, mm subsyst=
-em
-> >> is still seeing 'struct folio/page', but other subsystem like slab is =
-using
-> >> 'struct slab', and there is still some common fields shared between
-> >> 'struct folio' and 'struct slab'.
-> >>
-> >
-> > In my eyes this is almost exactly what I suggested in RFC v1 and got
-> > immediately nacked with no room to negotiate. What we did for v1 is to
-> > allocate struct pages for dma-buf to make dma-bufs look like struct
-> > page to mm subsystem. Almost exactly what you're describing above.
->
-> Maybe the above is where we have disagreement:
-> Do we still need make dma-bufs look like struct page to mm subsystem?
-> IMHO, the answer is no. We might only need to make dma-bufs look like
-> struct page to net stack and page pool subsystem. I think that is already
-> what this pacthset is trying to do, what I am suggesting is just make
-> it more like 'struct page' to net stack and page pool subsystem, in order
-> to try to avoid most of the 'if' checking in net stack and page pool
-> subsystem.
->
+Following kernel panic noticed while running selftests: memfd: run_fuse_test.sh
+on arm64 Juno-r2 and x86 devices running Linux next-20231109.
 
-First, most of the checking in the net stack is
-skb_frag_not_readable(). dma-buf are fundamentally not kmap()able and
-not readable. So we can't remove those, no matter what we do I think.
-Can we agree on that? If so, lets discuss removing most of the ifs in
-the page pool, only.
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-> > It's a no-go. I don't think renaming struct page to netmem is going to
-> > move the needle (it also re-introduces code-churn). What I feel like I
-> > learnt is that dma-bufs are not struct pages and can't be made to look
-> > like one, I think.
-> >
-> >> As the netmem patchset, is devmem able to reuse the below 'struct netm=
-em'
-> >> and rename it to 'struct page_pool_iov'?
-> >
-> > I don't think so. For the reasons above, but also practically it
-> > immediately falls apart. Consider this field in netmem:
-> >
-> > + * @flags: The same as the page flags.  Do not use directly.
-> >
-> > dma-buf don't have or support page-flags, and making dma-buf looks
-> > like they support page flags or any page-like features (other than
-> > dma_addr) seems extremely unacceptable to mm folks.
->
-> As far as I tell, as we limit the devmem usage in netstack, the below
-> is the related mm function call for 'struct page' for devmem:
-> page_ref_*(): page->_refcount does not need changing
+log:
+---
+# timeout set to 45
+# selftests: memfd: run_fuse_test.sh
+# opening: ./mnt/memfd
+# fuse: DONE
+[ 1931.860330] Unable to handle kernel paging request at virtual
+address 005a5a5a5a5a5a5a
+[ 1931.868645] Mem abort info:
+[ 1931.871505]   ESR = 0x0000000096000021
+[ 1931.875311]   EC = 0x25: DABT (current EL), IL = 32 bits
+[ 1931.880805]   SET = 0, FnV = 0
+[ 1931.883924]   EA = 0, S1PTW = 0
+[ 1931.887563]   FSC = 0x21: alignment fault
+[ 1931.891618] Data abort info:
+[ 1931.894542]   ISV = 0, ISS = 0x00000021, ISS2 = 0x00000000
+[ 1931.900219]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
+[ 1931.905305]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
+[ 1931.910692] [005a5a5a5a5a5a5a] address between user and kernel address ranges
+[ 1931.918091] Internal error: Oops: 0000000096000021 [#1] PREEMPT SMP
+[ 1931.924375] Modules linked in: gpio_sim onboard_usb_hub tda998x
+hdlcd crct10dif_ce cec drm_dma_helper dm_mod [last unloaded:
+gpio_mockup]
+[ 1931.936789] CPU: 1 PID: 20739 Comm: fusermount Not tainted
+6.6.0-next-20231109 #1
+[ 1931.944295] Hardware name: ARM Juno development board (r2) (DT)
+[ 1931.950224] pstate: 40000005 (nZcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+[ 1931.957205] pc : fuse_evict_inode
+(arch/arm64/include/asm/atomic_ll_sc.h:96 (discriminator 3)
+arch/arm64/include/asm/atomic.h:51 (discriminator 3)
+include/linux/atomic/atomic-arch-fallback.h:944 (discriminator 3)
+include/linux/atomic/atomic-instrumented.h:401 (discriminator 3)
+include/linux/refcount.h:272 (discriminator 3)
+include/linux/refcount.h:315 (discriminator 3)
+include/linux/refcount.h:333 (discriminator 3) fs/fuse/inode.c:137
+(discriminator 3) fs/fuse/inode.c:166 (discriminator 3))
+[ 1931.961586] lr : fuse_evict_inode (fs/fuse/inode.c:162)
+[ 1931.965868] sp : ffff80008792ba90
+[ 1931.969189] x29: ffff80008792ba90 x28: ffff000800b58040 x27: 0000000000000000
+[ 1931.976358] x26: 0000000000000000 x25: ffff800080508f98 x24: ffff80008316a008
+[ 1931.983519] x23: ffff80008316a008 x22: ffff80008424a020 x21: ffff00082a514c00
+[ 1931.990679] x20: 5a5a5a5a5a5a5a5a x19: ffff000838828780 x18: 0000000000000000
+[ 1931.997840] x17: ffff80008050e610 x16: ffff80008050e5bc x15: ffff80008050e3e8
+[ 1932.005003] x14: ffff80008050df10 x13: ffff800080769c60 x12: ffff8000851f6388
+[ 1932.012165] x11: 0000000000000645 x10: 0000000000000645 x9 : ffff800081c0e0b4
+[ 1932.019332] x8 : ffff80008792b988 x7 : 0000000000000000 x6 : ffff800084a75fe8
+[ 1932.026495] x5 : 0000000000000000 x4 : 0000000000000001 x3 : ffff80008424a968
+[ 1932.033659] x2 : 0000000000000002 x1 : ffff000800b58040 x0 : 0000000000000001
+[ 1932.040820] Call trace:
+[ 1932.043272] fuse_evict_inode
+(arch/arm64/include/asm/atomic_ll_sc.h:96 (discriminator 3)
+arch/arm64/include/asm/atomic.h:51 (discriminator 3)
+include/linux/atomic/atomic-arch-fallback.h:944 (discriminator 3)
+include/linux/atomic/atomic-instrumented.h:401 (discriminator 3)
+include/linux/refcount.h:272 (discriminator 3)
+include/linux/refcount.h:315 (discriminator 3)
+include/linux/refcount.h:333 (discriminator 3) fs/fuse/inode.c:137
+(discriminator 3) fs/fuse/inode.c:166 (discriminator 3))
+[ 1932.047296] evict (fs/inode.c:669)
+[ 1932.050279] iput_final (fs/inode.c:1776)
+[ 1932.053694] iput.part.0 (fs/inode.c:1803)
+[ 1932.057280] iput (fs/inode.c:1803)
+[ 1932.060085] dentry_unlink_inode (fs/dcache.c:402)
+[ 1932.064281] __dentry_kill (arch/arm64/include/asm/current.h:19
+arch/arm64/include/asm/preempt.h:47 fs/dcache.c:610)
+[ 1932.067956] shrink_dentry_list (include/linux/list.h:373
+(discriminator 2) fs/dcache.c:1179 (discriminator 2))
+[ 1932.072067] shrink_dcache_parent (fs/dcache.c:1652)
+[ 1932.076433] shrink_dcache_for_umount (fs/dcache.c:1682 fs/dcache.c:1698)
+[ 1932.081062] generic_shutdown_super (fs/super.c:647)
+[ 1932.085518] kill_anon_super (fs/super.c:1254)
+[ 1932.089277] fuse_kill_sb_anon (fs/fuse/fuse_i.h:895 fs/fuse/inode.c:1912)
+[ 1932.093298] deactivate_locked_super (fs/super.c:489)
+[ 1932.097753] deactivate_super (fs/super.c:522)
+[ 1932.101599] cleanup_mnt (fs/namespace.c:139 fs/namespace.c:1257)
+[ 1932.105097] __cleanup_mnt (fs/namespace.c:1264)
+[ 1932.108680] task_work_run (kernel/task_work.c:182)
+[ 1932.112266] do_notify_resume (include/linux/resume_user_mode.h:49
+arch/arm64/kernel/signal.c:1305)
+[ 1932.116283] el0_svc (arch/arm64/kernel/entry-common.c:137
+arch/arm64/kernel/entry-common.c:144
+arch/arm64/kernel/entry-common.c:679)
+[ 1932.119345] el0t_64_sync_handler (arch/arm64/kernel/entry-common.c:697)
+[ 1932.123710] el0t_64_sync (arch/arm64/kernel/entry.S:595)
+[ 1932.127383] Code: f9026a7f 17ffffd9 52800020 f9800291 (885f7e81)
+All code
+========
+   0: f9026a7f str xzr, [x19, #1232]
+   4: 17ffffd9 b 0xffffffffffffff68
+   8: 52800020 mov w0, #0x1                    // #1
+   c: f9800291 prfm pstl1strm, [x20]
+  10:* 885f7e81 ldxr w1, [x20] <-- trapping instruction
 
-Sorry, I don't understand. Are you suggesting we call page_ref_add() &
-page_ref_sub() on page_pool_iov? That is basically making
-page_pool_iov look like struct page to the mm stack, since page_ref_*
-are mm calls, which you say above we don't need to do. We will still
-need to special case this, no?
-
-> page_is_pfmemalloc(): which is corresponding to page->pp_magic, and
->                       devmem provider can set/unset it in it's 'alloc_pag=
-es'
->                       ops.
-
-page_is_pfmemalloc() has nothing to do with page->pp_magic. It checks
-page->lru.next to figure out if this is a pfmemalloc. page_pool_iov
-has no page->lru.next. Still need to special case this?
-
-> page_to_nid(): we may need to handle it differently somewhat like this
->                patch does as page_to_nid() may has different implementati=
-on
->                based on different configuration.
-
-So you're saying we need to handle page_to_nid() differently for
-devmem? So we're not going to be able to avoid the if statement.
-
-> page_pool_iov_put_many(): as mentioned in other thread, if net stack is n=
-ot
->                           calling page_pool_page_put_many() directly, we
->                           can reuse napi_pp_put_page() for devmem too, an=
-d
->                           handle the special case for devmem in 'release_=
-page'
->                           ops.
->
-
-page_pool_iov_put_many()/page_pool_iov_get_many() are called to do
-refcounting before the page is released back to the provider. I'm not
-seeing how we can handle the special case inside of 'release_page' -
-that's too late, as far as I can tell.
-
-The only way to remove the if statements in the page pool is to
-implement what you said was not feasible in an earlier email. We would
-define this struct:
-
-struct netmem {
-        /* common fields */
-        refcount_t refcount;
-        bool is_pfmemalloc;
-        int nid;
-        ......
-        union {
-                struct devmem{
-                        struct dmabuf_genpool_chunk_owner *owner;
-                };
-
-                struct page * page;
-        };
-};
-
-Then, we would require all memory providers to allocate struct netmem
-for the memory and set the common fields, including ones that have
-struct pages. For devmem, netmem->page will be NULL, because netmem
-has no page.
-
-If we do that, the page pool can ignore whether the underlying memory
-is page or devmem, because it can use the common fields, example:
-
-/* page_ref_count replacement */
-netmem_ref_count(struct netmem* netmem) {
-    return netmem->refcount;
-}
-
-/* page_ref_add replacement */
-netmem_ref_add(struct netmem* netmem) {
-   atomic_inc(netmem->refcount);
-}
-
-/* page_to_nid replacement */
-netmem_nid(struct netmem* netmem) {
-    return netmem->nid;
-}
-
-/* page_is_pfmemalloc() replacement */
-netmem_is_pfmemalloc(struct netmem* netmem) {
-    return netmem->is_pfmemalloc;
-}
-
-/* page_ref_sub replacement */
-netmem_ref_sub(struct netmem* netmem) {
-    atomic_sub(netmet->refcount);
-    if (netmem->refcount =3D=3D 0) {
-                  /* release page to the memory provider.
-                   * struct page memory provider will do put_page(),
-                   * devmem will do something else */
-           }
-     }
-}
+Code starting with the faulting instruction
+===========================================
+   0: 885f7e81 ldxr w1, [x20]
+[ 1932.133486] ---[ end trace 0000000000000000 ]---
+[ 1932.138111] Kernel panic - not syncing: Oops: Fatal exception
+[ 1932.143867] SMP: stopping secondary CPUs
+[ 1932.148008] Kernel Offset: disabled
+[ 1932.151498] CPU features: 0x1,0000020c,3c020000,0100421b
+[ 1932.156820] Memory Limit: none
+[ 1932.159880] ---[ end Kernel panic - not syncing: Oops: Fatal exception ]---
 
 
-I think this MAY BE technically feasible, but I'm not sure it's better:
+Links:
+- https://lkft.validation.linaro.org/scheduler/job/7006578#L6164
+- https://lkft.validation.linaro.org/scheduler/job/7006482#L9235
 
-1. It is a huge refactor to the page pool, lots of code churn. While
-the page pool currently uses page*, it needs to be completely
-refactored to use netmem*.
-2. It causes extra memory usage. struct netmem needs to be allocated
-for every struct page.
-3. It has minimal perf upside. The page_is_page_pool_iov() checks
-currently have minimal perf impact, and I demonstrated that to Jesper
-in RFC v2.
-4. It also may not be technically feasible. I'm not sure how netmem
-interacts with skb_frag_t. I guess we replace struct page* bv_page
-with struct netmem* bv_page, and add changes there.
-5. Drivers need to be refactored to use netmem* instead of page*,
-unless we cast netmem* to page* before returning to the driver.
-
-Possibly other downsides, these are what I could immediately think of.
-
-If I'm still misunderstanding your suggestion, it may be time to send
-me a concrete code snippet of what you have in mind. I'm a bit
-confused at the moment because the only avenue I see to remove the if
-statements in the page pool is to define the struct that we agreed is
-not feasible in earlier emails.
-
-> >
-> >> So that 'struct page' for normal
-> >> memory and 'struct page_pool_iov' for devmem share the common fields u=
-sed
-> >> by page pool and net stack?
-> >
-> > Are you suggesting that we'd cast a netmem* to a page* and call core
-> > mm APIs on it? It's basically what was happening with RFC v1, where
-> > things that are not struct pages were made to look like struct pages.
-> >
-> > Also, there isn't much upside for what you're suggesting, I think. For
-> > example I can align the refcount variable in struct page_pool_iov with
-> > the refcount in struct page so that this works:
-> >
-> > put_page((struct page*)ppiov);
-> >
-> > but it's a disaster. Because put_page() will call __put_page() if the
-> > page is freed, and __put_page() will try to return the page to the
-> > buddy allocator!
->
-> As what I suggested above, Can we handle this in devmem provider's
-> 'release_page' ops instead of calling put_page() directly as for devmem.
->
-> >
-> >>  And we might be able to reuse the 'flags',
-> >> '_pp_mapping_pad' and '_mapcount' for specific mem provider, which is =
-enough
-> >> for the devmem only requiring a single pointer to point to it's
-> >> owner?
-> >>
-> >
-> > All the above seems quite similar to RFC v1 again, using netmem
-> > instead of struct page. In RFC v1 we re-used zone_device_data() for
-> > the dma-buf owner equivalent.
->
-> As we have added a few checkings to limit 'struct page' for devmem to
-> be only used in net stack, we can decouple 'struct page' for devmem
-> from mm subsystem, zone_device_data() is not really needed, right?
->
-> If we can decouple 'struct page' for normal memory from mm subsystem
-> through the folio work in the future, then we may define a more abstract
-> structure for page pool and net stack instead of reusing 'struct page'
-> from mm.
->
-> >
-
+metadata:
+git_ref: master
+git_repo: https://gitlab.com/Linaro/lkft/mirrors/next/linux-next
+git_sha: b622d91ca201bf97582e9b09ebbaab005ecee86f
+git_describe: next-20231109
+kernel_version: 6.6.0
+kernel-config:
+https://storage.tuxsuite.com/public/linaro/lkft/builds/2Xv92VPrzXNNmQil9l8bJV2RQHs/config
+artifact-location:
+https://storage.tuxsuite.com/public/linaro/lkft/builds/2Xv92VPrzXNNmQil9l8bJV2RQHs/
+toolchain: gcc-13
 
 
 --
-Thanks,
-Mina
+Linaro LKFT
+https://lkft.linaro.org
