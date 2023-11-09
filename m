@@ -2,36 +2,70 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F2E47E66CA
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Nov 2023 10:30:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C10FE7E68DC
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Nov 2023 11:53:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230343AbjKIJay (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Nov 2023 04:30:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53154 "EHLO
+        id S232602AbjKIKxB (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Nov 2023 05:53:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229583AbjKIJax (ORCPT
+        with ESMTP id S233551AbjKIKw6 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Nov 2023 04:30:53 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 745EB2590;
-        Thu,  9 Nov 2023 01:30:51 -0800 (PST)
-Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4SQxWy6kV1zfb3k;
-        Thu,  9 Nov 2023 17:30:38 +0800 (CST)
-Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
- (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.31; Thu, 9 Nov
- 2023 17:30:16 +0800
-Subject: Re: [RFC PATCH v3 07/12] page-pool: device memory support
-To:     Mina Almasry <almasrymina@google.com>
-CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arch@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <linaro-mm-sig@lists.linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
+        Thu, 9 Nov 2023 05:52:58 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 739F126AF
+        for <linux-kselftest@vger.kernel.org>; Thu,  9 Nov 2023 02:52:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1699527128;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=/fEMZu04vJmPyEDeZ4tFFxfgW3Qd9nS2eGWSB2Vs73s=;
+        b=Id6+graJtD4jUxo3awPyoB+LjUj2/IkSyjSLwob4XBj3xzudQTRCjh5NG+oXjuNq3G+GrT
+        nEmeAC2GjORp86piU6S074f+QQSz3RxyfK+D/x0sjJNsmHFULI3WuG94Vu0Zw4DRBCWbjs
+        00H6Iexk9CBSEKxpG0zkdXJrEIFiigc=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-608-E4ORqiOAPeq5kY8Il6tzAQ-1; Thu, 09 Nov 2023 05:52:07 -0500
+X-MC-Unique: E4ORqiOAPeq5kY8Il6tzAQ-1
+Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-66cfa898cfeso1039136d6.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Nov 2023 02:52:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699527126; x=1700131926;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/fEMZu04vJmPyEDeZ4tFFxfgW3Qd9nS2eGWSB2Vs73s=;
+        b=FN3dGNKz7EX1PaTQvyhmKDLp0/bSqYmLrA4jYVBcC/gybRGnrFQ9CexwTgxBRK8QKh
+         57Bg/N+NqeTccmL2mpeWQmi3pwb250hB+dfCyKcBUrAuOB1qhgEE+rRRo5TSrc3F5H1c
+         ciRO6GbC/Y1NFORSEoJZHHk70nlAQ2ht7v+0rlFiJ5el69tYEMGlQwKZqbDput5F04H2
+         E+qW0V7NL1KQRjUIsaO3PfEeaFfUgxtt9xGYBNEFopRzSMqMe1emhqD1fx4pkmvMg1Uh
+         FmiKKmtlAxs+JNXYxBGs8JmuGyEQ9/tWzHs4aYpvjpaVpbGnpuZRd6oWXKxbXW5dShDr
+         zLbQ==
+X-Gm-Message-State: AOJu0Yz8unuFaV7+sMlOx/W9aL/NuqZKzxWm4HGjYyF/bkv/Rwq5i1A8
+        J+sPlm7Lslsa2Igjqf+p3PxpIzAFlWqlyjXknECGS/Ah4+SRc0PnVeHn8hoMiR88t4QQTvT60mp
+        wBEjXDDwTzgw1wi5wKydZ3wT79n+S
+X-Received: by 2002:a05:6214:4a:b0:670:d117:1f9e with SMTP id c10-20020a056214004a00b00670d1171f9emr4487359qvr.2.1699527126642;
+        Thu, 09 Nov 2023 02:52:06 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFAk/DQxSd74d4wUNFAZnKsQQezg47K5p4R/fP0LVcZMKk5oMlW4rqzws8VL1bQTjgTMKPmVQ==
+X-Received: by 2002:a05:6214:4a:b0:670:d117:1f9e with SMTP id c10-20020a056214004a00b00670d1171f9emr4487333qvr.2.1699527126264;
+        Thu, 09 Nov 2023 02:52:06 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-228-197.dyn.eolo.it. [146.241.228.197])
+        by smtp.gmail.com with ESMTPSA id l8-20020a056214104800b0065d89f4d537sm1952390qvr.45.2023.11.09.02.52.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 09 Nov 2023 02:52:05 -0800 (PST)
+Message-ID: <e584ca804a2e98bcf6e8e5ea2d4206f9f579e0ce.camel@redhat.com>
+Subject: Re: [RFC PATCH v3 10/12] tcp: RX path for devmem TCP
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
+Cc:     "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
         Jesper Dangaard Brouer <hawk@kernel.org>,
         Ilias Apalodimas <ilias.apalodimas@linaro.org>,
         Arnd Bergmann <arnd@arndb.de>,
@@ -39,132 +73,249 @@ CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
         Shuah Khan <shuah@kernel.org>,
         Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
         Shakeel Butt <shakeelb@google.com>,
         Jeroen de Borst <jeroendb@google.com>,
-        Praveen Kaligineedi <pkaligineedi@google.com>
+        Praveen Kaligineedi <pkaligineedi@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Kaiyuan Zhang <kaiyuanz@google.com>
+Date:   Thu, 09 Nov 2023 11:52:01 +0100
+In-Reply-To: <20231106024413.2801438-11-almasrymina@google.com>
 References: <20231106024413.2801438-1-almasrymina@google.com>
- <20231106024413.2801438-8-almasrymina@google.com>
- <4a0e9d53-324d-e19b-2a30-ba86f9e5569e@huawei.com>
- <CAHS8izNbw7vAGo2euQGA+TF9CgQ8zwrDqTVGsOSxh22_uo0R1w@mail.gmail.com>
- <d4309392-711a-75b0-7bf0-9e7de8fd527e@huawei.com>
- <CAHS8izM1P6d8jgyWE9wFJUJah2YFsjHP2uikDwA0vR=3QA+BXQ@mail.gmail.com>
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <a8ae22dc-5b85-9efe-16c7-d95d455828fa@huawei.com>
-Date:   Thu, 9 Nov 2023 17:30:16 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+         <20231106024413.2801438-11-almasrymina@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-In-Reply-To: <CAHS8izM1P6d8jgyWE9wFJUJah2YFsjHP2uikDwA0vR=3QA+BXQ@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.69.30.204]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On 2023/11/9 11:20, Mina Almasry wrote:
-> On Wed, Nov 8, 2023 at 2:56 AM Yunsheng Lin <linyunsheng@huawei.com> wrote:
+On Sun, 2023-11-05 at 18:44 -0800, Mina Almasry wrote:
+[...]
+> +/* On error, returns the -errno. On success, returns number of bytes sen=
+t to the
+> + * user. May not consume all of @remaining_len.
+> + */
+> +static int tcp_recvmsg_devmem(const struct sock *sk, const struct sk_buf=
+f *skb,
+> +			      unsigned int offset, struct msghdr *msg,
+> +			      int remaining_len)
+> +{
+> +	struct cmsg_devmem cmsg_devmem =3D { 0 };
+> +	unsigned int start;
+> +	int i, copy, n;
+> +	int sent =3D 0;
+> +	int err =3D 0;
+> +
+> +	do {
+> +		start =3D skb_headlen(skb);
+> +
+> +		if (!skb_frags_not_readable(skb)) {
 
-> 
-> Agreed everything above is undoable.
-> 
->> But we might be able to do something as folio is doing now, mm subsystem
->> is still seeing 'struct folio/page', but other subsystem like slab is using
->> 'struct slab', and there is still some common fields shared between
->> 'struct folio' and 'struct slab'.
->>
-> 
-> In my eyes this is almost exactly what I suggested in RFC v1 and got
-> immediately nacked with no room to negotiate. What we did for v1 is to
-> allocate struct pages for dma-buf to make dma-bufs look like struct
-> page to mm subsystem. Almost exactly what you're describing above.
+As 'skb_frags_not_readable()' is intended to be a possibly wider scope
+test then skb->devmem, should the above test explicitly skb->devmem?
 
-Maybe the above is where we have disagreement:
-Do we still need make dma-bufs look like struct page to mm subsystem?
-IMHO, the answer is no. We might only need to make dma-bufs look like
-struct page to net stack and page pool subsystem. I think that is already
-what this pacthset is trying to do, what I am suggesting is just make
-it more like 'struct page' to net stack and page pool subsystem, in order
-to try to avoid most of the 'if' checking in net stack and page pool
-subsystem.
+> +			err =3D -ENODEV;
+> +			goto out;
+> +		}
+> +
+> +		/* Copy header. */
+> +		copy =3D start - offset;
+> +		if (copy > 0) {
+> +			copy =3D min(copy, remaining_len);
+> +
+> +			n =3D copy_to_iter(skb->data + offset, copy,
+> +					 &msg->msg_iter);
+> +			if (n !=3D copy) {
+> +				err =3D -EFAULT;
+> +				goto out;
+> +			}
+> +
+> +			offset +=3D copy;
+> +			remaining_len -=3D copy;
+> +
+> +			/* First a cmsg_devmem for # bytes copied to user
+> +			 * buffer.
+> +			 */
+> +			memset(&cmsg_devmem, 0, sizeof(cmsg_devmem));
+> +			cmsg_devmem.frag_size =3D copy;
+> +			err =3D put_cmsg(msg, SOL_SOCKET, SO_DEVMEM_HEADER,
+> +				       sizeof(cmsg_devmem), &cmsg_devmem);
+> +			if (err || msg->msg_flags & MSG_CTRUNC) {
+> +				msg->msg_flags &=3D ~MSG_CTRUNC;
+> +				if (!err)
+> +					err =3D -ETOOSMALL;
+> +				goto out;
+> +			}
+> +
+> +			sent +=3D copy;
+> +
+> +			if (remaining_len =3D=3D 0)
+> +				goto out;
+> +		}
+> +
+> +		/* after that, send information of devmem pages through a
+> +		 * sequence of cmsg
+> +		 */
+> +		for (i =3D 0; i < skb_shinfo(skb)->nr_frags; i++) {
+> +			const skb_frag_t *frag =3D &skb_shinfo(skb)->frags[i];
+> +			struct page_pool_iov *ppiov;
+> +			u64 frag_offset;
+> +			u32 user_token;
+> +			int end;
+> +
+> +			/* skb_frags_not_readable() should indicate that ALL the
+> +			 * frags in this skb are unreadable page_pool_iovs.
+> +			 * We're checking for that flag above, but also check
+> +			 * individual pages here. If the tcp stack is not
+> +			 * setting skb->devmem correctly, we still don't want to
+> +			 * crash here when accessing pgmap or priv below.
+> +			 */
+> +			if (!skb_frag_page_pool_iov(frag)) {
+> +				net_err_ratelimited("Found non-devmem skb with page_pool_iov");
+> +				err =3D -ENODEV;
+> +				goto out;
+> +			}
+> +
+> +			ppiov =3D skb_frag_page_pool_iov(frag);
+> +			end =3D start + skb_frag_size(frag);
+> +			copy =3D end - offset;
+> +
+> +			if (copy > 0) {
+> +				copy =3D min(copy, remaining_len);
+> +
+> +				frag_offset =3D page_pool_iov_virtual_addr(ppiov) +
+> +					      skb_frag_off(frag) + offset -
+> +					      start;
+> +				cmsg_devmem.frag_offset =3D frag_offset;
+> +				cmsg_devmem.frag_size =3D copy;
+> +				err =3D xa_alloc((struct xarray *)&sk->sk_user_pages,
+> +					       &user_token, frag->bv_page,
+> +					       xa_limit_31b, GFP_KERNEL);
+> +				if (err)
+> +					goto out;
+> +
+> +				cmsg_devmem.frag_token =3D user_token;
+> +
+> +				offset +=3D copy;
+> +				remaining_len -=3D copy;
+> +
+> +				err =3D put_cmsg(msg, SOL_SOCKET,
+> +					       SO_DEVMEM_OFFSET,
+> +					       sizeof(cmsg_devmem),
+> +					       &cmsg_devmem);
+> +				if (err || msg->msg_flags & MSG_CTRUNC) {
+> +					msg->msg_flags &=3D ~MSG_CTRUNC;
+> +					xa_erase((struct xarray *)&sk->sk_user_pages,
+> +						 user_token);
+> +					if (!err)
+> +						err =3D -ETOOSMALL;
+> +					goto out;
+> +				}
+> +
+> +				page_pool_iov_get_many(ppiov, 1);
+> +
+> +				sent +=3D copy;
+> +
+> +				if (remaining_len =3D=3D 0)
+> +					goto out;
+> +			}
+> +			start =3D end;
+> +		}
+> +
+> +		if (!remaining_len)
+> +			goto out;
+> +
+> +		/* if remaining_len is not satisfied yet, we need to go to the
+> +		 * next frag in the frag_list to satisfy remaining_len.
+> +		 */
+> +		skb =3D skb_shinfo(skb)->frag_list ?: skb->next;
 
-> It's a no-go. I don't think renaming struct page to netmem is going to
-> move the needle (it also re-introduces code-churn). What I feel like I
-> learnt is that dma-bufs are not struct pages and can't be made to look
-> like one, I think.
-> 
->> As the netmem patchset, is devmem able to reuse the below 'struct netmem'
->> and rename it to 'struct page_pool_iov'?
-> 
-> I don't think so. For the reasons above, but also practically it
-> immediately falls apart. Consider this field in netmem:
-> 
-> + * @flags: The same as the page flags.  Do not use directly.
-> 
-> dma-buf don't have or support page-flags, and making dma-buf looks
-> like they support page flags or any page-like features (other than
-> dma_addr) seems extremely unacceptable to mm folks.
+I think at this point the 'skb' is still on the sk receive queue. The
+above will possibly walk the queue.
 
-As far as I tell, as we limit the devmem usage in netstack, the below
-is the related mm function call for 'struct page' for devmem:
-page_ref_*(): page->_refcount does not need changing
-page_is_pfmemalloc(): which is corresponding to page->pp_magic, and
-                      devmem provider can set/unset it in it's 'alloc_pages'
-                      ops.
-page_to_nid(): we may need to handle it differently somewhat like this
-               patch does as page_to_nid() may has different implementation
-               based on different configuration.
-page_pool_iov_put_many(): as mentioned in other thread, if net stack is not
-                          calling page_pool_page_put_many() directly, we
-                          can reuse napi_pp_put_page() for devmem too, and
-                          handle the special case for devmem in 'release_page'
-                          ops.
+Later on, only the current queue tail could be possibly consumed by
+tcp_recvmsg_locked(). This feel confusing to me?!? Why don't limit the
+loop only the 'current' skb and it's frags?
 
-> 
->> So that 'struct page' for normal
->> memory and 'struct page_pool_iov' for devmem share the common fields used
->> by page pool and net stack?
-> 
-> Are you suggesting that we'd cast a netmem* to a page* and call core
-> mm APIs on it? It's basically what was happening with RFC v1, where
-> things that are not struct pages were made to look like struct pages.
-> 
-> Also, there isn't much upside for what you're suggesting, I think. For
-> example I can align the refcount variable in struct page_pool_iov with
-> the refcount in struct page so that this works:
-> 
-> put_page((struct page*)ppiov);
-> 
-> but it's a disaster. Because put_page() will call __put_page() if the
-> page is freed, and __put_page() will try to return the page to the
-> buddy allocator!
+> +
+> +		offset =3D offset - start;
+> +	} while (skb);
+> +
+> +	if (remaining_len) {
+> +		err =3D -EFAULT;
+> +		goto out;
+> +	}
+> +
+> +out:
+> +	if (!sent)
+> +		sent =3D err;
+> +
+> +	return sent;
+> +}
+> +
+>  /*
+>   *	This routine copies from a sock struct into the user buffer.
+>   *
+> @@ -2314,6 +2463,7 @@ static int tcp_recvmsg_locked(struct sock *sk, stru=
+ct msghdr *msg, size_t len,
+>  			      int *cmsg_flags)
+>  {
+>  	struct tcp_sock *tp =3D tcp_sk(sk);
+> +	int last_copied_devmem =3D -1; /* uninitialized */
+>  	int copied =3D 0;
+>  	u32 peek_seq;
+>  	u32 *seq;
+> @@ -2491,15 +2641,44 @@ static int tcp_recvmsg_locked(struct sock *sk, st=
+ruct msghdr *msg, size_t len,
+>  		}
+> =20
+>  		if (!(flags & MSG_TRUNC)) {
+> -			err =3D skb_copy_datagram_msg(skb, offset, msg, used);
+> -			if (err) {
+> -				/* Exception. Bailout! */
+> -				if (!copied)
+> -					copied =3D -EFAULT;
+> +			if (last_copied_devmem !=3D -1 &&
+> +			    last_copied_devmem !=3D skb->devmem)
+>  				break;
+> +
+> +			if (!skb->devmem) {
+> +				err =3D skb_copy_datagram_msg(skb, offset, msg,
+> +							    used);
+> +				if (err) {
+> +					/* Exception. Bailout! */
+> +					if (!copied)
+> +						copied =3D -EFAULT;
+> +					break;
+> +				}
+> +			} else {
+> +				if (!(flags & MSG_SOCK_DEVMEM)) {
+> +					/* skb->devmem skbs can only be received
+> +					 * with the MSG_SOCK_DEVMEM flag.
+> +					 */
+> +					if (!copied)
+> +						copied =3D -EFAULT;
+> +
+> +					break;
+> +				}
+> +
+> +				err =3D tcp_recvmsg_devmem(sk, skb, offset, msg,
+> +							 used);
+> +				if (err <=3D 0) {
+> +					if (!copied)
+> +						copied =3D -EFAULT;
+> +
+> +					break;
+> +				}
+> +				used =3D err;
 
-As what I suggested above, Can we handle this in devmem provider's
-'release_page' ops instead of calling put_page() directly as for devmem.
+Minor nit: I personally would find the above more readable, placing
+this whole chunk in a single helper (e.g. the current
+tcp_recvmsg_devmem(), renamed to something more appropriate).
 
-> 
->>  And we might be able to reuse the 'flags',
->> '_pp_mapping_pad' and '_mapcount' for specific mem provider, which is enough
->> for the devmem only requiring a single pointer to point to it's
->> owner?
->>
-> 
-> All the above seems quite similar to RFC v1 again, using netmem
-> instead of struct page. In RFC v1 we re-used zone_device_data() for
-> the dma-buf owner equivalent.
+Cheers,
 
-As we have added a few checkings to limit 'struct page' for devmem to
-be only used in net stack, we can decouple 'struct page' for devmem
-from mm subsystem, zone_device_data() is not really needed, right?
+Paolo
 
-If we can decouple 'struct page' for normal memory from mm subsystem
-through the folio work in the future, then we may define a more abstract
-structure for page pool and net stack instead of reusing 'struct page'
-from mm.
-
-> 
