@@ -2,233 +2,318 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9B557E69CD
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Nov 2023 12:38:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A6FC7E6A6A
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Nov 2023 13:20:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232002AbjKILiD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Nov 2023 06:38:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59450 "EHLO
+        id S230063AbjKIMU3 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Nov 2023 07:20:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231878AbjKILiD (ORCPT
+        with ESMTP id S229798AbjKIMU2 (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Nov 2023 06:38:03 -0500
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15E90269A;
-        Thu,  9 Nov 2023 03:38:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1699529881; x=1731065881;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=DKFfaiU9gGxjgDYBwyC5urWJAh5gfm6X7WCUnD4IAWM=;
-  b=FRBC3Ds5jzTLvym0W6ctK7MrFpuMHP6bKeuFF3PbPN6PJXTu6g9PyG9R
-   EqsEMHzoNhbap0JAtrLyCotVWUQvNspjr5QWS9jLgjDI/BHBQBIoOaWGB
-   yfqezKZyVVF1cJwI8UG+yjqkJ9BX3+048/MWoTF65HGiHVcwXBC4ZgSFP
-   /pZPaLSZ+T2IG1uvKSIOsaTkgBeVzSs7ZQnZwngJJSKEYZcwtuCxnzxR4
-   Utkkl48VmQdn3pNYknX0wNS+pYsErIgeCUU8b17o+EQ1Ay6fXILl18pOY
-   KS1y4VnB/BdbvNBSS9fjPkvspIr2Pn5zswKpHRXwnvJ3f4ensjUsfM41J
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10888"; a="369301857"
-X-IronPort-AV: E=Sophos;i="6.03,289,1694761200"; 
-   d="scan'208";a="369301857"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2023 03:37:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10888"; a="854052328"
-X-IronPort-AV: E=Sophos;i="6.03,289,1694761200"; 
-   d="scan'208";a="854052328"
-Received: from bsochack-mobl2.ger.corp.intel.com (HELO wieczorr-mobl1.intel.com) ([10.213.8.94])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2023 03:37:56 -0800
-From:   Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-To:     Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     ilpo.jarvinen@intel.com, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: [PATCH] selftests/resctrl: Add non-contiguous CBMs CAT test
-Date:   Thu,  9 Nov 2023 12:28:47 +0100
-Message-ID: <20231109112847.432687-1-maciej.wieczor-retman@intel.com>
-X-Mailer: git-send-email 2.42.1
+        Thu, 9 Nov 2023 07:20:28 -0500
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB45A270C
+        for <linux-kselftest@vger.kernel.org>; Thu,  9 Nov 2023 04:20:25 -0800 (PST)
+Received: by mail-vs1-xe36.google.com with SMTP id ada2fe7eead31-457c6267818so322911137.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Nov 2023 04:20:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1699532425; x=1700137225; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BPcS64LNsr6Re9WYBQ3Sfo6KPTli043xINsR6eR0oWU=;
+        b=CGuM6wOVAZlujMOXHQNeku1AE6QvAmM2iij+iJLrYAQC+V2esDVnIAL/n2CqDR+dqw
+         LZLkwCzUOcD6ZOE98OaiHbINwIwhVP+/r20yI5s5s9Y4dHeksn6jU+kH9OwcOmCdzqn4
+         a9TS+wGPZLS+49mbMhxQ8FLGxePOcPtOAVjnR1W+87oWfDtTzBGDHzvMKwQkcHzR2Eul
+         SlduiTaCIla+dHwQ2FFGc6rByWzCsKo75/cfx63kjxyJC4w5gFD4bI1m82CmKxzo+xQM
+         CHHfiiqGZ6EGC6jUCM9FjKX6z7wzgAi9KojyMSWa4c7tEoIDOObdG3DCBNcrb2+uzDx3
+         v3dg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699532425; x=1700137225;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BPcS64LNsr6Re9WYBQ3Sfo6KPTli043xINsR6eR0oWU=;
+        b=kdUJrl2TXQvf5Zp2TYmMBuRwlVC14Ma/+grYl6FLow2aZjMDxWngB+rfu5ITbLnFRb
+         FDzCABHhkFUiDcjkju48HTOpDy8i0DOxBIKWx0fE+p6NUZP9LLCpchLfQlLpOx8DIbxY
+         /9zEITxgs/Yy5Jsm0pT4wvd+UfCQrhvB2xfRLxN7yaT5JPhUP+EmItUkc7QEumN1SSwb
+         1xSDN5aqwqTxiV/tFBy4aycfG3pRdRdPh8AbsDpS7+Qu0CXBTgccJ+Op5/DEixz1+tfx
+         oLiFJUI0MI+hyaz1FD1PALAVtbmLO2BR+Vae6nhh4KU+jfc8hytXjyl+tDL9CZV047pR
+         neEQ==
+X-Gm-Message-State: AOJu0YxmKIfpb5vCAa2Y2RK6+JvVAevp9ZFNTi9IZ53NpBE7i5p6wPsF
+        N19f1+fsj7Bmfe57tH4zqJ+4ZEwlk2X/K8tY7UpVKA==
+X-Google-Smtp-Source: AGHT+IFfFl922mscmOxZBJu/cgw+xUG99huJKamj4SvfI8CIyJ6yJO0CbXCAJJce1KiW6D25ou0quO0lgo5uh+PiKfc=
+X-Received: by 2002:a67:ef5e:0:b0:45d:b022:9835 with SMTP id
+ k30-20020a67ef5e000000b0045db0229835mr4061147vsr.22.1699532424738; Thu, 09
+ Nov 2023 04:20:24 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20231106024413.2801438-1-almasrymina@google.com>
+ <20231106024413.2801438-8-almasrymina@google.com> <4a0e9d53-324d-e19b-2a30-ba86f9e5569e@huawei.com>
+ <CAHS8izNbw7vAGo2euQGA+TF9CgQ8zwrDqTVGsOSxh22_uo0R1w@mail.gmail.com>
+ <d4309392-711a-75b0-7bf0-9e7de8fd527e@huawei.com> <CAHS8izM1P6d8jgyWE9wFJUJah2YFsjHP2uikDwA0vR=3QA+BXQ@mail.gmail.com>
+ <a8ae22dc-5b85-9efe-16c7-d95d455828fa@huawei.com>
+In-Reply-To: <a8ae22dc-5b85-9efe-16c7-d95d455828fa@huawei.com>
+From:   Mina Almasry <almasrymina@google.com>
+Date:   Thu, 9 Nov 2023 04:20:11 -0800
+Message-ID: <CAHS8izOh8yC7q9yJN+RAKGs=AgsEf13MnFDmG46=EU05ynnLKw@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 07/12] page-pool: device memory support
+To:     Yunsheng Lin <linyunsheng@huawei.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linaro-mm-sig@lists.linaro.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        David Ahern <dsahern@kernel.org>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Jeroen de Borst <jeroendb@google.com>,
+        Praveen Kaligineedi <pkaligineedi@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-Non-contiguous CBM support for Intel CAT has been merged into the kernel
-with Commit 0e3cd31f6e90 ("x86/resctrl: Enable non-contiguous CBMs in
-Intel CAT") but there is no selftest that would validate if this feature
-works correctly.
+On Thu, Nov 9, 2023 at 1:30=E2=80=AFAM Yunsheng Lin <linyunsheng@huawei.com=
+> wrote:
+>
+> On 2023/11/9 11:20, Mina Almasry wrote:
+> > On Wed, Nov 8, 2023 at 2:56=E2=80=AFAM Yunsheng Lin <linyunsheng@huawei=
+.com> wrote:
+>
+> >
+> > Agreed everything above is undoable.
+> >
+> >> But we might be able to do something as folio is doing now, mm subsyst=
+em
+> >> is still seeing 'struct folio/page', but other subsystem like slab is =
+using
+> >> 'struct slab', and there is still some common fields shared between
+> >> 'struct folio' and 'struct slab'.
+> >>
+> >
+> > In my eyes this is almost exactly what I suggested in RFC v1 and got
+> > immediately nacked with no room to negotiate. What we did for v1 is to
+> > allocate struct pages for dma-buf to make dma-bufs look like struct
+> > page to mm subsystem. Almost exactly what you're describing above.
+>
+> Maybe the above is where we have disagreement:
+> Do we still need make dma-bufs look like struct page to mm subsystem?
+> IMHO, the answer is no. We might only need to make dma-bufs look like
+> struct page to net stack and page pool subsystem. I think that is already
+> what this pacthset is trying to do, what I am suggesting is just make
+> it more like 'struct page' to net stack and page pool subsystem, in order
+> to try to avoid most of the 'if' checking in net stack and page pool
+> subsystem.
+>
 
-The selftest needs to verify if writing non-contiguous CBMs to the
-schemata file behaves as expected in comparison to the information about
-non-contiguous CBMs support.
+First, most of the checking in the net stack is
+skb_frag_not_readable(). dma-buf are fundamentally not kmap()able and
+not readable. So we can't remove those, no matter what we do I think.
+Can we agree on that? If so, lets discuss removing most of the ifs in
+the page pool, only.
 
-Add tests for both L2 and L3 CAT to verify if the return values
-generated by writing non-contiguous CBMs don't contradict the
-reported non-contiguous support information.
+> > It's a no-go. I don't think renaming struct page to netmem is going to
+> > move the needle (it also re-introduces code-churn). What I feel like I
+> > learnt is that dma-bufs are not struct pages and can't be made to look
+> > like one, I think.
+> >
+> >> As the netmem patchset, is devmem able to reuse the below 'struct netm=
+em'
+> >> and rename it to 'struct page_pool_iov'?
+> >
+> > I don't think so. For the reasons above, but also practically it
+> > immediately falls apart. Consider this field in netmem:
+> >
+> > + * @flags: The same as the page flags.  Do not use directly.
+> >
+> > dma-buf don't have or support page-flags, and making dma-buf looks
+> > like they support page flags or any page-like features (other than
+> > dma_addr) seems extremely unacceptable to mm folks.
+>
+> As far as I tell, as we limit the devmem usage in netstack, the below
+> is the related mm function call for 'struct page' for devmem:
+> page_ref_*(): page->_refcount does not need changing
 
-Comparing the return value of write_schemata() with non-contiguous CBMs
-support information can be simplified as a logical XOR operation. In
-other words if non-contiguous CBMs are supported and if non-contiguous
-write succeeds the test should succeed and if the write fails the test
-should also fail. The opposite should happen if non-contiguous CBMs are
-not supported.
+Sorry, I don't understand. Are you suggesting we call page_ref_add() &
+page_ref_sub() on page_pool_iov? That is basically making
+page_pool_iov look like struct page to the mm stack, since page_ref_*
+are mm calls, which you say above we don't need to do. We will still
+need to special case this, no?
 
-Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+> page_is_pfmemalloc(): which is corresponding to page->pp_magic, and
+>                       devmem provider can set/unset it in it's 'alloc_pag=
+es'
+>                       ops.
 
----
+page_is_pfmemalloc() has nothing to do with page->pp_magic. It checks
+page->lru.next to figure out if this is a pfmemalloc. page_pool_iov
+has no page->lru.next. Still need to special case this?
 
-This patch is based on a rework of resctrl selftests that's currently in
-review [1]. The patch also implements a similiar functionality presented
-in the bash script included in the cover letter to the original
-non-contiguous CBMs in Intel CAT series [2].
+> page_to_nid(): we may need to handle it differently somewhat like this
+>                patch does as page_to_nid() may has different implementati=
+on
+>                based on different configuration.
 
-[1] https://lore.kernel.org/all/20231024092634.7122-1-ilpo.jarvinen@linux.intel.com/
-[2] https://lore.kernel.org/all/cover.1696934091.git.maciej.wieczor-retman@intel.com/
+So you're saying we need to handle page_to_nid() differently for
+devmem? So we're not going to be able to avoid the if statement.
 
- tools/testing/selftests/resctrl/cat_test.c    | 97 +++++++++++++++++++
- tools/testing/selftests/resctrl/resctrl.h     |  2 +
- .../testing/selftests/resctrl/resctrl_tests.c |  2 +
- 3 files changed, 101 insertions(+)
+> page_pool_iov_put_many(): as mentioned in other thread, if net stack is n=
+ot
+>                           calling page_pool_page_put_many() directly, we
+>                           can reuse napi_pp_put_page() for devmem too, an=
+d
+>                           handle the special case for devmem in 'release_=
+page'
+>                           ops.
+>
 
-diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-index bc88eb891f35..6a01a5da30b4 100644
---- a/tools/testing/selftests/resctrl/cat_test.c
-+++ b/tools/testing/selftests/resctrl/cat_test.c
-@@ -342,6 +342,87 @@ static int cat_run_test(const struct resctrl_test *test, const struct user_param
- 	return ret;
- }
- 
-+static int noncont_cat_run_test(const struct resctrl_test *test,
-+				const struct user_params *uparams)
-+{
-+	unsigned long full_cache_mask, cont_mask, noncont_mask;
-+	unsigned int eax, ebx, ecx, edx, ret, sparse_masks;
-+	char res_path[PATH_MAX];
-+	char schemata[64];
-+	int bit_center;
-+	FILE *fp;
-+
-+	/* Check to compare sparse_masks content to cpuid output. */
-+	snprintf(res_path, sizeof(res_path), "%s/%s/%s", INFO_PATH,
-+		 test->resource, "sparse_masks");
-+
-+	fp = fopen(res_path, "r");
-+	if (!fp) {
-+		perror("# Error in opening file\n");
-+		return errno;
-+	}
-+
-+	if (fscanf(fp, "%u", &sparse_masks) <= 0) {
-+		perror("Could not get sparse_masks contents\n");
-+		fclose(fp);
-+		return -1;
-+	}
-+
-+	fclose(fp);
-+
-+	if (!strcmp(test->resource, "L3"))
-+		__cpuid_count(0x10, 1, eax, ebx, ecx, edx);
-+	else if (!strcmp(test->resource, "L2"))
-+		__cpuid_count(0x10, 2, eax, ebx, ecx, edx);
-+	else
-+		return -EINVAL;
-+
-+	if (sparse_masks != ((ecx >> 3) & 1))
-+		return -1;
-+
-+	/* Write checks initialization. */
-+	ret = get_cbm_mask(test->resource, &full_cache_mask);
-+	if (ret < 0)
-+		return ret;
-+	bit_center = count_bits(full_cache_mask) / 2;
-+	cont_mask = full_cache_mask >> bit_center;
-+
-+	/* Contiguous mask write check. */
-+	snprintf(schemata, sizeof(schemata), "%lx", cont_mask);
-+	ret = write_schemata("", schemata, uparams->cpu, test->resource);
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * Non-contiguous mask write check. CBM has a 0xf hole approximately in the middle.
-+	 * Output is compared with support information to catch any edge case errors.
-+	 */
-+	noncont_mask = ~(full_cache_mask & (0xf << bit_center)) & full_cache_mask;
-+	snprintf(schemata, sizeof(schemata), "%lx", noncont_mask);
-+	ret = write_schemata("", schemata, uparams->cpu, test->resource);
-+	if (ret && sparse_masks)
-+		ksft_print_msg("Non-contiguous CBMs supported but write failed\n");
-+	else if (ret && !sparse_masks)
-+		ksft_print_msg("Non-contiguous CBMs not supported and write failed as expected\n");
-+	else if (!ret && !sparse_masks)
-+		ksft_print_msg("Non-contiguous CBMs not supported but write succeeded\n");
-+	return !ret == !sparse_masks;
-+}
-+
-+static bool noncont_cat_feature_check(const struct resctrl_test *test)
-+{
-+	char res_path[PATH_MAX];
-+	struct stat statbuf;
-+
-+	snprintf(res_path, sizeof(res_path), "%s/%s/%s", INFO_PATH,
-+		 test->resource, "sparse_masks");
-+
-+	if (stat(res_path, &statbuf))
-+		return false;
-+
-+	return test_resource_feature_check(test);
-+}
-+
- struct resctrl_test l3_cat_test = {
- 	.name = "L3_CAT",
- 	.group = "CAT",
-@@ -357,3 +438,19 @@ struct resctrl_test l2_cat_test = {
- 	.feature_check = test_resource_feature_check,
- 	.run_test = cat_run_test,
- };
-+
-+struct resctrl_test l3_noncont_cat_test = {
-+	.name = "L3_NONCONT_CAT",
-+	.group = "NONCONT_CAT",
-+	.resource = "L3",
-+	.feature_check = noncont_cat_feature_check,
-+	.run_test = noncont_cat_run_test,
-+};
-+
-+struct resctrl_test l2_noncont_cat_test = {
-+	.name = "L2_NONCONT_CAT",
-+	.group = "NONCONT_CAT",
-+	.resource = "L2",
-+	.feature_check = noncont_cat_feature_check,
-+	.run_test = noncont_cat_run_test,
-+};
-diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index fffeb442c173..51b8a6ff3a0d 100644
---- a/tools/testing/selftests/resctrl/resctrl.h
-+++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -184,5 +184,7 @@ extern struct resctrl_test mba_test;
- extern struct resctrl_test cmt_test;
- extern struct resctrl_test l3_cat_test;
- extern struct resctrl_test l2_cat_test;
-+extern struct resctrl_test l3_noncont_cat_test;
-+extern struct resctrl_test l2_noncont_cat_test;
- 
- #endif /* RESCTRL_H */
-diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
-index 9e254bca6c25..fdeef82feb4e 100644
---- a/tools/testing/selftests/resctrl/resctrl_tests.c
-+++ b/tools/testing/selftests/resctrl/resctrl_tests.c
-@@ -16,6 +16,8 @@ static struct resctrl_test *resctrl_tests[] = {
- 	&cmt_test,
- 	&l3_cat_test,
- 	&l2_cat_test,
-+	&l3_noncont_cat_test,
-+	&l2_noncont_cat_test,
- };
- 
- static int detect_vendor(void)
--- 
-2.42.1
+page_pool_iov_put_many()/page_pool_iov_get_many() are called to do
+refcounting before the page is released back to the provider. I'm not
+seeing how we can handle the special case inside of 'release_page' -
+that's too late, as far as I can tell.
 
+The only way to remove the if statements in the page pool is to
+implement what you said was not feasible in an earlier email. We would
+define this struct:
+
+struct netmem {
+        /* common fields */
+        refcount_t refcount;
+        bool is_pfmemalloc;
+        int nid;
+        ......
+        union {
+                struct devmem{
+                        struct dmabuf_genpool_chunk_owner *owner;
+                };
+
+                struct page * page;
+        };
+};
+
+Then, we would require all memory providers to allocate struct netmem
+for the memory and set the common fields, including ones that have
+struct pages. For devmem, netmem->page will be NULL, because netmem
+has no page.
+
+If we do that, the page pool can ignore whether the underlying memory
+is page or devmem, because it can use the common fields, example:
+
+/* page_ref_count replacement */
+netmem_ref_count(struct netmem* netmem) {
+    return netmem->refcount;
+}
+
+/* page_ref_add replacement */
+netmem_ref_add(struct netmem* netmem) {
+   atomic_inc(netmem->refcount);
+}
+
+/* page_to_nid replacement */
+netmem_nid(struct netmem* netmem) {
+    return netmem->nid;
+}
+
+/* page_is_pfmemalloc() replacement */
+netmem_is_pfmemalloc(struct netmem* netmem) {
+    return netmem->is_pfmemalloc;
+}
+
+/* page_ref_sub replacement */
+netmem_ref_sub(struct netmem* netmem) {
+    atomic_sub(netmet->refcount);
+    if (netmem->refcount =3D=3D 0) {
+                  /* release page to the memory provider.
+                   * struct page memory provider will do put_page(),
+                   * devmem will do something else */
+           }
+     }
+}
+
+
+I think this MAY BE technically feasible, but I'm not sure it's better:
+
+1. It is a huge refactor to the page pool, lots of code churn. While
+the page pool currently uses page*, it needs to be completely
+refactored to use netmem*.
+2. It causes extra memory usage. struct netmem needs to be allocated
+for every struct page.
+3. It has minimal perf upside. The page_is_page_pool_iov() checks
+currently have minimal perf impact, and I demonstrated that to Jesper
+in RFC v2.
+4. It also may not be technically feasible. I'm not sure how netmem
+interacts with skb_frag_t. I guess we replace struct page* bv_page
+with struct netmem* bv_page, and add changes there.
+5. Drivers need to be refactored to use netmem* instead of page*,
+unless we cast netmem* to page* before returning to the driver.
+
+Possibly other downsides, these are what I could immediately think of.
+
+If I'm still misunderstanding your suggestion, it may be time to send
+me a concrete code snippet of what you have in mind. I'm a bit
+confused at the moment because the only avenue I see to remove the if
+statements in the page pool is to define the struct that we agreed is
+not feasible in earlier emails.
+
+> >
+> >> So that 'struct page' for normal
+> >> memory and 'struct page_pool_iov' for devmem share the common fields u=
+sed
+> >> by page pool and net stack?
+> >
+> > Are you suggesting that we'd cast a netmem* to a page* and call core
+> > mm APIs on it? It's basically what was happening with RFC v1, where
+> > things that are not struct pages were made to look like struct pages.
+> >
+> > Also, there isn't much upside for what you're suggesting, I think. For
+> > example I can align the refcount variable in struct page_pool_iov with
+> > the refcount in struct page so that this works:
+> >
+> > put_page((struct page*)ppiov);
+> >
+> > but it's a disaster. Because put_page() will call __put_page() if the
+> > page is freed, and __put_page() will try to return the page to the
+> > buddy allocator!
+>
+> As what I suggested above, Can we handle this in devmem provider's
+> 'release_page' ops instead of calling put_page() directly as for devmem.
+>
+> >
+> >>  And we might be able to reuse the 'flags',
+> >> '_pp_mapping_pad' and '_mapcount' for specific mem provider, which is =
+enough
+> >> for the devmem only requiring a single pointer to point to it's
+> >> owner?
+> >>
+> >
+> > All the above seems quite similar to RFC v1 again, using netmem
+> > instead of struct page. In RFC v1 we re-used zone_device_data() for
+> > the dma-buf owner equivalent.
+>
+> As we have added a few checkings to limit 'struct page' for devmem to
+> be only used in net stack, we can decouple 'struct page' for devmem
+> from mm subsystem, zone_device_data() is not really needed, right?
+>
+> If we can decouple 'struct page' for normal memory from mm subsystem
+> through the folio work in the future, then we may define a more abstract
+> structure for page pool and net stack instead of reusing 'struct page'
+> from mm.
+>
+> >
+
+
+
+--
+Thanks,
+Mina
