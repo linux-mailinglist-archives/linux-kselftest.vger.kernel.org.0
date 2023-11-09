@@ -2,134 +2,242 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 821657E6299
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Nov 2023 04:26:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A03C57E6497
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Nov 2023 08:46:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229473AbjKID0i (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Nov 2023 22:26:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43512 "EHLO
+        id S232589AbjKIHqC (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Nov 2023 02:46:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232220AbjKID0h (ORCPT
+        with ESMTP id S231439AbjKIHqB (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Nov 2023 22:26:37 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A37AE1BEF
-        for <linux-kselftest@vger.kernel.org>; Wed,  8 Nov 2023 19:26:35 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1cc29f39e7aso3012705ad.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 08 Nov 2023 19:26:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1699500395; x=1700105195; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SL43KqdoOApMZsa3YMezQNkvoYmYG9YJ6cT/naFj7n0=;
-        b=0uYz7R1JoaKNf6DVQzg8oUlsaTbw54ZeweD2rTeXnGm4H1NH5jOstTo0ZjJBQeRgHQ
-         R2+yyZJuLZhMgXoevavAxCFp4q9NPrW0MVbDCZOVLP6/UnmRkH9sIrYDmg3//vMJyEbS
-         3OZKRepAyvCtQ1fDGxVc7KIBqFydhcyvqlZftyo6AkiUnd+IB33M16/H1SPWiDxvqGTK
-         KrMk64mvtW7WBhaByy+JY0l3Ts9iBrsxIsdetykOQwPmzVDbvyiCi5AE3Vjr4Rc8kCgC
-         4vVK8HrRM+GYpm/MjnrYcqoXD5fwONOkNVkFZdomrR/Vcc5SCygDIu3owhMYc9eSOq0A
-         Sz8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699500395; x=1700105195;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SL43KqdoOApMZsa3YMezQNkvoYmYG9YJ6cT/naFj7n0=;
-        b=Q72dBU2uiR9h1tVT2zpTBDZun+usl+ZtRGcAw6R7iGAbvt13CXgjAj4gx2hDQG0v4E
-         O7RjLoyl3nz4rWcKewVdIiu/01yLDQdY4aEXA+PsYYLMReOnCmoGf7FEukQPPyV4q/We
-         Ulx8ie+uV+TTMd90/3Nv30wNYZjUjx7I3Lst4W/+oIF3uSWwkP5QIHCdfXV/MSb5u5BV
-         GSuyFrgsz40GCXgAiKAaZ9ztvsATau1mzwD4DLgdH5PcwaoYV/ntD/C06HVhqUGWlwTI
-         ZqgSBqfiticZBaVR2aYznSn7xaqaVSd+a0BFXccCWbN67ch65U1zvN+IIu26FqiG0sSi
-         1B+A==
-X-Gm-Message-State: AOJu0YyVOss6EInUf9UrvNtzyOXFmKAxLY5ZNvtnFDO4X8MXXcZK9VFN
-        B9zo0kylQGPfNHQkViY7b2hYtQ==
-X-Google-Smtp-Source: AGHT+IGr7vGXKEc3TQWEMfgM2CHVvt0ly+Zqz32FmWgjh6G8g9LT1+KY6vb72CQ295XvF9UU+LAVYQ==
-X-Received: by 2002:a17:902:ee89:b0:1cc:87f8:96ab with SMTP id a9-20020a170902ee8900b001cc87f896abmr4072748pld.38.1699500394683;
-        Wed, 08 Nov 2023 19:26:34 -0800 (PST)
-Received: from localhost ([192.184.165.199])
-        by smtp.gmail.com with ESMTPSA id jj19-20020a170903049300b001bbb25dd3a7sm2388288plb.187.2023.11.08.19.26.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Nov 2023 19:26:34 -0800 (PST)
-Date:   Wed, 08 Nov 2023 19:26:34 -0800 (PST)
-X-Google-Original-Date: Wed, 08 Nov 2023 19:26:29 PST (-0800)
-Subject:     Re: [PATCH] selftests: sud_test: return correct emulated syscall value on RISC-V
-In-Reply-To: <20230913140711.266975-1-cleger@rivosinc.com>
-CC:     shuah@kernel.org, krisman@collabora.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, cleger@rivosinc.com
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     cleger@rivosinc.com
-Message-ID: <mhng-bd15a99e-2c1e-4f0e-95ff-b6f14fe26681@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+        Thu, 9 Nov 2023 02:46:01 -0500
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CE8D268D;
+        Wed,  8 Nov 2023 23:45:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1699515959; x=1731051959;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=ELyq3gVEQIYxMFqLbWIT0ROXWF7V1vELa/teCRoLsTQ=;
+  b=E3JiR/iTci39bCtyS5OLZMyOLayzfdl0rACy87bpRCl9HDOO5J3K0Gzg
+   NJK7lhLduAaPXL/ynmMLadd/ZJ46En82jq2N8sOjZTCidn7XIALyJAN7m
+   JKzYhzdUhrlrb/VoIG8pplpWMUqz6a0mmY4WOsfL0FIrHhJq4zlmdZBT0
+   6pIg4o0QEepDGAjT3asLv7LCdGoQTojOUvI31T3ws2xxrmJtzH+w3+qtV
+   JqfwwDlTXsKqXbqqoWh3uk9LBISxntaEfvTAev97eMMNRLQDUqWJw0X4J
+   540+dQemUe3NHAumR4PgJIhdfDGKQw0DLKcQJn+awTWCqT01okEa2JBw6
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10888"; a="370138005"
+X-IronPort-AV: E=Sophos;i="6.03,288,1694761200"; 
+   d="scan'208";a="370138005"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2023 23:45:58 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10888"; a="739762889"
+X-IronPort-AV: E=Sophos;i="6.03,288,1694761200"; 
+   d="scan'208";a="739762889"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by orsmga006.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 08 Nov 2023 23:45:58 -0800
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.34; Wed, 8 Nov 2023 23:45:58 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.34; Wed, 8 Nov 2023 23:45:58 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.34 via Frontend Transport; Wed, 8 Nov 2023 23:45:58 -0800
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.168)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.34; Wed, 8 Nov 2023 23:45:57 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nMhxZxbUiEVKlejsvKXfIKHu9711pd6aMGhR39uF3fqjydRuGcx/0JBCkMSY+H9dx25t+ZywdEoOs+dp9R7H6fQAkawNZWaAXWeEeeuhnc7ChXeWplkXbevSW7hVvoDMvOZJ003cqRP7Az20J1muBqdKZLOurP901bkLgPKk6EI3VxSGxGm8xjECzRu36qK6Z7Jcrw4OUCVu5/yGsJu0nBuBZYFainDBs37ScbS3TSfzs8Po2s+78kN6nZLrVIxCXrbkta50wUrogxah3BL3ALP/AyMA7peOyEVTs6PQSG6S0GUNYny43n0qXxJBSpmBJKUuSfxiRhSG+eflv5ZVAg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jDvFcfAp9Ix8J4GLPgYOC/YqOeGlsUl2CFE2XpuDK+c=;
+ b=OpiBGI2Bq9uSsZA/p9uJ6lkNrA0FaUa5NVnLG3kQQZmZokcF8eiCtNlGa3aD9GjItfFlbYnH/BkqxaaIaPLbzEBgkEfqXYf+0CdM9yCKUJ5HkocvNiWFjfKRbZXXMR+ltQmw37mPQiUyJ98AeMF///Mx26KVqMEUsC7c/pVlsltU9BJ77OSacNYApJZuXeY6yOCGW4k7DBLSwZBla1KHTVEGI6iWBykzeszcIjNVz1jNS7fYdAUWZFcJM5C+r0vQMRzD854NYt7hFefimGitqbC09RKlg2IqTE/jLd5f3SiviU+ObQ5FRLJvxQ9HFxF9Dtq0YF8T25c0LP7kFUAUSw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DS0PR11MB7529.namprd11.prod.outlook.com (2603:10b6:8:141::20)
+ by CY8PR11MB7361.namprd11.prod.outlook.com (2603:10b6:930:84::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6954.28; Thu, 9 Nov
+ 2023 07:45:55 +0000
+Received: from DS0PR11MB7529.namprd11.prod.outlook.com
+ ([fe80::e4ae:3948:1f55:547d]) by DS0PR11MB7529.namprd11.prod.outlook.com
+ ([fe80::e4ae:3948:1f55:547d%4]) with mapi id 15.20.6954.024; Thu, 9 Nov 2023
+ 07:45:55 +0000
+Message-ID: <110f5a3a-7f3f-4b82-bb12-c7ca5df5c98f@intel.com>
+Date:   Thu, 9 Nov 2023 15:48:21 +0800
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC 6/7] iommufd/selftest: Add test coverage for SIOV virtual
+ device
+Content-Language: en-US
+To:     "Tian, Kevin" <kevin.tian@intel.com>,
+        "joro@8bytes.org" <joro@8bytes.org>,
+        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+        "jgg@nvidia.com" <jgg@nvidia.com>,
+        "robin.murphy@arm.com" <robin.murphy@arm.com>,
+        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>
+CC:     "cohuck@redhat.com" <cohuck@redhat.com>,
+        "eric.auger@redhat.com" <eric.auger@redhat.com>,
+        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
+        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
+        "peterx@redhat.com" <peterx@redhat.com>,
+        "jasowang@redhat.com" <jasowang@redhat.com>,
+        "shameerali.kolothum.thodi@huawei.com" 
+        <shameerali.kolothum.thodi@huawei.com>,
+        "lulu@redhat.com" <lulu@redhat.com>,
+        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "Duan, Zhenzhong" <zhenzhong.duan@intel.com>,
+        "Martins, Joao" <joao.m.martins@oracle.com>
+References: <20231009085123.463179-1-yi.l.liu@intel.com>
+ <20231009085123.463179-7-yi.l.liu@intel.com>
+ <BN9PR11MB5276A82597B194611BE01DFE8CCDA@BN9PR11MB5276.namprd11.prod.outlook.com>
+From:   Yi Liu <yi.l.liu@intel.com>
+In-Reply-To: <BN9PR11MB5276A82597B194611BE01DFE8CCDA@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SG2PR02CA0052.apcprd02.prod.outlook.com
+ (2603:1096:4:54::16) To DS0PR11MB7529.namprd11.prod.outlook.com
+ (2603:10b6:8:141::20)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR11MB7529:EE_|CY8PR11MB7361:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3602fb21-473f-4ed5-77ee-08dbe0f7e6f9
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 3tK55rDfjmbU+5g27hsu+CbhZtvL/o5l9ZXtxoY/LElTEAqRH9Bck6up868TMmog0Lp2aPt4nRg5qUIW25iLsZ6mFtqIRP/p2zyb10toLXlsZmcyMMkCC9Gxz1AgiykaC7JrZ1jcWek/DgsiuKt2ZIA9W+LKQXIPlhHI0d15cj38BbmS6tV494DRIXhXMa2g7iGrAqfdtx1Lu5aXsJitGvzQV64g5Jww6GNXFUhmVmXcvzMGHm9LoG2czUG1x++KRtv03szDTUVHWDM8dF/ydvsCTPQ/LqrYOPtgcwerqQez8OOZwd4QzaYEYVVDEyDJjlIja50q+Ge2/vqa9oN0DSq78Sx1LNJn6FQ6l/j/mhKkbeiCT6042/J6JZIIEAyNiisZFxGUarTUq/WEPaO+I7lZpEViiJNMRH9MLMRBbpcJ9PVbmPk0rxT7IGM8JPVCpOOJ50lwEM/COlAJz7F7CAHanMTEJzktji1oBUqR+S/e4L27Q72CqQyxmKB/+hJzUnSnaBItLtBb68AweHrZsyERSc7jjBMJ3zhA+WZwlOysG5Tr8LBuM+wrvzPkqHwezjLz+kA/+ZiU5L3doNlV+u0ag+Tm26qEuG+iZjbz+0ZdpCrdH9DhFtpN9KSwB7poQ7Pvql/WTccsPVqC5AUDbw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB7529.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(366004)(136003)(396003)(346002)(39860400002)(230922051799003)(1800799009)(186009)(64100799003)(451199024)(41300700001)(6512007)(6486002)(53546011)(2616005)(478600001)(6666004)(6506007)(7416002)(26005)(4326008)(110136005)(8676002)(316002)(8936002)(5660300002)(66476007)(66946007)(54906003)(66556008)(31696002)(2906002)(31686004)(82960400001)(86362001)(38100700002)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bGVBTHN0RTU0U2EwUVF3N0tQSDMycGJRUjMwUTd4THNMeXRRcFNiT1ozazZu?=
+ =?utf-8?B?azBTRVh1VnVVUWZIbEtta0FtVnVhZzllTDEzdytsRkF5YXduRnhmUk1WbjFU?=
+ =?utf-8?B?aVAvMmRUWmp3alR5VXNWN2F0YXhHN2xxK2tMTjhDcDdleStVMFJXNzlLbFZz?=
+ =?utf-8?B?MCt4ekxnN3VGWjRta25IMTZST3NqRW04VXdRbHgyeW0yeUFidHdGQUZ2UHpW?=
+ =?utf-8?B?M09FeHliLzhXRzBDRFdXbisvaU05VHJxbWxIMVNtNzdTYlFNK0NNUkhzbUVy?=
+ =?utf-8?B?cnQzaExvMVp6ZSsvaVhmWjViZVJpbFpEcnFKVXJ0SDY1dlQ5SmtXZktPZ0Zo?=
+ =?utf-8?B?OENhN1ZxM2FqSWhuVUFybHY0MTlIa1JNRmkzY2JCWUJ2bktKKzh6NWtUc1B5?=
+ =?utf-8?B?dWg3Zk0wQmpRT3p0SGRNVG84VStDSnF0WU1QMHRiSTJCVmVrMFVzNWR4aDhs?=
+ =?utf-8?B?NlgwZ0V5QzdDRm45ZkVIVUszR3liaUJxQmExS2pGRmFKOHdyMWhHWGxLOGlG?=
+ =?utf-8?B?L2FYSVUveEp1OWxKVC9xSmk5bG9Xejl4RllxTHgrWDI0M0tsaE9nOENST3Vs?=
+ =?utf-8?B?K3JTUFVNUjE2MU15cVNsYVNPSDlNKzkzVUdoc052Lzlpc1NqNW9JWTE0YVVT?=
+ =?utf-8?B?OHVoUi9qZU5KZnBDc2NXZDVHL1JDK3BISDFzdnpEaDdSVCtBcndzYVVBNmlV?=
+ =?utf-8?B?VDJSdWV4ZmFSYkQ4enNKYkNBZmxPazlwOVFueGpVTnFUalBjM2h5cEFIMGFC?=
+ =?utf-8?B?S1k5Q1BESWlxY25pSHlNd3M4eTQrMmVwS0tHQkYwWmdYbmVlRXBnMjZRSkRa?=
+ =?utf-8?B?NUVUS0RLSURKWXdaaVpPUnUrTkp5M3NOb2ZKdnpKV3ZzMndEN0NSeERqOFlW?=
+ =?utf-8?B?M2NwQno3VEpVZ283anBaaWhYQ29zNHViSEZ6RnlIMDQ1d0ZmSHh3WUk2bGc1?=
+ =?utf-8?B?ZHh0Qkh2Sy91b2t0VHEzUlh3OTRMTnVIV1p3Z21XYTFGY0l4QWxrbGVUREdh?=
+ =?utf-8?B?K2l2bkJ2bmpnVjU3eFZ2Ry9VWUs4RnFuSGpoM2xydTBZaURONVdRditDRlZZ?=
+ =?utf-8?B?R2sveU1OUUFnUFcyQ2hnMk9rZkt6Q3RvbUFmcWZHZ2tybmR4cXRWQUlOSmhC?=
+ =?utf-8?B?VjQ1S3c5RDloeUlXMERta2ZRY2ZwUDB5b29iY1E2b3ZvbG9PY1BMSExsQmdT?=
+ =?utf-8?B?dDFoNm0wN1kza3JLVVpaRGRhWU9aelhZODlMZ1pRSmNXM0huY0lJeDVXWk9p?=
+ =?utf-8?B?Mmllc09HNy9sZXFtZCtFaGNUb29nT2hneC82MWYxT0F0ZGw3RkY4cVNNcjhu?=
+ =?utf-8?B?d1hNcElSRXI0Vm9GdFAxTTBTWTU1akR2Tkgyand4Y0VhYXAzWEJTUVAvVWlp?=
+ =?utf-8?B?ZmErTjlNN3B3WmlZZGEyMTNzVndBRlEyR2Z6OHBDWGh4SmJjZG9oYU9Zd3Ri?=
+ =?utf-8?B?WVQ3Y0toVVk5OUxnZWZTOGtkNEdDN2ZDbTg4NlFybXY5YTBhSEM1UzJwWWtP?=
+ =?utf-8?B?UHVEZks5c2lHN1NsQWEwUi9kTGFiRzdUS2xXUjd3c2lvT21DVUFQOUoxa0NH?=
+ =?utf-8?B?NjNOaUVoQW1GRzRhZHlsb3ZubE1EU3ZHWVBvemNKM245ZDRHSDk2L1hwMWhL?=
+ =?utf-8?B?VGFoREtuS0N3OTZGemZld1BGSG9JSDJJUnc5V1JQcCtIdUV2b1JCcVRBYzZY?=
+ =?utf-8?B?ZnQ4WVBHSERBNmFDNnZQNlFNWHRRcVZnRUI3Q01KbGpoYjRkUWRqTVBDQlll?=
+ =?utf-8?B?S0gzRlc0WHlwa3FFVllzQWhzeE11MEN4eUdKUDdYMnBGb3NmSUl0UTVJa254?=
+ =?utf-8?B?dmpOejZGeVBycktRY0R2ZDIyb2NPVDJheTVRdHBhU1l3ZXNpaVRONE5aQS85?=
+ =?utf-8?B?VUJrNG1BWkpiVldmYWI1THprbCtZWnpVTC9WWDFSUU9zTnRSRWFUdjBlV1R6?=
+ =?utf-8?B?RDA3bjFDVHVRa2NQVTNUZnBlNCs0bkFWTTh3VzFuSmVmZFJrMHMvSWNNamVp?=
+ =?utf-8?B?aVJaVzJyK3dDQ2VnVFh0ZUZKNldUTVZwRTJKRVdwNm9OMUhEeUZxWjAxMmow?=
+ =?utf-8?B?UkdGZ2xVR3NhK2JRa0Z1bklpUlhIa1FDalBVTlFOVEZNY21McXlySldIK3RX?=
+ =?utf-8?Q?ys6tiMpkwi5db2xOtTA2XGlvg?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3602fb21-473f-4ed5-77ee-08dbe0f7e6f9
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB7529.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Nov 2023 07:45:54.7741
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: oZeZDM0O0HoRo/NG1GCEUB5oUSmTwXqar7kEmuB8ZzUhbN3ZvYe631+5ix4CUIp2RjLu84ivVEJRIoRuxxWHuw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR11MB7361
+X-OriginatorOrg: intel.com
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, 13 Sep 2023 07:07:11 PDT (-0700), cleger@rivosinc.com wrote:
-> Currently, the sud_test expects the emulated syscall to return the
-> emulated syscall number. This assumption only works on architectures
-> were the syscall calling convention use the same register for syscall
-> number/syscall return value. This is not the case for RISC-V and thus
-> the return value must be also emulated using the provided ucontext.
->
-> Signed-off-by: Clément Léger <cleger@rivosinc.com>
-> ---
->  tools/testing/selftests/syscall_user_dispatch/sud_test.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
->
-> diff --git a/tools/testing/selftests/syscall_user_dispatch/sud_test.c b/tools/testing/selftests/syscall_user_dispatch/sud_test.c
-> index b5d592d4099e..1b5553c19700 100644
-> --- a/tools/testing/selftests/syscall_user_dispatch/sud_test.c
-> +++ b/tools/testing/selftests/syscall_user_dispatch/sud_test.c
-> @@ -158,6 +158,14 @@ static void handle_sigsys(int sig, siginfo_t *info, void *ucontext)
->
->  	/* In preparation for sigreturn. */
->  	SYSCALL_DISPATCH_OFF(glob_sel);
-> +
-> +	/*
-> +	 * Modify interrupted context returned value according to syscall
-> +	 * calling convention
-> +	 */
-> +#if defined(__riscv)
-> +	((ucontext_t*)ucontext)->uc_mcontext.__gregs[REG_A0] = MAGIC_SYSCALL_1;
-> +#endif
->  }
->
->  TEST(dispatch_and_return)
+On 2023/10/10 16:30, Tian, Kevin wrote:
+>> From: Liu, Yi L <yi.l.liu@intel.com>
+>> Sent: Monday, October 9, 2023 4:51 PM
+>>
+>> @@ -2071,6 +2083,43 @@ TEST_F(iommufd_device_pasid, pasid_attach)
+>>
+>> IOMMU_HWPT_ALLOC_DATA_SELFTEST,
+>>   					   &data, sizeof(data));
+>>
+>> +		if (variant->pasid) {
+>> +			uint32_t new_hwpt_id = 0;
+>> +
+>> +			ASSERT_EQ(0,
+>> +				  test_cmd_pasid_check_domain(self->fd,
+>> +							      self->stdev_id,
+>> +							      variant->pasid,
+>> +							      self->hwpt_id,
+>> +							      &result));
+>> +			EXPECT_EQ(1, result);
+>> +			test_cmd_hwpt_alloc(self->device_id, self->ioas_id,
+>> +					    0, &new_hwpt_id);
+>> +			test_cmd_mock_domain_replace(self->stdev_id,
+>> +						     new_hwpt_id);
+>> +			ASSERT_EQ(0,
+>> +				  test_cmd_pasid_check_domain(self->fd,
+>> +							      self->stdev_id,
+>> +							      variant->pasid,
+>> +							      new_hwpt_id,
+>> +							      &result));
+>> +			EXPECT_EQ(1, result);
+>> +
+>> +			/*
+>> +			 * Detach hwpt from variant->pasid, and check if the
+>> +			 * variant->pasid has null domain
+>> +			 */
+>> +			test_cmd_pasid_detach(variant->pasid);
+>> +			ASSERT_EQ(0,
+>> +				  test_cmd_pasid_check_domain(self->fd,
+>> +							      self->stdev_id,
+>> +							      variant->pasid,
+>> +							      0, &result));
+>> +			EXPECT_EQ(1, result);
+>> +
+>> +			test_ioctl_destroy(new_hwpt_id);
+>> +		}
+>> +
+> 
+> I wonder whether above better reuses the device attach/replace cases
+> given default_pasid is hidden inside iommufd_device. this pasid_attach
+> case is more for testing user pasids on a iommufd_device which hasn't
+> yet been supported by SIOV device?
 
-I'm not sure if I'm just tired, but it took me a while to figure out why 
-this was necessary.  I think this is a better explanation:
+perhaps the way how the above code checks the attached domain misled you.
+Actually, this is still testing the siov default_pasid. In the variant
+setup, the default_pasid is passed to the testing driver when creating
+the stdev. That's why the replace test does not require a pasid.
 
-    diff --git a/tools/testing/selftests/syscall_user_dispatch/sud_test.c b/tools/testing/selftests/syscall_user_dispatch/sud_test.c
-    index b5d592d4099e..a913fd90cfa3 100644
-    --- a/tools/testing/selftests/syscall_user_dispatch/sud_test.c
-    +++ b/tools/testing/selftests/syscall_user_dispatch/sud_test.c
-    @@ -158,6 +158,16 @@ static void handle_sigsys(int sig, siginfo_t *info, void *ucontext)
-    
-     	/* In preparation for sigreturn. */
-     	SYSCALL_DISPATCH_OFF(glob_sel);
-    +	/*
-    +	 * The tests for argument handling assume that `syscall(x) == x`.  This
-    +	 * is a NOP on x86 because the syscall number is passed in %rax, which
-    +	 * happens to also be the function ABI return register.  Other
-    +	 * architectures may need to swizzle the arguments around.
-    +	 */
-    +#if defined(__riscv)
-    +	(ucontext_t*)ucontext)->uc_mcontext.__gregs[REG_A0] =
-    +		(ucontext_t*)ucontext)->uc_mcontext.__gregs[REG_A7];
-    +#endif
-     }
-    
-     TEST(dispatch_and_return)
+maybe I can let have a new selftest op to check attached domain for a given 
+stdev instead of reusing test_cmd_pasid_check_domain().
 
-but also
-
-Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
-
-as I agree this is correct.
-
-also: wouldn't arm64 also need to move x8 into x0 here, for essentially 
-the same reason as we do?
+-- 
+Regards,
+Yi Liu
