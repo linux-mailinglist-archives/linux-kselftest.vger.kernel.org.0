@@ -2,159 +2,134 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C59C27E6D0B
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Nov 2023 16:15:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 377A07E6E3B
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Nov 2023 17:07:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232317AbjKIPPg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Nov 2023 10:15:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41716 "EHLO
+        id S234457AbjKIQHW (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Nov 2023 11:07:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231586AbjKIPPf (ORCPT
+        with ESMTP id S234482AbjKIQHV (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Nov 2023 10:15:35 -0500
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEC021735
-        for <linux-kselftest@vger.kernel.org>; Thu,  9 Nov 2023 07:15:33 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5af16e00fadso13627947b3.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Nov 2023 07:15:33 -0800 (PST)
+        Thu, 9 Nov 2023 11:07:21 -0500
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EFB9325A;
+        Thu,  9 Nov 2023 08:07:19 -0800 (PST)
+Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-32da4ffd7e5so666291f8f.0;
+        Thu, 09 Nov 2023 08:07:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1699542933; x=1700147733; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=h+Bm4VxsIbinzhc5nb4VCCnVH6ntCjSPhYk8v0ZWen8=;
-        b=whUnvyjRRgi8Q20u5Qy6Kok1hbnPxHrdOo/gS9leI/fNXZx4thT8TDx9b9HSbqq03c
-         U/ts6EH3FSE8va0gJkVfjRTurESSHxRx5tzCllQG0ijyhcNZmnayauUf3j5Fm2GjGj7z
-         1TTBLBUsYuHnmIfr/xwPtOx81FNI8/lE6N/vOgjqZWIDyKGj/R6UQ4Zvwr64bW0K6eTF
-         PEsIN3Zts9yHwCMZNczyCulGWEbVR+DckwjcLtbxr1pXblIjzrpGPy9llH8qYgnYv4ib
-         jzKwaDRbVhFhBi63ZZI/Nn09j2DPLEC76Y83iH6l7q5cbdSM+05bV2PyMdX2SiwbWByQ
-         yWyA==
+        d=gmail.com; s=20230601; t=1699546038; x=1700150838; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bLnVRYPlFfc13GAjjN2Xsp7jGpHoZsbxAdnsHea6XjM=;
+        b=S1PdBEEbQjC//UPEJlQzyAeUAkuHeKKJJ9YxSwGJsBWIinlJkTs+futdHjvOEVf1FC
+         i1Lq84/hnwkn4XeC5I0BBN/0oIHI5af7Fi3x6itpWXj6tG56p2o+2ARGn2y3UatsLXoM
+         2BRCpof7VunFpfVP3P0nRrTARM2YsPO0VE0dPjXa8wqDzjKgoixES1wF4kmsqRx0ezw9
+         h3fikdiuHtuXCTH3ejazBRyAvX0r13K29IX5G5vNdpNq2cBxgpRFb+JkL0Tem9jL0+K7
+         pAhZsBr6i3kJ2w4D3MLLjQvI1ypeSrlzcBEEphirMcF7RjNd0iiclyA2FqT68ZsCnMv5
+         hM3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699542933; x=1700147733;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=h+Bm4VxsIbinzhc5nb4VCCnVH6ntCjSPhYk8v0ZWen8=;
-        b=IBgp2ys6wLQCNITcgJNfznOkM2cvEHH9wlEOaylKAlmakBKrZPJbgEIHZCi6e8CNkG
-         034Af7wku9TQFjewoh3PZiX0vzfraq5Qfgfqw0Yi4sJzk9YS7DFyiZoo2IO++zqtjBEs
-         xcUg4wM/sXdPjF741zgBW4iLnrT8jAvJHNikueEXqKhZBHRg8O0CG0AwcyxD2oE3mFf9
-         QAWOHGldo8VRewDV+PHq4e2E+S/WpS6sqqazN2sUvVgiJs+q/Pqni1cQVGn3fj+Sth8v
-         oyMfEcgN+9HqKdJWqvCc3v7S2ryqPFF2axv3umhXVhh6MHTWWFsL/9UkWR/EsqIEaS4o
-         3PmA==
-X-Gm-Message-State: AOJu0YznT2RvLTmXuoxb3aWX/kUYUtgTIvicxjflsFkpzcZk4hGvHKai
-        pHoDYOQG6DRpliTEgmqSYO3l/6woIWE=
-X-Google-Smtp-Source: AGHT+IGa7z7+OfdYCmqIlLzQUeqKBMunW527AUwnYiPUX/rjhI5E9aZBnJn6/1t9X4kg9dH1DU8ZwWG+HkE=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:2fd2:0:b0:d7e:7a8a:2159 with SMTP id
- v201-20020a252fd2000000b00d7e7a8a2159mr125502ybv.5.1699542932831; Thu, 09 Nov
- 2023 07:15:32 -0800 (PST)
-Date:   Thu, 9 Nov 2023 07:15:31 -0800
-In-Reply-To: <ZUyeATu4Fd2xI0+h@chao-email>
-Mime-Version: 1.0
-References: <20231108183003.5981-1-xin3.li@intel.com> <20231108183003.5981-6-xin3.li@intel.com>
- <ZUyeATu4Fd2xI0+h@chao-email>
-Message-ID: <ZUz3cPmnqSq7Lol9@google.com>
-Subject: Re: [PATCH v1 05/23] KVM: VMX: Initialize FRED VM entry/exit controls
- in vmcs_config
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Gao <chao.gao@intel.com>
-Cc:     Xin Li <xin3.li@intel.com>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        pbonzini@redhat.com, corbet@lwn.net, kys@microsoft.com,
-        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        vkuznets@redhat.com, peterz@infradead.org, ravi.v.shankar@intel.com
-Content-Type: text/plain; charset="us-ascii"
+        d=1e100.net; s=20230601; t=1699546038; x=1700150838;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bLnVRYPlFfc13GAjjN2Xsp7jGpHoZsbxAdnsHea6XjM=;
+        b=R/MbwkS/v8iIbH06fbpsFkDdZD9+AYldSwwIVdg6X9PNPW5NkpenkDc9jDsYzVHhTT
+         J7VrGwVPZB1LflTmKfBY70EhNcRqlMD+LA/5rW2XJg0SdxntYLDp1NQWRunqbhaJU1xL
+         R/nOoJEzR6nzeRqBGN8bC1Qmhe4pReIQ4u/3QvTL83ZSyyHXzyc1nsSFDuwXSgRTlGQ5
+         AEwJ/V44dN0PXF/XYwUkQOkK0XgXxazJi4TwIMlWcGFERrmzfY9SWsBHzBRfbMqkQzfv
+         4Sz63UHyC5/kfLXFw0DSlEyRgW4+jh2nSoqU/uXcTN16mJVwgTt1V7mIz/OjCDpj+naD
+         /Osw==
+X-Gm-Message-State: AOJu0YwiZkdiOR1l2yn/EgV10xBCIJqDIqkgH4smPRNFKS8MUyVbibSC
+        xeGsTXVc6tTg8V3ClCJS6Yk=
+X-Google-Smtp-Source: AGHT+IGVRroWe9+M86SBSGyIl3Qj9MvOmsO9RPSIFo66Ff8BWlVF0jn+QQTFhXSBQi9W892f6tI7Bg==
+X-Received: by 2002:a05:6000:1888:b0:32f:87e8:707d with SMTP id a8-20020a056000188800b0032f87e8707dmr7113717wri.5.1699546037464;
+        Thu, 09 Nov 2023 08:07:17 -0800 (PST)
+Received: from [192.168.1.122] (cpc159313-cmbg20-2-0-cust161.5-4.cable.virginm.net. [82.0.78.162])
+        by smtp.gmail.com with ESMTPSA id t10-20020a5d42ca000000b0032f7fab0712sm7577069wrr.52.2023.11.09.08.07.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Nov 2023 08:07:17 -0800 (PST)
+Subject: Re: [RFC PATCH v3 10/12] tcp: RX path for devmem TCP
+To:     Mina Almasry <almasrymina@google.com>,
+        David Ahern <dsahern@kernel.org>
+Cc:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Stanislav Fomichev <sdf@google.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Jeroen de Borst <jeroendb@google.com>,
+        Praveen Kaligineedi <pkaligineedi@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Kaiyuan Zhang <kaiyuanz@google.com>
+References: <20231106024413.2801438-1-almasrymina@google.com>
+ <20231106024413.2801438-11-almasrymina@google.com>
+ <ZUk0FGuJ28s1d9OX@google.com>
+ <CAHS8izNFv7r6vqYR_TYqcCuDO61F+nnNMhsSu=DrYWSr3sVgrA@mail.gmail.com>
+ <CAF=yD-+MFpO5Hdqn+Q9X54SBpgcBeJvKTRD53X2oM4s8uVqnAQ@mail.gmail.com>
+ <ZUlp8XutSAScKs_0@google.com>
+ <CAF=yD-JZ88j+44MYgX-=oYJngz4Z0zw6Y0V3nHXisZJtNu7q6A@mail.gmail.com>
+ <CAKH8qBueYgpxQTvTwngOs6RNjy9yvLF92s1p5nFrobw_UprNMQ@mail.gmail.com>
+ <93eb6a2b-a991-40ca-8f26-f520c986729a@kernel.org>
+ <CAF=yD-Ln4v8orUne8E7D2_eHu39PWPCrMR3Qtuh312pCu=erng@mail.gmail.com>
+ <CAHS8izOU06ceKyc5oVZhdCKJqmeRdcRyJBFpjGe=u2yh=V52dQ@mail.gmail.com>
+ <7ce2d027-1e02-4a63-afb7-7304fbfbdf90@kernel.org>
+ <CAHS8izM_qrEs37F=kPzT_kmqCBV_wSiTf72PtHfJYxks9R9--Q@mail.gmail.com>
+From:   Edward Cree <ecree.xilinx@gmail.com>
+Message-ID: <6f853286-e463-b684-cc1e-405119528697@gmail.com>
+Date:   Thu, 9 Nov 2023 16:07:15 +0000
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
+MIME-Version: 1.0
+In-Reply-To: <CAHS8izM_qrEs37F=kPzT_kmqCBV_wSiTf72PtHfJYxks9R9--Q@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-GB
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Thu, Nov 09, 2023, Chao Gao wrote:
-> On Wed, Nov 08, 2023 at 10:29:45AM -0800, Xin Li wrote:
-> >Setup the global vmcs_config for FRED:
-> >1) Add VM_ENTRY_LOAD_IA32_FRED to KVM_OPTIONAL_VMX_VM_ENTRY_CONTROLS to
-> >   have a FRED CPU load guest FRED MSRs from VMCS upon VM entry.
-> >2) Add SECONDARY_VM_EXIT_SAVE_IA32_FRED to
-> >   KVM_OPTIONAL_VMX_SECONDARY_VM_EXIT_CONTROLS to have a FRED CPU save
-> >   guest FRED MSRs to VMCS during VM exit.
-> >3) add SECONDARY_VM_EXIT_LOAD_IA32_FRED to
-> >   KVM_OPTIONAL_VMX_SECONDARY_VM_EXIT_CONTROLS to have a FRED CPU load
-> >   host FRED MSRs from VMCS during VM exit.
-> >
-> >Also add sanity checks to make sure FRED VM entry/exit controls can be
-> >set on a FRED CPU.
-> >
-> >Tested-by: Shan Kang <shan.kang@intel.com>
-> >Signed-off-by: Xin Li <xin3.li@intel.com>
-> >---
-> > arch/x86/include/asm/vmx.h |  3 +++
-> > arch/x86/kvm/vmx/vmx.c     | 19 ++++++++++++++++++-
-> > arch/x86/kvm/vmx/vmx.h     |  7 +++++--
-> > 3 files changed, 26 insertions(+), 3 deletions(-)
-> >
-> >diff --git a/arch/x86/include/asm/vmx.h b/arch/x86/include/asm/vmx.h
-> >index 4d4177ec802c..41796a733bc9 100644
-> >--- a/arch/x86/include/asm/vmx.h
-> >+++ b/arch/x86/include/asm/vmx.h
-> >@@ -106,6 +106,8 @@
-> > #define VM_EXIT_PT_CONCEAL_PIP			0x01000000
-> > #define VM_EXIT_CLEAR_IA32_RTIT_CTL		0x02000000
-> > #define VM_EXIT_ACTIVATE_SECONDARY_CONTROLS	0x80000000
-> >+#define SECONDARY_VM_EXIT_SAVE_IA32_FRED	0x00000001
-> >+#define SECONDARY_VM_EXIT_LOAD_IA32_FRED	0x00000002
-> > 
-> > #define VM_EXIT_ALWAYSON_WITHOUT_TRUE_MSR	0x00036dff
-> > 
-> >@@ -119,6 +121,7 @@
-> > #define VM_ENTRY_LOAD_BNDCFGS                   0x00010000
-> > #define VM_ENTRY_PT_CONCEAL_PIP			0x00020000
-> > #define VM_ENTRY_LOAD_IA32_RTIT_CTL		0x00040000
-> >+#define VM_ENTRY_LOAD_IA32_FRED			0x00800000
-> > 
-> > #define VM_ENTRY_ALWAYSON_WITHOUT_TRUE_MSR	0x000011ff
-> > 
-> >diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> >index df769207cbe0..9186f41974ab 100644
-> >--- a/arch/x86/kvm/vmx/vmx.c
-> >+++ b/arch/x86/kvm/vmx/vmx.c
-> >@@ -2694,10 +2694,27 @@ static int setup_vmcs_config(struct vmcs_config *vmcs_conf,
-> > 		_vmexit_control &= ~x_ctrl;
-> > 	}
-> > 
-> >-	if (_vmexit_control & VM_EXIT_ACTIVATE_SECONDARY_CONTROLS)
-> >+	if (_vmexit_control & VM_EXIT_ACTIVATE_SECONDARY_CONTROLS) {
-> > 		_secondary_vmexit_control =
-> > 			adjust_vmx_controls64(KVM_OPTIONAL_VMX_SECONDARY_VM_EXIT_CONTROLS,
-> > 					      MSR_IA32_VMX_EXIT_CTLS2);
-> >+		if (cpu_feature_enabled(X86_FEATURE_FRED) &&
-> >+		    !(_secondary_vmexit_control & SECONDARY_VM_EXIT_SAVE_IA32_FRED &&
-> >+		      _secondary_vmexit_control & SECONDARY_VM_EXIT_LOAD_IA32_FRED)) {
-> >+			pr_warn_once("FRED enabled but no VMX VM-Exit {SAVE,LOAD}_IA32_FRED controls: %llx\n",
-> >+				     _secondary_vmexit_control);
+On 09/11/2023 02:39, Mina Almasry wrote:
+> On Wed, Nov 8, 2023 at 7:36 AM Edward Cree <ecree.xilinx@gmail.com> wrote:
+>>  If not then surely the way to return a memory area
+>>  in an io_uring idiom is just to post a new read sqe ('RX descriptor')
+>>  pointing into it, rather than explicitly returning it with setsockopt.
 > 
-> if there is no VM_EXIT_ACTIVATE_SECONDARY_CONTROLS, shouldn't we also emit this
-> warning?
-> 
-> >+			if (error_on_inconsistent_vmcs_config)
-> >+				return -EIO;
-> >+		}
-> >+	}
-> >+
-> >+	if (cpu_feature_enabled(X86_FEATURE_FRED) &&
-> >+	    !(_vmentry_control & VM_ENTRY_LOAD_IA32_FRED)) {
-> >+		pr_warn_once("FRED enabled but no VMX VM-Entry LOAD_IA32_FRED control: %x\n",
-> >+			     _vmentry_control);
-> 
-> Can we just hide FRED from guests like what KVM does for other features which
-> have similar dependencies? see vmx_set_cpu_caps().
+> We're interested in using this with regular TCP sockets, not
+> necessarily io_uring.
+Fair.  I just wanted to push against the suggestion upthread that "oh,
+ since io_uring supports setsockopt() we can just ignore it and it'll
+ all magically work later" (paraphrased).
+If you can keep the "allocate buffers out of a devmem region" and "post
+ RX descriptors built on those buffers" APIs separate (inside the
+ kernel; obviously both triggered by a single call to the setsockopt()
+ uAPI) that'll likely make things simpler for the io_uring interface I
+ describe, which will only want the latter.
 
-Both of these warnings should simply be dropped.  The error_on_inconsistent_vmcs_config
-stuff is for inconsistencies within the allowed VMCS fields.  Having a feature
-that is supported in bare metal but not virtualized is perfectly legal, if
-uncommon.
+-ed
 
-What *is* needed is for KVM to refuse to virtualize FRED if the entry/exit controls
-aren't consistent.  E.g. if at least one control is present, and at least one
-control is missing.   I.e. KVM needs a version of vmcs_entry_exit_pairs that can
-deal with SECONDAY_VM_EXIT controls.  I'll circle back to this when I give the
-series a proper review, which is going to be 3+ weeks. 
+PS: Here's a crazy idea that I haven't thought through at all: what if
+ you allow device memory to be mmap()ed into process address space
+ (obviously with none of r/w/x because it's unreachable), so that your
+ various uAPIs can just operate on pointers (e.g. the setsockopt
+ becomes the madvise it's named after; recvmsg just uses or populates
+ the iovec rather than needing a cmsg).  Then if future devices have
+ their memory CXL accessible that can potentially be enabled with no
+ change to the uAPI (userland just starts being able to access the
+ region without faulting).
+And you can maybe add a semantic flag to recvmsg saying "if you don't
+ use all the buffers in my iovec, keep hold of the rest of them for
+ future incoming traffic, and if I post new buffers with my next
+ recvmsg, add those to the tail of the RXQ rather than replacing the
+ ones you've got".  That way you can still have the "userland
+ directly fills the RX ring" behaviour even with TCP sockets.
