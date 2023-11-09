@@ -2,170 +2,159 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC0B67E6BF1
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Nov 2023 15:03:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C59C27E6D0B
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Nov 2023 16:15:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231659AbjKIODJ (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Nov 2023 09:03:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60536 "EHLO
+        id S232317AbjKIPPg (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Nov 2023 10:15:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231586AbjKIODJ (ORCPT
+        with ESMTP id S231586AbjKIPPf (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Nov 2023 09:03:09 -0500
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25CE5272C
-        for <linux-kselftest@vger.kernel.org>; Thu,  9 Nov 2023 06:03:07 -0800 (PST)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 242A3C433C8;
-        Thu,  9 Nov 2023 14:03:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1699538586;
-        bh=7D6Jijux2YM7BGQPWYbE7z6xuhCQoT6kUZvx28WELZo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=E/b2s6jgw0f3HF554QO9GLbSz9LFpxbkF1nEeyiXCL6BP0bgSbW+TLePAZuVO4J/4
-         LBeUQyoiGYDzbHVpS66PnheQiL3g1KEn5blDtX8WCWqIl+g6z8bJ0MGyY6FBvYJVF1
-         O3FWMjM43LGNdPE/g2sINSbMTO7SBjDxu8eld2EU045D2iskyREniimsgKj0npy1rN
-         vhRyiI6jZ1hx/aBXX9ulC+YpYPtKnd8u+Yr60Jp5mk4UxHV0jpb9fraZQlZWTg1kRk
-         xXY7tJYXq/t8CCpbsw0w5wGxWvbb/zKlZ+/Sq3w91+iqIjlPb71JvgP387EzD31VKU
-         Xvl6i3ScSJbiw==
-Date:   Thu, 9 Nov 2023 14:03:02 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc:     linux-mm <linux-mm@kvack.org>,
-        "open list:KERNEL SELFTEST FRAMEWORK" 
-        <linux-kselftest@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dan Carpenter <dan.carpenter@linaro.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>
-Subject: Re: WARNING: CPU: 6 PID: 474 at include/linux/maple_tree.h:712
- mmap_region (include/linux/maple_tree.h:556 include/linux/maple_tree.h:731
-Message-ID: <ZUzmlhvRv66I3J6P@finisterre.sirena.org.uk>
-References: <CA+G9fYs-j2FYZSFSVZj48mgoM9gQd4-7M2mu2Ez3D1DqDdW2bQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="N4lmr59gPo+3oBVi"
-Content-Disposition: inline
-In-Reply-To: <CA+G9fYs-j2FYZSFSVZj48mgoM9gQd4-7M2mu2Ez3D1DqDdW2bQ@mail.gmail.com>
-X-Cookie: Slow day.  Practice crawling.
+        Thu, 9 Nov 2023 10:15:35 -0500
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEC021735
+        for <linux-kselftest@vger.kernel.org>; Thu,  9 Nov 2023 07:15:33 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-5af16e00fadso13627947b3.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Nov 2023 07:15:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1699542933; x=1700147733; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=h+Bm4VxsIbinzhc5nb4VCCnVH6ntCjSPhYk8v0ZWen8=;
+        b=whUnvyjRRgi8Q20u5Qy6Kok1hbnPxHrdOo/gS9leI/fNXZx4thT8TDx9b9HSbqq03c
+         U/ts6EH3FSE8va0gJkVfjRTurESSHxRx5tzCllQG0ijyhcNZmnayauUf3j5Fm2GjGj7z
+         1TTBLBUsYuHnmIfr/xwPtOx81FNI8/lE6N/vOgjqZWIDyKGj/R6UQ4Zvwr64bW0K6eTF
+         PEsIN3Zts9yHwCMZNczyCulGWEbVR+DckwjcLtbxr1pXblIjzrpGPy9llH8qYgnYv4ib
+         jzKwaDRbVhFhBi63ZZI/Nn09j2DPLEC76Y83iH6l7q5cbdSM+05bV2PyMdX2SiwbWByQ
+         yWyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1699542933; x=1700147733;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=h+Bm4VxsIbinzhc5nb4VCCnVH6ntCjSPhYk8v0ZWen8=;
+        b=IBgp2ys6wLQCNITcgJNfznOkM2cvEHH9wlEOaylKAlmakBKrZPJbgEIHZCi6e8CNkG
+         034Af7wku9TQFjewoh3PZiX0vzfraq5Qfgfqw0Yi4sJzk9YS7DFyiZoo2IO++zqtjBEs
+         xcUg4wM/sXdPjF741zgBW4iLnrT8jAvJHNikueEXqKhZBHRg8O0CG0AwcyxD2oE3mFf9
+         QAWOHGldo8VRewDV+PHq4e2E+S/WpS6sqqazN2sUvVgiJs+q/Pqni1cQVGn3fj+Sth8v
+         oyMfEcgN+9HqKdJWqvCc3v7S2ryqPFF2axv3umhXVhh6MHTWWFsL/9UkWR/EsqIEaS4o
+         3PmA==
+X-Gm-Message-State: AOJu0YznT2RvLTmXuoxb3aWX/kUYUtgTIvicxjflsFkpzcZk4hGvHKai
+        pHoDYOQG6DRpliTEgmqSYO3l/6woIWE=
+X-Google-Smtp-Source: AGHT+IGa7z7+OfdYCmqIlLzQUeqKBMunW527AUwnYiPUX/rjhI5E9aZBnJn6/1t9X4kg9dH1DU8ZwWG+HkE=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a25:2fd2:0:b0:d7e:7a8a:2159 with SMTP id
+ v201-20020a252fd2000000b00d7e7a8a2159mr125502ybv.5.1699542932831; Thu, 09 Nov
+ 2023 07:15:32 -0800 (PST)
+Date:   Thu, 9 Nov 2023 07:15:31 -0800
+In-Reply-To: <ZUyeATu4Fd2xI0+h@chao-email>
+Mime-Version: 1.0
+References: <20231108183003.5981-1-xin3.li@intel.com> <20231108183003.5981-6-xin3.li@intel.com>
+ <ZUyeATu4Fd2xI0+h@chao-email>
+Message-ID: <ZUz3cPmnqSq7Lol9@google.com>
+Subject: Re: [PATCH v1 05/23] KVM: VMX: Initialize FRED VM entry/exit controls
+ in vmcs_config
+From:   Sean Christopherson <seanjc@google.com>
+To:     Chao Gao <chao.gao@intel.com>
+Cc:     Xin Li <xin3.li@intel.com>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        pbonzini@redhat.com, corbet@lwn.net, kys@microsoft.com,
+        haiyangz@microsoft.com, wei.liu@kernel.org, decui@microsoft.com,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        vkuznets@redhat.com, peterz@infradead.org, ravi.v.shankar@intel.com
+Content-Type: text/plain; charset="us-ascii"
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
+On Thu, Nov 09, 2023, Chao Gao wrote:
+> On Wed, Nov 08, 2023 at 10:29:45AM -0800, Xin Li wrote:
+> >Setup the global vmcs_config for FRED:
+> >1) Add VM_ENTRY_LOAD_IA32_FRED to KVM_OPTIONAL_VMX_VM_ENTRY_CONTROLS to
+> >   have a FRED CPU load guest FRED MSRs from VMCS upon VM entry.
+> >2) Add SECONDARY_VM_EXIT_SAVE_IA32_FRED to
+> >   KVM_OPTIONAL_VMX_SECONDARY_VM_EXIT_CONTROLS to have a FRED CPU save
+> >   guest FRED MSRs to VMCS during VM exit.
+> >3) add SECONDARY_VM_EXIT_LOAD_IA32_FRED to
+> >   KVM_OPTIONAL_VMX_SECONDARY_VM_EXIT_CONTROLS to have a FRED CPU load
+> >   host FRED MSRs from VMCS during VM exit.
+> >
+> >Also add sanity checks to make sure FRED VM entry/exit controls can be
+> >set on a FRED CPU.
+> >
+> >Tested-by: Shan Kang <shan.kang@intel.com>
+> >Signed-off-by: Xin Li <xin3.li@intel.com>
+> >---
+> > arch/x86/include/asm/vmx.h |  3 +++
+> > arch/x86/kvm/vmx/vmx.c     | 19 ++++++++++++++++++-
+> > arch/x86/kvm/vmx/vmx.h     |  7 +++++--
+> > 3 files changed, 26 insertions(+), 3 deletions(-)
+> >
+> >diff --git a/arch/x86/include/asm/vmx.h b/arch/x86/include/asm/vmx.h
+> >index 4d4177ec802c..41796a733bc9 100644
+> >--- a/arch/x86/include/asm/vmx.h
+> >+++ b/arch/x86/include/asm/vmx.h
+> >@@ -106,6 +106,8 @@
+> > #define VM_EXIT_PT_CONCEAL_PIP			0x01000000
+> > #define VM_EXIT_CLEAR_IA32_RTIT_CTL		0x02000000
+> > #define VM_EXIT_ACTIVATE_SECONDARY_CONTROLS	0x80000000
+> >+#define SECONDARY_VM_EXIT_SAVE_IA32_FRED	0x00000001
+> >+#define SECONDARY_VM_EXIT_LOAD_IA32_FRED	0x00000002
+> > 
+> > #define VM_EXIT_ALWAYSON_WITHOUT_TRUE_MSR	0x00036dff
+> > 
+> >@@ -119,6 +121,7 @@
+> > #define VM_ENTRY_LOAD_BNDCFGS                   0x00010000
+> > #define VM_ENTRY_PT_CONCEAL_PIP			0x00020000
+> > #define VM_ENTRY_LOAD_IA32_RTIT_CTL		0x00040000
+> >+#define VM_ENTRY_LOAD_IA32_FRED			0x00800000
+> > 
+> > #define VM_ENTRY_ALWAYSON_WITHOUT_TRUE_MSR	0x000011ff
+> > 
+> >diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+> >index df769207cbe0..9186f41974ab 100644
+> >--- a/arch/x86/kvm/vmx/vmx.c
+> >+++ b/arch/x86/kvm/vmx/vmx.c
+> >@@ -2694,10 +2694,27 @@ static int setup_vmcs_config(struct vmcs_config *vmcs_conf,
+> > 		_vmexit_control &= ~x_ctrl;
+> > 	}
+> > 
+> >-	if (_vmexit_control & VM_EXIT_ACTIVATE_SECONDARY_CONTROLS)
+> >+	if (_vmexit_control & VM_EXIT_ACTIVATE_SECONDARY_CONTROLS) {
+> > 		_secondary_vmexit_control =
+> > 			adjust_vmx_controls64(KVM_OPTIONAL_VMX_SECONDARY_VM_EXIT_CONTROLS,
+> > 					      MSR_IA32_VMX_EXIT_CTLS2);
+> >+		if (cpu_feature_enabled(X86_FEATURE_FRED) &&
+> >+		    !(_secondary_vmexit_control & SECONDARY_VM_EXIT_SAVE_IA32_FRED &&
+> >+		      _secondary_vmexit_control & SECONDARY_VM_EXIT_LOAD_IA32_FRED)) {
+> >+			pr_warn_once("FRED enabled but no VMX VM-Exit {SAVE,LOAD}_IA32_FRED controls: %llx\n",
+> >+				     _secondary_vmexit_control);
+> 
+> if there is no VM_EXIT_ACTIVATE_SECONDARY_CONTROLS, shouldn't we also emit this
+> warning?
+> 
+> >+			if (error_on_inconsistent_vmcs_config)
+> >+				return -EIO;
+> >+		}
+> >+	}
+> >+
+> >+	if (cpu_feature_enabled(X86_FEATURE_FRED) &&
+> >+	    !(_vmentry_control & VM_ENTRY_LOAD_IA32_FRED)) {
+> >+		pr_warn_once("FRED enabled but no VMX VM-Entry LOAD_IA32_FRED control: %x\n",
+> >+			     _vmentry_control);
+> 
+> Can we just hide FRED from guests like what KVM does for other features which
+> have similar dependencies? see vmx_set_cpu_caps().
 
---N4lmr59gPo+3oBVi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Both of these warnings should simply be dropped.  The error_on_inconsistent_vmcs_config
+stuff is for inconsistencies within the allowed VMCS fields.  Having a feature
+that is supported in bare metal but not virtualized is perfectly legal, if
+uncommon.
 
-On Thu, Nov 09, 2023 at 06:57:08PM +0530, Naresh Kamboju wrote:
-> Following kernel panic noticed while running  selftests: exec: load_addre=
-ss
-> on Fastmodels (FVP) running Linux next-20231109.
->=20
-
-Copying in Kees and Eric who maintain the exec API.
-
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->=20
-> log:
-> ---
->=20
-> # timeout set to 45
-> # selftests: exec: load_address_16777216
-> [  238.405168] ------------[ cut here ]------------
-> [  238.405244] WARNING: CPU: 6 PID: 474 at
-> include/linux/maple_tree.h:712 mmap_region
-> (include/linux/maple_tree.h:556 include/linux/maple_tree.h:731
-> include/linux/maple_tree.h:747 include/linux/mm.h:1033 mm/mmap.c:2828)
-> [  238.405432] Modules linked in: arm_spe_pmu crct10dif_ce
-> panel_simple pl111_drm drm_dma_helper drm_kms_helper fuse drm
-> backlight dm_mod ip_tables x_tables
-> [  238.405932] CPU: 6 PID: 474 Comm: load_address_16 Not tainted
-> 6.6.0-next-20231109 #1
-> [  238.406070] Hardware name: FVP Base RevC (DT)
-> [  238.406151] pstate: 123402009 (nzCv daif +PAN -UAO +TCO +DIT -SSBS BTY=
-PE=3D--)
-> [  238.406294] pc : mmap_region (include/linux/maple_tree.h:556
-> include/linux/maple_tree.h:731 include/linux/maple_tree.h:747
-> include/linux/mm.h:1033 mm/mmap.c:2828)
-> [  238.406424] lr : mmap_region (mm/mmap.c:2836)
-> [  238.406554] sp : ffff8000819639b0
-> [  238.406629] x29: ffff8000819639c0 x28: ffff000806f79000 x27: 000000000=
-2002000
-> [  238.406829] x26: ffff000806f798f0 x25: ffff000806f790b0 x24: 000000000=
-0000006
-> [  238.407029] x23: 0000000000000ffc x22: ffff000805d6e100 x21: ffff00080=
-16adf00
-> [  238.407229] x20: 0000000000100073 x19: 0000000001ffc000 x18: fffffffff=
-fffffff
-> [  238.407425] x17: 0000000000000000 x16: ffffd7c64ceb7c10 x15: fffffffff=
-fffffff
-> [  238.407627] x14: 0000000000000000 x13: 1fffe001002bc9a1 x12: ffff00080=
-15e4d0c
-> [  238.407825] x11: ffff800081963a48 x10: ffff0008015e4d00 x9 : ffffd7c64=
-b49c9f0
-> [  238.408028] x8 : ffff800081963778 x7 : 0000000000000000 x6 : 000000000=
-0000000
-> [  238.408223] x5 : ffffd7c64e35f000 x4 : ffffd7c64e35f278 x3 : 000000000=
-0000000
-> [  238.408420] x2 : ffffd7c64e92fd78 x1 : 0000000002001fff x0 : 000000000=
-0479fff
-> [  238.408618] Call trace:
-> [  238.408681] mmap_region (include/linux/maple_tree.h:556
-> include/linux/maple_tree.h:731 include/linux/maple_tree.h:747
-> include/linux/mm.h:1033 mm/mmap.c:2828)
-> [  238.408812] do_mmap (arch/arm64/include/asm/mman.h:18
-> include/linux/mman.h:147 mm/mmap.c:1274)
-> [  238.408940] vm_mmap_pgoff (mm/util.c:546)
-> [  238.409088] vm_mmap (mm/util.c:559)
-> [  238.409229] elf_load (fs/binfmt_elf.c:385 fs/binfmt_elf.c:408)
-> [  238.409337] load_elf_binary (fs/binfmt_elf.c:1134 (discriminator 1))
-> [  238.409454] bprm_execve (fs/exec.c:1940)
-> [  238.409598] do_execveat_common.isra.0 (fs/exec.c:1938)
-> [  238.409757] __arm64_sys_execve (fs/exec.c:2106)
-> [  238.409910] invoke_syscall (arch/arm64/kernel/syscall.c:46
-> (discriminator 19))
-> [  238.410058] el0_svc_common.constprop.0 (arch/arm64/kernel/syscall.c:13=
-6)
-> [  238.410218] do_el0_svc (arch/arm64/kernel/syscall.c:155)
-> [  238.410363] el0_svc (arch/arm64/include/asm/daifflags.h:75
-> arch/arm64/kernel/entry-common.c:677)
-> [  238.410508] el0t_64_sync_handler (arch/arm64/kernel/entry-common.c:697)
-> [  238.410623] el0t_64_sync (arch/arm64/kernel/entry.S:595)
-> [  238.410735] ---[ end trace 0000000000000000 ]---
->=20
->=20
-> Links:
->  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-202311=
-09/testrun/21009598/suite/log-parser-test/test/check-kernel-exception/log
->  - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-202311=
-09/testrun/21009598/suite/log-parser-test/tests/
->  - https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/tests/2Xv9w=
-ca3SPRN4lh73fIuUxVRNHI
->  - https://storage.tuxsuite.com/public/linaro/lkft/builds/2Xv9vEpjybxlDA4=
-IvgDBm4bjzVT/
->=20
-> --
-> Linaro LKFT
-> https://lkft.linaro.org
-
---N4lmr59gPo+3oBVi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVM5pYACgkQJNaLcl1U
-h9CbYQf/fZxm3kKPgU5OonTWLdsnp6rcIDmyLmn+U8D73IEEMEWq/W9yPn2rCEkt
-KWqxFAI9dAlpFt3/k3KNEaarsy1iIYPkd0lvajoKbXqtMdFYdyvDxgrJ6vmK1E6D
-1vfDmZEsnpAziQdiwMu06BS932Byl5kddd3AK+lfU2M2erLZOCI4phBJrC7E8qwX
-JCCosGgadkPURnR+X/awEIN++TGHfFVDqQoGcGuccP4V6Di1jXD+24oUNd/bSF78
-yvHBWCY/tpZG9Lds2T0j65iOG4g2ATU6BBfkB8X8cssXRX4zsLIcmhSnxcn3Gb4H
-npRfGhblaEB3uHIeXWS3F4m+89xAEA==
-=LvGW
------END PGP SIGNATURE-----
-
---N4lmr59gPo+3oBVi--
+What *is* needed is for KVM to refuse to virtualize FRED if the entry/exit controls
+aren't consistent.  E.g. if at least one control is present, and at least one
+control is missing.   I.e. KVM needs a version of vmcs_entry_exit_pairs that can
+deal with SECONDAY_VM_EXIT controls.  I'll circle back to this when I give the
+series a proper review, which is going to be 3+ weeks. 
