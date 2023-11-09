@@ -2,151 +2,154 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D3357E6165
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Nov 2023 01:28:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 178687E61A2
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Nov 2023 02:00:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230525AbjKIA2P (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Wed, 8 Nov 2023 19:28:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40528 "EHLO
+        id S231514AbjKIBAr (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Wed, 8 Nov 2023 20:00:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjKIA2P (ORCPT
+        with ESMTP id S230515AbjKIBAq (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Wed, 8 Nov 2023 19:28:15 -0500
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB0E4268E;
-        Wed,  8 Nov 2023 16:28:12 -0800 (PST)
-Received: by mail-io1-xd2d.google.com with SMTP id ca18e2360f4ac-7a67f447bf0so10396139f.2;
-        Wed, 08 Nov 2023 16:28:12 -0800 (PST)
+        Wed, 8 Nov 2023 20:00:46 -0500
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 029CD2118
+        for <linux-kselftest@vger.kernel.org>; Wed,  8 Nov 2023 17:00:44 -0800 (PST)
+Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1cc2575dfc7so2343885ad.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 08 Nov 2023 17:00:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1699489692; x=1700094492; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1lYLDbRd2D1qfONnTpMi6lcuDQ3NJHG1hPpWbdhsIpk=;
-        b=ITe3CEo/FEC7YdO6arrUjlDvolPQIvprpS4qTZIB4eUChrvaYEl56tX0sn6u2R7wlk
-         tWdTT3DecXBFA8EXu2ZcTRKLgOix4mpozRgjBPhfVs/JPa6ODH39Ki0kJDg65YF8WsxJ
-         gAQgn/wldsRJwlb41yejXMar0sNCz9i2BxxQfNH1dF5ZhM84twx3DXz9QlP7Ud9vapP+
-         N9trNXsNyMcOtyCHttKswxUZ3HTT12qIvo8C3jW88UfFVblcdFSuhwTM7oq1yaRXF05T
-         9k8CUhDW/d/RQcwqgO6i4h3h4LZO9gitiiJOTuFfC9x9VAgEXrBPbflYSKWVddrIZUkg
-         CePQ==
+        d=davidwei-uk.20230601.gappssmtp.com; s=20230601; t=1699491643; x=1700096443; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=g+m1/eec3BAI+VxQgeWP5nozlTdhs+GvhhRREFgPtnw=;
+        b=twBcydj177gEe6trQmjXVoEAVUA814gQxanP2tNi0bC3WYu6GFBi1NTJRuGFMc7qcb
+         N1KFTTsThKZvuYzaT5/e43BdLn98gA4KcYLDiodnOM9uamizS8mZ9pXr73tQHJjWEjHi
+         g9H1P6xpegWWj9yuDLHtWitsfInUyguJwyoGEy8ZNIbkP0BgIllWYEhtXdtsjPAqaAV7
+         5jjzjuj9NNgm7m2bXKd8/ghLRdWG1Lf80THlMHFiVTNR9MpuDFRZUIrpZDMmqvafM0jH
+         rzsw88LY2cGiakpGyVwhgep1rMZP8RoXur38b63NkiS9x71ETQvVDbUGwbahhix27iXP
+         W6Mw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699489692; x=1700094492;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1lYLDbRd2D1qfONnTpMi6lcuDQ3NJHG1hPpWbdhsIpk=;
-        b=DWdqN8AKZbzPwtO0WxoVdl4yf0Z2Va2psJRPAdY347KnjsSD/JX4TFIPKqAPqjAlW6
-         RIPvpPeyD9eavQ3fxS4sHEAstJ/+HWPbPyloel6c6659YND0SjPE3wUt2JLheibEX5hJ
-         DSWJW2Zr7fRMf9DIht4A7jK+FE13TWWMGXwwBiogqzYhkfUc/uldxsA7HBT1REZS15aq
-         eTg3uC8TTMrwssTR0c7w7QyAeFA7PZKlWdTO7glkdtZtM9uhKScD2o+pWp3X5eMjwAAp
-         qAqAnDB9xfIoNUXRMbpgZfb7vVFxl7qT1jSP3u+/VcIp9mZepJ8ySMwUetw5XlefTV3J
-         0DvA==
-X-Gm-Message-State: AOJu0YzcD9FGmryq9BKYsFfvTx4w8vq73MIXxIKINKGmIESDWOhbivAd
-        ipaAxf4HmvApxo5DjNSEeD8kp8hKReyi7HwwmZ0=
-X-Google-Smtp-Source: AGHT+IHkMvqxlBqvnjgkl6EzwG4igTKbhMs/Lw+LnDTYIcihAvDofeJz++IVExJAeWN+iW/MV/pGOOhM8CeXk06wwi4=
-X-Received: by 2002:a5e:8c16:0:b0:794:eaef:f43e with SMTP id
- n22-20020a5e8c16000000b00794eaeff43emr188592ioj.1.1699489692185; Wed, 08 Nov
- 2023 16:28:12 -0800 (PST)
+        d=1e100.net; s=20230601; t=1699491643; x=1700096443;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=g+m1/eec3BAI+VxQgeWP5nozlTdhs+GvhhRREFgPtnw=;
+        b=sPZJHPVQPwdoBmOyKr243CwfuyhToFfGJouo3RDNxtshg65jkTT6ufkjJtDTauUM+e
+         NorhYnUwRN+xbhmJR/+6xpw+56ksLfX/6ekoDYhbgi0PkNesXA0tO0kbGU42u/cHp7I5
+         1CTZP2lF+dIWNAjyPeXsej+oY9lDOwEywrUhNaZ7sT0klPsnDUKbgWr/T4O5Z+6Zm6w/
+         L2vcvz1oFmXRXXjxfBL0eZYuILtBxa5csdFj+9ozmTXMe+KVi3tbsvr7/Z8xeNrtzm0J
+         xkoekO1PvohtY5jCu4KnVrnPg3r8oglXkW+2HB4Q2HANDRv9E07Md6pPhBIubA/OWUF/
+         lnnA==
+X-Gm-Message-State: AOJu0Yyvm3lYvPFsK4JsUUet0q6RW0NtAT9SiVEqXKIHY64vIZSCspP7
+        iDzt0Q4wHCJXDp/QKBC34muEkg==
+X-Google-Smtp-Source: AGHT+IGqOk5pLGreahWyU5Tyhch5OGepp+ms2LPYRQxo1oPkx1W4LYvgzN77Bieh5CFVk1MoPdYbhQ==
+X-Received: by 2002:a17:902:d2cf:b0:1cc:6acc:8fa4 with SMTP id n15-20020a170902d2cf00b001cc6acc8fa4mr4025647plc.32.1699491643400;
+        Wed, 08 Nov 2023 17:00:43 -0800 (PST)
+Received: from ?IPV6:2a03:83e0:1256:2:c51:2090:e106:83fa? ([2620:10d:c090:500::5:887f])
+        by smtp.gmail.com with ESMTPSA id g10-20020a170902934a00b001b0358848b0sm2287468plp.161.2023.11.08.17.00.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Nov 2023 17:00:43 -0800 (PST)
+Message-ID: <b1476f8e-1b4b-497a-9e80-aff679ca8b4b@davidwei.uk>
+Date:   Wed, 8 Nov 2023 17:00:39 -0800
 MIME-Version: 1.0
-References: <20231106183159.3562879-1-nphamcs@gmail.com> <CAF8kJuMsXUm9=kiL8qPNVfYPzfyq-JWYSH3KraZadjF+myW-2A@mail.gmail.com>
- <CAKEwX=MNKY0UHbxi6Zfwf0KkepYavFaZo8F6LGe5GyyE3U35Jg@mail.gmail.com> <CAF8kJuMx4KT9z2RPy8z+snhM6YUtK=kZ1+BdHjKua2jhwFo-XQ@mail.gmail.com>
-In-Reply-To: <CAF8kJuMx4KT9z2RPy8z+snhM6YUtK=kZ1+BdHjKua2jhwFo-XQ@mail.gmail.com>
-From:   Nhat Pham <nphamcs@gmail.com>
-Date:   Wed, 8 Nov 2023 16:28:00 -0800
-Message-ID: <CAKEwX=OpQZhDmCr-a+O0=c8LfPoO0r8y=abpQoKXWcOP+V6yYg@mail.gmail.com>
-Subject: Re: [PATCH v5 0/6] workload-specific and memory pressure-driven zswap writeback
-To:     Chris Li <chrisl@kernel.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Domenico Cerasuolo <cerasuolodomenico@gmail.com>,
-        Yosry Ahmed <yosryahmed@google.com>,
-        Seth Jennings <sjenning@redhat.com>,
-        Dan Streetman <ddstreet@ieee.org>,
-        Vitaly Wool <vitaly.wool@konsulko.com>, mhocko@kernel.org,
-        roman.gushchin@linux.dev, Shakeel Butt <shakeelb@google.com>,
-        muchun.song@linux.dev, linux-mm <linux-mm@kvack.org>,
-        kernel-team@meta.com, LKML <linux-kernel@vger.kernel.org>,
-        cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, shuah@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v3 05/12] netdev: netdevice devmem allocator
+Content-Language: en-GB
+To:     David Ahern <dsahern@kernel.org>,
+        Mina Almasry <almasrymina@google.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Shakeel Butt <shakeelb@google.com>,
+        Jeroen de Borst <jeroendb@google.com>,
+        Praveen Kaligineedi <pkaligineedi@google.com>,
+        Willem de Bruijn <willemb@google.com>,
+        Kaiyuan Zhang <kaiyuanz@google.com>,
+        Pavel Begunkov <asml.silence@gmail.com>
+References: <20231106024413.2801438-1-almasrymina@google.com>
+ <20231106024413.2801438-6-almasrymina@google.com>
+ <3b0d612c-e33b-48aa-a861-fbb042572fc9@kernel.org>
+ <CAHS8izOHYx+oYnzksUDrK1S0+6CdMJmirApntP5W862yFumezw@mail.gmail.com>
+ <a5b95e6b-8716-4e2e-9183-959b754b5b5e@kernel.org>
+From:   David Wei <dw@davidwei.uk>
+In-Reply-To: <a5b95e6b-8716-4e2e-9183-959b754b5b5e@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Wed, Nov 8, 2023 at 3:12=E2=80=AFPM Chris Li <chrisl@kernel.org> wrote:
->
-> Hi Nhat,
->
-> On Wed, Nov 8, 2023 at 1:15=E2=80=AFPM Nhat Pham <nphamcs@gmail.com> wrot=
-e:
-> >
-> > Ah that was meant to be a fixlet - so that on top of the original
-> > "zswap: make shrinking memcg-aware" patch. The intention was
-> > to eventually squash it...
-> >
-> > But this is getting a bit annoyingly confusing, I admit. I just rebased=
- to
-> > mm-unstable + squashed it all again, then sent one single replacement
-> > patch:
-> >
-> > [PATCH v5 3/6 REPLACE] zswap: make shrinking memcg-aware
->
-> Thank you for the quick response.
->
-> Yes, I am able to download your replacement version of patch 3.
-> Just FYI, I am using "git mailsplit" to split up the mbox into 6
-> separate patch files.
-> On mm-unstable, I am able to apply your replacement patch 3 cleanly.
-> I also need some help on the patch 0005, it does not apply cleanly either=
-.
->
-> $ git mailsplit -ozswap-pool-lru
-> v5_20231106_nphamcs_workload_specific_and_memory_pressure_driven_zswap_wr=
-iteback.mbx
-> $ git am patches/zswap-pool-lru/0001
-> Applying: list_lru: allows explicit memcg and NUMA node selection
-> $ git am patches/zswap-pool-lru/0002
-> Applying: memcontrol: allows mem_cgroup_iter() to check for onlineness
-> $ git am patches/zswap-pool-lru/3.replace
-> Applying: zswap: make shrinking memcg-aware
-> $ git am patches/zswap-pool-lru/0004
-> Applying: mm: memcg: add per-memcg zswap writeback stat
-> $ git am patches/zswap-pool-lru/0005
-> Applying: selftests: cgroup: update per-memcg zswap writeback selftest
-> error: patch failed: tools/testing/selftests/cgroup/test_zswap.c:50
-> error: tools/testing/selftests/cgroup/test_zswap.c: patch does not apply
-> Patch failed at 0001 selftests: cgroup: update per-memcg zswap
-> writeback selftest
-> hint: Use 'git am --show-current-patch=3Ddiff' to see the failed patch
-> When you have resolved this problem, run "git am --continue".
-> If you prefer to skip this patch, run "git am --skip" instead.
-> To restore the original branch and stop patching, run "git am --abort".
->
-> >
-> > Let me know if this still fails to apply. If not, I'll send the whole t=
-hing
-> > again as v6! My sincerest apologies for the troubles and confusion :(
->
-> No problem at all. Thanks for your help on patch 3.
->
-> Chris
+On 2023-11-07 14:55, David Ahern wrote:
+> On 11/7/23 3:10 PM, Mina Almasry wrote:
+>> On Mon, Nov 6, 2023 at 3:44 PM David Ahern <dsahern@kernel.org> wrote:
+>>>
+>>> On 11/5/23 7:44 PM, Mina Almasry wrote:
+>>>> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+>>>> index eeeda849115c..1c351c138a5b 100644
+>>>> --- a/include/linux/netdevice.h
+>>>> +++ b/include/linux/netdevice.h
+>>>> @@ -843,6 +843,9 @@ struct netdev_dmabuf_binding {
+>>>>  };
+>>>>
+>>>>  #ifdef CONFIG_DMA_SHARED_BUFFER
+>>>> +struct page_pool_iov *
+>>>> +netdev_alloc_devmem(struct netdev_dmabuf_binding *binding);
+>>>> +void netdev_free_devmem(struct page_pool_iov *ppiov);
+>>>
+>>> netdev_{alloc,free}_dmabuf?
+>>>
+>>
+>> Can do.
+>>
+>>> I say that because a dmabuf can be host memory, at least I am not aware
+>>> of a restriction that a dmabuf is device memory.
+>>>
+>>
+>> In my limited experience dma-buf is generally device memory, and
+>> that's really its use case. CONFIG_UDMABUF is a driver that mocks
+>> dma-buf with a memfd which I think is used for testing. But I can do
+>> the rename, it's more clear anyway, I think.
+> 
+> config UDMABUF
+>         bool "userspace dmabuf misc driver"
+>         default n
+>         depends on DMA_SHARED_BUFFER
+>         depends on MEMFD_CREATE || COMPILE_TEST
+>         help
+>           A driver to let userspace turn memfd regions into dma-bufs.
+>           Qemu can use this to create host dmabufs for guest framebuffers.
+> 
+> 
+> Qemu is just a userspace process; it is no way a special one.
+> 
+> Treating host memory as a dmabuf should radically simplify the io_uring
+> extension of this set. That the io_uring set needs to dive into
+> page_pools is just wrong - complicating the design and code and pushing
+> io_uring into a realm it does not need to be involved in.
 
-Hmm my guess is that I probably sent this out based on an outdated
-mm-unstable. There has since been a new zswap selftest merged
-to mm-unstable (written by no other than myself - oh the irony), so
-maybe it does not apply cleanly anymore with git am.
+I think our io_uring proposal will already be vastly simplified once we
+rebase onto Kuba's page pool memory provider API. Using udmabuf means
+depending on a driver designed for testing, vs io_uring's registered
+buffers API that's been tried and tested.
 
-I was, however, able to apply the patch with the -3 argument, i.e:
+I don't have an intuitive understanding of the trade offs yet, and would
+need to try out udmabuf and compare vs say using our own page pool
+memory provider.
 
-git am -3 ../mbox/0005
-
-This will fall back to the 3-way merge if direct application fails.
-And, FWIW, the kselftest still seems to build.
-
-I think you'll have to do the same with the 6th patch as well. My
-guess is that on my latest rebase attempt, this was done silent and
-automatically, so I did not notice this.
-
-Let me know if this works. Worst case scenario, I can still rebase 'n
-resend the patch series :)
+> 
+> Most (all?) of this patch set can work with any memory; only device
+> memory is unreadable.
+> 
+> 
