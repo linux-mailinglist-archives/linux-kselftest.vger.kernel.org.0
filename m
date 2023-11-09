@@ -2,143 +2,233 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39E547E693B
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Nov 2023 12:10:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9B557E69CD
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Nov 2023 12:38:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233778AbjKILKb (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Nov 2023 06:10:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38922 "EHLO
+        id S232002AbjKILiD (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Nov 2023 06:38:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231270AbjKILKa (ORCPT
+        with ESMTP id S231878AbjKILiD (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Nov 2023 06:10:30 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 929422D49
-        for <linux-kselftest@vger.kernel.org>; Thu,  9 Nov 2023 03:09:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1699528183;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ezu0iXe5WM3zfDfpiwhiAtccNmWTLMMx0akG9lcRF/g=;
-        b=CjyTf0bPtHLHNbCf/Zc/P5nwyWCg9EJN7rTfDtuTIsESPnGzL1TLk3Uxe7i4S8C5s8qPqO
-        FY4BqMBJTMAMJmOEFb84kEVlp7H97WGguv/j+gmAOKmvGIoT2K3xGuYGH8iXkU7sanhJnr
-        gu1/QsT1NWIeoqJ5Dww1Zte7JaFY/7c=
-Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
- [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-320-qE8W1IOnNDaNQtjRawg7Hw-1; Thu, 09 Nov 2023 06:09:42 -0500
-X-MC-Unique: qE8W1IOnNDaNQtjRawg7Hw-1
-Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-41cbafdb4b6so2245511cf.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Nov 2023 03:09:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699528182; x=1700132982;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ezu0iXe5WM3zfDfpiwhiAtccNmWTLMMx0akG9lcRF/g=;
-        b=cagoFJAiOYiHQi4k/zie39zY4o4ljkTvHH166IIkAvclYuxKzX29o4BCJwhAPJ/UOC
-         3LC9GOHOQEymA4/gcnTAEqZLIdpsIpR9oWkaeBnWx4al38yNQFZXM/q1+AgAvIo4pm84
-         fsoTYyIYqnjzRFmTo88vUUIA/4o27lvP6HLHM774AmuIqhbX55N1PJylMf3haJVdYDeB
-         Re/WhEr1Q2EGRl7xhzpvLkBcbcYdUODEn9ZuhwasYfHAMgwirWmlSdQegLvNmsMLrCAu
-         9aZAKXBuBLiJAXgIWDRN+PVHb6IYzkbAM+99SpaEO3eK4JjxytRblbEfcWDmskZHbQ7w
-         hRcA==
-X-Gm-Message-State: AOJu0YxQVDXkwKOj/FVsvNZIFN6ZjJlGx57jLUPMQKc1wl6u4N9+8sm1
-        X6a4d2EkfnJvda51KZwmzcVC3TAgNcRJSkrNnMT2DxXtwnJSPTUzpBWFiv5COGt6Df0+8gJ15E6
-        x79wBGjy8fisiRA+oZ4G13b5fq6D9
-X-Received: by 2002:a05:622a:2b46:b0:41c:d433:6c86 with SMTP id hb6-20020a05622a2b4600b0041cd4336c86mr5854606qtb.4.1699528182040;
-        Thu, 09 Nov 2023 03:09:42 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEEczlBkEToxT5HA1bWloT/vSc9WPJn4E7V19w/sRlEABI2nrBuMePu+oCzKYFBd5r1xDIeGg==
-X-Received: by 2002:a05:622a:2b46:b0:41c:d433:6c86 with SMTP id hb6-20020a05622a2b4600b0041cd4336c86mr5854566qtb.4.1699528181732;
-        Thu, 09 Nov 2023 03:09:41 -0800 (PST)
-Received: from gerbillo.redhat.com (146-241-228-197.dyn.eolo.it. [146.241.228.197])
-        by smtp.gmail.com with ESMTPSA id n5-20020ac86745000000b0041977932fc6sm1828045qtp.18.2023.11.09.03.09.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Nov 2023 03:09:41 -0800 (PST)
-Message-ID: <fdf6b2e9c5a734b1a03336f7d5bcfd06bdef47c5.camel@redhat.com>
-Subject: Re: [RFC PATCH v3 02/12] net: page_pool: create hooks for custom
- page providers
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Ahern <dsahern@kernel.org>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Jeroen de Borst <jeroendb@google.com>,
-        Praveen Kaligineedi <pkaligineedi@google.com>
-Date:   Thu, 09 Nov 2023 12:09:37 +0100
-In-Reply-To: <20231106024413.2801438-3-almasrymina@google.com>
-References: <20231106024413.2801438-1-almasrymina@google.com>
-         <20231106024413.2801438-3-almasrymina@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Thu, 9 Nov 2023 06:38:03 -0500
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15E90269A;
+        Thu,  9 Nov 2023 03:38:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1699529881; x=1731065881;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=DKFfaiU9gGxjgDYBwyC5urWJAh5gfm6X7WCUnD4IAWM=;
+  b=FRBC3Ds5jzTLvym0W6ctK7MrFpuMHP6bKeuFF3PbPN6PJXTu6g9PyG9R
+   EqsEMHzoNhbap0JAtrLyCotVWUQvNspjr5QWS9jLgjDI/BHBQBIoOaWGB
+   yfqezKZyVVF1cJwI8UG+yjqkJ9BX3+048/MWoTF65HGiHVcwXBC4ZgSFP
+   /pZPaLSZ+T2IG1uvKSIOsaTkgBeVzSs7ZQnZwngJJSKEYZcwtuCxnzxR4
+   Utkkl48VmQdn3pNYknX0wNS+pYsErIgeCUU8b17o+EQ1Ay6fXILl18pOY
+   KS1y4VnB/BdbvNBSS9fjPkvspIr2Pn5zswKpHRXwnvJ3f4ensjUsfM41J
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10888"; a="369301857"
+X-IronPort-AV: E=Sophos;i="6.03,289,1694761200"; 
+   d="scan'208";a="369301857"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2023 03:37:59 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10888"; a="854052328"
+X-IronPort-AV: E=Sophos;i="6.03,289,1694761200"; 
+   d="scan'208";a="854052328"
+Received: from bsochack-mobl2.ger.corp.intel.com (HELO wieczorr-mobl1.intel.com) ([10.213.8.94])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Nov 2023 03:37:56 -0800
+From:   Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
+To:     Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     ilpo.jarvinen@intel.com, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: [PATCH] selftests/resctrl: Add non-contiguous CBMs CAT test
+Date:   Thu,  9 Nov 2023 12:28:47 +0100
+Message-ID: <20231109112847.432687-1-maciej.wieczor-retman@intel.com>
+X-Mailer: git-send-email 2.42.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
 
-On Sun, 2023-11-05 at 18:44 -0800, Mina Almasry wrote:
-> diff --git a/include/net/page_pool/types.h b/include/net/page_pool/types.=
-h
-> index 6fc5134095ed..d4bea053bb7e 100644
-> --- a/include/net/page_pool/types.h
-> +++ b/include/net/page_pool/types.h
-> @@ -60,6 +60,8 @@ struct page_pool_params {
->  	int		nid;
->  	struct device	*dev;
->  	struct napi_struct *napi;
-> +	u8		memory_provider;
-> +	void            *mp_priv;
+Non-contiguous CBM support for Intel CAT has been merged into the kernel
+with Commit 0e3cd31f6e90 ("x86/resctrl: Enable non-contiguous CBMs in
+Intel CAT") but there is no selftest that would validate if this feature
+works correctly.
 
-Minor nit: swapping the above 2 fields should make the struct smaller.
+The selftest needs to verify if writing non-contiguous CBMs to the
+schemata file behaves as expected in comparison to the information about
+non-contiguous CBMs support.
 
->  	enum dma_data_direction dma_dir;
->  	unsigned int	max_len;
->  	unsigned int	offset;
-> @@ -118,6 +120,19 @@ struct page_pool_stats {
->  };
->  #endif
-> =20
-> +struct mem_provider;
-> +
-> +enum pp_memory_provider_type {
-> +	__PP_MP_NONE, /* Use system allocator directly */
-> +};
-> +
-> +struct pp_memory_provider_ops {
-> +	int (*init)(struct page_pool *pool);
-> +	void (*destroy)(struct page_pool *pool);
-> +	struct page *(*alloc_pages)(struct page_pool *pool, gfp_t gfp);
-> +	bool (*release_page)(struct page_pool *pool, struct page *page);
-> +};
-> +
->  struct page_pool {
->  	struct page_pool_params p;
-> =20
-> @@ -165,6 +180,9 @@ struct page_pool {
->  	 */
->  	struct ptr_ring ring;
-> =20
-> +	const struct pp_memory_provider_ops *mp_ops;
-> +	void *mp_priv;
+Add tests for both L2 and L3 CAT to verify if the return values
+generated by writing non-contiguous CBMs don't contradict the
+reported non-contiguous support information.
 
-Why the mp_ops are not part of page_pool_params? why mp_priv is
-duplicated here?
+Comparing the return value of write_schemata() with non-contiguous CBMs
+support information can be simplified as a logical XOR operation. In
+other words if non-contiguous CBMs are supported and if non-contiguous
+write succeeds the test should succeed and if the write fails the test
+should also fail. The opposite should happen if non-contiguous CBMs are
+not supported.
 
-Cheers,
+Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 
-Paolo
+---
+
+This patch is based on a rework of resctrl selftests that's currently in
+review [1]. The patch also implements a similiar functionality presented
+in the bash script included in the cover letter to the original
+non-contiguous CBMs in Intel CAT series [2].
+
+[1] https://lore.kernel.org/all/20231024092634.7122-1-ilpo.jarvinen@linux.intel.com/
+[2] https://lore.kernel.org/all/cover.1696934091.git.maciej.wieczor-retman@intel.com/
+
+ tools/testing/selftests/resctrl/cat_test.c    | 97 +++++++++++++++++++
+ tools/testing/selftests/resctrl/resctrl.h     |  2 +
+ .../testing/selftests/resctrl/resctrl_tests.c |  2 +
+ 3 files changed, 101 insertions(+)
+
+diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
+index bc88eb891f35..6a01a5da30b4 100644
+--- a/tools/testing/selftests/resctrl/cat_test.c
++++ b/tools/testing/selftests/resctrl/cat_test.c
+@@ -342,6 +342,87 @@ static int cat_run_test(const struct resctrl_test *test, const struct user_param
+ 	return ret;
+ }
+ 
++static int noncont_cat_run_test(const struct resctrl_test *test,
++				const struct user_params *uparams)
++{
++	unsigned long full_cache_mask, cont_mask, noncont_mask;
++	unsigned int eax, ebx, ecx, edx, ret, sparse_masks;
++	char res_path[PATH_MAX];
++	char schemata[64];
++	int bit_center;
++	FILE *fp;
++
++	/* Check to compare sparse_masks content to cpuid output. */
++	snprintf(res_path, sizeof(res_path), "%s/%s/%s", INFO_PATH,
++		 test->resource, "sparse_masks");
++
++	fp = fopen(res_path, "r");
++	if (!fp) {
++		perror("# Error in opening file\n");
++		return errno;
++	}
++
++	if (fscanf(fp, "%u", &sparse_masks) <= 0) {
++		perror("Could not get sparse_masks contents\n");
++		fclose(fp);
++		return -1;
++	}
++
++	fclose(fp);
++
++	if (!strcmp(test->resource, "L3"))
++		__cpuid_count(0x10, 1, eax, ebx, ecx, edx);
++	else if (!strcmp(test->resource, "L2"))
++		__cpuid_count(0x10, 2, eax, ebx, ecx, edx);
++	else
++		return -EINVAL;
++
++	if (sparse_masks != ((ecx >> 3) & 1))
++		return -1;
++
++	/* Write checks initialization. */
++	ret = get_cbm_mask(test->resource, &full_cache_mask);
++	if (ret < 0)
++		return ret;
++	bit_center = count_bits(full_cache_mask) / 2;
++	cont_mask = full_cache_mask >> bit_center;
++
++	/* Contiguous mask write check. */
++	snprintf(schemata, sizeof(schemata), "%lx", cont_mask);
++	ret = write_schemata("", schemata, uparams->cpu, test->resource);
++	if (ret)
++		return ret;
++
++	/*
++	 * Non-contiguous mask write check. CBM has a 0xf hole approximately in the middle.
++	 * Output is compared with support information to catch any edge case errors.
++	 */
++	noncont_mask = ~(full_cache_mask & (0xf << bit_center)) & full_cache_mask;
++	snprintf(schemata, sizeof(schemata), "%lx", noncont_mask);
++	ret = write_schemata("", schemata, uparams->cpu, test->resource);
++	if (ret && sparse_masks)
++		ksft_print_msg("Non-contiguous CBMs supported but write failed\n");
++	else if (ret && !sparse_masks)
++		ksft_print_msg("Non-contiguous CBMs not supported and write failed as expected\n");
++	else if (!ret && !sparse_masks)
++		ksft_print_msg("Non-contiguous CBMs not supported but write succeeded\n");
++	return !ret == !sparse_masks;
++}
++
++static bool noncont_cat_feature_check(const struct resctrl_test *test)
++{
++	char res_path[PATH_MAX];
++	struct stat statbuf;
++
++	snprintf(res_path, sizeof(res_path), "%s/%s/%s", INFO_PATH,
++		 test->resource, "sparse_masks");
++
++	if (stat(res_path, &statbuf))
++		return false;
++
++	return test_resource_feature_check(test);
++}
++
+ struct resctrl_test l3_cat_test = {
+ 	.name = "L3_CAT",
+ 	.group = "CAT",
+@@ -357,3 +438,19 @@ struct resctrl_test l2_cat_test = {
+ 	.feature_check = test_resource_feature_check,
+ 	.run_test = cat_run_test,
+ };
++
++struct resctrl_test l3_noncont_cat_test = {
++	.name = "L3_NONCONT_CAT",
++	.group = "NONCONT_CAT",
++	.resource = "L3",
++	.feature_check = noncont_cat_feature_check,
++	.run_test = noncont_cat_run_test,
++};
++
++struct resctrl_test l2_noncont_cat_test = {
++	.name = "L2_NONCONT_CAT",
++	.group = "NONCONT_CAT",
++	.resource = "L2",
++	.feature_check = noncont_cat_feature_check,
++	.run_test = noncont_cat_run_test,
++};
+diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
+index fffeb442c173..51b8a6ff3a0d 100644
+--- a/tools/testing/selftests/resctrl/resctrl.h
++++ b/tools/testing/selftests/resctrl/resctrl.h
+@@ -184,5 +184,7 @@ extern struct resctrl_test mba_test;
+ extern struct resctrl_test cmt_test;
+ extern struct resctrl_test l3_cat_test;
+ extern struct resctrl_test l2_cat_test;
++extern struct resctrl_test l3_noncont_cat_test;
++extern struct resctrl_test l2_noncont_cat_test;
+ 
+ #endif /* RESCTRL_H */
+diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
+index 9e254bca6c25..fdeef82feb4e 100644
+--- a/tools/testing/selftests/resctrl/resctrl_tests.c
++++ b/tools/testing/selftests/resctrl/resctrl_tests.c
+@@ -16,6 +16,8 @@ static struct resctrl_test *resctrl_tests[] = {
+ 	&cmt_test,
+ 	&l3_cat_test,
+ 	&l2_cat_test,
++	&l3_noncont_cat_test,
++	&l2_noncont_cat_test,
+ };
+ 
+ static int detect_vendor(void)
+-- 
+2.42.1
 
