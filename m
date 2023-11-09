@@ -2,63 +2,62 @@ Return-Path: <linux-kselftest-owner@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81C067E6550
-	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Nov 2023 09:30:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AABA27E658B
+	for <lists+linux-kselftest@lfdr.de>; Thu,  9 Nov 2023 09:45:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233179AbjKIIao (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Thu, 9 Nov 2023 03:30:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47844 "EHLO
+        id S233641AbjKIIpR (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
+        Thu, 9 Nov 2023 03:45:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233167AbjKIIan (ORCPT
+        with ESMTP id S233653AbjKIIpP (ORCPT
         <rfc822;linux-kselftest@vger.kernel.org>);
-        Thu, 9 Nov 2023 03:30:43 -0500
+        Thu, 9 Nov 2023 03:45:15 -0500
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A696F2D50
-        for <linux-kselftest@vger.kernel.org>; Thu,  9 Nov 2023 00:30:00 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 023012717
+        for <linux-kselftest@vger.kernel.org>; Thu,  9 Nov 2023 00:44:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1699518599;
+        s=mimecast20190719; t=1699519465;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=0qGu6ReB5a+EcqdKKJhEiSap1D12mNLXKF1UNlxFd2w=;
-        b=D79jnct0+p49WHZIvBrLM3eviXDg+AaGwi4+1oZuvnw03Pr4cTNXGl34/igvzMPASFb7AD
-        ToN6OTXBXgt/rcWBi1Y677PMfBceNbOYPqLzw9QytUXS80YmLidqpHXMuPv9Kn/mm+KWSG
-        V04TssdwWyUTo0DWJ2J0V6T7ohPJ9qs=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=eTFEp4CMLoFdUcZdEGfmISXt6fDITsZHDJnL/kZD0Z4=;
+        b=ENvSeuu0qeJ6uNbqWmkbYQv2TqkNw6PJamE6VVAT4KYan7mbYrI1NHQNvv6LUjQOef6aNr
+        ufJWxgDbai29IuO4BDx8NxwOAB6S5AjynVmznUcztPulBsmlozAPO1UerD5b2/feDqJ7Rg
+        JEB/8G+AkqD2Nz4DMVfiS0S4MPFRMWg=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-146-ycmFnedUO9m1EzqZEnBb-A-1; Thu, 09 Nov 2023 03:29:58 -0500
-X-MC-Unique: ycmFnedUO9m1EzqZEnBb-A-1
-Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-9c45a6a8832so11662866b.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 09 Nov 2023 00:29:58 -0800 (PST)
+ us-mta-472-nbGhmA2TN4mOVvOj73bQJQ-1; Thu, 09 Nov 2023 03:44:22 -0500
+X-MC-Unique: nbGhmA2TN4mOVvOj73bQJQ-1
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-9bfacbcabb1so8611266b.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 09 Nov 2023 00:44:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699518597; x=1700123397;
+        d=1e100.net; s=20230601; t=1699519461; x=1700124261;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=0qGu6ReB5a+EcqdKKJhEiSap1D12mNLXKF1UNlxFd2w=;
-        b=nknHy1FxLyeklMOLj0v/yI1/yi+IARteXTeWCDQlfOXqXoTobIh7SVNGotUIIfJ5Jg
-         KxNEKFWFkE0nHRRMK1WyycCUSRIXvTkhuNVaKw7Eog+GFNus4xC/nKaowSY18SUWII2O
-         rp6pfvghzFWyFLIRMPXXuDnwEWqnvgex/edLFf304W/6cUrkadHDbh8Z3KWUBxHsVAZh
-         PD9dRPIL9OOcYPMh7pY474s2O5A4zgWSDyrcM7EsZXD0rF76VaxGP3PTkAZoMtxp1RqV
-         Ll6dIQdeGWe5lIVg7LV5HoSGwt1dqGKQR0kkoH6Q3ZL0UomakdAXVfSbOoKkxKYxcszd
-         X2qA==
-X-Gm-Message-State: AOJu0YxikGKz78/4m2nX1QvcvI33yshc6i1lS0WGQzuOpBSIZzW8jty2
-        fmduNUxHdcIy/l4qyVwQsAPiy4BohgamIzaEZwFZnCPPEKWRV1lgyueUBzCNZIvd8A1n52rkTen
-        cseBcnjqEihvgmo3Rsq1N7m2cafUJ
-X-Received: by 2002:a17:907:9725:b0:9dd:b624:dea9 with SMTP id jg37-20020a170907972500b009ddb624dea9mr3415530ejc.7.1699518597404;
-        Thu, 09 Nov 2023 00:29:57 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEFQLHA2HdtAUf7yiWJ3zu6Jf15htwDL4OIcB2ox9NPft2Q3sVGGotT9BWcb+BUEytSXl5ggw==
-X-Received: by 2002:a17:907:9725:b0:9dd:b624:dea9 with SMTP id jg37-20020a170907972500b009ddb624dea9mr3415493ejc.7.1699518597043;
-        Thu, 09 Nov 2023 00:29:57 -0800 (PST)
+        bh=eTFEp4CMLoFdUcZdEGfmISXt6fDITsZHDJnL/kZD0Z4=;
+        b=wWQEOyvTIecaXEp+AXbJ3/9Oq3lhSnoHyEGftPPCl4fUNrDMt/p2Jh7FQadtlyHvGa
+         LAWO+r5LF9+AvPfjCUns7P7KdfHn1SgWlkcQELp2w5/GZZP/EbT0XmQJ7/Duj8WFx2mk
+         9caN8cUgiPksr17gFJXexZIojzXMuvK05JCWORiJ3mKHmZd/dsOMFeEboqDtdl7xkUlz
+         v85/q/57mTp04bVgfR/n6jBMiQe238kxAzdAUshtGs/Pe2vgEa6y14BZpN8MYl6SAqSM
+         Wz2xY9OENr5ulSy4/gdrPGFP5Y+7An2EsY25Y0rZN6ZHIqxgxgoefisyaLGpWInBtJhm
+         1EgA==
+X-Gm-Message-State: AOJu0YyXZKOmcuvTfbQjXhetwuqenf4C+DmY8BXzFfRNGtSRmeC2xh41
+        3uc4aZQkRyVb1+5utdQGQh+rQ/V7I2gyV2zBJadOMmv7ISLzb6pge1rmQfrz43wOylOmzIzNuS/
+        39BO6MajhdKFmmsAYqu1gNmGX4G13
+X-Received: by 2002:a17:906:6a0e:b0:9ae:50de:1aaf with SMTP id qw14-20020a1709066a0e00b009ae50de1aafmr3323734ejc.4.1699519461244;
+        Thu, 09 Nov 2023 00:44:21 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHpt6f4OXVKtH4i3m412g4H1Y1OUcpmAtKJLGhLybamCWeX8G1/7ze6DLbaN+L9dFmPNZ/PZg==
+X-Received: by 2002:a17:906:6a0e:b0:9ae:50de:1aaf with SMTP id qw14-20020a1709066a0e00b009ae50de1aafmr3323714ejc.4.1699519460914;
+        Thu, 09 Nov 2023 00:44:20 -0800 (PST)
 Received: from gerbillo.redhat.com (146-241-228-197.dyn.eolo.it. [146.241.228.197])
-        by smtp.gmail.com with ESMTPSA id v25-20020a170906381900b009dfd3b80ba3sm2221221ejc.35.2023.11.09.00.29.55
+        by smtp.gmail.com with ESMTPSA id ha12-20020a170906a88c00b0099d804da2e9sm2235687ejb.225.2023.11.09.00.44.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Nov 2023 00:29:56 -0800 (PST)
-Message-ID: <076fa6505f3e1c79cc8acdf9903809fad6c2fd31.camel@redhat.com>
-Subject: Re: [RFC PATCH v3 04/12] netdev: support binding dma-buf to
- netdevice
+        Thu, 09 Nov 2023 00:44:20 -0800 (PST)
+Message-ID: <21e4ef7d4a1b4ad298b0688f2b9ce8f5572e1e69.camel@redhat.com>
+Subject: Re: [RFC PATCH v3 05/12] netdev: netdevice devmem allocator
 From:   Paolo Abeni <pabeni@redhat.com>
 To:     Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
@@ -80,10 +79,10 @@ Cc:     "David S. Miller" <davem@davemloft.net>,
         Praveen Kaligineedi <pkaligineedi@google.com>,
         Willem de Bruijn <willemb@google.com>,
         Kaiyuan Zhang <kaiyuanz@google.com>
-Date:   Thu, 09 Nov 2023 09:29:54 +0100
-In-Reply-To: <20231106024413.2801438-5-almasrymina@google.com>
+Date:   Thu, 09 Nov 2023 09:44:18 +0100
+In-Reply-To: <20231106024413.2801438-6-almasrymina@google.com>
 References: <20231106024413.2801438-1-almasrymina@google.com>
-         <20231106024413.2801438-5-almasrymina@google.com>
+         <20231106024413.2801438-6-almasrymina@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
@@ -94,102 +93,19 @@ X-Mailing-List: linux-kselftest@vger.kernel.org
 
 On Sun, 2023-11-05 at 18:44 -0800, Mina Almasry wrote:
 [...]
-> +int netdev_bind_dmabuf(struct net_device *dev, unsigned int dmabuf_fd,
-> +		       struct netdev_dmabuf_binding **out)
+> +void netdev_free_devmem(struct page_pool_iov *ppiov)
 > +{
-> +	struct netdev_dmabuf_binding *binding;
-> +	struct scatterlist *sg;
-> +	struct dma_buf *dmabuf;
-> +	unsigned int sg_idx, i;
-> +	unsigned long virtual;
-> +	int err;
+> +	struct netdev_dmabuf_binding *binding =3D page_pool_iov_binding(ppiov);
 > +
-> +	if (!capable(CAP_NET_ADMIN))
-> +		return -EPERM;
+> +	refcount_set(&ppiov->refcount, 1);
 > +
-> +	dmabuf =3D dma_buf_get(dmabuf_fd);
-> +	if (IS_ERR_OR_NULL(dmabuf))
-> +		return -EBADFD;
-> +
-> +	binding =3D kzalloc_node(sizeof(*binding), GFP_KERNEL,
-> +			       dev_to_node(&dev->dev));
-> +	if (!binding) {
-> +		err =3D -ENOMEM;
-> +		goto err_put_dmabuf;
-> +	}
-> +
-> +	xa_init_flags(&binding->bound_rxq_list, XA_FLAGS_ALLOC);
-> +
-> +	refcount_set(&binding->ref, 1);
-> +
-> +	binding->dmabuf =3D dmabuf;
-> +
-> +	binding->attachment =3D dma_buf_attach(binding->dmabuf, dev->dev.parent=
-);
-> +	if (IS_ERR(binding->attachment)) {
-> +		err =3D PTR_ERR(binding->attachment);
-> +		goto err_free_binding;
-> +	}
-> +
-> +	binding->sgt =3D dma_buf_map_attachment(binding->attachment,
-> +					      DMA_BIDIRECTIONAL);
-> +	if (IS_ERR(binding->sgt)) {
-> +		err =3D PTR_ERR(binding->sgt);
-> +		goto err_detach;
-> +	}
-> +
-> +	/* For simplicity we expect to make PAGE_SIZE allocations, but the
-> +	 * binding can be much more flexible than that. We may be able to
-> +	 * allocate MTU sized chunks here. Leave that for future work...
-> +	 */
-> +	binding->chunk_pool =3D gen_pool_create(PAGE_SHIFT,
-> +					      dev_to_node(&dev->dev));
-> +	if (!binding->chunk_pool) {
-> +		err =3D -ENOMEM;
-> +		goto err_unmap;
-> +	}
-> +
-> +	virtual =3D 0;
-> +	for_each_sgtable_dma_sg(binding->sgt, sg, sg_idx) {
-> +		dma_addr_t dma_addr =3D sg_dma_address(sg);
-> +		struct dmabuf_genpool_chunk_owner *owner;
-> +		size_t len =3D sg_dma_len(sg);
-> +		struct page_pool_iov *ppiov;
-> +
-> +		owner =3D kzalloc_node(sizeof(*owner), GFP_KERNEL,
-> +				     dev_to_node(&dev->dev));
-> +		owner->base_virtual =3D virtual;
-> +		owner->base_dma_addr =3D dma_addr;
-> +		owner->num_ppiovs =3D len / PAGE_SIZE;
-> +		owner->binding =3D binding;
-> +
-> +		err =3D gen_pool_add_owner(binding->chunk_pool, dma_addr,
-> +					 dma_addr, len, dev_to_node(&dev->dev),
-> +					 owner);
-> +		if (err) {
-> +			err =3D -EINVAL;
-> +			goto err_free_chunks;
-> +		}
-> +
-> +		owner->ppiovs =3D kvmalloc_array(owner->num_ppiovs,
-> +					       sizeof(*owner->ppiovs),
-> +					       GFP_KERNEL);
-> +		if (!owner->ppiovs) {
-> +			err =3D -ENOMEM;
-> +			goto err_free_chunks;
-> +		}
-> +
-> +		for (i =3D 0; i < owner->num_ppiovs; i++) {
-> +			ppiov =3D &owner->ppiovs[i];
-> +			ppiov->owner =3D owner;
-> +			refcount_set(&ppiov->refcount, 1);
-> +		}
-> +
-> +		dma_addr +=3D len;
+> +	if (gen_pool_has_addr(binding->chunk_pool,
+> +			      page_pool_iov_dma_addr(ppiov), PAGE_SIZE))
+> +		gen_pool_free(binding->chunk_pool,
+> +			      page_pool_iov_dma_addr(ppiov), PAGE_SIZE);
 
-I'm trying to wrap my head around the whole infra... the above line is
-confusing. Why do you increment dma_addr? it will be re-initialized in
-the next iteration.
+Minor nit: what about caching the dma_addr value to make the above more
+readable?
 
 Cheers,
 
