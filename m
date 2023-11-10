@@ -1,69 +1,71 @@
-Return-Path: <linux-kselftest+bounces-9-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-10-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44B6D7E8376
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Nov 2023 21:08:57 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 909777E8375
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Nov 2023 21:08:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DABA8B20E29
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Nov 2023 20:08:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C177E1C20B0E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Nov 2023 20:08:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 602613B7B3;
-	Fri, 10 Nov 2023 20:08:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EA743B796;
+	Fri, 10 Nov 2023 20:08:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tE8oHGWZ"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Z8z0hd3r"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D67D3B792
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 Nov 2023 20:08:41 +0000 (UTC)
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 518BAE9
-	for <linux-kselftest@vger.kernel.org>; Fri, 10 Nov 2023 12:08:39 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-da2b87dd614so3117571276.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Nov 2023 12:08:39 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E41333B7B7
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 Nov 2023 20:08:44 +0000 (UTC)
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 972B2A9
+	for <linux-kselftest@vger.kernel.org>; Fri, 10 Nov 2023 12:08:43 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-dae71322ed4so3022350276.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 10 Nov 2023 12:08:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1699646918; x=1700251718; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=4YunHZgtb5nkD4PkAgnIRkW9gO+ZcmaQMUyBJXXvNgg=;
-        b=tE8oHGWZbUBGyyJNmf7x2wgf8HTQb2oxOBTGnjdTnkGDx2nRbo2SIvZAE6KJgAyyjF
-         gc9EF7wUYm8f4ZlCg9yrCarKo/GJyAt5lnOFWBXfM/SJulEMMGWJxZ9eyl0yhiqasprV
-         Il5CQ2yO1Jd5szCNxfBiSfNdR97iric9T85I2R9xkXfRH0Hu85OVEV8gQVpYq79exny3
-         fFIaihfN5sTGPbEzdQNOkvRPii7SboB1CJoSeXWXdbol+5/6Kd+UJ6haQ+sK4vMfN8H5
-         fIXp6OoacNCkCfDiT5HqWrfP9jQoExEldZFUV76EvrzXVYzaVDLs9YayU5pFJjZPKb8N
-         3u+g==
+        d=google.com; s=20230601; t=1699646923; x=1700251723; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=51fJBfx3imxlXxpJCLaVZXz5cvn77oR86IbzpiZXKNs=;
+        b=Z8z0hd3rLiSBV1f7Bl/bch+Tx+/+iZQFB1vZWYMcF4yhbJ2WW9dLRvw9ghPIw3ton/
+         D7VUgsAgzqGQBQiAIu6k0HE9GiL5tw1nYVvcl88RFGE36J+f6f2VAfFQSK0/xXPEo1FN
+         AHkz61ADkq3ZlXuHSIYA15/cfCcY1CkuzJ0c93ukLURMJ9HrLb09RiKnxdX4EEktjU6G
+         Z/7yB97kcUhDBlQaLTk5E6WnGD3MGnnubTqOkyAwzRlhhEMSOZocrY7UVFbvJnbA966R
+         VTPboVNN5AdLNxUroFO4CBImuDhi1wn1dmb9SiCMdGYTMJMuerSqsJLiRJDkAXIV/2/E
+         jNKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699646918; x=1700251718;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4YunHZgtb5nkD4PkAgnIRkW9gO+ZcmaQMUyBJXXvNgg=;
-        b=BgOeo4L3xsHF0Bau959UfZkdX57nl0H4/AeKvg2YoRLXbhjc947Aer7avq0/TrPsrn
-         oyG7I5TeLTAIb5QqVKD5bVpI8y1RSP2EaTwmAbw839fJ2Z496sNhVCpbdO0/iIDClFeg
-         7h92JUI9jru6+Z0LpM8P+s2REj6Q1DQXO0SPyi3OeenTn1AqQVYPIVnCZbPZfc76OyWd
-         +rQrjEjik2E7ApnwFsFGWFXbA68WJneF+GJpQiTWukQWgcwv6rCblxIBkEvfkv1F931S
-         NfHf6b4m4QK8wMZKHc/fom3JPR3Ldg+1l8So+w/qIjfcZnWLSejfiwW814QBzW33q8cP
-         DaDg==
-X-Gm-Message-State: AOJu0YzE0iD57iGl6lJqS2XFPzKYfkTrhRK87TYtY3zCYcxEdWeFViN8
-	7uVzP7ysRZr8t+WZnShCwTNl5bZZXlke7w==
-X-Google-Smtp-Source: AGHT+IHpA8elPSDmxOHqJghOs6XywJyufpnZHYdeTgE8gm6TvPMzYUyvszmAZYiKI4lKiyHTNGpdXhSKe/S/Cw==
+        d=1e100.net; s=20230601; t=1699646923; x=1700251723;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=51fJBfx3imxlXxpJCLaVZXz5cvn77oR86IbzpiZXKNs=;
+        b=erkUcbLdjCE9sb7ZHieZZD6pXWwfyuhHbnRul9bqKLuToStcqC4UYVzFL45hIMQeZl
+         PMeT2oZ7hynogKH6whhZBo/i65MC0gI4aABzTyyOhRVUYEiAZ+74d3Cwd2GAlQV8zt7i
+         kyw4U9ELbvy3y9wi2gCuVRkrbn772bWB/VZQLEWjZdhUBt2aY/FH75up6CRss3XfKSSA
+         FQIZaObItZfdKeqYVSJO5q4WBDq8iC6YYg6cZQ7CXW7t5vn563B/PICz9ZcBv0XiSf3S
+         4Rg0NKLi2tkHGNcTEsZyw1Ze8NNiQMv+HY0tX87J93glhOTe0ex2GgIfLya+akpeDbjH
+         M7dg==
+X-Gm-Message-State: AOJu0Yw6jpGmsljOFF14vGEz9Qzo0ExvfQKe+3jOU+vVtdiUglTyBU/g
+	q4erdYI0OF5I/X/+deB8Uh5Vf1nlxqlinQ==
+X-Google-Smtp-Source: AGHT+IGDK07iaPg+g9N2kLo9bN2a5OkVBolpHXkG2QTgPQJFeKS5zwURLPQj7RWzYTJuEXCxK3CW75e1iydlNQ==
 X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a25:d849:0:b0:d9a:f3dc:7d18 with SMTP id
- p70-20020a25d849000000b00d9af3dc7d18mr3271ybg.13.1699646918475; Fri, 10 Nov
- 2023 12:08:38 -0800 (PST)
-Date: Sat, 11 Nov 2023 04:08:26 +0800
+ (user=davidgow job=sendgmr) by 2002:a05:6902:182:b0:d9a:ec95:9687 with SMTP
+ id t2-20020a056902018200b00d9aec959687mr3348ybh.11.1699646922890; Fri, 10 Nov
+ 2023 12:08:42 -0800 (PST)
+Date: Sat, 11 Nov 2023 04:08:27 +0800
+In-Reply-To: <20231110200830.1832556-1-davidgow@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <20231110200830.1832556-1-davidgow@google.com>
 X-Mailer: git-send-email 2.42.0.869.gea05f2083d-goog
-Message-ID: <20231110200830.1832556-1-davidgow@google.com>
-Subject: [PATCH 1/3] kunit: Add a macro to wrap a deferred action function
+Message-ID: <20231110200830.1832556-2-davidgow@google.com>
+Subject: [PATCH 2/3] drm/tests: Use KUNIT_DEFINE_ACTION_WRAPPER()
 From: David Gow <davidgow@google.com>
 To: Nathan Chancellor <nathan@kernel.org>, Kees Cook <keescook@chromium.org>, 
 	Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <rmoar@google.com>, dlatypov@google.com, 
@@ -80,130 +82,72 @@ Cc: David Gow <davidgow@google.com>,
 	dri-devel@lists.freedesktop.org
 Content-Type: text/plain; charset="UTF-8"
 
-KUnit's deferred action API accepts a void(*)(void *) function pointer
-which is called when the test is exited. However, we very frequently
-want to use existing functions which accept a single pointer, but which
-may not be of type void*. While this is probably dodgy enough to be on
-the wrong side of the C standard, it's been often used for similar
-callbacks, and gcc's -Wcast-function-type seems to ignore cases where
-the only difference is the type of the argument, assuming it's
-compatible (i.e., they're both pointers to data).
+In order to pass functions to kunit_add_action(), they need to be of the
+kunit_action_t type. While casting the function pointer can work, it
+will break control-flow integrity.
 
-However, clang 16 has introduced -Wcast-function-type-strict, which no
-longer permits any deviation in function pointer type. This seems to be
-because it'd break CFI, which validates the type of function calls.
+drm_kunit_helpers already defines wrappers, but we now have a macro
+which does this automatically. Using this greatly reduces the
+boilerplate needed.
 
-This rather ruins our attempts to cast functions to defer them, and
-leaves us with a few options. The one we've chosen is to implement a
-macro which will generate a wrapper function which accepts a void*, and
-casts the argument to the appropriate type.
-
-For example, if you were trying to wrap:
-void foo_close(struct foo *handle);
-you could use:
-KUNIT_DEFINE_ACTION_WRAPPER(kunit_action_foo_close,
-			    foo_close,
-			    struct foo *);
-
-This would create a new kunit_action_foo_close() function, of type
-kunit_action_t, which could be passed into kunit_add_action() and
-similar functions.
-
-In addition to defining this macro, update KUnit and its tests to use
-it.
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/1750
 Signed-off-by: David Gow <davidgow@google.com>
 ---
 
-This is a follow-up to the RFC here:
-https://lore.kernel.org/linux-kselftest/20230915050125.3609689-1-davidgow@google.com/
+This patch should be a no-op, just moving to use a standard macro to
+implement these wrappers rather than hand-coding them.
 
-There's no difference in the macro implementation, just an update to the
-KUnit tests to use it. This version is intended to complement:
-https://lore.kernel.org/all/20231106172557.2963-1-rf@opensource.cirrus.com/
+Let me know if you'd prefer to take these in separately via the drm
+trees, or if you're okay with having this whole series go via
+kselftest/kunit.
 
-There are also two follow-up patches in the series to use this macro in
-various DRM tests.
-
-Hopefully this will solve any CFI issues that show up with KUnit.
-
-Thanks,
+Cheers,
 -- David
 
 ---
- include/kunit/resource.h | 9 +++++++++
- lib/kunit/kunit-test.c   | 5 +----
- lib/kunit/test.c         | 6 ++++--
- 3 files changed, 14 insertions(+), 6 deletions(-)
+ drivers/gpu/drm/tests/drm_kunit_helpers.c | 30 +++++++----------------
+ 1 file changed, 9 insertions(+), 21 deletions(-)
 
-diff --git a/include/kunit/resource.h b/include/kunit/resource.h
-index c7383e90f5c9..4110e13970dc 100644
---- a/include/kunit/resource.h
-+++ b/include/kunit/resource.h
-@@ -390,6 +390,15 @@ void kunit_remove_resource(struct kunit *test, struct kunit_resource *res);
- /* A 'deferred action' function to be used with kunit_add_action. */
- typedef void (kunit_action_t)(void *);
- 
-+/* We can't cast function pointers to kunit_action_t if CFI is enabled. */
-+#define KUNIT_DEFINE_ACTION_WRAPPER(wrapper, orig, arg_type) \
-+	static void wrapper(void *in) \
-+	{ \
-+		arg_type arg = (arg_type)in; \
-+		orig(arg); \
-+	}
-+
-+
- /**
-  * kunit_add_action() - Call a function when the test ends.
-  * @test: Test case to associate the action with.
-diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
-index de2113a58fa0..ee6927c60979 100644
---- a/lib/kunit/kunit-test.c
-+++ b/lib/kunit/kunit-test.c
-@@ -538,10 +538,7 @@ static struct kunit_suite kunit_resource_test_suite = {
- #if IS_BUILTIN(CONFIG_KUNIT_TEST)
- 
- /* This avoids a cast warning if kfree() is passed direct to kunit_add_action(). */
--static void kfree_wrapper(void *p)
--{
--	kfree(p);
--}
-+KUNIT_DEFINE_ACTION_WRAPPER(kfree_wrapper, kfree, const void *);
- 
- static void kunit_log_test(struct kunit *test)
- {
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index f2eb71f1a66c..0308865194bb 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -772,6 +772,8 @@ static struct notifier_block kunit_mod_nb = {
+diff --git a/drivers/gpu/drm/tests/drm_kunit_helpers.c b/drivers/gpu/drm/tests/drm_kunit_helpers.c
+index bccb33b900f3..c251e6b34de0 100644
+--- a/drivers/gpu/drm/tests/drm_kunit_helpers.c
++++ b/drivers/gpu/drm/tests/drm_kunit_helpers.c
+@@ -27,27 +27,15 @@ static struct platform_driver fake_platform_driver = {
+ 	},
  };
- #endif
  
-+KUNIT_DEFINE_ACTION_WRAPPER(kfree_action_wrapper, kfree, const void *)
-+
- void *kunit_kmalloc_array(struct kunit *test, size_t n, size_t size, gfp_t gfp)
- {
- 	void *data;
-@@ -781,7 +783,7 @@ void *kunit_kmalloc_array(struct kunit *test, size_t n, size_t size, gfp_t gfp)
- 	if (!data)
- 		return NULL;
+-static void kunit_action_platform_driver_unregister(void *ptr)
+-{
+-	struct platform_driver *drv = ptr;
+-
+-	platform_driver_unregister(drv);
+-
+-}
+-
+-static void kunit_action_platform_device_put(void *ptr)
+-{
+-	struct platform_device *pdev = ptr;
+-
+-	platform_device_put(pdev);
+-}
+-
+-static void kunit_action_platform_device_del(void *ptr)
+-{
+-	struct platform_device *pdev = ptr;
+-
+-	platform_device_del(pdev);
+-}
++KUNIT_DEFINE_ACTION_WRAPPER(kunit_action_platform_driver_unregister,
++			    platform_driver_unregister,
++			    struct platform_driver *);
++KUNIT_DEFINE_ACTION_WRAPPER(kunit_action_platform_device_put,
++			    platform_device_put,
++			    struct platform_device *);
++KUNIT_DEFINE_ACTION_WRAPPER(kunit_action_platform_device_del,
++			    platform_device_del,
++			    struct platform_device *);
  
--	if (kunit_add_action_or_reset(test, (kunit_action_t *)kfree, data) != 0)
-+	if (kunit_add_action_or_reset(test, kfree_action_wrapper, data) != 0)
- 		return NULL;
- 
- 	return data;
-@@ -793,7 +795,7 @@ void kunit_kfree(struct kunit *test, const void *ptr)
- 	if (!ptr)
- 		return;
- 
--	kunit_release_action(test, (kunit_action_t *)kfree, (void *)ptr);
-+	kunit_release_action(test, kfree_action_wrapper, (void *)ptr);
- }
- EXPORT_SYMBOL_GPL(kunit_kfree);
- 
+ /**
+  * drm_kunit_helper_alloc_device - Allocate a mock device for a KUnit test
 -- 
 2.42.0.869.gea05f2083d-goog
 
