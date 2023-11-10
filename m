@@ -1,237 +1,205 @@
-Return-Path: <linux-kselftest-owner@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-5-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CB697E7E91
-	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Nov 2023 18:46:30 +0100 (CET)
-Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1345553AbjKJRq2 (ORCPT <rfc822;lists+linux-kselftest@lfdr.de>);
-        Fri, 10 Nov 2023 12:46:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46560 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231204AbjKJRpc (ORCPT
-        <rfc822;linux-kselftest@vger.kernel.org>);
-        Fri, 10 Nov 2023 12:45:32 -0500
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E39F25084
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Nov 2023 01:45:44 -0800 (PST)
-Received: by mail-vs1-xe34.google.com with SMTP id ada2fe7eead31-45db499e2faso833198137.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 10 Nov 2023 01:45:44 -0800 (PST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 055777E7F19
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Nov 2023 18:49:49 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 559EAB2231E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 10 Nov 2023 17:49:46 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B652039877;
+	Fri, 10 Nov 2023 17:47:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XEpbuUGp"
+X-Original-To: linux-kselftest@vger.kernel.org
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1A913B7B1;
+	Fri, 10 Nov 2023 17:46:56 +0000 (UTC)
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A83A38EA7;
+	Fri, 10 Nov 2023 06:28:03 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-507973f3b65so2909603e87.3;
+        Fri, 10 Nov 2023 06:28:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1699609543; x=1700214343; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7pUm/c3POcD26li8+Wke26dcOs+wqv0EJOUWvylNJQo=;
-        b=wYXDWjn7U63zYTzMWT2KkWW3kr8rgGqbDhEyIZZ5Ty4YEcIia9r48p4Dy+2CpAYXB7
-         l+/H/1gWi2YA6I13l4MSSKx7OpCK5aBvOUdy0a9KsF4UTae49Np2UUrswYYXoUhqrnE0
-         8gKbE3zhta89j3NLl92qaHlyyjmWh3+4kPnJ4Jf3RS193wHSWKQBQ/G16Y3PzcFsfQI5
-         iqrYZX93Jvm3B6Sz81vD44uR6HsFywTXRgUS0r/Sfl/Gy7aI9zXhn9gMnm8BCNGtm8+z
-         u45Qgm4wKz9o197av3qEsTzpCIB3+N9cwR5YFs8wn4E3nYRLdvwK8NNSjkTy+9MREi5z
-         E93w==
+        d=gmail.com; s=20230601; t=1699626482; x=1700231282; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Lmt2rY/D/CtOpYCyO0BO3zcHPLGs1JE21dVJIkVZZMQ=;
+        b=XEpbuUGpeql5W7m1dEFVEb+F8gMc08FKBibXPne405GHqC5X7JVX3LcvKqFyhR5T3L
+         90OMKDZUkXr712GxrYpEzwFwbIzUIiY47OFm4Xyfbs4w4m8Dy6QRRVhqSjdtFL3MtS0K
+         ERLqkWC6UuLiPZRPBsPOGrfKNiqkXq3yGSHREZQK8+xxcEEt2OQeoC94dmB2LYG6uPaD
+         EdwM+RHxwpmEzQoPJECej/n1FkBUUD7bg6+BH/XCO5kASIYXuVJ7EWB1Z+Kr3cz3nZCi
+         C1cvdIFqnMi7MuTbri8O5RubsM5rKs6Bl0HfoUDl2XqN5ZnC/a5MoBbsuQ3EdQp+DEjM
+         lGjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1699609543; x=1700214343;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7pUm/c3POcD26li8+Wke26dcOs+wqv0EJOUWvylNJQo=;
-        b=AFwOr7lbNY35ydWZ2y2TYR9TLQryybE7nnNcYe4lqodtZ51XpV5/krFfgDvGsO9w2c
-         6njI70dxnxfsoDC2nCfUNW3nqleiAFcRUQSn2irUAyj7i6HdMDGJPgNjrFd/YPtC54p1
-         x01ck5stwDH1YUljKfEmhUlxJocxiX7ZEYTdXXdKgg0O1XqYI+Wgg9Y3SFTKpEieDBPR
-         SJr760KoksJkn0VnmTKMRD36kzPk3PTPsHUVfECpqhAkfnVdmZjH+Y+cthdJ+fVmggLa
-         XokKBoSeGlxEQPOpAv72PnbNhvIrAfwKiEz2A7M8HbBzbP6tl03XIOdeon89UiUJSi50
-         Ct2g==
-X-Gm-Message-State: AOJu0YwdW8czzpnGkMwZiJXSIe4Z9vWYisM6bRINPA1vPtuXraqaHuFE
-        L4onU0kKZzClw6qetvCv7VD/MZnSphxEgak8XEx3PA==
-X-Google-Smtp-Source: AGHT+IGwONXBFBpAhD15bfaIVPNRmPgG1R+yrVeei2EXlwNf647dy9292PLH34LJT3G6STTIfr9u5/CLo0iSwGhMU3o=
-X-Received: by 2002:a67:c381:0:b0:45d:a4a6:6fae with SMTP id
- s1-20020a67c381000000b0045da4a66faemr6419953vsj.30.1699609542944; Fri, 10 Nov
- 2023 01:45:42 -0800 (PST)
-MIME-Version: 1.0
-References: <20231106024413.2801438-1-almasrymina@google.com>
- <20231106024413.2801438-5-almasrymina@google.com> <076fa6505f3e1c79cc8acdf9903809fad6c2fd31.camel@redhat.com>
- <CAHS8izOGSE-PJ1uShkH_Mr6kUoC1EjM_9P1J=_TO6nLFP9K53Q@mail.gmail.com> <aec0f586-c3b9-8da8-6a39-f313105267f8@huawei.com>
-In-Reply-To: <aec0f586-c3b9-8da8-6a39-f313105267f8@huawei.com>
-From:   Mina Almasry <almasrymina@google.com>
-Date:   Fri, 10 Nov 2023 01:45:29 -0800
-Message-ID: <CAHS8izP64Q3cP5vJ5ESQH9Y3fkSn8RCS+T84orKhK5=pzdJCLA@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 04/12] netdev: support binding dma-buf to netdevice
-To:     Yunsheng Lin <linyunsheng@huawei.com>
-Cc:     Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        David Ahern <dsahern@kernel.org>,
-        Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        Shakeel Butt <shakeelb@google.com>,
-        Jeroen de Borst <jeroendb@google.com>,
-        Praveen Kaligineedi <pkaligineedi@google.com>,
-        Willem de Bruijn <willemb@google.com>,
-        Kaiyuan Zhang <kaiyuanz@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
+        d=1e100.net; s=20230601; t=1699626482; x=1700231282;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lmt2rY/D/CtOpYCyO0BO3zcHPLGs1JE21dVJIkVZZMQ=;
+        b=K8xlq4Q7FP2AlUCdPFdKlLEN4BP02kk4cba7W6QIIx4BEa/QxDnvuU93k/V0lXuktL
+         L3UpPjvUf9T4KMAEgCeblWRpWVBG7rWsJR2ZHHsvRT5lBUzQ7VUnJ1SVXlo0R40JSdWu
+         aSgCDj4EvXRBvO0y36QwxpnuUDJtBONCL8KZpJFg+Z+kPpOlgOVhd0z+RhXowGP0ZNAq
+         peU/2bY+bT0XrCWWng2ks+DWb0/Jw41ZkcU55RqWGv+7x7moDTLIxdUnIuiutipUKgnH
+         CKfGv5AK2E7WWOUKKelFwpzyh+jZsIl8LHIkGir+GCkD1YXL+2vdRIrqfO18+K4tLLQx
+         wE6g==
+X-Gm-Message-State: AOJu0Yziq5jVDWUQN9Ner4vR5bqW3THigAz3vWn6v3XGSS1ib7JkpWoH
+	+5cLABZ7EUuffE253pZQEHHEBqzd2wHX0w==
+X-Google-Smtp-Source: AGHT+IFTo4QzKaHnf9JDfRPiLL22Yfoec65OGGtyn4UX6ZCRDspRCqMEHROz96TnecT8pMjBqFvQ1w==
+X-Received: by 2002:a19:7107:0:b0:507:9787:6776 with SMTP id m7-20020a197107000000b0050797876776mr3970775lfc.5.1699626481467;
+        Fri, 10 Nov 2023 06:28:01 -0800 (PST)
+Received: from [192.168.8.100] ([148.252.132.154])
+        by smtp.gmail.com with ESMTPSA id r5-20020a5d6945000000b0032fdcbfb093sm2003034wrw.81.2023.11.10.06.27.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Nov 2023 06:28:00 -0800 (PST)
+Message-ID: <3687e70e-29e6-34af-c943-8c0830ff92b8@gmail.com>
+Date: Fri, 10 Nov 2023 14:26:46 +0000
 Precedence: bulk
-List-ID: <linux-kselftest.vger.kernel.org>
 X-Mailing-List: linux-kselftest@vger.kernel.org
+List-Id: <linux-kselftest.vger.kernel.org>
+List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
+List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v3 05/12] netdev: netdevice devmem allocator
+To: Mina Almasry <almasrymina@google.com>, David Ahern <dsahern@kernel.org>,
+ David Wei <dw@davidwei.uk>
+Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>, Arnd Bergmann
+ <arnd@arndb.de>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Shakeel Butt <shakeelb@google.com>, Jeroen de Borst <jeroendb@google.com>,
+ Praveen Kaligineedi <pkaligineedi@google.com>,
+ Willem de Bruijn <willemb@google.com>, Kaiyuan Zhang <kaiyuanz@google.com>
+References: <20231106024413.2801438-1-almasrymina@google.com>
+ <20231106024413.2801438-6-almasrymina@google.com>
+ <3b0d612c-e33b-48aa-a861-fbb042572fc9@kernel.org>
+ <CAHS8izOHYx+oYnzksUDrK1S0+6CdMJmirApntP5W862yFumezw@mail.gmail.com>
+ <a5b95e6b-8716-4e2e-9183-959b754b5b5e@kernel.org>
+ <CAHS8izMKDOw5_y2MLRfuJHs=ai+sZ6GF7Rg1NuR_JqONg-5u5Q@mail.gmail.com>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <CAHS8izMKDOw5_y2MLRfuJHs=ai+sZ6GF7Rg1NuR_JqONg-5u5Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, Nov 9, 2023 at 11:38=E2=80=AFPM Yunsheng Lin <linyunsheng@huawei.co=
-m> wrote:
->
-> On 2023/11/10 10:59, Mina Almasry wrote:
-> > On Thu, Nov 9, 2023 at 12:30=E2=80=AFAM Paolo Abeni <pabeni@redhat.com>=
- wrote:
-> >>
-> >> I'm trying to wrap my head around the whole infra... the above line is
-> >> confusing. Why do you increment dma_addr? it will be re-initialized in
-> >> the next iteration.
-> >>
-> >
-> > That is just a mistake, sorry. Will remove this increment.
->
-> You seems to be combining comments in different thread and replying in
-> one thread, I am not sure that is a good practice and I almost missed the
-> reply below as I don't seem to be cc'ed.
->
+On 11/7/23 23:03, Mina Almasry wrote:
+> On Tue, Nov 7, 2023 at 2:55 PM David Ahern <dsahern@kernel.org> wrote:
+>>
+>> On 11/7/23 3:10 PM, Mina Almasry wrote:
+>>> On Mon, Nov 6, 2023 at 3:44 PM David Ahern <dsahern@kernel.org> wrote:
+>>>>
+>>>> On 11/5/23 7:44 PM, Mina Almasry wrote:
+>>>>> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+>>>>> index eeeda849115c..1c351c138a5b 100644
+>>>>> --- a/include/linux/netdevice.h
+>>>>> +++ b/include/linux/netdevice.h
+>>>>> @@ -843,6 +843,9 @@ struct netdev_dmabuf_binding {
+>>>>>   };
+>>>>>
+>>>>>   #ifdef CONFIG_DMA_SHARED_BUFFER
+>>>>> +struct page_pool_iov *
+>>>>> +netdev_alloc_devmem(struct netdev_dmabuf_binding *binding);
+>>>>> +void netdev_free_devmem(struct page_pool_iov *ppiov);
+>>>>
+>>>> netdev_{alloc,free}_dmabuf?
+>>>>
+>>>
+>>> Can do.
+>>>
+>>>> I say that because a dmabuf can be host memory, at least I am not aware
+>>>> of a restriction that a dmabuf is device memory.
+>>>>
+>>>
+>>> In my limited experience dma-buf is generally device memory, and
+>>> that's really its use case. CONFIG_UDMABUF is a driver that mocks
+>>> dma-buf with a memfd which I think is used for testing. But I can do
+>>> the rename, it's more clear anyway, I think.
+>>
+>> config UDMABUF
+>>          bool "userspace dmabuf misc driver"
+>>          default n
+>>          depends on DMA_SHARED_BUFFER
+>>          depends on MEMFD_CREATE || COMPILE_TEST
+>>          help
+>>            A driver to let userspace turn memfd regions into dma-bufs.
+>>            Qemu can use this to create host dmabufs for guest framebuffers.
+>>
+>>
+>> Qemu is just a userspace process; it is no way a special one.
+>>
+>> Treating host memory as a dmabuf should radically simplify the io_uring
+>> extension of this set.
+> 
+> I agree actually, and I was about to make that comment to David Wei's
+> series once I have the time.
+> 
+> David, your io_uring RX zerocopy proposal actually works with devmem
+> TCP, if you're inclined to do that instead, what you'd do roughly is
+> (I think):
+That would be a Frankenstein's monster api with no good reason for it.
+You bind memory via netlink because you don't have a proper context to
+work with otherwise, io_uring serves as the context with a separate and
+precise abstraction around queues. Same with dmabufs, it totally makes
+sense for device memory, but wrapping host memory into a file just to
+immediately unwrap it back with no particular benefits from doing so
+doesn't seem like a good uapi. Currently, the difference will be
+hidden by io_uring.
 
-Sorry about that.
+And we'd still need to have a hook in pp's get page to grab buffers from
+the buffer ring instead of refilling via SO_DEVMEM_DONTNEED and a
+callback for when skbs are dropped. It's just instead of a new pp ops
+it'll be a branch in the devmem path. io_uring might want to use the
+added iov format in the future for device memory or even before that,
+io_uring doesn't really care whether it's pages or not.
 
-> >
-> > On Thu, Nov 9, 2023 at 1:29=E2=80=AFAM Yunsheng Lin <linyunsheng@huawei=
-.com> wrote:> >>>
-> >>>>> gen_pool_destroy BUG_ON() if it's not empty at the time of destroyi=
-ng.
-> >>>>> Technically that should never happen, because
-> >>>>> __netdev_devmem_binding_free() should only be called when the refco=
-unt
-> >>>>> hits 0, so all the chunks have been freed back to the gen_pool. But=
-,
-> >>>>> just in case, I don't want to crash the server just because I'm
-> >>>>> leaking a chunk... this is a bit of defensive programming that is
-> >>>>> typically frowned upon, but the behavior of gen_pool is so severe I
-> >>>>> think the WARN() + check is warranted here.
-> >>>>
-> >>>> It seems it is pretty normal for the above to happen nowadays becaus=
-e of
-> >>>> retransmits timeouts, NAPI defer schemes mentioned below:
-> >>>>
-> >>>> https://lkml.kernel.org/netdev/168269854650.2191653.8465259808498269=
-815.stgit@firesoul/
-> >>>>
-> >>>> And currently page pool core handles that by using a workqueue.
-> >>>
-> >>> Forgive me but I'm not understanding the concern here.
-> >>>
-> >>> __netdev_devmem_binding_free() is called when binding->ref hits 0.
-> >>>
-> >>> binding->ref is incremented when an iov slice of the dma-buf is
-> >>> allocated, and decremented when an iov is freed. So,
-> >>> __netdev_devmem_binding_free() can't really be called unless all the
-> >>> iovs have been freed, and gen_pool_size() =3D=3D gen_pool_avail(),
-> >>> regardless of what's happening on the page_pool side of things, right=
-?
-> >>
-> >> I seems to misunderstand it. In that case, it seems to be about
-> >> defensive programming like other checking.
-> >>
-> >> By looking at it more closely, it seems napi_frag_unref() call
-> >> page_pool_page_put_many() directly=EF=BC=8C which means devmem seems t=
-o
-> >> be bypassing the napi_safe optimization.
-> >>
-> >> Can napi_frag_unref() reuse napi_pp_put_page() in order to reuse
-> >> the napi_safe optimization?
-> >>
-> >
-> > I think it already does. page_pool_page_put_many() is only called if
-> > !recycle or !napi_pp_put_page(). In that case
-> > page_pool_page_put_many() is just a replacement for put_page(),
-> > because this 'page' may be an iov.
->
-> Is there a reason why not calling napi_pp_put_page() for devmem too
-> instead of calling page_pool_page_put_many()? mem provider has a
-> 'release_page' ops, calling page_pool_page_put_many() directly here
-> seems to be bypassing the 'release_page' ops, which means devmem is
-> bypassing most of the main features of page pool.
->
+It's also my big concern from how many optimisations it'll fence us off.
+With the current io_uring RFC I can get rid of all buffer atomic
+refcounting and replace it with a single percpu counting per skb.
+Hopefully, that will be doable after we place it on top of pp providers.
 
-I think we're still calling napi_pp_put_page() as normal:
 
- /**
-@@ -3441,13 +3466,13 @@ bool napi_pp_put_page(struct page *page, bool
-napi_safe);
- static inline void
- napi_frag_unref(skb_frag_t *frag, bool recycle, bool napi_safe)
- {
--       struct page *page =3D skb_frag_page(frag);
--
- #ifdef CONFIG_PAGE_POOL
--       if (recycle && napi_pp_put_page(page, napi_safe))
-+       if (recycle && napi_pp_put_page(frag->bv_page, napi_safe))
-                return;
-+       page_pool_page_put_many(frag->bv_page, 1);
-+#else
-+       put_page(skb_frag_page(frag));
- #endif
--       put_page(page);
- }
+> - Allocate a memfd,
+> - Use CONFIG_UDMABUF to create a dma-buf out of that memfd.
+> - Bind the dma-buf to the NIC using the netlink API in this RFC.
+> - Your io_uring extensions and io_uring uapi should work as-is almost
+> on top of this series, I think.
+> 
+> If you do this the incoming packets should land into your memfd, which
+> may or may not work for you. In the future if you feel inclined to use
+> device memory, this approach that I'm describing here would be more
+> extensible to device memory, because you'd already be using dma-bufs
+> for your user memory; you'd just replace one kind of dma-buf (UDMABUF)
+> with another.
+> 
+>> That the io_uring set needs to dive into
+>> page_pools is just wrong - complicating the design and code and pushing
+>> io_uring into a realm it does not need to be involved in.
 
-The code change here is to replace put_page() with
-page_pool_page_put_many(), only, because bv_page may be a
-page_pool_iov, so we need to use page_pool_page_put_many() which
-handles page_pool_iov correcly. I did not change whether or not
-napi_pp_put_page() is called. It's still called if recycle=3D=3Dtrue.
+I disagree. How does it complicate it? io_uring will be just a yet another
+provider implementing the callbacks of the API created for such use cases
+and not changing common pp/net bits. The rest of code is in io_uring
+implementing interaction with userspace and other usability features, but
+there will be anyway some amount of code if we want to have a convenient
+and performant api via io_uring.
 
-> As far as I can tell, the main features of page pool:
-> 1. Allow lockless allocation and freeing in pool->alloc cache by
->    utilizing NAPI non-concurrent context.
-> 2. Allow concurrent allocation and freeing in pool->ring cache by
->    utilizing ptr_ring.
-> 3. Allow dma map/unmap and cache sync optimization.
-> 4. Allow detailed stats logging and tracing.
-> 5. Allow some bulk allocation and freeing.
-> 6. support both skb packet and xdp frame.
->
-> I am wondering what is the main features that devmem is utilizing
-> by intergrating into page pool?
->
-> It seems the driver can just call netdev_alloc_devmem() and
-> napi_frag_unref() can call netdev_free_devmem() directly without
-> intergrating into page pool and it should just works too?
->
-> Maybe we should consider creating a new thin layer, in order to
-> demux to page pool, devmem or other mem type if my suggestion does
-> not work out too?
->
 
-I went through this discussion with Jesper on RFC v2 in this thread:
+>>
+>> Most (all?) of this patch set can work with any memory; only device
+>> memory is unreadable.
 
-https://lore.kernel.org/netdev/CAHS8izOVJGJH5WF68OsRWFKJid1_huzzUK+hpKbLcL4=
-pSOD1Jw@mail.gmail.com/T/#ma9285d53735d82cc315717db67a1796477c89d86
+-- 
+Pavel Begunkov
 
-which culminates with that email where he seems on board with the
-change from a performance POV, and seems on board with hiding the
-memory type implementation from the drivers. That thread fully goes
-over the tradeoffs of integrating over the page pool or creating new
-ones. Integrating with the page pool abstracts most of the devmem
-implementation (and other memory types) from the driver. It reuses
-page pool features like page recycling for example.
-
---=20
-Thanks,
-Mina
