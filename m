@@ -1,50 +1,49 @@
-Return-Path: <linux-kselftest+bounces-37-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-38-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5B427E9253
-	for <lists+linux-kselftest@lfdr.de>; Sun, 12 Nov 2023 20:46:19 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F8A07E9254
+	for <lists+linux-kselftest@lfdr.de>; Sun, 12 Nov 2023 20:46:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6B6ED280A73
-	for <lists+linux-kselftest@lfdr.de>; Sun, 12 Nov 2023 19:46:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 583A61C208B0
+	for <lists+linux-kselftest@lfdr.de>; Sun, 12 Nov 2023 19:46:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F1B7179A8;
-	Sun, 12 Nov 2023 19:46:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A766118048;
+	Sun, 12 Nov 2023 19:46:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IZqjkc6F"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XXNBzq2z"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BC7617729;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E47A179BF;
+	Sun, 12 Nov 2023 19:46:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79A10C433C8;
 	Sun, 12 Nov 2023 19:46:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B47C7C433C9;
-	Sun, 12 Nov 2023 19:46:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699818376;
-	bh=aHVFSWkLgL3DSZk4BMjseldmOMFwERpUZXKvLSdezzE=;
+	s=k20201202; t=1699818377;
+	bh=tm53i8GhYDRGpRCnZgtLIn7P8jIf3OMjFqv6O/swkJU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=IZqjkc6FTf18ZhcDORKrMuhByH+hD2Ss0jubtVf43EF5ai/X82RLUEbaKYzgzrYU9
-	 z6lLO2EUuHLi77rriepOZl7QKtaMC8Lnri0kYl1PYU209QyxwYWYWi9JCcsCDjorSY
-	 nX7TWmp0x/LbG5ORpd0gvkGY5iZ3V4vgnl0FRXB+P9gnFbOn20pXo3jAaOlyD6rwT3
-	 EMOH773xXOzjDJZwTk0G2KvHE4Vh6Lo3Loq7gL6WzItm5OgzbL5eYpkwesgfSh4aAc
-	 tfP0sImuju4Qi3qfRbyvnT60OF/mRJz+vhHo9fpIDgD5AGwY3tf9vxowqQUza3+BJo
-	 jkDyFPFq0/qnA==
+	b=XXNBzq2zCZgn2UYIGKvFcCBBjZM3OsXnwYAYjfdnuvAc7vizTJiNCl+uyVVJ6WyIm
+	 Cfgcc3kzBfeZ3Jb5Tckg+aiaCEnG/DcKQxoVCzBEwRPhaIgEZYt1XfmOrheu95cfLH
+	 OGw+GOLfmabiO+SZ/+OReGQK7XVM2GUG8Q0FZEyEtHLjcauH9QISo0m2+uBSHkttxd
+	 t7TGcn79ZD6lqANkN6R6bAfwexg2lNxX+DqYtmWqIygswnmKYtfczhmiNjZBWJyY/h
+	 99/hFUjkYThSkmQk2NsHbl+q8HGW8K0e1YEk7+QzlP5FY4ocV5B+Q/nD9Me0FxYIvI
+	 X9b4MAHnJ6GjA==
 From: SeongJae Park <sj@kernel.org>
 To: 
 Cc: SeongJae Park <sj@kernel.org>,
 	Andrew Morton <akpm@linux-foundation.org>,
-	Brendan Higgins <brendanhiggins@google.com>,
+	Shuah Khan <shuah@kernel.org>,
 	damon@lists.linux.dev,
 	linux-mm@kvack.org,
-	kunit-dev@googlegroups.com,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 5/8] mm/damon/core-test: add a unit test for the feedback loop algorithm
-Date: Sun, 12 Nov 2023 19:46:04 +0000
-Message-Id: <20231112194607.61399-6-sj@kernel.org>
+Subject: [RFC PATCH 6/8] selftests/damon: test quota goals directory
+Date: Sun, 12 Nov 2023 19:46:05 +0000
+Message-Id: <20231112194607.61399-7-sj@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231112194607.61399-1-sj@kernel.org>
 References: <20231112194607.61399-1-sj@kernel.org>
@@ -56,64 +55,59 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Implement a simple kunit test for testing the behavior of the core logic
-of the goal-oriented feedback-driven DAMOS quota auto-tuning.
+Add DAMON selftests for testing creation/existence of quota goals
+directories and files, and simple valid input writes.
 
 Signed-off-by: SeongJae Park <sj@kernel.org>
 ---
- mm/damon/core-test.h | 32 ++++++++++++++++++++++++++++++++
- 1 file changed, 32 insertions(+)
+ tools/testing/selftests/damon/sysfs.sh | 27 ++++++++++++++++++++++++++
+ 1 file changed, 27 insertions(+)
 
-diff --git a/mm/damon/core-test.h b/mm/damon/core-test.h
-index f405d79dc623..c2b8cb25a195 100644
---- a/mm/damon/core-test.h
-+++ b/mm/damon/core-test.h
-@@ -447,6 +447,37 @@ static void damos_test_filter_out(struct kunit *test)
- 	damos_free_filter(f);
+diff --git a/tools/testing/selftests/damon/sysfs.sh b/tools/testing/selftests/damon/sysfs.sh
+index 56f0230a8b92..e9a976d296e2 100755
+--- a/tools/testing/selftests/damon/sysfs.sh
++++ b/tools/testing/selftests/damon/sysfs.sh
+@@ -150,6 +150,32 @@ test_weights()
+ 	ensure_file "$weights_dir/age_permil" "exist" "600"
  }
  
-+static void damon_test_feed_loop_next_input(struct kunit *test)
++test_goal()
 +{
-+	unsigned long last_input = 900000, current_score = 200;
-+
-+	/*
-+	 * If current score is lower than the goal, which is always 10,000
-+	 * (read the comment on damon_feed_loop_next_input()'s comment), next
-+	 * input should be higher than the last input.
-+	 */
-+	KUNIT_EXPECT_GT(test,
-+			damon_feed_loop_next_input(last_input, current_score),
-+			last_input);
-+
-+	/*
-+	 * If current score is higher than the goal, next input should be lower
-+	 * than the last input.
-+	 */
-+	current_score = 250000000;
-+	KUNIT_EXPECT_LT(test,
-+			damon_feed_loop_next_input(last_input, current_score),
-+			last_input);
-+
-+	/*
-+	 * The next input depends on the distance between the current score and
-+	 * the goal
-+	 */
-+	KUNIT_EXPECT_GT(test,
-+			damon_feed_loop_next_input(last_input, 200),
-+			damon_feed_loop_next_input(last_input, 2000));
++	goal_dir=$1
++	ensure_dir "$goal_dir" "exist"
++	ensure_file "$goal_dir/target_value" "exist" "600"
++	ensure_file "$goal_dir/current_value" "exist" "600"
 +}
 +
- static struct kunit_case damon_test_cases[] = {
- 	KUNIT_CASE(damon_test_target),
- 	KUNIT_CASE(damon_test_regions),
-@@ -463,6 +494,7 @@ static struct kunit_case damon_test_cases[] = {
- 	KUNIT_CASE(damon_test_moving_sum),
- 	KUNIT_CASE(damos_test_new_filter),
- 	KUNIT_CASE(damos_test_filter_out),
-+	KUNIT_CASE(damon_test_feed_loop_next_input),
- 	{},
- };
++test_goals()
++{
++	goals_dir=$1
++	ensure_dir "$goals_dir" "exist"
++	ensure_file "$goals_dir/nr_goals" "exist" "600"
++
++	ensure_write_succ  "$goals_dir/nr_goals" "1" "valid input"
++	test_goal "$goals_dir/0"
++
++	ensure_write_succ  "$goals_dir/nr_goals" "2" "valid input"
++	test_goal "$goals_dir/0"
++	test_goal "$goals_dir/1"
++
++	ensure_write_succ  "$goals_dir/nr_goals" "0" "valid input"
++	ensure_dir "$goals_dir/0" "not_exist"
++	ensure_dir "$goals_dir/1" "not_exist"
++}
++
+ test_quotas()
+ {
+ 	quotas_dir=$1
+@@ -158,6 +184,7 @@ test_quotas()
+ 	ensure_file "$quotas_dir/bytes" "exist" 600
+ 	ensure_file "$quotas_dir/reset_interval_ms" "exist" 600
+ 	test_weights "$quotas_dir/weights"
++	test_goals "$quotas_dir/goals"
+ }
  
+ test_access_pattern()
 -- 
 2.34.1
 
