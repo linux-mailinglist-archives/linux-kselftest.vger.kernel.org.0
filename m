@@ -1,41 +1,43 @@
-Return-Path: <linux-kselftest+bounces-30-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-32-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CB1A7E8DB6
-	for <lists+linux-kselftest@lfdr.de>; Sun, 12 Nov 2023 01:55:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58B727E8DFE
+	for <lists+linux-kselftest@lfdr.de>; Sun, 12 Nov 2023 03:36:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C6247280D5B
-	for <lists+linux-kselftest@lfdr.de>; Sun, 12 Nov 2023 00:55:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 60ADD1C203B9
+	for <lists+linux-kselftest@lfdr.de>; Sun, 12 Nov 2023 02:36:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18CB915B6;
-	Sun, 12 Nov 2023 00:55:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jIrkMdFY"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F7B080E;
+	Sun, 12 Nov 2023 02:36:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC7EE1380;
-	Sun, 12 Nov 2023 00:55:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 42B3DC433C7;
-	Sun, 12 Nov 2023 00:55:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699750546;
-	bh=g6sSrrVwZDGVPiE2PDTxknYsHB0fe/FH8seuAIgjE4c=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=jIrkMdFYXfoc6646t+fgdmy4sIr1F1ywDUgFixpiXVK2S8hG40s3w/ls/pmJisSN8
-	 TDIGXkLEgC3a/4p90siHf+cDU78je3Td25ZoX2ykDajR5fyvmfG6nqTybR75s0F48X
-	 dhCva+EM+Bb/7XjWSY23pHKwDlaXUgBmmr7RUB+ArjnyC0qTvqnvuv3vHCsNL2LctV
-	 0tXOdFgW8S0nqhX62C+KuwoToju/qNBjgv4ixifAFJngU54rqK79Ui6Hb4tkBa1nhX
-	 eW82M2tmZ+GzdWlCgBnP0vPjBB3jXsurXY6nG0HHjB/zS3YwI2Qi/5HDUR9t2KdWG2
-	 HzjUf7qn1KASQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2A27BE00084;
-	Sun, 12 Nov 2023 00:55:46 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81118184
+	for <linux-kselftest@vger.kernel.org>; Sun, 12 Nov 2023 02:36:13 +0000 (UTC)
+X-Greylist: delayed 310 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 11 Nov 2023 18:36:12 PST
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.197])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DFC130CB
+	for <linux-kselftest@vger.kernel.org>; Sat, 11 Nov 2023 18:36:12 -0800 (PST)
+Received: from localhost ([173.252.127.8]) by mrelay.perfora.net (mreueus003
+ [74.208.5.2]) with ESMTPSA (Nemesis) id 0LmJfA-1rbtEF3naU-00Zu3U; Sun, 12 Nov
+ 2023 03:30:46 +0100
+From: Jordan Rome <linux@jordanrome.com>
+To: bpf@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@kernel.org>,
+	Kernel Team <kernel-team@fb.com>
+Subject: [PATCH bpf-next] selftests/bpf: add assert for user stacks in test_task_stack
+Date: Sat, 11 Nov 2023 18:30:10 -0800
+Message-Id: <20231112023010.144675-1-linux@jordanrome.com>
+X-Mailer: git-send-email 2.39.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -43,44 +45,74 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [RESEND PATCH 0/2] add loongarch and riscv support for kprobe args
- test
-From: patchwork-bot+linux-riscv@kernel.org
-Message-Id: 
- <169975054616.11360.3939944763451576227.git-patchwork-notify@kernel.org>
-Date: Sun, 12 Nov 2023 00:55:46 +0000
-References: <20231018020858.1304218-1-liaoyu15@huawei.com>
-In-Reply-To: <20231018020858.1304218-1-liaoyu15@huawei.com>
-To: Yu Liao <liaoyu15@huawei.com>
-Cc: linux-riscv@lists.infradead.org, skhan@linuxfoundation.org,
- liwei391@huawei.com, rostedt@goodmis.org, linux-trace-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, shuah@kernel.org, mhiramat@kernel.org
+X-Provags-ID: V03:K1:PN7RG/90Yun44E0zzqkcOvPWLKrXq93inSWNwhsV9D4nSM4gWW7
+ IjKZHNvEJ/BG2p6CiZCrF9RghPoRSOAdRuuHoRmyrWDEZqbq6hBWKeIVw8BZcOOa+a5ZfTM
+ hxSvnDOxKrfB0rOiQqfZWZtE94kcN4DNJo0HG0NzwgSwYoGfEh4EIov2dai7HU4u6zJ6/B+
+ YcGqcDOytfYDFiDQTXu5g==
+UI-OutboundReport: notjunk:1;M01:P0:Ye/Dkl8kmoc=;D4UfSGUwJ+JL7FN9y8iOpcyqi+1
+ +GG64O4LmTA/uznRJS3Sk6PsDq5iTh4us8sq8zBFfjPSJ/VDxlnhd+SpkEmGe6Tt4qgkYTkPe
+ 4zgaZbmGnBpH6eKWMqIfJ8TVGHMkSqHMH4F1yKe2FZUPTXWsR9UQFCmVl0G7t/oT/NqRTl42s
+ bJJx9gHuz5P/VY4ufDkZPafa4Z6IKsJMBKuAmHxOeBOmJueXjfxhEoK4vJBA5LC6A8oNKfc//
+ 1aeDSmMap7/d3iCPezuHq+foKsqmskmCL60X5cpfxtPuP08aFN4yyqD+vyXpbj27KM7JmM0ua
+ yfx2pGmYY57vz5KASXAboPAY3GwTjbcTiArclAEjoTu+LwwiGKMG6ADz9oZjV/UUBn9X+x1oy
+ QfDmSMFzP0ECVP1PUYKlmviT2+Qd8OQ/WwVDBfWaYF118cQiQmXYi/N1nXWVJzxrtNZfKcGAr
+ RqFBz7ggn1KCDV6Cd4EQ1EE4v2gH8lLxUyISRjH/NZpbXJcKmKKD9yHVd833dI6SV3XfjFnW7
+ UpphGfQi3noV2PciCioULvjj5fM0ddP65ykr0Gn2JFyd/lzMcW7BIlqt/9y5i4mZ5bUQ7wytg
+ 8qtFW3Vcl4HdwNIEKrDE/ZGmElb8sRZiTN42L2Vu+r774G0DcOAElo4kbmL+XRjogRf9Ps9RC
+ cdGFVj0r8xACQln0X/CUACVxGdNBpQ/avbMWHkNe7nkW4djLZgcBcNoDqjcHIP/xNkETZlHFG
+ yifhEFJpG5D/WkMwRBml3IIR67AipWeiHqbKtZ7Zm8s0zq3qZDSEpd0YX7WK+bdhsbi+WfScP
+ s0mXO7OgcgQQb4ozpmIJ02Y10gm7BIj2qZvA3EJGOfMhGJTUXJ6wCSmnCqaFLtwOMdGdTNXuL
+ KNLpYZqJFCKiIsA==
 
-Hello:
+This is a follow up to:
+commit b8e3a87a627b ("bpf: Add crosstask check to __bpf_get_stack").
 
-This series was applied to riscv/linux.git (fixes)
-by Shuah Khan <skhan@linuxfoundation.org>:
+This test ensures that the task iterator only gets a single
+user stack (for the current task).
 
-On Wed, 18 Oct 2023 10:08:56 +0800 you wrote:
-> Yu Liao (2):
->   selftests/ftrace: add loongarch support for kprobe args char tests
->   selftests/ftrace: Add riscv support for kprobe arg tests
-> 
->  .../selftests/ftrace/test.d/kprobe/kprobe_args_char.tc      | 6 ++++++
->  .../selftests/ftrace/test.d/kprobe/kprobe_args_string.tc    | 3 +++
->  .../selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc    | 4 ++++
->  3 files changed, 13 insertions(+)
+Signed-off-by: Jordan Rome <linux@jordanrome.com>
+---
+ tools/testing/selftests/bpf/prog_tests/bpf_iter.c       | 2 ++
+ tools/testing/selftests/bpf/progs/bpf_iter_task_stack.c | 5 +++++
+ 2 files changed, 7 insertions(+)
 
-Here is the summary with links:
-  - [RESEND,1/2] selftests/ftrace: add loongarch support for kprobe args char tests
-    https://git.kernel.org/riscv/c/2eadb3299256
-  - [RESEND,2/2] selftests/ftrace: Add riscv support for kprobe arg tests
-    https://git.kernel.org/riscv/c/11df28854bee
-
-You are awesome, thank you!
+diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+index 4e02093c2cbe..618af9dfae9b 100644
+--- a/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
++++ b/tools/testing/selftests/bpf/prog_tests/bpf_iter.c
+@@ -332,6 +332,8 @@ static void test_task_stack(void)
+ 	do_dummy_read(skel->progs.dump_task_stack);
+ 	do_dummy_read(skel->progs.get_task_user_stacks);
+ 
++	ASSERT_EQ(skel->bss->num_user_stacks, 1, "num_user_stacks");
++
+ 	bpf_iter_task_stack__destroy(skel);
+ }
+ 
+diff --git a/tools/testing/selftests/bpf/progs/bpf_iter_task_stack.c b/tools/testing/selftests/bpf/progs/bpf_iter_task_stack.c
+index f2b8167b72a8..442f4ca39fd7 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_iter_task_stack.c
++++ b/tools/testing/selftests/bpf/progs/bpf_iter_task_stack.c
+@@ -35,6 +35,8 @@ int dump_task_stack(struct bpf_iter__task *ctx)
+ 	return 0;
+ }
+ 
++int num_user_stacks = 0;
++
+ SEC("iter/task")
+ int get_task_user_stacks(struct bpf_iter__task *ctx)
+ {
+@@ -51,6 +53,9 @@ int get_task_user_stacks(struct bpf_iter__task *ctx)
+ 	if (res <= 0)
+ 		return 0;
+ 
++	/* Only one task, the current one, should succeed */
++	++num_user_stacks;
++
+ 	buf_sz += res;
+ 
+ 	/* If the verifier doesn't refine bpf_get_task_stack res, and instead
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.39.3
 
 
