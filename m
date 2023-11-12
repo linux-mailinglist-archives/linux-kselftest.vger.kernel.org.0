@@ -1,39 +1,39 @@
-Return-Path: <linux-kselftest+bounces-31-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-30-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8EF77E8DBD
-	for <lists+linux-kselftest@lfdr.de>; Sun, 12 Nov 2023 01:55:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CB1A7E8DB6
+	for <lists+linux-kselftest@lfdr.de>; Sun, 12 Nov 2023 01:55:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 889071F20F55
-	for <lists+linux-kselftest@lfdr.de>; Sun, 12 Nov 2023 00:55:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C6247280D5B
+	for <lists+linux-kselftest@lfdr.de>; Sun, 12 Nov 2023 00:55:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B51917EA;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18CB915B6;
 	Sun, 12 Nov 2023 00:55:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qgpBSE+z"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jIrkMdFY"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22A8F15D1;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC7EE1380;
 	Sun, 12 Nov 2023 00:55:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6E392C433CC;
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 42B3DC433C7;
 	Sun, 12 Nov 2023 00:55:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1699750546;
-	bh=BudbliKklZT1nMXLsYFQyB+Pk18EUouJG6KZUqc8uyA=;
+	bh=g6sSrrVwZDGVPiE2PDTxknYsHB0fe/FH8seuAIgjE4c=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=qgpBSE+z2PM5zIUQ4ZiQ42U4qfNh/mK+G0UjLlwezYzovO7Hv0r3U4c2k0cyQdJYu
-	 2tpvqEdQc/11Ql3RizpG4raIDOskXMIAUvBKTtjTHuZBVqO64Ai4BwQvtxiuGP7GE0
-	 CQmDP5c7hXu//cf4WJPIWVVxlHFlXjFtikp2paYREnbtSZEzC4aaPYEiSS3SYENmbA
-	 8Um9rkkzACTUm8CXhr7u/rIYQ204eiVoJlZZJPnezsmOLIDxlNAQc1kpIVDVmquMV2
-	 HIxQgf86TrDBy4GYf8wHAQCmg3P0oq4N21BCiACjV24ts57a55XSwDkPCJQzoigyop
-	 H7y/eALJS/dlA==
+	b=jIrkMdFYXfoc6646t+fgdmy4sIr1F1ywDUgFixpiXVK2S8hG40s3w/ls/pmJisSN8
+	 TDIGXkLEgC3a/4p90siHf+cDU78je3Td25ZoX2ykDajR5fyvmfG6nqTybR75s0F48X
+	 dhCva+EM+Bb/7XjWSY23pHKwDlaXUgBmmr7RUB+ArjnyC0qTvqnvuv3vHCsNL2LctV
+	 0tXOdFgW8S0nqhX62C+KuwoToju/qNBjgv4ixifAFJngU54rqK79Ui6Hb4tkBa1nhX
+	 eW82M2tmZ+GzdWlCgBnP0vPjBB3jXsurXY6nG0HHjB/zS3YwI2Qi/5HDUR9t2KdWG2
+	 HzjUf7qn1KASQ==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 4CE26E0008B;
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2A27BE00084;
 	Sun, 12 Nov 2023 00:55:46 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
@@ -43,50 +43,39 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v3 0/6] KVM RISC-V Conditional Operations
+Subject: Re: [RESEND PATCH 0/2] add loongarch and riscv support for kprobe args
+ test
 From: patchwork-bot+linux-riscv@kernel.org
 Message-Id: 
- <169975054631.11360.10958982747975281844.git-patchwork-notify@kernel.org>
+ <169975054616.11360.3939944763451576227.git-patchwork-notify@kernel.org>
 Date: Sun, 12 Nov 2023 00:55:46 +0000
-References: <20231003035226.1945725-1-apatel@ventanamicro.com>
-In-Reply-To: <20231003035226.1945725-1-apatel@ventanamicro.com>
-To: Anup Patel <apatel@ventanamicro.com>
-Cc: linux-riscv@lists.infradead.org, pbonzini@redhat.com,
- atishp@atishpatra.org, palmer@dabbelt.com, paul.walmsley@sifive.com,
- conor@kernel.org, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
- shuah@kernel.org, ajones@ventanamicro.com, mchitale@ventanamicro.com,
- devicetree@vger.kernel.org, kvm@vger.kernel.org,
- kvm-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
+References: <20231018020858.1304218-1-liaoyu15@huawei.com>
+In-Reply-To: <20231018020858.1304218-1-liaoyu15@huawei.com>
+To: Yu Liao <liaoyu15@huawei.com>
+Cc: linux-riscv@lists.infradead.org, skhan@linuxfoundation.org,
+ liwei391@huawei.com, rostedt@goodmis.org, linux-trace-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, shuah@kernel.org, mhiramat@kernel.org
 
 Hello:
 
 This series was applied to riscv/linux.git (fixes)
-by Anup Patel <anup@brainfault.org>:
+by Shuah Khan <skhan@linuxfoundation.org>:
 
-On Tue,  3 Oct 2023 09:22:20 +0530 you wrote:
-> This series extends KVM RISC-V to allow Guest/VM discover and use
-> conditional operations related ISA extensions (namely XVentanaCondOps
-> and Zicond).
+On Wed, 18 Oct 2023 10:08:56 +0800 you wrote:
+> Yu Liao (2):
+>   selftests/ftrace: add loongarch support for kprobe args char tests
+>   selftests/ftrace: Add riscv support for kprobe arg tests
 > 
-> To try these patches, use KVMTOOL from riscv_zbx_zicntr_smstateen_condops_v1
-> branch at: https://github.com/avpatel/kvmtool.git
-> 
-> [...]
+>  .../selftests/ftrace/test.d/kprobe/kprobe_args_char.tc      | 6 ++++++
+>  .../selftests/ftrace/test.d/kprobe/kprobe_args_string.tc    | 3 +++
+>  .../selftests/ftrace/test.d/kprobe/kprobe_args_syntax.tc    | 4 ++++
+>  3 files changed, 13 insertions(+)
 
 Here is the summary with links:
-  - [v3,1/6] dt-bindings: riscv: Add Zicond extension entry
-    https://git.kernel.org/riscv/c/00c6f39c8247
-  - [v3,2/6] RISC-V: Detect Zicond from ISA string
-    https://git.kernel.org/riscv/c/662a601aa355
-  - [v3,3/6] RISC-V: KVM: Allow Zicond extension for Guest/VM
-    https://git.kernel.org/riscv/c/df68f4d8cb49
-  - [v3,4/6] KVM: riscv: selftests: Add senvcfg register to get-reg-list test
-    https://git.kernel.org/riscv/c/4d554e0226e6
-  - [v3,5/6] KVM: riscv: selftests: Add smstateen registers to get-reg-list test
-    https://git.kernel.org/riscv/c/e1a8db0c9a0e
-  - [v3,6/6] KVM: riscv: selftests: Add condops extensions to get-reg-list test
-    https://git.kernel.org/riscv/c/2b3f2b78ec93
+  - [RESEND,1/2] selftests/ftrace: add loongarch support for kprobe args char tests
+    https://git.kernel.org/riscv/c/2eadb3299256
+  - [RESEND,2/2] selftests/ftrace: Add riscv support for kprobe arg tests
+    https://git.kernel.org/riscv/c/11df28854bee
 
 You are awesome, thank you!
 -- 
