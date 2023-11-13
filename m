@@ -1,40 +1,40 @@
-Return-Path: <linux-kselftest+bounces-58-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-59-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0AA27EA6DD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Nov 2023 00:17:18 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 613F27EA6DF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 14 Nov 2023 00:17:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 857D61F2329D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Nov 2023 23:17:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EFDC41F233F1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 13 Nov 2023 23:17:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 104FA3D983;
-	Mon, 13 Nov 2023 23:17:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CA9C3D992;
+	Mon, 13 Nov 2023 23:17:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nb/M7yWV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LI7K/IS2"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD2D320B28;
-	Mon, 13 Nov 2023 23:17:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 523BFC433C9;
-	Mon, 13 Nov 2023 23:16:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4797A20B28;
+	Mon, 13 Nov 2023 23:17:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AA07C433C7;
+	Mon, 13 Nov 2023 23:17:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1699917422;
-	bh=W0b3gyn44KcNCBO6UUaZ6j/sKJtPmQfYULhtG6WJYqo=;
+	s=k20201202; t=1699917426;
+	bh=d/7LlCiNVS1nIuW7H/Teg2UKQha/cVG2+PsK03xJFXQ=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=nb/M7yWVUm1sNmkoRbJKG/C+OzPukvvt+bk50xwnwG3hAxNEPIX3qHpd//mulyEEC
-	 2pschryKCij7vGHecHbFBxMR4akdqQrO+muyh0ldD0Qxn+sO4GfGa9dOoJxOthMV9Z
-	 znRGqDrWBe0NZuFBWxZN4oVmyY87T3BvZ7sI5I6beW4f3d6ijxbQK1rzv/EoUkQtyz
-	 eOZ+X22Z2GCYoIJ0RTM6jjKqIv3okl2yw0JE7K5DJXTh7bjjGtCSbJ12xoF/dLgyFv
-	 B5snkAKLsuWpVgQDu+SKPRVbxToyB9eVd3BWlRssZgBMyHWxxikTMYuksoy4on83sU
-	 D757dO9dyhlhw==
+	b=LI7K/IS22AZ09mbMBkVdw/sA0B/A7+IzXl2u1mNAY54FjC66ikj7Hh/c8tEwMvx9Z
+	 h9e/KpoYtyU8BYiFj8q7p+xT1+YmtYZN4A/b3abX4Xo5m/6FwSBnrS421VecXBCkNe
+	 6E7g645bvZXQZwYgBeVCFM8md+pEt93AIvWsOsbTK5mkVddxk8h92+kS55itkzKasf
+	 kNiogk5nJ/fndt7N222fY+tAmWFjlhTstb5U68JjI1UsWUvdCLAnwGJFEOnopOtuVC
+	 cNMDau92c6PcWP75OHgciCsnOlB441uCoO+fNmdFT9AfeJ5QK/wL+UotPB7WTO+3O0
+	 O1KOAnb4NAsbg==
 From: Matthieu Baerts <matttbe@kernel.org>
-Date: Tue, 14 Nov 2023 00:16:16 +0100
-Subject: [PATCH net 4/5] mptcp: fix setsockopt(IP_TOS) subflow locking
+Date: Tue, 14 Nov 2023 00:16:17 +0100
+Subject: [PATCH net 5/5] selftests: mptcp: fix fastclose with csum failure
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -43,7 +43,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20231114-upstream-net-20231113-mptcp-misc-fixes-6-7-rc2-v1-4-7b9cd6a7b7f4@kernel.org>
+Message-Id: <20231114-upstream-net-20231113-mptcp-misc-fixes-6-7-rc2-v1-5-7b9cd6a7b7f4@kernel.org>
 References: <20231114-upstream-net-20231113-mptcp-misc-fixes-6-7-rc2-v1-0-7b9cd6a7b7f4@kernel.org>
 In-Reply-To: <20231114-upstream-net-20231113-mptcp-misc-fixes-6-7-rc2-v1-0-7b9cd6a7b7f4@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
@@ -54,59 +54,70 @@ To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
  Poorva Sonparote <psonparo@redhat.com>, Shuah Khan <shuah@kernel.org>
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, Matthieu Baerts <matttbe@kernel.org>, 
- stable@vger.kernel.org
+ Xiumei Mu <xmu@redhat.com>, stable@vger.kernel.org
 X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1141; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=pGUcGEjXJfFkLWEJhM/HAjyXejyxjQ+RM/5QKnxNKLo=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBlUq5aSKHTJBWyN67lqxuWcs30vPDduo09h2qxF
- iS1s9AGWJOJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZVKuWgAKCRD2t4JPQmmg
- c0n6D/9EtGTPQOu6+y+C+gD0tZW1tXp+SwlDwByKowUFh9faPZJKImn6tNpf1WF7mBHFNkmskoi
- nfHH6DzgCev+0xD/Dgytfz/b0nOSoLc46Bg59GySj9YBU3cuMshs8X3YQsWN8WoMEwZrMMHZSL5
- rX50bjvbZUHsfJpniwbS419CtzHwO1fSz4i9JuSQObSuRRe6zmYXWgrWGFVbVx7Zw+2h5hK1cTy
- GAL1fqI5E1oFmGfymAtW6zU4XOolSMUbxNOKGv27bLhKMB8Ifb5v4mhcBG6PbszA7Ju+bcpQ/v4
- tBPwvptoSPQTC0+s0LgfeXkexwQPMxUnWXVPVIhbc3QyFKZBi4ELBJVcg1SMn3AwG+ZvEhJiRxQ
- UOXd3+r0Hbyq5cILSrtJDdFnwJkkn7suxvYt0zSI0JUntO31po3qof9HO7LCsWlIgxk8Ywz7Itz
- CS5sYwemEcT3fVxirExCrHsMRf+hCj+9FB7qimQqy8ACYawckRLxOcd6E31s2d/3QS4ZcVrk+pj
- QwK+QcSIz1jNrjj4jcCrXpBXY46qs771Qob/jz5tGkVn0w5rtQM0LzVR9h8sLvOZObnK51PNVt9
- LI3FQH8SAf8waY/hTWnoy4AZBfZAOOtFtMpc0s4/nffEaeSSdyjHdYxFH5ttfjCZafxRyxpIQCi
- zs6yIRsZaIbJd/Q==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1642; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=1VtnS1TKj7lyzMRKX91SxQBtSgw2M4w3HXFlGeZDrN4=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBlUq5aMuCFwbwzlyq4ysRgP3pqKahOxzRgxFnnw
+ l+BNxMHQauJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZVKuWgAKCRD2t4JPQmmg
+ c7BoD/0SIPywq8PWF0/z161pvvpt0tmrXqnaBOoOkASD4y6f02LxkUk05rMrTNWgC7zilJlNX3J
+ zFwGVBtcm5oy9rMgshSRH2n93HKzFliMOFwPtNoLH7YJEfbPJ3tSS+lLrHsiLnstgRkxVtHF3x1
+ cRvJYr17YuqBxLz1ZfZ8nshn7zRox0YV+SU2K9hivi0iOH2eQ+rZOaOwwZRV7x0zSQcA/x7saWW
+ GuDMNfS1JWJYT6tyA4jKMGeVIPcRwFkODGbY+R7FizSjZPU8tlebHweL27O8gO7Uu/7tzB/bloV
+ 25RnyYerFDFP0e1nuaZuPNUwTQq+CF8Y9FAeLZKU54drxQFWwcNuU1ROPDO497+glcAeydvY6h5
+ dEsFpdquMy7zepnqf0KL4Iz2SzsbbBdN9jg7JCEB1k4Iq1F9LSAaokA2FNmJUv1vF32BhHTfo3v
+ uJJQzk/a/kC2l4PlJqFdJWa9RokLJ5Ep2mnUm/dv3VwMkpsKc00nAPJ4YC/9BHtbgjUPlaSmfq2
+ 4mVzD5d32cIlossWdbJJOM6cVtyJJJqvmIZiaFC0yOy99wsEy/6STe0x3Rq0y2AjHcXDO1+s2KV
+ gA+A/USQQ5tp0sQZCwQt/DpF5WBT3hN4808EpysM1+5xVwd8/GqMhDfhhgwT+8T0nUkpsQjQ/vX
+ Zfwyy5OVpsCugUQ==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
 From: Paolo Abeni <pabeni@redhat.com>
 
-The MPTCP implementation of the IP_TOS socket option uses the lockless
-variant of the TOS manipulation helper and does not hold such lock at
-the helper invocation time.
+Running the mp_join selftest manually with the following command line:
 
-Add the required locking.
+  ./mptcp_join.sh -z -C
 
-Fixes: ffcacff87cd6 ("mptcp: Support for IP_TOS for MPTCP setsockopt()")
+leads to some failures:
+
+  002 fastclose server test
+  # ...
+  rtx                                 [fail] got 1 MP_RST[s] TX expected 0
+  # ...
+  rstrx                               [fail] got 1 MP_RST[s] RX expected 0
+
+The problem is really in the wrong expectations for the RST checks
+implied by the csum validation. Note that the same check is repeated
+explicitly in the same test-case, with the correct expectation and
+pass successfully.
+
+Address the issue explicitly setting the correct expectation for
+the failing checks.
+
+Reported-by: Xiumei Mu <xmu@redhat.com>
+Fixes: 6bf41020b72b ("selftests: mptcp: update and extend fastclose test-cases")
 Cc: stable@vger.kernel.org
-Closes: https://github.com/multipath-tcp/mptcp_net-next/issues/457
 Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-Reviewed-by: Mat Martineau <martineau@kernel.org>
+Reviewed-by: Matthieu Baerts <matttbe@kernel.org>
 Signed-off-by: Matthieu Baerts <matttbe@kernel.org>
 ---
- net/mptcp/sockopt.c | 3 +++
- 1 file changed, 3 insertions(+)
+ tools/testing/selftests/net/mptcp/mptcp_join.sh | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/net/mptcp/sockopt.c b/net/mptcp/sockopt.c
-index 77f5e8932abf..353680733700 100644
---- a/net/mptcp/sockopt.c
-+++ b/net/mptcp/sockopt.c
-@@ -738,8 +738,11 @@ static int mptcp_setsockopt_v4_set_tos(struct mptcp_sock *msk, int optname,
- 	val = READ_ONCE(inet_sk(sk)->tos);
- 	mptcp_for_each_subflow(msk, subflow) {
- 		struct sock *ssk = mptcp_subflow_tcp_sock(subflow);
-+		bool slow;
- 
-+		slow = lock_sock_fast(ssk);
- 		__ip_sock_set_tos(ssk, val);
-+		unlock_sock_fast(ssk, slow);
- 	}
- 	release_sock(sk);
- 
+diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
+index 75a2438efdf3..3c94f2f194d6 100755
+--- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
++++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
+@@ -3240,7 +3240,7 @@ fastclose_tests()
+ 	if reset_check_counter "fastclose server test" "MPTcpExtMPFastcloseRx"; then
+ 		test_linkfail=1024 fastclose=server \
+ 			run_tests $ns1 $ns2 10.0.1.1
+-		chk_join_nr 0 0 0
++		chk_join_nr 0 0 0 0 0 0 1
+ 		chk_fclose_nr 1 1 invert
+ 		chk_rst_nr 1 1
+ 	fi
 
 -- 
 2.40.1
