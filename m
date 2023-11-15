@@ -1,117 +1,72 @@
-Return-Path: <linux-kselftest+bounces-172-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-173-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 560A87EC9EA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Nov 2023 18:52:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id ADA907ECAA7
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Nov 2023 19:41:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EB354B2099A
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Nov 2023 17:52:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DD2201C20978
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Nov 2023 18:41:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EB8B3FB0F;
-	Wed, 15 Nov 2023 17:52:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Sag0OzX5"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D86731753;
+	Wed, 15 Nov 2023 18:41:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dkim=none
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E422127
-	for <linux-kselftest@vger.kernel.org>; Wed, 15 Nov 2023 09:52:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1700070743;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=OG/PdxLPzgrb2SSqLq85wNnPv1wHigzKlm1PKA/CjnI=;
-	b=Sag0OzX5Nz3cSUqbAdodwmnbvTTOlKGR89n+VTXmyJ1AEKdtMfmPtFRxCXsn9E6bJ3iOk9
-	d9jrlYV8yTPNE196CcVSIpDlcT6gQsJrfLA1rBSSM4uTqlGtgnOdySKOP9AhDPikpz0MO+
-	dbNa3WMBbveUAGCaOGS7+tpOUacvVRk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-438-1_fhHc8YNcmXv39uhnoUYw-1; Wed, 15 Nov 2023 12:52:21 -0500
-X-MC-Unique: 1_fhHc8YNcmXv39uhnoUYw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C039D834FC6;
-	Wed, 15 Nov 2023 17:52:20 +0000 (UTC)
-Received: from ruby.redhat.com (unknown [10.39.192.56])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id B96FA1121306;
-	Wed, 15 Nov 2023 17:52:17 +0000 (UTC)
-From: Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com>
-To: workflows@vger.kernel.org,
-	Joe Perches <joe@perches.com>,
-	Andy Whitcroft <apw@canonical.com>,
-	Theodore Ts'o <tytso@mit.edu>,
-	David Gow <davidgow@google.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Mark Brown <broonie@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	"Darrick J . Wong" <djwong@kernel.org>
-Cc: kunit-dev@googlegroups.com,
-	linux-kselftest@vger.kernel.org,
-	Veronika Kabatova <vkabatov@redhat.com>,
-	CKI <cki-project@redhat.com>,
-	kernelci@lists.linux.dev,
-	Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com>
-Subject: [PATCH 3/3] MAINTAINERS: Require kunit core tests for framework changes
-Date: Wed, 15 Nov 2023 19:43:51 +0200
-Message-ID: <20231115175146.9848-4-Nikolai.Kondrashov@redhat.com>
-In-Reply-To: <20231115175146.9848-1-Nikolai.Kondrashov@redhat.com>
+X-Greylist: delayed 568 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 15 Nov 2023 10:40:57 PST
+Received: from relay.hostedemail.com (smtprelay0010.hostedemail.com [216.40.44.10])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA2979B
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Nov 2023 10:40:57 -0800 (PST)
+Received: from omf08.hostedemail.com (a10.router.float.18 [10.200.18.1])
+	by unirelay05.hostedemail.com (Postfix) with ESMTP id F331A40850;
+	Wed, 15 Nov 2023 18:31:26 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf08.hostedemail.com (Postfix) with ESMTPA id EC19B20028;
+	Wed, 15 Nov 2023 18:31:22 +0000 (UTC)
+Message-ID: <2e8979163c8ed93f6990c6a91c34cdf96a76daaf.camel@perches.com>
+Subject: Re: [PATCH 1/3] MAINTAINERS: Introduce V: field for required tests
+From: Joe Perches <joe@perches.com>
+To: Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com>, 
+ workflows@vger.kernel.org, Andy Whitcroft <apw@canonical.com>, Theodore
+ Ts'o <tytso@mit.edu>, David Gow <davidgow@google.com>, Steven Rostedt
+ <rostedt@goodmis.org>, Mark Brown <broonie@kernel.org>, Shuah Khan
+ <skhan@linuxfoundation.org>, "Darrick J . Wong" <djwong@kernel.org>
+Cc: kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org, Veronika
+ Kabatova <vkabatov@redhat.com>, CKI <cki-project@redhat.com>,
+ kernelci@lists.linux.dev
+Date: Wed, 15 Nov 2023 10:31:21 -0800
+In-Reply-To: <20231115175146.9848-2-Nikolai.Kondrashov@redhat.com>
 References: <20231115175146.9848-1-Nikolai.Kondrashov@redhat.com>
+	 <20231115175146.9848-2-Nikolai.Kondrashov@redhat.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.3
+X-Rspamd-Server: rspamout03
+X-Rspamd-Queue-Id: EC19B20028
+X-Stat-Signature: udaagxznsk9asmhndu3d835jjrbk6cxz
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1+4jip3LSD+Jej7pjexnseIWLQolUhj808=
+X-HE-Tag: 1700073082-6522
+X-HE-Meta: U2FsdGVkX1/xDCxqJSd44iIIaFO5Qzsc9gVNZDyfawy1q1z1bDfzscTNzfIdVz+ziykMKsGmpfilS/0145bWJURD6yJK6LefA8ONPfsyY5hLv/LjU+QNmF7zU6Z0xPY7QpDCNQNArMhNhlRWf2mh5zc4+awzDW3EtvMaJQ35O5Wv7VdvSEH7+ug/wsz18bzR4dM0rYb+IdcatpeJOFDVGOMvfduhd3IhGqxBaPqNWx3nVMiSoCUrCLm8hMltlTGQZbIPZi4dlKPSRX1j1y9632k7NIkT7t5c9Md+PW5qzdOpePA0lhHXMvhuvaQh5UmmQNWWT24x2dJQEsn7eYFhxlMuRpTXg9yu
 
-Signed-off-by: Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com>
----
- Documentation/process/tests.rst | 13 +++++++++++++
- MAINTAINERS                     |  1 +
- 2 files changed, 14 insertions(+)
+On Wed, 2023-11-15 at 19:43 +0200, Nikolai Kondrashov wrote:
+> Introduce a new 'V:' ("Verify") field to MAINTAINERS. The field accepts
+> a name of a test suite which is required to be executed for each
+> contribution to the subsystem.
 
-diff --git a/Documentation/process/tests.rst b/Documentation/process/tests.rst
-index 9a9ea3fe65c37..56a7911f69031 100644
---- a/Documentation/process/tests.rst
-+++ b/Documentation/process/tests.rst
-@@ -65,3 +65,16 @@ kvm-xfstests smoke
- 
- The "kvm-xfstests smoke" is a minimal subset of xfstests for testing all major
- file systems, running under KVM.
-+
-+kunit
-+-----
-+
-+:Summary: The complete set of KUnit unit tests
-+:Command: tools/testing/kunit/kunit.py run --alltests
-+
-+kunit core
-+----------
-+
-+:Summary: KUnit tests for the framework itself
-+:Superset: kunit
-+:Command: tools/testing/kunit/kunit.py run --kunitconfig lib/kunit
-diff --git a/MAINTAINERS b/MAINTAINERS
-index f81a47d87ac26..5f3261e96c90f 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -11626,6 +11626,7 @@ L:	linux-kselftest@vger.kernel.org
- L:	kunit-dev@googlegroups.com
- S:	Maintained
- W:	https://google.github.io/kunit-docs/third_party/kernel/docs/
-+V:	kunit core
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git kunit
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git kunit-fixes
- F:	Documentation/dev-tools/kunit/
--- 
-2.42.0
+Perhaps this is simply too much overhead
+process requirements for most kernel work.
+
+While the addition of V: seems ok, I think
+putting the verification in checkpatch is
+odd at best and the verification of test
+execution should be a separate script.
+
 
 
