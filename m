@@ -1,159 +1,146 @@
-Return-Path: <linux-kselftest+bounces-174-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-175-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72B707ECAAE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Nov 2023 19:44:00 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B1A27ECAD9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Nov 2023 19:58:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C0661C208FA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Nov 2023 18:43:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9E983B20B40
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Nov 2023 18:58:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7AE929D0E;
-	Wed, 15 Nov 2023 18:43:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D43313A8D5;
+	Wed, 15 Nov 2023 18:58:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XsmEj/L6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NpseXpzT"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B599326AC8;
-	Wed, 15 Nov 2023 18:43:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B93FC433C8;
-	Wed, 15 Nov 2023 18:43:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B14A0199A4;
+	Wed, 15 Nov 2023 18:58:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28932C433C8;
+	Wed, 15 Nov 2023 18:58:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700073836;
-	bh=Jf1pHHRRqyFoJrFcKBLJXZi9kYmA9sn0zKRsvTYeN9U=;
+	s=k20201202; t=1700074689;
+	bh=mbFipe60nh3wXLVitXBcl5WWbT6GAolpsW6Rl8bu/7Q=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XsmEj/L6owfl4Q4us64Fe207eympvsyfuTyF2EFkC5fMypx8x7hX+Nu+WtmRy6P7o
-	 vL+ErFVnalcapwhsCuboN+UbPQg/Q1YJ0wjdl9326hv62K1B4Dz44nEDUe9d4Sc8I+
-	 ttk8gVz8Av+XgvRLBGLryPFxAO/2+wI9MEF77VjBWxB0TBXLSDNAGhBKXu2gRLk62n
-	 7CsjxKZG8FolkApx0gMQSqtOts/0dxvlIFp/FtsDSOrx6lhGM2MvmW3AsHRfI4WbhB
-	 eWuHir/SH9qYR3lDkRv64kmeL0aCF9NX9+gJQorcgnyipZGYFTIpCcFizBpPuRC4Q3
-	 WcI5drfP9Qbqw==
-Date: Wed, 15 Nov 2023 18:43:47 +0000
-From: Mark Brown <broonie@kernel.org>
-To: "Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>
-Cc: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-	"dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
-	"brauner@kernel.org" <brauner@kernel.org>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"debug@rivosinc.com" <debug@rivosinc.com>,
-	"mgorman@suse.de" <mgorman@suse.de>,
-	"vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
-	"fweimer@redhat.com" <fweimer@redhat.com>,
-	"mingo@redhat.com" <mingo@redhat.com>,
-	"rostedt@goodmis.org" <rostedt@goodmis.org>,
-	"hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-	"tglx@linutronix.de" <tglx@linutronix.de>,
-	"vschneid@redhat.com" <vschneid@redhat.com>,
-	"shuah@kernel.org" <shuah@kernel.org>,
-	"bristot@redhat.com" <bristot@redhat.com>,
-	"hpa@zytor.com" <hpa@zytor.com>,
-	"peterz@infradead.org" <peterz@infradead.org>,
-	"bp@alien8.de" <bp@alien8.de>,
-	"bsegall@google.com" <bsegall@google.com>,
-	"x86@kernel.org" <x86@kernel.org>,
-	"juri.lelli@redhat.com" <juri.lelli@redhat.com>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-	"keescook@chromium.org" <keescook@chromium.org>,
-	"jannh@google.com" <jannh@google.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-	"will@kernel.org" <will@kernel.org>,
-	"Pandey, Sunil K" <sunil.k.pandey@intel.com>
-Subject: Re: [PATCH RFC RFT v2 2/5] fork: Add shadow stack support to clone3()
-Message-ID: <d90884a0-c4d3-41e9-8f23-68aa87bbe269@sirena.org.uk>
-References: <20231114-clone3-shadow-stack-v2-0-b613f8681155@kernel.org>
- <20231114-clone3-shadow-stack-v2-2-b613f8681155@kernel.org>
- <c9434fa9d864612ed9082197a601c5002ed86a38.camel@intel.com>
- <d873072c-e1f4-4e1f-9efc-dfbd53054766@sirena.org.uk>
- <ZVTvvJTOV777UGsP@arm.com>
+	b=NpseXpzTT0wSMAcgWMBgg2pysbbYQcPIX7NHH/8c2wXEatuGVcSoAxK7hnneM8DjV
+	 iqDwv7Px+d2o3L6+b7ZG7VYKRFWEXiYh5bOLrYKR985uMxu7SuK78I0/upIWwcVpWj
+	 K9P/dAtEhJwm/gUauhw7RWPURRvUVgJt4wwIR4sl9diVcqTef0KBsVGU62oOr1lKfe
+	 onZxHEO6ln21IxWL9b6toFUlCb5lNEsvQhtZp1cV3hjQ9ZcQx7jHh77KQBVIRhIidM
+	 y3t4wHjjiED4OGjuHekJ8AqUGQTbDcInRINTbVVscnZNd/ukT9wBTf8V6hDjFbTYcl
+	 oadiSqjcx9eEw==
+Date: Wed, 15 Nov 2023 10:58:08 -0800
+From: "Darrick J. Wong" <djwong@kernel.org>
+To: Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com>
+Cc: workflows@vger.kernel.org, Joe Perches <joe@perches.com>,
+	Andy Whitcroft <apw@canonical.com>, Theodore Ts'o <tytso@mit.edu>,
+	David Gow <davidgow@google.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Mark Brown <broonie@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>, kunit-dev@googlegroups.com,
+	linux-kselftest@vger.kernel.org,
+	Veronika Kabatova <vkabatov@redhat.com>,
+	CKI <cki-project@redhat.com>, kernelci@lists.linux.dev,
+	Chandan Babu R <chandanrlinux@gmail.com>,
+	Dave Chinner <david@fromorbit.com>
+Subject: Re: [PATCH 2/3] MAINTAINERS: Require kvm-xfstests smoke for ext4
+Message-ID: <20231115185808.GD36211@frogsfrogsfrogs>
+References: <20231115175146.9848-1-Nikolai.Kondrashov@redhat.com>
+ <20231115175146.9848-3-Nikolai.Kondrashov@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="jREq/r+U2+vimSwN"
-Content-Disposition: inline
-In-Reply-To: <ZVTvvJTOV777UGsP@arm.com>
-X-Cookie: For internal use only.
-
-
---jREq/r+U2+vimSwN
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20231115175146.9848-3-Nikolai.Kondrashov@redhat.com>
 
-On Wed, Nov 15, 2023 at 04:20:12PM +0000, Szabolcs.Nagy@arm.com wrote:
-> The 11/15/2023 12:36, Mark Brown wrote:
-> > On Wed, Nov 15, 2023 at 12:45:45AM +0000, Edgecombe, Rick P wrote:
-> > > On Tue, 2023-11-14 at 20:05 +0000, Mark Brown wrote:
+On Wed, Nov 15, 2023 at 07:43:50PM +0200, Nikolai Kondrashov wrote:
+> Signed-off-by: Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com>
+> ---
+>  Documentation/process/tests.rst | 32 ++++++++++++++++++++++++++++++++
+>  MAINTAINERS                     |  1 +
+>  2 files changed, 33 insertions(+)
+> 
+> diff --git a/Documentation/process/tests.rst b/Documentation/process/tests.rst
+> index 907311e91ec45..9a9ea3fe65c37 100644
+> --- a/Documentation/process/tests.rst
+> +++ b/Documentation/process/tests.rst
+> @@ -33,3 +33,35 @@ particularly useful:
+>  
+>  :Source: A URL pointing to the source code of the test suite
+>  :Docs: A URL pointing to further test suite documentation
+> +
+> +xfstests
+> +--------
+> +
+> +:Summary: File system regression test suite
+> +:Source: git://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git
 
-> > > > +               if (size < 8)
-> > > > +                       return (unsigned long)ERR_PTR(-EINVAL);
+You might as well use the https link to the fstests git repo.
+https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git
 
-> > > What is the intention here? The check in map_shadow_stack is to leave
-> > > space for the token, but here there is no token.
+> +:Docs: https://github.com/tytso/xfstests-bld/blob/master/Documentation/what-is-xfstests.md
 
-> > It was to ensure that there is sufficient space for at least one entry
-> > on the stack.
+Awkardly, this github link is nice for rendering the markdown as html,
+but I think the canonical source of xfstests-bld is also kernel.org:
 
-> end marker token (0) needs it i guess.
+https://git.kernel.org/pub/scm/fs/ext2/xfstests-bld.git
 
-x86 doesn't currently have end markers.  Actually, that's a point -
-should we add a flag for specifying the use of end markers here?
-There's code in my map_shadow_stack() implementation for arm64 which
-does that.
+> +
+> +As the name might imply, xfstests is a file system regression test suite which
+> +was originally developed by Silicon Graphics (SGI) for the XFS file system.
+> +Originally, xfstests, like XFS was only supported on the SGI's Irix operating
+> +system. When XFS was ported to Linux, so was xfstests, and now xfstests is
+> +only supported on Linux.
+> +
+> +Today, xfstests is used as a file system regression test suite for all of
+> +Linux's major file systems: xfs, ext2, ext4, cifs, btrfs, f2fs, reiserfs, gfs,
+> +jfs, udf, nfs, and tmpfs. Many file system maintainers will run a full set of
+> +xfstests before sending patches to Linus, and will require that any major
+> +changes be tested using xfstests before they are submitted for integration.
+> +
+> +The easiest way to start running xfstests is under KVM with xfstests-bld:
+> +https://github.com/tytso/xfstests-bld/blob/master/Documentation/kvm-quickstart.md
+> +
+> +kvm-xfstests smoke
+> +------------------
+> +
+> +:Summary: File system smoke tests
+> +:Superset: xfstests
 
-> otherwise 0 size would be fine: the child may not execute
-> a call instruction at all.
+Source: https://git.kernel.org/pub/scm/fs/ext2/xfstests-bld.git
 
-Well, a size of specifically zero will result in a fallback to implicit
-allocation/sizing of the stack as things stand so this is specifically
-the case where a size has been specified but is smaller than a single
-entry.
+?
 
-> > > I think for CLONE_VM we should not require a non-zero size. Speaking of
-> > > CLONE_VM we should probably be clear on what the expected behavior is
-> > > for situations when a new shadow stack is not usually allocated.
-> > > !CLONE_VM || CLONE_VFORK will use the existing shadow stack. Should we
-> > > require shadow_stack_size be zero in this case, or just ignore it? I'd
-> > > lean towards requiring it to be zero so userspace doesn't pass garbage
-> > > in that we have to accommodate later. What we could possibly need to do
-> > > around that though, I'm not sure. What do you think?
+> +:Docs: https://github.com/tytso/xfstests-bld/blob/master/Documentation/kvm-quickstart.md
+> +
+> +The "kvm-xfstests smoke" is a minimal subset of xfstests for testing all major
+> +file systems, running under KVM.
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 2565c04f0490e..f81a47d87ac26 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -7974,6 +7974,7 @@ L:	linux-ext4@vger.kernel.org
+>  S:	Maintained
+>  W:	http://ext4.wiki.kernel.org
+>  Q:	http://patchwork.ozlabs.org/project/linux-ext4/list/
+> +V:	kvm-xfstests smoke
 
-> > Yes, requiring it to be zero in that case makes sense I think.
+I wouldn't mind one of these being added to the XFS entry, though I've
+cc'd the current and past maintainer(s) of XFS for their input.
 
-> i think the condition is "no specified separate stack for
-> the child (stack==0 || stack==sp)".
+--D
 
-> CLONE_VFORK does not imply that the existing stack will be
-> used (a stack for the child can be specified, i think both
-> glibc and musl do this in posix_spawn).
-
-That also works as a check I think, though it requires the arch to check
-for the stack==sp case - I hadn't been aware of the posix_spawn() usage,
-the above checks Rick suggested just follow the handling for implicit
-allocation we have currently.
-
---jREq/r+U2+vimSwN
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVVEWIACgkQJNaLcl1U
-h9AoYwf/cojm+qZcxUY7dfJP7DC47qY+/XzUzkkr087SF7m5CJpUJMr7YDw+IqHs
-rSmaGhkeV2BLjb3e4P0UV4bD2pEgfheDGAqNGa5n9fDoQ6O1METyrDUPXco6PZVG
-lOcLQ/YWO5m8CddEWltolbnnkBasA3UDTXCkkiOtYs+B8d1N7m1XfpA4RGaul3uI
-L5IcslIwekmr1A5mfqcjeRvw3sh9qesVzDLOkWiTrbfLnPFzzU3aCYej18HttKJ3
-4DbBiTpvPnO0bgIMTGT5CL9CXEolecng5cEoZV3CtorIcycMj7hzaftvqC5ezkXB
-bkm9dunYL/0h1w7pJZ2wxk3h2Tg/ww==
-=p7qF
------END PGP SIGNATURE-----
-
---jREq/r+U2+vimSwN--
+>  T:	git git://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git
+>  F:	Documentation/filesystems/ext4/
+>  F:	fs/ext4/
+> -- 
+> 2.42.0
+> 
 
