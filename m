@@ -1,55 +1,68 @@
-Return-Path: <linux-kselftest+bounces-175-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-176-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B1A27ECAD9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Nov 2023 19:58:17 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1D817ECB09
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Nov 2023 20:13:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9E983B20B40
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Nov 2023 18:58:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5BEF32814BB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Nov 2023 19:13:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D43313A8D5;
-	Wed, 15 Nov 2023 18:58:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0D1F3BB31;
+	Wed, 15 Nov 2023 19:13:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NpseXpzT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YbfEmrrA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B14A0199A4;
-	Wed, 15 Nov 2023 18:58:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28932C433C8;
-	Wed, 15 Nov 2023 18:58:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700074689;
-	bh=mbFipe60nh3wXLVitXBcl5WWbT6GAolpsW6Rl8bu/7Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NpseXpzTT0wSMAcgWMBgg2pysbbYQcPIX7NHH/8c2wXEatuGVcSoAxK7hnneM8DjV
-	 iqDwv7Px+d2o3L6+b7ZG7VYKRFWEXiYh5bOLrYKR985uMxu7SuK78I0/upIWwcVpWj
-	 K9P/dAtEhJwm/gUauhw7RWPURRvUVgJt4wwIR4sl9diVcqTef0KBsVGU62oOr1lKfe
-	 onZxHEO6ln21IxWL9b6toFUlCb5lNEsvQhtZp1cV3hjQ9ZcQx7jHh77KQBVIRhIidM
-	 y3t4wHjjiED4OGjuHekJ8AqUGQTbDcInRINTbVVscnZNd/ukT9wBTf8V6hDjFbTYcl
-	 oadiSqjcx9eEw==
-Date: Wed, 15 Nov 2023 10:58:08 -0800
-From: "Darrick J. Wong" <djwong@kernel.org>
-To: Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com>
-Cc: workflows@vger.kernel.org, Joe Perches <joe@perches.com>,
-	Andy Whitcroft <apw@canonical.com>, Theodore Ts'o <tytso@mit.edu>,
-	David Gow <davidgow@google.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Mark Brown <broonie@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>, kunit-dev@googlegroups.com,
-	linux-kselftest@vger.kernel.org,
-	Veronika Kabatova <vkabatov@redhat.com>,
-	CKI <cki-project@redhat.com>, kernelci@lists.linux.dev,
-	Chandan Babu R <chandanrlinux@gmail.com>,
-	Dave Chinner <david@fromorbit.com>
-Subject: Re: [PATCH 2/3] MAINTAINERS: Require kvm-xfstests smoke for ext4
-Message-ID: <20231115185808.GD36211@frogsfrogsfrogs>
-References: <20231115175146.9848-1-Nikolai.Kondrashov@redhat.com>
- <20231115175146.9848-3-Nikolai.Kondrashov@redhat.com>
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75A20FA;
+	Wed, 15 Nov 2023 11:13:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1700075610; x=1731611610;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gXRiJ5Lucq8DXuhZwt0/bXTGhj/qXhHAst2jYHjGW3k=;
+  b=YbfEmrrAfGMLTsgprIdwWiI2ugx0JoYfIPr1JgWXdUhKRyKbO8QkSP9q
+   saLPWZwQflOYtFp2VbBohWfau5BvHJdAVfNH+HyFJQtMm++cdNXSX85WL
+   6RonKup+8Z5KI1fo4V3ar2F8UuZLjEWlI1XzdtpPrWbJyv3D5eV+j/I2y
+   KGEaANB3Jlg5d8A6gq9r2kZHw9h4UBnKx+JVqlrKxmjg6fBb8qiHB1fHm
+   cDbA+QySSmfrU79qhdnrTWfQOhyIBqc0vvvxbrrXvwxuCdX2ZqWyd/EJS
+   RYcZlJl43HBTmgHL7JESO/PM9uJqIUuooOJYV6KmYMaFggfXQB19FChXU
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10895"; a="370288071"
+X-IronPort-AV: E=Sophos;i="6.03,305,1694761200"; 
+   d="scan'208";a="370288071"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Nov 2023 11:13:29 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10895"; a="741519658"
+X-IronPort-AV: E=Sophos;i="6.03,305,1694761200"; 
+   d="scan'208";a="741519658"
+Received: from lkp-server02.sh.intel.com (HELO b8de5498638e) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 15 Nov 2023 11:13:25 -0800
+Received: from kbuild by b8de5498638e with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1r3LKF-0000jt-01;
+	Wed, 15 Nov 2023 19:13:23 +0000
+Date: Thu, 16 Nov 2023 03:12:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Waiman Long <longman@redhat.com>, Tejun Heo <tj@kernel.org>,
+	Zefan Li <lizefan.x@bytedance.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Lai Jiangshan <jiangshanlai@gmail.com>,
+	Shuah Khan <skhan@linuxfoundation.org>
+Cc: oe-kbuild-all@lists.linux.dev, cgroups@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, Peter Hunt <pehunt@redhat.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Waiman Long <longman@redhat.com>
+Subject: Re: [PATCH v3 1/5] workqueue: Make workqueue_set_unbound_cpumask()
+ static
+Message-ID: <202311160353.FAdfQwO3-lkp@intel.com>
+References: <20231115170359.163299-2-longman@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -58,89 +71,60 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231115175146.9848-3-Nikolai.Kondrashov@redhat.com>
+In-Reply-To: <20231115170359.163299-2-longman@redhat.com>
 
-On Wed, Nov 15, 2023 at 07:43:50PM +0200, Nikolai Kondrashov wrote:
-> Signed-off-by: Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com>
-> ---
->  Documentation/process/tests.rst | 32 ++++++++++++++++++++++++++++++++
->  MAINTAINERS                     |  1 +
->  2 files changed, 33 insertions(+)
-> 
-> diff --git a/Documentation/process/tests.rst b/Documentation/process/tests.rst
-> index 907311e91ec45..9a9ea3fe65c37 100644
-> --- a/Documentation/process/tests.rst
-> +++ b/Documentation/process/tests.rst
-> @@ -33,3 +33,35 @@ particularly useful:
->  
->  :Source: A URL pointing to the source code of the test suite
->  :Docs: A URL pointing to further test suite documentation
-> +
-> +xfstests
-> +--------
-> +
-> +:Summary: File system regression test suite
-> +:Source: git://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git
+Hi Waiman,
 
-You might as well use the https link to the fstests git repo.
-https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git
+kernel test robot noticed the following build warnings:
 
-> +:Docs: https://github.com/tytso/xfstests-bld/blob/master/Documentation/what-is-xfstests.md
+[auto build test WARNING on shuah-kselftest/next]
+[also build test WARNING on shuah-kselftest/fixes linus/master v6.7-rc1]
+[cannot apply to tj-cgroup/for-next tj-wq/for-next next-20231115]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Awkardly, this github link is nice for rendering the markdown as html,
-but I think the canonical source of xfstests-bld is also kernel.org:
+url:    https://github.com/intel-lab-lkp/linux/commits/Waiman-Long/workqueue-Make-workqueue_set_unbound_cpumask-static/20231116-010940
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git next
+patch link:    https://lore.kernel.org/r/20231115170359.163299-2-longman%40redhat.com
+patch subject: [PATCH v3 1/5] workqueue: Make workqueue_set_unbound_cpumask() static
+config: i386-tinyconfig (https://download.01.org/0day-ci/archive/20231116/202311160353.FAdfQwO3-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231116/202311160353.FAdfQwO3-lkp@intel.com/reproduce)
 
-https://git.kernel.org/pub/scm/fs/ext2/xfstests-bld.git
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202311160353.FAdfQwO3-lkp@intel.com/
 
-> +
-> +As the name might imply, xfstests is a file system regression test suite which
-> +was originally developed by Silicon Graphics (SGI) for the XFS file system.
-> +Originally, xfstests, like XFS was only supported on the SGI's Irix operating
-> +system. When XFS was ported to Linux, so was xfstests, and now xfstests is
-> +only supported on Linux.
-> +
-> +Today, xfstests is used as a file system regression test suite for all of
-> +Linux's major file systems: xfs, ext2, ext4, cifs, btrfs, f2fs, reiserfs, gfs,
-> +jfs, udf, nfs, and tmpfs. Many file system maintainers will run a full set of
-> +xfstests before sending patches to Linus, and will require that any major
-> +changes be tested using xfstests before they are submitted for integration.
-> +
-> +The easiest way to start running xfstests is under KVM with xfstests-bld:
-> +https://github.com/tytso/xfstests-bld/blob/master/Documentation/kvm-quickstart.md
-> +
-> +kvm-xfstests smoke
-> +------------------
-> +
-> +:Summary: File system smoke tests
-> +:Superset: xfstests
+All warnings (new ones prefixed by >>):
 
-Source: https://git.kernel.org/pub/scm/fs/ext2/xfstests-bld.git
+>> kernel/workqueue.c:4421:13: warning: 'apply_wqattrs_unlock' defined but not used [-Wunused-function]
+    4421 | static void apply_wqattrs_unlock(void)
+         |             ^~~~~~~~~~~~~~~~~~~~
+>> kernel/workqueue.c:4414:13: warning: 'apply_wqattrs_lock' defined but not used [-Wunused-function]
+    4414 | static void apply_wqattrs_lock(void)
+         |             ^~~~~~~~~~~~~~~~~~
 
-?
 
-> +:Docs: https://github.com/tytso/xfstests-bld/blob/master/Documentation/kvm-quickstart.md
-> +
-> +The "kvm-xfstests smoke" is a minimal subset of xfstests for testing all major
-> +file systems, running under KVM.
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 2565c04f0490e..f81a47d87ac26 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -7974,6 +7974,7 @@ L:	linux-ext4@vger.kernel.org
->  S:	Maintained
->  W:	http://ext4.wiki.kernel.org
->  Q:	http://patchwork.ozlabs.org/project/linux-ext4/list/
-> +V:	kvm-xfstests smoke
+vim +/apply_wqattrs_unlock +4421 kernel/workqueue.c
 
-I wouldn't mind one of these being added to the XFS entry, though I've
-cc'd the current and past maintainer(s) of XFS for their input.
+8864b4e59f7945 Tejun Heo                 2013-03-12  4413  
+a0111cf6710bd1 Lai Jiangshan             2015-05-19 @4414  static void apply_wqattrs_lock(void)
+a0111cf6710bd1 Lai Jiangshan             2015-05-19  4415  {
+a0111cf6710bd1 Lai Jiangshan             2015-05-19  4416  	/* CPUs should stay stable across pwq creations and installations */
+ffd8bea81fbb5a Sebastian Andrzej Siewior 2021-08-03  4417  	cpus_read_lock();
+a0111cf6710bd1 Lai Jiangshan             2015-05-19  4418  	mutex_lock(&wq_pool_mutex);
+a0111cf6710bd1 Lai Jiangshan             2015-05-19  4419  }
+a0111cf6710bd1 Lai Jiangshan             2015-05-19  4420  
+a0111cf6710bd1 Lai Jiangshan             2015-05-19 @4421  static void apply_wqattrs_unlock(void)
+a0111cf6710bd1 Lai Jiangshan             2015-05-19  4422  {
+a0111cf6710bd1 Lai Jiangshan             2015-05-19  4423  	mutex_unlock(&wq_pool_mutex);
+ffd8bea81fbb5a Sebastian Andrzej Siewior 2021-08-03  4424  	cpus_read_unlock();
+a0111cf6710bd1 Lai Jiangshan             2015-05-19  4425  }
+a0111cf6710bd1 Lai Jiangshan             2015-05-19  4426  
 
---D
-
->  T:	git git://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git
->  F:	Documentation/filesystems/ext4/
->  F:	fs/ext4/
-> -- 
-> 2.42.0
-> 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
