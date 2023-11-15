@@ -1,148 +1,127 @@
-Return-Path: <linux-kselftest+bounces-130-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-131-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41B097EC2FD
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Nov 2023 13:53:25 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43CAD7EC431
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Nov 2023 14:58:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F0F00280F74
-	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Nov 2023 12:53:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 719F21C209F4
+	for <lists+linux-kselftest@lfdr.de>; Wed, 15 Nov 2023 13:58:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E778D168C2;
-	Wed, 15 Nov 2023 12:53:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40C0C1EB5B;
+	Wed, 15 Nov 2023 13:58:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gbCPss0q"
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="fxE5AZTq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from lindbergh.monkeyblade.net (lindbergh.monkeyblade.net [23.128.96.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C41CE156F3;
-	Wed, 15 Nov 2023 12:53:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22C82C433C7;
-	Wed, 15 Nov 2023 12:53:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700052800;
-	bh=gcFqBYw8PXGO0sV0s5kjBNpQqfZ58F4h29SX//oQGIc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gbCPss0qRiZubn7E0ZPkBxNyntffhhRLA7M5bjDO4PkW0C4TjlMl+Q54z22HUWq99
-	 FE1r77hwcX1dEUf71IezL52SBh7gzsAN/2gsGxUFtZ0h/jwG4E0HNiG00G7a46Gn36
-	 j6eMCtYs/C4fKYKFgUwmQ2huEudAL9S4/mZtnNGGjd43K2MCVQkPpKF51l6bZYou2N
-	 AjLPZM640fz91gAXy6x6GMJfe/l+JpZrYHVVpE+AXe6aoNK39V1E/jAR8g31dc4KBJ
-	 zdXf/YkYsaT8YzyfguiO+/QpxyKRugT9z0QCPmI7geTcTC2ZNlr7Kp1NsDKq3iw2DZ
-	 0cXvVBKTMX7IA==
-Date: Wed, 15 Nov 2023 12:53:10 +0000
-From: Mark Brown <broonie@kernel.org>
-To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc: "dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
-	"Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
-	"brauner@kernel.org" <brauner@kernel.org>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"debug@rivosinc.com" <debug@rivosinc.com>,
-	"mgorman@suse.de" <mgorman@suse.de>,
-	"vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
-	"fweimer@redhat.com" <fweimer@redhat.com>,
-	"mingo@redhat.com" <mingo@redhat.com>,
-	"rostedt@goodmis.org" <rostedt@goodmis.org>,
-	"hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-	"tglx@linutronix.de" <tglx@linutronix.de>,
-	"vschneid@redhat.com" <vschneid@redhat.com>,
-	"shuah@kernel.org" <shuah@kernel.org>,
-	"bristot@redhat.com" <bristot@redhat.com>,
-	"hpa@zytor.com" <hpa@zytor.com>,
-	"peterz@infradead.org" <peterz@infradead.org>,
-	"bp@alien8.de" <bp@alien8.de>,
-	"bsegall@google.com" <bsegall@google.com>,
-	"x86@kernel.org" <x86@kernel.org>,
-	"juri.lelli@redhat.com" <juri.lelli@redhat.com>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-	"keescook@chromium.org" <keescook@chromium.org>,
-	"jannh@google.com" <jannh@google.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-	"will@kernel.org" <will@kernel.org>,
-	"Pandey, Sunil K" <sunil.k.pandey@intel.com>
-Subject: Re: [PATCH RFC RFT v2 5/5] kselftest/clone3: Test shadow stack
- support
-Message-ID: <7f2f36a7-e299-4eb1-8ef4-11c08181fe27@sirena.org.uk>
-References: <20231114-clone3-shadow-stack-v2-0-b613f8681155@kernel.org>
- <20231114-clone3-shadow-stack-v2-5-b613f8681155@kernel.org>
- <309927ad8bfa72ce2d084ee16cd0cd84e69fef16.camel@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2F171EB3C
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Nov 2023 13:58:10 +0000 (UTC)
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D2A7B3
+	for <linux-kselftest@vger.kernel.org>; Wed, 15 Nov 2023 05:58:08 -0800 (PST)
+Received: by mail-qt1-x830.google.com with SMTP id d75a77b69052e-421ae930545so35647571cf.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 15 Nov 2023 05:58:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1700056687; x=1700661487; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=KL+XKeTm+HS5yIv1+qB2Kl+EdYaEuM6uxRpozUNk15w=;
+        b=fxE5AZTqZNA1c3pM8PnL1ZfVKuwJpxUheldfHGEsWEtAp2gEVDDCk/sQbeVIYFoPxf
+         9KGVuG2GTZ61BFzp6iB80uFJEEgO+3AcP74J0XslGkuiEeomjUVANK79vYcLWKYP4xyS
+         2LgGCbLrvB/pQw6jo94DnBTy0KASnx4Dq0zcgzgTmGzfAnIu0l+CQa08/nM1FfDi0klD
+         8lmM/ZtEAne1zy4g4j5vifdPvxi4iYwH78y+Shm8tYEYEiDWLvvK/1pfqtmYfrkpgLuW
+         6zdCfOmRw/hQ9xXIzXdRA9MhRyYweUY7Gf/m2FFpFEx2vzp/qthF0gtt7XlhbzRn9XZi
+         zq8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700056687; x=1700661487;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KL+XKeTm+HS5yIv1+qB2Kl+EdYaEuM6uxRpozUNk15w=;
+        b=swhLkBxbnVb/2nXBg7+Y2bWgX56dpYBH6iZpQuEr413Wg0ta5PFK2lWHBqGLTFtX7J
+         Ecs+CkwKYsDnIJ1qML3NUtVc4Jqs5Wc916YNz/PCqdLaypH+wv39ZnMsFaaEIDC9tUBP
+         uj6/EHlraFp2t9QY08B6vOutEsu6abmdSJ1S5Y4kqubwXrG5wT2ZCV77Fi7XagMlj+K6
+         rd1B0RN+9Zx6eoxi1/fxRRE0J4O2NLIK0uBVLzfPi4np35InYRtjBY9Xra48UBA0eZpy
+         pRfF+BtYCzB5D4DxJxJyxJhoJu0Wt918p+UMNtEo0wnRxTjuAIInHtvfuKnp6vLLt2Nz
+         6D/A==
+X-Gm-Message-State: AOJu0Yxomv+wqsFxfXvninglFXXWxRGMuAOYGYXuOPAlsIqqC8/IwGE2
+	lhKzTFqTEQZErayxu6IBGURgfA==
+X-Google-Smtp-Source: AGHT+IHaKxJpp001exVovZ4EBDqBHs310q9gAHegSv6c6n8XW7Wb8GybvCcKXWJGvY9i5/iI45wjWw==
+X-Received: by 2002:ac8:5dd4:0:b0:421:f8d8:e0d8 with SMTP id e20-20020ac85dd4000000b00421f8d8e0d8mr1428187qtx.38.1700056687165;
+        Wed, 15 Nov 2023 05:58:07 -0800 (PST)
+Received: from ziepe.ca ([12.186.190.2])
+        by smtp.gmail.com with ESMTPSA id d22-20020ac86696000000b0041818df8a0dsm3553547qtp.36.2023.11.15.05.58.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Nov 2023 05:58:06 -0800 (PST)
+Received: from jgg by jggl with local (Exim 4.95)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1r3GP8-0007bi-2i;
+	Wed, 15 Nov 2023 09:58:06 -0400
+Date: Wed, 15 Nov 2023 09:58:06 -0400
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: "Liu, Jing2" <jing2.liu@linux.intel.com>
+Cc: Lu Baolu <baolu.lu@linux.intel.com>, Kevin Tian <kevin.tian@intel.com>,
+	Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	Nicolin Chen <nicolinc@nvidia.com>, Yi Liu <yi.l.liu@intel.com>,
+	Jacob Pan <jacob.jun.pan@linux.intel.com>, iommu@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	virtualization@lists.linux-foundation.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/6] IOMMUFD: Deliver IO page faults to user space
+Message-ID: <ZVTObiybC1MYlSam@ziepe.ca>
+References: <20231026024930.382898-1-baolu.lu@linux.intel.com>
+ <20231102124742.GA4634@ziepe.ca>
+ <c774e157-9b47-4fb8-80dd-37441c69b43d@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="3ZWyp9FLjuhAqq+o"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <309927ad8bfa72ce2d084ee16cd0cd84e69fef16.camel@intel.com>
-X-Cookie: For internal use only.
+In-Reply-To: <c774e157-9b47-4fb8-80dd-37441c69b43d@linux.intel.com>
 
+On Wed, Nov 15, 2023 at 01:17:06PM +0800, Liu, Jing2 wrote:
 
---3ZWyp9FLjuhAqq+o
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> This is the right way to approach it,
+> 
+>    I learned that there was discussion about using io_uring to get the
+>    page fault without
+> 
+>    eventfd notification in [1], and I am new at io_uring and studying the
+>    man page of
+> 
+>    liburing, but there're questions in my mind on how can QEMU get the
+>    coming page fault
+> 
+>    with a good performance.
+> 
+>    Since both QEMU and Kernel don't know when comes faults, after QEMU
+>    submits one
+> 
+>    read task to io_uring, we want kernel pending until fault comes. While
+>    based on
+> 
+>    hwpt_fault_fops_read() in [patch v2 4/6], it just returns 0 since
+>    there's now no fault,
+> 
+>    thus this round of read completes to CQ but it's not what we want. So
+>    I'm wondering
+> 
+>    how kernel pending on the read until fault comes. Does fops callback
+>    need special work to
 
-On Tue, Nov 14, 2023 at 11:11:58PM +0000, Edgecombe, Rick P wrote:
-> On Tue, 2023-11-14 at 20:05 +0000, Mark Brown wrote:
+Implement a fops with poll support that triggers when a new event is
+pushed and everything will be fine. There are many examples in the
+kernel. The ones in the mlx5 vfio driver spring to mind as a scheme I
+recently looked at.
 
-> > +=A0=A0=A0=A0=A0=A0=A0shadow_stack =3D syscall(__NR_map_shadow_stack, 0,
-> > getpagesize(), 0);
-
-> Hmm, x86 fails this call if user shadow stack is not supported in the
-> HW or the kernel, but doesn't care if it is enabled on the thread or
-> not. If shadow stack is not enabled (or not yet enabled), shadow stacks
-> are allowed to be mapped. Should it fail if shadow stack is not yet
-> enabled?
-
-> Since shadow stack is per thread, map_shadow_stack could still be
-> called on another thread that has it enabled. Basically I don't think
-> blocking it will reduce the possible states the kernel has to handle.
-
-Indeed - I would expect map_shadow_stack() to always succeed if the
-system supports it since it could reasonably be called as part of the
-preparation for enabling it and even if someone calls it and never
-actually uses the resulting memory there's no more harm to that than
-any other memory allocation.  The arm64 code wasn't explicitly caring if
-we actually had GCS enabled when we clone and just alloacating the stack
-if requested which on reflection is more just an opportunity for users
-to mess up than something we usefully want to support.
-
-> The traditional way to check if shadow stack is enabled on x86 is the
-> check for a non zero return from the _get_ssp() intrinsic:
-> https://gcc.gnu.org/onlinedocs/gcc-9.2.0/gcc/x86-control-flow-protection-=
-intrinsics.html
-
-> It seems like there will be a need for some generic method of checking
-> if shadow stack is enabled. Maybe a more generic compiler
-> intrinsic/builtin or glibc API (something unrelated to SSP)?
-
-Some sort of feature check in libc would be nice, yes.  That said since
-we really want the tests to run on systems without libc support for the
-feature (if only as a bootstrapping thing) we'll need to open code
-anyway.  I'll add code to startup which ensures the feature is enabled,
-we can't rely on it for detection without pain though since it's
-possible that we might have features locked by the startup code.
-
---3ZWyp9FLjuhAqq+o
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVUvzYACgkQJNaLcl1U
-h9AOXAf8C7LO3zDmvMkVUGlWN+N+fpmKG4F/msloRjDssP4TlUtLbV/KiDUMXa/S
-5WejIQQwD8ajc4nPg4zOXp4hwfdADWgI/9f+csVwADFrOth5eZqgRqTcfvdm1Arx
-9YffT2zBfx0ga6x5T4ToC0ywneZTzSR4inXbHrGEZtUsxToSbxqO9wWPgjgrF/Rr
-YQ8Ni6rAw2u/n2N7UngWU62zkCQ51NZBOGs56+N52tCTCUwFqdMGi5nlaUpqNZk9
-bePpU3yf/8FdQ1J+bIBzj9wFDQRY8I6RcUarTm2DdL3IH6YPiNYyiOSVF7I5To40
-I4svtiH5xfPhHF2HbE0A7iz0Kt2EqA==
-=3hkW
------END PGP SIGNATURE-----
-
---3ZWyp9FLjuhAqq+o--
+Jason
 
