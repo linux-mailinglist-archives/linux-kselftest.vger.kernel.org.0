@@ -1,116 +1,113 @@
-Return-Path: <linux-kselftest+bounces-222-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-223-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D92AF7EE2A8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Nov 2023 15:21:56 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E8777EE311
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Nov 2023 15:40:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8E21F1F2644C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Nov 2023 14:21:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9986EB20B09
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Nov 2023 14:40:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3387D31A72;
-	Thu, 16 Nov 2023 14:21:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99342168BC;
+	Thu, 16 Nov 2023 14:40:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="XtY+YwJk"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B49011F;
-	Thu, 16 Nov 2023 06:21:48 -0800 (PST)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-5b499b18b28so9628147b3.0;
-        Thu, 16 Nov 2023 06:21:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700144507; x=1700749307;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aTx8TpUCHZnFxSy50UzWEJ/5KYXYD5wT5yrFARu50ps=;
-        b=TuOp9BvBKdGANoYaWcadx8dEbcMXodYtEYQJWtx3dHAq0W1iqg1xt/V+hGkG8xvIBa
-         IS6VxUFjLkM+6YX1pM8NsXVJjjwZ7TAzTffOYOL4c2yJh2qNqnEOGswXmtDkbRa7qNFq
-         4OMxdZGuxNuIUBIejViyhXBBfV2j7Sb3l6fsMCPsLrTig2fsCwoZUAZwhRm8CVAAniGA
-         Ce9YDNkMiQlV5wylXKnmc0hvm4OAc9GZGdL0IFW2orMOfshkpvc6BQKwn2ka23UeAiiq
-         qYHsKKPpifPwZFxHBvQiaACoWyYnWXXxawCwqXHVASYF4eOBLwNQacWIRyUwWBy7ubwf
-         xfIw==
-X-Gm-Message-State: AOJu0Yy6wLCo1vp2ipKLwBftoprIsIRPd43mqb1BG1vw7gzPJ5lmP4mB
-	SxVhIEjLbPKcbcOzW8HHadrDDHqjiaMF+g==
-X-Google-Smtp-Source: AGHT+IFk65NcNMuIuixJS9RaQDjqSP6f1Fe3B8zyx/qzZ08ocWCkSvOsok9Lt9o4P8u/GiMloNodUA==
-X-Received: by 2002:a81:5201:0:b0:5a7:ba09:e58b with SMTP id g1-20020a815201000000b005a7ba09e58bmr17376492ywb.14.1700144507230;
-        Thu, 16 Nov 2023 06:21:47 -0800 (PST)
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com. [209.85.219.173])
-        by smtp.gmail.com with ESMTPSA id f125-20020a0ddc83000000b005a7bbd713ddsm1000165ywe.108.2023.11.16.06.21.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Nov 2023 06:21:47 -0800 (PST)
-Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-da3b4b7c6bdso811723276.2;
-        Thu, 16 Nov 2023 06:21:46 -0800 (PST)
-X-Received: by 2002:a25:d88a:0:b0:da0:3b47:bf0c with SMTP id
- p132-20020a25d88a000000b00da03b47bf0cmr17271398ybg.20.1700144505875; Thu, 16
- Nov 2023 06:21:45 -0800 (PST)
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EACB196;
+	Thu, 16 Nov 2023 06:39:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1700145594;
+	bh=yrmKvsI+CnrWZRR/QLp4Qs3fYtF932zZA3HDcQg5SQ4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XtY+YwJkr3U5KhDeW3j3Gi7Jn3iFCA57xrpl5EWp8VuDJ2wEqkHPYbhwKjGJRRvYN
+	 6cONdCXXdxBOpjweBZHYmBu3KYbDz0ctgcQwkdy1dAfwg5NensWMEvzFRsJu4Tq4G2
+	 uhX8tYolPkSWKgms2sdoqNh8I2yjjuW5RhCBczL4=
+Date: Thu, 16 Nov 2023 15:39:54 +0100
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Willy Tarreau <w@1wt.eu>
+Cc: Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC 1/3] selftests/nolibc: add custom test harness
+Message-ID: <93f771cb-4db1-4b16-ab02-f777894e3620@t-8ch.de>
+References: <20231115-nolibc-harness-v1-0-4d61382d9bf3@weissschuh.net>
+ <20231115-nolibc-harness-v1-1-4d61382d9bf3@weissschuh.net>
+ <ZVXBxuymJYDUNdvs@1wt.eu>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231115175146.9848-1-Nikolai.Kondrashov@redhat.com>
- <20231115175146.9848-2-Nikolai.Kondrashov@redhat.com> <ZVYXEry40HTCis00@archie.me>
-In-Reply-To: <ZVYXEry40HTCis00@archie.me>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 16 Nov 2023 15:21:34 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXza+PUrDfo+=Dzy6dr=C8vjsPQHN=8EDwXNjxdorNskQ@mail.gmail.com>
-Message-ID: <CAMuHMdXza+PUrDfo+=Dzy6dr=C8vjsPQHN=8EDwXNjxdorNskQ@mail.gmail.com>
-Subject: Re: [PATCH 1/3] MAINTAINERS: Introduce V: field for required tests
-To: Bagas Sanjaya <bagasdotme@gmail.com>
-Cc: Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com>, workflows@vger.kernel.org, 
-	Joe Perches <joe@perches.com>, Andy Whitcroft <apw@canonical.com>, "Theodore Ts'o" <tytso@mit.edu>, 
-	David Gow <davidgow@google.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Mark Brown <broonie@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, 
-	"Darrick J . Wong" <djwong@kernel.org>, Charles Han <hanchunchao@inspur.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Linux Kernel Unit Tests <kunit-dev@googlegroups.com>, 
-	Linux Kernel Self Tests <linux-kselftest@vger.kernel.org>, Veronika Kabatova <vkabatov@redhat.com>, 
-	CKI <cki-project@redhat.com>, kernelci@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZVXBxuymJYDUNdvs@1wt.eu>
 
-Hi Bagas,
-
-On Thu, Nov 16, 2023 at 2:20=E2=80=AFPM Bagas Sanjaya <bagasdotme@gmail.com=
-> wrote:
-> On Wed, Nov 15, 2023 at 07:43:49PM +0200, Nikolai Kondrashov wrote:
-> > Make scripts/checkpatch.pl ensure any added V: fields reference
-> > documented test suites only, and output a warning if a change to a
-> > subsystem doesn't certify the required test suites were executed,
-> > if any.
+On 2023-11-16 08:16:22+0100, Willy Tarreau wrote:
+> Hi Thomas,
+> 
+> On Wed, Nov 15, 2023 at 10:08:19PM +0100, Thomas Weißschuh wrote:
+> > The harness provides a framework to write unit tests for nolibc itself
+> > and kernel selftests using nolibc.
+> > 
+> > Advantages over the current harness:
+> > * Makes it possible to emit KTAP for integration into kselftests.
+> > * Provides familiarity with the kselftest harness and google test.
+> > * It is nicer to write testcases that are longer than one line.
+> > 
+> > Design goals:
+> > * Compatibility with nolibc. kselftest-harness requires setjmp() and
+> >   signals which are not supported on nolibc.
+> > * Provide the same output as the existing unittests.
+> > * Provide a way to emit KTAP.
+> > 
+> > Notes:
+> > * This differs from kselftest-harness in its support for test suites,
+> >   the same as google test.
 > >
-> > If the test suite description includes a "Command", then checkpatch.pl
-> > will output it as the one executing the suite. The command should run
-> > with only the kernel tree and the regular developer environment set up.
-> > But, at the same time, could simply output instructions for installing
-> > any extra dependencies (or pull some automatically). The idea is to
-> > get the developer into feedback loop quicker and easier, so they have
-> > something to run and iterate on, even if it involves installing some
-> > more stuff first. Therefore it's a good idea to add such wrappers to th=
-e
-> > kernel tree proper and refer to them from the tests.rst.
->
-> Does it also apply to trivial patches (e.g. spelling or checkpatch fixes
-> as seen on drivers/staging/)?
+> > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> 
+> Nice intro to present the benefits, but you forgot to explain what
+> the patch itself does among these points, the decisions you took,
+> tradeoffs if any etc. All of these are particularly important so as
+> to figure what to expect from the patch itself, because, tob be
+> honest, for me it's a bit difficult to estimate the suitability of
+> the code for a given purpose, thus for now I'll mostly focus on
+> general code.
 
-After having seen the introduction of too many build failures, I'm
-inclined to ask for an even stronger proof of testing for "trivial"
-fixes for drivers/staging...
+Good points. I'll expand more in v2 after we are through this round.
 
-Gr{oetje,eeting}s,
+> A few comments below:
+> 
+> > +static void putcharn(char c, size_t n)
+> > +{
+> > +	char buf[64];
+> > +
+> > +	memset(buf, c, n);
+> > +	buf[n] = '\0';
+> > +	fputs(buf, stdout);
+> > +}
+> 
+> You should really check that n < 64 here, not only because it's test
+> code that will trigger about any possible bug around, but also because
+> you want others to easily contribute and not get trapped by calling
+> this with a larger value without figuring it will do whatever. And
+> that way you can remove the tests from the callers which don't need
+> to hard-code this limit.
 
-                        Geert
+Ack.
 
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
+> 
+> > +#define is_signed_type(var)       (!!(((__typeof__(var))(-1)) < (__typeof__(var))1))
+> > +#define is_pointer_type(var)	(__builtin_classify_type(var) == 5)
+> 
+> The hard-coded "5" above should either be replaced with pointer_type_class
+> (if available here) or left as-is with a comment at the end of the line
+> saying e.g. "// pointer_type_class" so that the value can be looked up
+> more easily if needed.
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+Ack.
 
