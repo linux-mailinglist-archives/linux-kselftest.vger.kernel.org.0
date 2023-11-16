@@ -1,159 +1,135 @@
-Return-Path: <linux-kselftest+bounces-225-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-226-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4030F7EE358
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Nov 2023 15:52:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 634697EE47A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Nov 2023 16:36:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CF15BB207FC
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Nov 2023 14:52:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 171D01F24952
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Nov 2023 15:36:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A576630CEC;
-	Thu, 16 Nov 2023 14:52:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3481347D3;
+	Thu, 16 Nov 2023 15:36:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="MXfrW9p7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BEJAVynU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07381130;
-	Thu, 16 Nov 2023 06:51:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1700146318;
-	bh=VJ7RN0lzgbPYXdxxqICHsYygAN4e9y4IsXQGHBOjHj8=;
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FD0430653;
+	Thu, 16 Nov 2023 15:36:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66805C433C8;
+	Thu, 16 Nov 2023 15:36:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1700148967;
+	bh=6C/AOQWdfUU4GssUzzyFj3g9QVT/w7qFRNOlqS3TXuE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MXfrW9p7mvA2w6vEjR3kZYLRv4WkD/Cz2to6vWrZmV5p6U3dezjj8Ilzsw/DvRcmd
-	 d4GGVFQGUXfZN6shfgmG63VB4c0GSxzJc1rhxW/UpvuK16THoHGOftSSI5xDIZ5W9b
-	 9s0jAy42RwbYMAvrYnoOI2Thz2qJuG8mi4ZNRJsA=
-Date: Thu, 16 Nov 2023 15:51:57 +0100
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Willy Tarreau <w@1wt.eu>
-Cc: Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC 3/3] selftests/nolibc: migrate vfprintf tests to new
- harness
-Message-ID: <72c14cb1-5ac2-47a0-9759-fce10f3c59cc@t-8ch.de>
-References: <20231115-nolibc-harness-v1-0-4d61382d9bf3@weissschuh.net>
- <20231115-nolibc-harness-v1-3-4d61382d9bf3@weissschuh.net>
- <ZVXJMgly7/et8JAt@1wt.eu>
+	b=BEJAVynUeohXm9vE0j4lxmkxs22+mduLhGWHLSixGxPbtfq3aMf+74bEl9cUNW077
+	 wnP2Gf7K3RYrEiHWA2FS3RWdS1XDV3IseFhmxVL20I6GNcjWFVuce4U6XvbfFtCFQQ
+	 B5oOlDaNQ9neSxDhV2NRByiOvZmGJL94L8mg/sw5gycFj6/dW0tgW3VhaIri/GHyEa
+	 ufg9P7qJDr67mP8Mp5aR7Jrbnp1haOE/JQAzP5Y8ldcwE0NjF6NzCK9U+Gu3YCnJ+T
+	 CmgnWtML24xN3hm6CWTQt1Sndds5hX61RuaixHI/0Fr3mFyaIhYwAmAu/X6hjDzsyG
+	 GQxSgiHoQrhjA==
+Date: Thu, 16 Nov 2023 15:35:57 +0000
+From: Mark Brown <broonie@kernel.org>
+To: "Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>
+Cc: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+	"dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
+	"keescook@chromium.org" <keescook@chromium.org>,
+	"shuah@kernel.org" <shuah@kernel.org>,
+	"brauner@kernel.org" <brauner@kernel.org>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"debug@rivosinc.com" <debug@rivosinc.com>,
+	"mgorman@suse.de" <mgorman@suse.de>,
+	"vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
+	"fweimer@redhat.com" <fweimer@redhat.com>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"mingo@redhat.com" <mingo@redhat.com>,
+	"hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+	"rostedt@goodmis.org" <rostedt@goodmis.org>,
+	"tglx@linutronix.de" <tglx@linutronix.de>,
+	"linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+	"vschneid@redhat.com" <vschneid@redhat.com>,
+	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+	"bristot@redhat.com" <bristot@redhat.com>,
+	"will@kernel.org" <will@kernel.org>,
+	"hpa@zytor.com" <hpa@zytor.com>,
+	"peterz@infradead.org" <peterz@infradead.org>,
+	"jannh@google.com" <jannh@google.com>,
+	"bp@alien8.de" <bp@alien8.de>,
+	"bsegall@google.com" <bsegall@google.com>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"Pandey, Sunil K" <sunil.k.pandey@intel.com>,
+	"x86@kernel.org" <x86@kernel.org>,
+	"juri.lelli@redhat.com" <juri.lelli@redhat.com>
+Subject: Re: [PATCH RFC RFT v2 2/5] fork: Add shadow stack support to clone3()
+Message-ID: <54d3bc9c-9890-49f0-9e9d-78ea4d0d7199@sirena.org.uk>
+References: <20231114-clone3-shadow-stack-v2-0-b613f8681155@kernel.org>
+ <20231114-clone3-shadow-stack-v2-2-b613f8681155@kernel.org>
+ <c9434fa9d864612ed9082197a601c5002ed86a38.camel@intel.com>
+ <d873072c-e1f4-4e1f-9efc-dfbd53054766@sirena.org.uk>
+ <ZVTvvJTOV777UGsP@arm.com>
+ <d90884a0-c4d3-41e9-8f23-68aa87bbe269@sirena.org.uk>
+ <d05d23d56bd2c7de30e7732e6bd3d313d8385c47.camel@intel.com>
+ <ZVXvptSmmJ6MQ0dY@arm.com>
+ <1bd189e0-a7dd-422c-9766-ef1c9b0d3df8@sirena.org.uk>
+ <ZVYfO/yqRtuRYaJA@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="uQPPwN7Bpn582Rw8"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZVXJMgly7/et8JAt@1wt.eu>
-
-On 2023-11-16 08:48:02+0100, Willy Tarreau wrote:
-> On Wed, Nov 15, 2023 at 10:08:21PM +0100, Thomas Weißschuh wrote:
-> > Migrate part of nolibc-test.c to the new test harness.
-> > 
-> > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> > ---
-> >  tools/testing/selftests/nolibc/nolibc-test.c | 74 +++++++++++-----------------
-> >  1 file changed, 28 insertions(+), 46 deletions(-)
-> > 
-> > diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-> > index 6c1b42b58e3e..c0e7e090a05a 100644
-> > --- a/tools/testing/selftests/nolibc/nolibc-test.c
-> > +++ b/tools/testing/selftests/nolibc/nolibc-test.c
-> > @@ -1039,10 +1039,13 @@ int run_stdlib(int min, int max)
-> >  	return ret;
-> >  }
-> >  
-> > -#define EXPECT_VFPRINTF(c, expected, fmt, ...)				\
-> > -	ret += expect_vfprintf(llen, c, expected, fmt, ##__VA_ARGS__)
-> > +#define ASSERT_VFPRINTF(c, expected, fmt, ...)				\
-> > +	enum RESULT res = assert_vfprintf(_metadata, c, expected, fmt, ##__VA_ARGS__); \
-> > +	if (res == SKIPPED) SKIP(return); \
-> > +	if (res == FAIL) FAIL(return);
-> 
-> Please enclose this in a "do { } while (0)" block when using more than
-> one statement, because you can be certain that sooner or later someone
-> will put an "if" or "for" above it. This will also avoid the double
-> colon caused by the trailing one.
-
-Ack.
-
-> 
-> > -static int expect_vfprintf(int llen, int c, const char *expected, const char *fmt, ...)
-> > +static enum RESULT assert_vfprintf(struct __test_metadata *_metadata, int c,
-> > +				   const char *expected, const char *fmt, ...)
-> >  {
-> >  	int ret, fd;
-> >  	ssize_t w, r;
-> > @@ -1051,25 +1054,20 @@ static int expect_vfprintf(int llen, int c, const char *expected, const char *fm
-> >  	va_list args;
-> >  
-> >  	fd = open("/tmp", O_TMPFILE | O_EXCL | O_RDWR, 0600);
-> > -	if (fd == -1) {
-> > -		result(llen, SKIPPED);
-> > -		return 0;
-> > -	}
-> > +	if (fd == -1)
-> > +		return SKIPPED;
-> >  
-> >  	memfile = fdopen(fd, "w+");
-> > -	if (!memfile) {
-> > -		result(llen, FAIL);
-> > -		return 1;
-> > -	}
-> > +	if (!memfile)
-> > +		return FAIL;
->  
-> 
-> Till now it looks easier and more readable.
-> 
-> >  	va_start(args, fmt);
-> >  	w = vfprintf(memfile, fmt, args);
-> >  	va_end(args);
-> >  
-> >  	if (w != c) {
-> > -		llen += printf(" written(%d) != %d", (int)w, c);
-> > -		result(llen, FAIL);
-> > -		return 1;
-> > +		_metadata->exe.llen += printf(" written(%d) != %d", (int)w, c);
-> > +		return FAIL;
-> >  	}
-> 
-> Here however I feel like we're already hacking internals of the test
-> system and that doesn't seem natural nor logical. OK I understand that
-> llen contains the lenght of the emitted message, but how should the
-> user easily guess that it's placed into ->exe.llen, and they may or may
-> not touch other fields there, etc ? Also the fact that the variable is
-> prefixed with an underscore signals a warning to the user that they
-> should not fiddle too much with its internals.
-
-Agree that this is ugly.
-
-> I'm seeing basically two possible approaches:
->   - one consisting in having a wrapper around printf() that transparently
->     sets the llen field in _metadata->exe. This at least offload this
->     knowledge from the user who can then just know they have to pass an
->     opaque metadata argument and that's all.
-> 
->   - one consisting in saying that such functions should not affect the
->     test's metadata themselves and that it ought to be the caller's job
->     instead. The function then only ought to return the printed length,
->     and will not need the metadata at all.
-> 
-> I tend to prefer the second option. In addition, you seem to be returning
-> only 3 statuses (ok/skip/fail) so returning a single composite value for
-> this is easy, e.g. (result | llen) with result made of macros only touching
-> the high bits. If in the future more returns are needed, either a larger
-> int or shift can be used, or we can then return pairs or structs.
-
-I am prefering the first option. It will make it easier to adapt the
-backend of the harness to KTAP I think.
-
-If you are fine with the basics of the harness I can convert all of
-nolibc-test.c and then also add the KTAP output at the end.
-
-WDYT?
+In-Reply-To: <ZVYfO/yqRtuRYaJA@arm.com>
+X-Cookie: micro:
 
 
-Thomas
+--uQPPwN7Bpn582Rw8
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Thu, Nov 16, 2023 at 01:55:07PM +0000, Szabolcs.Nagy@arm.com wrote:
+> The 11/16/2023 12:33, Mark Brown wrote:
+> > On Thu, Nov 16, 2023 at 10:32:06AM +0000, Szabolcs.Nagy@arm.com wrote:
+
+> > > i guess the tricky case is stack!=0 && shadow_stack_size==0:
+> > > the user may want a new shadow stack with default size logic,
+> > > or (with !CLONE_VM || CLONE_VFORK) wants to use the existing
+> > > shadow stack from the parent.
+
+> > If shadow_stack_size is 0 then we're into clone() behaviour and doing
+> > the default/implicit handling which is to do exactly what the above
+> > describes.
+
+> to be clear does clone with flags==CLONE_VM|CLONE_VFORK always
+> use the parent shadow stack independently of the stack argument?
+
+!CLONE_VM rather than CLONE_VM but yes, that's what the clone() and
+hence current clone3() behaviour is here.
+
+> IMPORTANT NOTICE: The contents of this email and any attachments are confidential and may also be privileged. If you are not the intended recipient, please notify the sender immediately and do not disclose the contents to any other person, use it for any purpose, or store or copy the information in any medium. Thank you.
+
+There are mechanisms for disabling this...
+
+--uQPPwN7Bpn582Rw8
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVWNtwACgkQJNaLcl1U
+h9A8OAf+L47MiEGy1oAQUIl/rvLWqgZ8e3qktbrm7eRIk6aacjo+7k3qdr6L7EHh
+EoHwrpV3QlU1LOlZUuorSIjpKhs1FbWxUZd1Ga9NIqOl9h58OAmTJPMyGKqj1O8V
+SBPrXY79ObkfEOV2W9O9KzOlTAzHbbn2Jx2SwmetnkCeAaBeIm8tU9mU/mt45Xz3
+cn7H9ZbgXHYl/NbV01v8nilfK/5r07B1iyghvD8Ojwbq2QC1gXrRd+a4jzfS8Sp0
+23Nx/lWmpn6PPAGl6iAUjScyWBCuklVHxAwYq1ilPPIeN/AVQOuDJ5enoQuNJcUA
+eCNt8qYz4y6MmEATAyUySV/IPaEGOg==
+=JqPF
+-----END PGP SIGNATURE-----
+
+--uQPPwN7Bpn582Rw8--
 
