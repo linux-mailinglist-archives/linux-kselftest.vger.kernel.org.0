@@ -1,135 +1,161 @@
-Return-Path: <linux-kselftest+bounces-226-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-227-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 634697EE47A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Nov 2023 16:36:12 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7643C7EE53B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Nov 2023 17:33:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 171D01F24952
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Nov 2023 15:36:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8076EB20CF2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Nov 2023 16:33:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3481347D3;
-	Thu, 16 Nov 2023 15:36:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4D192FE3D;
+	Thu, 16 Nov 2023 16:33:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BEJAVynU"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UsIxlvly"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FD0430653;
-	Thu, 16 Nov 2023 15:36:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66805C433C8;
-	Thu, 16 Nov 2023 15:36:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700148967;
-	bh=6C/AOQWdfUU4GssUzzyFj3g9QVT/w7qFRNOlqS3TXuE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BEJAVynUeohXm9vE0j4lxmkxs22+mduLhGWHLSixGxPbtfq3aMf+74bEl9cUNW077
-	 wnP2Gf7K3RYrEiHWA2FS3RWdS1XDV3IseFhmxVL20I6GNcjWFVuce4U6XvbfFtCFQQ
-	 B5oOlDaNQ9neSxDhV2NRByiOvZmGJL94L8mg/sw5gycFj6/dW0tgW3VhaIri/GHyEa
-	 ufg9P7qJDr67mP8Mp5aR7Jrbnp1haOE/JQAzP5Y8ldcwE0NjF6NzCK9U+Gu3YCnJ+T
-	 CmgnWtML24xN3hm6CWTQt1Sndds5hX61RuaixHI/0Fr3mFyaIhYwAmAu/X6hjDzsyG
-	 GQxSgiHoQrhjA==
-Date: Thu, 16 Nov 2023 15:35:57 +0000
-From: Mark Brown <broonie@kernel.org>
-To: "Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>
-Cc: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-	"dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
-	"keescook@chromium.org" <keescook@chromium.org>,
-	"shuah@kernel.org" <shuah@kernel.org>,
-	"brauner@kernel.org" <brauner@kernel.org>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"debug@rivosinc.com" <debug@rivosinc.com>,
-	"mgorman@suse.de" <mgorman@suse.de>,
-	"vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
-	"fweimer@redhat.com" <fweimer@redhat.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"mingo@redhat.com" <mingo@redhat.com>,
-	"hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-	"rostedt@goodmis.org" <rostedt@goodmis.org>,
-	"tglx@linutronix.de" <tglx@linutronix.de>,
-	"linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-	"vschneid@redhat.com" <vschneid@redhat.com>,
-	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-	"bristot@redhat.com" <bristot@redhat.com>,
-	"will@kernel.org" <will@kernel.org>,
-	"hpa@zytor.com" <hpa@zytor.com>,
-	"peterz@infradead.org" <peterz@infradead.org>,
-	"jannh@google.com" <jannh@google.com>,
-	"bp@alien8.de" <bp@alien8.de>,
-	"bsegall@google.com" <bsegall@google.com>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"Pandey, Sunil K" <sunil.k.pandey@intel.com>,
-	"x86@kernel.org" <x86@kernel.org>,
-	"juri.lelli@redhat.com" <juri.lelli@redhat.com>
-Subject: Re: [PATCH RFC RFT v2 2/5] fork: Add shadow stack support to clone3()
-Message-ID: <54d3bc9c-9890-49f0-9e9d-78ea4d0d7199@sirena.org.uk>
-References: <20231114-clone3-shadow-stack-v2-0-b613f8681155@kernel.org>
- <20231114-clone3-shadow-stack-v2-2-b613f8681155@kernel.org>
- <c9434fa9d864612ed9082197a601c5002ed86a38.camel@intel.com>
- <d873072c-e1f4-4e1f-9efc-dfbd53054766@sirena.org.uk>
- <ZVTvvJTOV777UGsP@arm.com>
- <d90884a0-c4d3-41e9-8f23-68aa87bbe269@sirena.org.uk>
- <d05d23d56bd2c7de30e7732e6bd3d313d8385c47.camel@intel.com>
- <ZVXvptSmmJ6MQ0dY@arm.com>
- <1bd189e0-a7dd-422c-9766-ef1c9b0d3df8@sirena.org.uk>
- <ZVYfO/yqRtuRYaJA@arm.com>
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70CEED4B
+	for <linux-kselftest@vger.kernel.org>; Thu, 16 Nov 2023 08:33:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1700152390;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=L2R1YGHbVqaFXfxAjW2H0oaW69e+Pupsv8J1Jh5FYd8=;
+	b=UsIxlvlyg+TUDFZqbkeGCE4cJM/jEonv4NjpfoBXrM2KNVUbERl/mnwaXzTojNfqxec3rk
+	IP6HK6uREO+qTQDReyNWAzHhE9XGY3U4mglsa4PvNabr2KnzLbMq9ojJEhC5NekUI2/Nqt
+	1oBLfYtSWV/5IwwRokpmrNRvP5Ntbws=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-70-GO440TtYPEmZHMEFkZcf3w-1; Thu, 16 Nov 2023 11:33:08 -0500
+X-MC-Unique: GO440TtYPEmZHMEFkZcf3w-1
+Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-66d120c28afso10871036d6.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Nov 2023 08:33:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700152387; x=1700757187;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=L2R1YGHbVqaFXfxAjW2H0oaW69e+Pupsv8J1Jh5FYd8=;
+        b=Mkqh5iDgJCPgSgOYBg1PnfFhPjRqJDmmzqJKg7NKNkb1G/6HfmcZacqeWU2gaJU4Ad
+         +dfbhudzd4wPbqVT1p8U8l9sTlcwMOTRySR08xHvtjXdQhy8r3d/S1gxbG5NnupKjTpg
+         NVN6H6svI5/Z7UKVHdWslj4JmeX2+6cPMwdZCZeQNnkfeDNK+51/nahKMs14oiCdOAfw
+         /RZKmXat3M2UGmtlKQU0USGjueXrTgzqZClaLGQTl/n7hRPwS8Ad3bSzQRk020xnxER2
+         mVIx/nkPFys/a1muvdjfK18ry8QDxqtZHufpmuGnA6NIPz2pE0IOjeu/3JaBQxjUPpQf
+         VJtg==
+X-Gm-Message-State: AOJu0YyOmhoUlJDqFnzO3c8qsRtQG1+nU0lgfCD6FzETt6YUWa/D27cS
+	oofptE2AKo5bXBquIPYB58587wewM0247HoRcgEkDNVte9rpWFCCpDLWUyt5+RenFRtUOxwM8SS
+	5xElPsS0oXALkaoXalMCrpt79FpRv
+X-Received: by 2002:ad4:4a0c:0:b0:677:a9f8:ffaf with SMTP id m12-20020ad44a0c000000b00677a9f8ffafmr8581053qvz.13.1700152387669;
+        Thu, 16 Nov 2023 08:33:07 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFEEgk8pzw41/n4ANf585fqyMlEj86chFUDmRIhAvinjMu1NPYWAuUtx3i3d3vcebD/atvQ1Q==
+X-Received: by 2002:ad4:4a0c:0:b0:677:a9f8:ffaf with SMTP id m12-20020ad44a0c000000b00677a9f8ffafmr8581023qvz.13.1700152387376;
+        Thu, 16 Nov 2023 08:33:07 -0800 (PST)
+Received: from [192.168.0.118] (88-113-27-52.elisa-laajakaista.fi. [88.113.27.52])
+        by smtp.gmail.com with ESMTPSA id v12-20020a0cc60c000000b006717ddb4d47sm1465741qvi.28.2023.11.16.08.33.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 16 Nov 2023 08:33:06 -0800 (PST)
+Message-ID: <50d6abd6-111c-4e66-9989-65cb8e43b48c@redhat.com>
+Date: Thu, 16 Nov 2023 18:33:02 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="uQPPwN7Bpn582Rw8"
-Content-Disposition: inline
-In-Reply-To: <ZVYfO/yqRtuRYaJA@arm.com>
-X-Cookie: micro:
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/3] MAINTAINERS: Require kvm-xfstests smoke for ext4
+Content-Language: en-US
+To: "Darrick J. Wong" <djwong@kernel.org>
+Cc: workflows@vger.kernel.org, Joe Perches <joe@perches.com>,
+ Andy Whitcroft <apw@canonical.com>, Theodore Ts'o <tytso@mit.edu>,
+ David Gow <davidgow@google.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Mark Brown <broonie@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
+ kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+ Veronika Kabatova <vkabatov@redhat.com>, CKI <cki-project@redhat.com>,
+ kernelci@lists.linux.dev, Chandan Babu R <chandanrlinux@gmail.com>,
+ Dave Chinner <david@fromorbit.com>
+References: <20231115175146.9848-1-Nikolai.Kondrashov@redhat.com>
+ <20231115175146.9848-3-Nikolai.Kondrashov@redhat.com>
+ <20231115185808.GD36211@frogsfrogsfrogs>
+From: Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com>
+In-Reply-To: <20231115185808.GD36211@frogsfrogsfrogs>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+Thanks for the comments, Darrick!
 
---uQPPwN7Bpn582Rw8
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On 11/15/23 20:58, Darrick J. Wong wrote:
+> On Wed, Nov 15, 2023 at 07:43:50PM +0200, Nikolai Kondrashov wrote:
+>> +xfstests
+>> +--------
+>> +
+>> +:Summary: File system regression test suite
+>> +:Source: git://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git
+> 
+> You might as well use the https link to the fstests git repo.
+> https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git
 
-On Thu, Nov 16, 2023 at 01:55:07PM +0000, Szabolcs.Nagy@arm.com wrote:
-> The 11/16/2023 12:33, Mark Brown wrote:
-> > On Thu, Nov 16, 2023 at 10:32:06AM +0000, Szabolcs.Nagy@arm.com wrote:
+Sure! Queued for the next version.
 
-> > > i guess the tricky case is stack!=0 && shadow_stack_size==0:
-> > > the user may want a new shadow stack with default size logic,
-> > > or (with !CLONE_VM || CLONE_VFORK) wants to use the existing
-> > > shadow stack from the parent.
+>> +:Docs: https://github.com/tytso/xfstests-bld/blob/master/Documentation/what-is-xfstests.md
+> 
+> Awkardly, this github link is nice for rendering the markdown as html,
+> but I think the canonical source of xfstests-bld is also kernel.org:
+> 
+> https://git.kernel.org/pub/scm/fs/ext2/xfstests-bld.git
 
-> > If shadow_stack_size is 0 then we're into clone() behaviour and doing
-> > the default/implicit handling which is to do exactly what the above
-> > describes.
+Alright. Changed to 
+https://git.kernel.org/pub/scm/fs/ext2/xfstests-bld.git/tree/Documentation/kvm-quickstart.md
 
-> to be clear does clone with flags==CLONE_VM|CLONE_VFORK always
-> use the parent shadow stack independently of the stack argument?
+And changed the kvm-xfstests docs link to 
+https://git.kernel.org/pub/scm/fs/ext2/xfstests-bld.git/tree/Documentation/kvm-quickstart.md
 
-!CLONE_VM rather than CLONE_VM but yes, that's what the clone() and
-hence current clone3() behaviour is here.
+>> +kvm-xfstests smoke
+>> +------------------
+>> +
+>> +:Summary: File system smoke tests
+>> +:Superset: xfstests
+> 
+> Source: https://git.kernel.org/pub/scm/fs/ext2/xfstests-bld.git
+> 
+> ?
 
-> IMPORTANT NOTICE: The contents of this email and any attachments are confidential and may also be privileged. If you are not the intended recipient, please notify the sender immediately and do not disclose the contents to any other person, use it for any purpose, or store or copy the information in any medium. Thank you.
+Well, I wasn't sure what to put here either :D I would defer to you guys in 
+this matter.
 
-There are mechanisms for disabling this...
+I'm actually not really sure we need the "Source:" field. I think maybe having 
+just the "Docs" (HOWTO) field would less confusing. I.e. just go read the 
+docs, they should tell you what and how to get.
 
---uQPPwN7Bpn582Rw8
-Content-Type: application/pgp-signature; name="signature.asc"
+I mean you got the sources, and then what? Look for the docs there yourself?
 
------BEGIN PGP SIGNATURE-----
+What do you think?
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVWNtwACgkQJNaLcl1U
-h9A8OAf+L47MiEGy1oAQUIl/rvLWqgZ8e3qktbrm7eRIk6aacjo+7k3qdr6L7EHh
-EoHwrpV3QlU1LOlZUuorSIjpKhs1FbWxUZd1Ga9NIqOl9h58OAmTJPMyGKqj1O8V
-SBPrXY79ObkfEOV2W9O9KzOlTAzHbbn2Jx2SwmetnkCeAaBeIm8tU9mU/mt45Xz3
-cn7H9ZbgXHYl/NbV01v8nilfK/5r07B1iyghvD8Ojwbq2QC1gXrRd+a4jzfS8Sp0
-23Nx/lWmpn6PPAGl6iAUjScyWBCuklVHxAwYq1ilPPIeN/AVQOuDJ5enoQuNJcUA
-eCNt8qYz4y6MmEATAyUySV/IPaEGOg==
-=JqPF
------END PGP SIGNATURE-----
+>> +:Docs: https://github.com/tytso/xfstests-bld/blob/master/Documentation/kvm-quickstart.md
+>> +
+>> +The "kvm-xfstests smoke" is a minimal subset of xfstests for testing all major
+>> +file systems, running under KVM.
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index 2565c04f0490e..f81a47d87ac26 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -7974,6 +7974,7 @@ L:	linux-ext4@vger.kernel.org
+>>   S:	Maintained
+>>   W:	http://ext4.wiki.kernel.org
+>>   Q:	http://patchwork.ozlabs.org/project/linux-ext4/list/
+>> +V:	kvm-xfstests smoke
+> 
+> I wouldn't mind one of these being added to the XFS entry, though I've
+> cc'd the current and past maintainer(s) of XFS for their input.
 
---uQPPwN7Bpn582Rw8--
+Sure, just give me a shout when you're ready and I'll add it :D
+
+Thanks!
+Nick
+
 
