@@ -1,66 +1,66 @@
-Return-Path: <linux-kselftest+bounces-209-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-210-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BFC87EE04A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Nov 2023 13:01:02 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9FBD7EE069
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Nov 2023 13:10:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E9AAA280FA4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Nov 2023 12:01:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D6EF81C20752
+	for <lists+linux-kselftest@lfdr.de>; Thu, 16 Nov 2023 12:10:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C5F02F84A;
-	Thu, 16 Nov 2023 12:00:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 440D22E40C;
+	Thu, 16 Nov 2023 12:10:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="T7YTNNue"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fSLrYTFM"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E60A0C4
-	for <linux-kselftest@vger.kernel.org>; Thu, 16 Nov 2023 04:00:54 -0800 (PST)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 722CC193
+	for <linux-kselftest@vger.kernel.org>; Thu, 16 Nov 2023 04:10:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1700136054;
+	s=mimecast20190719; t=1700136600;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=SJEaqLcE8LMZlLtaRlJKiYIAGpgF6F9Co9xx2cwkfaM=;
-	b=T7YTNNue0grbMReHcmcODeYYKcwetwe0XBe0USyrRjKHqdLSwW9pyxkZqhnSY8Od93hsAZ
-	FUcgCfnlVOqYbSPr9tw6IVP1LWnxoWZ3EexBh07zxk2UJd60i12HFrmGWBsKO3rcqbGlxC
-	3Wbq09qtV1Dg04aflSZodzP/EHambqo=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=b6w0c/6Mjt9S6ipZbdX2b4aG7B54ILnQ5DkOjrtik/4=;
+	b=fSLrYTFMEXWcttz8z4yc3O8ZFR7fnmUBYLMLyS/sgvhUZ0WwgYI6KLjzWnTPn0ofWB0UAj
+	FOw+1RfbzUYRyJuIIaboC7JobX4sRHOqCjiKWbXMvF9b1j9YIQVVJd9mV9z4HXgVgIZuGM
+	0gtqjNVlmN7unyM6XhwYXp5VjJWeYhU=
+Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
+ [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-44-jVVxb83VPRafnmxMKB8_vg-1; Thu, 16 Nov 2023 07:00:52 -0500
-X-MC-Unique: jVVxb83VPRafnmxMKB8_vg-1
-Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-41cc9224395so8961981cf.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 16 Nov 2023 04:00:52 -0800 (PST)
+ us-mta-575-YNr14-odO2iIqU70uvnZ8w-1; Thu, 16 Nov 2023 07:09:59 -0500
+X-MC-Unique: YNr14-odO2iIqU70uvnZ8w-1
+Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-66d0b251a6aso8138526d6.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 16 Nov 2023 04:09:59 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700136052; x=1700740852;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1700136599; x=1700741399;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SJEaqLcE8LMZlLtaRlJKiYIAGpgF6F9Co9xx2cwkfaM=;
-        b=BnV4zocErqXSx8huh1SVsc0lARt3olErpv1Jd64Z6ONGi30jfQ1VEOalwIuuk3wPHs
-         18YW+047+HNLlS2M1K0wLoBsLaJsqK4AXb0RNqf1wq1oJuAjKGda4VxuIqu3kK7miZ65
-         HCaeuEW70uI5sEXvOmOvrordRnaDMPBWsMW5kitL6BfOpB5WTreTCNdFuSHsHNbuaNjf
-         Sf8YmTxukiThT9sqYmzZQnz7V+Lj2mywU7PZsSvbVAxIwpvEi3uZgURM1RXkWvvKDa1i
-         sxV8dnI772xch9+xRjG6GA+gxU1E4KsbFIqpAUpWAMqsDgcjtm3BtKsdkuubfmNPucXQ
-         hjQw==
-X-Gm-Message-State: AOJu0YxohKby02m+VXjlN476VWKCOGVJZXpXyi1uMDZl5Z35Dwt6WeCL
-	e9zs+GFXHcV6UMUycWAGW+hsTpFjgE9uidrcY63OGfI2WZ8mLZqOgyFfwe0gUq0rGP+iWryMGOk
-	NXQEUqQYXiLhWGV1Yvzd0s/FQniq5
-X-Received: by 2002:ac8:4e56:0:b0:421:c9a0:3e9b with SMTP id e22-20020ac84e56000000b00421c9a03e9bmr10037086qtw.3.1700136052282;
-        Thu, 16 Nov 2023 04:00:52 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IE1/IWAdCHnltnz/yj6txJliOQv9AD9LCa2gapSrP4v9cvJOfR3amYIwYxVui43ueMcT5wRmg==
-X-Received: by 2002:ac8:4e56:0:b0:421:c9a0:3e9b with SMTP id e22-20020ac84e56000000b00421c9a03e9bmr10037062qtw.3.1700136051926;
-        Thu, 16 Nov 2023 04:00:51 -0800 (PST)
+        bh=b6w0c/6Mjt9S6ipZbdX2b4aG7B54ILnQ5DkOjrtik/4=;
+        b=joFBYRZGBPI1V6I2jv9yx7qsbBuEikt6FGVwnR+b/u+4wy7nYUTZJZ35+FdBc2wYOk
+         34ez0MXO6Ywph7M8CoUoPbm88BC2eDOYc29n83LDW17Zf+PPH6G7TNqQjoPtwhZJPjvj
+         ZkB9ukwWMEuTV4kMrSUDNcXAjFmgcez4aLeEJ+NI2IoYsdOzSEdwDBymBze7Ld+FNxVl
+         J+HFCHBgrEwrPEkP2QGSAlcDFKbO3zSJAUbHYufXu1Y/xauI6gi9MJwWGmoCPPmZUz+b
+         sExyPlXoroxrShNu1e/eMzzJkO+ynd4MAWBWALjUYOmaJNk54p2eLiZ/ykbfBe42Y7Fz
+         k26w==
+X-Gm-Message-State: AOJu0YxubGwdWtsyI5JHERKvNatAOtVP5LaKPJ/Zu3LcM7YcmhjA60K+
+	FeY3/+vkpbfaWkBxbSO6f2LWYjeBJibqkdivGUrjsy2gvHD8/cs5xukd1cpvFd85bhEfgq+CyGf
+	1FVmmOQaTAVgv9vdsJI5+ZgW7Znym
+X-Received: by 2002:a05:6214:481:b0:670:63bc:a2ca with SMTP id pt1-20020a056214048100b0067063bca2camr10416127qvb.28.1700136599039;
+        Thu, 16 Nov 2023 04:09:59 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IH71Na6oMtgVxH7p4QiOqHTi/dcqvr3Ohm5MKFHhH9Kt+iUWX1LU0pvTZO2VvIJY7NykGZpBQ==
+X-Received: by 2002:a05:6214:481:b0:670:63bc:a2ca with SMTP id pt1-20020a056214048100b0067063bca2camr10416108qvb.28.1700136598694;
+        Thu, 16 Nov 2023 04:09:58 -0800 (PST)
 Received: from [192.168.0.118] (88-113-27-52.elisa-laajakaista.fi. [88.113.27.52])
-        by smtp.gmail.com with ESMTPSA id df4-20020a05622a0ec400b0040331a24f16sm4294893qtb.3.2023.11.16.04.00.48
+        by smtp.gmail.com with ESMTPSA id x9-20020a0ceb89000000b0067266b7b903sm1328321qvo.5.2023.11.16.04.09.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 Nov 2023 04:00:51 -0800 (PST)
-Message-ID: <e2d18278-1fdb-440e-8009-4ec49749b71c@redhat.com>
-Date: Thu, 16 Nov 2023 14:00:46 +0200
+        Thu, 16 Nov 2023 04:09:58 -0800 (PST)
+Message-ID: <cdf83c60-b89d-42b5-8f47-95a187693ac3@redhat.com>
+Date: Thu, 16 Nov 2023 14:09:54 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -69,53 +69,59 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 1/3] MAINTAINERS: Introduce V: field for required tests
-To: Joe Perches <joe@perches.com>, workflows@vger.kernel.org,
+Content-Language: en-US
+To: Mark Brown <broonie@kernel.org>
+Cc: workflows@vger.kernel.org, Joe Perches <joe@perches.com>,
  Andy Whitcroft <apw@canonical.com>, Theodore Ts'o <tytso@mit.edu>,
  David Gow <davidgow@google.com>, Steven Rostedt <rostedt@goodmis.org>,
- Mark Brown <broonie@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
- "Darrick J . Wong" <djwong@kernel.org>
-Cc: kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
- Veronika Kabatova <vkabatov@redhat.com>, CKI <cki-project@redhat.com>,
- kernelci@lists.linux.dev
+ Shuah Khan <skhan@linuxfoundation.org>, "Darrick J . Wong"
+ <djwong@kernel.org>, kunit-dev@googlegroups.com,
+ linux-kselftest@vger.kernel.org, Veronika Kabatova <vkabatov@redhat.com>,
+ CKI <cki-project@redhat.com>, kernelci@lists.linux.dev
 References: <20231115175146.9848-1-Nikolai.Kondrashov@redhat.com>
  <20231115175146.9848-2-Nikolai.Kondrashov@redhat.com>
- <2e8979163c8ed93f6990c6a91c34cdf96a76daaf.camel@perches.com>
-Content-Language: en-US
+ <7a4a71a2-cca3-401e-a7ad-16ee47812900@sirena.org.uk>
 From: Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com>
-In-Reply-To: <2e8979163c8ed93f6990c6a91c34cdf96a76daaf.camel@perches.com>
+In-Reply-To: <7a4a71a2-cca3-401e-a7ad-16ee47812900@sirena.org.uk>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 11/15/23 20:31, Joe Perches wrote:
-> On Wed, 2023-11-15 at 19:43 +0200, Nikolai Kondrashov wrote:
->> Introduce a new 'V:' ("Verify") field to MAINTAINERS. The field accepts
->> a name of a test suite which is required to be executed for each
->> contribution to the subsystem.
+On 11/15/23 22:14, Mark Brown wrote:
+> On Wed, Nov 15, 2023 at 07:43:49PM +0200, Nikolai Kondrashov wrote:
 > 
-> Perhaps this is simply too much overhead
-> process requirements for most kernel work.
+>> Introduce a new tag, 'Tested-with:', documented in the
+>> Documentation/process/submitting-patches.rst file. The tag is expected
+>> to reference the documented test suites, similarly to the 'V:' field,
+>> and to certify that the submitter executed the test suite on the change,
+>> and that it passed.
 > 
-> While the addition of V: seems ok, I think
-> putting the verification in checkpatch is
-> odd at best and the verification of test
-> execution should be a separate script.
+> This doesn't feel like it fits so well with git based flows - generally
+> the tags end up in git one way or another so there'll be a strong
+> tendency for this to end up getting added for one version and then
+> carried forward to the next version.  The way the tooling is at present
+> it doesn't really feel like there's a good point at which to insert the
+> tag.
+> 
+> I'm not sure exactly what'd be better though.
 
-I agree that this extends checkpatch.pl responsibilities somewhat. In the 
-sense that it requires you to do something beside changing the patch itself. 
-OTOH, checkpatch.pl already requires Signed-off-by:, which prompts you to 
-check and clear up your authorship, similarly requiring work outside the patch.
+Yeah, I agree that's a bit of a problem. One that only automated 
+tools/testing/CI could fully solve. Cough, git forges, cough.
 
-At the same time, you're supposed to test your changes anyway. Sometimes it's 
-manual and one-off, but often times running an existing test suite is at least 
-beneficial, if not required.
+OTOH, once you managed to run an automated suite once, it's much easier to do 
+it again, and most of the time developers *want* their code to work and pass 
+the tests (it's much easier than manual testing after all). So it's likely 
+they will keep running them for new revisions, even though they might not 
+notice they simply reused the previously-added Tested-with: tag.
 
-In a sense, this is not *checkpatch.pl* itself requiring testing, but 
-subsystem maintainers (who are opting in), and checkpatch.pl simply provides 
-convenient means and an entry point for raising attention to maintainer's 
-requests, and making it easier to discover the tests.
+Still, one way to make this better could be requiring a URL pointing at test 
+results to follow the test suite name in the Tested-with: tag. Then the 
+maintainer could check that they're indeed fresh.
 
-It also does *not* verify test execution, only alerts the contributors to the 
-need, and requires certification. Again, similar to Signed-off-by:.
+This would be however getting way ahead of ourselves and, with the current 
+(average) state of testing infra, hard to do. Perhaps sometime later.
+
+For now, I think this could already go a long way towards having more (and 
+better) testing.
 
 Nick
 
