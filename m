@@ -1,166 +1,145 @@
-Return-Path: <linux-kselftest+bounces-252-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-253-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA1767EF3A4
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Nov 2023 14:18:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A36287EF513
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Nov 2023 16:21:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6BA3728141C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Nov 2023 13:18:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 663F4280D48
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Nov 2023 15:21:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8EA032C65;
-	Fri, 17 Nov 2023 13:18:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48AC530344;
+	Fri, 17 Nov 2023 15:21:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KvkNphZw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bN23w5/0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BA26D57;
-	Fri, 17 Nov 2023 05:18:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700227101; x=1731763101;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=RidyZbnJH2WdtltNPSz30z+b1yF96itdW/+pcCRzRqI=;
-  b=KvkNphZwcQJDJPzACTFBEPDxSYNRnFcW9d8eykHnG0qqJxusfSZrpLD8
-   cZKoaeDM7/kKj/6XWfqtaOIypnGd0rZOtMHoMAQj6+mvxJHKRYMgS0h3L
-   VvhIz/XasdEfnAS/8/RAL/QPOLRU0PRpQWsco72StfmM4pIvoHpsPzSVG
-   l/GR4RhSVPNoQ0b5sniLBfVnIDGEz/LZ9wHrvFzUR6yBrGn3cEBbCV/QZ
-   G6tpSRq9bVWyn1quUFa3DG5JIEMYYDosnPha42LYgYO3FfBuvEdmHLbyg
-   oleSUcnHPZyEsJRPln3QO1A4OCUaW8dEl2lcWWnedPZfekwCYZ9JmpZn6
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10896"; a="381685614"
-X-IronPort-AV: E=Sophos;i="6.04,206,1695711600"; 
-   d="scan'208";a="381685614"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2023 05:18:20 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10896"; a="794831206"
-X-IronPort-AV: E=Sophos;i="6.04,206,1695711600"; 
-   d="scan'208";a="794831206"
-Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by orsmga008.jf.intel.com with ESMTP; 17 Nov 2023 05:18:20 -0800
-From: Yi Liu <yi.l.liu@intel.com>
-To: joro@8bytes.org,
-	alex.williamson@redhat.com,
-	jgg@nvidia.com,
-	kevin.tian@intel.com,
-	robin.murphy@arm.com,
-	baolu.lu@linux.intel.com
-Cc: cohuck@redhat.com,
-	eric.auger@redhat.com,
-	nicolinc@nvidia.com,
-	kvm@vger.kernel.org,
-	mjrosato@linux.ibm.com,
-	chao.p.peng@linux.intel.com,
-	yi.l.liu@intel.com,
-	yi.y.sun@linux.intel.com,
-	peterx@redhat.com,
-	jasowang@redhat.com,
-	shameerali.kolothum.thodi@huawei.com,
-	lulu@redhat.com,
-	suravee.suthikulpanit@amd.com,
-	iommu@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	zhenzhong.duan@intel.com,
-	joao.m.martins@oracle.com,
-	xin.zeng@intel.com,
-	yan.y.zhao@intel.com
-Subject: [PATCH v7 3/3] iommu/vt-d: Add iotlb flush for nested domain
-Date: Fri, 17 Nov 2023 05:18:16 -0800
-Message-Id: <20231117131816.24359-4-yi.l.liu@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231117131816.24359-1-yi.l.liu@intel.com>
-References: <20231117131816.24359-1-yi.l.liu@intel.com>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2989A1C692;
+	Fri, 17 Nov 2023 15:21:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B63AC433C9;
+	Fri, 17 Nov 2023 15:21:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1700234504;
+	bh=a62fWKk1eb9TGQvUS98DVjVF8hvQAFvABnre5JNQoEk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bN23w5/0fkbwH6Ux7LE55aOXFOYTr0ENOl+hXq012Ozqn1YyoPo/1CHxCrW8C9EHH
+	 rSnIL1R8H2Te2q0iMwVjo+PmgKPDt1wfV/18ptt4yyj1qPXEmc6t4PhscXTMjhCOKi
+	 JdMUH1PdSEY8m/hZoLuQ1tS0cji/iXIFBCLdgfuF9WyIUkKG6Dxvk9h6SP/8qIrotA
+	 /3nZTvF6G4nbz58TKCMUjr64WIP/Tu85BDncjLts1A1dfMnweWh489XpgEOWY1fgV6
+	 OFG8H1k9jLgEE68rfqyfPTNrdDUXCHke888mHpYO+V9T4F8flFi9FSe5CosEm0Cgp3
+	 +2IrbMUy7zDQw==
+Date: Fri, 17 Nov 2023 15:21:39 +0000
+From: Simon Horman <horms@kernel.org>
+To: Petr Machata <petrm@nvidia.com>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	netdev@vger.kernel.org, Ido Schimmel <idosch@nvidia.com>,
+	Amit Cohen <amcohen@nvidia.com>, mlxsw@nvidia.com,
+	linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH net-next 14/14] selftests: mlxsw: Add PCI reset test
+Message-ID: <20231117152139.GA164483@vergenet.net>
+References: <cover.1700047319.git.petrm@nvidia.com>
+ <f0dea3a59ae1e8eb73be5cb1269383bf1bcc922c.1700047319.git.petrm@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f0dea3a59ae1e8eb73be5cb1269383bf1bcc922c.1700047319.git.petrm@nvidia.com>
 
-This implements the .cache_invalidate_user() callback to support iotlb
-flush for nested domain.
++ linux-kselftest ML, Shuah Khan
 
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-Signed-off-by: Yi Liu <yi.l.liu@intel.com>
----
- drivers/iommu/intel/nested.c | 54 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 54 insertions(+)
+On Wed, Nov 15, 2023 at 01:17:23PM +0100, Petr Machata wrote:
+> From: Ido Schimmel <idosch@nvidia.com>
+> 
+> Test that PCI reset works correctly by verifying that only the expected
+> reset methods are supported and that after issuing the reset the ifindex
+> of the port changes.
+> 
+> Signed-off-by: Ido Schimmel <idosch@nvidia.com>
+> Reviewed-by: Petr Machata <petrm@nvidia.com>
+> Signed-off-by: Petr Machata <petrm@nvidia.com>
 
-diff --git a/drivers/iommu/intel/nested.c b/drivers/iommu/intel/nested.c
-index b5a5563ab32c..44ad48db7ea0 100644
---- a/drivers/iommu/intel/nested.c
-+++ b/drivers/iommu/intel/nested.c
-@@ -73,9 +73,63 @@ static void intel_nested_domain_free(struct iommu_domain *domain)
- 	kfree(to_dmar_domain(domain));
- }
- 
-+static void domain_flush_iotlb_psi(struct dmar_domain *domain,
-+				   u64 addr, unsigned long npages)
-+{
-+	struct iommu_domain_info *info;
-+	unsigned long i;
-+
-+	xa_for_each(&domain->iommu_array, i, info)
-+		iommu_flush_iotlb_psi(info->iommu, domain,
-+				      addr >> VTD_PAGE_SHIFT, npages, 1, 0);
-+}
-+
-+static int intel_nested_cache_invalidate_user(struct iommu_domain *domain,
-+					      struct iommu_user_data_array *array,
-+					      u32 *cerror_idx)
-+{
-+	struct dmar_domain *dmar_domain = to_dmar_domain(domain);
-+	struct iommu_hwpt_vtd_s1_invalidate inv_info;
-+	u32 index;
-+	int ret;
-+
-+	/* REVISIT:
-+	 * VT-d has defined ITE, ICE, IQE for invalidation failure per hardware,
-+	 * but no error code yet, so just set the error code to be 0.
-+	 */
-+	*cerror_idx = 0;
-+
-+	for (index = 0; index < array->entry_num; index++) {
-+		ret = iommu_copy_struct_from_user_array(&inv_info, array,
-+							IOMMU_HWPT_DATA_VTD_S1,
-+							index, __reserved);
-+		if (ret) {
-+			pr_err_ratelimited("Failed to fetch invalidation request\n");
-+			break;
-+		}
-+
-+		if (inv_info.__reserved || (inv_info.flags & ~IOMMU_VTD_INV_FLAGS_LEAF) ||
-+		    !IS_ALIGNED(inv_info.addr, VTD_PAGE_SIZE)) {
-+			ret = -EINVAL;
-+			break;
-+		}
-+
-+		if (inv_info.addr == 0 && inv_info.npages == -1)
-+			intel_flush_iotlb_all(domain);
-+		else
-+			domain_flush_iotlb_psi(dmar_domain,
-+					       inv_info.addr, inv_info.npages);
-+	}
-+
-+	array->entry_num = index;
-+
-+	return ret;
-+}
-+
- static const struct iommu_domain_ops intel_nested_domain_ops = {
- 	.attach_dev		= intel_nested_attach_dev,
- 	.free			= intel_nested_domain_free,
-+	.cache_invalidate_user	= intel_nested_cache_invalidate_user,
- };
- 
- struct iommu_domain *intel_nested_domain_alloc(struct iommu_domain *parent,
--- 
-2.34.1
+Reviewed-by: Simon Horman <horms@kernel.org>
 
+> ---
+>  .../selftests/drivers/net/mlxsw/pci_reset.sh  | 58 +++++++++++++++++++
+>  1 file changed, 58 insertions(+)
+>  create mode 100755 tools/testing/selftests/drivers/net/mlxsw/pci_reset.sh
+> 
+> diff --git a/tools/testing/selftests/drivers/net/mlxsw/pci_reset.sh b/tools/testing/selftests/drivers/net/mlxsw/pci_reset.sh
+> new file mode 100755
+> index 000000000000..fe0343b95e6c
+> --- /dev/null
+> +++ b/tools/testing/selftests/drivers/net/mlxsw/pci_reset.sh
+> @@ -0,0 +1,58 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0
+> +#
+> +# Test that PCI reset works correctly by verifying that only the expected reset
+> +# methods are supported and that after issuing the reset the ifindex of the
+> +# port changes.
+> +
+> +lib_dir=$(dirname $0)/../../../net/forwarding
+> +
+> +ALL_TESTS="
+> +	pci_reset_test
+> +"
+> +NUM_NETIFS=1
+> +source $lib_dir/lib.sh
+> +source $lib_dir/devlink_lib.sh
+> +
+> +pci_reset_test()
+> +{
+> +	RET=0
+> +
+> +	local bus=$(echo $DEVLINK_DEV | cut -d '/' -f 1)
+> +	local bdf=$(echo $DEVLINK_DEV | cut -d '/' -f 2)
+> +
+> +	if [ $bus != "pci" ]; then
+> +		check_err 1 "devlink device is not a PCI device"
+> +		log_test "pci reset"
+> +		return
+> +	fi
+> +
+> +	if [ ! -f /sys/bus/pci/devices/$bdf/reset_method ]; then
+> +		check_err 1 "reset is not supported"
+> +		log_test "pci reset"
+> +		return
+> +	fi
+> +
+> +	[[ $(cat /sys/bus/pci/devices/$bdf/reset_method) == "bus" ]]
+> +	check_err $? "only \"bus\" reset method should be supported"
+> +
+> +	local ifindex_pre=$(ip -j link show dev $swp1 | jq '.[]["ifindex"]')
+> +
+> +	echo 1 > /sys/bus/pci/devices/$bdf/reset
+> +	check_err $? "reset failed"
+> +
+> +	# Wait for udev to rename newly created netdev.
+> +	udevadm settle
+> +
+> +	local ifindex_post=$(ip -j link show dev $swp1 | jq '.[]["ifindex"]')
+> +
+> +	[[ $ifindex_pre != $ifindex_post ]]
+> +	check_err $? "reset not performed"
+> +
+> +	log_test "pci reset"
+> +}
+> +
+> +swp1=${NETIFS[p1]}
+> +tests_run
+> +
+> +exit $EXIT_STATUS
+> -- 
+> 2.41.0
+> 
 
