@@ -1,47 +1,47 @@
-Return-Path: <linux-kselftest+bounces-246-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-247-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52A007EF365
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Nov 2023 14:07:55 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C7557EF368
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Nov 2023 14:08:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 01B402813C1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Nov 2023 13:07:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2784E1F2696C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Nov 2023 13:08:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 271DB328C9;
-	Fri, 17 Nov 2023 13:07:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3C4E32C6D;
+	Fri, 17 Nov 2023 13:07:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XArybbIc"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AKAICCHu"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B78FD5A;
-	Fri, 17 Nov 2023 05:07:27 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8F2CD6A;
+	Fri, 17 Nov 2023 05:07:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700226447; x=1731762447;
+  t=1700226448; x=1731762448;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=vNaYz7iy30KVHMhHAV2qo0PJlGdOsQbJ8Uvt0Ebwm2k=;
-  b=XArybbIcJ4OJm+pJgBlgdb7tJmsE0a44JgH+FOkdLv6qe9H03LLKy8tL
-   Si3e4qBEUX+eBQeV3QSqIpVygPbg6vS4yRlJZnMWQ29igvJy/kS0NUNzs
-   CnYnoQB35nxqKECvlQmW3wAwNGkd90X9oVqUX8UnGxAHdSVFx3/yVcTri
-   N+8Sp9Wj/kIWStM8jNym2ZVzCDQR0gJfxgsS8Q0MmeBC1fON3SbvfsDu9
-   TxYtPbUEVY57sibl7G5LSjAsdgNUhtztCzJvyWZLc4bXo+8A4zCfSstNj
-   zak6pLZd1I5KSOOiKVBHveYoT3txbZhVwkHoVdG7LNpJW5sp6o5DgSiAQ
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10896"; a="388446416"
+  bh=/yseFcU7MAcJE8wUttutj1uMPXnZ2HTzdId0S/Tk2J4=;
+  b=AKAICCHuBSqs01ok9pz5Wwide7bgv7/c+cpkyKsUsFGZkD6A3K82kL1q
+   Qfqgv8nX7IHzqwzETr88/pz9Ebi78P37xJtKJPJ1Y6JpCxtqRXAWPMq66
+   QEs3juC+zzpq/Xh2IG5JRD/qC10C+8WtcecyEUArBa+W3J+I+ata6FHeb
+   8s0iyfwu/PVwiF+yAqnBqCqHwUTqIxMfF7JM9iFyTAtIXnRnM1tf5Xzlf
+   TtKSMy7yvPC3mt8Pp0KpRVUsAOn0aSbdMiNrCt5+DJDSxa4Ft85Pekkzx
+   qYQM7ypY4CIQre16Op40jDCOkdtek38LyKvviVuAFs+p9Jkh5gtvM77hY
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10896"; a="388446427"
 X-IronPort-AV: E=Sophos;i="6.04,206,1695711600"; 
-   d="scan'208";a="388446416"
+   d="scan'208";a="388446427"
 Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2023 05:07:26 -0800
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Nov 2023 05:07:28 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10896"; a="836072061"
+X-IronPort-AV: E=McAfee;i="6600,9927,10896"; a="836072069"
 X-IronPort-AV: E=Sophos;i="6.04,206,1695711600"; 
-   d="scan'208";a="836072061"
+   d="scan'208";a="836072069"
 Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by fmsmga004.fm.intel.com with ESMTP; 17 Nov 2023 05:07:25 -0800
+  by fmsmga004.fm.intel.com with ESMTP; 17 Nov 2023 05:07:27 -0800
 From: Yi Liu <yi.l.liu@intel.com>
 To: joro@8bytes.org,
 	alex.williamson@redhat.com,
@@ -69,9 +69,9 @@ Cc: cohuck@redhat.com,
 	joao.m.martins@oracle.com,
 	xin.zeng@intel.com,
 	yan.y.zhao@intel.com
-Subject: [PATCH v6 4/6] iommufd/selftest: Add mock_domain_cache_invalidate_user support
-Date: Fri, 17 Nov 2023 05:07:15 -0800
-Message-Id: <20231117130717.19875-5-yi.l.liu@intel.com>
+Subject: [PATCH v6 5/6] iommufd/selftest: Add IOMMU_TEST_OP_MD_CHECK_IOTLB test op
+Date: Fri, 17 Nov 2023 05:07:16 -0800
+Message-Id: <20231117130717.19875-6-yi.l.liu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231117130717.19875-1-yi.l.liu@intel.com>
 References: <20231117130717.19875-1-yi.l.liu@intel.com>
@@ -85,99 +85,134 @@ Content-Transfer-Encoding: 8bit
 
 From: Nicolin Chen <nicolinc@nvidia.com>
 
-Add mock_domain_cache_invalidate_user() data structure to support user
-space selftest program to cover user cache invalidation pathway.
+Allow to test whether IOTLB has been invalidated or not.
 
 Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
 Signed-off-by: Yi Liu <yi.l.liu@intel.com>
 ---
- drivers/iommu/iommufd/iommufd_test.h | 17 +++++++++++
- drivers/iommu/iommufd/selftest.c     | 43 ++++++++++++++++++++++++++++
- 2 files changed, 60 insertions(+)
+ drivers/iommu/iommufd/iommufd_test.h          |  5 ++++
+ drivers/iommu/iommufd/selftest.c              | 26 +++++++++++++++++++
+ tools/testing/selftests/iommu/iommufd.c       |  4 +++
+ tools/testing/selftests/iommu/iommufd_utils.h | 24 +++++++++++++++++
+ 4 files changed, 59 insertions(+)
 
 diff --git a/drivers/iommu/iommufd/iommufd_test.h b/drivers/iommu/iommufd/iommufd_test.h
-index 7910fbe1962d..0000f58dcda3 100644
+index 0000f58dcda3..35d6207a96dd 100644
 --- a/drivers/iommu/iommufd/iommufd_test.h
 +++ b/drivers/iommu/iommufd/iommufd_test.h
-@@ -148,4 +148,21 @@ struct iommu_hwpt_selftest {
- 	__u32 iotlb;
+@@ -21,6 +21,7 @@ enum {
+ 	IOMMU_TEST_OP_ACCESS_REPLACE_IOAS,
+ 	IOMMU_TEST_OP_MOCK_DOMAIN_FLAGS,
+ 	IOMMU_TEST_OP_DIRTY,
++	IOMMU_TEST_OP_MD_CHECK_IOTLB,
  };
  
-+/**
-+ * struct iommu_hwpt_invalidate_selftest
-+ *
-+ * @flags: invalidate flags
-+ * @iotlb_id: invalidate iotlb entry index
-+ *
-+ * If IOMMU_TEST_INVALIDATE_ALL is set in @flags, @iotlb_id will be ignored
-+ */
-+struct iommu_hwpt_invalidate_selftest {
-+#define IOMMU_TEST_INVALIDATE_ALL	(1ULL << 0)
-+	__u32 flags;
-+	__u32 iotlb_id;
-+};
-+
-+#define IOMMU_TEST_INVALIDATE_ERR_FETCH	0xdeadbeee
-+#define IOMMU_TEST_INVALIDATE_ERR_REQ	0xdeadbeef
-+
- #endif
+ enum {
+@@ -121,6 +122,10 @@ struct iommu_test_cmd {
+ 			__aligned_u64 uptr;
+ 			__aligned_u64 out_nr_dirty;
+ 		} dirty;
++		struct {
++			__u32 id;
++			__u32 iotlb;
++		} check_iotlb;
+ 	};
+ 	__u32 last;
+ };
 diff --git a/drivers/iommu/iommufd/selftest.c b/drivers/iommu/iommufd/selftest.c
-index 5d93434003d8..2a9b970ca84e 100644
+index 2a9b970ca84e..f2d4599f701b 100644
 --- a/drivers/iommu/iommufd/selftest.c
 +++ b/drivers/iommu/iommufd/selftest.c
-@@ -473,9 +473,52 @@ static void mock_domain_free_nested(struct iommu_domain *domain)
- 	kfree(mock_nested);
+@@ -836,6 +836,28 @@ static int iommufd_test_md_check_refs(struct iommufd_ucmd *ucmd,
+ 	return 0;
  }
  
-+static int
-+mock_domain_cache_invalidate_user(struct iommu_domain *domain,
-+				  struct iommu_user_data_array *array,
-+				  u32 *error_code)
++static int iommufd_test_md_check_iotlb(struct iommufd_ucmd *ucmd,
++				       u32 mockpt_id, unsigned int iotlb_id,
++				       u32 iotlb)
 +{
-+	struct mock_iommu_domain_nested *mock_nested =
-+		container_of(domain, struct mock_iommu_domain_nested, domain);
-+	struct iommu_hwpt_invalidate_selftest inv;
++	struct mock_iommu_domain_nested *mock_nested;
++	struct iommufd_hw_pagetable *hwpt;
 +	int rc = 0;
-+	int i, j;
 +
-+	if (domain->type != IOMMU_DOMAIN_NESTED)
-+		return -EINVAL;
++	hwpt = get_md_pagetable_nested(ucmd, mockpt_id, &mock_nested);
++	if (IS_ERR(hwpt))
++		return PTR_ERR(hwpt);
 +
-+	for (i = 0; i < array->entry_num; i++) {
-+		rc = iommu_copy_struct_from_user_array(&inv, array,
-+						       IOMMU_HWPT_DATA_SELFTEST,
-+						       i, iotlb_id);
-+		if (rc) {
-+			*error_code = IOMMU_TEST_INVALIDATE_ERR_FETCH;
-+			goto err;
-+		}
-+		/* Invalidate all mock iotlb entries and ignore iotlb_id */
-+		if (inv.flags & IOMMU_TEST_INVALIDATE_ALL) {
-+			for (j = 0; j < MOCK_NESTED_DOMAIN_IOTLB_NUM; j++)
-+				mock_nested->iotlb[j] = 0;
-+			continue;
-+		}
-+		/* Treat out-of-boundry iotlb_id as a request error */
-+		if (inv.iotlb_id > MOCK_NESTED_DOMAIN_IOTLB_ID_MAX) {
-+			*error_code = IOMMU_TEST_INVALIDATE_ERR_REQ;
-+			rc = -EINVAL;
-+			goto err;
-+		}
-+		mock_nested->iotlb[inv.iotlb_id] = 0;
-+	}
++	mock_nested = container_of(hwpt->domain,
++				   struct mock_iommu_domain_nested, domain);
 +
-+err:
-+	array->entry_num = i;
++	if (iotlb_id > MOCK_NESTED_DOMAIN_IOTLB_ID_MAX ||
++	    mock_nested->iotlb[iotlb_id] != iotlb)
++		rc = -EINVAL;
++	iommufd_put_object(&hwpt->obj);
 +	return rc;
 +}
 +
- static struct iommu_domain_ops domain_nested_ops = {
- 	.free = mock_domain_free_nested,
- 	.attach_dev = mock_domain_nop_attach,
-+	.cache_invalidate_user = mock_domain_cache_invalidate_user,
- };
+ struct selftest_access {
+ 	struct iommufd_access *access;
+ 	struct file *file;
+@@ -1317,6 +1339,10 @@ int iommufd_test(struct iommufd_ucmd *ucmd)
+ 		return iommufd_test_md_check_refs(
+ 			ucmd, u64_to_user_ptr(cmd->check_refs.uptr),
+ 			cmd->check_refs.length, cmd->check_refs.refs);
++	case IOMMU_TEST_OP_MD_CHECK_IOTLB:
++		return iommufd_test_md_check_iotlb(ucmd, cmd->id,
++						   cmd->check_iotlb.id,
++						   cmd->check_iotlb.iotlb);
+ 	case IOMMU_TEST_OP_CREATE_ACCESS:
+ 		return iommufd_test_create_access(ucmd, cmd->id,
+ 						  cmd->create_access.flags);
+diff --git a/tools/testing/selftests/iommu/iommufd.c b/tools/testing/selftests/iommu/iommufd.c
+index 6ed328c863c4..c8763b880a16 100644
+--- a/tools/testing/selftests/iommu/iommufd.c
++++ b/tools/testing/selftests/iommu/iommufd.c
+@@ -330,6 +330,10 @@ TEST_F(iommufd_ioas, alloc_hwpt_nested)
+ 					   &nested_hwpt_id[1],
+ 					   IOMMU_HWPT_DATA_SELFTEST, &data,
+ 					   sizeof(data));
++		test_cmd_hwpt_check_iotlb_all(nested_hwpt_id[0],
++					      IOMMU_TEST_IOTLB_DEFAULT);
++		test_cmd_hwpt_check_iotlb_all(nested_hwpt_id[1],
++					      IOMMU_TEST_IOTLB_DEFAULT);
  
- static inline struct iommufd_hw_pagetable *
+ 		/* Negative test: a nested hwpt on top of a nested hwpt */
+ 		test_err_hwpt_alloc_nested(EINVAL, self->device_id,
+diff --git a/tools/testing/selftests/iommu/iommufd_utils.h b/tools/testing/selftests/iommu/iommufd_utils.h
+index 050e9751321c..69561ba9e7aa 100644
+--- a/tools/testing/selftests/iommu/iommufd_utils.h
++++ b/tools/testing/selftests/iommu/iommufd_utils.h
+@@ -195,6 +195,30 @@ static int _test_cmd_hwpt_alloc(int fd, __u32 device_id, __u32 pt_id,
+ 		     _test_cmd_hwpt_alloc(self->fd, device_id, pt_id, flags, \
+ 					  hwpt_id, data_type, data, data_len))
+ 
++#define test_cmd_hwpt_check_iotlb(hwpt_id, iotlb_id, expected)                 \
++	({                                                                     \
++		struct iommu_test_cmd test_cmd = {                             \
++			.size = sizeof(test_cmd),                              \
++			.op = IOMMU_TEST_OP_MD_CHECK_IOTLB,                    \
++			.id = hwpt_id,                                         \
++			.check_iotlb = {                                       \
++				.id = iotlb_id,                                \
++				.iotlb = expected,                             \
++			},                                                     \
++		};                                                             \
++		ASSERT_EQ(0,                                                   \
++			  ioctl(self->fd,                                      \
++				_IOMMU_TEST_CMD(IOMMU_TEST_OP_MD_CHECK_IOTLB), \
++				&test_cmd));                                   \
++	})
++
++#define test_cmd_hwpt_check_iotlb_all(hwpt_id, expected)                       \
++	({                                                                     \
++		int i;                                                         \
++		for (i = 0; i < MOCK_NESTED_DOMAIN_IOTLB_NUM; i++)             \
++			test_cmd_hwpt_check_iotlb(hwpt_id, i, expected);       \
++	})
++
+ static int _test_cmd_access_replace_ioas(int fd, __u32 access_id,
+ 					 unsigned int ioas_id)
+ {
 -- 
 2.34.1
 
