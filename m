@@ -1,184 +1,240 @@
-Return-Path: <linux-kselftest+bounces-262-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-263-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A3CA7EF947
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Nov 2023 22:13:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 450497EFEEC
+	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Nov 2023 11:39:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B3865280DDF
-	for <lists+linux-kselftest@lfdr.de>; Fri, 17 Nov 2023 21:13:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EEE4D28102C
+	for <lists+linux-kselftest@lfdr.de>; Sat, 18 Nov 2023 10:39:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5FAF446D3;
-	Fri, 17 Nov 2023 21:13:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB8B7D507;
+	Sat, 18 Nov 2023 10:39:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="jeghf2rJ"
+	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="OgOH+LU+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83F31B6
-	for <linux-kselftest@vger.kernel.org>; Fri, 17 Nov 2023 13:13:08 -0800 (PST)
-Received: by mail-oi1-x22f.google.com with SMTP id 5614622812f47-3b2e72fe47fso1551611b6e.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 17 Nov 2023 13:13:08 -0800 (PST)
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A237BD72
+	for <linux-kselftest@vger.kernel.org>; Sat, 18 Nov 2023 02:39:06 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1ce618b7919so8862955ad.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 18 Nov 2023 02:39:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1700255588; x=1700860388; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=PKz01wcVX8Bxs3KR+NJBt3hwfdvhmPYzaTZtcibwsZc=;
-        b=jeghf2rJzclJzmiMiYweFiK2yBMmI83nH0JL+BaLEEjrzuMR8gAVxET00ZfzKhjfG4
-         EN0iZiMHgHaSkHFd/odjJYM3/s93jrJQVwfUW3IO3Y0quEWdKtWPtSWDAIEZvERGq5vo
-         TVGfwmg7JChgq8xrfcqmA8bZ0Ae7kT/x9I7ass/3h3V5IhT1F3lVw++7cEC4X++P1JWd
-         uU+gCH+MTYePUFhRppVYHN+wFC0sLPEJmMWINoaex8sYl3R+xiyZkQ4K+vtVU5yAQZte
-         x+yVLwgQ6ClbRJ2ym8zSxUcsH17Acv60AH24H8CfvGCizvKnOzLjlNFApubFFMfKnE4x
-         jr1A==
+        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1700303946; x=1700908746; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zy1KCU9oTgYlIGJ1CmWqV4X6k+RLxXAN+NT2CTiEe4g=;
+        b=OgOH+LU+DlnpLwQZuxxGIoOgEifApS1GwUrc/zmItgbKDpwXwQj0hKw2dQ9h8qisGG
+         31MHSx4nUFyYfqUOeC/KsC8vt5SgGRLy/I9zO62oysgiepVdv2LUStmtrQ9X/5xhn3uu
+         lKBuB2opDvL4jmKeuncrj7+HCzmR4QQNcnAJBWNNXWhg/x9ju08cZTqsCXgxtcZell1t
+         QmMgAU2E12RmFuBRC0Wk9Rxi4J/SDQivi2MuNFNb9l1EfpebPy4SaEuk0cONzx78Klwj
+         H7XiyXqGdxFW/TcDXpPSu1+n8Vzv+NGVm8jIv+Mx53l3el4WUk41UdohTbLybQherx48
+         SklA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700255588; x=1700860388;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20230601; t=1700303946; x=1700908746;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PKz01wcVX8Bxs3KR+NJBt3hwfdvhmPYzaTZtcibwsZc=;
-        b=Celbo8Peb2qy6k0H0s7SyG/oTeAPaZhFxxnI+vA1q2b6+w6tbGGpoqICLctNaOsda0
-         QT7tjlPT114svWOndxUKAp2/+UWyHIxPJ4p0rB6k0GG8I62P39AMF+2CBzhkw1Uh8pD6
-         fN6uM4DQfDhYxwGlM52VvxiH7p4sKoAYptNox/9kUvhFmrgt4QabJgd1ve58sczIYmaq
-         Qyj4KJVkBbQMqXHlKmDuO6VRNVLbMSgCUdI/cnFdlYWSvlHE4JGADYBca6T9EWuIuaYI
-         3GPFrYlu22+E0WrHxrdM/58M1tBGa6XQZ44AFbJ+L7RfBv/yrmxCcfirU49HrkEhfr57
-         TXMQ==
-X-Gm-Message-State: AOJu0YzkZWXApZmT+29EoPzfstmNXZEdtzggBENF5TEWsxYzgTK/hU74
-	HNZ2/AhnfflwC4oxNNOT0vVWdwB7tVqnqLjLznwRDQ==
-X-Google-Smtp-Source: AGHT+IHkJxAw4BCtYb7vtqTpvYzYdZ/WV9j6uSsTfqp9w+14kwuRXNQnpMN39mmIJPuH7mhfyy/qGA==
-X-Received: by 2002:a05:6808:429a:b0:3b2:e2d1:34d2 with SMTP id dq26-20020a056808429a00b003b2e2d134d2mr516718oib.47.1700255587791;
-        Fri, 17 Nov 2023 13:13:07 -0800 (PST)
-Received: from debug.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id o18-20020a05680803d200b003ae425fc9bdsm408308oie.23.2023.11.17.13.12.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Nov 2023 13:12:53 -0800 (PST)
-Date: Fri, 17 Nov 2023 13:12:46 -0800
-From: Deepak Gupta <debug@rivosinc.com>
-To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc: "dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
-	"broonie@kernel.org" <broonie@kernel.org>,
-	"Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
-	"brauner@kernel.org" <brauner@kernel.org>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"mgorman@suse.de" <mgorman@suse.de>,
-	"vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
-	"fweimer@redhat.com" <fweimer@redhat.com>,
-	"mingo@redhat.com" <mingo@redhat.com>,
-	"rostedt@goodmis.org" <rostedt@goodmis.org>,
-	"hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-	"tglx@linutronix.de" <tglx@linutronix.de>,
-	"vschneid@redhat.com" <vschneid@redhat.com>,
-	"shuah@kernel.org" <shuah@kernel.org>,
-	"bristot@redhat.com" <bristot@redhat.com>,
-	"hpa@zytor.com" <hpa@zytor.com>,
-	"peterz@infradead.org" <peterz@infradead.org>,
-	"bp@alien8.de" <bp@alien8.de>,
-	"bsegall@google.com" <bsegall@google.com>,
-	"x86@kernel.org" <x86@kernel.org>,
-	"juri.lelli@redhat.com" <juri.lelli@redhat.com>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-	"keescook@chromium.org" <keescook@chromium.org>,
-	"jannh@google.com" <jannh@google.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-	"will@kernel.org" <will@kernel.org>,
-	"Pandey, Sunil K" <sunil.k.pandey@intel.com>
-Subject: Re: [PATCH RFC RFT v2 5/5] kselftest/clone3: Test shadow stack
- support
-Message-ID: <ZVfXTmVestrAwIkN@debug.ba.rivosinc.com>
-References: <20231114-clone3-shadow-stack-v2-0-b613f8681155@kernel.org>
- <20231114-clone3-shadow-stack-v2-5-b613f8681155@kernel.org>
- <309927ad8bfa72ce2d084ee16cd0cd84e69fef16.camel@intel.com>
+        bh=zy1KCU9oTgYlIGJ1CmWqV4X6k+RLxXAN+NT2CTiEe4g=;
+        b=rd1s0r4CXKxCWysyczy3Xikba9AOw/ORkbi4ir+E5MGeiqLqdMZxZlzKF8A6zdPSst
+         twjMFVTzyXbl3dtDkDUqrcW6McKKajaXuWF8odUcwmbJcyIgTQbnCsrjASGCFVPlIdEU
+         PtUv6bMfSv7kHelTKL+gjesEr50LAb7lm5F7GMgGqsp1P16yfOs75TGuo99TJyJrWGbd
+         VpOL7PMJXseNMaBv4hNywDYFVnX1o/68Esl0r9bgUmwKhAxHXZhc7KWv2oJtYUGGSp/M
+         1xQLkc0SJhU0gfSabJB+I2PeGaV6GX1A+EDI1egdsMG35mc/VyzxjLPfkBlXpjAhNZea
+         fvjQ==
+X-Gm-Message-State: AOJu0YyHyDArNFVcEfmMbqDpE/DmPrJ8oyvOwFmHp5fa5O/NnzXrGLoy
+	pbuV1EkcCLngeBgwQA+ycDwzYQ==
+X-Google-Smtp-Source: AGHT+IF5N3QYbHRaegOcdKOfyplWUxrNW29H3jMu8vldA9SOfJqtKJgbzZKkkQCNxUUc0PsWDQo6Hw==
+X-Received: by 2002:a17:902:e88e:b0:1cc:5aef:f2c3 with SMTP id w14-20020a170902e88e00b001cc5aeff2c3mr11314929plg.22.1700303946093;
+        Sat, 18 Nov 2023 02:39:06 -0800 (PST)
+Received: from [157.82.205.15] ([157.82.205.15])
+        by smtp.gmail.com with ESMTPSA id c11-20020a170902aa4b00b001b896686c78sm2745643plr.66.2023.11.18.02.38.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 18 Nov 2023 02:39:05 -0800 (PST)
+Message-ID: <6253fb6b-9a53-484a-9be5-8facd46c051e@daynix.com>
+Date: Sat, 18 Nov 2023 19:38:58 +0900
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v2 1/7] bpf: Introduce BPF_PROG_TYPE_VNET_HASH
+Content-Language: en-US
+From: Akihiko Odaki <akihiko.odaki@daynix.com>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Jason Wang <jasowang@redhat.com>
+Cc: Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ "Michael S. Tsirkin" <mst@redhat.com>, Xuan Zhuo
+ <xuanzhuo@linux.alibaba.com>, Mykola Lysenko <mykolal@fb.com>,
+ Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>,
+ "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+ LKML <linux-kernel@vger.kernel.org>,
+ Network Development <netdev@vger.kernel.org>, kvm@vger.kernel.org,
+ virtualization@lists.linux-foundation.org,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ Yuri Benditovich <yuri.benditovich@daynix.com>,
+ Andrew Melnychenko <andrew@daynix.com>
+References: <20231015141644.260646-1-akihiko.odaki@daynix.com>
+ <20231015141644.260646-2-akihiko.odaki@daynix.com>
+ <CAADnVQLfUDmgYng8Cw1hiZOMfWNWLjbn7ZGc4yOEz-XmeFEz5Q@mail.gmail.com>
+ <2594bb24-74dc-4785-b46d-e1bffcc3e7ed@daynix.com>
+ <CAADnVQ+J+bOtvEfdvgUse_Rr07rM5KOZ5DtAmHDgRmi70W68+g@mail.gmail.com>
+ <CACGkMEs22078F7rSLEz6eQabkZZ=kujSONUNMThZz5Gp=YiidQ@mail.gmail.com>
+ <CAADnVQLt8NWvP8qGWMPx=12PwWWE69P7aS2dbm=khAJkCnJEoQ@mail.gmail.com>
+ <9a4853ad-5ef4-4b15-a49e-9edb5ae4468e@daynix.com>
+In-Reply-To: <9a4853ad-5ef4-4b15-a49e-9edb5ae4468e@daynix.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <309927ad8bfa72ce2d084ee16cd0cd84e69fef16.camel@intel.com>
 
-On Tue, Nov 14, 2023 at 11:11:58PM +0000, Edgecombe, Rick P wrote:
->On Tue, 2023-11-14 at 20:05 +0000, Mark Brown wrote:
->> +static void test_shadow_stack_supported(void)
->> +{
->> +        long shadow_stack;
->> +
->> +       shadow_stack = syscall(__NR_map_shadow_stack, 0,
->> getpagesize(), 0);
->
->Hmm, x86 fails this call if user shadow stack is not supported in the
->HW or the kernel, but doesn't care if it is enabled on the thread or
->not. If shadow stack is not enabled (or not yet enabled), shadow stacks
->are allowed to be mapped. Should it fail if shadow stack is not yet
->enabled?
->
->Since shadow stack is per thread, map_shadow_stack could still be
->called on another thread that has it enabled. Basically I don't think
->blocking it will reduce the possible states the kernel has to handle.
->
->The traditional way to check if shadow stack is enabled on x86 is the
->check for a non zero return from the _get_ssp() intrinsic:
->https://gcc.gnu.org/onlinedocs/gcc-9.2.0/gcc/x86-control-flow-protection-intrinsics.html
->
->It seems like there will be a need for some generic method of checking
->if shadow stack is enabled. Maybe a more generic compiler
->intrinsic/builtin or glibc API (something unrelated to SSP)?
+On 2023/10/18 4:19, Akihiko Odaki wrote:
+> On 2023/10/18 4:03, Alexei Starovoitov wrote:
+>> On Mon, Oct 16, 2023 at 7:38â€¯PM Jason Wang <jasowang@redhat.com> wrote:
+>>>
+>>> On Tue, Oct 17, 2023 at 7:53â€¯AM Alexei Starovoitov
+>>> <alexei.starovoitov@gmail.com> wrote:
+>>>>
+>>>> On Sun, Oct 15, 2023 at 10:10â€¯AM Akihiko Odaki 
+>>>> <akihiko.odaki@daynix.com> wrote:
+>>>>>
+>>>>> On 2023/10/16 1:07, Alexei Starovoitov wrote:
+>>>>>> On Sun, Oct 15, 2023 at 7:17â€¯AM Akihiko Odaki 
+>>>>>> <akihiko.odaki@daynix.com> wrote:
+>>>>>>>
+>>>>>>> diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+>>>>>>> index 0448700890f7..298634556fab 100644
+>>>>>>> --- a/include/uapi/linux/bpf.h
+>>>>>>> +++ b/include/uapi/linux/bpf.h
+>>>>>>> @@ -988,6 +988,7 @@ enum bpf_prog_type {
+>>>>>>> Â Â Â Â Â Â Â Â Â  BPF_PROG_TYPE_SK_LOOKUP,
+>>>>>>> Â Â Â Â Â Â Â Â Â  BPF_PROG_TYPE_SYSCALL, /* a program that can execute 
+>>>>>>> syscalls */
+>>>>>>> Â Â Â Â Â Â Â Â Â  BPF_PROG_TYPE_NETFILTER,
+>>>>>>> +Â Â Â Â Â Â  BPF_PROG_TYPE_VNET_HASH,
+>>>>>>
+>>>>>> Sorry, we do not add new stable program types anymore.
+>>>>>>
+>>>>>>> @@ -6111,6 +6112,10 @@ struct __sk_buff {
+>>>>>>> Â Â Â Â Â Â Â Â Â  __u8Â  tstamp_type;
+>>>>>>> Â Â Â Â Â Â Â Â Â  __u32 :24;Â Â Â Â Â Â Â Â Â Â Â Â Â  /* Padding, future use. */
+>>>>>>> Â Â Â Â Â Â Â Â Â  __u64 hwtstamp;
+>>>>>>> +
+>>>>>>> +Â Â Â Â Â Â  __u32 vnet_hash_value;
+>>>>>>> +Â Â Â Â Â Â  __u16 vnet_hash_report;
+>>>>>>> +Â Â Â Â Â Â  __u16 vnet_rss_queue;
+>>>>>>> Â Â  };
+>>>>>>
+>>>>>> we also do not add anything to uapi __sk_buff.
+>>>>>>
+>>>>>>> +const struct bpf_verifier_ops vnet_hash_verifier_ops = {
+>>>>>>> +Â Â Â Â Â Â  .get_func_protoÂ Â Â Â Â Â Â Â  = sk_filter_func_proto,
+>>>>>>> +Â Â Â Â Â Â  .is_valid_accessÂ Â Â Â Â Â Â  = sk_filter_is_valid_access,
+>>>>>>> +Â Â Â Â Â Â  .convert_ctx_accessÂ Â Â Â  = bpf_convert_ctx_access,
+>>>>>>> +Â Â Â Â Â Â  .gen_ld_absÂ Â Â Â Â Â Â Â Â Â Â Â  = bpf_gen_ld_abs,
+>>>>>>> +};
+>>>>>>
+>>>>>> and we don't do ctx rewrites like this either.
+>>>>>>
+>>>>>> Please see how hid-bpf and cgroup rstat are hooking up bpf
+>>>>>> in _unstable_ way.
+>>>>>
+>>>>> Can you describe what "stable" and "unstable" mean here? I'm new to 
+>>>>> BPF
+>>>>> and I'm worried if it may mean the interface stability.
+>>>>>
+>>>>> Let me describe the context. QEMU bundles an eBPF program that is used
+>>>>> for the "eBPF steering program" feature of tun. Now I'm proposing to
+>>>>> extend the feature to allow to return some values to the userspace and
+>>>>> vhost_net. As such, the extension needs to be done in a way that 
+>>>>> ensures
+>>>>> interface stability.
+>>>>
+>>>> bpf is not an option then.
+>>>> we do not add stable bpf program types or hooks any more.
+>>>
+>>> Does this mean eBPF could not be used for any new use cases other than
+>>> the existing ones?
+>>
+>> It means that any new use of bpf has to be unstable for the time being.
+> 
+> Can you elaborate more about making new use unstable "for the time 
+> being?" Is it a temporary situation? What is the rationale for that? 
+> Such information will help devise a solution that is best for both of 
+> the BPF and network subsystems.
+> 
+> I would also appreciate if you have some documentation or link to 
+> relevant discussions on the mailing list. That will avoid having same 
+> discussion you may already have done in the past.
 
-Exposing a new file under procfs would be useful?
-Something like "/proc/sys/vm/user_shadow_stack_supported"
+Hi,
 
-`map_shadow_stack` can return MAP_FAILED for other reasons.
-I think `kselftests` are fine but I don't want people to pick up this
-as test code and run with it in production :-)
+The discussion has been stuck for a month, but I'd still like to 
+continue figuring out the way best for the whole kernel to implement 
+this feature. I summarize the current situation and question that needs 
+to be answered before push this forward:
 
-So kernel providing a way to indicate whether it supports shadow stack
-mappings in user mode via procfs would be useful and arch agnostic.
+The goal of this RFC is to allow to report hash values calculated with 
+eBPF steering program. It's essentially just to report 4 bytes from the 
+kernel to the userspace.
 
->
->> +       {
->> +               .name = "Shadow stack on system with shadow stack",
->> +               .flags = 0,
->> +               .size = 0,
->> +               .expected = 0,
->> +               .e2big_valid = true,
->> +               .test_mode = CLONE3_ARGS_SHADOW_STACK,
->> +               .filter = no_shadow_stack,
->> +       },
->> +       {
->> +               .name = "Shadow stack on system without shadow
->> stack",
->> +               .flags = 0,
->> +               .size = 0,
->> +               .expected = -EINVAL,
->> +               .e2big_valid = true,
->> +               .test_mode = CLONE3_ARGS_SHADOW_STACK,
->> +               .filter = have_shadow_stack,
->> +       },
->>  };
->>  
->I changed x86's map_shadow_stack to return an error when shadow stack
->was not enabled to make the detection logic in the test work. Also
->changed the clone3 Makefile to generate the shadow stack bit in the
->tests. When running the 'clone3' test with shadow stack it passed, but
->there is a failure in the non-shadow stack case:
->...
-># Shadow stack not supported
->ok 20 # SKIP Shadow stack on system with shadow stack
-># Running test 'Shadow stack on system without shadow stack'
-># [1333] Trying clone3() with flags 0 (size 0)
-># I am the parent (1333). My child's pid is 1342
-># I am the child, my PID is 1342
-># [1333] clone3() with flags says: 0 expected -22
-># [1333] Result (0) is different than expected (-22)
->not ok 21 Shadow stack on system without shadow stack
-># Totals: pass:19 fail:1 xfail:0 xpass:0 skip:1 error:0
->
->The other tests passed in both cases. I'm going to dig into the other
->parts now but can circle back if it's not obvious what's going on
->there.
+Unfortunately, however, it is not acceptable for the BPF subsystem 
+because the "stable" BPF is completely fixed these days. The 
+"unstable/kfunc" BPF is an alternative, but the eBPF program will be 
+shipped with a portable userspace program (QEMU)[1] so the lack of 
+interface stability is not tolerable.
+
+Another option is to hardcode the algorithm that was conventionally 
+implemented with eBPF steering program in the kernel[2]. It is possible 
+because the algorithm strictly follows the virtio-net specification[3]. 
+However, there are proposals to add different algorithms to the 
+specification[4], and hardcoding the algorithm to the kernel will 
+require to add more UAPIs and code each time such a specification change 
+happens, which is not good for tuntap.
+
+In short, the proposed feature requires to make either of three compromises:
+
+1. Compromise on the BPF side: Relax the "stable" BPF feature freeze 
+once and allow eBPF steering program to report 4 more bytes to the kernel.
+
+2. Compromise on the tuntap side: Implement the algorithm to the kernel, 
+and abandon the capability to update the algorithm without changing the 
+kernel.
+
+IMHO, I think it's better to make a compromise on the BPF side (option 
+1). We should minimize the total UAPI changes in the whole kernel, and 
+option 1 is much superior in that sense.
+
+Yet I have to note that such a compromise on the BPF side can risk the 
+"stable" BPF feature freeze fragile and let other people complain like 
+"you allowed to change stable BPF for this, why do you reject [some 
+other request to change stable BPF]?" It is bad for BPF maintainers. (I 
+can imagine that introducing and maintaining widely different BPF 
+interfaces is too much burden.) And, of course, this requires an 
+approval from BPF maintainers.
+
+So I'd like to ask you that which of these compromises you think worse. 
+Please also tell me if you have another idea.
+
+Regards,
+Akihiko Odaki
+
+[1] https://qemu.readthedocs.io/en/v8.1.0/devel/ebpf_rss.html
+[2] 
+https://lore.kernel.org/all/20231008052101.144422-1-akihiko.odaki@daynix.com/
+[3] 
+https://docs.oasis-open.org/virtio/virtio/v1.2/csd01/virtio-v1.2-csd01.html#x1-2400003
+[4] 
+https://lore.kernel.org/all/CACGkMEuBbGKssxNv5AfpaPpWQfk2BHR83rM5AHXN-YVMf2NvpQ@mail.gmail.com/
 
