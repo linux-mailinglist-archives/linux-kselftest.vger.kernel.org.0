@@ -1,148 +1,218 @@
-Return-Path: <linux-kselftest+bounces-279-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-280-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2378B7F090B
-	for <lists+linux-kselftest@lfdr.de>; Sun, 19 Nov 2023 22:02:52 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8AEF7F0980
+	for <lists+linux-kselftest@lfdr.de>; Sun, 19 Nov 2023 23:55:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C4899280D34
-	for <lists+linux-kselftest@lfdr.de>; Sun, 19 Nov 2023 21:02:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ADF131C203BC
+	for <lists+linux-kselftest@lfdr.de>; Sun, 19 Nov 2023 22:55:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4325012E46;
-	Sun, 19 Nov 2023 21:02:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FDDE12B9F;
+	Sun, 19 Nov 2023 22:55:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FZpuU0td"
+	dkim=pass (2048-bit key) header.d=mit.edu header.i=@mit.edu header.b="hsz1c0Sf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10EC912B7C;
-	Sun, 19 Nov 2023 21:02:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57949C433C9;
-	Sun, 19 Nov 2023 21:02:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700427767;
-	bh=LdCcDCVibEq9XtMPBRAazcWyb1lUm4YRH93xkKpOHbM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=FZpuU0tdRMVqNc17EPw2Yx+O61k7X2a1HFa5dIdI0JeSJbPg+OayhEf8qOUGAqiy3
-	 t65XUeKw8Z935Y5auUU0WejjqnKGgNlEp1OxFv3e2uEtZJlCjgkEV4oIU6FCpC7Ovs
-	 QRuW5N2zde8PrWeKWO39XMJLMQysUEvMBI4N3XDwn/odf4AVo7ewp/Cj5zp56782Vv
-	 uXEpEyQ8f4mV+dC1VwB33IAfg95hhwshydjYwfaxW2yJAJlvzXqSkLtHWFHq0EA08i
-	 vATgFTBKZotJ6LQY5zo+mmwR81AvAOd4c8JUF5epck+DjCpD4r8DMoNr8uQmKeXBP9
-	 R07melvoUfkSw==
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2c509d5ab43so51544441fa.0;
-        Sun, 19 Nov 2023 13:02:47 -0800 (PST)
-X-Gm-Message-State: AOJu0YwGj2mEpQ+m6A257C8NBKjue25jd2UZAbsg8QKSN2rN22yUTpG2
-	j67ehwwO4XcsCuSfDiuSEysnjYvWqgn36Y8IvOQ=
-X-Google-Smtp-Source: AGHT+IFyYOQHQnx0Par61ni3D+IsRVTlNd6D9SKI0apNaeY6hc8EhMaBYVtDLvZWr7jIRh/7uxjcLeqDv60Mo+HqTn0=
-X-Received: by 2002:a2e:9656:0:b0:2be:54b4:ff90 with SMTP id
- z22-20020a2e9656000000b002be54b4ff90mr2814616ljh.53.1700427765530; Sun, 19
- Nov 2023 13:02:45 -0800 (PST)
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C729E12D
+	for <linux-kselftest@vger.kernel.org>; Sun, 19 Nov 2023 14:55:44 -0800 (PST)
+Received: from cwcc.thunk.org (pool-173-48-82-21.bstnma.fios.verizon.net [173.48.82.21])
+	(authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+	by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 3AJMsbEL032072
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sun, 19 Nov 2023 17:54:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+	t=1700434481; bh=cvxrKU06XMRJ5gQInDe4mgPA1QhjOCnI1DlVNYsLak4=;
+	h=Date:From:Subject:Message-ID:MIME-Version:Content-Type;
+	b=hsz1c0SfTpW0jGCJSgUBydQcigyA4uiF4VnwsEb2Pjt9fcdThq6w6aQB2j5kC/SkR
+	 F6Dqjy+j2/baYG40e1rQI416xnYe3WZ4b9t+8/SqkU5F4VUNxCNAFfVsAaxONzW9u6
+	 HJP5/2ZtdZ+RpZPiiuCjzMiysG4hNIoZ61eem6D51qrYsjqekgMFA121jK73B6u+bS
+	 vaoC0J+hsCdFKtMLrefsb80Npts0LrMD8QmS+Dtx/ltZKmSP7e2nLNxo203NAJ0OUE
+	 6AFuv6Aii6fs8u9DPTRi2t9RDpM3XVftBibZ6CVdZG9TwM14rUslJZnXTVo4LdJ0Pz
+	 yEYAsEIxXfgiw==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+	id A1D9815C02B0; Sun, 19 Nov 2023 17:54:37 -0500 (EST)
+Date: Sun, 19 Nov 2023 17:54:37 -0500
+From: "Theodore Ts'o" <tytso@mit.edu>
+To: Chandan Babu R <chandanbabu@kernel.org>
+Cc: "Darrick J. Wong" <djwong@kernel.org>,
+        Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com>,
+        workflows@vger.kernel.org, Joe Perches <joe@perches.com>,
+        Andy Whitcroft <apw@canonical.com>, David Gow <davidgow@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>, Mark Brown <broonie@kernel.org>,
+        Shuah Khan <skhan@linuxfoundation.org>, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org,
+        Veronika Kabatova <vkabatov@redhat.com>, CKI <cki-project@redhat.com>,
+        kernelci@lists.linux.dev, Chandan Babu R <chandanrlinux@gmail.com>,
+        Dave Chinner <david@fromorbit.com>
+Subject: Re: [PATCH 2/3] MAINTAINERS: Require kvm-xfstests smoke for ext4
+Message-ID: <20231119225437.GA292450@mit.edu>
+References: <20231115175146.9848-1-Nikolai.Kondrashov@redhat.com>
+ <20231115175146.9848-3-Nikolai.Kondrashov@redhat.com>
+ <20231115185808.GD36211@frogsfrogsfrogs>
+ <87v8a096cr.fsf@debian-BULLSEYE-live-builder-AMD64>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231015141644.260646-1-akihiko.odaki@daynix.com>
- <20231015141644.260646-2-akihiko.odaki@daynix.com> <CAADnVQLfUDmgYng8Cw1hiZOMfWNWLjbn7ZGc4yOEz-XmeFEz5Q@mail.gmail.com>
- <2594bb24-74dc-4785-b46d-e1bffcc3e7ed@daynix.com> <CAADnVQ+J+bOtvEfdvgUse_Rr07rM5KOZ5DtAmHDgRmi70W68+g@mail.gmail.com>
- <CACGkMEs22078F7rSLEz6eQabkZZ=kujSONUNMThZz5Gp=YiidQ@mail.gmail.com>
- <CAADnVQLt8NWvP8qGWMPx=12PwWWE69P7aS2dbm=khAJkCnJEoQ@mail.gmail.com>
- <9a4853ad-5ef4-4b15-a49e-9edb5ae4468e@daynix.com> <6253fb6b-9a53-484a-9be5-8facd46c051e@daynix.com>
- <CAPhsuW5JYoM-Mkehdy=FQsG1nvjbYGzwRZx8BkpG1P7cHdD=eQ@mail.gmail.com> <dba89d4b-84aa-4c9f-b016-56fd3ade04b2@daynix.com>
-In-Reply-To: <dba89d4b-84aa-4c9f-b016-56fd3ade04b2@daynix.com>
-From: Song Liu <song@kernel.org>
-Date: Sun, 19 Nov 2023 13:02:33 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW5KLgt_gsih7zi+T99iYVbt7hk7=OCwYzin-H3=OhF54Q@mail.gmail.com>
-Message-ID: <CAPhsuW5KLgt_gsih7zi+T99iYVbt7hk7=OCwYzin-H3=OhF54Q@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 1/7] bpf: Introduce BPF_PROG_TYPE_VNET_HASH
-To: Akihiko Odaki <akihiko.odaki@daynix.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Jason Wang <jasowang@redhat.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	"Michael S. Tsirkin" <mst@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Network Development <netdev@vger.kernel.org>, kvm@vger.kernel.org, 
-	virtualization@lists.linux-foundation.org, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, 
-	Yuri Benditovich <yuri.benditovich@daynix.com>, Andrew Melnychenko <andrew@daynix.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87v8a096cr.fsf@debian-BULLSEYE-live-builder-AMD64>
 
-On Sun, Nov 19, 2023 at 12:03=E2=80=AFAM Akihiko Odaki <akihiko.odaki@dayni=
-x.com> wrote:
->
-[...]
->
-> Unfortunately no. The communication with the userspace can be done with
-> two different means:
-> - usual socket read/write
-> - vhost for direct interaction with a KVM guest
->
-> The BPF map may be a valid option for socket read/write, but it is not
-> for vhost. In-kernel vhost may fetch hash from the BPF map, but I guess
-> it's not a standard way to have an interaction between the kernel code
-> and a BPF program.
+On Fri, Nov 17, 2023 at 12:39:56PM +0530, Chandan Babu R wrote:
+> IMHO, For XFS, The value of "V" field should refer to xfstests rather than a
+> framework built around xfstests. This is because xfstests project contains the
+> actual tests and also we could have several frameworks (e.g. Kdevops) for
+> running xfstests.
 
-I am very new to areas like vhost and KVM. So I don't really follow.
-Does this mean we have the guest kernel reading data from host eBPF
-programs (loaded by Qemu)?
+For ext4, what I plan to do is to start requiring, in a soon-to-be
+written:
 
-> >
-> >>
-> >> Unfortunately, however, it is not acceptable for the BPF subsystem
-> >> because the "stable" BPF is completely fixed these days. The
-> >> "unstable/kfunc" BPF is an alternative, but the eBPF program will be
-> >> shipped with a portable userspace program (QEMU)[1] so the lack of
-> >> interface stability is not tolerable.
-> >
-> > bpf kfuncs are as stable as exported symbols. Is exported symbols
-> > like stability enough for the use case? (I would assume yes.)
-> >
-> >>
-> >> Another option is to hardcode the algorithm that was conventionally
-> >> implemented with eBPF steering program in the kernel[2]. It is possibl=
-e
-> >> because the algorithm strictly follows the virtio-net specification[3]=
-.
-> >> However, there are proposals to add different algorithms to the
-> >> specification[4], and hardcoding the algorithm to the kernel will
-> >> require to add more UAPIs and code each time such a specification chan=
-ge
-> >> happens, which is not good for tuntap.
-> >
-> > The requirement looks similar to hid-bpf. Could you explain why that
-> > model is not enough? HID also requires some stability AFAICT.
->
-> I have little knowledge with hid-bpf, but I assume it is more like a
-> "safe" kernel module; in my understanding, it affects the system state
-> and is intended to be loaded with some kind of a system daemon. It is
-> fine to have the same lifecycle with the kernel for such a BPF program;
-> whenever the kernel is updated, the distributor can recompile the BPF
-> program with the new kernel headers and ship it along with the kernel
-> just as like a kernel module.
->
-> In contrast, our intended use case is more like a normal application.
-> So, for example, a user may download a container and run QEMU (including
-> the BPF program) installed in the container. As such, it is nice if the
-> ABI is stable across kernel releases, but it is not guaranteed for
-> kfuncs. Such a use case is already covered with the eBPF steering
-> program so I want to maintain it if possible.
+	Documentation/process/maintainer-ext4.rst
 
-TBH, I don't think stability should be a concern for kfuncs used by QEMU.
-Many core BPF APIs are now implemented as kfuncs: bpf_dynptr_*,
-bpf_rcu_*, etc. As long as there are valid use cases,these kfuncs will
-be supported.
+that *all* patches (exempting spelling/grammer nits which only touch
+comments and result in zero changes in the compiled .o file) will
+require running the xfstests smoke test.  The prooblem is that for
+newbie patch submitters, and for "drive-by" patches from, say, mm
+developers, installing and configuring xfstests, and then figuring out
+how to set up all of the config files, and/or environments variables,
+before you get to running "./check -g smoke"P, is really f**king hard.
 
-Thanks,
-Song
+As far as other test frameworks are concerned, I suggest that you ask
+a new college grad that your company has just hired, or a new intern,
+or a new GSOC or Outreachy intern, to apply a patch to the upstream
+linux tree --- given only the framework's documentation, and with
+***no*** help from anyone who knows how to use the framework.  Just
+sit on your hands, and try as best you can to keep your mouth
+shut.... and wait.
+
+I spent a lot of work to make the instructures here:
+
+  https://github.com/tytso/xfstests-bld/blob/master/Documentation/kvm-quickstart.md
+
+easy enough that it meets this critera.  What should be in the V:
+field for the MAINTAINERS field is less clear to me, because it's not
+clear whether we want it to be Dead Stupid Easy for anyone capable of
+creating a kernel patch can figure out how to run the tests.
+
+My personal opinion is that for someone who running through the Kernel
+Newbies' My First Kernel patch, to say, doing something trivial such
+as changing "(a < b) ? a : b" to "min(a,b)" and then being able
+compile kernel, and then be able to say, "it builds, ship it", and
+then following the kernel documentation to send a patch upstream ---
+the documentation and procedure necessary to do something better than
+"it builds, ship it!" by that Kernel Newbie.
+
+It's also my considered opinion that neither bare, upstream xfstests,
+*nor* kdevops meets this criteria.  For example, kdevops may claim
+that you only need a few commands:
+
+     "make menuconfig"
+     "make"
+     "make bringup"
+     "make linux"
+     "make fstests"
+     "make fstests-baseline"
+     "make fstests-results"
+
+... but to be honest, I never got past the 2nd step before *I* got
+massively confused and decided there was better things to do with my
+time.  First, the "make menuconfig" requires that you answer a whole
+bunch of questions, and it's not clear how you are supposed to answer
+them all.  Secondly "make" issues a huge number of cmomands, and then
+fails because I didn't run them as root.  But I won't download random
+git repositories and "make" as root.  It goes against the grain.  And
+so after trying to figure out what it did, and whether or not it was
+safe, I ultimetly gave up on it.
+
+For upstream xfstests, ask a New College Grad fresh hire, or intern,
+to read xfstests's README file, and ask them to set up xfstests,
+without help.  Go ahead, I'll wait....
+
+No doubt for someone who is willing to make a huge investment in time
+to become a file system developer specializing in that subsystem, you
+will eventually be able to figure it out.  And in the case of kdevops,
+eventually I'd could set up my own VM, and install a kernel compile
+toolchian, and all of kdevops's prequisits, and then run "make" and
+"make linux" in that VM.  But that's a lot more than just "four
+commands".
+
+So as for *me*, I'm going to point people at:
+
+https://github.com/tytso/xfstests-bld/blob/master/Documentation/kvm-quickstart.md
+
+because I've simplified a lot of things, up to and including have
+kvm-xfstests automatically download the test appliance VM image from
+kernel.org if necessary.  When it lists the handful of commands that
+need to be run, it includes downloading all of the prequisit packages,
+and there are no complex menu configuration steps, and doesn't require
+running random make processes of Makefile and Makefile fragments as
+root.
+
+(And note that I keep the xfstests-bld repo's on kernel.org and
+github.com both uptodate, and I prefer using the using the github.com
+URL because it's easier for the new developer to read and understand
+it.)
+
+Ultimately, at least for my planned
+Documentation/process/maintainer-ext4.rst, before I could make running
+a smoke test mandatory, I needed to make sure that the quickstart
+documentation for kvm-xfstests be made as simple and as fool-proof as
+possible.  That was extremely important to me from a personal point
+of view.
+
+As far as what should go into Documentation/process/tests.rst, for
+"kvm-xfstests smoke" this may depend on whether other file system
+maintainers want to adopt something which is similarly simple for
+first-time developers to run.
+
+Also, I would assert that the proposed V: line in the Maintainer's
+file does not mean that this is the only way to test the patch.  It is
+just the minimal amount of testing that should be done, and using the
+simplest test procedure that we would expect a non-subsystem developer
+to be able to use.  It certainly wouldn't be the only way to run a
+satisfactory amount of pre-submit testing.
+
+For example, *I* wouldn't be using "kvm-xfstests smoke".  I'd be using
+something like "gce-xfstests smoke", although that requires a bit more
+setup.  Or I might do a much more substantive amount of testing, such
+as "gce-xfstests ltm -c ext4/all -g auto".
+
+Or I might establish a watch on a branch, via: "gce-xfstests ltm -c
+ext4/all -g auto --repo https://github.com/tytso/ext4.git --watch
+test", and then just push commits to the test branch.
+
+And similarly, just because the V: line might say, "kvm-xfstests
+smoke", someone could certainly use kdevops if they wanted to.  So
+perhaps we need to be a bit clearer about what we expect the V: line
+to mean?
+
+Along these lines, we should perhaps be a bit more thoughtful about
+the intended audience for Documentation/process/tests.rst.  I
+personally wouldn't try ask first-time kernel developers to look at
+the xfstests group files, because that's just way too complicated for
+them.
+
+And I had *assumed* that Documentation/process/tests.rst was not
+primarily intended for sophistiocated file system developers who
+wouldn't be afraid to start looking at the many ways that xfstests
+could be configured.  But we should perhaps be a bit more explicit
+about who the intended audience would be for a certain set up
+Documentation files, since that will make it easier for us to come to
+consensus about how that particular piece of documentation would be
+worded.
+
+As E.B. White (author of the book "The Elements of Style" was reputed
+to have once said, "Always write with deep sympathy for the reader".
+Which means we need to understand who the reader is, and to try to
+walk in their shoes, first.
+
+Cheers,
+
+					- Ted
 
