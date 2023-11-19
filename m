@@ -1,293 +1,148 @@
-Return-Path: <linux-kselftest+bounces-278-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-279-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 601B77F083C
-	for <lists+linux-kselftest@lfdr.de>; Sun, 19 Nov 2023 19:02:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2378B7F090B
+	for <lists+linux-kselftest@lfdr.de>; Sun, 19 Nov 2023 22:02:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 83F511C2086F
-	for <lists+linux-kselftest@lfdr.de>; Sun, 19 Nov 2023 18:02:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C4899280D34
+	for <lists+linux-kselftest@lfdr.de>; Sun, 19 Nov 2023 21:02:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C993D13AD4;
-	Sun, 19 Nov 2023 18:01:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4325012E46;
+	Sun, 19 Nov 2023 21:02:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ImSXlByP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FZpuU0td"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B35E11A;
-	Sun, 19 Nov 2023 10:01:52 -0800 (PST)
-Received: by mail-wr1-x42f.google.com with SMTP id ffacd0b85a97d-32fdd0774d9so2613058f8f.2;
-        Sun, 19 Nov 2023 10:01:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700416910; x=1701021710; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gW/lObfs5yVuAZVZgm8zXDZOObBZ0xpT6zITDGCq/ZY=;
-        b=ImSXlByPgJv/NEKwypeS0vtJaC7WXLTdny4RlxRxD54xPWOx5KTK06fl8MOiTNUWKs
-         NRzKruwBVCaw9ifxkLoQ0gEkYkV7Qm0F2jtEesa1bN3z95VarNssj0fkfxrJvL5bvuA6
-         vx9T/lfNbOsKE399L5CCwjEnWU8IOz2ghoriWr9ggBEwtmGstrSQy5x3NtJ+D51Z7AUx
-         uMcOFFqYjaYJ7m5/QQrhd0N5QMQrao4gMKX/6vpr3CBjgyBBmr6bxPGSyRrsUMWusJ5t
-         rxSl9sFbsZJKMFzbUg9Ts7L0PJgO/E300uQD2kgKMHWs4yagS1pIwvfQWglaRG/YtmrL
-         486w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700416910; x=1701021710;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gW/lObfs5yVuAZVZgm8zXDZOObBZ0xpT6zITDGCq/ZY=;
-        b=vWrxJIXAJZdNa5NohgGkAbp9pED8uuNja7OdAQO1e4+chBOu2u4OxWKhrhgMjnak6g
-         8fdWy5B0ui5DkEEigPNxGqjKBF/33TyZCyju5cW97iFdI36R2FNWhrEtmBZ9D28KHniq
-         8esbmOJ0T9PVKkGg6Bug/5vXTeW32pRn3d1dvwidNbglaN8hm64zcjXAc/hSw5xdBuR6
-         xjXp3kX7RDTsS52tRhBQt9NEi/Nlpb8OQjkKkMduvHjIdf38pXgh5AwaIfq6cTeUbt2/
-         zr2aY+t57RgQz0ngEPz/8KzA7VfO19xRHW9pbqFNT+WtR4w97PBOLgyHYHt+4hRLteoG
-         v/Ug==
-X-Gm-Message-State: AOJu0YwEY37004m7W+GixJsxJdci3DShsRukIjnoeQO29p39UjkOHiRV
-	UuJyLBSINdTR0oSjYhntnxs=
-X-Google-Smtp-Source: AGHT+IFSSJpLwHX8eD/ZFiIxnMkC9dOTvOB86eWG7wAFxWu8KYhq4r6HahXt1Xdn0MiTzoF+W8h8/w==
-X-Received: by 2002:a05:6000:4028:b0:32f:7fe4:45f2 with SMTP id cp40-20020a056000402800b0032f7fe445f2mr3713993wrb.4.1700416910486;
-        Sun, 19 Nov 2023 10:01:50 -0800 (PST)
-Received: from laptop.home (110.50.134.37.dynamic.jazztel.es. [37.134.50.110])
-        by smtp.gmail.com with ESMTPSA id l6-20020a5d5606000000b00331698cb263sm8415549wrv.103.2023.11.19.10.01.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Nov 2023 10:01:50 -0800 (PST)
-From: =?UTF-8?q?Sergio=20Gonz=C3=A1lez=20Collado?= <sergio.collado@gmail.com>
-To: Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Wedson Almeida Filho <wedsonaf@gmail.com>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@google.com>,
-	linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com,
-	sergio.collado@gmail.com
-Cc: Boqun Feng <boqun.feng@gmail.com>,
-	Gary Guo <gary@garyguo.net>,
-	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@samsung.com>,
-	Alice Ryhl <aliceryhl@google.com>,
-	David Rheinsberg <david@readahead.eu>,
-	rust-for-linux@vger.kernel.org,
-	Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-Subject: [PATCH v2] Kunit to check the longest symbol length
-Date: Sun, 19 Nov 2023 19:01:45 +0100
-Message-Id: <20231119180145.157455-1-sergio.collado@gmail.com>
-X-Mailer: git-send-email 2.39.2
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10EC912B7C;
+	Sun, 19 Nov 2023 21:02:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57949C433C9;
+	Sun, 19 Nov 2023 21:02:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1700427767;
+	bh=LdCcDCVibEq9XtMPBRAazcWyb1lUm4YRH93xkKpOHbM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=FZpuU0tdRMVqNc17EPw2Yx+O61k7X2a1HFa5dIdI0JeSJbPg+OayhEf8qOUGAqiy3
+	 t65XUeKw8Z935Y5auUU0WejjqnKGgNlEp1OxFv3e2uEtZJlCjgkEV4oIU6FCpC7Ovs
+	 QRuW5N2zde8PrWeKWO39XMJLMQysUEvMBI4N3XDwn/odf4AVo7ewp/Cj5zp56782Vv
+	 uXEpEyQ8f4mV+dC1VwB33IAfg95hhwshydjYwfaxW2yJAJlvzXqSkLtHWFHq0EA08i
+	 vATgFTBKZotJ6LQY5zo+mmwR81AvAOd4c8JUF5epck+DjCpD4r8DMoNr8uQmKeXBP9
+	 R07melvoUfkSw==
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2c509d5ab43so51544441fa.0;
+        Sun, 19 Nov 2023 13:02:47 -0800 (PST)
+X-Gm-Message-State: AOJu0YwGj2mEpQ+m6A257C8NBKjue25jd2UZAbsg8QKSN2rN22yUTpG2
+	j67ehwwO4XcsCuSfDiuSEysnjYvWqgn36Y8IvOQ=
+X-Google-Smtp-Source: AGHT+IFyYOQHQnx0Par61ni3D+IsRVTlNd6D9SKI0apNaeY6hc8EhMaBYVtDLvZWr7jIRh/7uxjcLeqDv60Mo+HqTn0=
+X-Received: by 2002:a2e:9656:0:b0:2be:54b4:ff90 with SMTP id
+ z22-20020a2e9656000000b002be54b4ff90mr2814616ljh.53.1700427765530; Sun, 19
+ Nov 2023 13:02:45 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20231015141644.260646-1-akihiko.odaki@daynix.com>
+ <20231015141644.260646-2-akihiko.odaki@daynix.com> <CAADnVQLfUDmgYng8Cw1hiZOMfWNWLjbn7ZGc4yOEz-XmeFEz5Q@mail.gmail.com>
+ <2594bb24-74dc-4785-b46d-e1bffcc3e7ed@daynix.com> <CAADnVQ+J+bOtvEfdvgUse_Rr07rM5KOZ5DtAmHDgRmi70W68+g@mail.gmail.com>
+ <CACGkMEs22078F7rSLEz6eQabkZZ=kujSONUNMThZz5Gp=YiidQ@mail.gmail.com>
+ <CAADnVQLt8NWvP8qGWMPx=12PwWWE69P7aS2dbm=khAJkCnJEoQ@mail.gmail.com>
+ <9a4853ad-5ef4-4b15-a49e-9edb5ae4468e@daynix.com> <6253fb6b-9a53-484a-9be5-8facd46c051e@daynix.com>
+ <CAPhsuW5JYoM-Mkehdy=FQsG1nvjbYGzwRZx8BkpG1P7cHdD=eQ@mail.gmail.com> <dba89d4b-84aa-4c9f-b016-56fd3ade04b2@daynix.com>
+In-Reply-To: <dba89d4b-84aa-4c9f-b016-56fd3ade04b2@daynix.com>
+From: Song Liu <song@kernel.org>
+Date: Sun, 19 Nov 2023 13:02:33 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW5KLgt_gsih7zi+T99iYVbt7hk7=OCwYzin-H3=OhF54Q@mail.gmail.com>
+Message-ID: <CAPhsuW5KLgt_gsih7zi+T99iYVbt7hk7=OCwYzin-H3=OhF54Q@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 1/7] bpf: Introduce BPF_PROG_TYPE_VNET_HASH
+To: Akihiko Odaki <akihiko.odaki@daynix.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Jason Wang <jasowang@redhat.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	"Michael S. Tsirkin" <mst@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
+	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, kvm@vger.kernel.org, 
+	virtualization@lists.linux-foundation.org, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, 
+	Yuri Benditovich <yuri.benditovich@daynix.com>, Andrew Melnychenko <andrew@daynix.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The longest length of a symbol (KSYM_NAME_LEN) was increased to 512
-in the reference [1]. This patch adds a kunit test to check the longest
-symbol length.
+On Sun, Nov 19, 2023 at 12:03=E2=80=AFAM Akihiko Odaki <akihiko.odaki@dayni=
+x.com> wrote:
+>
+[...]
+>
+> Unfortunately no. The communication with the userspace can be done with
+> two different means:
+> - usual socket read/write
+> - vhost for direct interaction with a KVM guest
+>
+> The BPF map may be a valid option for socket read/write, but it is not
+> for vhost. In-kernel vhost may fetch hash from the BPF map, but I guess
+> it's not a standard way to have an interaction between the kernel code
+> and a BPF program.
 
-[1] https://lore.kernel.org/lkml/20220802015052.10452-6-ojeda@kernel.org/
+I am very new to areas like vhost and KVM. So I don't really follow.
+Does this mean we have the guest kernel reading data from host eBPF
+programs (loaded by Qemu)?
 
-Tested-by: Martin Rodriguez Reboredo <yakoyoku@gmail.com>
-Signed-off-by: Sergio González Collado <sergio.collado@gmail.com>
-- - -
-V1 -> V2: corrected CI tests. Added fix proposed at [2]
+> >
+> >>
+> >> Unfortunately, however, it is not acceptable for the BPF subsystem
+> >> because the "stable" BPF is completely fixed these days. The
+> >> "unstable/kfunc" BPF is an alternative, but the eBPF program will be
+> >> shipped with a portable userspace program (QEMU)[1] so the lack of
+> >> interface stability is not tolerable.
+> >
+> > bpf kfuncs are as stable as exported symbols. Is exported symbols
+> > like stability enough for the use case? (I would assume yes.)
+> >
+> >>
+> >> Another option is to hardcode the algorithm that was conventionally
+> >> implemented with eBPF steering program in the kernel[2]. It is possibl=
+e
+> >> because the algorithm strictly follows the virtio-net specification[3]=
+.
+> >> However, there are proposals to add different algorithms to the
+> >> specification[4], and hardcoding the algorithm to the kernel will
+> >> require to add more UAPIs and code each time such a specification chan=
+ge
+> >> happens, which is not good for tuntap.
+> >
+> > The requirement looks similar to hid-bpf. Could you explain why that
+> > model is not enough? HID also requires some stability AFAICT.
+>
+> I have little knowledge with hid-bpf, but I assume it is more like a
+> "safe" kernel module; in my understanding, it affects the system state
+> and is intended to be loaded with some kind of a system daemon. It is
+> fine to have the same lifecycle with the kernel for such a BPF program;
+> whenever the kernel is updated, the distributor can recompile the BPF
+> program with the new kernel headers and ship it along with the kernel
+> just as like a kernel module.
+>
+> In contrast, our intended use case is more like a normal application.
+> So, for example, a user may download a container and run QEMU (including
+> the BPF program) installed in the container. As such, it is nice if the
+> ABI is stable across kernel releases, but it is not guaranteed for
+> kfuncs. Such a use case is already covered with the eBPF steering
+> program so I want to maintain it if possible.
 
-[2] https://lore.kernel.org/lkml/Y9ES4UKl%2F+DtvAVS@gmail.com/T/#m3ef0e12bb834d01ed1ebdcae12ef5f2add342077
----
- arch/x86/tools/insn_decoder_test.c |   3 +-
- lib/Kconfig.debug                  |   9 +++
- lib/Makefile                       |   2 +
- lib/longest_symbol_kunit.c         | 122 +++++++++++++++++++++++++++++
- 4 files changed, 135 insertions(+), 1 deletion(-)
- create mode 100644 lib/longest_symbol_kunit.c
+TBH, I don't think stability should be a concern for kfuncs used by QEMU.
+Many core BPF APIs are now implemented as kfuncs: bpf_dynptr_*,
+bpf_rcu_*, etc. As long as there are valid use cases,these kfuncs will
+be supported.
 
-diff --git a/arch/x86/tools/insn_decoder_test.c b/arch/x86/tools/insn_decoder_test.c
-index 472540aeabc2..6c2986d2ad11 100644
---- a/arch/x86/tools/insn_decoder_test.c
-+++ b/arch/x86/tools/insn_decoder_test.c
-@@ -10,6 +10,7 @@
- #include <assert.h>
- #include <unistd.h>
- #include <stdarg.h>
-+#include <linux/kallsyms.h>
- 
- #define unlikely(cond) (cond)
- 
-@@ -106,7 +107,7 @@ static void parse_args(int argc, char **argv)
- 	}
- }
- 
--#define BUFSIZE 256
-+#define BUFSIZE (256 + KSYM_NAME_LEN)
- 
- int main(int argc, char **argv)
- {
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index cc7d53d9dc01..a531abece0a7 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -2769,6 +2769,15 @@ config FORTIFY_KUNIT_TEST
- 	  by the str*() and mem*() family of functions. For testing runtime
- 	  traps of FORTIFY_SOURCE, see LKDTM's "FORTIFY_*" tests.
- 
-+config LONGEST_SYM_KUNIT_TEST
-+	tristate "Test the longest symbol possible" if !KUNIT_ALL_TESTS
-+	depends on KUNIT && KPROBES
-+	default KUNIT_ALL_TESTS
-+	help
-+	  Tests the longest symbol possible
-+
-+	  If unsure, say N.
-+
- config HW_BREAKPOINT_KUNIT_TEST
- 	bool "Test hw_breakpoint constraints accounting" if !KUNIT_ALL_TESTS
- 	depends on HAVE_HW_BREAKPOINT
-diff --git a/lib/Makefile b/lib/Makefile
-index 6b09731d8e61..f72003d5869b 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -406,6 +406,8 @@ obj-$(CONFIG_FORTIFY_KUNIT_TEST) += fortify_kunit.o
- obj-$(CONFIG_STRCAT_KUNIT_TEST) += strcat_kunit.o
- obj-$(CONFIG_STRSCPY_KUNIT_TEST) += strscpy_kunit.o
- obj-$(CONFIG_SIPHASH_KUNIT_TEST) += siphash_kunit.o
-+obj-$(CONFIG_LONGEST_SYM_KUNIT_TEST) += longest_symbol_kunit.o
-+CFLAGS_longest_symbol_kunit.o += $(call cc-disable-warning, missing-prototypes)
- 
- obj-$(CONFIG_GENERIC_LIB_DEVMEM_IS_ALLOWED) += devmem_is_allowed.o
- 
-diff --git a/lib/longest_symbol_kunit.c b/lib/longest_symbol_kunit.c
-new file mode 100644
-index 000000000000..998563018f7a
---- /dev/null
-+++ b/lib/longest_symbol_kunit.c
-@@ -0,0 +1,122 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Test the longest symbol length. Execute with:
-+ *  ./tools/testing/kunit/kunit.py run longest-symbol
-+ *  --arch=x86_64 --kconfig_add CONFIG_KPROBES=y --kconfig_add CONFIG_MODULES=y
-+ *  --kconfig_add CONFIG_RETPOLINE=n
-+ */
-+
-+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-+
-+#include <kunit/test.h>
-+#include <linux/stringify.h>
-+#include <linux/kprobes.h>
-+#include <linux/kallsyms.h>
-+
-+#define DI(name) s##name##name
-+#define DDI(name) DI(n##name##name)
-+#define DDDI(name) DDI(n##name##name)
-+#define DDDDI(name) DDDI(n##name##name)
-+#define DDDDDI(name) DDDDI(n##name##name)
-+
-+#define PLUS1(name) __PASTE(name, e)
-+
-+/*Generate a symbol whose name length is 511 */
-+#define LONGEST_SYM_NAME  DDDDDI(g1h2i3j4k5l6m7n)
-+
-+/*Generate a symbol whose name length is 512 */
-+#define LONGEST_SYM_NAME_PLUS1 PLUS1(LONGEST_SYM_NAME)
-+
-+#define RETURN_LONGEST_SYM 0xAAAAA
-+#define RETURN_LONGEST_SYM_PLUS1 0x55555
-+
-+noinline int LONGEST_SYM_NAME(void);
-+noinline int LONGEST_SYM_NAME(void)
-+{
-+	return RETURN_LONGEST_SYM;
-+}
-+
-+noinline int LONGEST_SYM_NAME_PLUS1(void);
-+noinline int LONGEST_SYM_NAME_PLUS1(void)
-+{
-+	return RETURN_LONGEST_SYM_PLUS1;
-+}
-+
-+_Static_assert(sizeof(__stringify(LONGEST_SYM_NAME)) == KSYM_NAME_LEN,
-+"Incorrect symbol length found. Expected KSYM_NAME_LEN: "
-+__stringify(KSYM_NAME) ", but found: "
-+__stringify(sizeof(LONGEST_SYM_NAME)));
-+
-+static void test_longest_symbol(struct kunit *test)
-+{
-+	KUNIT_EXPECT_EQ(test, RETURN_LONGEST_SYM, LONGEST_SYM_NAME());
-+};
-+
-+static void test_longest_symbol_kallsyms(struct kunit *test)
-+{
-+	unsigned long (*kallsyms_lookup_name)(const char *name);
-+	static int (*longest_sym)(void);
-+
-+	struct kprobe kp = {
-+		.symbol_name = "kallsyms_lookup_name",
-+	};
-+
-+	if (register_kprobe(&kp) < 0) {
-+		pr_info("%s: kprobe not registered\n", __func__);
-+		KUNIT_FAIL(test, "test_longest_symbol kallsysms: kprobe not registered\n");
-+		return;
-+	}
-+
-+	kunit_warn(test, "test_longest_symbol kallsyms: kprobe registered\n");
-+	kallsyms_lookup_name = (unsigned long (*)(const char *name))kp.addr;
-+	unregister_kprobe(&kp);
-+
-+	longest_sym =
-+	    (void *) kallsyms_lookup_name(__stringify(LONGEST_SYM_NAME));
-+	KUNIT_EXPECT_EQ(test, RETURN_LONGEST_SYM, longest_sym());
-+};
-+
-+static void test_longest_symbol_plus1(struct kunit *test)
-+{
-+	KUNIT_EXPECT_EQ(test, RETURN_LONGEST_SYM_PLUS1, LONGEST_SYM_NAME_PLUS1());
-+};
-+
-+static void test_longest_symbol_plus1_kallsyms(struct kunit *test)
-+{
-+	unsigned long (*kallsyms_lookup_name)(const char *name);
-+	static int (*longest_sym_plus1)(void);
-+
-+	struct kprobe kp = {
-+		.symbol_name = "kallsyms_lookup_name",
-+	};
-+
-+	if (register_kprobe(&kp) < 0) {
-+		pr_info("%s: kprobe not registered\n", __func__);
-+		KUNIT_FAIL(test, "test_longest_symbol kallsysms: kprobe not registered\n");
-+		return;
-+	}
-+
-+	kunit_warn(test, "test_longest_symbol_plus1 kallsyms: kprobe registered\n");
-+	kallsyms_lookup_name = (unsigned long (*)(const char *name))kp.addr;
-+	unregister_kprobe(&kp);
-+
-+	longest_sym_plus1 =
-+	    (void *) kallsyms_lookup_name(__stringify(LONGEST_SYM_NAME_PLUS1));
-+	KUNIT_EXPECT_NULL(test, longest_sym_plus1);
-+};
-+
-+static struct kunit_case longest_symbol_test_cases[] = {
-+	KUNIT_CASE(test_longest_symbol),
-+	KUNIT_CASE(test_longest_symbol_kallsyms),
-+	KUNIT_CASE(test_longest_symbol_plus1),
-+	KUNIT_CASE(test_longest_symbol_plus1_kallsyms),
-+	{}
-+};
-+
-+static struct kunit_suite longest_symbol_test_suite = {
-+	.name = "longest-symbol",
-+	.test_cases = longest_symbol_test_cases,
-+};
-+kunit_test_suite(longest_symbol_test_suite);
-+
-+MODULE_LICENSE("GPL");
-
-base-commit: 037266a5f7239ead1530266f7d7af153d2a867fa
--- 
-2.39.2
-
+Thanks,
+Song
 
