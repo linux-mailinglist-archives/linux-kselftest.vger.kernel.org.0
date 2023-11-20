@@ -1,168 +1,127 @@
-Return-Path: <linux-kselftest+bounces-337-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-338-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBE9A7F1CE6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Nov 2023 19:49:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 553477F1D02
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Nov 2023 20:00:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 187FC1C21144
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Nov 2023 18:49:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0EC6D28271A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Nov 2023 19:00:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B0251EB24;
-	Mon, 20 Nov 2023 18:49:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AD891EB24;
+	Mon, 20 Nov 2023 19:00:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XaU9UTsV"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="LXLgLVWq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 634E9C8
-	for <linux-kselftest@vger.kernel.org>; Mon, 20 Nov 2023 10:49:01 -0800 (PST)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-54744e66d27so1761a12.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 20 Nov 2023 10:49:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1700506140; x=1701110940; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bdPcdKbJJEtVfw0r849sRaSkguh4va/xoo2bi7A5PKo=;
-        b=XaU9UTsVbp7T7EK1Miut3YjYPcys2eKun1AaFRMtELwSFiKtjm938L0MaIQHL+04z/
-         sqhvt84o7BryJd1d3YJu6BGgfaiwLKO1d+MsF+T8W5sdJKsp+5z+2zEPrZm/iiJaquPb
-         Qt9MacWDdhBSPDDQSew6+xP6Ahx7nEe/IwnLlmJKBn3OYZpYY65A3VGdBfSmC55dohND
-         u9GqqRDp4FTcKHxVKGyhoMuzfy15Th+mYHMI/MKAVKfG42oRZXTRtck8vWH9lTbbUgBP
-         /HHz8JN4LpjpgiEzJa6oAsCfwVFbWs34ACpimQWNrnr3K6ueu962geeSJN4IW/K+Y60P
-         gvWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700506140; x=1701110940;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bdPcdKbJJEtVfw0r849sRaSkguh4va/xoo2bi7A5PKo=;
-        b=VuuPRPrDkJ2hSm4QaD9fFrnAUr8yZvJXefb8P0rqHNaqtqHvDWOAMmGIgtBibBYdvI
-         NftKFiyv5jX5Sp2z1uCwpRLp0p3eH804yxs76HRJmH7oPqpp6PZKV2s8CUXinFeT0JD1
-         4+WPI+TJJ4Vjmv9pplGn9MsRCgnUGRDKYcjvFyZ0BuV+U3oWUyVa9iFvbdSNoTXnssI+
-         VPTsUqBzLJF7vND6cQbk1n1QA8yDUC5xLMwE5uNdlxS0mkJymBHWLf016xoi4GRJqhUN
-         e3EWna+JKBCmNnqWN8rMS8pDWz37ChQDqXvFd+Awk6mMKi+hk5MKE0aNVsbG/M7Nlb0P
-         V0gQ==
-X-Gm-Message-State: AOJu0YzCQOngcTNus0DXSpQIm8m0cntwA6ZDerrurrMb1w6T9MudEsyf
-	t8bzHAZHjMAjZtUdlcPe2Z7jCmw9jRQkoz7R9kzh8w==
-X-Google-Smtp-Source: AGHT+IHq1hNH843682vHffeGYc3GnkUtzYfC3xNjbXwDnYLAsQHGWgA3K2SQs1zb1ehyjwsV2INDePz3p5PhpVYrMgA=
-X-Received: by 2002:aa7:d8cf:0:b0:544:e37e:d597 with SMTP id
- k15-20020aa7d8cf000000b00544e37ed597mr231268eds.7.1700506139627; Mon, 20 Nov
- 2023 10:48:59 -0800 (PST)
+Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [IPv6:2001:41d0:203:375::aa])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6B32100;
+	Mon, 20 Nov 2023 11:00:26 -0800 (PST)
+Message-ID: <be025c4d-4602-4b2f-963c-5ec2561cc255@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1700506824;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jfwHLBU/eMYU2BU5PuQp1CafAYg938BQTjSvVXHWz4g=;
+	b=LXLgLVWq5d+Vt3kcSsr/102ISqSrsb2lZKMQtSIc6oXuNTEevMqOjFf0A2S5Qa8E8ymmfl
+	HtJX1uvCKr4/QI3sG4lwRY4oyVYmmHNEcjYuuiuSfBUoSyEO60ybTCWPO0RZ6nC4JG7p9E
+	aGJElRS3bcHtUTeQQE1jKb8w/N/R/UA=
+Date: Mon, 20 Nov 2023 11:00:17 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231115175146.9848-1-Nikolai.Kondrashov@redhat.com> <20231115175146.9848-4-Nikolai.Kondrashov@redhat.com>
-In-Reply-To: <20231115175146.9848-4-Nikolai.Kondrashov@redhat.com>
-From: Daniel Latypov <dlatypov@google.com>
-Date: Mon, 20 Nov 2023 10:48:46 -0800
-Message-ID: <CAGS_qxpfnQ6kmanEUQWosuixo+FGUxp3VJ_TSjBdRf_p9riTSQ@mail.gmail.com>
-Subject: Re: [PATCH 3/3] MAINTAINERS: Require kunit core tests for framework changes
-To: Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com>
-Cc: workflows@vger.kernel.org, Joe Perches <joe@perches.com>, 
-	Andy Whitcroft <apw@canonical.com>, "Theodore Ts'o" <tytso@mit.edu>, David Gow <davidgow@google.com>, 
-	Steven Rostedt <rostedt@goodmis.org>, Mark Brown <broonie@kernel.org>, 
-	Shuah Khan <skhan@linuxfoundation.org>, "Darrick J . Wong" <djwong@kernel.org>, 
-	kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org, 
-	Veronika Kabatova <vkabatov@redhat.com>, CKI <cki-project@redhat.com>, kernelci@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Nov 15, 2023 at 9:52=E2=80=AFAM Nikolai Kondrashov
-<Nikolai.Kondrashov@redhat.com> wrote:
-> +kunit core
-> +----------
-> +
-> +:Summary: KUnit tests for the framework itself
-> +:Superset: kunit
-> +:Command: tools/testing/kunit/kunit.py run --kunitconfig lib/kunit
-
-Note: we'd want this to instead be
-  ./tools/testing/kunit/run_checks.py
-
-That will run, in parallel
-* kunit.py run --kunitconfig lib/kunit
-* kunit_tool_test.py (the unit test for kunit.py)
-* two python type-checkers, if installed
-
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index f81a47d87ac26..5f3261e96c90f 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -11626,6 +11626,7 @@ L:      linux-kselftest@vger.kernel.org
->  L:     kunit-dev@googlegroups.com
->  S:     Maintained
->  W:     https://google.github.io/kunit-docs/third_party/kernel/docs/
-> +V:     kunit core
-
-Maybe this topic should go in the main thread, but I wanted to call it
-out here since this is a good concrete example.
-
-I'm wondering if this entry could simply be
-  V: ./tools/testing/kunit/run_checks.py
-
-And what if, for ext4, we could have multiple of these like
-  V: kvm-xfstests smoke
-  V: tools/testing/kunit/kunit.py run --kunitconfig fs/ext4
-
-I.e. what if we allowed the `V:` field to contain the command itself?
-
-# Complexity of the tests
-
-I appreciate the current "named test-set" approach since it encourages
-documenting *why* the test command is applicable.
-And for a lot of tests, it's not as simple as a binary GOOD/BAD
-result, e.g. benchmarks.
-Patch authors need to understand what they're testing, if they're
-testing the right thing, etc.
-
-But on the other hand, for simpler functional tests (e.g. KUnit),
-maybe it's not necessary.
-Ideally, KUnit tests should be written so the failure messages are
-immediately actionable w/o having to read a couple paragraphs.
-I.e. the test case names should make it clear what scenario they're
-testing, or the test code should be sufficiently documented, etc.
-
-# Variations on commands
-
-And there might be a bunch of slight variations on these commands,
-e.g. only different in terms of `--kunitconfig`.
-We'd probably have at least 18, given
-$ find -type f -name '.kunitconfig' | wc -l
-18
-
-And again using a kunit.py flag as an example, what if maintainers want KAS=
-AN?
-  ./tools/testing/kunit/kunit.py run --kunitconfig lib/kunit
---kconfig_add CONFIG_KASAN=3Dy
-Or what if it's too annoying to split up a larger kunit suite, so I
-ask people to run a subset?
-  ./tools/testing/kunit/kunit.py run --kunitconfig lib/kunit <suite_glob>
+Subject: Re: [PATCH bpf-next v2 1/4] selftests/bpf: Replaces the usage of
+ CHECK calls for ASSERTs in bpf_tcp_ca
+Content-Language: en-GB
+To: Yuran Pereira <yuran.pereira@hotmail.com>
+Cc: bpf@vger.kernel.org, andrii@kernel.org, andrii.nakryiko@gmail.com,
+ mykolal@fb.com, ast@kernel.org, martin.lau@linux.dev, song@kernel.org,
+ john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+ haoluo@google.com, jolsa@kernel.org, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kernel-mentees@lists.linuxfoundation.org
+References: <GV1PR10MB6563AECF8E94798A1E5B36A4E8B6A@GV1PR10MB6563.EURPRD10.PROD.OUTLOOK.COM>
+ <GV1PR10MB6563A7938B9B403861CA88F3E8B6A@GV1PR10MB6563.EURPRD10.PROD.OUTLOOK.COM>
+ <14c7dea0-242c-4b47-929c-7cbd1d7e202a@linux.dev>
+ <GV1PR10MB6563596BC3E2B01F664010C7E8B4A@GV1PR10MB6563.EURPRD10.PROD.OUTLOOK.COM>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <GV1PR10MB6563596BC3E2B01F664010C7E8B4A@GV1PR10MB6563.EURPRD10.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
 
-P.S.
-Tbh, I have always hoped we'd eventually have a field like
-  V: <one-liner test command>
+On 11/20/23 12:15 PM, Yuran Pereira wrote:
+> Hello Yonghong,
+> On Mon, Nov 20, 2023 at 07:22:59AM -0800, Yonghong Song wrote:
+>>> -		if (CHECK(!err || errno != ENOENT,
+>>> -			  "bpf_map_lookup_elem(sk_stg_map)",
+>>> -			  "err:%d errno:%d\n", err, errno))
+>>> +		if (!ASSERT_NEQ(err, 0, "bpf_map_lookup_elem(sk_stg_map)") ||
+>> !ASSERT_ERR(err, "bpf_map_lookup_elem(sk_stg_map)")
+>> might be simpler than !ASSERT_NEQ(..).
+>>
+> Sure, that makes sense. I'll change it in v3.
+>>> -	pthread_join(srv_thread, &thread_ret);
+>>> -	CHECK(IS_ERR(thread_ret), "pthread_join", "thread_ret:%ld",
+>>> -	      PTR_ERR(thread_ret));
+>>> +	err = pthread_join(srv_thread, &thread_ret);
+>>> +	ASSERT_OK(err, "pthread_join");
+>> The above is not equivalent to the original code.
+>> The original didn't check pthread_join() return as it
+>> is very very unlikely to fail. And check 'thread_ret'
+>> is still needed.
+>>
+> Yes that is true, but the v1 [1] broke the tests because the
+> ASSERT_OK_PTR(thread_ret, "pthread_join") kept failing, even
+> though all the asserts within the `server()` function itself
+> passed.
+>
+> Also, isn't asserting `thread_ret` technically checking the
+> `server()` function instead of `pthread_join`? So should we
+> have two asserts here? One for `server` and one for `pthread_join`
+> or is it not necessary?
+> i.e:
+> ```
+> ASSERT_OK_PTR(thread_ret, "server");
+> ASSERT_OK(err, "pthread_join");
+> ```
 
-That is part of why I added all those features above (--kunitconfig,
---kconfig_add, glob support, run_checks.py, etc.).
-I wanted kunit.py to be flexible enough that maintainers could state
-their testing requirements as a one-liner that people can just
-copy-paste and run.
+As I mentioned, checking return value of pthread_join()
+is not critical as in general pthread_join() not fail.
+The test is not to test pthread_join() and if pthread_join()
+fails it would be an even bigger problem affecting many other
+tests.
 
-Also, I recently talked to David Gow and I know he was interested in
-adding another feature to kunit.py to fit this use case.
-Namely, the ability to do something like
-  kunit.py run --arches=3Dx86_64,s390,...
-and have it run the tests built across N different arches and maybe w/
-M different kconfig options (e.g. a variation built w/ clang, etc.).
+>
+> Upon taking a second look, I now think that the reason why
+> `ASSERT_OK_PTR(thread_ret, "pthread_join");` failed in v1 might
+> have been because it calls `libbpf_get_error` which returns
+> `-errno` when the pointer is `NULL`.
+>
+> Since `server`'s return value is not a bpf address, which
+> `ASSERT_OK_PTR` expects it to be, do you that think we should
+> explicitly set `errno = 0` prior to returning NULL on server?
+> That way that assert would pass even when the pointer is NULL
+> (which is the case when `server` returns successfuly).
 
-That would be another very powerful tool for maintainers to have.
+Let us just do
 
-Thanks so much for this patch series and starting this discussion!
-Daniel
+   ASSERT_OK(IS_ERR(thread_ret), "thread_ret")
+
+
+>
+> [1] - https://lore.kernel.org/lkml/GV1PR10MB6563A0BE91080E6E8EC2651DE8B0A@GV1PR10MB6563.EURPRD10.PROD.OUTLOOK.COM/
+>
+> As always, thank you for your feedback.
+>
+> Yuran Pereira
+>
 
