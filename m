@@ -1,91 +1,130 @@
-Return-Path: <linux-kselftest+bounces-339-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-340-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC8E07F1E32
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Nov 2023 21:52:04 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7897F7F2049
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Nov 2023 23:27:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AF57B281C01
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Nov 2023 20:52:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A81E81C2131A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Nov 2023 22:27:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 123DE208D0;
-	Mon, 20 Nov 2023 20:52:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59B703A268;
+	Mon, 20 Nov 2023 22:27:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mit.edu header.i=@mit.edu header.b="FeS+4Q71"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tA/gMsnu"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A67FCD
-	for <linux-kselftest@vger.kernel.org>; Mon, 20 Nov 2023 12:51:57 -0800 (PST)
-Received: from cwcc.thunk.org (pool-173-48-82-21.bstnma.fios.verizon.net [173.48.82.21])
-	(authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-	by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 3AKKpVHE031574
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 20 Nov 2023 15:51:32 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-	t=1700513494; bh=Qhra/PeadF+kxbhZQdWkm4KjSgZyzyt74oOIJ4DgkH4=;
-	h=Date:From:Subject:Message-ID:MIME-Version:Content-Type;
-	b=FeS+4Q71mi0SljGJGvZds2wEUXSIMXqejzcia7Ms7oY6UKeyeuQjQ/mZKfRxqU7BE
-	 RoXIEs4X8FSNKE8FJtYbXdNks0Hlc9uCGeQmofrG1mIZvxOac0mkOnGcZAEqU8louQ
-	 1VT67MKG61XIPamVBtaLLvjqOzWeGDpbiBExz9DaLDoj1vOlWCtPshUEbUSPucX0mz
-	 Xi+d+Um2Ft5zLv01aURrVORoOYHFFSQ2N7rjLs8qIkx1wG4rzMZ0w9qeju/3SJ7XL7
-	 oK4Vbhgzl50cG9cNefjUY9Cm64/bcDdPGcpznWiy7pRM1qjRcannRD3EuZ7bDv9DMN
-	 tF0vic9HTaCIg==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-	id 43EB615C02B0; Mon, 20 Nov 2023 15:51:31 -0500 (EST)
-Date: Mon, 20 Nov 2023 15:51:31 -0500
-From: "Theodore Ts'o" <tytso@mit.edu>
-To: Ricardo =?iso-8859-1?Q?Ca=F1uelo?= <ricardo.canuelo@collabora.com>
-Cc: Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com>,
-        workflows@vger.kernel.org, joe@perches.com, apw@canonical.com,
-        davidgow@google.com, rostedt@goodmis.org, broonie@kernel.org,
-        skhan@linuxfoundation.org, djwong@kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        vkabatov@redhat.com, cki-project@redhat.com, kernelci@lists.linux.dev
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 374E83987A;
+	Mon, 20 Nov 2023 22:27:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A70DDC433C7;
+	Mon, 20 Nov 2023 22:27:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1700519259;
+	bh=0jOUHGCwKxgzLTwAREMVP/be39sK8VQWFmVkIgVKzRY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=tA/gMsnubJUZ5lprsnSOowJATircK+pIrE44RHnOwkBVvFb7/FHhyPiu7O3DFe2Ro
+	 4sO5kc4XMVFFMQgvjuOaEfmdkNbPiOKztfdQrB51lN1yP3hryjCeU010gf7Cl3pIev
+	 O/D1nGnsj51nBrXrNko5i0ta/cl+9Y50LwQH7j28qAyGBMzYLFwG7ztTnX0Vxq3wuT
+	 2PAvuvjyJMj6B9UdI4LTIFOV6fe6NRsD2ThzVVIrVBjbFc8eJDRL+wRvqBIYg2I9qj
+	 GFSA3Vg7q7ihmv41NZbZLEglIVyNW67g1eLr79iEEsLN79WU9lusXviwB96Fi6nSzN
+	 7RcVgOewsH4vA==
+Date: Mon, 20 Nov 2023 22:27:33 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Theodore Ts'o <tytso@mit.edu>
+Cc: Ricardo =?iso-8859-1?Q?Ca=F1uelo?= <ricardo.canuelo@collabora.com>,
+	Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com>,
+	workflows@vger.kernel.org, joe@perches.com, apw@canonical.com,
+	davidgow@google.com, rostedt@goodmis.org, skhan@linuxfoundation.org,
+	djwong@kernel.org, kunit-dev@googlegroups.com,
+	linux-kselftest@vger.kernel.org, vkabatov@redhat.com,
+	cki-project@redhat.com, kernelci@lists.linux.dev
 Subject: Re: [PATCH 1/3] MAINTAINERS: Introduce V: field for required tests
-Message-ID: <20231120205131.GA291888@mit.edu>
+Message-ID: <92c2f89d-f8a6-4260-b10d-671011cf1f70@sirena.org.uk>
 References: <20231115175146.9848-2-Nikolai.Kondrashov@redhat.com>
  <87sf50imba.fsf@collabora.com>
+ <20231120205131.GA291888@mit.edu>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="W/tyPRnz8XNYyIuZ"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <87sf50imba.fsf@collabora.com>
+In-Reply-To: <20231120205131.GA291888@mit.edu>
+X-Cookie: <Manoj> I *like* the chicken
 
-On Mon, Nov 20, 2023 at 02:30:49PM +0100, Ricardo Cañuelo wrote:
-> 
-> This is not trivial because tests vary a lot and we'd first need to
-> define which artifacts to link to, and because whatever is linked (test
-> commands, output log, results summary) would need to be stored
-> forever. But since we're doing that already for basically all kernel
-> mailing lists, I wonder if something like "public-inbox for test
-> results" could be possible some day.
 
-What we have at work is a way to upload the test results summary
-(e.g., just KTAP result lines, or the xfstests junit XML) along with
-test run metadata (e.g., what was the kernel commit on which the test
-was run, and the test hardware), and this would be stored permanently.
-Test artifacts is also preserved but for a limited amount of time
-(e.g., some number of months or a year).
+--W/tyPRnz8XNYyIuZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-The difference in storage lifetimes is because the junit XML file
-might be a few kilobytes to tens of kilobytes. but the test artifacts
-might be a few megabytes to tens of megabytes.
+On Mon, Nov 20, 2023 at 03:51:31PM -0500, Theodore Ts'o wrote:
 
-Of course once you have this data, it becomes possible to detect when
-a test may have regressed, or to detect flaky tests, and perhaps to
-figure out if certain hardware configurations or kernel configurations
-are more likely to trigger a particular test to fail.  So having all
-of this data stored centrally would be really cool.  The only question
-is who might be able to create such an infrastructure, and be able to
-pay for the ongoing development and operational costs....
+> What we have at work is a way to upload the test results summary
+> (e.g., just KTAP result lines, or the xfstests junit XML) along with
+> test run metadata (e.g., what was the kernel commit on which the test
+> was run, and the test hardware), and this would be stored permanently.
+> Test artifacts is also preserved but for a limited amount of time
+> (e.g., some number of months or a year).
 
-    	    	    		    		- Ted
+> The difference in storage lifetimes is because the junit XML file
+> might be a few kilobytes to tens of kilobytes. but the test artifacts
+> might be a few megabytes to tens of megabytes.
+
+This is the sort of thing that kcidb (which Nikolai works on) is good at
+ingesting, I actually do push all my CI's test results into there
+already:
+
+   https://github.com/kernelci/kcidb/
+
+(the dashboard is down currently.)  A few other projects including the
+current KernelCI and RedHat's CKI push their data in there too, I'm sure
+Nikolai would be delighted to get more people pushing data in.  The goal
+is to merge this with the main KernelCI infrastructure, it's currently
+separate while people figure out the whole big data thing.
+
+> Of course once you have this data, it becomes possible to detect when
+> a test may have regressed, or to detect flaky tests, and perhaps to
+> figure out if certain hardware configurations or kernel configurations
+> are more likely to trigger a particular test to fail.  So having all
+> of this data stored centrally would be really cool.  The only question
+> is who might be able to create such an infrastructure, and be able to
+> pay for the ongoing development and operational costs....
+
+The KernelCI LF project is funding kcidb with precisely this goal for
+the reasons you outline, the data collection part seems to be relatively
+mature at this point but AIUI there's a bunch of open questions with the
+analysis and usage side, partly due to needing to find people to work on
+it.  My understanding is that ingesting large data sets into cloud
+providers is pretty tractable, as with a lot of this stuff it gets more
+interesting trying to pull the data out and comprehend it in a practical
+fashion.  It'd be really cool to see more people working on that side of
+things.
+
+On the submission side it'd be interesting to start collecting more data
+about the test systems used to run things, might be useful to add a new
+schema for that which can be referenced from the test schema.
+
+--W/tyPRnz8XNYyIuZ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVb3VQACgkQJNaLcl1U
+h9AAywf9H7Dzbu0aNpWDX4osAMlrLJ3HYs3A24OOVIskqWE6ACkvbL4NXD44DyHt
+a/u5Rfsach/H5bRgNI+hWWiAVwlMx574dCZcmBOxw7osjVqPK4FiSVHQNGENh59F
+8L2cFcoyxjA5UyUUKxczfmgQNhqt1LAr1bDW+y2wRaVONnwQu9eXXYirQUfVZrpT
+JwhTmkVsCvBoeE8f/w4UbvCU6/QCVIhg8pm7wdiOK4VVDvzZSkKR1A80ALvZcw69
+FRUA0FNF3qWdirU1juf4GENDtlpeiDTly1UECeOXgy6dbZ8uU0Jmr7ytWStXWJ6o
+FOQroLJoHsHZwIwRlxCWgGE5ak1XeQ==
+=0jNL
+-----END PGP SIGNATURE-----
+
+--W/tyPRnz8XNYyIuZ--
 
