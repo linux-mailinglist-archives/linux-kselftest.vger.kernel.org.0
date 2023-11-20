@@ -1,47 +1,47 @@
-Return-Path: <linux-kselftest+bounces-295-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-296-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 749747F116F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Nov 2023 12:14:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE9477F1171
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Nov 2023 12:14:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CDAAEB210CA
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Nov 2023 11:13:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A422C281887
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Nov 2023 11:14:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6092511CB7;
-	Mon, 20 Nov 2023 11:13:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 929CB134B3;
+	Mon, 20 Nov 2023 11:14:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dgN3vGtd"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ggdidZGC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDE6E90;
-	Mon, 20 Nov 2023 03:13:52 -0800 (PST)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A053BEB;
+	Mon, 20 Nov 2023 03:14:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700478832; x=1732014832;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=/an/gutTC3ca3FRZlF33LyscB+3U/rmMAnTwlNyxgdY=;
-  b=dgN3vGtds25OIQ0ywsKS8L4R9oXaDElSk7ZMtZF5ZMIRVta5tlbCEPyq
-   bQ+kGgWaIgl+NfwbvOYMs1l2R/zgvABw55qQudNzhowADzSX6DYOPg9r8
-   1Tif8Kv1EciPkaTuoErV/aWhPhbCp4JAQ/ESSXxx8cpzanJrex0hz+ILQ
-   xtja9zk6NzGGJlyma19YyMBhbnZIczQqRpp+t9TQHiC7aI39Ou66TzNUp
-   rAcm8zCQQm04qxBuMvkFohcS0TmjTyh/Mvv2/k70KokDDxMNnVRkzPfbi
-   Fs6s472HjEQVSgxuqUc3+D/UJhZlrtibNX2a8bhA80LM+xExq987AEbjt
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10899"; a="458095741"
+  t=1700478842; x=1732014842;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=tzPsjJjcfyDfgR8LTQ4WEtUUvgvOSZlRwS0QORtco8Y=;
+  b=ggdidZGCs8fcKCH6HV//1Z8wKabJBRM8JOKusu6CQlg8ELJOVmE+Gcu8
+   ao2hZjNDcQX2H9uH+KWVGZ46Wn3yGeczmyHVritUwMCeorUOcl26YFMH2
+   Dq9QY+iXwsePJSHPgYCNva8cHmROU7P5HpafgFhP1T3vAmlIwvJo0lY95
+   7FtZWe5xiIFbSeCwBbPTKxyQPBPojyRie8kh4pyPzJH8XxrOO7AeJIE+I
+   oHiPHmrBcblM7OrSNBf9cK9Crn6iL7S+fBtaSr3FfJOAT3Y6pEGZoshXC
+   KN27SOrKR6K3LGbSh2wmwaBVSgATYnUf8cCQWbyntkjILmH/j8TmPD4LY
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10899"; a="390457334"
 X-IronPort-AV: E=Sophos;i="6.04,213,1695711600"; 
-   d="scan'208";a="458095741"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 03:13:52 -0800
+   d="scan'208";a="390457334"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 03:14:02 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10899"; a="716179188"
+X-IronPort-AV: E=McAfee;i="6600,9927,10899"; a="801126899"
 X-IronPort-AV: E=Sophos;i="6.04,213,1695711600"; 
-   d="scan'208";a="716179188"
+   d="scan'208";a="801126899"
 Received: from sc9itsct4906.amr.corp.intel.com (HELO localhost) ([10.249.46.107])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 03:13:49 -0800
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 03:13:58 -0800
 From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To: linux-kselftest@vger.kernel.org,
 	Reinette Chatre <reinette.chatre@intel.com>,
@@ -51,10 +51,12 @@ To: linux-kselftest@vger.kernel.org,
 	Fenghua Yu <fenghua.yu@intel.com>
 Cc: linux-kernel@vger.kernel.org,
 	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v2 00/26] selftests/resctrl: CAT test improvements & generalized test framework
-Date: Mon, 20 Nov 2023 13:13:14 +0200
-Message-Id: <20231120111340.7805-1-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v2 01/26] selftests/resctrl: Don't use ctrlc_handler() outside signal handling
+Date: Mon, 20 Nov 2023 13:13:15 +0200
+Message-Id: <20231120111340.7805-2-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20231120111340.7805-1-ilpo.jarvinen@linux.intel.com>
+References: <20231120111340.7805-1-ilpo.jarvinen@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -64,101 +66,39 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hi all,
+perf_event_open_llc_miss() calls ctrlc_handler() to cleanup if
+perf_event_open() returns an error. Those cleanups, however, are not
+the responsability of perf_event_open_llc_miss() and it thus interferes
+unnecessarily with the usual cleanup pattern. Worse yet,
+ctrlc_handler() calls exit() in the end preventing the ordinary cleanup
+done in the calling function from executing.
 
-Here's v2 series to improve resctrl selftests with generalized test
-framework and rewritten CAT test. In contrast to v1, this version does
-not include L2 CAT test because it needs further work. In general, I
-feel that v2 is in much better shape than v1 because I ended up
-addressing a few small things beyond what came up during v1 review.
+ctrlc_handler() should only be used as a signal handler, not during
+normal error handling.
 
-The series contains following improvements:
+Remove call to ctrlc_handler() from perf_event_open_llc_miss(). As
+unmounting resctrlfs and test cleanup are already handled properly
+by error rollbacks in the calling functions, no other changes are
+necessary.
 
-- Excludes shareable bits from CAT test allocation to avoid interference
-- Replaces file "sink" with a volatile variable
-- Alters read pattern to defeat HW prefetcher optimizations
-- Rewrites CAT test to make the CAT test reliable and truly measure
-  if CAT is working or not
-- Introduces generalized test framework making easier to add new tests
-- Lots of other cleanups & refactoring
+Suggested-by: Reinette Chatre <reinette.chatre@intel.com>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+---
+ tools/testing/selftests/resctrl/cache.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-This series have been tested across a large number of systems from
-different generations.
-
-v2:
-- Postpone adding L2 CAT test as more investigations are necessary
-- Add patch to remove ctrlc_handler() from wrong place
-- Improvements to changelogs
-- Function comments improvements & comment cleanups
-- Move some parts of the changes into more logical patch
-- If checks: buf == NULL -> !buf
-- Variable naming:
-        - p -> buf
-        - cbm_mask_path -> cbm_path
-- Function naming:
-        - get_cbm_mask() -> get_full_cbm()
-        - cache_size() -> cache_portion_size()
-- Use PATH_MAX
-- Improved cache_portion_size() parameter names
-- int count -> unsigned int
-- Pass filename to measurement taking functions instead of
-  resctrl_val_param
-- !lines ? : reversal
-- Removed bogus static from function local variable
-- Open perf fd only once, reset & enable in the innermost test loop
-- Add perf fd ioctl() error handling
-- Add patch to change compiler optimization prevention "sink" from file
-  to volatile variable
-- Remove cpu_no and resource (the latter was added in v1) members from
-  resctrl_val_param (pass uparams and test where those are needed)
-- Removed ARRAY_SIZE() macro
-- Add patch to rename "resource_id" to "domain_id"
-
-Ilpo Järvinen (26):
-  selftests/resctrl: Don't use ctrlc_handler() outside signal handling
-  selftests/resctrl: Split fill_buf to allow tests finer-grained control
-  selftests/resctrl: Refactor fill_buf functions
-  selftests/resctrl: Refactor get_cbm_mask() and rename to
-    get_full_cbm()
-  selftests/resctrl: Mark get_cache_size() cache_type const
-  selftests/resctrl: Create cache_portion_size() helper
-  selftests/resctrl: Exclude shareable bits from schemata in CAT test
-  selftests/resctrl: Split measure_cache_vals()
-  selftests/resctrl: Split show_cache_info() to test specific and
-    generic parts
-  selftests/resctrl: Remove unnecessary __u64 -> unsigned long
-    conversion
-  selftests/resctrl: Remove nested calls in perf event handling
-  selftests/resctrl: Consolidate naming of perf event related things
-  selftests/resctrl: Improve perf init
-  selftests/resctrl: Convert perf related globals to locals
-  selftests/resctrl: Move cat_val() to cat_test.c and rename to
-    cat_test()
-  selftests/resctrl: Open perf fd before start & add error handling
-  selftests/resctrl: Replace file write with volatile variable
-  selftests/resctrl: Read in less obvious order to defeat prefetch
-    optimizations
-  selftests/resctrl: Rewrite Cache Allocation Technology (CAT) test
-  selftests/resctrl: Create struct for input parameters
-  selftests/resctrl: Introduce generalized test framework
-  selftests/resctrl: Pass write_schemata() resource instead of test name
-  selftests/resctrl: Add helper to convert L2/3 to integer
-  selftests/resctrl: Rename resource ID to domain ID
-  selftests/resctrl: Get domain id from cache id
-  selftests/resctrl: Add test groups and name L3 CAT test L3_CAT
-
- tools/testing/selftests/resctrl/cache.c       | 274 +++++----------
- tools/testing/selftests/resctrl/cat_test.c    | 328 +++++++++++-------
- tools/testing/selftests/resctrl/cmt_test.c    |  76 +++-
- tools/testing/selftests/resctrl/fill_buf.c    | 132 ++++---
- tools/testing/selftests/resctrl/mba_test.c    |  26 +-
- tools/testing/selftests/resctrl/mbm_test.c    |  28 +-
- tools/testing/selftests/resctrl/resctrl.h     | 117 +++++--
- .../testing/selftests/resctrl/resctrl_tests.c | 205 +++++------
- tools/testing/selftests/resctrl/resctrl_val.c |  56 +--
- tools/testing/selftests/resctrl/resctrlfs.c   | 246 ++++++++-----
- 10 files changed, 821 insertions(+), 667 deletions(-)
-
+diff --git a/tools/testing/selftests/resctrl/cache.c b/tools/testing/selftests/resctrl/cache.c
+index bcbca356d56a..8aa6d67db978 100644
+--- a/tools/testing/selftests/resctrl/cache.c
++++ b/tools/testing/selftests/resctrl/cache.c
+@@ -41,7 +41,6 @@ static int perf_event_open_llc_miss(pid_t pid, int cpu_no)
+ 				PERF_FLAG_FD_CLOEXEC);
+ 	if (fd_lm == -1) {
+ 		perror("Error opening leader");
+-		ctrlc_handler(0, NULL, NULL);
+ 		return -1;
+ 	}
+ 
 -- 
 2.30.2
 
