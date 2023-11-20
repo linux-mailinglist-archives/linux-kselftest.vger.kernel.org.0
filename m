@@ -1,47 +1,47 @@
-Return-Path: <linux-kselftest+bounces-296-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-297-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE9477F1171
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Nov 2023 12:14:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F7907F1172
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Nov 2023 12:14:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A422C281887
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Nov 2023 11:14:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C94DE1F23AB8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Nov 2023 11:14:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 929CB134B3;
-	Mon, 20 Nov 2023 11:14:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F6A7134D5;
+	Mon, 20 Nov 2023 11:14:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ggdidZGC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="la5ILu7z"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A053BEB;
-	Mon, 20 Nov 2023 03:14:02 -0800 (PST)
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5F88C5;
+	Mon, 20 Nov 2023 03:14:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1700478842; x=1732014842;
+  t=1700478850; x=1732014850;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=tzPsjJjcfyDfgR8LTQ4WEtUUvgvOSZlRwS0QORtco8Y=;
-  b=ggdidZGCs8fcKCH6HV//1Z8wKabJBRM8JOKusu6CQlg8ELJOVmE+Gcu8
-   ao2hZjNDcQX2H9uH+KWVGZ46Wn3yGeczmyHVritUwMCeorUOcl26YFMH2
-   Dq9QY+iXwsePJSHPgYCNva8cHmROU7P5HpafgFhP1T3vAmlIwvJo0lY95
-   7FtZWe5xiIFbSeCwBbPTKxyQPBPojyRie8kh4pyPzJH8XxrOO7AeJIE+I
-   oHiPHmrBcblM7OrSNBf9cK9Crn6iL7S+fBtaSr3FfJOAT3Y6pEGZoshXC
-   KN27SOrKR6K3LGbSh2wmwaBVSgATYnUf8cCQWbyntkjILmH/j8TmPD4LY
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10899"; a="390457334"
+  bh=3w5YPzsrJAtu6IwpvvctKCS09dxA4ulRia909xdQq0U=;
+  b=la5ILu7z2kI+O0YnwUFjV367xdIWwGBKkFAvBJK1vtUm2gfsJchhlv0Q
+   TOV+14I5QGLQQ4B0xvMRZPC657r1o0q+4RVMVvb3TbidSL9a/N3ogj9WG
+   n7UwVAjH0r5EcCrafjRFFT3oH1czVC/9CHizhwhb8hzSl2bJQ4Plk922+
+   8sAtY7/9o+0KAqjz9yJgAsnRNvafcRw9AI90FrNNWFRVfxMKtR7rzM3zU
+   yYShPPY/qxEhiC02/I3k9hxURFmYeNchad3dypR7UC05ub4sMpkJ+ROqo
+   21SInO7uk6UlWpqFntQWptOQbsJazDAruNIj+R+jGG4eDmVj3HPHBvhgt
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10899"; a="458095860"
 X-IronPort-AV: E=Sophos;i="6.04,213,1695711600"; 
-   d="scan'208";a="390457334"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 03:14:02 -0800
+   d="scan'208";a="458095860"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 03:14:10 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10899"; a="801126899"
+X-IronPort-AV: E=McAfee;i="6600,9927,10899"; a="716179264"
 X-IronPort-AV: E=Sophos;i="6.04,213,1695711600"; 
-   d="scan'208";a="801126899"
+   d="scan'208";a="716179264"
 Received: from sc9itsct4906.amr.corp.intel.com (HELO localhost) ([10.249.46.107])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 03:13:58 -0800
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2023 03:14:07 -0800
 From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To: linux-kselftest@vger.kernel.org,
 	Reinette Chatre <reinette.chatre@intel.com>,
@@ -51,9 +51,9 @@ To: linux-kselftest@vger.kernel.org,
 	Fenghua Yu <fenghua.yu@intel.com>
 Cc: linux-kernel@vger.kernel.org,
 	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v2 01/26] selftests/resctrl: Don't use ctrlc_handler() outside signal handling
-Date: Mon, 20 Nov 2023 13:13:15 +0200
-Message-Id: <20231120111340.7805-2-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v2 02/26] selftests/resctrl: Split fill_buf to allow tests finer-grained control
+Date: Mon, 20 Nov 2023 13:13:16 +0200
+Message-Id: <20231120111340.7805-3-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20231120111340.7805-1-ilpo.jarvinen@linux.intel.com>
 References: <20231120111340.7805-1-ilpo.jarvinen@linux.intel.com>
@@ -66,39 +66,78 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-perf_event_open_llc_miss() calls ctrlc_handler() to cleanup if
-perf_event_open() returns an error. Those cleanups, however, are not
-the responsability of perf_event_open_llc_miss() and it thus interferes
-unnecessarily with the usual cleanup pattern. Worse yet,
-ctrlc_handler() calls exit() in the end preventing the ordinary cleanup
-done in the calling function from executing.
+MBM, MBA and CMT test cases call run_fill_buf() that in turn calls
+fill_cache() to alloc and loop indefinitely around the buffer. This
+binds buffer allocation and running the benchmark into a single bundle
+so that a selftest cannot allocate a buffer once and reuse it. CAT test
+doesn't want to loop around the buffer continuously and after rewrite
+it needs the ability to allocate the buffer separately.
 
-ctrlc_handler() should only be used as a signal handler, not during
-normal error handling.
+Split buffer allocation out of fill_cache() into alloc_buffer(). This
+change is part of preparation for the new CAT test that allocates a
+buffer and does multiple passes over the same buffer (but not in an
+infinite loop).
 
-Remove call to ctrlc_handler() from perf_event_open_llc_miss(). As
-unmounting resctrlfs and test cleanup are already handled properly
-by error rollbacks in the calling functions, no other changes are
-necessary.
-
-Suggested-by: Reinette Chatre <reinette.chatre@intel.com>
+Co-developed-by: Fenghua Yu <fenghua.yu@intel.com>
+Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 ---
- tools/testing/selftests/resctrl/cache.c | 1 -
- 1 file changed, 1 deletion(-)
+ tools/testing/selftests/resctrl/fill_buf.c | 26 +++++++++++++---------
+ 1 file changed, 15 insertions(+), 11 deletions(-)
 
-diff --git a/tools/testing/selftests/resctrl/cache.c b/tools/testing/selftests/resctrl/cache.c
-index bcbca356d56a..8aa6d67db978 100644
---- a/tools/testing/selftests/resctrl/cache.c
-+++ b/tools/testing/selftests/resctrl/cache.c
-@@ -41,7 +41,6 @@ static int perf_event_open_llc_miss(pid_t pid, int cpu_no)
- 				PERF_FLAG_FD_CLOEXEC);
- 	if (fd_lm == -1) {
- 		perror("Error opening leader");
--		ctrlc_handler(0, NULL, NULL);
- 		return -1;
- 	}
+diff --git a/tools/testing/selftests/resctrl/fill_buf.c b/tools/testing/selftests/resctrl/fill_buf.c
+index 0d425f26583a..6f32f44128e1 100644
+--- a/tools/testing/selftests/resctrl/fill_buf.c
++++ b/tools/testing/selftests/resctrl/fill_buf.c
+@@ -135,33 +135,37 @@ static int fill_cache_write(unsigned char *buf, size_t buf_size, bool once)
+ 	return 0;
+ }
  
+-static int fill_cache(size_t buf_size, int memflush, int op, bool once)
++static unsigned char *alloc_buffer(size_t buf_size, int memflush)
+ {
+ 	unsigned char *buf;
+-	int ret;
+ 
+ 	buf = malloc_and_init_memory(buf_size);
+ 	if (!buf)
+-		return -1;
++		return NULL;
+ 
+ 	/* Flush the memory before using to avoid "cache hot pages" effect */
+ 	if (memflush)
+ 		mem_flush(buf, buf_size);
+ 
++	return buf;
++}
++
++static int fill_cache(size_t buf_size, int memflush, int op, bool once)
++{
++	unsigned char *buf;
++	int ret;
++
++	buf = alloc_buffer(buf_size, memflush);
++	if (!buf)
++		return -1;
++
+ 	if (op == 0)
+ 		ret = fill_cache_read(buf, buf_size, once);
+ 	else
+ 		ret = fill_cache_write(buf, buf_size, once);
+-
+ 	free(buf);
+ 
+-	if (ret) {
+-		printf("\n Error in fill cache read/write...\n");
+-		return -1;
+-	}
+-
+-
+-	return 0;
++	return ret;
+ }
+ 
+ int run_fill_buf(size_t span, int memflush, int op, bool once)
 -- 
 2.30.2
 
