@@ -1,104 +1,101 @@
-Return-Path: <linux-kselftest+bounces-323-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-324-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA9347F1472
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Nov 2023 14:31:01 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 162DF7F1475
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Nov 2023 14:31:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 400A4281597
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Nov 2023 13:31:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 46F941C215AD
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Nov 2023 13:31:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 314E81A728;
-	Mon, 20 Nov 2023 13:30:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0F781A72E;
+	Mon, 20 Nov 2023 13:31:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Nhkh5mfl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hM3nAMws"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6352191;
-	Mon, 20 Nov 2023 05:30:54 -0800 (PST)
-Received: from localhost (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	(Authenticated sender: rcn)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id 9B1C96602F1D;
-	Mon, 20 Nov 2023 13:30:52 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1700487052;
-	bh=iuC8R+5m6mgEX//giJTOK5COwXslXfrFu1ShOiauqs4=;
-	h=From:To:Cc:Subject:In-reply-to:Date:From;
-	b=Nhkh5mflnbq9vD2Ip8UWv6EX+Mm+PUlWDxy0xMtcWSp3lfe3tTaz8lPAH4RuZXmkc
-	 CMru9KJ5wnuHIyS9d5NfliuoU4k+3bQUPbDYt04unu3xC1dMn8EZvak0atj2G/Uj+a
-	 oOJEUFhVqJnyoHsOoZV3FGF2JD7EhZfdDfUOmR+2s0YtufNojMakFi2hy/pTO3w1CR
-	 p1g2x+dBCZ9DXWqoPAKg5OGwNPs3RDsanXBPAO5+34ORFBfRA6guYf//WPIHldF2G3
-	 YnH1wVhP8nyRkE89MUMDWl4iOzbMB/KwkTqyQ6OLU8np/bcWh4Oq9JM+OhE0b1cbNb
-	 INkpv2IM0goZg==
-From: =?utf-8?Q?Ricardo_Ca=C3=B1uelo?= <ricardo.canuelo@collabora.com>
-To: Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com>
-Cc: workflows@vger.kernel.org,
-	joe@perches.com,
-	apw@canonical.com,
-	tytso@mit.edu,
-	davidgow@google.com,
-	rostedt@goodmis.org,
-	broonie@kernel.org,
-	skhan@linuxfoundation.org,
-	djwong@kernel.org, kunit-dev@googlegroups.com,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCC051A728;
+	Mon, 20 Nov 2023 13:31:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2A06C433C7;
+	Mon, 20 Nov 2023 13:31:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1700487095;
+	bh=M8hXpqu/SFXEFGkb7RfUuX8flLLBuh9b/Fq64VoHQpw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hM3nAMwszfDIhSArCnA6KtTsdLLiaLRN1q7rOjqK/oYbLG8IucYrOURECM043OjZo
+	 gj/3ab3Qphmljn10UavvewFUhR7J+aSEBdqddXOFFd0sgAZGjCAqZvExfqkDDCXEYQ
+	 4pdVGs4vkXHOn5kVZDvdd/aQuYh5y3eIqHHU12BreIQCU5Es8GfRInSCM3wcwn7d7A
+	 kFkxgalSXajpyS70czyTIMlEPbmGDxMHZjKQb6V1v40v5YgnZ9OozUShshoy3NA3Zh
+	 H7zY1YKmRZEzIejoWqiB8NGBmXRHw+ROqsbMNE7iwhORDY/tCyx/oeNDTxSTsVd0od
+	 TraHh8yq2L6zQ==
+Date: Mon, 20 Nov 2023 13:31:28 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Gustavo Padovan <gustavo.padovan@collabora.com>
+Cc: Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com>,
+	Konstantin Ryabitsev <konstantin@linuxfoundation.org>,
+	workflows@vger.kernel.org, Joe Perches <joe@perches.com>,
+	Andy Whitcroft <apw@canonical.com>, Theodore Tso <tytso@mit.edu>,
+	David Gow <davidgow@google.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	"Darrick J . Wong" <djwong@kernel.org>, kunit-dev@googlegroups.com,
 	linux-kselftest@vger.kernel.org,
-	vkabatov@redhat.com,
-	cki-project@redhat.com,
-	kernelci@lists.linux.dev,
-	Nikolai.Kondrashov@redhat.com
+	Veronika Kabatova <vkabatov@redhat.com>,
+	CKI <cki-project@redhat.com>, kernelci@lists.linux.dev,
+	kernel@collabora.com,
+	Ricardo =?iso-8859-1?Q?Ca=F1uelo?= Navarro <ricardo.canuelo@collabora.com>
 Subject: Re: [PATCH 1/3] MAINTAINERS: Introduce V: field for required tests
-In-reply-to: <20231115175146.9848-2-Nikolai.Kondrashov@redhat.com> (message
- from Nikolai Kondrashov on Wed, 15 Nov 2023 19:43:49 +0200)
-Date: Mon, 20 Nov 2023 14:30:49 +0100
-Message-ID: <87sf50imba.fsf@collabora.com>
+Message-ID: <92219e71-4715-44e7-9522-191f268fe22c@sirena.org.uk>
+References: <13fe4866-0522-4690-a060-160fdab9f54b@redhat.com>
+ <1341-655b5400-1-5f647c80@80242238>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="wpzPcxOY99Tb7/Ji"
+Content-Disposition: inline
+In-Reply-To: <1341-655b5400-1-5f647c80@80242238>
+X-Cookie: <Manoj> I *like* the chicken
 
-Hi Nikolai,
 
-On mi=C3=A9, nov 15 2023 at 19:43:49, Nikolai Kondrashov <Nikolai.Kondrasho=
-v@redhat.com> wrote:
-> Introduce a new tag, 'Tested-with:', documented in the
-> Documentation/process/submitting-patches.rst file. The tag is expected
-> to reference the documented test suites, similarly to the 'V:' field,
-> and to certify that the submitter executed the test suite on the change,
-> and that it passed.
+--wpzPcxOY99Tb7/Ji
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I think the 'V:' field in MAINTAINERS is a good addition to document
-what developers are supposed to test for every subsystem, but in the
-case of the per-commit "Tested-with:" tag, I think the real value of it
-would be in using it for accountability and traceability purposes
-instead, that is, to link to the actual results of the (automatic) tests
-that were used to validate a commit.
+On Mon, Nov 20, 2023 at 12:40:39PM +0000, Gustavo Padovan wrote:
 
-This would provide two important features:
+> I also wonder how to make for subsystems that will have different test
+> suites (eg something in kselftests and an external test suite). Would
+> an alternative be pointing to a Documentation page with detailed info?
 
-1. Rather than trusting that the tester did things right and that the
-   test environment used was appropriate, we'd now have proof that the
-   test results are as expected and a way to reproduce the steps.
+Why not just add multiple test suite lines like we do for other things
+where there can be more than one example?
 
-2. A history of test results for future reference. When a regression is
-   introduced, now we'd have more information about how things worked
-   back when the test was still passing.
+Please fix your mail client to word wrap within paragraphs at something
+substantially less than 80 columns.  Doing this makes your messages much
+easier to read and reply to.
 
-This is not trivial because tests vary a lot and we'd first need to
-define which artifacts to link to, and because whatever is linked (test
-commands, output log, results summary) would need to be stored
-forever. But since we're doing that already for basically all kernel
-mailing lists, I wonder if something like "public-inbox for test
-results" could be possible some day.
+--wpzPcxOY99Tb7/Ji
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Cheers,
-Ricardo
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVbX68ACgkQJNaLcl1U
+h9B4IggAg+T0prKijOeC3QNgobuJ0qxDuMVcNzod2bpIDyBJomSQITktQIs2KqJr
+ksVzYw2shK6StpwGpNI6G7vICYLB6pEE0isc0m41MvtqcuewGYFdBJL7SQhtZNBN
+YnRAcmNpD/HCj61MK10CZITHwSkDCzf6i2pHl6l00qS6hPeBrh0DmE28GrOvluMa
+cpd6/to5SMJPVOMfIcOgmkhUMASpAWtDh4TBzwSou0q1UOkrsMyxvMk0mPF246Ac
+X5By5iarDrccmWqzx5wuBLHV4sWEX2mKeVxob+4x1rJKiQFQ5v4o2Y2OCHOOaseA
+JvFtSpzIfa+kwJl8u/pBqyDg0dNRew==
+=ncnT
+-----END PGP SIGNATURE-----
+
+--wpzPcxOY99Tb7/Ji--
 
