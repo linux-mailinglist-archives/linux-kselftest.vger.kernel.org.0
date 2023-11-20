@@ -1,41 +1,40 @@
-Return-Path: <linux-kselftest+bounces-343-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-344-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 185B27F21B6
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Nov 2023 00:55:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id ADC047F21B9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Nov 2023 00:55:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C18F528267D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Nov 2023 23:55:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 67EE3282350
+	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Nov 2023 23:55:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 453443B78E;
-	Mon, 20 Nov 2023 23:55:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CD003B790;
+	Mon, 20 Nov 2023 23:55:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JYAZrAIT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WV41QAv1"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C4C83B786;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B9A13B2B7;
+	Mon, 20 Nov 2023 23:55:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F53DC433C7;
 	Mon, 20 Nov 2023 23:55:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 213C5C433C8;
-	Mon, 20 Nov 2023 23:55:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700524522;
-	bh=a/9neu1tFH+KJoMSs60BVIB0GUVr2b3mTNMGBRScTUk=;
-	h=From:Subject:Date:To:Cc:From;
-	b=JYAZrAITo3f0CN1qCjUsi9Vrq+8+7jKeIfVoT45KT2zX/2A5Rr2KblHWs9MPX+m8K
-	 2ez0uqC9h1O5ZcRIbKPiSsohDRTKlLZqeKvIIVZ+EUVeRuq0Zf03qGoh9tXVkyqpaO
-	 bZC6KDU7ajg0kVbbjANrLhq/knFkoh+eQFgp4R+MLgop8ASueQJm8iSIZpe5CUArnq
-	 sjGT20Zvyt2OMEj6ovhiW7DKP3G0ykDsgS/OGZ9VUsrHgVLu8zZd7tmUZ+jAWSVA6O
-	 N6smpgKwib5vO60jvWpsGhasCKZ/+QGbbuNJ3FDNM4Yz++2/AFO2/2Wsh6TaAZctr0
-	 YnWK/dbZ8X+Kg==
+	s=k20201202; t=1700524531;
+	bh=FEKtInmB6mFDaJj7WRZ2UJIP9/hPzlhQkMpJUP8BQq8=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=WV41QAv1rJxcj+vxnp7S0mCF1VeOKiaAkuL4CwSZ6/Jeks1hLwuKK9WMXrg9P0gd1
+	 X3qZWI8NRU/tKrfslrA+LaaeugWU79B1mu7XTuYGFZk5bsbtqgQM/0bXJcBahZwpvE
+	 jXUUSP0ha5tVnF3yjM2iPpZiU5ACkYrzE0iNw6sD4/7g0wtTq0YDNx6pGtzmwbM8iC
+	 4vcFDLPjdmR7wDMVw7PM9zhH5taYkZLzn8kyHG8RfuJoNbEGbirETrJCW8uLokNkG7
+	 Y+XB8yIlaco10Anz0mUFJR443r/paPgMNsRVBJ62m+Q1kbY0AFN2MG7rekzOV0mDnN
+	 jG6Ws5gd2hYaw==
 From: Mark Brown <broonie@kernel.org>
-Subject: [PATCH RFT v3 0/5] fork: Support shadow stacks in clone3()
-Date: Mon, 20 Nov 2023 23:54:28 +0000
-Message-Id: <20231120-clone3-shadow-stack-v3-0-a7b8ed3e2acc@kernel.org>
+Date: Mon, 20 Nov 2023 23:54:29 +0000
+Subject: [PATCH RFT v3 1/5] mm: Introduce ARCH_HAS_USER_SHADOW_STACK
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -44,10 +43,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIALXxW2UC/23NQQ7CIBAF0KsY1mIYKFhdufIAxp1x0ZZpS9qAg
- QY1Te8uwYUx6fLPz7w/k4DeYCDHzUw8RhOMsymI7YY0fWU7pEanTDjjAhgcaDM6i4KGvtLuScN
- UNQMFqQumed1KoUj6fHhszSurN3I5X8k9HXsTJuffeSlCrr4oF6toBMqoLtVeszr5mp0G9BbHn
- fNdBiP/IQDFOsITUisQbalKACn/kGVZPoNZvpIBAQAA
+Message-Id: <20231120-clone3-shadow-stack-v3-1-a7b8ed3e2acc@kernel.org>
+References: <20231120-clone3-shadow-stack-v3-0-a7b8ed3e2acc@kernel.org>
+In-Reply-To: <20231120-clone3-shadow-stack-v3-0-a7b8ed3e2acc@kernel.org>
 To: "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>, 
  Deepak Gupta <debug@rivosinc.com>, Szabolcs Nagy <Szabolcs.Nagy@arm.com>, 
  "H.J. Lu" <hjl.tools@gmail.com>, Florian Weimer <fweimer@redhat.com>, 
@@ -68,108 +66,89 @@ Cc: linux-kernel@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>,
  linux-api@vger.kernel.org, Mark Brown <broonie@kernel.org>, 
  David Hildenbrand <david@redhat.com>
 X-Mailer: b4 0.13-dev-0438c
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4572; i=broonie@kernel.org;
- h=from:subject:message-id; bh=a/9neu1tFH+KJoMSs60BVIB0GUVr2b3mTNMGBRScTUk=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBlW/He+R9tbOuG3iCWWr+KroLJVc1KteepSJ28g1T0
- o7YadV2JATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZVvx3gAKCRAk1otyXVSH0M9yB/
- 4glbrgSuL+qqlZo7pncWnZALQCHVi6bW1l9IilkRhvgdoz8H2MSQ2YP59x56pa0uMUOQoSoHH5l4v+
- Jjd7S3MDqc6TAuYwxmA4Vr6Bu74wm5etkRBbggKZEExxdu270I2gHsdx3CZzJ95ls2v2KsgGIHTOrY
- u9f5Amky+q7z+QcbPk9SJVj33XeKiBJgRFRQg/tK+xrAM/HZ3n/zIth3a+ys/nKNhjDcdLJqt6wYvk
- Z9lBOdYyMXQML24PyXvC6jyy5PRJaXgmo8EhLPcJy2zsUKNbQM+Okb54Kj1rrRZA9J2kJFI6xIxzLH
- zd/ls6HZZDHxG6V4SEu7lAVilp8STa
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2350; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=FEKtInmB6mFDaJj7WRZ2UJIP9/hPzlhQkMpJUP8BQq8=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBlW/HeNGumee5BBgwYzS/jfuVxfmeNbdDo3h499Lve
+ AEC5g2GJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZVvx3gAKCRAk1otyXVSH0MH8B/
+ 49OKKVqeGmJqH5SHRyriH7oXHLzEzq1hobb2QMbBMeWL3VRKyHvLSTHT7IONQZP9FOOs45Dl+Jbspj
+ tkMdlvyxD8ciXP9uA1FlLLCsTh/Nl6K3upIWBVPL6QGN14wVx0XUfQe9saZn1BCkx48IfsFtoMY3lE
+ VggZmBbeEUAkFRuD1Cwq655/PHcXYF7mZx10TVcyISzeZg+Xx/QbVUm9rflE/4Il3EV3+9NqKnT0oF
+ cVRbKrLqJUp7D9F1mOQQUkkR6ppUCctRNdNpbT+m+JFgqgKenpvg4ru1ckIGBRIlr9gB9Mv3DvWfPu
+ xydhRD0JNsM+AgQGPUlS0kJ4/f709v
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-The kernel has recently added support for shadow stacks, currently
-x86 only using their CET feature but both arm64 and RISC-V have
-equivalent features (GCS and Zicfiss respectively), I am actively
-working on GCS[1].  With shadow stacks the hardware maintains an
-additional stack containing only the return addresses for branch
-instructions which is not generally writeable by userspace and ensures
-that any returns are to the recorded addresses.  This provides some
-protection against ROP attacks and making it easier to collect call
-stacks.  These shadow stacks are allocated in the address space of the
-userspace process.
+Since multiple architectures have support for shadow stacks and we need to
+select support for this feature in several places in the generic code
+provide a generic config option that the architectures can select.
 
-Our API for shadow stacks does not currently offer userspace any
-flexiblity for managing the allocation of shadow stacks for newly
-created threads, instead the kernel allocates a new shadow stack with
-the same size as the normal stack whenever a thread is created with the
-feature enabled.  The stacks allocated in this way are freed by the
-kernel when the thread exits or shadow stacks are disabled for the
-thread.  This lack of flexibility and control isn't ideal, in the vast
-majority of cases the shadow stack will be over allocated and the
-implicit allocation and deallocation is not consistent with other
-interfaces.  As far as I can tell the interface is done in this manner
-mainly because the shadow stack patches were in development since before
-clone3() was implemented.
-
-Since clone3() is readily extensible let's add support for specifying a
-shadow stack when creating a new thread or process in a similar manner
-to how the normal stack is specified, keeping the current implicit
-allocation behaviour if one is not specified either with clone3() or
-through the use of clone().  Unlike normal stacks only the shadow stack
-size is specified, similar issues to those that lead to the creation of
-map_shadow_stack() apply.
-
-Please note that the x86 portions of this code are build tested only, I
-don't appear to have a system that can run CET avaible to me, I have
-done testing with an integration into my pending work for GCS.  There is
-some possibility that the arm64 implementation may require the use of
-clone3() and explicit userspace allocation of shadow stacks, this is
-still under discussion.
-
-A new architecture feature Kconfig option for shadow stacks is added as
-here, this was suggested as part of the review comments for the arm64
-GCS series and since we need to detect if shadow stacks are supported it
-seemed sensible to roll it in here.
-
-[1] https://lore.kernel.org/r/20231009-arm64-gcs-v6-0-78e55deaa4dd@kernel.org/
-
+Suggested-by: David Hildenbrand <david@redhat.com>
+Acked-by: David Hildenbrand <david@redhat.com>
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
-Changes in v3:
-- Rebase onto v6.7-rc2.
-- Remove stale shadow_stack in internal kargs.
-- If a shadow stack is specified unconditionally use it regardless of
-  CLONE_ parameters.
-- Force enable shadow stacks in the selftest.
-- Update changelogs for RISC-V feature rename.
-- Link to v2: https://lore.kernel.org/r/20231114-clone3-shadow-stack-v2-0-b613f8681155@kernel.org
+ arch/x86/Kconfig   | 1 +
+ fs/proc/task_mmu.c | 2 +-
+ include/linux/mm.h | 2 +-
+ mm/Kconfig         | 6 ++++++
+ 4 files changed, 9 insertions(+), 2 deletions(-)
 
-Changes in v2:
-- Rebase onto v6.7-rc1.
-- Remove ability to provide preallocated shadow stack, just specify the
-  desired size.
-- Link to v1: https://lore.kernel.org/r/20231023-clone3-shadow-stack-v1-0-d867d0b5d4d0@kernel.org
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 3762f41bb092..14b7703a9a2b 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -1952,6 +1952,7 @@ config X86_USER_SHADOW_STACK
+ 	depends on AS_WRUSS
+ 	depends on X86_64
+ 	select ARCH_USES_HIGH_VMA_FLAGS
++	select ARCH_HAS_USER_SHADOW_STACK
+ 	select X86_CET
+ 	help
+ 	  Shadow stack protection is a hardware feature that detects function
+diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
+index ef2eb12906da..f0a904aeee8e 100644
+--- a/fs/proc/task_mmu.c
++++ b/fs/proc/task_mmu.c
+@@ -699,7 +699,7 @@ static void show_smap_vma_flags(struct seq_file *m, struct vm_area_struct *vma)
+ #ifdef CONFIG_HAVE_ARCH_USERFAULTFD_MINOR
+ 		[ilog2(VM_UFFD_MINOR)]	= "ui",
+ #endif /* CONFIG_HAVE_ARCH_USERFAULTFD_MINOR */
+-#ifdef CONFIG_X86_USER_SHADOW_STACK
++#ifdef CONFIG_ARCH_HAS_USER_SHADOW_STACK
+ 		[ilog2(VM_SHADOW_STACK)] = "ss",
+ #endif
+ 	};
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 418d26608ece..10462f354614 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -341,7 +341,7 @@ extern unsigned int kobjsize(const void *objp);
+ #endif
+ #endif /* CONFIG_ARCH_HAS_PKEYS */
+ 
+-#ifdef CONFIG_X86_USER_SHADOW_STACK
++#ifdef CONFIG_ARCH_HAS_USER_SHADOW_STACK
+ /*
+  * VM_SHADOW_STACK should not be set with VM_SHARED because of lack of
+  * support core mm.
+diff --git a/mm/Kconfig b/mm/Kconfig
+index 89971a894b60..6713bb3b0b48 100644
+--- a/mm/Kconfig
++++ b/mm/Kconfig
+@@ -1270,6 +1270,12 @@ config LOCK_MM_AND_FIND_VMA
+ 	bool
+ 	depends on !STACK_GROWSUP
+ 
++config ARCH_HAS_USER_SHADOW_STACK
++	bool
++	help
++	  The architecture has hardware support for userspace shadow call
++          stacks (eg, x86 CET, arm64 GCS or RISC-V Zicfiss).
++
+ source "mm/damon/Kconfig"
+ 
+ endmenu
 
----
-Mark Brown (5):
-      mm: Introduce ARCH_HAS_USER_SHADOW_STACK
-      fork: Add shadow stack support to clone3()
-      selftests/clone3: Factor more of main loop into test_clone3()
-      selftests/clone3: Allow tests to flag if -E2BIG is a valid error code
-      kselftest/clone3: Test shadow stack support
-
- arch/x86/Kconfig                                  |   1 +
- arch/x86/include/asm/shstk.h                      |  11 +-
- arch/x86/kernel/process.c                         |   2 +-
- arch/x86/kernel/shstk.c                           |  59 +++++--
- fs/proc/task_mmu.c                                |   2 +-
- include/linux/mm.h                                |   2 +-
- include/linux/sched/task.h                        |   1 +
- include/uapi/linux/sched.h                        |   4 +
- kernel/fork.c                                     |  22 ++-
- mm/Kconfig                                        |   6 +
- tools/testing/selftests/clone3/clone3.c           | 200 +++++++++++++++++-----
- tools/testing/selftests/clone3/clone3_selftests.h |   7 +
- 12 files changed, 250 insertions(+), 67 deletions(-)
----
-base-commit: 98b1cc82c4affc16f5598d4fa14b1858671b2263
-change-id: 20231019-clone3-shadow-stack-15d40d2bf536
-
-Best regards,
 -- 
-Mark Brown <broonie@kernel.org>
+2.30.2
 
 
