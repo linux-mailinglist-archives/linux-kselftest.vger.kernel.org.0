@@ -1,99 +1,94 @@
-Return-Path: <linux-kselftest+bounces-368-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-369-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 215E17F2905
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Nov 2023 10:32:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D3EC7F291A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Nov 2023 10:42:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B4BD3B2111C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Nov 2023 09:32:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 051A228260B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Nov 2023 09:42:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AF103BB49;
-	Tue, 21 Nov 2023 09:32:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EAE33BB5B;
+	Tue, 21 Nov 2023 09:42:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="j65JvBpU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from cmccmta1.chinamobile.com (cmccmta8.chinamobile.com [111.22.67.151])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 11168F5;
-	Tue, 21 Nov 2023 01:32:42 -0800 (PST)
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app02-12002 (RichMail) with SMTP id 2ee2655c7937287-805b6;
-	Tue, 21 Nov 2023 17:32:40 +0800 (CST)
-X-RM-TRANSID:2ee2655c7937287-805b6
-X-RM-TagInfo: emlType=0                                       
-X-RM-SPAM-FLAG:00000000
-Received:from ubuntu.localdomain (unknown[10.54.5.255])
-	by rmsmtp-syy-appsvr08-12008 (RichMail) with SMTP id 2ee8655c7937a7b-cb139;
-	Tue, 21 Nov 2023 17:32:40 +0800 (CST)
-X-RM-TRANSID:2ee8655c7937a7b-cb139
-From: Zhu Jun <zhujun2@cmss.chinamobile.com>
-To: dan.carpenter@linaro.org
-Cc: ivan.orlov0322@gmail.com,
-	kernel-janitors@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	mathieu.desnoyers@efficios.com,
-	shuah@kernel.org,
-	zhujun2@cmss.chinamobile.com
-Subject: [PATCH v1] selftests/media_tests: fix a resource leak
-Date: Tue, 21 Nov 2023 01:32:38 -0800
-Message-Id: <20231121093238.5376-1-zhujun2@cmss.chinamobile.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <71465605-7179-4281-8ec8-80f741e78038@suswa.mountain>
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11109D8
+	for <linux-kselftest@vger.kernel.org>; Tue, 21 Nov 2023 01:42:39 -0800 (PST)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-40842752c6eso23789715e9.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Nov 2023 01:42:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1700559757; x=1701164557; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=OFo9KPKmFK7WqzXwym/48RniSRgiZpvp+lNPOreiEFY=;
+        b=j65JvBpUptIHNcFEhAJk0iFw6YMB730lUNSU9RxlEP0jEFmP9/m78yBxi9CptNHyI2
+         62NtSsp4FiK+8/0GyOigt13rEnQuog5Cjqxw0fDWqIMtmvxZWDb+C+jHrOr6NWLZjBTZ
+         X+ayrigretPeRDNHhFjEqO1d18RUxYdIQPzI8cY4UuFJ9Ztq2rIadHNlIxmUOtDS7oyb
+         iN18O12T8i143rbyMg3KaAtZRwuCMCa/gqYDx6ibFkkd2hPKrNKQCwkNcZIJYLmSY0HM
+         9HEkYaU46h28Db6nBvhFy57dqX8Mo6w/4S/CUKI1rpuIBU/1tACtLqjq3PjaTQ/bwDkx
+         HwQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700559757; x=1701164557;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OFo9KPKmFK7WqzXwym/48RniSRgiZpvp+lNPOreiEFY=;
+        b=eZo/y5KbDVSAAyFmYl4/vINiNN8dK1iM/qUwbWwWd4tXALCJ8+1zM7NC2gfTIIi9Os
+         MeLxWjpgisgZz+yXfZiTlJYYSOuQ2gAttTUMXZTPdp/zAyMsdmh7GHGX0hhlAiAzZEfZ
+         9sFSbbmk1JiQos1a7UGX9QKZdNw8g9xqGbG69p4zSGI/FhJNZ+ucV82U7BTSb2wVYcTI
+         Jt8b4A8uJVb1AfttOBCoD58TzCS9xtLtRNpaYwnUv/thMF1XPLWflpHFcLxVuEtafB4l
+         Fq/EWAar0dOgXJNt/Z9wSQGQ1JztPh9cFZED5ifvPS//LC3LR746Z6Y9HcqvsQHGpOeB
+         G1Iw==
+X-Gm-Message-State: AOJu0YyWYwLU6JplLZ6AE5j2oiG7wUkQFfi1ajJ1DVRpLRjW9ZLeaG9/
+	MKPQHradOxfs8c8bGi/w5XfNLg==
+X-Google-Smtp-Source: AGHT+IHIyVqWoNqJSzyFRtD//B41b3mRhSXS014z/c9urGhK0lZKNPRhwj0Rcm/ITAjDFfTbjoZB3g==
+X-Received: by 2002:a7b:c342:0:b0:40a:4a7d:606b with SMTP id l2-20020a7bc342000000b0040a4a7d606bmr8053233wmj.40.1700559757371;
+        Tue, 21 Nov 2023 01:42:37 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id n7-20020a05600c4f8700b0040588d85b3asm20872413wmq.15.2023.11.21.01.42.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Nov 2023 01:42:37 -0800 (PST)
+Date: Tue, 21 Nov 2023 04:42:33 -0500
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Zhu Jun <zhujun2@cmss.chinamobile.com>
+Cc: ivan.orlov0322@gmail.com, kernel-janitors@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	mathieu.desnoyers@efficios.com, shuah@kernel.org
+Subject: Re: [PATCH v1] selftests/media_tests: fix a resource leak
+Message-ID: <a0cdd2a9-08db-4b9e-aba4-7837df7fd2eb@suswa.mountain>
 References: <71465605-7179-4281-8ec8-80f741e78038@suswa.mountain>
+ <20231121093238.5376-1-zhujun2@cmss.chinamobile.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231121093238.5376-1-zhujun2@cmss.chinamobile.com>
 
-From: zhujun2 <zhujun2@cmss.chinamobile.com>
+On Tue, Nov 21, 2023 at 01:32:38AM -0800, Zhu Jun wrote:
+> From: zhujun2 <zhujun2@cmss.chinamobile.com>
+> 
+> The opened file should be closed in main(), otherwise resource
+> leak will occur that this problem was discovered by code reading
+> 
+> Signed-off-by: zhujun2 <zhujun2@cmss.chinamobile.com>
+> ---
+> 
+> Hi Dan Carpenter 
+> 	
+> 	I believe that the Linux kernel code is sacred and should strictly adhere to C code conventions
+> 
 
-The opened file should be closed in main(), otherwise resource
-leak will occur that this problem was discovered by code reading
+*sigh*.  You do you, I guess.  This patch is pointless but I don't care
+whether it's merged or not.
 
-Signed-off-by: zhujun2 <zhujun2@cmss.chinamobile.com>
----
-
-Hi Dan Carpenter 
-	
-	I believe that the Linux kernel code is sacred and should strictly adhere to C code conventions
-
-thanks,
-[Zhu Jun]
-
- tools/testing/selftests/media_tests/media_device_open.c | 2 ++
- tools/testing/selftests/media_tests/media_device_test.c | 2 ++
- 2 files changed, 4 insertions(+)
-
-diff --git a/tools/testing/selftests/media_tests/media_device_open.c b/tools/testing/selftests/media_tests/media_device_open.c
-index 93183a37b133..ae263eb78a2c 100644
---- a/tools/testing/selftests/media_tests/media_device_open.c
-+++ b/tools/testing/selftests/media_tests/media_device_open.c
-@@ -79,4 +79,6 @@ int main(int argc, char **argv)
- 	else
- 		printf("Media device model %s driver %s\n",
- 			mdi.model, mdi.driver);
-+
-+	close(fd);
- }
-diff --git a/tools/testing/selftests/media_tests/media_device_test.c b/tools/testing/selftests/media_tests/media_device_test.c
-index 4b9953359e40..65888ce5c89f 100644
---- a/tools/testing/selftests/media_tests/media_device_test.c
-+++ b/tools/testing/selftests/media_tests/media_device_test.c
-@@ -100,4 +100,6 @@ int main(int argc, char **argv)
- 		sleep(10);
- 		count--;
- 	}
-+
-+	close(fd);
- }
--- 
-2.17.1
-
-
-
+regards,
+dan carpenter
 
