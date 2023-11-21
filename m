@@ -1,105 +1,253 @@
-Return-Path: <linux-kselftest+bounces-382-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-383-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88A377F339C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Nov 2023 17:25:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F3597F34BC
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Nov 2023 18:16:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B9BF41C218F7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Nov 2023 16:25:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 35A8B28240F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Nov 2023 17:16:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40BD35A102;
-	Tue, 21 Nov 2023 16:25:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A052D5A10C;
+	Tue, 21 Nov 2023 17:16:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="VdJvR+PM"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GVh17TNW"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AB1F1A2;
-	Tue, 21 Nov 2023 08:25:17 -0800 (PST)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-	by mx0a-001ae601.pphosted.com (8.17.1.22/8.17.1.22) with ESMTP id 3ALDQR9s022514;
-	Tue, 21 Nov 2023 10:25:02 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=
-	from:to:cc:subject:date:message-id:mime-version
-	:content-transfer-encoding:content-type; s=PODMain02222019; bh=a
-	/7u789OEKGmrzwWMfo3Tx7id73xOZOq/UBx/8LmtAk=; b=VdJvR+PM1JVNbKr+B
-	wvEHwmOA+mU45lBA85+WhADAivTLMG8mYI55kEKPbQiaY3U72QH7Uq54vwweSbvn
-	xp8Q/gdM0xvvyOIIlTf2+Sp5C6HBP9kmwO8RX5V6jIZJ274UWdribh2qPm65X2F1
-	e2FEtrXKxHeVLxxsFvCVcYGC5E+808eMOvubfLbM8hMBAdJpKoN/DOsO/GiDkHq8
-	7DZCcyM/0jFiW366QFU5AeqkTfqvcvq5sADMw8VhpUCGuCW7BXPlYcePFuYtDf/K
-	T9wxwJ7NTChSiFgZ27lqnR1SdZItxNeOfgV6SEC/t2LcHTEoFFLcorrIx6r5JSmI
-	pXK0Q==
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-	by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3ueuj2bdag-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 21 Nov 2023 10:25:02 -0600 (CST)
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.39; Tue, 21 Nov
- 2023 16:25:00 +0000
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.39 via Frontend Transport; Tue, 21 Nov 2023 16:25:00 +0000
-Received: from EDIN4L06LR3.ad.cirrus.com (EDIN4L06LR3.ad.cirrus.com [198.61.65.98])
-	by ediswmail.ad.cirrus.com (Postfix) with ESMTP id BC675458;
-	Tue, 21 Nov 2023 16:24:59 +0000 (UTC)
-From: Richard Fitzgerald <rf@opensource.cirrus.com>
-To: <brendan.higgins@linux.dev>, <davidgow@google.com>, <rmoar@google.com>
-CC: <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
-        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>,
-        "Richard
- Fitzgerald" <rf@opensource.cirrus.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH] kunit: string-stream-test: Avoid cast warning when testing gfp_t flags
-Date: Tue, 21 Nov 2023 16:24:57 +0000
-Message-ID: <20231121162457.17703-1-rf@opensource.cirrus.com>
-X-Mailer: git-send-email 2.30.2
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B333113
+	for <linux-kselftest@vger.kernel.org>; Tue, 21 Nov 2023 09:16:48 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-da31ec03186so4533674276.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 21 Nov 2023 09:16:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1700587007; x=1701191807; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jM7XBxZIdIQFnI3Em7K4YQrm7oT5I43ipyduUgFQ+MA=;
+        b=GVh17TNWuas6TS28Ma3ChKSsOyji8jaRRYtlv86hNS7C4EMKLiaMj9rcAnRMVp/nMj
+         BH4NbQymzT5qwevhhalLVNGTZ4ah7I0Yyyft24YCpaINzi7TNUqdABxtfUD+AEbBH3CN
+         4jS4BDgeaq9r1GrHjxp8y9ze+9pBnVJz6lD6Fv7s7CXKYpG+nXd6k3NVjJYW2iq+uwqh
+         Yo3XLnK6XoD+71T/HHdbCGIommIzS1mbZePoxguUMmqKeQReTTl6J0RPG77/pNgekKG+
+         fDAvbPjnihsHvJdhWRzbu3/ss06aV9mUGuWhXG7kLQqvL4pV9FWYdkGAodHqGx4u5EPe
+         vDcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700587007; x=1701191807;
+        h=content-transfer-encoding:cc:to:from:subject:message-id
+         :mime-version:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jM7XBxZIdIQFnI3Em7K4YQrm7oT5I43ipyduUgFQ+MA=;
+        b=LFg8PqbPqlXMzXDEPdpFE2wbbDud684eAqRmSSHtlRJfnPUchKpLXW9lkpZeeU896o
+         2Ly7V/Ey2TYA8v2edLELTR4unGOL8xNJfTFQue586XQChhx4+rjjPVdK0BPPodMS7PAk
+         aahdcTaH8nFfEcxjiW1J/DKONbozuPrRLrTMyH61t0KVxSayCcnfObEs6WpXOAPHtq0q
+         a3bPR3I64jDeZetJOrFTL98x0PJ1vr9NBO3zArXOXUD78U5c5xsZhtLGK6uMfNzyyhfW
+         JknuH4T4n8DG29R+gQ4iLgpySDy6bJmUyB9AOc3thhErj3199T23k+AQ5L8fraudKM3m
+         gxVQ==
+X-Gm-Message-State: AOJu0YynZT3Bs78VKkJoiSIgYAV/UbchjrJ+SvP5r+sDfVCi4gq7wEiW
+	qIsaz3Qe+GO1lNGHsPE/9mx8rjbXhGM=
+X-Google-Smtp-Source: AGHT+IFqboCvwPHQtX7cCJPOYR6+OPn7Jj/tG7no88TpQkFNSfK4t9ha8o0yTwTy7v2M2vtmHrTy83rrpPo=
+X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:2045:f6d2:f01d:3fff])
+ (user=surenb job=sendgmr) by 2002:a25:4a44:0:b0:d89:42d7:e72d with SMTP id
+ x65-20020a254a44000000b00d8942d7e72dmr88654yba.3.1700587007306; Tue, 21 Nov
+ 2023 09:16:47 -0800 (PST)
+Date: Tue, 21 Nov 2023 09:16:33 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 11SOlOybwqtl2KAu4CPyy3AQ8cBaz4Ma
-X-Proofpoint-GUID: 11SOlOybwqtl2KAu4CPyy3AQ8cBaz4Ma
-X-Proofpoint-Spam-Reason: safe
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.43.0.rc1.413.gea7ed67945-goog
+Message-ID: <20231121171643.3719880-1-surenb@google.com>
+Subject: [PATCH v5 0/5] userfaultfd move option
+From: Suren Baghdasaryan <surenb@google.com>
+To: akpm@linux-foundation.org
+Cc: viro@zeniv.linux.org.uk, brauner@kernel.org, shuah@kernel.org, 
+	aarcange@redhat.com, lokeshgidra@google.com, peterx@redhat.com, 
+	david@redhat.com, hughd@google.com, mhocko@suse.com, axelrasmussen@google.com, 
+	rppt@kernel.org, willy@infradead.org, Liam.Howlett@oracle.com, 
+	jannh@google.com, zhangpeng362@huawei.com, bgeffon@google.com, 
+	kaleshsingh@google.com, ngeoffray@google.com, jdduke@google.com, 
+	surenb@google.com, linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Passing a gfp_t to KUNIT_EXPECT_EQ() causes a cast warning:
+This patch series introduces UFFDIO_MOVE feature to userfaultfd, which
+has long been implemented and maintained by Andrea in his local tree [1],
+but was not upstreamed due to lack of use cases where this approach would
+be better than allocating a new page and copying the contents. Previous
+upstraming attempts could be found at [6] and [7].
 
-  lib/kunit/string-stream-test.c:73:9: sparse: sparse: incorrect type in
-  initializer (different base types) expected long long right_value
-  got restricted gfp_t const __right
+UFFDIO_COPY performs ~20% better than UFFDIO_MOVE when the application
+needs pages to be allocated [2]. However, with UFFDIO_MOVE, if pages are
+available (in userspace) for recycling, as is usually the case in heap
+compaction algorithms, then we can avoid the page allocation and memcpy
+(done by UFFDIO_COPY). Also, since the pages are recycled in the
+userspace, we avoid the need to release (via madvise) the pages back to
+the kernel [3].
+We see over 40% reduction (on a Google pixel 6 device) in the compacting
+thread=E2=80=99s completion time by using UFFDIO_MOVE vs. UFFDIO_COPY. This=
+ was
+measured using a benchmark that emulates a heap compaction implementation
+using userfaultfd (to allow concurrent accesses by application threads).
+More details of the usecase are explained in [3].
 
-Avoid this by testing stream->gfp for the expected value and passing the
-boolean result of this comparison to KUNIT_EXPECT_TRUE(), as was already
-done a few lines above in string_stream_managed_init_test().
+Furthermore, UFFDIO_MOVE enables moving swapped-out pages without
+touching them within the same vma. Today, it can only be done by mremap,
+however it forces splitting the vma.
 
-Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
-Fixes: d1a0d699bfc0 ("kunit: string-stream: Add tests for freeing resource-managed string_stream")
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202311181918.0mpCu2Xh-lkp@intel.com/
----
- lib/kunit/string-stream-test.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/lib/kunit/string-stream-test.c b/lib/kunit/string-stream-test.c
-index 06822766f29a..03fb511826f7 100644
---- a/lib/kunit/string-stream-test.c
-+++ b/lib/kunit/string-stream-test.c
-@@ -72,7 +72,7 @@ static void string_stream_unmanaged_init_test(struct kunit *test)
- 
- 	KUNIT_EXPECT_EQ(test, stream->length, 0);
- 	KUNIT_EXPECT_TRUE(test, list_empty(&stream->fragments));
--	KUNIT_EXPECT_EQ(test, stream->gfp, GFP_KERNEL);
-+	KUNIT_EXPECT_TRUE(test, (stream->gfp == GFP_KERNEL));
- 	KUNIT_EXPECT_FALSE(test, stream->append_newlines);
- 
- 	KUNIT_EXPECT_TRUE(test, string_stream_is_empty(stream));
--- 
-2.30.2
+TODOs for follow-up improvements:
+- cross-mm support. Known differences from single-mm and missing pieces:
+	- memcg recharging (might need to isolate pages in the process)
+	- mm counters
+	- cross-mm deposit table moves
+	- cross-mm test
+	- document the address space where src and dest reside in struct
+	  uffdio_move
+
+- TLB flush batching. Will require extensive changes to PTL locking in
+move_pages_pte(). OTOH that might let us reuse parts of mremap code.
+
+Changes since v4 [9]:
+- added Acked-by in patch 1, per Peter Xu
+- added description for ctx, mm and mode parameters of move_pages(),
+per kernel test robot
+- added Reviewed-by's, per Peter Xu and Axel Rasmussen
+- removed unused operations in uffd_test_case_ops
+- refactored uffd-unit-test changes to avoid using global variables and
+handle pmd moves without page size overrides, per Peter Xu
+
+Changes since v3 [8]:
+- changed retry path in folio_lock_anon_vma_read() to unlock and then
+relock RCU, per Peter Xu
+- removed cross-mm support from initial patchset, per David Hildenbrand
+- replaced BUG_ONs with VM_WARN_ON or WARN_ON_ONCE, per David Hildenbrand
+- added missing cache flushing, per Lokesh Gidra and Peter Xu
+- updated manpage text in the patch description, per Peter Xu
+- renamed internal functions from "remap" to "move", per Peter Xu
+- added mmap_changing check after taking mmap_lock, per Peter Xu
+- changed uffd context check to ensure dst_mm is registered onto uffd we
+are operating on, Peter Xu and David Hildenbrand
+- changed to non-maybe variants of maybe*_mkwrite(), per David Hildenbrand
+- fixed warning for CONFIG_TRANSPARENT_HUGEPAGE=3Dn, per kernel test robot
+- comments cleanup, per David Hildenbrand and Peter Xu
+- checks for VM_IO,VM_PFNMAP,VM_HUGETLB,..., per David Hildenbrand
+- prevent moving pinned pages, per Peter Xu
+- changed uffd tests to call move uffd_test_ctx_clear() at the end of the
+test run instead of in the beginning of the next run
+- added support for testcase-specific ops
+- added test for moving PMD-aligned blocks
+
+Changes since v2 [5]:
+- renamed UFFDIO_REMAP to UFFDIO_MOVE, per David Hildenbrand
+- rebase over mm-unstable to use folio_move_anon_rmap(),
+per David Hildenbrand
+- added text for manpage explaining DONTFORK and KSM requirements for this
+feature, per David Hildenbrand
+- check for anon_vma changes in the fast path of folio_lock_anon_vma_read,
+per Peter Xu
+- updated the title and description of the first patch,
+per David Hildenbrand
+- updating comments in folio_lock_anon_vma_read() explaining the need for
+anon_vma checks, per David Hildenbrand
+- changed all mapcount checks to PageAnonExclusive, per Jann Horn and
+David Hildenbrand
+- changed counters in remap_swap_pte() from MM_ANONPAGES to MM_SWAPENTS,
+per Jann Horn
+- added a check for PTE change after folio is locked in remap_pages_pte(),
+per Jann Horn
+- added handling of PMD migration entries and bailout when pmd_devmap(),
+per Jann Horn
+- added checks to ensure both src and dst VMAs are writable, per Peter Xu
+- added UFFD_FEATURE_MOVE, per Peter Xu
+- removed obsolete comments, per Peter Xu
+- renamed remap_anon_pte to remap_present_pte, per Peter Xu
+- added a comment for folio_get_anon_vma() explaining the need for
+anon_vma checks, per Peter Xu
+- changed error handling in remap_pages() to make it more clear,
+per Peter Xu
+- changed EFAULT to EAGAIN to retry when a hugepage appears or disappears
+from under us, per Peter Xu
+- added links to previous upstreaming attempts, per David Hildenbrand
+
+Changes since v1 [4]:
+- add mmget_not_zero in userfaultfd_remap, per Jann Horn
+- removed extern from function definitions, per Matthew Wilcox
+- converted to folios in remap_pages_huge_pmd, per Matthew Wilcox
+- use PageAnonExclusive in remap_pages_huge_pmd, per David Hildenbrand
+- handle pgtable transfers between MMs, per Jann Horn
+- ignore concurrent A/D pte bit changes, per Jann Horn
+- split functions into smaller units, per David Hildenbrand
+- test for folio_test_large in remap_anon_pte, per Matthew Wilcox
+- use pte_swp_exclusive for swapcount check, per David Hildenbrand
+- eliminated use of mmu_notifier_invalidate_range_start_nonblock,
+per Jann Horn
+- simplified THP alignment checks, per Jann Horn
+- refactored the loop inside remap_pages, per Jann Horn
+- additional clarifying comments, per Jann Horn
+
+Main changes since Andrea's last version [1]:
+- Trivial translations from page to folio, mmap_sem to mmap_lock
+- Replace pmd_trans_unstable() with pte_offset_map_nolock() and handle its
+possible failure
+- Move pte mapping into remap_pages_pte to allow for retries when source
+page or anon_vma is contended. Since pte_offset_map_nolock() start RCU
+read section, we can't block anymore after mapping a pte, so have to unmap
+the ptesm do the locking and retry.
+- Add and use anon_vma_trylock_write()  to avoid blocking while in RCU
+read section.
+- Accommodate changes in mmu_notifier_range_init() API, switch to
+mmu_notifier_invalidate_range_start_nonblock() to avoid blocking while in
+RCU read section.
+- Open-code now removed __swp_swapcount()
+- Replace pmd_read_atomic() with pmdp_get_lockless()
+- Add new selftest for UFFDIO_MOVE
+
+[1] https://gitlab.com/aarcange/aa/-/commit/2aec7aea56b10438a3881a20a411aa4=
+b1fc19e92
+[2] https://lore.kernel.org/all/1425575884-2574-1-git-send-email-aarcange@r=
+edhat.com/
+[3] https://lore.kernel.org/linux-mm/CA+EESO4uO84SSnBhArH4HvLNhaUQ5nZKNKXqx=
+RCyjniNVjp0Aw@mail.gmail.com/
+[4] https://lore.kernel.org/all/20230914152620.2743033-1-surenb@google.com/
+[5] https://lore.kernel.org/all/20230923013148.1390521-1-surenb@google.com/
+[6] https://lore.kernel.org/all/1425575884-2574-21-git-send-email-aarcange@=
+redhat.com/
+[7] https://lore.kernel.org/all/cover.1547251023.git.blake.caldwell@colorad=
+o.edu/
+[8] https://lore.kernel.org/all/20231009064230.2952396-1-surenb@google.com/
+[9] https://lore.kernel.org/all/20231028003819.652322-1-surenb@google.com/
+
+Andrea Arcangeli (2):
+  mm/rmap: support move to different root anon_vma in
+    folio_move_anon_rmap()
+  userfaultfd: UFFDIO_MOVE uABI
+
+Suren Baghdasaryan (3):
+  selftests/mm: call uffd_test_ctx_clear at the end of the test
+  selftests/mm: add uffd_test_case_ops to allow test case-specific
+    operations
+  selftests/mm: add UFFDIO_MOVE ioctl test
+
+ Documentation/admin-guide/mm/userfaultfd.rst |   3 +
+ fs/userfaultfd.c                             |  72 +++
+ include/linux/rmap.h                         |   5 +
+ include/linux/userfaultfd_k.h                |  11 +
+ include/uapi/linux/userfaultfd.h             |  29 +-
+ mm/huge_memory.c                             | 122 ++++
+ mm/khugepaged.c                              |   3 +
+ mm/rmap.c                                    |  30 +
+ mm/userfaultfd.c                             | 599 +++++++++++++++++++
+ tools/testing/selftests/mm/uffd-common.c     |  39 +-
+ tools/testing/selftests/mm/uffd-common.h     |   9 +
+ tools/testing/selftests/mm/uffd-stress.c     |   5 +-
+ tools/testing/selftests/mm/uffd-unit-tests.c | 192 ++++++
+ 13 files changed, 1115 insertions(+), 4 deletions(-)
+
+--=20
+2.43.0.rc1.413.gea7ed67945-goog
 
 
