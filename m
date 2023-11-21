@@ -1,54 +1,67 @@
-Return-Path: <linux-kselftest+bounces-380-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-381-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16F857F2E49
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Nov 2023 14:27:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6769E7F3346
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Nov 2023 17:09:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 48ADE1C218AB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Nov 2023 13:27:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8AD6D1C21B77
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Nov 2023 16:09:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C4D4495D7;
-	Tue, 21 Nov 2023 13:27:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 570BF59176;
+	Tue, 21 Nov 2023 16:09:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="s/Cj1hs8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O1iqDLIU"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76207168CB;
-	Tue, 21 Nov 2023 13:27:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C09A7C433C8;
-	Tue, 21 Nov 2023 13:27:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36F9558108;
+	Tue, 21 Nov 2023 16:09:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08B91C433C8;
+	Tue, 21 Nov 2023 16:09:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700573271;
-	bh=HsbZm4i+W0o1xTWC6fqvVGXLlSas3MdzUj56Sie1+dk=;
+	s=k20201202; t=1700582985;
+	bh=5M41NCGcjZMhgdurlBjtRlLdvlA9gQfTtgnr20SzQZU=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=s/Cj1hs8TekOYMJY8u198suyeCM8gyvEOV+i5vEDjSCKFRfz67WAMTEGoxjgYZAax
-	 WGa6CehOYC1MIpazeHmXZlRtUeoB2/rhy/rcVtU3XheSoDtiBlu5j4rVKQeo38mgo7
-	 J80NmKCOxwXcNA0vVbs4xcuEs/EvONdLm/Pk3g5iyBfIGFZNswjJX+rpWRkmhgmRZ+
-	 wEpygIBB/r90G0IJIFpAHiMZohh17d0OrYFWpWiLFTkNKRrDtm3k1JDcM0NDDo9zcQ
-	 ewpxEGZYEN4V3oQPpnLRXmZZH264mqxHMmSq7to2PfN3COmxSn6cqjSpofukRlvruf
-	 3m5EqiDnhgaWg==
-Date: Tue, 21 Nov 2023 13:27:44 +0000
+	b=O1iqDLIUfkFchTr0uWwZMhQgAuctcM2Lx3snmajtHnpejlh8n+MTWJO7l3nV1CBa1
+	 kAHoT3m9q+xRr659OjHWajWVNSlBi0D7Aw+vM7kO4fJqjjqvxeApGS+5nfGJEa78Jk
+	 6Y07eattO7dTYl9+mTfkk0M2mD18uYjoBR7K/37EXMdznWu325kyXczTP3GxOGGoRU
+	 Xjtnh3hx9nQM2LplH6L1EMqLam1VpAjVMm6H6tloJi/HViAQeJtNGA6mCZIgX9TSna
+	 8gmK/ReArU1XZnSjlnmXs2uxwb8xHedROorBMvsdvX6GiHiGeR9Kn3Hg/tbZYz3OVH
+	 x6NU13TxFQvNg==
+Date: Tue, 21 Nov 2023 16:09:40 +0000
 From: Mark Brown <broonie@kernel.org>
-To: Theodore Ts'o <tytso@mit.edu>
-Cc: Ricardo =?iso-8859-1?Q?Ca=F1uelo?= <ricardo.canuelo@collabora.com>,
-	Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com>,
-	workflows@vger.kernel.org, joe@perches.com, apw@canonical.com,
-	davidgow@google.com, rostedt@goodmis.org, skhan@linuxfoundation.org,
-	djwong@kernel.org, kunit-dev@googlegroups.com,
-	linux-kselftest@vger.kernel.org, vkabatov@redhat.com,
-	cki-project@redhat.com, kernelci@lists.linux.dev
-Subject: Re: [PATCH 1/3] MAINTAINERS: Introduce V: field for required tests
-Message-ID: <5d69e9ef-e60c-4eb9-b067-5b44488dd8c9@sirena.org.uk>
-References: <20231115175146.9848-2-Nikolai.Kondrashov@redhat.com>
- <87sf50imba.fsf@collabora.com>
- <20231120205131.GA291888@mit.edu>
- <92c2f89d-f8a6-4260-b10d-671011cf1f70@sirena.org.uk>
- <20231121060450.GB335601@mit.edu>
+To: Szabolcs Nagy <Szabolcs.Nagy@arm.com>
+Cc: Christian Brauner <brauner@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>, "H.J. Lu" <hjl.tools@gmail.com>,
+	Florian Weimer <fweimer@redhat.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Daniel Bristot de Oliveira <bristot@redhat.com>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Kees Cook <keescook@chromium.org>,
+	jannh@google.com, linux-kselftest@vger.kernel.org,
+	linux-api@vger.kernel.org, David Hildenbrand <david@redhat.com>,
+	nd@arm.com
+Subject: Re: [PATCH RFT v3 0/5] fork: Support shadow stacks in clone3()
+Message-ID: <ZVzWRIA9AfXHeWMW@finisterre.sirena.org.uk>
+References: <20231120-clone3-shadow-stack-v3-0-a7b8ed3e2acc@kernel.org>
+ <20231121-urlaub-motivieren-c9d7ee1a6058@brauner>
+ <ZVyg0WgILK35xjBn@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -56,133 +69,148 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="4ChVjL7ja6bjs4kb"
+	protocol="application/pgp-signature"; boundary="Cu1hqtbNXe1joyHG"
 Content-Disposition: inline
-In-Reply-To: <20231121060450.GB335601@mit.edu>
-X-Cookie: Hindsight is an exact science.
+In-Reply-To: <ZVyg0WgILK35xjBn@arm.com>
+X-Cookie: Slow day.  Practice crawling.
 
 
---4ChVjL7ja6bjs4kb
+--Cu1hqtbNXe1joyHG
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 21, 2023 at 01:04:50AM -0500, Theodore Ts'o wrote:
-> On Mon, Nov 20, 2023 at 10:27:33PM +0000, Mark Brown wrote:
+On Tue, Nov 21, 2023 at 12:21:37PM +0000, Szabolcs Nagy wrote:
+> The 11/21/2023 11:17, Christian Brauner wrote:
 
-> > This is the sort of thing that kcidb (which Nikolai works on) is good at
-> > ingesting, I actually do push all my CI's test results into there
-> > already:
+> > I have a few questions that are probably me just not knowing much about
+> > shadow stacks so hopefully I'm not asking you write a thesis by
+> > accident:
 
-> >    https://github.com/kernelci/kcidb/
+One thing it feels like it's worth saying up front here is that shadow
+stacks are userspace memory with special permissions and instructions
+for access - they are mapped into the userspace address range and
+userspace can directly interact with them in restricted ways.  For
+example there's some thought to using shadow stacks in unwinders since
+all the return addresses are stored in a single convenient block of
+memory which it's much harder to corrupt.  Overflowing a shadow stack
+results in userspace getting a memory access fault just as with other
+memory access issues.
 
-> > (the dashboard is down currently.)  A few other projects including the
-> > current KernelCI and RedHat's CKI push their data in there too, I'm sure
-> > Nikolai would be delighted to get more people pushing data in.  The goal
-> > is to merge this with the main KernelCI infrastructure, it's currently
-> > separate while people figure out the whole big data thing.
+> > (2) With what other interfaces is implicit allocation and deallocation
+> >     not consistent? I don't understand this argument. The kernel creates
+> >     a shadow stack as a security measure to store return addresses. It
+> >     seems to me exactly that the kernel should implicitly allocate and
+> >     deallocate the shadow stack and not have userspace muck around with
+> >     its size?
 
-> Looking at the kernelci, it appears that it's using a JSON submission
-> format.  Is there conversion scripts that take a KTAP test report, or
-> a Junit XML test report?
+> the kernel is not supposed to impose stack size policy or a particular
+> programming model that limits the stack management options nor prevent
+> the handling of stack overflows.
 
-Probably - I know I've got something for KUnit which is annoyingly
-difficult to publish for non-technical reasons and is a little broken
-(things weren't visible in the dashboard when it was up which might mean
-some missing field or a date set wrong).  My KTAP stuff is all mediated
-through LAVA, that can push results into a web hook directly so it's
-really easy to just add a notifier to your job and stream the results in
-directly (I intend to push that into kcidb in my copious free time so
-other people can use my code there).  It's relatively straightforward to
-write these things.
+The inconsistency here is with the management of the standard stack -
+with the standard stack userspace passes an already allocated address
+range to the kernel.  A constant tension during review of the shadow
+stack interfaces has been that shadow stack memory is userspace memory
+but the security constraints mean that we've come down on the side of
+having a custom allocation syscall for it instead of using flags on
+mmap() and friends like people often expect, and now having it allocated
+as part of clone3().  The aim is to highlight that this difference is
+deliberately chosen for specific reasons rather than just carelessness.
 
-> > The KernelCI LF project is funding kcidb with precisely this goal for
-> > the reasons you outline, the data collection part seems to be relatively
-> > mature at this point but AIUI there's a bunch of open questions with the
-> > analysis and usage side, partly due to needing to find people to work on
-> > it.
+> > (3) Why is it safe for userspace to request the shadow stack size? What
+> >     if they request a tiny shadow stack size? Should this interface
+> >     require any privilege?
 
-> Indeed, this is the super hard part.  Having looked at the kernelci
-> web site, its dashboard isn't particularly useful for what I'm trying
-> to do with it.  For my part, when analyizing a single test run, the
-> kernelci dashboard isn't particularly helpful.  What I need is
-> something more like this:
->=20
-> ext4/4k: 554 tests, 48 skipped, 4301 seconds
-> ext4/1k: 550 tests, 3 failures, 51 skipped, 6739 seconds
->   Failures: generic/051 generic/475 generic/476
+> user can allocate huge or tiny stacks already.
 
-That should be achievable with the KernelCI stuff (which is different to
-kcidb at present) - you're a lot of the way there with how kselftest is
-currently reported modulo the list of failures which currently requires
-you to drill down to a second level page.
+> and i think userspace can take control over shadow stack management:
+> it can disable signals, start a clone child with stack_size == 1 page,
+> map_shadow_stack and switch to it, enable signals. however this is
+> complicated, leaks 1 page of kernel allocated shadow stack (+reserved
+> guard page, i guess userspace could unmap, not sure if that works
+> currently) and requires additional syscalls.
 
-> ... which summarizes 6,592 tests in 20 lines, and for any test that
-> has failed, we rerun it four more times, so we can get an indication
-> of whether a test is a hard failure, or a flaky failure.
+The other thing here is that if userspace gets this wrong it'll result
+in the userspace process hitting the top of the stack and getting fatal
+signals in a similar manner to what happens if it gets the size of
+the standard stack wrong (the kernel allocation does mean that there
+should always be guard pages and it's harder to overrun the stack and
+corrupt adjacent memory).  There doesn't seem to be any meaningful risk
+here over what userspace can already do to itself anyway as part of
+thread allocation.
 
-> (I don't need to see all of the tests that passes; it's the test
-> failures or the test flakes that are significant.)
+> > (4) Why isn't the @stack_size argument I added for clone3() enough?
+> >     If it is specified can't the size of the shadow stack derived from it?
 
-The listing of tests does get a bit more complex when you mix in running
-on different platforms.
+> shadow stack only contains return addresses so it is proportional
+> to the number of stack frames, not the stack size and it must
+> account for sigaltstack too, not just the thread stack.
 
-> And then when comparing between multiple test runs, that's when I'm
-> interesting in see which tests may have regressed, or which tests may
-> have been fixed when going in between version A and version B.
+> if you make minimal assumptions about stack usage and ignore the
+> sigaltstack issue then the worst case shadow stack requirement
+> is indeed proportional to the stack_size, but this upper bound
+> can be pessimistic and userspace knows the tradeoffs better.
 
-Yup, that comparison stuff is useful.  The landing pages for individual
-tests do have something there but not really anything higher level:
+It's also worth pointing out here that the existing shadow stack support
+for x86 and in review code for arm64 make exactly these assumptions and
+guesses at a shadow stack size based on the stack_size for the thread.
+There's just been a general lack of enthusiasm for the fact that due to
+the need to store variables on the normal stack the resulting shadow
+stack is very likely to be substantially overallocated but we can't
+safely reduce the size without information from userspace.
 
-   https://linux.kernelci.org/test/case/id/655b0fa18dc4b7e0c47e4a88/
+> > And my current main objection is that shadow stacks were just released
+> > to userspace. There can't be a massive amount of users yet - outside of
+> > maybe early adopters.
 
-> And right now, kernelci doesn't have any of that.  So it might be hard
-> to convinced overloaded maintainers to upload test runs to kernelci,
-> when they don't see any immediate benefit of uploading the kernelci db.
+> no upstream libc has code to enable shadow stacks at this point
+> so there are exactly 0 users in the open. (this feature requires
+> runtime support)
 
-Note that kcidb and KernelCI are currently different databases - with
-the dashboard being done kcidb has no UI at all.  Personally I'm pushing
-my data in on the basis that it costs me basically nothing to do so
-given that I'm already running the tests.
+> the change is expected to allow wider deployability. (e.g. not
+> just in glibc)
 
-> There is a bit of a chicken-and-egg problem, since without the test
-> results getting uploaded, it's hard to get the analysis functionality
-> implemented, and without the analysis features, it's hard to get
-> developers to upload the data.
+Right, and the lack of any userspace control of the shadow stack size
+has been a review concern with the arm64 GCS series which I'm trying to
+address here.  The main concern is that userspaces that start a lot of
+threads are going to start using a lot more address space than they need
+to when shadow stacks are enabled.  Given the fairly long deployment
+pipeline from extending a syscall to end users who might be using the
+feature in conjuction with imposing resource limits it does seem like a
+reasonable problem to anticipate.
 
-I think if we get tooling in place so that people can just run a script,
-add a flag to their tools or whatever to ingest results from the
-standard testsuites the barrier to reporting becomes sufficiently low
-that it's more of a "why not?" type thing.
+> > The fact that there are other architectures that bring in a similar
+> > feature makes me even more hesitant. If they have all agreed _and_
+> > implemented shadow stacks and have unified semantics then we can
+> > consider exposing control knobs to userspace that aren't implicitly
+> > architecture specific currently.
 
-There's also other things we can do beyond big data analysis, some of
-which are a lot easier - for example checking other people's CI results
-for your branch before sending or accepting a pull request (if you've
-got a one stop shop to pull data from that's a lot easier than if you
-have to go round a bunch of places).
+To be clear the reason I'm working on this is that I've implemented the
+arm64 support, I don't even have any access to x86 systems that have the
+feature (hence the RFT in the subject line) - Rick Edgecombe did the x86
+work.  The arm64 code is still in review, the userspace interface is
+very similar to that for x86 and there doesn't seem to be any
+controversy there which makes me expect that a change is likely.  Unlike
+x86 we only have a spec and virtual implementations at present, there's
+no immintent hardware, so we're taking our time with making sure that
+everything is working well.  Deepak Gupta (in CC) has been reviewing the
+series from the point of view of RISC-V.  I think we're all fairly well
+aligned on the requirements here.
 
-> That being said, a number of file system developers probably have
-> several years worth of test results that we could probably give you.
-> I have hundreds of junit.xml files, with information about how kernel
-> version, what version of xfstesets, etc, that was used.  I'm happy to
-> make samples of it available for anyone who is interested.
-
-Right, I've likewise got a pile of results I can reprocess at will.
-
---4ChVjL7ja6bjs4kb
+--Cu1hqtbNXe1joyHG
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVcsE8ACgkQJNaLcl1U
-h9COYwf/fTMDLpXwvVNNxK+v5hlq41OYVt2sklCaJ/43xLnOUqxbRElV4yTxNnW6
-i83EPXz5J9rw1kYcPjR7NFJWeZuLJz45r5G4M2++NfS/sJGI16DpM6Lo3gD0+Oky
-sJt7j2HlvKDIxRtitaajVL4dsWKxlFkn5Xqhz6JrNONTxdbl/kEaKR6hf141NERB
-OKq70z8drw82CZvAfesZk4gxkY0qOPg8SYrgc/N2pWuYAm2sQsISRBnb9xiauNbC
-bucWk+Yx9o4n8siFE0gi2Cn5ZdKAzGbZOOr/20JrCP4Ukj1sULHTniLdORKwzYQ3
-u0KziIdFTugVPPYsOw19YE8IZvhrcw==
-=weIR
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVc1kMACgkQJNaLcl1U
+h9CDlwf+IhkEGdyJ2fiqfKcNpafPMwN0aeTMjOPP/L7jiP8Td42ADOhD2xjnT+hO
+Hf4eTNgjFZn8jmQkkctS/BiOWjx1ktNT1b8YW7/uOElZ8ecMmwGy9oTLihIuFTfk
+y2jC8/Ih1LfS6Uj493lNI7ozpbPqSAtCppeVWDnoB+YaEw476ZsNl7xnEBcx0k0U
+EXcsMSe9AD3vgV1zZ9oCnSdvG0+HdxwO6yzaKjdJOnd3MMtp7tSeuokr0OehZUDk
+nd/mDzROewzF8DHGFPo0D8UlOhNE3JV2sZPm3AExh/fsrah3JFrj2DDQOQpuoekP
+2nh2I0Rc8Jsn11q+EnefpA8nVFch3w==
+=+tkg
 -----END PGP SIGNATURE-----
 
---4ChVjL7ja6bjs4kb--
+--Cu1hqtbNXe1joyHG--
 
