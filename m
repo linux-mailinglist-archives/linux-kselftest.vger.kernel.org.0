@@ -1,300 +1,170 @@
-Return-Path: <linux-kselftest+bounces-348-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-349-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D71B57F21C3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Nov 2023 00:56:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A67797F21EC
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Nov 2023 01:03:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8D3F72822ED
-	for <lists+linux-kselftest@lfdr.de>; Mon, 20 Nov 2023 23:56:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6062F2828C5
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Nov 2023 00:03:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F27463B79D;
-	Mon, 20 Nov 2023 23:55:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BB71385;
+	Tue, 21 Nov 2023 00:03:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kXPWNcG5"
+	dkim=pass (2048-bit key) header.d=hotmail.com header.i=@hotmail.com header.b="gLPUfmEy"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D47813B2B7;
-	Mon, 20 Nov 2023 23:55:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 117A9C433CD;
-	Mon, 20 Nov 2023 23:55:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700524557;
-	bh=owctnHEQpTZFQ/Gh7J9JCdoUfmKHACZs61x8UVn64fA=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=kXPWNcG58IzRJcCMYKqGURnJUj6rneGHKU5SHp+Yf638TdXxD6qdEjDB7S6BCsaPN
-	 kw1grYPFTeK8O5cG4h2X1cqzvy7XNsobjqD1iKKOpu1y7GW7ir3IcILs1wvsxePXiX
-	 Om32bgn+r0Kc4xsb7B1qJWMcY1ZTdpkCqgZG6axe8UqYiPPUaoeS9aNspPLDfQYe7F
-	 4i5WaIbb0Lb48acRfEomtvfTLDEae9OiDs96AATwQ4MzV7kPJ53TypjDlyYATRcP1F
-	 nhlKAg5hr5a2EkdbbJmjlz8SdWFaQ9QHXR6en4tnnzhDUYXYcnIjzDOwk8LfxvxLFB
-	 a0M4ISsRfNyLg==
-From: Mark Brown <broonie@kernel.org>
-Date: Mon, 20 Nov 2023 23:54:33 +0000
-Subject: [PATCH RFT v3 5/5] kselftest/clone3: Test shadow stack support
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05olkn2076.outbound.protection.outlook.com [40.92.91.76])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0063497;
+	Mon, 20 Nov 2023 16:03:42 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iVO8BJXuaqtKcJstbFz0qIstl4Wb5SAAxTQQe1Ivj6XUD67gpD1wk+HwPMILk6TKpTk/IR3hnWZb735MsfHOuuE9zz1y/Q65dUvAJJ7YH09yzav5yCE0Kz3esVTDg9MEA6mABH3CUQ2XIDgh66yYtr4kNsvjjFEWIZHBFWSqg27hrH6z5+dJPIX/WMVp3HK+gZdLh1uV0mOXXfZuZ08yQfuTsgdGcCqKpEuj+sRdYBlcbwYHZ2s4bX9tbvyzekUrZHJZE33zD13zCJIuSn1rwMST2cJynOg/l5koddrKrpCB0ZcEr/HzXZz6VVWTWNc6Ma0FI4eyOsIWbrO9CtWXUw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LL/wn7ek3J/d0CPs0+AsqMukxl9/vjhVzdFDfQgj/Q0=;
+ b=M/onqgvToQpZFQrj6YESqXyOze/2HFs/PWZYX2t2mQ2JIP32LF9FgLQ/HRexbgMWcnTqOUyjaji489InnFn0N0S4uolWHCxT11IRN81WQUJsGNtMQkYruF5r6VXRfPzMjuj0StaKHFFvqNiFYIVa+C3Y6P4KYBclbNF3kw2NSfj5e9FpNu5FvbBtnqTpJ4IV1kKpW7RcHfNooONU43HOezp/+XJCE2W8FyPoL0qL0/IzTgwdIRq0qpRmBTqeg2VZM0jaahIltmq0cZB/OOhN176rSdXOcbtQkfjXlcmGwc888R6eeT0sgdHyc8jqaO3FyBPchfDA0Wl0ofC14wXMXA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LL/wn7ek3J/d0CPs0+AsqMukxl9/vjhVzdFDfQgj/Q0=;
+ b=gLPUfmEykYQRbnpb0WnQHXFVS+5IDKxWoLqHNv6fBeWiPdJmPqz47cy1Vv1NckYYv1VdzY9C0ueYunjYmUlrzE32/Oq2gAcUSPsBvTNC4N0rkxbZMiSa1skMdUDsLulAbwdB+hMszq1RGz9ISsZ74hb16MkWldfkRlaKQ0QdkfGx5IAT73/HHgTAonscMUU3+BQObtbdCa7HDCWLl4b9+Fbkm9FcmsTpYUjlbh55yxwk6tuGKCSZrP1vVyuHp0TyGHBF1OyY5lut3twwY+xljRuHmor/lJUNNXO9A6uIx/imnF7CdJMh3Xv9Dj775ytwLVvdjDOQwGe1mlCb56C1Pw==
+Received: from GV1PR10MB6563.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:150:83::20)
+ by PAVPR10MB7444.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:2f4::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7002.28; Tue, 21 Nov
+ 2023 00:03:40 +0000
+Received: from GV1PR10MB6563.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::6c45:bfdf:a384:5450]) by GV1PR10MB6563.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::6c45:bfdf:a384:5450%7]) with mapi id 15.20.7002.028; Tue, 21 Nov 2023
+ 00:03:40 +0000
+From: Yuran Pereira <yuran.pereira@hotmail.com>
+To: bpf@vger.kernel.org
+Cc: Yuran Pereira <yuran.pereira@hotmail.com>,
+	andrii@kernel.org,
+	ast@kernel.org,
+	haoluo@google.com,
+	john.fastabend@gmail.com,
+	jolsa@kernel.org,
+	kpsingh@kernel.org,
+	linux-kernel-mentees@lists.linuxfoundation.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	martin.lau@linux.dev,
+	mykolal@fb.com,
+	sdf@google.com,
+	shuah@kernel.org,
+	song@kernel.org,
+	yonghong.song@linux.dev
+Subject: [PATCH bpf-next v3 0/4] selftests/bpf: Update multiple prog_tests to use ASSERT_ macros
+Date: Tue, 21 Nov 2023 05:33:14 +0530
+Message-ID:
+ <GV1PR10MB6563BEFEA4269E1DDBC264B1E8BBA@GV1PR10MB6563.EURPRD10.PROD.OUTLOOK.COM>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TMN: [wiZBkUxM0L1MJd/m0WZS0o8LfjZvW86N]
+X-ClientProxiedBy: JN2P275CA0021.ZAFP275.PROD.OUTLOOK.COM (2603:1086:0:3::33)
+ To GV1PR10MB6563.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:150:83::20)
+X-Microsoft-Original-Message-ID:
+ <20231121000314.421019-1-yuran.pereira@hotmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20231120-clone3-shadow-stack-v3-5-a7b8ed3e2acc@kernel.org>
-References: <20231120-clone3-shadow-stack-v3-0-a7b8ed3e2acc@kernel.org>
-In-Reply-To: <20231120-clone3-shadow-stack-v3-0-a7b8ed3e2acc@kernel.org>
-To: "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>, 
- Deepak Gupta <debug@rivosinc.com>, Szabolcs Nagy <Szabolcs.Nagy@arm.com>, 
- "H.J. Lu" <hjl.tools@gmail.com>, Florian Weimer <fweimer@redhat.com>, 
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
- Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
- Vincent Guittot <vincent.guittot@linaro.org>, 
- Dietmar Eggemann <dietmar.eggemann@arm.com>, 
- Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, 
- Mel Gorman <mgorman@suse.de>, 
- Daniel Bristot de Oliveira <bristot@redhat.com>, 
- Valentin Schneider <vschneid@redhat.com>, 
- Christian Brauner <brauner@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Catalin Marinas <catalin.marinas@arm.com>, 
- Will Deacon <will@kernel.org>, Kees Cook <keescook@chromium.org>, 
- jannh@google.com, bsegall@google.com, linux-kselftest@vger.kernel.org, 
- linux-api@vger.kernel.org, Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.13-dev-0438c
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6256; i=broonie@kernel.org;
- h=from:subject:message-id; bh=owctnHEQpTZFQ/Gh7J9JCdoUfmKHACZs61x8UVn64fA=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBlW/HiMlAIrIk0zoNZPXS7mjGALNqlLtxI2zW1lzFx
- 3jMYT1aJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZVvx4gAKCRAk1otyXVSH0ET0B/
- 4nvEdmzpCcydJg0+47Rl9429nQXE80i9vOlZZ/9WqqOIYAlKpHeFSIOp/PZDC83mbAQAxnUgbUKz02
- SCY9ehwt0jFjCW6KAfX3s5hXXl5tcbhUGCHr9lyXvKF4RC8gUhqsAn7Di0fIfaEyPir7UEEbwfAI9N
- KAD4OkZsq2rJBXu/VfcqDkUqE3NAI/WfYWh0ztHPuhz7F+6+z34EL5+xqEN+LBsYQMbB/5dVN/Icjx
- XRa8eunc+ibLyI5fUpjAe8aUnbiQwU+xUl/9w21ilfDLimj8hwbZSMx5zyvOvN2sl31yjPqo6wtKaB
- Qpc9fjLP8sGNv3P8Guq8Q/ZS7Ha8T6
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: GV1PR10MB6563:EE_|PAVPR10MB7444:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3b8aebd3-15c2-4919-07dd-08dbea25513e
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	hPenmBiySzQvzLdtS+sA3XaakzmfVtbHcieZjgp7UMndmok+un1OJd+seZM76mzneOA1k65+k98ujFGJ8sDQwzEpXIM/+nlsyQ0mGMTGODMNOEg7ycg5EBFeDarvAqrS4jaRTagw+WKZo7b8qJduuNpa6fLBJkqGCI3burDVhY/m4vT+QuFfloTnIQSt3+aGnspTqjVAXrmgnPgqj+wO/6QC6IlVudZe9PxDkq5XBX64F7lRf/26wPg8jOTFxpoZ6mfXutPJVy7Ni/oBpSR2GynE68qgSn1Ng1MsSB//np8I4jc+txjhhlXMor825lzuNHqtWeuntxPHGRFc5T1h9nnvOB3k+a0sI4TW8YjHYY22oT/pOb8ClokhvcOPx1u6jrY5NGk29BPG0tymJUqED7S2Qd+uBWLrysopkL6q65rOOy7XIHjz0xJm0jIKWzYBe5bG1D0Hg6Wh83hPbsoZiye3x6KNIMiw6wnU4qMLZXrANQI76GN8UCzwR1FJVnTPuuAxGG2hnffF4tZOx9faK4JcaYk4Alu4rjjS7Rqc1jUlG4Y/vLsuJpEKP8Vh74TYRG42TEceUKG/cwCjP5PtW8rhuDFwWnUebZmbQdd0ZZrFlk8P3ZMPelogvDVjJJTG2/tp/aq5MiBmfPgqTbhqpW6VyU163Rv7QBm/MBoZvFc=
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?S/LMXkg63D0lHD5B1D7DHbmec3IAFUafbLLRfqwJO6fzFXx9UI6Sk9+/xjvN?=
+ =?us-ascii?Q?yeKnZKfTxif4oK5wgYCm77kDk7CSYhoB+q2iXWy10o/uhxXBq3oM5CXfCh6x?=
+ =?us-ascii?Q?WkPH3RqgXUEW98AbTP4LNCfPTbqAKZ5pRP17+Ws5s8A/u6erTNk93L3dXF0g?=
+ =?us-ascii?Q?TBas3YllS6SK8T91IBssgGSrYl2JW+UY6wFpMawVXMvO57/iprABi4Ls8X5E?=
+ =?us-ascii?Q?cERdT8uPsjQSEcJ6BA60hsQFSALAMuYvT78iSA9OZ5YHJeC7LzwhISVzn1UK?=
+ =?us-ascii?Q?6f2h77laXTP/MVwwuNufqTz1izkhkGdPGAbZf9Y6ERRRFKVNS0dDEsPGNzrh?=
+ =?us-ascii?Q?Tx5unOq5qcmBJphAf8CjEmWySqxgeKp17O291L97GisEnL8zs6nnfbW6iATy?=
+ =?us-ascii?Q?ipF0UY/KtsLHzJhLEtnveYVr24RGC3+nOTLnD+vqMZHagrLsc1HliMcXbm7j?=
+ =?us-ascii?Q?jpi+eW84LsVNKE8Xow3vACLEK7XpPsk8FLGYj04iCQ6pf+Bf/VTlxhKb3a3n?=
+ =?us-ascii?Q?wNf7q9ig+MQVy6tlAYiGvl9BcrKjF1WyOD3MmckfdaBqHiin/V3mzfA7po3g?=
+ =?us-ascii?Q?iBhAgKcnRDzL0Mp/1Fdj6Fm3DZRSk9f0HC2lq5qyr9l+ajy/qzd2x690L4WR?=
+ =?us-ascii?Q?ikpFKGHwPfythJtYaAG8xlnsD2tTeGFR/wA23VA+wBKRb7raIUfEbcwidh24?=
+ =?us-ascii?Q?4aMIhH2qadgBxccqUAviDCioT6dFiy8eW1Rh+2uAK3luKHAKPMR72Fwbkj8A?=
+ =?us-ascii?Q?VAmlP+46di1Rq/7zxRSCMytxm3S2kfOYbpprbhHzPbFLJhMQi7qBwNABngEh?=
+ =?us-ascii?Q?9oLt6Ze3xmuaE4SrplO6FiJYNoUzF/NDbu3oDd3D34pTmyi/bG1WVoOGiWfQ?=
+ =?us-ascii?Q?kbZjAMV1vP/GyJ6VYNG1YUiPeHK4goWksf/7fMz52CrsKtepyJadUgOFgCgu?=
+ =?us-ascii?Q?t1WQXqxO4O4CBpZ35IdWn7h0m4iLfK8DQLKw7yx7WkiG35tair9lcOraS2Ou?=
+ =?us-ascii?Q?pudtO19KejuPVHAfAwm6g3TZ3YmPVek6iQ09jbu3tRibyEcBwxYppUPlAqj2?=
+ =?us-ascii?Q?8ALUCHWyQ5BFlLC6KKHSjH6zpVg3idbsJXxGm0nUhmqxKLA+jY9fjdPX+3z1?=
+ =?us-ascii?Q?iUYs9d9Faf5I51hmmRO7W/+x3CxMAYGTFr/EervKFNbVMZrta4mNkyQUC/Qh?=
+ =?us-ascii?Q?rxz42usHrwLgmoL0PSgLtTg+93dF4Jenj13rH2x+JKRNZkX6wopBC4NPzsg?=
+ =?us-ascii?Q?=3D?=
+X-OriginatorOrg: sct-15-20-4755-11-msonline-outlook-6b909.templateTenant
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3b8aebd3-15c2-4919-07dd-08dbea25513e
+X-MS-Exchange-CrossTenant-AuthSource: GV1PR10MB6563.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Nov 2023 00:03:40.5328
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+	00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAVPR10MB7444
 
-Add basic test coverage for specifying the shadow stack for a newly
-created thread via clone3(), including coverage of the newly extended
-argument structure.
+Multiple files/programs in `tools/testing/selftests/bpf/prog_tests/` still
+heavily use the `CHECK` macro, even when better `ASSERT_` alternatives are
+available.
 
-In order to facilitate testing on systems without userspace shadow stack
-support we manually enable shadow stacks on startup, this is architecture
-specific due to the use of an arch_prctl() on x86. Due to interactions with
-potential userspace locking of features we actually detect support for
-shadow stacks on the running system by attempting to allocate a shadow
-stack page during initialisation using map_shadow_stack(), warning if this
-succeeds when the enable failed.
+As it was already pointed out by Yonghong Song [1] in the bpf selftests the use
+of the ASSERT_* series of macros is preferred over the CHECK macro.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/clone3/clone3.c           | 117 ++++++++++++++++++++++
- tools/testing/selftests/clone3/clone3_selftests.h |   7 ++
- 2 files changed, 124 insertions(+)
+This patchset replaces the usage of `CHECK(` macros to the equivalent `ASSERT_`
+family of macros in the following prog_tests:
+- bind_perm.c
+- bpf_obj_id.c
+- bpf_tcp_ca.c
+- vmlinux.c
 
-diff --git a/tools/testing/selftests/clone3/clone3.c b/tools/testing/selftests/clone3/clone3.c
-index 6adbfd14c841..0f9f99dc5aac 100644
---- a/tools/testing/selftests/clone3/clone3.c
-+++ b/tools/testing/selftests/clone3/clone3.c
-@@ -11,6 +11,7 @@
- #include <stdint.h>
- #include <stdio.h>
- #include <stdlib.h>
-+#include <sys/mman.h>
- #include <sys/syscall.h>
- #include <sys/types.h>
- #include <sys/un.h>
-@@ -21,6 +22,10 @@
- #include "../kselftest.h"
- #include "clone3_selftests.h"
- 
-+static bool shadow_stack_enabled;
-+static bool shadow_stack_supported;
-+static size_t max_supported_args_size;
-+
- enum test_mode {
- 	CLONE3_ARGS_NO_TEST,
- 	CLONE3_ARGS_ALL_0,
-@@ -28,6 +33,7 @@ enum test_mode {
- 	CLONE3_ARGS_INVAL_EXIT_SIGNAL_NEG,
- 	CLONE3_ARGS_INVAL_EXIT_SIGNAL_CSIG,
- 	CLONE3_ARGS_INVAL_EXIT_SIGNAL_NSIG,
-+	CLONE3_ARGS_SHADOW_STACK,
- };
- 
- typedef bool (*filter_function)(void);
-@@ -44,6 +50,36 @@ struct test {
- 	filter_function filter;
- };
- 
-+#ifndef __NR_map_shadow_stack
-+#define __NR_map_shadow_stack 453
-+#endif
-+
-+/*
-+ * We check for shadow stack support by attempting to use
-+ * map_shadow_stack() since features may have been locked by the
-+ * dynamic linker resulting in spurious errors when we attempt to
-+ * enable on startup.  We warn if the enable failed.
-+ */
-+static void test_shadow_stack_supported(void)
-+{
-+        long shadow_stack;
-+
-+	shadow_stack = syscall(__NR_map_shadow_stack, 0, getpagesize(), 0);
-+	if (shadow_stack == -1) {
-+		ksft_print_msg("map_shadow_stack() not supported\n");
-+	} else if ((void *)shadow_stack == MAP_FAILED) {
-+		ksft_print_msg("Failed to map shadow stack\n");
-+	} else {
-+		ksft_print_msg("Shadow stack supportd\n");
-+		shadow_stack_supported = true;
-+
-+		if (!shadow_stack_enabled)
-+			ksft_print_msg("Mapped but did not enable shadow stack\n");
-+
-+		munmap((void *)shadow_stack, getpagesize());
-+	}
-+}
-+
- static int call_clone3(uint64_t flags, size_t size, enum test_mode test_mode)
- {
- 	struct __clone_args args = {
-@@ -89,6 +125,9 @@ static int call_clone3(uint64_t flags, size_t size, enum test_mode test_mode)
- 	case CLONE3_ARGS_INVAL_EXIT_SIGNAL_NSIG:
- 		args.exit_signal = 0x00000000000000f0ULL;
- 		break;
-+	case CLONE3_ARGS_SHADOW_STACK:
-+		args.shadow_stack_size = getpagesize();
-+		break;
- 	}
- 
- 	memcpy(&args_ext.args, &args, sizeof(struct __clone_args));
-@@ -179,6 +218,26 @@ static bool no_timenamespace(void)
- 	return true;
- }
- 
-+static bool have_shadow_stack(void)
-+{
-+	if (shadow_stack_supported) {
-+		ksft_print_msg("Shadow stack supported\n");
-+		return true;
-+	}
-+
-+	return false;
-+}
-+
-+static bool no_shadow_stack(void)
-+{
-+	if (!shadow_stack_supported) {
-+		ksft_print_msg("Shadow stack not supported\n");
-+		return true;
-+	}
-+
-+	return false;
-+}
-+
- static size_t page_size_plus_8(void)
- {
- 	return getpagesize() + 8;
-@@ -322,16 +381,74 @@ static const struct test tests[] = {
- 		.expected = -EINVAL,
- 		.test_mode = CLONE3_ARGS_NO_TEST,
- 	},
-+	{
-+		.name = "Shadow stack on system with shadow stack",
-+		.flags = CLONE_VM,
-+		.size = 0,
-+		.expected = 0,
-+		.e2big_valid = true,
-+		.test_mode = CLONE3_ARGS_SHADOW_STACK,
-+		.filter = no_shadow_stack,
-+	},
-+	{
-+		.name = "Shadow stack on system without shadow stack",
-+		.flags = CLONE_VM,
-+		.size = 0,
-+		.expected = -EINVAL,
-+		.e2big_valid = true,
-+		.test_mode = CLONE3_ARGS_SHADOW_STACK,
-+		.filter = have_shadow_stack,
-+	},
- };
- 
-+#ifdef __x86_64__
-+#define ARCH_SHSTK_ENABLE	0x5001
-+#define ARCH_SHSTK_SHSTK	(1ULL <<  0)
-+
-+#define ARCH_PRCTL(arg1, arg2)					\
-+({								\
-+	long _ret;						\
-+	register long _num  asm("eax") = __NR_arch_prctl;	\
-+	register long _arg1 asm("rdi") = (long)(arg1);		\
-+	register long _arg2 asm("rsi") = (long)(arg2);		\
-+								\
-+	asm volatile (						\
-+		"syscall\n"					\
-+		: "=a"(_ret)					\
-+		: "r"(_arg1), "r"(_arg2),			\
-+		  "0"(_num)					\
-+		: "rcx", "r11", "memory", "cc"			\
-+	);							\
-+	_ret;							\
-+})
-+
-+#define ENABLED_SHADOW_STACK
-+static inline void enable_shadow_stack(void)
-+{
-+	int ret = ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_SHSTK);
-+	if (ret == 0)
-+		shadow_stack_enabled = true;
-+}
-+
-+#endif
-+
-+#ifndef ENABLE_SHADOW_STACK
-+static void enable_shadow_stack(void)
-+{
-+}
-+#endif
-+
- int main(int argc, char *argv[])
- {
- 	size_t size;
- 	int i;
- 
-+	enable_shadow_stack();
-+
- 	ksft_print_header();
- 	ksft_set_plan(ARRAY_SIZE(tests));
- 	test_clone3_supported();
-+	test_shadow_stack_supported();
- 
- 	for (i = 0; i < ARRAY_SIZE(tests); i++)
- 		test_clone3(&tests[i]);
-diff --git a/tools/testing/selftests/clone3/clone3_selftests.h b/tools/testing/selftests/clone3/clone3_selftests.h
-index 3d2663fe50ba..2e06127091f5 100644
---- a/tools/testing/selftests/clone3/clone3_selftests.h
-+++ b/tools/testing/selftests/clone3/clone3_selftests.h
-@@ -31,6 +31,13 @@ struct __clone_args {
- 	__aligned_u64 set_tid;
- 	__aligned_u64 set_tid_size;
- 	__aligned_u64 cgroup;
-+#ifndef CLONE_ARGS_SIZE_VER2
-+#define CLONE_ARGS_SIZE_VER2 88	/* sizeof third published struct */
-+#endif
-+	__aligned_u64 shadow_stack_size;
-+#ifndef CLONE_ARGS_SIZE_VER3
-+#define CLONE_ARGS_SIZE_VER3 96 /* sizeof fourth published struct */
-+#endif
- };
- 
- static pid_t sys_clone3(struct __clone_args *args, size_t size)
+[1] https://lore.kernel.org/lkml/0a142924-633c-44e6-9a92-2dc019656bf2@linux.dev
+
+Changes in v3:
+- Addressed the following points mentioned by Yonghong Song
+- Improved `bpf_map_lookup_elem` assertion in bpf_tcp_ca.
+- Replaced assertion introduced in v2 with one that checks `thread_ret`
+  instead of `pthread_join`. This ensures that `server`'s return value
+  (thread_ret) is the one being checked, as oposed to `pthread_join`'s
+  return value, since the latter one is less likely to fail.
+
+Changes in v2:
+- Fixed pthread_join assertion that broke the previous test
+
+Previous version:
+v2 - https://lore.kernel.org/lkml/GV1PR10MB6563AECF8E94798A1E5B36A4E8B6A@GV1PR10MB6563.EURPRD10.PROD.OUTLOOK.COM
+v1 - https://lore.kernel.org/lkml/GV1PR10MB6563FCFF1C5DEBE84FEA985FE8B0A@GV1PR10MB6563.EURPRD10.PROD.OUTLOOK.COM
+
+Yuran Pereira (4):
+  Replaces the usage of CHECK calls for ASSERTs in bpf_tcp_ca
+  Replaces the usage of CHECK calls for ASSERTs in bind_perm
+  Replaces the usage of CHECK calls for ASSERTs in bpf_obj_id
+  selftests/bpf: Replaces the usage of CHECK calls for ASSERTs in
+    vmlinux
+
+ .../selftests/bpf/prog_tests/bind_perm.c      |   6 +-
+ .../selftests/bpf/prog_tests/bpf_obj_id.c     | 204 +++++++-----------
+ .../selftests/bpf/prog_tests/bpf_tcp_ca.c     |  48 ++---
+ .../selftests/bpf/prog_tests/vmlinux.c        |  16 +-
+ 4 files changed, 105 insertions(+), 169 deletions(-)
 
 -- 
-2.30.2
+2.25.1
 
 
