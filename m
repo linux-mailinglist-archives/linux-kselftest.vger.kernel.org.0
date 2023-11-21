@@ -1,94 +1,141 @@
-Return-Path: <linux-kselftest+bounces-369-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-370-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D3EC7F291A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Nov 2023 10:42:45 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65B797F2A1C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Nov 2023 11:17:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 051A228260B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Nov 2023 09:42:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 964FB1C20A06
+	for <lists+linux-kselftest@lfdr.de>; Tue, 21 Nov 2023 10:17:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EAE33BB5B;
-	Tue, 21 Nov 2023 09:42:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EABF23D394;
+	Tue, 21 Nov 2023 10:17:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="j65JvBpU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PjToqBuy"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11109D8
-	for <linux-kselftest@vger.kernel.org>; Tue, 21 Nov 2023 01:42:39 -0800 (PST)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-40842752c6eso23789715e9.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Nov 2023 01:42:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1700559757; x=1701164557; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OFo9KPKmFK7WqzXwym/48RniSRgiZpvp+lNPOreiEFY=;
-        b=j65JvBpUptIHNcFEhAJk0iFw6YMB730lUNSU9RxlEP0jEFmP9/m78yBxi9CptNHyI2
-         62NtSsp4FiK+8/0GyOigt13rEnQuog5Cjqxw0fDWqIMtmvxZWDb+C+jHrOr6NWLZjBTZ
-         X+ayrigretPeRDNHhFjEqO1d18RUxYdIQPzI8cY4UuFJ9Ztq2rIadHNlIxmUOtDS7oyb
-         iN18O12T8i143rbyMg3KaAtZRwuCMCa/gqYDx6ibFkkd2hPKrNKQCwkNcZIJYLmSY0HM
-         9HEkYaU46h28Db6nBvhFy57dqX8Mo6w/4S/CUKI1rpuIBU/1tACtLqjq3PjaTQ/bwDkx
-         HwQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700559757; x=1701164557;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OFo9KPKmFK7WqzXwym/48RniSRgiZpvp+lNPOreiEFY=;
-        b=eZo/y5KbDVSAAyFmYl4/vINiNN8dK1iM/qUwbWwWd4tXALCJ8+1zM7NC2gfTIIi9Os
-         MeLxWjpgisgZz+yXfZiTlJYYSOuQ2gAttTUMXZTPdp/zAyMsdmh7GHGX0hhlAiAzZEfZ
-         9sFSbbmk1JiQos1a7UGX9QKZdNw8g9xqGbG69p4zSGI/FhJNZ+ucV82U7BTSb2wVYcTI
-         Jt8b4A8uJVb1AfttOBCoD58TzCS9xtLtRNpaYwnUv/thMF1XPLWflpHFcLxVuEtafB4l
-         Fq/EWAar0dOgXJNt/Z9wSQGQ1JztPh9cFZED5ifvPS//LC3LR746Z6Y9HcqvsQHGpOeB
-         G1Iw==
-X-Gm-Message-State: AOJu0YyWYwLU6JplLZ6AE5j2oiG7wUkQFfi1ajJ1DVRpLRjW9ZLeaG9/
-	MKPQHradOxfs8c8bGi/w5XfNLg==
-X-Google-Smtp-Source: AGHT+IHIyVqWoNqJSzyFRtD//B41b3mRhSXS014z/c9urGhK0lZKNPRhwj0Rcm/ITAjDFfTbjoZB3g==
-X-Received: by 2002:a7b:c342:0:b0:40a:4a7d:606b with SMTP id l2-20020a7bc342000000b0040a4a7d606bmr8053233wmj.40.1700559757371;
-        Tue, 21 Nov 2023 01:42:37 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id n7-20020a05600c4f8700b0040588d85b3asm20872413wmq.15.2023.11.21.01.42.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Nov 2023 01:42:37 -0800 (PST)
-Date: Tue, 21 Nov 2023 04:42:33 -0500
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Zhu Jun <zhujun2@cmss.chinamobile.com>
-Cc: ivan.orlov0322@gmail.com, kernel-janitors@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	mathieu.desnoyers@efficios.com, shuah@kernel.org
-Subject: Re: [PATCH v1] selftests/media_tests: fix a resource leak
-Message-ID: <a0cdd2a9-08db-4b9e-aba4-7837df7fd2eb@suswa.mountain>
-References: <71465605-7179-4281-8ec8-80f741e78038@suswa.mountain>
- <20231121093238.5376-1-zhujun2@cmss.chinamobile.com>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB6681E523;
+	Tue, 21 Nov 2023 10:17:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A26C7C433C8;
+	Tue, 21 Nov 2023 10:17:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1700561875;
+	bh=qobUWG625nNMvTACmwygc8zMctgjS+7q0tONS6bD3mM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=PjToqBuyTQmRxcOTpKMOibzwbIIU483uxDJ6znRdu6UBqMjietLC8muKhIlGB8xo8
+	 S+p+JRjAld3Mi6g5nL8qf0l9t1iJxofoEKpqhqU6zgcVnlfk8zBA6M926p5lHgdmoX
+	 YhhJNcpTMOHmiXy7XQ5xIRSf+9dbsbMkRtHzxzeVwAK97ZUNDG1CXT56lQg6/zR1J1
+	 BuG9AQXCkt6IBqTHRe1AoX/cBHNUJZT7iZsdsLPypv4hbw+vLiwQkqEOE3jm/zWxi6
+	 ebvlokFppiTSpgIQFU7lK7N940pGkNIvFjEzPmtNlTVDl7Zgk7HPnBwvy/8lOKPJvE
+	 Rn0BA/kch9+fQ==
+Date: Tue, 21 Nov 2023 11:17:45 +0100
+From: Christian Brauner <brauner@kernel.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Deepak Gupta <debug@rivosinc.com>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Florian Weimer <fweimer@redhat.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Daniel Bristot de Oliveira <bristot@redhat.com>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Kees Cook <keescook@chromium.org>,
+	jannh@google.com, linux-kselftest@vger.kernel.org,
+	linux-api@vger.kernel.org, David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH RFT v3 0/5] fork: Support shadow stacks in clone3()
+Message-ID: <20231121-urlaub-motivieren-c9d7ee1a6058@brauner>
+References: <20231120-clone3-shadow-stack-v3-0-a7b8ed3e2acc@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20231121093238.5376-1-zhujun2@cmss.chinamobile.com>
+In-Reply-To: <20231120-clone3-shadow-stack-v3-0-a7b8ed3e2acc@kernel.org>
 
-On Tue, Nov 21, 2023 at 01:32:38AM -0800, Zhu Jun wrote:
-> From: zhujun2 <zhujun2@cmss.chinamobile.com>
+On Mon, Nov 20, 2023 at 11:54:28PM +0000, Mark Brown wrote:
+> The kernel has recently added support for shadow stacks, currently
+> x86 only using their CET feature but both arm64 and RISC-V have
+> equivalent features (GCS and Zicfiss respectively), I am actively
+> working on GCS[1].  With shadow stacks the hardware maintains an
+> additional stack containing only the return addresses for branch
+> instructions which is not generally writeable by userspace and ensures
+> that any returns are to the recorded addresses.  This provides some
+> protection against ROP attacks and making it easier to collect call
+> stacks.  These shadow stacks are allocated in the address space of the
+> userspace process.
 > 
-> The opened file should be closed in main(), otherwise resource
-> leak will occur that this problem was discovered by code reading
+> Our API for shadow stacks does not currently offer userspace any
+> flexiblity for managing the allocation of shadow stacks for newly
+> created threads, instead the kernel allocates a new shadow stack with
+> the same size as the normal stack whenever a thread is created with the
+> feature enabled.  The stacks allocated in this way are freed by the
+> kernel when the thread exits or shadow stacks are disabled for the
+> thread.  This lack of flexibility and control isn't ideal, in the vast
+> majority of cases the shadow stack will be over allocated and the
+> implicit allocation and deallocation is not consistent with other
+> interfaces.  As far as I can tell the interface is done in this manner
+> mainly because the shadow stack patches were in development since before
+> clone3() was implemented.
 > 
-> Signed-off-by: zhujun2 <zhujun2@cmss.chinamobile.com>
-> ---
-> 
-> Hi Dan Carpenter 
-> 	
-> 	I believe that the Linux kernel code is sacred and should strictly adhere to C code conventions
-> 
+> Since clone3() is readily extensible let's add support for specifying a
+> shadow stack when creating a new thread or process in a similar manner
 
-*sigh*.  You do you, I guess.  This patch is pointless but I don't care
-whether it's merged or not.
+So while I made clone3() readily extensible I don't want it to ever
+devolve into a fancier version of a prctl().
 
-regards,
-dan carpenter
+I would really like to see a strong reason for allowing userspace to
+configure the shadow stack size at this point in time.
+
+I have a few questions that are probably me just not knowing much about
+shadow stacks so hopefully I'm not asking you write a thesis by
+accident:
+
+(1) What does it mean for a shadow stack to be over allocated and is
+    over-allocation really that much of a problem out in the wild that
+    we need to give I userspace a knob to control a kernel security
+    feature?
+(2) With what other interfaces is implicit allocation and deallocation
+    not consistent? I don't understand this argument. The kernel creates
+    a shadow stack as a security measure to store return addresses. It
+    seems to me exactly that the kernel should implicitly allocate and
+    deallocate the shadow stack and not have userspace muck around with
+    its size?
+(3) Why is it safe for userspace to request the shadow stack size? What
+    if they request a tiny shadow stack size? Should this interface
+    require any privilege?
+(4) Why isn't the @stack_size argument I added for clone3() enough?
+    If it is specified can't the size of the shadow stack derived from it?
+
+And my current main objection is that shadow stacks were just released
+to userspace. There can't be a massive amount of users yet - outside of
+maybe early adopters.
+
+The fact that there are other architectures that bring in a similar
+feature makes me even more hesitant. If they have all agreed _and_
+implemented shadow stacks and have unified semantics then we can
+consider exposing control knobs to userspace that aren't implicitly
+architecture specific currently.
+
+So I don't have anything against the patches per obviously but with the
+wider context.
+
+Thanks!
 
