@@ -1,149 +1,151 @@
-Return-Path: <linux-kselftest+bounces-402-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-403-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91DEF7F3D67
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Nov 2023 06:36:50 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8DCCA7F3FED
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Nov 2023 09:20:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0C3F1B20FB4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Nov 2023 05:36:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 434911F2150F
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Nov 2023 08:20:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B4B3125A8;
-	Wed, 22 Nov 2023 05:36:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59DE22207F;
+	Wed, 22 Nov 2023 08:20:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="em2DzhAj"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="GxN2U02X"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F111318E
-	for <linux-kselftest@vger.kernel.org>; Tue, 21 Nov 2023 21:36:39 -0800 (PST)
-Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-5bdbe2de25fso4883362a12.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 21 Nov 2023 21:36:39 -0800 (PST)
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37DEE1A4
+	for <linux-kselftest@vger.kernel.org>; Wed, 22 Nov 2023 00:13:08 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-4079ed65471so32170435e9.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Nov 2023 00:13:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1700631399; x=1701236199; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=OPmH0R/ZGatN6+UwwJY3MEok1l+rZDRi+gW+Psbpgp4=;
-        b=em2DzhAjzA6+M6CAZujzfRwbEZCqdGSRYk74aXSfvrwfC9i0A5Oyz+J+5tXb6LB8dK
-         pb1g2PGElnuo2VdvsfPqhH/zL4esxIz8rbH83DzmAT67TQcpdWYKKVZUIut7hb1C1Dbk
-         SSU7+oZWwp6PD3mXy/vhPNk2gTDZAD15xboH/Ew9BYswQvTRf1/GEiDSNQyn9VaGj5b4
-         uApyRPYUw0IJVUcMc8WuX08ZPTfmQ8+6n3cXr8qZCA5fJ6k/UaM5+Ibswq/4Y3EzKHvu
-         R9g/W7fzIJjmilMuHgWda6NsgQYaM4/F5jzzQu3bTAx4UkOXhFHVQUVBoyK2tkqx17Ww
-         LxCg==
+        d=ventanamicro.com; s=google; t=1700640786; x=1701245586; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=FzPPKXZyEg7qy/J2H0aK0NbgOULhdPKN22jDT3Q9NdY=;
+        b=GxN2U02XTGK2f/fxYTGLt4FajNNnbvLcTMoB6YpqWRA/MvELw10CHbVHiITgo07/TZ
+         I91B8yUW/sUsDWBWJwcKS1hqq0GTRal3+SjdYRh0caZFOc+mxWIrR0ITMSIYIO7cqGpl
+         ysFLmPiXTuk9s0RrbzfdG6vIX9cmHQcuHRH36TBqpZVgyryGt0n6ZEj998DVo5eOCnTT
+         HLll+cForxVNYCtxwlZqdK6MKZRnIfQBW+1ujkLnamwiHiXsahyhiD9jPbLLX572ASlV
+         mVNpck35SYPNftW2wjq99x5JlcmB1f0b9oQAZxBBtpvQu+vL0wbL1oxfJfOU3QMaJtX2
+         CSRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700631399; x=1701236199;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1700640786; x=1701245586;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OPmH0R/ZGatN6+UwwJY3MEok1l+rZDRi+gW+Psbpgp4=;
-        b=Tzq0sK5VB1hEJNtxP6glLVyUUv6u+5lUWNWvq+30Gvjja0jPtDBQO94VfhPmvJoQO3
-         03+Jys4yIPL74jWjN/smf3BudjB1hH1OvPBRASx7etWnNmGXXtzUgc3G4SeGpp2vFyH3
-         DpdMnqcvSfTQ3Y8YHQE5CausU7qDN4o5EwBZI/VdXVbTiRSX7ZqN5mEW5F+Hudk8up1r
-         sUEfNe8RlUxFYoXsjgZfZ18TJZao+hwp1B2asjqlnK6a9BY2V/HAIwBss6ERYoR0KLiG
-         w1FJ+Y5WwtfhEFlHd9z8BqG0AXnVYflZNxByC0IJNBn5Jb3iTpDqcyecIOeiXlB7IwUp
-         pGmg==
-X-Gm-Message-State: AOJu0YwE1OZkpNq5AZ54T/Z6tp4vLsS1d6+skDUVcrjxofmgLqgf6yX/
-	5c1IkagfxGG8KdGTRjUfXEeubA==
-X-Google-Smtp-Source: AGHT+IE67Eq9oO1uEot/zjxOXNvgyCk21nCZbXVKotApAyu3bet6Avb8lU17DWWWT9joNIuvOnZhJw==
-X-Received: by 2002:a05:6a20:8f1d:b0:17a:e941:b0a3 with SMTP id b29-20020a056a208f1d00b0017ae941b0a3mr1395905pzk.39.1700631399364;
-        Tue, 21 Nov 2023 21:36:39 -0800 (PST)
-Received: from [157.82.205.15] ([157.82.205.15])
-        by smtp.gmail.com with ESMTPSA id gj13-20020a17090b108d00b002839a4f65c5sm454781pjb.30.2023.11.21.21.36.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 21 Nov 2023 21:36:39 -0800 (PST)
-Message-ID: <664003d3-aadb-4938-80f6-67fab1c9dcdd@daynix.com>
-Date: Wed, 22 Nov 2023 14:36:32 +0900
+        bh=FzPPKXZyEg7qy/J2H0aK0NbgOULhdPKN22jDT3Q9NdY=;
+        b=nHPygAlaTgKkLogVIJfu9v8zp77qJZRWCC4EGSZVndolpvfo+fh2sQr93Dcu6+FLlV
+         aOvMAm/mkpRuxitBBIiquj8hKQMeLTOgsqB13teEXycIYYiBWTVA8qAAO0Jxq8PxtXb1
+         MPB5epNHgU6xN3HmSo4SWRAYV3Kg8BPCOUW6QIGyZD5/8OtIIEeaTyZE63mJnz6ZmF3u
+         /2wL7VbcxJliCliLfqaKtOLsWGnAhdVvZRllNkj1GItTMLl7FKBTKbthkpMdy5tVld7x
+         a9mQRiAOPG2hRl/11NcbDphIJpTBQdTF4SLt9whwOvRn7Js9+GuD7fUtbJHpF17e355+
+         cGFQ==
+X-Gm-Message-State: AOJu0YypHW9j19hEIIvAQTfbOrZ2Ai0VzCwSZ8ohz4UTGQh1wDsYHM1q
+	rCrl1f+zxvJfd0ZMlUGLaznNqA==
+X-Google-Smtp-Source: AGHT+IHPZfaDHkxQULB/N6YwAHSW77gMAbzbjK0nZaSfLb1EK8uIfrnvGjJE9KnZqt2r7I6qEwdCDQ==
+X-Received: by 2002:a05:600c:4e89:b0:405:e492:8aef with SMTP id f9-20020a05600c4e8900b00405e4928aefmr832641wmq.40.1700640786547;
+        Wed, 22 Nov 2023 00:13:06 -0800 (PST)
+Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
+        by smtp.gmail.com with ESMTPSA id az39-20020a05600c602700b0040596352951sm1364960wmb.5.2023.11.22.00.13.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Nov 2023 00:13:05 -0800 (PST)
+Date: Wed, 22 Nov 2023 09:13:04 +0100
+From: Andrew Jones <ajones@ventanamicro.com>
+To: Haibo Xu <xiaobo55x@gmail.com>
+Cc: Haibo Xu <haibo1.xu@intel.com>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Paolo Bonzini <pbonzini@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>, Marc Zyngier <maz@kernel.org>, 
+	Oliver Upton <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, 
+	Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, 
+	Anup Patel <anup@brainfault.org>, Atish Patra <atishp@atishpatra.org>, 
+	Sean Christopherson <seanjc@google.com>, Ricardo Koller <ricarkol@google.com>, 
+	Vishal Annapurve <vannapurve@google.com>, Vipin Sharma <vipinsh@google.com>, 
+	David Matlack <dmatlack@google.com>, Aaron Lewis <aaronlewis@google.com>, 
+	Colton Lewis <coltonlewis@google.com>, Thomas Huth <thuth@redhat.com>, linux-kernel@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, kvm-riscv@lists.infradead.org
+Subject: Re: [PATCH v3 2/9] KVM: selftests: Unify the makefile rule for split
+ targets
+Message-ID: <20231122-b471122622059496906801c1@orel>
+References: <cover.1694421911.git.haibo1.xu@intel.com>
+ <cda6cc71c9bdde87fe87f6c2dec4f03ca249dd62.1694421911.git.haibo1.xu@intel.com>
+ <20231003-d44206f71d0b22e539833697@orel>
+ <CAJve8o=Q74U0Z3PayrzY7heNc0qeTw5VYS+tdkpm=aJdefQEbQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2 1/7] bpf: Introduce BPF_PROG_TYPE_VNET_HASH
-To: Song Liu <song@kernel.org>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Jason Wang <jasowang@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- "Michael S. Tsirkin" <mst@redhat.com>, Xuan Zhuo
- <xuanzhuo@linux.alibaba.com>, Mykola Lysenko <mykolal@fb.com>,
- Shuah Khan <shuah@kernel.org>, bpf <bpf@vger.kernel.org>,
- "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
- LKML <linux-kernel@vger.kernel.org>,
- Network Development <netdev@vger.kernel.org>, kvm@vger.kernel.org,
- virtualization@lists.linux-foundation.org,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- Yuri Benditovich <yuri.benditovich@daynix.com>,
- Andrew Melnychenko <andrew@daynix.com>
-References: <20231015141644.260646-1-akihiko.odaki@daynix.com>
- <20231015141644.260646-2-akihiko.odaki@daynix.com>
- <CAADnVQLfUDmgYng8Cw1hiZOMfWNWLjbn7ZGc4yOEz-XmeFEz5Q@mail.gmail.com>
- <2594bb24-74dc-4785-b46d-e1bffcc3e7ed@daynix.com>
- <CAADnVQ+J+bOtvEfdvgUse_Rr07rM5KOZ5DtAmHDgRmi70W68+g@mail.gmail.com>
- <CACGkMEs22078F7rSLEz6eQabkZZ=kujSONUNMThZz5Gp=YiidQ@mail.gmail.com>
- <CAADnVQLt8NWvP8qGWMPx=12PwWWE69P7aS2dbm=khAJkCnJEoQ@mail.gmail.com>
- <9a4853ad-5ef4-4b15-a49e-9edb5ae4468e@daynix.com>
- <6253fb6b-9a53-484a-9be5-8facd46c051e@daynix.com>
- <CAPhsuW5JYoM-Mkehdy=FQsG1nvjbYGzwRZx8BkpG1P7cHdD=eQ@mail.gmail.com>
- <dba89d4b-84aa-4c9f-b016-56fd3ade04b2@daynix.com>
- <CAPhsuW5KLgt_gsih7zi+T99iYVbt7hk7=OCwYzin-H3=OhF54Q@mail.gmail.com>
- <a1f09866-a443-4f74-8025-6cdb32eb1d2c@daynix.com>
- <CAPhsuW4o5o41a+jVjgGP+Ck3eUD8w6coLXMTYewXKJYmciLLnQ@mail.gmail.com>
-Content-Language: en-US
-From: Akihiko Odaki <akihiko.odaki@daynix.com>
-In-Reply-To: <CAPhsuW4o5o41a+jVjgGP+Ck3eUD8w6coLXMTYewXKJYmciLLnQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJve8o=Q74U0Z3PayrzY7heNc0qeTw5VYS+tdkpm=aJdefQEbQ@mail.gmail.com>
 
-On 2023/11/22 14:25, Song Liu wrote:
-> On Mon, Nov 20, 2023 at 12:05 AM Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
->>
->> On 2023/11/20 6:02, Song Liu wrote:
-> [...]
->>>> In contrast, our intended use case is more like a normal application.
->>>> So, for example, a user may download a container and run QEMU (including
->>>> the BPF program) installed in the container. As such, it is nice if the
->>>> ABI is stable across kernel releases, but it is not guaranteed for
->>>> kfuncs. Such a use case is already covered with the eBPF steering
->>>> program so I want to maintain it if possible.
->>>
->>> TBH, I don't think stability should be a concern for kfuncs used by QEMU.
->>> Many core BPF APIs are now implemented as kfuncs: bpf_dynptr_*,
->>> bpf_rcu_*, etc. As long as there are valid use cases,these kfuncs will
->>> be supported.
->>
->> Documentation/bpf/kfuncs.rst still says:
->>   > kfuncs provide a kernel <-> kernel API, and thus are not bound by any
->>   > of the strict stability restrictions associated with kernel <-> user
->>   > UAPIs.
->>
->> Is it possible to change the statement like as follows:
->> "Most kfuncs provide a kernel <-> kernel API, and thus are not bound by
->> any of the strict stability restrictions associated with kernel <-> user
->> UAPIs. kfuncs that have same stability restrictions associated with
->> UAPIs are exceptional, and must be carefully reviewed by subsystem (and
->> BPF?) maintainers as any other UAPIs are."
+On Sun, Oct 08, 2023 at 10:58:57AM +0800, Haibo Xu wrote:
+> On Tue, Oct 3, 2023 at 6:28 PM Andrew Jones <ajones@ventanamicro.com> wrote:
+> >
+> > On Thu, Sep 14, 2023 at 09:36:56AM +0800, Haibo Xu wrote:
+> > > A separate makefile rule was used for split targets which was added
+> > > in patch(KVM: arm64: selftests: Split get-reg-list test code). This
+> > > could be avoided by minor changes to the recipes of current rule.
+> > >
+> > > Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
+> > > ---
+> > >  tools/testing/selftests/kvm/Makefile | 6 ++----
+> > >  1 file changed, 2 insertions(+), 4 deletions(-)
+> > >
+> > > diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+> > > index a3bb36fb3cfc..7972269e8c5f 100644
+> > > --- a/tools/testing/selftests/kvm/Makefile
+> > > +++ b/tools/testing/selftests/kvm/Makefile
+> > > @@ -249,13 +249,10 @@ TEST_DEP_FILES += $(patsubst %.o, %.d, $(SPLIT_TESTS_OBJS))
+> > >  -include $(TEST_DEP_FILES)
+> > >
+> > >  $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED): %: %.o
+> > > -     $(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH) $< $(LIBKVM_OBJS) $(LDLIBS) -o $@
+> > > +     $(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH) $^ $(LDLIBS) -o $@
+> > >  $(TEST_GEN_OBJ): $(OUTPUT)/%.o: %.c
+> > >       $(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
+> > >
+> > > -$(SPLIT_TESTS_TARGETS): %: %.o $(SPLIT_TESTS_OBJS)
+> > > -     $(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH) $^ $(LDLIBS) -o $@
+> > > -
+> > >  EXTRA_CLEAN += $(LIBKVM_OBJS) $(TEST_DEP_FILES) $(TEST_GEN_OBJ) $(SPLIT_TESTS_OBJS) cscope.*
+> > >
+> > >  x := $(shell mkdir -p $(sort $(dir $(LIBKVM_C_OBJ) $(LIBKVM_S_OBJ))))
+> > > @@ -274,6 +271,7 @@ $(LIBKVM_STRING_OBJ): $(OUTPUT)/%.o: %.c
+> > >  x := $(shell mkdir -p $(sort $(dir $(TEST_GEN_PROGS))))
+> > >  $(TEST_GEN_PROGS): $(LIBKVM_OBJS)
+> > >  $(TEST_GEN_PROGS_EXTENDED): $(LIBKVM_OBJS)
+> > > +$(SPLIT_TESTS_TARGETS): $(OUTPUT)/%: $(ARCH_DIR)/%.o
+> > >
+> > >  cscope: include_paths = $(LINUX_TOOL_INCLUDE) $(LINUX_HDR_PATH) include lib ..
+> > >  cscope:
+> > > --
+> > > 2.34.1
+> > >
+> >
+> > I just noticed that with and without this patch we're building the
+> > arch-specific part in tools/testing/selftests/kvm/riscv even when we have
+> > an $(OUTPUT) directory (e.g. O=build). Those build artifacts should be in
+> > build/kselftest/kvm/riscv instead.
+> >
 > 
-> I am afraid this is against the intention to not guarantee UAPI-level stability
-> for kfuncs.
+> Thanks for pointing it out. I will have a look in next week!
+>
 
-Is it possible to ensure that a QEMU binary with the eBPF program 
-included works on different kernel versions without UAPI-level stability 
-then? Otherwise, I think we need to think of the minimal UAPI addition 
-that exposes the feature I propose, and the two options I presented 
-first are the candidates of such: the stable BPF change or tuntap 
-interface change.
+Hi Haibo,
 
-Regards,
-Akihiko Odaki
+Paolo just fixed this
+
+https://lore.kernel.org/all/20231121165631.1170797-1-pbonzini@redhat.com/
+
+Thanks,
+drew
 
