@@ -1,66 +1,66 @@
-Return-Path: <linux-kselftest+bounces-450-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-451-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9A7E7F4E31
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Nov 2023 18:19:49 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40CB47F4E86
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Nov 2023 18:38:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5EC1628142B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Nov 2023 17:19:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D5480B20CBD
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Nov 2023 17:38:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD5895B5A1;
-	Wed, 22 Nov 2023 17:19:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77CF751028;
+	Wed, 22 Nov 2023 17:38:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="djW0rCp2"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ade5N826"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF4A61A8
-	for <linux-kselftest@vger.kernel.org>; Wed, 22 Nov 2023 09:19:42 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2892419D
+	for <linux-kselftest@vger.kernel.org>; Wed, 22 Nov 2023 09:38:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1700673581;
+	s=mimecast20190719; t=1700674700;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=q9F8luSkLS94qknN9g2F0Qlv/PMDhatpz5xR+p0UaIM=;
-	b=djW0rCp2Qw834F4meiDGcBY3PQVi7H0L9ACbNd5wjGOe/CA4k4Ocf36gsU2q5ePw5KR5Ye
-	SsXCMmUN8h69c6H/0421jy5+Nfd6zsvZOZo5r/fGayMstin8zALsMXri1ZJ94t6cozGOK+
-	kLHHg/w+WqUFyaYBgiYes/6zYATbFEY=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=wCirk8wMzZUyQ6zcKj2cOOG81MWIHNS3qpPYhZ0C5Oo=;
+	b=ade5N826pHU0RvWsR1kjuTvR7BvcPE1htp7UpiAoNpEfglqz9HrGzvxAHgjrYq/EPqkmiB
+	4rSwNxyHSmsBd4Sz5YFcXQ4aZ/GSIpQrJiz5D0sD7wDQIf44Igb2/+9ArYjCqcEu4mmek0
+	6xgq0OPFUMYcn7PjHVUpblf4h7/0v1k=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-577-MAylD2iwNoaR-_uKCKrwwg-1; Wed, 22 Nov 2023 12:19:39 -0500
-X-MC-Unique: MAylD2iwNoaR-_uKCKrwwg-1
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-778b5445527so220578585a.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 22 Nov 2023 09:19:39 -0800 (PST)
+ us-mta-557-ol_tdCrVPwOuY0gxfLfSJw-1; Wed, 22 Nov 2023 12:38:18 -0500
+X-MC-Unique: ol_tdCrVPwOuY0gxfLfSJw-1
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-7789f06778aso226801985a.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Nov 2023 09:38:18 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700673579; x=1701278379;
+        d=1e100.net; s=20230601; t=1700674698; x=1701279498;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=q9F8luSkLS94qknN9g2F0Qlv/PMDhatpz5xR+p0UaIM=;
-        b=palz9jqesvRQGn5lrgYbsC86fJz7J6asNyP1EH9xUmL/LcE+zKXEPQXVb47nGx7hL8
-         NNSAe5M/Iw/jFVnhOKrFq/6A2Q2jl0llrCvZW1sv6K3KIo7lkdpuTeJ6Vg6TzF3+IJwi
-         rcP+/DcUFLGiB9eONmj2s3gjeGAIXmSHfSurhOQ/3AiU+xk4fDjdCbZHhKjbEVsS09jL
-         T/PoE/ikc7B/DB21jIb0syIO352/u3vLXPBjozJ1R6aDoSybwDWuVfKGIukh9O+asmqe
-         hFjqa1FtKp+va5NbOxD1FHQjCB+5HIHBW3Cu0PbpT0swukkt3GQhM+XbuWy/7Z+9K8l2
-         l3qA==
-X-Gm-Message-State: AOJu0YwOPfia3s1DvMhK5T8EC0HPvRdoUiZLFqOI7FQJwJVO1qjtfFy8
-	TZNihfMvvxcQElo/CYF0vMQwrCfmPTp93miekqp3h/wJBsrrkipEOoG+4X126CAO9WkGbIkoka5
-	9HMmrePbko4uGARwWXGRhFc49bvVE
-X-Received: by 2002:a05:620a:4016:b0:775:8fab:8c6f with SMTP id h22-20020a05620a401600b007758fab8c6fmr138971qko.29.1700673579195;
-        Wed, 22 Nov 2023 09:19:39 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHDO7wtI5fmFIqHfIMuXIFc4gNjAlSxlFCQNZ2n72fom71dWUvMJverJqO8D1rkiIZRj+0YiQ==
-X-Received: by 2002:a05:620a:4016:b0:775:8fab:8c6f with SMTP id h22-20020a05620a401600b007758fab8c6fmr138945qko.29.1700673578804;
-        Wed, 22 Nov 2023 09:19:38 -0800 (PST)
+        bh=wCirk8wMzZUyQ6zcKj2cOOG81MWIHNS3qpPYhZ0C5Oo=;
+        b=GUVdRZyHW3tduQOFfcyL66El4xBBDcPBvIJfWK1BFxQNg5yls9IR8w8Ga760AzO/s7
+         Kq8KZHoEHPOcCj8bh/v9D7nO3IsdOEcmOGHehLMmKUNLd4lrcP8L3NDJtC0Vx57/q5Rk
+         JV1+mr/bSs/O2ighf7W3MFvZrmxDOgBc1V2aqfQminmIo4igVnqY/WDHvmmhDRnmbYn7
+         WDMtPpF557Xc7TTYpVGBNuuxmcDS6jeVX8o1xvJ9fQwwJMyTzXGv1+cMwdRpcbgnNydp
+         JiAlHL+o4kHX81kyLjOUP2hcjx1+/+ozBZIsKytYGZNrE6naNpL8Ig/w9cEAsRvbpS+1
+         uniw==
+X-Gm-Message-State: AOJu0Yw2GHEqn2szDShZ7TM1ovy9A18mP0Sp9FoWNE4VqkiyFYL9XhbW
+	yv6ApmObnymIaxc4UYFHlAAF1ZFBUCfEWQPHpDTVhGNqtI5WGg0wima+G65d3kEwhx5WIe2XTdZ
+	m5XrMM2XWCG12Q0ubJOR6rZ51xT8N
+X-Received: by 2002:a05:620a:8190:b0:77b:bfc4:4e13 with SMTP id ot16-20020a05620a819000b0077bbfc44e13mr218772qkn.18.1700674698046;
+        Wed, 22 Nov 2023 09:38:18 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHcVCRtdLK+GqZbNkCFqYSq1Z8hTiwfO/3vOTUgNhaVJU5KS3DJFogXkBj+W0DSlCUWyTgnlA==
+X-Received: by 2002:a05:620a:8190:b0:77b:bfc4:4e13 with SMTP id ot16-20020a05620a819000b0077bbfc44e13mr218745qkn.18.1700674697767;
+        Wed, 22 Nov 2023 09:38:17 -0800 (PST)
 Received: from [192.168.0.118] (88-113-27-52.elisa-laajakaista.fi. [88.113.27.52])
-        by smtp.gmail.com with ESMTPSA id az30-20020a05620a171e00b0077d6700a460sm15864qkb.82.2023.11.22.09.19.36
+        by smtp.gmail.com with ESMTPSA id oo4-20020a05620a530400b0077d5e1e4edesm32579qkn.57.2023.11.22.09.38.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 22 Nov 2023 09:19:38 -0800 (PST)
-Message-ID: <61497ab2-d44d-4a7a-984b-d4ded259f583@redhat.com>
-Date: Wed, 22 Nov 2023 19:19:34 +0200
+        Wed, 22 Nov 2023 09:38:17 -0800 (PST)
+Message-ID: <ac688ab2-b8b5-42d2-9032-cf23eab6aeed@redhat.com>
+Date: Wed, 22 Nov 2023 19:38:13 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -68,220 +68,148 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] MAINTAINERS: Introduce V: field for required tests
+Subject: Re: [PATCH 3/3] MAINTAINERS: Require kunit core tests for framework
+ changes
 Content-Language: en-US
-To: David Gow <davidgow@google.com>
+To: Daniel Latypov <dlatypov@google.com>
 Cc: workflows@vger.kernel.org, Joe Perches <joe@perches.com>,
  Andy Whitcroft <apw@canonical.com>, Theodore Ts'o <tytso@mit.edu>,
- Steven Rostedt <rostedt@goodmis.org>, Mark Brown <broonie@kernel.org>,
- Shuah Khan <skhan@linuxfoundation.org>, "Darrick J . Wong"
- <djwong@kernel.org>, kunit-dev@googlegroups.com,
+ David Gow <davidgow@google.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Mark Brown <broonie@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
+ "Darrick J . Wong" <djwong@kernel.org>, kunit-dev@googlegroups.com,
  linux-kselftest@vger.kernel.org, Veronika Kabatova <vkabatov@redhat.com>,
  CKI <cki-project@redhat.com>, kernelci@lists.linux.dev
 References: <20231115175146.9848-1-Nikolai.Kondrashov@redhat.com>
- <20231115175146.9848-2-Nikolai.Kondrashov@redhat.com>
- <CABVgOSkRpL9KC4FDMrQ-g51b0_BB-=m71LzaQNG8UsqHJ7VrkQ@mail.gmail.com>
+ <20231115175146.9848-4-Nikolai.Kondrashov@redhat.com>
+ <CAGS_qxpfnQ6kmanEUQWosuixo+FGUxp3VJ_TSjBdRf_p9riTSQ@mail.gmail.com>
 From: Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com>
-In-Reply-To: <CABVgOSkRpL9KC4FDMrQ-g51b0_BB-=m71LzaQNG8UsqHJ7VrkQ@mail.gmail.com>
+In-Reply-To: <CAGS_qxpfnQ6kmanEUQWosuixo+FGUxp3VJ_TSjBdRf_p9riTSQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 11/21/23 12:36, David Gow wrote:
-> Thanks so much for doing this! I think everyone agrees that we need
-> _some_ way of documenting which tests to run, and I think this is our
-> best option.
-
-Awesome :D
-
-> In any case, this patch does a lot, and I'll comment on them
-> one-by-one. (It may be worth splitting this patch up into a few
-> separate bits, if only so that we can better separate the
-> uncontroversial bits from the open questions.)
-
-Yeah, I'll try to figure out a less controversial split.
-
-> On Thu, 16 Nov 2023 at 01:52, Nikolai Kondrashov
->> Each referenced test suite is expected to be documented in the new
->> Documentation/process/tests.rst file, which must have enough structure
->> (documented inside) for the tools to make use of it. Apart from basic
->> data, each test can refer to its "superset" - a test suite which this
->> one is a part of. The expected use is to describe both a large test
->> suite and its subsets, so the former would also be accepted, if a
->> subsystem requires only a subset.
+On 11/20/23 20:48, Daniel Latypov wrote:
+> On Wed, Nov 15, 2023 at 9:52 AM Nikolai Kondrashov
+> <Nikolai.Kondrashov@redhat.com> wrote:
+>> +kunit core
+>> +----------
+>> +
+>> +:Summary: KUnit tests for the framework itself
+>> +:Superset: kunit
+>> +:Command: tools/testing/kunit/kunit.py run --kunitconfig lib/kunit
 > 
-> I think this could work, but is a bit complicated.
+> Note: we'd want this to instead be
+>    ./tools/testing/kunit/run_checks.py
 > 
-> My initial thought was to have this as a more free-form field, which
-> either contained a:
-> - Path to a command to run (e.g. tools/testing/kunit/run_checks.py)
-> - Path to a documentation file describing the test.
-> - URL to a page describing the test
-> - (Maybe) freeform text.
+> That will run, in parallel
+> * kunit.py run --kunitconfig lib/kunit
+> * kunit_tool_test.py (the unit test for kunit.py)
+> * two python type-checkers, if installed
 
-I think we should be careful about having too much flexibility here, if we
-want to have tools process this. I mean, we would then have to formalize and
-define the syntax for all the cases, which could then become too obscure for
-humans to easily read and write.
+Noted, queued!
 
-As I said elsewhere, our ultimate (even if unachievable) target should be to
-have commands to execute (instead of long setup and execution instructions),
-for *all* V: entries. So that definitely should be supported. The current
-patch already supports putting a command in the tests.rst to be printed by
-checkpatch.pl. Perhaps we can allow putting it into the V: entry directly. I
-have one idea on how to do that.
-
-OTOH, I think there's value in an overall catalogue of tests and having
-easily-accessible documentation for that command (even if brief), and that's
-what going for the command via tests.rst allows.
-
-Regarding a path to the documentation file, that goes against the idea of a
-catalogue file, again, so I'm reluctant of letting it go. Same goes for a
-documentation URL. Both of these can be expressed via the catalogue too.
-
-I wonder if it could be useful to add another option to get_maintainer.pl, or
-implement a new script, which would just dump the referenced test catalogue
-sections for a patchset, for a longer-form read than what checkpatch.pl can
-produce, but faster than scanning the whole catalogue personally.
-
-> It's probably worth also looking at this proposal to auto-generate
-> similar documentation:
-> https://lore.kernel.org/linux-kselftest/cover.1689171160.git.mchehab@kernel.org/
-
-IIRC, Mauro has mentioned this effort to me at EOSS in Prague, but I still
-haven't found the time to look at it closely. I think this is a worthy effort
-overall, but at a somewhat lower level. What I would like to be in the
-tests.rst is a basic intro and help to get each corresponding test suite
-running, to help breach the gap between trying to contribute and having your
-contribution tested with what maintainers prescribe. The docs in tests.rst can
-point to the more detailed docs, in turn. I also think it's good to have a
-document with an overview of what tests exist in general and which areas they
-address.
-
-> The other question is how to handle outdated results when a new patch
-> revision is sent out. Personally, I think this is something we can
-> solve similarly to 'Reviewed-by', depending on the extent of the
-> changes and cost of the tests. I suspect for most automated tests,
-> this would mean never carrying the 'Tested-with' tag over, but if
-> testing it involved manually building and running kernels against 50
-> different hardware setups, I could imagine it making sense to not
-> re-do this if a new revision just changed a doc typo. If a URL is used
-> here, it could contain version info, too.
-
-Yeah, that would be painful.
-
-> Paste encouragement for in-tree test suites triggered by git forges here <
-
-I think what Ricardo is suggesting in another branch, regarding adding result
-URLs, could work. So it would be nice to account for that in the change, but
-the policy would probably depend on subsystem/maintainer/the change in question.
-
->> Introduce a new tag, 'Tested-with:', documented in the
->> Documentation/process/submitting-patches.rst file. The tag is expected
->> to reference the documented test suites, similarly to the 'V:' field,
->> and to certify that the submitter executed the test suite on the change,
->> and that it passed.
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index f81a47d87ac26..5f3261e96c90f 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -11626,6 +11626,7 @@ L:      linux-kselftest@vger.kernel.org
+>>   L:     kunit-dev@googlegroups.com
+>>   S:     Maintained
+>>   W:     https://google.github.io/kunit-docs/third_party/kernel/docs/
+>> +V:     kunit core
 > 
-> I'm also 100% for this, though I'd considered it separately from the
-> MAINTAINERS change.
+> Maybe this topic should go in the main thread, but I wanted to call it
+> out here since this is a good concrete example.
 > 
-> I think, in the ideal case, we want this to link to the results
-> somehow. kcidb would seem to be the obvious choice there.
+> I'm wondering if this entry could simply be
+>    V: ./tools/testing/kunit/run_checks.py
 > 
-> Again, as a fallback, a plain text field would be useful to describe
-> cases where a patch was tested by some means other than a formal test
-> suite. This might not be ideal, but I'd still rather have people
-> describe that something "builds and boots on <x> hardware" than have
-> to guess if a patch was tested at all.
+> And what if, for ext4, we could have multiple of these like
+>    V: kvm-xfstests smoke
+>    V: tools/testing/kunit/kunit.py run --kunitconfig fs/ext4
 > 
-> Of course, it'd then be up to maintainers to decide what they'd
-> accept: I'd expect that some would require there be a 'Tested-with'
-> header which links to valid results for the tests described in
-> MAINTAINERS.
-
-I'm thinking that maybe we should just not *require* a valid reference to a
-documented test in the Tested-with: field. I.e. only verify that all the V:
-values are listed, but ignore everything unknown.
-
->> Make scripts/checkpatch.pl ensure any added V: fields reference
->> documented test suites only, and output a warning if a change to a
->> subsystem doesn't certify the required test suites were executed,
->> if any.
+> I.e. what if we allowed the `V:` field to contain the command itself?
 > 
-> I'd definitely want something like this to run at some point in the
-> patch-submission workflow. I think that, ultimately, we'll want to be
-> able to run some tests automatically (e.g., a git hook could run the
-> tests and add the 'Tested-with' line).
+> # Complexity of the tests
 > 
-> Personally, I'd like to require that all patches have a 'Tested-with'
-> field, even if there's not a corresponding 'V' MAINTAINERS entry, as
-> people should at least think of how something's tested, even if
-> there's not a formal 'test suite' for it. Though that seems a
-> longer-term goal
-
-Yeah, that would be nice from a maintainer's POV, but probably not very popular.
-
->> If the test suite description includes a "Command", then checkpatch.pl
->> will output it as the one executing the suite. The command should run
->> with only the kernel tree and the regular developer environment set up.
->> But, at the same time, could simply output instructions for installing
->> any extra dependencies (or pull some automatically). The idea is to
->> get the developer into feedback loop quicker and easier, so they have
->> something to run and iterate on, even if it involves installing some
->> more stuff first. Therefore it's a good idea to add such wrappers to the
->> kernel tree proper and refer to them from the tests.rst.
->>
->> Extend scripts/get_maintainer.pl to support retrieving the V: fields,
->> and scripts/parse-maintainers.pl to maintain their ordering.
->>
->> Signed-off-by: Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com>
->> ---
+> I appreciate the current "named test-set" approach since it encourages
+> documenting *why* the test command is applicable.
+> And for a lot of tests, it's not as simple as a binary GOOD/BAD
+> result, e.g. benchmarks.
+> Patch authors need to understand what they're testing, if they're
+> testing the right thing, etc.
 > 
-> The questions I think we need to answer to get this in are:
-> 1. Do we want to split this up (and potentially land it
-> piece-by-piece), or is it more valuable to have a stricter, more
-> complete system from the get-go?
-
-I'll see what I can do about splitting it.
-
-> 2. What format should the 'V' line take? If it is simply a test name,
-> do we use a doc as suggested (or one generated in part from some other
-> process), or something like a command name or URL? Can it just be
-> freeform text?
-> 3. Should 'Tested-with' be a test name in the same format as 'V', a
-> URL to results (any URL, or just kcidb?), or freeform text? How does
-> this evolve with multiple versions of patches?
-
-I don't think it's useful to restrict this to kcidb. I think the tools should
-generally allow anything there, but verify the entries by MAINTAINERS are
-there, as I write above.
-
-> 4. How should this be enforced? A warning (not an 'error') from
-> checkpatch? A separate script?
+> But on the other hand, for simpler functional tests (e.g. KUnit),
+> maybe it's not necessary.
+> Ideally, KUnit tests should be written so the failure messages are
+> immediately actionable w/o having to read a couple paragraphs.
+> I.e. the test case names should make it clear what scenario they're
+> testing, or the test code should be sufficiently documented, etc.
 > 
-> Personally, my gut feeling is that we should land the simplest, most
-> minimal version of this (the 'V' field, as freeform text) now, and
-> build on that as consensus and tooling permits. I'd probably also add
-> the 'Tested-with' or similar tag, as freeform text, too. I don't think
-> either of those would cause major problems if we needed to change or
-> restrict the format later; I imagine there won't be a huge need to
-> parse old commits for test data, and even if so, it wouldn't be too
-> hard to ignore any which don't conform to any stricter future
-> convention.
+> # Variations on commands
 > 
-> But I don't think there's anything fundamentally wrong with the full
-> plan as-is, so if everyone's happy with it, I'd not object to having
-> it.
+> And there might be a bunch of slight variations on these commands,
+> e.g. only different in terms of `--kunitconfig`.
+> We'd probably have at least 18, given
+> $ find -type f -name '.kunitconfig' | wc -l
+> 18
+> 
+> And again using a kunit.py flag as an example, what if maintainers want KASAN?
+>    ./tools/testing/kunit/kunit.py run --kunitconfig lib/kunit
+> --kconfig_add CONFIG_KASAN=y
+> Or what if it's too annoying to split up a larger kunit suite, so I
+> ask people to run a subset?
+>    ./tools/testing/kunit/kunit.py run --kunitconfig lib/kunit <suite_glob>
+> 
+> 
+> P.S.
+> Tbh, I have always hoped we'd eventually have a field like
+>    V: <one-liner test command>
+> 
+> That is part of why I added all those features above (--kunitconfig,
+> --kconfig_add, glob support, run_checks.py, etc.).
+> I wanted kunit.py to be flexible enough that maintainers could state
+> their testing requirements as a one-liner that people can just
+> copy-paste and run.
+> 
+> Also, I recently talked to David Gow and I know he was interested in
+> adding another feature to kunit.py to fit this use case.
+> Namely, the ability to do something like
+>    kunit.py run --arches=x86_64,s390,...
+> and have it run the tests built across N different arches and maybe w/
+> M different kconfig options (e.g. a variation built w/ clang, etc.).
+> 
+> That would be another very powerful tool for maintainers to have.
+> 
+> Thanks so much for this patch series and starting this discussion!
 
-I agree that the minimum support (just the freeform V:/Tested-with:) would be
-easier to get merged, but would also be somewhat toothless. I think some sort
-of test documentation/catalogue adds value, and a message from checkpatch.pl
-even more so, as it greatly aids test discoverability, and I is a major point
-of the change. We can lower the WARN to INFO to reduce resistance, or even
-maybe make the level configurable in the V: field.
+I'm a bit squeamish about just letting commands into the V: fields, as it 
+hurts discoverability of the documentation (or even just a simple description 
+of what the command does), and then checkpatch.pl would have a problem 
+identifying the modified command in Tested-with:.
 
-Anyway, I'll work on splitting this.
+OTOH, we're all hackers here, and I understand where these arguments are 
+coming from, and as I said in other branches, I think command-first should be 
+our ultimate target, not instructions-first. Also, if each of these commands 
+supports the -h/--help options and manages to make sense in their output, it 
+makes things somewhat better.
 
-Thanks a lot for the extensive and insightful comments, David!
+All-in-all, I think we can have both the already-implemented "V: test name -> 
+catalogue -> command" route, and the "V: command" one.
+
+Something like this for the commands:
+
+     V: tools/testing/kunit/run_checks.py
+
+and
+
+     V: "kvm-xfstests smoke"
+
+for test names referencing the catalogue.
+
+Then make checkpatch.pl verify only the presence of Tested-with: tag for the 
+latter, and leave verifying the (more fluid) commands to humans.
+
+Thanks for all the comments, explanations, and details, Daniel!
 
 Nick
 
