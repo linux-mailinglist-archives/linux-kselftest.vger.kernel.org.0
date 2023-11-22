@@ -1,92 +1,85 @@
-Return-Path: <linux-kselftest+bounces-461-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-465-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D1CE7F5467
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Nov 2023 00:21:37 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C66017F5488
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Nov 2023 00:28:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E9B741F20CAC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Nov 2023 23:21:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 07DB9B20C6D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Nov 2023 23:28:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 401AC3C0E;
-	Wed, 22 Nov 2023 23:21:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF53521347;
+	Wed, 22 Nov 2023 23:28:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="A+DzyIWo"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hc1wwOrG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45654110;
-	Wed, 22 Nov 2023 15:21:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1700695286;
-	bh=UvTHVLrVS7yXSVngtpUNw0aaFtisHMdv5IagkHAb8Vw=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=A+DzyIWop9H1iQqC4wC7ZOx+e18wBfsDCs2oqTHFLJYmu3W02n86u+DegEehx1vo5
-	 zPnK5LHg5A1Gg9qKYUcvDua/04K/8lWDki8Nk6Hw6ybKKJJvjWzvlD3ht04llm2dg3
-	 vqI0+I1UGmluY0dWiW/xLGaKI5pZkkW/27NZjQjk=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Thu, 23 Nov 2023 00:21:27 +0100
-Subject: [PATCH 3/3] selftests/nolibc: disable coredump via setrlimit
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6B71B5;
+	Wed, 22 Nov 2023 15:28:29 -0800 (PST)
+Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-332cc1f176bso182008f8f.2;
+        Wed, 22 Nov 2023 15:28:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1700695708; x=1701300508; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wfE1KTkgq6xLLiPqdRtfBaDM02CW7efViNW5ZFPiv6Y=;
+        b=hc1wwOrGT+29COZc2S5ErMm8kicGbNGH0xm+6D2Z+Y5t9lligQOnixC/Roq69MXkym
+         KeWbv7EUnNbZbLvhTU8y7gQDi0o7O3bh5TJIPsWjFY4RFkPOGpkUJmkr0Qa6bfS2Z9G6
+         c/sLZJeo5BdfDEam8PGXKsnpiV5dFU8htuNh77JWtlZsNRCADghH1CIYZ1WESuhgXz3v
+         7QuHZb02qIe8NqzN0kiwKRdU0CzIgkbTI2O6lvQQxIJoK5y70CKiQPuxg0rKU3lixTwY
+         lkHTHT2LQ8AmUUlT9ExmjwldepdMacPyKS/tuvQsQ8abmWnVAGjr05HwYsEkVQDsTddu
+         f5/A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700695708; x=1701300508;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wfE1KTkgq6xLLiPqdRtfBaDM02CW7efViNW5ZFPiv6Y=;
+        b=VZHKwq/83gOoc5SfSFVJw+r7rL+aTGJxAxqmImPXwPjncPnhTdKXrkLpwL0OcE741M
+         Qf4luHnRfAS+pHsfAhmUwrXmaZ1a5SQgFsJHrxhcDCu6Z4WY44LFqFGsDkwjsKqA6hlj
+         qwyXQLj8rszhWobwXqzHxeCGRdhA6xa3FFAaoOEKcrurrQDWwGpSXoPuwfpF2h0nKnl+
+         i+hMwMWnXHI8Ps9kBjrgUehv1e0LHQOqxzyRoOwydV6clGBve83iH4jVgc5l+FCYmEr7
+         zYOIM86B3lhhs2ZnVLOH0O9sGEW+hA0K0BQ2wfyL2U6iCLKCsZu/Pyi64/cbyhEbZnn5
+         YhwA==
+X-Gm-Message-State: AOJu0YwfOYBhNoOXtud3eo7xEulrf8B8FFXnSGfJUs5D70Y/7Lhqm3Na
+	VnkmDRm1W2HTHJZ2VnV83fexU4KWYRqZ5AgS0VtUzeIa
+X-Google-Smtp-Source: AGHT+IEWa+pEGlUg+/D9JPP0S7XYTOdPQaLW3OpbJ4qWMzplMz4rJEDxjuTipm4leeAQKQZkXLmHQEzoc/18EMdp+/4=
+X-Received: by 2002:a5d:5550:0:b0:332:e190:f8dd with SMTP id
+ g16-20020a5d5550000000b00332e190f8ddmr13782wrw.37.1700695708128; Wed, 22 Nov
+ 2023 15:28:28 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20231123-nolibc-rlimit-v1-3-a428b131de2a@weissschuh.net>
-References: <20231123-nolibc-rlimit-v1-0-a428b131de2a@weissschuh.net>
-In-Reply-To: <20231123-nolibc-rlimit-v1-0-a428b131de2a@weissschuh.net>
-To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1700695285; l=1257;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=UvTHVLrVS7yXSVngtpUNw0aaFtisHMdv5IagkHAb8Vw=;
- b=6KaZT5arNtlQH/G4RUsDPzhaYavmO+ntu3wPDXuPTC1+AZtPQ7oKArk9dQd3zjNeWdHEh79kF
- 0mI+PGBl1gJASvDvJ1nsyTFpMpIFBc+504WY/LcH19X3N09dwik+7xk
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+References: <cover.1700676682.git.dxu@dxuuu.xyz> <84111ba0ea652a7013df520c151d40d400401e9c.1700676682.git.dxu@dxuuu.xyz>
+In-Reply-To: <84111ba0ea652a7013df520c151d40d400401e9c.1700676682.git.dxu@dxuuu.xyz>
+From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date: Wed, 22 Nov 2023 15:28:16 -0800
+Message-ID: <CAADnVQKg7-T_g7CFRs62ZDFyR9z=FTxfyXyTe=3_ojGpnvxJ4w@mail.gmail.com>
+Subject: Re: [PATCH ipsec-next v1 7/7] bpf: xfrm: Add selftest for bpf_xdp_get_xfrm_state()
+To: Daniel Xu <dxu@dxuuu.xyz>
+Cc: John Fastabend <john.fastabend@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, Jakub Kicinski <kuba@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
+	antony.antony@secunet.com, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Mykola Lysenko <mykolal@fb.com>, bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, devel@linux-ipsec.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-qemu-user does has its own implementation of coredumping.
-That implementation does not respect the call to
-prctl(PR_SET_DUMPABLE, 0) in run_protection().
-This leads to a coredump for every test run under qemu-user.
+On Wed, Nov 22, 2023 at 10:21=E2=80=AFAM Daniel Xu <dxu@dxuuu.xyz> wrote:
+>
+> +
+> +       bpf_printk("replay-window %d\n", x->replay_esn->replay_window);
 
-Use also setrlimit() to inhibit coredump creation which is respected by
-qemu-user.
-
-Link: https://lore.kernel.org/qemu-devel/20231115-qemu-user-dumpable-v1-2-edbe7f0fbb02@t-8ch.de/
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- tools/testing/selftests/nolibc/nolibc-test.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
-index d07cebace107..ccb8d017a3e7 100644
---- a/tools/testing/selftests/nolibc/nolibc-test.c
-+++ b/tools/testing/selftests/nolibc/nolibc-test.c
-@@ -1167,6 +1167,7 @@ static int run_protection(int min __attribute__((unused)),
- {
- 	pid_t pid;
- 	int llen = 0, status;
-+	struct rlimit rlimit = { 0, 0 };
- 
- 	llen += printf("0 -fstackprotector ");
- 
-@@ -1198,6 +1199,7 @@ static int run_protection(int min __attribute__((unused)),
- 		close(STDERR_FILENO);
- 
- 		prctl(PR_SET_DUMPABLE, 0, 0, 0, 0);
-+		setrlimit(RLIMIT_CORE, &rlimit);
- 		smash_stack();
- 		return 1;
- 
-
--- 
-2.43.0
-
+Pls no printk in tests. Find a different way to validate.
 
