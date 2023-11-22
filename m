@@ -1,244 +1,190 @@
-Return-Path: <linux-kselftest+bounces-459-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-460-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85F5F7F4F4F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Nov 2023 19:22:05 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D80657F51E6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Nov 2023 21:51:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3EBA12811E3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Nov 2023 18:22:04 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 324C6B20D3D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 22 Nov 2023 20:51:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61D465D49C;
-	Wed, 22 Nov 2023 18:21:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B84D846B;
+	Wed, 22 Nov 2023 20:51:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="rC5vATeK";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Om7uyCE+"
+	dkim=pass (2048-bit key) header.d=fromorbit-com.20230601.gappssmtp.com header.i=@fromorbit-com.20230601.gappssmtp.com header.b="eERjgB3s"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45BD51AB;
-	Wed, 22 Nov 2023 10:21:12 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailnew.nyi.internal (Postfix) with ESMTP id 7333258071E;
-	Wed, 22 Nov 2023 13:21:11 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Wed, 22 Nov 2023 13:21:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-	:cc:content-transfer-encoding:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:sender:subject:subject:to:to; s=fm3; t=1700677271; x=
-	1700684471; bh=MkiWZ7hndeUKcl/hIWbjV8IQ3kJNfZ+yq9JosgeOxnU=; b=r
-	C5vATeKuhOW93dtcUKH8UClKCfjzF9Xl4bA1RFgGxj4x2Z/V0laY/04WwqJPq6Ad
-	r28Y4QVdadBBSD5RVGoYZ13ZFEDERoDtoJyZpZfd3IYyqMy8lOwzToqb2la/SDfx
-	3fvZo3l3hsKpmbbLk0+LhBOO/lr2AEG5yrTLaPM5qOmrKpwQGbkiwyFQsbCy0EXl
-	+fjuncUUzp318ZSwX1n0gML9TXAzYvF/P4IahnPdtPg5fD+w/vF1MUPmolNuh0xQ
-	GPYsmMoGG0yvy6JQLvvDEw/KxMJYlyme/dCEPWxRXcE36hZhx1Pv4VPDc3vCBT0d
-	31MDYZbgkCky8BRxwIdhg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1700677271; x=
-	1700684471; bh=MkiWZ7hndeUKcl/hIWbjV8IQ3kJNfZ+yq9JosgeOxnU=; b=O
-	m7uyCE+97C8ZSq/6OKBwWyKEv9gWkvbTgMlQEwaFo6d0wXG7ky4shzpSKmmYkVmr
-	ZVnEDlNVXE6M/quKpBnxMl4F7OgTrq84wLH6JP7DfhbYnn12BSnbZkTaRu1SivfF
-	VUJao4vmqHLyHgPZQiTtNaovT+QAWLLTxzJ31oAAF/u/+9DBat2JMnB6bDFMvpkT
-	MPK1pI2Fi8Dr5qikEv/dNTvVDQjeoBfVZdCNUXjGEVyrEHAvUFAMoxT+ff6ixRRR
-	5WqRAnardiLg5vDzdeDb8gBw+MdvC0JiuPkuy5MOJDxgAV2K3GaLJDVAyVecYIWO
-	dxfMLb4pdJRs7Zq4VlN9g==
-X-ME-Sender: <xms:l0ZeZTE8tlyliDsDO6nJF6yB4-9n1Hxeh3VBHkcV7uZcoWLrWBW2xA>
-    <xme:l0ZeZQXDzXbdPZwlmmxQOXl6HNtmmVoipOT3Xr5yeknlSaVnrtiyGLwaQmZLww036
-    5CGpfnSoFeYt0kPkw>
-X-ME-Received: <xmr:l0ZeZVLfzoiy6e6IUYzeBOZM64YzOhQFxjo-CeBjswqYCk8tZQElRF1LlO6oi_qN9ltrSay_sLnodvomndf8nNofzImIG0WpOLpODYOhc5lJkA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudehuddguddutdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecufghrlhcuvffnffculdefhedmnecujfgurhephf
-    fvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepffgrnhhivghlucgiuhcu
-    oegugihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpefgfefggeejhfduie
-    ekvdeuteffleeifeeuvdfhheejleejjeekgfffgefhtddtteenucevlhhushhtvghrufhi
-    iigvpedunecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiii
-X-ME-Proxy: <xmx:l0ZeZREuNF294xuSzhD6lAHt_Nm1M5EJKy08xIrIP8iX-kTuggJLQQ>
-    <xmx:l0ZeZZWnigLssRFcHmdKjL0nUzrlf4VaT5WJaCDtszIa7joOx3XbPQ>
-    <xmx:l0ZeZcPU29sNi1LwktVFAbRNMyIx-O4zaLnYe7TVLXZq43sh8SdyWA>
-    <xmx:l0ZeZfFC2uN9Ytr1PmSOGkCKdEOnEp793N9kct-9NZYUluUxrEijkA>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 22 Nov 2023 13:21:09 -0500 (EST)
-From: Daniel Xu <dxu@dxuuu.xyz>
-To: john.fastabend@gmail.com,
-	davem@davemloft.net,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	hawk@kernel.org,
-	kuba@kernel.org,
-	andrii@kernel.org,
-	shuah@kernel.org,
-	steffen.klassert@secunet.com,
-	antony.antony@secunet.com,
-	alexei.starovoitov@gmail.com
-Cc: martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	kpsingh@kernel.org,
-	sdf@google.com,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	mykolal@fb.com,
-	bpf@vger.kernel.org,
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78881112
+	for <linux-kselftest@vger.kernel.org>; Wed, 22 Nov 2023 12:51:47 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1cf56e28465so1480865ad.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 22 Nov 2023 12:51:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20230601.gappssmtp.com; s=20230601; t=1700686307; x=1701291107; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=QDYyRLoiycUaY49QoLf26F930m6gNVp1RU3PlgGtl7M=;
+        b=eERjgB3sh2hm3upFresTqzAHyiUxEGuZZ62OrpJkl095cpFA1GYlAE53MC6PsvAsV8
+         6Ut0z2EsXM57RdECbRVT28bCZDG4UXCKcpVHQUhB/hYiRSouQ65gxmHp1nnJolRJLtwy
+         MO8cBR42HRqBYTMseGGfpfyjUVnUZk+Ci90GLmOJaKbM7zpzCJ5IGXv1VlGRLTgGmttl
+         sKSwefTFaYH55NOgeDF96nVKzXwWMfRBUZn2oO7Zd/c9714f1/pdRSbfKYeVyvOwBcos
+         dgNBKY7DeJ+yn0GwXNTq6mXZQVzlmcAdqQldobbq9nem2zHtvkRo2OKJkvpS/4zZjDaX
+         prLw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700686307; x=1701291107;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QDYyRLoiycUaY49QoLf26F930m6gNVp1RU3PlgGtl7M=;
+        b=aY/nwld8FgjuJnTll51ErQKj5XViHFRFsc0yA5V3p3x6X816ZuqNMvN3S0Nmd2Dcwc
+         +2jg1s8EOxlyy69fIy7EVOh6FDUcnQu+O6dXalZYk86eXhJiSQAeRZyI9cyRRv5HsXKG
+         AEiuwKhRrlSfCJNJrfQbWmMQYhtXhN3gmFhLq6lo4k274FfwOgDT+2rLd0J38NqeA/kf
+         t9FtSI7Tu0NwRYMonhBQFOghPAMLszeomeKdMaOhyfzK5FsYGxhAxWJyh00EObxhSEif
+         SczC/lv+asmL7QH+OgwKonFmz8VIp/E6znuIZYpFtBLk3hOG9DRzBOjIP9oFBFm/IeaX
+         x9mw==
+X-Gm-Message-State: AOJu0Yzba1npMdmZdJ1JksBsl26cyfdNNdoq26bzvcYX44PLRKZKJxre
+	GOv6+wvGIHzDW/L1wFWHHHGVFA==
+X-Google-Smtp-Source: AGHT+IE6oL5OBU3IwVHKwsZfJXYmwuWE0TSV4peQofShC5i+2wEn3Ehzw2AsBZVt3VWIgqiavzxf1g==
+X-Received: by 2002:a17:902:8649:b0:1cc:e823:c8cc with SMTP id y9-20020a170902864900b001cce823c8ccmr3253781plt.41.1700686306783;
+        Wed, 22 Nov 2023 12:51:46 -0800 (PST)
+Received: from dread.disaster.area (pa49-180-125-5.pa.nsw.optusnet.com.au. [49.180.125.5])
+        by smtp.gmail.com with ESMTPSA id z3-20020a170902ee0300b001cc2ebd2c2csm100557plb.256.2023.11.22.12.51.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Nov 2023 12:51:46 -0800 (PST)
+Received: from dave by dread.disaster.area with local (Exim 4.96)
+	(envelope-from <david@fromorbit.com>)
+	id 1r5uCF-00G9zk-1o;
+	Thu, 23 Nov 2023 07:51:43 +1100
+Date: Thu, 23 Nov 2023 07:51:43 +1100
+From: Dave Chinner <david@fromorbit.com>
+To: "Darrick J. Wong" <djwong@kernel.org>
+Cc: Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com>,
+	Theodore Ts'o <tytso@mit.edu>,
+	Chandan Babu R <chandanbabu@kernel.org>, workflows@vger.kernel.org,
+	Joe Perches <joe@perches.com>, Andy Whitcroft <apw@canonical.com>,
+	David Gow <davidgow@google.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Mark Brown <broonie@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>, kunit-dev@googlegroups.com,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	devel@linux-ipsec.org
-Subject: [PATCH ipsec-next v1 7/7] bpf: xfrm: Add selftest for bpf_xdp_get_xfrm_state()
-Date: Wed, 22 Nov 2023 11:20:28 -0700
-Message-ID: <84111ba0ea652a7013df520c151d40d400401e9c.1700676682.git.dxu@dxuuu.xyz>
-X-Mailer: git-send-email 2.42.1
-In-Reply-To: <cover.1700676682.git.dxu@dxuuu.xyz>
-References: <cover.1700676682.git.dxu@dxuuu.xyz>
+	Veronika Kabatova <vkabatov@redhat.com>,
+	CKI <cki-project@redhat.com>, kernelci@lists.linux.dev,
+	Chandan Babu R <chandanrlinux@gmail.com>
+Subject: Re: [PATCH 2/3] MAINTAINERS: Require kvm-xfstests smoke for ext4
+Message-ID: <ZV5p32opqhX+wtfY@dread.disaster.area>
+References: <20231115175146.9848-1-Nikolai.Kondrashov@redhat.com>
+ <20231115175146.9848-3-Nikolai.Kondrashov@redhat.com>
+ <20231115185808.GD36211@frogsfrogsfrogs>
+ <87v8a096cr.fsf@debian-BULLSEYE-live-builder-AMD64>
+ <20231119225437.GA292450@mit.edu>
+ <cd2d6ed9-7047-4090-ab44-16540f503087@redhat.com>
+ <20231122161746.GM36211@frogsfrogsfrogs>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231122161746.GM36211@frogsfrogsfrogs>
 
-This commit extends test_tunnel selftest to test the new XDP xfrm state
-lookup kfunc.
+On Wed, Nov 22, 2023 at 08:17:46AM -0800, Darrick J. Wong wrote:
+> On Wed, Nov 22, 2023 at 04:44:58PM +0200, Nikolai Kondrashov wrote:
+> > On 11/20/23 00:54, Theodore Ts'o wrote:
+> > > So as for *me*, I'm going to point people at:
+> > > 
+> > > https://github.com/tytso/xfstests-bld/blob/master/Documentation/kvm-quickstart.md
+> > 
+> > ...
+> > 
+> > > (And note that I keep the xfstests-bld repo's on kernel.org and
+> > > github.com both uptodate, and I prefer using the using the github.com
+> > > URL because it's easier for the new developer to read and understand
+> > > it.)
+> > 
+> > I already queued a switch to the kernel.org URL, which Darrick has suggested.
+> > I'll drop it now, but you guys would have to figure it out between yourselves,
+> > which one you want :D
+> > 
+> > Personally, I agree that the one on GitHub is more reader-friendly, FWIW.
+> 
+> For xfstests-bld links, I'm ok with whichever domain Ted wants.
+> 
+> > > And similarly, just because the V: line might say, "kvm-xfstests
+> > > smoke", someone could certainly use kdevops if they wanted to.  So
+> > > perhaps we need to be a bit clearer about what we expect the V: line
+> > > to mean?
+> > 
+> > I tried to handle some of that with the "subsets", so that you can run a wider
+> > test suite and still pass the Tested-with: check. I think this has to be
+> > balanced between allowing all the possible ways to run the tests and a
+> > reasonable way to certify the commit was tested automatically.
+> > 
+> > E.g. name the test "xfstests", and list all the ways it can be executed, thus
+> > communicating that it should still say "Tested-with: xfstests" regardless of
+> > the way. And if there is a smaller required subset, name it just "xfstests
+> > smoke" and list all the ways it can be run, including the simplest
+> > "kvm-xfstests smoke", but accept just "Tested-with: xfstests-smoke".
+> > 
+> > I'm likely getting things wrong, but I hope you get what I'm trying to say.
+> 
+> Not entirely -- for drive-by contributions and obvious bugfixes, a quick
+> "V: xfstests-bld: kvm-xfstests smoke" / "V: fstests: ./check -g smoke"
+> run is probably sufficient.
 
-Co-developed-by: Antony Antony <antony.antony@secunet.com>
-Signed-off-by: Antony Antony <antony.antony@secunet.com>
-Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
----
- .../selftests/bpf/progs/test_tunnel_kern.c    | 49 +++++++++++++++++++
- tools/testing/selftests/bpf/test_tunnel.sh    | 12 +++--
- 2 files changed, 57 insertions(+), 4 deletions(-)
+For trivial drive-by contributions and obvious bug fixes, I think
+this is an unnecessary burden on these potential contributors. If
+it's trivial, then there's little burden on the reviewer/maintainer
+to actually test it, whilst there is significant burden on the
+one-off contributor to set up an entirely new, unfamiliar testing
+environment just to fix something trivial.
 
-diff --git a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-index ec7e04e012ae..17bf9ce28460 100644
---- a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-+++ b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-@@ -35,6 +35,10 @@ int bpf_skb_set_fou_encap(struct __sk_buff *skb_ctx,
- 			  struct bpf_fou_encap *encap, int type) __ksym;
- int bpf_skb_get_fou_encap(struct __sk_buff *skb_ctx,
- 			  struct bpf_fou_encap *encap) __ksym;
-+struct xfrm_state *
-+bpf_xdp_get_xfrm_state(struct xdp_md *ctx, struct bpf_xfrm_state_opts *opts,
-+		       u32 opts__sz) __ksym;
-+void bpf_xdp_xfrm_state_release(struct xfrm_state *x) __ksym;
- 
- struct {
- 	__uint(type, BPF_MAP_TYPE_ARRAY);
-@@ -948,4 +952,49 @@ int xfrm_get_state(struct __sk_buff *skb)
- 	return TC_ACT_OK;
- }
- 
-+SEC("xdp")
-+int xfrm_get_state_xdp(struct xdp_md *xdp)
-+{
-+	struct bpf_xfrm_state_opts opts = {};
-+	struct xfrm_state *x = NULL;
-+	struct ip_esp_hdr *esph;
-+	struct bpf_dynptr ptr;
-+	u8 esph_buf[8] = {};
-+	u8 iph_buf[20] = {};
-+	struct iphdr *iph;
-+	u32 off;
-+
-+	if (bpf_dynptr_from_xdp(xdp, 0, &ptr))
-+		goto out;
-+
-+	off = sizeof(struct ethhdr);
-+	iph = bpf_dynptr_slice(&ptr, off, iph_buf, sizeof(iph_buf));
-+	if (!iph || iph->protocol != IPPROTO_ESP)
-+		goto out;
-+
-+	off += sizeof(struct iphdr);
-+	esph = bpf_dynptr_slice(&ptr, off, esph_buf, sizeof(esph_buf));
-+	if (!esph)
-+		goto out;
-+
-+	opts.netns_id = BPF_F_CURRENT_NETNS,
-+	opts.daddr.a4 = iph->daddr;
-+	opts.spi = esph->spi;
-+	opts.proto = IPPROTO_ESP;
-+	opts.family = AF_INET;
-+
-+	x = bpf_xdp_get_xfrm_state(xdp, &opts, sizeof(opts));
-+	if (!x || opts.error)
-+		goto out;
-+
-+	if (!x->replay_esn)
-+		goto out;
-+
-+	bpf_printk("replay-window %d\n", x->replay_esn->replay_window);
-+out:
-+	if (x)
-+		bpf_xdp_xfrm_state_release(x);
-+	return XDP_PASS;
-+}
-+
- char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/test_tunnel.sh b/tools/testing/selftests/bpf/test_tunnel.sh
-index dd3c79129e87..17d263681c71 100755
---- a/tools/testing/selftests/bpf/test_tunnel.sh
-+++ b/tools/testing/selftests/bpf/test_tunnel.sh
-@@ -528,7 +528,7 @@ setup_xfrm_tunnel()
- 	# at_ns0 -> root
- 	ip netns exec at_ns0 \
- 		ip xfrm state add src 172.16.1.100 dst 172.16.1.200 proto esp \
--			spi $spi_in_to_out reqid 1 mode tunnel \
-+			spi $spi_in_to_out reqid 1 mode tunnel replay-window 42 \
- 			auth-trunc 'hmac(sha1)' $auth 96 enc 'cbc(aes)' $enc
- 	ip netns exec at_ns0 \
- 		ip xfrm policy add src 10.1.1.100/32 dst 10.1.1.200/32 dir out \
-@@ -537,7 +537,7 @@ setup_xfrm_tunnel()
- 	# root -> at_ns0
- 	ip netns exec at_ns0 \
- 		ip xfrm state add src 172.16.1.200 dst 172.16.1.100 proto esp \
--			spi $spi_out_to_in reqid 2 mode tunnel \
-+			spi $spi_out_to_in reqid 2 mode tunnel replay-window 42 \
- 			auth-trunc 'hmac(sha1)' $auth 96 enc 'cbc(aes)' $enc
- 	ip netns exec at_ns0 \
- 		ip xfrm policy add src 10.1.1.200/32 dst 10.1.1.100/32 dir in \
-@@ -553,14 +553,14 @@ setup_xfrm_tunnel()
- 	# root namespace
- 	# at_ns0 -> root
- 	ip xfrm state add src 172.16.1.100 dst 172.16.1.200 proto esp \
--		spi $spi_in_to_out reqid 1 mode tunnel \
-+		spi $spi_in_to_out reqid 1 mode tunnel replay-window 42 \
- 		auth-trunc 'hmac(sha1)' $auth 96  enc 'cbc(aes)' $enc
- 	ip xfrm policy add src 10.1.1.100/32 dst 10.1.1.200/32 dir in \
- 		tmpl src 172.16.1.100 dst 172.16.1.200 proto esp reqid 1 \
- 		mode tunnel
- 	# root -> at_ns0
- 	ip xfrm state add src 172.16.1.200 dst 172.16.1.100 proto esp \
--		spi $spi_out_to_in reqid 2 mode tunnel \
-+		spi $spi_out_to_in reqid 2 mode tunnel replay-window 42 \
- 		auth-trunc 'hmac(sha1)' $auth 96  enc 'cbc(aes)' $enc
- 	ip xfrm policy add src 10.1.1.200/32 dst 10.1.1.100/32 dir out \
- 		tmpl src 172.16.1.200 dst 172.16.1.100 proto esp reqid 2 \
-@@ -585,6 +585,8 @@ test_xfrm_tunnel()
- 	tc qdisc add dev veth1 clsact
- 	tc filter add dev veth1 proto ip ingress bpf da object-pinned \
- 		${BPF_PIN_TUNNEL_DIR}/xfrm_get_state
-+	ip link set dev veth1 xdpdrv pinned \
-+		${BPF_PIN_TUNNEL_DIR}/xfrm_get_state_xdp
- 	ip netns exec at_ns0 ping $PING_ARG 10.1.1.200
- 	sleep 1
- 	grep "reqid 1" ${TRACE}
-@@ -593,6 +595,8 @@ test_xfrm_tunnel()
- 	check_err $?
- 	grep "remote ip 0xac100164" ${TRACE}
- 	check_err $?
-+	grep "replay-window 42" ${TRACE}
-+	check_err $?
- 	cleanup
- 
- 	if [ $ret -ne 0 ]; then
+If you want every patch tested, the follow the lead of the btrfs
+developers: set up a CI mechanism on github and ask people to submit
+changes there first and then provide a link to the successful test
+completion ticket with the patch submission.
+
+> (Insofar as n00bs running ./check isn't sufficient, but that's something
+> that fstests needs to solve...)
+> 
+> For nontrivial code tidying, the author really ought to run the whole
+> test suite.  It's still an open question as to whether xfs tidying
+> should run the full fuzz suite too, since that increases the runtime
+> from overnightish to a week.
+
+Yes, the auto group tests should be run before non-trivial patch
+sets are submitted. That is the entire premise of the the auto group
+existing - it's the set of regression tests we expect to pass for
+any change.
+
+However, the full on disk format fuzz tests should not be required
+to be run. Asking people to run tests that take a week for general
+cleanups and code quality improvements is just crazy talk - the
+cost-benefit equation is all out of whack here, especially if the
+changes have no interaction with the on-disk format at all.
+
+IMO, extensive fuzz testing is something that should be done
+post-integration - requiring individual developers to run
+tests that take at least a week to run before they can submit a
+patchset for review/inclusion is an excessive burden, and we don't
+need every developer to run such tests every time they do something
+even slightly non-trivial.
+
+It is the job of the release manager to co-ordinate with the testing
+resources to run extensive, long running tests after code has been
+integrated into the tree. Forcing individual developers to run this
+sort of testing just isn't an efficient use of resources....
+
+> For /new features/, the developer(s) ought to come up with a testing
+> plan and run that by the community.  Eventually those will merge into
+> fstests or ktest or wherever.
+
+That's how it already works, isn't it?
+
+-Dave.
 -- 
-2.42.1
-
+Dave Chinner
+david@fromorbit.com
 
