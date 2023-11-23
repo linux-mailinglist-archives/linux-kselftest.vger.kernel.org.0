@@ -1,64 +1,64 @@
-Return-Path: <linux-kselftest+bounces-471-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-470-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EE977F5869
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Nov 2023 07:39:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3ACA7F5865
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Nov 2023 07:38:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 049F9281711
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Nov 2023 06:39:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 894E8281826
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Nov 2023 06:38:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3ACEBF9D5;
-	Thu, 23 Nov 2023 06:39:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9337811CAD;
+	Thu, 23 Nov 2023 06:38:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Sja2+5JE"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GXEnUDdS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2F63E7
-	for <linux-kselftest@vger.kernel.org>; Wed, 22 Nov 2023 22:38:56 -0800 (PST)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3D771A5
+	for <linux-kselftest@vger.kernel.org>; Wed, 22 Nov 2023 22:38:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1700721536;
+	s=mimecast20190719; t=1700721494;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=RJp5nY8nbatxC345Vjomqx4C47NJJa+lgfSz+yavQYo=;
-	b=Sja2+5JEuMhlCf37HYVhAsR/8cETmqZbyubDoNQA9l3bIfLO10RRW7WD7nK8PSZg3PyTgS
-	RaNpeLBWb+PhGngiGzRFrzYQR6ZC27Qv5+R9lKJxEJO4FBjW4twxD8xPDcb110ScjzToth
-	YJvd6jOEcZkqFuaGCoCvh/d3HAJv9Sw=
+	bh=aUEQD5MfVaqhpzv7dhMTbTAwn2srimSeAW0TyOyP80I=;
+	b=GXEnUDdSlbI1mlKKQom5IB43FhzRfawoU5JLcFdDrtR7UoG2r827uoZAnweBj/j4vmAtMB
+	HkWGmtg/No+pPrNgd7HAYQblvSX4Kpu7Bpo1MgjxKH93+Hv07b709fjbwF6/643Y277Rnu
+	SNm6fB6FJb87pgNp1SAMbf9AvZRjdz4=
 Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
  [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-574-fZI7w6MPPKubj_IyIYdeFA-1; Thu, 23 Nov 2023 01:38:09 -0500
-X-MC-Unique: fZI7w6MPPKubj_IyIYdeFA-1
+ us-mta-637-jWCAy0frMkSZiAgPkCwIKg-1; Thu, 23 Nov 2023 01:38:11 -0500
+X-MC-Unique: jWCAy0frMkSZiAgPkCwIKg-1
 Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id C7886811764;
-	Thu, 23 Nov 2023 06:38:08 +0000 (UTC)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E2D0D101D25D;
+	Thu, 23 Nov 2023 06:38:10 +0000 (UTC)
 Received: from virt-mtcollins-01.lab.eng.rdu2.redhat.com (virt-mtcollins-01.lab.eng.rdu2.redhat.com [10.8.1.196])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id B9F491C060AE;
-	Thu, 23 Nov 2023 06:38:08 +0000 (UTC)
+	by smtp.corp.redhat.com (Postfix) with ESMTP id D5E461C060AE;
+	Thu, 23 Nov 2023 06:38:10 +0000 (UTC)
 From: Shaoqin Huang <shahuang@redhat.com>
 To: Oliver Upton <oliver.upton@linux.dev>,
 	Marc Zyngier <maz@kernel.org>,
 	kvmarm@lists.linux.dev
 Cc: Shaoqin Huang <shahuang@redhat.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
 	James Morse <james.morse@arm.com>,
 	Suzuki K Poulose <suzuki.poulose@arm.com>,
 	Zenghui Yu <yuzenghui@huawei.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
 	kvm@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v1 2/3] KVM: selftests: aarch64: Move the pmu helper function into lib/
-Date: Thu, 23 Nov 2023 01:37:44 -0500
-Message-Id: <20231123063750.2176250-3-shahuang@redhat.com>
+	linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v1 3/3] KVM: selftests: aarch64: Introduce pmu_event_filter_test
+Date: Thu, 23 Nov 2023 01:37:45 -0500
+Message-Id: <20231123063750.2176250-4-shahuang@redhat.com>
 In-Reply-To: <20231123063750.2176250-1-shahuang@redhat.com>
 References: <20231123063750.2176250-1-shahuang@redhat.com>
 Precedence: bulk
@@ -70,289 +70,326 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.7
 
-Move those pmu helper function into lib/, thus it can be used by other
-pmu test.
+Introduce pmu_event_filter_test for arm64 platforms. The test configures
+PMUv3 for a vCPU, and sets different pmu event filter for the vCPU, and
+check if the guest can use those events which user allow and can't use
+those events which use deny.
+
+This test refactor the create_vpmu_vm() and make it a wrapper for
+__create_vpmu_vm(), which can let we do some extra init before
+KVM_ARM_VCPU_PMU_V3_INIT.
+
+This test choose the branches_retired and the instructions_retired
+event, and let guest use the two events in pmu. And check if the result
+is expected.
 
 Signed-off-by: Shaoqin Huang <shahuang@redhat.com>
 ---
- .../kvm/aarch64/vpmu_counter_access.c         | 118 -----------------
- .../selftests/kvm/include/aarch64/vpmu.h      | 119 ++++++++++++++++++
- 2 files changed, 119 insertions(+), 118 deletions(-)
+ tools/testing/selftests/kvm/Makefile          |   1 +
+ .../kvm/aarch64/pmu_event_filter_test.c       | 227 ++++++++++++++++++
+ .../selftests/kvm/include/aarch64/vpmu.h      |   4 +
+ .../testing/selftests/kvm/lib/aarch64/vpmu.c  |  14 +-
+ 4 files changed, 244 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/kvm/aarch64/pmu_event_filter_test.c
 
-diff --git a/tools/testing/selftests/kvm/aarch64/vpmu_counter_access.c b/tools/testing/selftests/kvm/aarch64/vpmu_counter_access.c
-index 17305408a334..62d6315790ab 100644
---- a/tools/testing/selftests/kvm/aarch64/vpmu_counter_access.c
-+++ b/tools/testing/selftests/kvm/aarch64/vpmu_counter_access.c
-@@ -20,12 +20,6 @@
- #include <perf/arm_pmuv3.h>
- #include <linux/bitfield.h>
- 
--/* The max number of the PMU event counters (excluding the cycle counter) */
--#define ARMV8_PMU_MAX_GENERAL_COUNTERS	(ARMV8_PMU_MAX_COUNTERS - 1)
--
--/* The cycle counter bit position that's common among the PMU registers */
--#define ARMV8_PMU_CYCLE_IDX		31
--
- static struct vpmu_vm *vpmu_vm;
- 
- struct pmreg_sets {
-@@ -35,118 +29,6 @@ struct pmreg_sets {
- 
- #define PMREG_SET(set, clr) {.set_reg_id = set, .clr_reg_id = clr}
- 
--static uint64_t get_pmcr_n(uint64_t pmcr)
--{
--	return (pmcr >> ARMV8_PMU_PMCR_N_SHIFT) & ARMV8_PMU_PMCR_N_MASK;
--}
--
--static void set_pmcr_n(uint64_t *pmcr, uint64_t pmcr_n)
--{
--	*pmcr = *pmcr & ~(ARMV8_PMU_PMCR_N_MASK << ARMV8_PMU_PMCR_N_SHIFT);
--	*pmcr |= (pmcr_n << ARMV8_PMU_PMCR_N_SHIFT);
--}
--
--static uint64_t get_counters_mask(uint64_t n)
--{
--	uint64_t mask = BIT(ARMV8_PMU_CYCLE_IDX);
--
--	if (n)
--		mask |= GENMASK(n - 1, 0);
--	return mask;
--}
--
--/* Read PMEVTCNTR<n>_EL0 through PMXEVCNTR_EL0 */
--static inline unsigned long read_sel_evcntr(int sel)
--{
--	write_sysreg(sel, pmselr_el0);
--	isb();
--	return read_sysreg(pmxevcntr_el0);
--}
--
--/* Write PMEVTCNTR<n>_EL0 through PMXEVCNTR_EL0 */
--static inline void write_sel_evcntr(int sel, unsigned long val)
--{
--	write_sysreg(sel, pmselr_el0);
--	isb();
--	write_sysreg(val, pmxevcntr_el0);
--	isb();
--}
--
--/* Read PMEVTYPER<n>_EL0 through PMXEVTYPER_EL0 */
--static inline unsigned long read_sel_evtyper(int sel)
--{
--	write_sysreg(sel, pmselr_el0);
--	isb();
--	return read_sysreg(pmxevtyper_el0);
--}
--
--/* Write PMEVTYPER<n>_EL0 through PMXEVTYPER_EL0 */
--static inline void write_sel_evtyper(int sel, unsigned long val)
--{
--	write_sysreg(sel, pmselr_el0);
--	isb();
--	write_sysreg(val, pmxevtyper_el0);
--	isb();
--}
--
--static inline void enable_counter(int idx)
--{
--	uint64_t v = read_sysreg(pmcntenset_el0);
--
--	write_sysreg(BIT(idx) | v, pmcntenset_el0);
--	isb();
--}
--
--static inline void disable_counter(int idx)
--{
--	uint64_t v = read_sysreg(pmcntenset_el0);
--
--	write_sysreg(BIT(idx) | v, pmcntenclr_el0);
--	isb();
--}
--
--static void pmu_disable_reset(void)
--{
--	uint64_t pmcr = read_sysreg(pmcr_el0);
--
--	/* Reset all counters, disabling them */
--	pmcr &= ~ARMV8_PMU_PMCR_E;
--	write_sysreg(pmcr | ARMV8_PMU_PMCR_P, pmcr_el0);
--	isb();
--}
--
--#define RETURN_READ_PMEVCNTRN(n) \
--	return read_sysreg(pmevcntr##n##_el0)
--static unsigned long read_pmevcntrn(int n)
--{
--	PMEVN_SWITCH(n, RETURN_READ_PMEVCNTRN);
--	return 0;
--}
--
--#define WRITE_PMEVCNTRN(n) \
--	write_sysreg(val, pmevcntr##n##_el0)
--static void write_pmevcntrn(int n, unsigned long val)
--{
--	PMEVN_SWITCH(n, WRITE_PMEVCNTRN);
--	isb();
--}
--
--#define READ_PMEVTYPERN(n) \
--	return read_sysreg(pmevtyper##n##_el0)
--static unsigned long read_pmevtypern(int n)
--{
--	PMEVN_SWITCH(n, READ_PMEVTYPERN);
--	return 0;
--}
--
--#define WRITE_PMEVTYPERN(n) \
--	write_sysreg(val, pmevtyper##n##_el0)
--static void write_pmevtypern(int n, unsigned long val)
--{
--	PMEVN_SWITCH(n, WRITE_PMEVTYPERN);
--	isb();
--}
--
- /*
-  * The pmc_accessor structure has pointers to PMEV{CNTR,TYPER}<n>_EL0
-  * accessors that test cases will use. Each of the accessors will
-diff --git a/tools/testing/selftests/kvm/include/aarch64/vpmu.h b/tools/testing/selftests/kvm/include/aarch64/vpmu.h
-index 0a56183644ee..e0cc1ca1c4b7 100644
---- a/tools/testing/selftests/kvm/include/aarch64/vpmu.h
-+++ b/tools/testing/selftests/kvm/include/aarch64/vpmu.h
-@@ -1,10 +1,17 @@
- /* SPDX-License-Identifier: GPL-2.0 */
- 
- #include <kvm_util.h>
+diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+index b60852c222ac..5f126e1a1dbf 100644
+--- a/tools/testing/selftests/kvm/Makefile
++++ b/tools/testing/selftests/kvm/Makefile
+@@ -155,6 +155,7 @@ TEST_GEN_PROGS_aarch64 += aarch64/arch_timer
+ TEST_GEN_PROGS_aarch64 += aarch64/debug-exceptions
+ TEST_GEN_PROGS_aarch64 += aarch64/hypercalls
+ TEST_GEN_PROGS_aarch64 += aarch64/page_fault_test
++TEST_GEN_PROGS_aarch64 += aarch64/pmu_event_filter_test
+ TEST_GEN_PROGS_aarch64 += aarch64/psci_test
+ TEST_GEN_PROGS_aarch64 += aarch64/set_id_regs
+ TEST_GEN_PROGS_aarch64 += aarch64/smccc_filter
+diff --git a/tools/testing/selftests/kvm/aarch64/pmu_event_filter_test.c b/tools/testing/selftests/kvm/aarch64/pmu_event_filter_test.c
+new file mode 100644
+index 000000000000..a876f5c2033b
+--- /dev/null
++++ b/tools/testing/selftests/kvm/aarch64/pmu_event_filter_test.c
+@@ -0,0 +1,227 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * pmu_event_filter_test - Test user limit pmu event for guest.
++ *
++ * Copyright (c) 2023 Red Hat, Inc.
++ *
++ * This test checks if the guest only see the limited pmu event that userspace
++ * sets, if the gust can use those events which user allow, and if the guest
++ * can't use those events which user deny.
++ * It also checks set invalid filter return the expected error.
++ * This test runs only when KVM_CAP_ARM_PMU_V3 is supported on the host.
++ */
++#include <kvm_util.h>
++#include <processor.h>
++#include <vgic.h>
++#include <vpmu.h>
++#include <test_util.h>
 +#include <perf/arm_pmuv3.h>
- 
- #define GICD_BASE_GPA	0x8000000ULL
- #define GICR_BASE_GPA	0x80A0000ULL
- 
-+/* The max number of the PMU event counters (excluding the cycle counter) */
-+#define ARMV8_PMU_MAX_GENERAL_COUNTERS	(ARMV8_PMU_MAX_COUNTERS - 1)
 +
-+/* The cycle counter bit position that's common among the PMU registers */
-+#define ARMV8_PMU_CYCLE_IDX		31
++struct {
++	uint64_t branches_retired;
++	uint64_t instructions_retired;
++} pmc_results;
 +
- struct vpmu_vm {
- 	struct kvm_vm *vm;
- 	struct kvm_vcpu *vcpu;
-@@ -14,3 +21,115 @@ struct vpmu_vm {
- struct vpmu_vm *create_vpmu_vm(void *guest_code);
- 
- void destroy_vpmu_vm(struct vpmu_vm *vpmu_vm);
++static struct vpmu_vm *vpmu_vm;
 +
-+static inline uint64_t get_pmcr_n(uint64_t pmcr)
++#define FILTER_NR 10
++
++struct test_desc {
++	const char *name;
++	void (*check_result)(void);
++	struct kvm_pmu_event_filter filter[FILTER_NR];
++};
++
++#define __DEFINE_FILTER(base, num, act)		\
++	((struct kvm_pmu_event_filter) {	\
++		.base_event	= base,		\
++		.nevents	= num,		\
++		.action		= act,		\
++	})
++
++#define DEFINE_FILTER(base, act) __DEFINE_FILTER(base, 1, act)
++
++#define EMPTY_FILTER	{ 0 }
++
++#define SW_INCR		0x0
++#define INST_RETIRED	0x8
++#define BR_RETIERD	0x21
++
++#define NUM_BRANCHES	10
++
++static void run_and_measure_loop(void)
 +{
-+	return (pmcr >> ARMV8_PMU_PMCR_N_SHIFT) & ARMV8_PMU_PMCR_N_MASK;
++	asm volatile(
++		"	mov	x10, %[loop]\n"
++		"1:	sub	x10, x10, #1\n"
++		"	cmp	x10, #0x0\n"
++		"	b.gt	1b\n"
++		:
++		: [loop] "r" (NUM_BRANCHES)
++		: "x10", "cc");
 +}
 +
-+static inline void set_pmcr_n(uint64_t *pmcr, uint64_t pmcr_n)
-+{
-+	*pmcr = *pmcr & ~(ARMV8_PMU_PMCR_N_MASK << ARMV8_PMU_PMCR_N_SHIFT);
-+	*pmcr |= (pmcr_n << ARMV8_PMU_PMCR_N_SHIFT);
-+}
-+
-+static inline uint64_t get_counters_mask(uint64_t n)
-+{
-+	uint64_t mask = BIT(ARMV8_PMU_CYCLE_IDX);
-+
-+	if (n)
-+		mask |= GENMASK(n - 1, 0);
-+	return mask;
-+}
-+
-+/* Read PMEVTCNTR<n>_EL0 through PMXEVCNTR_EL0 */
-+static inline unsigned long read_sel_evcntr(int sel)
-+{
-+	write_sysreg(sel, pmselr_el0);
-+	isb();
-+	return read_sysreg(pmxevcntr_el0);
-+}
-+
-+/* Write PMEVTCNTR<n>_EL0 through PMXEVCNTR_EL0 */
-+static inline void write_sel_evcntr(int sel, unsigned long val)
-+{
-+	write_sysreg(sel, pmselr_el0);
-+	isb();
-+	write_sysreg(val, pmxevcntr_el0);
-+	isb();
-+}
-+
-+/* Read PMEVTYPER<n>_EL0 through PMXEVTYPER_EL0 */
-+static inline unsigned long read_sel_evtyper(int sel)
-+{
-+	write_sysreg(sel, pmselr_el0);
-+	isb();
-+	return read_sysreg(pmxevtyper_el0);
-+}
-+
-+/* Write PMEVTYPER<n>_EL0 through PMXEVTYPER_EL0 */
-+static inline void write_sel_evtyper(int sel, unsigned long val)
-+{
-+	write_sysreg(sel, pmselr_el0);
-+	isb();
-+	write_sysreg(val, pmxevtyper_el0);
-+	isb();
-+}
-+
-+static inline void enable_counter(int idx)
-+{
-+	uint64_t v = read_sysreg(pmcntenset_el0);
-+
-+	write_sysreg(BIT(idx) | v, pmcntenset_el0);
-+	isb();
-+}
-+
-+static inline void disable_counter(int idx)
-+{
-+	uint64_t v = read_sysreg(pmcntenset_el0);
-+
-+	write_sysreg(BIT(idx) | v, pmcntenclr_el0);
-+	isb();
-+}
-+
-+static inline void pmu_disable_reset(void)
++static void guest_code(void)
 +{
 +	uint64_t pmcr = read_sysreg(pmcr_el0);
 +
-+	/* Reset all counters, disabling them */
-+	pmcr &= ~ARMV8_PMU_PMCR_E;
-+	write_sysreg(pmcr | ARMV8_PMU_PMCR_P, pmcr_el0);
-+	isb();
++	pmu_disable_reset();
++
++	write_pmevtypern(0, BR_RETIERD);
++	write_pmevtypern(1, INST_RETIRED);
++	enable_counter(0);
++	enable_counter(1);
++	write_sysreg(pmcr | ARMV8_PMU_PMCR_E, pmcr_el0);
++
++	run_and_measure_loop();
++
++	write_sysreg(pmcr, pmcr_el0);
++
++	pmc_results.branches_retired = read_sysreg(pmevcntr0_el0);
++	pmc_results.instructions_retired = read_sysreg(pmevcntr1_el0);
++
++	GUEST_DONE();
 +}
 +
-+#define RETURN_READ_PMEVCNTRN(n) \
-+	return read_sysreg(pmevcntr##n##_el0)
-+static inline unsigned long read_pmevcntrn(int n)
++static void pmu_event_filter_init(struct vpmu_vm *vm, void *arg)
 +{
-+	PMEVN_SWITCH(n, RETURN_READ_PMEVCNTRN);
-+	return 0;
++	struct kvm_device_attr attr = {
++		.group	= KVM_ARM_VCPU_PMU_V3_CTRL,
++		.attr	= KVM_ARM_VCPU_PMU_V3_FILTER,
++	};
++	struct kvm_pmu_event_filter *filter = (struct kvm_pmu_event_filter *)arg;
++
++	while (filter && filter->nevents != 0) {
++		attr.addr = (uint64_t)filter;
++		vcpu_ioctl(vm->vcpu, KVM_SET_DEVICE_ATTR, &attr);
++		filter++;
++	}
 +}
 +
-+#define WRITE_PMEVCNTRN(n) \
-+	write_sysreg(val, pmevcntr##n##_el0)
-+static inline void write_pmevcntrn(int n, unsigned long val)
++static void create_vpmu_vm_with_filter(void *guest_code,
++				       struct kvm_pmu_event_filter *filter)
 +{
-+	PMEVN_SWITCH(n, WRITE_PMEVCNTRN);
-+	isb();
++	vpmu_vm = __create_vpmu_vm(guest_code, pmu_event_filter_init, filter);
 +}
 +
-+#define READ_PMEVTYPERN(n) \
-+	return read_sysreg(pmevtyper##n##_el0)
-+static inline unsigned long read_pmevtypern(int n)
++static void run_vcpu(struct kvm_vcpu *vcpu)
 +{
-+	PMEVN_SWITCH(n, READ_PMEVTYPERN);
-+	return 0;
++	struct ucall uc;
++
++	while (1) {
++		vcpu_run(vcpu);
++		switch (get_ucall(vcpu, &uc)) {
++		case UCALL_DONE:
++			return;
++		default:
++			TEST_FAIL("Unknown ucall %lu", uc.cmd);
++		}
++	}
 +}
 +
-+#define WRITE_PMEVTYPERN(n) \
-+	write_sysreg(val, pmevtyper##n##_el0)
-+static inline void write_pmevtypern(int n, unsigned long val)
++static void check_pmc_counting(void)
 +{
-+	PMEVN_SWITCH(n, WRITE_PMEVTYPERN);
-+	isb();
++	uint64_t br = pmc_results.branches_retired;
++	uint64_t ir = pmc_results.instructions_retired;
++
++	TEST_ASSERT(br && br == NUM_BRANCHES, "Branch instructions retired = "
++		    "%lu (expected %u)", br, NUM_BRANCHES);
++	TEST_ASSERT(ir, "Instructions retired = %lu (expected > 0)", ir);
 +}
++
++static void check_pmc_not_counting(void)
++{
++	uint64_t br = pmc_results.branches_retired;
++	uint64_t ir = pmc_results.instructions_retired;
++
++	TEST_ASSERT(!br, "Branch instructions retired = %lu (expected 0)", br);
++	TEST_ASSERT(!ir, "Instructions retired = %lu (expected 0)", ir);
++}
++
++static void run_vcpu_and_sync_pmc_results(void)
++{
++	memset(&pmc_results, 0, sizeof(pmc_results));
++	sync_global_to_guest(vpmu_vm->vm, pmc_results);
++
++	run_vcpu(vpmu_vm->vcpu);
++
++	sync_global_from_guest(vpmu_vm->vm, pmc_results);
++}
++
++static void run_test(struct test_desc *t)
++{
++	pr_debug("Test: %s\n", t->name);
++
++	create_vpmu_vm_with_filter(guest_code, t->filter);
++
++	run_vcpu_and_sync_pmc_results();
++
++	t->check_result();
++
++	destroy_vpmu_vm(vpmu_vm);
++}
++
++static struct test_desc tests[] = {
++	{"without_filter", check_pmc_counting, { EMPTY_FILTER }},
++	{"member_allow_filter", check_pmc_counting,
++	 {DEFINE_FILTER(SW_INCR, 0), DEFINE_FILTER(INST_RETIRED, 0),
++	  DEFINE_FILTER(BR_RETIERD, 0), EMPTY_FILTER}},
++	{"member_deny_filter", check_pmc_not_counting,
++	 {DEFINE_FILTER(SW_INCR, 1), DEFINE_FILTER(INST_RETIRED, 1),
++	  DEFINE_FILTER(BR_RETIERD, 1), EMPTY_FILTER}},
++	{"not_member_deny_filter", check_pmc_counting,
++	 {DEFINE_FILTER(SW_INCR, 1), EMPTY_FILTER}},
++	{"not_member_allow_filter", check_pmc_not_counting,
++	 {DEFINE_FILTER(SW_INCR, 0), EMPTY_FILTER}},
++	{ 0 }
++};
++
++static void for_each_test(void)
++{
++	struct test_desc *t;
++
++	for (t = &tests[0]; t->name; t++)
++		run_test(t);
++}
++
++static void set_invalid_filter(struct vpmu_vm *vm, void *arg)
++{
++	struct kvm_pmu_event_filter invalid;
++	struct kvm_device_attr attr = {
++		.group	= KVM_ARM_VCPU_PMU_V3_CTRL,
++		.attr	= KVM_ARM_VCPU_PMU_V3_FILTER,
++		.addr	= (uint64_t)&invalid,
++	};
++	int ret = 0;
++
++	/* The max event number is (1 << 16), set a range large than it. */
++	invalid = __DEFINE_FILTER(BIT(15), BIT(15)+1, 0);
++	ret = __vcpu_ioctl(vm->vcpu, KVM_SET_DEVICE_ATTR, &attr);
++	TEST_ASSERT(ret && errno == EINVAL, "Set Invalid filter range "
++		    "ret = %d, errno = %d (expected ret = -1, errno = EINVAL)",
++		    ret, errno);
++
++	ret = 0;
++
++	/* Set the Invalid action. */
++	invalid = __DEFINE_FILTER(0, 1, 3);
++	ret = __vcpu_ioctl(vm->vcpu, KVM_SET_DEVICE_ATTR, &attr);
++	TEST_ASSERT(ret && errno == EINVAL, "Set Invalid filter action "
++		    "ret = %d, errno = %d (expected ret = -1, errno = EINVAL)",
++		    ret, errno);
++}
++
++static void test_invalid_filter(void)
++{
++	vpmu_vm = __create_vpmu_vm(guest_code, set_invalid_filter, NULL);
++	destroy_vpmu_vm(vpmu_vm);
++}
++
++int main(void)
++{
++	TEST_REQUIRE(kvm_has_cap(KVM_CAP_ARM_PMU_V3));
++
++	for_each_test();
++
++	test_invalid_filter();
++}
+diff --git a/tools/testing/selftests/kvm/include/aarch64/vpmu.h b/tools/testing/selftests/kvm/include/aarch64/vpmu.h
+index e0cc1ca1c4b7..db97bfb07996 100644
+--- a/tools/testing/selftests/kvm/include/aarch64/vpmu.h
++++ b/tools/testing/selftests/kvm/include/aarch64/vpmu.h
+@@ -18,6 +18,10 @@ struct vpmu_vm {
+ 	int gic_fd;
+ };
+ 
++struct vpmu_vm *__create_vpmu_vm(void *guest_code,
++				 void (*init_pmu)(struct vpmu_vm *vm, void *arg),
++				 void *arg);
++
+ struct vpmu_vm *create_vpmu_vm(void *guest_code);
+ 
+ void destroy_vpmu_vm(struct vpmu_vm *vpmu_vm);
+diff --git a/tools/testing/selftests/kvm/lib/aarch64/vpmu.c b/tools/testing/selftests/kvm/lib/aarch64/vpmu.c
+index b3de8fdc555e..76ea03d607f1 100644
+--- a/tools/testing/selftests/kvm/lib/aarch64/vpmu.c
++++ b/tools/testing/selftests/kvm/lib/aarch64/vpmu.c
+@@ -7,8 +7,9 @@
+ #include <vpmu.h>
+ #include <perf/arm_pmuv3.h>
+ 
+-/* Create a VM that has one vCPU with PMUv3 configured. */
+-struct vpmu_vm *create_vpmu_vm(void *guest_code)
++struct vpmu_vm *__create_vpmu_vm(void *guest_code,
++				 void (*init_pmu)(struct vpmu_vm *vm, void *arg),
++				 void *arg)
+ {
+ 	struct kvm_vcpu_init init;
+ 	uint8_t pmuver;
+@@ -50,12 +51,21 @@ struct vpmu_vm *create_vpmu_vm(void *guest_code)
+ 		    "Unexpected PMUVER (0x%x) on the vCPU with PMUv3", pmuver);
+ 
+ 	/* Initialize vPMU */
++	if (init_pmu)
++		init_pmu(vpmu_vm, arg);
++
+ 	vcpu_ioctl(vpmu_vm->vcpu, KVM_SET_DEVICE_ATTR, &irq_attr);
+ 	vcpu_ioctl(vpmu_vm->vcpu, KVM_SET_DEVICE_ATTR, &init_attr);
+ 
+ 	return vpmu_vm;
+ }
+ 
++/* Create a VM that has one vCPU with PMUv3 configured. */
++struct vpmu_vm *create_vpmu_vm(void *guest_code)
++{
++	return __create_vpmu_vm(guest_code, NULL, NULL);
++}
++
+ void destroy_vpmu_vm(struct vpmu_vm *vpmu_vm)
+ {
+ 	close(vpmu_vm->gic_fd);
 -- 
 2.40.1
 
