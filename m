@@ -1,58 +1,58 @@
-Return-Path: <linux-kselftest+bounces-488-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-489-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D87507F66C6
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Nov 2023 19:58:38 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D290D7F66C3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Nov 2023 19:58:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4447DB210B4
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 025831C20934
 	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Nov 2023 18:58:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F123405CC;
-	Thu, 23 Nov 2023 18:58:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B007A41232;
+	Thu, 23 Nov 2023 18:58:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vrull.eu header.i=@vrull.eu header.b="gJ7RVFr3"
+	dkim=pass (2048-bit key) header.d=vrull.eu header.i=@vrull.eu header.b="cSdtf/wV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94B19E
-	for <linux-kselftest@vger.kernel.org>; Thu, 23 Nov 2023 10:58:29 -0800 (PST)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-a00ac0101d9so159848566b.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Nov 2023 10:58:29 -0800 (PST)
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF2CD40
+	for <linux-kselftest@vger.kernel.org>; Thu, 23 Nov 2023 10:58:31 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-9fa2714e828so155763266b.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 Nov 2023 10:58:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vrull.eu; s=google; t=1700765908; x=1701370708; darn=vger.kernel.org;
+        d=vrull.eu; s=google; t=1700765910; x=1701370710; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dhz1HO1TFrn+esU2JyrDQXLuWyA0tprcaBHDYdqjcxQ=;
-        b=gJ7RVFr3BplZ5mzK9yqnTTzgxxePX12hdwZxTOZVjyvDkAHDNGRB9FOY1tBe9+Tciy
-         v7+tjZrsyNjceJy18oL2Z0PyHfCOdBAa15uMgul5YIDOoogvZDnkNBz8RSJS8OeHMjlG
-         hAU+224l4M7e5HgXkBk8ZP2krc+RG2WQMkmTJK/UIaU+wYVsssIBc4bQbKWJVqXmxvfD
-         hkCm4zbKHfUKLnUOYqSq8HANBiB2FpLtzGTRmi8l6CQcN842fdGCr6pchNq2uSiwvp3J
-         cZk79Z716Rz97DCQQXzbpTNlzgAXJFj5vVsv+doYGPWUVaxoW+jdHvP6vIYbyhBjx2sp
-         DzdA==
+        bh=D52mho4bbVBLhO1MqSHLzeH5mafSEJrrR5dOy4gDBr8=;
+        b=cSdtf/wVdnMJpBcJIHXBcSzwoCpd9ei0cVYoiTlsuwkgwzmMX2rsXqh7DHqJZb2GR6
+         txjD7zh/dpMHGYLNjJ0pjnEAArPzqd9/sGVgLNirIjC65CIDO3vZdyEHLHMZpHudpD+o
+         O3Ewgk1y5KE/2OyFRGwBZnCEWW4N1ggOKX6EOvTmUA4+CAfKWATRqeOhx+F89hWYXlP0
+         0hDEF4OM/PJK079sHxwfNyiEzAxVX8TIyRVhO5k5CgI9t6VUXViKAVZMaWAaq0Znqe5a
+         H/1oPod2UF2tq4WfmSMaY6fBrsEB4q7yXuupPXzwgrjQCBjyWatLxl0NmOE9Gknn7MSm
+         5DGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700765908; x=1701370708;
+        d=1e100.net; s=20230601; t=1700765910; x=1701370710;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dhz1HO1TFrn+esU2JyrDQXLuWyA0tprcaBHDYdqjcxQ=;
-        b=fXlIO/hketUE75a4LSjlXFki5mTB3ZCktrCdfCP2Tu7RpTGji4MoGsR6/MzFck0rZp
-         LeHiNJzueUQHcEo0EA++TQJLwWlvuAwF7t5Hy4LuDkKwd2DqLt/zKEiWaUF40paD5CAd
-         veBCDfsIlGe/0YPruxbtAqeADQuyjEwSIh/FK8LsRhUqARK6f9sZgcZBIgNRe0XldeE9
-         cKCeS+pIBTSK5/WgbhE6vWcUb9MJNP/noBsyVcIlOjeASpf1fRyYFl8W8oADqZiHACTs
-         f82i8pMIGMEa+I2WgH4xr51Fxvh3R3w68bB3XB2ys1apnnQRcYWwOvSsC6/72XL5l+uB
-         9scw==
-X-Gm-Message-State: AOJu0Yz5oe1M0383fBfp2+nKFemOcb9aB9fYPI+iF/EdmZRPQRwL9Kj/
-	AUVW8GP9PK63RnQhMtXjXgdT+A==
-X-Google-Smtp-Source: AGHT+IHuV5dXf2Er0VwPFonFK4Fp1h+h+XsSB+7tO9pY2bovS/v0cFYLhOuYH9heihq0E1lWqqNMWw==
-X-Received: by 2002:a17:906:d4:b0:a01:8ef2:849 with SMTP id 20-20020a17090600d400b00a018ef20849mr177665eji.4.1700765908104;
-        Thu, 23 Nov 2023 10:58:28 -0800 (PST)
+        bh=D52mho4bbVBLhO1MqSHLzeH5mafSEJrrR5dOy4gDBr8=;
+        b=qkxZd5yV02oTo1ojD6xD23fDF93I+s9bIJPZUkolyQAQsigzO9e2lJMDf8r0GxtzPw
+         n39CJAps2CYPwDQxZIcHlOfv2pKP5DHXxS0OHsiby6SuDuVy40Idac77b8tmVBXKNwep
+         FrxTvQsnbi0rGcQzsU5wk86s67Bcick3jV9cZomvyP82RvBBipEcZEJlPfDwcVAfmidj
+         T6bqCwJNOAUzpHA+CFp4a/sGTN6gafNvYs7h1xQXsGegmsYJJ2HRHpH7n2O2xwmChgdU
+         ykG8xnzjKg7Iul5dTvvuG3zNqVI49qLov7MgEBydFvwy5HSQWrgt5Ud83J1wUXTWs3Q8
+         Pvpg==
+X-Gm-Message-State: AOJu0YzvTMYtYbPzS0QPIRsuRc1ltFE2uWFlt2WlF2sWRp7R45yFS9UK
+	RpLw6yPDlYxbQ637VACYNCi9Mw==
+X-Google-Smtp-Source: AGHT+IFVVpG1Z6gxPdaL7IaaTFJinrPmrgoX6cwu9dsiRja9dZsbaJhr6jSoHE3EsEV83YZM2drU6A==
+X-Received: by 2002:a17:906:738b:b0:9f8:2f30:d74f with SMTP id f11-20020a170906738b00b009f82f30d74fmr185134ejl.7.1700765909911;
+        Thu, 23 Nov 2023 10:58:29 -0800 (PST)
 Received: from beast.fritz.box (62-178-148-172.cable.dynamic.surfer.at. [62.178.148.172])
-        by smtp.gmail.com with ESMTPSA id l23-20020a170906231700b009ff1997ce86sm1115944eja.149.2023.11.23.10.58.26
+        by smtp.gmail.com with ESMTPSA id l23-20020a170906231700b009ff1997ce86sm1115944eja.149.2023.11.23.10.58.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Nov 2023 10:58:27 -0800 (PST)
+        Thu, 23 Nov 2023 10:58:29 -0800 (PST)
 From: Christoph Muellner <christoph.muellner@vrull.eu>
 To: linux-riscv@lists.infradead.org,
 	linux-kselftest@vger.kernel.org,
@@ -70,9 +70,9 @@ Cc: Philipp Tomsich <philipp.tomsich@vrull.eu>,
 	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
 	Charlie Jenkins <charlie@rivosinc.com>,
 	=?UTF-8?q?Christoph=20M=C3=BCllner?= <christoph.muellner@vrull.eu>
-Subject: [PATCH 1/5] tools: selftests: riscv: Fix compile warnings in hwprobe
-Date: Thu, 23 Nov 2023 19:58:17 +0100
-Message-ID: <20231123185821.2272504-2-christoph.muellner@vrull.eu>
+Subject: [PATCH 2/5] tools: selftests: riscv: Fix compile warnings in cbo
+Date: Thu, 23 Nov 2023 19:58:18 +0100
+Message-ID: <20231123185821.2272504-3-christoph.muellner@vrull.eu>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20231123185821.2272504-1-christoph.muellner@vrull.eu>
 References: <20231123185821.2272504-1-christoph.muellner@vrull.eu>
@@ -88,36 +88,45 @@ Content-Transfer-Encoding: 8bit
 From: Christoph Müllner <christoph.muellner@vrull.eu>
 
 GCC prints a couple of format string warnings when compiling
-the hwprobe test. Let's follow the recommendation in
+the cbo test. Let's follow the recommendation in
 Documentation/printk-formats.txt to fix these warnings.
 
 Signed-off-by: Christoph Müllner <christoph.muellner@vrull.eu>
 ---
- tools/testing/selftests/riscv/hwprobe/hwprobe.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ tools/testing/selftests/riscv/hwprobe/cbo.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/riscv/hwprobe/hwprobe.c b/tools/testing/selftests/riscv/hwprobe/hwprobe.c
-index c474891df307..abb825811c70 100644
---- a/tools/testing/selftests/riscv/hwprobe/hwprobe.c
-+++ b/tools/testing/selftests/riscv/hwprobe/hwprobe.c
-@@ -29,7 +29,7 @@ int main(int argc, char **argv)
- 		/* Fail if the kernel claims not to recognize a base key. */
- 		if ((i < 4) && (pairs[i].key != i))
- 			ksft_exit_fail_msg("Failed to recognize base key: key != i, "
--					   "key=%ld, i=%ld\n", pairs[i].key, i);
-+					   "key=%lld, i=%ld\n", pairs[i].key, i);
+diff --git a/tools/testing/selftests/riscv/hwprobe/cbo.c b/tools/testing/selftests/riscv/hwprobe/cbo.c
+index 50a2cc8aef38..c6a83ab11e22 100644
+--- a/tools/testing/selftests/riscv/hwprobe/cbo.c
++++ b/tools/testing/selftests/riscv/hwprobe/cbo.c
+@@ -97,7 +97,7 @@ static void test_zicboz(void *arg)
+ 	block_size = pair.value;
+ 	ksft_test_result(rc == 0 && pair.key == RISCV_HWPROBE_KEY_ZICBOZ_BLOCK_SIZE &&
+ 			 is_power_of_2(block_size), "Zicboz block size\n");
+-	ksft_print_msg("Zicboz block size: %ld\n", block_size);
++	ksft_print_msg("Zicboz block size: %llu\n", block_size);
  
- 		if (pairs[i].key != RISCV_HWPROBE_KEY_BASE_BEHAVIOR)
- 			continue;
-@@ -37,7 +37,7 @@ int main(int argc, char **argv)
- 		if (pairs[i].value & RISCV_HWPROBE_BASE_BEHAVIOR_IMA)
- 			continue;
+ 	illegal_insn = false;
+ 	cbo_zero(&mem[block_size]);
+@@ -121,7 +121,7 @@ static void test_zicboz(void *arg)
+ 		for (j = 0; j < block_size; ++j) {
+ 			if (mem[i * block_size + j] != expected) {
+ 				ksft_test_result_fail("cbo.zero check\n");
+-				ksft_print_msg("cbo.zero check: mem[%d] != 0x%x\n",
++				ksft_print_msg("cbo.zero check: mem[%llu] != 0x%x\n",
+ 					       i * block_size + j, expected);
+ 				return;
+ 			}
+@@ -201,7 +201,7 @@ int main(int argc, char **argv)
+ 	pair.key = RISCV_HWPROBE_KEY_IMA_EXT_0;
+ 	rc = riscv_hwprobe(&pair, 1, sizeof(cpu_set_t), (unsigned long *)&cpus, 0);
+ 	if (rc < 0)
+-		ksft_exit_fail_msg("hwprobe() failed with %d\n", rc);
++		ksft_exit_fail_msg("hwprobe() failed with %ld\n", rc);
+ 	assert(rc == 0 && pair.key == RISCV_HWPROBE_KEY_IMA_EXT_0);
  
--		ksft_exit_fail_msg("Unexpected pair: (%ld, %ld)\n", pairs[i].key, pairs[i].value);
-+		ksft_exit_fail_msg("Unexpected pair: (%lld, %llu)\n", pairs[i].key, pairs[i].value);
- 	}
- 
- 	out = riscv_hwprobe(pairs, 8, 0, 0, 0);
+ 	if (pair.value & RISCV_HWPROBE_EXT_ZICBOZ) {
 -- 
 2.41.0
 
