@@ -1,132 +1,113 @@
-Return-Path: <linux-kselftest+bounces-486-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-487-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 426117F658A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Nov 2023 18:35:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 276BE7F66C2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Nov 2023 19:58:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D7CCDB20FF7
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Nov 2023 17:35:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D68B328167C
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Nov 2023 18:58:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36828405E8;
-	Thu, 23 Nov 2023 17:35:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8890624A0E;
+	Thu, 23 Nov 2023 18:58:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KY1lQexw"
+	dkim=pass (2048-bit key) header.d=vrull.eu header.i=@vrull.eu header.b="DrC1T99i"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1692D405E5;
-	Thu, 23 Nov 2023 17:35:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E27BCC433CC;
-	Thu, 23 Nov 2023 17:35:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700760942;
-	bh=/73LHzEUuMC+UbtJ5BdZY8QbIJypb3dNXKHEGBhyUfk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KY1lQexwEHntktudEDLo2U/ya2/15YkepNxQSkua05q8GbSv6SrrINT35F3cF/9SN
-	 nVVuTeTKuFby1C2Q2H9+GAtGpc3HmEwhDoSMRjdrnDZ7qd8YIV7PXYL7d3b0tOSPW0
-	 y7mw/lZsUVYDLUtrAv1a3ClM+o5NKYp0Gprp7NcVJrSepRcjEsTppbDPIu4rYAqPhq
-	 CPn+qYP6jrRFi7gx+yV6h+UfDlNYqR+RSiEZM4yd6J+0quh157aUnC+PPHDcVK7GKV
-	 v6z9a7G+dQuNhkhiiJDlH3d4BufRFhu6hioME38hjy6Ql6uspZzj41LliW1R+CMLeN
-	 S/BNLPWNqi4TQ==
-Date: Thu, 23 Nov 2023 17:35:38 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Christian Brauner <brauner@kernel.org>
-Cc: "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
-	Deepak Gupta <debug@rivosinc.com>,
-	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
-	"H.J. Lu" <hjl.tools@gmail.com>,
-	Florian Weimer <fweimer@redhat.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Daniel Bristot de Oliveira <bristot@redhat.com>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Kees Cook <keescook@chromium.org>,
-	jannh@google.com, linux-kselftest@vger.kernel.org,
-	linux-api@vger.kernel.org
-Subject: Re: [PATCH RFT v3 2/5] fork: Add shadow stack support to clone3()
-Message-ID: <ZV+NamY31GyANEe/@finisterre.sirena.org.uk>
-References: <20231120-clone3-shadow-stack-v3-0-a7b8ed3e2acc@kernel.org>
- <20231120-clone3-shadow-stack-v3-2-a7b8ed3e2acc@kernel.org>
- <20231123-derivate-freikarte-6de8984caf85@brauner>
- <ZV9Cz00vAKd7EwKD@finisterre.sirena.org.uk>
- <20231123-ausziehen-harpune-d020d47f964c@brauner>
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43902D40
+	for <linux-kselftest@vger.kernel.org>; Thu, 23 Nov 2023 10:58:28 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2c8880f14eeso14847301fa.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 23 Nov 2023 10:58:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=vrull.eu; s=google; t=1700765906; x=1701370706; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IGDig6YgBY65aRC6yCBQTLGsMwfbG6Dc++Rh1cU7fbM=;
+        b=DrC1T99i0M2ZaIhu7Xi8wj3jQMkFXQpgn77EmwbppqJvw9LThxqAgjxu07PvCPrJEY
+         wp3jkXWKXWWbwTGWonmdyNL93JlQjRTEP5MUmfEgzHVPPvfAzAWBXOBQIlbdwquX3TQT
+         g8IX6/YCdVbGu0B4tiNVgiZ/GUbKU+eh8KijcRCNny7Snl8wuvpQ+gunhezXWPvfvUlM
+         aY1BAsZJ4l2gtTNwqmXSyuuyaa0Rw7tuKwwgONQ4WqXlZme+1Qc1j0BseJjV/Rxchat3
+         hhyHShY7A02RsC3i5B4jfVPczmaSlDhM/IRuBVVLfLAYM3EqQnMqnJH5DwusAgX9K3Ap
+         3c0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700765906; x=1701370706;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IGDig6YgBY65aRC6yCBQTLGsMwfbG6Dc++Rh1cU7fbM=;
+        b=cCZXWcRvVKE8YTkX6qduwE39KLfMO+99R5TXSNg36XY+BLOKCaopRMTwEy///h1gmZ
+         GQw9ePQbGaJk4tXU4GOEIKkMlPofdVo2uxzdQEXnF97Y6uK+xF+7/TpMEMtKUpUJK1ZP
+         TgbKj5r3dWeKME9/e+9VQ8YZeNRSG8v1ISTtRMXrrBtdMotwACloYkH8v8EybVXcLMdZ
+         5WjPiQpB2L5XVU10AUIRMxUGNOZ17wdI1xOh1S2H3HZuBgUImo9Z9mzTH5kZpW8JAH0n
+         jSyWCF5ustoJgJaJwOY7522Zq7c6/WTqfh1YQamH3v6KPFcAEUpPGcIAu7OOHuOOANLK
+         i4Cw==
+X-Gm-Message-State: AOJu0YxmNXMocHXOX7dVseSg14ieftt+CvuL3Uh4wGHLXo6OREbqA+yj
+	m3JdpSNmUab6YBGJxy55+HhR7Q==
+X-Google-Smtp-Source: AGHT+IFY1/C0dQe7cOOy2B31dSRmgNpyJ4PnGGQCob4NYZKF2UsPTkohGqYxikaY7xsNsW23oO0U/w==
+X-Received: by 2002:a2e:9ac3:0:b0:2c5:14da:91f2 with SMTP id p3-20020a2e9ac3000000b002c514da91f2mr219754ljj.22.1700765906008;
+        Thu, 23 Nov 2023 10:58:26 -0800 (PST)
+Received: from beast.fritz.box (62-178-148-172.cable.dynamic.surfer.at. [62.178.148.172])
+        by smtp.gmail.com with ESMTPSA id l23-20020a170906231700b009ff1997ce86sm1115944eja.149.2023.11.23.10.58.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Nov 2023 10:58:25 -0800 (PST)
+From: Christoph Muellner <christoph.muellner@vrull.eu>
+To: linux-riscv@lists.infradead.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Philipp Tomsich <philipp.tomsich@vrull.eu>,
+	Andrew Jones <ajones@ventanamicro.com>,
+	Evan Green <evan@rivosinc.com>,
+	Xiao Wang <xiao.w.wang@intel.com>,
+	Alexandre Ghiti <alexghiti@rivosinc.com>,
+	Andy Chiu <andy.chiu@sifive.com>,
+	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
+	Charlie Jenkins <charlie@rivosinc.com>,
+	=?UTF-8?q?Christoph=20M=C3=BCllner?= <christoph.muellner@vrull.eu>
+Subject: [PATCH 0/5] tools: selftests: riscv: Fix compiler warnings
+Date: Thu, 23 Nov 2023 19:58:16 +0100
+Message-ID: <20231123185821.2272504-1-christoph.muellner@vrull.eu>
+X-Mailer: git-send-email 2.41.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="CndIlGpPnv8RlVC+"
-Content-Disposition: inline
-In-Reply-To: <20231123-ausziehen-harpune-d020d47f964c@brauner>
-X-Cookie: Slow day.  Practice crawling.
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+From: Christoph Müllner <christoph.muellner@vrull.eu>
 
---CndIlGpPnv8RlVC+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+When building the RISC-V selftests with a riscv32 compiler I ran into
+a couple of compiler warnings. While riscv32 support for these tests is
+questionable, the fixes are so trivial that it is probably best to simply
+apply them.
 
-On Thu, Nov 23, 2023 at 05:33:05PM +0100, Christian Brauner wrote:
-> On Thu, Nov 23, 2023 at 12:17:19PM +0000, Mark Brown wrote:
+Note that the missing-include patch and some format string warnings
+are also relevant for riscv64.
 
-> > > > +		if (clone_flags & CLONE_VFORK) {
-> > > > +			shstk->base = 0;
-> > > > +			shstk->size = 0;
-> > > > +			return 0;
-> > > > +		}
+Christoph Müllner (5):
+  tools: selftests: riscv: Fix compile warnings in hwprobe
+  tools: selftests: riscv: Fix compile warnings in cbo
+  tools: selftests: riscv: Add missing include for vector test
+  tools: selftests: riscv: Fix compile warnings in vector tests
+  tools: selftests: riscv: Fix compile warnings in mm tests
 
-> > > Why is the CLONE_VFORK handling only necessary if shadow_stack_size is
-> > > unset? In general, a comment or explanation on the interaction between
-> > > CLONE_VFORK and shadow_stack_size would be helpful.
+ tools/testing/selftests/riscv/hwprobe/cbo.c               | 6 +++---
+ tools/testing/selftests/riscv/hwprobe/hwprobe.c           | 4 ++--
+ tools/testing/selftests/riscv/mm/mmap_test.h              | 3 +++
+ tools/testing/selftests/riscv/vector/v_initval_nolibc.c   | 2 +-
+ tools/testing/selftests/riscv/vector/vstate_exec_nolibc.c | 3 +++
+ tools/testing/selftests/riscv/vector/vstate_prctl.c       | 4 ++--
+ 6 files changed, 14 insertions(+), 8 deletions(-)
 
-> > This is the existing implicit behaviour that clone() has, it's current
-> > ABI for x86.  The intent is that if the user has explicitly configured a
-> > shadow stack then we just do whatever they asked us to do, if they
+-- 
+2.41.0
 
-> So what I'm asking is: if the calling process is suspended until the
-> child exits or exec's does it make sense for the child to even get a
-> shadow stack? I don't know the answer which is why I'm asking.
-
-We were initially doing some suppression of stack creation based on the
-flags but based on prior discussion we decided it wasn't worth it.
-There was some question about corner cases (IIRC the main one was
-posix_spawn()), but generally the thinking here was that since userspace
-explicitly asked for the shadow stack in the worst case it'll just be
-inefficient and userspace can fix things by just not doing that.  If we
-just create the shadow stack whenever it's requested then it makes the
-kernel side handling really simple to implement/verify and we don't have
-to worry about having missed any use cases with combinations of flags
-that we've not anticipated.
-
---CndIlGpPnv8RlVC+
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVfjWoACgkQJNaLcl1U
-h9AaCAf9ESVElI0jUJmzKPT+rOMQcmn2utfrXnIajA0L2w8qephayJtaRS/cumi6
-x79EY3sWCc3/7DU8ZokCs+1hlLe2YXBcHChU9mPSM5r910muGEmRFmDNYvXT0MDx
-zTAxwD1JezQm/xx+eao6qAXcndvSWtQ07KRkY+7kGh48MaBu6ea7ZHGLX36KLU3D
-FGZ4pwQjZAEZniikVAMKqkMiZgPWLaklyuu86hpWa1m5m9t6j3O97Zc7zsT9EhvO
-+L9dshnSTGK00sGneVJrznPPUm6w+9xYsAO8YNFfVMDSEeezBH3nKHxDGaGONOyP
-jacIFPP64N2TZMtsNbsQpUCrFXE4DQ==
-=+O4D
------END PGP SIGNATURE-----
-
---CndIlGpPnv8RlVC+--
 
