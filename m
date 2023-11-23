@@ -1,40 +1,40 @@
-Return-Path: <linux-kselftest+bounces-485-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-486-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E5EE7F63FB
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Nov 2023 17:33:17 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 426117F658A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Nov 2023 18:35:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B0A7F1C20C86
-	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Nov 2023 16:33:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D7CCDB20FF7
+	for <lists+linux-kselftest@lfdr.de>; Thu, 23 Nov 2023 17:35:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08B633B2B0;
-	Thu, 23 Nov 2023 16:33:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36828405E8;
+	Thu, 23 Nov 2023 17:35:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YRHhRKo6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KY1lQexw"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D53113FB25;
-	Thu, 23 Nov 2023 16:33:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C60A2C433CA;
-	Thu, 23 Nov 2023 16:33:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1692D405E5;
+	Thu, 23 Nov 2023 17:35:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E27BCC433CC;
+	Thu, 23 Nov 2023 17:35:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700757195;
-	bh=SG11iwaP+p3koKgEoIVWXgRVVhH7qW0Y0/2cmw+cMpw=;
+	s=k20201202; t=1700760942;
+	bh=/73LHzEUuMC+UbtJ5BdZY8QbIJypb3dNXKHEGBhyUfk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YRHhRKo69OXirFp+Rt89lJzssRTbqTsohTNQcXFTUxdRnQHui3q8TSYSPO8SKrQC/
-	 apsxzb02JH6F8E2/A8Y+mQWA9CSforGzyx14GmG7KtRdXJ7Fwo5ozuYo+xctTezX+6
-	 e4Z/UJVWbDFeJ+rPhV9+qTdkb0dQIV4kJSt7WVlBa/pi5TVSzIOXE77wAvq/ekeZ7Y
-	 fR0IriTFRegUMQnRs0pPjjJJoK6QZUFgQN2caRms+YlTkpkK8Xcqkvp6z5rxLi9DZg
-	 yQ5mBweHcpFEcaw+ukuWs7hps2RwbRsdWJWFym5IL855bTKNlgyA7iJNkrhXvxnXMP
-	 jiPPfmnIZs8Hw==
-Date: Thu, 23 Nov 2023 17:33:05 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: Mark Brown <broonie@kernel.org>
+	b=KY1lQexwEHntktudEDLo2U/ya2/15YkepNxQSkua05q8GbSv6SrrINT35F3cF/9SN
+	 nVVuTeTKuFby1C2Q2H9+GAtGpc3HmEwhDoSMRjdrnDZ7qd8YIV7PXYL7d3b0tOSPW0
+	 y7mw/lZsUVYDLUtrAv1a3ClM+o5NKYp0Gprp7NcVJrSepRcjEsTppbDPIu4rYAqPhq
+	 CPn+qYP6jrRFi7gx+yV6h+UfDlNYqR+RSiEZM4yd6J+0quh157aUnC+PPHDcVK7GKV
+	 v6z9a7G+dQuNhkhiiJDlH3d4BufRFhu6hioME38hjy6Ql6uspZzj41LliW1R+CMLeN
+	 S/BNLPWNqi4TQ==
+Date: Thu, 23 Nov 2023 17:35:38 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Christian Brauner <brauner@kernel.org>
 Cc: "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
 	Deepak Gupta <debug@rivosinc.com>,
 	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
@@ -58,56 +58,75 @@ Cc: "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
 	jannh@google.com, linux-kselftest@vger.kernel.org,
 	linux-api@vger.kernel.org
 Subject: Re: [PATCH RFT v3 2/5] fork: Add shadow stack support to clone3()
-Message-ID: <20231123-ausziehen-harpune-d020d47f964c@brauner>
+Message-ID: <ZV+NamY31GyANEe/@finisterre.sirena.org.uk>
 References: <20231120-clone3-shadow-stack-v3-0-a7b8ed3e2acc@kernel.org>
  <20231120-clone3-shadow-stack-v3-2-a7b8ed3e2acc@kernel.org>
  <20231123-derivate-freikarte-6de8984caf85@brauner>
  <ZV9Cz00vAKd7EwKD@finisterre.sirena.org.uk>
+ <20231123-ausziehen-harpune-d020d47f964c@brauner>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="CndIlGpPnv8RlVC+"
 Content-Disposition: inline
-In-Reply-To: <ZV9Cz00vAKd7EwKD@finisterre.sirena.org.uk>
+In-Reply-To: <20231123-ausziehen-harpune-d020d47f964c@brauner>
+X-Cookie: Slow day.  Practice crawling.
 
-On Thu, Nov 23, 2023 at 12:17:19PM +0000, Mark Brown wrote:
-> On Thu, Nov 23, 2023 at 11:28:47AM +0100, Christian Brauner wrote:
-> > On Mon, Nov 20, 2023 at 11:54:30PM +0000, Mark Brown wrote:
-> 
-> > Any reasonably maximum that should be assumed here? IOW, what happens if
-> > userspace starts specifying 4G shadow_stack_size with each clone3() call
-> > for lolz?
-> 
-> I guess we could impose RLIMIT_STACK?
 
-Yeah, that also seems to be what acct_stack_growth() is using.
+--CndIlGpPnv8RlVC+
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> 
-> > > +	} else {
-> > > +		/*
-> > > +		 * For CLONE_VFORK the child will share the parents
-> > > +		 * shadow stack.  Make sure to clear the internal
-> > > +		 * tracking of the thread shadow stack so the freeing
-> > > +		 * logic run for child knows to leave it alone.
-> > > +		 */
-> > > +		if (clone_flags & CLONE_VFORK) {
-> > > +			shstk->base = 0;
-> > > +			shstk->size = 0;
-> > > +			return 0;
-> > > +		}
-> 
-> > Why is the CLONE_VFORK handling only necessary if shadow_stack_size is
-> > unset? In general, a comment or explanation on the interaction between
-> > CLONE_VFORK and shadow_stack_size would be helpful.
-> 
-> This is the existing implicit behaviour that clone() has, it's current
-> ABI for x86.  The intent is that if the user has explicitly configured a
-> shadow stack then we just do whatever they asked us to do, if they
+On Thu, Nov 23, 2023 at 05:33:05PM +0100, Christian Brauner wrote:
+> On Thu, Nov 23, 2023 at 12:17:19PM +0000, Mark Brown wrote:
 
-So what I'm asking is: if the calling process is suspended until the
-child exits or exec's does it make sense for the child to even get a
-shadow stack? I don't know the answer which is why I'm asking.
+> > > > +		if (clone_flags & CLONE_VFORK) {
+> > > > +			shstk->base = 0;
+> > > > +			shstk->size = 0;
+> > > > +			return 0;
+> > > > +		}
+
+> > > Why is the CLONE_VFORK handling only necessary if shadow_stack_size is
+> > > unset? In general, a comment or explanation on the interaction between
+> > > CLONE_VFORK and shadow_stack_size would be helpful.
+
+> > This is the existing implicit behaviour that clone() has, it's current
+> > ABI for x86.  The intent is that if the user has explicitly configured a
+> > shadow stack then we just do whatever they asked us to do, if they
+
+> So what I'm asking is: if the calling process is suspended until the
+> child exits or exec's does it make sense for the child to even get a
+> shadow stack? I don't know the answer which is why I'm asking.
+
+We were initially doing some suppression of stack creation based on the
+flags but based on prior discussion we decided it wasn't worth it.
+There was some question about corner cases (IIRC the main one was
+posix_spawn()), but generally the thinking here was that since userspace
+explicitly asked for the shadow stack in the worst case it'll just be
+inefficient and userspace can fix things by just not doing that.  If we
+just create the shadow stack whenever it's requested then it makes the
+kernel side handling really simple to implement/verify and we don't have
+to worry about having missed any use cases with combinations of flags
+that we've not anticipated.
+
+--CndIlGpPnv8RlVC+
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVfjWoACgkQJNaLcl1U
+h9AaCAf9ESVElI0jUJmzKPT+rOMQcmn2utfrXnIajA0L2w8qephayJtaRS/cumi6
+x79EY3sWCc3/7DU8ZokCs+1hlLe2YXBcHChU9mPSM5r910muGEmRFmDNYvXT0MDx
+zTAxwD1JezQm/xx+eao6qAXcndvSWtQ07KRkY+7kGh48MaBu6ea7ZHGLX36KLU3D
+FGZ4pwQjZAEZniikVAMKqkMiZgPWLaklyuu86hpWa1m5m9t6j3O97Zc7zsT9EhvO
++L9dshnSTGK00sGneVJrznPPUm6w+9xYsAO8YNFfVMDSEeezBH3nKHxDGaGONOyP
+jacIFPP64N2TZMtsNbsQpUCrFXE4DQ==
+=+O4D
+-----END PGP SIGNATURE-----
+
+--CndIlGpPnv8RlVC+--
 
