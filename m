@@ -1,58 +1,58 @@
-Return-Path: <linux-kselftest+bounces-503-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-504-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 553E97F6F86
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 10:28:10 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 753297F6F88
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 10:28:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D1FA8B211D2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 09:28:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C67FBB211FD
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 09:28:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65543FBEA;
-	Fri, 24 Nov 2023 09:28:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D810D29B;
+	Fri, 24 Nov 2023 09:28:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NthqsxM7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bCgfVySz"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98423D46;
-	Fri, 24 Nov 2023 01:27:57 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id 41be03b00d2f7-5bdbe2de25fso1276083a12.3;
-        Fri, 24 Nov 2023 01:27:57 -0800 (PST)
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EF37D46;
+	Fri, 24 Nov 2023 01:28:02 -0800 (PST)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1cf59c07faeso12870105ad.2;
+        Fri, 24 Nov 2023 01:28:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700818076; x=1701422876; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1700818081; x=1701422881; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=zzRb3ZuXImOqXYgiw+Uj29ubtM7yPA76TIuVl1zE3yM=;
-        b=NthqsxM7SWJuCO8si8C4M6f8o0h3MA2CtUXnFhVio2ri/tJANF++koztCPa3NA87kZ
-         pgDYJf8ulDAWFUhH0YUohe7QLQOx0LIlBJ/EtW93/BFUI3WSYZYz9hOXgkZCIdVWOcAb
-         aJ8ff8mxjLH/gVy0UXkcJomjmzFpcrVPDth5zJP7dkc4Tv/+fQ5SzZrWw3p0+bx444P0
-         RMYnK400cslbONJ5R6lZs7rsHbdZUJhKn2d0AqVgSTvVIAcyQC5nFUc7o0l9WVZOMJGv
-         S0xzE0/FgzH45LNwcRfklqDQ0tvelBzJD1FgHxSLgeV7Lpq6igr0welE3NAViBG3HX0G
-         T5fg==
+        bh=amdf5W5HZfwxTkR/KEZBnqqDqTHsOv+jX6Lb1e7A47s=;
+        b=bCgfVySzmhHnAT/QsDcPBhJ5lECvhS9yK8UpObg5um2BkexybO95hWiZH7nh5UVaoS
+         WC0LCRpn2OCKwTRepBvJgcTX34jMSGMgncmJDdFpUjJVNq3etPG2jO0wehe/yAYchgqH
+         SdWJRQk8mawuQbIP6Gc9JK2g5oGyNz9A3wIzgDZDzCjp7774H/uDWy8w2p3WK26CxrQT
+         ++k1dTBaAXUuiFzppdB65lJkKXPi3zUyKBbS6BTNexohOFOkdBGmdkvXiDWDjzT4NWbH
+         J/1rV8A3QqNiRpe8ViTvqEi1VnHre4vzjeTowv6VZqXsuaUX6Jkw77D5fAgZ53dp1q9X
+         8H4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700818076; x=1701422876;
+        d=1e100.net; s=20230601; t=1700818081; x=1701422881;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=zzRb3ZuXImOqXYgiw+Uj29ubtM7yPA76TIuVl1zE3yM=;
-        b=bWHr/sIJbiMQoboOJeEzEr4nRm9f9hy+gBWo0LRLZo2XOeB/1hEklkW4j1FM6xmUNn
-         ZiLka3Y3D2tu0lGOJV1gPxPntp1TRdf0n8B1tbrizBReovRmmigusydB1BXy+Fit6aZ6
-         ldTS1W+Ecq+U9zT21/m/sR++JX8sZr1/5dGE+j47nPCjcw7fQlGiueR3Zu8cLhYhHN8m
-         azxyyPg6hRmJVYzBZS3Mi1HMl+xUP1j/E3G1fLQe6vaFub4aMfmBP93iE5tBE7Me0ndD
-         PiF0/y1ZUWsl8fcunFZZ0QsZg8VT4BDkOSNHOvP4lkK12ycKzzxTnwXyhAJQpDeCLqFi
-         ksqA==
-X-Gm-Message-State: AOJu0YwqbzEw3mLFZHICW5uUFIkFXZ7glZ9PEiP/PGJysmEm1H2SKXq4
-	0+cIrtUizfWPj9/1yazIWh5zgDY8wqUrf6Tu
-X-Google-Smtp-Source: AGHT+IFfq75FZ73zLhsUyO4C7DFsN7EreRz25hwY5JU6exXPoczwRQjv/a+dOwy9ZkvRNOG4GDchVg==
-X-Received: by 2002:a05:6a20:3e03:b0:18b:d229:1310 with SMTP id m3-20020a056a203e0300b0018bd2291310mr1985041pzc.35.1700818076605;
-        Fri, 24 Nov 2023 01:27:56 -0800 (PST)
+        bh=amdf5W5HZfwxTkR/KEZBnqqDqTHsOv+jX6Lb1e7A47s=;
+        b=dPgfcQxkFgLdi67mewhMFHQ4PauuttFfeyN//D4DU32B+0qswb0f3/iT+4N/aaKMln
+         uMvm6zYq1mOpO72N5WLbnMozJfziJvfCznWYCLOQ5siUhimCmajVObD20+KOjDuEzgdO
+         CzQLex/v7ikelnGwTbWB8qIS+MUjOesw69J0RhkrucOJ56OeNpPVTNGOCavyXpOC9UHR
+         mAgw63rr7am0BqtoyYAi3wBaLUCCGx1Ahk8SzRt7k7+7TGg05vBIjjwwUotC7GYGhL+4
+         NcUrkU5FXPnavzDLn5dXzkl/TtfGfkx9qhG6pumhP5115fYeLrdkkAckwhKEZJebuFSn
+         9ZIg==
+X-Gm-Message-State: AOJu0YyOM5ntyAUDt99nb8rEyxpvmkdedEHEFiTZJVmvrt0WIiHr745a
+	NUO4hjEwFkEl/JzrHvg2lr/n6jgrfUybBXoq
+X-Google-Smtp-Source: AGHT+IFDC/mGh2/nQHs1gPwmkbXxniL9q1b0zqu3ZzJQXh6J+HlDABXq2OZY60aTxg7foujdIIE0Nw==
+X-Received: by 2002:a17:903:2311:b0:1cc:32df:8eb5 with SMTP id d17-20020a170903231100b001cc32df8eb5mr2275082plh.6.1700818081279;
+        Fri, 24 Nov 2023 01:28:01 -0800 (PST)
 Received: from Laptop-X1.redhat.com ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id o10-20020a170902d4ca00b001cfacc54674sm32679plg.106.2023.11.24.01.27.52
+        by smtp.gmail.com with ESMTPSA id o10-20020a170902d4ca00b001cfacc54674sm32679plg.106.2023.11.24.01.27.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Nov 2023 01:27:55 -0800 (PST)
+        Fri, 24 Nov 2023 01:28:00 -0800 (PST)
 From: Hangbin Liu <liuhangbin@gmail.com>
 To: netdev@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -70,9 +70,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Mark Brown <broonie@kernel.org>,
 	Luis Chamberlain <mcgrof@kernel.org>,
 	Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCH net-next 01/38] selftests/net: add lib.sh
-Date: Fri, 24 Nov 2023 17:26:59 +0800
-Message-ID: <20231124092736.3673263-2-liuhangbin@gmail.com>
+Subject: [PATCH net-next 02/38] selftests/net: arp_ndisc_evict_nocarrier.sh convert to run test in unique namespace
+Date: Fri, 24 Nov 2023 17:27:00 +0800
+Message-ID: <20231124092736.3673263-3-liuhangbin@gmail.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20231124092736.3673263-1-liuhangbin@gmail.com>
 References: <20231124092736.3673263-1-liuhangbin@gmail.com>
@@ -84,136 +84,144 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add a lib.sh for net selftests. This file can be used to define commonly
-used variables and functions.
+Here is the test result after conversion.
 
-Add function setup_ns() for user to create unique namespaces with given
-prefix name.
+]# ./arp_ndisc_evict_nocarrier.sh
+run arp_evict_nocarrier=1 test
+ok
+run arp_evict_nocarrier=0 test
+ok
+run all.arp_evict_nocarrier=0 test
+ok
+run ndisc_evict_nocarrier=1 test
+ok
+run ndisc_evict_nocarrier=0 test
+ok
+run all.ndisc_evict_nocarrier=0 test
+ok
 
 Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
 ---
- tools/testing/selftests/net/Makefile |  2 +-
- tools/testing/selftests/net/lib.sh   | 98 ++++++++++++++++++++++++++++
- 2 files changed, 99 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/net/lib.sh
+ .../net/arp_ndisc_evict_nocarrier.sh          | 46 +++++++------------
+ 1 file changed, 16 insertions(+), 30 deletions(-)
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index 9274edfb76ff..14bd68da7466 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -54,7 +54,7 @@ TEST_PROGS += ip_local_port_range.sh
- TEST_PROGS += rps_default_mask.sh
- TEST_PROGS += big_tcp.sh
- TEST_PROGS_EXTENDED := in_netns.sh setup_loopback.sh setup_veth.sh
--TEST_PROGS_EXTENDED += toeplitz_client.sh toeplitz.sh
-+TEST_PROGS_EXTENDED += toeplitz_client.sh toeplitz.sh lib.sh
- TEST_GEN_FILES =  socket nettest
- TEST_GEN_FILES += psock_fanout psock_tpacket msg_zerocopy reuseport_addr_any
- TEST_GEN_FILES += tcp_mmap tcp_inq psock_snd txring_overwrite
-diff --git a/tools/testing/selftests/net/lib.sh b/tools/testing/selftests/net/lib.sh
-new file mode 100644
-index 000000000000..239ab2beb438
---- /dev/null
-+++ b/tools/testing/selftests/net/lib.sh
-@@ -0,0 +1,98 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
+diff --git a/tools/testing/selftests/net/arp_ndisc_evict_nocarrier.sh b/tools/testing/selftests/net/arp_ndisc_evict_nocarrier.sh
+index 4a110bb01e53..92eb880c52f2 100755
+--- a/tools/testing/selftests/net/arp_ndisc_evict_nocarrier.sh
++++ b/tools/testing/selftests/net/arp_ndisc_evict_nocarrier.sh
+@@ -12,7 +12,8 @@
+ # {arp,ndisc}_evict_nocarrer=0 should still contain the single ARP/ND entry
+ #
+ 
+-readonly PEER_NS="ns-peer-$(mktemp -u XXXXXX)"
++source lib.sh
 +
-+##############################################################################
-+# Defines
-+
-+# Kselftest framework requirement - SKIP code is 4.
-+ksft_skip=4
-+# namespace list created by setup_ns
-+NS_LIST=""
-+
-+##############################################################################
-+# Helpers
-+busywait()
-+{
-+	local timeout=$1; shift
-+
-+	local start_time="$(date -u +%s%3N)"
-+	while true
-+	do
-+		local out
-+		out=$($@)
-+		local ret=$?
-+		if ((!ret)); then
-+			echo -n "$out"
-+			return 0
-+		fi
-+
-+		local current_time="$(date -u +%s%3N)"
-+		if ((current_time - start_time > timeout)); then
-+			echo -n "$out"
-+			return 1
-+		fi
-+	done
-+}
-+
-+cleanup_ns()
-+{
-+	local ns=""
-+	local errexit=0
-+
-+	# disable errexit temporary
-+	if [[ $- =~ "e" ]]; then
-+		errexit=1
-+		set +e
-+	fi
-+
-+	for ns in "$@"; do
-+		ip netns delete "${ns}" &> /dev/null
-+		busywait 2 "ip netns list | grep -vq $1" &> /dev/null
-+		if ip netns list | grep -q $1; then
-+			echo "Failed to remove namespace $1"
-+			return $ksft_skip
-+		fi
-+	done
-+
-+	[ $errexit -eq 1 ] && set -e
-+	return 0
-+}
-+
-+# By default, remove all netns before EXIT.
-+cleanup_all_ns()
-+{
-+	cleanup_ns $NS_LIST
-+}
-+trap cleanup_all_ns EXIT
-+
-+# setup netns with given names as prefix. e.g
-+# setup_ns local remote
-+setup_ns()
-+{
-+	local ns=""
-+	# the ns list we created in this call
-+	local ns_list=""
-+	while [ -n "$1" ]; do
-+		# Some test may setup/remove same netns multi times
-+		if unset $1 2> /dev/null; then
-+			ns="${1,,}-$(mktemp -u XXXXXX)"
-+			eval readonly $1=$ns
-+		else
-+			eval ns='$'$1
-+			cleanup_ns $ns
-+
-+		fi
-+
-+		ip netns add $ns
-+		if ! ip netns list | grep -q $ns; then
-+			echo "Failed to create namespace $1"
-+			cleanup_ns $ns_list
-+			return $ksft_skip
-+		fi
-+		ip -n $ns link set lo up
-+		ns_list="$ns_list $ns"
-+
-+		shift
-+	done
-+	NS_LIST="$NS_LIST $ns_list"
-+}
+ readonly V4_ADDR0=10.0.10.1
+ readonly V4_ADDR1=10.0.10.2
+ readonly V6_ADDR0=2001:db8:91::1
+@@ -22,43 +23,29 @@ ret=0
+ 
+ cleanup_v6()
+ {
+-    ip netns del me
+-    ip netns del peer
++    cleanup_ns ${me} ${peer}
+ 
+     sysctl -w net.ipv6.conf.veth1.ndisc_evict_nocarrier=1 >/dev/null 2>&1
+     sysctl -w net.ipv6.conf.all.ndisc_evict_nocarrier=1 >/dev/null 2>&1
+ }
+ 
+-create_ns()
+-{
+-    local n=${1}
+-
+-    ip netns del ${n} 2>/dev/null
+-
+-    ip netns add ${n}
+-    ip netns set ${n} $((nsid++))
+-    ip -netns ${n} link set lo up
+-}
+-
+-
+ setup_v6() {
+-    create_ns me
+-    create_ns peer
++    setup_ns me peer
+ 
+-    IP="ip -netns me"
++    IP="ip -netns ${me}"
+ 
+     $IP li add veth1 type veth peer name veth2
+     $IP li set veth1 up
+     $IP -6 addr add $V6_ADDR0/64 dev veth1 nodad
+-    $IP li set veth2 netns peer up
+-    ip -netns peer -6 addr add $V6_ADDR1/64 dev veth2 nodad
++    $IP li set veth2 netns ${peer} up
++    ip -netns ${peer} -6 addr add $V6_ADDR1/64 dev veth2 nodad
+ 
+-    ip netns exec me sysctl -w $1 >/dev/null 2>&1
++    ip netns exec ${me} sysctl -w $1 >/dev/null 2>&1
+ 
+     # Establish an ND cache entry
+-    ip netns exec me ping -6 -c1 -Iveth1 $V6_ADDR1 >/dev/null 2>&1
++    ip netns exec ${me} ping -6 -c1 -Iveth1 $V6_ADDR1 >/dev/null 2>&1
+     # Should have the veth1 entry in ND table
+-    ip netns exec me ip -6 neigh get $V6_ADDR1 dev veth1 >/dev/null 2>&1
++    ip netns exec ${me} ip -6 neigh get $V6_ADDR1 dev veth1 >/dev/null 2>&1
+     if [ $? -ne 0 ]; then
+         cleanup_v6
+         echo "failed"
+@@ -66,11 +53,11 @@ setup_v6() {
+     fi
+ 
+     # Set veth2 down, which will put veth1 in NOCARRIER state
+-    ip netns exec peer ip link set veth2 down
++    ip netns exec ${peer} ip link set veth2 down
+ }
+ 
+ setup_v4() {
+-    ip netns add "${PEER_NS}"
++    setup_ns PEER_NS
+     ip link add name veth0 type veth peer name veth1
+     ip link set dev veth0 up
+     ip link set dev veth1 netns "${PEER_NS}"
+@@ -99,8 +86,7 @@ setup_v4() {
+ cleanup_v4() {
+     ip neigh flush dev veth0
+     ip link del veth0
+-    local -r ns="$(ip netns list|grep $PEER_NS)"
+-    [ -n "$ns" ] && ip netns del $ns 2>/dev/null
++    cleanup_ns $PEER_NS
+ 
+     sysctl -w net.ipv4.conf.veth0.arp_evict_nocarrier=1 >/dev/null 2>&1
+     sysctl -w net.ipv4.conf.all.arp_evict_nocarrier=1 >/dev/null 2>&1
+@@ -163,7 +149,7 @@ run_ndisc_evict_nocarrier_enabled() {
+ 
+     setup_v6 "net.ipv6.conf.veth1.ndisc_evict_nocarrier=1"
+ 
+-    ip netns exec me ip -6 neigh get $V6_ADDR1 dev veth1 >/dev/null 2>&1
++    ip netns exec ${me} ip -6 neigh get $V6_ADDR1 dev veth1 >/dev/null 2>&1
+ 
+     if [ $? -eq 0 ];then
+         echo "failed"
+@@ -180,7 +166,7 @@ run_ndisc_evict_nocarrier_disabled() {
+ 
+     setup_v6 "net.ipv6.conf.veth1.ndisc_evict_nocarrier=0"
+ 
+-    ip netns exec me ip -6 neigh get $V6_ADDR1 dev veth1 >/dev/null 2>&1
++    ip netns exec ${me} ip -6 neigh get $V6_ADDR1 dev veth1 >/dev/null 2>&1
+ 
+     if [ $? -eq 0 ];then
+         echo "ok"
+@@ -197,7 +183,7 @@ run_ndisc_evict_nocarrier_disabled_all() {
+ 
+     setup_v6 "net.ipv6.conf.all.ndisc_evict_nocarrier=0"
+ 
+-    ip netns exec me ip -6 neigh get $V6_ADDR1 dev veth1 >/dev/null 2>&1
++    ip netns exec ${me} ip -6 neigh get $V6_ADDR1 dev veth1 >/dev/null 2>&1
+ 
+     if [ $? -eq 0 ];then
+         echo "ok"
 -- 
 2.41.0
 
