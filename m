@@ -1,71 +1,61 @@
-Return-Path: <linux-kselftest+bounces-541-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-542-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 533247F7024
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 10:40:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C21827F710D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 11:15:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E824EB20F3D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 09:40:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1D485B20CA8
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 10:15:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96FED15AD5;
-	Fri, 24 Nov 2023 09:40:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F03818636;
+	Fri, 24 Nov 2023 10:15:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="iCbh6pTS"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="rCFKbF3m"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8A0D71
-	for <linux-kselftest@vger.kernel.org>; Fri, 24 Nov 2023 01:40:41 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-409299277bbso11567615e9.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Nov 2023 01:40:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1700818840; x=1701423640; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=liKWi3k1bQmGEMyLltDAEJD618fY1ygP7q9s9GKBNQY=;
-        b=iCbh6pTSrlU3axKSDVlAEbvJ8FkJrYAlkp7tLPy6XcDdc2tocoULEnP8JKrWRUWL8s
-         8Qmq1stTFpQBnTpqByFwVoZ5cFaug1ugwtX8lRe6QzH+hj6nLD1bCO/YxV+581INpfGx
-         L6k4BedylFdg+ry+nqhJtkkfyrs69+IOUeT8j5Yhq9E9WiNCq5nMZOqBi2zCfPE/bZpX
-         0WnNvPB9fuIPv6WQjrtNo/AyQPGEnwYkn9nU+GsBzWtci2Ip8S1GIy4meYFVx8L31USE
-         btemkWbMp7HfTht8JzINJgLzLNK6qmJCFRnRJDleBMvX59NtXZyL8FAzvdO0LtW3ji2n
-         1R6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700818840; x=1701423640;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=liKWi3k1bQmGEMyLltDAEJD618fY1ygP7q9s9GKBNQY=;
-        b=wRUvLROF4w0rjbYTTKsCG1Bh/njbvrHz0q6My0fCWts27cEH1ElLEb+jHM0hud9EBY
-         8oNXqMGwK0AQOOltGeI05xvsN2Up+ndD4rNr9HzqOY2n3PJjr0GeUX4EJH9fIepvwbD1
-         JHylnOjuZkgdZvbKQxW4UG+HppPeTSBRH3IAut2b1at5ZODlupr0Vo/++cXq7yXO3nJk
-         EiRe/nQPO4MrNRlr/LBuBvaxaY97TH1ID6h0UKwDlhzDwSoV5bL5yfqhHqo3ePxAYTDZ
-         RHZt9qnOEaF54CEX0vuZpT9uFCm7wVH7B/An3bosKESzFdTj6ceOC1ZLu23Sy9jK3ohY
-         cI1A==
-X-Gm-Message-State: AOJu0Yx02BKwzMMQwcpmHr1wrnnD54PACIaIZlS2o09KWsr2Fu2g24tV
-	2ntOuSdoiwa3tSiCuhRle8D4LQ==
-X-Google-Smtp-Source: AGHT+IF9VLUBW6WyHhdlX2rn3vRUYeHRnBcJF0nS6mbPXvTDrFDn41SBn1hGDsyIKy9IjON6i7vOzg==
-X-Received: by 2002:a05:600c:a0b:b0:408:3cdf:32c with SMTP id z11-20020a05600c0a0b00b004083cdf032cmr2103866wmp.41.1700818840312;
-        Fri, 24 Nov 2023 01:40:40 -0800 (PST)
-Received: from localhost (cst-prg-91-180.cust.vodafone.cz. [46.135.91.180])
-        by smtp.gmail.com with ESMTPSA id q19-20020a05600c46d300b0040b35195e54sm4550012wmo.5.2023.11.24.01.40.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Nov 2023 01:40:39 -0800 (PST)
-Date: Fri, 24 Nov 2023 10:40:34 +0100
-From: Andrew Jones <ajones@ventanamicro.com>
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EE811719;
+	Fri, 24 Nov 2023 02:15:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=X/ymfIJYGS3rgfsyyKZPvatWK1hMRdU56iYMTo6mr84=; b=rCFKbF3mDACBFhTXzRNdFrFO4O
+	eoXOKmJ9nZiGJbfFMIBv6nwz3CsjBdIoMhWkUoG1xIESyQX9y7utknNb2crx4yYaVl0TokaNQnX59
+	UQEefO9tha/lsxyx4F65ZPyZ5QCqVo0rlZL/kdkYuCLGIjIenfBE0G4ANfmh4TiCyiHjQw5pCSoOw
+	9nE6YLG7xrJLF6VvKnJbRf5H0lcpRBYkeFjXyVCwHcJ8GALVBfL/W2eebEDWHFXmQx9wxeHAVLh5J
+	AP7Md+iD5Lbnbp5HhKqJfhCerVvC52VYb0wyb/cpFm3UZZNXbX+76free6tqI6J6N/OKWjkdwAGLS
+	Lh31sbQw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+	id 1r6TDU-00DqKC-0M;
+	Fri, 24 Nov 2023 10:15:20 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 83119300338; Fri, 24 Nov 2023 11:15:19 +0100 (CET)
+Date: Fri, 24 Nov 2023 11:15:19 +0100
+From: Peter Zijlstra <peterz@infradead.org>
 To: Christoph Muellner <christoph.muellner@vrull.eu>
-Cc: linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Albert Ou <aou@eecs.berkeley.edu>, Shuah Khan <shuah@kernel.org>, 
-	Philipp Tomsich <philipp.tomsich@vrull.eu>, Evan Green <evan@rivosinc.com>, 
-	Xiao Wang <xiao.w.wang@intel.com>, Alexandre Ghiti <alexghiti@rivosinc.com>, 
-	Andy Chiu <andy.chiu@sifive.com>, =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>, 
-	Charlie Jenkins <charlie@rivosinc.com>
-Subject: Re: [PATCH 0/5] tools: selftests: riscv: Fix compiler warnings
-Message-ID: <20231124-3934c1b3c4b6dc3f076b0f9a@orel>
-References: <20231123185821.2272504-1-christoph.muellner@vrull.eu>
+Cc: linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Anup Patel <apatel@ventanamicro.com>,
+	Philipp Tomsich <philipp.tomsich@vrull.eu>,
+	Andrew Jones <ajones@ventanamicro.com>, Guo Ren <guoren@kernel.org>,
+	Daniel Henrique Barboza <dbarboza@ventanamicro.com>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Andrea Parri <parri.andrea@gmail.com>,
+	Will Deacon <will@kernel.org>, Daniel Lustig <dlustig@nvidia.com>
+Subject: Re: [RFC PATCH 0/5] RISC-V: Add dynamic TSO support
+Message-ID: <20231124101519.GP3818@noisy.programming.kicks-ass.net>
+References: <20231124072142.2786653-1-christoph.muellner@vrull.eu>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -75,28 +65,37 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20231123185821.2272504-1-christoph.muellner@vrull.eu>
+In-Reply-To: <20231124072142.2786653-1-christoph.muellner@vrull.eu>
 
-On Thu, Nov 23, 2023 at 07:58:16PM +0100, Christoph Muellner wrote:
+On Fri, Nov 24, 2023 at 08:21:37AM +0100, Christoph Muellner wrote:
 > From: Christoph Müllner <christoph.muellner@vrull.eu>
 > 
-> When building the RISC-V selftests with a riscv32 compiler I ran into
-> a couple of compiler warnings. While riscv32 support for these tests is
-> questionable, the fixes are so trivial that it is probably best to simply
-> apply them.
+> The upcoming RISC-V Ssdtso specification introduces a bit in the senvcfg
+> CSR to switch the memory consistency model at run-time from RVWMO to TSO
+> (and back). The active consistency model can therefore be switched on a
+> per-hart base and managed by the kernel on a per-process/thread base.
+
+You guys, computers are hartless, nobody told ya?
+
+> This patch implements basic Ssdtso support and adds a prctl API on top
+> so that user-space processes can switch to a stronger memory consistency
+> model (than the kernel was written for) at run-time.
 > 
-> Note that the missing-include patch and some format string warnings
-> are also relevant for riscv64.
+> I am not sure if other architectures support switching the memory
+> consistency model at run-time, but designing the prctl API in an
+> arch-independent way allows reusing it in the future.
 
-I also posted [1] a couple days ago for the format warnings, but, as this
-series also includes rv32 fixes, then we can drop [1] in favor of this.
+IIRC some Sparc chips could do this, but I don't think anybody ever
+exposed this to userspace (or used it much).
 
-[1] https://lore.kernel.org/all/20231122171821.130854-2-ajones@ventanamicro.com/
+IA64 had planned to do this, except they messed it up and did it the
+wrong way around (strong first and then relax it later), which lead to
+the discovery that all existing software broke (d'uh).
 
-For the series,
+I think ARM64 approached this problem by adding the
+load-acquire/store-release instructions and for TSO based code,
+translate into those (eg. x86 -> arm64 transpilers).
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-
-Thanks,
-drew
+IIRC Risc-V actually has such instructions as well, so *why* are you
+doing this?!?!
 
