@@ -1,78 +1,132 @@
-Return-Path: <linux-kselftest+bounces-550-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-551-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 519D37F7790
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 16:21:58 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 846527F7792
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 16:22:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C7FC0B2178A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 15:21:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9CECD1C20D54
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 15:22:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78B782E851;
-	Fri, 24 Nov 2023 15:21:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 480332E82C;
+	Fri, 24 Nov 2023 15:22:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W/9coW4P"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tP47FDox"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D3602E820
-	for <linux-kselftest@vger.kernel.org>; Fri, 24 Nov 2023 15:21:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1FD1C433C9;
-	Fri, 24 Nov 2023 15:21:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B9AD1A715
+	for <linux-kselftest@vger.kernel.org>; Fri, 24 Nov 2023 15:22:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20744C433C8;
+	Fri, 24 Nov 2023 15:22:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700839311;
-	bh=LkiNqv5TLRrCYY7WjHKTVSxGQ3WbJ9zRq3lhvDB/w5I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=W/9coW4PM7Gn/qWd0DzK4w2XzWyxbcALDAI5l6Vb2vdjqsWYlAtul/n2JQvGF7Dw+
-	 TnnrLfjHc+CfBl588vn97XZvfe81pG0VEKW3urDahIVGfzyJl+NNMPQvcDpwq536bV
-	 G4wvoFiR0jBlzzHOjQSV0rcj2GClWAnaxHPRP4sVX0NdAzd7RlOpc1N5hsCkyNFE1h
-	 Si4S82K8eiKJLRWLp3naWVPkbUF7M/NivzWBPjOygxZm5Om0Iu88zVZLY845pC+X5S
-	 aCd0rn+ZN5BKKygLea38GB1+cbjvhtC0k4mPdyLOv/fXtDTULPpi+Ccn/0/xg+G0Kq
-	 OYcW5MMQ48eLA==
-Date: Fri, 24 Nov 2023 16:21:46 +0100
-From: Christian Brauner <brauner@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] kselftest/clone3: Make test names for set_tid test stable
-Message-ID: <20231124-eintagsfliege-brennen-385b1d96defe@brauner>
-References: <20231115-kselftest-clone3-set-tid-v1-1-c1932591c480@kernel.org>
+	s=k20201202; t=1700839350;
+	bh=eOmzk2kjD2qGLqrF6Q6BvgazwN+efxPGwLtAu031LrQ=;
+	h=From:Date:Subject:To:Cc:From;
+	b=tP47FDox6zvAd0CAisIZRgXBpQCvZESDI7nmtsqnX5rpS9X14SPmYq3DKU9hGYYpy
+	 WBKHLU1KG6r+IYhrBRvY2i7ay6+aTe3qh/l6d0vQHg2GkRJniyEDu23gp/sUsQtFnZ
+	 niUdeGlNbe8iOsrI0Q69m3LRBHTzoJnXx7yiFekJgMHx/WYSw4sx4E1R6fi7Yfsela
+	 QtaRYn9x9yWujw8qHgwyv0Kmzy6MAUHxAMvI0W5aY8y7uUezDwfXY0rxOOuffRJ9Ez
+	 RqmQzrwBdGEL5FvBUrXxTMxI/+m56CT06eclwqPywdjOU5exVi3wqechoNNDsPp6bT
+	 ntcEpiE3lLj+w==
+From: Mark Brown <broonie@kernel.org>
+Date: Fri, 24 Nov 2023 15:22:21 +0000
+Subject: [PATCH] kselftest/arm64: Improve output for skipped TPIDR2 ABI
+ test
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20231115-kselftest-clone3-set-tid-v1-1-c1932591c480@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20231124-kselftest-arm64-tpidr2-skip-v1-1-e05d0ccef101@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAKy/YGUC/x3MQQqEMAxA0atI1gZsGxTmKoML0VSDjlOSIoJ4d
+ 4vwN2/zLzBWYYNPdYHyISb/vcDVFYzLsM+MMhWDb3xwzhOuxlvMbBkH/bWEOcmkHm2VhBS6liL
+ FEkE5JOUo53v/9vf9AMcLRtZtAAAA
+To: Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.13-dev-0438c
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1888; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=eOmzk2kjD2qGLqrF6Q6BvgazwN+efxPGwLtAu031LrQ=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBlYL+yR76ZEEXIOFVMLt4fDAAXcrbLJgL1eipot
+ DPjYuPlK9eJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZWC/sgAKCRAk1otyXVSH
+ 0OiIB/480+RDhxLSMZRDkXaICXSlMATxrxDQzBvISYnkBsX9mAimgnYPxYSvswfOuVOSNptdQUL
+ YSu/myNZqWhILtJrob4ms7vuGMDaT4+6b4sbeyKNpxwSRPM1q/DR083SZrJDFtn2dO/UGpK/HRo
+ siI831FLOYphc7jzTgNqh9+NDtkor31dauF4UydCccFKiNVv5ckAzjCh3kO/XUDOlglNbRv2ZQI
+ Qr/C1EHYMfPhCBLsWAlQJ+ZzydqhYs5PZIaFehUHlHuhuayaXJcOylB5DzCiqaoUhkBt88uO8pN
+ riuyMfH7wY2q8X0J+L2s6pndHqVNNTPI5GHmtFsjZX8uo2aA
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-On Wed, Nov 15, 2023 at 02:43:02PM +0000, Mark Brown wrote:
-> The test results reported for the clone3_set_tid tests interact poorly with
-> automation for running kselftest since the reported test names include TIDs
-> dynamically allocated at runtime. A lot of automation for running kselftest
-> will compare runs by looking at the test name to identify if the same test
-> is being run so changing names make it look like the testsuite has been
-> updated to include new tests. This makes the results display less clearly
-> and breaks cases like bisection.
-> 
-> Address this by providing a brief description of the tests and logging that
-> along with the stable parameters for the test currently logged. The TIDs
-> are already logged separately in existing logging except for the final test
-> which has a new log message added. We also tweak the formatting of the
-> logging of expected/actual values for clarity.
-> 
-> There are still issues with the logging of skipped tests (many are simply
-> not logged at all when skipped and all are logged with different names) but
-> these are less disruptive since the skips are all based on not being run as
-> root, a condition likely to be stable for a given test system.
-> 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
+When TPIDR2 is not supported the tpidr2 ABI test prints the same message
+for each skipped test:
 
-May I already acked this. Not sure,
-Acked-by: Christian Brauner <brauner@kernel.org>
+  ok 1 skipped, TPIDR2 not supported
+
+which isn't ideal for test automation software since it tracks kselftest
+results based on the string used to describe the test. This is also not
+standard KTAP output, the expected format is:
+
+  ok 1 # SKIP default_value
+
+Updated the program to generate this, using the same set of test names that
+we would run if the test actually executed.
+
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ tools/testing/selftests/arm64/abi/tpidr2.c | 18 +++++++++++-------
+ 1 file changed, 11 insertions(+), 7 deletions(-)
+
+diff --git a/tools/testing/selftests/arm64/abi/tpidr2.c b/tools/testing/selftests/arm64/abi/tpidr2.c
+index 351a098b503a..02ee3a91b780 100644
+--- a/tools/testing/selftests/arm64/abi/tpidr2.c
++++ b/tools/testing/selftests/arm64/abi/tpidr2.c
+@@ -254,6 +254,12 @@ static int write_clone_read(void)
+ 	putnum(++tests_run);		     \
+ 	putstr(" " #name "\n");
+ 
++#define skip_test(name)			     \
++	tests_skipped++;		     \
++	putstr("ok ");			     \
++	putnum(++tests_run);		     \
++	putstr(" # SKIP " #name "\n");
++
+ int main(int argc, char **argv)
+ {
+ 	int ret, i;
+@@ -283,13 +289,11 @@ int main(int argc, char **argv)
+ 	} else {
+ 		putstr("# SME support not present\n");
+ 
+-		for (i = 0; i < EXPECTED_TESTS; i++) {
+-			putstr("ok ");
+-			putnum(i);
+-			putstr(" skipped, TPIDR2 not supported\n");
+-		}
+-
+-		tests_skipped += EXPECTED_TESTS;
++		skip_test(default_value);
++		skip_test(write_read);
++		skip_test(write_sleep_read);
++		skip_test(write_fork_read);
++		skip_test(write_clone_read);
+ 	}
+ 
+ 	print_summary();
+
+---
+base-commit: 98b1cc82c4affc16f5598d4fa14b1858671b2263
+change-id: 20231124-kselftest-arm64-tpidr2-skip-43764f4ff4f4
+
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
+
 
