@@ -1,38 +1,38 @@
-Return-Path: <linux-kselftest+bounces-586-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-587-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0623C7F79FA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 18:03:00 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id EEBED7F7A06
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 18:04:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B62B8281AB3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 17:02:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 362CEB20FE6
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 17:04:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4214028E25;
-	Fri, 24 Nov 2023 17:02:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81C2A2FC3A;
+	Fri, 24 Nov 2023 17:04:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L3OadON0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dgk/0foz"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1368C364A4;
-	Fri, 24 Nov 2023 17:02:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6680C433C8;
-	Fri, 24 Nov 2023 17:02:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A7F32D61F;
+	Fri, 24 Nov 2023 17:04:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F846C433C8;
+	Fri, 24 Nov 2023 17:04:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700845373;
-	bh=spAQEHLnkWTw0So+tleUMpl17On0BgAWnZncp1uMdDg=;
+	s=k20201202; t=1700845470;
+	bh=GXt96s5il2u/P9SLTNelXJ6lsqLGbKZhXhMZs+TD4NI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=L3OadON014nWHsSs5rlBRKuXRvvJGgy+8YNd/bysrt6RcyglTmsjpcSpYDHApHyyN
-	 gHbfKDRKprR98OGshDHJLUAh/Xe0U3Ky2XKLAnBtAtj8arR9rm+x51hTept0N7XuNm
-	 hTW/7442ToWXrTiLKfurDJCvfm4x1/REhoCI2Nc2Gi0wp2zNVIYEQ6wD7Qs/WAtb32
-	 dZrKdzwyXLX1Vb5ZDlClv0LypdPMp6xzwu1fB+m2vyM1pU6167qMe5MOCTLa+kC4TY
-	 yCL2BVOnVw3bXsaviPOKI6XBn1ajDe0yhCYa69TsbAwFf1XL83PUc0WPKsxSyfN73e
-	 zfqQAOnpOTWOQ==
-Date: Fri, 24 Nov 2023 17:02:50 +0000
+	b=Dgk/0fozNtbyIfkGYRDbJFt01zKJRS5kw/wCE5hBBOLoOMjIE89zpG2lJvHMQCu35
+	 kxYM1BjBgJjtDy9mTBcmY6V4i93k58fDa4tLyZrE4AhwtNZmKtQP/JuEW8NrZwFpNF
+	 f8e2bXyD4dyCaxlc/TTgNWBTdzeyjV71TRMgGDPY6V6ZfmJG2gYyW8UBCnVtsYt2/B
+	 b030M13IOHavs13aFF9L/zTd6hxJeAYCsMwmPjLJCuEynhbEKBl+YiQy8+R7/Qio97
+	 y04Z3WJZKAZGDzqDB8njOaAzq1apUz1S8FR6LzABvDSIVYn4H2HqxOuPCczAAOqPNu
+	 pmeJss9a6Gamg==
+Date: Fri, 24 Nov 2023 17:04:27 +0000
 From: Mark Brown <broonie@kernel.org>
 To: Joey Gouly <joey.gouly@arm.com>
 Cc: linux-arm-kernel@lists.infradead.org, akpm@linux-foundation.org,
@@ -43,10 +43,11 @@ Cc: linux-arm-kernel@lists.infradead.org, akpm@linux-foundation.org,
 	linux-kselftest@vger.kernel.org, James Morse <james.morse@arm.com>,
 	Suzuki K Poulose <suzuki.poulose@arm.com>,
 	Zenghui Yu <yuzenghui@huawei.com>
-Subject: Re: [PATCH v3 22/25] kselftest/arm64: add HWCAP test for FEAT_S1POE
-Message-ID: <ZWDXOt/aw73DWAmN@finisterre.sirena.org.uk>
+Subject: Re: [PATCH v3 24/25] kselftest/arm64: Add test case for POR_EL0
+ signal frame records
+Message-ID: <ZWDXm7FM2DTjPpkP@finisterre.sirena.org.uk>
 References: <20231124163510.1835740-1-joey.gouly@arm.com>
- <20231124163510.1835740-23-joey.gouly@arm.com>
+ <20231124163510.1835740-25-joey.gouly@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -54,35 +55,46 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="Cy6DkPtJZtCWNOXe"
+	protocol="application/pgp-signature"; boundary="44RVQTTbBU8xqQ2i"
 Content-Disposition: inline
-In-Reply-To: <20231124163510.1835740-23-joey.gouly@arm.com>
+In-Reply-To: <20231124163510.1835740-25-joey.gouly@arm.com>
 X-Cookie: Slow day.  Practice crawling.
 
 
---Cy6DkPtJZtCWNOXe
+--44RVQTTbBU8xqQ2i
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-On Fri, Nov 24, 2023 at 04:35:07PM +0000, Joey Gouly wrote:
-> Check that when POE is enabled, the POR_EL0 register is accessible.
+On Fri, Nov 24, 2023 at 04:35:09PM +0000, Joey Gouly wrote:
+
+> +++ b/tools/testing/selftests/arm64/signal/.gitignore
+> @@ -5,6 +5,7 @@ sme_*
+>  ssve_*
+>  sve_*
+>  tpidr2_*
+> +poe_siginfo
+>  za_*
+>  zt_*
+>  !*.[ch]
+
+Please keep this sorted, otherwise
 
 Reviewed-by: Mark Brown <broonie@kernel.org>
 
---Cy6DkPtJZtCWNOXe
+--44RVQTTbBU8xqQ2i
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVg1zkACgkQJNaLcl1U
-h9DF+Qf+McRE5ZenovytNZGzGU8V8IA6TSVcpZqxQ3RA5hJ+YJrVA3LQk7CD5tHD
-zB2hHviuiPzojikWvl+ePw3fTZKb2EvJA71mTNhXr3X8MaHj01lIP4JIbcvKNBy2
-gkAzwct73nwr//NpZxtBHgLh0gdNKWj6vKnVzB9gNZVfdilsvUef0YQSC/AfHW0m
-YUwFr+14yRKtxhffk2Z90cw1JquBirIA+CJX9Dj76oNfhHgKThgwGCfNbgTkz+Yv
-T1KD/Db4kD6cWmAxmRGFhERi88XQrGMhpwSu793LBJSBO4eL1akCb6nKG8wBkqRo
-XdB6Kk2IQ2ZRPNSc/vPOdmb6ybl2dQ==
-=+Tza
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVg15sACgkQJNaLcl1U
+h9Ad2wf/arLABO85+JXaO0h5UHm1Jiq6wXE11hvBlZ1522Yb3TX6Uv874rkDuVO1
+EGr7WGWupfHIOShcb1s2tisuP707lwhY1bfPWEENdo4EipGhzgILmjQfRdKVShA5
+NM9LSnJnqdzqyKlHWNZUty7QiOrL+QJrFHeFFpAnUo1PC6vscqquaOnXoRwXNeK2
+Bfa8RaSAn0dYfvY6VoBTnO1aAh1R8nUeRbia3Ot6moRx4sJBxKfqfzKuwe1ScAUj
+IhcPqHMbjY/8dTiOok+7HCbgEnrXEA3pwP9OLppmSKYvlwOYNh85gNCVIPt8DSaG
+08iEgSgGlrSuviX/iOsz45OUelKd7w==
+=on9u
 -----END PGP SIGNATURE-----
 
---Cy6DkPtJZtCWNOXe--
+--44RVQTTbBU8xqQ2i--
 
