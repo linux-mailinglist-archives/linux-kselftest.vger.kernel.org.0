@@ -1,413 +1,116 @@
-Return-Path: <linux-kselftest+bounces-597-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-598-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F44E7F7CA1
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 19:17:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id F03707F8550
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 21:59:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 538191C211B7
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 18:17:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2761A1C25ED1
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 20:59:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 237332511F;
-	Fri, 24 Nov 2023 18:17:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4C7F3A8CB;
+	Fri, 24 Nov 2023 20:59:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IFhQLh1r"
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="TJo54wDK";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Bi9AtZKV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EBDB1BC2
-	for <linux-kselftest@vger.kernel.org>; Fri, 24 Nov 2023 10:16:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1700849760;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Zm7npic6hpdnvYBc9CxZ2JM6kBkxKJfDj7QUHeYYNcE=;
-	b=IFhQLh1rOcyf0xGVI+QqFA72BSWUM3zduwjZpK8uZh0NvimRSnnjJ7PeKByQIi+OeP8Kti
-	CgEFRZ8B2drBEDHZNrvu2QVvrqA1oJVZzIReFErm+AgWRxmgH3QkL1agUAJ8wDbDty0FRc
-	4LOIXazd9ggf5RqPHgOvqHg0/pN5zSw=
-Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com
- [209.85.167.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-2-0b9ZtYnpOJa0S7a1LFYSCg-1; Fri, 24 Nov 2023 13:14:51 -0500
-X-MC-Unique: 0b9ZtYnpOJa0S7a1LFYSCg-1
-Received: by mail-oi1-f199.google.com with SMTP id 5614622812f47-3b8517c2136so1122419b6e.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 24 Nov 2023 10:14:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700849688; x=1701454488;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Zm7npic6hpdnvYBc9CxZ2JM6kBkxKJfDj7QUHeYYNcE=;
-        b=XfDdBasi0ye/QZbGba0CuJKpG+LnlTsA9E7LnZyqgx5YjeoAo9/Y7RtTH+FGf6xPJ6
-         16ODuXticBoe0cl91diPwzlekoDqpNn6xgrnax+/bJuvufd9VrHzUvVSbaVa4CeVgaMr
-         Dap9TE0FyKFFmdmtpUlUecCE5PxLvtYCPdSgL97Pxcb+Ika3x82Avez+1nVKVQm1TLvG
-         XT5bmzB7+wtl5+WBe6c1+skuSqNE7Kvfp/CXfWPjBm1D34yXLFVuJxQfN/w1eSKoCQvk
-         4h3j/m0rfYzga6BjMErPrapvmZBsClmYQkNkotvFioVewN3Qu4TSG6RutDx484XYE4ws
-         x5Dg==
-X-Gm-Message-State: AOJu0Yz0XWs4jcx59mezhBlJ8uEaWyqCPfHUq6Z8RTVHGjITOVIaTeLA
-	15ZK1SaxlSwD69R5W/e16XUuaMi/dxzhRvHs2yoya4fVWJP5uOHl2xQr+yuwjPYKzPkuo7Ng2bF
-	tQLlhL8xcURPIv7Gk9RdiAWH0KH82USlu3Ty4
-X-Received: by 2002:a05:6808:1798:b0:3b8:44dc:7ce0 with SMTP id bg24-20020a056808179800b003b844dc7ce0mr4687200oib.2.1700849688355;
-        Fri, 24 Nov 2023 10:14:48 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEtGmM2eM47HzlOguDVKmn1lCm5hyLxe/kX5JAo4GtREYdwQJDRCUdA9WBI3RJNGHQMpo+kSQ==
-X-Received: by 2002:a05:6808:1798:b0:3b8:44dc:7ce0 with SMTP id bg24-20020a056808179800b003b844dc7ce0mr4687174oib.2.1700849688025;
-        Fri, 24 Nov 2023 10:14:48 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:59e:9d80:527b:9dff:feef:3874? ([2a01:e0a:59e:9d80:527b:9dff:feef:3874])
-        by smtp.gmail.com with ESMTPSA id cz9-20020a056214088900b0067a225ab63esm141629qvb.84.2023.11.24.10.14.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Nov 2023 10:14:46 -0800 (PST)
-Message-ID: <63c97950-2c12-4ee1-b8d1-0794e7603b25@redhat.com>
-Date: Fri, 24 Nov 2023 19:14:43 +0100
+Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CF0619A3;
+	Fri, 24 Nov 2023 12:59:31 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailnew.nyi.internal (Postfix) with ESMTP id 7313958049F;
+	Fri, 24 Nov 2023 15:59:27 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute6.internal (MEProxy); Fri, 24 Nov 2023 15:59:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to; s=fm3; t=
+	1700859567; x=1700866767; bh=LUc6+oAUXdxf0gLuIlkH0gh0571S4Y/6Cb0
+	mYTuCEC4=; b=TJo54wDKCgMuWkoE9drzZDiVLRQhY/GJRZQbHp7h+tibivPtYdz
+	aoy+dD/iB6VH/tHq1lkDZSyBeUiPUKnU+CPUBLH9oDL4UiuE6hzBkHgZdpTaAyMD
+	vGDocwfPKyrAxwD4arpe2BagHsS4TfP6SchUmq7QzlC0tl9WV6mhq4DbdDSaJCkG
+	DiZRzg+Grk2oWd3veN4MrIlJxOdoTv80OKIq9dyWH6G+POItZfygpmv6Hde5rox+
+	VRCqRKdHztbDx/R3ACq9XqwpDs3mJqjXeVXTQV0qz2ku+2/FxPr2IdVbKLyeWSXT
+	z2sPjzPCWFWfQyjSK3eu992T16Pw5NYvfrg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
+	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1700859567; x=1700866767; bh=LUc6+oAUXdxf0gLuIlkH0gh0571S4Y/6Cb0
+	mYTuCEC4=; b=Bi9AtZKVEzB6ILE28gGs0V2BjploLrLFm4vL9yieiaAbuReoHKj
+	S60zq3BxmqGOrsPP16zHlbzesBhzij7oshzaUNJtfr8XyXKD7Y/f2gmFQnb1AXiu
+	9yrNXo063xCLmAJehlT5JPFAc6fWKVUQ3DzZcnEinVvimSEOWM5/r08H43JKgk7b
+	tkKSbPHpzmOW7YzvYqwQeYXXntHkpV7cMBehqn2I9KbyZK+enTbdOy4mnTlSfkiC
+	KE2fcCPj8cU+u4o6qVzO2LKoIYF4nPxii4WlldEPSRHxAAy7Ly8EArEnUf0LO8jr
+	VGHpemmpxDrV/SevjcIIHWH6+TnbVtMJmBg==
+X-ME-Sender: <xms:rg5hZWcjngq0PBJ4Yt3DFGUS9mKKrFvQ303LZs4GmU1rdAtZJN3lTg>
+    <xme:rg5hZQO5DdaBzcgYbUGXxPSRLUxCdh55A2W2lv9ITgz-joW-u7JXZaw49hWbn3muY
+    jbX95IOBlzKyjt3EA>
+X-ME-Received: <xmr:rg5hZXjQNJgd0YWEGzNMF92LA72-QPYKp2622RdnvCTjTsQtmF25A1O7OJl6Mv_cHrWUIM8XkOmGmx3seIC6N2roMDcwXiZxmuVx1-51lNdk_015rndatAEDw1Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudehhedgudeggecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enfghrlhcuvffnffculdejtddmnecujfgurhepfffhvfevuffkfhggtggugfgjsehtkefs
+    tddttdejnecuhfhrohhmpeffrghnihgvlhcuighuuceougiguhesugiguhhuuhdrgiihii
+    eqnecuggftrfgrthhtvghrnheptdfgueeuueekieekgfeiueekffelteekkeekgeegffev
+    tddvjeeuheeuueelfeetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
+    hilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
+X-ME-Proxy: <xmx:rg5hZT__S8VmppWZ-1-GJdLAUH0xp8oh4ZwiDoj9JUI2-36UilZY2w>
+    <xmx:rg5hZSsMBnUp1nRxqwPpVc2fNRielAXeqic28Nl-pai_BQD8lJuvWg>
+    <xmx:rg5hZaFsDEW49cZxHhwMqUFl5AZKUrSxHjmv5j-MR6jvRFD3dAdmSA>
+    <xmx:rw5hZSf9w0z44a0z6VFmEW3z8LJC7RQyr-7597RGS6OlXcFCDjuG1A>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 24 Nov 2023 15:59:25 -0500 (EST)
+Date: Fri, 24 Nov 2023 13:59:24 -0700
+From: Daniel Xu <dxu@dxuuu.xyz>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: John Fastabend <john.fastabend@gmail.com>, 
+	"David S. Miller" <davem@davemloft.net>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Jakub Kicinski <kuba@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
+	antony.antony@secunet.com, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, devel@linux-ipsec.org
+Subject: Re: [PATCH ipsec-next v1 7/7] bpf: xfrm: Add selftest for
+ bpf_xdp_get_xfrm_state()
+Message-ID: <rsj2usphrnghq3gnwkbho7rek7ffbgyur4kjuakpfxwu7zqpzw@cj3rmd4gupxq>
+References: <cover.1700676682.git.dxu@dxuuu.xyz>
+ <84111ba0ea652a7013df520c151d40d400401e9c.1700676682.git.dxu@dxuuu.xyz>
+ <CAADnVQKg7-T_g7CFRs62ZDFyR9z=FTxfyXyTe=3_ojGpnvxJ4w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/3] KVM: selftests: aarch64: Make the
- [create|destroy]_vpmu_vm() can be reused
-Content-Language: en-US
-To: Shaoqin Huang <shahuang@redhat.com>, Oliver Upton
- <oliver.upton@linux.dev>, Marc Zyngier <maz@kernel.org>,
- kvmarm@lists.linux.dev
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
- James Morse <james.morse@arm.com>, Suzuki K Poulose
- <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>,
- linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20231123063750.2176250-1-shahuang@redhat.com>
- <20231123063750.2176250-2-shahuang@redhat.com>
-From: Eric Auger <eauger@redhat.com>
-In-Reply-To: <20231123063750.2176250-2-shahuang@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQKg7-T_g7CFRs62ZDFyR9z=FTxfyXyTe=3_ojGpnvxJ4w@mail.gmail.com>
 
-Hi Shaoqin,
+Hi Alexei,
 
-On 11/23/23 07:37, Shaoqin Huang wrote:
-> Move the [create|destroy]_vpmu_vm() into the lib/, which makes those
-some wording suggestions below:
-
-Move the implementation of .. into lib/aarch64/pmu.c and export their
-declaration in a header so that they can be reused by other tests. Also
-the title may be renamed: Make [create|destroy]_vpmu_vm() public
-> function can be used by other tests. Install the handler is specific to
-the sync exception handler install is test specific so we move it out of
-the helper function.
-> the vpmu_counter_access test, so create a wrapper function for it, and
-> only move the common part.
+On Wed, Nov 22, 2023 at 03:28:16PM -0800, Alexei Starovoitov wrote:
+> On Wed, Nov 22, 2023 at 10:21 AM Daniel Xu <dxu@dxuuu.xyz> wrote:
+> >
+> > +
+> > +       bpf_printk("replay-window %d\n", x->replay_esn->replay_window);
 > 
-> No functional change.
-intended ;-)
-> 
-> Signed-off-by: Shaoqin Huang <shahuang@redhat.com>
-> ---
->  tools/testing/selftests/kvm/Makefile          |   1 +
->  .../kvm/aarch64/vpmu_counter_access.c         | 100 +++++-------------
->  .../selftests/kvm/include/aarch64/vpmu.h      |  16 +++
->  .../testing/selftests/kvm/lib/aarch64/vpmu.c  |  64 +++++++++++
->  4 files changed, 105 insertions(+), 76 deletions(-)
->  create mode 100644 tools/testing/selftests/kvm/include/aarch64/vpmu.h
->  create mode 100644 tools/testing/selftests/kvm/lib/aarch64/vpmu.c
-> 
-> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-> index a5963ab9215b..b60852c222ac 100644
-> --- a/tools/testing/selftests/kvm/Makefile
-> +++ b/tools/testing/selftests/kvm/Makefile
-> @@ -57,6 +57,7 @@ LIBKVM_aarch64 += lib/aarch64/processor.c
->  LIBKVM_aarch64 += lib/aarch64/spinlock.c
->  LIBKVM_aarch64 += lib/aarch64/ucall.c
->  LIBKVM_aarch64 += lib/aarch64/vgic.c
-> +LIBKVM_aarch64 += lib/aarch64/vpmu.c
->  
->  LIBKVM_s390x += lib/s390x/diag318_test_handler.c
->  LIBKVM_s390x += lib/s390x/processor.c
-> diff --git a/tools/testing/selftests/kvm/aarch64/vpmu_counter_access.c b/tools/testing/selftests/kvm/aarch64/vpmu_counter_access.c
-> index 5ea78986e665..17305408a334 100644
-> --- a/tools/testing/selftests/kvm/aarch64/vpmu_counter_access.c
-> +++ b/tools/testing/selftests/kvm/aarch64/vpmu_counter_access.c
-> @@ -16,6 +16,7 @@
->  #include <processor.h>
->  #include <test_util.h>
->  #include <vgic.h>
-> +#include <vpmu.h>
->  #include <perf/arm_pmuv3.h>
->  #include <linux/bitfield.h>
->  
-> @@ -25,13 +26,7 @@
->  /* The cycle counter bit position that's common among the PMU registers */
->  #define ARMV8_PMU_CYCLE_IDX		31
->  
-> -struct vpmu_vm {
-> -	struct kvm_vm *vm;
-> -	struct kvm_vcpu *vcpu;
-> -	int gic_fd;
-> -};
-> -
-> -static struct vpmu_vm vpmu_vm;
-> +static struct vpmu_vm *vpmu_vm;
->  
->  struct pmreg_sets {
->  	uint64_t set_reg_id;
-> @@ -421,64 +416,6 @@ static void guest_code(uint64_t expected_pmcr_n)
->  	GUEST_DONE();
->  }
->  
-> -#define GICD_BASE_GPA	0x8000000ULL
-> -#define GICR_BASE_GPA	0x80A0000ULL
-> -
-> -/* Create a VM that has one vCPU with PMUv3 configured. */
-> -static void create_vpmu_vm(void *guest_code)
-> -{
-> -	struct kvm_vcpu_init init;
-> -	uint8_t pmuver, ec;
-> -	uint64_t dfr0, irq = 23;
-> -	struct kvm_device_attr irq_attr = {
-> -		.group = KVM_ARM_VCPU_PMU_V3_CTRL,
-> -		.attr = KVM_ARM_VCPU_PMU_V3_IRQ,
-> -		.addr = (uint64_t)&irq,
-> -	};
-> -	struct kvm_device_attr init_attr = {
-> -		.group = KVM_ARM_VCPU_PMU_V3_CTRL,
-> -		.attr = KVM_ARM_VCPU_PMU_V3_INIT,
-> -	};
-> -
-> -	/* The test creates the vpmu_vm multiple times. Ensure a clean state */
-> -	memset(&vpmu_vm, 0, sizeof(vpmu_vm));
-> -
-> -	vpmu_vm.vm = vm_create(1);
-> -	vm_init_descriptor_tables(vpmu_vm.vm);
-> -	for (ec = 0; ec < ESR_EC_NUM; ec++) {
-> -		vm_install_sync_handler(vpmu_vm.vm, VECTOR_SYNC_CURRENT, ec,
-> -					guest_sync_handler);
-> -	}
-> -
-> -	/* Create vCPU with PMUv3 */
-> -	vm_ioctl(vpmu_vm.vm, KVM_ARM_PREFERRED_TARGET, &init);
-> -	init.features[0] |= (1 << KVM_ARM_VCPU_PMU_V3);
-> -	vpmu_vm.vcpu = aarch64_vcpu_add(vpmu_vm.vm, 0, &init, guest_code);
-> -	vcpu_init_descriptor_tables(vpmu_vm.vcpu);
-> -	vpmu_vm.gic_fd = vgic_v3_setup(vpmu_vm.vm, 1, 64,
-> -					GICD_BASE_GPA, GICR_BASE_GPA);
-> -	__TEST_REQUIRE(vpmu_vm.gic_fd >= 0,
-> -		       "Failed to create vgic-v3, skipping");
-> -
-> -	/* Make sure that PMUv3 support is indicated in the ID register */
-> -	vcpu_get_reg(vpmu_vm.vcpu,
-> -		     KVM_ARM64_SYS_REG(SYS_ID_AA64DFR0_EL1), &dfr0);
-> -	pmuver = FIELD_GET(ARM64_FEATURE_MASK(ID_AA64DFR0_EL1_PMUVer), dfr0);
-> -	TEST_ASSERT(pmuver != ID_AA64DFR0_EL1_PMUVer_IMP_DEF &&
-> -		    pmuver >= ID_AA64DFR0_EL1_PMUVer_IMP,
-> -		    "Unexpected PMUVER (0x%x) on the vCPU with PMUv3", pmuver);
-> -
-> -	/* Initialize vPMU */
-> -	vcpu_ioctl(vpmu_vm.vcpu, KVM_SET_DEVICE_ATTR, &irq_attr);
-> -	vcpu_ioctl(vpmu_vm.vcpu, KVM_SET_DEVICE_ATTR, &init_attr);
-> -}
-> -
-> -static void destroy_vpmu_vm(void)
-> -{
-> -	close(vpmu_vm.gic_fd);
-> -	kvm_vm_free(vpmu_vm.vm);
-> -}
-> -
->  static void run_vcpu(struct kvm_vcpu *vcpu, uint64_t pmcr_n)
->  {
->  	struct ucall uc;
-> @@ -497,13 +434,24 @@ static void run_vcpu(struct kvm_vcpu *vcpu, uint64_t pmcr_n)
->  	}
->  }
->  
-> +static void create_vpmu_vm_with_handler(void *guest_code)
-> +{
-> +	uint8_t ec;
-> +	vpmu_vm = create_vpmu_vm(guest_code);
-> +
-> +	for (ec = 0; ec < ESR_EC_NUM; ec++) {
-> +		vm_install_sync_handler(vpmu_vm->vm, VECTOR_SYNC_CURRENT, ec,
-> +					guest_sync_handler);
-> +	}
-> +}
-> +
->  static void test_create_vpmu_vm_with_pmcr_n(uint64_t pmcr_n, bool expect_fail)
->  {
->  	struct kvm_vcpu *vcpu;
->  	uint64_t pmcr, pmcr_orig;
->  
-> -	create_vpmu_vm(guest_code);
-> -	vcpu = vpmu_vm.vcpu;
-> +	create_vpmu_vm_with_handler(guest_code);
-> +	vcpu = vpmu_vm->vcpu;
->  
->  	vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_PMCR_EL0), &pmcr_orig);
->  	pmcr = pmcr_orig;
-> @@ -539,7 +487,7 @@ static void run_access_test(uint64_t pmcr_n)
->  	pr_debug("Test with pmcr_n %lu\n", pmcr_n);
->  
->  	test_create_vpmu_vm_with_pmcr_n(pmcr_n, false);
-> -	vcpu = vpmu_vm.vcpu;
-> +	vcpu = vpmu_vm->vcpu;
->  
->  	/* Save the initial sp to restore them later to run the guest again */
->  	vcpu_get_reg(vcpu, ARM64_CORE_REG(sp_el1), &sp);
-> @@ -550,7 +498,7 @@ static void run_access_test(uint64_t pmcr_n)
->  	 * Reset and re-initialize the vCPU, and run the guest code again to
->  	 * check if PMCR_EL0.N is preserved.
->  	 */
-> -	vm_ioctl(vpmu_vm.vm, KVM_ARM_PREFERRED_TARGET, &init);
-> +	vm_ioctl(vpmu_vm->vm, KVM_ARM_PREFERRED_TARGET, &init);
->  	init.features[0] |= (1 << KVM_ARM_VCPU_PMU_V3);
->  	aarch64_vcpu_setup(vcpu, &init);
->  	vcpu_init_descriptor_tables(vcpu);
-> @@ -559,7 +507,7 @@ static void run_access_test(uint64_t pmcr_n)
->  
->  	run_vcpu(vcpu, pmcr_n);
->  
-> -	destroy_vpmu_vm();
-> +	destroy_vpmu_vm(vpmu_vm);
->  }
->  
->  static struct pmreg_sets validity_check_reg_sets[] = {
-> @@ -580,7 +528,7 @@ static void run_pmregs_validity_test(uint64_t pmcr_n)
->  	uint64_t valid_counters_mask, max_counters_mask;
->  
->  	test_create_vpmu_vm_with_pmcr_n(pmcr_n, false);
-> -	vcpu = vpmu_vm.vcpu;
-> +	vcpu = vpmu_vm->vcpu;
->  
->  	valid_counters_mask = get_counters_mask(pmcr_n);
->  	max_counters_mask = get_counters_mask(ARMV8_PMU_MAX_COUNTERS);
-> @@ -621,7 +569,7 @@ static void run_pmregs_validity_test(uint64_t pmcr_n)
->  			    KVM_ARM64_SYS_REG(clr_reg_id), reg_val);
->  	}
->  
-> -	destroy_vpmu_vm();
-> +	destroy_vpmu_vm(vpmu_vm);
->  }
->  
->  /*
-> @@ -634,7 +582,7 @@ static void run_error_test(uint64_t pmcr_n)
->  	pr_debug("Error test with pmcr_n %lu (larger than the host)\n", pmcr_n);
->  
->  	test_create_vpmu_vm_with_pmcr_n(pmcr_n, true);
-> -	destroy_vpmu_vm();
-> +	destroy_vpmu_vm(vpmu_vm);
->  }
->  
->  /*
-> @@ -645,9 +593,9 @@ static uint64_t get_pmcr_n_limit(void)
->  {
->  	uint64_t pmcr;
->  
-> -	create_vpmu_vm(guest_code);
-> -	vcpu_get_reg(vpmu_vm.vcpu, KVM_ARM64_SYS_REG(SYS_PMCR_EL0), &pmcr);
-> -	destroy_vpmu_vm();
-> +	create_vpmu_vm_with_handler(guest_code);
-> +	vcpu_get_reg(vpmu_vm->vcpu, KVM_ARM64_SYS_REG(SYS_PMCR_EL0), &pmcr);
-> +	destroy_vpmu_vm(vpmu_vm);
->  	return get_pmcr_n(pmcr);
->  }
->  
-> diff --git a/tools/testing/selftests/kvm/include/aarch64/vpmu.h b/tools/testing/selftests/kvm/include/aarch64/vpmu.h
-> new file mode 100644
-> index 000000000000..0a56183644ee
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/include/aarch64/vpmu.h
-> @@ -0,0 +1,16 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +
-> +#include <kvm_util.h>
-> +
-> +#define GICD_BASE_GPA	0x8000000ULL
-> +#define GICR_BASE_GPA	0x80A0000ULL
-> +
-> +struct vpmu_vm {
-> +	struct kvm_vm *vm;
-> +	struct kvm_vcpu *vcpu;
-> +	int gic_fd;
-> +};
-> +
-> +struct vpmu_vm *create_vpmu_vm(void *guest_code);
-> +
-> +void destroy_vpmu_vm(struct vpmu_vm *vpmu_vm);
-> diff --git a/tools/testing/selftests/kvm/lib/aarch64/vpmu.c b/tools/testing/selftests/kvm/lib/aarch64/vpmu.c
-> new file mode 100644
-> index 000000000000..b3de8fdc555e
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/lib/aarch64/vpmu.c
-> @@ -0,0 +1,64 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <kvm_util.h>
-> +#include <processor.h>
-> +#include <test_util.h>
-> +#include <vgic.h>
-> +#include <vpmu.h>
-> +#include <perf/arm_pmuv3.h>
-> +
-> +/* Create a VM that has one vCPU with PMUv3 configured. */
-> +struct vpmu_vm *create_vpmu_vm(void *guest_code)
-> +{
-> +	struct kvm_vcpu_init init;
-> +	uint8_t pmuver;
-> +	uint64_t dfr0, irq = 23;
-> +	struct kvm_device_attr irq_attr = {
-> +		.group = KVM_ARM_VCPU_PMU_V3_CTRL,
-> +		.attr = KVM_ARM_VCPU_PMU_V3_IRQ,
-> +		.addr = (uint64_t)&irq,
-> +	};
-> +	struct kvm_device_attr init_attr = {
-> +		.group = KVM_ARM_VCPU_PMU_V3_CTRL,
-> +		.attr = KVM_ARM_VCPU_PMU_V3_INIT,
-> +	};
-> +	struct vpmu_vm *vpmu_vm;
-> +
-> +	vpmu_vm = calloc(1, sizeof(*vpmu_vm));
-> +	TEST_ASSERT(vpmu_vm != NULL, "Insufficient Memory");
-> +	memset(vpmu_vm, 0, sizeof(vpmu_vm));
-> +
-> +	vpmu_vm->vm = vm_create(1);
-> +	vm_init_descriptor_tables(vpmu_vm->vm);
-> +
-> +	/* Create vCPU with PMUv3 */
-> +	vm_ioctl(vpmu_vm->vm, KVM_ARM_PREFERRED_TARGET, &init);
-> +	init.features[0] |= (1 << KVM_ARM_VCPU_PMU_V3);
-> +	vpmu_vm->vcpu = aarch64_vcpu_add(vpmu_vm->vm, 0, &init, guest_code);
-> +	vcpu_init_descriptor_tables(vpmu_vm->vcpu);
-> +	vpmu_vm->gic_fd = vgic_v3_setup(vpmu_vm->vm, 1, 64,
-> +					GICD_BASE_GPA, GICR_BASE_GPA);
-> +	__TEST_REQUIRE(vpmu_vm->gic_fd >= 0,
-> +		       "Failed to create vgic-v3, skipping");
-> +
-> +	/* Make sure that PMUv3 support is indicated in the ID register */
-> +	vcpu_get_reg(vpmu_vm->vcpu,
-> +		     KVM_ARM64_SYS_REG(SYS_ID_AA64DFR0_EL1), &dfr0);
-> +	pmuver = FIELD_GET(ARM64_FEATURE_MASK(ID_AA64DFR0_EL1_PMUVer), dfr0);
-> +	TEST_ASSERT(pmuver != ID_AA64DFR0_EL1_PMUVer_IMP_DEF &&
-> +		    pmuver >= ID_AA64DFR0_EL1_PMUVer_IMP,
-> +		    "Unexpected PMUVER (0x%x) on the vCPU with PMUv3", pmuver);
-> +
-> +	/* Initialize vPMU */
-> +	vcpu_ioctl(vpmu_vm->vcpu, KVM_SET_DEVICE_ATTR, &irq_attr);
-> +	vcpu_ioctl(vpmu_vm->vcpu, KVM_SET_DEVICE_ATTR, &init_attr);
-> +
-> +	return vpmu_vm;
-> +}
-> +
-> +void destroy_vpmu_vm(struct vpmu_vm *vpmu_vm)
-> +{
-> +	close(vpmu_vm->gic_fd);
-> +	kvm_vm_free(vpmu_vm->vm);
-> +	free(vpmu_vm);
-> +}
-Besides looks good to me
-Reviewed-by: Eric Auger <eric.auger@redhat.com>
+> Pls no printk in tests. Find a different way to validate.
 
-Eric
+Ack. I'll migrate the ipsec tunnel tests to test_progs next rev so it
+can use mmaped globals.
 
-
+Thanks,
+Daniel
 
