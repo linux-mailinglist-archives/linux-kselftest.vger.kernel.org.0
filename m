@@ -1,91 +1,99 @@
-Return-Path: <linux-kselftest+bounces-588-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-590-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D75B7F7A12
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 18:07:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 00D0F7F7A2B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 18:16:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BE1031C20911
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 17:07:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3212F1C20A86
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 17:16:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D98731754;
-	Fri, 24 Nov 2023 17:07:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04C44364A1;
+	Fri, 24 Nov 2023 17:16:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d9f27DY7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DqWgB3HR"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45AA12E859;
-	Fri, 24 Nov 2023 17:07:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C576C433C7;
-	Fri, 24 Nov 2023 17:07:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1700845662;
-	bh=k4mQRY9ktaiTbFxSEI3izt0tLlfHV8eElmgj1GxHaeY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=d9f27DY70LWRjTMC4/+Jq1zqen2o4HE0Nsq0MrYwBkrHt1wG5KGjhX74edhy7OzdK
-	 qYdrvjuiMLxKIbTy0QcdqXK5dywo9ktO32i+XnMeFLgaBBL7MieIbSah2r6YcD7KFs
-	 qxzqr0SO4gkcF/6bWCDuZ8RSQMRlYzAzXdCXuB2eyB+RhzeiKF+INCpeuxncEr2dIf
-	 gDuGxoJaYjkZUP2DUzyQF/toz4cPpxqztYlD5K2Yi2cj9XmMfESb5ga1xIXrR/Clia
-	 nOJhcaSOlQm/4y8wCt9VqzTBpGcdDhG2pwujSF1tU5O8Ei134NqPYtd1ek/hz/kf/B
-	 eBCktCiE2EMaw==
-Date: Fri, 24 Nov 2023 17:07:39 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Joey Gouly <joey.gouly@arm.com>
-Cc: linux-arm-kernel@lists.infradead.org, akpm@linux-foundation.org,
-	aneesh.kumar@linux.ibm.com, catalin.marinas@arm.com,
-	dave.hansen@linux.intel.com, maz@kernel.org, oliver.upton@linux.dev,
-	shuah@kernel.org, will@kernel.org, kvmarm@lists.linux.dev,
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>
-Subject: Re: [PATCH v3 25/25] KVM: selftests: get-reg-list: add Permission
- Overlay registers
-Message-ID: <ZWDYW0cjtCsauIrz@finisterre.sirena.org.uk>
-References: <20231124163510.1835740-1-joey.gouly@arm.com>
- <20231124163510.1835740-26-joey.gouly@arm.com>
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE0410E7;
+	Fri, 24 Nov 2023 09:16:50 -0800 (PST)
+Received: by mail-qt1-x82f.google.com with SMTP id d75a77b69052e-41b7ec4cceeso10262791cf.1;
+        Fri, 24 Nov 2023 09:16:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1700846210; x=1701451010; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xg82JrfzBfyMPKKSBUKzAJjlyzjnEcy1rIS6yPWPAIc=;
+        b=DqWgB3HRFRa6CcJJ6PanGKae81xoKww8sqiVWcuh7RajQ6uFEzb9ToA4ExBaABQ2wv
+         ANoQyX2a7+7cdFMNYPHI5rFwQnIg9Jbp7/cNCR1tyzsZc/K+TLJn+Oq63o7wCJP1t2dB
+         WOvYD96CnBpEdtyBtJkifqgdIFRUc3fxf/CAq7AQXUSugM6xBDn+vIE12+YEC0c+fahF
+         V37jf32i5FsJMQMCzIZIXVK3NkQF0Jjc1AoxGBg3TGjQo6VpvA0rdUDkq2HqgAJPDt9l
+         o8onqGLgeV7IN7sR/R2epJv23w71g+1HHSa6MV/c+yL/dC4+Jj+t0+H+DdlsDRddoxAp
+         6nBA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700846210; x=1701451010;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Xg82JrfzBfyMPKKSBUKzAJjlyzjnEcy1rIS6yPWPAIc=;
+        b=tZ/3DxXe7VUty+7+dBu0vd9FpSEnMb+wh8f/IFAn426Yd6YwzemcJU8jzajnI8yunt
+         hHp9CZ03IB5b9neKoxzMFSpgyAav9oYCEaIfP4P2jJ7bGOGPyDzSVefBN7HgtpPolPg1
+         QyFmKegLyMxUe0K333rQDgnen51C4J6bOZsr2JxfuilBmxHXkmjNqDgKoCRaSf/YGY0A
+         E6CakY8rfofLoZu0mYTB7MWUbHXl7d7BQd7HRt9Yl+9vHZRah5AUFsypk7cUqspECHEG
+         Uvg2MhbeTbcmLPp5vIVI2E02pHxRuBx4IBR1CDUf7UKrLGTRQ9ELGesWqXvGbRJaNKPS
+         ygdQ==
+X-Gm-Message-State: AOJu0YzygThEOU27T7rpSvxBLQvPn3TlzlAkgfrrJ1gXCy8M5TU2OKLS
+	AfTSsGEyJPjpxWL30YrrhZbN2Sd9lRY=
+X-Google-Smtp-Source: AGHT+IEk0lodYaHM2GkoX6TloY5EenuGOW0yAp6K9Jyv3l6ywMv0A3UI3Wiq9C5VR4Ik93Q75lmP3Q==
+X-Received: by 2002:a05:6214:419b:b0:67a:ef6:c3d4 with SMTP id ld27-20020a056214419b00b0067a0ef6c3d4mr5406800qvb.26.1700846209891;
+        Fri, 24 Nov 2023 09:16:49 -0800 (PST)
+Received: from willemb.c.googlers.com.com (240.157.150.34.bc.googleusercontent.com. [34.150.157.240])
+        by smtp.gmail.com with ESMTPSA id mn23-20020a0562145ed700b0067a0a00b24csm1389278qvb.73.2023.11.24.09.16.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Nov 2023 09:16:49 -0800 (PST)
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	kuba@kernel.org,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	linux-kselftest@vger.kernel.org,
+	Willem de Bruijn <willemb@google.com>
+Subject: [PATCH net 0/4] selftests/net: fix a few small compiler warnings
+Date: Fri, 24 Nov 2023 12:15:18 -0500
+Message-ID: <20231124171645.1011043-1-willemdebruijn.kernel@gmail.com>
+X-Mailer: git-send-email 2.43.0.rc1.413.gea7ed67945-goog
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="V+yoxhtAjNavAuxz"
-Content-Disposition: inline
-In-Reply-To: <20231124163510.1835740-26-joey.gouly@arm.com>
-X-Cookie: Slow day.  Practice crawling.
+Content-Transfer-Encoding: 8bit
 
+From: Willem de Bruijn <willemb@google.com>
 
---V+yoxhtAjNavAuxz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Observed a clang warning when backporting cmsg_sender.
+Ran the same build against all the .c files under selftests/net.
 
-On Fri, Nov 24, 2023 at 04:35:10PM +0000, Joey Gouly wrote:
-> Add new system registers:
->   - POR_EL1
->   - POR_EL0
+This is clang-14 with -Wall
+Which is what tools/testing/selftests/net/Makefile also enables.
 
-Reviewed-by: Mark Brown <broonie@kernel.org>
+Willem de Bruijn (4):
+  selftests/net: ipsec: fix constant out of range
+  selftests/net: fix a char signedness issue
+  selftests/net: unix: fix unused variable compiler warning
+  selftests/net: mptcp: fix uninitialized variable warnings
 
---V+yoxhtAjNavAuxz
-Content-Type: application/pgp-signature; name="signature.asc"
+ tools/testing/selftests/net/af_unix/diag_uid.c    |  1 -
+ tools/testing/selftests/net/cmsg_sender.c         |  2 +-
+ tools/testing/selftests/net/ipsec.c               |  4 ++--
+ tools/testing/selftests/net/mptcp/mptcp_connect.c | 11 ++++-------
+ tools/testing/selftests/net/mptcp/mptcp_inq.c     | 11 ++++-------
+ 5 files changed, 11 insertions(+), 18 deletions(-)
 
------BEGIN PGP SIGNATURE-----
+-- 
+2.43.0.rc1.413.gea7ed67945-goog
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVg2FsACgkQJNaLcl1U
-h9Du4wf/QbEyJScocmjBLoL9Na4wwhu5ptS65iVSJ8NUJUmw3SjqBoyz9NXAm6qe
-8K49B58fJYJlKIhsuulwIkJPnIAOxyk1P2f4LdZYHRIYdqi4DRN44X8kzIGmCycP
-VW3gToofxJltX5VIfvKLXt7+cOE87DyJQvxNg7hJPo+WOzmuuKcoHq3Vg2osXt9b
-Ii7Cs0GiYekE77k8bhsxKOkMqeqhfM/e+NTFo82cRBQiAY1J56Ct/hL2+KOihG8Z
-pLhfr61mJ9+2JNEBwQhVI3LNKuOaGE24hzphsvWAKKL+kS8UyiySze1uXe9n6go2
-L+ttmthGaqt/5/FEs2MEwlEA/GQh+w==
-=FDjs
------END PGP SIGNATURE-----
-
---V+yoxhtAjNavAuxz--
 
