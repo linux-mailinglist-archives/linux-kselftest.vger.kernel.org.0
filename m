@@ -1,115 +1,88 @@
-Return-Path: <linux-kselftest+bounces-585-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-586-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A9ED7F7954
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 17:37:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0623C7F79FA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 18:03:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3BEE51C20E68
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 16:37:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B62B8281AB3
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 17:02:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EE873A8E1;
-	Fri, 24 Nov 2023 16:36:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4214028E25;
+	Fri, 24 Nov 2023 17:02:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L3OadON0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0EC3919AA;
-	Fri, 24 Nov 2023 08:36:24 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4BB5B1C01;
-	Fri, 24 Nov 2023 08:37:10 -0800 (PST)
-Received: from e124191.cambridge.arm.com (e124191.cambridge.arm.com [10.1.197.45])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9C6C93F73F;
-	Fri, 24 Nov 2023 08:36:21 -0800 (PST)
-From: Joey Gouly <joey.gouly@arm.com>
-To: linux-arm-kernel@lists.infradead.org
-Cc: akpm@linux-foundation.org,
-	aneesh.kumar@linux.ibm.com,
-	broonie@kernel.org,
-	catalin.marinas@arm.com,
-	dave.hansen@linux.intel.com,
-	joey.gouly@arm.com,
-	maz@kernel.org,
-	oliver.upton@linux.dev,
-	shuah@kernel.org,
-	will@kernel.org,
-	kvmarm@lists.linux.dev,
-	linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	James Morse <james.morse@arm.com>,
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1368C364A4;
+	Fri, 24 Nov 2023 17:02:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6680C433C8;
+	Fri, 24 Nov 2023 17:02:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1700845373;
+	bh=spAQEHLnkWTw0So+tleUMpl17On0BgAWnZncp1uMdDg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=L3OadON014nWHsSs5rlBRKuXRvvJGgy+8YNd/bysrt6RcyglTmsjpcSpYDHApHyyN
+	 gHbfKDRKprR98OGshDHJLUAh/Xe0U3Ky2XKLAnBtAtj8arR9rm+x51hTept0N7XuNm
+	 hTW/7442ToWXrTiLKfurDJCvfm4x1/REhoCI2Nc2Gi0wp2zNVIYEQ6wD7Qs/WAtb32
+	 dZrKdzwyXLX1Vb5ZDlClv0LypdPMp6xzwu1fB+m2vyM1pU6167qMe5MOCTLa+kC4TY
+	 yCL2BVOnVw3bXsaviPOKI6XBn1ajDe0yhCYa69TsbAwFf1XL83PUc0WPKsxSyfN73e
+	 zfqQAOnpOTWOQ==
+Date: Fri, 24 Nov 2023 17:02:50 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Joey Gouly <joey.gouly@arm.com>
+Cc: linux-arm-kernel@lists.infradead.org, akpm@linux-foundation.org,
+	aneesh.kumar@linux.ibm.com, catalin.marinas@arm.com,
+	dave.hansen@linux.intel.com, maz@kernel.org, oliver.upton@linux.dev,
+	shuah@kernel.org, will@kernel.org, kvmarm@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, James Morse <james.morse@arm.com>,
 	Suzuki K Poulose <suzuki.poulose@arm.com>,
 	Zenghui Yu <yuzenghui@huawei.com>
-Subject: [PATCH v3 25/25] KVM: selftests: get-reg-list: add Permission Overlay registers
-Date: Fri, 24 Nov 2023 16:35:10 +0000
-Message-Id: <20231124163510.1835740-26-joey.gouly@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20231124163510.1835740-1-joey.gouly@arm.com>
+Subject: Re: [PATCH v3 22/25] kselftest/arm64: add HWCAP test for FEAT_S1POE
+Message-ID: <ZWDXOt/aw73DWAmN@finisterre.sirena.org.uk>
 References: <20231124163510.1835740-1-joey.gouly@arm.com>
+ <20231124163510.1835740-23-joey.gouly@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="Cy6DkPtJZtCWNOXe"
+Content-Disposition: inline
+In-Reply-To: <20231124163510.1835740-23-joey.gouly@arm.com>
+X-Cookie: Slow day.  Practice crawling.
 
-Add new system registers:
-  - POR_EL1
-  - POR_EL0
 
-Signed-off-by: Joey Gouly <joey.gouly@arm.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Marc Zyngier <maz@kernel.org>
-Cc: Oliver Upton <oliver.upton@linux.dev>
-Cc: Shuah Khan <shuah@kernel.org>
----
- tools/testing/selftests/kvm/aarch64/get-reg-list.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+--Cy6DkPtJZtCWNOXe
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-diff --git a/tools/testing/selftests/kvm/aarch64/get-reg-list.c b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
-index 709d7d721760..ac661ebf6859 100644
---- a/tools/testing/selftests/kvm/aarch64/get-reg-list.c
-+++ b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
-@@ -40,6 +40,18 @@ static struct feature_id_reg feat_id_regs[] = {
- 		ARM64_SYS_REG(3, 0, 0, 7, 3),	/* ID_AA64MMFR3_EL1 */
- 		4,
- 		1
-+	},
-+	{
-+		ARM64_SYS_REG(3, 0, 10, 2, 4),	/* POR_EL1 */
-+		ARM64_SYS_REG(3, 0, 0, 7, 3),	/* ID_AA64MMFR3_EL1 */
-+		16,
-+		1
-+	},
-+	{
-+		ARM64_SYS_REG(3, 3, 10, 2, 4),	/* POR_EL0 */
-+		ARM64_SYS_REG(3, 0, 0, 7, 3),	/* ID_AA64MMFR3_EL1 */
-+		16,
-+		1
- 	}
- };
- 
-@@ -468,6 +480,7 @@ static __u64 base_regs[] = {
- 	ARM64_SYS_REG(3, 0, 10, 2, 0),	/* MAIR_EL1 */
- 	ARM64_SYS_REG(3, 0, 10, 2, 2),	/* PIRE0_EL1 */
- 	ARM64_SYS_REG(3, 0, 10, 2, 3),	/* PIR_EL1 */
-+	ARM64_SYS_REG(3, 0, 10, 2, 4),	/* POR_EL1 */
- 	ARM64_SYS_REG(3, 0, 10, 3, 0),	/* AMAIR_EL1 */
- 	ARM64_SYS_REG(3, 0, 12, 0, 0),	/* VBAR_EL1 */
- 	ARM64_SYS_REG(3, 0, 12, 1, 1),	/* DISR_EL1 */
-@@ -475,6 +488,7 @@ static __u64 base_regs[] = {
- 	ARM64_SYS_REG(3, 0, 13, 0, 4),	/* TPIDR_EL1 */
- 	ARM64_SYS_REG(3, 0, 14, 1, 0),	/* CNTKCTL_EL1 */
- 	ARM64_SYS_REG(3, 2, 0, 0, 0),	/* CSSELR_EL1 */
-+	ARM64_SYS_REG(3, 3, 10, 2, 4),	/* POR_EL0 */
- 	ARM64_SYS_REG(3, 3, 13, 0, 2),	/* TPIDR_EL0 */
- 	ARM64_SYS_REG(3, 3, 13, 0, 3),	/* TPIDRRO_EL0 */
- 	ARM64_SYS_REG(3, 3, 14, 0, 1),	/* CNTPCT_EL0 */
--- 
-2.25.1
+On Fri, Nov 24, 2023 at 04:35:07PM +0000, Joey Gouly wrote:
+> Check that when POE is enabled, the POR_EL0 register is accessible.
 
+Reviewed-by: Mark Brown <broonie@kernel.org>
+
+--Cy6DkPtJZtCWNOXe
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVg1zkACgkQJNaLcl1U
+h9DF+Qf+McRE5ZenovytNZGzGU8V8IA6TSVcpZqxQ3RA5hJ+YJrVA3LQk7CD5tHD
+zB2hHviuiPzojikWvl+ePw3fTZKb2EvJA71mTNhXr3X8MaHj01lIP4JIbcvKNBy2
+gkAzwct73nwr//NpZxtBHgLh0gdNKWj6vKnVzB9gNZVfdilsvUef0YQSC/AfHW0m
+YUwFr+14yRKtxhffk2Z90cw1JquBirIA+CJX9Dj76oNfhHgKThgwGCfNbgTkz+Yv
+T1KD/Db4kD6cWmAxmRGFhERi88XQrGMhpwSu793LBJSBO4eL1akCb6nKG8wBkqRo
+XdB6Kk2IQ2ZRPNSc/vPOdmb6ybl2dQ==
+=+Tza
+-----END PGP SIGNATURE-----
+
+--Cy6DkPtJZtCWNOXe--
 
