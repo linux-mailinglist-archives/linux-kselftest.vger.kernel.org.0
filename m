@@ -1,58 +1,58 @@
-Return-Path: <linux-kselftest+bounces-507-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-508-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C43227F6F8E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 10:28:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9748E7F6F90
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 10:28:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 00F131C20F50
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 09:28:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 898A01C20F4C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 09:28:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDBD18C18;
-	Fri, 24 Nov 2023 09:28:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9DD0FBEA;
+	Fri, 24 Nov 2023 09:28:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Cv48Xu5q"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CQEuUNhM"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE9DFD46;
-	Fri, 24 Nov 2023 01:28:15 -0800 (PST)
-Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1cc5fa0e4d5so13641075ad.0;
-        Fri, 24 Nov 2023 01:28:15 -0800 (PST)
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4034FDD;
+	Fri, 24 Nov 2023 01:28:20 -0800 (PST)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-6c10f098a27so1371166b3a.2;
+        Fri, 24 Nov 2023 01:28:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700818095; x=1701422895; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1700818099; x=1701422899; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=F1L/ZZdYZKIoDq9m4iqvKtYtXvoTpGtCEg5hK4lKFBY=;
-        b=Cv48Xu5qhFuquvZnP02O8OLQrQ+kDsczsGYPta2+VJBCfczC9C8eyhSrTLCSw3lU2S
-         JyFtB3pOkX6MZh1Y13bj1+IDt2aDWlqYA5FH/A+s3k0WtKM/03VNdCocPLb9HRdWgfRq
-         riTEXVkZutqLs9/mURSq6uZvAoInOaqNPDgsDAxrhGEAvb1be5Qz/MiLzfxtiM2FdVc2
-         JcE6CnTDHO6AUnS1RH54/BXynus0tvnrTqFT241Rz3305R7N4bXTVmKkk6o0mBQFub0L
-         HW6muIHbVi0Dgj6L2l77+bXYUFl0cIVTZ/midRisI/KPZufGxawEHyL7Kd2VfA8L6x15
-         BfKQ==
+        bh=KA5vRVzq91uijg6aVCCtOeejBBWQLG86GKIseV9oaOQ=;
+        b=CQEuUNhM+GHyRZsHW7eZ+w7erHaYl1iWBnZDGSH7yekB+zo+P0MvE5uj7Q8gebzkgf
+         Z/diUs5NPNEtLz0gvB7I7mHKcHWQsijg4VsVw3C9iWboYrHFPhnaTlv1SNz93a9RhPkm
+         1E4TH8FRbifX0G/qodl3FANiCYxcQ52biR3i/+Dpstmm41G4MVBQmZtPzJRaiMxBDhXl
+         YHa4OujYeEBG4C66BD3vGRMgqs90YMHNn1M/3UnchftBV1kCrBT8Uan6HgGMCVPusJYo
+         2cIDyGtmRIVi3CjwotNZz/CHM+bCzz43CAA1ZBvd9Yno0l0Aeb0dEPWSaek5Aiv7v1B+
+         l+Jw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700818095; x=1701422895;
+        d=1e100.net; s=20230601; t=1700818099; x=1701422899;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=F1L/ZZdYZKIoDq9m4iqvKtYtXvoTpGtCEg5hK4lKFBY=;
-        b=Fb5Mq9p2/A2XHo2kt2GBdUY8oIosLDbwqNsghM0Vc94lctBbQ6A5Jg93mETzvIyML6
-         MHxuJXbrKzIgvMBV9Mqt4fzRw7ytvLvgxY9fImbu5Smn2wrqWKzVcjo2PaBhPuVk4NlR
-         PeGNnC/mSa/txxIJE4J/wsnE0LN3X9XKr00aAom1ginTt+Ky3QbRr8ehGhPFFxc9KjVz
-         TASFepAmmFmiL32LyzLACN4b9YnX/lgP/NWmZgbiSU3J7Z8XDWDuAhn6KDyc0oLpaBfu
-         Ce3pKHg0RDNbbvtV4ZynIdVyPz/c9XbQvE7vtHyAqbEZplq1qq2cd+ZDfhOggG0K+fPX
-         oOJQ==
-X-Gm-Message-State: AOJu0Yx45Nr5OvoyoHTlBEQvaw3XAqHlI6I+Nn5ax+LD9/H3cVmBBvbv
-	ClhIw3y2tEsi7h6kvxoTwuOAlbNUn0d6yWOm
-X-Google-Smtp-Source: AGHT+IHppfy9LGBWA9mu7XWJRgl5SLxtkygd69XovfWzlbvyv55RbfKjgeXOrnW+cOBm9AiMiqzv+Q==
-X-Received: by 2002:a17:902:f68d:b0:1cf:6704:4340 with SMTP id l13-20020a170902f68d00b001cf67044340mr2170223plg.22.1700818094866;
-        Fri, 24 Nov 2023 01:28:14 -0800 (PST)
+        bh=KA5vRVzq91uijg6aVCCtOeejBBWQLG86GKIseV9oaOQ=;
+        b=mskJzNSC3sSe0jOyg6/vwUg/IyBYLB11iMJ3Z9vtOvUz7HXcRF9A73ZfJ4wwa0AtRl
+         xZrclXlmtU1vqQ9koAkHAFybXWgnadFdLfLxKDFrGVEgvWyvF1icxT2Hgyw3UpyraIz1
+         BA70S8BYJiGOJZP5NRf2zqXuZPVU526jr12LQ/GmrjQ7FlKFM+62e3EEXRUj/uGQgDlP
+         0SgJTAMyq8OOKQK++RGi0mOujSgpMAUr8oU0KWgf33ah6S/4NTgUonAK1Z30dVRSXcyL
+         nNGmwYIlg90dv48qYxZppky/rFexFz2NO4kjlFHXmCD+Bp2deVSTFMcyGRSX6xFGE4Aj
+         nUWQ==
+X-Gm-Message-State: AOJu0Yxqp3tJrak++ZfGJEdYJ63pKWbFDa97m/a8GETDAfGfv6psnFNc
+	3/0CVuFUjBMtwNVrjK1h5Nh+gSQbNAZBrxPm
+X-Google-Smtp-Source: AGHT+IGYPNFYRK56EyILaDO74SFXXCOazBc46mdDxPhjdWEGjqPP5zzJMWl7yGFVML7BKV4kvKILfg==
+X-Received: by 2002:a05:6a20:431c:b0:166:82cf:424a with SMTP id h28-20020a056a20431c00b0016682cf424amr2251163pzk.33.1700818099267;
+        Fri, 24 Nov 2023 01:28:19 -0800 (PST)
 Received: from Laptop-X1.redhat.com ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id o10-20020a170902d4ca00b001cfacc54674sm32679plg.106.2023.11.24.01.28.10
+        by smtp.gmail.com with ESMTPSA id o10-20020a170902d4ca00b001cfacc54674sm32679plg.106.2023.11.24.01.28.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Nov 2023 01:28:13 -0800 (PST)
+        Fri, 24 Nov 2023 01:28:18 -0800 (PST)
 From: Hangbin Liu <liuhangbin@gmail.com>
 To: netdev@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -70,9 +70,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Mark Brown <broonie@kernel.org>,
 	Luis Chamberlain <mcgrof@kernel.org>,
 	Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCH net-next 05/38] selftests/net: convert drop_monitor_tests.sh to run it in unique namespace
-Date: Fri, 24 Nov 2023 17:27:03 +0800
-Message-ID: <20231124092736.3673263-6-liuhangbin@gmail.com>
+Subject: [PATCH net-next 06/38] selftests/net: convert fcnal-test.sh to run it in unique namespace
+Date: Fri, 24 Nov 2023 17:27:04 +0800
+Message-ID: <20231124092736.3673263-7-liuhangbin@gmail.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20231124092736.3673263-1-liuhangbin@gmail.com>
 References: <20231124092736.3673263-1-liuhangbin@gmail.com>
@@ -84,88 +84,142 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Here is the test result after conversion.
+Here is the test result after conversion. There are some failures, but it
+also exists on my system without this patch. So it's not affectec by
+this patch and I will check the reason later.
 
-]# ./drop_monitor_tests.sh
+  ]# time ./fcnal-test.sh
+  /usr/bin/which: no nettest in (/root/.local/bin:/root/bin:/usr/share/Modules/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin)
 
-Software drops test
-    TEST: Capturing active software drops                               [ OK ]
-    TEST: Capturing inactive software drops                             [ OK ]
+  ###########################################################################
+  IPv4 ping
+  ###########################################################################
 
-Hardware drops test
-    TEST: Capturing active hardware drops                               [ OK ]
-    TEST: Capturing inactive hardware drops                             [ OK ]
+  #################################################################
+  No VRF
 
-Tests passed:   4
-Tests failed:   0
+  SYSCTL: net.ipv4.raw_l3mdev_accept=0
+
+  TEST: ping out - ns-B IP                                                      [ OK ]
+  TEST: ping out, device bind - ns-B IP                                         [ OK ]
+  TEST: ping out, address bind - ns-B IP                                        [ OK ]
+  ...
+
+  #################################################################
+  SNAT on VRF
+
+  TEST: IPv4 TCP connection over VRF with SNAT                                  [ OK ]
+  TEST: IPv6 TCP connection over VRF with SNAT                                  [ OK ]
+
+  Tests passed: 893
+  Tests failed:  21
+
+  real    52m48.178s
+  user    0m34.158s
+  sys     1m42.976s
+
+BTW, this test needs a really long time. So expand the timeout to 1h.
 
 Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
 ---
- .../selftests/net/drop_monitor_tests.sh       | 21 ++++++++++---------
- 1 file changed, 11 insertions(+), 10 deletions(-)
+ tools/testing/selftests/net/fcnal-test.sh | 30 ++++++++++-------------
+ tools/testing/selftests/net/settings      |  2 +-
+ 2 files changed, 14 insertions(+), 18 deletions(-)
 
-diff --git a/tools/testing/selftests/net/drop_monitor_tests.sh b/tools/testing/selftests/net/drop_monitor_tests.sh
-index b7650e30d18b..7c4818c971fc 100755
---- a/tools/testing/selftests/net/drop_monitor_tests.sh
-+++ b/tools/testing/selftests/net/drop_monitor_tests.sh
-@@ -2,10 +2,8 @@
- # SPDX-License-Identifier: GPL-2.0
+diff --git a/tools/testing/selftests/net/fcnal-test.sh b/tools/testing/selftests/net/fcnal-test.sh
+index d32a14ba069a..0d4f252427e2 100755
+--- a/tools/testing/selftests/net/fcnal-test.sh
++++ b/tools/testing/selftests/net/fcnal-test.sh
+@@ -37,9 +37,7 @@
+ #
+ # server / client nomenclature relative to ns-A
  
- # This test is for checking drop monitor functionality.
--
-+source lib.sh
- ret=0
 -# Kselftest framework requirement - SKIP code is 4.
 -ksft_skip=4
+-
++source lib.sh
+ VERBOSE=0
  
- # all tests in this script. Can be overridden with -t option
- TESTS="
-@@ -13,10 +11,6 @@ TESTS="
- 	hw_drops
- "
+ NSA_DEV=eth1
+@@ -82,14 +80,6 @@ MCAST=ff02::1
+ NSA_LINKIP6=
+ NSB_LINKIP6=
  
--IP="ip -netns ns1"
--TC="tc -netns ns1"
--DEVLINK="devlink -N ns1"
--NS_EXEC="ip netns exec ns1"
- NETDEVSIM_PATH=/sys/bus/netdevsim/
- DEV_ADDR=1337
- DEV=netdevsim${DEV_ADDR}
-@@ -43,7 +37,7 @@ setup()
- 	modprobe netdevsim &> /dev/null
+-NSA=ns-A
+-NSB=ns-B
+-NSC=ns-C
+-
+-NSA_CMD="ip netns exec ${NSA}"
+-NSB_CMD="ip netns exec ${NSB}"
+-NSC_CMD="ip netns exec ${NSC}"
+-
+ which ping6 > /dev/null 2>&1 && ping6=$(which ping6) || ping6=$(which ping)
  
- 	set -e
--	ip netns add ns1
-+	setup_ns NS1
- 	$IP link add dummy10 up type dummy
+ # Check if FIPS mode is enabled
+@@ -406,9 +396,6 @@ create_ns()
+ 	local addr=$2
+ 	local addr6=$3
  
- 	$NS_EXEC echo "$DEV_ADDR 1" > ${NETDEVSIM_PATH}/new_device
-@@ -57,7 +51,7 @@ setup()
- cleanup()
- {
- 	$NS_EXEC echo "$DEV_ADDR" > ${NETDEVSIM_PATH}/del_device
--	ip netns del ns1
-+	cleanup_ns ${NS1}
+-	ip netns add ${ns}
+-
+-	ip -netns ${ns} link set lo up
+ 	if [ "${addr}" != "-" ]; then
+ 		ip -netns ${ns} addr add dev lo ${addr}
+ 	fi
+@@ -467,13 +454,12 @@ cleanup()
+ 		ip -netns ${NSA} link del dev ${NSA_DEV}
+ 
+ 		ip netns pids ${NSA} | xargs kill 2>/dev/null
+-		ip netns del ${NSA}
++		cleanup_ns ${NSA}
+ 	fi
+ 
+ 	ip netns pids ${NSB} | xargs kill 2>/dev/null
+-	ip netns del ${NSB}
+ 	ip netns pids ${NSC} | xargs kill 2>/dev/null
+-	ip netns del ${NSC} >/dev/null 2>&1
++	cleanup_ns ${NSB} ${NSC}
  }
  
- sw_drops_test()
-@@ -194,8 +188,15 @@ if [ $? -ne 0 ]; then
- 	exit $ksft_skip
- fi
+ cleanup_vrf_dup()
+@@ -487,6 +473,8 @@ setup_vrf_dup()
+ {
+ 	# some VRF tests use ns-C which has the same config as
+ 	# ns-B but for a device NOT in the VRF
++	setup_ns NSC
++	NSC_CMD="ip netns exec ${NSC}"
+ 	create_ns ${NSC} "-" "-"
+ 	connect_ns ${NSA} ${NSA_DEV2} ${NSA_IP}/24 ${NSA_IP6}/64 \
+ 		   ${NSC} ${NSC_DEV} ${NSB_IP}/24 ${NSB_IP6}/64
+@@ -503,6 +491,10 @@ setup()
+ 	log_debug "Configuring network namespaces"
+ 	set -e
  
--# start clean
-+# create netns first so we can get the namespace name
-+setup_ns NS1
- cleanup &> /dev/null
-+trap cleanup EXIT
++	setup_ns NSA NSB
++	NSA_CMD="ip netns exec ${NSA}"
++	NSB_CMD="ip netns exec ${NSB}"
 +
-+IP="ip -netns ${NS1}"
-+TC="tc -netns ${NS1}"
-+DEVLINK="devlink -N ${NS1}"
-+NS_EXEC="ip netns exec ${NS1}"
+ 	create_ns ${NSA} ${NSA_LO_IP}/32 ${NSA_LO_IP6}/128
+ 	create_ns ${NSB} ${NSB_LO_IP}/32 ${NSB_LO_IP6}/128
+ 	connect_ns ${NSA} ${NSA_DEV} ${NSA_IP}/24 ${NSA_IP6}/64 \
+@@ -545,6 +537,10 @@ setup_lla_only()
+ 	log_debug "Configuring network namespaces"
+ 	set -e
  
- for t in $TESTS
- do
++	setup_ns NSA NSB NSC
++	NSA_CMD="ip netns exec ${NSA}"
++	NSB_CMD="ip netns exec ${NSB}"
++	NSC_CMD="ip netns exec ${NSC}"
+ 	create_ns ${NSA} "-" "-"
+ 	create_ns ${NSB} "-" "-"
+ 	create_ns ${NSC} "-" "-"
+diff --git a/tools/testing/selftests/net/settings b/tools/testing/selftests/net/settings
+index dfc27cdc6c05..ed8418e8217a 100644
+--- a/tools/testing/selftests/net/settings
++++ b/tools/testing/selftests/net/settings
+@@ -1 +1 @@
+-timeout=1500
++timeout=3600
 -- 
 2.41.0
 
