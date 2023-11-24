@@ -1,58 +1,58 @@
-Return-Path: <linux-kselftest+bounces-510-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-511-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84A0A7F6F94
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 10:28:39 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE9817F6F96
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 10:28:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DAF62281DBC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 09:28:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1354CB2126C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 09:28:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA81A14F60;
-	Fri, 24 Nov 2023 09:28:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCB10FC02;
+	Fri, 24 Nov 2023 09:28:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JJOmBUzF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XvAx59dM"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECC7FD6F;
-	Fri, 24 Nov 2023 01:28:28 -0800 (PST)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1cf59c07faeso12873035ad.2;
-        Fri, 24 Nov 2023 01:28:28 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72405130;
+	Fri, 24 Nov 2023 01:28:33 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1ce28faa92dso13062115ad.2;
+        Fri, 24 Nov 2023 01:28:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700818108; x=1701422908; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1700818112; x=1701422912; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vJMgPbrP5UvlU9fu1Hxhe9v6i0//LxSD5GMYH3AvBO0=;
-        b=JJOmBUzFGOYUs9drp4pqVWqkdwJFJ4EVd8v6sEdbHUFwnIMwDcKvE43RJLbUjTJZSf
-         UUDsfjFpPV7HF2G5ye8qTMlU8KCc9KZ0kATglJKGgU45pXMRM9n3L1gKl9Ir8AAIQjve
-         L5DjLstulFd70HvoUZk0/4Db44Z7jT7fsvO82hh1Xx9ALrGSOkWrrzFl/4z+GcaYnoQ6
-         1GQ0JoOt3udTMGR4V8bI6dfb/8/0nuph/JsTojWzlReQN0XMcSZkiIQ2Wr4AC9WohVsF
-         UnaYdgMDiI28rCu8F0PuvkS8uX3qNYnJ9FmqF3oaEd3taNzZWjQZrQnRE/LpCtz7coS4
-         fgYw==
+        bh=rbopMw6n9Kt3zH6aGxVA2h4+m77L/4vPBqQxTNi8IMg=;
+        b=XvAx59dMv5dOrjKVrzFylRWYOdcf9/YjcOt/qhzbZWa9iofF0c8dcel1CnvUSxfiC9
+         jq2jMb7XrlkhqcdGh1u26tas7X+3rir1qzrYhq1UMRKBncgZgaXeukfO45WFViI9DXDo
+         mjqXIok5r0qhpLJX9PaGJsM65V1iOE6+r07BSIzOavQyIvINI3kVXKg0/TMp+Y77KA2u
+         oWOUX+tpkGEnfXSEoaF+sLtoeqrmAzgW6O83t/Te7KOBs1ZZCLWosW94FMFMxmqs4rQ1
+         /8S0zDZzIfNnnYOQCdVM2StNgx8rBKVAB5cL4/LLJcjNGj1hRMse77kBJWKwlmFaKw8f
+         nVqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700818108; x=1701422908;
+        d=1e100.net; s=20230601; t=1700818112; x=1701422912;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=vJMgPbrP5UvlU9fu1Hxhe9v6i0//LxSD5GMYH3AvBO0=;
-        b=D2xeQIePMcfl5lbsFR/mfsJABfbR5o7lGnWWJg8bJEkhP98ZweQCesXCZZg6rh1cUN
-         ieA5vT7Osl5VXLn2HG8uu/9OOyTyaa97Vhx85g9vAWCe5rUHTzBibj/2HGzSTx95pd+R
-         PrU2rFo/bcFJ96aUgTIcza4bMD9GN9ueezIzr6/txD9l62KHETaYNqNkIryEYKFYWdm0
-         7lemW79CeRGwuIOktFskI3TqdD7BioSj1mBEsu+09h5jNnYmGI/mJZcYKx7RYaO63Nrx
-         oMfZaAIy8nuUz/6bVViYJhnGptLSSkjeLnuEUjQzqhni1RcqzfYe2m7eE9DyjghyArvr
-         tYbw==
-X-Gm-Message-State: AOJu0YwYMdkZV6whaaUmvrj9+K1R0vNsnF3LskPobL0mB+9G0/aWcSOX
-	a1AK9IPUP6LUUn78SWUJgCXduHx5XPZtjSDM
-X-Google-Smtp-Source: AGHT+IEXnP9txGRYuDCx/Bkj3L6HIPs8Ga1Lyg95r+r/ZcWdHR3232RD6PURDTdfziR/rkLbhqr32A==
-X-Received: by 2002:a17:902:8c85:b0:1cf:51c5:d427 with SMTP id t5-20020a1709028c8500b001cf51c5d427mr1931639plo.65.1700818108084;
-        Fri, 24 Nov 2023 01:28:28 -0800 (PST)
+        bh=rbopMw6n9Kt3zH6aGxVA2h4+m77L/4vPBqQxTNi8IMg=;
+        b=tjfMhpeWQcfzNUZtb0jpiuYQMN+GzwWQf7GgC2KaiBB5NZ7iTZjwsFEmnvDB9VZhxx
+         dPAurJPwQqSl2WI24t+cPO+nRgrdPFIRFFdfmdFEPUVt96dfMc7HIcwa6G5O1suF6ZRo
+         4rHsKMlXHAd660jYCCtYO739od2ea1A8oFUOdhsiTEpDpD9npYkZcZER290y5kB+vxAk
+         sEm0+/4nbFGahAZlvX6iTcp9qCxEHNhXMFJBKga+o2SH9CXIlDNxQyB81JTYcFjqF3bp
+         xV3CXKgcPK5ULzxUxpOMcCtU2nJdcYfftl/jPoe3XeBZnbuQdaQXTCkOsM7x6Bi/vBbM
+         tdlw==
+X-Gm-Message-State: AOJu0YxTNIwUxMlQs5MrBRT4+NW/JXyYlZbVg0SsfISVuJB5srr6n5SX
+	WfRXq+u4fkaj2ygm4bCFsVKKBMJQsodklO4O
+X-Google-Smtp-Source: AGHT+IEXfWDKtNOKjYA/8/+i3soPAciALWc9TOtVGMgn3PxM0l31AhMKT/4JS16NG8h/MskAGReUoA==
+X-Received: by 2002:a17:903:234e:b0:1cc:5296:10e4 with SMTP id c14-20020a170903234e00b001cc529610e4mr2162435plh.22.1700818112362;
+        Fri, 24 Nov 2023 01:28:32 -0800 (PST)
 Received: from Laptop-X1.redhat.com ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id o10-20020a170902d4ca00b001cfacc54674sm32679plg.106.2023.11.24.01.28.23
+        by smtp.gmail.com with ESMTPSA id o10-20020a170902d4ca00b001cfacc54674sm32679plg.106.2023.11.24.01.28.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Nov 2023 01:28:27 -0800 (PST)
+        Fri, 24 Nov 2023 01:28:31 -0800 (PST)
 From: Hangbin Liu <liuhangbin@gmail.com>
 To: netdev@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -70,9 +70,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Mark Brown <broonie@kernel.org>,
 	Luis Chamberlain <mcgrof@kernel.org>,
 	Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCH net-next 08/38] selftests/net: convert fib_nexthop_nongw.sh to run it in unique namespace
-Date: Fri, 24 Nov 2023 17:27:06 +0800
-Message-ID: <20231124092736.3673263-9-liuhangbin@gmail.com>
+Subject: [PATCH net-next 09/38] selftests/net: convert fib_nexthops.sh to run it in unique namespace
+Date: Fri, 24 Nov 2023 17:27:07 +0800
+Message-ID: <20231124092736.3673263-10-liuhangbin@gmail.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20231124092736.3673263-1-liuhangbin@gmail.com>
 References: <20231124092736.3673263-1-liuhangbin@gmail.com>
@@ -86,90 +86,418 @@ Content-Transfer-Encoding: 8bit
 
 Here is the test result after conversion.
 
-]# ./fib_nexthop_nongw.sh
-TEST: nexthop: get route with nexthop without gw                    [ OK ]
-TEST: nexthop: ping through nexthop without gw                      [ OK ]
+]# ./fib_nexthops.sh
+
+Basic functional tests
+----------------------
+TEST: List with nothing defined                                     [ OK ]
+TEST: Nexthop get on non-existent id                                [ OK ]
+
+...
+
+TEST: IPv6 resilient nexthop group torture test                     [ OK ]
+
+Tests passed: 234
+Tests failed:   0
 
 Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
 ---
- .../selftests/net/fib_nexthop_nongw.sh        | 34 ++++++++-----------
- 1 file changed, 15 insertions(+), 19 deletions(-)
+ tools/testing/selftests/net/fib_nexthops.sh | 142 ++++++++++----------
+ 1 file changed, 69 insertions(+), 73 deletions(-)
 
-diff --git a/tools/testing/selftests/net/fib_nexthop_nongw.sh b/tools/testing/selftests/net/fib_nexthop_nongw.sh
-index b7b928b38ce4..1ccf56f10171 100755
---- a/tools/testing/selftests/net/fib_nexthop_nongw.sh
-+++ b/tools/testing/selftests/net/fib_nexthop_nongw.sh
-@@ -8,6 +8,7 @@
- #            veth0 <---|---> veth1
- # Validate source address selection for route without gateway
+diff --git a/tools/testing/selftests/net/fib_nexthops.sh b/tools/testing/selftests/net/fib_nexthops.sh
+index a6f2c0b9555d..d5a281aadbac 100755
+--- a/tools/testing/selftests/net/fib_nexthops.sh
++++ b/tools/testing/selftests/net/fib_nexthops.sh
+@@ -14,6 +14,7 @@
+ # objects. Device reference counts and network namespace cleanup tested
+ # by use of network namespace for peer.
  
 +source lib.sh
- PAUSE_ON_FAIL=no
- VERBOSE=0
  ret=0
-@@ -64,35 +65,31 @@ run_cmd()
- # config
- setup()
+ # Kselftest framework requirement - SKIP code is 4.
+ ksft_skip=4
+@@ -148,13 +149,7 @@ create_ns()
  {
--	ip netns add h1
--	ip -n h1 link set lo up
--	ip netns add h2
--	ip -n h2 link set lo up
-+	setup_ns h1 h2
+ 	local n=${1}
  
- 	# Add a fake eth0 to support an ip address
--	ip -n h1 link add name eth0 type dummy
--	ip -n h1 link set eth0 up
--	ip -n h1 address add 192.168.0.1/24 dev eth0
-+	ip -n $h1 link add name eth0 type dummy
-+	ip -n $h1 link set eth0 up
-+	ip -n $h1 address add 192.168.0.1/24 dev eth0
+-	ip netns del ${n} 2>/dev/null
+-
+ 	set -e
+-	ip netns add ${n}
+-	ip netns set ${n} $((nsid++))
+-	ip -netns ${n} addr add 127.0.0.1/8 dev lo
+-	ip -netns ${n} link set lo up
  
- 	# Configure veths (same @mac, arp off)
--	ip -n h1 link add name veth0 type veth peer name veth1 netns h2
--	ip -n h1 link set veth0 up
-+	ip -n $h1 link add name veth0 type veth peer name veth1 netns $h2
-+	ip -n $h1 link set veth0 up
+ 	ip netns exec ${n} sysctl -qw net.ipv4.ip_forward=1
+ 	ip netns exec ${n} sysctl -qw net.ipv4.fib_multipath_use_neigh=1
+@@ -173,12 +168,13 @@ setup()
+ {
+ 	cleanup
  
--	ip -n h2 link set veth1 up
-+	ip -n $h2 link set veth1 up
+-	create_ns me
+-	create_ns peer
+-	create_ns remote
++	setup_ns me peer remote
++	create_ns $me
++	create_ns $peer
++	create_ns $remote
  
- 	# Configure @IP in the peer netns
--	ip -n h2 address add 192.168.1.1/32 dev veth1
--	ip -n h2 route add default dev veth1
-+	ip -n $h2 address add 192.168.1.1/32 dev veth1
-+	ip -n $h2 route add default dev veth1
+-	IP="ip -netns me"
+-	BRIDGE="bridge -netns me"
++	IP="ip -netns $me"
++	BRIDGE="bridge -netns $me"
+ 	set -e
+ 	$IP li add veth1 type veth peer name veth2
+ 	$IP li set veth1 up
+@@ -190,24 +186,24 @@ setup()
+ 	$IP addr add 172.16.2.1/24 dev veth3
+ 	$IP -6 addr add 2001:db8:92::1/64 dev veth3 nodad
  
- 	# Add a nexthop without @gw and use it in a route
--	ip -n h1 nexthop add id 1 dev veth0
--	ip -n h1 route add 192.168.1.1 nhid 1
-+	ip -n $h1 nexthop add id 1 dev veth0
-+	ip -n $h1 route add 192.168.1.1 nhid 1
+-	$IP li set veth2 netns peer up
+-	ip -netns peer addr add 172.16.1.2/24 dev veth2
+-	ip -netns peer -6 addr add 2001:db8:91::2/64 dev veth2 nodad
++	$IP li set veth2 netns $peer up
++	ip -netns $peer addr add 172.16.1.2/24 dev veth2
++	ip -netns $peer -6 addr add 2001:db8:91::2/64 dev veth2 nodad
+ 
+-	$IP li set veth4 netns peer up
+-	ip -netns peer addr add 172.16.2.2/24 dev veth4
+-	ip -netns peer -6 addr add 2001:db8:92::2/64 dev veth4 nodad
++	$IP li set veth4 netns $peer up
++	ip -netns $peer addr add 172.16.2.2/24 dev veth4
++	ip -netns $peer -6 addr add 2001:db8:92::2/64 dev veth4 nodad
+ 
+-	ip -netns remote li add veth5 type veth peer name veth6
+-	ip -netns remote li set veth5 up
+-	ip -netns remote addr add dev veth5 172.16.101.1/24
+-	ip -netns remote -6 addr add dev veth5 2001:db8:101::1/64 nodad
+-	ip -netns remote ro add 172.16.0.0/22 via 172.16.101.2
+-	ip -netns remote -6 ro add 2001:db8:90::/40 via 2001:db8:101::2
++	ip -netns $remote li add veth5 type veth peer name veth6
++	ip -netns $remote li set veth5 up
++	ip -netns $remote addr add dev veth5 172.16.101.1/24
++	ip -netns $remote -6 addr add dev veth5 2001:db8:101::1/64 nodad
++	ip -netns $remote ro add 172.16.0.0/22 via 172.16.101.2
++	ip -netns $remote -6 ro add 2001:db8:90::/40 via 2001:db8:101::2
+ 
+-	ip -netns remote li set veth6 netns peer up
+-	ip -netns peer addr add dev veth6 172.16.101.2/24
+-	ip -netns peer -6 addr add dev veth6 2001:db8:101::2/64 nodad
++	ip -netns $remote li set veth6 netns $peer up
++	ip -netns $peer addr add dev veth6 172.16.101.2/24
++	ip -netns $peer -6 addr add dev veth6 2001:db8:101::2/64 nodad
+ 	set +e
  }
  
- cleanup()
+@@ -215,7 +211,7 @@ cleanup()
  {
--	ip netns del h1 2>/dev/null
--	ip netns del h2 2>/dev/null
-+	cleanup_ns $h1 $h2
- }
+ 	local ns
  
- trap cleanup EXIT
-@@ -108,12 +105,11 @@ do
+-	for ns in me peer remote; do
++	for ns in $me $peer $remote; do
+ 		ip netns del ${ns} 2>/dev/null
+ 	done
+ }
+@@ -779,7 +775,7 @@ ipv6_grp_refs()
+ 	run_cmd "$IP route add 2001:db8:101::1/128 nhid 102"
+ 
+ 	# create per-cpu dsts through nh 100
+-	run_cmd "ip netns exec me mausezahn -6 veth1.10 -B 2001:db8:101::1 -A 2001:db8:91::1 -c 5 -t tcp "dp=1-1023, flags=syn" >/dev/null 2>&1"
++	run_cmd "ip netns exec $me mausezahn -6 veth1.10 -B 2001:db8:101::1 -A 2001:db8:91::1 -c 5 -t tcp "dp=1-1023, flags=syn" >/dev/null 2>&1"
+ 
+ 	# remove nh 100 from the group to delete the route potentially leaving
+ 	# a stale per-cpu dst which holds a reference to the nexthop's net
+@@ -805,7 +801,7 @@ ipv6_grp_refs()
+ 
+ 	# if a reference was lost this command will hang because the net device
+ 	# cannot be removed
+-	timeout -s KILL 5 ip netns exec me ip link del veth1.10 >/dev/null 2>&1
++	timeout -s KILL 5 ip netns exec $me ip link del veth1.10 >/dev/null 2>&1
+ 
+ 	# we can't cleanup if the command is hung trying to delete the netdev
+ 	if [ $? -eq 137 ]; then
+@@ -1012,13 +1008,13 @@ ipv6_fcnal_runtime()
+ 	log_test $? 0 "Route delete"
+ 
+ 	run_cmd "$IP ro add 2001:db8:101::1/128 nhid 81"
+-	run_cmd "ip netns exec me ping -c1 -w$PING_TIMEOUT 2001:db8:101::1"
++	run_cmd "ip netns exec $me ping -c1 -w$PING_TIMEOUT 2001:db8:101::1"
+ 	log_test $? 0 "Ping with nexthop"
+ 
+ 	run_cmd "$IP nexthop add id 82 via 2001:db8:92::2 dev veth3"
+ 	run_cmd "$IP nexthop add id 122 group 81/82"
+ 	run_cmd "$IP ro replace 2001:db8:101::1/128 nhid 122"
+-	run_cmd "ip netns exec me ping -c1 -w$PING_TIMEOUT 2001:db8:101::1"
++	run_cmd "ip netns exec $me ping -c1 -w$PING_TIMEOUT 2001:db8:101::1"
+ 	log_test $? 0 "Ping - multipath"
+ 
+ 	#
+@@ -1026,26 +1022,26 @@ ipv6_fcnal_runtime()
+ 	#
+ 	run_cmd "$IP -6 nexthop add id 83 blackhole"
+ 	run_cmd "$IP ro replace 2001:db8:101::1/128 nhid 83"
+-	run_cmd "ip netns exec me ping -c1 -w$PING_TIMEOUT 2001:db8:101::1"
++	run_cmd "ip netns exec $me ping -c1 -w$PING_TIMEOUT 2001:db8:101::1"
+ 	log_test $? 2 "Ping - blackhole"
+ 
+ 	run_cmd "$IP nexthop replace id 83 via 2001:db8:91::2 dev veth1"
+-	run_cmd "ip netns exec me ping -c1 -w$PING_TIMEOUT 2001:db8:101::1"
++	run_cmd "ip netns exec $me ping -c1 -w$PING_TIMEOUT 2001:db8:101::1"
+ 	log_test $? 0 "Ping - blackhole replaced with gateway"
+ 
+ 	run_cmd "$IP -6 nexthop replace id 83 blackhole"
+-	run_cmd "ip netns exec me ping -c1 -w$PING_TIMEOUT 2001:db8:101::1"
++	run_cmd "ip netns exec $me ping -c1 -w$PING_TIMEOUT 2001:db8:101::1"
+ 	log_test $? 2 "Ping - gateway replaced by blackhole"
+ 
+ 	run_cmd "$IP ro replace 2001:db8:101::1/128 nhid 122"
+-	run_cmd "ip netns exec me ping -c1 -w$PING_TIMEOUT 2001:db8:101::1"
++	run_cmd "ip netns exec $me ping -c1 -w$PING_TIMEOUT 2001:db8:101::1"
+ 	if [ $? -eq 0 ]; then
+ 		run_cmd "$IP nexthop replace id 122 group 83"
+-		run_cmd "ip netns exec me ping -c1 -w$PING_TIMEOUT 2001:db8:101::1"
++		run_cmd "ip netns exec $me ping -c1 -w$PING_TIMEOUT 2001:db8:101::1"
+ 		log_test $? 2 "Ping - group with blackhole"
+ 
+ 		run_cmd "$IP nexthop replace id 122 group 81/82"
+-		run_cmd "ip netns exec me ping -c1 -w$PING_TIMEOUT 2001:db8:101::1"
++		run_cmd "ip netns exec $me ping -c1 -w$PING_TIMEOUT 2001:db8:101::1"
+ 		log_test $? 0 "Ping - group blackhole replaced with gateways"
+ 	else
+ 		log_test 2 0 "Ping - multipath failed"
+@@ -1128,15 +1124,15 @@ ipv6_fcnal_runtime()
+ 
+ 	# rpfilter and default route
+ 	$IP nexthop flush >/dev/null 2>&1
+-	run_cmd "ip netns exec me ip6tables -t mangle -I PREROUTING 1 -m rpfilter --invert -j DROP"
++	run_cmd "ip netns exec $me ip6tables -t mangle -I PREROUTING 1 -m rpfilter --invert -j DROP"
+ 	run_cmd "$IP nexthop add id 91 via 2001:db8:91::2 dev veth1"
+ 	run_cmd "$IP nexthop add id 92 via 2001:db8:92::2 dev veth3"
+ 	run_cmd "$IP nexthop add id 93 group 91/92"
+ 	run_cmd "$IP -6 ro add default nhid 91"
+-	run_cmd "ip netns exec me ping -c1 -w$PING_TIMEOUT 2001:db8:101::1"
++	run_cmd "ip netns exec $me ping -c1 -w$PING_TIMEOUT 2001:db8:101::1"
+ 	log_test $? 0 "Nexthop with default route and rpfilter"
+ 	run_cmd "$IP -6 ro replace default nhid 93"
+-	run_cmd "ip netns exec me ping -c1 -w$PING_TIMEOUT 2001:db8:101::1"
++	run_cmd "ip netns exec $me ping -c1 -w$PING_TIMEOUT 2001:db8:101::1"
+ 	log_test $? 0 "Nexthop with multipath default route and rpfilter"
+ 
+ 	# TO-DO:
+@@ -1216,11 +1212,11 @@ ipv6_torture()
+ 	pid1=$!
+ 	ipv6_grp_replace_loop &
+ 	pid2=$!
+-	ip netns exec me ping -f 2001:db8:101::1 >/dev/null 2>&1 &
++	ip netns exec $me ping -f 2001:db8:101::1 >/dev/null 2>&1 &
+ 	pid3=$!
+-	ip netns exec me ping -f 2001:db8:101::2 >/dev/null 2>&1 &
++	ip netns exec $me ping -f 2001:db8:101::2 >/dev/null 2>&1 &
+ 	pid4=$!
+-	ip netns exec me mausezahn -6 veth1 -B 2001:db8:101::2 -A 2001:db8:91::1 -c 0 -t tcp "dp=1-1023, flags=syn" >/dev/null 2>&1 &
++	ip netns exec $me mausezahn -6 veth1 -B 2001:db8:101::2 -A 2001:db8:91::1 -c 0 -t tcp "dp=1-1023, flags=syn" >/dev/null 2>&1 &
+ 	pid5=$!
+ 
+ 	sleep 300
+@@ -1270,11 +1266,11 @@ ipv6_res_torture()
+ 	pid1=$!
+ 	ipv6_res_grp_replace_loop &
+ 	pid2=$!
+-	ip netns exec me ping -f 2001:db8:101::1 >/dev/null 2>&1 &
++	ip netns exec $me ping -f 2001:db8:101::1 >/dev/null 2>&1 &
+ 	pid3=$!
+-	ip netns exec me ping -f 2001:db8:101::2 >/dev/null 2>&1 &
++	ip netns exec $me ping -f 2001:db8:101::2 >/dev/null 2>&1 &
+ 	pid4=$!
+-	ip netns exec me mausezahn -6 veth1 \
++	ip netns exec $me mausezahn -6 veth1 \
+ 			    -B 2001:db8:101::2 -A 2001:db8:91::1 -c 0 \
+ 			    -t tcp "dp=1-1023, flags=syn" >/dev/null 2>&1 &
+ 	pid5=$!
+@@ -1544,7 +1540,7 @@ ipv4_withv6_fcnal()
+ 	local lladdr
+ 
+ 	set -e
+-	lladdr=$(get_linklocal veth2 peer)
++	lladdr=$(get_linklocal veth2 $peer)
+ 	run_cmd "$IP nexthop add id 11 via ${lladdr} dev veth1"
+ 	set +e
+ 	run_cmd "$IP ro add 172.16.101.1/32 nhid 11"
+@@ -1606,13 +1602,13 @@ ipv4_fcnal_runtime()
+ 	#
+ 	run_cmd "$IP nexthop replace id 21 via 172.16.1.2 dev veth1"
+ 	run_cmd "$IP ro replace 172.16.101.1/32 nhid 21"
+-	run_cmd "ip netns exec me ping -c1 -w$PING_TIMEOUT 172.16.101.1"
++	run_cmd "ip netns exec $me ping -c1 -w$PING_TIMEOUT 172.16.101.1"
+ 	log_test $? 0 "Basic ping"
+ 
+ 	run_cmd "$IP nexthop replace id 22 via 172.16.2.2 dev veth3"
+ 	run_cmd "$IP nexthop add id 122 group 21/22"
+ 	run_cmd "$IP ro replace 172.16.101.1/32 nhid 122"
+-	run_cmd "ip netns exec me ping -c1 -w$PING_TIMEOUT 172.16.101.1"
++	run_cmd "ip netns exec $me ping -c1 -w$PING_TIMEOUT 172.16.101.1"
+ 	log_test $? 0 "Ping - multipath"
+ 
+ 	run_cmd "$IP ro delete 172.16.101.1/32 nhid 122"
+@@ -1623,7 +1619,7 @@ ipv4_fcnal_runtime()
+ 	run_cmd "$IP nexthop add id 501 via 172.16.1.2 dev veth1"
+ 	run_cmd "$IP ro add default nhid 501"
+ 	run_cmd "$IP ro add default via 172.16.1.3 dev veth1 metric 20"
+-	run_cmd "ip netns exec me ping -c1 -w$PING_TIMEOUT 172.16.101.1"
++	run_cmd "ip netns exec $me ping -c1 -w$PING_TIMEOUT 172.16.101.1"
+ 	log_test $? 0 "Ping - multiple default routes, nh first"
+ 
+ 	# flip the order
+@@ -1632,7 +1628,7 @@ ipv4_fcnal_runtime()
+ 	run_cmd "$IP ro add default via 172.16.1.2 dev veth1 metric 20"
+ 	run_cmd "$IP nexthop replace id 501 via 172.16.1.3 dev veth1"
+ 	run_cmd "$IP ro add default nhid 501 metric 20"
+-	run_cmd "ip netns exec me ping -c1 -w$PING_TIMEOUT 172.16.101.1"
++	run_cmd "ip netns exec $me ping -c1 -w$PING_TIMEOUT 172.16.101.1"
+ 	log_test $? 0 "Ping - multiple default routes, nh second"
+ 
+ 	run_cmd "$IP nexthop delete nhid 501"
+@@ -1643,26 +1639,26 @@ ipv4_fcnal_runtime()
+ 	#
+ 	run_cmd "$IP nexthop add id 23 blackhole"
+ 	run_cmd "$IP ro replace 172.16.101.1/32 nhid 23"
+-	run_cmd "ip netns exec me ping -c1 -w$PING_TIMEOUT 172.16.101.1"
++	run_cmd "ip netns exec $me ping -c1 -w$PING_TIMEOUT 172.16.101.1"
+ 	log_test $? 2 "Ping - blackhole"
+ 
+ 	run_cmd "$IP nexthop replace id 23 via 172.16.1.2 dev veth1"
+-	run_cmd "ip netns exec me ping -c1 -w$PING_TIMEOUT 172.16.101.1"
++	run_cmd "ip netns exec $me ping -c1 -w$PING_TIMEOUT 172.16.101.1"
+ 	log_test $? 0 "Ping - blackhole replaced with gateway"
+ 
+ 	run_cmd "$IP nexthop replace id 23 blackhole"
+-	run_cmd "ip netns exec me ping -c1 -w$PING_TIMEOUT 172.16.101.1"
++	run_cmd "ip netns exec $me ping -c1 -w$PING_TIMEOUT 172.16.101.1"
+ 	log_test $? 2 "Ping - gateway replaced by blackhole"
+ 
+ 	run_cmd "$IP ro replace 172.16.101.1/32 nhid 122"
+-	run_cmd "ip netns exec me ping -c1 -w$PING_TIMEOUT 172.16.101.1"
++	run_cmd "ip netns exec $me ping -c1 -w$PING_TIMEOUT 172.16.101.1"
+ 	if [ $? -eq 0 ]; then
+ 		run_cmd "$IP nexthop replace id 122 group 23"
+-		run_cmd "ip netns exec me ping -c1 -w$PING_TIMEOUT 172.16.101.1"
++		run_cmd "ip netns exec $me ping -c1 -w$PING_TIMEOUT 172.16.101.1"
+ 		log_test $? 2 "Ping - group with blackhole"
+ 
+ 		run_cmd "$IP nexthop replace id 122 group 21/22"
+-		run_cmd "ip netns exec me ping -c1 -w$PING_TIMEOUT 172.16.101.1"
++		run_cmd "ip netns exec $me ping -c1 -w$PING_TIMEOUT 172.16.101.1"
+ 		log_test $? 0 "Ping - group blackhole replaced with gateways"
+ 	else
+ 		log_test 2 0 "Ping - multipath failed"
+@@ -1685,11 +1681,11 @@ ipv4_fcnal_runtime()
+ 	# IPv4 with IPv6
+ 	#
+ 	set -e
+-	lladdr=$(get_linklocal veth2 peer)
++	lladdr=$(get_linklocal veth2 $peer)
+ 	run_cmd "$IP nexthop add id 24 via ${lladdr} dev veth1"
+ 	set +e
+ 	run_cmd "$IP ro replace 172.16.101.1/32 nhid 24"
+-	run_cmd "ip netns exec me ping -c1 -w$PING_TIMEOUT 172.16.101.1"
++	run_cmd "ip netns exec $me ping -c1 -w$PING_TIMEOUT 172.16.101.1"
+ 	log_test $? 0 "IPv6 nexthop with IPv4 route"
+ 
+ 	$IP neigh sh | grep -q "${lladdr} dev veth1"
+@@ -1713,11 +1709,11 @@ ipv4_fcnal_runtime()
+ 
+ 	check_route "172.16.101.1" "172.16.101.1 nhid 101 nexthop via inet6 ${lladdr} dev veth1 weight 1 nexthop via 172.16.1.2 dev veth1 weight 1"
+ 
+-	run_cmd "ip netns exec me ping -c1 -w$PING_TIMEOUT 172.16.101.1"
++	run_cmd "ip netns exec $me ping -c1 -w$PING_TIMEOUT 172.16.101.1"
+ 	log_test $? 0 "IPv6 nexthop with IPv4 route"
+ 
+ 	run_cmd "$IP ro replace 172.16.101.1/32 via inet6 ${lladdr} dev veth1"
+-	run_cmd "ip netns exec me ping -c1 -w$PING_TIMEOUT 172.16.101.1"
++	run_cmd "ip netns exec $me ping -c1 -w$PING_TIMEOUT 172.16.101.1"
+ 	log_test $? 0 "IPv4 route with IPv6 gateway"
+ 
+ 	$IP neigh sh | grep -q "${lladdr} dev veth1"
+@@ -1734,7 +1730,7 @@ ipv4_fcnal_runtime()
+ 
+ 	run_cmd "$IP ro del 172.16.101.1/32 via inet6 ${lladdr} dev veth1"
+ 	run_cmd "$IP -4 ro add default via inet6 ${lladdr} dev veth1"
+-	run_cmd "ip netns exec me ping -c1 -w$PING_TIMEOUT 172.16.101.1"
++	run_cmd "ip netns exec $me ping -c1 -w$PING_TIMEOUT 172.16.101.1"
+ 	log_test $? 0 "IPv4 default route with IPv6 gateway"
+ 
+ 	#
+@@ -1785,7 +1781,7 @@ sysctl_nexthop_compat_mode_check()
+ 	local sysctlname="net.ipv4.nexthop_compat_mode"
+ 	local lprefix=$1
+ 
+-	IPE="ip netns exec me"
++	IPE="ip netns exec $me"
+ 
+ 	$IPE sysctl -q $sysctlname 2>&1 >/dev/null
+ 	if [ $? -ne 0 ]; then
+@@ -1804,7 +1800,7 @@ sysctl_nexthop_compat_mode_set()
+ 	local mode=$1
+ 	local lprefix=$2
+ 
+-	IPE="ip netns exec me"
++	IPE="ip netns exec $me"
+ 
+ 	out=$($IPE sysctl -w $sysctlname=$mode)
+ 	log_test $? 0 "$lprefix set compat mode - $mode"
+@@ -1988,11 +1984,11 @@ ipv4_torture()
+ 	pid1=$!
+ 	ipv4_grp_replace_loop &
+ 	pid2=$!
+-	ip netns exec me ping -f 172.16.101.1 >/dev/null 2>&1 &
++	ip netns exec $me ping -f 172.16.101.1 >/dev/null 2>&1 &
+ 	pid3=$!
+-	ip netns exec me ping -f 172.16.101.2 >/dev/null 2>&1 &
++	ip netns exec $me ping -f 172.16.101.2 >/dev/null 2>&1 &
+ 	pid4=$!
+-	ip netns exec me mausezahn veth1 -B 172.16.101.2 -A 172.16.1.1 -c 0 -t tcp "dp=1-1023, flags=syn" >/dev/null 2>&1 &
++	ip netns exec $me mausezahn veth1 -B 172.16.101.2 -A 172.16.1.1 -c 0 -t tcp "dp=1-1023, flags=syn" >/dev/null 2>&1 &
+ 	pid5=$!
+ 
+ 	sleep 300
+@@ -2042,11 +2038,11 @@ ipv4_res_torture()
+ 	pid1=$!
+ 	ipv4_res_grp_replace_loop &
+ 	pid2=$!
+-	ip netns exec me ping -f 172.16.101.1 >/dev/null 2>&1 &
++	ip netns exec $me ping -f 172.16.101.1 >/dev/null 2>&1 &
+ 	pid3=$!
+-	ip netns exec me ping -f 172.16.101.2 >/dev/null 2>&1 &
++	ip netns exec $me ping -f 172.16.101.2 >/dev/null 2>&1 &
+ 	pid4=$!
+-	ip netns exec me mausezahn veth1 \
++	ip netns exec $me mausezahn veth1 \
+ 				-B 172.16.101.2 -A 172.16.1.1 -c 0 \
+ 				-t tcp "dp=1-1023, flags=syn" >/dev/null 2>&1 &
+ 	pid5=$!
+@@ -2081,10 +2077,10 @@ basic()
+ 
+ 	# create nh with linkdown device - fails
+ 	$IP li set veth1 up
+-	ip -netns peer li set veth2 down
++	ip -netns $peer li set veth2 down
+ 	run_cmd "$IP nexthop add id 1 dev veth1"
+ 	log_test $? 2 "Nexthop with device that is linkdown"
+-	ip -netns peer li set veth2 up
++	ip -netns $peer li set veth2 up
+ 
+ 	# device only
+ 	run_cmd "$IP nexthop add id 1 dev veth1"
+@@ -2465,7 +2461,7 @@ fi
+ for t in $TESTS
+ do
+ 	case $t in
+-	none) IP="ip -netns peer"; setup; exit 0;;
++	none) IP="ip -netns $peer"; setup; exit 0;;
+ 	*) setup; $t; cleanup;;
  	esac
  done
- 
--cleanup
- setup
- 
--run_cmd ip -netns h1 route get 192.168.1.1
-+run_cmd ip -netns $h1 route get 192.168.1.1
- log_test $? 0 "nexthop: get route with nexthop without gw"
--run_cmd ip netns exec h1 ping -c1 192.168.1.1
-+run_cmd ip netns exec $h1 ping -c1 192.168.1.1
- log_test $? 0 "nexthop: ping through nexthop without gw"
- 
- exit $ret
 -- 
 2.41.0
 
