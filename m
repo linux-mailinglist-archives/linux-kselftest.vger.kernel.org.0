@@ -1,234 +1,226 @@
-Return-Path: <linux-kselftest+bounces-501-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-502-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4B747F6CDD
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 08:22:47 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A27F7F6F83
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 10:28:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 70A36281A83
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 07:22:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7ACDA1C20B06
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 09:27:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AA904420;
-	Fri, 24 Nov 2023 07:22:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D64BCA74;
+	Fri, 24 Nov 2023 09:27:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vrull.eu header.i=@vrull.eu header.b="pLeWM1Wj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dcNMmIBS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29FFA1731
-	for <linux-kselftest@vger.kernel.org>; Thu, 23 Nov 2023 23:22:37 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-507cd62472dso2754986e87.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 23 Nov 2023 23:22:37 -0800 (PST)
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E558D46;
+	Fri, 24 Nov 2023 01:27:53 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id 41be03b00d2f7-5c2139492d9so1091634a12.0;
+        Fri, 24 Nov 2023 01:27:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=vrull.eu; s=google; t=1700810555; x=1701415355; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dTCTYVT+alIj/hXglZXCEukMBb5xc4LjFRdKzIJrwQI=;
-        b=pLeWM1Wjrk4Dz9WkKNV01mgNP1ma6s/hKogEJidXf+J9gOAkpwXh//dHrq/gZ1tbsg
-         TsIAElOopAnVwT2e2/6HUpdRm3CBh7pNKhAib4zB1tGi8/eqy2db5u8vQ6VGKLtPEdVJ
-         wq8F5cQpm+Rxp/MP46M1rXGnZRtKa77xuAo2/wtCMdw+rhzaPweYwe6PJjAhf/U3j4Ij
-         F2GR6EwPFrAPyjC3mrg9OaPmeaEpTJMeQlN4VZtaLAW1TlMI9ocafd3OTgts04dP3DMO
-         IzHqZA1dEgtuRW+CnkcBE+ohEwosxA5p4ax9TXT/Hc8wbQ9s1YNZmwTJcvpHSvgIh/Nb
-         Dzfg==
+        d=gmail.com; s=20230601; t=1700818072; x=1701422872; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=08TyyyR4Y0mFzmW5qWREvNnpyQq7Y6bXyj+Ypqof5Ro=;
+        b=dcNMmIBS28e5Ca7m55dfpAtZpzyi2EyTSYOugN8BjQY5kBm10+ehYNfAetD21IpBT4
+         dYojIvjJkIqvgB5TYNNFRXhVn03TzP5y5kVUPEosvU/j8s1yejo2DYTzbvfSFC0Wzxd1
+         D14xnrbiUQ8RQBGfkZOw850o0svO9zPZwPc0CUW+mm+Hrr/UQF+xnb5VcpAq+0udAtBT
+         EKuDAZQDNNNteJsDC9AN6gM/QBxC5+QdM5Mtjl7xTM1drji90iKWbNBnxZAFOdMXzO99
+         gyZf7fjC+2yAclLvDmbXT8EqpAfQAQsfCy60pjK/BbfFj84zYiioqkyIgyhN6Hc6YJ6S
+         p62Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700810555; x=1701415355;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dTCTYVT+alIj/hXglZXCEukMBb5xc4LjFRdKzIJrwQI=;
-        b=HNdYsDD/AJj7CoL2xzQcXoW0BuiJbEnJBYWNP73AxguWpFKoYOmE+oheb0vfsv5rTv
-         RXO11RZmY6M3ndUUF3JrksJ0IoUZwbHEbP9TTkSDiQ37BcF/WTI9Lb3rlIQE5f1AAF5i
-         kCkN2k7O/8XvOeLCemJn9stNB76YWZMKeYFmZOmac3OS1/cKf9aOXf2uhKVd5KTf7bsD
-         8bqQTKDBNPKkBLnzGveRrK4irDcMmQEyxdHnivQzk4cEvBZWHYbAoNM0uvNTSnQ7jXz/
-         FBk3QW0PCe9q4s3Hbm79p5XyNfFC8mCY790giL+comxF5tkgHPp39tI/EGStsSLVPlIT
-         rPVg==
-X-Gm-Message-State: AOJu0YxjIRHJljDBVW2j/eNFG5LEoKk6l2WFIbUTE3eGt79KJVW+x5UA
-	wZGBWdlnEtIjH2ppwcBuFWOXMJAojDfSYwZOJ91i0rtD
-X-Google-Smtp-Source: AGHT+IFRswhz1gVkvMsF4D/eVNQFjsDNT0mxrUgf8ssfidkb6p0pdysEYXgPfpWNEDJ755CSdEkwNA==
-X-Received: by 2002:a17:906:100e:b0:9f2:8220:3f57 with SMTP id 14-20020a170906100e00b009f282203f57mr4003586ejm.8.1700810534715;
-        Thu, 23 Nov 2023 23:22:14 -0800 (PST)
-Received: from beast.fritz.box (62-178-148-172.cable.dynamic.surfer.at. [62.178.148.172])
-        by smtp.gmail.com with ESMTPSA id q18-20020a1709060e5200b00992f2befcbcsm1709930eji.180.2023.11.23.23.22.13
+        d=1e100.net; s=20230601; t=1700818072; x=1701422872;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=08TyyyR4Y0mFzmW5qWREvNnpyQq7Y6bXyj+Ypqof5Ro=;
+        b=X4SoG3Qcp2IywZ+HuoweRQZYEjrNRa6sYY+D642r5rM1qcu0VAJUNAzD2XzGM7c21l
+         L7vQAZTr91XtwQbiSF7zafDDOiLSyJMxGKgyiQIJfOkW/vzqB9neoKgp4IlYxgvVWUxL
+         xLMS30G9DmhqySVjXk6d0BXN/z8YR0o00+clrf9l86DGw8L4wQIAmmjolwRJlf3A8ATM
+         5WgIiyC/8qI0k6/1RdSPIRbBcbXN7TofUDGzpl6Zz5XCiHiJR8JRZ2YcI5y1ysM8x6lE
+         2vkAIaASWcmInLTnqxNijVQKFKUKeK/fqr15lMXP3RV6FzqlqeJs46o1pUY6qqaSD1si
+         jKHw==
+X-Gm-Message-State: AOJu0YyNjr/X5wPVicVdJOgcv8xN0W7wZ/qCT5sr32K4DiPPHM+lalug
+	kPk9Z/7pKYe8i4KbXud1kI30TcYl0nHgvxXY
+X-Google-Smtp-Source: AGHT+IHTKuXx1In518jaVlTWSkT4umIt/5+eSyON4kwy4VQRtnBX+eESfWnKM9xaJCzTkP/QLA9r5w==
+X-Received: by 2002:a05:6a20:42a0:b0:17d:f127:d435 with SMTP id o32-20020a056a2042a000b0017df127d435mr2496571pzj.45.1700818072175;
+        Fri, 24 Nov 2023 01:27:52 -0800 (PST)
+Received: from Laptop-X1.redhat.com ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id o10-20020a170902d4ca00b001cfacc54674sm32679plg.106.2023.11.24.01.27.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Nov 2023 23:22:14 -0800 (PST)
-From: Christoph Muellner <christoph.muellner@vrull.eu>
-To: linux-riscv@lists.infradead.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Andrew Morton <akpm@linux-foundation.org>,
+        Fri, 24 Nov 2023 01:27:50 -0800 (PST)
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: netdev@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
 	Shuah Khan <shuah@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Anup Patel <apatel@ventanamicro.com>,
-	Philipp Tomsich <philipp.tomsich@vrull.eu>,
-	Andrew Jones <ajones@ventanamicro.com>,
-	Guo Ren <guoren@kernel.org>,
-	Daniel Henrique Barboza <dbarboza@ventanamicro.com>,
-	Conor Dooley <conor.dooley@microchip.com>,
+	David Ahern <dsahern@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	Po-Hsu Lin <po-hsu.lin@canonical.com>,
+	Guillaume Nault <gnault@redhat.com>,
 	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Andrea Parri <parri.andrea@gmail.com>,
-	Will Deacon <will@kernel.org>,
-	Daniel Lustig <dlustig@nvidia.com>,
-	Peter Zijlstra <peterz@infradead.org>
-Cc: =?UTF-8?q?Christoph=20M=C3=BCllner?= <christoph.muellner@vrull.eu>
-Subject: [RFC PATCH 5/5] RISC-V: selftests: Add DTSO tests
-Date: Fri, 24 Nov 2023 08:21:42 +0100
-Message-ID: <20231124072142.2786653-6-christoph.muellner@vrull.eu>
+	Ryan Roberts <ryan.roberts@arm.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Mark Brown <broonie@kernel.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Hangbin Liu <liuhangbin@gmail.com>
+Subject: [PATCH net-next 00/38] Conver all net selftests to run in unique namespace
+Date: Fri, 24 Nov 2023 17:26:58 +0800
+Message-ID: <20231124092736.3673263-1-liuhangbin@gmail.com>
 X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20231124072142.2786653-1-christoph.muellner@vrull.eu>
-References: <20231124072142.2786653-1-christoph.muellner@vrull.eu>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Christoph Müllner <christoph.muellner@vrull.eu>
+As Guillaume pointed, many selftests create namespaces with very common
+names (like "client" or "server") or even (partially) run directly in init_net.
+This makes these tests prone to failure if another namespace with the same
+name already exists. It also makes it impossible to run several instances
+of these tests in parallel.
 
-This patch tests the dynamic memory consistency model prctl() behaviour
-on RISC-V. It does not depend on CONFIG_RISCV_ISA_SSDTSO or the availability
-of Ssdtso, but will test other aspects if these are not given.
+This patch set conver all the net selftests to run in unique namespace,
+so we can update the selftest freamwork to run all tests in it's own namespace
+in parallel. After update, we only need to wait for the test which need
+longest time.
 
-Signed-off-by: Christoph Müllner <christoph.muellner@vrull.eu>
----
- tools/testing/selftests/riscv/Makefile        |  2 +-
- tools/testing/selftests/riscv/dtso/.gitignore |  1 +
- tools/testing/selftests/riscv/dtso/Makefile   | 11 +++
- tools/testing/selftests/riscv/dtso/dtso.c     | 77 +++++++++++++++++++
- 4 files changed, 90 insertions(+), 1 deletion(-)
- create mode 100644 tools/testing/selftests/riscv/dtso/.gitignore
- create mode 100644 tools/testing/selftests/riscv/dtso/Makefile
- create mode 100644 tools/testing/selftests/riscv/dtso/dtso.c
+]# per_test_logging=1 time ./run_kselftest.sh -n -c net
+TAP version 13
+# selftests: net: reuseport_bpf_numa
+not ok 3 selftests: net: reuseport_bpf_numa # exit=1
+# selftests: net: reuseport_bpf_cpu
+not ok 2 selftests: net: reuseport_bpf_cpu # exit=1
+# selftests: net: reuseport_dualstack
+not ok 4 selftests: net: reuseport_dualstack # exit=1
+# selftests: net: reuseaddr_conflict
+ok 5 selftests: net: reuseaddr_conflict
 
-diff --git a/tools/testing/selftests/riscv/Makefile b/tools/testing/selftests/riscv/Makefile
-index 4a9ff515a3a0..1421c21841f9 100644
---- a/tools/testing/selftests/riscv/Makefile
-+++ b/tools/testing/selftests/riscv/Makefile
-@@ -5,7 +5,7 @@
- ARCH ?= $(shell uname -m 2>/dev/null || echo not)
- 
- ifneq (,$(filter $(ARCH),riscv))
--RISCV_SUBTARGETS ?= hwprobe vector mm
-+RISCV_SUBTARGETS ?= dtso hwprobe vector mm
- else
- RISCV_SUBTARGETS :=
- endif
-diff --git a/tools/testing/selftests/riscv/dtso/.gitignore b/tools/testing/selftests/riscv/dtso/.gitignore
-new file mode 100644
-index 000000000000..217d01679115
---- /dev/null
-+++ b/tools/testing/selftests/riscv/dtso/.gitignore
-@@ -0,0 +1 @@
-+dtso
-diff --git a/tools/testing/selftests/riscv/dtso/Makefile b/tools/testing/selftests/riscv/dtso/Makefile
-new file mode 100644
-index 000000000000..a1ffbdd3da85
---- /dev/null
-+++ b/tools/testing/selftests/riscv/dtso/Makefile
-@@ -0,0 +1,11 @@
-+# SPDX-License-Identifier: GPL-2.0
-+# Copyright (C) 2023 VRULL
-+
-+CFLAGS += -I$(top_srcdir)/tools/include
-+
-+TEST_GEN_PROGS := dtso
-+
-+include ../../lib.mk
-+
-+$(OUTPUT)/dtso: dtso.c ../hwprobe/sys_hwprobe.S
-+	$(CC) -static -o$@ $(CFLAGS) $(LDFLAGS) $^
-diff --git a/tools/testing/selftests/riscv/dtso/dtso.c b/tools/testing/selftests/riscv/dtso/dtso.c
-new file mode 100644
-index 000000000000..b9ca33ca6551
---- /dev/null
-+++ b/tools/testing/selftests/riscv/dtso/dtso.c
-@@ -0,0 +1,77 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/* dtso - used for functional tests of memory consistency model switching
-+ * at run-time.
-+ *
-+ * Copyright (c) 2023 Christoph Muellner <christoph.muellner@vrull.eu>
-+ */
-+
-+#include <sys/prctl.h>
-+#include <unistd.h>
-+#include <errno.h>
-+
-+#include "../hwprobe/hwprobe.h"
-+#include "../../kselftest_harness.h"
-+
-+/*
-+ * We have the following cases:
-+ * 1) DTSO support disabed in the kernel config:
-+ *    - Ssdtso is not detected
-+ *    - {G,S}ET_MEMORY_CONSISTENCY_MODEL fails with EINVAL
-+ * 2) DTSO support enabled and Ssdtso not available:
-+ *    - Ssdtso is not detected
-+ *    - {G,S}ET_MEMORY_CONSISTENCY_MODEL works for WMO and fails for TSO with EINVAL:
-+ * 3) DTSO support enabled and Ssdtso available
-+ *    - Ssdtso is detected
-+ *    - {G,S}ET_MEMORY_CONSISTENCY_MODEL works for WMO and TSO
-+ */
-+
-+TEST(dtso)
-+{
-+	struct riscv_hwprobe pair;
-+	int ret;
-+	bool ssdtso_configured;
-+	bool ssdtso_available;
-+
-+	ret = prctl(PR_GET_MEMORY_CONSISTENCY_MODEL);
-+	if (ret < 0) {
-+		ASSERT_EQ(errno, EINVAL);
-+		ssdtso_configured = false;
-+	} else {
-+		ASSERT_TRUE(ret == PR_MEMORY_CONSISTENCY_MODEL_RISCV_WMO ||
-+			    ret == PR_MEMORY_CONSISTENCY_MODEL_RISCV_TSO);
-+		ssdtso_configured = true;
-+	}
-+
-+	pair.key = RISCV_HWPROBE_KEY_IMA_EXT_0;
-+	ret = riscv_hwprobe(&pair, 1, 0, NULL, 0);
-+	ASSERT_GE(ret, 0);
-+	ASSERT_EQ(pair.key, RISCV_HWPROBE_KEY_IMA_EXT_0);
-+	ssdtso_available = !!(pair.value & RISCV_HWPROBE_EXT_SSDTSO);
-+
-+	if (ssdtso_configured) {
-+		ret = prctl(PR_GET_MEMORY_CONSISTENCY_MODEL);
-+		ASSERT_TRUE(ret == PR_MEMORY_CONSISTENCY_MODEL_RISCV_WMO ||
-+			    ret == PR_MEMORY_CONSISTENCY_MODEL_RISCV_TSO);
-+
-+		if (ssdtso_available) {
-+			ret = prctl(PR_SET_MEMORY_CONSISTENCY_MODEL,
-+				    PR_MEMORY_CONSISTENCY_MODEL_RISCV_TSO);
-+			ASSERT_EQ(ret, 0);
-+			ret = prctl(PR_GET_MEMORY_CONSISTENCY_MODEL);
-+			ASSERT_TRUE(ret == PR_MEMORY_CONSISTENCY_MODEL_RISCV_TSO);
-+		} else {
-+			ksft_test_result_skip("Ssdtso not available\n");
-+		}
-+
-+		ret = prctl(PR_SET_MEMORY_CONSISTENCY_MODEL,
-+			    PR_MEMORY_CONSISTENCY_MODEL_RISCV_WMO);
-+		ASSERT_EQ(ret, 0);
-+		ret = prctl(PR_GET_MEMORY_CONSISTENCY_MODEL);
-+		ASSERT_TRUE(ret == PR_MEMORY_CONSISTENCY_MODEL_RISCV_WMO);
-+	} else {
-+		ASSERT_EQ(ssdtso_available, false);
-+		ksft_test_result_skip("Ssdtso not configured\n");
-+	}
-+}
-+
-+TEST_HARNESS_MAIN
+...
+
+# selftests: net: test_vxlan_mdb.sh
+ok 90 selftests: net: test_vxlan_mdb.sh
+# selftests: net: fib_nexthops.sh
+not ok 41 selftests: net: fib_nexthops.sh # exit=1
+# selftests: net: fcnal-test.sh
+not ok 36 selftests: net: fcnal-test.sh # exit=1
+
+real    55m1.238s
+user    12m10.350s
+sys     22m17.432s
+
+
+Hangbin Liu (38):
+  selftests/net: add lib.sh
+  selftests/net: arp_ndisc_evict_nocarrier.sh convert to run test in
+    unique namespace
+  selftest: arp_ndisc_untracked_subnets.sh convert to run test in unique
+    namespace
+  selftests/net: convert cmsg tests to make them run in unique namespace
+  selftests/net: convert drop_monitor_tests.sh to run it in unique
+    namespace
+  selftests/net: convert fcnal-test.sh to run it in unique namespace
+  selftests/net: convert fib_nexthop_multiprefix to run it in unique
+    namespace
+  selftests/net: convert fib_nexthop_nongw.sh to run it in unique
+    namespace
+  selftests/net: convert fib_nexthops.sh to run it in unique namespace
+  selftests/net: convert fib-onlink-tests.sh to run it in unique
+    namespace
+  selftests/net: convert fib_rule_tests.sh to run it in unique namespace
+  selftests/net: convert fib_tests.sh to run it in unique namespace
+  selftests/net: convert gre_gso.sh to run it in unique namespace
+  selftests/net: convert icmp_redirect.sh to run it in unique namespace
+  sleftests/net: convert icmp.sh to run it in unique namespace
+  selftests/net: convert ioam6.sh to run it in unique namespace
+  selftests/net: convert l2tp.sh to run it in unique namespace
+  selftests/net: convert ndisc_unsolicited_na_test.sh to run it in
+    unique namespace
+  selftests/net: convert netns-name.sh to run it in unique namespace
+  selftests/net: convert fdb_flush.sh to run it in unique namespace
+  selftests/net: convert rtnetlink.sh to run it in unique namespace
+  selftests/net: convert sctp_vrf.sh to run it in unique namespace
+  selftests/net: use unique netns name for setup_loopback.sh
+    setup_veth.sh
+  selftests/net: convert stress_reuseport_listen.sh to run it in unique
+    namespace
+  selftests/net: convert test_bridge_backup_port.sh to run it in unique
+    namespace
+  selftests/net: convert test_bridge_neigh_suppress.sh to run it in
+    unique namespace
+  selftests/net: convert test_vxlan_mdb.sh to run it in unique namespace
+  selftests/net: convert test_vxlan_nolocalbypass.sh to run it in unique
+    namespace
+  selftests/net: convert test_vxlan_under_vrf.sh to run it in unique
+    namespace
+  selftests/net: convert test_vxlan_vnifiltering.sh to run it in unique
+    namespace
+  selftests/net: convert toeplitz.sh to run it in unique namespace
+  selftests/net: convert unicast_extensions.sh to run it in unique
+    namespace
+  selftests/net: convert vrf_route_leaking.sh to run it in unique
+    namespace
+  selftests/net: convert vrf_strict_mode_test.sh to run it in unique
+    namespace
+  selftests/net: convert vrf-xfrm-tests.sh to run it in unique namespace
+  selftests/net: convert traceroute.sh to run it in unique namespace
+  selftests/net: convert xfrm_policy.sh to run it in unique namespace
+  kselftest/runner.sh: add netns support
+
+ tools/testing/selftests/kselftest/runner.sh   |  26 +-
+ tools/testing/selftests/net/Makefile          |   2 +-
+ .../net/arp_ndisc_evict_nocarrier.sh          |  46 +--
+ .../net/arp_ndisc_untracked_subnets.sh        |  18 +-
+ tools/testing/selftests/net/cmsg_ipv6.sh      |  10 +-
+ tools/testing/selftests/net/cmsg_so_mark.sh   |   7 +-
+ tools/testing/selftests/net/cmsg_time.sh      |   7 +-
+ .../selftests/net/drop_monitor_tests.sh       |  21 +-
+ tools/testing/selftests/net/fcnal-test.sh     |  30 +-
+ tools/testing/selftests/net/fdb_flush.sh      |  11 +-
+ .../testing/selftests/net/fib-onlink-tests.sh |   7 +-
+ .../selftests/net/fib_nexthop_multiprefix.sh  | 104 +++--
+ .../selftests/net/fib_nexthop_nongw.sh        |  34 +-
+ tools/testing/selftests/net/fib_nexthops.sh   | 142 ++++---
+ tools/testing/selftests/net/fib_rule_tests.sh |  36 +-
+ tools/testing/selftests/net/fib_tests.sh      | 184 +++++----
+ tools/testing/selftests/net/gre_gso.sh        |  18 +-
+ tools/testing/selftests/net/icmp.sh           |  10 +-
+ tools/testing/selftests/net/icmp_redirect.sh  | 182 +++++----
+ tools/testing/selftests/net/ioam6.sh          | 247 ++++++------
+ tools/testing/selftests/net/l2tp.sh           | 130 +++----
+ tools/testing/selftests/net/lib.sh            |  98 +++++
+ .../net/ndisc_unsolicited_na_test.sh          |  19 +-
+ tools/testing/selftests/net/netns-name.sh     |  44 +--
+ tools/testing/selftests/net/rtnetlink.sh      |  21 +-
+ tools/testing/selftests/net/sctp_vrf.sh       |  12 +-
+ tools/testing/selftests/net/settings          |   2 +-
+ tools/testing/selftests/net/setup_loopback.sh |   8 +-
+ tools/testing/selftests/net/setup_veth.sh     |   9 +-
+ .../selftests/net/stress_reuseport_listen.sh  |   6 +-
+ .../selftests/net/test_bridge_backup_port.sh  | 368 +++++++++---------
+ .../net/test_bridge_neigh_suppress.sh         | 333 ++++++++--------
+ tools/testing/selftests/net/test_vxlan_mdb.sh | 202 +++++-----
+ .../selftests/net/test_vxlan_nolocalbypass.sh |  48 ++-
+ .../selftests/net/test_vxlan_under_vrf.sh     |  70 ++--
+ .../selftests/net/test_vxlan_vnifiltering.sh  | 154 +++++---
+ tools/testing/selftests/net/toeplitz.sh       |  16 +-
+ tools/testing/selftests/net/traceroute.sh     |  82 ++--
+ .../selftests/net/unicast_extensions.sh       |  99 +++--
+ tools/testing/selftests/net/vrf-xfrm-tests.sh |  77 ++--
+ .../selftests/net/vrf_route_leaking.sh        | 201 +++++-----
+ .../selftests/net/vrf_strict_mode_test.sh     |  47 ++-
+ tools/testing/selftests/net/xfrm_policy.sh    | 138 +++----
+ tools/testing/selftests/run_kselftest.sh      |   4 +
+ 44 files changed, 1676 insertions(+), 1654 deletions(-)
+ create mode 100644 tools/testing/selftests/net/lib.sh
+
 -- 
 2.41.0
 
