@@ -1,180 +1,102 @@
-Return-Path: <linux-kselftest+bounces-540-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-541-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCE9B7F6FD9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 10:31:21 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 533247F7024
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 10:40:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CBBAE1C210AC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 09:31:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E824EB20F3D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 09:40:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 016F4171A3;
-	Fri, 24 Nov 2023 09:30:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96FED15AD5;
+	Fri, 24 Nov 2023 09:40:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZcqC6wJC"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="iCbh6pTS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E01D10E7;
-	Fri, 24 Nov 2023 01:30:37 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1cf6bdf8274so19666595ad.1;
-        Fri, 24 Nov 2023 01:30:37 -0800 (PST)
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8A0D71
+	for <linux-kselftest@vger.kernel.org>; Fri, 24 Nov 2023 01:40:41 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-409299277bbso11567615e9.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 24 Nov 2023 01:40:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700818236; x=1701423036; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=duX0Wmbx1MdXQmSsGeJq/IxxlguI9DSP3X41UJZyQfY=;
-        b=ZcqC6wJCXzyrPRnoQPtMiBVUkixUoDBc1QqNLS1/bsBx1WF3IFMFCBr9hxas3EyAz9
-         bI1MbAAnFKWP6Z1xGkDlrGq14THpMcSlnwtZP0OPYtZPJdFD+4EktKxgqV2S7D5mjYQp
-         lIQaEVuXLw+/QWauMwHE/bXlOYcTHXYiNm6WPww55wRz7KdZuWwIjqoU6Bv35BD+KkPD
-         TLlqMNe8bzVzE0n49UU9RHI6vkTA+/YumVAfpwiaxR01Ep9Web0VG6B5UJSFR8G5voTL
-         JJFWn4y8shawJlayseLhuZyljPM4HJjTrNgoV5VrdqW3ZrWJH2QycyIpoKvpyVAT5w6B
-         LMNQ==
+        d=ventanamicro.com; s=google; t=1700818840; x=1701423640; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=liKWi3k1bQmGEMyLltDAEJD618fY1ygP7q9s9GKBNQY=;
+        b=iCbh6pTSrlU3axKSDVlAEbvJ8FkJrYAlkp7tLPy6XcDdc2tocoULEnP8JKrWRUWL8s
+         8Qmq1stTFpQBnTpqByFwVoZ5cFaug1ugwtX8lRe6QzH+hj6nLD1bCO/YxV+581INpfGx
+         L6k4BedylFdg+ry+nqhJtkkfyrs69+IOUeT8j5Yhq9E9WiNCq5nMZOqBi2zCfPE/bZpX
+         0WnNvPB9fuIPv6WQjrtNo/AyQPGEnwYkn9nU+GsBzWtci2Ip8S1GIy4meYFVx8L31USE
+         btemkWbMp7HfTht8JzINJgLzLNK6qmJCFRnRJDleBMvX59NtXZyL8FAzvdO0LtW3ji2n
+         1R6g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700818236; x=1701423036;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=duX0Wmbx1MdXQmSsGeJq/IxxlguI9DSP3X41UJZyQfY=;
-        b=rvDFxjprURG39VYM3m0Ua6xrQ0tOHIyzBN8IBcDrgJJxCSZUk2q95AcaVv2wyN4ajJ
-         zwSKs7PLHRhad4hsIMRaN2i7nN5gsUyyhwdjOVt6607W22DFuiLEDY+3+1YgHxpahrzy
-         BgCA41o+60SfnkTM2hROdaIlUukFwmbSMzKezTP8O7PFhAnYT6+txbD0Ir4afgna+gKF
-         b6erBwe9uh81iZWB0OUjku4uD42iNUePOf677v2Nvx7bg4l3/gB6pkuv5XHV/EM+ZOif
-         xpViXLC0vpPyxFce/5OUZOa+N/Bs5eGU/0kflHOzN1Xgq7mv0RsUonBqaX8zH4AXOoX3
-         EPyw==
-X-Gm-Message-State: AOJu0YzC1JexywR+20ZfzdXeigydlN59SKLU+et3IWiD+qUif83cBnvo
-	u8J+/or07mgVXHPV1MBDs1BBJztR5FD+vonu
-X-Google-Smtp-Source: AGHT+IEVpaxQ8GsEZG5j3IImyqKQwuQUt4aQ3k30sc2KjXvbhDfGkmuUB0DiDnXRayFt8EaOxPSfVQ==
-X-Received: by 2002:a17:902:d50e:b0:1bd:e258:a256 with SMTP id b14-20020a170902d50e00b001bde258a256mr2609935plg.32.1700818236443;
-        Fri, 24 Nov 2023 01:30:36 -0800 (PST)
-Received: from Laptop-X1.redhat.com ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id o10-20020a170902d4ca00b001cfacc54674sm32679plg.106.2023.11.24.01.30.32
+        d=1e100.net; s=20230601; t=1700818840; x=1701423640;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=liKWi3k1bQmGEMyLltDAEJD618fY1ygP7q9s9GKBNQY=;
+        b=wRUvLROF4w0rjbYTTKsCG1Bh/njbvrHz0q6My0fCWts27cEH1ElLEb+jHM0hud9EBY
+         8oNXqMGwK0AQOOltGeI05xvsN2Up+ndD4rNr9HzqOY2n3PJjr0GeUX4EJH9fIepvwbD1
+         JHylnOjuZkgdZvbKQxW4UG+HppPeTSBRH3IAut2b1at5ZODlupr0Vo/++cXq7yXO3nJk
+         EiRe/nQPO4MrNRlr/LBuBvaxaY97TH1ID6h0UKwDlhzDwSoV5bL5yfqhHqo3ePxAYTDZ
+         RHZt9qnOEaF54CEX0vuZpT9uFCm7wVH7B/An3bosKESzFdTj6ceOC1ZLu23Sy9jK3ohY
+         cI1A==
+X-Gm-Message-State: AOJu0Yx02BKwzMMQwcpmHr1wrnnD54PACIaIZlS2o09KWsr2Fu2g24tV
+	2ntOuSdoiwa3tSiCuhRle8D4LQ==
+X-Google-Smtp-Source: AGHT+IF9VLUBW6WyHhdlX2rn3vRUYeHRnBcJF0nS6mbPXvTDrFDn41SBn1hGDsyIKy9IjON6i7vOzg==
+X-Received: by 2002:a05:600c:a0b:b0:408:3cdf:32c with SMTP id z11-20020a05600c0a0b00b004083cdf032cmr2103866wmp.41.1700818840312;
+        Fri, 24 Nov 2023 01:40:40 -0800 (PST)
+Received: from localhost (cst-prg-91-180.cust.vodafone.cz. [46.135.91.180])
+        by smtp.gmail.com with ESMTPSA id q19-20020a05600c46d300b0040b35195e54sm4550012wmo.5.2023.11.24.01.40.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Nov 2023 01:30:35 -0800 (PST)
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: netdev@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	David Ahern <dsahern@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	Po-Hsu Lin <po-hsu.lin@canonical.com>,
-	Guillaume Nault <gnault@redhat.com>,
-	=?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Mark Brown <broonie@kernel.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCH net-next 38/38] kselftest/runner.sh: add netns support
-Date: Fri, 24 Nov 2023 17:27:36 +0800
-Message-ID: <20231124092736.3673263-39-liuhangbin@gmail.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20231124092736.3673263-1-liuhangbin@gmail.com>
-References: <20231124092736.3673263-1-liuhangbin@gmail.com>
+        Fri, 24 Nov 2023 01:40:39 -0800 (PST)
+Date: Fri, 24 Nov 2023 10:40:34 +0100
+From: Andrew Jones <ajones@ventanamicro.com>
+To: Christoph Muellner <christoph.muellner@vrull.eu>
+Cc: linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Albert Ou <aou@eecs.berkeley.edu>, Shuah Khan <shuah@kernel.org>, 
+	Philipp Tomsich <philipp.tomsich@vrull.eu>, Evan Green <evan@rivosinc.com>, 
+	Xiao Wang <xiao.w.wang@intel.com>, Alexandre Ghiti <alexghiti@rivosinc.com>, 
+	Andy Chiu <andy.chiu@sifive.com>, =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>, 
+	Charlie Jenkins <charlie@rivosinc.com>
+Subject: Re: [PATCH 0/5] tools: selftests: riscv: Fix compiler warnings
+Message-ID: <20231124-3934c1b3c4b6dc3f076b0f9a@orel>
+References: <20231123185821.2272504-1-christoph.muellner@vrull.eu>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20231123185821.2272504-1-christoph.muellner@vrull.eu>
 
-Add a variable RUN_IN_NETNS if user want to run all the test in name
-space in parallel. With this, we can save a lot of testing time.
+On Thu, Nov 23, 2023 at 07:58:16PM +0100, Christoph Muellner wrote:
+> From: Christoph Müllner <christoph.muellner@vrull.eu>
+> 
+> When building the RISC-V selftests with a riscv32 compiler I ran into
+> a couple of compiler warnings. While riscv32 support for these tests is
+> questionable, the fixes are so trivial that it is probably best to simply
+> apply them.
+> 
+> Note that the missing-include patch and some format string warnings
+> are also relevant for riscv64.
 
-Nit: the NUM in run_one is not used, rename it to test_num.
+I also posted [1] a couple days ago for the format warnings, but, as this
+series also includes rv32 fixes, then we can drop [1] in favor of this.
 
-Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
----
- tools/testing/selftests/kselftest/runner.sh | 26 +++++++++++++++++++--
- tools/testing/selftests/run_kselftest.sh    |  4 ++++
- 2 files changed, 28 insertions(+), 2 deletions(-)
+[1] https://lore.kernel.org/all/20231122171821.130854-2-ajones@ventanamicro.com/
 
-diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
-index cd2fb43eea61..4306b716c115 100644
---- a/tools/testing/selftests/kselftest/runner.sh
-+++ b/tools/testing/selftests/kselftest/runner.sh
-@@ -6,6 +6,7 @@ export skip_rc=4
- export timeout_rc=124
- export logfile=/dev/stdout
- export per_test_logging=
-+export RUN_IN_NETNS=
- 
- # Defaults for "settings" file fields:
- # "timeout" how many seconds to let each test run before running
-@@ -47,7 +48,7 @@ run_one()
- {
- 	DIR="$1"
- 	TEST="$2"
--	NUM="$3"
-+	local test_num="$3"
- 
- 	BASENAME_TEST=$(basename $TEST)
- 
-@@ -141,6 +142,21 @@ run_one()
- 	fi
- }
- 
-+run_in_netns()
-+{
-+	local netns=$(mktemp -u ${BASENAME_TEST}-XXXXXX)
-+	local tmplog="/tmp/$(mktemp -u ${BASENAME_TEST}-XXXXXX)"
-+	ip netns add $netns
-+	if [ $? -ne 0 ]; then
-+		echo "# Warning: Create namespace failed for $BASENAME_TEST"
-+		echo "not ok $test_num selftests: $DIR: $BASENAME_TEST # Create NS failed"
-+	fi
-+	ip netns exec $netns bash -c "BASE_DIR=$BASE_DIR; source $BASE_DIR/kselftest/runner.sh; logfile=$logfile; run_one $DIR $TEST $test_num" &> $tmplog
-+	ip netns del $netns &> /dev/null
-+	cat $tmplog
-+	rm -f $tmplog
-+}
-+
- run_many()
- {
- 	echo "TAP version 13"
-@@ -155,6 +171,12 @@ run_many()
- 			logfile="/tmp/$BASENAME_TEST"
- 			cat /dev/null > "$logfile"
- 		fi
--		run_one "$DIR" "$TEST" "$test_num"
-+		if [ -n "$RUN_IN_NETNS" ]; then
-+			run_in_netns &
-+		else
-+			run_one "$DIR" "$TEST" "$test_num"
-+		fi
- 	done
-+
-+	wait
- }
-diff --git a/tools/testing/selftests/run_kselftest.sh b/tools/testing/selftests/run_kselftest.sh
-index 92743980e553..637aaa9e474a 100755
---- a/tools/testing/selftests/run_kselftest.sh
-+++ b/tools/testing/selftests/run_kselftest.sh
-@@ -25,6 +25,7 @@ Usage: $0 [OPTIONS]
-   -c | --collection COLLECTION	Run all tests from COLLECTION
-   -l | --list			List the available collection:test entries
-   -d | --dry-run		Don't actually run any tests
-+  -n | --netns			Run each test in namespace
-   -h | --help			Show this usage info
-   -o | --override-timeout	Number of seconds after which we timeout
- EOF
-@@ -53,6 +54,9 @@ while true; do
- 		-d | --dry-run)
- 			dryrun="echo"
- 			shift ;;
-+		-n | --netns)
-+			RUN_IN_NETNS=1
-+			shift ;;
- 		-o | --override-timeout)
- 			kselftest_override_timeout="$2"
- 			shift 2 ;;
--- 
-2.41.0
+For the series,
 
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+
+Thanks,
+drew
 
