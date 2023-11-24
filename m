@@ -1,58 +1,58 @@
-Return-Path: <linux-kselftest+bounces-535-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-536-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66E467F6FC9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 10:30:46 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87DAF7F6FCB
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 10:30:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1CB1828135E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 09:30:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B92F01C211F9
+	for <lists+linux-kselftest@lfdr.de>; Fri, 24 Nov 2023 09:30:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A72561774E;
-	Fri, 24 Nov 2023 09:30:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B32917993;
+	Fri, 24 Nov 2023 09:30:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XK/yYWzE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b4/LTHdo"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6FED7E;
-	Fri, 24 Nov 2023 01:30:15 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1cf89df1eecso12198585ad.3;
-        Fri, 24 Nov 2023 01:30:15 -0800 (PST)
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E234A10C9;
+	Fri, 24 Nov 2023 01:30:19 -0800 (PST)
+Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1cf61eed213so14279035ad.2;
+        Fri, 24 Nov 2023 01:30:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1700818215; x=1701423015; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1700818219; x=1701423019; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qgBEaxvrc+2wbvzWK1enBc8wP3vKvHP/PM/JxL5bcMg=;
-        b=XK/yYWzEAjLE5ObRWdF8RP0/bKKr5kZPNk4t4zxoqWYjicnK+xfEn1N2i4pvs9ZARo
-         +z0lIraWFkI+I/uPab7ZcB+vRHPL8pJIKsEAI9DAr7Df38gQ7nCOtQaICbGyuza2Tsrv
-         qJiiVLs8ks6uw6+FR/tGfQnD6r4JqwW3VS45mg/GDm5Dfm1I75X90asDCTSx9Iu0dD8a
-         b4VRjTd0fBVLmkSPwDMEWFRX8xGyEVdsfEf4WHTwWLeDB3+5xVRNjZm3d+r0mBRAJoq/
-         WaTRDcqlvTgmT/3Z2gCYdmcAkyNysLWBtouKX/irBhMcHnk1YjS7jEHOoRBBOqpoHuYe
-         ZMqQ==
+        bh=yDn8yu+ZXSMz5mDoGBzoKKYnvA+22L4dgcOQ1oqMhxo=;
+        b=b4/LTHdoiElVYt8Aq9QpVuz/aFdHa5ImWLJIXLWdA4DEupXNUIak7ptBwDTfSjv1hn
+         aTzBrng74+0dUmWmuEugmMPtGCqaaFfVYYTEUBi4fEZGcINVOX7stf4wIXy3N3rblI+u
+         s7NPBn7Y+ChxT6bxklfMNT2iZlzouxXg/CdB6DEAYGdXD8aV7f9lRgvMxs81vuPRZWJ2
+         YmYne7MI4Vyk5NbGwevg4OVtp6H/wsOf12+a1dWbPMhUkhpBJsnABfQpYttYbzuAJzQY
+         VGW//mP3G1My31DPI77gqDVb/KEN/+iH2KzPgk5DXpvyIILbvmOiHnRhM4UshAzSoPR2
+         5WmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700818215; x=1701423015;
+        d=1e100.net; s=20230601; t=1700818219; x=1701423019;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qgBEaxvrc+2wbvzWK1enBc8wP3vKvHP/PM/JxL5bcMg=;
-        b=i7xKaEYYnY2hL3FzXIs5WniRNK5nxxtswPg/t+dhhnFiui5BAHrNjHNah3e4DjcqHC
-         Z1/0aEfcPzHxv9u9GdKG5RR/Ont47XD4AStuUS2Jk5+32421toY8bpeTsoYY4dJ00Z7B
-         M9mUslGh3QwPEcLLENW6Gcij70TiOfMC1Ct+yBqp4cB1LFxeNFy3wcY/JYge8EhJe2pM
-         n2BNuBZn3JOXL3OLs/8fKtoqR8hbtn2u1yRhG72ASMClch9Xo+evnWb8jhA261wNggdA
-         gi9Vn/YQcedsFNgWMJuo2bOZHhasiekzYON1F5rwG/ZUlA2apH/uLRuPoiM30Aoa0uCH
-         IQEg==
-X-Gm-Message-State: AOJu0YzUs1Nrt2RlyB/b49eEoFctTOEGEg9e0Mj9+HQDBnh3/3ooQA1/
-	pSqtYd+FcVwb3arIRHat9oErV6hzrQsx2rj+
-X-Google-Smtp-Source: AGHT+IH0J2OY8iTKOZcW8qNuOYyyJQh+Wag3QU6ZZXWb18rSj86/HAPIr7KnztKlKZOUXmgYzQkeKg==
-X-Received: by 2002:a17:902:f68e:b0:1cf:9bd1:aaea with SMTP id l14-20020a170902f68e00b001cf9bd1aaeamr2548042plg.11.1700818214700;
-        Fri, 24 Nov 2023 01:30:14 -0800 (PST)
+        bh=yDn8yu+ZXSMz5mDoGBzoKKYnvA+22L4dgcOQ1oqMhxo=;
+        b=Ypx02i/cbjP7B9DGMx5/2OQ6TzwTyM/01EfUQsSfdqLh/2IUDu4nhAQWEk+kowHjrb
+         9467U2JFM+E83ZJUwClJaGsaZ/YzBJGb5OW8oMbRx0zDkuCMGYnWRqSCZdQlgsVH34W6
+         ZPNXFwKv5EK7HpXPZk1VOPZaiydm7nKoLXH1RWQ7t8+WNd4BMIqMBuK6eqUVfXHF+qfo
+         WlSZGDca7puJF5KPePVRqDGUDZmphbihkp6IldZ7d8gudn90eJbx6SfxX7TfIwltJDGT
+         5p73mcMxIUxVvJsRVlK8Tw3palO045BTMcd0dXRvRk02K5DZ+av5Xu9KbvgSlWciezsR
+         ROFA==
+X-Gm-Message-State: AOJu0Yw9z977vEPNlGqpy07q+3lCF8DW2lwWtPwTVHKiDtiob/upALYW
+	3FNLcLDIMVBLI1v1T4wlZJjRYitOuMkl2+Jg
+X-Google-Smtp-Source: AGHT+IEo3C9WUilU/fhGW9lY9ye2i/v7qOceBd5jmotOh/wGTq+twDbQ4uhZIx7xJi5h5fZl4N9c4w==
+X-Received: by 2002:a17:902:f54c:b0:1cc:5aef:f2d1 with SMTP id h12-20020a170902f54c00b001cc5aeff2d1mr2415575plf.25.1700818218822;
+        Fri, 24 Nov 2023 01:30:18 -0800 (PST)
 Received: from Laptop-X1.redhat.com ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id o10-20020a170902d4ca00b001cfacc54674sm32679plg.106.2023.11.24.01.30.10
+        by smtp.gmail.com with ESMTPSA id o10-20020a170902d4ca00b001cfacc54674sm32679plg.106.2023.11.24.01.30.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Nov 2023 01:30:13 -0800 (PST)
+        Fri, 24 Nov 2023 01:30:18 -0800 (PST)
 From: Hangbin Liu <liuhangbin@gmail.com>
 To: netdev@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -70,9 +70,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Mark Brown <broonie@kernel.org>,
 	Luis Chamberlain <mcgrof@kernel.org>,
 	Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCH net-next 33/38] selftests/net: convert vrf_route_leaking.sh to run it in unique namespace
-Date: Fri, 24 Nov 2023 17:27:31 +0800
-Message-ID: <20231124092736.3673263-34-liuhangbin@gmail.com>
+Subject: [PATCH net-next 34/38] selftests/net: convert vrf_strict_mode_test.sh to run it in unique namespace
+Date: Fri, 24 Nov 2023 17:27:32 +0800
+Message-ID: <20231124092736.3673263-35-liuhangbin@gmail.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20231124092736.3673263-1-liuhangbin@gmail.com>
 References: <20231124092736.3673263-1-liuhangbin@gmail.com>
@@ -86,374 +86,135 @@ Content-Transfer-Encoding: 8bit
 
 Here is the test result after conversion.
 
- ]# ./vrf_route_leaking.sh
+ ]# ./vrf_strict_mode_test.sh
 
- ###########################################################################
- IPv4 (sym route): VRF ICMP ttl error route lookup ping
- ###########################################################################
+ ################################################################################
+ TEST SECTION: VRF strict_mode test on init network namespace
+ ################################################################################
 
- TEST: Basic IPv4 connectivity                                       [ OK ]
- TEST: Ping received ICMP ttl exceeded                               [ OK ]
+     TEST: init: net.vrf.strict_mode is available                        [ OK ]
+
+     TEST: init: strict_mode=0 by default, 0 vrfs                        [ OK ]
 
  ...
 
- TEST: Basic IPv6 connectivity                                       [ OK ]
- TEST: Traceroute6 reports a hop on r1                               [ OK ]
+     TEST: init: check strict_mode=1                                     [ OK ]
 
- Tests passed:  18
+     TEST: testns-HvoZkB: check strict_mode=0                            [ OK ]
+
+ Tests passed:  37
  Tests failed:   0
 
 Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
 ---
- .../selftests/net/vrf_route_leaking.sh        | 201 +++++++++---------
- 1 file changed, 96 insertions(+), 105 deletions(-)
+ .../selftests/net/vrf_strict_mode_test.sh     | 47 +++++++++----------
+ 1 file changed, 22 insertions(+), 25 deletions(-)
 
-diff --git a/tools/testing/selftests/net/vrf_route_leaking.sh b/tools/testing/selftests/net/vrf_route_leaking.sh
-index dedc52562b4f..2da32f4c479b 100755
---- a/tools/testing/selftests/net/vrf_route_leaking.sh
-+++ b/tools/testing/selftests/net/vrf_route_leaking.sh
-@@ -58,6 +58,7 @@
- # to send an ICMP error back to the source when the ttl of a packet reaches 1
- # while it is forwarded between different vrfs.
+diff --git a/tools/testing/selftests/net/vrf_strict_mode_test.sh b/tools/testing/selftests/net/vrf_strict_mode_test.sh
+index 417d214264f3..01552b542544 100755
+--- a/tools/testing/selftests/net/vrf_strict_mode_test.sh
++++ b/tools/testing/selftests/net/vrf_strict_mode_test.sh
+@@ -3,9 +3,7 @@
  
+ # This test is designed for testing the new VRF strict_mode functionality.
+ 
+-# Kselftest framework requirement - SKIP code is 4.
+-ksft_skip=4
+-
 +source lib.sh
- VERBOSE=0
- PAUSE_ON_FAIL=no
- DEFAULT_TTYPE=sym
-@@ -171,11 +172,7 @@ run_cmd_grep()
+ ret=0
+ 
+ # identifies the "init" network namespace which is often called root network
+@@ -247,13 +245,12 @@ setup()
+ {
+ 	modprobe vrf
+ 
+-	ip netns add testns
+-	ip netns exec testns ip link set lo up
++	setup_ns testns
+ }
  
  cleanup()
  {
--	local ns
--
--	for ns in h1 h2 r1 r2; do
--		ip netns del $ns 2>/dev/null
--	done
-+	cleanup_ns $h1 $h2 $r1 $r2
- }
+-	ip netns del testns 2>/dev/null
++	ip netns del $testns 2>/dev/null
  
- setup_vrf()
-@@ -212,72 +209,69 @@ setup_sym()
- 
- 	#
- 	# create nodes as namespaces
--	#
--	for ns in h1 h2 r1; do
--		ip netns add $ns
--		ip -netns $ns link set lo up
--
--		case "${ns}" in
--		h[12]) ip netns exec $ns sysctl -q -w net.ipv6.conf.all.forwarding=0
--		       ip netns exec $ns sysctl -q -w net.ipv6.conf.all.keep_addr_on_down=1
--			;;
--		r1)    ip netns exec $ns sysctl -q -w net.ipv4.ip_forward=1
--		       ip netns exec $ns sysctl -q -w net.ipv6.conf.all.forwarding=1
--		esac
-+	setup_ns h1 h2 r1
-+	for ns in $h1 $h2 $r1; do
-+		if echo $ns | grep -q h[12]-; then
-+			ip netns exec $ns sysctl -q -w net.ipv6.conf.all.forwarding=0
-+			ip netns exec $ns sysctl -q -w net.ipv6.conf.all.keep_addr_on_down=1
-+		else
-+			ip netns exec $ns sysctl -q -w net.ipv4.ip_forward=1
-+			ip netns exec $ns sysctl -q -w net.ipv6.conf.all.forwarding=1
-+		fi
- 	done
- 
- 	#
- 	# create interconnects
- 	#
--	ip -netns h1 link add eth0 type veth peer name r1h1
--	ip -netns h1 link set r1h1 netns r1 name eth0 up
-+	ip -netns $h1 link add eth0 type veth peer name r1h1
-+	ip -netns $h1 link set r1h1 netns $r1 name eth0 up
- 
--	ip -netns h2 link add eth0 type veth peer name r1h2
--	ip -netns h2 link set r1h2 netns r1 name eth1 up
-+	ip -netns $h2 link add eth0 type veth peer name r1h2
-+	ip -netns $h2 link set r1h2 netns $r1 name eth1 up
- 
- 	#
- 	# h1
- 	#
--	ip -netns h1 addr add dev eth0 ${H1_N1_IP}/24
--	ip -netns h1 -6 addr add dev eth0 ${H1_N1_IP6}/64 nodad
--	ip -netns h1 link set eth0 up
-+	ip -netns $h1 addr add dev eth0 ${H1_N1_IP}/24
-+	ip -netns $h1 -6 addr add dev eth0 ${H1_N1_IP6}/64 nodad
-+	ip -netns $h1 link set eth0 up
- 
- 	# h1 to h2 via r1
--	ip -netns h1    route add ${H2_N2} via ${R1_N1_IP} dev eth0
--	ip -netns h1 -6 route add ${H2_N2_6} via "${R1_N1_IP6}" dev eth0
-+	ip -netns $h1    route add ${H2_N2} via ${R1_N1_IP} dev eth0
-+	ip -netns $h1 -6 route add ${H2_N2_6} via "${R1_N1_IP6}" dev eth0
- 
- 	#
- 	# h2
- 	#
--	ip -netns h2 addr add dev eth0 ${H2_N2_IP}/24
--	ip -netns h2 -6 addr add dev eth0 ${H2_N2_IP6}/64 nodad
--	ip -netns h2 link set eth0 up
-+	ip -netns $h2 addr add dev eth0 ${H2_N2_IP}/24
-+	ip -netns $h2 -6 addr add dev eth0 ${H2_N2_IP6}/64 nodad
-+	ip -netns $h2 link set eth0 up
- 
- 	# h2 to h1 via r1
--	ip -netns h2 route add default via ${R1_N2_IP} dev eth0
--	ip -netns h2 -6 route add default via ${R1_N2_IP6} dev eth0
-+	ip -netns $h2 route add default via ${R1_N2_IP} dev eth0
-+	ip -netns $h2 -6 route add default via ${R1_N2_IP6} dev eth0
- 
- 	#
- 	# r1
- 	#
--	setup_vrf r1
--	create_vrf r1 blue 1101
--	create_vrf r1 red 1102
--	ip -netns r1 link set mtu 1400 dev eth1
--	ip -netns r1 link set eth0 vrf blue up
--	ip -netns r1 link set eth1 vrf red up
--	ip -netns r1 addr add dev eth0 ${R1_N1_IP}/24
--	ip -netns r1 -6 addr add dev eth0 ${R1_N1_IP6}/64 nodad
--	ip -netns r1 addr add dev eth1 ${R1_N2_IP}/24
--	ip -netns r1 -6 addr add dev eth1 ${R1_N2_IP6}/64 nodad
-+	setup_vrf $r1
-+	create_vrf $r1 blue 1101
-+	create_vrf $r1 red 1102
-+	ip -netns $r1 link set mtu 1400 dev eth1
-+	ip -netns $r1 link set eth0 vrf blue up
-+	ip -netns $r1 link set eth1 vrf red up
-+	ip -netns $r1 addr add dev eth0 ${R1_N1_IP}/24
-+	ip -netns $r1 -6 addr add dev eth0 ${R1_N1_IP6}/64 nodad
-+	ip -netns $r1 addr add dev eth1 ${R1_N2_IP}/24
-+	ip -netns $r1 -6 addr add dev eth1 ${R1_N2_IP6}/64 nodad
- 
- 	# Route leak from blue to red
--	ip -netns r1 route add vrf blue ${H2_N2} dev red
--	ip -netns r1 -6 route add vrf blue ${H2_N2_6} dev red
-+	ip -netns $r1 route add vrf blue ${H2_N2} dev red
-+	ip -netns $r1 -6 route add vrf blue ${H2_N2_6} dev red
- 
- 	# Route leak from red to blue
--	ip -netns r1 route add vrf red ${H1_N1} dev blue
--	ip -netns r1 -6 route add vrf red ${H1_N1_6} dev blue
-+	ip -netns $r1 route add vrf red ${H1_N1} dev blue
-+	ip -netns $r1 -6 route add vrf red ${H1_N1_6} dev blue
- 
- 
- 	# Wait for ip config to settle
-@@ -293,90 +287,87 @@ setup_asym()
- 
- 	#
- 	# create nodes as namespaces
--	#
--	for ns in h1 h2 r1 r2; do
--		ip netns add $ns
--		ip -netns $ns link set lo up
--
--		case "${ns}" in
--		h[12]) ip netns exec $ns sysctl -q -w net.ipv6.conf.all.forwarding=0
--		       ip netns exec $ns sysctl -q -w net.ipv6.conf.all.keep_addr_on_down=1
--			;;
--		r[12]) ip netns exec $ns sysctl -q -w net.ipv4.ip_forward=1
--		       ip netns exec $ns sysctl -q -w net.ipv6.conf.all.forwarding=1
--		esac
-+	setup_ns h1 h2 r1 r2
-+	for ns in $h1 $h2 $r1 $r2; do
-+		if echo $ns | grep -q h[12]-; then
-+			ip netns exec $ns sysctl -q -w net.ipv6.conf.all.forwarding=0
-+			ip netns exec $ns sysctl -q -w net.ipv6.conf.all.keep_addr_on_down=1
-+		else
-+			ip netns exec $ns sysctl -q -w net.ipv4.ip_forward=1
-+			ip netns exec $ns sysctl -q -w net.ipv6.conf.all.forwarding=1
-+		fi
- 	done
- 
- 	#
- 	# create interconnects
- 	#
--	ip -netns h1 link add eth0 type veth peer name r1h1
--	ip -netns h1 link set r1h1 netns r1 name eth0 up
-+	ip -netns $h1 link add eth0 type veth peer name r1h1
-+	ip -netns $h1 link set r1h1 netns $r1 name eth0 up
- 
--	ip -netns h1 link add eth1 type veth peer name r2h1
--	ip -netns h1 link set r2h1 netns r2 name eth0 up
-+	ip -netns $h1 link add eth1 type veth peer name r2h1
-+	ip -netns $h1 link set r2h1 netns $r2 name eth0 up
- 
--	ip -netns h2 link add eth0 type veth peer name r1h2
--	ip -netns h2 link set r1h2 netns r1 name eth1 up
-+	ip -netns $h2 link add eth0 type veth peer name r1h2
-+	ip -netns $h2 link set r1h2 netns $r1 name eth1 up
- 
--	ip -netns h2 link add eth1 type veth peer name r2h2
--	ip -netns h2 link set r2h2 netns r2 name eth1 up
-+	ip -netns $h2 link add eth1 type veth peer name r2h2
-+	ip -netns $h2 link set r2h2 netns $r2 name eth1 up
- 
- 	#
- 	# h1
- 	#
--	ip -netns h1 link add br0 type bridge
--	ip -netns h1 link set br0 up
--	ip -netns h1 addr add dev br0 ${H1_N1_IP}/24
--	ip -netns h1 -6 addr add dev br0 ${H1_N1_IP6}/64 nodad
--	ip -netns h1 link set eth0 master br0 up
--	ip -netns h1 link set eth1 master br0 up
-+	ip -netns $h1 link add br0 type bridge
-+	ip -netns $h1 link set br0 up
-+	ip -netns $h1 addr add dev br0 ${H1_N1_IP}/24
-+	ip -netns $h1 -6 addr add dev br0 ${H1_N1_IP6}/64 nodad
-+	ip -netns $h1 link set eth0 master br0 up
-+	ip -netns $h1 link set eth1 master br0 up
- 
- 	# h1 to h2 via r1
--	ip -netns h1    route add ${H2_N2} via ${R1_N1_IP} dev br0
--	ip -netns h1 -6 route add ${H2_N2_6} via "${R1_N1_IP6}" dev br0
-+	ip -netns $h1    route add ${H2_N2} via ${R1_N1_IP} dev br0
-+	ip -netns $h1 -6 route add ${H2_N2_6} via "${R1_N1_IP6}" dev br0
- 
- 	#
- 	# h2
- 	#
--	ip -netns h2 link add br0 type bridge
--	ip -netns h2 link set br0 up
--	ip -netns h2 addr add dev br0 ${H2_N2_IP}/24
--	ip -netns h2 -6 addr add dev br0 ${H2_N2_IP6}/64 nodad
--	ip -netns h2 link set eth0 master br0 up
--	ip -netns h2 link set eth1 master br0 up
-+	ip -netns $h2 link add br0 type bridge
-+	ip -netns $h2 link set br0 up
-+	ip -netns $h2 addr add dev br0 ${H2_N2_IP}/24
-+	ip -netns $h2 -6 addr add dev br0 ${H2_N2_IP6}/64 nodad
-+	ip -netns $h2 link set eth0 master br0 up
-+	ip -netns $h2 link set eth1 master br0 up
- 
- 	# h2 to h1 via r2
--	ip -netns h2 route add default via ${R2_N2_IP} dev br0
--	ip -netns h2 -6 route add default via ${R2_N2_IP6} dev br0
-+	ip -netns $h2 route add default via ${R2_N2_IP} dev br0
-+	ip -netns $h2 -6 route add default via ${R2_N2_IP6} dev br0
- 
- 	#
- 	# r1
- 	#
--	setup_vrf r1
--	create_vrf r1 blue 1101
--	create_vrf r1 red 1102
--	ip -netns r1 link set mtu 1400 dev eth1
--	ip -netns r1 link set eth0 vrf blue up
--	ip -netns r1 link set eth1 vrf red up
--	ip -netns r1 addr add dev eth0 ${R1_N1_IP}/24
--	ip -netns r1 -6 addr add dev eth0 ${R1_N1_IP6}/64 nodad
--	ip -netns r1 addr add dev eth1 ${R1_N2_IP}/24
--	ip -netns r1 -6 addr add dev eth1 ${R1_N2_IP6}/64 nodad
-+	setup_vrf $r1
-+	create_vrf $r1 blue 1101
-+	create_vrf $r1 red 1102
-+	ip -netns $r1 link set mtu 1400 dev eth1
-+	ip -netns $r1 link set eth0 vrf blue up
-+	ip -netns $r1 link set eth1 vrf red up
-+	ip -netns $r1 addr add dev eth0 ${R1_N1_IP}/24
-+	ip -netns $r1 -6 addr add dev eth0 ${R1_N1_IP6}/64 nodad
-+	ip -netns $r1 addr add dev eth1 ${R1_N2_IP}/24
-+	ip -netns $r1 -6 addr add dev eth1 ${R1_N2_IP6}/64 nodad
- 
- 	# Route leak from blue to red
--	ip -netns r1 route add vrf blue ${H2_N2} dev red
--	ip -netns r1 -6 route add vrf blue ${H2_N2_6} dev red
-+	ip -netns $r1 route add vrf blue ${H2_N2} dev red
-+	ip -netns $r1 -6 route add vrf blue ${H2_N2_6} dev red
- 
- 	# No route leak from red to blue
- 
- 	#
- 	# r2
- 	#
--	ip -netns r2 addr add dev eth0 ${R2_N1_IP}/24
--	ip -netns r2 -6 addr add dev eth0 ${R2_N1_IP6}/64 nodad
--	ip -netns r2 addr add dev eth1 ${R2_N2_IP}/24
--	ip -netns r2 -6 addr add dev eth1 ${R2_N2_IP6}/64 nodad
-+	ip -netns $r2 addr add dev eth0 ${R2_N1_IP}/24
-+	ip -netns $r2 -6 addr add dev eth0 ${R2_N1_IP6}/64 nodad
-+	ip -netns $r2 addr add dev eth1 ${R2_N2_IP}/24
-+	ip -netns $r2 -6 addr add dev eth1 ${R2_N2_IP6}/64 nodad
- 
- 	# Wait for ip config to settle
- 	sleep 2
-@@ -384,14 +375,14 @@ setup_asym()
- 
- check_connectivity()
+ 	ip link del vrf100 2>/dev/null
+ 	ip link del vrf101 2>/dev/null
+@@ -298,28 +295,28 @@ vrf_strict_mode_tests_testns()
  {
--	ip netns exec h1 ping -c1 -w1 ${H2_N2_IP} >/dev/null 2>&1
-+	ip netns exec $h1 ping -c1 -w1 ${H2_N2_IP} >/dev/null 2>&1
- 	log_test $? 0 "Basic IPv4 connectivity"
- 	return $?
+ 	log_section "VRF strict_mode test on testns network namespace"
+ 
+-	vrf_strict_mode_check_support testns
++	vrf_strict_mode_check_support $testns
+ 
+-	strict_mode_check_default testns
++	strict_mode_check_default $testns
+ 
+-	enable_strict_mode_and_check testns
++	enable_strict_mode_and_check $testns
+ 
+-	add_vrf_and_check testns vrf100 100
+-	config_vrf_and_check testns 10.0.100.1/24 vrf100
++	add_vrf_and_check $testns vrf100 100
++	config_vrf_and_check $testns 10.0.100.1/24 vrf100
+ 
+-	add_vrf_and_check_fail testns vrf101 100
++	add_vrf_and_check_fail $testns vrf101 100
+ 
+-	add_vrf_and_check_fail testns vrf102 100
++	add_vrf_and_check_fail $testns vrf102 100
+ 
+-	add_vrf_and_check testns vrf200 200
++	add_vrf_and_check $testns vrf200 200
+ 
+-	disable_strict_mode_and_check testns
++	disable_strict_mode_and_check $testns
+ 
+-	add_vrf_and_check testns vrf101 100
++	add_vrf_and_check $testns vrf101 100
+ 
+-	add_vrf_and_check testns vrf102 100
++	add_vrf_and_check $testns vrf102 100
+ 
+-	#the strict_mode is disabled in the testns
++	#the strict_mode is disabled in the $testns
  }
  
- check_connectivity6()
- {
--	ip netns exec h1 "${ping6}" -c1 -w1 ${H2_N2_IP6} >/dev/null 2>&1
-+	ip netns exec $h1 "${ping6}" -c1 -w1 ${H2_N2_IP6} >/dev/null 2>&1
- 	log_test $? 0 "Basic IPv6 connectivity"
- 	return $?
- }
-@@ -426,7 +417,7 @@ ipv4_traceroute()
+ vrf_strict_mode_tests_mix()
+@@ -328,25 +325,25 @@ vrf_strict_mode_tests_mix()
  
- 	check_connectivity || return
+ 	read_strict_mode_compare_and_check init 1
  
--	run_cmd_grep "${R1_N1_IP}" ip netns exec h1 traceroute ${H2_N2_IP}
-+	run_cmd_grep "${R1_N1_IP}" ip netns exec $h1 traceroute ${H2_N2_IP}
- 	log_test $? 0 "Traceroute reports a hop on r1"
- }
+-	read_strict_mode_compare_and_check testns 0
++	read_strict_mode_compare_and_check $testns 0
  
-@@ -449,7 +440,7 @@ ipv6_traceroute()
+-	del_vrf_and_check testns vrf101
++	del_vrf_and_check $testns vrf101
  
- 	check_connectivity6 || return
+-	del_vrf_and_check testns vrf102
++	del_vrf_and_check $testns vrf102
  
--	run_cmd_grep "${R1_N1_IP6}" ip netns exec h1 traceroute6 ${H2_N2_IP6}
-+	run_cmd_grep "${R1_N1_IP6}" ip netns exec $h1 traceroute6 ${H2_N2_IP6}
- 	log_test $? 0 "Traceroute6 reports a hop on r1"
- }
+ 	disable_strict_mode_and_check init
  
-@@ -470,7 +461,7 @@ ipv4_ping_ttl()
+-	enable_strict_mode_and_check testns
++	enable_strict_mode_and_check $testns
  
- 	check_connectivity || return
+ 	enable_strict_mode_and_check init
+ 	enable_strict_mode_and_check init
  
--	run_cmd_grep "Time to live exceeded" ip netns exec h1 ping -t1 -c1 -W2 ${H2_N2_IP}
-+	run_cmd_grep "Time to live exceeded" ip netns exec $h1 ping -t1 -c1 -W2 ${H2_N2_IP}
- 	log_test $? 0 "Ping received ICMP ttl exceeded"
- }
+-	disable_strict_mode_and_check testns
+-	disable_strict_mode_and_check testns
++	disable_strict_mode_and_check $testns
++	disable_strict_mode_and_check $testns
  
-@@ -491,7 +482,7 @@ ipv4_ping_frag()
+ 	read_strict_mode_compare_and_check init 1
  
- 	check_connectivity || return
- 
--	run_cmd_grep "Frag needed" ip netns exec h1 ping -s 1450 -Mdo -c1 -W2 ${H2_N2_IP}
-+	run_cmd_grep "Frag needed" ip netns exec $h1 ping -s 1450 -Mdo -c1 -W2 ${H2_N2_IP}
- 	log_test $? 0 "Ping received ICMP Frag needed"
+-	read_strict_mode_compare_and_check testns 0
++	read_strict_mode_compare_and_check $testns 0
  }
  
-@@ -512,7 +503,7 @@ ipv6_ping_ttl()
- 
- 	check_connectivity6 || return
- 
--	run_cmd_grep "Time exceeded: Hop limit" ip netns exec h1 "${ping6}" -t1 -c1 -W2 ${H2_N2_IP6}
-+	run_cmd_grep "Time exceeded: Hop limit" ip netns exec $h1 "${ping6}" -t1 -c1 -W2 ${H2_N2_IP6}
- 	log_test $? 0 "Ping received ICMP Hop limit"
- }
- 
-@@ -533,7 +524,7 @@ ipv6_ping_frag()
- 
- 	check_connectivity6 || return
- 
--	run_cmd_grep "Packet too big" ip netns exec h1 "${ping6}" -s 1450 -Mdo -c1 -W2 ${H2_N2_IP6}
-+	run_cmd_grep "Packet too big" ip netns exec $h1 "${ping6}" -s 1450 -Mdo -c1 -W2 ${H2_N2_IP6}
- 	log_test $? 0 "Ping received ICMP Packet too big"
- }
- 
+ ################################################################################
 -- 
 2.41.0
 
