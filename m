@@ -1,57 +1,58 @@
-Return-Path: <linux-kselftest+bounces-603-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-604-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 666347F8957
-	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Nov 2023 09:43:15 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09EBA7F895A
+	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Nov 2023 09:43:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7E6461C20BE3
-	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Nov 2023 08:43:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 54167B21303
+	for <lists+linux-kselftest@lfdr.de>; Sat, 25 Nov 2023 08:43:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CBC78F6B;
-	Sat, 25 Nov 2023 08:43:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B863063C7;
+	Sat, 25 Nov 2023 08:43:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="HozOdHTi"
+	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="pRBffyQr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oa1-x36.google.com (mail-oa1-x36.google.com [IPv6:2001:4860:4864:20::36])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15804E6
-	for <linux-kselftest@vger.kernel.org>; Sat, 25 Nov 2023 00:43:08 -0800 (PST)
-Received: by mail-oa1-x36.google.com with SMTP id 586e51a60fabf-1f9e6a8b00aso1040157fac.3
-        for <linux-kselftest@vger.kernel.org>; Sat, 25 Nov 2023 00:43:08 -0800 (PST)
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6C2FA9
+	for <linux-kselftest@vger.kernel.org>; Sat, 25 Nov 2023 00:43:11 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1ce3084c2d1so21230865ad.3
+        for <linux-kselftest@vger.kernel.org>; Sat, 25 Nov 2023 00:43:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1700901786; x=1701506586; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=7HH2pxIh3nFi6PgmibuEVDY9PSlg1zWmdehxfnJOthE=;
-        b=HozOdHTidnvXz+6zbgktJW2ePFhpn3MzoGuGF+AEc4ueOTzg68BVWj5IyR0dYsmvDO
-         7EZ/UgKmStDBuxM+FU6nvjYVSLA+GDuJYakqYLKzvVFEf7IqgN5MoWzzbpEaf9pzRtA7
-         e5aP0lEglX0R0o3Ck4o2TR0PXe371+wwkJN+UTre+XST547MrcvKhSBkZYwxllrFjKWI
-         m5gk51cgJx6rQKnqgrBz2yzFW6A9cp5quM9uktbqfIsEL4+uNgYq1W8y6qaQbNKNu/pE
-         uXEVpgBMN/uZx4UTtVvd3pe13tRbOwAdWJYuRL8ECikdP5POJ1AXqr1d48IA5I2GT/+q
-         CZ4Q==
+        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1700901791; x=1701506591; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NPPxIVkRMPlLUxZMsEygBEBjgDTLIaOmfxI6JWnloIc=;
+        b=pRBffyQrCwf4oKhvTAqwDsql81Gi1ZUG1TrWWb6Th9wByymCvZ4X4bzpp/9PDyFHGb
+         JmdQhjCkn7EtugvsHui0i2ssEtCDYTd8z1fElK0aM/ar8YXaqvCuXiGIlud47tTtebc/
+         E3CA4FM2z4dZmUjPX8X1wtv+VyAfON7Zm3JDIQZEoQ3JQf8+S7RgUq9/BMI8BTUB0oRj
+         kUfC7HIugLwA/ZSj+ifnjYyeBQxHnKX6pMeLK394C9+iS1BFK/W3kafNRnEBwK4ThjeY
+         /ofKbPaRIuRdqkfj24IYDyXAbJkKu08h6EhVO27TDEzpTNj9N6hTphqY893bNlUtGjMB
+         /WEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700901786; x=1701506586;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7HH2pxIh3nFi6PgmibuEVDY9PSlg1zWmdehxfnJOthE=;
-        b=qrIH/bUrj+XUaBlqlKU3uKXIFyuX/CkK5Jg4S2CvhLpRdzYxK3Gk+ni420KmhGTgBF
-         3GMy/1b76OzY104Mk3NJAcs6gBMc16EKCF2HxDuVi5wGhAJEfHuAoHhjPf8HOmtDcyaM
-         GJ1wGMYECcBSGNMd3DttEG/uUNPflxL5toqw8AfVXDLcxWiGcd9C2a7bnwNQB2Jf6vx8
-         2UaO34bSkQq7urQlUT5BP/0qy6+M0bUgIsdFamXsfxavEYbpLvwxpslEJo+1e9IOTgUX
-         FAHQ9sjV3dPbgFLSoaicjf1dQGG33G33G0Ls7ufwkysqccBSZfG4ZmxNl65fapl1DEAg
-         weyQ==
-X-Gm-Message-State: AOJu0YxLsxqssLOJGIvAffvySyQnmLrzoM3NmUCvPtbHCTUn8/ePy/43
-	anKWYP0KoU3lbntUwatUYSAJ5A==
-X-Google-Smtp-Source: AGHT+IFmZhHL5cLpP2WUD/tuxlPb1Nw3FRYAI7O7Swcj6l2uZNuYbQz1/jSNINvtK+tOhi1SIoMNZg==
-X-Received: by 2002:a05:6870:7028:b0:1e9:e97e:24e5 with SMTP id u40-20020a056870702800b001e9e97e24e5mr1002542oae.20.1700901786025;
-        Sat, 25 Nov 2023 00:43:06 -0800 (PST)
+        d=1e100.net; s=20230601; t=1700901791; x=1701506591;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NPPxIVkRMPlLUxZMsEygBEBjgDTLIaOmfxI6JWnloIc=;
+        b=U7bfCtB+5IWkCI1uoPeLukGFFJ6qyQVw8SfVm98G1Yjy/UqmGSjd//Bv029RyfEg2B
+         TKNiD2bM+h5fWjqt4NZJECVw3AM4qgO5DvoT0tTgweckdr1DmtZLHgm1IZKlTsWrQZWl
+         4CUQ0ih36zktfNofFlBtf7RZujsTpr23TTYcbnddFMwCQvwdUU++sdlsVLzIJwYsxQZw
+         nAOkNS4OMntSp/2oDZs+x7SCIQvwU4S8rujBAc3G+8MmL1jGEqWVEk5qsVR+Qhi/qfhn
+         d+WICJS6F+pwwwL4Ewd2jC4ztr/N8gH7BQzWHcHQRH68GQKVrPZ0S9BgbNZWR1d1alhU
+         VezA==
+X-Gm-Message-State: AOJu0Yzwx3KHiaT+u0ECDpdx8XVnteFhp1AIrex9zmlrgHZErEX6A1P5
+	2aJ9XUqhd1W3ONmhjuaLExRxmg==
+X-Google-Smtp-Source: AGHT+IEVVpVFIcUVQouFS95iWEttXau5YwBJgu8W9QjT7uKgsVIqZzxbtoETCuWtg/ws4lKe1JRV9g==
+X-Received: by 2002:a17:902:f68d:b0:1cf:6704:4340 with SMTP id l13-20020a170902f68d00b001cf67044340mr6468913plg.22.1700901791152;
+        Sat, 25 Nov 2023 00:43:11 -0800 (PST)
 Received: from localhost ([157.82.205.15])
-        by smtp.gmail.com with UTF8SMTPSA id e13-20020a170902d38d00b001cf5c99f031sm2451130pld.283.2023.11.25.00.43.02
+        by smtp.gmail.com with UTF8SMTPSA id h12-20020a170902748c00b001c9d011581dsm4432500pll.164.2023.11.25.00.43.07
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 25 Nov 2023 00:43:05 -0800 (PST)
+        Sat, 25 Nov 2023 00:43:10 -0800 (PST)
 From: Akihiko Odaki <akihiko.odaki@daynix.com>
 To: 
 Cc: Andrii Nakryiko <andrii@kernel.org>,
@@ -72,10 +73,12 @@ Cc: Andrii Nakryiko <andrii@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Akihiko Odaki <akihiko.odaki@daynix.com>
-Subject: [PATCH bpf-next v5 0/3] selftests/bpf: Use pkg-config to determine ld flags
-Date: Sat, 25 Nov 2023 17:42:49 +0900
-Message-ID: <20231125084253.85025-1-akihiko.odaki@daynix.com>
+Subject: [PATCH bpf-next v5 1/3] selftests/bpf: Choose pkg-config for the target
+Date: Sat, 25 Nov 2023 17:42:50 +0900
+Message-ID: <20231125084253.85025-2-akihiko.odaki@daynix.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20231125084253.85025-1-akihiko.odaki@daynix.com>
+References: <20231125084253.85025-1-akihiko.odaki@daynix.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -84,26 +87,39 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-When linking statically, libraries may require other dependencies to be
-included to ld flags. In particular, libelf may require libzstd. Use
-pkg-config to determine such dependencies.
+pkg-config is used to build sign-file executable. It should use the
+library for the target instead of the host as it is called during tests.
 
-V4 -> V5: Introduced variables LIBELF_CFLAGS and LIBELF_LIBS.
-          (Daniel Borkmann)
-          Added patch "selftests/bpf: Choose pkg-config for the target".
-V3 -> V4: Added "2> /dev/null".
-V2 -> V3: Added missing "echo".
-V1 -> V2: Implemented fallback, referring to HOSTPKG_CONFIG.
+Signed-off-by: Akihiko Odaki <akihiko.odaki@daynix.com>
+---
+ tools/testing/selftests/bpf/Makefile | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Akihiko Odaki (3):
-  selftests/bpf: Choose pkg-config for the target
-  selftests/bpf: Override PKG_CONFIG for static builds
-  selftests/bpf: Use pkg-config for libelf
-
- tools/testing/selftests/bpf/Makefile   | 14 +++++++++-----
- tools/testing/selftests/bpf/README.rst |  2 +-
- 2 files changed, 10 insertions(+), 6 deletions(-)
-
+diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+index 9c27b67bc7b1..94825ef813d5 100644
+--- a/tools/testing/selftests/bpf/Makefile
++++ b/tools/testing/selftests/bpf/Makefile
+@@ -18,7 +18,7 @@ else
+ GENDIR := $(abspath ../../../../include/generated)
+ endif
+ GENHDR := $(GENDIR)/autoconf.h
+-HOSTPKG_CONFIG := pkg-config
++PKG_CONFIG ?= $(CROSS_COMPILE)pkg-config
+ 
+ ifneq ($(wildcard $(GENHDR)),)
+   GENFLAGS := -DHAVE_GENHDR
+@@ -219,9 +219,9 @@ $(OUTPUT)/urandom_read: urandom_read.c urandom_read_aux.c $(OUTPUT)/liburandom_r
+ 
+ $(OUTPUT)/sign-file: ../../../../scripts/sign-file.c
+ 	$(call msg,SIGN-FILE,,$@)
+-	$(Q)$(CC) $(shell $(HOSTPKG_CONFIG) --cflags libcrypto 2> /dev/null) \
++	$(Q)$(CC) $(shell $(PKG_CONFIG) --cflags libcrypto 2> /dev/null) \
+ 		  $< -o $@ \
+-		  $(shell $(HOSTPKG_CONFIG) --libs libcrypto 2> /dev/null || echo -lcrypto)
++		  $(shell $(PKG_CONFIG) --libs libcrypto 2> /dev/null || echo -lcrypto)
+ 
+ $(OUTPUT)/bpf_testmod.ko: $(VMLINUX_BTF) $(RESOLVE_BTFIDS) $(wildcard bpf_testmod/Makefile bpf_testmod/*.[ch])
+ 	$(call msg,MOD,,$@)
 -- 
 2.43.0
 
