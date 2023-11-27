@@ -1,226 +1,206 @@
-Return-Path: <linux-kselftest+bounces-656-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-657-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1BCD7FA882
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Nov 2023 19:01:31 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF8B27FAA5B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Nov 2023 20:37:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5C6B9B2114D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Nov 2023 18:01:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EB5FE1C20C1D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Nov 2023 19:37:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9990F3BB43;
-	Mon, 27 Nov 2023 18:01:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F00C3FB0C;
+	Mon, 27 Nov 2023 19:37:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ul4K9Hg/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ePo1IfS9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DE2F3BB36;
-	Mon, 27 Nov 2023 18:01:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDF0DC433C7;
-	Mon, 27 Nov 2023 18:01:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701108083;
-	bh=Ctz2/d8fKRCj3eHDttwdg2nfR3buzb2KJwcp2lA0lBU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=ul4K9Hg/bVzcrzbZ2AsrPwCEGW8K6+dumYyBXoP4AvyoIZwc3cLerYqpaR8F1FbXz
-	 tumsWkfgwMVR+9dX31+U5LckZTLkhGbMLRKsEAA6zIOMJfs3+2U9x29oHEl+CUUtCL
-	 +kTSPuih54Nl8IBrNoNmgOYL0TASzMSZx/55I6idiLeV3BMiguZnutSRrGLRUC8Rw1
-	 KaUANBSZAb8QM0/rOGoq3jXutCrMxGndXtubHs6JoOFoYVlaZnLxoBML5/gGjlIVp8
-	 KBTbYz+C6znLEW9fWgHP4bPWl7K53NFHLzcGOmAlgvCHT9dZdKnhmVfLJnWW3BGasa
-	 gxs48H8FgkjIA==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1r7fv7-00GsvN-5x;
-	Mon, 27 Nov 2023 18:01:21 +0000
-Date: Mon, 27 Nov 2023 18:01:18 +0000
-Message-ID: <86bkbfcbyp.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Joey Gouly <joey.gouly@arm.com>
-Cc: linux-arm-kernel@lists.infradead.org,
-	akpm@linux-foundation.org,
-	aneesh.kumar@linux.ibm.com,
-	broonie@kernel.org,
-	catalin.marinas@arm.com,
-	dave.hansen@linux.intel.com,
-	oliver.upton@linux.dev,
-	shuah@kernel.org,
-	will@kernel.org,
-	kvmarm@lists.linux.dev,
-	linux-fsdevel@vger.kernel.org,
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEB8DD72;
+	Mon, 27 Nov 2023 11:37:04 -0800 (PST)
+Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-28598035301so2786689a91.0;
+        Mon, 27 Nov 2023 11:37:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701113824; x=1701718624; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Pr58hl6apUe5+alkB6uva5XtrEHy6iRJyUoDh1Ha2hs=;
+        b=ePo1IfS9Iy4MgZuk24jA3MgZVYU+0LcxgtQfmo/3HDrZCQ2AiMu9eWqle5nQTIVnc4
+         T4dE72WSaanpGhguQ8PK1qYFSjkDPwNeopHpVDqHhfbRKlGcX/krtZiDLVwrnQjqk/Nl
+         1ecwbBSF0jKXDA+69JiWYMjEHWx8+LWqeBUqGUNScYKlr8LxEbajiqCU7sidHYKDlNAD
+         BnV0VatfVAQHaWfh29pbVudjV32W9eAhXQfDIuHQZOJYO+SPvmeHFscpSkY83kSzmWuI
+         aRdaTur7452zfiSn2SoL63LEdgwoi2P9/vhtsJdMtE1OqZg5Sq25yCFbC+hWfKBOhNVv
+         Ir4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701113824; x=1701718624;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Pr58hl6apUe5+alkB6uva5XtrEHy6iRJyUoDh1Ha2hs=;
+        b=Aij6Cr/6F8anSn1vLQkp1OlfHx7j8mJ5KwZ3uzhKTdonXIfWHVbwexeRWy73b7vrAw
+         jnqnonOlJc6MKNbUiCmkW1hLmkpdiyaDMx4ydimwyo2YPqJpQlDzDEj+CCQZtKEZQxNj
+         S6LZwv4zrX4whr1JrUSHZMrYtsbmJt9SMYfbW3V+9GLDrEXDxwdfV8qRXd4dA0RiZTEx
+         ORQnOQ8xmNFmElqmx+dZH8lwN33pdLGctonTSuwbaynrdS2viTl9xoUJgqctgNFzy0A6
+         rm5WYLpqlHTxB9T643pHlKsjkGO8I8oITloDkAcMXrTz/XHlMdj4gbZ4fCwwiXdqNLVC
+         LMUA==
+X-Gm-Message-State: AOJu0YzuF7pAamosGAjeoomE1ZUdqTp5i5oChOPrH19nHD23yLv+l6/j
+	NO85xouvXqCC7vW6vtO6RxP6SV6dBkY=
+X-Google-Smtp-Source: AGHT+IGwCclyYBEHXLoWjJQZEITf2jm2Btr55pPS0Qw3ekTMzxn2uSOt7WbdoKi3d0Axy4JycJ9oMw==
+X-Received: by 2002:a17:90b:212:b0:285:81aa:aeb7 with SMTP id fy18-20020a17090b021200b0028581aaaeb7mr13868104pjb.8.1701113824212;
+        Mon, 27 Nov 2023 11:37:04 -0800 (PST)
+Received: from localhost (fwdproxy-prn-003.fbsv.net. [2a03:2880:ff:3::face:b00c])
+        by smtp.gmail.com with ESMTPSA id 102-20020a17090a09ef00b002800e0b4852sm8958205pjo.22.2023.11.27.11.37.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Nov 2023 11:37:03 -0800 (PST)
+From: Nhat Pham <nphamcs@gmail.com>
+To: akpm@linux-foundation.org
+Cc: hannes@cmpxchg.org,
+	cerasuolodomenico@gmail.com,
+	yosryahmed@google.com,
+	sjenning@redhat.com,
+	ddstreet@ieee.org,
+	vitaly.wool@konsulko.com,
+	mhocko@kernel.org,
+	roman.gushchin@linux.dev,
+	shakeelb@google.com,
+	muchun.song@linux.dev,
+	chrisl@kernel.org,
 	linux-mm@kvack.org,
+	kernel-team@meta.com,
+	linux-kernel@vger.kernel.org,
+	cgroups@vger.kernel.org,
+	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>
-Subject: Re: [PATCH v3 06/25] KVM: arm64: Save/restore POE registers
-In-Reply-To: <20231124163510.1835740-7-joey.gouly@arm.com>
-References: <20231124163510.1835740-1-joey.gouly@arm.com>
-	<20231124163510.1835740-7-joey.gouly@arm.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	shuah@kernel.org
+Subject: [PATCH v6 0/6] workload-specific and memory pressure-driven zswap writeback
+Date: Mon, 27 Nov 2023 11:36:57 -0800
+Message-Id: <20231127193703.1980089-1-nphamcs@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: joey.gouly@arm.com, linux-arm-kernel@lists.infradead.org, akpm@linux-foundation.org, aneesh.kumar@linux.ibm.com, broonie@kernel.org, catalin.marinas@arm.com, dave.hansen@linux.intel.com, oliver.upton@linux.dev, shuah@kernel.org, will@kernel.org, kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, james.morse@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Fri, 24 Nov 2023 16:34:51 +0000,
-Joey Gouly <joey.gouly@arm.com> wrote:
-> 
-> Define the new system registers that POE introduces and context switch them.
+Changelog:
+v6:
+   * Rebase on top of latest mm-unstable.
+   * Fix/improve the in-code documentation of the new list_lru
+     manipulation functions (patch 1)
+v5:
+   * Replace reference getting with an rcu_read_lock() section for
+     zswap lru modifications (suggested by Yosry)
+   * Add a new prep patch that allows mem_cgroup_iter() to return
+     online cgroup.
+   * Add a callback that updates pool->next_shrink when the cgroup is
+     offlined (suggested by Yosry Ahmed, Johannes Weiner)
+v4:
+   * Rename list_lru_add to list_lru_add_obj and __list_lru_add to
+     list_lru_add (patch 1) (suggested by Johannes Weiner and
+	 Yosry Ahmed)
+   * Some cleanups on the memcg aware LRU patch (patch 2)
+     (suggested by Yosry Ahmed)
+   * Use event interface for the new per-cgroup writeback counters.
+     (patch 3) (suggested by Yosry Ahmed)
+   * Abstract zswap's lruvec states and handling into 
+     zswap_lruvec_state (patch 5) (suggested by Yosry Ahmed)
+v3:
+   * Add a patch to export per-cgroup zswap writeback counters
+   * Add a patch to update zswap's kselftest
+   * Separate the new list_lru functions into its own prep patch
+   * Do not start from the top of the hierarchy when encounter a memcg
+     that is not online for the global limit zswap writeback (patch 2)
+     (suggested by Yosry Ahmed)
+   * Do not remove the swap entry from list_lru in
+     __read_swapcache_async() (patch 2) (suggested by Yosry Ahmed)
+   * Removed a redundant zswap pool getting (patch 2)
+     (reported by Ryan Roberts)
+   * Use atomic for the nr_zswap_protected (instead of lruvec's lock)
+     (patch 5) (suggested by Yosry Ahmed)
+   * Remove the per-cgroup zswap shrinker knob (patch 5)
+     (suggested by Yosry Ahmed)
+v2:
+   * Fix loongarch compiler errors
+   * Use pool stats instead of memcg stats when !CONFIG_MEMCG_KEM
 
-I would really like to see a discussion on the respective lifetimes of
-these two registers (see below).
+There are currently several issues with zswap writeback:
 
->
-> Signed-off-by: Joey Gouly <joey.gouly@arm.com>
-> Cc: Marc Zyngier <maz@kernel.org>
-> Cc: Oliver Upton <oliver.upton@linux.dev>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> ---
->  arch/arm64/include/asm/kvm_arm.h           |  4 ++--
->  arch/arm64/include/asm/kvm_host.h          |  4 ++++
->  arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h | 10 ++++++++++
->  arch/arm64/kvm/sys_regs.c                  |  2 ++
->  4 files changed, 18 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/include/asm/kvm_arm.h b/arch/arm64/include/asm/kvm_arm.h
-> index b85f46a73e21..597470e0b87b 100644
-> --- a/arch/arm64/include/asm/kvm_arm.h
-> +++ b/arch/arm64/include/asm/kvm_arm.h
-> @@ -346,14 +346,14 @@
->   */
->  #define __HFGRTR_EL2_RES0	(GENMASK(63, 56) | GENMASK(53, 51))
->  #define __HFGRTR_EL2_MASK	GENMASK(49, 0)
-> -#define __HFGRTR_EL2_nMASK	(GENMASK(58, 57) | GENMASK(55, 54) | BIT(50))
-> +#define __HFGRTR_EL2_nMASK	(GENMASK(60, 57) | GENMASK(55, 54) | BIT(50))
->  
->  #define __HFGWTR_EL2_RES0	(GENMASK(63, 56) | GENMASK(53, 51) |	\
->  				 BIT(46) | BIT(42) | BIT(40) | BIT(28) | \
->  				 GENMASK(26, 25) | BIT(21) | BIT(18) |	\
->  				 GENMASK(15, 14) | GENMASK(10, 9) | BIT(2))
->  #define __HFGWTR_EL2_MASK	GENMASK(49, 0)
-> -#define __HFGWTR_EL2_nMASK	(GENMASK(58, 57) | GENMASK(55, 54) | BIT(50))
-> +#define __HFGWTR_EL2_nMASK	(GENMASK(60, 57) | GENMASK(55, 54) | BIT(50))
->  
->  #define __HFGITR_EL2_RES0	GENMASK(63, 57)
->  #define __HFGITR_EL2_MASK	GENMASK(54, 0)
-> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
-> index 824f29f04916..fa9ebd8fce40 100644
-> --- a/arch/arm64/include/asm/kvm_host.h
-> +++ b/arch/arm64/include/asm/kvm_host.h
-> @@ -401,6 +401,10 @@ enum vcpu_sysreg {
->  	PIR_EL1,       /* Permission Indirection Register 1 (EL1) */
->  	PIRE0_EL1,     /*  Permission Indirection Register 0 (EL1) */
->  
-> +	/* Permission Overlay Extension registers */
-> +	POR_EL1,	/* Permission Overlay Register 1 (EL1) */
-> +	POR_EL0,	/* Permission Overlay Register 0 (EL0) */
-> +
->  	/* 32bit specific registers. */
->  	DACR32_EL2,	/* Domain Access Control Register */
->  	IFSR32_EL2,	/* Instruction Fault Status Register */
-> diff --git a/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h b/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h
-> index bb6b571ec627..22f07ee43e7e 100644
-> --- a/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h
-> +++ b/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h
-> @@ -19,6 +19,9 @@
->  static inline void __sysreg_save_common_state(struct kvm_cpu_context *ctxt)
->  {
->  	ctxt_sys_reg(ctxt, MDSCR_EL1)	= read_sysreg(mdscr_el1);
-> +
-> +	if (system_supports_poe())
-> +		ctxt_sys_reg(ctxt, POR_EL0)	= read_sysreg_s(SYS_POR_EL0);
+1. There is only a single global LRU for zswap, making it impossible to
+   perform worload-specific shrinking - an memcg under memory pressure
+   cannot determine which pages in the pool it owns, and often ends up
+   writing pages from other memcgs. This issue has been previously
+   observed in practice and mitigated by simply disabling
+   memcg-initiated shrinking:
 
-So this is saved as eagerly as it gets. Why? If it only affects EL0,
-it can be saved/restored in a much lazier way.
+   https://lore.kernel.org/all/20230530232435.3097106-1-nphamcs@gmail.com/T/#u
 
->  }
->  
->  static inline void __sysreg_save_user_state(struct kvm_cpu_context *ctxt)
-> @@ -59,6 +62,8 @@ static inline void __sysreg_save_el1_state(struct kvm_cpu_context *ctxt)
->  		ctxt_sys_reg(ctxt, PIR_EL1)	= read_sysreg_el1(SYS_PIR);
->  		ctxt_sys_reg(ctxt, PIRE0_EL1)	= read_sysreg_el1(SYS_PIRE0);
+   But this solution leaves a lot to be desired, as we still do not
+   have an avenue for an memcg to free up its own memory locked up in
+   the zswap pool.
 
-And the fact that you only touch PIRE0_EL1 here seems to be a good
-indication that the above can be relaxed.
+2. We only shrink the zswap pool when the user-defined limit is hit.
+   This means that if we set the limit too high, cold data that are
+   unlikely to be used again will reside in the pool, wasting precious
+   memory. It is hard to predict how much zswap space will be needed
+   ahead of time, as this depends on the workload (specifically, on
+   factors such as memory access patterns and compressibility of the
+   memory pages).
 
->  	}
-> +	if (system_supports_poe())
+This patch series solves these issues by separating the global zswap
+LRU into per-memcg and per-NUMA LRUs, and performs workload-specific
+(i.e memcg- and NUMA-aware) zswap writeback under memory pressure. The
+new shrinker does not have any parameter that must be tuned by the
+user, and can be opted in or out on a per-memcg basis.
 
-nit: missing new line before the if().
+As a proof of concept, we ran the following synthetic benchmark:
+build the linux kernel in a memory-limited cgroup, and allocate some
+cold data in tmpfs to see if the shrinker could write them out and
+improved the overall performance. Depending on the amount of cold data
+generated, we observe from 14% to 35% reduction in kernel CPU time used
+in the kernel builds.
 
-> +		ctxt_sys_reg(ctxt, POR_EL1)	= read_sysreg_el1(SYS_POR);
->  	ctxt_sys_reg(ctxt, PAR_EL1)	= read_sysreg_par();
->  	ctxt_sys_reg(ctxt, TPIDR_EL1)	= read_sysreg(tpidr_el1);
->  
-> @@ -89,6 +94,9 @@ static inline void __sysreg_save_el2_return_state(struct kvm_cpu_context *ctxt)
->  static inline void __sysreg_restore_common_state(struct kvm_cpu_context *ctxt)
->  {
->  	write_sysreg(ctxt_sys_reg(ctxt, MDSCR_EL1),  mdscr_el1);
-> +
-> +	if (system_supports_poe())
-> +		write_sysreg_s(ctxt_sys_reg(ctxt, POR_EL0),	SYS_POR_EL0);
+Domenico Cerasuolo (3):
+  zswap: make shrinking memcg-aware
+  mm: memcg: add per-memcg zswap writeback stat
+  selftests: cgroup: update per-memcg zswap writeback selftest
 
-Same thing here about the eager restore.
+Nhat Pham (3):
+  list_lru: allows explicit memcg and NUMA node selection
+  memcontrol: allows mem_cgroup_iter() to check for onlineness
+  zswap: shrinks zswap pool based on memory pressure
 
->  }
->  
->  static inline void __sysreg_restore_user_state(struct kvm_cpu_context *ctxt)
-> @@ -135,6 +143,8 @@ static inline void __sysreg_restore_el1_state(struct kvm_cpu_context *ctxt)
->  		write_sysreg_el1(ctxt_sys_reg(ctxt, PIR_EL1),	SYS_PIR);
->  		write_sysreg_el1(ctxt_sys_reg(ctxt, PIRE0_EL1),	SYS_PIRE0);
->  	}
-> +	if (system_supports_poe())
+ Documentation/admin-guide/mm/zswap.rst      |   7 +
+ drivers/android/binder_alloc.c              |   5 +-
+ fs/dcache.c                                 |   8 +-
+ fs/gfs2/quota.c                             |   6 +-
+ fs/inode.c                                  |   4 +-
+ fs/nfs/nfs42xattr.c                         |   8 +-
+ fs/nfsd/filecache.c                         |   4 +-
+ fs/xfs/xfs_buf.c                            |   6 +-
+ fs/xfs/xfs_dquot.c                          |   2 +-
+ fs/xfs/xfs_qm.c                             |   2 +-
+ include/linux/list_lru.h                    |  54 ++-
+ include/linux/memcontrol.h                  |   9 +-
+ include/linux/mmzone.h                      |   2 +
+ include/linux/vm_event_item.h               |   1 +
+ include/linux/zswap.h                       |  27 +-
+ mm/list_lru.c                               |  48 ++-
+ mm/memcontrol.c                             |  20 +-
+ mm/mmzone.c                                 |   1 +
+ mm/shrinker.c                               |   4 +-
+ mm/swap.h                                   |   3 +-
+ mm/swap_state.c                             |  26 +-
+ mm/vmscan.c                                 |  26 +-
+ mm/vmstat.c                                 |   1 +
+ mm/workingset.c                             |   4 +-
+ mm/zswap.c                                  | 426 +++++++++++++++++---
+ tools/testing/selftests/cgroup/test_zswap.c |  74 ++--
+ 26 files changed, 629 insertions(+), 149 deletions(-)
 
-new line.
 
-> +		write_sysreg_el1(ctxt_sys_reg(ctxt, POR_EL1),	SYS_POR);
->  	write_sysreg(ctxt_sys_reg(ctxt, PAR_EL1),	par_el1);
->  	write_sysreg(ctxt_sys_reg(ctxt, TPIDR_EL1),	tpidr_el1);
->  
-> diff --git a/arch/arm64/kvm/sys_regs.c b/arch/arm64/kvm/sys_regs.c
-> index 4735e1b37fb3..a54e5eadbf29 100644
-> --- a/arch/arm64/kvm/sys_regs.c
-> +++ b/arch/arm64/kvm/sys_regs.c
-> @@ -2269,6 +2269,7 @@ static const struct sys_reg_desc sys_reg_descs[] = {
->  	{ SYS_DESC(SYS_MAIR_EL1), access_vm_reg, reset_unknown, MAIR_EL1 },
->  	{ SYS_DESC(SYS_PIRE0_EL1), NULL, reset_unknown, PIRE0_EL1 },
->  	{ SYS_DESC(SYS_PIR_EL1), NULL, reset_unknown, PIR_EL1 },
-> +	{ SYS_DESC(SYS_POR_EL1), NULL, reset_unknown, POR_EL1 },
->  	{ SYS_DESC(SYS_AMAIR_EL1), access_vm_reg, reset_amair_el1, AMAIR_EL1 },
->  
->  	{ SYS_DESC(SYS_LORSA_EL1), trap_loregion },
-> @@ -2352,6 +2353,7 @@ static const struct sys_reg_desc sys_reg_descs[] = {
->  	  .access = access_pmovs, .reg = PMOVSSET_EL0,
->  	  .get_user = get_pmreg, .set_user = set_pmreg },
->  
-> +	{ SYS_DESC(SYS_POR_EL0), NULL, reset_unknown, POR_EL0 },
->  	{ SYS_DESC(SYS_TPIDR_EL0), NULL, reset_unknown, TPIDR_EL0 },
->  	{ SYS_DESC(SYS_TPIDRRO_EL0), NULL, reset_unknown, TPIDRRO_EL0 },
->  	{ SYS_DESC(SYS_TPIDR2_EL0), undef_access },
-
-Another thing that is missing is the trap routing for NV in
-emulated-nested.c. Please fill in the various tables there.
-
-Thanks,
-
-	M.
-
+base-commit: 40b487ae2620fc9187fee68b09d2cb275de0d60e
 -- 
-Without deviation from the norm, progress is not possible.
+2.34.1
 
