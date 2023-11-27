@@ -1,237 +1,186 @@
-Return-Path: <linux-kselftest+bounces-666-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-667-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 509D17FABD4
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Nov 2023 21:45:25 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD15B7FAC20
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Nov 2023 22:01:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 73B041C20D9B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Nov 2023 20:45:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 242C01C20C3A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Nov 2023 21:01:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B02F32F87F;
-	Mon, 27 Nov 2023 20:45:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 574CD3EA60;
+	Mon, 27 Nov 2023 21:00:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="pgevG6dm";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Rfq6nyQn"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="yzDbR+kT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C22A1AA;
-	Mon, 27 Nov 2023 12:45:19 -0800 (PST)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-	by mailnew.west.internal (Postfix) with ESMTP id 4BBC32B0013D;
-	Mon, 27 Nov 2023 15:45:15 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Mon, 27 Nov 2023 15:45:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-	1701117914; x=1701125114; bh=c6RIxCPZspuBtK8K2FUFUy9oe3rOA3IlnLJ
-	SMn0aJrY=; b=pgevG6dm8hI24w8peAUEuqrhrBxxBUDDFCa0Hm1UIUnb/T7rTjM
-	qCpKbObWmxmmRGvLKpbJUQDavUV2Er1g3ipGG7DCnXPezvkHY65i21yrNKxtdzuk
-	DR+PN7+i5JLdCXSmBY5xbAjfCJsdBFzf9wWI6ADakx3kMBu+wilTOKOiWs9TFpAc
-	vBd8zruS+Gtr97UiqdlR9OG6hY+NSi7KYPE0l2P1R7JcUpqDCGmTsPyRcLXcZ/ox
-	5wmtS+5X4JdCWnCY881cxlgGzWkae7Afzbufdr+Mmn2ha5+/jqf6+89NQ99FeLlC
-	x7/gYhb6UeZGD4zsq2Bdhb5KpuOW87GY+bw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1701117914; x=1701125114; bh=c6RIxCPZspuBtK8K2FUFUy9oe3rOA3IlnLJ
-	SMn0aJrY=; b=Rfq6nyQnKnCi3gDOoi66hH0ZpfPk+E924Vdx/1BipZdSjeaqekH
-	tdWqN63IevDJNwH9oSolNGavAKGHMUxjSTcHTUMACgQJO4au11SbcZHQZ5v3Rvgw
-	ENZ9XeCF6VyNxNSLdT82qFEni/due1wxdKM7Ddj3ksHDPHpN/d5KpxpcJE+xvu3P
-	f7F44b6mBTFFaSuslNTiM7bnBOgbwt2tB3/G3UvDjIOzB/X2+jggM80wPzmuD9AI
-	N1ZVbM2WU53AQ3igGLR1fhVnUGtmtZzq6tXgYZzxQXUdc4f4SPPk4vVE4/vxyHpQ
-	2erVRMU6Ho3grJA25M9wZRMBMz6B/pXbGnw==
-X-ME-Sender: <xms:2f9kZTi25_zkJrmXET_KDyWAMVKkbzoFgBrHv8ANkfUdiguLApTjcg>
-    <xme:2f9kZQAC9a8vBBDBZ2y9HZL2MllFJxZVGfAbQgFoR6BxFPquFOFcr6syCkFh_RQpY
-    owHmYIW79EpgiY-OQ>
-X-ME-Received: <xmr:2f9kZTEyftqvefDvMcRt0CG2BhcjG29W99bYFbe8OvIbu-W0Vd-maMnkDnx22jQz4GeAswwJluDws32c3gx4WqIAg1bDbmlhDqPBxvaFYICO7-xT-cajyhSSifk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudeiuddgudegvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enfghrlhcuvffnffculdejtddmnecujfgurhepfffhvfevuffkfhggtggugfgjsehtkefs
-    tddttddunecuhfhrohhmpeffrghnihgvlhcuighuuceougiguhesugiguhhuuhdrgiihii
-    eqnecuggftrfgrthhtvghrnhepudefiedtieehffeuffelffegheegjeekteekgfdtkeef
-    jeehffejtdfgkeeiteelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
-    hilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
-X-ME-Proxy: <xmx:2f9kZQTR4nBr7Y-dxUjnLjjdQwBsfjoT2Wxh1e_j4OlC7I4qIFJNFA>
-    <xmx:2f9kZQxbUDx61KaAdVg2gkVDDml2RCQ9JvKRBNEw2KRu64np0V1pUw>
-    <xmx:2f9kZW4o-rcgLZw2yXCCC5SxWGNAFYksp9XUJv3CeDlP8uEP6cV1pg>
-    <xmx:2v9kZdz7R6dEonqpP1w4QvJ7vI63sdvRV-JRlc_kM7IMCMr7dm2sfn1H2-8>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 27 Nov 2023 15:45:12 -0500 (EST)
-Date: Mon, 27 Nov 2023 14:45:11 -0600
-From: Daniel Xu <dxu@dxuuu.xyz>
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: Eduard Zingerman <eddyz87@gmail.com>, 
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	antony.antony@secunet.com, Mykola Lysenko <mykolal@fb.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, devel@linux-ipsec.org, 
-	Network Development <netdev@vger.kernel.org>
-Subject: Re: [PATCH ipsec-next v1 6/7] bpf: selftests: test_tunnel: Disable
- CO-RE relocations
-Message-ID: <xehp2qvy5cyaairbnfhem4hvbsl26blo4zzu7z6ywbp26jcwyn@hgp3v2q4ud7o>
-References: <cover.1700676682.git.dxu@dxuuu.xyz>
- <391d524c496acc97a8801d8bea80976f58485810.1700676682.git.dxu@dxuuu.xyz>
- <0f210cef-c6e9-41c1-9ba8-225f046435e5@linux.dev>
- <CAADnVQ+sEsUyNYPeZyOf2PcCnxOvOqw4bUuAuMofCU14szTGvg@mail.gmail.com>
- <3ec6c068-7f95-419a-a0ae-a901f95e4838@linux.dev>
- <18e43cdf65e7ba0d8f6912364fbc5b08a6928b35.camel@gmail.com>
- <uc5fv3keghefszuvono7aclgtjtgjnnia3i54ynejmyrs42ser@bwdpq5gmuvub>
- <0535eb913f1a0c2d3c291478fde07e0aa2b333f1.camel@gmail.com>
- <42f9bf0d-695a-412d-bea5-cb7036fa7418@linux.dev>
- <a5a84482-13ef-47d8-bf07-8017060a5d64@linux.dev>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D812031735;
+	Mon, 27 Nov 2023 21:00:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1E8DC433C9;
+	Mon, 27 Nov 2023 21:00:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1701118857;
+	bh=d0FagZci1PXFMezi/BonwyYv+7yV34Dht6vxRLQOKK8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=yzDbR+kT8L1Ms6G8xL0TrV5ITh7u9pHV2Tf3NB55xhtilyqokg+gTeQDHkcIheVm8
+	 DFA9Di1naDUQ7+V1qm6//jzz5SoG4oQI202ZHvMMcRWO/D2v+XJx6r6wBn7BU8ic6i
+	 nNpDcKvEsu+FmI1qaMNFFOqckiGwHehyfX1VN2tA=
+Date: Mon, 27 Nov 2023 13:00:55 -0800
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Nhat Pham <nphamcs@gmail.com>
+Cc: hannes@cmpxchg.org, cerasuolodomenico@gmail.com, yosryahmed@google.com,
+ sjenning@redhat.com, ddstreet@ieee.org, vitaly.wool@konsulko.com,
+ mhocko@kernel.org, roman.gushchin@linux.dev, shakeelb@google.com,
+ muchun.song@linux.dev, chrisl@kernel.org, linux-mm@kvack.org,
+ kernel-team@meta.com, linux-kernel@vger.kernel.org,
+ cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, shuah@kernel.org
+Subject: Re: [PATCH v6 6/6] zswap: shrinks zswap pool based on memory
+ pressure
+Message-Id: <20231127130055.30c455906d912e09dcb7e79b@linux-foundation.org>
+In-Reply-To: <20231127193703.1980089-7-nphamcs@gmail.com>
+References: <20231127193703.1980089-1-nphamcs@gmail.com>
+	<20231127193703.1980089-7-nphamcs@gmail.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a5a84482-13ef-47d8-bf07-8017060a5d64@linux.dev>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Sun, Nov 26, 2023 at 09:53:04PM -0800, Yonghong Song wrote:
+On Mon, 27 Nov 2023 11:37:03 -0800 Nhat Pham <nphamcs@gmail.com> wrote:
+
+> Currently, we only shrink the zswap pool when the user-defined limit is
+> hit. This means that if we set the limit too high, cold data that are
+> unlikely to be used again will reside in the pool, wasting precious
+> memory. It is hard to predict how much zswap space will be needed ahead
+> of time, as this depends on the workload (specifically, on factors such
+> as memory access patterns and compressibility of the memory pages).
 > 
-> On 11/27/23 12:44 AM, Yonghong Song wrote:
-> > 
-> > On 11/26/23 8:52 PM, Eduard Zingerman wrote:
-> > > On Sun, 2023-11-26 at 18:04 -0600, Daniel Xu wrote:
-> > > [...]
-> > > > > Tbh I'm not sure. This test passes with preserve_static_offset
-> > > > > because it suppresses preserve_access_index. In general clang
-> > > > > translates bitfield access to a set of IR statements like:
-> > > > > 
-> > > > >    C:
-> > > > >      struct foo {
-> > > > >        unsigned _;
-> > > > >        unsigned a:1;
-> > > > >        ...
-> > > > >      };
-> > > > >      ... foo->a ...
-> > > > > 
-> > > > >    IR:
-> > > > >      %a = getelementptr inbounds %struct.foo, ptr %0, i32 0, i32 1
-> > > > >      %bf.load = load i8, ptr %a, align 4
-> > > > >      %bf.clear = and i8 %bf.load, 1
-> > > > >      %bf.cast = zext i8 %bf.clear to i32
-> > > > > 
-> > > > > With preserve_static_offset the getelementptr+load are replaced by a
-> > > > > single statement which is preserved as-is till code generation,
-> > > > > thus load with align 4 is preserved.
-> > > > > 
-> > > > > On the other hand, I'm not sure that clang guarantees that load or
-> > > > > stores used for bitfield access would be always aligned according to
-> > > > > verifier expectations.
-> > > > > 
-> > > > > I think we should check if there are some clang knobs that prevent
-> > > > > generation of unaligned memory access. I'll take a look.
-> > > > Is there a reason to prefer fixing in compiler? I'm not opposed to it,
-> > > > but the downside to compiler fix is it takes years to propagate and
-> > > > sprinkles ifdefs into the code.
-> > > > 
-> > > > Would it be possible to have an analogue of BPF_CORE_READ_BITFIELD()?
-> > > Well, the contraption below passes verification, tunnel selftest
-> > > appears to work. I might have messed up some shifts in the macro,
-> > > though.
-> > 
-> > I didn't test it. But from high level it should work.
-> > 
-> > > 
-> > > Still, if clang would peek unlucky BYTE_{OFFSET,SIZE} for a particular
-> > > field access might be unaligned.
-> > 
-> > clang should pick a sensible BYTE_SIZE/BYTE_OFFSET to meet
-> > alignment requirement. This is also required for BPF_CORE_READ_BITFIELD.
-> > 
-> > > 
-> > > ---
-> > > 
-> > > diff --git a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-> > > b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-> > > index 3065a716544d..41cd913ac7ff 100644
-> > > --- a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-> > > +++ b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-> > > @@ -9,6 +9,7 @@
-> > >   #include "vmlinux.h"
-> > >   #include <bpf/bpf_helpers.h>
-> > >   #include <bpf/bpf_endian.h>
-> > > +#include <bpf/bpf_core_read.h>
-> > >   #include "bpf_kfuncs.h"
-> > >   #include "bpf_tracing_net.h"
-> > >   @@ -144,6 +145,38 @@ int ip6gretap_get_tunnel(struct __sk_buff *skb)
-> > >       return TC_ACT_OK;
-> > >   }
-> > >   +#define BPF_CORE_WRITE_BITFIELD(s, field, new_val) ({            \
-> > > +    void *p = (void *)s + __CORE_RELO(s, field, BYTE_OFFSET);    \
-> > > +    unsigned byte_size = __CORE_RELO(s, field, BYTE_SIZE);        \
-> > > +    unsigned lshift = __CORE_RELO(s, field, LSHIFT_U64); \
-> > > +    unsigned rshift = __CORE_RELO(s, field, RSHIFT_U64); \
-> > > +    unsigned bit_size = (rshift - lshift);                \
-> > > +    unsigned long long nval, val, hi, lo;                \
-> > > +                                    \
-> > > +    asm volatile("" : "=r"(p) : "0"(p));                \
-> > 
-> > Use asm volatile("" : "+r"(p)) ?
-> > 
-> > > +                                    \
-> > > +    switch (byte_size) {                        \
-> > > +    case 1: val = *(unsigned char *)p; break;            \
-> > > +    case 2: val = *(unsigned short *)p; break;            \
-> > > +    case 4: val = *(unsigned int *)p; break;            \
-> > > +    case 8: val = *(unsigned long long *)p; break;            \
-> > > +    }                                \
-> > > +    hi = val >> (bit_size + rshift);                \
-> > > +    hi <<= bit_size + rshift;                    \
-> > > +    lo = val << (bit_size + lshift);                \
-> > > +    lo >>= bit_size + lshift;                    \
-> > > +    nval = new_val;                            \
-> > > +    nval <<= lshift;                        \
-> > > +    nval >>= rshift;                        \
-> > > +    val = hi | nval | lo;                        \
-> > > +    switch (byte_size) {                        \
-> > > +    case 1: *(unsigned char *)p      = val; break;            \
-> > > +    case 2: *(unsigned short *)p     = val; break;            \
-> > > +    case 4: *(unsigned int *)p       = val; break;            \
-> > > +    case 8: *(unsigned long long *)p = val; break;            \
-> > > +    }                                \
-> > > +})
-> > 
-> > I think this should be put in libbpf public header files but not sure
-> > where to put it. bpf_core_read.h although it is core write?
-> > 
-> > But on the other hand, this is a uapi struct bitfield write,
-> > strictly speaking, CORE write is really unnecessary here. It
-> > would be great if we can relieve users from dealing with
-> > such unnecessary CORE writes. In that sense, for this particular
-> > case, I would prefer rewriting the code by using byte-level
-> > stores...
-> or preserve_static_offset to clearly mean to undo bitfield CORE ...
-
-Ok, I will do byte-level rewrite for next revision.
-
-Just wondering, though: will bpftool be able to generate the appropriate
-annotations for uapi structs? IIUC uapi structs look the same in BTF as
-any other struct.
-
+> This patch implements a memcg- and NUMA-aware shrinker for zswap, that
+> is initiated when there is memory pressure. The shrinker does not
+> have any parameter that must be tuned by the user, and can be opted in
+> or out on a per-memcg basis.
 > 
-> [...]
+> Furthermore, to make it more robust for many workloads and prevent
+> overshrinking (i.e evicting warm pages that might be refaulted into
+> memory), we build in the following heuristics:
 > 
+> * Estimate the number of warm pages residing in zswap, and attempt to
+>   protect this region of the zswap LRU.
+> * Scale the number of freeable objects by an estimate of the memory
+>   saving factor. The better zswap compresses the data, the fewer pages
+>   we will evict to swap (as we will otherwise incur IO for relatively
+>   small memory saving).
+> * During reclaim, if the shrinker encounters a page that is also being
+>   brought into memory, the shrinker will cautiously terminate its
+>   shrinking action, as this is a sign that it is touching the warmer
+>   region of the zswap LRU.
+> 
+> As a proof of concept, we ran the following synthetic benchmark:
+> build the linux kernel in a memory-limited cgroup, and allocate some
+> cold data in tmpfs to see if the shrinker could write them out and
+> improved the overall performance. Depending on the amount of cold data
+> generated, we observe from 14% to 35% reduction in kernel CPU time used
+> in the kernel builds.
+> 
+> ...
+>
+> --- a/include/linux/mmzone.h
+> +++ b/include/linux/mmzone.h
+> @@ -22,6 +22,7 @@
+>  #include <linux/mm_types.h>
+>  #include <linux/page-flags.h>
+>  #include <linux/local_lock.h>
+> +#include <linux/zswap.h>
+>  #include <asm/page.h>
+>  
+>  /* Free memory management - zoned buddy allocator.  */
+> @@ -641,6 +642,7 @@ struct lruvec {
+>  #ifdef CONFIG_MEMCG
+>  	struct pglist_data *pgdat;
+>  #endif
+> +	struct zswap_lruvec_state zswap_lruvec_state;
 
-Thanks,
-Daniel
+Normally we'd put this in #ifdef CONFIG_ZSWAP.
+
+> --- a/include/linux/zswap.h
+> +++ b/include/linux/zswap.h
+> @@ -5,20 +5,40 @@
+>  #include <linux/types.h>
+>  #include <linux/mm_types.h>
+>  
+> +struct lruvec;
+> +
+>  extern u64 zswap_pool_total_size;
+>  extern atomic_t zswap_stored_pages;
+>  
+>  #ifdef CONFIG_ZSWAP
+>  
+> +struct zswap_lruvec_state {
+> +	/*
+> +	 * Number of pages in zswap that should be protected from the shrinker.
+> +	 * This number is an estimate of the following counts:
+> +	 *
+> +	 * a) Recent page faults.
+> +	 * b) Recent insertion to the zswap LRU. This includes new zswap stores,
+> +	 *    as well as recent zswap LRU rotations.
+> +	 *
+> +	 * These pages are likely to be warm, and might incur IO if the are written
+> +	 * to swap.
+> +	 */
+> +	atomic_long_t nr_zswap_protected;
+> +};
+> +
+>  bool zswap_store(struct folio *folio);
+>  bool zswap_load(struct folio *folio);
+>  void zswap_invalidate(int type, pgoff_t offset);
+>  void zswap_swapon(int type);
+>  void zswap_swapoff(int type);
+>  void zswap_memcg_offline_cleanup(struct mem_cgroup *memcg);
+> -
+> +void zswap_lruvec_state_init(struct lruvec *lruvec);
+> +void zswap_lruvec_swapin(struct page *page);
+>  #else
+>  
+> +struct zswap_lruvec_state {};
+
+But instead you made it an empty struct in this case.
+
+That's a bit funky, but I guess OK.  It does send a careful reader of
+struct lruvec over to look at the zswap_lruvec_state definition to
+understand what's going on.
+
+>  static inline bool zswap_store(struct folio *folio)
+>  {
+>  	return false;
+> @@ -33,7 +53,8 @@ static inline void zswap_invalidate(int type, pgoff_t offset) {}
+>  static inline void zswap_swapon(int type) {}
+>  static inline void zswap_swapoff(int type) {}
+>  static inline void zswap_memcg_offline_cleanup(struct mem_cgroup *memcg) {}
+> -
+> +static inline void zswap_lruvec_init(struct lruvec *lruvec) {}
+> +static inline void zswap_lruvec_swapin(struct page *page) {}
+
+Needed this build fix:
+
+--- a/include/linux/zswap.h~zswap-shrinks-zswap-pool-based-on-memory-pressure-fix
++++ a/include/linux/zswap.h
+@@ -54,6 +54,7 @@ static inline void zswap_swapon(int type
+ static inline void zswap_swapoff(int type) {}
+ static inline void zswap_memcg_offline_cleanup(struct mem_cgroup *memcg) {}
+ static inline void zswap_lruvec_init(struct lruvec *lruvec) {}
++static inline void zswap_lruvec_state_init(struct lruvec *lruvec) {}
+ static inline void zswap_lruvec_swapin(struct page *page) {}
+ #endif
+ 
+_
+
 
