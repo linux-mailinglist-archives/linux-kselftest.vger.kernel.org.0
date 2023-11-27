@@ -1,104 +1,122 @@
-Return-Path: <linux-kselftest+bounces-641-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-642-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 783E97F9DDC
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Nov 2023 11:43:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C87F7F9E5E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Nov 2023 12:17:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9B62E1C20C94
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Nov 2023 10:43:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CBC55281356
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Nov 2023 11:17:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4653516426;
-	Mon, 27 Nov 2023 10:43:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81DD818E32;
+	Mon, 27 Nov 2023 11:17:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QnbNT5w/"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ATqUzkBA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C12D113
-	for <linux-kselftest@vger.kernel.org>; Mon, 27 Nov 2023 02:43:27 -0800 (PST)
-Received: by mail-vs1-xe2d.google.com with SMTP id ada2fe7eead31-45f3b583ce9so2919447137.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 27 Nov 2023 02:43:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1701081805; x=1701686605; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=R6TSIoz+H8JLiNUcGCIq1Csd5pwnS8su62/9RaC91nk=;
-        b=QnbNT5w/x/n6y8y6/4c6UoHMeQctlFvR0X5JJKvPmtk0/M6tgmjkymPdzZS4RHyYpv
-         1KKaTlRZXRvIfPG4udxvhbE+s762oyLxh7AJhzRNcfinAJ5rq9E+iA5cEBzIUVRXbHl9
-         KDVbEEl7cHNRSRP3rR/IBP45UQs40P2hlW1ILeXZGtHU+bLleF2qJ7iNrNwA7txE5klo
-         u8eM4AArfzx6TdfHWY7Og4qFzA2Yuqs2gBANOhogudfnjS5hhxewMc28QxAcyArQA0xq
-         nEwFFuNrIbv3mb+fSyVyK4yxnFPfYYGxDChg/GlnUfsATzyenSO/0Qr/PeO4Wlg+kys5
-         jh5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701081805; x=1701686605;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=R6TSIoz+H8JLiNUcGCIq1Csd5pwnS8su62/9RaC91nk=;
-        b=XwZzbPFQOsb5BNFpQ2M0Wp1r22M0eMqi5r8aVQJ9WZS1Cm4NFMcTDLv1J5FdZZOkf0
-         q17E6d1NxHlMoU5Xorlt/oOP7WjIiyNuOuhOczhRPMep2THWYKRzVNsb6vAxVt4GVxaQ
-         PYcgEib5R9E6+xYPREp+kixjMVQjluCMQNT14ZiBgoSoFhcgLbEZJXHFoqflDoKyLDKr
-         fNTsiXuN1cooKMFRCpJxCgWrxKhvfn4Be+whFBKUCHJ1c6S7Yt3G/CkHyt6HrUZAJAt2
-         Gw+WYXsnXAUkNnC8KkkdBbMqsSX92Vo8xj5FF1UteF5jtbNaZCaUhwvLgBGzMG662kgZ
-         Z8sQ==
-X-Gm-Message-State: AOJu0YwYdoBF9AAJaJdX1qBN5pl+zfgSzgQZmKYMwUjf+LADoE44uV7R
-	5zMt8+gNRn9MaSE9f7KiXq+w2PBofhYLoljFcUc2MoSpqbVDuKMI/Tk=
-X-Google-Smtp-Source: AGHT+IGMKNRQ2wePxRC4PpDnj4YoN1p1HWwhKXLnzyZPaFNOeCXmqVoolj5+388JcmcpA13+Hkz5NYjQyYeR/zR/n8Y=
-X-Received: by 2002:a67:cd16:0:b0:462:f13a:286a with SMTP id
- u22-20020a67cd16000000b00462f13a286amr2897810vsl.4.1701081805658; Mon, 27 Nov
- 2023 02:43:25 -0800 (PST)
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515AB136;
+	Mon, 27 Nov 2023 03:17:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=cAMYRwVtTk4t4CFVybTFSaosFfl7UAZUdZLXZwoFExo=; b=ATqUzkBAXvyJcu5VDkL3MVJVfz
+	M/w2F2dpijW6LxyJLlqXBnQ0lCixTGvRKNlSoSiX09wPSklZT/HtWrEsqMUIdkq93s+4dAO9uWxTV
+	zMJVEfgI4+fLLB/BspixOggT0/648mr9X8rGlX6pT0ysMRuueX9ZH2SJCHA6yABLLJ3WdeVUQ9nkx
+	7hkUh0jav76aCSftSKzOTTuPr4TusyFps7ll+zKj+RPzbY6WUbwHRxY8UE9/5HR6OBjEBqv0sRGhO
+	1hHs7A0mYGz4bDCYmyPGoVMW2Gwqq/97kzONjxkB6w/6NX7lo3vhxYcv3rFdjOgVRN8vrcTve873R
+	d3HFyzHg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+	id 1r7ZbZ-00G258-25;
+	Mon, 27 Nov 2023 11:16:46 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 17B3A3002F1; Mon, 27 Nov 2023 12:16:44 +0100 (CET)
+Date: Mon, 27 Nov 2023 12:16:43 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Guo Ren <guoren@kernel.org>
+Cc: Christoph Muellner <christoph.muellner@vrull.eu>,
+	linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Anup Patel <apatel@ventanamicro.com>,
+	Philipp Tomsich <philipp.tomsich@vrull.eu>,
+	Andrew Jones <ajones@ventanamicro.com>,
+	Daniel Henrique Barboza <dbarboza@ventanamicro.com>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	=?iso-8859-1?Q?Bj=F6rn_T=F6pel?= <bjorn@rivosinc.com>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Andrea Parri <parri.andrea@gmail.com>,
+	Will Deacon <will@kernel.org>, Daniel Lustig <dlustig@nvidia.com>
+Subject: Re: [RFC PATCH 0/5] RISC-V: Add dynamic TSO support
+Message-ID: <20231127111643.GV3818@noisy.programming.kicks-ass.net>
+References: <20231124072142.2786653-1-christoph.muellner@vrull.eu>
+ <20231124101519.GP3818@noisy.programming.kicks-ass.net>
+ <ZWFhSYalMCgTo+SG@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Mon, 27 Nov 2023 16:13:14 +0530
-Message-ID: <CA+G9fYs6WafDBtSbcLpoyWehQyBPNeX37PvsP6HzSotXr3dYLg@mail.gmail.com>
-Subject: lsm_list_modules_test.c:104:22: error: 'LSM_ID_IMA' undeclared (first
- use in this function); did you mean 'LSM_ID_YAMA'?
-To: "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, 
-	open list <linux-kernel@vger.kernel.org>, lkft-triage@lists.linaro.org, 
-	regressions@lists.linux.dev
-Cc: Casey Schaufler <casey@schaufler-ca.com>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	Paul Moore <paul@paul-moore.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Anders Roxell <anders.roxell@linaro.org>, Shuah Khan <shuah@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZWFhSYalMCgTo+SG@gmail.com>
 
-Following build errors noticed while building selftests lsm tests for x86
-with gcc-13 toolchain on Linux next-20231127 tag.
+On Fri, Nov 24, 2023 at 09:51:53PM -0500, Guo Ren wrote:
+> On Fri, Nov 24, 2023 at 11:15:19AM +0100, Peter Zijlstra wrote:
+> > On Fri, Nov 24, 2023 at 08:21:37AM +0100, Christoph Muellner wrote:
+> > > From: Christoph Müllner <christoph.muellner@vrull.eu>
+> > > 
+> > > The upcoming RISC-V Ssdtso specification introduces a bit in the senvcfg
+> > > CSR to switch the memory consistency model at run-time from RVWMO to TSO
+> > > (and back). The active consistency model can therefore be switched on a
+> > > per-hart base and managed by the kernel on a per-process/thread base.
+> > 
+> > You guys, computers are hartless, nobody told ya?
+> > 
+> > > This patch implements basic Ssdtso support and adds a prctl API on top
+> > > so that user-space processes can switch to a stronger memory consistency
+> > > model (than the kernel was written for) at run-time.
+> > > 
+> > > I am not sure if other architectures support switching the memory
+> > > consistency model at run-time, but designing the prctl API in an
+> > > arch-independent way allows reusing it in the future.
+> > 
+> > IIRC some Sparc chips could do this, but I don't think anybody ever
+> > exposed this to userspace (or used it much).
+> > 
+> > IA64 had planned to do this, except they messed it up and did it the
+> > wrong way around (strong first and then relax it later), which lead to
+> > the discovery that all existing software broke (d'uh).
+> > 
+> > I think ARM64 approached this problem by adding the
+> > load-acquire/store-release instructions and for TSO based code,
+> > translate into those (eg. x86 -> arm64 transpilers).
 
-Build log:
-------
-selftest/lsm/lsm_list_modules_test
-lsm_list_modules_test.c: In function 'correct_lsm_list_modules':
-lsm_list_modules_test.c:104:22: error: 'LSM_ID_IMA' undeclared (first
-use in this function); did you mean 'LSM_ID_YAMA'?
-  104 |                 case LSM_ID_IMA:
-      |                      ^~~~~~~~~~
-      |                      LSM_ID_YAMA
-lsm_list_modules_test.c:104:22: note: each undeclared identifier is
-reported only once for each function it appears in
+> Keeping global TSO order is easier and faster than mixing
+> acquire/release and regular load/store. That means when ssdtso is
+> enabled, the transpiler's load-acquire/store-release becomes regular
+> load/store. Some micro-arch hardwares could speed up the performance.
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Why is it faster? Because the release+acquire thing becomes RcSC instead
+of RcTSO? Surely that can be fixed with a weaker store-release variant
+ot something?
 
-Steps to reproduce:
------
+The problem I have with all of this is that you need to context switch
+this state and that you need to deal with exceptions, which must be
+written for the weak model but then end up running in the tso model --
+possibly slower than desired.
 
-tuxmake --runtime podman --target-arch x86_64 --toolchain gcc-13  \
- --kconfig https://storage.tuxsuite.com/public/linaro/lkft/builds/2Yk9XptRIQra77bvzZHcgyzkH7w/config
-\
-       debugkernel cpupower headers kernel kselftest modules
-
-Links:
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20231127/testrun/21324802/suite/build/test/gcc-13-lkftconfig-kselftest/log
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20231127/testrun/21327065/suite/build/test/gcc-13-lkftconfig-kselftest/history/
- - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20231127/testrun/21324802/suite/build/test/gcc-13-lkftconfig-kselftest/details/
+If OTOH you only have a single model, everything becomes so much
+simpler. You just need to be able to express exactly what you want.
 
 
---
-Linaro LKFT
-https://lkft.linaro.org
 
