@@ -1,191 +1,237 @@
-Return-Path: <linux-kselftest+bounces-665-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-666-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 082067FAAA8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Nov 2023 20:53:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 509D17FABD4
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Nov 2023 21:45:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B6D2228198C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Nov 2023 19:53:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 73B041C20D9B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Nov 2023 20:45:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E83C45956;
-	Mon, 27 Nov 2023 19:53:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B02F32F87F;
+	Mon, 27 Nov 2023 20:45:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="FF5K60Oz"
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="pgevG6dm";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Rfq6nyQn"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2056.outbound.protection.outlook.com [40.107.212.56])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7875EB8;
-	Mon, 27 Nov 2023 11:53:27 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Xc5wS1dLKhT8jT8dHcwATYf4neWH55awOOOiX7xiQpkqQEH+tERwerrdaLebvKKpbSiMCVZhLAMnwYvgGj3x8uDpCy+WHrubVbJh1B4SjfLYJZGZO9MmCaeUfD4TVt9x3X3CW7dp4d9JlZr8o0fLCOucTlmi+99U41aPd42uqKC6GrfFsMjonCG0NnqRm1WHtWdkjO2MS0vysoSHH98SEKJaR0U3KJCh6S0M9SOFhyT7oDjV23rKwJsgR+++p73zevzP9TG7/tAKsRruyTdmNP0887o6SOx52XlSHT39s740sqQjdDHGeE1yJdi/CzeDFb0LTpD+IDEANc4wRfPa9Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Sq/pLOnwq+TxmAcS9Ulb+yiBRt/seeNqlfBY8iwn70c=;
- b=OkUTPuGc6OoejG0jXzSoVWjp691GUtbtBfPuaSFzS2YBzI93/9lz8NSUsetWzFEKnNXalQm5gkjPJPurni2oR+aeAZ3zBUXhufhOJra5b2IP294uSUcXBLRE738mf2ggeTjaN37P42ATUTdImBtSf2mDZf+fwCTWxS/F9j1WWigdeI6buoOPd14mwAt5WaPHmFnWdEbqMQZQQwHNW1GjBXwjdvvYE1DKXs7/zVr5cfGhyh40Dq0fceo/UQl5TqWNRI5y+rfXWgNQxIjzPK6u6saANppIQXPWzD7XKSIFjm7KQl+cnKexif2vvPoo3F27zBZ3+mjQs7vq5CNxeYZaKw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.232) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Sq/pLOnwq+TxmAcS9Ulb+yiBRt/seeNqlfBY8iwn70c=;
- b=FF5K60OzAyrOAxO4vJ4BZ2oXonyReykYgv3EOUnnuv1q4Oj1iJp6AtqGWHsrsiGwYRC98hn5Q4xeUyi3gHrBASmKnIR3JsT8fynuZ8C7BecxZsDeIQWG/KsjognvRuqceP0PnF/lbLiw4sGD4HO/BkduWFwnbCzI/l1arBt+wmsOWu2gf3NzQ+gT4VXJe7SPMIZtT680rTWpZg5TNmGlr3ouZcp6jSZ2pihq45sj9iYUIHkwi6LB6rpEGx6srgF1zlg5pUN4UVyWrnscunSnQ1w6VlXETnXdbI4zJWAZIdEQSDqKk+BFkBpbjox/z3MiBnXKr6CZ2DzGCmjdTq83fw==
-Received: from SN4PR0501CA0104.namprd05.prod.outlook.com
- (2603:10b6:803:42::21) by DS0PR12MB6583.namprd12.prod.outlook.com
- (2603:10b6:8:d1::12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.27; Mon, 27 Nov
- 2023 19:53:21 +0000
-Received: from SN1PEPF000252A0.namprd05.prod.outlook.com
- (2603:10b6:803:42:cafe::3a) by SN4PR0501CA0104.outlook.office365.com
- (2603:10b6:803:42::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7046.21 via Frontend
- Transport; Mon, 27 Nov 2023 19:53:21 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.232) by
- SN1PEPF000252A0.mail.protection.outlook.com (10.167.242.7) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7046.17 via Frontend Transport; Mon, 27 Nov 2023 19:53:21 +0000
-Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
- (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 27 Nov
- 2023 11:53:07 -0800
-Received: from drhqmail201.nvidia.com (10.126.190.180) by
- drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Mon, 27 Nov 2023 11:53:07 -0800
-Received: from Asurada-Nvidia (10.127.8.12) by mail.nvidia.com
- (10.126.190.180) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41 via Frontend
- Transport; Mon, 27 Nov 2023 11:53:06 -0800
-Date: Mon, 27 Nov 2023 11:53:04 -0800
-From: Nicolin Chen <nicolinc@nvidia.com>
-To: "Tian, Kevin" <kevin.tian@intel.com>
-CC: "Liu, Yi L" <yi.l.liu@intel.com>, "joro@8bytes.org" <joro@8bytes.org>,
-	"alex.williamson@redhat.com" <alex.williamson@redhat.com>, "jgg@nvidia.com"
-	<jgg@nvidia.com>, "robin.murphy@arm.com" <robin.murphy@arm.com>,
-	"baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>, "cohuck@redhat.com"
-	<cohuck@redhat.com>, "eric.auger@redhat.com" <eric.auger@redhat.com>,
-	"kvm@vger.kernel.org" <kvm@vger.kernel.org>, "mjrosato@linux.ibm.com"
-	<mjrosato@linux.ibm.com>, "chao.p.peng@linux.intel.com"
-	<chao.p.peng@linux.intel.com>, "yi.y.sun@linux.intel.com"
-	<yi.y.sun@linux.intel.com>, "peterx@redhat.com" <peterx@redhat.com>,
-	"jasowang@redhat.com" <jasowang@redhat.com>,
-	"shameerali.kolothum.thodi@huawei.com"
-	<shameerali.kolothum.thodi@huawei.com>, "lulu@redhat.com" <lulu@redhat.com>,
-	"suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-	"iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "Duan,
- Zhenzhong" <zhenzhong.duan@intel.com>, "joao.m.martins@oracle.com"
-	<joao.m.martins@oracle.com>, "Zeng, Xin" <xin.zeng@intel.com>, "Zhao, Yan Y"
-	<yan.y.zhao@intel.com>
-Subject: Re: [PATCH v6 2/6] iommufd: Add IOMMU_HWPT_INVALIDATE
-Message-ID: <ZWTzoBTDDEWAKMs9@Asurada-Nvidia>
-References: <20231117130717.19875-1-yi.l.liu@intel.com>
- <20231117130717.19875-3-yi.l.liu@intel.com>
- <BN9PR11MB5276D8406BF08B853329288C8CB4A@BN9PR11MB5276.namprd11.prod.outlook.com>
- <fa736836-e136-4ed4-a6af-8ea2f0e7c0dd@intel.com>
- <BN9PR11MB527659462CCB7280055858D98CB4A@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZVuZOYFzAaCuJjXZ@Asurada-Nvidia>
- <BN9PR11MB5276C8EACE2C300A646EA8A18CBBA@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZVw/BXxgGCuCZCA6@Asurada-Nvidia>
- <BN9PR11MB52761A9B48A25E89BEECE6308CB8A@BN9PR11MB5276.namprd11.prod.outlook.com>
+Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C22A1AA;
+	Mon, 27 Nov 2023 12:45:19 -0800 (PST)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailnew.west.internal (Postfix) with ESMTP id 4BBC32B0013D;
+	Mon, 27 Nov 2023 15:45:15 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Mon, 27 Nov 2023 15:45:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to; s=fm3; t=
+	1701117914; x=1701125114; bh=c6RIxCPZspuBtK8K2FUFUy9oe3rOA3IlnLJ
+	SMn0aJrY=; b=pgevG6dm8hI24w8peAUEuqrhrBxxBUDDFCa0Hm1UIUnb/T7rTjM
+	qCpKbObWmxmmRGvLKpbJUQDavUV2Er1g3ipGG7DCnXPezvkHY65i21yrNKxtdzuk
+	DR+PN7+i5JLdCXSmBY5xbAjfCJsdBFzf9wWI6ADakx3kMBu+wilTOKOiWs9TFpAc
+	vBd8zruS+Gtr97UiqdlR9OG6hY+NSi7KYPE0l2P1R7JcUpqDCGmTsPyRcLXcZ/ox
+	5wmtS+5X4JdCWnCY881cxlgGzWkae7Afzbufdr+Mmn2ha5+/jqf6+89NQ99FeLlC
+	x7/gYhb6UeZGD4zsq2Bdhb5KpuOW87GY+bw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
+	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+	1701117914; x=1701125114; bh=c6RIxCPZspuBtK8K2FUFUy9oe3rOA3IlnLJ
+	SMn0aJrY=; b=Rfq6nyQnKnCi3gDOoi66hH0ZpfPk+E924Vdx/1BipZdSjeaqekH
+	tdWqN63IevDJNwH9oSolNGavAKGHMUxjSTcHTUMACgQJO4au11SbcZHQZ5v3Rvgw
+	ENZ9XeCF6VyNxNSLdT82qFEni/due1wxdKM7Ddj3ksHDPHpN/d5KpxpcJE+xvu3P
+	f7F44b6mBTFFaSuslNTiM7bnBOgbwt2tB3/G3UvDjIOzB/X2+jggM80wPzmuD9AI
+	N1ZVbM2WU53AQ3igGLR1fhVnUGtmtZzq6tXgYZzxQXUdc4f4SPPk4vVE4/vxyHpQ
+	2erVRMU6Ho3grJA25M9wZRMBMz6B/pXbGnw==
+X-ME-Sender: <xms:2f9kZTi25_zkJrmXET_KDyWAMVKkbzoFgBrHv8ANkfUdiguLApTjcg>
+    <xme:2f9kZQAC9a8vBBDBZ2y9HZL2MllFJxZVGfAbQgFoR6BxFPquFOFcr6syCkFh_RQpY
+    owHmYIW79EpgiY-OQ>
+X-ME-Received: <xmr:2f9kZTEyftqvefDvMcRt0CG2BhcjG29W99bYFbe8OvIbu-W0Vd-maMnkDnx22jQz4GeAswwJluDws32c3gx4WqIAg1bDbmlhDqPBxvaFYICO7-xT-cajyhSSifk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudeiuddgudegvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enfghrlhcuvffnffculdejtddmnecujfgurhepfffhvfevuffkfhggtggugfgjsehtkefs
+    tddttddunecuhfhrohhmpeffrghnihgvlhcuighuuceougiguhesugiguhhuuhdrgiihii
+    eqnecuggftrfgrthhtvghrnhepudefiedtieehffeuffelffegheegjeekteekgfdtkeef
+    jeehffejtdfgkeeiteelnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
+    hilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
+X-ME-Proxy: <xmx:2f9kZQTR4nBr7Y-dxUjnLjjdQwBsfjoT2Wxh1e_j4OlC7I4qIFJNFA>
+    <xmx:2f9kZQxbUDx61KaAdVg2gkVDDml2RCQ9JvKRBNEw2KRu64np0V1pUw>
+    <xmx:2f9kZW4o-rcgLZw2yXCCC5SxWGNAFYksp9XUJv3CeDlP8uEP6cV1pg>
+    <xmx:2v9kZdz7R6dEonqpP1w4QvJ7vI63sdvRV-JRlc_kM7IMCMr7dm2sfn1H2-8>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 27 Nov 2023 15:45:12 -0500 (EST)
+Date: Mon, 27 Nov 2023 14:45:11 -0600
+From: Daniel Xu <dxu@dxuuu.xyz>
+To: Yonghong Song <yonghong.song@linux.dev>
+Cc: Eduard Zingerman <eddyz87@gmail.com>, 
+	Alexei Starovoitov <alexei.starovoitov@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
+	antony.antony@secunet.com, Mykola Lysenko <mykolal@fb.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, devel@linux-ipsec.org, 
+	Network Development <netdev@vger.kernel.org>
+Subject: Re: [PATCH ipsec-next v1 6/7] bpf: selftests: test_tunnel: Disable
+ CO-RE relocations
+Message-ID: <xehp2qvy5cyaairbnfhem4hvbsl26blo4zzu7z6ywbp26jcwyn@hgp3v2q4ud7o>
+References: <cover.1700676682.git.dxu@dxuuu.xyz>
+ <391d524c496acc97a8801d8bea80976f58485810.1700676682.git.dxu@dxuuu.xyz>
+ <0f210cef-c6e9-41c1-9ba8-225f046435e5@linux.dev>
+ <CAADnVQ+sEsUyNYPeZyOf2PcCnxOvOqw4bUuAuMofCU14szTGvg@mail.gmail.com>
+ <3ec6c068-7f95-419a-a0ae-a901f95e4838@linux.dev>
+ <18e43cdf65e7ba0d8f6912364fbc5b08a6928b35.camel@gmail.com>
+ <uc5fv3keghefszuvono7aclgtjtgjnnia3i54ynejmyrs42ser@bwdpq5gmuvub>
+ <0535eb913f1a0c2d3c291478fde07e0aa2b333f1.camel@gmail.com>
+ <42f9bf0d-695a-412d-bea5-cb7036fa7418@linux.dev>
+ <a5a84482-13ef-47d8-bf07-8017060a5d64@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <BN9PR11MB52761A9B48A25E89BEECE6308CB8A@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN1PEPF000252A0:EE_|DS0PR12MB6583:EE_
-X-MS-Office365-Filtering-Correlation-Id: a3cf8543-16d3-44e4-23a3-08dbef828235
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	GqYkn2uaDstpEupCzyCwdHnPZrC3ZubtJSiJPxLEnT0G2bfIEo4ziKb0BiV95JLjc4BS5P8XUhzNIKdTV40YkL9oORCPh4gg7Ohh7jPmP2Fj+T8Qth1OXab3gtUlJnybJ1Jjoyj1xZj85HpjfjviyuDxdhl0KNxy87tfMsECENRGmdiySsaYFUL4aj7JxdDuyjtOLeHcSHw9FlK5Fxzn8r4VIxRsgGd3l1+NFe7vtJfoEG9S9DR29WvhaC9fiXPMy3Mx8+8C0ktgmortLmhThsBHVFEfbEBa8ai00pkqwDYltm33kLPGLcEj5bfxapQQ8DPzCxnaxkuYe11ZcyU3wxy5teTyxUDa4ex1F2y0Av2JOL5e6xYJI3Ju/P+/f0QQiyoJs8nGeWGOEBZizbp8wSm8BdBvrzmg4/RNdLEoLKQEsuezOH9CMUb+e9NDOdipGt5Zrv095xQA9ElnzIkHlY6WQp2glBcs4yBDR8MmXqpCAv8f4kucOyl3gHNORu9BAIZReOYhyL/lcFUtnu9EAxTnfD5PWeyGoSUhRkU8XzUZrV2xGItgls6uRXPWmKZ4+5VHZaUg6LqBmGZVTs9W098FpcUDrOXve5V21u2Yw3fNLZdFYQ7mjWsQAr71OFzLYDG37xgw0sfgcfnQUdlZezJvPSG1Mq6yEubhYyfnBDsTT1zTQSpWNmXki10y7qro4mAgeoKSH7fszJxGNJAlM86Pknwpe8fdtC7dl8mOG3e5qAjXVE/PT8JzH4UO32+g
-X-Forefront-Antispam-Report:
-	CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230031)(4636009)(136003)(376002)(346002)(396003)(39860400002)(230922051799003)(1800799012)(82310400011)(186009)(64100799003)(451199024)(40470700004)(46966006)(36840700001)(40480700001)(41300700001)(36860700001)(47076005)(356005)(33716001)(55016003)(7636003)(336012)(83380400001)(426003)(7416002)(82740400003)(5660300002)(70206006)(26005)(86362001)(2906002)(70586007)(9686003)(8676002)(8936002)(4326008)(478600001)(40460700003)(6916009)(316002)(54906003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Nov 2023 19:53:21.1114
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a3cf8543-16d3-44e4-23a3-08dbef828235
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SN1PEPF000252A0.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6583
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a5a84482-13ef-47d8-bf07-8017060a5d64@linux.dev>
 
-On Fri, Nov 24, 2023 at 02:36:29AM +0000, Tian, Kevin wrote:
-
-> > > > > > >> + * @out_driver_error_code: Report a driver speicifc error code
-> > upon
-> > > > > > failure.
-> > > > > > >> + *                         It's optional, driver has a choice to fill it or
-> > > > > > >> + *                         not.
-> > > > > > >
-> > > > > > > Being optional how does the user tell whether the code is filled or
-> > not?
-> > > >
-> > > > Well, naming it "error_code" indicates zero means no error while
-> > > > non-zero means something? An error return from this ioctl could
-> > > > also tell the user space to look up for this driver error code,
-> > > > if it ever cares.
-> > >
-> > > probably over-thinking but I'm not sure whether zero is guaranteed to
-> > > mean no error in all implementations...
-> >
-> > Well, you are right. Usually HW conveniently raises a flag in a
-> > register to indicate something wrong, yet it is probably unsafe
-> > to say it definitely.
-> >
+On Sun, Nov 26, 2023 at 09:53:04PM -0800, Yonghong Song wrote:
 > 
-> this reminds me one open. What about an implementation having
-> a hierarchical error code layout e.g. one main error register with
-> each bit representing an error category then multiple error code
-> registers each for one error category? In this case probably
-> a single out_driver_error_code cannot carry that raw information.
+> On 11/27/23 12:44 AM, Yonghong Song wrote:
+> > 
+> > On 11/26/23 8:52 PM, Eduard Zingerman wrote:
+> > > On Sun, 2023-11-26 at 18:04 -0600, Daniel Xu wrote:
+> > > [...]
+> > > > > Tbh I'm not sure. This test passes with preserve_static_offset
+> > > > > because it suppresses preserve_access_index. In general clang
+> > > > > translates bitfield access to a set of IR statements like:
+> > > > > 
+> > > > >    C:
+> > > > >      struct foo {
+> > > > >        unsigned _;
+> > > > >        unsigned a:1;
+> > > > >        ...
+> > > > >      };
+> > > > >      ... foo->a ...
+> > > > > 
+> > > > >    IR:
+> > > > >      %a = getelementptr inbounds %struct.foo, ptr %0, i32 0, i32 1
+> > > > >      %bf.load = load i8, ptr %a, align 4
+> > > > >      %bf.clear = and i8 %bf.load, 1
+> > > > >      %bf.cast = zext i8 %bf.clear to i32
+> > > > > 
+> > > > > With preserve_static_offset the getelementptr+load are replaced by a
+> > > > > single statement which is preserved as-is till code generation,
+> > > > > thus load with align 4 is preserved.
+> > > > > 
+> > > > > On the other hand, I'm not sure that clang guarantees that load or
+> > > > > stores used for bitfield access would be always aligned according to
+> > > > > verifier expectations.
+> > > > > 
+> > > > > I think we should check if there are some clang knobs that prevent
+> > > > > generation of unaligned memory access. I'll take a look.
+> > > > Is there a reason to prefer fixing in compiler? I'm not opposed to it,
+> > > > but the downside to compiler fix is it takes years to propagate and
+> > > > sprinkles ifdefs into the code.
+> > > > 
+> > > > Would it be possible to have an analogue of BPF_CORE_READ_BITFIELD()?
+> > > Well, the contraption below passes verification, tunnel selftest
+> > > appears to work. I might have messed up some shifts in the macro,
+> > > though.
+> > 
+> > I didn't test it. But from high level it should work.
+> > 
+> > > 
+> > > Still, if clang would peek unlucky BYTE_{OFFSET,SIZE} for a particular
+> > > field access might be unaligned.
+> > 
+> > clang should pick a sensible BYTE_SIZE/BYTE_OFFSET to meet
+> > alignment requirement. This is also required for BPF_CORE_READ_BITFIELD.
+> > 
+> > > 
+> > > ---
+> > > 
+> > > diff --git a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
+> > > b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
+> > > index 3065a716544d..41cd913ac7ff 100644
+> > > --- a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
+> > > +++ b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
+> > > @@ -9,6 +9,7 @@
+> > >   #include "vmlinux.h"
+> > >   #include <bpf/bpf_helpers.h>
+> > >   #include <bpf/bpf_endian.h>
+> > > +#include <bpf/bpf_core_read.h>
+> > >   #include "bpf_kfuncs.h"
+> > >   #include "bpf_tracing_net.h"
+> > >   @@ -144,6 +145,38 @@ int ip6gretap_get_tunnel(struct __sk_buff *skb)
+> > >       return TC_ACT_OK;
+> > >   }
+> > >   +#define BPF_CORE_WRITE_BITFIELD(s, field, new_val) ({            \
+> > > +    void *p = (void *)s + __CORE_RELO(s, field, BYTE_OFFSET);    \
+> > > +    unsigned byte_size = __CORE_RELO(s, field, BYTE_SIZE);        \
+> > > +    unsigned lshift = __CORE_RELO(s, field, LSHIFT_U64); \
+> > > +    unsigned rshift = __CORE_RELO(s, field, RSHIFT_U64); \
+> > > +    unsigned bit_size = (rshift - lshift);                \
+> > > +    unsigned long long nval, val, hi, lo;                \
+> > > +                                    \
+> > > +    asm volatile("" : "=r"(p) : "0"(p));                \
+> > 
+> > Use asm volatile("" : "+r"(p)) ?
+> > 
+> > > +                                    \
+> > > +    switch (byte_size) {                        \
+> > > +    case 1: val = *(unsigned char *)p; break;            \
+> > > +    case 2: val = *(unsigned short *)p; break;            \
+> > > +    case 4: val = *(unsigned int *)p; break;            \
+> > > +    case 8: val = *(unsigned long long *)p; break;            \
+> > > +    }                                \
+> > > +    hi = val >> (bit_size + rshift);                \
+> > > +    hi <<= bit_size + rshift;                    \
+> > > +    lo = val << (bit_size + lshift);                \
+> > > +    lo >>= bit_size + lshift;                    \
+> > > +    nval = new_val;                            \
+> > > +    nval <<= lshift;                        \
+> > > +    nval >>= rshift;                        \
+> > > +    val = hi | nval | lo;                        \
+> > > +    switch (byte_size) {                        \
+> > > +    case 1: *(unsigned char *)p      = val; break;            \
+> > > +    case 2: *(unsigned short *)p     = val; break;            \
+> > > +    case 4: *(unsigned int *)p       = val; break;            \
+> > > +    case 8: *(unsigned long long *)p = val; break;            \
+> > > +    }                                \
+> > > +})
+> > 
+> > I think this should be put in libbpf public header files but not sure
+> > where to put it. bpf_core_read.h although it is core write?
+> > 
+> > But on the other hand, this is a uapi struct bitfield write,
+> > strictly speaking, CORE write is really unnecessary here. It
+> > would be great if we can relieve users from dealing with
+> > such unnecessary CORE writes. In that sense, for this particular
+> > case, I would prefer rewriting the code by using byte-level
+> > stores...
+> or preserve_static_offset to clearly mean to undo bitfield CORE ...
 
-Hmm, good point.
+Ok, I will do byte-level rewrite for next revision.
 
-> Instead the iommu driver may need to define a customized error
-> code convention in uapi header which is converted from the
-> raw error information.
+Just wondering, though: will bpftool be able to generate the appropriate
+annotations for uapi structs? IIUC uapi structs look the same in BTF as
+any other struct.
+
 > 
-> From this angle should we simply say that the error code definition
-> must be included in the uapi header? If raw error information can
-> be carried by this field then this hw can simply say that the error
-> code format is same as the hw spec defines.
+> [...]
 > 
-> With that explicit information then the viommu can easily tell
-> whether error code is filled or not based on its own convention.
 
-That'd be to put this error_code field into the driver uAPI
-structure right?
-
-I also thought about making this out_driver_error_code per HW.
-Yet, an error can be either per array or per entry/quest. The
-array-related error should be reported in the array structure
-that is a core uAPI, v.s. the per-HW entry structure. Though
-we could still report an array error in the entry structure
-at the first entry (or indexed by "array->entry_num")?
-
-Thanks
-Nic
+Thanks,
+Daniel
 
