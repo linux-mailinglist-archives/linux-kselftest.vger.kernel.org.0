@@ -1,40 +1,40 @@
-Return-Path: <linux-kselftest+bounces-673-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-674-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9EB547FAE67
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Nov 2023 00:36:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F23397FAE6D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Nov 2023 00:36:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5269528154E
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Nov 2023 23:36:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A7E652816E9
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Nov 2023 23:36:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61951495FC;
-	Mon, 27 Nov 2023 23:36:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E969049F80;
+	Mon, 27 Nov 2023 23:36:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="H9emDfZb"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="n2p++2b+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FEF81AD;
-	Mon, 27 Nov 2023 15:36:08 -0800 (PST)
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9C5B1B8;
+	Mon, 27 Nov 2023 15:36:12 -0800 (PST)
 Received: from notapiano.myfiosgateway.com (cola.collaboradmins.com [195.201.22.229])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: nfraprado)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id 1075566022D1;
-	Mon, 27 Nov 2023 23:36:02 +0000 (GMT)
+	by madras.collabora.co.uk (Postfix) with ESMTPSA id A4CA56607286;
+	Mon, 27 Nov 2023 23:36:07 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1701128167;
-	bh=YEe8v7wDFFs3gQgZ9RcTV5I1wDd3U2Sg4ahCaTkprQo=;
-	h=From:To:Cc:Subject:Date:From;
-	b=H9emDfZbsGRiS+F7o/zTjCwpKOs9ATigOjvWWhy0SbmNQ69YCARc1007iQcAPpPaJ
-	 d68ud9ABQ5h4isZTQstZd7TVlnqHPX+5aKqTnST515c8vuv+CdsdgBAmIu2PRQ1o6J
-	 KHiWC5kJd7I4I0SWI99sgftn5KTtNDda51pfVjMR/5HjQAbu2WG3eegfZxZQSDEHBg
-	 kZ8kQDTJOOkQrAGLZQgsBlcTnAYqgwoEJxwEdYGzT7sispRNN7BzmSS8D9wQbZhQW9
-	 HeRoF10/cE7rO/VNqgF7DVIO74rsHEBCma2H6cqN+If86xm+TY7TP7x8AYbEHmH/Pq
-	 IWg9QJj2qfGZQ==
+	s=mail; t=1701128171;
+	bh=uszfqMsRyEw54/XQFNZxt8fdYO5WUerKHy+2zOlCCgg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=n2p++2b+KtXB0WF15oFP3ygUdj8gd69ZgSggXl1cbnsTZZJyY6igjbC+Ujwfr53i7
+	 Ufo1jzKmoinwhvsbOPGLkW+3gdhiWSwnfxKh6A/EzNpBYlbfjzNk7B348gYRhbyPz8
+	 gW7mGRlLrwsaGjdRILs/m+Y36uEqUNhNGUb7ZgrRUUxt0taN5xIRc53f+jUCZeBliL
+	 LjXy9S4OxsR3OZ4SxMO/PNEOi5ughBjb+wWAdIcsnse5WajqbWSBO7+edpq1LmgYzl
+	 BjxK5scWjK+CZMgFrRsZ4+ATPWMLZccNBkwoDTqZktQSQUwHHAfLeO0VRM5RIzMwOr
+	 ZohhinjpSkCAg==
 From: =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= <nfraprado@collabora.com>
 To: Shuah Khan <shuah@kernel.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -54,10 +54,12 @@ Cc: Saravana Kannan <saravanak@google.com>,
 	devicetree@vger.kernel.org,
 	=?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= <nfraprado@collabora.com>,
 	linux-kernel@vger.kernel.org
-Subject: [RFC PATCH v2 0/2] Add test to verify probe of devices from discoverable busses
-Date: Mon, 27 Nov 2023 18:34:05 -0500
-Message-ID: <20231127233558.868365-1-nfraprado@collabora.com>
+Subject: [RFC PATCH v2 1/2] kselftest: Add test to verify probe of devices from discoverable busses
+Date: Mon, 27 Nov 2023 18:34:06 -0500
+Message-ID: <20231127233558.868365-2-nfraprado@collabora.com>
 X-Mailer: git-send-email 2.42.1
+In-Reply-To: <20231127233558.868365-1-nfraprado@collabora.com>
+References: <20231127233558.868365-1-nfraprado@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -67,96 +69,230 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
+Add a new test to verify that a list of expected devices on a given
+platform have been successfully probed by a driver.
 
-Hi,
+Add a new test to verify that all expected devices from discoverable
+busses (ie USB, PCI) have been successfully instantiated and probed by a
+driver.
 
-v1 [1] was discussed during Plumbers [2], where a lot of feedback was given. I
-hope to justify the changes in v2 and address the feedback here.
+The per-platform list of expected devices is selected from the ones
+under the boards/ directory based on compatible.
 
-One feedback from Shuah was that keeping per-platform files with the USB/PCI
-devices to test as part of the kselftest tree wasn't maintainable. One proposed
-alternative was to generate a list of probed devices on a known-good kernel and
-use that as a reference. However you need someone to look at that generated
-reference to be able to say it is a good one, and you need to save it to ensure
-it will be reproducible later anyway, so that wouldn't actually solve the
-problem. It is a matter of hand-crafting vs generating the test definitions, but
-they will need to be vouched by someone and stored somewhere in both cases.
+Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-So for this v2, in patch 2 I just have a sample test definition, and the
-per-platform test definitions would be added to a separate repository.
+---
 
-The other feedback received was that the BIOS might reconfigure the PCI
-topology (at least on x86), meaning that relying on a sequence of device and
-function numbers (eg 1d.0/02.0/0.0) as a stable description of a device on the
-platform is not possible. I couldn't verify whether this is really the case (if
-you have any more insight into this, please let me know), but with that in mind,
-here in v2 I have taken a different approach. Here I'm using the device's
-properties which are used for driver matching (the same that show on modalias)
-to identify a device in a stable way.
-
-This approach has some drawbacks compared to the one on v1. For one it doesn't
-uniquely identify a device, so if there are multiple of the same device on a
-platform they have to be checked as a group. Also the test definition isn't as
-human-readable.
-
-I'm adding in CC the people I recognized at the Plumbers session that were
-interested in this work. Feel free to add anyone missing.
-
-Thanks,
-Nícolas
-
-[1] https://lore.kernel.org/all/20231024211818.365844-1-nfraprado@collabora.com
-[2] https://www.youtube.com/watch?v=oE73eVSyFXQ&t=9377s
-
-Original cover letter:
-
-This is part of an effort to improve detection of regressions impacting
-device probe on all platforms. The recently merged DT kselftest [3]
-detects probe issues for all devices described statically in the DT.
-That leaves out devices discovered at run-time from discoverable busses.
-
-This is where this test comes in. All of the devices that are connected
-through discoverable busses (ie USB and PCI), and which are internal and
-therefore always present, can be described in a per-platform file so
-they can be checked for. The test will check that the device has been
-instantiated and bound to a driver.
-
-Patch 1 introduces the test. Patch 2 adds the test definitions for the
-google,spherion machine (Acer Chromebook 514) as an example.
-
-This is the sample output from the test running on Spherion:
-
-TAP version 13
- Using board file:  boards/google,spherion
-1..3
-ok 1 usb.camera
-ok 2 usb.bluetooth
-ok 3 pci.wifi
- Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
-
-[3] https://lore.kernel.org/all/20230828211424.2964562-1-nfraprado@collabora.com/
-
-Changes in v2:
-- Changed approach of encoding stable device reference in test file from
-  HW topology to device match fields (the ones from modalias)
-- Better documented test format
-
-Nícolas F. R. A. Prado (2):
-  kselftest: Add test to verify probe of devices from discoverable
-    busses
-  kselftest: devices: Add sample board file for google,spherion
+(no changes since v1)
 
  tools/testing/selftests/Makefile              |   1 +
  tools/testing/selftests/devices/.gitignore    |   1 +
  tools/testing/selftests/devices/Makefile      |   8 +
- .../selftests/devices/boards/google,spherion  |  12 ++
  .../devices/test_discoverable_devices.sh      | 160 ++++++++++++++++++
- 5 files changed, 182 insertions(+)
+ 4 files changed, 170 insertions(+)
  create mode 100644 tools/testing/selftests/devices/.gitignore
  create mode 100644 tools/testing/selftests/devices/Makefile
- create mode 100644 tools/testing/selftests/devices/boards/google,spherion
  create mode 100755 tools/testing/selftests/devices/test_discoverable_devices.sh
 
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 3b2061d1c1a5..7f5088006c3c 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -13,6 +13,7 @@ TARGETS += core
+ TARGETS += cpufreq
+ TARGETS += cpu-hotplug
+ TARGETS += damon
++TARGETS += devices
+ TARGETS += dmabuf-heaps
+ TARGETS += drivers/dma-buf
+ TARGETS += drivers/s390x/uvdevice
+diff --git a/tools/testing/selftests/devices/.gitignore b/tools/testing/selftests/devices/.gitignore
+new file mode 100644
+index 000000000000..e3c5c04d1b19
+--- /dev/null
++++ b/tools/testing/selftests/devices/.gitignore
+@@ -0,0 +1 @@
++ktap_helpers.sh
+diff --git a/tools/testing/selftests/devices/Makefile b/tools/testing/selftests/devices/Makefile
+new file mode 100644
+index 000000000000..ff2fdc8fc5e2
+--- /dev/null
++++ b/tools/testing/selftests/devices/Makefile
+@@ -0,0 +1,8 @@
++TEST_PROGS := test_discoverable_devices.sh
++TEST_GEN_FILES := ktap_helpers.sh
++TEST_FILES := boards
++
++include ../lib.mk
++
++$(OUTPUT)/ktap_helpers.sh:
++	cp ../dt/ktap_helpers.sh $@
+diff --git a/tools/testing/selftests/devices/test_discoverable_devices.sh b/tools/testing/selftests/devices/test_discoverable_devices.sh
+new file mode 100755
+index 000000000000..82bad5ba7081
+--- /dev/null
++++ b/tools/testing/selftests/devices/test_discoverable_devices.sh
+@@ -0,0 +1,160 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# Copyright (c) 2023 Collabora Ltd
++#
++# This script tests for presence and driver binding of devices from discoverable
++# busses (ie USB, PCI).
++#
++# The per-platform list of devices to be tested is stored inside the boards/
++# directory and chosen based on compatible. Each line of the file follows the
++# following format:
++#
++#   usb|pci test_name number_of_matches field=value [ field=value ... ]
++#
++# The available match fields vary by bus. The field-value match pairs for a
++# device can be retrieved from the device's modalias attribute in sysfs.
++#
++
++DIR="$(dirname $(readlink -f "$0"))"
++
++source "${DIR}"/ktap_helpers.sh
++
++KSFT_FAIL=1
++KSFT_SKIP=4
++
++retval=0
++
++match()
++{
++	FILE="$1"
++	ID="$2"
++
++	[ ! -f "$FILE" ] && return 1
++	[ "$ID" = "" ] && return 0
++	grep -q "$ID" "$FILE" || return 1
++	return 0
++}
++
++usb()
++{
++	name="$1"
++	count="$2"
++	shift 2
++
++	for arg in $@; do
++		[[ "$arg" =~ ^v= ]] && v="${arg#v=}"
++		[[ "$arg" =~ ^p= ]] && p="${arg#p=}"
++		[[ "$arg" =~ ^d= ]] && d="${arg#d=}"
++		[[ "$arg" =~ ^dc= ]] && dc="${arg#dc=}"
++		[[ "$arg" =~ ^dsc= ]] && dsc="${arg#dsc=}"
++		[[ "$arg" =~ ^dp= ]] && dp="${arg#dp=}"
++		[[ "$arg" =~ ^ic= ]] && ic="${arg#ic=}"
++		[[ "$arg" =~ ^isc= ]] && isc="${arg#isc=}"
++		[[ "$arg" =~ ^ip= ]] && ip="${arg#ip=}"
++		[[ "$arg" =~ ^in= ]] && in="${arg#in=}"
++	done
++
++	cur_count=0
++
++	for dev in $(find /sys/bus/usb/devices -maxdepth 1); do
++		match "$dev"/idVendor "$v" || continue
++		match "$dev"/idProduct "$p" || continue
++		match "$dev"/bcdDevice "$d" || continue
++		match "$dev"/bDeviceClass "$dc" || continue
++		match "$dev"/bDeviceSubClass "$dsc" || continue
++		match "$dev"/bDeviceProtocol "$dp" || continue
++
++		# Matched device. Now search through interfaces
++		for intf in $(find "$dev"/ -maxdepth 1 -type d); do
++			match "$intf"/bInterfaceClass "$ic" || continue
++			match "$intf"/bInterfaceSubClass "$isc" || continue
++			match "$intf"/bInterfaceProtocol "$ip" || continue
++			match "$intf"/bInterfaceNumber "$in" || continue
++
++			# Matched interface. Add to count if it was probed by driver.
++			[ -d "$intf"/driver ] && cur_count=$((cur_count+1))
++		done
++	done
++
++	if [ "$cur_count" -eq "$count" ]; then
++		ktap_test_pass usb."$name"
++	else
++		ktap_test_fail usb."$name"
++		retval="$KSFT_FAIL"
++	fi
++}
++
++pci()
++{
++	name="$1"
++	count="$2"
++	shift 2
++
++	for arg in $@; do
++		[[ "$arg" =~ ^v= ]] && v="${arg#v=}"
++		[[ "$arg" =~ ^d= ]] && d="${arg#d=}"
++		[[ "$arg" =~ ^sv= ]] && sv="${arg#sv=}"
++		[[ "$arg" =~ ^sd= ]] && sd="${arg#sd=}"
++		[[ "$arg" =~ ^bc= ]] && bc="${arg#bc=}"
++		[[ "$arg" =~ ^sc= ]] && sc="${arg#sc=}"
++		[[ "$arg" =~ ^i= ]] && i="${arg#i=}"
++	done
++
++	cur_count=0
++
++	for dev in $(find /sys/bus/pci/devices -maxdepth 1); do
++		match "$dev"/vendor "$v" || continue
++		match "$dev"/device "$d" || continue
++		match "$dev"/subsystem_vendor "$sv" || continue
++		match "$dev"/subsystem_device "$sd" || continue
++
++		[ -z "$bc" ] && bc='..'
++		[ -z "$sc" ] && sc='..'
++		[ -z "$i" ] && i='..'
++		match "$dev/"class "$bc$sc$i" || continue
++
++		# Matched device. Add to count if it was probed by driver.
++		[ -d "$dev"/driver ] && cur_count=$((cur_count+1))
++	done
++
++	if [ "$cur_count" -eq "$count" ]; then
++		ktap_test_pass pci."$name"
++	else
++		ktap_test_fail pci."$name"
++		retval="$KSFT_FAIL"
++	fi
++}
++
++ktap_print_header
++
++plat_compatible=/proc/device-tree/compatible
++
++if [ ! -f "$plat_compatible" ]; then
++	ktap_skip_all "No board compatible available"
++	exit "$KSFT_SKIP"
++fi
++
++compatibles=$(tr '\000' '\n' < "$plat_compatible")
++
++for compatible in $compatibles; do
++	if [ -f boards/"$compatible" ]; then
++		board_file=boards/"$compatible"
++		break
++	fi
++done
++
++if [ -z "$board_file" ]; then
++	ktap_skip_all "No matching board file found"
++	exit "$KSFT_SKIP"
++fi
++
++echo "# Using board file: " "$board_file"
++
++num_tests=$(grep -E "^(usb|pci)" "$board_file" | wc -l)
++ktap_set_plan "$num_tests"
++
++source "$board_file"
++
++ktap_print_totals
++exit "${retval}"
 -- 
 2.42.1
 
