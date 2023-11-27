@@ -1,186 +1,126 @@
-Return-Path: <linux-kselftest+bounces-667-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-668-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD15B7FAC20
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Nov 2023 22:01:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8097C7FAC96
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Nov 2023 22:32:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 242C01C20C3A
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Nov 2023 21:01:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3479B281B94
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Nov 2023 21:32:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 574CD3EA60;
-	Mon, 27 Nov 2023 21:00:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F41A46455;
+	Mon, 27 Nov 2023 21:32:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="yzDbR+kT"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mypgcsMM"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D812031735;
-	Mon, 27 Nov 2023 21:00:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1E8DC433C9;
-	Mon, 27 Nov 2023 21:00:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1701118857;
-	bh=d0FagZci1PXFMezi/BonwyYv+7yV34Dht6vxRLQOKK8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=yzDbR+kT8L1Ms6G8xL0TrV5ITh7u9pHV2Tf3NB55xhtilyqokg+gTeQDHkcIheVm8
-	 DFA9Di1naDUQ7+V1qm6//jzz5SoG4oQI202ZHvMMcRWO/D2v+XJx6r6wBn7BU8ic6i
-	 nNpDcKvEsu+FmI1qaMNFFOqckiGwHehyfX1VN2tA=
-Date: Mon, 27 Nov 2023 13:00:55 -0800
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Nhat Pham <nphamcs@gmail.com>
-Cc: hannes@cmpxchg.org, cerasuolodomenico@gmail.com, yosryahmed@google.com,
- sjenning@redhat.com, ddstreet@ieee.org, vitaly.wool@konsulko.com,
- mhocko@kernel.org, roman.gushchin@linux.dev, shakeelb@google.com,
- muchun.song@linux.dev, chrisl@kernel.org, linux-mm@kvack.org,
- kernel-team@meta.com, linux-kernel@vger.kernel.org,
- cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, shuah@kernel.org
-Subject: Re: [PATCH v6 6/6] zswap: shrinks zswap pool based on memory
- pressure
-Message-Id: <20231127130055.30c455906d912e09dcb7e79b@linux-foundation.org>
-In-Reply-To: <20231127193703.1980089-7-nphamcs@gmail.com>
-References: <20231127193703.1980089-1-nphamcs@gmail.com>
-	<20231127193703.1980089-7-nphamcs@gmail.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F5E7131;
+	Mon, 27 Nov 2023 13:32:39 -0800 (PST)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-a0bdf4eeb46so312673066b.3;
+        Mon, 27 Nov 2023 13:32:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701120758; x=1701725558; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=W/1uSzXDfGGBJQhktgQcNYFDx6Quw5SgU4SWdrjub/w=;
+        b=mypgcsMMNggtuV9bW2/YnBKFa7upRp8gWnNMYqJwu0p6+UOuuv6BnTBFcNdW1zBLsc
+         ZIqWj3tESlJeGVfwZfSp1H0r1U3Csqp1M84sikaQ80RKZLTagy1vftXeoi7ljIdfBqgU
+         yxAMsPEzL3pFHRsTF+6Xgs4Mlzm79SJgYo9aQFYdnaenaXjaHi2w+uRRiwEctpZUVTUK
+         HdzmRfPswq2XmKHTDDTMCji24snRwp9E0XhjXeaJhVXmape+BusMYSP/wXBOry0qLOgx
+         fYPLY5AsLzoVezZPlnPXfI7hlNM5JjzUiFIQUc+n7StMZmpqy4V2BDLTabJrjb88lfX+
+         r7SQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701120758; x=1701725558;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=W/1uSzXDfGGBJQhktgQcNYFDx6Quw5SgU4SWdrjub/w=;
+        b=FeKMbURmP9juaeuHq0t0fEWjiF0Nm9jbhPxoekZ6BNqVHlFthm81gtgcZf0v2VTvme
+         KH4s4CMI7JY9CLkD/fqaKcHgiUVUF8giQ2Go2Ez52I2ikHf3WzCysYj/42UI/EZKEbit
+         ZyDWrdjW0/qtT0hm7XiDgY0vm3dlSotwRfXY9/zR5OEB3imFnThbPU4DrZoYvPVckt6w
+         Wbipbmd5QmDDex8LZE7CW+ULQhxz0ZFiKkNaMBBpWAycw621WrUc7cdAJKZbYOO4nin6
+         ONn//Z/RlnOatqkpmK8VEDeH0MPd9kJ8qVrkK4IUvI7Xhp+igGGuixGyPmlguZj0ROr7
+         6EIw==
+X-Gm-Message-State: AOJu0YxxKf+DjolOaxx8PwG/qKkv7HODA1Zuj0AmrLBhFnSaWOMCNlwL
+	2NlmzPJcvckF/v3DLps82hw=
+X-Google-Smtp-Source: AGHT+IGiLRdPfMRCVg9ZEFSpMdpp/TzdZZxtg0wo3DlOFoWnGAfTT/GaVGLjZGSYXUHwDj1D6qqoJA==
+X-Received: by 2002:a17:906:4e81:b0:a0e:3a22:af5 with SMTP id v1-20020a1709064e8100b00a0e3a220af5mr1303801eju.77.1701120757825;
+        Mon, 27 Nov 2023 13:32:37 -0800 (PST)
+Received: from [192.168.1.95] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
+        by smtp.gmail.com with ESMTPSA id 3-20020a170906018300b00a0a8b2b74ddsm4087917ejb.154.2023.11.27.13.32.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Nov 2023 13:32:37 -0800 (PST)
+Message-ID: <f4777af7e0b47b41760da5f291a7535c7006adf9.camel@gmail.com>
+Subject: Re: [PATCH ipsec-next v1 6/7] bpf: selftests: test_tunnel: Disable
+ CO-RE relocations
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Daniel Xu <dxu@dxuuu.xyz>, Yonghong Song <yonghong.song@linux.dev>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Shuah Khan
+ <shuah@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+ <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Steffen Klassert
+ <steffen.klassert@secunet.com>, antony.antony@secunet.com, Mykola Lysenko
+ <mykolal@fb.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu
+ <song@kernel.org>, John Fastabend <john.fastabend@gmail.com>, KP Singh
+ <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
+ <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, bpf
+ <bpf@vger.kernel.org>,  "open list:KERNEL SELFTEST FRAMEWORK"
+ <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+ devel@linux-ipsec.org, Network Development <netdev@vger.kernel.org>
+Date: Mon, 27 Nov 2023 23:32:35 +0200
+In-Reply-To: <xehp2qvy5cyaairbnfhem4hvbsl26blo4zzu7z6ywbp26jcwyn@hgp3v2q4ud7o>
+References: <cover.1700676682.git.dxu@dxuuu.xyz>
+	 <391d524c496acc97a8801d8bea80976f58485810.1700676682.git.dxu@dxuuu.xyz>
+	 <0f210cef-c6e9-41c1-9ba8-225f046435e5@linux.dev>
+	 <CAADnVQ+sEsUyNYPeZyOf2PcCnxOvOqw4bUuAuMofCU14szTGvg@mail.gmail.com>
+	 <3ec6c068-7f95-419a-a0ae-a901f95e4838@linux.dev>
+	 <18e43cdf65e7ba0d8f6912364fbc5b08a6928b35.camel@gmail.com>
+	 <uc5fv3keghefszuvono7aclgtjtgjnnia3i54ynejmyrs42ser@bwdpq5gmuvub>
+	 <0535eb913f1a0c2d3c291478fde07e0aa2b333f1.camel@gmail.com>
+	 <42f9bf0d-695a-412d-bea5-cb7036fa7418@linux.dev>
+	 <a5a84482-13ef-47d8-bf07-8017060a5d64@linux.dev>
+	 <xehp2qvy5cyaairbnfhem4hvbsl26blo4zzu7z6ywbp26jcwyn@hgp3v2q4ud7o>
+Autocrypt: addr=eddyz87@gmail.com; prefer-encrypt=mutual; keydata=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
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.1 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
 
-On Mon, 27 Nov 2023 11:37:03 -0800 Nhat Pham <nphamcs@gmail.com> wrote:
+On Mon, 2023-11-27 at 14:45 -0600, Daniel Xu wrote:
+[...]
+> IIUC uapi structs look the same in BTF as any other struct.
 
-> Currently, we only shrink the zswap pool when the user-defined limit is
-> hit. This means that if we set the limit too high, cold data that are
-> unlikely to be used again will reside in the pool, wasting precious
-> memory. It is hard to predict how much zswap space will be needed ahead
-> of time, as this depends on the workload (specifically, on factors such
-> as memory access patterns and compressibility of the memory pages).
-> 
-> This patch implements a memcg- and NUMA-aware shrinker for zswap, that
-> is initiated when there is memory pressure. The shrinker does not
-> have any parameter that must be tuned by the user, and can be opted in
-> or out on a per-memcg basis.
-> 
-> Furthermore, to make it more robust for many workloads and prevent
-> overshrinking (i.e evicting warm pages that might be refaulted into
-> memory), we build in the following heuristics:
-> 
-> * Estimate the number of warm pages residing in zswap, and attempt to
->   protect this region of the zswap LRU.
-> * Scale the number of freeable objects by an estimate of the memory
->   saving factor. The better zswap compresses the data, the fewer pages
->   we will evict to swap (as we will otherwise incur IO for relatively
->   small memory saving).
-> * During reclaim, if the shrinker encounters a page that is also being
->   brought into memory, the shrinker will cautiously terminate its
->   shrinking action, as this is a sign that it is touching the warmer
->   region of the zswap LRU.
-> 
-> As a proof of concept, we ran the following synthetic benchmark:
-> build the linux kernel in a memory-limited cgroup, and allocate some
-> cold data in tmpfs to see if the shrinker could write them out and
-> improved the overall performance. Depending on the amount of cold data
-> generated, we observe from 14% to 35% reduction in kernel CPU time used
-> in the kernel builds.
-> 
-> ...
->
-> --- a/include/linux/mmzone.h
-> +++ b/include/linux/mmzone.h
-> @@ -22,6 +22,7 @@
->  #include <linux/mm_types.h>
->  #include <linux/page-flags.h>
->  #include <linux/local_lock.h>
-> +#include <linux/zswap.h>
->  #include <asm/page.h>
->  
->  /* Free memory management - zoned buddy allocator.  */
-> @@ -641,6 +642,7 @@ struct lruvec {
->  #ifdef CONFIG_MEMCG
->  	struct pglist_data *pgdat;
->  #endif
-> +	struct zswap_lruvec_state zswap_lruvec_state;
+Yes, and all share preserve_access_index attribute because of the way
+attribute push/pop directives are generated in vmlinux.h.
 
-Normally we'd put this in #ifdef CONFIG_ZSWAP.
+> Just wondering, though: will bpftool be able to generate the appropriate
+> annotations for uapi structs?=20
 
-> --- a/include/linux/zswap.h
-> +++ b/include/linux/zswap.h
-> @@ -5,20 +5,40 @@
->  #include <linux/types.h>
->  #include <linux/mm_types.h>
->  
-> +struct lruvec;
-> +
->  extern u64 zswap_pool_total_size;
->  extern atomic_t zswap_stored_pages;
->  
->  #ifdef CONFIG_ZSWAP
->  
-> +struct zswap_lruvec_state {
-> +	/*
-> +	 * Number of pages in zswap that should be protected from the shrinker.
-> +	 * This number is an estimate of the following counts:
-> +	 *
-> +	 * a) Recent page faults.
-> +	 * b) Recent insertion to the zswap LRU. This includes new zswap stores,
-> +	 *    as well as recent zswap LRU rotations.
-> +	 *
-> +	 * These pages are likely to be warm, and might incur IO if the are written
-> +	 * to swap.
-> +	 */
-> +	atomic_long_t nr_zswap_protected;
-> +};
-> +
->  bool zswap_store(struct folio *folio);
->  bool zswap_load(struct folio *folio);
->  void zswap_invalidate(int type, pgoff_t offset);
->  void zswap_swapon(int type);
->  void zswap_swapoff(int type);
->  void zswap_memcg_offline_cleanup(struct mem_cgroup *memcg);
-> -
-> +void zswap_lruvec_state_init(struct lruvec *lruvec);
-> +void zswap_lruvec_swapin(struct page *page);
->  #else
->  
-> +struct zswap_lruvec_state {};
+The problem is that there is no easy way to identify if structure is
+uapi in DWARF (from which BTF is generated).
+One way to do this:
+- modify pahole to check DW_AT_decl_file for each struct DWARF entry
+  and generate some special decl tag in BTF;
+- modify bpftool to interpret this tag as a marker to not generate
+  preserve_access_index for a structure.
 
-But instead you made it an empty struct in this case.
+The drawback is that such behavior hardcodes some kernel specific
+assumptions both in pahole and in bpftool. It also remains to be seen
+if DW_AT_decl_file tags are consistent.
 
-That's a bit funky, but I guess OK.  It does send a careful reader of
-struct lruvec over to look at the zswap_lruvec_state definition to
-understand what's going on.
+It might be the case that allowing excessive CO-RE relocations is a
+better option. (And maybe tweak something about bitfield access
+generation to avoid such issues as in this thread).
 
->  static inline bool zswap_store(struct folio *folio)
->  {
->  	return false;
-> @@ -33,7 +53,8 @@ static inline void zswap_invalidate(int type, pgoff_t offset) {}
->  static inline void zswap_swapon(int type) {}
->  static inline void zswap_swapoff(int type) {}
->  static inline void zswap_memcg_offline_cleanup(struct mem_cgroup *memcg) {}
-> -
-> +static inline void zswap_lruvec_init(struct lruvec *lruvec) {}
-> +static inline void zswap_lruvec_swapin(struct page *page) {}
-
-Needed this build fix:
-
---- a/include/linux/zswap.h~zswap-shrinks-zswap-pool-based-on-memory-pressure-fix
-+++ a/include/linux/zswap.h
-@@ -54,6 +54,7 @@ static inline void zswap_swapon(int type
- static inline void zswap_swapoff(int type) {}
- static inline void zswap_memcg_offline_cleanup(struct mem_cgroup *memcg) {}
- static inline void zswap_lruvec_init(struct lruvec *lruvec) {}
-+static inline void zswap_lruvec_state_init(struct lruvec *lruvec) {}
- static inline void zswap_lruvec_swapin(struct page *page) {}
- #endif
- 
-_
-
+Thanks,
+Eduard
 
