@@ -1,70 +1,70 @@
-Return-Path: <linux-kselftest+bounces-647-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-648-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A90CE7FA06B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Nov 2023 14:16:51 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8A137FA119
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Nov 2023 14:29:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CFC551C20A0D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Nov 2023 13:16:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F2117B20A96
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Nov 2023 13:29:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FCE82D02B;
-	Mon, 27 Nov 2023 13:16:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C5612EB0C;
+	Mon, 27 Nov 2023 13:29:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="ss4Sy8rF"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="LJeG2cWs"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2083.outbound.protection.outlook.com [40.107.243.83])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33842AA;
-	Mon, 27 Nov 2023 05:16:42 -0800 (PST)
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2044.outbound.protection.outlook.com [40.107.237.44])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C17C491;
+	Mon, 27 Nov 2023 05:29:23 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=a05o/0T+2WlYMLDSgs0p+zyVO8ue6+RVLxWPofYACCjobFo5j8+bwZ13iQPb6oIlxOtx96ojSJAh5LJFAEOSEOlDdFTf1k6Do7ZwaqUGNJPvj6z+tmdUU1twCnSwyJ+TuR2YKXM6uqshk5stQO3Y6hjSTJZk+Tdl1r8XFbhJllMUFuB4ZAWsUpzKKo3tad85myW2wcPVPUM1gMZc7zqslTIqwg5sOqh7l08snLLd7QY7dZrVvyDKMzs1VIMqf7ojVROrIelWJ87FB/unbbTz5JOz30r2q85BP5PveOH6MGVibzyHDr/96OtrezsJtZxD4Pe8OQ+Qo+YpPyRhp4YGSA==
+ b=XvedOg7JyELroDurQOp1DFYAKdq/JJAboSyqFiPoaShuWf2KA/TEEdist+Bn/g3tPVBbd3J8znqxDECJzqqEXQCNu1U19bRjj6W3+cUppH+p21D8pU4x6pSQo+dDf9XEVYqzOEHy4QaZLb6MvRqpaxvGbnBHK73nznrlIHmA6CdG5DrzmfpYkbTyDKM3PZ3OWw1OK1GMp6C1ufeDGH3sv6T6fusB3ttOZpnlWvlFM7XQAcj0XT7vl4Cldlr0SoeV43XAvM1qwEh+iuY0GLVPnqj58SEgHZhIeWa6y3bDN0+eZJLkP8UNFDe9NkTEw1RpjcO9+cZTPXm3tSbm4hVfwg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qgjVwhVnb/i9xLhcaLV0iKWoTC5goHrUnFLwuVWuuZs=;
- b=TLGCrCOMAAtMHqY+cBnyyOMbtt6UP6GvHHjwnEDPl3S4ZsjPGnwtO61E9etCp8hakPafuu15ZJZr94FYKFXkEU87wq7vuHqgOk9kUuGoET7t9FmIUYP1LVBhO77Xc9Gc+dPvHXPuMhGXoWnRjxJwhcQYfZZqc9KRb6+ADMW2hfzKmiRZpd1G3IIK5HyPrQaEwEmJywsz3AVmEqZP0K7JQS4saB0+o4/pdBxqgk4A57eNxOr1AIIdvetPGMytUDCWHSaOh93zwPnkSd1zsIhC1yXBCpsf5kYI5sUwXfPYvCdyYBUTl8iHsN8jeMd2KVDJ0j3KSKSCeJLjDOvOrM+qWA==
+ bh=kk89eI99pWaDAwDwDPT3JxQC/MfwIytQZmRoXyJhDq8=;
+ b=cdDPT2E06uNdrDSZBGAYDjY7XT5LyLcMmqIOIf2veOq7SPcZrK3exw4m1vJWkgdyEOCerxXVjOqn5B7HmLFitn1KwSbNBdLcywfNyzh6y/X+w/oU2t1P9fApbmEgp6IVV3xJ5vTEp1p049S8l14lc0fa+4E8/lOv4S/dPMvUPB3HZ85AsYBXtX8RcDoFm3PzPCCvnLUWF6Dt+bzIkd+eCvyiUG60IBszuIQbGDeSyQuWx/fnHisaezblh1DJyxSKv6Fms5/oh2XpeMVXHKTjfkGIEMuxT7wbOCBJ7SlZJrtKBZcrm8hJRAVJrcCaPanqG2FyjklLSE5nWhdH3+D9aA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ 216.228.117.161) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qgjVwhVnb/i9xLhcaLV0iKWoTC5goHrUnFLwuVWuuZs=;
- b=ss4Sy8rFURAhyMrmIO4hOS780bU+Xuql+54Ija9l7FO825y9mEsauE5GhdQswxX/W/SsbVanUDP1wp7uFMEhIFwjC0glaVLEicC4PVIK+XZAheCXhed6Q76fj5s3rAk2+DLKv9yXjfGG1pjAP83LShbPHLVIaRbpr4DzATZS/ekLYUU35d9uKS7GL3fAgbPrp6jXIoS+NyZGq1gtOf0a2w10Ct7yL51pxv41nxfmfDvKGA19dtt3vG8SOgywx5TW+wYYr2xLbXEr8uzUjZxzaRbHw2O4GuVEBQxszoDOWiGgcUS5SDzgliu22KVt5x0suH6OkL1b8OiP7JLA0R9MTA==
-Received: from CYZPR14CA0013.namprd14.prod.outlook.com (2603:10b6:930:8f::17)
- by MW5PR12MB5650.namprd12.prod.outlook.com (2603:10b6:303:19e::12) with
+ bh=kk89eI99pWaDAwDwDPT3JxQC/MfwIytQZmRoXyJhDq8=;
+ b=LJeG2cWsvpOQdV3owhIKBrTgkTjDxSzoAI32qNhcbV2PqNcdJdBJ/Ds9/BH+6erS4TklV0lGIrwhG/aZcUHiEf+5HX9JyfTJ9Q5l+3bGD6sojtlJCLTMM1eU/iYhXq6dF5op1JRllUUx9kuYMpNp8aNqvN0qOrHvW17z5fgD5eElBY+f6cPPu4EfC+oUzeBzQqFYc5ELiLzgIlXxIcyMhn3Eo1vMCa9FHyXZDpUDBJy6BvYer6fyJJxlWSAjkdh7pz+bRBmWR24AlkWcCBllzHTp/i+yBxIQZRftKrP2UpIRPTofiidtUj0XsUavaryTOV+/XXoHML12X6zBlFrzrg==
+Received: from CY5PR14CA0014.namprd14.prod.outlook.com (2603:10b6:930:2::27)
+ by PH0PR12MB5420.namprd12.prod.outlook.com (2603:10b6:510:e8::18) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.27; Mon, 27 Nov
- 2023 13:16:39 +0000
-Received: from CY4PEPF0000E9CD.namprd03.prod.outlook.com
- (2603:10b6:930:8f:cafe::16) by CYZPR14CA0013.outlook.office365.com
- (2603:10b6:930:8f::17) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.29 via Frontend
- Transport; Mon, 27 Nov 2023 13:16:39 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.29; Mon, 27 Nov
+ 2023 13:29:21 +0000
+Received: from CY4PEPF0000E9D1.namprd03.prod.outlook.com
+ (2603:10b6:930:2:cafe::29) by CY5PR14CA0014.outlook.office365.com
+ (2603:10b6:930:2::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.28 via Frontend
+ Transport; Mon, 27 Nov 2023 13:29:21 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CY4PEPF0000E9CD.mail.protection.outlook.com (10.167.241.140) with Microsoft
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ CY4PEPF0000E9D1.mail.protection.outlook.com (10.167.241.144) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7046.17 via Frontend Transport; Mon, 27 Nov 2023 13:16:39 +0000
+ 15.20.7046.17 via Frontend Transport; Mon, 27 Nov 2023 13:29:20 +0000
 Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 27 Nov
- 2023 05:16:21 -0800
-Received: from yaviefel (10.126.230.35) by rnnvmail201.nvidia.com
+ 2023 05:29:08 -0800
+Received: from yaviefel (10.126.231.35) by rnnvmail201.nvidia.com
  (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 27 Nov
- 2023 05:16:17 -0800
+ 2023 05:29:04 -0800
 References: <20231124092736.3673263-1-liuhangbin@gmail.com>
  <20231124092736.3673263-2-liuhangbin@gmail.com>
- <87h6lbfdnh.fsf@nvidia.com> <ZWGJGDV3TKYUsqqW@Laptop-X1>
+ <87cyvzfagj.fsf@nvidia.com> <ZWGRCK4D64EfUybp@Laptop-X1>
 User-agent: mu4e 1.8.11; emacs 28.3
 From: Petr Machata <petrm@nvidia.com>
 To: Hangbin Liu <liuhangbin@gmail.com>
@@ -78,9 +78,9 @@ CC: Petr Machata <petrm@nvidia.com>, <netdev@vger.kernel.org>, "David S.
 	<akpm@linux-foundation.org>, Mark Brown <broonie@kernel.org>, "Luis
  Chamberlain" <mcgrof@kernel.org>
 Subject: Re: [PATCH net-next 01/38] selftests/net: add lib.sh
-Date: Mon, 27 Nov 2023 14:15:47 +0100
-In-Reply-To: <ZWGJGDV3TKYUsqqW@Laptop-X1>
-Message-ID: <87fs0re3q8.fsf@nvidia.com>
+Date: Mon, 27 Nov 2023 14:19:08 +0100
+In-Reply-To: <ZWGRCK4D64EfUybp@Laptop-X1>
+Message-ID: <87bkbfe34x.fsf@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -88,83 +88,91 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
+X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
  rnnvmail201.nvidia.com (10.129.68.8)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9CD:EE_|MW5PR12MB5650:EE_
-X-MS-Office365-Filtering-Correlation-Id: e8e5bddc-d776-4fe3-502d-08dbef4b1752
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000E9D1:EE_|PH0PR12MB5420:EE_
+X-MS-Office365-Filtering-Correlation-Id: 30edee7a-17a9-4e24-3f1f-08dbef4cdd00
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	oc2aEeVidIpQcVVRtQI61i4cSNqmoRsXpL2zISu+Lqa6akcpSNvd4m17noJnoDf1PWD8TCkY10Y6EeYW+hO28YUv+g0YJdDNbJPMrx6l+fBLtFS4/9KBco/WpuuWZgVqBxYUknInhQefsZKtJsXg+QUHB3dBKCIW7C/gnkIS4TNMydwlXqTMiq7qaPfQjSZK6QZHlnVSsSXUxNVKq2GM74d0vAJQlMpKX/OWjDkUFg8GT7U2xWekD/4NXae8CeMqUhusdbXWuP0tCn0ixgAXCg/XM//n4S1IH695WVcPPWfiXetZ1ESY5l7q6EAX+Nk/iIzQRtNUTGbIncmw/gjvyz6eG1/kQZnAKbM7zT2tYV/N/ShBTf+p4zzMMq49TjdlkxNvgYTECrHlV+nxe1oBLOamcUZYza4KWjQH/kALKocWM8tykNwShpqvRMuwOZsAtv9cd5Xzceeh/OEYLn5qhkdVLqEEBAnAKn/MidYEldwz++8Xa7FRLB70tbQlMa8yx6NyydF9ADRVoZnVJlmDMCUr//yiyokigRyOpyZFQWwwGsusw5LTp4QzrjCbRNQgzha33sXrQO8zndHkDNliari1eFfFEvmHUpUWYeG+MzXdWCnUJTkBRcSRvrYBaA93GF+nN0cYVifd4pJYnlZbThFk5orPbWqQAUp+YxrShPMilHke6TB3aVIcGdX4etdXk+17cPFm+wZTUO5uFZR6u1p+e7jBNoj4kiECcv2F+E9jBHp7fNrUxILVgOWbSRZT
+	NnU5yPksfwQ5EjwRHbEIeNfHL9kWX5/96zd5UlX1Pe80nwLhSj+QIu52IAGckheMywPjcWMxvQptzG7n2O03b+OVAvP++Rcpn0+FzfMJxca0+85RKILeQ4Xbuq4k/rId5sL1uIw9DVRmkLh4tMDp8e/S1DQnZN0VOe67OAW7pMpBEjHS13ZO7HeUT7YwtkZM4afHXsklgEg1triv6ahRN7fTKak1Pi5xP4O1s1gwkv7K4EgRbO2f7QUHTaIDpoFyHv+vut0RtVW0lMhIbOO+ekLlKdtK900heynpW2Un8mY18KCPLxUbHUS4EBMJtB4Q3+L2rc2tPlOptTNi8GcXX/cC30YbNiKSVn7I4ERzoEhkzDHMaAOVpJ5dEDVkthtm90smOhF0shQITHqy3uCLJMSbC3EpnmQUuVoThU4e/OYDRetIVQ7QyBTdR5EuT1G32vpOcT2VK+jg7mQpWAzscho9a1iVSgejKVnzR9Dc4K8WOyWnBCwWcCPyjpKXoaYg8N6nIOxc5V9jt/gm6LR/STfS960JoMTWyjAzoleJN7OfR1jyNxO8KPnndop37h7eFqvXaWOdHQ7qH+X/D+nHSCqDdAnTME8tGijBIqT8VEzit2QSexpI8gv0xOG+eDxa6piPqT52IuWYor9mLUsGvv9R1FgCuvh7j8XJWkfVbr2zlf5NjNvuCmMcNImW+zbTlp8H+OPbjUipcZzGPpTFkr3dMTW4b+jIAohXalrRq9/7VwceNs9S8FAwTeSiA0juIKr1m9z7nC9g9psjmXXRrQ==
 X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230031)(4636009)(346002)(136003)(396003)(376002)(39860400002)(230922051799003)(64100799003)(1800799012)(82310400011)(451199024)(186009)(46966006)(40470700004)(36840700001)(40480700001)(36860700001)(41300700001)(86362001)(6666004)(40460700003)(5660300002)(2906002)(7416002)(356005)(4326008)(8676002)(8936002)(36756003)(70206006)(54906003)(70586007)(6916009)(2616005)(478600001)(316002)(26005)(16526019)(7636003)(336012)(82740400003)(426003)(47076005);DIR:OUT;SFP:1101;
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230031)(4636009)(376002)(346002)(136003)(39860400002)(396003)(230922051799003)(1800799012)(451199024)(64100799003)(82310400011)(186009)(46966006)(40470700004)(36840700001)(36860700001)(36756003)(82740400003)(356005)(7636003)(40460700003)(86362001)(316002)(6916009)(54906003)(8936002)(8676002)(41300700001)(70586007)(70206006)(966005)(478600001)(4326008)(5660300002)(7416002)(2906002)(47076005)(40480700001)(426003)(336012)(16526019)(26005)(2616005);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Nov 2023 13:16:39.4819
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Nov 2023 13:29:20.5984
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e8e5bddc-d776-4fe3-502d-08dbef4b1752
+X-MS-Exchange-CrossTenant-Network-Message-Id: 30edee7a-17a9-4e24-3f1f-08dbef4cdd00
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	CY4PEPF0000E9CD.namprd03.prod.outlook.com
+	CY4PEPF0000E9D1.namprd03.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR12MB5650
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB5420
 
 
 Hangbin Liu <liuhangbin@gmail.com> writes:
 
-> On Fri, Nov 24, 2023 at 03:05:18PM +0100, Petr Machata wrote:
+> On Fri, Nov 24, 2023 at 03:35:51PM +0100, Petr Machata wrote:
 >> 
 >> Hangbin Liu <liuhangbin@gmail.com> writes:
 >> 
->> > +# Helpers
->> > +busywait()
->> > +{
->> > +	local timeout=$1; shift
->> > +
->> > +	local start_time="$(date -u +%s%3N)"
->> > +	while true
->> > +	do
->> > +		local out
->> > +		out=$($@)
->> > +		local ret=$?
->> > +		if ((!ret)); then
->> > +			echo -n "$out"
->> > +			return 0
->> > +		fi
->> > +
->> > +		local current_time="$(date -u +%s%3N)"
->> > +		if ((current_time - start_time > timeout)); then
->> > +			echo -n "$out"
->> > +			return 1
 >> > +		fi
 >> > +	done
+>> > +
+>> > +	[ $errexit -eq 1 ] && set -e
+>> > +	return 0
 >> > +}
+>> > +
+>> > +# By default, remove all netns before EXIT.
+>> > +cleanup_all_ns()
+>> > +{
+>> > +	cleanup_ns $NS_LIST
+>> > +}
+>> > +trap cleanup_all_ns EXIT
 >> 
->> This is lifted from forwarding/lib.sh, right? Would it make sense to
+>> Hmm, OK, this is a showstopper for inclusion from forwarding/lib.sh,
+>> because basically all users of forwarding/lib.sh use the EXIT trap.
+>> 
+>> I wonder if we need something like these push_cleanup / on_exit helpers:
+>> 
+>> 	https://github.com/pmachata/stuff/blob/master/ptp-test/lib.sh#L15
 >
-> Yes.
->
->> just source this new file from forwarding/lib.sh instead of copying
->
-> Do you mean let net/forwarding/lib.sh source net.lib, and let other net
-> tests source the net/forwarding/lib.sh?
->
-> Or move the busywait() function from net/forwarding/lib.sh to net.lib.
-> Then let net/forwarding/lib.sh source net.lib?
+> When I added this, I just want to make sure the netns are cleaned up if the
+> client script forgot. I think the client script trap function should
+> cover this one, no?
 
-This.
+So the motivation makes sense. But in general, invoking cleanup from the
+same abstraction layer that acquired the resource, makes the code easier
+to analyze. And in particular here that we are talking about traps,
+which are a global resource, and one that the client might well want to
+use for their own management. The client should be using the trap
+instead of the framework.
 
->> stuff around? I imagine there will eventually be more commonality, and
->> when that pops up, we can just shuffle the forwarding code to
->> net/lib.sh.
+The framework might expose APIs to allow clients to register cleanups
+etc., which the framework itself is then free to use of course, for
+resources that it itself has acquired. But even with these APIs in place
+I think it would be better if the client that acquires a resource also
+schedules its release. (Though it's not as clear-cut in that case.)
+
+>> 
+>> But I don't want to force this on your already large patchset :)
 >
-> Yes, make sense.
+> Yes, Paolo also told me that this is too large. I will break it to
+> 2 path set or merge some small patches together for next version.
 >
-> Thanks
+>> So just ignore the bit about including from forwarding/lib.sh.
+>
+>> Actually I take this back. The cleanup should be invoked from where the
+>> init was called. I don't think the library should be auto-invoking it,
+>> the client scripts should. Whether through a trap or otherwise.
+>
+> OK, also makes sense. I will remove this trap.
+>
+> Thanks for all your comments.
 > Hangbin
 
 
