@@ -1,154 +1,104 @@
-Return-Path: <linux-kselftest+bounces-640-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-641-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B9797F9DB0
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Nov 2023 11:37:56 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 783E97F9DDC
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Nov 2023 11:43:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7D5AA1C20D5D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Nov 2023 10:37:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9B62E1C20C94
+	for <lists+linux-kselftest@lfdr.de>; Mon, 27 Nov 2023 10:43:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A494FDDC7;
-	Mon, 27 Nov 2023 10:37:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4653516426;
+	Mon, 27 Nov 2023 10:43:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="lUJnbHA2"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QnbNT5w/"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90EED18E;
-	Mon, 27 Nov 2023 02:37:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1701081471; x=1732617471;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+/K/TBwFkECz7aLxzE8hjx15xz33xVUqkjmbFTjpyh0=;
-  b=lUJnbHA2VNVyMWTwbNDEUjzbu7mYPKXbUjMUBq8y/mXRYppdTPEGH1nX
-   xakVgfPl3H7QmtCqixpWAgRk35GeAF2XlrCrLb1ttHg3+lDFTmxDngfH8
-   t1rhsTGAVjobrT+Xl8Uv4d4lfxoS+5yET5MrhJ8Ke11/a0O9OIm8qkEh9
-   p6MGLMM7R8uWhYt4TsbkdVW1TF4ssj3DDlFMiBaaG09EmDmGD4zwm+fts
-   hK2FZJ8F1arFOLd60bpUCQ0eWdV8z31iAVT0WGjx+RklLIg4BUx6pPzrb
-   GkO2vW5bQNN8kBRd3AbGyqhRL2iKFVKc+cEycNb4ri5aYYVSaJHqRxeJQ
-   A==;
-X-CSE-ConnectionGUID: xOAyVbUwTMO+uJD9UgwqaQ==
-X-CSE-MsgGUID: 18YxV9ktRHWC/RgNDyCApQ==
-X-ThreatScanner-Verdict: Negative
-X-IronPort-AV: E=Sophos;i="6.04,230,1695711600"; 
-   d="asc'?scan'208";a="12327336"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa3.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Nov 2023 03:37:40 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 27 Nov 2023 03:37:17 -0700
-Received: from wendy (10.10.85.11) by chn-vm-ex04.mchp-main.com (10.10.85.152)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Mon, 27 Nov 2023 03:37:13 -0700
-Date: Mon, 27 Nov 2023 10:36:44 +0000
-From: Conor Dooley <conor.dooley@microchip.com>
-To: Christoph Muellner <christoph.muellner@vrull.eu>
-CC: <linux-riscv@lists.infradead.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>, Palmer Dabbelt
-	<palmer@dabbelt.com>, Paul Walmsley <paul.walmsley@sifive.com>, Albert Ou
-	<aou@eecs.berkeley.edu>, Andrew Morton <akpm@linux-foundation.org>, Shuah
- Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Anup Patel
-	<apatel@ventanamicro.com>, Philipp Tomsich <philipp.tomsich@vrull.eu>, Andrew
- Jones <ajones@ventanamicro.com>, Guo Ren <guoren@kernel.org>, Daniel Henrique
- Barboza <dbarboza@ventanamicro.com>, =?iso-8859-1?Q?Bj=F6rn_T=F6pel?=
-	<bjorn@rivosinc.com>, Alan Stern <stern@rowland.harvard.edu>, Andrea Parri
-	<parri.andrea@gmail.com>, Will Deacon <will@kernel.org>, Daniel Lustig
-	<dlustig@nvidia.com>, Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [RFC PATCH 0/5] RISC-V: Add dynamic TSO support
-Message-ID: <20231127-process-dinginess-cea6dd652b99@wendy>
-References: <20231124072142.2786653-1-christoph.muellner@vrull.eu>
+Received: from mail-vs1-xe2d.google.com (mail-vs1-xe2d.google.com [IPv6:2607:f8b0:4864:20::e2d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C12D113
+	for <linux-kselftest@vger.kernel.org>; Mon, 27 Nov 2023 02:43:27 -0800 (PST)
+Received: by mail-vs1-xe2d.google.com with SMTP id ada2fe7eead31-45f3b583ce9so2919447137.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 27 Nov 2023 02:43:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1701081805; x=1701686605; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=R6TSIoz+H8JLiNUcGCIq1Csd5pwnS8su62/9RaC91nk=;
+        b=QnbNT5w/x/n6y8y6/4c6UoHMeQctlFvR0X5JJKvPmtk0/M6tgmjkymPdzZS4RHyYpv
+         1KKaTlRZXRvIfPG4udxvhbE+s762oyLxh7AJhzRNcfinAJ5rq9E+iA5cEBzIUVRXbHl9
+         KDVbEEl7cHNRSRP3rR/IBP45UQs40P2hlW1ILeXZGtHU+bLleF2qJ7iNrNwA7txE5klo
+         u8eM4AArfzx6TdfHWY7Og4qFzA2Yuqs2gBANOhogudfnjS5hhxewMc28QxAcyArQA0xq
+         nEwFFuNrIbv3mb+fSyVyK4yxnFPfYYGxDChg/GlnUfsATzyenSO/0Qr/PeO4Wlg+kys5
+         jh5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701081805; x=1701686605;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=R6TSIoz+H8JLiNUcGCIq1Csd5pwnS8su62/9RaC91nk=;
+        b=XwZzbPFQOsb5BNFpQ2M0Wp1r22M0eMqi5r8aVQJ9WZS1Cm4NFMcTDLv1J5FdZZOkf0
+         q17E6d1NxHlMoU5Xorlt/oOP7WjIiyNuOuhOczhRPMep2THWYKRzVNsb6vAxVt4GVxaQ
+         PYcgEib5R9E6+xYPREp+kixjMVQjluCMQNT14ZiBgoSoFhcgLbEZJXHFoqflDoKyLDKr
+         fNTsiXuN1cooKMFRCpJxCgWrxKhvfn4Be+whFBKUCHJ1c6S7Yt3G/CkHyt6HrUZAJAt2
+         Gw+WYXsnXAUkNnC8KkkdBbMqsSX92Vo8xj5FF1UteF5jtbNaZCaUhwvLgBGzMG662kgZ
+         Z8sQ==
+X-Gm-Message-State: AOJu0YwYdoBF9AAJaJdX1qBN5pl+zfgSzgQZmKYMwUjf+LADoE44uV7R
+	5zMt8+gNRn9MaSE9f7KiXq+w2PBofhYLoljFcUc2MoSpqbVDuKMI/Tk=
+X-Google-Smtp-Source: AGHT+IGMKNRQ2wePxRC4PpDnj4YoN1p1HWwhKXLnzyZPaFNOeCXmqVoolj5+388JcmcpA13+Hkz5NYjQyYeR/zR/n8Y=
+X-Received: by 2002:a67:cd16:0:b0:462:f13a:286a with SMTP id
+ u22-20020a67cd16000000b00462f13a286amr2897810vsl.4.1701081805658; Mon, 27 Nov
+ 2023 02:43:25 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="kbT7YkFzL4BHVstF"
-Content-Disposition: inline
-In-Reply-To: <20231124072142.2786653-1-christoph.muellner@vrull.eu>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Mon, 27 Nov 2023 16:13:14 +0530
+Message-ID: <CA+G9fYs6WafDBtSbcLpoyWehQyBPNeX37PvsP6HzSotXr3dYLg@mail.gmail.com>
+Subject: lsm_list_modules_test.c:104:22: error: 'LSM_ID_IMA' undeclared (first
+ use in this function); did you mean 'LSM_ID_YAMA'?
+To: "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, 
+	open list <linux-kernel@vger.kernel.org>, lkft-triage@lists.linaro.org, 
+	regressions@lists.linux.dev
+Cc: Casey Schaufler <casey@schaufler-ca.com>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	Paul Moore <paul@paul-moore.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Anders Roxell <anders.roxell@linaro.org>, Shuah Khan <shuah@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
---kbT7YkFzL4BHVstF
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Following build errors noticed while building selftests lsm tests for x86
+with gcc-13 toolchain on Linux next-20231127 tag.
 
-Hi,
+Build log:
+------
+selftest/lsm/lsm_list_modules_test
+lsm_list_modules_test.c: In function 'correct_lsm_list_modules':
+lsm_list_modules_test.c:104:22: error: 'LSM_ID_IMA' undeclared (first
+use in this function); did you mean 'LSM_ID_YAMA'?
+  104 |                 case LSM_ID_IMA:
+      |                      ^~~~~~~~~~
+      |                      LSM_ID_YAMA
+lsm_list_modules_test.c:104:22: note: each undeclared identifier is
+reported only once for each function it appears in
 
-On Fri, Nov 24, 2023 at 08:21:37AM +0100, Christoph Muellner wrote:
-> From: Christoph M=FCllner <christoph.muellner@vrull.eu>
->=20
-> The upcoming RISC-V Ssdtso specification introduces a bit in the senvcfg
-> CSR to switch the memory consistency model at run-time from RVWMO to TSO
-> (and back). The active consistency model can therefore be switched on a
-> per-hart base and managed by the kernel on a per-process/thread base.
->=20
-> This patch implements basic Ssdtso support and adds a prctl API on top
-> so that user-space processes can switch to a stronger memory consistency
-> model (than the kernel was written for) at run-time.
->=20
-> I am not sure if other architectures support switching the memory
-> consistency model at run-time, but designing the prctl API in an
-> arch-independent way allows reusing it in the future.
->=20
-> The patchset also comes with a short documentation of the prctl API.
->=20
-> This series is based on the second draft of the Ssdtso specification
-> which was published recently on an RVI list:
->   https://lists.riscv.org/g/tech-arch-review/message/183
-> Note, that the Ssdtso specification is in development state
-> (i.e., not frozen or even ratified) which is also the reason
-> why I marked the series as RFC.
->=20
-> One aspect that is not covered in this patchset is virtualization.
-> It is planned to add virtualization support in a later version.
-> Hints/suggestions on how to implement this part are very much
-> appreciated.
->=20
-> Christoph M=FCllner (5):
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-I know this is an RFC, but it could probably do with a bit more compile
-testing, as:
+Steps to reproduce:
+-----
 
->   RISC-V: Add basic Ssdtso support
+tuxmake --runtime podman --target-arch x86_64 --toolchain gcc-13  \
+ --kconfig https://storage.tuxsuite.com/public/linaro/lkft/builds/2Yk9XptRIQra77bvzZHcgyzkH7w/config
+\
+       debugkernel cpupower headers kernel kselftest modules
 
-This patch doesn't build for rv64 allmodconfig
+Links:
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20231127/testrun/21324802/suite/build/test/gcc-13-lkftconfig-kselftest/log
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20231127/testrun/21327065/suite/build/test/gcc-13-lkftconfig-kselftest/history/
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20231127/testrun/21324802/suite/build/test/gcc-13-lkftconfig-kselftest/details/
 
->   RISC-V: Expose Ssdtso via hwprobe API
 
-This one seems to build fine
-
->   uapi: prctl: Add new prctl call to set/get the memory consistency
->     model
->   RISC-V: Implement prctl call to set/get the memory consistency model
->   RISC-V: selftests: Add DTSO tests
-
-These don't build for:
-rv32 defconfig
-rv64 allmodconfig
-rv64 nommu
-
-Cheers,
-Conor.
-
---kbT7YkFzL4BHVstF
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZWRxPAAKCRB4tDGHoIJi
-0lTTAP9C2gVptHYxg1wEQyIceVB2NvjKokFBaZX4p4k/YXZz7gD+MoMtrN7h6uWY
-3jfYLulJnUx7qvF2seA9F7dMnismKQw=
-=roRE
------END PGP SIGNATURE-----
-
---kbT7YkFzL4BHVstF--
+--
+Linaro LKFT
+https://lkft.linaro.org
 
