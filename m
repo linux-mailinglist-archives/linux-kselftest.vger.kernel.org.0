@@ -1,246 +1,224 @@
-Return-Path: <linux-kselftest+bounces-684-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-685-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D4CF7FAECF
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Nov 2023 01:01:22 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4D9D7FAF1F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Nov 2023 01:36:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E53EDB21117
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Nov 2023 00:01:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 69C9A281977
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Nov 2023 00:36:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25B4836B;
-	Tue, 28 Nov 2023 00:01:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68CB11365;
+	Tue, 28 Nov 2023 00:36:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="h0vUhgD6";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="awkJk73X"
+	dkim=pass (2048-bit key) header.d=sony.com header.i=@sony.com header.b="A4OvNYtL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from new3-smtp.messagingengine.com (new3-smtp.messagingengine.com [66.111.4.229])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1824101;
-	Mon, 27 Nov 2023 16:01:10 -0800 (PST)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-	by mailnew.nyi.internal (Postfix) with ESMTP id 6ACEB580979;
-	Mon, 27 Nov 2023 19:01:07 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Mon, 27 Nov 2023 19:01:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-	1701129667; x=1701136867; bh=OSQtcO0pegrxarZcG5C5VOBtpHVJhZcct9m
-	oQPXmvT4=; b=h0vUhgD60RYO7nCWRGpot3ijJG19C3YfA4IIwFyt5kXWyvb9puA
-	AWklEiuo9lkbPYgqPBm+2ytpwqLWv92V3IFFRnw6+Rix78s95QWtzD2eNtSNh9MU
-	KAx7SQ36fYiuB2pu6ZIn6I5UzbWhCYN0C+vkTtYL4/oR9sB5wZETNiHhRqQLNPIb
-	NPIGXPvNNH6fAgi1IztrtsLv7z/FkVWLs49gojsQCNR8ouH2JHr+RY0kd5rtvxZL
-	tJ6nE1jzcThqBubP7Llz+8WPQ0SNyce3wca8453C24xAH2Jh6tzGjvihH/Ab+VU/
-	sPti/9X12x1it+XA/cy54WoIimh/YQVFKUg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1701129667; x=1701136867; bh=OSQtcO0pegrxarZcG5C5VOBtpHVJhZcct9m
-	oQPXmvT4=; b=awkJk73X+I1uiAWNEQNYVfVRIMq1ZItqrORBmTZep8lSK1xxZkY
-	DtfTBYj+ETVL2WGPowa6TQNRc0pr+lBFrUNDwhYtfWy68hW5yvbWFDUDpLg6GHDt
-	QyYDf0s0B6Yh5NzguaHrASuO91Eek9LcP1FfwggGl9oE7l6l8KxQKyGMQ2c+ViWD
-	aNRW9/AokxHlC4Y8eahUqlQMmwwyfkkjjpEQTD8bAAPIl20seqA5fkxm1VAewsJK
-	0ims1oXiSYZjbRadYrgAKD3+t2JUpSZtzOV3eyy0+11wNgve47OuUJKVQqOuphDU
-	hR6w3hI5ilKBqyo4usayhnAerJpaKSJIkgw==
-X-ME-Sender: <xms:wS1lZVNjk5J9DyJX2P6YmrMiP6c0IX9o4-SWgScUp8iL4Wod9Ms5PA>
-    <xme:wS1lZX_4d6aXQX2n04miga8vf0Cixzw6Zm5zfP5cvJ2KztEFddxIUCLcVgqCKKYKF
-    yr3XNjhfO9a-Yk3rw>
-X-ME-Received: <xmr:wS1lZURAy9jMPGoMfF26znWE7bQ1hyeHMnwrfM5nEPhiEcXISryDbBmOxL7zx9ZgzmXeJmcZtcSRuahiwgwndR0kWnWLZGjW3AzJSeDE4qD6kEXSiTtju2xs21I>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudeivddgudejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    gfrhhlucfvnfffucdljedtmdenucfjughrpeffhffvvefukfhfgggtugfgjgestheksfdt
-    tddtudenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihusegugihuuhhurdighiiiqe
-    enucggtffrrghtthgvrhhnpeehteelgfffiedtledulefgteejhedufeehuefhvefhhfff
-    hfekhfefkefhkeegudenucffohhmrghinhepugiguhhuuhdrgiihiienucevlhhushhtvg
-    hrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdig
-    hiii
-X-ME-Proxy: <xmx:wi1lZRvh2mX76SoCmDnz2VUJdkbcWfB2EPb-TbIcqCuiC3W1k_xsbQ>
-    <xmx:wi1lZdfely_9ITCr7XGzR6-e6lXE5Hn1tzwI2rfWH5UWxkhmPMyvhA>
-    <xmx:wi1lZd2n-RYWze-qa67kob1sGvPedOBU5Ci5c8tkWoC1sLB2EHbSdw>
-    <xmx:wy1lZT_Mhk3mz2Zi4Uj1Nt66u5V5I4EIZ-k2l2d-vaNb0HVRA7-06w>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 27 Nov 2023 19:01:04 -0500 (EST)
-Date: Mon, 27 Nov 2023 18:01:03 -0600
-From: Daniel Xu <dxu@dxuuu.xyz>
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: Eduard Zingerman <eddyz87@gmail.com>, 
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	antony.antony@secunet.com, Mykola Lysenko <mykolal@fb.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, devel@linux-ipsec.org, 
-	Network Development <netdev@vger.kernel.org>
-Subject: Re: [PATCH ipsec-next v1 6/7] bpf: selftests: test_tunnel: Disable
- CO-RE relocations
-Message-ID: <53jaqi72ef4gynyafxidl5veb54kfs7dttxezkarwg75t7szd4@cvfg5pc7pyum>
-References: <391d524c496acc97a8801d8bea80976f58485810.1700676682.git.dxu@dxuuu.xyz>
- <0f210cef-c6e9-41c1-9ba8-225f046435e5@linux.dev>
- <CAADnVQ+sEsUyNYPeZyOf2PcCnxOvOqw4bUuAuMofCU14szTGvg@mail.gmail.com>
- <3ec6c068-7f95-419a-a0ae-a901f95e4838@linux.dev>
- <18e43cdf65e7ba0d8f6912364fbc5b08a6928b35.camel@gmail.com>
- <uc5fv3keghefszuvono7aclgtjtgjnnia3i54ynejmyrs42ser@bwdpq5gmuvub>
- <0535eb913f1a0c2d3c291478fde07e0aa2b333f1.camel@gmail.com>
- <42f9bf0d-695a-412d-bea5-cb7036fa7418@linux.dev>
- <a5a84482-13ef-47d8-bf07-8017060a5d64@linux.dev>
- <xehp2qvy5cyaairbnfhem4hvbsl26blo4zzu7z6ywbp26jcwyn@hgp3v2q4ud7o>
+X-Greylist: delayed 1507 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 27 Nov 2023 16:36:32 PST
+Received: from mx08-001d1705.pphosted.com (mx08-001d1705.pphosted.com [185.183.30.70])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B24341A2;
+	Mon, 27 Nov 2023 16:36:32 -0800 (PST)
+Received: from pps.filterd (m0209318.ppops.net [127.0.0.1])
+	by mx08-001d1705.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3ARMDE4j025363;
+	Tue, 28 Nov 2023 00:10:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sony.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : mime-version :
+ content-type : content-transfer-encoding; s=S1;
+ bh=MRn2eyz7OH/SrlGvAzHCG56tDOQonGKFHRM+I5MFfuo=;
+ b=A4OvNYtL+Gh0zcFCcPKRte3Pmtr6oTI5GhJzBXzZKKT3W0UDQ27VUYmrIeGDPS74sTFy
+ dEgojgMZlRNU1+sy8mCiv5ry5G668YfV57i+67vgai+Iaqg/HIlA4CotstXLHuDrc8lO
+ hZPMLnAZsb8fGke347LJ+HE7A/hvXcT7GQ6PjIeRqthg3XemM8hQE5Oyr12sGMO+2LL9
+ IgQdTZrUAuKz9xuoWBzmAcEKtYHndkEFet/rnn9je+9kR3SvMaJVj62rghmqJgBDQ6IY
+ wEz5BtPCtIuvhqBXfzFFAcEmVBi8h7m6IXlBpn26aOYXiCzYEL/eWGFz8vVnyo7pGEYB 0Q== 
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2168.outbound.protection.outlook.com [104.47.56.168])
+	by mx08-001d1705.pphosted.com (PPS) with ESMTPS id 3uk7g6a76w-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 28 Nov 2023 00:10:52 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LrhV2mi+mbraYuK+mbX5NHKQ808t0isya3WEVTtUgUk23s7K5Ydl4QAQw2+WcUJn2SUSCRIIFpvUxQ7dhb7AJhHdWCQoDMukoSn3oJdJrsdEKabTJsrz6F8GJ4+yptBEV5ve1KbgtVKoSEJ8350hV37NM47qiw0+SQqYZfzplx3qEfs0gLQ7ayjeArtCfD3/JW4WgqpD7WKB1IfNMhR+f3cuOGhs4kZDlriZlKOJZyaqO7OyvKI5rDvm18GAgU118dEHMX6FwCILquq0+BFbE0CNLms21/72BTH/W35yVjo1uOseIB44CLhkVS6o/J7vhrXq+Fc/1tQwAn7wu6oWWg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=MRn2eyz7OH/SrlGvAzHCG56tDOQonGKFHRM+I5MFfuo=;
+ b=UWa4JE2T8j4REB90dBqR4WFA3xPrm2Z4nY8QCgNvDr5rjmUU/yqAP5F/lMJ2qydPFJJQzAjoHjiuOk82FaLEv8iA0jG+DpIce9V3n3m5jW4ljGgSQHgZYk+RKYE3VVQAtTqQfwDHUa/HwvziZV1JX03mybfcj45OiigITzi4eRGobNDUyVA9j2KX8e1Z8FCp65MNBkVpHNAnXf/SVW3msLUWzkoqtAmxABsH9xF755tV5luslkOeqNQcuGxEzAL07NeVH7sfb77j1oVK+YjPOuOxrl9UQ6Jli+2JCWOj+AJsO7mQ6cML8bOPssKlfEt3HIfDWdXh0SJmZjE8Sg+cqA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=sony.com; dmarc=pass action=none header.from=sony.com;
+ dkim=pass header.d=sony.com; arc=none
+Received: from BN8PR13MB2738.namprd13.prod.outlook.com (2603:10b6:408:8d::28)
+ by PH7PR13MB5913.namprd13.prod.outlook.com (2603:10b6:510:158::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.27; Tue, 28 Nov
+ 2023 00:10:47 +0000
+Received: from BN8PR13MB2738.namprd13.prod.outlook.com
+ ([fe80::58b:bf63:b6b:706c]) by BN8PR13MB2738.namprd13.prod.outlook.com
+ ([fe80::58b:bf63:b6b:706c%6]) with mapi id 15.20.7025.022; Tue, 28 Nov 2023
+ 00:10:46 +0000
+From: "Bird, Tim" <Tim.Bird@sony.com>
+To: =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>
+CC: Saravana Kannan <saravanak@google.com>, Rob Herring <robh+dt@kernel.org>,
+        "kernelci@lists.linux.dev" <kernelci@lists.linux.dev>,
+        David Gow
+	<davidgow@google.com>, Guenter Roeck <groeck@chromium.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "kernel@collabora.com" <kernel@collabora.com>,
+        Dan Carpenter
+	<dan.carpenter@linaro.org>,
+        "linux-pci@vger.kernel.org"
+	<linux-pci@vger.kernel.org>,
+        Doug Anderson <dianders@chromium.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [RFC PATCH v2 2/2] kselftest: devices: Add sample board file for
+ google,spherion
+Thread-Topic: [RFC PATCH v2 2/2] kselftest: devices: Add sample board file for
+ google,spherion
+Thread-Index: AQHaIYqHCCVqMV2IwESZQPAOrwlnnbCO2peQ
+Date: Tue, 28 Nov 2023 00:10:46 +0000
+Message-ID: 
+ <BN8PR13MB27384F089C7DAAF06DF9DDECFDBCA@BN8PR13MB2738.namprd13.prod.outlook.com>
+References: <20231127233558.868365-1-nfraprado@collabora.com>
+ <20231127233558.868365-3-nfraprado@collabora.com>
+In-Reply-To: <20231127233558.868365-3-nfraprado@collabora.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN8PR13MB2738:EE_|PH7PR13MB5913:EE_
+x-ms-office365-filtering-correlation-id: a7793d92-7404-420c-8442-08dbefa6780f
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 
+ 5NS1h0s93VHnvAG+jqQnDOpnQ6VkFsjtp/xxGq1M1M1YQU5z5Utcw/0YXxChNSnpS1nplPL7cMwqkiydP95jmLbtB2O4nc/jYZwoBhhHdJwM3vRI2bGpwG+2/mbt8on4oHipVBwZumePvw+qeeNlKZZFxUAyC3WBZExqhVeR5K7SbhgBVDvW9tfjz7Dl48cjtNvcku9qUz6V3o5gGDbJfniXMhitk7K9+9WcHXhCAM9SKYgyVxQ+iTwSSh24XcozYl2JqQIhYuumQiX7yPLR0zSs8ye3sw5OO6pzk3z5+npOuh/edkBrAtwiYZNcqJA/p6X1E2HLfzbGvkU9PLBFh+BFFEsveYWEjRNOQen2eYEsbeD+AYfRk53vCx5ZJM61Od5lqG8BgpiHVhu1+Yo3gF77B4ahDKAfUZzvvrCdvpq6ey5o9Rsh0TUwSQECuZbGZv1k7NCHlYIdjm0CTu+4zIULy9ZXceqx+vdITnzKwgFXXNlSbrneu5/VDyFglQyLFk+Zd53/R3meqKusI305jXiiFGJOQTFXw4tLgo5WakdSzWHqmGlp1hWZnLaXVLO8D2HFexfprSOCxQcw25I6bUA6y+a54TKrBRuUbSivVBAdRnbHCs1/vZG3Q5CJ8FCBiE9TbmAzKxfKIkplxNEHXCRH6/7rzhSjA/M1sNsbN5E=
+x-forefront-antispam-report: 
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR13MB2738.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(366004)(136003)(39860400002)(346002)(376002)(230922051799003)(64100799003)(451199024)(186009)(1800799012)(52536014)(8936002)(8676002)(4326008)(9686003)(71200400001)(6506007)(7696005)(64756008)(54906003)(110136005)(66556008)(66476007)(76116006)(66946007)(316002)(478600001)(66446008)(122000001)(55016003)(41300700001)(38100700002)(38070700009)(33656002)(86362001)(26005)(2906002)(83380400001)(7416002)(5660300002)(82960400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: 
+ =?utf-8?B?K1Vxd2pDUU9NN3JUaVoxNHdGVktpWW9Yb0hrbWN5MEFTcklzajRsNXFQaURC?=
+ =?utf-8?B?RU9uVjRSNm9OdjREM1owMlhRdDhKNE1EaGxWQk43STVtSjBzNVRRRDBpUFB5?=
+ =?utf-8?B?Q2hkcS9lUk5tK3NNSFU3ZmE5cC9tbWt0SDFwa2p1bWpGTU5CS0R2eWRpSVZp?=
+ =?utf-8?B?K0h0QXQ1QVJzSHY0bmlUaG5IOUtSbDhIaHR5TThrV3Rlam1pZmJQblZib0d2?=
+ =?utf-8?B?a2I4RXRPVFRIT2JZTjk5TjBzMDBXRnhndDd6NEhqWmRpOFBmRTFyTEtHVUw5?=
+ =?utf-8?B?eU5WbkE2K2ZZWVZBZEZZelp3MVhiZER0V05VYk5VNFg2UWZSdy9nVkM0V0lw?=
+ =?utf-8?B?QWJwSzliaDBHeGdVNTBEaWx4Vyt4aGtnVmppUHFSR2FReU1TVW1RZmJtSG1B?=
+ =?utf-8?B?b0g5cW1oRjBINXFzMmtJZ2ZWT3BDRTNhaVhCTjVnU3JxcE9KZHozdGg5cG1J?=
+ =?utf-8?B?UHJzb25EZUNzMUdnU25MQjlJYnhNcS9XcWoxa0dpLzU4SjdoVE1rY1gyc0sy?=
+ =?utf-8?B?OEpXdHpqTkV3TDBibHQ3MXFOVzYyazhuQVpPN1hsNzRpTFlYazVFZ2JUaC9B?=
+ =?utf-8?B?blRKc1JZcVdhdUhKWHpRYVlDTVRYZmdCQjBJNVNuZVZOaDQzNWU2cG9EVUdL?=
+ =?utf-8?B?YnpKUDdEeGRFVnNrcDZFc3oxRFZpbXhaSlVBa09vVDN4Vmp6TWY4TnpKcXFi?=
+ =?utf-8?B?b0dkeWYrcjJZRHhETHY4aFpTQldINVdZT2trdG5pNUlONjlqMnBkWVFXWnJX?=
+ =?utf-8?B?ZkxwUGF6Yk1nandrbEFObkxXWUU1aWlWQU9uQ2lqSHNxZkRGdnRRZXdNRXlz?=
+ =?utf-8?B?dENIeHBGMkRlUmVqZWV1NUhDYUd4Sm5LTnFDWnBKblByYlpkY3dZVEJXelRK?=
+ =?utf-8?B?blJYZ2ZhZzY5cXRJOTN0ZVhKNERGR0xtci9zOXhacUhYY1BrRllpa1JIYVM4?=
+ =?utf-8?B?VlFxendNc1BLSTcvdmhod3hiY0VrcUV5MkVibENISC9HN2dqY0hBZUg3Q0l6?=
+ =?utf-8?B?Y3B3RU5ydFludVdsdVkwU1hrM2V6Rm5wQ1dBVTdmbzhTbG1Ic0p2amNGd3Ir?=
+ =?utf-8?B?MEl1dzdYQWpnTVJ4VHdzQklZdk9WWXAyVWp5cnlQd1BkTUVGUlg5SjVwNWl1?=
+ =?utf-8?B?S1lHSk5GSnNRMHREVC9JNmpYUFY0YWhZQ2IzNXJwYXZPSFAwZGN1U015Umtk?=
+ =?utf-8?B?cDJBNjA3Tk85R1BRM3VyRG1NMkwvTlFHSFJ6anlKRE1uK1VzbmFLN2Z6aGVF?=
+ =?utf-8?B?SW5TYlVQYXdrRERxK0FJWkQwWHg3L0pmZ3Rvc1ZnUGFLS21jZ2g3MmFpQU5D?=
+ =?utf-8?B?YnNXNTFJTDZFdlgrK1hTMjJaRklZVVZOci9RU2dSVXBqSlJYaXYxQ2s0cXNx?=
+ =?utf-8?B?T05PK1JXaDJwVWpFM0NHYW81Q2t1Rk1vV2x1NlIya0RqbUhoUklLdUNFVmpX?=
+ =?utf-8?B?RDdLYjJoZmIvWXRVK292MDN4MjMyUU9IQWNzTjFpaFAzOFFaVld0YVNpNi84?=
+ =?utf-8?B?V1Zha25iNU9FR1ZKeTVYUUxIYUg3QnNwQm9qZU1yWENlazRyL1pPZ2ZyZy95?=
+ =?utf-8?B?cnVRcjlYdkZtb3JZU2h0NXlzS1k1Z2Q5bG55Z0FKZnZSdWVZSUxyMHMydFhJ?=
+ =?utf-8?B?VEc0c3ZNYWpMaVBldllmK2VpeFVrclZIdzNqWkhwOXEzWk4wVzN4ZjlVTjZU?=
+ =?utf-8?B?eXpvVkExT1loVXlyNmFzYjlSSndtQ1lXZG52b0RlMXFqempYMUVFZ3lOY2dk?=
+ =?utf-8?B?UTRJa09neG9VR3ZDTDQ2NjZTTjB4dW96b3JWZ0lzaEFaWW4zRS9XR1ZuS0pM?=
+ =?utf-8?B?dHMwWnBqZ3kyc2NjOFl6NTd6dENJam9oakx2L0UxRHBscWhFeE1Za0xiamVX?=
+ =?utf-8?B?ZEtTQW4rQjJBc0RnSEs2NEY0VjF4WHVvKy9rQTlNd1JWVmpjOFRLQzJ4dWhm?=
+ =?utf-8?B?SFBVMlRnME9EcnB5cUhIUUdKSTRPUnV3L3Nsbk1PSnFLOFRObXA5UmFUYjE2?=
+ =?utf-8?B?ZEtPby9IMzVLYUtkTEIwWnlXVEdsM0JJMkZXUzBxVVVFWjV1NVNWVEZERlZW?=
+ =?utf-8?B?c25CK044MkprdmsxQllYZUJlY2hja1loQUFhNWFJSTNlTUZieWpnWE9IeE1I?=
+ =?utf-8?Q?z3N0=3D?=
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <xehp2qvy5cyaairbnfhem4hvbsl26blo4zzu7z6ywbp26jcwyn@hgp3v2q4ud7o>
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: 
+	=?utf-8?B?RUdsaUxZS0M1TFdaTjJYQkJwN3YwWW9mQVVDTC9TUmRoVmdITFRkRlJCV3RV?=
+ =?utf-8?B?RkpuN3NvOEZtMTA3d3ppWUhvNU5TTndUMlJWT2xwckVPZ2xqTU9Jb3k4Mmtp?=
+ =?utf-8?B?aytvMm5wbit1L2R0K1ZtQ3doWTd1MDFyR21KODFzYTFZT0sxT0ZFbE4rRENP?=
+ =?utf-8?B?TmpUVjd1cFFka09VbCtvRGhoM3lFQlJmdkIxTFYzUDQ2eUxBNENJWjFqUlpO?=
+ =?utf-8?B?U2lGTllzQU41RExvOW91UmMxVUtLUnNFb2tKMTNOVndrY0g4YjhZQ1FrNTc4?=
+ =?utf-8?B?OFZqTW9oYlBXR2JOYmVPMXphZmhXbWt4UElTM1dBbWhUcEZzVXhXZ3UzQ1hw?=
+ =?utf-8?B?NlZLUVVqNDhrOE9DU2szdmk3RC9VYnFPVS9PN1dKZ0VlN0hxVGZWdHZrcUFW?=
+ =?utf-8?B?TUc3K3pGaHhPbTdxSFpoTW5KaVF2ZTFqcTA3cEhvbmxPZFhSM3A5SnF1TzhW?=
+ =?utf-8?B?alkveUJES1Y3RGRrR3U3K2RYUXdBUVUrR015dVJwa2dQN2V3dkNUZTdEMXJL?=
+ =?utf-8?B?RVpTVUdsRndIQkprLzJNd0k1eGZzbzFCVDhyYy9aU2xGYTZqam90QTlXWm9W?=
+ =?utf-8?B?ZHJkM1cxWlVXaFFCYWNoM1o1RjV4UnRDc3V6TmQ5Y2NaSEZRZ2dzNHZuSzVF?=
+ =?utf-8?B?aXl0VG1mREpub3M5ZUpOeWpxSEswMXB3NkpueGJWRGhnSmRrd240T1JJMDRq?=
+ =?utf-8?B?MnRXUHk3Q3lrcUtnTVlHTGJYamtPUlVSQWFvVzdMaUg5b3R5dG42MENObEdU?=
+ =?utf-8?B?bnBrSmlZUGoxeHVMRUM0czJJVzBudzJZM0F4UEtwdUtSSlpmUnpjakw4WkJv?=
+ =?utf-8?B?UmF4TU1iVklGNHN1dDZtWjBWWXBBTU14Z2hUcWtXREIzZVk3Y3dGOFhjN0w0?=
+ =?utf-8?B?TlkzQjJXWDJmYitjUkR6alMrYkJMbGh1Z0NsN0h4cHR0TjN1VXJRTThLUDJZ?=
+ =?utf-8?B?R1Ira05pcnUvV2todksyMkR1Y3JsTER0M24wRlh2OUpHRzZRa3Y1OTAvK0pn?=
+ =?utf-8?B?RFJGeHVGSkFJMWIzSHhRaWJscVlaeTlaRUlnWXZ1VEVDSDI4Y0kwMjdrVXRL?=
+ =?utf-8?B?V0lIRWtkZWNrczNEYTMzcmc1UElML1VEd0tEbjBUUjIzL2hZUkJVV21uZzFZ?=
+ =?utf-8?B?d01uV3loRktXTWJCQ2JTUE1lTHdrL3ZCUzB2d2tzdnZtWG1uUHRqNDk1bHFZ?=
+ =?utf-8?B?S0pGUkh5V1BVclZ6TlJHbjViZ290UmN0NXZJRXE4ZVdRT0ZIdjNNOVFSUFEz?=
+ =?utf-8?B?c3ZpMnFwUmUzWXUybW9rajFGRnlpRWJteVZPY1dTblR2cFk0dFBZM3JoUUxB?=
+ =?utf-8?B?amVnQ05obFA0akZoeWo5ZC9pVVViRVlCUTlNY1Z1cXVPK3FMSUI4MFlPTTNH?=
+ =?utf-8?Q?Iv0U0NkTTamqSTmgS0cbFLaCSaMQBwi8=3D?=
+X-OriginatorOrg: sony.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR13MB2738.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a7793d92-7404-420c-8442-08dbefa6780f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Nov 2023 00:10:46.0795
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 66c65d8a-9158-4521-a2d8-664963db48e4
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: jMqKYkqqSznhw4GAJbSZOvIzrN9HYBbhNpWeA6wBVj4SLjLTcUEBfWSrN4b74FcwCb9J1+2n6o3ahsLbF6WfxA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR13MB5913
+X-Proofpoint-GUID: fWru3I_Sx1KzvcOT8X9kr-CHOAyX7H9-
+X-Proofpoint-ORIG-GUID: fWru3I_Sx1KzvcOT8X9kr-CHOAyX7H9-
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+X-Sony-Outbound-GUID: fWru3I_Sx1KzvcOT8X9kr-CHOAyX7H9-
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.987,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-11-27_20,2023-11-27_01,2023-05-22_02
 
-On Mon, Nov 27, 2023 at 02:45:11PM -0600, Daniel Xu wrote:
-> On Sun, Nov 26, 2023 at 09:53:04PM -0800, Yonghong Song wrote:
-> > 
-> > On 11/27/23 12:44 AM, Yonghong Song wrote:
-> > > 
-> > > On 11/26/23 8:52 PM, Eduard Zingerman wrote:
-> > > > On Sun, 2023-11-26 at 18:04 -0600, Daniel Xu wrote:
-> > > > [...]
-> > > > > > Tbh I'm not sure. This test passes with preserve_static_offset
-> > > > > > because it suppresses preserve_access_index. In general clang
-> > > > > > translates bitfield access to a set of IR statements like:
-> > > > > > 
-> > > > > >    C:
-> > > > > >      struct foo {
-> > > > > >        unsigned _;
-> > > > > >        unsigned a:1;
-> > > > > >        ...
-> > > > > >      };
-> > > > > >      ... foo->a ...
-> > > > > > 
-> > > > > >    IR:
-> > > > > >      %a = getelementptr inbounds %struct.foo, ptr %0, i32 0, i32 1
-> > > > > >      %bf.load = load i8, ptr %a, align 4
-> > > > > >      %bf.clear = and i8 %bf.load, 1
-> > > > > >      %bf.cast = zext i8 %bf.clear to i32
-> > > > > > 
-> > > > > > With preserve_static_offset the getelementptr+load are replaced by a
-> > > > > > single statement which is preserved as-is till code generation,
-> > > > > > thus load with align 4 is preserved.
-> > > > > > 
-> > > > > > On the other hand, I'm not sure that clang guarantees that load or
-> > > > > > stores used for bitfield access would be always aligned according to
-> > > > > > verifier expectations.
-> > > > > > 
-> > > > > > I think we should check if there are some clang knobs that prevent
-> > > > > > generation of unaligned memory access. I'll take a look.
-> > > > > Is there a reason to prefer fixing in compiler? I'm not opposed to it,
-> > > > > but the downside to compiler fix is it takes years to propagate and
-> > > > > sprinkles ifdefs into the code.
-> > > > > 
-> > > > > Would it be possible to have an analogue of BPF_CORE_READ_BITFIELD()?
-> > > > Well, the contraption below passes verification, tunnel selftest
-> > > > appears to work. I might have messed up some shifts in the macro,
-> > > > though.
-> > > 
-> > > I didn't test it. But from high level it should work.
-> > > 
-> > > > 
-> > > > Still, if clang would peek unlucky BYTE_{OFFSET,SIZE} for a particular
-> > > > field access might be unaligned.
-> > > 
-> > > clang should pick a sensible BYTE_SIZE/BYTE_OFFSET to meet
-> > > alignment requirement. This is also required for BPF_CORE_READ_BITFIELD.
-> > > 
-> > > > 
-> > > > ---
-> > > > 
-> > > > diff --git a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-> > > > b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-> > > > index 3065a716544d..41cd913ac7ff 100644
-> > > > --- a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-> > > > +++ b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-> > > > @@ -9,6 +9,7 @@
-> > > >   #include "vmlinux.h"
-> > > >   #include <bpf/bpf_helpers.h>
-> > > >   #include <bpf/bpf_endian.h>
-> > > > +#include <bpf/bpf_core_read.h>
-> > > >   #include "bpf_kfuncs.h"
-> > > >   #include "bpf_tracing_net.h"
-> > > >   @@ -144,6 +145,38 @@ int ip6gretap_get_tunnel(struct __sk_buff *skb)
-> > > >       return TC_ACT_OK;
-> > > >   }
-> > > >   +#define BPF_CORE_WRITE_BITFIELD(s, field, new_val) ({            \
-> > > > +    void *p = (void *)s + __CORE_RELO(s, field, BYTE_OFFSET);    \
-> > > > +    unsigned byte_size = __CORE_RELO(s, field, BYTE_SIZE);        \
-> > > > +    unsigned lshift = __CORE_RELO(s, field, LSHIFT_U64); \
-> > > > +    unsigned rshift = __CORE_RELO(s, field, RSHIFT_U64); \
-> > > > +    unsigned bit_size = (rshift - lshift);                \
-> > > > +    unsigned long long nval, val, hi, lo;                \
-> > > > +                                    \
-> > > > +    asm volatile("" : "=r"(p) : "0"(p));                \
-> > > 
-> > > Use asm volatile("" : "+r"(p)) ?
-> > > 
-> > > > +                                    \
-> > > > +    switch (byte_size) {                        \
-> > > > +    case 1: val = *(unsigned char *)p; break;            \
-> > > > +    case 2: val = *(unsigned short *)p; break;            \
-> > > > +    case 4: val = *(unsigned int *)p; break;            \
-> > > > +    case 8: val = *(unsigned long long *)p; break;            \
-> > > > +    }                                \
-> > > > +    hi = val >> (bit_size + rshift);                \
-> > > > +    hi <<= bit_size + rshift;                    \
-> > > > +    lo = val << (bit_size + lshift);                \
-> > > > +    lo >>= bit_size + lshift;                    \
-> > > > +    nval = new_val;                            \
-> > > > +    nval <<= lshift;                        \
-> > > > +    nval >>= rshift;                        \
-> > > > +    val = hi | nval | lo;                        \
-> > > > +    switch (byte_size) {                        \
-> > > > +    case 1: *(unsigned char *)p      = val; break;            \
-> > > > +    case 2: *(unsigned short *)p     = val; break;            \
-> > > > +    case 4: *(unsigned int *)p       = val; break;            \
-> > > > +    case 8: *(unsigned long long *)p = val; break;            \
-> > > > +    }                                \
-> > > > +})
-> > > 
-> > > I think this should be put in libbpf public header files but not sure
-> > > where to put it. bpf_core_read.h although it is core write?
-> > > 
-> > > But on the other hand, this is a uapi struct bitfield write,
-> > > strictly speaking, CORE write is really unnecessary here. It
-> > > would be great if we can relieve users from dealing with
-> > > such unnecessary CORE writes. In that sense, for this particular
-> > > case, I would prefer rewriting the code by using byte-level
-> > > stores...
-> > or preserve_static_offset to clearly mean to undo bitfield CORE ...
-> 
-> Ok, I will do byte-level rewrite for next revision.
-
-[...]
-
-This patch seems to work: https://pastes.dxuuu.xyz/0glrf9 .
-
-But I don't think it's very pretty. Also I'm seeing on the internet that
-people are saying the exact layout of bitfields is compiler dependent.
-So I am wondering if these byte sized writes are correct. For that
-matter, I am wondering how the GCC generated bitfield accesses line up
-with clang generated BPF bytecode. Or why uapi contains a bitfield.
-
-WDYT, should I send up v2 with this or should I do one of the other
-approaches in this thread?
-
-I am ok with any of the approaches.
-
-Thanks,
-Daniel
+PiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiBGcm9tOiBOw61jb2xhcyBGLiBSLiBBLiBQ
+cmFkbyA8bmZyYXByYWRvQGNvbGxhYm9yYS5jb20+DQo+IEFkZCBhIHNhbXBsZSBib2FyZCBmaWxl
+IGRlc2NyaWJpbmcgdGhlIGZpbGUncyBmb3JtYXQgYW5kIHdpdGggdGhlIGxpc3QNCj4gb2YgZGV2
+aWNlcyBleHBlY3RlZCB0byBiZSBwcm9iZWQgb24gdGhlIGdvb2dsZSxzcGhlcmlvbiBtYWNoaW5l
+IGFzIGFuDQo+IGV4YW1wbGUuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBOw61jb2xhcyBGLiBSLiBB
+LiBQcmFkbyA8bmZyYXByYWRvQGNvbGxhYm9yYS5jb20+DQo+IC0tLQ0KPiANCj4gKG5vIGNoYW5n
+ZXMgc2luY2UgdjEpDQo+IA0KPiAgLi4uL3Rlc3Rpbmcvc2VsZnRlc3RzL2RldmljZXMvYm9hcmRz
+L2dvb2dsZSxzcGhlcmlvbiB8IDEyICsrKysrKysrKysrKw0KDQpPdmVyYWxsLCB3aGlsZSB0cnlp
+bmcgdG8gbWFpbnRhaW4gYSBjb21wcmVoZW5zaXZlIHNldCBvZiBib2FyZCBkZWZpbml0aW9ucw0K
+c2VlbXMgaGFyZCwgSSB0aGluayBoYXZpbmcgYSBmZXcgYXMgZXhhbXBsZXMgaXMgdXNlZnVsLg0K
+DQpJJ20gbm90IGEgYmlnIGZhbiBvZiBuYW1pbmcgdGhlc2Ugd2l0aCBhIGNvbW1hIGluIHRoZSBu
+YW1lLiAgSXMgdGhlcmUgYSByZWFzb24NCnlvdSBhcmUgbm90IHVzaW5nIGRhc2ggb3IgdW5kZXJz
+Y29yZT8NCg0KRG8geW91IGFudGljaXBhdGUgYSBjb252ZW50aW9uIG9mICA8cHJvZHVjZXI+IDxi
+b2FyZC1vci1wcm9kdWN0LW5hbWU+IHR1cGxlcyBmb3INCnRoZSBmaWxlbmFtZT8NCiAtLSBUaW0N
+Cg0KPiAgMSBmaWxlIGNoYW5nZWQsIDEyIGluc2VydGlvbnMoKykNCj4gIGNyZWF0ZSBtb2RlIDEw
+MDY0NCB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9kZXZpY2VzL2JvYXJkcy9nb29nbGUsc3BoZXJp
+b24NCj4gDQo+IGRpZmYgLS1naXQgYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9kZXZpY2VzL2Jv
+YXJkcy9nb29nbGUsc3BoZXJpb24gYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9kZXZpY2VzL2Jv
+YXJkcy9nb29nbGUsc3BoZXJpb24NCj4gbmV3IGZpbGUgbW9kZSAxMDA2NDQNCj4gaW5kZXggMDAw
+MDAwMDAwMDAwLi5kYjlhMTdjY2NkMDMNCj4gLS0tIC9kZXYvbnVsbA0KPiArKysgYi90b29scy90
+ZXN0aW5nL3NlbGZ0ZXN0cy9kZXZpY2VzL2JvYXJkcy9nb29nbGUsc3BoZXJpb24NCj4gQEAgLTAs
+MCArMSwxMiBAQA0KPiArIyBFeGFtcGxlIHRlc3QgZGVmaW5pdGlvbiBmb3IgR29vZ2xlIFNwaGVy
+aW9uIENocm9tZWJvb2sNCj4gKyMNCj4gKyMgRm9ybWF0Og0KPiArIyAgIHVzYnxwY2kgdGVzdF9u
+YW1lIG51bWJlcl9vZl9tYXRjaGVzIGZpZWxkPXZhbHVlIFsgZmllbGQ9dmFsdWUgLi4uIF0NCj4g
+KyMNCj4gKyMgVGhlIGF2YWlsYWJsZSBtYXRjaCBmaWVsZHMgdmFyeSBieSBidXMuIFRoZSBmaWVs
+ZC12YWx1ZSBtYXRjaCBwYWlycyBmb3IgYQ0KPiArIyBkZXZpY2UgY2FuIGJlIHJldHJpZXZlZCBm
+cm9tIHRoZSBkZXZpY2UncyBtb2RhbGlhcyBhdHRyaWJ1dGUgaW4gc3lzZnMuIEENCj4gKyMgc3Vi
+c2V0IG9mIHRoZSBmaWVsZHMgbWF5IGJlIHVzZWQgdG8gbWFrZSB0aGUgbWF0Y2ggbW9yZSBnZW5l
+cmljIHNvIGl0IGNhbiB3b3JrDQo+ICsjIHdpdGggdGhlIGRpZmZlcmVudCBoYXJkd2FyZSB2YXJp
+YW50cyBvZiBhIGRldmljZSBvbiB0aGUgbWFjaGluZS4NCj4gK3VzYiBjYW1lcmEgMSBpYz0wZSBp
+c2M9MDEgaXA9MDANCj4gK3VzYiBibHVldG9vdGggMSBpYz1lMCBpc2M9MDEgaXA9MDEgaW49MDAN
+Cj4gK3BjaSB3aWZpIDEgdj0xNGMzIGQ9Nzk2MQ0KPiAtLQ0KPiAyLjQyLjENCg0K
 
