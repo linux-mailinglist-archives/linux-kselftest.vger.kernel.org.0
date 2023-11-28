@@ -1,256 +1,128 @@
-Return-Path: <linux-kselftest+bounces-726-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-727-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86F277FBF0E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Nov 2023 17:18:07 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 525697FBF16
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Nov 2023 17:19:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CADE7B21371
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Nov 2023 16:18:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 119382827B0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Nov 2023 16:19:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BBBE37D32;
-	Tue, 28 Nov 2023 16:18:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AC8F37D36;
+	Tue, 28 Nov 2023 16:19:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="o7xF4oy4";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="nm4kC8Dy"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Uu4ot+Y+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3436182;
-	Tue, 28 Nov 2023 08:17:56 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-	by mailnew.nyi.internal (Postfix) with ESMTP id 516DA580855;
-	Tue, 28 Nov 2023 11:17:56 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Tue, 28 Nov 2023 11:17:56 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-	1701188276; x=1701195476; bh=GZ5L0AMTLI05H5bqiQnQyltqp4P9zp6XIYx
-	LYjP5ZtA=; b=o7xF4oy4c3SxLmp5JIOOCX58qCpUsPD4N74ZCiJ3dFmRQjueNTk
-	XNE6hqR3GvcpzANiIPoJt0VZYAKXRw/9uD7FXeg/TlRiUC1uxjoNSd3pcKVRDRf3
-	oaDGA/Vn5cr5MmPWN35HSOoswwD3HsA8b+N3VSeeF6T59Hm8hlGTcqNF6blVNqZd
-	usaUnWCd4ZI/P4N1leCwfFYZ5BPfcLgCbI3mALFWmo7/ZpX76UC2XExQLcmUf3VB
-	lCllqFWn8FgIZvwuG6pL9gdlGyB6owoAhM4kBY0ZCtBnC46/35ni/wZ/gutfBzc9
-	L2q7C5nTHWCBWqUBVqC/Y7bSUwQZiva7QyQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1701188276; x=1701195476; bh=GZ5L0AMTLI05H5bqiQnQyltqp4P9zp6XIYx
-	LYjP5ZtA=; b=nm4kC8Dy6SVhN6AJoRCe0Y7Gira86b2rfiGTtPYUhHi76WZ42/p
-	CDV39H4wZ5maA+nySZXj9/urDVUvS3i1YNigtwXy0etS3laluMwp4zPvgYqDMv8U
-	oaKqwI31TGKT4RiHfKvfBCa6Bj6FEkMnUJP/b4ETlK1r9mYGpr5qnhfrCDVVEykU
-	Yk6eHS8XUoVlViEgRQJ2Zlm8XQHZStUHUAjvaXZt8KZXaA+0hImcVfSBE9oEABDl
-	z1/NYfchHUsbMtZrjF+QIlEOL5DtopQEFQJTvpcGpIlH5FTTjm7xgEO5WnfvJuGT
-	7ywpRSBDCp7r7eScKu10Vt5GEvc8GbbXWsg==
-X-ME-Sender: <xms:tBJmZeYfifIX3DjAmZfQ1ktIZLfYTWDERMXGCYQQNFw_Ps0xT6TxYw>
-    <xme:tBJmZRZVCZtFgsR1VLRu5-e5loRvWPss_S-C8OfnhoDF6Kxr2SOU-bSjhchdN3g-Y
-    jmqk30xJADjVNPBGA>
-X-ME-Received: <xmr:tBJmZY9WE-Ex3D32OD7SktHZZ15dm4abwsijvx4e-lb8xBQ3iJmmbx6ZG7NzaMS8yxzGO213yx1PFl_hyt5KXw4--fDjPaWXSRSvNMKt>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudeifedgkeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    gfrhhlucfvnfffucdlvdefmdenucfjughrpeffhffvvefukfhfgggtugfgjgestheksfdt
-    tddtudenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihusegugihuuhhurdighiiiqe
-    enucggtffrrghtthgvrhhnpeelieeljeefgffgteehfeevgffgieeukeetveduteeuvdff
-    kedufeegvdeuvdejfeenucffohhmrghinhepugiguhhuuhdrgiihiidpghhithhhuhgsrd
-    gtohhmpdifihhkihhpvgguihgrrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfr
-    rghrrghmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
-X-ME-Proxy: <xmx:tBJmZQrBt0ceS7yRJ1pxBI5zT4Xl_FHvNuqOYHhTgcP3UbsWS006XA>
-    <xmx:tBJmZZrxJ35Z1foPCfRjYYf9jDp7Up9ulfndumAqSXk1X0siOt3SHA>
-    <xmx:tBJmZeTW8GDJ_PxxQa31Dx0BfW_V6Nm9Ix1wokaFqeOqhnULoVALHQ>
-    <xmx:tBJmZVrNyU2mO4zMijwe-79kbR0LBneVL4ErdeUXtU81lgqrgP2Wuw>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 28 Nov 2023 11:17:53 -0500 (EST)
-Date: Tue, 28 Nov 2023 10:17:51 -0600
-From: Daniel Xu <dxu@dxuuu.xyz>
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: Eduard Zingerman <eddyz87@gmail.com>, 
-	Alexei Starovoitov <alexei.starovoitov@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	antony.antony@secunet.com, Mykola Lysenko <mykolal@fb.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, devel@linux-ipsec.org, 
-	Network Development <netdev@vger.kernel.org>
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73D4B182;
+	Tue, 28 Nov 2023 08:19:18 -0800 (PST)
+Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-5079f6efd64so7633953e87.2;
+        Tue, 28 Nov 2023 08:19:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701188356; x=1701793156; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=AeC86zbCGJVSk79IhGKH9GShZbi811qqEA24Z7ghM0M=;
+        b=Uu4ot+Y+/yr6anfulEW9FJBZ/sZefqjz76MNgQ7GsoYMn6wK3Lzb7+gP4b/4RopvHv
+         +bTQLNod+CC2soIujByj+Q54uSjmZXqU59jubqO8XxeDkq3/iKXDTsjUDrHRepgmfafp
+         m6czn/C0LdooY3a93n0yMIB+HEzddn3bPn5jZcM46EnyGg4F1MRI9wddH46Z+F2CpaZ1
+         O0gLL9O9LQOQq6vMDSeTNHuojKk+F0Pd9VZn9CFXudT0fTa+MZh+vsbXZU4V06kIQuIx
+         GZMvoBrNolhhsLzzGbCQhyfn36BViO5bRtD19ydnD8H1aNLaJDSl2taJ9gngN3zcVx7r
+         p6ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701188356; x=1701793156;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AeC86zbCGJVSk79IhGKH9GShZbi811qqEA24Z7ghM0M=;
+        b=kRLnyB2vxbeW/RHNzNmruPnnD4oFXgHBigfM6egHn3+Io07nn0SixvEhHZ53E3LsdJ
+         LRXgKJEKpLdY8ZYvzQA+OMA2vjLBEVi5MhFQlQ0DiQsqrocNb2NJ7pFe1L9n/WuIpK6b
+         9DApDp125KMbyrrJsl5tzhcFmWBWEA3aJBvbSSTIlWoo/28Qv/yYT6uc75S7ikP0vsVI
+         YBFkQ/cu8v5jDFEJRSsUoyLh5AFQ55/pZTMNIyCBccVBOBHc8gfy2Pd46Br2G54xoVSe
+         R+EF/7MnNzhAML+L91qCaVCLF9dN3G/7CYTce9kZn3AXu5qqOU7a9Nv/c64AM5o6PrX5
+         Lrkw==
+X-Gm-Message-State: AOJu0Yz2aDtlqozyIoQpfhkaicNPF0/bXqeyaKn2hGrXq6EIE17fD1bQ
+	Nv+euAhf/Rq/w9flCqhpYsU=
+X-Google-Smtp-Source: AGHT+IGMma2vgs85Y0T7461/0MipHE1/19RTn/0fiyXlqiyumPPE/1qzpnDwgkRnEwkYX001zMdDPQ==
+X-Received: by 2002:a05:6512:2245:b0:50a:40b6:2d37 with SMTP id i5-20020a056512224500b0050a40b62d37mr13159186lfu.40.1701188356322;
+        Tue, 28 Nov 2023 08:19:16 -0800 (PST)
+Received: from [192.168.1.95] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
+        by smtp.gmail.com with ESMTPSA id i14-20020a05640200ce00b0054866f0c1b8sm6386704edu.69.2023.11.28.08.19.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Nov 2023 08:19:15 -0800 (PST)
+Message-ID: <b9f63218d934b8048ccdafa8e2c27f9929e344a6.camel@gmail.com>
 Subject: Re: [PATCH ipsec-next v1 6/7] bpf: selftests: test_tunnel: Disable
  CO-RE relocations
-Message-ID: <idvgqkzzlq7lcnx52wzi5o2los2wcvwgt2qtpvko3go3kaggnk@s55os4akwb7d>
-References: <3ec6c068-7f95-419a-a0ae-a901f95e4838@linux.dev>
- <18e43cdf65e7ba0d8f6912364fbc5b08a6928b35.camel@gmail.com>
- <uc5fv3keghefszuvono7aclgtjtgjnnia3i54ynejmyrs42ser@bwdpq5gmuvub>
- <0535eb913f1a0c2d3c291478fde07e0aa2b333f1.camel@gmail.com>
- <42f9bf0d-695a-412d-bea5-cb7036fa7418@linux.dev>
- <a5a84482-13ef-47d8-bf07-8017060a5d64@linux.dev>
- <xehp2qvy5cyaairbnfhem4hvbsl26blo4zzu7z6ywbp26jcwyn@hgp3v2q4ud7o>
- <53jaqi72ef4gynyafxidl5veb54kfs7dttxezkarwg75t7szd4@cvfg5pc7pyum>
- <f68c01d6-bf6b-4b76-8b20-53e9f4a61fcd@linux.dev>
- <p6qdiwnuglz7ry6hsssruf3w6n3tnavglya3iampors7eb4ac6@nonyetjx2zvc>
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Daniel Xu <dxu@dxuuu.xyz>, Yonghong Song <yonghong.song@linux.dev>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Shuah Khan
+ <shuah@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko
+ <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>, Steffen Klassert
+ <steffen.klassert@secunet.com>, antony.antony@secunet.com, Mykola Lysenko
+ <mykolal@fb.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu
+ <song@kernel.org>, John Fastabend <john.fastabend@gmail.com>, KP Singh
+ <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo
+ <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, bpf
+ <bpf@vger.kernel.org>,  "open list:KERNEL SELFTEST FRAMEWORK"
+ <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+ devel@linux-ipsec.org, Network Development <netdev@vger.kernel.org>
+Date: Tue, 28 Nov 2023 18:19:08 +0200
+In-Reply-To: <p6qdiwnuglz7ry6hsssruf3w6n3tnavglya3iampors7eb4ac6@nonyetjx2zvc>
+References: 
+	<CAADnVQ+sEsUyNYPeZyOf2PcCnxOvOqw4bUuAuMofCU14szTGvg@mail.gmail.com>
+	 <3ec6c068-7f95-419a-a0ae-a901f95e4838@linux.dev>
+	 <18e43cdf65e7ba0d8f6912364fbc5b08a6928b35.camel@gmail.com>
+	 <uc5fv3keghefszuvono7aclgtjtgjnnia3i54ynejmyrs42ser@bwdpq5gmuvub>
+	 <0535eb913f1a0c2d3c291478fde07e0aa2b333f1.camel@gmail.com>
+	 <42f9bf0d-695a-412d-bea5-cb7036fa7418@linux.dev>
+	 <a5a84482-13ef-47d8-bf07-8017060a5d64@linux.dev>
+	 <xehp2qvy5cyaairbnfhem4hvbsl26blo4zzu7z6ywbp26jcwyn@hgp3v2q4ud7o>
+	 <53jaqi72ef4gynyafxidl5veb54kfs7dttxezkarwg75t7szd4@cvfg5pc7pyum>
+	 <f68c01d6-bf6b-4b76-8b20-53e9f4a61fcd@linux.dev>
+	 <p6qdiwnuglz7ry6hsssruf3w6n3tnavglya3iampors7eb4ac6@nonyetjx2zvc>
+Autocrypt: addr=eddyz87@gmail.com; prefer-encrypt=mutual; keydata=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
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.1 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <p6qdiwnuglz7ry6hsssruf3w6n3tnavglya3iampors7eb4ac6@nonyetjx2zvc>
 
-On Tue, Nov 28, 2023 at 10:13:50AM -0600, Daniel Xu wrote:
-> On Mon, Nov 27, 2023 at 08:06:01PM -0800, Yonghong Song wrote:
-> > 
-> > On 11/27/23 7:01 PM, Daniel Xu wrote:
-> > > On Mon, Nov 27, 2023 at 02:45:11PM -0600, Daniel Xu wrote:
-> > > > On Sun, Nov 26, 2023 at 09:53:04PM -0800, Yonghong Song wrote:
-> > > > > On 11/27/23 12:44 AM, Yonghong Song wrote:
-> > > > > > On 11/26/23 8:52 PM, Eduard Zingerman wrote:
-> > > > > > > On Sun, 2023-11-26 at 18:04 -0600, Daniel Xu wrote:
-> > > > > > > [...]
-> > > > > > > > > Tbh I'm not sure. This test passes with preserve_static_offset
-> > > > > > > > > because it suppresses preserve_access_index. In general clang
-> > > > > > > > > translates bitfield access to a set of IR statements like:
-> > > > > > > > > 
-> > > > > > > > >     C:
-> > > > > > > > >       struct foo {
-> > > > > > > > >         unsigned _;
-> > > > > > > > >         unsigned a:1;
-> > > > > > > > >         ...
-> > > > > > > > >       };
-> > > > > > > > >       ... foo->a ...
-> > > > > > > > > 
-> > > > > > > > >     IR:
-> > > > > > > > >       %a = getelementptr inbounds %struct.foo, ptr %0, i32 0, i32 1
-> > > > > > > > >       %bf.load = load i8, ptr %a, align 4
-> > > > > > > > >       %bf.clear = and i8 %bf.load, 1
-> > > > > > > > >       %bf.cast = zext i8 %bf.clear to i32
-> > > > > > > > > 
-> > > > > > > > > With preserve_static_offset the getelementptr+load are replaced by a
-> > > > > > > > > single statement which is preserved as-is till code generation,
-> > > > > > > > > thus load with align 4 is preserved.
-> > > > > > > > > 
-> > > > > > > > > On the other hand, I'm not sure that clang guarantees that load or
-> > > > > > > > > stores used for bitfield access would be always aligned according to
-> > > > > > > > > verifier expectations.
-> > > > > > > > > 
-> > > > > > > > > I think we should check if there are some clang knobs that prevent
-> > > > > > > > > generation of unaligned memory access. I'll take a look.
-> > > > > > > > Is there a reason to prefer fixing in compiler? I'm not opposed to it,
-> > > > > > > > but the downside to compiler fix is it takes years to propagate and
-> > > > > > > > sprinkles ifdefs into the code.
-> > > > > > > > 
-> > > > > > > > Would it be possible to have an analogue of BPF_CORE_READ_BITFIELD()?
-> > > > > > > Well, the contraption below passes verification, tunnel selftest
-> > > > > > > appears to work. I might have messed up some shifts in the macro,
-> > > > > > > though.
-> > > > > > I didn't test it. But from high level it should work.
-> > > > > > 
-> > > > > > > Still, if clang would peek unlucky BYTE_{OFFSET,SIZE} for a particular
-> > > > > > > field access might be unaligned.
-> > > > > > clang should pick a sensible BYTE_SIZE/BYTE_OFFSET to meet
-> > > > > > alignment requirement. This is also required for BPF_CORE_READ_BITFIELD.
-> > > > > > 
-> > > > > > > ---
-> > > > > > > 
-> > > > > > > diff --git a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-> > > > > > > b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-> > > > > > > index 3065a716544d..41cd913ac7ff 100644
-> > > > > > > --- a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-> > > > > > > +++ b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-> > > > > > > @@ -9,6 +9,7 @@
-> > > > > > >    #include "vmlinux.h"
-> > > > > > >    #include <bpf/bpf_helpers.h>
-> > > > > > >    #include <bpf/bpf_endian.h>
-> > > > > > > +#include <bpf/bpf_core_read.h>
-> > > > > > >    #include "bpf_kfuncs.h"
-> > > > > > >    #include "bpf_tracing_net.h"
-> > > > > > >    @@ -144,6 +145,38 @@ int ip6gretap_get_tunnel(struct __sk_buff *skb)
-> > > > > > >        return TC_ACT_OK;
-> > > > > > >    }
-> > > > > > >    +#define BPF_CORE_WRITE_BITFIELD(s, field, new_val) ({            \
-> > > > > > > +    void *p = (void *)s + __CORE_RELO(s, field, BYTE_OFFSET);    \
-> > > > > > > +    unsigned byte_size = __CORE_RELO(s, field, BYTE_SIZE);        \
-> > > > > > > +    unsigned lshift = __CORE_RELO(s, field, LSHIFT_U64); \
-> > > > > > > +    unsigned rshift = __CORE_RELO(s, field, RSHIFT_U64); \
-> > > > > > > +    unsigned bit_size = (rshift - lshift);                \
-> > > > > > > +    unsigned long long nval, val, hi, lo;                \
-> > > > > > > +                                    \
-> > > > > > > +    asm volatile("" : "=r"(p) : "0"(p));                \
-> > > > > > Use asm volatile("" : "+r"(p)) ?
-> > > > > > 
-> > > > > > > +                                    \
-> > > > > > > +    switch (byte_size) {                        \
-> > > > > > > +    case 1: val = *(unsigned char *)p; break;            \
-> > > > > > > +    case 2: val = *(unsigned short *)p; break;            \
-> > > > > > > +    case 4: val = *(unsigned int *)p; break;            \
-> > > > > > > +    case 8: val = *(unsigned long long *)p; break;            \
-> > > > > > > +    }                                \
-> > > > > > > +    hi = val >> (bit_size + rshift);                \
-> > > > > > > +    hi <<= bit_size + rshift;                    \
-> > > > > > > +    lo = val << (bit_size + lshift);                \
-> > > > > > > +    lo >>= bit_size + lshift;                    \
-> > > > > > > +    nval = new_val;                            \
-> > > > > > > +    nval <<= lshift;                        \
-> > > > > > > +    nval >>= rshift;                        \
-> > > > > > > +    val = hi | nval | lo;                        \
-> > > > > > > +    switch (byte_size) {                        \
-> > > > > > > +    case 1: *(unsigned char *)p      = val; break;            \
-> > > > > > > +    case 2: *(unsigned short *)p     = val; break;            \
-> > > > > > > +    case 4: *(unsigned int *)p       = val; break;            \
-> > > > > > > +    case 8: *(unsigned long long *)p = val; break;            \
-> > > > > > > +    }                                \
-> > > > > > > +})
-> > > > > > I think this should be put in libbpf public header files but not sure
-> > > > > > where to put it. bpf_core_read.h although it is core write?
-> > > > > > 
-> > > > > > But on the other hand, this is a uapi struct bitfield write,
-> > > > > > strictly speaking, CORE write is really unnecessary here. It
-> > > > > > would be great if we can relieve users from dealing with
-> > > > > > such unnecessary CORE writes. In that sense, for this particular
-> > > > > > case, I would prefer rewriting the code by using byte-level
-> > > > > > stores...
-> > > > > or preserve_static_offset to clearly mean to undo bitfield CORE ...
-> > > > Ok, I will do byte-level rewrite for next revision.
-> > > [...]
-> > > 
-> > > This patch seems to work: https://pastes.dxuuu.xyz/0glrf9 .
-> > > 
-> > > But I don't think it's very pretty. Also I'm seeing on the internet that
-> > > people are saying the exact layout of bitfields is compiler dependent.
-> > 
-> > Any reference for this (exact layout of bitfields is compiler dependent)?
-> > 
-> > > So I am wondering if these byte sized writes are correct. For that
-> > > matter, I am wondering how the GCC generated bitfield accesses line up
-> > > with clang generated BPF bytecode. Or why uapi contains a bitfield.
-> > 
+On Tue, 2023-11-28 at 10:13 -0600, Daniel Xu wrote:
+[...]
 > > One thing for sure is memory layout of bitfields should be the same
 > > for both clang and gcc as it is determined by C standard. Register
 > > representation and how to manipulate could be different for different
 > > compilers.
-> 
+>=20
 > I was reading this thread:
 > https://github.com/Lora-net/LoRaMac-node/issues/697. It's obviously not
 > authoritative, but they sure sound confident!
-> 
+>=20
 > I think I've also heard it before a long time ago when I was working on
 > adding bitfield support to bpftrace.
+>=20
+>=20
+> [...]
 
-Wikipedia [0] also claims this:
+Here is a citation from ISO/IEC 9899:201x (C11 standard) =C2=A76.7.2.1
+(Structure and union specifiers), paragraph 11 (page 114 in my pdf):
 
-        The layout of bit fields in a C struct is
-        implementation-defined. For behavior that remains predictable
-        across compilers, it may be preferable to emulate bit fields
-        with a primitive and bit operators:  
-
-[0]: https://en.wikipedia.org/wiki/Bit_field#C_programming_language
+> An implementation may allocate any addressable storage unit large
+> enough to hold a bit- field. If enough space remains, a bit-field
+> that immediately follows another bit-field in a structure shall be
+> packed into adjacent bits of the same unit. If insufficient space
+> remains, whether a bit-field that does not fit is put into the next
+> unit or overlaps adjacent units is implementation-defined. The order
+> of allocation of bit-fields within a unit (high-order to low-order
+> or low-order to high-order) is implementation-defined. The alignment
+> of the addressable storage unit is unspecified.
 
