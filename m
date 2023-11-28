@@ -1,324 +1,221 @@
-Return-Path: <linux-kselftest+bounces-691-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-692-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC3A97FB057
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Nov 2023 04:09:19 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF2FC7FB0CD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Nov 2023 05:06:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CD93C1C20B40
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Nov 2023 03:09:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 31FF1B20FCB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Nov 2023 04:06:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F0046AB5;
-	Tue, 28 Nov 2023 03:09:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EE97DF54;
+	Tue, 28 Nov 2023 04:06:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ve9rydiA"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="RPyOjSsl"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EA05138;
-	Mon, 27 Nov 2023 19:09:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701140952; x=1732676952;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=KR+7lxX1yjeOgSzvZ4SVrJjylQn8p9U0JLCmKdZOsiA=;
-  b=Ve9rydiANr22ETAjwSzfMgszxMMJyeikuaDA8EDnHUOx8CqYw4Byy9az
-   ldk/1hY9LzXPZc8DOahwzv3+9U5Z97oUYJz9+3rGhPNE2LYppK+XVJIa0
-   dYIxOtgnxWLrict5CcsISBWJ86h0uvDSZVJXF91jCD8I26GCDz0huWglW
-   3vN8pO5N2LUF+41tehfYCYi7/cImKYw00QP3tatYQK1uWq+vbImFM411I
-   nyYT3kC9Hmogx6elIN2qmV6ALexZyP+IrbX18d0Lp2SZwGLRn8qgDGCnZ
-   rlXouucm5JTN+TlAhOm54Q9zYZMo6byKau3zpiIzBuSQn7iiXL0uAvcVO
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10907"; a="459342539"
-X-IronPort-AV: E=Sophos;i="6.04,232,1695711600"; 
-   d="scan'208";a="459342539"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2023 19:09:11 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.04,232,1695711600"; 
-   d="scan'208";a="9985682"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmviesa002.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 27 Nov 2023 19:09:11 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34; Mon, 27 Nov 2023 19:09:10 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.34 via Frontend Transport; Mon, 27 Nov 2023 19:09:10 -0800
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.40) by
- edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.34; Mon, 27 Nov 2023 19:09:10 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VaF8BNFcdIK5M2rUExNRagXsp4EAYqtkfvlVJ7RZpGML0YqjeW+SFWrrcRPeKC8Kz3l3zfL8yx8G4vZiRLyNMcHoYiUdfD+ttys4uEHj6joDHZdpRMJOsMu7EeQPqwdo8DtKP4CiTtj1vxiwnKyPeHU25eux6X6rO0qvFNx07RiXAlB2zc2yCinIaJT3Hjn9n0sbdwgA3sJvDSHym4ktmXvhb6Go4yKeckJKwIS+ExmRlxQk5e7Q6MIJQPYVXwqSCkwPb2U2vhu9q4BBoewTY3qdFvUeQQNWfAUgfzWd1oOG7suOQk+hsuyNzcR7mfPS5AmipK6W32dY8QmZ84bsgw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=zl/FJBZXuBtkx9Vd0he378btII5AE5z7PSSPCa3OCNM=;
- b=m0D/4phYWZXevIuZZa/gJKZIkh8umrsJuIzhS3/BDl1PUYuRa21o0gp++yVinJhuU6ccsxxnpiUB0TlMn/W6fS1B8PdJOBGBykMEQ/XlExeplvkwabsByb3/PETr29wLZe9d9QzXY/68RaDJXbaaPy9OPObJAVGusQ2euBucwfxnSpFsheqlQDEHBc1cc1ed1kCJmJnQICnElJ/Fnh596JojDAbKSmivOKPzAXO7i1s4adUwK3SZ14ykphiiz4k2SkYJoNgxKWVJ21qtpZ0mmRZ9TEJtg8VCy8tw+dOv0ZWVyz+pOsHQVAoy00b69aGp8p1OWpvvEa+ifK6TobNzsQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DS0PR11MB7529.namprd11.prod.outlook.com (2603:10b6:8:141::20)
- by SJ2PR11MB8587.namprd11.prod.outlook.com (2603:10b6:a03:568::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.18; Tue, 28 Nov
- 2023 03:09:08 +0000
-Received: from DS0PR11MB7529.namprd11.prod.outlook.com
- ([fe80::e4ae:3948:1f55:547d]) by DS0PR11MB7529.namprd11.prod.outlook.com
- ([fe80::e4ae:3948:1f55:547d%5]) with mapi id 15.20.7025.022; Tue, 28 Nov 2023
- 03:09:08 +0000
-Message-ID: <88353789-6b37-44ca-aa21-23d27fab37ee@intel.com>
-Date: Tue, 28 Nov 2023 11:11:37 +0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/3] vfio: Report PASID capability via VFIO_DEVICE_FEATURE
- ioctl
-Content-Language: en-US
-To: "Duan, Zhenzhong" <zhenzhong.duan@intel.com>, "joro@8bytes.org"
-	<joro@8bytes.org>, "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-	"jgg@nvidia.com" <jgg@nvidia.com>, "Tian, Kevin" <kevin.tian@intel.com>,
-	"robin.murphy@arm.com" <robin.murphy@arm.com>, "baolu.lu@linux.intel.com"
-	<baolu.lu@linux.intel.com>
-CC: "cohuck@redhat.com" <cohuck@redhat.com>, "eric.auger@redhat.com"
-	<eric.auger@redhat.com>, "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
-	"kvm@vger.kernel.org" <kvm@vger.kernel.org>, "mjrosato@linux.ibm.com"
-	<mjrosato@linux.ibm.com>, "chao.p.peng@linux.intel.com"
-	<chao.p.peng@linux.intel.com>, "yi.y.sun@linux.intel.com"
-	<yi.y.sun@linux.intel.com>, "peterx@redhat.com" <peterx@redhat.com>,
-	"jasowang@redhat.com" <jasowang@redhat.com>,
-	"shameerali.kolothum.thodi@huawei.com"
-	<shameerali.kolothum.thodi@huawei.com>, "lulu@redhat.com" <lulu@redhat.com>,
-	"suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-	"iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"joao.m.martins@oracle.com" <joao.m.martins@oracle.com>, "Zeng, Xin"
-	<xin.zeng@intel.com>, "Zhao, Yan Y" <yan.y.zhao@intel.com>
-References: <20231127063909.129153-1-yi.l.liu@intel.com>
- <20231127063909.129153-4-yi.l.liu@intel.com>
- <SJ0PR11MB6744DC9B7C7D0E4122F224FD92BDA@SJ0PR11MB6744.namprd11.prod.outlook.com>
-From: Yi Liu <yi.l.liu@intel.com>
-In-Reply-To: <SJ0PR11MB6744DC9B7C7D0E4122F224FD92BDA@SJ0PR11MB6744.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SI2PR02CA0040.apcprd02.prod.outlook.com
- (2603:1096:4:196::6) To DS0PR11MB7529.namprd11.prod.outlook.com
- (2603:10b6:8:141::20)
+Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A35ED5F
+	for <linux-kselftest@vger.kernel.org>; Mon, 27 Nov 2023 20:06:14 -0800 (PST)
+Message-ID: <f68c01d6-bf6b-4b76-8b20-53e9f4a61fcd@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1701144373;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hCB+Tnyjl/lcxIYlcCvvwZQa4hXLluU5PYVE5GOSw70=;
+	b=RPyOjSslSqXufqb2RcMVQZndE8KliOKF1eVOVbP5IFrliwhRUVgf0GqNx7IeMI6fvTjqPP
+	XiHnLJlArI1wx3nI4OjsWwft97gCu/JKzfN/qBUBYFGqV53KIMaWNZHc9FRN4LGaucizNS
+	qBCFMpVRgiAutrTogxxUsoG/7+02+ZI=
+Date: Mon, 27 Nov 2023 20:06:01 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR11MB7529:EE_|SJ2PR11MB8587:EE_
-X-MS-Office365-Filtering-Correlation-Id: c7047d7f-f32c-498a-1296-08dbefbf6285
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YZVk3fb9Ol/HRYOq35twO1ZgNwyahBJfxRVCKGYYZRqdnYUBTj9rkl6JJXrHYYvfq1c1UW4z4MLOGj3uckV3OH4vocM94fB2nSuO5Xib5SGJiBMZ2F6BzU71QV1M0xazTgNwgQ5/3/KtwIm+rWiwbdQJt+c8YX+beOujJSgVyvTvIEwd9BE9zehSmswlqNB2Jd9fF3XamHbS8OsX1o+JWSJdneaeNQTvo28YKmpOVVmZuW7zVZG7QnJ71Bx3J10QxO5+IO/upfYkZs3hxOZEJv/qpOWsLHi+BnUXLhlLoJNko8TKOpOCUIG5Xa1H7zkyekszoPZXjIDPpuugi1R9PLiYo9k5gS3OGtxmZEZs186lhA2vsCwuvh9JyGW2M7Zn7r4AHirzusOVG41GMtlfevKV9rHUxG4YJxQgs5zwyGuhcGVcEq4GM/gnUkXQoOiAqGLxHxN+kBPvYjUJabAjnwS1UGZTsl/Ww6COD0P9wTISYsMcso8mDlqsourlzv8tFSWXOEUqk1MDqVgyp2WhJBon5hGAtsJL4vvo/lNjeQzOhUHhjT/4Tc1f3B52BOkXQcPA1xP6zoiKe20khdtsb/OJthz++ltBUsso+MQXzM1B2AAbOiWz1v4rYl/kOlN9DmEH/W8Kpzzy24tPTFjQDA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB7529.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(346002)(366004)(136003)(39860400002)(376002)(230922051799003)(1800799012)(64100799003)(186009)(451199024)(4326008)(41300700001)(2906002)(8936002)(8676002)(66946007)(66476007)(54906003)(2616005)(478600001)(7416002)(53546011)(5660300002)(6486002)(6666004)(6506007)(6512007)(31686004)(26005)(83380400001)(316002)(110136005)(66556008)(38100700002)(31696002)(86362001)(82960400001)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eCs2WUpocC9tS0ZrckxkL29RSlVmZ09YSlZWcmZDWjQ0TFBxOWFTT2lRYWpu?=
- =?utf-8?B?RVN4STg1SWthT3VCVmlzVG1ra1FaWkt5bkg5cUVXU3FPTGFGOFpYNWxUZkxF?=
- =?utf-8?B?MGE4NHBJT0tkMk1zZUVraWhTdTQxb2tqNE9tb0lkRU5sRUdqTUFjbEFQYWZQ?=
- =?utf-8?B?bHB5QjdxczUxWUl2cFErUlVmUU9nazZXU1dEYjJGeFdXY2RtcGVpamFZL2tp?=
- =?utf-8?B?bnQvL2FIbU53NDM0VEY1eHR5cjdpWWpUdXJBQjh5MHhxcnNJVXRkNlM1engx?=
- =?utf-8?B?bGNBM1o3ZjVKaVM1YThaS0hMOWJmYUhPZUZUNEdZTWdVYkhJcVFWalpiQTU2?=
- =?utf-8?B?RGZRRmJUa3IvNkhxK1oyaWh2Nk56RVpScFR1Z05xNHR4QTRrUDRGdnNBSzMv?=
- =?utf-8?B?QlZFdnBOVXYxMGxuaHhpTjIyd0RtVlR0NHd6UXRTQW43a1Z6OWdBY2R2VGJo?=
- =?utf-8?B?bWVxd3Y4cVIzdS9qbnJiekFZNGwwRGsweXZpaGNEN01zNWJzVGhIODNNTU9D?=
- =?utf-8?B?eGVxY2RZSjllY0U5QVhpRTRORm5xTW5pbTVwNHkvc1ZNVGNyVGM2QzRUb2lz?=
- =?utf-8?B?a29wOXI4OHVjS0pHcUhVMmRCaDdHZGh4S0t6M1FodlpnYjBCQ21DMnFsQlNo?=
- =?utf-8?B?bnFBaU0vSlFkSm5lbHhuQ2pGeXZWVFJxZmliSitLUis2aWdwa3dBc0cyNzl2?=
- =?utf-8?B?bytXMzNvTXpQWm0yaitka0FoTkdLREhsYWhVNzE3OXRjOTZjczR3SjF0SC8r?=
- =?utf-8?B?eTg3SlhpWWhNS2NCaFR1WGFFSzQ5WVVCcXpSTWNJK1lxSTZPV2pCekwrbkpv?=
- =?utf-8?B?OGJheldOcWtmcy9wU2lFSmtIZlVWUFN1aGMwZUNkUzFxUzdLUFNtd243NlNG?=
- =?utf-8?B?czlQQjlqZDI4bjRLeTBYZkpjVkhueGd3MWUvUHRUTm9NRWJDZzlxMTBZQVNx?=
- =?utf-8?B?dlNtQ1hHcDZqcmZVMDNLcE1uYkg4UDZ2WnhReHdRb1FHUHlxQzhheTRENVhy?=
- =?utf-8?B?YnlHdUU3dys1SkVUSDBBeVFDV2NNaENEcTNyQVNnVERaMUNQenRWVHdvcTZZ?=
- =?utf-8?B?MVhCNE5zOGZkZGttTnN0YkdVa2dUNmFoMzBDWEVQRXZKUUJOWDgwSzMwQXc2?=
- =?utf-8?B?ZVZKajIvYWtYU3R4em9HZU5WcUdvNWZ6SjFtUU42YUlXTDZMSWxzS2xMa0lz?=
- =?utf-8?B?ZlU0YWdiMDI1alk5M0xWVXNnbUw3cTd4MFBmS2FVcWhOenFYV3I5QnNjQ1Ey?=
- =?utf-8?B?d1dCZ1pSdlFMSU5yZ1o2L2ZvZmUyVGJOQW4zclRLLzZnbExkNXJyRUcvT1k0?=
- =?utf-8?B?UmM4cWVnVGUrMnJvc3RpbU9zWTVjbVl6VlVmRjJrOFJUWWFxWGNBaFdTdE1x?=
- =?utf-8?B?a24zMHFoa281MVVwM1B2VkV3MklZYy9iWWxTc09iRnQyNlJUa2N4ZTg5d1o5?=
- =?utf-8?B?UmN6SlRDeEM2ZGJLLy9aTlVxM2FteDY2YjFwS1Mwd28rdUVuTWRPa25KUEZa?=
- =?utf-8?B?VmdsNW5DUStHYy9UQ2VYZEpSWThvdkQ1SWh1c1YzY2gwVFYvZ1FZWUNwWjJo?=
- =?utf-8?B?K2Y2YVk5ZVNsOHNkK0ROMXBPRmJNTUdiNzhwblQvcitaMWVZT0MzSS94ZFVL?=
- =?utf-8?B?RllBcVhBcDlRQ1hiNjFYVWxpalpzV3pRaUVuK1VpdnR5ZWRHWVZYQkl4Nkg4?=
- =?utf-8?B?cWIyMm1ha3pvVnFUeDB3Y1g5TFU0VHY5anhKTC9TanVJKy9SSVZyTGVSYW5z?=
- =?utf-8?B?MFdReDd3bUdYOExlN3pvNm1xRUhkSllSSGJCMmxaejZNbjhCWDkzOXJEMFdi?=
- =?utf-8?B?ZjNpRzRnaXpoc1VKUzJJUkVUbGZrc3c4YUJlUFc2RlMyVXJ2YlB5S2RGNFRW?=
- =?utf-8?B?cGs4Uk5ZYnhoS3dTK3FneTRtcHNzTFdnT3ZGSkJ6Z0padzdya0liYUhMUWxm?=
- =?utf-8?B?cWJUMzlIMnErTGNBVFBkSkcvbmtVZjlBM3VFYWFiWUs2ektjeHZieDZ5dENn?=
- =?utf-8?B?UVlxVUtQMW1reFRTZGloSkh1LzVub0pVM1BjdlFjKzc0SHNRSUIrRHFoS3BD?=
- =?utf-8?B?aHk4MkRrcC9vZW5EU0ZWWmd3cEhIL0dIVU1MOXEwYjFBcXdvT2FlUUl0ZUlh?=
- =?utf-8?Q?i5WDiE6FmncG0PMU6A/qb1Bbe?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: c7047d7f-f32c-498a-1296-08dbefbf6285
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB7529.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Nov 2023 03:09:07.9688
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4pNCcYJDN/pfbmKOYtRmhWg8jiJD+Qi6Phi019fLNFic9Zcbh8ix0GMMFjuryLKxLO4RJmLTgFIbNPW5i4AqZA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR11MB8587
-X-OriginatorOrg: intel.com
+Subject: Re: [PATCH ipsec-next v1 6/7] bpf: selftests: test_tunnel: Disable
+ CO-RE relocations
+Content-Language: en-GB
+To: Daniel Xu <dxu@dxuuu.xyz>
+Cc: Eduard Zingerman <eddyz87@gmail.com>,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+ Steffen Klassert <steffen.klassert@secunet.com>, antony.antony@secunet.com,
+ Mykola Lysenko <mykolal@fb.com>, Martin KaFai Lau <martin.lau@linux.dev>,
+ Song Liu <song@kernel.org>, John Fastabend <john.fastabend@gmail.com>,
+ KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
+ Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+ bpf <bpf@vger.kernel.org>,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ LKML <linux-kernel@vger.kernel.org>, devel@linux-ipsec.org,
+ Network Development <netdev@vger.kernel.org>
+References: <391d524c496acc97a8801d8bea80976f58485810.1700676682.git.dxu@dxuuu.xyz>
+ <0f210cef-c6e9-41c1-9ba8-225f046435e5@linux.dev>
+ <CAADnVQ+sEsUyNYPeZyOf2PcCnxOvOqw4bUuAuMofCU14szTGvg@mail.gmail.com>
+ <3ec6c068-7f95-419a-a0ae-a901f95e4838@linux.dev>
+ <18e43cdf65e7ba0d8f6912364fbc5b08a6928b35.camel@gmail.com>
+ <uc5fv3keghefszuvono7aclgtjtgjnnia3i54ynejmyrs42ser@bwdpq5gmuvub>
+ <0535eb913f1a0c2d3c291478fde07e0aa2b333f1.camel@gmail.com>
+ <42f9bf0d-695a-412d-bea5-cb7036fa7418@linux.dev>
+ <a5a84482-13ef-47d8-bf07-8017060a5d64@linux.dev>
+ <xehp2qvy5cyaairbnfhem4hvbsl26blo4zzu7z6ywbp26jcwyn@hgp3v2q4ud7o>
+ <53jaqi72ef4gynyafxidl5veb54kfs7dttxezkarwg75t7szd4@cvfg5pc7pyum>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <53jaqi72ef4gynyafxidl5veb54kfs7dttxezkarwg75t7szd4@cvfg5pc7pyum>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On 2023/11/27 15:28, Duan, Zhenzhong wrote:
-> 
-> 
->> -----Original Message-----
->> From: Liu, Yi L <yi.l.liu@intel.com>
->> Sent: Monday, November 27, 2023 2:39 PM
->> Subject: [PATCH 3/3] vfio: Report PASID capability via VFIO_DEVICE_FEATURE
->> ioctl
->>
->> This reports the PASID capability data to userspace via VFIO_DEVICE_FEATURE,
->> hence userspace could probe PASID capability by it. This is a bit different
->> with other capabilities which are reported to userspace when the user reads
->> the device's PCI configuration space. There are two reasons for this.
->>
->> - First, Qemu by default exposes all available PCI capabilities in vfio-pci
->>    config space to the guest as read-only, so adding PASID capability in the
->>    vfio-pci config space will make it exposed to the guest automatically while
->>    an old Qemu doesn't really support it.
->>
->> - Second, PASID capability does not exit on VFs (instead shares the cap of
->>    the PF). Creating a virtual PASID capability in vfio-pci config space needs
->>    to find a hole to place it, but doing so may require device specific
->>    knowledge to avoid potential conflict with device specific registers like
->>    hiden bits in VF config space. It's simpler by moving this burden to the
->>    VMM instead of maintaining a quirk system in the kernel.
->>
->> Suggested-by: Alex Williamson <alex.williamson@redhat.com>
->> Signed-off-by: Yi Liu <yi.l.liu@intel.com>
->> ---
->> drivers/vfio/pci/vfio_pci_core.c | 47 ++++++++++++++++++++++++++++++++
->> include/uapi/linux/vfio.h        | 13 +++++++++
->> 2 files changed, 60 insertions(+)
->>
->> diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
->> index 1929103ee59a..8038aa45500e 100644
->> --- a/drivers/vfio/pci/vfio_pci_core.c
->> +++ b/drivers/vfio/pci/vfio_pci_core.c
->> @@ -1495,6 +1495,51 @@ static int vfio_pci_core_feature_token(struct
->> vfio_device *device, u32 flags,
->> 	return 0;
->> }
->>
->> +static int vfio_pci_core_feature_pasid(struct vfio_device *device, u32 flags,
->> +				       struct vfio_device_feature_pasid __user
->> *arg,
->> +				       size_t argsz)
->> +{
->> +	struct vfio_pci_core_device *vdev =
->> +		container_of(device, struct vfio_pci_core_device, vdev);
->> +	struct vfio_device_feature_pasid pasid = { 0 };
->> +	struct pci_dev *pdev = vdev->pdev;
->> +	u32 capabilities = 0;
->> +	int ret;
->> +
->> +	/* We do not support SET of the PASID capability */
->> +	ret = vfio_check_feature(flags, argsz, VFIO_DEVICE_FEATURE_GET,
->> +				 sizeof(pasid));
->> +	if (ret != 1)
->> +		return ret;
->> +
->> +	/*
->> +	 * Needs go to PF if the device is VF as VF shares its PF's
->> +	 * PASID Capability.
->> +	 */
->> +	if (pdev->is_virtfn)
->> +		pdev = pci_physfn(pdev);
->> +
->> +	if (!pdev->pasid_enabled)
->> +		goto out;
-> 
-> Does a PF bound to VFIO have pasid enabled by default?
 
-Today, host iommu driver (at least intel iommu driver) enables it in the
-time of device probe and seems not changed afterward. So yes, VFIO should
-see it if pasid is enabled.
+On 11/27/23 7:01 PM, Daniel Xu wrote:
+> On Mon, Nov 27, 2023 at 02:45:11PM -0600, Daniel Xu wrote:
+>> On Sun, Nov 26, 2023 at 09:53:04PM -0800, Yonghong Song wrote:
+>>> On 11/27/23 12:44 AM, Yonghong Song wrote:
+>>>> On 11/26/23 8:52 PM, Eduard Zingerman wrote:
+>>>>> On Sun, 2023-11-26 at 18:04 -0600, Daniel Xu wrote:
+>>>>> [...]
+>>>>>>> Tbh I'm not sure. This test passes with preserve_static_offset
+>>>>>>> because it suppresses preserve_access_index. In general clang
+>>>>>>> translates bitfield access to a set of IR statements like:
+>>>>>>>
+>>>>>>>     C:
+>>>>>>>       struct foo {
+>>>>>>>         unsigned _;
+>>>>>>>         unsigned a:1;
+>>>>>>>         ...
+>>>>>>>       };
+>>>>>>>       ... foo->a ...
+>>>>>>>
+>>>>>>>     IR:
+>>>>>>>       %a = getelementptr inbounds %struct.foo, ptr %0, i32 0, i32 1
+>>>>>>>       %bf.load = load i8, ptr %a, align 4
+>>>>>>>       %bf.clear = and i8 %bf.load, 1
+>>>>>>>       %bf.cast = zext i8 %bf.clear to i32
+>>>>>>>
+>>>>>>> With preserve_static_offset the getelementptr+load are replaced by a
+>>>>>>> single statement which is preserved as-is till code generation,
+>>>>>>> thus load with align 4 is preserved.
+>>>>>>>
+>>>>>>> On the other hand, I'm not sure that clang guarantees that load or
+>>>>>>> stores used for bitfield access would be always aligned according to
+>>>>>>> verifier expectations.
+>>>>>>>
+>>>>>>> I think we should check if there are some clang knobs that prevent
+>>>>>>> generation of unaligned memory access. I'll take a look.
+>>>>>> Is there a reason to prefer fixing in compiler? I'm not opposed to it,
+>>>>>> but the downside to compiler fix is it takes years to propagate and
+>>>>>> sprinkles ifdefs into the code.
+>>>>>>
+>>>>>> Would it be possible to have an analogue of BPF_CORE_READ_BITFIELD()?
+>>>>> Well, the contraption below passes verification, tunnel selftest
+>>>>> appears to work. I might have messed up some shifts in the macro,
+>>>>> though.
+>>>> I didn't test it. But from high level it should work.
+>>>>
+>>>>> Still, if clang would peek unlucky BYTE_{OFFSET,SIZE} for a particular
+>>>>> field access might be unaligned.
+>>>> clang should pick a sensible BYTE_SIZE/BYTE_OFFSET to meet
+>>>> alignment requirement. This is also required for BPF_CORE_READ_BITFIELD.
+>>>>
+>>>>> ---
+>>>>>
+>>>>> diff --git a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
+>>>>> b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
+>>>>> index 3065a716544d..41cd913ac7ff 100644
+>>>>> --- a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
+>>>>> +++ b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
+>>>>> @@ -9,6 +9,7 @@
+>>>>>    #include "vmlinux.h"
+>>>>>    #include <bpf/bpf_helpers.h>
+>>>>>    #include <bpf/bpf_endian.h>
+>>>>> +#include <bpf/bpf_core_read.h>
+>>>>>    #include "bpf_kfuncs.h"
+>>>>>    #include "bpf_tracing_net.h"
+>>>>>    @@ -144,6 +145,38 @@ int ip6gretap_get_tunnel(struct __sk_buff *skb)
+>>>>>        return TC_ACT_OK;
+>>>>>    }
+>>>>>    +#define BPF_CORE_WRITE_BITFIELD(s, field, new_val) ({            \
+>>>>> +    void *p = (void *)s + __CORE_RELO(s, field, BYTE_OFFSET);    \
+>>>>> +    unsigned byte_size = __CORE_RELO(s, field, BYTE_SIZE);        \
+>>>>> +    unsigned lshift = __CORE_RELO(s, field, LSHIFT_U64); \
+>>>>> +    unsigned rshift = __CORE_RELO(s, field, RSHIFT_U64); \
+>>>>> +    unsigned bit_size = (rshift - lshift);                \
+>>>>> +    unsigned long long nval, val, hi, lo;                \
+>>>>> +                                    \
+>>>>> +    asm volatile("" : "=r"(p) : "0"(p));                \
+>>>> Use asm volatile("" : "+r"(p)) ?
+>>>>
+>>>>> +                                    \
+>>>>> +    switch (byte_size) {                        \
+>>>>> +    case 1: val = *(unsigned char *)p; break;            \
+>>>>> +    case 2: val = *(unsigned short *)p; break;            \
+>>>>> +    case 4: val = *(unsigned int *)p; break;            \
+>>>>> +    case 8: val = *(unsigned long long *)p; break;            \
+>>>>> +    }                                \
+>>>>> +    hi = val >> (bit_size + rshift);                \
+>>>>> +    hi <<= bit_size + rshift;                    \
+>>>>> +    lo = val << (bit_size + lshift);                \
+>>>>> +    lo >>= bit_size + lshift;                    \
+>>>>> +    nval = new_val;                            \
+>>>>> +    nval <<= lshift;                        \
+>>>>> +    nval >>= rshift;                        \
+>>>>> +    val = hi | nval | lo;                        \
+>>>>> +    switch (byte_size) {                        \
+>>>>> +    case 1: *(unsigned char *)p      = val; break;            \
+>>>>> +    case 2: *(unsigned short *)p     = val; break;            \
+>>>>> +    case 4: *(unsigned int *)p       = val; break;            \
+>>>>> +    case 8: *(unsigned long long *)p = val; break;            \
+>>>>> +    }                                \
+>>>>> +})
+>>>> I think this should be put in libbpf public header files but not sure
+>>>> where to put it. bpf_core_read.h although it is core write?
+>>>>
+>>>> But on the other hand, this is a uapi struct bitfield write,
+>>>> strictly speaking, CORE write is really unnecessary here. It
+>>>> would be great if we can relieve users from dealing with
+>>>> such unnecessary CORE writes. In that sense, for this particular
+>>>> case, I would prefer rewriting the code by using byte-level
+>>>> stores...
+>>> or preserve_static_offset to clearly mean to undo bitfield CORE ...
+>> Ok, I will do byte-level rewrite for next revision.
+> [...]
+>
+> This patch seems to work: https://pastes.dxuuu.xyz/0glrf9 .
+>
+> But I don't think it's very pretty. Also I'm seeing on the internet that
+> people are saying the exact layout of bitfields is compiler dependent.
 
-> Isn't the guest kernel's responsibility to enable pasid cap of an assigned PF?
+Any reference for this (exact layout of bitfields is compiler dependent)?
 
-guest kernel should not have the capability to change host's pasid
-configuration. It can only write to its own vconfig emulated by
-hypervisor.
+> So I am wondering if these byte sized writes are correct. For that
+> matter, I am wondering how the GCC generated bitfield accesses line up
+> with clang generated BPF bytecode. Or why uapi contains a bitfield.
 
-> Thanks
-> Zhenzhong
-> 
->> +
->> +#ifdef CONFIG_PCI_PASID
->> +	pci_read_config_dword(pdev, pdev->pasid_cap + PCI_PASID_CAP,
->> +			      &capabilities);
->> +#endif
->> +
->> +	if (capabilities & PCI_PASID_CAP_EXEC)
->> +		pasid.capabilities |= VFIO_DEVICE_PASID_CAP_EXEC;
->> +	if (capabilities & PCI_PASID_CAP_PRIV)
->> +		pasid.capabilities |= VFIO_DEVICE_PASID_CAP_PRIV;
->> +
->> +	pasid.width = (capabilities >> 8) & 0x1f;
->> +
->> +out:
->> +	if (copy_to_user(arg, &pasid, sizeof(pasid)))
->> +		return -EFAULT;
->> +	return 0;
->> +}
->> +
->> int vfio_pci_core_ioctl_feature(struct vfio_device *device, u32 flags,
->> 				void __user *arg, size_t argsz)
->> {
->> @@ -1508,6 +1553,8 @@ int vfio_pci_core_ioctl_feature(struct vfio_device
->> *device, u32 flags,
->> 		return vfio_pci_core_pm_exit(device, flags, arg, argsz);
->> 	case VFIO_DEVICE_FEATURE_PCI_VF_TOKEN:
->> 		return vfio_pci_core_feature_token(device, flags, arg, argsz);
->> +	case VFIO_DEVICE_FEATURE_PASID:
->> +		return vfio_pci_core_feature_pasid(device, flags, arg, argsz);
->> 	default:
->> 		return -ENOTTY;
->> 	}
->> diff --git a/include/uapi/linux/vfio.h b/include/uapi/linux/vfio.h
->> index 495193629029..8326faf8622b 100644
->> --- a/include/uapi/linux/vfio.h
->> +++ b/include/uapi/linux/vfio.h
->> @@ -1512,6 +1512,19 @@ struct vfio_device_feature_bus_master {
->> };
->> #define VFIO_DEVICE_FEATURE_BUS_MASTER 10
->>
->> +/**
->> + * Upon VFIO_DEVICE_FEATURE_GET, return the PASID capability for the device.
->> + * Zero width means no support for PASID.
->> + */
->> +struct vfio_device_feature_pasid {
->> +	__u16 capabilities;
->> +#define VFIO_DEVICE_PASID_CAP_EXEC	(1 << 0)
->> +#define VFIO_DEVICE_PASID_CAP_PRIV	(1 << 1)
->> +	__u8 width;
->> +	__u8 __reserved;
->> +};
->> +#define VFIO_DEVICE_FEATURE_PASID 11
->> +
->> /* -------- API for Type1 VFIO IOMMU -------- */
->>
->> /**
->> --
->> 2.34.1
-> 
+One thing for sure is memory layout of bitfields should be the same
+for both clang and gcc as it is determined by C standard. Register
+representation and how to manipulate could be different for different
+compilers.
 
--- 
-Regards,
-Yi Liu
+>
+> WDYT, should I send up v2 with this or should I do one of the other
+> approaches in this thread?
+
+Daniel, look at your patch, since we need to do CORE_READ for
+those bitfields any way, I think Eduard's patch with
+BPF_CORE_WRITE_BITFIELD does make sense and it also makes code
+easy to understand. Could you take Eduard's patch for now?
+Whether and where to put BPF_CORE_WRITE_BITFIELD macros
+can be decided later.
+
+>
+> I am ok with any of the approaches.
+>
+> Thanks,
+> Daniel
+>
 
