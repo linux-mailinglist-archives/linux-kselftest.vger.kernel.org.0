@@ -1,123 +1,147 @@
-Return-Path: <linux-kselftest+bounces-731-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-732-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4227F7FBFD5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Nov 2023 17:59:06 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED5F37FC0B0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Nov 2023 18:54:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BE5821F20DD4
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Nov 2023 16:59:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A9087282B2D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Nov 2023 17:54:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E30FB21A1A;
-	Tue, 28 Nov 2023 16:59:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4E865B5B4;
+	Tue, 28 Nov 2023 17:54:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YvLWilmz"
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="FgQ9rBAe";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="wGBILsJv"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2072DD6;
-	Tue, 28 Nov 2023 08:58:59 -0800 (PST)
-Received: by mail-io1-xd30.google.com with SMTP id ca18e2360f4ac-7b34c5d7ecdso207893539f.0;
-        Tue, 28 Nov 2023 08:58:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701190738; x=1701795538; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2fI/LznoECWCqcF0gUCTmOAEWgm3bqBRaqsoNP6NJb0=;
-        b=YvLWilmzQsaW2jRY1xeZ/WOZF4rqXq7SLpyW9iD4htL5d2Zu98YcjsWprbzRJawKWN
-         4UVTEsH6N3gsob3hUFlHGqo4oOxMBJ3bcyCZqR/yswAmyxtyCLr1eA/MshAL3tTrq/VI
-         VY3/UhGFSc3XvSpMrsXLQ9SNOFN/iGi/PuJZb59I2cFbUj5WoCaNEUUIul8X3z8TWLqi
-         KbAz7jXSBVaAO/V/v5LC1saKUuXhCsJi0/RFEZKVwkp47CbRiupkCfO52O5vT/CFXH2O
-         PFGxlLWsklWCud8FjvUwPgC7hllQo3mnQWVgc8pyqMXV2l0dzyp69UYLr9xYQU737ai9
-         aUmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701190738; x=1701795538;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2fI/LznoECWCqcF0gUCTmOAEWgm3bqBRaqsoNP6NJb0=;
-        b=l9qmxeGifIBhft6s/wgIP5B7LPyq02vvT8Eaj97L7DCNixfnpxZakxZ/Y9VtDseczF
-         Wa6iw6GgoEvjTuNXKeGA+mJBfFmGRN8djDlUuhqrepHko+VBvomNTECmYy2s45y1lWnn
-         AJK2sMZ5CFcS9Zz7UNAC3QVKaNWdpHAQ6/9RTN3SvHkbJbOLCO/Vjr9/aBNE6u2EEqHR
-         O30hWJx12ps9WGg3gSKhowps4xldGPPMZpqoVVtZXFfZ86Z5sAsc26X1HBlIbiBi1Sn2
-         dh+Q76A7sR2gpATv9cHRAMY6j5XRc9pZ+hXVKDXEUloAGZGFKCOJeGDuYHy6D9Z39xoS
-         xuCg==
-X-Gm-Message-State: AOJu0YxVyaZuPvlg8OdVnqLz2o1gZg/yoH3mAPzEfodFf+IoIyJvIauJ
-	0MT+INnmbIrbQjjrUKLquPhMfCttNs8IDS9GpIM=
-X-Google-Smtp-Source: AGHT+IHnsz1sdC0tq9NnxI0ceiNpHLvCP/gAZY/typAxLv95pCgArj+vZFNUBd3rEY5RkZ9BfVXhaODco8rR03ngRmQ=
-X-Received: by 2002:a6b:6d18:0:b0:79f:99b6:63 with SMTP id a24-20020a6b6d18000000b0079f99b60063mr13394697iod.9.1701190738383;
- Tue, 28 Nov 2023 08:58:58 -0800 (PST)
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 306541710;
+	Tue, 28 Nov 2023 09:54:50 -0800 (PST)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+	by mailout.nyi.internal (Postfix) with ESMTP id 412505C009E;
+	Tue, 28 Nov 2023 12:54:49 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Tue, 28 Nov 2023 12:54:49 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+	:cc:content-transfer-encoding:content-type:date:date:from:from
+	:in-reply-to:message-id:mime-version:reply-to:sender:subject
+	:subject:to:to; s=fm3; t=1701194089; x=1701280489; bh=FjP7ejQHFE
+	0z5ThOzRjLFxTQyIGpyVo9B05Q7w9eZpE=; b=FgQ9rBAeNZ0btzk/wx2ncsWp2b
+	BPP5CDQ4I/RCQbLrznq924GuHcyGIMqctjjpp6uoWU9q8UjoxE+xxIYQddVUchvY
+	6YZjofdT/M6Hq0TuisenRa6IpRtLTo2x1sQ3lOZ/UVn3s8wQ87wTXREV4I0t8HYp
+	nTccLEz/aqTV1OJhj4khRZegn3sQsquOXqboNoyBxWrcQjpIvlkOG8/PQqBXoU0o
+	s1FK5XUPvg6oK+BmAXg6KzSdknDtAgDz8LSLEYH6dh+/l/VHxnXoMNhOBHOt5ce4
+	cHanTViTMcbo/6t9hN4MZxsNc7P13zfoVs/FDgYJZTAlpWEgdUKVia9eouxA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:message-id:mime-version:reply-to:sender:subject
+	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+	:x-sasl-enc; s=fm1; t=1701194089; x=1701280489; bh=FjP7ejQHFE0z5
+	ThOzRjLFxTQyIGpyVo9B05Q7w9eZpE=; b=wGBILsJv5W9f56TAXM2r7CI+wXMWD
+	JvFjad2ohIJAt/u1QplnXAhblqkIdF1VR4O1V6QZLtDF64ItOs3S5QsOj/gVZ3sF
+	GfpCk+cTuRpQ5PrsYBTjZOcfFnEKNK4E8mKEJf6SkK0iHC7wweeHiK2xiJqkAhE0
+	uIG5GtXnd5mPvDOcR/pG8Dsz/6qiH2FqB7eBrE8vo+omtFPuVKiDNxloJKpe+16A
+	tReIJafyFoXBS+bQFZP1vT9hOeZuIg/y6wOZZ6/uUa1/NptiZwA30ahA5Wdapad7
+	XInR5E0ftzStOY/gRpYK+aYDgiiwdmurfuH0EijVrX9Ahz0hndEnJvvRA==
+X-ME-Sender: <xms:aClmZdV7vjRDSM3dt7DkssVxQwZmtBinoVL74hKtUn-ZPxmyVN-Pdg>
+    <xme:aClmZdkzrr52FbHDzFLmL5QeTST_QswrhwZ01orZq8xpiGEPzc8x8GaYRMuvHPfVZ
+    nf2hiXEtqAserWoAA>
+X-ME-Received: <xmr:aClmZZZhLaSaM1LBCFyRU2Q0gJM4NSy3pDAmY4ZCa2AFWWgO_vTfoeEN4hxqkvDW-VE1ArvBn-w1vfiUdxu1ZiZk5Ox_3cZ1k9A5brf--IoKsw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudeifedguddthecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecufghrlhcuvffnffculddvfedmnecujfgurhephf
+    fvvefufffkofgggfestdekredtredttdenucfhrhhomhepffgrnhhivghlucgiuhcuoegu
+    gihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpeeikeehudegteevuddthf
+    eilefhjefgueeuueffveevheeggfeufeejfeeuudekfeenucffohhmrghinhepihgvthhf
+    rdhorhhgpdhgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
+    grmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiii
+X-ME-Proxy: <xmx:aClmZQW9Kvw_AMEAedzkZ0LSJsdAnmhXAOHwwaO2vGMj01BwffF50w>
+    <xmx:aClmZXm95JbzU-5jv4sLIMJIpKtCv46YIAxoC0HnF0sBIt5kJMCN7A>
+    <xmx:aClmZdf-Edw2xh3eU1gk7PujVulbGZjoXOox7RjzA9UR9Jeybkdjjw>
+    <xmx:aSlmZQgprf94_masvagbmK85pqD_LJYUEmm7PcBXA-TKlBL4upIzMw>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 28 Nov 2023 12:54:47 -0500 (EST)
+From: Daniel Xu <dxu@dxuuu.xyz>
+To: netdev@vger.kernel.org,
+	llvm@lists.linux.dev,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	steffen.klassert@secunet.com,
+	antony.antony@secunet.com,
+	alexei.starovoitov@gmail.com,
+	yonghong.song@linux.dev,
+	eddyz87@gmail.com
+Cc: devel@linux-ipsec.org
+Subject: [PATCH ipsec-next v2 0/6] Add bpf_xdp_get_xfrm_state() kfunc
+Date: Tue, 28 Nov 2023 10:54:20 -0700
+Message-ID: <cover.1701193577.git.dxu@dxuuu.xyz>
+X-Mailer: git-send-email 2.42.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231127193703.1980089-1-nphamcs@gmail.com> <20231127193703.1980089-3-nphamcs@gmail.com>
- <ZWW1IG0Mv3r0m4mp@tiehlicka> <CAKEwX=OGtkqWys9VM9EBScoCdAjSdfPjEkvoY7_u9udDZBFFpw@mail.gmail.com>
-In-Reply-To: <CAKEwX=OGtkqWys9VM9EBScoCdAjSdfPjEkvoY7_u9udDZBFFpw@mail.gmail.com>
-From: Nhat Pham <nphamcs@gmail.com>
-Date: Tue, 28 Nov 2023 08:58:47 -0800
-Message-ID: <CAKEwX=PnjGwSCceZw5H_hPUx9cxAqoUVw2QnAX=q3wVbHTpeAQ@mail.gmail.com>
-Subject: Re: [PATCH v6 2/6] memcontrol: allows mem_cgroup_iter() to check for onlineness
-To: Michal Hocko <mhocko@suse.com>
-Cc: akpm@linux-foundation.org, hannes@cmpxchg.org, cerasuolodomenico@gmail.com, 
-	yosryahmed@google.com, sjenning@redhat.com, ddstreet@ieee.org, 
-	vitaly.wool@konsulko.com, roman.gushchin@linux.dev, shakeelb@google.com, 
-	muchun.song@linux.dev, chrisl@kernel.org, linux-mm@kvack.org, 
-	kernel-team@meta.com, linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, shuah@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Tue, Nov 28, 2023 at 8:53=E2=80=AFAM Nhat Pham <nphamcs@gmail.com> wrote=
-:
->
-> On Tue, Nov 28, 2023 at 1:38=E2=80=AFAM Michal Hocko <mhocko@suse.com> wr=
-ote:
-> >
-> > On Mon 27-11-23 11:36:59, Nhat Pham wrote:
-> > > The new zswap writeback scheme requires an online-only memcg hierarch=
-y
-> > > traversal. Add a new parameter to mem_cgroup_iter() to check for
-> > > onlineness before returning.
-> >
-> > Why is this needed?
->
-> For context, in patch 3 of this series, Domenico and I are adding
-> cgroup-aware LRU to zswap, so that we can perform workload-specific
-> zswap writeback. When the reclaim happens due to the global zswap
-> limit being hit, a cgroup is selected by the mem_cgroup_iter(), and
-> the last one selected is saved in the zswap pool (so that the
-> iteration can follow from there next time the limit is hit).
->
-> However, one problem with this scheme is we will be pinning the
-> reference to that saved memcg until the next global reclaim attempt,
-> which could prevent it from being killed for quite some time after it
-> has been offlined. Johannes, Yosry, and I discussed a couple of
-> approaches for a while, and decided to add a callback that would
-> release the reference held by the zswap pool when the memcg is
-> offlined, and the zswap pool will obtain the reference to the next
-> online memcg in the traversal (or at least one that has not had the
-> zswap-memcg-release-callback run on it yet).
+This patchset adds two kfunc helpers, bpf_xdp_get_xfrm_state() and
+bpf_xdp_xfrm_state_release() that wrap xfrm_state_lookup() and
+xfrm_state_put(). The intent is to support software RSS (via XDP) for
+the ongoing/upcoming ipsec pcpu work [0]. Recent experiments performed
+on (hopefully) reproducible AWS testbeds indicate that single tunnel
+pcpu ipsec can reach line rate on 100G ENA nics.
 
-I forgot to add, but as Andrew had pointed out, this is quite a niche
-use case (well only zswap is using it specifically). So I have decided
-to keep the original behavior for mem_cgroup_iter(), and added a
-special mem_cgroup_iter_online() that does this. All the current
-mem_cgroup_iter() users should not see any change. This is already in
-v7 of this patch series:
+Note this patchset only tests/shows generic xfrm_state access. The
+"secret sauce" (if you can really even call it that) involves accessing
+a soon-to-be-upstreamed pcpu_num field in xfrm_state. Early example is
+available here [1].
 
-https://lore.kernel.org/linux-mm/20231127234600.2971029-3-nphamcs@gmail.com=
-/
+[0]: https://datatracker.ietf.org/doc/draft-ietf-ipsecme-multi-sa-performance/03/
+[1]: https://github.com/danobi/xdp-tools/blob/e89a1c617aba3b50d990f779357d6ce2863ecb27/xdp-bench/xdp_redirect_cpumap.bpf.c#L385-L406
+
+Changes from v1:
+* Move xfrm tunnel tests to test_progs
+* Fix writing to opts->error when opts is invalid
+* Use __bpf_kfunc_start_defs()
+* Remove unused vxlanhdr definition
+* Add and use BPF_CORE_WRITE_BITFIELD() macro
+* Make series bisect clean
+
+Changes from RFCv2:
+* Rebased to ipsec-next
+* Fix netns leak
+
+Changes from RFCv1:
+* Add Antony's commit tags
+* Add KF_ACQUIRE and KF_RELEASE semantics
 
 
+Daniel Xu (6):
+  bpf: xfrm: Add bpf_xdp_get_xfrm_state() kfunc
+  bpf: xfrm: Add bpf_xdp_xfrm_state_release() kfunc
+  libbpf: Add BPF_CORE_WRITE_BITFIELD() macro
+  bpf: selftests: test_tunnel: Use vmlinux.h declarations
+  bpf: selftests: Move xfrm tunnel test to test_progs
+  bpf: xfrm: Add selftest for bpf_xdp_get_xfrm_state()
 
+ include/net/xfrm.h                            |   9 +
+ net/xfrm/Makefile                             |   1 +
+ net/xfrm/xfrm_policy.c                        |   2 +
+ net/xfrm/xfrm_state_bpf.c                     | 128 +++++++++++++++
+ tools/lib/bpf/bpf_core_read.h                 |  36 ++++
+ .../selftests/bpf/prog_tests/test_tunnel.c    | 155 ++++++++++++++++++
+ .../selftests/bpf/progs/bpf_tracing_net.h     |   1 +
+ .../selftests/bpf/progs/test_tunnel_kern.c    | 138 +++++++++-------
+ tools/testing/selftests/bpf/test_tunnel.sh    |  92 -----------
+ 9 files changed, 412 insertions(+), 150 deletions(-)
+ create mode 100644 net/xfrm/xfrm_state_bpf.c
 
->
-> > --
-> > Michal Hocko
-> > SUSE Labs
+-- 
+2.42.1
+
 
