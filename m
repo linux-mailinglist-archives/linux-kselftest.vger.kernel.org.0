@@ -1,57 +1,57 @@
-Return-Path: <linux-kselftest+bounces-753-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-754-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2A657FC7EE
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Nov 2023 22:29:54 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D91357FC811
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Nov 2023 22:36:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 76D84B217BB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Nov 2023 21:29:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6BA74B2106D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Nov 2023 21:36:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54ABF44C62;
-	Tue, 28 Nov 2023 21:29:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C0EF44C7A;
+	Tue, 28 Nov 2023 21:36:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TUVAe8sm"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bCtp6mL1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oo1-xc30.google.com (mail-oo1-xc30.google.com [IPv6:2607:f8b0:4864:20::c30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E0851FC1;
-	Tue, 28 Nov 2023 13:29:44 -0800 (PST)
-Received: by mail-oo1-xc30.google.com with SMTP id 006d021491bc7-58cf894544cso3188224eaf.3;
-        Tue, 28 Nov 2023 13:29:44 -0800 (PST)
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 406282D56;
+	Tue, 28 Nov 2023 13:36:18 -0800 (PST)
+Received: by mail-qk1-x72c.google.com with SMTP id af79cd13be357-77d708e4916so314314085a.3;
+        Tue, 28 Nov 2023 13:36:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701206984; x=1701811784; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1701207377; x=1701812177; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=50NgtX7SvQ7Ubnw7wnZdr9/ovViujYpH8S6F31BeVuI=;
-        b=TUVAe8smsZ6z+1ZFTR2an12KqE4/vs3YhHDoM17/h1AnTS+izbilnRHZOO5Sh1om2v
-         Y8LaAvp4sk4/lYS8/AjBloAm9pWy9nZCgeeqhOEr4WVDXp2Bbz+iAU1V9jvizIemOG8l
-         MdUC6jyip0mb1YhJMBQJ9ba3Eu1ftjh3J+QL5jBaqY2OolRa/+7tCZvjg95vaY500N4z
-         lF2pv8RmFUi5zDBNyP1UtJtOOE138EUO68v36CppW5OBy1A4i+zVPs4E31mtOKoCUK3m
-         egyh6DFGQK6xE5QfjazVXsuHB1EcvxHODdE1tKXwBQXrIMsna4pIk0haUjCYdf5v0OKa
-         XoOg==
+        bh=9+7egZpgbxWlQy7x1pNLLDFc7cb12zF09MZ6gXGVBBI=;
+        b=bCtp6mL1ul/UWguDZAwtY/6sx3jH4/Ej34/IZyhHTEd0nU2A7WGCyP5nl0Nuue9vx4
+         KMRTMPJbTGptvB4OAcVDFwmcfEPJy3iCUaMbns2ibPDoCNPVRWz9LGXbp3ZTqlQkkake
+         NM3cOHK+NJKBmVgm64Bgxxfyx/QuL+Op+53EhhAOh/k1SnKdIFrj6SYTczalDF1RWRQy
+         oLnzSPoAIJ466rr44DGTMGB3Tr08kkO08L5vAySj84XaVrmKGgJDQtAXdl/VeNRcez0g
+         dXpn2s72HUXzn402sHv/jc4FLVAmvBUBA31aSGI3p+1rUNoZJkkRrbC6zfVXZupCvLMY
+         9W7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701206984; x=1701811784;
+        d=1e100.net; s=20230601; t=1701207377; x=1701812177;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=50NgtX7SvQ7Ubnw7wnZdr9/ovViujYpH8S6F31BeVuI=;
-        b=bsVtOGtPdM4f6wuGZ3aNsJh0QI+QG5C8I08fQf4eF3cx6lrMYmiomgPLHLkS6cp7gh
-         6gjcWHB3Czn8IJjLj3lrVdlOVTsRwN0OeyJyrA1bUVBHMrvf7NjiKrFCifeo2vVCL2RU
-         Sb73hHmNWPwoJmUW4Ys4Zs6inPrCBVLgP3IIhN58nvXT7tqHXTCg0NsNW3PtovIG+xEV
-         3aJxgpRC4q+TWipsawMNjcWqEbYavE9GdOGZAXj49jofRgxixne5GoMtg4olFVte7msd
-         FBOTkvdJdB6KnWPpDB5FrKmeMCXaOR7uY4TL4hcK2B6ykhgWAXwXNZ51A9t1+ykgsXWy
-         VdWg==
-X-Gm-Message-State: AOJu0YztE+ei+qPDkEAgXv93O75DuOGfxi4s0GhWHZ8tG4B4vldFKUL7
-	KngEpZWEyUJm/FSdrbS2sLc=
-X-Google-Smtp-Source: AGHT+IGoswHYUfxHCB9J9zdO0iBkdDHzl9EW8tcmrjnfJTMp+HEs56LooAoxnz1sJN9WJ+Oji2aJaw==
-X-Received: by 2002:a05:6358:106:b0:16e:13c:ba48 with SMTP id f6-20020a056358010600b0016e013cba48mr16308704rwa.0.1701206983758;
-        Tue, 28 Nov 2023 13:29:43 -0800 (PST)
+        bh=9+7egZpgbxWlQy7x1pNLLDFc7cb12zF09MZ6gXGVBBI=;
+        b=HER3tA758eiCu+RcOoilS9pmPVay/QDLYIxc3vo0yzNAH89qsdfbutu+Hd5sC7eZeJ
+         w5DIzeJLnlcxBwty9SxV5qzGcm23HY6S60cuWy2NEnXJzsYOp9aSulQpV8kEHESpcKcP
+         aF9zysrcO6DK4GG76LGdm308kUN5wlLu4qrZAWrsa/7o7Sru9vMQ9czAAhSVzCkS8+fv
+         wxas+67ZcPbXAiKq0weuJDDVsW0nz6Bo1DiXy8cuRi0Dh/xEvmlQB5rsaSqkcO1L6NGU
+         pZ4S1wlySoK1i85vNp6b3t2XgMU3jKF0BuJrU7QsQlHbhFNdUeL6QsbjFrw65DFS98VN
+         PS3A==
+X-Gm-Message-State: AOJu0YykKIgbyZD1GKTWvjpSx6ye6o/rFVPJcLZ3PY/g4SivJuKA2M7B
+	2WEx+dxGjBje/sJJcS74BhDeAcqfsU4pbQ==
+X-Google-Smtp-Source: AGHT+IGezPzPpBB7DD09TuoxH+6HfyyvNO4ke1lW5qOxroc6VuYdtXuB6VytQfYAYI66586Qug016w==
+X-Received: by 2002:a05:620a:852f:b0:778:9156:3f07 with SMTP id pe47-20020a05620a852f00b0077891563f07mr16334065qkn.24.1701207377382;
+        Tue, 28 Nov 2023 13:36:17 -0800 (PST)
 Received: from angquan-linux.. ([72.36.119.4])
-        by smtp.gmail.com with ESMTPSA id t2-20020ac87602000000b00421c272bcbasm4880712qtq.11.2023.11.28.13.29.42
+        by smtp.gmail.com with ESMTPSA id q5-20020a05620a0c8500b00775bb02893esm4819851qki.96.2023.11.28.13.36.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Nov 2023 13:29:43 -0800 (PST)
+        Tue, 28 Nov 2023 13:36:17 -0800 (PST)
 From: angquan yu <angquan21@gmail.com>
 X-Google-Original-From: angquan yu
 To: skhan@linuxfoundation.org
@@ -60,9 +60,9 @@ Cc: shuah@kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kernel-mentees@lists.linuxfoundation.org,
 	angquan yu <angquan21@gmail.com>
-Subject: [PATCH] Resolve 'Unused Result' Warning from proc-empty-vm.c
-Date: Tue, 28 Nov 2023 15:29:27 -0600
-Message-Id: <20231128212927.59313-1-angquan21@gmail.com>
+Subject: [PATCH] Fix Format String Warning in breakpoint_test
+Date: Tue, 28 Nov 2023 15:36:07 -0600
+Message-Id: <20231128213607.59587-1-angquan21@gmail.com>
 X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -70,48 +70,57 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 From: angquan yu <angquan21@gmail.com>
 
-In tools/testing/selftests/proc/proc-empty->because the return value
-of a write call was being ignored. This call was partof a conditional
-debugging block (if (0) { ... }), which meant it would neveractually
-execute.
+This commit resolves a compiler warning regardingthe
+use of non-literal format strings in breakpoint_test.c.
 
-This patch removes the unused debug write call. This cleanup resolves
-the compi>warning about ignoring the result of write declared with
-the warn_unused_resultattribute.
+The functions `ksft_test_result_pass` and `ksft_test_result_fail`
+were previously called with a variable `msg` directly, which could
+potentially lead to format string vulnerabilities.
 
-Removing this code also improves the clarity and maintainability of
-the function, as it eliminates a non-functional block of code.
+Changes made:
+- Modified the calls to `ksft_test_result_pass` and `ksft_test_result_fail`
+by adding a "%s" format specifier. This explicitly declares `msg` as a
+string argument, adhering to safer coding practices and resolving
+the compiler warning.
 
-This is original warning: proc-empty-vm.c: In function
-‘test_proc_pid_statm’ :proc-empty-vm.c:385:17:
-warning: ignoring return value of ‘write’
-declared with>385 |                 write(1, buf, rv);|
+This change does not affect the functional behavior of the code but ensures
+better code safety and compliance with recommended C programming standards.
+
+The previous warning is "breakpoint_test.c:287:17:
+warning: format not a string literal and no format arguments
+[-Wformat-security]
+  287 |                 ksft_test_result_pass(msg);
+      |                 ^~~~~~~~~~~~~~~~~~~~~
+breakpoint_test.c:289:17: warning: format not a string literal
+and no format arguments [-Wformat-security]
+  289 |                 ksft_test_result_fail(msg);
+      |    "
 
 Signed-off-by: angquan yu <angquan21@gmail.com>
 ---
- tools/testing/selftests/proc/proc-empty-vm.c | 2 ++
- 1 file changed, 2 insertions(+)
+ tools/testing/selftests/breakpoints/breakpoint_test.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/proc/proc-empty-vm.c b/tools/testing/selftests/proc/proc-empty-vm.c
-index 5e7020630..d231e61e4 100644
---- a/tools/testing/selftests/proc/proc-empty-vm.c
-+++ b/tools/testing/selftests/proc/proc-empty-vm.c
-@@ -383,8 +383,10 @@ static int test_proc_pid_statm(pid_t pid)
- 	assert(rv <= sizeof(buf));
- 	if (0) {
- 		ssize_t written = write(1, buf, rv);
-+
- 		if (written == -1) {
- 			perror("write failed to /proc/${pid}");
-+			return EXIT_FAILURE;
- 		}
- 	}
+diff --git a/tools/testing/selftests/breakpoints/breakpoint_test.c b/tools/testing/selftests/breakpoints/breakpoint_test.c
+index 3266cc929..d46962a24 100644
+--- a/tools/testing/selftests/breakpoints/breakpoint_test.c
++++ b/tools/testing/selftests/breakpoints/breakpoint_test.c
+@@ -284,9 +284,9 @@ static void check_success(const char *msg)
+ 	nr_tests++;
  
+ 	if (ret)
+-		ksft_test_result_pass(msg);
++		ksft_test_result_pass("%s", msg);
+ 	else
+-		ksft_test_result_fail(msg);
++		ksft_test_result_fail("%s", msg);
+ }
+ 
+ static void launch_instruction_breakpoints(char *buf, int local, int global)
 -- 
 2.39.2
 
