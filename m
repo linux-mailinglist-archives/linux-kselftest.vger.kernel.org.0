@@ -1,57 +1,72 @@
-Return-Path: <linux-kselftest+bounces-842-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-843-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ACB7A7FE2C4
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Nov 2023 23:12:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5AE4D7FE31C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Nov 2023 23:25:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 34985B20E94
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Nov 2023 22:12:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B92D1C208D8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Nov 2023 22:25:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B65F54CB23;
-	Wed, 29 Nov 2023 22:12:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D408D3B1AA;
+	Wed, 29 Nov 2023 22:25:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="g4ZSismX"
+	dkim=pass (2048-bit key) header.d=mojatatu-com.20230601.gappssmtp.com header.i=@mojatatu-com.20230601.gappssmtp.com header.b="JeKeSyOe"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 655A1C9
-	for <linux-kselftest@vger.kernel.org>; Wed, 29 Nov 2023 14:11:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1701295917;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=8tAo/jhWZHKemdFMhhMTV3K6TBojPxmRv8xo7iH8yXA=;
-	b=g4ZSismXVwDrKzvzHslHNQKVe/KinpODxwDZqVC8WyCMpc6WMGmKmPXLL62/ZRnVrUEH30
-	yoDFA+MdJegc5cuH/jsHgo+D6I1gMlCK68dizWr6lyCNTLXs7uXfPQXhofAF9K1S1OtQY/
-	tRXWI3KD0qvG4T8/Vo9XIcuw+ZKKfKY=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-477-B0Pjic9AOkyvXSB3pOb7Qg-1; Wed, 29 Nov 2023 17:11:52 -0500
-X-MC-Unique: B0Pjic9AOkyvXSB3pOb7Qg-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 0CB13811E7B;
-	Wed, 29 Nov 2023 22:11:52 +0000 (UTC)
-Received: from localhost.localdomain.com (unknown [10.22.17.10])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 641B6492BFC;
-	Wed, 29 Nov 2023 22:11:51 +0000 (UTC)
-From: Nico Pache <npache@redhat.com>
-To: linux-kernel@vger.kernel.org,
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4FD2172C
+	for <linux-kselftest@vger.kernel.org>; Wed, 29 Nov 2023 14:24:46 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1cfabcbda7bso11540785ad.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Nov 2023 14:24:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mojatatu-com.20230601.gappssmtp.com; s=20230601; t=1701296686; x=1701901486; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GVpR0IvniY+kstE90A1PQqhW/E4iWnd4RrGkFh8q6BI=;
+        b=JeKeSyOehWuZQMxZqJhUjXlcX8gEDi9WAM01N2txLoyvDZN5djgQfbU678Rs8w3HM+
+         c60C59u7rBk7zBa9oiN4nYmnwsODoBF2wQAyJkrPcPwHWWC1KnZQDpDDpkd8IXK3G6Py
+         xz2JXeT6ZMzIcjkgakWtm138KOAkyf5uJeTi8oR5/i2VAME7apQ3HaIH6dGsPAn4IdaZ
+         1b70YlZpmbLXzjTip7yInfKOWf9Yl6M7dPnBIIIPQO+cmaBxTR+mgmBXUleOlYNnRaQz
+         ADwbAKa7jIQzGbz5T9X2zOLhxTSkhSuFFKP9QbSQrGEchiIqUdFPowyuRb8IVF1rNPTx
+         gupw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701296686; x=1701901486;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GVpR0IvniY+kstE90A1PQqhW/E4iWnd4RrGkFh8q6BI=;
+        b=tKji4u5lq3rIF2nrgHYq40aNvM1nj3jARDyKScsu1tHojT3eqWiV3xXo+u9b1AYu3P
+         dnB4CCG+DFrHBo6V0xuv8+koOA8Qj29g4A+FjVfbIkOQEtbH1O/vvgZzeN0a/bcEFbIG
+         kmBcUlud1UH1lyBY2ade36ViStPw3y2eDKwR3+BcifQbrq1JXsCQEhuM5ltCR9/DZ2hP
+         IztoE0x30ZXMPyn3Zu14+GzZRvH4r3rnik5Lq4kgIM75b9w7+fgJEmCCLrIAvkVyqzaQ
+         xfKtfJWzgQU0KuCDfEk3fHXJlRaaQIYTG5o/B3VmLxRz6J13IYTKIhHhRtzZQqVLzsNO
+         7jlw==
+X-Gm-Message-State: AOJu0YyN5zezgtpbZ6FoPaT0HWiiyjYC8Po8g4Hhf927dSPcK2P6IzYg
+	cSauq/Xz+dkXPUWohtiCS544Hg==
+X-Google-Smtp-Source: AGHT+IFClV4b7JkVRjSMctCqetKwaxnf7eXFOh+Igz9VqrhJWsfakYYRWHRsaNBmBLlbn2kZMOnaGg==
+X-Received: by 2002:a17:902:f681:b0:1cf:a652:471f with SMTP id l1-20020a170902f68100b001cfa652471fmr29761107plg.26.1701296686007;
+        Wed, 29 Nov 2023 14:24:46 -0800 (PST)
+Received: from rogue-one.tail33bf8.ts.net ([201.17.86.134])
+        by smtp.gmail.com with ESMTPSA id l8-20020a170902f68800b001cfb971edf2sm8663697plg.13.2023.11.29.14.24.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 29 Nov 2023 14:24:45 -0800 (PST)
+From: Pedro Tammela <pctammela@mojatatu.com>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	jhs@mojatatu.com,
+	xiyou.wangcong@gmail.com,
+	jiri@resnulli.us,
 	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Cc: shuah@kernel.org,
-	akpm@linux-foundation.org,
-	jsavitz@redhat.com,
-	David Hildenbrand <david@redhat.com>
-Subject: [PATCH] selftests/mm: dont run ksm_functional_tests twice
-Date: Wed, 29 Nov 2023 15:11:40 -0700
-Message-ID: <20231129221140.614713-1-npache@redhat.com>
+	Pedro Tammela <pctammela@mojatatu.com>
+Subject: [PATCH net-next 0/4] selftests: tc-testing: more tdc updates
+Date: Wed, 29 Nov 2023 19:24:20 -0300
+Message-Id: <20231129222424.910148-1-pctammela@mojatatu.com>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -59,32 +74,25 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.10
 
-ksm functional test is already being run.
-Remove the duplicate call to ./ksm_functional_tests.
+Follow-up on a feedback from Jakub and random cleanups from related
+net/sched patches
 
-Fixes: 93fb70aa5904 ("selftests/vm: add KSM unmerge tests")
-Signed-off-by: Nico Pache <npache@redhat.com>
-Cc: David Hildenbrand <david@redhat.com>
----
- tools/testing/selftests/mm/run_vmtests.sh | 2 --
- 1 file changed, 2 deletions(-)
+Pedro Tammela (4):
+  selftests: tc-testing: remove spurious nsPlugin usage
+  selftests: tc-testing: remove spurious './' from Makefile
+  selftests: tc-testing: rename concurrency.json to flower.json
+  selftests: tc-testing: remove filters/tests.json
 
-diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-index 00757445278e..c0212258b852 100755
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -334,8 +334,6 @@ CATEGORY="ksm_numa" run_test ./ksm_tests -N -m 0
- 
- CATEGORY="ksm" run_test ./ksm_functional_tests
- 
--run_test ./ksm_functional_tests
--
- # protection_keys tests
- if [ -x ./protection_keys_32 ]
- then
+ tools/testing/selftests/tc-testing/Makefile   |   2 +-
+ .../filters/{concurrency.json => flower.json} |  98 +++++++++++++
+ .../tc-testing/tc-tests/filters/matchall.json |  23 ++++
+ .../tc-testing/tc-tests/filters/tests.json    | 129 ------------------
+ 4 files changed, 122 insertions(+), 130 deletions(-)
+ rename tools/testing/selftests/tc-testing/tc-tests/filters/{concurrency.json => flower.json} (65%)
+ delete mode 100644 tools/testing/selftests/tc-testing/tc-tests/filters/tests.json
+
 -- 
-2.41.0
+2.40.1
 
 
