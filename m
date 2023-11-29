@@ -1,201 +1,258 @@
-Return-Path: <linux-kselftest+bounces-797-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-798-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C75A7FCF5B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Nov 2023 07:50:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AF9587FCF65
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Nov 2023 07:55:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2DD481C209CB
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Nov 2023 06:50:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CD7F51C20980
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Nov 2023 06:55:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4549A63DE;
-	Wed, 29 Nov 2023 06:50:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0C336FBD;
+	Wed, 29 Nov 2023 06:55:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UYZknXDW"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="S6TF5Sco"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6670410F0
-	for <linux-kselftest@vger.kernel.org>; Tue, 28 Nov 2023 22:50:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1701240616;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=AHA+jAwKlaCovHGQsXB1D2aSSp8od4/kNe2Qw9++Xtw=;
-	b=UYZknXDWVBxiYyJ3yV+WPnfdyagSUr4tAQfk9ehGJC8Zp+7jmIUkNCV5mdp5BbaJ2Lvwp3
-	JpZZMpATcwyoNc3ybl5MHZxZO0DfnfZQq03VSvNId8cpHfKVvq9Saj5TVpaaMkuutlSpeD
-	o5KRnZ8In+NR+cZINtBXYHK3ANwxT4g=
-Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com
- [209.85.210.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-454-Hwtg4wgzM8mOyB4HiqX-UQ-1; Wed, 29 Nov 2023 01:50:14 -0500
-X-MC-Unique: Hwtg4wgzM8mOyB4HiqX-UQ-1
-Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-6cba224fce7so2171138b3a.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 28 Nov 2023 22:50:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701240613; x=1701845413;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AHA+jAwKlaCovHGQsXB1D2aSSp8od4/kNe2Qw9++Xtw=;
-        b=tAekSrFUdVhnVq2acaUHsga9qgNq60lth9L3wbZDcW5fx/3hlHoRFX4+McWfETiajk
-         mkkBf9kofXtID2SWRuVOO+tpmBOsRTJWxPBGbo0vRlwj9PjwOfhsrYHfZ105ecuF7OUW
-         dmWagk8jshCzgpFRzm9EhhJPMnIw+hwaQjWfJcMYg5ehXJLOl14o8DbZjlC/MGgd9Ik4
-         y8xzmpkpk+HCZt19mMUoDcNgiZBmFUONTyAwPaQM12+02FVSwdpUGDNJxPVqpOlirTUb
-         x4qFLyYGm7WkCMRNPJVS4vFAcqjjxJMqivzCQsqyjcExW62OmRVC+qcuXBQG4y1M2Umu
-         OtHA==
-X-Gm-Message-State: AOJu0YyvegWEbb4gSfJL00WFWo4nGmDMucUZnICQixWooGTxJCvoanTK
-	orI7WpjFUgBzHXmQmP90oSXiim58+tEYLbMSGbvUUxHjFARRNV0+eE25eaKkVp8AmKJ/5n0qnvM
-	tAxqgglcWBgL6eakCBRKdHhRFvsKJ
-X-Received: by 2002:a05:6a20:a11c:b0:18b:c9cf:4521 with SMTP id q28-20020a056a20a11c00b0018bc9cf4521mr17747840pzk.2.1701240613659;
-        Tue, 28 Nov 2023 22:50:13 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHE2xrUao/RhjJjda73nPdFOnK+/MrmdpsZADcu3bAluUflDUxgKey5q7Du+Lm1fFtsc+6eug==
-X-Received: by 2002:a05:6a20:a11c:b0:18b:c9cf:4521 with SMTP id q28-20020a056a20a11c00b0018bc9cf4521mr17747829pzk.2.1701240613314;
-        Tue, 28 Nov 2023 22:50:13 -0800 (PST)
-Received: from [10.72.112.34] ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id 2-20020a170902c14200b001c755810f89sm11381913plj.181.2023.11.28.22.50.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 28 Nov 2023 22:50:12 -0800 (PST)
-Message-ID: <7bd42b9b-5173-6737-4a54-e5a2bb0986df@redhat.com>
-Date: Wed, 29 Nov 2023 14:50:07 +0800
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 945D3170B;
+	Tue, 28 Nov 2023 22:55:06 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KIQbIqTYWSVSec0VsnT6QhJPTZqCSIWR8kpGO/172YGV9NlX0IQrbgDDMRQSMYJL5FJARHqHbsb072uEyJ3OGEt1dMM4AD2alu2O0Oys5dhvyoU/88HiA3JsxjceO6u4Lf41FS2YpYl/KS/V9E8pHUZ6J6Lp57hMoj6/kD4V6MHT8bYZ3COh8hvQ7DZ7A6tCwBOgluUSte29ZMs7Y83J0Gw6MC/YV8H5S/xaHTuQsysMKqQK93gnWgJ5ZQvtnqIB8qxgbdBb8FioTqiDqTY2NCg+Uie2HELaCrIzt/KBIYIULwzw9Z58VOgWS7kjscnxm5ZJ4BXrDQUDiJVcJy0GWA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RWl/tvKCUGPPwMLXwkXZfnSLt4Ct+NNkFb6YW2X/jGM=;
+ b=ds7ko7xn/MbhDtz4UuF1zIrzh8w4tSTB7UC4dLS67q+84o+ayrtQV6v6vkVI9qfwch9UmsgaMbiheyJKuHSwENIytkdyV2Ho7MLPRjDxrxzVSAtkiF26tCCFdFaCTHsFqBOHTNS79sWOVBlG5hf5jGmt0DORcn7X2fwk06EGe7Up7tCkrPaNdRYrY7LZWGWmOulk1Ara/wLpIdVivCQ2LsYXVurXmo5griEBOPJ4+lNi1acJdkMufoDSHRHtLhrelHvPZj2To+Jq6arCYHvoo5SHCGEVsUMlYl/S4CYXgd0MCWJjJilpH6OZk6ZVjQWAZHXfWEjZ+YPyzpqhoKASZw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RWl/tvKCUGPPwMLXwkXZfnSLt4Ct+NNkFb6YW2X/jGM=;
+ b=S6TF5ScoIRiQzm8ZQx0JaHkaYa5e+xhwX7WB6EGY1f+SWBlqqH/SDIYuyV9sYS3V81UXOUOBeVhbGXXLVvTSR67or54o/oeCA12yFoaZivU7a5wPN80YLPkMpID1l6KOOp29b66sgOrOVVQQtWTE+8ZQq1ykFPVNmUS+gfLuhWg=
+Received: from PR3P192CA0024.EURP192.PROD.OUTLOOK.COM (2603:10a6:102:56::29)
+ by MW4PR12MB6950.namprd12.prod.outlook.com (2603:10b6:303:207::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.28; Wed, 29 Nov
+ 2023 06:55:03 +0000
+Received: from SN1PEPF0002BA51.namprd03.prod.outlook.com
+ (2603:10a6:102:56:cafe::2) by PR3P192CA0024.outlook.office365.com
+ (2603:10a6:102:56::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.27 via Frontend
+ Transport; Wed, 29 Nov 2023 06:55:02 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ SN1PEPF0002BA51.mail.protection.outlook.com (10.167.242.74) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7046.17 via Frontend Transport; Wed, 29 Nov 2023 06:55:01 +0000
+Received: from jasmine-meng.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.34; Wed, 29 Nov
+ 2023 00:54:55 -0600
+From: Meng Li <li.meng@amd.com>
+To: "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, Huang Rui
+	<ray.huang@amd.com>
+CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<x86@kernel.org>, <linux-acpi@vger.kernel.org>, Shuah Khan
+	<skhan@linuxfoundation.org>, <linux-kselftest@vger.kernel.org>, "Nathan
+ Fontenot" <nathan.fontenot@amd.com>, Deepak Sharma <deepak.sharma@amd.com>,
+	Alex Deucher <alexander.deucher@amd.com>, Mario Limonciello
+	<mario.limonciello@amd.com>, Shimmer Huang <shimmer.huang@amd.com>, "Perry
+ Yuan" <Perry.Yuan@amd.com>, Xiaojian Du <Xiaojian.Du@amd.com>, Viresh Kumar
+	<viresh.kumar@linaro.org>, Borislav Petkov <bp@alien8.de>, "Oleksandr
+ Natalenko" <oleksandr@natalenko.name>, Meng Li <li.meng@amd.com>
+Subject: [PATCH V11 0/7] amd-pstate preferred core
+Date: Wed, 29 Nov 2023 14:54:30 +0800
+Message-ID: <20231129065437.290183-1-li.meng@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
-Subject: Re: [PATCH v2] KVM: selftests: Fix the dirty_log_test semaphore
- imbalance
-Content-Language: en-US
-To: kvm@vger.kernel.org, kvmarm@lists.linux.dev
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Oliver Upton <oliver.upton@linux.dev>
-References: <20231117052210.26396-1-shahuang@redhat.com>
-From: Shaoqin Huang <shahuang@redhat.com>
-In-Reply-To: <20231117052210.26396-1-shahuang@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN1PEPF0002BA51:EE_|MW4PR12MB6950:EE_
+X-MS-Office365-Filtering-Correlation-Id: 77946fd5-45f9-4d34-e90b-08dbf0a81c1e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	juMCpmu6LcviVCIXhcFwH2DoRtRAFxtQ1nsKvhxJd4GJbuboc0qklW+PgXOIEKR5jz8URiES1ZPU3an27UO3suRl/2sVuKwjpPZS90pWW+lHzsFtw/tctdsFTo0ek6Xdc/WRPFMRZJcrsdIc1q7ye0MXF7NxBI0br6dFz8eyw7QJv640qmL1QWD8Eh8Luoxe76HYhxw0gO46tKJHcTnzi23N7P2ehlP0JdOkdfMkN5qYu+/FhL+65eS0tUve2z6mF8DCEAg6umJTO5mkTiUGDg0JiNUvhnfSNyXz7GcwbFBv/Qc/TVOl4ccDJaueCRGt5u6AVw+KDV+jxsf4B/kWwv953nkrxhuO7G4iBYcjrrHoxdl549AywC6Vgnzu0SZkHO2Sh6UqmQhygi7b+i+aM7vrOv09Oq9od7eqQ9g9x/w+b1563qZm1w6JZJ+cENZzdgOy+d5tdJUpSQzZ3pijNKvoSAs4On9LHDfy6R4rcw64RHQNoNOQVDbLinKn3KxmjTgc4L68j96gnEIP269ubpVvRDlsEoods3B/vNryXTxgqk0lLPo9GsB8JSUoDoFfhj1IdsSHL13enNDN/oacptTxYGRItZebMWvASyWuyvrnXOaVT/sE+83l/QoFtYaw6fMe9GIwI+lpmPsVXrMUB2zpQ/Es+9+2vy5MOBItGYPQ65eMoihYwpaHPorppIvokOmgUMqMTUR4EA2i0z74Ziq8lIm1MS1ctec8glTY/D7JkhWbpE9auD8Cc3281Vkre5VnsQAQ0U+FM9Xn9j2nrukNMFpwA+ypLWACVwYhZDzAbPMLA0/lbBhED/V4Wvab
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(396003)(376002)(136003)(346002)(39860400002)(230922051799003)(230273577357003)(230173577357003)(64100799003)(1800799012)(451199024)(186009)(82310400011)(46966006)(36840700001)(40470700004)(5660300002)(7416002)(2906002)(8936002)(4326008)(8676002)(70586007)(54906003)(110136005)(40480700001)(16526019)(26005)(478600001)(6666004)(2616005)(1076003)(316002)(7696005)(83380400001)(41300700001)(70206006)(426003)(336012)(6636002)(40460700003)(47076005)(36860700001)(86362001)(81166007)(356005)(36756003)(82740400003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2023 06:55:01.9391
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 77946fd5-45f9-4d34-e90b-08dbf0a81c1e
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SN1PEPF0002BA51.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB6950
 
-Kindly ping..
+Hi all:
 
-On 11/17/23 13:22, Shaoqin Huang wrote:
-> When execute the dirty_log_test on some aarch64 machine, it sometimes
-> trigger the ASSERT:
-> 
-> ==== Test Assertion Failure ====
->    dirty_log_test.c:384: dirty_ring_vcpu_ring_full
->    pid=14854 tid=14854 errno=22 - Invalid argument
->       1  0x00000000004033eb: dirty_ring_collect_dirty_pages at dirty_log_test.c:384
->       2  0x0000000000402d27: log_mode_collect_dirty_pages at dirty_log_test.c:505
->       3   (inlined by) run_test at dirty_log_test.c:802
->       4  0x0000000000403dc7: for_each_guest_mode at guest_modes.c:100
->       5  0x0000000000401dff: main at dirty_log_test.c:941 (discriminator 3)
->       6  0x0000ffff9be173c7: ?? ??:0
->       7  0x0000ffff9be1749f: ?? ??:0
->       8  0x000000000040206f: _start at ??:?
->    Didn't continue vcpu even without ring full
-> 
-> The dirty_log_test fails when execute the dirty-ring test, this is
-> because the sem_vcpu_cont and the sem_vcpu_stop is non-zero value when
-> execute the dirty_ring_collect_dirty_pages() function. When those two
-> sem_t variables are non-zero, the dirty_ring_wait_vcpu() at the
-> beginning of the dirty_ring_collect_dirty_pages() will not wait for the
-> vcpu to stop, but continue to execute the following code. In this case,
-> before vcpu stop, if the dirty_ring_vcpu_ring_full is true, and the
-> dirty_ring_collect_dirty_pages() has passed the check for the
-> dirty_ring_vcpu_ring_full but hasn't execute the check for the
-> continued_vcpu, the vcpu stop, and set the dirty_ring_vcpu_ring_full to
-> false. Then dirty_ring_collect_dirty_pages() will trigger the ASSERT.
-> 
-> Why sem_vcpu_cont and sem_vcpu_stop can be non-zero value? It's because
-> the dirty_ring_before_vcpu_join() execute the sem_post(&sem_vcpu_cont)
-> at the end of each dirty-ring test. It can cause two cases:
-> 
-> 1. sem_vcpu_cont be non-zero. When we set the host_quit to be true,
->     the vcpu_worker directly see the host_quit to be true, it quit. So
->     the log_mode_before_vcpu_join() function will set the sem_vcpu_cont
->     to 1, since the vcpu_worker has quit, it won't consume it.
-> 2. sem_vcpu_stop be non-zero. When we set the host_quit to be true,
->     the vcpu_worker has entered the guest state, the next time it exit
->     from guest state, it will set the sem_vcpu_stop to 1, and then see
->     the host_quit, no one will consume the sem_vcpu_stop.
-> 
-> When execute more and more dirty-ring tests, the sem_vcpu_cont and
-> sem_vcpu_stop can be larger and larger, which makes many code paths
-> don't wait for the sem_t. Thus finally cause the problem.
-> 
-> To fix this problem, we can wait a while before set the host_quit to
-> true, which gives the vcpu time to enter the guest state, so it will
-> exit again. Then we can wait the vcpu to exit, and let it continue
-> again, then the vcpu will see the host_quit. Thus the sem_vcpu_cont and
-> sem_vcpu_stop will be both zero when test finished.
-> 
-> Signed-off-by: Shaoqin Huang <shahuang@redhat.com>
-> ---
-> v1->v2:
->    - Fix the real logic bug, not just fresh the context.
-> 
-> v1: https://lore.kernel.org/all/20231116093536.22256-1-shahuang@redhat.com/
-> ---
->   tools/testing/selftests/kvm/dirty_log_test.c | 16 +++++++++++++++-
->   1 file changed, 15 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/dirty_log_test.c b/tools/testing/selftests/kvm/dirty_log_test.c
-> index 936f3a8d1b83..a6e0ff46a07c 100644
-> --- a/tools/testing/selftests/kvm/dirty_log_test.c
-> +++ b/tools/testing/selftests/kvm/dirty_log_test.c
-> @@ -417,7 +417,8 @@ static void dirty_ring_after_vcpu_run(struct kvm_vcpu *vcpu, int ret, int err)
->   
->   static void dirty_ring_before_vcpu_join(void)
->   {
-> -	/* Kick another round of vcpu just to make sure it will quit */
-> +	/* Wait vcpu exit, and let it continue to see the host_quit. */
-> +	dirty_ring_wait_vcpu();
->   	sem_post(&sem_vcpu_cont);
->   }
->   
-> @@ -719,6 +720,7 @@ static void run_test(enum vm_guest_mode mode, void *arg)
->   	struct kvm_vm *vm;
->   	unsigned long *bmap;
->   	uint32_t ring_buf_idx = 0;
-> +	int sem_val;
->   
->   	if (!log_mode_supported()) {
->   		print_skip("Log mode '%s' not supported",
-> @@ -726,6 +728,11 @@ static void run_test(enum vm_guest_mode mode, void *arg)
->   		return;
->   	}
->   
-> +	sem_getvalue(&sem_vcpu_stop, &sem_val);
-> +	assert(sem_val == 0);
-> +	sem_getvalue(&sem_vcpu_cont, &sem_val);
-> +	assert(sem_val == 0);
-> +
->   	/*
->   	 * We reserve page table for 2 times of extra dirty mem which
->   	 * will definitely cover the original (1G+) test range.  Here
-> @@ -825,6 +832,13 @@ static void run_test(enum vm_guest_mode mode, void *arg)
->   		sync_global_to_guest(vm, iteration);
->   	}
->   
-> +	/*
-> +	 *
-> +	 * Before we set the host_quit, let the vcpu has time to run, to make
-> +	 * sure we consume the sem_vcpu_stop and the vcpu consume the
-> +	 * sem_vcpu_cont, to keep the semaphore balance.
-> +	 */
-> +	usleep(p->interval * 1000);
->   	/* Tell the vcpu thread to quit */
->   	host_quit = true;
->   	log_mode_before_vcpu_join();
+The core frequency is subjected to the process variation in semiconductors.
+Not all cores are able to reach the maximum frequency respecting the
+infrastructure limits. Consequently, AMD has redefined the concept of
+maximum frequency of a part. This means that a fraction of cores can reach
+maximum frequency. To find the best process scheduling policy for a given
+scenario, OS needs to know the core ordering informed by the platform through
+highest performance capability register of the CPPC interface.
+
+Earlier implementations of amd-pstate preferred core only support a static
+core ranking and targeted performance. Now it has the ability to dynamically
+change the preferred core based on the workload and platform conditions and
+accounting for thermals and aging.
+
+Amd-pstate driver utilizes the functions and data structures provided by
+the ITMT architecture to enable the scheduler to favor scheduling on cores
+which can be get a higher frequency with lower voltage.
+We call it amd-pstate preferred core.
+
+Here sched_set_itmt_core_prio() is called to set priorities and
+sched_set_itmt_support() is called to enable ITMT feature.
+Amd-pstate driver uses the highest performance value to indicate
+the priority of CPU. The higher value has a higher priority.
+
+Amd-pstate driver will provide an initial core ordering at boot time.
+It relies on the CPPC interface to communicate the core ranking to the
+operating system and scheduler to make sure that OS is choosing the cores
+with highest performance firstly for scheduling the process. When amd-pstate
+driver receives a message with the highest performance change, it will
+update the core ranking.
+
+Changes from V10->V11:
+- cpufreq: amd-pstate:
+- - according Perry's commnts, I replace the string with str_enabled_disable().
+
+Changes from V9->V10:
+- cpufreq: amd-pstate:
+- - add judgement for highest_perf. When it is less than 255, the
+  preferred core feature is enabled. And it will set the priority.
+- - deleset "static u32 max_highest_perf" etc, because amd p-state
+  perferred coe does not require specail process for hotpulg.
+
+Changes form V8->V9:
+- all:
+- - pick up Tested-By flag added by Oleksandr.
+- cpufreq: amd-pstate:
+- - pick up Review-By flag added by Wyes.
+- - ignore modification of bug.
+- - add a attribute of prefcore_ranking.
+- - modify data type conversion from u32 to int.
+- Documentation: amd-pstate:
+- - pick up Review-By flag added by Wyes.
+
+Changes form V7->V8:
+- all:
+- - pick up Review-By flag added by Mario and Ray.
+- cpufreq: amd-pstate:
+- - use hw_prefcore embeds into cpudata structure.
+- - delete preferred core init from cpu online/off.
+
+Changes form V6->V7:
+- x86:
+- - Modify kconfig about X86_AMD_PSTATE.
+- cpufreq: amd-pstate:
+- - modify incorrect comments about scheduler_work().
+- - convert highest_perf data type.
+- - modify preferred core init when cpu init and online.
+- acpi: cppc:
+- - modify link of CPPC highest performance.
+- cpufreq:
+- - modify link of CPPC highest performance changed.
+
+Changes form V5->V6:
+- cpufreq: amd-pstate:
+- - modify the wrong tag order.
+- - modify warning about hw_prefcore sysfs attribute.
+- - delete duplicate comments.
+- - modify the variable name cppc_highest_perf to prefcore_ranking.
+- - modify judgment conditions for setting highest_perf.
+- - modify sysfs attribute for CPPC highest perf to pr_debug message.
+- Documentation: amd-pstate:
+- - modify warning: title underline too short.
+
+Changes form V4->V5:
+- cpufreq: amd-pstate:
+- - modify sysfs attribute for CPPC highest perf.
+- - modify warning about comments
+- - rebase linux-next
+- cpufreq: 
+- - Moidfy warning about function declarations.
+- Documentation: amd-pstate:
+- - align with ``amd-pstat``
+
+Changes form V3->V4:
+- Documentation: amd-pstate:
+- - Modify inappropriate descriptions.
+
+Changes form V2->V3:
+- x86:
+- - Modify kconfig and description.
+- cpufreq: amd-pstate: 
+- - Add Co-developed-by tag in commit message.
+- cpufreq:
+- - Modify commit message.
+- Documentation: amd-pstate:
+- - Modify inappropriate descriptions.
+
+Changes form V1->V2:
+- acpi: cppc:
+- - Add reference link.
+- cpufreq:
+- - Moidfy link error.
+- cpufreq: amd-pstate: 
+- - Init the priorities of all online CPUs
+- - Use a single variable to represent the status of preferred core.
+- Documentation:
+- - Default enabled preferred core.
+- Documentation: amd-pstate: 
+- - Modify inappropriate descriptions.
+- - Default enabled preferred core.
+- - Use a single variable to represent the status of preferred core.
+
+Meng Li (7):
+  x86: Drop CPU_SUP_INTEL from SCHED_MC_PRIO for the expansion.
+  acpi: cppc: Add get the highest performance cppc control
+  cpufreq: amd-pstate: Enable amd-pstate preferred core supporting.
+  cpufreq: Add a notification message that the highest perf has changed
+  cpufreq: amd-pstate: Update amd-pstate preferred core ranking
+    dynamically
+  Documentation: amd-pstate: introduce amd-pstate preferred core
+  Documentation: introduce amd-pstate preferrd core mode kernel command
+    line options
+
+ .../admin-guide/kernel-parameters.txt         |   5 +
+ Documentation/admin-guide/pm/amd-pstate.rst   |  59 +++++-
+ arch/x86/Kconfig                              |   5 +-
+ drivers/acpi/cppc_acpi.c                      |  13 ++
+ drivers/acpi/processor_driver.c               |   6 +
+ drivers/cpufreq/amd-pstate.c                  | 187 ++++++++++++++++--
+ drivers/cpufreq/cpufreq.c                     |  13 ++
+ include/acpi/cppc_acpi.h                      |   5 +
+ include/linux/amd-pstate.h                    |  10 +
+ include/linux/cpufreq.h                       |   5 +
+ 10 files changed, 288 insertions(+), 20 deletions(-)
 
 -- 
-Shaoqin
+2.34.1
 
 
