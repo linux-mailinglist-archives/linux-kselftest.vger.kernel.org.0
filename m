@@ -1,145 +1,454 @@
-Return-Path: <linux-kselftest+bounces-805-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-806-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32AB87FCF79
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Nov 2023 07:56:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 54F117FCF94
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Nov 2023 07:58:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 569751C20D4B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Nov 2023 06:55:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 77E3A1C20998
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Nov 2023 06:58:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E5B6101F0;
-	Wed, 29 Nov 2023 06:55:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB85A10780;
+	Wed, 29 Nov 2023 06:58:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="h8FVn1gD"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FQr7fPKo"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2071.outbound.protection.outlook.com [40.107.243.71])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB722106;
-	Tue, 28 Nov 2023 22:55:43 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=O7ErRTO/sW5GqWbtJGh1hrZwg5IvSVRpKNxlEVxZ77wllrf2QqhayEN/m9qYlTkgzFqIB4KwYOMbl8uzsGf+XfEyo1GlXUGwmdF6wM3WtJsM+fr0NlWAVai8l6xvOL7g9V9vzn0uQYk8veSIFCK9Ochmb6QvwAPtzahGAEIa6yK8Nfw9Zv4hBVC2EnnD7hmXNb8p50eMj7nZPm6oOza/bvcqwiu6SShNiftUZnV17A9MrWYtVURi2855aMBEWd05gzixnymqV5Bp4ic9TGcq/GESGaYRbNzhIJ+TREF7jv0zXa9LV9LrBHS47zzLgldkg4B3Q2KR/gX9FYoIPQqluA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iKc1dIPsjE9yGYtF4kKEBsXDZo1NDaqtRaV3fani9k4=;
- b=D6ydXa8dvTdJcUiI5Iis5HEslGuBUgb8e79BJid87aLuauOl6QBRBBmel28D3I0j8bvH0jaqqHHOhNEkfGunfq5TluEFZhf9Fr/GiE62D5BERUA4xj6eipquoMn1ZVSVLqirim6C8DZx7bwzk+Dqop979A1tBK4opifRULK4xGX3sIYAmUo4tno33De4i1qojU/E41tjEmdeAcD+8DJ6t67Y3ED4u1t4p7yG8Z/qXlpf+sRzotvqhEfccx4mEKWXFNXCiU4X/yb+MS+I5NFGbXFZtT3QsjPTQHkxoXcyKNVu/XYJ8i44tDywFCIrqRbAY8w/f8ALEGT0HGVbxPgAHg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iKc1dIPsjE9yGYtF4kKEBsXDZo1NDaqtRaV3fani9k4=;
- b=h8FVn1gD7J/aYM1TTtvx+NdHO01BChCiIcde0v99jjGc7dkjv8k4x07S7vPIgxERc5n6xHGz4/w3FJUfYyElDHo1e3iggqqDfjxa48hooCPL6AsaFnd5GUPlKX0uLSwSQ1oBLytwt5pGdPK367j20CWOfzUE6lX1a24LcAuL0ao=
-Received: from PR3P192CA0020.EURP192.PROD.OUTLOOK.COM (2603:10a6:102:56::25)
- by PH7PR12MB7162.namprd12.prod.outlook.com (2603:10b6:510:201::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.29; Wed, 29 Nov
- 2023 06:55:41 +0000
-Received: from SN1PEPF0002BA52.namprd03.prod.outlook.com
- (2603:10a6:102:56:cafe::36) by PR3P192CA0020.outlook.office365.com
- (2603:10a6:102:56::25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.28 via Frontend
- Transport; Wed, 29 Nov 2023 06:55:40 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- SN1PEPF0002BA52.mail.protection.outlook.com (10.167.242.75) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7046.17 via Frontend Transport; Wed, 29 Nov 2023 06:55:40 +0000
-Received: from jasmine-meng.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.34; Wed, 29 Nov
- 2023 00:55:33 -0600
-From: Meng Li <li.meng@amd.com>
-To: "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, Huang Rui
-	<ray.huang@amd.com>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<x86@kernel.org>, <linux-acpi@vger.kernel.org>, Shuah Khan
-	<skhan@linuxfoundation.org>, <linux-kselftest@vger.kernel.org>, "Nathan
- Fontenot" <nathan.fontenot@amd.com>, Deepak Sharma <deepak.sharma@amd.com>,
-	Alex Deucher <alexander.deucher@amd.com>, Mario Limonciello
-	<mario.limonciello@amd.com>, Shimmer Huang <shimmer.huang@amd.com>, "Perry
- Yuan" <Perry.Yuan@amd.com>, Xiaojian Du <Xiaojian.Du@amd.com>, Viresh Kumar
-	<viresh.kumar@linaro.org>, Borislav Petkov <bp@alien8.de>, "Oleksandr
- Natalenko" <oleksandr@natalenko.name>, Meng Li <li.meng@amd.com>, Wyes Karny
-	<wyes.karny@amd.com>
-Subject: [PATCH V11 7/7] Documentation: introduce amd-pstate preferrd core mode kernel command line options
-Date: Wed, 29 Nov 2023 14:54:37 +0800
-Message-ID: <20231129065437.290183-8-li.meng@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231129065437.290183-1-li.meng@amd.com>
-References: <20231129065437.290183-1-li.meng@amd.com>
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A059B1BC6
+	for <linux-kselftest@vger.kernel.org>; Tue, 28 Nov 2023 22:58:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1701241123;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=44I9TgDarjiswLg+RPvRTfzPxaXxsOAGEM0CeQyA9WY=;
+	b=FQr7fPKoOOeHkr1hHDaK73Rw3Md+sJmHyGxw5phKZRPLJkwqNEBbnQG+t17u16ESUOtTML
+	O1sZ7RNWo2v5fKQa26lvE/WsYoYCecRy9mydimwejGzlxqOU/IJa7o5iJezXS5Plx7DDaQ
+	TsDX2Wg24YFReI2iB2DgSqsWmzPIagY=
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com
+ [209.85.216.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-656-elUNcp5vPT6I0uF35EqKMQ-1; Wed, 29 Nov 2023 01:58:42 -0500
+X-MC-Unique: elUNcp5vPT6I0uF35EqKMQ-1
+Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-28571b38828so1022898a91.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 28 Nov 2023 22:58:42 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701241121; x=1701845921;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=44I9TgDarjiswLg+RPvRTfzPxaXxsOAGEM0CeQyA9WY=;
+        b=vo8bYP9t6kQAQDzqivDBOtSeXsOHOBsFblZD55AuoNOC5XxFSTUjvHTXRWH/4R/la+
+         k7NiPcDi1Rh1kSqj11cQmcNH9jR9h5xQusDCh27ZBFBXcOduWs5Y5fGuHgvJeOt9L7n/
+         nrIOnEjpHVkB/eSvIo7uxOzJbUjg1Jjs7qBBmDIptk0bpiCXUe1Vner/Lg5YRqeL4/e+
+         N3CupQbMn64JTQbqHRG9HOJ8BgfIFCSIe0VRPwhDoxzK4SPHN1JGmUXMqb1EfkMqUIHP
+         BZlvRV9JWua7CVCY5Qg8PyrxKH/FBLW0Cp2lHuIXSGScP+ovwJmWz+VntobllHRlZacU
+         GuMg==
+X-Gm-Message-State: AOJu0YxEY+nkrtBwaJv1X1BS+xnXhN4a1CBfhjLDKHaZRyGu/tJh/Eyz
+	e0Yg1aNeIUfQuW+OJ9wM2rTrylVFLC+FNrpjDWgKEYdulpT/C6SmI20htlKKgRfRLvaasHGTEzv
+	cm7BQ+Vig63s+dfh+0y3pWTfDQM2B
+X-Received: by 2002:a17:90a:7408:b0:285:6f2b:4e82 with SMTP id a8-20020a17090a740800b002856f2b4e82mr17587401pjg.1.1701241121075;
+        Tue, 28 Nov 2023 22:58:41 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHMf+gCrVwkP5+54NJCOeUJzKXrPI0AR/UWjpOetgeTAlH1iLG9BTL0Vxv+vtFMzcuv70Dn2w==
+X-Received: by 2002:a17:90a:7408:b0:285:6f2b:4e82 with SMTP id a8-20020a17090a740800b002856f2b4e82mr17587391pjg.1.1701241120695;
+        Tue, 28 Nov 2023 22:58:40 -0800 (PST)
+Received: from [10.72.112.34] ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id v24-20020a17090abb9800b00285a2069a22sm602872pjr.5.2023.11.28.22.58.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 28 Nov 2023 22:58:40 -0800 (PST)
+Message-ID: <bb50e7ce-4953-0299-ffc7-7f1e843fcdb0@redhat.com>
+Date: Wed, 29 Nov 2023 14:58:34 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN1PEPF0002BA52:EE_|PH7PR12MB7162:EE_
-X-MS-Office365-Filtering-Correlation-Id: 083529a5-eb54-4c17-065c-08dbf0a832e4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	Kpz4ZUufly4qa3LqPwBfJ5kZFMYUwC6MA1wONlLmUFanJzPOhSSSzZfoxs4eeuPc672yrUaD8L/Xf2Xe2Tp/ctuNapU8BnAgNEDrcUu5Kz8CekY3gyEwysJfR3qTQf6+DX8JkPnW7ucQzV97vLW95WOniLmECzvXBSUmODNYQJygQqCQNHMoKDAXr8QI3yM/mfK75vOKG3/GiU6oSh1b5/7jO46mdrRGQmlLClUvJRB5DXupo8LWWvVdrlZln+fmnA4ceMmI3mWlJxu0JECFx22Y0KRI1KhV3gDFE3Hb0639eK7ERTBCJCRsOFjbSs0ifgpkmPMpusJFd0LkzJ+0MnxDbDyEWdI7EjBvbZr5r6Dd9rNRScnBcjROV+1GSOn3L2Wyq/rI5uMZkLNWi48+YME+wr+kAlYqrnbZ9g96v+HczPutoAmQzL4m24HpIIWMTMGmmZLt8kQ8eynbE0ylkANq3PhIgFGDemTACXrUCRfZJeXhfWwVtsZv8E919oMgpDqvM2vzW+MP7mH6xTQUp/U6BxUdUGSaJJsBrErW2rk+C2YMo0lbcAHOtqkYWbTYH52t+iLePMEBnarmnFCm+xRH0y0gx2jGnHgXaNeC73NLDKM4bwOlifxn/C5b5qMT/ZeY3df6KhcFTItMx5mcvshxYv21i04SLgwvBrRfKuAyqcYLvJ36gYc3CVgE8qgIkc7EMqQgVu9fuleF6LMmM6xC6WHE0hDGhUGW3FAqQCok52zQPWb2BMIx5WY/wQ3IWNp9BM2rGeSN8s1fHaujtL4rNLJHI3pg9xn/CVP9j3imGvrk2LwVK211OkBysV7f
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(346002)(396003)(39860400002)(136003)(376002)(230922051799003)(451199024)(82310400011)(186009)(64100799003)(1800799012)(40470700004)(36840700001)(46966006)(40480700001)(41300700001)(2906002)(40460700003)(7416002)(86362001)(5660300002)(356005)(81166007)(83380400001)(70586007)(6636002)(70206006)(8936002)(4326008)(8676002)(336012)(110136005)(54906003)(16526019)(7696005)(82740400003)(2616005)(316002)(1076003)(26005)(36756003)(426003)(478600001)(47076005)(36860700001)(36900700001)(14943795004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2023 06:55:40.1408
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 083529a5-eb54-4c17-065c-08dbf0a832e4
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SN1PEPF0002BA52.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7162
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.15.1
+Subject: Re: [PATCH v1 3/3] KVM: selftests: aarch64: Introduce
+ pmu_event_filter_test
+Content-Language: en-US
+To: Eric Auger <eauger@redhat.com>, Oliver Upton <oliver.upton@linux.dev>,
+ Marc Zyngier <maz@kernel.org>, kvmarm@lists.linux.dev
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+ James Morse <james.morse@arm.com>, Suzuki K Poulose
+ <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>,
+ linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+References: <20231123063750.2176250-1-shahuang@redhat.com>
+ <20231123063750.2176250-4-shahuang@redhat.com>
+ <3c18a04a-2834-43ef-b857-e6ad8f0c5f41@redhat.com>
+From: Shaoqin Huang <shahuang@redhat.com>
+In-Reply-To: <3c18a04a-2834-43ef-b857-e6ad8f0c5f41@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-amd-pstate driver support enable/disable preferred core.
-Default enabled on platforms supporting amd-pstate preferred core.
-Disable amd-pstate preferred core with
-"amd_prefcore=disable" added to the kernel command line.
+Hi Eric,
 
-Signed-off-by: Meng Li <li.meng@amd.com>
-Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-Reviewed-by: Wyes Karny <wyes.karny@amd.com>
-Reviewed-by: Huang Rui <ray.huang@amd.com>
-Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
----
- Documentation/admin-guide/kernel-parameters.txt | 5 +++++
- 1 file changed, 5 insertions(+)
+On 11/27/23 16:10, Eric Auger wrote:
+> Hi Shaoqin,
+> 
+> On 11/23/23 07:37, Shaoqin Huang wrote:
+>> Introduce pmu_event_filter_test for arm64 platforms. The test configures
+>> PMUv3 for a vCPU, and sets different pmu event filter for the vCPU, and
+> filters
+>> check if the guest can use those events which user allow and can't use
+>> those events which use deny.
+>>
+>> This test refactor the create_vpmu_vm() and make it a wrapper for
+>> __create_vpmu_vm(), which can let we do some extra init before
+> which can let we do -> which allows some extra init code.
 
-diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
-index 758bb25ea3e6..008bdfd63c22 100644
---- a/Documentation/admin-guide/kernel-parameters.txt
-+++ b/Documentation/admin-guide/kernel-parameters.txt
-@@ -363,6 +363,11 @@
- 			  selects a performance level in this range and appropriate
- 			  to the current workload.
- 
-+	amd_prefcore=
-+			[X86]
-+			disable
-+			  Disable amd-pstate preferred core.
-+
- 	amijoy.map=	[HW,JOY] Amiga joystick support
- 			Map of devices attached to JOY0DAT and JOY1DAT
- 			Format: <a>,<b>
+Copy that.
+
+>> KVM_ARM_VCPU_PMU_V3_INIT.
+>>
+>> This test choose the branches_retired and the instructions_retired
+>> event, and let guest use the two events in pmu. And check if the result
+> Are you sure those events are supported?
+>> is expected.
+>>
+>> Signed-off-by: Shaoqin Huang <shahuang@redhat.com>
+>> ---
+>>   tools/testing/selftests/kvm/Makefile          |   1 +
+>>   .../kvm/aarch64/pmu_event_filter_test.c       | 227 ++++++++++++++++++
+>>   .../selftests/kvm/include/aarch64/vpmu.h      |   4 +
+>>   .../testing/selftests/kvm/lib/aarch64/vpmu.c  |  14 +-
+>>   4 files changed, 244 insertions(+), 2 deletions(-)
+>>   create mode 100644 tools/testing/selftests/kvm/aarch64/pmu_event_filter_test.c
+>>
+>> diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+>> index b60852c222ac..5f126e1a1dbf 100644
+>> --- a/tools/testing/selftests/kvm/Makefile
+>> +++ b/tools/testing/selftests/kvm/Makefile
+>> @@ -155,6 +155,7 @@ TEST_GEN_PROGS_aarch64 += aarch64/arch_timer
+>>   TEST_GEN_PROGS_aarch64 += aarch64/debug-exceptions
+>>   TEST_GEN_PROGS_aarch64 += aarch64/hypercalls
+>>   TEST_GEN_PROGS_aarch64 += aarch64/page_fault_test
+>> +TEST_GEN_PROGS_aarch64 += aarch64/pmu_event_filter_test
+>>   TEST_GEN_PROGS_aarch64 += aarch64/psci_test
+>>   TEST_GEN_PROGS_aarch64 += aarch64/set_id_regs
+>>   TEST_GEN_PROGS_aarch64 += aarch64/smccc_filter
+>> diff --git a/tools/testing/selftests/kvm/aarch64/pmu_event_filter_test.c b/tools/testing/selftests/kvm/aarch64/pmu_event_filter_test.c
+>> new file mode 100644
+>> index 000000000000..a876f5c2033b
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/kvm/aarch64/pmu_event_filter_test.c
+>> @@ -0,0 +1,227 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * pmu_event_filter_test - Test user limit pmu event for guest.
+>> + *
+>> + * Copyright (c) 2023 Red Hat, Inc.
+>> + *
+>> + * This test checks if the guest only see the limited pmu event that userspace
+> sees
+>> + * sets, if the gust can use those events which user allow, and if the guest
+> s/gust/guest
+
+Thanks, will correct it.
+
+>> + * can't use those events which user deny.
+>> + * It also checks set invalid filter return the expected error.
+> it also checks that setting invalid filter ranges ...
+>> + * This test runs only when KVM_CAP_ARM_PMU_V3 is supported on the host.
+>> + */
+>> +#include <kvm_util.h>
+>> +#include <processor.h>
+>> +#include <vgic.h>
+>> +#include <vpmu.h>
+>> +#include <test_util.h>
+>> +#include <perf/arm_pmuv3.h>
+>> +
+>> +struct {
+>> +	uint64_t branches_retired;
+>> +	uint64_t instructions_retired;
+>> +} pmc_results;
+>> +
+>> +static struct vpmu_vm *vpmu_vm;
+>> +
+>> +#define FILTER_NR 10
+>> +
+>> +struct test_desc {
+>> +	const char *name;
+>> +	void (*check_result)(void);
+>> +	struct kvm_pmu_event_filter filter[FILTER_NR];
+>> +};
+>> +
+>> +#define __DEFINE_FILTER(base, num, act)		\
+>> +	((struct kvm_pmu_event_filter) {	\
+>> +		.base_event	= base,		\
+>> +		.nevents	= num,		\
+>> +		.action		= act,		\
+>> +	})
+>> +
+>> +#define DEFINE_FILTER(base, act) __DEFINE_FILTER(base, 1, act)
+>> +
+>> +#define EMPTY_FILTER	{ 0 }
+>> +
+>> +#define SW_INCR		0x0
+>> +#define INST_RETIRED	0x8
+>> +#define BR_RETIERD	0x21
+> looks like a typo
+
+It's a typo error. Fixed it.
+
+>> +
+>> +#define NUM_BRANCHES	10
+>> +
+>> +static void run_and_measure_loop(void)
+>> +{
+>> +	asm volatile(
+>> +		"	mov	x10, %[loop]\n"
+>> +		"1:	sub	x10, x10, #1\n"
+>> +		"	cmp	x10, #0x0\n"
+>> +		"	b.gt	1b\n"
+>> +		:
+>> +		: [loop] "r" (NUM_BRANCHES)
+>> +		: "x10", "cc");
+>> +}
+>> +
+>> +static void guest_code(void)
+>> +{
+>> +	uint64_t pmcr = read_sysreg(pmcr_el0);
+>> +
+>> +	pmu_disable_reset();
+>> +
+>> +	write_pmevtypern(0, BR_RETIERD);
+>> +	write_pmevtypern(1, INST_RETIRED);
+>> +	enable_counter(0);
+>> +	enable_counter(1);
+>> +	write_sysreg(pmcr | ARMV8_PMU_PMCR_E, pmcr_el0);
+>> +
+>> +	run_and_measure_loop();
+>> +
+>> +	write_sysreg(pmcr, pmcr_el0);
+>> +
+>> +	pmc_results.branches_retired = read_sysreg(pmevcntr0_el0);
+>> +	pmc_results.instructions_retired = read_sysreg(pmevcntr1_el0);
+>> +
+>> +	GUEST_DONE();
+> another direct way to see if the guest can use those filters is to read
+> the PMCEIDx that indicates whether an event is supported.
+> 
+
+Yes. That's the easist way. Why I do this is because I follow the x86 
+design.
+
+>> +}
+>> +
+>> +static void pmu_event_filter_init(struct vpmu_vm *vm, void *arg)
+>> +{
+>> +	struct kvm_device_attr attr = {
+>> +		.group	= KVM_ARM_VCPU_PMU_V3_CTRL,
+>> +		.attr	= KVM_ARM_VCPU_PMU_V3_FILTER,
+>> +	};
+>> +	struct kvm_pmu_event_filter *filter = (struct kvm_pmu_event_filter *)arg;
+>> +
+>> +	while (filter && filter->nevents != 0) {
+>> +		attr.addr = (uint64_t)filter;
+>> +		vcpu_ioctl(vm->vcpu, KVM_SET_DEVICE_ATTR, &attr);
+>> +		filter++;
+>> +	}
+>> +}
+>> +
+>> +static void create_vpmu_vm_with_filter(void *guest_code,
+>> +				       struct kvm_pmu_event_filter *filter)
+>> +{
+>> +	vpmu_vm = __create_vpmu_vm(guest_code, pmu_event_filter_init, filter);
+>> +}
+>> +
+>> +static void run_vcpu(struct kvm_vcpu *vcpu)
+>> +{
+>> +	struct ucall uc;
+>> +
+>> +	while (1) {
+>> +		vcpu_run(vcpu);
+>> +		switch (get_ucall(vcpu, &uc)) {
+>> +		case UCALL_DONE:
+>> +			return;
+>> +		default:
+>> +			TEST_FAIL("Unknown ucall %lu", uc.cmd);
+>> +		}
+>> +	}
+>> +}
+>> +
+>> +static void check_pmc_counting(void)
+>> +{
+>> +	uint64_t br = pmc_results.branches_retired;
+>> +	uint64_t ir = pmc_results.instructions_retired;
+>> +
+>> +	TEST_ASSERT(br && br == NUM_BRANCHES, "Branch instructions retired = "
+>> +		    "%lu (expected %u)", br, NUM_BRANCHES);
+>> +	TEST_ASSERT(ir, "Instructions retired = %lu (expected > 0)", ir);
+>> +}
+>> +
+>> +static void check_pmc_not_counting(void)
+>> +{
+>> +	uint64_t br = pmc_results.branches_retired;
+>> +	uint64_t ir = pmc_results.instructions_retired;
+>> +
+>> +	TEST_ASSERT(!br, "Branch instructions retired = %lu (expected 0)", br);
+>> +	TEST_ASSERT(!ir, "Instructions retired = %lu (expected 0)", ir);
+>> +}
+>> +
+>> +static void run_vcpu_and_sync_pmc_results(void)
+>> +{
+>> +	memset(&pmc_results, 0, sizeof(pmc_results));
+>> +	sync_global_to_guest(vpmu_vm->vm, pmc_results);
+>> +
+>> +	run_vcpu(vpmu_vm->vcpu);
+>> +
+>> +	sync_global_from_guest(vpmu_vm->vm, pmc_results);
+>> +}
+>> +
+>> +static void run_test(struct test_desc *t)
+>> +{
+>> +	pr_debug("Test: %s\n", t->name);
+>> +
+>> +	create_vpmu_vm_with_filter(guest_code, t->filter);
+>> +
+>> +	run_vcpu_and_sync_pmc_results();
+>> +
+>> +	t->check_result();
+>> +
+>> +	destroy_vpmu_vm(vpmu_vm);
+>> +}
+>> +
+>> +static struct test_desc tests[] = {
+>> +	{"without_filter", check_pmc_counting, { EMPTY_FILTER }},
+>> +	{"member_allow_filter", check_pmc_counting,
+>> +	 {DEFINE_FILTER(SW_INCR, 0), DEFINE_FILTER(INST_RETIRED, 0),
+>> +	  DEFINE_FILTER(BR_RETIERD, 0), EMPTY_FILTER}},
+>> +	{"member_deny_filter", check_pmc_not_counting,
+>> +	 {DEFINE_FILTER(SW_INCR, 1), DEFINE_FILTER(INST_RETIRED, 1),
+>> +	  DEFINE_FILTER(BR_RETIERD, 1), EMPTY_FILTER}},
+>> +	{"not_member_deny_filter", check_pmc_counting,
+>> +	 {DEFINE_FILTER(SW_INCR, 1), EMPTY_FILTER}},
+>> +	{"not_member_allow_filter", check_pmc_not_counting,
+>> +	 {DEFINE_FILTER(SW_INCR, 0), EMPTY_FILTER}},
+>> +	{ 0 }
+>> +};
+>> +
+>> +static void for_each_test(void)
+>> +{
+>> +	struct test_desc *t;
+>> +
+>> +	for (t = &tests[0]; t->name; t++)
+>> +		run_test(t);
+>> +}
+>> +
+>> +static void set_invalid_filter(struct vpmu_vm *vm, void *arg)
+>> +{
+>> +	struct kvm_pmu_event_filter invalid;
+>> +	struct kvm_device_attr attr = {
+>> +		.group	= KVM_ARM_VCPU_PMU_V3_CTRL,
+>> +		.attr	= KVM_ARM_VCPU_PMU_V3_FILTER,
+>> +		.addr	= (uint64_t)&invalid,
+>> +	};
+>> +	int ret = 0;
+>> +
+>> +	/* The max event number is (1 << 16), set a range large than it. */
+>> +	invalid = __DEFINE_FILTER(BIT(15), BIT(15)+1, 0);
+>> +	ret = __vcpu_ioctl(vm->vcpu, KVM_SET_DEVICE_ATTR, &attr);
+>> +	TEST_ASSERT(ret && errno == EINVAL, "Set Invalid filter range "
+>> +		    "ret = %d, errno = %d (expected ret = -1, errno = EINVAL)",
+>> +		    ret, errno);
+>> +
+>> +	ret = 0;
+>> +
+>> +	/* Set the Invalid action. */
+>> +	invalid = __DEFINE_FILTER(0, 1, 3);
+>> +	ret = __vcpu_ioctl(vm->vcpu, KVM_SET_DEVICE_ATTR, &attr);
+>> +	TEST_ASSERT(ret && errno == EINVAL, "Set Invalid filter action "
+>> +		    "ret = %d, errno = %d (expected ret = -1, errno = EINVAL)",
+>> +		    ret, errno);
+>> +}
+>> +
+>> +static void test_invalid_filter(void)
+>> +{
+>> +	vpmu_vm = __create_vpmu_vm(guest_code, set_invalid_filter, NULL);
+>> +	destroy_vpmu_vm(vpmu_vm);
+>> +}
+>> +
+>> +int main(void)
+>> +{
+>> +	TEST_REQUIRE(kvm_has_cap(KVM_CAP_ARM_PMU_V3));
+>> +
+>> +	for_each_test();
+>> +
+>> +	test_invalid_filter();
+> I would introduce test_invalid_filter in a separate patch
+
+Ok. I can split it into two.
+
+Thanks,
+Shaoqin
+
+>> +}
+>> diff --git a/tools/testing/selftests/kvm/include/aarch64/vpmu.h b/tools/testing/selftests/kvm/include/aarch64/vpmu.h
+>> index e0cc1ca1c4b7..db97bfb07996 100644
+>> --- a/tools/testing/selftests/kvm/include/aarch64/vpmu.h
+>> +++ b/tools/testing/selftests/kvm/include/aarch64/vpmu.h
+>> @@ -18,6 +18,10 @@ struct vpmu_vm {
+>>   	int gic_fd;
+>>   };
+>>   
+>> +struct vpmu_vm *__create_vpmu_vm(void *guest_code,
+>> +				 void (*init_pmu)(struct vpmu_vm *vm, void *arg),
+>> +				 void *arg);
+>> +
+>>   struct vpmu_vm *create_vpmu_vm(void *guest_code);
+>>   
+>>   void destroy_vpmu_vm(struct vpmu_vm *vpmu_vm);
+>> diff --git a/tools/testing/selftests/kvm/lib/aarch64/vpmu.c b/tools/testing/selftests/kvm/lib/aarch64/vpmu.c
+>> index b3de8fdc555e..76ea03d607f1 100644
+>> --- a/tools/testing/selftests/kvm/lib/aarch64/vpmu.c
+>> +++ b/tools/testing/selftests/kvm/lib/aarch64/vpmu.c
+>> @@ -7,8 +7,9 @@
+>>   #include <vpmu.h>
+>>   #include <perf/arm_pmuv3.h>
+>>   
+>> -/* Create a VM that has one vCPU with PMUv3 configured. */
+>> -struct vpmu_vm *create_vpmu_vm(void *guest_code)
+>> +struct vpmu_vm *__create_vpmu_vm(void *guest_code,
+>> +				 void (*init_pmu)(struct vpmu_vm *vm, void *arg),
+>> +				 void *arg)
+>>   {
+>>   	struct kvm_vcpu_init init;
+>>   	uint8_t pmuver;
+>> @@ -50,12 +51,21 @@ struct vpmu_vm *create_vpmu_vm(void *guest_code)
+>>   		    "Unexpected PMUVER (0x%x) on the vCPU with PMUv3", pmuver);
+>>   
+>>   	/* Initialize vPMU */
+>> +	if (init_pmu)
+>> +		init_pmu(vpmu_vm, arg);
+>> +
+>>   	vcpu_ioctl(vpmu_vm->vcpu, KVM_SET_DEVICE_ATTR, &irq_attr);
+>>   	vcpu_ioctl(vpmu_vm->vcpu, KVM_SET_DEVICE_ATTR, &init_attr);
+>>   
+>>   	return vpmu_vm;
+>>   }
+>>   
+>> +/* Create a VM that has one vCPU with PMUv3 configured. */
+>> +struct vpmu_vm *create_vpmu_vm(void *guest_code)
+>> +{
+>> +	return __create_vpmu_vm(guest_code, NULL, NULL);
+>> +}
+>> +
+>>   void destroy_vpmu_vm(struct vpmu_vm *vpmu_vm)
+>>   {
+>>   	close(vpmu_vm->gic_fd);
+> Thanks
+> 
+> Eric
+> 
+
 -- 
-2.34.1
+Shaoqin
 
 
