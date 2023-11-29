@@ -1,41 +1,41 @@
-Return-Path: <linux-kselftest+bounces-824-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-825-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CA067FDB33
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Nov 2023 16:25:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49ED77FDB35
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Nov 2023 16:25:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4F1F81C20A6E
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F3DD1282BB1
 	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Nov 2023 15:25:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2978F381AD;
-	Wed, 29 Nov 2023 15:25:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6127374FF;
+	Wed, 29 Nov 2023 15:25:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sMmZgpkr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dGCduNII"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 089FB3032E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92A033032E;
+	Wed, 29 Nov 2023 15:25:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E34D4C433CB;
 	Wed, 29 Nov 2023 15:25:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 009D0C433C8;
-	Wed, 29 Nov 2023 15:25:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701271505;
-	bh=d0j1ygzfv543NA+sGX2Z4uqQwtYj5yA4+tnlTa5g4Ko=;
+	s=k20201202; t=1701271507;
+	bh=kG2+ej6cJ+ghQo+0P11j+c5Gws+B/g/6ONT5dR7kBSg=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=sMmZgpkr3oSEc/hnNfjXgKBVCPQPCvRbhbHzQF5uJtId/6mLhP5rXV+DDtk8LCmnD
-	 Sa3Y+pLYDCIA0fzN0XfWuAoc7WT3onyTfP0FJdis9Uq0BuMCxTM+JXxx8vd9ciFnwH
-	 Cf2POVg+Kb0kYMOpvWC80x98O1IUxKf4TE3uUN0peBfWubb7jDhUztxYv5/kPtw0/M
-	 JxZ8ygFP9/koIQWymKarxiIi0YxTWA2Ur6Ohnx5nTEjhz50IICKQGiHXprOwMpSZHZ
-	 pRLUILFC4xEX/cJoPIb3GkGaiS2zu0kl/i1HoKcvyshAt88539vBzV/RcnHaf5oOPS
-	 Y4BH/5eDeZbqQ==
+	b=dGCduNIIvZgqq/TxuYMezF3tHg4UfzJwkO+QFU+etNx5EnXi07/Dq/aHCLz5bQzqu
+	 gK9S/QFt7JL+C3Pw8OcXQ87oMJ47zQu7+pjtlmEvITlVIbzQm2JrmWf6/+nmUkP3ei
+	 48NIvmprJGh8PHWIGPSIkreSxwNU6dSty+MOxBErDg7y53pMTifxQPTeCRBnV8HQoY
+	 lrEs1zX8tXjYCh8sdzhrL3rczWjkrjGNKX+62qTgcpCcT6+MDHCbOBfPWbB0JeCdxE
+	 q+4/+TJh42PO2n+dmLa7RUMdn56EBVFUDhr8aQB/dwvilxA+g/qkGw0nttTgwOtdne
+	 nzqoAeVbNJyLg==
 From: Benjamin Tissoires <bentiss@kernel.org>
-Date: Wed, 29 Nov 2023 16:24:27 +0100
-Subject: [PATCH 02/12] selftests/hid: vmtest.sh: allow finer control on the
- build steps
+Date: Wed, 29 Nov 2023 16:24:28 +0100
+Subject: [PATCH 03/12] selftests/hid: base: allow for multiple
+ skip_if_uhdev
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -44,7 +44,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20231129-wip-selftests-v1-2-ba15a1fe1b0d@kernel.org>
+Message-Id: <20231129-wip-selftests-v1-3-ba15a1fe1b0d@kernel.org>
 References: <20231129-wip-selftests-v1-0-ba15a1fe1b0d@kernel.org>
 In-Reply-To: <20231129-wip-selftests-v1-0-ba15a1fe1b0d@kernel.org>
 To: Jiri Kosina <jikos@kernel.org>, 
@@ -53,119 +53,42 @@ To: Jiri Kosina <jikos@kernel.org>,
 Cc: linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  linux-kernel@vger.kernel.org, Benjamin Tissoires <bentiss@kernel.org>
 X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1701271499; l=3407;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1701271499; l=1211;
  i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
- bh=d0j1ygzfv543NA+sGX2Z4uqQwtYj5yA4+tnlTa5g4Ko=;
- b=936ntHKnOa4tMGXOqIzvQBJMwFxjDxpyeDuhAQllyO2dJ5tdmUXkhVz5Vm6nSJ8QcRRU2ElX6
- oOlMwhR1YhLCVue2OBoZ1BqJ8PCkz6pFN+4gw3Pa+czVbhjmvqXw42+
+ bh=kG2+ej6cJ+ghQo+0P11j+c5Gws+B/g/6ONT5dR7kBSg=;
+ b=cRFybPnwZ68SH5mCbsRVxDJcFgImN6Y5PIICvbba808TbqdFz1Ch3p8CQc+UIyA6tVhJaY+bY
+ zLd5oD03G7bD+zF5g/bCAs6eMhzDrtSDwOw2wyqAvs2ZkwA226KbLuS
 X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
  pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
 
-vmtest.sh works great for a one shot test, but not so much for CI where
-I want to build (with different configs) the bzImage in a separate
-job than the one I am running it.
+We can actually have multiple occurences of `skip_if_uhdev` if we follow
+the information from the pytest doc[0].
 
-Add a "build_only" option to specify whether we need to boot the currently
-built kernel in the vm.
+This is not immediately used, but can be if we need multiple conditions
+on a given test.
+
+
+[0] https://docs.pytest.org/en/latest/historical-notes.html#update-marker-code
 
 Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
 ---
- tools/testing/selftests/hid/vmtest.sh | 42 ++++++++++++++++++++---------------
- 1 file changed, 24 insertions(+), 18 deletions(-)
+ tools/testing/selftests/hid/tests/base.py | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/hid/vmtest.sh b/tools/testing/selftests/hid/vmtest.sh
-index 301b4e162336..52ada972833b 100755
---- a/tools/testing/selftests/hid/vmtest.sh
-+++ b/tools/testing/selftests/hid/vmtest.sh
-@@ -32,7 +32,7 @@ DEFAULT_COMMAND="pip3 install hid-tools; make -C tools/testing/selftests TARGETS
- usage()
- {
- 	cat <<EOF
--Usage: $0 [-i] [-s] [-d <output_dir>] -- [<command>]
-+Usage: $0 [-j N] [-s] [-b] [-d <output_dir>] -- [<command>]
+diff --git a/tools/testing/selftests/hid/tests/base.py b/tools/testing/selftests/hid/tests/base.py
+index 1305cfc9646e..5d9c26dfc460 100644
+--- a/tools/testing/selftests/hid/tests/base.py
++++ b/tools/testing/selftests/hid/tests/base.py
+@@ -238,8 +238,7 @@ class BaseTestCase:
+             try:
+                 with HIDTestUdevRule.instance():
+                     with new_uhdev as self.uhdev:
+-                        skip_cond = request.node.get_closest_marker("skip_if_uhdev")
+-                        if skip_cond:
++                        for skip_cond in request.node.iter_markers("skip_if_uhdev"):
+                             test, message, *rest = skip_cond.args
  
- <command> is the command you would normally run when you are in
- the source kernel direcory. e.g:
-@@ -55,6 +55,7 @@ Options:
- 
- 	-u)		Update the boot2container script to a newer version.
- 	-d)		Update the output directory (default: ${OUTPUT_DIR})
-+	-b)		Run the only build steps for the kernel and the selftests
- 	-j)		Number of jobs for compilation, similar to -j in make
- 			(default: ${NUM_COMPILE_JOBS})
- 	-s)		Instead of powering off the VM, start an interactive
-@@ -191,8 +192,9 @@ main()
- 	local command="${DEFAULT_COMMAND}"
- 	local update_b2c="no"
- 	local debug_shell="no"
-+	local build_only="no"
- 
--	while getopts ':hsud:j:' opt; do
-+	while getopts ':hsud:j:b' opt; do
- 		case ${opt} in
- 		u)
- 			update_b2c="yes"
-@@ -207,6 +209,9 @@ main()
- 			command="/bin/sh"
- 			debug_shell="yes"
- 			;;
-+		b)
-+			build_only="yes"
-+			;;
- 		h)
- 			usage
- 			exit 0
-@@ -226,8 +231,7 @@ main()
- 	shift $((OPTIND -1))
- 
- 	# trap 'catch "$?"' EXIT
--
--	if [[ "${debug_shell}" == "no" ]]; then
-+	if [[ "${build_only}" == "no" && "${debug_shell}" == "no" ]]; then
- 		if [[ $# -eq 0 ]]; then
- 			echo "No command specified, will run ${DEFAULT_COMMAND} in the vm"
- 		else
-@@ -267,24 +271,26 @@ main()
- 	update_kconfig "${kernel_checkout}" "${kconfig_file}"
- 
- 	recompile_kernel "${kernel_checkout}" "${make_command}"
-+	update_selftests "${kernel_checkout}" "${make_command}"
- 
--	if [[ "${update_b2c}" == "no" && ! -f "${b2c}" ]]; then
--		echo "vm2c script not found in ${b2c}"
--		update_b2c="yes"
--	fi
-+	if [[ "${build_only}" == "no" ]]; then
-+		if [[ "${update_b2c}" == "no" && ! -f "${b2c}" ]]; then
-+			echo "vm2c script not found in ${b2c}"
-+			update_b2c="yes"
-+		fi
- 
--	if [[ "${update_b2c}" == "yes" ]]; then
--		download $B2C_URL $b2c
--		chmod +x $b2c
--	fi
-+		if [[ "${update_b2c}" == "yes" ]]; then
-+			download $B2C_URL $b2c
-+			chmod +x $b2c
-+		fi
- 
--	update_selftests "${kernel_checkout}" "${make_command}"
--	run_vm "${kernel_checkout}" $b2c "${kernel_bzimage}" "${command}"
--	if [[ "${debug_shell}" != "yes" ]]; then
--		echo "Logs saved in ${OUTPUT_DIR}/${LOG_FILE}"
--	fi
-+		run_vm "${kernel_checkout}" $b2c "${kernel_bzimage}" "${command}"
-+		if [[ "${debug_shell}" != "yes" ]]; then
-+			echo "Logs saved in ${OUTPUT_DIR}/${LOG_FILE}"
-+		fi
- 
--	exit $(cat ${OUTPUT_DIR}/${EXIT_STATUS_FILE})
-+		exit $(cat ${OUTPUT_DIR}/${EXIT_STATUS_FILE})
-+	fi
- }
- 
- main "$@"
+                             if test(self.uhdev):
 
 -- 
 2.41.0
