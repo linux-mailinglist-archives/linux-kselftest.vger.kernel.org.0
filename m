@@ -1,227 +1,213 @@
-Return-Path: <linux-kselftest+bounces-784-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-785-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 477857FCA75
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Nov 2023 00:04:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 118A77FCC0E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Nov 2023 01:51:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C3691B2174A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 28 Nov 2023 23:04:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5F8BEB21632
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Nov 2023 00:51:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 805BD59B76;
-	Tue, 28 Nov 2023 23:04:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65E3A10E7;
+	Wed, 29 Nov 2023 00:51:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PJJUQQcs"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="kFboe8Jm"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99F6212C;
-	Tue, 28 Nov 2023 15:04:15 -0800 (PST)
-Received: by mail-io1-xd32.google.com with SMTP id ca18e2360f4ac-7b3bc70fca5so8734439f.1;
-        Tue, 28 Nov 2023 15:04:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701212655; x=1701817455; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2DFhzUwmSAVWyj8UA9HM/5RmuhrapMWgT80OB1ol+pw=;
-        b=PJJUQQcsrXQ3FpOex5IFRIz053Tj/fzr7Z2DJs5z6q8okLYPJXx8HagpFCdFdwg4EY
-         EzVZTk7K4aG0n8eOYQ2R2R79DpYmc/g23wcKGeVZNPEDRqjuI4wVMCrgqQ6599Br166g
-         vcm/GQTBUi/Gc9e2CcB1ahA1HcWdnqJAL6xQExdlQuyll4AQLzwtetJkcHwUXbIlyuwg
-         I4F9NCHmuegM6BX78qyJOlb/a9q18sMTDpBinNyJbfr79b3rcdsD4Bk1xEe07S3AK5Xn
-         C4cpQEfC31bhvINCXwhUWRr82GOzXYBJP4rNJSQBcW7w7Y5v7xQhI9gtQvyiVdp8+NmL
-         5l8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701212655; x=1701817455;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2DFhzUwmSAVWyj8UA9HM/5RmuhrapMWgT80OB1ol+pw=;
-        b=H7gkbpFIhrxiP6omsCcvPUolSZvZnxfYHUI9EvW3M9yY0jDSOWv3IgPFQBioXqvfmP
-         NrIQEvVmM3252JR+FgiR0aiaCAVeIKnkYCbf0lvW9W7PVkI3M0fVk0awkY22NQ2Np6T7
-         Zpvtkp2YvV02CrWV+rWKa/CXaX5u9BzRouxz21YptSC1rLICvny+zc5gwS2f3TEaWpUQ
-         mqcSORCkIxpr0JDASc55Sep4Rnm7//4QcLAPybJBjW+OZcpsF4wqjf1TnnNRh4exxg2E
-         rtVw4k7X+JH7GW/Um39PgJS7w6MjIp8eLwMBSHenFJnCbvp5XNVWuJUegAn3sZbywBe1
-         TxQQ==
-X-Gm-Message-State: AOJu0YzLGjBqVjhLHNhSll2vTJ9m2E0qn9Hjnib1j/3AR+qK2wBlTgJl
-	M2lAuazPGKr2RDXkS7DcC+hOjk4jO3MzktlmKyg=
-X-Google-Smtp-Source: AGHT+IHEQbQKDe8LZI8hD3vy2YVk1aTnCS615hOJnwxGT9PKd2Vc2radk/Uw2Cm0lySrjxcR7yiXVY4Tbcgyou67tQ4=
-X-Received: by 2002:a6b:e40a:0:b0:7b3:7491:1dee with SMTP id
- u10-20020a6be40a000000b007b374911deemr13877445iog.10.1701212654841; Tue, 28
- Nov 2023 15:04:14 -0800 (PST)
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2043.outbound.protection.outlook.com [40.107.244.43])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0A16137;
+	Tue, 28 Nov 2023 16:51:44 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=QibiT8iZ4SadFdjePh4gHhs8PZapIlBauDaBMvZ0wCgbLbUPgukvMe6WFC5KQj6itGu20iJOPMAsYWTSTrT7pgNH+K01byMsRhOqdwy/hND4/O6V4OmUAhJ/AgbYVLYtq8FZVrM45dOsSRprOWItf7wNGeBGed3KBiuKyjiLS0NRh2AowWqDeaAuiC8wSjMdV6XbvJNW6iduztxcHMSDczIxNoNKOQ58i4wxKywc50TvNtj3hGi9RSi6qMXrVcChECjF2BhaolPr3KEAu1VPaixdBaFTkYMTdE78imchiLmvZCr7KW8D2gt4osfaqgBE36/JY0ZaxGOkYC6mEQcpag==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=S4V12ocUeRn9/nHO66BTnzjSEUrVobZtf2LoWheKElI=;
+ b=QalJpBB4S2ofSZj61MVpu2mnFIHzBq0G5U9fOcKRHYlXpwBa2GktO/yfZ3lnaJwXHJRbWhZuEQzLnMkHCu9cyD8Bm56aXR37toUIi82lHCtbn3+yPTXg7HjHhlT+BtlGzJ5K5xlDCQBfwaELY5JekJLNAaTeerISES/YHeRldXWfF8IDk7QQGTzhb0Wv4fIuNavPT5/dfywxGJa0r7bwonTP8noyzWwVRuUNJTt7FkDry6plL43KfSC+zyFia/9/pz7STYL3J+d63PCCsKIYvhQJBDO6YIMsW5JtL818M4mcATUM3st99k9j2+7HCKXH47wtrsT9RM3ZZGdPdjssrQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=S4V12ocUeRn9/nHO66BTnzjSEUrVobZtf2LoWheKElI=;
+ b=kFboe8JmZsJnHvf6w1Tm1szUxRm/7fK7LRDh8z7TM/+AzyMy3IV2TTTMhnFrRGhVM4jXU766+hKqkL0hTAw4H5ToJihzYKHNenIVHRD0eCaqmYmi+ma96xereJTRvQuRiIeNVZwOOQTLrTgmu8nv2VJILUbNokJ6+3qFA7TREJkhNhjR5XN84s0QlFaOWGT1ZOOGKHgdgYk0IeJJda3uunGqDsXOmNMI477mnyt0S5AxxgkUyZmxl9IA3n5FFG1n+hg/zhjEJTh+qOqhMdjlruLmGM+CowtXc6tMkXvcC97ML7NVqfAC2zHmlTaIGghZ2B6UEcUgUpB07KIazo6vpQ==
+Received: from PH7PR13CA0008.namprd13.prod.outlook.com (2603:10b6:510:174::15)
+ by CH3PR12MB9169.namprd12.prod.outlook.com (2603:10b6:610:1a0::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7025.28; Wed, 29 Nov
+ 2023 00:51:42 +0000
+Received: from SN1PEPF0002BA4D.namprd03.prod.outlook.com
+ (2603:10b6:510:174:cafe::fb) by PH7PR13CA0008.outlook.office365.com
+ (2603:10b6:510:174::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7046.22 via Frontend
+ Transport; Wed, 29 Nov 2023 00:51:41 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ SN1PEPF0002BA4D.mail.protection.outlook.com (10.167.242.70) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7046.17 via Frontend Transport; Wed, 29 Nov 2023 00:51:41 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 28 Nov
+ 2023 16:51:24 -0800
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 28 Nov
+ 2023 16:51:24 -0800
+Received: from Asurada-Nvidia (10.127.8.12) by mail.nvidia.com (10.129.68.6)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41 via Frontend
+ Transport; Tue, 28 Nov 2023 16:51:23 -0800
+Date: Tue, 28 Nov 2023 16:51:21 -0800
+From: Nicolin Chen <nicolinc@nvidia.com>
+To: "Tian, Kevin" <kevin.tian@intel.com>
+CC: "Liu, Yi L" <yi.l.liu@intel.com>, "joro@8bytes.org" <joro@8bytes.org>,
+	"alex.williamson@redhat.com" <alex.williamson@redhat.com>, "jgg@nvidia.com"
+	<jgg@nvidia.com>, "robin.murphy@arm.com" <robin.murphy@arm.com>,
+	"baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>, "cohuck@redhat.com"
+	<cohuck@redhat.com>, "eric.auger@redhat.com" <eric.auger@redhat.com>,
+	"kvm@vger.kernel.org" <kvm@vger.kernel.org>, "mjrosato@linux.ibm.com"
+	<mjrosato@linux.ibm.com>, "chao.p.peng@linux.intel.com"
+	<chao.p.peng@linux.intel.com>, "yi.y.sun@linux.intel.com"
+	<yi.y.sun@linux.intel.com>, "peterx@redhat.com" <peterx@redhat.com>,
+	"jasowang@redhat.com" <jasowang@redhat.com>,
+	"shameerali.kolothum.thodi@huawei.com"
+	<shameerali.kolothum.thodi@huawei.com>, "lulu@redhat.com" <lulu@redhat.com>,
+	"suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+	"iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "Duan,
+ Zhenzhong" <zhenzhong.duan@intel.com>, "joao.m.martins@oracle.com"
+	<joao.m.martins@oracle.com>, "Zeng, Xin" <xin.zeng@intel.com>, "Zhao, Yan Y"
+	<yan.y.zhao@intel.com>
+Subject: Re: [PATCH v6 2/6] iommufd: Add IOMMU_HWPT_INVALIDATE
+Message-ID: <ZWaLCSAMIOXTlghk@Asurada-Nvidia>
+References: <20231117130717.19875-3-yi.l.liu@intel.com>
+ <BN9PR11MB5276D8406BF08B853329288C8CB4A@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <fa736836-e136-4ed4-a6af-8ea2f0e7c0dd@intel.com>
+ <BN9PR11MB527659462CCB7280055858D98CB4A@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <ZVuZOYFzAaCuJjXZ@Asurada-Nvidia>
+ <BN9PR11MB5276C8EACE2C300A646EA8A18CBBA@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <ZVw/BXxgGCuCZCA6@Asurada-Nvidia>
+ <BN9PR11MB52761A9B48A25E89BEECE6308CB8A@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <ZWTzoBTDDEWAKMs9@Asurada-Nvidia>
+ <BN9PR11MB5276FD60A0EDF8E3F231FCC88CBCA@BN9PR11MB5276.namprd11.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231127193703.1980089-1-nphamcs@gmail.com> <20231127193703.1980089-7-nphamcs@gmail.com>
- <20231127130055.30c455906d912e09dcb7e79b@linux-foundation.org>
-In-Reply-To: <20231127130055.30c455906d912e09dcb7e79b@linux-foundation.org>
-From: Nhat Pham <nphamcs@gmail.com>
-Date: Tue, 28 Nov 2023 15:04:03 -0800
-Message-ID: <CAKEwX=PCqwUCb+Gm8CYLNkVE2s5KJ-OQq4y3hx+xr=d3y3_RTQ@mail.gmail.com>
-Subject: Re: [PATCH v6 6/6] zswap: shrinks zswap pool based on memory pressure
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: hannes@cmpxchg.org, cerasuolodomenico@gmail.com, yosryahmed@google.com, 
-	sjenning@redhat.com, ddstreet@ieee.org, vitaly.wool@konsulko.com, 
-	mhocko@kernel.org, roman.gushchin@linux.dev, shakeelb@google.com, 
-	muchun.song@linux.dev, chrisl@kernel.org, linux-mm@kvack.org, 
-	kernel-team@meta.com, linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, shuah@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <BN9PR11MB5276FD60A0EDF8E3F231FCC88CBCA@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN1PEPF0002BA4D:EE_|CH3PR12MB9169:EE_
+X-MS-Office365-Filtering-Correlation-Id: b93850fb-437b-4629-f2e0-08dbf0755a2a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	09thnlgSWlpeL27whKlJsgkhblM7dVQrgLGKz60dJoVHf2Eti/4pWLuX4gyQiuEOF+VMVUdOXOYajIR+YzCBCH2IipYpCYfO1/zccjgS2rO0WR22B2jWO8YEgjnUAK/SKiQ8WY3izFDQHM0HzFyt4A1PG2SnVvKD8g4idWPQuu62bIvKZGUeS4bsgdBXPFToSYgTL243f58iFZj3oPo/HRbmVgxOY8A0FP09JIy7Iy5JdmaCFOJKUcrxHNhyZ6J22QDoGNWC+TRLhtLiJWsjzgjb7PLsvtyFx+NJ4rHwAdX6LLaDAjw7/wXs+yVOklBl7XhrTP7XqDn9K0MhgCEr06HIJoxRPnJkIpz9MqOlIsavBiYFs1rUSrULJ35g6DUg96CDYvBRkpYGxwjk0o2GLbB7RlKfW/id/lsc4IBXecwrckSFGDn7KWC71qArPUFgkHnsHUfH89nGhh4QixkmjeyVHQhd6cOyMM+QNI0PTfWoyGoxseO9xVi+wvzbB7Un5DRSl5q9BaI538OSC2obTv+GgUphnfTq/m+ZtQscwmZmz1MAuf8Vy2LFk5PYmvfzWiHCuI+hs3VWsgW+DbYv7+uDmVpSH0GonGNtsfWQZczzpl2LWrwaPmVxQn7qAdSmOLW1M8KWLxTWiA4CLGQ3c96YSRTxkjn2zKKH0obQBK4Xev+7Mqi1803onF2oUhVVgENE6Qc0WV1VSkko8rnQZhtNRfMTFKsKECHVANTs5mLbI4sIBzUfj1l+y6agEO7X
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230031)(4636009)(396003)(39860400002)(136003)(376002)(346002)(230922051799003)(64100799003)(186009)(451199024)(1800799012)(82310400011)(36840700001)(40470700004)(46966006)(40460700003)(8936002)(336012)(4326008)(82740400003)(426003)(55016003)(6916009)(478600001)(8676002)(5660300002)(7416002)(86362001)(70586007)(316002)(70206006)(54906003)(36860700001)(83380400001)(26005)(47076005)(356005)(7636003)(2906002)(40480700001)(33716001)(41300700001)(9686003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Nov 2023 00:51:41.6254
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b93850fb-437b-4629-f2e0-08dbf0755a2a
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SN1PEPF0002BA4D.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB9169
 
-On Mon, Nov 27, 2023 at 1:00=E2=80=AFPM Andrew Morton <akpm@linux-foundatio=
-n.org> wrote:
->
-> On Mon, 27 Nov 2023 11:37:03 -0800 Nhat Pham <nphamcs@gmail.com> wrote:
->
-> > Currently, we only shrink the zswap pool when the user-defined limit is
-> > hit. This means that if we set the limit too high, cold data that are
-> > unlikely to be used again will reside in the pool, wasting precious
-> > memory. It is hard to predict how much zswap space will be needed ahead
-> > of time, as this depends on the workload (specifically, on factors such
-> > as memory access patterns and compressibility of the memory pages).
+On Tue, Nov 28, 2023 at 08:03:35AM +0000, Tian, Kevin wrote:
+> > From: Nicolin Chen <nicolinc@nvidia.com>
+> > Sent: Tuesday, November 28, 2023 3:53 AM
 > >
-> > This patch implements a memcg- and NUMA-aware shrinker for zswap, that
-> > is initiated when there is memory pressure. The shrinker does not
-> > have any parameter that must be tuned by the user, and can be opted in
-> > or out on a per-memcg basis.
+> > On Fri, Nov 24, 2023 at 02:36:29AM +0000, Tian, Kevin wrote:
 > >
-> > Furthermore, to make it more robust for many workloads and prevent
-> > overshrinking (i.e evicting warm pages that might be refaulted into
-> > memory), we build in the following heuristics:
+> > > > > > > > >> + * @out_driver_error_code: Report a driver speicifc error code
+> > > > upon
+> > > > > > > > failure.
+> > > > > > > > >> + *                         It's optional, driver has a choice to fill it or
+> > > > > > > > >> + *                         not.
+> > > > > > > > >
+> > > > > > > > > Being optional how does the user tell whether the code is filled
+> > or
+> > > > not?
+> > > > > >
+> > > > > > Well, naming it "error_code" indicates zero means no error while
+> > > > > > non-zero means something? An error return from this ioctl could
+> > > > > > also tell the user space to look up for this driver error code,
+> > > > > > if it ever cares.
+> > > > >
+> > > > > probably over-thinking but I'm not sure whether zero is guaranteed to
+> > > > > mean no error in all implementations...
+> > > >
+> > > > Well, you are right. Usually HW conveniently raises a flag in a
+> > > > register to indicate something wrong, yet it is probably unsafe
+> > > > to say it definitely.
+> > > >
+> > >
+> > > this reminds me one open. What about an implementation having
+> > > a hierarchical error code layout e.g. one main error register with
+> > > each bit representing an error category then multiple error code
+> > > registers each for one error category? In this case probably
+> > > a single out_driver_error_code cannot carry that raw information.
 > >
-> > * Estimate the number of warm pages residing in zswap, and attempt to
-> >   protect this region of the zswap LRU.
-> > * Scale the number of freeable objects by an estimate of the memory
-> >   saving factor. The better zswap compresses the data, the fewer pages
-> >   we will evict to swap (as we will otherwise incur IO for relatively
-> >   small memory saving).
-> > * During reclaim, if the shrinker encounters a page that is also being
-> >   brought into memory, the shrinker will cautiously terminate its
-> >   shrinking action, as this is a sign that it is touching the warmer
-> >   region of the zswap LRU.
+> > Hmm, good point.
 > >
-> > As a proof of concept, we ran the following synthetic benchmark:
-> > build the linux kernel in a memory-limited cgroup, and allocate some
-> > cold data in tmpfs to see if the shrinker could write them out and
-> > improved the overall performance. Depending on the amount of cold data
-> > generated, we observe from 14% to 35% reduction in kernel CPU time used
-> > in the kernel builds.
+> > > Instead the iommu driver may need to define a customized error
+> > > code convention in uapi header which is converted from the
+> > > raw error information.
+> > >
+> > > From this angle should we simply say that the error code definition
+> > > must be included in the uapi header? If raw error information can
+> > > be carried by this field then this hw can simply say that the error
+> > > code format is same as the hw spec defines.
+> > >
+> > > With that explicit information then the viommu can easily tell
+> > > whether error code is filled or not based on its own convention.
 > >
-> > ...
+> > That'd be to put this error_code field into the driver uAPI
+> > structure right?
 > >
-> > --- a/include/linux/mmzone.h
-> > +++ b/include/linux/mmzone.h
-> > @@ -22,6 +22,7 @@
-> >  #include <linux/mm_types.h>
-> >  #include <linux/page-flags.h>
-> >  #include <linux/local_lock.h>
-> > +#include <linux/zswap.h>
-> >  #include <asm/page.h>
+> > I also thought about making this out_driver_error_code per HW.
+> > Yet, an error can be either per array or per entry/quest. The
+> > array-related error should be reported in the array structure
+> > that is a core uAPI, v.s. the per-HW entry structure. Though
+> > we could still report an array error in the entry structure
+> > at the first entry (or indexed by "array->entry_num")?
 > >
-> >  /* Free memory management - zoned buddy allocator.  */
-> > @@ -641,6 +642,7 @@ struct lruvec {
-> >  #ifdef CONFIG_MEMCG
-> >       struct pglist_data *pgdat;
-> >  #endif
-> > +     struct zswap_lruvec_state zswap_lruvec_state;
->
-> Normally we'd put this in #ifdef CONFIG_ZSWAP.
->
-> > --- a/include/linux/zswap.h
-> > +++ b/include/linux/zswap.h
-> > @@ -5,20 +5,40 @@
-> >  #include <linux/types.h>
-> >  #include <linux/mm_types.h>
-> >
-> > +struct lruvec;
-> > +
-> >  extern u64 zswap_pool_total_size;
-> >  extern atomic_t zswap_stored_pages;
-> >
-> >  #ifdef CONFIG_ZSWAP
-> >
-> > +struct zswap_lruvec_state {
-> > +     /*
-> > +      * Number of pages in zswap that should be protected from the shr=
-inker.
-> > +      * This number is an estimate of the following counts:
-> > +      *
-> > +      * a) Recent page faults.
-> > +      * b) Recent insertion to the zswap LRU. This includes new zswap =
-stores,
-> > +      *    as well as recent zswap LRU rotations.
-> > +      *
-> > +      * These pages are likely to be warm, and might incur IO if the a=
-re written
-> > +      * to swap.
-> > +      */
-> > +     atomic_long_t nr_zswap_protected;
-> > +};
-> > +
-> >  bool zswap_store(struct folio *folio);
-> >  bool zswap_load(struct folio *folio);
-> >  void zswap_invalidate(int type, pgoff_t offset);
-> >  void zswap_swapon(int type);
-> >  void zswap_swapoff(int type);
-> >  void zswap_memcg_offline_cleanup(struct mem_cgroup *memcg);
-> > -
-> > +void zswap_lruvec_state_init(struct lruvec *lruvec);
-> > +void zswap_lruvec_swapin(struct page *page);
-> >  #else
-> >
-> > +struct zswap_lruvec_state {};
->
-> But instead you made it an empty struct in this case.
->
-> That's a bit funky, but I guess OK.  It does send a careful reader of
-> struct lruvec over to look at the zswap_lruvec_state definition to
-> understand what's going on.
+> 
+> why would there be an array error? array is just a software
+> entity containing actual HW invalidation cmds. If there is
+> any error with the array itself it should be reported via
+> ioctl errno.
 
-I agree.
+User array reading is a software operation, but kernel array
+reading is a hardware operation that can raise an error when
+the memory location to the array is incorrect or so.
 
-Originally, I included the fields in struct lruvec itself, guarded by
-a #ifdef CONFIG_ZSWAP as you pointed out here. Yosry gave me this
-suggestion to hide the zswap-specific states and details from ordinary
-lruvec user, and direct people who care and/or need to know about
-details towards the zswap codebase, which is good IMHO.
+With that being said, I think errno (-EIO) could do the job,
+as you suggested too.
 
-It is a bit weird I admit, but in this case I think it works out.
+Thanks
+Nic
 
->
-> >  static inline bool zswap_store(struct folio *folio)
-> >  {
-> >       return false;
-> > @@ -33,7 +53,8 @@ static inline void zswap_invalidate(int type, pgoff_t=
- offset) {}
-> >  static inline void zswap_swapon(int type) {}
-> >  static inline void zswap_swapoff(int type) {}
-> >  static inline void zswap_memcg_offline_cleanup(struct mem_cgroup *memc=
-g) {}
-> > -
-> > +static inline void zswap_lruvec_init(struct lruvec *lruvec) {}
-> > +static inline void zswap_lruvec_swapin(struct page *page) {}
->
-> Needed this build fix:
->
-> --- a/include/linux/zswap.h~zswap-shrinks-zswap-pool-based-on-memory-pres=
-sure-fix
-> +++ a/include/linux/zswap.h
-> @@ -54,6 +54,7 @@ static inline void zswap_swapon(int type
->  static inline void zswap_swapoff(int type) {}
->  static inline void zswap_memcg_offline_cleanup(struct mem_cgroup *memcg)=
- {}
->  static inline void zswap_lruvec_init(struct lruvec *lruvec) {}
-> +static inline void zswap_lruvec_state_init(struct lruvec *lruvec) {}
->  static inline void zswap_lruvec_swapin(struct page *page) {}
->  #endif
->
-> _
->
-
-Yeah that looks like a typo on my part. My bad. v7 includes this fix.
+> Jason, how about your opinion? I didn't spot big issues
+> except this one. Hope it can make into 6.8.
 
