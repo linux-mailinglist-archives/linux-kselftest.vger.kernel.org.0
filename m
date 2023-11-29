@@ -1,99 +1,223 @@
-Return-Path: <linux-kselftest+bounces-837-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-838-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D517C7FDDD7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Nov 2023 18:00:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 361BA7FE078
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Nov 2023 20:48:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CC170B20F09
-	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Nov 2023 17:00:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DF7DC28295B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 29 Nov 2023 19:47:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C162F3B788;
-	Wed, 29 Nov 2023 17:00:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DD3A5EE68;
+	Wed, 29 Nov 2023 19:47:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cmpxchg-org.20230601.gappssmtp.com header.i=@cmpxchg-org.20230601.gappssmtp.com header.b="Cc5TfHiv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="syQ2+UVh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-x731.google.com (mail-qk1-x731.google.com [IPv6:2607:f8b0:4864:20::731])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 847DB112
-	for <linux-kselftest@vger.kernel.org>; Wed, 29 Nov 2023 09:00:03 -0800 (PST)
-Received: by mail-qk1-x731.google.com with SMTP id af79cd13be357-777754138bdso357408185a.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 29 Nov 2023 09:00:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20230601.gappssmtp.com; s=20230601; t=1701277202; x=1701882002; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=U8mgkS00IbNP5jyZ+NO8ODgKFBs6g0ytgBOeKMTZ8ns=;
-        b=Cc5TfHivfaAnMCl2wCcKTmQ8V6KSXeBQ94Qc/hQQqHLMx94l/6q7kPVNFzn7Dor7Om
-         6r5o64nLBMpemmWLPtav/sto+wf49O3ontvSa18PfOd0XXjiMnKZtOqqCXk4x/3rwyzH
-         hQurXNSbwCRv1XenKKEVXvAtxgRL+DXNm9JeEvd+/mwrPPmI5BU/y6SAEoauTneFXVNz
-         iAL1/AENwaUWINoEwMac8Z93ItWqw77TbXbLuXyx+HAL5Iq7+JhO6rV8OxiIGkr454FE
-         5t/LT3LM3bnUyefxYAHxY4BKVtLnyH7KYRruznsMa0lB7/xjGjzc+fVK8VK3xX62Nax9
-         GazQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701277202; x=1701882002;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=U8mgkS00IbNP5jyZ+NO8ODgKFBs6g0ytgBOeKMTZ8ns=;
-        b=TRmNDBx4l9y0OlxG6IwneNSrZRjP2kNTvLwUiMhaTsi7lwXtL3c+oc6VGacJaw43/v
-         KiHyE3ECCzr6wBFjeyiQiKkJcAikAhme8RfmFNUVdXh2SvmZSzp8EpzLQTu/a1PSI7KY
-         Qb8osb9/TK0pCwwC8Uz01JMgkndj285RtTR6Jq1ulxNrvB956a2WZlZWwk7NJvi0JOKR
-         bW5VyD0S5oxtOPmv33mXefg327v8y/Dg+gr/lcTf1nXr7r3huMKIXcADOg2smlWfbILx
-         Gh23OIxfGBMGhBlYFGAqbjROlAZ79SjPqBTXK1g3nBzDozhADeByPO1dnBzVFvmIuPmK
-         U1uQ==
-X-Gm-Message-State: AOJu0YxYiS4t7vmohRqeUxyUfH7nU5K5OqlnkSnb7gR6dYddY1pRAsiP
-	I2GGjhUPPvgDAnqlUyRWOoHxgw==
-X-Google-Smtp-Source: AGHT+IFMmcjiCa+i8CW0+x0EBy+ZJodS4kAFY34IuEihW6YJGVum8lmU2DvIyHxJC59g78xXhTu4kQ==
-X-Received: by 2002:a05:620a:2707:b0:77d:a0ee:f196 with SMTP id b7-20020a05620a270700b0077da0eef196mr14597254qkp.5.1701277202618;
-        Wed, 29 Nov 2023 09:00:02 -0800 (PST)
-Received: from localhost ([2620:10d:c091:400::5:ffba])
-        by smtp.gmail.com with ESMTPSA id rg7-20020a05620a8ec700b0077d8622ee6csm4397763qkn.81.2023.11.29.09.00.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Nov 2023 09:00:02 -0800 (PST)
-Date: Wed, 29 Nov 2023 12:00:01 -0500
-From: Johannes Weiner <hannes@cmpxchg.org>
-To: Nhat Pham <nphamcs@gmail.com>
-Cc: akpm@linux-foundation.org, cerasuolodomenico@gmail.com,
-	yosryahmed@google.com, sjenning@redhat.com, ddstreet@ieee.org,
-	vitaly.wool@konsulko.com, mhocko@kernel.org,
-	roman.gushchin@linux.dev, shakeelb@google.com,
-	muchun.song@linux.dev, chrisl@kernel.org, linux-mm@kvack.org,
-	kernel-team@meta.com, linux-kernel@vger.kernel.org,
-	cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, shuah@kernel.org
-Subject: Re: [PATCH v7 2/6] memcontrol: add a new function to traverse
- online-only memcg hierarchy
-Message-ID: <20231129170001.GF135852@cmpxchg.org>
-References: <20231127234600.2971029-1-nphamcs@gmail.com>
- <20231127234600.2971029-3-nphamcs@gmail.com>
- <20231129150403.GB135852@cmpxchg.org>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35EAB1DFCE;
+	Wed, 29 Nov 2023 19:47:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 894CCC433C9;
+	Wed, 29 Nov 2023 19:47:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701287274;
+	bh=YG8IdGIKyEPPRl3BRdJ7ECZAIkh6utCR8Z3bE/lJTKg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=syQ2+UVhgwDKeVwkvcw3WWJMrIMwVFdqOaBnQdnY0Rlt9K0r4cb1XvV4Wn5nXHhiV
+	 gvTopNRfVdRFpnAxCIj73GZetoCy3oRvVWaF9UN49jRb7Z9PaP9OSK8xd3kbYWQPAf
+	 1DVl4x39hf55wBk5hq0wuuTKmwCIa53KirnCxp64qhjbH1nsW/rX0ljX0eKOsDQczo
+	 5NnQ+5y5F2fyYIQD1SrPwraAux7InBikg0rKMW1QXBI4LRkHIbJph2j7VkE0B5XT6p
+	 6lO6X2oBE1/m0yp44YgdR/5dTD+ohUFD0wP52uflq/4L+T9N3OYm8sxTaYYY5dT5A+
+	 NahbHETz7zMtA==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1r8QXH-0001z1-Ua;
+	Wed, 29 Nov 2023 19:47:52 +0000
+Date: Wed, 29 Nov 2023 19:47:50 +0000
+Message-ID: <87h6l48hp5.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Joey Gouly <joey.gouly@arm.com>
+Cc: linux-arm-kernel@lists.infradead.org,
+	akpm@linux-foundation.org,
+	aneesh.kumar@linux.ibm.com,
+	broonie@kernel.org,
+	catalin.marinas@arm.com,
+	dave.hansen@linux.intel.com,
+	oliver.upton@linux.dev,
+	shuah@kernel.org,
+	will@kernel.org,
+	kvmarm@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>
+Subject: Re: [PATCH v3 06/25] KVM: arm64: Save/restore POE registers
+In-Reply-To: <20231129151123.GA2423241@e124191.cambridge.arm.com>
+References: <20231124163510.1835740-1-joey.gouly@arm.com>
+	<20231124163510.1835740-7-joey.gouly@arm.com>
+	<86bkbfcbyp.wl-maz@kernel.org>
+	<20231129151123.GA2423241@e124191.cambridge.arm.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231129150403.GB135852@cmpxchg.org>
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: joey.gouly@arm.com, linux-arm-kernel@lists.infradead.org, akpm@linux-foundation.org, aneesh.kumar@linux.ibm.com, broonie@kernel.org, catalin.marinas@arm.com, dave.hansen@linux.intel.com, oliver.upton@linux.dev, shuah@kernel.org, will@kernel.org, kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, james.morse@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Wed, Nov 29, 2023 at 10:04:05AM -0500, Johannes Weiner wrote:
-> On Mon, Nov 27, 2023 at 03:45:56PM -0800, Nhat Pham wrote:
-> > The new zswap writeback scheme requires an online-only memcg hierarchy
-> > traversal. Add this functionality via the new mem_cgroup_iter_online()
-> > function - the old mem_cgroup_iter() is a special case of this new
-> > function.
-> > 
-> > Suggested-by: Andrew Morton <akpm@linux-foundation.org>
-> > Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+On Wed, 29 Nov 2023 15:11:23 +0000,
+Joey Gouly <joey.gouly@arm.com> wrote:
 > 
-> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+> Hi Marc,
+> 
+> Thanks for taking a look.
+> 
+> On Mon, Nov 27, 2023 at 06:01:18PM +0000, Marc Zyngier wrote:
+> > On Fri, 24 Nov 2023 16:34:51 +0000,
+> > Joey Gouly <joey.gouly@arm.com> wrote:
+> > > 
+> > > Define the new system registers that POE introduces and context switch them.
+> > 
+> > I would really like to see a discussion on the respective lifetimes of
+> > these two registers (see below).
+> > 
+> > >
+> > > Signed-off-by: Joey Gouly <joey.gouly@arm.com>
+> > > Cc: Marc Zyngier <maz@kernel.org>
+> > > Cc: Oliver Upton <oliver.upton@linux.dev>
+> > > Cc: Catalin Marinas <catalin.marinas@arm.com>
+> > > Cc: Will Deacon <will@kernel.org>
+> > > ---
+> > >  arch/arm64/include/asm/kvm_arm.h           |  4 ++--
+> > >  arch/arm64/include/asm/kvm_host.h          |  4 ++++
+> > >  arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h | 10 ++++++++++
+> > >  arch/arm64/kvm/sys_regs.c                  |  2 ++
+> > >  4 files changed, 18 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/arch/arm64/include/asm/kvm_arm.h b/arch/arm64/include/asm/kvm_arm.h
+> > > index b85f46a73e21..597470e0b87b 100644
+> > > --- a/arch/arm64/include/asm/kvm_arm.h
+> > > +++ b/arch/arm64/include/asm/kvm_arm.h
+> > > @@ -346,14 +346,14 @@
+> > >   */
+> > >  #define __HFGRTR_EL2_RES0	(GENMASK(63, 56) | GENMASK(53, 51))
+> > >  #define __HFGRTR_EL2_MASK	GENMASK(49, 0)
+> > > -#define __HFGRTR_EL2_nMASK	(GENMASK(58, 57) | GENMASK(55, 54) | BIT(50))
+> > > +#define __HFGRTR_EL2_nMASK	(GENMASK(60, 57) | GENMASK(55, 54) | BIT(50))
+> > >  
+> > >  #define __HFGWTR_EL2_RES0	(GENMASK(63, 56) | GENMASK(53, 51) |	\
+> > >  				 BIT(46) | BIT(42) | BIT(40) | BIT(28) | \
+> > >  				 GENMASK(26, 25) | BIT(21) | BIT(18) |	\
+> > >  				 GENMASK(15, 14) | GENMASK(10, 9) | BIT(2))
+> > >  #define __HFGWTR_EL2_MASK	GENMASK(49, 0)
+> > > -#define __HFGWTR_EL2_nMASK	(GENMASK(58, 57) | GENMASK(55, 54) | BIT(50))
+> > > +#define __HFGWTR_EL2_nMASK	(GENMASK(60, 57) | GENMASK(55, 54) | BIT(50))
+> > >  
+> > >  #define __HFGITR_EL2_RES0	GENMASK(63, 57)
+> > >  #define __HFGITR_EL2_MASK	GENMASK(54, 0)
+> > > diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+> > > index 824f29f04916..fa9ebd8fce40 100644
+> > > --- a/arch/arm64/include/asm/kvm_host.h
+> > > +++ b/arch/arm64/include/asm/kvm_host.h
+> > > @@ -401,6 +401,10 @@ enum vcpu_sysreg {
+> > >  	PIR_EL1,       /* Permission Indirection Register 1 (EL1) */
+> > >  	PIRE0_EL1,     /*  Permission Indirection Register 0 (EL1) */
+> > >  
+> > > +	/* Permission Overlay Extension registers */
+> > > +	POR_EL1,	/* Permission Overlay Register 1 (EL1) */
+> > > +	POR_EL0,	/* Permission Overlay Register 0 (EL0) */
+> > > +
+> > >  	/* 32bit specific registers. */
+> > >  	DACR32_EL2,	/* Domain Access Control Register */
+> > >  	IFSR32_EL2,	/* Instruction Fault Status Register */
+> > > diff --git a/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h b/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h
+> > > index bb6b571ec627..22f07ee43e7e 100644
+> > > --- a/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h
+> > > +++ b/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h
+> > > @@ -19,6 +19,9 @@
+> > >  static inline void __sysreg_save_common_state(struct kvm_cpu_context *ctxt)
+> > >  {
+> > >  	ctxt_sys_reg(ctxt, MDSCR_EL1)	= read_sysreg(mdscr_el1);
+> > > +
+> > > +	if (system_supports_poe())
+> > > +		ctxt_sys_reg(ctxt, POR_EL0)	= read_sysreg_s(SYS_POR_EL0);
+> > 
+> > So this is saved as eagerly as it gets. Why? If it only affects EL0,
+> > it can be saved/restored in a much lazier way.
+> 
+> Just to confirm I understand what you mean, the current code looks like:
+> 
+> 	vcpu_load()                // Lazy save
+> 
+> 	while (ret > 0)
+> 		check_vcpu_requests()
+> 		kvm_arm_vcpu_enter_exit()  // Eager save/restore
+> 		ret = handle_exit()
+> 
+> 	vcpu_put()                // Lazy restore
 
-I saw Michal's reply on the other thread only after I sent this.
+Yes, with the additional caveat that VHE and nVHE/hVHE have different
+views of what can be lazy or not.
 
-I agree with him it would be better to just check mem_cgroup_online()
-in the shinker callsite and leave mem_cgroup_iter() as-is. If it's
-offline, just continue to the next mem_cgroup_iter() invocation.
+>
+> POR_EL0 does affect EL2, if it does some form of {get,put}_user.
+> This happens in vgic_its_process_commands (as part of handle_exit), also the
+> stolen time code (in check_vcpu_requests) and could possibly happen if perf
+> tries to walk the user stack.
+>
+> So I think that it does need to happen eagerly, such that the host-userspace's
+> POR_EL0 is used to access the VM's memory, not the guest-userspace's POR_EL0.
+
+OK, I didn't quite see that initially, thanks for the explanation.
+I find it rather ugly that userspace can directly affect these
+functionalities, but hey, why not.
+
+> Does that make sense? It will need a comment, I agree.
+
+Yes, that'd be good indeed.
+
+> 
+> > 
+> > >  }
+> > >  
+> > >  static inline void __sysreg_save_user_state(struct kvm_cpu_context *ctxt)
+> > > @@ -59,6 +62,8 @@ static inline void __sysreg_save_el1_state(struct kvm_cpu_context *ctxt)
+> > >  		ctxt_sys_reg(ctxt, PIR_EL1)	= read_sysreg_el1(SYS_PIR);
+> > >  		ctxt_sys_reg(ctxt, PIRE0_EL1)	= read_sysreg_el1(SYS_PIRE0);
+> > 
+> > And the fact that you only touch PIRE0_EL1 here seems to be a good
+> > indication that the above can be relaxed.
+> 
+> PIREO_EL1 is not directly accessible from EL0. I'll have a think
+> about this a bit more, and if there is a potential similar issue
+> here.
+
+Ah, re-reading the spec, I see that there is a PIRE0_EL2 that is in
+use for VHE, meaning that in that case restoring POR_EL0 is enough to
+get the correct permissions. For nVHE/hVHE, this function is part of
+the 'eager' lot, so it doesn't matter.
+
+So this code is correct in the end, and all that's missing is some
+comments and the NV stuff.
+
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
 
