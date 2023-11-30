@@ -1,47 +1,47 @@
-Return-Path: <linux-kselftest+bounces-893-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-894-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 070CE7FF4BE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Nov 2023 17:22:12 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A30D97FF4C3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Nov 2023 17:22:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D2BA1F20F49
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Nov 2023 16:22:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5876D2816FA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Nov 2023 16:22:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B13AE54FA6;
-	Thu, 30 Nov 2023 16:22:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1177554F92;
+	Thu, 30 Nov 2023 16:22:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fdksiZi8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Zq/Y39Jf"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D77E810F9;
-	Thu, 30 Nov 2023 08:21:59 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FD85131;
+	Thu, 30 Nov 2023 08:22:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701361320; x=1732897320;
+  t=1701361325; x=1732897325;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=RxQigYZX0AwiQz5iF7nEbIkSvowYJwMREZVwWRXD5sM=;
-  b=fdksiZi8seE9H/LblACmagwbZ3sX4Vvzhpk1CuqmzGqyyViVKBX+M4KE
-   pfZ0VZEKvnfgq0MMn9/CRTZ1EEKnkf8xUCJUNoF0wJhQy5YaFOJYtQGLi
-   mTAaMBP5Ztnof3SREo6opZH2sf9i0UlwMgVsSx48pIOg3qydrpCfJtNlv
-   7FYd39Jey4tGZHbcciFQPRE+VL3NqWpaTE+SouhrbV+dVm/7SRY7MfUEp
-   760GAeULNfMNjK1VEj17wmCa60kA2CZFvzME4tTDjSEWjiIUGJNDIIl2X
-   BZkZCpvFuGQaxZacFmpAXYLBm0NQfhI17cTnh1lQae4YDw3jd5ekpn3wL
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10910"; a="383744595"
+  bh=bXoVezPhVWKfoB3JGdgSXzPzDzpsCHhdUMolTMlscIk=;
+  b=Zq/Y39JfsSeJYxpFxFiHPGtupQT8jPxyiyLRxywhw6TIlwpqMM5KuBXa
+   12Qc95vP2U4dRt4nbzFjkc0cRjb3pQLo448DA1lrQ7Ea3Xe8tKTjWDuPZ
+   coStaEqSu/Q4SQrQP7DP8GVhlwMOuzJ4QmPE//5qcgkgFkfxnd4OGI+W6
+   8AhksZI3RVHkS1IIxOp4RXhUhqNXLrVRhPvVOZeV9y5Dtq6Zgrg6OT8cc
+   9Sty2fCBh9aBhYt/Rr/j6HdnqIGGM9/McXEI4b3oZMu4N3rNSQ5/OPzCE
+   PAyhA7EVmuThhLRpkttwQAuv5CAjReMJOwd+BAcQuviF03xUvE7BQhXhl
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10910"; a="383744636"
 X-IronPort-AV: E=Sophos;i="6.04,239,1695711600"; 
-   d="scan'208";a="383744595"
+   d="scan'208";a="383744636"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2023 08:21:52 -0800
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2023 08:22:04 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10910"; a="803758602"
+X-IronPort-AV: E=McAfee;i="6600,9927,10910"; a="803758703"
 X-IronPort-AV: E=Sophos;i="6.04,239,1695711600"; 
-   d="scan'208";a="803758602"
+   d="scan'208";a="803758703"
 Received: from p12ill20yoongsia.png.intel.com ([10.88.227.28])
-  by orsmga001.jf.intel.com with ESMTP; 30 Nov 2023 08:21:42 -0800
+  by orsmga001.jf.intel.com with ESMTP; 30 Nov 2023 08:21:55 -0800
 From: Song Yoong Siang <yoong.siang.song@intel.com>
 To: "David S . Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
@@ -81,9 +81,9 @@ Cc: netdev@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kselftest@vger.kernel.org,
 	Song Yoong Siang <yoong.siang.song@intel.com>
-Subject: [PATCH bpf-next 2/3] net: stmmac: Add launch time support to XDP ZC
-Date: Fri,  1 Dec 2023 00:20:27 +0800
-Message-Id: <20231130162028.852006-3-yoong.siang.song@intel.com>
+Subject: [PATCH bpf-next 3/3] selftests/bpf: Add launch time to xdp_hw_metadata
+Date: Fri,  1 Dec 2023 00:20:28 +0800
+Message-Id: <20231130162028.852006-4-yoong.siang.song@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231130162028.852006-1-yoong.siang.song@intel.com>
 References: <20231130162028.852006-1-yoong.siang.song@intel.com>
@@ -95,62 +95,121 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patch enables launch time support to XDP zero copy via XDP Tx
-metadata framework.
+This patch adds launch time support to xdp_hw_metadata. User can configure
+the delta of HW launch time to HW RX-time by using "-l" argument.
+
+This patch is tested with stmmac on Intel Tiger Lake platform. Refer to
+result below, the delta between pre-determined launch time and actual
+transmit time is around 24 us.
+
+$ sudo ./xdp_hw_metadata enp0s30f4
+...
+xsk_ring_cons__peek: 1
+0x55fcb80ce7a8: rx_desc[0]->addr=80100 addr=80100 comp_addr=80100 EoP
+No rx_hash err=-95
+HW RX-time:   1677764507059055964 (sec:1677764507.0591) delta to User RX-time sec:0.0002 (237.548 usec)
+XDP RX-time:   1677764507059280741 (sec:1677764507.0593) delta to User RX-time sec:0.0000 (12.771 usec)
+0x55fcb80ce7a8: ping-pong with csum=5619 (want 8626) csum_start=34 csum_offset=6
+HW RX-time:   1677764507059055964 (sec:1677764507.0591) delta to HW Launch-time sec:1.0000 (1000000.000 usec)
+0x55fcb80ce7a8: complete tx idx=0 addr=18
+HW Launch-time:   1677764508059055964 (sec:1677764508.0591) delta to HW TX-complete-time sec:0.0000 (24.235 usec)
+HW TX-complete-time:   1677764508059080199 (sec:1677764508.0591) delta to User TX-complete-time sec:0.0054 (5423.263 usec)
+XDP RX-time:   1677764507059280741 (sec:1677764507.0593) delta to User TX-complete-time sec:1.0052 (1005222.721 usec)
+HW RX-time:   1677764507059055964 (sec:1677764507.0591) delta to HW TX-complete-time sec:1.0000 (1000024.235 usec)
+0x55fcb80ce7a8: complete rx idx=128 addr=80100
+
+$ sudo ./xdp_hw_metadata enp0s30f4 -l 10000000
+...
+xsk_ring_cons__peek: 1
+0x5626d54de7a8: rx_desc[0]->addr=80100 addr=80100 comp_addr=80100 EoP
+No rx_hash err=-95
+HW RX-time:   1677764655807717783 (sec:1677764655.8077) delta to User RX-time sec:0.0002 (240.571 usec)
+XDP RX-time:   1677764655807942983 (sec:1677764655.8079) delta to User RX-time sec:0.0000 (15.371 usec)
+0x5626d54de7a8: ping-pong with csum=5619 (want 8626) csum_start=34 csum_offset=6
+HW RX-time:   1677764655807717783 (sec:1677764655.8077) delta to HW Launch-time sec:0.0100 (10000.000 usec)
+0x5626d54de7a8: complete tx idx=0 addr=18
+HW Launch-time:   1677764655817717783 (sec:1677764655.8177) delta to HW TX-complete-time sec:0.0000 (23.965 usec)
+HW TX-complete-time:   1677764655817741748 (sec:1677764655.8177) delta to User TX-complete-time sec:0.0003 (291.792 usec)
+XDP RX-time:   1677764655807942983 (sec:1677764655.8079) delta to User TX-complete-time sec:0.0101 (10090.557 usec)
+HW RX-time:   1677764655807717783 (sec:1677764655.8077) delta to HW TX-complete-time sec:0.0100 (10023.965 usec)
+0x5626d54de7a8: complete rx idx=128 addr=80100
 
 Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
 ---
- drivers/net/ethernet/stmicro/stmmac/stmmac.h      |  2 ++
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 13 +++++++++++++
- 2 files changed, 15 insertions(+)
+ tools/testing/selftests/bpf/xdp_hw_metadata.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac.h b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
-index 686c94c2e8a7..e8538af6e207 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac.h
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac.h
-@@ -105,6 +105,8 @@ struct stmmac_metadata_request {
- 	struct stmmac_priv *priv;
- 	struct dma_desc *tx_desc;
- 	bool *set_ic;
-+	struct dma_edesc *edesc;
-+	int tbs;
- };
+diff --git a/tools/testing/selftests/bpf/xdp_hw_metadata.c b/tools/testing/selftests/bpf/xdp_hw_metadata.c
+index 3291625ba4fb..ff1b2e5b0fce 100644
+--- a/tools/testing/selftests/bpf/xdp_hw_metadata.c
++++ b/tools/testing/selftests/bpf/xdp_hw_metadata.c
+@@ -13,6 +13,7 @@
+  * - UDP 9091 packets trigger TX reply
+  * - TX HW timestamp is requested and reported back upon completion
+  * - TX checksum is requested
++ * - HW launch time is set for transmission
+  */
  
- struct stmmac_xsk_tx_complete {
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index c2ac88aaffed..c33517d3850a 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -2465,9 +2465,20 @@ static u64 stmmac_xsk_fill_timestamp(void *_priv)
- 	return 0;
- }
+ #include <test_progs.h>
+@@ -61,6 +62,8 @@ int rxq;
+ bool skip_tx;
+ __u64 last_hw_rx_timestamp;
+ __u64 last_xdp_rx_timestamp;
++__u64 last_launch_time;
++__u64 launch_time_offset = 1000000000; /* 1 second */
  
-+static void stmmac_xsk_request_launch_time(u64 launch_time, void *_priv)
-+{
-+	struct stmmac_metadata_request *meta_req = _priv;
-+	struct timespec64 ts = ns_to_timespec64(launch_time);
+ void test__fail(void) { /* for network_helpers.c */ }
+ 
+@@ -274,6 +277,8 @@ static bool complete_tx(struct xsk *xsk, clockid_t clock_id)
+ 	if (meta->completion.tx_timestamp) {
+ 		__u64 ref_tstamp = gettime(clock_id);
+ 
++		print_tstamp_delta("HW Launch-time", "HW TX-complete-time",
++				   last_launch_time, meta->completion.tx_timestamp);
+ 		print_tstamp_delta("HW TX-complete-time", "User TX-complete-time",
+ 				   meta->completion.tx_timestamp, ref_tstamp);
+ 		print_tstamp_delta("XDP RX-time", "User TX-complete-time",
+@@ -371,6 +376,13 @@ static void ping_pong(struct xsk *xsk, void *rx_packet, clockid_t clock_id)
+ 	       xsk, ntohs(udph->check), ntohs(want_csum),
+ 	       meta->request.csum_start, meta->request.csum_offset);
+ 
++	/* Set launch time at launch_time_offset ns later than HW Rx-time */
++	meta->flags |= XDP_TXMD_FLAGS_LAUNCH_TIME;
++	last_launch_time = last_hw_rx_timestamp + launch_time_offset;
++	meta->request.launch_time = last_launch_time;
++	print_tstamp_delta("HW RX-time", "HW Launch-time",
++			   last_hw_rx_timestamp, meta->request.launch_time);
 +
-+	if ((meta_req->tbs & STMMAC_TBS_EN) && launch_time > 0)
-+		stmmac_set_desc_tbs(meta_req->priv, meta_req->edesc, ts.tv_sec,
-+				    ts.tv_nsec);
-+}
-+
- static const struct xsk_tx_metadata_ops stmmac_xsk_tx_metadata_ops = {
- 	.tmo_request_timestamp		= stmmac_xsk_request_timestamp,
- 	.tmo_fill_timestamp		= stmmac_xsk_fill_timestamp,
-+	.tmo_request_launch_time	= stmmac_xsk_request_launch_time,
- };
+ 	memcpy(data, rx_packet, len); /* don't share umem chunk for simplicity */
+ 	tx_desc->options |= XDP_TX_METADATA;
+ 	tx_desc->len = len;
+@@ -595,6 +607,7 @@ static void print_usage(void)
+ 		"  -h    Display this help and exit\n\n"
+ 		"  -m    Enable multi-buffer XDP for larger MTU\n"
+ 		"  -r    Don't generate AF_XDP reply (rx metadata only)\n"
++		"  -l    Delta of HW launch time to HW RX-time in ns (default: 1s)\n"
+ 		"Generate test packets on the other machine with:\n"
+ 		"  echo -n xdp | nc -u -q1 <dst_ip> 9091\n";
  
- static bool stmmac_xdp_xmit_zc(struct stmmac_priv *priv, u32 queue, u32 budget)
-@@ -2545,6 +2556,8 @@ static bool stmmac_xdp_xmit_zc(struct stmmac_priv *priv, u32 queue, u32 budget)
- 		meta_req.priv = priv;
- 		meta_req.tx_desc = tx_desc;
- 		meta_req.set_ic = &set_ic;
-+		meta_req.tbs = tx_q->tbs;
-+		meta_req.edesc = &tx_q->dma_entx[entry];
- 		xsk_tx_metadata_request(meta, &stmmac_xsk_tx_metadata_ops,
- 					&meta_req);
- 		if (set_ic) {
+@@ -605,7 +618,7 @@ static void read_args(int argc, char *argv[])
+ {
+ 	int opt;
+ 
+-	while ((opt = getopt(argc, argv, "chmr")) != -1) {
++	while ((opt = getopt(argc, argv, "chmrl:")) != -1) {
+ 		switch (opt) {
+ 		case 'c':
+ 			bind_flags &= ~XDP_USE_NEED_WAKEUP;
+@@ -621,6 +634,9 @@ static void read_args(int argc, char *argv[])
+ 		case 'r':
+ 			skip_tx = true;
+ 			break;
++		case 'l':
++			launch_time_offset = atoll(optarg);
++			break;
+ 		case '?':
+ 			if (isprint(optopt))
+ 				fprintf(stderr, "Unknown option: -%c\n", optopt);
 -- 
 2.34.1
 
