@@ -1,158 +1,86 @@
-Return-Path: <linux-kselftest+bounces-856-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-857-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FE017FE5FE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Nov 2023 02:26:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id ED4757FE65A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Nov 2023 02:44:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 69FF41C2097B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Nov 2023 01:26:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2A0C61C20BD4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Nov 2023 01:44:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A36453A1;
-	Thu, 30 Nov 2023 01:26:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BBFF6FA2;
+	Thu, 30 Nov 2023 01:44:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l1xiFnKq"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hLCQLMre"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59D4010C3;
-	Wed, 29 Nov 2023 17:26:47 -0800 (PST)
-Received: by mail-il1-x12e.google.com with SMTP id e9e14a558f8ab-35c617c9e73so930935ab.1;
-        Wed, 29 Nov 2023 17:26:47 -0800 (PST)
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B7A710DF
+	for <linux-kselftest@vger.kernel.org>; Wed, 29 Nov 2023 17:44:25 -0800 (PST)
+Received: by mail-pl1-x649.google.com with SMTP id d9443c01a7336-1d015cec74dso5144305ad.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 29 Nov 2023 17:44:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701307606; x=1701912406; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bAYD5IjaIlcnamI/OXacp/VY9pjlnxPbgUDraWeIFVQ=;
-        b=l1xiFnKqcPrRbQrAar0/jISBsvpfi8Tl39rcpJv8drEMpKI3BLXB33i6Bcw68ESZUC
-         S3B69l7PUXaF8NTZX+OpZ7J/pu00Q5kL2/pUOi60CLa/mTQrNMq7x0/VOhm78NjtKP04
-         qifDHUKX4A6i/rEOx124HeXAXmBCxl03S3vpPqnD7eTA6K9iMrTgGArqw05VLJfTy8wT
-         M294b/jxs5gAWLuaeG83iagLZUO50VQojADYkdfp1YSjB8grIyPp7UZpIPBEpJg0Rn/T
-         S11/PGC714K2rKmIEsgT9Gv4xgAQySUosxRASOueBeCCcwezLhLQ48gxeFIFz4atIemd
-         dsWQ==
+        d=google.com; s=20230601; t=1701308665; x=1701913465; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lln3JA/pL2zNGG8fnWXWFxt/sDS6XmKq9CUbeWSzI+U=;
+        b=hLCQLMreGSsOJb4PEsjjAZX5OBqORQsQ0vhdiAWLZuioy3zTgy6oGMa2s8q+PXMQjA
+         OFnirMnv1WQLWdKgACzf+kmNQvDay62Wm4lkfT/2oxPEr7B8otAMdBSSQNw2Kr7ubp/T
+         LZnr5wQYJ13pQb4fosgsUqgNv5q3naAnV/U7SDItKHLf7/d4/dH0OavYBrw6IQVT9hWn
+         wut9o0kRv8aVgNWaB6VFrtFGVXvyOgXBg6rXqob0GqRUw3jPsw7ICIJ7Tg71PRimIi9V
+         zt29wgc0MlnFkhqTAtblLgwPqTIGHqDTeuz7oGxFgo5qZjsg9dAJ00+2C2VsG7JdIA39
+         xrnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701307606; x=1701912406;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bAYD5IjaIlcnamI/OXacp/VY9pjlnxPbgUDraWeIFVQ=;
-        b=h0+QqMn/m643twAfY6TfwEKfEAPAbG3PK+OVlI27T+UdOlgYWd2EaW7v/Ga3gMGIAe
-         UyLRes8aQ3q/BnpWVW9cheFld7uQmAh0X+ccuiGldfjWjnky/gV/Iy4zAF8mKXdw+ToT
-         6Vb3dC/X3/XEdSj1ORwQTqTWLWEtViRwXBp+f0V9lsbUCaOfVzO0fEXthWYR9AHLqPph
-         Fko7L4FnnysPaoRKp88yeP+XjYm6kv+F/NjOBKlV6cqc65n1cuuUSqFIgqhM57r8IKtv
-         V/hoFa5ESuFH8IhYSAV6Ym+oAti8cVLyaOJZUSXgE7Y/Dg4UXey4IswLW8zj282eg67n
-         8Svw==
-X-Gm-Message-State: AOJu0Yyhg3nOABOLTqHu9DHxvlCqOvxxwk4pwEn2DPtqZxggf4WbzNXO
-	b933+pn51Hkbn25KB5VeLG8qJ7Lm0EElZquLEbw=
-X-Google-Smtp-Source: AGHT+IE3W3NFenEBkj10iaZduYHiFsqZTptTCu9CtFVqwR0QFWqwuHcKqWUaQLTkNatWIljPNg5415UZJNAoj8G8tTk=
-X-Received: by 2002:a92:4b02:0:b0:35c:d630:8c9a with SMTP id
- m2-20020a924b02000000b0035cd6308c9amr13585997ilg.28.1701307606540; Wed, 29
- Nov 2023 17:26:46 -0800 (PST)
+        d=1e100.net; s=20230601; t=1701308665; x=1701913465;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lln3JA/pL2zNGG8fnWXWFxt/sDS6XmKq9CUbeWSzI+U=;
+        b=OiE6LTCUDi/dBtPygs02Rp5NR2svGMvyDHevuvosn4B6ncSRYKHKkLYs8nZDGkuXHf
+         MAd2ciCoiEFO3ybVtPt+rOKvenfXPZ2ZtAUSDmEPp1f6uh2u7bdu6ZBeQPE7C1u0HeI0
+         lNo1MkTLVJt0Uo6cXCYUvvtNSK6vPJ4KS1KpuZ1HBmWBuvyne/DwLPLPfhSF3JWIUoyI
+         OfO/IiRUP2cqIh5Jq5JgC9pAanL7eubtQPphap93TMrbvBq2AK32h3V7bqO1i887+M5i
+         kefIuzIxU4aw/fqAzYvEeYlLqpEImJ3EkiRViw1LaiKP2l2tbrTYLTvZnMfKUfk7LUP8
+         FFGg==
+X-Gm-Message-State: AOJu0Yyz1TiAfHOPVAik9cqIhup5+vmLJNrcfh26BKWXkZNupaXbw/jq
+	sxeQD90xIoZ3w8ZYkJSR78HJhE7hYv0=
+X-Google-Smtp-Source: AGHT+IHhXzzYXOzUBShDv5PGX0Z4/O+DwcPcBk7HaqSRWwv0r6E6VgrGl95aCT63qnVH61WySbFupvW1SnI=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:903:452:b0:1cf:a2af:ee09 with SMTP id
+ iw18-20020a170903045200b001cfa2afee09mr3891848plb.5.1701308665015; Wed, 29
+ Nov 2023 17:44:25 -0800 (PST)
+Date: Wed, 29 Nov 2023 17:44:10 -0800
+In-Reply-To: <9fc8b5395321abbfcaf5d78477a9a7cd350b08e4.camel@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20231127234600.2971029-1-nphamcs@gmail.com> <20231127234600.2971029-5-nphamcs@gmail.com>
- <20231129152509.GD135852@cmpxchg.org>
-In-Reply-To: <20231129152509.GD135852@cmpxchg.org>
-From: Nhat Pham <nphamcs@gmail.com>
-Date: Wed, 29 Nov 2023 17:26:35 -0800
-Message-ID: <CAKEwX=P48OwcKMyeFXDuXmUOcpx3stGfV_DwunBuXjL7EuqF1w@mail.gmail.com>
-Subject: Re: [PATCH v7 4/6] mm: memcg: add per-memcg zswap writeback stat
-To: Johannes Weiner <hannes@cmpxchg.org>
-Cc: akpm@linux-foundation.org, cerasuolodomenico@gmail.com, 
-	yosryahmed@google.com, sjenning@redhat.com, ddstreet@ieee.org, 
-	vitaly.wool@konsulko.com, mhocko@kernel.org, roman.gushchin@linux.dev, 
-	shakeelb@google.com, muchun.song@linux.dev, chrisl@kernel.org, 
-	linux-mm@kvack.org, kernel-team@meta.com, linux-kernel@vger.kernel.org, 
-	cgroups@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, shuah@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+References: <9fc8b5395321abbfcaf5d78477a9a7cd350b08e4.camel@infradead.org>
+X-Mailer: git-send-email 2.43.0.rc1.413.gea7ed67945-goog
+Message-ID: <170129774172.531444.5273351479240082811.b4-ty@google.com>
+Subject: Re: [PATCH] KVM: selftests: add -MP to CFLAGS
+From: Sean Christopherson <seanjc@google.com>
+To: Sean Christopherson <seanjc@google.com>, kvm@vger.kernel.org, 
+	David Woodhouse <dwmw2@infradead.org>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
 
-On Wed, Nov 29, 2023 at 7:25=E2=80=AFAM Johannes Weiner <hannes@cmpxchg.org=
-> wrote:
->
-> On Mon, Nov 27, 2023 at 03:45:58PM -0800, Nhat Pham wrote:
-> > From: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-> >
-> > Since zswap now writes back pages from memcg-specific LRUs, we now need=
- a
-> > new stat to show writebacks count for each memcg.
-> >
-> > Suggested-by: Nhat Pham <nphamcs@gmail.com>
-> > Signed-off-by: Domenico Cerasuolo <cerasuolodomenico@gmail.com>
-> > Signed-off-by: Nhat Pham <nphamcs@gmail.com>
-> > ---
-> >  include/linux/vm_event_item.h | 1 +
-> >  mm/memcontrol.c               | 1 +
-> >  mm/vmstat.c                   | 1 +
-> >  mm/zswap.c                    | 3 +++
-> >  4 files changed, 6 insertions(+)
-> >
-> > diff --git a/include/linux/vm_event_item.h b/include/linux/vm_event_ite=
-m.h
-> > index d1b847502f09..f4569ad98edf 100644
-> > --- a/include/linux/vm_event_item.h
-> > +++ b/include/linux/vm_event_item.h
-> > @@ -142,6 +142,7 @@ enum vm_event_item { PGPGIN, PGPGOUT, PSWPIN, PSWPO=
-UT,
-> >  #ifdef CONFIG_ZSWAP
-> >               ZSWPIN,
-> >               ZSWPOUT,
-> > +             ZSWP_WB,
-> >  #endif
-> >  #ifdef CONFIG_X86
-> >               DIRECT_MAP_LEVEL2_SPLIT,
-> > diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-> > index 8c0f3f971179..f88c8fd03689 100644
-> > --- a/mm/memcontrol.c
-> > +++ b/mm/memcontrol.c
-> > @@ -703,6 +703,7 @@ static const unsigned int memcg_vm_event_stat[] =3D=
- {
-> >  #if defined(CONFIG_MEMCG_KMEM) && defined(CONFIG_ZSWAP)
-> >       ZSWPIN,
-> >       ZSWPOUT,
-> > +     ZSWP_WB,
-> >  #endif
-> >  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
-> >       THP_FAULT_ALLOC,
-> > diff --git a/mm/vmstat.c b/mm/vmstat.c
-> > index afa5a38fcc9c..2249f85e4a87 100644
-> > --- a/mm/vmstat.c
-> > +++ b/mm/vmstat.c
-> > @@ -1401,6 +1401,7 @@ const char * const vmstat_text[] =3D {
-> >  #ifdef CONFIG_ZSWAP
-> >       "zswpin",
-> >       "zswpout",
-> > +     "zswp_wb",
->
-> ZSWPWB and "zswpwb" would match the existing naming scheme a bit
-> better.
->
-> >  #endif
-> >  #ifdef CONFIG_X86
-> >       "direct_map_level2_splits",
-> > diff --git a/mm/zswap.c b/mm/zswap.c
-> > index 5e397fc1f375..6a761753f979 100644
-> > --- a/mm/zswap.c
-> > +++ b/mm/zswap.c
-> > @@ -754,6 +754,9 @@ static enum lru_status shrink_memcg_cb(struct list_=
-head *item, struct list_lru_o
-> >       }
-> >       zswap_written_back_pages++;
-> >
-> > +     if (entry->objcg)
-> > +             count_objcg_event(entry->objcg, ZSWP_WB);
-> > +
->
-> You need to call count_vm_event() as well, otherwise the /proc/vmstat
-> counter will stay zero.
+On Sat, 28 Oct 2023 20:34:53 +0100, David Woodhouse wrote:
+> Using -MD without -MP causes build failures when a header file is deleted
+> or moved. With -MP, the compiler will emit phony targets for the header
+> files it lists as dependencies, and the Makefiles won't refuse to attempt
+> to rebuild a C unit which no longer includes the deleted header.
+> 
+> 
 
-Ahh I didn't check that. I only looked at the cgroup's memory.stat
-counter. I'll fix this for v8!
+Applied to kvm-x86 selftests, thanks!
+
+[1/1] KVM: selftests: add -MP to CFLAGS
+      https://github.com/kvm-x86/linux/commit/fc6543bb55d4
+
+--
+https://github.com/kvm-x86/linux/tree/next
 
