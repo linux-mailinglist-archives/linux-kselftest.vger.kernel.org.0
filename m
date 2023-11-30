@@ -1,113 +1,149 @@
-Return-Path: <linux-kselftest+bounces-860-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-861-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B54D37FE6EF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Nov 2023 03:37:06 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E28A7FE7C3
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Nov 2023 04:44:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E71D71C20A35
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Nov 2023 02:37:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BCE9CB20E09
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Nov 2023 03:44:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14C57F9CE;
-	Thu, 30 Nov 2023 02:37:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 358D5134B9;
+	Thu, 30 Nov 2023 03:44:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mF2NM7qE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JpQXb5oQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9F84125CC;
-	Thu, 30 Nov 2023 02:37:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E14DAC433C9;
-	Thu, 30 Nov 2023 02:37:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701311823;
-	bh=tm53i8GhYDRGpRCnZgtLIn7P8jIf3OMjFqv6O/swkJU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=mF2NM7qEDR2eJeiTCxOHD0A+5NunTLYKc63iE0l9/ywqjnaj6xo8D0yGnT6Gmvw/A
-	 xD91IpuQUYOBVVCxDiJe4H16CJesJnVJ21lgmggfbUD5S3QxJiJkLZszoLmYDHMXxz
-	 PEj1zqFucaACRUuOXA3oPuDzdJy8kYEUBSv5OE8pBMbxrZHe2uJjsTidqJEOFmS8eR
-	 0AGIKl4PgJVr/z5eQ3zv6EABddpoQCRpnRrDVKwL/lnsjlaZ0+Ma9teMxzaf/ccZz7
-	 fo0/hMTsCfM4rXGNO0cNf6rXSkHmTF7AkE30ORjDwm4TF23bo0hVD688vrMHNQ/Vku
-	 s9Kd4TI4Fn6xQ==
-From: SeongJae Park <sj@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: SeongJae Park <sj@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	damon@lists.linux.dev,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 6/9] selftests/damon: test quota goals directory
-Date: Thu, 30 Nov 2023 02:36:49 +0000
-Message-Id: <20231130023652.50284-7-sj@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231130023652.50284-1-sj@kernel.org>
-References: <20231130023652.50284-1-sj@kernel.org>
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 519D510F5;
+	Wed, 29 Nov 2023 19:44:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701315857; x=1732851857;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=WZZMnWGpd1y0ccfThg5B81AdxxPkKMFT8brLpoZWyyM=;
+  b=JpQXb5oQFg/znCF9eSnr3+/ahKTjZe5l5bX/0UNeu0eWmTwqbBKVlXU/
+   snUdiI6PhX6PEIHmUYQFEUvmLjFoNGYq1CT72EfOZK16czwcXSu9pHsy1
+   EPAdxKs8NDE1ZMuAoCFGNEf1PXqHPmXJ0XEVTvCC4XafLUVgENFXKupCz
+   3nrcnr9XXB6ZxrkbRqpKvKK9kdL5PTwzJQzZnYKtC/ypL9vatERoGUAOu
+   H/uYAkNrWDoo9BPknRFTjKZZfLHAFBe/7Qv/SJXeSLSOaBGppdRz/fYkQ
+   IUcNRfCyKj/gjTXR4+z68gMc89Kukw/+HI8lkvoM87huaIraNJ/Z5zJ/j
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10909"; a="246698"
+X-IronPort-AV: E=Sophos;i="6.04,237,1695711600"; 
+   d="scan'208";a="246698"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2023 19:44:16 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10909"; a="1016499582"
+X-IronPort-AV: E=Sophos;i="6.04,237,1695711600"; 
+   d="scan'208";a="1016499582"
+Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.249.171.155]) ([10.249.171.155])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Nov 2023 19:44:12 -0800
+Message-ID: <61736bbd-1e8f-4dce-9c31-c1a6f10ae344@linux.intel.com>
+Date: Thu, 30 Nov 2023 11:44:10 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Cc: baolu.lu@linux.intel.com, "iommu@lists.linux.dev"
+ <iommu@lists.linux.dev>,
+ "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+ "virtualization@lists.linux-foundation.org"
+ <virtualization@lists.linux-foundation.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 0/6] IOMMUFD: Deliver IO page faults to user space
+To: Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Kevin Tian <kevin.tian@intel.com>,
+ Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+ Robin Murphy <robin.murphy@arm.com>,
+ Jean-Philippe Brucker <jean-philippe@linaro.org>,
+ Nicolin Chen <nicolinc@nvidia.com>, Yi Liu <yi.l.liu@intel.com>,
+ Jacob Pan <jacob.jun.pan@linux.intel.com>
+References: <20231026024930.382898-1-baolu.lu@linux.intel.com>
+ <55ed1ac0f2024c429b396cb751773d62@huawei.com>
+Content-Language: en-US
+From: Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <55ed1ac0f2024c429b396cb751773d62@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Add DAMON selftests for testing creation/existence of quota goals
-directories and files, and simple valid input writes.
+On 2023/11/29 17:08, Shameerali Kolothum Thodi wrote:
+> 
+> 
+>> -----Original Message-----
+>> From: Lu Baolu [mailto:baolu.lu@linux.intel.com]
+>> Sent: 26 October 2023 03:49
+>> To: Jason Gunthorpe <jgg@ziepe.ca>; Kevin Tian <kevin.tian@intel.com>;
+>> Joerg Roedel <joro@8bytes.org>; Will Deacon <will@kernel.org>; Robin
+>> Murphy <robin.murphy@arm.com>; Jean-Philippe Brucker
+>> <jean-philippe@linaro.org>; Nicolin Chen <nicolinc@nvidia.com>; Yi Liu
+>> <yi.l.liu@intel.com>; Jacob Pan <jacob.jun.pan@linux.intel.com>
+>> Cc: iommu@lists.linux.dev; linux-kselftest@vger.kernel.org;
+>> virtualization@lists.linux-foundation.org; linux-kernel@vger.kernel.org; Lu
+>> Baolu <baolu.lu@linux.intel.com>
+>> Subject: [PATCH v2 0/6] IOMMUFD: Deliver IO page faults to user space
+>>
+>> Hi folks,
+>>
+>> This series implements the functionality of delivering IO page faults to
+>> user space through the IOMMUFD framework for nested translation. Nested
+>> translation is a hardware feature that supports two-stage translation
+>> tables for IOMMU. The second-stage translation table is managed by the
+>> host VMM, while the first-stage translation table is owned by user
+>> space. This allows user space to control the IOMMU mappings for its
+>> devices.
+>>
+>> When an IO page fault occurs on the first-stage translation table, the
+>> IOMMU hardware can deliver the page fault to user space through the
+>> IOMMUFD framework. User space can then handle the page fault and
+>> respond
+>> to the device top-down through the IOMMUFD. This allows user space to
+>> implement its own IO page fault handling policies.
+>>
+>> User space indicates its capability of handling IO page faults by
+>> setting the IOMMU_HWPT_ALLOC_IOPF_CAPABLE flag when allocating a
+>> hardware page table (HWPT). IOMMUFD will then set up its infrastructure
+>> for page fault delivery. On a successful return of HWPT allocation, the
+>> user can retrieve and respond to page faults by reading and writing to
+>> the file descriptor (FD) returned in out_fault_fd.
+>>
+>> The iommu selftest framework has been updated to test the IO page fault
+>> delivery and response functionality.
+>>
+>> This series is based on the latest implementation of nested translation
+>> under discussion [1] and the page fault handling framework refactoring in
+>> the IOMMU core [2].
+>>
+>> The series and related patches are available on GitHub: [3]
+>>
+>> [1]
+>> https://lore.kernel.org/linux-iommu/20230921075138.124099-1-yi.l.liu@int
+>> el.com/
+>> [2]
+>> https://lore.kernel.org/linux-iommu/20230928042734.16134-1-baolu.lu@li
+>> nux.intel.com/
+>> [3]
+>> https://github.com/LuBaolu/intel-iommu/commits/iommufd-io-pgfault-deliv
+>> ery-v2
+> 
+> Hi Baolu,
 
-Signed-off-by: SeongJae Park <sj@kernel.org>
----
- tools/testing/selftests/damon/sysfs.sh | 27 ++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+Hi Shameer,
 
-diff --git a/tools/testing/selftests/damon/sysfs.sh b/tools/testing/selftests/damon/sysfs.sh
-index 56f0230a8b92..e9a976d296e2 100755
---- a/tools/testing/selftests/damon/sysfs.sh
-+++ b/tools/testing/selftests/damon/sysfs.sh
-@@ -150,6 +150,32 @@ test_weights()
- 	ensure_file "$weights_dir/age_permil" "exist" "600"
- }
- 
-+test_goal()
-+{
-+	goal_dir=$1
-+	ensure_dir "$goal_dir" "exist"
-+	ensure_file "$goal_dir/target_value" "exist" "600"
-+	ensure_file "$goal_dir/current_value" "exist" "600"
-+}
-+
-+test_goals()
-+{
-+	goals_dir=$1
-+	ensure_dir "$goals_dir" "exist"
-+	ensure_file "$goals_dir/nr_goals" "exist" "600"
-+
-+	ensure_write_succ  "$goals_dir/nr_goals" "1" "valid input"
-+	test_goal "$goals_dir/0"
-+
-+	ensure_write_succ  "$goals_dir/nr_goals" "2" "valid input"
-+	test_goal "$goals_dir/0"
-+	test_goal "$goals_dir/1"
-+
-+	ensure_write_succ  "$goals_dir/nr_goals" "0" "valid input"
-+	ensure_dir "$goals_dir/0" "not_exist"
-+	ensure_dir "$goals_dir/1" "not_exist"
-+}
-+
- test_quotas()
- {
- 	quotas_dir=$1
-@@ -158,6 +184,7 @@ test_quotas()
- 	ensure_file "$quotas_dir/bytes" "exist" 600
- 	ensure_file "$quotas_dir/reset_interval_ms" "exist" 600
- 	test_weights "$quotas_dir/weights"
-+	test_goals "$quotas_dir/goals"
- }
- 
- test_access_pattern()
--- 
-2.34.1
+> 
+> Do you have a corresponding Qemu git to share? I could give it a spin on our ARM
+> platform. Please let me know.
 
+This version of the series is tested by the iommufd selftest. We are in
+process of developing the QEMU code. I will provide the repo link after
+we complete it.
+
+Best regards,
+baolu
 
