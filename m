@@ -1,58 +1,58 @@
-Return-Path: <linux-kselftest+bounces-872-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-873-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35C3A7FE808
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Nov 2023 05:02:14 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C5F97FE809
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Nov 2023 05:02:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DF8AA282108
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Nov 2023 04:02:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 740091C20E60
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Nov 2023 04:02:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8056914F63;
-	Thu, 30 Nov 2023 04:02:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37C58154BF;
+	Thu, 30 Nov 2023 04:02:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c6fR07tt"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WECQ0Zhj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87BCE10E6;
-	Wed, 29 Nov 2023 20:02:03 -0800 (PST)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-6cde11fb647so534699b3a.1;
-        Wed, 29 Nov 2023 20:02:03 -0800 (PST)
+Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1530B10CB;
+	Wed, 29 Nov 2023 20:02:08 -0800 (PST)
+Received: by mail-ot1-x32f.google.com with SMTP id 46e09a7af769-6d84ddd642fso327263a34.0;
+        Wed, 29 Nov 2023 20:02:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701316922; x=1701921722; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1701316927; x=1701921727; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=c8mTE23PmGDTebdhWskA0+f3lQGuitvRrQH6VGgo/B4=;
-        b=c6fR07ttIXiZu5nr1GfB1xrcSQSrRmZzoyY9ci6rLbT1M9+KkK4N53dmK6ZbI7Iw2Y
-         c2R5xYZhBMyZSuU4/45+hajIUZh4wWSKgJ50R33M+1nAZwnXt2+Lr856JzeYp61cgXhp
-         oOFVuujdoyhrJE+tKl/i/P7Cvkntc1SdQjeOlqOHi+FjCWEG2xaa2Knv5IchI0J6rjXu
-         /MgwVBa7JPXg9OFMnFhdPQvIHjQRDuyUVyd31m/h6LIzE/+AZYxO+5L7e6lEHKRnHo8U
-         j0PnJt11nUU+QDrJ8J33FdrKHA/hGpzrYOGbTevyofoQlBz14M2R9wYlnd4M6Ex4Nd5R
-         ugCw==
+        bh=+snsdkeFNTrHHlU7siXlQO8lyLNwfSOi5ZFQJu7MSnE=;
+        b=WECQ0ZhjwXBIMFR8zgiu183CUO4w3z6AAGbvwlfrsFezRVgKknHjkZZBivnloYGl4e
+         gS/ihOM/vMGKdJ+ZsvOPOmv0OuGc66oBO8k8SDEhMVO3GjnfSiOtozf+s1oN7MV2Vapm
+         GARlF5j40p2XxKIBrY+sr9bQUl0blg545c5LRH4p+SXMj3lRFG6nZsauWHklsBrDM8KE
+         5/e5x111PsdtjmUVZLG0iSmzCE9wS20WhkeiR8jpDznDUH8nGWIH60rgASu9bnHSSeho
+         J2IbgkRLQbZ0tGl9nElkJeseeOeCxgpsCUPukpt4hGNbnOM6ISTOOogh5hqo9EfI3JGv
+         N+tA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701316922; x=1701921722;
+        d=1e100.net; s=20230601; t=1701316927; x=1701921727;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=c8mTE23PmGDTebdhWskA0+f3lQGuitvRrQH6VGgo/B4=;
-        b=SA924OsJWiNK+Oig45RB1YIgC5oM44O+l/btkHWAPgYbNWneQK6ec6fS1fS+FbIOvr
-         WkKEfXqSK1T/aHK+FTgCZIrzbYuxsIIItMZWZreBr0Jfuod2HcXTvG/LDEWYMpTaqRrz
-         bGZJrSRRgPKfCTcUpqrhXbhU0EF4APpBNIN8R/KVVD4vN7nZ4VAb+PY5PPGalZ/w5gqN
-         ttM7tjOla+Btw8WGoeMMtJ0/lpnuwyFaM8ck1BkISlUXV/ccRSy4lhL3xc/DN6HIWNZN
-         +IIc4Q+ArZhN9MUkwK4xPY/Th8rAFzDVMbsBTDUpuSrbWbFlTPGwmafpDfPJ1jGzychI
-         0HFQ==
-X-Gm-Message-State: AOJu0Yy+c1pUSimnIRHZuFF7l+/nCkX0SI5Ji8t+oGgj9EOjl1waW/Yy
-	6SK0SB0sw/ZInCqEvzPDELvsVrwvWIW4bA==
-X-Google-Smtp-Source: AGHT+IH2tKNiHz0eMAvkKp//C3S+OO88h4VDBEe2v5/cB+in7Sm02U/1DodFzoSTxPUPMzbDoFNBFg==
-X-Received: by 2002:a05:6a00:1a91:b0:6c4:9672:9a17 with SMTP id e17-20020a056a001a9100b006c496729a17mr24932241pfv.1.1701316922189;
-        Wed, 29 Nov 2023 20:02:02 -0800 (PST)
+        bh=+snsdkeFNTrHHlU7siXlQO8lyLNwfSOi5ZFQJu7MSnE=;
+        b=kCDUEKSJrRfRj1iEHt2QjWV90Xyz8bo3J5voob7WVJGVeTpRVXO9U5o2g0mnBYCjCL
+         W1/TlHqnUrwDgN8bfyC/1j3NhT5hc2i5OtlcQDZOZJkKtYpeBOIfmsScIK+5xVNq8WB1
+         iHyjqAHmdGaIXbPMnkVmk/SuRjFAH3yd8hwqPbTGpxjTispyFUxzZUYqaRIgvzZ5b+Zj
+         wYDnQfiIAu2wqWQ6bfGbQMAryGXB7Xh7WTUGKDl6Ww+26MRoPDYd3tS3RuJkU5W5xRAL
+         KlN19+tl3TVZwudgwTDw7cf5d626L27k6jOK+YJzWmoArMceyE9+0QtRzJz+9o5hqvB3
+         pslQ==
+X-Gm-Message-State: AOJu0YzO3D26BU8Bcf9HHYjTnuYw2pAks3TTpueinCpN+Xvfv1eAXcUn
+	mTDKFs94E7gx2lxp55Xmrd3XkIAsVW+PCg==
+X-Google-Smtp-Source: AGHT+IF73sBji6NyOHndkkaZSZz5U+2iR3Se148x4RkdASNf6Gb5rQHWHlCEvgUbIrJJ8cFtg2VQfA==
+X-Received: by 2002:a05:6870:9f08:b0:1fa:1738:85dd with SMTP id xl8-20020a0568709f0800b001fa173885ddmr21807441oab.57.1701316926879;
+        Wed, 29 Nov 2023 20:02:06 -0800 (PST)
 Received: from Laptop-X1.redhat.com ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id p16-20020aa78610000000b006cc02a6d18asm187975pfn.61.2023.11.29.20.01.57
+        by smtp.gmail.com with ESMTPSA id p16-20020aa78610000000b006cc02a6d18asm187975pfn.61.2023.11.29.20.02.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Nov 2023 20:02:01 -0800 (PST)
+        Wed, 29 Nov 2023 20:02:06 -0800 (PST)
 From: Hangbin Liu <liuhangbin@gmail.com>
 To: netdev@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -72,9 +72,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Justin Iurman <justin.iurman@uliege.be>,
 	Xin Long <lucien.xin@gmail.com>,
 	Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCHv2 net-next 10/14] selftests/net: convert ioam6.sh to run it in unique namespace
-Date: Thu, 30 Nov 2023 12:01:01 +0800
-Message-ID: <20231130040105.1265779-11-liuhangbin@gmail.com>
+Subject: [PATCHv2 net-next 11/14] selftests/net: convert l2tp.sh to run it in unique namespace
+Date: Thu, 30 Nov 2023 12:01:02 +0800
+Message-ID: <20231130040105.1265779-12-liuhangbin@gmail.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20231130040105.1265779-1-liuhangbin@gmail.com>
 References: <20231130040105.1265779-1-liuhangbin@gmail.com>
@@ -88,510 +88,332 @@ Content-Transfer-Encoding: 8bit
 
 Here is the test result after conversion.
 
-]# ./ioam6.sh
+]# ./l2tp.sh
+TEST: IPv4 basic L2TP tunnel                                        [ OK ]
+TEST: IPv4 route through L2TP tunnel                                [ OK ]
+TEST: IPv6 basic L2TP tunnel                                        [ OK ]
+TEST: IPv6 route through L2TP tunnel                                [ OK ]
+TEST: IPv4 basic L2TP tunnel - with IPsec                           [ OK ]
+TEST: IPv4 route through L2TP tunnel - with IPsec                   [ OK ]
+TEST: IPv6 basic L2TP tunnel - with IPsec                           [ OK ]
+TEST: IPv6 route through L2TP tunnel - with IPsec                   [ OK ]
+TEST: IPv4 basic L2TP tunnel                                        [ OK ]
+TEST: IPv4 route through L2TP tunnel                                [ OK ]
+TEST: IPv6 basic L2TP tunnel - with IPsec                           [ OK ]
+TEST: IPv6 route through L2TP tunnel - with IPsec                   [ OK ]
+TEST: IPv4 basic L2TP tunnel - after IPsec teardown                 [ OK ]
+TEST: IPv4 route through L2TP tunnel - after IPsec teardown         [ OK ]
+TEST: IPv6 basic L2TP tunnel - after IPsec teardown                 [ OK ]
+TEST: IPv6 route through L2TP tunnel - after IPsec teardown         [ OK ]
 
---------------------------------------------------------------------------
-OUTPUT tests
---------------------------------------------------------------------------
-TEST: Unknown IOAM namespace (inline mode)                          [ OK ]
-TEST: Unknown IOAM namespace (encap mode)                           [ OK ]
-TEST: Missing trace room (inline mode)                              [ OK ]
-TEST: Missing trace room (encap mode)                               [ OK ]
-TEST: Trace type with bit 0 only (inline mode)                      [ OK ]
-...
-TEST: Full supported trace (encap mode)                             [ OK ]
-
---------------------------------------------------------------------------
-GLOBAL tests
---------------------------------------------------------------------------
-TEST: Forward - Full supported trace (inline mode)                  [ OK ]
-TEST: Forward - Full supported trace (encap mode)                   [ OK ]
-
-- Tests passed: 88
-- Tests failed: 0
+Tests passed:  16
+Tests failed:   0
 
 Acked-by: David Ahern <dsahern@kernel.org>
 Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
 ---
- tools/testing/selftests/net/ioam6.sh | 247 +++++++++++++--------------
- 1 file changed, 121 insertions(+), 126 deletions(-)
+ tools/testing/selftests/net/l2tp.sh | 130 +++++++++++++---------------
+ 1 file changed, 62 insertions(+), 68 deletions(-)
 
-diff --git a/tools/testing/selftests/net/ioam6.sh b/tools/testing/selftests/net/ioam6.sh
-index 4ceb401da1bf..c2ea3ed43a93 100755
---- a/tools/testing/selftests/net/ioam6.sh
-+++ b/tools/testing/selftests/net/ioam6.sh
-@@ -117,8 +117,7 @@
- #        | Schema Data         |                                     |
- #        +-----------------------------------------------------------+
+diff --git a/tools/testing/selftests/net/l2tp.sh b/tools/testing/selftests/net/l2tp.sh
+index 5782433886fc..88de7166c8ae 100755
+--- a/tools/testing/selftests/net/l2tp.sh
++++ b/tools/testing/selftests/net/l2tp.sh
+@@ -13,6 +13,7 @@
+ #                10.1.1.1    |            |   10.1.2.1
+ #              2001:db8:1::1 |            | 2001:db8:2::1
  
--# Kselftest framework requirement - SKIP code is 4.
--ksft_skip=4
 +source lib.sh
+ VERBOSE=0
+ PAUSE_ON_FAIL=no
  
- ################################################################################
- #                                                                              #
-@@ -195,32 +194,32 @@ TESTS_GLOBAL="
+@@ -80,9 +81,6 @@ create_ns()
+ 	[ -z "${addr}" ] && addr="-"
+ 	[ -z "${addr6}" ] && addr6="-"
  
- check_kernel_compatibility()
+-	ip netns add ${ns}
+-
+-	ip -netns ${ns} link set lo up
+ 	if [ "${addr}" != "-" ]; then
+ 		ip -netns ${ns} addr add dev lo ${addr}
+ 	fi
+@@ -133,12 +131,7 @@ connect_ns()
+ 
+ cleanup()
  {
--  ip netns add ioam-tmp-node
--  ip link add name veth0 netns ioam-tmp-node type veth \
--         peer name veth1 netns ioam-tmp-node
-+  setup_ns ioam_tmp_node
-+  ip link add name veth0 netns $ioam_tmp_node type veth \
-+         peer name veth1 netns $ioam_tmp_node
+-	local ns
+-
+-	for ns in host-1 host-2 router
+-	do
+-		ip netns del ${ns} 2>/dev/null
+-	done
++	cleanup_ns $host_1 $host_2 $router
+ }
  
--  ip -netns ioam-tmp-node link set veth0 up
--  ip -netns ioam-tmp-node link set veth1 up
-+  ip -netns $ioam_tmp_node link set veth0 up
-+  ip -netns $ioam_tmp_node link set veth1 up
+ setup_l2tp_ipv4()
+@@ -146,28 +139,28 @@ setup_l2tp_ipv4()
+ 	#
+ 	# configure l2tpv3 tunnel on host-1
+ 	#
+-	ip -netns host-1 l2tp add tunnel tunnel_id 1041 peer_tunnel_id 1042 \
++	ip -netns $host_1 l2tp add tunnel tunnel_id 1041 peer_tunnel_id 1042 \
+ 			 encap ip local 10.1.1.1 remote 10.1.2.1
+-	ip -netns host-1 l2tp add session name l2tp4 tunnel_id 1041 \
++	ip -netns $host_1 l2tp add session name l2tp4 tunnel_id 1041 \
+ 			 session_id 1041 peer_session_id 1042
+-	ip -netns host-1 link set dev l2tp4 up
+-	ip -netns host-1 addr add dev l2tp4 172.16.1.1 peer 172.16.1.2
++	ip -netns $host_1 link set dev l2tp4 up
++	ip -netns $host_1 addr add dev l2tp4 172.16.1.1 peer 172.16.1.2
  
--  ip -netns ioam-tmp-node ioam namespace add 0
-+  ip -netns $ioam_tmp_node ioam namespace add 0
-   ns_ad=$?
+ 	#
+ 	# configure l2tpv3 tunnel on host-2
+ 	#
+-	ip -netns host-2 l2tp add tunnel tunnel_id 1042 peer_tunnel_id 1041 \
++	ip -netns $host_2 l2tp add tunnel tunnel_id 1042 peer_tunnel_id 1041 \
+ 			 encap ip local 10.1.2.1 remote 10.1.1.1
+-	ip -netns host-2 l2tp add session name l2tp4 tunnel_id 1042 \
++	ip -netns $host_2 l2tp add session name l2tp4 tunnel_id 1042 \
+ 			 session_id 1042 peer_session_id 1041
+-	ip -netns host-2 link set dev l2tp4 up
+-	ip -netns host-2 addr add dev l2tp4 172.16.1.2 peer 172.16.1.1
++	ip -netns $host_2 link set dev l2tp4 up
++	ip -netns $host_2 addr add dev l2tp4 172.16.1.2 peer 172.16.1.1
  
--  ip -netns ioam-tmp-node ioam namespace show | grep -q "namespace 0"
-+  ip -netns $ioam_tmp_node ioam namespace show | grep -q "namespace 0"
-   ns_sh=$?
+ 	#
+ 	# add routes to loopback addresses
+ 	#
+-	ip -netns host-1 ro add 172.16.101.2/32 via 172.16.1.2
+-	ip -netns host-2 ro add 172.16.101.1/32 via 172.16.1.1
++	ip -netns $host_1 ro add 172.16.101.2/32 via 172.16.1.2
++	ip -netns $host_2 ro add 172.16.101.1/32 via 172.16.1.1
+ }
  
-   if [[ $ns_ad != 0 || $ns_sh != 0 ]]
-   then
-     echo "SKIP: kernel version probably too old, missing ioam support"
-     ip link del veth0 2>/dev/null || true
--    ip netns del ioam-tmp-node || true
-+    ip netns del $ioam_tmp_node || true
-     exit $ksft_skip
-   fi
+ setup_l2tp_ipv6()
+@@ -175,28 +168,28 @@ setup_l2tp_ipv6()
+ 	#
+ 	# configure l2tpv3 tunnel on host-1
+ 	#
+-	ip -netns host-1 l2tp add tunnel tunnel_id 1061 peer_tunnel_id 1062 \
++	ip -netns $host_1 l2tp add tunnel tunnel_id 1061 peer_tunnel_id 1062 \
+ 			 encap ip local 2001:db8:1::1 remote 2001:db8:2::1
+-	ip -netns host-1 l2tp add session name l2tp6 tunnel_id 1061 \
++	ip -netns $host_1 l2tp add session name l2tp6 tunnel_id 1061 \
+ 			 session_id 1061 peer_session_id 1062
+-	ip -netns host-1 link set dev l2tp6 up
+-	ip -netns host-1 addr add dev l2tp6 fc00:1::1 peer fc00:1::2
++	ip -netns $host_1 link set dev l2tp6 up
++	ip -netns $host_1 addr add dev l2tp6 fc00:1::1 peer fc00:1::2
  
--  ip -netns ioam-tmp-node route add db02::/64 encap ioam6 mode inline \
-+  ip -netns $ioam_tmp_node route add db02::/64 encap ioam6 mode inline \
-          trace prealloc type 0x800000 ns 0 size 4 dev veth0
-   tr_ad=$?
+ 	#
+ 	# configure l2tpv3 tunnel on host-2
+ 	#
+-	ip -netns host-2 l2tp add tunnel tunnel_id 1062 peer_tunnel_id 1061 \
++	ip -netns $host_2 l2tp add tunnel tunnel_id 1062 peer_tunnel_id 1061 \
+ 			 encap ip local 2001:db8:2::1 remote 2001:db8:1::1
+-	ip -netns host-2 l2tp add session name l2tp6 tunnel_id 1062 \
++	ip -netns $host_2 l2tp add session name l2tp6 tunnel_id 1062 \
+ 			 session_id 1062 peer_session_id 1061
+-	ip -netns host-2 link set dev l2tp6 up
+-	ip -netns host-2 addr add dev l2tp6 fc00:1::2 peer fc00:1::1
++	ip -netns $host_2 link set dev l2tp6 up
++	ip -netns $host_2 addr add dev l2tp6 fc00:1::2 peer fc00:1::1
  
--  ip -netns ioam-tmp-node -6 route | grep -q "encap ioam6"
-+  ip -netns $ioam_tmp_node -6 route | grep -q "encap ioam6"
-   tr_sh=$?
- 
-   if [[ $tr_ad != 0 || $tr_sh != 0 ]]
-@@ -228,12 +227,12 @@ check_kernel_compatibility()
-     echo "SKIP: cannot attach an ioam trace to a route, did you compile" \
-          "without CONFIG_IPV6_IOAM6_LWTUNNEL?"
-     ip link del veth0 2>/dev/null || true
--    ip netns del ioam-tmp-node || true
-+    ip netns del $ioam_tmp_node || true
-     exit $ksft_skip
-   fi
- 
-   ip link del veth0 2>/dev/null || true
--  ip netns del ioam-tmp-node || true
-+  ip netns del $ioam_tmp_node || true
- 
-   lsmod | grep -q "ip6_tunnel"
-   ip6tnl_loaded=$?
-@@ -265,9 +264,7 @@ cleanup()
-   ip link del ioam-veth-alpha 2>/dev/null || true
-   ip link del ioam-veth-gamma 2>/dev/null || true
- 
--  ip netns del ioam-node-alpha || true
--  ip netns del ioam-node-beta || true
--  ip netns del ioam-node-gamma || true
-+  cleanup_ns $ioam_node_alpha $ioam_node_beta $ioam_node_gamma
- 
-   if [ $ip6tnl_loaded != 0 ]
-   then
-@@ -277,69 +274,67 @@ cleanup()
+ 	#
+ 	# add routes to loopback addresses
+ 	#
+-	ip -netns host-1 -6 ro add fc00:101::2/128 via fc00:1::2
+-	ip -netns host-2 -6 ro add fc00:101::1/128 via fc00:1::1
++	ip -netns $host_1 -6 ro add fc00:101::2/128 via fc00:1::2
++	ip -netns $host_2 -6 ro add fc00:101::1/128 via fc00:1::1
+ }
  
  setup()
+@@ -205,21 +198,22 @@ setup()
+ 	cleanup
+ 
+ 	set -e
+-	create_ns host-1 172.16.101.1/32 fc00:101::1/128
+-	create_ns host-2 172.16.101.2/32 fc00:101::2/128
+-	create_ns router
++	setup_ns host_1 host_2 router
++	create_ns $host_1 172.16.101.1/32 fc00:101::1/128
++	create_ns $host_2 172.16.101.2/32 fc00:101::2/128
++	create_ns $router
+ 
+-	connect_ns host-1 eth0 10.1.1.1/24 2001:db8:1::1/64 \
+-	           router eth1 10.1.1.2/24 2001:db8:1::2/64
++	connect_ns $host_1 eth0 10.1.1.1/24 2001:db8:1::1/64 \
++	           $router eth1 10.1.1.2/24 2001:db8:1::2/64
+ 
+-	connect_ns host-2 eth0 10.1.2.1/24 2001:db8:2::1/64 \
+-	           router eth2 10.1.2.2/24 2001:db8:2::2/64
++	connect_ns $host_2 eth0 10.1.2.1/24 2001:db8:2::1/64 \
++	           $router eth2 10.1.2.2/24 2001:db8:2::2/64
+ 
+-	ip -netns host-1 ro add 10.1.2.0/24 via 10.1.1.2
+-	ip -netns host-1 -6 ro add 2001:db8:2::/64 via 2001:db8:1::2
++	ip -netns $host_1 ro add 10.1.2.0/24 via 10.1.1.2
++	ip -netns $host_1 -6 ro add 2001:db8:2::/64 via 2001:db8:1::2
+ 
+-	ip -netns host-2 ro add 10.1.1.0/24 via 10.1.2.2
+-	ip -netns host-2 -6 ro add 2001:db8:1::/64 via 2001:db8:2::2
++	ip -netns $host_2 ro add 10.1.1.0/24 via 10.1.2.2
++	ip -netns $host_2 -6 ro add 2001:db8:1::/64 via 2001:db8:2::2
+ 
+ 	setup_l2tp_ipv4
+ 	setup_l2tp_ipv6
+@@ -231,38 +225,38 @@ setup_ipsec()
+ 	#
+ 	# IPv4
+ 	#
+-	run_cmd host-1 ip xfrm policy add \
++	run_cmd $host_1 ip xfrm policy add \
+ 		src 10.1.1.1 dst 10.1.2.1 dir out \
+ 		tmpl proto esp mode transport
+ 
+-	run_cmd host-1 ip xfrm policy add \
++	run_cmd $host_1 ip xfrm policy add \
+ 		src 10.1.2.1 dst 10.1.1.1 dir in \
+ 		tmpl proto esp mode transport
+ 
+-	run_cmd host-2 ip xfrm policy add \
++	run_cmd $host_2 ip xfrm policy add \
+ 		src 10.1.1.1 dst 10.1.2.1 dir in \
+ 		tmpl proto esp mode transport
+ 
+-	run_cmd host-2 ip xfrm policy add \
++	run_cmd $host_2 ip xfrm policy add \
+ 		src 10.1.2.1 dst 10.1.1.1 dir out \
+ 		tmpl proto esp mode transport
+ 
+-	ip -netns host-1 xfrm state add \
++	ip -netns $host_1 xfrm state add \
+ 		src 10.1.1.1 dst 10.1.2.1 \
+ 		spi 0x1000 proto esp aead 'rfc4106(gcm(aes))' \
+ 		0x0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f 128 mode transport
+ 
+-	ip -netns host-1 xfrm state add \
++	ip -netns $host_1 xfrm state add \
+ 		src 10.1.2.1 dst 10.1.1.1 \
+ 		spi 0x1001 proto esp aead 'rfc4106(gcm(aes))' \
+ 		0x0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f 128 mode transport
+ 
+-	ip -netns host-2 xfrm state add \
++	ip -netns $host_2 xfrm state add \
+ 		src 10.1.1.1 dst 10.1.2.1 \
+ 		spi 0x1000 proto esp aead 'rfc4106(gcm(aes))' \
+ 		0x0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f 128 mode transport
+ 
+-	ip -netns host-2 xfrm state add \
++	ip -netns $host_2 xfrm state add \
+ 		src 10.1.2.1 dst 10.1.1.1 \
+ 		spi 0x1001 proto esp aead 'rfc4106(gcm(aes))' \
+ 		0x0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f 128 mode transport
+@@ -270,38 +264,38 @@ setup_ipsec()
+ 	#
+ 	# IPV6
+ 	#
+-	run_cmd host-1 ip -6 xfrm policy add \
++	run_cmd $host_1 ip -6 xfrm policy add \
+ 		src 2001:db8:1::1 dst 2001:db8:2::1 dir out \
+ 		tmpl proto esp mode transport
+ 
+-	run_cmd host-1 ip -6 xfrm policy add \
++	run_cmd $host_1 ip -6 xfrm policy add \
+ 		src 2001:db8:2::1 dst 2001:db8:1::1 dir in \
+ 		tmpl proto esp mode transport
+ 
+-	run_cmd host-2 ip -6 xfrm policy add \
++	run_cmd $host_2 ip -6 xfrm policy add \
+ 		src 2001:db8:1::1 dst 2001:db8:2::1 dir in \
+ 		tmpl proto esp mode transport
+ 
+-	run_cmd host-2 ip -6 xfrm policy add \
++	run_cmd $host_2 ip -6 xfrm policy add \
+ 		src 2001:db8:2::1 dst 2001:db8:1::1 dir out \
+ 		tmpl proto esp mode transport
+ 
+-	ip -netns host-1 -6 xfrm state add \
++	ip -netns $host_1 -6 xfrm state add \
+ 		src 2001:db8:1::1 dst 2001:db8:2::1 \
+ 		spi 0x1000 proto esp aead 'rfc4106(gcm(aes))' \
+ 		0x0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f 128 mode transport
+ 
+-	ip -netns host-1 -6 xfrm state add \
++	ip -netns $host_1 -6 xfrm state add \
+ 		src 2001:db8:2::1 dst 2001:db8:1::1 \
+ 		spi 0x1001 proto esp aead 'rfc4106(gcm(aes))' \
+ 		0x0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f 128 mode transport
+ 
+-	ip -netns host-2 -6 xfrm state add \
++	ip -netns $host_2 -6 xfrm state add \
+ 		src 2001:db8:1::1 dst 2001:db8:2::1 \
+ 		spi 0x1000 proto esp aead 'rfc4106(gcm(aes))' \
+ 		0x0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f 128 mode transport
+ 
+-	ip -netns host-2 -6 xfrm state add \
++	ip -netns $host_2 -6 xfrm state add \
+ 		src 2001:db8:2::1 dst 2001:db8:1::1 \
+ 		spi 0x1001 proto esp aead 'rfc4106(gcm(aes))' \
+ 		0x0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f0f 128 mode transport
+@@ -309,10 +303,10 @@ setup_ipsec()
+ 
+ teardown_ipsec()
  {
--  ip netns add ioam-node-alpha
--  ip netns add ioam-node-beta
--  ip netns add ioam-node-gamma
--
--  ip link add name ioam-veth-alpha netns ioam-node-alpha type veth \
--         peer name ioam-veth-betaL netns ioam-node-beta
--  ip link add name ioam-veth-betaR netns ioam-node-beta type veth \
--         peer name ioam-veth-gamma netns ioam-node-gamma
--
--  ip -netns ioam-node-alpha link set ioam-veth-alpha name veth0
--  ip -netns ioam-node-beta link set ioam-veth-betaL name veth0
--  ip -netns ioam-node-beta link set ioam-veth-betaR name veth1
--  ip -netns ioam-node-gamma link set ioam-veth-gamma name veth0
--
--  ip -netns ioam-node-alpha addr add db01::2/64 dev veth0
--  ip -netns ioam-node-alpha link set veth0 up
--  ip -netns ioam-node-alpha link set lo up
--  ip -netns ioam-node-alpha route add db02::/64 via db01::1 dev veth0
--  ip -netns ioam-node-alpha route del db01::/64
--  ip -netns ioam-node-alpha route add db01::/64 dev veth0
--
--  ip -netns ioam-node-beta addr add db01::1/64 dev veth0
--  ip -netns ioam-node-beta addr add db02::1/64 dev veth1
--  ip -netns ioam-node-beta link set veth0 up
--  ip -netns ioam-node-beta link set veth1 up
--  ip -netns ioam-node-beta link set lo up
--
--  ip -netns ioam-node-gamma addr add db02::2/64 dev veth0
--  ip -netns ioam-node-gamma link set veth0 up
--  ip -netns ioam-node-gamma link set lo up
--  ip -netns ioam-node-gamma route add db01::/64 via db02::1 dev veth0
-+  setup_ns ioam_node_alpha ioam_node_beta ioam_node_gamma
-+
-+  ip link add name ioam-veth-alpha netns $ioam_node_alpha type veth \
-+         peer name ioam-veth-betaL netns $ioam_node_beta
-+  ip link add name ioam-veth-betaR netns $ioam_node_beta type veth \
-+         peer name ioam-veth-gamma netns $ioam_node_gamma
-+
-+  ip -netns $ioam_node_alpha link set ioam-veth-alpha name veth0
-+  ip -netns $ioam_node_beta link set ioam-veth-betaL name veth0
-+  ip -netns $ioam_node_beta link set ioam-veth-betaR name veth1
-+  ip -netns $ioam_node_gamma link set ioam-veth-gamma name veth0
-+
-+  ip -netns $ioam_node_alpha addr add db01::2/64 dev veth0
-+  ip -netns $ioam_node_alpha link set veth0 up
-+  ip -netns $ioam_node_alpha link set lo up
-+  ip -netns $ioam_node_alpha route add db02::/64 via db01::1 dev veth0
-+  ip -netns $ioam_node_alpha route del db01::/64
-+  ip -netns $ioam_node_alpha route add db01::/64 dev veth0
-+
-+  ip -netns $ioam_node_beta addr add db01::1/64 dev veth0
-+  ip -netns $ioam_node_beta addr add db02::1/64 dev veth1
-+  ip -netns $ioam_node_beta link set veth0 up
-+  ip -netns $ioam_node_beta link set veth1 up
-+  ip -netns $ioam_node_beta link set lo up
-+
-+  ip -netns $ioam_node_gamma addr add db02::2/64 dev veth0
-+  ip -netns $ioam_node_gamma link set veth0 up
-+  ip -netns $ioam_node_gamma link set lo up
-+  ip -netns $ioam_node_gamma route add db01::/64 via db02::1 dev veth0
- 
-   # - IOAM config -
--  ip netns exec ioam-node-alpha sysctl -wq net.ipv6.ioam6_id=${ALPHA[0]}
--  ip netns exec ioam-node-alpha sysctl -wq net.ipv6.ioam6_id_wide=${ALPHA[1]}
--  ip netns exec ioam-node-alpha sysctl -wq net.ipv6.conf.veth0.ioam6_id=${ALPHA[4]}
--  ip netns exec ioam-node-alpha sysctl -wq net.ipv6.conf.veth0.ioam6_id_wide=${ALPHA[5]}
--  ip -netns ioam-node-alpha ioam namespace add 123 data ${ALPHA[6]} wide ${ALPHA[7]}
--  ip -netns ioam-node-alpha ioam schema add ${ALPHA[8]} "${ALPHA[9]}"
--  ip -netns ioam-node-alpha ioam namespace set 123 schema ${ALPHA[8]}
--
--  ip netns exec ioam-node-beta sysctl -wq net.ipv6.conf.all.forwarding=1
--  ip netns exec ioam-node-beta sysctl -wq net.ipv6.ioam6_id=${BETA[0]}
--  ip netns exec ioam-node-beta sysctl -wq net.ipv6.ioam6_id_wide=${BETA[1]}
--  ip netns exec ioam-node-beta sysctl -wq net.ipv6.conf.veth0.ioam6_enabled=1
--  ip netns exec ioam-node-beta sysctl -wq net.ipv6.conf.veth0.ioam6_id=${BETA[2]}
--  ip netns exec ioam-node-beta sysctl -wq net.ipv6.conf.veth0.ioam6_id_wide=${BETA[3]}
--  ip netns exec ioam-node-beta sysctl -wq net.ipv6.conf.veth1.ioam6_id=${BETA[4]}
--  ip netns exec ioam-node-beta sysctl -wq net.ipv6.conf.veth1.ioam6_id_wide=${BETA[5]}
--  ip -netns ioam-node-beta ioam namespace add 123 data ${BETA[6]} wide ${BETA[7]}
--  ip -netns ioam-node-beta ioam schema add ${BETA[8]} "${BETA[9]}"
--  ip -netns ioam-node-beta ioam namespace set 123 schema ${BETA[8]}
--
--  ip netns exec ioam-node-gamma sysctl -wq net.ipv6.ioam6_id=${GAMMA[0]}
--  ip netns exec ioam-node-gamma sysctl -wq net.ipv6.ioam6_id_wide=${GAMMA[1]}
--  ip netns exec ioam-node-gamma sysctl -wq net.ipv6.conf.veth0.ioam6_enabled=1
--  ip netns exec ioam-node-gamma sysctl -wq net.ipv6.conf.veth0.ioam6_id=${GAMMA[2]}
--  ip netns exec ioam-node-gamma sysctl -wq net.ipv6.conf.veth0.ioam6_id_wide=${GAMMA[3]}
--  ip -netns ioam-node-gamma ioam namespace add 123 data ${GAMMA[6]} wide ${GAMMA[7]}
-+  ip netns exec $ioam_node_alpha sysctl -wq net.ipv6.ioam6_id=${ALPHA[0]}
-+  ip netns exec $ioam_node_alpha sysctl -wq net.ipv6.ioam6_id_wide=${ALPHA[1]}
-+  ip netns exec $ioam_node_alpha sysctl -wq net.ipv6.conf.veth0.ioam6_id=${ALPHA[4]}
-+  ip netns exec $ioam_node_alpha sysctl -wq net.ipv6.conf.veth0.ioam6_id_wide=${ALPHA[5]}
-+  ip -netns $ioam_node_alpha ioam namespace add 123 data ${ALPHA[6]} wide ${ALPHA[7]}
-+  ip -netns $ioam_node_alpha ioam schema add ${ALPHA[8]} "${ALPHA[9]}"
-+  ip -netns $ioam_node_alpha ioam namespace set 123 schema ${ALPHA[8]}
-+
-+  ip netns exec $ioam_node_beta sysctl -wq net.ipv6.conf.all.forwarding=1
-+  ip netns exec $ioam_node_beta sysctl -wq net.ipv6.ioam6_id=${BETA[0]}
-+  ip netns exec $ioam_node_beta sysctl -wq net.ipv6.ioam6_id_wide=${BETA[1]}
-+  ip netns exec $ioam_node_beta sysctl -wq net.ipv6.conf.veth0.ioam6_enabled=1
-+  ip netns exec $ioam_node_beta sysctl -wq net.ipv6.conf.veth0.ioam6_id=${BETA[2]}
-+  ip netns exec $ioam_node_beta sysctl -wq net.ipv6.conf.veth0.ioam6_id_wide=${BETA[3]}
-+  ip netns exec $ioam_node_beta sysctl -wq net.ipv6.conf.veth1.ioam6_id=${BETA[4]}
-+  ip netns exec $ioam_node_beta sysctl -wq net.ipv6.conf.veth1.ioam6_id_wide=${BETA[5]}
-+  ip -netns $ioam_node_beta ioam namespace add 123 data ${BETA[6]} wide ${BETA[7]}
-+  ip -netns $ioam_node_beta ioam schema add ${BETA[8]} "${BETA[9]}"
-+  ip -netns $ioam_node_beta ioam namespace set 123 schema ${BETA[8]}
-+
-+  ip netns exec $ioam_node_gamma sysctl -wq net.ipv6.ioam6_id=${GAMMA[0]}
-+  ip netns exec $ioam_node_gamma sysctl -wq net.ipv6.ioam6_id_wide=${GAMMA[1]}
-+  ip netns exec $ioam_node_gamma sysctl -wq net.ipv6.conf.veth0.ioam6_enabled=1
-+  ip netns exec $ioam_node_gamma sysctl -wq net.ipv6.conf.veth0.ioam6_id=${GAMMA[2]}
-+  ip netns exec $ioam_node_gamma sysctl -wq net.ipv6.conf.veth0.ioam6_id_wide=${GAMMA[3]}
-+  ip -netns $ioam_node_gamma ioam namespace add 123 data ${GAMMA[6]} wide ${GAMMA[7]}
- 
-   sleep 1
- 
--  ip netns exec ioam-node-alpha ping6 -c 5 -W 1 db02::2 &>/dev/null
-+  ip netns exec $ioam_node_alpha ping6 -c 5 -W 1 db02::2 &>/dev/null
-   if [ $? != 0 ]
-   then
-     echo "Setup FAILED"
-@@ -412,7 +407,7 @@ run()
-   echo
- 
-   # set OUTPUT settings
--  ip netns exec ioam-node-beta sysctl -wq net.ipv6.conf.veth0.ioam6_enabled=0
-+  ip netns exec $ioam_node_beta sysctl -wq net.ipv6.conf.veth0.ioam6_enabled=0
- 
-   for t in $TESTS_OUTPUT
-   do
-@@ -421,8 +416,8 @@ run()
-   done
- 
-   # clean OUTPUT settings
--  ip netns exec ioam-node-beta sysctl -wq net.ipv6.conf.veth0.ioam6_enabled=1
--  ip -netns ioam-node-alpha route change db01::/64 dev veth0
-+  ip netns exec $ioam_node_beta sysctl -wq net.ipv6.conf.veth0.ioam6_enabled=1
-+  ip -netns $ioam_node_alpha route change db01::/64 dev veth0
- 
- 
-   echo
-@@ -433,7 +428,7 @@ run()
-   echo
- 
-   # set INPUT settings
--  ip -netns ioam-node-alpha ioam namespace del 123
-+  ip -netns $ioam_node_alpha ioam namespace del 123
- 
-   for t in $TESTS_INPUT
-   do
-@@ -442,10 +437,10 @@ run()
-   done
- 
-   # clean INPUT settings
--  ip -netns ioam-node-alpha ioam namespace add 123 \
-+  ip -netns $ioam_node_alpha ioam namespace add 123 \
-          data ${ALPHA[6]} wide ${ALPHA[7]}
--  ip -netns ioam-node-alpha ioam namespace set 123 schema ${ALPHA[8]}
--  ip -netns ioam-node-alpha route change db01::/64 dev veth0
-+  ip -netns $ioam_node_alpha ioam namespace set 123 schema ${ALPHA[8]}
-+  ip -netns $ioam_node_alpha route change db01::/64 dev veth0
- 
-   echo
-   printf "%0.s-" {1..74}
-@@ -488,15 +483,15 @@ out_undef_ns()
-   local desc="Unknown IOAM namespace"
- 
-   [ "$1" = "encap" ] && mode="$1 tundst db01::1" || mode="$1"
--  [ "$1" = "encap" ] && ip -netns ioam-node-beta link set ip6tnl0 up
-+  [ "$1" = "encap" ] && ip -netns $ioam_node_beta link set ip6tnl0 up
- 
--  ip -netns ioam-node-alpha route change db01::/64 encap ioam6 mode $mode \
-+  ip -netns $ioam_node_alpha route change db01::/64 encap ioam6 mode $mode \
-          trace prealloc type 0x800000 ns 0 size 4 dev veth0
- 
--  run_test ${FUNCNAME[0]} "${desc} ($1 mode)" ioam-node-alpha ioam-node-beta \
-+  run_test ${FUNCNAME[0]} "${desc} ($1 mode)" $ioam_node_alpha $ioam_node_beta \
-          db01::2 db01::1 veth0 0x800000 0
- 
--  [ "$1" = "encap" ] && ip -netns ioam-node-beta link set ip6tnl0 down
-+  [ "$1" = "encap" ] && ip -netns $ioam_node_beta link set ip6tnl0 down
+-	run_cmd host-1 ip xfrm state flush
+-	run_cmd host-1 ip xfrm policy flush
+-	run_cmd host-2 ip xfrm state flush
+-	run_cmd host-2 ip xfrm policy flush
++	run_cmd $host_1 ip xfrm state flush
++	run_cmd $host_1 ip xfrm policy flush
++	run_cmd $host_2 ip xfrm state flush
++	run_cmd $host_2 ip xfrm policy flush
  }
  
- out_no_room()
-@@ -508,15 +503,15 @@ out_no_room()
-   local desc="Missing trace room"
+ ################################################################################
+@@ -322,16 +316,16 @@ run_ping()
+ {
+ 	local desc="$1"
  
-   [ "$1" = "encap" ] && mode="$1 tundst db01::1" || mode="$1"
--  [ "$1" = "encap" ] && ip -netns ioam-node-beta link set ip6tnl0 up
-+  [ "$1" = "encap" ] && ip -netns $ioam_node_beta link set ip6tnl0 up
+-	run_cmd host-1 ping -c1 -w1 172.16.1.2
++	run_cmd $host_1 ping -c1 -w1 172.16.1.2
+ 	log_test $? 0 "IPv4 basic L2TP tunnel ${desc}"
  
--  ip -netns ioam-node-alpha route change db01::/64 encap ioam6 mode $mode \
-+  ip -netns $ioam_node_alpha route change db01::/64 encap ioam6 mode $mode \
-          trace prealloc type 0xc00000 ns 123 size 4 dev veth0
+-	run_cmd host-1 ping -c1 -w1 -I 172.16.101.1 172.16.101.2
++	run_cmd $host_1 ping -c1 -w1 -I 172.16.101.1 172.16.101.2
+ 	log_test $? 0 "IPv4 route through L2TP tunnel ${desc}"
  
--  run_test ${FUNCNAME[0]} "${desc} ($1 mode)" ioam-node-alpha ioam-node-beta \
-+  run_test ${FUNCNAME[0]} "${desc} ($1 mode)" $ioam_node_alpha $ioam_node_beta \
-          db01::2 db01::1 veth0 0xc00000 123
+-	run_cmd host-1 ${ping6} -c1 -w1 fc00:1::2
++	run_cmd $host_1 ${ping6} -c1 -w1 fc00:1::2
+ 	log_test $? 0 "IPv6 basic L2TP tunnel ${desc}"
  
--  [ "$1" = "encap" ] && ip -netns ioam-node-beta link set ip6tnl0 down
-+  [ "$1" = "encap" ] && ip -netns $ioam_node_beta link set ip6tnl0 down
+-	run_cmd host-1 ${ping6} -c1 -w1 -I fc00:101::1 fc00:101::2
++	run_cmd $host_1 ${ping6} -c1 -w1 -I fc00:101::1 fc00:101::2
+ 	log_test $? 0 "IPv6 route through L2TP tunnel ${desc}"
  }
  
- out_bits()
-@@ -532,11 +527,11 @@ out_bits()
-   bit2size[22]=$(( $tmp + ${#ALPHA[9]} + ((4 - (${#ALPHA[9]} % 4)) % 4) ))
+@@ -344,16 +338,16 @@ run_tests()
  
-   [ "$1" = "encap" ] && mode="$1 tundst db01::1" || mode="$1"
--  [ "$1" = "encap" ] && ip -netns ioam-node-beta link set ip6tnl0 up
-+  [ "$1" = "encap" ] && ip -netns $ioam_node_beta link set ip6tnl0 up
+ 	setup_ipsec
+ 	run_ping "- with IPsec"
+-	run_cmd host-1 ping -c1 -w1 172.16.1.2
++	run_cmd $host_1 ping -c1 -w1 172.16.1.2
+ 	log_test $? 0 "IPv4 basic L2TP tunnel ${desc}"
  
-   for i in {0..22}
-   do
--    ip -netns ioam-node-alpha route change db01::/64 encap ioam6 mode $mode \
-+    ip -netns $ioam_node_alpha route change db01::/64 encap ioam6 mode $mode \
-            trace prealloc type ${bit2type[$i]} ns 123 size ${bit2size[$i]} \
-            dev veth0 &>/dev/null
+-	run_cmd host-1 ping -c1 -w1 -I 172.16.101.1 172.16.101.2
++	run_cmd $host_1 ping -c1 -w1 -I 172.16.101.1 172.16.101.2
+ 	log_test $? 0 "IPv4 route through L2TP tunnel ${desc}"
  
-@@ -554,12 +549,12 @@ out_bits()
-         log_test_failed "$descr"
-       fi
-     else
--	run_test "out_bit$i" "$descr ($1 mode)" ioam-node-alpha \
--           ioam-node-beta db01::2 db01::1 veth0 ${bit2type[$i]} 123
-+	run_test "out_bit$i" "$descr ($1 mode)" $ioam_node_alpha \
-+           $ioam_node_beta db01::2 db01::1 veth0 ${bit2type[$i]} 123
-     fi
-   done
+-	run_cmd host-1 ${ping6} -c1 -w1 fc00:1::2
++	run_cmd $host_1 ${ping6} -c1 -w1 fc00:1::2
+ 	log_test $? 0 "IPv6 basic L2TP tunnel - with IPsec"
  
--  [ "$1" = "encap" ] && ip -netns ioam-node-beta link set ip6tnl0 down
-+  [ "$1" = "encap" ] && ip -netns $ioam_node_beta link set ip6tnl0 down
+-	run_cmd host-1 ${ping6} -c1 -w1 -I fc00:101::1 fc00:101::2
++	run_cmd $host_1 ${ping6} -c1 -w1 -I fc00:101::1 fc00:101::2
+ 	log_test $? 0 "IPv6 route through L2TP tunnel - with IPsec"
  
-   bit2size[22]=$tmp
- }
-@@ -573,15 +568,15 @@ out_full_supp_trace()
-   local desc="Full supported trace"
- 
-   [ "$1" = "encap" ] && mode="$1 tundst db01::1" || mode="$1"
--  [ "$1" = "encap" ] && ip -netns ioam-node-beta link set ip6tnl0 up
-+  [ "$1" = "encap" ] && ip -netns $ioam_node_beta link set ip6tnl0 up
- 
--  ip -netns ioam-node-alpha route change db01::/64 encap ioam6 mode $mode \
-+  ip -netns $ioam_node_alpha route change db01::/64 encap ioam6 mode $mode \
-          trace prealloc type 0xfff002 ns 123 size 100 dev veth0
- 
--  run_test ${FUNCNAME[0]} "${desc} ($1 mode)" ioam-node-alpha ioam-node-beta \
-+  run_test ${FUNCNAME[0]} "${desc} ($1 mode)" $ioam_node_alpha $ioam_node_beta \
-          db01::2 db01::1 veth0 0xfff002 123
- 
--  [ "$1" = "encap" ] && ip -netns ioam-node-beta link set ip6tnl0 down
-+  [ "$1" = "encap" ] && ip -netns $ioam_node_beta link set ip6tnl0 down
- }
- 
- 
-@@ -603,15 +598,15 @@ in_undef_ns()
-   local desc="Unknown IOAM namespace"
- 
-   [ "$1" = "encap" ] && mode="$1 tundst db01::1" || mode="$1"
--  [ "$1" = "encap" ] && ip -netns ioam-node-beta link set ip6tnl0 up
-+  [ "$1" = "encap" ] && ip -netns $ioam_node_beta link set ip6tnl0 up
- 
--  ip -netns ioam-node-alpha route change db01::/64 encap ioam6 mode $mode \
-+  ip -netns $ioam_node_alpha route change db01::/64 encap ioam6 mode $mode \
-          trace prealloc type 0x800000 ns 0 size 4 dev veth0
- 
--  run_test ${FUNCNAME[0]} "${desc} ($1 mode)" ioam-node-alpha ioam-node-beta \
-+  run_test ${FUNCNAME[0]} "${desc} ($1 mode)" $ioam_node_alpha $ioam_node_beta \
-          db01::2 db01::1 veth0 0x800000 0
- 
--  [ "$1" = "encap" ] && ip -netns ioam-node-beta link set ip6tnl0 down
-+  [ "$1" = "encap" ] && ip -netns $ioam_node_beta link set ip6tnl0 down
- }
- 
- in_no_room()
-@@ -623,15 +618,15 @@ in_no_room()
-   local desc="Missing trace room"
- 
-   [ "$1" = "encap" ] && mode="$1 tundst db01::1" || mode="$1"
--  [ "$1" = "encap" ] && ip -netns ioam-node-beta link set ip6tnl0 up
-+  [ "$1" = "encap" ] && ip -netns $ioam_node_beta link set ip6tnl0 up
- 
--  ip -netns ioam-node-alpha route change db01::/64 encap ioam6 mode $mode \
-+  ip -netns $ioam_node_alpha route change db01::/64 encap ioam6 mode $mode \
-          trace prealloc type 0xc00000 ns 123 size 4 dev veth0
- 
--  run_test ${FUNCNAME[0]} "${desc} ($1 mode)" ioam-node-alpha ioam-node-beta \
-+  run_test ${FUNCNAME[0]} "${desc} ($1 mode)" $ioam_node_alpha $ioam_node_beta \
-          db01::2 db01::1 veth0 0xc00000 123
- 
--  [ "$1" = "encap" ] && ip -netns ioam-node-beta link set ip6tnl0 down
-+  [ "$1" = "encap" ] && ip -netns $ioam_node_beta link set ip6tnl0 down
- }
- 
- in_bits()
-@@ -647,19 +642,19 @@ in_bits()
-   bit2size[22]=$(( $tmp + ${#BETA[9]} + ((4 - (${#BETA[9]} % 4)) % 4) ))
- 
-   [ "$1" = "encap" ] && mode="$1 tundst db01::1" || mode="$1"
--  [ "$1" = "encap" ] && ip -netns ioam-node-beta link set ip6tnl0 up
-+  [ "$1" = "encap" ] && ip -netns $ioam_node_beta link set ip6tnl0 up
- 
-   for i in {0..11} {22..22}
-   do
--    ip -netns ioam-node-alpha route change db01::/64 encap ioam6 mode $mode \
-+    ip -netns $ioam_node_alpha route change db01::/64 encap ioam6 mode $mode \
-            trace prealloc type ${bit2type[$i]} ns 123 size ${bit2size[$i]} \
-            dev veth0
- 
--    run_test "in_bit$i" "${desc/<n>/$i} ($1 mode)" ioam-node-alpha \
--           ioam-node-beta db01::2 db01::1 veth0 ${bit2type[$i]} 123
-+    run_test "in_bit$i" "${desc/<n>/$i} ($1 mode)" $ioam_node_alpha \
-+           $ioam_node_beta db01::2 db01::1 veth0 ${bit2type[$i]} 123
-   done
- 
--  [ "$1" = "encap" ] && ip -netns ioam-node-beta link set ip6tnl0 down
-+  [ "$1" = "encap" ] && ip -netns $ioam_node_beta link set ip6tnl0 down
- 
-   bit2size[22]=$tmp
- }
-@@ -675,22 +670,22 @@ in_oflag()
-   # Exception:
-   #   Here, we need the sender to set the Overflow flag. For that, we will add
-   #   back the IOAM namespace that was previously configured on the sender.
--  ip -netns ioam-node-alpha ioam namespace add 123
-+  ip -netns $ioam_node_alpha ioam namespace add 123
- 
-   [ "$1" = "encap" ] && mode="$1 tundst db01::1" || mode="$1"
--  [ "$1" = "encap" ] && ip -netns ioam-node-beta link set ip6tnl0 up
-+  [ "$1" = "encap" ] && ip -netns $ioam_node_beta link set ip6tnl0 up
- 
--  ip -netns ioam-node-alpha route change db01::/64 encap ioam6 mode $mode \
-+  ip -netns $ioam_node_alpha route change db01::/64 encap ioam6 mode $mode \
-          trace prealloc type 0xc00000 ns 123 size 4 dev veth0
- 
--  run_test ${FUNCNAME[0]} "${desc} ($1 mode)" ioam-node-alpha ioam-node-beta \
-+  run_test ${FUNCNAME[0]} "${desc} ($1 mode)" $ioam_node_alpha $ioam_node_beta \
-          db01::2 db01::1 veth0 0xc00000 123
- 
--  [ "$1" = "encap" ] && ip -netns ioam-node-beta link set ip6tnl0 down
-+  [ "$1" = "encap" ] && ip -netns $ioam_node_beta link set ip6tnl0 down
- 
-   # And we clean the exception for this test to get things back to normal for
-   # other INPUT tests
--  ip -netns ioam-node-alpha ioam namespace del 123
-+  ip -netns $ioam_node_alpha ioam namespace del 123
- }
- 
- in_full_supp_trace()
-@@ -702,15 +697,15 @@ in_full_supp_trace()
-   local desc="Full supported trace"
- 
-   [ "$1" = "encap" ] && mode="$1 tundst db01::1" || mode="$1"
--  [ "$1" = "encap" ] && ip -netns ioam-node-beta link set ip6tnl0 up
-+  [ "$1" = "encap" ] && ip -netns $ioam_node_beta link set ip6tnl0 up
- 
--  ip -netns ioam-node-alpha route change db01::/64 encap ioam6 mode $mode \
-+  ip -netns $ioam_node_alpha route change db01::/64 encap ioam6 mode $mode \
-          trace prealloc type 0xfff002 ns 123 size 80 dev veth0
- 
--  run_test ${FUNCNAME[0]} "${desc} ($1 mode)" ioam-node-alpha ioam-node-beta \
-+  run_test ${FUNCNAME[0]} "${desc} ($1 mode)" $ioam_node_alpha $ioam_node_beta \
-          db01::2 db01::1 veth0 0xfff002 123
- 
--  [ "$1" = "encap" ] && ip -netns ioam-node-beta link set ip6tnl0 down
-+  [ "$1" = "encap" ] && ip -netns $ioam_node_beta link set ip6tnl0 down
- }
- 
- 
-@@ -730,15 +725,15 @@ fwd_full_supp_trace()
-   local desc="Forward - Full supported trace"
- 
-   [ "$1" = "encap" ] && mode="$1 tundst db02::2" || mode="$1"
--  [ "$1" = "encap" ] && ip -netns ioam-node-gamma link set ip6tnl0 up
-+  [ "$1" = "encap" ] && ip -netns $ioam_node_gamma link set ip6tnl0 up
- 
--  ip -netns ioam-node-alpha route change db02::/64 encap ioam6 mode $mode \
-+  ip -netns $ioam_node_alpha route change db02::/64 encap ioam6 mode $mode \
-          trace prealloc type 0xfff002 ns 123 size 244 via db01::1 dev veth0
- 
--  run_test ${FUNCNAME[0]} "${desc} ($1 mode)" ioam-node-alpha ioam-node-gamma \
-+  run_test ${FUNCNAME[0]} "${desc} ($1 mode)" $ioam_node_alpha $ioam_node_gamma \
-          db01::2 db02::2 veth0 0xfff002 123
- 
--  [ "$1" = "encap" ] && ip -netns ioam-node-gamma link set ip6tnl0 down
-+  [ "$1" = "encap" ] && ip -netns $ioam_node_gamma link set ip6tnl0 down
- }
- 
- 
+ 	teardown_ipsec
 -- 
 2.41.0
 
