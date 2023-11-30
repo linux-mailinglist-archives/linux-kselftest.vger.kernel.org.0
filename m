@@ -1,123 +1,143 @@
-Return-Path: <linux-kselftest+bounces-854-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-855-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B1537FE51C
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Nov 2023 01:48:12 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E215E7FE5E8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Nov 2023 02:17:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 379211C20B1D
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Nov 2023 00:48:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6A5A5B21411
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Nov 2023 01:17:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4FBE628;
-	Thu, 30 Nov 2023 00:48:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AF3C4C7E;
+	Thu, 30 Nov 2023 01:17:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q3gDyxeg"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EBy9JBlx"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oa1-x2c.google.com (mail-oa1-x2c.google.com [IPv6:2001:4860:4864:20::2c])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33AF1C9;
-	Wed, 29 Nov 2023 16:47:59 -0800 (PST)
-Received: by mail-oa1-x2c.google.com with SMTP id 586e51a60fabf-1f9e0e44fecso169052fac.3;
-        Wed, 29 Nov 2023 16:47:59 -0800 (PST)
+Received: from mail-io1-xd2e.google.com (mail-io1-xd2e.google.com [IPv6:2607:f8b0:4864:20::d2e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D7DB8E;
+	Wed, 29 Nov 2023 17:17:22 -0800 (PST)
+Received: by mail-io1-xd2e.google.com with SMTP id ca18e2360f4ac-7b37405f64aso8344139f.2;
+        Wed, 29 Nov 2023 17:17:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701305278; x=1701910078; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1701307042; x=1701911842; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=px7lu5nOqajxdLEanLNBtXA+0BLm4pP2tpUPChWnjUo=;
-        b=Q3gDyxegKcTCM22dYyiIS3FhVJKlB3JlX5pEtwKlifYACjCod8X2Nzp7Shbm1wUjqZ
-         3VQUTWS3p44xgvuKDB+Q5PQ0btMjf62LpnI0+xEi7TMx8oDXolmqF3GzRrPzwhaEQ/EZ
-         ELGYT7s/ptGFZMyqO6LiXbECKOe2pp+xrTC4q+17k+tz43kt5payZXz1H76bbzNHtsro
-         nCLOrtuAIm3SmWHmBqbBmO/vwAlhPcBLLKWhbiWZWRNGGURUNwfiGP59gnejquWjjFcV
-         7aXEJ0C8UMJNTkBtV0NqhlSdZBi3z8WIoh73nJOJzPCdGbG8nePM3naVI+zMK301IyhW
-         4veg==
+        bh=6eWb4cpMSDpOhY83scp3GXSiLGlssYt4cGYuWNn8dfc=;
+        b=EBy9JBlxub0+T3KolCI5RgHQJ0LJbqVC5ICQJf9+sd+vMmLcF+OxNicGiX/BYJRLYJ
+         EMOb/DshTqCnd80IL0mRifVoxz7ahMBynfxHz16k2ZiA5Ujs77iiFY6Q3FAPtYNYXSZ3
+         hxdqlK/IizLV+l2fHyjoLA1e4jQtkkR0Wk5dhnw851kS3gDbuo+ROn8+8cmhNBJDaYzx
+         GQCfuw8chQdwwWyCnT29rQdNpMt44UhTaLoAzh9rCKri201vJf5YCzWCs9AF3Q349Jbj
+         aPfY2gz8H3tZCyTY6Z7dJ0eyA8Hxhlc9XfNZfzM6bxS/MBeQ1xb27/JB4Njfxp/uRFFj
+         r9fQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701305278; x=1701910078;
+        d=1e100.net; s=20230601; t=1701307042; x=1701911842;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=px7lu5nOqajxdLEanLNBtXA+0BLm4pP2tpUPChWnjUo=;
-        b=tJfANXCNtGck1rwWNvT7R4p8sYSNBnu2q0vATepHof9pn1lxNkeK+U7UFL7TuzIDAe
-         +PV+XtmL8I/y4RDqP0fM9ws1t+1O/wyVK5E8egpFFt7H0CdVqFFv3on0Yov5dKa49V0Q
-         umcDORQYk/FMlo2XHDK1AZ8MoNKzka2R/ihAxeqm0Tpdk3wKKvTLcT8mHknBD9o+ecxW
-         WAMF8Cf6+u5AxhI80t9nuBJNrtYSz5yIjCFjkx8UmCMdzW+JYHKCBNpA5GS58ae7/5wC
-         V6tW/iTAkSKM+DSm0y3pYSoWP6lArul5rM8meYPHU2URrWd9K4/5UPTjuaDFH6rbr7Yi
-         A/2A==
-X-Gm-Message-State: AOJu0YwHfCb7qQwHQzcg3pjb3/aDcQcDVUi11MXoPluctd4NXFchffut
-	JqpMCnx+pRWgDMumLt5c9qz9GpCot8y3CywG0Po=
-X-Google-Smtp-Source: AGHT+IHNybKJyRL115STmke+mJBBLpb72k/nusUuGsqlLJZZnSa/+eziMVVFWzCKHCT3Qez7vepBVUhLO2cGnfNCpUg=
-X-Received: by 2002:a05:6870:eca2:b0:1f9:5081:f287 with SMTP id
- eo34-20020a056870eca200b001f95081f287mr26311523oab.27.1701305278396; Wed, 29
- Nov 2023 16:47:58 -0800 (PST)
+        bh=6eWb4cpMSDpOhY83scp3GXSiLGlssYt4cGYuWNn8dfc=;
+        b=e4VRPYlxVXT3BO5MZF6TqzlaRrNVCMyI83JATdUjPrujPm46TA26hPee0DkepaTTgy
+         d7uXkyHJvfBH1CBYuUNMEZ5vLMFn9JepsvRH7CCpE70qg717HZ3JMNLulCF2+nuzW5Gg
+         CPefnEYpqfuMeW8NKxByLBNAu7Z8KL8SykxX73IU96a0hp8wkznM5bEOGywCl6PWJIjl
+         wksB+tXwkLE0hkwKY5p7f165RfrbNdPaj1y+kZCy4vCYlpFW2E1VyXhAHQzvwtjb/AQb
+         0Rub3aLg0yF66qTp8/3JRRMBU0X/6S2vAHUx4XlRdWfyfTkZR5fwgHvpWh6lqMTW3yyV
+         4zKA==
+X-Gm-Message-State: AOJu0Yw+D8PDzgQPU0h1qN2dIjbFkWkifkKO6vXF4ZuxONox7vPQNU51
+	YudgOUpupe2c0KF7q3+LUdwWRG3YS2ns7JBe4DE=
+X-Google-Smtp-Source: AGHT+IE5YuiZlN60NP+PTEYxX011dseeYtEXDZDUfubnFiHW22/wCFNaxyqnolgJzwpz4/cQjyTG35wtqDaax6dmI8Y=
+X-Received: by 2002:a05:6e02:811:b0:35c:e1fc:8b83 with SMTP id
+ u17-20020a056e02081100b0035ce1fc8b83mr12988531ilm.16.1701307041738; Wed, 29
+ Nov 2023 17:17:21 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231127193703.1980089-1-nphamcs@gmail.com> <20231127193703.1980089-3-nphamcs@gmail.com>
- <ZWW1IG0Mv3r0m4mp@tiehlicka> <CAKEwX=OGtkqWys9VM9EBScoCdAjSdfPjEkvoY7_u9udDZBFFpw@mail.gmail.com>
- <ZWcB_r8ywytCFR8B@tiehlicka>
-In-Reply-To: <ZWcB_r8ywytCFR8B@tiehlicka>
+References: <20231127234600.2971029-1-nphamcs@gmail.com> <20231127234600.2971029-4-nphamcs@gmail.com>
+ <20231129151721.GC135852@cmpxchg.org> <CAKEwX=M=iFGS6PQyF7FiV2JDhN0uLzSiJ3TK30nGiV1mM1wZ+A@mail.gmail.com>
+In-Reply-To: <CAKEwX=M=iFGS6PQyF7FiV2JDhN0uLzSiJ3TK30nGiV1mM1wZ+A@mail.gmail.com>
 From: Nhat Pham <nphamcs@gmail.com>
-Date: Wed, 29 Nov 2023 16:47:47 -0800
-Message-ID: <CAKEwX=PgubfJeCVYUzCCqgGzn=KsjOcUbFJ+Y-Jd5pfk7Wrv-A@mail.gmail.com>
-Subject: Re: [PATCH v6 2/6] memcontrol: allows mem_cgroup_iter() to check for onlineness
-To: Michal Hocko <mhocko@suse.com>
-Cc: akpm@linux-foundation.org, hannes@cmpxchg.org, cerasuolodomenico@gmail.com, 
+Date: Wed, 29 Nov 2023 17:17:10 -0800
+Message-ID: <CAKEwX=MPkFfVp6vupje0cjePa9Uxh3orPubiDkrtewtj3N=RXA@mail.gmail.com>
+Subject: Re: [PATCH v7 3/6] zswap: make shrinking memcg-aware
+To: Johannes Weiner <hannes@cmpxchg.org>
+Cc: akpm@linux-foundation.org, cerasuolodomenico@gmail.com, 
 	yosryahmed@google.com, sjenning@redhat.com, ddstreet@ieee.org, 
-	vitaly.wool@konsulko.com, roman.gushchin@linux.dev, shakeelb@google.com, 
-	muchun.song@linux.dev, chrisl@kernel.org, linux-mm@kvack.org, 
-	kernel-team@meta.com, linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, shuah@kernel.org
+	vitaly.wool@konsulko.com, mhocko@kernel.org, roman.gushchin@linux.dev, 
+	shakeelb@google.com, muchun.song@linux.dev, chrisl@kernel.org, 
+	linux-mm@kvack.org, kernel-team@meta.com, linux-kernel@vger.kernel.org, 
+	cgroups@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, shuah@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 29, 2023 at 1:18=E2=80=AFAM Michal Hocko <mhocko@suse.com> wrot=
-e:
+On Wed, Nov 29, 2023 at 4:21=E2=80=AFPM Nhat Pham <nphamcs@gmail.com> wrote=
+:
 >
-> On Tue 28-11-23 08:53:56, Nhat Pham wrote:
-> > On Tue, Nov 28, 2023 at 1:38=E2=80=AFAM Michal Hocko <mhocko@suse.com> =
-wrote:
-> > >
-> > > On Mon 27-11-23 11:36:59, Nhat Pham wrote:
-> > > > The new zswap writeback scheme requires an online-only memcg hierar=
-chy
-> > > > traversal. Add a new parameter to mem_cgroup_iter() to check for
-> > > > onlineness before returning.
-> > >
-> > > Why is this needed?
+> On Wed, Nov 29, 2023 at 7:17=E2=80=AFAM Johannes Weiner <hannes@cmpxchg.o=
+rg> wrote:
 > >
-> > For context, in patch 3 of this series, Domenico and I are adding
-> > cgroup-aware LRU to zswap, so that we can perform workload-specific
-> > zswap writeback. When the reclaim happens due to the global zswap
-> > limit being hit, a cgroup is selected by the mem_cgroup_iter(), and
-> > the last one selected is saved in the zswap pool (so that the
-> > iteration can follow from there next time the limit is hit).
+> > On Mon, Nov 27, 2023 at 03:45:57PM -0800, Nhat Pham wrote:
+> > >  static void shrink_worker(struct work_struct *w)
+> > >  {
+> > >       struct zswap_pool *pool =3D container_of(w, typeof(*pool),
+> > >                                               shrink_work);
+> > > +     struct mem_cgroup *memcg;
+> > >       int ret, failures =3D 0;
+> > >
+> > > +     /* global reclaim will select cgroup in a round-robin fashion. =
+*/
+> > >       do {
+> > > -             ret =3D zswap_reclaim_entry(pool);
+> > > -             if (ret) {
+> > > -                     zswap_reject_reclaim_fail++;
+> > > -                     if (ret !=3D -EAGAIN)
+> > > -                             break;
+> > > +             spin_lock(&zswap_pools_lock);
+> > > +             memcg =3D pool->next_shrink =3D
+> > > +                     mem_cgroup_iter_online(NULL, pool->next_shrink,=
+ NULL, true);
+> > > +
+> > > +             /* full round trip */
+> > > +             if (!memcg) {
+> > > +                     spin_unlock(&zswap_pools_lock);
+> > >                       if (++failures =3D=3D MAX_RECLAIM_RETRIES)
+> > >                               break;
+> > > +
+> > > +                     goto resched;
+> > >               }
+> > > +
+> > > +             /*
+> > > +              * Acquire an extra reference to the iterated memcg in =
+case the
+> > > +              * original reference is dropped by the zswap offlining=
+ callback.
+> > > +              */
+> > > +             css_get(&memcg->css);
 > >
-> > However, one problem with this scheme is we will be pinning the
-> > reference to that saved memcg until the next global reclaim attempt,
-> > which could prevent it from being killed for quite some time after it
-> > has been offlined. Johannes, Yosry, and I discussed a couple of
-> > approaches for a while, and decided to add a callback that would
-> > release the reference held by the zswap pool when the memcg is
-> > offlined, and the zswap pool will obtain the reference to the next
-> > online memcg in the traversal (or at least one that has not had the
-> > zswap-memcg-release-callback run on it yet).
+> > struct mem_cgroup isn't defined when !CONFIG_MEMCG. This needs a
+> > mem_cgroup_get() wrapper and a dummy function for no-memcg builds.
 >
-> This should be a part of the changelog along with an explanation why
-> this cannot be handled on the caller level? You have a pin on the memcg,
-> you can check it is online and scratch it if not, right? Why do we need
-> to make a rather convoluted iterator interface more complex when most
-> users simply do not require that?
+> I got this exact same issue a couple of versions ago, but it was
+> hidden behind another helper function which can be implemented as a
+> no-op in the case of !CONFIG_MEMCG, so I forgot about it until now. It
+> always strikes me a bit weird that we have mem_cgroup_put() but not an
+> equivalent get - let me correct that.
 
-Ah that's a good point. Hmm then I'll just do an extra online check in
-the zswap reclaim callsite - cleaner and less invasive.
+Actually, I'll instead implement mem_cgroup_tryget_online(), as we
+have to check for the cgroup's onlineness as well anyway! If it's
+online, then keep the extra reference - all good. If it's not, then
+drop the original reference before releasing the lock.
 
-Thanks for the suggestion!
+
 >
-> --
-> Michal Hocko
-> SUSE Labs
+> >
+> > With that fixed, though, everything else looks good to me:
+> >
+> > Acked-by: Johannes Weiner <hannes@cmpxchg.org>
+>
+> Thanks for the review, Johannes!
 
