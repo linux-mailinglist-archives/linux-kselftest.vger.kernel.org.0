@@ -1,267 +1,344 @@
-Return-Path: <linux-kselftest+bounces-876-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-877-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 338487FE80F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Nov 2023 05:02:30 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC87A7FE8CB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Nov 2023 06:49:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 526721C20BCE
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Nov 2023 04:02:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 12E98B210D4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Nov 2023 05:49:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 530CD154AB;
-	Thu, 30 Nov 2023 04:02:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5764182C7;
+	Thu, 30 Nov 2023 05:49:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZVSNaHLD"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="RIJg4P/+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB2F210C6;
-	Wed, 29 Nov 2023 20:02:22 -0800 (PST)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-1fa289a35e7so219010fac.1;
-        Wed, 29 Nov 2023 20:02:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701316941; x=1701921741; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XptYyCZ/t8rK/GyAMfNyjvajpXYTcBpHu30r/cdQdH4=;
-        b=ZVSNaHLDMar2TEDFh/jvG12+xV9At9oLdSWilUvHadUJpNB2PW2lQ5QIpAkjUiYUHG
-         +FZhkw+f8uE0V2s4JhN7AilOnhqw7tX7euvnI011bo5+OeG20CxaRSg+s2+j9YFlsO1M
-         6QrS/j0G65yaYBHfxgdHkjfpjs+TeRPw0LpXVmw0FCKeSb9J7iSaiOZ6B1exXI/p1vEu
-         /Icm33JA0h52WQKghWoLI0rq9URt7YJjcbGZQe8lJ93iScFt28imFAF68pyqEWFSCj46
-         UJBNb5012qkw5BxxmFFVd95QN8jTvczH4+j1ykH56Ah6S5jksW3aB18l9OxXhJmXIcIg
-         ebrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701316941; x=1701921741;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XptYyCZ/t8rK/GyAMfNyjvajpXYTcBpHu30r/cdQdH4=;
-        b=m32IjT+BqcWhXVdYQkZRiSSKiKlQeovo7qeWlOyZzOxzanipVtVkJH3r/DpR7EMsl+
-         O41cmBMOk+xdSmvaD0IGA/VpY/VYDAoi5ZJgCObjte1J8g9OoE5LPC5p5GV+IwLRU+TI
-         e3HBpdANXKfeex9YfB99gh7ILon30iadDVKi7Uy2ftlqoBFEDSYnjkXb8Fj8sF0cYh6a
-         cWTB/3t9hVTYzKcap9eUa7l1QBW3aMy8YtvKMmllSa0RWe5qcYjbo4ucaVhjMBIVGrFw
-         ra+sb1ZZFIpQIcvWJxBWjxA1uYB8uTtR2AjLffOxRTsUGxeBcn1yM+Q5Fv104EIPfR//
-         dqIA==
-X-Gm-Message-State: AOJu0Yx6X9IWeFQzHoGWmwMJ2XZfU3zm5bR+bx06fVoNcNnyOxYcgov9
-	wFp79oM/Pw9BkYOTb3pCWpT8aNSggloptQ==
-X-Google-Smtp-Source: AGHT+IGAc3Q1mVj/xSt37EBlFeUy+t8XYqs05TiWYzmM9BlRaDKTiwC+5MTu4BG7P0olIS2hpwiQ3Q==
-X-Received: by 2002:a05:6871:3a2c:b0:1fa:3685:1cae with SMTP id pu44-20020a0568713a2c00b001fa36851caemr15769444oac.6.1701316941405;
-        Wed, 29 Nov 2023 20:02:21 -0800 (PST)
-Received: from Laptop-X1.redhat.com ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id p16-20020aa78610000000b006cc02a6d18asm187975pfn.61.2023.11.29.20.02.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Nov 2023 20:02:20 -0800 (PST)
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: netdev@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	David Ahern <dsahern@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	Po-Hsu Lin <po-hsu.lin@canonical.com>,
-	Guillaume Nault <gnault@redhat.com>,
-	Petr Machata <petrm@nvidia.com>,
-	James Prestwood <prestwoj@gmail.com>,
-	Jaehee Park <jhpark1013@gmail.com>,
-	Ido Schimmel <idosch@nvidia.com>,
-	Francesco Ruggeri <fruggeri@arista.com>,
-	Justin Iurman <justin.iurman@uliege.be>,
-	Xin Long <lucien.xin@gmail.com>,
-	Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCHv2 net-next 14/14] selftests/net: convert unicast_extensions.sh to run it in unique namespace
-Date: Thu, 30 Nov 2023 12:01:05 +0800
-Message-ID: <20231130040105.1265779-15-liuhangbin@gmail.com>
-X-Mailer: git-send-email 2.41.0
-In-Reply-To: <20231130040105.1265779-1-liuhangbin@gmail.com>
-References: <20231130040105.1265779-1-liuhangbin@gmail.com>
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2047.outbound.protection.outlook.com [40.107.100.47])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86B9ED5C;
+	Wed, 29 Nov 2023 21:49:17 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EGMCLW+LrpC2HtACN+joMO1tWySEfYxAKvjI/98ix/HBAL2LC1ZDpHHHkrYl9KvKIJUiOmvONEP5WY6i6peAoxK9Or/mAoEekNdDADtJicbblNa41bcrz0wT1K1UkzJCsg1XCDWRyjOOhqpLwN2VrvWYQ0C2IuXdDfJkLmGi8LWtiNW5dVMIYSGaEp5cBUm/S2QIRKWmhzRKda4G5bSrRXh71NFvNqn+54B3epfkDJo2ZLGDNvBkCp5KVmqpFgABeop/OxW0CEPsiEfLvKKtpIh72xX3ajTZFqZ5GnfWqE1fqiJeFJeHBut7kVjl7gXBavechsd7NxTLiwGAEOaSQA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6iZS0KQDvqoWZGtkGKaqQrfOAW5QkAvIo4BIR0FXjDQ=;
+ b=HvJb/MFKFXCpto7UQNmV5c30sffzZh+k6gFagnOHHZxXEFiQinPlR8CS3PN9+E5X+/1xOu/VV8tNyAJmwSy3eY5OiXuR0xuxqRpIRxK2pQhRrmQ12xEiPeXJ6cJeD6FSIjtje7Hz+AICezdAfw2seQPbgXsQGYmWw9QT0jHZwKfnJd6isvCEOCa2eQxt41vhraJUsMrB12JKrbc4oGlByIbecE8+1VaMqE/dnAp5xsVSFKQm+Ml1SHWZYrGOKBDbEppf/a753RvzF2CfN/blib22iTxpnrLZTCtdIIDsim3D+lNfMC9Viqv+dlvMmLDNL645d8rhNQpVRpywX+GXrA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6iZS0KQDvqoWZGtkGKaqQrfOAW5QkAvIo4BIR0FXjDQ=;
+ b=RIJg4P/+KwdKXTbXfynxXuU7HSugR2o8f17bI5MfPUs6eELq759JqZaUHcyAwY3H0KCxlrAurCMPcIXw8pLaWiCruSHdQzxJjqLUkT1Ni6yyrosEcPR1Ip86Ej8rXpIX+RlhD4+SNLa5mjojdBsf+LXzoXqFta37bK5OoUkoEYQ=
+Received: from CH3PR12MB8657.namprd12.prod.outlook.com (2603:10b6:610:172::6)
+ by SA1PR12MB6799.namprd12.prod.outlook.com (2603:10b6:806:25b::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7046.22; Thu, 30 Nov
+ 2023 05:49:12 +0000
+Received: from CH3PR12MB8657.namprd12.prod.outlook.com
+ ([fe80::466c:b6a0:f281:1e99]) by CH3PR12MB8657.namprd12.prod.outlook.com
+ ([fe80::466c:b6a0:f281:1e99%7]) with mapi id 15.20.7046.024; Thu, 30 Nov 2023
+ 05:49:12 +0000
+From: "Yuan, Perry" <Perry.Yuan@amd.com>
+To: "Meng, Li (Jassmine)" <Li.Meng@amd.com>, "Rafael J . Wysocki"
+	<rafael.j.wysocki@intel.com>, "Huang, Ray" <Ray.Huang@amd.com>
+CC: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"x86@kernel.org" <x86@kernel.org>, "linux-acpi@vger.kernel.org"
+	<linux-acpi@vger.kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"Fontenot, Nathan" <Nathan.Fontenot@amd.com>, "Sharma, Deepak"
+	<Deepak.Sharma@amd.com>, "Deucher, Alexander" <Alexander.Deucher@amd.com>,
+	"Limonciello, Mario" <Mario.Limonciello@amd.com>, "Huang, Shimmer"
+	<Shimmer.Huang@amd.com>, "Du, Xiaojian" <Xiaojian.Du@amd.com>, Viresh Kumar
+	<viresh.kumar@linaro.org>, Borislav Petkov <bp@alien8.de>, Oleksandr
+ Natalenko <oleksandr@natalenko.name>, "Karny, Wyes" <Wyes.Karny@amd.com>
+Subject: RE: [PATCH V11 5/7] cpufreq: amd-pstate: Update amd-pstate preferred
+ core ranking dynamically
+Thread-Topic: [PATCH V11 5/7] cpufreq: amd-pstate: Update amd-pstate preferred
+ core ranking dynamically
+Thread-Index: AQHaIpEKjvWtP+SoH0ina49wOQKAGLCSXF8g
+Date: Thu, 30 Nov 2023 05:49:11 +0000
+Message-ID:
+ <CH3PR12MB865722889AB91EF5CFDC11F29C82A@CH3PR12MB8657.namprd12.prod.outlook.com>
+References: <20231129065437.290183-1-li.meng@amd.com>
+ <20231129065437.290183-6-li.meng@amd.com>
+In-Reply-To: <20231129065437.290183-6-li.meng@amd.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+msip_labels:
+ MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ActionId=154f5ba1-2df4-40ec-bacc-07b461fede1d;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_ContentBits=0;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Enabled=true;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Method=Standard;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_Name=General;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SetDate=2023-11-30T05:47:49Z;MSIP_Label_4342314e-0df4-4b58-84bf-38bed6170a0f_SiteId=3dd8961f-e488-4e60-8e11-a82d994e183d;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CH3PR12MB8657:EE_|SA1PR12MB6799:EE_
+x-ms-office365-filtering-correlation-id: 27108e2b-d567-4dd2-ae70-08dbf1681417
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info:
+ Wsiml3HUDsDvck93QZx+MhvE70AlbJgUBz+SG4m2olIm8aeFSqnv2YoAJ7GAlILvtMLRhqmJGEArSkzCALUqV7yHF8zhTajEBpeTRVnU3YX8P9j1RepyZzQTf06U37G3ZwNOXIVdKBO0owczrGeqPEjepFlvTscPTscm5zrlxhzAvmjT+xmywevJJ2gpfXfJzFdbM+9i9o4UdYrCIt5ybfsOVAuj+lDelw45mVu0VZqLKeus/3sFG/htciH7/ZRGAZkH0Xj90OjlVzofWs63WDxr4N/g21Iz6717fIgEPMHMYQ3rRTU8LhLy/myWK8L7UUglupyMoC6rGnJ9+RAhOfAlP+a2PWfJkXEC2BDw8SppqCHqq66KAMYF2UWkXdoz0XTQS0GmGvmBbb4MNEq365UHk61QveaQE5/rtTUkhB1gVSalEbQyPsF3NQNEMleUkI2p8yXJSEfkes2ehAc345uhYAPgAAlAvVYY/QuahTsuCv0otnbvUu2R08TDrSsl9qzwaLoO2yi9zY/W+X6O6oX1/jpwnWytbT8UV+pF3sVhkdwrqhZUJ+T5MOSOt8fAw53Do89xz0tzYyq9E6umQwlWO1IKIGlGAM14Q642Lzp+zPW6kyZ4wNJju8uGf2qXSLmRR2mE4r2px9jvYi7BP990LN4Ypix7DCPWJPt4z4o=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8657.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(39860400002)(376002)(396003)(136003)(366004)(230922051799003)(64100799003)(186009)(451199024)(1800799012)(9686003)(122000001)(64756008)(8936002)(38100700002)(478600001)(8676002)(7696005)(4326008)(41300700001)(110136005)(66556008)(66946007)(76116006)(6636002)(54906003)(316002)(66446008)(26005)(66476007)(86362001)(6506007)(53546011)(71200400001)(38070700009)(52536014)(202311291699003)(83380400001)(33656002)(2906002)(55016003)(15650500001)(5660300002)(66899024)(7416002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?bOLPGq1V6qJCcgX0fubkRW0F5RbGcVrhwRpRmEagDH7F188FryHI2MCNluFP?=
+ =?us-ascii?Q?VCbeVxMI6KfH+sg9v4UUcZaMQWlvCO1zYINpOZmoBFgVn/j9d8JlriiHTD5y?=
+ =?us-ascii?Q?m0DKc9N2mwjapmgYhk6asOtpvQ+pDaBTdkmU5wln96La3ckYWuhnAU97IcOu?=
+ =?us-ascii?Q?aXlx9NtJZlHtlMKfyfUeryaj21PL3NXMtn1tJNpfCvwcAdSBNtTR69/XWt6k?=
+ =?us-ascii?Q?SWoj1kvr3V1KCJ3EUkD1PTpFuZ1TCGtJp3X2gcaAa1nHWyCDPFagM7LBKam4?=
+ =?us-ascii?Q?ZmFyMppfVIaNgl3YSQfzIK3HCxhuIEDUhsmFUN2/TZlFqYpwLj9rkuoGinxc?=
+ =?us-ascii?Q?PqUg06wuSP27dqjlrPJFChUxwODIkb64eeQMC/i2mzCWdcMPDjatDgMdUbKf?=
+ =?us-ascii?Q?TRc7/QDtdrK74OiOHjTO1lulMNEoqxGRdIRpbM+D2ykxUkdR7kQiI3T/IAny?=
+ =?us-ascii?Q?kHLJ6wLbmvld/RwW0eHAButCtmth0/36gbyIdf+5RzvXMsYiQbUZpRpq+sOk?=
+ =?us-ascii?Q?TBjKEok3cO7PY7lzxnbIMY57HL+5uzSGN7qF8hFEpvXrtqSPzkGQ83OBZE87?=
+ =?us-ascii?Q?mWpczFq3S0CSKsslvltVoI5b08z+DjCnQttpY4pbb7RMjDl6Odcgbt9Y+Lb5?=
+ =?us-ascii?Q?QsyuQ8trlF5+BIqUbJbfjxVZrEXyH0GfFCUhHuRryG9y6+WrV9oLjrG5tlqq?=
+ =?us-ascii?Q?csuDQFXFPA2237UBNp5na61QdWrVmx4iqXsr08neBHRLzk8J3Wq75Smn36sp?=
+ =?us-ascii?Q?Pbu3I2NwQdYVFsuNXmF7YFMz7ElcwPQnFDrTvNdKvIyq8U5QoVgnJwzEFs9A?=
+ =?us-ascii?Q?Q8FSGc6YbHyH0m5mbGoHzrisJXMsWj7zl9BtwHI2XgppFyYzAIPu5qqmNiah?=
+ =?us-ascii?Q?/hYKXZHiDy451CdlFL7yyJa1XW71ywCljUioeX9aOCETkOcwx1z8F1+hGKCM?=
+ =?us-ascii?Q?oOYVo2OpeGJVEVW+8Er4r8pWkR0tXAnkrRywjwtffGThA4UjEzrHjckhZgDc?=
+ =?us-ascii?Q?14QZay1JSOSpMALjSEjeLht+nf8wjEykekVlDLzOm5t5qh01tMybyiD+Lygu?=
+ =?us-ascii?Q?WbeInyA6AAYumOrxpfiMbiTTVzU/7ZQ7otXmq11J9UCQA5eY7YMS9iYrNV3K?=
+ =?us-ascii?Q?5IfLv6G2NhkS4HOXkIdqFXg+2R17byfCUAg13HHx15i5Nd8bj2OdEVgiatOR?=
+ =?us-ascii?Q?oMh0AZ9E8HK+GAmbs87KKWmo1krVaQG5+RgdQi+XdP1pkYkUI/GerQU11ff1?=
+ =?us-ascii?Q?ho3Y/tIbFMYJ91bvEHwM26wJx9Pjg+Edfx6Eu6Ts4TMSwo2if3i+CBpSdW0s?=
+ =?us-ascii?Q?yV1NDyAN1dZiI5V6bjdbdLFK5CjNY60Fu46nja5/5UuuL86ZpgqfJM5x+Rec?=
+ =?us-ascii?Q?bSFr1m0dCQevbz93IUae6QzgT6RICXw11U9eMDO5I43IC+1vdPhv/Wu2Kw6V?=
+ =?us-ascii?Q?pICCU1VHxPrulj3VaDU6Dy6ocdzukD19INMnbAzJkj7WmbzOHUYMhUGJ/ILZ?=
+ =?us-ascii?Q?u4BN0DEMiqRfSluT2eUzblcoXY8buAfdYfyYYlu/ChrSZ2jjoXGuu5Uw4a6V?=
+ =?us-ascii?Q?8Ju7o2+yZ0UNMez3rFo=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8657.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 27108e2b-d567-4dd2-ae70-08dbf1681417
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Nov 2023 05:49:11.8641
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: H216s7jp6TWmw6XSri+/OwF1tdpnx3+nWpU6xCZAETyfbxPpev9Shzv4faODAiALhRgN8JDpTcxHzpBc7ml69Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6799
 
-Here is the test result after conversion.
+[AMD Official Use Only - General]
 
- # ./unicast_extensions.sh
- /usr/bin/which: no nettest in (/root/.local/bin:/root/bin:/usr/share/Modules/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin)
- ###########################################################################
- Unicast address extensions tests (behavior of reserved IPv4 addresses)
- ###########################################################################
- TEST: assign and ping within 240/4 (1 of 2) (is allowed)            [ OK ]
- TEST: assign and ping within 240/4 (2 of 2) (is allowed)            [ OK ]
- TEST: assign and ping within 0/8 (1 of 2) (is allowed)              [ OK ]
-
- ...
-
- TEST: assign and ping class D address (is forbidden)                [ OK ]
- TEST: routing using class D (is forbidden)                          [ OK ]
- TEST: routing using 127/8 (is forbidden)                            [ OK ]
-
-Acked-by: David Ahern <dsahern@kernel.org>
-Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
----
- .../selftests/net/unicast_extensions.sh       | 99 +++++++++----------
- 1 file changed, 46 insertions(+), 53 deletions(-)
-
-diff --git a/tools/testing/selftests/net/unicast_extensions.sh b/tools/testing/selftests/net/unicast_extensions.sh
-index 2d10ccac898a..b7a2cb9e7477 100755
---- a/tools/testing/selftests/net/unicast_extensions.sh
-+++ b/tools/testing/selftests/net/unicast_extensions.sh
-@@ -28,8 +28,7 @@
- # These tests provide an easy way to flip the expected result of any
- # of these behaviors for testing kernel patches that change them.
- 
--# Kselftest framework requirement - SKIP code is 4.
--ksft_skip=4
-+source ./lib.sh
- 
- # nettest can be run from PATH or from same directory as this selftest
- if ! which nettest >/dev/null; then
-@@ -61,20 +60,20 @@ _do_segmenttest(){
- 	# foo --- bar
- 	# Arguments: ip_a ip_b prefix_length test_description
- 	#
--	# Caller must set up foo-ns and bar-ns namespaces
-+	# Caller must set up $foo_ns and $bar_ns namespaces
- 	# containing linked veth devices foo and bar,
- 	# respectively.
- 
--	ip -n foo-ns address add $1/$3 dev foo || return 1
--	ip -n foo-ns link set foo up || return 1
--	ip -n bar-ns address add $2/$3 dev bar || return 1
--	ip -n bar-ns link set bar up || return 1
-+	ip -n $foo_ns address add $1/$3 dev foo || return 1
-+	ip -n $foo_ns link set foo up || return 1
-+	ip -n $bar_ns address add $2/$3 dev bar || return 1
-+	ip -n $bar_ns link set bar up || return 1
- 
--	ip netns exec foo-ns timeout 2 ping -c 1 $2 || return 1
--	ip netns exec bar-ns timeout 2 ping -c 1 $1 || return 1
-+	ip netns exec $foo_ns timeout 2 ping -c 1 $2 || return 1
-+	ip netns exec $bar_ns timeout 2 ping -c 1 $1 || return 1
- 
--	nettest -B -N bar-ns -O foo-ns -r $1 || return 1
--	nettest -B -N foo-ns -O bar-ns -r $2 || return 1
-+	nettest -B -N $bar_ns -O $foo_ns -r $1 || return 1
-+	nettest -B -N $foo_ns -O $bar_ns -r $2 || return 1
- 
- 	return 0
- }
-@@ -88,31 +87,31 @@ _do_route_test(){
- 	# Arguments: foo_ip foo1_ip bar1_ip bar_ip prefix_len test_description
- 	# Displays test result and returns success or failure.
- 
--	# Caller must set up foo-ns, bar-ns, and router-ns
-+	# Caller must set up $foo_ns, $bar_ns, and $router_ns
- 	# containing linked veth devices foo-foo1, bar1-bar
--	# (foo in foo-ns, foo1 and bar1 in router-ns, and
--	# bar in bar-ns).
+> -----Original Message-----
+> From: Meng, Li (Jassmine) <Li.Meng@amd.com>
+> Sent: Wednesday, November 29, 2023 2:55 PM
+> To: Rafael J . Wysocki <rafael.j.wysocki@intel.com>; Huang, Ray
+> <Ray.Huang@amd.com>
+> Cc: linux-pm@vger.kernel.org; linux-kernel@vger.kernel.org; x86@kernel.or=
+g;
+> linux-acpi@vger.kernel.org; Shuah Khan <skhan@linuxfoundation.org>; linux=
 -
--	ip -n foo-ns address add $1/$5 dev foo || return 1
--	ip -n foo-ns link set foo up || return 1
--	ip -n foo-ns route add default via $2 || return 1
--	ip -n bar-ns address add $4/$5 dev bar || return 1
--	ip -n bar-ns link set bar up || return 1
--	ip -n bar-ns route add default via $3 || return 1
--	ip -n router-ns address add $2/$5 dev foo1 || return 1
--	ip -n router-ns link set foo1 up || return 1
--	ip -n router-ns address add $3/$5 dev bar1 || return 1
--	ip -n router-ns link set bar1 up || return 1
--
--	echo 1 | ip netns exec router-ns tee /proc/sys/net/ipv4/ip_forward
--
--	ip netns exec foo-ns timeout 2 ping -c 1 $2 || return 1
--	ip netns exec foo-ns timeout 2 ping -c 1 $4 || return 1
--	ip netns exec bar-ns timeout 2 ping -c 1 $3 || return 1
--	ip netns exec bar-ns timeout 2 ping -c 1 $1 || return 1
--
--	nettest -B -N bar-ns -O foo-ns -r $1 || return 1
--	nettest -B -N foo-ns -O bar-ns -r $4 || return 1
-+	# (foo in $foo_ns, foo1 and bar1 in $router_ns, and
-+	# bar in $bar_ns).
-+
-+	ip -n $foo_ns address add $1/$5 dev foo || return 1
-+	ip -n $foo_ns link set foo up || return 1
-+	ip -n $foo_ns route add default via $2 || return 1
-+	ip -n $bar_ns address add $4/$5 dev bar || return 1
-+	ip -n $bar_ns link set bar up || return 1
-+	ip -n $bar_ns route add default via $3 || return 1
-+	ip -n $router_ns address add $2/$5 dev foo1 || return 1
-+	ip -n $router_ns link set foo1 up || return 1
-+	ip -n $router_ns address add $3/$5 dev bar1 || return 1
-+	ip -n $router_ns link set bar1 up || return 1
-+
-+	echo 1 | ip netns exec $router_ns tee /proc/sys/net/ipv4/ip_forward
-+
-+	ip netns exec $foo_ns timeout 2 ping -c 1 $2 || return 1
-+	ip netns exec $foo_ns timeout 2 ping -c 1 $4 || return 1
-+	ip netns exec $bar_ns timeout 2 ping -c 1 $3 || return 1
-+	ip netns exec $bar_ns timeout 2 ping -c 1 $1 || return 1
-+
-+	nettest -B -N $bar_ns -O $foo_ns -r $1 || return 1
-+	nettest -B -N $foo_ns -O $bar_ns -r $4 || return 1
- 
- 	return 0
- }
-@@ -121,17 +120,15 @@ segmenttest(){
- 	# Sets up veth link and tries to connect over it.
- 	# Arguments: ip_a ip_b prefix_len test_description
- 	hide_output
--	ip netns add foo-ns
--	ip netns add bar-ns
--	ip link add foo netns foo-ns type veth peer name bar netns bar-ns
-+	setup_ns foo_ns bar_ns
-+	ip link add foo netns $foo_ns type veth peer name bar netns $bar_ns
- 
- 	test_result=0
- 	_do_segmenttest "$@" || test_result=1
- 
--	ip netns pids foo-ns | xargs -r kill -9
--	ip netns pids bar-ns | xargs -r kill -9
--	ip netns del foo-ns
--	ip netns del bar-ns
-+	ip netns pids $foo_ns | xargs -r kill -9
-+	ip netns pids $bar_ns | xargs -r kill -9
-+	cleanup_ns $foo_ns $bar_ns
- 	show_output
- 
- 	# inverted tests will expect failure instead of success
-@@ -147,21 +144,17 @@ route_test(){
- 	# Returns success or failure.
- 
- 	hide_output
--	ip netns add foo-ns
--	ip netns add bar-ns
--	ip netns add router-ns
--	ip link add foo netns foo-ns type veth peer name foo1 netns router-ns
--	ip link add bar netns bar-ns type veth peer name bar1 netns router-ns
-+	setup_ns foo_ns bar_ns router_ns
-+	ip link add foo netns $foo_ns type veth peer name foo1 netns $router_ns
-+	ip link add bar netns $bar_ns type veth peer name bar1 netns $router_ns
- 
- 	test_result=0
- 	_do_route_test "$@" || test_result=1
- 
--	ip netns pids foo-ns | xargs -r kill -9
--	ip netns pids bar-ns | xargs -r kill -9
--	ip netns pids router-ns | xargs -r kill -9
--	ip netns del foo-ns
--	ip netns del bar-ns
--	ip netns del router-ns
-+	ip netns pids $foo_ns | xargs -r kill -9
-+	ip netns pids $bar_ns | xargs -r kill -9
-+	ip netns pids $router_ns | xargs -r kill -9
-+	cleanup_ns $foo_ns $bar_ns $router_ns
- 
- 	show_output
- 
--- 
-2.41.0
+> kselftest@vger.kernel.org; Fontenot, Nathan <Nathan.Fontenot@amd.com>;
+> Sharma, Deepak <Deepak.Sharma@amd.com>; Deucher, Alexander
+> <Alexander.Deucher@amd.com>; Limonciello, Mario
+> <Mario.Limonciello@amd.com>; Huang, Shimmer
+> <Shimmer.Huang@amd.com>; Yuan, Perry <Perry.Yuan@amd.com>; Du,
+> Xiaojian <Xiaojian.Du@amd.com>; Viresh Kumar <viresh.kumar@linaro.org>;
+> Borislav Petkov <bp@alien8.de>; Oleksandr Natalenko
+> <oleksandr@natalenko.name>; Meng, Li (Jassmine) <Li.Meng@amd.com>;
+> Karny, Wyes <Wyes.Karny@amd.com>
+> Subject: [PATCH V11 5/7] cpufreq: amd-pstate: Update amd-pstate preferred
+> core ranking dynamically
+>
+> Preferred core rankings can be changed dynamically by the platform based =
+on
+> the workload and platform conditions and accounting for thermals and agin=
+g.
+> When this occurs, cpu priority need to be set.
+>
+> Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
+> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
+> Reviewed-by: Wyes Karny <wyes.karny@amd.com>
+> Reviewed-by: Huang Rui <ray.huang@amd.com>
+> Signed-off-by: Meng Li <li.meng@amd.com>
+> ---
+>  drivers/cpufreq/amd-pstate.c | 46
+> ++++++++++++++++++++++++++++++++++++
+>  include/linux/amd-pstate.h   |  6 +++++
+>  2 files changed, 52 insertions(+)
+>
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index 74dcf63d75f9..88df6510dcc0 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -312,6 +312,7 @@ static int pstate_init_perf(struct amd_cpudata
+> *cpudata)
+>       WRITE_ONCE(cpudata->nominal_perf,
+> AMD_CPPC_NOMINAL_PERF(cap1));
+>       WRITE_ONCE(cpudata->lowest_nonlinear_perf,
+> AMD_CPPC_LOWNONLIN_PERF(cap1));
+>       WRITE_ONCE(cpudata->lowest_perf,
+> AMD_CPPC_LOWEST_PERF(cap1));
+> +     WRITE_ONCE(cpudata->prefcore_ranking,
+> AMD_CPPC_HIGHEST_PERF(cap1));
+>
+>       return 0;
+>  }
+> @@ -333,6 +334,7 @@ static int cppc_init_perf(struct amd_cpudata
+> *cpudata)
+>       WRITE_ONCE(cpudata->lowest_nonlinear_perf,
+>                  cppc_perf.lowest_nonlinear_perf);
+>       WRITE_ONCE(cpudata->lowest_perf, cppc_perf.lowest_perf);
+> +     WRITE_ONCE(cpudata->prefcore_ranking, cppc_perf.highest_perf);
+>
+>       if (cppc_state =3D=3D AMD_PSTATE_ACTIVE)
+>               return 0;
+> @@ -749,6 +751,34 @@ static void amd_pstate_init_prefcore(struct
+> amd_cpudata *cpudata)
+>       schedule_work(&sched_prefcore_work);
+>  }
+>
+> +static void amd_pstate_update_highest_perf(unsigned int cpu) {
+> +     struct cpufreq_policy *policy;
+> +     struct amd_cpudata *cpudata;
+> +     u32 prev_high =3D 0, cur_high =3D 0;
+> +     int ret;
+> +
+> +     if ((!amd_pstate_prefcore) || (!cpudata->hw_prefcore))
+> +             return;
+> +
+> +     ret =3D amd_pstate_get_highest_perf(cpu, &cur_high);
+> +     if (ret)
+> +             return;
+> +
+> +     policy =3D cpufreq_cpu_get(cpu);
+> +     cpudata =3D policy->driver_data;
+> +     prev_high =3D READ_ONCE(cpudata->prefcore_ranking);
+> +
+> +     if (prev_high !=3D cur_high) {
+> +             WRITE_ONCE(cpudata->prefcore_ranking, cur_high);
+> +
+> +             if (cur_high < CPPC_MAX_PERF)
+> +                     sched_set_itmt_core_prio((int)cur_high, cpu);
+> +     }
+> +
+> +     cpufreq_cpu_put(policy);
+> +}
+> +
+>  static int amd_pstate_cpu_init(struct cpufreq_policy *policy)  {
+>       int min_freq, max_freq, nominal_freq, lowest_nonlinear_freq, ret;
+> @@ -920,6 +950,17 @@ static ssize_t show_amd_pstate_highest_perf(struct
+> cpufreq_policy *policy,
+>       return sysfs_emit(buf, "%u\n", perf);
+>  }
+>
+> +static ssize_t show_amd_pstate_prefcore_ranking(struct cpufreq_policy
+> *policy,
+> +                                             char *buf)
+> +{
+> +     u32 perf;
+> +     struct amd_cpudata *cpudata =3D policy->driver_data;
+> +
+> +     perf =3D READ_ONCE(cpudata->prefcore_ranking);
+> +
+> +     return sysfs_emit(buf, "%u\n", perf);
+> +}
+> +
+>  static ssize_t show_amd_pstate_hw_prefcore(struct cpufreq_policy *policy=
+,
+>                                          char *buf)
+>  {
+> @@ -1133,6 +1174,7 @@ cpufreq_freq_attr_ro(amd_pstate_max_freq);
+>  cpufreq_freq_attr_ro(amd_pstate_lowest_nonlinear_freq);
+>
+>  cpufreq_freq_attr_ro(amd_pstate_highest_perf);
+> +cpufreq_freq_attr_ro(amd_pstate_prefcore_ranking);
+>  cpufreq_freq_attr_ro(amd_pstate_hw_prefcore);
+>  cpufreq_freq_attr_rw(energy_performance_preference);
+>  cpufreq_freq_attr_ro(energy_performance_available_preferences);
+> @@ -1143,6 +1185,7 @@ static struct freq_attr *amd_pstate_attr[] =3D {
+>       &amd_pstate_max_freq,
+>       &amd_pstate_lowest_nonlinear_freq,
+>       &amd_pstate_highest_perf,
+> +     &amd_pstate_prefcore_ranking,
+>       &amd_pstate_hw_prefcore,
+>       NULL,
+>  };
+> @@ -1151,6 +1194,7 @@ static struct freq_attr *amd_pstate_epp_attr[] =3D =
+{
+>       &amd_pstate_max_freq,
+>       &amd_pstate_lowest_nonlinear_freq,
+>       &amd_pstate_highest_perf,
+> +     &amd_pstate_prefcore_ranking,
+>       &amd_pstate_hw_prefcore,
+>       &energy_performance_preference,
+>       &energy_performance_available_preferences,
+> @@ -1491,6 +1535,7 @@ static struct cpufreq_driver amd_pstate_driver =3D =
+{
+>       .suspend        =3D amd_pstate_cpu_suspend,
+>       .resume         =3D amd_pstate_cpu_resume,
+>       .set_boost      =3D amd_pstate_set_boost,
+> +     .update_highest_perf    =3D amd_pstate_update_highest_perf,
+>       .name           =3D "amd-pstate",
+>       .attr           =3D amd_pstate_attr,
+>  };
+> @@ -1505,6 +1550,7 @@ static struct cpufreq_driver
+> amd_pstate_epp_driver =3D {
+>       .online         =3D amd_pstate_epp_cpu_online,
+>       .suspend        =3D amd_pstate_epp_suspend,
+>       .resume         =3D amd_pstate_epp_resume,
+> +     .update_highest_perf    =3D amd_pstate_update_highest_perf,
+>       .name           =3D "amd-pstate-epp",
+>       .attr           =3D amd_pstate_epp_attr,
+>  };
+> diff --git a/include/linux/amd-pstate.h b/include/linux/amd-pstate.h inde=
+x
+> 87e140e9e6db..426822612373 100644
+> --- a/include/linux/amd-pstate.h
+> +++ b/include/linux/amd-pstate.h
+> @@ -39,11 +39,16 @@ struct amd_aperf_mperf {
+>   * @cppc_req_cached: cached performance request hints
+>   * @highest_perf: the maximum performance an individual processor may
+> reach,
+>   *             assuming ideal conditions
+> + *             For platforms that do not support the preferred core feat=
+ure,
+> the
+> + *             highest_pef may be configured with 166 or 255, to avoid
+> max frequency
+> + *             calculated wrongly. we take the fixed value as the
+> highest_perf.
+>   * @nominal_perf: the maximum sustained performance level of the
+> processor,
+>   *             assuming ideal operating conditions
+>   * @lowest_nonlinear_perf: the lowest performance level at which nonline=
+ar
+> power
+>   *                      savings are achieved
+>   * @lowest_perf: the absolute lowest performance level of the processor
+> + * @prefcore_ranking: the preferred core ranking, the higher value indic=
+ates a
+> higher
+> + *             priority.
+>   * @max_freq: the frequency that mapped to highest_perf
+>   * @min_freq: the frequency that mapped to lowest_perf
+>   * @nominal_freq: the frequency that mapped to nominal_perf @@ -73,6
+> +78,7 @@ struct amd_cpudata {
+>       u32     nominal_perf;
+>       u32     lowest_nonlinear_perf;
+>       u32     lowest_perf;
+> +     u32     prefcore_ranking;
+>
+>       u32     max_freq;
+>       u32     min_freq;
+> --
+> 2.34.1
 
+Reviewed-by: Perry Yuan <perry.yuan@amd.com>
 
