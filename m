@@ -1,57 +1,58 @@
-Return-Path: <linux-kselftest+bounces-862-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-863-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 507857FE7EF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Nov 2023 05:01:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 435F87FE7F0
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Nov 2023 05:01:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B8B12821B2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Nov 2023 04:01:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C4BE828234E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 30 Nov 2023 04:01:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A726613FF6;
-	Thu, 30 Nov 2023 04:01:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 412501429A;
+	Thu, 30 Nov 2023 04:01:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iVZnVV0G"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VrQkdLBe"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363C498;
-	Wed, 29 Nov 2023 20:01:15 -0800 (PST)
-Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-517ab9a4a13so439952a12.1;
-        Wed, 29 Nov 2023 20:01:15 -0800 (PST)
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19A0898;
+	Wed, 29 Nov 2023 20:01:20 -0800 (PST)
+Received: by mail-il1-x131.google.com with SMTP id e9e14a558f8ab-35aa6107e9fso1338335ab.0;
+        Wed, 29 Nov 2023 20:01:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701316874; x=1701921674; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=g3a9sCiS2Css+WXIZZveZE/xtShrUDTTw/Xo+wUDP5I=;
-        b=iVZnVV0GUv4DYBg3A4075ExxbqczAOAR8t5KMnBKqjNfCqnDAlm0byGY/S9RjK48RX
-         QpKfQxuyGSyPchVRU5RBm3GxDi6E7j7zi4OX6i7C8YkhMRVfV6oLCI9xrCIXBKFrMNTP
-         NHRjVskFnHMDD7R3CFjNtvdHWYO4AgIoM9e6sLxu1X/x9OblAG4i/Z5Ct6ap+PKbyOC8
-         N1Swfnu/4AjEYiHVpO55vlmn0vW5B/SjXU9gifckD6BbJaVnFRMMvr5N17Dr38lo/bfY
-         w0Klq5mehFXahFXfeUnODVQpxRD6CCOJCn04wmeBgKZV5buxj0ljK8cmQ1YaBPjTOLBc
-         ePGg==
+        d=gmail.com; s=20230601; t=1701316879; x=1701921679; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Gjk7iuV8A+tyeFYWlo3kf68GzFjjU4BPv1o4618L2Aw=;
+        b=VrQkdLBeAMsRJcRz6f4TS09vZrymfyTJmeXBnJufy55IdaFT7TAYM59DxOAd9FAe+l
+         Rqjyez3FvTlarifIfkpzfQ7xbgd427frkCt6IamL64fMby7vxLruy+kA/Sb9f59fo14P
+         k3+vP5rac+hL2u1qrp8dbSgK0FFylvoiR6gr4sJF/VILdUF9SiovtWXx8XGXmaFMfyZC
+         lCyVLC3ZmnS2hdDLwQtPksP5Mf76UbMcGx/Y88cE9qGRcwQt1Zo4ebp9JZ2xYXQzRg0y
+         ZZ2g4ge0+eySraJUZAb6tpWOv39jTwOOhwHoH6Iy8EENKdi4KSXG0zAikFFd1u2oKn5X
+         2kPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701316874; x=1701921674;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=g3a9sCiS2Css+WXIZZveZE/xtShrUDTTw/Xo+wUDP5I=;
-        b=PR9/TdG2cU4TkmK2HQeMUlu5UF0E/KAyQpd2GY944S+mcrmba4QrfLmOrWplgl5fr2
-         eJ2urxhD2UErVo/FFGjdAtljeAwB5i9X95jLOMFwtc9XoKNAuoFaQKAAZAYm3umZTyDx
-         a80inHJyn7FmeRK9ie812zqWyi/HRsn3G29Y4Yi1TDf79/QutpXTm4RBAHxIqnuWUns/
-         QBRi2Xd/p09waY7SRkUfKWCt7lB1MDzb+hDOW+pahCXrP1+kSb+bjD5Ig0QoYq8UqgnD
-         /Xq3a7Vma0SI/6iZKSEBV8VaC4rFR0GzKcBEA/TWNqkRCEr9ROqxb056ndRHqAuse9Bo
-         HE4w==
-X-Gm-Message-State: AOJu0Yxc1C2FOVyv7cP455w/QvvAcpvfQauNevBsZ2S84toxIXPXsts/
-	x2bbR2KHXv/mcsqeN4HywsAa9dsNpGmWig==
-X-Google-Smtp-Source: AGHT+IF3BPa+FqlOORuz23m3hh4/ReFMOunkAZMPAoTkU/NORxOHXGTtA9eZKfSzO+VBysmSuXs0OQ==
-X-Received: by 2002:a05:6a21:99a6:b0:18c:63cb:e86e with SMTP id ve38-20020a056a2199a600b0018c63cbe86emr19548963pzb.2.1701316874000;
-        Wed, 29 Nov 2023 20:01:14 -0800 (PST)
+        d=1e100.net; s=20230601; t=1701316879; x=1701921679;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Gjk7iuV8A+tyeFYWlo3kf68GzFjjU4BPv1o4618L2Aw=;
+        b=KzdyhswEmun/KTwXqsd9ClWqu8DKs9P7Sb44U8yH/FRklSMBKXdW2+v75QDDrC5meE
+         JHFXLjUm3AMU3RWcJIO5THu3sWJPBh15KEBfq1yb1V+C6TYPWxYdsN20pb1xLj7oV30e
+         v/GZvVEtU3AqRVV58surjOvDIlHjd3zju6RgPj3cQ3x1AT3wVjDkFMexDbkooISx8duC
+         OSQX9Pe8qcdCSt15B5yB1UQJqs3QZGAsSA0VUhq5elyN2EC98s+2okM9lkVNgDVJGu98
+         o43eeF6R7lgRrzzYw5TOsJXCkid1YHm+elLSmKsgT4Kt25ey37cJuJYyBxDiSxvN1YeY
+         v2+w==
+X-Gm-Message-State: AOJu0YxPquRr4bcJYULZPwPtA6IrTYy0fd596s5dG9LnjTExSinOnMg+
+	ivBBgKLenRR/pgJRbDIK6tQbMd/NTQ41rA==
+X-Google-Smtp-Source: AGHT+IEl1zoszRax/cXnv2qz7N9/Np/DS94MuLbjw6q7oSpfgosU4PE+pee0G7WEN6xsJr8V+p2buA==
+X-Received: by 2002:a05:6e02:218b:b0:359:d6e4:cfb7 with SMTP id j11-20020a056e02218b00b00359d6e4cfb7mr27553173ila.11.1701316878781;
+        Wed, 29 Nov 2023 20:01:18 -0800 (PST)
 Received: from Laptop-X1.redhat.com ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id p16-20020aa78610000000b006cc02a6d18asm187975pfn.61.2023.11.29.20.01.09
+        by smtp.gmail.com with ESMTPSA id p16-20020aa78610000000b006cc02a6d18asm187975pfn.61.2023.11.29.20.01.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Nov 2023 20:01:13 -0800 (PST)
+        Wed, 29 Nov 2023 20:01:18 -0800 (PST)
 From: Hangbin Liu <liuhangbin@gmail.com>
 To: netdev@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -71,10 +72,12 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Justin Iurman <justin.iurman@uliege.be>,
 	Xin Long <lucien.xin@gmail.com>,
 	Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCHv2 net-next 00/14] Conver net selftests to run in unique namespace (Part 1)
-Date: Thu, 30 Nov 2023 12:00:51 +0800
-Message-ID: <20231130040105.1265779-1-liuhangbin@gmail.com>
+Subject: [PATCHv2 net-next 01/14] selftests/net: add lib.sh
+Date: Thu, 30 Nov 2023 12:00:52 +0800
+Message-ID: <20231130040105.1265779-2-liuhangbin@gmail.com>
 X-Mailer: git-send-email 2.41.0
+In-Reply-To: <20231130040105.1265779-1-liuhangbin@gmail.com>
+References: <20231130040105.1265779-1-liuhangbin@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,67 +86,177 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-As Guillaume pointed, many selftests create namespaces with very common
-names (like "client" or "server") or even (partially) run directly in init_net.
-This makes these tests prone to failure if another namespace with the same
-name already exists. It also makes it impossible to run several instances
-of these tests in parallel.
+Add a lib.sh for net selftests. This file can be used to define commonly
+used variables and functions. Some commonly used functions can be moved
+from forwarding/lib.sh to this lib file. e.g. busywait().
 
-This patch set intend to conver all the net selftests to run in unique namespace,
-so we can update the selftest freamwork to run all tests in it's own namespace
-in parallel. After update, we only need to wait for the test which need
-longest time.
+Add function setup_ns() for user to create unique namespaces with given
+prefix name.
 
-As the total patch set is too large. I break it to severl parts. This is
-the first part.
-
-v1 -> v2:
-- Split the large patch set to small parts for easy review (Paolo Abeni)
-- Move busywait from forwarding/lib.sh to net/lib.sh directly (Petr Machata)
-- Update setup_ns/cleanup_ns struct (Petr Machata)
-- Remove default trap in lib.sh (Petr Machata)
-
-Hangbin Liu (14):
-  selftests/net: add lib.sh
-  selftests/net: convert arp_ndisc_evict_nocarrier.sh to run it in
-    unique namespace
-  selftests/net: specify the interface when do arping
-  selftests/net: convert arp_ndisc_untracked_subnets.sh to run it in
-    unique namespace
-  selftests/net: convert cmsg tests to make them run in unique namespace
-  selftests/net: convert drop_monitor_tests.sh to run it in unique
-    namespace
-  selftests/net: convert traceroute.sh to run it in unique namespace
-  selftests/net: convert icmp_redirect.sh to run it in unique namespace
-  sleftests/net: convert icmp.sh to run it in unique namespace
-  selftests/net: convert ioam6.sh to run it in unique namespace
-  selftests/net: convert l2tp.sh to run it in unique namespace
-  selftests/net: convert ndisc_unsolicited_na_test.sh to run it in
-    unique namespace
-  selftests/net: convert sctp_vrf.sh to run it in unique namespace
-  selftests/net: convert unicast_extensions.sh to run it in unique
-    namespace
-
- tools/testing/selftests/net/Makefile          |   2 +-
- .../net/arp_ndisc_evict_nocarrier.sh          |  46 ++--
- .../net/arp_ndisc_untracked_subnets.sh        |  20 +-
- tools/testing/selftests/net/cmsg_ipv6.sh      |  10 +-
- tools/testing/selftests/net/cmsg_so_mark.sh   |   7 +-
- tools/testing/selftests/net/cmsg_time.sh      |   7 +-
- .../selftests/net/drop_monitor_tests.sh       |  21 +-
- tools/testing/selftests/net/forwarding/lib.sh |  27 +-
- tools/testing/selftests/net/icmp.sh           |  10 +-
- tools/testing/selftests/net/icmp_redirect.sh  | 182 +++++++------
- tools/testing/selftests/net/ioam6.sh          | 247 +++++++++---------
- tools/testing/selftests/net/l2tp.sh           | 130 +++++----
- tools/testing/selftests/net/lib.sh            |  85 ++++++
- .../net/ndisc_unsolicited_na_test.sh          |  19 +-
- tools/testing/selftests/net/sctp_vrf.sh       |  12 +-
- tools/testing/selftests/net/traceroute.sh     |  82 +++---
- .../selftests/net/unicast_extensions.sh       |  99 ++++---
- 17 files changed, 500 insertions(+), 506 deletions(-)
+Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+---
+ tools/testing/selftests/net/Makefile          |  2 +-
+ tools/testing/selftests/net/forwarding/lib.sh | 27 +-----
+ tools/testing/selftests/net/lib.sh            | 85 +++++++++++++++++++
+ 3 files changed, 87 insertions(+), 27 deletions(-)
  create mode 100644 tools/testing/selftests/net/lib.sh
 
+diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
+index 9274edfb76ff..14bd68da7466 100644
+--- a/tools/testing/selftests/net/Makefile
++++ b/tools/testing/selftests/net/Makefile
+@@ -54,7 +54,7 @@ TEST_PROGS += ip_local_port_range.sh
+ TEST_PROGS += rps_default_mask.sh
+ TEST_PROGS += big_tcp.sh
+ TEST_PROGS_EXTENDED := in_netns.sh setup_loopback.sh setup_veth.sh
+-TEST_PROGS_EXTENDED += toeplitz_client.sh toeplitz.sh
++TEST_PROGS_EXTENDED += toeplitz_client.sh toeplitz.sh lib.sh
+ TEST_GEN_FILES =  socket nettest
+ TEST_GEN_FILES += psock_fanout psock_tpacket msg_zerocopy reuseport_addr_any
+ TEST_GEN_FILES += tcp_mmap tcp_inq psock_snd txring_overwrite
+diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
+index e37a15eda6c2..8f6ca458af9a 100755
+--- a/tools/testing/selftests/net/forwarding/lib.sh
++++ b/tools/testing/selftests/net/forwarding/lib.sh
+@@ -4,9 +4,6 @@
+ ##############################################################################
+ # Defines
+ 
+-# Kselftest framework requirement - SKIP code is 4.
+-ksft_skip=4
+-
+ # Can be overridden by the configuration file.
+ PING=${PING:=ping}
+ PING6=${PING6:=ping6}
+@@ -41,6 +38,7 @@ if [[ -f $relative_path/forwarding.config ]]; then
+ 	source "$relative_path/forwarding.config"
+ fi
+ 
++source ../lib.sh
+ ##############################################################################
+ # Sanity checks
+ 
+@@ -395,29 +393,6 @@ log_info()
+ 	echo "INFO: $msg"
+ }
+ 
+-busywait()
+-{
+-	local timeout=$1; shift
+-
+-	local start_time="$(date -u +%s%3N)"
+-	while true
+-	do
+-		local out
+-		out=$("$@")
+-		local ret=$?
+-		if ((!ret)); then
+-			echo -n "$out"
+-			return 0
+-		fi
+-
+-		local current_time="$(date -u +%s%3N)"
+-		if ((current_time - start_time > timeout)); then
+-			echo -n "$out"
+-			return 1
+-		fi
+-	done
+-}
+-
+ not()
+ {
+ 	"$@"
+diff --git a/tools/testing/selftests/net/lib.sh b/tools/testing/selftests/net/lib.sh
+new file mode 100644
+index 000000000000..518eca57b815
+--- /dev/null
++++ b/tools/testing/selftests/net/lib.sh
+@@ -0,0 +1,85 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++
++##############################################################################
++# Defines
++
++# Kselftest framework requirement - SKIP code is 4.
++ksft_skip=4
++
++##############################################################################
++# Helpers
++busywait()
++{
++	local timeout=$1; shift
++
++	local start_time="$(date -u +%s%3N)"
++	while true
++	do
++		local out
++		out=$("$@")
++		local ret=$?
++		if ((!ret)); then
++			echo -n "$out"
++			return 0
++		fi
++
++		local current_time="$(date -u +%s%3N)"
++		if ((current_time - start_time > timeout)); then
++			echo -n "$out"
++			return 1
++		fi
++	done
++}
++
++cleanup_ns()
++{
++	local ns=""
++	local errexit=0
++	local ret=0
++
++	# disable errexit temporary
++	if [[ $- =~ "e" ]]; then
++		errexit=1
++		set +e
++	fi
++
++	for ns in "$@"; do
++		ip netns delete "${ns}" &> /dev/null
++		if ! busywait 2 ip netns list \| grep -vq "^$ns$" &> /dev/null; then
++			echo "Warn: Failed to remove namespace $ns"
++			ret=1
++		fi
++	done
++
++	[ $errexit -eq 1 ] && set -e
++	return $ret
++}
++
++# setup netns with given names as prefix. e.g
++# setup_ns local remote
++setup_ns()
++{
++	local ns=""
++	local ns_name=""
++	local ns_list=""
++	for ns_name in "$@"; do
++		# Some test may setup/remove same netns multi times
++		if unset ${ns_name} 2> /dev/null; then
++			ns="${ns_name,,}-$(mktemp -u XXXXXX)"
++			eval readonly ${ns_name}="$ns"
++		else
++			eval ns='$'${ns_name}
++			cleanup_ns "$ns"
++
++		fi
++
++		if ! ip netns add "$ns"; then
++			echo "Failed to create namespace $ns_name"
++			cleanup_ns "$ns_list"
++			return $ksft_skip
++		fi
++		ip -n "$ns" link set lo up
++		ns_list="$ns_list $ns"
++	done
++}
 -- 
 2.41.0
 
