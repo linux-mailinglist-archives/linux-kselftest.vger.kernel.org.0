@@ -1,28 +1,40 @@
-Return-Path: <linux-kselftest+bounces-976-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-977-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2A518011B8
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Dec 2023 18:30:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5D3180129E
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Dec 2023 19:29:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D274C1C20942
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Dec 2023 17:30:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3ED5828187A
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Dec 2023 18:29:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 460344E616;
-	Fri,  1 Dec 2023 17:30:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F15184F61F;
+	Fri,  1 Dec 2023 18:28:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A81vm8Af"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CA7A4E1DB;
-	Fri,  1 Dec 2023 17:30:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46A19C433C8;
-	Fri,  1 Dec 2023 17:30:25 +0000 (UTC)
-Date: Fri, 1 Dec 2023 17:30:22 +0000
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Mark Brown <broonie@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC4724EB59;
+	Fri,  1 Dec 2023 18:28:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3274AC433C8;
+	Fri,  1 Dec 2023 18:28:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701455338;
+	bh=GRzvb6K1F09jnFNhMGdAakhzpcFCOUV6/A//CTedh4I=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=A81vm8AffuWGRBlTGQ6h8Ukd3z/U1Ud6I5sNaVbK5J3kTwKD/u3+evexovH0kUvYr
+	 PtSE3KDikxJeZNGdGkSNH0mc6fmmAylgGwpToBd04E2B4LbMW14o+TcWeY25snyHDw
+	 fTtnf9n4lwHqrh8lDDaUZCoi9HMWqYsmkT0aVi2nsRZuoTN4oUBdH8i/5U/p/PTbu2
+	 S2lGZJkv12gi0Q+9npLmBClZCuduDTBzgKiVkuRAouu7FmM1eWtUXxo2EweuRo9LfK
+	 ViEAJXevymtpRykKPA7pw6Da9zAy2v538ZItO3J830G494ZzD5isvKvrohPdYQ50j0
+	 m6yojiW2HtnTQ==
+Date: Fri, 1 Dec 2023 18:28:48 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Catalin Marinas <catalin.marinas@arm.com>
 Cc: "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
 	Deepak Gupta <debug@rivosinc.com>,
 	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
@@ -46,107 +58,80 @@ Cc: "Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
 	jannh@google.com, linux-kselftest@vger.kernel.org,
 	linux-api@vger.kernel.org, David Hildenbrand <david@redhat.com>
 Subject: Re: [PATCH RFT v4 0/5] fork: Support shadow stacks in clone3()
-Message-ID: <ZWoYLs2STGA1LZLU@arm.com>
+Message-ID: <37a35edb-e72d-4983-8be7-67c56d2292c5@sirena.org.uk>
 References: <20231128-clone3-shadow-stack-v4-0-8b28ffe4f676@kernel.org>
  <ZWjb6r0RWPo199pC@arm.com>
  <fce4c169-5d19-40e8-bc32-0abec9bb008e@sirena.org.uk>
+ <ZWoYLs2STGA1LZLU@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="CkFryha6tlsnAYUC"
+Content-Disposition: inline
+In-Reply-To: <ZWoYLs2STGA1LZLU@arm.com>
+X-Cookie: The early worm gets the late bird.
+
+
+--CkFryha6tlsnAYUC
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <fce4c169-5d19-40e8-bc32-0abec9bb008e@sirena.org.uk>
 
-Thanks all for the clarification.
+On Fri, Dec 01, 2023 at 05:30:22PM +0000, Catalin Marinas wrote:
 
-On Thu, Nov 30, 2023 at 09:51:04PM +0000, Mark Brown wrote:
-> On Thu, Nov 30, 2023 at 07:00:58PM +0000, Catalin Marinas wrote:
-> > My hope when looking at the arm64 patches was that we can completely
-> > avoid the kernel allocation/deallocation of the shadow stack since it
-> > doesn't need to do this for the normal stack either. Could someone
-> > please summarise why we dropped the shadow stack pointer after v1? IIUC
-> > there was a potential security argument but I don't think it was a very
-> > strong one. Also what's the threat model for this feature? I thought
-> > it's mainly mitigating stack corruption. If some rogue code can do
-> > syscalls, we have bigger problems than clone3() taking a shadow stack
-> > pointer.
-> 
-> As well as preventing/detecting corruption of the in memory stack shadow
-> stacks are also ensuring that any return instructions are unwinding a
-> prior call instruction, and that the returns are done in opposite order
-> to the calls.  This forces usage of the stack - any value we attempt to
-> RET to is going to be checked against the top of the shadow stack which
-> makes chaining returns together as a substitute for branches harder.
-> 
-> The concern Rick raised was that allowing user to pick the exact shadow
-> stack pointer would allow userspace to corrupt or reuse the stack of an
-> existing thread by starting a new thread with the shadow stack pointing
-> into the existing shadow stack of that thread.  While in isolation
-> that's not too much more than what userspace could just do directly
-> anyway it might compose with other issues to something more "interesting"
-> (eg, I'd be a bit concerned about overlap with pkeys/POE though I've not
-> thought through potential uses in detail).
+> Another concern I had was that map_shadow_stack() currently takes
+> a flags arg (though only one flag) while the clone/clone3() allocate the
+> shadow stack with an implicit configuration (other than size). Would
+> map_shadow_stack() ever get new flags that we may also need to set on
+> the default thread shadow stack (e.g. a new permission type)? At that
+> point it would be better if clone3() allowed a shadow stack pointer so
+> that any specific attributes would be limited to map_shadow_stack().
 
-Another concern I had was that map_shadow_stack() currently takes
-a flags arg (though only one flag) while the clone/clone3() allocate the
-shadow stack with an implicit configuration (other than size). Would
-map_shadow_stack() ever get new flags that we may also need to set on
-the default thread shadow stack (e.g. a new permission type)? At that
-point it would be better if clone3() allowed a shadow stack pointer so
-that any specific attributes would be limited to map_shadow_stack().
+The flags argument currently only lets you specify if a stack switch
+token should be written (which is not relevant for the clone3() case)
+and if a top of stack marker should be included (which since the top of
+stack marker is NULL for arm64 only has perceptible effect if a token is
+being written).  I'm not particularly anticipating any further additions,
+though never say never.
 
-If that's only theoretical, I'm fine to go ahead with a size-only
-argument for clone3(). We could also add the pointer now and allocate
-the stack if NULL or reuse it if not, maybe with some prctl to allow
-this. It might be overengineering and we'd never use such feature
-though.
+> If that's only theoretical, I'm fine to go ahead with a size-only
+> argument for clone3(). We could also add the pointer now and allocate
+> the stack if NULL or reuse it if not, maybe with some prctl to allow
+> this. It might be overengineering and we'd never use such feature
+> though.
 
-> > I'm not against clone3() getting a shadow_stack_size argument but asking
-> > some more questions. If we won't pass a pointer as well, is there any
-> > advantage in expanding this syscall vs a specific prctl() option? Do we
-> > need a different size per thread or do all threads have the same shadow
-> > stack size? A new RLIMIT doesn't seem to map well though, it is more
-> > like an upper limit rather than a fixed/default size (glibc I think uses
-> > it for thread stacks but bionic or musl don't AFAIK).
-> 
-> I don't know what the userspace patterns are likely to be here, it's
-> possible a single value for each process might be fine but I couldn't
-> say that confidently.  I agree that a RLIMIT does seem like a poor fit.
+Yeah, it seems like a bunch of work and interface to test that I'm not
+convinced anyone would actually use.
 
-Szabolcs clarified that there are cases where we need the size per
-thread.
+> > As well as the actual configuration of the size the other thing that we
+> > gain is that as well as relying on heuristics to determine if we need to
+> > allocate a new shadow stack for the new thread we allow userspace to
+> > explicitly request a new shadow stack.
 
-> As well as the actual configuration of the size the other thing that we
-> gain is that as well as relying on heuristics to determine if we need to
-> allocate a new shadow stack for the new thread we allow userspace to
-> explicitly request a new shadow stack.
+> But the reverse is not true - we can't use clone3() to create a thread
+> without a shadow stack AFAICT.
 
-But the reverse is not true - we can't use clone3() to create a thread
-without a shadow stack AFAICT.
+Right.  Given the existing implicit allocation only x86 ABI we'd need to
+retrofit that by adding an explicit "no shadow stack" flag.  That is
+possible though I'm having a hard time seeing the use case for it.
 
-> > Another dumb question on arm64 - is GCSPR_EL0 writeable by the user? If
-> > yes, can the libc wrapper for threads allocate a shadow stack via
-> > map_shadow_stack() and set it up in the thread initialisation handler
-> > before invoking the thread function?
-> 
-> No, GCSPR_EL0 can only be changed by EL0 through BL, RET and the
-> new GCS instructions (push/pop and stack switch).  Push is optional -
-> userspace has to explicitly request that it be enabled and this could be
-> prevented through seccomp or some other LSM.  The stack switch
-> instructions require a token at the destination address which must
-> either be written by a higher EL or will be written in the process of
-> switching away from a stack so you can switch back.  Unless I've missed
-> one every mechanism for userspace to update GCSPR_EL0 will do a GCS
-> memory access so providing guard pages have been allocated wrapping to a
-> different stack will be prevented.
-> 
-> We would need a syscall to allow GCSPR_EL0 to be written.
+--CkFryha6tlsnAYUC
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Good point, I thought I must be missing something.
+-----BEGIN PGP SIGNATURE-----
 
--- 
-Catalin
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVqJeAACgkQJNaLcl1U
+h9DzAQf+LrewNdEd54lFym1uNzfqTALngDRzqEQiwyX9OjpXl7qCfKd77el1CZ0K
+CJz64ccqu/oWsPYXYcGbSzzFELkIyPbqIWZ48NeKCGVMapsadRneUI6QO0pONxhV
+UBVjFK0nqQeKMuXZXSPnPQ4r2TP6/8V0GXwpTmI6t2rMAIKgUQ0co0qAQBbVUWVh
+C+V88onP3gYcXwH6uKjmj27pT2gr2vJABiO/VkXt1CSXUlqK9VgG0cPwj/DHIq9X
+RiFY1ItDu4w+4efoNzq6mmX+hbBRDfqWWYzUeJl/XLd/1cDY3ZLB/CCzNvN5s4YW
+PXlpWyT3/osvaRjlXy33OnPqJ7lLQQ==
+=UeuB
+-----END PGP SIGNATURE-----
+
+--CkFryha6tlsnAYUC--
 
