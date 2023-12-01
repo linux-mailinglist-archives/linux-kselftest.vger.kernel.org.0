@@ -1,102 +1,107 @@
-Return-Path: <linux-kselftest+bounces-927-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-928-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11CBD800225
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Dec 2023 04:34:40 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9585F80022B
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Dec 2023 04:42:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BC4722814CB
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Dec 2023 03:34:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 866E8B20F6C
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Dec 2023 03:42:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6417E17CF;
-	Fri,  1 Dec 2023 03:34:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 857443D8C;
+	Fri,  1 Dec 2023 03:42:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vzEPz18k"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HS0n+wPz"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D7DF1716
-	for <linux-kselftest@vger.kernel.org>; Thu, 30 Nov 2023 19:34:31 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-54c52baaa59so2381a12.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 30 Nov 2023 19:34:31 -0800 (PST)
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C454112B
+	for <linux-kselftest@vger.kernel.org>; Thu, 30 Nov 2023 19:42:14 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-40b367a0a12so25295e9.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 30 Nov 2023 19:42:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1701401669; x=1702006469; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1701402133; x=1702006933; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=nKeo3KBD7k9iqODqPzjarLwCTV/xS66N3DlPfBNf/jY=;
-        b=vzEPz18kkTYWwnhKTTuLBvGFxWqi3Rs4+ne+nRQagwgFEVtCpl3FA0cJ8EC2fEYJZ/
-         as6BH170d/iSiuVOBRlX7hRA8+rfixz5STcj/2aN0nESncV0JWqhqbb+D/k04qkjtWSu
-         Cu+pvRzeSNKjh1UKiumGmPmYTWyJwscI7zZ1zzzHygX4svck7kwxB/pH6aNNWkI3ipea
-         albMU1aIURcLGVpMR6o2OwA0oz8fFqS+CmCJyQ3aMlLMfYP/RFsnUNAZgKS5/0VweWJt
-         GyKONDisMjl3IANfFH0IgB0c/PwAM1zPOwhfypSQMt8HpvZZiOu2dGq4fSsj5K+1XAx0
-         WaAw==
+        bh=SCgsTgnYHre9D4abY45qvLVVmTDr2ALWjiYcRJ1zxIw=;
+        b=HS0n+wPzJWhmcCUDa0jO/6QfBxSFSw707aHV8O4ScVaeBNRxQwOQ/p2HWey8dypxYW
+         8g3TOJyYI7ZmJ37Gz/KI9n7GBQ4Hx+rLJhQf8fsn0k0JO+XJW3jXrtm0V/IZv29eLgD4
+         KPBDwjhx0b6PfCVs79BnXA8XdWrRRtVZWDYdjh8cZ5cOxjCY6GozG2altxJK8wc3WDFh
+         KfED8AwktyokPlkU8Pbf18zxPSzMs93/S1/jb50UI4XDXjzW2RxFoasSLJ+H1+1qcYlY
+         Cv6qIsiLiGq84Cmhz4VbxwpEq2ghnvPOKQI8vlNUk7boqwmp6IaStdwiaTkqEQXp5zES
+         p2KA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701401669; x=1702006469;
+        d=1e100.net; s=20230601; t=1701402133; x=1702006933;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=nKeo3KBD7k9iqODqPzjarLwCTV/xS66N3DlPfBNf/jY=;
-        b=DLGp2f5wlNwN1U3JArIHdNiMgT/XwL457ptfS6auPFYkAD4x6nxaUPj+fqsJ5WAFRQ
-         uhpwhkWS6dgyUnh8eI1CVXpA5OJ7Q7qodGdejcYRivcRlp6J6RM1uFr5P1v7IrZSPOSz
-         8JOYdC/Fr/X6F6uNtKJroK6DsprMziD22KjEwbutp+czxk+UBCf4A4EN9G2+9VFdIcRT
-         xqlICre/1NSkvSFeytw5ovecq+hLEYfnI7EAx5cgY8R+ZNJWQjbbbYCc8VtQc4LFhPeS
-         u0lfbX8ZrnIZgHsg91egs+YM4cwLfbFpoBvSbM/f3DG3CzUujyJkJ1QNGpNB6osx/FGD
-         uUmA==
-X-Gm-Message-State: AOJu0YxlqRh0Rp1WrVAdO5OLXCJ+JyFASugIyKMErjND7n6CQGhToI1a
-	AHEFXgvdsP0dQ9+nQ6gL+02RadVn8CHPNThHS8wDxQ==
-X-Google-Smtp-Source: AGHT+IHaGQlN/+6MjrFGGbRAGCa5XTMy4uzX5C1DQ43p0LsTX2WdZcrxSdM9lc7nCzsXPGsXV6p4WYerbbyCY0jdT5o=
-X-Received: by 2002:a50:aacf:0:b0:54b:321:ef1a with SMTP id
- r15-20020a50aacf000000b0054b0321ef1amr75541edc.6.1701401669452; Thu, 30 Nov
- 2023 19:34:29 -0800 (PST)
+        bh=SCgsTgnYHre9D4abY45qvLVVmTDr2ALWjiYcRJ1zxIw=;
+        b=C0s4wzqr7YTuQl6kLjAakchDCtAb/tRiNaTyPVVtHdqUyedWgznymO3HGUnjJw7Uo3
+         /aMvyLBeI+WLbBFa3t81eeqcRe0ifWqzml8lVRCyvXpq87+chWqO+/dBxeDED2ZdIsdt
+         PLi8iL+r9QnoK9K8J7xwqyqUEHrVSkW2URuPqhFdkR45VshUEyRY9G/dVktZ7jWFrkeE
+         13a7qCyKBJIwIk9UAR+SlTIOPrAhACJJ4XmrEgs6fCtGbXCdiIKYQv9FcaCwCzktj1VI
+         /HRZxIMnNhFLH7JTIb/61/jG5DDABh358FsrK9i5MM1vYMBS4DtsqB9DFwnbkSIu3zXD
+         8xjQ==
+X-Gm-Message-State: AOJu0Yx0yjti7dYgI63chbUrC5xxYzZEotYm/avRwA4SHbjgbNvzjvY6
+	J2xzIO8dp2usqpEuY6zoJL7DyD6mvmGO8aYu1XCpVw==
+X-Google-Smtp-Source: AGHT+IHeF5qmVC7VE9e/Rns8enwwzqMECV/0PWj0Mmc8KWfJ8NVLDZ/iTHDDv4WVyJzjSUtuaBqOe+ZAbp2mTP4Ydtk=
+X-Received: by 2002:a05:600c:54e7:b0:3f7:3e85:36a with SMTP id
+ jb7-20020a05600c54e700b003f73e85036amr37404wmb.7.1701402133104; Thu, 30 Nov
+ 2023 19:42:13 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231030104746.241414-1-rf@opensource.cirrus.com>
-In-Reply-To: <20231030104746.241414-1-rf@opensource.cirrus.com>
+References: <20231030104732.241339-1-rf@opensource.cirrus.com>
+In-Reply-To: <20231030104732.241339-1-rf@opensource.cirrus.com>
 From: David Gow <davidgow@google.com>
-Date: Fri, 1 Dec 2023 11:34:15 +0800
-Message-ID: <CABVgOS=bd5Udd9fKfzEGOikCG8KJLdG=NZ70KL9pm-NvNhKipw@mail.gmail.com>
-Subject: Re: [PATCH RESEND] kunit: string-stream: Allow ERR_PTR to be passed
- to string_stream_destroy()
+Date: Fri, 1 Dec 2023 11:42:02 +0800
+Message-ID: <CABVgOSmyeEUPEFChW9PJp8pum45H24dnLh24Du_Bujeha0mF4w@mail.gmail.com>
+Subject: Re: [PATCH v2 RESEND] kunit: debugfs: Handle errors from alloc_string_stream()
 To: Richard Fitzgerald <rf@opensource.cirrus.com>
 Cc: brendan.higgins@linux.dev, rmoar@google.com, 
 	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
+	linux-kernel@vger.kernel.org, patches@opensource.cirrus.com, 
+	Dan Carpenter <dan.carpenter@linaro.org>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="0000000000002892c1060b6a72a1"
+	boundary="000000000000ca3944060b6a8d02"
 
---0000000000002892c1060b6a72a1
+--000000000000ca3944060b6a8d02
 Content-Type: text/plain; charset="UTF-8"
 
 On Mon, 30 Oct 2023 at 18:47, Richard Fitzgerald
 <rf@opensource.cirrus.com> wrote:
 >
-> Check the stream pointer passed to string_stream_destroy() for
-> IS_ERR_OR_NULL() instead of only NULL.
+> In kunit_debugfs_create_suite() give up and skip creating the debugfs
+> file if any of the alloc_string_stream() calls return an error or NULL.
+> Only put a value in the log pointer of kunit_suite and kunit_test if it
+> is a valid pointer to a log.
 >
-> Whatever alloc_string_stream() returns should be safe to pass
-> to string_stream_destroy(), and that will be an ERR_PTR.
+> This prevents the potential invalid dereference reported by smatch:
 >
-> It's obviously good practise and generally helpful to also check
-> for NULL pointers so that client cleanup code can call
-> string_stream_destroy() unconditionally - which could include
-> pointers that have never been set to anything and so are NULL.
+>  lib/kunit/debugfs.c:115 kunit_debugfs_create_suite() error: 'suite->log'
+>         dereferencing possible ERR_PTR()
+>  lib/kunit/debugfs.c:119 kunit_debugfs_create_suite() error: 'test_case->log'
+>         dereferencing possible ERR_PTR()
 >
 > Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+> Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+> Fixes: 05e2006ce493 ("kunit: Use string_stream for test log")
 > ---
 
-Yeah, this makes sense, and let's support NULL as well.
 
+Thanks for fixing all the nasty C error handling.
+
+Closes: https://groups.google.com/g/kunit-dev/c/sf6MsFzeEV4
 Reviewed-by: David Gow <davidgow@google.com>
 
 Cheers,
 -- David
 
---0000000000002892c1060b6a72a1
+--000000000000ca3944060b6a8d02
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -163,15 +168,15 @@ impZAng7ccvvK09K3ZuhwTIxJMsPXCZYsrXWORTw5sczRAP6XvKbPBJnsJoSTe5dFBPBHOQJOGhU
 qWfEfWnWMJPF3LxSGLpLFQXO3RwQqmxv08avwXfVPouh1xuB3FX7rpDabT8YDhu9JgIZkLEKko7L
 yQt6zWwng7k8YF/jGbiAta6VMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCY
-+BUVJztaA7qKVNQMUTyqzdIegG/K0ytjHz/O6VRZrjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzEyMDEwMzM0MjlaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAp
+6ZmPUG36k1U5qynuKGpZEbC1mG/OvM2utLQsbYptNzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzEyMDEwMzQyMTNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAgmC0WxnrCWCAfxwHknQp
-7haegoKfCFQJe9lNpvCWDSExPXxvRDkDsgsYT5bp7O76q2Hb2Pw2AjxRUuOdh8T83rhbJFMM9dVp
-P9q/7MmEZdOv07iS9OpnXWIr0iw0cZ3gymEwze8cPCTb4KgkCrSQITYENwpX9mREL7miqpbYpyYh
-L+J29cjgSFKGwZA2PdyNgzSD4hcl12CMrTNb9XKSPj0byrXrZ1yCFBHBZqysOtIIdUqcqQMW1hTn
-o0lhWp0qmkrS3DoMpdWvAA/krxRg9UBn/ysSHvzW7W6HqGO3ortWjwVPOj3bWdnfjpTWY7AGt0j5
-lwX5+hAF8mooaNZ+4g==
---0000000000002892c1060b6a72a1--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAAskRlu1umQR0oIdJ0Xyf
+zPtlnMSExlN8hUI1XlwTRZoVQDvOZ+oAtSVcQ+s1F+lHvwre3YdEwXHu/I+Un0Ewm6vt/1vHdksq
+UHTtkcWEylWVIwQkbdIHrMD+VQVgT+22sSUYSZzkxIP0y+B7ZJzSeVOmJUVSdCZ0IsYRSyt94hn8
+iBsDA9PPHUNs2ILa73nBtg0oEeZx/le2N/xhzXGL9vHgcv4r5xpVrFvM7Ix/cTGzARPpdikUrnzC
+EJdkCavKdMZp6ZLxP6XH2cZyXdBU47A9zh2rbgzupgcG2W1D9fxn4HqOLBzYa+1tvuD+im0nsZ07
+iwSz6c2aLhjVifUvxA==
+--000000000000ca3944060b6a8d02--
 
