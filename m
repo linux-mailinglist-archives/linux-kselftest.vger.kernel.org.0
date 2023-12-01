@@ -1,170 +1,170 @@
-Return-Path: <linux-kselftest+bounces-988-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-989-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55B488014D9
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Dec 2023 21:56:26 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB4A38015CD
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Dec 2023 22:59:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DC890281D56
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Dec 2023 20:56:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6332EB20F21
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Dec 2023 21:59:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A779D55799;
-	Fri,  1 Dec 2023 20:56:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BE505A119;
+	Fri,  1 Dec 2023 21:59:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="p7UQPML1"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hX6VTg28"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD0199A
-	for <linux-kselftest@vger.kernel.org>; Fri,  1 Dec 2023 12:56:18 -0800 (PST)
-Received: by mail-il1-x135.google.com with SMTP id e9e14a558f8ab-35c6cefa872so22655ab.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 01 Dec 2023 12:56:18 -0800 (PST)
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7EEAFE
+	for <linux-kselftest@vger.kernel.org>; Fri,  1 Dec 2023 13:59:26 -0800 (PST)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-5d40c728fc4so9961077b3.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 01 Dec 2023 13:59:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1701464178; x=1702068978; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1701467966; x=1702072766; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=iDU6SlWRVKBiv8MHZWR7PalVXO/1RHV9RChrnpMyBqo=;
-        b=p7UQPML1UjIqAibtSyQvnHjq4VunrlInVJZsvT+8KsePoEZyp3M/rOHs8xCl8zDJWr
-         kjsGphDLzcMFs/dWMcuIfr4ut0fpFWIELV3qxSVLt0mBrIzA9Nit0ohlEhW0fNAI9qkq
-         ZulJOLOLuL6gYrKobO06kpXND1uKZLfcbi6RusLtI038BO2ye6xUpLr85lYE5RusgVYv
-         BdfKZ4ZxNV1KGGF7X7wC6PmMM31HLGhJ1WFbis6WdtryF4Uddyrd1UJh+WxJ9XrLGZ1d
-         MTnnpfLuRtkqrYd2bLg/kAeLhpy2P6FyLl19GBzPggPwsKZA5ZOLcV08dOhc1llaKwNf
-         VS0g==
+        bh=Z+exs5h/ORFFX83E63BLP4xoRIe35RXovt/mscKVvNI=;
+        b=hX6VTg28CCxCeP57YZmXo477YSgmH93Dw4fBMR4wa6zhQtrlFGN42dTJW7ffMyR2CE
+         vAl1PUUYT91fOBJfopsUCUmAArwAU/VlXXeMGz5isSl2Of77vITRovW1K3zBV9xyb6x/
+         KF/Q9DLL8h61WDxD5pTUbV55HXMS1+wiPLdBdZlMrzgejIPbQuH9TyOBSG6+RPX7iyxJ
+         H8lRnSppJWjq8j4vS8hgcP5RY9WmKYYEZv4al4VbPGw/seqJTkfGMlmuoO1bX93eVAb5
+         nrrvinDEAAMx+dOteVgfbjAyhpSDOX90IBDRwxDtT8COoK3qtagPQW8Pz4x5gnhfgFzM
+         7Yhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701464178; x=1702068978;
+        d=1e100.net; s=20230601; t=1701467966; x=1702072766;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=iDU6SlWRVKBiv8MHZWR7PalVXO/1RHV9RChrnpMyBqo=;
-        b=ShCcm+MnP65JJ41fd3Z163bcmLC73xjWmlR7KHBy9Ft4NwmyRCKGe8OzVYexTm8pk9
-         m9acjPqeIDjmToc5fzCSRbxM3lSnbFn8Xoc56sMnbIU56pgFt2BiQsk2FUox5iCQ68Kj
-         MjjIDh9W6pQEonzHqwRtb2+3dtIS3FhDvZETFRViIozrfAdlcRnW1foWPbZ7GWoXVtlW
-         ApxW/Nk2Hwfkpk5VqfzKO6Pqxsj2s4z5wfa4UX++oLeCIpEnjiZ/ys+3wusA/nUBamb4
-         B4KSFqBorgUT70woxW86AtOwpD5Wv26P5ccmRMx31kZlnoJS663vt0ca0+tvLblw0/pv
-         vYlg==
-X-Gm-Message-State: AOJu0YxXtbo1RM7xaOGiv9aw7SSJDwu29wJaAbpJnHqxA59nOvDjt1Cu
-	1EwskZzBupPGGrur45zGMJ/8AdvAkL79Uu2YbRYeRA==
-X-Google-Smtp-Source: AGHT+IHv+vjOPkfAnQO7BH4FNl96FBQtAS+iXk6yc2jOVypvrwLn0XkkQewUIMd8xQ35p4x5GUBkCVa52rVxJFU6goU=
-X-Received: by 2002:a05:6e02:1c01:b0:35d:3785:71c6 with SMTP id
- l1-20020a056e021c0100b0035d378571c6mr214742ilh.26.1701464177957; Fri, 01 Dec
- 2023 12:56:17 -0800 (PST)
+        bh=Z+exs5h/ORFFX83E63BLP4xoRIe35RXovt/mscKVvNI=;
+        b=kMJvlT6jBD2Vi1RTX6xVAwBE22tXcORJIUZP+p8LuJ4cqFbZ+f6l1kLbD4LnsceVBh
+         wG8NdTi+Yio2P1L/yMpAht7DoUGNYlpseTwIqMhRlLVVzDeUknRtuKPrY2mBXLHIKnO8
+         bhvnUXtKOy4F8C7v62WH7bdxvgBrZxPEgv6+r5xc3bCYFnjxzIBuPb9HIGbOzvt7kQGJ
+         BR6NCfNZUKUUMGVioKGofiSb1RWb5TRXTpa0B0Xv1JPO8DO0aftJfVHHOeNMPGiDxlMR
+         /c6obJMgqp/6GLLaLLBz9dK5756h9Vl4cRZWh0HsoHmTxqPu1hGUkjsmtVYw6sQyZc8F
+         bqtA==
+X-Gm-Message-State: AOJu0YzyM8N8TpxROoxM3XNMSxxzHZrMn9vX85bkSgHJqlFY5ehzWLYi
+	YNl5ek/V28In0Gr5IfNsGhj0aJgRsQ0ZvLnpsJ7UgQ==
+X-Google-Smtp-Source: AGHT+IH5pinfBxSB4oGxosUPol8k+50xPe9U5E7xmyyM7NKUdtj+66RiOT8P6mzKNjGWMLXdmWbEEzCJywNKZK4Oneo=
+X-Received: by 2002:a0d:e684:0:b0:5d7:1a33:5ad3 with SMTP id
+ p126-20020a0de684000000b005d71a335ad3mr115182ywe.32.1701467965712; Fri, 01
+ Dec 2023 13:59:25 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230421141723.2405942-1-peternewman@google.com>
- <20230421141723.2405942-4-peternewman@google.com> <38b9e6df-cccd-a745-da4a-1d1a0ec86ff3@intel.com>
- <CALPaoCg76nUsJ7eYcU61gied8WBuAAmqy0Pqpsq5=Z-S52Qg6w@mail.gmail.com>
- <31993ea8-97e5-b8d5-b344-48db212bc9cf@intel.com> <CALPaoCiPCxUeGKjZytxmse2oNs=qDBbRY9kH7AZGG6iXf1qtJw@mail.gmail.com>
- <04c9eb5e-3395-05e6-f0cc-bc8f054a6031@intel.com>
-In-Reply-To: <04c9eb5e-3395-05e6-f0cc-bc8f054a6031@intel.com>
-From: Peter Newman <peternewman@google.com>
-Date: Fri, 1 Dec 2023 12:56:06 -0800
-Message-ID: <CALPaoCjg-W3w8OKLHP_g6Evoo03fbgaOQZrGTLX6vdSLp70=SA@mail.gmail.com>
-Subject: Re: [PATCH v1 3/9] x86/resctrl: Add resctrl_mbm_flush_cpu() to
- collect CPUs' MBM events
-To: Reinette Chatre <reinette.chatre@intel.com>
-Cc: Fenghua Yu <fenghua.yu@intel.com>, Babu Moger <babu.moger@amd.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Stephane Eranian <eranian@google.com>, James Morse <james.morse@arm.com>, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20231121171643.3719880-1-surenb@google.com> <20231121171643.3719880-6-surenb@google.com>
+ <b3c882d2-0135-430c-8179-784f78be0902@arm.com> <a41c759f-78d8-44ed-b708-1bb737a8e6c1@redhat.com>
+In-Reply-To: <a41c759f-78d8-44ed-b708-1bb737a8e6c1@redhat.com>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Fri, 1 Dec 2023 13:59:14 -0800
+Message-ID: <CAJuCfpGtfxmyGDeCH9+YMMd-aX2z9pgdBch+DD7vGZzcfaC+kw@mail.gmail.com>
+Subject: Re: [PATCH v5 5/5] selftests/mm: add UFFDIO_MOVE ioctl test
+To: David Hildenbrand <david@redhat.com>
+Cc: Ryan Roberts <ryan.roberts@arm.com>, akpm@linux-foundation.org, 
+	viro@zeniv.linux.org.uk, brauner@kernel.org, shuah@kernel.org, 
+	aarcange@redhat.com, lokeshgidra@google.com, peterx@redhat.com, 
+	hughd@google.com, mhocko@suse.com, axelrasmussen@google.com, rppt@kernel.org, 
+	willy@infradead.org, Liam.Howlett@oracle.com, jannh@google.com, 
+	zhangpeng362@huawei.com, bgeffon@google.com, kaleshsingh@google.com, 
+	ngeoffray@google.com, jdduke@google.com, linux-mm@kvack.org, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kernel-team@android.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Reinette,
-
-On Tue, May 16, 2023 at 5:06=E2=80=AFPM Reinette Chatre
-<reinette.chatre@intel.com> wrote:
-> On 5/15/2023 7:42 AM, Peter Newman wrote:
-> >
-> > I used a simple parent-child pipe loop benchmark with the parent in
-> > one monitoring group and the child in another to trigger 2M
-> > context-switches on the same CPU and compared the sample-based
-> > profiles on an AMD and Intel implementation. I used perf diff to
-> > compare the samples between hard and soft RMID switches.
-> >
-> > Intel(R) Xeon(R) Platinum 8173M CPU @ 2.00GHz:
-> >
-> >               +44.80%  [kernel.kallsyms]  [k] __rmid_read
-> >     10.43%     -9.52%  [kernel.kallsyms]  [k] __switch_to
-> >
-> > AMD EPYC 7B12 64-Core Processor:
-> >
-> >               +28.27%  [kernel.kallsyms]  [k] __rmid_read
-> >     13.45%    -13.44%  [kernel.kallsyms]  [k] __switch_to
-> >
-> > Note that a soft RMID switch that doesn't change CLOSID skips the
-> > PQR_ASSOC write completely, so from this data I can roughly say that
-> > __rmid_read() is a little over 2x the length of a PQR_ASSOC write that
-> > changes the current RMID on the AMD implementation and about 4.5x
-> > longer on Intel.
-> >
-> > Let me know if this clarifies the cost enough or if you'd like to also
-> > see instrumented measurements on the individual WRMSR/RDMSR
-> > instructions.
+On Fri, Dec 1, 2023 at 12:47=E2=80=AFPM David Hildenbrand <david@redhat.com=
+> wrote:
 >
-> I can see from the data the portion of total time spent in __rmid_read().
-> It is not clear to me what the impact on a context switch is. Is it
-> possible to say with this data that: this solution makes a context switch
-> x% slower?
+> On 01.12.23 10:29, Ryan Roberts wrote:
+> > On 21/11/2023 17:16, Suren Baghdasaryan wrote:
+> >> Add tests for new UFFDIO_MOVE ioctl which uses uffd to move source
+> >> into destination buffer while checking the contents of both after
+> >> the move. After the operation the content of the destination buffer
+> >> should match the original source buffer's content while the source
+> >> buffer should be zeroed. Separate tests are designed for PMD aligned a=
+nd
+> >> unaligned cases because they utilize different code paths in the kerne=
+l.
+> >>
+> >> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> >> ---
+> >>   tools/testing/selftests/mm/uffd-common.c     |  24 +++
+> >>   tools/testing/selftests/mm/uffd-common.h     |   1 +
+> >>   tools/testing/selftests/mm/uffd-unit-tests.c | 189 +++++++++++++++++=
+++
+> >>   3 files changed, 214 insertions(+)
+> >>
+> >> diff --git a/tools/testing/selftests/mm/uffd-common.c b/tools/testing/=
+selftests/mm/uffd-common.c
+> >> index fb3bbc77fd00..b0ac0ec2356d 100644
+> >> --- a/tools/testing/selftests/mm/uffd-common.c
+> >> +++ b/tools/testing/selftests/mm/uffd-common.c
+> >> @@ -631,6 +631,30 @@ int copy_page(int ufd, unsigned long offset, bool=
+ wp)
+> >>      return __copy_page(ufd, offset, false, wp);
+> >>   }
+> >>
+> >> +int move_page(int ufd, unsigned long offset, unsigned long len)
+> >> +{
+> >> +    struct uffdio_move uffdio_move;
+> >> +
+> >> +    if (offset + len > nr_pages * page_size)
+> >> +            err("unexpected offset %lu and length %lu\n", offset, len=
+);
+> >> +    uffdio_move.dst =3D (unsigned long) area_dst + offset;
+> >> +    uffdio_move.src =3D (unsigned long) area_src + offset;
+> >> +    uffdio_move.len =3D len;
+> >> +    uffdio_move.mode =3D UFFDIO_MOVE_MODE_ALLOW_SRC_HOLES;
+> >> +    uffdio_move.move =3D 0;
+> >> +    if (ioctl(ufd, UFFDIO_MOVE, &uffdio_move)) {
+> >> +            /* real retval in uffdio_move.move */
+> >> +            if (uffdio_move.move !=3D -EEXIST)
+> >> +                    err("UFFDIO_MOVE error: %"PRId64,
+> >> +                        (int64_t)uffdio_move.move);
+> >
+> > Hi Suren,
+> >
+> > FYI this error is triggering in mm-unstable (715b67adf4c8):
+> >
+> > Testing move-pmd on anon... ERROR: UFFDIO_MOVE error: -16 (errno=3D16,
+> > @uffd-common.c:648)
+> >
+> > I'm running in a VM on Apple M2 (arm64). I haven't debugged any further=
+, but
+> > happy to go deeper if you can direct.
 >
-> I think it may be optimistic to view this as a replacement of a PQR write=
-.
-> As you point out, that requires that a CPU switches between tasks with th=
-e
-> same CLOSID. You demonstrate that resctrl already contributes a significa=
-nt
-> delay to __switch_to - this work will increase that much more, it has to
-> be clear about this impact and motivate that it is acceptable.
+> Does it trigger reliably? Which pagesize is that kernel using?
+>
+> I can spot that uffd_move_pmd_test()/uffd_move_pmd_handle_fault() uses
+> default_huge_page_size(), which reads the default hugetlb size.
+>
+> That, however, does not necessarily correspond to the THP size. That one
+> can be obtained using read_pmd_pagesize() in vm_util.c
 
-We were operating under the assumption that if the overhead wasn't
-acceptable, we would have heard complaints about it by now, but we
-ultimately learned that this feature wasn't deployed as much as we had
-originally thought on AMD hardware and that the overhead does need to
-be addressed.
+Oh, I didn't realize that default_huge_page_size() is not always the
+actual THP size. Will fix.
 
-I am interested in your opinion on two options I'm exploring to
-mitigate the overhead, both of which depend on an API like the one
-Babu recently proposed for the AMD ABMC feature [1], where a new file
-interface will allow the user to indicate which mon_groups are
-actively being measured. I will refer to this as "assigned" for now,
-as that's the current proposal.
+>
+> I quickly scanned the code (still want to take a deeper look), but all
+> PAE checks looked sane to me.
+>
+> I think the issue is folio split handling. I replied to the patch.
 
-The first is likely the simpler approach: only read MBM event counters
-which have been marked as "assigned" in the filesystem to avoid paying
-the context switch cost on tasks in groups which are not actively
-being measured. In our use case, we calculate memory bandwidth on
-every group every few minutes by reading the counters twice, 5 seconds
-apart. We would just need counters read during this 5-second window.
+Thanks for your hint! That's very possibly the reason for the test
+failure. I'm in the process of trying to reproduce this issue on
+ARM64. If I'm unable to do so then I'll create a patch to split
+PTE-mapped THP when encountered and will ask Ryan to try that.
+Thanks,
+Suren.
 
-The second involves avoiding the situation where a hardware counter
-could be deallocated: Determine the number of simultaneous RMIDs
-supported, reduce the effective number of RMIDs available to that
-number. Use the default RMID (0) for all "unassigned" monitoring
-groups and report "Unavailable" on all counter reads (and address the
-default monitoring group's counts being unreliable). When assigned,
-attempt to allocate one of the remaining, usable RMIDs to that group.
-It would only be possible to assign all event counters (local, total,
-occupancy) at the same time. Using this approach, we would no longer
-be able to measure all groups at the same time, but this is something
-we would already be accepting when using the AMD ABMC feature.
-
-While the second feature is a lot more disruptive at the filesystem
-layer, it does eliminate the added context switch overhead. Also, it
-may be helpful in the long run for the filesystem code to start taking
-a more abstract view of hardware monitoring resources, given that few
-implementations can afford to assign hardware to all monitoring IDs
-all the time. In both cases, the meaning of "assigned" could vary
-greatly, even among AMD implementations.
-
-Thanks!
--Peter
-
-[1] https://lore.kernel.org/lkml/20231201005720.235639-1-babu.moger@amd.com=
-/
+>
+> --
+> Cheers,
+>
+> David / dhildenb
+>
 
