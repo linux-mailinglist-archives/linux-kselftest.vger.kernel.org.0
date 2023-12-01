@@ -1,143 +1,114 @@
-Return-Path: <linux-kselftest+bounces-964-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-965-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E18FD800CC2
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Dec 2023 15:00:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 617E5800D16
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Dec 2023 15:24:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1EAEA1C20E19
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Dec 2023 14:00:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1BD78281571
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Dec 2023 14:24:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 467DA3C475;
-	Fri,  1 Dec 2023 14:00:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29F5F3D987;
+	Fri,  1 Dec 2023 14:24:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XzdUKyur"
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="lJrLG8qL"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2687A3B792;
-	Fri,  1 Dec 2023 14:00:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2913FC433C8;
-	Fri,  1 Dec 2023 14:00:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701439240;
-	bh=cH/WQ4KETfzKoL236M7jGi9GYZdkGcwb5KqlIXUvyeg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XzdUKyurfLDqP1vkQGdkeo9Vp39hy0C1j4hwqhkwLy7UQuhcHmAyKkp1AaJR1YvpY
-	 wxRjWAynnlmZYfUCkPde5kSEXOKswvqf0pi37yfB8ceEgmFhbIfsHYODylbheVYZ+M
-	 wZRHT4F1OqsXdAoHXOVO4bc9nVePCrf5RQj2KhO2Pzg//uLffyqFr0St0XRTOHrQ6j
-	 LqiyoIRT2UAUU8Srdu/U64y5jcNsfh7rGTiZ437YpYybTc9hfO+eyb/jYRkRVYNdNk
-	 VinrS6WtrpYkKGsi0U9wEndI/l6c8EkO37vujystxtJrA3ddO160nmhXnf1zQNMAzk
-	 1rtXbGcyuHkEQ==
-Date: Fri, 1 Dec 2023 14:00:31 +0000
-From: Mark Brown <broonie@kernel.org>
-To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc: "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-	"dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
-	"keescook@chromium.org" <keescook@chromium.org>,
-	"Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
-	"brauner@kernel.org" <brauner@kernel.org>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"debug@rivosinc.com" <debug@rivosinc.com>,
-	"mgorman@suse.de" <mgorman@suse.de>,
-	"vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
-	"fweimer@redhat.com" <fweimer@redhat.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"mingo@redhat.com" <mingo@redhat.com>,
-	"rostedt@goodmis.org" <rostedt@goodmis.org>,
-	"hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-	"tglx@linutronix.de" <tglx@linutronix.de>,
-	"linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-	"vschneid@redhat.com" <vschneid@redhat.com>,
-	"shuah@kernel.org" <shuah@kernel.org>,
-	"bristot@redhat.com" <bristot@redhat.com>,
-	"will@kernel.org" <will@kernel.org>,
-	"hpa@zytor.com" <hpa@zytor.com>,
-	"peterz@infradead.org" <peterz@infradead.org>,
-	"jannh@google.com" <jannh@google.com>,
-	"bp@alien8.de" <bp@alien8.de>,
-	"bsegall@google.com" <bsegall@google.com>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"david@redhat.com" <david@redhat.com>,
-	"x86@kernel.org" <x86@kernel.org>,
-	"juri.lelli@redhat.com" <juri.lelli@redhat.com>
-Subject: Re: [PATCH RFT v4 0/5] fork: Support shadow stacks in clone3()
-Message-ID: <a3a04d9c-7c53-4399-b096-dee406716193@sirena.org.uk>
-References: <20231128-clone3-shadow-stack-v4-0-8b28ffe4f676@kernel.org>
- <ZWjb6r0RWPo199pC@arm.com>
- <fce4c169-5d19-40e8-bc32-0abec9bb008e@sirena.org.uk>
- <881e1b6d89d61cef4e71c6be688635fc47bb2b8e.camel@intel.com>
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 847711707
+	for <linux-kselftest@vger.kernel.org>; Fri,  1 Dec 2023 06:24:29 -0800 (PST)
+Received: by mail-qk1-x730.google.com with SMTP id af79cd13be357-77dd08f75afso115170085a.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 01 Dec 2023 06:24:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1701440668; x=1702045468; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZBsvr3M7y7nivS2i0Ob2cINhbfVirpoyS0qfXlH/VdM=;
+        b=lJrLG8qLCH75Njz6LiPzicDKXddlkerBMgdC1KrdE9grFXInDpr2+DLjkvWUgJ2pxh
+         GT+OPqP4nP3gdWevqj9qqIaOySE05d2E9+ZODJu7GmTkUoX/y4SSH1Lp9OzSO7IgRCTn
+         DLtWXmYG5Xa4YFTCs29BHVwHfmpyTbhn2CeeAT0I2ApXkDbmaDET4CI4pI6NLZMQ2A0a
+         qvd9XiYEZm64jpHSegtX/Qasj6/xwasATwBmPF3mdUj5IjNLDgyJOrxLh+TOt9w68btU
+         aCxchV+OPYXQZM9t6+AL2+SSTBjdpUpIKCcwOqjF6sxmesX35PLoxyq9yz8+r1vYr5kW
+         J8rQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701440668; x=1702045468;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZBsvr3M7y7nivS2i0Ob2cINhbfVirpoyS0qfXlH/VdM=;
+        b=ptfsHhK699zhZGf8TxnhgncV1NndGjbjCft+Q/8W/wYaX76rCnuy3Q1uYXzR1lPM5I
+         8+4CSgxFCX08piLbuDL1zM+H5XC2bEmmjl4NtB9AcTdKfHxKV9b9m6oazA81zfShEsPl
+         xFEqe6tiJVrq9JhqrNEFOV33H0SwqVSgnjGIxDd8QpqLwfyjj0UWQmZAOs6PCJlzyjzY
+         twAFCI8T6h0vm1sl2j/qYYNAtoQ5afozgPL9BrKeeEzUOj72IdXojCq58xIwze0HVvrZ
+         LnpHtvJevbXx5eF08aSFz9uuKl83ECM0gzNzdmCp4oLLyRAgHxqGpQUWr+GyORImBo5+
+         KntQ==
+X-Gm-Message-State: AOJu0YytEuMFHyw8p2Ntc+FY+VyIU/NfvNN5MjJcjsVCweTosFCdZLX8
+	NE3w7D66LlJ4bktZatmP2xXLVw==
+X-Google-Smtp-Source: AGHT+IFhbf0pnfqRmkrdAgeW6divQjwDnNZXsygeLqQa4cWucFhgEwsEVMG94jE+nlw/p5nE/n3K4A==
+X-Received: by 2002:a05:620a:1daa:b0:779:deb9:72c6 with SMTP id pj42-20020a05620a1daa00b00779deb972c6mr24340270qkn.14.1701440668556;
+        Fri, 01 Dec 2023 06:24:28 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-134-23-187.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.134.23.187])
+        by smtp.gmail.com with ESMTPSA id v15-20020a05620a122f00b0077d606bec92sm1519643qkj.108.2023.12.01.06.24.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Dec 2023 06:24:27 -0800 (PST)
+Received: from jgg by wakko with local (Exim 4.95)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1r94RP-006FTp-4e;
+	Fri, 01 Dec 2023 10:24:27 -0400
+Date: Fri, 1 Dec 2023 10:24:27 -0400
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: Lu Baolu <baolu.lu@linux.intel.com>
+Cc: Kevin Tian <kevin.tian@intel.com>, Joerg Roedel <joro@8bytes.org>,
+	Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	Nicolin Chen <nicolinc@nvidia.com>, Yi Liu <yi.l.liu@intel.com>,
+	Jacob Pan <jacob.jun.pan@linux.intel.com>, iommu@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	virtualization@lists.linux-foundation.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/6] IOMMUFD: Deliver IO page faults to user space
+Message-ID: <20231201142427.GJ1394392@ziepe.ca>
+References: <20231026024930.382898-1-baolu.lu@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="RXABTafy96aV2/7C"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <881e1b6d89d61cef4e71c6be688635fc47bb2b8e.camel@intel.com>
-X-Cookie: The early worm gets the late bird.
+In-Reply-To: <20231026024930.382898-1-baolu.lu@linux.intel.com>
 
+On Thu, Oct 26, 2023 at 10:49:24AM +0800, Lu Baolu wrote:
+> Hi folks,
+> 
+> This series implements the functionality of delivering IO page faults to
+> user space through the IOMMUFD framework for nested translation. Nested
+> translation is a hardware feature that supports two-stage translation
+> tables for IOMMU. The second-stage translation table is managed by the
+> host VMM, while the first-stage translation table is owned by user
+> space. This allows user space to control the IOMMU mappings for its
+> devices.
+> 
+> When an IO page fault occurs on the first-stage translation table, the
+> IOMMU hardware can deliver the page fault to user space through the
+> IOMMUFD framework. User space can then handle the page fault and respond
+> to the device top-down through the IOMMUFD. This allows user space to
+> implement its own IO page fault handling policies.
+> 
+> User space indicates its capability of handling IO page faults by
+> setting the IOMMU_HWPT_ALLOC_IOPF_CAPABLE flag when allocating a
+> hardware page table (HWPT). IOMMUFD will then set up its infrastructure
+> for page fault delivery. On a successful return of HWPT allocation, the
+> user can retrieve and respond to page faults by reading and writing to
+> the file descriptor (FD) returned in out_fault_fd.
 
---RXABTafy96aV2/7C
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This is probably backwards, userspace should allocate the FD with a
+dedicated ioctl and provide it during domain allocation.
 
-On Thu, Nov 30, 2023 at 11:37:42PM +0000, Edgecombe, Rick P wrote:
-> On Thu, 2023-11-30 at 21:51 +0000, Mark Brown wrote:
-> > On Thu, Nov 30, 2023 at 07:00:58PM +0000, Catalin Marinas wrote:
+If the userspace wants a fd per domain then it should do that. If it
+wants to share fds between domains that should work too.
 
-> > explicitly request a new shadow stack.=A0 There was some corner case
-> > with
-> > IIRC posix_nspawn() mentioned where the heuristics aren't what we
-> > want
-> > for example.
-
-> Can't posix_spawn() pass in a shadow stack size into clone3 to get a
-> new shadow stack after this series?
-
-Yes, the above was addressing Catalin's suggestion that we add stack
-size control separately to clone3() instead - doing that would remove
-the ability to explicitly request a new stack unless we add a flag to
-clone3() at which point we're back to modifying clone3() anyway.
-
-> > > Another dumb question on arm64 - is GCSPR_EL0 writeable by the
-> > > user? If
-> > > yes, can the libc wrapper for threads allocate a shadow stack via
-> > > map_shadow_stack() and set it up in the thread initialisation
-> > > handler
-> > > before invoking the thread function?
-
-> > We would need a syscall to allow GCSPR_EL0 to be written.
-
-> I think the problem with doing this is signals. If a signal is
-> delivered to the new thread, then it could push to the old shadow stack
-> before userspace gets a chance to switch. So the thread needs to start
-> on a new shadow/stack.
-
-That's an issue, plus using a syscall just wouldn't work with a security
-model that locked down writes to the pointer which does seem like
-something people would reasonably want to deploy.
-
---RXABTafy96aV2/7C
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVp5v4ACgkQJNaLcl1U
-h9B1egf/blIXdR5uSvIkINi89u3Br4JE6lupOzoIADM0aQZN7uaqtT7T3F3qzJAV
-bqBIpN//uR3KUtud8CnlC1jMqYPUtCg4qiki9BYkG5z2libk8YJg/4rgFYhei7Zl
-iT9caiCXwNWGHxlp2yGLFh1VmRz4YFSuqf75Q3Cifl84LgcyvO5gu62jRHfwXDMU
-9qL3k1dIhPVPKhGjORaj+80DUCC72LzolsXYrOZDwwqp9jb1g+8F31Em2P/d9HF0
-7f0DkhYh+AI3t7qRYgGFYL+HW49MEfGFk0SxdOusMOsXF2CZN0LZgPuu0Xap7+CV
-7IQIlw8S47qEV4/7yVFqNLoPb2Pp/g==
-=hmJJ
------END PGP SIGNATURE-----
-
---RXABTafy96aV2/7C--
+Jason
 
