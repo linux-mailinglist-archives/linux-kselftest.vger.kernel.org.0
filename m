@@ -1,203 +1,207 @@
-Return-Path: <linux-kselftest+bounces-986-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-987-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 534AF8014BB
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Dec 2023 21:43:55 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0BD1E8014C6
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Dec 2023 21:47:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0A944281DA1
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Dec 2023 20:43:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AD77B1F2104C
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Dec 2023 20:47:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEC4258AA6;
-	Fri,  1 Dec 2023 20:43:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EED09584FA;
+	Fri,  1 Dec 2023 20:47:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="FdgPe+TR"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cj4L7pIX"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2081.outbound.protection.outlook.com [40.107.220.81])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F16F1;
-	Fri,  1 Dec 2023 12:43:45 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dY1A/mR8MeSrmlAaMH9A7DphZKzDMiKjWjAnVTxxzkDisbistosZSHLsyvYqb9tejgDCuWgDufJ3u3JN5mZjGdBaF0gIdRIa+iitcZ5dSBbLXqSYSbSh8eOotNxav5UuliA9h8Y95C3rm+TLSPrt68kJbVrdk9ClFr6lnAtCw9DeYAgAQaF/aVEIB4D+hgjrGZUa9u8XbgnOu/2+ztOJoBYGbBsmlg6WSt6tEzyzIPfn1B8Uhxy03v0kE/NHy4v5mnKKzrW39UJ7tjugpxx2jmkn/ZblEQdZW0p2OWfen+x05gcgqzlakXuo/0YPJ7xeZKddyBfFP66rMJwZhUpY1Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qXhWGgPhFcPgX9xjyOaqsavFkzyBCViMhx9CiIVyDFU=;
- b=NumEE/HByvFbnaCTs+KOmIXkPJM3A8LErFYbr8lhH3bfzd7ywqbZ92lMkp+xTohpsCR/rJqDGnZA33N4+y5WqqOM9KIMI6PERYnum958REDcQE7YJDvwGiuY2q7bLbRDI2hQhHs7Ti9FO82tVZl1zYwe4+uw7ked/g+qHSL2M+KgSRrEZ2/1MpUObBNihBvFB7ZTgzo74k/H148wjjAAeEKm3fF2G1TABHgW9UC+XvmIvKRdf35jGHOYm4U4KLL4+kul0x64D5LXSLTujdozJ6hOHlAcFa33XoA4shJYmIcs1B7SO/4OmP5NjYFgwWJJ8ayfTai7+352hLPS+kXYtg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=qXhWGgPhFcPgX9xjyOaqsavFkzyBCViMhx9CiIVyDFU=;
- b=FdgPe+TRlCR62HtvsIrGU4biNBZaL7gZfmKyUYtShxmpfMbWThEinUh2KvAXmbBPeCF0bCMW7f3Fgxhifg8hPgbKd6HVMQyspnXVaINiC0injzqPbL5F+QgD3BvYzYhXG3xE37Dr/HmspikHbm1Px7pGwKzdbftwBQuMz8q3j/aTAmU1WH0XhsIar48659G7healPsb8DtRWZGzxsKLujLE4sSlgPw/NiGpHaLITKT4Cg5WfAtq09nVMbB9HXRfnWvNIjXL6Lm64UOrwJdZc5sYUT7f75tyxhcCcOGkeOMFVDoPFMXqu2U9HkoQz6tusDEY1qHy51mEZpXcxjMHFHA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by PH8PR12MB8432.namprd12.prod.outlook.com (2603:10b6:510:25b::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7046.23; Fri, 1 Dec
- 2023 20:43:42 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::60d4:c1e3:e1aa:8f93]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::60d4:c1e3:e1aa:8f93%4]) with mapi id 15.20.7046.027; Fri, 1 Dec 2023
- 20:43:42 +0000
-Date: Fri, 1 Dec 2023 16:43:40 -0400
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Nicolin Chen <nicolinc@nvidia.com>
-Cc: "Tian, Kevin" <kevin.tian@intel.com>, "Liu, Yi L" <yi.l.liu@intel.com>,
-	"joro@8bytes.org" <joro@8bytes.org>,
-	"alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-	"robin.murphy@arm.com" <robin.murphy@arm.com>,
-	"baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-	"cohuck@redhat.com" <cohuck@redhat.com>,
-	"eric.auger@redhat.com" <eric.auger@redhat.com>,
-	"kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-	"mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-	"chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-	"yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-	"peterx@redhat.com" <peterx@redhat.com>,
-	"jasowang@redhat.com" <jasowang@redhat.com>,
-	"shameerali.kolothum.thodi@huawei.com" <shameerali.kolothum.thodi@huawei.com>,
-	"lulu@redhat.com" <lulu@redhat.com>,
-	"suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-	"iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"Duan, Zhenzhong" <zhenzhong.duan@intel.com>,
-	"joao.m.martins@oracle.com" <joao.m.martins@oracle.com>,
-	"Zeng, Xin" <xin.zeng@intel.com>,
-	"Zhao, Yan Y" <yan.y.zhao@intel.com>
-Subject: Re: [PATCH v6 2/6] iommufd: Add IOMMU_HWPT_INVALIDATE
-Message-ID: <20231201204340.GA1493156@nvidia.com>
-References: <20231129005715.GS436702@nvidia.com>
- <ZWaPM4p7yjJ0sEKk@Asurada-Nvidia>
- <20231129195804.GF436702@nvidia.com>
- <ZWe2PvatTkkyNCY5@Asurada-Nvidia>
- <20231130000816.GB1389974@nvidia.com>
- <ZWjzcEAAg8ptVH4A@Asurada-Nvidia>
- <20231201004523.GJ1389974@nvidia.com>
- <ZWlhLk3JVwX0hRt/@Asurada-Nvidia>
- <20231201125538.GK1389974@nvidia.com>
- <ZWo6z59tnmS8F2V7@Asurada-Nvidia>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZWo6z59tnmS8F2V7@Asurada-Nvidia>
-X-ClientProxiedBy: BLAPR03CA0164.namprd03.prod.outlook.com
- (2603:10b6:208:32f::20) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4345E10DB
+	for <linux-kselftest@vger.kernel.org>; Fri,  1 Dec 2023 12:47:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1701463632;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=roRHhLauepkrd5alx72dFMXjJCaurGVuqpPk08xyld4=;
+	b=cj4L7pIXVjAzwDDpqCXgaESdD9y/+Hszmw3IKc3hl2DL0ftedbNzwTrw7my8RIjV7kr597
+	f5MoZm8fQvfWA/wb20BRDZ/kCSSVnLqCzeP3EvHGm4L2IQn6C78croZhRXEPG9VqfvsDjv
+	3xzDkT3gewE0kHGjPLiM90O25GQ2lNo=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-235-HCVK9P0vPKC04r7pyOLRHQ-1; Fri, 01 Dec 2023 15:47:11 -0500
+X-MC-Unique: HCVK9P0vPKC04r7pyOLRHQ-1
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-40b3487fa9eso19941875e9.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 01 Dec 2023 12:47:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701463630; x=1702068430;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :references:cc:to:content-language:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=roRHhLauepkrd5alx72dFMXjJCaurGVuqpPk08xyld4=;
+        b=pCYRD6i8k8Gga1scRaT5oLFpv/4qDQTI0rK3VqX8GG2960Vnogy45wXtHV0TxINPpg
+         wsJHRNbvJwEDcmFD2Mj7dUR2JQgSa9uwleB0UgpxMGq4hGsSheO85pvSzz5W3YSLBhM7
+         qotTCA7XxSPok0M8w2BHG+mMOT8QgPKgx9/aZ+vD4JkwinhhO3EaNePsVklQKnAK+OuF
+         5+WBs+sm5Mb/rFbgPPGxOZxyMETTQ5d4pEEgLRw+oZfvOnlXyVRjxJ7hud4NDPWQdJI+
+         Rb9jvpzf74q+s2av/+aLG9y+oOtpySQEdMUlTDB2ObcDKEF8isUGZzyQZRl3P3D8PKqn
+         Pfpg==
+X-Gm-Message-State: AOJu0YwEzr4UffOJs7kyJ1LDaplkiKNy36gJsLc+I7QijxMwLCarGWFg
+	fPh19DKaetXDy0h1gZ4iGbgdXc0xcCIhMZI7hPKdY38SV2rEQNuUDVb3FNcisl4xVn1Bzl2XAH3
+	cj7QuKS3pGGRLsYYK+iApiRh8Y/KA
+X-Received: by 2002:adf:ef0e:0:b0:333:2fd2:5d4e with SMTP id e14-20020adfef0e000000b003332fd25d4emr1458933wro.128.1701463629943;
+        Fri, 01 Dec 2023 12:47:09 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHZKMjh8pTfwrN7X75z4hiGXRlcazvFaCrgi3fYPEKkR9z/8z96TQOeqZHjl2bfL/NASM0NAw==
+X-Received: by 2002:adf:ef0e:0:b0:333:2fd2:5d4e with SMTP id e14-20020adfef0e000000b003332fd25d4emr1458915wro.128.1701463629604;
+        Fri, 01 Dec 2023 12:47:09 -0800 (PST)
+Received: from ?IPV6:2003:d8:2f28:7800:30d7:645a:7306:e437? (p200300d82f28780030d7645a7306e437.dip0.t-ipconnect.de. [2003:d8:2f28:7800:30d7:645a:7306:e437])
+        by smtp.gmail.com with ESMTPSA id c12-20020a056000104c00b00333339e5f42sm1767916wrx.32.2023.12.01.12.47.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 01 Dec 2023 12:47:09 -0800 (PST)
+Message-ID: <a41c759f-78d8-44ed-b708-1bb737a8e6c1@redhat.com>
+Date: Fri, 1 Dec 2023 21:47:07 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|PH8PR12MB8432:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0bbd76af-52fa-4082-8b92-08dbf2ae345e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	CNJwY14vg7JUj3g73X8ZpgOeTFSMv8Vz3yDYxO0jtWhj+iJSf2FnlzczQSeopXyJ8JxjGz/C6jyM3KZ9W3AvR0w5Up3ao+Y/54MoV81aEeJAqkuRNmJ3I5vJ1X+5GY9OYYFc2hqX1FOgUDq+8byWebUTsEhz5AAgECCrVD5Qp4fOqZ5hqdd6MQ02NaqtfsrsbFNafS84pM6BQnxxPyoZTPl3L7sSrZYdD6flXoWaSGXO9whGorx1wUfG/m5iRyfCqz06Ylf0qFyFhd+yq57Kw7e4i0nSYrOjxt9npgY05QYkZOfcsEBxMkIoE4L59WAxzZ1SF/gCwLmODw4CqYRj2FaR5OdnAVwCYnKYAQ1yDq5BBvOpANXSB9lAiMkhgVY0Sh6DzC/ub4oHew/dSy8O9VbQQYdh9qY/HDpE9SBbP6wYdrrjxhL2QdvpV56YrLgj1YnoqMJPuYisVr8+4SWhEDqfvFbd140c5Vc/QLQXSfLReBp2I3WlOo34/nZdzzepNIIBBua5orS6mtO41BayMGCQeklkKLB0uOXuKaZbtAkYIyEHxWnr/uzfvSvsqi8C
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(396003)(346002)(366004)(376002)(136003)(230922051799003)(1800799012)(451199024)(64100799003)(186009)(83380400001)(33656002)(478600001)(2906002)(6512007)(36756003)(6506007)(8676002)(6862004)(4326008)(8936002)(41300700001)(6486002)(38100700002)(316002)(66476007)(66946007)(6636002)(66556008)(37006003)(5660300002)(7416002)(86362001)(26005)(54906003)(1076003)(2616005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?IQuJB/I3jOxexilN3IvfYPLeNtha3jt57LFklCI4giHK7RJuBHaCAhH8DO4b?=
- =?us-ascii?Q?0OotVvrT451wdDeDh1jyOsYQF+/SVAZIaFw64i8ILurC7P+NDnYswT+xYOP7?=
- =?us-ascii?Q?ushO5ZL8N3/em4IVzPLai2IBi1UNsh7I+vFGPglMppUfi/D5IHngoG6rNusH?=
- =?us-ascii?Q?mPUu/JWEVk9i53cgC9O2/kMpJh3Vhwis+1loSvewfuGkoN0aj4Tf34f49acz?=
- =?us-ascii?Q?oq151ClLvKCU62uotMndQz4/RHDOiziBNjVe9vO4iS2FpvdM8wKp9ojUtKFD?=
- =?us-ascii?Q?cHlNs0xHzHiw6PcBA4X5/ykKsNnHpt5ZMerWWzBL8ZyJ0Y1Dw//v9/An4mpl?=
- =?us-ascii?Q?y7i+KUga2GzDVTPPavIw5iox/NK4LGBwKRv6kYEbMgp5R/zMrvFO1z53zE0E?=
- =?us-ascii?Q?N507OEP/l9nRVVCp7KrB+iMK51nB0vv4ryVNoNg6SsOnLZxvGrFVdJCAfoX/?=
- =?us-ascii?Q?e/Vn+NTGTX26TRWq1GyNDWsZ3cVkBYMhqbQFnu8rnJnRVs0ihLm5W8Asebbw?=
- =?us-ascii?Q?13TLOJgZsNS/qIigglwL5OD+2WSAI4j0uqxlhBRQ9aw2YI5r6F4FyBM4X2p+?=
- =?us-ascii?Q?uMFGa1JNkK8RoAwv/cve/QV1000Yun0ZwwaktOCQL/axevINKpx2uyuvLPKX?=
- =?us-ascii?Q?D1nOkQYZNXp1qtaX3pyGmzYNEJp5UJUIX7d9NkthIqHggJHInBHC3GpJ5SdD?=
- =?us-ascii?Q?uehocOMgq4Bk63LIHlyqvFo88li3KXajH3cYFrN7B/Wy+tAb/vwXW4XiAgjH?=
- =?us-ascii?Q?5TossCLaV9oppP9aX88/cjc+h9zP6zfm/08O/mgIlefKWGXIlOXEj2hNeDIP?=
- =?us-ascii?Q?2W4ZClqXeHRJx1Md908WEIlQRZUmT0xZvu9gKiQ424FyREiQEV1Dc3IkdXcd?=
- =?us-ascii?Q?0OWtJxFY03Ulmci47R1Hh61c3SjBnzB0C5+4+u9Dk7p958iMSNIoCxCqg6kt?=
- =?us-ascii?Q?307exeL8VED0baLMixC9ox0QDWNlic6/NJIXhKVyq7z3ovrXNzpANqmTEQMg?=
- =?us-ascii?Q?I653YD3ofb2RPr1F/r8goAi7GCmt/MFV8KU4mWY7mNIWUtbALTtcPxrEbiU/?=
- =?us-ascii?Q?H1uUZZJ8jHsCBDsIlF9GxXC0Z6BmVynu43Iu60ALuD+yUUOkYKvOiYxy72Ip?=
- =?us-ascii?Q?TNpBx4RWLHzkdn0PWk1hA/3kSpWIRPefPcmCSKQBlmVhFAuS9gpZnmBscq4W?=
- =?us-ascii?Q?aaIXC6+YgBcXTEVy3omrQX+vax+Muk6oW8vPO5PA/7Yn4+X18geRfAiUqzsV?=
- =?us-ascii?Q?01lBhoLIx3fcq417FPtKBEk21Qdi4ZeqG1iEVqdkmBftphAU0qOSKqUMxmS8?=
- =?us-ascii?Q?tFiwUSM0niPp0APsIZobOgpoGqNmrOMl2ywExt6zQnhqklTE5/52n5x3DSWJ?=
- =?us-ascii?Q?vQ0FHMYnnx40vBTyAIatborqBsm7Tj4Q7FOYl8QITbidjkyqmDUP19kCCZLF?=
- =?us-ascii?Q?VmzMwWoqTqY+alQ3MnvawGWuaJAUju6fnWascyo7pdvL6tlL5I4VwIQNAthU?=
- =?us-ascii?Q?Nm4zQCOmC6hRGscl1rjLOHwXl2lnsfm5l5wMfssvo0vOd9lTJ7WbQagIawTb?=
- =?us-ascii?Q?nWnngeZB/An44uVo9nhnQ7os4d35wqxQtzF3M7Go?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0bbd76af-52fa-4082-8b92-08dbf2ae345e
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Dec 2023 20:43:42.1600
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: gPq+5zeepC6UKOLN/4yOMWGB54PRvRzeJ97Uv+wIPyODLxB44DqSHtK4COY1Bc0R
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB8432
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 5/5] selftests/mm: add UFFDIO_MOVE ioctl test
+Content-Language: en-US
+To: Ryan Roberts <ryan.roberts@arm.com>,
+ Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org
+Cc: viro@zeniv.linux.org.uk, brauner@kernel.org, shuah@kernel.org,
+ aarcange@redhat.com, lokeshgidra@google.com, peterx@redhat.com,
+ hughd@google.com, mhocko@suse.com, axelrasmussen@google.com,
+ rppt@kernel.org, willy@infradead.org, Liam.Howlett@oracle.com,
+ jannh@google.com, zhangpeng362@huawei.com, bgeffon@google.com,
+ kaleshsingh@google.com, ngeoffray@google.com, jdduke@google.com,
+ linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kernel-team@android.com
+References: <20231121171643.3719880-1-surenb@google.com>
+ <20231121171643.3719880-6-surenb@google.com>
+ <b3c882d2-0135-430c-8179-784f78be0902@arm.com>
+From: David Hildenbrand <david@redhat.com>
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ WNyWQQ==
+Organization: Red Hat
+In-Reply-To: <b3c882d2-0135-430c-8179-784f78be0902@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Dec 01, 2023 at 11:58:07AM -0800, Nicolin Chen wrote:
-> > It seems there is not a simple way to realize this error back to
-> > userspace since we can't block the global command queue and we proceed
-> > to complete commands that the real HW would not have completed.
-> > 
-> > To actually emulate this the gerror handler would have to capture all
-> > the necessary registers, return them back to the thread doing
-> > invalidate_user and all of that would have to return back to userspace
-> > to go into the virtual version of all the same registers.
-> > 
-> > Yes, it can be synchronous it seems, but we don't have any
-> > infrastructure in the driver to do this.
-> >
-> > Given this is pretty niche maybe we just don't support error
-> > forwarding and simply ensure it could be added to the uapi later?
+On 01.12.23 10:29, Ryan Roberts wrote:
+> On 21/11/2023 17:16, Suren Baghdasaryan wrote:
+>> Add tests for new UFFDIO_MOVE ioctl which uses uffd to move source
+>> into destination buffer while checking the contents of both after
+>> the move. After the operation the content of the destination buffer
+>> should match the original source buffer's content while the source
+>> buffer should be zeroed. Separate tests are designed for PMD aligned and
+>> unaligned cases because they utilize different code paths in the kernel.
+>>
+>> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+>> ---
+>>   tools/testing/selftests/mm/uffd-common.c     |  24 +++
+>>   tools/testing/selftests/mm/uffd-common.h     |   1 +
+>>   tools/testing/selftests/mm/uffd-unit-tests.c | 189 +++++++++++++++++++
+>>   3 files changed, 214 insertions(+)
+>>
+>> diff --git a/tools/testing/selftests/mm/uffd-common.c b/tools/testing/selftests/mm/uffd-common.c
+>> index fb3bbc77fd00..b0ac0ec2356d 100644
+>> --- a/tools/testing/selftests/mm/uffd-common.c
+>> +++ b/tools/testing/selftests/mm/uffd-common.c
+>> @@ -631,6 +631,30 @@ int copy_page(int ufd, unsigned long offset, bool wp)
+>>   	return __copy_page(ufd, offset, false, wp);
+>>   }
+>>   
+>> +int move_page(int ufd, unsigned long offset, unsigned long len)
+>> +{
+>> +	struct uffdio_move uffdio_move;
+>> +
+>> +	if (offset + len > nr_pages * page_size)
+>> +		err("unexpected offset %lu and length %lu\n", offset, len);
+>> +	uffdio_move.dst = (unsigned long) area_dst + offset;
+>> +	uffdio_move.src = (unsigned long) area_src + offset;
+>> +	uffdio_move.len = len;
+>> +	uffdio_move.mode = UFFDIO_MOVE_MODE_ALLOW_SRC_HOLES;
+>> +	uffdio_move.move = 0;
+>> +	if (ioctl(ufd, UFFDIO_MOVE, &uffdio_move)) {
+>> +		/* real retval in uffdio_move.move */
+>> +		if (uffdio_move.move != -EEXIST)
+>> +			err("UFFDIO_MOVE error: %"PRId64,
+>> +			    (int64_t)uffdio_move.move);
 > 
-> If arm_smmu_cmdq_issue_cmdlist in arm_smmu_cache_invalidate_user
-> fails with ETIMEOUT, we polls the CONS register to get the error
-> code. This can cover CERROR_ABT and CERROR_ATC_INV.
+> Hi Suren,
+> 
+> FYI this error is triggering in mm-unstable (715b67adf4c8):
+> 
+> Testing move-pmd on anon... ERROR: UFFDIO_MOVE error: -16 (errno=16,
+> @uffd-common.c:648)
+> 
+> I'm running in a VM on Apple M2 (arm64). I haven't debugged any further, but
+> happy to go deeper if you can direct.
 
-Why is timeout linked to these two? Or rather, it doesn't have to be
-linked like that. Any gerror is effectively synchronous because it
-halts the queue and allows SW time to inspect which command failed and
-record the gerror flags. So each and every command can get an error
-indication.
+Does it trigger reliably? Which pagesize is that kernel using?
 
-Restarting the queue is done by putting sync in there to effectively
-nop the failed command and we hope for the best and let it rip.
+I can spot that uffd_move_pmd_test()/uffd_move_pmd_handle_fault() uses 
+default_huge_page_size(), which reads the default hugetlb size.
 
-> As you remarked that we can't block the global CMDQ, so we have
-> to let a real CERROR_ILL go. Yet, we can make sure commands to
-> be fully sanitized before being issued, as we should immediately
-> reject faulty commands anyway, for errors such as unsupported op
-> codes, unzero-ed reserved fields, and unlinked vSIDs. This can
-> at least largely reduce the probability of a real CERROR_ILL.
+That, however, does not necessarily correspond to the THP size. That one 
+can be obtained using read_pmd_pagesize() in vm_util.c
 
-I'm more a little more concerend with ATC_INV as a malfunctioning
-device can trigger this..
+I quickly scanned the code (still want to take a deeper look), but all 
+PAE checks looked sane to me.
 
-> So, combining these two, we can still have a basic synchronous
-> way by returning an errno to the invalidate ioctl? I see Kevin
-> replied something similar too.
+I think the issue is folio split handling. I replied to the patch.
 
-It isn't enough information, you don't know which gerror bits to set
-and you don't know what cons index to stick to indicate the error
-triggering command with just a simple errno.
+-- 
+Cheers,
 
-It does need to return a bunch of data to get it all right.
+David / dhildenb
 
-Though again, there is no driver infrastructure to do all this and it
-doesn't seem that important so maybe we can just ensure there is a
-future extension possiblity and have userspace understand an errno
-means to generate CERROR_ILL on the last command in the batch?
-
-Jason
 
