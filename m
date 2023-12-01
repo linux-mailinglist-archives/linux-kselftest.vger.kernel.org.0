@@ -1,86 +1,100 @@
-Return-Path: <linux-kselftest+bounces-979-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-980-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6A60801445
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Dec 2023 21:24:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 62647801456
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Dec 2023 21:24:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E792D1C209FE
-	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Dec 2023 20:23:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 847351C20A1B
+	for <lists+linux-kselftest@lfdr.de>; Fri,  1 Dec 2023 20:24:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D8D256B98;
-	Fri,  1 Dec 2023 20:23:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66543584DE;
+	Fri,  1 Dec 2023 20:24:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="k+GjMhwb";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="YC5ec4jY"
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="YNgx8Hvm";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="spe0L5Kb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E43F110C2;
-	Fri,  1 Dec 2023 12:23:52 -0800 (PST)
-Received: from compute7.internal (compute7.nyi.internal [10.202.2.48])
-	by mailout.nyi.internal (Postfix) with ESMTP id 1E64F5C01AE;
-	Fri,  1 Dec 2023 15:23:52 -0500 (EST)
+Received: from new1-smtp.messagingengine.com (new1-smtp.messagingengine.com [66.111.4.221])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CA4610E5;
+	Fri,  1 Dec 2023 12:24:00 -0800 (PST)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+	by mailnew.nyi.internal (Postfix) with ESMTP id B5EC6580992;
+	Fri,  1 Dec 2023 15:23:59 -0500 (EST)
 Received: from mailfrontend2 ([10.202.2.163])
-  by compute7.internal (MEProxy); Fri, 01 Dec 2023 15:23:52 -0500
+  by compute6.internal (MEProxy); Fri, 01 Dec 2023 15:23:59 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
 	:cc:content-transfer-encoding:content-type:date:date:from:from
-	:in-reply-to:message-id:mime-version:reply-to:sender:subject
-	:subject:to:to; s=fm3; t=1701462232; x=1701548632; bh=v+Tu4Bv5Hn
-	sux9nKej021Clejo1i0m7B359jEiXfuUk=; b=k+GjMhwb4lBExMqHzvpS1DDiM9
-	xJpNzAiHkhGEm9hcPI6CkRPr2uD15m8gOTtr9NdHwNWJ2sY8XK8LDUihwz6v0ZXk
-	7396GWvonb1jA1BZYunU93pfw35hvrUAiNCxBc0XfLMalwVm2Q2NGoJdFLQMlVGS
-	UhETxmW/EkQ8gM8GS5pCJu6jEDwIffW5czb5dSVD0I9M783LaygiK1AFmYTmWAiG
-	xUo1y9LFZuONVGTV9Pdf+EWRSzD7tyB+QtpIzhVfyioI/MgUfjF769j0rSl62Amd
-	BRR/0HVWE/MFnRIyNQxLWiTXfEPxJ1FMqoD2QBpNDnOWMGkxc1rFtuH72GZg==
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:sender:subject:subject:to:to; s=fm3; t=1701462239; x=
+	1701469439; bh=D8noEFBJZ4ewr1BGMuw+TiQmHop9t4Qe8cy7C7t2YkI=; b=Y
+	Ngx8HvmT5P6l9C65V3JzMgc5wRfw6QvgfzXbCJVKZFC/XVm9fVzDErtiXdaKdpAN
+	6ZGMuMiz0OIoLZX7JVUZN9RheTS9OU0SjbJalCUp5bKiRlOtXUheRTrX5U6P/97z
+	tMuLHD2bURLvEepZTPTTBofCnSXeZZYdvHMLSdbMFzwWw3urTO8Xj3V7BtJYBR2+
+	GP5qXVpCY9gNn0TUgurzLNIeq1lPjngGUzYAymEJhLUYNXvGQDHX1QI3fpDITl+A
+	rAKuAwo/KBUBZA8qY6GcIsf0rWnmj9N+rWMyOglogENQMXTRVd7o3WvCEpZxtTLj
+	Mg6TPN5s9HOjvv42raBQA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:message-id:mime-version:reply-to:sender:subject
-	:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-	:x-sasl-enc; s=fm1; t=1701462232; x=1701548632; bh=v+Tu4Bv5Hnsux
-	9nKej021Clejo1i0m7B359jEiXfuUk=; b=YC5ec4jYHVz5viFxUXWS0vb0RUxYg
-	82WHiNgKXbfSwmmryzA2WB8uY5YV0IbhJBhHGMU+jtSOwnskOGE6hG/0cqbCa8zs
-	JSXWlo5cWJZY4zaLJ3i2wlAm0tK+ZlC5ORbOorBdBpJ+6Ak5n7Gqj5rpCPLCfk3Q
-	P5XR3KE8tnXLhQ5lA7mgz1u9YMDkoDzTkS5ReVYEFglkUeV2KdWGSA6uOla5/CH0
-	+LQf6xxrRBnGpNg9fLXeYy2FnV7UFkJVIYZTG7gUjX63m69PD0PHJq/3Z4W6+xBx
-	YBIf1z4tqeBu94l1wk0kvbt/4dhKNVHTWR/nAOUg9F3lByp5p3xEhuH2A==
-X-ME-Sender: <xms:10BqZU-5DD2Jd3lvUmWPBEI3bJBvidiFx1XQvtY1LvPLNNlLUkWhBA>
-    <xme:10BqZcv8sQvMd08J6QouebE7FPpy8n1vryna3ODlnALZ7NEEA2HaVYbPDyYREnj_G
-    79-bRGGLpyPiUqceA>
-X-ME-Received: <xmr:10BqZaBca_B1Ki24sM4eVqlSipvzFstDXAcxmFMnD5XghUdc-Si78M_8FYxa9s72YvoNPrnkJLBAtCcNmldvMS7QVVinROvAFbCxjr6_QeTEhw>
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1701462239; x=
+	1701469439; bh=D8noEFBJZ4ewr1BGMuw+TiQmHop9t4Qe8cy7C7t2YkI=; b=s
+	pe0L5Kb5EQesoz68YAYAKkIwIFOkUWSup0tY/AqFhM1Ww/KSh2vl6GmVSCe7gkgC
+	j2324KysdrsZG2dpsd/mceN3vE9pHo83+0P/uQrocipH/ZuL2cQyfB2PmSkEQpPw
+	m9qh7jVTywfTEY0lBlzEPodBO8gCMQr+eF1eO0LuHRbc1fpPk1gNRsef5qzqiScX
+	QJfTVaBep1ccgsfoufABgQCrobhMxI9mwE0SYOBsQCg4rQrjArtpLP2eODhhdAk5
+	ddm24JhWu0LZOF07gOcSaD3trVjp6WSRK7NSzV4t6eTb9HMR2T+hydAPghjMqDNc
+	nQ0Zj5qvnf3/NLAEcLc5g==
+X-ME-Sender: <xms:30BqZe6n7pj0r_5hgF2ecq-PbFd8YQ-8omTCQzZ616ijtdTm4v15IQ>
+    <xme:30BqZX5w2wNe_ijIdX2xk6p1BYMXliVcsw2ca9-nat6-LBO3uH44bVtlUgz5vAimw
+    -eMyLWKlvXoQkGZQA>
+X-ME-Received: <xmr:30BqZddxCLuBHOXyrBBEpquatSLwwidEIqyNWvDUoT9OvSVlsKgLpoSA1xWLjvSEfxIWL90XOsPvxqhGSa3s0C_KW86uWJzPq-TWGBKJRikjBw>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudeiledgudefjecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecufghrlhcuvffnffculddvfedmnecujfgurhephf
-    fvvefufffkofgggfestdekredtredttdenucfhrhhomhepffgrnhhivghlucgiuhcuoegu
-    gihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpeeikeehudegteevuddthf
-    eilefhjefgueeuueffveevheeggfeufeejfeeuudekfeenucffohhmrghinhepihgvthhf
-    rdhorhhgpdhgihhthhhusgdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
-    grmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiii
-X-ME-Proxy: <xmx:10BqZUecUTuIuTt5Gk6kKmrwLXMse3fbQDzYtiCtuGIV-92H4YFgXw>
-    <xmx:10BqZZMY33McqneU-XDqa-Bz1Gv-qxQyD-qIwDJ87T_xj-HBLtKD9w>
-    <xmx:10BqZekkfGjNtDwbYzf8ugwXFW5IiuuwLhttwJHY-ABk87PyONQaLg>
-    <xmx:2EBqZcpcMkAVoFiHty4ANJSo9ZfI5IiBQZozkxKWmuY6f_tkNfOFNw>
+    necuuegrihhlohhuthemuceftddtnecufghrlhcuvffnffculdejtddmnecujfgurhephf
+    fvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepffgrnhhivghlucgiuhcu
+    oegugihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpefgfefggeejhfduie
+    ekvdeuteffleeifeeuvdfhheejleejjeekgfffgefhtddtteenucevlhhushhtvghrufhi
+    iigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiii
+X-ME-Proxy: <xmx:30BqZbIO9-HKNCXcKMUNx5WuodFRkNxldFh3e_nLiiFM09a-dcoXlw>
+    <xmx:30BqZSLywFEY-q59dbzjkVo4Vty77qP4YmJvNUHwTAORZdZLMnc7lw>
+    <xmx:30BqZcxA8FxQB1Symv8ee7MCrv_W9ef9VwQ9uU3cTCAO7efCJ-UK0Q>
+    <xmx:30BqZSJI3ry_1IS2IsbJhXV3bSec5iu9ItsbDGu9HISE6ptILlKMnQ>
 Feedback-ID: i6a694271:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 1 Dec 2023 15:23:50 -0500 (EST)
+ 1 Dec 2023 15:23:58 -0500 (EST)
 From: Daniel Xu <dxu@dxuuu.xyz>
-To: netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	llvm@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	shuah@kernel.org,
+	andrii@kernel.org,
 	steffen.klassert@secunet.com,
 	antony.antony@secunet.com,
 	alexei.starovoitov@gmail.com,
 	yonghong.song@linux.dev,
 	eddyz87@gmail.com
-Cc: devel@linux-ipsec.org
-Subject: [PATCH ipsec-next v3 0/9] Add bpf_xdp_get_xfrm_state() kfunc
-Date: Fri,  1 Dec 2023 13:23:11 -0700
-Message-ID: <cover.1701462010.git.dxu@dxuuu.xyz>
+Cc: mykolal@fb.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@google.com,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	devel@linux-ipsec.org,
+	netdev@vger.kernel.org
+Subject: [PATCH ipsec-next v3 4/9] bpf: selftests: test_loader: Support __btf_path() annotation
+Date: Fri,  1 Dec 2023 13:23:15 -0700
+Message-ID: <68419933c552bd30e92d432e287ce91deb3ed52e.1701462010.git.dxu@dxuuu.xyz>
 X-Mailer: git-send-email 2.42.1
+In-Reply-To: <cover.1701462010.git.dxu@dxuuu.xyz>
+References: <cover.1701462010.git.dxu@dxuuu.xyz>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -89,70 +103,67 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patchset adds two kfunc helpers, bpf_xdp_get_xfrm_state() and
-bpf_xdp_xfrm_state_release() that wrap xfrm_state_lookup() and
-xfrm_state_put(). The intent is to support software RSS (via XDP) for
-the ongoing/upcoming ipsec pcpu work [0]. Recent experiments performed
-on (hopefully) reproducible AWS testbeds indicate that single tunnel
-pcpu ipsec can reach line rate on 100G ENA nics.
+This commit adds support for per-prog btf_custom_path. This is necessary
+for testing CO-RE relocations on non-vmlinux types using test_loader
+infrastructure.
 
-Note this patchset only tests/shows generic xfrm_state access. The
-"secret sauce" (if you can really even call it that) involves accessing
-a soon-to-be-upstreamed pcpu_num field in xfrm_state. Early example is
-available here [1].
+Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+---
+ tools/testing/selftests/bpf/progs/bpf_misc.h | 1 +
+ tools/testing/selftests/bpf/test_loader.c    | 7 +++++++
+ 2 files changed, 8 insertions(+)
 
-[0]: https://datatracker.ietf.org/doc/draft-ietf-ipsecme-multi-sa-performance/03/
-[1]: https://github.com/danobi/xdp-tools/blob/e89a1c617aba3b50d990f779357d6ce2863ecb27/xdp-bench/xdp_redirect_cpumap.bpf.c#L385-L406
-
-Changes from v2:
-* Fix/simplify BPF_CORE_WRITE_BITFIELD() algorithm
-* Added verifier tests for bitfield writes
-* Fix state leakage across test_tunnel subtests
-
-Changes from v1:
-* Move xfrm tunnel tests to test_progs
-* Fix writing to opts->error when opts is invalid
-* Use __bpf_kfunc_start_defs()
-* Remove unused vxlanhdr definition
-* Add and use BPF_CORE_WRITE_BITFIELD() macro
-* Make series bisect clean
-
-Changes from RFCv2:
-* Rebased to ipsec-next
-* Fix netns leak
-
-Changes from RFCv1:
-* Add Antony's commit tags
-* Add KF_ACQUIRE and KF_RELEASE semantics
-
-Daniel Xu (9):
-  bpf: xfrm: Add bpf_xdp_get_xfrm_state() kfunc
-  bpf: xfrm: Add bpf_xdp_xfrm_state_release() kfunc
-  libbpf: Add BPF_CORE_WRITE_BITFIELD() macro
-  bpf: selftests: test_loader: Support __btf_path() annotation
-  libbpf: selftests: Add verifier tests for CO-RE bitfield writes
-  bpf: selftests: test_tunnel: Setup fresh topology for each subtest
-  bpf: selftests: test_tunnel: Use vmlinux.h declarations
-  bpf: selftests: Move xfrm tunnel test to test_progs
-  bpf: xfrm: Add selftest for bpf_xdp_get_xfrm_state()
-
- include/net/xfrm.h                            |   9 +
- net/xfrm/Makefile                             |   1 +
- net/xfrm/xfrm_policy.c                        |   2 +
- net/xfrm/xfrm_state_bpf.c                     | 128 ++++++++++++++
- tools/lib/bpf/bpf_core_read.h                 |  34 ++++
- .../selftests/bpf/prog_tests/test_tunnel.c    | 162 +++++++++++++++++-
- .../selftests/bpf/prog_tests/verifier.c       |   2 +
- tools/testing/selftests/bpf/progs/bpf_misc.h  |   1 +
- .../selftests/bpf/progs/bpf_tracing_net.h     |   1 +
- .../selftests/bpf/progs/test_tunnel_kern.c    | 138 ++++++++-------
- .../bpf/progs/verifier_bitfield_write.c       | 100 +++++++++++
- tools/testing/selftests/bpf/test_loader.c     |   7 +
- tools/testing/selftests/bpf/test_tunnel.sh    |  92 ----------
- 13 files changed, 522 insertions(+), 155 deletions(-)
- create mode 100644 net/xfrm/xfrm_state_bpf.c
- create mode 100644 tools/testing/selftests/bpf/progs/verifier_bitfield_write.c
-
+diff --git a/tools/testing/selftests/bpf/progs/bpf_misc.h b/tools/testing/selftests/bpf/progs/bpf_misc.h
+index 799fff4995d8..2fd59970c43a 100644
+--- a/tools/testing/selftests/bpf/progs/bpf_misc.h
++++ b/tools/testing/selftests/bpf/progs/bpf_misc.h
+@@ -71,6 +71,7 @@
+ #define __retval_unpriv(val)	__attribute__((btf_decl_tag("comment:test_retval_unpriv="#val)))
+ #define __auxiliary		__attribute__((btf_decl_tag("comment:test_auxiliary")))
+ #define __auxiliary_unpriv	__attribute__((btf_decl_tag("comment:test_auxiliary_unpriv")))
++#define __btf_path(path)	__attribute__((btf_decl_tag("comment:test_btf_path=" path)))
+ 
+ /* Convenience macro for use with 'asm volatile' blocks */
+ #define __naked __attribute__((naked))
+diff --git a/tools/testing/selftests/bpf/test_loader.c b/tools/testing/selftests/bpf/test_loader.c
+index a350ecdfba4a..74ceb7877ae2 100644
+--- a/tools/testing/selftests/bpf/test_loader.c
++++ b/tools/testing/selftests/bpf/test_loader.c
+@@ -27,6 +27,7 @@
+ #define TEST_TAG_RETVAL_PFX_UNPRIV "comment:test_retval_unpriv="
+ #define TEST_TAG_AUXILIARY "comment:test_auxiliary"
+ #define TEST_TAG_AUXILIARY_UNPRIV "comment:test_auxiliary_unpriv"
++#define TEST_BTF_PATH "comment:test_btf_path="
+ 
+ /* Warning: duplicated in bpf_misc.h */
+ #define POINTER_VALUE	0xcafe4all
+@@ -58,6 +59,7 @@ struct test_spec {
+ 	const char *prog_name;
+ 	struct test_subspec priv;
+ 	struct test_subspec unpriv;
++	const char *btf_custom_path;
+ 	int log_level;
+ 	int prog_flags;
+ 	int mode_mask;
+@@ -288,6 +290,8 @@ static int parse_test_spec(struct test_loader *tester,
+ 					goto cleanup;
+ 				update_flags(&spec->prog_flags, flags, clear);
+ 			}
++		} else if (str_has_pfx(s, TEST_BTF_PATH)) {
++			spec->btf_custom_path = s + sizeof(TEST_BTF_PATH) - 1;
+ 		}
+ 	}
+ 
+@@ -578,6 +582,9 @@ void run_subtest(struct test_loader *tester,
+ 		}
+ 	}
+ 
++	/* Implicitly reset to NULL if next test case doesn't specify */
++	open_opts->btf_custom_path = spec->btf_custom_path;
++
+ 	tobj = bpf_object__open_mem(obj_bytes, obj_byte_cnt, open_opts);
+ 	if (!ASSERT_OK_PTR(tobj, "obj_open_mem")) /* shouldn't happen */
+ 		goto subtest_cleanup;
 -- 
 2.42.1
 
