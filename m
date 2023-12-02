@@ -1,118 +1,153 @@
-Return-Path: <linux-kselftest+bounces-1002-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1003-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E47BE8018DA
-	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Dec 2023 01:20:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A4F58019C5
+	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Dec 2023 03:01:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EDF12B20D53
-	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Dec 2023 00:20:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0574F2817A8
+	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Dec 2023 02:01:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C77C64A;
-	Sat,  2 Dec 2023 00:20:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 205C21FA2;
+	Sat,  2 Dec 2023 02:01:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jn43UGKF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="enbmTjII"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34B6CCF;
-	Fri,  1 Dec 2023 16:20:19 -0800 (PST)
-Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2c9b5c12898so34226401fa.2;
-        Fri, 01 Dec 2023 16:20:19 -0800 (PST)
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD3A9D;
+	Fri,  1 Dec 2023 18:01:20 -0800 (PST)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-5d2d0661a8dso30862227b3.2;
+        Fri, 01 Dec 2023 18:01:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701476417; x=1702081217; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=V7H5mtM4rdlF96TurskSVKsv77wngFKN9XzMokfXX3o=;
-        b=Jn43UGKFRFJ0+BEoGYvujtwfUqqKtIr6LDAE+RABaR+aVGqcnIx9X9jdWX7QQ8vIhF
-         E+loP/zR25iuxh77C4btFqjufM4WD3BO2iyr9QdKMy3yGDdswhGhTm5BhnKpzH++fMND
-         zGK4JuVbf316yQGLyUbTcV9WKT/UktTEHsfqJbJUTSbSRn9q/6/p8gjzreGNi/SmfCr3
-         pnE4OHHQKOcPdAIY3UXT0u+zXq3fVybVi4WWzvlKWrVN1lRZ1poPiJ5Lc1qAlyBMy1hf
-         19xNACl2sU2y+boBKntWDxToJ9O9xgm4rJmEJRv0/UPG0I5o8AHMU2uoTIaX3dJFq48F
-         +qdw==
+        d=gmail.com; s=20230601; t=1701482479; x=1702087279; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ETbMUJPdq3ZAibifRc15FxdQblP3OD10cIHFBChFvcs=;
+        b=enbmTjIIqWq9QzlOzP8J7CbX6RmH0G6+Er3PaPUdR/6xDucmhVAVRSb9wFA6PbP9rw
+         MbIoHsB+TzwuI1+9TlhW+yjRuOHUUuMIZNko+0yJvJ17rguxgH/ftEbQ33yCwa3g1ut7
+         6ukYGDFITV+cOrDkBif8NjaA9Jxy5Qt/4cgSrE69WtgcT8Nj2Q2mUJicMTaLSsodh6Cd
+         ecgv0z587QnxeFb/h0/Du9eIWMLKsMBPdqrob7lsifuj7nUtRpq3UWfbHhXbRbnrCjdC
+         2ZiWj6QWYArv/J3vfNq8M5g7dfWYQf2S2bjsOiuf0gKmM6qRTQCUPB54xSHm4uYwxlJT
+         5hSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701476417; x=1702081217;
-        h=mime-version:user-agent:content-transfer-encoding:autocrypt
-         :references:in-reply-to:date:cc:to:from:subject:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=V7H5mtM4rdlF96TurskSVKsv77wngFKN9XzMokfXX3o=;
-        b=gIOVEQWQwbhgyaaxtu5zJHX9YrxLDozKa65p7yZFZ3XnQDZ+2UTERbXnoS+q31ndcw
-         P22HAiS1z0JdsQ8D4grM9jZizJEaNRxooKqL7IgBXFMx1sr0dA4/6Q2Tozfhq+lwyvuM
-         MCeABfqJiw3+o83O8Bpd4c3bEV8ToxHoq/Qd1S5qVgdIo1GTzO/4GvOzSPLB/58WkiYr
-         7IvClF9NCAwyr1DyBAOuVG2RtOsb1Tc827OScTX5uFC8519CddvS0SUz0lUrUfD2hbLD
-         ldOnyohNNbT9K72H0U+K+MuHZDRY/8+PpJTjPzGRnHyFT/1ApaN1CsY0akVNxbeWYX/U
-         TUcQ==
-X-Gm-Message-State: AOJu0YyIQYXyB5sJRa0qtUuuTaLChD+qCrslkclMvnKDilrM+kMxyquo
-	4lJR/sdi+eq0zwrodjLs/sM=
-X-Google-Smtp-Source: AGHT+IHIx/W2tOPuzPFRMcUv6dY0UL4yjmePC/SUMhNp+oiMbw0mgLKn5Mr6poXdbiv24WSxMFodQA==
-X-Received: by 2002:a2e:8895:0:b0:2c9:d874:6efc with SMTP id k21-20020a2e8895000000b002c9d8746efcmr1441290lji.89.1701476417363;
-        Fri, 01 Dec 2023 16:20:17 -0800 (PST)
-Received: from [192.168.1.95] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
-        by smtp.gmail.com with ESMTPSA id l13-20020a170906a40d00b00a18a9931dc1sm2365617ejz.105.2023.12.01.16.20.15
+        d=1e100.net; s=20230601; t=1701482479; x=1702087279;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ETbMUJPdq3ZAibifRc15FxdQblP3OD10cIHFBChFvcs=;
+        b=m/pb4JZ+QaQ+Y1MAeooJBh3puorvP/nR0mefnNLiznWODwmVzSAuk3DVQBviO8t50H
+         pDSkOIlcP7uI2neUnbNUv/T8EgPjcMzCoYb6XML6mC2M8azXZplLFOeaq3sF7Q4pE647
+         AajPjnd2jteP++9y2vomL5OTYqKzD0kJJpnEBH/VnuUf5lxr8VQn68EAGgmMpmpzLapn
+         GcnBWF0g1IVZHH5jnAYHP6lcm31IQOLelu8SR5svuwXR9WVU6qlmgVSp1f7A2ygNKvHS
+         WdFV0aXyUaXVesM0tekJpz4KajAip5GneFwKniYww9dwbMvGkqxsEBOGZlQ1R4/5RE38
+         z80Q==
+X-Gm-Message-State: AOJu0Yyl6uZizgNNjy9XLmbekPNEKSfwq8cNE0z7/umXm6qJXgYvSPl/
+	UCZLeZ6OTk4/AyRpwEZcXccdAD904Tte7UXo
+X-Google-Smtp-Source: AGHT+IEyJmYaYqrDmJ67q0QCLUiP4ltzy/kk955rdOlGK4mrlZ6iOvjAYsXspaILmVdLlVYoVcP7tA==
+X-Received: by 2002:a81:ac52:0:b0:5d3:b951:6b12 with SMTP id z18-20020a81ac52000000b005d3b9516b12mr522172ywj.17.1701482479023;
+        Fri, 01 Dec 2023 18:01:19 -0800 (PST)
+Received: from Laptop-X1.redhat.com ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id h1-20020a170902f54100b001b3bf8001a9sm3993034plf.48.2023.12.01.18.01.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Dec 2023 16:20:16 -0800 (PST)
-Message-ID: <d2fe8b0593a1009305e90d98a8bff984c1314748.camel@gmail.com>
-Subject: Re: [PATCH ipsec-next v3 5/9] libbpf: selftests: Add verifier tests
- for CO-RE bitfield writes
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Daniel Xu <dxu@dxuuu.xyz>, Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: ast@kernel.org, daniel@iogearbox.net, shuah@kernel.org,
- andrii@kernel.org,  steffen.klassert@secunet.com,
- antony.antony@secunet.com,  alexei.starovoitov@gmail.com,
- yonghong.song@linux.dev, mykolal@fb.com,  martin.lau@linux.dev,
- song@kernel.org, john.fastabend@gmail.com,  kpsingh@kernel.org,
- sdf@google.com, haoluo@google.com, jolsa@kernel.org, 
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, devel@linux-ipsec.org,
- netdev@vger.kernel.org
-Date: Sat, 02 Dec 2023 02:20:15 +0200
-In-Reply-To: <ka2irjz53qjkax545o67mvouyytzqw3dvorqixe2q72crgzjpi@he2uiobuelvd>
-References: <cover.1701462010.git.dxu@dxuuu.xyz>
-	 <e4d14fb5f07145ff4a367cc01d8dcf6c82581c88.1701462010.git.dxu@dxuuu.xyz>
-	 <CAEf4Bzaz+_y=kxBpPmwYsvzaHypmL=ZBfOK12vLom04DRDWyPg@mail.gmail.com>
-	 <ka2irjz53qjkax545o67mvouyytzqw3dvorqixe2q72crgzjpi@he2uiobuelvd>
-Autocrypt: addr=eddyz87@gmail.com; prefer-encrypt=mutual; keydata=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
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.1 
+        Fri, 01 Dec 2023 18:01:17 -0800 (PST)
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: netdev@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	David Ahern <dsahern@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	Po-Hsu Lin <po-hsu.lin@canonical.com>,
+	Guillaume Nault <gnault@redhat.com>,
+	Petr Machata <petrm@nvidia.com>,
+	James Prestwood <prestwoj@gmail.com>,
+	Jaehee Park <jhpark1013@gmail.com>,
+	Ido Schimmel <idosch@nvidia.com>,
+	Justin Iurman <justin.iurman@uliege.be>,
+	Xin Long <lucien.xin@gmail.com>,
+	James Chapman <jchapman@katalix.com>,
+	Hangbin Liu <liuhangbin@gmail.com>
+Subject: [PATCHv3 net-next 00/14] Conver net selftests to run in unique namespace (Part 1)
+Date: Sat,  2 Dec 2023 10:00:56 +0800
+Message-ID: <20231202020110.362433-1-liuhangbin@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Fri, 2023-12-01 at 17:10 -0700, Daniel Xu wrote:
-[...]
-> > > +SEC("tc")
-> > > +__description("single CO-RE bitfield roundtrip")
-> > > +__btf_path("btf__core_reloc_bitfields.bpf.o")
-> > > +__success __failure_unpriv
-> >=20
-> > do we want __failure_unpriv at all? Is this failure related to
-> > *bitfield* logic at all?
->=20
-> Oh, I pre-emptively added it. From the docs, I thought __failure_unpriv
-> meant "don't try to load this as an unprivileged used cuz it'll fail".
-> And since I used the tc hook, I figured it'd fail.
+As Guillaume pointed, many selftests create namespaces with very common
+names (like "client" or "server") or even (partially) run directly in init_net.
+This makes these tests prone to failure if another namespace with the same
+name already exists. It also makes it impossible to run several instances
+of these tests in parallel.
 
-Actually it means:
-"try to load as unprivileged user and expect failure,
- report error on successful load".
+This patch set intend to conver all the net selftests to run in unique namespace,
+so we can update the selftest freamwork to run all tests in it's own namespace
+in parallel. After update, we only need to wait for the test which need
+longest time.
 
-In general, the meaning of "___xxx" and "___xxx_unpriv" annotations
-is identical, except first instructs to run the test in privileged mode,
-while second instructs to run test in unprivileged mode:
-- if only annotations w/o "*_unpriv" suffix are present the test would
-  be executed as privileged;
-- if only annotations with "*_unpriv" suffix are present the test would
-  be executed as unprivileged;
-- if both kinds of annotations are present the test would be executed
-  in both modes.
+As the total patch set is too large. I break it to severl parts. This is
+the first part.
 
-[...]
+v2 -> v3:
+- Convert all ip netns del to cleanup_ns (Justin Iurman)
+
+v1 -> v2:
+- Split the large patch set to small parts for easy review (Paolo Abeni)
+- Move busywait from forwarding/lib.sh to net/lib.sh directly (Petr Machata)
+- Update setup_ns/cleanup_ns struct (Petr Machata)
+- Remove default trap in lib.sh (Petr Machata)
+
+Hangbin Liu (14):
+  selftests/net: add lib.sh
+  selftests/net: convert arp_ndisc_evict_nocarrier.sh to run it in
+    unique namespace
+  selftests/net: specify the interface when do arping
+  selftests/net: convert arp_ndisc_untracked_subnets.sh to run it in
+    unique namespace
+  selftests/net: convert cmsg tests to make them run in unique namespace
+  selftests/net: convert drop_monitor_tests.sh to run it in unique
+    namespace
+  selftests/net: convert traceroute.sh to run it in unique namespace
+  selftests/net: convert icmp_redirect.sh to run it in unique namespace
+  sleftests/net: convert icmp.sh to run it in unique namespace
+  selftests/net: convert ioam6.sh to run it in unique namespace
+  selftests/net: convert l2tp.sh to run it in unique namespace
+  selftests/net: convert ndisc_unsolicited_na_test.sh to run it in
+    unique namespace
+  selftests/net: convert sctp_vrf.sh to run it in unique namespace
+  selftests/net: convert unicast_extensions.sh to run it in unique
+    namespace
+
+ tools/testing/selftests/net/Makefile          |   2 +-
+ .../net/arp_ndisc_evict_nocarrier.sh          |  46 ++--
+ .../net/arp_ndisc_untracked_subnets.sh        |  20 +-
+ tools/testing/selftests/net/cmsg_ipv6.sh      |  10 +-
+ tools/testing/selftests/net/cmsg_so_mark.sh   |   7 +-
+ tools/testing/selftests/net/cmsg_time.sh      |   7 +-
+ .../selftests/net/drop_monitor_tests.sh       |  21 +-
+ tools/testing/selftests/net/forwarding/lib.sh |  27 +-
+ tools/testing/selftests/net/icmp.sh           |  10 +-
+ tools/testing/selftests/net/icmp_redirect.sh  | 182 +++++++------
+ tools/testing/selftests/net/ioam6.sh          | 247 +++++++++---------
+ tools/testing/selftests/net/l2tp.sh           | 130 +++++----
+ tools/testing/selftests/net/lib.sh            |  85 ++++++
+ .../net/ndisc_unsolicited_na_test.sh          |  19 +-
+ tools/testing/selftests/net/sctp_vrf.sh       |  12 +-
+ tools/testing/selftests/net/traceroute.sh     |  82 +++---
+ .../selftests/net/unicast_extensions.sh       |  99 ++++---
+ 17 files changed, 500 insertions(+), 506 deletions(-)
+ create mode 100644 tools/testing/selftests/net/lib.sh
+
+-- 
+2.43.0
+
 
