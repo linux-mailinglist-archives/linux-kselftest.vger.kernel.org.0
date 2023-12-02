@@ -1,164 +1,118 @@
-Return-Path: <linux-kselftest+bounces-1001-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1002-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A3728018CB
-	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Dec 2023 01:16:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E47BE8018DA
+	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Dec 2023 01:20:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 99523B20D10
-	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Dec 2023 00:16:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EDF12B20D53
+	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Dec 2023 00:20:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 607C764A;
-	Sat,  2 Dec 2023 00:16:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C77C64A;
+	Sat,  2 Dec 2023 00:20:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="GnkBaMMh";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="njnExw1a"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jn43UGKF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210D7DD;
-	Fri,  1 Dec 2023 16:16:08 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-	by mailout.nyi.internal (Postfix) with ESMTP id 4C5D75C01D5;
-	Fri,  1 Dec 2023 19:16:07 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Fri, 01 Dec 2023 19:16:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to; s=fm3; t=
-	1701476167; x=1701562567; bh=NnvmqJQAxazHvzMLPYJJMCWR3fPVZJKgp3P
-	iGTQFF9M=; b=GnkBaMMh4C6+HCWh8gY282XFYkUbCQKqHStiMvQKIbmzT1hstvE
-	kKIkOnm4nmyyjDCRtMwmNzLUgYtn4Mo6kJHPFPweAeuAi4Nu/pWxgGu4bjJD/bIm
-	N2ellqNdcMk6JilhPiPREjR2EbA26NOnogWh9WKPSqOGjH/0S6Pi4SiKbbcTQCjw
-	eAzYKwle2XIV8dzjnLE8kn4pvf7VMNsF4rAbd9mmz5CHIwwINmwguVvOaDQBZzHK
-	+l3ZOr2f6jWzkObSx/eA3ceBV+VRStx2qrbiH1zKZ62kNvtT5D45N44Fy5INL45l
-	aGM/0HGXZBaTfwXeUVBwMcUpAbEF8yYiNLw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:sender:subject:subject:to:to:x-me-proxy
-	:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1701476167; x=1701562567; bh=NnvmqJQAxazHvzMLPYJJMCWR3fPVZJKgp3P
-	iGTQFF9M=; b=njnExw1aJ9gx5YelQLM8f2uDV52Uhf3pJ0EDd9aCnL0k3c/4F59
-	n1h+Q97jaQFTYxabcrbyEd9I2Xp+g7gcgm8pXYz8Zm4NW95OjVmGYx4FA9MWGDwh
-	jOyMRdjXCghnzStcHG5Zh/BHQZ2TalLty2ps4LNcUZGVEtoky/YP09+aA9S2iSIr
-	J6Hl4YUTjTw62tJwB+c90eDZsxrPSaMEyk1CVla8TNmiiLLKV5d+P62lgkxn/ljv
-	W90Hu5FKtWecRA7ChWSOxDn6BoMqlZVzECtfUU7dr10y7LglMBAYz1UQm2u15Kf7
-	5SXqqiAjk3QCl0mRYUZa0shmWmuj4wFWemQ==
-X-ME-Sender: <xms:RndqZZcUs9Ut9E0-UXE-lSJtYqMciKOb6ZXqXpb22Y_XuYwvHg1rTw>
-    <xme:RndqZXOK6RYeQb3CeCSwetUsbeKH7axhT0NmBqnTvZmGRDhjJCkef6U6HV9xa4oMr
-    d2_vqjFpLQp9Waq_w>
-X-ME-Received: <xmr:RndqZSidN-cuQ8SBE41aPZLxpHbrLp2M3tY7d9lLhqahBfpc3gMkzxB-CEEPtQb7Zxi9RkateJPvEbEKGCAsFrBT0vy7VcKTfgLJ5wQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudejtddgudelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    gfrhhlucfvnfffucdlvdefmdenucfjughrpeffhffvvefukfhfgggtugfgjgestheksfdt
-    tddtjeenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihusegugihuuhhurdighiiiqe
-    enucggtffrrghtthgvrhhnpefggfdvfffhiedvieeuuddvudfffffggeeugedtkeehffeh
-    jefgheejiedtledtfeenucffohhmrghinhepihgvthhfrdhorhhgpdhgihhthhhusgdrtg
-    homhenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegu
-    gihusegugihuuhhurdighiii
-X-ME-Proxy: <xmx:RndqZS9Goz_m3esZoI2St0pdbueUBF9fkKjs6dW3ZYSbEP_w0SmKSg>
-    <xmx:RndqZVvgKntjyFjfkGZLTk85Votr_fMzTTe0PAVH9MSqqZZjH8KxOQ>
-    <xmx:RndqZRHlnTXnweupWcL2F1CSYQjr7k_98XKqqrwEJ8CqDZBBSKpgrQ>
-    <xmx:R3dqZbJQYvkKaQ-SCgWvg3gUZHKTLltPC7K7TmQhMG80Cliuk2BhHg>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 1 Dec 2023 19:16:05 -0500 (EST)
-Date: Fri, 1 Dec 2023 17:16:04 -0700
-From: Daniel Xu <dxu@dxuuu.xyz>
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc: Network Development <netdev@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>, 
-	clang-built-linux <llvm@lists.linux.dev>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	antony.antony@secunet.com, Yonghong Song <yonghong.song@linux.dev>, 
-	Eddy Z <eddyz87@gmail.com>, devel@linux-ipsec.org
-Subject: Re: [PATCH ipsec-next v3 0/9] Add bpf_xdp_get_xfrm_state() kfunc
-Message-ID: <dkzlpw6sj7we5xteyvbwxufqzg6axwlrvb4arq23ecaiy5ayok@jg52fqjr4ftf>
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34B6CCF;
+	Fri,  1 Dec 2023 16:20:19 -0800 (PST)
+Received: by mail-lj1-x231.google.com with SMTP id 38308e7fff4ca-2c9b5c12898so34226401fa.2;
+        Fri, 01 Dec 2023 16:20:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701476417; x=1702081217; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=V7H5mtM4rdlF96TurskSVKsv77wngFKN9XzMokfXX3o=;
+        b=Jn43UGKFRFJ0+BEoGYvujtwfUqqKtIr6LDAE+RABaR+aVGqcnIx9X9jdWX7QQ8vIhF
+         E+loP/zR25iuxh77C4btFqjufM4WD3BO2iyr9QdKMy3yGDdswhGhTm5BhnKpzH++fMND
+         zGK4JuVbf316yQGLyUbTcV9WKT/UktTEHsfqJbJUTSbSRn9q/6/p8gjzreGNi/SmfCr3
+         pnE4OHHQKOcPdAIY3UXT0u+zXq3fVybVi4WWzvlKWrVN1lRZ1poPiJ5Lc1qAlyBMy1hf
+         19xNACl2sU2y+boBKntWDxToJ9O9xgm4rJmEJRv0/UPG0I5o8AHMU2uoTIaX3dJFq48F
+         +qdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701476417; x=1702081217;
+        h=mime-version:user-agent:content-transfer-encoding:autocrypt
+         :references:in-reply-to:date:cc:to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=V7H5mtM4rdlF96TurskSVKsv77wngFKN9XzMokfXX3o=;
+        b=gIOVEQWQwbhgyaaxtu5zJHX9YrxLDozKa65p7yZFZ3XnQDZ+2UTERbXnoS+q31ndcw
+         P22HAiS1z0JdsQ8D4grM9jZizJEaNRxooKqL7IgBXFMx1sr0dA4/6Q2Tozfhq+lwyvuM
+         MCeABfqJiw3+o83O8Bpd4c3bEV8ToxHoq/Qd1S5qVgdIo1GTzO/4GvOzSPLB/58WkiYr
+         7IvClF9NCAwyr1DyBAOuVG2RtOsb1Tc827OScTX5uFC8519CddvS0SUz0lUrUfD2hbLD
+         ldOnyohNNbT9K72H0U+K+MuHZDRY/8+PpJTjPzGRnHyFT/1ApaN1CsY0akVNxbeWYX/U
+         TUcQ==
+X-Gm-Message-State: AOJu0YyIQYXyB5sJRa0qtUuuTaLChD+qCrslkclMvnKDilrM+kMxyquo
+	4lJR/sdi+eq0zwrodjLs/sM=
+X-Google-Smtp-Source: AGHT+IHIx/W2tOPuzPFRMcUv6dY0UL4yjmePC/SUMhNp+oiMbw0mgLKn5Mr6poXdbiv24WSxMFodQA==
+X-Received: by 2002:a2e:8895:0:b0:2c9:d874:6efc with SMTP id k21-20020a2e8895000000b002c9d8746efcmr1441290lji.89.1701476417363;
+        Fri, 01 Dec 2023 16:20:17 -0800 (PST)
+Received: from [192.168.1.95] (host-176-36-0-241.b024.la.net.ua. [176.36.0.241])
+        by smtp.gmail.com with ESMTPSA id l13-20020a170906a40d00b00a18a9931dc1sm2365617ejz.105.2023.12.01.16.20.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Dec 2023 16:20:16 -0800 (PST)
+Message-ID: <d2fe8b0593a1009305e90d98a8bff984c1314748.camel@gmail.com>
+Subject: Re: [PATCH ipsec-next v3 5/9] libbpf: selftests: Add verifier tests
+ for CO-RE bitfield writes
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Daniel Xu <dxu@dxuuu.xyz>, Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, shuah@kernel.org,
+ andrii@kernel.org,  steffen.klassert@secunet.com,
+ antony.antony@secunet.com,  alexei.starovoitov@gmail.com,
+ yonghong.song@linux.dev, mykolal@fb.com,  martin.lau@linux.dev,
+ song@kernel.org, john.fastabend@gmail.com,  kpsingh@kernel.org,
+ sdf@google.com, haoluo@google.com, jolsa@kernel.org, 
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, devel@linux-ipsec.org,
+ netdev@vger.kernel.org
+Date: Sat, 02 Dec 2023 02:20:15 +0200
+In-Reply-To: <ka2irjz53qjkax545o67mvouyytzqw3dvorqixe2q72crgzjpi@he2uiobuelvd>
 References: <cover.1701462010.git.dxu@dxuuu.xyz>
- <CAADnVQKWrvec6ap_7O0Z5uAJe-pdrhuJk8LRkmWvGMM4iF9Frg@mail.gmail.com>
+	 <e4d14fb5f07145ff4a367cc01d8dcf6c82581c88.1701462010.git.dxu@dxuuu.xyz>
+	 <CAEf4Bzaz+_y=kxBpPmwYsvzaHypmL=ZBfOK12vLom04DRDWyPg@mail.gmail.com>
+	 <ka2irjz53qjkax545o67mvouyytzqw3dvorqixe2q72crgzjpi@he2uiobuelvd>
+Autocrypt: addr=eddyz87@gmail.com; prefer-encrypt=mutual; keydata=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
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.1 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAADnVQKWrvec6ap_7O0Z5uAJe-pdrhuJk8LRkmWvGMM4iF9Frg@mail.gmail.com>
 
-On Fri, Dec 01, 2023 at 04:10:18PM -0800, Alexei Starovoitov wrote:
-> On Fri, Dec 1, 2023 at 12:23 PM Daniel Xu <dxu@dxuuu.xyz> wrote:
-> >
-> > This patchset adds two kfunc helpers, bpf_xdp_get_xfrm_state() and
-> > bpf_xdp_xfrm_state_release() that wrap xfrm_state_lookup() and
-> > xfrm_state_put(). The intent is to support software RSS (via XDP) for
-> > the ongoing/upcoming ipsec pcpu work [0]. Recent experiments performed
-> > on (hopefully) reproducible AWS testbeds indicate that single tunnel
-> > pcpu ipsec can reach line rate on 100G ENA nics.
-> >
-> > Note this patchset only tests/shows generic xfrm_state access. The
-> > "secret sauce" (if you can really even call it that) involves accessing
-> > a soon-to-be-upstreamed pcpu_num field in xfrm_state. Early example is
-> > available here [1].
-> >
-> > [0]: https://datatracker.ietf.org/doc/draft-ietf-ipsecme-multi-sa-performance/03/
-> > [1]: https://github.com/danobi/xdp-tools/blob/e89a1c617aba3b50d990f779357d6ce2863ecb27/xdp-bench/xdp_redirect_cpumap.bpf.c#L385-L406
-> >
-> > Changes from v2:
-> > * Fix/simplify BPF_CORE_WRITE_BITFIELD() algorithm
-> > * Added verifier tests for bitfield writes
-> > * Fix state leakage across test_tunnel subtests
-> >
-> > Changes from v1:
-> > * Move xfrm tunnel tests to test_progs
-> > * Fix writing to opts->error when opts is invalid
-> > * Use __bpf_kfunc_start_defs()
-> > * Remove unused vxlanhdr definition
-> > * Add and use BPF_CORE_WRITE_BITFIELD() macro
-> > * Make series bisect clean
-> >
-> > Changes from RFCv2:
-> > * Rebased to ipsec-next
-> > * Fix netns leak
-> >
-> > Changes from RFCv1:
-> > * Add Antony's commit tags
-> > * Add KF_ACQUIRE and KF_RELEASE semantics
-> >
-> > Daniel Xu (9):
-> >   bpf: xfrm: Add bpf_xdp_get_xfrm_state() kfunc
-> >   bpf: xfrm: Add bpf_xdp_xfrm_state_release() kfunc
-> >   libbpf: Add BPF_CORE_WRITE_BITFIELD() macro
-> >   bpf: selftests: test_loader: Support __btf_path() annotation
-> >   libbpf: selftests: Add verifier tests for CO-RE bitfield writes
-> >   bpf: selftests: test_tunnel: Setup fresh topology for each subtest
-> >   bpf: selftests: test_tunnel: Use vmlinux.h declarations
-> >   bpf: selftests: Move xfrm tunnel test to test_progs
-> >   bpf: xfrm: Add selftest for bpf_xdp_get_xfrm_state()
-> >
-> >  include/net/xfrm.h                            |   9 +
-> >  net/xfrm/Makefile                             |   1 +
-> >  net/xfrm/xfrm_policy.c                        |   2 +
-> >  net/xfrm/xfrm_state_bpf.c                     | 128 ++++++++++++++
-> >  tools/lib/bpf/bpf_core_read.h                 |  34 ++++
-> >  .../selftests/bpf/prog_tests/test_tunnel.c    | 162 +++++++++++++++++-
-> >  .../selftests/bpf/prog_tests/verifier.c       |   2 +
-> >  tools/testing/selftests/bpf/progs/bpf_misc.h  |   1 +
-> >  .../selftests/bpf/progs/bpf_tracing_net.h     |   1 +
-> >  .../selftests/bpf/progs/test_tunnel_kern.c    | 138 ++++++++-------
-> >  .../bpf/progs/verifier_bitfield_write.c       | 100 +++++++++++
-> >  tools/testing/selftests/bpf/test_loader.c     |   7 +
-> >  tools/testing/selftests/bpf/test_tunnel.sh    |  92 ----------
-> >  13 files changed, 522 insertions(+), 155 deletions(-)
-> 
-> I really think this should go via bpf-next tree.
-> The bpf changes are much bigger than ipsec.
+On Fri, 2023-12-01 at 17:10 -0700, Daniel Xu wrote:
+[...]
+> > > +SEC("tc")
+> > > +__description("single CO-RE bitfield roundtrip")
+> > > +__btf_path("btf__core_reloc_bitfields.bpf.o")
+> > > +__success __failure_unpriv
+> >=20
+> > do we want __failure_unpriv at all? Is this failure related to
+> > *bitfield* logic at all?
+>=20
+> Oh, I pre-emptively added it. From the docs, I thought __failure_unpriv
+> meant "don't try to load this as an unprivileged used cuz it'll fail".
+> And since I used the tc hook, I figured it'd fail.
 
-Ack. Ended up picking up a lot of stuff along the way.
+Actually it means:
+"try to load as unprivileged user and expect failure,
+ report error on successful load".
+
+In general, the meaning of "___xxx" and "___xxx_unpriv" annotations
+is identical, except first instructs to run the test in privileged mode,
+while second instructs to run test in unprivileged mode:
+- if only annotations w/o "*_unpriv" suffix are present the test would
+  be executed as privileged;
+- if only annotations with "*_unpriv" suffix are present the test would
+  be executed as unprivileged;
+- if both kinds of annotations are present the test would be executed
+  in both modes.
+
+[...]
 
