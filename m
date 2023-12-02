@@ -1,58 +1,58 @@
-Return-Path: <linux-kselftest+bounces-1008-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1009-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 383668019CF
-	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Dec 2023 03:01:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id F395F8019D1
+	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Dec 2023 03:02:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5B8F81C20BFE
-	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Dec 2023 02:01:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 303B81C209E0
+	for <lists+linux-kselftest@lfdr.de>; Sat,  2 Dec 2023 02:02:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1202F184C;
-	Sat,  2 Dec 2023 02:01:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95B0146BB;
+	Sat,  2 Dec 2023 02:01:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g3h/tvaz"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FhPrCRTZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90703D5;
-	Fri,  1 Dec 2023 18:01:44 -0800 (PST)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-5d3d0f862f7so20206327b3.0;
-        Fri, 01 Dec 2023 18:01:44 -0800 (PST)
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD1EB9D;
+	Fri,  1 Dec 2023 18:01:48 -0800 (PST)
+Received: by mail-il1-x132.google.com with SMTP id e9e14a558f8ab-35cd70d7735so9738985ab.0;
+        Fri, 01 Dec 2023 18:01:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701482503; x=1702087303; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1701482507; x=1702087307; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=yGqQWu7PQdA+GXS1NCkG0Hrv8bmQZ7GFfMytHHVX0oE=;
-        b=g3h/tvazD4ACSO+y/CoznXDjJTi4O7soNtK2v1lBW7JI3+OzqMk5ia7saopBQ2uXpg
-         +lRZThWV0oYoc9DFtpJvATJ9fIGIDGWVyPCb//k3PhOqTHF4LftRhset78bcYGa6sZ2K
-         SwPdVFvUjwcgXJJU9SpsyMom7e2/sFtFclraWrw1XiBxhLgK5uYBMiOEsoAc3LDkkMxN
-         93xBVPeRGz53cxrwLeTWFX2U48RUCYf0okKFc0vQrD45ROqEMtMkIY3aorOaIOYY2+Eo
-         buieRm6YqGW3UTHmhoAZBztSpPaEzlHSTxl2o4SenEkQ0RB0MPVd7gzmADtvYPf0Uxmd
-         BK7w==
+        bh=ZlLY4g9cr0HGrzaIYMi76SXlocTMG+p1N+1yvMTwCyA=;
+        b=FhPrCRTZ0PesRsw8lWu0MZv0ctTCMcejYunCkX5j+g/w1RYtILBfdaRtjfkQ57zRfR
+         05M8aCmJaGzHXhd7NPOFAFih6psiUbry0wpQgLDdjgpNxJoyUItdojODE6kL2uQYVuGH
+         pEXNCM+rxW1fYgPCR80RKfdozIfsJYI7eGmKYAiVvdLTGupGHa1BuBY59ooFu+2ITsmg
+         3c+XoARCAbNY9+YN6dADwt0vhQTyvn5eC2BICMBNXUAcZPjmPxHUy7SzQ10XqY/xD42I
+         LlFRXMNnrax8L60D1fjsBfCjHmYNmDEKLmU+jnQQ1QgGN+HRqEW8lfz+E9An0r2qxgZf
+         prAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701482503; x=1702087303;
+        d=1e100.net; s=20230601; t=1701482507; x=1702087307;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=yGqQWu7PQdA+GXS1NCkG0Hrv8bmQZ7GFfMytHHVX0oE=;
-        b=rdBXHsylEWwG5+TcNtVxr0lZ9dyI20xzHZlrao2vvxHn3BuouFtNFMHJvBBIvkcV8t
-         dFu1vKYo8OHcCzJM+XlWN4wacuYxRJWgeGz/d7GMNLfxlHtUIEc/jtiSNBpsL29mVtRe
-         WljTlcvE0fx0GZZGtHEoSOJuRLTLjDNaFLBOLuLykjsrWEAC6bhRWZvh3QK/QrhL+GGC
-         ooDPX/AsfNFgIczIpdXPVqqfQtJOr5uSY+V2VFs7ClBFCLFnju5FUUn5P0UjhDcRNDb3
-         SQaynw6QA6bL3MPxomOItUBJOg8zxOz+fe0BT2VBGEdPqsMgEykkj3JnJpvs/SG6LZLx
-         WteA==
-X-Gm-Message-State: AOJu0Yzp23T58P6JNR2biu8Nsy3kxmalDOzJGcex+KkgsUNeK5Z1q62/
-	9qiSghsOsPbBprbMYceulexGoHA52fMmaN5C
-X-Google-Smtp-Source: AGHT+IHySo71X+odJULOj2P6h3vn9JfZwX4OamqEg3TqnPH1Lh5cflOedv9bmuFRHEpLEZAzcjtInw==
-X-Received: by 2002:a0d:eaca:0:b0:5d7:1940:b371 with SMTP id t193-20020a0deaca000000b005d71940b371mr481514ywe.61.1701482503072;
-        Fri, 01 Dec 2023 18:01:43 -0800 (PST)
+        bh=ZlLY4g9cr0HGrzaIYMi76SXlocTMG+p1N+1yvMTwCyA=;
+        b=aNI/0ANCz7a1zDvCJqvDjRGsxJQ8XHOYHLeVqpbvrC/aZsRbdIi6Zdei3mkH9mjGU6
+         BQegW/jO2ctDGtXqr9ICnGCRpM4awKkppxKyqW4Y3MRZva8fXGI5JAAB9lOT+OVc/b3f
+         9iXaRPEDUVn9xvhNJnnNO07PedYB6ZrIgoqVTfIMBnyVrDzvlS0smODLQE5YpamUiu3Z
+         GBta4zc92yVSllP0oUfLea/YXW/ai0zhM0PO7FtMjvzIozXq0D0qwKo99ajGbp1YWli/
+         GJVgDnxsodP8YIZLFQUpii+kEFePQrWP/XRrovmOqf81x0o14nIXCA3zMbvW5DU6tBJW
+         G0yA==
+X-Gm-Message-State: AOJu0YyO4SQB4tSPdYQ2y0A9YLMBj+zJLECRQZfTdGWqjPFdvieiehiM
+	KMd0JbF2RjunYAE57ct/kZ2c6Y56FczgN89P
+X-Google-Smtp-Source: AGHT+IHRw79P6AWBNlO8YZ48r1z3qEjdrcs/YuDrc0xzRntWMORjCsLSUPOLP6aSajhKn0wt/h5yYA==
+X-Received: by 2002:a92:dc0b:0:b0:35c:dbda:25f9 with SMTP id t11-20020a92dc0b000000b0035cdbda25f9mr542336iln.31.1701482507664;
+        Fri, 01 Dec 2023 18:01:47 -0800 (PST)
 Received: from Laptop-X1.redhat.com ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id h1-20020a170902f54100b001b3bf8001a9sm3993034plf.48.2023.12.01.18.01.38
+        by smtp.gmail.com with ESMTPSA id h1-20020a170902f54100b001b3bf8001a9sm3993034plf.48.2023.12.01.18.01.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 01 Dec 2023 18:01:42 -0800 (PST)
+        Fri, 01 Dec 2023 18:01:47 -0800 (PST)
 From: Hangbin Liu <liuhangbin@gmail.com>
 To: netdev@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -72,9 +72,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Xin Long <lucien.xin@gmail.com>,
 	James Chapman <jchapman@katalix.com>,
 	Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCHv3 net-next 05/14] selftests/net: convert cmsg tests to make them run in unique namespace
-Date: Sat,  2 Dec 2023 10:01:01 +0800
-Message-ID: <20231202020110.362433-6-liuhangbin@gmail.com>
+Subject: [PATCHv3 net-next 06/14] selftests/net: convert drop_monitor_tests.sh to run it in unique namespace
+Date: Sat,  2 Dec 2023 10:01:02 +0800
+Message-ID: <20231202020110.362433-7-liuhangbin@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20231202020110.362433-1-liuhangbin@gmail.com>
 References: <20231202020110.362433-1-liuhangbin@gmail.com>
@@ -88,121 +88,87 @@ Content-Transfer-Encoding: 8bit
 
 Here is the test result after conversion.
 
-]# ./cmsg_ipv6.sh
-OK
-]# ./cmsg_so_mark.sh
-OK
-]# ./cmsg_time.sh
-OK
+]# ./drop_monitor_tests.sh
+
+Software drops test
+    TEST: Capturing active software drops                               [ OK ]
+    TEST: Capturing inactive software drops                             [ OK ]
+
+Hardware drops test
+    TEST: Capturing active hardware drops                               [ OK ]
+    TEST: Capturing inactive hardware drops                             [ OK ]
+
+Tests passed:   4
+Tests failed:   0
 
 Acked-by: David Ahern <dsahern@kernel.org>
 Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
 ---
- tools/testing/selftests/net/cmsg_ipv6.sh    | 10 ++++------
- tools/testing/selftests/net/cmsg_so_mark.sh |  7 ++++---
- tools/testing/selftests/net/cmsg_time.sh    |  7 ++++---
- 3 files changed, 12 insertions(+), 12 deletions(-)
+ .../selftests/net/drop_monitor_tests.sh       | 21 ++++++++++---------
+ 1 file changed, 11 insertions(+), 10 deletions(-)
 
-diff --git a/tools/testing/selftests/net/cmsg_ipv6.sh b/tools/testing/selftests/net/cmsg_ipv6.sh
-index 330d0b1ceced..f30bd57d5e38 100755
---- a/tools/testing/selftests/net/cmsg_ipv6.sh
-+++ b/tools/testing/selftests/net/cmsg_ipv6.sh
-@@ -1,9 +1,8 @@
- #!/bin/bash
+diff --git a/tools/testing/selftests/net/drop_monitor_tests.sh b/tools/testing/selftests/net/drop_monitor_tests.sh
+index b7650e30d18b..7c4818c971fc 100755
+--- a/tools/testing/selftests/net/drop_monitor_tests.sh
++++ b/tools/testing/selftests/net/drop_monitor_tests.sh
+@@ -2,10 +2,8 @@
  # SPDX-License-Identifier: GPL-2.0
  
--ksft_skip=4
+ # This test is for checking drop monitor functionality.
+-
 +source lib.sh
+ ret=0
+-# Kselftest framework requirement - SKIP code is 4.
+-ksft_skip=4
  
--NS=ns
- IP6=2001:db8:1::1/64
- TGT6=2001:db8:1::2
- TMPF=$(mktemp --suffix ".pcap")
-@@ -11,13 +10,11 @@ TMPF=$(mktemp --suffix ".pcap")
+ # all tests in this script. Can be overridden with -t option
+ TESTS="
+@@ -13,10 +11,6 @@ TESTS="
+ 	hw_drops
+ "
+ 
+-IP="ip -netns ns1"
+-TC="tc -netns ns1"
+-DEVLINK="devlink -N ns1"
+-NS_EXEC="ip netns exec ns1"
+ NETDEVSIM_PATH=/sys/bus/netdevsim/
+ DEV_ADDR=1337
+ DEV=netdevsim${DEV_ADDR}
+@@ -43,7 +37,7 @@ setup()
+ 	modprobe netdevsim &> /dev/null
+ 
+ 	set -e
+-	ip netns add ns1
++	setup_ns NS1
+ 	$IP link add dummy10 up type dummy
+ 
+ 	$NS_EXEC echo "$DEV_ADDR 1" > ${NETDEVSIM_PATH}/new_device
+@@ -57,7 +51,7 @@ setup()
  cleanup()
  {
-     rm -f $TMPF
--    ip netns del $NS
-+    cleanup_ns $NS
+ 	$NS_EXEC echo "$DEV_ADDR" > ${NETDEVSIM_PATH}/del_device
+-	ip netns del ns1
++	cleanup_ns ${NS1}
  }
  
- trap cleanup EXIT
- 
--NSEXE="ip netns exec $NS"
--
- tcpdump -h | grep immediate-mode >> /dev/null
- if [ $? -ne 0 ]; then
-     echo "SKIP - tcpdump with --immediate-mode option required"
-@@ -25,7 +22,8 @@ if [ $? -ne 0 ]; then
+ sw_drops_test()
+@@ -194,8 +188,15 @@ if [ $? -ne 0 ]; then
+ 	exit $ksft_skip
  fi
  
- # Namespaces
--ip netns add $NS
-+setup_ns NS
-+NSEXE="ip netns exec $NS"
- 
- $NSEXE sysctl -w net.ipv4.ping_group_range='0 2147483647' > /dev/null
- 
-diff --git a/tools/testing/selftests/net/cmsg_so_mark.sh b/tools/testing/selftests/net/cmsg_so_mark.sh
-index 1650b8622f2f..772ad0cc2630 100755
---- a/tools/testing/selftests/net/cmsg_so_mark.sh
-+++ b/tools/testing/selftests/net/cmsg_so_mark.sh
-@@ -1,7 +1,8 @@
- #!/bin/bash
- # SPDX-License-Identifier: GPL-2.0
- 
--NS=ns
-+source lib.sh
+-# start clean
++# create netns first so we can get the namespace name
++setup_ns NS1
+ cleanup &> /dev/null
++trap cleanup EXIT
 +
- IP4=172.16.0.1/24
- TGT4=172.16.0.2
- IP6=2001:db8:1::1/64
-@@ -10,13 +11,13 @@ MARK=1000
++IP="ip -netns ${NS1}"
++TC="tc -netns ${NS1}"
++DEVLINK="devlink -N ${NS1}"
++NS_EXEC="ip netns exec ${NS1}"
  
- cleanup()
- {
--    ip netns del $NS
-+    cleanup_ns $NS
- }
- 
- trap cleanup EXIT
- 
- # Namespaces
--ip netns add $NS
-+setup_ns NS
- 
- ip netns exec $NS sysctl -w net.ipv4.ping_group_range='0 2147483647' > /dev/null
- 
-diff --git a/tools/testing/selftests/net/cmsg_time.sh b/tools/testing/selftests/net/cmsg_time.sh
-index 91161e1da734..af85267ad1e3 100755
---- a/tools/testing/selftests/net/cmsg_time.sh
-+++ b/tools/testing/selftests/net/cmsg_time.sh
-@@ -1,7 +1,8 @@
- #!/bin/bash
- # SPDX-License-Identifier: GPL-2.0
- 
--NS=ns
-+source lib.sh
-+
- IP4=172.16.0.1/24
- TGT4=172.16.0.2
- IP6=2001:db8:1::1/64
-@@ -9,13 +10,13 @@ TGT6=2001:db8:1::2
- 
- cleanup()
- {
--    ip netns del $NS
-+    cleanup_ns $NS
- }
- 
- trap cleanup EXIT
- 
- # Namespaces
--ip netns add $NS
-+setup_ns NS
- 
- ip netns exec $NS sysctl -w net.ipv4.ping_group_range='0 2147483647' > /dev/null
- 
+ for t in $TESTS
+ do
 -- 
 2.43.0
 
