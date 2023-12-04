@@ -1,49 +1,50 @@
-Return-Path: <linux-kselftest+bounces-1083-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1084-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 772FE803F5B
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Dec 2023 21:33:29 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33511803F5D
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Dec 2023 21:33:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A490F1C20BA0
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Dec 2023 20:33:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 638531C20BD6
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Dec 2023 20:33:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3792A35EEB;
-	Mon,  4 Dec 2023 20:33:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 406E935EF2;
+	Mon,  4 Dec 2023 20:33:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bRdo68l9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dvNFnpFz"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14A5035EE9;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E4E835EE2;
+	Mon,  4 Dec 2023 20:33:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AD3EC433CC;
 	Mon,  4 Dec 2023 20:33:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2E99C433C8;
-	Mon,  4 Dec 2023 20:33:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701722003;
-	bh=DmLcVDVMT5DQb4/cnrHAIskw0sq/6uoZsdZgUyZ0CGM=;
+	s=k20201202; t=1701722005;
+	bh=VQ1kDw6UcR7JbTEq2lMQAZ17c1wIZV3ufze0fEvndbA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=bRdo68l9MepVTosbqD8pe8I/w3MwY0W5Jn5Rk1xGbcRgwa9KCkfvS7AIvdZa/IWHG
-	 MOtMdFnm1qPIOGLx5NaAHbqBlqFxYSz8eA1gLkxuGLEuvN3RwxuxPWpS0l6AXUoV0z
-	 cik3+SVtZvniuhVQFsjEkVMiMauNfqdeh5hHwq3weOE56VGcgHVSoiT0VIO7TAP3q0
-	 dttMJMxi3KR70DMw5rypot5esMyYo61l9rpaNYc3IFSgiX5k15iihj1xEkQjyV3ylh
-	 BdEyazHEdO23dIZVL2yuJXhQYaxgN4eEm2hxqYxJlPqAP5ulOT62XXuSIaCHyyIYa8
-	 phxIdlyrROMpw==
+	b=dvNFnpFz/PSWcSxylNhLAdk53Csf6TjBDMF40Vc8+lPruq8HRef9dS+GGfYv9Vy5i
+	 sK6zR5EJMxk1is3BB0nukj19AyM/racWMAMBy2hP7UvFAouTokKK+UddrM3NahmXzt
+	 Zr7AKMX4+ThlUzQFL3C7IHGLOE9/448KzY5tzi4GngaqivDk5zdUhylzw89dYR69re
+	 8p2314zXghypQ2iLBXhg3PYLPGbdBoeaeVNPQ9AHMGF/oAQLif09D6iiq1lA6lPB0O
+	 XjEjVU86FG9DKMNUfW5a0V7daA1CTD5M0ZrQNDWUkdvm7QuC1WrNmfg9FC7pmA6I8H
+	 ia2c7wTEgn8pg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Maxime Ripard <mripard@kernel.org>,
+Cc: Michal Wajdeczko <michal.wajdeczko@intel.com>,
 	David Gow <davidgow@google.com>,
+	Rae Moar <rmoar@google.com>,
 	Shuah Khan <skhan@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	kunit-dev@googlegroups.com
-Subject: [PATCH AUTOSEL 6.6 02/32] kunit: Warn if tests are slow
-Date: Mon,  4 Dec 2023 15:32:22 -0500
-Message-ID: <20231204203317.2092321-2-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 03/32] kunit: Reset suite counter right before running tests
+Date: Mon,  4 Dec 2023 15:32:23 -0500
+Message-ID: <20231204203317.2092321-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.42.0
 In-Reply-To: <20231204203317.2092321-1-sashal@kernel.org>
 References: <20231204203317.2092321-1-sashal@kernel.org>
@@ -58,92 +59,71 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.6.4
 Content-Transfer-Encoding: 8bit
 
-From: Maxime Ripard <mripard@kernel.org>
+From: Michal Wajdeczko <michal.wajdeczko@intel.com>
 
-[ Upstream commit f8f2847f739dc899d0e563eac01299dadefa64ff ]
+[ Upstream commit 2e3c94aed51eabbe9c1c0ee515371ea5441c2fa7 ]
 
-Kunit recently gained support to setup attributes, the first one being
-the speed of a given test, then allowing to filter out slow tests.
+Today we reset the suite counter as part of the suite cleanup,
+called from the module exit callback, but it might not work that
+well as one can try to collect results without unloading a previous
+test (either unintentionally or due to dependencies).
 
-A slow test is defined in the documentation as taking more than one
-second. There's an another speed attribute called "super slow" but whose
-definition is less clear.
+For easy reproduction try to load the kunit-test.ko and then
+collect and parse results from the kunit-example-test.ko load.
+Parser will complain about mismatch of expected test number:
 
-Add support to the test runner to check the test execution time, and
-report tests that should be marked as slow but aren't.
+[ ] KTAP version 1
+[ ] 1..1
+[ ]     # example: initializing suite
+[ ]     KTAP version 1
+[ ]     # Subtest: example
+..
+[ ] # example: pass:5 fail:0 skip:4 total:9
+[ ] # Totals: pass:6 fail:0 skip:6 total:12
+[ ] ok 7 example
 
-Signed-off-by: Maxime Ripard <mripard@kernel.org>
+[ ] [ERROR] Test: example: Expected test number 1 but found 7
+[ ] ===================== [PASSED] example =====================
+[ ] ============================================================
+[ ] Testing complete. Ran 12 tests: passed: 6, skipped: 6, errors: 1
+
+Since we are now printing suite test plan on every module load,
+right before running suite tests, we should make sure that suite
+counter will also start from 1. Easiest solution seems to be move
+counter reset to the __kunit_test_suites_init() function.
+
+Signed-off-by: Michal Wajdeczko <michal.wajdeczko@intel.com>
+Cc: David Gow <davidgow@google.com>
+Cc: Rae Moar <rmoar@google.com>
 Reviewed-by: David Gow <davidgow@google.com>
 Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- lib/kunit/test.c | 38 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 38 insertions(+)
+ lib/kunit/test.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 421f139814123..e451cfe6143ec 100644
+index e451cfe6143ec..7452d1a2acd98 100644
 --- a/lib/kunit/test.c
 +++ b/lib/kunit/test.c
-@@ -372,6 +372,36 @@ void kunit_init_test(struct kunit *test, const char *name, char *log)
- }
- EXPORT_SYMBOL_GPL(kunit_init_test);
- 
-+/* Only warn when a test takes more than twice the threshold */
-+#define KUNIT_SPEED_WARNING_MULTIPLIER	2
-+
-+/* Slow tests are defined as taking more than 1s */
-+#define KUNIT_SPEED_SLOW_THRESHOLD_S	1
-+
-+#define KUNIT_SPEED_SLOW_WARNING_THRESHOLD_S	\
-+	(KUNIT_SPEED_WARNING_MULTIPLIER * KUNIT_SPEED_SLOW_THRESHOLD_S)
-+
-+#define s_to_timespec64(s) ns_to_timespec64((s) * NSEC_PER_SEC)
-+
-+static void kunit_run_case_check_speed(struct kunit *test,
-+				       struct kunit_case *test_case,
-+				       struct timespec64 duration)
-+{
-+	struct timespec64 slow_thr =
-+		s_to_timespec64(KUNIT_SPEED_SLOW_WARNING_THRESHOLD_S);
-+	enum kunit_speed speed = test_case->attr.speed;
-+
-+	if (timespec64_compare(&duration, &slow_thr) < 0)
-+		return;
-+
-+	if (speed == KUNIT_SPEED_VERY_SLOW || speed == KUNIT_SPEED_SLOW)
-+		return;
-+
-+	kunit_warn(test,
-+		   "Test should be marked slow (runtime: %lld.%09lds)",
-+		   duration.tv_sec, duration.tv_nsec);
-+}
-+
- /*
-  * Initializes and runs test case. Does not clean up or do post validations.
-  */
-@@ -379,6 +409,8 @@ static void kunit_run_case_internal(struct kunit *test,
- 				    struct kunit_suite *suite,
- 				    struct kunit_case *test_case)
- {
-+	struct timespec64 start, end;
-+
- 	if (suite->init) {
- 		int ret;
- 
-@@ -390,7 +422,13 @@ static void kunit_run_case_internal(struct kunit *test,
- 		}
+@@ -740,6 +740,8 @@ int __kunit_test_suites_init(struct kunit_suite * const * const suites, int num_
+ 		return 0;
  	}
  
-+	ktime_get_ts64(&start);
++	kunit_suite_counter = 1;
 +
- 	test_case->run_case(test);
-+
-+	ktime_get_ts64(&end);
-+
-+	kunit_run_case_check_speed(test, test_case, timespec64_sub(end, start));
- }
+ 	static_branch_inc(&kunit_running);
  
- static void kunit_case_internal_cleanup(struct kunit *test)
+ 	for (i = 0; i < num_suites; i++) {
+@@ -766,8 +768,6 @@ void __kunit_test_suites_exit(struct kunit_suite **suites, int num_suites)
+ 
+ 	for (i = 0; i < num_suites; i++)
+ 		kunit_exit_suite(suites[i]);
+-
+-	kunit_suite_counter = 1;
+ }
+ EXPORT_SYMBOL_GPL(__kunit_test_suites_exit);
+ 
 -- 
 2.42.0
 
