@@ -1,185 +1,260 @@
-Return-Path: <linux-kselftest+bounces-1074-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1075-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD2F9803BF7
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Dec 2023 18:49:15 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92EF4803CFB
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Dec 2023 19:27:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2B79C2810FE
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Dec 2023 17:49:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 228D4B20A25
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Dec 2023 18:27:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 158F62E85C;
-	Mon,  4 Dec 2023 17:49:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DB862F854;
+	Mon,  4 Dec 2023 18:27:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lzqq2MCm"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dBVshDLA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-xd2b.google.com (mail-io1-xd2b.google.com [IPv6:2607:f8b0:4864:20::d2b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAD22125;
-	Mon,  4 Dec 2023 09:49:04 -0800 (PST)
-Received: by mail-io1-xd2b.google.com with SMTP id ca18e2360f4ac-7b06844971dso145861439f.2;
-        Mon, 04 Dec 2023 09:49:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701712144; x=1702316944; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Q67gi0sVaKsqnMZLHzOOPDUWGyW46YeGeCa+WMG6ae8=;
-        b=lzqq2MCmo16dQevrm3H5gbkgCmsNMRLuNKrKgeZWktFoT5H6Sh4goh2QbdR8mdz94K
-         74V4a52TE+zxhUDb3KEK35uqOtWM8/xr6jWySHq2lAC3Sq8ObwQO0l3jnT2goSEVvuPh
-         gIFSq3LW5uak0ewh2gAa78Vm9xSUDWqyea0qr7UJMuQ4jP0QRzg6xip5Jkpvbs9COV/v
-         IVDkpmHL4/cl4WCgqoJjrpG6tkpoFcDiP8eOO8RYxUxeaMYPIoU19kVgbWWZCEh80E7I
-         +/OVXyQs3oUO5iNL7oy2Ca9nQY9CVgrC6RnFiCCeNA6w6tdfeItApyAjr6jVAQK4ehm8
-         ZG5Q==
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2A46109
+	for <linux-kselftest@vger.kernel.org>; Mon,  4 Dec 2023 10:27:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1701714457;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=MsCR3w3iP/fbWtFIHfml8iFRMkitafuttFnD2iLIZic=;
+	b=dBVshDLA9/kD70QjW2dzwAsUUez8cwbp5f7te6ajHlBUeH33WJ2I9barhnmd17/BW9FdfD
+	v/MHPgYmGjRpPg8rngUroh24AxduCMlvTJTHDjN0SWx87T5xn8d9G5zbebhi35tfenACg8
+	5gYPr/aK0wNTZJtDeuOkqKg0NMBD2Ds=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-651-m7EXeOWTPrCPzS4Tyb0FsA-1; Mon, 04 Dec 2023 13:27:36 -0500
+X-MC-Unique: m7EXeOWTPrCPzS4Tyb0FsA-1
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-332ee20a40fso3729907f8f.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 04 Dec 2023 10:27:36 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701712144; x=1702316944;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Q67gi0sVaKsqnMZLHzOOPDUWGyW46YeGeCa+WMG6ae8=;
-        b=wV/sGW9vt5qfoozMvRzPsMBQq4V517YKqE5GmtkxDANWRDitCZTuxernCW4NtJzw1g
-         lkIQro6/oHFoASCY4nxoBZw+aiVdlfKnuqvKf6APtZXlDKIfLWOKieYMWk7l8wAfT2zA
-         eHtapq5qjCQEBq6MjC/PPgrby2EEeT4700xIKJ7rKiGZn3qrwht/bLPabGg6aMwh0/1v
-         QgQTiBe7O96bqcC4XXRDqWw4UuQlGj0sfbuypl/BDIZ1uwHSjTHbPv6CEO+MXHuoTE0E
-         QJoK17ED0a01V1+UonfaUWunlLCeU8prG2qXaELjcdjuStWV7q6maXrvNSEfyGbo862K
-         VcaA==
-X-Gm-Message-State: AOJu0YxDvHv6EscVSQYbDdgIv5lxqdZdeXXIFgLYxn9eDZfwHLQRhJVB
-	a0c65yIWVDRjtCWVPQxMhBw7xYSn8f6is0byjow=
-X-Google-Smtp-Source: AGHT+IFt8GSzYZxVi1Z4SafwJMjDfy5IZvFf41ASLqOjmQPOc+b/WfHB3rutmq2iGSn8FSt0XVivG4D4QRvU+UeeVQg=
-X-Received: by 2002:a6b:c408:0:b0:7b4:2af4:479e with SMTP id
- y8-20020a6bc408000000b007b42af4479emr2378483ioa.24.1701712143938; Mon, 04 Dec
- 2023 09:49:03 -0800 (PST)
+        d=1e100.net; s=20230601; t=1701714455; x=1702319255;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :references:cc:to:content-language:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MsCR3w3iP/fbWtFIHfml8iFRMkitafuttFnD2iLIZic=;
+        b=TmIpNrxL78Cy+eX7uaJWtorlW/aCFEHsG6//QJhrH3G4UEz0/+gVVlC0NZAz1vSkNy
+         gOGd1IbxDP3B4txn5rj7+eSvM5BdL+5RU2HH3zU5/+oJcw8GIBOERHYlfzSCppce05lt
+         cwWOtVcwv52YZWGHAVgzvuwtfkDzosa2yLJs9JiQ8ER2LUfZ53vzVwi/liHcsQFGxuOb
+         ZhNvj7de0o57cSewPEyWCT1vqcj6rSuDG8cS05PrEAng8O+KjGpQRuueVbtA3CPYFMFG
+         kmEcbjTstpf7c76xpWI0111Cpxfmm70/J62xqIa6wnMdl6Txni5XYnhqbrVkEok9VjaF
+         V4ww==
+X-Gm-Message-State: AOJu0YwKC/0qJpd1PkCjgWNuHcQjfL8HBgUvuFbiIRkJ565TVkBxJjfQ
+	7W7EE3NEIf9o3DU8c5N1L5lK5WAPTwM9azBfL11XZNC1hJTriSAroMaFyLHD9bX54rW9nBUzr6q
+	bCcTB8eW/QBsrJDAem3uAezWdsffugGjalI6M
+X-Received: by 2002:a5d:4402:0:b0:333:2fd2:6f64 with SMTP id z2-20020a5d4402000000b003332fd26f64mr3528672wrq.110.1701714455266;
+        Mon, 04 Dec 2023 10:27:35 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGSV8kYq6adpaC56C7Llu3Yl8ioyuD6XQmmCo/8TnVNJ6VX5WXiBhZpY16lx0rh5pfD/VchbQ==
+X-Received: by 2002:a5d:4402:0:b0:333:2fd2:6f64 with SMTP id z2-20020a5d4402000000b003332fd26f64mr3528665wrq.110.1701714454771;
+        Mon, 04 Dec 2023 10:27:34 -0800 (PST)
+Received: from ?IPV6:2003:cb:c722:3700:6501:8925:6f9:fcdc? (p200300cbc72237006501892506f9fcdc.dip0.t-ipconnect.de. [2003:cb:c722:3700:6501:8925:6f9:fcdc])
+        by smtp.gmail.com with ESMTPSA id w3-20020a5d6803000000b003333eadd206sm6363571wru.27.2023.12.04.10.27.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Dec 2023 10:27:34 -0800 (PST)
+Message-ID: <a52284a4-2b8c-4118-965d-04c472fbee05@redhat.com>
+Date: Mon, 4 Dec 2023 19:27:32 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231130194023.4102148-1-nphamcs@gmail.com> <20231130194023.4102148-2-nphamcs@gmail.com>
- <ZWjpNr3ZzvU4TDC8@casper.infradead.org> <CAKEwX=MV-F50i_=sZ0unfbgjrdxSTio00c4xTM19113BAN3-wA@mail.gmail.com>
- <20231130203522.GC543908@cmpxchg.org> <e3e319f5-9bcd-4c35-92e6-6fdb33eaa080@linux.dev>
-In-Reply-To: <e3e319f5-9bcd-4c35-92e6-6fdb33eaa080@linux.dev>
-From: Nhat Pham <nphamcs@gmail.com>
-Date: Mon, 4 Dec 2023 09:48:52 -0800
-Message-ID: <CAKEwX=OBHe12R6fTbRn_dNGrz+T4ekE4MSo5w+7i_NNoprmnkw@mail.gmail.com>
-Subject: Re: [PATCH v8 1/6] list_lru: allows explicit memcg and NUMA node selection
-To: Chengming Zhou <chengming.zhou@linux.dev>
-Cc: Johannes Weiner <hannes@cmpxchg.org>, Matthew Wilcox <willy@infradead.org>, akpm@linux-foundation.org, 
-	cerasuolodomenico@gmail.com, yosryahmed@google.com, sjenning@redhat.com, 
-	ddstreet@ieee.org, vitaly.wool@konsulko.com, mhocko@kernel.org, 
-	roman.gushchin@linux.dev, shakeelb@google.com, muchun.song@linux.dev, 
-	chrisl@kernel.org, linux-mm@kvack.org, kernel-team@meta.com, 
-	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, shuah@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 5/5] selftests/mm: add UFFDIO_MOVE ioctl test
+Content-Language: en-US
+To: Suren Baghdasaryan <surenb@google.com>,
+ Ryan Roberts <ryan.roberts@arm.com>
+Cc: akpm@linux-foundation.org, viro@zeniv.linux.org.uk, brauner@kernel.org,
+ shuah@kernel.org, aarcange@redhat.com, lokeshgidra@google.com,
+ peterx@redhat.com, hughd@google.com, mhocko@suse.com,
+ axelrasmussen@google.com, rppt@kernel.org, willy@infradead.org,
+ Liam.Howlett@oracle.com, jannh@google.com, zhangpeng362@huawei.com,
+ bgeffon@google.com, kaleshsingh@google.com, ngeoffray@google.com,
+ jdduke@google.com, linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kernel-team@android.com
+References: <20231121171643.3719880-1-surenb@google.com>
+ <20231121171643.3719880-6-surenb@google.com>
+ <b3c882d2-0135-430c-8179-784f78be0902@arm.com>
+ <a41c759f-78d8-44ed-b708-1bb737a8e6c1@redhat.com>
+ <cb3d3b12-abf3-4eda-8d9a-944684d05505@arm.com>
+ <ccdb1080-7a2e-4f98-a4e8-e864fa2db299@redhat.com>
+ <CAJuCfpHS63bXkRGE1_G4z-2fDe72BeLka8t5ioSg2OXjbUrHXg@mail.gmail.com>
+ <744be4e0-48e0-4c77-825c-711386dd205f@arm.com>
+ <CAJuCfpHpbz4fWawmYU=B1D5pPE4+x0Wj0V-514Dja9UWcwiL9A@mail.gmail.com>
+From: David Hildenbrand <david@redhat.com>
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ WNyWQQ==
+Organization: Red Hat
+In-Reply-To: <CAJuCfpHpbz4fWawmYU=B1D5pPE4+x0Wj0V-514Dja9UWcwiL9A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, Dec 4, 2023 at 12:30=E2=80=AFAM Chengming Zhou <chengming.zhou@linu=
-x.dev> wrote:
->
-> On 2023/12/1 04:35, Johannes Weiner wrote:
-> > On Thu, Nov 30, 2023 at 12:07:41PM -0800, Nhat Pham wrote:
-> >> On Thu, Nov 30, 2023 at 11:57=E2=80=AFAM Matthew Wilcox <willy@infrade=
-ad.org> wrote:
-> >>>
-> >>> On Thu, Nov 30, 2023 at 11:40:18AM -0800, Nhat Pham wrote:
-> >>>> This patch changes list_lru interface so that the caller must explic=
-itly
-> >>>> specify numa node and memcg when adding and removing objects. The ol=
-d
-> >>>> list_lru_add() and list_lru_del() are renamed to list_lru_add_obj() =
-and
-> >>>> list_lru_del_obj(), respectively.
-> >>>
-> >>> Wouldn't it be better to add list_lru_add_memcg() and
-> >>> list_lru_del_memcg() and have:
-> >>>
-> >>> +bool list_lru_del(struct list_lru *lru, struct list_head *item)
-> >>> +{
-> >>> +       int nid =3D page_to_nid(virt_to_page(item));
-> >>> +       struct mem_cgroup *memcg =3D list_lru_memcg_aware(lru) ?
-> >>> +               mem_cgroup_from_slab_obj(item) : NULL;
-> >>> +
-> >>> +       return list_lru_del_memcg(lru, item, nid, memcg);
-> >>> +}
-> >>>
-> >>> Seems like _most_ callers will want the original versions and only
-> >>> a few will want the explicit memcg/nid versions.  No?
-> >>>
-> >>
-> >> I actually did something along that line in earlier iterations of this
-> >> patch series (albeit with poorer naming - __list_lru_add() instead of
-> >> list_lru_add_memcg()). The consensus after some back and forth was
-> >> that the original list_lru_add() was not a very good design (the
-> >> better one was this new version that allows for explicit numa/memcg
-> >> selection). So I agreed to fix it everywhere as a prep patch.
-> >>
-> >> I don't have strong opinions here to be completely honest, but I do
-> >> think this new API makes more sense (at the cost of quite a bit of
-> >> elbow grease to fix every callsites and extra reviewing).
-> >
-> > Maybe I can shed some light since I was pushing for doing it this way.
-> >
-> > The quiet assumption that 'struct list_head *item' is (embedded in) a
-> > slab object that is also charged to a cgroup is a bit much, given that
-> > nothing in the name or documentation of the function points to that.
-> >
-> > It bit us in the THP shrinker where that list head is embedded in a
-> > tailpage (virt_to_page(page) is fun to debug). And it caused some
-> > confusion in this case as well, where the zswap entry is a slab object
-> > but not charged (the entry descriptor is not attractive for cgroup
-> > accounting, only the backing memory it points to.)
->
-> Hi,
->
-> I have a question, maybe I missed something since I haven't read all
-> the earlier versions.
->
-> IIUC, the problem here is that "zswap_entry" has different memcg and node
-> than the "page", so I wonder if we can just charge "zswap_entry" to the
-> same memcg of the "page".
->
-> Like we can do these when allocating the "zswap_entry":
->
->         old_memcg =3D set_active_memcg(memcg)
->         kmem_cache_alloc_lru(zswap_entry_cache, lru, gfp)
->         set_active_memcg(old_memcg)
->
-> The good points are:
->
-> 1. "zswap_entry" is charged to the memcg of "page", which is more sensibl=
-e?
->
-> 2. We can reuse the kmem_cache_alloc_lru() interface, which makes code si=
-mpler
->    since we don't need to manage list_lru_memcg by ourselves.
->
-> 3. Maybe the new list_lru_add() and list_lru_del() are not needed anymore=
-?
->    Since the "zswap_entry" is of the same memcg and node with the "page".
->    But don't know if THP shrinker still need it.
->
-> Thanks!
+On 04.12.23 17:35, Suren Baghdasaryan wrote:
+> On Mon, Dec 4, 2023 at 1:27 AM Ryan Roberts <ryan.roberts@arm.com> wrote:
+>>
+>> On 04/12/2023 04:09, Suren Baghdasaryan wrote:
+>>> On Sat, Dec 2, 2023 at 2:11 AM David Hildenbrand <david@redhat.com> wrote:
+>>>>
+>>>> On 02.12.23 09:04, Ryan Roberts wrote:
+>>>>> On 01/12/2023 20:47, David Hildenbrand wrote:
+>>>>>> On 01.12.23 10:29, Ryan Roberts wrote:
+>>>>>>> On 21/11/2023 17:16, Suren Baghdasaryan wrote:
+>>>>>>>> Add tests for new UFFDIO_MOVE ioctl which uses uffd to move source
+>>>>>>>> into destination buffer while checking the contents of both after
+>>>>>>>> the move. After the operation the content of the destination buffer
+>>>>>>>> should match the original source buffer's content while the source
+>>>>>>>> buffer should be zeroed. Separate tests are designed for PMD aligned and
+>>>>>>>> unaligned cases because they utilize different code paths in the kernel.
+>>>>>>>>
+>>>>>>>> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+>>>>>>>> ---
+>>>>>>>>     tools/testing/selftests/mm/uffd-common.c     |  24 +++
+>>>>>>>>     tools/testing/selftests/mm/uffd-common.h     |   1 +
+>>>>>>>>     tools/testing/selftests/mm/uffd-unit-tests.c | 189 +++++++++++++++++++
+>>>>>>>>     3 files changed, 214 insertions(+)
+>>>>>>>>
+>>>>>>>> diff --git a/tools/testing/selftests/mm/uffd-common.c
+>>>>>>>> b/tools/testing/selftests/mm/uffd-common.c
+>>>>>>>> index fb3bbc77fd00..b0ac0ec2356d 100644
+>>>>>>>> --- a/tools/testing/selftests/mm/uffd-common.c
+>>>>>>>> +++ b/tools/testing/selftests/mm/uffd-common.c
+>>>>>>>> @@ -631,6 +631,30 @@ int copy_page(int ufd, unsigned long offset, bool wp)
+>>>>>>>>         return __copy_page(ufd, offset, false, wp);
+>>>>>>>>     }
+>>>>>>>>     +int move_page(int ufd, unsigned long offset, unsigned long len)
+>>>>>>>> +{
+>>>>>>>> +    struct uffdio_move uffdio_move;
+>>>>>>>> +
+>>>>>>>> +    if (offset + len > nr_pages * page_size)
+>>>>>>>> +        err("unexpected offset %lu and length %lu\n", offset, len);
+>>>>>>>> +    uffdio_move.dst = (unsigned long) area_dst + offset;
+>>>>>>>> +    uffdio_move.src = (unsigned long) area_src + offset;
+>>>>>>>> +    uffdio_move.len = len;
+>>>>>>>> +    uffdio_move.mode = UFFDIO_MOVE_MODE_ALLOW_SRC_HOLES;
+>>>>>>>> +    uffdio_move.move = 0;
+>>>>>>>> +    if (ioctl(ufd, UFFDIO_MOVE, &uffdio_move)) {
+>>>>>>>> +        /* real retval in uffdio_move.move */
+>>>>>>>> +        if (uffdio_move.move != -EEXIST)
+>>>>>>>> +            err("UFFDIO_MOVE error: %"PRId64,
+>>>>>>>> +                (int64_t)uffdio_move.move);
+>>>>>>>
+>>>>>>> Hi Suren,
+>>>>>>>
+>>>>>>> FYI this error is triggering in mm-unstable (715b67adf4c8):
+>>>>>>>
+>>>>>>> Testing move-pmd on anon... ERROR: UFFDIO_MOVE error: -16 (errno=16,
+>>>>>>> @uffd-common.c:648)
+>>>>>>>
+>>>>>>> I'm running in a VM on Apple M2 (arm64). I haven't debugged any further, but
+>>>>>>> happy to go deeper if you can direct.
+>>>>>>
+>>>>>> Does it trigger reliably? Which pagesize is that kernel using?
+>>>>>
+>>>>> Yep, although very occasionally it fails with EAGAIN. 4K kernel; see other email
+>>>>> for full config.
+>>>>>
+>>>>>>
+>>>>>> I can spot that uffd_move_pmd_test()/uffd_move_pmd_handle_fault() uses
+>>>>>> default_huge_page_size(), which reads the default hugetlb size.
+>>>>>
+>>>>> My kernel command line is explicitly seting the default huge page size to 2M.
+>>>>>
+>>>>
+>>>> Okay, so that likely won't affect it.
+>>>>
+>>>> I can only guess that it has to do with the alignment of the virtual
+>>>> area we are testing with, and that we do seem to get more odd patterns
+>>>> on arm64.
+>>>>
+>>>> uffd_move_test_common() is a bit more elaborate, but if we aligned the
+>>>> src+start area up, surely "step_count" cannot be left unmodified?
+>>>>
+>>>> So assuming we get either an unaligned source or an unaligned dst from
+>>>> mmap(), I am not convinced that we won't be moving areas that are not
+>>>> necessarily fully backed by PMDs and maybe don't even fall into the VMA
+>>>> of interest?
+>>>>
+>>>> Not sure if that could trigger the THP splitting issue, though.
+>>>>
+>>>> But I just quickly scanned that test setup, could be I am missing
+>>>> something. It might make sense to just print the mmap'ed range and the
+>>>> actual ranges we are trying to move. Maybe something "obvious" can be
+>>>> observed.
+>>>
+>>> I was able to reproduce the issue on an Android device and after
+>>> implementing David's suggestions to split the large folio and after
+>>> replacing default_huge_page_size() with read_pmd_pagesize(), the
+>>> move-pmd test started working for me. Ryan, could you please apply
+>>> attached patches (over mm-unstable) and try the test again?
+>>
+>> Yep, all fixed with those patches!
+> 
+> Great! Thanks for testing and confirming. I'll post an updated
+> patchset later today and will ask Andrew to replace the current one
+> with it.
+> I'll also look into the reasons we need to split PMD on ARM64 in this
+> test. It's good that this happened and we were able to test the PMD
+> split path but I'm curious about the reason. It's possible my address
+> alignment calculations are  somehow incorrect.
 
-That idea was considered in earlier iterations/discussions of the
-patch series as well. Charging things is not free - there is an
-overhead associated with it, which is why we are usually selective
-about whether to charge something. We were not super keen to do this
-for zswap_entry just to plumb around the list_lru's restriction. Might
-as well pay the price of extending the list_lru interface now.
+I only skimmed the diff briefly, but likely you also want to try 
+splitting in move_pages_pte(), if you encounter an already-pte-mapped THP.
 
-If in the future, not charging the zswap entry causes a separate
-isolation issue, we could revisit this decision and charge it.
-Otherwise, IMHO we should just stick with this for now.
+-- 
+Cheers,
 
->
-> >
-> > Yes, for most users - at least right now - the current assumption is
-> > accurate. The thinking was just that if we do have to differentiate
-> > callers now anyway, we might as well make the interface a bit more
-> > self-documenting and harder to misuse going forward, even if it's a
-> > bit more churn now.
-> >
-> >
+David / dhildenb
+
 
