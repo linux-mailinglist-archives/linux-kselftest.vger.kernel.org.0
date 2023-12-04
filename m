@@ -1,99 +1,217 @@
-Return-Path: <linux-kselftest+bounces-1072-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1073-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A1258038E1
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Dec 2023 16:32:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0B31803A64
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Dec 2023 17:35:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F0D97281173
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Dec 2023 15:32:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6286F1F21283
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Dec 2023 16:35:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2BA12C857;
-	Mon,  4 Dec 2023 15:32:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B36FB3C04;
+	Mon,  4 Dec 2023 16:35:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="altJvCMF"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zcMi7qeE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FE1B6
-	for <linux-kselftest@vger.kernel.org>; Mon,  4 Dec 2023 07:32:11 -0800 (PST)
-Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-42548f6c565so18476841cf.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 04 Dec 2023 07:32:11 -0800 (PST)
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E523FB0
+	for <linux-kselftest@vger.kernel.org>; Mon,  4 Dec 2023 08:35:40 -0800 (PST)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-5d852ac9bb2so13546667b3.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 04 Dec 2023 08:35:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1701703931; x=1702308731; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QNErOhF1qMkgPNVpHAnyVSyCwAUX/1YSBmZDFvsm8OU=;
-        b=altJvCMFqLnz0th385qoKkCef9KpcoT97a66K2T11evxL+qQgeN04sZF2sJciPhIxa
-         MTCpLAlzXQ/Et3m8eJlcuazUcWUcPNwH0ennEkeVk1j/pe55zuDf4BAdLOYazfOsm/ul
-         6jWn5e7ZlaEMc+SMDee03zgbkmhj7ScXWJj83JUVDYdKDCHtDxCdzZBFbB061egcWZT1
-         qlYYWu+paNhGEAf6akyznZHBoEUZgESyjTDVFcJYgBtmRDRCBjy9/DLfwjCpeZZKTPT6
-         OOxQOSIzAcCJOINEVcKdvFNrhOLXwom8QBrCJ3e8yNm8jfNxfqC+SGJ4O+Dc00TtsKnK
-         6VRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701703931; x=1702308731;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1701707740; x=1702312540; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QNErOhF1qMkgPNVpHAnyVSyCwAUX/1YSBmZDFvsm8OU=;
-        b=lXjh7+vFiQ20kX00MRX4mUYgRKxp9sh7BpoFWaJIqzole3M24wcQJtPKCeyhXBcGQr
-         8iNY8W5mlwbOHBN3yi/HZwCqvAghWCA073Jp4BsQivZI6kQwp5/ewMDAMkDsZ5GB257v
-         0Msu4pkb4fTkM9rU96qH3paU/D0LWzwwCNebiXOiRHSPV+fnuYSWU2nvPwOFWUMp+4Nh
-         aW4sAyz1VbnRHeU72K5D/j3pWmu3ZOIgpqp9eD8o7anywU7iKtR/Rc9a019/z6YB+D9O
-         WNXkfWfG3NvRByLhg6ljxAxJRq4K/BaN2JE4e/hvNw2WEwtuYXl95gO6AodoNym2ga6C
-         FXVQ==
-X-Gm-Message-State: AOJu0YwEJQMIQacKr8ZIGg8R3eevzVi3sljy9EjbAOuMk5ZZ3Q6pgC8L
-	wPPCdKNt53uvWZbGi3OU690vow==
-X-Google-Smtp-Source: AGHT+IEnloh+umt8D2CaTqj/3erJ8LZq5gKurAnArFiVByvdfAGoIgyiu/VWyqqDTZ8kj1dh4ApCGQ==
-X-Received: by 2002:a05:622a:1c8:b0:425:4043:96e2 with SMTP id t8-20020a05622a01c800b00425404396e2mr6614490qtw.111.1701703930810;
-        Mon, 04 Dec 2023 07:32:10 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-134-23-187.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.134.23.187])
-        by smtp.gmail.com with ESMTPSA id df15-20020a05622a0ecf00b00423da75b0f4sm4371928qtb.71.2023.12.04.07.32.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Dec 2023 07:32:10 -0800 (PST)
-Received: from jgg by wakko with local (Exim 4.95)
-	(envelope-from <jgg@ziepe.ca>)
-	id 1rAAvZ-00B2r2-ML;
-	Mon, 04 Dec 2023 11:32:09 -0400
-Date: Mon, 4 Dec 2023 11:32:09 -0400
-From: Jason Gunthorpe <jgg@ziepe.ca>
-To: Joel Granados <j.granados@samsung.com>
-Cc: Lu Baolu <baolu.lu@linux.intel.com>, Kevin Tian <kevin.tian@intel.com>,
-	Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	Nicolin Chen <nicolinc@nvidia.com>, Yi Liu <yi.l.liu@intel.com>,
-	Jacob Pan <jacob.jun.pan@linux.intel.com>, iommu@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	virtualization@lists.linux-foundation.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/6] IOMMUFD: Deliver IO page faults to user space
-Message-ID: <20231204153209.GN1489931@ziepe.ca>
-References: <20231026024930.382898-1-baolu.lu@linux.intel.com>
- <CGME20231204150747eucas1p2365e92a7ac33ba99b801d7c800acaf6a@eucas1p2.samsung.com>
- <20231204150744.db3hfpq4v55cuavn@localhost>
+        bh=jABw2zbx7ijea0rhPxJuqEg+N1RDQxgva2LQbaOAzns=;
+        b=zcMi7qeEGh7ktceqXYRGk16iQYqVcbQIXe0R50O5EPCofGnE8Bw50A/c8tZlCZ/I0z
+         VM9vplNfCl1ZhVWc3SgZX7xID/n2QlDtyEP4sMeO7p9hdmkV3LgbW/wFwWuJoSmjWszT
+         +NgFKGZUlr5vJI/V2myauNJ1ogYnr8vlIErTi4h3TLIhucYJKouiSYY+/g7/YzQbyIdk
+         P9ZqFgF/Wg9gPi6YARUji4q/7jGLVjTuIhhrja2T+w5yHN/WY+ZswNzD6kGzLd7Q0v7p
+         dRHhyMi2IouYffx/IzpxtvkEXBQis3xjkP0KYzvt4djd6tIG4pSyARCLTGsTwEJVnFy6
+         Npmw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701707740; x=1702312540;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jABw2zbx7ijea0rhPxJuqEg+N1RDQxgva2LQbaOAzns=;
+        b=RDVjQQ1AM2hUKgYzcwrUsYn1asCQTUjVgpd9u/sMExm0Z9mJhy+3y6BhDsBFpy7Pxg
+         iJ+NqwBh6flmgvFkxTg73Y2AhP1y/MoAajCr0j/7au1r5e7pyY/PXKR1SWcpjTSVDYS3
+         xu8fB8tal7QYsA5n2KMpBJy5faolR9S228PBEzqyJNRCtf2qmwjAyoT0PZTqG0X6y/g5
+         3ogkpCWYCTzhu8RfIe4NL2Zz2YnitzJPAfH+9azOnTbk7EdmfyJ4jVI3beDmZCsGR/wi
+         yyPzUk438AJQsfYEXpX9vLn8xJBkWnpIZi8ILU5Qt0hfX/3DGY1hKfKIKp/L9aXyAhnp
+         YslA==
+X-Gm-Message-State: AOJu0YwKESnueb0km+w6lrTcgIWp6gJOUwm3jeriWtOlvnpuTZXJrvBu
+	XFDcflnXYagDdclTLQIJKurvdEmxUXFxfLk/qaidLg==
+X-Google-Smtp-Source: AGHT+IEPIvS2v9x5/LGkP67CUghbCwHnkkFfGaI/Rzd47JgebT80lAaPaT/OgP4FMUPPtIDXwaqelTsXTcjSOD2IRY4=
+X-Received: by 2002:a05:690c:a06:b0:5d7:1940:53c2 with SMTP id
+ cg6-20020a05690c0a0600b005d7194053c2mr3349401ywb.58.1701707739801; Mon, 04
+ Dec 2023 08:35:39 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231204150744.db3hfpq4v55cuavn@localhost>
+References: <20231121171643.3719880-1-surenb@google.com> <20231121171643.3719880-6-surenb@google.com>
+ <b3c882d2-0135-430c-8179-784f78be0902@arm.com> <a41c759f-78d8-44ed-b708-1bb737a8e6c1@redhat.com>
+ <cb3d3b12-abf3-4eda-8d9a-944684d05505@arm.com> <ccdb1080-7a2e-4f98-a4e8-e864fa2db299@redhat.com>
+ <CAJuCfpHS63bXkRGE1_G4z-2fDe72BeLka8t5ioSg2OXjbUrHXg@mail.gmail.com> <744be4e0-48e0-4c77-825c-711386dd205f@arm.com>
+In-Reply-To: <744be4e0-48e0-4c77-825c-711386dd205f@arm.com>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Mon, 4 Dec 2023 08:35:27 -0800
+Message-ID: <CAJuCfpHpbz4fWawmYU=B1D5pPE4+x0Wj0V-514Dja9UWcwiL9A@mail.gmail.com>
+Subject: Re: [PATCH v5 5/5] selftests/mm: add UFFDIO_MOVE ioctl test
+To: Ryan Roberts <ryan.roberts@arm.com>
+Cc: David Hildenbrand <david@redhat.com>, akpm@linux-foundation.org, viro@zeniv.linux.org.uk, 
+	brauner@kernel.org, shuah@kernel.org, aarcange@redhat.com, 
+	lokeshgidra@google.com, peterx@redhat.com, hughd@google.com, mhocko@suse.com, 
+	axelrasmussen@google.com, rppt@kernel.org, willy@infradead.org, 
+	Liam.Howlett@oracle.com, jannh@google.com, zhangpeng362@huawei.com, 
+	bgeffon@google.com, kaleshsingh@google.com, ngeoffray@google.com, 
+	jdduke@google.com, linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Dec 04, 2023 at 04:07:44PM +0100, Joel Granados wrote:
-> On Thu, Oct 26, 2023 at 10:49:24AM +0800, Lu Baolu wrote:
-> > Hi folks,
-> > 
-> > This series implements the functionality of delivering IO page faults to
-> > user space through the IOMMUFD framework for nested translation. Nested
-> Does this mean the IOPF_CAPABLE HWPT needs to be parented by a HWPT
-> created with IOMMU_HWPT_ALLOC_NEST_PARENT set?
+On Mon, Dec 4, 2023 at 1:27=E2=80=AFAM Ryan Roberts <ryan.roberts@arm.com> =
+wrote:
+>
+> On 04/12/2023 04:09, Suren Baghdasaryan wrote:
+> > On Sat, Dec 2, 2023 at 2:11=E2=80=AFAM David Hildenbrand <david@redhat.=
+com> wrote:
+> >>
+> >> On 02.12.23 09:04, Ryan Roberts wrote:
+> >>> On 01/12/2023 20:47, David Hildenbrand wrote:
+> >>>> On 01.12.23 10:29, Ryan Roberts wrote:
+> >>>>> On 21/11/2023 17:16, Suren Baghdasaryan wrote:
+> >>>>>> Add tests for new UFFDIO_MOVE ioctl which uses uffd to move source
+> >>>>>> into destination buffer while checking the contents of both after
+> >>>>>> the move. After the operation the content of the destination buffe=
+r
+> >>>>>> should match the original source buffer's content while the source
+> >>>>>> buffer should be zeroed. Separate tests are designed for PMD align=
+ed and
+> >>>>>> unaligned cases because they utilize different code paths in the k=
+ernel.
+> >>>>>>
+> >>>>>> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
+> >>>>>> ---
+> >>>>>>    tools/testing/selftests/mm/uffd-common.c     |  24 +++
+> >>>>>>    tools/testing/selftests/mm/uffd-common.h     |   1 +
+> >>>>>>    tools/testing/selftests/mm/uffd-unit-tests.c | 189 ++++++++++++=
++++++++
+> >>>>>>    3 files changed, 214 insertions(+)
+> >>>>>>
+> >>>>>> diff --git a/tools/testing/selftests/mm/uffd-common.c
+> >>>>>> b/tools/testing/selftests/mm/uffd-common.c
+> >>>>>> index fb3bbc77fd00..b0ac0ec2356d 100644
+> >>>>>> --- a/tools/testing/selftests/mm/uffd-common.c
+> >>>>>> +++ b/tools/testing/selftests/mm/uffd-common.c
+> >>>>>> @@ -631,6 +631,30 @@ int copy_page(int ufd, unsigned long offset, =
+bool wp)
+> >>>>>>        return __copy_page(ufd, offset, false, wp);
+> >>>>>>    }
+> >>>>>>    +int move_page(int ufd, unsigned long offset, unsigned long len=
+)
+> >>>>>> +{
+> >>>>>> +    struct uffdio_move uffdio_move;
+> >>>>>> +
+> >>>>>> +    if (offset + len > nr_pages * page_size)
+> >>>>>> +        err("unexpected offset %lu and length %lu\n", offset, len=
+);
+> >>>>>> +    uffdio_move.dst =3D (unsigned long) area_dst + offset;
+> >>>>>> +    uffdio_move.src =3D (unsigned long) area_src + offset;
+> >>>>>> +    uffdio_move.len =3D len;
+> >>>>>> +    uffdio_move.mode =3D UFFDIO_MOVE_MODE_ALLOW_SRC_HOLES;
+> >>>>>> +    uffdio_move.move =3D 0;
+> >>>>>> +    if (ioctl(ufd, UFFDIO_MOVE, &uffdio_move)) {
+> >>>>>> +        /* real retval in uffdio_move.move */
+> >>>>>> +        if (uffdio_move.move !=3D -EEXIST)
+> >>>>>> +            err("UFFDIO_MOVE error: %"PRId64,
+> >>>>>> +                (int64_t)uffdio_move.move);
+> >>>>>
+> >>>>> Hi Suren,
+> >>>>>
+> >>>>> FYI this error is triggering in mm-unstable (715b67adf4c8):
+> >>>>>
+> >>>>> Testing move-pmd on anon... ERROR: UFFDIO_MOVE error: -16 (errno=3D=
+16,
+> >>>>> @uffd-common.c:648)
+> >>>>>
+> >>>>> I'm running in a VM on Apple M2 (arm64). I haven't debugged any fur=
+ther, but
+> >>>>> happy to go deeper if you can direct.
+> >>>>
+> >>>> Does it trigger reliably? Which pagesize is that kernel using?
+> >>>
+> >>> Yep, although very occasionally it fails with EAGAIN. 4K kernel; see =
+other email
+> >>> for full config.
+> >>>
+> >>>>
+> >>>> I can spot that uffd_move_pmd_test()/uffd_move_pmd_handle_fault() us=
+es
+> >>>> default_huge_page_size(), which reads the default hugetlb size.
+> >>>
+> >>> My kernel command line is explicitly seting the default huge page siz=
+e to 2M.
+> >>>
+> >>
+> >> Okay, so that likely won't affect it.
+> >>
+> >> I can only guess that it has to do with the alignment of the virtual
+> >> area we are testing with, and that we do seem to get more odd patterns
+> >> on arm64.
+> >>
+> >> uffd_move_test_common() is a bit more elaborate, but if we aligned the
+> >> src+start area up, surely "step_count" cannot be left unmodified?
+> >>
+> >> So assuming we get either an unaligned source or an unaligned dst from
+> >> mmap(), I am not convinced that we won't be moving areas that are not
+> >> necessarily fully backed by PMDs and maybe don't even fall into the VM=
+A
+> >> of interest?
+> >>
+> >> Not sure if that could trigger the THP splitting issue, though.
+> >>
+> >> But I just quickly scanned that test setup, could be I am missing
+> >> something. It might make sense to just print the mmap'ed range and the
+> >> actual ranges we are trying to move. Maybe something "obvious" can be
+> >> observed.
+> >
+> > I was able to reproduce the issue on an Android device and after
+> > implementing David's suggestions to split the large folio and after
+> > replacing default_huge_page_size() with read_pmd_pagesize(), the
+> > move-pmd test started working for me. Ryan, could you please apply
+> > attached patches (over mm-unstable) and try the test again?
+>
+> Yep, all fixed with those patches!
 
-I would expect no. Both a nested and un-nested configuration should
-work.
+Great! Thanks for testing and confirming. I'll post an updated
+patchset later today and will ask Andrew to replace the current one
+with it.
+I'll also look into the reasons we need to split PMD on ARM64 in this
+test. It's good that this happened and we were able to test the PMD
+split path but I'm curious about the reason. It's possible my address
+alignment calculations are  somehow incorrect.
+Thanks,
+Suren.
 
-Jason
+>
+>
+> > Thanks,
+> > Suren.
+> >
+> >>
+> >> --
+> >> Cheers,
+> >>
+> >> David / dhildenb
+> >>
+>
 
