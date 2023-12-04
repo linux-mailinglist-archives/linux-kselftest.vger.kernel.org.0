@@ -1,219 +1,132 @@
-Return-Path: <linux-kselftest+bounces-1030-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1031-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E0778025C2
-	for <lists+linux-kselftest@lfdr.de>; Sun,  3 Dec 2023 17:52:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8134D802A66
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Dec 2023 03:42:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 507381C20971
-	for <lists+linux-kselftest@lfdr.de>; Sun,  3 Dec 2023 16:52:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 399D0280C74
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Dec 2023 02:42:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FC8B1642B;
-	Sun,  3 Dec 2023 16:52:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E8D4814;
+	Mon,  4 Dec 2023 02:42:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KbX2ippj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U2OuZqmu"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D510A106;
-	Sun,  3 Dec 2023 08:52:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701622354; x=1733158354;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=EA2ji1tKwR3xZ86ktJFvtkVW0seRxPfhzpnrXQXAqB4=;
-  b=KbX2ippj1PaACm0L/STZvJXEIuCSVeRW3+51NiiqUGhFG3aU8WmuMnng
-   n6pBUbdggDWh9pGZsZsWHpeaGXq9jyehvVv7c7L41zSxqW1HHbzVQQoow
-   3KuRXjeRpzQXXAPdSOicV0AgAW0EDQi5drmGC4t+X+07cOFHL76UhBtS4
-   M+mdWwooQ1FxhppcWaCQqS5IhCZQO1dOo6UsEtjgIueOXHdeFxowwVglS
-   LPP6MD4Ua8h9ghHiVIuyPeAysmW/99Jz9wQmJwX1lQtgvxavqc0ERmdqX
-   ScWPmZP1CIbl7Gfj+jrjQWLlgJf3c/gv2bBNmqYK/hAkB30y2MKQWZHgM
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10913"; a="706864"
-X-IronPort-AV: E=Sophos;i="6.04,247,1695711600"; 
-   d="scan'208";a="706864"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2023 08:52:33 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10913"; a="799345527"
-X-IronPort-AV: E=Sophos;i="6.04,247,1695711600"; 
-   d="scan'208";a="799345527"
-Received: from p12ill20yoongsia.png.intel.com ([10.88.227.28])
-  by orsmga008.jf.intel.com with ESMTP; 03 Dec 2023 08:52:24 -0800
-From: Song Yoong Siang <yoong.siang.song@intel.com>
-To: "David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Bjorn Topel <bjorn@kernel.org>,
-	Magnus Karlsson <magnus.karlsson@intel.com>,
-	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-	Jonathan Lemon <jonathan.lemon@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@google.com>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	Tariq Toukan <tariqt@nvidia.com>,
-	Willem de Bruijn <willemb@google.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	KP Singh <kpsingh@kernel.org>,
-	Hao Luo <haoluo@google.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Jose Abreu <joabreu@synopsys.com>
-Cc: netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	bpf@vger.kernel.org,
-	xdp-hints@xdp-project.net,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kselftest@vger.kernel.org,
-	Song Yoong Siang <yoong.siang.song@intel.com>
-Subject: [PATCH bpf-next v3 3/3] selftests/bpf: add Launch Time request to xdp_hw_metadata
-Date: Mon,  4 Dec 2023 00:51:29 +0800
-Message-Id: <20231203165129.1740512-4-yoong.siang.song@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231203165129.1740512-1-yoong.siang.song@intel.com>
-References: <20231203165129.1740512-1-yoong.siang.song@intel.com>
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A656D9;
+	Sun,  3 Dec 2023 18:42:38 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2ca03103155so4974391fa.0;
+        Sun, 03 Dec 2023 18:42:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701657756; x=1702262556; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SEUh6K5iutasnoMeRQbvniZJyhB8EqO9DGWeSRBdHG8=;
+        b=U2OuZqmucqFts8pAMt/wdD4lmr34uN6jJ/2bh2Hb8iYEpve6PK1jjBFcAMnW2jXsW0
+         s9qMLepYbliqh1PIAorSrtzuxrHMcl8wTU42TkZaBwZMKIKvZG6bUoX2Nsm4huEBBKal
+         kOV79Z5gP7m8T3TSMukeasr+T49wCsxWnRFS7+T38XWk7vivD2NqeRluCPmPEOA/7XXl
+         8gs75xOLkFR3BA8umg/sUY5wQfANIOAZCgUwA01z6gKkcQh12fnV2NzpfacFv/a3bNmr
+         4Ofk9fi7NdyeLyYg5BM9J7qyIlDB6S863h0geH75v3xQxjJVYF0M4OarjUVYPio0nvOj
+         g4mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701657756; x=1702262556;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SEUh6K5iutasnoMeRQbvniZJyhB8EqO9DGWeSRBdHG8=;
+        b=WIUeDHzytcpf0c/oZdrX7GeB/I9tDhKNEBoS46Wz/Zwqgw4x1E5WA/So1Wr04JSEDi
+         CNcG+HwMtydMbIfodpOfmBplpQPvBdncVDa08+MqTkR92TNtHnupWc525SytOhdEn74P
+         yASIHfkd+aIh+uL7x8fCe5rlRBAQergP4LQmVhoOZIFPt02vdkJndLx98/5Vx6hUfEfi
+         jWqVkDlGE9sYX7oiTGuzmvOf5mJu4bRnUWl85rbK+P1zRZ9tUqyX6cf/Am4afgV1EsxQ
+         n+Zd4pha3Undmp5tv1yZlwu302tQH7pY7GlLqr306SiOTvqnPxKmL+M0SJ56LlRza4Rs
+         mNHw==
+X-Gm-Message-State: AOJu0Yz8KemNXAHDqY4CmCvYkm1cpYqbyqyN2QzL+kcPLM5k2c4MGxgN
+	iUcjLfPC6+TZUnClqo7X5k3pYPQ9oTRT7X3dDnY=
+X-Google-Smtp-Source: AGHT+IFwUdfTpFRUP7l0fmhtGiz7fd+NP19pyuThwxbiypx7Ivz7rX5Zrc/KjwBbAY7wO0CJI2SrHgFWM/kImEvN9oM=
+X-Received: by 2002:a05:6512:ea1:b0:50b:f03c:1eaa with SMTP id
+ bi33-20020a0565120ea100b0050bf03c1eaamr553100lfb.95.1701657756237; Sun, 03
+ Dec 2023 18:42:36 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <cover.1694421911.git.haibo1.xu@intel.com> <64e0637cd6f22dd7557ed44bd2242001e7830d1c.1694421911.git.haibo1.xu@intel.com>
+ <20230914-d2e594e7d84503ad14036e2d@orel> <CAJve8onhY534T=Hyncjfi4GfdZ+0D2xM+jRSaYCAWCdaKxPUcQ@mail.gmail.com>
+In-Reply-To: <CAJve8onhY534T=Hyncjfi4GfdZ+0D2xM+jRSaYCAWCdaKxPUcQ@mail.gmail.com>
+From: Haibo Xu <xiaobo55x@gmail.com>
+Date: Mon, 4 Dec 2023 10:42:24 +0800
+Message-ID: <CAJve8omitHDpijJaLV_wHk+5LXpsBUWF8_eTD4MeWKM-807Siw@mail.gmail.com>
+Subject: Re: [PATCH v3 9/9] KVM: riscv: selftests: Add sstc timer test
+To: Andrew Jones <ajones@ventanamicro.com>
+Cc: Haibo Xu <haibo1.xu@intel.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, Marc Zyngier <maz@kernel.org>, 
+	Oliver Upton <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, 
+	Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, 
+	Anup Patel <anup@brainfault.org>, Atish Patra <atishp@atishpatra.org>, 
+	Sean Christopherson <seanjc@google.com>, Ricardo Koller <ricarkol@google.com>, 
+	Vishal Annapurve <vannapurve@google.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, 
+	Vipin Sharma <vipinsh@google.com>, David Matlack <dmatlack@google.com>, 
+	Colton Lewis <coltonlewis@google.com>, Aaron Lewis <aaronlewis@google.com>, 
+	Thomas Huth <thuth@redhat.com>, linux-kernel@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	kvmarm@lists.linux.dev, kvm-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This patch adds Launch Time hw offload request to xdp_hw_metadata. User can
-configure the delta of HW launch time to HW RX-time by using "-l" argument.
-The default delta is set to 0.1 second.
+On Fri, Sep 15, 2023 at 2:21=E2=80=AFPM Haibo Xu <xiaobo55x@gmail.com> wrot=
+e:
+>
+> On Thu, Sep 14, 2023 at 5:52=E2=80=AFPM Andrew Jones <ajones@ventanamicro=
+.com> wrote:
+> >
+> > On Thu, Sep 14, 2023 at 09:37:03AM +0800, Haibo Xu wrote:
+> > > Add a KVM selftests to validate the Sstc timer functionality.
+> > > The test was ported from arm64 arch timer test.
+> >
+> > I just tried this test out. Running it over and over again on QEMU I se=
+e
+> > it works sometimes, but it frequently fails with the
+> > GUEST_ASSERT_EQ(config_iter + 1, irq_iter) assert and at least once I
+> > also saw the __GUEST_ASSERT(xcnt >=3D cmp) assert.
+> >
+>
+> Good catch!
+>
+> I can also reproduce this issue and it is a common problem for both
+> arm64 and riscv because it also happens in a arm64 Qemu VM.
+>
+> It seems like a synchronization issue between host and guest shared
+> variables. Will double check the test code.
+>
+> > Thanks,
+> > drew
 
-This patch is tested with stmmac on Intel Tiger Lake platform. Refer to
-result below, the delta between pre-determined launch time and actual HW
-transmit complete time is around 24 us.
+Hi Andrew,
 
-$ sudo ./xdp_hw_metadata eth0
-...
-xsk_ring_cons__peek: 1
-0x55e577c3a7a8: rx_desc[0]->addr=80100 addr=80100 comp_addr=80100 EoP
-No rx_hash err=-95
-HW RX-time:   1677762523393813392 (sec:1677762523.3938) delta to User RX-time sec:0.0003 (259.290 usec)
-XDP RX-time:   1677762523394050576 (sec:1677762523.3941) delta to User RX-time sec:0.0000 (22.106 usec)
-0x55e577c3a7a8: ping-pong with csum=5619 (want 8626) csum_start=34 csum_offset=6
-HW RX-time:   1677762523393813392 (sec:1677762523.3938) delta to HW Launch-time sec:0.1000 (100000.000 usec)
-0x55e577c3a7a8: complete tx idx=0 addr=18
-HW Launch-time:   1677762523493813392 (sec:1677762523.4938) delta to HW TX-complete-time sec:0.0000 (24.181 usec)
-HW TX-complete-time:   1677762523493837573 (sec:1677762523.4938) delta to User TX-complete-time sec:0.0007 (737.636 usec)
-XDP RX-time:   1677762523394050576 (sec:1677762523.3941) delta to User TX-complete-time sec:0.1005 (100524.633 usec)
-HW RX-time:   1677762523393813392 (sec:1677762523.3938) delta to HW TX-complete-time sec:0.1000 (100024.181 usec)
-0x55e577c3a7a8: complete rx idx=128 addr=80100
+After several rounds of regression testing, some findings:
+1. The intermittent failure also happened on ARM64 Qemu VM, and even
+in the initial arch_timer commit(4959d8650e9f4).
+2. it didn't happen on a ARM64 HW(but a different failure occured
+during stress test)
+3. The failure have a close relationship with
+TIMER_TEST_ERR_MARGIN_US(default 100), and after increasing
+     the macro to 300, the failure couldn't reproduced in 1000 loops
+stress test in RISC-V Qemu VM
 
-$ sudo ./xdp_hw_metadata eth0 -l 10000000
-...
-poll: 1 (0) skip=17 fail=0 redir=17
-xsk_ring_cons__peek: 1
-0x558336d397a8: rx_desc[15]->addr=9e100 addr=9e100 comp_addr=9e100 EoP
-No rx_hash err=-95
-HW RX-time:   1677762699254666655 (sec:1677762699.2547) delta to User RX-time sec:0.0003 (256.928 usec)
-XDP RX-time:   1677762699254901232 (sec:1677762699.2549) delta to User RX-time sec:0.0000 (22.351 usec)
-0x558336d397a8: ping-pong with csum=5619 (want 8626) csum_start=34 csum_offset=6
-HW RX-time:   1677762699254666655 (sec:1677762699.2547) delta to HW Launch-time sec:0.0100 (10000.000 usec)
-0x558336d397a8: complete tx idx=15 addr=f018
-HW Launch-time:   1677762699264666655 (sec:1677762699.2647) delta to HW TX-complete-time sec:0.0000 (24.307 usec)
-HW TX-complete-time:   1677762699264690962 (sec:1677762699.2647) delta to User TX-complete-time sec:0.0003 (309.901 usec)
-XDP RX-time:   1677762699254901232 (sec:1677762699.2549) delta to User TX-complete-time sec:0.0101 (10099.631 usec)
-HW RX-time:   1677762699254666655 (sec:1677762699.2547) delta to HW TX-complete-time sec:0.0100 (10024.307 usec)
-0x558336d397a8: complete rx idx=143 addr=9e100
+So my suggestion is we can expose the TIMER_TEST_ERR_MARGIN_US
+parameter as an arch_timer test arg parameter
+and tune it based on a specific test environment.
 
-Signed-off-by: Song Yoong Siang <yoong.siang.song@intel.com>
----
- tools/testing/selftests/bpf/xdp_hw_metadata.c | 19 ++++++++++++++++++-
- 1 file changed, 18 insertions(+), 1 deletion(-)
+What's your opinion?
 
-diff --git a/tools/testing/selftests/bpf/xdp_hw_metadata.c b/tools/testing/selftests/bpf/xdp_hw_metadata.c
-index 3291625ba4fb..3e238bb310b7 100644
---- a/tools/testing/selftests/bpf/xdp_hw_metadata.c
-+++ b/tools/testing/selftests/bpf/xdp_hw_metadata.c
-@@ -13,6 +13,7 @@
-  * - UDP 9091 packets trigger TX reply
-  * - TX HW timestamp is requested and reported back upon completion
-  * - TX checksum is requested
-+ * - HW launch time is set for transmission
-  */
- 
- #include <test_progs.h>
-@@ -61,6 +62,8 @@ int rxq;
- bool skip_tx;
- __u64 last_hw_rx_timestamp;
- __u64 last_xdp_rx_timestamp;
-+__u64 last_launch_time;
-+__u64 launch_time_delta_to_hw_rx_timestamp = 100000000; /* 0.1 second */
- 
- void test__fail(void) { /* for network_helpers.c */ }
- 
-@@ -274,6 +277,8 @@ static bool complete_tx(struct xsk *xsk, clockid_t clock_id)
- 	if (meta->completion.tx_timestamp) {
- 		__u64 ref_tstamp = gettime(clock_id);
- 
-+		print_tstamp_delta("HW Launch-time", "HW TX-complete-time",
-+				   last_launch_time, meta->completion.tx_timestamp);
- 		print_tstamp_delta("HW TX-complete-time", "User TX-complete-time",
- 				   meta->completion.tx_timestamp, ref_tstamp);
- 		print_tstamp_delta("XDP RX-time", "User TX-complete-time",
-@@ -371,6 +376,14 @@ static void ping_pong(struct xsk *xsk, void *rx_packet, clockid_t clock_id)
- 	       xsk, ntohs(udph->check), ntohs(want_csum),
- 	       meta->request.csum_start, meta->request.csum_offset);
- 
-+	/* Set the value of launch time */
-+	meta->flags |= XDP_TXMD_FLAGS_LAUNCH_TIME;
-+	meta->request.launch_time = last_hw_rx_timestamp +
-+				    launch_time_delta_to_hw_rx_timestamp;
-+	last_launch_time = meta->request.launch_time;
-+	print_tstamp_delta("HW RX-time", "HW Launch-time", last_hw_rx_timestamp,
-+			   meta->request.launch_time);
-+
- 	memcpy(data, rx_packet, len); /* don't share umem chunk for simplicity */
- 	tx_desc->options |= XDP_TX_METADATA;
- 	tx_desc->len = len;
-@@ -595,6 +608,7 @@ static void print_usage(void)
- 		"  -h    Display this help and exit\n\n"
- 		"  -m    Enable multi-buffer XDP for larger MTU\n"
- 		"  -r    Don't generate AF_XDP reply (rx metadata only)\n"
-+		"  -l    Delta of HW Launch-time to HW RX-time in ns (default: 0.1s)\n"
- 		"Generate test packets on the other machine with:\n"
- 		"  echo -n xdp | nc -u -q1 <dst_ip> 9091\n";
- 
-@@ -605,7 +619,7 @@ static void read_args(int argc, char *argv[])
- {
- 	int opt;
- 
--	while ((opt = getopt(argc, argv, "chmr")) != -1) {
-+	while ((opt = getopt(argc, argv, "chmrl:")) != -1) {
- 		switch (opt) {
- 		case 'c':
- 			bind_flags &= ~XDP_USE_NEED_WAKEUP;
-@@ -621,6 +635,9 @@ static void read_args(int argc, char *argv[])
- 		case 'r':
- 			skip_tx = true;
- 			break;
-+		case 'l':
-+			launch_time_delta_to_hw_rx_timestamp = atoll(optarg);
-+			break;
- 		case '?':
- 			if (isprint(optopt))
- 				fprintf(stderr, "Unknown option: -%c\n", optopt);
--- 
-2.34.1
-
+Regards,
+Haibo
 
