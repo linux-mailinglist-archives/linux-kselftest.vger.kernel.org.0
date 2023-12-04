@@ -1,115 +1,122 @@
-Return-Path: <linux-kselftest+bounces-1042-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1043-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30820803072
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Dec 2023 11:36:52 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00F64803137
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Dec 2023 12:03:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B81FCB20A42
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Dec 2023 10:36:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 839A4B20A52
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Dec 2023 11:03:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55306224DA;
-	Mon,  4 Dec 2023 10:36:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C043225DB;
+	Mon,  4 Dec 2023 11:03:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TYuJbBEO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r7zJ1vDr"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2402022333;
-	Mon,  4 Dec 2023 10:36:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B651CC433C7;
-	Mon,  4 Dec 2023 10:36:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55F67224EF;
+	Mon,  4 Dec 2023 11:03:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2FDCC433C7;
+	Mon,  4 Dec 2023 11:03:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701686198;
-	bh=+ErQN2WS12/khFYfpQDZFxvXogAuk59InCRmaNowfS4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=TYuJbBEOWc7KkHydu2jfldkno0up5yHsG0uUho4wBtYHENJrIhEzopw828B8nYR2y
-	 /Bq7E40/MYPd1WbSuMXOvrTR5LHNu4Nyf/Kw+gB/7gkQzftmk1CpVYV9eJwBzY35J7
-	 xEUZGCUu5mNhYCftzglLku0Qv8rqkxUO3hFH3lqEzc07PY3VLfg/jHqko9fsaF3gZi
-	 n60G9Q65Bc1Acq6pmo9DI1XvzmOdhIgAhp4s7D3JCsTjOCRoMf5DFu4Adbt8rs1jkb
-	 JUYwE//FlD7965G/pbx4+GWSA9D9XyXOvGaEDUVAyM3lQkuP2ld5EEhAtkvcn/6u8N
-	 p2QNPiNTkbN1g==
-Message-ID: <43b01013-e78b-417e-b169-91909c7309b1@kernel.org>
-Date: Mon, 4 Dec 2023 11:36:30 +0100
+	s=k20201202; t=1701687808;
+	bh=td2FHNFbaEBhn6/pKvODA/OD7GSweig2jmUFrnTj5ag=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=r7zJ1vDrsKNETcUBXXgqaZq6Wk03L1ZzHpvEGkz45riz5nQZDIo72NUTT4HuGntNq
+	 qX2pr4CDP/8s4bgsQoMq4tozF/fmyCc9PcQFTWg8qOQaFuYlSFogTROx3mSkFluwUr
+	 5iF/pvd1gsO1yM25oy1txVw6llgnbmNecrEAVQYV9k5FsGTdZBpwC/cM55E5/WgI6y
+	 ghEBkvTEPbGSddIoNGtHhp9fsLL/gepQTyGFXEaZxrA4+mbXYZhsTTT/cRARv1pFYR
+	 Pre5QK1QcG8Osh9+gpDvHtwA12ZK69rJh15eFjEcEhChLi10Ua+NQ+BKcmoteS7s54
+	 kN08CJrkDgEWQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1rA6jV-001CFD-VG;
+	Mon, 04 Dec 2023 11:03:26 +0000
+Date: Mon, 04 Dec 2023 11:03:24 +0000
+Message-ID: <86jzpub56r.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Joey Gouly <joey.gouly@arm.com>
+Cc: linux-arm-kernel@lists.infradead.org,
+	akpm@linux-foundation.org,
+	aneesh.kumar@linux.ibm.com,
+	broonie@kernel.org,
+	catalin.marinas@arm.com,
+	dave.hansen@linux.intel.com,
+	oliver.upton@linux.dev,
+	shuah@kernel.org,
+	will@kernel.org,
+	kvmarm@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>
+Subject: Re: [PATCH v3 00/25] Permission Overlay Extension
+In-Reply-To: <20231124163510.1835740-1-joey.gouly@arm.com>
+References: <20231124163510.1835740-1-joey.gouly@arm.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 2/3] net: stmmac: add Launch Time support to
- XDP ZC
-Content-Language: en-US
-To: Song Yoong Siang <yoong.siang.song@intel.com>,
- "David S . Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
- Bjorn Topel <bjorn@kernel.org>, Magnus Karlsson <magnus.karlsson@intel.com>,
- Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
- Jonathan Lemon <jonathan.lemon@gmail.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@google.com>, Lorenzo Bianconi <lorenzo@kernel.org>,
- Tariq Toukan <tariqt@nvidia.com>, Willem de Bruijn <willemb@google.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Mykola Lysenko <mykolal@fb.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>,
- Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
- Shuah Khan <shuah@kernel.org>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Jose Abreu <joabreu@synopsys.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, bpf@vger.kernel.org, xdp-hints@xdp-project.net,
- linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org
-References: <20231203165129.1740512-1-yoong.siang.song@intel.com>
- <20231203165129.1740512-3-yoong.siang.song@intel.com>
-From: Jesper Dangaard Brouer <hawk@kernel.org>
-In-Reply-To: <20231203165129.1740512-3-yoong.siang.song@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: joey.gouly@arm.com, linux-arm-kernel@lists.infradead.org, akpm@linux-foundation.org, aneesh.kumar@linux.ibm.com, broonie@kernel.org, catalin.marinas@arm.com, dave.hansen@linux.intel.com, oliver.upton@linux.dev, shuah@kernel.org, will@kernel.org, kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, james.morse@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
+Hi Joey,
 
-
-On 12/3/23 17:51, Song Yoong Siang wrote:
-> This patch enables Launch Time (Time-Based Scheduling) support to XDP zero
-> copy via XDP Tx metadata framework.
+On Fri, 24 Nov 2023 16:34:45 +0000,
+Joey Gouly <joey.gouly@arm.com> wrote:
 > 
-> Signed-off-by: Song Yoong Siang<yoong.siang.song@intel.com>
-> ---
->   drivers/net/ethernet/stmicro/stmmac/stmmac.h      |  2 ++
+> Hello everyone,
+> 
+> This series implements the Permission Overlay Extension introduced in 2022
+> VMSA enhancements [1]. It is based on v6.7-rc2.
+> 
+> Changes since v2[2]:
+> 	# Added ptrace support and selftest
+> 	# Add missing POR_EL0 initialisation in fork/clone
+> 	# Rebase onto v6.7-rc2
+> 	# Add r-bs
+> 
+> The Permission Overlay Extension allows to constrain permissions on memory
+> regions. This can be used from userspace (EL0) without a system call or TLB
+> invalidation.
 
-As requested before, I think we need to see another driver implementing 
-this.
+I have given this series a few more thoughts, and came to the
+conclusion that is it still incomplete on the KVM front:
 
-I propose driver igc and chip i225.
+* FEAT_S1POE often comes together with FEAT_S2POE. For obvious
+  reasons, we cannot afford to let the guest play with S2POR_EL1, nor
+  do we want to advertise FEAT_S2POE to the guest.
 
-The interesting thing for me is to see how the LaunchTime max 1 second
-into the future[1] is handled code wise. One suggestion is to add a 
-section to Documentation/networking/xsk-tx-metadata.rst per driver that 
-mentions/documents these different hardware limitations.  It is natural 
-that different types of hardware have limitations.  This is a close-to 
-hardware-level abstraction/API, and IMHO as long as we document the 
-limitations we can expose this API without too many limitations for more 
-capable hardware.
+  You will need to add some additional FGT for this, and mask out
+  FEAT_S2POE from the guest's view of the ID registers.
 
-  [1] 
-https://github.com/xdp-project/xdp-project/blob/master/areas/tsn/code01_follow_qdisc_TSN_offload.org#setup-code-driver-igb
+* letting the guest play with POE comes with some interesting strings
+  attached: a guest that has started on a POE-enabled host cannot be
+  migrated to one that doesn't have POE. which means that the POE
+  registers should only be visible to the host userspace if enabled in
+  the guest's ID registers, and thus only context-switched in these
+  conditions. They should otherwise UNDEF.
 
-This stmmac driver and Intel Tiger Lake CPU must also have some limit on 
-how long into the future it will/can schedule packets?
+Thanks,
 
+	M.
 
-People from xdp-hints list must make their voice hear if they want i210 
-and igb driver support, because it have even-more hardware limitations, 
-see [1] (E.g. only TX queue 0 and 1 supports LaunchTime). BUT I know 
-some have this hardware in production and might be motivated to get a 
-functioning driver with this feature?
-
---Jesper
+-- 
+Without deviation from the norm, progress is not possible.
 
