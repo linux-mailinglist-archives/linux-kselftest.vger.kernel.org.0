@@ -1,167 +1,109 @@
-Return-Path: <linux-kselftest+bounces-1039-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1040-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDBF5802E85
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Dec 2023 10:28:01 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92681802ECC
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Dec 2023 10:39:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5E365B209AB
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Dec 2023 09:27:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C387F1C20987
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Dec 2023 09:39:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33FB61803D;
-	Mon,  4 Dec 2023 09:27:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D61821C2BE;
+	Mon,  4 Dec 2023 09:39:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CoFuB5nU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7F3BBD8;
-	Mon,  4 Dec 2023 01:27:52 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 702AA1650;
-	Mon,  4 Dec 2023 01:28:38 -0800 (PST)
-Received: from [10.57.73.130] (unknown [10.57.73.130])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A46113F6C4;
-	Mon,  4 Dec 2023 01:27:47 -0800 (PST)
-Message-ID: <744be4e0-48e0-4c77-825c-711386dd205f@arm.com>
-Date: Mon, 4 Dec 2023 09:27:45 +0000
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3086B2;
+	Mon,  4 Dec 2023 01:39:43 -0800 (PST)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-40c09ba723eso11251645e9.2;
+        Mon, 04 Dec 2023 01:39:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701682782; x=1702287582; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=itnvq+P/Fjh6RP+B0+dY8QHorajZulYkmu3iW5W6GwY=;
+        b=CoFuB5nU6e31ISJXpMBxyiKWE8ME0yoRZlrS8DYOEhlP14xRysT5BPQ1zaKlVJkRkh
+         RWTkyHgh2rNT35F0yWexHGP3Puk939AkBnYihRc6q5aXdbtJQ51lsnde0RYAEoj34x1L
+         Al355chhLfeKHg59nxVWtG6bZKKwwWfCTn8/S+e1fcyLFl4TSu9oywM84I9PbOGSiQ9P
+         g6jTHkVmRwzXn24IHzD/+RhyMCx+CuJFUR7TRwmil+Ubuq0oldyG3/V9Mx2pjy1di8r4
+         PBhVAnF5SWGOqGpopJxZygsCkmxHg1u6Sm2NlsQbx+TXs1SWinASfhWPMfGoRcLgukM+
+         jlYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701682782; x=1702287582;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=itnvq+P/Fjh6RP+B0+dY8QHorajZulYkmu3iW5W6GwY=;
+        b=lqZhmGd5RlTi8S9CP++e9Cs89/mlhMhzAGwO25jZ4QZKEzjwpCb8JUBKHpzyUeBQxZ
+         UBh1uSxhZXm2iWHOyaiHwEzK9J/L9wBhPW5hOVyuO+9fYxHB/p5cdKohLqS3SvRuj2dj
+         sZ49m0GkqUrI3OsVUuX+On9YoDsgMWkOxX5phtSs0P1G+gjIgYylLHOJbcj/oXxIv6wY
+         G44IC7zGvTPzDlH+4fytdRQKzQFaQg2kgml9bnnvocDma/HFj8nZDFPcDTXDw5UwJzS+
+         IrzO0ZTiBOJnj09Yt/PHuSDzLnFioMCVnAmNPXekAxup5r+nc30yimP5Oxk+48U0U980
+         8mOw==
+X-Gm-Message-State: AOJu0Ywl+MvrBnkEYQgBTbL+e0kgCjSlSzPqIZPrvfeRHS31TUflC2PJ
+	x1HbEks8a29RBfIgLNJw9KQ=
+X-Google-Smtp-Source: AGHT+IEuktjrUxLdnaKY9QQMHGXtWDZAhW0oayMCNA5adoVDlXNkChDbLVtvMFBUY6gJCz8lY1y0og==
+X-Received: by 2002:a05:600c:3584:b0:408:5a1c:9de7 with SMTP id p4-20020a05600c358400b004085a1c9de7mr2136608wmq.7.1701682782129;
+        Mon, 04 Dec 2023 01:39:42 -0800 (PST)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id r1-20020a5d4e41000000b0033340c678ffsm4278525wrt.96.2023.12.04.01.39.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Dec 2023 01:39:41 -0800 (PST)
+From: Colin Ian King <colin.i.king@gmail.com>
+To: Andrii Nakryiko <andrii@kernel.org>,
+	Mykola Lysenko <mykolal@fb.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	KP Singh <kpsingh@kernel.org>,
+	Stanislav Fomichev <sdf@google.com>,
+	Hao Luo <haoluo@google.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: kernel-janitors@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH][NEXT] selftests/bpf: Fix spelling mistake "get_signaure_size" -> "get_signature_size"
+Date: Mon,  4 Dec 2023 09:39:40 +0000
+Message-Id: <20231204093940.2611954-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 5/5] selftests/mm: add UFFDIO_MOVE ioctl test
-Content-Language: en-GB
-To: Suren Baghdasaryan <surenb@google.com>,
- David Hildenbrand <david@redhat.com>
-Cc: akpm@linux-foundation.org, viro@zeniv.linux.org.uk, brauner@kernel.org,
- shuah@kernel.org, aarcange@redhat.com, lokeshgidra@google.com,
- peterx@redhat.com, hughd@google.com, mhocko@suse.com,
- axelrasmussen@google.com, rppt@kernel.org, willy@infradead.org,
- Liam.Howlett@oracle.com, jannh@google.com, zhangpeng362@huawei.com,
- bgeffon@google.com, kaleshsingh@google.com, ngeoffray@google.com,
- jdduke@google.com, linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kernel-team@android.com
-References: <20231121171643.3719880-1-surenb@google.com>
- <20231121171643.3719880-6-surenb@google.com>
- <b3c882d2-0135-430c-8179-784f78be0902@arm.com>
- <a41c759f-78d8-44ed-b708-1bb737a8e6c1@redhat.com>
- <cb3d3b12-abf3-4eda-8d9a-944684d05505@arm.com>
- <ccdb1080-7a2e-4f98-a4e8-e864fa2db299@redhat.com>
- <CAJuCfpHS63bXkRGE1_G4z-2fDe72BeLka8t5ioSg2OXjbUrHXg@mail.gmail.com>
-From: Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <CAJuCfpHS63bXkRGE1_G4z-2fDe72BeLka8t5ioSg2OXjbUrHXg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-On 04/12/2023 04:09, Suren Baghdasaryan wrote:
-> On Sat, Dec 2, 2023 at 2:11 AM David Hildenbrand <david@redhat.com> wrote:
->>
->> On 02.12.23 09:04, Ryan Roberts wrote:
->>> On 01/12/2023 20:47, David Hildenbrand wrote:
->>>> On 01.12.23 10:29, Ryan Roberts wrote:
->>>>> On 21/11/2023 17:16, Suren Baghdasaryan wrote:
->>>>>> Add tests for new UFFDIO_MOVE ioctl which uses uffd to move source
->>>>>> into destination buffer while checking the contents of both after
->>>>>> the move. After the operation the content of the destination buffer
->>>>>> should match the original source buffer's content while the source
->>>>>> buffer should be zeroed. Separate tests are designed for PMD aligned and
->>>>>> unaligned cases because they utilize different code paths in the kernel.
->>>>>>
->>>>>> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
->>>>>> ---
->>>>>>    tools/testing/selftests/mm/uffd-common.c     |  24 +++
->>>>>>    tools/testing/selftests/mm/uffd-common.h     |   1 +
->>>>>>    tools/testing/selftests/mm/uffd-unit-tests.c | 189 +++++++++++++++++++
->>>>>>    3 files changed, 214 insertions(+)
->>>>>>
->>>>>> diff --git a/tools/testing/selftests/mm/uffd-common.c
->>>>>> b/tools/testing/selftests/mm/uffd-common.c
->>>>>> index fb3bbc77fd00..b0ac0ec2356d 100644
->>>>>> --- a/tools/testing/selftests/mm/uffd-common.c
->>>>>> +++ b/tools/testing/selftests/mm/uffd-common.c
->>>>>> @@ -631,6 +631,30 @@ int copy_page(int ufd, unsigned long offset, bool wp)
->>>>>>        return __copy_page(ufd, offset, false, wp);
->>>>>>    }
->>>>>>    +int move_page(int ufd, unsigned long offset, unsigned long len)
->>>>>> +{
->>>>>> +    struct uffdio_move uffdio_move;
->>>>>> +
->>>>>> +    if (offset + len > nr_pages * page_size)
->>>>>> +        err("unexpected offset %lu and length %lu\n", offset, len);
->>>>>> +    uffdio_move.dst = (unsigned long) area_dst + offset;
->>>>>> +    uffdio_move.src = (unsigned long) area_src + offset;
->>>>>> +    uffdio_move.len = len;
->>>>>> +    uffdio_move.mode = UFFDIO_MOVE_MODE_ALLOW_SRC_HOLES;
->>>>>> +    uffdio_move.move = 0;
->>>>>> +    if (ioctl(ufd, UFFDIO_MOVE, &uffdio_move)) {
->>>>>> +        /* real retval in uffdio_move.move */
->>>>>> +        if (uffdio_move.move != -EEXIST)
->>>>>> +            err("UFFDIO_MOVE error: %"PRId64,
->>>>>> +                (int64_t)uffdio_move.move);
->>>>>
->>>>> Hi Suren,
->>>>>
->>>>> FYI this error is triggering in mm-unstable (715b67adf4c8):
->>>>>
->>>>> Testing move-pmd on anon... ERROR: UFFDIO_MOVE error: -16 (errno=16,
->>>>> @uffd-common.c:648)
->>>>>
->>>>> I'm running in a VM on Apple M2 (arm64). I haven't debugged any further, but
->>>>> happy to go deeper if you can direct.
->>>>
->>>> Does it trigger reliably? Which pagesize is that kernel using?
->>>
->>> Yep, although very occasionally it fails with EAGAIN. 4K kernel; see other email
->>> for full config.
->>>
->>>>
->>>> I can spot that uffd_move_pmd_test()/uffd_move_pmd_handle_fault() uses
->>>> default_huge_page_size(), which reads the default hugetlb size.
->>>
->>> My kernel command line is explicitly seting the default huge page size to 2M.
->>>
->>
->> Okay, so that likely won't affect it.
->>
->> I can only guess that it has to do with the alignment of the virtual
->> area we are testing with, and that we do seem to get more odd patterns
->> on arm64.
->>
->> uffd_move_test_common() is a bit more elaborate, but if we aligned the
->> src+start area up, surely "step_count" cannot be left unmodified?
->>
->> So assuming we get either an unaligned source or an unaligned dst from
->> mmap(), I am not convinced that we won't be moving areas that are not
->> necessarily fully backed by PMDs and maybe don't even fall into the VMA
->> of interest?
->>
->> Not sure if that could trigger the THP splitting issue, though.
->>
->> But I just quickly scanned that test setup, could be I am missing
->> something. It might make sense to just print the mmap'ed range and the
->> actual ranges we are trying to move. Maybe something "obvious" can be
->> observed.
-> 
-> I was able to reproduce the issue on an Android device and after
-> implementing David's suggestions to split the large folio and after
-> replacing default_huge_page_size() with read_pmd_pagesize(), the
-> move-pmd test started working for me. Ryan, could you please apply
-> attached patches (over mm-unstable) and try the test again?
+There is a spelling mistake in an ASSERT_GT message. Fix it.
 
-Yep, all fixed with those patches!
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ tools/testing/selftests/bpf/prog_tests/verify_pkcs7_sig.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-
-> Thanks,
-> Suren.
-> 
->>
->> --
->> Cheers,
->>
->> David / dhildenb
->>
+diff --git a/tools/testing/selftests/bpf/prog_tests/verify_pkcs7_sig.c b/tools/testing/selftests/bpf/prog_tests/verify_pkcs7_sig.c
+index 6c90372b772d..ab0f02faa80c 100644
+--- a/tools/testing/selftests/bpf/prog_tests/verify_pkcs7_sig.c
++++ b/tools/testing/selftests/bpf/prog_tests/verify_pkcs7_sig.c
+@@ -498,7 +498,7 @@ static void test_pkcs7_sig_fsverity(void)
+ 	if (!ASSERT_OK_PTR(skel, "test_sig_in_xattr__open"))
+ 		goto out;
+ 	ret = get_signature_size(sig_path);
+-	if (!ASSERT_GT(ret, 0, "get_signaure_size"))
++	if (!ASSERT_GT(ret, 0, "get_signature_size"))
+ 		goto out;
+ 	skel->bss->sig_size = ret;
+ 	skel->bss->user_keyring_serial = syscall(__NR_request_key, "keyring",
+-- 
+2.39.2
 
 
