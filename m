@@ -1,265 +1,267 @@
-Return-Path: <linux-kselftest+bounces-1091-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1092-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB80680409E
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Dec 2023 21:58:27 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A513804165
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Dec 2023 23:15:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 36066B20BB7
-	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Dec 2023 20:58:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 510BB1F212F2
+	for <lists+linux-kselftest@lfdr.de>; Mon,  4 Dec 2023 22:15:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B9B83A8F6;
-	Mon,  4 Dec 2023 20:57:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2BC13A8CA;
+	Mon,  4 Dec 2023 22:15:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="fQoXufqY";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="a0G1dJFA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LBcrlt+M"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E456173B;
-	Mon,  4 Dec 2023 12:57:12 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailnew.nyi.internal (Postfix) with ESMTP id 90418580A6A;
-	Mon,  4 Dec 2023 15:57:11 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Mon, 04 Dec 2023 15:57:11 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-	:cc:content-transfer-encoding:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:sender:subject:subject:to:to; s=fm3; t=1701723431; x=
-	1701730631; bh=Xy5DWhMcuaQWz9hFzj8IU9Hd0UISUG5+/EyW9nquCao=; b=f
-	QoXufqYcQIqHDb6el7DTUJd0fBEdJBUVU5fChFUUxqhhNptIPWA2GRfZjS5By+kM
-	TSZmQy0jNI4S4C3Xzcf3SQxzfJaIp/4rzSJwhtM3BLXoAcPtTYwhRdUtsc7Cq+YQ
-	/vNbJhiEN+Ih45VmOsGphKUYIfa4A4q/ZPylcUTjClRfYMa/DICvhVYDcC4HIZ8H
-	K8hgEexMFRkSPklKC373I8YYyKagom68fe9bWDqJZIEI3n92ydmOfPDPNJKSS9tb
-	e4gjLLKfV8FYwNwiYqCqvEtH5YJKa3aMV4e1WyPkqejMUzTinX5ew+VlBFTNVdSv
-	7Em7dEUtrLlCGLAo/lEkQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1701723431; x=
-	1701730631; bh=Xy5DWhMcuaQWz9hFzj8IU9Hd0UISUG5+/EyW9nquCao=; b=a
-	0G1dJFA48CvQe6gUE0On96JanSsLf7wueO3F1B4613z0EoYzIg2yB63UoGRCsIsQ
-	NHF3yMLdOovVFVpDNXfv1ncdAlBYvn2Zns/c/XcqOYOc9+Z7y3YQYE9pvp6pVlhf
-	FYyPUI/egIzvJMLHKr/1/CPKLENAfHBOLsbJH5XcwoxrE+8u6du607mPmAE+3HLv
-	BzrhJinolZmi0agqWryGkTo/eGouP5Hzkhr6GJIjXTE4+HXreHRA6NVoIFWqMctv
-	gPaZFilQ9twbCtVNEIFHXehy43p3fzOp/Ryynnqo1IOhwaVTd0/X70xKevH4cZKD
-	mkJXAU7wBQtbF5mIEKDVw==
-X-ME-Sender: <xms:Jz1uZbbPJAWqw1hbkmdCf0OIc5cXLyn_tIjNkGvN7IdMolIJ0nQHKQ>
-    <xme:Jz1uZaYQCNvJrlAuauPZ8-Gl2lyEQM4sFCIiNi-SBtGpT8IrUT4d9Kgs_0kG480R1
-    a9pn8eCLfkLt3i3Iw>
-X-ME-Received: <xmr:Jz1uZd-SzMW3Gag7dTS2UNdDBlimaWKPgkpl-aeaIOCSICynrGW6bqvQXCsYv9PSrl7NOA_GG3laktaAgl3tPSnMMU8FPCuC3tiH6H6a4O8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudejiedgudeggecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecufghrlhcuvffnffculdefhedmnecujfgurhephf
-    fvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepffgrnhhivghlucgiuhcu
-    oegugihusegugihuuhhurdighiiiqeenucggtffrrghtthgvrhhnpefgfefggeejhfduie
-    ekvdeuteffleeifeeuvdfhheejleejjeekgfffgefhtddtteenucevlhhushhtvghrufhi
-    iigvpedunecurfgrrhgrmhepmhgrihhlfhhrohhmpegugihusegugihuuhhurdighiii
-X-ME-Proxy: <xmx:Jz1uZRpPhhDVYqaEh3YnUGp3rYsAfraByBKMTWkzoCK6HD41pqIbow>
-    <xmx:Jz1uZWrOfGi_yx1eBdyltH_ddZPfrJRG8CMf-ebmYxHw1yD4YYeoQg>
-    <xmx:Jz1uZXS7NVV8FytT-dssTKaa9AlvgQaSEIx8k0D_KPPqIAQ5UhMphA>
-    <xmx:Jz1uZZ5L0Gpt67rr6UlJRtzZaa7l8ZKhmdZumwqyfXC4A2OaOy6g7A>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 4 Dec 2023 15:57:09 -0500 (EST)
-From: Daniel Xu <dxu@dxuuu.xyz>
-To: daniel@iogearbox.net,
-	ast@kernel.org,
-	davem@davemloft.net,
-	hawk@kernel.org,
-	john.fastabend@gmail.com,
-	andrii@kernel.org,
-	kuba@kernel.org,
-	shuah@kernel.org,
-	steffen.klassert@secunet.com,
-	antony.antony@secunet.com,
-	alexei.starovoitov@gmail.com,
-	yonghong.song@linux.dev,
-	eddyz87@gmail.com
-Cc: mykolal@fb.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	kpsingh@kernel.org,
-	sdf@google.com,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	devel@linux-ipsec.org
-Subject: [PATCH bpf-next v4 10/10] bpf: xfrm: Add selftest for bpf_xdp_get_xfrm_state()
-Date: Mon,  4 Dec 2023 13:56:30 -0700
-Message-ID: <ee451cb630f53ef9f71fed9af6fd516bc547468b.1701722991.git.dxu@dxuuu.xyz>
-X-Mailer: git-send-email 2.42.1
-In-Reply-To: <cover.1701722991.git.dxu@dxuuu.xyz>
-References: <cover.1701722991.git.dxu@dxuuu.xyz>
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D560FF;
+	Mon,  4 Dec 2023 14:15:00 -0800 (PST)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-a1a5772b8a5so363454966b.1;
+        Mon, 04 Dec 2023 14:14:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701728098; x=1702332898; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cT5ING78Aw6QvaBr7RPKXeEm1alnh4pQOnp24KNcG6U=;
+        b=LBcrlt+MKjEO3c31uU2GKLPLSDABi1fW5KFcLhihgKg3/4NIz0K0I0sn0nT/sIiwe9
+         7KhY/zMJWyRWpoCxmZF6Sm84vz6Ie0tWoHIOSR1NVoWHB+8pTnhM+P4f1fkU0lt3qW6v
+         B/nMBm3PptrsYM3tlMp+JoK3BBC6d3VH9AP8visDYkeyFtFc0dUoaFpSQmGnOwYpgNmi
+         zm05yPVl2uyF1VcRUrUOj3u+Z7zXEO/0N4ZS/XzjfmO8yBIobBKlPV+3DDQs/EhxxqmF
+         c+aN7EkQarbEYUkvYqzRnjhlLi0K5I3JMlX720yy4wrh+R7/FrXzj7lFI5Yeeaqhcv5D
+         BULg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701728098; x=1702332898;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cT5ING78Aw6QvaBr7RPKXeEm1alnh4pQOnp24KNcG6U=;
+        b=w/NrVxx3J3XPJaWwZmCON9oTi9CWh/jeaUiHtQmZY1T1GnvJ891gTD8IcY+ciCgLNh
+         cf+9srdRa5Rh5SVc1Bqrz8/SqTNaXL7Cql51jhT1BNUEiV6CtgwEW+P9efkOiirPXwbw
+         45klZb6z+H6IaAsWcsOO/0tOdEj8ehE65kDyCz+J7KvXDCi079LGueQ3VRDat5GoZjEO
+         6ElP++dhI8XBlBkrYhsvB5ThN5X3508SqREFs7hh0WN10VGlQHqaekjphT+LyxpURGET
+         jiwEPk1JOMyY9mGUxc642be2Dn3HYSZYhePap/4YONMwJKuFiDGxJTL0ICV5deHetAaW
+         dsZg==
+X-Gm-Message-State: AOJu0YyQXHWH+sBdOahJXXt2bYEgIkXH+n2Bj9zqG4kEidFejvjOUk22
+	F9eJvKylFq5m6FJDajGQTay3kDjf9mfmpi8EkGJWZ8YWyzk=
+X-Google-Smtp-Source: AGHT+IFoeGilC7KQ6Unb3jfilMiyCDHGb3JBCgBI+bgOUtA4U8OnYlGMdCUBhy2PrVAbC60n5Rk0rZxYScsgRykKnXE=
+X-Received: by 2002:a17:906:74c2:b0:a19:a19b:78ac with SMTP id
+ z2-20020a17090674c200b00a19a19b78acmr2117622ejl.111.1701728098257; Mon, 04
+ Dec 2023 14:14:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20231204201406.341074-1-khuey@kylehuey.com> <20231204201406.341074-3-khuey@kylehuey.com>
+In-Reply-To: <20231204201406.341074-3-khuey@kylehuey.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 4 Dec 2023 14:14:46 -0800
+Message-ID: <CAEf4BzbDKiP7femK5DZ8jeyK0u63KrV+FogEDVPaYS7mc4if7g@mail.gmail.com>
+Subject: Re: [PATCH 2/2] selftest/bpf: Test returning zero from a perf bpf
+ program suppresses SIGIO.
+To: Kyle Huey <me@kylehuey.com>
+Cc: Kyle Huey <khuey@kylehuey.com>, linux-kernel@vger.kernel.org, 
+	"Robert O'Callahan" <robert@ocallahan.org>, Andrii Nakryiko <andrii@kernel.org>, 
+	Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This commit extends test_tunnel selftest to test the new XDP xfrm state
-lookup kfunc.
+On Mon, Dec 4, 2023 at 12:14=E2=80=AFPM Kyle Huey <me@kylehuey.com> wrote:
+>
+> The test sets a hardware breakpoint and uses a bpf program to suppress th=
+e
+> I/O availability signal if the ip matches the expected value.
+>
+> Signed-off-by: Kyle Huey <khuey@kylehuey.com>
+> ---
+>  .../selftests/bpf/prog_tests/perf_skip.c      | 95 +++++++++++++++++++
+>  .../selftests/bpf/progs/test_perf_skip.c      | 23 +++++
+>  2 files changed, 118 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/perf_skip.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/test_perf_skip.c
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/perf_skip.c b/tools/t=
+esting/selftests/bpf/prog_tests/perf_skip.c
+> new file mode 100644
+> index 000000000000..b269a31669b7
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/perf_skip.c
+> @@ -0,0 +1,95 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#define _GNU_SOURCE
+> +#include <test_progs.h>
+> +#include "test_perf_skip.skel.h"
+> +#include <linux/hw_breakpoint.h>
+> +#include <sys/mman.h>
+> +
+> +#define BPF_OBJECT            "test_perf_skip.bpf.o"
 
-Co-developed-by: Antony Antony <antony.antony@secunet.com>
-Signed-off-by: Antony Antony <antony.antony@secunet.com>
-Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
----
- .../selftests/bpf/prog_tests/test_tunnel.c    | 20 ++++++--
- .../selftests/bpf/progs/test_tunnel_kern.c    | 51 +++++++++++++++++++
- 2 files changed, 67 insertions(+), 4 deletions(-)
+leftover?
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/test_tunnel.c b/tools/testing/selftests/bpf/prog_tests/test_tunnel.c
-index 2d7f8fa82ebd..fc804095d578 100644
---- a/tools/testing/selftests/bpf/prog_tests/test_tunnel.c
-+++ b/tools/testing/selftests/bpf/prog_tests/test_tunnel.c
-@@ -278,7 +278,7 @@ static int add_xfrm_tunnel(void)
- 	SYS(fail,
- 	    "ip netns exec at_ns0 "
- 		"ip xfrm state add src %s dst %s proto esp "
--			"spi %d reqid 1 mode tunnel "
-+			"spi %d reqid 1 mode tunnel replay-window 42 "
- 			"auth-trunc 'hmac(sha1)' %s 96 enc 'cbc(aes)' %s",
- 	    IP4_ADDR_VETH0, IP4_ADDR1_VETH1, XFRM_SPI_IN_TO_OUT, XFRM_AUTH, XFRM_ENC);
- 	SYS(fail,
-@@ -292,7 +292,7 @@ static int add_xfrm_tunnel(void)
- 	SYS(fail,
- 	    "ip netns exec at_ns0 "
- 		"ip xfrm state add src %s dst %s proto esp "
--			"spi %d reqid 2 mode tunnel "
-+			"spi %d reqid 2 mode tunnel replay-window 42 "
- 			"auth-trunc 'hmac(sha1)' %s 96 enc 'cbc(aes)' %s",
- 	    IP4_ADDR1_VETH1, IP4_ADDR_VETH0, XFRM_SPI_OUT_TO_IN, XFRM_AUTH, XFRM_ENC);
- 	SYS(fail,
-@@ -313,7 +313,7 @@ static int add_xfrm_tunnel(void)
- 	 */
- 	SYS(fail,
- 	    "ip xfrm state add src %s dst %s proto esp "
--		    "spi %d reqid 1 mode tunnel "
-+		    "spi %d reqid 1 mode tunnel replay-window 42 "
- 		    "auth-trunc 'hmac(sha1)' %s 96  enc 'cbc(aes)' %s",
- 	    IP4_ADDR_VETH0, IP4_ADDR1_VETH1, XFRM_SPI_IN_TO_OUT, XFRM_AUTH, XFRM_ENC);
- 	SYS(fail,
-@@ -325,7 +325,7 @@ static int add_xfrm_tunnel(void)
- 	/* root -> at_ns0 */
- 	SYS(fail,
- 	    "ip xfrm state add src %s dst %s proto esp "
--		    "spi %d reqid 2 mode tunnel "
-+		    "spi %d reqid 2 mode tunnel replay-window 42 "
- 		    "auth-trunc 'hmac(sha1)' %s 96  enc 'cbc(aes)' %s",
- 	    IP4_ADDR1_VETH1, IP4_ADDR_VETH0, XFRM_SPI_OUT_TO_IN, XFRM_AUTH, XFRM_ENC);
- 	SYS(fail,
-@@ -628,8 +628,10 @@ static void test_xfrm_tunnel(void)
- {
- 	DECLARE_LIBBPF_OPTS(bpf_tc_hook, tc_hook,
- 			    .attach_point = BPF_TC_INGRESS);
-+	LIBBPF_OPTS(bpf_xdp_attach_opts, opts);
- 	struct test_tunnel_kern *skel = NULL;
- 	struct nstoken *nstoken;
-+	int xdp_prog_fd;
- 	int tc_prog_fd;
- 	int ifindex;
- 	int err;
-@@ -654,6 +656,14 @@ static void test_xfrm_tunnel(void)
- 	if (attach_tc_prog(&tc_hook, tc_prog_fd, -1))
- 		goto done;
- 
-+	/* attach xdp prog to tunnel dev */
-+	xdp_prog_fd = bpf_program__fd(skel->progs.xfrm_get_state_xdp);
-+	if (!ASSERT_GE(xdp_prog_fd, 0, "bpf_program__fd"))
-+		goto done;
-+	err = bpf_xdp_attach(ifindex, xdp_prog_fd, XDP_FLAGS_REPLACE, &opts);
-+	if (!ASSERT_OK(err, "bpf_xdp_attach"))
-+		goto done;
-+
- 	/* ping from at_ns0 namespace test */
- 	nstoken = open_netns("at_ns0");
- 	err = test_ping(AF_INET, IP4_ADDR_TUNL_DEV1);
-@@ -667,6 +677,8 @@ static void test_xfrm_tunnel(void)
- 		goto done;
- 	if (!ASSERT_EQ(skel->bss->xfrm_remote_ip, 0xac100164, "remote_ip"))
- 		goto done;
-+	if (!ASSERT_EQ(skel->bss->xfrm_replay_window, 42, "replay_window"))
-+		goto done;
- 
- done:
- 	delete_xfrm_tunnel();
-diff --git a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-index 3a59eb9c34de..c0dd38616562 100644
---- a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-+++ b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-@@ -30,6 +30,10 @@ int bpf_skb_set_fou_encap(struct __sk_buff *skb_ctx,
- 			  struct bpf_fou_encap *encap, int type) __ksym;
- int bpf_skb_get_fou_encap(struct __sk_buff *skb_ctx,
- 			  struct bpf_fou_encap *encap) __ksym;
-+struct xfrm_state *
-+bpf_xdp_get_xfrm_state(struct xdp_md *ctx, struct bpf_xfrm_state_opts *opts,
-+		       u32 opts__sz) __ksym;
-+void bpf_xdp_xfrm_state_release(struct xfrm_state *x) __ksym;
- 
- struct {
- 	__uint(type, BPF_MAP_TYPE_ARRAY);
-@@ -950,4 +954,51 @@ int xfrm_get_state(struct __sk_buff *skb)
- 	return TC_ACT_OK;
- }
- 
-+volatile int xfrm_replay_window = 0;
-+
-+SEC("xdp")
-+int xfrm_get_state_xdp(struct xdp_md *xdp)
-+{
-+	struct bpf_xfrm_state_opts opts = {};
-+	struct xfrm_state *x = NULL;
-+	struct ip_esp_hdr *esph;
-+	struct bpf_dynptr ptr;
-+	u8 esph_buf[8] = {};
-+	u8 iph_buf[20] = {};
-+	struct iphdr *iph;
-+	u32 off;
-+
-+	if (bpf_dynptr_from_xdp(xdp, 0, &ptr))
-+		goto out;
-+
-+	off = sizeof(struct ethhdr);
-+	iph = bpf_dynptr_slice(&ptr, off, iph_buf, sizeof(iph_buf));
-+	if (!iph || iph->protocol != IPPROTO_ESP)
-+		goto out;
-+
-+	off += sizeof(struct iphdr);
-+	esph = bpf_dynptr_slice(&ptr, off, esph_buf, sizeof(esph_buf));
-+	if (!esph)
-+		goto out;
-+
-+	opts.netns_id = BPF_F_CURRENT_NETNS;
-+	opts.daddr.a4 = iph->daddr;
-+	opts.spi = esph->spi;
-+	opts.proto = IPPROTO_ESP;
-+	opts.family = AF_INET;
-+
-+	x = bpf_xdp_get_xfrm_state(xdp, &opts, sizeof(opts));
-+	if (!x || opts.error)
-+		goto out;
-+
-+	if (!x->replay_esn)
-+		goto out;
-+
-+	xfrm_replay_window = x->replay_esn->replay_window;
-+out:
-+	if (x)
-+		bpf_xdp_xfrm_state_release(x);
-+	return XDP_PASS;
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.42.1
+> +
+> +static void handle_sig(int)
+> +{
+> +       ASSERT_OK(1, "perf event not skipped");
+> +}
+> +
+> +static noinline int test_function(void)
+> +{
 
+please add
+
+asm volatile ("");
+
+here to prevent compiler from actually inlining at the call site
+
+> +       return 0;
+> +}
+> +
+> +void serial_test_perf_skip(void)
+> +{
+> +       sighandler_t previous;
+> +       int duration =3D 0;
+> +       struct test_perf_skip *skel =3D NULL;
+> +       int map_fd =3D -1;
+> +       long page_size =3D sysconf(_SC_PAGE_SIZE);
+> +       uintptr_t *ip =3D NULL;
+> +       int prog_fd =3D -1;
+> +       struct perf_event_attr attr =3D {0};
+> +       int perf_fd =3D -1;
+> +       struct f_owner_ex owner;
+> +       int err;
+> +
+> +       previous =3D signal(SIGIO, handle_sig);
+> +
+> +       skel =3D test_perf_skip__open_and_load();
+> +       if (!ASSERT_OK_PTR(skel, "skel_load"))
+> +               goto cleanup;
+> +
+> +       prog_fd =3D bpf_program__fd(skel->progs.handler);
+> +       if (!ASSERT_OK(prog_fd < 0, "bpf_program__fd"))
+> +               goto cleanup;
+> +
+> +       map_fd =3D bpf_map__fd(skel->maps.ip);
+> +       if (!ASSERT_OK(map_fd < 0, "bpf_map__fd"))
+> +               goto cleanup;
+> +
+> +       ip =3D mmap(NULL, page_size, PROT_READ | PROT_WRITE, MAP_SHARED, =
+map_fd, 0);
+> +       if (!ASSERT_OK_PTR(ip, "mmap bpf map"))
+> +               goto cleanup;
+> +
+> +       *ip =3D (uintptr_t)test_function;
+> +
+> +       attr.type =3D PERF_TYPE_BREAKPOINT;
+> +       attr.size =3D sizeof(attr);
+> +       attr.bp_type =3D HW_BREAKPOINT_X;
+> +       attr.bp_addr =3D (uintptr_t)test_function;
+> +       attr.bp_len =3D sizeof(long);
+> +       attr.sample_period =3D 1;
+> +       attr.sample_type =3D PERF_SAMPLE_IP;
+> +       attr.pinned =3D 1;
+> +       attr.exclude_kernel =3D 1;
+> +       attr.exclude_hv =3D 1;
+> +       attr.precise_ip =3D 3;
+> +
+> +       perf_fd =3D syscall(__NR_perf_event_open, &attr, 0, -1, -1, 0);
+> +       if (CHECK(perf_fd < 0, "perf_event_open", "err %d\n", perf_fd))
+
+please don't use CHECK() macro, stick to ASSERT_xxx()
+
+also, we are going to run all this on different hardware and VMs, see
+how we skip tests if hardware support is not there. See test__skip
+usage in prog_tests/perf_branches.c, as one example
+
+> +               goto cleanup;
+> +
+> +       err =3D fcntl(perf_fd, F_SETFL, O_ASYNC);
+
+I assume this is what will send SIGIO, right? Can you add a small
+comment explicitly saying this?
+
+> +       if (!ASSERT_OK(err, "fcntl(F_SETFL, O_ASYNC)"))
+> +               goto cleanup;
+> +
+> +       owner.type =3D F_OWNER_TID;
+> +       owner.pid =3D gettid();
+> +       err =3D fcntl(perf_fd, F_SETOWN_EX, &owner);
+> +       if (!ASSERT_OK(err, "fcntl(F_SETOWN_EX)"))
+> +               goto cleanup;
+> +
+> +       err =3D ioctl(perf_fd, PERF_EVENT_IOC_SET_BPF, prog_fd);
+> +       if (!ASSERT_OK(err, "ioctl(PERF_EVENT_IOC_SET_BPF)"))
+> +               goto cleanup;
+
+we have a better way to do this, please use
+bpf_program__attach_perf_event() instead
+
+> +
+> +       test_function();
+> +
+> +cleanup:
+> +       if (perf_fd >=3D 0)
+> +               close(perf_fd);
+> +       if (ip)
+> +               munmap(ip, page_size);
+> +       if (skel)
+> +               test_perf_skip__destroy(skel);
+> +
+> +       signal(SIGIO, previous);
+> +}
+> diff --git a/tools/testing/selftests/bpf/progs/test_perf_skip.c b/tools/t=
+esting/selftests/bpf/progs/test_perf_skip.c
+> new file mode 100644
+> index 000000000000..ef01a9161afe
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/test_perf_skip.c
+> @@ -0,0 +1,23 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include "vmlinux.h"
+> +#include <bpf/bpf_helpers.h>
+> +#include <bpf/bpf_tracing.h>
+> +
+> +struct {
+> +       __uint(type, BPF_MAP_TYPE_ARRAY);
+> +       __uint(max_entries, 1);
+> +       __uint(map_flags, BPF_F_MMAPABLE);
+> +       __type(key, uint32_t);
+> +       __type(value, uintptr_t);
+> +} ip SEC(".maps");
+
+please use global variable:
+
+__u64 ip;
+
+and then access it from user-space side through skeleton
+
+skel->bss.ip =3D &test_function;
+
+> +
+> +SEC("perf_event")
+> +int handler(struct bpf_perf_event_data *data)
+> +{
+> +       const uint32_t index =3D 0;
+> +       uintptr_t *v =3D bpf_map_lookup_elem(&ip, &index);
+> +
+> +       return !(v && *v =3D=3D PT_REGS_IP(&data->regs));
+
+and so we the above global var suggestion this will be just:
+
+return ip =3D=3D PT_REGS_IP(&data->regs);
+
+> +}
+> +
+> +char _license[] SEC("license") =3D "GPL";
+> --
+> 2.34.1
+>
 
