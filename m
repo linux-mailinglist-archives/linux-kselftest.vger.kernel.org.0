@@ -1,154 +1,163 @@
-Return-Path: <linux-kselftest+bounces-1138-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1139-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 775D0805699
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 14:54:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6122A80573E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 15:24:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 326D4281CC1
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 13:54:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0B52B1F215B2
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 14:24:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F4625FF1E;
-	Tue,  5 Dec 2023 13:54:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E030F65EB9;
+	Tue,  5 Dec 2023 14:24:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U9fCmrbt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ObTgFDce"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD0FE122;
-	Tue,  5 Dec 2023 05:54:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701784460; x=1733320460;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=AMNx/fjJGfvaJNGvGiW3daQJM+aiJW9ZD+58Y4J119c=;
-  b=U9fCmrbtg24jDdxfaQ9xeZzKgQlSEvNM21T7pGztQcTR/CBGlihnU/yi
-   xOnrAZbTZgkQXDfx6E+ZbP/K0e9uqIGAoH7/pwvM0Rwuo1HOAAXUJVfLs
-   KwNcWmELueuBfM5ma17v3mGwAENL7YbvfnzfQlX4vIPoOBsaX4Msw3RA4
-   Jxb2Y9tYNWt+oDBtT6w5yWAs0U1+6+GhVSX1yWTwRpZtRkXNASDjBBeF4
-   yDkeaNUwDKX6uTB/es8xFk4rlWcMZfVUoZzhvIMMRZutkgjk4uIGpKnhW
-   oFEWO07G37+2Z8VXGMSSoDRuEsIgB1Jgj6cXEytNhRzFRP09RNKrGRBFu
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10914"; a="7240125"
-X-IronPort-AV: E=Sophos;i="6.04,252,1695711600"; 
-   d="scan'208";a="7240125"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2023 05:54:20 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10914"; a="805278184"
-X-IronPort-AV: E=Sophos;i="6.04,252,1695711600"; 
-   d="scan'208";a="805278184"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga001.jf.intel.com with ESMTP; 05 Dec 2023 05:54:14 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rAVsJ-00096M-26;
-	Tue, 05 Dec 2023 13:54:11 +0000
-Date: Tue, 5 Dec 2023 21:53:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: davidgow@google.com, Rae Moar <rmoar@google.com>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-	Matti Vaittinen <mazziesaccount@gmail.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Jonathan Corbet <corbet@lwn.net>, Kees Cook <keescook@chromium.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>, Maxime Ripard <mripard@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-	linux-sound@vger.kernel.org, David Gow <davidgow@google.com>
-Subject: Re: [PATCH 1/4] kunit: Add APIs for managing devices
-Message-ID: <202312052114.VQD1viY5-lkp@intel.com>
-References: <20231205-kunit_bus-v1-1-635036d3bc13@google.com>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3BC365EB1
+	for <linux-kselftest@vger.kernel.org>; Tue,  5 Dec 2023 14:24:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3623C433C8;
+	Tue,  5 Dec 2023 14:24:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701786291;
+	bh=jSFY6ngQogrJiHDWxQDhDnPQplkFw+RxN+tqq7rkIuo=;
+	h=From:Date:Subject:To:Cc:From;
+	b=ObTgFDce5CvhMAMYEA6xBNyyNpWqZoRQQHEafkBJcRAImxgmUw6JapCLHVe0/KPIA
+	 ivH3Rr68X6GB0oRlwU0FVxjxLugOzNweBspkXo6VagoGzOGKK8YHtrOx53pxXI1dMI
+	 RAwh9wFtW6VuYwyMUAA+qgxUxdk9DUcVVAkVvUlPFUPH17ABOaHqEdahnVgu55CZnP
+	 pJwha/E2rKEiEZH8+Xy0dKYfBl3Y9BGG7bI3wHRSHCd2+6zpnxOCXCPioWVbWF5fjn
+	 UsdeVC4qz0hCDAUQz5TkLJpWeJKzf2g/A1N61ztFnulc5sFXDkgGH5MFejFFRlsohL
+	 tlV2zqXFkuFlw==
+From: Mark Brown <broonie@kernel.org>
+Date: Tue, 05 Dec 2023 14:24:44 +0000
+Subject: [PATCH] kselftest/arm64: Log SVCR when the SME tests barf
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231205-kunit_bus-v1-1-635036d3bc13@google.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20231205-arm64-kselftest-log-svcr-v1-1-b77abd9ee7f3@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAKwyb2UC/x3MOQqAQAxA0atIagMzcQOvIhaDRg2uJCKCeHcHy
+ 1f8/4CxChvUyQPKl5jsW4RPE+imsI2M0kcDOco8uRyDrmWOs/EynGwnLvuIdnWKWUWBvCvIBYa
+ YH8qD3P+6ad/3A78DbpBqAAAA
+To: Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.13-dev-5c066
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2579; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=jSFY6ngQogrJiHDWxQDhDnPQplkFw+RxN+tqq7rkIuo=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBlbzKw2Ip54YYzvTRn+xfMczlGiTTrq6VEnNtVDHUC
+ 1ipV8PiJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZW8ysAAKCRAk1otyXVSH0L+nB/
+ 9AEoTq/6l+kDAJJrqW6eA7/Z8Sk3UANVz/z15sCRGFBi646UnGEG9TDE/Q+I4lp6/BUz7uN0+RKSSc
+ XbRlqSzis7IAU6V4xOLsebhtJqF2WSPS4S0l0CMba53T6ZKJfVs01wWXOwf+wGEw4aHmUSnt38mua+
+ 16fUYtPXp2+JGX+x7YQnEK8pX9L/fYCUbPAC7s6//uFTM1X2l2JlAVopI90qJPcIVwdb56CvaR3y+u
+ ycE3GzoZIuCHAhTaH595OjEQ/HyxssSBSmPScw7HNSIDhXmJ8xvYOd9Yn0LDvFfUFxD8mqv7b9cl4I
+ KXz6xl70OqxV2H58KCtNqSirp6O+iY
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-Hi,
+On failure we log the actual and expected value of the register we detect
+a mismatch in. For SME one obvious potential source of corruption would be
+if we had corrupted SVCR since changes in streaming mode will reset the
+register values, log the value to aid in understanding issues.
 
-kernel test robot noticed the following build warnings:
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+ tools/testing/selftests/arm64/fp/sve-test.S | 10 ++++++++++
+ tools/testing/selftests/arm64/fp/za-test.S  |  6 ++++++
+ tools/testing/selftests/arm64/fp/zt-test.S  |  5 +++++
+ 3 files changed, 21 insertions(+)
 
-[auto build test WARNING on c8613be119892ccceffbc550b9b9d7d68b995c9e]
+diff --git a/tools/testing/selftests/arm64/fp/sve-test.S b/tools/testing/selftests/arm64/fp/sve-test.S
+index 547d077e3517..fff60e2a25ad 100644
+--- a/tools/testing/selftests/arm64/fp/sve-test.S
++++ b/tools/testing/selftests/arm64/fp/sve-test.S
+@@ -515,6 +515,10 @@ function barf
+ 	mov	x11, x1	// actual data
+ 	mov	x12, x2	// data size
+ 
++#ifdef SSVE
++	mrs	x13, S3_3_C4_C2_2
++#endif
++
+ 	puts	"Mismatch: PID="
+ 	mov	x0, x20
+ 	bl	putdec
+@@ -534,6 +538,12 @@ function barf
+ 	bl	dumphex
+ 	puts	"]\n"
+ 
++#ifdef SSVE
++	puts	"\tSVCR: "
++	mov	x0, x13
++	bl	putdecn
++#endif
++
+ 	mov	x8, #__NR_getpid
+ 	svc	#0
+ // fpsimd.c acitivty log dump hack
+diff --git a/tools/testing/selftests/arm64/fp/za-test.S b/tools/testing/selftests/arm64/fp/za-test.S
+index 9dcd70911397..095b45531640 100644
+--- a/tools/testing/selftests/arm64/fp/za-test.S
++++ b/tools/testing/selftests/arm64/fp/za-test.S
+@@ -333,6 +333,9 @@ function barf
+ //	mov	w8, #__NR_exit
+ //	svc	#0
+ // end hack
++
++	mrs	x13, S3_3_C4_C2_2
++
+ 	smstop
+ 	mov	x10, x0	// expected data
+ 	mov	x11, x1	// actual data
+@@ -356,6 +359,9 @@ function barf
+ 	mov	x1, x12
+ 	bl	dumphex
+ 	puts	"]\n"
++	puts	"\tSVCR: "
++	mov	x0, x13
++	bl	putdecn
+ 
+ 	mov	x8, #__NR_getpid
+ 	svc	#0
+diff --git a/tools/testing/selftests/arm64/fp/zt-test.S b/tools/testing/selftests/arm64/fp/zt-test.S
+index d63286397638..b5c81e81a379 100644
+--- a/tools/testing/selftests/arm64/fp/zt-test.S
++++ b/tools/testing/selftests/arm64/fp/zt-test.S
+@@ -267,6 +267,8 @@ function barf
+ //	mov	w8, #__NR_exit
+ //	svc	#0
+ // end hack
++
++	mrs	x13, S3_3_C4_C2_2
+ 	smstop
+ 	mov	x10, x0	// expected data
+ 	mov	x11, x1	// actual data
+@@ -287,6 +289,9 @@ function barf
+ 	mov	x1, x12
+ 	bl	dumphex
+ 	puts	"]\n"
++	puts	"\tSVCR: "
++	mov	x0, x13
++	bl	putdecn
+ 
+ 	mov	x8, #__NR_getpid
+ 	svc	#0
 
-url:    https://github.com/intel-lab-lkp/linux/commits/davidgow-google-com/kunit-Add-APIs-for-managing-devices/20231205-153349
-base:   c8613be119892ccceffbc550b9b9d7d68b995c9e
-patch link:    https://lore.kernel.org/r/20231205-kunit_bus-v1-1-635036d3bc13%40google.com
-patch subject: [PATCH 1/4] kunit: Add APIs for managing devices
-config: powerpc-randconfig-r081-20231205 (https://download.01.org/0day-ci/archive/20231205/202312052114.VQD1viY5-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project.git 4a5ac14ee968ff0ad5d2cc1ffa0299048db4c88a)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231205/202312052114.VQD1viY5-lkp@intel.com/reproduce)
+---
+base-commit: 2cc14f52aeb78ce3f29677c2de1f06c0e91471ab
+change-id: 20231204-arm64-kselftest-log-svcr-372a210520ae
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312052114.VQD1viY5-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> lib/kunit/device.c:100:22: warning: no previous prototype for function '__kunit_device_register_internal' [-Wmissing-prototypes]
-     100 | struct kunit_device *__kunit_device_register_internal(struct kunit *test,
-         |                      ^
-   lib/kunit/device.c:100:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-     100 | struct kunit_device *__kunit_device_register_internal(struct kunit *test,
-         | ^
-         | static 
-   1 warning generated.
-
-
-vim +/__kunit_device_register_internal +100 lib/kunit/device.c
-
-    99	
- > 100	struct kunit_device *__kunit_device_register_internal(struct kunit *test,
-   101							      const char *name,
-   102							      struct device_driver *drv)
-   103	{
-   104		struct kunit_device *kunit_dev;
-   105		int err = -ENOMEM;
-   106	
-   107		kunit_dev = kzalloc(sizeof(struct kunit_device), GFP_KERNEL);
-   108		if (!kunit_dev)
-   109			return ERR_PTR(err);
-   110	
-   111		kunit_dev->owner = test;
-   112	
-   113		err = dev_set_name(&kunit_dev->dev, "%s.%s", test->name, name);
-   114		if (err) {
-   115			kfree(kunit_dev);
-   116			return ERR_PTR(err);
-   117		}
-   118	
-   119		/* Set the expected driver pointer, so we match. */
-   120		kunit_dev->driver = drv;
-   121	
-   122		kunit_dev->dev.release = kunit_device_release;
-   123		kunit_dev->dev.bus = &kunit_bus_type;
-   124		kunit_dev->dev.parent = &kunit_bus;
-   125	
-   126		err = device_register(&kunit_dev->dev);
-   127		if (err) {
-   128			put_device(&kunit_dev->dev);
-   129			return ERR_PTR(err);
-   130		}
-   131	
-   132		kunit_add_action(test, device_unregister_wrapper, &kunit_dev->dev);
-   133	
-   134		return kunit_dev;
-   135	}
-   136	
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Mark Brown <broonie@kernel.org>
+
 
