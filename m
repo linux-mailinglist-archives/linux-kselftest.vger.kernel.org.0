@@ -1,155 +1,145 @@
-Return-Path: <linux-kselftest+bounces-1143-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1144-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8247C805812
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 15:59:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CC57980582A
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 16:05:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BAC171C211FF
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 14:59:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 06D5C1C20C6E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 15:05:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95BE167E7F;
-	Tue,  5 Dec 2023 14:59:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53BB167E84;
+	Tue,  5 Dec 2023 15:05:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e9dEpWsW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KY4z3Vzv"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1192D188;
-	Tue,  5 Dec 2023 06:59:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701788372; x=1733324372;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VZDh21/Ig8AXYrMCD18ioZIyJdzTpoel4Yv9mfI1z6Q=;
-  b=e9dEpWsWa7GANAIdFYw2tFvEvlrhgQ1pm3fxzyZMeSsm+r/XGRDHdaSW
-   DA+hVb3syqfpXDS6J8W6tVkhBowJaEJjRBh8IkTW0/e/LVRPww3WyzCJL
-   sEUwOTbwcz0a/m/cEBIzOaNrB83XprKQtnNa8ILHow/7Qdxf8+l8rbKym
-   qu/ZMsa71hIVGRSvnMVdrpXYX9GCxMzntpnJj7/ICoDUtiwTUU/TlHYDA
-   Rdths1sfOl0HNKe46LBHTbbie43bHsLTUx/bD4VhbRpo8Cs2P8wAiABnL
-   OryYuCsqeiQvox5UUnFX11Q9uTLgrDcHqvzMHxUjHUFYhyAmDCeqBUKQM
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10915"; a="7250408"
-X-IronPort-AV: E=Sophos;i="6.04,252,1695711600"; 
-   d="scan'208";a="7250408"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2023 06:59:31 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10915"; a="944283594"
-X-IronPort-AV: E=Sophos;i="6.04,252,1695711600"; 
-   d="scan'208";a="944283594"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by orsmga005.jf.intel.com with ESMTP; 05 Dec 2023 06:59:24 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rAWtO-0009DG-02;
-	Tue, 05 Dec 2023 14:59:22 +0000
-Date: Tue, 5 Dec 2023 22:59:20 +0800
-From: kernel test robot <lkp@intel.com>
-To: davidgow@google.com, Rae Moar <rmoar@google.com>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-	Matti Vaittinen <mazziesaccount@gmail.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Jonathan Corbet <corbet@lwn.net>, Kees Cook <keescook@chromium.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>, Maxime Ripard <mripard@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-	linux-sound@vger.kernel.org, David Gow <davidgow@google.com>
-Subject: Re: [PATCH 1/4] kunit: Add APIs for managing devices
-Message-ID: <202312052230.ic1pg0uo-lkp@intel.com>
-References: <20231205-kunit_bus-v1-1-635036d3bc13@google.com>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3240867E81;
+	Tue,  5 Dec 2023 15:05:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 055F1C433C7;
+	Tue,  5 Dec 2023 15:05:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701788745;
+	bh=aap6pmp+k2anpVz8ybOF65zFnWxtExFTvx5xhqmLzhM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KY4z3VzvUuPldDeBw1TVDWWHBlLtm/bPmaaxPgzbCSHLaQYi1u+lCwOb7Us/NjEcx
+	 o7sD3S6iAE0kqc55CH1FJRYCDrFhE5JAnh2FSorQL9ENifCtcB2OIGfSLGSXF7VgE/
+	 o8/cza+U878GauzXqR/B12Q4kYa0ZCG/YLvOstc6yG+uoqaW/dRuVIKhEkrjSzhZaX
+	 JZuFrrGjzC2DWyMRSXLM0njLcgfRJhjuQfswGV2u1JFM8I7wuJhwyIQtXoneSf/wQL
+	 MzPZZnBSiQNxsG7dgobcKlxmI6QUYtjnEhqQZnnA8PKsirpP69JcRC/rx3sMBgHSi6
+	 kxfISKx2P9EAA==
+Date: Tue, 5 Dec 2023 15:05:36 +0000
+From: Mark Brown <broonie@kernel.org>
+To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc: "dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
+	"Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
+	"brauner@kernel.org" <brauner@kernel.org>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"debug@rivosinc.com" <debug@rivosinc.com>,
+	"mgorman@suse.de" <mgorman@suse.de>,
+	"vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
+	"fweimer@redhat.com" <fweimer@redhat.com>,
+	"mingo@redhat.com" <mingo@redhat.com>,
+	"rostedt@goodmis.org" <rostedt@goodmis.org>,
+	"hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+	"tglx@linutronix.de" <tglx@linutronix.de>,
+	"vschneid@redhat.com" <vschneid@redhat.com>,
+	"shuah@kernel.org" <shuah@kernel.org>,
+	"bristot@redhat.com" <bristot@redhat.com>,
+	"hpa@zytor.com" <hpa@zytor.com>,
+	"peterz@infradead.org" <peterz@infradead.org>,
+	"bp@alien8.de" <bp@alien8.de>,
+	"bsegall@google.com" <bsegall@google.com>,
+	"x86@kernel.org" <x86@kernel.org>,
+	"juri.lelli@redhat.com" <juri.lelli@redhat.com>,
+	"keescook@chromium.org" <keescook@chromium.org>,
+	"jannh@google.com" <jannh@google.com>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+	"linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+	"will@kernel.org" <will@kernel.org>
+Subject: Re: [PATCH RFT v4 5/5] kselftest/clone3: Test shadow stack support
+Message-ID: <345cf31a-3663-4974-9b2a-54d2433e64a7@sirena.org.uk>
+References: <20231128-clone3-shadow-stack-v4-0-8b28ffe4f676@kernel.org>
+ <20231128-clone3-shadow-stack-v4-5-8b28ffe4f676@kernel.org>
+ <4898975452179af46f38daa6979b32ba94001419.camel@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="eEFWtkuzePavFi4c"
+Content-Disposition: inline
+In-Reply-To: <4898975452179af46f38daa6979b32ba94001419.camel@intel.com>
+X-Cookie: I've Been Moved!
+
+
+--eEFWtkuzePavFi4c
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231205-kunit_bus-v1-1-635036d3bc13@google.com>
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
+On Tue, Dec 05, 2023 at 12:10:20AM +0000, Edgecombe, Rick P wrote:
 
-kernel test robot noticed the following build warnings:
+> Without this diff, the test crashed for me on a shadow stack system:
 
-[auto build test WARNING on c8613be119892ccceffbc550b9b9d7d68b995c9e]
+> -static inline void enable_shadow_stack(void)
+> +static inline __attribute__((always_inline)) void
 
-url:    https://github.com/intel-lab-lkp/linux/commits/davidgow-google-com/kunit-Add-APIs-for-managing-devices/20231205-153349
-base:   c8613be119892ccceffbc550b9b9d7d68b995c9e
-patch link:    https://lore.kernel.org/r/20231205-kunit_bus-v1-1-635036d3bc13%40google.com
-patch subject: [PATCH 1/4] kunit: Add APIs for managing devices
-config: i386-randconfig-141-20231205 (https://download.01.org/0day-ci/archive/20231205/202312052230.ic1pg0uo-lkp@intel.com/config)
-compiler: gcc-9 (Debian 9.3.0-22) 9.3.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20231205/202312052230.ic1pg0uo-lkp@intel.com/reproduce)
+doh.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202312052230.ic1pg0uo-lkp@intel.com/
+> But I wonder if the clone3 test should get its shadow stack enabled the
+> conventional elf bit way. So if it's all there (HW, kernel, glibc) then
+> the test will run with shadow stack. Otherwise the test will run
+> without shadow stack.
 
-All warnings (new ones prefixed by >>):
+This creates bootstrapping issues if we do it for arm64 where nothing is
+merged yet except for the model and EL3 support - in order to get any
+test coverage you need to be using an OS with the libc and toolchain
+support available and that's not going to be something we can rely on
+for a while (and even when things are merged a lot of the CI systems use
+Debian).  There is a small risk that the toolchain will generate
+incompatible code if it doesn't know it's specifically targetting shadow
+stacks but the toolchain people didn't seem concerned about that risk
+and we've not been running into problems.
 
->> lib/kunit/device.c:100:22: warning: no previous prototype for '__kunit_device_register_internal' [-Wmissing-prototypes]
-     100 | struct kunit_device *__kunit_device_register_internal(struct kunit *test,
-         |                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+It looks x86 is in better shape here with the userspace having run ahead
+of the kernel support though I'm not 100% clear if everything is fully
+lined up?  -mshstk -fcf-protection appears to build fine with gcc 8 but
+I'm a bit less clear on glibc and any ABI variations.
 
-Kconfig warnings: (for reference only)
-   WARNING: unmet direct dependencies detected for DRM_I915_DEBUG_GEM
-   Depends on [n]: HAS_IOMEM [=y] && DRM_I915 [=m] && EXPERT [=y] && DRM_I915_WERROR [=n]
-   Selected by [m]:
-   - DRM_I915_DEBUG [=y] && HAS_IOMEM [=y] && DRM_I915 [=m] && EXPERT [=y] && !COMPILE_TEST [=n]
+> The other reason is that the shadow stack test in the x86 selftest
+> manual enabling is designed to work without a shadow stack enabled
+> glibc and has to be specially crafted to work around the missing
+> support. I'm not sure the more generic selftests should have to know
+> how to do this. So what about something like this instead:
 
+What's the issue with working around the missing support?  My
+understanding was that there should be no ill effects from repeated
+attempts to enable.  We could add a check for things already being
+enabled=20
 
-vim +/__kunit_device_register_internal +100 lib/kunit/device.c
+--eEFWtkuzePavFi4c
+Content-Type: application/pgp-signature; name="signature.asc"
 
-    99	
- > 100	struct kunit_device *__kunit_device_register_internal(struct kunit *test,
-   101							      const char *name,
-   102							      struct device_driver *drv)
-   103	{
-   104		struct kunit_device *kunit_dev;
-   105		int err = -ENOMEM;
-   106	
-   107		kunit_dev = kzalloc(sizeof(struct kunit_device), GFP_KERNEL);
-   108		if (!kunit_dev)
-   109			return ERR_PTR(err);
-   110	
-   111		kunit_dev->owner = test;
-   112	
-   113		err = dev_set_name(&kunit_dev->dev, "%s.%s", test->name, name);
-   114		if (err) {
-   115			kfree(kunit_dev);
-   116			return ERR_PTR(err);
-   117		}
-   118	
-   119		/* Set the expected driver pointer, so we match. */
-   120		kunit_dev->driver = drv;
-   121	
-   122		kunit_dev->dev.release = kunit_device_release;
-   123		kunit_dev->dev.bus = &kunit_bus_type;
-   124		kunit_dev->dev.parent = &kunit_bus;
-   125	
-   126		err = device_register(&kunit_dev->dev);
-   127		if (err) {
-   128			put_device(&kunit_dev->dev);
-   129			return ERR_PTR(err);
-   130		}
-   131	
-   132		kunit_add_action(test, device_unregister_wrapper, &kunit_dev->dev);
-   133	
-   134		return kunit_dev;
-   135	}
-   136	
+-----BEGIN PGP SIGNATURE-----
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVvPEAACgkQJNaLcl1U
+h9BTUAf/XQUhFFRSCwVlzHTp8jJ+VI5Cs+r84ZiyHFlSQtaZvyox4D48jNDyd8kw
+iXxMa2/lUeW/qiZ2bufzYmM8AKSuObkpZhcCj+TyprXYnvmhqscegfQjQqnqgV+b
+ctpM6PGCxetylMwYUwMw83v4ZUrLua2oCnU+xdHphkC1ClZt2lH6lZXAAG5q7Qx/
+E2t1mv+L/eA7qNnMGddM3PQ35AQu7mHFuPohck0pIKqvxXiQVGDRdYTLuMxlKQDG
+f43kOxDHV7jSemDeF0K60+t53hVU36kE5yFUH2gqQUaksnZsTzkv1OX8Hdn/VXON
+1HI0UnmxFD8fHjkg8vvOvtr3/ncfxw==
+=1GHB
+-----END PGP SIGNATURE-----
+
+--eEFWtkuzePavFi4c--
 
