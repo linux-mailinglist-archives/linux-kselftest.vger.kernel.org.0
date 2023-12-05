@@ -1,347 +1,236 @@
-Return-Path: <linux-kselftest+bounces-1199-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1185-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1A5C805DF1
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 19:46:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC8C5805CCC
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 19:03:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 32C721F21111
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 18:46:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ED4091C20FA1
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 18:03:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9544357880;
-	Tue,  5 Dec 2023 18:46:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29F436A34C;
+	Tue,  5 Dec 2023 18:03:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RuxDTTPc"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jDzxqxX4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95E56C0
-	for <linux-kselftest@vger.kernel.org>; Tue,  5 Dec 2023 10:46:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1701801965;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=CfSpnYy4oKsXzvE3S4cKH6fDl4J4nm+5m3oSRUCkKP4=;
-	b=RuxDTTPcBF0tHtTEDleznNugqm1XXzHk4+UtjFFFtWrlXWEz418Ucz3JnolbKfzmIZ3np/
-	9L4EzoFmAAU1hPlEQ6aRTQj1HfBTRiCgzv/tUUWy8L8fcprQJDv3Mmhnnq013Dgt4q1ril
-	IZ9LdbBDYECOL4AKwGZFgjeN5CfKSDw=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-225-kxiglrEjPbC8QQ1GeR3YAw-1; Tue, 05 Dec 2023 13:46:02 -0500
-X-MC-Unique: kxiglrEjPbC8QQ1GeR3YAw-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2B3DF185A785;
-	Tue,  5 Dec 2023 18:46:02 +0000 (UTC)
-Received: from ruby.redhat.com (unknown [10.39.192.2])
-	by smtp.corp.redhat.com (Postfix) with ESMTP id 30955492BE6;
-	Tue,  5 Dec 2023 18:45:59 +0000 (UTC)
-From: Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com>
-To: workflows@vger.kernel.org,
-	Jonathan Corbet <corbet@lwn.net>,
-	Joe Perches <joe@perches.com>,
-	Andy Whitcroft <apw@canonical.com>,
-	Theodore Ts'o <tytso@mit.edu>,
-	David Gow <davidgow@google.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Mark Brown <broonie@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	"Darrick J . Wong" <djwong@kernel.org>
-Cc: kunit-dev@googlegroups.com,
-	linux-kselftest@vger.kernel.org,
-	Veronika Kabatova <vkabatov@redhat.com>,
-	CKI <cki-project@redhat.com>,
-	kernelci@lists.linux.dev,
-	Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com>
-Subject: [RFC PATCH v2 10/10] MAINTAINERS: Add proposal strength to V: entries
-Date: Tue,  5 Dec 2023 20:03:06 +0200
-Message-ID: <20231205184503.79769-11-Nikolai.Kondrashov@redhat.com>
-In-Reply-To: <20231205184503.79769-1-Nikolai.Kondrashov@redhat.com>
-References: <20231115175146.9848-1-Nikolai.Kondrashov@redhat.com>
- <20231205184503.79769-1-Nikolai.Kondrashov@redhat.com>
+Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C127490;
+	Tue,  5 Dec 2023 10:03:47 -0800 (PST)
+Received: by mail-qk1-x72e.google.com with SMTP id af79cd13be357-77d8f9159fbso323096485a.2;
+        Tue, 05 Dec 2023 10:03:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701799427; x=1702404227; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mtqmpldzJhepZSlcxwawCnd6BYpTKMMQiQbo2+VQqDs=;
+        b=jDzxqxX48qnzrFkI2Mjy7S6pIDdUytPY6+SEGY+S+x2V9kGMfDzFyXLXZs9BlnmsA9
+         Mli8NEPpO2jZJRt/4iv8Yf75m38V4e8GvnL1tdjTPdR20nQ055CnxD51xsTvB6ksf7QG
+         B/iBw15ASauQj4bNLB8gfQp0CaeTr7rOv3nuNqP4Se1cyxZMPRC7bNdN9MnwZ8vh0chv
+         SYuTwk0nO/PzfRsjv7/7L+AXIsKhkRSITyPdzq4bhekioT88dDteUowXa6UlocvEGiJg
+         WnmFBq1zwoSu/+pn0D8jLltI5RMj8d6PAEpnjyHKbnF/uFA6q8+5L16chsvxrjnjzZRC
+         Bcpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701799427; x=1702404227;
+        h=content-transfer-encoding:mime-version:subject:references
+         :in-reply-to:message-id:cc:to:from:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=mtqmpldzJhepZSlcxwawCnd6BYpTKMMQiQbo2+VQqDs=;
+        b=p4p2R5pERSh7xbYoQmwvHaQ88y89dLEw3r7/fFQDWxx26yJeS/LibxmS02hZxqSREZ
+         6+8NBljyS+q0svZzoTDFXJQNOn8ktBGMZ3gEelUa7j+hiY6DdSy5fF7H5/MGAwdVoR1P
+         T8K9ohgp+DJwzbAH/zMy9gOfeIkI527+Lkj+CyfG5EIYuxInks+Jl1odDFcqz8g0bpHd
+         Do+sRZqse49gCFra9bKe0mK1zsGUaC7bXDHPLHg7sUAes+O9eI/0VNqc/cRxzl+WLVOe
+         5JAztn+lObC6fDFpuUdLNZYQlVeYWLjeyMRMR+X7z7WkQZuhV3MKL3m1VlQOkSo6l568
+         EcJg==
+X-Gm-Message-State: AOJu0Yy4Fej501A++wEO5E8Iy9CZ5DWXOEnQByevhBdbxwJbW3/fxKnG
+	AO8efFiAyQ81jbuIrgOAIZI=
+X-Google-Smtp-Source: AGHT+IH5nvUqAJXOSA/slhx2XextBvezJuOqw3B1kWvu8x7p9HMI0Usz1QLdc8DahjbJUTB515nU3A==
+X-Received: by 2002:a05:620a:349:b0:77e:fba3:7574 with SMTP id t9-20020a05620a034900b0077efba37574mr1530842qkm.108.1701799426793;
+        Tue, 05 Dec 2023 10:03:46 -0800 (PST)
+Received: from localhost (114.66.194.35.bc.googleusercontent.com. [35.194.66.114])
+        by smtp.gmail.com with ESMTPSA id qh13-20020a05620a668d00b0077d85d22e89sm5264273qkn.63.2023.12.05.10.03.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Dec 2023 10:03:46 -0800 (PST)
+Date: Tue, 05 Dec 2023 13:03:46 -0500
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Stanislav Fomichev <sdf@google.com>, 
+ Florian Bezdeka <florian.bezdeka@siemens.com>
+Cc: "Song, Yoong Siang" <yoong.siang.song@intel.com>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+ Jesper Dangaard Brouer <hawk@kernel.org>, 
+ "David S . Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, 
+ Jonathan Corbet <corbet@lwn.net>, 
+ Bjorn Topel <bjorn@kernel.org>, 
+ "Karlsson, Magnus" <magnus.karlsson@intel.com>, 
+ "Fijalkowski, Maciej" <maciej.fijalkowski@intel.com>, 
+ Jonathan Lemon <jonathan.lemon@gmail.com>, 
+ Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Lorenzo Bianconi <lorenzo@kernel.org>, 
+ Tariq Toukan <tariqt@nvidia.com>, 
+ Willem de Bruijn <willemb@google.com>, 
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Mykola Lysenko <mykolal@fb.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, 
+ KP Singh <kpsingh@kernel.org>, 
+ Hao Luo <haoluo@google.com>, 
+ Jiri Olsa <jolsa@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, 
+ Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+ Jose Abreu <joabreu@synopsys.com>, 
+ "netdev@vger.kernel.org" <netdev@vger.kernel.org>, 
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+ "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, 
+ "bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
+ "xdp-hints@xdp-project.net" <xdp-hints@xdp-project.net>, 
+ "linux-stm32@st-md-mailman.stormreply.com" <linux-stm32@st-md-mailman.stormreply.com>, 
+ "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
+ "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Message-ID: <656f66023f7bd_3dd6422942a@willemb.c.googlers.com.notmuch>
+In-Reply-To: <CAKH8qBuXL8bOYtfKKPS8y=KJqouDptyciCjr0wNKVHtNj6BmqA@mail.gmail.com>
+References: <20231203165129.1740512-1-yoong.siang.song@intel.com>
+ <20231203165129.1740512-3-yoong.siang.song@intel.com>
+ <43b01013-e78b-417e-b169-91909c7309b1@kernel.org>
+ <656de830e8d70_2e983e294ca@willemb.c.googlers.com.notmuch>
+ <PH0PR11MB583000826591093B98BA841DD885A@PH0PR11MB5830.namprd11.prod.outlook.com>
+ <5a0faf8cc9ec3ab0d5082c66b909c582c8f1eae6.camel@siemens.com>
+ <CAKH8qBuXL8bOYtfKKPS8y=KJqouDptyciCjr0wNKVHtNj6BmqA@mail.gmail.com>
+Subject: Re: [xdp-hints] Re: [PATCH bpf-next v3 2/3] net: stmmac: add Launch
+ Time support to XDP ZC
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.10
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Require the MAINTAINERS V: entries to begin with a keyword, one of
-SUGGESTED/RECOMMENDED/REQUIRED, signifying how strongly the test is
-proposed for verifying the subsystem changes, prompting
-scripts/checkpatch.pl to produce CHECK/WARNING/ERROR messages
-respectively, whenever the commit message doesn't have the corresponding
-Tested-with: tag.
+Stanislav Fomichev wrote:
+> On Tue, Dec 5, 2023 at 7:34=E2=80=AFAM Florian Bezdeka
+> <florian.bezdeka@siemens.com> wrote:
+> >
+> > On Tue, 2023-12-05 at 15:25 +0000, Song, Yoong Siang wrote:
+> > > On Monday, December 4, 2023 10:55 PM, Willem de Bruijn wrote:
+> > > > Jesper Dangaard Brouer wrote:
+> > > > >
+> > > > >
+> > > > > On 12/3/23 17:51, Song Yoong Siang wrote:
+> > > > > > This patch enables Launch Time (Time-Based Scheduling) suppor=
+t to XDP zero
+> > > > > > copy via XDP Tx metadata framework.
+> > > > > >
+> > > > > > Signed-off-by: Song Yoong Siang<yoong.siang.song@intel.com>
+> > > > > > ---
+> > > > > >   drivers/net/ethernet/stmicro/stmmac/stmmac.h      |  2 ++
+> > > > >
+> > > > > As requested before, I think we need to see another driver impl=
+ementing
+> > > > > this.
+> > > > >
+> > > > > I propose driver igc and chip i225.
+> > >
+> > > Sure. I will include igc patches in next version.
+> > >
+> > > > >
+> > > > > The interesting thing for me is to see how the LaunchTime max 1=
+ second
+> > > > > into the future[1] is handled code wise. One suggestion is to a=
+dd a
+> > > > > section to Documentation/networking/xsk-tx-metadata.rst per dri=
+ver that
+> > > > > mentions/documents these different hardware limitations.  It is=
+ natural
+> > > > > that different types of hardware have limitations.  This is a c=
+lose-to
+> > > > > hardware-level abstraction/API, and IMHO as long as we document=
+ the
+> > > > > limitations we can expose this API without too many limitations=
+ for more
+> > > > > capable hardware.
+> > >
+> > > Sure. I will try to add hardware limitations in documentation.
+> > >
+> > > >
+> > > > I would assume that the kfunc will fail when a value is passed th=
+at
+> > > > cannot be programmed.
+> > > >
+> > >
+> > > In current design, the xsk_tx_metadata_request() dint got return va=
+lue.
+> > > So user won't know if their request is fail.
+> > > It is complex to inform user which request is failing.
+> > > Therefore, IMHO, it is good that we let driver handle the error sil=
+ently.
+> > >
+> >
+> > If the programmed value is invalid, the packet will be "dropped" / wi=
+ll
+> > never make it to the wire, right?
 
-Signed-off-by: Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com>
----
- Documentation/process/submitting-patches.rst | 11 ++-
- MAINTAINERS                                  | 20 +++--
- scripts/checkpatch.pl                        | 83 ++++++++++++--------
- 3 files changed, 71 insertions(+), 43 deletions(-)
+Programmable behavior is to either drop or cap to some boundary
+value, such as the farthest programmable time in the future: the
+horizon. In fq:
 
-diff --git a/Documentation/process/submitting-patches.rst b/Documentation/process/submitting-patches.rst
-index 45bd1a713ef33..199fadc50cf62 100644
---- a/Documentation/process/submitting-patches.rst
-+++ b/Documentation/process/submitting-patches.rst
-@@ -233,18 +233,21 @@ Test your changes
- 
- Test the patch to the best of your ability. Check the MAINTAINERS file for the
- subsystem(s) you are changing to see if there are any **V:** entries
--proposing particular test suites, either directly as commands, or via
--documentation references.
-+proposing particular test suites.
-+
-+The **V:** entries start with a proposal strength keyword
-+(SUGGESTED/RECOMMENDED/REQUIRED), followed either by a command, or a
-+documentation reference.
- 
- Test suite references start with a ``*`` (similar to C pointer dereferencing),
- followed by the name of the test suite, which would be documented in the
- Documentation/process/tests.rst under the corresponding heading. E.g.::
- 
--  V: *xfstests
-+  V: SUGGESTED *xfstests
- 
- Anything not starting with a ``*`` is considered a command. E.g.::
- 
--  V: tools/testing/kunit/run_checks.py
-+  V: RECOMMENDED tools/testing/kunit/run_checks.py
- 
- Supplying the ``--test`` option to ``scripts/get_maintainer.pl`` adds **V:**
- entries to its output.
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 84e90ec015090..3a35e320b5a5b 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -59,15 +59,19 @@ Descriptions of section entries and preferred order
- 	      matches patches or files that contain one or more of the words
- 	      printk, pr_info or pr_err
- 	   One regex pattern per line.  Multiple K: lines acceptable.
--	V: *Test suite* proposed for execution. The command that could be
--	   executed to verify changes to the maintained subsystem, or a reference
--	   to a test suite documented in Documentation/process/tests.txt.
-+	V: *Test suite* proposed for execution for verifying changes to the
-+	   maintained subsystem. Must start with a proposal strength keyword:
-+	   (SUGGESTED/RECOMMENDED/REQUIRED), followed by the test suite command,
-+	   or a reference to a test suite documented in
-+	   Documentation/process/tests.txt.
-+	   Proposal strengths correspond to checkpatch.pl message levels
-+	   (CHECK/WARNING/ERROR respectively, whenever Tested-with: is missing).
- 	   Commands must be executed from the root of the source tree.
- 	   Commands must support the -h/--help option.
- 	   References must be preceded with a '*'.
- 	   Cannot contain '@' or '#' characters.
--	   V: tools/testing/kunit/run_checks.py
--	   V: *xfstests
-+	   V: SUGGESTED tools/testing/kunit/run_checks.py
-+	   V: RECOMMENDED *xfstests
- 	   One test suite per line.
- 
- Maintainers List
-@@ -7978,7 +7982,7 @@ L:	linux-ext4@vger.kernel.org
- S:	Maintained
- W:	http://ext4.wiki.kernel.org
- Q:	http://patchwork.ozlabs.org/project/linux-ext4/list/
--V:	*kvm-xfstests smoke
-+V:	RECOMMENDED *kvm-xfstests smoke
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git
- F:	Documentation/filesystems/ext4/
- F:	fs/ext4/
-@@ -11628,7 +11632,7 @@ L:	linux-kselftest@vger.kernel.org
- L:	kunit-dev@googlegroups.com
- S:	Maintained
- W:	https://google.github.io/kunit-docs/third_party/kernel/docs/
--V:	tools/testing/kunit/run_checks.py
-+V:	RECOMMENDED tools/testing/kunit/run_checks.py
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git kunit
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux-kselftest.git kunit-fixes
- F:	Documentation/dev-tools/kunit/
-@@ -18367,7 +18371,7 @@ REGISTER MAP ABSTRACTION
- M:	Mark Brown <broonie@kernel.org>
- L:	linux-kernel@vger.kernel.org
- S:	Supported
--V:	*kunit
-+V:	RECOMMENDED *kunit
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git
- F:	Documentation/devicetree/bindings/regmap/
- F:	drivers/base/regmap/
-diff --git a/scripts/checkpatch.pl b/scripts/checkpatch.pl
-index bfeb4c33b5424..9438e4f452a6c 100755
---- a/scripts/checkpatch.pl
-+++ b/scripts/checkpatch.pl
-@@ -1181,39 +1181,57 @@ sub is_maintained_obsolete {
- 	return $maintained_status{$filename} =~ /obsolete/i;
- }
- 
--# Test suites proposed per changed file
-+# A list of test proposal strength keywords, weakest to strongest
-+our @test_proposal_strengths = qw(suggested recommended required);
-+# A regular expression string matching test proposal strength keywords
-+my $test_proposal_strengths_res = join('|', @test_proposal_strengths);
-+# A regular expression matching valid values of MAINTAINERS V: entries
-+# Puts proposal strength into $1 and the test into $2
-+my $test_proposal_entry_re = qr/^\s*($test_proposal_strengths_res)\s+([^@#]+?)\s*$/i;
-+
-+# A hashmap of changed files and references to hashmaps of test suites and the
-+# strength (0-2) of their proposal
- our %files_proposed_tests = ();
- 
--# Return a list of test suites proposed for execution for a particular file
-+# Return a reference to a hashmap of test suites proposed for execution for a
-+# particular file, and their proposal strengths - 0, 1, or 2 for
-+# SUGGESTED/RECOMMENDED/REQUIRED respectively.
- sub get_file_proposed_tests {
- 	my ($filename) = @_;
--	my $file_proposed_tests;
- 
--	return () if (!$tree || !(-e "$root/scripts/get_maintainer.pl"));
-+	return {} if (!$tree || !(-e "$root/scripts/get_maintainer.pl"));
- 
- 	if (!exists($files_proposed_tests{$filename})) {
-+		# Retrieve and parse the entries
-+		my %file_proposed_tests = ();
- 		my $command = "perl $root/scripts/get_maintainer.pl --test --multiline --nogit --nogit-fallback -f $filename";
- 		# Ignore warnings on stderr
- 		my $output = `$command 2>/dev/null`;
- 		# But regenerate stderr on failure
- 		die "Failed retrieving tests proposed for changes to \"$filename\":\n" . `$command 2>&1 >/dev/null` if ($?);
--		$file_proposed_tests = [grep { !/@/ } split("\n", $output)];
--		# Validate and normalize all references
--		for my $index (0 .. scalar @$file_proposed_tests - 1) {
--			my $test = $file_proposed_tests->[$index];
--			if ($test =~ /^\*\s*(.*)$/) {
--				my $name = $1;
--				die "Test $name referenced in MAINTAINERS not found in $testsrelfile\n"
--					if (!exists $tests{$name});
--				$file_proposed_tests->[$index] = "*" . $name;
-+		# For each non-email line (a V: entry)
-+		foreach my $entry (grep { !/@/ } split("\n", $output)) {
-+			# Extract the strength and the test
-+			if ($entry =~ $test_proposal_entry_re) {
-+				my $strength = grep { $test_proposal_strengths[$_] eq lc($1) }
-+						0..$#test_proposal_strengths;
-+				my $test = $2;
-+				# Validate and normalize references
-+				if ($test =~ /^\*\s*(.*)$/) {
-+					my $name = $1;
-+					die "Test $name referenced in MAINTAINERS not found in $testsrelfile\n"
-+						if (!exists $tests{$name});
-+					$test = "*" . $name;
-+				}
-+				$file_proposed_tests{$test} = $strength;
-+			} else {
-+				die "Invalid MAINTAINERS V: entry: $entry\n";
- 			}
- 		}
--		$files_proposed_tests{$filename} = $file_proposed_tests;
--	} else {
--		$file_proposed_tests = $files_proposed_tests{$filename};
-+		$files_proposed_tests{$filename} = \%file_proposed_tests;
- 	}
- 
--	return @$file_proposed_tests;
-+	return $files_proposed_tests{$filename};
- }
- 
- sub is_SPDX_License_valid {
-@@ -2761,7 +2779,7 @@ sub process {
- 	my @setup_docs = ();
- 	my $setup_docs = 0;
- 
--	# Test suites which should not be proposed for execution
-+	# Maximum strength (0-2) of test proposals to be ignored
- 	my %dont_propose_tests = ();
- 
- 	my $camelcase_file_seeded = 0;
-@@ -2983,8 +3001,10 @@ sub process {
- 			}
- 
- 			# Check if tests are proposed for changes to the file
--			foreach my $test (get_file_proposed_tests($realfile)) {
--				next if exists $dont_propose_tests{$test};
-+			my $file_proposed_tests = get_file_proposed_tests($realfile);
-+			foreach my $test (keys %$file_proposed_tests) {
-+				my $strength = $file_proposed_tests->{$test};
-+				next if $strength <= ($dont_propose_tests{$test} // -1);
- 				my $name;
- 				my $title;
- 				my $command;
-@@ -3000,19 +3020,19 @@ sub process {
- 					$command = $test;
- 				}
- 				if ($command) {
--					$message = "Execute the $title " .
--						"proposed for verifying changes to $realfile:\n" .
--						"$command\n";
-+					$message = "Execute the $title $test_proposal_strengths[$strength] " .
-+						"for verifying changes to $realfile:\n$command\n";
- 				} else {
--					$message = "The $title is proposed for verifying changes to $realfile\n";
-+					$message = "The $title is $test_proposal_strengths[$strength] " .
-+						"for verifying changes to $realfile\n";
- 				}
- 				if ($name) {
- 					$message .= "See instructions under \"$name\" in $testsrelfile\n";
- 				}
- 				$message .= "Add the following to the tested commit's message, " .
- 					"IF IT PASSES:\nTested-with: $test\n";
--				CHK("TEST_PROPOSAL", $message);
--				$dont_propose_tests{$test} = 1;
-+				(\&CHK, \&WARN, \&ERROR)[$strength]("TEST_PROPOSAL", $message);
-+				$dont_propose_tests{$test} = $strength;
- 			}
- 
- 			next;
-@@ -3350,7 +3370,7 @@ sub process {
- 				# the test and its subsets
- 				local *dont_propose_test_name = sub {
- 					my ($name) = @_;
--					$dont_propose_tests{"*" . $name} = 1;
-+					$dont_propose_tests{"*" . $name} = 2;
- 					foreach my $sub_name (keys %tests) {
- 						my $sub_data = $tests{$sub_name};
- 						my $superset = $sub_data->{"superset"};
-@@ -3363,7 +3383,7 @@ sub process {
- 			# Else it's a command
- 			} else {
- 				# Do not propose the test
--				$dont_propose_tests{$test} = 1;
-+				$dont_propose_tests{$test} = 2;
- 			}
- 		}
- 
-@@ -3821,9 +3841,10 @@ sub process {
- 			if ($rawline =~ /^\+V:\s*(.*)/) {
- 				my $entry = $1;
- 				# If this is a valid entry value
--				if ($entry =~ /^[^@#]*$/) {
-+				if ($entry =~ $test_proposal_entry_re) {
-+					my $test = $2;
- 					# If the test in the entry is a reference
--					if ($entry =~ /^\*\s*(.*)$/) {
-+					if ($test =~ /^\*\s*(.*)$/) {
- 						my $name = $1;
- 						ERROR("TEST_PROPOSAL_INVALID",
- 						      "Test $name referenced in MAINTAINERS not found in $testsrelfile\n" .
-@@ -3831,7 +3852,7 @@ sub process {
- 					}
- 				} else {
- 					ERROR("TEST_PROPOSAL_INVALID",
--					      "Test proposal cannot contain '\@' or '#' characters\n" . $herecurr);
-+					      "Invalid test proposal entry: $entry\n" . $herecurr);
- 				}
- 			}
- 		}
--- 
-2.42.0
+                /* Check if packet timestamp is too far in the future. */=
+
+                if (fq_packet_beyond_horizon(skb, q, now)) {
+                        if (q->horizon_drop) {
+                                        q->stat_horizon_drops++;
+                                        return qdisc_drop(skb, sch, to_fr=
+ee);
+                        }
+                        q->stat_horizon_caps++;
+                        skb->tstamp =3D now + q->horizon;
+                }
+                fq_skb_cb(skb)->time_to_send =3D skb->tstamp;
+
+Drop is the more obviously correct mode.
+
+Programming with a clock source that the driver does not support will
+then be a persistent failure.
+
+Preferably, this driver capability can be queried beforehand (rather
+than only through reading error counters afterwards).
+
+Perhaps it should not be a driver task to convert from possibly
+multiple clock sources to the device native clock. Right now, we do
+use per-device timecounters for this, implemented in the driver.
+
+As for which clocks are relevant. For PTP, I suppose the device PHC,
+converted to nsec. For pacing offload, TCP uses CLOCK_MONOTONIC.
+
+> >
+> > That is clearly a situation that the user should be informed about. F=
+or
+> > RT systems this normally means that something is really wrong regardi=
+ng
+> > timing / cycle overflow. Such systems have to react on that situation=
+.
+> =
+
+> In general, af_xdp is a bit lacking in this 'notify the user that they
+> somehow messed up' area :-(
+> For example, pushing a tx descriptor with a wrong addr/len in zc mode
+> will not give any visible signal back (besides driver potentially
+> spilling something into dmesg as it was in the mlx case).
+> We can probably start with having some counters for these events?
+
+This is because the AF_XDP completion queue descriptor format is only
+a u64 address?
+
+Could error conditions be reported on tx completion in the metadata,
+using xsk_tx_metadata_complete?
 
 
