@@ -1,165 +1,162 @@
-Return-Path: <linux-kselftest+bounces-1155-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1156-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25731805A2F
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 17:43:56 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B6A6805A4E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 17:51:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E30F0B211A8
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 16:43:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 31F7FB21134
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 16:51:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C10046AF;
-	Tue,  5 Dec 2023 16:43:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 968F95B1E3;
+	Tue,  5 Dec 2023 16:51:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OKtrLOuu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cA2ltJ3C"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25DE468EB4;
-	Tue,  5 Dec 2023 16:43:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8AB2C433C7;
-	Tue,  5 Dec 2023 16:43:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 709FC4174B;
+	Tue,  5 Dec 2023 16:51:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 910E0C433C8;
+	Tue,  5 Dec 2023 16:51:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701794630;
-	bh=bW3OrJbYp0bj7igkmuhy/a8fB4L68pG99Ed2bPNX7D8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OKtrLOuuzsIJEvtJbodeJDDqyNZhcMw2XYqVbA/dlzeiW5j6c1Oori5+rCJHBJL0N
-	 AoMjz0uYXkSw2g7Egm3G9+/18GWtQxbc5E9k/FJvCclJjMJxPOapumx21dhLn15+jH
-	 GWKCpCOWpqj/eG7+5kiUNq2kUFogM9pw5dVkgl19S5rs7qQ984N/WKvF4P1LskuSEz
-	 TA7ajMQ+y39xuyXxZW5CAFMMjeCK7YJOS1UEsVf5RlJa1NOj/fnrXqqmWKqXj6Kwex
-	 QNtVj+NDLGGaoFjVZqyp3Wx+VWsE13mUb/5lzRAqy1E4zl2EHVnyweDanvIC98LVtw
-	 9TrRETeQSanYQ==
-Date: Tue, 5 Dec 2023 16:43:41 +0000
+	s=k20201202; t=1701795069;
+	bh=ld1xDDBIxU0aMjeZJcBk8TzmodfOXcQzxXPrqLOm3Wc=;
+	h=From:Subject:Date:To:Cc:From;
+	b=cA2ltJ3Ciu6iOJdi4d9B/ltq2K0G8sHqPxOAvifGX4gGCgc8VemqNpQJTyQayOS0p
+	 N1/5z6HA7O21Gy0CuqHBd7MD93z1Fo+yFkhRXrmCNC/lvKfoODEHIqVUwvhFE69Dgb
+	 tG9vV1X8YnX4m0mmtEQxHMKnxLhUJsE+pcjSsDohcOakIGGAVKM6QJS7Z2SILPGR3G
+	 JvlcRZgctPb3u0CJQhcSm65XFRDhZt8TMfDdTZLN/7ldJR6xQDH14qO/uP70rXh9w9
+	 4dE9Tc0pcvrI2L1UYABYYQPEEaRPYxENcSXqlL1aapvQI9x0D19LRIXkWNdhIy7gnM
+	 VqgDaVl/NnV0Q==
 From: Mark Brown <broonie@kernel.org>
-To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc: "dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
-	"keescook@chromium.org" <keescook@chromium.org>,
-	"shuah@kernel.org" <shuah@kernel.org>,
-	"brauner@kernel.org" <brauner@kernel.org>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"debug@rivosinc.com" <debug@rivosinc.com>,
-	"mgorman@suse.de" <mgorman@suse.de>,
-	"Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
-	"fweimer@redhat.com" <fweimer@redhat.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"mingo@redhat.com" <mingo@redhat.com>,
-	"hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-	"rostedt@goodmis.org" <rostedt@goodmis.org>,
-	"vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
-	"tglx@linutronix.de" <tglx@linutronix.de>,
-	"vschneid@redhat.com" <vschneid@redhat.com>,
-	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
-	"bristot@redhat.com" <bristot@redhat.com>,
-	"will@kernel.org" <will@kernel.org>,
-	"hpa@zytor.com" <hpa@zytor.com>,
-	"peterz@infradead.org" <peterz@infradead.org>,
-	"jannh@google.com" <jannh@google.com>,
-	"bp@alien8.de" <bp@alien8.de>,
-	"bsegall@google.com" <bsegall@google.com>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-	"x86@kernel.org" <x86@kernel.org>,
-	"juri.lelli@redhat.com" <juri.lelli@redhat.com>
-Subject: Re: [PATCH RFT v4 5/5] kselftest/clone3: Test shadow stack support
-Message-ID: <098f5d43-e093-4316-9b86-80833c2b94ec@sirena.org.uk>
-References: <20231128-clone3-shadow-stack-v4-0-8b28ffe4f676@kernel.org>
- <20231128-clone3-shadow-stack-v4-5-8b28ffe4f676@kernel.org>
- <4898975452179af46f38daa6979b32ba94001419.camel@intel.com>
- <345cf31a-3663-4974-9b2a-54d2433e64a7@sirena.org.uk>
- <a6bf192a1568620826dd79124511ea61472873c8.camel@intel.com>
+Subject: [PATCH v3 00/21] arm64: Support for 2023 DPISA extensions
+Date: Tue, 05 Dec 2023 16:47:58 +0000
+Message-Id: <20231205-arm64-2023-dpisa-v3-0-dbcbcd867a7f@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="geVM8gTWdCwKEGG9"
-Content-Disposition: inline
-In-Reply-To: <a6bf192a1568620826dd79124511ea61472873c8.camel@intel.com>
-X-Cookie: I've Been Moved!
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAD9Ub2UC/23N0QrCIBTG8VcZXmfo8UzdrnqP6MKl26TahoYUY
+ ++eG0FEXf4/OL8zk+iCd5HUxUyCSz76ccghdgU592boHPU2NwEGgjMmqAk3iXRNaicfDYVWWCg
+ VSlRI8tkUXOsfG3k85e59vI/huX1IfF3fGMhfLHHKqEbFrK101TRwuLgwuOt+DB1ZtQQfgXP8I
+ 0AWUEHJdYWtNPpLWJblBSYrTd/zAAAA
+To: Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, 
+ Oliver Upton <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, 
+ Suzuki K Poulose <suzuki.poulose@arm.com>, Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ kvmarm@lists.linux.dev, linux-doc@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.13-dev-5c066
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4657; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=ld1xDDBIxU0aMjeZJcBk8TzmodfOXcQzxXPrqLOm3Wc=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBlb1ToWY21TL2lSFiNFFmpncXHZ+8uv3xdv0x92cWg
+ Iu7GAfWJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZW9U6AAKCRAk1otyXVSH0CTCB/
+ 9LsWRTj/wZmAWjeHxaGBiu4BElH0V6M0Tohiptgba/9qZblZAxTt7uVj1YC/BTGqiGuGajmHYUQhJ8
+ X2Bnb/Ttzt20+XlZnVYvaQ547tIUGHQ09wyXuPMfjoacAl/SfDZeP/NQzOBs+mNY2li70oPfvmhTO0
+ 2AmNK9Cq2jKWi/V8mqRw+tyKLV2lmvFGUrpahC8WEV7FgmGWsuH4q8ZeW2jLYA9DGW1WOk0W9W/TtF
+ X05gevBgezfm+zlyxAS6q98+WbF+vcdXfWuKOkWuk0cKnUaViQZDE3EmuVQNJmJ8BiejhePxk5mCxX
+ oXk5q8/Wx4ITOnEhKnMGqweRvTAHc0
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
+This series enables support for the data processing extensions in the
+newly released 2023 architecture, this is mainly support for 8 bit
+floating point formats.  Most of the extensions only introduce new
+instructions and therefore only require hwcaps but there is a new EL0
+visible control register FPMR used to control the 8 bit floating point
+formats, we need to manage traps for this and context switch it.
 
---geVM8gTWdCwKEGG9
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The sharing of floating point save code between the host and guest
+kernels slightly complicates the introduction of KVM support, we first
+introduce host support with some placeholders for KVM then replace those
+with the actual KVM support.
 
-On Tue, Dec 05, 2023 at 04:01:50PM +0000, Edgecombe, Rick P wrote:
+I've not added test coverage for ptrace, I've got a not quite finished
+test program which exercises all the FP ptrace interfaces and their
+interactions together, my plan is to cover it there rather than add
+another tiny test program that duplicates the boilerplace for tracing a
+target and doesn't actually run the traced program.
 
-> Hmm, I didn't realize you were planning to have the kernel support
-> upstream before the libc support was in testable shape.
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+Changes in v3:
+- Rebase onto v6.7-rc3.
+- Hook up traps for FPMR in emulate-nested.c.
+- Link to v2: https://lore.kernel.org/r/20231114-arm64-2023-dpisa-v2-0-47251894f6a8@kernel.org
 
-It's not a "could someone run it" thing - it's about trying ensure that
-we get coverage from people who are just running the selftests as part
-of general testing coverage rather than with the specific goal of
-testing this one feature.  Even when things start to land there will be
-a considerable delay before they filter out so that all the enablement
-is in CI systems off the shelf and it'd be good to have coverage in that
-interval.
+Changes in v2:
+- Rebase onto v6.7-rc1.
+- Link to v1: https://lore.kernel.org/r/20231026-arm64-2023-dpisa-v1-0-8470dd989bb2@kernel.org
 
-> > What's the issue with working around the missing support?=A0 My
-> > understanding was that there should be no ill effects from repeated
-> > attempts to enable.=A0 We could add a check for things already being
-> > enabled
+---
+Mark Brown (21):
+      arm64/sysreg: Add definition for ID_AA64PFR2_EL1
+      arm64/sysreg: Update ID_AA64ISAR2_EL1 defintion for DDI0601 2023-09
+      arm64/sysreg: Add definition for ID_AA64ISAR3_EL1
+      arm64/sysreg: Add definition for ID_AA64FPFR0_EL1
+      arm64/sysreg: Update ID_AA64SMFR0_EL1 definition for DDI0601 2023-09
+      arm64/sysreg: Update SCTLR_EL1 for DDI0601 2023-09
+      arm64/sysreg: Update HCRX_EL2 definition for DDI0601 2023-09
+      arm64/sysreg: Add definition for FPMR
+      arm64/cpufeature: Hook new identification registers up to cpufeature
+      arm64/fpsimd: Enable host kernel access to FPMR
+      arm64/fpsimd: Support FEAT_FPMR
+      arm64/signal: Add FPMR signal handling
+      arm64/ptrace: Expose FPMR via ptrace
+      KVM: arm64: Add newly allocated ID registers to register descriptions
+      KVM: arm64: Support FEAT_FPMR for guests
+      arm64/hwcap: Define hwcaps for 2023 DPISA features
+      kselftest/arm64: Handle FPMR context in generic signal frame parser
+      kselftest/arm64: Add basic FPMR test
+      kselftest/arm64: Add 2023 DPISA hwcap test coverage
+      KVM: arm64: selftests: Document feature registers added in 2023 extensions
+      KVM: arm64: selftests: Teach get-reg-list about FPMR
 
-> Normally the loader enables shadow stack and glibc then knows to do
-> things in special ways when it is successful. If it instead manually
-> enables in the app:
->  - The app can't return from main() without disabling shadow stack=A0
->    beforehand. Luckily this test directly calls exit()
->  - The app can't do longjmp()
->  - The app can't do ucontext stuff
->  - The enabling code needs to be carefully crafted (the inline problem=A0
->    you hit)
+ Documentation/arch/arm64/elf_hwcaps.rst            |  49 +++++
+ arch/arm64/include/asm/cpu.h                       |   3 +
+ arch/arm64/include/asm/cpufeature.h                |   5 +
+ arch/arm64/include/asm/fpsimd.h                    |   2 +
+ arch/arm64/include/asm/hwcap.h                     |  15 ++
+ arch/arm64/include/asm/kvm_arm.h                   |   4 +-
+ arch/arm64/include/asm/kvm_host.h                  |   3 +
+ arch/arm64/include/asm/processor.h                 |   2 +
+ arch/arm64/include/uapi/asm/hwcap.h                |  15 ++
+ arch/arm64/include/uapi/asm/sigcontext.h           |   8 +
+ arch/arm64/kernel/cpufeature.c                     |  72 +++++++
+ arch/arm64/kernel/cpuinfo.c                        |  18 ++
+ arch/arm64/kernel/fpsimd.c                         |  13 ++
+ arch/arm64/kernel/ptrace.c                         |  42 ++++
+ arch/arm64/kernel/signal.c                         |  59 ++++++
+ arch/arm64/kvm/emulate-nested.c                    |   9 +
+ arch/arm64/kvm/fpsimd.c                            |  19 +-
+ arch/arm64/kvm/hyp/include/hyp/switch.h            |   7 +-
+ arch/arm64/kvm/sys_regs.c                          |  17 +-
+ arch/arm64/tools/cpucaps                           |   1 +
+ arch/arm64/tools/sysreg                            | 153 ++++++++++++++-
+ include/uapi/linux/elf.h                           |   1 +
+ tools/testing/selftests/arm64/abi/hwcap.c          | 217 +++++++++++++++++++++
+ tools/testing/selftests/arm64/signal/.gitignore    |   1 +
+ .../arm64/signal/testcases/fpmr_siginfo.c          |  82 ++++++++
+ .../selftests/arm64/signal/testcases/testcases.c   |   8 +
+ .../selftests/arm64/signal/testcases/testcases.h   |   1 +
+ tools/testing/selftests/kvm/aarch64/get-reg-list.c |  11 +-
+ 28 files changed, 819 insertions(+), 18 deletions(-)
+---
+base-commit: 2cc14f52aeb78ce3f29677c2de1f06c0e91471ab
+change-id: 20231003-arm64-2023-dpisa-2f3d25746474
 
-> I guess it's not a huge list, and mostly tests will run ok. But it
-> doesn't seem right to add somewhat hacky shadow stack crud into generic
-> tests.
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
 
-Right, it's a small and fairly easily auditable list - it's more about
-the app than the double enable which was what I thought your concern
-was.  It's a bit annoying definitely and not something we want to do in
-general but for something like this where we're adding specific coverage
-for API extensions for the feature it seems like a reasonable tradeoff.
-
-If the x86 toolchain/libc support is widely enough deployed (or you just
-don't mind any missing coverage) we could use the toolchain support
-there and only have the manual enable for arm64, it'd be inconsistent
-but not wildly so.
-
-> So you were planning to enable GCS in this test manually as well? How
-> many tests were you planning to add it like this?
-
-Yes, the current version of the arm64 series has the equivalent support
-for GCS.  I was only planning to do this along with adding specific
-coverage for shadow stacks/GCS, general stuff that doesn't have any
-specific support can get covered as part of system testing with the
-toolchain and libc support.
-
-The only case beyond that I've done is some arm64 specific stress tests
-which are written as standalone assembler programs, those wouldn't get
-enabled by the toolchain anyway and have some chance of catching context
-switch or signal handling issues should they occur.  It seemed worth it
-for the few lines of assembly it takes.
-
---geVM8gTWdCwKEGG9
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVvUzwACgkQJNaLcl1U
-h9C+jAf+Md2bTNdvJs2oIqh+pACXbkAHBDvJZ/N1O5qY7yBLok1tIPJANG0jKFYX
-6PxRyrDBuvQ47eZfaV2+7ea/+13vVBkVuPTI1503ktL8/gHGkBAfjTbpvj2Y9AOU
-8SpeWDdlYSmo1F+o34hhroFMh5i1OY+l+vJ+FQaZIvcl9T/Duhe+9fe1xY5t49A5
-gnCQXEDUxaLWeVb7WpcKlClGEX90GJyI94OrQ4wuIylpc98x9YQuGAiEdJcPLm+g
-IK7nqgioxopCgNhdhXy8nnR8r7WQUlxW7g/MMc+3DIOhLRoegISD6zpls62PDJbQ
-VF3UWrKSNa1UlF+p6OgWRKeODawTZg==
-=2dm/
------END PGP SIGNATURE-----
-
---geVM8gTWdCwKEGG9--
 
