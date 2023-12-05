@@ -1,318 +1,157 @@
-Return-Path: <linux-kselftest+bounces-1181-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1182-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92512805B22
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 18:31:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4017D805B2E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 18:34:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 338AF1F21652
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 17:31:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CB79D1F216C2
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 17:34:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7BE067E8E;
-	Tue,  5 Dec 2023 17:30:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B4EC68B66;
+	Tue,  5 Dec 2023 17:33:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Eo34XWay"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="HOXYHOvJ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35317675D4;
-	Tue,  5 Dec 2023 17:30:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D0D6C433C8;
-	Tue,  5 Dec 2023 17:30:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1701797452;
-	bh=CwZH8dp4E6n8XqkzFtg8ZeyfOny+4HhH2LzxKqY45/g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Eo34XWayzo1yJIrgJEuVirn1KuAJ+0ua2w/vTh2EcI8xwiKp/gbo39WkN0UCHBKGR
-	 BJ5BHYJ1Qew/EmfyAP6UUgwVOzL9+KmH9VkQkYNa1g4WjJEul68Q66H4Z5r/XaLggs
-	 UmgJ5WWiwP3rUxNeLI/TGqEurRJQVrSx4dvN4+Es=
-Date: Wed, 6 Dec 2023 02:30:45 +0900
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: davidgow@google.com
-Cc: Rae Moar <rmoar@google.com>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	Matti Vaittinen <mazziesaccount@gmail.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Jonathan Corbet <corbet@lwn.net>, Kees Cook <keescook@chromium.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>, Maxime Ripard <mripard@kernel.org>,
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-hardening@vger.kernel.org, linux-sound@vger.kernel.org
-Subject: Re: [PATCH 1/4] kunit: Add APIs for managing devices
-Message-ID: <2023120602-vaguely-primarily-b6b2@gregkh>
-References: <20231205-kunit_bus-v1-0-635036d3bc13@google.com>
- <20231205-kunit_bus-v1-1-635036d3bc13@google.com>
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2081.outbound.protection.outlook.com [40.107.92.81])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E70ACA;
+	Tue,  5 Dec 2023 09:33:54 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cCQ8ZES3xUVa9UQJbJkFSfbMMu9o+wPNddZ8aKCb/bTMlT0Gxj7ul4jcp4/+ZRuAokFN6mlZD8QMbwHJi+JEFe8ZZPJMh6ALosswca+eV/WmI3i0nI9Pt0OGzCcE6BJf9Ak9MZ+Z+AJ3R0UNG1kQTJw09SeqZpYGoSX9FX3HKLgkaklLOAEKngFeCrDVnn8twIy+7XUu7HhFwGutlwRzGPq9NL7y+TfIpG1QAuUBsBLaJIkzfO1xJOHQx7AMfnIKCO0CugD3BDVhtKq4nv4m/bHq7lNXzRuolFZuHu7yeKIT9K7yTd6u5ArXx8P7BzfWQNlIiKaVFKif8oO5uOp8pA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hSSFQkGjCxebzXrGirArb1ftLbCoMCoHa2QKVy1RPC8=;
+ b=E2l5bYYW9d7lqL+7nmehtfEUiEtiImTbb9LEzg3vIFnauS1JhQV2ZvyJB+e1dc+uqgb2Xs2pQ5xnqOZ4CAGWAVZhhTlcMDs2LiF8q9uxrQrqrZ2yNLStWzw/+c0Zs+Ekg3e8sz6ppVPcc7dBVEY8GrfHnE2sNiW49n4oAIAcuQgEYukcOftpK5qtTsdx3wcJONdiXHd3OtDLNc8fLbDWUz0DZ+f4s0Pb/DNJ4fNnqAvvgB10Ufvi/hXL6vSP6RzmOMl37tu3Uhpzfrvf9pXLqGraXihp5aXuFlzyaMpnmFgMf7d8JKaJ7IcMAK6/3ck+NBPokzKP9VN93hKnSJZAoQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=oracle.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=hSSFQkGjCxebzXrGirArb1ftLbCoMCoHa2QKVy1RPC8=;
+ b=HOXYHOvJDmh6+naASUZ4hyQHFZDjD6kryOxiwGZ47Yc00yJYr7GiKEb5d8YZwBecE2mvsLrOwMah4vUGOmSxkGwwk+CaXFjwY/aCAsib7uvNNn04GCZeE1FQ40b8vOSnMCMeaw/3h78x3Gr8jYgzTYwdLOOqc8de1YW4BRJ6CJBI2HTJinhPhgJ+x/vHAftcB/8GXkNYeWojmvCbKuYL9dacgbtRTIlEC1Gazwat67Sm+iBZDTpbcBH5EBynr5F/nSH9bK5F5n5ZcK0/jYFcwVm2bNwynExMmPPyuIxiu702kXL0zsR14TO6MBIlBZWSCY48PK+zvVrZtr25riSQsA==
+Received: from PH0PR07CA0036.namprd07.prod.outlook.com (2603:10b6:510:e::11)
+ by CH0PR12MB5297.namprd12.prod.outlook.com (2603:10b6:610:d4::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7046.34; Tue, 5 Dec
+ 2023 17:33:51 +0000
+Received: from SA2PEPF000015C9.namprd03.prod.outlook.com
+ (2603:10b6:510:e:cafe::f7) by PH0PR07CA0036.outlook.office365.com
+ (2603:10b6:510:e::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7046.34 via Frontend
+ Transport; Tue, 5 Dec 2023 17:33:51 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ SA2PEPF000015C9.mail.protection.outlook.com (10.167.241.199) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7068.20 via Frontend Transport; Tue, 5 Dec 2023 17:33:50 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 5 Dec 2023
+ 09:33:34 -0800
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 5 Dec 2023
+ 09:33:33 -0800
+Received: from Asurada-Nvidia (10.127.8.13) by mail.nvidia.com (10.129.68.7)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41 via Frontend
+ Transport; Tue, 5 Dec 2023 09:33:32 -0800
+Date: Tue, 5 Dec 2023 09:33:30 -0800
+From: Nicolin Chen <nicolinc@nvidia.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+CC: "Tian, Kevin" <kevin.tian@intel.com>, "Liu, Yi L" <yi.l.liu@intel.com>,
+	"joro@8bytes.org" <joro@8bytes.org>, "alex.williamson@redhat.com"
+	<alex.williamson@redhat.com>, "robin.murphy@arm.com" <robin.murphy@arm.com>,
+	"baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>, "cohuck@redhat.com"
+	<cohuck@redhat.com>, "eric.auger@redhat.com" <eric.auger@redhat.com>,
+	"kvm@vger.kernel.org" <kvm@vger.kernel.org>, "mjrosato@linux.ibm.com"
+	<mjrosato@linux.ibm.com>, "chao.p.peng@linux.intel.com"
+	<chao.p.peng@linux.intel.com>, "yi.y.sun@linux.intel.com"
+	<yi.y.sun@linux.intel.com>, "peterx@redhat.com" <peterx@redhat.com>,
+	"jasowang@redhat.com" <jasowang@redhat.com>,
+	"shameerali.kolothum.thodi@huawei.com"
+	<shameerali.kolothum.thodi@huawei.com>, "lulu@redhat.com" <lulu@redhat.com>,
+	"suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+	"iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "Duan,
+ Zhenzhong" <zhenzhong.duan@intel.com>, "joao.m.martins@oracle.com"
+	<joao.m.martins@oracle.com>, "Zeng, Xin" <xin.zeng@intel.com>, "Zhao, Yan Y"
+	<yan.y.zhao@intel.com>
+Subject: Re: [PATCH v6 2/6] iommufd: Add IOMMU_HWPT_INVALIDATE
+Message-ID: <ZW9e6hxyDmkK8bfe@Asurada-Nvidia>
+References: <ZWe2PvatTkkyNCY5@Asurada-Nvidia>
+ <20231130000816.GB1389974@nvidia.com>
+ <ZWjzcEAAg8ptVH4A@Asurada-Nvidia>
+ <20231201004523.GJ1389974@nvidia.com>
+ <ZWlhLk3JVwX0hRt/@Asurada-Nvidia>
+ <20231201125538.GK1389974@nvidia.com>
+ <ZWo6z59tnmS8F2V7@Asurada-Nvidia>
+ <20231201204340.GA1493156@nvidia.com>
+ <ZWpaTD9dVge+suyv@Asurada-Nvidia>
+ <20231204144850.GC1493156@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20231205-kunit_bus-v1-1-635036d3bc13@google.com>
+In-Reply-To: <20231204144850.GC1493156@nvidia.com>
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA2PEPF000015C9:EE_|CH0PR12MB5297:EE_
+X-MS-Office365-Filtering-Correlation-Id: cb559ea3-8dac-4ae7-3f91-08dbf5b85885
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	l385PzBUkGY2EcdrsgCSlrWHQ04Nl6SaeOGfAONtzRD2FtY3YvJ93Q6L2U+K9pKk+BMVyPV51tTexwr/Ox10orHcZRxbXWuFSEwVaWS9Vpp1EbiwnAfEIRZRrNlcBKAVzCYkLnUEPbbtfPOA5aIjkOkiDB+rIJc77abpXJWjHJgRib/IEnAs0ko00f48uaA7mdVdc9E/zZHXnWXjZ2H6v45sJXsrd0FQogRXZ5yRWYhRxFZOukbjQz/tXvBcJRbIwa7seUF7hrLItqj7pTZOA3AU1BnvnruKFPn2UfyH5XEdcI8ty8kKtfKl2egY7W7bkpaTbv4Q8s05V0gV/dv1FBq3OcB/0lvNyQG/54WjlFzTezLYTemTxAAgKFHtvJlN+7K2F71L/YB5aFZZiODSlelLA0qfDhcCX+fCRtU92GYbNb3StKhspJlRKx0FzWmJZU+ZlEyA8/t3DJcZj4PiO8eCnrJSty3AEpY+/3p6BMIDtpckQHgrf0TkVuAP4kC3Kc4nXJxxC/28deqGFVw3QJ34gDTgNm/wzy7MHYbLe/Fs+cKO/Amvmiq0wYZA4CxKZuoobFd/Qn6FmDKQdTk7uo7KXOlPRDNe0oaLMZ8p4QGNjxiNwSWCyi5oNoSMvvSimeWefDg88korSTWaet4GSPxCV6qaVaJ1zUCv24dek2xP1JAN1HvXgQXLnP7rby1bp/Y/j1mpGGalP1bhx7Gw142N4wrs8Td1REp1N1leCTc=
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230031)(4636009)(346002)(39860400002)(136003)(376002)(396003)(230922051799003)(451199024)(186009)(1800799012)(64100799003)(82310400011)(46966006)(36840700001)(40470700004)(8936002)(8676002)(6862004)(4326008)(26005)(9686003)(40460700003)(316002)(54906003)(6636002)(70586007)(70206006)(478600001)(41300700001)(4744005)(7416002)(5660300002)(33716001)(2906002)(86362001)(36860700001)(40480700001)(47076005)(82740400003)(356005)(55016003)(7636003)(426003)(83380400001)(336012);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Dec 2023 17:33:50.9409
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: cb559ea3-8dac-4ae7-3f91-08dbf5b85885
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SA2PEPF000015C9.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5297
 
-On Tue, Dec 05, 2023 at 03:31:33PM +0800, davidgow@google.com wrote:
-> Tests for drivers often require a struct device to pass to other
-> functions. While it's possible to create these with
-> root_device_register(), or to use something like a platform device, this
-> is both a misuse of those APIs, and can be difficult to clean up after,
-> for example, a failed assertion.
+On Mon, Dec 04, 2023 at 10:48:50AM -0400, Jason Gunthorpe wrote:
+ 
+> > Or am I missing some point here?
 > 
-> Add some KUnit-specific functions for registering and unregistering a
-> struct device:
-> - kunit_device_register()
-> - kunit_device_register_with_driver()
-> - kunit_device_unregister()
+> It sounds Ok, we just have to understand what userspace should be
+> doing and how much of this the kernel should implement.
 > 
-> These helpers allocate a on a 'kunit' bus which will either probe the
-> driver passed in (kunit_device_register_with_driver), or will create a
-> stub driver (kunit_device_register) which is cleaned up on test shutdown.
-> 
-> Devices are automatically unregistered on test shutdown, but can be
-> manually unregistered earlier with kunit_device_unregister() in order
-> to, for example, test device release code.
+> It seems to me that the error code should return the gerror and the
+> req_num should indicate the halted cons. The vmm should relay both
+> into the virtual registers.
 
-At first glance, nice work.  But looks like 0-day doesn't like it that
-much, so I'll wait for the next version to review it properly.
+I see your concern. I will take a closer look and see if we can
+add to the initial version of arm_smmu_cache_invalidate_user().
+Otherwise, we can add later.
 
-One nit I did notice:
+Btw, VT-d seems to want the error_code and reports in the VT-d
+specific invalidate entry structure, as Kevin and Yi had that
+discussion in the other side of the thread.
 
-> +// For internal use only -- registers the kunit_bus.
-> +int kunit_bus_init(void);
-
-Put stuff like this in a local .h file, don't pollute the include/linux/
-files for things that you do not want any other part of the kernel to
-call.
-
-> +/**
-> + * kunit_device_register_with_driver() - Create a struct device for use in KUnit tests
-> + * @test: The test context object.
-> + * @name: The name to give the created device.
-> + * @drv: The struct device_driver to associate with the device.
-> + *
-> + * Creates a struct kunit_device (which is a struct device) with the given
-> + * name, and driver. The device will be cleaned up on test exit, or when
-> + * kunit_device_unregister is called. See also kunit_device_register, if you
-> + * wish KUnit to create and manage a driver for you
-> + */
-> +struct device *kunit_device_register_with_driver(struct kunit *test,
-> +						 const char *name,
-> +						 struct device_driver *drv);
-
-Shouldn't "struct device_driver *" be a constant pointer?
-
-But really, why is this a "raw" device_driver pointer and not a pointer
-to the driver type for your bus?
-
-Oh heck, let's point out the other issues as I'm already here...
-
-> @@ -7,7 +7,8 @@ kunit-objs +=				test.o \
->  					assert.o \
->  					try-catch.o \
->  					executor.o \
-> -					attributes.o
-> +					attributes.o \
-> +					device.o
-
-Shouldn't this file be "bus.c" as you are creating a kunit bus?
-
->  
->  ifeq ($(CONFIG_KUNIT_DEBUGFS),y)
->  kunit-objs +=				debugfs.o
-> diff --git a/lib/kunit/device.c b/lib/kunit/device.c
-> new file mode 100644
-> index 000000000000..93ace1a2297d
-> --- /dev/null
-> +++ b/lib/kunit/device.c
-> @@ -0,0 +1,176 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * KUnit basic device implementation
-
-"basic bus/driver implementation", not device, right?
-
-> + *
-> + * Implementation of struct kunit_device helpers.
-> + *
-> + * Copyright (C) 2023, Google LLC.
-> + * Author: David Gow <davidgow@google.com>
-> + */
-> +
-> +#include <linux/device.h>
-> +
-> +#include <kunit/test.h>
-> +#include <kunit/device.h>
-> +#include <kunit/resource.h>
-> +
-> +
-> +/* Wrappers for use with kunit_add_action() */
-> +KUNIT_DEFINE_ACTION_WRAPPER(device_unregister_wrapper, device_unregister, struct device *);
-> +KUNIT_DEFINE_ACTION_WRAPPER(driver_unregister_wrapper, driver_unregister, struct device_driver *);
-> +
-> +static struct device kunit_bus = {
-> +	.init_name = "kunit"
-> +};
-
-A static device as a bus?  This feels wrong, what is it for?  And where
-does this live?  If you _REALLY_ want a single device for the root of
-your bus (which is a good idea), then make it a dynamic variable (as it
-is reference counted), NOT a static struct device which should not be
-done if at all possible.
-
-> +
-> +/* A device owned by a KUnit test. */
-> +struct kunit_device {
-> +	struct device dev;
-> +	struct kunit *owner;
-> +	/* Force binding to a specific driver. */
-> +	struct device_driver *driver;
-> +	/* The driver is managed by KUnit and unique to this device. */
-> +	bool cleanup_driver;
-> +};
-
-Wait, why isn't your "kunit" device above a struct kunit_device
-structure?  Why is it ok to be a "raw" struct device (hint, that's
-almost never a good idea.)
-
-> +static inline struct kunit_device *to_kunit_device(struct device *d)
-> +{
-> +	return container_of(d, struct kunit_device, dev);
-
-container_of_const()?  And to use that properly, why not make this a #define?
-
-> +}
-> +
-> +static int kunit_bus_match(struct device *dev, struct device_driver *driver)
-> +{
-> +	struct kunit_device *kunit_dev = to_kunit_device(dev);
-> +
-> +	if (kunit_dev->driver == driver)
-> +		return 1;
-> +
-> +	return 0;
-
-I don't understand, what are you trying to match here?
-
-> +}
-> +
-> +static struct bus_type kunit_bus_type = {
-> +	.name		= "kunit",
-> +	.match		= kunit_bus_match
-> +};
-> +
-> +int kunit_bus_init(void)
-> +{
-> +	int error;
-> +
-> +	error = bus_register(&kunit_bus_type);
-> +	if (!error) {
-> +		error = device_register(&kunit_bus);
-> +		if (error)
-> +			bus_unregister(&kunit_bus_type);
-> +	}
-> +	return error;
-> +}
-> +late_initcall(kunit_bus_init);
-> +
-> +static void kunit_device_release(struct device *d)
-> +{
-> +	kfree(to_kunit_device(d));
-> +}
-> +
-> +struct device_driver *kunit_driver_create(struct kunit *test, const char *name)
-> +{
-> +	struct device_driver *driver;
-> +	int err = -ENOMEM;
-> +
-> +	driver = kunit_kzalloc(test, sizeof(*driver), GFP_KERNEL);
-> +
-> +	if (!driver)
-> +		return ERR_PTR(err);
-> +
-> +	driver->name = name;
-> +	driver->bus = &kunit_bus_type;
-> +	driver->owner = THIS_MODULE;
-> +
-> +	err = driver_register(driver);
-> +	if (err) {
-> +		kunit_kfree(test, driver);
-> +		return ERR_PTR(err);
-> +	}
-> +
-> +	kunit_add_action(test, driver_unregister_wrapper, driver);
-> +	return driver;
-> +}
-> +EXPORT_SYMBOL_GPL(kunit_driver_create);
-> +
-> +struct kunit_device *__kunit_device_register_internal(struct kunit *test,
-> +						      const char *name,
-> +						      struct device_driver *drv)
-> +{
-> +	struct kunit_device *kunit_dev;
-> +	int err = -ENOMEM;
-> +
-> +	kunit_dev = kzalloc(sizeof(struct kunit_device), GFP_KERNEL);
-> +	if (!kunit_dev)
-> +		return ERR_PTR(err);
-> +
-> +	kunit_dev->owner = test;
-> +
-> +	err = dev_set_name(&kunit_dev->dev, "%s.%s", test->name, name);
-> +	if (err) {
-> +		kfree(kunit_dev);
-> +		return ERR_PTR(err);
-> +	}
-> +
-> +	/* Set the expected driver pointer, so we match. */
-> +	kunit_dev->driver = drv;
-
-Ah, so this is the match function to pass above?  If so, why do you need
-it at all?
-
-> +
-> +	kunit_dev->dev.release = kunit_device_release;
-> +	kunit_dev->dev.bus = &kunit_bus_type;
-> +	kunit_dev->dev.parent = &kunit_bus;
-> +
-> +	err = device_register(&kunit_dev->dev);
-> +	if (err) {
-> +		put_device(&kunit_dev->dev);
-> +		return ERR_PTR(err);
-> +	}
-> +
-> +	kunit_add_action(test, device_unregister_wrapper, &kunit_dev->dev);
-> +
-> +	return kunit_dev;
-> +}
-> +
-> +struct device *kunit_device_register_with_driver(struct kunit *test,
-> +						 const char *name,
-> +						 struct device_driver *drv)
-> +{
-> +	struct kunit_device *kunit_dev = __kunit_device_register_internal(test, name, drv);
-> +
-> +	if (IS_ERR_OR_NULL(kunit_dev))
-
-This is almost always a sign that something is wrong with the api.
-
-> +		return (struct device *)kunit_dev; /* This is an error or NULL, so is compatible */
-
-Ick, the cast is odd, are you sure you need it?  Why would you return a
-struct device and not a kunit_device() anyway?
-
-> +
-> +	return &kunit_dev->dev;
-
-Again, why this type, why not use the real type you have?
-
-thanks,
-
-greg k-h
+Thanks
+Nicolin
 
