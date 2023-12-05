@@ -1,128 +1,286 @@
-Return-Path: <linux-kselftest+bounces-1133-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1134-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C28A8051E3
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 12:17:50 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 31C3B8053B3
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 13:00:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 962231C20B34
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 11:17:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A5EF41F2091B
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 12:00:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22E5C5675F;
-	Tue,  5 Dec 2023 11:17:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D799B59E54;
+	Tue,  5 Dec 2023 12:00:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dP4HIHup"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NeW4rZvQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58962184;
-	Tue,  5 Dec 2023 03:17:43 -0800 (PST)
-Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-50bfa5a6cffso2337583e87.0;
-        Tue, 05 Dec 2023 03:17:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701775061; x=1702379861; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=iI7MNYltXP/pFO87Lkqjtj0O5CyAgLwLAo0fkrJE6Hk=;
-        b=dP4HIHupoDaUrRdXC6/3nhxStEoAGkfozR7nMkZtdng+eB+A5PgdBy9gzD5A1b3FSF
-         EmVCp7aRzQbnCN20lKjaz9IAOT9eB6i7JbFLJyEvl8Fo3a2Hz+tv9dr6lwuCubVv0fVp
-         vObs1xqCl3urp4Ea5jrK+/VKR8rLCOvGDee2wF781mjNA1hy4fuLqKwPJj70ituzoDgu
-         +iUuqZQGl59e4EuRrXP0RfcMVZ/kmZmMr+jsIom3Y14mxQu2Xx94eKWJWQk2CFRRhkZD
-         VYI+OJtKAVo3qhRj3m09fTRXYHN1wXBy32jRq50qWTWidBczklwITM++GDpi2awQ9Clk
-         9JEA==
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF86AA7
+	for <linux-kselftest@vger.kernel.org>; Tue,  5 Dec 2023 04:00:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1701777634;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=20GQcsknLlOrAs8uFrXzeujlWSijSdYal/a04hZduK0=;
+	b=NeW4rZvQGzIx83shYgxhGjj06sg3w4RRmag2LFM6vzPzisvZsrcEFBReekzhOOaJxrkrjO
+	eetO9MQM6BLKXVTSDk/Mx0PVb8JnFndc79RAmDqDcJuEO19fx+b0U+WlcY+ng2obk7Ra1K
+	oIuxBobWegpctPhmVAtlbD5XibyRjMQ=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-32-sCZtVW2POwWBSs9dMgyrSg-1; Tue, 05 Dec 2023 07:00:33 -0500
+X-MC-Unique: sCZtVW2POwWBSs9dMgyrSg-1
+Received: by mail-ed1-f71.google.com with SMTP id 4fb4d7f45d1cf-5450c83aa5dso688546a12.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 05 Dec 2023 04:00:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701775061; x=1702379861;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iI7MNYltXP/pFO87Lkqjtj0O5CyAgLwLAo0fkrJE6Hk=;
-        b=msAt2mlxO2Yfv9RjAx3Je1dnUYGhr7RR2xzVaC1RpYS++5a8jmnUhjQgWFkkDJcdDa
-         /3Wnk3bSD67Urbn+Vp8Ztc1ri1G4Mux4ainJEYch0R8cTrHH6v36cohFdj62aKr4Onso
-         S35HIaHtJ4496ipGH7Ov1KoCJfZPmk7tH4xHmrcqKORFOpyykT1qfnvVgLDrGD++wpnt
-         vxLLiL9ZZXCj+w0uzjfUdM+cX8zXpG0qe46B4Ene2PhROGNqGPOFl2YghAOs/X5KVW/g
-         OtZhEojAAetcguuZWV3vm1PWDOGOCXTARhqF1rsmweYEkm0Fkw0Ug/Me5GR1Cs3f6Hv3
-         HN/w==
-X-Gm-Message-State: AOJu0Yz+0N8fjhUDDQ0Bnn09UBHgDGeA/IwFSJqycxv70e7drF+nj/Nb
-	G1/wjoEZAn/AlIf35Gm4jRc=
-X-Google-Smtp-Source: AGHT+IHEN61nwDvELtOai4WeGBT9eS7LRDhWTpi6AarU8d/CaG3ducgh6GQhHOrB3Cg4T2+3Gc6DXw==
-X-Received: by 2002:a19:c507:0:b0:50b:feb2:dac9 with SMTP id w7-20020a19c507000000b0050bfeb2dac9mr873236lfe.2.1701775061066;
-        Tue, 05 Dec 2023 03:17:41 -0800 (PST)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id a15-20020aa7cf0f000000b0054ca7afdf35sm936627edy.86.2023.12.05.03.17.40
+        d=1e100.net; s=20230601; t=1701777632; x=1702382432;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=20GQcsknLlOrAs8uFrXzeujlWSijSdYal/a04hZduK0=;
+        b=meQxiB/JTvIGBDXc5zi0ZoDja45YtNILGMRUf1cQ7RvPSHu/3GnuWgaLsyy3L/z8C0
+         woz0cycdD0r8usEvbVguU5OQ7fK0kaUUZyWUli1fI28ZpFb+C1S3FlfucYT13s9Z3ayh
+         Tm0qyrbN62TCR5nmHrQykYmp7Ng8wGBWjXaSpyZ9DKD+ibHyf8kSyY7/7qXRJTvGgV5G
+         04rpM1QpCKuaGP4QL9J5YzCrKZ6vGebTeUgpnr3+4PPgKHm+k/lp4kja9p5jnzsS7pki
+         yWZbdGh8m8LABb2siLULdA5DEsUNcUx9PSJFTQB1mczeqCdQZ4F+TiXb50sjJfiqSPSC
+         eH0g==
+X-Gm-Message-State: AOJu0YwPYGXCoRKmSxH131ZHxII8jPqt9t+hqHWeZSxLmmOXTLRaEggd
+	fC+1UvA04i5FOXEASe/o6yGHnJwAypViCzMh7CzLwAdUtCgPhpfgFh2Q6CwMifK07qjwEJL90Bf
+	ih2RKo36MTz1wpQHp2Q/oreEcPDRN
+X-Received: by 2002:a05:6402:430d:b0:54d:3838:490a with SMTP id m13-20020a056402430d00b0054d3838490amr816140edc.3.1701777632305;
+        Tue, 05 Dec 2023 04:00:32 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IF9eONxd7d8LRO22GLsrViNctQNoTDf/CknACqwPnUGu/qVoAXLfeKj9F84EiNm67Wd5ElUDQ==
+X-Received: by 2002:a05:6402:430d:b0:54d:3838:490a with SMTP id m13-20020a056402430d00b0054d3838490amr816096edc.3.1701777631716;
+        Tue, 05 Dec 2023 04:00:31 -0800 (PST)
+Received: from gerbillo.redhat.com (146-241-241-54.dyn.eolo.it. [146.241.241.54])
+        by smtp.gmail.com with ESMTPSA id n10-20020a056402060a00b0054c6a70a435sm986678edv.44.2023.12.05.04.00.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Dec 2023 03:17:40 -0800 (PST)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Tue, 5 Dec 2023 12:17:38 +0100
-To: Kyle Huey <me@kylehuey.com>
-Cc: Kyle Huey <khuey@kylehuey.com>, linux-kernel@vger.kernel.org,
-	Robert O'Callahan <robert@ocallahan.org>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>,
-	Hao Luo <haoluo@google.com>, Shuah Khan <shuah@kernel.org>,
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/2] selftest/bpf: Test returning zero from a perf bpf
- program suppresses SIGIO.
-Message-ID: <ZW8G0muteKBhP18a@krava>
-References: <20231204201406.341074-1-khuey@kylehuey.com>
- <20231204201406.341074-3-khuey@kylehuey.com>
+        Tue, 05 Dec 2023 04:00:31 -0800 (PST)
+Message-ID: <7e73dbfe6cad7d551516d02bb02881d885045498.camel@redhat.com>
+Subject: Re: [PATCHv3 net-next 01/14] selftests/net: add lib.sh
+From: Paolo Abeni <pabeni@redhat.com>
+To: Hangbin Liu <liuhangbin@gmail.com>, netdev@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>, Jakub Kicinski
+ <kuba@kernel.org>,  Eric Dumazet <edumazet@google.com>, Shuah Khan
+ <shuah@kernel.org>, David Ahern <dsahern@kernel.org>, 
+ linux-kselftest@vger.kernel.org, Po-Hsu Lin <po-hsu.lin@canonical.com>, 
+ Guillaume Nault <gnault@redhat.com>, Petr Machata <petrm@nvidia.com>, James
+ Prestwood <prestwoj@gmail.com>,  Jaehee Park <jhpark1013@gmail.com>, Ido
+ Schimmel <idosch@nvidia.com>, Justin Iurman <justin.iurman@uliege.be>, Xin
+ Long <lucien.xin@gmail.com>, James Chapman <jchapman@katalix.com>
+Date: Tue, 05 Dec 2023 13:00:29 +0100
+In-Reply-To: <20231202020110.362433-2-liuhangbin@gmail.com>
+References: <20231202020110.362433-1-liuhangbin@gmail.com>
+	 <20231202020110.362433-2-liuhangbin@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231204201406.341074-3-khuey@kylehuey.com>
 
-On Mon, Dec 04, 2023 at 12:14:06PM -0800, Kyle Huey wrote:
-> The test sets a hardware breakpoint and uses a bpf program to suppress the
-> I/O availability signal if the ip matches the expected value.
-> 
-> Signed-off-by: Kyle Huey <khuey@kylehuey.com>
+On Sat, 2023-12-02 at 10:00 +0800, Hangbin Liu wrote:
+> Add a lib.sh for net selftests. This file can be used to define commonly
+> used variables and functions. Some commonly used functions can be moved
+> from forwarding/lib.sh to this lib file. e.g. busywait().
+>=20
+> Add function setup_ns() for user to create unique namespaces with given
+> prefix name.
+>=20
+> Reviewed-by: Petr Machata <petrm@nvidia.com>
+> Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
 > ---
->  .../selftests/bpf/prog_tests/perf_skip.c      | 95 +++++++++++++++++++
->  .../selftests/bpf/progs/test_perf_skip.c      | 23 +++++
->  2 files changed, 118 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/perf_skip.c
->  create mode 100644 tools/testing/selftests/bpf/progs/test_perf_skip.c
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/perf_skip.c b/tools/testing/selftests/bpf/prog_tests/perf_skip.c
+>  tools/testing/selftests/net/Makefile          |  2 +-
+>  tools/testing/selftests/net/forwarding/lib.sh | 27 +-----
+>  tools/testing/selftests/net/lib.sh            | 85 +++++++++++++++++++
+>  3 files changed, 87 insertions(+), 27 deletions(-)
+>  create mode 100644 tools/testing/selftests/net/lib.sh
+>=20
+> diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftes=
+ts/net/Makefile
+> index 9274edfb76ff..14bd68da7466 100644
+> --- a/tools/testing/selftests/net/Makefile
+> +++ b/tools/testing/selftests/net/Makefile
+> @@ -54,7 +54,7 @@ TEST_PROGS +=3D ip_local_port_range.sh
+>  TEST_PROGS +=3D rps_default_mask.sh
+>  TEST_PROGS +=3D big_tcp.sh
+>  TEST_PROGS_EXTENDED :=3D in_netns.sh setup_loopback.sh setup_veth.sh
+> -TEST_PROGS_EXTENDED +=3D toeplitz_client.sh toeplitz.sh
+> +TEST_PROGS_EXTENDED +=3D toeplitz_client.sh toeplitz.sh lib.sh
+>  TEST_GEN_FILES =3D  socket nettest
+>  TEST_GEN_FILES +=3D psock_fanout psock_tpacket msg_zerocopy reuseport_ad=
+dr_any
+>  TEST_GEN_FILES +=3D tcp_mmap tcp_inq psock_snd txring_overwrite
+> diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testin=
+g/selftests/net/forwarding/lib.sh
+> index e37a15eda6c2..8f6ca458af9a 100755
+> --- a/tools/testing/selftests/net/forwarding/lib.sh
+> +++ b/tools/testing/selftests/net/forwarding/lib.sh
+> @@ -4,9 +4,6 @@
+>  ########################################################################=
+######
+>  # Defines
+> =20
+> -# Kselftest framework requirement - SKIP code is 4.
+> -ksft_skip=3D4
+> -
+>  # Can be overridden by the configuration file.
+>  PING=3D${PING:=3Dping}
+>  PING6=3D${PING6:=3Dping6}
+> @@ -41,6 +38,7 @@ if [[ -f $relative_path/forwarding.config ]]; then
+>  	source "$relative_path/forwarding.config"
+>  fi
+> =20
+> +source ../lib.sh
+>  ########################################################################=
+######
+>  # Sanity checks
+> =20
+> @@ -395,29 +393,6 @@ log_info()
+>  	echo "INFO: $msg"
+>  }
+> =20
+> -busywait()
+> -{
+> -	local timeout=3D$1; shift
+> -
+> -	local start_time=3D"$(date -u +%s%3N)"
+> -	while true
+> -	do
+> -		local out
+> -		out=3D$("$@")
+> -		local ret=3D$?
+> -		if ((!ret)); then
+> -			echo -n "$out"
+> -			return 0
+> -		fi
+> -
+> -		local current_time=3D"$(date -u +%s%3N)"
+> -		if ((current_time - start_time > timeout)); then
+> -			echo -n "$out"
+> -			return 1
+> -		fi
+> -	done
+> -}
+> -
+>  not()
+>  {
+>  	"$@"
+> diff --git a/tools/testing/selftests/net/lib.sh b/tools/testing/selftests=
+/net/lib.sh
 > new file mode 100644
-> index 000000000000..b269a31669b7
+> index 000000000000..518eca57b815
 > --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/perf_skip.c
-> @@ -0,0 +1,95 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#define _GNU_SOURCE
-> +#include <test_progs.h>
-> +#include "test_perf_skip.skel.h"
-> +#include <linux/hw_breakpoint.h>
-> +#include <sys/mman.h>
+> +++ b/tools/testing/selftests/net/lib.sh
+> @@ -0,0 +1,85 @@
+> +#!/bin/bash
+> +# SPDX-License-Identifier: GPL-2.0
 > +
-> +#define BPF_OBJECT            "test_perf_skip.bpf.o"
+> +########################################################################=
+######
+> +# Defines
 > +
-> +static void handle_sig(int)
+> +# Kselftest framework requirement - SKIP code is 4.
+> +ksft_skip=3D4
+> +
+> +########################################################################=
+######
+> +# Helpers
+> +busywait()
 > +{
-> +	ASSERT_OK(1, "perf event not skipped");
+> +	local timeout=3D$1; shift
+> +
+> +	local start_time=3D"$(date -u +%s%3N)"
+> +	while true
+> +	do
+> +		local out
+> +		out=3D$("$@")
+> +		local ret=3D$?
+> +		if ((!ret)); then
+> +			echo -n "$out"
+> +			return 0
+> +		fi
+> +
+> +		local current_time=3D"$(date -u +%s%3N)"
+> +		if ((current_time - start_time > timeout)); then
+> +			echo -n "$out"
+> +			return 1
+> +		fi
+> +	done
 > +}
 > +
-> +static noinline int test_function(void)
+> +cleanup_ns()
 > +{
-> +	return 0;
+> +	local ns=3D""
+> +	local errexit=3D0
+> +	local ret=3D0
+> +
+> +	# disable errexit temporary
+> +	if [[ $- =3D~ "e" ]]; then
+> +		errexit=3D1
+> +		set +e
+> +	fi
+> +
+> +	for ns in "$@"; do
+> +		ip netns delete "${ns}" &> /dev/null
+> +		if ! busywait 2 ip netns list \| grep -vq "^$ns$" &> /dev/null; then
+> +			echo "Warn: Failed to remove namespace $ns"
+> +			ret=3D1
+> +		fi
+> +	done
+> +
+> +	[ $errexit -eq 1 ] && set -e
+> +	return $ret
 > +}
 > +
-> +void serial_test_perf_skip(void)
+> +# setup netns with given names as prefix. e.g
+> +# setup_ns local remote
+> +setup_ns()
+> +{
+> +	local ns=3D""
+> +	local ns_name=3D""
+> +	local ns_list=3D""
+> +	for ns_name in "$@"; do
+> +		# Some test may setup/remove same netns multi times
+> +		if unset ${ns_name} 2> /dev/null; then
+> +			ns=3D"${ns_name,,}-$(mktemp -u XXXXXX)"
+> +			eval readonly ${ns_name}=3D"$ns"
+> +		else
+> +			eval ns=3D'$'${ns_name}
+> +			cleanup_ns "$ns"
+> +
+> +		fi
+> +
+> +		if ! ip netns add "$ns"; then
+> +			echo "Failed to create namespace $ns_name"
+> +			cleanup_ns "$ns_list"
+> +			return $ksft_skip
+> +		fi
+> +		ip -n "$ns" link set lo up
+> +		ns_list=3D"$ns_list $ns"
 
-does it need to be serial?
+Side note for a possible follow-up: if you maintain $ns_list as global
+variable, and remove from such list the ns deleted by cleanup_ns, you
+could remove the cleanup trap from the individual test with something
+alike:
 
-jirka
+final_cleanup_ns()
+{
+	cleanup_ns $ns_list
+}
+
+trap final_cleanup_ns EXIT
+
+No respin needed for the above, could be a follow-up if agreed upon.
+
+Cheers,
+
+Paolo
+
 
