@@ -1,40 +1,41 @@
-Return-Path: <linux-kselftest+bounces-1157-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1158-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E40B805A50
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 17:51:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19624805A51
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 17:51:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ED324B207B1
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 16:51:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C709D281CA5
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 16:51:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AE0F5C8F1;
-	Tue,  5 Dec 2023 16:51:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 271515B1E6;
+	Tue,  5 Dec 2023 16:51:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ADI9sPog"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lrmJaaJz"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 249564174B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2E4C4174B;
+	Tue,  5 Dec 2023 16:51:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12EA0C433CD;
 	Tue,  5 Dec 2023 16:51:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81F8BC433CA;
-	Tue,  5 Dec 2023 16:51:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701795074;
-	bh=7RNGzDmYQmscIH9JLPqJXNwGek+pQVepVhKqfj7iORk=;
+	s=k20201202; t=1701795078;
+	bh=yGEIdovBwYeKe84KQvqQuF6UfRvXTIIewONLZW3lJjY=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=ADI9sPog+fjm9K3T+A9ZApXzEebNj3iy0cn9GF4b1skSpglBT9KEzLjlW5LpOuQnF
-	 gla0szlkjmrr6SGLwgk8JkczMUBy/Fmmp7vhp0JvX9MPIGiQ6qW8ybMx/bNb5CyeDm
-	 /IP2hoM9dQ8KYr3mg/ZboPBVrTH8viiMWhubBzmJMmXKByk20lI1qVzEykw9TdD/YL
-	 ofAeJpFPCIQoPn6MFbOM9LDto7J8Y+WMtIbgObXp+wbkavK4HKG0qM3vE8+550u2at
-	 f/czwxuvzEQFO8iRSl9nPG+WNIDml3Z6Aqswf0JOwlME2DhAyT8FtoE/ZL/X9M1GEF
-	 4bsVPDYsaOyOA==
+	b=lrmJaaJz7csx4cTSAn/g53zpNTXaWkn2ParAcP/v1+H+9KiJiv/gCs2+j4XkShfA0
+	 E2IdUfMUy4GJA7dhSkqa+lq5uSIUOiCTW/6zxmfsjZ5yYM15HnQzdt/ueaIPP6jS4g
+	 K5e9zshdmnNJ57AJgw0IL9ZnDdI0r9M0d32pV6m2zF7KbH533lI+dq1PUkGbCuMvAo
+	 FuAODu2KGXFjlOd9kPSZOCF4EV02X+evnoTwal6qHAgFFjEi6DOLgOvNPdbBfgG08C
+	 O/WVyVO4XrNKhiRMmvu5Cp7kEW+U1GeDrMx+0WKibXoanJueSk322gMW2+vp4da20P
+	 dWBwwx7zvV8ug==
 From: Mark Brown <broonie@kernel.org>
-Date: Tue, 05 Dec 2023 16:47:59 +0000
-Subject: [PATCH v3 01/21] arm64/sysreg: Add definition for ID_AA64PFR2_EL1
+Date: Tue, 05 Dec 2023 16:48:00 +0000
+Subject: [PATCH v3 02/21] arm64/sysreg: Update ID_AA64ISAR2_EL1 defintion
+ for DDI0601 2023-09
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -43,7 +44,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20231205-arm64-2023-dpisa-v3-1-dbcbcd867a7f@kernel.org>
+Message-Id: <20231205-arm64-2023-dpisa-v3-2-dbcbcd867a7f@kernel.org>
 References: <20231205-arm64-2023-dpisa-v3-0-dbcbcd867a7f@kernel.org>
 In-Reply-To: <20231205-arm64-2023-dpisa-v3-0-dbcbcd867a7f@kernel.org>
 To: Catalin Marinas <catalin.marinas@arm.com>, 
@@ -55,59 +56,76 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  kvmarm@lists.linux.dev, linux-doc@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.13-dev-5c066
-X-Developer-Signature: v=1; a=openpgp-sha256; l=956; i=broonie@kernel.org;
- h=from:subject:message-id; bh=7RNGzDmYQmscIH9JLPqJXNwGek+pQVepVhKqfj7iORk=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBlb1TpX108CHonTAhZqb98RgydAoTiu67u4fx1tQ5P
- vBeCHyKJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZW9U6QAKCRAk1otyXVSH0B/dB/
- 0RaLXek3gvFEvOZl1SWe1zdDv/e4Q0eaM5oM/hhkXiZKwWXB4R8bg9xdESjxJyhtekmqtIbTZS9Nx0
- b7lCGDvJTiS/59bSAcdIKb9KGfvicEnoh6lJoVy2lMfJMmcufgK0cWw9XuazhKy0499kxA9U+1tXZc
- hmrgZQZJPfftJWRURroCGHUIALMdimzVhvYwLb05f62E+9SJUb4lxQ16Oy00EOgCxVrS1twwLbD08b
- 58RDQ9DI4x2BjFwkKQqqJTjccC+oV/5KNGemgZ1IfcsoJYByntBBaq6f8Mg6YUEl3t1A5SXnPyTyJN
- hv4FbexGnUDga5QONSsZwVFdBC4Ohg
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1340; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=yGEIdovBwYeKe84KQvqQuF6UfRvXTIIewONLZW3lJjY=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBlb1TqJj/PHrAXfTngRmg+JNAI8LnfyAIgs6I/oO1p
+ KaqvxmiJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZW9U6gAKCRAk1otyXVSH0FPnB/
+ 91d9hA/HISKqxPHud6SP9aifwHjcb93GHR5j8Sqs777GxGDtJ0TjRkPjbDf8Ou1apPzIe6racVfzcU
+ Cdh24FpAF8bFmoJkXqxMTQUvRvv1oJgC29S7dMzXAQcspAN/C1gyrQ9vdnocgbaLvTi0iEFk/AA8o7
+ 597tlSqx2qFUNsclQqnhRTKz76R9NfExXaYWC2wDaL9TPt7oeBXuCJ7ui2Rf3Qd1UDUQFgMH/obRvz
+ D3ZxSknS5EaX5NDMA3Me/dCynSWUwSOm/rqy4MOqqSISsYI4Q5PmcGIBYAmkJe4BAL+l6rKIGk0BEY
+ ZaUwoKzUfmhVkCUZRIV9PCdWQz/teV
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-DDI0601 2023-09 defines a new system register ID_AA64PFR2_EL1 which
-enumerates FPMR and some new MTE features. Add a definition of this
-register.
+DDI0601 2023-09 defines some new fields in previously RES0 space in
+ID_AA64ISAR2_EL1, together with one new enum value. Update the system
+register definition to reflect this.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/tools/sysreg | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ arch/arm64/tools/sysreg | 24 ++++++++++++++++++++++--
+ 1 file changed, 22 insertions(+), 2 deletions(-)
 
 diff --git a/arch/arm64/tools/sysreg b/arch/arm64/tools/sysreg
-index 96cbeeab4eec..f22ade8f1fa7 100644
+index f22ade8f1fa7..27d79644e1a0 100644
 --- a/arch/arm64/tools/sysreg
 +++ b/arch/arm64/tools/sysreg
-@@ -1002,6 +1002,27 @@ UnsignedEnum	3:0	BT
- EndEnum
+@@ -1365,7 +1365,14 @@ EndEnum
  EndSysreg
  
-+Sysreg	ID_AA64PFR2_EL1	3	0	0	4	2
-+Res0	63:36
-+UnsignedEnum	35:32	FPMR
+ Sysreg	ID_AA64ISAR2_EL1	3	0	0	6	2
+-Res0	63:56
++UnsignedEnum	63:60	ATS1A
 +	0b0000	NI
 +	0b0001	IMP
 +EndEnum
-+Res0	31:12
-+UnsignedEnum	11:8	MTEFAR
++UnsignedEnum	59:56	LUT
 +	0b0000	NI
 +	0b0001	IMP
 +EndEnum
-+UnsignedEnum	7:4	MTESTOREONLY
+ UnsignedEnum	55:52	CSSC
+ 	0b0000	NI
+ 	0b0001	IMP
+@@ -1374,7 +1381,19 @@ UnsignedEnum	51:48	RPRFM
+ 	0b0000	NI
+ 	0b0001	IMP
+ EndEnum
+-Res0	47:32
++Res0	47:44
++UnsignedEnum	43:40	PRFMSLC
 +	0b0000	NI
 +	0b0001	IMP
 +EndEnum
-+UnsignedEnum	3:0	MTEPERM
++UnsignedEnum	39:36	SYSINSTR_128
 +	0b0000	NI
 +	0b0001	IMP
 +EndEnum
-+EndSysreg
-+
- Sysreg	ID_AA64ZFR0_EL1	3	0	0	4	4
- Res0	63:60
- UnsignedEnum	59:56	F64MM
++UnsignedEnum	35:32	SYSREG_128
++	0b0000	NI
++	0b0001	IMP
++EndEnum
+ UnsignedEnum	31:28	CLRBHB
+ 	0b0000	NI
+ 	0b0001	IMP
+@@ -1398,6 +1417,7 @@ UnsignedEnum	15:12	APA3
+ 	0b0011	PAuth2
+ 	0b0100	FPAC
+ 	0b0101	FPACCOMBINE
++	0b0110	PAUTH_LR
+ EndEnum
+ UnsignedEnum	11:8	GPA3
+ 	0b0000	NI
 
 -- 
 2.30.2
