@@ -1,66 +1,88 @@
-Return-Path: <linux-kselftest+bounces-1203-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1204-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 341E0805E37
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 19:58:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 29BF7805E38
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 19:59:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DDF821F216BD
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 18:58:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D42941F21503
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 18:59:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B40268B7C;
-	Tue,  5 Dec 2023 18:58:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD4E568B7F;
+	Tue,  5 Dec 2023 18:59:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="Fo+15sbo"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from relay.hostedemail.com (smtprelay0016.hostedemail.com [216.40.44.16])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E16EC0;
-	Tue,  5 Dec 2023 10:58:26 -0800 (PST)
-Received: from omf09.hostedemail.com (a10.router.float.18 [10.200.18.1])
-	by unirelay02.hostedemail.com (Postfix) with ESMTP id 4725E12023B;
-	Tue,  5 Dec 2023 18:58:24 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf09.hostedemail.com (Postfix) with ESMTPA id 032DB20028;
-	Tue,  5 Dec 2023 18:58:19 +0000 (UTC)
-Message-ID: <7181366346c744a544515f69b1c21d5dba6ab25a.camel@perches.com>
-Subject: Re: [RFC PATCH v2 02/10] MAINTAINERS: Introduce V: entry for tests
-From: Joe Perches <joe@perches.com>
-To: Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com>, 
-	workflows@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>, Andy Whitcroft
-	 <apw@canonical.com>, Theodore Ts'o <tytso@mit.edu>, David Gow
-	 <davidgow@google.com>, Steven Rostedt <rostedt@goodmis.org>, Mark Brown
-	 <broonie@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, "Darrick J .
-	Wong" <djwong@kernel.org>
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9847DB0;
+	Tue,  5 Dec 2023 10:59:37 -0800 (PST)
+Received: from localhost (boingo-wire.bear2.houston1.level3.net [4.2.233.242])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by ms.lwn.net (Postfix) with ESMTPSA id 0B05E60A;
+	Tue,  5 Dec 2023 18:59:35 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 0B05E60A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+	t=1701802776; bh=0ncyxIjUSJwIksl5e6cUcciHfHgKyC4e8TX9/ruSMGc=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+	b=Fo+15sbowo8yomUr6wIBKTEQmL3TtCRvRu4rKB4onthQaHuTh1/fMjz1EDhU/YWvV
+	 IIrYYDAln9mdLFOp3arOwT1B5YysamfQaAC4sD+Qkq7ZDNm50ipFcTOdzQ5AXguxGI
+	 /LgSIG69By2FT41eauThdhJCGhpOZOZryJlCplRTINzomPr6vzAvSz2/ywEUrKAl4X
+	 pHCwUyqBO95sRX3Ra0e5tXOa4s/rzd167WA2MuphIKPPxWhxXaAK5XAHgqr4tvj16x
+	 2zME5hlJlAK6vXMJrqv1KY11YhlML2vZx34I2sriy8KH0UzwA+ugsoXBj1kaqXula/
+	 V0FDF2SN524jw==
+From: Jonathan Corbet <corbet@lwn.net>
+To: Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com>,
+ workflows@vger.kernel.org, Joe Perches <joe@perches.com>, Andy Whitcroft
+ <apw@canonical.com>, Theodore Ts'o <tytso@mit.edu>, David Gow
+ <davidgow@google.com>, Steven Rostedt <rostedt@goodmis.org>, Mark Brown
+ <broonie@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, "Darrick J .
+ Wong" <djwong@kernel.org>
 Cc: kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org, Veronika
  Kabatova <vkabatov@redhat.com>, CKI <cki-project@redhat.com>,
- kernelci@lists.linux.dev
-Date: Tue, 05 Dec 2023 10:58:19 -0800
-In-Reply-To: <20231205184503.79769-3-Nikolai.Kondrashov@redhat.com>
+ kernelci@lists.linux.dev, Nikolai Kondrashov
+ <Nikolai.Kondrashov@redhat.com>
+Subject: Re: [RFC PATCH v2 04/10] docs: submitting-patches: Introduce
+ Tested-with:
+In-Reply-To: <20231205184503.79769-5-Nikolai.Kondrashov@redhat.com>
 References: <20231115175146.9848-1-Nikolai.Kondrashov@redhat.com>
-	 <20231205184503.79769-1-Nikolai.Kondrashov@redhat.com>
-	 <20231205184503.79769-3-Nikolai.Kondrashov@redhat.com>
-Content-Type: text/plain; charset="ISO-8859-1"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.4 (3.48.4-1.fc38) 
+ <20231205184503.79769-1-Nikolai.Kondrashov@redhat.com>
+ <20231205184503.79769-5-Nikolai.Kondrashov@redhat.com>
+Date: Tue, 05 Dec 2023 11:59:35 -0700
+Message-ID: <87zfyomq5k.fsf@meer.lwn.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Rspamd-Queue-Id: 032DB20028
-X-Stat-Signature: hn7kghgmzrchozzphyan4eirx6b5kn3b
-X-Rspamd-Server: rspamout01
-X-Session-Marker: 6A6F6540706572636865732E636F6D
-X-Session-ID: U2FsdGVkX1/YiS7yEWBgHPlpHd3dQkdApjFJd1hvXR0=
-X-HE-Tag: 1701802699-774340
-X-HE-Meta: U2FsdGVkX18NEtwviUMTx0MGx9JIeBeZTP3Z6TF+54NCEYXkuZ6y1qSb6UglvMdC+Ju3wgdDoHT1Iobu+sIxpy90DdjTBFPna5n+Bb2LFYFSsj6w5HHhvl/t2pWUh2hztHJc+VIyWV8pGGbTXU0XhJDyGb6dnzDpHDaV/JC/JMNlwrCbJmkKt4F0HiY1X3q29TfkNibof7o6NCypFobPNniSBrL9Y3cXwOgSspvKQe3KRUtXMO8rFm19ZAazgf3qAsiCA5l4hznlOo82JLZyZ9SMOIuiPeA98rF0vrDCJAUcGXHpHd95pm+bW4mTiEbU
+Content-Type: text/plain
 
-On Tue, 2023-12-05 at 20:02 +0200, Nikolai Kondrashov wrote:
-> Require the entry values to not contain the '@' character, so they could
-> be distinguished from emails (always) output by get_maintainer.pl.
+Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com> writes:
 
-Why is this useful?
-Why the need to distinguish?
+> Introduce a new tag, 'Tested-with:', documented in the
+> Documentation/process/submitting-patches.rst file.
+>
+> The tag is expected to contain the test suite command which was executed
+> for the commit, and to certify it passed. Additionally, it can contain a
+> URL pointing to the execution results, after a '#' character.
+>
+> Prohibit the V: field from containing the '#' character correspondingly.
+>
+> Signed-off-by: Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com>
+> ---
+>  Documentation/process/submitting-patches.rst | 10 ++++++++++
+>  MAINTAINERS                                  |  2 +-
+>  scripts/checkpatch.pl                        |  4 ++--
+>  3 files changed, 13 insertions(+), 3 deletions(-)
 
+I have to ask whether we *really* need to introduce yet another tag for
+this.  How are we going to use this information?  Are we going to try to
+make a tag for every way in which somebody might test a patch?
 
+Thanks,
+
+jon
 
