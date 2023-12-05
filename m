@@ -1,160 +1,101 @@
-Return-Path: <linux-kselftest+bounces-1105-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1106-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB7B9804515
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 03:38:37 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5FD0C804869
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 05:05:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC5AF1C20C2F
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 02:38:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BEC22B20C1D
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 04:05:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E1E9A59;
-	Tue,  5 Dec 2023 02:38:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 720F8C8ED;
+	Tue,  5 Dec 2023 04:05:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rBnFTf7X"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aD+6kY7o"
 X-Original-To: linux-kselftest@vger.kernel.org
-X-Greylist: delayed 548 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 04 Dec 2023 18:38:32 PST
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F6F81A6
-	for <linux-kselftest@vger.kernel.org>; Mon,  4 Dec 2023 18:38:32 -0800 (PST)
-Message-ID: <f3b16968-d55a-4b30-803f-261fda353775@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1701743362;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ymMLu9FZ8CtZOyGQwaalZh7+0iVyegROhtwrn5KGHB4=;
-	b=rBnFTf7X21Q4cNhSaM8MqzICMe44z516qx66zq5Z6w5CwqtmCX3plbgQuWQ1hCNrqI0WUk
-	3WKu7/haEG+O2MStW7f6iHUOZppGPjNOI+ul/Og7Lahu3inHi79MCDKxEiB+fyHev+DmDm
-	GpH3C1ZZNsCzXdv7S4quXwwA1vd3TKU=
-Date: Tue, 5 Dec 2023 10:28:50 +0800
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D2BD3;
+	Mon,  4 Dec 2023 20:05:41 -0800 (PST)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-a1a496a73ceso487463466b.2;
+        Mon, 04 Dec 2023 20:05:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701749139; x=1702353939; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2k7iixUT5DlTn6h1rQEcCyY4ImOO7JGoRLtRpOFAc8o=;
+        b=aD+6kY7oEUbMvsvS2Ooh3gkQdxirDXK6g3GM8e6tdAFewVrLnfdUwDnngAvdTZVJ8O
+         pz0wuZkkEx5TDOR2InNCU3utlYmTA1hktnTQO49mkAeIEUA8KILiw33s6VA70EBU+RsB
+         Z2iTkA9FaqYSHR0EXimsGxFqH35GwEiEVcCsEoZUCf3IRvxeWcXMb+NYFZHs2ti0ILFS
+         oWjqZLdS9qq7FMO3Tw7JyJ2WweibHtyCFf2fbb/Y7sQytyZfRjJueCzQJ3W2EoVjJ0pQ
+         LGaG/j/tzoOdSklfwrnBB7xKUWI9jpwlQpuQzZOqya1ikYxKRjU0pyXbe/UY1gXuR9/I
+         L4aQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701749139; x=1702353939;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2k7iixUT5DlTn6h1rQEcCyY4ImOO7JGoRLtRpOFAc8o=;
+        b=pqXf5sFQr32oHyMLsVPZFPJjlmQBCQamJbtSu4ISnDXkiNXyu/hvK2nEos/ECZ/ARg
+         VcN1Oeytkw4Mb1ivBf5eE72xv87G8Ctn055ulkkcoHumobJ2yYZMAs9G87dBu3MTUkOa
+         DAq82gRhvSmOQFrvJw0z9sapo0GCbMF7DZ4w7yw/iqj8NYd6Pf8z9jn2/EtiBSf8f66P
+         RkWiRitqhYDw8P01jv/ERa3g7FJsd6Zcnqx6CLZqie32nTDv5DSRarU3xqXfI4fBIFp7
+         HTFW9rdAj1yyZ8OykB2B+latm8deULUC9hE2dwDHpcyX3odUFZWN9C3Bcwmi45duhSUC
+         fLaQ==
+X-Gm-Message-State: AOJu0YymP7pfpEyv8PnQm1gln0QgORc8oB/RUUybd3WPAOCDZMJ3N8Ki
+	CQMaCLSPV2aJo+qGHfMBh6kDhGA2D41omkFEXqI=
+X-Google-Smtp-Source: AGHT+IGhkddhCDG4agTaAdkzi8AdH3aBcGfj7PIzbkB3LUqn1FwhtskDdgNCANy5y4jv4mBcMUfEpAn5GNED8IQXEcw=
+X-Received: by 2002:a17:906:10d0:b0:a19:a19b:7897 with SMTP id
+ v16-20020a17090610d000b00a19a19b7897mr94028ejv.90.1701749139497; Mon, 04 Dec
+ 2023 20:05:39 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v8 1/6] list_lru: allows explicit memcg and NUMA node
- selection
-Content-Language: en-US
-To: Nhat Pham <nphamcs@gmail.com>
-Cc: Johannes Weiner <hannes@cmpxchg.org>, Matthew Wilcox
- <willy@infradead.org>, akpm@linux-foundation.org,
- cerasuolodomenico@gmail.com, yosryahmed@google.com, sjenning@redhat.com,
- ddstreet@ieee.org, vitaly.wool@konsulko.com, mhocko@kernel.org,
- roman.gushchin@linux.dev, shakeelb@google.com, muchun.song@linux.dev,
- chrisl@kernel.org, linux-mm@kvack.org, kernel-team@meta.com,
- linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, shuah@kernel.org
-References: <20231130194023.4102148-1-nphamcs@gmail.com>
- <20231130194023.4102148-2-nphamcs@gmail.com>
- <ZWjpNr3ZzvU4TDC8@casper.infradead.org>
- <CAKEwX=MV-F50i_=sZ0unfbgjrdxSTio00c4xTM19113BAN3-wA@mail.gmail.com>
- <20231130203522.GC543908@cmpxchg.org>
- <e3e319f5-9bcd-4c35-92e6-6fdb33eaa080@linux.dev>
- <CAKEwX=OBHe12R6fTbRn_dNGrz+T4ekE4MSo5w+7i_NNoprmnkw@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Chengming Zhou <chengming.zhou@linux.dev>
-In-Reply-To: <CAKEwX=OBHe12R6fTbRn_dNGrz+T4ekE4MSo5w+7i_NNoprmnkw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+References: <cover.1701722991.git.dxu@dxuuu.xyz> <d47d9105686551f0435091f45888bc64d1101bd4.1701722991.git.dxu@dxuuu.xyz>
+In-Reply-To: <d47d9105686551f0435091f45888bc64d1101bd4.1701722991.git.dxu@dxuuu.xyz>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Mon, 4 Dec 2023 20:05:27 -0800
+Message-ID: <CAEf4BzZPwHnGf6kirHg+wiNQ-y51GS5Qid4sFykpCneESP1fDQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v4 06/10] libbpf: selftests: Add verifier tests
+ for CO-RE bitfield writes
+To: Daniel Xu <dxu@dxuuu.xyz>
+Cc: daniel@iogearbox.net, shuah@kernel.org, andrii@kernel.org, ast@kernel.org, 
+	steffen.klassert@secunet.com, antony.antony@secunet.com, 
+	alexei.starovoitov@gmail.com, yonghong.song@linux.dev, eddyz87@gmail.com, 
+	mykolal@fb.com, martin.lau@linux.dev, song@kernel.org, 
+	john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com, 
+	haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, devel@linux-ipsec.org, 
+	netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2023/12/5 01:48, Nhat Pham wrote:
-> On Mon, Dec 4, 2023 at 12:30 AM Chengming Zhou <chengming.zhou@linux.dev> wrote:
->>
->> On 2023/12/1 04:35, Johannes Weiner wrote:
->>> On Thu, Nov 30, 2023 at 12:07:41PM -0800, Nhat Pham wrote:
->>>> On Thu, Nov 30, 2023 at 11:57 AM Matthew Wilcox <willy@infradead.org> wrote:
->>>>>
->>>>> On Thu, Nov 30, 2023 at 11:40:18AM -0800, Nhat Pham wrote:
->>>>>> This patch changes list_lru interface so that the caller must explicitly
->>>>>> specify numa node and memcg when adding and removing objects. The old
->>>>>> list_lru_add() and list_lru_del() are renamed to list_lru_add_obj() and
->>>>>> list_lru_del_obj(), respectively.
->>>>>
->>>>> Wouldn't it be better to add list_lru_add_memcg() and
->>>>> list_lru_del_memcg() and have:
->>>>>
->>>>> +bool list_lru_del(struct list_lru *lru, struct list_head *item)
->>>>> +{
->>>>> +       int nid = page_to_nid(virt_to_page(item));
->>>>> +       struct mem_cgroup *memcg = list_lru_memcg_aware(lru) ?
->>>>> +               mem_cgroup_from_slab_obj(item) : NULL;
->>>>> +
->>>>> +       return list_lru_del_memcg(lru, item, nid, memcg);
->>>>> +}
->>>>>
->>>>> Seems like _most_ callers will want the original versions and only
->>>>> a few will want the explicit memcg/nid versions.  No?
->>>>>
->>>>
->>>> I actually did something along that line in earlier iterations of this
->>>> patch series (albeit with poorer naming - __list_lru_add() instead of
->>>> list_lru_add_memcg()). The consensus after some back and forth was
->>>> that the original list_lru_add() was not a very good design (the
->>>> better one was this new version that allows for explicit numa/memcg
->>>> selection). So I agreed to fix it everywhere as a prep patch.
->>>>
->>>> I don't have strong opinions here to be completely honest, but I do
->>>> think this new API makes more sense (at the cost of quite a bit of
->>>> elbow grease to fix every callsites and extra reviewing).
->>>
->>> Maybe I can shed some light since I was pushing for doing it this way.
->>>
->>> The quiet assumption that 'struct list_head *item' is (embedded in) a
->>> slab object that is also charged to a cgroup is a bit much, given that
->>> nothing in the name or documentation of the function points to that.
->>>
->>> It bit us in the THP shrinker where that list head is embedded in a
->>> tailpage (virt_to_page(page) is fun to debug). And it caused some
->>> confusion in this case as well, where the zswap entry is a slab object
->>> but not charged (the entry descriptor is not attractive for cgroup
->>> accounting, only the backing memory it points to.)
->>
->> Hi,
->>
->> I have a question, maybe I missed something since I haven't read all
->> the earlier versions.
->>
->> IIUC, the problem here is that "zswap_entry" has different memcg and node
->> than the "page", so I wonder if we can just charge "zswap_entry" to the
->> same memcg of the "page".
->>
->> Like we can do these when allocating the "zswap_entry":
->>
->>         old_memcg = set_active_memcg(memcg)
->>         kmem_cache_alloc_lru(zswap_entry_cache, lru, gfp)
->>         set_active_memcg(old_memcg)
->>
->> The good points are:
->>
->> 1. "zswap_entry" is charged to the memcg of "page", which is more sensible?
->>
->> 2. We can reuse the kmem_cache_alloc_lru() interface, which makes code simpler
->>    since we don't need to manage list_lru_memcg by ourselves.
->>
->> 3. Maybe the new list_lru_add() and list_lru_del() are not needed anymore?
->>    Since the "zswap_entry" is of the same memcg and node with the "page".
->>    But don't know if THP shrinker still need it.
->>
->> Thanks!
-> 
-> That idea was considered in earlier iterations/discussions of the
-> patch series as well. Charging things is not free - there is an
-> overhead associated with it, which is why we are usually selective
-> about whether to charge something. We were not super keen to do this
-> for zswap_entry just to plumb around the list_lru's restriction. Might
-> as well pay the price of extending the list_lru interface now.
-> 
-> If in the future, not charging the zswap entry causes a separate
-> isolation issue, we could revisit this decision and charge it.
-> Otherwise, IMHO we should just stick with this for now.
-> 
+On Mon, Dec 4, 2023 at 12:57=E2=80=AFPM Daniel Xu <dxu@dxuuu.xyz> wrote:
+>
+> Add some tests that exercise BPF_CORE_WRITE_BITFIELD() macro. Since some
+> non-trivial bit fiddling is going on, make sure various edge cases (such
+> as adjacent bitfields and bitfields at the edge of structs) are
+> exercised.
+>
+> Acked-by: Andrii Nakryiko <andrii@kernel.org>
+> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
+> ---
 
-Ok, I get it. Thanks much for your clear explanation!
+nit: please drop "libbpf: " prefix from the patch subject, this is
+"selftests/bpf: " actually
 
+
+>  .../selftests/bpf/prog_tests/verifier.c       |   2 +
+>  .../bpf/progs/verifier_bitfield_write.c       | 100 ++++++++++++++++++
+>  2 files changed, 102 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/progs/verifier_bitfield_w=
+rite.c
+>
+
+[...]
 
