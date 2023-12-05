@@ -1,112 +1,125 @@
-Return-Path: <linux-kselftest+bounces-1150-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1151-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 570AE8058FD
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 16:41:36 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 352F9805919
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 16:51:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 052791F21769
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 15:41:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F6291C20FF9
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 15:51:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9C185F1F7;
-	Tue,  5 Dec 2023 15:41:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDB9D68EA7;
+	Tue,  5 Dec 2023 15:51:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RGyeU7Qv"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 75C7318D;
-	Tue,  5 Dec 2023 07:41:25 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ADFB6139F;
-	Tue,  5 Dec 2023 07:42:11 -0800 (PST)
-Received: from e124191.cambridge.arm.com (e124191.cambridge.arm.com [10.1.197.45])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1501B3F6C4;
-	Tue,  5 Dec 2023 07:41:22 -0800 (PST)
-Date: Tue, 5 Dec 2023 15:41:16 +0000
-From: Joey Gouly <joey.gouly@arm.com>
-To: Marc Zyngier <maz@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, akpm@linux-foundation.org,
-	aneesh.kumar@linux.ibm.com, broonie@kernel.org,
-	catalin.marinas@arm.com, dave.hansen@linux.intel.com,
-	oliver.upton@linux.dev, shuah@kernel.org, will@kernel.org,
-	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>
-Subject: Re: [PATCH v3 00/25] Permission Overlay Extension
-Message-ID: <20231205154116.GA3613610@e124191.cambridge.arm.com>
-References: <20231124163510.1835740-1-joey.gouly@arm.com>
- <86jzpub56r.wl-maz@kernel.org>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A90395F1EE;
+	Tue,  5 Dec 2023 15:51:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DF6DC433CA;
+	Tue,  5 Dec 2023 15:51:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701791488;
+	bh=cRtFwqVwGM/L5ElETR7/boeZZkQBM/dk1tSxRXa+SjE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=RGyeU7QvMB9+MJb48ISbSvf4giVhpNA1dzt2x0ApFyux9D1hNyJs59V5235TZ2GG4
+	 YmmscdTAvjHB2f/Dzabq6WldhzjojX/lu0bKk4lcksWKzdLuGoTrT7fvHU9LKRoqKD
+	 S6fN3oMu6fGnXMPU4L/vZ6F9j9IuH35Qz5dhWGCkgVvbhBxiXlzpMFRGcGhkI0e2WY
+	 ZE++rhJDKQDduO5iCBtpGGCA7cUvKwqeWnAIZbSrOqwWlHJRndZ6IL6Q7Lsq2ZPYiE
+	 JTczBH9TsKFE66ZbfxdXRr6dqYK61eoQAS9hDwYl5X2RGRoSpJ3NNZMHrCdoArncrG
+	 56cJ50OFSADtw==
+Date: Tue, 5 Dec 2023 15:51:19 +0000
+From: Mark Brown <broonie@kernel.org>
+To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc: "dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
+	"Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
+	"brauner@kernel.org" <brauner@kernel.org>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"debug@rivosinc.com" <debug@rivosinc.com>,
+	"mgorman@suse.de" <mgorman@suse.de>,
+	"vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
+	"fweimer@redhat.com" <fweimer@redhat.com>,
+	"mingo@redhat.com" <mingo@redhat.com>,
+	"rostedt@goodmis.org" <rostedt@goodmis.org>,
+	"hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+	"tglx@linutronix.de" <tglx@linutronix.de>,
+	"vschneid@redhat.com" <vschneid@redhat.com>,
+	"shuah@kernel.org" <shuah@kernel.org>,
+	"bristot@redhat.com" <bristot@redhat.com>,
+	"hpa@zytor.com" <hpa@zytor.com>,
+	"peterz@infradead.org" <peterz@infradead.org>,
+	"bp@alien8.de" <bp@alien8.de>,
+	"bsegall@google.com" <bsegall@google.com>,
+	"x86@kernel.org" <x86@kernel.org>,
+	"juri.lelli@redhat.com" <juri.lelli@redhat.com>,
+	"keescook@chromium.org" <keescook@chromium.org>,
+	"jannh@google.com" <jannh@google.com>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+	"linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+	"will@kernel.org" <will@kernel.org>
+Subject: Re: [PATCH RFT v4 2/5] fork: Add shadow stack support to clone3()
+Message-ID: <ed665d6f-66b0-4eeb-8cf8-db852e017d6a@sirena.org.uk>
+References: <20231128-clone3-shadow-stack-v4-0-8b28ffe4f676@kernel.org>
+ <20231128-clone3-shadow-stack-v4-2-8b28ffe4f676@kernel.org>
+ <61f80d032c6a630dd641c9b598b37c2eb40d51e8.camel@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="ofW00QD6kVu0wbQR"
 Content-Disposition: inline
-In-Reply-To: <86jzpub56r.wl-maz@kernel.org>
+In-Reply-To: <61f80d032c6a630dd641c9b598b37c2eb40d51e8.camel@intel.com>
+X-Cookie: I've Been Moved!
 
-Hi Marc,
 
-On Mon, Dec 04, 2023 at 11:03:24AM +0000, Marc Zyngier wrote:
-> Hi Joey,
-> 
-> On Fri, 24 Nov 2023 16:34:45 +0000,
-> Joey Gouly <joey.gouly@arm.com> wrote:
-> > 
-> > Hello everyone,
-> > 
-> > This series implements the Permission Overlay Extension introduced in 2022
-> > VMSA enhancements [1]. It is based on v6.7-rc2.
-> > 
-> > Changes since v2[2]:
-> > 	# Added ptrace support and selftest
-> > 	# Add missing POR_EL0 initialisation in fork/clone
-> > 	# Rebase onto v6.7-rc2
-> > 	# Add r-bs
-> > 
-> > The Permission Overlay Extension allows to constrain permissions on memory
-> > regions. This can be used from userspace (EL0) without a system call or TLB
-> > invalidation.
-> 
-> I have given this series a few more thoughts, and came to the
-> conclusion that is it still incomplete on the KVM front:
-> 
-> * FEAT_S1POE often comes together with FEAT_S2POE. For obvious
->   reasons, we cannot afford to let the guest play with S2POR_EL1, nor
->   do we want to advertise FEAT_S2POE to the guest.
-> 
->   You will need to add some additional FGT for this, and mask out
->   FEAT_S2POE from the guest's view of the ID registers.
+--ofW00QD6kVu0wbQR
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I found out last week that I had misunderstood S2POR_EL1, so yes looks like
-we need to trap that. I will add that in.
+On Tue, Dec 05, 2023 at 12:26:57AM +0000, Edgecombe, Rick P wrote:
+> On Tue, 2023-11-28 at 18:22 +0000, Mark Brown wrote:
 
-> 
-> * letting the guest play with POE comes with some interesting strings
->   attached: a guest that has started on a POE-enabled host cannot be
->   migrated to one that doesn't have POE. which means that the POE
->   registers should only be visible to the host userspace if enabled in
->   the guest's ID registers, and thus only context-switched in these
->   conditions. They should otherwise UNDEF.
+> > -=A0=A0=A0=A0=A0=A0=A0size =3D adjust_shstk_size(stack_size);
+> > +=A0=A0=A0=A0=A0=A0=A0size =3D adjust_shstk_size(size);
+> > =A0=A0=A0=A0=A0=A0=A0=A0addr =3D alloc_shstk(0, size, 0, false);
 
-Can you give me some clarification here?
-	
-	- By visible to the host userspace do you mean via the GET_ONE_REG API?
-	- Currently the ID register (ID_AA64MMFR3_EL1) is not ID_WRITABLE,
-	  should this series or another make it so? Currently if the host had
-	  POE it's enabled in the guest, so I believe migration to a non-POE
-	  host will fail?
-	- For the context switch, do you mean something like:
+> Hmm. I didn't test this, but in the copy_process(), copy_mm() happens
+> before this point. So the shadow stack would get mapped in current's MM
+> (i.e. the parent). So in the !CLONE_VM case with shadow_stack_size!=3D0
+> the SSP in the child will be updated to an area that is not mapped in
+> the child. I think we need to pass tsk->mm into alloc_shstk(). But such
+> an exotic clone usage does give me pause, regarding whether all of this
+> is premature.
 
-		if (system_supports_poe() && ID_REG(MMFR3_EL1) & S1POE)
-			ctxt_sys_reg(ctxt, POR_EL0)     = read_sysreg_s(SYS_POR_EL0);
+Hrm, right.  And we then can't use do_mmap() either.  I'd be somewhat
+tempted to disallow that specific case for now rather than deal with it
+though that's not really in the spirit of just always following what the
+user asked for.
 
-	  That would need some refactoring, since I don't see how to access
-	  id_regs from struct kvm_cpu_context.
+--ofW00QD6kVu0wbQR
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Thanks,
-Joey
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVvRvYACgkQJNaLcl1U
+h9DXGQf6AvheyqUPcMw3T4JTt1lwn5bDs4oC7fZ63uO+BX16gGSEx73amHIyNaGv
+p+FtTHrVU1xQTu+Bh5L5QjW68t6061HLlHW0E+RoX9HlyW4v6GsBwzHxAYfp1eNw
+zce0c49OZQlgDA42/CH/PbejjX8H1a3jlwW+zIxwHNDqWs8pe+pEaZ/jEhLLUQ1W
+vJGRdn/PtZRKo7APLWn3uTOUGUbI9hXU/XQvJwKEo3DvNbYkezmTGe8ExIBkWQV3
+5oecmztnkjUiARHVRvyxW3vjbljlNxG4ECGlrpchrZgpeanmraDINzcWNnwYIBHE
+lP5fF9Y4DIiSj/DAO0BKEO0x5wgfCw==
+=1erK
+-----END PGP SIGNATURE-----
+
+--ofW00QD6kVu0wbQR--
 
