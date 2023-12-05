@@ -1,156 +1,120 @@
-Return-Path: <linux-kselftest+bounces-1213-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1214-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB0A9805F10
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 21:06:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A05CC805F95
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 21:39:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A4B68281D1B
-	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 20:06:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5566E1F21685
+	for <lists+linux-kselftest@lfdr.de>; Tue,  5 Dec 2023 20:39:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 980606D1BD;
-	Tue,  5 Dec 2023 20:06:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28442692AA;
+	Tue,  5 Dec 2023 20:39:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dqLoN7Le"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="r9xutZFF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3ABD6194
-	for <linux-kselftest@vger.kernel.org>; Tue,  5 Dec 2023 12:06:28 -0800 (PST)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-a1b68ae4104so5455866b.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 05 Dec 2023 12:06:28 -0800 (PST)
+Received: from mail-qt1-x849.google.com (mail-qt1-x849.google.com [IPv6:2607:f8b0:4864:20::849])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69FA4181
+	for <linux-kselftest@vger.kernel.org>; Tue,  5 Dec 2023 12:39:10 -0800 (PST)
+Received: by mail-qt1-x849.google.com with SMTP id d75a77b69052e-4239047911bso736691cf.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 05 Dec 2023 12:39:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1701806786; x=1702411586; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wlqC0mLlbsamWeTdymhvWwnQu+epiSDRN+zbg2hBOUA=;
-        b=dqLoN7LeBAJ+6P2G8vDtqHEV5R6PfL2dtERshtR/hpGsyL7NvcO0Rjzq2RdvkD4m49
-         7m3EdJU1nxur9N3INcj9qSvuUQ/GiDTDTrdStnjw5cGwmW6GhMd6lQIoorvbDhZ1y9op
-         ASBCkSNCc/a+h1mCu4E2Ha3OyJQRmYDd3OrsZvamERV2JXeTEEU72PMYw+o/HszqTkwU
-         4ec6YOG40uG3661ZnxoI+hW08D2uAbvTEVxjfoKfIs+UQ6nuPg2Q7PE90cdt8MAX6d75
-         NsAFLAAi8dKoUX5irKmmn97Aqqs7eV2cO5nGmq81a4WO+NRJCuvqPjtnvYNatdL8rTf/
-         Xxlw==
+        d=google.com; s=20230601; t=1701808749; x=1702413549; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Yd7GThBDMFg3IYSnPer/AdnP24vZnl3M/lgBnBxitXE=;
+        b=r9xutZFF5fAQE8GZbP00Aa2g/hGs8YDy8RDC+0MP/GTJhNkm71qzYoBeeYuFKwYkU7
+         126P+1KeWKfCCB7RHj1Jbt1EZb6USNBV11bGzMGWuGxTIrf7WKABbqhoFuIp2U8mJvx8
+         x24HADTXHxgKvqst/tjVcdiXD7Dl5rHoPhT5ozSENxdjChhK6Gw+yNfB4wykobQpZK4w
+         rb7LrTfSEKoBCeml5/uAmAD7o6bKAcDi2BBYnS4ajB8u+KPoBi7jvi7AANyVAw/MglpA
+         imstNrGyRN4SFL4LTLcXPQqw/FVp3qk+JUbgOjPfVZ0pPfIQMMOsJdNb6Cq7RRXO2EZT
+         f6yw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701806786; x=1702411586;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wlqC0mLlbsamWeTdymhvWwnQu+epiSDRN+zbg2hBOUA=;
-        b=h1mxqNGfcLynSHPCKwXK20IppjWzdv4cRiAsxrbH/K6DHcQCBmSUGj88GQp+QXZy/Y
-         lx5xQzauWLWXW8zlIpM9DlDT/fxpRU2R26TAEikDnMn3edMrSENysYKQ19/qq468mwax
-         ukpTYiQWLosGHZOUtFdahMEEEuqW6oOBNMjY+/QBtVsDbhJ022qjNc6GvxlyWsM4blHE
-         oNYLdRf0r83B4olqp25i9Eog0YGrBCrqxQr9c4qM+qHMC38PIuITo9hA5qlqTvbJfDsa
-         WubaPB3fCqzdUmNrPGNUMfQbHuiAIHrKtkmUJOV1Fdg+oKKtGumfoEdYjizRCsPfBBu7
-         DNsg==
-X-Gm-Message-State: AOJu0YwhrIML005qato4tW7mIQhaYe1guDIXxgD868k2LGQoyTyVoerI
-	2thiXYVSaUy9pfMtg8mfq2offdXFZO+ZWLAA5HY3HA==
-X-Google-Smtp-Source: AGHT+IGOdUeVb0c9zBSJgx9rodC7t4Ia+OxD3ogESh9JYVWU23yxaj5p6I3M/sO6DE0hSoEHtwbw4cUyG+qyicjsc1E=
-X-Received: by 2002:a17:906:1c8c:b0:a18:ad93:460d with SMTP id
- g12-20020a1709061c8c00b00a18ad93460dmr818197ejh.69.1701806786537; Tue, 05 Dec
- 2023 12:06:26 -0800 (PST)
+        d=1e100.net; s=20230601; t=1701808749; x=1702413549;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Yd7GThBDMFg3IYSnPer/AdnP24vZnl3M/lgBnBxitXE=;
+        b=Eqkb+n9l44u1rIj2KI3KPsLKv4h3JWY6wdxRF+oL92yZjVIhFBbVFZQH6EWcVnQ1Nz
+         9afAgXw1qaVPw5uCBP0OdU6KcVpUFvML21Re6nW5AvaLdf4rWwPwBvarAOwkzPk1h4+F
+         jcEh0Ik47c6yKY/oJUu1MK7s79FKUGBUq5I5+UgF/reTLnp3RuagEPzrOZyKMEKLXhN1
+         F9LwvYdYvp5hHUYlF8GiZ2v+bBtdjiWirU3J5T8jRWxkTVKfLYvT9C2Ee71O/zJxFI0p
+         aTk1MZW9b+SSuyCtv74fLf7OfjEWLElwtQ8yONZFpVDKOecWZkN64MB703UaqvwFX577
+         vYhw==
+X-Gm-Message-State: AOJu0YxfXmWtzoE9eXwV1Lqg3jRHEA5kzPNgDLdDhheT7ZkNkFBQfUvT
+	/wI3bdGJTEvHuoWfKagCA7bMdTMB8A==
+X-Google-Smtp-Source: AGHT+IH0cd2HLFsC8CxaZuQ7ewPF5xTgOB6kCd9NRSSMtX79MgZW4qJ/dust0PqxwCuD94P1XVpaYtIuBw==
+X-Received: from rmoar-specialist.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:45d3])
+ (user=rmoar job=sendgmr) by 2002:a05:622a:4413:b0:423:6f2b:5a04 with SMTP id
+ ka19-20020a05622a441300b004236f2b5a04mr26155qtb.10.1701808749501; Tue, 05 Dec
+ 2023 12:39:09 -0800 (PST)
+Date: Tue,  5 Dec 2023 20:38:52 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20231130194023.4102148-5-nphamcs@gmail.com> <20231205193307.2432803-1-nphamcs@gmail.com>
-In-Reply-To: <20231205193307.2432803-1-nphamcs@gmail.com>
-From: Yosry Ahmed <yosryahmed@google.com>
-Date: Tue, 5 Dec 2023 12:05:48 -0800
-Message-ID: <CAJD7tkarJydo0eYwRv+0cNHOBzBSEy-_xKMtcKBh4Kh3nXBFQQ@mail.gmail.com>
-Subject: Re: [PATCH v8 4/6] mm: memcg: add per-memcg zswap writeback stat (fix)
-To: Nhat Pham <nphamcs@gmail.com>
-Cc: akpm@linux-foundation.org, hannes@cmpxchg.org, cerasuolodomenico@gmail.com, 
-	sjenning@redhat.com, ddstreet@ieee.org, vitaly.wool@konsulko.com, 
-	mhocko@kernel.org, roman.gushchin@linux.dev, shakeelb@google.com, 
-	muchun.song@linux.dev, chrisl@kernel.org, linux-mm@kvack.org, 
-	kernel-team@meta.com, linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, shuah@kernel.org
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.43.0.rc2.451.g8631bc7472-goog
+Message-ID: <20231205203852.1700497-1-rmoar@google.com>
+Subject: [PATCH] kunit: tool: fix parsing of test attributes
+From: Rae Moar <rmoar@google.com>
+To: shuah@kernel.org, davidgow@google.com, dlatypov@google.com, 
+	brendan.higgins@linux.dev
+Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	linux-kernel@vger.kernel.org, Rae Moar <rmoar@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Dec 5, 2023 at 11:33=E2=80=AFAM Nhat Pham <nphamcs@gmail.com> wrote=
-:
->
-> Rename ZSWP_WB to ZSWPWB to better match the existing counters naming
-> scheme.
->
-> Suggested-by: Johannes Weiner <hannes@cmpxchg.org>
-> Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+Add parsing of attributes as diagnostic data. Fixes issue with test plan
+being parsed incorrectly as diagnostic data when located after
+suite-level attributes.
 
-For the original patch + this fix:
+Note that if there does not exist a test plan line, the diagnostic lines
+between the suite header and the first result will be saved in the suite
+log rather than the first test case log.
 
-Reviewed-by: Yosry Ahmed <yosryahmed@google.com>
+Signed-off-by: Rae Moar <rmoar@google.com>
+---
 
-> ---
->  include/linux/vm_event_item.h | 2 +-
->  mm/memcontrol.c               | 2 +-
->  mm/vmstat.c                   | 2 +-
->  mm/zswap.c                    | 4 ++--
->  4 files changed, 5 insertions(+), 5 deletions(-)
->
-> diff --git a/include/linux/vm_event_item.h b/include/linux/vm_event_item.=
-h
-> index f4569ad98edf..747943bc8cc2 100644
-> --- a/include/linux/vm_event_item.h
-> +++ b/include/linux/vm_event_item.h
-> @@ -142,7 +142,7 @@ enum vm_event_item { PGPGIN, PGPGOUT, PSWPIN, PSWPOUT=
-,
->  #ifdef CONFIG_ZSWAP
->                 ZSWPIN,
->                 ZSWPOUT,
-> -               ZSWP_WB,
-> +               ZSWPWB,
->  #endif
->  #ifdef CONFIG_X86
->                 DIRECT_MAP_LEVEL2_SPLIT,
-> diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-> index 21d79249c8b4..0286b7d38832 100644
-> --- a/mm/memcontrol.c
-> +++ b/mm/memcontrol.c
-> @@ -703,7 +703,7 @@ static const unsigned int memcg_vm_event_stat[] =3D {
->  #if defined(CONFIG_MEMCG_KMEM) && defined(CONFIG_ZSWAP)
->         ZSWPIN,
->         ZSWPOUT,
-> -       ZSWP_WB,
-> +       ZSWPWB,
->  #endif
->  #ifdef CONFIG_TRANSPARENT_HUGEPAGE
->         THP_FAULT_ALLOC,
-> diff --git a/mm/vmstat.c b/mm/vmstat.c
-> index 2249f85e4a87..cfd8d8256f8e 100644
-> --- a/mm/vmstat.c
-> +++ b/mm/vmstat.c
-> @@ -1401,7 +1401,7 @@ const char * const vmstat_text[] =3D {
->  #ifdef CONFIG_ZSWAP
->         "zswpin",
->         "zswpout",
-> -       "zswp_wb",
-> +       "zswpwb",
->  #endif
->  #ifdef CONFIG_X86
->         "direct_map_level2_splits",
-> diff --git a/mm/zswap.c b/mm/zswap.c
-> index c65b8ccc6b72..0fb0945c0031 100644
-> --- a/mm/zswap.c
-> +++ b/mm/zswap.c
-> @@ -761,9 +761,9 @@ static enum lru_status shrink_memcg_cb(struct list_he=
-ad *item, struct list_lru_o
->         zswap_written_back_pages++;
->
->         if (entry->objcg)
-> -               count_objcg_event(entry->objcg, ZSWP_WB);
-> +               count_objcg_event(entry->objcg, ZSWPWB);
->
-> -       count_vm_event(ZSWP_WB);
-> +       count_vm_event(ZSWPWB);
->         /*
->          * Writeback started successfully, the page now belongs to the
->          * swapcache. Drop the entry from zswap - unless invalidate alrea=
-dy
-> --
-> 2.34.1
+Note this patch is a resend but I removed the second patch in the series
+so now it is a standalone patch.
+
+ tools/testing/kunit/kunit_parser.py | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+index 79d8832c862a..ce34be15c929 100644
+--- a/tools/testing/kunit/kunit_parser.py
++++ b/tools/testing/kunit/kunit_parser.py
+@@ -450,7 +450,7 @@ def parse_diagnostic(lines: LineStream) -> List[str]:
+ 	Log of diagnostic lines
+ 	"""
+ 	log = []  # type: List[str]
+-	non_diagnostic_lines = [TEST_RESULT, TEST_HEADER, KTAP_START, TAP_START]
++	non_diagnostic_lines = [TEST_RESULT, TEST_HEADER, KTAP_START, TAP_START, TEST_PLAN]
+ 	while lines and not any(re.match(lines.peek())
+ 			for re in non_diagnostic_lines):
+ 		log.append(lines.pop())
+@@ -726,6 +726,7 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str], is_subtest:
+ 		# test plan
+ 		test.name = "main"
+ 		ktap_line = parse_ktap_header(lines, test)
++		test.log.extend(parse_diagnostic(lines))
+ 		parse_test_plan(lines, test)
+ 		parent_test = True
+ 	else:
+@@ -737,6 +738,7 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str], is_subtest:
+ 		if parent_test:
+ 			# If KTAP version line and/or subtest header is found, attempt
+ 			# to parse test plan and print test header
++			test.log.extend(parse_diagnostic(lines))
+ 			parse_test_plan(lines, test)
+ 			print_test_header(test)
+ 	expected_count = test.expected_count
+
+base-commit: b85ea95d086471afb4ad062012a4d73cd328fa86
+-- 
+2.43.0.rc2.451.g8631bc7472-goog
+
 
