@@ -1,216 +1,136 @@
-Return-Path: <linux-kselftest+bounces-1312-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1313-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 438638077AC
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 19:38:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 684408077B7
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 19:42:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E5FE28216A
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 18:38:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 72575282190
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 18:42:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F5C336D;
-	Wed,  6 Dec 2023 18:38:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F5ED30349;
+	Wed,  6 Dec 2023 18:42:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PUQINWTZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YZlmINq0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 211A1139
-	for <linux-kselftest@vger.kernel.org>; Wed,  6 Dec 2023 10:38:27 -0800 (PST)
-Received: by mail-il1-x134.google.com with SMTP id e9e14a558f8ab-35d68239732so7845ab.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 06 Dec 2023 10:38:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1701887906; x=1702492706; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1kHi+/x/yV8/AO54c41VfM0jyCOf9g4qLEuUxaryfSU=;
-        b=PUQINWTZcuJ1Gzxm+DVf8U75wXjpYcVdMtpAoAD2Iw0x8aACAL/G89S72dNVxK7UoB
-         wnVsTWUJiFM9R4kDT2yaDaBzg6PgTC2eK4KQZs/ZV/SMq2EX9CirM54Gihu034T0tsDS
-         N7dNsYL+rzxUXWCBdBT2zecBQz1v3vGRd1WAVADPwB81EM0V1QX3JzGATe/2M2lEbeIi
-         XgyW7nEhYX9SXPMsmNH3P38TjiPmEgJa32ggS+7YNfN08KbKuIVDw3tktcldndu00y0W
-         2aMRtNUOjZhvDVJZ6u5KfyooWPwB3I6AVnC8Y3h9ETLim2MT6JXSrCLMDjEOFIkrR1P/
-         iErQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701887906; x=1702492706;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1kHi+/x/yV8/AO54c41VfM0jyCOf9g4qLEuUxaryfSU=;
-        b=SFLHCZC+LoQr9wgbwQVIbfQpZB2h0vP83LMI8scx9hD1FFkMO0Fey712o92s3xzjBD
-         HF4+KV8UXwG0HEYb0WVwBNmYOqMdRMwMm6BZwJDnxL3ctc5x0Rth2ZCfzzEEUJ8rqU+q
-         5KZZIhyOaR7quN2DJjxNoXkhfT4c9A2oVQKtD1C7EgWAz8PPERZ0CPkU+uHqhgOoxRXs
-         CnKrIJwKi4VMb9QOrXHabT54aH8Zux/WYcueU8mOTuq0+sQjvSQP/rV744U3tiIPbLqy
-         m/JjZ8tjlNTAqtSJoxV+Y3TqbRNPfwgcwNype5YTna53SCWe17BNMqYNNZnDBWbR0e7h
-         56gg==
-X-Gm-Message-State: AOJu0YzZw0O3n1yccmeAA5Q8DEuLCr97NJADMGqWJyvu1DpQkz+frzCX
-	pO420fETc+Wu52Ajs5szM2cyPYe5gp1xt8syc0sE4g==
-X-Google-Smtp-Source: AGHT+IECEzFpg3QWyp0E5e/eCQj0fEABYtZZmB0KvLMjY2AH2UAB7JCkJPuizEBMXLOu30ycJ+39VKwEyevubqWqV2U=
-X-Received: by 2002:a05:6e02:1bc4:b0:35d:5fd7:b57 with SMTP id
- x4-20020a056e021bc400b0035d5fd70b57mr369567ilv.20.1701887906105; Wed, 06 Dec
- 2023 10:38:26 -0800 (PST)
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBFBA364;
+	Wed,  6 Dec 2023 18:42:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02CFFC433CA;
+	Wed,  6 Dec 2023 18:42:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701888152;
+	bh=Z1/55yzMuInGGMiFrVpL72QittGX16HCTLFf+Os5o/w=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YZlmINq0IhveoV1iEJDBzMqrwVakbojITZqfK7Ub17p4CaHW4axLE1K8gmtbPzdXY
+	 7sZgtS8nJcEHdyx8PrY26UkJjo3Ti4WlDXOn5VBnZLNSYol2VE+xEIRfjHsogWpwEf
+	 em8DLtq0DGYwf1gGD2xcVI3FCflaNEOtkEuXwoZv7gMeZsVU7HryDKpUvnXzta/pdT
+	 BSrkOORx/nxKZI91EItlnB7hcoxIUL25ZHM46t+eDqisxnnmynuqKdkd36MVd+OrmE
+	 odcXURBHZCAVFMmdn6JICXKvM0km2elMMzpv2daDtblEuonbBGmowoFW7UPqQw3k6y
+	 9W0LBUzmtQiBg==
+Date: Wed, 6 Dec 2023 18:42:23 +0000
+From: Mark Brown <broonie@kernel.org>
+To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc: "dietmar.eggemann@arm.com" <dietmar.eggemann@arm.com>,
+	"keescook@chromium.org" <keescook@chromium.org>,
+	"Szabolcs.Nagy@arm.com" <Szabolcs.Nagy@arm.com>,
+	"shuah@kernel.org" <shuah@kernel.org>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"debug@rivosinc.com" <debug@rivosinc.com>,
+	"mgorman@suse.de" <mgorman@suse.de>,
+	"brauner@kernel.org" <brauner@kernel.org>,
+	"fweimer@redhat.com" <fweimer@redhat.com>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"mingo@redhat.com" <mingo@redhat.com>,
+	"hjl.tools@gmail.com" <hjl.tools@gmail.com>,
+	"rostedt@goodmis.org" <rostedt@goodmis.org>,
+	"vincent.guittot@linaro.org" <vincent.guittot@linaro.org>,
+	"tglx@linutronix.de" <tglx@linutronix.de>,
+	"vschneid@redhat.com" <vschneid@redhat.com>,
+	"catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+	"bristot@redhat.com" <bristot@redhat.com>,
+	"will@kernel.org" <will@kernel.org>,
+	"hpa@zytor.com" <hpa@zytor.com>,
+	"peterz@infradead.org" <peterz@infradead.org>,
+	"jannh@google.com" <jannh@google.com>,
+	"bp@alien8.de" <bp@alien8.de>,
+	"bsegall@google.com" <bsegall@google.com>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+	"x86@kernel.org" <x86@kernel.org>,
+	"juri.lelli@redhat.com" <juri.lelli@redhat.com>
+Subject: Re: [PATCH RFT v4 5/5] kselftest/clone3: Test shadow stack support
+Message-ID: <2a7fe5bd-3133-4bdf-9150-cf929925d421@sirena.org.uk>
+References: <20231128-clone3-shadow-stack-v4-0-8b28ffe4f676@kernel.org>
+ <20231128-clone3-shadow-stack-v4-5-8b28ffe4f676@kernel.org>
+ <4898975452179af46f38daa6979b32ba94001419.camel@intel.com>
+ <345cf31a-3663-4974-9b2a-54d2433e64a7@sirena.org.uk>
+ <a6bf192a1568620826dd79124511ea61472873c8.camel@intel.com>
+ <098f5d43-e093-4316-9b86-80833c2b94ec@sirena.org.uk>
+ <127bba3063b19dd87ae3014f6d3bba342f7a16fb.camel@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20230421141723.2405942-1-peternewman@google.com>
- <20230421141723.2405942-4-peternewman@google.com> <38b9e6df-cccd-a745-da4a-1d1a0ec86ff3@intel.com>
- <CALPaoCg76nUsJ7eYcU61gied8WBuAAmqy0Pqpsq5=Z-S52Qg6w@mail.gmail.com>
- <31993ea8-97e5-b8d5-b344-48db212bc9cf@intel.com> <CALPaoCiPCxUeGKjZytxmse2oNs=qDBbRY9kH7AZGG6iXf1qtJw@mail.gmail.com>
- <04c9eb5e-3395-05e6-f0cc-bc8f054a6031@intel.com> <CALPaoCjg-W3w8OKLHP_g6Evoo03fbgaOQZrGTLX6vdSLp70=SA@mail.gmail.com>
- <e4a77e0c-a31c-429b-9de9-3cadd704ca34@intel.com> <CALPaoCiRD6j_Rp7ffew+PtGTF4rWDORwbuRQqH2i-cY5SvWQBg@mail.gmail.com>
- <101c0235-c354-43b1-afc2-1332bd8b453a@intel.com>
-In-Reply-To: <101c0235-c354-43b1-afc2-1332bd8b453a@intel.com>
-From: Peter Newman <peternewman@google.com>
-Date: Wed, 6 Dec 2023 10:38:15 -0800
-Message-ID: <CALPaoCiLB99MDdMuVR=U6dA8hsnRJkdb2FrHvwXzQoQBHp_qNA@mail.gmail.com>
-Subject: Re: [PATCH v1 3/9] x86/resctrl: Add resctrl_mbm_flush_cpu() to
- collect CPUs' MBM events
-To: Reinette Chatre <reinette.chatre@intel.com>
-Cc: Fenghua Yu <fenghua.yu@intel.com>, Babu Moger <babu.moger@amd.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Stephane Eranian <eranian@google.com>, James Morse <james.morse@arm.com>, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Hi Reinette,
-
-On Tue, Dec 5, 2023 at 5:47=E2=80=AFPM Reinette Chatre
-<reinette.chatre@intel.com> wrote:
->
-> On 12/5/2023 4:33 PM, Peter Newman wrote:
-> > On Tue, Dec 5, 2023 at 1:57=E2=80=AFPM Reinette Chatre
-> > <reinette.chatre@intel.com> wrote:
-> >> On 12/1/2023 12:56 PM, Peter Newman wrote:
-
-> > Ignoring any present-day resctrl interfaces, what we minimally need is.=
-..
-> >
-> > 1. global "start measurement", which enables a
-> > read-counters-on-context switch flag, and broadcasts an IPI to all
-> > CPUs to read their current count
-> > 2. wait 5 seconds
-> > 3. global "end measurement", to IPI all CPUs again for final counts
-> > and clear the flag from step 1
-> >
-> > Then the user could read at their leisure all the (frozen) event
-> > counts from memory until the next measurement begins.
-> >
-> > In our case, if we're measuring as often as 5 seconds for every
-> > minute, that will already be a 12x aggregate reduction in overhead,
-> > which would be worthwhile enough.
->
-> The "con" here would be that during those 5 seconds (which I assume would=
- be
-> controlled via user space so potentially shorter or longer) all tasks in =
-the
-> system is expected to have significant (but yet to be measured) impact
-> on context switch delay.
-
-Yes, of course. In the worst case I've measured, Zen2, it's roughly a
-1700-cycle context switch penalty (~20%) for tasks in different
-monitoring groups. Bad, but the benefit we gain from the per-RMID MBM
-data makes up for it several times over if we only pay the cost during a
-measurement.
-
-> I expect the overflow handler should only be run during the measurement
-> timeframe, to not defeat the "at their leisure" reading of counters.
-
-Yes, correct. We wouldn't be interested in overflows of the hardware
-counter when not actively measuring bandwidth.
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="zxBosQRC8SZzpWjX"
+Content-Disposition: inline
+In-Reply-To: <127bba3063b19dd87ae3014f6d3bba342f7a16fb.camel@intel.com>
+X-Cookie: From concentrate.
 
 
->
-> >>> The second involves avoiding the situation where a hardware counter
-> >>> could be deallocated: Determine the number of simultaneous RMIDs
-> >>> supported, reduce the effective number of RMIDs available to that
-> >>> number. Use the default RMID (0) for all "unassigned" monitoring
-> >>
-> >> hmmm ... so on the one side there is "only the RMID within the PQR
-> >> register can be guaranteed to be tracked by hardware" and on the
-> >> other side there is "A given implementation may have insufficient
-> >> hardware to simultaneously track the bandwidth for all RMID values
-> >> that the hardware supports."
-> >>
-> >> From the above there seems to be something in the middle where
-> >> some subset of the RMID values supported by hardware can be used
-> >> to simultaneously track bandwidth? How can it be determined
-> >> what this number of RMID values is?
-> >
-> > In the context of AMD, we could use the smallest number of CPUs in any
-> > L3 domain as a lower bound of the number of counters.
->
-> Could you please elaborate on this? (With the numbers of CPUs nowadays th=
-is
-> may be many RMIDs, perhaps even more than what ABMC supports.)
+--zxBosQRC8SZzpWjX
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I think the "In the context of AMD" part is key. This feature would only
-be applicable to the AMD implementations we have today which do not
-implement ABMC.  I believe the difficulties are unique to the topologies
-of these systems: many small L3 domains per node with a relatively small
-number of CPUs in each. If the L3 domains were large and few, simply
-restricting the number of RMIDs and allocating on group creation as we
-do today would probably be fine.
+On Tue, Dec 05, 2023 at 10:31:09PM +0000, Edgecombe, Rick P wrote:
+> On Tue, 2023-12-05 at 16:43 +0000, Mark Brown wrote:
 
-> I am missing something here since it is not obvious to me how this lower
-> bound is determined. Let's assume that there are as many monitor groups
-> (and thus as many assigned RMIDs) as there are CPUs in a L3 domain.
-> Each monitor group may have many tasks. It can be expected that at any
-> moment in time only a subset of assigned RMIDs are assigned to CPUs
-> via the CPUs' PQR registers. Of those RMIDs that are not assigned to
-> CPUs, how can it be certain that they continue to be tracked by hardware?
+> > If the x86 toolchain/libc support is widely enough deployed (or you
+> > just
+> > don't mind any missing coverage) we could use the toolchain support
+> > there and only have the manual enable for arm64, it'd be inconsistent
+> > but not wildly so.
 
-Are you asking whether the counters will ever be reclaimed proactively?
-The behavior I've observed is that writing a new RMID into a PQR_ASSOC
-register when all hardware counters in the domain are allocated will
-trigger the reallocation.
+> I'm hoping there is not too much of a gap before the glibc support
+> starts filtering out. Long term, elf bit enabling is probably the right
+> thing for the generic tests. Short term, manual enabling is ok with me
+> if no one else minds. Maybe we could add my "don't do" list as a
+> comment if we do manual enabling?
 
-However, I admit the wording in the PQoS spec[1] is only written to
-support the permanent-assignment workaround in the current patch series:
+Probably good to write it up somewhere, yes - it'd also be useful for
+anyone off doing their own non-libc things.  It did cross my mind to
+try to make a document for the generic bit of the ABI for shadow stacks.
 
-"All RMIDs which are currently in use by one or more processors in the
-QOS domain will be tracked. The hardware will always begin tracking a
-new RMID value when it gets written to the PQR_ASSOC register of any of
-the processors in the QOS domain and it is not already being tracked.
-When the hardware begins tracking an RMID that it was not previously
-tracking, it will clear the QM_CTR for all events in the new RMID."
+> I'll have to check your new series, but I also wonder if we could cram
+> the manual enabling and status checking pieces into some headers and
+> not have to have "if x86" "if arm" logic in the test themselves.
 
-I would need to confirm whether this is the case and request the
-documentation be clarified if it is.
+I did think about that but was worried that a header might encourage
+more users doing the hacky thing.  OTOH it would mean the arch specific
+tests could share the header though so perhaps you're right, I'll take a
+look.
 
+--zxBosQRC8SZzpWjX
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> >>>
-> >>> While the second feature is a lot more disruptive at the filesystem
-> >>> layer, it does eliminate the added context switch overhead. Also, it
-> >>
-> >> Which changes to filesystem layer are you anticipating?
-> >
-> > Roughly speaking...
-> >
-> > 1. The proposed "assign" interface would have to become more indirect
-> > to avoid understanding how assign could be implemented on various
-> > platforms.
->
-> It is almost starting to sound like we could learn from the tracing
-> interface where individual events can be enabled/disabled ... with severa=
-l
-> events potentially enabled with an "enable" done higher in hierarchy, per=
-haps
-> even globally to support the first approach ...
+-----BEGIN PGP SIGNATURE-----
 
-Sorry, can you clarify the part about the tracing interface? Tracing to
-support dynamic autoconfiguration of events?
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVwwI8ACgkQJNaLcl1U
+h9CVHQf/cmjZxceMOIDMMSGhM2fS6i96ldlWTSPwQfb5HMKyTcQ9YOSXaNHb1m2n
+dbvgXqvkgPThdFw0hYwcTryPVlHqdnqTAuZwcn5s0I+z0YEt9KiBtfNM1AZtxSkd
+wIEAlKcXlSJV6x8d35Hg5hsVHoeEefnw4Wi5qVddYjN2yoBVVKH11gniMSs5dll+
+nlvb20GPpPPTFyx3qqVyuraICoNnxRAI7x/+GyDlDJW4fn9EBcYnOr32L4kRxIY7
+aQY9S2naHGi/jQoayRcGng+kj+FMGqeRF6nJh3oN57fekEqjJvcE43JtefHT25Cf
+AuTtlmmNB4jQcvkAK6CoMdX6HG153w==
+=RXcG
+-----END PGP SIGNATURE-----
 
-Thanks!
--Peter
-
-
- [1] AMD64 Technology Platform Quality of Service Extensions, Revision: 1.0=
-3:
-     https://bugzilla.kernel.org/attachment.cgi?id=3D301365
+--zxBosQRC8SZzpWjX--
 
