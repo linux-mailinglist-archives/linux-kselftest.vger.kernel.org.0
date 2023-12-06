@@ -1,115 +1,127 @@
-Return-Path: <linux-kselftest+bounces-1296-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1297-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2ADB8074E1
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 17:24:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C8DF8074EC
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 17:29:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7C9201F21182
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 16:24:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 08C28281C49
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 16:29:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3F9A47762;
-	Wed,  6 Dec 2023 16:24:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C24794776D;
+	Wed,  6 Dec 2023 16:29:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CQV69eSS"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="JUP9Q7hQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D07AE137
-	for <linux-kselftest@vger.kernel.org>; Wed,  6 Dec 2023 08:23:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1701879837;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bEeLgq3tKfeo+gDdZ+RSrAtJVLsXviPr2EfsX6Jr+7w=;
-	b=CQV69eSSBUiFKz/NWaJxvQdmGsxOcmD7ehgIMz84jxrATHXgCM4n2AfP5x5fGFTBnL8BgX
-	jYYqBcU9DZMkWcliyyku+D8SusL9jLnFB72VaoCyWgpthKC7yffCYQEBoXM0mxUOQxvf8O
-	K4jYPtmp4NKk643LY0BrLvwcctIXYWU=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-193-sVArkIdgOc-eu7g3GzweHw-1; Wed, 06 Dec 2023 11:23:55 -0500
-X-MC-Unique: sVArkIdgOc-eu7g3GzweHw-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-40b310b5453so47860285e9.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 06 Dec 2023 08:23:55 -0800 (PST)
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91DCB12F
+	for <linux-kselftest@vger.kernel.org>; Wed,  6 Dec 2023 08:29:02 -0800 (PST)
+Received: by mail-ot1-x330.google.com with SMTP id 46e09a7af769-6d9a1dd6fdcso521110a34.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 06 Dec 2023 08:29:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1701880142; x=1702484942; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=B5ZbGGmoH/lFlZhMRZN1vjFtS/EFqjm5PsB2wakbCe8=;
+        b=JUP9Q7hQu9MmC8qT+pvq4Rvvq1eyIaYqOLTyljMFCuaeJS7pJri5kF+MfbVN26lg8h
+         NbQAtypwudwKwgAnl4F2e4YIGPKgeXQvCYWKRhvhrePNzfDBNQjnAmx3w0yttDn3Oh3u
+         ELEA6s41uIP/aJhbtXh+sPC9yDZT9uIzzw8hYMBOlmldIVohtdFSayFtHKXNaNvqL5pG
+         9tblrpZ2IEvFHK9wSOzSLLFgV4RzVHl/wk4ZebAjuD4uzFEHnsFLXVCabYheSQxM0mcF
+         YHN8LrpFy1MRsuxZMFzIztIK7s5iEy3vvBvlIQEWH2LK3ZJgZDe+ojzcDzEyyNwMYljO
+         5Fmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701879834; x=1702484634;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bEeLgq3tKfeo+gDdZ+RSrAtJVLsXviPr2EfsX6Jr+7w=;
-        b=lFLVCO7koSk3uQcPmNDs2DSKQADrl0O4CwdrL5Fphv6/Xy0svghKHZsNUqlRn560lk
-         kLxqXvfALwxt3eN4Rzny9Wo2p+VYYxwMhalfLoUMQwIZfZ9OUYZGYXa/8/2Nu7ICdUZM
-         ZsjvLoizwzTmV/5QO9VjEe1vE4qIUojtiQmYaPb2UJhGfMTCxvyURpRme6lOiMnWwhJ9
-         soAJhHFpN1VJnxBAi15DZI8QLglG4y0Y0soyGnDKgLRGuyWxGIK9p+J7Phq/sNu7nAQi
-         TdRjtpB3ZwtLF7ySDveAl3exjy82IWAA8SaCg2652F5Aok93OLLrJk/XIjPrB89l9oS9
-         G01w==
-X-Gm-Message-State: AOJu0YysX+n+vSBe1rUUh2N9NWiNtq/NZ7s3q0knaFBEuBf5qxh/kWjK
-	oy8I46e938Ma+6okE9VltNP1gi5KQIJ9EZUwQWpd5W5BnaCsJHT9NQplQUCpSIbHg9dPZ6Vzfxg
-	384Bxpyt+rzftCaEvZF5fZ95KNhSx
-X-Received: by 2002:a05:600c:54f1:b0:40c:838:a695 with SMTP id jb17-20020a05600c54f100b0040c0838a695mr664575wmb.174.1701879834183;
-        Wed, 06 Dec 2023 08:23:54 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFwz5MnYWQbASuNlLkNiWsEDxekCPXedq1zH8YxfdaJZ9iXOBY3+Os5iiOyqzo1HtFVVnI73g==
-X-Received: by 2002:a05:600c:54f1:b0:40c:838:a695 with SMTP id jb17-20020a05600c54f100b0040c0838a695mr664563wmb.174.1701879833914;
-        Wed, 06 Dec 2023 08:23:53 -0800 (PST)
-Received: from [192.168.0.118] (88-113-27-52.elisa-laajakaista.fi. [88.113.27.52])
-        by smtp.gmail.com with ESMTPSA id bi12-20020a05600c3d8c00b0040b54335d57sm178976wmb.17.2023.12.06.08.23.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Dec 2023 08:23:53 -0800 (PST)
-Message-ID: <f64c8105-5373-4dfb-b48c-655221accd19@redhat.com>
-Date: Wed, 6 Dec 2023 18:23:51 +0200
+        d=1e100.net; s=20230601; t=1701880142; x=1702484942;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=B5ZbGGmoH/lFlZhMRZN1vjFtS/EFqjm5PsB2wakbCe8=;
+        b=Xnqs2o26XhRlAGSKKkyLaXyY0rfnwUiDgQBzAUr4x22VubiVw8FQH2f9DgioYnwwPH
+         22a4RJ82+Ti0iKTE/HtzuHOvWm6yCtMBlNV1af/BxXZQFzU9fA7VzSl+al3VKb2dwvlo
+         P3oGWloww+7nCSCs0UBpI3E0uyfDvImzRZZXukEJ4MT5/L3Ru7urWohw5CQmdLCS2OKr
+         ShUMwkHcLdPJdeJt9uQNq93tUI3UVgrLLNvk0QGJ2LbDr412lT2dWtC5xknjDuZUDOZg
+         QwiqG/hm27k8SnTR7RQH5SRhh+IRXDD5qzPniw5dRZUJSRt7YWiYNMWRf4FeqnmoOWfA
+         qOBQ==
+X-Gm-Message-State: AOJu0YzS7HpkSTjEEeRpFB88mfFHz5BBlJQM8D+/zz9K0f+MaJiGB97F
+	fuVuSfNrQ7F/O/T1o5LP0j0I3Q==
+X-Google-Smtp-Source: AGHT+IGn8NLklrz8gfLpf4ZROBA91oSNRaf0+Ba33U1gJX5IEC3OyhkihvKkTQRDR3ZHIRtV5+wHCg==
+X-Received: by 2002:a9d:6385:0:b0:6d9:9ed9:f0e0 with SMTP id w5-20020a9d6385000000b006d99ed9f0e0mr559336otk.14.1701880141802;
+        Wed, 06 Dec 2023 08:29:01 -0800 (PST)
+Received: from localhost ([192.184.165.199])
+        by smtp.gmail.com with ESMTPSA id c25-20020a9d6859000000b006d9a0bf775asm24697oto.7.2023.12.06.08.29.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Dec 2023 08:29:01 -0800 (PST)
+Date: Wed, 06 Dec 2023 08:29:01 -0800 (PST)
+X-Google-Original-Date: Wed, 06 Dec 2023 08:28:59 PST (-0800)
+Subject:     Re: [PATCH v2] selftests: sud_test: return correct emulated syscall value on RISC-V
+In-Reply-To: <20231206134438.473166-1-cleger@rivosinc.com>
+CC: shuah@kernel.org, krisman@collabora.com, linux-kselftest@vger.kernel.org,
+  linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, cleger@rivosinc.com,
+  Bjorn Topel <bjorn@rivosinc.com>
+From: Palmer Dabbelt <palmer@rivosinc.com>
+To: cleger@rivosinc.com, tglx@linutronix.de
+Message-ID: <mhng-bd5d2bdb-99ab-464a-a043-bdfc34b96b71@palmer-ri-x1c9>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2 02/10] MAINTAINERS: Introduce V: entry for tests
-Content-Language: en-US
-To: David Gow <davidgow@google.com>
-Cc: workflows@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
- Joe Perches <joe@perches.com>, Andy Whitcroft <apw@canonical.com>,
- Theodore Ts'o <tytso@mit.edu>, Steven Rostedt <rostedt@goodmis.org>,
- Mark Brown <broonie@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>,
- "Darrick J . Wong" <djwong@kernel.org>, kunit-dev@googlegroups.com,
- linux-kselftest@vger.kernel.org, Veronika Kabatova <vkabatov@redhat.com>,
- CKI <cki-project@redhat.com>, kernelci@lists.linux.dev
-References: <20231115175146.9848-1-Nikolai.Kondrashov@redhat.com>
- <20231205184503.79769-1-Nikolai.Kondrashov@redhat.com>
- <20231205184503.79769-3-Nikolai.Kondrashov@redhat.com>
- <CABVgOSnCNJcEfVp_k3emEHziYx55ecNaEj4fsbcfgrsCN4CrNQ@mail.gmail.com>
-From: Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com>
-In-Reply-To: <CABVgOSnCNJcEfVp_k3emEHziYx55ecNaEj4fsbcfgrsCN4CrNQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 12/6/23 10:12, David Gow wrote:
-> I'm pretty happy with this personally, though I definitely think we
-> need the support for tests which aren't just executable scripts (e.g.
-> the docs in patch 6).
-> 
-> The get_maintailer.pl bits, and hence the requirement to not include
-> '@', feel a little bit 'off': I'd rather get_maintainer.pl kept emails
-> and tests separate by some other means (either having --test _only_
-> print tests, not emails at all, or by giving them a prefix like
-> 'TEST:' or something). But that is diverging more from the existing
-> behaviour of get_maintainer.pl, so I could go either way.
-> 
-> Otherwise, this looks pretty good. I'll give it a proper test tomorrow
-> alongside the other patches.
+On Wed, 06 Dec 2023 05:44:37 PST (-0800), cleger@rivosinc.com wrote:
+> Currently, the sud_test expects the emulated syscall to return the
+> emulated syscall number. This assumption only works on architectures
+> were the syscall calling convention use the same register for syscall
+> number/syscall return value. This is not the case for RISC-V and thus
+> the return value must be also emulated using the provided ucontext.
+>
+> Signed-off-by: Clément Léger <cleger@rivosinc.com>
+> Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
+> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+>
+> ---
+>
+> Changes in V2:
+>  - Changes comment to be more explicit
+>  - Use A7 syscall arg rather than hardcoding MAGIC_SYSCALL_1
+>
+> ---
+>  .../selftests/syscall_user_dispatch/sud_test.c     | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+>
+> diff --git a/tools/testing/selftests/syscall_user_dispatch/sud_test.c b/tools/testing/selftests/syscall_user_dispatch/sud_test.c
+> index b5d592d4099e..d975a6767329 100644
+> --- a/tools/testing/selftests/syscall_user_dispatch/sud_test.c
+> +++ b/tools/testing/selftests/syscall_user_dispatch/sud_test.c
+> @@ -158,6 +158,20 @@ static void handle_sigsys(int sig, siginfo_t *info, void *ucontext)
+>
+>  	/* In preparation for sigreturn. */
+>  	SYSCALL_DISPATCH_OFF(glob_sel);
+> +
+> +	/*
+> +	 * The tests for argument handling assume that `syscall(x) == x`. This
+> +	 * is a NOP on x86 because the syscall number is passed in %rax, which
+> +	 * happens to also be the function ABI return register.  Other
+> +	 * architectures may need to swizzle the arguments around.
+> +	 */
+> +#if defined(__riscv)
+> +/* REG_A7 is not defined in libc headers */
+> +# define REG_A7 (REG_A0 + 7)
+> +
+> +	((ucontext_t *)ucontext)->uc_mcontext.__gregs[REG_A0] =
+> +			((ucontext_t *)ucontext)->uc_mcontext.__gregs[REG_A7];
+> +#endif
+>  }
+>
+>  TEST(dispatch_and_return)
 
-Thanks for the review, David!
+Thanks.
 
-Yeah, I don't like the '@' bit myself, but it seems to be the path of least 
-resistance right now (not necessarily the best one, of course).
-
-I'm up for adding an option to get_maintainer.pl that disables email output, 
-if people like that, though.
-
-Nick
-
+Thomas: looks like you picked up all the commits that touched this?  No 
+rush on my end, just LMK if you want me to pick it up -- I'm going to 
+leave it alone for now.
 
