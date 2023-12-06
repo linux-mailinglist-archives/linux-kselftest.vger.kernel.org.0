@@ -1,54 +1,54 @@
-Return-Path: <linux-kselftest+bounces-1246-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1247-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E28C2806913
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 09:04:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC30C80692E
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 09:12:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 69D8E1F213EC
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 08:04:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7D9991F2153D
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 08:12:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7949C18AF0;
-	Wed,  6 Dec 2023 08:04:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21FB418C14;
+	Wed,  6 Dec 2023 08:12:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nO9Ti3Bc"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tj8WgiF8"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 162BD1B5
-	for <linux-kselftest@vger.kernel.org>; Wed,  6 Dec 2023 00:04:00 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-54c77d011acso5517a12.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 06 Dec 2023 00:04:00 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E24218D
+	for <linux-kselftest@vger.kernel.org>; Wed,  6 Dec 2023 00:12:22 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-54c79cca895so8370a12.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 06 Dec 2023 00:12:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1701849838; x=1702454638; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1701850341; x=1702455141; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=yl9Kt910+aZrTuuspQhrim7e+h7G7Y6uAYR69kUlQhE=;
-        b=nO9Ti3Bc1TuyhPK520KQpltb2jJhzvlz0fUJXaD/49jGuFyfbBsjVepPOlbLxFoDSB
-         hGx9Lp4IIdx1clBQYszQ8WzMmIDLaGiv+Bify2QwmlCX4ewzSpAAlXKlLXbvdTLjymJz
-         fcnuXh0i8eo3kpOOKmyQx57POpeAciuwA335Kg9JfiQgouV1auRUB/ElDI77GHTNlCHV
-         +9dGRZg//CidP9qljZjHPhvmQsaQ2lYo7pnfURHZ9OKKsjSqZpO43RW9ruo7imSs9mB2
-         C9npZeSbev7yiIBTnlWLU6Zd2YOf/f1lHfdKxL0wxpri3+tbl3VSYNPdCLZTa7cLn52E
-         JLCA==
+        bh=Ib5L10QNRz9uiIkAwba5mbchL7ZGyJs8UGt49onGZ+o=;
+        b=tj8WgiF8DJEui70sVlVWhRo+OkipjhalHOkoQgmFpj+2Wldnk9uVCehCDE+0pPMUgp
+         J4Dny1AE59uvL0P33fP39QeisuEdy/SZLYbYrkpP0Q5z/UwslVXqbuAzq5+9idVp4W7L
+         Ir69C7yMDAA6uybGertRT5Q9OI654tfAOElaUmg+YxcSmCHLLBJGbLETSbxeJ3ecqzVe
+         XYEXZ3dfukFBIrt3Nm9qdJxuamhfJW9dGAPBDYECdvNeecuGmXrK5+ubnR9cX97JDOYY
+         MgN/hHXuNBb4ghTzecC32eof219IbV92x3dqmjcIIyKZ54X1KKQkTHjM1Zgv+gi/WMpP
+         QOyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701849838; x=1702454638;
+        d=1e100.net; s=20230601; t=1701850341; x=1702455141;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=yl9Kt910+aZrTuuspQhrim7e+h7G7Y6uAYR69kUlQhE=;
-        b=rVT4PoYuf1BMrQvWqFZ26k2H1uyQkM6O4iL1VUMoucP3iCybFbyn1Qxvef8rEcnpHI
-         JGKBzzn4VkIvS7yFhmuVIU/xnIikxImgFivGVlnl0I02tdgiSaPjymGUVsLnwpLEi84F
-         n0b/4BbjswJteYPK3XWwgSImVHx655HCLXeOrE5H2sd406eTeSoFfz8jOeonzYQqQRzr
-         pHgh94SqK8th3RTxCeABj1JV3eDg3YeIzXhW/sgFNbYiJ/HmBWg28GEBojGwK8O9hEgv
-         Jw3PhCjY7qN1FgOnNTlfkCylP22TbsWdWkDwLbL22YAFnMA2aVzpUxxlzcpvpCukOmFO
-         31Xw==
-X-Gm-Message-State: AOJu0YylXJvNWK5lOE4QNWWo6E8H/pFqkd08Ck6V986JS3+l9TpuW0hY
-	4qGTTwjHjWo4OdvYfVbRGxlf5STXOhuUq9n0dzftTQ==
-X-Google-Smtp-Source: AGHT+IEaO+94iDBEXay94ezSPUxJ91cw5Aey+lBPpm7zInTNoW+eAVYUvOH98LT91lcesH3+n2Wv3kvyGNmnBQEJtFc=
+        bh=Ib5L10QNRz9uiIkAwba5mbchL7ZGyJs8UGt49onGZ+o=;
+        b=f6NIu/tAAD6mBG134cHeTE2WyHW2ct3m7I7tBkOjj56E+MrbpZIO5Uqc/OeMHfAu8P
+         +ZUsIgce6A2XiSgvwzVp23yUFje1jdYLdPg830BIEnoQbr+FcRWy1VruWxQkdVwvQheZ
+         Iv2XVjR4Y7hgmUOl7ToKPj952g+pQGIdV/HU7NNXeAoQO5teyj6fIWjVL7CEtYdYaURP
+         nBA4DpYMcSM3tdw/QxTn+vPYA1gO3NnVmCtXRbaa47TFmwITYY2hZnJfRH3TSlYnoU4g
+         Naxao2u7zoDKfcOyUBuEqIvr/Xu76UtIDD4igvKnclhwHitMFuq06yI8dxYtZrEF9hYJ
+         MO2Q==
+X-Gm-Message-State: AOJu0YxCCSKkS+86VWsGKNzTVfMnfw0bcZ44yHjbYjkTzb8gZKbUlGGl
+	8P8a1X6BdMNQUagtKfyb07ERhdB9o2l1gtgTn90Qxg==
+X-Google-Smtp-Source: AGHT+IEA1ulS5xaDm437Hb3xvdqucH0fEVeqIGpUJmjqFD3gLRCKe/pBXQkQ9tKRQbnJqWloZYVY7bSIH+EBvglbxO4=
 X-Received: by 2002:a50:d744:0:b0:543:fb17:1a8 with SMTP id
- i4-20020a50d744000000b00543fb1701a8mr40204edj.3.1701849838267; Wed, 06 Dec
- 2023 00:03:58 -0800 (PST)
+ i4-20020a50d744000000b00543fb1701a8mr41012edj.3.1701850340503; Wed, 06 Dec
+ 2023 00:12:20 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -56,13 +56,12 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20231115175146.9848-1-Nikolai.Kondrashov@redhat.com>
- <20231205184503.79769-1-Nikolai.Kondrashov@redhat.com> <20231205184503.79769-7-Nikolai.Kondrashov@redhat.com>
-In-Reply-To: <20231205184503.79769-7-Nikolai.Kondrashov@redhat.com>
+ <20231205184503.79769-1-Nikolai.Kondrashov@redhat.com> <20231205184503.79769-3-Nikolai.Kondrashov@redhat.com>
+In-Reply-To: <20231205184503.79769-3-Nikolai.Kondrashov@redhat.com>
 From: David Gow <davidgow@google.com>
-Date: Wed, 6 Dec 2023 16:03:44 +0800
-Message-ID: <CABVgOSnW1Yzz-1Zdr-k-qWL25yUDZo+jbhPwNkK7dG-8-WonFg@mail.gmail.com>
-Subject: Re: [RFC PATCH v2 06/10] MAINTAINERS: Support referencing test docs
- in V:
+Date: Wed, 6 Dec 2023 16:12:09 +0800
+Message-ID: <CABVgOSnCNJcEfVp_k3emEHziYx55ecNaEj4fsbcfgrsCN4CrNQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 02/10] MAINTAINERS: Introduce V: entry for tests
 To: Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com>
 Cc: workflows@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>, 
 	Joe Perches <joe@perches.com>, Andy Whitcroft <apw@canonical.com>, "Theodore Ts'o" <tytso@mit.edu>, 
@@ -71,74 +70,49 @@ Cc: workflows@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
 	kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org, 
 	Veronika Kabatova <vkabatov@redhat.com>, CKI <cki-project@redhat.com>, kernelci@lists.linux.dev
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="0000000000001ad6ea060bd2cb27"
+	boundary="0000000000000a0985060bd2e929"
 
---0000000000001ad6ea060bd2cb27
+--0000000000000a0985060bd2e929
 Content-Type: text/plain; charset="UTF-8"
 
 On Wed, 6 Dec 2023 at 02:45, Nikolai Kondrashov
 <Nikolai.Kondrashov@redhat.com> wrote:
 >
-> Support referencing test suite documentation in the V: entries of
-> MAINTAINERS file. Use the '*<name>' syntax (like C pointer dereference),
-> where '<name>' is a second-level heading in the new
-> Documentation/process/tests.rst file, with the suite's description.
-> This syntax allows distinguishing the references from test commands.
+> Introduce a new 'V:' ("Verify") entry to MAINTAINERS. The entry accepts
+> a test suite command which is proposed to be executed for each
+> contribution to the subsystem.
 >
-> Add a boiler-plate Documentation/process/tests.rst file, describing a
-> way to add structured info to the test suites in the form of field
-> lists. Apart from a "summary" and "command" fields, they can also
-> contain a "superset" field specifying the superset of the test suite,
-> helping reuse documentation and express both wider and narrower test
-> sets.
+> Extend scripts/get_maintainer.pl to support retrieving the V: entries
+> when '--test' option is specified.
 >
-> Make scripts/checkpatch.pl load the tests from the file, along with the
-> structured data, validate the references in MAINTAINERS, dereference
-> them, and output the test suite information in the CHECK messages
-> whenever the corresponding subsystems are changed. But only if there was
-> no corresponding Tested-with: tag in the commit message, certifying it
-> was executed successfully already.
+> Require the entry values to not contain the '@' character, so they could
+> be distinguished from emails (always) output by get_maintainer.pl. Make
+> scripts/checkpatch.pl check that they don't.
 >
-> This is supposed to help propose executing test suites which cannot be
-> executed immediately, and need extra setup, as well as provide a place
-> for extra documentation and information on directly-available suites.
+> Update entry ordering in both scripts/checkpatch.pl and
+> scripts/parse-maintainers.pl.
 >
 > Signed-off-by: Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com>
 > ---
 
-I like the idea here, but wonder whether it makes sense to put all of
-these tests into a single 'tests.rst' file. There's already lots of
-existing documentation scattered around the tree, and while keeping
-all of the testing information in one place does have advantages, I
-think there's a lot to be said for keeping subsystem-specific test
-docs alongside the rest of the documentation for the subsystem itself.
-And it'd be less work, as the docs are already there.
+I'm pretty happy with this personally, though I definitely think we
+need the support for tests which aren't just executable scripts (e.g.
+the docs in patch 6).
 
-So, could we just make this a path under Documentation/ (possibly with
-an #anchor if we need to reference just one part of a file)?
+The get_maintailer.pl bits, and hence the requirement to not include
+'@', feel a little bit 'off': I'd rather get_maintainer.pl kept emails
+and tests separate by some other means (either having --test _only_
+print tests, not emails at all, or by giving them a prefix like
+'TEST:' or something). But that is diverging more from the existing
+behaviour of get_maintainer.pl, so I could go either way.
 
-e.g., something like these, all of which are existing docs:
-V: *Documentation/dev-tools/kasan.rst#Tests
-or
-V: *Dcoumentation/RCU/torture.rst
-or
-V: *Documentation/gpu/automated_testing.rst
-or
-V: *Documentation/process/maintainer-kvm-x86.rst#Testing
+Otherwise, this looks pretty good. I'll give it a proper test tomorrow
+alongside the other patches.
 
-(We could even get rid of the '*' and just use 'Documentation/' as a
-prefix, or the executable bit on the file, or similar to distinguish
-these from scripts.)
-
-If we wanted to be very brave, we could extend this further to
-arbitrary webpages, like:
-V: https://git.kernel.org/pub/scm/fs/xfs/xfstests-dev.git/tree/README
-
-Thoughts?
-
+Cheers,
 -- David
 
---0000000000001ad6ea060bd2cb27
+--0000000000000a0985060bd2e929
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -205,15 +179,15 @@ impZAng7ccvvK09K3ZuhwTIxJMsPXCZYsrXWORTw5sczRAP6XvKbPBJnsJoSTe5dFBPBHOQJOGhU
 qWfEfWnWMJPF3LxSGLpLFQXO3RwQqmxv08avwXfVPouh1xuB3FX7rpDabT8YDhu9JgIZkLEKko7L
 yQt6zWwng7k8YF/jGbiAta6VMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAi
-4zRGZTPrAx8Sdr2fXBo12qgoaqGEkHi0dxeSeXWQZjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzEyMDYwODAzNThaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCC5
+frpM5s+CUCA22eqZxX97UypNIPo6SIptoHuGn3v9rjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzEyMDYwODEyMjFaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAeC4llIqdeMMwKOLglV8Z
-XqGVAdlUjsO+cG8/wUtR0TPh7rkgynB+oBlzgf51JYaDqo2tdBn7AK6ECfBx9Hw+4yyyGMY3hRtG
-MdLLgmJlAB4DQtr8DMnsPi9xK1hu+nVkpxCaUzptyCe4FgsBCaXRg4Au7b6z8r7QVSgdcmXcvxxd
-vIly5XegcVB2TFX8v3SuDS4rUDyn8iiqpTwZMQoXuZtlYQP0Ay9txaFOs+Bm1puub+1MjRK2tLfH
-jvJB9xh71J54wPQklybmW3WnGbUKmW18PIw2p/5cZp2UKoVfQWEGAd2yTSEi62E7pC3bckn4ZP/V
-YZMkS2d372hhut0agw==
---0000000000001ad6ea060bd2cb27--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAFFQ7jjiyAZ3wB62FGaZY
+PON5cF2LX5hkNFBPXt2McMW3rxAgkS3jI9lFTexfmDS11kLwIwQN9ZR9X1azjTzoNHT1fLV+oehw
+gPJ30fckCQU5kmNozfvoQGfdC6tDalivJCYO7CdrmwOJ+8dcnrpZlWPM2KLWZN/r2blfIwIbKQxf
+qcl0/HHV1hmELSrj2zzkFAw3R/pILnY/w/Je3cnE2j88STMwDfdN8iVItD5sWO/9PFXoi1c/osGu
+VvWqO9D/e/f5sjhJIM1bD5AW9dnWH59wu+ipPCKbjwU120hHtjH3c72cZ3vtt1tl7woZFsMP15M0
+zuutKcFECxPkpQgh7g==
+--0000000000000a0985060bd2e929--
 
