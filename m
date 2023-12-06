@@ -1,58 +1,58 @@
-Return-Path: <linux-kselftest+bounces-1233-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1234-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A3378067F1
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 08:08:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EE0128067F2
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 08:08:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C0F731F2175E
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 07:08:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6EFAC1F21794
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 07:08:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A592F134AB;
-	Wed,  6 Dec 2023 07:08:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C55B134AB;
+	Wed,  6 Dec 2023 07:08:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OU0xmES7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z8N/v/df"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7830DD42;
-	Tue,  5 Dec 2023 23:08:14 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-6ce6dd83945so1414901b3a.3;
-        Tue, 05 Dec 2023 23:08:14 -0800 (PST)
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 40413135;
+	Tue,  5 Dec 2023 23:08:19 -0800 (PST)
+Received: by mail-oi1-x22e.google.com with SMTP id 5614622812f47-3b84e328327so3888307b6e.2;
+        Tue, 05 Dec 2023 23:08:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701846493; x=1702451293; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1701846498; x=1702451298; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5IF5DGbntq2VRZVdy7aWVL/lGpZaZmpeJADi7s0ptSU=;
-        b=OU0xmES7kPaOIJgk6oZt2/wI9/FEnfMezwPF0ByG8CfDAYLKRh9IEIcJCBvWcqQoFT
-         8H6vxfZpOfb9KdGQfDHmoojwbY6joNoj8WAZE6wsNwo70bGltMKAUeVOq2cjOyaSGym7
-         kdCq0GQ9DFgDecP2q11nIrEh/laDPooj+RLIxtMeTR00tjyRLuYMT2gwzATc6HdEEkts
-         9WDgJ9Ims1DtZ95QEZBvBp0bwyep+pj8gEmrldd7y2HLN75j2ItQ1VFIUOcCW7o9d0Fc
-         0JS7uFwCXVPdeBVe7ytr0bSlXUwnHtE9K8KKDAh+bV/wm7tgZYSCP/11krIOvuBqrD/a
-         0T+A==
+        bh=17gl4U+Jcq9vjydFNVgF3vBTDN4pUVOc2Vp/MAsPT9A=;
+        b=Z8N/v/dfevTeUzx1I999fE+U5JTVTggtyCmVe21a45YZNx4BcFYFAEr8ymLSJQXbxz
+         G4p9EXdKCLwa+c3/zdeGzbWn77yOgMpH1BLFxOww8Aqf45pi2z7djUqWCFIF+DCgDoXa
+         ab465qCQCN861sVy3fCNJgilAKb0w43S7csVCc1+zsl67Q+e8UEjl9AGuKQ6abuKvBuP
+         lE6PMv5VgdRgjY4eXaXbuezJ3dBZI8Yo8pEnE31QuF4e0tHstttqg90r5qpom80DdINZ
+         XPr32SlKuAU2CoAe+jdze/TTaBIusxQXkaFnOXeSV52tXpkGGLrNir8Od7E9/AD1k+WT
+         U46w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701846493; x=1702451293;
+        d=1e100.net; s=20230601; t=1701846498; x=1702451298;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5IF5DGbntq2VRZVdy7aWVL/lGpZaZmpeJADi7s0ptSU=;
-        b=bkzwojT6aJDHZrMHaH/XXofa32N385v694TR87OxRat6nEBWsQhH2hXnzyNbaoNvLm
-         WRP9+zdmGmSCtEcgXkt/JgMghqA6Ye8kwAAUvyYbY9G6MDhpzGF+AlVShjWkppqXKF3V
-         cr0yDkBpGbNaV4HNg/bTNoy0pxyZmQxQ9CEc6zcKyXzhmq5EhQ/tpwmw5c7Fyvu0popU
-         UkIfPkO6bFEHsO/cxf41cCejnQeoc4SlqGyleCsqvw1uDeAipiLKNQu9/MRKwNwH4MSq
-         6phx0MOm1w6HbNk56xAMUJhcjxRmpY99PzzON7VMuJOlBaXqczzHPJcNQPBNEA52srPD
-         bqRw==
-X-Gm-Message-State: AOJu0YzYUtuXLHpUuMlz5pVXm67LG2g2EDXfiFNo3Jk/nb4qTuq4oT3z
-	oKyh9E8zRffQXrB9yeLCJhPfR7MGPg578NGa
-X-Google-Smtp-Source: AGHT+IEJuFqKWk2h7dkKNxvm9sB835WS5s8ue0CV8plk9FE7zT0a0oJx26b32z+N6npfdmsGCEHEdQ==
-X-Received: by 2002:a05:6a00:5c:b0:6c4:e7a0:af4a with SMTP id i28-20020a056a00005c00b006c4e7a0af4amr520777pfk.32.1701846492902;
-        Tue, 05 Dec 2023 23:08:12 -0800 (PST)
+        bh=17gl4U+Jcq9vjydFNVgF3vBTDN4pUVOc2Vp/MAsPT9A=;
+        b=DuIQwd/088geCbb2L57sA+anGY9dmoUQMnfdygqUVg9Rv4k/SBMZAbB3Jg5YD15ioP
+         KAVH/k4F0vDUmm1GFojWKLMQnmxNi5cu/fS12lRyDJicjOpeUDWsjCV/n1YMSxgD8sM8
+         awvv4vGjxtys1hyhv2/UCepKlTGl3Y7Vp8ZQYABSMExE2tWaHqC/A/8OQ/9m3xcp3xZS
+         JtAbZAjNxQWLt+XpdOZM560LTLd6UJPFh0LrGqB2vbr04337WUZv0ePjz38x2WEAVhzw
+         OjV/0/FtlBRBC3jpsgfNa4mV0tDL3kMkdM0URv7P3csDeidx1eUaA0e709Jo56uIui7+
+         LFRQ==
+X-Gm-Message-State: AOJu0YxKmggefMQWYgmR5VChRwtTA6ku4oGpjbWJkYU8ZNXNABJPGXAm
+	mhbfdbna219SBdRJiEds2Izf/ZdOiuLMvfiN
+X-Google-Smtp-Source: AGHT+IEasJGKglAtC5JqxZ+cIw3T7O23noIjy1FSiJrnytuEY0ZFrs3B1GtNNPTzC60svhzZ8YrMZA==
+X-Received: by 2002:a05:6808:219a:b0:3b8:b063:6b9c with SMTP id be26-20020a056808219a00b003b8b0636b9cmr713405oib.75.1701846497375;
+        Tue, 05 Dec 2023 23:08:17 -0800 (PST)
 Received: from Laptop-X1.redhat.com ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id n7-20020a63f807000000b005b529d633b7sm10184212pgh.14.2023.12.05.23.08.08
+        by smtp.gmail.com with ESMTPSA id n7-20020a63f807000000b005b529d633b7sm10184212pgh.14.2023.12.05.23.08.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Dec 2023 23:08:12 -0800 (PST)
+        Tue, 05 Dec 2023 23:08:16 -0800 (PST)
 From: Hangbin Liu <liuhangbin@gmail.com>
 To: netdev@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -70,9 +70,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Vladimir Nikishkin <vladimir@nikishkin.pw>,
 	Roopa Prabhu <roopa@nvidia.com>,
 	Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCH net-next 1/9] selftests/net: convert test_bridge_backup_port.sh to run it in unique namespace
-Date: Wed,  6 Dec 2023 15:07:53 +0800
-Message-ID: <20231206070801.1691247-2-liuhangbin@gmail.com>
+Subject: [PATCH net-next 2/9] selftests/net: convert test_bridge_neigh_suppress.sh to run it in unique namespace
+Date: Wed,  6 Dec 2023 15:07:54 +0800
+Message-ID: <20231206070801.1691247-3-liuhangbin@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20231206070801.1691247-1-liuhangbin@gmail.com>
 References: <20231206070801.1691247-1-liuhangbin@gmail.com>
@@ -84,41 +84,33 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-There is no h1 h2 actually. Remove it. Here is the test result after
-conversion.
+Here is the test result after conversion.
 
-]# ./test_bridge_backup_port.sh
+]# ./test_bridge_neigh_suppress.sh
 
-Backup port
------------
-TEST: Forwarding out of swp1                                        [ OK ]
-TEST: No forwarding out of vx0                                      [ OK ]
-TEST: swp1 carrier off                                              [ OK ]
-TEST: No forwarding out of swp1                                     [ OK ]
+Per-port ARP suppression - VLAN 10
+----------------------------------
+TEST: arping                                                        [ OK ]
+TEST: ARP suppression                                               [ OK ]
+
 ...
-Backup nexthop ID - ping
-------------------------
-TEST: Ping with backup nexthop ID                                   [ OK ]
-TEST: Ping after disabling backup nexthop ID                        [ OK ]
 
-Backup nexthop ID - torture test
---------------------------------
-TEST: Torture test                                                  [ OK ]
+TEST: NS suppression (VLAN 20)                                      [ OK ]
 
-Tests passed:  83
+Tests passed: 148
 Tests failed:   0
 
 Acked-by: David Ahern <dsahern@kernel.org>
 Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
 ---
- .../selftests/net/test_bridge_backup_port.sh  | 371 +++++++++---------
- 1 file changed, 182 insertions(+), 189 deletions(-)
+ .../net/test_bridge_neigh_suppress.sh         | 331 +++++++++---------
+ 1 file changed, 162 insertions(+), 169 deletions(-)
 
-diff --git a/tools/testing/selftests/net/test_bridge_backup_port.sh b/tools/testing/selftests/net/test_bridge_backup_port.sh
-index 112cfd8a10ad..70a7d87ba2d2 100755
---- a/tools/testing/selftests/net/test_bridge_backup_port.sh
-+++ b/tools/testing/selftests/net/test_bridge_backup_port.sh
-@@ -35,9 +35,8 @@
+diff --git a/tools/testing/selftests/net/test_bridge_neigh_suppress.sh b/tools/testing/selftests/net/test_bridge_neigh_suppress.sh
+index d80f2cd87614..8533393a4f18 100755
+--- a/tools/testing/selftests/net/test_bridge_neigh_suppress.sh
++++ b/tools/testing/selftests/net/test_bridge_neigh_suppress.sh
+@@ -45,9 +45,8 @@
  # | sw1                                | | sw2                                |
  # +------------------------------------+ +------------------------------------+
  
@@ -129,7 +121,7 @@ index 112cfd8a10ad..70a7d87ba2d2 100755
  
  # All tests in this script. Can be overridden with -t option.
  TESTS="
-@@ -132,9 +131,6 @@ setup_topo_ns()
+@@ -140,9 +139,6 @@ setup_topo_ns()
  {
  	local ns=$1; shift
  
@@ -139,25 +131,55 @@ index 112cfd8a10ad..70a7d87ba2d2 100755
  	ip netns exec $ns sysctl -qw net.ipv6.conf.all.keep_addr_on_down=1
  	ip netns exec $ns sysctl -qw net.ipv6.conf.default.ignore_routes_with_linkdown=1
  	ip netns exec $ns sysctl -qw net.ipv6.conf.all.accept_dad=0
-@@ -145,13 +141,14 @@ setup_topo()
+@@ -153,21 +149,22 @@ setup_topo()
  {
  	local ns
  
--	for ns in sw1 sw2; do
-+	setup_ns sw1 sw2
-+	for ns in $sw1 $sw2; do
+-	for ns in h1 h2 sw1 sw2; do
++	setup_ns h1 h2 sw1 sw2
++	for ns in $h1 $h2 $sw1 $sw2; do
  		setup_topo_ns $ns
  	done
+ 
+ 	ip link add name veth0 type veth peer name veth1
+-	ip link set dev veth0 netns h1 name eth0
+-	ip link set dev veth1 netns sw1 name swp1
++	ip link set dev veth0 netns $h1 name eth0
++	ip link set dev veth1 netns $sw1 name swp1
  
  	ip link add name veth0 type veth peer name veth1
 -	ip link set dev veth0 netns sw1 name veth0
 -	ip link set dev veth1 netns sw2 name veth0
 +	ip link set dev veth0 netns $sw1 name veth0
 +	ip link set dev veth1 netns $sw2 name veth0
+ 
+ 	ip link add name veth0 type veth peer name veth1
+-	ip link set dev veth0 netns h2 name eth0
+-	ip link set dev veth1 netns sw2 name swp1
++	ip link set dev veth0 netns $h2 name eth0
++	ip link set dev veth1 netns $sw2 name swp1
  }
  
- setup_sw_common()
-@@ -190,7 +187,7 @@ setup_sw_common()
+ setup_host_common()
+@@ -190,7 +187,7 @@ setup_host_common()
+ 
+ setup_h1()
+ {
+-	local ns=h1
++	local ns=$h1
+ 	local v4addr1=192.0.2.1/28
+ 	local v4addr2=192.0.2.17/28
+ 	local v6addr1=2001:db8:1::1/64
+@@ -201,7 +198,7 @@ setup_h1()
+ 
+ setup_h2()
+ {
+-	local ns=h2
++	local ns=$h2
+ 	local v4addr1=192.0.2.2/28
+ 	local v4addr2=192.0.2.18/28
+ 	local v6addr1=2001:db8:1::2/64
+@@ -254,7 +251,7 @@ setup_sw_common()
  
  setup_sw1()
  {
@@ -166,7 +188,7 @@ index 112cfd8a10ad..70a7d87ba2d2 100755
  	local local_addr=192.0.2.33
  	local remote_addr=192.0.2.34
  	local veth_addr=192.0.2.49
-@@ -203,7 +200,7 @@ setup_sw1()
+@@ -265,7 +262,7 @@ setup_sw1()
  
  setup_sw2()
  {
@@ -175,7 +197,7 @@ index 112cfd8a10ad..70a7d87ba2d2 100755
  	local local_addr=192.0.2.34
  	local remote_addr=192.0.2.33
  	local veth_addr=192.0.2.50
-@@ -229,11 +226,7 @@ setup()
+@@ -291,11 +288,7 @@ setup()
  
  cleanup()
  {
@@ -184,571 +206,558 @@ index 112cfd8a10ad..70a7d87ba2d2 100755
 -	for ns in h1 h2 sw1 sw2; do
 -		ip netns del $ns &> /dev/null
 -	done
-+	cleanup_ns $sw1 $sw2
++	cleanup_ns $h1 $h2 $sw1 $sw2
  }
  
  ################################################################################
-@@ -248,85 +241,85 @@ backup_port()
- 	echo "Backup port"
- 	echo "-----------"
- 
--	run_cmd "tc -n sw1 qdisc replace dev swp1 clsact"
--	run_cmd "tc -n sw1 filter replace dev swp1 egress pref 1 handle 101 proto ip flower src_mac $smac dst_mac $dmac action pass"
-+	run_cmd "tc -n $sw1 qdisc replace dev swp1 clsact"
-+	run_cmd "tc -n $sw1 filter replace dev swp1 egress pref 1 handle 101 proto ip flower src_mac $smac dst_mac $dmac action pass"
+@@ -312,80 +305,80 @@ neigh_suppress_arp_common()
+ 	echo "Per-port ARP suppression - VLAN $vid"
+ 	echo "----------------------------------"
  
 -	run_cmd "tc -n sw1 qdisc replace dev vx0 clsact"
--	run_cmd "tc -n sw1 filter replace dev vx0 egress pref 1 handle 101 proto ip flower src_mac $smac dst_mac $dmac action pass"
+-	run_cmd "tc -n sw1 filter replace dev vx0 egress pref 1 handle 101 proto 0x0806 flower indev swp1 arp_tip $tip arp_sip $sip arp_op request action pass"
 +	run_cmd "tc -n $sw1 qdisc replace dev vx0 clsact"
-+	run_cmd "tc -n $sw1 filter replace dev vx0 egress pref 1 handle 101 proto ip flower src_mac $smac dst_mac $dmac action pass"
++	run_cmd "tc -n $sw1 filter replace dev vx0 egress pref 1 handle 101 proto 0x0806 flower indev swp1 arp_tip $tip arp_sip $sip arp_op request action pass"
  
--	run_cmd "bridge -n sw1 fdb replace $dmac dev swp1 master static vlan 10"
-+	run_cmd "bridge -n $sw1 fdb replace $dmac dev swp1 master static vlan 10"
- 
- 	# Initial state - check that packets are forwarded out of swp1 when it
- 	# has a carrier and not forwarded out of any port when it does not have
- 	# a carrier.
--	run_cmd "ip netns exec sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
--	tc_check_packets sw1 "dev swp1 egress" 101 1
-+	run_cmd "ip netns exec $sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
-+	tc_check_packets $sw1 "dev swp1 egress" 101 1
- 	log_test $? 0 "Forwarding out of swp1"
--	tc_check_packets sw1 "dev vx0 egress" 101 0
-+	tc_check_packets $sw1 "dev vx0 egress" 101 0
- 	log_test $? 0 "No forwarding out of vx0"
- 
--	run_cmd "ip -n sw1 link set dev swp1 carrier off"
-+	run_cmd "ip -n $sw1 link set dev swp1 carrier off"
- 	log_test $? 0 "swp1 carrier off"
- 
--	run_cmd "ip netns exec sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
--	tc_check_packets sw1 "dev swp1 egress" 101 1
-+	run_cmd "ip netns exec $sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
-+	tc_check_packets $sw1 "dev swp1 egress" 101 1
- 	log_test $? 0 "No forwarding out of swp1"
--	tc_check_packets sw1 "dev vx0 egress" 101 0
-+	tc_check_packets $sw1 "dev vx0 egress" 101 0
- 	log_test $? 0 "No forwarding out of vx0"
- 
--	run_cmd "ip -n sw1 link set dev swp1 carrier on"
-+	run_cmd "ip -n $sw1 link set dev swp1 carrier on"
- 	log_test $? 0 "swp1 carrier on"
- 
- 	# Configure vx0 as the backup port of swp1 and check that packets are
- 	# forwarded out of swp1 when it has a carrier and out of vx0 when swp1
- 	# does not have a carrier.
--	run_cmd "bridge -n sw1 link set dev swp1 backup_port vx0"
--	run_cmd "bridge -n sw1 -d link show dev swp1 | grep \"backup_port vx0\""
-+	run_cmd "bridge -n $sw1 link set dev swp1 backup_port vx0"
-+	run_cmd "bridge -n $sw1 -d link show dev swp1 | grep \"backup_port vx0\""
- 	log_test $? 0 "vx0 configured as backup port of swp1"
- 
--	run_cmd "ip netns exec sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
--	tc_check_packets sw1 "dev swp1 egress" 101 2
-+	run_cmd "ip netns exec $sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
-+	tc_check_packets $sw1 "dev swp1 egress" 101 2
- 	log_test $? 0 "Forwarding out of swp1"
--	tc_check_packets sw1 "dev vx0 egress" 101 0
-+	tc_check_packets $sw1 "dev vx0 egress" 101 0
- 	log_test $? 0 "No forwarding out of vx0"
- 
--	run_cmd "ip -n sw1 link set dev swp1 carrier off"
-+	run_cmd "ip -n $sw1 link set dev swp1 carrier off"
- 	log_test $? 0 "swp1 carrier off"
- 
--	run_cmd "ip netns exec sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
--	tc_check_packets sw1 "dev swp1 egress" 101 2
-+	run_cmd "ip netns exec $sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
-+	tc_check_packets $sw1 "dev swp1 egress" 101 2
- 	log_test $? 0 "No forwarding out of swp1"
+ 	# Initial state - check that ARP requests are not suppressed and that
+ 	# ARP replies are received.
+-	run_cmd "ip netns exec h1 arping -q -b -c 1 -w 5 -s $sip -I eth0.$vid $tip"
++	run_cmd "ip netns exec $h1 arping -q -b -c 1 -w 5 -s $sip -I eth0.$vid $tip"
+ 	log_test $? 0 "arping"
 -	tc_check_packets sw1 "dev vx0 egress" 101 1
 +	tc_check_packets $sw1 "dev vx0 egress" 101 1
- 	log_test $? 0 "Forwarding out of vx0"
+ 	log_test $? 0 "ARP suppression"
  
--	run_cmd "ip -n sw1 link set dev swp1 carrier on"
-+	run_cmd "ip -n $sw1 link set dev swp1 carrier on"
- 	log_test $? 0 "swp1 carrier on"
+ 	# Enable neighbor suppression and check that nothing changes compared
+ 	# to the initial state.
+-	run_cmd "bridge -n sw1 link set dev vx0 neigh_suppress on"
+-	run_cmd "bridge -n sw1 -d link show dev vx0 | grep \"neigh_suppress on\""
++	run_cmd "bridge -n $sw1 link set dev vx0 neigh_suppress on"
++	run_cmd "bridge -n $sw1 -d link show dev vx0 | grep \"neigh_suppress on\""
+ 	log_test $? 0 "\"neigh_suppress\" is on"
  
--	run_cmd "ip netns exec sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
--	tc_check_packets sw1 "dev swp1 egress" 101 3
-+	run_cmd "ip netns exec $sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
-+	tc_check_packets $sw1 "dev swp1 egress" 101 3
- 	log_test $? 0 "Forwarding out of swp1"
--	tc_check_packets sw1 "dev vx0 egress" 101 1
-+	tc_check_packets $sw1 "dev vx0 egress" 101 1
- 	log_test $? 0 "No forwarding out of vx0"
- 
- 	# Remove vx0 as the backup port of swp1 and check that packets are no
- 	# longer forwarded out of vx0 when swp1 does not have a carrier.
--	run_cmd "bridge -n sw1 link set dev swp1 nobackup_port"
--	run_cmd "bridge -n sw1 -d link show dev swp1 | grep \"backup_port vx0\""
-+	run_cmd "bridge -n $sw1 link set dev swp1 nobackup_port"
-+	run_cmd "bridge -n $sw1 -d link show dev swp1 | grep \"backup_port vx0\""
- 	log_test $? 1 "vx0 not configured as backup port of swp1"
- 
--	run_cmd "ip netns exec sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
--	tc_check_packets sw1 "dev swp1 egress" 101 4
-+	run_cmd "ip netns exec $sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
-+	tc_check_packets $sw1 "dev swp1 egress" 101 4
- 	log_test $? 0 "Forwarding out of swp1"
--	tc_check_packets sw1 "dev vx0 egress" 101 1
-+	tc_check_packets $sw1 "dev vx0 egress" 101 1
- 	log_test $? 0 "No forwarding out of vx0"
- 
--	run_cmd "ip -n sw1 link set dev swp1 carrier off"
-+	run_cmd "ip -n $sw1 link set dev swp1 carrier off"
- 	log_test $? 0 "swp1 carrier off"
- 
--	run_cmd "ip netns exec sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
--	tc_check_packets sw1 "dev swp1 egress" 101 4
-+	run_cmd "ip netns exec $sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
-+	tc_check_packets $sw1 "dev swp1 egress" 101 4
- 	log_test $? 0 "No forwarding out of swp1"
--	tc_check_packets sw1 "dev vx0 egress" 101 1
-+	tc_check_packets $sw1 "dev vx0 egress" 101 1
- 	log_test $? 0 "No forwarding out of vx0"
- }
- 
-@@ -339,125 +332,125 @@ backup_nhid()
- 	echo "Backup nexthop ID"
- 	echo "-----------------"
- 
--	run_cmd "tc -n sw1 qdisc replace dev swp1 clsact"
--	run_cmd "tc -n sw1 filter replace dev swp1 egress pref 1 handle 101 proto ip flower src_mac $smac dst_mac $dmac action pass"
-+	run_cmd "tc -n $sw1 qdisc replace dev swp1 clsact"
-+	run_cmd "tc -n $sw1 filter replace dev swp1 egress pref 1 handle 101 proto ip flower src_mac $smac dst_mac $dmac action pass"
- 
--	run_cmd "tc -n sw1 qdisc replace dev vx0 clsact"
--	run_cmd "tc -n sw1 filter replace dev vx0 egress pref 1 handle 101 proto ip flower src_mac $smac dst_mac $dmac action pass"
-+	run_cmd "tc -n $sw1 qdisc replace dev vx0 clsact"
-+	run_cmd "tc -n $sw1 filter replace dev vx0 egress pref 1 handle 101 proto ip flower src_mac $smac dst_mac $dmac action pass"
- 
--	run_cmd "ip -n sw1 nexthop replace id 1 via 192.0.2.34 fdb"
--	run_cmd "ip -n sw1 nexthop replace id 2 via 192.0.2.34 fdb"
--	run_cmd "ip -n sw1 nexthop replace id 10 group 1/2 fdb"
-+	run_cmd "ip -n $sw1 nexthop replace id 1 via 192.0.2.34 fdb"
-+	run_cmd "ip -n $sw1 nexthop replace id 2 via 192.0.2.34 fdb"
-+	run_cmd "ip -n $sw1 nexthop replace id 10 group 1/2 fdb"
- 
--	run_cmd "bridge -n sw1 fdb replace $dmac dev swp1 master static vlan 10"
--	run_cmd "bridge -n sw1 fdb replace $dmac dev vx0 self static dst 192.0.2.36 src_vni 10010"
-+	run_cmd "bridge -n $sw1 fdb replace $dmac dev swp1 master static vlan 10"
-+	run_cmd "bridge -n $sw1 fdb replace $dmac dev vx0 self static dst 192.0.2.36 src_vni 10010"
- 
--	run_cmd "ip -n sw2 address replace 192.0.2.36/32 dev lo"
-+	run_cmd "ip -n $sw2 address replace 192.0.2.36/32 dev lo"
- 
- 	# The first filter matches on packets forwarded using the backup
- 	# nexthop ID and the second filter matches on packets forwarded using a
- 	# regular VXLAN FDB entry.
--	run_cmd "tc -n sw2 qdisc replace dev vx0 clsact"
--	run_cmd "tc -n sw2 filter replace dev vx0 ingress pref 1 handle 101 proto ip flower src_mac $smac dst_mac $dmac enc_key_id 10010 enc_dst_ip 192.0.2.34 action pass"
--	run_cmd "tc -n sw2 filter replace dev vx0 ingress pref 1 handle 102 proto ip flower src_mac $smac dst_mac $dmac enc_key_id 10010 enc_dst_ip 192.0.2.36 action pass"
-+	run_cmd "tc -n $sw2 qdisc replace dev vx0 clsact"
-+	run_cmd "tc -n $sw2 filter replace dev vx0 ingress pref 1 handle 101 proto ip flower src_mac $smac dst_mac $dmac enc_key_id 10010 enc_dst_ip 192.0.2.34 action pass"
-+	run_cmd "tc -n $sw2 filter replace dev vx0 ingress pref 1 handle 102 proto ip flower src_mac $smac dst_mac $dmac enc_key_id 10010 enc_dst_ip 192.0.2.36 action pass"
- 
- 	# Configure vx0 as the backup port of swp1 and check that packets are
- 	# forwarded out of swp1 when it has a carrier and out of vx0 when swp1
- 	# does not have a carrier. When packets are forwarded out of vx0, check
- 	# that they are forwarded by the VXLAN FDB entry.
--	run_cmd "bridge -n sw1 link set dev swp1 backup_port vx0"
--	run_cmd "bridge -n sw1 -d link show dev swp1 | grep \"backup_port vx0\""
-+	run_cmd "bridge -n $sw1 link set dev swp1 backup_port vx0"
-+	run_cmd "bridge -n $sw1 -d link show dev swp1 | grep \"backup_port vx0\""
- 	log_test $? 0 "vx0 configured as backup port of swp1"
- 
--	run_cmd "ip netns exec sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
--	tc_check_packets sw1 "dev swp1 egress" 101 1
-+	run_cmd "ip netns exec $sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
-+	tc_check_packets $sw1 "dev swp1 egress" 101 1
- 	log_test $? 0 "Forwarding out of swp1"
--	tc_check_packets sw1 "dev vx0 egress" 101 0
-+	tc_check_packets $sw1 "dev vx0 egress" 101 0
- 	log_test $? 0 "No forwarding out of vx0"
- 
--	run_cmd "ip -n sw1 link set dev swp1 carrier off"
-+	run_cmd "ip -n $sw1 link set dev swp1 carrier off"
- 	log_test $? 0 "swp1 carrier off"
- 
--	run_cmd "ip netns exec sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
--	tc_check_packets sw1 "dev swp1 egress" 101 1
-+	run_cmd "ip netns exec $sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
-+	tc_check_packets $sw1 "dev swp1 egress" 101 1
- 	log_test $? 0 "No forwarding out of swp1"
--	tc_check_packets sw1 "dev vx0 egress" 101 1
-+	tc_check_packets $sw1 "dev vx0 egress" 101 1
- 	log_test $? 0 "Forwarding out of vx0"
--	tc_check_packets sw2 "dev vx0 ingress" 101 0
-+	tc_check_packets $sw2 "dev vx0 ingress" 101 0
- 	log_test $? 0 "No forwarding using backup nexthop ID"
--	tc_check_packets sw2 "dev vx0 ingress" 102 1
-+	tc_check_packets $sw2 "dev vx0 ingress" 102 1
- 	log_test $? 0 "Forwarding using VXLAN FDB entry"
- 
--	run_cmd "ip -n sw1 link set dev swp1 carrier on"
-+	run_cmd "ip -n $sw1 link set dev swp1 carrier on"
- 	log_test $? 0 "swp1 carrier on"
- 
- 	# Configure nexthop ID 10 as the backup nexthop ID of swp1 and check
- 	# that when packets are forwarded out of vx0, they are forwarded using
- 	# the backup nexthop ID.
--	run_cmd "bridge -n sw1 link set dev swp1 backup_nhid 10"
--	run_cmd "bridge -n sw1 -d link show dev swp1 | grep \"backup_nhid 10\""
-+	run_cmd "bridge -n $sw1 link set dev swp1 backup_nhid 10"
-+	run_cmd "bridge -n $sw1 -d link show dev swp1 | grep \"backup_nhid 10\""
- 	log_test $? 0 "nexthop ID 10 configured as backup nexthop ID of swp1"
- 
--	run_cmd "ip netns exec sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
--	tc_check_packets sw1 "dev swp1 egress" 101 2
-+	run_cmd "ip netns exec $sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
-+	tc_check_packets $sw1 "dev swp1 egress" 101 2
- 	log_test $? 0 "Forwarding out of swp1"
--	tc_check_packets sw1 "dev vx0 egress" 101 1
-+	tc_check_packets $sw1 "dev vx0 egress" 101 1
- 	log_test $? 0 "No forwarding out of vx0"
- 
--	run_cmd "ip -n sw1 link set dev swp1 carrier off"
-+	run_cmd "ip -n $sw1 link set dev swp1 carrier off"
- 	log_test $? 0 "swp1 carrier off"
- 
--	run_cmd "ip netns exec sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
--	tc_check_packets sw1 "dev swp1 egress" 101 2
-+	run_cmd "ip netns exec $sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
-+	tc_check_packets $sw1 "dev swp1 egress" 101 2
- 	log_test $? 0 "No forwarding out of swp1"
+-	run_cmd "ip netns exec h1 arping -q -b -c 1 -w 5 -s $sip -I eth0.$vid $tip"
++	run_cmd "ip netns exec $h1 arping -q -b -c 1 -w 5 -s $sip -I eth0.$vid $tip"
+ 	log_test $? 0 "arping"
 -	tc_check_packets sw1 "dev vx0 egress" 101 2
 +	tc_check_packets $sw1 "dev vx0 egress" 101 2
- 	log_test $? 0 "Forwarding out of vx0"
--	tc_check_packets sw2 "dev vx0 ingress" 101 1
-+	tc_check_packets $sw2 "dev vx0 ingress" 101 1
- 	log_test $? 0 "Forwarding using backup nexthop ID"
--	tc_check_packets sw2 "dev vx0 ingress" 102 1
-+	tc_check_packets $sw2 "dev vx0 ingress" 102 1
- 	log_test $? 0 "No forwarding using VXLAN FDB entry"
+ 	log_test $? 0 "ARP suppression"
  
--	run_cmd "ip -n sw1 link set dev swp1 carrier on"
-+	run_cmd "ip -n $sw1 link set dev swp1 carrier on"
- 	log_test $? 0 "swp1 carrier on"
+ 	# Install an FDB entry for the remote host and check that nothing
+ 	# changes compared to the initial state.
+-	h2_mac=$(ip -n h2 -j -p link show eth0.$vid | jq -r '.[]["address"]')
+-	run_cmd "bridge -n sw1 fdb replace $h2_mac dev vx0 master static vlan $vid"
++	h2_mac=$(ip -n $h2 -j -p link show eth0.$vid | jq -r '.[]["address"]')
++	run_cmd "bridge -n $sw1 fdb replace $h2_mac dev vx0 master static vlan $vid"
+ 	log_test $? 0 "FDB entry installation"
  
--	run_cmd "ip netns exec sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
--	tc_check_packets sw1 "dev swp1 egress" 101 3
-+	run_cmd "ip netns exec $sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
-+	tc_check_packets $sw1 "dev swp1 egress" 101 3
- 	log_test $? 0 "Forwarding out of swp1"
--	tc_check_packets sw1 "dev vx0 egress" 101 2
-+	tc_check_packets $sw1 "dev vx0 egress" 101 2
- 	log_test $? 0 "No forwarding out of vx0"
--	tc_check_packets sw2 "dev vx0 ingress" 101 1
-+	tc_check_packets $sw2 "dev vx0 ingress" 101 1
- 	log_test $? 0 "No forwarding using backup nexthop ID"
--	tc_check_packets sw2 "dev vx0 ingress" 102 1
-+	tc_check_packets $sw2 "dev vx0 ingress" 102 1
- 	log_test $? 0 "No forwarding using VXLAN FDB entry"
- 
- 	# Reset the backup nexthop ID to 0 and check that packets are no longer
- 	# forwarded using the backup nexthop ID when swp1 does not have a
- 	# carrier and are instead forwarded by the VXLAN FDB.
--	run_cmd "bridge -n sw1 link set dev swp1 backup_nhid 0"
--	run_cmd "bridge -n sw1 -d link show dev swp1 | grep \"backup_nhid\""
-+	run_cmd "bridge -n $sw1 link set dev swp1 backup_nhid 0"
-+	run_cmd "bridge -n $sw1 -d link show dev swp1 | grep \"backup_nhid\""
- 	log_test $? 1 "No backup nexthop ID configured for swp1"
- 
--	run_cmd "ip netns exec sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
--	tc_check_packets sw1 "dev swp1 egress" 101 4
-+	run_cmd "ip netns exec $sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
-+	tc_check_packets $sw1 "dev swp1 egress" 101 4
- 	log_test $? 0 "Forwarding out of swp1"
--	tc_check_packets sw1 "dev vx0 egress" 101 2
-+	tc_check_packets $sw1 "dev vx0 egress" 101 2
- 	log_test $? 0 "No forwarding out of vx0"
--	tc_check_packets sw2 "dev vx0 ingress" 101 1
-+	tc_check_packets $sw2 "dev vx0 ingress" 101 1
- 	log_test $? 0 "No forwarding using backup nexthop ID"
--	tc_check_packets sw2 "dev vx0 ingress" 102 1
-+	tc_check_packets $sw2 "dev vx0 ingress" 102 1
- 	log_test $? 0 "No forwarding using VXLAN FDB entry"
- 
--	run_cmd "ip -n sw1 link set dev swp1 carrier off"
-+	run_cmd "ip -n $sw1 link set dev swp1 carrier off"
- 	log_test $? 0 "swp1 carrier off"
- 
--	run_cmd "ip netns exec sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
--	tc_check_packets sw1 "dev swp1 egress" 101 4
-+	run_cmd "ip netns exec $sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
-+	tc_check_packets $sw1 "dev swp1 egress" 101 4
- 	log_test $? 0 "No forwarding out of swp1"
+-	run_cmd "ip netns exec h1 arping -q -b -c 1 -w 5 -s $sip -I eth0.$vid $tip"
++	run_cmd "ip netns exec $h1 arping -q -b -c 1 -w 5 -s $sip -I eth0.$vid $tip"
+ 	log_test $? 0 "arping"
 -	tc_check_packets sw1 "dev vx0 egress" 101 3
 +	tc_check_packets $sw1 "dev vx0 egress" 101 3
- 	log_test $? 0 "Forwarding out of vx0"
--	tc_check_packets sw2 "dev vx0 ingress" 101 1
-+	tc_check_packets $sw2 "dev vx0 ingress" 101 1
- 	log_test $? 0 "No forwarding using backup nexthop ID"
--	tc_check_packets sw2 "dev vx0 ingress" 102 2
-+	tc_check_packets $sw2 "dev vx0 ingress" 102 2
- 	log_test $? 0 "Forwarding using VXLAN FDB entry"
- }
+ 	log_test $? 0 "ARP suppression"
  
-@@ -475,109 +468,109 @@ backup_nhid_invalid()
- 	# is forwarded out of the VXLAN port, but dropped by the VXLAN driver
- 	# and does not crash the host.
+ 	# Install a neighbor on the matching SVI interface and check that ARP
+ 	# requests are suppressed.
+-	run_cmd "ip -n sw1 neigh replace $tip lladdr $h2_mac nud permanent dev br0.$vid"
++	run_cmd "ip -n $sw1 neigh replace $tip lladdr $h2_mac nud permanent dev br0.$vid"
+ 	log_test $? 0 "Neighbor entry installation"
  
--	run_cmd "tc -n sw1 qdisc replace dev swp1 clsact"
--	run_cmd "tc -n sw1 filter replace dev swp1 egress pref 1 handle 101 proto ip flower src_mac $smac dst_mac $dmac action pass"
-+	run_cmd "tc -n $sw1 qdisc replace dev swp1 clsact"
-+	run_cmd "tc -n $sw1 filter replace dev swp1 egress pref 1 handle 101 proto ip flower src_mac $smac dst_mac $dmac action pass"
- 
--	run_cmd "tc -n sw1 qdisc replace dev vx0 clsact"
--	run_cmd "tc -n sw1 filter replace dev vx0 egress pref 1 handle 101 proto ip flower src_mac $smac dst_mac $dmac action pass"
-+	run_cmd "tc -n $sw1 qdisc replace dev vx0 clsact"
-+	run_cmd "tc -n $sw1 filter replace dev vx0 egress pref 1 handle 101 proto ip flower src_mac $smac dst_mac $dmac action pass"
- 	# Drop all other Tx traffic to avoid changes to Tx drop counter.
--	run_cmd "tc -n sw1 filter replace dev vx0 egress pref 2 handle 102 proto all matchall action drop"
-+	run_cmd "tc -n $sw1 filter replace dev vx0 egress pref 2 handle 102 proto all matchall action drop"
- 
--	tx_drop=$(ip -n sw1 -s -j link show dev vx0 | jq '.[]["stats64"]["tx"]["dropped"]')
-+	tx_drop=$(ip -n $sw1 -s -j link show dev vx0 | jq '.[]["stats64"]["tx"]["dropped"]')
- 
--	run_cmd "ip -n sw1 nexthop replace id 1 via 192.0.2.34 fdb"
--	run_cmd "ip -n sw1 nexthop replace id 2 via 192.0.2.34 fdb"
--	run_cmd "ip -n sw1 nexthop replace id 10 group 1/2 fdb"
-+	run_cmd "ip -n $sw1 nexthop replace id 1 via 192.0.2.34 fdb"
-+	run_cmd "ip -n $sw1 nexthop replace id 2 via 192.0.2.34 fdb"
-+	run_cmd "ip -n $sw1 nexthop replace id 10 group 1/2 fdb"
- 
--	run_cmd "bridge -n sw1 fdb replace $dmac dev swp1 master static vlan 10"
-+	run_cmd "bridge -n $sw1 fdb replace $dmac dev swp1 master static vlan 10"
- 
--	run_cmd "tc -n sw2 qdisc replace dev vx0 clsact"
--	run_cmd "tc -n sw2 filter replace dev vx0 ingress pref 1 handle 101 proto ip flower src_mac $smac dst_mac $dmac enc_key_id 10010 enc_dst_ip 192.0.2.34 action pass"
-+	run_cmd "tc -n $sw2 qdisc replace dev vx0 clsact"
-+	run_cmd "tc -n $sw2 filter replace dev vx0 ingress pref 1 handle 101 proto ip flower src_mac $smac dst_mac $dmac enc_key_id 10010 enc_dst_ip 192.0.2.34 action pass"
- 
- 	# First, check that redirection works.
--	run_cmd "bridge -n sw1 link set dev swp1 backup_port vx0"
--	run_cmd "bridge -n sw1 -d link show dev swp1 | grep \"backup_port vx0\""
-+	run_cmd "bridge -n $sw1 link set dev swp1 backup_port vx0"
-+	run_cmd "bridge -n $sw1 -d link show dev swp1 | grep \"backup_port vx0\""
- 	log_test $? 0 "vx0 configured as backup port of swp1"
- 
--	run_cmd "bridge -n sw1 link set dev swp1 backup_nhid 10"
--	run_cmd "bridge -n sw1 -d link show dev swp1 | grep \"backup_nhid 10\""
-+	run_cmd "bridge -n $sw1 link set dev swp1 backup_nhid 10"
-+	run_cmd "bridge -n $sw1 -d link show dev swp1 | grep \"backup_nhid 10\""
- 	log_test $? 0 "Valid nexthop as backup nexthop"
- 
--	run_cmd "ip -n sw1 link set dev swp1 carrier off"
-+	run_cmd "ip -n $sw1 link set dev swp1 carrier off"
- 	log_test $? 0 "swp1 carrier off"
- 
--	run_cmd "ip netns exec sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
--	tc_check_packets sw1 "dev swp1 egress" 101 0
-+	run_cmd "ip netns exec $sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
-+	tc_check_packets $sw1 "dev swp1 egress" 101 0
- 	log_test $? 0 "No forwarding out of swp1"
--	tc_check_packets sw1 "dev vx0 egress" 101 1
-+	tc_check_packets $sw1 "dev vx0 egress" 101 1
- 	log_test $? 0 "Forwarding out of vx0"
--	tc_check_packets sw2 "dev vx0 ingress" 101 1
-+	tc_check_packets $sw2 "dev vx0 ingress" 101 1
- 	log_test $? 0 "Forwarding using backup nexthop ID"
--	run_cmd "ip -n sw1 -s -j link show dev vx0 | jq -e '.[][\"stats64\"][\"tx\"][\"dropped\"] == $tx_drop'"
-+	run_cmd "ip -n $sw1 -s -j link show dev vx0 | jq -e '.[][\"stats64\"][\"tx\"][\"dropped\"] == $tx_drop'"
- 	log_test $? 0 "No Tx drop increase"
- 
- 	# Use a non-existent nexthop ID.
--	run_cmd "bridge -n sw1 link set dev swp1 backup_nhid 20"
--	run_cmd "bridge -n sw1 -d link show dev swp1 | grep \"backup_nhid 20\""
-+	run_cmd "bridge -n $sw1 link set dev swp1 backup_nhid 20"
-+	run_cmd "bridge -n $sw1 -d link show dev swp1 | grep \"backup_nhid 20\""
- 	log_test $? 0 "Non-existent nexthop as backup nexthop"
- 
--	run_cmd "ip netns exec sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
--	tc_check_packets sw1 "dev swp1 egress" 101 0
-+	run_cmd "ip netns exec $sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
-+	tc_check_packets $sw1 "dev swp1 egress" 101 0
- 	log_test $? 0 "No forwarding out of swp1"
--	tc_check_packets sw1 "dev vx0 egress" 101 2
-+	tc_check_packets $sw1 "dev vx0 egress" 101 2
- 	log_test $? 0 "Forwarding out of vx0"
--	tc_check_packets sw2 "dev vx0 ingress" 101 1
-+	tc_check_packets $sw2 "dev vx0 ingress" 101 1
- 	log_test $? 0 "No forwarding using backup nexthop ID"
--	run_cmd "ip -n sw1 -s -j link show dev vx0 | jq -e '.[][\"stats64\"][\"tx\"][\"dropped\"] == $((tx_drop + 1))'"
-+	run_cmd "ip -n $sw1 -s -j link show dev vx0 | jq -e '.[][\"stats64\"][\"tx\"][\"dropped\"] == $((tx_drop + 1))'"
- 	log_test $? 0 "Tx drop increased"
- 
- 	# Use a blckhole nexthop.
--	run_cmd "ip -n sw1 nexthop replace id 30 blackhole"
--	run_cmd "bridge -n sw1 link set dev swp1 backup_nhid 30"
--	run_cmd "bridge -n sw1 -d link show dev swp1 | grep \"backup_nhid 30\""
-+	run_cmd "ip -n $sw1 nexthop replace id 30 blackhole"
-+	run_cmd "bridge -n $sw1 link set dev swp1 backup_nhid 30"
-+	run_cmd "bridge -n $sw1 -d link show dev swp1 | grep \"backup_nhid 30\""
- 	log_test $? 0 "Blackhole nexthop as backup nexthop"
- 
--	run_cmd "ip netns exec sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
--	tc_check_packets sw1 "dev swp1 egress" 101 0
-+	run_cmd "ip netns exec $sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
-+	tc_check_packets $sw1 "dev swp1 egress" 101 0
- 	log_test $? 0 "No forwarding out of swp1"
+-	run_cmd "ip netns exec h1 arping -q -b -c 1 -w 5 -s $sip -I eth0.$vid $tip"
++	run_cmd "ip netns exec $h1 arping -q -b -c 1 -w 5 -s $sip -I eth0.$vid $tip"
+ 	log_test $? 0 "arping"
 -	tc_check_packets sw1 "dev vx0 egress" 101 3
 +	tc_check_packets $sw1 "dev vx0 egress" 101 3
- 	log_test $? 0 "Forwarding out of vx0"
--	tc_check_packets sw2 "dev vx0 ingress" 101 1
-+	tc_check_packets $sw2 "dev vx0 ingress" 101 1
- 	log_test $? 0 "No forwarding using backup nexthop ID"
--	run_cmd "ip -n sw1 -s -j link show dev vx0 | jq -e '.[][\"stats64\"][\"tx\"][\"dropped\"] == $((tx_drop + 2))'"
-+	run_cmd "ip -n $sw1 -s -j link show dev vx0 | jq -e '.[][\"stats64\"][\"tx\"][\"dropped\"] == $((tx_drop + 2))'"
- 	log_test $? 0 "Tx drop increased"
+ 	log_test $? 0 "ARP suppression"
  
- 	# Non-group FDB nexthop.
--	run_cmd "bridge -n sw1 link set dev swp1 backup_nhid 1"
--	run_cmd "bridge -n sw1 -d link show dev swp1 | grep \"backup_nhid 1\""
-+	run_cmd "bridge -n $sw1 link set dev swp1 backup_nhid 1"
-+	run_cmd "bridge -n $sw1 -d link show dev swp1 | grep \"backup_nhid 1\""
- 	log_test $? 0 "Non-group FDB nexthop as backup nexthop"
+ 	# Take the second host down and check that ARP requests are suppressed
+ 	# and that ARP replies are received.
+-	run_cmd "ip -n h2 link set dev eth0.$vid down"
++	run_cmd "ip -n $h2 link set dev eth0.$vid down"
+ 	log_test $? 0 "H2 down"
  
--	run_cmd "ip netns exec sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
--	tc_check_packets sw1 "dev swp1 egress" 101 0
-+	run_cmd "ip netns exec $sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
-+	tc_check_packets $sw1 "dev swp1 egress" 101 0
- 	log_test $? 0 "No forwarding out of swp1"
+-	run_cmd "ip netns exec h1 arping -q -b -c 1 -w 5 -s $sip -I eth0.$vid $tip"
++	run_cmd "ip netns exec $h1 arping -q -b -c 1 -w 5 -s $sip -I eth0.$vid $tip"
+ 	log_test $? 0 "arping"
+-	tc_check_packets sw1 "dev vx0 egress" 101 3
++	tc_check_packets $sw1 "dev vx0 egress" 101 3
+ 	log_test $? 0 "ARP suppression"
+ 
+-	run_cmd "ip -n h2 link set dev eth0.$vid up"
++	run_cmd "ip -n $h2 link set dev eth0.$vid up"
+ 	log_test $? 0 "H2 up"
+ 
+ 	# Disable neighbor suppression and check that ARP requests are no
+ 	# longer suppressed.
+-	run_cmd "bridge -n sw1 link set dev vx0 neigh_suppress off"
+-	run_cmd "bridge -n sw1 -d link show dev vx0 | grep \"neigh_suppress off\""
++	run_cmd "bridge -n $sw1 link set dev vx0 neigh_suppress off"
++	run_cmd "bridge -n $sw1 -d link show dev vx0 | grep \"neigh_suppress off\""
+ 	log_test $? 0 "\"neigh_suppress\" is off"
+ 
+-	run_cmd "ip netns exec h1 arping -q -b -c 1 -w 5 -s $sip -I eth0.$vid $tip"
++	run_cmd "ip netns exec $h1 arping -q -b -c 1 -w 5 -s $sip -I eth0.$vid $tip"
+ 	log_test $? 0 "arping"
 -	tc_check_packets sw1 "dev vx0 egress" 101 4
 +	tc_check_packets $sw1 "dev vx0 egress" 101 4
- 	log_test $? 0 "Forwarding out of vx0"
--	tc_check_packets sw2 "dev vx0 ingress" 101 1
-+	tc_check_packets $sw2 "dev vx0 ingress" 101 1
- 	log_test $? 0 "No forwarding using backup nexthop ID"
--	run_cmd "ip -n sw1 -s -j link show dev vx0 | jq -e '.[][\"stats64\"][\"tx\"][\"dropped\"] == $((tx_drop + 3))'"
-+	run_cmd "ip -n $sw1 -s -j link show dev vx0 | jq -e '.[][\"stats64\"][\"tx\"][\"dropped\"] == $((tx_drop + 3))'"
- 	log_test $? 0 "Tx drop increased"
+ 	log_test $? 0 "ARP suppression"
  
- 	# IPv6 address family nexthop.
--	run_cmd "ip -n sw1 nexthop replace id 100 via 2001:db8:100::1 fdb"
--	run_cmd "ip -n sw1 nexthop replace id 200 via 2001:db8:100::1 fdb"
--	run_cmd "ip -n sw1 nexthop replace id 300 group 100/200 fdb"
--	run_cmd "bridge -n sw1 link set dev swp1 backup_nhid 300"
--	run_cmd "bridge -n sw1 -d link show dev swp1 | grep \"backup_nhid 300\""
-+	run_cmd "ip -n $sw1 nexthop replace id 100 via 2001:db8:100::1 fdb"
-+	run_cmd "ip -n $sw1 nexthop replace id 200 via 2001:db8:100::1 fdb"
-+	run_cmd "ip -n $sw1 nexthop replace id 300 group 100/200 fdb"
-+	run_cmd "bridge -n $sw1 link set dev swp1 backup_nhid 300"
-+	run_cmd "bridge -n $sw1 -d link show dev swp1 | grep \"backup_nhid 300\""
- 	log_test $? 0 "IPv6 address family nexthop as backup nexthop"
+ 	# Take the second host down and check that ARP requests are not
+ 	# suppressed and that ARP replies are not received.
+-	run_cmd "ip -n h2 link set dev eth0.$vid down"
++	run_cmd "ip -n $h2 link set dev eth0.$vid down"
+ 	log_test $? 0 "H2 down"
  
--	run_cmd "ip netns exec sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
--	tc_check_packets sw1 "dev swp1 egress" 101 0
-+	run_cmd "ip netns exec $sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 1"
-+	tc_check_packets $sw1 "dev swp1 egress" 101 0
- 	log_test $? 0 "No forwarding out of swp1"
+-	run_cmd "ip netns exec h1 arping -q -b -c 1 -w 5 -s $sip -I eth0.$vid $tip"
++	run_cmd "ip netns exec $h1 arping -q -b -c 1 -w 5 -s $sip -I eth0.$vid $tip"
+ 	log_test $? 1 "arping"
 -	tc_check_packets sw1 "dev vx0 egress" 101 5
 +	tc_check_packets $sw1 "dev vx0 egress" 101 5
- 	log_test $? 0 "Forwarding out of vx0"
--	tc_check_packets sw2 "dev vx0 ingress" 101 1
-+	tc_check_packets $sw2 "dev vx0 ingress" 101 1
- 	log_test $? 0 "No forwarding using backup nexthop ID"
--	run_cmd "ip -n sw1 -s -j link show dev vx0 | jq -e '.[][\"stats64\"][\"tx\"][\"dropped\"] == $((tx_drop + 4))'"
-+	run_cmd "ip -n $sw1 -s -j link show dev vx0 | jq -e '.[][\"stats64\"][\"tx\"][\"dropped\"] == $((tx_drop + 4))'"
- 	log_test $? 0 "Tx drop increased"
+ 	log_test $? 0 "ARP suppression"
  }
  
-@@ -591,44 +584,44 @@ backup_nhid_ping()
- 	echo "------------------------"
+@@ -415,80 +408,80 @@ neigh_suppress_ns_common()
+ 	echo "Per-port NS suppression - VLAN $vid"
+ 	echo "---------------------------------"
  
- 	# Test bidirectional traffic when traffic is redirected in both VTEPs.
--	sw1_mac=$(ip -n sw1 -j -p link show br0.10 | jq -r '.[]["address"]')
--	sw2_mac=$(ip -n sw2 -j -p link show br0.10 | jq -r '.[]["address"]')
-+	sw1_mac=$(ip -n $sw1 -j -p link show br0.10 | jq -r '.[]["address"]')
-+	sw2_mac=$(ip -n $sw2 -j -p link show br0.10 | jq -r '.[]["address"]')
+-	run_cmd "tc -n sw1 qdisc replace dev vx0 clsact"
+-	run_cmd "tc -n sw1 filter replace dev vx0 egress pref 1 handle 101 proto ipv6 flower indev swp1 ip_proto icmpv6 dst_ip $maddr src_ip $saddr type 135 code 0 action pass"
++	run_cmd "tc -n $sw1 qdisc replace dev vx0 clsact"
++	run_cmd "tc -n $sw1 filter replace dev vx0 egress pref 1 handle 101 proto ipv6 flower indev swp1 ip_proto icmpv6 dst_ip $maddr src_ip $saddr type 135 code 0 action pass"
  
--	run_cmd "bridge -n sw1 fdb replace $sw2_mac dev swp1 master static vlan 10"
--	run_cmd "bridge -n sw2 fdb replace $sw1_mac dev swp1 master static vlan 10"
-+	run_cmd "bridge -n $sw1 fdb replace $sw2_mac dev swp1 master static vlan 10"
-+	run_cmd "bridge -n $sw2 fdb replace $sw1_mac dev swp1 master static vlan 10"
+ 	# Initial state - check that NS messages are not suppressed and that ND
+ 	# messages are received.
+-	run_cmd "ip netns exec h1 ndisc6 -q -r 1 -s $saddr -w 5000 $daddr eth0.$vid"
++	run_cmd "ip netns exec $h1 ndisc6 -q -r 1 -s $saddr -w 5000 $daddr eth0.$vid"
+ 	log_test $? 0 "ndisc6"
+-	tc_check_packets sw1 "dev vx0 egress" 101 1
++	tc_check_packets $sw1 "dev vx0 egress" 101 1
+ 	log_test $? 0 "NS suppression"
  
--	run_cmd "ip -n sw1 neigh replace 192.0.2.66 lladdr $sw2_mac nud perm dev br0.10"
--	run_cmd "ip -n sw2 neigh replace 192.0.2.65 lladdr $sw1_mac nud perm dev br0.10"
-+	run_cmd "ip -n $sw1 neigh replace 192.0.2.66 lladdr $sw2_mac nud perm dev br0.10"
-+	run_cmd "ip -n $sw2 neigh replace 192.0.2.65 lladdr $sw1_mac nud perm dev br0.10"
+ 	# Enable neighbor suppression and check that nothing changes compared
+ 	# to the initial state.
+-	run_cmd "bridge -n sw1 link set dev vx0 neigh_suppress on"
+-	run_cmd "bridge -n sw1 -d link show dev vx0 | grep \"neigh_suppress on\""
++	run_cmd "bridge -n $sw1 link set dev vx0 neigh_suppress on"
++	run_cmd "bridge -n $sw1 -d link show dev vx0 | grep \"neigh_suppress on\""
+ 	log_test $? 0 "\"neigh_suppress\" is on"
  
--	run_cmd "ip -n sw1 nexthop replace id 1 via 192.0.2.34 fdb"
--	run_cmd "ip -n sw2 nexthop replace id 1 via 192.0.2.33 fdb"
--	run_cmd "ip -n sw1 nexthop replace id 10 group 1 fdb"
--	run_cmd "ip -n sw2 nexthop replace id 10 group 1 fdb"
-+	run_cmd "ip -n $sw1 nexthop replace id 1 via 192.0.2.34 fdb"
-+	run_cmd "ip -n $sw2 nexthop replace id 1 via 192.0.2.33 fdb"
-+	run_cmd "ip -n $sw1 nexthop replace id 10 group 1 fdb"
-+	run_cmd "ip -n $sw2 nexthop replace id 10 group 1 fdb"
+-	run_cmd "ip netns exec h1 ndisc6 -q -r 1 -s $saddr -w 5000 $daddr eth0.$vid"
++	run_cmd "ip netns exec $h1 ndisc6 -q -r 1 -s $saddr -w 5000 $daddr eth0.$vid"
+ 	log_test $? 0 "ndisc6"
+-	tc_check_packets sw1 "dev vx0 egress" 101 2
++	tc_check_packets $sw1 "dev vx0 egress" 101 2
+ 	log_test $? 0 "NS suppression"
  
--	run_cmd "bridge -n sw1 link set dev swp1 backup_port vx0"
--	run_cmd "bridge -n sw2 link set dev swp1 backup_port vx0"
--	run_cmd "bridge -n sw1 link set dev swp1 backup_nhid 10"
--	run_cmd "bridge -n sw2 link set dev swp1 backup_nhid 10"
-+	run_cmd "bridge -n $sw1 link set dev swp1 backup_port vx0"
-+	run_cmd "bridge -n $sw2 link set dev swp1 backup_port vx0"
-+	run_cmd "bridge -n $sw1 link set dev swp1 backup_nhid 10"
-+	run_cmd "bridge -n $sw2 link set dev swp1 backup_nhid 10"
+ 	# Install an FDB entry for the remote host and check that nothing
+ 	# changes compared to the initial state.
+-	h2_mac=$(ip -n h2 -j -p link show eth0.$vid | jq -r '.[]["address"]')
+-	run_cmd "bridge -n sw1 fdb replace $h2_mac dev vx0 master static vlan $vid"
++	h2_mac=$(ip -n $h2 -j -p link show eth0.$vid | jq -r '.[]["address"]')
++	run_cmd "bridge -n $sw1 fdb replace $h2_mac dev vx0 master static vlan $vid"
+ 	log_test $? 0 "FDB entry installation"
  
--	run_cmd "ip -n sw1 link set dev swp1 carrier off"
--	run_cmd "ip -n sw2 link set dev swp1 carrier off"
-+	run_cmd "ip -n $sw1 link set dev swp1 carrier off"
-+	run_cmd "ip -n $sw2 link set dev swp1 carrier off"
+-	run_cmd "ip netns exec h1 ndisc6 -q -r 1 -s $saddr -w 5000 $daddr eth0.$vid"
++	run_cmd "ip netns exec $h1 ndisc6 -q -r 1 -s $saddr -w 5000 $daddr eth0.$vid"
+ 	log_test $? 0 "ndisc6"
+-	tc_check_packets sw1 "dev vx0 egress" 101 3
++	tc_check_packets $sw1 "dev vx0 egress" 101 3
+ 	log_test $? 0 "NS suppression"
  
--	run_cmd "ip netns exec sw1 ping -i 0.1 -c 10 -w $PING_TIMEOUT 192.0.2.66"
-+	run_cmd "ip netns exec $sw1 ping -i 0.1 -c 10 -w $PING_TIMEOUT 192.0.2.66"
- 	log_test $? 0 "Ping with backup nexthop ID"
+ 	# Install a neighbor on the matching SVI interface and check that NS
+ 	# messages are suppressed.
+-	run_cmd "ip -n sw1 neigh replace $daddr lladdr $h2_mac nud permanent dev br0.$vid"
++	run_cmd "ip -n $sw1 neigh replace $daddr lladdr $h2_mac nud permanent dev br0.$vid"
+ 	log_test $? 0 "Neighbor entry installation"
  
- 	# Reset the backup nexthop ID to 0 and check that ping fails.
--	run_cmd "bridge -n sw1 link set dev swp1 backup_nhid 0"
--	run_cmd "bridge -n sw2 link set dev swp1 backup_nhid 0"
-+	run_cmd "bridge -n $sw1 link set dev swp1 backup_nhid 0"
-+	run_cmd "bridge -n $sw2 link set dev swp1 backup_nhid 0"
+-	run_cmd "ip netns exec h1 ndisc6 -q -r 1 -s $saddr -w 5000 $daddr eth0.$vid"
++	run_cmd "ip netns exec $h1 ndisc6 -q -r 1 -s $saddr -w 5000 $daddr eth0.$vid"
+ 	log_test $? 0 "ndisc6"
+-	tc_check_packets sw1 "dev vx0 egress" 101 3
++	tc_check_packets $sw1 "dev vx0 egress" 101 3
+ 	log_test $? 0 "NS suppression"
  
--	run_cmd "ip netns exec sw1 ping -i 0.1 -c 10 -w $PING_TIMEOUT 192.0.2.66"
-+	run_cmd "ip netns exec $sw1 ping -i 0.1 -c 10 -w $PING_TIMEOUT 192.0.2.66"
- 	log_test $? 1 "Ping after disabling backup nexthop ID"
+ 	# Take the second host down and check that NS messages are suppressed
+ 	# and that ND messages are received.
+-	run_cmd "ip -n h2 link set dev eth0.$vid down"
++	run_cmd "ip -n $h2 link set dev eth0.$vid down"
+ 	log_test $? 0 "H2 down"
+ 
+-	run_cmd "ip netns exec h1 ndisc6 -q -r 1 -s $saddr -w 5000 $daddr eth0.$vid"
++	run_cmd "ip netns exec $h1 ndisc6 -q -r 1 -s $saddr -w 5000 $daddr eth0.$vid"
+ 	log_test $? 0 "ndisc6"
+-	tc_check_packets sw1 "dev vx0 egress" 101 3
++	tc_check_packets $sw1 "dev vx0 egress" 101 3
+ 	log_test $? 0 "NS suppression"
+ 
+-	run_cmd "ip -n h2 link set dev eth0.$vid up"
++	run_cmd "ip -n $h2 link set dev eth0.$vid up"
+ 	log_test $? 0 "H2 up"
+ 
+ 	# Disable neighbor suppression and check that NS messages are no longer
+ 	# suppressed.
+-	run_cmd "bridge -n sw1 link set dev vx0 neigh_suppress off"
+-	run_cmd "bridge -n sw1 -d link show dev vx0 | grep \"neigh_suppress off\""
++	run_cmd "bridge -n $sw1 link set dev vx0 neigh_suppress off"
++	run_cmd "bridge -n $sw1 -d link show dev vx0 | grep \"neigh_suppress off\""
+ 	log_test $? 0 "\"neigh_suppress\" is off"
+ 
+-	run_cmd "ip netns exec h1 ndisc6 -q -r 1 -s $saddr -w 5000 $daddr eth0.$vid"
++	run_cmd "ip netns exec $h1 ndisc6 -q -r 1 -s $saddr -w 5000 $daddr eth0.$vid"
+ 	log_test $? 0 "ndisc6"
+-	tc_check_packets sw1 "dev vx0 egress" 101 4
++	tc_check_packets $sw1 "dev vx0 egress" 101 4
+ 	log_test $? 0 "NS suppression"
+ 
+ 	# Take the second host down and check that NS messages are not
+ 	# suppressed and that ND messages are not received.
+-	run_cmd "ip -n h2 link set dev eth0.$vid down"
++	run_cmd "ip -n $h2 link set dev eth0.$vid down"
+ 	log_test $? 0 "H2 down"
+ 
+-	run_cmd "ip netns exec h1 ndisc6 -q -r 1 -s $saddr -w 5000 $daddr eth0.$vid"
++	run_cmd "ip netns exec $h1 ndisc6 -q -r 1 -s $saddr -w 5000 $daddr eth0.$vid"
+ 	log_test $? 2 "ndisc6"
+-	tc_check_packets sw1 "dev vx0 egress" 101 5
++	tc_check_packets $sw1 "dev vx0 egress" 101 5
+ 	log_test $? 0 "NS suppression"
  }
  
- backup_nhid_add_del_loop()
- {
- 	while true; do
--		ip -n sw1 nexthop del id 10
--		ip -n sw1 nexthop replace id 10 group 1/2 fdb
-+		ip -n $sw1 nexthop del id 10
-+		ip -n $sw1 nexthop replace id 10 group 1/2 fdb
- 	done >/dev/null 2>&1
+@@ -524,118 +517,118 @@ neigh_vlan_suppress_arp()
+ 	echo "Per-{Port, VLAN} ARP suppression"
+ 	echo "--------------------------------"
+ 
+-	run_cmd "tc -n sw1 qdisc replace dev vx0 clsact"
+-	run_cmd "tc -n sw1 filter replace dev vx0 egress pref 1 handle 101 proto 0x0806 flower indev swp1 arp_tip $tip1 arp_sip $sip1 arp_op request action pass"
+-	run_cmd "tc -n sw1 filter replace dev vx0 egress pref 1 handle 102 proto 0x0806 flower indev swp1 arp_tip $tip2 arp_sip $sip2 arp_op request action pass"
++	run_cmd "tc -n $sw1 qdisc replace dev vx0 clsact"
++	run_cmd "tc -n $sw1 filter replace dev vx0 egress pref 1 handle 101 proto 0x0806 flower indev swp1 arp_tip $tip1 arp_sip $sip1 arp_op request action pass"
++	run_cmd "tc -n $sw1 filter replace dev vx0 egress pref 1 handle 102 proto 0x0806 flower indev swp1 arp_tip $tip2 arp_sip $sip2 arp_op request action pass"
+ 
+-	h2_mac1=$(ip -n h2 -j -p link show eth0.$vid1 | jq -r '.[]["address"]')
+-	h2_mac2=$(ip -n h2 -j -p link show eth0.$vid2 | jq -r '.[]["address"]')
+-	run_cmd "bridge -n sw1 fdb replace $h2_mac1 dev vx0 master static vlan $vid1"
+-	run_cmd "bridge -n sw1 fdb replace $h2_mac2 dev vx0 master static vlan $vid2"
+-	run_cmd "ip -n sw1 neigh replace $tip1 lladdr $h2_mac1 nud permanent dev br0.$vid1"
+-	run_cmd "ip -n sw1 neigh replace $tip2 lladdr $h2_mac2 nud permanent dev br0.$vid2"
++	h2_mac1=$(ip -n $h2 -j -p link show eth0.$vid1 | jq -r '.[]["address"]')
++	h2_mac2=$(ip -n $h2 -j -p link show eth0.$vid2 | jq -r '.[]["address"]')
++	run_cmd "bridge -n $sw1 fdb replace $h2_mac1 dev vx0 master static vlan $vid1"
++	run_cmd "bridge -n $sw1 fdb replace $h2_mac2 dev vx0 master static vlan $vid2"
++	run_cmd "ip -n $sw1 neigh replace $tip1 lladdr $h2_mac1 nud permanent dev br0.$vid1"
++	run_cmd "ip -n $sw1 neigh replace $tip2 lladdr $h2_mac2 nud permanent dev br0.$vid2"
+ 
+ 	# Enable per-{Port, VLAN} neighbor suppression and check that ARP
+ 	# requests are not suppressed and that ARP replies are received.
+-	run_cmd "bridge -n sw1 link set dev vx0 neigh_vlan_suppress on"
+-	run_cmd "bridge -n sw1 -d link show dev vx0 | grep \"neigh_vlan_suppress on\""
++	run_cmd "bridge -n $sw1 link set dev vx0 neigh_vlan_suppress on"
++	run_cmd "bridge -n $sw1 -d link show dev vx0 | grep \"neigh_vlan_suppress on\""
+ 	log_test $? 0 "\"neigh_vlan_suppress\" is on"
+ 
+-	run_cmd "ip netns exec h1 arping -q -b -c 1 -w 5 -s $sip1 -I eth0.$vid1 $tip1"
++	run_cmd "ip netns exec $h1 arping -q -b -c 1 -w 5 -s $sip1 -I eth0.$vid1 $tip1"
+ 	log_test $? 0 "arping (VLAN $vid1)"
+-	run_cmd "ip netns exec h1 arping -q -b -c 1 -w 5 -s $sip2 -I eth0.$vid2 $tip2"
++	run_cmd "ip netns exec $h1 arping -q -b -c 1 -w 5 -s $sip2 -I eth0.$vid2 $tip2"
+ 	log_test $? 0 "arping (VLAN $vid2)"
+ 
+-	tc_check_packets sw1 "dev vx0 egress" 101 1
++	tc_check_packets $sw1 "dev vx0 egress" 101 1
+ 	log_test $? 0 "ARP suppression (VLAN $vid1)"
+-	tc_check_packets sw1 "dev vx0 egress" 102 1
++	tc_check_packets $sw1 "dev vx0 egress" 102 1
+ 	log_test $? 0 "ARP suppression (VLAN $vid2)"
+ 
+ 	# Enable neighbor suppression on VLAN 10 and check that only on this
+ 	# VLAN ARP requests are suppressed.
+-	run_cmd "bridge -n sw1 vlan set vid $vid1 dev vx0 neigh_suppress on"
+-	run_cmd "bridge -n sw1 -d vlan show dev vx0 vid $vid1 | grep \"neigh_suppress on\""
++	run_cmd "bridge -n $sw1 vlan set vid $vid1 dev vx0 neigh_suppress on"
++	run_cmd "bridge -n $sw1 -d vlan show dev vx0 vid $vid1 | grep \"neigh_suppress on\""
+ 	log_test $? 0 "\"neigh_suppress\" is on (VLAN $vid1)"
+-	run_cmd "bridge -n sw1 -d vlan show dev vx0 vid $vid2 | grep \"neigh_suppress off\""
++	run_cmd "bridge -n $sw1 -d vlan show dev vx0 vid $vid2 | grep \"neigh_suppress off\""
+ 	log_test $? 0 "\"neigh_suppress\" is off (VLAN $vid2)"
+ 
+-	run_cmd "ip netns exec h1 arping -q -b -c 1 -w 5 -s $sip1 -I eth0.$vid1 $tip1"
++	run_cmd "ip netns exec $h1 arping -q -b -c 1 -w 5 -s $sip1 -I eth0.$vid1 $tip1"
+ 	log_test $? 0 "arping (VLAN $vid1)"
+-	run_cmd "ip netns exec h1 arping -q -b -c 1 -w 5 -s $sip2 -I eth0.$vid2 $tip2"
++	run_cmd "ip netns exec $h1 arping -q -b -c 1 -w 5 -s $sip2 -I eth0.$vid2 $tip2"
+ 	log_test $? 0 "arping (VLAN $vid2)"
+ 
+-	tc_check_packets sw1 "dev vx0 egress" 101 1
++	tc_check_packets $sw1 "dev vx0 egress" 101 1
+ 	log_test $? 0 "ARP suppression (VLAN $vid1)"
+-	tc_check_packets sw1 "dev vx0 egress" 102 2
++	tc_check_packets $sw1 "dev vx0 egress" 102 2
+ 	log_test $? 0 "ARP suppression (VLAN $vid2)"
+ 
+ 	# Enable neighbor suppression on the port and check that it has no
+ 	# effect compared to previous state.
+-	run_cmd "bridge -n sw1 link set dev vx0 neigh_suppress on"
+-	run_cmd "bridge -n sw1 -d link show dev vx0 | grep \"neigh_suppress on\""
++	run_cmd "bridge -n $sw1 link set dev vx0 neigh_suppress on"
++	run_cmd "bridge -n $sw1 -d link show dev vx0 | grep \"neigh_suppress on\""
+ 	log_test $? 0 "\"neigh_suppress\" is on"
+ 
+-	run_cmd "ip netns exec h1 arping -q -b -c 1 -w 5 -s $sip1 -I eth0.$vid1 $tip1"
++	run_cmd "ip netns exec $h1 arping -q -b -c 1 -w 5 -s $sip1 -I eth0.$vid1 $tip1"
+ 	log_test $? 0 "arping (VLAN $vid1)"
+-	run_cmd "ip netns exec h1 arping -q -b -c 1 -w 5 -s $sip2 -I eth0.$vid2 $tip2"
++	run_cmd "ip netns exec $h1 arping -q -b -c 1 -w 5 -s $sip2 -I eth0.$vid2 $tip2"
+ 	log_test $? 0 "arping (VLAN $vid2)"
+ 
+-	tc_check_packets sw1 "dev vx0 egress" 101 1
++	tc_check_packets $sw1 "dev vx0 egress" 101 1
+ 	log_test $? 0 "ARP suppression (VLAN $vid1)"
+-	tc_check_packets sw1 "dev vx0 egress" 102 3
++	tc_check_packets $sw1 "dev vx0 egress" 102 3
+ 	log_test $? 0 "ARP suppression (VLAN $vid2)"
+ 
+ 	# Disable neighbor suppression on the port and check that it has no
+ 	# effect compared to previous state.
+-	run_cmd "bridge -n sw1 link set dev vx0 neigh_suppress off"
+-	run_cmd "bridge -n sw1 -d link show dev vx0 | grep \"neigh_suppress off\""
++	run_cmd "bridge -n $sw1 link set dev vx0 neigh_suppress off"
++	run_cmd "bridge -n $sw1 -d link show dev vx0 | grep \"neigh_suppress off\""
+ 	log_test $? 0 "\"neigh_suppress\" is off"
+ 
+-	run_cmd "ip netns exec h1 arping -q -b -c 1 -w 5 -s $sip1 -I eth0.$vid1 $tip1"
++	run_cmd "ip netns exec $h1 arping -q -b -c 1 -w 5 -s $sip1 -I eth0.$vid1 $tip1"
+ 	log_test $? 0 "arping (VLAN $vid1)"
+-	run_cmd "ip netns exec h1 arping -q -b -c 1 -w 5 -s $sip2 -I eth0.$vid2 $tip2"
++	run_cmd "ip netns exec $h1 arping -q -b -c 1 -w 5 -s $sip2 -I eth0.$vid2 $tip2"
+ 	log_test $? 0 "arping (VLAN $vid2)"
+ 
+-	tc_check_packets sw1 "dev vx0 egress" 101 1
++	tc_check_packets $sw1 "dev vx0 egress" 101 1
+ 	log_test $? 0 "ARP suppression (VLAN $vid1)"
+-	tc_check_packets sw1 "dev vx0 egress" 102 4
++	tc_check_packets $sw1 "dev vx0 egress" 102 4
+ 	log_test $? 0 "ARP suppression (VLAN $vid2)"
+ 
+ 	# Disable neighbor suppression on VLAN 10 and check that ARP requests
+ 	# are no longer suppressed on this VLAN.
+-	run_cmd "bridge -n sw1 vlan set vid $vid1 dev vx0 neigh_suppress off"
+-	run_cmd "bridge -n sw1 -d vlan show dev vx0 vid $vid1 | grep \"neigh_suppress off\""
++	run_cmd "bridge -n $sw1 vlan set vid $vid1 dev vx0 neigh_suppress off"
++	run_cmd "bridge -n $sw1 -d vlan show dev vx0 vid $vid1 | grep \"neigh_suppress off\""
+ 	log_test $? 0 "\"neigh_suppress\" is off (VLAN $vid1)"
+ 
+-	run_cmd "ip netns exec h1 arping -q -b -c 1 -w 5 -s $sip1 -I eth0.$vid1 $tip1"
++	run_cmd "ip netns exec $h1 arping -q -b -c 1 -w 5 -s $sip1 -I eth0.$vid1 $tip1"
+ 	log_test $? 0 "arping (VLAN $vid1)"
+-	run_cmd "ip netns exec h1 arping -q -b -c 1 -w 5 -s $sip2 -I eth0.$vid2 $tip2"
++	run_cmd "ip netns exec $h1 arping -q -b -c 1 -w 5 -s $sip2 -I eth0.$vid2 $tip2"
+ 	log_test $? 0 "arping (VLAN $vid2)"
+ 
+-	tc_check_packets sw1 "dev vx0 egress" 101 2
++	tc_check_packets $sw1 "dev vx0 egress" 101 2
+ 	log_test $? 0 "ARP suppression (VLAN $vid1)"
+-	tc_check_packets sw1 "dev vx0 egress" 102 5
++	tc_check_packets $sw1 "dev vx0 egress" 102 5
+ 	log_test $? 0 "ARP suppression (VLAN $vid2)"
+ 
+ 	# Disable per-{Port, VLAN} neighbor suppression, enable neighbor
+ 	# suppression on the port and check that on both VLANs ARP requests are
+ 	# suppressed.
+-	run_cmd "bridge -n sw1 link set dev vx0 neigh_vlan_suppress off"
+-	run_cmd "bridge -n sw1 -d link show dev vx0 | grep \"neigh_vlan_suppress off\""
++	run_cmd "bridge -n $sw1 link set dev vx0 neigh_vlan_suppress off"
++	run_cmd "bridge -n $sw1 -d link show dev vx0 | grep \"neigh_vlan_suppress off\""
+ 	log_test $? 0 "\"neigh_vlan_suppress\" is off"
+ 
+-	run_cmd "bridge -n sw1 link set dev vx0 neigh_suppress on"
+-	run_cmd "bridge -n sw1 -d link show dev vx0 | grep \"neigh_suppress on\""
++	run_cmd "bridge -n $sw1 link set dev vx0 neigh_suppress on"
++	run_cmd "bridge -n $sw1 -d link show dev vx0 | grep \"neigh_suppress on\""
+ 	log_test $? 0 "\"neigh_suppress\" is on"
+ 
+-	run_cmd "ip netns exec h1 arping -q -b -c 1 -w 5 -s $sip1 -I eth0.$vid1 $tip1"
++	run_cmd "ip netns exec $h1 arping -q -b -c 1 -w 5 -s $sip1 -I eth0.$vid1 $tip1"
+ 	log_test $? 0 "arping (VLAN $vid1)"
+-	run_cmd "ip netns exec h1 arping -q -b -c 1 -w 5 -s $sip2 -I eth0.$vid2 $tip2"
++	run_cmd "ip netns exec $h1 arping -q -b -c 1 -w 5 -s $sip2 -I eth0.$vid2 $tip2"
+ 	log_test $? 0 "arping (VLAN $vid2)"
+ 
+-	tc_check_packets sw1 "dev vx0 egress" 101 2
++	tc_check_packets $sw1 "dev vx0 egress" 101 2
+ 	log_test $? 0 "ARP suppression (VLAN $vid1)"
+-	tc_check_packets sw1 "dev vx0 egress" 102 5
++	tc_check_packets $sw1 "dev vx0 egress" 102 5
+ 	log_test $? 0 "ARP suppression (VLAN $vid2)"
  }
  
-@@ -648,19 +641,19 @@ backup_nhid_torture()
- 	# deleting the group. The test is considered successful if nothing
- 	# crashed.
+@@ -655,118 +648,118 @@ neigh_vlan_suppress_ns()
+ 	echo "Per-{Port, VLAN} NS suppression"
+ 	echo "-------------------------------"
  
--	run_cmd "ip -n sw1 nexthop replace id 1 via 192.0.2.34 fdb"
--	run_cmd "ip -n sw1 nexthop replace id 2 via 192.0.2.34 fdb"
--	run_cmd "ip -n sw1 nexthop replace id 10 group 1/2 fdb"
-+	run_cmd "ip -n $sw1 nexthop replace id 1 via 192.0.2.34 fdb"
-+	run_cmd "ip -n $sw1 nexthop replace id 2 via 192.0.2.34 fdb"
-+	run_cmd "ip -n $sw1 nexthop replace id 10 group 1/2 fdb"
+-	run_cmd "tc -n sw1 qdisc replace dev vx0 clsact"
+-	run_cmd "tc -n sw1 filter replace dev vx0 egress pref 1 handle 101 proto ipv6 flower indev swp1 ip_proto icmpv6 dst_ip $maddr src_ip $saddr1 type 135 code 0 action pass"
+-	run_cmd "tc -n sw1 filter replace dev vx0 egress pref 1 handle 102 proto ipv6 flower indev swp1 ip_proto icmpv6 dst_ip $maddr src_ip $saddr2 type 135 code 0 action pass"
++	run_cmd "tc -n $sw1 qdisc replace dev vx0 clsact"
++	run_cmd "tc -n $sw1 filter replace dev vx0 egress pref 1 handle 101 proto ipv6 flower indev swp1 ip_proto icmpv6 dst_ip $maddr src_ip $saddr1 type 135 code 0 action pass"
++	run_cmd "tc -n $sw1 filter replace dev vx0 egress pref 1 handle 102 proto ipv6 flower indev swp1 ip_proto icmpv6 dst_ip $maddr src_ip $saddr2 type 135 code 0 action pass"
  
--	run_cmd "bridge -n sw1 fdb replace $dmac dev swp1 master static vlan 10"
-+	run_cmd "bridge -n $sw1 fdb replace $dmac dev swp1 master static vlan 10"
+-	h2_mac1=$(ip -n h2 -j -p link show eth0.$vid1 | jq -r '.[]["address"]')
+-	h2_mac2=$(ip -n h2 -j -p link show eth0.$vid2 | jq -r '.[]["address"]')
+-	run_cmd "bridge -n sw1 fdb replace $h2_mac1 dev vx0 master static vlan $vid1"
+-	run_cmd "bridge -n sw1 fdb replace $h2_mac2 dev vx0 master static vlan $vid2"
+-	run_cmd "ip -n sw1 neigh replace $daddr1 lladdr $h2_mac1 nud permanent dev br0.$vid1"
+-	run_cmd "ip -n sw1 neigh replace $daddr2 lladdr $h2_mac2 nud permanent dev br0.$vid2"
++	h2_mac1=$(ip -n $h2 -j -p link show eth0.$vid1 | jq -r '.[]["address"]')
++	h2_mac2=$(ip -n $h2 -j -p link show eth0.$vid2 | jq -r '.[]["address"]')
++	run_cmd "bridge -n $sw1 fdb replace $h2_mac1 dev vx0 master static vlan $vid1"
++	run_cmd "bridge -n $sw1 fdb replace $h2_mac2 dev vx0 master static vlan $vid2"
++	run_cmd "ip -n $sw1 neigh replace $daddr1 lladdr $h2_mac1 nud permanent dev br0.$vid1"
++	run_cmd "ip -n $sw1 neigh replace $daddr2 lladdr $h2_mac2 nud permanent dev br0.$vid2"
  
--	run_cmd "bridge -n sw1 link set dev swp1 backup_port vx0"
--	run_cmd "bridge -n sw1 link set dev swp1 backup_nhid 10"
--	run_cmd "ip -n sw1 link set dev swp1 carrier off"
-+	run_cmd "bridge -n $sw1 link set dev swp1 backup_port vx0"
-+	run_cmd "bridge -n $sw1 link set dev swp1 backup_nhid 10"
-+	run_cmd "ip -n $sw1 link set dev swp1 carrier off"
+ 	# Enable per-{Port, VLAN} neighbor suppression and check that NS
+ 	# messages are not suppressed and that ND messages are received.
+-	run_cmd "bridge -n sw1 link set dev vx0 neigh_vlan_suppress on"
+-	run_cmd "bridge -n sw1 -d link show dev vx0 | grep \"neigh_vlan_suppress on\""
++	run_cmd "bridge -n $sw1 link set dev vx0 neigh_vlan_suppress on"
++	run_cmd "bridge -n $sw1 -d link show dev vx0 | grep \"neigh_vlan_suppress on\""
+ 	log_test $? 0 "\"neigh_vlan_suppress\" is on"
  
- 	backup_nhid_add_del_loop &
- 	pid1=$!
--	ip netns exec sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 0 &
-+	ip netns exec $sw1 mausezahn br0.10 -a $smac -b $dmac -A 198.51.100.1 -B 198.51.100.2 -t ip -p 100 -q -c 0 &
- 	pid2=$!
+-	run_cmd "ip netns exec h1 ndisc6 -q -r 1 -s $saddr1 -w 5000 $daddr1 eth0.$vid1"
++	run_cmd "ip netns exec $h1 ndisc6 -q -r 1 -s $saddr1 -w 5000 $daddr1 eth0.$vid1"
+ 	log_test $? 0 "ndisc6 (VLAN $vid1)"
+-	run_cmd "ip netns exec h1 ndisc6 -q -r 1 -s $saddr2 -w 5000 $daddr2 eth0.$vid2"
++	run_cmd "ip netns exec $h1 ndisc6 -q -r 1 -s $saddr2 -w 5000 $daddr2 eth0.$vid2"
+ 	log_test $? 0 "ndisc6 (VLAN $vid2)"
  
- 	sleep 30
+-	tc_check_packets sw1 "dev vx0 egress" 101 1
++	tc_check_packets $sw1 "dev vx0 egress" 101 1
+ 	log_test $? 0 "NS suppression (VLAN $vid1)"
+-	tc_check_packets sw1 "dev vx0 egress" 102 1
++	tc_check_packets $sw1 "dev vx0 egress" 102 1
+ 	log_test $? 0 "NS suppression (VLAN $vid2)"
+ 
+ 	# Enable neighbor suppression on VLAN 10 and check that only on this
+ 	# VLAN NS messages are suppressed.
+-	run_cmd "bridge -n sw1 vlan set vid $vid1 dev vx0 neigh_suppress on"
+-	run_cmd "bridge -n sw1 -d vlan show dev vx0 vid $vid1 | grep \"neigh_suppress on\""
++	run_cmd "bridge -n $sw1 vlan set vid $vid1 dev vx0 neigh_suppress on"
++	run_cmd "bridge -n $sw1 -d vlan show dev vx0 vid $vid1 | grep \"neigh_suppress on\""
+ 	log_test $? 0 "\"neigh_suppress\" is on (VLAN $vid1)"
+-	run_cmd "bridge -n sw1 -d vlan show dev vx0 vid $vid2 | grep \"neigh_suppress off\""
++	run_cmd "bridge -n $sw1 -d vlan show dev vx0 vid $vid2 | grep \"neigh_suppress off\""
+ 	log_test $? 0 "\"neigh_suppress\" is off (VLAN $vid2)"
+ 
+-	run_cmd "ip netns exec h1 ndisc6 -q -r 1 -s $saddr1 -w 5000 $daddr1 eth0.$vid1"
++	run_cmd "ip netns exec $h1 ndisc6 -q -r 1 -s $saddr1 -w 5000 $daddr1 eth0.$vid1"
+ 	log_test $? 0 "ndisc6 (VLAN $vid1)"
+-	run_cmd "ip netns exec h1 ndisc6 -q -r 1 -s $saddr2 -w 5000 $daddr2 eth0.$vid2"
++	run_cmd "ip netns exec $h1 ndisc6 -q -r 1 -s $saddr2 -w 5000 $daddr2 eth0.$vid2"
+ 	log_test $? 0 "ndisc6 (VLAN $vid2)"
+ 
+-	tc_check_packets sw1 "dev vx0 egress" 101 1
++	tc_check_packets $sw1 "dev vx0 egress" 101 1
+ 	log_test $? 0 "NS suppression (VLAN $vid1)"
+-	tc_check_packets sw1 "dev vx0 egress" 102 2
++	tc_check_packets $sw1 "dev vx0 egress" 102 2
+ 	log_test $? 0 "NS suppression (VLAN $vid2)"
+ 
+ 	# Enable neighbor suppression on the port and check that it has no
+ 	# effect compared to previous state.
+-	run_cmd "bridge -n sw1 link set dev vx0 neigh_suppress on"
+-	run_cmd "bridge -n sw1 -d link show dev vx0 | grep \"neigh_suppress on\""
++	run_cmd "bridge -n $sw1 link set dev vx0 neigh_suppress on"
++	run_cmd "bridge -n $sw1 -d link show dev vx0 | grep \"neigh_suppress on\""
+ 	log_test $? 0 "\"neigh_suppress\" is on"
+ 
+-	run_cmd "ip netns exec h1 ndisc6 -q -r 1 -s $saddr1 -w 5000 $daddr1 eth0.$vid1"
++	run_cmd "ip netns exec $h1 ndisc6 -q -r 1 -s $saddr1 -w 5000 $daddr1 eth0.$vid1"
+ 	log_test $? 0 "ndisc6 (VLAN $vid1)"
+-	run_cmd "ip netns exec h1 ndisc6 -q -r 1 -s $saddr2 -w 5000 $daddr2 eth0.$vid2"
++	run_cmd "ip netns exec $h1 ndisc6 -q -r 1 -s $saddr2 -w 5000 $daddr2 eth0.$vid2"
+ 	log_test $? 0 "ndisc6 (VLAN $vid2)"
+ 
+-	tc_check_packets sw1 "dev vx0 egress" 101 1
++	tc_check_packets $sw1 "dev vx0 egress" 101 1
+ 	log_test $? 0 "NS suppression (VLAN $vid1)"
+-	tc_check_packets sw1 "dev vx0 egress" 102 3
++	tc_check_packets $sw1 "dev vx0 egress" 102 3
+ 	log_test $? 0 "NS suppression (VLAN $vid2)"
+ 
+ 	# Disable neighbor suppression on the port and check that it has no
+ 	# effect compared to previous state.
+-	run_cmd "bridge -n sw1 link set dev vx0 neigh_suppress off"
+-	run_cmd "bridge -n sw1 -d link show dev vx0 | grep \"neigh_suppress off\""
++	run_cmd "bridge -n $sw1 link set dev vx0 neigh_suppress off"
++	run_cmd "bridge -n $sw1 -d link show dev vx0 | grep \"neigh_suppress off\""
+ 	log_test $? 0 "\"neigh_suppress\" is off"
+ 
+-	run_cmd "ip netns exec h1 ndisc6 -q -r 1 -s $saddr1 -w 5000 $daddr1 eth0.$vid1"
++	run_cmd "ip netns exec $h1 ndisc6 -q -r 1 -s $saddr1 -w 5000 $daddr1 eth0.$vid1"
+ 	log_test $? 0 "ndisc6 (VLAN $vid1)"
+-	run_cmd "ip netns exec h1 ndisc6 -q -r 1 -s $saddr2 -w 5000 $daddr2 eth0.$vid2"
++	run_cmd "ip netns exec $h1 ndisc6 -q -r 1 -s $saddr2 -w 5000 $daddr2 eth0.$vid2"
+ 	log_test $? 0 "ndisc6 (VLAN $vid2)"
+ 
+-	tc_check_packets sw1 "dev vx0 egress" 101 1
++	tc_check_packets $sw1 "dev vx0 egress" 101 1
+ 	log_test $? 0 "NS suppression (VLAN $vid1)"
+-	tc_check_packets sw1 "dev vx0 egress" 102 4
++	tc_check_packets $sw1 "dev vx0 egress" 102 4
+ 	log_test $? 0 "NS suppression (VLAN $vid2)"
+ 
+ 	# Disable neighbor suppression on VLAN 10 and check that NS messages
+ 	# are no longer suppressed on this VLAN.
+-	run_cmd "bridge -n sw1 vlan set vid $vid1 dev vx0 neigh_suppress off"
+-	run_cmd "bridge -n sw1 -d vlan show dev vx0 vid $vid1 | grep \"neigh_suppress off\""
++	run_cmd "bridge -n $sw1 vlan set vid $vid1 dev vx0 neigh_suppress off"
++	run_cmd "bridge -n $sw1 -d vlan show dev vx0 vid $vid1 | grep \"neigh_suppress off\""
+ 	log_test $? 0 "\"neigh_suppress\" is off (VLAN $vid1)"
+ 
+-	run_cmd "ip netns exec h1 ndisc6 -q -r 1 -s $saddr1 -w 5000 $daddr1 eth0.$vid1"
++	run_cmd "ip netns exec $h1 ndisc6 -q -r 1 -s $saddr1 -w 5000 $daddr1 eth0.$vid1"
+ 	log_test $? 0 "ndisc6 (VLAN $vid1)"
+-	run_cmd "ip netns exec h1 ndisc6 -q -r 1 -s $saddr2 -w 5000 $daddr2 eth0.$vid2"
++	run_cmd "ip netns exec $h1 ndisc6 -q -r 1 -s $saddr2 -w 5000 $daddr2 eth0.$vid2"
+ 	log_test $? 0 "ndisc6 (VLAN $vid2)"
+ 
+-	tc_check_packets sw1 "dev vx0 egress" 101 2
++	tc_check_packets $sw1 "dev vx0 egress" 101 2
+ 	log_test $? 0 "NS suppression (VLAN $vid1)"
+-	tc_check_packets sw1 "dev vx0 egress" 102 5
++	tc_check_packets $sw1 "dev vx0 egress" 102 5
+ 	log_test $? 0 "NS suppression (VLAN $vid2)"
+ 
+ 	# Disable per-{Port, VLAN} neighbor suppression, enable neighbor
+ 	# suppression on the port and check that on both VLANs NS messages are
+ 	# suppressed.
+-	run_cmd "bridge -n sw1 link set dev vx0 neigh_vlan_suppress off"
+-	run_cmd "bridge -n sw1 -d link show dev vx0 | grep \"neigh_vlan_suppress off\""
++	run_cmd "bridge -n $sw1 link set dev vx0 neigh_vlan_suppress off"
++	run_cmd "bridge -n $sw1 -d link show dev vx0 | grep \"neigh_vlan_suppress off\""
+ 	log_test $? 0 "\"neigh_vlan_suppress\" is off"
+ 
+-	run_cmd "bridge -n sw1 link set dev vx0 neigh_suppress on"
+-	run_cmd "bridge -n sw1 -d link show dev vx0 | grep \"neigh_suppress on\""
++	run_cmd "bridge -n $sw1 link set dev vx0 neigh_suppress on"
++	run_cmd "bridge -n $sw1 -d link show dev vx0 | grep \"neigh_suppress on\""
+ 	log_test $? 0 "\"neigh_suppress\" is on"
+ 
+-	run_cmd "ip netns exec h1 ndisc6 -q -r 1 -s $saddr1 -w 5000 $daddr1 eth0.$vid1"
++	run_cmd "ip netns exec $h1 ndisc6 -q -r 1 -s $saddr1 -w 5000 $daddr1 eth0.$vid1"
+ 	log_test $? 0 "ndisc6 (VLAN $vid1)"
+-	run_cmd "ip netns exec h1 ndisc6 -q -r 1 -s $saddr2 -w 5000 $daddr2 eth0.$vid2"
++	run_cmd "ip netns exec $h1 ndisc6 -q -r 1 -s $saddr2 -w 5000 $daddr2 eth0.$vid2"
+ 	log_test $? 0 "ndisc6 (VLAN $vid2)"
+ 
+-	tc_check_packets sw1 "dev vx0 egress" 101 2
++	tc_check_packets $sw1 "dev vx0 egress" 101 2
+ 	log_test $? 0 "NS suppression (VLAN $vid1)"
+-	tc_check_packets sw1 "dev vx0 egress" 102 5
++	tc_check_packets $sw1 "dev vx0 egress" 102 5
+ 	log_test $? 0 "NS suppression (VLAN $vid2)"
+ }
+ 
 -- 
 2.43.0
 
