@@ -1,127 +1,134 @@
-Return-Path: <linux-kselftest+bounces-1297-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1298-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C8DF8074EC
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 17:29:10 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B505E807500
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 17:31:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 08C28281C49
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 16:29:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E0A1A1C20AC9
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 16:31:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C24794776D;
-	Wed,  6 Dec 2023 16:29:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36A1C47778;
+	Wed,  6 Dec 2023 16:31:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="JUP9Q7hQ"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TgzJlGSt"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91DCB12F
-	for <linux-kselftest@vger.kernel.org>; Wed,  6 Dec 2023 08:29:02 -0800 (PST)
-Received: by mail-ot1-x330.google.com with SMTP id 46e09a7af769-6d9a1dd6fdcso521110a34.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 06 Dec 2023 08:29:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1701880142; x=1702484942; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=B5ZbGGmoH/lFlZhMRZN1vjFtS/EFqjm5PsB2wakbCe8=;
-        b=JUP9Q7hQu9MmC8qT+pvq4Rvvq1eyIaYqOLTyljMFCuaeJS7pJri5kF+MfbVN26lg8h
-         NbQAtypwudwKwgAnl4F2e4YIGPKgeXQvCYWKRhvhrePNzfDBNQjnAmx3w0yttDn3Oh3u
-         ELEA6s41uIP/aJhbtXh+sPC9yDZT9uIzzw8hYMBOlmldIVohtdFSayFtHKXNaNvqL5pG
-         9tblrpZ2IEvFHK9wSOzSLLFgV4RzVHl/wk4ZebAjuD4uzFEHnsFLXVCabYheSQxM0mcF
-         YHN8LrpFy1MRsuxZMFzIztIK7s5iEy3vvBvlIQEWH2LK3ZJgZDe+ojzcDzEyyNwMYljO
-         5Fmw==
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5385A18D
+	for <linux-kselftest@vger.kernel.org>; Wed,  6 Dec 2023 08:31:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1701880309;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vaxlh8wJXgliq/77VlAO9+epZ3Cym7OmXbevnFZtFZE=;
+	b=TgzJlGStrpcMMCA362LWwIEg/acE3mPRv940Zic+KPPtQmfAG3upOpp5OS1tGMiissRVJ+
+	otZkj6RqPnrcZZYjwEz/OeEmrw3TeFhVgppN11tDCJLaaf0Cucaatvy3eVo9l/KrZluOHu
+	gBLJUZ6GuMPMGYig5kC9pO+WQyOJKAk=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-154-y144IZMOOuONDWvVBBoOrQ-1; Wed, 06 Dec 2023 11:31:45 -0500
+X-MC-Unique: y144IZMOOuONDWvVBBoOrQ-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-40c193fca81so7310435e9.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 06 Dec 2023 08:31:44 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701880142; x=1702484942;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B5ZbGGmoH/lFlZhMRZN1vjFtS/EFqjm5PsB2wakbCe8=;
-        b=Xnqs2o26XhRlAGSKKkyLaXyY0rfnwUiDgQBzAUr4x22VubiVw8FQH2f9DgioYnwwPH
-         22a4RJ82+Ti0iKTE/HtzuHOvWm6yCtMBlNV1af/BxXZQFzU9fA7VzSl+al3VKb2dwvlo
-         P3oGWloww+7nCSCs0UBpI3E0uyfDvImzRZZXukEJ4MT5/L3Ru7urWohw5CQmdLCS2OKr
-         ShUMwkHcLdPJdeJt9uQNq93tUI3UVgrLLNvk0QGJ2LbDr412lT2dWtC5xknjDuZUDOZg
-         QwiqG/hm27k8SnTR7RQH5SRhh+IRXDD5qzPniw5dRZUJSRt7YWiYNMWRf4FeqnmoOWfA
-         qOBQ==
-X-Gm-Message-State: AOJu0YzS7HpkSTjEEeRpFB88mfFHz5BBlJQM8D+/zz9K0f+MaJiGB97F
-	fuVuSfNrQ7F/O/T1o5LP0j0I3Q==
-X-Google-Smtp-Source: AGHT+IGn8NLklrz8gfLpf4ZROBA91oSNRaf0+Ba33U1gJX5IEC3OyhkihvKkTQRDR3ZHIRtV5+wHCg==
-X-Received: by 2002:a9d:6385:0:b0:6d9:9ed9:f0e0 with SMTP id w5-20020a9d6385000000b006d99ed9f0e0mr559336otk.14.1701880141802;
-        Wed, 06 Dec 2023 08:29:01 -0800 (PST)
-Received: from localhost ([192.184.165.199])
-        by smtp.gmail.com with ESMTPSA id c25-20020a9d6859000000b006d9a0bf775asm24697oto.7.2023.12.06.08.29.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Dec 2023 08:29:01 -0800 (PST)
-Date: Wed, 06 Dec 2023 08:29:01 -0800 (PST)
-X-Google-Original-Date: Wed, 06 Dec 2023 08:28:59 PST (-0800)
-Subject:     Re: [PATCH v2] selftests: sud_test: return correct emulated syscall value on RISC-V
-In-Reply-To: <20231206134438.473166-1-cleger@rivosinc.com>
-CC: shuah@kernel.org, krisman@collabora.com, linux-kselftest@vger.kernel.org,
-  linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, cleger@rivosinc.com,
-  Bjorn Topel <bjorn@rivosinc.com>
-From: Palmer Dabbelt <palmer@rivosinc.com>
-To: cleger@rivosinc.com, tglx@linutronix.de
-Message-ID: <mhng-bd5d2bdb-99ab-464a-a043-bdfc34b96b71@palmer-ri-x1c9>
+        d=1e100.net; s=20230601; t=1701880303; x=1702485103;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vaxlh8wJXgliq/77VlAO9+epZ3Cym7OmXbevnFZtFZE=;
+        b=oy+S7CKb+Bm/6JOnLPef2xvigbPssm7rCBa+2VS8R46IkApAF1dc5brLyZlriXrxSp
+         VfHTrY+73qr+qLXFeOq9UXPTXwTc5a945vBUwoplWr/esHCjAG5rzavJ7eOoyMvyyDYc
+         j/dADamZC3fJp9UnqyEEK2ssB7FWlsoTGOtM47BR3nPjnFYGKl08PNMGtdFs6Wrng2pN
+         4rm7OYjtgcky4fxSAevWm0N8yiIvaDClbaCiyhsQ/ixr2yZ6W8s2uIhiXC/AQOOwUDuz
+         GwsgQSn/O913Y/IvrkDK6rLmukIAdlf/zYc5iOyKQc7v8LC5f2nvHxFpgs/9BtKfodNY
+         URPQ==
+X-Gm-Message-State: AOJu0Yw3pxZxeKHnDuQWZJ5QwkdG8qKENdJ+Gpf+vXdlfEBC2SeZfQ07
+	klvgkTQ2CyGFGmYuV31oJVN7BhEdGKxCXhRimi42AfQKoxucmgLD9skwYIERi8cNJtl/aCc2E+1
+	3AchcVAI5eHE7UxqF82FVv1j+YzVg
+X-Received: by 2002:a05:600c:198e:b0:40b:5e1d:839e with SMTP id t14-20020a05600c198e00b0040b5e1d839emr811319wmq.50.1701880303691;
+        Wed, 06 Dec 2023 08:31:43 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEFKdeeY63Rr8GYbgHOkzsiRaLtwhKYRqy4GAdN5mZSrmYVw/I5CHGSTTjMHCUL/zUr0j0s6g==
+X-Received: by 2002:a05:600c:198e:b0:40b:5e1d:839e with SMTP id t14-20020a05600c198e00b0040b5e1d839emr811312wmq.50.1701880303404;
+        Wed, 06 Dec 2023 08:31:43 -0800 (PST)
+Received: from [192.168.0.118] (88-113-27-52.elisa-laajakaista.fi. [88.113.27.52])
+        by smtp.gmail.com with ESMTPSA id w4-20020adfec44000000b003333dd777a4sm81663wrn.46.2023.12.06.08.31.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Dec 2023 08:31:42 -0800 (PST)
+Message-ID: <a6184327-953d-4185-af8e-b0c20fb9d6e8@redhat.com>
+Date: Wed, 6 Dec 2023 18:31:40 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v2 04/10] docs: submitting-patches: Introduce
+ Tested-with:
+Content-Language: en-US
+To: Jonathan Corbet <corbet@lwn.net>, workflows@vger.kernel.org,
+ Joe Perches <joe@perches.com>, Andy Whitcroft <apw@canonical.com>,
+ Theodore Ts'o <tytso@mit.edu>, David Gow <davidgow@google.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Mark Brown <broonie@kernel.org>,
+ Shuah Khan <skhan@linuxfoundation.org>, "Darrick J . Wong"
+ <djwong@kernel.org>
+Cc: kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
+ Veronika Kabatova <vkabatov@redhat.com>, CKI <cki-project@redhat.com>,
+ kernelci@lists.linux.dev
+References: <20231115175146.9848-1-Nikolai.Kondrashov@redhat.com>
+ <20231205184503.79769-1-Nikolai.Kondrashov@redhat.com>
+ <20231205184503.79769-5-Nikolai.Kondrashov@redhat.com>
+ <87zfyomq5k.fsf@meer.lwn.net>
+From: Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com>
+In-Reply-To: <87zfyomq5k.fsf@meer.lwn.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, 06 Dec 2023 05:44:37 PST (-0800), cleger@rivosinc.com wrote:
-> Currently, the sud_test expects the emulated syscall to return the
-> emulated syscall number. This assumption only works on architectures
-> were the syscall calling convention use the same register for syscall
-> number/syscall return value. This is not the case for RISC-V and thus
-> the return value must be also emulated using the provided ucontext.
->
-> Signed-off-by: Clément Léger <cleger@rivosinc.com>
-> Reviewed-by: Palmer Dabbelt <palmer@rivosinc.com>
-> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
->
-> ---
->
-> Changes in V2:
->  - Changes comment to be more explicit
->  - Use A7 syscall arg rather than hardcoding MAGIC_SYSCALL_1
->
-> ---
->  .../selftests/syscall_user_dispatch/sud_test.c     | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
->
-> diff --git a/tools/testing/selftests/syscall_user_dispatch/sud_test.c b/tools/testing/selftests/syscall_user_dispatch/sud_test.c
-> index b5d592d4099e..d975a6767329 100644
-> --- a/tools/testing/selftests/syscall_user_dispatch/sud_test.c
-> +++ b/tools/testing/selftests/syscall_user_dispatch/sud_test.c
-> @@ -158,6 +158,20 @@ static void handle_sigsys(int sig, siginfo_t *info, void *ucontext)
->
->  	/* In preparation for sigreturn. */
->  	SYSCALL_DISPATCH_OFF(glob_sel);
-> +
-> +	/*
-> +	 * The tests for argument handling assume that `syscall(x) == x`. This
-> +	 * is a NOP on x86 because the syscall number is passed in %rax, which
-> +	 * happens to also be the function ABI return register.  Other
-> +	 * architectures may need to swizzle the arguments around.
-> +	 */
-> +#if defined(__riscv)
-> +/* REG_A7 is not defined in libc headers */
-> +# define REG_A7 (REG_A0 + 7)
-> +
-> +	((ucontext_t *)ucontext)->uc_mcontext.__gregs[REG_A0] =
-> +			((ucontext_t *)ucontext)->uc_mcontext.__gregs[REG_A7];
-> +#endif
->  }
->
->  TEST(dispatch_and_return)
+On 12/5/23 20:59, Jonathan Corbet wrote:
+> Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com> writes:
+> 
+>> Introduce a new tag, 'Tested-with:', documented in the
+>> Documentation/process/submitting-patches.rst file.
+>>
+>> The tag is expected to contain the test suite command which was executed
+>> for the commit, and to certify it passed. Additionally, it can contain a
+>> URL pointing to the execution results, after a '#' character.
+>>
+>> Prohibit the V: field from containing the '#' character correspondingly.
+>>
+>> Signed-off-by: Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com>
+>> ---
+>>   Documentation/process/submitting-patches.rst | 10 ++++++++++
+>>   MAINTAINERS                                  |  2 +-
+>>   scripts/checkpatch.pl                        |  4 ++--
+>>   3 files changed, 13 insertions(+), 3 deletions(-)
+> 
+> I have to ask whether we *really* need to introduce yet another tag for
+> this.  How are we going to use this information?  Are we going to try to
+> make a tag for every way in which somebody might test a patch?
 
-Thanks.
+How I understand the purpose of this is that, first, people want to encourage 
+submitters to test their patches with the relevant test suites, and second, if 
+they do, to tell them they did. That is all.
 
-Thomas: looks like you picked up all the commits that touched this?  No 
-rush on my end, just LMK if you want me to pick it up -- I'm going to 
-leave it alone for now.
+The idea of Tested-with: is to specify *which* test was executed, so I don't 
+think we would need another tag.
+
+However, I let people (all copied) who expressed interest in this in the first 
+place, and had this discussed earlier, chime in.
+
+I have no specific interest in this particular way, I just want kernel testing 
+to improve. If it was for me, I'd rather encourage everyone to just use GitLab 
+or GitHub, post MRs/PRs (like millions of other projects do, including other 
+operating systems), have tests executed automatically, results recorded and 
+archived automatically, commits linked to those results automatically, and not 
+mess around with any tags :D
+
+Nick
+
 
