@@ -1,97 +1,110 @@
-Return-Path: <linux-kselftest+bounces-1328-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1329-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FE6F807A35
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 22:14:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6BE45807A68
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 22:28:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C9C891F218FB
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 21:14:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 26C6628259B
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 21:28:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB39E6F62E;
-	Wed,  6 Dec 2023 21:14:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E63E56386;
+	Wed,  6 Dec 2023 21:27:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HLsQjd6i"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KfkCRa9f"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18C80D5F
-	for <linux-kselftest@vger.kernel.org>; Wed,  6 Dec 2023 13:14:13 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-54c77e0835bso282461a12.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 06 Dec 2023 13:14:13 -0800 (PST)
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2406A10CB
+	for <linux-kselftest@vger.kernel.org>; Wed,  6 Dec 2023 13:27:28 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1d04c097e34so2235195ad.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 06 Dec 2023 13:27:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1701897251; x=1702502051; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PmJEDBzKxyQU9MCwcJin0j3ArzElELYr7Bhn9rZHDMc=;
-        b=HLsQjd6is8o1mLTgKgynRGGnavRhRCjDYmyDeS5fOmPhbbkV9ieLR5oyJDZ4JH1Bhy
-         /tdnLN41SfG+6hv1kSIQtl2/t8Lt0/lGUjlFdZCO0K8CH5gAMqEkYpDn4doFV7eGr3/w
-         5Iq9imXpSmWj5cVoPhnxliChrNdI3fySwk5P/ql2pEWIfhDapvUiIG/N9Ru0uCocL2rh
-         31v7cCkSPZkmolPrPZcJBnxCPe5IhGJsWg8UhTwTW3L1VeKPUV9y0/U8e14fufjLFYc2
-         WuoCQ+yldbFB+Y+CLSR4rnLG55r+4sOrbcDDimqxZk+WW34JOZ9lcWmPw5/W6AtZrz54
-         v8Ug==
+        d=linaro.org; s=google; t=1701898047; x=1702502847; darn=vger.kernel.org;
+        h=mime-version:message-id:date:in-reply-to:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=mbZzH+s3JDxV/sloks5umdqEjeI9fKLBWt3znOcMhGI=;
+        b=KfkCRa9fM4NEjcL7Gb6xjuKXyCWeOKdTkvxTnIU2vfyNQLIfT+bqLIf95FhcEs4ds8
+         euAWcJSfqGg0++Cx3B1VK5K+aDVcjAENud+a3jBW8mQwIKhzC3pqP/6mlh6/ViYg6RNI
+         TfoNWfLLnygj5WeFkf8OAdZkElskLMAG8ZIoOb+QDB2k80pgg1xWWs5JF+/jfpsS7ngj
+         T9xzop2Sgq6RpYEmMhk/u/+uvYB96343esMMFdKGxQxW32dz70VcRHJWJM5tCZ3Ylbxx
+         n4XG7YWO6HBNEU1x6DnB4NHSMOXJ0zXf7dNjvuVlNvXMcFVAMVY0Lp8qoxPUV4iGWHIq
+         gceQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701897251; x=1702502051;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PmJEDBzKxyQU9MCwcJin0j3ArzElELYr7Bhn9rZHDMc=;
-        b=qTGlX3DU1eU3+HB8Jx3QJvrHrS0bI2jrXGlpvuod32GPQFZrdLkhDPCrCsVihdo17t
-         sowH+jGZsczLB/+sHYpnQwrmTjbfQdxBqgvTxsuok6xG268i2WWE0OSkmGwh1AvZfvNu
-         tA7NPVtmZ9aWAgiaVLM2HGPEEoIBzXDZrvUmyjiwL9tkUj96g7TigybvWLxOBJCnpBlc
-         NyVgYh1bp5nKfnBOhrHwSYvF4nhqQwTcdGkVvnlP3GQll76X74fD6HomT2MVtnFfgFdL
-         GdUe2ydCRpXt616TVwebQyoL06O5dndt0YEgVtLwFYVfcgF0mmrAGvwXAVtcSF+5i4r2
-         K1Fw==
-X-Gm-Message-State: AOJu0Yz/uPtoOiAEvNwidU2zHTm2cukmkf+4Mo9YqOZhPfGTjwliPnjr
-	f2q02dGtRW0S2bnzfZgSPs5zvcmBpXjEeDjf5sXPlQ==
-X-Google-Smtp-Source: AGHT+IGdUJ0U7LGEKJjGqt5itynfcSrlXa/hzW69+tBQz3ZKJeFsQ9wcSARFzKG7Hzt4JesxN71jS11/3dhzFfPH9sA=
-X-Received: by 2002:a17:906:3518:b0:a19:a19b:78b1 with SMTP id
- r24-20020a170906351800b00a19a19b78b1mr730768eja.116.1701897251403; Wed, 06
- Dec 2023 13:14:11 -0800 (PST)
+        d=1e100.net; s=20230601; t=1701898047; x=1702502847;
+        h=mime-version:message-id:date:in-reply-to:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mbZzH+s3JDxV/sloks5umdqEjeI9fKLBWt3znOcMhGI=;
+        b=WBaI+5hpSKMHdyBGVGTfzm0j1BzA0R+dMulZQhbY4kAPiRZT8qdkjbrGVb4ZWr6AFU
+         gMDVBwSQb3gJa+YPAEACgkPPJkb7AMFLFcDvuPv4BjIsjps+TxcS8si/lKRwXhuOCPQy
+         0YHZRiFFnefLZGXP3wB9pzesPd8YVi1W7+W5qyknLqQ/5ecgZ5J3fugMOUrJnL/8Jd32
+         mnTvhEpKistq0jKXlVnT0l1ttO5L3U/taGrsDP9mLICHLezy8IWslpmOKV20zT63cR5N
+         wFtlZpo2SpwYdpTJIojIiMgbmFdbvzU0Ln8ReHkuQR/woOG1RzTyAt1YJp0mW9/bAZzi
+         6yrg==
+X-Gm-Message-State: AOJu0YxvmP+12ptTotZXzzXDq77dKA3b994XHXGL5CivpcosXEar9YjO
+	Q0ZRU18KY4BJIitmOIFsuU7FzQ==
+X-Google-Smtp-Source: AGHT+IGLa8DInnGMjJcXZtON7bZ8pQ8xN1J6vJzQP1zj6zdeB3quK1/DibmWAlo2/mpEotTdJ4e23w==
+X-Received: by 2002:a17:902:e80f:b0:1d0:6cfd:d3c4 with SMTP id u15-20020a170902e80f00b001d06cfdd3c4mr2193857plg.17.1701898047545;
+        Wed, 06 Dec 2023 13:27:27 -0800 (PST)
+Received: from localhost ([2804:14d:7e22:803e:f0e2:3ff1:8acc:a2d5])
+        by smtp.gmail.com with ESMTPSA id jj12-20020a170903048c00b001cf6453b237sm259379plb.236.2023.12.06.13.27.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Dec 2023 13:27:27 -0800 (PST)
+References: <20231122-arm64-gcs-v7-0-201c483bd775@kernel.org>
+ <20231122-arm64-gcs-v7-22-201c483bd775@kernel.org>
+User-agent: mu4e 1.10.8; emacs 29.1
+From: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon
+ <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Andrew Morton
+ <akpm@linux-foundation.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton
+ <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, Suzuki K
+ Poulose <suzuki.poulose@arm.com>, Arnd Bergmann <arnd@arndb.de>, Oleg
+ Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, Kees
+ Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>, "Rick P.
+ Edgecombe" <rick.p.edgecombe@intel.com>, Deepak Gupta
+ <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>, Szabolcs Nagy
+ <Szabolcs.Nagy@arm.com>, "H.J. Lu" <hjl.tools@gmail.com>, Paul Walmsley
+ <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
+ <aou@eecs.berkeley.edu>, Florian Weimer <fweimer@redhat.com>, Christian
+ Brauner <brauner@kernel.org>, linux-arm-kernel@lists.infradead.org,
+ linux-doc@vger.kernel.org, kvmarm@lists.linux.dev,
+ linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v7 22/39] arm64/gcs: Implement shadow stack prctl()
+ interface
+In-reply-to: <20231122-arm64-gcs-v7-22-201c483bd775@kernel.org>
+Date: Wed, 06 Dec 2023 18:27:25 -0300
+Message-ID: <87edfzhvia.fsf@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231130194023.4102148-1-nphamcs@gmail.com> <20231130194023.4102148-7-nphamcs@gmail.com>
- <ed2792de-24cc-4037-9ee1-966cc07df57a@linux.dev> <CAJD7tkbiWqXs1PEZjMHO0gj5uSaaB-KNUNCiUz25MuPvzeb=wg@mail.gmail.com>
- <CAKEwX=M8YThH8qOdHt5TV1E4PCiw2FSv7815O3fhqXNVMt5ezg@mail.gmail.com> <CAKEwX=OkZsPiv-A3Rg7Wh2TKcf0aKd-1Yi9wRyEzJK6o9=zXQA@mail.gmail.com>
-In-Reply-To: <CAKEwX=OkZsPiv-A3Rg7Wh2TKcf0aKd-1Yi9wRyEzJK6o9=zXQA@mail.gmail.com>
-From: Yosry Ahmed <yosryahmed@google.com>
-Date: Wed, 6 Dec 2023 13:13:35 -0800
-Message-ID: <CAJD7tkZb71Tr=se96hrtEWc5oXXwdYOLMayNkkiP1ymcKBjNig@mail.gmail.com>
-Subject: Re: [PATCH v8 6/6] zswap: shrinks zswap pool based on memory pressure
-To: Nhat Pham <nphamcs@gmail.com>
-Cc: Chengming Zhou <chengming.zhou@linux.dev>, akpm@linux-foundation.org, hannes@cmpxchg.org, 
-	cerasuolodomenico@gmail.com, sjenning@redhat.com, ddstreet@ieee.org, 
-	vitaly.wool@konsulko.com, mhocko@kernel.org, roman.gushchin@linux.dev, 
-	shakeelb@google.com, muchun.song@linux.dev, chrisl@kernel.org, 
-	linux-mm@kvack.org, kernel-team@meta.com, linux-kernel@vger.kernel.org, 
-	cgroups@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, shuah@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Wed, Dec 6, 2023 at 11:47=E2=80=AFAM Nhat Pham <nphamcs@gmail.com> wrote=
-:
->
-> [...]
-> >
-> > Hmm so how should we proceed from here? How about this:
-> >
-> > a) I can send a fixlet to move the enablement check above the stats
-> > flushing + use mem_cgroup_flush_stats
-> > b) Then maybe, you can send a fixlet to update this new callsite?
-> >
-> > Does that sound reasonable?
->
-> I just sent out the fixlet. Yosry and Chengming, let me know if that
-> looks good. Thank you both for detecting this issue and proposing the
-> fix!
 
-The fixlet looks good, and Andrew already took care of (b) before I
-could send a followup fixlet out :)
+Mark Brown <broonie@kernel.org> writes:
+
+> Implement the architecture neutral prtctl() interface for setting the
+> shadow stack status, this supports setting and reading the current GCS
+> configuration for the current thread.
+>
+> Userspace can enable basic GCS functionality and additionally also
+> support for GCS pushes and arbatrary GCS stores.  It is expected that
+
+s/arbatrary/arbitrary/
+
+> this prctl() will be called very early in application startup, for
+> example by the dynamic linker, and not subsequently adjusted during
+> normal operation.  Users should carefully note that after enabling GCS
+> for a thread GCS will become active with no call stack so it is not
+> normally possible to return from the function that invoked the prctl().
+
+-- 
+Thiago
 
