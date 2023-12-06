@@ -1,148 +1,134 @@
-Return-Path: <linux-kselftest+bounces-1285-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1286-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B22F807076
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 14:01:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 327FD80708C
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 14:09:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F36AA28176F
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 13:01:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6CD3B1C20AC7
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 13:09:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C46513714E;
-	Wed,  6 Dec 2023 13:01:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67B373717B;
+	Wed,  6 Dec 2023 13:09:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="iFtiiD5h"
+	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="Yb1qhaqw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2087.outbound.protection.outlook.com [40.107.223.87])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 886AAD3;
-	Wed,  6 Dec 2023 05:00:59 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DuRmP1RF3zT7iakkju2+7CFbVY0El6eqVN5zVNLX4vmVm6T4RPm+IVe+JhZ19VZRXSKJSZCFbUcXYpRK4AcujVt3ZfnUuV4P628NkQtvnwMj6Q5Efoe95yQrNyLhYCGF2pKHFcJs1tHEXGHcBsTS3cMpsLOcR1riM4awASX/JcZWu+IUqE7/VvHpSROP1XI2QSH8wdrvi79VLUXy1WEJm2ku9xPqCP7Vi1KF3ICV1+v/sjYo14tkmTgDZ7OhelKHIGncnH6y8bT5XeQAqerIvk+IFb1iXmGQL0QkaNgXYEez528s10vLpbR7QN6t9iAiSMgsAeoconsylAtaYUisVw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7Ahszf3fFN+01v282ZyU7MlDk8NqwghTukHIzOZ41GQ=;
- b=AFEXTZVXdBO847PgndqNqnoJs9VIW+vwX6gREd7STgrGsmpT84L8OdSGgmLT9AxCAbuJqrxWN6GtTJH4a2BgzZf7Wl0M2KB3guZx8LVOK5o+uDpE7X+qRQB1QtJB73c+4J3roIlo7PsPws1aGlWQQ50UWGqFCI7DbTgKKZ8RjD4HduYR4q2G5dYda3bRmo60KWkaVt1rjrFU+bZqNN9MtYY8eUq499OQKhJYJ72kYFUPKs00sUMs1DMCU5X5xw5fNx6aZCCgIuuA0/aEDz/fTUpFYY79RjMTsAvbFKpnfBl/yChD71bdI2QC3oLZmsFvUjf1fMogYrOuFnzDVdzrqQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7Ahszf3fFN+01v282ZyU7MlDk8NqwghTukHIzOZ41GQ=;
- b=iFtiiD5hSxtkQhL7lSM3E5v2ZBeEXN6CqCSzpwWpGAhJQ8GBJDl2lq94ba4JZtd4HUNlhTMsta1kFKm36Ud6yQcwS3/y4/2wPwWQ7u9dhTlj+JzEn9jcmKRDu0Aj6skdyCddE0H3WpYXTR658QCnnw+ZyextFSc8xGS/miXhDDtgBmtc0M/mVG364AyjKH2KxCUk9uUasGrSmpS4iykC9efmCcNfgYjt11uroSi5tirJ0rIqykPihpMsNuc+3RVbrm+V/uYx4GZLo3dO3h2ImuAZHTIIhC0z1Dy+9otj8I2BSnS5oM1dH1id9E8Y9liDKdGkbt6cmMxTRHZoZ45Mtg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CY5PR12MB6179.namprd12.prod.outlook.com (2603:10b6:930:24::22)
- by LV8PR12MB9154.namprd12.prod.outlook.com (2603:10b6:408:190::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7068.25; Wed, 6 Dec
- 2023 13:00:56 +0000
-Received: from CY5PR12MB6179.namprd12.prod.outlook.com
- ([fe80::fef2:f63d:326c:f63f]) by CY5PR12MB6179.namprd12.prod.outlook.com
- ([fe80::fef2:f63d:326c:f63f%5]) with mapi id 15.20.7025.022; Wed, 6 Dec 2023
- 13:00:56 +0000
-Date: Wed, 6 Dec 2023 15:00:52 +0200
-From: Ido Schimmel <idosch@nvidia.com>
-To: Hangbin Liu <liuhangbin@gmail.com>
-Cc: netdev@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, David Ahern <dsahern@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	Po-Hsu Lin <po-hsu.lin@canonical.com>,
-	Guillaume Nault <gnault@redhat.com>,
-	Petr Machata <petrm@nvidia.com>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Vladimir Nikishkin <vladimir@nikishkin.pw>,
-	Roopa Prabhu <roopa@nvidia.com>
-Subject: Re: [PATCH net-next 4/9] selftests/net: convert
- test_vxlan_nolocalbypass.sh to run it in unique namespace
-Message-ID: <ZXBwhNKlvnTdLX6q@shredder>
-References: <20231206070801.1691247-1-liuhangbin@gmail.com>
- <20231206070801.1691247-5-liuhangbin@gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231206070801.1691247-5-liuhangbin@gmail.com>
-X-ClientProxiedBy: LO4P265CA0137.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:2c4::15) To CY5PR12MB6179.namprd12.prod.outlook.com
- (2603:10b6:930:24::22)
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20589C7;
+	Wed,  6 Dec 2023 05:09:35 -0800 (PST)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+	by mx0a-001ae601.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3B65uLUs028385;
+	Wed, 6 Dec 2023 07:09:12 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=
+	message-id:date:mime-version:subject:to:cc:references:from
+	:in-reply-to:content-type:content-transfer-encoding; s=
+	PODMain02222019; bh=vVXlRsiAy9OWWtQEMj4TkVdZXjoKPFJXcF0mguDSNPE=; b=
+	Yb1qhaqwbcbNhueoO/dXJUufL4XWZiGxoWePc9h8BFt/xOiRDBaaNpor84WtKSfI
+	wO3S0n6QSeZmAIBzSzWU2oiRlt4glnp+YrfANnGiAeNlwXrUOLBDme6MVfvZODJt
+	vDvQJKYvzu50IEOPjhotO8mxXFX7sTUtp7/1r4T70dSLN+n9YOCPW0Pyr7SxXLs+
+	CFbpaJlJg0cXWXpptd/hO6NQ1uf6UKuy4R5I8GAlxQT5DCN4UmhjluG63snJ/XbD
+	yYCoeq4oalRUyO+cG5BTUBjdd9L9wbeWfOCFJ2FuXJciLJH3xtwxWg+EnLYCRkLW
+	d/TYlQd1TPfCuJOSYGi17w==
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+	by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3utd47rphm-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 06 Dec 2023 07:09:12 -0600 (CST)
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Wed, 6 Dec
+ 2023 13:09:10 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.40 via Frontend
+ Transport; Wed, 6 Dec 2023 13:09:10 +0000
+Received: from [198.90.251.82] (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.82])
+	by ediswmail.ad.cirrus.com (Postfix) with ESMTP id DA03711AB;
+	Wed,  6 Dec 2023 13:09:09 +0000 (UTC)
+Message-ID: <23e3e9b6-c6e2-4b89-b30e-0319f8789590@opensource.cirrus.com>
+Date: Wed, 6 Dec 2023 13:09:08 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR12MB6179:EE_|LV8PR12MB9154:EE_
-X-MS-Office365-Filtering-Correlation-Id: b87bdc47-85ca-41a6-206b-08dbf65b6309
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	CGXSp62jJ+3vXOVoTpijspGVoSoSKY/MpjfVuL78Cs5UWNsX8C6PAVZ9WCIMimewvZM4+d2ZAeWGmrdvG17ggd3CtikymcYz97uK3xsH+frAuXpQXPSpZk0Ug0P97p+b01fSTCGgcaAgoFbuVfs2JtcID8pGxP8FyDq9SY/0QeTsbycB9Yw9bYwtXAedDMUZHZwFCXyP67lNZ8ZC+az5n8DALQVHizxpiCC/K6et66fuJWZmDOIq7eh/3mUWug4lJdjyAIgQfiP3puIblGCnclDiDgrnKD2/rpbV8Gtxc2P+5hxoKg1JB9bSeRg8RO+ia/UIMzlXGNPGh6lC25hkFRIhWN9HNn/cWw2gqVsB3xpvH4ppYlQaXidUOxaIGtl0p8w+2h71CkLrShcyX/q7L1clE1E8W4RHO+PSBmHPsk3X/iZX48+xeUgE+i9wBGi2zM5G/6D0CURE5k604Y2Gu2bYNSe7wiJVt//P7kJsNwF3MzhkTQ6rif7a2EleKY2kzmvoQNluoNp2SxkZMRevWe9MQq4+lpARDBTQCKD4tvNoMxsAZBwkO2JkDJYpaOj3
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6179.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(366004)(136003)(346002)(376002)(39860400002)(396003)(230922051799003)(451199024)(1800799012)(186009)(64100799003)(83380400001)(6486002)(478600001)(6666004)(6506007)(107886003)(26005)(6512007)(9686003)(86362001)(5660300002)(8936002)(38100700002)(8676002)(4326008)(4744005)(2906002)(41300700001)(316002)(7416002)(66556008)(66946007)(66476007)(54906003)(6916009)(33716001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?1CJ1dNFwzISIfQuvVL7mibLcqWePKKZhSmbuJYKIc3lRnGIax6A+h07NaUbg?=
- =?us-ascii?Q?ybogPMLbqXTriEt6uXKXsoaj05MQSD0AGMi8uE/R4ASOIza9Mby/afl8wDOU?=
- =?us-ascii?Q?QGXs8ydtX2mLYvrmnKCdfnOnIBYIE34UUdHCFOueqrr3IUvObpAI1K+JUBjP?=
- =?us-ascii?Q?n6LgczkzYkgkXH1CK8kiaGS11kMzLAr5udYCS2Zxhi3gO8ObGyGuWMyHwRby?=
- =?us-ascii?Q?Z1qAGrppepVTd4Grn+lqfa01Py8ynJkpFVP/XIfkfnY5OXUMRCM9uSfMKmnx?=
- =?us-ascii?Q?IAjtkrF2tO/AZ3gj3vTLD6UA0C3YfQTZmTiOuKoAOTvc15LPI2fdkJKh/WMf?=
- =?us-ascii?Q?JPDy11Os+TZD3UTgTPhbRIYyg98+lGRMPpAamxVghJeYD5N4592AMfpJDJ0a?=
- =?us-ascii?Q?WhkbwgiydeeV2Jkxg+1YtYWOKrzb6k6PhT2mId7nMOD5Wy/UBh6tp1NRNz8s?=
- =?us-ascii?Q?XoqwrfXdntJS3HAqCeotJqPxJY4EOxdym8bjF2fZDIdq84+5qgEWnmMVGWXD?=
- =?us-ascii?Q?yspP0vxyJmaycxyjMFh1FQzu4N/D0ChcNua1iDwQcrJdMU9Gr/+XNaUjdsYK?=
- =?us-ascii?Q?KyFbwxK3LHd09PGIF3HFxJSdw2Tr8N+MtXW6SiRgT+qr9qfBk1yCpTSUkkEr?=
- =?us-ascii?Q?4IpclRSLPtG3o1WLFG88rPLKY5gyuI24Rra22PGUJFlY/sgXrSzUL3GCrOK5?=
- =?us-ascii?Q?rQIpt+753leabe+XsdAPRtBagtpusOABQF1mkCaA2V/WxNleluo0GbcbBCHK?=
- =?us-ascii?Q?WAsZFE1IIyyoyagNczI0fMx5OZDg3BRm+unwormA7AkuUxKJy6mv8xeI7fzL?=
- =?us-ascii?Q?HVwaa7Fnraept81+HWJHDfseyL6ngN1Uv36Xypif/TqzN8cbhVUv2obdTYsO?=
- =?us-ascii?Q?xn+8Vigt1+nCTriJ7CJ1tkRhNPQYA2IWCL7aGUWGYvfOxZ8UvblV/z67J7r8?=
- =?us-ascii?Q?Z9MZ7RaKQsa4+F0derOejqeCdWS0PYPTfiBKSN2dhkjqsoDZZwK0xtj/CI/N?=
- =?us-ascii?Q?DoHtDGbksD5ysjLmV5spXQPOSYNZ7AgIBmogw2NB0eoN+aT9EPo1u0d50QvJ?=
- =?us-ascii?Q?8Egm9q545YCeB3steVNjM0A10pdbmPwJ0993pRz+zGpfPl1pSlMbOvwtxy96?=
- =?us-ascii?Q?WBOBgdMkOOAbBacJS9fCQu26Xcl+wilmXjXT87E4yUyKvGstmknwJdHqv2eg?=
- =?us-ascii?Q?J4ZIQOk6BHVBQ7X5Oe3Z1QKC3UkE+ERVC5QAQtD6ggDVK4nlLQAu49Hi8A3m?=
- =?us-ascii?Q?2DPYx7xjb0Zuz0ovMzLkHUEbWTzDcD67oHzKn8Ir6heTyCvOMlFNNL/a7A3w?=
- =?us-ascii?Q?nkbs47nchC6dLCaja9H2ap7QlPI0rvzQjJqIV2BVJIU/KiKJa33fiYABYHVf?=
- =?us-ascii?Q?r2Kx8ctpXwzCRKsZRRCrCoadmFzzP6fOcva1bCNCiK3YGG7bAMPG+Q1H9xM3?=
- =?us-ascii?Q?yWSx+ZD8jm5lTD0EEcXHfl3A/wHo/jv2hm03Lh42nQ3i9vgmSnDBVaAXxSBc?=
- =?us-ascii?Q?x/YfJUqZsMlE6V0AuHuCtqe+tnQ0Gm6nhAcbrzXABvYdy7XJVKT69muIhfLk?=
- =?us-ascii?Q?GXr/VGaMUQHbBqGDMxujg3aHZKr5E+2dodFDiEwn?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b87bdc47-85ca-41a6-206b-08dbf65b6309
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6179.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Dec 2023 13:00:56.8303
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zisxp9QbL9I9om8EtNt1pnFCXx5pNQr68FDOM0rhLFz0JtqqH/wYrDYwLh5MXcrbYCPn35t++4odHDfY+U3CgA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR12MB9154
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] kunit: run test suites only after module
+ initialization completes
+To: Marco Pagani <marpagan@redhat.com>,
+        Brendan Higgins
+	<brendan.higgins@linux.dev>,
+        David Gow <davidgow@google.com>, Rae Moar
+	<rmoar@google.com>,
+        Jinjie Ruan <ruanjinjie@huawei.com>,
+        Shuah Khan
+	<skhan@linuxfoundation.org>
+CC: Javier Martinez Canillas <javierm@redhat.com>,
+        <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
+        <linux-kernel@vger.kernel.org>
+References: <20231128101627.65399-1-marpagan@redhat.com>
+Content-Language: en-US
+From: Richard Fitzgerald <rf@opensource.cirrus.com>
+In-Reply-To: <20231128101627.65399-1-marpagan@redhat.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: y2rFDQWL8jBYyQGM-XoXdC0outj7skhz
+X-Proofpoint-ORIG-GUID: y2rFDQWL8jBYyQGM-XoXdC0outj7skhz
+X-Proofpoint-Spam-Reason: safe
 
-On Wed, Dec 06, 2023 at 03:07:56PM +0800, Hangbin Liu wrote:
-> Here is the test result after conversion.
+On 28/11/2023 10:16, Marco Pagani wrote:
+> Commit 2810c1e99867 ("kunit: Fix wild-memory-access bug in
+> kunit_free_suite_set()") fixed a wild-memory-access bug that could have
+> happened during the loading phase of test suites built and executed as
+> loadable modules. However, it also introduced a problematic side effect
+> that causes test suites modules to crash when they attempt to register
+> fake devices.
 > 
-> ]# ./test_vxlan_nolocalbypass.sh
-> TEST: localbypass enabled                                           [ OK ]
-> TEST: Packet received by local VXLAN device - localbypass           [ OK ]
-> TEST: localbypass disabled                                          [ OK ]
-> TEST: Packet not received by local VXLAN device - nolocalbypass     [ OK ]
-> TEST: localbypass enabled                                           [ OK ]
-> TEST: Packet received by local VXLAN device - localbypass           [ OK ]
+> When a module is loaded, it traverses the MODULE_STATE_UNFORMED and
+> MODULE_STATE_COMING states before reaching the normal operating state
+> MODULE_STATE_LIVE. Finally, when the module is removed, it moves to
+> MODULE_STATE_GOING before being released. However, if the loading
+> function load_module() fails between complete_formation() and
+> do_init_module(), the module goes directly from MODULE_STATE_COMING to
+> MODULE_STATE_GOING without passing through MODULE_STATE_LIVE.
 > 
-> Tests passed:   6
-> Tests failed:   0
+> This behavior was causing kunit_module_exit() to be called without
+> having first executed kunit_module_init(). Since kunit_module_exit() is
+> responsible for freeing the memory allocated by kunit_module_init()
+> through kunit_filter_suites(), this behavior was resulting in a
+> wild-memory-access bug.
 > 
-> Acked-by: David Ahern <dsahern@kernel.org>
-> Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+> Commit 2810c1e99867 ("kunit: Fix wild-memory-access bug in
+> kunit_free_suite_set()") fixed this issue by running the tests when the
+> module is still in MODULE_STATE_COMING. However, modules in that state
+> are not fully initialized, lacking sysfs kobjects. Therefore, if a test
+> module attempts to register a fake device, it will inevitably crash.
+> 
+> This patch proposes a different approach to fix the original
+> wild-memory-access bug while restoring the normal module execution flow
+> by making kunit_module_exit() able to detect if kunit_module_init() has
+> previously initialized the tests suite set. In this way, test modules
+> can once again register fake devices without crashing.
+> 
+> This behavior is achieved by checking whether mod->kunit_suites is a
+> virtual or direct mapping address. If it is a virtual address, then
+> kunit_module_init() has allocated the suite_set in kunit_filter_suites()
+> using kmalloc_array(). On the contrary, if mod->kunit_suites is still
+> pointing to the original address that was set when looking up the
+> .kunit_test_suites section of the module, then the loading phase has
+> failed and there's no memory to be freed.
+> 
+> v2:
+> - add include <linux/mm.h>
+> 
+> Fixes: 2810c1e99867 ("kunit: Fix wild-memory-access bug in kunit_free_suite_set()")
+> Signed-off-by: Marco Pagani <marpagan@redhat.com>
 
-Reviewed-by: Ido Schimmel <idosch@nvidia.com>
-Tested-by: Ido Schimmel <idosch@nvidia.com>
+Tested-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+
+Fixed this crash:
+https://lore.kernel.org/all/e239b94b-462a-41e5-9a4c-cd1ffd530d75@opensource.cirrus.com/
+
+Also tested with sound/pci/hda/cirrus_scodec_test.c
 
