@@ -1,89 +1,72 @@
-Return-Path: <linux-kselftest+bounces-1320-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1321-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D43B8078D7
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 20:47:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61C6D8078E7
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 20:51:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4473F1C20AD3
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 19:47:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 85AF31C20AA1
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 19:51:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 244CE47F74;
-	Wed,  6 Dec 2023 19:47:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5290247F75;
+	Wed,  6 Dec 2023 19:51:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Tg4mUD4U"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YPzN7GRN"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-vk1-xa30.google.com (mail-vk1-xa30.google.com [IPv6:2607:f8b0:4864:20::a30])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EADB3D46;
-	Wed,  6 Dec 2023 11:47:45 -0800 (PST)
-Received: by mail-vk1-xa30.google.com with SMTP id 71dfb90a1353d-4b313cda01cso54708e0c.0;
-        Wed, 06 Dec 2023 11:47:45 -0800 (PST)
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9EEBD5A
+	for <linux-kselftest@vger.kernel.org>; Wed,  6 Dec 2023 11:51:47 -0800 (PST)
+Received: by mail-wm1-x32b.google.com with SMTP id 5b1f17b1804b1-40c039e9719so1894995e9.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 06 Dec 2023 11:51:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701892065; x=1702496865; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=V3Uq7Eb3LQAhmgOwGxl2uUmTACv20Da6IjMtrl5hh2k=;
-        b=Tg4mUD4Uduc4OenqQ/cF1Fwxb2AawTvkTDuOkJ9NOr30g8gFTWSgHFEzrvn9OTEJso
-         k6uKZLU6Ny0oxt14j+VYVNLJo6crcBPgrEWAzYHV76yDLrTlz2b3kRK5bUIbIsaWFIfg
-         mugfPS970KNHKcabe8uGcEA1w772jUnpmLIGYhecZmdDrsep8v3j6nK2LLkW1f4X2vUw
-         Kxwqvf4i2Iluy0CByuwFurAE2Gm6IzcDc4Ax4+vKeiJXR3J6iLgF873xJuhO9xkEOzsa
-         Dw59SXI5nYYnXuaMhxCbhHfEhWNWnwgzNbHEfzbVrrS+p+knRwqJYXz58JIAAy/a/EoN
-         r5cg==
+        d=gmail.com; s=20230601; t=1701892306; x=1702497106; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:date:message-id:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jm7MoA/env00fiO7p1h/h0KrSPPlqjftAjh8tFLIQHg=;
+        b=YPzN7GRNmi5hMp5fJUulPa/pU8s9dUa6Oz5u3luT6kwzkyKV3U0MoA/zwTxsZpFUDJ
+         3GyfTMKGf2+jX6PjUSu3B/rVR1Vb34KNdo7hBkK+QRtDwdCeBNEu/O1z36udGhafx0fj
+         yYSF+EzuNHybC01uIeQaiwmSQ55Sg1y5FVC8i34Ub30ay2h74FulSADX1LnC46nn0wmN
+         CegaTcLhIffpxqGMXvpWdz6W1cFSMNOIl8zMEAuzK8dnzSpmWo//sBivgu7n3Im6JeOa
+         S2H3v1r+WGYqbXH1n4C/jmR2OSKPpDcoIEIrS18jhKbKNX0YzeK52MxGfh5lqYy5se4B
+         aeiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701892065; x=1702496865;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=V3Uq7Eb3LQAhmgOwGxl2uUmTACv20Da6IjMtrl5hh2k=;
-        b=HYpK6pPeSNXcS/JZX+O4L9gxbO1InWuO9Aylht+IDp/WbPZxr/CBqJcZgxRjgJPs1E
-         EWsjRZVvIavhyjIfFQeIt+ClXE2UliOv0XcuBMSMJpXIFushmMSSZaUdsPRKkv3ZDQmF
-         qOds686zDDr/FSH2U1wI6l6AGH1kcktv6b3bSG8brx5DkJ6hP4NAp8KcnwtPvS6CvUNO
-         E30z9ebe5HTD3zw4WYwZg2k0Mv2ldYqNkL0Hm7XCt2obn8brotJiu41rdK7H5cmbctfU
-         e+zMxaEn10vG/eAiXHfVHkHmvCHrMTbGGtaZkZ22RTlSM0bEgTA5FTzf5PV1ruOk1164
-         C+Pg==
-X-Gm-Message-State: AOJu0Yzogesvm+M3NXTLbRfpkl1Mbci8ggVK5ZG93kMZ2FeC7fl9vmoJ
-	iafRGEL/TtbR3/FSGHH0yYiDs0Q+c/X8tMeYsw0tNbokSIE=
-X-Google-Smtp-Source: AGHT+IHYl1yzcNVSMG13aCy+iy0WYAPTgpbzn6h590/aczcT1C5kVNrn6NnMKuR9NVMHNIVY9l96rBQikhUQLjE3ruQ=
-X-Received: by 2002:a05:6102:5106:b0:464:8ba6:2a62 with SMTP id
- bm6-20020a056102510600b004648ba62a62mr1631158vsb.28.1701892064936; Wed, 06
- Dec 2023 11:47:44 -0800 (PST)
+        d=1e100.net; s=20230601; t=1701892306; x=1702497106;
+        h=content-transfer-encoding:mime-version:date:message-id:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jm7MoA/env00fiO7p1h/h0KrSPPlqjftAjh8tFLIQHg=;
+        b=RJd2JFx8ZL/hEOFfYC/V79NmwBd/Tlsa5M1k3HUQfeUSNt/Z0WshbtpgN/cQMbBWkg
+         TzUTJODM2LAaG+EcITqSDhkr5urnmvvz3zRz6q5kLPm1wakLlSFbkbZdbFHNNUkVezXx
+         4SqVylYAmsAhrCpYjUOYk4c9HDKQ9HHT2Qh8CT9t5HyNwQFoMZUZfrdePlSJEGkmyowN
+         vujmA8MrxhEUyAwpUfxWeJvFT3YhWF2rWN/EpQLVWpcLB4U5W85xQQoEFhiwF1QHGg3I
+         u24uiZnVoVX1gm7IydXkF0t1JPkK3OsemDOEUYOA4+kUPMIv1IbnYSOeg4+iv+8GgmdC
+         zGvw==
+X-Gm-Message-State: AOJu0YxuLwaLxktRhYLJy+SnnQRHsRRp/BVzjRhT4DSFEIrZUsfjAkSN
+	2ogHZ9EmKG3/OUo2FA8COMD+5vuFNK7Osg==
+X-Google-Smtp-Source: AGHT+IEfYMddWF9gqxFgIMpgrZQlJvd4p3xhQjtYlERgTFA+NHAOkzx0Ut/ItwWue9iGhslXQh2S8A==
+X-Received: by 2002:a05:600c:5409:b0:40b:5e59:e9ea with SMTP id he9-20020a05600c540900b0040b5e59e9eamr951540wmb.137.1701892305818;
+        Wed, 06 Dec 2023 11:51:45 -0800 (PST)
+Received: from DESKTOP-3011VCQ ([160.179.1.54])
+        by smtp.gmail.com with ESMTPSA id t4-20020a5d6a44000000b003333298eb4bsm447956wrw.61.2023.12.06.11.51.45
+        for <linux-kselftest@vger.kernel.org>
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Wed, 06 Dec 2023 11:51:45 -0800 (PST)
+From: "mohams" <rakaminalwado@gmail.com>
+To: "linux-kselftest" <linux-kselftest@vger.kernel.org> 
+Subject: hi
+Message-ID: <1b197d58585a4745a56f057e3fced0da@192.168.1.109>
+Date: Wed, 06 Dec 2023 16:00:40 -0400
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231130194023.4102148-1-nphamcs@gmail.com> <20231130194023.4102148-7-nphamcs@gmail.com>
- <ed2792de-24cc-4037-9ee1-966cc07df57a@linux.dev> <CAJD7tkbiWqXs1PEZjMHO0gj5uSaaB-KNUNCiUz25MuPvzeb=wg@mail.gmail.com>
- <CAKEwX=M8YThH8qOdHt5TV1E4PCiw2FSv7815O3fhqXNVMt5ezg@mail.gmail.com>
-In-Reply-To: <CAKEwX=M8YThH8qOdHt5TV1E4PCiw2FSv7815O3fhqXNVMt5ezg@mail.gmail.com>
-From: Nhat Pham <nphamcs@gmail.com>
-Date: Wed, 6 Dec 2023 11:47:33 -0800
-Message-ID: <CAKEwX=OkZsPiv-A3Rg7Wh2TKcf0aKd-1Yi9wRyEzJK6o9=zXQA@mail.gmail.com>
-Subject: Re: [PATCH v8 6/6] zswap: shrinks zswap pool based on memory pressure
-To: Yosry Ahmed <yosryahmed@google.com>
-Cc: Chengming Zhou <chengming.zhou@linux.dev>, akpm@linux-foundation.org, hannes@cmpxchg.org, 
-	cerasuolodomenico@gmail.com, sjenning@redhat.com, ddstreet@ieee.org, 
-	vitaly.wool@konsulko.com, mhocko@kernel.org, roman.gushchin@linux.dev, 
-	shakeelb@google.com, muchun.song@linux.dev, chrisl@kernel.org, 
-	linux-mm@kvack.org, kernel-team@meta.com, linux-kernel@vger.kernel.org, 
-	cgroups@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, shuah@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain;
+	charset="ascii"
+Content-Transfer-Encoding: quoted-printable
 
-[...]
->
-> Hmm so how should we proceed from here? How about this:
->
-> a) I can send a fixlet to move the enablement check above the stats
-> flushing + use mem_cgroup_flush_stats
-> b) Then maybe, you can send a fixlet to update this new callsite?
->
-> Does that sound reasonable?
+hi my friend
 
-I just sent out the fixlet. Yosry and Chengming, let me know if that
-looks good. Thank you both for detecting this issue and proposing the
-fix!
 
