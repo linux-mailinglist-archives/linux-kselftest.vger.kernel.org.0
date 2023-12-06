@@ -1,100 +1,107 @@
-Return-Path: <linux-kselftest+bounces-1330-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1331-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DF79807AB4
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 22:44:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E7885807B77
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 23:38:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4FFE71F219A9
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 21:44:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D78D1F219B2
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 22:38:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 633C87099A;
-	Wed,  6 Dec 2023 21:44:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08FC147F69;
+	Wed,  6 Dec 2023 22:38:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fpedcGrX"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Sn7Sha/E"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22C6E98
-	for <linux-kselftest@vger.kernel.org>; Wed,  6 Dec 2023 13:44:07 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-5c239897895so166457a12.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 06 Dec 2023 13:44:07 -0800 (PST)
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 510FBD59
+	for <linux-kselftest@vger.kernel.org>; Wed,  6 Dec 2023 14:38:42 -0800 (PST)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-6ce9c8c45a7so40210b3a.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 06 Dec 2023 14:38:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1701899046; x=1702503846; darn=vger.kernel.org;
-        h=mime-version:message-id:date:in-reply-to:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=emWQ//128IChCAhCT/THcHGJcWxhncZjLzE78FXSX8E=;
-        b=fpedcGrXN/s/usHdY5n66hpDB178ztE+Biv+HqogR8yk7FHQhvfPAypMzjmwoH3Jeu
-         RQj3AtHr6cSmIK5seDqhgno1Nld+U3e1AuQ0Nss7B9j2MgyI3YQhFgesSPTXNhGZtjA/
-         Fg2KaITdLEeyAmGyRZJJ4xgRH3FYX57BljlYj58IT475aJWbNLEe2vR5cZ+TnZ8iT5H3
-         ji60uCNHum81RoK9CCRUrShJmxjzqXnrA1SstKerWXkQF7lURFNXqwi8UFuNhmSo7lQG
-         5bnygjrk58+gvOacllLHSWymXMsoAZMtVUFlgRsJbUF0OVcjXiC/FElWsk2ARgJdtuCN
-         CJAQ==
+        d=chromium.org; s=google; t=1701902322; x=1702507122; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=v+4oPNNVBI0NPUQNcE82sxUMnJJvgGad4QF6v1JsIK8=;
+        b=Sn7Sha/E4sdNZ3QX4Gy40HA0h0Aqj277xP5CTOaB8vLsWuk8m9Z3EN/yTMUHcbwT+J
+         x1P/kOETqM92AsYS242cfKsxAVD2/fp364MGNeCeBcLVNaooJiZ8hBTfzcZy0xrJhzSV
+         51b6L4SvM7XE2pnRpSJHWmmLJogxkumx3h7do=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701899046; x=1702503846;
-        h=mime-version:message-id:date:in-reply-to:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20230601; t=1701902322; x=1702507122;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=emWQ//128IChCAhCT/THcHGJcWxhncZjLzE78FXSX8E=;
-        b=n3jd3h8ZhOHVHl41vIDsYsAPossCwEuIk/ItfCP5q+kFCAKa+QVh9iltVF/duMQb3K
-         +qdbdBsNnpckNdI4aJQDcodc0aHGNAeZYXywiOGplt26QxrzCWpNomlOvOz2tPVHC8zr
-         5zGCWvrekv7UDLnwuEOdaZy/IKjy/UcTjzAr/whIsq9dGPb8T8gRYG+Eo/fHo9AZ6f5h
-         kpuhPqqK7ri9RXBN9j71khQf634QCSvOIgIjBjXe/CS2mjP/z+b0kSqFbKRohrMe6t9Z
-         YBZdza10eTZFUZ5+IHZKFrMacww/EGitHz63otJnYuUM59ud/mUo9fd/+prxRaIGV1Qe
-         kAYQ==
-X-Gm-Message-State: AOJu0YxyEuXaReALThBivnCEs/1i9TVnuZlbRD94WlfL7zMDvER/BPZF
-	rKX0kTpTsTaZjlrt49rcSJxk5Q==
-X-Google-Smtp-Source: AGHT+IF/KxemxaFFxK+8duX7yz47wLjIg4ovMlgkotFmeA6CuhxmgEGVP9MOvenfubO04eLnbo0Zng==
-X-Received: by 2002:a05:6a21:190:b0:187:f343:ab3d with SMTP id le16-20020a056a21019000b00187f343ab3dmr1422332pzb.55.1701899046588;
-        Wed, 06 Dec 2023 13:44:06 -0800 (PST)
-Received: from localhost ([2804:14d:7e22:803e:f0e2:3ff1:8acc:a2d5])
-        by smtp.gmail.com with ESMTPSA id ju17-20020a170903429100b001c74df14e6fsm267818plb.284.2023.12.06.13.44.05
+        bh=v+4oPNNVBI0NPUQNcE82sxUMnJJvgGad4QF6v1JsIK8=;
+        b=CT2q2QQSv9cv2TC2P1iCyZBtfONXIjYoZONbs9yCw87LsN5zgAzFWvquO4BssnWKoW
+         2Slb6CkjwHibWUrYf4eZiF3qPYhHOFc1RMKQor+0QTyoCtBEgUvfuQNXJ4CJIGTkyB2F
+         hcye8tvbIC92VcVmzC6c/TA0b4OYlwMFa3MkKw5ljLXOj/LEfTsuv7Q7ipC019oz2HY3
+         7tlROED7+yl+Tg87UQb5/SY/uVjnmyZhc6pYlzTCOM/stlfq5hfRmVIaEDHjjkreI69l
+         LSbgWPLkymY4th3tjm5FohwNi1x0QzTCZ8S1XhpncKeRLw56SittDtHfr6JiZcpZvkyi
+         ScIA==
+X-Gm-Message-State: AOJu0YxLhh83kAillCNcvdMpGmz9Mldt5m8SzWp6VSI1uNMynhV3PSFa
+	xG06sZ0CTl/AwvCwfUn2/YqqBQ==
+X-Google-Smtp-Source: AGHT+IHTO6Bm1YpVvYyKzmSzmx2nP0B5WjacD55ZsWjTp5zZqxQfRGUNO6A8B1rAllGZoH4U9W4bXA==
+X-Received: by 2002:a05:6a00:1ca5:b0:6cd:fd5c:3c01 with SMTP id y37-20020a056a001ca500b006cdfd5c3c01mr1524853pfw.15.1701902321833;
+        Wed, 06 Dec 2023 14:38:41 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id p22-20020aa78616000000b006cb60b188bdsm19755pfn.196.2023.12.06.14.38.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Dec 2023 13:44:06 -0800 (PST)
-References: <20231122-arm64-gcs-v7-0-201c483bd775@kernel.org>
- <20231122-arm64-gcs-v7-23-201c483bd775@kernel.org>
-User-agent: mu4e 1.10.8; emacs 29.1
-From: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon
- <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Andrew Morton
- <akpm@linux-foundation.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton
- <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, Suzuki K
- Poulose <suzuki.poulose@arm.com>, Arnd Bergmann <arnd@arndb.de>, Oleg
- Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, Kees
- Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>, "Rick P.
- Edgecombe" <rick.p.edgecombe@intel.com>, Deepak Gupta
- <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>, Szabolcs Nagy
- <Szabolcs.Nagy@arm.com>, "H.J. Lu" <hjl.tools@gmail.com>, Paul Walmsley
- <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
- <aou@eecs.berkeley.edu>, Florian Weimer <fweimer@redhat.com>, Christian
- Brauner <brauner@kernel.org>, linux-arm-kernel@lists.infradead.org,
- linux-doc@vger.kernel.org, kvmarm@lists.linux.dev,
- linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v7 23/39] arm64/mm: Implement map_shadow_stack()
-In-reply-to: <20231122-arm64-gcs-v7-23-201c483bd775@kernel.org>
-Date: Wed, 06 Dec 2023 18:44:04 -0300
-Message-ID: <87a5qnhuqj.fsf@linaro.org>
+        Wed, 06 Dec 2023 14:38:41 -0800 (PST)
+Date: Wed, 6 Dec 2023 14:38:40 -0800
+From: Kees Cook <keescook@chromium.org>
+To: "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Mark Brown <broonie@kernel.org>
+Cc: linux-mm <linux-mm@kvack.org>,
+	Naresh Kamboju <naresh.kamboju@linaro.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+	Linux ARM <linux-arm-kernel@lists.infradead.org>,
+	lkft-triage@lists.linaro.org, regressions@lists.linux.dev,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Will Deacon <will@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Eric Biederman <ebiederm@xmission.com>
+Subject: Re: WARNING: CPU: 6 PID: 474 at include/linux/maple_tree.h:712
+ mmap_region (include/linux/maple_tree.h:556 include/linux/maple_tree.h:731
+Message-ID: <202312061435.E57F367C16@keescook>
+References: <CA+G9fYs-j2FYZSFSVZj48mgoM9gQd4-7M2mu2Ez3D1DqDdW2bQ@mail.gmail.com>
+ <ZUzmlhvRv66I3J6P@finisterre.sirena.org.uk>
+ <B4299DC4-57CF-4CB2-ACB1-A215F429BF6A@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <B4299DC4-57CF-4CB2-ACB1-A215F429BF6A@kernel.org>
 
+On Thu, Nov 09, 2023 at 09:45:26PM -0800, Kees Cook wrote:
+> 
+> 
+> On November 9, 2023 6:03:02 AM PST, Mark Brown <broonie@kernel.org> wrote:
+> >On Thu, Nov 09, 2023 at 06:57:08PM +0530, Naresh Kamboju wrote:
+> >> Following kernel panic noticed while running  selftests: exec: load_address
+> >> on Fastmodels (FVP) running Linux next-20231109.
+> >> 
+> >
+> >Copying in Kees and Eric who maintain the exec API.
+> 
+> I'm traveling tomorrow so I won't be able to investigate this for a couple days. A quick look makes it seem like this is only happening in -next? (This warning was recently added to __mas_set_range?)
+> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/include/linux/maple_tree.h?id=02eccbc51164b43c5dadc3e5b40922c757075e08
+> 
+> Adding Liam...
 
-Mark Brown <broonie@kernel.org> writes:
+Did this get addressed? I still see the warning checks in
+__mas_set_range()...
 
-> Since the x86 code has not yet been rebased to v6.5-rc1 this includes
-> the architecture neutral parts of Rick Edgecmbe's "x86/shstk: Introduce
-> map_shadow_stack syscall".
-
-This paragraph can be dropped now.
+-Kees
 
 -- 
-Thiago
+Kees Cook
 
