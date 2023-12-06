@@ -1,40 +1,40 @@
-Return-Path: <linux-kselftest+bounces-1278-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1279-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71EA6806C8E
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 11:46:43 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68B1E806C92
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 11:46:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2D1F628195C
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 10:46:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 08F4AB20D9C
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 10:46:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20A3D30341;
-	Wed,  6 Dec 2023 10:46:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D261230343;
+	Wed,  6 Dec 2023 10:46:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O9I5lN34"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O4lUvbTg"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0182813AEA;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B34C313AEA;
+	Wed,  6 Dec 2023 10:46:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0018CC43391;
 	Wed,  6 Dec 2023 10:46:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F21B6C433AB;
-	Wed,  6 Dec 2023 10:46:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701859595;
-	bh=qlUB59mdEXNSA6/Zy2rtughuPHzMiJYZi2ulYjUvu2c=;
+	s=k20201202; t=1701859597;
+	bh=brjJ96URjS/De2F/QMe4Vwb6nXSvrFhFcqR+W+FmdYU=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=O9I5lN34VEbMkUNQPkDh2gcPlZCb/4oo4HxVfVBsJZDFEdGfsBIu1Dl0KV7TsOc1+
-	 thVHfa5iaAsFXqjzpltYqH2cJaMTfEC+1Oz9PilY/L21mxoQsQwhQbFB+ZQmztkvI7
-	 3qzKTxDVtFsPke6jhxiPNgUhnjGq07Np+HCWNVxU2Xn2BEMfIiZS79lzgpYw8kNqaQ
-	 0Amuw944V/ZwodOsYbIUwnQYLz2DBRTICETb7adtS5shOAsdKzBlvqJqLDIFvHxnNf
-	 qxKG/4demQ7u1IOapRbP2FO/p+yaxqquDnvFxr1gcJIOg2KOGLKUmqdbhkxEht8mc3
-	 Xc2ck5F0nBJuw==
+	b=O4lUvbTgHVGmEJWPwZ5TfYMQuF+8+bjlb0IDYH2Dmj0E8ZMhJHuYMK+ouzUobW29t
+	 o7sidpF+vyC4nDWy5QwxcxOmmoY97SMaYS6ZktBOTgUXFE+DKl6Dk4XB2NknRYP2Vf
+	 xpLrLkD7+qvB0zjb4yqol0yRyy+7h/nHM22TdqXLAo5Fw9ZbigDjcflmRMa7aCvett
+	 +6cvgXqcWP2z5N+0HWfEtcw7HJyetqM9iFFRQkFmRu6aaNhqTfuCJmpFUXl9b/FmzB
+	 nRcAQqxGoKTFo6jBOS3BBzPIeO6OpJ0eqF4HiDRIYedg58s7T3v2N6JxoFvRl7r4Tz
+	 zgd5UifDqDEaA==
 From: Benjamin Tissoires <bentiss@kernel.org>
-Date: Wed, 06 Dec 2023 11:46:05 +0100
-Subject: [PATCH v2 14/15] selftests/hid: fix mypy complains
+Date: Wed, 06 Dec 2023 11:46:06 +0100
+Subject: [PATCH v2 15/15] selftests/hid: fix ruff linter complains
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -43,7 +43,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20231206-wip-selftests-v2-14-c0350c2f5986@kernel.org>
+Message-Id: <20231206-wip-selftests-v2-15-c0350c2f5986@kernel.org>
 References: <20231206-wip-selftests-v2-0-c0350c2f5986@kernel.org>
 In-Reply-To: <20231206-wip-selftests-v2-0-c0350c2f5986@kernel.org>
 To: Jiri Kosina <jikos@kernel.org>, 
@@ -52,15 +52,16 @@ To: Jiri Kosina <jikos@kernel.org>,
 Cc: linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  linux-kernel@vger.kernel.org, Benjamin Tissoires <bentiss@kernel.org>
 X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1701859565; l=2690;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1701859565; l=2505;
  i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
- bh=qlUB59mdEXNSA6/Zy2rtughuPHzMiJYZi2ulYjUvu2c=;
- b=eNuto/PCVNKt4hEZ3qf3mbOg5IFQ64ju2cLEbB7qwWDnWb+JsGHfxC2TZ818Uigmv40m14QLs
- gmWRqXz+HseB49TOWMNIE0QwU8o9CxUQHoTHdea4CjX4JMMC85zKw1+
+ bh=brjJ96URjS/De2F/QMe4Vwb6nXSvrFhFcqR+W+FmdYU=;
+ b=tdJcMhy7Ay4dczYmS/vEywZYeugyRtvPySkGrsTjVqjJfg1eQ7HmsabSTrrYmeotZMcpy+eco
+ ZNIAuLH/1gUDWZva7HhwohRisMlNN6WYKaYM+Xn2CRPdapO3zgpXec3
 X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
  pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
 
-No code change, only typing information added/ignored
+rename ambiguous variables l, r, and m, and ignore the return values
+of uhdev.get_evdev() and uhdev.get_slot()
 
 Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
 
@@ -68,67 +69,58 @@ Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
 
 new in v2
 ---
- tools/testing/selftests/hid/tests/base.py        |  4 ++--
- tools/testing/selftests/hid/tests/test_tablet.py | 10 +++++-----
- 2 files changed, 7 insertions(+), 7 deletions(-)
+ tools/testing/selftests/hid/tests/test_mouse.py         | 14 +++++++-------
+ tools/testing/selftests/hid/tests/test_wacom_generic.py |  6 +++---
+ 2 files changed, 10 insertions(+), 10 deletions(-)
 
-diff --git a/tools/testing/selftests/hid/tests/base.py b/tools/testing/selftests/hid/tests/base.py
-index 5d9c26dfc460..51433063b227 100644
---- a/tools/testing/selftests/hid/tests/base.py
-+++ b/tools/testing/selftests/hid/tests/base.py
-@@ -14,7 +14,7 @@ import logging
+diff --git a/tools/testing/selftests/hid/tests/test_mouse.py b/tools/testing/selftests/hid/tests/test_mouse.py
+index fd2ba62e783a..66daf7e5975c 100644
+--- a/tools/testing/selftests/hid/tests/test_mouse.py
++++ b/tools/testing/selftests/hid/tests/test_mouse.py
+@@ -52,13 +52,13 @@ class BaseMouse(base.UHIDTestDevice):
+         :param reportID: the numeric report ID for this report, if needed
+         """
+         if buttons is not None:
+-            l, r, m = buttons
+-            if l is not None:
+-                self.left = l
+-            if r is not None:
+-                self.right = r
+-            if m is not None:
+-                self.middle = m
++            left, right, middle = buttons
++            if left is not None:
++                self.left = left
++            if right is not None:
++                self.right = right
++            if middle is not None:
++                self.middle = middle
+         left = self.left
+         right = self.right
+         middle = self.middle
+diff --git a/tools/testing/selftests/hid/tests/test_wacom_generic.py b/tools/testing/selftests/hid/tests/test_wacom_generic.py
+index f92fe8e02c1b..49186a27467e 100644
+--- a/tools/testing/selftests/hid/tests/test_wacom_generic.py
++++ b/tools/testing/selftests/hid/tests/test_wacom_generic.py
+@@ -909,7 +909,7 @@ class TestDTH2452Tablet(test_multitouch.BaseTest.TestMultitouch, TouchTabletTest
+         Ensure that the confidence bit being set to false should not result in a touch event.
+         """
+         uhdev = self.uhdev
+-        evdev = uhdev.get_evdev()
++        _evdev = uhdev.get_evdev()
  
- from hidtools.device.base_device import BaseDevice, EvdevMatch, SysfsFile
- from pathlib import Path
--from typing import Final
-+from typing import Final, List, Tuple
+         t0 = test_multitouch.Touch(1, 50, 100)
+         t0.confidence = False
+@@ -917,6 +917,6 @@ class TestDTH2452Tablet(test_multitouch.BaseTest.TestMultitouch, TouchTabletTest
+         events = uhdev.next_sync_events()
+         self.debug_reports(r, uhdev, events)
  
- logger = logging.getLogger("hidtools.test.base")
+-        slot = self.get_slot(uhdev, t0, 0)
++        _slot = self.get_slot(uhdev, t0, 0)
  
-@@ -155,7 +155,7 @@ class BaseTestCase:
-         # if any module is not available (not compiled), the test will skip.
-         # Each element is a tuple '(kernel driver name, kernel module)',
-         # for example ("playstation", "hid-playstation")
--        kernel_modules = []
-+        kernel_modules: List[Tuple[str, str]] = []
- 
-         def assertInputEventsIn(self, expected_events, effective_events):
-             effective_events = effective_events.copy()
-diff --git a/tools/testing/selftests/hid/tests/test_tablet.py b/tools/testing/selftests/hid/tests/test_tablet.py
-index 9374bd7524ef..dc8b0fe9e7f3 100644
---- a/tools/testing/selftests/hid/tests/test_tablet.py
-+++ b/tools/testing/selftests/hid/tests/test_tablet.py
-@@ -87,9 +87,9 @@ class PenState(Enum):
-     )
- 
-     def __init__(self, touch: BtnTouch, tool: Optional[ToolType], button: Optional[BtnPressed]):
--        self.touch = touch
--        self.tool = tool
--        self.button = button
-+        self.touch = touch  # type: ignore
-+        self.tool = tool  # type: ignore
-+        self.button = button  # type: ignore
- 
-     @classmethod
-     def from_evdev(cls, evdev) -> "PenState":
-@@ -122,7 +122,7 @@ class PenState(Enum):
-         if tool is None:
-             button = None
- 
--        return cls((touch, tool, button))
-+        return cls((touch, tool, button))  # type: ignore
- 
-     def apply(self, events: List[libevdev.InputEvent], strict: bool) -> "PenState":
-         if libevdev.EV_SYN.SYN_REPORT in events:
-@@ -162,7 +162,7 @@ class PenState(Enum):
-         if tool is None:
-             button = None
- 
--        new_state = PenState((touch, tool, button))
-+        new_state = PenState((touch, tool, button))  # type: ignore
-         if strict:
-             assert (
-                 new_state in self.valid_transitions()
+-        assert not events
+\ No newline at end of file
++        assert not events
 
 -- 
 2.41.0
