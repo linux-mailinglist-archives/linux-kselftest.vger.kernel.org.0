@@ -1,279 +1,268 @@
-Return-Path: <linux-kselftest+bounces-1252-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1253-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41959806AAB
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 10:25:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E9B9806B46
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 11:07:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 642D61C209AE
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 09:25:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AFD471C209DC
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 10:07:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EFCA1A717;
-	Wed,  6 Dec 2023 09:25:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E38628DA9;
+	Wed,  6 Dec 2023 10:07:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hTq+XZfm"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SEKwbpRS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3C031BDB
-	for <linux-kselftest@vger.kernel.org>; Wed,  6 Dec 2023 01:21:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1701854482;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=C15e7/LIYcrGWdbNEaRKjqFcMT5GroD4qDzg3I8vY9E=;
-	b=hTq+XZfmTlDDzdGsbvySdAXSdqMM9MkpSJnBiGschfsFeG8xdHIcacyDgldvWnRU4dkEln
-	rYppfRkhN6BqTtiMw2A0qbk5mQHUNjtrpC1fWmM1KCVxNk1my/cFW6TQRmcLKMyWz49g1k
-	cuftSmPkj/sLvpHnjJlGGN1NX6AQKkk=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-357-S1HKnu6HNTSkSMWP9hA0ng-1; Wed, 06 Dec 2023 04:21:20 -0500
-X-MC-Unique: S1HKnu6HNTSkSMWP9hA0ng-1
-Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-33342e25313so521232f8f.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 06 Dec 2023 01:21:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701854479; x=1702459279;
-        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
-         :references:cc:to:content-language:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+Received: from mail-oo1-xc34.google.com (mail-oo1-xc34.google.com [IPv6:2607:f8b0:4864:20::c34])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C83FA;
+	Wed,  6 Dec 2023 02:07:09 -0800 (PST)
+Received: by mail-oo1-xc34.google.com with SMTP id 006d021491bc7-58d9a0ead0cso919624eaf.0;
+        Wed, 06 Dec 2023 02:07:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1701857228; x=1702462028; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=C15e7/LIYcrGWdbNEaRKjqFcMT5GroD4qDzg3I8vY9E=;
-        b=GjtfFmxtgZgy9K/c7XO6plGXeJjVD0hstT/P1NZGRGjvjnQhxA+RPi2NTYT3lZH7sU
-         QMelyPdGccBzU2Y7Y+u6tiBaEUlpiK7jTaWUpknmWTJrqSXIq4Kg+sXij+n2uqb1a5Sf
-         S6ZhrxZDv973VriGlbv0f9CY7uJemeG9O3MCMvlG6KgFs7DarYA0iVoArC6hR8JT8MTh
-         5uq3q7qonI3vnLOQtyKboM7vICHtZbKpJBRtH0+r07TosXjD1t5s+unS2eaA/B83xfzp
-         /nlKKUeSypKZZkQDQ5BEx0M/MSmpsJQ2Yx8Qjaz2Het03dbAFjVodlN3nETJpwf828+N
-         7yaA==
-X-Gm-Message-State: AOJu0Yw1HokXN8OyoMLgM0E0ZSNRNC9k1t8N19M/RBD8Bhpn/1b+5ild
-	BumaWh70kkhGQB6K0MPxXLH0hBHSDofABcL1FQq9uar2lSq45H1/nRciPhDtj53zCRU4jBkp2He
-	HYT5NXQUrB0YcXhKavCkWluVjWM8y
-X-Received: by 2002:a5d:6a0a:0:b0:333:1d9c:c34b with SMTP id m10-20020a5d6a0a000000b003331d9cc34bmr291842wru.41.1701854479089;
-        Wed, 06 Dec 2023 01:21:19 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGJt64TQXsdMHsdf9ZDWJDQBSkounTEA5bVNSVXlVfWZRWe3DfgUgzdli/2NceZuDUSqkkReA==
-X-Received: by 2002:a5d:6a0a:0:b0:333:1d9c:c34b with SMTP id m10-20020a5d6a0a000000b003331d9cc34bmr291831wru.41.1701854478657;
-        Wed, 06 Dec 2023 01:21:18 -0800 (PST)
-Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
-        by smtp.gmail.com with ESMTPSA id g7-20020a5d4887000000b003335ebde680sm2792854wrq.75.2023.12.06.01.21.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 06 Dec 2023 01:21:18 -0800 (PST)
-Message-ID: <3ba0015b-b36e-449a-8445-0f6272694db5@redhat.com>
-Date: Wed, 6 Dec 2023 10:21:16 +0100
+        bh=W/vlq7pt9AeGEnRub01NvFpgsDNby2jk6O8E2xtdj9s=;
+        b=SEKwbpRSt7+tHgwJpeZOsx36bBSW/nxilQiycK8FTEA1n7rr8NL6g/njLzuQHinLlJ
+         iQ5onXqgo5uU5FhNue3HfUU4mzR+e7v/Qh5ssmbGi/iqtZu5ti2lvjcFjybFX9QVRnB9
+         l2IIIgfSJg0ZMToW5b+jDFgtB+ikGim+Chqv+5i4T+uHgixrimQLYPSsl+mUUmxF1qzW
+         m5X9e5ik/kWsx4xZtXpNLVSsxP50YR7AEsIHjaUJpZqEf527iuXWwZha0gDachs9fpUi
+         nqAbvTjCOIgHtJwXUyizPtzUrXr4i9J5sNXreE0f1H+ZWvEGbKBAFEe84lKitqN2b93E
+         k5zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1701857228; x=1702462028;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=W/vlq7pt9AeGEnRub01NvFpgsDNby2jk6O8E2xtdj9s=;
+        b=XnWg1AD2n4VGpWXkOCogzZBUkJcNtiZ/8wzZznCX0gUwAaPkTy7iIwO4SmaNMVrytK
+         3n4DdVFurAa3gNIVJGVAB69gx0ULZ6Ju+u//kBh1nzycrVEqRQghjNNKDnVrgaTeySHy
+         EIBxz9BocnS8nylpgL/0ceVi5LnJwzEH7B09+F0FlmGRJc/8VyZ5q3BpfmTg8i3X5CYx
+         uG2EzBBYWQrusnyNnH0EXvSu1ksSNiwHKvkuxhM6IBTyt61ypk1JUFxoGZhxtKns7Z+k
+         0DM2XE/fng0xfWsUK1l/wy/zwPKuAzazIsunCrIy/9T5ifGvPR0YwuOp/lVgh9BBCCs9
+         xZCQ==
+X-Gm-Message-State: AOJu0YyOuVPy3fpD5wneCqY+UHgnZGnfDMOyonyojbRJhBobavbRVpXl
+	W7K6U9LcCY92gsMngXrE20UrWbh/Xf48UO4T20o=
+X-Google-Smtp-Source: AGHT+IFM6+SkktBbli78RNGNd8KWWCUqf7S2N+h7frD1ZfTKF9ggdkQwqOjS+jWDA8naLrSe5Bcn1Lp1etLJdeyYiUI=
+X-Received: by 2002:a05:6830:39de:b0:6d9:b049:7e9b with SMTP id
+ bt30-20020a05683039de00b006d9b0497e9bmr1160555otb.3.1701857228489; Wed, 06
+ Dec 2023 02:07:08 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 5/5] selftests/mm: add UFFDIO_MOVE ioctl test
-Content-Language: en-US
-To: Suren Baghdasaryan <surenb@google.com>
-Cc: Ryan Roberts <ryan.roberts@arm.com>, akpm@linux-foundation.org,
- viro@zeniv.linux.org.uk, brauner@kernel.org, shuah@kernel.org,
- aarcange@redhat.com, lokeshgidra@google.com, peterx@redhat.com,
- hughd@google.com, mhocko@suse.com, axelrasmussen@google.com,
- rppt@kernel.org, willy@infradead.org, Liam.Howlett@oracle.com,
- jannh@google.com, zhangpeng362@huawei.com, bgeffon@google.com,
- kaleshsingh@google.com, ngeoffray@google.com, jdduke@google.com,
- linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kernel-team@android.com
-References: <20231121171643.3719880-1-surenb@google.com>
- <20231121171643.3719880-6-surenb@google.com>
- <b3c882d2-0135-430c-8179-784f78be0902@arm.com>
- <a41c759f-78d8-44ed-b708-1bb737a8e6c1@redhat.com>
- <cb3d3b12-abf3-4eda-8d9a-944684d05505@arm.com>
- <ccdb1080-7a2e-4f98-a4e8-e864fa2db299@redhat.com>
- <CAJuCfpHS63bXkRGE1_G4z-2fDe72BeLka8t5ioSg2OXjbUrHXg@mail.gmail.com>
- <744be4e0-48e0-4c77-825c-711386dd205f@arm.com>
- <CAJuCfpHpbz4fWawmYU=B1D5pPE4+x0Wj0V-514Dja9UWcwiL9A@mail.gmail.com>
- <a52284a4-2b8c-4118-965d-04c472fbee05@redhat.com>
- <CAJuCfpEbxPksw3WtLWRT9mmGUCSZ431E4vaWMtbu8OrXmMxCdw@mail.gmail.com>
- <CAJuCfpG=seLkKbMRjwuWNQozGSQmP-JqKVUuCGRqMqxND2u18A@mail.gmail.com>
-From: David Hildenbrand <david@redhat.com>
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- WNyWQQ==
-Organization: Red Hat
-In-Reply-To: <CAJuCfpG=seLkKbMRjwuWNQozGSQmP-JqKVUuCGRqMqxND2u18A@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20231203165129.1740512-1-yoong.siang.song@intel.com>
+ <20231203165129.1740512-3-yoong.siang.song@intel.com> <43b01013-e78b-417e-b169-91909c7309b1@kernel.org>
+ <656de830e8d70_2e983e294ca@willemb.c.googlers.com.notmuch>
+ <PH0PR11MB583000826591093B98BA841DD885A@PH0PR11MB5830.namprd11.prod.outlook.com>
+ <5a0faf8cc9ec3ab0d5082c66b909c582c8f1eae6.camel@siemens.com>
+ <CAKH8qBuXL8bOYtfKKPS8y=KJqouDptyciCjr0wNKVHtNj6BmqA@mail.gmail.com>
+ <656f66023f7bd_3dd6422942a@willemb.c.googlers.com.notmuch> <ZW98UW033wCy9vI-@google.com>
+In-Reply-To: <ZW98UW033wCy9vI-@google.com>
+From: Magnus Karlsson <magnus.karlsson@gmail.com>
+Date: Wed, 6 Dec 2023 11:06:57 +0100
+Message-ID: <CAJ8uoz3_XqavGt1DyFoQAuKS8Faa1Lc85b2t+whc-f6GN1Pvzw@mail.gmail.com>
+Subject: Re: [xdp-hints] Re: [PATCH bpf-next v3 2/3] net: stmmac: add Launch
+ Time support to XDP ZC
+To: Stanislav Fomichev <sdf@google.com>
+Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+	Florian Bezdeka <florian.bezdeka@siemens.com>, yoong.siang.song@intel.com, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, davem@davemloft.net, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Bjorn Topel <bjorn@kernel.org>, magnus.karlsson@intel.com, maciej.fijalkowski@intel.com, 
+	Jonathan Lemon <jonathan.lemon@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Lorenzo Bianconi <lorenzo@kernel.org>, Tariq Toukan <tariqt@nvidia.com>, 
+	Willem de Bruijn <willemb@google.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Mykola Lysenko <mykolal@fb.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Alexandre Torgue <alexandre.torgue@foss.st.com>, Jose Abreu <joabreu@synopsys.com>, 
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, "bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
+	"xdp-hints@xdp-project.net" <xdp-hints@xdp-project.net>, 
+	"linux-stm32@st-md-mailman.stormreply.com" <linux-stm32@st-md-mailman.stormreply.com>, 
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 05.12.23 05:46, Suren Baghdasaryan wrote:
-> On Mon, Dec 4, 2023 at 10:44 AM Suren Baghdasaryan <surenb@google.com> wrote:
->>
->> On Mon, Dec 4, 2023 at 10:27 AM David Hildenbrand <david@redhat.com> wrote:
->>>
->>> On 04.12.23 17:35, Suren Baghdasaryan wrote:
->>>> On Mon, Dec 4, 2023 at 1:27 AM Ryan Roberts <ryan.roberts@arm.com> wrote:
->>>>>
->>>>> On 04/12/2023 04:09, Suren Baghdasaryan wrote:
->>>>>> On Sat, Dec 2, 2023 at 2:11 AM David Hildenbrand <david@redhat.com> wrote:
->>>>>>>
->>>>>>> On 02.12.23 09:04, Ryan Roberts wrote:
->>>>>>>> On 01/12/2023 20:47, David Hildenbrand wrote:
->>>>>>>>> On 01.12.23 10:29, Ryan Roberts wrote:
->>>>>>>>>> On 21/11/2023 17:16, Suren Baghdasaryan wrote:
->>>>>>>>>>> Add tests for new UFFDIO_MOVE ioctl which uses uffd to move source
->>>>>>>>>>> into destination buffer while checking the contents of both after
->>>>>>>>>>> the move. After the operation the content of the destination buffer
->>>>>>>>>>> should match the original source buffer's content while the source
->>>>>>>>>>> buffer should be zeroed. Separate tests are designed for PMD aligned and
->>>>>>>>>>> unaligned cases because they utilize different code paths in the kernel.
->>>>>>>>>>>
->>>>>>>>>>> Signed-off-by: Suren Baghdasaryan <surenb@google.com>
->>>>>>>>>>> ---
->>>>>>>>>>>      tools/testing/selftests/mm/uffd-common.c     |  24 +++
->>>>>>>>>>>      tools/testing/selftests/mm/uffd-common.h     |   1 +
->>>>>>>>>>>      tools/testing/selftests/mm/uffd-unit-tests.c | 189 +++++++++++++++++++
->>>>>>>>>>>      3 files changed, 214 insertions(+)
->>>>>>>>>>>
->>>>>>>>>>> diff --git a/tools/testing/selftests/mm/uffd-common.c
->>>>>>>>>>> b/tools/testing/selftests/mm/uffd-common.c
->>>>>>>>>>> index fb3bbc77fd00..b0ac0ec2356d 100644
->>>>>>>>>>> --- a/tools/testing/selftests/mm/uffd-common.c
->>>>>>>>>>> +++ b/tools/testing/selftests/mm/uffd-common.c
->>>>>>>>>>> @@ -631,6 +631,30 @@ int copy_page(int ufd, unsigned long offset, bool wp)
->>>>>>>>>>>          return __copy_page(ufd, offset, false, wp);
->>>>>>>>>>>      }
->>>>>>>>>>>      +int move_page(int ufd, unsigned long offset, unsigned long len)
->>>>>>>>>>> +{
->>>>>>>>>>> +    struct uffdio_move uffdio_move;
->>>>>>>>>>> +
->>>>>>>>>>> +    if (offset + len > nr_pages * page_size)
->>>>>>>>>>> +        err("unexpected offset %lu and length %lu\n", offset, len);
->>>>>>>>>>> +    uffdio_move.dst = (unsigned long) area_dst + offset;
->>>>>>>>>>> +    uffdio_move.src = (unsigned long) area_src + offset;
->>>>>>>>>>> +    uffdio_move.len = len;
->>>>>>>>>>> +    uffdio_move.mode = UFFDIO_MOVE_MODE_ALLOW_SRC_HOLES;
->>>>>>>>>>> +    uffdio_move.move = 0;
->>>>>>>>>>> +    if (ioctl(ufd, UFFDIO_MOVE, &uffdio_move)) {
->>>>>>>>>>> +        /* real retval in uffdio_move.move */
->>>>>>>>>>> +        if (uffdio_move.move != -EEXIST)
->>>>>>>>>>> +            err("UFFDIO_MOVE error: %"PRId64,
->>>>>>>>>>> +                (int64_t)uffdio_move.move);
->>>>>>>>>>
->>>>>>>>>> Hi Suren,
->>>>>>>>>>
->>>>>>>>>> FYI this error is triggering in mm-unstable (715b67adf4c8):
->>>>>>>>>>
->>>>>>>>>> Testing move-pmd on anon... ERROR: UFFDIO_MOVE error: -16 (errno=16,
->>>>>>>>>> @uffd-common.c:648)
->>>>>>>>>>
->>>>>>>>>> I'm running in a VM on Apple M2 (arm64). I haven't debugged any further, but
->>>>>>>>>> happy to go deeper if you can direct.
->>>>>>>>>
->>>>>>>>> Does it trigger reliably? Which pagesize is that kernel using?
->>>>>>>>
->>>>>>>> Yep, although very occasionally it fails with EAGAIN. 4K kernel; see other email
->>>>>>>> for full config.
->>>>>>>>
->>>>>>>>>
->>>>>>>>> I can spot that uffd_move_pmd_test()/uffd_move_pmd_handle_fault() uses
->>>>>>>>> default_huge_page_size(), which reads the default hugetlb size.
->>>>>>>>
->>>>>>>> My kernel command line is explicitly seting the default huge page size to 2M.
->>>>>>>>
->>>>>>>
->>>>>>> Okay, so that likely won't affect it.
->>>>>>>
->>>>>>> I can only guess that it has to do with the alignment of the virtual
->>>>>>> area we are testing with, and that we do seem to get more odd patterns
->>>>>>> on arm64.
->>>>>>>
->>>>>>> uffd_move_test_common() is a bit more elaborate, but if we aligned the
->>>>>>> src+start area up, surely "step_count" cannot be left unmodified?
->>>>>>>
->>>>>>> So assuming we get either an unaligned source or an unaligned dst from
->>>>>>> mmap(), I am not convinced that we won't be moving areas that are not
->>>>>>> necessarily fully backed by PMDs and maybe don't even fall into the VMA
->>>>>>> of interest?
->>>>>>>
->>>>>>> Not sure if that could trigger the THP splitting issue, though.
->>>>>>>
->>>>>>> But I just quickly scanned that test setup, could be I am missing
->>>>>>> something. It might make sense to just print the mmap'ed range and the
->>>>>>> actual ranges we are trying to move. Maybe something "obvious" can be
->>>>>>> observed.
->>>>>>
->>>>>> I was able to reproduce the issue on an Android device and after
->>>>>> implementing David's suggestions to split the large folio and after
->>>>>> replacing default_huge_page_size() with read_pmd_pagesize(), the
->>>>>> move-pmd test started working for me. Ryan, could you please apply
->>>>>> attached patches (over mm-unstable) and try the test again?
->>>>>
->>>>> Yep, all fixed with those patches!
->>>>
->>>> Great! Thanks for testing and confirming. I'll post an updated
->>>> patchset later today and will ask Andrew to replace the current one
->>>> with it.
->>>> I'll also look into the reasons we need to split PMD on ARM64 in this
->>>> test. It's good that this happened and we were able to test the PMD
->>>> split path but I'm curious about the reason. It's possible my address
->>>> alignment calculations are  somehow incorrect.
->>>
->>> I only skimmed the diff briefly, but likely you also want to try
->>> splitting in move_pages_pte(), if you encounter an already-pte-mapped THP.
->>
->> Huh, good point. I might be able to move the folio splitting code into
->> pte-mapped case and do a retry after splitting. That should minimize
->> the additional code required. Will do and post a new set shortly.
->> Thanks!
-> 
-> Was planning to post an update today but need some more time. Will try
-> to send it tomorrow.
+On Tue, 5 Dec 2023 at 20:39, Stanislav Fomichev <sdf@google.com> wrote:
+>
+> On 12/05, Willem de Bruijn wrote:
+> > Stanislav Fomichev wrote:
+> > > On Tue, Dec 5, 2023 at 7:34=E2=80=AFAM Florian Bezdeka
+> > > <florian.bezdeka@siemens.com> wrote:
+> > > >
+> > > > On Tue, 2023-12-05 at 15:25 +0000, Song, Yoong Siang wrote:
+> > > > > On Monday, December 4, 2023 10:55 PM, Willem de Bruijn wrote:
+> > > > > > Jesper Dangaard Brouer wrote:
+> > > > > > >
+> > > > > > >
+> > > > > > > On 12/3/23 17:51, Song Yoong Siang wrote:
+> > > > > > > > This patch enables Launch Time (Time-Based Scheduling) supp=
+ort to XDP zero
+> > > > > > > > copy via XDP Tx metadata framework.
+> > > > > > > >
+> > > > > > > > Signed-off-by: Song Yoong Siang<yoong.siang.song@intel.com>
+> > > > > > > > ---
+> > > > > > > >   drivers/net/ethernet/stmicro/stmmac/stmmac.h      |  2 ++
+> > > > > > >
+> > > > > > > As requested before, I think we need to see another driver im=
+plementing
+> > > > > > > this.
+> > > > > > >
+> > > > > > > I propose driver igc and chip i225.
+> > > > >
+> > > > > Sure. I will include igc patches in next version.
+> > > > >
+> > > > > > >
+> > > > > > > The interesting thing for me is to see how the LaunchTime max=
+ 1 second
+> > > > > > > into the future[1] is handled code wise. One suggestion is to=
+ add a
+> > > > > > > section to Documentation/networking/xsk-tx-metadata.rst per d=
+river that
+> > > > > > > mentions/documents these different hardware limitations.  It =
+is natural
+> > > > > > > that different types of hardware have limitations.  This is a=
+ close-to
+> > > > > > > hardware-level abstraction/API, and IMHO as long as we docume=
+nt the
+> > > > > > > limitations we can expose this API without too many limitatio=
+ns for more
+> > > > > > > capable hardware.
+> > > > >
+> > > > > Sure. I will try to add hardware limitations in documentation.
+> > > > >
+> > > > > >
+> > > > > > I would assume that the kfunc will fail when a value is passed =
+that
+> > > > > > cannot be programmed.
+> > > > > >
+> > > > >
+> > > > > In current design, the xsk_tx_metadata_request() dint got return =
+value.
+> > > > > So user won't know if their request is fail.
+> > > > > It is complex to inform user which request is failing.
+> > > > > Therefore, IMHO, it is good that we let driver handle the error s=
+ilently.
+> > > > >
+> > > >
+> > > > If the programmed value is invalid, the packet will be "dropped" / =
+will
+> > > > never make it to the wire, right?
+> >
+> > Programmable behavior is to either drop or cap to some boundary
+> > value, such as the farthest programmable time in the future: the
+> > horizon. In fq:
+> >
+> >                 /* Check if packet timestamp is too far in the future. =
+*/
+> >                 if (fq_packet_beyond_horizon(skb, q, now)) {
+> >                         if (q->horizon_drop) {
+> >                                         q->stat_horizon_drops++;
+> >                                         return qdisc_drop(skb, sch, to_=
+free);
+> >                         }
+> >                         q->stat_horizon_caps++;
+> >                         skb->tstamp =3D now + q->horizon;
+> >                 }
+> >                 fq_skb_cb(skb)->time_to_send =3D skb->tstamp;
+> >
+> > Drop is the more obviously correct mode.
+> >
+> > Programming with a clock source that the driver does not support will
+> > then be a persistent failure.
+> >
+> > Preferably, this driver capability can be queried beforehand (rather
+> > than only through reading error counters afterwards).
+> >
+> > Perhaps it should not be a driver task to convert from possibly
+> > multiple clock sources to the device native clock. Right now, we do
+> > use per-device timecounters for this, implemented in the driver.
+> >
+> > As for which clocks are relevant. For PTP, I suppose the device PHC,
+> > converted to nsec. For pacing offload, TCP uses CLOCK_MONOTONIC.
+>
+> Do we need to expose some generic netdev netlink apis to query/adjust
+> nic clock sources (or maybe there is something existing already)?
+> Then the userspace can be responsible for syncing/converting the
+> timestamps to the internal nic clocks. +1 to trying to avoid doing
+> this in the drivers.
+>
+> > > > That is clearly a situation that the user should be informed about.=
+ For
+> > > > RT systems this normally means that something is really wrong regar=
+ding
+> > > > timing / cycle overflow. Such systems have to react on that situati=
+on.
+> > >
+> > > In general, af_xdp is a bit lacking in this 'notify the user that the=
+y
+> > > somehow messed up' area :-(
+> > > For example, pushing a tx descriptor with a wrong addr/len in zc mode
+> > > will not give any visible signal back (besides driver potentially
+> > > spilling something into dmesg as it was in the mlx case).
+> > > We can probably start with having some counters for these events?
+> >
+> > This is because the AF_XDP completion queue descriptor format is only
+> > a u64 address?
+>
+> Yeah. XDP_COPY mode has the descriptor validation which is exported via
+> recvmsg errno, but zerocopy path seems to be too deep in the stack
+> to report something back. And there is no place, as you mention,
+> in the completion ring to report the status.
+>
+> > Could error conditions be reported on tx completion in the metadata,
+> > using xsk_tx_metadata_complete?
+>
+> That would be one way to do it, yes. But then the error reporting depends
+> on the metadata opt-in. Having a separate ring to export the errors,
+> or having a v2 tx-completions layout with extra 'status' field would also
+> work.
 
-It would be great to have tests that cover these cases (having to 
-PTE-map a PMD-mapped THP, and stumbling over an already-PTE-mapped one).
+There are error counters for the non-metadata and offloading cases
+above that can be retrieved with the XDP_STATISTICS getsockopt(). From
+if_xdp.h:
 
--- 
-Cheers,
+struct xdp_statistics {
+        __u64 rx_dropped; /* Dropped for other reasons */
+        __u64 rx_invalid_descs; /* Dropped due to invalid descriptor */
+        __u64 tx_invalid_descs; /* Dropped due to invalid descriptor */
+        __u64 rx_ring_full; /* Dropped due to rx ring being full */
+        __u64 rx_fill_ring_empty_descs; /* Failed to retrieve item
+from fill ring */
+        __u64 tx_ring_empty_descs; /* Failed to retrieve item from tx ring =
+*/
+};
 
-David / dhildenb
+Albeit, these are aggregate statistics and do not say anything about
+which packet that caused it. Works well for things that are
+programming bugs that should not occur (such as rx_invalid_descs and
+tx_invalid_descs) and requires the programmer to debug and fix his or
+her program, but it does not work for requests that might fail even
+though the program is correct and need to be handled on a packet by
+packet basis. So something needs to be added for that as you both say.
 
+Would prefer if we could avoid a v2 completion descriptor format or
+another ring that needs to be checked all the time, so if we could
+live with providing the error status in the metadata field of the
+packet at completion time, that would be good. Though having the error
+status in the completion ring would be faster as that cache line is
+hot, while the metadata section of the packet is likely not at
+completion time. So that speaks for a v2 completion ring format. Just
+thinking out loud here.
+
+> But this seems like something that should be handled separately? Because
+> we'd have to teach all existing zc drivers to report those errors back
+> instead of dropping these descriptors..
+>
 
