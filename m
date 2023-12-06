@@ -1,253 +1,147 @@
-Return-Path: <linux-kselftest+bounces-1304-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1305-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5217D8075DE
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 17:57:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD7E28075E1
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 17:57:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E6EC1B20C62
-	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 16:57:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6FCA4281E14
+	for <lists+linux-kselftest@lfdr.de>; Wed,  6 Dec 2023 16:57:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC256495FA;
-	Wed,  6 Dec 2023 16:56:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FFD149F61;
+	Wed,  6 Dec 2023 16:57:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aU35HanS"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AYpWgT9A"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A541B2;
-	Wed,  6 Dec 2023 08:56:55 -0800 (PST)
-Received: by mail-il1-x131.google.com with SMTP id e9e14a558f8ab-35d725ac060so12692295ab.2;
-        Wed, 06 Dec 2023 08:56:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701881815; x=1702486615; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yIrgXBCmrJsEmx/2lceqqp9Xwm1JeHuqctE9dAlll+0=;
-        b=aU35HanSNxKXTrTQ4kjEHWAZLFS/tBF3j+fPpW+VrMq78Cqd6wx6n1ee3jUw3O1rr9
-         ALTKgvLZBjgCF7Nde2nUL0mYEAbOqVQYzijEM5FT8tVfvuDICeKsIWmukHSFh8ZzcsYB
-         TTfQgRw83idj5raYHzvEgULsDnpjX2V5EAF1oXFxvL9wHxRDKS8hW2v9vj2QfyxdlKBf
-         rsjA5qadoS4E07v3YnWJ+MaY+3FkG25dIhXpm5ev3DmJdUr2vvSV3olRavFgr3YjxF74
-         C+oFhmdbQl3wR2hCKKOnQSimPiAOHWIlcpR6ktaJ+EZhJXrgozMTAQOd16XCVibcSEd2
-         10UQ==
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD792B2
+	for <linux-kselftest@vger.kernel.org>; Wed,  6 Dec 2023 08:57:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1701881867;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=oFeuJtK+zmdF2DRGAJQr++0Z9wdgk0HTu1uHhXoKQ9I=;
+	b=AYpWgT9APhYbcdvUtZ2PO+nt5uloYTncpsnQa77VsJTYiNE8gBgi8HaSNaLx2YVeNLmvwk
+	ROSHw0b7DCjnOyatdemUIOOAotR++VTOYSxCDS0vjv6bu1j2de34rkSrH6aLYpbaX/KzbZ
+	48vRqntzg7rx1pBV5cY5deUNIb2qmno=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-683-yXC_Ztc5Od6_cH_ePmEIcQ-1; Wed, 06 Dec 2023 11:57:45 -0500
+X-MC-Unique: yXC_Ztc5Od6_cH_ePmEIcQ-1
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-333503fd5bdso778108f8f.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 06 Dec 2023 08:57:45 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701881815; x=1702486615;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yIrgXBCmrJsEmx/2lceqqp9Xwm1JeHuqctE9dAlll+0=;
-        b=rduf33fc/QRBnPHX5In1m5A+wNchwJUEESGduvgSWou8BD8oBYAo/jZYE3K2BYsVk7
-         e8b1QV3IDa+CtJKZC4JqA+OOvohykW7wFPOO8FzF9+7SPbo/eoMFFv9bkmCSO2DHHb/N
-         bj+sW2EytpyNkTVyVT2lNcHBr9bR+kvUabPiNywxh8uEOD2/nb5J4lhZWUeqL85WXngJ
-         m8nHlYK9FgQlLeW4/syA3FOeWE/txNzPIO+pwvAaKzkZA8mh8gOxsli/GFnplZvOtsPr
-         Zkii0SjRc/mbs6VJF02N6YqLRG1yvRd+B3QiGF1MuyX97Dia25a0DhSlORLHnqEDjv83
-         xe9g==
-X-Gm-Message-State: AOJu0YzoMkDakOQh5a6D6OwghWcSGJ3zSJCeDp3eb/C9EimcaWJ9/luy
-	op5n2ZHrdE/KMGLUpXzPTtf4mN2DFLVavuB9jD8=
-X-Google-Smtp-Source: AGHT+IFNq8u43WbI4c01PT05oYMO3aPQSJ6ErYBAcTShuJSw9WrajU+G7etAPmGSFnGOLDah6Qzb1dasQimC9b9ONCQ=
-X-Received: by 2002:a05:6e02:1050:b0:35d:59a2:1281 with SMTP id
- p16-20020a056e02105000b0035d59a21281mr1435226ilj.45.1701881814603; Wed, 06
- Dec 2023 08:56:54 -0800 (PST)
+        d=1e100.net; s=20230601; t=1701881864; x=1702486664;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oFeuJtK+zmdF2DRGAJQr++0Z9wdgk0HTu1uHhXoKQ9I=;
+        b=crstjKI/ME+N8N8rAbzZ9atkBnZHtLW5332jiW4Va9gJ/Ub6P640hwLC7Z9/Oynjue
+         GrGe2DJRFc2O3OSjPpPx1h7y8OGPaab48lAc4rf8pA4i0z+g/ssYNgZEmPi2+gN8/IKE
+         Hg467TIu1IbZMFk3PRmXxF625IvK/xtCr1PBhtqSwA8yWTSSFsSe46uGS1NP+KQk1bwk
+         dkj7dM8hbFMb20RZufoNevtODFZiwPGSjTgJexZ0E25EsiC5LriFRuhIZKcTbawHlfHK
+         4yFjZVZcPt49dFwAD9aI8iZtGLfLA6zzpKp5qgAZYMnEyt2jcGTJZDEzGjEFAh8ulD4l
+         zYUQ==
+X-Gm-Message-State: AOJu0YzfWhH+orUoR/XNVTyL3PACE2qbt48no3pBapoC2p1/VJ1IUGIV
+	z2IXo3OVt0hxXjnZbzOu2I9QjslPjNpxC1AzJwa4EuiiQymqWs6qNgHaNanV2Q+qUytflRAjDwP
+	zEhSWgoAThvag43HM5z9balYbCHrh
+X-Received: by 2002:a5d:56cf:0:b0:333:1adc:a37b with SMTP id m15-20020a5d56cf000000b003331adca37bmr630986wrw.5.1701881864153;
+        Wed, 06 Dec 2023 08:57:44 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEP4MRv6FtBdsWsfM6nYWwuBr+Be/E9MbySQYUrXe/MmZeAqmbZdu0rtf327EL+KMbRwVwS1w==
+X-Received: by 2002:a5d:56cf:0:b0:333:1adc:a37b with SMTP id m15-20020a5d56cf000000b003331adca37bmr630971wrw.5.1701881863851;
+        Wed, 06 Dec 2023 08:57:43 -0800 (PST)
+Received: from [192.168.0.118] (88-113-27-52.elisa-laajakaista.fi. [88.113.27.52])
+        by smtp.gmail.com with ESMTPSA id g17-20020adfa491000000b003333541a5bdsm119315wrb.80.2023.12.06.08.57.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 06 Dec 2023 08:57:43 -0800 (PST)
+Message-ID: <ba60bfe4-939b-4d7b-b7a5-1a8309045767@redhat.com>
+Date: Wed, 6 Dec 2023 18:57:41 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231130194023.4102148-1-nphamcs@gmail.com> <20231130194023.4102148-7-nphamcs@gmail.com>
- <ed2792de-24cc-4037-9ee1-966cc07df57a@linux.dev> <CAJD7tkbiWqXs1PEZjMHO0gj5uSaaB-KNUNCiUz25MuPvzeb=wg@mail.gmail.com>
-In-Reply-To: <CAJD7tkbiWqXs1PEZjMHO0gj5uSaaB-KNUNCiUz25MuPvzeb=wg@mail.gmail.com>
-From: Nhat Pham <nphamcs@gmail.com>
-Date: Wed, 6 Dec 2023 08:56:43 -0800
-Message-ID: <CAKEwX=M8YThH8qOdHt5TV1E4PCiw2FSv7815O3fhqXNVMt5ezg@mail.gmail.com>
-Subject: Re: [PATCH v8 6/6] zswap: shrinks zswap pool based on memory pressure
-To: Yosry Ahmed <yosryahmed@google.com>
-Cc: Chengming Zhou <chengming.zhou@linux.dev>, akpm@linux-foundation.org, hannes@cmpxchg.org, 
-	cerasuolodomenico@gmail.com, sjenning@redhat.com, ddstreet@ieee.org, 
-	vitaly.wool@konsulko.com, mhocko@kernel.org, roman.gushchin@linux.dev, 
-	shakeelb@google.com, muchun.song@linux.dev, chrisl@kernel.org, 
-	linux-mm@kvack.org, kernel-team@meta.com, linux-kernel@vger.kernel.org, 
-	cgroups@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, shuah@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH v2 02/10] MAINTAINERS: Introduce V: entry for tests
+Content-Language: en-US
+To: Joe Perches <joe@perches.com>, David Gow <davidgow@google.com>
+Cc: workflows@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+ Andy Whitcroft <apw@canonical.com>, Theodore Ts'o <tytso@mit.edu>,
+ Steven Rostedt <rostedt@goodmis.org>, Mark Brown <broonie@kernel.org>,
+ Shuah Khan <skhan@linuxfoundation.org>, "Darrick J . Wong"
+ <djwong@kernel.org>, kunit-dev@googlegroups.com,
+ linux-kselftest@vger.kernel.org, Veronika Kabatova <vkabatov@redhat.com>,
+ CKI <cki-project@redhat.com>, kernelci@lists.linux.dev
+References: <20231115175146.9848-1-Nikolai.Kondrashov@redhat.com>
+ <20231205184503.79769-1-Nikolai.Kondrashov@redhat.com>
+ <20231205184503.79769-3-Nikolai.Kondrashov@redhat.com>
+ <CABVgOSnCNJcEfVp_k3emEHziYx55ecNaEj4fsbcfgrsCN4CrNQ@mail.gmail.com>
+ <f64c8105-5373-4dfb-b48c-655221accd19@redhat.com>
+ <9b45b0ebce3457c22aa456779aa1a5244b8ef6ad.camel@perches.com>
+From: Nikolai Kondrashov <Nikolai.Kondrashov@redhat.com>
+In-Reply-To: <9b45b0ebce3457c22aa456779aa1a5244b8ef6ad.camel@perches.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Dec 5, 2023 at 10:00=E2=80=AFPM Yosry Ahmed <yosryahmed@google.com>=
- wrote:
->
-> [..]
-> > > @@ -526,6 +582,102 @@ static struct zswap_entry *zswap_entry_find_get=
-(struct rb_root *root,
-> > >       return entry;
-> > >  }
-> > >
-> > > +/*********************************
-> > > +* shrinker functions
-> > > +**********************************/
-> > > +static enum lru_status shrink_memcg_cb(struct list_head *item, struc=
-t list_lru_one *l,
-> > > +                                    spinlock_t *lock, void *arg);
-> > > +
-> > > +static unsigned long zswap_shrinker_scan(struct shrinker *shrinker,
-> > > +             struct shrink_control *sc)
-> > > +{
-> > > +     struct lruvec *lruvec =3D mem_cgroup_lruvec(sc->memcg, NODE_DAT=
-A(sc->nid));
-> > > +     unsigned long shrink_ret, nr_protected, lru_size;
-> > > +     struct zswap_pool *pool =3D shrinker->private_data;
-> > > +     bool encountered_page_in_swapcache =3D false;
-> > > +
-> > > +     nr_protected =3D
-> > > +             atomic_long_read(&lruvec->zswap_lruvec_state.nr_zswap_p=
-rotected);
-> > > +     lru_size =3D list_lru_shrink_count(&pool->list_lru, sc);
-> > > +
-> > > +     /*
-> > > +      * Abort if the shrinker is disabled or if we are shrinking int=
-o the
-> > > +      * protected region.
-> > > +      *
-> > > +      * This short-circuiting is necessary because if we have too ma=
-ny multiple
-> > > +      * concurrent reclaimers getting the freeable zswap object coun=
-ts at the
-> > > +      * same time (before any of them made reasonable progress), the=
- total
-> > > +      * number of reclaimed objects might be more than the number of=
- unprotected
-> > > +      * objects (i.e the reclaimers will reclaim into the protected =
-area of the
-> > > +      * zswap LRU).
-> > > +      */
-> > > +     if (!zswap_shrinker_enabled || nr_protected >=3D lru_size - sc-=
->nr_to_scan) {
-> > > +             sc->nr_scanned =3D 0;
-> > > +             return SHRINK_STOP;
-> > > +     }
-> > > +
-> > > +     shrink_ret =3D list_lru_shrink_walk(&pool->list_lru, sc, &shrin=
-k_memcg_cb,
-> > > +             &encountered_page_in_swapcache);
-> > > +
-> > > +     if (encountered_page_in_swapcache)
-> > > +             return SHRINK_STOP;
-> > > +
-> > > +     return shrink_ret ? shrink_ret : SHRINK_STOP;
-> > > +}
-> > > +
-> > > +static unsigned long zswap_shrinker_count(struct shrinker *shrinker,
-> > > +             struct shrink_control *sc)
-> > > +{
-> > > +     struct zswap_pool *pool =3D shrinker->private_data;
-> > > +     struct mem_cgroup *memcg =3D sc->memcg;
-> > > +     struct lruvec *lruvec =3D mem_cgroup_lruvec(memcg, NODE_DATA(sc=
-->nid));
-> > > +     unsigned long nr_backing, nr_stored, nr_freeable, nr_protected;
-> > > +
-> > > +#ifdef CONFIG_MEMCG_KMEM
-> > > +     cgroup_rstat_flush(memcg->css.cgroup);
-> > > +     nr_backing =3D memcg_page_state(memcg, MEMCG_ZSWAP_B) >> PAGE_S=
-HIFT;
-> > > +     nr_stored =3D memcg_page_state(memcg, MEMCG_ZSWAPPED);
-> > > +#else
-> > > +     /* use pool stats instead of memcg stats */
-> > > +     nr_backing =3D get_zswap_pool_size(pool) >> PAGE_SHIFT;
-> > > +     nr_stored =3D atomic_read(&pool->nr_stored);
-> > > +#endif
-> > > +
-> > > +     if (!zswap_shrinker_enabled || !nr_stored)
-> > When I tested with this series, with !zswap_shrinker_enabled in the def=
-ault case,
-> > I found the performance is much worse than that without this patch.
-> >
-> > Testcase: memory.max=3D2G, zswap enabled, kernel build -j32 in a tmpfs =
-directory.
-> >
-> > The reason seems the above cgroup_rstat_flush(), caused much rstat lock=
- contention
-> > to the zswap_store() path. And if I put the "zswap_shrinker_enabled" ch=
-eck above
-> > the cgroup_rstat_flush(), the performance become much better.
-> >
-> > Maybe we can put the "zswap_shrinker_enabled" check above cgroup_rstat_=
-flush()?
->
-> Yes, we should do nothing if !zswap_shrinker_enabled. We should also
-> use mem_cgroup_flush_stats() here like other places unless accuracy is
-> crucial, which I doubt given that reclaim uses
-> mem_cgroup_flush_stats().
+On 12/6/23 18:38, Joe Perches wrote:
+> On Wed, 2023-12-06 at 18:23 +0200, Nikolai Kondrashov wrote:
+>> On 12/6/23 10:12, David Gow wrote:
+>>> I'm pretty happy with this personally, though I definitely think we
+>>> need the support for tests which aren't just executable scripts (e.g.
+>>> the docs in patch 6).
+>>>
+>>> The get_maintailer.pl bits, and hence the requirement to not include
+>>> '@', feel a little bit 'off': I'd rather get_maintainer.pl kept emails
+>>> and tests separate by some other means (either having --test _only_
+>>> print tests, not emails at all, or by giving them a prefix like
+>>> 'TEST:' or something). But that is diverging more from the existing
+>>> behaviour of get_maintainer.pl, so I could go either way.
+>>>
+>>> Otherwise, this looks pretty good. I'll give it a proper test tomorrow
+>>> alongside the other patches.
+>>
+>> Thanks for the review, David!
+>>
+>> Yeah, I don't like the '@' bit myself, but it seems to be the path of least
+>> resistance right now (not necessarily the best one, of course).
+>>
+>> I'm up for adding an option to get_maintainer.pl that disables email output,
+>> if people like that, though.
+> 
+> That already exists though I don't understand the
+> specific requirement here
+> 
+> --nom --nol --nor
+> 
+> from
+> $ ./scripts/get_maintainer.pl --help
+> []
+>      --m => include maintainer(s) if any
+>      --r => include reviewer(s) if any
+>      --n => include name 'Full Name <addr@domain.tld>'
+>      --l => include list(s) if any
+> []
+>     Most options have both positive and negative forms.
+>        The negative forms for --<foo> are --no<foo> and --no-<foo>.
+> 
 
-Ah, good points on both suggestions. We should not do extra work for
-non-user. And, this is a best-effort approximation of the memory
-saving factor, so as long as it is not *too* far off I think it's
-acceptable.
+Thanks, Joe!
 
->
-> mem_cgroup_flush_stats() has some thresholding to make sure we don't
-> do flushes unnecessarily, and I have a pending series in mm-unstable
-> that makes that thresholding per-memcg. Keep in mind that adding a
-> call to mem_cgroup_flush_stats() will cause a conflict in mm-unstable,
-> because the series there adds a memcg argument to
-> mem_cgroup_flush_stats(). That should be easily amenable though, I can
-> post a fixlet for my series to add the memcg argument there on top of
-> users if needed.
+Yeah, I already explored that way, but it seems to be explicitly forbidden:
 
-Hmm so how should we proceed from here? How about this:
+$ scripts/get_maintainer.pl --nom --nol --nor 
+0001-dt-bindings-mailbox-convert-bcm2835-mbox-bindings-to.patch
+scripts/get_maintainer.pl: Please select at least 1 email option
 
-a) I can send a fixlet to move the enablement check above the stats
-flushing + use mem_cgroup_flush_stats
-b) Then maybe, you can send a fixlet to update this new callsite?
+So, I assumed there is a reason and an intention behind this behavior and went 
+the other way.
 
-Does that sound reasonable?
+Nick
 
->
-> >
-> > Thanks!
-> >
-> > > +             return 0;
-> > > +
-> > > +     nr_protected =3D
-> > > +             atomic_long_read(&lruvec->zswap_lruvec_state.nr_zswap_p=
-rotected);
-> > > +     nr_freeable =3D list_lru_shrink_count(&pool->list_lru, sc);
-> > > +     /*
-> > > +      * Subtract the lru size by an estimate of the number of pages
-> > > +      * that should be protected.
-> > > +      */
-> > > +     nr_freeable =3D nr_freeable > nr_protected ? nr_freeable - nr_p=
-rotected : 0;
-> > > +
-> > > +     /*
-> > > +      * Scale the number of freeable pages by the memory saving fact=
-or.
-> > > +      * This ensures that the better zswap compresses memory, the fe=
-wer
-> > > +      * pages we will evict to swap (as it will otherwise incur IO f=
-or
-> > > +      * relatively small memory saving).
-> > > +      */
-> > > +     return mult_frac(nr_freeable, nr_backing, nr_stored);
-> > > +}
-> > > +
-> > > +static void zswap_alloc_shrinker(struct zswap_pool *pool)
-> > > +{
-> > > +     pool->shrinker =3D
-> > > +             shrinker_alloc(SHRINKER_NUMA_AWARE | SHRINKER_MEMCG_AWA=
-RE, "mm-zswap");
-> > > +     if (!pool->shrinker)
-> > > +             return;
-> > > +
-> > > +     pool->shrinker->private_data =3D pool;
-> > > +     pool->shrinker->scan_objects =3D zswap_shrinker_scan;
-> > > +     pool->shrinker->count_objects =3D zswap_shrinker_count;
-> > > +     pool->shrinker->batch =3D 0;
-> > > +     pool->shrinker->seeks =3D DEFAULT_SEEKS;
-> > > +}
-> > > +
-> > >  /*********************************
-> > >  * per-cpu code
-> > >  **********************************/
-> [..]
 
