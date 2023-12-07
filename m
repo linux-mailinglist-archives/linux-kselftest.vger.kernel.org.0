@@ -1,296 +1,202 @@
-Return-Path: <linux-kselftest+bounces-1376-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1377-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A381C809113
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Dec 2023 20:13:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 80953809125
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Dec 2023 20:20:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C56811C20934
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Dec 2023 19:13:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8D2BD1C20AD0
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Dec 2023 19:20:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71E0B4F5E9;
-	Thu,  7 Dec 2023 19:13:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D06484F614;
+	Thu,  7 Dec 2023 19:19:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VMWAIfXo"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="QcfKhdrk"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FC6E10F9;
-	Thu,  7 Dec 2023 11:12:59 -0800 (PST)
-Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2c9eca5bbaeso14529441fa.3;
-        Thu, 07 Dec 2023 11:12:59 -0800 (PST)
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3E021708
+	for <linux-kselftest@vger.kernel.org>; Thu,  7 Dec 2023 11:19:49 -0800 (PST)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-54c70c70952so1830172a12.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 07 Dec 2023 11:19:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1701976377; x=1702581177; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=r7L52bButApvPAe1l+vSFfVbgaHr8LHhwAbqHXZCi2I=;
-        b=VMWAIfXoi1i7HFkBSZPZSpjFVb29QjWZFeQdCEiDhBsBM2oyOXFXd6+Jqyg7GrX7B+
-         pobFwrlbsaFsJ6HtRAn262TSdiriJNEmNFtdgTkAVvrDhO8WQRUechtHxxXvlDoDXjP/
-         12ICOAYkqEaWL6Oe6JFmmcqsSTRtru9NI4jrst/9yiQa9xIfU+k4cvDaRxePIZs4lm0D
-         yGOT3J+pVeCr7UIV9QryfVA/94NA2S2UOT+n94m6Znt3hbGOOD1vj4uWy3MO51aahRdh
-         RNHreeTslveH+HJ5mIr+k2XlHOhksItrAoaS+lQ/0C+hJjxvqfwMxwoP/wfs9UghUwwN
-         IXNQ==
+        d=suse.com; s=google; t=1701976788; x=1702581588; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=GqNljMeu10jeQo935R54vZ6RNgIIhYo8bGwZuNpxXu4=;
+        b=QcfKhdrknHq8e6jK6RVLpxIGMtEh7bCRxkfJFFg5kjvaeiXjFg+WIT6EzbRai7Eq7q
+         r2bDCOZsmmu+/wr+kcgK1uRu/bKZESakMzqjTyV7Io12elmmJZjpzowz/LwYzfp5KNEW
+         Cp7cDjL7P2xTkK8clrdEpOQcPqcKaI/rrU0DDSZzsw+iGJeM32N5Vgs37jE4EU3Uh27k
+         AtV9bi56iRbpf4ly/ptViDC9Eb+CYLZoFugkqG76oemY7EwcqKbfOPs5NJ8HdxKd7v9g
+         N7Wu/HEZmRKwueGf7mj4Q5rFbrRWnfVqb7ui7JAkq/Wk/v1lfIm0EvBQeVEOzxNMopX+
+         Folg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701976377; x=1702581177;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=r7L52bButApvPAe1l+vSFfVbgaHr8LHhwAbqHXZCi2I=;
-        b=UlqIBOCuZEFYwW522C78E+9yC5XMBBNfoLR8YuPhKF9KytbOa0/QrjulrCzy/xeAas
-         n8j62lxYKuYqQQTwMVCopgeOIaeg8QnDO8ykbniOZ9mstU3HJZU9H3hwNxPZF63Qul1B
-         t2+NAyt4KvUTXVF7fxDjKwQeSo+NVKI+LAUi81Ur5lbCR40N3Ffg7dKRIg5s9jbpNles
-         ANFVWXBl/VPvfr/c+emDVxFXQJ5o4w+Ruy7JdIxcKxhBDOZMatVFG2HSXXWXwUw0DfcH
-         0XTaMJEXus0waq6DVsgppgW86sm2ybwO+bfU8hlMlCMa1KD9GA7U7Duu77QVxEYWOa+V
-         U7gw==
-X-Gm-Message-State: AOJu0YwPWWielJeZMvPegCLu5TZ49UDZD8rNKno8sd3rwxYUnSkCiwdH
-	R6Bn8bIBVOQgIO214XE1ZlunrtzsoEzy/39hUs0=
-X-Google-Smtp-Source: AGHT+IG1tPh8nbBAXvNAo40dCFKvu65nxH9hKddanqzjbPMoW+28Rh/cdC2azbaAgSR+xHsIuJQbhiLTTXKQYelmZws=
-X-Received: by 2002:a2e:901a:0:b0:2c9:f776:e28f with SMTP id
- h26-20020a2e901a000000b002c9f776e28fmr928562ljg.120.1701976377304; Thu, 07
- Dec 2023 11:12:57 -0800 (PST)
+        d=1e100.net; s=20230601; t=1701976788; x=1702581588;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GqNljMeu10jeQo935R54vZ6RNgIIhYo8bGwZuNpxXu4=;
+        b=bTUih7hM5X0n4b7NXRgccUyFwHIlfSQI7I/ZwiesfnaR9jkPwjYNHg8OXkH+lgsDII
+         QEn5vRGhiLZ1cZMsv6YkVVfO5x4717qVlh6EpDqsqVb7dOVbDllmZVgHlWl8EkIgZy5s
+         z0e6/jmJr1T8tddnIEgMyxsLaDDdok3qvp19GiuwcKdTGc7KSe6hBKXAQaGPWHSuIKe3
+         BA//IpSsK8qLXd3CeJlx2mW+DvqmxL3j3AbIun/VHRzv2bYOA04aaInosu76ig34Tyum
+         c3TiACaanK1lZH7xNcDkizLIAkiBYIuumuqu+G8llA7i7aKww1tXoBMebBUW/cFuT2jp
+         qUPQ==
+X-Gm-Message-State: AOJu0Yy4FPzWZZ9T5OzIY680eu6tfXJhP5/YPIaY8bZelkNbBdWd/jvM
+	BGJocJ9+LeVJF7tnZPu1juJ5zV8YQ7vC6rMXtgA=
+X-Google-Smtp-Source: AGHT+IFBIOm0w6M5xLYQMgu5ASfsSFBsRFtnFH6mDk0C8McQSxHcLqmHPgbqxDhYSlhlK7QDsnXq4Q==
+X-Received: by 2002:a17:906:a84d:b0:a19:a19b:4268 with SMTP id dx13-20020a170906a84d00b00a19a19b4268mr1051351ejb.211.1701976788270;
+        Thu, 07 Dec 2023 11:19:48 -0800 (PST)
+Received: from ?IPv6:2804:30c:915:cb00:89a8:6d94:ec55:e0a3? ([2804:30c:915:cb00:89a8:6d94:ec55:e0a3])
+        by smtp.gmail.com with ESMTPSA id sa25-20020a1709076d1900b00a1d8626d650sm97674ejc.208.2023.12.07.11.19.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 07 Dec 2023 11:19:48 -0800 (PST)
+Message-ID: <57fb9f30afbaddb09def96aac11c45296a59a277.camel@suse.com>
+Subject: Re: [PATCH v3 2/3] livepatch: Move tests from lib/livepatch to
+ selftests/livepatch
+From: mpdesouza@suse.com
+To: Joe Lawrence <joe.lawrence@redhat.com>, Miroslav Benes <mbenes@suse.cz>
+Cc: Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Heiko
+ Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, Alexander
+ Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger
+ <borntraeger@linux.ibm.com>,  Sven Schnelle <svens@linux.ibm.com>, Josh
+ Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>,  Petr
+ Mladek <pmladek@suse.com>, linux-kselftest@vger.kernel.org,
+ linux-doc@vger.kernel.org,  linux-kernel@vger.kernel.org,
+ linux-s390@vger.kernel.org,  live-patching@vger.kernel.org
+Date: Thu, 07 Dec 2023 16:19:32 -0300
+In-Reply-To: <273a86d6-d220-fdcf-3c2f-70516c519ff9@redhat.com>
+References: <20231031-send-lp-kselftests-v3-0-2b1655c2605f@suse.com>
+	 <20231031-send-lp-kselftests-v3-2-2b1655c2605f@suse.com>
+	 <ZWn7dEzVWoKxycmy@redhat.com>
+	 <alpine.LSU.2.21.2312061543280.13051@pobox.suse.cz>
+	 <273a86d6-d220-fdcf-3c2f-70516c519ff9@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.1 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231207163458.5554-1-khuey@kylehuey.com> <20231207163458.5554-4-khuey@kylehuey.com>
-In-Reply-To: <20231207163458.5554-4-khuey@kylehuey.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 7 Dec 2023 11:12:45 -0800
-Message-ID: <CAEf4Bzbt1abnfj2w6Hmp2w8SqVkQiCW=SimY6ss_Jp_325QyoA@mail.gmail.com>
-Subject: Re: [PATCH v2 3/3] selftest/bpf: Test a perf bpf program that
- suppresses side effects.
-To: Kyle Huey <me@kylehuey.com>
-Cc: Kyle Huey <khuey@kylehuey.com>, linux-kernel@vger.kernel.org, 
-	Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Marco Elver <elver@google.com>, 
-	Yonghong Song <yonghong.song@linux.dev>, "Robert O'Callahan" <robert@ocallahan.org>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Mykola Lysenko <mykolal@fb.com>, 
-	Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Dec 7, 2023 at 8:35=E2=80=AFAM Kyle Huey <me@kylehuey.com> wrote:
->
-> The test sets a hardware breakpoint and uses a bpf program to suppress th=
-e
-> side effects of a perf event sample, including I/O availability signals,
-> SIGTRAPs, and decrementing the event counter limit, if the ip matches the
-> expected value. Then the function with the breakpoint is executed multipl=
-e
-> times to test that all effects behave as expected.
->
-> Signed-off-by: Kyle Huey <khuey@kylehuey.com>
-> ---
->  .../selftests/bpf/prog_tests/perf_skip.c      | 145 ++++++++++++++++++
->  .../selftests/bpf/progs/test_perf_skip.c      |  15 ++
->  2 files changed, 160 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/perf_skip.c
->  create mode 100644 tools/testing/selftests/bpf/progs/test_perf_skip.c
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/perf_skip.c b/tools/t=
-esting/selftests/bpf/prog_tests/perf_skip.c
-> new file mode 100644
-> index 000000000000..f6fa9bfd9efa
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/perf_skip.c
-> @@ -0,0 +1,145 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#define _GNU_SOURCE
-> +
-> +/* We need the latest siginfo from the kernel repo. */
-> +#include <asm/siginfo.h>
+On Thu, 2023-12-07 at 10:20 -0500, Joe Lawrence wrote:
+> On 12/6/23 10:05, Miroslav Benes wrote:
+> > On Fri, 1 Dec 2023, Joe Lawrence wrote:
+> >=20
+> > > On Tue, Oct 31, 2023 at 06:10:52PM -0300, Marcos Paulo de Souza
+> > > wrote:
+> > > > The modules are being moved from lib/livepatch to
+> > > > tools/testing/selftests/livepatch/test_modules.
+> > > >=20
+> > > > This code moving will allow writing more complex tests, like
+> > > > for example an
+> > > > userspace C code that will call a livepatched kernel function.
+> > > >=20
+> > > > The modules are now built as out-of-tree
+> > > > modules, but being part of the kernel source means they will be
+> > > > maintained.
+> > > >=20
+> > > > Another advantage of the code moving is to be able to easily
+> > > > change,
+> > > > debug and rebuild the tests by running make on the
+> > > > selftests/livepatch directory,
+> > > > which is not currently possible since the modules on
+> > > > lib/livepatch are
+> > > > build and installed using the "modules" target.
+> > > >=20
+> > > > The current approach also keeps the ability to execute the
+> > > > tests manually by
+> > > > executing the scripts inside selftests/livepatch directory, as
+> > > > it's currently
+> > > > supported. If the modules are modified, they needed to be
+> > > > rebuilt before running
+> > > > the scripts though.
+> > > >=20
+> > > > The modules are built before running the selftests when using
+> > > > the
+> > > > kselftest invocations:
+> > > >=20
+> > > > 	make kselftest TARGETS=3Dlivepatch
+> > > > or
+> > > > 	make -C tools/testing/selftests/livepatch run_tests
+> > > >=20
+> > >=20
+> > > Quick question:
+> > >=20
+> > > - We have been building with CONFIG_LIVEPATCH_TEST=3Dm to generate
+> > > the
+> > > =C2=A0 test modules at kernel build time
+> > >=20
+> > > - Our packaging filters out the selftest scripts and supporting
+> > > modules
+> > > =C2=A0 from the general kernel RPM package into their subpackages
+> > >=20
+> > > - Tests are run as part of CKI or other manual tests by
+> > > installing the
+> > > =C2=A0 pre-built packages from the previous step
+> > >=20
+> > >=20
+> > > After this patch, we would need to add something like the
+> > > following to
+> > > our kernel build, before packaging:
+> > >=20
+> > > =C2=A0 $ make KDIR=3D$(pwd) -C tools/testing/selftests/livepatch/
+> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^^^^
+> > >=20
+> > > If this is the correct way to build the test modules for *this*
+> > > tree and
+> > > /lib/modules/$(shell uname -r)/build... it might be useful to
+> > > document
+> > > in the commit message as an alternative use case.
 
-selftests are built with UAPI headers' copies under tools/include, so
-CI did catch a real issue, I think. Try copying
-include/uapi/asm-generic/siginfo.h into
-tools/include/uapi/asm-generic/siginfo.h ?
+That's right:
 
-> +#define __have_siginfo_t 1
-> +#define __have_sigval_t 1
-> +#define __have_sigevent_t 1
-> +#define __siginfo_t_defined
-> +#define __sigval_t_defined
-> +#define __sigevent_t_defined
-> +#define _BITS_SIGINFO_CONSTS_H 1
-> +#define _BITS_SIGEVENT_CONSTS_H 1
-> +
-> +#include <test_progs.h>
-> +#include "test_perf_skip.skel.h"
-> +#include <linux/compiler.h>
-> +#include <linux/hw_breakpoint.h>
-> +#include <sys/mman.h>
-> +
-> +int signals_unexpected =3D 1;
-> +int sigio_count, sigtrap_count;
-> +
-> +static void handle_sigio(int sig __always_unused)
-> +{
-> +       ASSERT_OK(signals_unexpected, "perf event not skipped");
-> +       ++sigio_count;
-> +}
-> +
-> +static void handle_sigtrap(int signum __always_unused,
-> +                          siginfo_t *info,
-> +                          void *ucontext __always_unused)
-> +{
-> +       ASSERT_OK(signals_unexpected, "perf event not skipped");
-> +       ASSERT_EQ(info->si_code, TRAP_PERF, "wrong si_code");
-> +       ++sigtrap_count;
-> +}
-> +
-> +static noinline int test_function(void)
-> +{
-> +       asm volatile ("");
-> +       return 0;
-> +}
-> +
-> +void serial_test_perf_skip(void)
-> +{
-> +       struct sigaction action =3D {};
-> +       struct sigaction previous_sigtrap;
-> +       sighandler_t previous_sigio;
-> +       struct test_perf_skip *skel =3D NULL;
-> +       struct perf_event_attr attr =3D {};
-> +       int perf_fd =3D -1;
-> +       int err;
-> +       struct f_owner_ex owner;
-> +       struct bpf_link *prog_link =3D NULL;
-> +
-> +       action.sa_flags =3D SA_SIGINFO | SA_NODEFER;
-> +       action.sa_sigaction =3D handle_sigtrap;
-> +       sigemptyset(&action.sa_mask);
-> +       if (!ASSERT_OK(sigaction(SIGTRAP, &action, &previous_sigtrap), "s=
-igaction"))
-> +               return;
-> +
-> +       previous_sigio =3D signal(SIGIO, handle_sigio);
-> +
-> +       skel =3D test_perf_skip__open_and_load();
-> +       if (!ASSERT_OK_PTR(skel, "skel_load"))
-> +               goto cleanup;
-> +
-> +       attr.type =3D PERF_TYPE_BREAKPOINT;
-> +       attr.size =3D sizeof(attr);
-> +       attr.bp_type =3D HW_BREAKPOINT_X;
-> +       attr.bp_addr =3D (uintptr_t)test_function;
-> +       attr.bp_len =3D sizeof(long);
-> +       attr.sample_period =3D 1;
-> +       attr.sample_type =3D PERF_SAMPLE_IP;
-> +       attr.pinned =3D 1;
-> +       attr.exclude_kernel =3D 1;
-> +       attr.exclude_hv =3D 1;
-> +       attr.precise_ip =3D 3;
-> +       attr.sigtrap =3D 1;
-> +       attr.remove_on_exec =3D 1;
-> +
-> +       perf_fd =3D syscall(__NR_perf_event_open, &attr, 0, -1, -1, 0);
-> +       if (perf_fd < 0 && (errno =3D=3D ENOENT || errno =3D=3D EOPNOTSUP=
-P)) {
-> +               printf("SKIP:no PERF_TYPE_BREAKPOINT/HW_BREAKPOINT_X\n");
-> +               test__skip();
-> +               goto cleanup;
-> +       }
-> +       if (!ASSERT_OK(perf_fd < 0, "perf_event_open"))
-> +               goto cleanup;
-> +
-> +       // Configure the perf event to signal on sample.
+$ make -C tools/testing/selftests/livepatch/
 
-please don't use C++ style comments
+is indeed the way to build the tests without running them. KDIR will be
+set to  /lib/modules/$(shell uname -r)/build is empty.
 
-> +       err =3D fcntl(perf_fd, F_SETFL, O_ASYNC);
-> +       if (!ASSERT_OK(err, "fcntl(F_SETFL, O_ASYNC)"))
-> +               goto cleanup;
-> +
-> +       owner.type =3D F_OWNER_TID;
-> +       owner.pid =3D syscall(__NR_gettid);
-> +       err =3D fcntl(perf_fd, F_SETOWN_EX, &owner);
-> +       if (!ASSERT_OK(err, "fcntl(F_SETOWN_EX)"))
-> +               goto cleanup;
-> +
-> +       // Allow at most one sample. A sample rejected by bpf should
-> +       // not count against this.
-> +       err =3D ioctl(perf_fd, PERF_EVENT_IOC_REFRESH, 1);
-> +       if (!ASSERT_OK(err, "ioctl(PERF_EVENT_IOC_REFRESH)"))
-> +               goto cleanup;
-> +
-> +       prog_link =3D bpf_program__attach_perf_event(skel->progs.handler,=
- perf_fd);
-> +       if (!ASSERT_OK_PTR(prog_link, "bpf_program__attach_perf_event"))
-> +               goto cleanup;
-> +
-> +       // Configure the bpf program to suppress the sample.
-> +       skel->bss->ip =3D (uintptr_t)test_function;
-> +       test_function();
-> +
-> +       ASSERT_EQ(sigio_count, 0, "sigio_count");
-> +       ASSERT_EQ(sigtrap_count, 0, "sigtrap_count");
-> +
-> +       // Configure the bpf program to allow the sample.
-> +       skel->bss->ip =3D 0;
-> +       signals_unexpected =3D 0;
-> +       test_function();
-> +
-> +       ASSERT_EQ(sigio_count, 1, "sigio_count");
-> +       ASSERT_EQ(sigtrap_count, 1, "sigtrap_count");
-> +
-> +       // Test that the sample above is the only one allowed (by perf, n=
-ot
-> +       // by bpf)
-> +       test_function();
-> +
-> +       ASSERT_EQ(sigio_count, 1, "sigio_count");
-> +       ASSERT_EQ(sigtrap_count, 1, "sigtrap_count");
-> +
-> +cleanup:
-> +       if (prog_link)
+Yes, I can definitely add documentation about it inside the
+tools/testing/selftests/livepatch/README.
 
-nit: no need for a check, bpf_link__destroy() handles NULLs just fine
+> >=20
+> > So if I understand it correctly, you would like to stick to pre-
+> > building=20
+> > the modules (not in-tree but now after the kernel is build using
+> > the=20
+> > proposed way), package them and then install everything on a system
+> > running the respective kernel. A valid use case in my opinion.
+> >=20
+>=20
+> That would accurate.=C2=A0 If this use case can be supported, it wouldn't
+> require changes to our CKI / testing scripts, only the post-build
+> packaging bits.
+>=20
+> > My idea is to abandon this way completely, take the selftests and
+> > build=20
+> > and run them on the system right away.
+> >=20
+> > Both should be doable, hopefully, if we wire it all correctly...
+> > and=20
+> > document it.
+> >=20
+> I can't think of why it shouldn't continue to work, even in a future
+> where newer livepatching selftests support older kernels.=C2=A0 (We would
+> just have newer selftests sources backported to test older kernel
+> sources.)
+>=20
+> Are there any test cases which truly need to be build on-the-fly?=C2=A0
+> Aside
+> from testing different toolchain pieces?
 
-> +               bpf_link__destroy(prog_link);
-> +       if (perf_fd >=3D 0)
-> +               close(perf_fd);
-> +       if (skel)
-> +               test_perf_skip__destroy(skel);
+We would like to use the same selftests to trigger testing on different
+kernels (adjusting it when necessary as you stated), without having to
+rebuild the kernel. Miroslav may have other ideias about it too, IIRC.
 
-same, no need for NULL check
+>=20
 
-> +
-> +       signal(SIGIO, previous_sigio);
-> +       sigaction(SIGTRAP, &previous_sigtrap, NULL);
-> +}
-> diff --git a/tools/testing/selftests/bpf/progs/test_perf_skip.c b/tools/t=
-esting/selftests/bpf/progs/test_perf_skip.c
-> new file mode 100644
-> index 000000000000..417a9db3b770
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/test_perf_skip.c
-> @@ -0,0 +1,15 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include "vmlinux.h"
-> +#include <bpf/bpf_helpers.h>
-> +#include <bpf/bpf_tracing.h>
-> +
-> +uintptr_t ip;
-> +
-> +SEC("perf_event")
-> +int handler(struct bpf_perf_event_data *data)
-> +{
-> +       // Skip events that have the correct ip.
-
-C++ comments
-
-
-> +       return ip !=3D PT_REGS_IP(&data->regs);
-> +}
-> +
-> +char _license[] SEC("license") =3D "GPL";
-> --
-> 2.34.1
->
 
