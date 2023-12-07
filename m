@@ -1,247 +1,216 @@
-Return-Path: <linux-kselftest+bounces-1339-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1340-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B84BC808355
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Dec 2023 09:40:06 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59013808360
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Dec 2023 09:42:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CC66D1C21CC8
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Dec 2023 08:40:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0FC89283D77
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Dec 2023 08:42:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3AC9171C6;
-	Thu,  7 Dec 2023 08:40:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78879199CA;
+	Thu,  7 Dec 2023 08:42:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="esa/Qkqg"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="luEkdGRC"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2452328C8;
-	Thu,  7 Dec 2023 08:40:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 420C2C433C7;
-	Thu,  7 Dec 2023 08:40:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701938404;
-	bh=aERKSRSkgUM4DekqTDBhu4Ocyd2adYz1QF9/iT1ti/o=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=esa/QkqgYlHsn6hwR7x1wBb4dhnQrP/9kPdP8POQbBVMV7yp1HdqBgJ2p5X0vNfiH
-	 460P9x4aip/x1L2+SzI0XGFamUl9rUZbin82hE+MTadrDh2iEcr9PYUb794tKHoeqY
-	 lFCsUZOeqtB672dsUwXecZUXkOTt7Eh+XwoSAMtStv+ol7OIpWHITeVhHIw3SU2Pcs
-	 624V31oVMWUHTIH8XMVAiAwHS4RTJHa3/m1lPbzC5heIHLn7zXp+1wxlb6NqtrPTiI
-	 BM2XKMlRf5sMR3ptIT11+3IhfgDprU7UvavyZWH/BOFrS9ixaEGN5jrHK3YyVFHy//
-	 B7vzOgstBmKgQ==
-Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1rB9vN-0029MR-84;
-	Thu, 07 Dec 2023 08:40:01 +0000
-Date: Thu, 07 Dec 2023 08:39:46 +0000
-Message-ID: <87cyvi8kz1.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	kvmarm@lists.linux.dev,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 15/21] KVM: arm64: Support FEAT_FPMR for guests
-In-Reply-To: <20231205-arm64-2023-dpisa-v3-15-dbcbcd867a7f@kernel.org>
-References: <20231205-arm64-2023-dpisa-v3-0-dbcbcd867a7f@kernel.org>
-	<20231205-arm64-2023-dpisa-v3-15-dbcbcd867a7f@kernel.org>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88B5C126;
+	Thu,  7 Dec 2023 00:42:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701938565; x=1733474565;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=0OmbIqT+PTEKJSPGxj4pijNqjiR20rOKm1WvhAtu2XE=;
+  b=luEkdGRCSAq7cQFqDobtGM+Lg/p3wF1QCRGu1Co8Gu1PJW+NmZfdXbKr
+   PeK6XqIoWSfJXiePARxZmQ9U0Sgp946z1ZQ0AUMzP8L9n/04qwndgJNfp
+   9wydHTkQJcdMMjbq9GmT8yD2RUFlkRhcIHn+CA3oWdaVG/4yjBSvhV0Kj
+   kDcXS1CbxyA4Ke6s6aZcfCZ/TCB3jNPPPOqial1XUFHpYe6uHmXBDtjGA
+   OImr+U4fgeXw77Kr9aCTCc2Gsz0duYt0Du5RewCqizeUUaT6kwpvtwTJ6
+   gQ6pq7ymzQeCUwMXsowyE44iTx/OJeAatz36jKY1vnGoEySQu454eTk8o
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10916"; a="1027483"
+X-IronPort-AV: E=Sophos;i="6.04,256,1695711600"; 
+   d="scan'208";a="1027483"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2023 00:42:45 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10916"; a="944958259"
+X-IronPort-AV: E=Sophos;i="6.04,256,1695711600"; 
+   d="scan'208";a="944958259"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga005.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 07 Dec 2023 00:42:44 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Thu, 7 Dec 2023 00:42:43 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Thu, 7 Dec 2023 00:42:43 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35 via Frontend Transport; Thu, 7 Dec 2023 00:42:43 -0800
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.40) by
+ edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Thu, 7 Dec 2023 00:42:42 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GezHs8DcsytXyn17Zg7AQ6bwNVcAe/nuKUevRvvKwl4u2P0vGFBGC1sVjCmzP+n56jMvQpfAUybBPtlFwA6WPL4AqdFz7m2Ez7bi/xeJXSBO5gD43V1DPy5Obzev0NPUqZ1W8GMhkNqxDHU4odSUheh15ck9D8c7aYNDRpnCrx7R9+Zc9J8qVioMSpRP3NkEGf9KNFhpepeB6QA3bOPtPuJgIrW6Eh1EmmXUkGushzL32iFQWipCekuEVvRWph3M85vuHV+733mwaecob9ZCJcEl/Vo0cMgPl+CmImfJ9OtII0Jhggrb4Wi1s0ZeGgYPjbr34fJ4VJnrMPIOoDvnuA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SCkB12D745cAhgyQzurpj4p18eyDoUPZpajMmpLfUH0=;
+ b=BnaespaOHvdQNl7G0GpOQZWD++w+uKgulL315KuIRIdWi9NqZE3C4uejtNYA07WRrz+Qw1ihpiB4pvfbhdowx+cVg7BBLLPoqnxeAo4bEP9B3MJpDos9LioIOMWjOxkAxnkvd26ySU4+xSSikiliwOiDiYQUmWb/yeNXOzPhh1wP+kyjQjy2ziR+optxANNDUPB7tHUQV6GL6c1b0xz5KaeeGUngZmaxG6gouGoLFGt5ro49h+HbaPGFWCk0qNXK5K5GWzlNf24MmK4LuwjlIwhP3Ig9C+44BF0ymeIDKsjpnRdouMS/RhQYbCumCl6FYUzmT9kiHvhUuBCwnb32Ng==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CH3PR11MB8660.namprd11.prod.outlook.com (2603:10b6:610:1ce::13)
+ by IA1PR11MB7854.namprd11.prod.outlook.com (2603:10b6:208:3f6::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7068.27; Thu, 7 Dec
+ 2023 08:42:40 +0000
+Received: from CH3PR11MB8660.namprd11.prod.outlook.com
+ ([fe80::66ec:5c08:f169:6038]) by CH3PR11MB8660.namprd11.prod.outlook.com
+ ([fe80::66ec:5c08:f169:6038%3]) with mapi id 15.20.7068.025; Thu, 7 Dec 2023
+ 08:42:40 +0000
+Date: Thu, 7 Dec 2023 16:42:26 +0800
+From: Chao Gao <chao.gao@intel.com>
+To: "Li, Xin3" <xin3.li@intel.com>
+CC: "kvm@vger.kernel.org" <kvm@vger.kernel.org>, "linux-doc@vger.kernel.org"
+	<linux-doc@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>, "linux-hyperv@vger.kernel.org"
+	<linux-hyperv@vger.kernel.org>, "linux-kselftest@vger.kernel.org"
+	<linux-kselftest@vger.kernel.org>, "seanjc@google.com" <seanjc@google.com>,
+	"pbonzini@redhat.com" <pbonzini@redhat.com>, "corbet@lwn.net"
+	<corbet@lwn.net>, "kys@microsoft.com" <kys@microsoft.com>,
+	"haiyangz@microsoft.com" <haiyangz@microsoft.com>, "wei.liu@kernel.org"
+	<wei.liu@kernel.org>, "Cui, Dexuan" <decui@microsoft.com>,
+	"tglx@linutronix.de" <tglx@linutronix.de>, "mingo@redhat.com"
+	<mingo@redhat.com>, "bp@alien8.de" <bp@alien8.de>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>, "x86@kernel.org"
+	<x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>, "vkuznets@redhat.com"
+	<vkuznets@redhat.com>, "peterz@infradead.org" <peterz@infradead.org>,
+	"Shankar, Ravi V" <ravi.v.shankar@intel.com>
+Subject: Re: [PATCH v1 13/23] KVM: VMX: Handle VMX nested exception for FRED
+Message-ID: <ZXGFcuwwmkBlqq5s@chao-email>
+References: <20231108183003.5981-1-xin3.li@intel.com>
+ <20231108183003.5981-14-xin3.li@intel.com>
+ <ZVMkVmBPVfaMjDTL@chao-email>
+ <SA1PR11MB67348D3637C2BC6B107C5CCAA8B1A@SA1PR11MB6734.namprd11.prod.outlook.com>
+ <SA1PR11MB6734EFF17E15C68AAD12A227A884A@SA1PR11MB6734.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <SA1PR11MB6734EFF17E15C68AAD12A227A884A@SA1PR11MB6734.namprd11.prod.outlook.com>
+X-ClientProxiedBy: SI2PR01CA0050.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:193::21) To CH3PR11MB8660.namprd11.prod.outlook.com
+ (2603:10b6:610:1ce::13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.104.136.29
-X-SA-Exim-Rcpt-To: broonie@kernel.org, catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, corbet@lwn.net, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH3PR11MB8660:EE_|IA1PR11MB7854:EE_
+X-MS-Office365-Filtering-Correlation-Id: 03f54bcb-62fe-4813-8a0b-08dbf700781e
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: qvkF2kIBNiPeItxUvtUu1IlzUjv2+2/Q+YAO0k/8zQpWCuXuIycN45f4GSLuYZ+bZECz75o1B70LhYAlqRBL8IhJwbpvWiQpDct44/MK2/dlAED8umxIcTso2Zv21IsKlAkOQqpD0yFGLBDg6ZrrO8WqihtYWftXX+EwsgI1MXLWJvStNUscUb/sGcLqBUBnjNzJh0YAvP13mJRO1PYzo011A6rZFb5W/9WQMEO4qrg8vZU2gOon90+oElZ+9+aWjgW/wievjs3Ialv4TWmndIVmpS5ylVo+EaKGt+hxE/OtPTaLqRO7ctsztSuYKtipjkMVXsf+a3TwP4uJlxvTG3x7F+rm/vk5PY4BCWAb+qRG4RbGGl3LtKb7ygqgQyPXu02h9169OY+Oue71tMyc91heDwvYLoZJ2rpuY0PUmNHVI9J/2wGFH7oAATuESzzuHJDeUmW1fsTT+6ltN6+Q/3qX26ZmxSIw0mDhVWnpRkiRvyFZ2u/LulJY9j/7WVJQoHPqpJ8AodMWHs2PtsKdOSPzPhU3FjMbZWEW960nu9UGiXLva2g4xQYWohBEAVJY
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR11MB8660.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(39860400002)(376002)(396003)(346002)(366004)(136003)(230922051799003)(64100799003)(451199024)(186009)(1800799012)(6862004)(4326008)(2906002)(8676002)(8936002)(44832011)(86362001)(7416002)(5660300002)(33716001)(41300700001)(83380400001)(82960400001)(6512007)(9686003)(6506007)(6666004)(26005)(38100700002)(66556008)(66476007)(54906003)(6636002)(316002)(66946007)(478600001)(6486002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?m+FzD0dX7jSCYMLPwVL6kA4XWP4UPhv0hEo7W9x086U4FRWX5aMHxxEjKKlD?=
+ =?us-ascii?Q?P93nHodfmsCpaEQvpwjnwPKWP+JT0LxmS3QbXXWeI5XJcBOosmtlttavr6AQ?=
+ =?us-ascii?Q?u+TMkSWHoTK7lLivru4ekQHU0cQFhOupCXaDFKdJ2j/62G/qDYjpBDD3J85m?=
+ =?us-ascii?Q?kRa/m2itUhe1KRkwjaJBTJcU8WA+XaFrn6dzcR+OfO7qjNFEyADReHMHsaR+?=
+ =?us-ascii?Q?nfGkBMPMusul4BSVb57H4xeaol4unYVLV46waFYV4bSojUHaWgUI7m98by05?=
+ =?us-ascii?Q?C3rZulEE8DU8Z90RjGOyRahGg7oaAXkBGkXvrLTqdU8edryg7RT0UgViygyl?=
+ =?us-ascii?Q?JngZF+bLZrtB0EXhlKIpJah1+or4Ipb/V/nT3Fr3b9xnC5krgxw+D7X43y3Q?=
+ =?us-ascii?Q?+gTnDaKJ6Fnpk7E8KvIvq03c4gdpHbu7JXyySrKDbIfzwcVCDb/rcUrGU/Xb?=
+ =?us-ascii?Q?67Hd9sH1WhIKb58/tW8ldmlg+NOdsCnXwYxGiCWfggWP5MToOJzNTlnLUOA1?=
+ =?us-ascii?Q?ntiNsQNR9AYHMOD8QG+iyRVi9/xGqEZ8aEkOYlovu1G2HNx6hwwhAuvvgjlg?=
+ =?us-ascii?Q?7XGFrilSC7XsdzAD8boM87r+pk7l4AY5COS41gxet7oc+11uOQtIFWpf/dFM?=
+ =?us-ascii?Q?7BpNZ0jwUU1uWbAiP+ZnAUfo9OPTQ47FbsS7gA/c6ITUJSfhnFHFIN3gLCw4?=
+ =?us-ascii?Q?SrUxmYr5s62js7ckb5sFdy1J20pyhC27MBNaR1BdMnp4ARvmxC/cZAILonDF?=
+ =?us-ascii?Q?0R5GS75fVYoFXV0L1Y2dCHjcJObBg7ZhUVoV8XTPf6TvGF/2rPFL0NCjeNAg?=
+ =?us-ascii?Q?oAO/OjWUhB1TeFgSPB8boTWmcNBa3rc7Isv2YFdMzPdzLctjbu6lMCK0wJKT?=
+ =?us-ascii?Q?AWPDfTTYpJ0HGOfyXTOA96tct1q3sXNeA8nkVxdpO6vitpGXp/hZGSkLWzgr?=
+ =?us-ascii?Q?NwDKEwdVVOvuo6s5wSplh5BQKYzVp7WMY3TUxtrnvkgsa2ZfjWv0WomxzCaR?=
+ =?us-ascii?Q?yTh5H5K9Nh76O1Gvs/eYd4n7SGWMO+CWqLiDaUkt5A+01bGhKEsu7QpUmDzI?=
+ =?us-ascii?Q?DPYSkFI4uqZ01L6E87Y6qYq+GKf9G/kTaOlss2h0Uy8AL6qwNCCE3UVl8Eby?=
+ =?us-ascii?Q?P+LOMGJvD93PialelM5gHmoRravxcoX8hEmpGsLHqUKB9OPfDOZNDuN4bVBq?=
+ =?us-ascii?Q?tjTVUPLghHbXheFGUwROJkVBcUKLzemTG85o/6R2+m4HG562d90WqJDhMkye?=
+ =?us-ascii?Q?BsSkmxwLftOT2l0TOzFzER78B0yf42Xz9xwGwEpc4AMkT9J8bCZTAq6aEYl2?=
+ =?us-ascii?Q?3L2Hgn7hS+v17X4DIIfU01k8ZBTZLsWQbgCxrYbTquea7m7iK8yN83h12/SZ?=
+ =?us-ascii?Q?ZLeKRaofYcv3cqsTsbxliMBJrJT3t1kYp+DBlLBDlp8MqjT9N7+iGhmV1BtE?=
+ =?us-ascii?Q?Z1FYWbpeCdxnA5NjehWTkpMwGKc/xxcBtuPK/HINdJ6/AFeeu98Fnh0toXnU?=
+ =?us-ascii?Q?KLtolLwgIYSmLHRuJCMUQ1h7xqsm6Udn1XkFUkkNZt6pby3wHbTu4+QZLB+x?=
+ =?us-ascii?Q?Nv7Lq3mmF7ESph7Fl3EdAJbH+y/23qhLA1A/JbgJ?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 03f54bcb-62fe-4813-8a0b-08dbf700781e
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR11MB8660.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2023 08:42:39.2483
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: xTYNz6Ug9m7T6FUcx7NEyQYtQ/dBSLDDfKDLSsljypZDTamECOcuHhoAPoE5p7aYJhURwNCAqsUVzaL0hp+xeA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB7854
+X-OriginatorOrg: intel.com
 
-On Tue, 05 Dec 2023 16:48:13 +0000,
-Mark Brown <broonie@kernel.org> wrote:
-> 
-> FEAT_FPMR introduces a new system register FPMR which allows configuration
-> of floating point behaviour, currently for FP8 specific features. Allow use
-> of this in guests, disabling the trap while guests are running and saving
-> and restoring the value along with the rest of the floating point state.
-> Since FPMR is stored immediately after the main floating point state we
-> share it with the hypervisor by adjusting the size of the shared region.
-> 
-> Access to FPMR is covered by both a register specific trap HCRX_EL2.EnFPM
-> and the overall floating point access trap so we just unconditionally
-> enable the FPMR specific trap and rely on the floating point access trap to
-> detect guest floating point usage.
-> 
-> Signed-off-by: Mark Brown <broonie@kernel.org>
-> ---
->  arch/arm64/include/asm/kvm_arm.h        |  2 +-
->  arch/arm64/include/asm/kvm_host.h       |  4 +++-
->  arch/arm64/kvm/emulate-nested.c         |  9 +++++++++
->  arch/arm64/kvm/fpsimd.c                 | 20 +++++++++++++++++---
->  arch/arm64/kvm/hyp/include/hyp/switch.h |  7 ++++++-
->  arch/arm64/kvm/sys_regs.c               | 11 +++++++++++
->  6 files changed, 47 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/arm64/include/asm/kvm_arm.h b/arch/arm64/include/asm/kvm_arm.h
-> index 9f9239d86900..95f3b44e7c3a 100644
-> --- a/arch/arm64/include/asm/kvm_arm.h
-> +++ b/arch/arm64/include/asm/kvm_arm.h
-> @@ -103,7 +103,7 @@
->  #define HCR_HOST_VHE_FLAGS (HCR_RW | HCR_TGE | HCR_E2H)
->  
->  #define HCRX_GUEST_FLAGS \
-> -	(HCRX_EL2_SMPME | HCRX_EL2_TCR2En | \
-> +	(HCRX_EL2_SMPME | HCRX_EL2_TCR2En | HCRX_EL2_EnFPM | \
+On Wed, Dec 06, 2023 at 04:37:39PM +0800, Li, Xin3 wrote:
+>> Subject: RE: [PATCH v1 13/23] KVM: VMX: Handle VMX nested exception for FRED
+>> 
+>> > >+		if (idt_vectoring_info &
+>> VECTORING_INFO_DELIVER_CODE_MASK)
+>> > >+			kvm_requeue_exception_e(vcpu, vector,
+>> > vmcs_read32(error_code_field),
+>> > >+						idt_vectoring_info &
+>> > INTR_INFO_NESTED_EXCEPTION_MASK);
+>> > >+		else
+>> > >+			kvm_requeue_exception(vcpu, vector,
+>> > >+					      idt_vectoring_info &
+>> > INTR_INFO_NESTED_EXCEPTION_MASK);
+>> >
+>> > Exiting-event identification can also have bit 13 set, indicating a
+>> > nested exception encountered and caused VM-exit. when reinjecting the
+>> > exception to guests, kvm needs to set the "nested" bit, right? I
+>> > suspect some changes to e.g., handle_exception_nmi() are needed.
+>> 
+>> The current patch relies on kvm_multiple_exception() to do that.  But TBH, I'm
+>> not sure it can recognize all nested cases.  I probably should revisit it.
+>
+>So the conclusion is that kvm_multiple_exception() is smart enough, and
+>a VMM doesn't have to check bit 13 of the Exiting-event identification.
+>
+>In FRED spec 5.0, section 9.2 - New VMX Feature: VMX Nested-Exception
+>Support, there is a statement at the end of Exiting-event identification:
+>
+>(The value of this bit is always identical to that of the valid bit of
+>the original-event identification field.)
+>
+>It means that even w/o VMX Nested-Exception support, a VMM already knows
+>if an exception is a nested exception encountered during delivery of
+>another event in an exception caused VM exit (exit reason 0).  This is
+>done in KVM through reading IDT_VECTORING_INFO_FIELD and calling
+>vmx_complete_interrupts() immediately after VM exits.
+>
+>vmx_complete_interrupts() simply queues the original exception if there is
+>one, and later the nested exception causing the VM exit could be cancelled
+>if it is a shadow page fault.  However if the shadow page fault is caused
+>by a guest page fault, KVM injects it as a nested exception to have guest
+>fix its page table.
+>
+>I will add comments about this background in the next iteration.
 
-We really should start making all of these things conditional. See
-below.
-
->  	 (cpus_have_final_cap(ARM64_HAS_MOPS) ? (HCRX_EL2_MSCEn | HCRX_EL2_MCE2) : 0))
->  #define HCRX_HOST_FLAGS (HCRX_EL2_MSCEn | HCRX_EL2_TCR2En | HCRX_EL2_EnFPM)
->  
-> diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
-> index f8d98985a39c..9885adff06fa 100644
-> --- a/arch/arm64/include/asm/kvm_host.h
-> +++ b/arch/arm64/include/asm/kvm_host.h
-> @@ -391,6 +391,8 @@ enum vcpu_sysreg {
->  	CNTP_CVAL_EL0,
->  	CNTP_CTL_EL0,
->  
-> +	FPMR,
-> +
->  	/* Memory Tagging Extension registers */
->  	RGSR_EL1,	/* Random Allocation Tag Seed Register */
->  	GCR_EL1,	/* Tag Control Register */
-> @@ -517,7 +519,6 @@ struct kvm_vcpu_arch {
->  	enum fp_type fp_type;
->  	unsigned int sve_max_vl;
->  	u64 svcr;
-> -	u64 fpmr;
-
-Why do this change here? Why isn't done like that the first place?
-
->  
->  	/* Stage 2 paging state used by the hardware on next switch */
->  	struct kvm_s2_mmu *hw_mmu;
-> @@ -576,6 +577,7 @@ struct kvm_vcpu_arch {
->  	struct kvm_guest_debug_arch external_debug_state;
->  
->  	struct user_fpsimd_state *host_fpsimd_state;	/* hyp VA */
-> +	u64 *host_fpmr;					/* hyp VA */
->  	struct task_struct *parent_task;
->  
->  	struct {
-> diff --git a/arch/arm64/kvm/emulate-nested.c b/arch/arm64/kvm/emulate-nested.c
-> index 06185216a297..802e5cde696f 100644
-> --- a/arch/arm64/kvm/emulate-nested.c
-> +++ b/arch/arm64/kvm/emulate-nested.c
-> @@ -67,6 +67,8 @@ enum cgt_group_id {
->  	CGT_HCR_TTLBIS,
->  	CGT_HCR_TTLBOS,
->  
-> +	CGT_HCRX_EnFPM,
-> +
->  	CGT_MDCR_TPMCR,
->  	CGT_MDCR_TPM,
->  	CGT_MDCR_TDE,
-> @@ -279,6 +281,12 @@ static const struct trap_bits coarse_trap_bits[] = {
->  		.mask		= HCR_TTLBOS,
->  		.behaviour	= BEHAVE_FORWARD_ANY,
->  	},
-> +	[CGT_HCRX_EnFPM] = {
-> +		.index		= HCRX_EL2,
-> +		.value		= HCRX_EL2_EnFPM,
-> +		.mask		= HCRX_EL2_EnFPM,
-> +		.behaviour	= BEHAVE_FORWARD_ANY,
-
-This looks wrong. HCRX_EL2.EnFPM is an enable bit.
-
-> +	},
->  	[CGT_MDCR_TPMCR] = {
->  		.index		= MDCR_EL2,
->  		.value		= MDCR_EL2_TPMCR,
-> @@ -478,6 +486,7 @@ static const struct encoding_to_trap_config encoding_to_cgt[] __initconst = {
->  	SR_TRAP(SYS_AIDR_EL1,		CGT_HCR_TID1),
->  	SR_TRAP(SYS_SMIDR_EL1,		CGT_HCR_TID1),
->  	SR_TRAP(SYS_CTR_EL0,		CGT_HCR_TID2),
-> +	SR_TRAP(SYS_FPMR,		CGT_HCRX_EnFPM),
->  	SR_TRAP(SYS_CCSIDR_EL1,		CGT_HCR_TID2_TID4),
->  	SR_TRAP(SYS_CCSIDR2_EL1,	CGT_HCR_TID2_TID4),
->  	SR_TRAP(SYS_CLIDR_EL1,		CGT_HCR_TID2_TID4),
-> diff --git a/arch/arm64/kvm/fpsimd.c b/arch/arm64/kvm/fpsimd.c
-> index e3e611e30e91..dee078625d0d 100644
-> --- a/arch/arm64/kvm/fpsimd.c
-> +++ b/arch/arm64/kvm/fpsimd.c
-> @@ -14,6 +14,16 @@
->  #include <asm/kvm_mmu.h>
->  #include <asm/sysreg.h>
->  
-> +static void *fpsimd_share_end(struct user_fpsimd_state *fpsimd)
-> +{
-> +	void *share_end = fpsimd + 1;
-> +
-> +	if (cpus_have_final_cap(ARM64_HAS_FPMR))
-> +		share_end += sizeof(u64);
-> +
-> +	return share_end;
-> +}
-
-This is horrible. Why can't you just have a new structure wrapping
-both user_fpsimd_state and fpmr? This is going to break in subtle
-ways, just like the SVE/SME stuff.
-
-> +
->  void kvm_vcpu_unshare_task_fp(struct kvm_vcpu *vcpu)
->  {
->  	struct task_struct *p = vcpu->arch.parent_task;
-> @@ -23,7 +33,7 @@ void kvm_vcpu_unshare_task_fp(struct kvm_vcpu *vcpu)
->  		return;
->  
->  	fpsimd = &p->thread.uw.fpsimd_state;
-> -	kvm_unshare_hyp(fpsimd, fpsimd + 1);
-> +	kvm_unshare_hyp(fpsimd, fpsimd_share_end(fpsimd));
->  	put_task_struct(p);
->  }
->  
-> @@ -45,11 +55,15 @@ int kvm_arch_vcpu_run_map_fp(struct kvm_vcpu *vcpu)
->  	kvm_vcpu_unshare_task_fp(vcpu);
->  
->  	/* Make sure the host task fpsimd state is visible to hyp: */
-> -	ret = kvm_share_hyp(fpsimd, fpsimd + 1);
-> +	ret = kvm_share_hyp(fpsimd, fpsimd_share_end(fpsimd));
->  	if (ret)
->  		return ret;
->  
->  	vcpu->arch.host_fpsimd_state = kern_hyp_va(fpsimd);
-> +	if (cpus_have_final_cap(ARM64_HAS_FPMR)) {
-> +		WARN_ON_ONCE(&current->thread.fpmr + 1 != fpsimd_share_end(fpsimd));
-
-How can this happen?
-
-> +		vcpu->arch.host_fpmr = kern_hyp_va(&current->thread.fpmr);
-> +	}
-
-We really need to stop piling the save/restore of stuff that isn't
-advertised to the guest.
-
-	M.
-
--- 
-Without deviation from the norm, progress is not possible.
+is it possible that the CPU encounters an exception and causes VM-exit during
+injecting an __interrupt__? in this case, no __exception__ will be (re-)queued
+by vmx_complete_interrupts().
 
