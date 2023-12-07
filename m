@@ -1,89 +1,92 @@
-Return-Path: <linux-kselftest+bounces-1336-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1338-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17B6680812C
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Dec 2023 07:51:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8DC6808143
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Dec 2023 07:56:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C7B7D281843
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Dec 2023 06:51:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9054F281A9B
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Dec 2023 06:56:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB37413AED;
-	Thu,  7 Dec 2023 06:51:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7466414016;
+	Thu,  7 Dec 2023 06:56:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EvpgXgH9"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ULQm65wq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AF2F198B;
-	Wed,  6 Dec 2023 22:50:41 -0800 (PST)
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD47E85;
+	Wed,  6 Dec 2023 22:56:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701931842; x=1733467842;
+  t=1701932211; x=1733468211;
   h=message-id:date:subject:to:cc:references:from:
    in-reply-to:content-transfer-encoding:mime-version;
-  bh=8j+BnTwvVq+Bibs41zIel91zbmrCT4gCcwpXjdTVpQU=;
-  b=EvpgXgH9JB2sXAHkVv+56EBE5hC1bF7UG0wWvCpYzSoUb2Xv34eK5zYx
-   mCNvA8gh0o3BbTJGfMm/PCYsWClN87/TcAJxL5wRBzl4HXSxXn+oG6FNP
-   bB6IfJ9ObVZTWQk4cI157vAU+idvG4qgBl+QtvPsiIYs3fYoOscVCDJf1
-   N/fjbbT9rutzuI7hJAiHKj5c/wCf/8d30/putCKbVFLZrpgOfcTcuZQg2
-   cIIRoH4cJ0C7E9WUidqOX4xyKaVuaqGcQlgWDzgkqgl9m3sKzOAA5yMFP
-   S4ZHDG40t8OzvzuO1UAJous37k+o5UpUyGRmqDYz6/MDkYBf1JYSA9hZH
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10916"; a="1055025"
+  bh=U/ZKVdQtJl6Dx4jvbgWm23xJxD2HfGnoxmKWYTLbtt4=;
+  b=ULQm65wqE6gV3FqoiR2O40wy/oq+t2fAbeRuGWpLTXUwCTJsmcVgm60z
+   gUPzPJjLvVjC7ksYYfeh26eC3TntbV/J+7QIp7xuaj/AfNg64qjFdsDkv
+   rtKW+7pvGIa9n0UXvn0UdGk5G91U8qEmem7tAZH6274sy04XaKfYEgbSB
+   HcmuECy9NMi5x5FZvUSKG7keexNtKhqD4e520xgiFkC8KwtWflMLJ3eYH
+   DCmA3s7I10f6yVq86AnbnGbtV6iMl6E62KogbKSQWYnPE+T6STt7kFfyE
+   MhNkNHFtqdPH2Up05I5ob0sl0+hJuvR2cOfVtHqyfxf3FqQy7yPgH+VHC
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10916"; a="1268487"
 X-IronPort-AV: E=Sophos;i="6.04,256,1695711600"; 
-   d="scan'208";a="1055025"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2023 22:50:40 -0800
+   d="scan'208";a="1268487"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Dec 2023 22:56:50 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10916"; a="800628748"
 X-IronPort-AV: E=Sophos;i="6.04,256,1695711600"; 
-   d="scan'208";a="800628748"
+   d="scan'208";a="19605236"
 Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga008.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 06 Dec 2023 22:50:39 -0800
-Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
+  by orviesa001.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 06 Dec 2023 22:56:49 -0800
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
  fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Wed, 6 Dec 2023 22:50:38 -0800
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ 15.1.2507.35; Wed, 6 Dec 2023 22:56:48 -0800
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35 via Frontend Transport; Wed, 6 Dec 2023 22:50:38 -0800
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.168)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ 15.1.2507.35; Wed, 6 Dec 2023 22:56:48 -0800
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35 via Frontend Transport; Wed, 6 Dec 2023 22:56:48 -0800
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.100)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Wed, 6 Dec 2023 22:50:38 -0800
+ 15.1.2507.35; Wed, 6 Dec 2023 22:56:48 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PqDG8c0Drkz3qU6l7qIS0mDw7Vj4klBbMZKZ5d9VKJlI+qoY7wbpkJRxWZS50FToILUZOJ0HqeFDTFygSDrnCn6pX33LoTnB92QmCv957Mdha0rlrPRkdBcGQnzFx0pb98rsK2ZSssI09D6GhxMLu4JLkX5XBDdlVA4+QzQevSyR3Kxma0ri/dNnMPoYbHWpqtDWzsWZAuI3sIW6jAejfU37jnJI4JXYQDCPVsOWneEPb1vlbno4TQ+hiMxQH8TE8E2N6c9AFI7lvf2Zv9dUqjRWzw6gGyehMzIYlzvyXOx+J4n1mJIK9HdTlyQk/sazpGOYhR7KhHE+uo78PKPmzA==
+ b=Tx1UoPkuPy/04Y2W1AopdLb7lAzVgrkMYDCLxofzQc+nmGG7whsQnvf3fOT4oibFHvYCTx5ijKJp/bzyfDyOoYy2WlHYN6ETE+VMKHTD3QEHTwmKfWiXSv2ldV4LO/TYqqbJnLptlJ19LEYrNjTNv4GAW2r78nbmlMg53BlJAA3du61RFdgukBqF6vLPuMQbLcj7xCEfcM4ss8ix3rOw/OFYWVCxLhXrk2if28uK6dO2VUGbgF1srhBFZGLc7X3hqocSx/zXAgZ+Y4XhOKbj7rjK2vMAFifLJXlHel6IXoyYCykBPH/9NA7KvgDuXIiZ3xFSVDh2PpSWxIMQDM8xMw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eEdYgpoGbJmwR8qnXPa9aJkZqQ0LcGnwZWuorOblP1w=;
- b=EpOUBwY9bqZEmu5QYyGyfJXSao4qry3RldHNS8lXLWAYuQ7lpBk96YqDSdSPkeS1cEE8J/oh/+md/MEu1Dmskm4u5OFTsResSHN37V3aSsv6/7ZZPNoNXQ+d3iV+DaotgeYbuhzM8mcoXTb7xk4jOcw8pCYIeZYbjxNqsqHD+INedKgFLI9eajsx4ncGDlNsyNL9UJ7I+1ekcwtlPpdmc84cl9l+TPYsnKu+t3Te6tgJs/Ev4pO+393FaBVcnulZcyKsTWHKdHWbyv4WtI9FcOcPsq+kNLUY7Ew/oIJjlPbWaWww3mT3JlQWCyEZl5V525nbaUeoDEDPUZndDzigog==
+ bh=ozVnRYo74LPOYXr4kP2Nke5/azj7Onm9ehPVO2kIOYU=;
+ b=MBl1RZ8W65yR8k+MbXxCLZtIXMkHijka0yh+W3kCCdAo5rnB05hGjpKLcgJabiBYKCsH6R+w2l8zMintn9lRRYclJGautD2oaPz2jivgfGJx9HG8TKNOWfnOIHbr9mvahjwAD6295MfwAIE5MV+Lp+PJlDfJ4gzOJZKYMd5aFOvfXpKlX0K9q9LtLVx3uH/yb8SH0QnDw2koDL7g84jqEtdbup+gmrtF3XLArivR286AvQdEHj0gczrV5lNfFH0n21ufecthkQK2snzTqQ2cFSUezvftoZM3YGHKYzflj7f/Z0qAi6vVer3DOHUj60IoNiORmgY5hsrb7gbOc9JUvA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=intel.com;
 Received: from DS0PR11MB7529.namprd11.prod.outlook.com (2603:10b6:8:141::20)
- by DS0PR11MB7312.namprd11.prod.outlook.com (2603:10b6:8:11f::18) with
+ by CY8PR11MB7900.namprd11.prod.outlook.com (2603:10b6:930:7a::8) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7046.34; Thu, 7 Dec
- 2023 06:50:35 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7068.25; Thu, 7 Dec
+ 2023 06:56:46 +0000
 Received: from DS0PR11MB7529.namprd11.prod.outlook.com
  ([fe80::e4ae:3948:1f55:547d]) by DS0PR11MB7529.namprd11.prod.outlook.com
  ([fe80::e4ae:3948:1f55:547d%5]) with mapi id 15.20.7068.025; Thu, 7 Dec 2023
- 06:50:35 +0000
-Message-ID: <a9699f71-805a-4a5a-9282-3ec52e5bc81a@intel.com>
-Date: Thu, 7 Dec 2023 14:53:04 +0800
+ 06:56:45 +0000
+Message-ID: <112383df-3ea3-475f-963f-5c53232a1bf4@intel.com>
+Date: Thu, 7 Dec 2023 14:59:17 +0800
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 1/6] iommu: Add cache_invalidate_user op
+Subject: Re: [PATCH v6 2/6] iommufd: Add IOMMU_HWPT_INVALIDATE
 Content-Language: en-US
-To: Jason Gunthorpe <jgg@nvidia.com>, Nicolin Chen <nicolinc@nvidia.com>
-CC: <joro@8bytes.org>, <alex.williamson@redhat.com>, <kevin.tian@intel.com>,
-	<robin.murphy@arm.com>, <baolu.lu@linux.intel.com>, <cohuck@redhat.com>,
-	<eric.auger@redhat.com>, <kvm@vger.kernel.org>, <mjrosato@linux.ibm.com>,
+To: <joro@8bytes.org>, <alex.williamson@redhat.com>, <jgg@nvidia.com>,
+	<kevin.tian@intel.com>, <robin.murphy@arm.com>, <baolu.lu@linux.intel.com>
+CC: <cohuck@redhat.com>, <eric.auger@redhat.com>, <nicolinc@nvidia.com>,
+	<kvm@vger.kernel.org>, <mjrosato@linux.ibm.com>,
 	<chao.p.peng@linux.intel.com>, <yi.y.sun@linux.intel.com>,
 	<peterx@redhat.com>, <jasowang@redhat.com>,
 	<shameerali.kolothum.thodi@huawei.com>, <lulu@redhat.com>,
@@ -92,15 +95,13 @@ CC: <joro@8bytes.org>, <alex.williamson@redhat.com>, <kevin.tian@intel.com>,
 	<zhenzhong.duan@intel.com>, <joao.m.martins@oracle.com>,
 	<xin.zeng@intel.com>, <yan.y.zhao@intel.com>
 References: <20231117130717.19875-1-yi.l.liu@intel.com>
- <20231117130717.19875-2-yi.l.liu@intel.com>
- <20231206183209.GZ2692119@nvidia.com> <ZXDA1uUzvxmLf/o4@Asurada-Nvidia>
- <20231206185031.GB2692119@nvidia.com>
+ <20231117130717.19875-3-yi.l.liu@intel.com>
 From: Yi Liu <yi.l.liu@intel.com>
-In-Reply-To: <20231206185031.GB2692119@nvidia.com>
+In-Reply-To: <20231117130717.19875-3-yi.l.liu@intel.com>
 Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SI2PR01CA0002.apcprd01.prod.exchangelabs.com
- (2603:1096:4:191::21) To DS0PR11MB7529.namprd11.prod.outlook.com
+X-ClientProxiedBy: SI1PR02CA0036.apcprd02.prod.outlook.com
+ (2603:1096:4:1f6::20) To DS0PR11MB7529.namprd11.prod.outlook.com
  (2603:10b6:8:141::20)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -109,91 +110,248 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR11MB7529:EE_|DS0PR11MB7312:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2096279c-bc06-4d7c-53f3-08dbf6f0cefc
+X-MS-TrafficTypeDiagnostic: DS0PR11MB7529:EE_|CY8PR11MB7900:EE_
+X-MS-Office365-Filtering-Correlation-Id: 96ca386a-84d7-4be9-22d7-08dbf6f1acb5
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 3cyZGejlbxpgxXgpvglOom/yy5yZa+hpzOiseYEwVn6vOriO2wSs7sQKIeojhJnMBcmZXWMsQty7Knry+bSnOTrJ5CAktKjV3YgrNgwFZJBKkAhsVi7WCTp6uIXX5EyD97mMDSxWzbvysQFI5oqK0/2ALqAYy5D3IKqJJEQdHMNPNkgMUXY2UBuHcKIc6piY2Vr4KUYnkmridBuyC+HZwet2lexXdU4b/QQn3aThI1R+pp3q0xYz58PjoD5c7AJvscY3BXqY4kzBdGP6vS+7H7N8FQD42CXEcq5ymBAVMJ0sJiz3iPumOQc5LJ3ekN5q1wOhVbICCe4QqMgjW/3UwBySvyKld7LJ5ugVzraDXa7Ag+OzHlV12/kIxQTTG8hUkeeGkl2HiY6NP1rPfFaR+u9AlEynUg26FR2s808eudRZ2ghYgjn/kIFMeOM+XaeuQj3VkDhPm6hK001bZHtcqObJlGQpTh3ol5H4zwHO6vLy2X6htuRYYC8fRF9299LPU/CfgsuxL49n/PrBfJTnnnXPog4aOht2EejZ+5qRUsEaUPuDUDvZC60cfCRywy904J2P0Mp8SkgDHOKOtn51UXemE5l4fom8RKAmSQOwUUU0g0edtXmVlPldkCYn5J8YsJ/J4S6EUyQK3yPEpfqPZg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB7529.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(366004)(396003)(136003)(346002)(39860400002)(230922051799003)(186009)(64100799003)(451199024)(1800799012)(31686004)(38100700002)(7416002)(2906002)(41300700001)(5660300002)(82960400001)(6512007)(53546011)(83380400001)(36756003)(6506007)(6666004)(6486002)(2616005)(26005)(66476007)(110136005)(478600001)(66556008)(8676002)(4326008)(66946007)(31696002)(316002)(86362001)(8936002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: 7HR1A/jZuaI7J+fQfJrbD1HvQukPNGtYFg7dKHuYeSu9wKFCMmgzZqNLzGx72cmORYF/N1Gx6O+UdeEZGL7nYudlP2MAsJstX54/alNWeki9zyMWTU/YYuQtjUvCJuekBpqSd6Nn7PfjjmgkxCS0xoUYfCOqGpcyoYYjS12O4tOfLPTK51zBD2xOnIeloqvxBXuaMCTK6BX79m0A0SpBuiCkQrNn47UlVsMCTbey+WmbnfdPpmr5DQV6+edQdeeSniLGXU6Qc/SA7JBOKvCZcUYf2FvPAPMLC8omDtCpi4afv19/AgybdRa+8x5SkByHI3DXzt8wKtMVBMoj1LotGip58PryJBbfvz861cuAvasX4twljZ1Ch50NAWeittmFtDYe3/PD0+/XeD/1uZlPkvUAEee33SRru6P8U7F/hlqHZAxdAIOXQfNLzPg1xl1biptbbok7H1MsskwgWlR1ZozopIhWeOURMboPttIiDvPOknU6dcjhOn11LLd+2MD+743c3LuIizue8TGNRK5KVeCrg2xaEH5Qkgvczkq7EvqEH7USXQ3HBXcD7wya3aRQYx/uSaPgJqDRgmE0C+BEMwoyy8RU6BMvSOka2sDJLYByVkufLGJkS4vclDWW9VT1iBwjEs9MegLaKmQCUra1qA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB7529.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(346002)(366004)(376002)(39860400002)(396003)(230922051799003)(1800799012)(451199024)(64100799003)(186009)(7416002)(5660300002)(82960400001)(31696002)(6666004)(4326008)(8676002)(86362001)(36756003)(41300700001)(8936002)(38100700002)(31686004)(2906002)(316002)(26005)(83380400001)(2616005)(6512007)(966005)(53546011)(6506007)(66556008)(66946007)(478600001)(66476007)(6486002)(43740500002)(45980500001);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZGVNUHZqbjBUWXA0Z1lEY2VEMVZSYVJRRURMU3VrVnBlMThLdkxQSUVFUUVp?=
- =?utf-8?B?OCtoNUVaZlJQUmRNblE0d0Q4Z2JIWkhtRmJzRlFxOGExUXJrZzN6VU1IRGpk?=
- =?utf-8?B?QVluUWxiTFRhcFAxMUNWZm9ybERXU01uQVR4S3pSK2NFY0JsOCtaOFlRbTcr?=
- =?utf-8?B?YWRySkhQNUpTT2hLcEk1dzdNclBXeHJmVlljVnIxaHgyRlRnUkc5TGtSak93?=
- =?utf-8?B?cG5kQWJtU1plOHdZNE8vZDY1MzZ1UXpLY0o0ZVJQVUF2ZGRCaEdueGdMTU4y?=
- =?utf-8?B?d0xqM1krYjkvaEZiUXNhR1dVdzBTbDlhTitkTUVXbisrRXc1L1JXSS9RUWdj?=
- =?utf-8?B?Z3Q4WEhWcmNBa1ZYa1lqcmZGM3VFOXdpUUtLYmNuVk5UaDc3YkZkT2NhWmJM?=
- =?utf-8?B?WVZnaTVwR3NRMjZuMitGejhIK1Z2WEtmd2JoUWNzcTJGc0dlOXRXcVBEZEtl?=
- =?utf-8?B?WEtta3hvVjk5VDRjN0NpaGgyWGg2em4rL0Ercm1DbDRZa3pIVG1qWWJSQUtB?=
- =?utf-8?B?V3dBd1dybEFzMk9pTmFmellJMlpzR0FEdnRPZXp0aEQycS90YkdaTHBCMklS?=
- =?utf-8?B?SVU5bi9abUZUeXArS0RRUGRZWHpKL1ZjTnVqRkFVbDlqMXdyVHBsei9JR2pY?=
- =?utf-8?B?RVBWMzdOc2poN3VRbktzbjlocWVkbnROMEF5cFFBbFdSZ2VleTdEVWdJaGVI?=
- =?utf-8?B?Z1MvZjJvYVFobzBsZ2doOWpycldzU3NSSStqY2grOThFbDhHVlJWclVvVmJV?=
- =?utf-8?B?K25zQ1JqTVREc2tTL1U1ZUV0RnFlMlFYaFZBTnFLR3ZyajlGMmZYcGxXcjZL?=
- =?utf-8?B?UnBzV1BVbzV1WEIyaEZKc0pudGhodXZnSktlYlVZNXFEcitwNWFWcmsyNDBm?=
- =?utf-8?B?ajNBSDhhZFV0UmlXZ0wwL2RQNUttUVk5blJTWWNZbmpsdno0RlFSaWNZVXRz?=
- =?utf-8?B?MnVVYzZlQzVwY2FTbkQ0TDhvemViS3IxSnVPMEZyNlorZXp3S25kWVdxNDNP?=
- =?utf-8?B?UTRyWGxaUUNuU044UHpwc0VGZGFyMXhZcmFXM3F6clpMZDhZdnlvc0FERWY1?=
- =?utf-8?B?aWhZVE1aTGk3VU4yUnpGY3BlMmdVZWo2bzNMVzVDSXZZcUJ4bDYyRzdrcjVG?=
- =?utf-8?B?QUt4ZU91SFo2SlhNRlhIV0ZtRlBrZ3JFT2M4THZKL0trcFdORlQ1d1VLUVNU?=
- =?utf-8?B?N1hsZXBIeWQ0cjlPRjQ2UXExdVJyVnYybHlqekF2MS9ORFRoUFFSS01xZ1pZ?=
- =?utf-8?B?Y2JVU3Rqd3pLa0NwU2pkckw0R1h4cnc0Y3NSYW1zajN5SHErTXJaK25tZmdo?=
- =?utf-8?B?RUwyUmJEWTVjdDVabmpBMzVFZC9LLzVNQkF1OEtqcW10UldHakpJN0tBUFZO?=
- =?utf-8?B?QUc4Qk1FN3lKVXEraVFrc0ZWQ3c5TmJWYUpDZ1c3T25SdFE1bkVmK0xwR0Ro?=
- =?utf-8?B?YzAzNWprNHhla1dBNjl1TnV5Nm13dVJRazdrTEpTMEdjd1ViWEJzWGJFWTdz?=
- =?utf-8?B?ajIrd3pkRXFTSWpkQTNkNEhyY3YzdHZMaXNRWFArRXlORkxkOUlyL0hJUFhB?=
- =?utf-8?B?cDA1WWQ5VWZvekV6eDRpMW1LbjRSd0pqaFpGSXBuQzNVbnplR2QzUC9WZGVa?=
- =?utf-8?B?elRtWExQYlliRFcwNVptWDdrQkRvcWZvS2RKME4zUnRIMEtuK0dGSlg0cUFU?=
- =?utf-8?B?MFFvdWxHa0RBd0s4MjNQb3FPdGtDSFQ3Z3BnVnNnUEtnNFpibDlNTlZDSklo?=
- =?utf-8?B?cmlPclBPdi9GRTU2RnZwV3ZiYlQrNUNmYXVoU0pkUkJEd0UweDYzaUx6TnNp?=
- =?utf-8?B?ak9KT01aeGVOdkxUQWdYT1EzY0JzY1ZJQmpodHY1MWU0dXRpekdQYUpvQ0Fp?=
- =?utf-8?B?d0lyL1IzYThTSk9ZWlV1Ry9EZFpVMkdQNGEvYk1sZHU0YTJ2NERwRjFkeG85?=
- =?utf-8?B?NXdFQVZFenc3dlI0TDlzVys4dDJrQlVQWnlIeHpzdmdycGNMNnlIbjl1S3Qz?=
- =?utf-8?B?QW1tSDlvNDhXR2plRXlQYStueXd2QmlvMW5RSldhNHdTanNiM1NxZUpQWFd2?=
- =?utf-8?B?VzFEVXVkZnNORDcwS3hZSWVtSk5Zcm5RNWliVVZEQjlxdjM2Z0JyWkVxbS9Q?=
- =?utf-8?Q?JKZqOSrODLFU2vewTfq8VXkW9?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2096279c-bc06-4d7c-53f3-08dbf6f0cefc
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QlRYZnl0aWhzcjg4TWpYRXdiNGYxTnlnelFKSFUvRk5zeUtZSmgvNXhLOElR?=
+ =?utf-8?B?M2orOGFZMkRXTmY0UWlyaVJLdXJKNVJFZmFPZ3ZTb0RrWVR5Y3VNeGIxMklu?=
+ =?utf-8?B?TEVJZ0hRekNTeTNtZEVReHNIR1BmR3dPeWNVRk5KZ2VsL2xFVVQ3VitPUFlS?=
+ =?utf-8?B?WmpkNEVkVjBZTmNKRXJtTTlPU3FFRjhlQWFFeFFHcGJOMm1rY1Z6UGxrWGNS?=
+ =?utf-8?B?VENnWW0wTXRQYlZYeGt3SzRIeEpCdi9ubDIyWXp2Qm93RkNoQWUwNi9rTE54?=
+ =?utf-8?B?MUt0dWd1VXZhOHZaSkJERkd4aktDNVJ1YlNXRXp1YXJrYm9OZDkrQWlGKzFq?=
+ =?utf-8?B?aFh5emtSRHg2TStJWGUveXBkY1ZJZTN2OEZxQnRYV09WMXJkMVVGZzRCcjdH?=
+ =?utf-8?B?YkFmRTNiOEp6dFY1cFJIMC9QV2hzaVN3MDJMUFpkdHNpTUg4cWhZTDBUVFoy?=
+ =?utf-8?B?K0pPakJ3SThDcUdrWXNJMGpUK2xRT1YvWWNuMHRCMFFQdHE2RFMzWnNFQW8v?=
+ =?utf-8?B?Vjk2RlUzNUxwaHp4R2dKV05Idk85Q3hCbDJ6UnQ3YSs0alBndU5BNmkzRDlB?=
+ =?utf-8?B?TkVYUGNXQUFEa0l4STBJMXVNcjlBeTdhMnNaZ3Zic0NDSmMrV2p0MTZNU05k?=
+ =?utf-8?B?NEdvR25DKzBrWTBoS0c3d3Z3aUdhaHVsajRsc3N1S0E1eDdNRWZudnhnT0dZ?=
+ =?utf-8?B?Zm9wb3hCdGZBcmpDT2ZVRFhWQnBUQ3JZQVBhYlpXR2szNzlhVStkc3A3WWNu?=
+ =?utf-8?B?eEFHRTR5eUxFWDBKOHBsWlk2dU4zMUM5MHlYQ3NTQ0pSeUZzVjZyUnlpZmZu?=
+ =?utf-8?B?SkIvNFBaY0hQTW1rdXRoWjljck52RG12RGcrYktsSklidjAzRkVXaC9Ndytu?=
+ =?utf-8?B?ejYwbEUwRnFIVGMvSTQrSVl5NnQveTdhL0I0QnN1OGkwMzBPdU4wSXVCNkcv?=
+ =?utf-8?B?ZjdRVGVZQ0krSGNaNExNRG1qcHVEMm5GSWZYOWhNVVhhcWZsbktsY0ozS0Yr?=
+ =?utf-8?B?RytWZld4Vjd6QWtVVmJjU2VnTnN3M3hkNlYxbGNheXFGc2NkRGRuTjZFL1Jt?=
+ =?utf-8?B?R01xbitkNWRaVWtYQ3JRZWdxVjlLQnc0ZUx4K0FWZDU3a0VWdTZXRUpkVkFr?=
+ =?utf-8?B?TUJSMGcyMmtmU3ZwMWVBL0NsaTJxdDUrWkVLRDAvZm1qT1g3TFRES1M0U3lh?=
+ =?utf-8?B?K0U2T3dQeVhud0t6b0ZCTjd2TkdoQTRoWS9UcHppYk9Ha0xmTzZvNDRUWCtn?=
+ =?utf-8?B?bmI4WE1CU2RIcHgrSk40Wk40ZXJieGpVQlJINFBvcHVZN0ZTQ015VU5OQWpU?=
+ =?utf-8?B?RzN1R1I0Y0ZQUFNZY3B1Y0Erbm9qWWRqblhnK2JHQVJMbTN5WWU2L3JtT0Fr?=
+ =?utf-8?B?R2hHZy9WUXdyQ2xNQU15YUdndjBxNnNNd2RYN1FEd3VYQXlNTUcycjA4Z3p3?=
+ =?utf-8?B?ZVkrT210bTN6RENId2ZZeWV3ZG9uVW5tNzVqeGJaQ0hsd3RYNklNZXd5bVlq?=
+ =?utf-8?B?S1NITHZmZlU0T1NwTENVVHZ4b0JiRUwxVlFKOFlDdWM2Q1A4RTZKWXF3eW1q?=
+ =?utf-8?B?dlBLd2Q0QVJ0NmZhOFdGcFNiZ0xYc011TUtwVG91TFNISy9PWU4xczRMMkF2?=
+ =?utf-8?B?S0ZBMXkvcnV3WlU0c2ViQ0hLRXdPRndrekV3WmFjSFcwdW8rM0ZBNnFpYXE0?=
+ =?utf-8?B?UzlxYWxJU3dYMlFPTnlxajF6SlVkNUlYc1hYKzI3Z3hlbU1sdGtnT1o5V281?=
+ =?utf-8?B?c3gvVGxoNUJTYkMyUkhxTUFCcXRHN3AybEE4MDJWcEF3cGNyejNUTkd0QUJl?=
+ =?utf-8?B?Q0d2Q3Bvb0JWYWF0N0FCME5PU0lJYWN3cWxsbmRFb1JjUVZUTHN5RTNGQldz?=
+ =?utf-8?B?alhwdmhzampjK1E5YlVGQm9IajRlTzVKaUJTWGIxbGZJdTV1KzVTMVdVdGpO?=
+ =?utf-8?B?U3FkRVozc0pYZGlzd0tWWDFpMFpvTTJmMENjL0FUTmM4QWZ3SFZydmJQTC9a?=
+ =?utf-8?B?ZVoxbnp6SUtTeGdyNmd4Vit0VzhCaXJOUmRaSE10N0VINFNJbWtlb0ZLUWY2?=
+ =?utf-8?B?WldsSzBkbXRiZUkyVGtVL1dWVUN1MlNBenByUmU4QzBlSVpQRVVZMWE3Z0tZ?=
+ =?utf-8?Q?3k33YT9A4AlTws+CwscX27Orm?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 96ca386a-84d7-4be9-22d7-08dbf6f1acb5
 X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB7529.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2023 06:50:33.5616
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Dec 2023 06:56:45.4155
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qOQgYYA8wpVuvwXYEPdxH8dqVC7CMAQaDIDgO4y+rUxUX5QAS4NekvMPOFbkjTAlY9fBk/4Fpt32c8d64WraEQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB7312
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9V+Hl30W2z5sAvTqkOQDRDi61/dxXij8W2chr2xZn4+qGV8Mm/74uouiIsaLyMRicA++FYFW+yqnGolRgBtBtQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR11MB7900
 X-OriginatorOrg: intel.com
 
-On 2023/12/7 02:50, Jason Gunthorpe wrote:
-> On Wed, Dec 06, 2023 at 10:43:34AM -0800, Nicolin Chen wrote:
->> On Wed, Dec 06, 2023 at 02:32:09PM -0400, Jason Gunthorpe wrote:
->>> On Fri, Nov 17, 2023 at 05:07:12AM -0800, Yi Liu wrote:
->>   
->>>> @@ -465,6 +492,9 @@ struct iommu_domain_ops {
->>>>   			      size_t size);
->>>>   	void (*iotlb_sync)(struct iommu_domain *domain,
->>>>   			   struct iommu_iotlb_gather *iotlb_gather);
->>>> +	int (*cache_invalidate_user)(struct iommu_domain *domain,
->>>> +				     struct iommu_user_data_array *array,
->>>> +				     u32 *error_code);
->>>
->>> Regarding the other conversation I worry a u32 error_code is too small.
->>>
->>> Unfortunately there is no obvious place to put something better so if
->>> we reach it we will have to add more error_code space via normal
->>> extension.
->>>
->>> Maybe expand this to u64? That is 64 bits of error register data and
->>> the consumer index. It should do for SMMUv3 at least?
->>
->> I think Yi is moving the error_code to the entry data structure,
->> where we can even define a list of error_codes as a driver data
->> needs. So, I assume this u32 pointer would be gone too.
+On 2023/11/17 21:07, Yi Liu wrote:
+> In nested translation, the stage-1 page table is user-managed but cached
+> by the IOMMU hardware, so an update on present page table entries in the
+> stage-1 page table should be followed with a cache invalidation.
 > 
-> Oh, lets see that then..
+> Add an IOMMU_HWPT_INVALIDATE ioctl to support such a cache invalidation.
+> It takes hwpt_id to specify the iommu_domain, and a multi-entry array to
+> support multiple invalidation requests in one ioctl.
+> 
+> Check cache_invalidate_user op in the iommufd_hw_pagetable_alloc_nested,
+> since all nested domains need that.
+> 
+> Co-developed-by: Nicolin Chen <nicolinc@nvidia.com>
+> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+> Signed-off-by: Yi Liu <yi.l.liu@intel.com>
+> ---
+>   drivers/iommu/iommufd/hw_pagetable.c    | 35 +++++++++++++++++++++++++
+>   drivers/iommu/iommufd/iommufd_private.h |  9 +++++++
+>   drivers/iommu/iommufd/main.c            |  3 +++
+>   include/uapi/linux/iommufd.h            | 35 +++++++++++++++++++++++++
+>   4 files changed, 82 insertions(+)
+> 
+> diff --git a/drivers/iommu/iommufd/hw_pagetable.c b/drivers/iommu/iommufd/hw_pagetable.c
+> index 2abbeafdbd22..367459d92f69 100644
+> --- a/drivers/iommu/iommufd/hw_pagetable.c
+> +++ b/drivers/iommu/iommufd/hw_pagetable.c
+> @@ -238,6 +238,11 @@ iommufd_hwpt_nested_alloc(struct iommufd_ctx *ictx,
+>   		rc = -EINVAL;
+>   		goto out_abort;
+>   	}
+> +	/* Driver is buggy by missing cache_invalidate_user in domain_ops */
+> +	if (WARN_ON_ONCE(!hwpt->domain->ops->cache_invalidate_user)) {
+> +		rc = -EINVAL;
+> +		goto out_abort;
+> +	}
+>   	return hwpt_nested;
+>   
+>   out_abort:
+> @@ -370,4 +375,34 @@ int iommufd_hwpt_get_dirty_bitmap(struct iommufd_ucmd *ucmd)
+>   
+>   	iommufd_put_object(&hwpt_paging->common.obj);
+>   	return rc;
+> +};
+> +
+> +int iommufd_hwpt_invalidate(struct iommufd_ucmd *ucmd)
+> +{
+> +	struct iommu_hwpt_invalidate *cmd = ucmd->cmd;
+> +	struct iommu_user_data_array data_array = {
+> +		.type = cmd->req_type,
+> +		.uptr = u64_to_user_ptr(cmd->reqs_uptr),
+> +		.entry_len = cmd->req_len,
+> +		.entry_num = cmd->req_num,
+> +	};
+> +	struct iommufd_hw_pagetable *hwpt;
+> +	int rc = 0;
+> +
+> +	if (cmd->req_type == IOMMU_HWPT_DATA_NONE)
+> +		return -EINVAL;
+> +	if (!cmd->reqs_uptr || !cmd->req_len || !cmd->req_num)
+> +		return -EINVAL;
+> +
+> +	hwpt = iommufd_hw_pagetable_get_nested(ucmd, cmd->hwpt_id);
+> +	if (IS_ERR(hwpt))
+> +		return PTR_ERR(hwpt);
+> +
+> +	rc = hwpt->domain->ops->cache_invalidate_user(hwpt->domain, &data_array,
+> +						      &cmd->out_driver_error_code);
+> +	cmd->req_num = data_array.entry_num;
+> +	if (iommufd_ucmd_respond(ucmd, sizeof(*cmd)))
+> +		return -EFAULT;
+> +	iommufd_put_object(&hwpt->obj);
+> +	return rc;
+>   }
+> diff --git a/drivers/iommu/iommufd/iommufd_private.h b/drivers/iommu/iommufd/iommufd_private.h
+> index a74cfefffbc6..160521800d9b 100644
+> --- a/drivers/iommu/iommufd/iommufd_private.h
+> +++ b/drivers/iommu/iommufd/iommufd_private.h
+> @@ -301,6 +301,7 @@ void iommufd_hwpt_paging_abort(struct iommufd_object *obj);
+>   void iommufd_hwpt_nested_destroy(struct iommufd_object *obj);
+>   void iommufd_hwpt_nested_abort(struct iommufd_object *obj);
+>   int iommufd_hwpt_alloc(struct iommufd_ucmd *ucmd);
+> +int iommufd_hwpt_invalidate(struct iommufd_ucmd *ucmd);
+>   
+>   static inline void iommufd_hw_pagetable_put(struct iommufd_ctx *ictx,
+>   					    struct iommufd_hw_pagetable *hwpt)
+> @@ -318,6 +319,14 @@ static inline void iommufd_hw_pagetable_put(struct iommufd_ctx *ictx,
+>   	refcount_dec(&hwpt->obj.users);
+>   }
+>   
+> +static inline struct iommufd_hw_pagetable *
+> +iommufd_hw_pagetable_get_nested(struct iommufd_ucmd *ucmd, u32 id)
+> +{
+> +	return container_of(iommufd_get_object(ucmd->ictx, id,
+> +					       IOMMUFD_OBJ_HWPT_NESTED),
+> +			    struct iommufd_hw_pagetable, obj);
+> +}
+> +
+>   struct iommufd_group {
+>   	struct kref ref;
+>   	struct mutex lock;
+> diff --git a/drivers/iommu/iommufd/main.c b/drivers/iommu/iommufd/main.c
+> index 45b9d40773b1..6edef860f91c 100644
+> --- a/drivers/iommu/iommufd/main.c
+> +++ b/drivers/iommu/iommufd/main.c
+> @@ -309,6 +309,7 @@ union ucmd_buffer {
+>   	struct iommu_hwpt_alloc hwpt;
+>   	struct iommu_hwpt_get_dirty_bitmap get_dirty_bitmap;
+>   	struct iommu_hwpt_set_dirty_tracking set_dirty_tracking;
+> +	struct iommu_hwpt_invalidate cache;
+>   	struct iommu_ioas_alloc alloc;
+>   	struct iommu_ioas_allow_iovas allow_iovas;
+>   	struct iommu_ioas_copy ioas_copy;
+> @@ -348,6 +349,8 @@ static const struct iommufd_ioctl_op iommufd_ioctl_ops[] = {
+>   		 struct iommu_hwpt_get_dirty_bitmap, data),
+>   	IOCTL_OP(IOMMU_HWPT_SET_DIRTY_TRACKING, iommufd_hwpt_set_dirty_tracking,
+>   		 struct iommu_hwpt_set_dirty_tracking, __reserved),
+> +	IOCTL_OP(IOMMU_HWPT_INVALIDATE, iommufd_hwpt_invalidate,
+> +		 struct iommu_hwpt_invalidate, out_driver_error_code),
+>   	IOCTL_OP(IOMMU_IOAS_ALLOC, iommufd_ioas_alloc_ioctl,
+>   		 struct iommu_ioas_alloc, out_ioas_id),
+>   	IOCTL_OP(IOMMU_IOAS_ALLOW_IOVAS, iommufd_ioas_allow_iovas,
+> diff --git a/include/uapi/linux/iommufd.h b/include/uapi/linux/iommufd.h
+> index 0b2bc6252e2c..7f92cecc87d7 100644
+> --- a/include/uapi/linux/iommufd.h
+> +++ b/include/uapi/linux/iommufd.h
+> @@ -49,6 +49,7 @@ enum {
+>   	IOMMUFD_CMD_GET_HW_INFO,
+>   	IOMMUFD_CMD_HWPT_SET_DIRTY_TRACKING,
+>   	IOMMUFD_CMD_HWPT_GET_DIRTY_BITMAP,
+> +	IOMMUFD_CMD_HWPT_INVALIDATE,
+>   };
+>   
+>   /**
+> @@ -613,4 +614,38 @@ struct iommu_hwpt_get_dirty_bitmap {
+>   #define IOMMU_HWPT_GET_DIRTY_BITMAP _IO(IOMMUFD_TYPE, \
+>   					IOMMUFD_CMD_HWPT_GET_DIRTY_BITMAP)
+>   
+> +/**
+> + * struct iommu_hwpt_invalidate - ioctl(IOMMU_HWPT_INVALIDATE)
+> + * @size: sizeof(struct iommu_hwpt_invalidate)
+> + * @hwpt_id: HWPT ID of a nested HWPT for cache invalidation
+> + * @reqs_uptr: User pointer to an array having @req_num of cache invalidation
+> + *             requests. The request entries in the array are of fixed width
+> + *             @req_len, and contain a user data structure for invalidation
+> + *             request specific to the given hardware page table.
+> + * @req_type: One of enum iommu_hwpt_data_type, defining the data type of all
+> + *            the entries in the invalidation request array. It should suit
+> + *            with the data_type passed per the allocation of the hwpt pointed
+> + *            by @hwpt_id.
 
-yes, I'm going to move it.
+@Jason and Kevin,
+
+Here a check with you two. I had a conversation with Nic on the definition
+of req_type here. It was added to support potential multiple kinds of cache
+invalidation data types for a invalidating cache for a single hwpt type[1].
+But we defined it as reusing the hwpt_data_type. In this way, it is not
+able to support the potential case in[1]. is it? Shall we define a separate
+enum for invalidation data types? And how can we let user know the
+available invalidation data types for a hwpt type? Any idea?
+
+[1] https://lore.kernel.org/linux-iommu/20231018163720.GA3952@nvidia.com/
+
+
+> + * @req_len: Length (in bytes) of a request entry in the request array
+> + * @req_num: Input the number of cache invalidation requests in the array.
+> + *           Output the number of requests successfully handled by kernel.
+> + * @out_driver_error_code: Report a driver speicifc error code upon failure.
+> + *                         It's optional, driver has a choice to fill it or
+> + *                         not.
+> + *
+> + * Invalidate the iommu cache for user-managed page table. Modifications on a
+> + * user-managed page table should be followed by this operation to sync cache.
+> + * Each ioctl can support one or more cache invalidation requests in the array
+> + * that has a total size of @req_len * @req_num.
+> + */
+> +struct iommu_hwpt_invalidate {
+> +	__u32 size;
+> +	__u32 hwpt_id;
+> +	__aligned_u64 reqs_uptr;
+> +	__u32 req_type;
+> +	__u32 req_len;
+> +	__u32 req_num;
+> +	__u32 out_driver_error_code;
+> +};
+> +#define IOMMU_HWPT_INVALIDATE _IO(IOMMUFD_TYPE, IOMMUFD_CMD_HWPT_INVALIDATE)
+>   #endif
 
 -- 
 Regards,
