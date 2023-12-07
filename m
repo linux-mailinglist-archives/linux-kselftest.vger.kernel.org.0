@@ -1,139 +1,216 @@
-Return-Path: <linux-kselftest+bounces-1354-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1355-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2DA18089CA
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Dec 2023 15:04:24 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C85D8089D6
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Dec 2023 15:07:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0DE0F1C20AC8
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Dec 2023 14:04:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EAC6B1C20B59
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Dec 2023 14:07:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A61AD41206;
-	Thu,  7 Dec 2023 14:04:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CA6C41840;
+	Thu,  7 Dec 2023 14:07:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dx0NFVnx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="djX50Moa"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.24])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7259310C2;
-	Thu,  7 Dec 2023 06:04:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1701957852; x=1733493852;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=sQ3VPlHWz03Xl+CmKdb7cfnD+1sqirMdhZ7aUAJOLcI=;
-  b=dx0NFVnxmjHsMraKtyFHMB5OgbdBxW2XQmX5nMTfGfyzPY1+lfXf1fs1
-   rsE1L15sM5aa0deNTZTr+Td8Exmkhznb8uu0cC2oPMDx2VeQs/T0gVgc2
-   Wbk+oNEDm/klJJ6YmAJgP4utkX3r5+aPwNev0ONabZDZIt4PUrq1HfZE4
-   h/8DbjP6H+2yJziVH2VwuzNwr/CucJxTGWAas7zBcpWzr7uoxXMQsSB2L
-   d6Zd495ff8PDfFNiCfh1rLCuscq9z+iLNjYN5ymP+8LlPcITcugJZIeps
-   7BTVlLxNS110A6fDcvNtsfCLa0QkQGTf2OtoqSPeke61dpPC8GgttTZv6
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="397024582"
-X-IronPort-AV: E=Sophos;i="6.04,256,1695711600"; 
-   d="scan'208";a="397024582"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2023 06:04:12 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.04,256,1695711600"; 
-   d="scan'208";a="19709866"
-Received: from dkrupnov-mobl3.ger.corp.intel.com ([10.249.34.6])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2023 06:04:10 -0800
-Date: Thu, 7 Dec 2023 16:04:07 +0200 (EET)
-From: =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To: Reinette Chatre <reinette.chatre@intel.com>
-cc: linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
-    Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>, 
-    =?ISO-8859-15?Q?Maciej_Wiecz=F3r-Retman?= <maciej.wieczor-retman@intel.com>, 
-    Fenghua Yu <fenghua.yu@intel.com>, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 02/26] selftests/resctrl: Split fill_buf to allow
- tests finer-grained control
-In-Reply-To: <356eb613-a380-4389-96d3-f2667b7d18d3@intel.com>
-Message-ID: <4ad2d41-9d65-e2ae-ade8-6d38dd4cbd81@linux.intel.com>
-References: <20231120111340.7805-1-ilpo.jarvinen@linux.intel.com> <20231120111340.7805-3-ilpo.jarvinen@linux.intel.com> <356eb613-a380-4389-96d3-f2667b7d18d3@intel.com>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58F3C3D0AC;
+	Thu,  7 Dec 2023 14:07:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23BB1C433C9;
+	Thu,  7 Dec 2023 14:07:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1701958022;
+	bh=cZE6recoVJBKdwJhpx4lYW5auQfi5FwfjuprvRYlh1o=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=djX50MoaBv+/704ycHe+m7Gz/dhYtStLSzczs5PozYrzQ4DeGKjJ/B1igcoz76jH4
+	 D5AOKiNgYf8i3qN/SmV7Pp+adUHBxasOvSpxoS8wMzSxogR8XdhWdXFSCUepqCOdj6
+	 A3R7AyGfZtLukgkvApcZvyLqcG6iBEnn72jcU+GWoWpDZ5ZWu9OfVRofM8SJ0FHqTl
+	 b3tGOHgzebbfuRPoMEfOOhi4GtlXp6SuPEKQTFWyj9LePaBPbPU0bXL6ELRI4c9+Sf
+	 GvA01iPnQmx1MK6ps+CDNKHGMWWcSwgz9AxHK0ZWAc5VFzfmtVZGn+Z6kKlpI8N9xq
+	 YOB0lDorFZjJA==
+Received: from ip-185-104-136-29.ptr.icomera.net ([185.104.136.29] helo=wait-a-minute.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1rBF1n-002ENN-Lw;
+	Thu, 07 Dec 2023 14:06:59 +0000
+Date: Thu, 07 Dec 2023 14:06:34 +0000
+Message-ID: <87bkb285ud.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	kvmarm@lists.linux.dev,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 15/21] KVM: arm64: Support FEAT_FPMR for guests
+In-Reply-To: <08ae06c7-1654-4dfd-a789-b8e13c87d705@sirena.org.uk>
+References: <20231205-arm64-2023-dpisa-v3-0-dbcbcd867a7f@kernel.org>
+	<20231205-arm64-2023-dpisa-v3-15-dbcbcd867a7f@kernel.org>
+	<87cyvi8kz1.wl-maz@kernel.org>
+	<08ae06c7-1654-4dfd-a789-b8e13c87d705@sirena.org.uk>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1882619583-1701957851=:1765"
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.104.136.29
+X-SA-Exim-Rcpt-To: broonie@kernel.org, catalin.marinas@arm.com, will@kernel.org, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, corbet@lwn.net, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-1882619583-1701957851=:1765
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-
-On Tue, 28 Nov 2023, Reinette Chatre wrote:
-> On 11/20/2023 3:13 AM, Ilpo Järvinen wrote:
-> > MBM, MBA and CMT test cases call run_fill_buf() that in turn calls
-> > fill_cache() to alloc and loop indefinitely around the buffer. This
-> > binds buffer allocation and running the benchmark into a single bundle
-> > so that a selftest cannot allocate a buffer once and reuse it. CAT test
-> > doesn't want to loop around the buffer continuously and after rewrite
-> > it needs the ability to allocate the buffer separately.
-> > 
-> > Split buffer allocation out of fill_cache() into alloc_buffer(). This
-> > change is part of preparation for the new CAT test that allocates a
-> > buffer and does multiple passes over the same buffer (but not in an
-> > infinite loop).
-> > 
-> > Co-developed-by: Fenghua Yu <fenghua.yu@intel.com>
-> > Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
-> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> > ---
+On Thu, 07 Dec 2023 12:30:45 +0000,
+Mark Brown <broonie@kernel.org> wrote:
 > 
-> Could you please list the changes to a patch in this area instead of
-> lumping all in the cover letter? Without this it is not clear what,
-> if anything, changed in the new version.
-
-Okay, I'll try to keep them per patch.
-
-> > +static int fill_cache(size_t buf_size, int memflush, int op, bool once)
-> > +{
-> > +	unsigned char *buf;
-> > +	int ret;
-> > +
-> > +	buf = alloc_buffer(buf_size, memflush);
-> > +	if (!buf)
-> > +		return -1;
-> > +
-> >  	if (op == 0)
-> >  		ret = fill_cache_read(buf, buf_size, once);
-> >  	else
-> >  		ret = fill_cache_write(buf, buf_size, once);
-> > -
-> >  	free(buf);
-> >  
-> > -	if (ret) {
-> > -		printf("\n Error in fill cache read/write...\n");
-> > -		return -1;
-> > -	}
-> > -
+> On Thu, Dec 07, 2023 at 08:39:46AM +0000, Marc Zyngier wrote:
+> > Mark Brown <broonie@kernel.org> wrote:
 > 
-> The changelog does not motivate the removal of this error message.
-> It seems ok at this point since the only failing functions already
-> print their own error message. Without a motivation of this change
-> it is not clear if it is actually intended.
-
-Hi,
-
-I don't have recollection of how it ended up into this patch as it's so 
-long time ago already... But in any case, it naturally seemed to fit into 
-the next patch that removes the extra call level so I moved the removal 
-of the duplicated error printout to that patch instead.
-
-> In any case, this looks good.
+> > >  #define HCRX_GUEST_FLAGS \
+> > > -	(HCRX_EL2_SMPME | HCRX_EL2_TCR2En | \
+> > > +	(HCRX_EL2_SMPME | HCRX_EL2_TCR2En | HCRX_EL2_EnFPM | \
 > 
-> Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
+> > We really should start making all of these things conditional. See
+> > below.
+> 
+> Is there an overarching theory behind how these things are intended to
+> work?  I agree with you that I'd have expected more conditionality here,
+> I was trying to fit in with the existing pattern.  It's kind of hard to
+> follow what the intention is, I think to some extent due to things
+> having evolved over time.
 
+The intention is that *everything* becomes conditional, based on both
+the host CPU support and the feature set advertised to the guest.
+Which means that we don't stuff that isn't advertised to the guest,
+and instead make these things UNDEF. Just like on any real CPU
+implementation.
+
+>
+> > > @@ -517,7 +519,6 @@ struct kvm_vcpu_arch {
+> > >  	enum fp_type fp_type;
+> > >  	unsigned int sve_max_vl;
+> > >  	u64 svcr;
+> > > -	u64 fpmr;
+> 
+> > Why do this change here? Why isn't done like that the first place?
+> 
+> It didn't seem right to add the register to struct vcpu_sysreg before it
+> was handled by KVM.  As referenced in the cover letter normally this
+> wouldn't come up because KVM doesn't rely on the host kernel for
+> managing register state so we add KVM support then enable the host
+> kernel but for FPSIMD we're reusing fpsimd_save() so we need the host
+> kernel support to be in place when we enable KVM.
+
+That doesn't explain why you can't be upfront with it and populate the
+FPMR entry. In either case, you are wasting a u64.
+
+> 
+> > >  	CGT_MDCR_TDE,
+> > > @@ -279,6 +281,12 @@ static const struct trap_bits coarse_trap_bits[] = {
+> > >  		.mask		= HCR_TTLBOS,
+> > >  		.behaviour	= BEHAVE_FORWARD_ANY,
+> > >  	},
+> > > +	[CGT_HCRX_EnFPM] = {
+> > > +		.index		= HCRX_EL2,
+> > > +		.value		= HCRX_EL2_EnFPM,
+> > > +		.mask		= HCRX_EL2_EnFPM,
+> > > +		.behaviour	= BEHAVE_FORWARD_ANY,
+> 
+> > This looks wrong. HCRX_EL2.EnFPM is an enable bit.
+> 
+> Right, it's the wrong way round.
+> 
+> > > +static void *fpsimd_share_end(struct user_fpsimd_state *fpsimd)
+> > > +{
+> > > +	void *share_end = fpsimd + 1;
+> > > +
+> > > +	if (cpus_have_final_cap(ARM64_HAS_FPMR))
+> > > +		share_end += sizeof(u64);
+> > > +
+> > > +	return share_end;
+> > > +}
+> 
+> > This is horrible. Why can't you just have a new structure wrapping
+> > both user_fpsimd_state and fpmr? This is going to break in subtle
+> > ways, just like the SVE/SME stuff.
+> 
+> I agree that it's not great, the main issue was that fpsimd_state is
+> both already embedded in uw for hardened usercopy and very widely
+> referenced by exactly which struct it's in so I was taking a guess as to
+> what would get the least objections.  The obvious thing would be to add
+> FPMR to uw and share the whole thing with the hypervisor, if people
+> don't mind adding another field to uw I could do that?
+
+Either that, or you create a KVM-specific structure that contains
+these fields. If that results in KVM changes, so be it. But I won't
+take this sort of pointer arithmetic that assumes some pre-defined
+layout.
+
+> 
+> > >  	vcpu->arch.host_fpsimd_state = kern_hyp_va(fpsimd);
+> > > +	if (cpus_have_final_cap(ARM64_HAS_FPMR)) {
+> > > +		WARN_ON_ONCE(&current->thread.fpmr + 1 != fpsimd_share_end(fpsimd));
+> 
+> > How can this happen?
+> 
+> It shouldn't, but it'd be bad if it did so I put a check in to make sure
+> we haven't messed up.
+
+See my earlier point: you shouldn't have to check if you used a data
+structure.
+
+> 
+> > > +		vcpu->arch.host_fpmr = kern_hyp_va(&current->thread.fpmr);
+> > > +	}
+> 
+> > We really need to stop piling the save/restore of stuff that isn't
+> > advertised to the guest.
+> 
+> I'm not clear what you're referencing here?  The feature is advertised
+> to the guest via the ID registers and in the past you've pushed back on
+> making things where the state is just a single register like this
+> optional.  Do you mean that we should be making this conditional on the
+> guest ID registers?  If that is the case is there a plan for how that's
+> supposed to work, set flags when kvm_vcpu_run_pid_change() happens for
+> example?
+
+See the beginning of this email. It is high time that we stop enabling
+everything by default, because this totally breaks VM migration. We
+already have a huge backlog of these things, and I don't want to add
+more of it.
+
+Which means that at the very least, enabling *any* feature also comes
+with sanitising the state one way or another when this feature is
+disabled by userspace.
+
+How this is being done is still a work in progress: my current plan is
+based on a set of trap bits that are computed on a per-VM basis, and
+some side state that indicates whether the trap handling is for
+emulation or feature disabling purpose. This will probably reuse the
+NV infrastructure which has an exhaustive list of the sysregs that can
+be trapped from EL0/EL1.
+
+At the very least, userspace shouldn't be able to observe the state
+that a guest isn't supposed to generate, and we should be mindful of
+not creating covert channels.
+
+	M.
 
 -- 
- i.
-
---8323329-1882619583-1701957851=:1765--
+Without deviation from the norm, progress is not possible.
 
