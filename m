@@ -1,126 +1,131 @@
-Return-Path: <linux-kselftest+bounces-1373-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1374-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8EDD808FF1
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Dec 2023 19:33:29 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6073F808FF5
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Dec 2023 19:33:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E24D5B20C5D
-	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Dec 2023 18:33:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C3315B20E85
+	for <lists+linux-kselftest@lfdr.de>; Thu,  7 Dec 2023 18:33:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CC0746BA4;
-	Thu,  7 Dec 2023 18:33:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1ACD74EB25;
+	Thu,  7 Dec 2023 18:33:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="As9Xf3sb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from xavier.telenet-ops.be (xavier.telenet-ops.be [IPv6:2a02:1800:120:4::f00:14])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9479B1709
-	for <linux-kselftest@vger.kernel.org>; Thu,  7 Dec 2023 10:33:19 -0800 (PST)
-Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed40:f5c7:c244:a7e3:47bf])
-	by xavier.telenet-ops.be with bizsmtp
-	id KWZG2B00S2nBfCd01WZGRb; Thu, 07 Dec 2023 19:33:17 +0100
-Received: from rox.of.borg ([192.168.97.57])
-	by ramsan.of.borg with esmtp (Exim 4.95)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1rBJB7-00BL2d-Md;
-	Thu, 07 Dec 2023 19:33:16 +0100
-Received: from geert by rox.of.borg with local (Exim 4.95)
-	(envelope-from <geert@linux-m68k.org>)
-	id 1rBJBU-003ZDD-Az;
-	Thu, 07 Dec 2023 19:33:16 +0100
-From: Geert Uytterhoeven <geert+renesas@glider.be>
-To: John Stultz <jstultz@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	=?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund@ragnatech.se>
-Cc: linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>
-Subject: [PATCH] selftests: timers: clocksource-switch: Adapt progress to kselftest framework
-Date: Thu,  7 Dec 2023 19:33:10 +0100
-Message-Id: <6d7a665392e75c0af8fd4ad5b95bd3f0489236ee.1701973869.git.geert+renesas@glider.be>
-X-Mailer: git-send-email 2.34.1
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6460510E7;
+	Thu,  7 Dec 2023 10:33:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701974026; x=1733510026;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=vOrZCjTlpOw7hm/DaYACfQ5R3zdPrvsOUsNaWvhG3Fk=;
+  b=As9Xf3sblg86nm3qcZw8xnVqN1amKxvL75u+6BZFM5EFa/y5Y6wkBZVR
+   hzICXoXRqyQWHDz1J3bGyMhIV6N1earCAT2yyKTl45TSnJd62xmc+3e9Y
+   kw9bimf84nWcn64UoQfyD+AEZtPrQaEZp59qSXQFgMIp815RJA2mkTUZ5
+   BlqqN3oTWPjWFEgfe49qVq0a9meoJ9/9mt+9sFKiDji54VXxwDMjJD1sW
+   xcGZXvr7PKFktX3CoV56pOwvb0RswSqo794QodqISluIwwQ0nYWLDIFt3
+   8ajlGXVS6jUQWc8nuOOwwFeVDD/poUVJ9ml7WHR3DU0oev/rsDsQyzSS8
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="393152071"
+X-IronPort-AV: E=Sophos;i="6.04,258,1695711600"; 
+   d="scan'208";a="393152071"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2023 10:33:46 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="889833432"
+X-IronPort-AV: E=Sophos;i="6.04,258,1695711600"; 
+   d="scan'208";a="889833432"
+Received: from dkrupnov-mobl3.ger.corp.intel.com ([10.249.34.6])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2023 10:33:43 -0800
+Date: Thu, 7 Dec 2023 20:33:41 +0200 (EET)
+From: =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To: Reinette Chatre <reinette.chatre@intel.com>
+cc: linux-kselftest@vger.kernel.org, Shuah Khan <shuah@kernel.org>, 
+    Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>, 
+    =?ISO-8859-15?Q?Maciej_Wiecz=F3r-Retman?= <maciej.wieczor-retman@intel.com>, 
+    Fenghua Yu <fenghua.yu@intel.com>, LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 08/26] selftests/resctrl: Split measure_cache_vals()
+In-Reply-To: <8f6c7b40-5218-4427-865d-55e5f09c594f@intel.com>
+Message-ID: <f6f42f73-ef84-535-78d7-c93685625aca@linux.intel.com>
+References: <20231120111340.7805-1-ilpo.jarvinen@linux.intel.com> <20231120111340.7805-9-ilpo.jarvinen@linux.intel.com> <c303ba1b-d7bd-47cf-9e81-8ea0c60b973c@intel.com> <e87d8ba-141a-5779-fc6-27e4735fc1bf@linux.intel.com>
+ <8f6c7b40-5218-4427-865d-55e5f09c594f@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/mixed; boundary="8323329-2060136618-1701974025=:1765"
 
-When adapting the test to the kselftest framework, a few printf() calls
-indicating test progress were not updated.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Fix this by replacing these printf() calls by ksft_print_msg() calls.
+--8323329-2060136618-1701974025=:1765
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
-Fixes: ce7d101750ff8450 ("selftests: timers: clocksource-switch: adapt to kselftest framework")
-Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
----
-When just running the test, the output looks like:
+On Thu, 7 Dec 2023, Reinette Chatre wrote:
+> On 12/7/2023 6:32 AM, Ilpo Järvinen wrote:
+> > On Tue, 28 Nov 2023, Reinette Chatre wrote:
+> >> On 11/20/2023 3:13 AM, Ilpo Järvinen wrote:
+> 
+> ...
+> >>> -	/*
+> >>> -	 * Measure llc occupancy from resctrl.
+> >>> -	 */
+> >>> -	if (!strncmp(param->resctrl_val, CMT_STR, sizeof(CMT_STR))) {
+> >>> -		ret = get_llc_occu_resctrl(&llc_occu_resc);
+> >>> -		if (ret < 0)
+> >>> -			return ret;
+> >>> -		llc_value = llc_occu_resc;
+> >>> -	}
+> >>> -	ret = print_results_cache(param->filename, bm_pid, llc_value);
+> >>> -	if (ret)
+> >>> +	ret = print_results_cache(filename, bm_pid, llc_perf_miss);
+> >>> +	return ret;
+> >>> +}
+> >>
+> >> Perhaps print_results_cache() can be made to return negative error
+> >> and this just be "return print_results_cache(...)" and the function
+> >> comment be accurate?
+> > 
+> > I think, I'll just change all "return errno;" to "return -1" before this,
+> > however, one open question which impacts whether this is actually Fixes 
+> > class issue:
+> > 
+> > It seems that perror()'s manpage doesn't answer one important question, 
+> > whether it ifself can alter errno or not. The resctrl selftest code 
+> > assumes it doesn't but some evidence I came across says otherwise so doing 
+> > return errno; after calling perror() might not even be valid at all.
+> > 
+> > So I'm tempted to create an additional Fixes patch about the return change 
+> > into the front of the series.
+> > 
+> 
+> I would not trust errno to contain code of earlier calls after a call to perror().
+> If errno is needed I think it should be saved before calling perror(). Looking
+> at perror() at [1] I do not see an effort to restore errno before it returns,
+> and looking at the implementation of perror() there appears to be many
+> opportunities for errno to change.
+> 
+> Reinette
+> 
+> [1] https://sourceware.org/git/?p=glibc.git;a=blob;f=stdio-common/perror.c;h=51e621e332a5e2aa76ecefb3bcf325efb43b345f;hb=HEAD#l47
 
-    # Validating clocksource arch_sys_counter
-    TAP version 13
-    1..12
-    ok 1 CLOCK_REALTIME
-    ...
-    # Validating clocksource ffca0000.timer
-    TAP version 13
-    1..12
-    ok 1 CLOCK_REALTIME
-    ...
+I already spent some moments in converting all return error -> return -1, 
+since all such places do perror() calls anyway (which I also converted to 
+ksft_perror() or ksft_print_msg() where perror() didn't make any sense) 
+there's not much added value in returning the errno which was not 
+correctly done in the existing code anyway.
 
-When redirecting the test output to a file, the progress prints are not
-interspersed with the test output, but collated at the end:
 
-    TAP version 13
-    1..12
-    ok 1 CLOCK_REALTIME
-    ...
-    TAP version 13
-    1..12
-    ok 1 CLOCK_REALTIME
-    ...
-    # Totals: pass:6 fail:0 xfail:0 xpass:0 skip:6 error:0
-    # Validating clocksource arch_sys_counter
-    # Validating clocksource ffca0000.timer
-    ...
-
-This makes it hard to match the test results with the timer under test.
-Is there a way to fix this?  The test does use fork().
-
-Thanks!
----
- tools/testing/selftests/timers/clocksource-switch.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/timers/clocksource-switch.c b/tools/testing/selftests/timers/clocksource-switch.c
-index c5264594064c8516..83faa4e354e389c2 100644
---- a/tools/testing/selftests/timers/clocksource-switch.c
-+++ b/tools/testing/selftests/timers/clocksource-switch.c
-@@ -156,8 +156,8 @@ int main(int argc, char **argv)
- 	/* Check everything is sane before we start switching asynchronously */
- 	if (do_sanity_check) {
- 		for (i = 0; i < count; i++) {
--			printf("Validating clocksource %s\n",
--				clocksource_list[i]);
-+			ksft_print_msg("Validating clocksource %s\n",
-+					clocksource_list[i]);
- 			if (change_clocksource(clocksource_list[i])) {
- 				status = -1;
- 				goto out;
-@@ -169,7 +169,7 @@ int main(int argc, char **argv)
- 		}
- 	}
- 
--	printf("Running Asynchronous Switching Tests...\n");
-+	ksft_print_msg("Running Asynchronous Switching Tests...\n");
- 	pid = fork();
- 	if (!pid)
- 		return run_tests(runtime);
 -- 
-2.34.1
+ i.
 
+--8323329-2060136618-1701974025=:1765--
 
