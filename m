@@ -1,60 +1,60 @@
-Return-Path: <linux-kselftest+bounces-1456-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1459-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A5CF80ADAE
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 21:20:17 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CF4D80ADF2
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 21:35:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EA2AB281774
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 20:20:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3E0E01C20C81
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 20:35:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE08E57338;
-	Fri,  8 Dec 2023 20:20:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E286057881;
+	Fri,  8 Dec 2023 20:35:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XEL0ZfNj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GNt935a5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A4C810DE;
-	Fri,  8 Dec 2023 12:20:08 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-40c317723a8so14465735e9.3;
-        Fri, 08 Dec 2023 12:20:07 -0800 (PST)
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3574198C;
+	Fri,  8 Dec 2023 12:35:27 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-40a4848c6e1so29638245e9.1;
+        Fri, 08 Dec 2023 12:35:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702066806; x=1702671606; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1702067726; x=1702672526; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=uOW35AO1MljF8VXrGiU+7YQ0Sxg9Sin/49gICtGehP4=;
-        b=XEL0ZfNjqeU7BrX1xdyEx6DUG2Xg0X0WDF7UaIPhES5Z39zlai5xKx5Are2fOk5+9h
-         +pagOJCQm2zHOYD27vCVwsMW40LEmI62upbSI8zbNJ8vJm/1CGqliz4xfROAZiOgKtcn
-         tpgeLSrB2Cyaf/C9dWgpUFjFGyzylpRqdJ3TJmPOVtvnHCJwac1rP3ow7mTY/tsQ2WC3
-         5pyNyc9Qe3J+6g92rqB+3WHZ1YRq9Rv2qjkt3RaLb17QbeGWJbbXhUxwBpBC+2MLve1q
-         ZJRdu3j+6/ykyapdXbQ9I31Onz9F+srT1ZjYV3Gzjpj4rE2WAE9Zhl9UBhBChWp8yYQw
-         KOwQ==
+        bh=5WPzggr+JIIcZt9j2+N/vNpUQEAOa3KMecMg/7uW9IE=;
+        b=GNt935a57YU1ODyelRed/q3gVEF0A3p77smAwUvWNAj18cPFGb1tWns72zj504cOIc
+         oX92zHrDHlePliG50XROTC1yOiWJfA6DgG+4Bvagz7gQfmoZeurTO80KLlZ7h6+loaHy
+         jAjHsG7gPRu/NUyN+p8ai7234qwQJMmOel0xVtmnYe4xUMTofYgBmE8q0rfp+OuP7x9+
+         0tt1zS/i+hxNzgPrgmlQOxLv/XkDgjq9QFUgxEWlaFuaa+0msMU1CMnIrj8VPXiRqfa6
+         Pc3W5K0qRMlDLnBFBk0d2NtNiWwZCumLYhb4qmIk5zpIfWstHuX5qacPPjKnWVzrEF6W
+         VX0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702066806; x=1702671606;
+        d=1e100.net; s=20230601; t=1702067726; x=1702672526;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uOW35AO1MljF8VXrGiU+7YQ0Sxg9Sin/49gICtGehP4=;
-        b=LHQ7FOArxk9arwJABnVZdFZSwF/UDCAI1DX7SiqCimLh1ldGx0VOduIWGwYGwYWbJa
-         QnbrxqhAg49Vbkd0Msy/jKG4JzGdWTpSGF/RRPlFqDsuJ5TEeXnQmrqmOnO/zjzDEeZW
-         tt1/gc24jTPhpPQtFcTNwoidtmG0Gmtb9TPxzZy7jpMH5w9eCXYxq3VhbZPnwJZ8jJa2
-         FDWMogjGdwwBIzZI09EPbQ51nDJDdFKdG7QKhcV1zHJ3vf4FsQzDw6FLLGS3CdBBKsHL
-         h47dlCRNXXldTM+ROFGxm4xDtYg2VtuwHZvyQnWvaMH5QS83J+z0T6Vsc35O9Y8w9sp5
-         /GLA==
-X-Gm-Message-State: AOJu0YyJY1h1PQCOMCX/4ji7UY2fZ25c6+9r5eNZ9L2HwJhfM5M8h5dZ
-	fQ3jk5fwL2ovOOX8oUv17Xw=
-X-Google-Smtp-Source: AGHT+IHPBOEeXi/rqbz7qszufoY2A9OT7UPzmbehyZD259vtVrFzNVCxBNaFELhPk/sbfSi3pdVMng==
-X-Received: by 2002:a05:600c:3411:b0:40b:37ec:41b3 with SMTP id y17-20020a05600c341100b0040b37ec41b3mr298018wmp.31.1702066806283;
-        Fri, 08 Dec 2023 12:20:06 -0800 (PST)
+        bh=5WPzggr+JIIcZt9j2+N/vNpUQEAOa3KMecMg/7uW9IE=;
+        b=cB3M36yLCEC3nCzSkPpFq/+WzxwSnuV8xIOANYKgFOnP34f9L5RRuYlXBNMDqQWlQ2
+         V5sP5Pv7EmF0p8kglPykNxLjrrcP/OcZpzyA33k1U3sehBdWFxm59pwSKmcF8C9hiRWV
+         +tFBjkBBs3whlB8pLzyB1UgbzaiG6aREF6FynO8HjXUZwBdblWXzh199oTUDBxynBpE9
+         f4nbhZQ3y/3/lULSdhkTS1cJMj27guNEAQNAsU5T+lLaZWJ5/7L8sY9B0WKcgbDuj+4B
+         wCYpZSzsofKD6Z4MuFK9WSIbd0f73Y8MeVnNPYWkB+hnj+WrB6SmOasTAoyW6Toi+250
+         xgPQ==
+X-Gm-Message-State: AOJu0Yy67IezYE7L8UMhQvoxxNj8j7fAhPGIehTD2FeOs58h7ea31bBu
+	w4+IWPX28CIkJFXkuwgBZMY=
+X-Google-Smtp-Source: AGHT+IHdwbAlc9QaVuOmMS3uETMk6NFLdZw5yIXklzl91LInkNaoZgu8mRrfJeijBbH68GTPvWp7PQ==
+X-Received: by 2002:a05:600c:3093:b0:40b:5e21:bdbe with SMTP id g19-20020a05600c309300b0040b5e21bdbemr287462wmn.77.1702067725916;
+        Fri, 08 Dec 2023 12:35:25 -0800 (PST)
 Received: from [192.168.8.100] ([85.255.232.89])
-        by smtp.gmail.com with ESMTPSA id bh15-20020a05600c3d0f00b0040b4ccdcffbsm3947710wmb.2.2023.12.08.12.20.04
+        by smtp.gmail.com with ESMTPSA id u10-20020a5d434a000000b0033342338a24sm2778357wrr.6.2023.12.08.12.35.23
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Dec 2023 12:20:06 -0800 (PST)
-Message-ID: <fbdba904-e24c-43e8-9278-cde7fbe74053@gmail.com>
-Date: Fri, 8 Dec 2023 20:12:57 +0000
+        Fri, 08 Dec 2023 12:35:25 -0800 (PST)
+Message-ID: <7e7c2c21-12ba-41c1-92c4-f32a3906f3ee@gmail.com>
+Date: Fri, 8 Dec 2023 20:28:15 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -64,10 +64,9 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [RFC PATCH v3 10/12] tcp: RX path for devmem TCP
 Content-Language: en-US
-To: Edward Cree <ecree.xilinx@gmail.com>,
- Mina Almasry <almasrymina@google.com>, David Ahern <dsahern@kernel.org>
-Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Stanislav Fomichev <sdf@google.com>, netdev@vger.kernel.org,
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Stanislav Fomichev <sdf@google.com>
+Cc: Mina Almasry <almasrymina@google.com>, netdev@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
  linux-kselftest@vger.kernel.org, linux-media@vger.kernel.org,
  dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
@@ -75,8 +74,8 @@ Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
  Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
  Jesper Dangaard Brouer <hawk@kernel.org>,
  Ilias Apalodimas <ilias.apalodimas@linaro.org>, Arnd Bergmann
- <arnd@arndb.de>, Shuah Khan <shuah@kernel.org>,
- Sumit Semwal <sumit.semwal@linaro.org>,
+ <arnd@arndb.de>, David Ahern <dsahern@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
  =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
  Shakeel Butt <shakeelb@google.com>, Jeroen de Borst <jeroendb@google.com>,
  Praveen Kaligineedi <pkaligineedi@google.com>,
@@ -88,58 +87,93 @@ References: <20231106024413.2801438-1-almasrymina@google.com>
  <CAF=yD-+MFpO5Hdqn+Q9X54SBpgcBeJvKTRD53X2oM4s8uVqnAQ@mail.gmail.com>
  <ZUlp8XutSAScKs_0@google.com>
  <CAF=yD-JZ88j+44MYgX-=oYJngz4Z0zw6Y0V3nHXisZJtNu7q6A@mail.gmail.com>
- <CAKH8qBueYgpxQTvTwngOs6RNjy9yvLF92s1p5nFrobw_UprNMQ@mail.gmail.com>
- <93eb6a2b-a991-40ca-8f26-f520c986729a@kernel.org>
- <CAF=yD-Ln4v8orUne8E7D2_eHu39PWPCrMR3Qtuh312pCu=erng@mail.gmail.com>
- <CAHS8izOU06ceKyc5oVZhdCKJqmeRdcRyJBFpjGe=u2yh=V52dQ@mail.gmail.com>
- <7ce2d027-1e02-4a63-afb7-7304fbfbdf90@kernel.org>
- <CAHS8izM_qrEs37F=kPzT_kmqCBV_wSiTf72PtHfJYxks9R9--Q@mail.gmail.com>
- <6f853286-e463-b684-cc1e-405119528697@gmail.com>
 From: Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <6f853286-e463-b684-cc1e-405119528697@gmail.com>
+In-Reply-To: <CAF=yD-JZ88j+44MYgX-=oYJngz4Z0zw6Y0V3nHXisZJtNu7q6A@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 11/9/23 16:07, Edward Cree wrote:
-> On 09/11/2023 02:39, Mina Almasry wrote:
->> On Wed, Nov 8, 2023 at 7:36 AM Edward Cree <ecree.xilinx@gmail.com> wrote:
->>>   If not then surely the way to return a memory area
->>>   in an io_uring idiom is just to post a new read sqe ('RX descriptor')
->>>   pointing into it, rather than explicitly returning it with setsockopt.
+On 11/6/23 22:55, Willem de Bruijn wrote:
+> On Mon, Nov 6, 2023 at 2:34 PM Stanislav Fomichev <sdf@google.com> wrote:
 >>
->> We're interested in using this with regular TCP sockets, not
->> necessarily io_uring.
-> Fair.  I just wanted to push against the suggestion upthread that "oh,
->   since io_uring supports setsockopt() we can just ignore it and it'll
->   all magically work later" (paraphrased).
-
-IMHO, that'd be horrible, but that why there are io_uring zc rx
-patches, and we'll be sending an update soon
-
-https://lore.kernel.org/all/20231107214045.2172393-1-dw@davidwei.uk/
-
-
-> If you can keep the "allocate buffers out of a devmem region" and "post
->   RX descriptors built on those buffers" APIs separate (inside the
->   kernel; obviously both triggered by a single call to the setsockopt()
->   uAPI) that'll likely make things simpler for the io_uring interface I
->   describe, which will only want the latter.
-> PS: Here's a crazy idea that I haven't thought through at all: what if
->   you allow device memory to be mmap()ed into process address space
->   (obviously with none of r/w/x because it's unreachable), so that your
->   various uAPIs can just operate on pointers (e.g. the setsockopt
->   becomes the madvise it's named after; recvmsg just uses or populates
->   the iovec rather than needing a cmsg).  Then if future devices have
->   their memory CXL accessible that can potentially be enabled with no
->   change to the uAPI (userland just starts being able to access the
->   region without faulting).
-> And you can maybe add a semantic flag to recvmsg saying "if you don't
->   use all the buffers in my iovec, keep hold of the rest of them for
->   future incoming traffic, and if I post new buffers with my next
->   recvmsg, add those to the tail of the RXQ rather than replacing the
->   ones you've got".  That way you can still have the "userland
->   directly fills the RX ring" behaviour even with TCP sockets.
+>> On 11/06, Willem de Bruijn wrote:
+>>>>> IMHO, we need a better UAPI to receive the tokens and give them back to
+>>>>> the kernel. CMSG + setsockopt(SO_DEVMEM_DONTNEED) get the job done,
+>>>>> but look dated and hacky :-(
+>>>>>
+>>>>> We should either do some kind of user/kernel shared memory queue to
+>>>>> receive/return the tokens (similar to what Jonathan was doing in his
+>>>>> proposal?)
+>>>>
+>>>> I'll take a look at Jonathan's proposal, sorry, I'm not immediately
+>>>> familiar but I wanted to respond :-) But is the suggestion here to
+>>>> build a new kernel-user communication channel primitive for the
+>>>> purpose of passing the information in the devmem cmsg? IMHO that seems
+>>>> like an overkill. Why add 100-200 lines of code to the kernel to add
+>>>> something that can already be done with existing primitives? I don't
+>>>> see anything concretely wrong with cmsg & setsockopt approach, and if
+>>>> we switch to something I'd prefer to switch to an existing primitive
+>>>> for simplicity?
+>>>>
+>>>> The only other existing primitive to pass data outside of the linear
+>>>> buffer is the MSG_ERRQUEUE that is used for zerocopy. Is that
+>>>> preferred? Any other suggestions or existing primitives I'm not aware
+>>>> of?
+>>>>
+>>>>> or bite the bullet and switch to io_uring.
+>>>>>
+>>>>
+>>>> IMO io_uring & socket support are orthogonal, and one doesn't preclude
+>>>> the other. As you know we like to use sockets and I believe there are
+>>>> issues with io_uring adoption at Google that I'm not familiar with
+>>>> (and could be wrong). I'm interested in exploring io_uring support as
+>>>> a follow up but I think David Wei will be interested in io_uring
+>>>> support as well anyway.
+>>>
+>>> I also disagree that we need to replace a standard socket interface
+>>> with something "faster", in quotes.
+>>>
+>>> This interface is not the bottleneck to the target workload.
+>>>
+>>> Replacing the synchronous sockets interface with something more
+>>> performant for workloads where it is, is an orthogonal challenge.
+>>> However we do that, I think that traditional sockets should continue
+>>> to be supported.
+>>>
+>>> The feature may already even work with io_uring, as both recvmsg with
+>>> cmsg and setsockopt have io_uring support now.
+>>
+>> I'm not really concerned with faster. I would prefer something cleaner :-)
+>>
+>> Or maybe we should just have it documented. With some kind of path
+>> towards beautiful world where we can create dynamic queues..
 > 
+> I suppose we just disagree on the elegance of the API.
+> 
+> The concise notification API returns tokens as a range for
+> compression, encoding as two 32-bit unsigned integers start + length.
+> It allows for even further batching by returning multiple such ranges
+> in a single call.
+
+FWIW, nothing prevents io_uring from compressing ranges. The io_uring
+zc RFC returns {offset, size} as well, though at the moment the would
+lie in the same page.
+
+> This is analogous to the MSG_ZEROCOPY notification mechanism from
+> kernel to user.
+> 
+> The synchronous socket syscall interface can be replaced by something
+> asynchronous like io_uring. This already works today? Whatever
+
+If you mean async io_uring recv, it does work. In short, internally
+it polls the socket and then calls sock_recvmsg(). There is also a
+feature that would make it return back to polling after sock_recvmsg()
+and loop like this.
+
+> asynchronous ring-based API would be selected, io_uring or otherwise,
+> I think the concise notification encoding would remain as is.
+> 
+> Since this is an operation on a socket, I find a setsockopt the
+> fitting interface.
 
 -- 
 Pavel Begunkov
