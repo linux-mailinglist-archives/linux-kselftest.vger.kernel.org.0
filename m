@@ -1,121 +1,133 @@
-Return-Path: <linux-kselftest+bounces-1430-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1431-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B05F780A48C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 14:40:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B44E80A499
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 14:41:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 66A7C281BBE
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 13:40:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BA6F7281C2B
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 13:41:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 510831D539;
-	Fri,  8 Dec 2023 13:40:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5ECEC1D54B;
+	Fri,  8 Dec 2023 13:41:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="hwp9A3Wr"
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="UQO4D9uf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48B021706;
-	Fri,  8 Dec 2023 05:40:06 -0800 (PST)
-Received: from localhost.localdomain (zone.collabora.co.uk [167.235.23.81])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: nfraprado)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id 0B32A66073AA;
-	Fri,  8 Dec 2023 13:40:01 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1702042805;
-	bh=XyWarEWJXpA/T9XhTV+onEShyeWe+9A2yodWAKUFUJI=;
-	h=From:To:Cc:Subject:Date:From;
-	b=hwp9A3WrBnaVFqsUWe+3crnvYWmhKfcMaI94XY4ocrQvK2T0rc8PLVSHNO2jl6QRk
-	 OBiYSCn1CFviR5Nie9vd4o1l1dL8pYZJuPm+qGCAiTVEZT4eRGme+t17/y5YOHq+9l
-	 GLgYDgqP8UgabULhins15CaD/wIgQTRPG5gIN3tP3MMjGjsG22Znbo5IaiNfn0jwQK
-	 eDj0q8BpRMNsaYhpaEBjQdF/NlR9c4zEXzqfrr5vpd+XlHRrjVPDZbJhtYRoMG19SO
-	 YPvJlFcz3bBSD8LhFtMiCZ0+k5JAXaNsmC4D3ghKEWpmbkkRaFoHEzV/6gq+R19xYM
-	 Si0G8GPrtgBkg==
-From: =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= <nfraprado@collabora.com>
-To: Rob Herring <robh+dt@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Mark Brown <broonie@kernel.org>,
-	kernel@collabora.com,
-	=?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= <nfraprado@collabora.com>,
-	Frank Rowand <frowand.list@gmail.com>,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH] kselftest: dt: Stop relying on dirname to improve performance
-Date: Fri,  8 Dec 2023 10:39:27 -0300
-Message-ID: <20231208133955.483851-1-nfraprado@collabora.com>
-X-Mailer: git-send-email 2.43.0
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85EDA1985
+	for <linux-kselftest@vger.kernel.org>; Fri,  8 Dec 2023 05:41:41 -0800 (PST)
+Received: by mail-qt1-x836.google.com with SMTP id d75a77b69052e-4258423e133so12145071cf.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 08 Dec 2023 05:41:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1702042900; x=1702647700; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=YucZctI9OnES6g1Fy1Wtf0Z1+OcLPgAF9qFfV1szyvI=;
+        b=UQO4D9ufl/sEF35xxGRzYtk162hQ7fl1RaoDfoS/+9vl4xs3B3qXZlr9UGkNUlpU04
+         VUqAwEonYfNfHnaDG/DSNPDCkcoPx2WOXMxQISI8l7WbtrG56pnofxLFtrRfVmZbH3bC
+         qq+uB6QQkS2xHkPXxhm1T9Nh/NVcOSbVuq0DcK4eb4eCTOYkJ4i2UBp3g+c3TOmTZOBI
+         kvkR+RRa6idVSYIo0Cp9PjJLNuR1hAj4nxTPR0rEzNS7Yf7vsNgNrhvt0Q8rG8hPrCRe
+         FwKQZJ7Iho98qBcQPJ9ZkquW5dlXifvvFXtHnH07MmqXCI+2udmaTZm2pM4wiSOKeCs/
+         Y/UA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702042900; x=1702647700;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=YucZctI9OnES6g1Fy1Wtf0Z1+OcLPgAF9qFfV1szyvI=;
+        b=oTbwgC+ZHfMUnT/EsB5T/ifyr11mFo0HWPaBzssQeAwkf2N0Rr2rJozYRORassCzHZ
+         sIa3Za9bnBB+exkyK1sduWrXXOWcZWK9uo2txJjeVga73APwprkZ26mBenK+HBtNS9p9
+         w6eKUepODOV3OnINant5LjPL+3cykAWMoC33o/wf+ZuWMNe3ef9QEO4LnVEt6GV2xZqi
+         bY7Ja8XFUavRd5Kfbn5jgcNVueG2uEqjeLUXOJkiHQqQnPSSwrNAjaF3CVow0l9c6DXj
+         kBKvs0Z8t17+t26qQTMW/uw7L/wyvg0pLchQzgc/R1gTLR92Us03giha0o3dITnWlllF
+         b8ww==
+X-Gm-Message-State: AOJu0YwFUqkf3wLb1fUTIZmHV75/omwEjUP/ki3NYZhX/Oa3t8rzRWfD
+	FWL59QIUuOSNiSCip05WTlWJJg==
+X-Google-Smtp-Source: AGHT+IHjZ5fbgyGNj4pXddo/yd/fsGP0DpJlldXMV869RcUAC8mCOG4RaDWeA5g67kLmuW+2zDsrMw==
+X-Received: by 2002:a05:622a:1708:b0:425:4043:1d77 with SMTP id h8-20020a05622a170800b0042540431d77mr105008qtk.74.1702042900661;
+        Fri, 08 Dec 2023 05:41:40 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-134-23-187.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.134.23.187])
+        by smtp.gmail.com with ESMTPSA id cd5-20020a05622a418500b004255fd32eeasm543901qtb.7.2023.12.08.05.41.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Dec 2023 05:41:40 -0800 (PST)
+Received: from jgg by wakko with local (Exim 4.95)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1rBb6p-00C88X-Fn;
+	Fri, 08 Dec 2023 09:41:39 -0400
+Date: Fri, 8 Dec 2023 09:41:39 -0400
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: Baolu Lu <baolu.lu@linux.intel.com>
+Cc: Joel Granados <j.granados@samsung.com>,
+	Kevin Tian <kevin.tian@intel.com>, Joerg Roedel <joro@8bytes.org>,
+	Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	Nicolin Chen <nicolinc@nvidia.com>, Yi Liu <yi.l.liu@intel.com>,
+	Jacob Pan <jacob.jun.pan@linux.intel.com>, iommu@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	virtualization@lists.linux-foundation.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/6] iommufd: Deliver fault messages to user space
+Message-ID: <20231208134139.GW1489931@ziepe.ca>
+References: <20231026024930.382898-1-baolu.lu@linux.intel.com>
+ <20231026024930.382898-5-baolu.lu@linux.intel.com>
+ <CGME20231207163412eucas1p2fa912b4923031804c27c764e5c8d67e7@eucas1p2.samsung.com>
+ <20231207163410.ap3w4faii6wkgwed@localhost>
+ <20231207171742.GU1489931@ziepe.ca>
+ <c72184d8-693d-43ce-aed9-00a8fc684137@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c72184d8-693d-43ce-aed9-00a8fc684137@linux.intel.com>
 
-When walking directory trees, instead of looking for specific files and
-running dirname to get the parent folder, traverse all folders and
-ignore the ones not containing the desired files. This avoids the need
-to call dirname inside the loop, which gives a big performance boost,
-approximately halving run time: Running locally on a
-mt8192-asurada-spherion, which reports 160 test cases, has gone from
-5.5s to 2.9s, while running remotely with an nfsroot has gone from
-13.5s to 5.5s.
+On Fri, Dec 08, 2023 at 01:47:35PM +0800, Baolu Lu wrote:
+> On 12/8/23 1:17 AM, Jason Gunthorpe wrote:
+> > On Thu, Dec 07, 2023 at 05:34:10PM +0100, Joel Granados wrote:
+> > > > @@ -58,6 +255,8 @@ static void hw_pagetable_fault_free(struct hw_pgtable_fault *fault)
+> > > >   	WARN_ON(!list_empty(&fault->deliver));
+> > > >   	WARN_ON(!list_empty(&fault->response));
+> > > > +	fput(fault->fault_file);
+> > > > +	put_unused_fd(fault->fault_fd);
+> > > I have resolved this in a naive way by just not calling the
+> > > put_unused_fd function.
+> > That is correct.
+> > 
+> > put_unused_fd() should only be called on error paths prior to the
+> > syscall return.
+> > 
+> > The design of a FD must follow this pattern
+> > 
+> >   syscall():
+> >     fdno = get_unused_fd_flags(O_CLOEXEC);
+> >     filep = [..]
+> >     // syscall MUST succeed after this statement:
+> >     fd_install(fdno, filep);
+> >     return 0;
+> > 
+> >    err:
+> >      put_unused_fd(fdno)
+> >      return -ERRNO
+> 
+> Yes. Agreed.
+> 
+> > 
+> > Also the refcounting looks a little strange, the filep reference is
+> > consumed by fd_install, so what is that fput pairing with in fault_free?
+> 
+> fput() pairs with get_unused_fd_flags()? fd_install() does not seem to
+> increase any reference.
 
-This change has a side-effect, which is that the root DT node now
-also shows in the output, even though it isn't expected to bind to a
-driver. However there shouldn't be a matching driver for the board
-compatible, so the end result will be just an extra skipped test:
+fd_install() transfers the reference to the fd table and that
+reference is put back by the close() system call.
 
-ok 1 / # SKIP
+Notice that instantly after fd_install() a concurrent user can free
+the filep.
 
-Reported-by: Mark Brown <broonie@kernel.org>
-Closes: https://lore.kernel.org/all/310391e8-fdf2-4c2f-a680-7744eb685177@sirena.org.uk
-Fixes: 14571ab1ad21 ("kselftest: Add new test for detecting unprobed Devicetree devices")
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-
----
-
- tools/testing/selftests/dt/test_unprobed_devices.sh | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
-
-diff --git a/tools/testing/selftests/dt/test_unprobed_devices.sh b/tools/testing/selftests/dt/test_unprobed_devices.sh
-index b07af2a4c4de..7fae90293a9d 100755
---- a/tools/testing/selftests/dt/test_unprobed_devices.sh
-+++ b/tools/testing/selftests/dt/test_unprobed_devices.sh
-@@ -33,8 +33,8 @@ if [[ ! -d "${PDT}" ]]; then
- fi
- 
- nodes_compatible=$(
--	for node_compat in $(find ${PDT} -name compatible); do
--		node=$(dirname "${node_compat}")
-+	for node in $(find ${PDT} -type d); do
-+		[ ! -f "${node}"/compatible ] && continue
- 		# Check if node is available
- 		if [[ -e "${node}"/status ]]; then
- 			status=$(tr -d '\000' < "${node}"/status)
-@@ -46,10 +46,11 @@ nodes_compatible=$(
- 
- nodes_dev_bound=$(
- 	IFS=$'\n'
--	for uevent in $(find /sys/devices -name uevent); do
--		if [[ -d "$(dirname "${uevent}")"/driver ]]; then
--			grep '^OF_FULLNAME=' "${uevent}" | sed -e 's|OF_FULLNAME=||'
--		fi
-+	for dev_dir in $(find /sys/devices -type d); do
-+		[ ! -f "${dev_dir}"/uevent ] && continue
-+		[ ! -d "${dev_dir}"/driver ] && continue
-+
-+		grep '^OF_FULLNAME=' "${dev_dir}"/uevent | sed -e 's|OF_FULLNAME=||'
- 	done
- 	)
- 
--- 
-2.43.0
-
+Jason
 
