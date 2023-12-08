@@ -1,122 +1,119 @@
-Return-Path: <linux-kselftest+bounces-1410-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1411-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8F83809AA1
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 04:47:14 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11ED6809B7D
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 06:07:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 163791C208E3
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 03:47:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 96371B20D3C
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 05:07:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC96F442D;
-	Fri,  8 Dec 2023 03:47:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA036641;
+	Fri,  8 Dec 2023 05:07:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Y8auVz02"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NR2gyJ10"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 700BA10FC;
-	Thu,  7 Dec 2023 19:47:06 -0800 (PST)
-Message-ID: <620df220-4b82-4102-ba56-1ed348c2f8cb@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1702007224;
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 645B11BF1
+	for <linux-kselftest@vger.kernel.org>; Thu,  7 Dec 2023 21:07:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1702012050;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=LRG1tZ4BUZmjduFYGxdtrgVWOq3VdOKTbXXj+ZyvQXQ=;
-	b=Y8auVz02tjoEIUc5pIn0TwqMEITXkgCR9ncdXJWR54TcaBEplXik5NNufV91wm50W4GLzw
-	7VVbQZlJ09/QB7mFD9brVfMbAbi69T7TzFW+6IeSyhOq0FQYFgWkUJTQx0mrIQiA2K16J1
-	6fAg53MbC+XKopi+b74uquU794C1NYc=
-Date: Thu, 7 Dec 2023 19:46:56 -0800
+	bh=7DjOW++h2qpYv/KAC35xyOMKgc1I7IXf0474RhNm4+E=;
+	b=NR2gyJ10zr6rJ7QI2Er/qlFTkrgErvHWCi6siRkAqjXYN9I4PfWpINNMMSamVquQNe280S
+	1phRD0Kn3MYbaIWMEGZMiQkiY38ztLcZbABsP4fRJqW2pkzKYzgw+JW6JuG2BsOEnDU18m
+	D/eR3V6ZAdRyK2zzFbeYAerX59iJP4w=
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com
+ [209.85.214.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-607-7gu3wztRPxKm1T3ya4UsHQ-1; Fri, 08 Dec 2023 00:07:29 -0500
+X-MC-Unique: 7gu3wztRPxKm1T3ya4UsHQ-1
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-1d03cf821e3so11795485ad.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 07 Dec 2023 21:07:28 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702012048; x=1702616848;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7DjOW++h2qpYv/KAC35xyOMKgc1I7IXf0474RhNm4+E=;
+        b=kLpfec612VJM968hYWl7y9yipJcB7sX5475JbLxm/w8gzRJf025ZtkcjCl6vSQo1bi
+         OiI+9MgkgWuMoM6h0J9ovk/7ExSPS/HOkVmaYEmPIsaiZii7kYCqj3oif00lTCOwGIKH
+         sXVu+LvsfLgAwjTN52QWsZb9JgbX6S5T9yk3v+NaHd7naXpPP02GFryXuSGYbjN7qIUf
+         0GeykGhqvIBDKZHemGXf/7vfR4D9ujFZk1WiZjc3wgo7C4B7RQS9HgZjUBdUwSFRMcVl
+         /UctK9e72uPtP0NLZdim1Bd3gqQoqfJzVR+ktObGG4gcuRCc9sBzR7Bb+7prH/utdIIv
+         BkrQ==
+X-Gm-Message-State: AOJu0YwngKYLbDMrC7QR5MYxNgu9UidmpDtQmJEGrIoh2sKwITJwE3SB
+	UXA5wGyHG1R8uLD8BKCjrNHQlEdRD1B++pqN+GhcoanbLLDwwDW5OKwxDF/cSg6oJ9f5URewN/J
+	3B+UsgRw8Ua2/k1B3J4uLAnMTNfEM
+X-Received: by 2002:a17:903:228b:b0:1d0:b16a:b26a with SMTP id b11-20020a170903228b00b001d0b16ab26amr3435387plh.4.1702012048131;
+        Thu, 07 Dec 2023 21:07:28 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IG6LlOSfQMdwKQHpCvinXE+YTOV9LAn4L/4e5piuadXfTGPzQr096NtqUuMnxxErVNRlrsErQ==
+X-Received: by 2002:a17:903:228b:b0:1d0:b16a:b26a with SMTP id b11-20020a170903228b00b001d0b16ab26amr3435375plh.4.1702012047799;
+        Thu, 07 Dec 2023 21:07:27 -0800 (PST)
+Received: from [192.168.68.51] ([43.252.115.3])
+        by smtp.gmail.com with ESMTPSA id g24-20020a170902869800b001cf9ddd3552sm701722plo.85.2023.12.07.21.07.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Dec 2023 21:07:27 -0800 (PST)
+Message-ID: <c8e1594e-1379-4fb3-904f-fba2cd194cdc@redhat.com>
+Date: Fri, 8 Dec 2023 15:07:22 +1000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v2 3/3] selftest/bpf: Test a perf bpf program that
- suppresses side effects.
-Content-Language: en-GB
-To: Kyle Huey <me@kylehuey.com>, Marco Elver <elver@google.com>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>,
- Kyle Huey <khuey@kylehuey.com>, linux-kernel@vger.kernel.org,
- Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
- Robert O'Callahan <robert@ocallahan.org>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20231207163458.5554-1-khuey@kylehuey.com>
- <20231207163458.5554-4-khuey@kylehuey.com>
- <CAEf4Bzbt1abnfj2w6Hmp2w8SqVkQiCW=SimY6ss_Jp_325QyoA@mail.gmail.com>
- <CANpmjNOLojXk64jvwD+m19B+FsR5MuBwWKv95uakq-Dp1_AGXA@mail.gmail.com>
- <CAP045AoeVP=n5K+0jt2ddBspif7kx4hzOdBM86CuxNGRCgx4VA@mail.gmail.com>
- <CAP045ArdMgodyOTs_m6-99FxrqUJzRjDth8epkaa69YQtNeSMw@mail.gmail.com>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <CAP045ArdMgodyOTs_m6-99FxrqUJzRjDth8epkaa69YQtNeSMw@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1] KVM: selftests: Fix Assertion on non-x86_64 platforms
+Content-Language: en-US
+To: Shaoqin Huang <shahuang@redhat.com>, kvm@vger.kernel.org
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+ Sean Christopherson <seanjc@google.com>, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kvmarm@lists.linux.dev
+References: <20231208033505.2930064-1-shahuang@redhat.com>
+From: Gavin Shan <gshan@redhat.com>
+In-Reply-To: <20231208033505.2930064-1-shahuang@redhat.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 7bit
 
+On 12/8/23 13:35, Shaoqin Huang wrote:
+> When running the set_memory_region_test on arm64 platform, it causes the
+> below assert:
+> 
+> ==== Test Assertion Failure ====
+>    set_memory_region_test.c:355: r && errno == EINVAL
+>    pid=40695 tid=40695 errno=0 - Success
+>       1	0x0000000000401baf: test_invalid_memory_region_flags at set_memory_region_test.c:355
+>       2	 (inlined by) main at set_memory_region_test.c:541
+>       3	0x0000ffff951c879b: ?? ??:0
+>       4	0x0000ffff951c886b: ?? ??:0
+>       5	0x0000000000401caf: _start at ??:?
+>    KVM_SET_USER_MEMORY_REGION should have failed on v2 only flag 0x2
+> 
+> This is because the arm64 platform also support the KVM_MEM_READONLY flag, but
+> the current implementation add it into the supportd_flags only on x86_64
+> platform, so this causes assert on other platform which also support the
+> KVM_MEM_READONLY flag.
+> 
+> Fix it by using the __KVM_HAVE_READONLY_MEM macro to detect if the
+> current platform support the KVM_MEM_READONLY, thus fix this problem on
+> all other platform which support KVM_MEM_READONLY.
+> 
+> Fixes: 5d74316466f4 ("KVM: selftests: Add a memory region subtest to validate invalid flags")
+> Signed-off-by: Shaoqin Huang <shahuang@redhat.com>
+> ---
+> This patch is based on the latest kvm-next[1] branch.
+> 
+> [1] https://git.kernel.org/pub/scm/virt/kvm/kvm.git/log/?h=next
+> ---
+>   tools/testing/selftests/kvm/set_memory_region_test.c | 4 +++-
+>   1 file changed, 3 insertions(+), 1 deletion(-)
+> 
 
-On 12/7/23 5:08 PM, Kyle Huey wrote:
-> On Thu, Dec 7, 2023 at 2:56 PM Kyle Huey <me@kylehuey.com> wrote:
->> On Thu, Dec 7, 2023 at 11:20 AM Marco Elver <elver@google.com> wrote:
->>> On Thu, 7 Dec 2023 at 20:12, Andrii Nakryiko <andrii.nakryiko@gmail.com> wrote:
->>>> On Thu, Dec 7, 2023 at 8:35 AM Kyle Huey <me@kylehuey.com> wrote:
->>>>> The test sets a hardware breakpoint and uses a bpf program to suppress the
->>>>> side effects of a perf event sample, including I/O availability signals,
->>>>> SIGTRAPs, and decrementing the event counter limit, if the ip matches the
->>>>> expected value. Then the function with the breakpoint is executed multiple
->>>>> times to test that all effects behave as expected.
->>>>>
->>>>> Signed-off-by: Kyle Huey <khuey@kylehuey.com>
->>>>> ---
->>>>>   .../selftests/bpf/prog_tests/perf_skip.c      | 145 ++++++++++++++++++
->>>>>   .../selftests/bpf/progs/test_perf_skip.c      |  15 ++
->>>>>   2 files changed, 160 insertions(+)
->>>>>   create mode 100644 tools/testing/selftests/bpf/prog_tests/perf_skip.c
->>>>>   create mode 100644 tools/testing/selftests/bpf/progs/test_perf_skip.c
->>>>>
->>>>> diff --git a/tools/testing/selftests/bpf/prog_tests/perf_skip.c b/tools/testing/selftests/bpf/prog_tests/perf_skip.c
->>>>> new file mode 100644
->>>>> index 000000000000..f6fa9bfd9efa
->>>>> --- /dev/null
->>>>> +++ b/tools/testing/selftests/bpf/prog_tests/perf_skip.c
->>>>> @@ -0,0 +1,145 @@
->>>>> +// SPDX-License-Identifier: GPL-2.0
->>>>> +#define _GNU_SOURCE
->>>>> +
->>>>> +/* We need the latest siginfo from the kernel repo. */
->>>>> +#include <asm/siginfo.h>
->>>> selftests are built with UAPI headers' copies under tools/include, so
->>>> CI did catch a real issue, I think. Try copying
->>>> include/uapi/asm-generic/siginfo.h into
->>>> tools/include/uapi/asm-generic/siginfo.h ?
->>> I believe parts of this were inspired by
->>> tools/testing/selftests/perf_events/sigtrap_threads.c - getting the
->>> kernel headers is allowed, as long as $(KHDR_INCLUDES) is added to
->>> CFLAGS. See tools/testing/selftests/perf_events/Makefile. Not sure
->>> it's appropriate for this test though, if you don't want to add
->>> KHDR_INCLUDES for everything.
->> Yes, that's right. Namhyung's commit message for 91c97b36bd69 leads me
->> to believe that I should copy siginfo.h over into tools/include and
->> fix the perf_events self tests too.
->>
->> - Kyle
-> That doesn't really help (though perhaps it should be done anyway so
-> the selftests aren't reaching into include/) because the glibc headers
-> still redefine a ton of stuff in asm-generic/siginfo.h.
+Reviewed-by: Gavin Shan <gshan@redhat.com>
 
-Just for testing purpose, I think you can avoid includeasm/siginfo.h and directly define necessary structures in the C file 
-directly, right?
-
->
-> - Kyle
 
