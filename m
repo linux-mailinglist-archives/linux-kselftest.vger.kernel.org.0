@@ -1,160 +1,119 @@
-Return-Path: <linux-kselftest+bounces-1426-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1427-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 528A780A274
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 12:43:41 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0804080A310
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 13:20:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E7B9AB20A8E
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 11:43:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 84EBDB20B12
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 12:20:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E245D1B291;
-	Fri,  8 Dec 2023 11:43:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A9281C294;
+	Fri,  8 Dec 2023 12:20:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GOZ1N66u"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o0Mm75HZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2839AD59;
-	Fri,  8 Dec 2023 03:43:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702035811; x=1733571811;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ZmkAP0N/gOOmFK2HS73Ar6ckEAFg8Q3aZC+p9EeSO1Y=;
-  b=GOZ1N66uIDbEVMD4+BhgoazD/AoEsfQ94BjrcIkQdHTbZUOB5cnjx47X
-   b64apZQ1fMDcaDzkh8O4CJIpwkdxJr/vhPfEChmsi75RVxt1aXVXXQzxB
-   W+H9MQYM2Ahv6KqGPo4K8vabl7GWHNn3liYDbGfm7tgdjIPL0X8VyGGEw
-   8/vyGDS5TGKwe0JC95SLyOCcTg5zDK1Ezx/wL0qSmaqTuvP9hsK6irLog
-   7MjevueSoiPOw9liSjmTcgQuNXxUFdyT/X+/+S93SEGX8yAN7YdXWojhm
-   WmVN0GCDJ930q5xO0c5jYG+ESr0EJL4l6R23fPTx8oc/zIikDVW4qai2i
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="394134276"
-X-IronPort-AV: E=Sophos;i="6.04,260,1695711600"; 
-   d="scan'208";a="394134276"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2023 03:43:30 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="765465888"
-X-IronPort-AV: E=Sophos;i="6.04,260,1695711600"; 
-   d="scan'208";a="765465888"
-Received: from blu2-mobl.ccr.corp.intel.com (HELO [10.255.31.238]) ([10.255.31.238])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2023 03:43:27 -0800
-Message-ID: <abc94be4-a909-4255-bb08-f0fcf45a21b8@linux.intel.com>
-Date: Fri, 8 Dec 2023 19:43:12 +0800
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D79CE1BDFD;
+	Fri,  8 Dec 2023 12:20:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 54FDEC433C9;
+	Fri,  8 Dec 2023 12:20:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702038026;
+	bh=cL4G09FMM87FyW6qx9cfGc3SyCcZ7hGoUTZkQ/Jyhwc=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=o0Mm75HZaLPa7B8w7uwRvona9U6iSN0xdICbD73DfMBt4z5wdpMQoSqo+1HHXL/mc
+	 2MmDHbwMAU0ioadIuu8Jh9Pwssnh7xm6ZLkpDSX+T0WMBEksUrPXHDhwZcLwBgjZAk
+	 iXCZvxzH6VppHmSrxddnlq3pQHiuJnz6YzB0zmJSkIo4RiZsWMGnG7n1Ie8HoLGiqm
+	 /ULFP3ItYamI40aTRHmHyh0GVKQ1DQbRs6of36zBkD+/5QZm+1IeinD74LmCwku6Tw
+	 ccvhX121fSyo9kFmmad+obR53xkbSiyZb7EiUw2BocVuZyGWAElEmLsMjA3gWb5p8K
+	 ye7BC0m7juWbA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3B711C04E32;
+	Fri,  8 Dec 2023 12:20:26 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: baolu.lu@linux.intel.com, Kevin Tian <kevin.tian@intel.com>,
- Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
- Robin Murphy <robin.murphy@arm.com>,
- Jean-Philippe Brucker <jean-philippe@linaro.org>,
- Nicolin Chen <nicolinc@nvidia.com>, Yi Liu <yi.l.liu@intel.com>,
- Jacob Pan <jacob.jun.pan@linux.intel.com>, iommu@lists.linux.dev,
- linux-kselftest@vger.kernel.org, virtualization@lists.linux-foundation.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/6] iommufd: Deliver fault messages to user space
-To: Jason Gunthorpe <jgg@ziepe.ca>
-References: <20231026024930.382898-1-baolu.lu@linux.intel.com>
- <20231026024930.382898-5-baolu.lu@linux.intel.com>
- <20231201152459.GB1489931@ziepe.ca>
-Content-Language: en-US
-From: Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20231201152459.GB1489931@ziepe.ca>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 0/9] Convert net selftests to run in unique namespace
+ (Part 2)
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <170203802623.6196.5009719464522054541.git-patchwork-notify@kernel.org>
+Date: Fri, 08 Dec 2023 12:20:26 +0000
+References: <20231206070801.1691247-1-liuhangbin@gmail.com>
+In-Reply-To: <20231206070801.1691247-1-liuhangbin@gmail.com>
+To: Hangbin Liu <liuhangbin@gmail.com>
+Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
+ edumazet@google.com, pabeni@redhat.com, shuah@kernel.org, dsahern@kernel.org,
+ linux-kselftest@vger.kernel.org, po-hsu.lin@canonical.com, gnault@redhat.com,
+ petrm@nvidia.com, idosch@nvidia.com, razor@blackwall.org,
+ vladimir@nikishkin.pw, roopa@nvidia.com
 
-On 2023/12/1 23:24, Jason Gunthorpe wrote:
-> On Thu, Oct 26, 2023 at 10:49:28AM +0800, Lu Baolu wrote:
-> 
->> +static ssize_t hwpt_fault_fops_write(struct file *filep,
->> +				     const char __user *buf,
->> +				     size_t count, loff_t *ppos)
->> +{
->> +	size_t response_size = sizeof(struct iommu_hwpt_page_response);
->> +	struct hw_pgtable_fault *fault = filep->private_data;
->> +	struct iommu_hwpt_page_response response;
->> +	struct iommufd_hw_pagetable *hwpt;
->> +	struct iopf_group *iter, *group;
->> +	struct iommufd_device *idev;
->> +	size_t done = 0;
->> +	int rc = 0;
->> +
->> +	if (*ppos || count % response_size)
->> +		return -ESPIPE;
->> +
->> +	mutex_lock(&fault->mutex);
->> +	while (!list_empty(&fault->response) && count > done) {
->> +		rc = copy_from_user(&response, buf + done, response_size);
->> +		if (rc)
->> +			break;
->> +
->> +		/* Get the device that this response targets at. */
->> +		idev = container_of(iommufd_get_object(fault->ictx,
->> +						       response.dev_id,
->> +						       IOMMUFD_OBJ_DEVICE),
->> +				    struct iommufd_device, obj);
->> +		if (IS_ERR(idev)) {
->> +			rc = PTR_ERR(idev);
->> +			break;
->> +		}
-> 
-> See here it might be better to have a per-fd list of outstanding
-> faults per-fd and then the cookie would just index that list, then you
-> get everything in one shot instead of having to do a xarray looking
-> and then a linear list search
+Hello:
 
-Yours is more efficient. I will do it that way in the next version.
+This series was applied to netdev/net-next.git (main)
+by David S. Miller <davem@davemloft.net>:
 
+On Wed,  6 Dec 2023 15:07:52 +0800 you wrote:
+> Here is the 2nd part of converting net selftests to run in unique namespace.
+> This part converts all bridge, vxlan, vrf tests.
 > 
->> +static const struct file_operations hwpt_fault_fops = {
->> +	.owner		= THIS_MODULE,
->> +	.read		= hwpt_fault_fops_read,
->> +	.write		= hwpt_fault_fops_write,
->> +};
+> Here is the part 1 link:
+> https://lore.kernel.org/netdev/20231202020110.362433-1-liuhangbin@gmail.com
 > 
-> nonseekable_open() behavior should be integrated into this
+> Hangbin Liu (9):
+>   selftests/net: convert test_bridge_backup_port.sh to run it in unique
+>     namespace
+>   selftests/net: convert test_bridge_neigh_suppress.sh to run it in
+>     unique namespace
+>   selftests/net: convert test_vxlan_mdb.sh to run it in unique namespace
+>   selftests/net: convert test_vxlan_nolocalbypass.sh to run it in unique
+>     namespace
+>   selftests/net: convert test_vxlan_under_vrf.sh to run it in unique
+>     namespace
+>   selftests/net: convert test_vxlan_vnifiltering.sh to run it in unique
+>     namespace
+>   selftests/net: convert vrf_route_leaking.sh to run it in unique
+>     namespace
+>   selftests/net: convert vrf_strict_mode_test.sh to run it in unique
+>     namespace
+>   selftests/net: convert vrf-xfrm-tests.sh to run it in unique namespace
+> 
+> [...]
 
-Sure.
+Here is the summary with links:
+  - [net-next,1/9] selftests/net: convert test_bridge_backup_port.sh to run it in unique namespace
+    https://git.kernel.org/netdev/net-next/c/4624a78c18c6
+  - [net-next,2/9] selftests/net: convert test_bridge_neigh_suppress.sh to run it in unique namespace
+    https://git.kernel.org/netdev/net-next/c/312abe3d93a3
+  - [net-next,3/9] selftests/net: convert test_vxlan_mdb.sh to run it in unique namespace
+    https://git.kernel.org/netdev/net-next/c/a8258e64ca74
+  - [net-next,4/9] selftests/net: convert test_vxlan_nolocalbypass.sh to run it in unique namespace
+    https://git.kernel.org/netdev/net-next/c/d79e907b425d
+  - [net-next,5/9] selftests/net: convert test_vxlan_under_vrf.sh to run it in unique namespace
+    https://git.kernel.org/netdev/net-next/c/d6aab1f63297
+  - [net-next,6/9] selftests/net: convert test_vxlan_vnifiltering.sh to run it in unique namespace
+    https://git.kernel.org/netdev/net-next/c/5ece8371747d
+  - [net-next,7/9] selftests/net: convert vrf_route_leaking.sh to run it in unique namespace
+    https://git.kernel.org/netdev/net-next/c/bedc99abcaf8
+  - [net-next,8/9] selftests/net: convert vrf_strict_mode_test.sh to run it in unique namespace
+    https://git.kernel.org/netdev/net-next/c/51f64acbe36e
+  - [net-next,9/9] selftests/net: convert vrf-xfrm-tests.sh to run it in unique namespace
+    https://git.kernel.org/netdev/net-next/c/61b12ebe439a
 
-> 
->> +static int hw_pagetable_get_fault_fd(struct hw_pgtable_fault *fault)
->> +{
->> +	struct file *filep;
->> +	int fdno;
->> +
->> +	fdno = get_unused_fd_flags(O_CLOEXEC);
->> +	if (fdno < 0)
->> +		return fdno;
->> +
->> +	filep = anon_inode_getfile("[iommufd-pgfault]", &hwpt_fault_fops,
->> +				   fault, O_RDWR);
->> +	if (IS_ERR(filep)) {
->> +		put_unused_fd(fdno);
->> +		return PTR_ERR(filep);
->> +	}
->> +
->> +	fd_install(fdno, filep);
->> +	fault->fault_file = filep;
->> +	fault->fault_fd = fdno;
-> 
-> fd_install must be the very last thing before returning success from a
-> system call because we cannot undo it.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Yes.
-
-> 
-> There are other failure paths before here and the final return
-> 
-> Jason
-
-Best regards,
-baolu
 
 
