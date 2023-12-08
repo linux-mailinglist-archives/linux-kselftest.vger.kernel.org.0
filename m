@@ -1,128 +1,113 @@
-Return-Path: <linux-kselftest+bounces-1453-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1454-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7FB480AD14
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 20:31:29 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7B9E80AD1D
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 20:33:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DA6A3B20B84
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 19:31:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 635241F20FC7
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 19:33:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 102E04E1A2;
-	Fri,  8 Dec 2023 19:31:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F1FB4CB4E;
+	Fri,  8 Dec 2023 19:33:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="AA19aOJz"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SUwEC5xF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-vk1-xa32.google.com (mail-vk1-xa32.google.com [IPv6:2607:f8b0:4864:20::a32])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68DA1173B
-	for <linux-kselftest@vger.kernel.org>; Fri,  8 Dec 2023 11:31:16 -0800 (PST)
-Received: by mail-vk1-xa32.google.com with SMTP id 71dfb90a1353d-4b2e50b58ffso552817e0c.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 08 Dec 2023 11:31:16 -0800 (PST)
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D7851732
+	for <linux-kselftest@vger.kernel.org>; Fri,  8 Dec 2023 11:33:04 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-40c38e520e2so8535e9.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 08 Dec 2023 11:33:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1702063875; x=1702668675; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1702063983; x=1702668783; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kWu+J+wzMOcih150vf6YNmhjcZNaZMBMCrHoJTVq0Uw=;
-        b=AA19aOJzqgtW3RV80AFQwVMChqnhyx3dotQVTb0hrBmAlbNUmsuBTJtMrljDDTaPE4
-         UT2XZXwwEhyL6RvaC5iWygV0PrrojOamdQDwSsldkfSAMM7VJCtSIzBuUePJhJzEMdpX
-         CPGh4gECrlJoIIISE5H4oez9KZbbP2rZerJwxtlHukbw8x1DHD6xfCD40QWJNSF2TTZv
-         jyd/PaV6H4EEWDsI8Bemrygg75E84QrYgetKO+iTPy9VQtZwScDXn3sfczLGri9aGHpp
-         7vil7CrYcYmsqEFV7IMvKlG6rg+3CTnia8RBmcwiGoSy+xuGXcA38kRCZHFSMQWuS23S
-         tl7Q==
+        bh=Ra9vJuTInRrpamBBEJ9LmrEW3hYoB09CBBvxN/oJ2+Y=;
+        b=SUwEC5xFvyL3QDodvRud/4eaGIAtEMP7zbj7xDJFx/avnxwykn0lyvpUdPFgBNM63Y
+         jDRoDYxBqsl4AwlKUu8zweKfSbPCl3+GDwvVPg9zY5aDyOYv5AR928vA1V0jlyNW8yLo
+         WPZCGT43X2ltD4XzSZEhNr5SjS6BsyPCjGFgS57TpdJOQaGHTNmxt2wg4wYicvMarsKZ
+         YFEZKjBBc1PCP7HcUhbdYwH9JyjbIwRx24sbWEjXoJaNWGoKIFOSJg5wFe9HcKRhp/2f
+         VaeQTevTvUG60yOFjqpGyduRLZ3gUKwkyaIEIZlCl7NEX9O1HxY6DXawTZV70i18KGux
+         5PKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702063875; x=1702668675;
+        d=1e100.net; s=20230601; t=1702063983; x=1702668783;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kWu+J+wzMOcih150vf6YNmhjcZNaZMBMCrHoJTVq0Uw=;
-        b=PspB0f5Wje/1+MAVwbsyMoPtAScF095QIxn2Q8LJRi8GPyHoTefPIOXsoIGtr3RP8r
-         maRlmUOX5wyXuSXIzCKGNZQkevQFE68oREVc4RT1jygDnHUidQF4mQICvd9xldO1r3VW
-         q8o8qHdWKt/4ER2r7zezJryZFP8AJXrC0KZYsaMwHrI0oNuaRRUKGRQxY1DZfH0dOZtO
-         Pu8bg3uWEEpdpJbg4VdWYZWJREa07pr0H0/v/ij/zPXw1ppfOJ7Vvnsm47HOUfyKz9J/
-         SZPBqiE+GCrBmDs+0EIN3FcRHwzFW/gs2jgfUPEI26W1NvPzvRlya1hI7+9hpF3wwm95
-         64hg==
-X-Gm-Message-State: AOJu0Yys/GwjzInghQqQ9NFvm6qnazybIQsGoSevRK9b0bbBO7wdcRMr
-	1Yd+gM37nh62UbKScPhkQWaS4c1oEaEb69LKeJ83sw==
-X-Google-Smtp-Source: AGHT+IEWy2ZoASGB97Xf4UzepNASdfhsiRufEtATUoKuaLdGqOq89E4y/cKAIuTMSGCSkffzh0Lc4oz7kiKBOoq4yro=
-X-Received: by 2002:a05:6102:3ec4:b0:464:40b2:e59f with SMTP id
- n4-20020a0561023ec400b0046440b2e59fmr628329vsv.32.1702063875124; Fri, 08 Dec
- 2023 11:31:15 -0800 (PST)
+        bh=Ra9vJuTInRrpamBBEJ9LmrEW3hYoB09CBBvxN/oJ2+Y=;
+        b=dwrGPqYoxoQViGny4AJeFYCSOelXYZGyzEReqP9hC9pIjWrMUQJkL6I8QIeyzQzMnw
+         7/6bouW3t5qbH5N5Ws30Tr0HEXz1pMopATuN42FYn4e7NtlUgFGMZiAoo5NqLPla4/1h
+         f1sYrW+xus7/tDKvaQnZXPyUktDLbOMuhYRJs/iMvh9GI7De0GJcaME9Tbkx3WmFkk48
+         SfLf/JEovNforL71HfetI9DOnXSf2BNT35U0cBCiJoBRCBpboaF28+JRSGDq1KpavNqj
+         zVtxRNGdhfHh5PUal1AxZKbin077eUb2O/XUIVeI8psRvTvSsyneivI6D40w8glNZivZ
+         6cUg==
+X-Gm-Message-State: AOJu0YzfI69AkNOYKTauhkIt/Wh6ZDx6acCtgUm/w0mELWruxSgXHT+S
+	M03Q8r3FPuyL9RYIHc6K77gPKHuuPJadUEmS2apnjIh6ow9fmxBmcBw=
+X-Google-Smtp-Source: AGHT+IGdOUZJcWkF1Q/IPZf5TuqHSwtcgFDnUkDzI2G5sOp+gsWGwRfPac8MwWtVbp+GO5kIg5Uloat2UDw51JfXlxg=
+X-Received: by 2002:a05:600c:286:b0:40c:29a1:5547 with SMTP id
+ 6-20020a05600c028600b0040c29a15547mr86714wmk.7.1702063982671; Fri, 08 Dec
+ 2023 11:33:02 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231208005250.2910004-1-almasrymina@google.com> <3fea9ae9-e9e6-4ba5-812b-2775a6ed9e6a@kernel.org>
-In-Reply-To: <3fea9ae9-e9e6-4ba5-812b-2775a6ed9e6a@kernel.org>
-From: Mina Almasry <almasrymina@google.com>
-Date: Fri, 8 Dec 2023 11:31:01 -0800
-Message-ID: <CAHS8izOc05jQEhU+s6FZtBN4fynUwVPrKsXBtjYo-X8fHQXOjg@mail.gmail.com>
-Subject: Re: [net-next v1 00/16] Device Memory TCP
-To: David Ahern <dsahern@kernel.org>
-Cc: Shailend Chand <shailend@google.com>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Jeroen de Borst <jeroendb@google.com>, 
-	Praveen Kaligineedi <pkaligineedi@google.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Yunsheng Lin <linyunsheng@huawei.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
-	Shakeel Butt <shakeelb@google.com>
+References: <20231206082251.586204-1-davidgow@google.com>
+In-Reply-To: <20231206082251.586204-1-davidgow@google.com>
+From: Rae Moar <rmoar@google.com>
+Date: Fri, 8 Dec 2023 14:32:49 -0500
+Message-ID: <CA+GJov4H8DJgeaxus5BTS=Y0iR9M+BirLVht8fB9jxjWGODrMA@mail.gmail.com>
+Subject: Re: [PATCH] kunit: test: Use an action wrapper instead of a cast
+To: David Gow <davidgow@google.com>
+Cc: Shuah Khan <skhan@linuxfoundation.org>, kunit-dev@googlegroups.com, 
+	Brendan Higgins <brendan.higgins@linux.dev>, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Dec 8, 2023 at 9:57=E2=80=AFAM David Ahern <dsahern@kernel.org> wro=
-te:
+On Wed, Dec 6, 2023 at 3:23=E2=80=AFAM David Gow <davidgow@google.com> wrot=
+e:
 >
-> On 12/7/23 5:52 PM, Mina Almasry wrote:
-> > Major changes in v1:
-> > --------------
-> >
-> > 1. Implemented MVP queue API ndos to remove the userspace-visible
-> >    driver reset.
-> >
-> > 2. Fixed issues in the napi_pp_put_page() devmem frag unref path.
-> >
-> > 3. Removed RFC tag.
-> >
-> > Many smaller addressed comments across all the patches (patches have
-> > individual change log).
-> >
-> > Full tree including the rest of the GVE driver changes:
-> > https://github.com/mina/linux/commits/tcpdevmem-v1
-> >
+> We missed one of the casts of kfree() to kunit_action_t in kunit-test,
+> which was only enabled when debugfs was in use. This could potentially
+> break CFI.
 >
-> Still a lot of DEVMEM references (e.g., socket API). Any reason not to
-> move those to DMABUF?
+> Use the existing wrapper function instead.
 >
+> Signed-off-by: David Gow <davidgow@google.com>
 
-In my mind the naming (maybe too silly/complicated, feel free to correct) i=
-s:
+Hello!
 
-The feature is devmem TCP because we really care about TCPing into
-device memory. So the uapi/feature name retains devmem.
+This looks good to me. All ready to go.
 
-dmabuf is the abstraction for devmem that we use. In theory someone
-can come up with a driver that doesn't like dmabuf and uses something
-else instead, and the devmem TCP support can be extended to support
-that something else. Functions that handle specifically dmabuf and are
-not generic to support general devmem are named accordingly
-(netdev_alloc_dmabuf/netdev_free_dmabuf)
+Reviewed-by: Rae Moar <rmoar@google.com>
 
-page_pool_iov is a generic type to support generic non-paged memory,
-functions that are supposed to handle any generic non-paged memory and
-named accordingly (page_pool_iov_get_many).
+Thanks!
+-Rae
 
-
---=20
-Thanks,
-Mina
+> ---
+>  lib/kunit/kunit-test.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
+> index 3e9c5192d095..ee6927c60979 100644
+> --- a/lib/kunit/kunit-test.c
+> +++ b/lib/kunit/kunit-test.c
+> @@ -559,7 +559,7 @@ static void kunit_log_test(struct kunit *test)
+>         KUNIT_EXPECT_TRUE(test, test->log->append_newlines);
+>
+>         full_log =3D string_stream_get_string(test->log);
+> -       kunit_add_action(test, (kunit_action_t *)kfree, full_log);
+> +       kunit_add_action(test, kfree_wrapper, full_log);
+>         KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
+>                                      strstr(full_log, "put this in log.")=
+);
+>         KUNIT_EXPECT_NOT_ERR_OR_NULL(test,
+> --
+> 2.43.0.rc2.451.g8631bc7472-goog
+>
 
