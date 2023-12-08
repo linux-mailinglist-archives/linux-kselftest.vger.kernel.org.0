@@ -1,49 +1,49 @@
-Return-Path: <linux-kselftest+bounces-1413-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1414-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80CBD809BEC
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 06:52:24 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3071B809C1D
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 07:02:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 35C831F210C5
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 05:52:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5A2EA1C209A6
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 06:02:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88D046ADC;
-	Fri,  8 Dec 2023 05:52:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4C2E7474;
+	Fri,  8 Dec 2023 06:02:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FJ9pODvJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d7N+kUK+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76AD9171F;
-	Thu,  7 Dec 2023 21:52:16 -0800 (PST)
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A643171D;
+	Thu,  7 Dec 2023 22:02:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702014737; x=1733550737;
+  t=1702015327; x=1733551327;
   h=message-id:date:mime-version:cc:subject:to:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=2CgvhfqEe7oPS8iAqYFe0ARHhvX5HhGtxuEy7yZmrms=;
-  b=FJ9pODvJGSndZ85yMXUM1yZHYqKCRB3XjCOIEfQxtwLF3hYD6WBDkech
-   oUtZqtPO3FQeh2d5stT7K8o0qhS2OfwWgTIq+OEfVZBbIBJEGsPEHmkQ1
-   d814zGM3ddUKV56qt/Wmuo5/YAOMCQV2lNfLGCf9lma9aNM2Rrf3Hr6c0
-   eX2BtLgXoHAUvq2OT4sfO50tO7dARDVOskqJKkxTVvLdHSCPSP2Q10Vwq
-   BFVdr7Bl4ZjWiJVay1mYRcDWCUvM3LV7bBmKYOsmX3Hxh6iwCOrKtlfwT
-   5QLTdRZy1zHAqqBnUp4IpJYFySXQf77PGrhrfILyClXJKTDGXhrMnNc47
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="7685672"
-X-IronPort-AV: E=Sophos;i="6.04,259,1695711600"; 
-   d="scan'208";a="7685672"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2023 21:52:16 -0800
+  bh=8YfUtY53ybfUCrDRuQ3/gMPNDKuhyX3Iq/kRdGPDIQk=;
+  b=d7N+kUK+dYlFennt86EgJxrqa+EhdbnHv78BvCY539AgEoLem6J/3CJo
+   B9Y2dtbNA0MYUXwYdzFXyYb98uFanAqvdk3e4AkLDJlrtDSWRgFeO70AB
+   LFjCAvmPddVAymJy5P7FHjBzLKHbnjiJQwH6Y2t3X9PtQvz7Hf6HuJNlY
+   ylS5cNuajkBpADlukbM22nm/uNhGi8v2WLa/3RV6ASnzPxvY8YgBp5GGi
+   bQuRSVBvt4SWI6sPprqr9OgmFkFd5jwSRwacxwNEqHXPWMcg3FqM8IJpw
+   DblYFl7anZCItjgZgJb4Q28f4t06CZmS1vvPdLydYgmHXtOa9aax4IKAs
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="1467163"
+X-IronPort-AV: E=Sophos;i="6.04,260,1695711600"; 
+   d="scan'208";a="1467163"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Dec 2023 22:02:07 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="838016425"
-X-IronPort-AV: E=Sophos;i="6.04,259,1695711600"; 
-   d="scan'208";a="838016425"
+X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="842486903"
+X-IronPort-AV: E=Sophos;i="6.04,260,1695711600"; 
+   d="scan'208";a="842486903"
 Received: from allen-box.sh.intel.com (HELO [10.239.159.127]) ([10.239.159.127])
-  by fmsmga008.fm.intel.com with ESMTP; 07 Dec 2023 21:52:12 -0800
-Message-ID: <c72184d8-693d-43ce-aed9-00a8fc684137@linux.intel.com>
-Date: Fri, 8 Dec 2023 13:47:35 +0800
+  by fmsmga004.fm.intel.com with ESMTP; 07 Dec 2023 22:02:03 -0800
+Message-ID: <46c80b4e-9f05-4fb2-a31d-7386a41c895a@linux.intel.com>
+Date: Fri, 8 Dec 2023 13:57:26 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -59,56 +59,55 @@ Cc: baolu.lu@linux.intel.com, Kevin Tian <kevin.tian@intel.com>,
  Jacob Pan <jacob.jun.pan@linux.intel.com>, iommu@lists.linux.dev,
  linux-kselftest@vger.kernel.org, virtualization@lists.linux-foundation.org,
  linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/6] iommufd: Deliver fault messages to user space
+Subject: Re: [PATCH v2 0/6] IOMMUFD: Deliver IO page faults to user space
 Content-Language: en-US
-To: Jason Gunthorpe <jgg@ziepe.ca>, Joel Granados <j.granados@samsung.com>
+To: Jason Gunthorpe <jgg@ziepe.ca>
 References: <20231026024930.382898-1-baolu.lu@linux.intel.com>
- <20231026024930.382898-5-baolu.lu@linux.intel.com>
- <CGME20231207163412eucas1p2fa912b4923031804c27c764e5c8d67e7@eucas1p2.samsung.com>
- <20231207163410.ap3w4faii6wkgwed@localhost>
- <20231207171742.GU1489931@ziepe.ca>
+ <20231201142427.GJ1394392@ziepe.ca>
 From: Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20231207171742.GU1489931@ziepe.ca>
+In-Reply-To: <20231201142427.GJ1394392@ziepe.ca>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 12/8/23 1:17 AM, Jason Gunthorpe wrote:
-> On Thu, Dec 07, 2023 at 05:34:10PM +0100, Joel Granados wrote:
->>> @@ -58,6 +255,8 @@ static void hw_pagetable_fault_free(struct hw_pgtable_fault *fault)
->>>   	WARN_ON(!list_empty(&fault->deliver));
->>>   	WARN_ON(!list_empty(&fault->response));
->>>   
->>> +	fput(fault->fault_file);
->>> +	put_unused_fd(fault->fault_fd);
->> I have resolved this in a naive way by just not calling the
->> put_unused_fd function.
-> That is correct.
+On 12/1/23 10:24 PM, Jason Gunthorpe wrote:
+> On Thu, Oct 26, 2023 at 10:49:24AM +0800, Lu Baolu wrote:
+>> Hi folks,
+>>
+>> This series implements the functionality of delivering IO page faults to
+>> user space through the IOMMUFD framework for nested translation. Nested
+>> translation is a hardware feature that supports two-stage translation
+>> tables for IOMMU. The second-stage translation table is managed by the
+>> host VMM, while the first-stage translation table is owned by user
+>> space. This allows user space to control the IOMMU mappings for its
+>> devices.
+>>
+>> When an IO page fault occurs on the first-stage translation table, the
+>> IOMMU hardware can deliver the page fault to user space through the
+>> IOMMUFD framework. User space can then handle the page fault and respond
+>> to the device top-down through the IOMMUFD. This allows user space to
+>> implement its own IO page fault handling policies.
+>>
+>> User space indicates its capability of handling IO page faults by
+>> setting the IOMMU_HWPT_ALLOC_IOPF_CAPABLE flag when allocating a
+>> hardware page table (HWPT). IOMMUFD will then set up its infrastructure
+>> for page fault delivery. On a successful return of HWPT allocation, the
+>> user can retrieve and respond to page faults by reading and writing to
+>> the file descriptor (FD) returned in out_fault_fd.
 > 
-> put_unused_fd() should only be called on error paths prior to the
-> syscall return.
-> 
-> The design of a FD must follow this pattern
-> 
->   syscall():
->     fdno = get_unused_fd_flags(O_CLOEXEC);
->     filep = [..]
->   
->     // syscall MUST succeed after this statement:
->     fd_install(fdno, filep);
->     return 0;
-> 
->    err:
->      put_unused_fd(fdno)
->      return -ERRNO
+> This is probably backwards, userspace should allocate the FD with a
+> dedicated ioctl and provide it during domain allocation.
 
-Yes. Agreed.
+Introducing a dedicated fault FD for fault handling seems promising. It
+decouples the fault handling from any specific domain. I suppose we need
+different fault fd for recoverable faults (a.k.a. IO page fault) and
+unrecoverable faults. Do I understand you correctly?
 
-> 
-> Also the refcounting looks a little strange, the filep reference is
-> consumed by fd_install, so what is that fput pairing with in fault_free?
 
-fput() pairs with get_unused_fd_flags()? fd_install() does not seem to
-increase any reference.
+> If the userspace wants a fd per domain then it should do that. If it
+> wants to share fds between domains that should work too.
+
+Yes, it's more flexible. The fault message contains the hwpt obj id, so
+user space can recognize the hwpt on which the fault happened.
 
 Best regards,
 baolu
