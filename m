@@ -1,227 +1,94 @@
-Return-Path: <linux-kselftest+bounces-1458-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1460-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98E3880ADE4
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 21:32:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F1A480AF74
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 23:10:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0B5541F21188
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 20:32:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D03831C20AC1
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 22:10:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F30DE57873;
-	Fri,  8 Dec 2023 20:32:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38E5C54657;
+	Fri,  8 Dec 2023 22:10:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OT9qNTkt"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="FGvjnfZ7"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8659C1734
-	for <linux-kselftest@vger.kernel.org>; Fri,  8 Dec 2023 12:32:34 -0800 (PST)
-Received: by mail-il1-x12c.google.com with SMTP id e9e14a558f8ab-35da85e543eso6588345ab.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 08 Dec 2023 12:32:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1702067554; x=1702672354; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WhBb1HqSAqTrwRbd+v/ErOl81Ub5hOYpEU76T44IBUo=;
-        b=OT9qNTktmyhac+err3AygALM8976BIJr8UonNCPVRMCqs3h4+xubBNlTSEgTBgkxfn
-         s8jGYjnLDJRxTlEccGT/09BeEKv2cOrpL7UwAy44AoFjtidczLhujT53Pidz0PD8Ode/
-         ZewIA+kNlhiP1FDq4a6AbDkYKqPZgPJ8mvM5R9gGlHiZqg58xds0N7FOUaCb6Cj2pVF7
-         nWDi3la8GPw7jc1SmohTpbQQ5smxCIWTw7yt+aDPR5kP4kq+UbHdoBCR6gxgrM5Jdi0I
-         7VC/YNMH0+Q6RiDlyOaxr+LZr/4ejjk/+VTePwKHRBi+kp+CuGPMA6EIG7MZ84CTlpjH
-         wuhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702067554; x=1702672354;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WhBb1HqSAqTrwRbd+v/ErOl81Ub5hOYpEU76T44IBUo=;
-        b=AJvyFWjekBLElA1nVtcfHo6qk5jZ1OgUvKH81Q4uvkus9s0Ee66unvY6O0Y62UCiDb
-         u1uXaPGqd8rAogJp3c+3UcM2Df+KQfUBwy5GqPGiCR+6ZB8QxRfqr42KmYkymzKY6U3C
-         QjFUr7F/Xg6Ix9huZubT27JfpWerkbnzeUS0kbz810PCh6ufiy26Teo1ad4y9uI8p5mW
-         QMHnRyt5t8VKhb77kkRlwMFTJcFW1M6N1JEwhVJkG3kHbaWGX3TObpaYQ8JlslwGNu2K
-         8zDYIyiMMCESr8KFWDc+DBIFyE96UYV3yutZjHMWVbKuOC56ptDVZ2/O7Bduw9cZykOf
-         M6XA==
-X-Gm-Message-State: AOJu0YyFW49CFALXvjrBEkEQ89CK97BoaFguPFqWu2IXV6NoX4IvmoOP
-	QSqKcg4Qg+KG0fHDKL7ynCMF49IBIAbq7km5VzsZ3A==
-X-Google-Smtp-Source: AGHT+IG9JHOMDiMtvPVJkg2EdX8pFgSL5xbwUORKO76ChzHaeIYv3+ZS8mk+kxtsayRFdEIS46pfgO5uRe5PxVO24Xs=
-X-Received: by 2002:a05:6e02:184b:b0:35d:51de:bae2 with SMTP id
- b11-20020a056e02184b00b0035d51debae2mr913106ilv.24.1702067553659; Fri, 08 Dec
- 2023 12:32:33 -0800 (PST)
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 892B0171D;
+	Fri,  8 Dec 2023 14:10:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=/0Qz43yXWHKRpnVXenO5RhbNzM7+gVncZQ63SMwE3i4=; b=FGvjnfZ7+Por6qLX7oGRUbZTeQ
+	I0DhdI59LFdS83KUNARfpVoB+NROGqZhSY3HVXg+Y+Rk5vz82vI++nvPojoocbk1Y5foyoi2CsFFk
+	m1nr7LWznGR+iTy0g+3uD3GMwKRciZ16K8R+/iSMbk0x3FBdU8o0NKH9PEzPl/p6/cYh/t3O1PLcg
+	d0Y2znNuzkjlkSqx4MBusJPC3X/nUn0pWmcJUTUhUtNlsA5TTkEr3qrLJfq/m3D06BD5xtJ0XoZXY
+	nXrMxljNFpzAr10nWbH7zGfxOeNK8ax6cLAgGb1tx4fTva0JyTouSkV9HlNDWd/Ggq+3yHez0eDnS
+	7yuK3HfA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+	id 1rBj2u-006fJt-EM; Fri, 08 Dec 2023 22:10:08 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 76E993003F0; Fri,  8 Dec 2023 23:10:07 +0100 (CET)
+Date: Fri, 8 Dec 2023 23:10:07 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: John Hubbard <jhubbard@nvidia.com>
+Cc: David Hildenbrand <david@redhat.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	LKML <linux-kernel@vger.kernel.org>,
+	Muhammad Usama Anjum <usama.anjum@collabora.com>,
+	Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v3 11/11] selftests: error out if kernel header files are
+ not yet built
+Message-ID: <20231208221007.GO28727@noisy.programming.kicks-ass.net>
+References: <20230606071637.267103-1-jhubbard@nvidia.com>
+ <20230606071637.267103-12-jhubbard@nvidia.com>
+ <20231103121652.GA6217@noisy.programming.kicks-ass.net>
+ <a002f903-723f-40ae-8d7a-421ab2e082e2@redhat.com>
+ <20231208151401.GG28727@noisy.programming.kicks-ass.net>
+ <990feea2-c7a8-4cd9-8a6a-bc4bc1c2ffab@redhat.com>
+ <c54b4059-e3a7-40bd-84dc-013dc3b15c65@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231208005250.2910004-1-almasrymina@google.com>
- <20231208005250.2910004-7-almasrymina@google.com> <5752508c-f7bc-44ac-8778-c807b2ee5831@kernel.org>
- <CAHS8izPsQ2XoJy-vYWkn051Yc=D_kSprtQcG4mmPutf1G3+-aw@mail.gmail.com>
-In-Reply-To: <CAHS8izPsQ2XoJy-vYWkn051Yc=D_kSprtQcG4mmPutf1G3+-aw@mail.gmail.com>
-From: Mina Almasry <almasrymina@google.com>
-Date: Fri, 8 Dec 2023 12:32:21 -0800
-Message-ID: <CAHS8izNuhFpoLVB_03i3G5-GoHqPJ5Gz_-5JzQ8UsNF=TkR9Cg@mail.gmail.com>
-Subject: Re: [net-next v1 06/16] netdev: support binding dma-buf to netdevice
-To: David Ahern <dsahern@kernel.org>
-Cc: Shailend Chand <shailend@google.com>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Jeroen de Borst <jeroendb@google.com>, 
-	Praveen Kaligineedi <pkaligineedi@google.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Sumit Semwal <sumit.semwal@linaro.org>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Yunsheng Lin <linyunsheng@huawei.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
-	Shakeel Butt <shakeelb@google.com>, Willem de Bruijn <willemb@google.com>, 
-	Kaiyuan Zhang <kaiyuanz@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c54b4059-e3a7-40bd-84dc-013dc3b15c65@nvidia.com>
 
-On Fri, Dec 8, 2023 at 11:22=E2=80=AFAM Mina Almasry <almasrymina@google.co=
-m> wrote:
->
-> On Fri, Dec 8, 2023 at 9:48=E2=80=AFAM David Ahern <dsahern@kernel.org> w=
-rote:
-> >
-> > On 12/7/23 5:52 PM, Mina Almasry wrote:
-> ...
-> > > +
-> > > +     xa_for_each(&binding->bound_rxq_list, xa_idx, rxq) {
-> > > +             if (rxq->binding =3D=3D binding) {
-> > > +                     /* We hold the rtnl_lock while binding/unbindin=
-g
-> > > +                      * dma-buf, so we can't race with another threa=
-d that
-> > > +                      * is also modifying this value. However, the d=
-river
-> > > +                      * may read this config while it's creating its
-> > > +                      * rx-queues. WRITE_ONCE() here to match the
-> > > +                      * READ_ONCE() in the driver.
-> > > +                      */
-> > > +                     WRITE_ONCE(rxq->binding, NULL);
-> > > +
-> > > +                     rxq_idx =3D get_netdev_rx_queue_index(rxq);
-> > > +
-> > > +                     netdev_restart_rx_queue(binding->dev, rxq_idx);
-> >
-> > Blindly restarting a queue when a dmabuf is heavy handed. If the dmabuf
-> > has no outstanding references (ie., no references in the RxQ), then no
-> > restart is needed.
-> >
->
-> I think I need to stop the queue while binding to a dmabuf for the
-> sake of concurrency, no? I.e. the softirq thread may be delivering a
-> packet, and in parallel a separate thread holds rtnl_lock and tries to
-> bind the dma-buf. At that point the page_pool recreation will race
-> with the driver doing page_pool_alloc_page(). I don't think I can
-> insert a lock to handle this into the rx fast path, no?
->
-> Also, this sounds like it requires (lots of) more changes. The
-> page_pool + driver need to report how many pending references there
-> are (with locking so we don't race with incoming packets), and have
-> them reported via an ndo so that we can skip restarting the queue.
-> Implementing the changes in to a huge issue but handling the
-> concurrency may be a genuine blocker. Not sure it's worth the upside
-> of not restarting the single rx queue?
->
-> > > +             }
-> > > +     }
-> > > +
-> > > +     xa_erase(&netdev_dmabuf_bindings, binding->id);
-> > > +
-> > > +     netdev_dmabuf_binding_put(binding);
-> > > +}
-> > > +
-> > > +int netdev_bind_dmabuf_to_queue(struct net_device *dev, u32 rxq_idx,
-> > > +                             struct netdev_dmabuf_binding *binding)
-> > > +{
-> > > +     struct netdev_rx_queue *rxq;
-> > > +     u32 xa_idx;
-> > > +     int err;
-> > > +
-> > > +     rxq =3D __netif_get_rx_queue(dev, rxq_idx);
-> > > +
-> > > +     if (rxq->binding)
-> > > +             return -EEXIST;
-> > > +
-> > > +     err =3D xa_alloc(&binding->bound_rxq_list, &xa_idx, rxq, xa_lim=
-it_32b,
-> > > +                    GFP_KERNEL);
-> > > +     if (err)
-> > > +             return err;
-> > > +
-> > > +     /* We hold the rtnl_lock while binding/unbinding dma-buf, so we=
- can't
-> > > +      * race with another thread that is also modifying this value. =
-However,
-> > > +      * the driver may read this config while it's creating its * rx=
--queues.
-> > > +      * WRITE_ONCE() here to match the READ_ONCE() in the driver.
-> > > +      */
-> > > +     WRITE_ONCE(rxq->binding, binding);
-> > > +
-> > > +     err =3D netdev_restart_rx_queue(dev, rxq_idx);
-> >
-> > Similarly, here binding a dmabuf to a queue. I was expecting the dmabuf
-> > binding to add entries to the page pool for the queue.
->
-> To be honest, I think maybe there's a slight disconnect between how
-> you think the page_pool works, and my primitive understanding of how
-> it works. Today, I see a 1:1 mapping between rx-queue and page_pool in
-> the code. I don't see 1:many or many:1 mappings.
->
-> In theory mapping 1 rx-queue to n page_pools is trivial: the driver
-> can call page_pool_create() multiple times to generate n queues and
-> decide for incoming packets which one to use.
->
-> However, mapping n rx-queues to 1 page_pool seems like a can of worms.
-> I see code in the page_pool that looks to me (and Willem) like it's
-> safe only because the page_pool is used from the same napi context.
-> with a n rx-queueue: 1 page_pool mapping, that is no longer true, no?
-> There is a tail end of issues to resolve to be able to map 1 page_pool
-> to n queues as I understand and even if resolved I'm not sure the
-> maintainers are interested in taking the code.
->
-> So, per my humble understanding there is no such thing as "add entries
-> to the page pool for the (specific) queue", the page_pool is always
-> used by 1 queue.
->
-> Note that even though this limitation exists, we still support binding
-> 1 dma-buf to multiple queues, because multiple page pools can use the
-> same netdev_dmabuf_binding. I should add that to the docs.
->
-> > If the pool was
-> > previously empty, then maybe the queue needs to be "started" in the
-> > sense of creating with h/w or just pushing buffers into the queue and
-> > moving the pidx.
-> >
-> >
->
-> I don't think it's enough to add buffers to the page_pool, no? The
-> existing buffers in the page_pool (host mem) must be purged. I think
-> maybe the queue needs to be stopped as well so that we don't race with
-> incoming packets and end up with skbs with devmem and non-devmem frags
-> (unless you're thinking it becomes a requirement to support that, I
-> think things are complicated as-is and it's a good simplification).
-> When we already purge the existing buffers & restart the queue, it's
-> little effort to migrate this to become in line with Jakub's queue-api
-> that he also wants to use for per-queue configuration & ndo_stop/open.
->
+On Fri, Dec 08, 2023 at 12:29:37PM -0800, John Hubbard wrote:
 
-FWIW what i'm referring to with Jakub's queue-api is here:
-https://lore.kernel.org/netdev/20230815171638.4c057dcd@kernel.org/
+> I don't have a strong opinion about how this should be done, and in
+> fact I believed at the time that I was bringing the system into
+> compliance with what everyone wanted here. :)
+> 
+> There seem to be two conflicting visions:
+> 
+> a) The way it was (much) earlier: use ifdefs and defines to get by
+> without the latest kernel headers, or
+> 
+> b) Requiring recent kernel headers to build the various selftests.
+> 
+> Shuah, Peter, others: can we choose a direction please? Either
+> way will work, and I personally don't care which one we choose.
 
-I made some simplifications, vis-a-vis passing the queue idx for the
-driver to extract the config from rather than the 'cfg' param Jakub
-outlined, and again passed the queue idx instead of the 'queue info'
-(the API currently assumes RX, and can be extended later for TX use
-cases).
---=20
-Thanks,
-Mina
+So as David already argued, the current thing does not in fact help with
+b. You just have to install once and the error goes away, then carry
+that tree for a year and you're running old crap again.
+
+My biggest beef with the whole thing is that I simply do not want to use
+'make headers', it doesn't work for me.
+
+I have a ton of output directories and I don't care to build tools into
+the output dirs, in fact some of them flat out refuse to work that way
+(bpf comes to mind).
 
