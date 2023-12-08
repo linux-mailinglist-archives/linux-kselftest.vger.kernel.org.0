@@ -1,55 +1,55 @@
-Return-Path: <linux-kselftest+bounces-1422-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1423-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D89F280A04B
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9B4480A04C
 	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 11:10:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 58D091F2176B
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 10:10:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A5112281952
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 10:10:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1A561426B;
-	Fri,  8 Dec 2023 10:10:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF4361426D;
+	Fri,  8 Dec 2023 10:10:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="EqYGlbBu"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VDr9tcj4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAC1110EF
-	for <linux-kselftest@vger.kernel.org>; Fri,  8 Dec 2023 02:09:52 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-db3ef4c7094so2595650276.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 08 Dec 2023 02:09:52 -0800 (PST)
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A43EA1735
+	for <linux-kselftest@vger.kernel.org>; Fri,  8 Dec 2023 02:09:57 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-daee86e2d70so2584295276.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 08 Dec 2023 02:09:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1702030192; x=1702634992; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1702030197; x=1702634997; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=p9BDbU6BiK/bb+b6d2mvvKMnn7b29FDLvRbbG2au7Cs=;
-        b=EqYGlbBuyMaVVhzcmY3IlpzQkxU5kGU31+UGlT5uHRgwl4kT0NfSocv/1l0aQ/Q0Ne
-         9OvMcdMsFwV8wsz0PXkdIslwfHWf4HdprB2DKOekPriSsVXAUdvFf26FNdmXYEKdYfWL
-         NlhLM4VlFyI2ZCbx6vIv7M0Q0QyWX6KQkGQe7NhZFmkSfEnZPbsHlimFLxriw2gRmDtw
-         sL2MJQVUp6F3gXCRDJGwPTGYcwUgow8+AAXAZBN6/BJLO/CgBl0HTA6gsmKE9B6c4BNF
-         S+FGymw5wx+u9ZlR52Co9793pgt+IQFiBXJzNr5fXG7nzK5H6P3xlRJ4aL1fB/W/6Uq1
-         reQg==
+        bh=vJ3XYd4VAh0rMwZdPZnf0/R4/jXxDQ1RiH7pfcHiYc8=;
+        b=VDr9tcj4StnA6acjRdrtszhpigA+LyEHfIwbdwp5vEDSLyQ2c06X0f1qayIhI8+EAM
+         r6FhkDaaKJDAFG2WPAqaLSFgFJYgJTQmwSinohvw6fX9JU05gn1piF4HSMp1QyjuD+hc
+         LlgfLm9xm/qiGoZ+JYDrryT6EFNdLOCNWFYWUNJJIkjz86006ehBfhgbvosPV1O4WBPU
+         ABaqxj2OzKfF8pO28M7kbucpENFfkZVMQ+R/GvWK0j/oeVPrTz99IIeQ5nRoaxIhWa7G
+         qQ5dED3iTrJbm5hEMRwp3R0L563dY3XUizJ0DaECRNx5LvnFnzhjznIrwqajOL4Tp+9H
+         x8eA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702030192; x=1702634992;
+        d=1e100.net; s=20230601; t=1702030197; x=1702634997;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=p9BDbU6BiK/bb+b6d2mvvKMnn7b29FDLvRbbG2au7Cs=;
-        b=E1/3q6BPdeWG3SaaKf67q8A1Yn2v0iQTdOsRUS5OhOxCQYv4DMeKTW6eaXNxgNQz9f
-         v+hOarjXJZ+WbQ5Z5ChGxuFTDoUYQ8Dk3PYrOzqWESOZ9kZya775IGTvCjxYL4kyxyrD
-         EUivXWG0zL15PmdIAdmHnXMqjAAZq8PZftqlvemLjcR4M/I1edVDvTtYshgn5OaMaEho
-         tUCSmTHVe2JWkAfXDJtpLML86eQ4MvcpNH1/C4efDW7erwDdI1RWQOFQgjWEfUQ7i6r6
-         BO4OwLvK+HfVHOku8LeuZlcHaBSD/fPoVS3H9qNS5LQkyfro9RyJZpIyWrQytyjmtf9Y
-         Qk8A==
-X-Gm-Message-State: AOJu0YwQUdQ9ayc9GkODSmA8WOD3binpVgK97vpAcyOCls4bZPCdlQPh
-	rJXOfQZVdQmhnGT5L+rOOK9DoRoudElirw==
-X-Google-Smtp-Source: AGHT+IHNleCdgyatNThdB1BLyotO7f3vCuP6pLPPEha6KdVcY3KjVBTGQb3eHydW81vewFCX+TfdBv5sYTJ5dw==
+        bh=vJ3XYd4VAh0rMwZdPZnf0/R4/jXxDQ1RiH7pfcHiYc8=;
+        b=JjtkgLWChSwJAU4zdJY2g5IjDLlO+WpKQNERPy44wdBrlijITtixYMT/WFtDi5xO1O
+         keKQcNviaRIuM+870Zid3aLwZhKnp3iaOfv0Dj/AdEehTi/Sf8MuxdcfYqJJAzDkCkj3
+         29sNzqhaIH1Z8PGmGadjq800a7VPdbw03iWBl7MBRsdi+tllWw8FjvscfEMqr15kBILZ
+         d1fXCES48IRyHG1es86S9ZyTzXIIdoIKyB3Jv+2eVpHP7FWajpQbJmRZOS6k+Va1dSQp
+         a+rxxMLZzo24BkVnlweitIBfeJSlsVPSXnuAyRKSfhli6Yp6mJAZaU/QdeMxMY8PjAxu
+         r+Vg==
+X-Gm-Message-State: AOJu0YwUnQQ//9TdaVaeVJsHMdEak/3web5xi0nlwZEMWDPWiUkEdZ+5
+	EQ1QgdfzMwso8CUz0h+QXx905s6t6LneqQ==
+X-Google-Smtp-Source: AGHT+IEoLvJsRYtYBtpiMYYBRwRZCWLln+T0Te5bpJ5ZhKJL6iGz1n9WIFhdhIvRsrqNCPNn+H/9E0PqoIsEoA==
 X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a05:6902:389:b0:dbc:4e4b:88e1 with SMTP
- id f9-20020a056902038900b00dbc4e4b88e1mr8837ybs.1.1702030192088; Fri, 08 Dec
- 2023 02:09:52 -0800 (PST)
-Date: Fri, 08 Dec 2023 18:09:29 +0800
+ (user=davidgow job=sendgmr) by 2002:a25:fc12:0:b0:dbc:1b65:fd8c with SMTP id
+ v18-20020a25fc12000000b00dbc1b65fd8cmr43469ybd.5.1702030196750; Fri, 08 Dec
+ 2023 02:09:56 -0800 (PST)
+Date: Fri, 08 Dec 2023 18:09:30 +0800
 In-Reply-To: <20231208-kunit_bus-v2-0-e95905d9b325@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20231208-kunit_bus-v2-0-e95905d9b325@google.com>
 X-Mailer: b4 0.13-dev-099c9
-Message-ID: <20231208-kunit_bus-v2-1-e95905d9b325@google.com>
-Subject: [PATCH v2 1/4] kunit: Add APIs for managing devices
+Message-ID: <20231208-kunit_bus-v2-2-e95905d9b325@google.com>
+Subject: [PATCH v2 2/4] fortify: test: Use kunit_device
 From: davidgow@google.com
 To: Rae Moar <rmoar@google.com>, Brendan Higgins <brendan.higgins@linux.dev>, 
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Matti Vaittinen <mazziesaccount@gmail.com>, 
@@ -74,580 +74,47 @@ Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
 	David Gow <davidgow@google.com>
 Content-Type: text/plain; charset="utf-8"
 
-Tests for drivers often require a struct device to pass to other
-functions. While it's possible to create these with
-root_device_register(), or to use something like a platform device, this
-is both a misuse of those APIs, and can be difficult to clean up after,
-for example, a failed assertion.
-
-Add some KUnit-specific functions for registering and unregistering a
-struct device:
-- kunit_device_register()
-- kunit_device_register_with_driver()
-- kunit_device_unregister()
-
-These helpers allocate a on a 'kunit' bus which will either probe the
-driver passed in (kunit_device_register_with_driver), or will create a
-stub driver (kunit_device_register) which is cleaned up on test shutdown.
-
-Devices are automatically unregistered on test shutdown, but can be
-manually unregistered earlier with kunit_device_unregister() in order
-to, for example, test device release code.
+Using struct root_device to create fake devices for tests is something
+of a hack. The new struct kunit_device is meant for this purpose, so use
+it instead.
 
 Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
+Acked-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: David Gow <davidgow@google.com>
 ---
- Documentation/dev-tools/kunit/api/resource.rst |   9 ++
- Documentation/dev-tools/kunit/usage.rst        |  50 +++++++
- include/kunit/device.h                         |  80 +++++++++++
- lib/kunit/Makefile                             |   3 +-
- lib/kunit/device.c                             | 181 +++++++++++++++++++++++++
- lib/kunit/kunit-test.c                         | 134 +++++++++++++++++-
- lib/kunit/test.c                               |   3 +
- 7 files changed, 458 insertions(+), 2 deletions(-)
+ lib/fortify_kunit.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/dev-tools/kunit/api/resource.rst b/Documentation/dev-tools/kunit/api/resource.rst
-index 0a94f831259e..ec6002a6b0db 100644
---- a/Documentation/dev-tools/kunit/api/resource.rst
-+++ b/Documentation/dev-tools/kunit/api/resource.rst
-@@ -11,3 +11,12 @@ state on a per-test basis, register custom cleanup actions, and more.
+diff --git a/lib/fortify_kunit.c b/lib/fortify_kunit.c
+index c8c33cbaae9e..2e4fedc81621 100644
+--- a/lib/fortify_kunit.c
++++ b/lib/fortify_kunit.c
+@@ -15,6 +15,7 @@
+  */
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
  
- .. kernel-doc:: include/kunit/resource.h
-    :internal:
-+
-+Managed Devices
-+---------------
-+
-+Functions for using KUnit-managed struct device and struct device_driver.
-+Include ``kunit/device.h`` to use these.
-+
-+.. kernel-doc:: include/kunit/device.h
-+   :internal:
-diff --git a/Documentation/dev-tools/kunit/usage.rst b/Documentation/dev-tools/kunit/usage.rst
-index 9db12e91668e..53c6f7dc8a42 100644
---- a/Documentation/dev-tools/kunit/usage.rst
-+++ b/Documentation/dev-tools/kunit/usage.rst
-@@ -797,3 +797,53 @@ structures as shown below:
- KUnit is not enabled, or if no test is running in the current task, it will do
- nothing. This compiles down to either a no-op or a static key check, so will
- have a negligible performance impact when no test is running.
-+
-+Managing Fake Devices and Drivers
-+---------------------------------
-+
-+When testing drivers or code which interacts with drivers, many functions will
-+require a ``struct device`` or ``struct device_driver``. In many cases, setting
-+up a real device is not required to test any given function, so a fake device
-+can be used instead.
-+
-+KUnit provides helper functions to create and manage these fake devices, which
-+are internally of type ``struct kunit_device``, and are attached to a special
-+``kunit_bus``. These devices support managed device resources (devres), as
-+described in Documentation/driver-api/driver-model/devres.rst
-+
-+To create a KUnit-managed ``struct device_driver``, use ``kunit_driver_create()``,
-+which will create a driver with the given name, on the ``kunit_bus``. This driver
-+will automatically be destroyed when the corresponding test finishes, but can also
-+be manually destroyed with ``driver_unregister()``.
-+
-+To create a fake device, use the ``kunit_device_register()``, which will create
-+and register a device, using a new KUnit-managed driver created with ``kunit_driver_create()``.
-+To provide a specific, non-KUnit-managed driver, use ``kunit_device_register_with_driver()``
-+instead. Like with managed drivers, KUnit-managed fake devices are automatically
-+cleaned up when the test finishes, but can be manually cleaned up early with
-+``kunit_device_unregister()``.
-+
-+The KUnit devices should be used in preference to ``root_device_register()``, and
-+instead of ``platform_device_register()`` in cases where the device is not otherwise
-+a platform device.
-+
-+For example:
-+
-+.. code-block:: c
-+
-+	#include <kunit/device.h>
-+
-+	static void test_my_device(struct kunit *test)
-+	{
-+		struct device *fake_device;
-+		const char *dev_managed_string;
-+
-+		// Create a fake device.
-+		fake_device = kunit_device_register(test, "my_device");
-+		KUNIT_ASSERT_NOT_ERR_OR_NULL(test, fake_device)
-+
-+		// Pass it to functions which need a device.
-+		dev_managed_string = devm_kstrdup(fake_device, "Hello, World!");
-+
-+		// Everything is cleaned up automatically when the test ends.
-+	}
-\ No newline at end of file
-diff --git a/include/kunit/device.h b/include/kunit/device.h
-new file mode 100644
-index 000000000000..2450110ad64e
---- /dev/null
-+++ b/include/kunit/device.h
-@@ -0,0 +1,80 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * KUnit basic device implementation
-+ *
-+ * Helpers for creating and managing fake devices for KUnit tests.
-+ *
-+ * Copyright (C) 2023, Google LLC.
-+ * Author: David Gow <davidgow@google.com>
-+ */
-+
-+#ifndef _KUNIT_DEVICE_H
-+#define _KUNIT_DEVICE_H
-+
-+#if IS_ENABLED(CONFIG_KUNIT)
-+
-+#include <kunit/test.h>
-+
-+struct device;
-+struct device_driver;
-+
-+/**
-+ * kunit_driver_create() - Create a struct device_driver attached to the kunit_bus
-+ * @test: The test context object.
-+ * @name: The name to give the created driver.
-+ *
-+ * Creates a struct device_driver attached to the kunit_bus, with the name @name.
-+ * This driver will automatically be cleaned up on test exit.
-+ *
-+ * Return: a stub struct device_driver, managed by KUnit, with the name @name.
-+ */
-+struct device_driver *kunit_driver_create(struct kunit *test, const char *name);
-+
-+/**
-+ * kunit_device_register() - Create a struct device for use in KUnit tests
-+ * @test: The test context object.
-+ * @name: The name to give the created device.
-+ *
-+ * Creates a struct kunit_device (which is a struct device) with the given name,
-+ * and a corresponding driver. The device and driver will be cleaned up on test
-+ * exit, or when kunit_device_unregister is called. See also
-+ * kunit_device_register_with_driver, if you wish to provide your own
-+ * struct device_driver.
-+ *
-+ * Return: a pointer to a struct device which will be cleaned up when the test
-+ * exits, or an error pointer if the device could not be allocated or registered.
-+ */
-+struct device *kunit_device_register(struct kunit *test, const char *name);
-+
-+/**
-+ * kunit_device_register_with_driver() - Create a struct device for use in KUnit tests
-+ * @test: The test context object.
-+ * @name: The name to give the created device.
-+ * @drv: The struct device_driver to associate with the device.
-+ *
-+ * Creates a struct kunit_device (which is a struct device) with the given
-+ * name, and driver. The device will be cleaned up on test exit, or when
-+ * kunit_device_unregister is called. See also kunit_device_register, if you
-+ * wish KUnit to create and manage a driver for you.
-+ *
-+ * Return: a pointer to a struct device which will be cleaned up when the test
-+ * exits, or an error pointer if the device could not be allocated or registered.
-+ */
-+struct device *kunit_device_register_with_driver(struct kunit *test,
-+						 const char *name,
-+						 const struct device_driver *drv);
-+
-+/**
-+ * kunit_device_unregister() - Unregister a KUnit-managed device
-+ * @test: The test context object which created the device
-+ * @dev: The device.
-+ *
-+ * Unregisters and destroys a struct device which was created with
-+ * kunit_device_register or kunit_device_register_with_driver. If KUnit created
-+ * a driver, cleans it up as well.
-+ */
-+void kunit_device_unregister(struct kunit *test, struct device *dev);
-+
-+#endif
-+
-+#endif
-diff --git a/lib/kunit/Makefile b/lib/kunit/Makefile
-index 46f75f23dfe4..309659a32a78 100644
---- a/lib/kunit/Makefile
-+++ b/lib/kunit/Makefile
-@@ -7,7 +7,8 @@ kunit-objs +=				test.o \
- 					assert.o \
- 					try-catch.o \
- 					executor.o \
--					attributes.o
-+					attributes.o \
-+					device.o
- 
- ifeq ($(CONFIG_KUNIT_DEBUGFS),y)
- kunit-objs +=				debugfs.o
-diff --git a/lib/kunit/device.c b/lib/kunit/device.c
-new file mode 100644
-index 000000000000..1db4305b615a
---- /dev/null
-+++ b/lib/kunit/device.c
-@@ -0,0 +1,181 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * KUnit-managed device implementation
-+ *
-+ * Implementation of struct kunit_device helpers for fake devices whose
-+ * lifecycle is managed by KUnit.
-+ *
-+ * Copyright (C) 2023, Google LLC.
-+ * Author: David Gow <davidgow@google.com>
-+ */
-+
-+#include <linux/device.h>
-+
-+#include <kunit/test.h>
 +#include <kunit/device.h>
-+#include <kunit/resource.h>
-+
-+#include "device-impl.h"
-+
-+/* Wrappers for use with kunit_add_action() */
-+KUNIT_DEFINE_ACTION_WRAPPER(device_unregister_wrapper, device_unregister, struct device *);
-+KUNIT_DEFINE_ACTION_WRAPPER(driver_unregister_wrapper, driver_unregister, struct device_driver *);
-+
-+/* The root device for the KUnit bus, parent of all kunit_devices. */
-+static struct device *kunit_bus_device;
-+
-+/* A device owned by a KUnit test. */
-+struct kunit_device {
-+	struct device dev;
-+	/* The KUnit test which owns this device. */
-+	struct kunit *owner;
-+	/* If the driver is managed by KUnit and unique to this device. */
-+	const struct device_driver *driver;
-+};
-+
-+#define to_kunit_device(d) container_of_const(d, struct kunit_device, dev)
-+
-+static struct bus_type kunit_bus_type = {
-+	.name		= "kunit",
-+};
-+
-+/* Register the 'kunit_bus' used for fake devices. */
-+int kunit_bus_init(void)
-+{
-+	int error;
-+
-+	kunit_bus_device = root_device_register("kunit");
-+	if (!kunit_bus_device)
-+		return -ENOMEM;
-+
-+	error = bus_register(&kunit_bus_type);
-+	if (error)
-+		bus_unregister(&kunit_bus_type);
-+	return error;
-+}
-+
-+/* Release a 'fake' KUnit device. */
-+static void kunit_device_release(struct device *d)
-+{
-+	kfree(to_kunit_device(d));
-+}
-+
-+/**
-+ * Create and register a KUnit-managed struct device_driver on the kunit_bus.
-+ * Returns an error pointer on failure.
-+ */
-+struct device_driver *kunit_driver_create(struct kunit *test, const char *name)
-+{
-+	struct device_driver *driver;
-+	int err = -ENOMEM;
-+
-+	driver = kunit_kzalloc(test, sizeof(*driver), GFP_KERNEL);
-+
-+	if (!driver)
-+		return ERR_PTR(err);
-+
-+	driver->name = name;
-+	driver->bus = &kunit_bus_type;
-+	driver->owner = THIS_MODULE;
-+
-+	err = driver_register(driver);
-+	if (err) {
-+		kunit_kfree(test, driver);
-+		return ERR_PTR(err);
-+	}
-+
-+	kunit_add_action(test, driver_unregister_wrapper, driver);
-+	return driver;
-+}
-+EXPORT_SYMBOL_GPL(kunit_driver_create);
-+
-+/* Helper which creates a kunit_device, attaches it to the kunit_bus*/
-+static struct kunit_device *kunit_device_register_internal(struct kunit *test,
-+							   const char *name,
-+							   const struct device_driver *drv)
-+{
-+	struct kunit_device *kunit_dev;
-+	int err = -ENOMEM;
-+
-+	kunit_dev = kzalloc(sizeof(*kunit_dev), GFP_KERNEL);
-+	if (!kunit_dev)
-+		return ERR_PTR(err);
-+
-+	kunit_dev->owner = test;
-+
-+	err = dev_set_name(&kunit_dev->dev, "%s.%s", test->name, name);
-+	if (err) {
-+		kfree(kunit_dev);
-+		return ERR_PTR(err);
-+	}
-+
-+	kunit_dev->dev.release = kunit_device_release;
-+	kunit_dev->dev.bus = &kunit_bus_type;
-+	kunit_dev->dev.parent = kunit_bus_device;
-+
-+	err = device_register(&kunit_dev->dev);
-+	if (err) {
-+		put_device(&kunit_dev->dev);
-+		return ERR_PTR(err);
-+	}
-+
-+	kunit_add_action(test, device_unregister_wrapper, &kunit_dev->dev);
-+
-+	return kunit_dev;
-+}
-+
-+/**
-+ * Create and register a new KUnit-managed device, using the user-supplied device_driver.
-+ * On failure, returns an error pointer.
-+ */
-+struct device *kunit_device_register_with_driver(struct kunit *test,
-+						 const char *name,
-+						 const struct device_driver *drv)
-+{
-+	struct kunit_device *kunit_dev = kunit_device_register_internal(test, name, drv);
-+
-+	if (IS_ERR_OR_NULL(kunit_dev))
-+		return ERR_CAST(kunit_dev);
-+
-+	return &kunit_dev->dev;
-+}
-+EXPORT_SYMBOL_GPL(kunit_device_register_with_driver);
-+
-+/**
-+ * Create and register a new KUnit-managed device, including a matching device_driver.
-+ * On failure, returns an error pointer.
-+ */
-+struct device *kunit_device_register(struct kunit *test, const char *name)
-+{
-+	struct device_driver *drv;
-+	struct kunit_device *dev;
-+
-+	drv = kunit_driver_create(test, name);
-+	if (IS_ERR(drv))
-+		return ERR_CAST(drv);
-+
-+	dev = kunit_device_register_internal(test, name, drv);
-+	if (IS_ERR(dev)) {
-+		kunit_release_action(test, driver_unregister_wrapper, (void *)drv);
-+		return ERR_CAST(dev);
-+	}
-+
-+	/* Request the driver be freed. */
-+	dev->driver = drv;
-+
-+
-+	return &dev->dev;
-+}
-+EXPORT_SYMBOL_GPL(kunit_device_register);
-+
-+/* Unregisters a KUnit-managed device early (including the driver, if automatically created). */
-+void kunit_device_unregister(struct kunit *test, struct device *dev)
-+{
-+	const struct device_driver *driver = to_kunit_device(dev)->driver;
-+
-+	kunit_release_action(test, device_unregister_wrapper, dev);
-+	if (driver)
-+		kunit_release_action(test, driver_unregister_wrapper, (void *)driver);
-+}
-+EXPORT_SYMBOL_GPL(kunit_device_unregister);
-+
-diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
-index 3e9c5192d095..6c666fbdd6ad 100644
---- a/lib/kunit/kunit-test.c
-+++ b/lib/kunit/kunit-test.c
-@@ -8,6 +8,9 @@
  #include <kunit/test.h>
- #include <kunit/test-bug.h>
+ #include <linux/device.h>
+ #include <linux/slab.h>
+@@ -269,7 +270,7 @@ DEFINE_ALLOC_SIZE_TEST_PAIR(kvmalloc)
+ 	size_t len;							\
+ 									\
+ 	/* Create dummy device for devm_kmalloc()-family tests. */	\
+-	dev = root_device_register(dev_name);				\
++	dev = kunit_device_register(test, dev_name);			\
+ 	KUNIT_ASSERT_FALSE_MSG(test, IS_ERR(dev),			\
+ 			       "Cannot register test device\n");	\
+ 									\
+@@ -303,7 +304,7 @@ DEFINE_ALLOC_SIZE_TEST_PAIR(kvmalloc)
+ 	checker(len, devm_kmemdup(dev, "Ohai", len, gfp),		\
+ 		devm_kfree(dev, p));					\
+ 									\
+-	device_unregister(dev);						\
++	kunit_device_unregister(test, dev);				\
+ } while (0)
+ DEFINE_ALLOC_SIZE_TEST_PAIR(devm_kmalloc)
  
-+#include <linux/device.h>
-+#include <kunit/device.h>
-+
- #include "string-stream.h"
- #include "try-catch-impl.h"
- 
-@@ -687,6 +690,135 @@ static struct kunit_case kunit_current_test_cases[] = {
- 	{}
- };
- 
-+static void test_dev_action(void *priv)
-+{
-+	*(void **)priv = (void *)1;
-+}
-+
-+static void kunit_device_test(struct kunit *test)
-+{
-+	struct device *test_device;
-+	long action_was_run = 0;
-+
-+	test_device = kunit_device_register(test, "my_device");
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, test_device);
-+
-+	// Add an action to verify cleanup.
-+	devm_add_action(test_device, test_dev_action, &action_was_run);
-+
-+	KUNIT_EXPECT_EQ(test, action_was_run, 0);
-+
-+	kunit_device_unregister(test, test_device);
-+
-+	KUNIT_EXPECT_EQ(test, action_was_run, 1);
-+}
-+
-+static void kunit_device_cleanup_test(struct kunit *test)
-+{
-+	struct device *test_device;
-+	long action_was_run = 0;
-+
-+	test_device = kunit_device_register(test, "my_device");
-+	KUNIT_ASSERT_NOT_NULL(test, test_device);
-+
-+	/* Add an action to verify cleanup. */
-+	devm_add_action(test_device, test_dev_action, &action_was_run);
-+
-+	KUNIT_EXPECT_EQ(test, action_was_run, 0);
-+
-+	/* Force KUnit to run cleanup early. */
-+	kunit_cleanup(test);
-+
-+	KUNIT_EXPECT_EQ(test, action_was_run, 1);
-+}
-+
-+struct driver_test_state {
-+	bool driver_device_probed;
-+	bool driver_device_removed;
-+	long action_was_run;
-+};
-+
-+static int driver_probe_hook(struct device *dev)
-+{
-+	struct kunit *test = kunit_get_current_test();
-+	struct driver_test_state *state = (struct driver_test_state *)test->priv;
-+
-+	state->driver_device_probed = true;
-+	return 0;
-+}
-+
-+static int driver_remove_hook(struct device *dev)
-+{
-+	struct kunit *test = kunit_get_current_test();
-+	struct driver_test_state *state = (struct driver_test_state *)test->priv;
-+
-+	state->driver_device_removed = true;
-+	return 0;
-+}
-+
-+
-+static void kunit_device_driver_test(struct kunit *test)
-+{
-+	struct device_driver *test_driver;
-+	struct device *test_device;
-+	struct driver_test_state test_state = {};
-+
-+	test->priv = &test_state;
-+	test_driver = kunit_driver_create(test, "my_driver");
-+
-+	// This can fail with an error pointer.
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, test_driver);
-+
-+	test_driver->probe = driver_probe_hook;
-+	test_driver->remove = driver_remove_hook;
-+
-+	test_device = kunit_device_register_with_driver(test, "my_device", test_driver);
-+
-+	// This can fail with an error pointer.
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, test_device);
-+
-+	// Make sure the probe function was called.
-+	KUNIT_ASSERT_TRUE(test, test_state.driver_device_probed);
-+
-+	// Add an action to verify cleanup.
-+	devm_add_action(test_device, test_dev_action, &test_state.action_was_run);
-+
-+	KUNIT_EXPECT_EQ(test, test_state.action_was_run, 0);
-+
-+	kunit_device_unregister(test, test_device);
-+	test_device = NULL;
-+
-+	// Make sure the remove hook was called.
-+	KUNIT_ASSERT_TRUE(test, test_state.driver_device_removed);
-+
-+	// We're going to test this again.
-+	test_state.driver_device_probed = false;
-+
-+	// The driver should not automatically be destroyed by
-+	// kunit_device_unregister, so we can re-use it.
-+	test_device = kunit_device_register_with_driver(test, "my_device", test_driver);
-+
-+	// This can fail with an error pointer.
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, test_device);
-+
-+	// Probe was called again.
-+	KUNIT_ASSERT_TRUE(test, test_state.driver_device_probed);
-+
-+	// Everything is automatically freed here.
-+}
-+
-+static struct kunit_case kunit_device_test_cases[] = {
-+	KUNIT_CASE(kunit_device_test),
-+	KUNIT_CASE(kunit_device_cleanup_test),
-+	KUNIT_CASE(kunit_device_driver_test),
-+	{}
-+};
-+
-+static struct kunit_suite kunit_device_test_suite = {
-+	.name = "kunit_device",
-+	.test_cases = kunit_device_test_cases,
-+};
-+
- static struct kunit_suite kunit_current_test_suite = {
- 	.name = "kunit_current",
- 	.test_cases = kunit_current_test_cases,
-@@ -694,6 +826,6 @@ static struct kunit_suite kunit_current_test_suite = {
- 
- kunit_test_suites(&kunit_try_catch_test_suite, &kunit_resource_test_suite,
- 		  &kunit_log_test_suite, &kunit_status_test_suite,
--		  &kunit_current_test_suite);
-+		  &kunit_current_test_suite, &kunit_device_test_suite);
- 
- MODULE_LICENSE("GPL v2");
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 0308865194bb..c457593e4913 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -18,6 +18,7 @@
- #include <linux/sched.h>
- 
- #include "debugfs.h"
-+#include "device-impl.h"
- #include "hooks-impl.h"
- #include "string-stream.h"
- #include "try-catch-impl.h"
-@@ -840,6 +841,8 @@ static int __init kunit_init(void)
- 	kunit_install_hooks();
- 
- 	kunit_debugfs_init();
-+
-+	kunit_bus_init();
- #ifdef CONFIG_MODULES
- 	return register_module_notifier(&kunit_mod_nb);
- #else
 
 -- 
 2.43.0.472.g3155946c3a-goog
