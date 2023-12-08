@@ -1,90 +1,104 @@
-Return-Path: <linux-kselftest+bounces-1433-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1434-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A50080A4AB
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 14:46:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2810B80A71B
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 16:14:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0ABEEB20C75
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 13:46:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D1E2E1F214F9
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 15:14:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8B791D54B;
-	Fri,  8 Dec 2023 13:45:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AE802C187;
+	Fri,  8 Dec 2023 15:14:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="HHxhVN/m"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Urb7F/kI"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F604172B;
-	Fri,  8 Dec 2023 05:45:57 -0800 (PST)
-Received: from notapiano (zone.collabora.co.uk [167.235.23.81])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: nfraprado)
-	by madras.collabora.co.uk (Postfix) with ESMTPSA id 5598D66073AA;
-	Fri,  8 Dec 2023 13:45:52 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1702043156;
-	bh=twSl3vT3zaZOdj4/451frioqLeLg5HRJipbHbe5yGRU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HHxhVN/miACQglCgDJJ8KpCp4r5TuOFV3zlVxcj+i76dTjmr+mUknqzmiXJN46EMo
-	 qos6VZNCBpn1Xrbsulcn5g+07kXLOEw5xckSHHnWsRtuOE/LXvcD3rf29xPswdqhMV
-	 Fmjz7jmp2jqiRMhXfgP4H0/kQ4hxkfDkd+xfpyinLZTNage0D1EnsihwWGv8AHsUJq
-	 aHh1R+XXURD+wKT8PEQIT2G+JxNEoqN27hzVwpC271BwLQxTv8lmJY+MHCdvBU5yhM
-	 HjvRfSDGkrDxHL555YvFqxEswB/WEF76NqWJUvySMXqNQ9+zyqgZLJIxzn72ygSjG+
-	 vmT81RHMKJxgw==
-Date: Fri, 8 Dec 2023 10:45:46 -0300
-From: =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <nfraprado@collabora.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Rob Herring <robh+dt@kernel.org>, Frank Rowand <frowand.list@gmail.com>,
-	Shuah Khan <shuah@kernel.org>, kernelci@lists.linux.dev,
-	kernel@collabora.com, Guenter Roeck <groeck@chromium.org>,
-	Bjorn Andersson <andersson@kernel.org>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 3/3] kselftest: Add new test for detecting unprobed
- Devicetree devices
-Message-ID: <e9772963-56e8-4465-9c29-3a2955b6f546@notapiano>
-References: <20230828211424.2964562-1-nfraprado@collabora.com>
- <20230828211424.2964562-4-nfraprado@collabora.com>
- <310391e8-fdf2-4c2f-a680-7744eb685177@sirena.org.uk>
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8194A1706;
+	Fri,  8 Dec 2023 07:14:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=R35glQOGU4B0yR33HDpJFKOjzNBBa5sMO4yfY0YOJxs=; b=Urb7F/kIqU3YnTZAoccPn2bO2+
+	q2hbXOFx8mmv+dghxtqjzkSNZ2c12hs35s+7mvojrvbNE/3pDv36aUANNXyvU58M23xhkCzJUS1FR
+	S7jxMn6ur/edEUljTKC6sOLqLIEsENqT6RljN36xWH3STUpTeMWnhQV6UcPLmFuzGLQiBqCraPXVp
+	cbDPPlTXGQrnUvSonVWM5h1ZgU3d18O3WJtOk6R6Ozv4Dv0zeCv3BNG5kCaJLoo5e3rsA12YjxwRN
+	9T1zqbN1AZYAQfGZ3zb5sntIy9H2P0QV75N8HpgEdtm73hrcjk5klcnltx0GGEPxnyd4HOIK3vXvd
+	3ykyfbMA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+	id 1rBcYE-006cfM-3B;
+	Fri, 08 Dec 2023 15:14:03 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id E36073003F0; Fri,  8 Dec 2023 16:14:01 +0100 (CET)
+Date: Fri, 8 Dec 2023 16:14:01 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: David Hildenbrand <david@redhat.com>
+Cc: John Hubbard <jhubbard@nvidia.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	LKML <linux-kernel@vger.kernel.org>,
+	Muhammad Usama Anjum <usama.anjum@collabora.com>,
+	Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v3 11/11] selftests: error out if kernel header files are
+ not yet built
+Message-ID: <20231208151401.GG28727@noisy.programming.kicks-ass.net>
+References: <20230606071637.267103-1-jhubbard@nvidia.com>
+ <20230606071637.267103-12-jhubbard@nvidia.com>
+ <20231103121652.GA6217@noisy.programming.kicks-ass.net>
+ <a002f903-723f-40ae-8d7a-421ab2e082e2@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <310391e8-fdf2-4c2f-a680-7744eb685177@sirena.org.uk>
+In-Reply-To: <a002f903-723f-40ae-8d7a-421ab2e082e2@redhat.com>
 
-On Thu, Dec 07, 2023 at 08:18:49PM +0000, Mark Brown wrote:
-> On Mon, Aug 28, 2023 at 05:13:12PM -0400, Nícolas F. R. A. Prado wrote:
-> > Introduce a new kselftest to detect devices that were declared in the
-> > Devicetree, and are expected to be probed by a driver, but weren't.
+On Fri, Nov 03, 2023 at 01:22:54PM +0100, David Hildenbrand wrote:
+> On 03.11.23 13:16, Peter Zijlstra wrote:
+> > On Tue, Jun 06, 2023 at 12:16:37AM -0700, John Hubbard wrote:
+> > > As per a discussion with Muhammad Usama Anjum [1], the following is how
+> > > one is supposed to build selftests:
+> > > 
+> > >      make headers && make -C tools/testing/selftests/mm
+> > > 
+> > > Change the selftest build system's lib.mk to fail out with a helpful
+> > > message if that prerequisite "make headers" has not been done yet.
+> > > 
+> > 
+> > NAK NAK NAK
+> > 
+> > This now means I can no longer run selftests, I thank you very much! :-/
+> > 
+> > root@spr:/usr/src/linux-2.6# make O=defconfig-build/ -j64
+> > make[1]: Entering directory '/usr/src/linux-2.6/defconfig-build'
+> > ***
+> > *** The source tree is not clean, please run 'make mrproper'
+> > *** in /usr/src/linux-2.6
+> > 
+> > 
+> > I've always done:
+> > 
+> >    cd tools/testing/selftests/x86; make
+> > 
+> > and that has always worked
+> > 
+> > Now I can't bloody well build *any* selftest or risk not being able to
+> > do builds.
 > 
-> I've been running this in my personal CI for a little while now and I'm
-> finding it's pretty marginal for the 45 second default timeout in
-> kselftest on some platforms, especially BeagleBone Black though it's not
-> just that.  BBB is both slow and has a comprehensive DT which won't help
-> matters, there's 253 devices.
-> 
-> I'm running it from nfsroot which is going to be part of the problem but
-> shouldn't be too bad since we're mainly dealing with proc and sysfs and
-> hopefully mostly running cached binaries, I'm also using a serial
-> console to get the output which is going to add overhead especially with
-> a large number odevices with length names.  I'm not sure what the best
-> solution is here - a quick glance at the code doesn't ring any alarm
-> bells for me, this may just be a reasonable runtime for the test.
+> This change landed in 6.5, no? And 6.6 was just released. Just curious why
+> you notice that now.
 
-Thanks for reporting this. I've experimented a bit and was able to find an
-effective optimization and CC'ed it to you [1]. Hopefully it is as effective for
-your board and setup as it is for mine. Let me know there.
+And I hit it again (different box etc..)
 
-[1] https://lore.kernel.org/all/20231208133955.483851-1-nfraprado@collabora.com
-
-Thanks,
-Nícolas
+Can we please get this garbage fixed already?
 
