@@ -1,119 +1,197 @@
-Return-Path: <linux-kselftest+bounces-1427-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1428-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0804080A310
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 13:20:34 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7E1B80A3A1
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 13:43:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 84EBDB20B12
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 12:20:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 374C9B20B32
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 12:43:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A9281C294;
-	Fri,  8 Dec 2023 12:20:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85D0B12B6C;
+	Fri,  8 Dec 2023 12:43:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o0Mm75HZ"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="eS9gYmn5"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D79CE1BDFD;
-	Fri,  8 Dec 2023 12:20:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 54FDEC433C9;
-	Fri,  8 Dec 2023 12:20:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702038026;
-	bh=cL4G09FMM87FyW6qx9cfGc3SyCcZ7hGoUTZkQ/Jyhwc=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=o0Mm75HZaLPa7B8w7uwRvona9U6iSN0xdICbD73DfMBt4z5wdpMQoSqo+1HHXL/mc
-	 2MmDHbwMAU0ioadIuu8Jh9Pwssnh7xm6ZLkpDSX+T0WMBEksUrPXHDhwZcLwBgjZAk
-	 iXCZvxzH6VppHmSrxddnlq3pQHiuJnz6YzB0zmJSkIo4RiZsWMGnG7n1Ie8HoLGiqm
-	 /ULFP3ItYamI40aTRHmHyh0GVKQ1DQbRs6of36zBkD+/5QZm+1IeinD74LmCwku6Tw
-	 ccvhX121fSyo9kFmmad+obR53xkbSiyZb7EiUw2BocVuZyGWAElEmLsMjA3gWb5p8K
-	 ye7BC0m7juWbA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3B711C04E32;
-	Fri,  8 Dec 2023 12:20:26 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 163B21989
+	for <linux-kselftest@vger.kernel.org>; Fri,  8 Dec 2023 04:43:28 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-50bf3efe2cbso2343924e87.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 08 Dec 2023 04:43:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1702039406; x=1702644206; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=M4jRq8coAm6Zi8gGKP+BNqEZe9vdeBRNYUjT809qI8k=;
+        b=eS9gYmn5WmiONKtxW1pUrNsiHvsUa8Bak0Cw08bWY+D+a4TVi05QHvNOyNS1UKgsQP
+         XLAMSBLK99Bx5bk55gh3dnocWnl9OmJOy2/s9awqWVW/hPMySHxjjk+UNmLWCEZq3b7d
+         bPVXC+w/9NSfIm3YxSXfJO50/RzsB7hLaxAbfWBcnTRyHfP/NbwMqjk+s0eumO2Vdlpq
+         GBat9vfuhklrDpgBo/doNWtE0UidlEHxyQdF6h+5KfuBnuZQaPY/5l1IWNWmxKpNu/BU
+         FYEtXZsK/CaaoWoj1yGw+y2lSZNAnLIDoJ53EIJ33JrwiYXXrS317U7Q2n16Gb3R6lUD
+         KvmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702039406; x=1702644206;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=M4jRq8coAm6Zi8gGKP+BNqEZe9vdeBRNYUjT809qI8k=;
+        b=Y0CrA+2sXT/io69f6k436Kh5m2XjqPlkdSFVB++G/StEIB3kgSRLNB+Dzo7Wja5+zW
+         qDOHSsZRaL/9dqfLeBQ4/NRJFqS178y7WpQ1vG13jbWyL/Ej/L4VvYJHTXI3jIKiw3bu
+         Y54u4waTWmfAFUGDPtBTQXv/Xo8bXZ79XywaiA9g/N0fshAr0QkMK7ICAiclKS0lS4xM
+         l0NWRF1hT2a8uJU/WOB/Uz7yfmsEN3gSazj/pLVhY6Mr32M36MNtjrrxmOSNyeKxsvgI
+         hmzysbSjsQRuK0LCyRJknlI3UhuIQ2agRxalTu63hvY/mPAmNpsztmjWWk82+jxhBGmd
+         fVNw==
+X-Gm-Message-State: AOJu0YwAA04jtwKdYVZpofvvlsSwnbpvfFty8Dgv25QADmQJnXlB/YCM
+	arPJhnSzzoGNPklFkQq+Kcfd2tGgdT8tkO2g9iTJJA==
+X-Google-Smtp-Source: AGHT+IHRFOAuPIdICwCcvqg1kT1FUQi84zSfoyRSVJAtC+mFNnvreKg04Zjw+t+pELN5DB8vfxXdEQ==
+X-Received: by 2002:a05:6512:3b0f:b0:50b:f3cc:13b0 with SMTP id f15-20020a0565123b0f00b0050bf3cc13b0mr1610669lfv.62.1702039406308;
+        Fri, 08 Dec 2023 04:43:26 -0800 (PST)
+Received: from alley ([176.114.240.50])
+        by smtp.gmail.com with ESMTPSA id ec44-20020a0564020d6c00b0054dc00457e3sm770302edb.5.2023.12.08.04.43.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Dec 2023 04:43:25 -0800 (PST)
+Date: Fri, 8 Dec 2023 13:43:24 +0100
+From: Petr Mladek <pmladek@suse.com>
+To: Miroslav Benes <mbenes@suse.cz>
+Cc: Joe Lawrence <joe.lawrence@redhat.com>,
+	Marcos Paulo de Souza <mpdesouza@suse.com>,
+	Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Jiri Kosina <jikos@kernel.org>, linux-kselftest@vger.kernel.org,
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-s390@vger.kernel.org, live-patching@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] livepatch: Move tests from lib/livepatch to
+ selftests/livepatch
+Message-ID: <ZXL_Lmx9J8U25fq-@alley>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 0/9] Convert net selftests to run in unique namespace
- (Part 2)
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <170203802623.6196.5009719464522054541.git-patchwork-notify@kernel.org>
-Date: Fri, 08 Dec 2023 12:20:26 +0000
-References: <20231206070801.1691247-1-liuhangbin@gmail.com>
-In-Reply-To: <20231206070801.1691247-1-liuhangbin@gmail.com>
-To: Hangbin Liu <liuhangbin@gmail.com>
-Cc: netdev@vger.kernel.org, davem@davemloft.net, kuba@kernel.org,
- edumazet@google.com, pabeni@redhat.com, shuah@kernel.org, dsahern@kernel.org,
- linux-kselftest@vger.kernel.org, po-hsu.lin@canonical.com, gnault@redhat.com,
- petrm@nvidia.com, idosch@nvidia.com, razor@blackwall.org,
- vladimir@nikishkin.pw, roopa@nvidia.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.LSU.2.21.2312080854100.14729@pobox.suse.cz>
 
-Hello:
-
-This series was applied to netdev/net-next.git (main)
-by David S. Miller <davem@davemloft.net>:
-
-On Wed,  6 Dec 2023 15:07:52 +0800 you wrote:
-> Here is the 2nd part of converting net selftests to run in unique namespace.
-> This part converts all bridge, vxlan, vrf tests.
+On Fri 2023-12-08 09:06:30, Miroslav Benes wrote:
+> > > My idea is to abandon this way completely, take the selftests and build 
+> > > and run them on the system right away.
+> > > 
+> > > Both should be doable, hopefully, if we wire it all correctly... and 
+> > > document it.
+> > > 
+> > I can't think of why it shouldn't continue to work, even in a future
+> > where newer livepatching selftests support older kernels.  (We would
+> > just have newer selftests sources backported to test older kernel sources.)
+> > 
+> > Are there any test cases which truly need to be build on-the-fly?  Aside
+> > from testing different toolchain pieces?
 > 
-> Here is the part 1 link:
-> https://lore.kernel.org/netdev/20231202020110.362433-1-liuhangbin@gmail.com
+> https://github.com/SUSE/qa_test_klp is what we would like to migrate to 
+> selftests to have just one place for all tests.
 > 
-> Hangbin Liu (9):
->   selftests/net: convert test_bridge_backup_port.sh to run it in unique
->     namespace
->   selftests/net: convert test_bridge_neigh_suppress.sh to run it in
->     unique namespace
->   selftests/net: convert test_vxlan_mdb.sh to run it in unique namespace
->   selftests/net: convert test_vxlan_nolocalbypass.sh to run it in unique
->     namespace
->   selftests/net: convert test_vxlan_under_vrf.sh to run it in unique
->     namespace
->   selftests/net: convert test_vxlan_vnifiltering.sh to run it in unique
->     namespace
->   selftests/net: convert vrf_route_leaking.sh to run it in unique
->     namespace
->   selftests/net: convert vrf_strict_mode_test.sh to run it in unique
->     namespace
->   selftests/net: convert vrf-xfrm-tests.sh to run it in unique namespace
-> 
-> [...]
+> There is basically just one live patch template and one supporting kernel 
+> module template which is livepatched. The final result is driven by a set 
+> of macros and function parameters. In some cases more modules are compiled 
+> as parts of a test in a loop.
+>
+> However, I do not think there is anything which truly needs to be built 
+> on-the-fly in the end. Everything can be worked around. Templates may be 
+> abandoned and we would have a live patch and a module(s) per test. Some 
+> tests are probably not worth it and may be removed. So it is a question of 
+> convenience and maintainability. When we, for example, simplified API and 
+> klp_register_patch() was removed, only one place needed to be amended. 
+> Also, the current state in lib/livepatch/ could be simplified with the 
+> proposed infrastructure as some files could be merged together.
 
-Here is the summary with links:
-  - [net-next,1/9] selftests/net: convert test_bridge_backup_port.sh to run it in unique namespace
-    https://git.kernel.org/netdev/net-next/c/4624a78c18c6
-  - [net-next,2/9] selftests/net: convert test_bridge_neigh_suppress.sh to run it in unique namespace
-    https://git.kernel.org/netdev/net-next/c/312abe3d93a3
-  - [net-next,3/9] selftests/net: convert test_vxlan_mdb.sh to run it in unique namespace
-    https://git.kernel.org/netdev/net-next/c/a8258e64ca74
-  - [net-next,4/9] selftests/net: convert test_vxlan_nolocalbypass.sh to run it in unique namespace
-    https://git.kernel.org/netdev/net-next/c/d79e907b425d
-  - [net-next,5/9] selftests/net: convert test_vxlan_under_vrf.sh to run it in unique namespace
-    https://git.kernel.org/netdev/net-next/c/d6aab1f63297
-  - [net-next,6/9] selftests/net: convert test_vxlan_vnifiltering.sh to run it in unique namespace
-    https://git.kernel.org/netdev/net-next/c/5ece8371747d
-  - [net-next,7/9] selftests/net: convert vrf_route_leaking.sh to run it in unique namespace
-    https://git.kernel.org/netdev/net-next/c/bedc99abcaf8
-  - [net-next,8/9] selftests/net: convert vrf_strict_mode_test.sh to run it in unique namespace
-    https://git.kernel.org/netdev/net-next/c/51f64acbe36e
-  - [net-next,9/9] selftests/net: convert vrf-xfrm-tests.sh to run it in unique namespace
-    https://git.kernel.org/netdev/net-next/c/61b12ebe439a
+In the patchset reworking livepatch states, I solved this problem
+by including the same sources in another module source, like:
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+$> cat lib/livepatch/test_klp_speaker_livepatch2.c
+// SPDX-License-Identifier: GPL-2.0
+// Copyright (C) 2023 SUSE
+
+/* Same livepatch with the same features. */
+#include "test_klp_speaker_livepatch.c"
+
+=========
+
+$> cat lib/livepatch/test_klp_speaker2.c
+// SPDX-License-Identifier: GPL-2.0
+// Copyright (C) 2023 SUSE
+
+/* Use versioned function name for livepatched functions */
+#define _VER_NAME(name) name ## 2
+
+/* Same module with the same features. */
+#include "test_klp_speaker.c"
+
+==========
+
+And the behavior was changed by module parameters. The test
+lookes like:
+
+$> cat tools/testing/selftests/livepatch/test-modules.sh
+[...]
+start_test "multiple target modules"
+
+load_mod $MOD_TARGET
+read_module_param $MOD_TARGET welcome
+
+load_lp $MOD_LIVEPATCH add_applause=1
+read_module_param $MOD_TARGET welcome
+
+load_mod $MOD_TARGET2
+read_module_param $MOD_TARGET2 welcome
+
+unload_mod $MOD_TARGET2
+disable_lp $MOD_LIVEPATCH
+read_module_param $MOD_TARGET welcome
+
+unload_lp $MOD_LIVEPATCH
+unload_mod $MOD_TARGET
+
+===========
+
+It is a kind of hack. But it would allow to build and package the
+test modules. It has several advantages:
+
+   + Less modules are needed. The behavior is modified by
+     the parameters.
+
+   + The separate parameters are easier to parse in compare
+     with embedding the behavior into the module name.
+
+   + Build problems would be solved before the packages
+     reach QA department
+
+   + The package would have lightweight dependencies.
+
+   + Running the tests would be faster.
 
 
+
+Regarding disadvantages:
+
+   + The source included in all the other variants would be more
+     complex.
+
+     But the same would happen when building the modules during
+     the tests. It would also require a more complicated template
+     and an extra script generating the particular module sources.
+
+
+I personally prefer the solution with "#include" because it has
+all the mentioned advantages. The "#include" is a hack but it is
+needed only when we need more modules with all the features.
+
+Best Regards,
+Petr
 
