@@ -1,92 +1,116 @@
-Return-Path: <linux-kselftest+bounces-1447-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1448-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 409D180AB6F
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 18:57:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1C5680ACBA
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 20:12:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DEF501F2108E
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 17:57:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6D74281764
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 19:12:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74F494175D;
-	Fri,  8 Dec 2023 17:57:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A84FF481C1;
+	Fri,  8 Dec 2023 19:12:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IrhW+No2"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TtOpdMwp"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4392539AF3;
-	Fri,  8 Dec 2023 17:57:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D37FC433C8;
-	Fri,  8 Dec 2023 17:57:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702058269;
-	bh=MZC8OXd/xhYpQFY9QXSMpIHOKQcKILf1nuFEeLx1Z1k=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=IrhW+No2LIvscdmhlUWqrjJiqbzeddYeZMlOvgrxLv9Pp/gv65XNGK+d/kQvyt9F8
-	 eWeHCO3AAqSqLgKmc7Ik62hbdVifPyu/Z9BpeaTSYwEumWm4CM5RdsEVq3wTqAc8Yt
-	 0Mtxfy6ckCdT2CkRx53DyJYDR5tIlMzrGiRqLFkqVd6vRp5p0uaNNgnc/icx60AhME
-	 T4jAdjX/YdISDa0zROBRF880qcvvvYg4KCcH3HTEvBilmN+djnGudGA6yjwLQu61zC
-	 QQA9Js/3CQoJWElJJO/mXVHwonG1Z2FbVz8Cwm/aqWQC4pxhlM1WCn1Hu4n/x0J3l+
-	 Hql17ZKbnZbkA==
-Message-ID: <3fea9ae9-e9e6-4ba5-812b-2775a6ed9e6a@kernel.org>
-Date: Fri, 8 Dec 2023 10:57:47 -0700
+Received: from mail-qv1-xf4a.google.com (mail-qv1-xf4a.google.com [IPv6:2607:f8b0:4864:20::f4a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4148610F8
+	for <linux-kselftest@vger.kernel.org>; Fri,  8 Dec 2023 11:12:29 -0800 (PST)
+Received: by mail-qv1-xf4a.google.com with SMTP id 6a1803df08f44-67ab4382912so43928506d6.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 08 Dec 2023 11:12:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1702062748; x=1702667548; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=nVvef+BcVgEroNYpsUvlaSbQE1KPpVwrXco8mT3u6R8=;
+        b=TtOpdMwpk3HmyGxPMn0lXTJ1YACZLpsGKVjALtvXPgYgZcY36t9V9cUvKebcqvVtLv
+         rHzmU5w01VqPobGCR9NkYT/l+IzVWoLeh2hExeW2HZGo/kXu7oZ/KaqdW8qCO+AsT+yH
+         rlObRSjtVUEdJG6ZycKmb+i0RZQOqhj+/StTJKaltqK56ZepK/fyzwWC7IlFA8Y2vX8U
+         /aVX/poyzT/swMPh+JUF/qC7N4EvnO0Tbui9mDqtqJyZVTgVN+bPQT/ffOAccpXFWuLx
+         6NE+ekEuL8Vx3+qoo9kQp+w8QpwZSIMOhtJW8+GxOuecEzCqpy0eKfoBOpEN0bGFxnGy
+         Oo6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702062748; x=1702667548;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nVvef+BcVgEroNYpsUvlaSbQE1KPpVwrXco8mT3u6R8=;
+        b=gCl+9S6hfxNkNSWof0f7nWl4EYAS+ZC5EDhisfI3D8pxxBgJalgYIahf/pKAYJcS5O
+         7X4A/PawmberrtXRpNli5VdorOHArhVPJU+0jOu5hYAn0C/OlvSiFEMpL1hu9enL+xfI
+         gQ99cYzVyTpLBHMspfr2L86nU0Tl8C1TkmImVnjQhX6T7sSPDNPTOC7Zi7+XErvNRB4O
+         T4VlUPLuGQ/3/0tH1GNdzWcReARn7iafYgileNIznPfZ2bPb9Yq6k8XwaMEUsYT4jJcv
+         UvTXxSklDojy7lDCJI8EnUnkslgTxLQt2bPctOXih04lJBa6Aq54AKyHPuw5MC3BhO3F
+         K9Tg==
+X-Gm-Message-State: AOJu0Yz+6PC26nEvCMpzZ6dwcwKGZlPWqXZDSWPj2XAmuPUTCUGySO6b
+	FW0e3Eps2efLhw85XGGNLgo8Fm5ALQ==
+X-Google-Smtp-Source: AGHT+IGuOdD3gIEzMskxj65xx+SL0VrhBoEpExw0ALUkNEYuZ/zPOt9y7oxmzmGADGUzBYXekOw1J3gmSA==
+X-Received: from rmoar-specialist.c.googlers.com ([fda3:e722:ac3:cc00:2b:7d90:c0a8:45d3])
+ (user=rmoar job=sendgmr) by 2002:a0c:f7d1:0:b0:67a:dbad:8ebd with SMTP id
+ f17-20020a0cf7d1000000b0067adbad8ebdmr11575qvo.5.1702062748417; Fri, 08 Dec
+ 2023 11:12:28 -0800 (PST)
+Date: Fri,  8 Dec 2023 19:12:21 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [net-next v1 00/16] Device Memory TCP
-Content-Language: en-US
-To: Mina Almasry <almasrymina@google.com>,
- Shailend Chand <shailend@google.com>, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
- bpf@vger.kernel.org, linux-media@vger.kernel.org,
- dri-devel@lists.freedesktop.org
-Cc: "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
- Jeroen de Borst <jeroendb@google.com>,
- Praveen Kaligineedi <pkaligineedi@google.com>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- Ilias Apalodimas <ilias.apalodimas@linaro.org>, Arnd Bergmann
- <arnd@arndb.de>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
- =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
- Yunsheng Lin <linyunsheng@huawei.com>,
- Harshitha Ramamurthy <hramamurthy@google.com>,
- Shakeel Butt <shakeelb@google.com>
-References: <20231208005250.2910004-1-almasrymina@google.com>
-From: David Ahern <dsahern@kernel.org>
-In-Reply-To: <20231208005250.2910004-1-almasrymina@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.43.0.472.g3155946c3a-goog
+Message-ID: <20231208191222.630119-1-rmoar@google.com>
+Subject: [PATCH v3 1/2] kunit: tool: fix parsing of test attributes
+From: Rae Moar <rmoar@google.com>
+To: shuah@kernel.org, davidgow@google.com, dlatypov@google.com, 
+	brendan.higgins@linux.dev
+Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	linux-kernel@vger.kernel.org, Rae Moar <rmoar@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On 12/7/23 5:52 PM, Mina Almasry wrote:
-> Major changes in v1:
-> --------------
-> 
-> 1. Implemented MVP queue API ndos to remove the userspace-visible
->    driver reset.
-> 
-> 2. Fixed issues in the napi_pp_put_page() devmem frag unref path.
-> 
-> 3. Removed RFC tag.
-> 
-> Many smaller addressed comments across all the patches (patches have
-> individual change log).
-> 
-> Full tree including the rest of the GVE driver changes:
-> https://github.com/mina/linux/commits/tcpdevmem-v1
-> 
+Add parsing of attributes as diagnostic data. Fixes issue with test plan
+being parsed incorrectly as diagnostic data when located after
+suite-level attributes.
 
-Still a lot of DEVMEM references (e.g., socket API). Any reason not to
-move those to DMABUF?
+Note that if there does not exist a test plan line, the diagnostic lines
+between the suite header and the first result will be saved in the suite
+log rather than the first test case log.
+
+Signed-off-by: Rae Moar <rmoar@google.com>
+---
+ tools/testing/kunit/kunit_parser.py | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/kunit/kunit_parser.py b/tools/testing/kunit/kunit_parser.py
+index 79d8832c862a..ce34be15c929 100644
+--- a/tools/testing/kunit/kunit_parser.py
++++ b/tools/testing/kunit/kunit_parser.py
+@@ -450,7 +450,7 @@ def parse_diagnostic(lines: LineStream) -> List[str]:
+ 	Log of diagnostic lines
+ 	"""
+ 	log = []  # type: List[str]
+-	non_diagnostic_lines = [TEST_RESULT, TEST_HEADER, KTAP_START, TAP_START]
++	non_diagnostic_lines = [TEST_RESULT, TEST_HEADER, KTAP_START, TAP_START, TEST_PLAN]
+ 	while lines and not any(re.match(lines.peek())
+ 			for re in non_diagnostic_lines):
+ 		log.append(lines.pop())
+@@ -726,6 +726,7 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str], is_subtest:
+ 		# test plan
+ 		test.name = "main"
+ 		ktap_line = parse_ktap_header(lines, test)
++		test.log.extend(parse_diagnostic(lines))
+ 		parse_test_plan(lines, test)
+ 		parent_test = True
+ 	else:
+@@ -737,6 +738,7 @@ def parse_test(lines: LineStream, expected_num: int, log: List[str], is_subtest:
+ 		if parent_test:
+ 			# If KTAP version line and/or subtest header is found, attempt
+ 			# to parse test plan and print test header
++			test.log.extend(parse_diagnostic(lines))
+ 			parse_test_plan(lines, test)
+ 			print_test_header(test)
+ 	expected_count = test.expected_count
+
+base-commit: b85ea95d086471afb4ad062012a4d73cd328fa86
+-- 
+2.43.0.472.g3155946c3a-goog
 
 
