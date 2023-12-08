@@ -1,145 +1,116 @@
-Return-Path: <linux-kselftest+bounces-1408-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1409-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19E40809A16
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 04:13:27 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7705C809A86
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 04:35:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4BF101C20992
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 03:13:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B976281E3E
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 03:35:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 472C820F4;
-	Fri,  8 Dec 2023 03:13:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5785C4A24;
+	Fri,  8 Dec 2023 03:35:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gbXD9aty"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dT//7IGF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95ED010CA
-	for <linux-kselftest@vger.kernel.org>; Thu,  7 Dec 2023 19:13:16 -0800 (PST)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-54c77d011acso3446a12.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 07 Dec 2023 19:13:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1702005195; x=1702609995; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HNS+ovI/q3JlBtEM2uaw1KWaKlXeGtEnkG9NS8Et7tA=;
-        b=gbXD9atyXPm1oP5XU2qeen+pJTOmZ3e7iuZfb3wcN5G4mm0Aag6J77DYgA2Cm/RYz3
-         VnyWsQLRRsJ25zx4+j944KrbGoQTYS5wcATkdB7i2YPSLtNz7949WzZjb+UOH/bxuCyk
-         49Xy4ScmeS2wecVCQ5dxBNxglrovY7RKTfjWETzfq+E82GvCtt9bEWUb/GX9aXiVtLy1
-         vQO+AY6le5lApFq2Mu/fiVNEVpP6HXiQh35qVKDno5R5dN7LZRaQx3wz4xB/4OFFrs7S
-         1oHgf/M3gVEWrGhTyiqEcL0WBMU2iWngKfsFAEHQUVRdL4lWVZJ1EjrxfbTqgyo2JFR2
-         b9Pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702005195; x=1702609995;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HNS+ovI/q3JlBtEM2uaw1KWaKlXeGtEnkG9NS8Et7tA=;
-        b=Vi1DDrDVg20LsWN16TyF//ledfmIXXiYxKTYL81XTNYV+jrhpiJ8H0Y63+EVkxs6D/
-         j4MBOfmRcRSzjUYzS4TKHFi9iv9IB8eRVaOsaLiutAjw3KYQq/F7kjeXfJs7YZbJcDps
-         KTw6rXed1aHqPk4FdfE14XsuO0u74lSixtognVWEH457rUqqRlrGQtQev6XfrqNlR6d0
-         hJ5aSAeP9xC+NBN4yPud7uZjjqvOBYvswpnhS03OylO2e1qGJT7Y0cDS+nEAC2Dpu2Bs
-         2LBWtz5hy9M1ZTzKSdASG0kqAF6uKs73fwByF/BpU9NU+Uc5ZfnqWyz3ObamJsyiXQ1I
-         pD6Q==
-X-Gm-Message-State: AOJu0YwUhJM/PceBF4BkQsjYuZ9rEY862klsKsibLboFwjlKXXT8kWOt
-	YJAJZmJD1MAGBwbKtvNqWwpxi9jphsxDUstYsS1b/Q==
-X-Google-Smtp-Source: AGHT+IF6lnS9jdG7Mel03q85kJn6B8enFm7q6yqnXLrTB095MG3Pt7OgvO20urLr5o46zc0NbKZAl1GRCClQ4zRkKn4=
-X-Received: by 2002:a50:d7c3:0:b0:54a:ee8b:7a99 with SMTP id
- m3-20020a50d7c3000000b0054aee8b7a99mr20514edj.0.1702005194949; Thu, 07 Dec
- 2023 19:13:14 -0800 (PST)
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45B8410DF
+	for <linux-kselftest@vger.kernel.org>; Thu,  7 Dec 2023 19:35:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1702006525;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=vh3S+Lns+sOh+ZFwSTFTZocc8C/FbBJ0BQFWEGhlNzI=;
+	b=dT//7IGFAW6mBpyYXRW3A7KzLChlrdSwDb6CImVeu91xWqyzXMQBHLeGPayZO4+RKe7l56
+	YShHDoyfCUKD/eY+iqOxN3GOGJFcnkkCrgJvPcwwiW5ACiVrXzJhwARKCovq+vCXUS741w
+	EOtRlheLYAMq2/63JJ0YtY33c9/oQNc=
+Received: from mimecast-mx02.redhat.com (mx-ext.redhat.com [66.187.233.73])
+ by relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-168-QbWSTXDmMXmiBdhqKILqdw-1; Thu,
+ 07 Dec 2023 22:35:21 -0500
+X-MC-Unique: QbWSTXDmMXmiBdhqKILqdw-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E778A1C04322;
+	Fri,  8 Dec 2023 03:35:20 +0000 (UTC)
+Received: from virt-mtcollins-01.lab.eng.rdu2.redhat.com (virt-mtcollins-01.lab.eng.rdu2.redhat.com [10.8.1.196])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id D8143492BC6;
+	Fri,  8 Dec 2023 03:35:20 +0000 (UTC)
+From: Shaoqin Huang <shahuang@redhat.com>
+To: kvm@vger.kernel.org
+Cc: Shaoqin Huang <shahuang@redhat.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Sean Christopherson <seanjc@google.com>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v1] KVM: selftests: Fix Assertion on non-x86_64 platforms
+Date: Thu,  7 Dec 2023 22:35:05 -0500
+Message-Id: <20231208033505.2930064-1-shahuang@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231207213410.417564-1-rmoar@google.com> <20231207213410.417564-2-rmoar@google.com>
-In-Reply-To: <20231207213410.417564-2-rmoar@google.com>
-From: David Gow <davidgow@google.com>
-Date: Fri, 8 Dec 2023 11:13:03 +0800
-Message-ID: <CABVgOSkqH0Gsw-w5Dkm2dRfFTOd5_zhBawn0Lwgf+rkckRWpfQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] kunit: tool: add test for parsing attributes
-To: Rae Moar <rmoar@google.com>
-Cc: shuah@kernel.org, dlatypov@google.com, brendan.higgins@linux.dev, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.9
 
-On Fri, 8 Dec 2023 at 05:34, Rae Moar <rmoar@google.com> wrote:
->
-> Add test for parsing attributes to kunit_tool_test.py. Test checks
-> attributes are parsed and saved in the test logs.
->
-> This test also checks that the attributes have not interfered with the
-> parsing of other test information, specifically the suite header as
-> the test plan was being incorrectely parsed.
->
-> Signed-off-by: Rae Moar <rmoar@google.com>
-> ---
+When running the set_memory_region_test on arm64 platform, it causes the
+below assert:
 
-Thanks -- it's good to have this tested. I'm looking forward to our
-actually parsing attributes out and using them for things in the
-future, too.
+==== Test Assertion Failure ====
+  set_memory_region_test.c:355: r && errno == EINVAL
+  pid=40695 tid=40695 errno=0 - Success
+     1	0x0000000000401baf: test_invalid_memory_region_flags at set_memory_region_test.c:355
+     2	 (inlined by) main at set_memory_region_test.c:541
+     3	0x0000ffff951c879b: ?? ??:0
+     4	0x0000ffff951c886b: ?? ??:0
+     5	0x0000000000401caf: _start at ??:?
+  KVM_SET_USER_MEMORY_REGION should have failed on v2 only flag 0x2
 
-Reviewed-by: David Gow <davidgow@google.com>
+This is because the arm64 platform also support the KVM_MEM_READONLY flag, but
+the current implementation add it into the supportd_flags only on x86_64
+platform, so this causes assert on other platform which also support the
+KVM_MEM_READONLY flag.
 
-Cheers,
--- David
+Fix it by using the __KVM_HAVE_READONLY_MEM macro to detect if the
+current platform support the KVM_MEM_READONLY, thus fix this problem on
+all other platform which support KVM_MEM_READONLY.
 
->  tools/testing/kunit/kunit_tool_test.py           | 16 ++++++++++++++++
->  .../kunit/test_data/test_parse_attributes.log    |  9 +++++++++
->  2 files changed, 25 insertions(+)
->  create mode 100644 tools/testing/kunit/test_data/test_parse_attributes.log
->
-> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-> index b28c1510be2e..2beb7327e53f 100755
-> --- a/tools/testing/kunit/kunit_tool_test.py
-> +++ b/tools/testing/kunit/kunit_tool_test.py
-> @@ -331,6 +331,22 @@ class KUnitParserTest(unittest.TestCase):
->                         kunit_parser.parse_run_tests(file.readlines())
->                 self.print_mock.assert_any_call(StrContains('suite (1 subtest)'))
->
-> +       def test_parse_attributes(self):
-> +               ktap_log = test_data_path('test_parse_attributes.log')
-> +               with open(ktap_log) as file:
-> +                       result = kunit_parser.parse_run_tests(file.readlines())
-> +
-> +               # Test should pass with no errors
-> +               self.assertEqual(result.counts, kunit_parser.TestCounts(passed=1, errors=0))
-> +               self.assertEqual(kunit_parser.TestStatus.SUCCESS, result.status)
-> +
-> +               # Ensure suite header is parsed correctly
-> +               self.print_mock.assert_any_call(StrContains('suite (1 subtest)'))
-> +
-> +               # Ensure attributes in correct test log
-> +               self.assertContains('# module: example', result.subtests[0].log)
-> +               self.assertContains('# test.speed: slow', result.subtests[0].subtests[0].log)
-> +
->         def test_show_test_output_on_failure(self):
->                 output = """
->                 KTAP version 1
-> diff --git a/tools/testing/kunit/test_data/test_parse_attributes.log b/tools/testing/kunit/test_data/test_parse_attributes.log
-> new file mode 100644
-> index 000000000000..1a13c371fe9d
-> --- /dev/null
-> +++ b/tools/testing/kunit/test_data/test_parse_attributes.log
-> @@ -0,0 +1,9 @@
-> +KTAP version 1
-> +1..1
-> +  KTAP version 1
-> +  # Subtest: suite
-> +  # module: example
-> +  1..1
-> +  # test.speed: slow
-> +  ok 1 test
-> +ok 1 suite
-> \ No newline at end of file
+Fixes: 5d74316466f4 ("KVM: selftests: Add a memory region subtest to validate invalid flags")
+Signed-off-by: Shaoqin Huang <shahuang@redhat.com>
+---
+This patch is based on the latest kvm-next[1] branch.
 
-Why doesn't this have a newline at the end of the file?
+[1] https://git.kernel.org/pub/scm/virt/kvm/kvm.git/log/?h=next
+---
+ tools/testing/selftests/kvm/set_memory_region_test.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-I'm actually okay with it here (it's good to test the case where there
-isn't one _somewhere_), but in general, I think we'd want to prefer
-KTAP documents end with the trailing newline, like most text file.
+diff --git a/tools/testing/selftests/kvm/set_memory_region_test.c b/tools/testing/selftests/kvm/set_memory_region_test.c
+index 6637a0845acf..1ce710fd7a5a 100644
+--- a/tools/testing/selftests/kvm/set_memory_region_test.c
++++ b/tools/testing/selftests/kvm/set_memory_region_test.c
+@@ -333,9 +333,11 @@ static void test_invalid_memory_region_flags(void)
+ 	struct kvm_vm *vm;
+ 	int r, i;
+ 
+-#ifdef __x86_64__
++#ifdef __KVM_HAVE_READONLY_MEM
+ 	supported_flags |= KVM_MEM_READONLY;
++#endif
+ 
++#ifdef __x86_64__
+ 	if (kvm_check_cap(KVM_CAP_VM_TYPES) & BIT(KVM_X86_SW_PROTECTED_VM))
+ 		vm = vm_create_barebones_protected_vm();
+ 	else
+-- 
+2.40.1
+
 
