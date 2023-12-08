@@ -1,98 +1,190 @@
-Return-Path: <linux-kselftest+bounces-1442-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1443-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DDD380AAC3
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 18:29:42 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FA8580AB22
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 18:48:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E7C08281867
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 17:29:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3AA5FB20B52
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 17:48:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9B6039AC0;
-	Fri,  8 Dec 2023 17:29:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57ECC3C48B;
+	Fri,  8 Dec 2023 17:48:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AR2wPhGk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vG3IUgCI"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9900D3984B;
-	Fri,  8 Dec 2023 17:29:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79D0DC433C7;
-	Fri,  8 Dec 2023 17:29:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1502239AF3;
+	Fri,  8 Dec 2023 17:48:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C2B6C433C7;
+	Fri,  8 Dec 2023 17:48:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702056575;
-	bh=3PxOBEXFDvmx4FoVcbn8IisqPaIUct50HbstATld534=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AR2wPhGk2fAvPLFyB3Mvv7cnFnjN2eshwUXqpo7nbjINXPmGWTywFfU5qIWajadZ3
-	 3I49M/i8UhpWPOOLeLgfsm9R4lSCXxlzm2YsXNNkEKTmaNQ9nRHEyrSKp060VNRxxJ
-	 NeqCYz8gto+GOKdtfXsrohiRfGBd0P4cjwkRP5Q4TaAskOMqplz5B/3+votUzVyAPt
-	 ye65cjWTu3hlKebC7Y6C9Ychpg9SYLKnIN68rPBbglwxnPavfzIhnlSaHint/DeJO4
-	 SVqsDOnnEIXimi/nSjE52ejy6yQcu1B6vp8g8z4l2oe/3McQY2unfMvKWrlKBZhPhX
-	 txyi9K2P9tHDA==
-Date: Fri, 8 Dec 2023 17:29:31 +0000
-From: Mark Brown <broonie@kernel.org>
-To: =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado <nfraprado@collabora.com>
-Cc: Rob Herring <robh+dt@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	kernel@collabora.com, Frank Rowand <frowand.list@gmail.com>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH] kselftest: dt: Stop relying on dirname to improve
- performance
-Message-ID: <ZXNSe2zSCS8fExDz@finisterre.sirena.org.uk>
-References: <20231208133955.483851-1-nfraprado@collabora.com>
+	s=k20201202; t=1702057715;
+	bh=QhXQPyvQgWIfvDkbSx67u+Zj6uEqAYuquxDBwKePCJE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=vG3IUgCI7Vl1Ae7jqY3QTraWz66PaiSD+WpG1WvnBrANgyZraJ2iA8SAnKT3INQU1
+	 LVtpqSYOJ9jbHnCfywwcF7ri2RUAha1/EgX+42PNhDgQRuFRKz3ra0rg1DtBj9H9KJ
+	 RoNZsIGJ2YbO1TilE2f329bwgtfBR5Lg+IvgWvF0hqn/2yhF5oFSu2vNWsFAk0b/gZ
+	 rTidktVHR0u7SzSqDA9u7ShRYuFqrCmUFLY6J8SOVqhfrC6mUBoqKWEYdaBAQ9nADl
+	 6hzrOGEKkLY9HhwOn/M1/P6d9j/R6K2mTpn1xHIzAf+7KIiRibqlj8BlKFQi4kS5ym
+	 tFNg+JaK/IVqA==
+Message-ID: <5752508c-f7bc-44ac-8778-c807b2ee5831@kernel.org>
+Date: Fri, 8 Dec 2023 10:48:33 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="3vS4BeAJHYDVIouR"
-Content-Disposition: inline
-In-Reply-To: <20231208133955.483851-1-nfraprado@collabora.com>
-X-Cookie: Slow day.  Practice crawling.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [net-next v1 06/16] netdev: support binding dma-buf to netdevice
+Content-Language: en-US
+To: Mina Almasry <almasrymina@google.com>,
+ Shailend Chand <shailend@google.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ bpf@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org
+Cc: "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+ Jeroen de Borst <jeroendb@google.com>,
+ Praveen Kaligineedi <pkaligineedi@google.com>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>, Arnd Bergmann
+ <arnd@arndb.de>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Yunsheng Lin <linyunsheng@huawei.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>,
+ Shakeel Butt <shakeelb@google.com>, Willem de Bruijn <willemb@google.com>,
+ Kaiyuan Zhang <kaiyuanz@google.com>
+References: <20231208005250.2910004-1-almasrymina@google.com>
+ <20231208005250.2910004-7-almasrymina@google.com>
+From: David Ahern <dsahern@kernel.org>
+In-Reply-To: <20231208005250.2910004-7-almasrymina@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+
+On 12/7/23 5:52 PM, Mina Almasry wrote:
+> +
+> +static int netdev_restart_rx_queue(struct net_device *dev, int rxq_idx)
+> +{
+> +	void *new_mem;
+> +	void *old_mem;
+> +	int err;
+> +
+> +	if (!dev || !dev->netdev_ops)
+> +		return -EINVAL;
+> +
+> +	if (!dev->netdev_ops->ndo_queue_stop ||
+> +	    !dev->netdev_ops->ndo_queue_mem_free ||
+> +	    !dev->netdev_ops->ndo_queue_mem_alloc ||
+> +	    !dev->netdev_ops->ndo_queue_start)
+> +		return -EOPNOTSUPP;
+> +
+> +	new_mem = dev->netdev_ops->ndo_queue_mem_alloc(dev, rxq_idx);
+> +	if (!new_mem)
+> +		return -ENOMEM;
+> +
+> +	err = dev->netdev_ops->ndo_queue_stop(dev, rxq_idx, &old_mem);
+> +	if (err)
+> +		goto err_free_new_mem;
+> +
+> +	err = dev->netdev_ops->ndo_queue_start(dev, rxq_idx, new_mem);
+> +	if (err)
+> +		goto err_start_queue;
+> +
+> +	dev->netdev_ops->ndo_queue_mem_free(dev, old_mem);
+> +
+> +	return 0;
+> +
+> +err_start_queue:
+> +	dev->netdev_ops->ndo_queue_start(dev, rxq_idx, old_mem);
+> +
+> +err_free_new_mem:
+> +	dev->netdev_ops->ndo_queue_mem_free(dev, new_mem);
+> +
+> +	return err;
+> +}
+> +
+> +/* Protected by rtnl_lock() */
+> +static DEFINE_XARRAY_FLAGS(netdev_dmabuf_bindings, XA_FLAGS_ALLOC1);
+> +
+> +void netdev_unbind_dmabuf(struct netdev_dmabuf_binding *binding)
+> +{
+> +	struct netdev_rx_queue *rxq;
+> +	unsigned long xa_idx;
+> +	unsigned int rxq_idx;
+> +
+> +	if (!binding)
+> +		return;
+> +
+> +	if (binding->list.next)
+> +		list_del(&binding->list);
+> +
+> +	xa_for_each(&binding->bound_rxq_list, xa_idx, rxq) {
+> +		if (rxq->binding == binding) {
+> +			/* We hold the rtnl_lock while binding/unbinding
+> +			 * dma-buf, so we can't race with another thread that
+> +			 * is also modifying this value. However, the driver
+> +			 * may read this config while it's creating its
+> +			 * rx-queues. WRITE_ONCE() here to match the
+> +			 * READ_ONCE() in the driver.
+> +			 */
+> +			WRITE_ONCE(rxq->binding, NULL);
+> +
+> +			rxq_idx = get_netdev_rx_queue_index(rxq);
+> +
+> +			netdev_restart_rx_queue(binding->dev, rxq_idx);
+
+Blindly restarting a queue when a dmabuf is heavy handed. If the dmabuf
+has no outstanding references (ie., no references in the RxQ), then no
+restart is needed.
+
+> +		}
+> +	}
+> +
+> +	xa_erase(&netdev_dmabuf_bindings, binding->id);
+> +
+> +	netdev_dmabuf_binding_put(binding);
+> +}
+> +
+> +int netdev_bind_dmabuf_to_queue(struct net_device *dev, u32 rxq_idx,
+> +				struct netdev_dmabuf_binding *binding)
+> +{
+> +	struct netdev_rx_queue *rxq;
+> +	u32 xa_idx;
+> +	int err;
+> +
+> +	rxq = __netif_get_rx_queue(dev, rxq_idx);
+> +
+> +	if (rxq->binding)
+> +		return -EEXIST;
+> +
+> +	err = xa_alloc(&binding->bound_rxq_list, &xa_idx, rxq, xa_limit_32b,
+> +		       GFP_KERNEL);
+> +	if (err)
+> +		return err;
+> +
+> +	/* We hold the rtnl_lock while binding/unbinding dma-buf, so we can't
+> +	 * race with another thread that is also modifying this value. However,
+> +	 * the driver may read this config while it's creating its * rx-queues.
+> +	 * WRITE_ONCE() here to match the READ_ONCE() in the driver.
+> +	 */
+> +	WRITE_ONCE(rxq->binding, binding);
+> +
+> +	err = netdev_restart_rx_queue(dev, rxq_idx);
+
+Similarly, here binding a dmabuf to a queue. I was expecting the dmabuf
+binding to add entries to the page pool for the queue. If the pool was
+previously empty, then maybe the queue needs to be "started" in the
+sense of creating with h/w or just pushing buffers into the queue and
+moving the pidx.
 
 
---3vS4BeAJHYDVIouR
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Fri, Dec 08, 2023 at 10:39:27AM -0300, N=EDcolas F. R. A. Prado wrote:
-> When walking directory trees, instead of looking for specific files and
-> running dirname to get the parent folder, traverse all folders and
-> ignore the ones not containing the desired files. This avoids the need
-> to call dirname inside the loop, which gives a big performance boost,
-> approximately halving run time: Running locally on a
-> mt8192-asurada-spherion, which reports 160 test cases, has gone from
-> 5.5s to 2.9s, while running remotely with an nfsroot has gone from
-> 13.5s to 5.5s.
-
-It's hard to be sure exactly since the runtime is a bit variable but it
-does look like this is running substantially faster on the test systems
-I have that were most affected by the slowdown, looks like approximately
-a quarter of the time, and all the tests that were present before seem
-to still be present.
-
-Tested-by: Mark Brown <broonie@kernel.org>
-
---3vS4BeAJHYDVIouR
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmVzUnQACgkQJNaLcl1U
-h9DmsQf+JFYIALfEl10juMrMljapsA3mjPr5arODy4QUeKno9st6AKVgLAlqb9eY
-APsPKDNooyd4qjQkkoprR7G1uWJhr3pRxa2QFy6lgc05JZFUpEQ3f1nW2ybn2IAT
-fRxXERccAExNnKbzaGyxGr/aHSwJpOh5odiFmhnrVLLtsFHTKkjYX80Ck+qKPbh0
-z7c1obwHDZsKi0CDlkb2zRENRZ23JNYvHFGBWNVS1KU8UqeO2tNCEQmpwIlalVpv
-y1i5X8VuhFYXeBRerPoY9p9/o0kZcHzLEoYvj3al5UebydN8YsJ/MvrliBgmOp1N
-jkDSq7DOAA+BOajRlL44GAUOsVr0zQ==
-=oWgR
------END PGP SIGNATURE-----
-
---3vS4BeAJHYDVIouR--
 
