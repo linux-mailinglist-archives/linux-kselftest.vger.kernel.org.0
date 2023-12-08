@@ -1,99 +1,90 @@
-Return-Path: <linux-kselftest+bounces-1440-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1441-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C65B80A8A4
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 17:21:22 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC35680AA2C
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 18:10:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BD0571C20909
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 16:21:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6D279B209FD
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 17:10:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFF1D374C6;
-	Fri,  8 Dec 2023 16:21:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A45138DE9;
+	Fri,  8 Dec 2023 17:10:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qGS4TmoY"
+	dkim=pass (2048-bit key) header.d=kylehuey.com header.i=@kylehuey.com header.b="BjINJGv8"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C94019A2
-	for <linux-kselftest@vger.kernel.org>; Fri,  8 Dec 2023 08:21:14 -0800 (PST)
-Received: by mail-pl1-x64a.google.com with SMTP id d9443c01a7336-1d0544c07c3so14808925ad.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 08 Dec 2023 08:21:14 -0800 (PST)
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20D791BD2
+	for <linux-kselftest@vger.kernel.org>; Fri,  8 Dec 2023 09:10:13 -0800 (PST)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-a1e7971db2aso262105366b.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 08 Dec 2023 09:10:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1702052473; x=1702657273; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Tn2js7FD63PZPF5/U2hMAUmYqMluIo8bm6m0EGWnrq8=;
-        b=qGS4TmoY9gPpC5+oOBgbzik/oBUuVsjqWviOS/YVQOdiL1QEWoKLdDXb7kbKeA+6xi
-         EcFpg1+JrRUdHhqp6YJ4Uf/yoBEn51RNjghzDZZPtaJNitLsyNHm/oIFngU7ItCtUUXy
-         3EtiqdBG+lL5nqKiwSOb2CATFZgqjYJr4FAlYIQFUWdEoGcpwWu4WICDfwiVaxB9gGTW
-         pWPnr2vE0cK26rYSMWJGH3B4jVFmdPP6Kqw1bLa9hiQ5asORfbSf1qHP2s4hpGTBEtA4
-         N9ejwWw/e3vjSSXmQg4gFPYWbd2xbppQyeoZzG7AT9KDQM/efhmYkOphgxV38eOAFPsr
-         87VQ==
+        d=kylehuey.com; s=google; t=1702055411; x=1702660211; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dT2ERtTh7TDwFF0uUcvQZyrq9v2hGvyHlT8iTFDcKgw=;
+        b=BjINJGv8Se2ZNM5dgM04aI3zaRiJt1oHH5Yo85O2Hy+QxkE3k0TcuACeNyqLHTNDv+
+         rqOjn0pRhxpXCKfupNTgxM9hylKbdnZY4buXBnRjPK6m89G2WVyjAO7qA+HErV5SGDI+
+         WT/A2YSF2DYnKhs4Qc1TbJ+XGIiWh8N3fIzrla0u/NiFZxAsgNs4KlRBfTCTx1B9Pp8u
+         uUYyjud9MJmLolgDYRHjDqIUrdZi6LnlcsZfNqa+od+fYEQlFSBXqG+vuLOhgF+3BOoQ
+         CeFCKexE7G+yD2Y5Z6vTjqHayxOgEv58NozqeThwyTzE+X/G/7WzuZOLTcxDdBpGC2Hl
+         0Aaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702052473; x=1702657273;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Tn2js7FD63PZPF5/U2hMAUmYqMluIo8bm6m0EGWnrq8=;
-        b=vjQYtNGOwagSBwTIY+FCu1AVyrIgrY8Ph+cGs7v2gdYfhgQ6/AObK0giIe++KbrBA4
-         w8XQVPQDPL521rKz8LppmafcbIL6HB6pZtACdXz9iUbUK9Jr6XV9SccXOPBJzlZ7L3xF
-         9o76haoyyIbfOme7Y4WGVVuha9lYF1aMtVEDF2QfbgkSTDr9lYdibh7ZGjqapODUEdcK
-         KBBQHhY4GBLaKWzmWihfKgXJup3bKxJjlMwOFGDCwHzPI7BJPyQg0WLbHVI66dQLdHdO
-         JSET7h0T+6h/8fYBuDiQ4sY+lM5Izx29JXuRxwlVgMw+RjiEjdQfnG917hBPRLvnYoP8
-         b3EQ==
-X-Gm-Message-State: AOJu0Yw+i2T0IGr77GjBEv4ZkRAyY+xMD5UZMvVNBq/0NE0UL9qPIYrt
-	c4sHmwXYKBJkTR2qk08FUTUO36M0Jzg=
-X-Google-Smtp-Source: AGHT+IFWQtVJ0r4eHGvVtUIeVYSgkmqQlzHfiGMIkd/nLI8qwI88lt5tQTOe7hJPAwvkVngG53ghJy8eGhM=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:e804:b0:1d0:c2be:3d9d with SMTP id
- u4-20020a170902e80400b001d0c2be3d9dmr3772plg.7.1702052473502; Fri, 08 Dec
- 2023 08:21:13 -0800 (PST)
-Date: Fri, 8 Dec 2023 08:21:12 -0800
-In-Reply-To: <20231208033505.2930064-1-shahuang@redhat.com>
+        d=1e100.net; s=20230601; t=1702055411; x=1702660211;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dT2ERtTh7TDwFF0uUcvQZyrq9v2hGvyHlT8iTFDcKgw=;
+        b=oT7Xy3O3xYugjlT+Vrr/ooxr8gy5VpXtHFd2kKABksX1HX1Zu7p3TlNo6fDjW7cKBc
+         p/wZSeu6OITf+y3gZZqE44eSqaUCvtRnY2xn77/wgfKdELCP0ERuKdsChhwEIgx4Kq9N
+         efJ0eUKBekZkfhVutaPOPyy97GSCpkIsU2JPrRdnI1yS6ZXmCVTl+iIEsQdbNpMi3jdQ
+         kWecTuv3TrUHaGSltGbYvKjZG6usJI5DRaUaUXEiyVuAqqPHNGOF+AQL0nKNov5Hmohl
+         HEtZ40zM4TF79tlG2LBojRH0R+caeCJF3knK7c3jFS2Rt+bIBgZi/3n5S27icUPT8SKj
+         vwUw==
+X-Gm-Message-State: AOJu0Yyjf5iwTEcNmvCExdXEhEifX0fUs0y8RJzECh6DKBxwVZkhnY2b
+	IrrPPTJ2dLW9OpOKrQdpw+WUcPVnNu8Rpe+7oWq61g==
+X-Google-Smtp-Source: AGHT+IHGvuTbhBrs1OTyitMrjad5wyb6Xlbd0k3C4Ub46dJTi1an7MU4lzJ7bUx8DWzxrGPZfWz9yBhELKwMZoI01To=
+X-Received: by 2002:a17:907:741:b0:a1c:fba4:b9ab with SMTP id
+ xc1-20020a170907074100b00a1cfba4b9abmr210269ejb.95.1702055411477; Fri, 08 Dec
+ 2023 09:10:11 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20231208033505.2930064-1-shahuang@redhat.com>
-Message-ID: <ZXNCd5UKYS_90xAD@google.com>
-Subject: Re: [PATCH v1] KVM: selftests: Fix Assertion on non-x86_64 platforms
-From: Sean Christopherson <seanjc@google.com>
-To: Shaoqin Huang <shahuang@redhat.com>
-Cc: kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+References: <20231207163458.5554-1-khuey@kylehuey.com> <20231207163458.5554-4-khuey@kylehuey.com>
+ <CAEf4Bzbt1abnfj2w6Hmp2w8SqVkQiCW=SimY6ss_Jp_325QyoA@mail.gmail.com>
+ <CANpmjNOLojXk64jvwD+m19B+FsR5MuBwWKv95uakq-Dp1_AGXA@mail.gmail.com>
+ <CAP045AoeVP=n5K+0jt2ddBspif7kx4hzOdBM86CuxNGRCgx4VA@mail.gmail.com>
+ <CAP045ArdMgodyOTs_m6-99FxrqUJzRjDth8epkaa69YQtNeSMw@mail.gmail.com> <CANpmjNMehFp7dM7QhR7AQgp33i-a0s0R-J9ZPweyroY45eCizQ@mail.gmail.com>
+In-Reply-To: <CANpmjNMehFp7dM7QhR7AQgp33i-a0s0R-J9ZPweyroY45eCizQ@mail.gmail.com>
+From: Kyle Huey <me@kylehuey.com>
+Date: Fri, 8 Dec 2023 09:09:59 -0800
+Message-ID: <CAP045AoFHiMjCkopXo8HQZTpNWz8fE2LBt+vPUgnvUpdR9STfQ@mail.gmail.com>
+Subject: Re: [PATCH v2 3/3] selftest/bpf: Test a perf bpf program that
+ suppresses side effects.
+To: Marco Elver <elver@google.com>
+Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, Kyle Huey <khuey@kylehuey.com>, 
+	linux-kernel@vger.kernel.org, Jiri Olsa <jolsa@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
+	"Robert O'Callahan" <robert@ocallahan.org>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Mykola Lysenko <mykolal@fb.com>, 
+	Shuah Khan <shuah@kernel.org>, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Dec 07, 2023, Shaoqin Huang wrote:
-> When running the set_memory_region_test on arm64 platform, it causes the
-> below assert:
-> 
-> ==== Test Assertion Failure ====
->   set_memory_region_test.c:355: r && errno == EINVAL
->   pid=40695 tid=40695 errno=0 - Success
->      1	0x0000000000401baf: test_invalid_memory_region_flags at set_memory_region_test.c:355
->      2	 (inlined by) main at set_memory_region_test.c:541
->      3	0x0000ffff951c879b: ?? ??:0
->      4	0x0000ffff951c886b: ?? ??:0
->      5	0x0000000000401caf: _start at ??:?
->   KVM_SET_USER_MEMORY_REGION should have failed on v2 only flag 0x2
-> 
-> This is because the arm64 platform also support the KVM_MEM_READONLY flag, but
-> the current implementation add it into the supportd_flags only on x86_64
-> platform, so this causes assert on other platform which also support the
-> KVM_MEM_READONLY flag.
-> 
-> Fix it by using the __KVM_HAVE_READONLY_MEM macro to detect if the
-> current platform support the KVM_MEM_READONLY, thus fix this problem on
-> all other platform which support KVM_MEM_READONLY.
-> 
-> Fixes: 5d74316466f4 ("KVM: selftests: Add a memory region subtest to validate invalid flags")
-> Signed-off-by: Shaoqin Huang <shahuang@redhat.com>
-> ---
+On Fri, Dec 8, 2023 at 12:07=E2=80=AFAM Marco Elver <elver@google.com> wrot=
+e:
+> I think that's easy to fix by just defining TRAP_PERF yourself
 
-/facepalm
+Yeah that would work here.
 
-Reviewed-by: Sean Christopherson <seanjc@google.com>
+- Kyle
 
