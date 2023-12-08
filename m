@@ -1,172 +1,169 @@
-Return-Path: <linux-kselftest+bounces-1420-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1421-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43CDC809F5D
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 10:30:50 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95D2780A047
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 11:09:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7530B1C20A9C
-	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 09:30:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4B64C28197E
+	for <lists+linux-kselftest@lfdr.de>; Fri,  8 Dec 2023 10:09:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63F92125DB;
-	Fri,  8 Dec 2023 09:30:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4330134DC;
+	Fri,  8 Dec 2023 10:09:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hUUtBuQO"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F351716;
-	Fri,  8 Dec 2023 01:30:39 -0800 (PST)
-Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.53])
-	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Smm472DZRz1Q6XR;
-	Fri,  8 Dec 2023 17:26:47 +0800 (CST)
-Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
- (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Fri, 8 Dec
- 2023 17:30:36 +0800
-Subject: Re: [net-next v1 09/16] page_pool: device memory support
-To: Mina Almasry <almasrymina@google.com>, Shailend Chand
-	<shailend@google.com>, <netdev@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<linux-arch@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<bpf@vger.kernel.org>, <linux-media@vger.kernel.org>,
-	<dri-devel@lists.freedesktop.org>
-CC: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
-	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>, Jeroen de Borst
-	<jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, Jesper
- Dangaard Brouer <hawk@kernel.org>, Ilias Apalodimas
-	<ilias.apalodimas@linaro.org>, Arnd Bergmann <arnd@arndb.de>, David Ahern
-	<dsahern@kernel.org>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
-	=?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>, Harshitha
- Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeelb@google.com>
-References: <20231208005250.2910004-1-almasrymina@google.com>
- <20231208005250.2910004-10-almasrymina@google.com>
-From: Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <32211cbf-3a4e-8a86-6214-4304ddb18a98@huawei.com>
-Date: Fri, 8 Dec 2023 17:30:36 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC73B171F
+	for <linux-kselftest@vger.kernel.org>; Fri,  8 Dec 2023 02:09:47 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-db3ef4c7094so2595587276.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 08 Dec 2023 02:09:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1702030187; x=1702634987; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ZNJdOgnTD3YcBum6U88iX7U/INKHt0AizM4EWV5IGP0=;
+        b=hUUtBuQOKOmP6kVPiF/y4Lic6SIJId/bCnuMh4mlTKWIlveovSMHMXFtl82AO4FrZq
+         7kTF4HonlEKtCovssG1YVxjnPpxFo9FC/+TphzjZrEIclglmb7mdouW/3nqUcdPNcPN4
+         nqPDVhqs+TizRCawG0XfQwC/MJ7++sYP6l4crjEElugjFu7b7+YSMFHMPQiqkXl11GAq
+         /Bj5YIaNGweP5VTQ0qEilRF20lMUPZ0PmgQV+ffFsj1pn8wVNLWcLFNDF3DFWvh0g8uy
+         B4JXulVPZNZfofNsS/1ZnJmmFWp8cet98tcdHwOOC05T8NHRyPGY/SVFFr26Wq5tcc/1
+         zwfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702030187; x=1702634987;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZNJdOgnTD3YcBum6U88iX7U/INKHt0AizM4EWV5IGP0=;
+        b=BVudcCvpdXGkvzwJden5LZpc6dq+sHrX41CGpzpTt0zmQmVF42FRFaBSBZoOHD/3nu
+         zxA1dNVDikHGTlOpMrcRgQd6rs73JaU+Rvfh/gITAnA6PH6RwKJERGE92a9zCFumqD56
+         o1kESdYp3Vggqk3LlOYNSpplj/cpUX1RYVNiOm3ZW/w7yEnsU6lkYwaWV1UMcmARcd6i
+         APaK2t7vSiqCo3DZYvPSCCRDFPx/E/cyIt3EyaSI6UdgqPdwHeBUaMok4ErIOGYQqHAh
+         gcqOTHjh3ZAZyY8EItXfkHYV0CJWlA2QosBq1cR3iEg7Qb+nC4fO3J0NgHB+44x4Wox/
+         RfKQ==
+X-Gm-Message-State: AOJu0YwyTGFmoiHcyOfO/fMQe9HiZDzZ6+0yD0uFqb/Q/iAUlYBEL432
+	kBwvCwmB44c8eQfwVLRopPuu5LXiGuBgsQ==
+X-Google-Smtp-Source: AGHT+IHTKUtelEN9ry7G8JO0oWDMjRg+GteO8sBFE+t84Xa6DtfewAHNHnUwLtzaRV+ZcTprCzoNZmTRSah3qA==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a25:d150:0:b0:db5:347d:44b with SMTP id
+ i77-20020a25d150000000b00db5347d044bmr40829ybg.11.1702030187085; Fri, 08 Dec
+ 2023 02:09:47 -0800 (PST)
+Date: Fri, 08 Dec 2023 18:09:28 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-In-Reply-To: <20231208005250.2910004-10-almasrymina@google.com>
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAFjrcmUC/03MSw6CMBSF4a2QO7amD0B05D4MMbRcyo1CTQuNh
+ rB3a0cO/5OTb4OAnjDApdjAY6RAbk4hDwWYsZstMupTg+RS8ZNo2GOdabnrNbBOi7MpcSib3kD
+ 6vzwO9M7WrU09Ulic/2Q6it+aFSF59adEwTirVcVV3StthLpa5+wTj8ZN0O77/gUe59CsowAAA A==
+X-Mailer: b4 0.13-dev-099c9
+Message-ID: <20231208-kunit_bus-v2-0-e95905d9b325@google.com>
+Subject: [PATCH v2 0/4] kunit: Add helpers for creating test-managed devices
+From: davidgow@google.com
+To: Rae Moar <rmoar@google.com>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Matti Vaittinen <mazziesaccount@gmail.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Kees Cook <keescook@chromium.org>, 
+	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, Maxime Ripard <mripard@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-hardening@vger.kernel.org, linux-sound@vger.kernel.org, 
+	David Gow <davidgow@google.com>
 Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
 
-On 2023/12/8 8:52, Mina Almasry wrote:
-> Overload the LSB of struct page* to indicate that it's a page_pool_iov.
-> 
-> Refactor mm calls on struct page* into helpers, and add page_pool_iov
-> handling on those helpers. Modify callers of these mm APIs with calls to
-> these helpers instead.
-> 
-> In areas where struct page* is dereferenced, add a check for special
-> handling of page_pool_iov.
-> 
-> Signed-off-by: Mina Almasry <almasrymina@google.com>
-> 
-> ---
-> 
-> v1:
-> - Disable fragmentation support for iov properly.
-> - fix napi_pp_put_page() path (Yunsheng).
-> 
-> ---
->  include/net/page_pool/helpers.h | 78 ++++++++++++++++++++++++++++++++-
->  net/core/page_pool.c            | 67 ++++++++++++++++++++--------
->  net/core/skbuff.c               | 28 +++++++-----
->  3 files changed, 141 insertions(+), 32 deletions(-)
-> 
-> diff --git a/include/net/page_pool/helpers.h b/include/net/page_pool/helpers.h
-> index 00197f14aa87..2d4e0a2c5620 100644
-> --- a/include/net/page_pool/helpers.h
-> +++ b/include/net/page_pool/helpers.h
-> @@ -154,6 +154,64 @@ static inline struct page_pool_iov *page_to_page_pool_iov(struct page *page)
->  	return NULL;
->  }
->  
-> +static inline int page_pool_page_ref_count(struct page *page)
-> +{
-> +	if (page_is_page_pool_iov(page))
+KUnit tests often need to provide a struct device, and thus far have
+mostly been using root_device_register() or platform devices to create
+a 'fake device' for use with, e.g., code which uses device-managed
+resources. This has several disadvantages, including not being designed
+for test use, scattering files in sysfs, and requiring manual teardown
+on test exit, which may not always be possible in case of failure.
 
-As mentioned before, it seems we need to have the above checking every
-time we need to do some per-page handling in page_pool core, is there
-a plan in your mind how to remove those kind of checking in the future?
+Instead, introduce a set of helper functions which allow devices
+(internally a struct kunit_device) to be created and managed by KUnit --
+i.e., they will be automatically unregistered on test exit. These
+helpers can either use a user-provided struct device_driver, or have one
+automatically created and managed by KUnit. In both cases, the device
+lives on a new kunit_bus.
 
-Even though a static_branch check is added in page_is_page_pool_iov(), it
-does not make much sense that a core has tow different 'struct' for its
-most basic data.
+This is a follow-up to a previous proposal here:
+https://lore.kernel.org/linux-kselftest/20230325043104.3761770-1-davidgow@google.com/
 
-IMHO, the ppiov for dmabuf is forced fitting into page_pool without much
-design consideration at this point.
+(The kunit_defer() function in the first patch there has since been
+merged as the 'deferred actions' feature.)
 
-> +		return page_pool_iov_refcount(page_to_page_pool_iov(page));
-> +
-> +	return page_ref_count(page);
-> +}
-> +
+My intention is to take this whole series in via the kselftest/kunit
+branch, but I'm equally okay with splitting up the later patches which
+use this to go via the various subsystem trees in case there are merge
+conflicts.
 
-...
+I'd really appreciate any extra scrutiny that can be given to this;
+particularly around the device refcounts and whether we can guarantee
+that the device will be released at the correct point in the test
+cleanup. I've seen a few crashes in kunit_cleanup, but only on some
+already flaky/fragile UML/clang/alltests setups, which seem to go away
+if I remove the devm_add_action() call (or if I enable any debugging
+features / symbols, annoyingly).
 
-> diff --git a/net/core/skbuff.c b/net/core/skbuff.c
-> index b157efea5dea..07f802f1adf1 100644
-> --- a/net/core/skbuff.c
-> +++ b/net/core/skbuff.c
-> @@ -896,19 +896,23 @@ bool napi_pp_put_page(struct page *page, bool napi_safe)
->  	bool allow_direct = false;
->  	struct page_pool *pp;
->  
-> -	page = compound_head(page);
-> -
-> -	/* page->pp_magic is OR'ed with PP_SIGNATURE after the allocation
-> -	 * in order to preserve any existing bits, such as bit 0 for the
-> -	 * head page of compound page and bit 1 for pfmemalloc page, so
-> -	 * mask those bits for freeing side when doing below checking,
-> -	 * and page_is_pfmemalloc() is checked in __page_pool_put_page()
-> -	 * to avoid recycling the pfmemalloc page.
-> -	 */
-> -	if (unlikely((page->pp_magic & ~0x3UL) != PP_SIGNATURE))
-> -		return false;
-> +	if (!page_is_page_pool_iov(page)) {
+Cheers,
+-- David
 
-For now, the above may work for the the rx part as it seems that you are
-only enabling rx for dmabuf for now.
+Signed-off-by: David Gow <davidgow@google.com>
+---
+Changes in v2:
+- Simplify device/driver/bus matching, removing the no-longer-required
+  kunit_bus_match function. (Thanks, Greg)
+- The return values are both more consistent (kunit_device_register now
+  returns an explicit error pointer, rather than failing the test), and
+  better documented.
+- Add some basic documentation to the implementations as well as the
+  headers. The documentation in the headers is still more complete, and
+  is now properly compiled into the HTML documentation (under
+  dev-tools/kunit/api/resources.html). (Thanks, Matti)
+- Moved the internal-only kunit_bus_init() function to a private header,
+  lib/kunit/device-impl.h to avoid polluting the public headers, and
+  match other internal-only headers. (Thanks, Greg)
+- Alphabetise KUnit includes in other test modules. (Thanks, Amadeusz.)
+- Several code cleanups, particularly around error handling and
+  allocation. (Thanks Greg, Maxime)
+- Several const-correctness and casting improvements. (Thanks, Greg)
+- Added a new test to verify KUnit cleanup triggers device cleanup.
+  (Thanks, Maxime).
+- Improved the user-specified device test to verify that probe/remove
+  hooks are called correctly. (Thanks, Maxime).
+- The overflow test no-longer needlessly calls
+  kunit_device_unregister().
+- Several other minor cleanups and documentation improvements, which
+  hopefully make this a bit clearer and more robust.
+- Link to v1: https://lore.kernel.org/r/20231205-kunit_bus-v1-0-635036d3bc13@google.com
 
-What is the plan to enable tx for dmabuf? If it is also intergrated into
-page_pool? There was a attempt to enable page_pool for tx, Eric seemed to
-have some comment about this:
-https://lkml.kernel.org/netdev/2cf4b672-d7dc-db3d-ce90-15b4e91c4005@huawei.com/T/#mb6ab62dc22f38ec621d516259c56dd66353e24a2
+---
+David Gow (4):
+      kunit: Add APIs for managing devices
+      fortify: test: Use kunit_device
+      overflow: Replace fake root_device with kunit_device
+      ASoC: topology: Replace fake root_device with kunit_device in tests
 
-If tx is not intergrated into page_pool, do we need to create a new layer for
-the tx dmabuf?
+ Documentation/dev-tools/kunit/api/resource.rst |   9 ++
+ Documentation/dev-tools/kunit/usage.rst        |  50 +++++++
+ include/kunit/device.h                         |  80 +++++++++++
+ lib/fortify_kunit.c                            |   5 +-
+ lib/kunit/Makefile                             |   3 +-
+ lib/kunit/device.c                             | 181 +++++++++++++++++++++++++
+ lib/kunit/kunit-test.c                         | 134 +++++++++++++++++-
+ lib/kunit/test.c                               |   3 +
+ lib/overflow_kunit.c                           |   5 +-
+ sound/soc/soc-topology-test.c                  |  10 +-
+ 10 files changed, 465 insertions(+), 15 deletions(-)
+---
+base-commit: c8613be119892ccceffbc550b9b9d7d68b995c9e
+change-id: 20230718-kunit_bus-ab19c4ef48dc
 
-> +		page = compound_head(page);
-> +
-> +		/* page->pp_magic is OR'ed with PP_SIGNATURE after the allocation
-> +		 * in order to preserve any existing bits, such as bit 0 for the
-> +		 * head page of compound page and bit 1 for pfmemalloc page, so
-> +		 * mask those bits for freeing side when doing below checking,
-> +		 * and page_is_pfmemalloc() is checked in __page_pool_put_page()
-> +		 * to avoid recycling the pfmemalloc page.
-> +		 */
-> +		if (unlikely((page->pp_magic & ~0x3UL) != PP_SIGNATURE))
-> +			return false;
->  
-> -	pp = page->pp;
-> +		pp = page->pp;
-> +	} else {
-> +		pp = page_to_page_pool_iov(page)->pp;
-> +	}
->  
->  	/* Allow direct recycle if we have reasons to believe that we are
->  	 * in the same context as the consumer would run, so there's
-> 
+Best regards,
+-- 
+David Gow <davidgow@google.com>
+
 
