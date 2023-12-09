@@ -1,268 +1,304 @@
-Return-Path: <linux-kselftest+bounces-1470-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1471-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D230480B1A9
-	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Dec 2023 03:05:33 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E02880B1DB
+	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Dec 2023 04:15:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5E9941F21347
-	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Dec 2023 02:05:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A3D681F211B9
+	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Dec 2023 03:15:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6706B7F8;
-	Sat,  9 Dec 2023 02:05:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 441D81107;
+	Sat,  9 Dec 2023 03:15:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="B/NPVYMN"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="pEoza8wV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (mail-bn8nam04on2064.outbound.protection.outlook.com [40.107.100.64])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A57F1;
-	Fri,  8 Dec 2023 18:05:24 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NZ4JXAnew+t4xSTl4QQw6E1Zv/psyqI8jOEWr9nHsYHrPkBGcYUeXF06sAvPL/ZeEOwMwTAiRhqwnNu+HzpH+RmA9ZTkg6h8/eZfzPI1wI0ZLJJOy2YEbmdKsAw1rbfe3kirFq9tigeIZJJKMW5nBNaFMPHrlHITr8Jf7qYTYNudDFcswiF7AuNLPTLwdsN4nvlESX1B1ncH5xxj2LT4gdHunF25NKsvLr3ayCt9knA8ZTzzMEHbHmcw/Jp3YjZP2m0x9FYof1dvEu1b9KOY1Sb21iAqY7DsBxdCpCHyeuBo4Lma5a1a46jPF60/j8zE8/QX1DZovIPxW4H7v13CCA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ujjjlGD0cy/Ht4ZbY31fgTy0harHUzCzeS7qoYwqjTQ=;
- b=F2JUyYYpJvGvcCwI5mv0gdWW1vNWJCkIgqeV3GYOoDznyKQAIqnpEwkYoYhB03WUO9cDxq1YTr0wVzPV7Bus7s3Ca6zoTOyrmUJGVfGFhW4IP50x0M/DOc9yvezu7HPVClfgDEB0/yA4A3Ss2Zqx7lrxhLGSB417Im8XEtCv86iU5/aU07hIDa0KQwrslXqki3NHeXFJf4ruDSI7+bGOfoQC1RIJDUrKrfZ9ufeU+Iv/gcqtnfcUk39Ov5+Sq5ARZuT/MBL5vwAKVMsWuPsOQDRsrn8e/a1ciK9qYkbrfznzcobtAEKZyh7S6kedDTgR/pSLnlOHC1QMIct53PD0Rg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=linux-foundation.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ujjjlGD0cy/Ht4ZbY31fgTy0harHUzCzeS7qoYwqjTQ=;
- b=B/NPVYMNt1jJx1TAd0iaB27TsFnlG/NqpyvTcB+8gHpc61xAFsJPC9OGvgF90vEWWgNvGTbCMVwzpb9tNOwlLHksCB3ONflRA6IYC/orJkfKlKwJr6ttAeQNtoMehSP3sSH05MreMs7f3CxM2ssL4rvLqvgpT6beVOyGF1IdWOhGYpwayd3aiWSFvUkemEVHb4BG0IyhSVlRgdCxHz3iY4mTfcfhbVGnXuNVDQXJzy5obwL0N4DVdyCFhUiZVoHUUO6UiREO+hRLzM9fsHKNt8feyALhp4FMQ1pUZhsF2lJVhfmVcyRzLMkowhAMb+3p/3T4zr/1geSxlDuwaJ4UsQ==
-Received: from CY5PR15CA0199.namprd15.prod.outlook.com (2603:10b6:930:82::16)
- by SJ0PR12MB5610.namprd12.prod.outlook.com (2603:10b6:a03:423::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7068.29; Sat, 9 Dec
- 2023 02:05:18 +0000
-Received: from CY4PEPF0000EE3B.namprd03.prod.outlook.com
- (2603:10b6:930:82:cafe::89) by CY5PR15CA0199.outlook.office365.com
- (2603:10b6:930:82::16) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7068.28 via Frontend
- Transport; Sat, 9 Dec 2023 02:05:18 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- CY4PEPF0000EE3B.mail.protection.outlook.com (10.167.242.15) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7091.18 via Frontend Transport; Sat, 9 Dec 2023 02:05:17 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 8 Dec 2023
- 18:05:08 -0800
-Received: from [10.110.48.28] (10.126.231.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 8 Dec 2023
- 18:05:07 -0800
-Message-ID: <330553d0-4888-4b55-9e9f-a168e65e1ffa@nvidia.com>
-Date: Fri, 8 Dec 2023 18:05:02 -0800
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B54410E7
+	for <linux-kselftest@vger.kernel.org>; Fri,  8 Dec 2023 19:15:26 -0800 (PST)
+Received: by mail-pg1-x533.google.com with SMTP id 41be03b00d2f7-53fbf2c42bfso2237117a12.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 08 Dec 2023 19:15:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1702091726; x=1702696526; darn=vger.kernel.org;
+        h=mime-version:message-id:date:in-reply-to:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=2b+6n+ULng3a579Szt1kcCIxHSrZ+D7LmH/Z+vqyyTE=;
+        b=pEoza8wVnM6tjIXWzzXHyURLxumLQKhtVzfubbHMHLXafo2aNEaDG1BKQ6qKIcjqDs
+         PBizxwWF777KEHW4PdK2suQqyYH+3EsToGtXPnPDKV40E4CCvzzmTGmT7Ysgev9/RbKz
+         j3mnjTIxzaK46S1EEvPtDI3j7Y/N6siH5PWGzL8CHn3ocgcD57KfSfja+wD1nyiyjeCP
+         ZzfLXRBoE+yBTbAY6njOwXDki228RkGszl44Upz9uCcBaPbLU8CHlOnQeavbIHx84lkj
+         1V8tljMWPcVkl4GVwI7X1g3OP9IDEckBY0lFz+PMH+xqYh3x9zhN6a7eR4sAgfUtpc0O
+         fCfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702091726; x=1702696526;
+        h=mime-version:message-id:date:in-reply-to:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2b+6n+ULng3a579Szt1kcCIxHSrZ+D7LmH/Z+vqyyTE=;
+        b=WA0WhIhZd6qudhU88lRxbD4ODEcJ79j0c4TgnQelOvkGST5sfh+KOBu2qfNIo8coSs
+         0+0tzrzv8m3IvXWvsmKz9z0DPz+H8As3fRBBJ23pyeETDaf4Vi6lpLVgUYjupu+6v4Pk
+         adxmdzu4vI5OR8ywDZ/GX2A+zl4ympcm89kjApEqGKV4BvJ4wFjOlXeJ2tsppdVW73h0
+         M3lnQ2qaOO57lex1Wwl9FIeLb80wT0kCYAkjMUbaN77Zj4pvEEOpl4FRXldtTxdsU7VK
+         mhxc6uJRtg0XIz42IyCJNpMR2DfqkOxINTmMk9k8kX2MoxyX3r+oLwKRUPQHFAxnm0eu
+         JfJQ==
+X-Gm-Message-State: AOJu0YxM4k3PNTPdQyz2Z+svAabv+GaOx4nWdoncuSWAXYujVim4mGz4
+	RIXUGsQ1lOZNXz4gQrb0o+IWQw==
+X-Google-Smtp-Source: AGHT+IEaUnkmb6VMOC1ZmV7RhknH3M28z+3B6TqVq+yqgnnJz1v02mq63uTBtrSHn4oV4teABtH6uA==
+X-Received: by 2002:a05:6a20:f390:b0:190:6920:e14b with SMTP id qr16-20020a056a20f39000b001906920e14bmr1018200pzb.122.1702091725612;
+        Fri, 08 Dec 2023 19:15:25 -0800 (PST)
+Received: from localhost ([2804:14d:7e39:8470:4c58:a216:27d2:2ff])
+        by smtp.gmail.com with ESMTPSA id x22-20020a056a00271600b006be5af77f06sm2330693pfv.2.2023.12.08.19.15.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 08 Dec 2023 19:15:25 -0800 (PST)
+References: <20231122-arm64-gcs-v7-0-201c483bd775@kernel.org>
+ <20231122-arm64-gcs-v7-24-201c483bd775@kernel.org>
+User-agent: mu4e 1.10.8; emacs 29.1
+From: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon
+ <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Andrew Morton
+ <akpm@linux-foundation.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton
+ <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, Suzuki K
+ Poulose <suzuki.poulose@arm.com>, Arnd Bergmann <arnd@arndb.de>, Oleg
+ Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, Kees
+ Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>, "Rick P.
+ Edgecombe" <rick.p.edgecombe@intel.com>, Deepak Gupta
+ <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>, Szabolcs Nagy
+ <Szabolcs.Nagy@arm.com>, "H.J. Lu" <hjl.tools@gmail.com>, Paul Walmsley
+ <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
+ <aou@eecs.berkeley.edu>, Florian Weimer <fweimer@redhat.com>, Christian
+ Brauner <brauner@kernel.org>, linux-arm-kernel@lists.infradead.org,
+ linux-doc@vger.kernel.org, kvmarm@lists.linux.dev,
+ linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v7 24/39] arm64/signal: Set up and restore the GCS
+ context for signal handlers
+In-reply-to: <20231122-arm64-gcs-v7-24-201c483bd775@kernel.org>
+Date: Sat, 09 Dec 2023 00:15:22 -0300
+Message-ID: <8734wcgj79.fsf@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Revert "selftests: error out if kernel header files are
- not yet built"
-Content-Language: en-US
-To: Andrew Morton <akpm@linux-foundation.org>, Peter Zijlstra
-	<peterz@infradead.org>
-CC: David Hildenbrand <david@redhat.com>, Peter Xu <peterx@redhat.com>, "Shuah
- Khan" <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
-	<linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>, LKML
-	<linux-kernel@vger.kernel.org>, Anders Roxell <anders.roxell@linaro.org>,
-	Muhammad Usama Anjum <usama.anjum@collabora.com>, Jonathan Corbet
-	<corbet@lwn.net>
-References: <20231209020144.244759-1-jhubbard@nvidia.com>
-From: John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <20231209020144.244759-1-jhubbard@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY4PEPF0000EE3B:EE_|SJ0PR12MB5610:EE_
-X-MS-Office365-Filtering-Correlation-Id: b28f65ef-4984-465a-0614-08dbf85b4a9d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	ucnv7XI6CyH9eBVYdbiG2j7D/S145tbHq/ff/acNGWVAbzDQuSZCJyLuWfYwa6y0vmol6yEO3tXED0PUqX633jFp8Wi2k29gyZGqfadzGh6w1eflaP52n6cDnsYM8ngQRhVaK1Sj75UArVMap9PE1ZFfVhE4PiGAc44bja7bIH9A0D8aiqv+Lgf00wg/VoshBfl8WNweondSBo4kFhPJZsbnKzzVBSpXayVsR4H4iQR3rq6yO761PsYCpevDeYqLR7YPjMRFOmwpG4Qx69djN74zBAFQiddkI7QxF2t+9C0w4UQB3vqESZp0qrwWkkVHRXIRwN95DTDxB+i55bn1W4WyA1hRZ+Te/3aHwBL4x/I0BEdvHfe5mgcIAXuFP1VT33T1h4RA7gV+Mh1Nwaz5F4U1XHUhN6apat7ryI2VMEO3mrIaQmPTGDxoDBoQJS5EnCkK7m/eUQx0nB3BTFMr+vb/dELxVwGVmjYbMKuUW6KIEeHNBuuesxDEX3g7CGG88d9xEh2u+ReSlSWDaiJd1L8k72Smkajx9NDgwCuXJrrxZq5JY15J4EJKH2cUQX50hz++BZivwXiaOkRhKfueo4QVukHnp+L6PRXHQA7e4Y1UNKJvI/U1sIyBTTApF1kLThGhKwR94zv2D5nzFvECLHzYAvcDzJx5hAKneB5QxE+oCG+U82wJtikOCKLCUZG5I/s05ECWuouhQNSZJgL8ijtb7if1qwWj6yU0hdo8jHmtj0babxD0Wt8Eierm2Q8B5xcku9ajUGAOckIWDgSX00kPtgePTguOt5RYw6gJHp+htgklUAGnCkXPGRR8JRiT
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230031)(4636009)(396003)(376002)(346002)(136003)(39860400002)(230922051799003)(451199024)(64100799003)(1800799012)(82310400011)(186009)(40470700004)(36840700001)(46966006)(110136005)(70586007)(70206006)(54906003)(53546011)(41300700001)(6666004)(16526019)(2616005)(36756003)(426003)(336012)(26005)(86362001)(31696002)(82740400003)(356005)(7636003)(47076005)(83380400001)(36860700001)(966005)(478600001)(8936002)(8676002)(4326008)(2906002)(7416002)(5660300002)(40480700001)(16576012)(40460700003)(316002)(31686004)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2023 02:05:17.9636
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b28f65ef-4984-465a-0614-08dbf85b4a9d
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CY4PEPF0000EE3B.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5610
-
-...and, somehow I failed to Cc Peter Z. Doing that now.
+Content-Type: text/plain
 
 
-thanks,
-John Hubbard
-NVIDIA
+Mark Brown <broonie@kernel.org> writes:
 
-On 12/8/23 18:01, John Hubbard wrote:
-> This reverts commit 9fc96c7c19df ("selftests: error out if kernel header
-> files are not yet built").
-> 
-> It turns out that requiring the kernel headers to be built as a
-> prerequisite to building selftests, does not work in many cases. For
-> example, Peter Zijlstra writes:
-> 
-> "My biggest beef with the whole thing is that I simply do not want to use
-> 'make headers', it doesn't work for me.
-> 
-> I have a ton of output directories and I don't care to build tools into
-> the output dirs, in fact some of them flat out refuse to work that way
-> (bpf comes to mind)." [1]
-> 
-> Therefore, stop erroring out on the selftests build. Additional patches
-> will be required in order to change over to not requiring the kernel
-> headers.
-> 
-> [1] https://lore.kernel.org/20231208221007.GO28727@noisy.programming.kicks-ass.net
-> 
-> Cc: Anders Roxell <anders.roxell@linaro.org>
-> Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> Cc: David Hildenbrand <david@redhat.com>
-> Cc: Peter Xu <peterx@redhat.com>
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Signed-off-by: John Hubbard <jhubbard@nvidia.com>
-> ---
->   tools/testing/selftests/Makefile | 21 +----------------
->   tools/testing/selftests/lib.mk   | 40 +++-----------------------------
->   2 files changed, 4 insertions(+), 57 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-> index 3b2061d1c1a5..8247a7c69c36 100644
-> --- a/tools/testing/selftests/Makefile
-> +++ b/tools/testing/selftests/Makefile
-> @@ -155,12 +155,10 @@ ifneq ($(KBUILD_OUTPUT),)
->     abs_objtree := $(realpath $(abs_objtree))
->     BUILD := $(abs_objtree)/kselftest
->     KHDR_INCLUDES := -isystem ${abs_objtree}/usr/include
-> -  KHDR_DIR := ${abs_objtree}/usr/include
->   else
->     BUILD := $(CURDIR)
->     abs_srctree := $(shell cd $(top_srcdir) && pwd)
->     KHDR_INCLUDES := -isystem ${abs_srctree}/usr/include
-> -  KHDR_DIR := ${abs_srctree}/usr/include
->     DEFAULT_INSTALL_HDR_PATH := 1
->   endif
->   
-> @@ -174,7 +172,7 @@ export KHDR_INCLUDES
->   # all isn't the first target in the file.
->   .DEFAULT_GOAL := all
->   
-> -all: kernel_header_files
-> +all:
->   	@ret=1;							\
->   	for TARGET in $(TARGETS); do				\
->   		BUILD_TARGET=$$BUILD/$$TARGET;			\
-> @@ -185,23 +183,6 @@ all: kernel_header_files
->   		ret=$$((ret * $$?));				\
->   	done; exit $$ret;
->   
-> -kernel_header_files:
-> -	@ls $(KHDR_DIR)/linux/*.h >/dev/null 2>/dev/null;                          \
-> -	if [ $$? -ne 0 ]; then                                                     \
-> -            RED='\033[1;31m';                                                  \
-> -            NOCOLOR='\033[0m';                                                 \
-> -            echo;                                                              \
-> -            echo -e "$${RED}error$${NOCOLOR}: missing kernel header files.";   \
-> -            echo "Please run this and try again:";                             \
-> -            echo;                                                              \
-> -            echo "    cd $(top_srcdir)";                                       \
-> -            echo "    make headers";                                           \
-> -            echo;                                                              \
-> -	    exit 1;                                                                \
-> -	fi
-> -
-> -.PHONY: kernel_header_files
-> -
->   run_tests: all
->   	@for TARGET in $(TARGETS); do \
->   		BUILD_TARGET=$$BUILD/$$TARGET;	\
-> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-> index 118e0964bda9..aa646e0661f3 100644
-> --- a/tools/testing/selftests/lib.mk
-> +++ b/tools/testing/selftests/lib.mk
-> @@ -44,26 +44,10 @@ endif
->   selfdir = $(realpath $(dir $(filter %/lib.mk,$(MAKEFILE_LIST))))
->   top_srcdir = $(selfdir)/../../..
->   
-> -ifeq ("$(origin O)", "command line")
-> -  KBUILD_OUTPUT := $(O)
-> +ifeq ($(KHDR_INCLUDES),)
-> +KHDR_INCLUDES := -isystem $(top_srcdir)/usr/include
->   endif
->   
-> -ifneq ($(KBUILD_OUTPUT),)
-> -  # Make's built-in functions such as $(abspath ...), $(realpath ...) cannot
-> -  # expand a shell special character '~'. We use a somewhat tedious way here.
-> -  abs_objtree := $(shell cd $(top_srcdir) && mkdir -p $(KBUILD_OUTPUT) && cd $(KBUILD_OUTPUT) && pwd)
-> -  $(if $(abs_objtree),, \
-> -    $(error failed to create output directory "$(KBUILD_OUTPUT)"))
-> -  # $(realpath ...) resolves symlinks
-> -  abs_objtree := $(realpath $(abs_objtree))
-> -  KHDR_DIR := ${abs_objtree}/usr/include
-> -else
-> -  abs_srctree := $(shell cd $(top_srcdir) && pwd)
-> -  KHDR_DIR := ${abs_srctree}/usr/include
-> -endif
-> -
-> -KHDR_INCLUDES := -isystem $(KHDR_DIR)
-> -
->   # The following are built by lib.mk common compile rules.
->   # TEST_CUSTOM_PROGS should be used by tests that require
->   # custom build rule and prevent common build rule use.
-> @@ -74,25 +58,7 @@ TEST_GEN_PROGS := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS))
->   TEST_GEN_PROGS_EXTENDED := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS_EXTENDED))
->   TEST_GEN_FILES := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_FILES))
->   
-> -all: kernel_header_files $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) \
-> -     $(TEST_GEN_FILES)
-> -
-> -kernel_header_files:
-> -	@ls $(KHDR_DIR)/linux/*.h >/dev/null 2>/dev/null;                      \
-> -	if [ $$? -ne 0 ]; then                                                 \
-> -            RED='\033[1;31m';                                                  \
-> -            NOCOLOR='\033[0m';                                                 \
-> -            echo;                                                              \
-> -            echo -e "$${RED}error$${NOCOLOR}: missing kernel header files.";   \
-> -            echo "Please run this and try again:";                             \
-> -            echo;                                                              \
-> -            echo "    cd $(top_srcdir)";                                       \
-> -            echo "    make headers";                                           \
-> -            echo;                                                              \
-> -	    exit 1; \
-> -	fi
-> -
-> -.PHONY: kernel_header_files
-> +all: $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES)
->   
->   define RUN_TESTS
->   	BASE_DIR="$(selfdir)";			\
+> +static bool gcs_signal_cap_valid(u64 addr, u64 val)
+> +{
+> +	/*
+> +	 * The top bit should be set, this is an invalid address for
+> +	 * EL0 and will only be set for caps created by signals.
+> +	 */
+> +	if (!(val & GCS_SIGNAL_CAP_FLAG))
+> +		return false;
+> +
+> +	/* The rest should be a standard architectural cap token. */
+> +	val &= ~GCS_SIGNAL_CAP_FLAG;
+> +
+> +	/* The cap must have the low bits set to a token value */
+> +	if (GCS_CAP_TOKEN(val) != 0)
+> +		return false;
 
+I found the comment above a little confusing, since the if condition
+actually checks that low bits aren't set at all. Perhaps reword to
+something like "The token value of a signal cap must be 0"?
 
+> +
+> +	/* The cap must store the VA the cap was stored at */
+> +	if (GCS_CAP_ADDR(addr) != GCS_CAP_ADDR(val))
+> +		return false;
+> +
+> +	return true;
+> +}
+> +#endif
+> +
+>  /*
+>   * Do a signal return; undo the signal stack. These are aligned to 128-bit.
+>   */
+> @@ -815,6 +847,45 @@ static int restore_sigframe(struct pt_regs *regs,
+>  	return err;
+>  }
+>  
+> +#ifdef CONFIG_ARM64_GCS
+> +static int gcs_restore_signal(void)
+> +{
+> +	u64 gcspr_el0, cap;
+> +	int ret;
+> +
+> +	if (!system_supports_gcs())
+> +		return 0;
+> +
+> +	if (!(current->thread.gcs_el0_mode & PR_SHADOW_STACK_ENABLE))
+> +		return 0;
+> +
+> +	gcspr_el0 = read_sysreg_s(SYS_GCSPR_EL0);
+> +
+> +	/*
+> +	 * GCSPR_EL0 should be pointing at a capped GCS, read the cap...
+> +	 */
+> +	gcsb_dsync();
+> +	ret = copy_from_user(&cap, (__user void*)gcspr_el0, sizeof(cap));
+> +	if (ret)
+> +		return -EFAULT;
+> +
+> +	/*
+> +	 * ...then check that the cap is the actual GCS before
+> +	 * restoring it.
+> +	 */
+> +	if (!gcs_signal_cap_valid(gcspr_el0, cap))
+> +		return -EINVAL;
+> +
+> +	current->thread.gcspr_el0 = gcspr_el0 + sizeof(cap);
+> +	write_sysreg_s(current->thread.gcspr_el0, SYS_GCSPR_EL0);
+
+At this point, there's an inactive but valid cap just below the GCS.
+Over time, as different signals are received when the GCSPR is pointing
+at different locations of the stack, there could be a number of valid
+inactive caps available for misuse.
+
+I'm still not proficient enough in GCS to know how exactly this could be
+abused (e.g., somehow writing the desired return location right above
+one of these inactive caps and arranging for GCSPR to point to the cap
+before returning from a signal) but to be safe or paranoid, perhaps zero
+the location of the cap before returning?
+
+> +
+> +	return 0;
+> +}
+> +
+> +#else
+> +static int gcs_restore_signal(void) { return 0; }
+> +#endif
+> +
+>  SYSCALL_DEFINE0(rt_sigreturn)
+>  {
+>  	struct pt_regs *regs = current_pt_regs();
+> @@ -841,6 +912,9 @@ SYSCALL_DEFINE0(rt_sigreturn)
+>  	if (restore_altstack(&frame->uc.uc_stack))
+>  		goto badframe;
+>  
+> +	if (gcs_restore_signal())
+> +		goto badframe;
+> +
+>  	return regs->regs[0];
+>  
+>  badframe:
+> @@ -1071,7 +1145,50 @@ static int get_sigframe(struct rt_sigframe_user_layout *user,
+>  	return 0;
+>  }
+>  
+> -static void setup_return(struct pt_regs *regs, struct k_sigaction *ka,
+> +#ifdef CONFIG_ARM64_GCS
+> +
+> +static int gcs_signal_entry(__sigrestore_t sigtramp, struct ksignal *ksig)
+
+The ksig argument is unused, so it can be removed.
+
+> +{
+> +	unsigned long __user *gcspr_el0;
+> +	int ret = 0;
+> +
+> +	if (!system_supports_gcs())
+> +		return 0;
+> +
+> +	if (!task_gcs_el0_enabled(current))
+> +		return 0;
+> +
+> +	/*
+> +	 * We are entering a signal handler, current register state is
+> +	 * active.
+> +	 */
+> +	gcspr_el0 = (unsigned long __user *)read_sysreg_s(SYS_GCSPR_EL0);
+> +
+> +	/*
+> +	 * Push a cap and the GCS entry for the trampoline onto the GCS.
+> +	 */
+> +	put_user_gcs((unsigned long)sigtramp, gcspr_el0 - 2, &ret);
+> +	put_user_gcs(GCS_SIGNAL_CAP(gcspr_el0 - 1), gcspr_el0 - 1, &ret);
+> +	if (ret != 0)
+> +		return ret;
+> +
+> +	gcsb_dsync();
+> +
+> +	gcspr_el0 -= 2;
+> +	write_sysreg_s((unsigned long)gcspr_el0, SYS_GCSPR_EL0);
+> +
+> +	return 0;
+> +}
+> +#else
+> +
+> +static int gcs_signal_entry(__sigrestore_t sigtramp, struct ksignal *ksig)
+> +{
+> +	return 0;
+> +}
+> +
+> +#endif
+> +
+> +static int setup_return(struct pt_regs *regs, struct ksignal *ksig,
+>  			 struct rt_sigframe_user_layout *user, int usig)
+
+Since the ksig argument isn't used by gcs_signal_entry(), setup_return()
+can keep the ka argument and the changes below from ka to ksic->ka are
+unnecessary.
+
+>  {
+>  	__sigrestore_t sigtramp;
+> @@ -1079,7 +1196,7 @@ static void setup_return(struct pt_regs *regs, struct k_sigaction *ka,
+>  	regs->regs[0] = usig;
+>  	regs->sp = (unsigned long)user->sigframe;
+>  	regs->regs[29] = (unsigned long)&user->next_frame->fp;
+> -	regs->pc = (unsigned long)ka->sa.sa_handler;
+> +	regs->pc = (unsigned long)ksig->ka.sa.sa_handler;
+>  
+>  	/*
+>  	 * Signal delivery is a (wacky) indirect function call in
+> @@ -1119,12 +1236,14 @@ static void setup_return(struct pt_regs *regs, struct k_sigaction *ka,
+>  		sme_smstop();
+>  	}
+>  
+> -	if (ka->sa.sa_flags & SA_RESTORER)
+> -		sigtramp = ka->sa.sa_restorer;
+> +	if (ksig->ka.sa.sa_flags & SA_RESTORER)
+> +		sigtramp = ksig->ka.sa.sa_restorer;
+>  	else
+>  		sigtramp = VDSO_SYMBOL(current->mm->context.vdso, sigtramp);
+>  
+>  	regs->regs[30] = (unsigned long)sigtramp;
+> +
+> +	return gcs_signal_entry(sigtramp, ksig);
+>  }
+>  
+>  static int setup_rt_frame(int usig, struct ksignal *ksig, sigset_t *set,
+> @@ -1147,7 +1266,7 @@ static int setup_rt_frame(int usig, struct ksignal *ksig, sigset_t *set,
+>  	err |= __save_altstack(&frame->uc.uc_stack, regs->sp);
+>  	err |= setup_sigframe(&user, regs, set);
+>  	if (err == 0) {
+> -		setup_return(regs, &ksig->ka, &user, usig);
+> +		err = setup_return(regs, ksig, &user, usig);
+>  		if (ksig->ka.sa.sa_flags & SA_SIGINFO) {
+>  			err |= copy_siginfo_to_user(&frame->info, &ksig->info);
+>  			regs->regs[1] = (unsigned long)&frame->info;
+> diff --git a/arch/arm64/mm/gcs.c b/arch/arm64/mm/gcs.c
+> index 02f8f6046c10..6f51429c5a46 100644
+> --- a/arch/arm64/mm/gcs.c
+> +++ b/arch/arm64/mm/gcs.c
+> @@ -6,6 +6,7 @@
+>  #include <linux/types.h>
+>  
+>  #include <asm/cpufeature.h>
+> +#include <asm/gcs.h>
+>  #include <asm/page.h>
+
+This is #include isn't needed by this patch. Probably better as part of
+another one.
+
+-- 
+Thiago
 
