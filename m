@@ -1,304 +1,216 @@
-Return-Path: <linux-kselftest+bounces-1471-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1472-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E02880B1DB
-	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Dec 2023 04:15:34 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF52380B2DE
+	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Dec 2023 08:48:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A3D681F211B9
-	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Dec 2023 03:15:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1DC7A1C208D4
+	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Dec 2023 07:48:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 441D81107;
-	Sat,  9 Dec 2023 03:15:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 972F25394;
+	Sat,  9 Dec 2023 07:48:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="pEoza8wV"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UGdJ5Fj6"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B54410E7
-	for <linux-kselftest@vger.kernel.org>; Fri,  8 Dec 2023 19:15:26 -0800 (PST)
-Received: by mail-pg1-x533.google.com with SMTP id 41be03b00d2f7-53fbf2c42bfso2237117a12.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 08 Dec 2023 19:15:26 -0800 (PST)
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B103A12E
+	for <linux-kselftest@vger.kernel.org>; Fri,  8 Dec 2023 23:48:31 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-54f4a933ddcso5117a12.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 08 Dec 2023 23:48:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702091726; x=1702696526; darn=vger.kernel.org;
-        h=mime-version:message-id:date:in-reply-to:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=2b+6n+ULng3a579Szt1kcCIxHSrZ+D7LmH/Z+vqyyTE=;
-        b=pEoza8wVnM6tjIXWzzXHyURLxumLQKhtVzfubbHMHLXafo2aNEaDG1BKQ6qKIcjqDs
-         PBizxwWF777KEHW4PdK2suQqyYH+3EsToGtXPnPDKV40E4CCvzzmTGmT7Ysgev9/RbKz
-         j3mnjTIxzaK46S1EEvPtDI3j7Y/N6siH5PWGzL8CHn3ocgcD57KfSfja+wD1nyiyjeCP
-         ZzfLXRBoE+yBTbAY6njOwXDki228RkGszl44Upz9uCcBaPbLU8CHlOnQeavbIHx84lkj
-         1V8tljMWPcVkl4GVwI7X1g3OP9IDEckBY0lFz+PMH+xqYh3x9zhN6a7eR4sAgfUtpc0O
-         fCfw==
+        d=google.com; s=20230601; t=1702108110; x=1702712910; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Suy5hMg5aNbWyDBvDEfMyo2Ae+/lRHmVmO7N5g9qNtY=;
+        b=UGdJ5Fj623jnEhcAZ6FxBE/cR/r1TRUti9WpP2z6mEeQux5s6bxF2cIjaD1Fs88zfq
+         58zyZhlH695LYUMByrfZfyotgVVD9xVqwMcOLmv8/kKjX4f7IpXBcQnFCpnW3H3r5Til
+         IRv93P0lgkG9hEUY+Q+ea1c+2G+HUL6qIblgsbwE6GSBTBiaHe+6l4BuWyUozgddZGR9
+         63z6LMHV3ecdBl8r1sohdILtQNkYBW1WnpeU+35ls/fZlo4PUyzSFhop9U2wZNqP7hne
+         vIBbX2RiU6BgwudLBtPHK4nkqBHN8lv1gCJrGBBkaWiLeNfs8MmZOA7c9cGSvMdu27Dm
+         ibrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702091726; x=1702696526;
-        h=mime-version:message-id:date:in-reply-to:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2b+6n+ULng3a579Szt1kcCIxHSrZ+D7LmH/Z+vqyyTE=;
-        b=WA0WhIhZd6qudhU88lRxbD4ODEcJ79j0c4TgnQelOvkGST5sfh+KOBu2qfNIo8coSs
-         0+0tzrzv8m3IvXWvsmKz9z0DPz+H8As3fRBBJ23pyeETDaf4Vi6lpLVgUYjupu+6v4Pk
-         adxmdzu4vI5OR8ywDZ/GX2A+zl4ympcm89kjApEqGKV4BvJ4wFjOlXeJ2tsppdVW73h0
-         M3lnQ2qaOO57lex1Wwl9FIeLb80wT0kCYAkjMUbaN77Zj4pvEEOpl4FRXldtTxdsU7VK
-         mhxc6uJRtg0XIz42IyCJNpMR2DfqkOxINTmMk9k8kX2MoxyX3r+oLwKRUPQHFAxnm0eu
-         JfJQ==
-X-Gm-Message-State: AOJu0YxM4k3PNTPdQyz2Z+svAabv+GaOx4nWdoncuSWAXYujVim4mGz4
-	RIXUGsQ1lOZNXz4gQrb0o+IWQw==
-X-Google-Smtp-Source: AGHT+IEaUnkmb6VMOC1ZmV7RhknH3M28z+3B6TqVq+yqgnnJz1v02mq63uTBtrSHn4oV4teABtH6uA==
-X-Received: by 2002:a05:6a20:f390:b0:190:6920:e14b with SMTP id qr16-20020a056a20f39000b001906920e14bmr1018200pzb.122.1702091725612;
-        Fri, 08 Dec 2023 19:15:25 -0800 (PST)
-Received: from localhost ([2804:14d:7e39:8470:4c58:a216:27d2:2ff])
-        by smtp.gmail.com with ESMTPSA id x22-20020a056a00271600b006be5af77f06sm2330693pfv.2.2023.12.08.19.15.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 08 Dec 2023 19:15:25 -0800 (PST)
-References: <20231122-arm64-gcs-v7-0-201c483bd775@kernel.org>
- <20231122-arm64-gcs-v7-24-201c483bd775@kernel.org>
-User-agent: mu4e 1.10.8; emacs 29.1
-From: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon
- <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Andrew Morton
- <akpm@linux-foundation.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton
- <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, Suzuki K
- Poulose <suzuki.poulose@arm.com>, Arnd Bergmann <arnd@arndb.de>, Oleg
- Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, Kees
- Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>, "Rick P.
- Edgecombe" <rick.p.edgecombe@intel.com>, Deepak Gupta
- <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>, Szabolcs Nagy
- <Szabolcs.Nagy@arm.com>, "H.J. Lu" <hjl.tools@gmail.com>, Paul Walmsley
- <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
- <aou@eecs.berkeley.edu>, Florian Weimer <fweimer@redhat.com>, Christian
- Brauner <brauner@kernel.org>, linux-arm-kernel@lists.infradead.org,
- linux-doc@vger.kernel.org, kvmarm@lists.linux.dev,
- linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v7 24/39] arm64/signal: Set up and restore the GCS
- context for signal handlers
-In-reply-to: <20231122-arm64-gcs-v7-24-201c483bd775@kernel.org>
-Date: Sat, 09 Dec 2023 00:15:22 -0300
-Message-ID: <8734wcgj79.fsf@linaro.org>
+        d=1e100.net; s=20230601; t=1702108110; x=1702712910;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Suy5hMg5aNbWyDBvDEfMyo2Ae+/lRHmVmO7N5g9qNtY=;
+        b=vynT6mHhBF5vyGSN2mXAeYmAjk2HZMOBJ9JgSBKMxq4lKgm+d9ObM21TOBv/t0elXO
+         V3faG23fyW85ybwKnJ2NnlpAubTJbxszi6Q8BE45RCgylUYetb4GPxsBFX3AMZej5Gb9
+         O/0zYQTTuRuRpbxdRKPru1fMvTJbpCfaGRjXLZm5WTn2rNUNVlMRBCOnKmiR2HbWn657
+         +LI3JSIGk7Weoq7MU/cwl9oXeLPJmjxYHYl+GV4FVWIVscT+HPFfvan0kZ1OXs6ABuTm
+         42HAckuSLoImrJqX7SmApNX8WROxu6xliDfoGF3s2a7Wd5lD/y0CYBqZEb4zQgF3vFQQ
+         ub7g==
+X-Gm-Message-State: AOJu0Ywso++6lStMuaF5jomlS0eRMiYrhqT/hT9EakAip8AE+IH76v5J
+	y/w2Uil2zuVYte/s/z7f2C3ByXAYnccM/MBhNqnYmg==
+X-Google-Smtp-Source: AGHT+IHtDOYCaJe3OJ2vmWISpPp5/Y0F/uE6kJGg3viAxXnuehSZrlDqfWmDNEV73NA1+s5mUTAqY5Hv/1SNs96ss2s=
+X-Received: by 2002:a50:d643:0:b0:54b:321:ef1a with SMTP id
+ c3-20020a50d643000000b0054b0321ef1amr135735edj.6.1702108110034; Fri, 08 Dec
+ 2023 23:48:30 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20231204221932.1465004-1-rmoar@google.com>
+In-Reply-To: <20231204221932.1465004-1-rmoar@google.com>
+From: David Gow <davidgow@google.com>
+Date: Sat, 9 Dec 2023 15:48:17 +0800
+Message-ID: <CABVgOS=5Y_CrTZ4hs57UGdR_p1aK2+1w2-aZ9EVELsbRdVvqTg@mail.gmail.com>
+Subject: Re: [PATCH v3 1/6] kunit: move KUNIT_TABLE out of INIT_DATA
+To: Rae Moar <rmoar@google.com>
+Cc: shuah@kernel.org, dlatypov@google.com, brendan.higgins@linux.dev, 
+	sadiyakazi@google.com, keescook@chromium.org, arnd@arndb.de, 
+	linux-kselftest@vger.kernel.org, linux-arch@vger.kernel.org, 
+	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+	boundary="0000000000004b5022060c0eed6e"
 
+--0000000000004b5022060c0eed6e
+Content-Type: text/plain; charset="UTF-8"
 
-Mark Brown <broonie@kernel.org> writes:
+On Tue, 5 Dec 2023 at 06:19, Rae Moar <rmoar@google.com> wrote:
+>
+> Alter the linker section of KUNIT_TABLE to move it out of INIT_DATA and
+> into DATA_DATA.
+>
+> Data for KUnit tests does not need to be in the init section.
+>
+> In order to run tests again after boot the KUnit data cannot be labeled as
+> init data as the kernel could write over it.
+>
+> Add a KUNIT_INIT_TABLE in the next patch for KUnit tests that test init
+> data/functions.
+>
+> Signed-off-by: Rae Moar <rmoar@google.com>
+> ---
 
-> +static bool gcs_signal_cap_valid(u64 addr, u64 val)
-> +{
-> +	/*
-> +	 * The top bit should be set, this is an invalid address for
-> +	 * EL0 and will only be set for caps created by signals.
-> +	 */
-> +	if (!(val & GCS_SIGNAL_CAP_FLAG))
-> +		return false;
-> +
-> +	/* The rest should be a standard architectural cap token. */
-> +	val &= ~GCS_SIGNAL_CAP_FLAG;
-> +
-> +	/* The cap must have the low bits set to a token value */
-> +	if (GCS_CAP_TOKEN(val) != 0)
-> +		return false;
+I think this actually fixes a potential bug, as we loop through the
+list of suites after init has ended in the debugfs logic.
 
-I found the comment above a little confusing, since the if condition
-actually checks that low bits aren't set at all. Perhaps reword to
-something like "The token value of a signal cap must be 0"?
+So maybe this is:
+Fixes: 90a025a859a3 ("vmlinux.lds.h: add linker section for KUnit test suites")
 
-> +
-> +	/* The cap must store the VA the cap was stored at */
-> +	if (GCS_CAP_ADDR(addr) != GCS_CAP_ADDR(val))
-> +		return false;
-> +
-> +	return true;
-> +}
-> +#endif
-> +
+Regardless, I'd love to get this in, even if we don't manage to get
+the rest of the series in soon.
+
+Reviewed-by: David Gow <davidgow@google.com>
+
+Cheers,
+-- David
+
+>  include/asm-generic/vmlinux.lds.h | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/include/asm-generic/vmlinux.lds.h b/include/asm-generic/vmlinux.lds.h
+> index bae0fe4d499b..1107905d37fc 100644
+> --- a/include/asm-generic/vmlinux.lds.h
+> +++ b/include/asm-generic/vmlinux.lds.h
+> @@ -370,7 +370,8 @@
+>         BRANCH_PROFILE()                                                \
+>         TRACE_PRINTKS()                                                 \
+>         BPF_RAW_TP()                                                    \
+> -       TRACEPOINT_STR()
+> +       TRACEPOINT_STR()                                                \
+> +       KUNIT_TABLE()
+>
 >  /*
->   * Do a signal return; undo the signal stack. These are aligned to 128-bit.
->   */
-> @@ -815,6 +847,45 @@ static int restore_sigframe(struct pt_regs *regs,
->  	return err;
->  }
->  
-> +#ifdef CONFIG_ARM64_GCS
-> +static int gcs_restore_signal(void)
-> +{
-> +	u64 gcspr_el0, cap;
-> +	int ret;
-> +
-> +	if (!system_supports_gcs())
-> +		return 0;
-> +
-> +	if (!(current->thread.gcs_el0_mode & PR_SHADOW_STACK_ENABLE))
-> +		return 0;
-> +
-> +	gcspr_el0 = read_sysreg_s(SYS_GCSPR_EL0);
-> +
-> +	/*
-> +	 * GCSPR_EL0 should be pointing at a capped GCS, read the cap...
-> +	 */
-> +	gcsb_dsync();
-> +	ret = copy_from_user(&cap, (__user void*)gcspr_el0, sizeof(cap));
-> +	if (ret)
-> +		return -EFAULT;
-> +
-> +	/*
-> +	 * ...then check that the cap is the actual GCS before
-> +	 * restoring it.
-> +	 */
-> +	if (!gcs_signal_cap_valid(gcspr_el0, cap))
-> +		return -EINVAL;
-> +
-> +	current->thread.gcspr_el0 = gcspr_el0 + sizeof(cap);
-> +	write_sysreg_s(current->thread.gcspr_el0, SYS_GCSPR_EL0);
+>   * Data section helpers
+> @@ -699,8 +700,7 @@
+>         THERMAL_TABLE(governor)                                         \
+>         EARLYCON_TABLE()                                                \
+>         LSM_TABLE()                                                     \
+> -       EARLY_LSM_TABLE()                                               \
+> -       KUNIT_TABLE()
+> +       EARLY_LSM_TABLE()
+>
+>  #define INIT_TEXT                                                      \
+>         *(.init.text .init.text.*)                                      \
+>
+> base-commit: b85ea95d086471afb4ad062012a4d73cd328fa86
+> --
+> 2.43.0.rc2.451.g8631bc7472-goog
+>
 
-At this point, there's an inactive but valid cap just below the GCS.
-Over time, as different signals are received when the GCSPR is pointing
-at different locations of the stack, there could be a number of valid
-inactive caps available for misuse.
+--0000000000004b5022060c0eed6e
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-I'm still not proficient enough in GCS to know how exactly this could be
-abused (e.g., somehow writing the desired return location right above
-one of these inactive caps and arranging for GCSPR to point to the cap
-before returning from a signal) but to be safe or paranoid, perhaps zero
-the location of the cap before returning?
-
-> +
-> +	return 0;
-> +}
-> +
-> +#else
-> +static int gcs_restore_signal(void) { return 0; }
-> +#endif
-> +
->  SYSCALL_DEFINE0(rt_sigreturn)
->  {
->  	struct pt_regs *regs = current_pt_regs();
-> @@ -841,6 +912,9 @@ SYSCALL_DEFINE0(rt_sigreturn)
->  	if (restore_altstack(&frame->uc.uc_stack))
->  		goto badframe;
->  
-> +	if (gcs_restore_signal())
-> +		goto badframe;
-> +
->  	return regs->regs[0];
->  
->  badframe:
-> @@ -1071,7 +1145,50 @@ static int get_sigframe(struct rt_sigframe_user_layout *user,
->  	return 0;
->  }
->  
-> -static void setup_return(struct pt_regs *regs, struct k_sigaction *ka,
-> +#ifdef CONFIG_ARM64_GCS
-> +
-> +static int gcs_signal_entry(__sigrestore_t sigtramp, struct ksignal *ksig)
-
-The ksig argument is unused, so it can be removed.
-
-> +{
-> +	unsigned long __user *gcspr_el0;
-> +	int ret = 0;
-> +
-> +	if (!system_supports_gcs())
-> +		return 0;
-> +
-> +	if (!task_gcs_el0_enabled(current))
-> +		return 0;
-> +
-> +	/*
-> +	 * We are entering a signal handler, current register state is
-> +	 * active.
-> +	 */
-> +	gcspr_el0 = (unsigned long __user *)read_sysreg_s(SYS_GCSPR_EL0);
-> +
-> +	/*
-> +	 * Push a cap and the GCS entry for the trampoline onto the GCS.
-> +	 */
-> +	put_user_gcs((unsigned long)sigtramp, gcspr_el0 - 2, &ret);
-> +	put_user_gcs(GCS_SIGNAL_CAP(gcspr_el0 - 1), gcspr_el0 - 1, &ret);
-> +	if (ret != 0)
-> +		return ret;
-> +
-> +	gcsb_dsync();
-> +
-> +	gcspr_el0 -= 2;
-> +	write_sysreg_s((unsigned long)gcspr_el0, SYS_GCSPR_EL0);
-> +
-> +	return 0;
-> +}
-> +#else
-> +
-> +static int gcs_signal_entry(__sigrestore_t sigtramp, struct ksignal *ksig)
-> +{
-> +	return 0;
-> +}
-> +
-> +#endif
-> +
-> +static int setup_return(struct pt_regs *regs, struct ksignal *ksig,
->  			 struct rt_sigframe_user_layout *user, int usig)
-
-Since the ksig argument isn't used by gcs_signal_entry(), setup_return()
-can keep the ka argument and the changes below from ka to ksic->ka are
-unnecessary.
-
->  {
->  	__sigrestore_t sigtramp;
-> @@ -1079,7 +1196,7 @@ static void setup_return(struct pt_regs *regs, struct k_sigaction *ka,
->  	regs->regs[0] = usig;
->  	regs->sp = (unsigned long)user->sigframe;
->  	regs->regs[29] = (unsigned long)&user->next_frame->fp;
-> -	regs->pc = (unsigned long)ka->sa.sa_handler;
-> +	regs->pc = (unsigned long)ksig->ka.sa.sa_handler;
->  
->  	/*
->  	 * Signal delivery is a (wacky) indirect function call in
-> @@ -1119,12 +1236,14 @@ static void setup_return(struct pt_regs *regs, struct k_sigaction *ka,
->  		sme_smstop();
->  	}
->  
-> -	if (ka->sa.sa_flags & SA_RESTORER)
-> -		sigtramp = ka->sa.sa_restorer;
-> +	if (ksig->ka.sa.sa_flags & SA_RESTORER)
-> +		sigtramp = ksig->ka.sa.sa_restorer;
->  	else
->  		sigtramp = VDSO_SYMBOL(current->mm->context.vdso, sigtramp);
->  
->  	regs->regs[30] = (unsigned long)sigtramp;
-> +
-> +	return gcs_signal_entry(sigtramp, ksig);
->  }
->  
->  static int setup_rt_frame(int usig, struct ksignal *ksig, sigset_t *set,
-> @@ -1147,7 +1266,7 @@ static int setup_rt_frame(int usig, struct ksignal *ksig, sigset_t *set,
->  	err |= __save_altstack(&frame->uc.uc_stack, regs->sp);
->  	err |= setup_sigframe(&user, regs, set);
->  	if (err == 0) {
-> -		setup_return(regs, &ksig->ka, &user, usig);
-> +		err = setup_return(regs, ksig, &user, usig);
->  		if (ksig->ka.sa.sa_flags & SA_SIGINFO) {
->  			err |= copy_siginfo_to_user(&frame->info, &ksig->info);
->  			regs->regs[1] = (unsigned long)&frame->info;
-> diff --git a/arch/arm64/mm/gcs.c b/arch/arm64/mm/gcs.c
-> index 02f8f6046c10..6f51429c5a46 100644
-> --- a/arch/arm64/mm/gcs.c
-> +++ b/arch/arm64/mm/gcs.c
-> @@ -6,6 +6,7 @@
->  #include <linux/types.h>
->  
->  #include <asm/cpufeature.h>
-> +#include <asm/gcs.h>
->  #include <asm/page.h>
-
-This is #include isn't needed by this patch. Probably better as part of
-another one.
-
--- 
-Thiago
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+ddIn9n5Jt6Z1o79zxraLMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQBtHFwIgQZjer5K
+H+4Q+wns10k7qN+4wN2Uf+JsyOYjukaMEgdLErfA1wwtQ9uHkoYQZcWBuVVkQFa5hI+sqI2m1Weq
+riMCFSiU38s1tADdMX12IMfJRN60Nznhrw+nPyDRZqRhUTW24TwnHorkDnFPW8PHo7fAw4FrpI0n
+impZAng7ccvvK09K3ZuhwTIxJMsPXCZYsrXWORTw5sczRAP6XvKbPBJnsJoSTe5dFBPBHOQJOGhU
+qWfEfWnWMJPF3LxSGLpLFQXO3RwQqmxv08avwXfVPouh1xuB3FX7rpDabT8YDhu9JgIZkLEKko7L
+yQt6zWwng7k8YF/jGbiAta6VMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCD/
+sI/7ZoyvsuMNptfqiZv2zuf1SCeNkIIKqbWKWrwlDzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzEyMDkwNzQ4MzBaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAQHe+7eYfGrUsMoio+yNP
+KKlZg0BvjTJpbyaoZJDd7LKqhvnvhEnZkrn4IJOKcKRAsYKcwMb/nFQmyG/t8UN9+tspt5LB6AcX
+LsieKohrWgvUnf3pRVCoqjgSE49yt+M1gpTHywVdE3b9lW+KS/oLlTwdFMpnqaSgVoSZ/MdF1NDp
+LgzwDUbFbjWZNzRCBpK3NyYEqiHySn81P5LUx1rpqP3K8Wv3smqnoHj8KnZHlXT9TbLt2M+xVKV0
+EBk6751LbkEYsIvoe/I4AKM/gbj1H2OgYIR0s69cZQnczzyPQcDGJyzKTGxoE4kVggYnul1+JyKq
+rmK6Qc1llUsaaxfoqQ==
+--0000000000004b5022060c0eed6e--
 
