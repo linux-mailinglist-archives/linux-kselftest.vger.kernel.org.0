@@ -1,107 +1,295 @@
-Return-Path: <linux-kselftest+bounces-1475-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1476-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30DC480B2EA
-	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Dec 2023 08:58:05 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6A1080B2ED
+	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Dec 2023 08:58:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E078B280F7A
-	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Dec 2023 07:58:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C9CBE1C209FA
+	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Dec 2023 07:58:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBB2363D2;
-	Sat,  9 Dec 2023 07:58:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 451FF6AA8;
+	Sat,  9 Dec 2023 07:58:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="A9MBAmdZ"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="P68CYZfA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93FC61996
-	for <linux-kselftest@vger.kernel.org>; Fri,  8 Dec 2023 23:57:57 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-40c3963f9fcso18605e9.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 08 Dec 2023 23:57:57 -0800 (PST)
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A2310EF
+	for <linux-kselftest@vger.kernel.org>; Fri,  8 Dec 2023 23:58:06 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-50bf1de91c6so1291e87.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 08 Dec 2023 23:58:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1702108675; x=1702713475; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1702108685; x=1702713485; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=TkZ+kEWubNnGrnC7WiZPonGtPuVCWaxVau7TBnOStm4=;
-        b=A9MBAmdZVFhasICTR9hAi9troOhACdBwDDD0sAw/U1h2kEYdumsVYl78RWFCXnX9yA
-         Jt/EkwJnPOmspyRjnVxhasyZ3QdXsX1WzZbzVsOp7RHp7MqLEBhxkSp25Pd0S72vVi9p
-         AkXrHieWIiCRoktwf+TaGTNHMAosp4L2KAmoens6w0ygEzCq7BMziU9XREF8JIviDMqW
-         7JM2sPI1P5X/DD57PnmkA6sonh1+FuInC+1X5e9mxNVudztdMvwsMOHp+ClpQY8Mk5+z
-         0j1bMspsEcC500NatVNm2qTGO3uQxTECf6F75TuOzBbtEBFIwFI0gY5ZKpy9MCg8ZrrL
-         ar9Q==
+        bh=fPp9RGzrnUtJY8NWKvayRbWoQM2/UZYY02bTJV2DZao=;
+        b=P68CYZfALM/HyFCU+fu800wrIlbvCRcBNhVetncLZp1RB/2JA7l9/7/FPN0a3s6k78
+         +Ed2Azy9LmsvrLRvJ7TzVB4zcEimIVL/uQ4a0pPET5wCzD08WUsyRvYvJY19dqvtJPaW
+         9LlSafNBcIuOKEW4x+Iew7yL475zCnodobeDmbOiQYsSNuDsegzoCShebgr80YZCCSTC
+         9/Fr4gXvFgMPZ0MxqBOfDe2NUY+8LDnS/GoxDVI4YS2+K3xcI5Ht/hrHSWkzoz9+wvUz
+         gwRxb/HfjdyYNAp5YAbcRgsyjbZXRXPdPuATiI/aRGzkFOXmYpT3W/6ziAsg/qz/8bTb
+         mIAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702108675; x=1702713475;
+        d=1e100.net; s=20230601; t=1702108685; x=1702713485;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=TkZ+kEWubNnGrnC7WiZPonGtPuVCWaxVau7TBnOStm4=;
-        b=oNLm8/VBmVMLLC6lVRC4NfpgE57JixIcxFZbaVEiOLckNVlDZfUKOKqsE2OIT3V5N5
-         rlWLqJfLl+A2Boq+htZ4oDxNlcBuEn90Al+aq5aZF+maSzGznvMonkjjmsq8wgxtwhvO
-         qIjvUK0wh3OmUCbtQscjVNEncIOHRWuMo5TsgnWiB9mDBdjlbi21SXmFmYFSCDFV/g/z
-         gNcEstjuJ8G0H0MNKyaYohrMPxdrXReeEjyQxY1vRhUjZaucxoVZh7OablzbQjP7fbrB
-         xH9GjQG97ff5vCENzAd07GLA747Bxg7LiBvtegwx2eGbFuM/FXet+4tnoPOU07FRLHGu
-         bsNA==
-X-Gm-Message-State: AOJu0YwTrJB60MBctZ1c/q/tm/li3WbV5M3op1x1R+oU4K0ReMQxednc
-	EyYoND53Ak5g2I+g1ZuUvM8h4s6jIyuxghzqcvPJjQ==
-X-Google-Smtp-Source: AGHT+IH8Cyx188AVHOWLiD3XyRsQ1opQjcUlD1P6EU9mm78KGF/AxKfS5ZCJpcJxDyH3qfQiij7JrJNWolKLC8rWitc=
-X-Received: by 2002:a05:600c:3648:b0:3f7:3e85:36a with SMTP id
- y8-20020a05600c364800b003f73e85036amr118023wmq.7.1702108675702; Fri, 08 Dec
- 2023 23:57:55 -0800 (PST)
+        bh=fPp9RGzrnUtJY8NWKvayRbWoQM2/UZYY02bTJV2DZao=;
+        b=vFFUr2A5F368/lZ3eK5CjEPlVdnlwL6c7CpoxQwVPXH9Pkx7Xij4Ai+AUzzl5eShAa
+         Pzkmo9wv/bKDls6if68BagrUgboZrUgPuS1uBRZgnWVwZJDb+2b8vLoJgI/a+USGbjou
+         3vTi2ezZKR0zexkVOCC6r8eINn02E2d90nacUzr2mzT2JT9FmE27Q/+igiRXY2R2bf0e
+         yBSinemBa1rl63hzGKjjWm9LdkRMUgEZu5KyOZ3xdskJOOXt3EvUj6YcHKWGqX3grLTW
+         LuXLAtk+O/i8vOISOSAepZekr5WY0g+e4kQLxVdq/bbsMNpSvRoFwqZAWzpK3RReXsUM
+         pT9A==
+X-Gm-Message-State: AOJu0Yw091eD0vZuZCCSRwDgbrjUPTseJBliircm5b0qukibn2qmsrJ7
+	IoAE8PdwK+CwPK5lgCIi3/eWf9c51uJGwxZ/aesLNA==
+X-Google-Smtp-Source: AGHT+IH+7PP5sHaUdomA1xYFrFkLYjTSlz93BwATnQE1orF/3ChsGGfjKIc9caaIpUCSQ9JUEKlcX8xu/IhI1QydRPA=
+X-Received: by 2002:a19:655e:0:b0:50b:fa6c:3e11 with SMTP id
+ c30-20020a19655e000000b0050bfa6c3e11mr80979lfj.6.1702108684751; Fri, 08 Dec
+ 2023 23:58:04 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231204221932.1465004-1-rmoar@google.com> <20231204221932.1465004-4-rmoar@google.com>
-In-Reply-To: <20231204221932.1465004-4-rmoar@google.com>
+References: <20231204221932.1465004-1-rmoar@google.com> <20231204221932.1465004-5-rmoar@google.com>
+In-Reply-To: <20231204221932.1465004-5-rmoar@google.com>
 From: David Gow <davidgow@google.com>
-Date: Sat, 9 Dec 2023 15:57:43 +0800
-Message-ID: <CABVgOSmbbAyckSvKREmUDBrZJtErQpxaNjXH0vaH1oZjkVt3JA@mail.gmail.com>
-Subject: Re: [PATCH v3 4/6] kunit: add is_init test attribute
+Date: Sat, 9 Dec 2023 15:57:53 +0800
+Message-ID: <CABVgOSngSGgxmc-6gENvZfgVK4DTpHXoPZagAcikyd1CMnaoBg@mail.gmail.com>
+Subject: Re: [PATCH v3 5/6] kunit: add ability to run tests after boot using debugfs
 To: Rae Moar <rmoar@google.com>
 Cc: shuah@kernel.org, dlatypov@google.com, brendan.higgins@linux.dev, 
 	sadiyakazi@google.com, keescook@chromium.org, arnd@arndb.de, 
 	linux-kselftest@vger.kernel.org, linux-arch@vger.kernel.org, 
 	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000007616060c0f0f32"
+	boundary="0000000000008c1def060c0f0ff5"
 
---000000000000007616060c0f0f32
+--0000000000008c1def060c0f0ff5
 Content-Type: text/plain; charset="UTF-8"
 
 On Tue, 5 Dec 2023 at 06:19, Rae Moar <rmoar@google.com> wrote:
 >
-> Add is_init test attribute of type bool. Add to_string, get, and filter
-> methods to lib/kunit/attributes.c.
+> Add functionality to run built-in tests after boot by writing to a
+> debugfs file.
 >
-> Mark each of the tests in the init section with the is_init=true attribute.
+> Add a new debugfs file labeled "run" for each test suite to use for
+> this purpose.
 >
-> Add is_init to the attributes documentation.
+> As an example, write to the file using the following:
+>
+> echo "any string" > /sys/kernel/debugfs/kunit/<testsuite>/run
+>
+> This will trigger the test suite to run and will print results to the
+> kernel log.
+>
+> To guard against running tests concurrently with this feature, add a
+> mutex lock around running kunit. This supports the current practice of
+> not allowing tests to be run concurrently on the same kernel.
+>
+> This new functionality could be used to design a parameter
+> injection feature in the future.
 >
 > Signed-off-by: Rae Moar <rmoar@google.com>
 > ---
 
-Would it be possible to not have this in kunit_attributes? I know it's
-required for the run-after-boot stuff later, but I'd love this to be
-(a) just generated at runtime, or (b) stored only at a suite or
-suite-set level. It seems like a bit of a waste to store this
-per-test-case, and to have it potentially accessible or overwritable
-by users.
+This looks good to me.
 
-Otherwise, this looks good (and I appreciate the automatic setting of
-this when merging the suite sets.
+A future feature which may be useful would be to support other kunit
+actions here (like list, list_attr), but that's probably worth leaving
+as a follow-up.
 
-Maybe if we always kept the init suites in a separate set, we could
-just use pointer comparisons to generate this; otherwise let's make
-this a suite-level-only attribute (inherited by tests).
+Reviewed-by: David Gow <davidgow@google.com>
 
-
+Cheers,
 -- David
 
---000000000000007616060c0f0f32
+
+>
+> Changes since v2:
+> - Move resetting the log to test.c
+> - Add is_init attribute and patches to change linker sections to avoid
+>   re-running tests that use init data and functions
+>
+>  lib/kunit/debugfs.c | 68 +++++++++++++++++++++++++++++++++++++++++++++
+>  lib/kunit/test.c    | 10 +++++++
+>  2 files changed, 78 insertions(+)
+>
+> diff --git a/lib/kunit/debugfs.c b/lib/kunit/debugfs.c
+> index 270d185737e6..2e0a92a0c461 100644
+> --- a/lib/kunit/debugfs.c
+> +++ b/lib/kunit/debugfs.c
+> @@ -8,12 +8,14 @@
+>  #include <linux/module.h>
+>
+>  #include <kunit/test.h>
+> +#include <kunit/test-bug.h>
+>
+>  #include "string-stream.h"
+>  #include "debugfs.h"
+>
+>  #define KUNIT_DEBUGFS_ROOT             "kunit"
+>  #define KUNIT_DEBUGFS_RESULTS          "results"
+> +#define KUNIT_DEBUGFS_RUN              "run"
+>
+>  /*
+>   * Create a debugfs representation of test suites:
+> @@ -21,6 +23,8 @@
+>   * Path                                                Semantics
+>   * /sys/kernel/debug/kunit/<testsuite>/results Show results of last run for
+>   *                                             testsuite
+> + * /sys/kernel/debug/kunit/<testsuite>/run     Write to this file to trigger
+> + *                                             testsuite to run
+>   *
+>   */
+>
+> @@ -99,6 +103,51 @@ static int debugfs_results_open(struct inode *inode, struct file *file)
+>         return single_open(file, debugfs_print_results, suite);
+>  }
+>
+> +/*
+> + * Print a usage message to the debugfs "run" file
+> + * (/sys/kernel/debug/kunit/<testsuite>/run) if opened.
+> + */
+> +static int debugfs_print_run(struct seq_file *seq, void *v)
+> +{
+> +       struct kunit_suite *suite = (struct kunit_suite *)seq->private;
+> +
+> +       seq_puts(seq, "Write to this file to trigger the test suite to run.\n");
+> +       seq_printf(seq, "usage: echo \"any string\" > /sys/kernel/debugfs/kunit/%s/run\n",
+> +                       suite->name);
+> +       return 0;
+> +}
+> +
+> +/*
+> + * The debugfs "run" file (/sys/kernel/debug/kunit/<testsuite>/run)
+> + * contains no information. Write to the file to trigger the test suite
+> + * to run.
+> + */
+> +static int debugfs_run_open(struct inode *inode, struct file *file)
+> +{
+> +       struct kunit_suite *suite;
+> +
+> +       suite = (struct kunit_suite *)inode->i_private;
+> +
+> +       return single_open(file, debugfs_print_run, suite);
+> +}
+> +
+> +/*
+> + * Trigger a test suite to run by writing to the suite's "run" debugfs
+> + * file found at: /sys/kernel/debug/kunit/<testsuite>/run
+> + *
+> + * Note: what is written to this file will not be saved.
+> + */
+> +static ssize_t debugfs_run(struct file *file,
+> +               const char __user *buf, size_t count, loff_t *ppos)
+> +{
+> +       struct inode *f_inode = file->f_inode;
+> +       struct kunit_suite *suite = (struct kunit_suite *) f_inode->i_private;
+> +
+> +       __kunit_test_suites_init(&suite, 1);
+> +
+> +       return count;
+> +}
+> +
+>  static const struct file_operations debugfs_results_fops = {
+>         .open = debugfs_results_open,
+>         .read = seq_read,
+> @@ -106,10 +155,22 @@ static const struct file_operations debugfs_results_fops = {
+>         .release = debugfs_release,
+>  };
+>
+> +static const struct file_operations debugfs_run_fops = {
+> +       .open = debugfs_run_open,
+> +       .read = seq_read,
+> +       .write = debugfs_run,
+> +       .llseek = seq_lseek,
+> +       .release = debugfs_release,
+> +};
+> +
+>  void kunit_debugfs_create_suite(struct kunit_suite *suite)
+>  {
+>         struct kunit_case *test_case;
+>
+> +       /* If suite log already allocated, do not create new debugfs files. */
+> +       if (suite->log)
+> +               return;
+> +
+>         /* Allocate logs before creating debugfs representation. */
+>         suite->log = alloc_string_stream(GFP_KERNEL);
+>         string_stream_set_append_newlines(suite->log, true);
+> @@ -124,6 +185,13 @@ void kunit_debugfs_create_suite(struct kunit_suite *suite)
+>         debugfs_create_file(KUNIT_DEBUGFS_RESULTS, S_IFREG | 0444,
+>                             suite->debugfs,
+>                             suite, &debugfs_results_fops);
+> +
+> +       /* Do not create file to re-run test if test runs on init */
+> +       if (!suite->attr.is_init) {
+> +               debugfs_create_file(KUNIT_DEBUGFS_RUN, S_IFREG | 0644,
+> +                                   suite->debugfs,
+> +                                   suite, &debugfs_run_fops);
+> +       }
+>  }
+>
+>  void kunit_debugfs_destroy_suite(struct kunit_suite *suite)
+> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> index 8bae6e2bc6a0..58e46bb3b4c4 100644
+> --- a/lib/kunit/test.c
+> +++ b/lib/kunit/test.c
+> @@ -13,6 +13,7 @@
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+>  #include <linux/moduleparam.h>
+> +#include <linux/mutex.h>
+>  #include <linux/panic.h>
+>  #include <linux/sched/debug.h>
+>  #include <linux/sched.h>
+> @@ -22,6 +23,8 @@
+>  #include "string-stream.h"
+>  #include "try-catch-impl.h"
+>
+> +static DEFINE_MUTEX(kunit_run_lock);
+> +
+>  /*
+>   * Hook to fail the current test and print an error message to the log.
+>   */
+> @@ -654,6 +657,7 @@ static void kunit_init_suite(struct kunit_suite *suite)
+>         kunit_debugfs_create_suite(suite);
+>         suite->status_comment[0] = '\0';
+>         suite->suite_init_err = 0;
+> +       string_stream_clear(suite->log);
+>  }
+>
+>  bool kunit_enabled(void)
+> @@ -670,6 +674,11 @@ int __kunit_test_suites_init(struct kunit_suite * const * const suites, int num_
+>                 return 0;
+>         }
+>
+> +       /* Use mutex lock to guard against running tests concurrently. */
+> +       if (mutex_lock_interruptible(&kunit_run_lock)) {
+> +               pr_err("kunit: test interrupted\n");
+> +               return -EINTR;
+> +       }
+>         static_branch_inc(&kunit_running);
+>
+>         for (i = 0; i < num_suites; i++) {
+> @@ -678,6 +687,7 @@ int __kunit_test_suites_init(struct kunit_suite * const * const suites, int num_
+>         }
+>
+>         static_branch_dec(&kunit_running);
+> +       mutex_unlock(&kunit_run_lock);
+>         return 0;
+>  }
+>  EXPORT_SYMBOL_GPL(__kunit_test_suites_init);
+> --
+> 2.43.0.rc2.451.g8631bc7472-goog
+>
+
+--0000000000008c1def060c0f0ff5
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -168,15 +356,15 @@ impZAng7ccvvK09K3ZuhwTIxJMsPXCZYsrXWORTw5sczRAP6XvKbPBJnsJoSTe5dFBPBHOQJOGhU
 qWfEfWnWMJPF3LxSGLpLFQXO3RwQqmxv08avwXfVPouh1xuB3FX7rpDabT8YDhu9JgIZkLEKko7L
 yQt6zWwng7k8YF/jGbiAta6VMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCD4
-mqdEXgb+UTpyFDwv7uquG0CIDhrkU+moqYYpwGcmfTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzEyMDkwNzU3NTVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBk
+WDNVUGsXoZ+hLI/x0VfoCPGJtGH96mvaz6zGMdFJXzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzEyMDkwNzU4MDVaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAZk9zA0VeU3h+80vC3HpI
-Uyc2B3jNWBPG59mENJ9BRt/a+v3/Iv/2gkBfxB8OM4ywQvvvG97xHc/5NUiXn23svcrpFzVR4708
-mGuhj2n0jTUDtnegUcHeSLm+dwP/IhcjYWGVcoxXtLELWhPc/knxSTO8OEL5MoRaEisFo8mA9BKr
-K/Z6j6frZi2Wufg1Hx48kj5YHUuC+UNGTrGp2CHfjELYUSZeFsIUIdC5XEEUTflDivZWB04FXvJF
-1P8K40RznUF+UpGM4sxGZaOc07P79exRpcKVBA18ltoVlwl6YLE0yqa2+9nYRTrvzwWc/kQ6Qjx1
-4KWUq9hU/ryH4ZtGGA==
---000000000000007616060c0f0f32--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAZv/VqNQctnrTo7jJJZTy
+SNeWI8zj1JW3PRsu+W5QEriKsqnVXbH0IhFzivQRsmDZX+I1uEkzew9NnnYYlnMlcMNyv+ivyCzq
++MlxF9QQJZST9RobmGRC9oSnPqrheAP8ONC0amyK/cNajA4eD0fYFRCP5BaXX1U9hZ/XDmcl7Dti
+9VVidPFiDEawqaQB7y6umpZ0ZR22SmhY3NUdmXTgS6UUS9pmkdEXgKsfI1OFzGuzKHyRkMSRub/y
+6/lu4oTlvAeR+0dm7li/9ck0+omotMFCPYkhPnZ6sRo/fSWNjoNEKt32L3kQMe3ZE8uscDy5C1Ig
+rRVBk2+vzvKbW+FAEg==
+--0000000000008c1def060c0f0ff5--
 
