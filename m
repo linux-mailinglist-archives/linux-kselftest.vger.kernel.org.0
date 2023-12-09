@@ -1,274 +1,259 @@
-Return-Path: <linux-kselftest+bounces-1468-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1469-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2766980B18D
-	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Dec 2023 02:47:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D72880B1A1
+	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Dec 2023 03:02:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 527781C20D02
-	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Dec 2023 01:47:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CB19F281937
+	for <lists+linux-kselftest@lfdr.de>; Sat,  9 Dec 2023 02:02:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C575B80F;
-	Sat,  9 Dec 2023 01:47:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E68927F8;
+	Sat,  9 Dec 2023 02:02:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="IQ/dZh9F"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="NB40n4Dr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2051.outbound.protection.outlook.com [40.107.102.51])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C705E3;
-	Fri,  8 Dec 2023 17:47:30 -0800 (PST)
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2047.outbound.protection.outlook.com [40.107.223.47])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10BA4EB;
+	Fri,  8 Dec 2023 18:02:16 -0800 (PST)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=MwvVbQzeNYFGaGNACZA1nyt8T6FtChe5V0/m/LH3GE6yHXBDNRmT5eeXG3pHXvIrglrseWVaJjaNy65yxKA7hulFh9H0iZgktFypq/VPw8MQqRh9av96jyztOferFgE2HBRx73d2uUmZGQ0s1QEEyLGM+dR/QzABJTwADSz0brlEx8NyNO4chVFQP3jh8DzFugqMwojRnbCHU0P+BMqxTP/qodkJz9OOjkO5Ik6d1pEaUM/QpyUBN73JZ9iL/qQvsF4Qu2Kv8TUYQAtmpocypumH41/KW2sLfnla3aHpwXpNzZqI800zHL+XnQ5XffnDSDOeds6g7AzxXnoTIkPEeQ==
+ b=I3FIz9CPDnmdjyejnX6O9BJbp/mrLU+D53NsdtvFwK72EN97yJLbD0+oTSLyRwmyJSi5hmhAjwsMHF17uQGUBDykaKRoik/VRgxn9mKfKTkP2nN+RFc6fbCMraTMx7zWFVN2nSYTlF65Naq1QnC8n+JN75mXzTmJbVhhCwJoF9QcM1J0oWLdtWjI25f6VJMc7gblokkNNMenH0Ia2gUzrY8MRfYunao1lNSys4I4Tue2blr3r2DBdTgGKSKjmiYykW1f+/uWdHqpYHzpSO0pLgma8kjIyxR3IiHVjj7IaXTez1BTZlFbYYJK6MoMrs4IMXBGYbmIS0TVsqY1lQr8vA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=KUNwJl8Jn1PBN/HxlkjA3aFFCPKLNlTw97AZnQreqcQ=;
- b=L+NnUnWPdUgxP3Nhl7iUepLCYOKbi9WKPM5pQmrWmyL+B113zn57bIJ2DbxwehbWwV8MH7iDPR4vjU5nSHogicUbAAD12vIQa1XJIkjF4p3Om0tKpzxOrV+1puNaoO4GOQvzxXaGZ9BRGFCnsNaVkbE6bZpZ3xl6fuRcofHG7h9p18JI/lIOW2Rc1FUFM/y0gkW4Wxk2brYYZnuooNg6VlWKsGQE0GwL4kDY+IShYe7eEYbFassSWl/+HNhqbYkU5yZVNQX8zRS62kQ5h6K0mzIAyaZehQsWNRDXvGdb6UthkDtdLpL6w6PRThwxLFfLch73B9JWSYB19FmdoNlG3Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
+ bh=QmWOXvwg710M+qzCCZLI1CG62sHXiD8UxWuuyqUgLng=;
+ b=M7bSbHbLxRvAyxjAq/NoHzDxaplV2u2ywzXGx3bspwKkjCdV4+rf6/PidmiVd6YRjt/zo367xnhyUS5+GfdWNevs5cGfYONtPoFymBBX+cJ6lewL9yQ+SKW8oFtKjzrEqk2tXIcHkTtrFPH8c8UO4dL+kkeltAid11YjrQqXrxAVRL24/opvQGuaVbIDcDQ23FTfsYoxpkEgs6+cvRXN6v93ulOVDH7ni4jQjh52sSAO40QXtn+9w0+s7/HP5rjDUNr5j65dPMMMY2KKDgCGlII7JAY+LwN1QnKcPWouyTwKHSMn839jQnEKxXL4Bdr2StRm63BJGUs0JErfBDJcJw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=linux-foundation.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=KUNwJl8Jn1PBN/HxlkjA3aFFCPKLNlTw97AZnQreqcQ=;
- b=IQ/dZh9FIDKmdKb35WnQZIWPmyNTkY5lno+Vvrmvx3pgQov/UiF+R+C2UUUNyB9YkYgu6nEjuCbxnab8CRI83LOVdTjFFJUlaluAYlZwxY0MFVlNMw1Je7DoQlYh4joyBuUQPwMI1w7h66L22Lw3kOOJv9SusfyHLDcg9lYbD9W7cFhgzoN1x5OsKmhThgJ8SKFR5pPkuR0Ymwj8vqnp8ryJmSZEW1asJmeo3mb4CKNwwg6zB/6wFv08EKuyB0SOrCgtiX05+aazS46qxek9FqqdKJo02Zp0Q+L5FMEpFEQDuyK/2NAt/4fqf/z37p7B35y/DKYWdti+QUJPmUNYvA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by SA1PR12MB7296.namprd12.prod.outlook.com (2603:10b6:806:2ba::21) with
+ bh=QmWOXvwg710M+qzCCZLI1CG62sHXiD8UxWuuyqUgLng=;
+ b=NB40n4DrfG1HVQG5eRvX8j5kvghpQwqL3ij1ZL2Kf5PIpBEG56xw2tnwyW5ETY8nNKwHtfVUMEiWfZJZEYDjH56UrRYEYPEEb5SG52B43vvHQTQSc7f/ZEZkPj8XWQO6IQw/uHhXsgRrT8pqw/e4k+DJTC3H69UaHLo1WOQTr0Z8fiO7sGUTvc5akbtDstztqfK/736LX+ALlrTq46wJKaj+uQF+fBXTECaOtoVFoBMP1pCFNr/F1rmCcz3hraUJrGarM9tuSN7dH2Ex3R3RX6LUYbkg1asbSu2IDS9i10i9g6FB7HA2nqQ6fJuERPnF91pDgL/xYc8uUeIbwWMnoA==
+Received: from CH0PR03CA0046.namprd03.prod.outlook.com (2603:10b6:610:b3::21)
+ by SJ0PR12MB7475.namprd12.prod.outlook.com (2603:10b6:a03:48d::10) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7068.27; Sat, 9 Dec
- 2023 01:47:27 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::60d4:c1e3:e1aa:8f93]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::60d4:c1e3:e1aa:8f93%4]) with mapi id 15.20.7046.038; Sat, 9 Dec 2023
- 01:47:27 +0000
-Date: Fri, 8 Dec 2023 21:47:26 -0400
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Yi Liu <yi.l.liu@intel.com>, "Giani, Dhaval" <Dhaval.Giani@amd.com>,
-	Vasant Hegde <vasant.hegde@amd.com>,
-	Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>
-Cc: joro@8bytes.org, alex.williamson@redhat.com, kevin.tian@intel.com,
-	robin.murphy@arm.com, baolu.lu@linux.intel.com, cohuck@redhat.com,
-	eric.auger@redhat.com, nicolinc@nvidia.com, kvm@vger.kernel.org,
-	mjrosato@linux.ibm.com, chao.p.peng@linux.intel.com,
-	yi.y.sun@linux.intel.com, peterx@redhat.com, jasowang@redhat.com,
-	shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
-	suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	zhenzhong.duan@intel.com, joao.m.martins@oracle.com,
-	xin.zeng@intel.com, yan.y.zhao@intel.com
-Subject: Re: [PATCH v6 0/6] iommufd: Add nesting infrastructure (part 2/2)
-Message-ID: <20231209014726.GA2945299@nvidia.com>
-References: <20231117130717.19875-1-yi.l.liu@intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231117130717.19875-1-yi.l.liu@intel.com>
-X-ClientProxiedBy: MN2PR05CA0043.namprd05.prod.outlook.com
- (2603:10b6:208:236::12) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7068.29; Sat, 9 Dec
+ 2023 02:02:13 +0000
+Received: from CY4PEPF0000EE38.namprd03.prod.outlook.com
+ (2603:10b6:610:b3:cafe::5c) by CH0PR03CA0046.outlook.office365.com
+ (2603:10b6:610:b3::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7068.28 via Frontend
+ Transport; Sat, 9 Dec 2023 02:02:11 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ CY4PEPF0000EE38.mail.protection.outlook.com (10.167.242.12) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7068.26 via Frontend Transport; Sat, 9 Dec 2023 02:02:11 +0000
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 8 Dec 2023
+ 18:01:56 -0800
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail204.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 8 Dec 2023
+ 18:01:56 -0800
+Received: from blueforge.nvidia.com (10.127.8.13) by mail.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server id 15.2.986.41 via Frontend
+ Transport; Fri, 8 Dec 2023 18:01:55 -0800
+From: John Hubbard <jhubbard@nvidia.com>
+To: Andrew Morton <akpm@linux-foundation.org>
+CC: David Hildenbrand <david@redhat.com>, Peter Xu <peterx@redhat.com>, "Shuah
+ Khan" <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
+	<linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>, LKML
+	<linux-kernel@vger.kernel.org>, John Hubbard <jhubbard@nvidia.com>, "Anders
+ Roxell" <anders.roxell@linaro.org>, Muhammad Usama Anjum
+	<usama.anjum@collabora.com>, Jonathan Corbet <corbet@lwn.net>
+Subject: [PATCH] Revert "selftests: error out if kernel header files are not yet built"
+Date: Fri, 8 Dec 2023 18:01:44 -0800
+Message-ID: <20231209020144.244759-1-jhubbard@nvidia.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-NVConfidentiality: public
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SA1PR12MB7296:EE_
-X-MS-Office365-Filtering-Correlation-Id: 239ad3df-e218-43ba-bb7e-08dbf858cc1d
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000EE38:EE_|SJ0PR12MB7475:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3153e015-60af-488d-bb08-08dbf85adb36
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	dW2Hcnt+yR64b6809RnfwaNFBY1Tqn/qAqsPtYc+NGcAmMaVaaZMk6D46KfSK0tUswdAZ65/yTdnbKM8Rj4+Q/U5cgYgmS8rIphkF6sUSOVetwq8uxgLAchEntzI0jAPwPgpEiQa7dI8n4ibuZTqFxcBvGSBREMyWMk6XVkzIEkQ/S/NKcw5EZvSnIOYqsNCBikIuacOxjB+EZgJc+a2db50hutcP0J+qwtHseRE32Iy9Oo4L6NHWTyUfdoliEV0/MpMfoLsB7gsSyGCdExLxcthIq+wIBnlzSLKp5kL/7yb6gnajN4bw/r3/JtCnG/NwHKrzLeJ/qEUc9rBcNwW8abMBdm5jvl5uyQY0V+PLi8qRmIfhvd8pC3pqmNaOyYehvxh9EWRDnlv1IwQ9bTgI+8lwYqFsnSBGIB9wZsOcRMuoMpFhICl6axhZXGH5kNT7w1ItgtFXLy+Y4dlBCZN1xeUiI+TUWyIss6dhke9CeKIG6CVX+dueqOITu0DeRxRZe4RWjZ57KFm/ghRXLECgdBUxDRKZblAh8fj0bT09+njGBPv0gyyyd8/0p/ndCwq
+	UDC5APBvc/aC0gKGNv6BtrrX6Qpawyh4HBBcrUn2i9eeezXphGmIztP3W8THKw5MlfP0CoI/+yxTSsp2Zhl6dgpNYzfXKni9yR+YUzPRnDk5Jp/nXmDh5rMRjbzLRPcjx5R3BhlS8UAoiWkS78qx0lMH20VX/O7Ba4oB8nbJuL0WP5tAZ9ytHvTV/y6fX0z6YIgwlfhl5YtzwRqU61QE2Nw9Dcx/E55ghuY1mCQF6ya+bKcPleABRSqCzl37e9014BJ1YhDQYERDDlW4ckJlFiB05jd60FmWqNgMAsqYWjKbiFyjQjkRXfes6vqqjd0dHKpOKfO/hGRibjnw443j3kQaddmh9S83sYpXtkQ4+Axm9+m73rQj9sOwFpiOITxGKJ/iYWuAP1Qa6rSq88tCgJYlpDK9cd0VQSL+h4B1KzkLfGM3TR5kpAm3t2qwD34Jnk0Ezux0kEwG5imy2UEhHVbKtc3hGmojGzprixkh3WV8H9lX4brdzVeOOYl6iJS+udEGnwblywPbKzcu3a52EhQX82gM1RFKGDaAWSmyc81LZ12FtXmy4IcRxYfYVIvIVjQRDBz1jNN9FjdzV7JqOs1WjLHFxLRMYdUUPzKcVeAoKxx5WqHA6KjSATRkJX3do4yjPxw/t34eMA337DUWovKHK0x/jAOnhngs3UCrmU44qJK5e6hDf2KO5oEcthYfEf44nCsota4LTXfZymybCvVzvOIUgiA4NOODZf4Gtu61PptBoMvtFzLCsoLP6Fu//WbX7LuugIuy0JVCSj63BQ==
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376002)(346002)(39860400002)(396003)(136003)(366004)(230922051799003)(451199024)(64100799003)(1800799012)(186009)(2616005)(6512007)(26005)(1076003)(83380400001)(6486002)(41300700001)(86362001)(4326008)(36756003)(8936002)(2906002)(5660300002)(7416002)(8676002)(316002)(66556008)(66946007)(66476007)(110136005)(6506007)(478600001)(33656002)(38100700002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?upgdOvZnvOyF2J9bMCEzv56ykztyfAFrUxBHLfdrE/clS0CVEn1cl1T15cuI?=
- =?us-ascii?Q?wLulaBcgpEwIi1iu3CXx7XeoS0/npTmuTmfa6kfQewkzhNvAghdusKUpumAn?=
- =?us-ascii?Q?XhNGK/xxNEJ1rm7LKqavWVFruzZClAQkI4/H+4k4tDmAEvGGMkRijn1fTrSR?=
- =?us-ascii?Q?SUGREwmeAJMT4AuX3UHPZooVl+X+EpIHrOYD5KhN2jw59sYr9ZFLjmcSYNj4?=
- =?us-ascii?Q?Xgob9r0iINMXPUI6y3WrN7nNB2lk1btbLL/Fgeu0Ehp/sOsCAJcnaIKkjdCh?=
- =?us-ascii?Q?W36jFtFGbPOYFvnP2ub5KzXjb69+YirHFlsgLa9/7stCb3aT6TKxw9sGFLAP?=
- =?us-ascii?Q?3Gc78VdpJfobDrhH7FNr7KBJmvGmjHw7kMJhBatA3YVyZVRN6Ip3tJHwX5Fn?=
- =?us-ascii?Q?FbjC73par//BKJKkEGyRmaQBbgKLz31cBuz2oziovkjwUD0a1knYGVkelx5K?=
- =?us-ascii?Q?GcZDxuo81GwNPtLpY44GgviHvYK+ogVxCUryzK8pIt/l4UkGz6scL1EuVabQ?=
- =?us-ascii?Q?qvFjxC/Y9gFeBpEPVM6KFuF/KCFytyhTVhjvjomj8F4idU4+CAMGwawLQVV/?=
- =?us-ascii?Q?6aeVgkUAilihUuGCkQXp7+ZVfYK+9bpeb96qpn5Ir5zAzHnx1/9H/BbuTE6M?=
- =?us-ascii?Q?2fyppqz3FnKpI+vpiCk1HsT9fWluaT+ImFafGOYPWZqp2gim1Fkyg/Aez2OF?=
- =?us-ascii?Q?lAw1hHDnM1OdIUNek5UG5/aswydZmtXtt0lMGqf1g3ULuVWsGqISOFdd/YyI?=
- =?us-ascii?Q?ZOINmLvVX2xfm0YgAwb5V7T99eX1ujnyiOXplImpcgzOJsyzWTB9kShvI4d0?=
- =?us-ascii?Q?4Twk9r5slMivj+rLbqO8k+BFxyh2NfCseVknzTvzyMQpeOdOR9jX0RBnlExP?=
- =?us-ascii?Q?LIoqwW4fYh1pYClhozsI7sBT4gLctpuERHne2ndaxe4jNgttyEhetg0/TzFr?=
- =?us-ascii?Q?w5t1AgkRMCb+fhLv5VhzHkwITH1Y37VSKssT37T/1KBVZFpfxM8uWdhlDL4M?=
- =?us-ascii?Q?CUyIugJSn0oWf5TLiK5zcjkkIYJEWTcHgmKkSB395u5uXLMgDD5xkg8Q4HRc?=
- =?us-ascii?Q?lqCzGHLnb8xSwK+e7iuQpczZXN2XRPCWa2Rum1fazLFLzi9aTVktojVzFdEe?=
- =?us-ascii?Q?QDZIVh+fLrJJS/MvXUb5lOW4w3nEKZBTawN2mBbCL3nU/g8TrttaqJm3qrHp?=
- =?us-ascii?Q?wRlMRAnK7F4ldqCfDt1q2uWlTW4xBycO5HcfHlU/19U9urqjz30HG/YYS08E?=
- =?us-ascii?Q?YBn+p3d4Z0/J9RRW03SARAaSWH1mieKfpB0IASkNJbs4g6tsAyUB5Z2R5TkC?=
- =?us-ascii?Q?8b0pO+vOjpYDuMNJsjJZtuQSLKhcLn8GHmmis2caJU032cerXKcGic9e4AkW?=
- =?us-ascii?Q?Zrja2Y2+dZGTze8xzLpvDlb7bnio7B4Nqp7pxRbEmp7Mv3yMOCouexL2MTBs?=
- =?us-ascii?Q?M2MNED+kpy1HHe6xaMRA9blXJVT8l46L3dUiiABTdCn1Zp3pcFqNM6l8rqK0?=
- =?us-ascii?Q?EPpm+l+CQRillz44Mj1Ze01Y/XvDaqPnHzeBPBViIHiwIt3s4mObMMOfepai?=
- =?us-ascii?Q?r6v/qXj+/7IdnZvYNc3bbxuc/l2QlOGNtZ9xYxOj?=
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230031)(4636009)(396003)(376002)(346002)(136003)(39860400002)(230922051799003)(451199024)(64100799003)(1800799012)(82310400011)(186009)(40470700004)(36840700001)(46966006)(70586007)(70206006)(54906003)(41300700001)(7696005)(6666004)(2616005)(1076003)(36756003)(426003)(336012)(26005)(86362001)(82740400003)(356005)(7636003)(47076005)(83380400001)(36860700001)(966005)(478600001)(8936002)(8676002)(4326008)(2906002)(7416002)(5660300002)(40480700001)(40460700003)(6916009)(316002);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 239ad3df-e218-43ba-bb7e-08dbf858cc1d
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2023 01:47:27.0091
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Dec 2023 02:02:11.0505
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3153e015-60af-488d-bb08-08dbf85adb36
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Ax5QQCwKo6nOeSKMvuFmmRshbt3lyYkgVw+xce9hE2bbYuwNZbIJh0BeCvTn+sgs
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7296
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CY4PEPF0000EE38.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB7475
 
-On Fri, Nov 17, 2023 at 05:07:11AM -0800, Yi Liu wrote:
+This reverts commit 9fc96c7c19df ("selftests: error out if kernel header
+files are not yet built").
 
-> Take Intel VT-d as an example, the stage-1 translation table is I/O page
-> table. As the below diagram shows, guest I/O page table pointer in GPA
-> (guest physical address) is passed to host and be used to perform the stage-1
-> address translation. Along with it, modifications to present mappings in the
-> guest I/O page table should be followed with an IOTLB invalidation.
+It turns out that requiring the kernel headers to be built as a
+prerequisite to building selftests, does not work in many cases. For
+example, Peter Zijlstra writes:
 
-I've been looking at what the three HW's need for invalidation, it is
-a bit messy.. Here is my thinking. Please let me know if I got it right
+"My biggest beef with the whole thing is that I simply do not want to use
+'make headers', it doesn't work for me.
 
-What is the starting point of the guest memory walks:
- Intel: Single Scalable Mode PASID table entry indexed by a RID & PASID
- AMD: GCR3 table (a table of PASIDs) indexed by RID
- ARM: CD table (a table of PASIDs) indexed by RID
+I have a ton of output directories and I don't care to build tools into
+the output dirs, in fact some of them flat out refuse to work that way
+(bpf comes to mind)." [1]
 
-What key does the physical HW use for invalidation:
- Intel: Domain-ID (stored in hypervisor, per PASID), PASID
- AMD: Domain-ID (stored in hypervisor, per RID), PASID
- ARM: VMID (stored in hypervisor, per RID), ASID (stored in guest)
+Therefore, stop erroring out on the selftests build. Additional patches
+will be required in order to change over to not requiring the kernel
+headers.
 
-Why key does the VM use for invalidation:
- Intel: vDomain-ID (per PASID), PASID
- AMD: vDomain-ID (per RID), PASID
- ARM: ASID
+[1] https://lore.kernel.org/20231208221007.GO28727@noisy.programming.kicks-ass.net
 
-What is in a Nested domain:
- Intel: A single IO page table refereed to by a PASID entry
-        Each vDomain-ID,PASID allocates a unique nesting domain
- AMD: A GCR3 table pointer
-      Nesting domains are created for every unique GCR3 pointer.
-      vDomain-ID can possibly refer to multiple Nesting domains :(
- ARM: A CD table pointer
-      Nesting domains are created for every unique CD table top pointer.
+Cc: Anders Roxell <anders.roxell@linaro.org>
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>
+Cc: David Hildenbrand <david@redhat.com>
+Cc: Peter Xu <peterx@redhat.com>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Shuah Khan <shuah@kernel.org>
+Signed-off-by: John Hubbard <jhubbard@nvidia.com>
+---
+ tools/testing/selftests/Makefile | 21 +----------------
+ tools/testing/selftests/lib.mk   | 40 +++-----------------------------
+ 2 files changed, 4 insertions(+), 57 deletions(-)
 
-How does the hypervisor compute it's cache tag:
- Intel: Each time a nesting domain is attached to a (RID,PASID) the
-        hypervisor driver will try to find a (DID,PASID) that is
-	already used by this domain, or allocate a new DID.
- AMD: When creating the Nesting Domain the vDomain-ID should be passed
-      in. The hypervisor driver will allocate a unique pDomain-ID for
-      each vDomain-ID (hand wave). Several Nesting Domains will share
-      the same p/vDomain-ID.
- ARM: The VMID is uniquely assigned to the Nesting Parent when it
-      is allocated, in some configurations it has to be shared with
-      KVM's VMID so allocating the Nesting Parent will require a KVM FD.
-
-Will ATC be forwarded or synthesized:
- Intel: The (vDomain-ID,PASID) is a unique nesting domain so
-        the hypervisor knows exactly which RIDs this nesting domain is
-	linked to and can generate an ATC invalidation. Plan is to
-	supress/discard the ATC invalidations from the VM and generate
-	them in the hypervisor.
- AMD: (vDomain-ID,PASID) is ambiguous, it can refer to multiple GCR3
-      tables. We know which maximal set of RIDs it represents, but not
-      the actual set. I expect AMD will forward the ATC invalidation
-      to avoid over invalidation.
- ARM: ASID is ambiguous. We have no idea which Nesting Domain/CD table
-      the ASID is contained in. ARM must forward the ATC invalidation
-      from the guest.
-
-What iommufd object should receive the IOTLB invalidation command list:
- Intel: The Nesting domain. The command list has to be broken up per
-        (vDomain-ID,PASID) and that batch delivered to the single
-	nesting domain. Kernel ignores vDomain-ID/PASID and just
-	invalidates whatever the nesting domain is actually attached to
- AMD: Any Nesting Domain in the vDomain-ID group. The command list has
-      to be broken up per (vDomain-ID). Kernel replaces
-      vDomain-ID with pDomain-ID from the nesting domain and executes
-      the invalidation.
- ARM: The Nesting Parent domain. Kernel forces the VMID from the
-      Nesting Parent and executes the invalidation.
-
-In all cases the VM issues an ATC invalidation with (vRID, PASID) as
-the tag. The VMM must translate vRID -> dev_id -> pRID
-
-For a pure SW flow the vRID can be mapped to the dev_id and the ATC
-invalidation delivered to the device object (eg IOMMUFD_DEV_INVALIDATE)
-
-Finally, we have the HW driven invalidation DMA queues that can be
-directly assigned to the guest. AMD and SMMUv3+vCMDQ support this. In
-this case the HW is directly processing invalidation commands without
-a hypervisor trap.
-
-To make this work the iommu needs to be programmed with:
- AMD: A vDomain-ID -> pDomain-ID table
-      A vRID -> pRID table
-      This is all bound to some "virtual function"
- ARM: A vRID -> pRID table
-      The vCMDQ is bound to a VM_ID, so to the Nesting Parent
-
-For AMD, as above, I suggest the vDomain-ID be passed when creating
-the nesting domain.
-
-The AMD "virtual function".. It is probably best to create a new iommufd
-object for this and it can be passed in to a few places
-
-The vRID->pRID table should be some mostly common
-IOMMUFD_DEV_ASSIGN_VIRTUAL_ID. AMD will need to pass in the virtual
-function ID and ARM will need to pass in the Nesting Parent ID.
-
-For the HW path some function will create the command queue and
-DMA/mmap it. Taking in the virtual function/nesting parent as the
-handle to associate it with.
-
-For a SW path:
- AMD: All invalidations can be delivered to the virtual function
-      and the kernel can use the vDomainID/vRID tables to translate
-      them fully
- ARM: All invalidations can be delivered to the nesting parent
-
-In many ways the nesting parent/virtual function are very similar
-things. Perhaps ARM should also create a virtual function object which
-is just welded to the nesting parent for API consistency.
-
-So.. In short.. Invalidation is a PITA. The idea is the same but
-annoying little details interfere with actually having a compltely
-common API here. IMHO the uAPI in this series is fine. It will support
-Intel invalidation and non-ATC invalidation on AMD/ARM. It should be
-setup to allow that the target domain object can be any HWPT.
-
-ARM will be able to do IOTLB invalidation using this API.
-
-IOMMUFD_DEV_INVALIDATE should be introduced with the same design as
-HWPT invalidate. This would be used for AMD/ARM's ATC invalidation
-(and just force the stream ID, userspace must direct the vRID to the
-correct dev_id).
-
-Then in yet another series we can tackle the entire "virtual function"
-vRID/pRID translation stuff when the mmapable queue thing is
-introduced.
-
-Thus next steps:
- - Respin this and lets focus on Intel only (this will be tough for
-   the holidays, but if it is available I will try)
- - Get an ARM patch that just does IOTLB invalidation and add it to my
-   part 3
- - Start working on IOMMUFD_DEV_INVALIDATE along with an ARM
-   implementation of it
- - Reorganize the AMD RFC broadly along these lines and lets see it
-   freshened up in the next months as well. I would like to see the
-   AMD support structured to implement the SW paths in first steps and
-   later add in the "virtual function" acceleration stuff. The latter
-   is going to be complex.
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 3b2061d1c1a5..8247a7c69c36 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -155,12 +155,10 @@ ifneq ($(KBUILD_OUTPUT),)
+   abs_objtree := $(realpath $(abs_objtree))
+   BUILD := $(abs_objtree)/kselftest
+   KHDR_INCLUDES := -isystem ${abs_objtree}/usr/include
+-  KHDR_DIR := ${abs_objtree}/usr/include
+ else
+   BUILD := $(CURDIR)
+   abs_srctree := $(shell cd $(top_srcdir) && pwd)
+   KHDR_INCLUDES := -isystem ${abs_srctree}/usr/include
+-  KHDR_DIR := ${abs_srctree}/usr/include
+   DEFAULT_INSTALL_HDR_PATH := 1
+ endif
  
-Jason
+@@ -174,7 +172,7 @@ export KHDR_INCLUDES
+ # all isn't the first target in the file.
+ .DEFAULT_GOAL := all
+ 
+-all: kernel_header_files
++all:
+ 	@ret=1;							\
+ 	for TARGET in $(TARGETS); do				\
+ 		BUILD_TARGET=$$BUILD/$$TARGET;			\
+@@ -185,23 +183,6 @@ all: kernel_header_files
+ 		ret=$$((ret * $$?));				\
+ 	done; exit $$ret;
+ 
+-kernel_header_files:
+-	@ls $(KHDR_DIR)/linux/*.h >/dev/null 2>/dev/null;                          \
+-	if [ $$? -ne 0 ]; then                                                     \
+-            RED='\033[1;31m';                                                  \
+-            NOCOLOR='\033[0m';                                                 \
+-            echo;                                                              \
+-            echo -e "$${RED}error$${NOCOLOR}: missing kernel header files.";   \
+-            echo "Please run this and try again:";                             \
+-            echo;                                                              \
+-            echo "    cd $(top_srcdir)";                                       \
+-            echo "    make headers";                                           \
+-            echo;                                                              \
+-	    exit 1;                                                                \
+-	fi
+-
+-.PHONY: kernel_header_files
+-
+ run_tests: all
+ 	@for TARGET in $(TARGETS); do \
+ 		BUILD_TARGET=$$BUILD/$$TARGET;	\
+diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+index 118e0964bda9..aa646e0661f3 100644
+--- a/tools/testing/selftests/lib.mk
++++ b/tools/testing/selftests/lib.mk
+@@ -44,26 +44,10 @@ endif
+ selfdir = $(realpath $(dir $(filter %/lib.mk,$(MAKEFILE_LIST))))
+ top_srcdir = $(selfdir)/../../..
+ 
+-ifeq ("$(origin O)", "command line")
+-  KBUILD_OUTPUT := $(O)
++ifeq ($(KHDR_INCLUDES),)
++KHDR_INCLUDES := -isystem $(top_srcdir)/usr/include
+ endif
+ 
+-ifneq ($(KBUILD_OUTPUT),)
+-  # Make's built-in functions such as $(abspath ...), $(realpath ...) cannot
+-  # expand a shell special character '~'. We use a somewhat tedious way here.
+-  abs_objtree := $(shell cd $(top_srcdir) && mkdir -p $(KBUILD_OUTPUT) && cd $(KBUILD_OUTPUT) && pwd)
+-  $(if $(abs_objtree),, \
+-    $(error failed to create output directory "$(KBUILD_OUTPUT)"))
+-  # $(realpath ...) resolves symlinks
+-  abs_objtree := $(realpath $(abs_objtree))
+-  KHDR_DIR := ${abs_objtree}/usr/include
+-else
+-  abs_srctree := $(shell cd $(top_srcdir) && pwd)
+-  KHDR_DIR := ${abs_srctree}/usr/include
+-endif
+-
+-KHDR_INCLUDES := -isystem $(KHDR_DIR)
+-
+ # The following are built by lib.mk common compile rules.
+ # TEST_CUSTOM_PROGS should be used by tests that require
+ # custom build rule and prevent common build rule use.
+@@ -74,25 +58,7 @@ TEST_GEN_PROGS := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS))
+ TEST_GEN_PROGS_EXTENDED := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS_EXTENDED))
+ TEST_GEN_FILES := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_FILES))
+ 
+-all: kernel_header_files $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) \
+-     $(TEST_GEN_FILES)
+-
+-kernel_header_files:
+-	@ls $(KHDR_DIR)/linux/*.h >/dev/null 2>/dev/null;                      \
+-	if [ $$? -ne 0 ]; then                                                 \
+-            RED='\033[1;31m';                                                  \
+-            NOCOLOR='\033[0m';                                                 \
+-            echo;                                                              \
+-            echo -e "$${RED}error$${NOCOLOR}: missing kernel header files.";   \
+-            echo "Please run this and try again:";                             \
+-            echo;                                                              \
+-            echo "    cd $(top_srcdir)";                                       \
+-            echo "    make headers";                                           \
+-            echo;                                                              \
+-	    exit 1; \
+-	fi
+-
+-.PHONY: kernel_header_files
++all: $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES)
+ 
+ define RUN_TESTS
+ 	BASE_DIR="$(selfdir)";			\
+-- 
+2.43.0
+
 
