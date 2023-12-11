@@ -1,110 +1,83 @@
-Return-Path: <linux-kselftest+bounces-1615-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1616-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 668E880DB88
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 21:22:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 818D780DB95
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 21:27:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1D73A1F21C32
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 20:22:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B7372819FD
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 20:27:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A1B353E0E;
-	Mon, 11 Dec 2023 20:21:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C807653E1B;
+	Mon, 11 Dec 2023 20:27:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IsnscW4Z"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jToo/cEQ"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0634F5381E;
-	Mon, 11 Dec 2023 20:21:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB20AC433C7;
-	Mon, 11 Dec 2023 20:21:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7C0D53E13
+	for <linux-kselftest@vger.kernel.org>; Mon, 11 Dec 2023 20:27:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5172C433C8;
+	Mon, 11 Dec 2023 20:27:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702326107;
-	bh=rBpsBQzFgdCR4uHw0YOyenL0nzKHxfcOgHqKnrLFUgI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IsnscW4ZZ5eBgpkU295ZqeOTsNn9/RTDGLj7cdzfkE8r9Ykj9rjeLJWZOosb66RpM
-	 PcruomYoMTgkCOxzS7igzpPDXBSXxzbMKwDpyKmEn52XohKoXrPW+E4FaeTUTZn/vf
-	 TE3qxb83kDoO9+z3I2BE7RP6RRCqeG9Oazz/sB5uqVqZtClli7+l5e1u5pkoTigTEa
-	 V3YMc/Mulx67x28a+6szulTMl72N2/2hfHpb/71TBZBlG9ScNb/+3rwtjq8LhVoRYf
-	 6jiEm7qGsyygnUZxQkZrZl+HWG8LWyMUyl4ymFPGxjkqmV0MNZZL8RX+rQMmNkD3Hl
-	 7I/AKm1Q3PoWA==
-Date: Mon, 11 Dec 2023 20:21:38 +0000
-From: Mark Brown <broonie@kernel.org>
-To: John Hubbard <jhubbard@nvidia.com>
-Cc: David Hildenbrand <david@redhat.com>,
-	Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
-	viro@zeniv.linux.org.uk, brauner@kernel.org, shuah@kernel.org,
-	aarcange@redhat.com, lokeshgidra@google.com, peterx@redhat.com,
-	ryan.roberts@arm.com, hughd@google.com, mhocko@suse.com,
-	axelrasmussen@google.com, rppt@kernel.org, willy@infradead.org,
-	Liam.Howlett@oracle.com, jannh@google.com, zhangpeng362@huawei.com,
-	bgeffon@google.com, kaleshsingh@google.com, ngeoffray@google.com,
-	jdduke@google.com, linux-mm@kvack.org,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, kernel-team@android.com,
-	Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v6 5/5] selftests/mm: add UFFDIO_MOVE ioctl test
-Message-ID: <3d22f342-280f-4a44-87f4-8cca291cfce7@sirena.org.uk>
-References: <20231206103702.3873743-6-surenb@google.com>
- <ZXXJ9NdH61YZfC4c@finisterre.sirena.org.uk>
- <CAJuCfpFbWeycjvjAFryuugXuiv5ggm=cXG+Y1jfaCD9kJ6KWqQ@mail.gmail.com>
- <CAJuCfpHRYi4S9c+KKQqtE6Faw1e0E0ENMMRE17zXsqv_CftTGw@mail.gmail.com>
- <b93b29e9-c176-4111-ae0e-d4922511f223@sirena.org.uk>
- <50385948-5eb4-47ea-87f8-add4265933d6@redhat.com>
- <6a34b0c9-e084-4928-b239-7af01c8d4479@sirena.org.uk>
- <CAJuCfpEcbcO0d5WPDHMqiEJws9k_5c30pE-J+E_VxO_fpTf_mw@mail.gmail.com>
- <3240f4b5-081b-4075-851a-7d1cd86f4333@redhat.com>
- <3eadd79c-c02a-495f-92c0-0315046ef59f@nvidia.com>
+	s=k20201202; t=1702326465;
+	bh=+f+K1J2zjMnV4XxDy3cuCWY6rDx5LO4Cp2MLoIwdP08=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=jToo/cEQ3vlKq7uXuK6pQ0GhiYMB+ee4x2MXGN1GDctBWWy9YToDQi9E/NJqpDNn5
+	 PeO30kk9waFSFEfgmxpTMjF1HztAPVRYsYfEXZb7tnwSCrWuXxPsQekKAJ4EB6Q3ah
+	 qfGSeDXlNd/plAfuamlpsjPZwetCcjXv/tZ6QcGfVEaUqRkizOxAM2i8OOvw6igspA
+	 xCBSbfxxea++rr2rzEaIhq6UXKQNn6jEkI8NB2lyc8+QVaH08KGPY0Hjvl5HFYf8+6
+	 sFUNqH9Ap3B7J5zMnnXu+EYsLYchLw/XKmuKfnSECYoSTVC4YmWmP/mpyRukVxo8q1
+	 UFNC3jjQSiwfw==
+From: Will Deacon <will@kernel.org>
+To: Catalin Marinas <catalin.marinas@arm.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Mark Brown <broonie@kernel.org>
+Cc: kernel-team@android.com,
+	Will Deacon <will@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH] kselftest/arm64: Improve output for skipped TPIDR2 ABI test
+Date: Mon, 11 Dec 2023 20:27:29 +0000
+Message-Id: <170229604354.42938.7367909798766410585.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20231124-kselftest-arm64-tpidr2-skip-v1-1-e05d0ccef101@kernel.org>
+References: <20231124-kselftest-arm64-tpidr2-skip-v1-1-e05d0ccef101@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="2t6rLyxDF+xX0gNK"
-Content-Disposition: inline
-In-Reply-To: <3eadd79c-c02a-495f-92c0-0315046ef59f@nvidia.com>
-X-Cookie: Better dead than mellow.
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
+On Fri, 24 Nov 2023 15:22:21 +0000, Mark Brown wrote:
+> When TPIDR2 is not supported the tpidr2 ABI test prints the same message
+> for each skipped test:
+> 
+>   ok 1 skipped, TPIDR2 not supported
+> 
+> which isn't ideal for test automation software since it tracks kselftest
+> results based on the string used to describe the test. This is also not
+> standard KTAP output, the expected format is:
+> 
+> [...]
 
---2t6rLyxDF+xX0gNK
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Applied to arm64 (for-next/selftests), thanks!
 
-On Mon, Dec 11, 2023 at 10:46:23AM -0800, John Hubbard wrote:
+[1/1] kselftest/arm64: Improve output for skipped TPIDR2 ABI test
+      https://git.kernel.org/arm64/c/33c1a7785a41
 
-> Or (4) Hack in little ifdef snippets, into the selftests, like we used
-> to do. Peter Zijlstra seems to be asking for this, if I understand his
-> (much) earlier comments about this.
+Cheers,
+-- 
+Will
 
-I can't help but think that if we're having to manually copy bits of
-the uapi headers (which are already separated out in the source) into
-another part of the same source tree in order to use them then there's
-room for improvement somewhere.  TBH it also doesn't seem great to add
-additional variables that depend on the user's build environment, we
-already have enough build issues.  It ought to be mostly tedious rather
-than hard but it's still a pain, especially given the issues we have
-getting kselftest fixes merged promptly.
-
---2t6rLyxDF+xX0gNK
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmV3b1IACgkQJNaLcl1U
-h9D6XQf9FJcaZ/aSuBGP4yhVAKDtuYM+O0Qsar4MJCFGlNRbAu/ep77u/lb6SiNm
-LU23BBBAiqPUIKnMW5exn+9u4d7eZg/jgUqktFGJQUooAZXP7tesJ2juToB11Von
-QMaHZ51yQWx/4vduSYWRr1jeH6bKVsC4iUQD8NAxCP7NgC5DqzoKkZUshRIJ1UPa
-m+TgJ2pDfv6sHcEeBnNvfGIUR7AtUlR+CyGsoRs+vv1EUYGuOmV46mf4w34U1FUc
-cSDhODvruTSYW8nNp0yvLcfzC+vgcC6N24IvLy06fYwhVWLsPx3dL089H+FYubVt
-1ik547NSpFhk2Unxhvfsaj1pgPYtCA==
-=lcNl
------END PGP SIGNATURE-----
-
---2t6rLyxDF+xX0gNK--
+https://fixes.arm64.dev
+https://next.arm64.dev
+https://will.arm64.dev
 
