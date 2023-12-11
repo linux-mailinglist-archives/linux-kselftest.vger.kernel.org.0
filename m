@@ -1,134 +1,204 @@
-Return-Path: <linux-kselftest+bounces-1599-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1600-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66ABE80D8F9
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 19:50:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6931680D963
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 19:53:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B7274B2171F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 18:50:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E1C85B21729
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 18:53:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1321851C53;
-	Mon, 11 Dec 2023 18:49:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CL3+qhbW"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4A2D51C59;
+	Mon, 11 Dec 2023 18:53:18 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D4D1E9
-	for <linux-kselftest@vger.kernel.org>; Mon, 11 Dec 2023 10:49:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1702320594;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=XB9mhIvJlXIIux4LJMz0ThVUKKa3x07C77ea6R/b5W4=;
-	b=CL3+qhbWdFALQhmyM2vBfmgPxZOzgAzYsJxg5sAEPbtRp03kDIDBZQZKre04jlPcd0FqRy
-	qjN6Dmq4gOziEHFWlM5AvecMkvhCem3+MFllHtWJExKnh9xrpMAniEsJepEHGQkYb1k310
-	JYbry6nYgoYnfp/F0U//Pnhmpq+cthE=
-Received: from mail-io1-f70.google.com (mail-io1-f70.google.com
- [209.85.166.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-136-k4ZOQKltPaCTixqI_-JRJQ-1; Mon, 11 Dec 2023 13:49:52 -0500
-X-MC-Unique: k4ZOQKltPaCTixqI_-JRJQ-1
-Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-7b34d2f6e07so524673639f.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 Dec 2023 10:49:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702320592; x=1702925392;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XB9mhIvJlXIIux4LJMz0ThVUKKa3x07C77ea6R/b5W4=;
-        b=WLUw9gX61QZ2yQX1u1xeKWI3UEXt2xWZFvCf3662E4cSuiD/8CFPcwBXSfedQ53bMN
-         E9DHYTlEZCzE3keI3IxbJpru1AoTk4uc+SNl4Il5uwb09YIYCYEzzzxcmta1pL9e6Mmv
-         v+UG62p9uemeqr5BGo9LQFz3FNv5iMKmQNiOuklPeDkh9pej2V/Scvz054Lui08ock4c
-         U/yNTJ7ftbtmVjmqKUa5+F/6MP7K89jTHAWt+0Lu+B3SZ79NlvzAyi/E/jN/ucqsR1Ay
-         okMWX0VwS38ofMBKHL9PS4u0YbRJ6d+yDg7+a2/w0sS7Q9C5fQgtpOriYrJXRHQ2cPCV
-         j4yQ==
-X-Gm-Message-State: AOJu0YwWxtxNTNpUIIg+qQcUcueKLrE6071tvdAo8biEgyniecu40Eip
-	QULcih1gsGKiKoBoa6ynTfuT7daujMZeac3ylchMC6TkueQ7lvkM6pJ93m9pPQ4OO4TZQATIroW
-	HEvA/DvOmJuuN6A2cJ09MQ8VtbXzw
-X-Received: by 2002:a05:6602:5c4:b0:7b7:cd9:69e4 with SMTP id w4-20020a05660205c400b007b70cd969e4mr5869258iox.17.1702320591959;
-        Mon, 11 Dec 2023 10:49:51 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IG9BStqyJrk+wPBnz2NVGzUjSM91G8zGRKaMo7y/fs+I/Qqz3zD2APq+aikOivF1KWpRzNeLg==
-X-Received: by 2002:a05:6602:5c4:b0:7b7:cd9:69e4 with SMTP id w4-20020a05660205c400b007b70cd969e4mr5869225iox.17.1702320591628;
-        Mon, 11 Dec 2023 10:49:51 -0800 (PST)
-Received: from redhat.com ([38.15.60.12])
-        by smtp.gmail.com with ESMTPSA id k18-20020a056638371200b0046921815eb5sm2056817jav.62.2023.12.11.10.49.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Dec 2023 10:49:51 -0800 (PST)
-Date: Mon, 11 Dec 2023 11:49:49 -0700
-From: Alex Williamson <alex.williamson@redhat.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Yi Liu <yi.l.liu@intel.com>, joro@8bytes.org, kevin.tian@intel.com,
- robin.murphy@arm.com, baolu.lu@linux.intel.com, cohuck@redhat.com,
- eric.auger@redhat.com, nicolinc@nvidia.com, kvm@vger.kernel.org,
- mjrosato@linux.ibm.com, chao.p.peng@linux.intel.com,
- yi.y.sun@linux.intel.com, peterx@redhat.com, jasowang@redhat.com,
- shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
- suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- zhenzhong.duan@intel.com, joao.m.martins@oracle.com, xin.zeng@intel.com,
- yan.y.zhao@intel.com
-Subject: Re: [PATCH 3/3] vfio: Report PASID capability via
- VFIO_DEVICE_FEATURE ioctl
-Message-ID: <20231211114949.273b21c0.alex.williamson@redhat.com>
-In-Reply-To: <20231211181028.GL2944114@nvidia.com>
-References: <20231127063909.129153-1-yi.l.liu@intel.com>
-	<20231127063909.129153-4-yi.l.liu@intel.com>
-	<20231211110345.1b4526c6.alex.williamson@redhat.com>
-	<20231211181028.GL2944114@nvidia.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; x86_64-redhat-linux-gnu)
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B4F951C37;
+	Mon, 11 Dec 2023 18:53:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E447C433C9;
+	Mon, 11 Dec 2023 18:53:15 +0000 (UTC)
+Date: Mon, 11 Dec 2023 18:53:13 +0000
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Joey Gouly <joey.gouly@arm.com>
+Cc: linux-arm-kernel@lists.infradead.org, akpm@linux-foundation.org,
+	aneesh.kumar@linux.ibm.com, broonie@kernel.org,
+	dave.hansen@linux.intel.com, maz@kernel.org, oliver.upton@linux.dev,
+	shuah@kernel.org, will@kernel.org, kvmarm@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Szabolcs Nagy <szabolcs.nagy@arm.com>
+Subject: Re: [PATCH v3 15/25] arm64: add POE signal support
+Message-ID: <ZXdamak1wDyUdwSG@arm.com>
+References: <20231124163510.1835740-1-joey.gouly@arm.com>
+ <20231124163510.1835740-16-joey.gouly@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231124163510.1835740-16-joey.gouly@arm.com>
 
-On Mon, 11 Dec 2023 14:10:28 -0400
-Jason Gunthorpe <jgg@nvidia.com> wrote:
++ Szabolcs for libc ack (and keeping the full patch quoted below)
 
-> On Mon, Dec 11, 2023 at 11:03:45AM -0700, Alex Williamson wrote:
-> > On Sun, 26 Nov 2023 22:39:09 -0800
-> > Yi Liu <yi.l.liu@intel.com> wrote:
+You should cc Szabolcs when reposting, we need his ack on the UAPI
+changes.
 
-> > >    the PF). Creating a virtual PASID capability in vfio-pci config space needs
-> > >    to find a hole to place it, but doing so may require device specific
-> > >    knowledge to avoid potential conflict with device specific registers like
-> > >    hiden bits in VF config space. It's simpler by moving this burden to the
-> > >    VMM instead of maintaining a quirk system in the kernel.  
-> > 
-> > This feels a bit like an incomplete solution though and we might
-> > already posses device specific knowledge in the form of a variant
-> > driver.  Should this feature structure include a flag + field that
-> > could serve to generically indicate to the VMM a location for
-> > implementing the PASID capability?  The default core implementation
-> > might fill this only for PFs where clearly an emualted PASID capability
-> > can overlap the physical capability.  Thanks,  
+On Fri, Nov 24, 2023 at 04:35:00PM +0000, Joey Gouly wrote:
+> Add PKEY support to signals, by saving and restoring POR_EL0 from the stackframe.
 > 
-> In many ways I would perfer to solve this for good by having a way to
-> learn a range of available config space - I liked the suggestion to
-> use a DVSEC to mark empty space.
-
-Yes, DVSEC is the most plausible option for the device itself to convey
-unused config space, but that requires hardware adoption so presumably
-we're going to need to fill the gaps with device specific code.  That
-code might live in a variant driver or in the VMM.  If we have faith
-that DVSEC is the way, it'd make sense for a variant driver to
-implement a virtual DVSEC to work out the QEMU implementation and set a
-precedent.
-
-I mostly just want us to recognize that this feature structure also has
-the possibility to fill this gap and we're consciously passing it over
-and should maybe formally propose the DVSEC solution and reference it
-in the commit log or comments here to provide a complete picture.
-Thanks,
-
-Alex
-
+> Signed-off-by: Joey Gouly <joey.gouly@arm.com>
+> Cc: Catalin Marinas <catalin.marinas@arm.com>
+> Cc: Will Deacon <will@kernel.org>
+> Reviewed-by: Mark Brown <broonie@kernel.org>
+> ---
+>  arch/arm64/include/uapi/asm/sigcontext.h |  7 ++++
+>  arch/arm64/kernel/signal.c               | 51 ++++++++++++++++++++++++
+>  2 files changed, 58 insertions(+)
+> 
+> diff --git a/arch/arm64/include/uapi/asm/sigcontext.h b/arch/arm64/include/uapi/asm/sigcontext.h
+> index f23c1dc3f002..cef85eeaf541 100644
+> --- a/arch/arm64/include/uapi/asm/sigcontext.h
+> +++ b/arch/arm64/include/uapi/asm/sigcontext.h
+> @@ -98,6 +98,13 @@ struct esr_context {
+>  	__u64 esr;
+>  };
+>  
+> +#define POE_MAGIC	0x504f4530
+> +
+> +struct poe_context {
+> +	struct _aarch64_ctx head;
+> +	__u64 por_el0;
+> +};
+> +
+>  /*
+>   * extra_context: describes extra space in the signal frame for
+>   * additional structures that don't fit in sigcontext.__reserved[].
+> diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
+> index 0e8beb3349ea..379f364005bf 100644
+> --- a/arch/arm64/kernel/signal.c
+> +++ b/arch/arm64/kernel/signal.c
+> @@ -62,6 +62,7 @@ struct rt_sigframe_user_layout {
+>  	unsigned long zt_offset;
+>  	unsigned long extra_offset;
+>  	unsigned long end_offset;
+> +	unsigned long poe_offset;
+>  };
+>  
+>  #define BASE_SIGFRAME_SIZE round_up(sizeof(struct rt_sigframe), 16)
+> @@ -182,6 +183,8 @@ struct user_ctxs {
+>  	u32 za_size;
+>  	struct zt_context __user *zt;
+>  	u32 zt_size;
+> +	struct poe_context __user *poe;
+> +	u32 poe_size;
+>  };
+>  
+>  static int preserve_fpsimd_context(struct fpsimd_context __user *ctx)
+> @@ -227,6 +230,20 @@ static int restore_fpsimd_context(struct user_ctxs *user)
+>  	return err ? -EFAULT : 0;
+>  }
+>  
+> +static int restore_poe_context(struct user_ctxs *user)
+> +{
+> +	u64 por_el0;
+> +	int err = 0;
+> +
+> +	if (user->poe_size != sizeof(*user->poe))
+> +		return -EINVAL;
+> +
+> +	__get_user_error(por_el0, &(user->poe->por_el0), err);
+> +	if (!err)
+> +		write_sysreg_s(por_el0, SYS_POR_EL0);
+> +
+> +	return err;
+> +}
+>  
+>  #ifdef CONFIG_ARM64_SVE
+>  
+> @@ -590,6 +607,7 @@ static int parse_user_sigframe(struct user_ctxs *user,
+>  	user->tpidr2 = NULL;
+>  	user->za = NULL;
+>  	user->zt = NULL;
+> +	user->poe = NULL;
+>  
+>  	if (!IS_ALIGNED((unsigned long)base, 16))
+>  		goto invalid;
+> @@ -640,6 +658,17 @@ static int parse_user_sigframe(struct user_ctxs *user,
+>  			/* ignore */
+>  			break;
+>  
+> +		case POE_MAGIC:
+> +			if (!system_supports_poe())
+> +				goto invalid;
+> +
+> +			if (user->poe)
+> +				goto invalid;
+> +
+> +			user->poe = (struct poe_context __user *)head;
+> +			user->poe_size = size;
+> +			break;
+> +
+>  		case SVE_MAGIC:
+>  			if (!system_supports_sve() && !system_supports_sme())
+>  				goto invalid;
+> @@ -812,6 +841,9 @@ static int restore_sigframe(struct pt_regs *regs,
+>  	if (err == 0 && system_supports_sme2() && user.zt)
+>  		err = restore_zt_context(&user);
+>  
+> +	if (err == 0 && system_supports_poe() && user.poe)
+> +		err = restore_poe_context(&user);
+> +
+>  	return err;
+>  }
+>  
+> @@ -928,6 +960,13 @@ static int setup_sigframe_layout(struct rt_sigframe_user_layout *user,
+>  		}
+>  	}
+>  
+> +	if (system_supports_poe()) {
+> +		err = sigframe_alloc(user, &user->poe_offset,
+> +				     sizeof(struct poe_context));
+> +		if (err)
+> +			return err;
+> +	}
+> +
+>  	return sigframe_alloc_end(user);
+>  }
+>  
+> @@ -968,6 +1007,15 @@ static int setup_sigframe(struct rt_sigframe_user_layout *user,
+>  		__put_user_error(current->thread.fault_code, &esr_ctx->esr, err);
+>  	}
+>  
+> +	if (system_supports_poe() && err == 0 && user->poe_offset) {
+> +		struct poe_context __user *poe_ctx =
+> +			apply_user_offset(user, user->poe_offset);
+> +
+> +		__put_user_error(POE_MAGIC, &poe_ctx->head.magic, err);
+> +		__put_user_error(sizeof(*poe_ctx), &poe_ctx->head.size, err);
+> +		__put_user_error(read_sysreg_s(SYS_POR_EL0), &poe_ctx->por_el0, err);
+> +	}
+> +
+>  	/* Scalable Vector Extension state (including streaming), if present */
+>  	if ((system_supports_sve() || system_supports_sme()) &&
+>  	    err == 0 && user->sve_offset) {
+> @@ -1119,6 +1167,9 @@ static void setup_return(struct pt_regs *regs, struct k_sigaction *ka,
+>  		sme_smstop();
+>  	}
+>  
+> +	if (system_supports_poe())
+> +		write_sysreg_s(POR_EL0_INIT, SYS_POR_EL0);
+> +
+>  	if (ka->sa.sa_flags & SA_RESTORER)
+>  		sigtramp = ka->sa.sa_restorer;
+>  	else
+> -- 
+> 2.25.1
 
