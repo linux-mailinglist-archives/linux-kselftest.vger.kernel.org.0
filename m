@@ -1,27 +1,27 @@
-Return-Path: <linux-kselftest+bounces-1566-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1567-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91D0E80D0BB
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 17:14:02 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9299980D0BE
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 17:14:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 21CA8B20DFE
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 16:14:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B56EC1C213FA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 16:14:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 619664C605;
-	Mon, 11 Dec 2023 16:13:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BE584C608;
+	Mon, 11 Dec 2023 16:14:09 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A647F3;
-	Mon, 11 Dec 2023 08:13:53 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 603DD8E;
+	Mon, 11 Dec 2023 08:14:05 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 782621007;
-	Mon, 11 Dec 2023 08:14:39 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AFA6DFEC;
+	Mon, 11 Dec 2023 08:14:51 -0800 (PST)
 Received: from e127643.broadband (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 053963F738;
-	Mon, 11 Dec 2023 08:13:48 -0800 (PST)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 3F4CE3F738;
+	Mon, 11 Dec 2023 08:14:01 -0800 (PST)
 From: James Clark <james.clark@arm.com>
 To: linux-arm-kernel@lists.infradead.org,
 	linux-perf-users@vger.kernel.org,
@@ -55,10 +55,12 @@ Cc: namhyung@gmail.com,
 	kvmarm@lists.linux.dev,
 	kvm@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v7 00/11] arm64: perf: Add support for event counting threshold
-Date: Mon, 11 Dec 2023 16:13:12 +0000
-Message-Id: <20231211161331.1277825-1-james.clark@arm.com>
+Subject: [PATCH v7 01/11] arm: perf: Remove inlines from arm_pmuv3.c
+Date: Mon, 11 Dec 2023 16:13:13 +0000
+Message-Id: <20231211161331.1277825-2-james.clark@arm.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231211161331.1277825-1-james.clark@arm.com>
+References: <20231211161331.1277825-1-james.clark@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -67,114 +69,205 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Changes since v6:
+These are all static and in one compilation unit so the inline has no
+effect on the binary. Except if FTRACE is enabled, then 3 functions
+which were already not inlined now get the nops added which allows them
+to be traced.
 
-  * Remove inlines from arm_pmuv3.c
-  * Use format attribute mechanism from SPE
-  * Re-arrange attributes so that threshold comes last and can
-    potentially be extended
-  * Emit an error if the max threshold is exceeded rather than clamping
-  * Convert all register fields to GENMASK
+Signed-off-by: James Clark <james.clark@arm.com>
+---
+ drivers/perf/arm_pmuv3.c | 46 ++++++++++++++++++++--------------------
+ 1 file changed, 23 insertions(+), 23 deletions(-)
 
-Changes since v5:
-  * Restructure the docs and add some more explanations
-  * PMMIR.WIDTH -> PMMIR.THWIDTH in one comment
-  * Don't write EVTYPER.TC if TH is 0. Doesn't have any functional
-    effect but it might be a bit easier to understand the code.
-  * Expand the format field #define names
-
-Changes since v4:
-
-  * Rebase onto v6.7-rc1, it no longer depends on kvmarm/next
-  * Remove change that moved ARMV8_PMU_EVTYPE_MASK to the asm files.
-    This actually depended on those files being included in a certain
-    order with arm_pmuv3.h to avoid circular includes. Now the
-    definition is done programmatically in arm_pmuv3.c instead.
-
-Changes since v3:
-
-  * Drop #include changes to KVM source files because since
-    commit bc512d6a9b92 ("KVM: arm64: Make PMEVTYPER<n>_EL0.NSH RES0 if
-    EL2 isn't advertised"), KVM doesn't use ARMV8_PMU_EVTYPE_MASK
-    anymore
-
-Changes since v2:
-
-  * Split threshold_control attribute into two, threshold_compare and
-    threshold_count so that it's easier to use
-  * Add some notes to the first commit message and the cover letter
-    about the behavior in KVM
-  * Update the docs commit with regards to the split attribute
+diff --git a/drivers/perf/arm_pmuv3.c b/drivers/perf/arm_pmuv3.c
+index 6ca7be05229c..9184a75435e2 100644
+--- a/drivers/perf/arm_pmuv3.c
++++ b/drivers/perf/arm_pmuv3.c
+@@ -300,12 +300,12 @@ PMU_FORMAT_ATTR(rdpmc, "config1:1");
  
-Changes since v1:
-
-  * Fix build on aarch32 by disabling FEAT_PMUv3_TH and splitting event
-    type mask between the platforms
-  * Change armv8pmu_write_evtype() to take unsigned long instead of u64
-    so it isn't unnecessarily wide on aarch32
-  * Add UL suffix to aarch64 event type mask definition
-
-----
-
-FEAT_PMUv3_TH (Armv8.8) is a new feature that allows conditional
-counting of PMU events depending on how much the event increments on
-a single cycle. Two new config fields for perf_event_open have been
-added, and a PMU cap file for reading the max_threshold. See the second
-commit message and the docs in the last commit for more details.
-
-The feature is not currently supported on KVM guests, and PMMIR is set
-to read as zero, so it's not advertised as available. But it can be
-added at a later time. Writes to PMEVTYPER.TC and TH from guests are
-already RES0.
-
-The change has been validated on the Arm FVP model:
-
-  # Zero values, works as expected (as before).
-  $ perf stat -e dtlb_walk/threshold=0,threshold_compare=0/ -- true
-
-    5962      dtlb_walk/threshold=0,threshold_compare=0/
-
-  # Threshold >= 255 causes count to be 0 because dtlb_walk doesn't
-  # increase by more than 1 per cycle.
-  $ perf stat -e dtlb_walk/threshold=255,threshold_compare=2/ -- true
-
-    0      dtlb_walk/threshold=255,threshold_compare=2/
-  
-  # Keeping comparison as >= but lowering the threshold to 1 makes the
-  # count return.
-  $ perf stat -e dtlb_walk/threshold=1,threshold_compare=2/ -- true
-
-    6329      dtlb_walk/threshold=1,threshold_compare=2/
-
-James Clark (11):
-  arm: perf: Remove inlines from arm_pmuv3.c
-  arm: perf/kvm: Use GENMASK for ARMV8_PMU_PMCR_N
-  arm: perf: Use GENMASK for PMMIR fields
-  arm: perf: Convert remaining fields to use GENMASK
-  arm64: perf: Include threshold control fields in PMEVTYPER mask
-  arm: pmu: Share user ABI format mechanism with SPE
-  perf/arm_dmc620: Remove duplicate format attribute #defines
-  KVM: selftests: aarch64: Update tools copy of arm_pmuv3.h
-  arm: pmu: Move error message and -EOPNOTSUPP to individual PMUs
-  arm64: perf: Add support for event counting threshold
-  Documentation: arm64: Document the PMU event counting threshold
-    feature
-
- Documentation/arch/arm64/perf.rst             |  72 +++++++
- arch/arm/kernel/perf_event_v7.c               |   6 +-
- arch/arm64/kvm/pmu-emul.c                     |   8 +-
- arch/arm64/kvm/sys_regs.c                     |   4 +-
- drivers/perf/apple_m1_cpu_pmu.c               |   6 +-
- drivers/perf/arm_dmc620_pmu.c                 |  22 +--
- drivers/perf/arm_pmu.c                        |  11 +-
- drivers/perf/arm_pmuv3.c                      | 175 ++++++++++++++----
- drivers/perf/arm_spe_pmu.c                    |  22 ---
- include/linux/perf/arm_pmu.h                  |  22 +++
- include/linux/perf/arm_pmuv3.h                |  34 ++--
- tools/include/perf/arm_pmuv3.h                |  43 +++--
- .../kvm/aarch64/vpmu_counter_access.c         |   5 +-
- 13 files changed, 296 insertions(+), 134 deletions(-)
-
+ static int sysctl_perf_user_access __read_mostly;
+ 
+-static inline bool armv8pmu_event_is_64bit(struct perf_event *event)
++static bool armv8pmu_event_is_64bit(struct perf_event *event)
+ {
+ 	return event->attr.config1 & 0x1;
+ }
+ 
+-static inline bool armv8pmu_event_want_user_access(struct perf_event *event)
++static bool armv8pmu_event_want_user_access(struct perf_event *event)
+ {
+ 	return event->attr.config1 & 0x2;
+ }
+@@ -397,7 +397,7 @@ static bool armv8pmu_has_long_event(struct arm_pmu *cpu_pmu)
+ 	return (IS_ENABLED(CONFIG_ARM64) && is_pmuv3p5(cpu_pmu->pmuver));
+ }
+ 
+-static inline bool armv8pmu_event_has_user_read(struct perf_event *event)
++static bool armv8pmu_event_has_user_read(struct perf_event *event)
+ {
+ 	return event->hw.flags & PERF_EVENT_FLAG_USER_READ_CNT;
+ }
+@@ -407,7 +407,7 @@ static inline bool armv8pmu_event_has_user_read(struct perf_event *event)
+  * except when we have allocated the 64bit cycle counter (for CPU
+  * cycles event) or when user space counter access is enabled.
+  */
+-static inline bool armv8pmu_event_is_chained(struct perf_event *event)
++static bool armv8pmu_event_is_chained(struct perf_event *event)
+ {
+ 	int idx = event->hw.idx;
+ 	struct arm_pmu *cpu_pmu = to_arm_pmu(event->pmu);
+@@ -428,36 +428,36 @@ static inline bool armv8pmu_event_is_chained(struct perf_event *event)
+ #define	ARMV8_IDX_TO_COUNTER(x)	\
+ 	(((x) - ARMV8_IDX_COUNTER0) & ARMV8_PMU_COUNTER_MASK)
+ 
+-static inline u64 armv8pmu_pmcr_read(void)
++static u64 armv8pmu_pmcr_read(void)
+ {
+ 	return read_pmcr();
+ }
+ 
+-static inline void armv8pmu_pmcr_write(u64 val)
++static void armv8pmu_pmcr_write(u64 val)
+ {
+ 	val &= ARMV8_PMU_PMCR_MASK;
+ 	isb();
+ 	write_pmcr(val);
+ }
+ 
+-static inline int armv8pmu_has_overflowed(u32 pmovsr)
++static int armv8pmu_has_overflowed(u32 pmovsr)
+ {
+ 	return pmovsr & ARMV8_PMU_OVERFLOWED_MASK;
+ }
+ 
+-static inline int armv8pmu_counter_has_overflowed(u32 pmnc, int idx)
++static int armv8pmu_counter_has_overflowed(u32 pmnc, int idx)
+ {
+ 	return pmnc & BIT(ARMV8_IDX_TO_COUNTER(idx));
+ }
+ 
+-static inline u64 armv8pmu_read_evcntr(int idx)
++static u64 armv8pmu_read_evcntr(int idx)
+ {
+ 	u32 counter = ARMV8_IDX_TO_COUNTER(idx);
+ 
+ 	return read_pmevcntrn(counter);
+ }
+ 
+-static inline u64 armv8pmu_read_hw_counter(struct perf_event *event)
++static u64 armv8pmu_read_hw_counter(struct perf_event *event)
+ {
+ 	int idx = event->hw.idx;
+ 	u64 val = armv8pmu_read_evcntr(idx);
+@@ -519,14 +519,14 @@ static u64 armv8pmu_read_counter(struct perf_event *event)
+ 	return  armv8pmu_unbias_long_counter(event, value);
+ }
+ 
+-static inline void armv8pmu_write_evcntr(int idx, u64 value)
++static void armv8pmu_write_evcntr(int idx, u64 value)
+ {
+ 	u32 counter = ARMV8_IDX_TO_COUNTER(idx);
+ 
+ 	write_pmevcntrn(counter, value);
+ }
+ 
+-static inline void armv8pmu_write_hw_counter(struct perf_event *event,
++static void armv8pmu_write_hw_counter(struct perf_event *event,
+ 					     u64 value)
+ {
+ 	int idx = event->hw.idx;
+@@ -552,7 +552,7 @@ static void armv8pmu_write_counter(struct perf_event *event, u64 value)
+ 		armv8pmu_write_hw_counter(event, value);
+ }
+ 
+-static inline void armv8pmu_write_evtype(int idx, u32 val)
++static void armv8pmu_write_evtype(int idx, u32 val)
+ {
+ 	u32 counter = ARMV8_IDX_TO_COUNTER(idx);
+ 
+@@ -560,7 +560,7 @@ static inline void armv8pmu_write_evtype(int idx, u32 val)
+ 	write_pmevtypern(counter, val);
+ }
+ 
+-static inline void armv8pmu_write_event_type(struct perf_event *event)
++static void armv8pmu_write_event_type(struct perf_event *event)
+ {
+ 	struct hw_perf_event *hwc = &event->hw;
+ 	int idx = hwc->idx;
+@@ -594,7 +594,7 @@ static u32 armv8pmu_event_cnten_mask(struct perf_event *event)
+ 	return mask;
+ }
+ 
+-static inline void armv8pmu_enable_counter(u32 mask)
++static void armv8pmu_enable_counter(u32 mask)
+ {
+ 	/*
+ 	 * Make sure event configuration register writes are visible before we
+@@ -604,7 +604,7 @@ static inline void armv8pmu_enable_counter(u32 mask)
+ 	write_pmcntenset(mask);
+ }
+ 
+-static inline void armv8pmu_enable_event_counter(struct perf_event *event)
++static void armv8pmu_enable_event_counter(struct perf_event *event)
+ {
+ 	struct perf_event_attr *attr = &event->attr;
+ 	u32 mask = armv8pmu_event_cnten_mask(event);
+@@ -616,7 +616,7 @@ static inline void armv8pmu_enable_event_counter(struct perf_event *event)
+ 		armv8pmu_enable_counter(mask);
+ }
+ 
+-static inline void armv8pmu_disable_counter(u32 mask)
++static void armv8pmu_disable_counter(u32 mask)
+ {
+ 	write_pmcntenclr(mask);
+ 	/*
+@@ -626,7 +626,7 @@ static inline void armv8pmu_disable_counter(u32 mask)
+ 	isb();
+ }
+ 
+-static inline void armv8pmu_disable_event_counter(struct perf_event *event)
++static void armv8pmu_disable_event_counter(struct perf_event *event)
+ {
+ 	struct perf_event_attr *attr = &event->attr;
+ 	u32 mask = armv8pmu_event_cnten_mask(event);
+@@ -638,18 +638,18 @@ static inline void armv8pmu_disable_event_counter(struct perf_event *event)
+ 		armv8pmu_disable_counter(mask);
+ }
+ 
+-static inline void armv8pmu_enable_intens(u32 mask)
++static void armv8pmu_enable_intens(u32 mask)
+ {
+ 	write_pmintenset(mask);
+ }
+ 
+-static inline void armv8pmu_enable_event_irq(struct perf_event *event)
++static void armv8pmu_enable_event_irq(struct perf_event *event)
+ {
+ 	u32 counter = ARMV8_IDX_TO_COUNTER(event->hw.idx);
+ 	armv8pmu_enable_intens(BIT(counter));
+ }
+ 
+-static inline void armv8pmu_disable_intens(u32 mask)
++static void armv8pmu_disable_intens(u32 mask)
+ {
+ 	write_pmintenclr(mask);
+ 	isb();
+@@ -658,13 +658,13 @@ static inline void armv8pmu_disable_intens(u32 mask)
+ 	isb();
+ }
+ 
+-static inline void armv8pmu_disable_event_irq(struct perf_event *event)
++static void armv8pmu_disable_event_irq(struct perf_event *event)
+ {
+ 	u32 counter = ARMV8_IDX_TO_COUNTER(event->hw.idx);
+ 	armv8pmu_disable_intens(BIT(counter));
+ }
+ 
+-static inline u32 armv8pmu_getreset_flags(void)
++static u32 armv8pmu_getreset_flags(void)
+ {
+ 	u32 value;
+ 
 -- 
 2.34.1
 
