@@ -1,27 +1,27 @@
-Return-Path: <linux-kselftest+bounces-1569-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1570-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8977380D0C6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 17:14:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41BE180D0CB
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 17:14:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BB6931C211C4
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 16:14:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DFFB71F21880
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 16:14:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C13054C60B;
-	Mon, 11 Dec 2023 16:14:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AE0A4C60C;
+	Mon, 11 Dec 2023 16:14:49 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1799010F;
-	Mon, 11 Dec 2023 08:14:30 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9FCED114;
+	Mon, 11 Dec 2023 08:14:42 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5AD1C16A3;
-	Mon, 11 Dec 2023 08:15:16 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BEFDE169E;
+	Mon, 11 Dec 2023 08:15:28 -0800 (PST)
 Received: from e127643.broadband (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id DBC793F738;
-	Mon, 11 Dec 2023 08:14:25 -0800 (PST)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 4DAC43F738;
+	Mon, 11 Dec 2023 08:14:38 -0800 (PST)
 From: James Clark <james.clark@arm.com>
 To: linux-arm-kernel@lists.infradead.org,
 	linux-perf-users@vger.kernel.org,
@@ -55,9 +55,9 @@ Cc: namhyung@gmail.com,
 	kvmarm@lists.linux.dev,
 	kvm@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v7 03/11] arm: perf: Use GENMASK for PMMIR fields
-Date: Mon, 11 Dec 2023 16:13:15 +0000
-Message-Id: <20231211161331.1277825-4-james.clark@arm.com>
+Subject: [PATCH v7 04/11] arm: perf: Convert remaining fields to use GENMASK
+Date: Mon, 11 Dec 2023 16:13:16 +0000
+Message-Id: <20231211161331.1277825-5-james.clark@arm.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231211161331.1277825-1-james.clark@arm.com>
 References: <20231211161331.1277825-1-james.clark@arm.com>
@@ -69,68 +69,78 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This is so that FIELD_GET and FIELD_PREP can be used and that the fields
-are in a consistent format to arm64/tools/sysreg
+Convert the remaining fields to use either GENMASK or be built from
+other fields. These all already started at bit 0 so don't need a code
+change for the lack of _SHIFT.
 
 Signed-off-by: James Clark <james.clark@arm.com>
 ---
- drivers/perf/arm_pmuv3.c       | 8 +++-----
- include/linux/perf/arm_pmuv3.h | 9 +++------
- 2 files changed, 6 insertions(+), 11 deletions(-)
+ drivers/perf/arm_pmuv3.c       |  2 +-
+ include/linux/perf/arm_pmuv3.h | 18 +++++++++++++-----
+ 2 files changed, 14 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/perf/arm_pmuv3.c b/drivers/perf/arm_pmuv3.c
-index e424de5dd44f..7b2c1d03464a 100644
+index 7b2c1d03464a..fbdf3cab8e66 100644
 --- a/drivers/perf/arm_pmuv3.c
 +++ b/drivers/perf/arm_pmuv3.c
-@@ -328,7 +328,7 @@ static ssize_t slots_show(struct device *dev, struct device_attribute *attr,
- {
- 	struct pmu *pmu = dev_get_drvdata(dev);
- 	struct arm_pmu *cpu_pmu = container_of(pmu, struct arm_pmu, pmu);
--	u32 slots = cpu_pmu->reg_pmmir & ARMV8_PMU_SLOTS_MASK;
-+	u32 slots = FIELD_GET(ARMV8_PMU_SLOTS, cpu_pmu->reg_pmmir);
+@@ -671,7 +671,7 @@ static u32 armv8pmu_getreset_flags(void)
+ 	value = read_pmovsclr();
  
- 	return sysfs_emit(page, "0x%08x\n", slots);
- }
-@@ -340,8 +340,7 @@ static ssize_t bus_slots_show(struct device *dev, struct device_attribute *attr,
- {
- 	struct pmu *pmu = dev_get_drvdata(dev);
- 	struct arm_pmu *cpu_pmu = container_of(pmu, struct arm_pmu, pmu);
--	u32 bus_slots = (cpu_pmu->reg_pmmir >> ARMV8_PMU_BUS_SLOTS_SHIFT)
--			& ARMV8_PMU_BUS_SLOTS_MASK;
-+	u32 bus_slots = FIELD_GET(ARMV8_PMU_BUS_SLOTS, cpu_pmu->reg_pmmir);
+ 	/* Write to clear flags */
+-	value &= ARMV8_PMU_OVSR_MASK;
++	value &= ARMV8_PMU_OVERFLOWED_MASK;
+ 	write_pmovsclr(value);
  
- 	return sysfs_emit(page, "0x%08x\n", bus_slots);
- }
-@@ -353,8 +352,7 @@ static ssize_t bus_width_show(struct device *dev, struct device_attribute *attr,
- {
- 	struct pmu *pmu = dev_get_drvdata(dev);
- 	struct arm_pmu *cpu_pmu = container_of(pmu, struct arm_pmu, pmu);
--	u32 bus_width = (cpu_pmu->reg_pmmir >> ARMV8_PMU_BUS_WIDTH_SHIFT)
--			& ARMV8_PMU_BUS_WIDTH_MASK;
-+	u32 bus_width = FIELD_GET(ARMV8_PMU_BUS_WIDTH, cpu_pmu->reg_pmmir);
- 	u32 val = 0;
- 
- 	/* Encoded as Log2(number of bytes), plus one */
+ 	return value;
 diff --git a/include/linux/perf/arm_pmuv3.h b/include/linux/perf/arm_pmuv3.h
-index ed62bd75cec7..1bc7678c10d4 100644
+index 1bc7678c10d4..daa63542242d 100644
 --- a/include/linux/perf/arm_pmuv3.h
 +++ b/include/linux/perf/arm_pmuv3.h
-@@ -250,12 +250,9 @@
- #define ARMV8_PMU_USERENR_ER	(1 << 3) /* Event counter can be read at EL0 */
- 
- /* PMMIR_EL1.SLOTS mask */
--#define ARMV8_PMU_SLOTS_MASK	0xff
--
--#define ARMV8_PMU_BUS_SLOTS_SHIFT 8
--#define ARMV8_PMU_BUS_SLOTS_MASK 0xff
--#define ARMV8_PMU_BUS_WIDTH_SHIFT 16
--#define ARMV8_PMU_BUS_WIDTH_MASK 0xf
-+#define ARMV8_PMU_SLOTS		GENMASK(7, 0)
-+#define ARMV8_PMU_BUS_SLOTS	GENMASK(15, 8)
-+#define ARMV8_PMU_BUS_WIDTH	GENMASK(19, 16)
+@@ -216,19 +216,25 @@
+ #define ARMV8_PMU_PMCR_LC	(1 << 6) /* Overflow on 64 bit cycle counter */
+ #define ARMV8_PMU_PMCR_LP	(1 << 7) /* Long event counter enable */
+ #define ARMV8_PMU_PMCR_N	GENMASK(15, 11) /* Number of counters supported */
+-#define ARMV8_PMU_PMCR_MASK	0xff    /* Mask for writable bits */
++/* Mask for writable bits */
++#define ARMV8_PMU_PMCR_MASK	(ARMV8_PMU_PMCR_E | ARMV8_PMU_PMCR_P | \
++				 ARMV8_PMU_PMCR_C | ARMV8_PMU_PMCR_D | \
++				 ARMV8_PMU_PMCR_X | ARMV8_PMU_PMCR_DP | \
++				 ARMV8_PMU_PMCR_LC | ARMV8_PMU_PMCR_LP)
  
  /*
-  * This code is really good
+  * PMOVSR: counters overflow flag status reg
+  */
+-#define ARMV8_PMU_OVSR_MASK		0xffffffff	/* Mask for writable bits */
+-#define ARMV8_PMU_OVERFLOWED_MASK	ARMV8_PMU_OVSR_MASK
++#define ARMV8_PMU_OVSR_P		GENMASK(30, 0)
++#define ARMV8_PMU_OVSR_C		BIT(31)
++/* Mask for writable bits is both P and C fields */
++#define ARMV8_PMU_OVERFLOWED_MASK	(ARMV8_PMU_OVSR_P | ARMV8_PMU_OVSR_C)
+ 
+ /*
+  * PMXEVTYPER: Event selection reg
+  */
+ #define ARMV8_PMU_EVTYPE_MASK	0xc800ffff	/* Mask for writable bits */
+-#define ARMV8_PMU_EVTYPE_EVENT	0xffff		/* Mask for EVENT bits */
++#define ARMV8_PMU_EVTYPE_EVENT	GENMASK(15, 0)	/* Mask for EVENT bits */
+ 
+ /*
+  * Event filters for PMUv3
+@@ -243,11 +249,13 @@
+ /*
+  * PMUSERENR: user enable reg
+  */
+-#define ARMV8_PMU_USERENR_MASK	0xf		/* Mask for writable bits */
+ #define ARMV8_PMU_USERENR_EN	(1 << 0) /* PMU regs can be accessed at EL0 */
+ #define ARMV8_PMU_USERENR_SW	(1 << 1) /* PMSWINC can be written at EL0 */
+ #define ARMV8_PMU_USERENR_CR	(1 << 2) /* Cycle counter can be read at EL0 */
+ #define ARMV8_PMU_USERENR_ER	(1 << 3) /* Event counter can be read at EL0 */
++/* Mask for writable bits */
++#define ARMV8_PMU_USERENR_MASK	(ARMV8_PMU_USERENR_EN | ARMV8_PMU_USERENR_SW | \
++				 ARMV8_PMU_USERENR_CR | ARMV8_PMU_USERENR_ER)
+ 
+ /* PMMIR_EL1.SLOTS mask */
+ #define ARMV8_PMU_SLOTS		GENMASK(7, 0)
 -- 
 2.34.1
 
