@@ -1,185 +1,280 @@
-Return-Path: <linux-kselftest+bounces-1618-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1619-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F23D980DBA2
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 21:30:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E11A280DBB6
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 21:37:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A9411281C3D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 20:30:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 661101F21BC2
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 20:37:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68EE7101CB;
-	Mon, 11 Dec 2023 20:30:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82E125380E;
+	Mon, 11 Dec 2023 20:37:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="VqezLvEN"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V6q1zdkV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2050.outbound.protection.outlook.com [40.107.237.50])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28C6EEA;
-	Mon, 11 Dec 2023 12:30:28 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ww21aBPzmKOYELsQSd5+0RMbO+9F1dIC5KSx4rKPp7sO+sXO1lIkSyE7YDaCclEGwmseUIdu4NoNGfAY82Q3sR2ysqyY4vx21b7GVDJgdFjCCdHQoNk4Q1COedNMuvkiergFurNuuuHRovTNYjZ6MV3/XY7OXWKGXjiAhpz+rbSytbOfzSNDhUo22W1AyRCH9EN5cB5GHEZOdVUdhMN6GpLiF1cHPuG8EEzYSvt2f4wDjqEggBVH525T01ZKffwUdqhfQhYS+WMLgFRQgpRvlo9gdYWzdva3BziUWwFSAjIF18zmKyQpu7384sKAVIrjpscXgQbJMybcJv28KvjTxw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=E4KC4EQm9y3QoU2E+lOjq/O6p7PsmYfIlaxC0AV2oUE=;
- b=CWandQGhou4bN50+u1ST7gOm4qXsf5F/PoJ03qfHqtl9Lt8F2+SNUn0+DtLusbf2+kQ+4RAT4+yGEzRgZOQFUY73Or+qhngaw/ppC6zOBaa87by7aFy4NcItnkERBT33uFy0nVJzdoKNEixYgoIkUy+fvaU/S0S6w8i7kueeinm11Q8ZoDv0tFQOh1GKgaK1LB//uwv3n+z2z+3FYPEivnAJIEdArmMo8zUM3TSwswL1af/iJlR98BgBMM/3tPQ0nEQXSgJ6q8z/20l87JGPbR9NwRPNZDD+xLqIWLnR2onEtl8/hrlsFzTwTk70PpPyo8KiCN3HkRSARbbR0CFo4w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=E4KC4EQm9y3QoU2E+lOjq/O6p7PsmYfIlaxC0AV2oUE=;
- b=VqezLvENKGd5mydA8wLfD8Zen9Yc2jvnS6EL4ONH6BaVMwcSQ41XJcWZv0Zwx1631+ld00cHVzAxTRs9F9M4pcrBo+QED5tfFU68KB4S64+CzUWaP7RgLKW0dA9oZobZmWZjgFWC2gOEvYxPqMT59uRXR3o+xtFkC/VjgaMmYbtnDGz4rQ9O3ENpNCKnZHouNuRXYPpkXWK1QSJXZKStIKT+qDxUZwDexF3Vi0sV7Hjcq3U78pe+/fa75YP6b6XMdaMN2m6XydXsOvtb9f2hl21Q/Aj5rea7PID1nzV8Kair03HKr9MIp/azL7sIawmAq8MB/MAQyDLXCorCz+rmaA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
- by SN7PR12MB7227.namprd12.prod.outlook.com (2603:10b6:806:2aa::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7068.32; Mon, 11 Dec
- 2023 20:30:25 +0000
-Received: from BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::6b9f:df87:1ee2:88ca]) by BY5PR12MB4130.namprd12.prod.outlook.com
- ([fe80::6b9f:df87:1ee2:88ca%6]) with mapi id 15.20.7068.033; Mon, 11 Dec 2023
- 20:30:25 +0000
-Message-ID: <e3048458-726e-4b98-b2bf-908ea9066959@nvidia.com>
-Date: Mon, 11 Dec 2023 12:29:58 -0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 5/5] selftests/mm: add UFFDIO_MOVE ioctl test
-Content-Language: en-US
-To: Mark Brown <broonie@kernel.org>
-Cc: David Hildenbrand <david@redhat.com>,
- Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
- viro@zeniv.linux.org.uk, brauner@kernel.org, shuah@kernel.org,
- aarcange@redhat.com, lokeshgidra@google.com, peterx@redhat.com,
- ryan.roberts@arm.com, hughd@google.com, mhocko@suse.com,
- axelrasmussen@google.com, rppt@kernel.org, willy@infradead.org,
- Liam.Howlett@oracle.com, jannh@google.com, zhangpeng362@huawei.com,
- bgeffon@google.com, kaleshsingh@google.com, ngeoffray@google.com,
- jdduke@google.com, linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kernel-team@android.com, Peter Zijlstra <peterz@infradead.org>
-References: <20231206103702.3873743-6-surenb@google.com>
- <ZXXJ9NdH61YZfC4c@finisterre.sirena.org.uk>
- <CAJuCfpFbWeycjvjAFryuugXuiv5ggm=cXG+Y1jfaCD9kJ6KWqQ@mail.gmail.com>
- <CAJuCfpHRYi4S9c+KKQqtE6Faw1e0E0ENMMRE17zXsqv_CftTGw@mail.gmail.com>
- <b93b29e9-c176-4111-ae0e-d4922511f223@sirena.org.uk>
- <50385948-5eb4-47ea-87f8-add4265933d6@redhat.com>
- <6a34b0c9-e084-4928-b239-7af01c8d4479@sirena.org.uk>
- <CAJuCfpEcbcO0d5WPDHMqiEJws9k_5c30pE-J+E_VxO_fpTf_mw@mail.gmail.com>
- <3240f4b5-081b-4075-851a-7d1cd86f4333@redhat.com>
- <3eadd79c-c02a-495f-92c0-0315046ef59f@nvidia.com>
- <3d22f342-280f-4a44-87f4-8cca291cfce7@sirena.org.uk>
-From: John Hubbard <jhubbard@nvidia.com>
-In-Reply-To: <3d22f342-280f-4a44-87f4-8cca291cfce7@sirena.org.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BYAPR11CA0104.namprd11.prod.outlook.com
- (2603:10b6:a03:f4::45) To BY5PR12MB4130.namprd12.prod.outlook.com
- (2603:10b6:a03:20b::16)
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7DBDD6;
+	Mon, 11 Dec 2023 12:37:18 -0800 (PST)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-3332e351670so4516544f8f.0;
+        Mon, 11 Dec 2023 12:37:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1702327037; x=1702931837; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5mREG4zmhlrjDE364pycILMuHT3yybZyzypq/2nes4o=;
+        b=V6q1zdkV+wxIKXpM7DWq66B2NPzZBUPK4hr3WRtG+MTVSfExKywo7PK4Bt3nluEqDT
+         MkYrCuuDgvHFyqtkeTL5EVEmHFlAqoCG4wzA1E0AOVgzV7GgxwkQ9vs2R6aGYX15ri2/
+         sp1/AuQvVGRbOCriyt32YoOicKW7+0NZ50d5dTXoKn41lk//umXIHVlwVFUrW8yo+vYp
+         lrn9Cd0RaMPdIaG8HHIVCsPOhnrT3YGAomYLF9MeJLVuBcHmmXArVou5P2kL/Ae82RHR
+         ZnSLIq6BPwppSyaCaayBA0PoehLyk2aJOEhKI7Uz3FPmnyjCKCcFU5bviWtGyL9hN/ou
+         07XA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702327037; x=1702931837;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5mREG4zmhlrjDE364pycILMuHT3yybZyzypq/2nes4o=;
+        b=XUGOs0D1C5EKC/b3Z0mxu1ogVHxrWSHJxBA65PBIYaZiH9yi8GafUYjsyV8T4DwD50
+         iI/eYdSCMb2iXzA3PXMw5XKi5yiYfZAet5sASmkxXIgBAHe7dc7e+81MnVu4zONtwbgJ
+         e9xqoQTLS1VsUyMbW8DnbrP/FQ/3S73ZrSodhoH31n3CPmfICPsRdUav5uIZ0y+l2p2f
+         BseSMW0UlBock5k7uzKK3pN9UsOmxf/FSvZP268P+JIQRei1jaSBheA1/uU9tAhth7Dp
+         fvX9tXjqjGZbrnAh1rP5Lge2WvBvNqA5x/tTQ4UEppdSvJroTP+V//2x/hUYGgTp/CUf
+         WKGg==
+X-Gm-Message-State: AOJu0YxI/1+RqepqcdtaXs8ZPwTXd9Ha46KBp8URvAL6Hv6fQJGeJM1S
+	HOj5ktQZ5YXRgkSxBIL4Nfo=
+X-Google-Smtp-Source: AGHT+IEzTCISh0ruDu6vYmjO9E9rylweqKZzQOVwuAulm2hyYEqdn+X3sTHJGxJeaYXMVcOHEARlYA==
+X-Received: by 2002:adf:a198:0:b0:333:38eb:8947 with SMTP id u24-20020adfa198000000b0033338eb8947mr1043696wru.275.1702327036762;
+        Mon, 11 Dec 2023 12:37:16 -0800 (PST)
+Received: from [192.168.8.100] ([85.255.234.108])
+        by smtp.gmail.com with ESMTPSA id o4-20020a5d58c4000000b0033333bee379sm9328312wrf.107.2023.12.11.12.37.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Dec 2023 12:37:16 -0800 (PST)
+Message-ID: <661c1bae-d7d3-457e-b545-5f67b9ef4197@gmail.com>
+Date: Mon, 11 Dec 2023 20:35:54 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR12MB4130:EE_|SN7PR12MB7227:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1efc8827-5c6e-4964-2ca0-08dbfa880198
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	bs6mrnPvOlXpO0sOQpZMTjByTyptsGDqSWOvkynxHkIzbMSoxJkd6tAx9f+VnUuqzohbckZ61Vdt/LpdcEuk4ruSn7JO0SsFn1kZZQjVnRw0G2dqoryGRHPzP6A+0uGgCB3hoUCTm8QVALXaizSFECJ7baTD8drvRaSP3Ad+s1DpATLLERoXklzgUPND2e80Ze2jJ0huq8sGT9swvz7rymjATmVKexnILhYi5Wj3dtxvNnt1tqxuUJJAYgsOe2mX7LNj/ssD78NlWnSOJ3xZS3G2sofcLLrAzysDKKxzkebcth0Q6fOm5bCoxVEY+zpS25vXNmfCRktA5q+ymPfjzxwGLPojK9h7isNtk/Pr8OkOMrjkpMfD/bJcVXaGLV4UHGG61JjYNi8QjsVD67vK9Zb7CIlvdD/NLluqRrzUQFzmImqGR9106bHcqBYohzO+VJPkmx8UTZZgNSRXmejToGoIfiLmFTi273k6TWAHMYn+4qWbXNvjkZ9hHnZhUEc2q9E9iipz8CDw/LhleFOJi5Clmj/aZtqH4oh/qBmDUsj1mrPFeCfKXqJ4FKeUzAEJ1NREYXv1Eq0vwtHlnh1DYaSg040kxU6PL2VLMtlwWW5ThAwk5usfRuhGKLk73b//ia98pCBUFBHumCwC4LZ1DHWZ/CpZgsRgwzBjsRZdZLUC4CT3ig5xG/ruZA06UjRe
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(346002)(136003)(39860400002)(376002)(396003)(230273577357003)(230173577357003)(230922051799003)(64100799003)(451199024)(186009)(1800799012)(31686004)(53546011)(6486002)(6666004)(2616005)(6506007)(478600001)(6512007)(38100700002)(86362001)(31696002)(36756003)(54906003)(2906002)(5660300002)(66946007)(66556008)(66476007)(6916009)(41300700001)(83380400001)(7416002)(316002)(4326008)(8936002)(8676002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?VlQrbEw3aTVudk5PNjRtUUwvNjU3ckJVV3ZPcHBZaTRrbXBDNDFxZUhMZ2NX?=
- =?utf-8?B?b0RicmNBdjFNS01wc3R2NldlRUlUZVJCc0lzcWI1dzVlcWQ3NmJ4N0pybHFy?=
- =?utf-8?B?V0dCT1Z0Q1FXNXJTZGdzMEVyS2JLYUlvWTg2QU9IRW42Zkp1Vkl1Ny9jNVBn?=
- =?utf-8?B?ekZQMURudFBReGlGU3ZENjRjVHVESC94VEFMSCtzMzlsMHNDMTVjcytIS3Fp?=
- =?utf-8?B?N3FlUVlCL21GMlV5TUU3UmI4YUhqL0Mvd09hWE5xdm52M2swTEk3MUVLVVBM?=
- =?utf-8?B?M1VKV0ZNYi9pZmlQcmVHRDBIMVZqL2dWWjRkWnhZd21mcEtXeXpNR0Q4Z0Q1?=
- =?utf-8?B?b1V2YWE1emU4RENydi9jWEpONUZma0U1SzBYL1UvREJYRWtMMFFLcitlbE1Y?=
- =?utf-8?B?S3FubE1kMTNyRHp1bU1PYVErTmhiU0ZOaTYxSXR3bGRWUTdpa2RkRmxNNmN2?=
- =?utf-8?B?d3ZrRDdOZ0FudTFwdFQvV0JBdGpXTTY3WEo1b21UMWVyYk9hY2FKSG1oL3JW?=
- =?utf-8?B?c21sS3JQU3RZaUFLVzd4bENGcnBySWRSRW9JcXFSSG5BRFZQZDBxQTJ0ejM1?=
- =?utf-8?B?L24ydVhubHhMdGI1YlVTOWhOL2V6cEcvbFRhMlhNRVRFbDNMcEUwa2pjaXo1?=
- =?utf-8?B?UjNWRDY1WHVsSjdNUHhVTkN0S2YzVUFzeEVXSXlUcStTM29uSTJXK1h2bmdp?=
- =?utf-8?B?YkdPUTZhZWJhYjNUcys3Wjl4ZWRNZ0pMZTRJNU5jQUY1UkRQN2JnU3RBbHl5?=
- =?utf-8?B?K2EveEpaamN5bFF3a1htbGZPWkd5NWkxd2tlWWJab1UzMWlyblZpU0QzOHp2?=
- =?utf-8?B?NGNIZmd4NXJURW8yREFOeTk0MTFTOFlrUTZLMTUxMVZuS3hpUS9UT2VXMnJ0?=
- =?utf-8?B?cU1SS0xsd3lEMVZIdFRMazhXby9mcEpwYUhUZThSZjBBTVk3ZFlGTURxR3BM?=
- =?utf-8?B?MUN6K3ZMOEhEejh4ZEJuSjdpYVJ0SUgvQlFjbWJ1b0NtSkk3RndCQWxNajZN?=
- =?utf-8?B?UHZMY1NZeWRua0lEeFNTdytGZ3lQVlNpeUxWUWkrLzRhbGE1dzVHYUhabnhM?=
- =?utf-8?B?aFRyTlhNOEt6dEZrb2NReGdFelVHbVhITU5MTkJJajBhUU5WNGhwekVvSmQr?=
- =?utf-8?B?b21BY3BhSFh0YURnMGkxMXdpcmhZLzRvcDJUeWJWU1RYdUR2eDlWZUVBbFhD?=
- =?utf-8?B?K0U2SHVjNmtXOUNhZ3RwNG9RS2cwc0JwMENHZDhBSXZ3bkhVQUFNTXdvUXhz?=
- =?utf-8?B?Si9tUVVSNitrVThmR2FXeUE1Mi9zTFRLUGZDM3RDWWFTd3JGaXdEUFN1emo1?=
- =?utf-8?B?NFg2d3FnUTlDOHNrak9yOEJuL3FvbjZYRmtzZXN1Y0VBdFJ4NmczSTk3VkJM?=
- =?utf-8?B?Y0oxVnZDRmptOWRrMjFrbDZpQnJXemlLc283d0tBN3M3ZEl6Ykh4VmdYRmZw?=
- =?utf-8?B?Z0V3ai9yWUQ4VGNyNStDVEVVOFF2aVZvMWlYb0dsZFBoQmlGbGdkanB2Q1Jz?=
- =?utf-8?B?T2VaU1VEREtXNlhEemovOURTUlRwUlFIT0p1ZzJEdEowVmduYUUrUi91NThv?=
- =?utf-8?B?dW9DMFFFZ0lQNkRKOU54aElzL2szSEVTZ0RQRFRXMFI5NHpVYVdDMXQzb3N0?=
- =?utf-8?B?Q1lGem9UUnpPamdhRnpvRngzMkhTNERNa1dLd0U2VTBQckpHWTlRNXcrWGVj?=
- =?utf-8?B?ZEZtdEhGZEFTVGVXWi9ObmpGZ2dIemF5N0JDWVVSdWFSOGVSWVBEL3d3dWtT?=
- =?utf-8?B?K3MwNWFqRm9NZnQwM0lkQVQ0UGFIMzhpZFpqeU0vZ1N3S01YZ2txRnBEUUxa?=
- =?utf-8?B?VkxncW5pTTRmZW43NzdPZTR6NVF3UTRXbmpUcnl2cU9abFNyQmd5VDlZN3ZC?=
- =?utf-8?B?ZWsyY1U5YWYzelBjWE5UaVBBMURZb2JIbEFKSllEVHFUYVE2bGtSYmNISlZJ?=
- =?utf-8?B?UEZDdWNRWXhhYVgwMStjMGQzK1V5bzQvRWZ2VVNMQ1k5ZTVmZmhGRGdBY0la?=
- =?utf-8?B?TTJxNEVJNHNBYms5emhjaExsV0g3ZEZpdGd4K3VWNUlxS2xibXU4MzByZXZT?=
- =?utf-8?B?K2lrdTNid0ZzK1ROc3BxNUowUnVaeE11MzVvVTZXUi9kRFdUcDNPbTFVWXBK?=
- =?utf-8?B?UkVRbFduNzlLRHV1RHcybFRQdkRobU8ya0hHK2pZQnREa2xEeTR0aHdNQXpk?=
- =?utf-8?B?ekE9PQ==?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1efc8827-5c6e-4964-2ca0-08dbfa880198
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Dec 2023 20:30:25.3433
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: u+RZiC5esrU0nUb/uZwWQkzv4sPzh5ejjhyGIpE8jB8XPHHV74SQtieOZfa/krLhBLl5bcqz+l5hvVbTf0G+bw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7227
+User-Agent: Mozilla Thunderbird
+Subject: Re: [net-next v1 08/16] memory-provider: dmabuf devmem memory
+ provider
+To: Mina Almasry <almasrymina@google.com>
+Cc: Shailend Chand <shailend@google.com>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ bpf@vger.kernel.org, linux-media@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+ Jeroen de Borst <jeroendb@google.com>,
+ Praveen Kaligineedi <pkaligineedi@google.com>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ Ilias Apalodimas <ilias.apalodimas@linaro.org>, Arnd Bergmann
+ <arnd@arndb.de>, David Ahern <dsahern@kernel.org>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
+ =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+ Yunsheng Lin <linyunsheng@huawei.com>,
+ Harshitha Ramamurthy <hramamurthy@google.com>,
+ Shakeel Butt <shakeelb@google.com>, Willem de Bruijn <willemb@google.com>,
+ Kaiyuan Zhang <kaiyuanz@google.com>
+References: <20231208005250.2910004-1-almasrymina@google.com>
+ <20231208005250.2910004-9-almasrymina@google.com>
+ <b07a4eca-0c3d-4620-9f97-b1d2c76642c2@gmail.com>
+ <CAHS8izNVFx6oHoo7y86P8Di9VCVe8A_n_9UZFkg5Wnt=A=YcNQ@mail.gmail.com>
+ <b1aea7bc-9627-499a-9bee-d2cc07856978@gmail.com>
+ <CAHS8izPry13h49v+PqrmWSREZKZjYpPesxUTyPQy7AGyFwzo4g@mail.gmail.com>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <CAHS8izPry13h49v+PqrmWSREZKZjYpPesxUTyPQy7AGyFwzo4g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 12/11/23 12:21, Mark Brown wrote:
-> On Mon, Dec 11, 2023 at 10:46:23AM -0800, John Hubbard wrote:
+On 12/11/23 02:30, Mina Almasry wrote:
+> On Sat, Dec 9, 2023 at 7:05 PM Pavel Begunkov <asml.silence@gmail.com> wrote:
+>>
+>> On 12/8/23 23:25, Mina Almasry wrote:
+>>> On Fri, Dec 8, 2023 at 2:56 PM Pavel Begunkov <asml.silence@gmail.com> wrote:
+>>>>
+>>>> On 12/8/23 00:52, Mina Almasry wrote:
+>>> ...
+>>>>> +     if (pool->p.queue)
+>>>>> +             binding = READ_ONCE(pool->p.queue->binding);
+>>>>> +
+>>>>> +     if (binding) {
+>>>>> +             pool->mp_ops = &dmabuf_devmem_ops;
+>>>>> +             pool->mp_priv = binding;
+>>>>> +     }
+>>>>
+>>>> Hmm, I don't understand why would we replace a nice transparent
+>>>> api with page pool relying on a queue having devmem specific
+>>>> pointer? It seemed more flexible and cleaner in the last RFC.
+>>>>
+>>>
+>>> Jakub requested this change and may chime in, but I suspect it's to
+>>> further abstract the devmem changes from driver. In this iteration,
+>>> the driver grabs the netdev_rx_queue and passes it to the page_pool,
+>>> and any future configurations between the net stack and page_pool can
+>>> be passed this way with the driver unbothered.
+>>
+>> Ok, that makes sense, but even if passed via an rx queue I'd
+>> at least hope it keeping abstract provider parameters, e.g.
+>> ops, but not hard coded with devmem specific code.
+>>
+>> It might even be better done with a helper like
+>> create_page_pool_from_queue(), unless there is some deeper
+>> interaction b/w pp and rx queues is predicted.
+>>
 > 
->> Or (4) Hack in little ifdef snippets, into the selftests, like we used
->> to do. Peter Zijlstra seems to be asking for this, if I understand his
->> (much) earlier comments about this.
+> Off hand I don't see the need for a new create_page_pool_from_queue().
+> page_pool_create() already takes in a param arg that lets us pass in
+> the queue as well as any other params.
 > 
-> I can't help but think that if we're having to manually copy bits of
-> the uapi headers (which are already separated out in the source) into
-> another part of the same source tree in order to use them then there's
-> room for improvement somewhere.  TBH it also doesn't seem great to add
+>>>>> +
+>>>>>         if (pool->mp_ops) {
+>>>>>                 err = pool->mp_ops->init(pool);
+>>>>>                 if (err) {
+>>>>> @@ -1020,3 +1033,77 @@ void page_pool_update_nid(struct page_pool *pool, int new_nid)
+>>>>>         }
+>>>>>     }
+>>>>>     EXPORT_SYMBOL(page_pool_update_nid);
+>>>>> +
+>>>>> +void __page_pool_iov_free(struct page_pool_iov *ppiov)
+>>>>> +{
+>>>>> +     if (WARN_ON(ppiov->pp->mp_ops != &dmabuf_devmem_ops))
+>>>>> +             return;
+>>>>> +
+>>>>> +     netdev_free_dmabuf(ppiov);
+>>>>> +}
+>>>>> +EXPORT_SYMBOL_GPL(__page_pool_iov_free);
+>>>>
+>>>> I didn't look too deep but I don't think I immediately follow
+>>>> the pp refcounting. It increments pages_state_hold_cnt on
+>>>> allocation, but IIUC doesn't mark skbs for recycle? Then, they all
+>>>> will be put down via page_pool_iov_put_many() bypassing
+>>>> page_pool_return_page() and friends. That will call
+>>>> netdev_free_dmabuf(), which doesn't bump pages_state_release_cnt.
+>>>>
+>>>> At least I couldn't make it work with io_uring, and for my purposes,
+>>>> I forced all puts to go through page_pool_return_page(), which calls
+>>>> the ->release_page callback. The callback will put the reference and
+>>>> ask its page pool to account release_cnt. It also gets rid of
+>>>> __page_pool_iov_free(), as we'd need to add a hook there for
+>>>> customization otherwise.
+>>>>
+>>>> I didn't care about overhead because the hot path for me is getting
+>>>> buffers from a ring, which is somewhat analogous to sock_devmem_dontneed(),
+>>>> but done on pp allocations under napi, and it's done separately.
+>>>>
+>>>> Completely untested with TCP devmem:
+>>>>
+>>>> https://github.com/isilence/linux/commit/14bd56605183dc80b540999e8058c79ac92ae2d8
+>>>>
+>>>
+>>> This was a mistake in the last RFC, which should be fixed in v1. In
+>>> the RFC I was not marking the skbs as skb_mark_for_recycle(), so the
+>>> unreffing path wasn't as expected.
+>>>
+>>> In this iteration, that should be completely fixed. I suspect since I
+>>> just posted this you're actually referring to the issue tested on the
+>>> last RFC? Correct me if wrong.
+>>
+>> Right, it was with RFCv3
+>>
+>>> In this iteration, the reffing story:
+>>>
+>>> - memory provider allocs ppiov and returns it to the page pool with
+>>> ppiov->refcount == 1.
+>>> - The page_pool gives the page to the driver. The driver may
+>>> obtain/release references with page_pool_page_[get|put]_many(), but
+>>> the driver is likely not doing that unless it's doing its own page
+>>> recycling.
+>>> - The net stack obtains references via skb_frag_ref() ->
+>>> page_pool_page_get_many()
+>>> - The net stack drops references via skb_frag_unref() ->
+>>> napi_pp_put_page() -> page_pool_return_page() and friends.
+>>>
+>>> Thus, the issue where the unref path was skipping
+>>> page_pool_return_page() and friends should be resolved in this
+>>> iteration, let me know if you think otherwise, but I think this was an
+>>> issue limited to the last RFC.
+>>
+>> Then page_pool_iov_put_many() should and supposedly would never be
+>> called by non devmap code because all puts must circle back into
+>> ->release_page. Why adding it to into page_pool_page_put_many()?
+>>
+>> @@ -731,6 +731,29 @@ __page_pool_put_page(struct page_pool *pool, struct page *page,
+>> +       if (page_is_page_pool_iov(page)) {
+>> ...
+>> +               page_pool_page_put_many(page, 1);
+>> +               return NULL;
+>> +       }
+>>
+>> Well, I'm looking at this new branch from Patch 10, it can put
+>> the buffer, but what if we race at it's actually the final put?
+>> Looks like nobody is going to to bump up pages_state_release_cnt
+>>
+> 
+> Good catch, I think indeed the release_cnt would be incorrect in this
+> case. I think the race is benign in the sense that the ppiov will be
+> freed correctly and available for allocation when the page_pool next
+> needs it; the issue is with the stats AFAICT.
 
-Yes, it feels that way to me, too.
-
-> additional variables that depend on the user's build environment, we
-> already have enough build issues.  It ought to be mostly tedious rather
-> than hard but it's still a pain, especially given the issues we have
-> getting kselftest fixes merged promptly.
-
-What about David's option (3):
-
-(3) Regularly archive the required headers in the selftest directory
-     like external projects like QEMU do.
-
-, combined with something in the build system to connect it up for
-building the selftests?
-
-Or maybe there is an innovative way to do all of this, that we have
-yet to think of.
+hold_cnt + release_cnt serves is used for refcounting. In this case
+it'll leak the pool when you try to destroy it.
 
 
-thanks,
+>> If you remove the branch, let it fall into ->release and rely
+>> on refcounting there, then the callback could also fix up
+>> release_cnt or ask pp to do it, like in the patch I linked above
+>>
+> 
+> Sadly I don't think this is possible due to the reasons I mention in
+> the commit message of that patch. Prematurely releasing ppiov and not
+> having them be candidates for recycling shows me a 4-5x degradation in
+> performance.
+
+I don't think I follow. The concept is to only recycle a buffer (i.e.
+make it available for allocation) when its refs drop to zero, which is
+IMHO the only way it can work, and IIUC what this patchset is doing.
+
+That's also I suggest to do, but through a slightly different path.
+Let's say at some moment there are 2 refs (e.g. 1 for an skb and
+1 for userspace/xarray).
+
+Say it first puts the skb:
+
+napi_pp_put_page()
+   -> page_pool_return_page()
+     -> mp_ops->release_page()
+        -> need_to_free = put_buf()
+           // not last ref, need_to_free==false,
+           // don't recycle, don't increase release_cnt
+
+Then you put the last ref:
+
+page_pool_iov_put_many()
+   -> page_pool_return_page()
+     -> mp_ops->release_page()
+        -> need_to_free = put_buf()
+           // last ref, need_to_free==true,
+           // recycle and release_cnt++
+
+And that last put can even be recycled right into the
+pp / ptr_ring, in which case it doesn't need to touch
+release_cnt. Does it make sense? I don't see where
+4-5x degradation would come from
+
+
+> What I could do here is detect that the refcount was dropped to 0 and
+> fix up the stats in that case.
+
 -- 
-John Hubbard
-NVIDIA
-
+Pavel Begunkov
 
