@@ -1,232 +1,189 @@
-Return-Path: <linux-kselftest+bounces-1524-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1526-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2413880C8F4
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 13:06:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C2CB80C95F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 13:18:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 95E341F20990
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 12:06:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DB4D4281B55
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 12:18:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA3D238FA1;
-	Mon, 11 Dec 2023 12:06:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 888C93A29D;
+	Mon, 11 Dec 2023 12:18:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="HxWFNVAu"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C+QQp+fU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lj1-x241.google.com (mail-lj1-x241.google.com [IPv6:2a00:1450:4864:20::241])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FB08F7
-	for <linux-kselftest@vger.kernel.org>; Mon, 11 Dec 2023 04:05:58 -0800 (PST)
-Received: by mail-lj1-x241.google.com with SMTP id 38308e7fff4ca-2ca1e6a94a4so55921471fa.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 11 Dec 2023 04:05:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1702296356; x=1702901156; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=yPRbunJso+hnUcdJBJfP0ri8/wbZ76bB4FYyMhUv7gY=;
-        b=HxWFNVAuQo0MHzywLoHmlwkgb49ngwh5UDL7eD0fhZ8Bl5gBHN6SJ5kyiRod22X8rC
-         +OPzL4PwogYrQdCRzGeXIeaYwmBEIKxuOVbdWpWsh6h0SbWfZd5Sj8ZOhjO15xagl5GP
-         gLYgk41TVcTSwW4NmMpLsdikp4ehQF4uvUxeS3TbMnRz9IIMRPC5LQrOZceyvKUht2AF
-         T91r5ZFSoTwdszSad2V1S/rpkvyyRzTXmRluK/ypnJ609FfyiU9jDA0EELxPst3yMlMr
-         Sk3Kd5laXhurosQuJRfKrKI7kVU5zIWmgUZAlCZNGni1TQBLuQ+CJHQdLhDporvdChz0
-         AcwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702296356; x=1702901156;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yPRbunJso+hnUcdJBJfP0ri8/wbZ76bB4FYyMhUv7gY=;
-        b=G8eJFWxKOrazn8WYfjCM9MY0DHsEO4qg50t9DC+2VLtG14ceo3lTysgIdsMcQrURRt
-         bvcOQ8DBU8JzXxDzgVMd0VHnutSyXQYNgTKBzP0iG3w5sb0+/Hp0ekGUWqmSw4CWJUki
-         Shyty8SozzIoPcK+YZQtbOtAlmwWOmQLETd6LQ3ETQCs2K/wt0a4M+7oGM+U21Me9fBi
-         sp1lKuvL4skx0qrtVMTpYvH9QI+3AM7sL7i6gWaV36J2Pv9Ps7xwvQGkOC5tXz4MzVc6
-         rflSlAhATzBZURwMzvVmqsgdiJRp/CK7iF1T3ppH+eAN74sVNwMmZ3pQ0PpeTsWug3S8
-         jZEQ==
-X-Gm-Message-State: AOJu0Yx1PA+W4RY3Q8rNoYY57iivZCbjt2wyICBzGppUxChJo5qkQKM7
-	tDE8LAfX4NOUH45ofkaiyJboUQ==
-X-Google-Smtp-Source: AGHT+IEig6w1WXc49xuX4iE5CXV95u9WT9rGUAC1VDkUzUgoX3sjzdVK/zLppKXtEn6dZJkEov2UuQ==
-X-Received: by 2002:a05:651c:2207:b0:2cc:2018:64e4 with SMTP id y7-20020a05651c220700b002cc201864e4mr1014427ljq.99.1702296356281;
-        Mon, 11 Dec 2023 04:05:56 -0800 (PST)
-Received: from ?IPv6:2804:30c:915:cb00:89a8:6d94:ec55:e0a3? ([2804:30c:915:cb00:89a8:6d94:ec55:e0a3])
-        by smtp.gmail.com with ESMTPSA id y8-20020a17090322c800b001d1ccb0ac98sm6446003plg.272.2023.12.11.04.05.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Dec 2023 04:05:55 -0800 (PST)
-Message-ID: <921825afe9e434f550d012c7e80c92973b2d93d1.camel@suse.com>
-Subject: Re: [PATCH] Revert "selftests: error out if kernel header files are
- not yet built"
-From: Marcos Paulo de Souza <mpdesouza@suse.com>
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>, John Hubbard
-	 <jhubbard@nvidia.com>, Andrew Morton <akpm@linux-foundation.org>
-Cc: David Hildenbrand <david@redhat.com>, Peter Xu <peterx@redhat.com>, 
- Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- linux-mm@kvack.org,  linux-kselftest@vger.kernel.org, LKML
- <linux-kernel@vger.kernel.org>, Anders Roxell <anders.roxell@linaro.org>,
- Jonathan Corbet <corbet@lwn.net>
-Date: Mon, 11 Dec 2023 09:05:49 -0300
-In-Reply-To: <0b35fcbd-ce8c-4c12-9725-01f18ade9fc0@collabora.com>
-References: <20231209020144.244759-1-jhubbard@nvidia.com>
-	 <0b35fcbd-ce8c-4c12-9725-01f18ade9fc0@collabora.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
-User-Agent: Evolution 3.50.1 
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D66CD;
+	Mon, 11 Dec 2023 04:18:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1702297122; x=1733833122;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=WoCyP7/eVs07Uaxg+Z6bbeKyFt0c/ppUNHZy+vX7I+w=;
+  b=C+QQp+fU30b9FokY+LYJkgJC2H6H7f7aaGMnn3YGozetZ14f7P8JiZIA
+   RSz6DQuzKqF2LIssYpo5+GhBmjrt5jR0r4vNYsswltkgoKPHnG3ed3QnE
+   /IJ6Xxb3D7pJYicWtOejJpoMF8wgpWiznuhDKDLvc22dg/v0MUAVGzpCA
+   mear1ywTP3/YENWvRR0Jd5Becy21+uYO1sshKmTQvs/EPMhEbI7RYb4T3
+   pqfLPvU4cyQqzUDzO+8uBXLZGpIRiTpEhXlSuI0QGyAbOEMnaKKWImTVV
+   cmpy9332D0QN2cZkrTuVSnQe2IQALRBRo4m0vTYgoeRwhoETOjEAuAWfT
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10920"; a="7992227"
+X-IronPort-AV: E=Sophos;i="6.04,267,1695711600"; 
+   d="scan'208";a="7992227"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2023 04:18:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10920"; a="916826074"
+X-IronPort-AV: E=Sophos;i="6.04,267,1695711600"; 
+   d="scan'208";a="916826074"
+Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.246.50.188])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2023 04:18:38 -0800
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To: linux-kselftest@vger.kernel.org,
+	Reinette Chatre <reinette.chatre@intel.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
+	=?UTF-8?q?Maciej=20Wiecz=C3=B3r-Retman?= <maciej.wieczor-retman@intel.com>,
+	Fenghua Yu <fenghua.yu@intel.com>
+Cc: linux-kernel@vger.kernel.org,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v3 00/29] selftests/resctrl: CAT test improvements & generalized test framework
+Date: Mon, 11 Dec 2023 14:17:57 +0200
+Message-Id: <20231211121826.14392-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-T24gTW9uLCAyMDIzLTEyLTExIGF0IDE2OjAwICswNTAwLCBNdWhhbW1hZCBVc2FtYSBBbmp1bSB3
-cm90ZToKPiBPbiAxMi85LzIzIDc6MDEgQU0sIEpvaG4gSHViYmFyZCB3cm90ZToKPiA+IFRoaXMg
-cmV2ZXJ0cyBjb21taXQgOWZjOTZjN2MxOWRmICgic2VsZnRlc3RzOiBlcnJvciBvdXQgaWYga2Vy
-bmVsCj4gPiBoZWFkZXIKPiA+IGZpbGVzIGFyZSBub3QgeWV0IGJ1aWx0IikuCj4gSSBkb24ndCB0
-aGluayB3aG9sZSBvZiB0aGlzIGNvbW1pdCBuZWVkcyB0byBiZSByZXZlcnRlZC4gTGV0cyBsZWF2
-ZQo+IHRoZQo+IHdhcm5pbmcgbWVzc2FnZSBhcyBpdCBpcyBhbmQganVzdCByZW1vdmUgdGhlIGNv
-bmRpdGlvbiB0byBhYm9ydCB0aGUKPiBjb21waWxhdGlvbi4KClJldmVydGluZyBvciBqdXN0IHBy
-aW50aW5nIHRoZSB3YXJuaW5nIHdvdWxkIHdvcmsgZm9yIG91ciB0ZXN0Y2FzZXMsIGFzCmxvbmcg
-YXMgaXQgZG9lc24ndCBlcnJvciBvdXQuCgo+IAo+ID4gCj4gPiBJdCB0dXJucyBvdXQgdGhhdCBy
-ZXF1aXJpbmcgdGhlIGtlcm5lbCBoZWFkZXJzIHRvIGJlIGJ1aWx0IGFzIGEKPiA+IHByZXJlcXVp
-c2l0ZSB0byBidWlsZGluZyBzZWxmdGVzdHMsIGRvZXMgbm90IHdvcmsgaW4gbWFueSBjYXNlcy4K
-PiA+IEZvcgo+ID4gZXhhbXBsZSwgUGV0ZXIgWmlqbHN0cmEgd3JpdGVzOgo+ID4gCj4gPiAiTXkg
-YmlnZ2VzdCBiZWVmIHdpdGggdGhlIHdob2xlIHRoaW5nIGlzIHRoYXQgSSBzaW1wbHkgZG8gbm90
-IHdhbnQKPiA+IHRvIHVzZQo+ID4gJ21ha2UgaGVhZGVycycsIGl0IGRvZXNuJ3Qgd29yayBmb3Ig
-bWUuCj4gPiAKPiA+IEkgaGF2ZSBhIHRvbiBvZiBvdXRwdXQgZGlyZWN0b3JpZXMgYW5kIEkgZG9u
-J3QgY2FyZSB0byBidWlsZCB0b29scwo+ID4gaW50bwo+ID4gdGhlIG91dHB1dCBkaXJzLCBpbiBm
-YWN0IHNvbWUgb2YgdGhlbSBmbGF0IG91dCByZWZ1c2UgdG8gd29yayB0aGF0Cj4gPiB3YXkKPiA+
-IChicGYgY29tZXMgdG8gbWluZCkuIiBbMV0KPiA+IAo+ID4gVGhlcmVmb3JlLCBzdG9wIGVycm9y
-aW5nIG91dCBvbiB0aGUgc2VsZnRlc3RzIGJ1aWxkLiBBZGRpdGlvbmFsCj4gPiBwYXRjaGVzCj4g
-PiB3aWxsIGJlIHJlcXVpcmVkIGluIG9yZGVyIHRvIGNoYW5nZSBvdmVyIHRvIG5vdCByZXF1aXJp
-bmcgdGhlCj4gPiBrZXJuZWwKPiA+IGhlYWRlcnMuCj4gPiAKPiA+IFsxXQo+ID4gaHR0cHM6Ly9s
-b3JlLmtlcm5lbC5vcmcvMjAyMzEyMDgyMjEwMDcuR08yODcyN0Bub2lzeS5wcm9ncmFtbWluZy5r
-aWNrcy1hc3MubmV0Cj4gPiAKPiA+IENjOiBBbmRlcnMgUm94ZWxsIDxhbmRlcnMucm94ZWxsQGxp
-bmFyby5vcmc+Cj4gPiBDYzogTXVoYW1tYWQgVXNhbWEgQW5qdW0gPHVzYW1hLmFuanVtQGNvbGxh
-Ym9yYS5jb20+Cj4gPiBDYzogRGF2aWQgSGlsZGVuYnJhbmQgPGRhdmlkQHJlZGhhdC5jb20+Cj4g
-PiBDYzogUGV0ZXIgWHUgPHBldGVyeEByZWRoYXQuY29tPgo+ID4gQ2M6IEpvbmF0aGFuIENvcmJl
-dCA8Y29yYmV0QGx3bi5uZXQ+Cj4gPiBDYzogTmF0aGFuIENoYW5jZWxsb3IgPG5hdGhhbkBrZXJu
-ZWwub3JnPgo+ID4gQ2M6IFNodWFoIEtoYW4gPHNodWFoQGtlcm5lbC5vcmc+Cj4gPiBTaWduZWQt
-b2ZmLWJ5OiBKb2huIEh1YmJhcmQgPGpodWJiYXJkQG52aWRpYS5jb20+Cj4gPiAtLS0KPiA+IMKg
-dG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvTWFrZWZpbGUgfCAyMSArLS0tLS0tLS0tLS0tLS0tLQo+
-ID4gwqB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9saWIubWvCoMKgIHwgNDAgKysrLS0tLS0tLS0t
-LS0tLS0tLS0tLS0tLS0tLQo+ID4gLS0tLQo+ID4gwqAyIGZpbGVzIGNoYW5nZWQsIDQgaW5zZXJ0
-aW9ucygrKSwgNTcgZGVsZXRpb25zKC0pCj4gPiAKPiA+IGRpZmYgLS1naXQgYS90b29scy90ZXN0
-aW5nL3NlbGZ0ZXN0cy9NYWtlZmlsZQo+ID4gYi90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9NYWtl
-ZmlsZQo+ID4gaW5kZXggM2IyMDYxZDFjMWE1Li44MjQ3YTdjNjljMzYgMTAwNjQ0Cj4gPiAtLS0g
-YS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9NYWtlZmlsZQo+ID4gKysrIGIvdG9vbHMvdGVzdGlu
-Zy9zZWxmdGVzdHMvTWFrZWZpbGUKPiA+IEBAIC0xNTUsMTIgKzE1NSwxMCBAQCBpZm5lcSAoJChL
-QlVJTERfT1VUUFVUKSwpCj4gPiDCoMKgIGFic19vYmp0cmVlIDo9ICQocmVhbHBhdGggJChhYnNf
-b2JqdHJlZSkpCj4gPiDCoMKgIEJVSUxEIDo9ICQoYWJzX29ianRyZWUpL2tzZWxmdGVzdAo+ID4g
-wqDCoCBLSERSX0lOQ0xVREVTIDo9IC1pc3lzdGVtICR7YWJzX29ianRyZWV9L3Vzci9pbmNsdWRl
-Cj4gPiAtwqAgS0hEUl9ESVIgOj0gJHthYnNfb2JqdHJlZX0vdXNyL2luY2x1ZGUKPiA+IMKgZWxz
-ZQo+ID4gwqDCoCBCVUlMRCA6PSAkKENVUkRJUikKPiA+IMKgwqAgYWJzX3NyY3RyZWUgOj0gJChz
-aGVsbCBjZCAkKHRvcF9zcmNkaXIpICYmIHB3ZCkKPiA+IMKgwqAgS0hEUl9JTkNMVURFUyA6PSAt
-aXN5c3RlbSAke2Fic19zcmN0cmVlfS91c3IvaW5jbHVkZQo+ID4gLcKgIEtIRFJfRElSIDo9ICR7
-YWJzX3NyY3RyZWV9L3Vzci9pbmNsdWRlCj4gPiDCoMKgIERFRkFVTFRfSU5TVEFMTF9IRFJfUEFU
-SCA6PSAxCj4gPiDCoGVuZGlmCj4gPiDCoAo+ID4gQEAgLTE3NCw3ICsxNzIsNyBAQCBleHBvcnQg
-S0hEUl9JTkNMVURFUwo+ID4gwqAjIGFsbCBpc24ndCB0aGUgZmlyc3QgdGFyZ2V0IGluIHRoZSBm
-aWxlLgo+ID4gwqAuREVGQVVMVF9HT0FMIDo9IGFsbAo+ID4gwqAKPiA+IC1hbGw6IGtlcm5lbF9o
-ZWFkZXJfZmlsZXMKPiA+ICthbGw6Cj4gPiDCoAlAcmV0PTE7CQkJCQkJCj4gPiAJXAo+ID4gwqAJ
-Zm9yIFRBUkdFVCBpbiAkKFRBUkdFVFMpOyBkbwkJCQlcCj4gPiDCoAkJQlVJTERfVEFSR0VUPSQk
-QlVJTEQvJCRUQVJHRVQ7CQkJXAo+ID4gQEAgLTE4NSwyMyArMTgzLDYgQEAgYWxsOiBrZXJuZWxf
-aGVhZGVyX2ZpbGVzCj4gPiDCoAkJcmV0PSQkKChyZXQgKiAkJD8pKTsJCQkJXAo+ID4gwqAJZG9u
-ZTsgZXhpdCAkJHJldDsKPiA+IMKgCj4gPiAta2VybmVsX2hlYWRlcl9maWxlczoKPiA+IC0JQGxz
-ICQoS0hEUl9ESVIpL2xpbnV4LyouaCA+L2Rldi9udWxsCj4gPiAyPi9kZXYvbnVsbDvCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBcCj4gPiAtCWlmIFsg
-JCQ/IC1uZSAwIF07Cj4gPiB0aGVuwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqAgXAo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqAKPiA+IFJFRD0nXDAzM1sx
-OzMxbSc7wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAKPiA+IFwKPiA+
-IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgCj4gPiBOT0NPTE9SPSdcMDMzWzBtJzvCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAKPiA+IFwKPiA+IC3CoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgCj4gPiBlY2hvO8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgCj4gPiBcCj4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oCBlY2hvIC1lICIkJHtSRUR9ZXJyb3IkJHtOT0NPTE9SfTogbWlzc2luZyBrZXJuZWwKPiA+IGhl
-YWRlciBmaWxlcy4iO8KgwqAgXAo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZWNobyAiUGxl
-YXNlIHJ1biB0aGlzIGFuZCB0cnkKPiA+IGFnYWluOiI7wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgXAo+ID4gLcKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqAKPiA+IGVjaG87wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAKPiA+IFwKPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-IGVjaG8gIsKgwqDCoCBjZAo+ID4gJCh0b3Bfc3JjZGlyKSI7wqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBc
-Cj4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBlY2hvICLCoMKgwqAgbWFrZQo+ID4gaGVhZGVy
-cyI7wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIFwKPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgCj4gPiBlY2hvO8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgCj4gPiBcCj4gPiAtCcKgwqDCoCBleGl0Cj4gPiAxO8KgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoCBcCj4gPiAtCWZpCj4gPiAtCj4gPiAtLlBIT05ZOiBrZXJuZWxfaGVhZGVyX2ZpbGVz
-Cj4gPiAtCj4gPiDCoHJ1bl90ZXN0czogYWxsCj4gPiDCoAlAZm9yIFRBUkdFVCBpbiAkKFRBUkdF
-VFMpOyBkbyBcCj4gPiDCoAkJQlVJTERfVEFSR0VUPSQkQlVJTEQvJCRUQVJHRVQ7CVwKPiA+IGRp
-ZmYgLS1naXQgYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9saWIubWsKPiA+IGIvdG9vbHMvdGVz
-dGluZy9zZWxmdGVzdHMvbGliLm1rCj4gPiBpbmRleCAxMThlMDk2NGJkYTkuLmFhNjQ2ZTA2NjFm
-MyAxMDA2NDQKPiA+IC0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2xpYi5tawo+ID4gKysr
-IGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvbGliLm1rCj4gPiBAQCAtNDQsMjYgKzQ0LDEwIEBA
-IGVuZGlmCj4gPiDCoHNlbGZkaXIgPSAkKHJlYWxwYXRoICQoZGlyICQoZmlsdGVyICUvbGliLm1r
-LCQoTUFLRUZJTEVfTElTVCkpKSkKPiA+IMKgdG9wX3NyY2RpciA9ICQoc2VsZmRpcikvLi4vLi4v
-Li4KPiA+IMKgCj4gPiAtaWZlcSAoIiQob3JpZ2luIE8pIiwgImNvbW1hbmQgbGluZSIpCj4gPiAt
-wqAgS0JVSUxEX09VVFBVVCA6PSAkKE8pCj4gPiAraWZlcSAoJChLSERSX0lOQ0xVREVTKSwpCj4g
-PiArS0hEUl9JTkNMVURFUyA6PSAtaXN5c3RlbSAkKHRvcF9zcmNkaXIpL3Vzci9pbmNsdWRlCj4g
-PiDCoGVuZGlmCj4gPiDCoAo+ID4gLWlmbmVxICgkKEtCVUlMRF9PVVRQVVQpLCkKPiA+IC3CoCAj
-IE1ha2UncyBidWlsdC1pbiBmdW5jdGlvbnMgc3VjaCBhcyAkKGFic3BhdGggLi4uKSwgJChyZWFs
-cGF0aAo+ID4gLi4uKSBjYW5ub3QKPiA+IC3CoCAjIGV4cGFuZCBhIHNoZWxsIHNwZWNpYWwgY2hh
-cmFjdGVyICd+Jy4gV2UgdXNlIGEgc29tZXdoYXQKPiA+IHRlZGlvdXMgd2F5IGhlcmUuCj4gPiAt
-wqAgYWJzX29ianRyZWUgOj0gJChzaGVsbCBjZCAkKHRvcF9zcmNkaXIpICYmIG1rZGlyIC1wCj4g
-PiAkKEtCVUlMRF9PVVRQVVQpICYmIGNkICQoS0JVSUxEX09VVFBVVCkgJiYgcHdkKQo+ID4gLcKg
-ICQoaWYgJChhYnNfb2JqdHJlZSksLCBcCj4gPiAtwqDCoMKgICQoZXJyb3IgZmFpbGVkIHRvIGNy
-ZWF0ZSBvdXRwdXQgZGlyZWN0b3J5ICIkKEtCVUlMRF9PVVRQVVQpIikpCj4gPiAtwqAgIyAkKHJl
-YWxwYXRoIC4uLikgcmVzb2x2ZXMgc3ltbGlua3MKPiA+IC3CoCBhYnNfb2JqdHJlZSA6PSAkKHJl
-YWxwYXRoICQoYWJzX29ianRyZWUpKQo+ID4gLcKgIEtIRFJfRElSIDo9ICR7YWJzX29ianRyZWV9
-L3Vzci9pbmNsdWRlCj4gPiAtZWxzZQo+ID4gLcKgIGFic19zcmN0cmVlIDo9ICQoc2hlbGwgY2Qg
-JCh0b3Bfc3JjZGlyKSAmJiBwd2QpCj4gPiAtwqAgS0hEUl9ESVIgOj0gJHthYnNfc3JjdHJlZX0v
-dXNyL2luY2x1ZGUKPiA+IC1lbmRpZgo+ID4gLQo+ID4gLUtIRFJfSU5DTFVERVMgOj0gLWlzeXN0
-ZW0gJChLSERSX0RJUikKPiA+IC0KPiA+IMKgIyBUaGUgZm9sbG93aW5nIGFyZSBidWlsdCBieSBs
-aWIubWsgY29tbW9uIGNvbXBpbGUgcnVsZXMuCj4gPiDCoCMgVEVTVF9DVVNUT01fUFJPR1Mgc2hv
-dWxkIGJlIHVzZWQgYnkgdGVzdHMgdGhhdCByZXF1aXJlCj4gPiDCoCMgY3VzdG9tIGJ1aWxkIHJ1
-bGUgYW5kIHByZXZlbnQgY29tbW9uIGJ1aWxkIHJ1bGUgdXNlLgo+ID4gQEAgLTc0LDI1ICs1OCw3
-IEBAIFRFU1RfR0VOX1BST0dTIDo9ICQocGF0c3Vic3QKPiA+ICUsJChPVVRQVVQpLyUsJChURVNU
-X0dFTl9QUk9HUykpCj4gPiDCoFRFU1RfR0VOX1BST0dTX0VYVEVOREVEIDo9ICQocGF0c3Vic3QK
-PiA+ICUsJChPVVRQVVQpLyUsJChURVNUX0dFTl9QUk9HU19FWFRFTkRFRCkpCj4gPiDCoFRFU1Rf
-R0VOX0ZJTEVTIDo9ICQocGF0c3Vic3QgJSwkKE9VVFBVVCkvJSwkKFRFU1RfR0VOX0ZJTEVTKSkK
-PiA+IMKgCj4gPiAtYWxsOiBrZXJuZWxfaGVhZGVyX2ZpbGVzICQoVEVTVF9HRU5fUFJPR1MpCj4g
-PiAkKFRFU1RfR0VOX1BST0dTX0VYVEVOREVEKSBcCj4gPiAtwqDCoMKgwqAgJChURVNUX0dFTl9G
-SUxFUykKPiA+IC0KPiA+IC1rZXJuZWxfaGVhZGVyX2ZpbGVzOgo+ID4gLQlAbHMgJChLSERSX0RJ
-UikvbGludXgvKi5oID4vZGV2L251bGwKPiA+IDI+L2Rldi9udWxsO8KgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBcCj4gPiAtCWlmIFsgJCQ/IC1uZSAwIF07Cj4gPiB0
-aGVuwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIFwKPiA+IC3CoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgCj4gPiBSRUQ9J1wwMzNbMTszMW0nO8KgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgCj4gPiBcCj4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoAo+
-ID4gTk9DT0xPUj0nXDAzM1swbSc7wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgCj4gPiBcCj4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoAo+ID4gZWNobzvCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoAo+
-ID4gXAo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZWNobyAtZSAiJCR7UkVEfWVycm9yJCR7
-Tk9DT0xPUn06IG1pc3Npbmcga2VybmVsCj4gPiBoZWFkZXIgZmlsZXMuIjvCoMKgIFwKPiA+IC3C
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgIGVjaG8gIlBsZWFzZSBydW4gdGhpcyBhbmQgdHJ5Cj4gPiBh
-Z2FpbjoiO8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgIFwKPiA+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgCj4gPiBlY2hvO8KgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgCj4g
-PiBcCj4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBlY2hvICLCoMKgwqAgY2QKPiA+ICQodG9w
-X3NyY2RpcikiO8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgXAo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqAgZWNobyAiwqDCoMKgIG1ha2UKPiA+IGhlYWRlcnMiO8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoCBcCj4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoAo+ID4gZWNobzvCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoAo+ID4g
-XAo+ID4gLQnCoMKgwqAgZXhpdCAxOyBcCj4gPiAtCWZpCj4gPiAtCj4gPiAtLlBIT05ZOiBrZXJu
-ZWxfaGVhZGVyX2ZpbGVzCj4gPiArYWxsOiAkKFRFU1RfR0VOX1BST0dTKSAkKFRFU1RfR0VOX1BS
-T0dTX0VYVEVOREVEKQo+ID4gJChURVNUX0dFTl9GSUxFUykKPiA+IMKgCj4gPiDCoGRlZmluZSBS
-VU5fVEVTVFMKPiA+IMKgCUJBU0VfRElSPSIkKHNlbGZkaXIpIjsJCQlcCj4gCgo=
+Hi all,
+
+Here's v3 series to improve resctrl selftests with generalized test
+framework and rewritten CAT test. As agreed, v3 does not include the
+group naming patch which will become part of Maciej's non-contiguous
+serie. The error handling cleanups (return errno, perror() & return
+value comment cleanups) and CPU affinity restore for CAT test add to
+the patch count.
+
+The series contains following improvements:
+
+- Excludes shareable bits from CAT test allocation to avoid interference
+- Replaces file "sink" with a volatile variable
+- Alters read pattern to defeat HW prefetcher optimizations
+- Rewrites CAT test to make the CAT test reliable and truly measure
+  if CAT is working or not
+- Introduces generalized test framework making easier to add new tests
+- Lots of other cleanups & refactoring
+
+This serie have been tested across a large number of systems from
+different generations.
+
+v3:
+- New patches to handle return errno, perror() and return value comments
+- Tweak changelogs
+- Moved error printout removal to other patch
+- Zero bit CBM returns error
+- Tweak comments
+- Make get_shareable_mask() static
+- Return directly without storing result into ret variable first
+- llc -> LLC
+- Altered changelog and removed "the whole time" wording because
+  llc occu results are still unsigned long
+- Altered changelog's wording to not say "a volatile pointer"
+- Make min_diff_percent and MIN_DIFF_PERCENT_PER_BIT unsigned long
+- Add patch to restore CPU affinity after CAT test
+- Move uparams clear into init function
+- Add CPU vendor ID bitmask comment
+- Use test_resource_feature_check(test) in CMT
+- "feature" -> "resource" in function comment
+
+v2:
+- Postpone adding L2 CAT test as more investigations are necessary
+- Add patch to remove ctrlc_handler() from wrong place
+- Improvements to changelogs
+- Function comments improvements & comment cleanups
+- Move some parts of the changes into more logical patch
+- If checks: buf == NULL -> !buf
+- Variable naming:
+        - p -> buf
+        - cbm_mask_path -> cbm_path
+- Function naming:
+        - get_cbm_mask() -> get_full_cbm()
+        - cache_size() -> cache_portion_size()
+- Use PATH_MAX
+- Improved cache_portion_size() parameter names
+- int count -> unsigned int
+- Pass filename to measurement taking functions instead of
+  resctrl_val_param
+- !lines ? : reversal
+- Removed bogus static from function local variable
+- Open perf fd only once, reset & enable in the innermost test loop
+- Add perf fd ioctl() error handling
+- Add patch to change compiler optimization prevention "sink" from file
+  to volatile variable
+- Remove cpu_no and resource (the latter was added in v1) members from
+  resctrl_val_param (pass uparams and test where those are needed)
+- Removed ARRAY_SIZE() macro
+- Add patch to rename "resource_id" to "domain_id"
+
+Ilpo Järvinen (29):
+  selftests/resctrl: Convert perror() to ksft_perror() or
+    ksft_print_msg()
+  selftests/resctrl: Return -1 instead of errno on error
+  selftests/resctrl: Don't use ctrlc_handler() outside signal handling
+  selftests/resctrl: Change function comments to say < 0 on error
+  selftests/resctrl: Split fill_buf to allow tests finer-grained control
+  selftests/resctrl: Refactor fill_buf functions
+  selftests/resctrl: Refactor get_cbm_mask() and rename to
+    get_full_cbm()
+  selftests/resctrl: Mark get_cache_size() cache_type const
+  selftests/resctrl: Create cache_portion_size() helper
+  selftests/resctrl: Exclude shareable bits from schemata in CAT test
+  selftests/resctrl: Split measure_cache_vals()
+  selftests/resctrl: Split show_cache_info() to test specific and
+    generic parts
+  selftests/resctrl: Remove unnecessary __u64 -> unsigned long
+    conversion
+  selftests/resctrl: Remove nested calls in perf event handling
+  selftests/resctrl: Consolidate naming of perf event related things
+  selftests/resctrl: Improve perf init
+  selftests/resctrl: Convert perf related globals to locals
+  selftests/resctrl: Move cat_val() to cat_test.c and rename to
+    cat_test()
+  selftests/resctrl: Open perf fd before start & add error handling
+  selftests/resctrl: Replace file write with volatile variable
+  selftests/resctrl: Read in less obvious order to defeat prefetch
+    optimizations
+  selftests/resctrl: Rewrite Cache Allocation Technology (CAT) test
+  selftests/resctrl: Restore the CPU affinity after CAT test
+  selftests/resctrl: Create struct for input parameters
+  selftests/resctrl: Introduce generalized test framework
+  selftests/resctrl: Pass write_schemata() resource instead of test name
+  selftests/resctrl: Add helper to convert L2/3 to integer
+  selftests/resctrl: Rename resource ID to domain ID
+  selftests/resctrl: Get domain id from cache id
+
+ tools/testing/selftests/resctrl/cache.c       | 287 +++++----------
+ tools/testing/selftests/resctrl/cat_test.c    | 337 +++++++++++-------
+ tools/testing/selftests/resctrl/cmt_test.c    |  80 +++--
+ tools/testing/selftests/resctrl/fill_buf.c    | 132 ++++---
+ tools/testing/selftests/resctrl/mba_test.c    |  30 +-
+ tools/testing/selftests/resctrl/mbm_test.c    |  32 +-
+ tools/testing/selftests/resctrl/resctrl.h     | 126 +++++--
+ .../testing/selftests/resctrl/resctrl_tests.c | 197 ++++------
+ tools/testing/selftests/resctrl/resctrl_val.c | 138 +++----
+ tools/testing/selftests/resctrl/resctrlfs.c   | 321 +++++++++++------
+ 10 files changed, 936 insertions(+), 744 deletions(-)
+
+-- 
+2.30.2
 
 
