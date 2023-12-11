@@ -1,97 +1,107 @@
-Return-Path: <linux-kselftest+bounces-1518-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1520-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id ACFB180C7A9
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 12:08:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E97180C7C0
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 12:15:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 60FE12816B8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 11:08:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CA553281752
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 11:15:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 570153454A;
-	Mon, 11 Dec 2023 11:08:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3C7E34CFB;
+	Mon, 11 Dec 2023 11:15:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="asK4bqJl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SGdnDlBb"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [IPv6:2a00:1098:ed:100::25])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4464DC7;
-	Mon, 11 Dec 2023 03:08:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1702292516;
-	bh=rtUQjIROmhcvKCPUzvaAzQ2+fePhDS70mvZIoWhWHcY=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=asK4bqJldmXIac4/3TTmMi7GWdaUqB7VuBu/KfBQ+t5fHPQI/KGd0sLOjYucopP3r
-	 coupqyEqgBh346fXNiHsryTYs7oJpatHdpcERcWrkbebUjdObt9Qouf45HWKKmhNLT
-	 qjL3HmJqJZowqHjrTYRvdcj6TQD7lP3kfTL6y1zeqppoQKt1qtUxzrDEWAi/8rtajU
-	 mg4EJ4JH3kPULJeZwJyGwMKliA5cuf3llRAveZEoC0p/r9oCISA1fHaVTnWw8/762P
-	 jsxHnq079Cmb+bX6G3yUfA37OZGUEao7LtjX8vqQ3SjT64QUUFH0HEqEGwWXTZiMy2
-	 tyxjPX1HrCz3g==
-Received: from [100.96.234.34] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 46974378141D;
-	Mon, 11 Dec 2023 11:01:52 +0000 (UTC)
-Message-ID: <2180095f-1dcd-4542-aafe-aa2b4d039e62@collabora.com>
-Date: Mon, 11 Dec 2023 16:01:52 +0500
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79491219FD;
+	Mon, 11 Dec 2023 11:15:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3666EC433C7;
+	Mon, 11 Dec 2023 11:15:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702293324;
+	bh=RN0s8CBgjbCxLqFraUoPfhHMhj3UEaksMF1EdYVCcb8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=SGdnDlBbyPhSvst+CiF1w38ZpOeK558Jw8N+UpmPNyViJLmQQ+g0HV0Z19pvIR7iU
+	 5i8v8GTroF8wUTuURm2+avQW/SivHcUDrcbJ5pX9rqkwFSq1r92e3trEvXc3k0y/Ef
+	 bafTI4P0CNtcBv0DOiDxVbOr98ALpffBXRxatfOrE8ozkTlOAV6c0dzhlhXwm4lYgL
+	 g24oJxyMkHWt+6V4YAPTPeqYKmsou6X+PQwn0RkLaAGyB3ILQOWSVHDLb7U1scskbT
+	 zrpP58ng92AGbhwFCwLdW9KQ/XG4MUl8R2Sisjg3pQANfwedpuDhL8zkJSB0Y8Qpkk
+	 1DtLTxjcqL2Qw==
+Date: Mon, 11 Dec 2023 11:15:15 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Suren Baghdasaryan <surenb@google.com>
+Cc: akpm@linux-foundation.org, viro@zeniv.linux.org.uk, brauner@kernel.org,
+	shuah@kernel.org, aarcange@redhat.com, lokeshgidra@google.com,
+	peterx@redhat.com, david@redhat.com, ryan.roberts@arm.com,
+	hughd@google.com, mhocko@suse.com, axelrasmussen@google.com,
+	rppt@kernel.org, willy@infradead.org, Liam.Howlett@oracle.com,
+	jannh@google.com, zhangpeng362@huawei.com, bgeffon@google.com,
+	kaleshsingh@google.com, ngeoffray@google.com, jdduke@google.com,
+	linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	kernel-team@android.com
+Subject: Re: [PATCH v6 5/5] selftests/mm: add UFFDIO_MOVE ioctl test
+Message-ID: <b93b29e9-c176-4111-ae0e-d4922511f223@sirena.org.uk>
+References: <20231206103702.3873743-1-surenb@google.com>
+ <20231206103702.3873743-6-surenb@google.com>
+ <ZXXJ9NdH61YZfC4c@finisterre.sirena.org.uk>
+ <CAJuCfpFbWeycjvjAFryuugXuiv5ggm=cXG+Y1jfaCD9kJ6KWqQ@mail.gmail.com>
+ <CAJuCfpHRYi4S9c+KKQqtE6Faw1e0E0ENMMRE17zXsqv_CftTGw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>, kernel@collabora.com,
- Aishwarya TCV <aishwarya.tcv@arm.com>, Shuah Khan
- <skhan@linuxfoundation.org>, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests: core: include linux/close_range.h for
- CLOSE_RANGE_* macros
-Content-Language: en-US
-To: Shuah Khan <shuah@kernel.org>
-References: <20231024155137.219700-1-usama.anjum@collabora.com>
- <9dbda2f9-2bb2-4e79-976a-12856ab6936a@collabora.com>
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <9dbda2f9-2bb2-4e79-976a-12856ab6936a@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="SYlO/FU6WXTPk3xW"
+Content-Disposition: inline
+In-Reply-To: <CAJuCfpHRYi4S9c+KKQqtE6Faw1e0E0ENMMRE17zXsqv_CftTGw@mail.gmail.com>
+X-Cookie: Better dead than mellow.
 
-Soft reminder
 
-On 11/29/23 4:34 PM, Muhammad Usama Anjum wrote:
-> Soft reminder
-> 
-> On 10/24/23 8:51 PM, Muhammad Usama Anjum wrote:
->> Correct header file is needed for getting CLOSE_RANGE_* macros.
->> Previously it was tested with newer glibc which didn't show the need to
->> include the header which was a mistake.
->>
->> Fixes: ec54424923cf ("selftests: core: remove duplicate defines")
->> Reported-by: Aishwarya TCV <aishwarya.tcv@arm.com>
->> Link: https://lore.kernel.org/all/7161219e-0223-d699-d6f3-81abd9abf13b@arm.com
->> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
->> ---
->>  tools/testing/selftests/core/close_range_test.c | 1 +
->>  1 file changed, 1 insertion(+)
->>
->> diff --git a/tools/testing/selftests/core/close_range_test.c b/tools/testing/selftests/core/close_range_test.c
->> index 534576f06df1c..c59e4adb905df 100644
->> --- a/tools/testing/selftests/core/close_range_test.c
->> +++ b/tools/testing/selftests/core/close_range_test.c
->> @@ -12,6 +12,7 @@
->>  #include <syscall.h>
->>  #include <unistd.h>
->>  #include <sys/resource.h>
->> +#include <linux/close_range.h>
->>  
->>  #include "../kselftest_harness.h"
->>  #include "../clone3/clone3_selftests.h"
-> 
+--SYlO/FU6WXTPk3xW
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-BR,
-Muhammad Usama Anjum
+On Sun, Dec 10, 2023 at 07:04:19PM -0800, Suren Baghdasaryan wrote:
+> On Sun, Dec 10, 2023 at 5:01=E2=80=AFPM Suren Baghdasaryan <surenb@google=
+=2Ecom> wrote:
+
+> > Thanks for reporting! I'll try that later today.
+> > Just to clarify, are you using mm-unstable and if so, has it been
+> > rebased since Friday? There was an update to this patchset in
+> > mm-unstable which Andrew merged on Friday and the failure does look
+> > like something that would happen with the previous version.
+
+> I tried reproducing the issue but so far unsuccessfully. Could you
+> please confirm that on the latest mm-unstable branch it's still
+> reproducible and if so, please provide detailed instructions on how
+> you reproduce it.
+
+This is linux-next.  I pasted the commands used to build and sent links
+to a full build log in the original report.
+
+--SYlO/FU6WXTPk3xW
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmV27z8ACgkQJNaLcl1U
+h9AxCwf/ejCSQ8c+qUs0HXMuJ4xPDKv1c+X9cLcAO/onhQH8kPEGi19DToONrIQ5
+FGCMwydxN8bgz6H9JNORPkzBCD8/Kuw+orP4Ch6rEGhlXTjnDX6m2RE/9H9yx+WT
+DlHZPMtV/N4G3ge5PAhP1t5VNdfDl59cEPsGaJJRt2GmveY32R6uW/zkLsgZwSvV
+e5/Dr8+kp1tyZjXvyeMJPNJIdwdz99xBa5Y889K7NiWnBJs1Ex76vPVpS/seTWEt
+R/8qjSd0Lo57V6AvhLNFjckVpJfnIiNy/nHMi88zYs7QqCFxVGWUuWjt1XSiw55F
+THCwieKs2vPRegtsifZR831PsToQfQ==
+=vyq7
+-----END PGP SIGNATURE-----
+
+--SYlO/FU6WXTPk3xW--
 
