@@ -1,57 +1,58 @@
-Return-Path: <linux-kselftest+bounces-1503-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1504-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 344B080C5EE
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 11:09:47 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9CC880C5F0
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 11:09:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6A0A2B20EAF
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 10:09:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9EE321F21551
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 10:09:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A27422318;
-	Mon, 11 Dec 2023 10:09:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE4E3225D6;
+	Mon, 11 Dec 2023 10:09:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JTAN3/yW"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d12gNZpV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFE8B12B;
-	Mon, 11 Dec 2023 02:09:32 -0800 (PST)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-6cebbf51742so2824237b3a.1;
-        Mon, 11 Dec 2023 02:09:32 -0800 (PST)
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C91F3106;
+	Mon, 11 Dec 2023 02:09:36 -0800 (PST)
+Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-6cebbf51742so2824374b3a.1;
+        Mon, 11 Dec 2023 02:09:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702289371; x=1702894171; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=OjyhT1vuz7BD+Lm/KeTclRkgWUbqbofPOWgP2VPLHUI=;
-        b=JTAN3/yW5ziZAm77F+c9stLTRziGO81chER5LZnG6qcXXNJLF2Coa/P0EplslNw22q
-         hBnaWmK2Cp3BypJHmzysMdYFKM3pezORMCjd4LQ8gqLDUi5SC4TOf9VWl1KoF8KiVA2l
-         CuSIJGNmyS8WasuXbk4qZnUzDQ1t1U4jsylR2x9ggNmfTNd1UHTej2egqhUgtTYEzUvv
-         HK3YpyAa8+gR2rlPfrqxQfAJ+j9P0fMFkrD7Nw3ZsBfK8cD47nlF/+qZ098EtKkuFPHr
-         s86kG/53pASAE1tgYgqHC57H0JaLwc6Rbsbp1P38XmVkrQjD/b+mVPbHPcfDdGIfkWtD
-         uySw==
+        d=gmail.com; s=20230601; t=1702289375; x=1702894175; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=22zEJ+GxtUyJSFDLu51q+tPWKHq87+5dqP6gAdHZUr0=;
+        b=d12gNZpVqJQmq9KdlsVx8RUMbWBUfCRQ/Pf+cOxkiWBkL1r+I89lA/xwlslwIe4h6K
+         oqcz7Jtv1ZPO0yVNOSuAdtsXQ3QE0ptTAfr8W4k/G3PoSzO5aZGvgU40yMd4lKg1Yybr
+         KSkbEyeHhS1ZeNp/fh46kFpIcl0AS8xGFj5z3oHBajcviq4Nbjr75MXLo9kWVZvQ2oYb
+         RKu+YLibgxOLcmcVAA+Nnqc7ogAFsGer+U2oQYSG2xExFy4TnnEvX40nG2TLH7lFdDrx
+         aaliXTWGPJBVIL3l0gi3zp4jzponDhNg2OkCGWTph9igx08JrwktjMzr0jTI3pXgXjpD
+         dCjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702289371; x=1702894171;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OjyhT1vuz7BD+Lm/KeTclRkgWUbqbofPOWgP2VPLHUI=;
-        b=GE8KcH3GA8qC9sjGx2NE0Xl93XPDBJc8veeCjkeUqMVKK5ciCllIO7WHUo+I67+8KY
-         cerof0KJDiiGEcxzgAC1AHIF1MLlVP/e+QbgqWdQu3zWqya+k4LM3mY+sgdXinirc6gl
-         xWYWNDR0sVODS0TR8AB+MWA7XUwD09+UajypLRfEHDKvny5Kw9mV2QtZVNuAstVUDW/L
-         8asjMoKg2rYgy75eKpJHM9Csi14epiJv52t2/d95AiKhEjc2U+BuTAXC1i7VtcvCtIRQ
-         4yGF1NP5mVLeibc4zy/9FEBaRjiOW0FjmSqCuJ2CVlEJEcZB8n2qMmrotQKfj/iqhEeq
-         78TQ==
-X-Gm-Message-State: AOJu0Yxc20yOqdSp/0sxRwV9OUDlF9GMwoqbCOyZDx7wIPUzRP54AqhE
-	LELA4E9038MjhO7mAUwCorR9+cXDgmK3YoNR
-X-Google-Smtp-Source: AGHT+IEcUvSqQi6E3SojhtbicN/T4wG/6+0CcUp4FzYuZhN55xlceb8ZD8mdk93gIC2p7EdZEoQPbg==
-X-Received: by 2002:a05:6a00:2d18:b0:6ce:2731:47b3 with SMTP id fa24-20020a056a002d1800b006ce273147b3mr4897021pfb.19.1702289371561;
-        Mon, 11 Dec 2023 02:09:31 -0800 (PST)
+        d=1e100.net; s=20230601; t=1702289375; x=1702894175;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=22zEJ+GxtUyJSFDLu51q+tPWKHq87+5dqP6gAdHZUr0=;
+        b=tU3aNWkjHQBGkpHFRgY1vyr9BvsAzR8TSW4nNugTIDaYogaB1fLkzVBcg85WmwaQ1u
+         romLemxy85rsFYKJUSm7EQfYI5tErDfFlCmFvIjGc96H6TOOEKluXyh8Mz7iPS6jTuyG
+         9VL+C5ARDemKX2yaCKUJwfjLHisFdC1oR1eV+ogiW1MIxp47F/POS/KY6nIYQQ1JkXP6
+         jF4KI471QdkX5jzTQTB/TKGrOCzcIFVP3nmR8M1etO3c81yeOwmV3Sg5V5+5rF6TEmqb
+         SwyTt/B+JRIRFIpJjkW4mAuI9PEKx2nzg5sua+piaa5GdwwdTFCSkkTP73dU5c72eflA
+         VKpg==
+X-Gm-Message-State: AOJu0YxbY9CrE6TWXWpv7m67KdfyCxOgMdAxLzo2YI9A0cuJ24mt3pbi
+	xVcNW0ycsVMv30p5jJ5uPxLpIJ1oKxhyjcF1
+X-Google-Smtp-Source: AGHT+IE3msFSvAUEN478ioOTRxPoDnatWAnAGQSJ9dBUCPulodp8kc8Jtd5mQl+6y2GFsZmQHduI8A==
+X-Received: by 2002:a05:6a20:3ca8:b0:18f:b899:8442 with SMTP id b40-20020a056a203ca800b0018fb8998442mr5245406pzj.6.1702289375462;
+        Mon, 11 Dec 2023 02:09:35 -0800 (PST)
 Received: from Laptop-X1.redhat.com ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id o17-20020a656151000000b005c2420fb198sm5151733pgv.37.2023.12.11.02.09.27
+        by smtp.gmail.com with ESMTPSA id o17-20020a656151000000b005c2420fb198sm5151733pgv.37.2023.12.11.02.09.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Dec 2023 02:09:31 -0800 (PST)
+        Mon, 11 Dec 2023 02:09:35 -0800 (PST)
 From: Hangbin Liu <liuhangbin@gmail.com>
 To: netdev@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -68,10 +69,12 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Roopa Prabhu <roopa@nvidia.com>,
 	Ido Schimmel <idosch@nvidia.com>,
 	Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCH net-next 00/13] Convert net selftests to run in unique namespace (Part 3)
-Date: Mon, 11 Dec 2023 18:09:12 +0800
-Message-ID: <20231211100925.3249265-1-liuhangbin@gmail.com>
+Subject: [PATCH net-next 01/13] selftests/net: add variable NS_LIST for lib.sh
+Date: Mon, 11 Dec 2023 18:09:13 +0800
+Message-ID: <20231211100925.3249265-2-liuhangbin@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20231211100925.3249265-1-liuhangbin@gmail.com>
+References: <20231211100925.3249265-1-liuhangbin@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -80,52 +83,46 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Here is the 3rd part of converting net selftests to run in unique namespace.
-This part converts all srv6 and fib tests.
+Add a global variable NS_LIST to store all the namespaces that setup_ns
+created, so the caller could call cleanup_all_ns() instead of remember
+all the netns names when using cleanup_ns().
 
-Note that patch 06 is a fix for testing fib_nexthop_multiprefix.
+Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+---
+ tools/testing/selftests/net/lib.sh | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-Here is the part 1 link:
-https://lore.kernel.org/netdev/20231202020110.362433-1-liuhangbin@gmail.com
-And part 2 link:
-https://lore.kernel.org/netdev/20231206070801.1691247-1-liuhangbin@gmail.com
-
-Hangbin Liu (13):
-  selftests/net: add variable NS_LIST for lib.sh
-  selftests/net: convert srv6_end_dt46_l3vpn_test.sh to run it in unique
-    namespace
-  selftests/net: convert srv6_end_dt4_l3vpn_test.sh to run it in unique
-    namespace
-  selftests/net: convert srv6_end_dt6_l3vpn_test.sh to run it in unique
-    namespace
-  selftests/net: convert fcnal-test.sh to run it in unique namespace
-  selftests/net: fix grep checking for fib_nexthop_multiprefix
-  selftests/net: convert fib_nexthop_multiprefix to run it in unique
-    namespace
-  selftests/net: convert fib_nexthop_nongw.sh to run it in unique
-    namespace
-  selftests/net: convert fib_nexthops.sh to run it in unique namespace
-  selftests/net: convert fib-onlink-tests.sh to run it in unique
-    namespace
-  selftests/net: convert fib_rule_tests.sh to run it in unique namespace
-  selftests/net: convert fib_tests.sh to run it in unique namespace
-  selftests/net: convert fdb_flush.sh to run it in unique namespace
-
- tools/testing/selftests/net/fcnal-test.sh     |  30 ++-
- tools/testing/selftests/net/fdb_flush.sh      |  11 +-
- .../testing/selftests/net/fib-onlink-tests.sh |   9 +-
- .../selftests/net/fib_nexthop_multiprefix.sh  |  98 +++++-----
- .../selftests/net/fib_nexthop_nongw.sh        |  34 ++--
- tools/testing/selftests/net/fib_nexthops.sh   | 142 +++++++-------
- tools/testing/selftests/net/fib_rule_tests.sh |  36 ++--
- tools/testing/selftests/net/fib_tests.sh      | 184 +++++++++---------
- tools/testing/selftests/net/lib.sh            |   8 +
- tools/testing/selftests/net/settings          |   2 +-
- .../selftests/net/srv6_end_dt46_l3vpn_test.sh |  51 +++--
- .../selftests/net/srv6_end_dt4_l3vpn_test.sh  |  48 ++---
- .../selftests/net/srv6_end_dt6_l3vpn_test.sh  |  46 ++---
- 13 files changed, 332 insertions(+), 367 deletions(-)
-
+diff --git a/tools/testing/selftests/net/lib.sh b/tools/testing/selftests/net/lib.sh
+index 518eca57b815..dca549443801 100644
+--- a/tools/testing/selftests/net/lib.sh
++++ b/tools/testing/selftests/net/lib.sh
+@@ -6,6 +6,8 @@
+ 
+ # Kselftest framework requirement - SKIP code is 4.
+ ksft_skip=4
++# namespace list created by setup_ns
++NS_LIST=""
+ 
+ ##############################################################################
+ # Helpers
+@@ -56,6 +58,11 @@ cleanup_ns()
+ 	return $ret
+ }
+ 
++cleanup_all_ns()
++{
++	cleanup_ns $NS_LIST
++}
++
+ # setup netns with given names as prefix. e.g
+ # setup_ns local remote
+ setup_ns()
+@@ -82,4 +89,5 @@ setup_ns()
+ 		ip -n "$ns" link set lo up
+ 		ns_list="$ns_list $ns"
+ 	done
++	NS_LIST="$NS_LIST $ns_list"
+ }
 -- 
 2.43.0
 
