@@ -1,27 +1,27 @@
-Return-Path: <linux-kselftest+bounces-1577-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1578-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76F5D80D0E5
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 17:16:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB90780D0E8
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 17:16:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A7B691C21788
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 16:16:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 983B928212D
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 16:16:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4BC94C622;
-	Mon, 11 Dec 2023 16:16:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4216D4C622;
+	Mon, 11 Dec 2023 16:16:13 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0078511F;
-	Mon, 11 Dec 2023 08:15:56 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 43521186;
+	Mon, 11 Dec 2023 08:16:09 -0800 (PST)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4F97F16F2;
-	Mon, 11 Dec 2023 08:16:43 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 877CE16F2;
+	Mon, 11 Dec 2023 08:16:55 -0800 (PST)
 Received: from e127643.broadband (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id CC74C3F738;
-	Mon, 11 Dec 2023 08:15:52 -0800 (PST)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 1313D3F738;
+	Mon, 11 Dec 2023 08:16:04 -0800 (PST)
 From: James Clark <james.clark@arm.com>
 To: linux-arm-kernel@lists.infradead.org,
 	linux-perf-users@vger.kernel.org,
@@ -31,6 +31,7 @@ To: linux-arm-kernel@lists.infradead.org,
 	anshuman.khandual@arm.com
 Cc: namhyung@gmail.com,
 	James Clark <james.clark@arm.com>,
+	Namhyung Kim <namhyung@kernel.org>,
 	Catalin Marinas <catalin.marinas@arm.com>,
 	Jonathan Corbet <corbet@lwn.net>,
 	Peter Zijlstra <peterz@infradead.org>,
@@ -38,7 +39,6 @@ Cc: namhyung@gmail.com,
 	Arnaldo Carvalho de Melo <acme@kernel.org>,
 	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
 	Jiri Olsa <jolsa@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
 	Ian Rogers <irogers@google.com>,
 	Adrian Hunter <adrian.hunter@intel.com>,
 	Russell King <linux@armlinux.org.uk>,
@@ -55,9 +55,9 @@ Cc: namhyung@gmail.com,
 	kvmarm@lists.linux.dev,
 	kvm@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v7 10/11] arm64: perf: Add support for event counting threshold
-Date: Mon, 11 Dec 2023 16:13:22 +0000
-Message-Id: <20231211161331.1277825-11-james.clark@arm.com>
+Subject: [PATCH v7 11/11] Documentation: arm64: Document the PMU event counting threshold feature
+Date: Mon, 11 Dec 2023 16:13:23 +0000
+Message-Id: <20231211161331.1277825-12-james.clark@arm.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231211161331.1277825-1-james.clark@arm.com>
 References: <20231211161331.1277825-1-james.clark@arm.com>
@@ -69,197 +69,97 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-FEAT_PMUv3_TH (Armv8.8) permits a PMU counter to increment only on
-events whose count meets a specified threshold condition. For example if
-PMEVTYPERn.TC (Threshold Control) is set to 0b101 (Greater than or
-equal, count), and the threshold is set to 2, then the PMU counter will
-now only increment by 1 when an event would have previously incremented
-the PMU counter by 2 or more on a single processor cycle.
+Add documentation for the new Perf event open parameters and
+the threshold_max capability file.
 
-Three new Perf event config fields, 'threshold', 'threshold_compare' and
-'threshold_count' have been added to control the feature.
-threshold_compare maps to the upper two bits of PMEVTYPERn.TC and
-threshold_count maps to the first bit of TC. These separate attributes
-have been picked rather than enumerating all the possible combinations
-of the TC field as in the Arm ARM. The attributes would be used on a
-Perf command line like this:
-
-  $ perf stat -e stall_slot/threshold=2,threshold_compare=2/
-
-A new capability for reading out the maximum supported threshold value
-has also been added:
-
-  $ cat /sys/bus/event_source/devices/armv8_pmuv3/caps/threshold_max
-
-  0x000000ff
-
-If a threshold higher than threshold_max is provided, then an error is
-generated. If FEAT_PMUv3_TH isn't implemented or a 32 bit kernel is
-running, then threshold_max reads zero, and attempting to set a
-threshold value will also result in an error.
-
-The threshold is per PMU counter, and there are potentially different
-threshold_max values per PMU type on heterogeneous systems.
-
-Bits higher than 32 now need to be written into PMEVTYPER, so
-armv8pmu_write_evtype() has to be updated to take an unsigned long value
-rather than u32 which gives the correct behavior on both aarch32 and 64.
-
+Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
+Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+Acked-by: Namhyung Kim <namhyung@kernel.org>
 Signed-off-by: James Clark <james.clark@arm.com>
 ---
- drivers/perf/arm_pmuv3.c       | 79 +++++++++++++++++++++++++++++++++-
- include/linux/perf/arm_pmuv3.h |  1 +
- 2 files changed, 79 insertions(+), 1 deletion(-)
+ Documentation/arch/arm64/perf.rst | 72 +++++++++++++++++++++++++++++++
+ 1 file changed, 72 insertions(+)
 
-diff --git a/drivers/perf/arm_pmuv3.c b/drivers/perf/arm_pmuv3.c
-index d33378a198cc..0bd6565eb401 100644
---- a/drivers/perf/arm_pmuv3.c
-+++ b/drivers/perf/arm_pmuv3.c
-@@ -305,10 +305,22 @@ static const struct attribute_group armv8_pmuv3_events_attr_group = {
- #define ATTR_CFG_FLD_rdpmc_CFG		config1
- #define ATTR_CFG_FLD_rdpmc_LO		1
- #define ATTR_CFG_FLD_rdpmc_HI		1
-+#define ATTR_CFG_FLD_threshold_count_CFG	config1 /* PMEVTYPER.TC[0] */
-+#define ATTR_CFG_FLD_threshold_count_LO		2
-+#define ATTR_CFG_FLD_threshold_count_HI		2
-+#define ATTR_CFG_FLD_threshold_compare_CFG	config1 /* PMEVTYPER.TC[2:1] */
-+#define ATTR_CFG_FLD_threshold_compare_LO	3
-+#define ATTR_CFG_FLD_threshold_compare_HI	4
-+#define ATTR_CFG_FLD_threshold_CFG		config1 /* PMEVTYPER.TH */
-+#define ATTR_CFG_FLD_threshold_LO		5
-+#define ATTR_CFG_FLD_threshold_HI		16
- 
- GEN_PMU_FORMAT_ATTR(event);
- GEN_PMU_FORMAT_ATTR(long);
- GEN_PMU_FORMAT_ATTR(rdpmc);
-+GEN_PMU_FORMAT_ATTR(threshold_count);
-+GEN_PMU_FORMAT_ATTR(threshold_compare);
-+GEN_PMU_FORMAT_ATTR(threshold);
- 
- static int sysctl_perf_user_access __read_mostly;
- 
-@@ -322,10 +334,27 @@ static bool armv8pmu_event_want_user_access(struct perf_event *event)
- 	return ATTR_CFG_GET_FLD(&event->attr, rdpmc);
- }
- 
-+static u8 armv8pmu_event_threshold_control(struct perf_event_attr *attr)
-+{
-+	u8 th_compare = ATTR_CFG_GET_FLD(attr, threshold_compare);
-+	u8 th_count = ATTR_CFG_GET_FLD(attr, threshold_count);
+diff --git a/Documentation/arch/arm64/perf.rst b/Documentation/arch/arm64/perf.rst
+index 1f87b57c2332..997fd716b82f 100644
+--- a/Documentation/arch/arm64/perf.rst
++++ b/Documentation/arch/arm64/perf.rst
+@@ -164,3 +164,75 @@ and should be used to mask the upper bits as needed.
+    https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/perf/arch/arm64/tests/user-events.c
+ .. _tools/lib/perf/tests/test-evsel.c:
+    https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/lib/perf/tests/test-evsel.c
 +
-+	/*
-+	 * The count bit is always the bottom bit of the full control field, and
-+	 * the comparison is the upper two bits, but it's not explicitly
-+	 * labelled in the Arm ARM. For the Perf interface we split it into two
-+	 * fields, so reconstruct it here.
-+	 */
-+	return (th_compare << 1) | th_count;
-+}
++Event Counting Threshold
++==========================================
 +
- static struct attribute *armv8_pmuv3_format_attrs[] = {
- 	&format_attr_event.attr,
- 	&format_attr_long.attr,
- 	&format_attr_rdpmc.attr,
-+	&format_attr_threshold.attr,
-+	&format_attr_threshold_compare.attr,
-+	&format_attr_threshold_count.attr,
- 	NULL,
- };
- 
-@@ -375,10 +404,38 @@ static ssize_t bus_width_show(struct device *dev, struct device_attribute *attr,
- 
- static DEVICE_ATTR_RO(bus_width);
- 
-+static u32 threshold_max(struct arm_pmu *cpu_pmu)
-+{
-+	/*
-+	 * PMMIR.THWIDTH is readable and non-zero on aarch32, but it would be
-+	 * impossible to write the threshold in the upper 32 bits of PMEVTYPER.
-+	 */
-+	if (IS_ENABLED(CONFIG_ARM))
-+		return 0;
++Overview
++--------
 +
-+	/*
-+	 * The largest value that can be written to PMEVTYPER<n>_EL0.TH is
-+	 * (2 ^ PMMIR.THWIDTH) - 1.
-+	 */
-+	return (1 << FIELD_GET(ARMV8_PMU_THWIDTH, cpu_pmu->reg_pmmir)) - 1;
-+}
++FEAT_PMUv3_TH (Armv8.8) permits a PMU counter to increment only on
++events whose count meets a specified threshold condition. For example if
++threshold_compare is set to 2 ('Greater than or equal'), and the
++threshold is set to 2, then the PMU counter will now only increment by
++when an event would have previously incremented the PMU counter by 2 or
++more on a single processor cycle.
 +
-+static ssize_t threshold_max_show(struct device *dev,
-+				  struct device_attribute *attr, char *page)
-+{
-+	struct pmu *pmu = dev_get_drvdata(dev);
-+	struct arm_pmu *cpu_pmu = container_of(pmu, struct arm_pmu, pmu);
++To increment by 1 after passing the threshold condition instead of the
++number of events on that cycle, add the 'threshold_count' option to the
++commandline.
 +
-+	return sysfs_emit(page, "0x%08x\n", threshold_max(cpu_pmu));
-+}
++How-to
++------
 +
-+static DEVICE_ATTR_RO(threshold_max);
++These are the parameters for controlling the feature:
 +
- static struct attribute *armv8_pmuv3_caps_attrs[] = {
- 	&dev_attr_slots.attr,
- 	&dev_attr_bus_slots.attr,
- 	&dev_attr_bus_width.attr,
-+	&dev_attr_threshold_max.attr,
- 	NULL,
- };
- 
-@@ -562,7 +619,7 @@ static void armv8pmu_write_counter(struct perf_event *event, u64 value)
- 		armv8pmu_write_hw_counter(event, value);
- }
- 
--static void armv8pmu_write_evtype(int idx, u32 val)
-+static void armv8pmu_write_evtype(int idx, unsigned long val)
- {
- 	u32 counter = ARMV8_IDX_TO_COUNTER(idx);
- 	unsigned long mask = ARMV8_PMU_EVTYPE_EVENT |
-@@ -931,6 +988,10 @@ static int armv8pmu_set_event_filter(struct hw_perf_event *event,
- 				     struct perf_event_attr *attr)
- {
- 	unsigned long config_base = 0;
-+	struct perf_event *perf_event = container_of(attr, struct perf_event,
-+						     attr);
-+	struct arm_pmu *cpu_pmu = to_arm_pmu(perf_event->pmu);
-+	u32 th;
- 
- 	if (attr->exclude_idle) {
- 		pr_debug("ARM performance counters do not support mode exclusion\n");
-@@ -964,6 +1025,22 @@ static int armv8pmu_set_event_filter(struct hw_perf_event *event,
- 	if (attr->exclude_user)
- 		config_base |= ARMV8_PMU_EXCLUDE_EL0;
- 
-+	/*
-+	 * If FEAT_PMUv3_TH isn't implemented, then THWIDTH (threshold_max) will
-+	 * be 0 and will also trigger this check, preventing it from being used.
-+	 */
-+	th = ATTR_CFG_GET_FLD(attr, threshold);
-+	if (th > threshold_max(cpu_pmu)) {
-+		pr_debug("PMU event threshold exceeds max value\n");
-+		return -EINVAL;
-+	}
++.. list-table::
++   :header-rows: 1
 +
-+	if (IS_ENABLED(CONFIG_ARM64) && th) {
-+		config_base |= FIELD_PREP(ARMV8_PMU_EVTYPE_TH, th);
-+		config_base |= FIELD_PREP(ARMV8_PMU_EVTYPE_TC,
-+					  armv8pmu_event_threshold_control(attr));
-+	}
++   * - Parameter
++     - Description
++   * - threshold
++     - Value to threshold the event by. A value of 0 means that
++       thresholding is disabled and the other parameters have no effect.
++   * - threshold_compare
++     - | Comparison function to use, with the following values supported:
++       |
++       | 0: Not-equal
++       | 1: Equals
++       | 2: Greater-than-or-equal
++       | 3: Less-than
++   * - threshold_count
++     - If this is set, count by 1 after passing the threshold condition
++       instead of the value of the event on this cycle.
 +
- 	/*
- 	 * Install the filter into config_base as this is used to
- 	 * construct the event type.
-diff --git a/include/linux/perf/arm_pmuv3.h b/include/linux/perf/arm_pmuv3.h
-index 91957b3468e9..0f4d62ef3a9a 100644
---- a/include/linux/perf/arm_pmuv3.h
-+++ b/include/linux/perf/arm_pmuv3.h
-@@ -262,6 +262,7 @@
- #define ARMV8_PMU_SLOTS		GENMASK(7, 0)
- #define ARMV8_PMU_BUS_SLOTS	GENMASK(15, 8)
- #define ARMV8_PMU_BUS_WIDTH	GENMASK(19, 16)
-+#define ARMV8_PMU_THWIDTH	GENMASK(23, 20)
- 
- /*
-  * This code is really good
++The threshold, threshold_compare and threshold_count values can be
++provided per event, for example:
++
++.. code-block:: sh
++
++  perf stat -e stall_slot/threshold=2,threshold_compare=2/ \
++            -e dtlb_walk/threshold=10,threshold_compare=3,threshold_count/
++
++In this example the stall_slot event will count by 2 or more on every
++cycle where 2 or more stalls happen. And dtlb_walk will count by 1 on
++every cycle where the number of dtlb walks were less than 10.
++
++The maximum supported threshold value can be read from the caps of each
++PMU, for example:
++
++.. code-block:: sh
++
++  cat /sys/bus/event_source/devices/armv8_pmuv3/caps/threshold_max
++
++  0x000000ff
++
++If a value higher than this is given, then opening the event will result
++in an error. The highest possible maximum is 4095, as the config field
++for threshold is limited to 12 bits, and the Perf tool will refuse to
++parse higher values.
++
++If the PMU doesn't support FEAT_PMUv3_TH, then threshold_max will read
++0, and attempting to set a threshold value will also result in an error.
++threshold_max will also read as 0 on aarch32 guests, even if the host
++is running on hardware with the feature.
 -- 
 2.34.1
 
