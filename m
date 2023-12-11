@@ -1,262 +1,173 @@
-Return-Path: <linux-kselftest+bounces-1525-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1523-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0792980C922
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 13:12:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F2AD80C8ED
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 13:03:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 380631C21028
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 12:12:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9DFA11C2096E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 12:03:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0C8D39865;
-	Mon, 11 Dec 2023 12:12:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE04438FB2;
+	Mon, 11 Dec 2023 12:03:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NFxflDP7"
 X-Original-To: linux-kselftest@vger.kernel.org
-X-Greylist: delayed 1228 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 11 Dec 2023 04:12:16 PST
-Received: from szxga06-in.huawei.com (szxga06-in.huawei.com [45.249.212.32])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E0B4F2;
-	Mon, 11 Dec 2023 04:12:16 -0800 (PST)
-Received: from mail.maildlp.com (unknown [172.19.163.17])
-	by szxga06-in.huawei.com (SkyGuard) with ESMTP id 4Spg7z2kdDz1vnkK;
-	Mon, 11 Dec 2023 19:51:43 +0800 (CST)
-Received: from dggpemm500005.china.huawei.com (unknown [7.185.36.74])
-	by mail.maildlp.com (Postfix) with ESMTPS id 759501A016F;
-	Mon, 11 Dec 2023 19:51:46 +0800 (CST)
-Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
- (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Mon, 11 Dec
- 2023 19:51:46 +0800
-Subject: Re: [net-next v1 09/16] page_pool: device memory support
-To: Mina Almasry <almasrymina@google.com>
-CC: Shailend Chand <shailend@google.com>, <netdev@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<linux-arch@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<bpf@vger.kernel.org>, <linux-media@vger.kernel.org>,
-	<dri-devel@lists.freedesktop.org>, "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>, Jeroen de Borst
-	<jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, Jesper
- Dangaard Brouer <hawk@kernel.org>, Ilias Apalodimas
-	<ilias.apalodimas@linaro.org>, Arnd Bergmann <arnd@arndb.de>, David Ahern
-	<dsahern@kernel.org>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
-	=?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>, Harshitha
- Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeelb@google.com>
-References: <20231208005250.2910004-1-almasrymina@google.com>
- <20231208005250.2910004-10-almasrymina@google.com>
- <32211cbf-3a4e-8a86-6214-4304ddb18a98@huawei.com>
- <CAHS8izOQcuLPwvDff96fuNB7r6EU9OWt3ShueQp=u7wat3L5LA@mail.gmail.com>
- <92e30bd9-6df4-b72f-7bcd-f4fe5670eba2@huawei.com>
- <CAHS8izPEFsqw50qgM+sPot6XVvOExpd+DrwrmPSR3zsWGLysRw@mail.gmail.com>
- <CAHS8izN6Cbjy0FCYhJyNsP396XfgJ_nTFXWuHb5QWNct=PifAg@mail.gmail.com>
-From: Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <59e07233-24cb-7fb2-1aee-e1cf7eb72fa9@huawei.com>
-Date: Mon, 11 Dec 2023 19:51:45 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689801BC9
+	for <linux-kselftest@vger.kernel.org>; Mon, 11 Dec 2023 04:03:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1702296213;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=Eaq72ijy7ksxG1UNPMWHN+8Pe2cAfZW+wwSGb5GojGo=;
+	b=NFxflDP7y/gNwjSG6qvFZlldx+tmSILi5c7fkEPEkB9W9H6owaQQdJbIiV/g4TIdvVpwaq
+	VTEUfY7T4JqWjNW/43TlGPysaf/KB3X0qFCefqPF732Sf3jYGlopvhOOAXCE2a4G/tC7S7
+	XEhIWMnBqGQvnsgq207vqRc1rvAFY/w=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-22-d1Z5lWHbPbKmAR47wLOzDg-1; Mon, 11 Dec 2023 07:03:31 -0500
+X-MC-Unique: d1Z5lWHbPbKmAR47wLOzDg-1
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-3334b1055fbso3677047f8f.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 11 Dec 2023 04:03:31 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702296210; x=1702901010;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Eaq72ijy7ksxG1UNPMWHN+8Pe2cAfZW+wwSGb5GojGo=;
+        b=A2N+qhdyBQQxm5RirSUdmRLjdV+bOdb+bIX9EMmDVx6IboAYPnN2hc/RhzLYPf8e+H
+         EX2+YzhHK4eMlrODCe4c03/RDzCIItD8m0Vvg1t+FGw34XtBwmjNWEmbAg1N0PM3S4SI
+         2pEf/LkEkE4k3JeX958yqDfHxUdDNWlG+5pfeNzP7DEhH+lwGurRJTp0kz+ceaW2bV5q
+         oWGaVmO7TYvJAfXViVjPVOBRyM3Cd5D4b+Mtb7cIWswXnbgOduqcSMQQHH5ix05lHfby
+         kcA9021fxWzTfMriyXswKlfxTeX0b00ZUw7trcVJ9mUsurlwFNo6rgguGUlKBPbvWSwL
+         Kl5Q==
+X-Gm-Message-State: AOJu0YxpUlBrzH886GHKeJwpwjteMQkV3wJlNmr5EfyLsZ2G4GLrTsnc
+	BXk/MX2I2zb2ZbybzBK595vKMKU/jKmkopd3209j15aHIA79wb8hsNFWm2bp004fhzufy2Ig7T/
+	jANxIEw0+AZZfBOFD/CGG+wyu86bn
+X-Received: by 2002:adf:fbc5:0:b0:333:4bd9:88 with SMTP id d5-20020adffbc5000000b003334bd90088mr1585447wrs.51.1702296210035;
+        Mon, 11 Dec 2023 04:03:30 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFhYpnoiGb6ozb1FNvNHnzUnC/GdcsqbUgFsrOJQ0NZrW4zXeCa7sTAy1Yfnx84xqWZAoC+Dg==
+X-Received: by 2002:adf:fbc5:0:b0:333:4bd9:88 with SMTP id d5-20020adffbc5000000b003334bd90088mr1585431wrs.51.1702296209583;
+        Mon, 11 Dec 2023 04:03:29 -0800 (PST)
+Received: from ?IPV6:2003:cb:c742:ae00:6e5f:7195:98f6:3ed1? (p200300cbc742ae006e5f719598f63ed1.dip0.t-ipconnect.de. [2003:cb:c742:ae00:6e5f:7195:98f6:3ed1])
+        by smtp.gmail.com with ESMTPSA id o1-20020adfe801000000b003333c06fa79sm8478223wrm.71.2023.12.11.04.03.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Dec 2023 04:03:29 -0800 (PST)
+Message-ID: <50385948-5eb4-47ea-87f8-add4265933d6@redhat.com>
+Date: Mon, 11 Dec 2023 13:03:27 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAHS8izN6Cbjy0FCYhJyNsP396XfgJ_nTFXWuHb5QWNct=PifAg@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 5/5] selftests/mm: add UFFDIO_MOVE ioctl test
+To: Mark Brown <broonie@kernel.org>, Suren Baghdasaryan <surenb@google.com>
+Cc: akpm@linux-foundation.org, viro@zeniv.linux.org.uk, brauner@kernel.org,
+ shuah@kernel.org, aarcange@redhat.com, lokeshgidra@google.com,
+ peterx@redhat.com, ryan.roberts@arm.com, hughd@google.com, mhocko@suse.com,
+ axelrasmussen@google.com, rppt@kernel.org, willy@infradead.org,
+ Liam.Howlett@oracle.com, jannh@google.com, zhangpeng362@huawei.com,
+ bgeffon@google.com, kaleshsingh@google.com, ngeoffray@google.com,
+ jdduke@google.com, linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kernel-team@android.com
+References: <20231206103702.3873743-1-surenb@google.com>
+ <20231206103702.3873743-6-surenb@google.com>
+ <ZXXJ9NdH61YZfC4c@finisterre.sirena.org.uk>
+ <CAJuCfpFbWeycjvjAFryuugXuiv5ggm=cXG+Y1jfaCD9kJ6KWqQ@mail.gmail.com>
+ <CAJuCfpHRYi4S9c+KKQqtE6Faw1e0E0ENMMRE17zXsqv_CftTGw@mail.gmail.com>
+ <b93b29e9-c176-4111-ae0e-d4922511f223@sirena.org.uk>
 Content-Language: en-US
+From: David Hildenbrand <david@redhat.com>
+Autocrypt: addr=david@redhat.com; keydata=
+ xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
+ dBrn+lhhOYjjNefFQou6478faXE6o2AhmebqT4KiQoUQFV4R7y1KMEKoSyy8hQaK1umALTdL
+ QZLQMzNE74ap+GDK0wnacPQFpcG1AE9RMq3aeErY5tujekBS32jfC/7AnH7I0v1v1TbbK3Gp
+ XNeiN4QroO+5qaSr0ID2sz5jtBLRb15RMre27E1ImpaIv2Jw8NJgW0k/D1RyKCwaTsgRdwuK
+ Kx/Y91XuSBdz0uOyU/S8kM1+ag0wvsGlpBVxRR/xw/E8M7TEwuCZQArqqTCmkG6HGcXFT0V9
+ PXFNNgV5jXMQRwU0O/ztJIQqsE5LsUomE//bLwzj9IVsaQpKDqW6TAPjcdBDPLHvriq7kGjt
+ WhVhdl0qEYB8lkBEU7V2Yb+SYhmhpDrti9Fq1EsmhiHSkxJcGREoMK/63r9WLZYI3+4W2rAc
+ UucZa4OT27U5ZISjNg3Ev0rxU5UH2/pT4wJCfxwocmqaRr6UYmrtZmND89X0KigoFD/XSeVv
+ jwBRNjPAubK9/k5NoRrYqztM9W6sJqrH8+UWZ1Idd/DdmogJh0gNC0+N42Za9yBRURfIdKSb
+ B3JfpUqcWwE7vUaYrHG1nw54pLUoPG6sAA7Mehl3nd4pZUALHwARAQABzSREYXZpZCBIaWxk
+ ZW5icmFuZCA8ZGF2aWRAcmVkaGF0LmNvbT7CwZgEEwEIAEICGwMGCwkIBwMCBhUIAgkKCwQW
+ AgMBAh4BAheAAhkBFiEEG9nKrXNcTDpGDfzKTd4Q9wD/g1oFAl8Ox4kFCRKpKXgACgkQTd4Q
+ 9wD/g1oHcA//a6Tj7SBNjFNM1iNhWUo1lxAja0lpSodSnB2g4FCZ4R61SBR4l/psBL73xktp
+ rDHrx4aSpwkRP6Epu6mLvhlfjmkRG4OynJ5HG1gfv7RJJfnUdUM1z5kdS8JBrOhMJS2c/gPf
+ wv1TGRq2XdMPnfY2o0CxRqpcLkx4vBODvJGl2mQyJF/gPepdDfcT8/PY9BJ7FL6Hrq1gnAo4
+ 3Iv9qV0JiT2wmZciNyYQhmA1V6dyTRiQ4YAc31zOo2IM+xisPzeSHgw3ONY/XhYvfZ9r7W1l
+ pNQdc2G+o4Di9NPFHQQhDw3YTRR1opJaTlRDzxYxzU6ZnUUBghxt9cwUWTpfCktkMZiPSDGd
+ KgQBjnweV2jw9UOTxjb4LXqDjmSNkjDdQUOU69jGMUXgihvo4zhYcMX8F5gWdRtMR7DzW/YE
+ BgVcyxNkMIXoY1aYj6npHYiNQesQlqjU6azjbH70/SXKM5tNRplgW8TNprMDuntdvV9wNkFs
+ 9TyM02V5aWxFfI42+aivc4KEw69SE9KXwC7FSf5wXzuTot97N9Phj/Z3+jx443jo2NR34XgF
+ 89cct7wJMjOF7bBefo0fPPZQuIma0Zym71cP61OP/i11ahNye6HGKfxGCOcs5wW9kRQEk8P9
+ M/k2wt3mt/fCQnuP/mWutNPt95w9wSsUyATLmtNrwccz63XOwU0EVcufkQEQAOfX3n0g0fZz
+ Bgm/S2zF/kxQKCEKP8ID+Vz8sy2GpDvveBq4H2Y34XWsT1zLJdvqPI4af4ZSMxuerWjXbVWb
+ T6d4odQIG0fKx4F8NccDqbgHeZRNajXeeJ3R7gAzvWvQNLz4piHrO/B4tf8svmRBL0ZB5P5A
+ 2uhdwLU3NZuK22zpNn4is87BPWF8HhY0L5fafgDMOqnf4guJVJPYNPhUFzXUbPqOKOkL8ojk
+ CXxkOFHAbjstSK5Ca3fKquY3rdX3DNo+EL7FvAiw1mUtS+5GeYE+RMnDCsVFm/C7kY8c2d0G
+ NWkB9pJM5+mnIoFNxy7YBcldYATVeOHoY4LyaUWNnAvFYWp08dHWfZo9WCiJMuTfgtH9tc75
+ 7QanMVdPt6fDK8UUXIBLQ2TWr/sQKE9xtFuEmoQGlE1l6bGaDnnMLcYu+Asp3kDT0w4zYGsx
+ 5r6XQVRH4+5N6eHZiaeYtFOujp5n+pjBaQK7wUUjDilPQ5QMzIuCL4YjVoylWiBNknvQWBXS
+ lQCWmavOT9sttGQXdPCC5ynI+1ymZC1ORZKANLnRAb0NH/UCzcsstw2TAkFnMEbo9Zu9w7Kv
+ AxBQXWeXhJI9XQssfrf4Gusdqx8nPEpfOqCtbbwJMATbHyqLt7/oz/5deGuwxgb65pWIzufa
+ N7eop7uh+6bezi+rugUI+w6DABEBAAHCwXwEGAEIACYCGwwWIQQb2cqtc1xMOkYN/MpN3hD3
+ AP+DWgUCXw7HsgUJEqkpoQAKCRBN3hD3AP+DWrrpD/4qS3dyVRxDcDHIlmguXjC1Q5tZTwNB
+ boaBTPHSy/Nksu0eY7x6HfQJ3xajVH32Ms6t1trDQmPx2iP5+7iDsb7OKAb5eOS8h+BEBDeq
+ 3ecsQDv0fFJOA9ag5O3LLNk+3x3q7e0uo06XMaY7UHS341ozXUUI7wC7iKfoUTv03iO9El5f
+ XpNMx/YrIMduZ2+nd9Di7o5+KIwlb2mAB9sTNHdMrXesX8eBL6T9b+MZJk+mZuPxKNVfEQMQ
+ a5SxUEADIPQTPNvBewdeI80yeOCrN+Zzwy/Mrx9EPeu59Y5vSJOx/z6OUImD/GhX7Xvkt3kq
+ Er5KTrJz3++B6SH9pum9PuoE/k+nntJkNMmQpR4MCBaV/J9gIOPGodDKnjdng+mXliF3Ptu6
+ 3oxc2RCyGzTlxyMwuc2U5Q7KtUNTdDe8T0uE+9b8BLMVQDDfJjqY0VVqSUwImzTDLX9S4g/8
+ kC4HRcclk8hpyhY2jKGluZO0awwTIMgVEzmTyBphDg/Gx7dZU1Xf8HFuE+UZ5UDHDTnwgv7E
+ th6RC9+WrhDNspZ9fJjKWRbveQgUFCpe1sa77LAw+XFrKmBHXp9ZVIe90RMe2tRL06BGiRZr
+ jPrnvUsUUsjRoRNJjKKA/REq+sAnhkNPPZ/NNMjaZ5b8Tovi8C0tmxiCHaQYqj7G2rgnT0kt
+ WNyWQQ==
+Organization: Red Hat
+In-Reply-To: <b93b29e9-c176-4111-ae0e-d4922511f223@sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500005.china.huawei.com (7.185.36.74)
 
-On 2023/12/11 12:04, Mina Almasry wrote:
-> On Sun, Dec 10, 2023 at 6:26 PM Mina Almasry <almasrymina@google.com> wrote:
->>
->> On Sun, Dec 10, 2023 at 6:04 PM Yunsheng Lin <linyunsheng@huawei.com> wrote:
->>>
->>> On 2023/12/9 0:05, Mina Almasry wrote:
->>>> On Fri, Dec 8, 2023 at 1:30 AM Yunsheng Lin <linyunsheng@huawei.com> wrote:
->>>>>
->>>>>
->>>>> As mentioned before, it seems we need to have the above checking every
->>>>> time we need to do some per-page handling in page_pool core, is there
->>>>> a plan in your mind how to remove those kind of checking in the future?
->>>>>
->>>>
->>>> I see 2 ways to remove the checking, both infeasible:
->>>>
->>>> 1. Allocate a wrapper struct that pulls out all the fields the page pool needs:
->>>>
->>>> struct netmem {
->>>>         /* common fields */
->>>>         refcount_t refcount;
->>>>         bool is_pfmemalloc;
->>>>         int nid;
->>>>         ...
->>>>         union {
->>>>                 struct dmabuf_genpool_chunk_owner *owner;
->>>>                 struct page * page;
->>>>         };
->>>> };
->>>>
->>>> The page pool can then not care if the underlying memory is iov or
->>>> page. However this introduces significant memory bloat as this struct
->>>> needs to be allocated for each page or ppiov, which I imagine is not
->>>> acceptable for the upside of removing a few static_branch'd if
->>>> statements with no performance cost.
->>>>
->>>> 2. Create a unified struct for page and dmabuf memory, which the mm
->>>> folks have repeatedly nacked, and I imagine will repeatedly nack in
->>>> the future.
->>>>
->>>> So I imagine the special handling of ppiov in some form is critical
->>>> and the checking may not be removable.
->>>
->>> If the above is true, perhaps devmem is not really supposed to be intergated
->>> into page_pool.
->>>
->>> Adding a checking for every per-page handling in page_pool core is just too
->>> hacky to be really considerred a longterm solution.
->>>
->>
->> The only other option is to implement another page_pool for ppiov and
->> have the driver create page_pool or ppiov_pool depending on the state
->> of the netdev_rx_queue (or some helper in the net stack to do that for
->> the driver). This introduces some code duplication. The ppiov_pool &
->> page_pool would look similar in implementation.
-
-I think there is a design pattern already to deal with this kind of problem,
-refactoring common code used by both page_pool and ppiov into a library to
-aovid code duplication if most of them have similar implementation.
-
->>
->> But this was all discussed in detail in RFC v2 and the last response I
->> heard from Jesper was in favor if this approach, if I understand
->> correctly:
->>
->> https://lore.kernel.org/netdev/7aedc5d5-0daf-63be-21bc-3b724cc1cab9@redhat.com/
->>
->> Would love to have the maintainer weigh in here.
->>
+On 11.12.23 12:15, Mark Brown wrote:
+> On Sun, Dec 10, 2023 at 07:04:19PM -0800, Suren Baghdasaryan wrote:
+>> On Sun, Dec 10, 2023 at 5:01 PM Suren Baghdasaryan <surenb@google.com> wrote:
 > 
-> I should note we may be able to remove some of the checking, but maybe not all.
+>>> Thanks for reporting! I'll try that later today.
+>>> Just to clarify, are you using mm-unstable and if so, has it been
+>>> rebased since Friday? There was an update to this patchset in
+>>> mm-unstable which Andrew merged on Friday and the failure does look
+>>> like something that would happen with the previous version.
 > 
-> - Checks that disable page fragging for ppiov can be removed once
-> ppiov has frag support (in this series or follow up).
+>> I tried reproducing the issue but so far unsuccessfully. Could you
+>> please confirm that on the latest mm-unstable branch it's still
+>> reproducible and if so, please provide detailed instructions on how
+>> you reproduce it.
 > 
-> - If we use page->pp_frag_count (or page->pp_ref_count) for
-> refcounting ppiov, we can remove the if checking in the refcounting.
-> 
-> - We may be able to store the dma_addr of the ppiov in page->dma_addr,
-> but I'm unsure if that actually works, because the dma_buf dmaddr is
-> dma_addr_t (u32 or u64), but page->dma_addr is unsigned long (4 bytes
-> I think). But if it works for pages I may be able to make it work for
-> ppiov as well.
-> 
-> - Checks that obtain the page->pp can work with ppiov if we align the
-> offset of page->pp and ppiov->pp.
-> 
-> - Checks around page->pp_magic can be removed if we also have offset
-> aligned ppiov->pp_magic.
-> 
-> Sadly I don't see us removing the checking for these other cases:
-> 
-> - page_is_pfmemalloc(): I'm not allowed to pass a non-struct page into
-> that helper.
+> This is linux-next.  I pasted the commands used to build and sent links
+> to a full build log in the original report.
 
-We can do similar trick like above as bit 1 of page->pp_magic is used to
-indicate that if it is a pfmemalloc page.
+Probably also related to "make headers-install":
 
-> 
-> - page_to_nid(): I'm not allowed to pass a non-struct page into that helper.
+https://lkml.kernel.org/r/20231209020144.244759-1-jhubbard@nvidia.com
 
-Yes, this one need special case.
+The general problem is that some mm selftests are currently not written 
+in way that allows them to compile with old linux headers. That's why 
+the build fails if "make headers-install" was not executed, but it does 
+not fail if "make headers-install" was once upon a time executed, but 
+the headers are outdated.
 
-> 
-> - page_pool_free_va(): ppiov have no va.
+-- 
+Cheers,
 
-Doesn't the skb_frags_readable() checking will protect the page_pool_free_va()
-from being called on devmem?
+David / dhildenb
 
-> 
-> - page_pool_sync_for_dev/page_pool_dma_map: ppiov backed by dma-buf
-> fundamentally can't get mapped again.
-
-Can we just fail the page_pool creation with PP_FLAG_DMA_MAP and
-DMA_ATTR_SKIP_CPU_SYNC flags for devmem provider?
-
-> 
-> Are the removal (or future removal) of these checks enough to resolve this?
-
-Yes, that is somewhat similar to my proposal, the biggest objection seems to
-be that we need to have a safe type checking for it to work correctly.
-
-> 
->>> It is somewhat ironical that devmem is using static_branch to alliviate the
->>> performance impact for normal memory at the possible cost of performance
->>> degradation for devmem, does it not defeat some purpose of intergating devmem
->>> to page_pool?
->>>
->>
->> I don't see the issue. The static branch sets the non-ppiov path as
->> default if no memory providers are in use, and flips it when they are,
->> making the default branch prediction ideal in both cases.
-
-You are assuming the we are not using page pool for both normal memory and
-devmem at the same. But a generic solution should not have that assumption
-as my understanding.
-
->>
->>>>
->>>>> Even though a static_branch check is added in page_is_page_pool_iov(), it
->>>>> does not make much sense that a core has tow different 'struct' for its
->>>>> most basic data.
->>>>>
->>>>> IMHO, the ppiov for dmabuf is forced fitting into page_pool without much
->>>>> design consideration at this point.
->>>>>
->>>> ...
->>>>>
->>>>> For now, the above may work for the the rx part as it seems that you are
->>>>> only enabling rx for dmabuf for now.
->>>>>
->>>>> What is the plan to enable tx for dmabuf? If it is also intergrated into
->>>>> page_pool? There was a attempt to enable page_pool for tx, Eric seemed to
->>>>> have some comment about this:
->>>>> https://lkml.kernel.org/netdev/2cf4b672-d7dc-db3d-ce90-15b4e91c4005@huawei.com/T/#mb6ab62dc22f38ec621d516259c56dd66353e24a2
->>>>>
->>>>> If tx is not intergrated into page_pool, do we need to create a new layer for
->>>>> the tx dmabuf?
->>>>>
->>>>
->>>> I imagine the TX path will reuse page_pool_iov, page_pool_iov_*()
->>>> helpers, and page_pool_page_*() helpers, but will not need any core
->>>> page_pool changes. This is because the TX path will have to piggyback
->>>
->>> We may need another bit/flags checking to demux between page_pool owned
->>> devmem and non-page_pool owned devmem.
->>>
->>
->> The way I'm imagining the support, I don't see the need for such
->> flags. We'd be re-using generic helpers like
->> page_pool_iov_get_dma_address() and what not that don't need that
->> checking.
->>
->>> Also calling page_pool_*() on non-page_pool owned devmem is confusing
->>> enough that we may need a thin layer handling non-page_pool owned devmem
->>> in the end.
->>>
->>
->> The page_pool_page* & page_pool_iov* functions can be renamed if
->> confusing. I would think that's no issue (note that the page_pool_*
-
-When you rename those functions, you will have a thin layer automatically.
-
->> functions need not be called for TX path).
->>
->>>> on MSG_ZEROCOPY (devmem is not copyable), so no memory allocation from
->>>> the page_pool (or otherwise) is needed or possible. RFCv1 had a TX
->>>> implementation based on dmabuf pages without page_pool involvement, I
->>>> imagine I'll do something similar.
->>> It would be good to have a tx implementation for the next version, so
->>> that we can have a whole picture of devmem.
 
