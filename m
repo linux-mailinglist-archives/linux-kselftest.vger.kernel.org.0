@@ -1,166 +1,113 @@
-Return-Path: <linux-kselftest+bounces-1578-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1574-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB90780D0E8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 17:16:14 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52E3980D0DF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 17:15:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 983B928212D
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 16:16:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BC94EB213C1
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 16:15:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4216D4C622;
-	Mon, 11 Dec 2023 16:16:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 310044C624;
+	Mon, 11 Dec 2023 16:15:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WL1ZZUAi"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 43521186;
-	Mon, 11 Dec 2023 08:16:09 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 877CE16F2;
-	Mon, 11 Dec 2023 08:16:55 -0800 (PST)
-Received: from e127643.broadband (unknown [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 1313D3F738;
-	Mon, 11 Dec 2023 08:16:04 -0800 (PST)
-From: James Clark <james.clark@arm.com>
-To: linux-arm-kernel@lists.infradead.org,
-	linux-perf-users@vger.kernel.org,
-	suzuki.poulose@arm.com,
-	will@kernel.org,
-	mark.rutland@arm.com,
-	anshuman.khandual@arm.com
-Cc: namhyung@gmail.com,
-	James Clark <james.clark@arm.com>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Zaid Al-Bassam <zalbassam@google.com>,
-	Raghavendra Rao Ananta <rananta@google.com>,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v7 11/11] Documentation: arm64: Document the PMU event counting threshold feature
-Date: Mon, 11 Dec 2023 16:13:23 +0000
-Message-Id: <20231211161331.1277825-12-james.clark@arm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231211161331.1277825-1-james.clark@arm.com>
-References: <20231211161331.1277825-1-james.clark@arm.com>
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5526A10B
+	for <linux-kselftest@vger.kernel.org>; Mon, 11 Dec 2023 08:15:26 -0800 (PST)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-5c08c47c055so45001087b3.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 11 Dec 2023 08:15:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1702311325; x=1702916125; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fnRSD+sBsefYYvzn3oBRGskx6xnKDW8P+HTWAzvULNU=;
+        b=WL1ZZUAiHI3jgra1bD3B0ZPJ4M8B2vD6DgLOkWeDTst2+Vp15GKXhSfBYuhwURIoJe
+         hSnt9KjWm5kY4+iJZml9qKbwHnM1vVJZhKTi8zzlYcifMGm5NSm/nU/Ba3JjbQoRIfel
+         dpYl5avD1kTMoB5uQXrJ01mclOCcDTRmCkW02YA5WI7POdKbO3oigZhr8tarQEyBT+/e
+         On7qNyOj0csaOO5VnIF+Loe57thEXJuzC0lvWd9vvO0SH3906PQiLICfrOrOh36jUW4a
+         kwJMiyoHgQassjGvZ4SXcpY/kssjMkKC4xn1VumguyK+eqvZo3gQ38OwfTOXeJP8tJPK
+         rNSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702311325; x=1702916125;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fnRSD+sBsefYYvzn3oBRGskx6xnKDW8P+HTWAzvULNU=;
+        b=eA0Q4twZ8QrLCa2OQpZ9bQnVVpJvlqRYOfug4DOqH+Mn+3/rhTJoW3cosIcf/43Hrr
+         EOcl6+hrNKpyh+4AC3kksCpxe8lt2AQboaWd36m4i1jg4bcnCV/nZTV7ia3zgboh2RDA
+         y81z4cmVUz23gf/kfNnZW+I83Atk9jrJop+nwCmmLBDqCL6c+HxraAe915ThKzaZUSGo
+         QMK3+ziYWH9LJanyFQqsgjjmfWR1LK6VZ/azv2t1XZOT6HT57IQeqyuHFxVmnMGfRrze
+         1KiL1d6hNc41V85/TOj12zwVRahSe3Z8zgsolminVYxD7RsbSNDwQ1iNL8x1CLlxlO/5
+         i53w==
+X-Gm-Message-State: AOJu0YzrgA10XnqdszDalZ5ZKfkNxuetK3zOXkbGkKTNShEvSFDToOGI
+	zyky1Ig+1oI4Oi6rvXKXL7SZUWEDXEgNX+f24Z7M3w==
+X-Google-Smtp-Source: AGHT+IFtvdYDtV18pDROt//QGcMAArJtde9LSDLbsQOqNXlre7oPEzwTXObS2vRBaJiNoebZprMpaahUpj+4Qgxz+Yw=
+X-Received: by 2002:a05:690c:3749:b0:5e1:8875:7cc2 with SMTP id
+ fw9-20020a05690c374900b005e188757cc2mr464939ywb.15.1702311325143; Mon, 11 Dec
+ 2023 08:15:25 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20231206103702.3873743-1-surenb@google.com> <20231206103702.3873743-6-surenb@google.com>
+ <ZXXJ9NdH61YZfC4c@finisterre.sirena.org.uk> <CAJuCfpFbWeycjvjAFryuugXuiv5ggm=cXG+Y1jfaCD9kJ6KWqQ@mail.gmail.com>
+ <CAJuCfpHRYi4S9c+KKQqtE6Faw1e0E0ENMMRE17zXsqv_CftTGw@mail.gmail.com>
+ <b93b29e9-c176-4111-ae0e-d4922511f223@sirena.org.uk> <50385948-5eb4-47ea-87f8-add4265933d6@redhat.com>
+ <6a34b0c9-e084-4928-b239-7af01c8d4479@sirena.org.uk>
+In-Reply-To: <6a34b0c9-e084-4928-b239-7af01c8d4479@sirena.org.uk>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Mon, 11 Dec 2023 08:15:11 -0800
+Message-ID: <CAJuCfpEcbcO0d5WPDHMqiEJws9k_5c30pE-J+E_VxO_fpTf_mw@mail.gmail.com>
+Subject: Re: [PATCH v6 5/5] selftests/mm: add UFFDIO_MOVE ioctl test
+To: Mark Brown <broonie@kernel.org>
+Cc: David Hildenbrand <david@redhat.com>, akpm@linux-foundation.org, viro@zeniv.linux.org.uk, 
+	brauner@kernel.org, shuah@kernel.org, aarcange@redhat.com, 
+	lokeshgidra@google.com, peterx@redhat.com, ryan.roberts@arm.com, 
+	hughd@google.com, mhocko@suse.com, axelrasmussen@google.com, rppt@kernel.org, 
+	willy@infradead.org, Liam.Howlett@oracle.com, jannh@google.com, 
+	zhangpeng362@huawei.com, bgeffon@google.com, kaleshsingh@google.com, 
+	ngeoffray@google.com, jdduke@google.com, linux-mm@kvack.org, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kernel-team@android.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add documentation for the new Perf event open parameters and
-the threshold_max capability file.
+On Mon, Dec 11, 2023 at 4:24=E2=80=AFAM Mark Brown <broonie@kernel.org> wro=
+te:
+>
+> On Mon, Dec 11, 2023 at 01:03:27PM +0100, David Hildenbrand wrote:
+> > On 11.12.23 12:15, Mark Brown wrote:
+>
+> > > This is linux-next.  I pasted the commands used to build and sent lin=
+ks
+> > > to a full build log in the original report.
+>
+> > Probably also related to "make headers-install":
+>
+> > https://lkml.kernel.org/r/20231209020144.244759-1-jhubbard@nvidia.com
+>
+> > The general problem is that some mm selftests are currently not written=
+ in
+> > way that allows them to compile with old linux headers. That's why the =
+build
+> > fails if "make headers-install" was not executed, but it does not fail =
+if
+> > "make headers-install" was once upon a time executed, but the headers a=
+re
+> > outdated.
+>
+> Oh, it's obviously the new headers not being installed.  The builds
+> where I'm seeing the problem (my own and KernelCI's) are all fresh
+> containers so there shouldn't be any stale headers lying around.
 
-Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
-Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
-Acked-by: Namhyung Kim <namhyung@kernel.org>
-Signed-off-by: James Clark <james.clark@arm.com>
----
- Documentation/arch/arm64/perf.rst | 72 +++++++++++++++++++++++++++++++
- 1 file changed, 72 insertions(+)
-
-diff --git a/Documentation/arch/arm64/perf.rst b/Documentation/arch/arm64/perf.rst
-index 1f87b57c2332..997fd716b82f 100644
---- a/Documentation/arch/arm64/perf.rst
-+++ b/Documentation/arch/arm64/perf.rst
-@@ -164,3 +164,75 @@ and should be used to mask the upper bits as needed.
-    https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/perf/arch/arm64/tests/user-events.c
- .. _tools/lib/perf/tests/test-evsel.c:
-    https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/lib/perf/tests/test-evsel.c
-+
-+Event Counting Threshold
-+==========================================
-+
-+Overview
-+--------
-+
-+FEAT_PMUv3_TH (Armv8.8) permits a PMU counter to increment only on
-+events whose count meets a specified threshold condition. For example if
-+threshold_compare is set to 2 ('Greater than or equal'), and the
-+threshold is set to 2, then the PMU counter will now only increment by
-+when an event would have previously incremented the PMU counter by 2 or
-+more on a single processor cycle.
-+
-+To increment by 1 after passing the threshold condition instead of the
-+number of events on that cycle, add the 'threshold_count' option to the
-+commandline.
-+
-+How-to
-+------
-+
-+These are the parameters for controlling the feature:
-+
-+.. list-table::
-+   :header-rows: 1
-+
-+   * - Parameter
-+     - Description
-+   * - threshold
-+     - Value to threshold the event by. A value of 0 means that
-+       thresholding is disabled and the other parameters have no effect.
-+   * - threshold_compare
-+     - | Comparison function to use, with the following values supported:
-+       |
-+       | 0: Not-equal
-+       | 1: Equals
-+       | 2: Greater-than-or-equal
-+       | 3: Less-than
-+   * - threshold_count
-+     - If this is set, count by 1 after passing the threshold condition
-+       instead of the value of the event on this cycle.
-+
-+The threshold, threshold_compare and threshold_count values can be
-+provided per event, for example:
-+
-+.. code-block:: sh
-+
-+  perf stat -e stall_slot/threshold=2,threshold_compare=2/ \
-+            -e dtlb_walk/threshold=10,threshold_compare=3,threshold_count/
-+
-+In this example the stall_slot event will count by 2 or more on every
-+cycle where 2 or more stalls happen. And dtlb_walk will count by 1 on
-+every cycle where the number of dtlb walks were less than 10.
-+
-+The maximum supported threshold value can be read from the caps of each
-+PMU, for example:
-+
-+.. code-block:: sh
-+
-+  cat /sys/bus/event_source/devices/armv8_pmuv3/caps/threshold_max
-+
-+  0x000000ff
-+
-+If a value higher than this is given, then opening the event will result
-+in an error. The highest possible maximum is 4095, as the config field
-+for threshold is limited to 12 bits, and the Perf tool will refuse to
-+parse higher values.
-+
-+If the PMU doesn't support FEAT_PMUv3_TH, then threshold_max will read
-+0, and attempting to set a threshold value will also result in an error.
-+threshold_max will also read as 0 on aarch32 guests, even if the host
-+is running on hardware with the feature.
--- 
-2.34.1
-
+Ok, I was updating my headers and that's why I could not reproduce it.
+David, should the test be modified to handle old linux headers
+(disable the new tests #ifndef _UFFDIO_MOVE or some other way)?
 
