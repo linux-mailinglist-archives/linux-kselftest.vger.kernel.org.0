@@ -1,139 +1,122 @@
-Return-Path: <linux-kselftest+bounces-1516-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1517-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 654C180C615
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 11:11:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 69D4F80C61E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 11:12:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 94E7A1C20BE2
-	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 10:11:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 990EB1C209A7
+	for <lists+linux-kselftest@lfdr.de>; Mon, 11 Dec 2023 10:12:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B32E2D63D;
-	Mon, 11 Dec 2023 10:10:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FDF82230A;
+	Mon, 11 Dec 2023 10:12:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aW5TJsPi"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fZIeWV9+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ot1-x32f.google.com (mail-ot1-x32f.google.com [IPv6:2607:f8b0:4864:20::32f])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DC20E8;
-	Mon, 11 Dec 2023 02:10:24 -0800 (PST)
-Received: by mail-ot1-x32f.google.com with SMTP id 46e09a7af769-6d9d0d0e083so3411118a34.2;
-        Mon, 11 Dec 2023 02:10:24 -0800 (PST)
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 167A1AB
+	for <linux-kselftest@vger.kernel.org>; Mon, 11 Dec 2023 02:12:32 -0800 (PST)
+Received: by mail-pj1-x1029.google.com with SMTP id 98e67ed59e1d1-286e03467a3so3130713a91.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 11 Dec 2023 02:12:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702289423; x=1702894223; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pMa41XF+hwSqPxO7tGAD0COLCNlUqX7ebtlUkJcEZus=;
-        b=aW5TJsPiKtHapUqYbfqJKGm+XDD17F5A7l+lQX/bKA9fB9QKB0TCNuUAU9eZWmPDYL
-         A86i8PlyYUj2niUXv3ZexH/TpbXoCymrS+Vx4QCremumJUeeMWIjc8jb1qZISUbSJllx
-         +7lWDEvoKRcNSBIqiYfAII6Vo3+DXc9BmMDoFHWVnBAn9JTHhJ0zW3KEf6AsbuG21zi0
-         49UBTmL7offUnhZgWL+pk9dnSifKuQtRoUn+UpH//AyOdcaSSEwWH/2wcKsAnDUOey1D
-         U+twj1pD/a7q8PKvGNFCfkRh4GuogtaDHKRDqWz2dubqD36DdKXDqtuMYx6oF8MrH39R
-         bq3g==
+        d=gmail.com; s=20230601; t=1702289551; x=1702894351; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=GH7i95L+H2BeLVRjjioDAByqwcO/R3UaRcZe+O+j5uI=;
+        b=fZIeWV9+r6sQ1D+IuzPWD7JmZPBOe4SHEGS4Cnk6elaTOHjmFS5M5h0f1F4h1PbenJ
+         Qdja0Tx6GEW5t5jF7p29kq7plUEFdM5TABAl7Br72fSCWriPXde3gQf7Fg4bWWWygsTi
+         8mjGJLMSbg4U4fHHkH+H1XaQgB1V2Os9oLjKe7nbWYoA32O+DGq0AoammfTUMTW/Oi25
+         kHunCq+WTvplMTofWjYIPTkhFhNPpVAGoSFKWA9Rj0QaHbhjMmUQexFJ5zxZ1304Mb4x
+         dcO+TjQaziLJz4b25YehMsO2m+qZ2gf6uHyJGcoxPak7CnvZEdj4M28iZ4wrryEQkqlR
+         1V2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702289423; x=1702894223;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pMa41XF+hwSqPxO7tGAD0COLCNlUqX7ebtlUkJcEZus=;
-        b=vBf3/y/ks7gEJoE1C9q6a6uNKKXlFpaafAVWg80CmmNruyW5hXk+3ivRsWErD6CKUf
-         GSEMNfJ8KV+QevNOEDPo793CgPv8VbyrzYDvkzyopSw8f0yseJT6ttVMYRtg29DOG12V
-         OYLWltLdI8kwF55fxp5wQr5z4T9kZKoDscKXMv0QR51hTKiY6PLM2ekmJbKvuD8HBErE
-         f3CamofhW605rKzpDQTNiD/mtZI6EYlUSbL4D/b8C5bEY0F62frSLuSVA45L/AhYIifZ
-         09nv3CQ4vPCpEq4G7lh3ycCcbRtFKFQBh9vvilSWQSCa1msbfsQ8Ct5nl9a8g1QoLrwd
-         XVHQ==
-X-Gm-Message-State: AOJu0YxJzOK4QxabTscT/7+ia/Q4TxoyWn/kcN6JOXsof9Jd6F8fFDL9
-	piPBGyJ/f1pcroNKxg0B2hVEa8bJT3O7JdIn
-X-Google-Smtp-Source: AGHT+IGNwz6Ri5YdJZWQ7k5JV2hte+Ad5Nvgw0lSu5rj9IzMjD118mwcN9SHQ4/hM3hF8aigD4orPg==
-X-Received: by 2002:a05:6830:1e83:b0:6d9:a60e:e3e5 with SMTP id n3-20020a0568301e8300b006d9a60ee3e5mr3494242otr.35.1702289423510;
-        Mon, 11 Dec 2023 02:10:23 -0800 (PST)
-Received: from Laptop-X1.redhat.com ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id o17-20020a656151000000b005c2420fb198sm5151733pgv.37.2023.12.11.02.10.19
+        d=1e100.net; s=20230601; t=1702289551; x=1702894351;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GH7i95L+H2BeLVRjjioDAByqwcO/R3UaRcZe+O+j5uI=;
+        b=ZoCkIJN1Kig25+SLJ56Ck73q97nEklM+4EUXLKgpMzPkUBUrc5G3axd/c3+MdeAUr5
+         QpocFzkzU0gjEx5jGlAUS/aAYbQQEB243DsUi4XfKrhLeUsOeK7Q0mioUmgr/k3Le5d7
+         /71TaVAR0zBrLAmrsJDfH0xem3RcsmH6emHmio1O9Zl0RnRQMn59/KngChAdIdbl7NG6
+         LWSSnTvQhuyVqtSzba6j/IX7VqiCp1WgrZsA7tZs96GzgLn7y4QVcpkai8ovkis+UG4U
+         TblLUXGYUvkVKC0a8Er1hHXVLatWhD1hotj+fAMb5ReP7ucCFTy8c0oi3wGdtf34jECW
+         ONJA==
+X-Gm-Message-State: AOJu0YxGt0ulwCKy7rtVOERwD3DkUZF4VnjIZ98T4XI87JN2Krezzc85
+	ryX1jHX/2dhij5tbnBzkrQI=
+X-Google-Smtp-Source: AGHT+IHC2ioI999wIUV7sxMWb6JVtOG4phKI2l4wRw1oHKKvsGzWFGKM7vUrC0En+IK+9032COUz0w==
+X-Received: by 2002:a17:90a:7c06:b0:286:6cc1:5fb3 with SMTP id v6-20020a17090a7c0600b002866cc15fb3mr1744888pjf.54.1702289551457;
+        Mon, 11 Dec 2023 02:12:31 -0800 (PST)
+Received: from Laptop-X1 ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id z6-20020a170903018600b001a98f844e60sm6077179plg.263.2023.12.11.02.12.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Dec 2023 02:10:23 -0800 (PST)
+        Mon, 11 Dec 2023 02:12:30 -0800 (PST)
+Date: Mon, 11 Dec 2023 18:12:27 +0800
 From: Hangbin Liu <liuhangbin@gmail.com>
-To: netdev@vger.kernel.org
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	David Ahern <dsahern@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	Po-Hsu Lin <po-hsu.lin@canonical.com>,
-	Andrea Mayer <andrea.mayer@uniroma2.it>,
-	Amit Cohen <amcohen@nvidia.com>,
-	Nicolas Dichtel <nicolas.dichtel@6wind.com>,
-	Roopa Prabhu <roopa@nvidia.com>,
-	Ido Schimmel <idosch@nvidia.com>,
-	Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCH net-next 13/13] selftests/net: convert fdb_flush.sh to run it in unique namespace
-Date: Mon, 11 Dec 2023 18:09:25 +0800
-Message-ID: <20231211100925.3249265-14-liuhangbin@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20231211100925.3249265-1-liuhangbin@gmail.com>
-References: <20231211100925.3249265-1-liuhangbin@gmail.com>
+To: Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH] kselftests: add per_test_log support
+Message-ID: <ZXbgiwZXt2PVN81e@Laptop-X1>
+References: <20231102075017.4060991-1-liuhangbin@gmail.com>
+ <ZV6wziKnIs2jZfa2@Laptop-X1>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZV6wziKnIs2jZfa2@Laptop-X1>
 
-Here is the test result after conversion.
-]# ./fdb_flush.sh
-TEST: vx10: Expected 5 FDB entries, got 5                           [ OK ]
-TEST: vx20: Expected 5 FDB entries, got 5                           [ OK ]
-...
-TEST: vx10: Expected 5 FDB entries, got 5                           [ OK ]
-TEST: Test entries with dst 192.0.2.1                               [ OK ]
+Ping Shuah. Is there any update I need?
 
-Acked-by: David Ahern <dsahern@kernel.org>
-Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
----
- tools/testing/selftests/net/fdb_flush.sh | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
-
-diff --git a/tools/testing/selftests/net/fdb_flush.sh b/tools/testing/selftests/net/fdb_flush.sh
-index 90e7a29e0476..d5e3abb8658c 100755
---- a/tools/testing/selftests/net/fdb_flush.sh
-+++ b/tools/testing/selftests/net/fdb_flush.sh
-@@ -5,6 +5,8 @@
- # Check that flush works as expected with all the supported arguments and verify
- # some combinations of arguments.
- 
-+source lib.sh
-+
- FLUSH_BY_STATE_TESTS="
- 	vxlan_test_flush_by_permanent
- 	vxlan_test_flush_by_nopermanent
-@@ -739,10 +741,9 @@ bridge_vxlan_test_flush()
- 
- setup()
- {
--	IP="ip -netns ns1"
--	BRIDGE="bridge -netns ns1"
--
--	ip netns add ns1
-+	setup_ns NS
-+	IP="ip -netns ${NS}"
-+	BRIDGE="bridge -netns ${NS}"
- 
- 	$IP link add name vx10 type vxlan id 1000 dstport "$VXPORT"
- 	$IP link add name vx20 type vxlan id 2000 dstport "$VXPORT"
-@@ -759,7 +760,7 @@ cleanup()
- 	$IP link del dev vx20
- 	$IP link del dev vx10
- 
--	ip netns del ns1
-+	cleanup_ns ${NS}
- }
- 
- ################################################################################
--- 
-2.43.0
-
+Thanks
+Hangbin
+On Thu, Nov 23, 2023 at 09:54:26AM +0800, Hangbin Liu wrote:
+> Hi Shuah,
+> 
+> Any comments for this?
+> 
+> Thanks
+> Hangbin
+> On Thu, Nov 02, 2023 at 03:50:17PM +0800, Hangbin Liu wrote:
+> > By default, all the test output will be printed to stdout or output.log if
+> > -s supplied. The kselftest/runner.sh also supports per test log if the
+> > variable per_test_logging is set. So add new option -p to set this
+> > veriable. Note the -p option is conflict with -s option.
+> > 
+> > Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
+> > ---
+> >  tools/testing/selftests/run_kselftest.sh | 6 +++++-
+> >  1 file changed, 5 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/tools/testing/selftests/run_kselftest.sh b/tools/testing/selftests/run_kselftest.sh
+> > index 92743980e553..965220a314ce 100755
+> > --- a/tools/testing/selftests/run_kselftest.sh
+> > +++ b/tools/testing/selftests/run_kselftest.sh
+> > @@ -20,7 +20,8 @@ usage()
+> >  {
+> >  	cat <<EOF
+> >  Usage: $0 [OPTIONS]
+> > -  -s | --summary		Print summary with detailed log in output.log
+> > +  -s | --summary		Print summary with detailed log in output.log (conflict with -p)
+> > +  -p | --per_test_log		Print test log in /tmp with each test name (conflict with -s)
+> >    -t | --test COLLECTION:TEST	Run TEST from COLLECTION
+> >    -c | --collection COLLECTION	Run all tests from COLLECTION
+> >    -l | --list			List the available collection:test entries
+> > @@ -41,6 +42,9 @@ while true; do
+> >  			logfile="$BASE_DIR"/output.log
+> >  			cat /dev/null > $logfile
+> >  			shift ;;
+> > +		-p | --per_test_log)
+> > +			per_test_logging=1
+> > +			shift ;;
+> >  		-t | --test)
+> >  			TESTS="$TESTS $2"
+> >  			shift 2 ;;
+> > -- 
+> > 2.41.0
+> > 
 
