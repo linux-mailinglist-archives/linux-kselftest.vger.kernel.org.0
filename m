@@ -1,37 +1,37 @@
-Return-Path: <linux-kselftest+bounces-1699-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1700-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1886A80F632
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 20:12:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5AF4380F633
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 20:12:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B61701F210F6
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 19:12:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 10B3B1F2180F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 19:12:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6A328005B;
-	Tue, 12 Dec 2023 19:12:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E20B881E20;
+	Tue, 12 Dec 2023 19:12:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nJ/ZB6cd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="igSIjbck"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9475380053;
-	Tue, 12 Dec 2023 19:12:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67E6EC433C8;
-	Tue, 12 Dec 2023 19:12:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD60E80053;
+	Tue, 12 Dec 2023 19:12:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A235CC433C7;
+	Tue, 12 Dec 2023 19:12:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702408331;
-	bh=6tke9Mw73/PmV6sucCIPXGu5OGZe4EV0PkE+FQKIYKI=;
-	h=From:To:Cc:Subject:Date:From;
-	b=nJ/ZB6cdaAzYm2iVfPA9pB4Kwf3IsNZ2cd5012uIiLCKnE8RjQKaTJKbdn/8HggFL
-	 JvHxekh3fKJhlTDeQ/zSEfKQ1OWLhCItYUItlw4h952ge07YwQt/pxbaaLZkUKcSO1
-	 y2M6qwdV5GYGwNYGUk0g7gmKprHI11sKdJcJnpMJPY8ObZmVgS9EQW5V3IByuGOUMA
-	 srxSoN8X7xIHv06AGfa73Sp/Fjt1qzTEbq10E/vnpXFmnnPTRvSE4JQxCHPOzfM5nX
-	 0NAg5wdjmhAJ3TTdZGF0MpX27kxvyl+Ra8R4VU2barlWQvfHh73WyMAWzgahAqKX/C
-	 f2pV37Ciqcc1Q==
+	s=k20201202; t=1702408333;
+	bh=GHi4Mu0bQn8zyIS9XnsaUAW8ixexoLEYfp8Ut/tF7Co=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=igSIjbckp2hVl7FoDQk0XpOqN8qpCWR+x4WM0LuOXFbwy7VEp+1mpdVGEp8BgivFk
+	 YWuKoyLk6+L92fw8DO6z/SjD/Age3Nw8aFN3sUTuRzQgQjSwqpMMH4MFQTfv9gsTfK
+	 0yQ9XH+/wMbWvMMsVUweD+5+gttAd05TAPRCtqgaWwxz119gLLW0XT1drB4JssYga9
+	 hUo9zJVevAPH1Y6xLxnsPPmQ6jbZ4y880MruyyjZJ+eCpF19hzXMTF25lBB45kswHv
+	 hg9DjEcyWnOzOwBRp0kdHamLzLcQIb5sDCdxJcPFu+s41K1wSzza5v7T1AmYPl9he3
+	 9OpPFk5S2jV4A==
 From: SeongJae Park <sj@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>
 Cc: SeongJae Park <sj@kernel.org>,
@@ -40,10 +40,12 @@ Cc: SeongJae Park <sj@kernel.org>,
 	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 0/5] selftests/damon: add Python-written DAMON functionality tests
-Date: Tue, 12 Dec 2023 19:12:01 +0000
-Message-Id: <20231212191206.52917-1-sj@kernel.org>
+Subject: [PATCH 1/5] selftests/damon: implement a python module for test-purpose DAMON sysfs controls
+Date: Tue, 12 Dec 2023 19:12:02 +0000
+Message-Id: <20231212191206.52917-2-sj@kernel.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20231212191206.52917-1-sj@kernel.org>
+References: <20231212191206.52917-1-sj@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,68 +54,125 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Changes from RFC
-(https://lore.kernel.org/damon/20231202000806.46210-1-sj@kernel.org/)
-- Make the working set size estimation test more reliable
-- Wordsmith coverletter and commit messages
-- Rename _damon.py to _damon_sysfs.py
+Implement a python module for DAMON sysfs controls.  The module is aimed
+to be useful for writing DAMON functionality tests in future.
+Nonetheless, this module is only representing a subset of DAMON sysfs
+files.  Following commits will implement more DAMON sysfs controls.
 
-DAMON exports most of its functionality via its sysfs interface.  Hence
-most DAMON functionality tests could be implemented using the interface.
-However, because the interfaces require simple but multiple operations
-for many controls, writing all such tests from the scratch could be
-repetitive and time consuming.
-
-Implement a minimum DAMON sysfs control module, and a couple of DAMON
-functionality tests using the control module.  The first test is for
-ensuring minimum accuracy of data access monitoring, and the second test
-is for finding if a previously found and fixed bug is introduced again.
-
-Note that the DAMON sysfs control module is only for avoiding
-duplicating code in tests.  For convenient and general control of DAMON,
-users should use DAMON user-space tools that developed for the purpose,
-such as damo[1].
-
-[1] https://github.com/damonitor/damo
-
-Patches Sequence
-----------------
-
-This patchset is constructed with five patches.  The first three patches
-implement a Python-written test implementation-purpose DAMON sysfs
-control module.  The implementation is incrementally done in the
-sequence of the basic data structure (first patch) first, kdamonds start
-command (second patch) next, and finally DAMOS tried bytes update
-command (third patch).
-
-Then two patches for implementing selftests using the module follows.
-The fourth patch implements a basic functionality test of DAMON for
-working set estimation accuracy.  Finally, the fifth patch implements a
-corner case test for a previously found bug.
-
-SeongJae Park (5):
-  selftests/damon: implement a python module for test-purpose DAMON
-    sysfs controls
-  selftests/damon/_damon_sysfs: implement kdamonds start function
-  selftests/damon/_damon_sysfs: implement updat_schemes_tried_bytes
-    command
-  selftests/damon: add a test for update_schemes_tried_regions sysfs
-    command
-  selftests/damon: add a test for update_schemes_tried_regions hang bug
-
- tools/testing/selftests/damon/Makefile        |   3 +
- tools/testing/selftests/damon/_damon_sysfs.py | 322 ++++++++++++++++++
- tools/testing/selftests/damon/access_memory.c |  41 +++
- ...sysfs_update_schemes_tried_regions_hang.py |  33 ++
- ...te_schemes_tried_regions_wss_estimation.py |  55 +++
- 5 files changed, 454 insertions(+)
+Signed-off-by: SeongJae Park <sj@kernel.org>
+---
+ tools/testing/selftests/damon/_damon_sysfs.py | 102 ++++++++++++++++++
+ 1 file changed, 102 insertions(+)
  create mode 100644 tools/testing/selftests/damon/_damon_sysfs.py
- create mode 100644 tools/testing/selftests/damon/access_memory.c
- create mode 100755 tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_hang.py
- create mode 100755 tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_wss_estimation.py
 
-
-base-commit: 5794dfaf6d1be564b0912d51d8a714baff329495
+diff --git a/tools/testing/selftests/damon/_damon_sysfs.py b/tools/testing/selftests/damon/_damon_sysfs.py
+new file mode 100644
+index 000000000000..78101846ab66
+--- /dev/null
++++ b/tools/testing/selftests/damon/_damon_sysfs.py
+@@ -0,0 +1,102 @@
++# SPDX-License-Identifier: GPL-2.0
++
++class DamosAccessPattern:
++    size = None
++    nr_accesses = None
++    age = None
++    scheme = None
++
++    def __init__(self, size=None, nr_accesses=None, age=None):
++        self.size = size
++        self.nr_accesses = nr_accesses
++        self.age = age
++
++        if self.size == None:
++            self.size = [0, 2**64 - 1]
++        if self.nr_accesses == None:
++            self.nr_accesses = [0, 2**64 - 1]
++        if self.age == None:
++            self.age = [0, 2**64 - 1]
++
++class Damos:
++    action = None
++    access_pattern = None
++    # todo: Support quotas, watermarks, stats, tried_regions
++    idx = None
++    context = None
++
++    def __init__(self, action='stat', access_pattern=DamosAccessPattern()):
++        self.action = action
++        self.access_pattern = access_pattern
++        self.access_pattern.scheme = self
++
++class DamonTarget:
++    pid = None
++    # todo: Support target regions if test is made
++    idx = None
++    context = None
++
++    def __init__(self, pid):
++        self.pid = pid
++
++class DamonAttrs:
++    sample_us = None
++    aggr_us = None
++    update_us = None
++    min_nr_regions = None
++    max_nr_regions = None
++    context = None
++
++    def __init__(self, sample_us=5000, aggr_us=100000, update_us=1000000,
++            min_nr_regions=10, max_nr_regions=1000):
++        self.sample_us = sample_us
++        self.aggr_us = aggr_us
++        self.update_us = update_us
++        self.min_nr_regions = min_nr_regions
++        self.max_nr_regions = max_nr_regions
++
++class DamonCtx:
++    ops = None
++    monitoring_attrs = None
++    targets = None
++    schemes = None
++    kdamond = None
++    idx = None
++
++    def __init__(self, ops='paddr', monitoring_attrs=DamonAttrs(), targets=[],
++            schemes=[]):
++        self.ops = ops
++        self.monitoring_attrs = monitoring_attrs
++        self.monitoring_attrs.context = self
++
++        self.targets = targets
++        for idx, target in enumerate(self.targets):
++            target.idx = idx
++            target.context = self
++
++        self.schemes = schemes
++        for idx, scheme in enumerate(self.schemes):
++            scheme.idx = idx
++            scheme.context = self
++
++class Kdamond:
++    state = None
++    pid = None
++    contexts = None
++    idx = None      # index of this kdamond between siblings
++    kdamonds = None # parent
++
++    def __init__(self, contexts=[]):
++        self.contexts = contexts
++        for idx, context in enumerate(self.contexts):
++            context.idx = idx
++            context.kdamond = self
++
++class Kdamonds:
++    kdamonds = []
++
++    def __init__(self, kdamonds=[]):
++        self.kdamonds = kdamonds
++        for idx, kdamond in enumerate(self.kdamonds):
++            kdamond.idx = idx
++            kdamond.kdamonds = self
 -- 
 2.34.1
 
