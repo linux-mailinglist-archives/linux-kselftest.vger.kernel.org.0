@@ -1,166 +1,285 @@
-Return-Path: <linux-kselftest+bounces-1647-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1648-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9036A80E56B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 09:05:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B269D80E572
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 09:08:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 291C41F2197A
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 08:05:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1E9441C20F92
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 08:08:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E9671805F;
-	Tue, 12 Dec 2023 08:05:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E34B118049;
+	Tue, 12 Dec 2023 08:08:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="k4ms8joL"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yjDyLlX+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E08BC7
-	for <linux-kselftest@vger.kernel.org>; Tue, 12 Dec 2023 00:05:23 -0800 (PST)
-Received: by mail-pg1-x52c.google.com with SMTP id 41be03b00d2f7-5c6ce4dffb5so2683716a12.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 Dec 2023 00:05:23 -0800 (PST)
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF677CF
+	for <linux-kselftest@vger.kernel.org>; Tue, 12 Dec 2023 00:07:56 -0800 (PST)
+Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-50e0ba402b4so149865e87.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 Dec 2023 00:07:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1702368322; x=1702973122; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xyrJ/oaF1a1+OdMWUr85QqR8PoKu+Afm3G/pEUOxUgM=;
-        b=k4ms8joLRiz69TcncnStNynkMWeX1AAk+q95UPMY08nbTrIPCfAcvMGA8aCj+ZU+lq
-         FYvkGgoDgIU/D4aSbpnM88tWrC11CVQxtjE2ovvCGfndzEoXVZ/PJP58dSUZ0/VVQ2cF
-         HzP8xylyMNogQxZO9AgOervvJOBMCzrSnGRwEwxoIFm8/RYYUpa2UUK8Pm/OICIt+giu
-         bsaKrXXR1NPcxwT6ywFNalqw665P7aKMwEflfMTJcNjakqvAXzd5D0VR86398MrWmMpO
-         UEf1PyoKtz+iIIakiuo0G3cV/+GD+35l5W6HFbkN01kyduWl/MALvQ1uuCT49p7RhReC
-         gzbA==
+        d=linaro.org; s=google; t=1702368475; x=1702973275; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=KEK+GLviJvtTbzYzmtDV4AEm8T+lMdwOyDcx0NSd3/o=;
+        b=yjDyLlX+WKvy4KTLqbEPOCBw4F+IfDEZIpxf47iaC+QwGIVN2mrumhoyWdfOJrZ4ln
+         elyQuYvRjFjTkc6oFXoVx6liygAGXgNq2KJsItw/ovqcLu0yKy56kIVV7YzDoowB1pRi
+         ks/5kNP3Pq4YwfnuN81N/o7hZ2oHD+mjhjXXeHtoNCrudwV9wg5+35c5/sB/6TI3b9Sj
+         4RESd8RD116cSDinYlkJ2MSyEmBrXvxm3GeUBqTMhncOnEV2ldV3DjKpqwGuotby8Jlb
+         krIJQANQDL1ceXf/yKAp7b2enwvIJlKKajnuMCFKYnGeVzM3m0o7sGrSs98s6tchC2Fo
+         oaaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702368322; x=1702973122;
-        h=content-transfer-encoding:cc:subject:from:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=xyrJ/oaF1a1+OdMWUr85QqR8PoKu+Afm3G/pEUOxUgM=;
-        b=kW7HlUeE/EHjXuSEAhVxLYowGLkd3qmFe7Q9QAVgLDpCJ9se7EEhCf+VuvpNv6X+b8
-         BaA2USPOA6cvXMWfwHEd633dcuvRI9Gonrqo/sIyX/nJ0hZFNTkHr7b2T3D8uLVEUQkL
-         1vtK+qStsMNK/F+hPE6QI5/EWCRyxU1X4VI6OZ2FZft3oT0xQNG7I0unEKDboEiAI7cS
-         XPSGQgVoc7EstJN7XYpKKQe6j6q141spzs0ZmxkZ2/oCBgWYmS7ZP28H1q9IYVZcLP3i
-         Nq8BVdUeh2/mQtCOZxNaFbSDmhGdbnPQ8pX+Mkbpmht5ekfiZ6pYzJqVkzYzb9O8WVIH
-         9j5w==
-X-Gm-Message-State: AOJu0YyYLI97qBk5uMxnd9UixPxILlepSD5jZe3/8Jcror7pttsWoq4s
-	KtwTEof7fXe3Fyv7loIWnX/c8w==
-X-Google-Smtp-Source: AGHT+IEql1gIzfMgiC3uwAyX05ccRP/TJmlVXqhwk7OLXHzm7HuO8eWQfZEt37CKdp9jdfYH1gF7Bw==
-X-Received: by 2002:a05:6a21:999d:b0:18f:fb0d:e961 with SMTP id ve29-20020a056a21999d00b0018ffb0de961mr3147656pzb.60.1702368322598;
-        Tue, 12 Dec 2023 00:05:22 -0800 (PST)
-Received: from [157.82.205.15] ([157.82.205.15])
-        by smtp.gmail.com with ESMTPSA id j17-20020a056a00175100b006ce6bf5491dsm7531509pfc.198.2023.12.12.00.05.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 12 Dec 2023 00:05:22 -0800 (PST)
-Message-ID: <2f33be45-fe11-4b69-8e89-4d2824a0bf01@daynix.com>
-Date: Tue, 12 Dec 2023 17:05:15 +0900
+        d=1e100.net; s=20230601; t=1702368475; x=1702973275;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KEK+GLviJvtTbzYzmtDV4AEm8T+lMdwOyDcx0NSd3/o=;
+        b=K05yUnUFYt0wfgVOPzVYQGB8KL3+4EGNeAO6zpp/U7Li2PcJ/jmp2DrSpQxXslabvQ
+         BRluLJ3dlsMaDxrk2zi85FkkzWAr5z2hRjKCZKvlAFqnV8KeWUtiKlsMUy3M1Xd+fsNb
+         qHCAYKp2vID1eMgM++CbswtYkZpyADp1O8Dssmf6MddSOupIj/m3WWPNWy46YTqLOI8o
+         7f2WsbHtMrPTENOQSgDVbsQUvvmpsJ1b+GCMUgwlDoj5ZqBm4KS9ubdWQ9a6DHSc2SCK
+         uKF+0L/KzV/hQ72u3r7GSDre8khCzAvk720J1Cnlv6o5PCq1rOLekMe8WLhq81J0ySBu
+         Msqg==
+X-Gm-Message-State: AOJu0YwtvsAheGZeci9wR+2m36bYKjTmaxwevDgpHhd6GuXWm862wwWm
+	vlH7auPdG0uV756vVuzu1qJUm6+IEr1f/Ui7uJtaoA==
+X-Google-Smtp-Source: AGHT+IEyDnIHVqAdsBAK/Xj7zNRHMZz0/zXmDbcUqKkjG+kJeiX3tGS1DN1FlCnS9R/LXR3IKWLy3yX4hnlm0fdZnR8=
+X-Received: by 2002:a05:6512:a8c:b0:50c:6b:f164 with SMTP id
+ m12-20020a0565120a8c00b0050c006bf164mr3620875lfu.27.1702368474939; Tue, 12
+ Dec 2023 00:07:54 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Jason Wang <jasowang@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- "Michael S. Tsirkin" <mst@redhat.com>, Xuan Zhuo
- <xuanzhuo@linux.alibaba.com>, Mykola Lysenko <mykolal@fb.com>,
- Shuah Khan <shuah@kernel.org>, Yuri Benditovich
- <yuri.benditovich@daynix.com>, Andrew Melnychenko <andrew@daynix.com>,
- Benjamin Tissoires <bentiss@kernel.org>
-From: Akihiko Odaki <akihiko.odaki@daynix.com>
-Subject: Should I add BPF kfuncs for userspace apps? And how?
-Cc: bpf <bpf@vger.kernel.org>,
- "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, kvm@vger.kernel.org,
- LKML <linux-kernel@vger.kernel.org>,
- virtualization@lists.linux-foundation.org,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- Network Development <netdev@vger.kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20231208005250.2910004-1-almasrymina@google.com> <20231208005250.2910004-3-almasrymina@google.com>
+In-Reply-To: <20231208005250.2910004-3-almasrymina@google.com>
+From: Ilias Apalodimas <ilias.apalodimas@linaro.org>
+Date: Tue, 12 Dec 2023 10:07:18 +0200
+Message-ID: <CAC_iWjKikzwpjR0hBjYuRxgYjyqp_EYrrxoveB_2DgCxk6vWYw@mail.gmail.com>
+Subject: Re: [net-next v1 02/16] net: page_pool: create hooks for custom page providers
+To: Mina Almasry <almasrymina@google.com>
+Cc: Shailend Chand <shailend@google.com>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Jeroen de Borst <jeroendb@google.com>, 
+	Praveen Kaligineedi <pkaligineedi@google.com>, Jesper Dangaard Brouer <hawk@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	David Ahern <dsahern@kernel.org>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+	Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>, 
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Yunsheng Lin <linyunsheng@huawei.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
+	Shakeel Butt <shakeelb@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi,
+Hi Mina,
 
-It is said eBPF is a safe way to extend kernels and that is very 
-attarctive, but we need to use kfuncs to add new usage of eBPF and 
-kfuncs are said as unstable as EXPORT_SYMBOL_GPL. So now I'd like to ask 
-some questions:
+Apologies for not participating in the party earlier.
 
-1) Which should I choose, BPF kfuncs or ioctl, when adding a new feature 
-for userspace apps?
-2) How should I use BPF kfuncs from userspace apps if I add them?
+On Fri, 8 Dec 2023 at 02:52, Mina Almasry <almasrymina@google.com> wrote:
+>
+> From: Jakub Kicinski <kuba@kernel.org>
+>
+> The page providers which try to reuse the same pages will
+> need to hold onto the ref, even if page gets released from
+> the pool - as in releasing the page from the pp just transfers
+> the "ownership" reference from pp to the provider, and provider
+> will wait for other references to be gone before feeding this
+> page back into the pool.
+>
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> Signed-off-by: Mina Almasry <almasrymina@google.com>
+>
+> ---
+>
+> This is implemented by Jakub in his RFC:
+> https://lore.kernel.org/netdev/f8270765-a27b-6ccf-33ea-cda097168d79@redhat.com/T/
+>
+> I take no credit for the idea or implementation; I only added minor
+> edits to make this workable with device memory TCP, and removed some
+> hacky test code. This is a critical dependency of device memory TCP
+> and thus I'm pulling it into this series to make it revewable and
+> mergable.
+>
+> RFC v3 -> v1
+> - Removed unusued mem_provider. (Yunsheng).
+> - Replaced memory_provider & mp_priv with netdev_rx_queue (Jakub).
+>
+> ---
+>  include/net/page_pool/types.h | 12 ++++++++++
+>  net/core/page_pool.c          | 43 +++++++++++++++++++++++++++++++----
+>  2 files changed, 50 insertions(+), 5 deletions(-)
+>
+> diff --git a/include/net/page_pool/types.h b/include/net/page_pool/types.h
+> index ac286ea8ce2d..0e9fa79a5ef1 100644
+> --- a/include/net/page_pool/types.h
+> +++ b/include/net/page_pool/types.h
+> @@ -51,6 +51,7 @@ struct pp_alloc_cache {
+>   * @dev:       device, for DMA pre-mapping purposes
+>   * @netdev:    netdev this pool will serve (leave as NULL if none or multiple)
+>   * @napi:      NAPI which is the sole consumer of pages, otherwise NULL
+> + * @queue:     struct netdev_rx_queue this page_pool is being created for.
+>   * @dma_dir:   DMA mapping direction
+>   * @max_len:   max DMA sync memory size for PP_FLAG_DMA_SYNC_DEV
+>   * @offset:    DMA sync address offset for PP_FLAG_DMA_SYNC_DEV
+> @@ -63,6 +64,7 @@ struct page_pool_params {
+>                 int             nid;
+>                 struct device   *dev;
+>                 struct napi_struct *napi;
+> +               struct netdev_rx_queue *queue;
+>                 enum dma_data_direction dma_dir;
+>                 unsigned int    max_len;
+>                 unsigned int    offset;
+> @@ -125,6 +127,13 @@ struct page_pool_stats {
+>  };
+>  #endif
+>
+> +struct memory_provider_ops {
+> +       int (*init)(struct page_pool *pool);
+> +       void (*destroy)(struct page_pool *pool);
+> +       struct page *(*alloc_pages)(struct page_pool *pool, gfp_t gfp);
+> +       bool (*release_page)(struct page_pool *pool, struct page *page);
+> +};
+> +
+>  struct page_pool {
+>         struct page_pool_params_fast p;
+>
+> @@ -174,6 +183,9 @@ struct page_pool {
+>          */
+>         struct ptr_ring ring;
+>
+> +       void *mp_priv;
+> +       const struct memory_provider_ops *mp_ops;
+> +
+>  #ifdef CONFIG_PAGE_POOL_STATS
+>         /* recycle stats are per-cpu to avoid locking */
+>         struct page_pool_recycle_stats __percpu *recycle_stats;
+> diff --git a/net/core/page_pool.c b/net/core/page_pool.c
+> index ca1b3b65c9b5..f5c84d2a4510 100644
+> --- a/net/core/page_pool.c
+> +++ b/net/core/page_pool.c
+> @@ -25,6 +25,8 @@
+>
+>  #include "page_pool_priv.h"
+>
+> +static DEFINE_STATIC_KEY_FALSE(page_pool_mem_providers);
 
-Here, a "userspace app" means something not like a system-wide daemon 
-like systemd (particularly, I have QEMU in mind). I'll describe the 
-context more below:
+We could add the existing page pool mechanisms as another 'provider',
+but I assume this is coded like this for performance reasons (IOW skip
+the expensive ptr call for the default case?)
 
----
+> +
+>  #define DEFER_TIME (msecs_to_jiffies(1000))
+>  #define DEFER_WARN_INTERVAL (60 * HZ)
+>
+> @@ -174,6 +176,7 @@ static int page_pool_init(struct page_pool *pool,
+>                           const struct page_pool_params *params)
+>  {
+>         unsigned int ring_qsize = 1024; /* Default */
+> +       int err;
+>
+>         memcpy(&pool->p, &params->fast, sizeof(pool->p));
+>         memcpy(&pool->slow, &params->slow, sizeof(pool->slow));
+> @@ -234,10 +237,25 @@ static int page_pool_init(struct page_pool *pool,
+>         /* Driver calling page_pool_create() also call page_pool_destroy() */
+>         refcount_set(&pool->user_cnt, 1);
+>
+> +       if (pool->mp_ops) {
+> +               err = pool->mp_ops->init(pool);
+> +               if (err) {
+> +                       pr_warn("%s() mem-provider init failed %d\n",
+> +                               __func__, err);
+> +                       goto free_ptr_ring;
+> +               }
+> +
+> +               static_branch_inc(&page_pool_mem_providers);
+> +       }
+> +
+>         if (pool->p.flags & PP_FLAG_DMA_MAP)
+>                 get_device(pool->p.dev);
+>
+>         return 0;
+> +
+> +free_ptr_ring:
+> +       ptr_ring_cleanup(&pool->ring, NULL);
+> +       return err;
+>  }
+>
+>  static void page_pool_uninit(struct page_pool *pool)
+> @@ -519,7 +537,10 @@ struct page *page_pool_alloc_pages(struct page_pool *pool, gfp_t gfp)
+>                 return page;
+>
+>         /* Slow-path: cache empty, do real allocation */
+> -       page = __page_pool_alloc_pages_slow(pool, gfp);
+> +       if (static_branch_unlikely(&page_pool_mem_providers) && pool->mp_ops)
 
-I'm working on a new feature that aids virtio-net implementations using 
-tuntap virtual network device. You can see [1] for details, but 
-basically it's to extend BPF_PROG_TYPE_SOCKET_FILTER to report four more 
-bytes.
+Why do we need && pool->mp_ops? On the init function, we only bump
+page_pool_mem_providers if the ops are there
 
-However, with long discussions we have confirmed extending 
-BPF_PROG_TYPE_SOCKET_FILTER is not going to happen, and adding kfuncs is 
-the way forward. So I decided how to add kfuncs to the kernel and how to 
-use it. There are rich documentations for the kernel side, but I found 
-little about the userspace. The best I could find is a systemd change 
-proposal that is based on WIP kernel changes[2].
+> +               page = pool->mp_ops->alloc_pages(pool, gfp);
+> +       else
+> +               page = __page_pool_alloc_pages_slow(pool, gfp);
+>         return page;
+>  }
+>  EXPORT_SYMBOL(page_pool_alloc_pages);
+> @@ -576,10 +597,13 @@ void __page_pool_release_page_dma(struct page_pool *pool, struct page *page)
+>  void page_pool_return_page(struct page_pool *pool, struct page *page)
+>  {
+>         int count;
+> +       bool put;
+>
+> -       __page_pool_release_page_dma(pool, page);
+> -
+> -       page_pool_clear_pp_info(page);
+> +       put = true;
+> +       if (static_branch_unlikely(&page_pool_mem_providers) && pool->mp_ops)
 
-So now I'm wondering how I should use BPF kfuncs from userspace apps if 
-I add them. In the systemd discussion, it is told that Linus said it's 
-fine to use BPF kfuncs in a private infrastructure big companies own, or 
-in systemd as those users know well about the system[3]. Indeed, those 
-users should be able to make more assumptions on the kernel than 
-"normal" userspace applications can.
+ditto
 
-Returning to my proposal, I'm proposing a new feature to be used by QEMU 
-or other VMM applications. QEMU is more like a normal userspace 
-application, and usually does not make much assumptions on the kernel it 
-runs on. For example, it's generally safe to run a Debian container 
-including QEMU installed with apt on Fedora. BPF kfuncs may work even in 
-such a situation thanks to CO-RE, but it sounds like *accidentally* 
-creating UAPIs.
+> +               put = pool->mp_ops->release_page(pool, page);
+> +       else
+> +               __page_pool_release_page_dma(pool, page);
+>
+>         /* This may be the last page returned, releasing the pool, so
+>          * it is not safe to reference pool afterwards.
+> @@ -587,7 +611,10 @@ void page_pool_return_page(struct page_pool *pool, struct page *page)
+>         count = atomic_inc_return_relaxed(&pool->pages_state_release_cnt);
+>         trace_page_pool_state_release(pool, page, count);
+>
+> -       put_page(page);
+> +       if (put) {
+> +               page_pool_clear_pp_info(page);
+> +               put_page(page);
+> +       }
+>         /* An optimization would be to call __free_pages(page, pool->p.order)
+>          * knowing page is not part of page-cache (thus avoiding a
+>          * __page_cache_release() call).
+> @@ -857,6 +884,12 @@ static void __page_pool_destroy(struct page_pool *pool)
+>
+>         page_pool_unlist(pool);
+>         page_pool_uninit(pool);
+> +
+> +       if (pool->mp_ops) {
 
-Considering all above, how can I integrate BPF kfuncs to the application?
+Same here. Using a mix of pool->mp_ops and page_pool_mem_providers
+will work, but since we always check the ptr on init, can't we simply
+rely on page_pool_mem_providers for the rest of the code?
 
-If BPF kfuncs are like EXPORT_SYMBOL_GPL, the natural way to handle them 
-is to think of BPF programs as some sort of kernel modules and 
-incorporate logic that behaves like modprobe. More concretely, I can put 
-eBPF binaries to a directory like:
-/usr/local/share/qemu/ebpf/$KERNEL_RELEASE
-
-Then, QEMU can uname() and get the path to the binary. It will give an 
-error if it can't find the binary for the current kernel so that it 
-won't create accidental UAPIs.
-
-The obvious downside of this is that it complicates packaging a lot; it 
-requires packaging QEMU eBPF binaries each time a new kernel comes up. 
-This complexity is centrally managed by modprobe for kernel modules, but 
-apparently each application needs to take care of it for BPF programs.
-
-In conclusion, I see too much complexity to use BPF in a userspace 
-application, which we didn't have to care for 
-BPF_PROG_TYPE_SOCKET_FILTER. Isn't there a better way? Or shouldn't I 
-use BPF in my case in the first place?
-
-Thanks,
-Akihiko Odaki
-
-[1] 
-https://lore.kernel.org/all/20231015141644.260646-1-akihiko.odaki@daynix.com/
-[2] https://github.com/systemd/systemd/pull/29797
-[3] https://github.com/systemd/systemd/pull/29797#discussion_r1384637939
+Thanks
+/Ilias
+> +               pool->mp_ops->destroy(pool);
+> +               static_branch_dec(&page_pool_mem_providers);
+> +       }
+> +
+>         kfree(pool);
+>  }
+>
+> --
+> 2.43.0.472.g3155946c3a-goog
+>
 
