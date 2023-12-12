@@ -1,304 +1,204 @@
-Return-Path: <linux-kselftest+bounces-1632-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1633-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE28180E035
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 01:25:42 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E879080E12A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 03:01:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6F17A2826B6
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 00:25:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7795B1F21C35
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 02:01:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0453F375;
-	Tue, 12 Dec 2023 00:25:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAC6015AE;
+	Tue, 12 Dec 2023 02:01:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jo4A/QWi"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="PmP012Ha"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E493CCE;
-	Mon, 11 Dec 2023 16:25:18 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id 5614622812f47-3b9df0a6560so3339420b6e.2;
-        Mon, 11 Dec 2023 16:25:18 -0800 (PST)
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 631B9D5
+	for <linux-kselftest@vger.kernel.org>; Mon, 11 Dec 2023 18:01:14 -0800 (PST)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-50c05ea5805so6134595e87.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 11 Dec 2023 18:01:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702340718; x=1702945518; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=39T29mKaZhZsvtvyPbf6oRtFUL7dkzA08+GHd64VmhI=;
-        b=jo4A/QWiQXMW/S66MDyqW5fBgdABOkIOck0+Y53GCC2ybLFJxUR9NjwBZRZgIApgQz
-         xxTWSt9SFMqKLFhvWcEk9KkQ/dJkNBV1gVb6xYnNdTrALvlXK27AHK9yU7vD1KLAcX4c
-         FcNCpeR5SumD8YsnyN/bp3vmyjhX0WYeoM9S2MUKWuXtOZkljGfDk6dRppih7yz4FlcA
-         a9OIFYDADWK0W96Fp9FCSmjv36m+WrjoupO0k0FaNBG0wiHJLtnjWIm0gJGSXox1vxGr
-         vy1yknMhKKvVZdKS+1sdnmHQe9kzmsV3WjYf+F91iRb19TUTT1cqgHzWt+sTHaHn3uDU
-         DAyw==
+        d=suse.com; s=google; t=1702346472; x=1702951272; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=7KWKhvYJwvM4Jhue2eRdgbRjWAjIqUdVY1eAlzHMEbo=;
+        b=PmP012HaRjZW7W0k3QyntP4F8B8RexAxaIJvVx+6Mx+Z+ZjWhO3Bof9h0sBE4idEVC
+         fyRaqEf6NZTgZ8VRh/X1Soo4vClm+KGVcPmYsptWHqQ0/rf3gOwEKIeoEnj2u3r62aPA
+         F3wFHBEwmIhpUKuBQUMVqoHOiuxLUQpqD01o8ZYiXDWlc/jnxMU5VG+dZmSsDT0j2EOm
+         1O2sGw9psMXUoZK2QoU2GezghdeEm1LPPPx1E600CV1yKHWGXM1xlyaMGlfrZINCdUKZ
+         Z+kpqKefO8xTkmNCWxqmMUCbDYdcVMhL2O5r9KiMb2U3ZD1Bk8rByRHglvy6SOivfTkh
+         uSrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702340718; x=1702945518;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=39T29mKaZhZsvtvyPbf6oRtFUL7dkzA08+GHd64VmhI=;
-        b=Ok3dK1CzwNWpeY0kMSpFjDIvTQF+HOGyzgpENxaz3eSX3hIqnFt9rib5yy3i5bIiwe
-         0ndupZrrAknW5L6O/IrzVvPs0gj5guo2CVwpRL1Uj9VoAizLVSQS3oAWWLCmcG+h9EvU
-         lIYLoRL6YWpYqaZlQXx+mL5ReKdOtWWW6ti/XyyLNf8aloOx1AIBFVfRoKc8xW+rCbW3
-         RwTsmORRN96izv90pDlMBJ4paDgQ3UGd41yhDp1ORXOVWWZgihd7t5ZuYpptA3ReVrwl
-         2G9sqfnuuGtCaUni8ZpM044b963PosxRG5JSrTNX2uxxvwgru3XVq3Lwa4MEBmND98cf
-         Alqg==
-X-Gm-Message-State: AOJu0Yy8xFdE2FdEuKqqQLX3V5LNWO4ZD9Nj0RmHZsqR/KEZC0j337GL
-	pC8NxgsM42yj6kY5dv7AZNfzskZVIz41/YgJ1g0=
-X-Google-Smtp-Source: AGHT+IEh6B1JkFF/ps9Eg/qwzMBzzH+8yw0p8aEhYu+TFDOp4cD/p9V1q7JFIhTjuKQ2UdWFg81KTYNc8+bnTtl1rfA=
-X-Received: by 2002:a05:6808:151f:b0:3b8:b063:664d with SMTP id
- u31-20020a056808151f00b003b8b063664dmr5343458oiw.68.1702340717969; Mon, 11
- Dec 2023 16:25:17 -0800 (PST)
+        d=1e100.net; s=20230601; t=1702346472; x=1702951272;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7KWKhvYJwvM4Jhue2eRdgbRjWAjIqUdVY1eAlzHMEbo=;
+        b=dVKUgqxi9aBWi/YFXknM+FSJm7VDLqHO0MS9WFpgTdFtoJ80feRyeTwqoIYGF08Kz/
+         AHAQALyb+AHUDoq2UD7hu958PRSbOZCziakj06mpc7/TjUwpn5B6jCAyN/NSaUOeTUot
+         /tGqCHvnIbbOkz7IzP4oOLFNcFFaWc0N9jf9nkXvOjZqxrOrB/jxM8RuyE6eu5hmEJRu
+         QDdZK7khiu68PSCaWEMZetcINN4kbxlptzr6/03UPo1gf4Nav2jZNwlDMedgWj3NVT12
+         RohS6I/1ARySbSlbxtVTGI1ykL6dR3umtSm3MZaO3SVGLZlWog5NtMZ5Owk42BGCz3MF
+         ynTg==
+X-Gm-Message-State: AOJu0YwUzHpFT2Ko1SBLZtl1WA7axrpJ5UDMOf2tbd+0htfToTNW9Gn/
+	JkDU/ejbzezK++NsuatDXEaygA==
+X-Google-Smtp-Source: AGHT+IHLzGUzER1PQtCvbxvQ9OvEFB7C9qq206eKNePTtcEO3I3JMvlhyJvuiG/Ox/5VE5XRq8Dr1w==
+X-Received: by 2002:a05:6512:2349:b0:50c:cdc1:b57 with SMTP id p9-20020a056512234900b0050ccdc10b57mr3057725lfu.3.1702346472558;
+        Mon, 11 Dec 2023 18:01:12 -0800 (PST)
+Received: from ?IPv6:2804:30c:915:cb00:89a8:6d94:ec55:e0a3? ([2804:30c:915:cb00:89a8:6d94:ec55:e0a3])
+        by smtp.gmail.com with ESMTPSA id tj3-20020a170907c24300b00a1b6cba8d20sm5467208ejc.122.2023.12.11.18.01.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Dec 2023 18:01:12 -0800 (PST)
+Message-ID: <e2817181598490e0455e33add1a61021b2535f78.camel@suse.com>
+Subject: Re: [PATCH v3 2/3] livepatch: Move tests from lib/livepatch to
+ selftests/livepatch
+From: Marcos Paulo de Souza <mpdesouza@suse.com>
+To: Shuah Khan <skhan@linuxfoundation.org>, Joe Lawrence
+	 <joe.lawrence@redhat.com>, Miroslav Benes <mbenes@suse.cz>
+Cc: Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Heiko
+ Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, Alexander
+ Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger
+ <borntraeger@linux.ibm.com>,  Sven Schnelle <svens@linux.ibm.com>, Josh
+ Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>,  Petr
+ Mladek <pmladek@suse.com>, linux-kselftest@vger.kernel.org,
+ linux-doc@vger.kernel.org,  linux-kernel@vger.kernel.org,
+ linux-s390@vger.kernel.org,  live-patching@vger.kernel.org
+Date: Mon, 11 Dec 2023 23:01:02 -0300
+In-Reply-To: <2c4f2771-0557-4b44-9c98-6bd2e6930d2f@linuxfoundation.org>
+References: <20231031-send-lp-kselftests-v3-0-2b1655c2605f@suse.com>
+	 <20231031-send-lp-kselftests-v3-2-2b1655c2605f@suse.com>
+	 <ZWn7dEzVWoKxycmy@redhat.com>
+	 <alpine.LSU.2.21.2312061543280.13051@pobox.suse.cz>
+	 <273a86d6-d220-fdcf-3c2f-70516c519ff9@redhat.com>
+	 <57fb9f30afbaddb09def96aac11c45296a59a277.camel@suse.com>
+	 <2c4f2771-0557-4b44-9c98-6bd2e6930d2f@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.1 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1702325874.git.dxu@dxuuu.xyz> <8ec1b885d2e13fcd20944cce9edc0340d993d044.1702325874.git.dxu@dxuuu.xyz>
- <CAHsH6GsdqBN638uqUm+8QkP1_45coucSTL7o=D2wFW-gYjPaBw@mail.gmail.com>
- <7yjkfhrwdphtcljq3odv4jc6lucd32wcg277hfsf4ve2jbo7hp@vuqzwbq5nxjw>
- <CAHsH6Gs1vUQnhR_a4qFnAF37Vx=68Do28sfVfFxQ9pVj9jSzjw@mail.gmail.com> <qiv464c4y43mo5rih5k6lgzkbpnj6wsrl52hrhgbxeqj45atun@szmqlmnccm52>
-In-Reply-To: <qiv464c4y43mo5rih5k6lgzkbpnj6wsrl52hrhgbxeqj45atun@szmqlmnccm52>
-From: Eyal Birger <eyal.birger@gmail.com>
-Date: Mon, 11 Dec 2023 16:25:06 -0800
-Message-ID: <CAHsH6Gujycb9RBuRk7QHorLe0Q=Np_tb3uboQfp9KmJnegVXvw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 9/9] bpf: xfrm: Add selftest for bpf_xdp_get_xfrm_state()
-To: Daniel Xu <dxu@dxuuu.xyz>
-Cc: daniel@iogearbox.net, davem@davemloft.net, shuah@kernel.org, 
-	ast@kernel.org, john.fastabend@gmail.com, kuba@kernel.org, andrii@kernel.org, 
-	hawk@kernel.org, steffen.klassert@secunet.com, antony.antony@secunet.com, 
-	alexei.starovoitov@gmail.com, yonghong.song@linux.dev, eddyz87@gmail.com, 
-	mykolal@fb.com, martin.lau@linux.dev, song@kernel.org, kpsingh@kernel.org, 
-	sdf@google.com, haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	netdev@vger.kernel.org, devel@linux-ipsec.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Dec 11, 2023 at 3:49=E2=80=AFPM Daniel Xu <dxu@dxuuu.xyz> wrote:
->
-> On Mon, Dec 11, 2023 at 03:13:07PM -0800, Eyal Birger wrote:
-> > On Mon, Dec 11, 2023 at 2:31=E2=80=AFPM Daniel Xu <dxu@dxuuu.xyz> wrote=
-:
-> > >
-> > > On Mon, Dec 11, 2023 at 01:39:25PM -0800, Eyal Birger wrote:
-> > > > Hi Daniel,
-> > > >
-> > > > Tiny nits below in case you respin this for other reasons:
-> > > >
-> > > > On Mon, Dec 11, 2023 at 12:20=E2=80=AFPM Daniel Xu <dxu@dxuuu.xyz> =
-wrote:
-> > > > >
-> > > > > This commit extends test_tunnel selftest to test the new XDP xfrm=
- state
-> > > > > lookup kfunc.
-> > > > >
-> > > > > Co-developed-by: Antony Antony <antony.antony@secunet.com>
-> > > > > Signed-off-by: Antony Antony <antony.antony@secunet.com>
-> > > > > Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
-> > > > > ---
-> > > > >  .../selftests/bpf/prog_tests/test_tunnel.c    | 20 ++++++--
-> > > > >  .../selftests/bpf/progs/test_tunnel_kern.c    | 51 +++++++++++++=
-++++++
-> > > > >  2 files changed, 67 insertions(+), 4 deletions(-)
-> > > > >
-> > > > > diff --git a/tools/testing/selftests/bpf/prog_tests/test_tunnel.c=
- b/tools/testing/selftests/bpf/prog_tests/test_tunnel.c
-> > > > > index 2d7f8fa82ebd..fc804095d578 100644
-> > > > > --- a/tools/testing/selftests/bpf/prog_tests/test_tunnel.c
-> > > > > +++ b/tools/testing/selftests/bpf/prog_tests/test_tunnel.c
-> > > > > @@ -278,7 +278,7 @@ static int add_xfrm_tunnel(void)
-> > > > >         SYS(fail,
-> > > > >             "ip netns exec at_ns0 "
-> > > > >                 "ip xfrm state add src %s dst %s proto esp "
-> > > > > -                       "spi %d reqid 1 mode tunnel "
-> > > > > +                       "spi %d reqid 1 mode tunnel replay-window=
- 42 "
-> > > > >                         "auth-trunc 'hmac(sha1)' %s 96 enc 'cbc(a=
-es)' %s",
-> > > > >             IP4_ADDR_VETH0, IP4_ADDR1_VETH1, XFRM_SPI_IN_TO_OUT, =
-XFRM_AUTH, XFRM_ENC);
-> > > > >         SYS(fail,
-> > > > > @@ -292,7 +292,7 @@ static int add_xfrm_tunnel(void)
-> > > > >         SYS(fail,
-> > > > >             "ip netns exec at_ns0 "
-> > > > >                 "ip xfrm state add src %s dst %s proto esp "
-> > > > > -                       "spi %d reqid 2 mode tunnel "
-> > > > > +                       "spi %d reqid 2 mode tunnel replay-window=
- 42 "
-> > > >
-> > > > nit: why do you need to set the replay-window in both directions?
-> > >
-> > > No reason - probably just careless here.
-> > >
-> > > >
-> > > > >                         "auth-trunc 'hmac(sha1)' %s 96 enc 'cbc(a=
-es)' %s",
-> > > > >             IP4_ADDR1_VETH1, IP4_ADDR_VETH0, XFRM_SPI_OUT_TO_IN, =
-XFRM_AUTH, XFRM_ENC);
-> > > > >         SYS(fail,
-> > > > > @@ -313,7 +313,7 @@ static int add_xfrm_tunnel(void)
-> > > > >          */
-> > > > >         SYS(fail,
-> > > > >             "ip xfrm state add src %s dst %s proto esp "
-> > > > > -                   "spi %d reqid 1 mode tunnel "
-> > > > > +                   "spi %d reqid 1 mode tunnel replay-window 42 =
-"
-> > > > >                     "auth-trunc 'hmac(sha1)' %s 96  enc 'cbc(aes)=
-' %s",
-> > > > >             IP4_ADDR_VETH0, IP4_ADDR1_VETH1, XFRM_SPI_IN_TO_OUT, =
-XFRM_AUTH, XFRM_ENC);
-> > > > >         SYS(fail,
-> > > > > @@ -325,7 +325,7 @@ static int add_xfrm_tunnel(void)
-> > > > >         /* root -> at_ns0 */
-> > > > >         SYS(fail,
-> > > > >             "ip xfrm state add src %s dst %s proto esp "
-> > > > > -                   "spi %d reqid 2 mode tunnel "
-> > > > > +                   "spi %d reqid 2 mode tunnel replay-window 42 =
-"
-> > > > >                     "auth-trunc 'hmac(sha1)' %s 96  enc 'cbc(aes)=
-' %s",
-> > > > >             IP4_ADDR1_VETH1, IP4_ADDR_VETH0, XFRM_SPI_OUT_TO_IN, =
-XFRM_AUTH, XFRM_ENC);
-> > > > >         SYS(fail,
-> > > > > @@ -628,8 +628,10 @@ static void test_xfrm_tunnel(void)
-> > > > >  {
-> > > > >         DECLARE_LIBBPF_OPTS(bpf_tc_hook, tc_hook,
-> > > > >                             .attach_point =3D BPF_TC_INGRESS);
-> > > > > +       LIBBPF_OPTS(bpf_xdp_attach_opts, opts);
-> > > > >         struct test_tunnel_kern *skel =3D NULL;
-> > > > >         struct nstoken *nstoken;
-> > > > > +       int xdp_prog_fd;
-> > > > >         int tc_prog_fd;
-> > > > >         int ifindex;
-> > > > >         int err;
-> > > > > @@ -654,6 +656,14 @@ static void test_xfrm_tunnel(void)
-> > > > >         if (attach_tc_prog(&tc_hook, tc_prog_fd, -1))
-> > > > >                 goto done;
-> > > > >
-> > > > > +       /* attach xdp prog to tunnel dev */
-> > > > > +       xdp_prog_fd =3D bpf_program__fd(skel->progs.xfrm_get_stat=
-e_xdp);
-> > > > > +       if (!ASSERT_GE(xdp_prog_fd, 0, "bpf_program__fd"))
-> > > > > +               goto done;
-> > > > > +       err =3D bpf_xdp_attach(ifindex, xdp_prog_fd, XDP_FLAGS_RE=
-PLACE, &opts);
-> > > > > +       if (!ASSERT_OK(err, "bpf_xdp_attach"))
-> > > > > +               goto done;
-> > > > > +
-> > > > >         /* ping from at_ns0 namespace test */
-> > > > >         nstoken =3D open_netns("at_ns0");
-> > > > >         err =3D test_ping(AF_INET, IP4_ADDR_TUNL_DEV1);
-> > > > > @@ -667,6 +677,8 @@ static void test_xfrm_tunnel(void)
-> > > > >                 goto done;
-> > > > >         if (!ASSERT_EQ(skel->bss->xfrm_remote_ip, 0xac100164, "re=
-mote_ip"))
-> > > > >                 goto done;
-> > > > > +       if (!ASSERT_EQ(skel->bss->xfrm_replay_window, 42, "replay=
-_window"))
-> > > > > +               goto done;
-> > > > >
-> > > > >  done:
-> > > > >         delete_xfrm_tunnel();
-> > > > > diff --git a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c=
- b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-> > > > > index 3a59eb9c34de..c0dd38616562 100644
-> > > > > --- a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-> > > > > +++ b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-> > > > > @@ -30,6 +30,10 @@ int bpf_skb_set_fou_encap(struct __sk_buff *sk=
-b_ctx,
-> > > > >                           struct bpf_fou_encap *encap, int type) =
-__ksym;
-> > > > >  int bpf_skb_get_fou_encap(struct __sk_buff *skb_ctx,
-> > > > >                           struct bpf_fou_encap *encap) __ksym;
-> > > > > +struct xfrm_state *
-> > > > > +bpf_xdp_get_xfrm_state(struct xdp_md *ctx, struct bpf_xfrm_state=
-_opts *opts,
-> > > > > +                      u32 opts__sz) __ksym;
-> > > > > +void bpf_xdp_xfrm_state_release(struct xfrm_state *x) __ksym;
-> > > > >
-> > > > >  struct {
-> > > > >         __uint(type, BPF_MAP_TYPE_ARRAY);
-> > > > > @@ -950,4 +954,51 @@ int xfrm_get_state(struct __sk_buff *skb)
-> > > > >         return TC_ACT_OK;
-> > > > >  }
-> > > > >
-> > > > > +volatile int xfrm_replay_window =3D 0;
-> > > > > +
-> > > > > +SEC("xdp")
-> > > > > +int xfrm_get_state_xdp(struct xdp_md *xdp)
-> > > > > +{
-> > > > > +       struct bpf_xfrm_state_opts opts =3D {};
-> > > > > +       struct xfrm_state *x =3D NULL;
-> > > > > +       struct ip_esp_hdr *esph;
-> > > > > +       struct bpf_dynptr ptr;
-> > > > > +       u8 esph_buf[8] =3D {};
-> > > > > +       u8 iph_buf[20] =3D {};
-> > > > > +       struct iphdr *iph;
-> > > > > +       u32 off;
-> > > > > +
-> > > > > +       if (bpf_dynptr_from_xdp(xdp, 0, &ptr))
-> > > > > +               goto out;
-> > > > > +
-> > > > > +       off =3D sizeof(struct ethhdr);
-> > > > > +       iph =3D bpf_dynptr_slice(&ptr, off, iph_buf, sizeof(iph_b=
-uf));
-> > > > > +       if (!iph || iph->protocol !=3D IPPROTO_ESP)
-> > > > > +               goto out;
-> > > > > +
-> > > > > +       off +=3D sizeof(struct iphdr);
-> > > > > +       esph =3D bpf_dynptr_slice(&ptr, off, esph_buf, sizeof(esp=
-h_buf));
-> > > > > +       if (!esph)
-> > > > > +               goto out;
-> > > > > +
-> > > > > +       opts.netns_id =3D BPF_F_CURRENT_NETNS;
-> > > > > +       opts.daddr.a4 =3D iph->daddr;
-> > > > > +       opts.spi =3D esph->spi;
-> > > > > +       opts.proto =3D IPPROTO_ESP;
-> > > > > +       opts.family =3D AF_INET;
-> > > > > +
-> > > > > +       x =3D bpf_xdp_get_xfrm_state(xdp, &opts, sizeof(opts));
-> > > > > +       if (!x || opts.error)
-> > > >
-> > > > nit: how can opts.error be non zero if x =3D=3D NULL?
-> > >
-> > > Ignoring the new -ENOENT case, it can't. Which is why I'm testing tha=
-t
-> > > behavior here.
-> >
-> > I'm sorry, I don't understand.
-> >
-> > AFAICT, regardless of the -ENOENT change, I don't see
-> > how (!x) is false and (opt.error) is true, and so
-> > "if (!x || opts.error)" is always equivalent to "if (!x)".
-> >
-> > What am I missing?
-> > Eyal.
->
-> The selftests are tests so my intention was to check edge cases here.
-> In normal operation it shouldn't be possible that
-> bpf_xdp_get_xfrm_state() returns non-NULL and also an error. Maybe
-> another way of writing this would be:
->
->         if (!x)
->                 goto out;
->         assert(opts.error =3D=3D 0);
+On Mon, 2023-12-11 at 14:56 -0700, Shuah Khan wrote:
+> On 12/7/23 12:19, mpdesouza@suse.com=C2=A0wrote:
+> > On Thu, 2023-12-07 at 10:20 -0500, Joe Lawrence wrote:
+> > > On 12/6/23 10:05, Miroslav Benes wrote:
+> > > > On Fri, 1 Dec 2023, Joe Lawrence wrote:
+> > > >=20
+> > > > > On Tue, Oct 31, 2023 at 06:10:52PM -0300, Marcos Paulo de
+> > > > > Souza
+> > > > > wrote:
+> > > > > > The modules are being moved from lib/livepatch to
+> > > > > > tools/testing/selftests/livepatch/test_modules.
+> > > > > >=20
+> > > > > > This code moving will allow writing more complex tests,
+> > > > > > like
+> > > > > > for example an
+> > > > > > userspace C code that will call a livepatched kernel
+> > > > > > function.
+> > > > > >=20
+> > > > > > The modules are now built as out-of-tree
+> > > > > > modules, but being part of the kernel source means they
+> > > > > > will be
+> > > > > > maintained.
+> > > > > >=20
+> > > > > > Another advantage of the code moving is to be able to
+> > > > > > easily
+> > > > > > change,
+> > > > > > debug and rebuild the tests by running make on the
+> > > > > > selftests/livepatch directory,
+> > > > > > which is not currently possible since the modules on
+> > > > > > lib/livepatch are
+> > > > > > build and installed using the "modules" target.
+> > > > > >=20
+> > > > > > The current approach also keeps the ability to execute the
+> > > > > > tests manually by
+> > > > > > executing the scripts inside selftests/livepatch directory,
+> > > > > > as
+> > > > > > it's currently
+> > > > > > supported. If the modules are modified, they needed to be
+> > > > > > rebuilt before running
+> > > > > > the scripts though.
+> > > > > >=20
+> > > > > > The modules are built before running the selftests when
+> > > > > > using
+> > > > > > the
+> > > > > > kselftest invocations:
+> > > > > >=20
+> > > > > > 	make kselftest TARGETS=3Dlivepatch
+> > > > > > or
+> > > > > > 	make -C tools/testing/selftests/livepatch
+> > > > > > run_tests
+> > > > > >=20
+> > > > >=20
+> > > > > Quick question:
+> > > > >=20
+> > > > > - We have been building with CONFIG_LIVEPATCH_TEST=3Dm to
+> > > > > generate
+> > > > > the
+> > > > > =C2=A0=C2=A0 test modules at kernel build time
+> > > > >=20
+> > > > > - Our packaging filters out the selftest scripts and
+> > > > > supporting
+> > > > > modules
+> > > > > =C2=A0=C2=A0 from the general kernel RPM package into their subpa=
+ckages
+> > > > >=20
+> > > > > - Tests are run as part of CKI or other manual tests by
+> > > > > installing the
+> > > > > =C2=A0=C2=A0 pre-built packages from the previous step
+> > > > >=20
+> > > > >=20
+> > > > > After this patch, we would need to add something like the
+> > > > > following to
+> > > > > our kernel build, before packaging:
+> > > > >=20
+> > > > > =C2=A0=C2=A0 $ make KDIR=3D$(pwd) -C tools/testing/selftests/live=
+patch/
+> > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ^^^^
+> > > > >=20
+> > > > > If this is the correct way to build the test modules for
+> > > > > *this*
+> > > > > tree and
+> > > > > /lib/modules/$(shell uname -r)/build... it might be useful to
+> > > > > document
+> > > > > in the commit message as an alternative use case.
+> >=20
+> > That's right:
+> >=20
+> > $ make -C tools/testing/selftests/livepatch/
+> >=20
+> > is indeed the way to build the tests without running them. KDIR
+> > will be
+> > set to=C2=A0 /lib/modules/$(shell uname -r)/build is empty.
+> >=20
+> > Yes, I can definitely add documentation about it inside the
+> > tools/testing/selftests/livepatch/README.
+> >=20
+>=20
+> How does the default kselftest run work with these changes?
+>=20
+> make ksefltest - does this still work as it did before this change?
 
-I think this would convey the "edge case testing" notion better.
+Yes,
 
->
-> If I'm trying to be too clever (or maybe just wrong) or it's pointless,
-> I can remove the `opts.error` condition.
+make kselftest TARGETS=3Dlivepatch
 
-At least for me the tests also serve as references as to how the
-API is expected to be used, so I think it'd be clearer without
-signaling that opts.error could potentially be nonzero on success.
+works the same as before. As well the
 
-An assertion would indeed make that clear.
+make -C tools/testing/selftests/livepatch run_tests
 
-Thanks for the explanation,
-Eyal.
+Both ways work as before.
+>=20
+> thanks,
+> -- Shuah
+>=20
+
 
