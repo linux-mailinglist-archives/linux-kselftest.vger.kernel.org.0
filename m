@@ -1,398 +1,461 @@
-Return-Path: <linux-kselftest+bounces-1754-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1760-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 59D7D80FB19
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 00:14:40 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B8FE80FB26
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 00:17:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EA7402820C5
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 23:14:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0BB451F21888
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 23:17:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58E5064714;
-	Tue, 12 Dec 2023 23:14:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C5526473B;
+	Tue, 12 Dec 2023 23:17:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nTIeK8ZD"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="LxeNw/v9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-x444.google.com (mail-wr1-x444.google.com [IPv6:2a00:1450:4864:20::444])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B715E99;
-	Tue, 12 Dec 2023 15:14:29 -0800 (PST)
-Received: by mail-wr1-x444.google.com with SMTP id ffacd0b85a97d-336378d3bfdso290085f8f.1;
-        Tue, 12 Dec 2023 15:14:29 -0800 (PST)
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D317AF
+	for <linux-kselftest@vger.kernel.org>; Tue, 12 Dec 2023 15:17:11 -0800 (PST)
+Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1d03bcf27e9so39463195ad.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 Dec 2023 15:17:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702422868; x=1703027668; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8MK4XNOiUczTnCjgph+SkPa+TLs4r2nIM6Me08H3+Bo=;
-        b=nTIeK8ZDZJceP2rMOH/5odbJeIj8IqH2WvAeHTppMrkOt3T1NInXDqmmpwofsYNx81
-         zkcGDhZq9NKgBvpCaaYUAjhJ+IDp+c81psTKmKBoNjY2XJjsw4XZPUpS1X7ygagMHg4K
-         TlU3nSQ/SGGR92rdAn57LvWDibW3xBi3e7MFReRe/OOsO5AodAie17dCl9z21BxWajCi
-         HkcdeGdoHIZUyJeYYa6xUDd4V60yA1rwzuu9CGssGCuainTCHdnqWPyZSe5hu2d8evvM
-         g7971HUfauONgXrfYsCn1aHnHSY0mmFLEI8JOZ2GMotbLR/1cjml2mjQ+Lo3MMXNFoLG
-         uSMg==
+        d=chromium.org; s=google; t=1702423031; x=1703027831; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=R5y8QYr+IjGzmB4C3pqLhk9PERDgJGoGDIvTpTZY5w0=;
+        b=LxeNw/v9N0GjG4xjvWxK7YzAVbQFo3UbBajbgqaNcV2hPh2prTwyfxCzr7MxHUjvtA
+         EhIzoU2I/h4SoZlUm/74Q3Kd4qSwpzvACFjZjgAL8gI5Ncd15GHNOGtuqYtKGF4UKQct
+         Tf+JMU0evDltbrwfr5rx1K8zOtDXplaEUFXt8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702422868; x=1703027668;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8MK4XNOiUczTnCjgph+SkPa+TLs4r2nIM6Me08H3+Bo=;
-        b=ISrSOM1kstZcg5BjCHUjfu1CViwcmS0ZvIfh2juP2HQV9OBSnVcDuTuIPwwPW3lZFO
-         gxPEomhmbuX6SMPOF2+KThE8Uzmw1Zk34v7K3CgdDeGT/j+dkkIgmzR1Rsyoj/NSAxzy
-         1CViZqpDxLs50n5lKbeoPfTF348lido6VOnfGXJWSVru9eWdU4zMZjs3dfMMNcAGQ/AL
-         lUJHp/esoWjCR2iCbYtPUbm5DlYnJIGbrZWizKwWdekoqNRzXVPAwX4O+jI99fnMa3j9
-         bLI/++h9/APktdKk8OkzQhXSuBuVXnOr0KFdoPmY7bqXlwW/mKEcACIpY0Qx78u0uXPx
-         yKwQ==
-X-Gm-Message-State: AOJu0YxXqu9yICRxuxv5l0488I2STrEFCUSGye2M1vDB/drkRwHME72N
-	0C0b5WruVJzS5K5VQj77X+6ywWXologkmhKyC2k=
-X-Google-Smtp-Source: AGHT+IEn8ug2jnMUFyqlw3I+9kC0xAzvNm7keMaysp7nQ8xDmdPjP/+qNrrL7CKS/5wfABLY2GmxfnCKIB6Xe/SdnHo=
-X-Received: by 2002:a05:600c:30d2:b0:40c:4378:f111 with SMTP id
- h18-20020a05600c30d200b0040c4378f111mr2377932wmn.80.1702422867897; Tue, 12
- Dec 2023 15:14:27 -0800 (PST)
+        d=1e100.net; s=20230601; t=1702423031; x=1703027831;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=R5y8QYr+IjGzmB4C3pqLhk9PERDgJGoGDIvTpTZY5w0=;
+        b=VtfS7QWjkWbos4oI/sbmK7CCa256tDeSNcMGGbXFd3OspfuXkSXlgeQy8107A3I+NV
+         iQmVpKFdYh2b/GWcc/U8gSjnftPwPWwGMdlfxF92qXdflpH5aduDVAIwhgdtOmqyB1se
+         NPygldWT7wfnL5Zx3eLGwos8kknO+1WeIuSSo/W30I4Stb329+YBH5X3lE+tjNfMIBTU
+         HA004nsGtiKH/v+gfu0rxjTi6WwKYDRSU8/ELaPQIyupCCAjy+TUzRqcWXXTRGJzQz6f
+         pFHRdbfAN+hKPWveUR9lx4lZVfXA8MRMP409q50/6VoPt5+iHAuY0iKPIsz6tn6sufqV
+         gtbw==
+X-Gm-Message-State: AOJu0YxuQyxKuIhrew0CL0GXPv2fVOEcUgoUTeGPwnFsI9K0nxQxwbee
+	6a9w3xy4GWtIAzYN4mfzNkMjVQ==
+X-Google-Smtp-Source: AGHT+IHrZJZDIxN6AqNI2c5OJ2w1Jjj2qPgLDrNRTuM35VdRqiK0uGNMQLM/+GsfPmMdyAG3Bld6Cg==
+X-Received: by 2002:a17:902:d512:b0:1d0:b6ca:e485 with SMTP id b18-20020a170902d51200b001d0b6cae485mr4047648plg.128.1702423030800;
+        Tue, 12 Dec 2023 15:17:10 -0800 (PST)
+Received: from localhost (34.133.83.34.bc.googleusercontent.com. [34.83.133.34])
+        by smtp.gmail.com with UTF8SMTPSA id c10-20020a170903234a00b001d043588122sm9156891plh.142.2023.12.12.15.17.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 12 Dec 2023 15:17:10 -0800 (PST)
+From: jeffxu@chromium.org
+To: akpm@linux-foundation.org,
+	keescook@chromium.org,
+	jannh@google.com,
+	sroettger@google.com,
+	willy@infradead.org,
+	gregkh@linuxfoundation.org,
+	torvalds@linux-foundation.org
+Cc: jeffxu@google.com,
+	jorgelo@chromium.org,
+	groeck@chromium.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	pedro.falcato@gmail.com,
+	dave.hansen@intel.com,
+	linux-hardening@vger.kernel.org,
+	deraadt@openbsd.org,
+	Jeff Xu <jeffxu@chromium.org>
+Subject: [RFC PATCH v3 00/11] Introduce mseal()
+Date: Tue, 12 Dec 2023 23:16:54 +0000
+Message-ID: <20231212231706.2680890-1-jeffxu@chromium.org>
+X-Mailer: git-send-email 2.43.0.472.g3155946c3a-goog
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1702325874.git.dxu@dxuuu.xyz> <8ec1b885d2e13fcd20944cce9edc0340d993d044.1702325874.git.dxu@dxuuu.xyz>
- <CAHsH6GsdqBN638uqUm+8QkP1_45coucSTL7o=D2wFW-gYjPaBw@mail.gmail.com>
- <7yjkfhrwdphtcljq3odv4jc6lucd32wcg277hfsf4ve2jbo7hp@vuqzwbq5nxjw>
- <CAHsH6Gs1vUQnhR_a4qFnAF37Vx=68Do28sfVfFxQ9pVj9jSzjw@mail.gmail.com>
- <qiv464c4y43mo5rih5k6lgzkbpnj6wsrl52hrhgbxeqj45atun@szmqlmnccm52>
- <CAHsH6Gujycb9RBuRk7QHorLe0Q=Np_tb3uboQfp9KmJnegVXvw@mail.gmail.com>
- <fwadmdjjogp4ybfxfpwovnmnn36jigffopijsuqt4ly4vxqghm@ysqhd25mzylp> <fecc7tpmbnqxuxqqolm44ggyeomcr3piabsjkv3pgyzlhyonq6@iiaxf34erjzq>
-In-Reply-To: <fecc7tpmbnqxuxqqolm44ggyeomcr3piabsjkv3pgyzlhyonq6@iiaxf34erjzq>
-From: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Date: Wed, 13 Dec 2023 00:13:51 +0100
-Message-ID: <CAP01T770poh_63vBC+Heb9ASJ9pDZd1wTDWAgm5KCYHK9GtE1g@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 9/9] bpf: xfrm: Add selftest for bpf_xdp_get_xfrm_state()
-To: Daniel Xu <dxu@dxuuu.xyz>
-Cc: Eyal Birger <eyal.birger@gmail.com>, daniel@iogearbox.net, davem@davemloft.net, 
-	shuah@kernel.org, ast@kernel.org, john.fastabend@gmail.com, kuba@kernel.org, 
-	andrii@kernel.org, hawk@kernel.org, steffen.klassert@secunet.com, 
-	antony.antony@secunet.com, alexei.starovoitov@gmail.com, 
-	yonghong.song@linux.dev, eddyz87@gmail.com, mykolal@fb.com, 
-	martin.lau@linux.dev, song@kernel.org, kpsingh@kernel.org, sdf@google.com, 
-	haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	netdev@vger.kernel.org, devel@linux-ipsec.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, 12 Dec 2023 at 20:52, Daniel Xu <dxu@dxuuu.xyz> wrote:
->
-> cc Kumar
->
-> On Tue, Dec 12, 2023 at 09:17:02AM -0700, Daniel Xu wrote:
-> > On Mon, Dec 11, 2023 at 04:25:06PM -0800, Eyal Birger wrote:
-> > > On Mon, Dec 11, 2023 at 3:49=E2=80=AFPM Daniel Xu <dxu@dxuuu.xyz> wro=
-te:
-> > > >
-> > > > On Mon, Dec 11, 2023 at 03:13:07PM -0800, Eyal Birger wrote:
-> > > > > On Mon, Dec 11, 2023 at 2:31=E2=80=AFPM Daniel Xu <dxu@dxuuu.xyz>=
- wrote:
-> > > > > >
-> > > > > > On Mon, Dec 11, 2023 at 01:39:25PM -0800, Eyal Birger wrote:
-> > > > > > > Hi Daniel,
-> > > > > > >
-> > > > > > > Tiny nits below in case you respin this for other reasons:
-> > > > > > >
-> > > > > > > On Mon, Dec 11, 2023 at 12:20=E2=80=AFPM Daniel Xu <dxu@dxuuu=
-.xyz> wrote:
-> > > > > > > >
-> > > > > > > > This commit extends test_tunnel selftest to test the new XD=
-P xfrm state
-> > > > > > > > lookup kfunc.
-> > > > > > > >
-> > > > > > > > Co-developed-by: Antony Antony <antony.antony@secunet.com>
-> > > > > > > > Signed-off-by: Antony Antony <antony.antony@secunet.com>
-> > > > > > > > Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
-> > > > > > > > ---
-> > > > > > > >  .../selftests/bpf/prog_tests/test_tunnel.c    | 20 ++++++-=
--
-> > > > > > > >  .../selftests/bpf/progs/test_tunnel_kern.c    | 51 +++++++=
-++++++++++++
-> > > > > > > >  2 files changed, 67 insertions(+), 4 deletions(-)
-> > > > > > > >
-> > > > > > > > diff --git a/tools/testing/selftests/bpf/prog_tests/test_tu=
-nnel.c b/tools/testing/selftests/bpf/prog_tests/test_tunnel.c
-> > > > > > > > index 2d7f8fa82ebd..fc804095d578 100644
-> > > > > > > > --- a/tools/testing/selftests/bpf/prog_tests/test_tunnel.c
-> > > > > > > > +++ b/tools/testing/selftests/bpf/prog_tests/test_tunnel.c
-> > > > > > > > @@ -278,7 +278,7 @@ static int add_xfrm_tunnel(void)
-> > > > > > > >         SYS(fail,
-> > > > > > > >             "ip netns exec at_ns0 "
-> > > > > > > >                 "ip xfrm state add src %s dst %s proto esp =
-"
-> > > > > > > > -                       "spi %d reqid 1 mode tunnel "
-> > > > > > > > +                       "spi %d reqid 1 mode tunnel replay-=
-window 42 "
-> > > > > > > >                         "auth-trunc 'hmac(sha1)' %s 96 enc =
-'cbc(aes)' %s",
-> > > > > > > >             IP4_ADDR_VETH0, IP4_ADDR1_VETH1, XFRM_SPI_IN_TO=
-_OUT, XFRM_AUTH, XFRM_ENC);
-> > > > > > > >         SYS(fail,
-> > > > > > > > @@ -292,7 +292,7 @@ static int add_xfrm_tunnel(void)
-> > > > > > > >         SYS(fail,
-> > > > > > > >             "ip netns exec at_ns0 "
-> > > > > > > >                 "ip xfrm state add src %s dst %s proto esp =
-"
-> > > > > > > > -                       "spi %d reqid 2 mode tunnel "
-> > > > > > > > +                       "spi %d reqid 2 mode tunnel replay-=
-window 42 "
-> > > > > > >
-> > > > > > > nit: why do you need to set the replay-window in both directi=
-ons?
-> > > > > >
-> > > > > > No reason - probably just careless here.
-> > > > > >
-> > > > > > >
-> > > > > > > >                         "auth-trunc 'hmac(sha1)' %s 96 enc =
-'cbc(aes)' %s",
-> > > > > > > >             IP4_ADDR1_VETH1, IP4_ADDR_VETH0, XFRM_SPI_OUT_T=
-O_IN, XFRM_AUTH, XFRM_ENC);
-> > > > > > > >         SYS(fail,
-> > > > > > > > @@ -313,7 +313,7 @@ static int add_xfrm_tunnel(void)
-> > > > > > > >          */
-> > > > > > > >         SYS(fail,
-> > > > > > > >             "ip xfrm state add src %s dst %s proto esp "
-> > > > > > > > -                   "spi %d reqid 1 mode tunnel "
-> > > > > > > > +                   "spi %d reqid 1 mode tunnel replay-wind=
-ow 42 "
-> > > > > > > >                     "auth-trunc 'hmac(sha1)' %s 96  enc 'cb=
-c(aes)' %s",
-> > > > > > > >             IP4_ADDR_VETH0, IP4_ADDR1_VETH1, XFRM_SPI_IN_TO=
-_OUT, XFRM_AUTH, XFRM_ENC);
-> > > > > > > >         SYS(fail,
-> > > > > > > > @@ -325,7 +325,7 @@ static int add_xfrm_tunnel(void)
-> > > > > > > >         /* root -> at_ns0 */
-> > > > > > > >         SYS(fail,
-> > > > > > > >             "ip xfrm state add src %s dst %s proto esp "
-> > > > > > > > -                   "spi %d reqid 2 mode tunnel "
-> > > > > > > > +                   "spi %d reqid 2 mode tunnel replay-wind=
-ow 42 "
-> > > > > > > >                     "auth-trunc 'hmac(sha1)' %s 96  enc 'cb=
-c(aes)' %s",
-> > > > > > > >             IP4_ADDR1_VETH1, IP4_ADDR_VETH0, XFRM_SPI_OUT_T=
-O_IN, XFRM_AUTH, XFRM_ENC);
-> > > > > > > >         SYS(fail,
-> > > > > > > > @@ -628,8 +628,10 @@ static void test_xfrm_tunnel(void)
-> > > > > > > >  {
-> > > > > > > >         DECLARE_LIBBPF_OPTS(bpf_tc_hook, tc_hook,
-> > > > > > > >                             .attach_point =3D BPF_TC_INGRES=
-S);
-> > > > > > > > +       LIBBPF_OPTS(bpf_xdp_attach_opts, opts);
-> > > > > > > >         struct test_tunnel_kern *skel =3D NULL;
-> > > > > > > >         struct nstoken *nstoken;
-> > > > > > > > +       int xdp_prog_fd;
-> > > > > > > >         int tc_prog_fd;
-> > > > > > > >         int ifindex;
-> > > > > > > >         int err;
-> > > > > > > > @@ -654,6 +656,14 @@ static void test_xfrm_tunnel(void)
-> > > > > > > >         if (attach_tc_prog(&tc_hook, tc_prog_fd, -1))
-> > > > > > > >                 goto done;
-> > > > > > > >
-> > > > > > > > +       /* attach xdp prog to tunnel dev */
-> > > > > > > > +       xdp_prog_fd =3D bpf_program__fd(skel->progs.xfrm_ge=
-t_state_xdp);
-> > > > > > > > +       if (!ASSERT_GE(xdp_prog_fd, 0, "bpf_program__fd"))
-> > > > > > > > +               goto done;
-> > > > > > > > +       err =3D bpf_xdp_attach(ifindex, xdp_prog_fd, XDP_FL=
-AGS_REPLACE, &opts);
-> > > > > > > > +       if (!ASSERT_OK(err, "bpf_xdp_attach"))
-> > > > > > > > +               goto done;
-> > > > > > > > +
-> > > > > > > >         /* ping from at_ns0 namespace test */
-> > > > > > > >         nstoken =3D open_netns("at_ns0");
-> > > > > > > >         err =3D test_ping(AF_INET, IP4_ADDR_TUNL_DEV1);
-> > > > > > > > @@ -667,6 +677,8 @@ static void test_xfrm_tunnel(void)
-> > > > > > > >                 goto done;
-> > > > > > > >         if (!ASSERT_EQ(skel->bss->xfrm_remote_ip, 0xac10016=
-4, "remote_ip"))
-> > > > > > > >                 goto done;
-> > > > > > > > +       if (!ASSERT_EQ(skel->bss->xfrm_replay_window, 42, "=
-replay_window"))
-> > > > > > > > +               goto done;
-> > > > > > > >
-> > > > > > > >  done:
-> > > > > > > >         delete_xfrm_tunnel();
-> > > > > > > > diff --git a/tools/testing/selftests/bpf/progs/test_tunnel_=
-kern.c b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-> > > > > > > > index 3a59eb9c34de..c0dd38616562 100644
-> > > > > > > > --- a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-> > > > > > > > +++ b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-> > > > > > > > @@ -30,6 +30,10 @@ int bpf_skb_set_fou_encap(struct __sk_bu=
-ff *skb_ctx,
-> > > > > > > >                           struct bpf_fou_encap *encap, int =
-type) __ksym;
-> > > > > > > >  int bpf_skb_get_fou_encap(struct __sk_buff *skb_ctx,
-> > > > > > > >                           struct bpf_fou_encap *encap) __ks=
-ym;
-> > > > > > > > +struct xfrm_state *
-> > > > > > > > +bpf_xdp_get_xfrm_state(struct xdp_md *ctx, struct bpf_xfrm=
-_state_opts *opts,
-> > > > > > > > +                      u32 opts__sz) __ksym;
-> > > > > > > > +void bpf_xdp_xfrm_state_release(struct xfrm_state *x) __ks=
-ym;
-> > > > > > > >
-> > > > > > > >  struct {
-> > > > > > > >         __uint(type, BPF_MAP_TYPE_ARRAY);
-> > > > > > > > @@ -950,4 +954,51 @@ int xfrm_get_state(struct __sk_buff *s=
-kb)
-> > > > > > > >         return TC_ACT_OK;
-> > > > > > > >  }
-> > > > > > > >
-> > > > > > > > +volatile int xfrm_replay_window =3D 0;
-> > > > > > > > +
-> > > > > > > > +SEC("xdp")
-> > > > > > > > +int xfrm_get_state_xdp(struct xdp_md *xdp)
-> > > > > > > > +{
-> > > > > > > > +       struct bpf_xfrm_state_opts opts =3D {};
-> > > > > > > > +       struct xfrm_state *x =3D NULL;
-> > > > > > > > +       struct ip_esp_hdr *esph;
-> > > > > > > > +       struct bpf_dynptr ptr;
-> > > > > > > > +       u8 esph_buf[8] =3D {};
-> > > > > > > > +       u8 iph_buf[20] =3D {};
-> > > > > > > > +       struct iphdr *iph;
-> > > > > > > > +       u32 off;
-> > > > > > > > +
-> > > > > > > > +       if (bpf_dynptr_from_xdp(xdp, 0, &ptr))
-> > > > > > > > +               goto out;
-> > > > > > > > +
-> > > > > > > > +       off =3D sizeof(struct ethhdr);
-> > > > > > > > +       iph =3D bpf_dynptr_slice(&ptr, off, iph_buf, sizeof=
-(iph_buf));
-> > > > > > > > +       if (!iph || iph->protocol !=3D IPPROTO_ESP)
-> > > > > > > > +               goto out;
-> > > > > > > > +
-> > > > > > > > +       off +=3D sizeof(struct iphdr);
-> > > > > > > > +       esph =3D bpf_dynptr_slice(&ptr, off, esph_buf, size=
-of(esph_buf));
-> > > > > > > > +       if (!esph)
-> > > > > > > > +               goto out;
-> > > > > > > > +
-> > > > > > > > +       opts.netns_id =3D BPF_F_CURRENT_NETNS;
-> > > > > > > > +       opts.daddr.a4 =3D iph->daddr;
-> > > > > > > > +       opts.spi =3D esph->spi;
-> > > > > > > > +       opts.proto =3D IPPROTO_ESP;
-> > > > > > > > +       opts.family =3D AF_INET;
-> > > > > > > > +
-> > > > > > > > +       x =3D bpf_xdp_get_xfrm_state(xdp, &opts, sizeof(opt=
-s));
-> > > > > > > > +       if (!x || opts.error)
-> > > > > > >
-> > > > > > > nit: how can opts.error be non zero if x =3D=3D NULL?
-> > > > > >
-> > > > > > Ignoring the new -ENOENT case, it can't. Which is why I'm testi=
-ng that
-> > > > > > behavior here.
-> > > > >
-> > > > > I'm sorry, I don't understand.
-> > > > >
-> > > > > AFAICT, regardless of the -ENOENT change, I don't see
-> > > > > how (!x) is false and (opt.error) is true, and so
-> > > > > "if (!x || opts.error)" is always equivalent to "if (!x)".
-> > > > >
-> > > > > What am I missing?
-> > > > > Eyal.
-> > > >
-> > > > The selftests are tests so my intention was to check edge cases her=
-e.
-> > > > In normal operation it shouldn't be possible that
-> > > > bpf_xdp_get_xfrm_state() returns non-NULL and also an error. Maybe
-> > > > another way of writing this would be:
-> > > >
-> > > >         if (!x)
-> > > >                 goto out;
-> > > >         assert(opts.error =3D=3D 0);
-> > >
-> > > I think this would convey the "edge case testing" notion better.
-> > >
-> > > >
-> > > > If I'm trying to be too clever (or maybe just wrong) or it's pointl=
-ess,
-> > > > I can remove the `opts.error` condition.
-> > >
-> > > At least for me the tests also serve as references as to how the
-> > > API is expected to be used, so I think it'd be clearer without
-> > > signaling that opts.error could potentially be nonzero on success.
-> > >
-> > > An assertion would indeed make that clear.
-> >
-> > Sure, sounds good. I will check on the new bpf assert infra.
->
-> Couldn't quite get bpf_assert() working. The following diff:
->
-> diff --git a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c b/tools=
-/testing/selftests/bpf/progs/test_tunnel_kern.c
-> index c0dd38616562..f00dba85ac5d 100644
-> --- a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-> +++ b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-> @@ -8,8 +8,9 @@
->   */
->  #include "vmlinux.h"
->  #include <bpf/bpf_core_read.h>
-> -#include <bpf/bpf_helpers.h>
->  #include <bpf/bpf_endian.h>
-> +#include <bpf/bpf_helpers.h>
-> +#include "bpf_experimental.h"
->  #include "bpf_kfuncs.h"
->  #include "bpf_tracing_net.h"
->
-> @@ -988,8 +989,9 @@ int xfrm_get_state_xdp(struct xdp_md *xdp)
->         opts.family =3D AF_INET;
->
->         x =3D bpf_xdp_get_xfrm_state(xdp, &opts, sizeof(opts));
-> -       if (!x || opts.error)
-> +       if (!x)
->                 goto out;
-> +       bpf_assert_with(opts.error =3D=3D 0, XDP_PASS);
->
->         if (!x->replay_esn)
->                 goto out;
->
-> results in:
->
-> 57: (b7) r1 =3D 2                       ; R1_w=3D2 refs=3D5
-> 58: (85) call bpf_throw#115436
-> calling kernel function bpf_throw is not allowed
->
+From: Jeff Xu <jeffxu@chromium.org>
 
-I think this might be because bpf_throw is not registered for use by
-BPF_PROG_TYPE_XDP. I would simply register the generic_kfunc_set for
-this program type as well, since it's already done for TC.
+This patchset proposes a new mseal() syscall for the Linux kernel.
 
-> It looks like the above error comes from verifier.c:fetch_kfunc_meta,
-> but I can run the exceptions selftests just fine with the same bzImage.
-> So I'm thinking it's not a kfunc registration or BTF issue.
->
-> Maybe it's cuz I'm holding onto KFUNC_ACQUIRE'd `x`? Not sure.
->
+In a nutshell, mseal() protects the VMAs of a given virtual memory
+range against modifications, such as changes to their permission bits.
 
-Yes, even once you enable this, this will fail for now. I am sending
-out a series later this week that enables bpf_throw with acquired
-references, but until then may I suggest the following:
+Modern CPUs support memory permissions, such as the read/write (RW)
+and no-execute (NX) bits. Linux has supported NX since the release of
+kernel version 2.6.8 in August 2004 [1]. The memory permission feature
+improves the security stance on memory corruption bugs, as an attacker
+cannot simply write to arbitrary memory and point the code to it. The
+memory must be marked with the X bit, or else an exception will occur.
+Internally, the kernel maintains the memory permissions in a data
+structure called VMA (vm_area_struct). mseal() additionally protects
+the VMA itself against modifications of the selected seal type.
 
-#define bpf_assert_if(cond) for (int ___i =3D 0, ___j =3D (cond); !(___j) \
-&& !___j; bpf_throw(), ___i++)
+Memory sealing is useful to mitigate memory corruption issues where a
+corrupted pointer is passed to a memory management system. For
+example, such an attacker primitive can break control-flow integrity
+guarantees since read-only memory that is supposed to be trusted can
+become writable or .text pages can get remapped. Memory sealing can
+automatically be applied by the runtime loader to seal .text and
+.rodata pages and applications can additionally seal security critical
+data at runtime. A similar feature already exists in the XNU kernel
+with the VM_FLAGS_PERMANENT [3] flag and on OpenBSD with the
+mimmutable syscall [4]. Also, Chrome wants to adopt this feature for
+their CFI work [2] and this patchset has been designed to be
+compatible with the Chrome use case.
 
-This will allow you to insert some cleanup code with an assertion.
-Then in my series, I will convert this temporary bpf_assert_if back to
-the normal bpf_assert.
+The new mseal() is an architecture independent syscall, and with
+following signature:
 
-It would look like:
-bpf_assert_if(opts.error =3D=3D 0) {
-  // Execute if assertion failed
-  bpf_xdp_xfrm_state_release(x);
-}
+mseal(void addr, size_t len, unsigned long types, unsigned long flags)
 
-Likewise for bpf_assert_with_if, you get the idea.
+addr/len: memory range.  Must be continuous/allocated memory, or else
+mseal() will fail and no VMA is updated. For details on acceptable
+arguments, please refer to documentation patch (mseal.rst) of this
+patch set. Those are also fully covered by the selftest.
+
+types: bit mask to specify the sealing types.
+MM_SEAL_BASE
+MM_SEAL_PROT_PKEY
+MM_SEAL_DISCARD_RO_ANON
+MM_SEAL_SEAL
+
+The MM_SEAL_BASE:
+The base package includes the features common to all VMA sealing
+types. It prevents sealed VMAs from:
+1> Unmapping, moving to another location, and shrinking the size, via
+munmap() and mremap(), can leave an empty space, therefore can be
+replaced with a VMA with a new set of attributes.
+2> Move or expand a different vma into the current location, via mremap().
+3> Modifying sealed VMA via mmap(MAP_FIXED).
+4> Size expansion, via mremap(), does not appear to pose any specific
+risks to sealed VMAs. It is included anyway because the use case is
+unclear. In any case, users can rely on merging to expand a sealed
+VMA.
+
+We consider the MM_SEAL_BASE feature, on which other sealing features
+will depend. For instance, it probably does not make sense to seal
+PROT_PKEY without sealing the BASE, and the kernel will implicitly add
+SEAL_BASE for SEAL_PROT_PKEY.
+
+The MM_SEAL_PROT_PKEY:
+Seal PROT and PKEY of the address range, i.e. mprotect() and
+pkey_mprotect() will be denied if the memory is sealed with
+MM_SEAL_PROT_PKEY.
+
+The MM_SEAL_DISCARD_RO_ANON
+Certain types of madvise() operations are destructive [6], such as
+MADV_DONTNEED, which can effectively alter region contents by
+discarding pages, especially when memory is anonymous. This blocks
+such operations for anonymous memory which is not writable to the
+user.
+
+The MM_SEAL_SEAL
+MM_SEAL_SEAL denies adding a new seal for an VMA.
+This is similar to F_SEAL_SEAL in fcntl.
 
 
+The idea that inspired this patch comes from Stephen Röttger’s work in
+V8 CFI [5]. Chrome browser in ChromeOS will be the first user of this
+API.
 
-> So for now I think I'll drop checking opts.error.
->
-> [...]
+Indeed, the Chrome browser has very specific requirements for sealing,
+which are distinct from those of most applications. For example, in
+the case of libc, sealing is only applied to read-only (RO) or
+read-execute (RX) memory segments (such as .text and .RELRO) to
+prevent them from becoming writable, the lifetime of those mappings
+are tied to the lifetime of the process.
+
+Chrome wants to seal two large address space reservations that are
+managed by different allocators. The memory is mapped RW- and RWX
+respectively but write access to it is restricted using pkeys (or in
+the future ARM permission overlay extensions). The lifetime of those
+mappings are not tied to the lifetime of the process, therefore, while
+the memory is sealed, the allocators still need to free or discard the
+unused memory. For example, with madvise(DONTNEED).
+
+However, always allowing madvise(DONTNEED) on this range poses a
+security risk. For example if a jump instruction crosses a page
+boundary and the second page gets discarded, it will overwrite the
+target bytes with zeros and change the control flow. Checking
+write-permission before the discard operation allows us to control
+when the operation is valid. In this case, the madvise will only
+succeed if the executing thread has PKEY write permissions and PKRU
+changes are protected in software by control-flow integrity.
+
+Although the initial version of this patch series is targeting the
+Chrome browser as its first user, it became evident during upstream
+discussions that we would also want to ensure that the patch set
+eventually is a complete solution for memory sealing and compatible
+with other use cases. The specific scenario currently in mind is
+glibc's use case of loading and sealing ELF executables. To this end,
+Stephen is working on a change to glibc to add sealing support to the
+dynamic linker, which will seal all non-writable segments at startup.
+Once this work is completed, all applications will be able to
+automatically benefit from these new protections.
+
+--------------------------------------------------------------------
+Change history:
+===============
+V3:
+- Abandon per-syscall approach, (Suggested by Linus Torvalds).
+- Organize sealing types around their functionality, such as
+  MM_SEAL_BASE, MM_SEAL_PROT_PKEY.
+- Extend the scope of sealing from calls originated in userspace to
+  both kernel and userspace. (Suggested by Linus Torvalds)
+- Add seal type support in mmap(). (Suggested by Pedro Falcato)
+- Add a new sealing type: MM_SEAL_DISCARD_RO_ANON to prevent
+  destructive operations of madvise. (Suggested by Jann Horn and
+  Stephen Röttger)
+- Make sealed VMAs mergeable. (Suggested by Jann Horn)
+- Add MAP_SEALABLE to mmap() (Detail see new discussions)
+- Add documentation - mseal.rst
+
+Work in progress:
+=================
+- update man page for mseal() and mmap()
+
+Open discussions:
+=================
+Several open discussions from V1/V2 were not incorporated into V3. I
+believe these are worth more discussion for future versions of this
+patch series.
+
+1> mseal() vs mimmutable()
+mseal(bitmasks for multiple seal types)
+	BASE + PROT_PKEY+ MM_SEAL_DISCARD_RO_ANON
+        Apply PROT_PKEY implies BASE, same for DISCARD_RO_ANON
+
+mimmutable() (openBSD)
+        This is equal to SEAL_BASE + SEAL_PROT_PKEY in mseal()
+        Plus allowing downgrade from W=>NW (OpenBSD)
+        Doesn’t have MM_SEAL_DISCARD_RO_ANON
+
+mimmutable() is designed for memory sealing in libc, and mseal()
+is designed for both Chrome browser and libc.
+
+For the two memory ranges that Chrome browser wants to seal, as
+discussed previously, the allocator still needs to free or discard
+memory for the sealed memory. For performance reasons, we have
+explored two solutions in the past: first, using PKEY-based munmap()
+[7], and second, separating SEAL_MPROTECT (v1 of this patch set).
+Recently, we have experimented with an alternative approach that
+allows us to remove the separation of SEAL_MPROTECT. For those two
+memory ranges, Chrome browser will use BASE + PROT_PKEY +
+DISCARD_RO_ANON for all its sealing needs.
+
+In the case of libc, the .text segment can be sealed with the BASE and
+PROT_PKEY, and the RO data segments can be sealed with the BASE +
+PROT_PKEY + DISCARD_RO_ANON.
+
+From a flexibility standpoint, separating BASE out could be beneficial
+for future extensions of sealing features. For instance, applications
+might desire downgradable "prot" permissions (X=>NX, W=>NW, R=>NR),
+which would conflict with SEAL_PROT_PKEY.
+
+The more sealing features integrated into a single sealing type, the
+fewer applications can utilize these features. For example, some
+applications might programmatically require DISCARD_RO_ANON memory,
+which would render such VMA unsuitable for sealing.
+
+I'd like to get the community's input on this. From Chrome's
+perspective, the separation isn't as important anymore, at least in
+the short term. However, I prefer the multiple bits approach because
+it's more extensible in the long term.
+
+2> mseal() vs mprotect() vs madvise() for setting the seal.
+
+mprotect():
+Using prot field, but prot supports unset. It's workable, i.e. let
+applications carry the sealing type and set in all subsequent calls to
+mprotect(), but it feels like this is an extra thing to care about.
+
+madvise():
+uses enum, multiple sealing types might require multiple roundtrips.
+
+IMO: sealing is a major departure from other memory syscalls because
+it takes away capabilities. The other memory APIs add behaviors or
+change attributes, but sealing does the opposite: it reduces
+capabilities. The name of the syscall, mseal(), can help emphasize the
+"taking away" part.
+
+My second choice would be madvise().
+
+3> Other:
+
+There is also a topic about ptrace/, /proc/self/mem, Userfaultfd,
+which I think can be followed up using v1 thread, where it has the
+most context.
+
+New discussions topics:
+=======================
+During the development of V3, I had new questions and thoughts and
+wished to discuss.
+
+1> shm/aio
+From reading the code, it seems to me that aio/shm can mmap/munmap
+maps on behalf of userspace, e.g. ksys_shmdt() in shm.c. The lifetime
+of those mapping are not tied to the lifetime of the process. If those
+memories are sealed from userspace, then unmap will fail. This isn’t a
+huge problem, since the memory will eventually be freed at exit or
+exec. However, it feels like the solution is not complete, because of
+the leaks in VMA address space during the lifetime of the process.
+There could be two solutions to address this, which I will discuss
+later.
+
+2> Brk (heap/stack)
+Currently, userspace applications can seal parts of the heap by
+calling malloc() and mseal(). This raises the question of what the
+expected behavior is when sealing the heap is attempted.
+
+let's assume following calls from user space:
+
+ptr = malloc(size);
+mprotect(ptr, size, RO);
+mseal(ptr, size, SEAL_PROT_PKEY);
+free(ptr);
+
+Technically, before mseal() is added, the user can change the
+protection of the heap by calling mprotect(RO). As long as the user
+changes the protection back to RW before free(), the memory can be
+reused.
+
+Adding mseal() into picture, however, the heap is then sealed
+partially, user can still free it, but the memory remains to be RO,
+and the result of brk-shrink is nondeterministic, depending on if
+munmap() will try to free the sealed memory.(brk uses munmap to shrink
+the heap).
+
+3> Above two cases led to the third topic:
+There are two options to address the problem mentioned above.
+Option 1:  A “MAP_SEALABLE” flag in mmap().
+If a map is created without this flag, the mseal() operation will
+fail. Applications that are not concerned with sealing will expect
+their behavior to be unchanged. For those that are concerned, adding a
+flag at mmap time to opt in is not difficult. For the short term, this
+solves problems 1 and 2 above. The memory in shm/aio/brk will not have
+the MAP_SEALABLE flag at mmap(), and the same is true for the heap.
+
+Option 2: Add MM_SEAL_SEAL during mmap()
+It is possible to defensively set MM_SEAL_SEAL for the selected mappings at
+creation time. Specifically, we can find all the mmaps that we do not want to
+seal, and add the MM_SEAL_SEAL flag in the mmap() call. The difference
+between MAP_SEALABLE and MM_SEAL_SEAL is that the first option starts from a
+small size and incrementally increases, while the second option is the
+opposite.
+
+In my opinion, MAP_SEALABLE is the preferred option. Only a limited set of
+mappings need to be sealed, and these are typically created by the runtime. For
+the few dedicated applications that manage their own mappings, such as Chrome,
+adding an extra flag at mmap() is not a difficult task. It is also a safer
+option in terms of regression risk. This is the option included in this
+version.
+
+4>
+I think it might be possible to seal the stack or other special
+mappings created at runtime (vdso, vsyscall, vvar). This means we can
+enforce and seal W^X for certain types of application. For instance,
+the stack is typically used in read-write mode, but in some cases, it
+can become executable. To defend against unintented addition of executable
+bit to stack, we could let the application to seal it. 
+
+Sealing the heap (for adding X) requires special handling, since the
+heap can shrink, and shrink is implemented through munmap().
+
+Indeed, it might be possible that all virtual memory accessible to user
+space, regardless of its usage pattern, could be sealed. However, this
+would require additional research and development work.
+
+------------------------------------------------------------------------
+v2:
+Use _BITUL to define MM_SEAL_XX type.
+Use unsigned long for seal type in sys_mseal() and other functions.
+Remove internal VM_SEAL_XX type and convert_user_seal_type().
+Remove MM_ACTION_XX type.
+Remove caller_origin(ON_BEHALF_OF_XX) and replace with sealing bitmask.
+Add more comments in code.
+Add a detailed commit message.
+https://lore.kernel.org/lkml/20231017090815.1067790-1-jeffxu@chromium.org/
+
+v1:
+https://lore.kernel.org/lkml/20231016143828.647848-1-jeffxu@chromium.org/
+
+----------------------------------------------------------------
+[1] https://kernelnewbies.org/Linux_2_6_8
+[2] https://v8.dev/blog/control-flow-integrity
+[3] https://github.com/apple-oss-distributions/xnu/blob/1031c584a5e37aff177559b9f69dbd3c8c3fd30a/osfmk/mach/vm_statistics.h#L274
+[4] https://man.openbsd.org/mimmutable.2
+[5] https://docs.google.com/document/d/1O2jwK4dxI3nRcOJuPYkonhTkNQfbmwdvxQMyXgeaRHo/edit#heading=h.bvaojj9fu6hc
+[6] https://lore.kernel.org/lkml/CAG48ez3ShUYey+ZAFsU2i1RpQn0a5eOs2hzQ426FkcgnfUGLvA@mail.gmail.com/
+[7] https://lore.kernel.org/lkml/20230515130553.2311248-1-jeffxu@chromium.org/
+
+Jeff Xu (11):
+  mseal: Add mseal syscall.
+  mseal: Wire up mseal syscall
+  mseal: add can_modify_mm and can_modify_vma
+  mseal: add MM_SEAL_BASE
+  mseal: add MM_SEAL_PROT_PKEY
+  mseal: add sealing support for mmap
+  mseal: make sealed VMA mergeable.
+  mseal: add MM_SEAL_DISCARD_RO_ANON
+  mseal: add MAP_SEALABLE to mmap()
+  selftest mm/mseal memory sealing
+  mseal:add documentation
+
+ Documentation/userspace-api/mseal.rst       |  189 ++
+ arch/alpha/kernel/syscalls/syscall.tbl      |    1 +
+ arch/arm/tools/syscall.tbl                  |    1 +
+ arch/arm64/include/asm/unistd.h             |    2 +-
+ arch/arm64/include/asm/unistd32.h           |    2 +
+ arch/ia64/kernel/syscalls/syscall.tbl       |    1 +
+ arch/m68k/kernel/syscalls/syscall.tbl       |    1 +
+ arch/microblaze/kernel/syscalls/syscall.tbl |    1 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl   |    1 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl   |    1 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl   |    1 +
+ arch/mips/kernel/vdso.c                     |   10 +-
+ arch/parisc/kernel/syscalls/syscall.tbl     |    1 +
+ arch/powerpc/kernel/syscalls/syscall.tbl    |    1 +
+ arch/s390/kernel/syscalls/syscall.tbl       |    1 +
+ arch/sh/kernel/syscalls/syscall.tbl         |    1 +
+ arch/sparc/kernel/syscalls/syscall.tbl      |    1 +
+ arch/x86/entry/syscalls/syscall_32.tbl      |    1 +
+ arch/x86/entry/syscalls/syscall_64.tbl      |    1 +
+ arch/xtensa/kernel/syscalls/syscall.tbl     |    1 +
+ fs/userfaultfd.c                            |    8 +-
+ include/linux/mm.h                          |  178 +-
+ include/linux/mm_types.h                    |    8 +
+ include/linux/syscalls.h                    |    2 +
+ include/uapi/asm-generic/mman-common.h      |   16 +
+ include/uapi/asm-generic/unistd.h           |    5 +-
+ include/uapi/linux/mman.h                   |    5 +
+ kernel/sys_ni.c                             |    1 +
+ mm/Kconfig                                  |    9 +
+ mm/Makefile                                 |    1 +
+ mm/madvise.c                                |   14 +-
+ mm/mempolicy.c                              |    2 +-
+ mm/mlock.c                                  |    2 +-
+ mm/mmap.c                                   |   77 +-
+ mm/mprotect.c                               |   12 +-
+ mm/mremap.c                                 |   44 +-
+ mm/mseal.c                                  |  376 ++++
+ tools/testing/selftests/mm/.gitignore       |    1 +
+ tools/testing/selftests/mm/Makefile         |    1 +
+ tools/testing/selftests/mm/config           |    1 +
+ tools/testing/selftests/mm/mseal_test.c     | 2141 +++++++++++++++++++
+ 41 files changed, 3091 insertions(+), 32 deletions(-)
+ create mode 100644 Documentation/userspace-api/mseal.rst
+ create mode 100644 mm/mseal.c
+ create mode 100644 tools/testing/selftests/mm/mseal_test.c
+
+-- 
+2.43.0.472.g3155946c3a-goog
+
 
