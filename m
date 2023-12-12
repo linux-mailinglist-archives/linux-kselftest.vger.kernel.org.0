@@ -1,198 +1,124 @@
-Return-Path: <linux-kselftest+bounces-1696-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1697-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9846480F5D2
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 19:54:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5607380F5EF
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 20:00:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4D48F1F21615
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 18:54:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D67291F216D3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 19:00:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54B9D7F564;
-	Tue, 12 Dec 2023 18:54:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA34080048;
+	Tue, 12 Dec 2023 19:00:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="fJWcEKim";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="cbVgQ2bD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41D2E210FB;
-	Tue, 12 Dec 2023 18:53:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1DDBC433C8;
-	Tue, 12 Dec 2023 18:53:58 +0000 (UTC)
-Date: Tue, 12 Dec 2023 13:54:41 -0500
-From: Steven Rostedt <rostedt@goodmis.org>
-To: LKML <linux-kernel@vger.kernel.org>, Linux Trace Kernel
- <linux-trace-kernel@vger.kernel.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland
- <mark.rutland@arm.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Subject: [PATCH] tracing/selftests: Add test to test max subbuf size with
- trace_marker
-Message-ID: <20231212135441.0337c3e9@gandalf.local.home>
-X-Mailer: Claws Mail 3.19.1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Received: from wnew4-smtp.messagingengine.com (wnew4-smtp.messagingengine.com [64.147.123.18])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA647F5;
+	Tue, 12 Dec 2023 11:00:19 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+	by mailnew.west.internal (Postfix) with ESMTP id DC7D12B00324;
+	Tue, 12 Dec 2023 14:00:16 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Tue, 12 Dec 2023 14:00:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1702407616;
+	 x=1702414816; bh=mkQgKltTP5G+DPU34il+RvyvNIX4AiTMdSuv1wgyTCs=; b=
+	fJWcEKimbASXhvV2Y/u0MJ78svo+WEkATOLi4dOjMTJl34I+28RO6i2vxF8vBxXh
+	jsbmdZ4CZZ3oJ0xuCFVmtmz0iN6NZN490VBweoWK0dziivbpcE0EtUMAeEIciL/R
+	+D+IlrTyEMR032DiKExWbeQLGl0EHepFzcM9oN/2/ylsF8jJc6Pev2gO1ky9dcWu
+	ECeZJ1ERoohvZvfHjllChUutXddvQlzoGvGUGkTHZPhpBQNlMVNxiVb9F51l4EVl
+	xpmyxS4Ve70UewVgveHc5z95UkFMU7l7BXAxJXvH2MkCGbWlYVI423oPKYmwb5MW
+	3ojHrD+5mip5w6kwCQ4FOA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1702407616; x=
+	1702414816; bh=mkQgKltTP5G+DPU34il+RvyvNIX4AiTMdSuv1wgyTCs=; b=c
+	bVgQ2bDrismRt/s9rEJ7L8njdhlUd9ehE9q2nUNlkqM5tU0Zdb28XirF+GNNFJgK
+	QGD6CAdH4+xkV+I2dGTf6x1mnzvFqB8eCvv3nw30VMPppuU1SlTqvzcpBpWQC+RV
+	rtN+rqLwlhFtmAF69aVziglCNyeSmhNjq8w8jPiHu7c6a0zwJSymjnxekk97tOd5
+	1ry6hUEkPvJ6//Fxbvjl9ne61C4CL6pzlahAnbAGJ6k/rvR/HP4/YJvN+TgMwGN0
+	XU2PeD7N46LosjFryxWsg4qkwDIfnxMGZbGttHLHA2wuRmHBqAf561NeXE5z3LLD
+	jTX/JrIU85031qi8sBtQA==
+X-ME-Sender: <xms:v614ZdNfI9-uA0PK0QDYer2BsPagbyWLZCLz-v2dCoFjaA2F_-kHYA>
+    <xme:v614Zf96oWJysoaTeYx3VOho0uu_GXGvTdUiKCg6hUg1c_NRjRx60kKgG3xKXVuor
+    B7vXwkNK1NZnJUhKQ>
+X-ME-Received: <xmr:v614ZcTQto9pOgbB7OCKQqX68JRxvTP1wQAkxjjEZgeN09Sj-U_PjPe-QiTlTq83lRqWQ4mNryKm7on5Y-FsdtiWsuAOygvqn5Cd>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudelgedguddujecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enfghrlhcuvffnffculdejtddmnecujfgurhepfffhvfevuffkfhggtggugfgjsehtkefs
+    tddttdejnecuhfhrohhmpeffrghnihgvlhcuighuuceougiguhesugiguhhuuhdrgiihii
+    eqnecuggftrfgrthhtvghrnheptdfgueeuueekieekgfeiueekffelteekkeekgeegffev
+    tddvjeeuheeuueelfeetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
+    hilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
+X-ME-Proxy: <xmx:v614ZZtn-iEtijrnnfd_gIrwezZGZLhKx2rX_xMDQZJme2y_5j0sxQ>
+    <xmx:v614ZVcj25nt5Bc0ewmlh-SqrlLvJuSRuPVIXROMiUuMHGU_J-2evg>
+    <xmx:v614ZV3SKOsS48sIkeGi0PTU1DkrmTd1ab3KcGdPw9tOTPey6q-TOA>
+    <xmx:wK14Zetkyeho1ahXdowo8kPL8mJXZyr8HfYclHZYOVWMJv1dO0NaKiku2s0>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 12 Dec 2023 14:00:13 -0500 (EST)
+Date: Tue, 12 Dec 2023 12:00:12 -0700
+From: Daniel Xu <dxu@dxuuu.xyz>
+To: Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc: Eyal Birger <eyal.birger@gmail.com>, 
+	Daniel Borkmann <daniel@iogearbox.net>, "David S. Miller" <davem@davemloft.net>, 
+	Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Steffen Klassert <steffen.klassert@secunet.com>, antony.antony@secunet.com, 
+	Yonghong Song <yonghong.song@linux.dev>, Eddy Z <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	bpf <bpf@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>, devel@linux-ipsec.org
+Subject: Re: [PATCH bpf-next v5 9/9] bpf: xfrm: Add selftest for
+ bpf_xdp_get_xfrm_state()
+Message-ID: <kj5zxyxf3edmz3uyjanxukdiysagu5f6mkneq64yyqgfzp4lsd@7glieqovplgd>
+References: <cover.1702325874.git.dxu@dxuuu.xyz>
+ <8ec1b885d2e13fcd20944cce9edc0340d993d044.1702325874.git.dxu@dxuuu.xyz>
+ <CAHsH6GsdqBN638uqUm+8QkP1_45coucSTL7o=D2wFW-gYjPaBw@mail.gmail.com>
+ <7yjkfhrwdphtcljq3odv4jc6lucd32wcg277hfsf4ve2jbo7hp@vuqzwbq5nxjw>
+ <CAHsH6Gs1vUQnhR_a4qFnAF37Vx=68Do28sfVfFxQ9pVj9jSzjw@mail.gmail.com>
+ <qiv464c4y43mo5rih5k6lgzkbpnj6wsrl52hrhgbxeqj45atun@szmqlmnccm52>
+ <CAHsH6Gujycb9RBuRk7QHorLe0Q=Np_tb3uboQfp9KmJnegVXvw@mail.gmail.com>
+ <fwadmdjjogp4ybfxfpwovnmnn36jigffopijsuqt4ly4vxqghm@ysqhd25mzylp>
+ <CAADnVQKpXpqMr9jmc8RKLcL822ir0wA7bEN2h6dEo=6Y60qgWQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAADnVQKpXpqMr9jmc8RKLcL822ir0wA7bEN2h6dEo=6Y60qgWQ@mail.gmail.com>
 
-From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On Tue, Dec 12, 2023 at 08:44:42AM -0800, Alexei Starovoitov wrote:
+> On Tue, Dec 12, 2023 at 8:17 AM Daniel Xu <dxu@dxuuu.xyz> wrote:
+> >
+> >
+> > If you don't mind (and there no more comments), I would prefer to send a
+> > follow up fixing the nits in this revision. So that I stop blasting the
+> > list (as well as people who may not be as concerned with these details).
+> 
+> Resending patches is little effort while follow up patches
+> double the commits, more code churn, increase in code reviews, etc.
+> Always address feedback by resending.
 
-Now that the trace_marker can write up to the max size of the sub buffer.
-Add a test to see if it actually can happen.
+Got it; will keep that in mind.
 
-The README is updated to state that the trace_marker writes can be broken
-up, and the test checks the README for that statement so that it does not
-fail on older kernels that does not support this.
-
-If the README does not have the specified update, the test will still test
-if all the string is written (although it would be broken up), as that
-should work with older kernels.
-
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org
-Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
----
- kernel/trace/trace.c                          |   1 +
- .../ftrace/test.d/00basic/trace_marker.tc     | 112 ++++++++++++++++++
- 2 files changed, 113 insertions(+)
- create mode 100755 tools/testing/selftests/ftrace/test.d/00basic/trace_marker.tc
-
-diff --git a/kernel/trace/trace.c b/kernel/trace/trace.c
-index 2f8d59834c00..cbfcdd882590 100644
---- a/kernel/trace/trace.c
-+++ b/kernel/trace/trace.c
-@@ -5595,6 +5595,7 @@ static const char readme_msg[] =
- 	"       delta:   Delta difference against a buffer-wide timestamp\n"
- 	"    absolute:   Absolute (standalone) timestamp\n"
- 	"\n  trace_marker\t\t- Writes into this file writes into the kernel buffer\n"
-+	"\n           May be broken into multiple events based on sub-buffer size.\n"
- 	"\n  trace_marker_raw\t\t- Writes into this file writes binary data into the kernel buffer\n"
- 	"  tracing_cpumask\t- Limit which CPUs to trace\n"
- 	"  instances\t\t- Make sub-buffers with: mkdir instances/foo\n"
-diff --git a/tools/testing/selftests/ftrace/test.d/00basic/trace_marker.tc b/tools/testing/selftests/ftrace/test.d/00basic/trace_marker.tc
-new file mode 100755
-index 000000000000..bcb2dc6b8a66
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/test.d/00basic/trace_marker.tc
-@@ -0,0 +1,112 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# description: Change the ringbuffer sub-buffer size
-+# requires: trace_marker
-+# flags: instance
-+
-+get_buffer_data_size() {
-+	sed -ne 's/^.*data.*size:\([0-9][0-9]*\).*/\1/p' events/header_page
-+}
-+
-+get_buffer_data_offset() {
-+	sed -ne 's/^.*data.*offset:\([0-9][0-9]*\).*/\1/p' events/header_page
-+}
-+
-+get_event_header_size() {
-+	type_len=`sed -ne 's/^.*type_len.*:[^0-9]*\([0-9][0-9]*\).*/\1/p' events/header_event`
-+	time_len=`sed -ne 's/^.*time_delta.*:[^0-9]*\([0-9][0-9]*\).*/\1/p' events/header_event`
-+	array_len=`sed -ne 's/^.*array.*:[^0-9]*\([0-9][0-9]*\).*/\1/p' events/header_event`
-+	total_bits=$((type_len+time_len+array_len))
-+	total_bits=$((total_bits+7))
-+	echo $((total_bits/8))
-+}
-+
-+get_print_event_buf_offset() {
-+	sed -ne 's/^.*buf.*offset:\([0-9][0-9]*\).*/\1/p' events/ftrace/print/format
-+}
-+
-+event_header_size=`get_event_header_size`
-+print_header_size=`get_print_event_buf_offset`
-+
-+# Find the README
-+README=""
-+if [ -f README ]; then
-+	README="README"
-+# instance?
-+elif [ -f ../../README ]; then
-+	README="../../README"
-+fi
-+
-+testone=0
-+if [ ! -z "$README" ]; then
-+	if grep -q  "May be broken into multiple events based on sub-buffer size" $README; then
-+		testone=1
-+	fi
-+fi
-+
-+data_offset=`get_buffer_data_offset`
-+
-+marker_meta=$((event_header_size+print_header_size))
-+
-+make_str() {
-+        cnt=$1
-+	# subtract two for \n\0 as marker adds these
-+	cnt=$((cnt-2))
-+	printf -- 'X%.0s' $(seq $cnt)
-+}
-+
-+write_buffer() {
-+	size=$1
-+
-+	str=`make_str $size`
-+
-+	# clear the buffer
-+	echo > trace
-+
-+	# write the string into the marker
-+	echo -n $str > trace_marker
-+
-+	echo $str
-+}
-+
-+test_buffer() {
-+
-+	size=`get_buffer_data_size`
-+	oneline_size=$((size-marker_meta))
-+	echo size = $size
-+	echo meta size = $marker_meta
-+
-+	if [ $testone -eq 1 ]; then
-+		echo oneline size = $oneline_size
-+
-+		str=`write_buffer $oneline_size`
-+
-+		# Should be in one single event
-+		new_str=`awk ' /tracing_mark_write:/ { sub(/^.*tracing_mark_write: */,"");printf "%s", $0; exit}' trace`
-+
-+		if [ "$new_str" != "$str" ]; then
-+			exit fail;
-+		fi
-+	fi
-+
-+	# Now add a little more the meta data overhead will overflow
-+
-+	str=`write_buffer $size`
-+
-+	# Make sure the line was broken
-+	new_str=`awk ' /tracing_mark_write:/ { sub(/^.*tracing_mark_write: /,"");printf "%s", $0; exit}' trace`
-+
-+	if [ "$new_str" = "$str" ]; then
-+		exit fail;
-+	fi
-+
-+	# Make sure the entire line can be found
-+	new_str=`awk ' /tracing_mark_write:/ { sub(/^.*tracing_mark_write: */,"");printf "%s", $0; }' trace`
-+
-+	if [ "$new_str" != "$str" ]; then
-+		exit fail;
-+	fi
-+}
-+
-+test_buffer
-+
--- 
-2.42.0
-
+Thanks,
+Daniel
 
