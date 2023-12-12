@@ -1,109 +1,124 @@
-Return-Path: <linux-kselftest+bounces-1711-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1712-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B6F880F703
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 20:40:07 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77DA480F71F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 20:48:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E926B1F21673
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 19:40:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3212228203F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 19:48:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4607C6356B;
-	Tue, 12 Dec 2023 19:40:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA46363580;
+	Tue, 12 Dec 2023 19:48:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nCtjlTaU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X95NT4af"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 235E463567;
-	Tue, 12 Dec 2023 19:40:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFA9EC433C8;
-	Tue, 12 Dec 2023 19:39:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9583563564;
+	Tue, 12 Dec 2023 19:48:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCFA9C433C8;
+	Tue, 12 Dec 2023 19:48:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702410000;
-	bh=XYzJ5VYogiTqPObmWUe/wKCpLEETTZjB1aB4bDGVTq8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nCtjlTaU2O00+gdYtzr9CBKSleBRK77fote3pL5kFzSHPolg3IdVpxTLVjMTah6qq
-	 wED0/6SyyNWMbqn4i15mNafnp9HhPlc5epRU1miXYYovarce9F5a/T+gTA1xJKVPN1
-	 LyWitF+BJbfQWWwTwprX5fC+8flmEHIzX1LK7gXV7SMQpl/fb9iisQWnHnPW+UYrZ5
-	 5FMZyEhAAs+a1sm+dW8pG/BFw7UOriHfMuclS93xYNF1v76J9+5NstthV0GJfO1UPo
-	 wGQD7zxM8XpdF6YhiNpN3jR/cdeP6jDyVgE5/dfYvMNT81GxIdjJJdpSkQbMGgV95U
-	 GaDHTDq1tDOTw==
-Date: Tue, 12 Dec 2023 19:39:51 +0000
-From: Mark Brown <broonie@kernel.org>
-To: David Hildenbrand <david@redhat.com>
-Cc: John Hubbard <jhubbard@nvidia.com>,
-	Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
-	viro@zeniv.linux.org.uk, brauner@kernel.org, shuah@kernel.org,
-	aarcange@redhat.com, lokeshgidra@google.com, peterx@redhat.com,
-	ryan.roberts@arm.com, hughd@google.com, mhocko@suse.com,
-	axelrasmussen@google.com, rppt@kernel.org, willy@infradead.org,
-	Liam.Howlett@oracle.com, jannh@google.com, zhangpeng362@huawei.com,
-	bgeffon@google.com, kaleshsingh@google.com, ngeoffray@google.com,
-	jdduke@google.com, linux-mm@kvack.org,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, kernel-team@android.com,
-	Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v6 5/5] selftests/mm: add UFFDIO_MOVE ioctl test
-Message-ID: <5e99796a-c489-4405-9d20-89d5ad117391@sirena.org.uk>
-References: <6a34b0c9-e084-4928-b239-7af01c8d4479@sirena.org.uk>
- <CAJuCfpEcbcO0d5WPDHMqiEJws9k_5c30pE-J+E_VxO_fpTf_mw@mail.gmail.com>
- <3240f4b5-081b-4075-851a-7d1cd86f4333@redhat.com>
- <1368c558-c58c-4574-907e-36b07dee31bb@sirena.org.uk>
- <6ee5d68a-fa54-4ed6-bc41-2bff0d9eb12f@redhat.com>
- <052dc756-cc05-4aa8-9724-14d42853089c@sirena.org.uk>
- <8a2ce635-58f4-44e1-a646-6527936c5836@redhat.com>
- <400c0342-bb28-4dd2-b132-9927c7babec4@sirena.org.uk>
- <f3081d52-8bbc-4bc7-96d4-b086ca91975a@nvidia.com>
- <daf9f834-c79d-4f8c-9248-b0b232017732@redhat.com>
+	s=k20201202; t=1702410499;
+	bh=igd2RnhMFXzUjNiscTu9eDHYyW+3+ewG3ZKhV0p4XGo=;
+	h=From:To:Cc:Subject:Date:From;
+	b=X95NT4afRyAWsTbccHx94B2W6zzknjz9JqcA0ko1z5FUEoNTBl7Ci88oljGXp5l9U
+	 +MDcVdzohghe0yxN+qav+YX16YRFRiO+7n0a8yfPKE5Uv67CS+rgZwxKw5LG992pcM
+	 lbTYfra/SJ7b4EozxyjCKF1bAGwmlHxKPhxXy1v2Nvs2LbNJMePXF0xOTsZQYoCqfe
+	 42knU6Y/QcMzxziq4TBYGFQRm/HBIjSLfGUfqDg779PmkHUf0g4D2seuunMQv8Iko6
+	 TbOwyb4nfQfs8hqd+lo5mt5Lt7Zr899nMncYM4jKYErwoVCVsm49Znn3CKIpO7n9k1
+	 FjYLmCmvp/u8w==
+From: SeongJae Park <sj@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: SeongJae Park <sj@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	damon@lists.linux.dev,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/5] selftests/damon: add Python-written DAMON functionality tests
+Date: Tue, 12 Dec 2023 19:48:05 +0000
+Message-Id: <20231212194810.54457-1-sj@kernel.org>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="bmbARan2FdQC/igT"
-Content-Disposition: inline
-In-Reply-To: <daf9f834-c79d-4f8c-9248-b0b232017732@redhat.com>
-X-Cookie: If rash develops, discontinue use.
+Content-Transfer-Encoding: 8bit
+
+Changes from v1
+(https://lore.kernel.org/damon/20231212191206.52917-1-sj@kernel.org/)
+- Fix conflicts on latest mm-unstable tree
+
+Changes from RFC
+(https://lore.kernel.org/damon/20231202000806.46210-1-sj@kernel.org/)
+- Make the working set size estimation test more reliable
+- Wordsmith coverletter and commit messages
+- Rename _damon.py to _damon_sysfs.py
+
+DAMON exports most of its functionality via its sysfs interface.  Hence
+most DAMON functionality tests could be implemented using the interface.
+However, because the interfaces require simple but multiple operations
+for many controls, writing all such tests from the scratch could be
+repetitive and time consuming.
+
+Implement a minimum DAMON sysfs control module, and a couple of DAMON
+functionality tests using the control module.  The first test is for
+ensuring minimum accuracy of data access monitoring, and the second test
+is for finding if a previously found and fixed bug is introduced again.
+
+Note that the DAMON sysfs control module is only for avoiding
+duplicating code in tests.  For convenient and general control of DAMON,
+users should use DAMON user-space tools that developed for the purpose,
+such as damo[1].
+
+[1] https://github.com/damonitor/damo
+
+Patches Sequence
+----------------
+
+This patchset is constructed with five patches.  The first three patches
+implement a Python-written test implementation-purpose DAMON sysfs
+control module.  The implementation is incrementally done in the
+sequence of the basic data structure (first patch) first, kdamonds start
+command (second patch) next, and finally DAMOS tried bytes update
+command (third patch).
+
+Then two patches for implementing selftests using the module follows.
+The fourth patch implements a basic functionality test of DAMON for
+working set estimation accuracy.  Finally, the fifth patch implements a
+corner case test for a previously found bug.
+
+SeongJae Park (5):
+  selftests/damon: implement a python module for test-purpose DAMON
+    sysfs controls
+  selftests/damon/_damon_sysfs: implement kdamonds start function
+  selftests/damon/_damon_sysfs: implement updat_schemes_tried_bytes
+    command
+  selftests/damon: add a test for update_schemes_tried_regions sysfs
+    command
+  selftests/damon: add a test for update_schemes_tried_regions hang bug
+
+ tools/testing/selftests/damon/Makefile        |   3 +
+ tools/testing/selftests/damon/_damon_sysfs.py | 322 ++++++++++++++++++
+ tools/testing/selftests/damon/access_memory.c |  41 +++
+ ...sysfs_update_schemes_tried_regions_hang.py |  33 ++
+ ...te_schemes_tried_regions_wss_estimation.py |  55 +++
+ 5 files changed, 454 insertions(+)
+ create mode 100644 tools/testing/selftests/damon/_damon_sysfs.py
+ create mode 100644 tools/testing/selftests/damon/access_memory.c
+ create mode 100755 tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_hang.py
+ create mode 100755 tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_wss_estimation.py
 
 
---bmbARan2FdQC/igT
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+base-commit: 091b8c820de390a6235595bdb281edab63b9befe
+-- 
+2.34.1
 
-On Tue, Dec 12, 2023 at 04:27:12PM +0100, David Hildenbrand wrote:
-
-> I usually build my stuff in-tree, so I don't really have a lot of experience
-> with out-of-tree selftest builds and the whole kernel header inclusion (and
-> how we could avoid the "make headers" and place the headers somewhere else).
-
-It's generally something along the lines of (from tuxmake):
-
-   make --silent --keep-going --jobs=15 O=/build/stage/build-work INSTALL_PATH=/build/stage/build-work/kselftest_install ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_COMPAT=arm-linux-gnueabihf- kselftest-install
-
-possibly with a -C in there to find the kernel source (from KernelCI):
-
-   make KBUILD_BUILD_USER=KernelCI FORMAT=.xz ARCH=arm64 HOSTCC=gcc CROSS_COMPILE=aarch64-linux-gnu- CROSS_COMPILE_COMPAT=arm-linux-gnueabihf- CC="ccache aarch64-linux-gnu-gcc" O=/tmp/kci/linux/build -C/tmp/kci/linux -j10 kselftest-gen_tar
-
---bmbARan2FdQC/igT
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmV4twYACgkQJNaLcl1U
-h9Di+ggAhFcVWNuwSylsTaqHlie7XylBqMvgn8gEUhFEuCgc61gt6bfC8ibnBnov
-pfKHGUM1aNIXWwda2PGSLzFYRSugiDOnDQNjrxRR7FKBsjvrUF+2Z5HOdqmH6t9O
-3XPDBbLr2gCXRxwEzebbqjPPRH0OyLUCX9zC70CPsXJniNGemo5bf22YIDwVhYV+
-WDoXwthEBK7GJtMLXZwHooueKztpVWshDrGabeeiseLmKoQ/P1tpnPywfOd4P5rc
-O346V5TFghUnjG0b/CXCkZqTlmHbLz5ckpMJsZHv0LLj7+/V+rw0th//EdbXjUXh
-67R937mSIXO2RLCkdhFI+b6/qRU+5Q==
-=dcFi
------END PGP SIGNATURE-----
-
---bmbARan2FdQC/igT--
 
