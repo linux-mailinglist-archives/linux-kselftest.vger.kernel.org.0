@@ -1,130 +1,119 @@
-Return-Path: <linux-kselftest+bounces-1674-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1675-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E011E80EE79
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 15:12:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A20A280EEAD
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 15:27:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 95B7A1F2163C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 14:12:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5AA77281567
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 14:27:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAD9C73175;
-	Tue, 12 Dec 2023 14:12:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F30337318B;
+	Tue, 12 Dec 2023 14:27:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="Ma6EWX39"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UIduafO1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9560D10C
-	for <linux-kselftest@vger.kernel.org>; Tue, 12 Dec 2023 06:12:11 -0800 (PST)
-Received: by mail-qk1-x72b.google.com with SMTP id af79cd13be357-77f8dd477fcso12477685a.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 Dec 2023 06:12:11 -0800 (PST)
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52F27D2
+	for <linux-kselftest@vger.kernel.org>; Tue, 12 Dec 2023 06:27:05 -0800 (PST)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-a1e116f2072so1166037066b.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 Dec 2023 06:27:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1702390330; x=1702995130; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mQ2TiLoD9Gaq6xkoyUSluJ0KHWLQt9mZyTQyaXIVvpI=;
-        b=Ma6EWX39Bj1+T9k0jBia+zrZupD7uZ+MvPqsdYZzuIIsCDzoZlisglAN5yH5/oEK9g
-         a1AAT63J2/G5xRWwi2oo1rppz6IWnTX3OZoTyKWZt++m1ECcRYhwSzlN5MvnZXiLi/rJ
-         l/E7r9Fan781Jhhyr9OVRLLCSF1oORTqZ/bw5C0bAmUzamQdXNNvfwmQHXn63uZr52n8
-         2UobjmltDa40DJ/hOqZTPFxpzzmrugA/7QL5aXuWv9AzO6nJ9M5sRc1i8jnP1ydUQSKR
-         JLaxJ8nyPCqhEe8Of6xlQdlg5KeLG/wfT3+naYeO9P+eC7SxHLMnnstTnJ8iOTbr1c9D
-         U+LA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702390330; x=1702995130;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20230601; t=1702391224; x=1702996024; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mQ2TiLoD9Gaq6xkoyUSluJ0KHWLQt9mZyTQyaXIVvpI=;
-        b=T9dkd0mEik781UpgOpBFpRaZzmzUbRZMYp8/G8ESsWzlGrSESp8zlVZ/dmM4bUIh2e
-         r5hswfZCSDWbJA6afgBFHvCyFHdcBOvs7rAelgpA85ZF+469VK4uNwoDK5JyKZqpVmPO
-         4iMOHPEGP4GwnefuUiJSVkkgxgbk7lYf3DXzcKp3edCmjqi7HVItLTcZBBLZLRdi/PP4
-         r73qggMlRk78K3m61H4vp52ByA/xdTr27n7pXK/3SMTZqW9L/Tk7g6fR5uhPSWVDTckT
-         pm0Wgxl3v7PHV5ZSDXDJ5seJsWL2m5VF/1DIejUP0Akls+k3bIpRcWgUDdfYp/2PbN4Z
-         xG4A==
-X-Gm-Message-State: AOJu0Yy7D1jWP0R9emhMBcV8CA7PcQeXyIivbGUTNpxaJD6Z30Gkjh2A
-	Iry6hIWj13Zqx50gFnMvPAa5Lw==
-X-Google-Smtp-Source: AGHT+IGRkRQVaTR68B5qveU70mgfrGlXmlTMF+z308FUs0i5H1yAdurOHwLdhvMF64yVQEAU8ICGfg==
-X-Received: by 2002:ac8:7dc6:0:b0:425:4043:29ff with SMTP id c6-20020ac87dc6000000b00425404329ffmr7750741qte.122.1702390330535;
-        Tue, 12 Dec 2023 06:12:10 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-134-23-187.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.134.23.187])
-        by smtp.gmail.com with ESMTPSA id t22-20020ac85316000000b0041cb787ff41sm4082934qtn.67.2023.12.12.06.12.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Dec 2023 06:12:09 -0800 (PST)
-Received: from jgg by wakko with local (Exim 4.95)
-	(envelope-from <jgg@ziepe.ca>)
-	id 1rD3UW-00CjJP-VZ;
-	Tue, 12 Dec 2023 10:12:08 -0400
-Date: Tue, 12 Dec 2023 10:12:08 -0400
-From: Jason Gunthorpe <jgg@ziepe.ca>
-To: Joel Granados <j.granados@samsung.com>
-Cc: Lu Baolu <baolu.lu@linux.intel.com>, Kevin Tian <kevin.tian@intel.com>,
-	Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	Nicolin Chen <nicolinc@nvidia.com>, Yi Liu <yi.l.liu@intel.com>,
-	Jacob Pan <jacob.jun.pan@linux.intel.com>, iommu@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	virtualization@lists.linux-foundation.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/6] iommufd: Initializing and releasing IO page fault
- data
-Message-ID: <20231212141208.GA3013885@ziepe.ca>
-References: <20231026024930.382898-1-baolu.lu@linux.intel.com>
- <20231026024930.382898-4-baolu.lu@linux.intel.com>
- <CGME20231212131010eucas1p104d069ac6d6c97fce4987caa62c996ee@eucas1p1.samsung.com>
- <20231212131008.k6s5xwjgolp6geps@localhost>
+        bh=bCZPRFlYELlSqnd7f+LApbuWWSOTUwHuWf2lhre3cTY=;
+        b=UIduafO1DT3E/9yl00OWV+EjecVJ2FWvoAE4REaS2pOQdZ5ihOPnmfePL8xZYamHU+
+         0bXdkQaFPcH+FNZUpV7sZkEfd1gxLFPT7iafcK+X1tDXmEDEmcxRpFnLgOAi5rKjJSJE
+         kPh9hyCUmvQcO6XQlE9+02ZQ9DAaghh/c0BDDAnoU0hXa9ki1ZKwacHa16PIjHxqmaqU
+         wx1GQSmZ2SY8SXxd7oAzT5MhZ2IaE6sVCFpAlw4lA3vJU6CF9WDBKObpxNNV3XxiTls4
+         qYzMjNmnbxO2y0Fdcv2yT4IOj3kaBYFvTAcGYv5O4HzqMn0R7j8VITzuWnP+Jdg5UaMy
+         +51Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702391224; x=1702996024;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bCZPRFlYELlSqnd7f+LApbuWWSOTUwHuWf2lhre3cTY=;
+        b=hSBSbowVSy+WiRYIIvpha2m9RxhiBf+1tR5t+eM50lnt8UxyHha4fA4MrDV/Vn93pn
+         W9P0dr9oDSWdNGkSqje6xeL7/Nl0LUtg8wWm41mWaW3UpY7usygyNjK56GQfeJ5ugic0
+         WrsoVONe9tQwpbRWA3kwtXaYXwC4fEN9hxMaw22AwT8sOtK8bT42lP53enGhGnKM/543
+         TBFBllrN9Bz5biGOKGPevE1zZzZgdIoOmRC0DiOM4+Vvyeuqg6K2xbLFFjuO6HcN2iy1
+         xUvS201geA2837KJJn/wmQyu8ldsRK3CGG2L+goWrHtgGTVXZrJP7TjnvCiq5ecD09N6
+         xPoQ==
+X-Gm-Message-State: AOJu0YzUu9KzTDrKjX4YaK/CeRLMgdVK7pgELez4Gz6x7RX7W9i2n1tA
+	pZ+zAsbfVLH9HPfJDuRHdT0BGz3ME8QNHfiDbHk5rg==
+X-Google-Smtp-Source: AGHT+IEOyCkF2DgwL7RBhVnTjCksBIhJaDTVsJX1VcMmek5dl3277Sns8cp70gbrdUy6r5MpVMdk0OJS5kwbSqhfdhU=
+X-Received: by 2002:a17:906:51de:b0:9f2:859f:713e with SMTP id
+ v30-20020a17090651de00b009f2859f713emr7079811ejk.3.1702391223630; Tue, 12 Dec
+ 2023 06:27:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231212131008.k6s5xwjgolp6geps@localhost>
+References: <20231208005250.2910004-1-almasrymina@google.com>
+ <20231208005250.2910004-9-almasrymina@google.com> <20231212122535.GA3029808@nvidia.com>
+In-Reply-To: <20231212122535.GA3029808@nvidia.com>
+From: Mina Almasry <almasrymina@google.com>
+Date: Tue, 12 Dec 2023 06:26:51 -0800
+Message-ID: <CAHS8izMVMx0fpT=dWsnD7piqs1g7Fam8Xf5dK3iOFNxeOQD9vQ@mail.gmail.com>
+Subject: Re: [net-next v1 08/16] memory-provider: dmabuf devmem memory provider
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Shailend Chand <shailend@google.com>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Jeroen de Borst <jeroendb@google.com>, 
+	Praveen Kaligineedi <pkaligineedi@google.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Arnd Bergmann <arnd@arndb.de>, 
+	David Ahern <dsahern@kernel.org>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+	Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>, 
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Yunsheng Lin <linyunsheng@huawei.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
+	Shakeel Butt <shakeelb@google.com>, Willem de Bruijn <willemb@google.com>, 
+	Kaiyuan Zhang <kaiyuanz@google.com>, Christoph Hellwig <hch@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Dec 12, 2023 at 02:10:08PM +0100, Joel Granados wrote:
-
-> > diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
-> > index 645ab5d290fe..0a8e03d5e7c5 100644
-> > --- a/drivers/iommu/iommufd/device.c
-> > +++ b/drivers/iommu/iommufd/device.c
-> > @@ -456,6 +456,16 @@ int iommufd_hw_pagetable_attach(struct iommufd_hw_pagetable *hwpt,
-> >  	if (rc)
-> >  		goto err_unlock;
-> >  
-> > +	if (hwpt->fault) {
-> > +		void *curr;
+On Tue, Dec 12, 2023 at 4:25=E2=80=AFAM Jason Gunthorpe <jgg@nvidia.com> wr=
+ote:
+>
+> On Thu, Dec 07, 2023 at 04:52:39PM -0800, Mina Almasry wrote:
+>
+> > +static inline struct page_pool_iov *page_to_page_pool_iov(struct page =
+*page)
+> > +{
+> > +     if (page_is_page_pool_iov(page))
+> > +             return (struct page_pool_iov *)((unsigned long)page & ~PP=
+_IOV);
 > > +
-> > +		curr = iopf_pasid_cookie_set(idev->dev, IOMMU_NO_PASID, idev);
-> I'm hitting an error here when I try to attach to a hwpt that I created
-> previously with the `IOMMU_HWPT_ALLOC_IOPF_CAPABLE` flag.
-> 
-> I get an -ENODEV from iopf_pasid_cookie_set which is triggered by
-> dev->iommu->fault_param being 0x0.
-> 
-> I looked around and I see that the fault param gets set in
-> iopf_queue_add_device which is called from iommu_dev_enable_feature
-> only. Furthermore iommu_dev_enable_feature is only called in idxd and
-> uacce drivers.
-> 
-> Questions:
-> 1. Should iopf_queue_add_device get called from the
->    IOMMU_HWPT_ALLOC_IOPF_CAPABLE ioctl call? This make sense to me as
->    this is where the device and the IOPF are related from user space.
+> > +     DEBUG_NET_WARN_ON_ONCE(true);
+> > +     return NULL;
+> > +}
+>
+> We already asked not to do this, please do not allocate weird things
+> can call them 'struct page' when they are not. It undermines the
+> maintainability of the mm to have things mis-typed like
+> this. Introduce a new type for your thing so the compiler can check it
+> properly.
+>
 
-It probably needs to call the set feature thing in the short term.
+There is a new type introduced, it's the page_pool_iov. We set the LSB
+on page_pool_iov* and cast it to page* only to avoid the churn of
+renaming page* to page_pool_iov* in the page_pool and all the net
+drivers using it. Is that not a reasonable compromise in your opinion?
+Since the LSB is set on the resulting page pointers, they are not
+actually usuable as pages, and are never passed to mm APIs per your
+requirement.
 
-In the medium term I would like the drivers to manage the iopf based
-on domain attachment not explicit feature asks
-
-> 2. This is not intended to work only with idxd and uacce. right?
-
-It should work everywhere, I suspect Intel Team didn't hit this
-because they are testing IDXD SIOV? Can you guys also test it as a PF
-assignment?
-
-Jason
+--=20
+Thanks,
+Mina
 
