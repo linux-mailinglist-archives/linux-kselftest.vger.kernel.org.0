@@ -1,262 +1,236 @@
-Return-Path: <linux-kselftest+bounces-1663-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1664-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4CDD80E955
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 11:40:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4718580EA2B
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 12:17:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2BF0FB20B3D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 10:40:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EE6052814F0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 11:17:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE5995CD00;
-	Tue, 12 Dec 2023 10:39:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="cMAyum48"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BB3E5CD2F;
+	Tue, 12 Dec 2023 11:17:29 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2AD8A0
-	for <linux-kselftest@vger.kernel.org>; Tue, 12 Dec 2023 02:39:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1702377595;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=fggtRaV/8orZgO1gMNRIxp3acepW1r0vajRNrmoShyY=;
-	b=cMAyum48wIBJj5VAD1MgNLRgEdL+bWiIP9boCXCsQ9AO/AmuAcDtjcq9MiGADFUf87//fs
-	BtyFYWAkeNVc1HuN1+644on39Y1i7WnnM/A5sb80KpZ8WlHlrFcq0vMWjMxKTlWL/gDeyL
-	NOG8Rt6AObUit9+qfKWulR2v7lMD8wU=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-460-f14YaOfsPkmtzJ7jwcu0Kw-1; Tue, 12 Dec 2023 05:39:53 -0500
-X-MC-Unique: f14YaOfsPkmtzJ7jwcu0Kw-1
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-a1eb3f3dc2eso83637866b.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 Dec 2023 02:39:53 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702377587; x=1702982387;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fggtRaV/8orZgO1gMNRIxp3acepW1r0vajRNrmoShyY=;
-        b=QCp6BMYFK83pwq3jyA1KrjqOkJ3KlBixEwvGA1nTGpw17dMuEGq80DHb3pjf4tGP7c
-         dOk7lRBDGtQkV5yWomBVFPTv+wiVzG9oOO440Nc9/Z/x6h81Bk4H5hpUXSIYNRyUT1rv
-         JspRFlW2Y3mOl5DBV3Bo1sDlwjH7dLuOmtRihwnnAIUF+Uk1mzqZnXeR7fIu4KUZz3T0
-         GGlPseNpBX8lGs17XZfS5uIyV9H2Wg55pwkkl4jbnO+OICKeCJMydNm8B8VEm8b5MqzP
-         HqyuauRwzkOev6aK60bgRcjNe53XFkaKE5jmkxEjoClk+ZztkhrVIWTxVMjJ9UByoH/B
-         q1aA==
-X-Gm-Message-State: AOJu0Yyr6Xo6dAznRhX1hxGtM1+DXtHhdZyXDrXyIPQ2PdNfTaLwy9dV
-	HGHm8Lr6+lXmBEeWuyZqhrmZP53fSqxkinwqlfqqifuPlNJsFOAdwBCwTgLRiuToVDzQ8m+GwBJ
-	5uog8nGp2gpHD5GYEcV3i6wEXAzfMFoyEGu2n9vLDsx/b
-X-Received: by 2002:a17:906:5194:b0:a1a:4a36:66fc with SMTP id y20-20020a170906519400b00a1a4a3666fcmr1343851ejk.16.1702377587457;
-        Tue, 12 Dec 2023 02:39:47 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IE1s9ejU0QHSLLSTC9/iMEf46k/k5nUUYOzmG44Y4BEDGsQWW58tFcSfCa8zIUz3Ryox9pKp23WQ8EeadbhgOA=
-X-Received: by 2002:a17:906:5194:b0:a1a:4a36:66fc with SMTP id
- y20-20020a170906519400b00a1a4a3666fcmr1343842ejk.16.1702377586761; Tue, 12
- Dec 2023 02:39:46 -0800 (PST)
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AD5EBE;
+	Tue, 12 Dec 2023 03:17:24 -0800 (PST)
+Received: from mail.maildlp.com (unknown [172.19.162.254])
+	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4SqGKp54dqzZcl2;
+	Tue, 12 Dec 2023 19:17:18 +0800 (CST)
+Received: from dggpemm500005.china.huawei.com (unknown [7.185.36.74])
+	by mail.maildlp.com (Postfix) with ESMTPS id 4699618005A;
+	Tue, 12 Dec 2023 19:17:22 +0800 (CST)
+Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
+ (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Tue, 12 Dec
+ 2023 19:17:21 +0800
+Subject: Re: [net-next v1 09/16] page_pool: device memory support
+To: Mina Almasry <almasrymina@google.com>
+CC: Shailend Chand <shailend@google.com>, <netdev@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<linux-arch@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<bpf@vger.kernel.org>, <linux-media@vger.kernel.org>,
+	<dri-devel@lists.freedesktop.org>, "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
+ Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>, Jeroen de Borst
+	<jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, Jesper
+ Dangaard Brouer <hawk@kernel.org>, Ilias Apalodimas
+	<ilias.apalodimas@linaro.org>, Arnd Bergmann <arnd@arndb.de>, David Ahern
+	<dsahern@kernel.org>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+	Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
+	=?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>, Harshitha
+ Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeelb@google.com>
+References: <20231208005250.2910004-1-almasrymina@google.com>
+ <20231208005250.2910004-10-almasrymina@google.com>
+ <32211cbf-3a4e-8a86-6214-4304ddb18a98@huawei.com>
+ <CAHS8izOQcuLPwvDff96fuNB7r6EU9OWt3ShueQp=u7wat3L5LA@mail.gmail.com>
+ <92e30bd9-6df4-b72f-7bcd-f4fe5670eba2@huawei.com>
+ <CAHS8izPEFsqw50qgM+sPot6XVvOExpd+DrwrmPSR3zsWGLysRw@mail.gmail.com>
+ <CAHS8izN6Cbjy0FCYhJyNsP396XfgJ_nTFXWuHb5QWNct=PifAg@mail.gmail.com>
+ <59e07233-24cb-7fb2-1aee-e1cf7eb72fa9@huawei.com>
+ <CAHS8izMdpo0D7GYzMkOtg1ueCODAVNxtwSP_qPseSYXNMhPGCw@mail.gmail.com>
+From: Yunsheng Lin <linyunsheng@huawei.com>
+Message-ID: <2cdf173c-95e4-2141-56f7-0761705cd737@huawei.com>
+Date: Tue, 12 Dec 2023 19:17:21 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <2f33be45-fe11-4b69-8e89-4d2824a0bf01@daynix.com>
-In-Reply-To: <2f33be45-fe11-4b69-8e89-4d2824a0bf01@daynix.com>
-From: Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Date: Tue, 12 Dec 2023 11:39:34 +0100
-Message-ID: <CAO-hwJJhzHtKrUEw0zrjgub3+eapgJG-zsG0HRB=PaPi6BxG+w@mail.gmail.com>
-Subject: Re: Should I add BPF kfuncs for userspace apps? And how?
-To: Akihiko Odaki <akihiko.odaki@daynix.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Jason Wang <jasowang@redhat.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	"Michael S. Tsirkin" <mst@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	Yuri Benditovich <yuri.benditovich@daynix.com>, Andrew Melnychenko <andrew@daynix.com>, 
-	Benjamin Tissoires <bentiss@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, kvm@vger.kernel.org, 
-	LKML <linux-kernel@vger.kernel.org>, virtualization@lists.linux-foundation.org, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, 
-	Network Development <netdev@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <CAHS8izMdpo0D7GYzMkOtg1ueCODAVNxtwSP_qPseSYXNMhPGCw@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
 
-Hi,
+On 2023/12/12 2:14, Mina Almasry wrote:
+> On Mon, Dec 11, 2023 at 3:51 AM Yunsheng Lin <linyunsheng@huawei.com> wrote:
+>>
+>> On 2023/12/11 12:04, Mina Almasry wrote:
+>>> On Sun, Dec 10, 2023 at 6:26 PM Mina Almasry <almasrymina@google.com> wrote:
+>>>>
+>>>> On Sun, Dec 10, 2023 at 6:04 PM Yunsheng Lin <linyunsheng@huawei.com> wrote:
+>>>>>
+>>>>> On 2023/12/9 0:05, Mina Almasry wrote:
+>>>>>> On Fri, Dec 8, 2023 at 1:30 AM Yunsheng Lin <linyunsheng@huawei.com> wrote:
+>>>>>>>
+>>>>>>>
+>>>>>>> As mentioned before, it seems we need to have the above checking every
+>>>>>>> time we need to do some per-page handling in page_pool core, is there
+>>>>>>> a plan in your mind how to remove those kind of checking in the future?
+>>>>>>>
+>>>>>>
+>>>>>> I see 2 ways to remove the checking, both infeasible:
+>>>>>>
+>>>>>> 1. Allocate a wrapper struct that pulls out all the fields the page pool needs:
+>>>>>>
+>>>>>> struct netmem {
+>>>>>>         /* common fields */
+>>>>>>         refcount_t refcount;
+>>>>>>         bool is_pfmemalloc;
+>>>>>>         int nid;
+>>>>>>         ...
+>>>>>>         union {
+>>>>>>                 struct dmabuf_genpool_chunk_owner *owner;
+>>>>>>                 struct page * page;
+>>>>>>         };
+>>>>>> };
+>>>>>>
+>>>>>> The page pool can then not care if the underlying memory is iov or
+>>>>>> page. However this introduces significant memory bloat as this struct
+>>>>>> needs to be allocated for each page or ppiov, which I imagine is not
+>>>>>> acceptable for the upside of removing a few static_branch'd if
+>>>>>> statements with no performance cost.
+>>>>>>
+>>>>>> 2. Create a unified struct for page and dmabuf memory, which the mm
+>>>>>> folks have repeatedly nacked, and I imagine will repeatedly nack in
+>>>>>> the future.
+>>>>>>
+>>>>>> So I imagine the special handling of ppiov in some form is critical
+>>>>>> and the checking may not be removable.
+>>>>>
+>>>>> If the above is true, perhaps devmem is not really supposed to be intergated
+>>>>> into page_pool.
+>>>>>
+>>>>> Adding a checking for every per-page handling in page_pool core is just too
+>>>>> hacky to be really considerred a longterm solution.
+>>>>>
+>>>>
+>>>> The only other option is to implement another page_pool for ppiov and
+>>>> have the driver create page_pool or ppiov_pool depending on the state
+>>>> of the netdev_rx_queue (or some helper in the net stack to do that for
+>>>> the driver). This introduces some code duplication. The ppiov_pool &
+>>>> page_pool would look similar in implementation.
+>>
+>> I think there is a design pattern already to deal with this kind of problem,
+>> refactoring common code used by both page_pool and ppiov into a library to
+>> aovid code duplication if most of them have similar implementation.
+>>
+> 
+> Code can be refactored if it's identical, not if it is similar. I
 
-On Tue, Dec 12, 2023 at 9:11=E2=80=AFAM Akihiko Odaki <akihiko.odaki@daynix=
-.com> wrote:
->
-> Hi,
->
-> It is said eBPF is a safe way to extend kernels and that is very
-> attarctive, but we need to use kfuncs to add new usage of eBPF and
-> kfuncs are said as unstable as EXPORT_SYMBOL_GPL. So now I'd like to ask
-> some questions:
->
-> 1) Which should I choose, BPF kfuncs or ioctl, when adding a new feature
-> for userspace apps?
-> 2) How should I use BPF kfuncs from userspace apps if I add them?
->
-> Here, a "userspace app" means something not like a system-wide daemon
-> like systemd (particularly, I have QEMU in mind). I'll describe the
-> context more below:
+Similarity indicates an opportunity to the refactor out the common
+code, like the page_frag case below:
+https://patchwork.kernel.org/project/netdevbpf/cover/20231205113444.63015-1-linyunsheng@huawei.com/
 
-I'm probably not the best person in the world to answer your
-questions, Alexei and others from the BPF core group are, but given
-that you pointed at a thread I was involved in, I feel I can give you
-a few pointers.
+But untill we do a proof of concept implemention, it is hard to tell if
+it is feasiable or not.
 
-But first and foremost, I encourage you to schedule an agenda item in
-the BPF office hour[4]. Being able to talk with the core people
-directly was tremendously helpful to me to understand their point.
+> suspect the page_pools will be only similar, and if you're not willing
+> to take devmem handling into the page pool then refactoring page_pool
+> code into helpers that do devmem handling may also not be an option.
+> 
+>>>>
+>>>> But this was all discussed in detail in RFC v2 and the last response I
+>>>> heard from Jesper was in favor if this approach, if I understand
+>>>> correctly:
+>>>>
+>>>> https://lore.kernel.org/netdev/7aedc5d5-0daf-63be-21bc-3b724cc1cab9@redhat.com/
+>>>>
+>>>> Would love to have the maintainer weigh in here.
+>>>>
+>>>
+>>> I should note we may be able to remove some of the checking, but maybe not all.
+>>>
+>>> - Checks that disable page fragging for ppiov can be removed once
+>>> ppiov has frag support (in this series or follow up).
+>>>
+>>> - If we use page->pp_frag_count (or page->pp_ref_count) for
+>>> refcounting ppiov, we can remove the if checking in the refcounting.
+>>>
+> 
+> I'm not sure this is actually possible in the short term. The
+> page_pool uses both page->_refcount and page->pp_frag_count for
+> refcounting, and I will not be able to remove the special handling
+> around page->_refcount as i'm not allowed to call page_ref_*() APIs on
+> a non-struct page.
 
+the page_ref_*() API may be avoided using the below patch:
+https://patchwork.kernel.org/project/netdevbpf/patch/20231113130041.58124-7-linyunsheng@huawei.com/
 
->
-> ---
->
-> I'm working on a new feature that aids virtio-net implementations using
-> tuntap virtual network device. You can see [1] for details, but
-> basically it's to extend BPF_PROG_TYPE_SOCKET_FILTER to report four more
-> bytes.
->
-> However, with long discussions we have confirmed extending
-> BPF_PROG_TYPE_SOCKET_FILTER is not going to happen, and adding kfuncs is
-> the way forward. So I decided how to add kfuncs to the kernel and how to
-> use it. There are rich documentations for the kernel side, but I found
-> little about the userspace. The best I could find is a systemd change
-> proposal that is based on WIP kernel changes[2].
+But I am not sure how to do that for tx part if devmem for tx is not
+intergating into page_pool, that is why I suggest having a tx implementation
+for the next version, so that we can have a whole picture of devmem.
 
-Yes, as Alexei already replied, BPF is not adding new stable APIs,
-only kfuncs. The reason being that once it's marked as stable, you
-can't really remove it, even if you think it's badly designed and
-useless.
+> 
+>>> - We may be able to store the dma_addr of the ppiov in page->dma_addr,
+>>> but I'm unsure if that actually works, because the dma_buf dmaddr is
+>>> dma_addr_t (u32 or u64), but page->dma_addr is unsigned long (4 bytes
+>>> I think). But if it works for pages I may be able to make it work for
+>>> ppiov as well.
+>>>
+>>> - Checks that obtain the page->pp can work with ppiov if we align the
+>>> offset of page->pp and ppiov->pp.
+>>>
+>>> - Checks around page->pp_magic can be removed if we also have offset
+>>> aligned ppiov->pp_magic.
+>>>
+>>> Sadly I don't see us removing the checking for these other cases:
+>>>
+>>> - page_is_pfmemalloc(): I'm not allowed to pass a non-struct page into
+>>> that helper.
+>>
+>> We can do similar trick like above as bit 1 of page->pp_magic is used to
+>> indicate that if it is a pfmemalloc page.
+>>
+> 
+> Likely yes.
+> 
+>>>
+>>> - page_to_nid(): I'm not allowed to pass a non-struct page into that helper.
+>>
+>> Yes, this one need special case.
+>>
+>>>
+>>> - page_pool_free_va(): ppiov have no va.
+>>
+>> Doesn't the skb_frags_readable() checking will protect the page_pool_free_va()
+>> from being called on devmem?
+>>
+> 
+> This function seems to be only called from veth which doesn't support
+> devmem. I can remove the handling there.
+> 
+>>>
+>>> - page_pool_sync_for_dev/page_pool_dma_map: ppiov backed by dma-buf
+>>> fundamentally can't get mapped again.
+>>
+>> Can we just fail the page_pool creation with PP_FLAG_DMA_MAP and
+>> DMA_ATTR_SKIP_CPU_SYNC flags for devmem provider?
+>>
+> 
+> Jakub says PP_FLAG_DMA_MAP must be enabled for devmem, such that the
+> page_pool handles the dma mapping of the devmem and the driver doesn't
+> use it on its own.
 
-Kfuncs, OTOH are "unstable" by default meaning that the constraints
-around it are more relaxed.
-
-However, "unstable" doesn't mean "unusable". It just means that the
-kernel might or might not have the function when you load your program
-in userspace. So you have to take that fact into account from day one,
-both from the kernel side and the userspace side. The kernel docs have
-a nice paragraph explaining that situation and makes the distinction
-between relatively unused kfuncs, and well known established ones.
-
-Regarding the systemd discussion you are mentioning ([2]), this is
-something that I have on my plate for a long time. I think I even
-mentioned it to Alexei at Kernel Recipes this year, and he frowned his
-eyebrows when I mentioned it. And looking at the systemd code and the
-benefits over a plain ioctl, it is clearer that in that case, a plain
-ioctl is better, mostly because we already know the API and the
-semantic.
-
-A kfunc would be interesting in cases where you are not sure about the
-overall design, and so you can give a shot at various API solutions
-without having to keep your bad v1 design forever.
-
->
-> So now I'm wondering how I should use BPF kfuncs from userspace apps if
-> I add them. In the systemd discussion, it is told that Linus said it's
-> fine to use BPF kfuncs in a private infrastructure big companies own, or
-> in systemd as those users know well about the system[3]. Indeed, those
-> users should be able to make more assumptions on the kernel than
-> "normal" userspace applications can.
->
-> Returning to my proposal, I'm proposing a new feature to be used by QEMU
-> or other VMM applications. QEMU is more like a normal userspace
-> application, and usually does not make much assumptions on the kernel it
-> runs on. For example, it's generally safe to run a Debian container
-> including QEMU installed with apt on Fedora. BPF kfuncs may work even in
-> such a situation thanks to CO-RE, but it sounds like *accidentally*
-> creating UAPIs.
->
-> Considering all above, how can I integrate BPF kfuncs to the application?
-
-FWIW, I'm not sure you can rely on BPF calls from a container. There
-is a high chance the syscall gets disabled by the runtime.
-
->
-> If BPF kfuncs are like EXPORT_SYMBOL_GPL, the natural way to handle them
-> is to think of BPF programs as some sort of kernel modules and
-> incorporate logic that behaves like modprobe. More concretely, I can put
-> eBPF binaries to a directory like:
-> /usr/local/share/qemu/ebpf/$KERNEL_RELEASE
-
-I would advise against that (one program per kernel release). Simply
-because your kfunc may or may not have been backported to kernel
-release v6.X.Y+1 while it was not there when v6.X.Y was out. So
-relying on the kernel number is just going to be a headache.
-
-As I understand it, the way forward is to rely on the kernel, libbpf
-and CO-RE: if the function is not available, the program will simply
-not load, and you'll know that this version of the code is not
-available (or has changed API).
-
-So what I would do if some kfunc API is becoming deprecated, is
-embedding both code paths in the same BPF unit, but marking them as
-not loaded by libppf. Then I can load the compilation unit, try v2 of
-the API, and if it's not available, try v1, and if not, then mention
-that I can not rely on BPF. Of course, this can also be done with
-separate compilation units.
-
->
-> Then, QEMU can uname() and get the path to the binary. It will give an
-> error if it can't find the binary for the current kernel so that it
-> won't create accidental UAPIs.
->
-> The obvious downside of this is that it complicates packaging a lot; it
-> requires packaging QEMU eBPF binaries each time a new kernel comes up.
-> This complexity is centrally managed by modprobe for kernel modules, but
-> apparently each application needs to take care of it for BPF programs.
-
-For my primary use case: HID-BPF, I put kfuncs in kernel v6.3 and
-given that I haven't touch this part of the API, the same compilation
-unit compiled in the v6.3 era still works on a v6.7-rcx, so no, IMO
-it's not complex and doesn't require to follow the kernel releases
-(which is the whole point of HID-BPF FWIW).
-
->
-> In conclusion, I see too much complexity to use BPF in a userspace
-> application, which we didn't have to care for
-> BPF_PROG_TYPE_SOCKET_FILTER. Isn't there a better way? Or shouldn't I
-> use BPF in my case in the first place?
-
-Given that I'm not a network person, I'm not sure about your use case,
-but I would make my decision based on:
-- do I know exactly what I want to achieve and I'm confident that I'll
-write the proper kernel API from day one? (if not then kfuncs is
-appealing because  it's less workload in the long run, but userspace
-needs to be slightly smarter)
-- are all of my use cases covered by using BPF? (what happens if I run
-QEMU in a container?) -> BPF might or might not be a solution
-
-But the nice thing about using BPF kfuncs is that it allows you to
-have a testing (not-)UAPI kernel interface. You can then implement the
-userspace changes and see how it behaves. And then, once you got the
-right design, you can decide to promote it to a proper syscall or
-ioctl if you want.
-
-Cheers,
-Benjamin
-
->
-> Thanks,
-> Akihiko Odaki
->
-> [1]
-> https://lore.kernel.org/all/20231015141644.260646-1-akihiko.odaki@daynix.=
-com/
-> [2] https://github.com/systemd/systemd/pull/29797
-> [3] https://github.com/systemd/systemd/pull/29797#discussion_r1384637939
->
-
-[4] https://docs.google.com/spreadsheets/d/1LfrDXZ9-fdhvPEp_LHkxAMYyxxpwBXj=
-ywWa0AejEveU
-
+I am not sure what benefit does it bring by enabling the DMA_MAP for devmem,
+as devmem seems to call dma_buf_map_attachment() in netdev_bind_dmabuf(), it
+does not really need enabling PP_FLAG_DMA_MAP to get the dma addr for the
+devmem chunk.
 
