@@ -1,347 +1,232 @@
-Return-Path: <linux-kselftest+bounces-1718-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1719-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8022A80F73C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 20:53:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 968A080F777
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 21:06:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 36011282004
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 19:53:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4121A1F212C4
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 20:06:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34DA963599;
-	Tue, 12 Dec 2023 19:52:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77E0752771;
+	Tue, 12 Dec 2023 20:06:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="IL928oPD";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="uJVvU2Hl"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="CLXCERSK"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E656D9A;
-	Tue, 12 Dec 2023 11:52:51 -0800 (PST)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-	by mailnew.west.internal (Postfix) with ESMTP id 3F6FA2B001D4;
-	Tue, 12 Dec 2023 14:52:47 -0500 (EST)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Tue, 12 Dec 2023 14:52:49 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1702410766;
-	 x=1702417966; bh=PWR2ya5pGiPVyjegzqtZ+4qYDOLJjkmxivRf/6mGesQ=; b=
-	IL928oPDrSAYbSUNTSiE9NxEDVeMdmmFFMcofmugw5LAZUgWMFm3dzW2ENQhf29G
-	jrhQw7rWZZf+ASWbGPieceLvbgc27OJvgf6p/z6AKhKWX82M0LO4acU1r4nAkRnT
-	CBEFAV6K+FGEIRexMY2tHVMWPu+9aupieB5BZm/u1NGByyvS4Vjyn9klcu5qmALj
-	opAEBGmgzldrObROMNGUWfAba0bACO/hum6K4LP51zr92oNAYMgrDbyhncH5u1+6
-	rlDBLZk00rCqvBKK4BxnDxfOSckRADRG1VQaBf0Jv1Dt4H+EFhItKkgnsDmC6FLn
-	iEJ4jCw++suOu6A67x7Dcg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1702410766; x=
-	1702417966; bh=PWR2ya5pGiPVyjegzqtZ+4qYDOLJjkmxivRf/6mGesQ=; b=u
-	JVvU2Hl07to+U2Yuz+OO8LScs/KD86ueEmDYkMdklLweASdRwUySivIZPppV8Fmj
-	AznjbmV4vo6cAtdRezplsIqFygb43n3lCVWyQVrVysMt9IS5XGBj2T0v3emaRTWc
-	nrKo9rXBn1vIPKi6sHfbH+OkKcoyMLa/5aVm5qEhBPjznuGqsOWkyzZXb1m57DOz
-	+G7uEAgWDYTw3W/jXvTH7eIBNeRP8Ugvr8AoRlso0CJZOyPZoHRt5yl1bT1bhQAp
-	DPmiqZ5BrZXb/E+wSmfZL5VOjR7Rsap/28CLN1CQJgQuDyBbJ9TjTitpcRnecLwR
-	+eJjGRvka7P5YvRC/QJ9Q==
-X-ME-Sender: <xms:Drp4ZcxAeV7xwT7DcKPrAGSjhrDI9h-k7TtdcgQwoxYlxzL_HlrgNQ>
-    <xme:Drp4ZQT73RXm7dCD7qdUWT1zlf_HqjtZunCvWHaRtq7FW3ixUuWS5481NqTuGswW-
-    ALKVcb3JMUDPnIZfg>
-X-ME-Received: <xmr:Drp4ZeXQGZbIoF7cZ9mHvPqYVGeSui__57TcUsq19Yltojzj3fhS_DGhm7eoO3_iwnlpOna7_xBJTCLmZwEThrbU-wzflkuAVvPa>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudelgedguddvjecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enfghrlhcuvffnffculdefhedmnecujfgurhepfffhvfevuffkfhggtggugfgjsehtkefs
-    tddttdejnecuhfhrohhmpeffrghnihgvlhcuighuuceougiguhesugiguhhuuhdrgiihii
-    eqnecuggftrfgrthhtvghrnheptdfgueeuueekieekgfeiueekffelteekkeekgeegffev
-    tddvjeeuheeuueelfeetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
-    hilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
-X-ME-Proxy: <xmx:Drp4Zagbq4jmav-kGsN7OxrOoavejutk39dkGmBVnzQ3whTU4NtIBg>
-    <xmx:Drp4ZeB611bMkmZcsRqdBEgTkqLgdtmVcHz_SmUabUjrRoOygdxfhQ>
-    <xmx:Drp4ZbIti5nu9uwcrxFlYK-I7cC1Bpq8Vg0CKMWeIwh4TU4v2ZiZqA>
-    <xmx:Drp4ZZaVSZXwP31ZtFowTJoC1shUbjnmn_mw4g_1H3JM_uWGA6AdbeEpLwg>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 12 Dec 2023 14:52:44 -0500 (EST)
-Date: Tue, 12 Dec 2023 12:52:43 -0700
-From: Daniel Xu <dxu@dxuuu.xyz>
-To: Eyal Birger <eyal.birger@gmail.com>
-Cc: daniel@iogearbox.net, davem@davemloft.net, shuah@kernel.org, 
-	ast@kernel.org, john.fastabend@gmail.com, kuba@kernel.org, andrii@kernel.org, 
-	hawk@kernel.org, steffen.klassert@secunet.com, antony.antony@secunet.com, 
-	alexei.starovoitov@gmail.com, yonghong.song@linux.dev, eddyz87@gmail.com, mykolal@fb.com, 
-	martin.lau@linux.dev, song@kernel.org, kpsingh@kernel.org, sdf@google.com, 
-	haoluo@google.com, jolsa@kernel.org, bpf@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
-	devel@linux-ipsec.org, memxor@gmail.com
-Subject: Re: [PATCH bpf-next v5 9/9] bpf: xfrm: Add selftest for
- bpf_xdp_get_xfrm_state()
-Message-ID: <fecc7tpmbnqxuxqqolm44ggyeomcr3piabsjkv3pgyzlhyonq6@iiaxf34erjzq>
-References: <cover.1702325874.git.dxu@dxuuu.xyz>
- <8ec1b885d2e13fcd20944cce9edc0340d993d044.1702325874.git.dxu@dxuuu.xyz>
- <CAHsH6GsdqBN638uqUm+8QkP1_45coucSTL7o=D2wFW-gYjPaBw@mail.gmail.com>
- <7yjkfhrwdphtcljq3odv4jc6lucd32wcg277hfsf4ve2jbo7hp@vuqzwbq5nxjw>
- <CAHsH6Gs1vUQnhR_a4qFnAF37Vx=68Do28sfVfFxQ9pVj9jSzjw@mail.gmail.com>
- <qiv464c4y43mo5rih5k6lgzkbpnj6wsrl52hrhgbxeqj45atun@szmqlmnccm52>
- <CAHsH6Gujycb9RBuRk7QHorLe0Q=Np_tb3uboQfp9KmJnegVXvw@mail.gmail.com>
- <fwadmdjjogp4ybfxfpwovnmnn36jigffopijsuqt4ly4vxqghm@ysqhd25mzylp>
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2070.outbound.protection.outlook.com [40.107.244.70])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5536D2;
+	Tue, 12 Dec 2023 12:06:12 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=PwCEkNqsvWO0NTO7T1SltoFb6wRbj1BTv4/MQMol/MFUb8FdGLkKyGFU+HM97PcJfLI1o2h+Tq7xMtGg3FuzhFDlbn2nhEf9g3fbqpJG6bFSiIEzHWJew2pLchXE+hnG4Ej9ylJc2Be/xlUZzGRGsZyp3T3P0IM/bJzC8T1Tkh8pWviTSMKBOa/ZS37SJHdcJG/vbqj20wC5sBtF6PGxgSOFXxYlZ92YXw56af+X4S1daQjVWp7FoGOM8R84QjujfFoiwE+BSYp/EcZIhRON5yBbI0WrYslQ7DPB/7RbuIimugmf1+DpA8lzTpf/kNsquOhCDJEniTAXeXjuqYXGJw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vYmLzQ/rFCr32uNmxfEMFI3JkjhpmAP0pNDS/HmmVaE=;
+ b=eHNpIQravmLRFzXadES43W9MiDIxVhnOKZRf30zG+rR9g1fV26vkg72bRfJxyDEH0HBuJxppVYkLHgduBYq1qx2NlaVuXJlrcU65XMkPsgGf8AEUp0l7M7OuDOk6DRadGuFEiTVNIpi7gJMpMWBi1Gx6qGaZ/xJCsEFt5KKAOTQ05pKtyuH+/5b4ErVK1cnyZd1RPUSfzuNNrQY3Vxa3CimjdRkI8hIrmBJWh73L3DvLaQ/bi1jrQJvms1NIyglPPMO1jVnGI+Y05wpIWZyaUYc5GIbMPFNfRgmkllqd3d5Kn954qDcCLzUNbif1BZ820c5kHtsp+j5IOlBrMlLgyA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=oracle.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vYmLzQ/rFCr32uNmxfEMFI3JkjhpmAP0pNDS/HmmVaE=;
+ b=CLXCERSKGosRI/BLUvlMzzascsN6nCPytnmEGa7fnQhC3qM1M7ACergBFkOPJzYof5+Ct2+76LAFXWtI73lW6ZU+dZr7irnO9hLaTTrL8Crko5tLRj8OQheBHcfOR+ZaYIzPvyL2qRqe41oR+b6P+X4jnMvTTuEOE+lE+TFUQtX1aaBAGfE4cfiWvyHYseWiP2sXV9VuYupY4nAYIxj3YNqcUJ59ZLGZi1ShA6k64Ad5WZFMW3JJPTNNvOAVY7ktkcnf2ml9XAEaw5EiSezEv9Lebb06R+B2nWEButycdYV9+3du6t7Wjb6dikoH3afI7ORV2kHyo1ERcYXGUnWcyA==
+Received: from MW4PR03CA0226.namprd03.prod.outlook.com (2603:10b6:303:b9::21)
+ by SJ1PR12MB6267.namprd12.prod.outlook.com (2603:10b6:a03:456::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7068.32; Tue, 12 Dec
+ 2023 20:06:07 +0000
+Received: from MWH0EPF000971E6.namprd02.prod.outlook.com
+ (2603:10b6:303:b9:cafe::21) by MW4PR03CA0226.outlook.office365.com
+ (2603:10b6:303:b9::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7068.33 via Frontend
+ Transport; Tue, 12 Dec 2023 20:06:06 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ MWH0EPF000971E6.mail.protection.outlook.com (10.167.243.74) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7091.26 via Frontend Transport; Tue, 12 Dec 2023 20:06:06 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 12 Dec
+ 2023 12:05:44 -0800
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by rnnvmail203.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 12 Dec
+ 2023 12:05:44 -0800
+Received: from Asurada-Nvidia (10.127.8.9) by mail.nvidia.com (10.129.68.7)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41 via Frontend
+ Transport; Tue, 12 Dec 2023 12:05:42 -0800
+Date: Tue, 12 Dec 2023 12:05:41 -0800
+From: Nicolin Chen <nicolinc@nvidia.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+CC: Yi Liu <yi.l.liu@intel.com>, "Giani, Dhaval" <Dhaval.Giani@amd.com>,
+	Vasant Hegde <vasant.hegde@amd.com>, Suravee Suthikulpanit
+	<suravee.suthikulpanit@amd.com>, <joro@8bytes.org>,
+	<alex.williamson@redhat.com>, <kevin.tian@intel.com>, <robin.murphy@arm.com>,
+	<baolu.lu@linux.intel.com>, <cohuck@redhat.com>, <eric.auger@redhat.com>,
+	<kvm@vger.kernel.org>, <mjrosato@linux.ibm.com>,
+	<chao.p.peng@linux.intel.com>, <yi.y.sun@linux.intel.com>,
+	<peterx@redhat.com>, <jasowang@redhat.com>,
+	<shameerali.kolothum.thodi@huawei.com>, <lulu@redhat.com>,
+	<iommu@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <zhenzhong.duan@intel.com>,
+	<joao.m.martins@oracle.com>, <xin.zeng@intel.com>, <yan.y.zhao@intel.com>
+Subject: Re: [PATCH v6 0/6] iommufd: Add nesting infrastructure (part 2/2)
+Message-ID: <ZXi9FaPSkHkCm679@Asurada-Nvidia>
+References: <20231117130717.19875-1-yi.l.liu@intel.com>
+ <20231209014726.GA2945299@nvidia.com>
+ <ZXd+1UVrcAQePjnD@Asurada-Nvidia>
+ <20231211215738.GB3014157@nvidia.com>
+ <ZXgL+GCGPgH+hlXo@Asurada-Nvidia>
+ <20231212144421.GH3014157@nvidia.com>
+ <ZXiw4XK/1+ZdsFV1@Asurada-Nvidia>
+ <20231212192100.GP3014157@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <fwadmdjjogp4ybfxfpwovnmnn36jigffopijsuqt4ly4vxqghm@ysqhd25mzylp>
+In-Reply-To: <20231212192100.GP3014157@nvidia.com>
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MWH0EPF000971E6:EE_|SJ1PR12MB6267:EE_
+X-MS-Office365-Filtering-Correlation-Id: cc82d36a-c9df-452f-b3d5-08dbfb4dc6b8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	t6QxDy+zjupoL7UWiD3n/UTT08lLeiurm6D7bQKEfJAxzTgzBgHdrRnZmTyP5yuHCY+PqFr6U76mYXYKbwOcrzhtcGWEAxKknbUJCaZBNK2wds2M0FAk4greLGsomz2/h6RUgFrOlUyZlktq2Up9mln2XIQ2LPxnQfQtJ89BFd6rQkUbx26Pjy7WRu1meY8uGVTHXimKSx+ggD1tH1YjY3NsIwmhtCK37nZXTpsEjAr1lSw4l3jAN+ROI1Tvl5XJA2KBLzmwQ/fihDJv83u+2nTrh3WvlH+RBdvBRrwz4paHTz50tx7wj85X7m1JXNuNu9lqHwuME/Q6Vw3Q5et+SN+rZEGX1I/22z9DV2Uo07rQQmkSL7Fucx5+UTrA99ckhrDOBijS5Fqot6Ej6rnXJDxCGD5LuMWiNv+aCg7mIiBxm2ejF1I6D1irmYq9epPxujZtaFh8NcibsP9Rsvq2dWzSAWl9V16lqiVdorjTf8HKKqtnPLS8QuC1eNIf//RAoNM7Tpja80AERYyQhbyYI4YQiTe7aqURSpPKB/SJvASZOPyl9nOB7pcO5ludVYG9JmpY6q7I/uFwSpwG5GKsULMvfJDLLoMf2fhHM5nMX/wv/5cFbg0tsix1Evr3eRDpJUnCFZwErcqIuFLZk1lV+3/kkg/OeGEQP8p3lNrxZwqxe94/ZfgGALFqv08cgKxqGS3WxNgxF3bQ0PaXjVange/RsCQ1hYCbnh0PyjSkPvS9UyGagl+ksCAqMXWe5qcd
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230031)(4636009)(346002)(376002)(39860400002)(136003)(396003)(230922051799003)(1800799012)(186009)(451199024)(64100799003)(82310400011)(36840700001)(40470700004)(46966006)(40460700003)(2906002)(7416002)(33716001)(41300700001)(36860700001)(86362001)(82740400003)(9686003)(356005)(336012)(426003)(26005)(83380400001)(47076005)(478600001)(54906003)(6862004)(4326008)(5660300002)(6636002)(316002)(70586007)(8936002)(70206006)(7636003)(8676002)(55016003)(40480700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Dec 2023 20:06:06.6697
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: cc82d36a-c9df-452f-b3d5-08dbfb4dc6b8
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	MWH0EPF000971E6.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR12MB6267
 
-cc Kumar
-
-On Tue, Dec 12, 2023 at 09:17:02AM -0700, Daniel Xu wrote:
-> On Mon, Dec 11, 2023 at 04:25:06PM -0800, Eyal Birger wrote:
-> > On Mon, Dec 11, 2023 at 3:49 PM Daniel Xu <dxu@dxuuu.xyz> wrote:
-> > >
-> > > On Mon, Dec 11, 2023 at 03:13:07PM -0800, Eyal Birger wrote:
-> > > > On Mon, Dec 11, 2023 at 2:31 PM Daniel Xu <dxu@dxuuu.xyz> wrote:
-> > > > >
-> > > > > On Mon, Dec 11, 2023 at 01:39:25PM -0800, Eyal Birger wrote:
-> > > > > > Hi Daniel,
-> > > > > >
-> > > > > > Tiny nits below in case you respin this for other reasons:
-> > > > > >
-> > > > > > On Mon, Dec 11, 2023 at 12:20 PM Daniel Xu <dxu@dxuuu.xyz> wrote:
-> > > > > > >
-> > > > > > > This commit extends test_tunnel selftest to test the new XDP xfrm state
-> > > > > > > lookup kfunc.
-> > > > > > >
-> > > > > > > Co-developed-by: Antony Antony <antony.antony@secunet.com>
-> > > > > > > Signed-off-by: Antony Antony <antony.antony@secunet.com>
-> > > > > > > Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
-> > > > > > > ---
-> > > > > > >  .../selftests/bpf/prog_tests/test_tunnel.c    | 20 ++++++--
-> > > > > > >  .../selftests/bpf/progs/test_tunnel_kern.c    | 51 +++++++++++++++++++
-> > > > > > >  2 files changed, 67 insertions(+), 4 deletions(-)
-> > > > > > >
-> > > > > > > diff --git a/tools/testing/selftests/bpf/prog_tests/test_tunnel.c b/tools/testing/selftests/bpf/prog_tests/test_tunnel.c
-> > > > > > > index 2d7f8fa82ebd..fc804095d578 100644
-> > > > > > > --- a/tools/testing/selftests/bpf/prog_tests/test_tunnel.c
-> > > > > > > +++ b/tools/testing/selftests/bpf/prog_tests/test_tunnel.c
-> > > > > > > @@ -278,7 +278,7 @@ static int add_xfrm_tunnel(void)
-> > > > > > >         SYS(fail,
-> > > > > > >             "ip netns exec at_ns0 "
-> > > > > > >                 "ip xfrm state add src %s dst %s proto esp "
-> > > > > > > -                       "spi %d reqid 1 mode tunnel "
-> > > > > > > +                       "spi %d reqid 1 mode tunnel replay-window 42 "
-> > > > > > >                         "auth-trunc 'hmac(sha1)' %s 96 enc 'cbc(aes)' %s",
-> > > > > > >             IP4_ADDR_VETH0, IP4_ADDR1_VETH1, XFRM_SPI_IN_TO_OUT, XFRM_AUTH, XFRM_ENC);
-> > > > > > >         SYS(fail,
-> > > > > > > @@ -292,7 +292,7 @@ static int add_xfrm_tunnel(void)
-> > > > > > >         SYS(fail,
-> > > > > > >             "ip netns exec at_ns0 "
-> > > > > > >                 "ip xfrm state add src %s dst %s proto esp "
-> > > > > > > -                       "spi %d reqid 2 mode tunnel "
-> > > > > > > +                       "spi %d reqid 2 mode tunnel replay-window 42 "
-> > > > > >
-> > > > > > nit: why do you need to set the replay-window in both directions?
-> > > > >
-> > > > > No reason - probably just careless here.
-> > > > >
-> > > > > >
-> > > > > > >                         "auth-trunc 'hmac(sha1)' %s 96 enc 'cbc(aes)' %s",
-> > > > > > >             IP4_ADDR1_VETH1, IP4_ADDR_VETH0, XFRM_SPI_OUT_TO_IN, XFRM_AUTH, XFRM_ENC);
-> > > > > > >         SYS(fail,
-> > > > > > > @@ -313,7 +313,7 @@ static int add_xfrm_tunnel(void)
-> > > > > > >          */
-> > > > > > >         SYS(fail,
-> > > > > > >             "ip xfrm state add src %s dst %s proto esp "
-> > > > > > > -                   "spi %d reqid 1 mode tunnel "
-> > > > > > > +                   "spi %d reqid 1 mode tunnel replay-window 42 "
-> > > > > > >                     "auth-trunc 'hmac(sha1)' %s 96  enc 'cbc(aes)' %s",
-> > > > > > >             IP4_ADDR_VETH0, IP4_ADDR1_VETH1, XFRM_SPI_IN_TO_OUT, XFRM_AUTH, XFRM_ENC);
-> > > > > > >         SYS(fail,
-> > > > > > > @@ -325,7 +325,7 @@ static int add_xfrm_tunnel(void)
-> > > > > > >         /* root -> at_ns0 */
-> > > > > > >         SYS(fail,
-> > > > > > >             "ip xfrm state add src %s dst %s proto esp "
-> > > > > > > -                   "spi %d reqid 2 mode tunnel "
-> > > > > > > +                   "spi %d reqid 2 mode tunnel replay-window 42 "
-> > > > > > >                     "auth-trunc 'hmac(sha1)' %s 96  enc 'cbc(aes)' %s",
-> > > > > > >             IP4_ADDR1_VETH1, IP4_ADDR_VETH0, XFRM_SPI_OUT_TO_IN, XFRM_AUTH, XFRM_ENC);
-> > > > > > >         SYS(fail,
-> > > > > > > @@ -628,8 +628,10 @@ static void test_xfrm_tunnel(void)
-> > > > > > >  {
-> > > > > > >         DECLARE_LIBBPF_OPTS(bpf_tc_hook, tc_hook,
-> > > > > > >                             .attach_point = BPF_TC_INGRESS);
-> > > > > > > +       LIBBPF_OPTS(bpf_xdp_attach_opts, opts);
-> > > > > > >         struct test_tunnel_kern *skel = NULL;
-> > > > > > >         struct nstoken *nstoken;
-> > > > > > > +       int xdp_prog_fd;
-> > > > > > >         int tc_prog_fd;
-> > > > > > >         int ifindex;
-> > > > > > >         int err;
-> > > > > > > @@ -654,6 +656,14 @@ static void test_xfrm_tunnel(void)
-> > > > > > >         if (attach_tc_prog(&tc_hook, tc_prog_fd, -1))
-> > > > > > >                 goto done;
-> > > > > > >
-> > > > > > > +       /* attach xdp prog to tunnel dev */
-> > > > > > > +       xdp_prog_fd = bpf_program__fd(skel->progs.xfrm_get_state_xdp);
-> > > > > > > +       if (!ASSERT_GE(xdp_prog_fd, 0, "bpf_program__fd"))
-> > > > > > > +               goto done;
-> > > > > > > +       err = bpf_xdp_attach(ifindex, xdp_prog_fd, XDP_FLAGS_REPLACE, &opts);
-> > > > > > > +       if (!ASSERT_OK(err, "bpf_xdp_attach"))
-> > > > > > > +               goto done;
-> > > > > > > +
-> > > > > > >         /* ping from at_ns0 namespace test */
-> > > > > > >         nstoken = open_netns("at_ns0");
-> > > > > > >         err = test_ping(AF_INET, IP4_ADDR_TUNL_DEV1);
-> > > > > > > @@ -667,6 +677,8 @@ static void test_xfrm_tunnel(void)
-> > > > > > >                 goto done;
-> > > > > > >         if (!ASSERT_EQ(skel->bss->xfrm_remote_ip, 0xac100164, "remote_ip"))
-> > > > > > >                 goto done;
-> > > > > > > +       if (!ASSERT_EQ(skel->bss->xfrm_replay_window, 42, "replay_window"))
-> > > > > > > +               goto done;
-> > > > > > >
-> > > > > > >  done:
-> > > > > > >         delete_xfrm_tunnel();
-> > > > > > > diff --git a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-> > > > > > > index 3a59eb9c34de..c0dd38616562 100644
-> > > > > > > --- a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-> > > > > > > +++ b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-> > > > > > > @@ -30,6 +30,10 @@ int bpf_skb_set_fou_encap(struct __sk_buff *skb_ctx,
-> > > > > > >                           struct bpf_fou_encap *encap, int type) __ksym;
-> > > > > > >  int bpf_skb_get_fou_encap(struct __sk_buff *skb_ctx,
-> > > > > > >                           struct bpf_fou_encap *encap) __ksym;
-> > > > > > > +struct xfrm_state *
-> > > > > > > +bpf_xdp_get_xfrm_state(struct xdp_md *ctx, struct bpf_xfrm_state_opts *opts,
-> > > > > > > +                      u32 opts__sz) __ksym;
-> > > > > > > +void bpf_xdp_xfrm_state_release(struct xfrm_state *x) __ksym;
-> > > > > > >
-> > > > > > >  struct {
-> > > > > > >         __uint(type, BPF_MAP_TYPE_ARRAY);
-> > > > > > > @@ -950,4 +954,51 @@ int xfrm_get_state(struct __sk_buff *skb)
-> > > > > > >         return TC_ACT_OK;
-> > > > > > >  }
-> > > > > > >
-> > > > > > > +volatile int xfrm_replay_window = 0;
-> > > > > > > +
-> > > > > > > +SEC("xdp")
-> > > > > > > +int xfrm_get_state_xdp(struct xdp_md *xdp)
-> > > > > > > +{
-> > > > > > > +       struct bpf_xfrm_state_opts opts = {};
-> > > > > > > +       struct xfrm_state *x = NULL;
-> > > > > > > +       struct ip_esp_hdr *esph;
-> > > > > > > +       struct bpf_dynptr ptr;
-> > > > > > > +       u8 esph_buf[8] = {};
-> > > > > > > +       u8 iph_buf[20] = {};
-> > > > > > > +       struct iphdr *iph;
-> > > > > > > +       u32 off;
-> > > > > > > +
-> > > > > > > +       if (bpf_dynptr_from_xdp(xdp, 0, &ptr))
-> > > > > > > +               goto out;
-> > > > > > > +
-> > > > > > > +       off = sizeof(struct ethhdr);
-> > > > > > > +       iph = bpf_dynptr_slice(&ptr, off, iph_buf, sizeof(iph_buf));
-> > > > > > > +       if (!iph || iph->protocol != IPPROTO_ESP)
-> > > > > > > +               goto out;
-> > > > > > > +
-> > > > > > > +       off += sizeof(struct iphdr);
-> > > > > > > +       esph = bpf_dynptr_slice(&ptr, off, esph_buf, sizeof(esph_buf));
-> > > > > > > +       if (!esph)
-> > > > > > > +               goto out;
-> > > > > > > +
-> > > > > > > +       opts.netns_id = BPF_F_CURRENT_NETNS;
-> > > > > > > +       opts.daddr.a4 = iph->daddr;
-> > > > > > > +       opts.spi = esph->spi;
-> > > > > > > +       opts.proto = IPPROTO_ESP;
-> > > > > > > +       opts.family = AF_INET;
-> > > > > > > +
-> > > > > > > +       x = bpf_xdp_get_xfrm_state(xdp, &opts, sizeof(opts));
-> > > > > > > +       if (!x || opts.error)
-> > > > > >
-> > > > > > nit: how can opts.error be non zero if x == NULL?
-> > > > >
-> > > > > Ignoring the new -ENOENT case, it can't. Which is why I'm testing that
-> > > > > behavior here.
-> > > >
-> > > > I'm sorry, I don't understand.
-> > > >
-> > > > AFAICT, regardless of the -ENOENT change, I don't see
-> > > > how (!x) is false and (opt.error) is true, and so
-> > > > "if (!x || opts.error)" is always equivalent to "if (!x)".
-> > > >
-> > > > What am I missing?
-> > > > Eyal.
-> > >
-> > > The selftests are tests so my intention was to check edge cases here.
-> > > In normal operation it shouldn't be possible that
-> > > bpf_xdp_get_xfrm_state() returns non-NULL and also an error. Maybe
-> > > another way of writing this would be:
-> > >
-> > >         if (!x)
-> > >                 goto out;
-> > >         assert(opts.error == 0);
+On Tue, Dec 12, 2023 at 03:21:00PM -0400, Jason Gunthorpe wrote:
+> On Tue, Dec 12, 2023 at 11:13:37AM -0800, Nicolin Chen wrote:
+> > On Tue, Dec 12, 2023 at 10:44:21AM -0400, Jason Gunthorpe wrote:
+> > > On Mon, Dec 11, 2023 at 11:30:00PM -0800, Nicolin Chen wrote:
+> > > 
+> > > > > > Could the structure just look like this?
+> > > > > > struct iommu_dev_assign_virtual_id {
+> > > > > >        __u32 size;
+> > > > > >        __u32 dev_id;
+> > > > > >        __u32 id_type;
+> > > > > >        __u32 id;
+> > > > > > };
+> > > > > 
+> > > > > It needs to take in the viommu_id also, and I'd make the id 64 bits
+> > > > > just for good luck.
+> > > > 
+> > > > What is viommu_id required for in this context? I thought we
+> > > > already know which SMMU instance to issue commands via dev_id?
+> > > 
+> > > The viommu_id would be the container that holds the xarray that maps
+> > > the vRID to pRID
+> > > 
+> > > Logically we could have multiple mappings per iommufd as we could have
+> > > multiple iommu instances working here.
 > > 
-> > I think this would convey the "edge case testing" notion better.
-> > 
-> > >
-> > > If I'm trying to be too clever (or maybe just wrong) or it's pointless,
-> > > I can remove the `opts.error` condition.
-> > 
-> > At least for me the tests also serve as references as to how the
-> > API is expected to be used, so I think it'd be clearer without
-> > signaling that opts.error could potentially be nonzero on success.
-> > 
-> > An assertion would indeed make that clear.
+> > I see. This is the object to hold a shared stage-2 HWPT/domain then.
 > 
-> Sure, sounds good. I will check on the new bpf assert infra.
+> It could be done like that, yes. I wasn't thinking about linking the
+> stage two so tightly but perhaps? If we can avoid putting the hwpt
+> here that might be more general.
+> 
+> > // iommufd_private.h
+> > 
+> > enum iommufd_object_type {
+> > 	...
+> > +	IOMMUFD_OBJ_VIOMMU,
+> > 	...
+> > };
+> > 
+> > +struct iommufd_viommu {
+> > +	struct iommufd_object obj;
+> > +	struct iommufd_hwpt_paging *hwpt;
+> > +	struct xarray devices;
+> > +};
+> > 
+> > struct iommufd_hwpt_paging hwpt {
+> > 	...
+> > +	struct list_head viommu_list;
+> > 	...
+> > };
+> 
+> I'd probably first try to go backwards and link the hwpt to the
+> viommu.
 
-Couldn't quite get bpf_assert() working. The following diff:
+I think a VM should have only one hwpt_paging object while one
+or more viommu objects, so we could do only viommu->hwpt_paging
+and hwpt_paging->viommu_list. How to go backwards?
 
-diff --git a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-index c0dd38616562..f00dba85ac5d 100644
---- a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-+++ b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
-@@ -8,8 +8,9 @@
-  */
- #include "vmlinux.h"
- #include <bpf/bpf_core_read.h>
--#include <bpf/bpf_helpers.h>
- #include <bpf/bpf_endian.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_experimental.h"
- #include "bpf_kfuncs.h"
- #include "bpf_tracing_net.h"
+> > struct iommufd_group {
+> > 	...
+> > +	struct iommufd_viommu *viommu; // should we attach to viommu instead of hwpt?
+> > 	...
+> > };
+> 
+> No. Attach is a statement of translation so you still attach to the HWPT.
 
-@@ -988,8 +989,9 @@ int xfrm_get_state_xdp(struct xdp_md *xdp)
-        opts.family = AF_INET;
+OK. It's probably not necessary since we know which piommu the
+device is behind. And we only need to link viommu and piommu,
+right?
 
-        x = bpf_xdp_get_xfrm_state(xdp, &opts, sizeof(opts));
--       if (!x || opts.error)
-+       if (!x)
-                goto out;
-+       bpf_assert_with(opts.error == 0, XDP_PASS);
+> > Question to finalize how we maps vRID-pRID in the xarray:
+> > how should IOMMUFD_DEV_INVALIDATE work? The ioctl structure has
+> > a dev_id and a list of commands that belongs to the device. So,
+> > it forwards the struct device pointer to the driver along with
+> > the commands. Then, doesn't the driver already know the pRID 
+> > from the dev pointer without looking up a vRID-pRID table?
+> 
+> The first version of DEV_INVALIDATE should have no xarray. The
+> invalidate commands are stripped of the SID and executed on the given
+> dev_id period. VMM splits up the invalidate command list.
 
-        if (!x->replay_esn)
-                goto out;
+Yes. This makes sense to me. VMM knows which device to issue
+an IOMMUFD_DEV_INVALIDATE from the vSID/vRID in the commands.
 
-results in:
+> The second version maybe we have the xarray, or maybe we just push the
+> xarray to the eventual viommu series.
 
-57: (b7) r1 = 2                       ; R1_w=2 refs=5
-58: (85) call bpf_throw#115436
-calling kernel function bpf_throw is not allowed
+I think that I still don't get the purpose of the xarray here.
+It was needed previously because a cache invalidate per hwpt
+doesn't know which device. Now IOMMUFD_DEV_INVALIDATE knows.
 
-It looks like the above error comes from verifier.c:fetch_kfunc_meta,
-but I can run the exceptions selftests just fine with the same bzImage.
-So I'm thinking it's not a kfunc registration or BTF issue.
+Maybe it's related to that narrative "logically we could have
+multiple mappings per iommufd" that you mentioned above. Mind
+elaborating a bit?
 
-Maybe it's cuz I'm holding onto KFUNC_ACQUIRE'd `x`? Not sure.
+In my mind, viommu is allocated by VMM per piommu, by detecting
+the piommu_id via hw_info. In that case, viommu can only have
+one unique device list. If IOMMUFD_DEV_INVALIDATE passes in the
+dev_id, we don't really need a mapping of vRID-pRID in a multi-
+viommu case either? In another word, VMM already has a mapping
+from vRID to dev_id, so it could call the DEV_INVALIDATE ioctl
+in the first place?
 
-So for now I think I'll drop checking opts.error.
-
-[...]
+Thanks
+Nicolin
 
