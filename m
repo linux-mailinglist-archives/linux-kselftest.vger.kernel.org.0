@@ -1,142 +1,130 @@
-Return-Path: <linux-kselftest+bounces-1673-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1674-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B724E80EDFA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 14:47:57 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E011E80EE79
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 15:12:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 70FD528183C
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 13:47:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 95B7A1F2163C
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 14:12:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CAEE6EB76;
-	Tue, 12 Dec 2023 13:47:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAD9C73175;
+	Tue, 12 Dec 2023 14:12:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="Ma6EWX39"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 277E1A1;
-	Tue, 12 Dec 2023 05:47:48 -0800 (PST)
-Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-6d9db92bd71so769625a34.1;
-        Tue, 12 Dec 2023 05:47:48 -0800 (PST)
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9560D10C
+	for <linux-kselftest@vger.kernel.org>; Tue, 12 Dec 2023 06:12:11 -0800 (PST)
+Received: by mail-qk1-x72b.google.com with SMTP id af79cd13be357-77f8dd477fcso12477685a.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 Dec 2023 06:12:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google; t=1702390330; x=1702995130; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mQ2TiLoD9Gaq6xkoyUSluJ0KHWLQt9mZyTQyaXIVvpI=;
+        b=Ma6EWX39Bj1+T9k0jBia+zrZupD7uZ+MvPqsdYZzuIIsCDzoZlisglAN5yH5/oEK9g
+         a1AAT63J2/G5xRWwi2oo1rppz6IWnTX3OZoTyKWZt++m1ECcRYhwSzlN5MvnZXiLi/rJ
+         l/E7r9Fan781Jhhyr9OVRLLCSF1oORTqZ/bw5C0bAmUzamQdXNNvfwmQHXn63uZr52n8
+         2UobjmltDa40DJ/hOqZTPFxpzzmrugA/7QL5aXuWv9AzO6nJ9M5sRc1i8jnP1ydUQSKR
+         JLaxJ8nyPCqhEe8Of6xlQdlg5KeLG/wfT3+naYeO9P+eC7SxHLMnnstTnJ8iOTbr1c9D
+         U+LA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702388867; x=1702993667;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=C/X6R0HR+xbXGN5qRhO2As3RreYVAwdxii2KLmKVXIM=;
-        b=Rkhj3hXQDzoRFr4vvAVaxTx7RzPnw16rqj8UMh4FHUqntPxjMt6iwQQ6tCgoQktUfm
-         y7rW6YOmn2JXyocc5Y0qUnQ9yJEsI1UbB2K/ytZzlC3ZkBekIc76uxCc7jw/9vdb/Iaw
-         GUgUn3ZxdFuxaJGRZZWaZIlmYJhhXiqjWHARy4edRxo/RPE8QumFJc+HzST3WNMNwaFc
-         vmCkLcfysfxHJs2gYF0e1lBERWPm0yTYnLrkW0343E+cZ5oWUa3cys0Euz2LjjmtbQHH
-         ZwTqq4mctDhFfW+wwQsFROzHEaQnwcul+xpmfo9Vr2TtP4KV/AINzJhqsCue7PeSaqNp
-         PS7Q==
-X-Gm-Message-State: AOJu0YwUIew1EEw7PsdYpO2rGd0AS9b6qmqYOcjXBlhdtdx1Pf8SOUBR
-	EiVeWKYuYUTxr8Wy2ybbC27DIxNUecNSRcD+KyeT7G88
-X-Google-Smtp-Source: AGHT+IEJhakpYW3S8EY4DMqvhznErmMox7oe1ZX5qPrH5Xkhs4aGDo5Bbnh5X9aUH+1+IG1hagao25A13pcgEloq/4s=
-X-Received: by 2002:a05:6870:b028:b0:1fb:e5f:c530 with SMTP id
- y40-20020a056870b02800b001fb0e5fc530mr11532372oae.4.1702388867382; Tue, 12
- Dec 2023 05:47:47 -0800 (PST)
+        d=1e100.net; s=20230601; t=1702390330; x=1702995130;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mQ2TiLoD9Gaq6xkoyUSluJ0KHWLQt9mZyTQyaXIVvpI=;
+        b=T9dkd0mEik781UpgOpBFpRaZzmzUbRZMYp8/G8ESsWzlGrSESp8zlVZ/dmM4bUIh2e
+         r5hswfZCSDWbJA6afgBFHvCyFHdcBOvs7rAelgpA85ZF+469VK4uNwoDK5JyKZqpVmPO
+         4iMOHPEGP4GwnefuUiJSVkkgxgbk7lYf3DXzcKp3edCmjqi7HVItLTcZBBLZLRdi/PP4
+         r73qggMlRk78K3m61H4vp52ByA/xdTr27n7pXK/3SMTZqW9L/Tk7g6fR5uhPSWVDTckT
+         pm0Wgxl3v7PHV5ZSDXDJ5seJsWL2m5VF/1DIejUP0Akls+k3bIpRcWgUDdfYp/2PbN4Z
+         xG4A==
+X-Gm-Message-State: AOJu0Yy7D1jWP0R9emhMBcV8CA7PcQeXyIivbGUTNpxaJD6Z30Gkjh2A
+	Iry6hIWj13Zqx50gFnMvPAa5Lw==
+X-Google-Smtp-Source: AGHT+IGRkRQVaTR68B5qveU70mgfrGlXmlTMF+z308FUs0i5H1yAdurOHwLdhvMF64yVQEAU8ICGfg==
+X-Received: by 2002:ac8:7dc6:0:b0:425:4043:29ff with SMTP id c6-20020ac87dc6000000b00425404329ffmr7750741qte.122.1702390330535;
+        Tue, 12 Dec 2023 06:12:10 -0800 (PST)
+Received: from ziepe.ca (hlfxns017vw-142-134-23-187.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.134.23.187])
+        by smtp.gmail.com with ESMTPSA id t22-20020ac85316000000b0041cb787ff41sm4082934qtn.67.2023.12.12.06.12.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Dec 2023 06:12:09 -0800 (PST)
+Received: from jgg by wakko with local (Exim 4.95)
+	(envelope-from <jgg@ziepe.ca>)
+	id 1rD3UW-00CjJP-VZ;
+	Tue, 12 Dec 2023 10:12:08 -0400
+Date: Tue, 12 Dec 2023 10:12:08 -0400
+From: Jason Gunthorpe <jgg@ziepe.ca>
+To: Joel Granados <j.granados@samsung.com>
+Cc: Lu Baolu <baolu.lu@linux.intel.com>, Kevin Tian <kevin.tian@intel.com>,
+	Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Jean-Philippe Brucker <jean-philippe@linaro.org>,
+	Nicolin Chen <nicolinc@nvidia.com>, Yi Liu <yi.l.liu@intel.com>,
+	Jacob Pan <jacob.jun.pan@linux.intel.com>, iommu@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	virtualization@lists.linux-foundation.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/6] iommufd: Initializing and releasing IO page fault
+ data
+Message-ID: <20231212141208.GA3013885@ziepe.ca>
+References: <20231026024930.382898-1-baolu.lu@linux.intel.com>
+ <20231026024930.382898-4-baolu.lu@linux.intel.com>
+ <CGME20231212131010eucas1p104d069ac6d6c97fce4987caa62c996ee@eucas1p1.samsung.com>
+ <20231212131008.k6s5xwjgolp6geps@localhost>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231205063537.872834-1-li.meng@amd.com> <20231205063537.872834-3-li.meng@amd.com>
-In-Reply-To: <20231205063537.872834-3-li.meng@amd.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 12 Dec 2023 14:47:36 +0100
-Message-ID: <CAJZ5v0ghO8A2co6tK6-kM-1NdjVggM-_26hj+oiv8hTGQGg1mw@mail.gmail.com>
-Subject: Re: [PATCH V12 2/7] acpi: cppc: Add get the highest performance cppc control
-To: Meng Li <li.meng@amd.com>
-Cc: "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, Huang Rui <ray.huang@amd.com>, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org, 
-	linux-acpi@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>, 
-	linux-kselftest@vger.kernel.org, Nathan Fontenot <nathan.fontenot@amd.com>, 
-	Deepak Sharma <deepak.sharma@amd.com>, Alex Deucher <alexander.deucher@amd.com>, 
-	Mario Limonciello <mario.limonciello@amd.com>, Shimmer Huang <shimmer.huang@amd.com>, 
-	Perry Yuan <Perry.Yuan@amd.com>, Xiaojian Du <Xiaojian.Du@amd.com>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, Borislav Petkov <bp@alien8.de>, 
-	Oleksandr Natalenko <oleksandr@natalenko.name>, Wyes Karny <wyes.karny@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231212131008.k6s5xwjgolp6geps@localhost>
 
-Please spell ACPI and CPPC in capitals in the subject.
+On Tue, Dec 12, 2023 at 02:10:08PM +0100, Joel Granados wrote:
 
-On Tue, Dec 5, 2023 at 7:38=E2=80=AFAM Meng Li <li.meng@amd.com> wrote:
->
-> Add support for getting the highest performance to the
-> generic CPPC driver. This enables downstream drivers
-> such as amd-pstate to discover and use these values.
->
-> Please refer to the ACPI_Spec for details on continuous
-> performance control of CPPC.
+> > diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
+> > index 645ab5d290fe..0a8e03d5e7c5 100644
+> > --- a/drivers/iommu/iommufd/device.c
+> > +++ b/drivers/iommu/iommufd/device.c
+> > @@ -456,6 +456,16 @@ int iommufd_hw_pagetable_attach(struct iommufd_hw_pagetable *hwpt,
+> >  	if (rc)
+> >  		goto err_unlock;
+> >  
+> > +	if (hwpt->fault) {
+> > +		void *curr;
+> > +
+> > +		curr = iopf_pasid_cookie_set(idev->dev, IOMMU_NO_PASID, idev);
+> I'm hitting an error here when I try to attach to a hwpt that I created
+> previously with the `IOMMU_HWPT_ALLOC_IOPF_CAPABLE` flag.
+> 
+> I get an -ENODEV from iopf_pasid_cookie_set which is triggered by
+> dev->iommu->fault_param being 0x0.
+> 
+> I looked around and I see that the fault param gets set in
+> iopf_queue_add_device which is called from iommu_dev_enable_feature
+> only. Furthermore iommu_dev_enable_feature is only called in idxd and
+> uacce drivers.
+> 
+> Questions:
+> 1. Should iopf_queue_add_device get called from the
+>    IOMMU_HWPT_ALLOC_IOPF_CAPABLE ioctl call? This make sense to me as
+>    this is where the device and the IOPF are related from user space.
 
-So which section of the spec is the reader supposed to refer to?
+It probably needs to call the set feature thing in the short term.
 
-> Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
-> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-> Reviewed-by: Wyes Karny <wyes.karny@amd.com>
-> Reviewed-by: Perry Yuan <perry.yuan@amd.com>
-> Acked-by: Huang Rui <ray.huang@amd.com>
-> Signed-off-by: Meng Li <li.meng@amd.com>
-> Link: https://uefi.org/specs/ACPI/6.5/08_Processor_Configuration_and_Cont=
-rol.html?highlight=3Dcppc#highest-performance
-> ---
->  drivers/acpi/cppc_acpi.c | 13 +++++++++++++
->  include/acpi/cppc_acpi.h |  5 +++++
->  2 files changed, 18 insertions(+)
->
-> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-> index 7ff269a78c20..ad388a0e8484 100644
-> --- a/drivers/acpi/cppc_acpi.c
-> +++ b/drivers/acpi/cppc_acpi.c
-> @@ -1154,6 +1154,19 @@ int cppc_get_nominal_perf(int cpunum, u64 *nominal=
-_perf)
->         return cppc_get_perf(cpunum, NOMINAL_PERF, nominal_perf);
->  }
->
-> +/**
-> + * cppc_get_highest_perf - Get the highest performance register value.
-> + * @cpunum: CPU from which to get highest performance.
-> + * @highest_perf: Return address.
-> + *
-> + * Return: 0 for success, -EIO otherwise.
-> + */
-> +int cppc_get_highest_perf(int cpunum, u64 *highest_perf)
-> +{
-> +       return cppc_get_perf(cpunum, HIGHEST_PERF, highest_perf);
-> +}
-> +EXPORT_SYMBOL_GPL(cppc_get_highest_perf);
-> +
->  /**
->   * cppc_get_epp_perf - Get the epp register value.
->   * @cpunum: CPU from which to get epp preference value.
-> diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
-> index 6126c977ece0..c0b69ffe7bdb 100644
-> --- a/include/acpi/cppc_acpi.h
-> +++ b/include/acpi/cppc_acpi.h
-> @@ -139,6 +139,7 @@ struct cppc_cpudata {
->  #ifdef CONFIG_ACPI_CPPC_LIB
->  extern int cppc_get_desired_perf(int cpunum, u64 *desired_perf);
->  extern int cppc_get_nominal_perf(int cpunum, u64 *nominal_perf);
-> +extern int cppc_get_highest_perf(int cpunum, u64 *highest_perf);
->  extern int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *perf_fb=
-_ctrs);
->  extern int cppc_set_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls);
->  extern int cppc_set_enable(int cpu, bool enable);
-> @@ -165,6 +166,10 @@ static inline int cppc_get_nominal_perf(int cpunum, =
-u64 *nominal_perf)
->  {
->         return -ENOTSUPP;
->  }
-> +static inline int cppc_get_highest_perf(int cpunum, u64 *highest_perf)
-> +{
-> +       return -ENOTSUPP;
-> +}
->  static inline int cppc_get_perf_ctrs(int cpu, struct cppc_perf_fb_ctrs *=
-perf_fb_ctrs)
->  {
->         return -ENOTSUPP;
-> --
+In the medium term I would like the drivers to manage the iopf based
+on domain attachment not explicit feature asks
+
+> 2. This is not intended to work only with idxd and uacce. right?
+
+It should work everywhere, I suspect Intel Team didn't hit this
+because they are testing IDXD SIOV? Can you guys also test it as a PF
+assignment?
+
+Jason
 
