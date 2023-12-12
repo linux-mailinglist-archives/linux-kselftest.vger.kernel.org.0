@@ -1,236 +1,326 @@
-Return-Path: <linux-kselftest+bounces-1664-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1665-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4718580EA2B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 12:17:33 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16B9C80EB33
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 13:04:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EE6052814F0
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 11:17:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8DDC81F2187A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 12:04:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BB3E5CD2F;
-	Tue, 12 Dec 2023 11:17:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 444605DF39;
+	Tue, 12 Dec 2023 12:04:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=armh.onmicrosoft.com header.i=@armh.onmicrosoft.com header.b="6ytu8UIZ";
+	dkim=pass (1024-bit key) header.d=armh.onmicrosoft.com header.i=@armh.onmicrosoft.com header.b="6ytu8UIZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AD5EBE;
-	Tue, 12 Dec 2023 03:17:24 -0800 (PST)
-Received: from mail.maildlp.com (unknown [172.19.162.254])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4SqGKp54dqzZcl2;
-	Tue, 12 Dec 2023 19:17:18 +0800 (CST)
-Received: from dggpemm500005.china.huawei.com (unknown [7.185.36.74])
-	by mail.maildlp.com (Postfix) with ESMTPS id 4699618005A;
-	Tue, 12 Dec 2023 19:17:22 +0800 (CST)
-Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
- (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.35; Tue, 12 Dec
- 2023 19:17:21 +0800
-Subject: Re: [net-next v1 09/16] page_pool: device memory support
-To: Mina Almasry <almasrymina@google.com>
-CC: Shailend Chand <shailend@google.com>, <netdev@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<linux-arch@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
-	<bpf@vger.kernel.org>, <linux-media@vger.kernel.org>,
-	<dri-devel@lists.freedesktop.org>, "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>, Jonathan Corbet <corbet@lwn.net>, Jeroen de Borst
-	<jeroendb@google.com>, Praveen Kaligineedi <pkaligineedi@google.com>, Jesper
- Dangaard Brouer <hawk@kernel.org>, Ilias Apalodimas
-	<ilias.apalodimas@linaro.org>, Arnd Bergmann <arnd@arndb.de>, David Ahern
-	<dsahern@kernel.org>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>,
-	=?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>, Harshitha
- Ramamurthy <hramamurthy@google.com>, Shakeel Butt <shakeelb@google.com>
-References: <20231208005250.2910004-1-almasrymina@google.com>
- <20231208005250.2910004-10-almasrymina@google.com>
- <32211cbf-3a4e-8a86-6214-4304ddb18a98@huawei.com>
- <CAHS8izOQcuLPwvDff96fuNB7r6EU9OWt3ShueQp=u7wat3L5LA@mail.gmail.com>
- <92e30bd9-6df4-b72f-7bcd-f4fe5670eba2@huawei.com>
- <CAHS8izPEFsqw50qgM+sPot6XVvOExpd+DrwrmPSR3zsWGLysRw@mail.gmail.com>
- <CAHS8izN6Cbjy0FCYhJyNsP396XfgJ_nTFXWuHb5QWNct=PifAg@mail.gmail.com>
- <59e07233-24cb-7fb2-1aee-e1cf7eb72fa9@huawei.com>
- <CAHS8izMdpo0D7GYzMkOtg1ueCODAVNxtwSP_qPseSYXNMhPGCw@mail.gmail.com>
-From: Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <2cdf173c-95e4-2141-56f7-0761705cd737@huawei.com>
-Date: Tue, 12 Dec 2023 19:17:21 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2070.outbound.protection.outlook.com [40.107.6.70])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6121C9F;
+	Tue, 12 Dec 2023 04:04:05 -0800 (PST)
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
+ b=dbRaV/Us/kohTjRafWS0jCA8hxf263NoyuMqNx3oQWEUXJszUIqILPA5C6epyQc2PdYed1mlJjNnxojSQ5NZJhfm5Sln+MoCoweobMGn8NSRGxsxnzPrxOib95LGzO6QA7qkP5jevYkgDkNle17yZ+oHPUmVkTa6MQtN/I98YPPn5pieiavOmWRIWCzby3BfyovWLluj8eNV0F1smu4zISaKWH7C7CQ23E8s6GlOsnPvKEXJLZTT24e2EMYSOXiIjJM6vOOoZ1FNjDlwwN1nF0Tj2ovvaV21Ig5tKQ34x61xw1uJsvnb3/A4YHm03jRYRWVXPQKnN+wC1gE+483iuA==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QKWzbD6Bn2L3zm5IeJhBhUTnYgDoW5cq3xP62ESTFz0=;
+ b=ACwnvqNDgScFBZ0Obyg1wQIfTbpbHLcwWRh5D1JVoaZD+0wzjfe8RV2IT+sdb82uexyyV+Jgs7Htd+B1skErTSZVuSjx3qjeqZihhK7sck5hoLwnuUshyyjImmn2QcbIerer0r+DuHf+nLpYRDhZZyui4zj6h4WeN2SNks2jTumVvx3IptjxrT6iVdywmwIxC+/pIcok9NOXWtLndyL7oUdcUF8t0HT2B4qC+JjdTPjS2mx+cUNydIcnBYpEibGqWtZe0kf4TfopebFEgq7Z/Y9D7+DNuwwpj4pdYbZwkanxH+AkRwaswuS047AlkUQLeu0RN4CbrTmewYhnWu/eSQ==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 63.35.35.123) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=arm.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=arm.com;
+ dkim=pass (signature was verified) header.d=armh.onmicrosoft.com; arc=pass (0
+ oda=1 ltdi=1 spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
+ dmarc=[1,1,header.from=arm.com])
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QKWzbD6Bn2L3zm5IeJhBhUTnYgDoW5cq3xP62ESTFz0=;
+ b=6ytu8UIZHTv0MQ7dGSBBG72lVuYKOkmFhWI3iCCotLJ+T/fVLkWl8tOODLsnS9V9mAIP4rXSx+aMomdkuzvwipFSSbliV5wr0TkEm1xoDCghmm7iZrLZjdDdT5t/jTEL+G6ENF3MfHVZsfyIwaAETbZ7d0G82SAzWvB+G11Grog=
+Received: from DUZPR01CA0349.eurprd01.prod.exchangelabs.com
+ (2603:10a6:10:4b8::14) by AM8PR08MB6498.eurprd08.prod.outlook.com
+ (2603:10a6:20b:364::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7068.33; Tue, 12 Dec
+ 2023 12:04:02 +0000
+Received: from DB5PEPF00014B9D.eurprd02.prod.outlook.com
+ (2603:10a6:10:4b8:cafe::16) by DUZPR01CA0349.outlook.office365.com
+ (2603:10a6:10:4b8::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7068.33 via Frontend
+ Transport; Tue, 12 Dec 2023 12:04:02 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
+ client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
+ pr=C
+Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
+ DB5PEPF00014B9D.mail.protection.outlook.com (10.167.8.164) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.7091.26 via Frontend Transport; Tue, 12 Dec 2023 12:04:02 +0000
+Received: ("Tessian outbound 385ad2f98d71:v228"); Tue, 12 Dec 2023 12:04:02 +0000
+X-CheckRecipientChecked: true
+X-CR-MTA-CID: 1c65ca2e2b61e7e8
+X-CR-MTA-TID: 64aa7808
+Received: from 2c6765903e7f.1
+	by 64aa7808-outbound-1.mta.getcheckrecipient.com id 876A3F85-4F1A-4AC8-885A-EBA7D6EA1980.1;
+	Tue, 12 Dec 2023 12:03:50 +0000
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com
+    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id 2c6765903e7f.1
+    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
+    Tue, 12 Dec 2023 12:03:50 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UxLip3L+cTCLR2hSUzpAllj25sYFrkMEYEkmYf3ygy4qMhdT15fq1Bwc80XtPrC+l7Ady9B8nwhxuGCZ2om8O8caxgJOSW/BiI49KkiLGjlxVwukxAyqKyo6P3mkw3d0y9k2yvftfHr5BuVBjVxz/DtLqEqtmbK31YYKchYTpC7WNz4lc10evgalI/plCsN9JIyfx+uLLBVhWslroFapi/eQXpBrcPTbsAEMDIUD05/qxGR2YxfTxYZnDixDPQ9Je9CKXWawpbwtfDiCet8Jjn5Dv1eS/465lkOHNfYoex8X2klduWJzmzu954OsiqH1tb2tTfYh2/J35qJsP3QZtw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QKWzbD6Bn2L3zm5IeJhBhUTnYgDoW5cq3xP62ESTFz0=;
+ b=J0rksiLZF5yLD5+9YZHz7/QEmQIg8bzauvWn7/GwUmJtil6kfj9SgwKqItkN578RyxgFTE1sMkVgDzByy8rmrtJ1Qjb76k/L9P0vosDcDYRnhpaaHeNS2Wbjkl65igxW1iBJ0S2lWOal9Et+YVwEvHTOKbTZkekdAvh8wnlhv8NW3q+/gI0xKWJecBeQdrNnDD8TRiv2zKbOG78Rr5YzjMSgn3aSoFJWX7Jjk66jUOLgv6mJHb8w7q4XE6Nb081tgMNZ1dYHVgWkCeAAkMj/VWdDzCyDBhQ041eYBD7J6uZPIOW6LJatza80SQDgVdUz5ZFoXIa2/XVUZudqbS9J8A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
+ s=selector2-armh-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QKWzbD6Bn2L3zm5IeJhBhUTnYgDoW5cq3xP62ESTFz0=;
+ b=6ytu8UIZHTv0MQ7dGSBBG72lVuYKOkmFhWI3iCCotLJ+T/fVLkWl8tOODLsnS9V9mAIP4rXSx+aMomdkuzvwipFSSbliV5wr0TkEm1xoDCghmm7iZrLZjdDdT5t/jTEL+G6ENF3MfHVZsfyIwaAETbZ7d0G82SAzWvB+G11Grog=
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+Received: from DB9PR08MB7179.eurprd08.prod.outlook.com (2603:10a6:10:2cc::19)
+ by DU0PR08MB9417.eurprd08.prod.outlook.com (2603:10a6:10:420::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7068.33; Tue, 12 Dec
+ 2023 12:03:47 +0000
+Received: from DB9PR08MB7179.eurprd08.prod.outlook.com
+ ([fe80::292d:9c0e:e9f7:deba]) by DB9PR08MB7179.eurprd08.prod.outlook.com
+ ([fe80::292d:9c0e:e9f7:deba%6]) with mapi id 15.20.7068.033; Tue, 12 Dec 2023
+ 12:03:47 +0000
+Date: Tue, 12 Dec 2023 12:03:32 +0000
+From: Szabolcs Nagy <szabolcs.nagy@arm.com>
+To: Catalin Marinas <catalin.marinas@arm.com>,
+	Joey Gouly <joey.gouly@arm.com>
+Cc: linux-arm-kernel@lists.infradead.org, akpm@linux-foundation.org,
+	aneesh.kumar@linux.ibm.com, broonie@kernel.org,
+	dave.hansen@linux.intel.com, maz@kernel.org, oliver.upton@linux.dev,
+	shuah@kernel.org, will@kernel.org, kvmarm@lists.linux.dev,
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>
+Subject: Re: [PATCH v3 15/25] arm64: add POE signal support
+Message-ID: <ZXhMFBK3khQHo2lX@arm.com>
+References: <20231124163510.1835740-1-joey.gouly@arm.com>
+ <20231124163510.1835740-16-joey.gouly@arm.com>
+ <ZXdamak1wDyUdwSG@arm.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <ZXdamak1wDyUdwSG@arm.com>
+X-ClientProxiedBy: LO4P123CA0237.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:1a7::8) To DB9PR08MB7179.eurprd08.prod.outlook.com
+ (2603:10a6:10:2cc::19)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAHS8izMdpo0D7GYzMkOtg1ueCODAVNxtwSP_qPseSYXNMhPGCw@mail.gmail.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- dggpemm500005.china.huawei.com (7.185.36.74)
+X-MS-TrafficTypeDiagnostic:
+	DB9PR08MB7179:EE_|DU0PR08MB9417:EE_|DB5PEPF00014B9D:EE_|AM8PR08MB6498:EE_
+X-MS-Office365-Filtering-Correlation-Id: 48176aca-5040-41ae-9dcf-08dbfb0a6e75
+x-checkrecipientrouted: true
+NoDisclaimer: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted: BCL:0;
+X-Microsoft-Antispam-Message-Info-Original:
+ vqTC7MCwQjvg+749Nb+1kyFvUqKcIMQp4ENNJDwgEwAZSTZEByOpjuTLc0Fr4OoNhLR6ICTjLqOgL9AvcGtlUtx7YwIlnf2q7A7kZ4y2QyuBfQ/PAo3HG2i+7pjOjhXs8PE/ssIdScY/N0vYYkjlzWEyGVP2zh+/0gmpdQc8xCluXvUlr6VJ7dUR2CBWV26NZMxkjyUnbXhEPUhEonPNTTAuAeBzmwsyWW1T+oSlGhhS5cUPYUanUOC+1IjsunjE8yTAyluGfbEBuL/7dN9JBZpSTNdBvOcWIuwxB3dfqYpBzOwihXjpgAmZb2vhGmzl8As/dPSKokm679GE4S92TzDT7GBrx5qMUwFilNDCTIfvBVB8vpBBatiBfRCic5T0mCamwwOTxbDquwTfdCcfPZVMOGsJtYaQwuqtN+OJFzsGtLJEM5MbVoeV9NWfrmCODIoThmNbV+gTB2nwyceTqE/YC3Cwz1V79uzhysQsdgYzNMZ9ccToaRdzpzX2vNEPw/k+wqjTOnJxyjcNtKSBJ098IbM5AzodwJht4Prwf5WEkB8PQQ03Z1YxNthAKWCA
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR08MB7179.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(136003)(376002)(366004)(396003)(39860400002)(230922051799003)(186009)(451199024)(1800799012)(64100799003)(83380400001)(6512007)(2616005)(6506007)(38100700002)(66946007)(44832011)(4326008)(5660300002)(8936002)(41300700001)(7416002)(8676002)(2906002)(6486002)(6666004)(110136005)(478600001)(316002)(66556008)(6636002)(54906003)(66476007)(36756003)(86362001)(26005);DIR:OUT;SFP:1101;
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR08MB9417
+Original-Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ DB5PEPF00014B9D.eurprd02.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+	011000a8-fc5d-49b5-4949-08dbfb0a659b
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	hR87tiAzYKw9oOsRdTfVCTLW4YlHB5nAkRDd9nd1vjC3Iz0Q0LyNT2jILk6ZO6izAfcf5UeN3jWlYM/7SdDWYRC3w8613vcuAkbZnx8Ch8y2JzjNRrjTe0C1ke/flUBh5A8DwC076sc68nu6QkwRfWEjkTIPBbln+FNC0DllciL7tRAKWmWjQSCqnP4nF9wRpFLiNwfG6xw1o7lpryUKFL6ljka6qPX3vS0p/AvUogV1KKmFJfx48daM1ev0JOAnHR5sA0vdkZEuT+phKacCPRA3OzZ03sm+7dFNp7Ia1rl9Qb7wYYyH3BsnX6JmCvnjow5m/JB6I8blwvEwzQH+8+zbhYI/cUHLa4Hj15VAdDluenieORLtNc+IUb/wp05dcZZXSsem0IjvHwgh8pU1ZKrNtEmjhSuSZhE1QN9az1cbb5TV7/tdKX5WRzs1ui73Esn1mSeT7ll+aQoZwAZc4Jgm9M15vVHvUCc8biHJlPpyFrToKkKQF6VNYRDBjLLV3ls/Nyv4RUzg6OgzCxAqpOfsZAmMi1UaK5Aj/xhMmjDq7MaT4KA0WlETceuWBqQCIBB8Gu+0c9tjoWfCmsTiRLnb11wRgNfYgHqMmlbwLuHFXlg3BiybGq6KR/I6cdftQTX3T03iHEyzYOttk6OtoywptgnJvy0kVhWnvhIgoeRrN417+WVn39kELxlrqT26OzpzoKOY7EKISc2PDc0T4Ahc5Ms+EX8JblKcvxlepnbGUj/PbDp/vp4BZQ0qNpg8
+X-Forefront-Antispam-Report:
+	CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230031)(4636009)(39860400002)(376002)(136003)(396003)(346002)(230922051799003)(451199024)(186009)(64100799003)(1800799012)(82310400011)(36840700001)(46966006)(40470700004)(40460700003)(336012)(107886003)(83380400001)(6506007)(6512007)(2616005)(47076005)(26005)(36860700001)(4326008)(5660300002)(8676002)(44832011)(41300700001)(6486002)(2906002)(6666004)(8936002)(316002)(478600001)(110136005)(70206006)(70586007)(36756003)(86362001)(6636002)(54906003)(450100002)(356005)(81166007)(82740400003)(40480700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Dec 2023 12:04:02.4191
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 48176aca-5040-41ae-9dcf-08dbfb0a6e75
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DB5PEPF00014B9D.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR08MB6498
 
-On 2023/12/12 2:14, Mina Almasry wrote:
-> On Mon, Dec 11, 2023 at 3:51 AM Yunsheng Lin <linyunsheng@huawei.com> wrote:
->>
->> On 2023/12/11 12:04, Mina Almasry wrote:
->>> On Sun, Dec 10, 2023 at 6:26 PM Mina Almasry <almasrymina@google.com> wrote:
->>>>
->>>> On Sun, Dec 10, 2023 at 6:04 PM Yunsheng Lin <linyunsheng@huawei.com> wrote:
->>>>>
->>>>> On 2023/12/9 0:05, Mina Almasry wrote:
->>>>>> On Fri, Dec 8, 2023 at 1:30 AM Yunsheng Lin <linyunsheng@huawei.com> wrote:
->>>>>>>
->>>>>>>
->>>>>>> As mentioned before, it seems we need to have the above checking every
->>>>>>> time we need to do some per-page handling in page_pool core, is there
->>>>>>> a plan in your mind how to remove those kind of checking in the future?
->>>>>>>
->>>>>>
->>>>>> I see 2 ways to remove the checking, both infeasible:
->>>>>>
->>>>>> 1. Allocate a wrapper struct that pulls out all the fields the page pool needs:
->>>>>>
->>>>>> struct netmem {
->>>>>>         /* common fields */
->>>>>>         refcount_t refcount;
->>>>>>         bool is_pfmemalloc;
->>>>>>         int nid;
->>>>>>         ...
->>>>>>         union {
->>>>>>                 struct dmabuf_genpool_chunk_owner *owner;
->>>>>>                 struct page * page;
->>>>>>         };
->>>>>> };
->>>>>>
->>>>>> The page pool can then not care if the underlying memory is iov or
->>>>>> page. However this introduces significant memory bloat as this struct
->>>>>> needs to be allocated for each page or ppiov, which I imagine is not
->>>>>> acceptable for the upside of removing a few static_branch'd if
->>>>>> statements with no performance cost.
->>>>>>
->>>>>> 2. Create a unified struct for page and dmabuf memory, which the mm
->>>>>> folks have repeatedly nacked, and I imagine will repeatedly nack in
->>>>>> the future.
->>>>>>
->>>>>> So I imagine the special handling of ppiov in some form is critical
->>>>>> and the checking may not be removable.
->>>>>
->>>>> If the above is true, perhaps devmem is not really supposed to be intergated
->>>>> into page_pool.
->>>>>
->>>>> Adding a checking for every per-page handling in page_pool core is just too
->>>>> hacky to be really considerred a longterm solution.
->>>>>
->>>>
->>>> The only other option is to implement another page_pool for ppiov and
->>>> have the driver create page_pool or ppiov_pool depending on the state
->>>> of the netdev_rx_queue (or some helper in the net stack to do that for
->>>> the driver). This introduces some code duplication. The ppiov_pool &
->>>> page_pool would look similar in implementation.
->>
->> I think there is a design pattern already to deal with this kind of problem,
->> refactoring common code used by both page_pool and ppiov into a library to
->> aovid code duplication if most of them have similar implementation.
->>
+The 12/11/2023 18:53, Catalin Marinas wrote:
+> + Szabolcs for libc ack (and keeping the full patch quoted below)
 > 
-> Code can be refactored if it's identical, not if it is similar. I
+> You should cc Szabolcs when reposting, we need his ack on the UAPI
+> changes.
+> 
+> On Fri, Nov 24, 2023 at 04:35:00PM +0000, Joey Gouly wrote:
+> > Add PKEY support to signals, by saving and restoring POR_EL0 from the stackframe.
 
-Similarity indicates an opportunity to the refactor out the common
-code, like the page_frag case below:
-https://patchwork.kernel.org/project/netdevbpf/cover/20231205113444.63015-1-linyunsheng@huawei.com/
+this looks good.
 
-But untill we do a proof of concept implemention, it is hard to tell if
-it is feasiable or not.
+Acked-by: Szabolcs Nagy <szabolcs.nagy@arm.com>
 
-> suspect the page_pools will be only similar, and if you're not willing
-> to take devmem handling into the page pool then refactoring page_pool
-> code into helpers that do devmem handling may also not be an option.
-> 
->>>>
->>>> But this was all discussed in detail in RFC v2 and the last response I
->>>> heard from Jesper was in favor if this approach, if I understand
->>>> correctly:
->>>>
->>>> https://lore.kernel.org/netdev/7aedc5d5-0daf-63be-21bc-3b724cc1cab9@redhat.com/
->>>>
->>>> Would love to have the maintainer weigh in here.
->>>>
->>>
->>> I should note we may be able to remove some of the checking, but maybe not all.
->>>
->>> - Checks that disable page fragging for ppiov can be removed once
->>> ppiov has frag support (in this series or follow up).
->>>
->>> - If we use page->pp_frag_count (or page->pp_ref_count) for
->>> refcounting ppiov, we can remove the if checking in the refcounting.
->>>
-> 
-> I'm not sure this is actually possible in the short term. The
-> page_pool uses both page->_refcount and page->pp_frag_count for
-> refcounting, and I will not be able to remove the special handling
-> around page->_refcount as i'm not allowed to call page_ref_*() APIs on
-> a non-struct page.
-
-the page_ref_*() API may be avoided using the below patch:
-https://patchwork.kernel.org/project/netdevbpf/patch/20231113130041.58124-7-linyunsheng@huawei.com/
-
-But I am not sure how to do that for tx part if devmem for tx is not
-intergating into page_pool, that is why I suggest having a tx implementation
-for the next version, so that we can have a whole picture of devmem.
-
-> 
->>> - We may be able to store the dma_addr of the ppiov in page->dma_addr,
->>> but I'm unsure if that actually works, because the dma_buf dmaddr is
->>> dma_addr_t (u32 or u64), but page->dma_addr is unsigned long (4 bytes
->>> I think). But if it works for pages I may be able to make it work for
->>> ppiov as well.
->>>
->>> - Checks that obtain the page->pp can work with ppiov if we align the
->>> offset of page->pp and ppiov->pp.
->>>
->>> - Checks around page->pp_magic can be removed if we also have offset
->>> aligned ppiov->pp_magic.
->>>
->>> Sadly I don't see us removing the checking for these other cases:
->>>
->>> - page_is_pfmemalloc(): I'm not allowed to pass a non-struct page into
->>> that helper.
->>
->> We can do similar trick like above as bit 1 of page->pp_magic is used to
->> indicate that if it is a pfmemalloc page.
->>
-> 
-> Likely yes.
-> 
->>>
->>> - page_to_nid(): I'm not allowed to pass a non-struct page into that helper.
->>
->> Yes, this one need special case.
->>
->>>
->>> - page_pool_free_va(): ppiov have no va.
->>
->> Doesn't the skb_frags_readable() checking will protect the page_pool_free_va()
->> from being called on devmem?
->>
-> 
-> This function seems to be only called from veth which doesn't support
-> devmem. I can remove the handling there.
-> 
->>>
->>> - page_pool_sync_for_dev/page_pool_dma_map: ppiov backed by dma-buf
->>> fundamentally can't get mapped again.
->>
->> Can we just fail the page_pool creation with PP_FLAG_DMA_MAP and
->> DMA_ATTR_SKIP_CPU_SYNC flags for devmem provider?
->>
-> 
-> Jakub says PP_FLAG_DMA_MAP must be enabled for devmem, such that the
-> page_pool handles the dma mapping of the devmem and the driver doesn't
-> use it on its own.
-
-I am not sure what benefit does it bring by enabling the DMA_MAP for devmem,
-as devmem seems to call dma_buf_map_attachment() in netdev_bind_dmabuf(), it
-does not really need enabling PP_FLAG_DMA_MAP to get the dma addr for the
-devmem chunk.
+> > 
+> > Signed-off-by: Joey Gouly <joey.gouly@arm.com>
+> > Cc: Catalin Marinas <catalin.marinas@arm.com>
+> > Cc: Will Deacon <will@kernel.org>
+> > Reviewed-by: Mark Brown <broonie@kernel.org>
+> > ---
+> >  arch/arm64/include/uapi/asm/sigcontext.h |  7 ++++
+> >  arch/arm64/kernel/signal.c               | 51 ++++++++++++++++++++++++
+> >  2 files changed, 58 insertions(+)
+> > 
+> > diff --git a/arch/arm64/include/uapi/asm/sigcontext.h b/arch/arm64/include/uapi/asm/sigcontext.h
+> > index f23c1dc3f002..cef85eeaf541 100644
+> > --- a/arch/arm64/include/uapi/asm/sigcontext.h
+> > +++ b/arch/arm64/include/uapi/asm/sigcontext.h
+> > @@ -98,6 +98,13 @@ struct esr_context {
+> >  	__u64 esr;
+> >  };
+> >  
+> > +#define POE_MAGIC	0x504f4530
+> > +
+> > +struct poe_context {
+> > +	struct _aarch64_ctx head;
+> > +	__u64 por_el0;
+> > +};
+> > +
+> >  /*
+> >   * extra_context: describes extra space in the signal frame for
+> >   * additional structures that don't fit in sigcontext.__reserved[].
+> > diff --git a/arch/arm64/kernel/signal.c b/arch/arm64/kernel/signal.c
+> > index 0e8beb3349ea..379f364005bf 100644
+> > --- a/arch/arm64/kernel/signal.c
+> > +++ b/arch/arm64/kernel/signal.c
+> > @@ -62,6 +62,7 @@ struct rt_sigframe_user_layout {
+> >  	unsigned long zt_offset;
+> >  	unsigned long extra_offset;
+> >  	unsigned long end_offset;
+> > +	unsigned long poe_offset;
+> >  };
+> >  
+> >  #define BASE_SIGFRAME_SIZE round_up(sizeof(struct rt_sigframe), 16)
+> > @@ -182,6 +183,8 @@ struct user_ctxs {
+> >  	u32 za_size;
+> >  	struct zt_context __user *zt;
+> >  	u32 zt_size;
+> > +	struct poe_context __user *poe;
+> > +	u32 poe_size;
+> >  };
+> >  
+> >  static int preserve_fpsimd_context(struct fpsimd_context __user *ctx)
+> > @@ -227,6 +230,20 @@ static int restore_fpsimd_context(struct user_ctxs *user)
+> >  	return err ? -EFAULT : 0;
+> >  }
+> >  
+> > +static int restore_poe_context(struct user_ctxs *user)
+> > +{
+> > +	u64 por_el0;
+> > +	int err = 0;
+> > +
+> > +	if (user->poe_size != sizeof(*user->poe))
+> > +		return -EINVAL;
+> > +
+> > +	__get_user_error(por_el0, &(user->poe->por_el0), err);
+> > +	if (!err)
+> > +		write_sysreg_s(por_el0, SYS_POR_EL0);
+> > +
+> > +	return err;
+> > +}
+> >  
+> >  #ifdef CONFIG_ARM64_SVE
+> >  
+> > @@ -590,6 +607,7 @@ static int parse_user_sigframe(struct user_ctxs *user,
+> >  	user->tpidr2 = NULL;
+> >  	user->za = NULL;
+> >  	user->zt = NULL;
+> > +	user->poe = NULL;
+> >  
+> >  	if (!IS_ALIGNED((unsigned long)base, 16))
+> >  		goto invalid;
+> > @@ -640,6 +658,17 @@ static int parse_user_sigframe(struct user_ctxs *user,
+> >  			/* ignore */
+> >  			break;
+> >  
+> > +		case POE_MAGIC:
+> > +			if (!system_supports_poe())
+> > +				goto invalid;
+> > +
+> > +			if (user->poe)
+> > +				goto invalid;
+> > +
+> > +			user->poe = (struct poe_context __user *)head;
+> > +			user->poe_size = size;
+> > +			break;
+> > +
+> >  		case SVE_MAGIC:
+> >  			if (!system_supports_sve() && !system_supports_sme())
+> >  				goto invalid;
+> > @@ -812,6 +841,9 @@ static int restore_sigframe(struct pt_regs *regs,
+> >  	if (err == 0 && system_supports_sme2() && user.zt)
+> >  		err = restore_zt_context(&user);
+> >  
+> > +	if (err == 0 && system_supports_poe() && user.poe)
+> > +		err = restore_poe_context(&user);
+> > +
+> >  	return err;
+> >  }
+> >  
+> > @@ -928,6 +960,13 @@ static int setup_sigframe_layout(struct rt_sigframe_user_layout *user,
+> >  		}
+> >  	}
+> >  
+> > +	if (system_supports_poe()) {
+> > +		err = sigframe_alloc(user, &user->poe_offset,
+> > +				     sizeof(struct poe_context));
+> > +		if (err)
+> > +			return err;
+> > +	}
+> > +
+> >  	return sigframe_alloc_end(user);
+> >  }
+> >  
+> > @@ -968,6 +1007,15 @@ static int setup_sigframe(struct rt_sigframe_user_layout *user,
+> >  		__put_user_error(current->thread.fault_code, &esr_ctx->esr, err);
+> >  	}
+> >  
+> > +	if (system_supports_poe() && err == 0 && user->poe_offset) {
+> > +		struct poe_context __user *poe_ctx =
+> > +			apply_user_offset(user, user->poe_offset);
+> > +
+> > +		__put_user_error(POE_MAGIC, &poe_ctx->head.magic, err);
+> > +		__put_user_error(sizeof(*poe_ctx), &poe_ctx->head.size, err);
+> > +		__put_user_error(read_sysreg_s(SYS_POR_EL0), &poe_ctx->por_el0, err);
+> > +	}
+> > +
+> >  	/* Scalable Vector Extension state (including streaming), if present */
+> >  	if ((system_supports_sve() || system_supports_sme()) &&
+> >  	    err == 0 && user->sve_offset) {
+> > @@ -1119,6 +1167,9 @@ static void setup_return(struct pt_regs *regs, struct k_sigaction *ka,
+> >  		sme_smstop();
+> >  	}
+> >  
+> > +	if (system_supports_poe())
+> > +		write_sysreg_s(POR_EL0_INIT, SYS_POR_EL0);
+> > +
+> >  	if (ka->sa.sa_flags & SA_RESTORER)
+> >  		sigtramp = ka->sa.sa_restorer;
+> >  	else
+> > -- 
+> > 2.25.1
 
