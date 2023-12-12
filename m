@@ -1,229 +1,168 @@
-Return-Path: <linux-kselftest+bounces-1685-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1686-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1790380EF61
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 15:53:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC14780EF76
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 15:58:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2293281AC7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 14:53:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 28BE41F215D8
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 14:58:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 944AA745DF;
-	Tue, 12 Dec 2023 14:53:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D2DA745F1;
+	Tue, 12 Dec 2023 14:58:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bKZhKxy1"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Di+xUrDN"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09734EA;
-	Tue, 12 Dec 2023 06:53:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702392818; x=1733928818;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=wTLiPs7DM2XKGHCN7FGTKAU1Kd3MFxHMnL+sAIX2BfA=;
-  b=bKZhKxy1kfWYdt4iVQBOFb7KDb/pohtLqS6er0pNgn7/1e+U+f4vlOOt
-   1jLBDKR4JmZ8w9+ZJ6zmjxWzMYXQNcSLYuJJ2zjwn8XfeAZNi3thswz4z
-   7NbVD9ncoU/rBhlEBnKAJkBDMXA+0/K7UOPTq2OQ+RjUXZdzPAxfUiRS+
-   gcc3w6Y2TjnwqyQPWMYjXw4yzL5Mtk1NGFQkFWergQMgJccw39dJB6pqm
-   9hDw3+cLWSdKWR3UnuP3kDg9Gsdg94R/W8aCw3FRMskAMwtHDY3SKwkGr
-   u1qqXYU51soGkMuB2C7sVFyXK7YEhKSWZ5pyNDrKucIuQwM850aet5Txk
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10922"; a="481014360"
-X-IronPort-AV: E=Sophos;i="6.04,270,1695711600"; 
-   d="scan'208";a="481014360"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2023 06:53:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.04,270,1695711600"; 
-   d="scan'208";a="15024023"
-Received: from mdabrows-mobl1.ger.corp.intel.com (HELO wieczorr-mobl1.intel.com) ([10.213.5.65])
-  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2023 06:53:34 -0800
-From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
-To: Fenghua Yu <fenghua.yu@intel.com>,
-	Reinette Chatre <reinette.chatre@intel.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: ilpo.jarvinen@linux.intel.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 4/4] selftests/resctrl: Add non-contiguous CBMs CAT test
-Date: Tue, 12 Dec 2023 15:52:54 +0100
-Message-ID: <10c3afd7f62c63db31a3d4af86529144a5d7bbf9.1702392177.git.maciej.wieczor-retman@intel.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1702392177.git.maciej.wieczor-retman@intel.com>
-References: <cover.1702392177.git.maciej.wieczor-retman@intel.com>
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E37C0D5
+	for <linux-kselftest@vger.kernel.org>; Tue, 12 Dec 2023 06:58:31 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id 2adb3069b0e04-50e0ba402b4so736069e87.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 12 Dec 2023 06:58:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1702393110; x=1702997910; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gzl81dpk3U9T9CudLlEFGkOzt7MaXHqDfkakdpQfiFo=;
+        b=Di+xUrDNquCXrbE4D+7pfjphiGfnnFvnJ9/Q4O0j/kgCgfP9AwhW6edileG02zHDCK
+         Ug2WZfJv083gx7y1zC5N5OA4s2BF+Hgsf4WwxYweX2huuzD1r9O1C3Nf8JmTd223jhpo
+         +5K34kx0JBlvAkN3qJK0TBeNvaqFoyOzPY09+zdHmT/gWAZ249Fuiyo7zUphSdV5997y
+         vj8XnTZFDeNqWujeHGTInKUIXjEymntsdhGdsU/8Ku2S46luA28K2kGokU9NNgogSVdF
+         LfZgPfe/YbCJ/TAWwjQD4MwRNdA17G43XaNJaX/g0EqK03F/9MT2NYNODogcWcseI4zZ
+         s8CQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702393110; x=1702997910;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gzl81dpk3U9T9CudLlEFGkOzt7MaXHqDfkakdpQfiFo=;
+        b=R1zVtvv0KVxxiV+bY9WYnup70wrWTGZ2e5KHkC9kIPK0AWEpUR8qKkkT/muEUayGyo
+         b4r25Z7kzzsKSVvDo5aYuxD6HQOcSTBbZzOpNFlySuQ6QBPEHThrzEmLJu2+eiLytb2E
+         Ye0xNIUoRIqtojZml+7qjYbVpQ1e6UpXkDLVZAN8D+VeEUfN5i3hQbXJ2eOEnPzREJ0d
+         EzTyCekLw0S0rP32P0SotfBqzSXGHGfI4BRXhbvygMzKkB0CHhg7iambGncg8RvnqjoH
+         qnOYaSv1Na9yoyC+SS74gm6I+B51DGhhzE+5uLw9WUOKyiErjSZGCJJ2dzjaBML1XU8O
+         S3Jg==
+X-Gm-Message-State: AOJu0YyyHAW9TkwOV144qVh80PTciYyM7auSYeYba+aXXyk1lhbWASIU
+	8zx0XlZlhuSDgMxOZ8OZzFFv5d8w6OcUzoSY8xUjHg==
+X-Google-Smtp-Source: AGHT+IERGuBL77UBvy25wKoqAwiWF0N6xvXc57i2t65+NTiYJO5PTJJ6k/4UPi+3laDB/s1BgrFICZhicXsZkg8qeMk=
+X-Received: by 2002:ac2:5b4f:0:b0:50b:fa9b:1649 with SMTP id
+ i15-20020ac25b4f000000b0050bfa9b1649mr3304569lfp.73.1702393109803; Tue, 12
+ Dec 2023 06:58:29 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20231208005250.2910004-1-almasrymina@google.com>
+ <20231208005250.2910004-9-almasrymina@google.com> <20231212122535.GA3029808@nvidia.com>
+ <CAHS8izMVMx0fpT=dWsnD7piqs1g7Fam8Xf5dK3iOFNxeOQD9vQ@mail.gmail.com> <20231212143942.GF3014157@nvidia.com>
+In-Reply-To: <20231212143942.GF3014157@nvidia.com>
+From: Mina Almasry <almasrymina@google.com>
+Date: Tue, 12 Dec 2023 06:58:17 -0800
+Message-ID: <CAHS8izNHtemjjkMf43grCHP1RZ=2UFiMtgea0M6+PaAgC=DDMQ@mail.gmail.com>
+Subject: Re: [net-next v1 08/16] memory-provider: dmabuf devmem memory provider
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Shailend Chand <shailend@google.com>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Jeroen de Borst <jeroendb@google.com>, 
+	Praveen Kaligineedi <pkaligineedi@google.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Arnd Bergmann <arnd@arndb.de>, 
+	David Ahern <dsahern@kernel.org>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+	Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>, 
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Yunsheng Lin <linyunsheng@huawei.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
+	Shakeel Butt <shakeelb@google.com>, Willem de Bruijn <willemb@google.com>, 
+	Kaiyuan Zhang <kaiyuanz@google.com>, Christoph Hellwig <hch@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add tests for both L2 and L3 CAT to verify the return values
-generated by writing non-contiguous CBMs don't contradict the
-reported non-contiguous support information.
+On Tue, Dec 12, 2023 at 6:39=E2=80=AFAM Jason Gunthorpe <jgg@nvidia.com> wr=
+ote:
+>
+> On Tue, Dec 12, 2023 at 06:26:51AM -0800, Mina Almasry wrote:
+> > On Tue, Dec 12, 2023 at 4:25=E2=80=AFAM Jason Gunthorpe <jgg@nvidia.com=
+> wrote:
+> > >
+> > > On Thu, Dec 07, 2023 at 04:52:39PM -0800, Mina Almasry wrote:
+> > >
+> > > > +static inline struct page_pool_iov *page_to_page_pool_iov(struct p=
+age *page)
+> > > > +{
+> > > > +     if (page_is_page_pool_iov(page))
+> > > > +             return (struct page_pool_iov *)((unsigned long)page &=
+ ~PP_IOV);
+> > > > +
+> > > > +     DEBUG_NET_WARN_ON_ONCE(true);
+> > > > +     return NULL;
+> > > > +}
+> > >
+> > > We already asked not to do this, please do not allocate weird things
+> > > can call them 'struct page' when they are not. It undermines the
+> > > maintainability of the mm to have things mis-typed like
+> > > this. Introduce a new type for your thing so the compiler can check i=
+t
+> > > properly.
+> > >
+> >
+> > There is a new type introduced, it's the page_pool_iov. We set the LSB
+> > on page_pool_iov* and cast it to page* only to avoid the churn of
+> > renaming page* to page_pool_iov* in the page_pool and all the net
+> > drivers using it. Is that not a reasonable compromise in your opinion?
+> > Since the LSB is set on the resulting page pointers, they are not
+> > actually usuable as pages, and are never passed to mm APIs per your
+> > requirement.
+>
+> There were two asks, the one you did was to never pass this non-struct
+> page memory to the mm, which is great.
+>
+> The other was to not mistype things, and don't type something as
+> struct page when it is, in fact, not.
+>
+> I fear what you've done is make it so only one driver calls these
+> special functions and left the other drivers passing the struct page
+> directly to the mm and sort of obfuscating why it is OK based on this
+> netdev knowledge of not enabling/using the static branch in the other
+> cases.
+>
 
-Use a logical XOR to confirm return value of write_schemata() and
-non-contiguous CBMs support information match.
+Jason, we set the LSB on page_pool_iov pointers before casting it to
+struct page pointers. The resulting pointers are not useable as page
+pointers at all.
 
-Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
----
-Changelog v2:
-- Redo the patch message. (Ilpo)
-- Tidy up __cpuid_count calls. (Ilpo)
-- Remove redundant AND in noncont_mask calculations (Ilpo)
-- Fix bit_center offset.
-- Add newline before function return. (Ilpo)
-- Group non-contiguous tests with CAT tests. (Ilpo)
-- Use a helper for reading sparse_masks file. (Ilpo)
-- Make get_cache_level() available in other source files. (Ilpo)
+In order to use the resulting pointers, the driver _must_ use the
+special functions that first clear the LSB. It is impossible for the
+driver to 'accidentally' use the resulting page pointers with the LSB
+set - the kernel would just crash trying to dereference such a
+pointer.
 
- tools/testing/selftests/resctrl/cat_test.c    | 75 +++++++++++++++++++
- tools/testing/selftests/resctrl/resctrl.h     |  3 +
- .../testing/selftests/resctrl/resctrl_tests.c |  2 +
- tools/testing/selftests/resctrl/resctrlfs.c   |  2 +-
- 4 files changed, 81 insertions(+), 1 deletion(-)
+The way it works currently is that drivers that support devmem TCP
+will declare that support to the net stack, and use the special
+functions that clear the LSB and cast the struct back to
+page_pool_iov. The drivers that don't support devmem TCP will not
+declare support and will get pages allocated from the mm stack from
+the page_pool and use them as pages normally.
 
-diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-index 7dc7206b3b99..ecf553a89aae 100644
---- a/tools/testing/selftests/resctrl/cat_test.c
-+++ b/tools/testing/selftests/resctrl/cat_test.c
-@@ -292,6 +292,65 @@ static int cat_run_test(const struct resctrl_test *test, const struct user_param
- 	return ret;
- }
- 
-+static int noncont_cat_run_test(const struct resctrl_test *test,
-+				const struct user_params *uparams)
-+{
-+	unsigned long full_cache_mask, cont_mask, noncont_mask;
-+	unsigned int eax, ebx, ecx, edx, ret;
-+	int level, bit_center, sparse_masks;
-+	char schemata[64];
-+
-+	/* Check to compare sparse_masks content to cpuid output. */
-+	sparse_masks = read_info_res_file(test->resource, "sparse_masks");
-+	if (sparse_masks < 0)
-+		return sparse_masks;
-+
-+	level = get_cache_level(test->resource);
-+	if (level < 0)
-+		return -EINVAL;
-+	__cpuid_count(0x10, 4 - level, eax, ebx, ecx, edx);
-+
-+	if (sparse_masks != ((ecx >> 3) & 1))
-+		return -1;
-+
-+	/* Write checks initialization. */
-+	ret = get_full_cbm(test->resource, &full_cache_mask);
-+	if (ret < 0)
-+		return ret;
-+	bit_center = count_bits(full_cache_mask) / 2;
-+	cont_mask = full_cache_mask >> bit_center;
-+
-+	/* Contiguous mask write check. */
-+	snprintf(schemata, sizeof(schemata), "%lx", cont_mask);
-+	ret = write_schemata("", schemata, uparams->cpu, test->resource);
-+	if (ret)
-+		return ret;
-+
-+	/*
-+	 * Non-contiguous mask write check. CBM has a 0xf hole approximately in the middle.
-+	 * Output is compared with support information to catch any edge case errors.
-+	 */
-+	noncont_mask = ~(0xf << (bit_center - 2)) & full_cache_mask;
-+	snprintf(schemata, sizeof(schemata), "%lx", noncont_mask);
-+	ret = write_schemata("", schemata, uparams->cpu, test->resource);
-+	if (ret && sparse_masks)
-+		ksft_print_msg("Non-contiguous CBMs supported but write failed\n");
-+	else if (ret && !sparse_masks)
-+		ksft_print_msg("Non-contiguous CBMs not supported and write failed as expected\n");
-+	else if (!ret && !sparse_masks)
-+		ksft_print_msg("Non-contiguous CBMs not supported but write succeeded\n");
-+
-+	return !ret == !sparse_masks;
-+}
-+
-+static bool noncont_cat_feature_check(const struct resctrl_test *test)
-+{
-+	if (!resctrl_resource_exists(test->resource))
-+		return false;
-+
-+	return resctrl_cache_feature_exists(test->resource, "sparse_masks");
-+}
-+
- struct resctrl_test l3_cat_test = {
- 	.name = "L3_CAT",
- 	.group = "CAT",
-@@ -299,3 +358,19 @@ struct resctrl_test l3_cat_test = {
- 	.feature_check = test_resource_feature_check,
- 	.run_test = cat_run_test,
- };
-+
-+struct resctrl_test l3_noncont_cat_test = {
-+	.name = "L3_NONCONT_CAT",
-+	.group = "CAT",
-+	.resource = "L3",
-+	.feature_check = noncont_cat_feature_check,
-+	.run_test = noncont_cat_run_test,
-+};
-+
-+struct resctrl_test l2_noncont_cat_test = {
-+	.name = "L2_NONCONT_CAT",
-+	.group = "CAT",
-+	.resource = "L2",
-+	.feature_check = noncont_cat_feature_check,
-+	.run_test = noncont_cat_run_test,
-+};
-diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index 74041a35d4ba..7b7a48d1fddd 100644
---- a/tools/testing/selftests/resctrl/resctrl.h
-+++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -165,6 +165,7 @@ unsigned int count_contiguous_bits(unsigned long val, unsigned int *start);
- int get_full_cbm(const char *cache_type, unsigned long *mask);
- int get_mask_no_shareable(const char *cache_type, unsigned long *mask);
- int get_cache_size(int cpu_no, const char *cache_type, unsigned long *cache_size);
-+int get_cache_level(const char *cache_type);
- int read_info_res_file(const char *resource, const char *filename);
- void ctrlc_handler(int signum, siginfo_t *info, void *ptr);
- int signal_handler_register(void);
-@@ -201,5 +202,7 @@ extern struct resctrl_test mbm_test;
- extern struct resctrl_test mba_test;
- extern struct resctrl_test cmt_test;
- extern struct resctrl_test l3_cat_test;
-+extern struct resctrl_test l3_noncont_cat_test;
-+extern struct resctrl_test l2_noncont_cat_test;
- 
- #endif /* RESCTRL_H */
-diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
-index 3044179ee6e9..f3dc1b9696e7 100644
---- a/tools/testing/selftests/resctrl/resctrl_tests.c
-+++ b/tools/testing/selftests/resctrl/resctrl_tests.c
-@@ -19,6 +19,8 @@ static struct resctrl_test *resctrl_tests[] = {
- 	&mba_test,
- 	&cmt_test,
- 	&l3_cat_test,
-+	&l3_noncont_cat_test,
-+	&l2_noncont_cat_test,
- };
- 
- static int detect_vendor(void)
-diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-index 8546421f0940..8bd30973fec3 100644
---- a/tools/testing/selftests/resctrl/resctrlfs.c
-+++ b/tools/testing/selftests/resctrl/resctrlfs.c
-@@ -100,7 +100,7 @@ int umount_resctrlfs(void)
-  *
-  * Return: cache level as integer or -1 if @cache_type is invalid.
-  */
--static int get_cache_level(const char *cache_type)
-+int get_cache_level(const char *cache_type)
- {
- 	if (!strcmp(cache_type, "L3"))
- 		return 3;
--- 
-2.43.0
+> Perhaps you can simply avoid this by arranging for this driver to also
+> exclusively use some special type to indicate the dual nature of the
+> pointer and leave the other drivers as using the struct page version.
+>
 
+This is certainly possible, but it requires us to rename all the page
+pointers in the page_pool to the new type, and requires the driver
+adding devmem TCP support to rename all the page* pointer instances to
+the new type. It's possible but it introduces lots of code churn. Is
+the LSB + cast not a reasonable compromise here? I feel like the trick
+of setting the least significant bit on a pointer to indicate it's
+something else has a fair amount of precedent in the kernel.
+
+--
+Thanks,
+Mina
 
