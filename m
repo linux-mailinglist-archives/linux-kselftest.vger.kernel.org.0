@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-1684-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1685-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B74080EF60
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 15:53:41 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1790380EF61
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 15:53:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B8CBDB20D38
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 14:53:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2293281AC7
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 14:53:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FC90745DE;
-	Tue, 12 Dec 2023 14:53:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 944AA745DF;
+	Tue, 12 Dec 2023 14:53:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NJkuiIcm"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bKZhKxy1"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B585112;
-	Tue, 12 Dec 2023 06:53:31 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09734EA;
+	Tue, 12 Dec 2023 06:53:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702392811; x=1733928811;
+  t=1702392818; x=1733928818;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=droSSJvsZMJojwftguYS9wIBR3x3fBqsd4DUIwU6/UQ=;
-  b=NJkuiIcmAncjnnRqTqHF/jajyQ9Y45km8kAxpC9Kt8q+UuVJbuHmJJ4t
-   KBHduzhr0ddydD8m/usYLN2Sq8JKnB11db3ar6dL4pDez1YropNmiaUvf
-   okrZZ9vzz+QS3iaOrwtcaHFi4y/nfqJ1L1i9YS0ixB2WbfBnzXhrwKLwu
-   gj/XDs74DSMdDP8TcrmXl2riV4b5JzK9iXteR7/hnOm4RTuKhLJtaiJAj
-   awM80OyIjs5QBvONwMwFzx3dXRa2d8fPo6FQ0bJHIkdKeIyAhX+4VHlKZ
-   K65Ay9MRucqgf2w23kDJIOdybl9A/Z/gZmaVmi7+k+PETwybK5SOmWXZt
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10922"; a="481014348"
+  bh=wTLiPs7DM2XKGHCN7FGTKAU1Kd3MFxHMnL+sAIX2BfA=;
+  b=bKZhKxy1kfWYdt4iVQBOFb7KDb/pohtLqS6er0pNgn7/1e+U+f4vlOOt
+   1jLBDKR4JmZ8w9+ZJ6zmjxWzMYXQNcSLYuJJ2zjwn8XfeAZNi3thswz4z
+   7NbVD9ncoU/rBhlEBnKAJkBDMXA+0/K7UOPTq2OQ+RjUXZdzPAxfUiRS+
+   gcc3w6Y2TjnwqyQPWMYjXw4yzL5Mtk1NGFQkFWergQMgJccw39dJB6pqm
+   9hDw3+cLWSdKWR3UnuP3kDg9Gsdg94R/W8aCw3FRMskAMwtHDY3SKwkGr
+   u1qqXYU51soGkMuB2C7sVFyXK7YEhKSWZ5pyNDrKucIuQwM850aet5Txk
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10922"; a="481014360"
 X-IronPort-AV: E=Sophos;i="6.04,270,1695711600"; 
-   d="scan'208";a="481014348"
+   d="scan'208";a="481014360"
 Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2023 06:53:31 -0800
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2023 06:53:37 -0800
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.04,270,1695711600"; 
-   d="scan'208";a="15023995"
+   d="scan'208";a="15024023"
 Received: from mdabrows-mobl1.ger.corp.intel.com (HELO wieczorr-mobl1.intel.com) ([10.213.5.65])
-  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2023 06:53:28 -0800
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2023 06:53:34 -0800
 From: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 To: Fenghua Yu <fenghua.yu@intel.com>,
 	Reinette Chatre <reinette.chatre@intel.com>,
@@ -48,9 +48,9 @@ To: Fenghua Yu <fenghua.yu@intel.com>,
 Cc: ilpo.jarvinen@linux.intel.com,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 3/4] selftests/resctrl: Split validate_resctrl_feature_request()
-Date: Tue, 12 Dec 2023 15:52:53 +0100
-Message-ID: <d6442103165be849d32585e861fc2850f7c4e8ea.1702392177.git.maciej.wieczor-retman@intel.com>
+Subject: [PATCH v2 4/4] selftests/resctrl: Add non-contiguous CBMs CAT test
+Date: Tue, 12 Dec 2023 15:52:54 +0100
+Message-ID: <10c3afd7f62c63db31a3d4af86529144a5d7bbf9.1702392177.git.maciej.wieczor-retman@intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1702392177.git.maciej.wieczor-retman@intel.com>
 References: <cover.1702392177.git.maciej.wieczor-retman@intel.com>
@@ -62,210 +62,167 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-validate_resctrl_feature_request() is used to test both if a resource is
-present in the info directory, and if a passed monitoring feature is
-present in the mon_features file. There exists a different way to
-represent feature support and that is by the presence of 0 or 1 in
-single file in the info/resource directory. In this case the filename
-represents what feature support is being indicated.
+Add tests for both L2 and L3 CAT to verify the return values
+generated by writing non-contiguous CBMs don't contradict the
+reported non-contiguous support information.
 
-Split validate_resctrl_feature_request() into three smaller functions
-that each accomplish one check:
-- Resource directory presence in the /sys/fs/resctrl/info directory.
-- Feature name presence in the /sys/fs/resctrl/info/RESOURCE/mon_features file.
-- Feature file presence in a given /sys/fs/resctrl/info/RESOURCE directory.
+Use a logical XOR to confirm return value of write_schemata() and
+non-contiguous CBMs support information match.
 
 Signed-off-by: Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>
 ---
 Changelog v2:
-- Added this patch.
+- Redo the patch message. (Ilpo)
+- Tidy up __cpuid_count calls. (Ilpo)
+- Remove redundant AND in noncont_mask calculations (Ilpo)
+- Fix bit_center offset.
+- Add newline before function return. (Ilpo)
+- Group non-contiguous tests with CAT tests. (Ilpo)
+- Use a helper for reading sparse_masks file. (Ilpo)
+- Make get_cache_level() available in other source files. (Ilpo)
 
- tools/testing/selftests/resctrl/cat_test.c  |  2 -
- tools/testing/selftests/resctrl/cmt_test.c  |  4 +-
- tools/testing/selftests/resctrl/mba_test.c  |  5 +-
- tools/testing/selftests/resctrl/mbm_test.c  |  6 +--
- tools/testing/selftests/resctrl/resctrl.h   |  6 ++-
- tools/testing/selftests/resctrl/resctrlfs.c | 59 +++++++++++++++++----
- 6 files changed, 63 insertions(+), 19 deletions(-)
+ tools/testing/selftests/resctrl/cat_test.c    | 75 +++++++++++++++++++
+ tools/testing/selftests/resctrl/resctrl.h     |  3 +
+ .../testing/selftests/resctrl/resctrl_tests.c |  2 +
+ tools/testing/selftests/resctrl/resctrlfs.c   |  2 +-
+ 4 files changed, 81 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-index 39fc9303b8e8..7dc7206b3b99 100644
+index 7dc7206b3b99..ecf553a89aae 100644
 --- a/tools/testing/selftests/resctrl/cat_test.c
 +++ b/tools/testing/selftests/resctrl/cat_test.c
-@@ -1,9 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- /*
-  * Cache Allocation Technology (CAT) test
-- *
-  * Copyright (C) 2018 Intel Corporation
-- *
-  * Authors:
-  *    Sai Praneeth Prakhya <sai.praneeth.prakhya@intel.com>,
-  *    Fenghua Yu <fenghua.yu@intel.com>
-diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
-index dd5ca343c469..7b63aec8e2c4 100644
---- a/tools/testing/selftests/resctrl/cmt_test.c
-+++ b/tools/testing/selftests/resctrl/cmt_test.c
-@@ -169,8 +169,8 @@ static int cmt_run_test(const struct resctrl_test *test, const struct user_param
- 
- static bool cmt_feature_check(const struct resctrl_test *test)
- {
--	return test_resource_feature_check(test) &&
--	       validate_resctrl_feature_request("L3_MON", "llc_occupancy");
-+	return resctrl_mon_feature_exists("L3_MON", "llc_occupancy") &&
-+	       resctrl_resource_exists("L3");
+@@ -292,6 +292,65 @@ static int cat_run_test(const struct resctrl_test *test, const struct user_param
+ 	return ret;
  }
  
- struct resctrl_test cmt_test = {
-diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
-index da256d2dbe5c..ecf1c186448d 100644
---- a/tools/testing/selftests/resctrl/mba_test.c
-+++ b/tools/testing/selftests/resctrl/mba_test.c
-@@ -170,8 +170,9 @@ static int mba_run_test(const struct resctrl_test *test, const struct user_param
- 
- static bool mba_feature_check(const struct resctrl_test *test)
- {
--	return test_resource_feature_check(test) &&
--	       validate_resctrl_feature_request("L3_MON", "mbm_local_bytes");
-+	return resctrl_resource_exists(test->resource) &&
-+	       resctrl_mon_feature_exists("L3_MON",
-+					  "mbm_local_bytes");
- }
- 
- struct resctrl_test mba_test = {
-diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
-index 34879e7b71a0..d67ffa3ec63a 100644
---- a/tools/testing/selftests/resctrl/mbm_test.c
-+++ b/tools/testing/selftests/resctrl/mbm_test.c
-@@ -97,7 +97,7 @@ static int mbm_setup(const struct resctrl_test *test,
- 		return END_OF_TESTS;
- 
- 	/* Set up shemata with 100% allocation on the first run. */
--	if (p->num_of_runs == 0 && validate_resctrl_feature_request("MB", NULL))
-+	if (p->num_of_runs == 0 && resctrl_resource_exists("MB"))
- 		ret = write_schemata(p->ctrlgrp, "100", uparams->cpu, test->resource);
- 
- 	p->num_of_runs++;
-@@ -140,8 +140,8 @@ static int mbm_run_test(const struct resctrl_test *test, const struct user_param
- 
- static bool mbm_feature_check(const struct resctrl_test *test)
- {
--	return validate_resctrl_feature_request("L3_MON", "mbm_total_bytes") &&
--	       validate_resctrl_feature_request("L3_MON", "mbm_local_bytes");
-+	return resctrl_mon_feature_exists("L3_MON", "mbm_total_bytes") &&
-+	       resctrl_mon_feature_exists("L3_MON", "mbm_local_bytes");
- }
- 
- struct resctrl_test mbm_test = {
-diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index 8f72d94b9cbe..74041a35d4ba 100644
---- a/tools/testing/selftests/resctrl/resctrl.h
-+++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -135,7 +135,11 @@ int get_domain_id(const char *resource, int cpu_no, int *domain_id);
- int mount_resctrlfs(void);
- int umount_resctrlfs(void);
- int validate_bw_report_request(char *bw_report);
--bool validate_resctrl_feature_request(const char *resource, const char *feature);
-+bool resctrl_resource_exists(const char *resource);
-+bool resctrl_mon_feature_exists(const char *resource,
-+				const char *feature);
-+bool resctrl_cache_feature_exists(const char *resource,
-+				  const char *feature);
- bool test_resource_feature_check(const struct resctrl_test *test);
- char *fgrep(FILE *inf, const char *str);
- int taskset_benchmark(pid_t bm_pid, int cpu_no, cpu_set_t *old_affinity);
-diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-index 70333440ff2f..8546421f0940 100644
---- a/tools/testing/selftests/resctrl/resctrlfs.c
-+++ b/tools/testing/selftests/resctrl/resctrlfs.c
-@@ -697,20 +697,16 @@ char *fgrep(FILE *inf, const char *str)
- }
- 
- /*
-- * validate_resctrl_feature_request - Check if requested feature is valid.
-- * @resource:	Required resource (e.g., MB, L3, L2, L3_MON, etc.)
-- * @feature:	Required monitor feature (in mon_features file). Can only be
-- *		set for L3_MON. Must be NULL for all other resources.
-+ * resctrl_resource_exists - Check if a resource is supported.
-+ * @resource:	Resctrl resource (e.g., MB, L3, L2, L3_MON, etc.)
-  *
-- * Return: True if the resource/feature is supported, else false. False is
-+ * Return: True if the resource is supported, else false. False is
-  *         also returned if resctrl FS is not mounted.
-  */
--bool validate_resctrl_feature_request(const char *resource, const char *feature)
-+bool resctrl_resource_exists(const char *resource)
- {
- 	char res_path[PATH_MAX];
- 	struct stat statbuf;
--	char *res;
--	FILE *inf;
- 	int ret;
- 
- 	if (!resource)
-@@ -725,6 +721,25 @@ bool validate_resctrl_feature_request(const char *resource, const char *feature)
- 	if (stat(res_path, &statbuf))
- 		return false;
- 
-+	return true;
++static int noncont_cat_run_test(const struct resctrl_test *test,
++				const struct user_params *uparams)
++{
++	unsigned long full_cache_mask, cont_mask, noncont_mask;
++	unsigned int eax, ebx, ecx, edx, ret;
++	int level, bit_center, sparse_masks;
++	char schemata[64];
++
++	/* Check to compare sparse_masks content to cpuid output. */
++	sparse_masks = read_info_res_file(test->resource, "sparse_masks");
++	if (sparse_masks < 0)
++		return sparse_masks;
++
++	level = get_cache_level(test->resource);
++	if (level < 0)
++		return -EINVAL;
++	__cpuid_count(0x10, 4 - level, eax, ebx, ecx, edx);
++
++	if (sparse_masks != ((ecx >> 3) & 1))
++		return -1;
++
++	/* Write checks initialization. */
++	ret = get_full_cbm(test->resource, &full_cache_mask);
++	if (ret < 0)
++		return ret;
++	bit_center = count_bits(full_cache_mask) / 2;
++	cont_mask = full_cache_mask >> bit_center;
++
++	/* Contiguous mask write check. */
++	snprintf(schemata, sizeof(schemata), "%lx", cont_mask);
++	ret = write_schemata("", schemata, uparams->cpu, test->resource);
++	if (ret)
++		return ret;
++
++	/*
++	 * Non-contiguous mask write check. CBM has a 0xf hole approximately in the middle.
++	 * Output is compared with support information to catch any edge case errors.
++	 */
++	noncont_mask = ~(0xf << (bit_center - 2)) & full_cache_mask;
++	snprintf(schemata, sizeof(schemata), "%lx", noncont_mask);
++	ret = write_schemata("", schemata, uparams->cpu, test->resource);
++	if (ret && sparse_masks)
++		ksft_print_msg("Non-contiguous CBMs supported but write failed\n");
++	else if (ret && !sparse_masks)
++		ksft_print_msg("Non-contiguous CBMs not supported and write failed as expected\n");
++	else if (!ret && !sparse_masks)
++		ksft_print_msg("Non-contiguous CBMs not supported but write succeeded\n");
++
++	return !ret == !sparse_masks;
 +}
 +
-+/*
-+ * resctrl_mon_feature_exists - Check if requested feature is valid.
-+ * @resource:	Required resource (e.g., MB, L3, L2, L3_MON, etc.)
-+ * @feature:	Required monitor feature (in mon_features file). Can only be
-+ *		set for L3_MON. Must be NULL for all other resources.
-+ *
-+ * Return: True if the resource/feature is supported, else false. False is
-+ *         also returned if resctrl FS is not mounted.
-+ */
-+bool resctrl_mon_feature_exists(const char *resource,
-+				const char *feature)
++static bool noncont_cat_feature_check(const struct resctrl_test *test)
 +{
-+	char res_path[PATH_MAX];
-+	char *res;
-+	FILE *inf;
-+
- 	if (!feature)
- 		return true;
- 
-@@ -740,9 +755,35 @@ bool validate_resctrl_feature_request(const char *resource, const char *feature)
- 	return !!res;
- }
- 
-+/*
-+ * resctrl_cache_feature_exists - Check if a file that indicates a
-+ * cache related feature support is present.
-+ * @resource:	Required cache resource (L3 or L2)
-+ * @feature:	Required cache feature.
-+ *
-+ * Return: True if the feature is supported, else false.
-+ */
-+bool resctrl_cache_feature_exists(const char *resource,
-+				  const char *feature)
-+{
-+	char res_path[PATH_MAX];
-+	struct stat statbuf;
-+
-+	if (!feature)
-+		return true;
-+
-+	snprintf(res_path, sizeof(res_path), "%s/%s/%s", INFO_PATH, resource,
-+		 feature);
-+
-+	if (stat(res_path, &statbuf))
++	if (!resctrl_resource_exists(test->resource))
 +		return false;
 +
-+	return true;
++	return resctrl_cache_feature_exists(test->resource, "sparse_masks");
 +}
 +
- bool test_resource_feature_check(const struct resctrl_test *test)
- {
--	return validate_resctrl_feature_request(test->resource, NULL);
-+	return resctrl_resource_exists(test->resource);
- }
+ struct resctrl_test l3_cat_test = {
+ 	.name = "L3_CAT",
+ 	.group = "CAT",
+@@ -299,3 +358,19 @@ struct resctrl_test l3_cat_test = {
+ 	.feature_check = test_resource_feature_check,
+ 	.run_test = cat_run_test,
+ };
++
++struct resctrl_test l3_noncont_cat_test = {
++	.name = "L3_NONCONT_CAT",
++	.group = "CAT",
++	.resource = "L3",
++	.feature_check = noncont_cat_feature_check,
++	.run_test = noncont_cat_run_test,
++};
++
++struct resctrl_test l2_noncont_cat_test = {
++	.name = "L2_NONCONT_CAT",
++	.group = "CAT",
++	.resource = "L2",
++	.feature_check = noncont_cat_feature_check,
++	.run_test = noncont_cat_run_test,
++};
+diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
+index 74041a35d4ba..7b7a48d1fddd 100644
+--- a/tools/testing/selftests/resctrl/resctrl.h
++++ b/tools/testing/selftests/resctrl/resctrl.h
+@@ -165,6 +165,7 @@ unsigned int count_contiguous_bits(unsigned long val, unsigned int *start);
+ int get_full_cbm(const char *cache_type, unsigned long *mask);
+ int get_mask_no_shareable(const char *cache_type, unsigned long *mask);
+ int get_cache_size(int cpu_no, const char *cache_type, unsigned long *cache_size);
++int get_cache_level(const char *cache_type);
+ int read_info_res_file(const char *resource, const char *filename);
+ void ctrlc_handler(int signum, siginfo_t *info, void *ptr);
+ int signal_handler_register(void);
+@@ -201,5 +202,7 @@ extern struct resctrl_test mbm_test;
+ extern struct resctrl_test mba_test;
+ extern struct resctrl_test cmt_test;
+ extern struct resctrl_test l3_cat_test;
++extern struct resctrl_test l3_noncont_cat_test;
++extern struct resctrl_test l2_noncont_cat_test;
  
- int filter_dmesg(void)
+ #endif /* RESCTRL_H */
+diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
+index 3044179ee6e9..f3dc1b9696e7 100644
+--- a/tools/testing/selftests/resctrl/resctrl_tests.c
++++ b/tools/testing/selftests/resctrl/resctrl_tests.c
+@@ -19,6 +19,8 @@ static struct resctrl_test *resctrl_tests[] = {
+ 	&mba_test,
+ 	&cmt_test,
+ 	&l3_cat_test,
++	&l3_noncont_cat_test,
++	&l2_noncont_cat_test,
+ };
+ 
+ static int detect_vendor(void)
+diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
+index 8546421f0940..8bd30973fec3 100644
+--- a/tools/testing/selftests/resctrl/resctrlfs.c
++++ b/tools/testing/selftests/resctrl/resctrlfs.c
+@@ -100,7 +100,7 @@ int umount_resctrlfs(void)
+  *
+  * Return: cache level as integer or -1 if @cache_type is invalid.
+  */
+-static int get_cache_level(const char *cache_type)
++int get_cache_level(const char *cache_type)
+ {
+ 	if (!strcmp(cache_type, "L3"))
+ 		return 3;
 -- 
 2.43.0
 
