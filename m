@@ -1,219 +1,131 @@
-Return-Path: <linux-kselftest+bounces-1709-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1710-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F03AD80F688
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 20:22:29 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3205E80F693
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 20:23:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 97E321F2110D
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 19:22:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B42051F215C0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 19:23:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1216681E48;
-	Tue, 12 Dec 2023 19:22:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A1B581E48;
+	Tue, 12 Dec 2023 19:23:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lSUwxVgD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IfP7DhS6"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF2C281E42;
-	Tue, 12 Dec 2023 19:22:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDE4CC433C8;
-	Tue, 12 Dec 2023 19:22:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 257AF81E36;
+	Tue, 12 Dec 2023 19:23:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ED42C433C7;
+	Tue, 12 Dec 2023 19:23:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702408941;
-	bh=i5eA2fXhaq3Do9ywFpJzwHOFQOS7qYLx5BFeshX3BZI=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=lSUwxVgDk2j4cnZPH/Zy7xE7vjsRTnpogG2abp5kyPRCtT/TZgdYhJerl+EIt8XO+
-	 AZCxf+fPMQpNamCpOTnjqC4DOxO2jnXg7wVICwPQJUTf6RfCL14WhPZuHupkqX7l0O
-	 Hq+nJ2IAFAZtDifyGfoR91Vlrlzdh0w8cg/NWZlNbz/mzlhu3X4Kwv8yuSz6GB6uHz
-	 PVUgx+D3XmLxKMS4vyobPs59mP5iwt/lGzRutQe8tew0eS6GZcND9rnTgF9gVWr8sg
-	 0Nerc0Xi7synedvS/VCWgFV37xO/7MVPkRGY//8a+vJkxCv/bYg7Qcn9afsFwQw62R
-	 IjULLbahcHfEg==
-From: SeongJae Park <sj@kernel.org>
-To: SeongJae Park <sj@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>,
-	damon@lists.linux.dev,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 4/5] selftests/damon: add a test for update_schemes_tried_regions sysfs command
-Date: Tue, 12 Dec 2023 19:22:18 +0000
-Message-Id: <20231212192218.54095-1-sj@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231212191206.52917-5-sj@kernel.org>
-References: 
+	s=k20201202; t=1702409007;
+	bh=XugEc5jga7y4PNlRm8BjKTZfUw+pu3ZxkmQIpRIWEZY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=IfP7DhS6GQRIPh94PCnUY3D3v9HTUhNBLMgvDIKCSEyZWm7on3QEnlPSEsrB8VAly
+	 VxMqSbIZ3bDXLEwsbe1kcsiYY+66gJUk3MPujLh2TLd7piiYzNgT8/mby6PZXl45hv
+	 sWza2pUfxy/BGubgyV4ylzDtq0PT2Kjxb2j3/tZYOAyFsmOn3MVP+RVMO0+OJ63ELh
+	 8RieySJS8ocPfrZvxa9x9m8fK3pWdefGd7urdXdt3BI/iUUyl4yaoAxKMVxifEh29R
+	 ScXKjFti5r284zeeNNlTXHDNkVr0M/tfj7cm/QDJyTpxq4jSK3MjR/isfYySuemepR
+	 TnR15vPgid9eA==
+Date: Tue, 12 Dec 2023 19:22:24 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Deepak Gupta <debug@rivosinc.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Florian Weimer <fweimer@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v7 02/39] prctl: arch-agnostic prctl for shadow stack
+Message-ID: <d708b493-267a-4418-be91-9bde6b2cf50c@sirena.org.uk>
+References: <20231122-arm64-gcs-v7-0-201c483bd775@kernel.org>
+ <20231122-arm64-gcs-v7-2-201c483bd775@kernel.org>
+ <CAKC1njSC5cC_fXnyNAPt=WU6cD-OjLKFxo90oVPmsLJbuWf4nw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="sqzR9iJQv0rAi7An"
+Content-Disposition: inline
+In-Reply-To: <CAKC1njSC5cC_fXnyNAPt=WU6cD-OjLKFxo90oVPmsLJbuWf4nw@mail.gmail.com>
+X-Cookie: If rash develops, discontinue use.
 
-This and fifth patch of this patchset may not cleanly applicable, since those
-are made on top of my out-of-tree experimental changes.  I will rebase these
-and send v2.  Sorry for the noise.
 
+--sqzR9iJQv0rAi7An
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks,
-SJ
+On Tue, Dec 12, 2023 at 11:17:11AM -0800, Deepak Gupta wrote:
+> On Wed, Nov 22, 2023 at 1:43=E2=80=AFAM Mark Brown <broonie@kernel.org> w=
+rote:
 
-On 2023-12-12T19:12:05+00:00 SeongJae Park <sj@kernel.org> wrote:
+> > +/*
+> > + * Set the current shadow stack configuration.  Enabling the shadow
+> > + * stack will cause a shadow stack to be allocated for the thread.
+> > + */
+> > +#define PR_SET_SHADOW_STACK_STATUS      72
+> > +# define PR_SHADOW_STACK_ENABLE         (1UL << 0)
 
-> Add a selftest for verifying the accuracy of DAMON's access monitoring
-> functionality.  The test starts a program of artificial access pattern,
-> monitor the access pattern using DAMON, and check if DAMON finds
-> expected amount of hot data region (working set size) with only
-> acceptable error rate.
-> 
-> Note that the acceptable error rate is set with only naive assumptions
-> and small number of tests.  Hence failures of the test may not always
-> mean DAMON is broken.  Rather than that, those could be a signal to
-> better understand the real accuracy level of DAMON in wider
-> environments.  Based on further finding, we could optimize DAMON or
-> adjust the expectation of the test.
-> 
-> Signed-off-by: SeongJae Park <sj@kernel.org>
-> ---
->  tools/testing/selftests/damon/Makefile        |  2 +
->  tools/testing/selftests/damon/access_memory.c | 41 ++++++++++++++
->  ...te_schemes_tried_regions_wss_estimation.py | 55 +++++++++++++++++++
->  3 files changed, 98 insertions(+)
->  create mode 100644 tools/testing/selftests/damon/access_memory.c
->  create mode 100755 tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_wss_estimation.py
-> 
-> diff --git a/tools/testing/selftests/damon/Makefile b/tools/testing/selftests/damon/Makefile
-> index d2105d41ea25..1363987709c6 100644
-> --- a/tools/testing/selftests/damon/Makefile
-> +++ b/tools/testing/selftests/damon/Makefile
-> @@ -4,6 +4,7 @@
->  TEST_GEN_FILES += huge_count_read_write
->  TEST_GEN_FILES += dbgfs_target_ids_read_before_terminate_race
->  TEST_GEN_FILES += dbgfs_target_ids_pid_leak
-> +TEST_GEN_FILES += access_memory
->  
->  TEST_FILES = _chk_dependency.sh _debugfs_common.sh
->  TEST_PROGS = debugfs_attrs.sh debugfs_schemes.sh debugfs_target_ids.sh
-> @@ -11,6 +12,7 @@ TEST_PROGS += debugfs_empty_targets.sh debugfs_huge_count_read_write.sh
->  TEST_PROGS += debugfs_duplicate_context_creation.sh
->  TEST_PROGS += debugfs_rm_non_contexts.sh
->  TEST_PROGS += sysfs.sh sysfs_update_removed_scheme_dir.sh
-> +TEST_PROGS += sysfs_update_schemes_tried_regions_wss_estimation.py
->  TEST_PROGS += reclaim.sh lru_sort.sh
->  TEST_PROGS += dbgfs_target_ids_read_before_terminate_race.sh
->  TEST_PROGS += dbgfs_target_ids_pid_leak.sh
-> diff --git a/tools/testing/selftests/damon/access_memory.c b/tools/testing/selftests/damon/access_memory.c
-> new file mode 100644
-> index 000000000000..585a2fa54329
-> --- /dev/null
-> +++ b/tools/testing/selftests/damon/access_memory.c
-> @@ -0,0 +1,41 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Artificial memory access program for testing DAMON.
-> + */
-> +
-> +#include <stdio.h>
-> +#include <stdlib.h>
-> +#include <string.h>
-> +#include <time.h>
-> +
-> +int main(int argc, char *argv[])
-> +{
-> +	char **regions;
-> +	clock_t start_clock;
-> +	int nr_regions;
-> +	int sz_region;
-> +	int access_time_ms;
-> +	int i;
-> +
-> +	if (argc != 4) {
-> +		printf("Usage: %s <number> <size (bytes)> <time (ms)>\n",
-> +				argv[0]);
-> +		return -1;
-> +	}
-> +
-> +	nr_regions = atoi(argv[1]);
-> +	sz_region = atoi(argv[2]);
-> +	access_time_ms = atoi(argv[3]);
-> +
-> +	regions = malloc(sizeof(*regions) * nr_regions);
-> +	for (i = 0; i < nr_regions; i++)
-> +		regions[i] = malloc(sz_region);
-> +
-> +	for (i = 0; i < nr_regions; i++) {
-> +		start_clock = clock();
-> +		while ((clock() - start_clock) * 1000 / CLOCKS_PER_SEC <
-> +				access_time_ms)
-> +			memset(regions[i], i, 1024 * 1024 * 10);
-> +	}
-> +	return 0;
-> +}
-> diff --git a/tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_wss_estimation.py b/tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_wss_estimation.py
-> new file mode 100755
-> index 000000000000..cdbf19b442c9
-> --- /dev/null
-> +++ b/tools/testing/selftests/damon/sysfs_update_schemes_tried_regions_wss_estimation.py
-> @@ -0,0 +1,55 @@
-> +#!/usr/bin/env python3
-> +# SPDX-License-Identifier: GPL-2.0
-> +
-> +import subprocess
-> +import time
-> +
-> +import _damon_sysfs
-> +
-> +def main():
-> +    # access two 10 MiB memory regions, 2 second per each
-> +    sz_region = 10 * 1024 * 1024
-> +    proc = subprocess.Popen(['./access_memory', '2', '%d' % sz_region, '2000'])
-> +    kdamonds = _damon_sysfs.Kdamonds([_damon_sysfs.Kdamond(
-> +            contexts=[_damon_sysfs.DamonCtx(
-> +                ops='vaddr',
-> +                targets=[_damon_sysfs.DamonTarget(pid=proc.pid)],
-> +                schemes=[_damon_sysfs.Damos(
-> +                    access_pattern=_damon_sysfs.DamosAccessPattern(
-> +                        # >= 25% access rate, >= 200ms age
-> +                        nr_accesses=[5, 20], age=[2, 2**64 - 1]))] # schemes
-> +                )] # contexts
-> +            )]) # kdamonds
-> +
-> +    err = kdamonds.start()
-> +    if err != None:
-> +        print('kdmaond start failed: %s' % err)
-> +        exit(1)
-> +
-> +    wss_collected = []
-> +    while proc.poll() == None:
-> +        time.sleep(0.1)
-> +        err = kdamonds.kdamonds[0].update_schemes_tried_bytes()
-> +        if err != None:
-> +            print('tried bytes update failed: %s' % err)
-> +            exit(1)
-> +
-> +        wss_collected.append(
-> +                kdamonds.kdamonds[0].contexts[0].schemes[0].tried_bytes)
-> +
-> +    wss_collected.sort()
-> +    acceptable_error_rate = 0.2
-> +    for percentile in [50, 75]:
-> +        sample = wss_collected[int(len(wss_collected) * percentile / 100)]
-> +        error_rate = abs(sample - sz_region) / sz_region
-> +        print('%d-th percentile (%d) error %f' %
-> +                (percentile, sample, error_rate))
-> +        if error_rate > acceptable_error_rate:
-> +            print('the error rate is not acceptable (> %f)' %
-> +                    acceptable_error_rate)
-> +            print('samples are as below')
-> +            print('\n'.join(['%d' % wss for wss in wss_collected]))
-> +            exit(1)
-> +
-> +if __name__ == '__main__':
-> +    main()
-> -- 
-> 2.34.1
+> Other architecture may require disabling shadow stack if glibc
+> tunables is set to permissive mode.
+> In permissive mode, if glibc encounters `dlopen` on an object which
+> doesn't support shadow stack,
+> glibc should be able to issue PR_SHADOW_STACK_DISABLE.
+
+> Architectures can choose to implement or not but I think arch agnostic
+> code should enumerate this.
+
+The current implementation for arm64 and therefore API for the prctl()
+is that whatever combination of flags is specified will be set, this
+means that setting the status to something that does not include _ENABLE
+will result in disabling and we don't need a separate flag for disable.
+We have use cases that make active use of disabling at runtime.
+
+Please delete unneeded context from replies, it makes it much easier to
+find new content.
+
+--sqzR9iJQv0rAi7An
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmV4svAACgkQJNaLcl1U
+h9Btqwf/bsYteQozf7cPtwIIhQRSI8MqfxjmscBVibOnKEFjdEqlRLo5JjkO6Pr6
+Hsm1uhj0HkH+VoTgU/3/1losf+mnWyaEoeE90IUq5vBweWShWNPKbMowY1s1JyJT
+eJ8Jv5z8xL0Zd92fTtAv0/Gl/nzqAWu3nWwc0eQH9GFutxYJ/RQceRg37XE/DJ7Z
+odJHFuONGqU0YzuzvzYXPwCScKSOq3ym2wrT5xOjARR2ltJqsKxN2gVDflKZzP62
+UImi4UsGqWZ2QvQb/fIh6ch/i9mPYGPi81vtynCHbAn91TWcPAvgOCA1Sywzc2p0
+32BmmvfZZxpi8FaPWip8qJ7NDQKaeA==
+=sM8B
+-----END PGP SIGNATURE-----
+
+--sqzR9iJQv0rAi7An--
 
