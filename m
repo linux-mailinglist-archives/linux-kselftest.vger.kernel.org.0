@@ -1,96 +1,130 @@
-Return-Path: <linux-kselftest+bounces-1694-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1695-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA01F80F373
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 17:45:05 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A096A80F451
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 18:21:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5CDB5B20D98
-	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 16:45:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4AC0F1F21330
+	for <lists+linux-kselftest@lfdr.de>; Tue, 12 Dec 2023 17:21:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 404F87A228;
-	Tue, 12 Dec 2023 16:44:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C43417D882;
+	Tue, 12 Dec 2023 17:21:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e2fftcZ3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="quWq7NFA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF39CCA;
-	Tue, 12 Dec 2023 08:44:55 -0800 (PST)
-Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-3333074512bso3734010f8f.1;
-        Tue, 12 Dec 2023 08:44:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702399494; x=1703004294; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=f72rnhLGCj7YeXxJ2uAZSlHFuNQHutdzqzKTHCk0k28=;
-        b=e2fftcZ3W3jZ8+lB3bO+fWSQFYhVe9ErWy3E7zjMmVxkdEmHaBt9KroM/75n6wQBA9
-         wt2T5XBb6spvvHU8fTPXbq1wtx1hwSSCJjCBKG2rR0Hh80ctd3hGpF3c0EGIGtvbcFE1
-         XnunYWOkE9E/nakovRvMUlgvS3dpLt7zdlDfzLKuDF0wFXEs2Mm8GOaPc4ouUpfA729b
-         LLVk30yocQ6+akKQEmJxvHiMltIMzqh/+1ZP6zB4qf4Z8V8DqrFw8MeJZ7PGHzBEFqXB
-         pdq5RvCw0lVz7gZd92DuUORfTGmyqQJF+PtdJzucVcEE61q18jSP2fQwmXaNRehlb5aO
-         W0CA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702399494; x=1703004294;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=f72rnhLGCj7YeXxJ2uAZSlHFuNQHutdzqzKTHCk0k28=;
-        b=a0nKNF5fadOtQGmSCx08N3d9PBZgN6QgTqo9kT6DzEmfo/pMZ0DUoSXk7AHrxMraZ4
-         PvoDZkcd9W3v0L5HVJgkOWVtJWDfu/3ylKDiccIG3QYSoId2aehDoPuP/PYW1jun7+Z/
-         dmJeEJejztooiAdGUjxDkrLBu+trXiLBpsUilkiW2R8cnLe0TZNlqlgSSTD4G9eB3nQt
-         L+eSswtSQDquwSBr2fdFhybZQT0rW7ncO82WUQYRl/Gmu6gkXZCeFRTikPe9E9L2Eq9p
-         Kmv2CWM5D3IhNVhfJw/w3NQc9fao58Zt4T/0aA0Uel6AgbUW1xL6loMPAwuDC/lt+nhV
-         oY6w==
-X-Gm-Message-State: AOJu0Yx/adthG4spR04sipg6nIr4PUn/IYBJ+oVDGbtlxNjPnN9FKNLV
-	oq7unj11jkoUMCSw05JL8klPLOp1xSw0xUAfCkM=
-X-Google-Smtp-Source: AGHT+IHXkobD8K3/QjhypGC53V4wE7Wqgr3NDwQ6ESNDr5WO/bsIbVIC15NStxk5bvlaXc9r9vtUtUHemqpAxlu8/9A=
-X-Received: by 2002:a05:600c:4897:b0:40c:1de7:41d5 with SMTP id
- j23-20020a05600c489700b0040c1de741d5mr3522673wmp.87.1702399493727; Tue, 12
- Dec 2023 08:44:53 -0800 (PST)
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DAF37B3D9;
+	Tue, 12 Dec 2023 17:21:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 955A4C433C9;
+	Tue, 12 Dec 2023 17:21:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702401677;
+	bh=NjEv9qEr/oYVM+wHeeNDWCRv65KfnIhhpX8bgvPrnAA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=quWq7NFAtXTBXufHjGAQPZuAXrlWxIJ4Rn3ITaI13bZesQeatjNFR7raywE3BfBn7
+	 Pitan+DMqBcCL58QZwCgz3Lh/6jidDw46o+sSHdw2XNETPNFha4R9ntZwxgldpxfvd
+	 ThUunTfPwVTXTNhOAsJ9W9/N6z4PG1M3beyPew54n2U5AZrjlyDMmXs2L7Toa+G5kj
+	 jyTED6ks2sSuPvCG+6dEMiYHKakPG+EvMGSSnpSABMjq1R1ugTLDeB0n3JnFi9LuSS
+	 cUuBfE0LIKezRTEQ8AUTFsdnAhfeVJygPdgHWAaZ27aCb30nqIqsyQPesJMXA3vzFc
+	 vN+/g3oSMdIBg==
+From: Will Deacon <will@kernel.org>
+To: anshuman.khandual@arm.com,
+	mark.rutland@arm.com,
+	linux-arm-kernel@lists.infradead.org,
+	James Clark <james.clark@arm.com>,
+	suzuki.poulose@arm.com,
+	linux-perf-users@vger.kernel.org
+Cc: catalin.marinas@arm.com,
+	kernel-team@android.com,
+	Will Deacon <will@kernel.org>,
+	Zaid Al-Bassam <zalbassam@google.com>,
+	linux-kselftest@vger.kernel.org,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	namhyung@gmail.com,
+	Jonathan Corbet <corbet@lwn.net>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Raghavendra Rao Ananta <rananta@google.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>,
+	James Morse <james.morse@arm.com>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	kvmarm@lists.linux.dev,
+	linux-doc@vger.kernel.org,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	Marc Zyngier <maz@kernel.org>,
+	Ian Rogers <irogers@google.com>,
+	linux-kernel@vger.kernel.org,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	kvm@vger.kernel.org,
+	Russell King <linux@armlinux.org.uk>
+Subject: Re: [PATCH v7 00/11] arm64: perf: Add support for event counting threshold
+Date: Tue, 12 Dec 2023 17:20:53 +0000
+Message-Id: <170237438420.1648654.4727808470285684911.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20231211161331.1277825-1-james.clark@arm.com>
+References: <20231211161331.1277825-1-james.clark@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1702325874.git.dxu@dxuuu.xyz> <8ec1b885d2e13fcd20944cce9edc0340d993d044.1702325874.git.dxu@dxuuu.xyz>
- <CAHsH6GsdqBN638uqUm+8QkP1_45coucSTL7o=D2wFW-gYjPaBw@mail.gmail.com>
- <7yjkfhrwdphtcljq3odv4jc6lucd32wcg277hfsf4ve2jbo7hp@vuqzwbq5nxjw>
- <CAHsH6Gs1vUQnhR_a4qFnAF37Vx=68Do28sfVfFxQ9pVj9jSzjw@mail.gmail.com>
- <qiv464c4y43mo5rih5k6lgzkbpnj6wsrl52hrhgbxeqj45atun@szmqlmnccm52>
- <CAHsH6Gujycb9RBuRk7QHorLe0Q=Np_tb3uboQfp9KmJnegVXvw@mail.gmail.com> <fwadmdjjogp4ybfxfpwovnmnn36jigffopijsuqt4ly4vxqghm@ysqhd25mzylp>
-In-Reply-To: <fwadmdjjogp4ybfxfpwovnmnn36jigffopijsuqt4ly4vxqghm@ysqhd25mzylp>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Tue, 12 Dec 2023 08:44:42 -0800
-Message-ID: <CAADnVQKpXpqMr9jmc8RKLcL822ir0wA7bEN2h6dEo=6Y60qgWQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 9/9] bpf: xfrm: Add selftest for bpf_xdp_get_xfrm_state()
-To: Daniel Xu <dxu@dxuuu.xyz>
-Cc: Eyal Birger <eyal.birger@gmail.com>, Daniel Borkmann <daniel@iogearbox.net>, 
-	"David S. Miller" <davem@davemloft.net>, Shuah Khan <shuah@kernel.org>, 
-	Alexei Starovoitov <ast@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Andrii Nakryiko <andrii@kernel.org>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, Steffen Klassert <steffen.klassert@secunet.com>, 
-	antony.antony@secunet.com, Yonghong Song <yonghong.song@linux.dev>, 
-	Eddy Z <eddyz87@gmail.com>, Mykola Lysenko <mykolal@fb.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Network Development <netdev@vger.kernel.org>, devel@linux-ipsec.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Tue, Dec 12, 2023 at 8:17=E2=80=AFAM Daniel Xu <dxu@dxuuu.xyz> wrote:
->
->
-> If you don't mind (and there no more comments), I would prefer to send a
-> follow up fixing the nits in this revision. So that I stop blasting the
-> list (as well as people who may not be as concerned with these details).
+On Mon, 11 Dec 2023 16:13:12 +0000, James Clark wrote:
+> Changes since v6:
+> 
+>   * Remove inlines from arm_pmuv3.c
+>   * Use format attribute mechanism from SPE
+>   * Re-arrange attributes so that threshold comes last and can
+>     potentially be extended
+>   * Emit an error if the max threshold is exceeded rather than clamping
+>   * Convert all register fields to GENMASK
+> 
+> [...]
 
-Resending patches is little effort while follow up patches
-double the commits, more code churn, increase in code reviews, etc.
-Always address feedback by resending.
+Thanks for respinning, James. This looks really good now.
+
+Applied to will (for-next/perf), thanks!
+
+[01/11] arm: perf: Remove inlines from arm_pmuv3.c
+        https://git.kernel.org/will/c/9343c790e6de
+[02/11] arm: perf/kvm: Use GENMASK for ARMV8_PMU_PMCR_N
+        https://git.kernel.org/will/c/62e1f212e5fe
+[03/11] arm: perf: Use GENMASK for PMMIR fields
+        https://git.kernel.org/will/c/2f6a00f30600
+[04/11] arm: perf: Convert remaining fields to use GENMASK
+        https://git.kernel.org/will/c/d30f09b6d7de
+[05/11] arm64: perf: Include threshold control fields in PMEVTYPER mask
+        https://git.kernel.org/will/c/3115ee021bfb
+[06/11] arm: pmu: Share user ABI format mechanism with SPE
+        https://git.kernel.org/will/c/f6da86969a3c
+[07/11] perf/arm_dmc620: Remove duplicate format attribute #defines
+        https://git.kernel.org/will/c/a5f4ca68f348
+[08/11] KVM: selftests: aarch64: Update tools copy of arm_pmuv3.h
+        https://git.kernel.org/will/c/c7b98bf0fc79
+[09/11] arm: pmu: Move error message and -EOPNOTSUPP to individual PMUs
+        https://git.kernel.org/will/c/186c91aaf549
+[10/11] arm64: perf: Add support for event counting threshold
+        https://git.kernel.org/will/c/816c26754447
+[11/11] Documentation: arm64: Document the PMU event counting threshold feature
+        https://git.kernel.org/will/c/bd690638e2c2
+
+Cheers,
+-- 
+Will
+
+https://fixes.arm64.dev
+https://next.arm64.dev
+https://will.arm64.dev
 
