@@ -1,195 +1,243 @@
-Return-Path: <linux-kselftest+bounces-1783-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1784-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E502A810799
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 02:23:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC5D88107EC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 02:59:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 98D521F21AED
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 01:23:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2E24C1F21AC9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 01:59:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F07D2EDF;
-	Wed, 13 Dec 2023 01:23:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 323C810E2;
+	Wed, 13 Dec 2023 01:59:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HUd1vd7D"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id 19543A7;
-	Tue, 12 Dec 2023 17:23:09 -0800 (PST)
-Received: from loongson.cn (unknown [113.200.148.30])
-	by gateway (Coremail) with SMTP id _____8DxE_B4B3lllIYAAA--.3300S3;
-	Wed, 13 Dec 2023 09:23:04 +0800 (CST)
-Received: from linux.localdomain (unknown [113.200.148.30])
-	by localhost.localdomain (Coremail) with SMTP id AQAAf8CxXeF1B3ll_JYBAA--.11124S4;
-	Wed, 13 Dec 2023 09:23:04 +0800 (CST)
-From: Tiezhu Yang <yangtiezhu@loongson.cn>
-To: Shuah Khan <shuah@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>
-Cc: linux-kselftest@vger.kernel.org,
-	loongarch@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/2] selftests/vDSO: Fix runtime errors on LoongArch
-Date: Wed, 13 Dec 2023 09:23:00 +0800
-Message-ID: <20231213012300.5640-3-yangtiezhu@loongson.cn>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20231213012300.5640-1-yangtiezhu@loongson.cn>
-References: <20231213012300.5640-1-yangtiezhu@loongson.cn>
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 057C4BE;
+	Tue, 12 Dec 2023 17:59:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1702432774; x=1733968774;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=qDeXpI92OgpZ2MRTC+7+7SsEFipFOOVErgTiRX2yS28=;
+  b=HUd1vd7Dly5U+C8OV/8pIXQTebW7uQoA8jPovDsYRNOT6F5tTjSkpLYd
+   VTIv5wNvDjuHRn0OABnLli3pZb/+eLh+MI4OB7iqRRzZNv7kB95c6cdwF
+   cy4s9uO5wi5tw422y2TyiPp6CblyKYrC72chC9kRPqKC/p/dUy1el1O7f
+   V0xS/liiIMZv9+PELa0Mm8DPAUM8y/gpQYDNS860qPEf9lJOJizwa0KEA
+   uHFrDQyYP3UdckH178c4A6++KkfMZeTDLRtqAJMe4WxnnfJxrUa5y1ny4
+   RsSYQhr98rca5Hu/o1SCQGsVEGAhyzEo2aOfNsP44AbqreAGhsOhPhORe
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10922"; a="393775224"
+X-IronPort-AV: E=Sophos;i="6.04,271,1695711600"; 
+   d="scan'208";a="393775224"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Dec 2023 17:59:33 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10922"; a="1105137104"
+X-IronPort-AV: E=Sophos;i="6.04,271,1695711600"; 
+   d="scan'208";a="1105137104"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga005.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 12 Dec 2023 17:59:31 -0800
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Tue, 12 Dec 2023 17:59:29 -0800
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Tue, 12 Dec 2023 17:59:29 -0800
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35 via Frontend Transport; Tue, 12 Dec 2023 17:59:29 -0800
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.169)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Tue, 12 Dec 2023 17:59:29 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=X9uNzhMp+/rgwdUexiYJt5a1sN6jPL6oPrnRh5nJjQImRX3sOyXImzogvNJeKA5VfirjfB0OO60IVqAsfI/lr2xKxnO8Oi9S+Q5C0tlWJ1Yrh7QWthpdL9C66Rzd0oVasHaJGCbxALcbueCgDPc1iFUgEmJDhBAO9gFIyFbJpoLf6LtmbGZ0WBfnQmxRZpAhOyEEuCX3Jj5W2SCVm994ja+sKO+15ZtfGmb58wYgfEUfz3C2xEstwB+b8S4GI2TWgqzqAPTwq2HLaEShaQqRt4vSiZRUZWxpNcC541eOx+WIjXUjELtHMlpVmqbJuuxwdjPCMU0yuWjjJT4Okqzgtg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Dt7kTG8dQ2tSx/dEwTC+I0SZb1tbzJmm6S3NpE6L1AY=;
+ b=U3NcQcoY6gR8yZapaACJC4N66mTsHadRcW+XeyGC7bhA6CDubnE0Mx6FutD/Ty7YE9CUaihaI0Gwr+MxeapdjS73fNbHTbxACrgAZ3iGwvKrXh6UXlfk0QbhuwzHkYKpGDc7jeAA+xwiBt0zdKwTKbwJRN7g64Rc/ZwU6nRa5ccMI/6Ay8asmry24bvv53Mg5ZkDbA6V4K1grPGfChsji2Qypt3gvo3so9jih7nyYJcJC06aLw85JyhqFocQqrpm1OKtUgLnEc8KLZOtfFfVyOFscbDd3QqxWxRiIxJoEi9XRqCV8ZvMohPSZLOv4LE1KzUDSMHYwiJtdtl6ScC0Ow==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by DS0PR11MB7852.namprd11.prod.outlook.com (2603:10b6:8:fc::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7091.26; Wed, 13 Dec
+ 2023 01:59:27 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::e7a4:a757:2f2e:f96a]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::e7a4:a757:2f2e:f96a%3]) with mapi id 15.20.7068.033; Wed, 13 Dec 2023
+ 01:59:27 +0000
+From: "Tian, Kevin" <kevin.tian@intel.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+CC: "Liu, Yi L" <yi.l.liu@intel.com>, "joro@8bytes.org" <joro@8bytes.org>,
+	"alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+	"robin.murphy@arm.com" <robin.murphy@arm.com>, "baolu.lu@linux.intel.com"
+	<baolu.lu@linux.intel.com>, "cohuck@redhat.com" <cohuck@redhat.com>,
+	"eric.auger@redhat.com" <eric.auger@redhat.com>, "nicolinc@nvidia.com"
+	<nicolinc@nvidia.com>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+	"mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+	"chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
+	"yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>, "peterx@redhat.com"
+	<peterx@redhat.com>, "jasowang@redhat.com" <jasowang@redhat.com>,
+	"shameerali.kolothum.thodi@huawei.com"
+	<shameerali.kolothum.thodi@huawei.com>, "lulu@redhat.com" <lulu@redhat.com>,
+	"suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+	"iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "Duan,
+ Zhenzhong" <zhenzhong.duan@intel.com>, "joao.m.martins@oracle.com"
+	<joao.m.martins@oracle.com>, "Zeng, Xin" <xin.zeng@intel.com>, "Zhao, Yan Y"
+	<yan.y.zhao@intel.com>
+Subject: RE: [PATCH 3/3] vfio: Report PASID capability via VFIO_DEVICE_FEATURE
+ ioctl
+Thread-Topic: [PATCH 3/3] vfio: Report PASID capability via
+ VFIO_DEVICE_FEATURE ioctl
+Thread-Index: AQHaIPx2EKyfzMrBBEWzcc+IDcJP4bCdkKlggAY/u4CAATAaUIAA3hcAgACraDA=
+Date: Wed, 13 Dec 2023 01:59:26 +0000
+Message-ID: <BN9PR11MB5276E0744C625273624333E08C8DA@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20231127063909.129153-1-yi.l.liu@intel.com>
+ <20231127063909.129153-4-yi.l.liu@intel.com>
+ <BN9PR11MB527639DBE4C433542F351F6D8C8BA@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <0bdae2ca-a200-4db1-a016-059730d1545e@intel.com>
+ <BN9PR11MB52763C75E3D638B722CE63A78C8EA@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <20231212153130.GK3014157@nvidia.com>
+In-Reply-To: <20231212153130.GK3014157@nvidia.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|DS0PR11MB7852:EE_
+x-ms-office365-filtering-correlation-id: 1fcb0f70-8d69-475f-d585-08dbfb7f2308
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: IZyidHd01wxYiGq85E6IHEwON2BMDv3SrQerM/ShpF8PBatiEAlZgWXo3b7LOQPuxHPiYW1P7p5UFP6lBE7ByhqB85cGmJ0SS5fvADVqHmYR48oVAjJs0ho8/X6pd3W/YQTD0vDgcZaNSblhpMg2LZy5mU1pURQEDuJItExtX/bzMPwiA9vryBgdftA+cZytjOellcw8MB8JY+VBEEVmV7y4PJ7jdmtiSmIpFbTPYtYJ8wzJAnVtWiaf01Y/Qou2dUAeETUGZl/wqBUNobKiJO7iNdYUaO8rvrAwrdElUT/Ig7xMCErCCMpwc+/abYDqao6FWhBN5gaM/dPPVEK3wl6LGaieunmeETcS0AZm00GL5i8I4Z9GF3206Zf8FVHmTaZAOBixwS4kLSsOPo74Z1j5/zuEZkwCM/rejq2o/LWKnXcKo2wcHbspCKQMSteu84hLLTXrALNji8TwuYuXc9xGx2RX4jym6qICuCrR+ptDsYsiku0l+NNTqrA+3+6omUalCqfqnRok5kFULe51IrFgC7e+/yvIEZv/I57UGcr0z+iD+1L4xR2ebohfkI3z1NsKr3hfhmx3+AIeywp31B3Bh5aq8hCGB2dpNZMrS6QwhIsRkaJRT+OJ6LEwAnaQ
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(376002)(136003)(39860400002)(366004)(396003)(230922051799003)(451199024)(1800799012)(64100799003)(186009)(53546011)(7696005)(6506007)(9686003)(122000001)(5660300002)(8676002)(8936002)(52536014)(7416002)(41300700001)(2906002)(4326008)(316002)(478600001)(26005)(71200400001)(38100700002)(66476007)(66446008)(6916009)(64756008)(54906003)(76116006)(66556008)(66946007)(86362001)(33656002)(82960400001)(38070700009)(55016003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?8ZnzLuYMI3AmEObcUXalim5yyQWf9JZ0NqJnaJrTQZFi+H9AMd9lK/Y/0P+b?=
+ =?us-ascii?Q?G3+DGr0J5s6+3KqCnFuh/VQit6jdnM9HkXsPKvF3tsUrGtG88fZ/Z1FeRKfD?=
+ =?us-ascii?Q?6a5lKV+BuePB3NDN3TcyOgmRCEJ+paFszBCBa19hnkXfeCY1xyQuPCldLOlJ?=
+ =?us-ascii?Q?v7x03/bHVSAaAJ9f+85F6VNh0Mn0NpGN0scqXCn4WbwWDE4whhYJm1vWjnvO?=
+ =?us-ascii?Q?q4n0VsYAvVbp2NwV2dQ4nYR51kFdIhmFqwgryyRheODvzu0oEGexKxIC9oCN?=
+ =?us-ascii?Q?vgLh6S4mnKaLo/psonSWlsV4Cp/zWI7qf7LeoeBxwW4/7PM89sTWOQbn7Wlb?=
+ =?us-ascii?Q?yK7ABMcgZSTbC+E61ruHYk0/CMTDbA8Ox3KLXuc22l2G83wwLgljC0r9yhcF?=
+ =?us-ascii?Q?stBA2uWpp6sxztP++stAVLmq5dNIn88+0Deog5Gm5CwFJS9KDL+n5a9giA5e?=
+ =?us-ascii?Q?qkjixHO6N/sKFy57KAlz7PSF6qWvXghmG6Yq6QZKCu8OArbCyYz1AUM1q5ej?=
+ =?us-ascii?Q?SOzFn8ra5M0H2HtLif7mT3Pl8clidY8mx30yO8fZZN9XSYEgoE0bVrpkwDGl?=
+ =?us-ascii?Q?psmWQvLilBv8KiMx+AWAvoTCWO7rFIFiZ21G3VP8nKimeI86+muYLWev1x+A?=
+ =?us-ascii?Q?FMOr5x0RhcX/h204GBaz3GOeZuVYhP2u0dmUj2AMncDyU84fbN54A8AxKgyZ?=
+ =?us-ascii?Q?11O2XTqCfYSFtencQfgF0TxjhB1JeGy+DFXb7H2Cf854uFQLIoCT3Qaiyvi2?=
+ =?us-ascii?Q?R55artrg9oenHbaP+PR/7czincrWbYy7trjWBZmNqXO6xFtUUU4A7jUPzqKD?=
+ =?us-ascii?Q?vtoNqgtK7pbdrKHBhp2bapn4w0+dFP5ZXhyePRtsclGwovw4Sew3p8spqhdJ?=
+ =?us-ascii?Q?8HeOZOMmCI9w571dQ6WPyUL108aJPs7cAvMPahQ7eFf7Ra9sbWnXc+MPZezj?=
+ =?us-ascii?Q?KaR81l4giME7V7ohpOILeYYp2IIvmz9o6On5HDe3xjl8YR85yZf2vb86Hxge?=
+ =?us-ascii?Q?5YUaQXkKjCwKKqHex1OvqOonmv4gWj0NaB38TjEACQJPlibWZxxbj3y97AVr?=
+ =?us-ascii?Q?RoOHN7FQElIELSjdPfqh6qz+wmUbH/oYeYNBm9lpDjTCSA+tYwT75SUcnqjp?=
+ =?us-ascii?Q?JXk4a1Y9b0NQIz44vxfieGyswX60x/Gvb26tXbOd7FPcifRbA4FxVUn5pEyo?=
+ =?us-ascii?Q?jPB2Iexua+vev8rT4MvHGYjOazlhJNSUXNKdrwIeFweo7lKQMJzP5OpAcwSv?=
+ =?us-ascii?Q?iREBkEZ6462AU4Lvhq//7Z5JRa4IYAl2ri4+y58DjW9ltLlb+TCNcBDCOm/b?=
+ =?us-ascii?Q?S7wSFYhOr4POFZj9NPQEdyJflQsaPigB9sbczboKfJZenoBvSG/L2paai4if?=
+ =?us-ascii?Q?UG9ylqL8R/teNskrT8JDTLfpSisaZVHtEbhjDKFc1VDzC1cMQEmR1hZUZCjB?=
+ =?us-ascii?Q?jVvzQk/LPayO3rQ3u5VXKoWY1HBzyn1DzjPV7+6HrE4aMEdCW7XORvi+CMlp?=
+ =?us-ascii?Q?GJhYmWq1opntlACJKPNcTig2yhzkl2pHfZ+zOq5bQc8N1RaWC82LuQmbb5RB?=
+ =?us-ascii?Q?he1PYjdVrt3MPROoUSJbNuEwFjn6jwwYsrNMsEyz?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:AQAAf8CxXeF1B3ll_JYBAA--.11124S4
-X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBj93XoWxuFy5Gw1UAFWkKF1kGF48uFX_yoWrCr18pa
-	n7Kry2kw48tay5Kw1Iyw1Dur4rJrn7Ga18Aw48AFW3AF47Zw48JrWDGFy5X3ZxurW0vr45
-	u3WFgr4F9aykJagCm3ZEXasCq-sJn29KB7ZKAUJUUUUr529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUU92b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r126r13M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Ar0_tr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIE14v26F4j6r4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAF
-	wI0_Gr1j6F4UJwAaw2AFwI0_Jrv_JF1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2
-	xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_
-	Jw0_WrylYx0Ex4A2jsIE14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x
-	0EwIxGrwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C267AK
-	xVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67
-	AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW8JVW5JwCI
-	42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMI
-	IF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVF
-	xhVjvjDU0xZFpf9x07jrPEfUUUUU=
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1fcb0f70-8d69-475f-d585-08dbfb7f2308
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Dec 2023 01:59:26.9638
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: fbdFqBR5+aS6Vo80s90oZSEkgqS0bJfy3Wl38aXlHzsOC3YF5oxD6wZ7r/sqw+9LpF8/ZQ8EmkgGqCSsgM/WZw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR11MB7852
+X-OriginatorOrg: intel.com
 
-It could not find __vdso_getcpu and __vdso_gettimeofday when test
-getcpu and gettimeofday on LoongArch.
+> From: Jason Gunthorpe <jgg@nvidia.com>
+> Sent: Tuesday, December 12, 2023 11:32 PM
+>=20
+> On Tue, Dec 12, 2023 at 02:20:01AM +0000, Tian, Kevin wrote:
+> > > From: Liu, Yi L <yi.l.liu@intel.com>
+> > > Sent: Monday, December 11, 2023 4:08 PM
+> > >
+> > > On 2023/12/7 16:47, Tian, Kevin wrote:
+> > > >> From: Liu, Yi L <yi.l.liu@intel.com>
+> > > >> Sent: Monday, November 27, 2023 2:39 PM
+> > > >>
+> > > >> +static int vfio_pci_core_feature_pasid(struct vfio_device *device=
+, u32
+> > > flags,
+> > > >> +				       struct vfio_device_feature_pasid __user
+> > > >> *arg,
+> > > >> +				       size_t argsz)
+> > > >> +{
+> > > >> +	struct vfio_pci_core_device *vdev =3D
+> > > >> +		container_of(device, struct vfio_pci_core_device, vdev);
+> > > >> +	struct vfio_device_feature_pasid pasid =3D { 0 };
+> > > >> +	struct pci_dev *pdev =3D vdev->pdev;
+> > > >> +	u32 capabilities =3D 0;
+> > > >> +	int ret;
+> > > >> +
+> > > >> +	/* We do not support SET of the PASID capability */
+> > > >
+> > > > this line alone is meaningless. Please explain the reason e.g. due =
+to
+> > > > no PASID capability per VF...
+> > >
+> > > sure. I think the major reason is we don't allow userspace to change =
+the
+> > > PASID configuration. is it?
+> >
+> > if only PF it's still possible to develop a model allowing userspace to
+> > change.
+>=20
+> More importantly the primary purpose of setting the PASID width is
+> because of the physical properties of the IOMMU HW.
+>=20
+> IOMMU HW that supports virtualization should do so in a way that the
+> PASID with can be globally set to some value the hypervisor is aware
+> the HW can decode in all cases.
+>=20
+> The VM should have no way to make the HW ignore (vs check for zero)
+> upper bits of the PASID that would require the physical PASID bits to
+> be reduced.
+>=20
+> So we should never allow programming of this, VMM just fakes it and
+> ignores sets.
 
-  # make headers && cd tools/testing/selftests/vDSO && make
-  # ./vdso_test_getcpu
-  Could not find __vdso_getcpu
-  # ./vdso_test_gettimeofday
-  Could not find __vdso_gettimeofday
+PASID width is read-only so certainly sets should be ignored
 
-One simple way is to add LoongArch case to define version and name,
-just like commit d942f231afc0 ("selftests/vDSO: Add riscv getcpu &
-gettimeofday test"), but it is not the best way.
+>=20
+> Similar argument for enable, IOMMU HW supporting virtualization should
+> always be able to decode PASID and reject PASID TLPs if the VM hasn't
+> configured the vIOMMU to decode them. The purpose of the disable bit
+> is to accommodate IOMMU HW that cannot decode the PASID TLP at all and
+> would become confused.
+>=20
 
-Since each architecture has already defined names and versions in
-vdso_config.h, it is proper to include vdso_config.h to get version
-and name for all archs.
-
-Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
----
- .../testing/selftests/vDSO/vdso_test_getcpu.c | 16 +++++-------
- .../selftests/vDSO/vdso_test_gettimeofday.c   | 26 +++++--------------
- 2 files changed, 13 insertions(+), 29 deletions(-)
-
-diff --git a/tools/testing/selftests/vDSO/vdso_test_getcpu.c b/tools/testing/selftests/vDSO/vdso_test_getcpu.c
-index 1df5d057d79f..b758f68c6c9c 100644
---- a/tools/testing/selftests/vDSO/vdso_test_getcpu.c
-+++ b/tools/testing/selftests/vDSO/vdso_test_getcpu.c
-@@ -13,13 +13,7 @@
- 
- #include "../kselftest.h"
- #include "parse_vdso.h"
--
--#if defined(__riscv)
--const char *version = "LINUX_4.15";
--#else
--const char *version = "LINUX_2.6";
--#endif
--const char *name = "__vdso_getcpu";
-+#include "vdso_config.h"
- 
- struct getcpu_cache;
- typedef long (*getcpu_t)(unsigned int *, unsigned int *,
-@@ -27,6 +21,8 @@ typedef long (*getcpu_t)(unsigned int *, unsigned int *,
- 
- int main(int argc, char **argv)
- {
-+	const char *version = versions[VDSO_VERSION];
-+	const char **name = (const char **)&names[VDSO_NAMES];
- 	unsigned long sysinfo_ehdr;
- 	unsigned int cpu, node;
- 	getcpu_t get_cpu;
-@@ -40,9 +36,9 @@ int main(int argc, char **argv)
- 
- 	vdso_init_from_sysinfo_ehdr(getauxval(AT_SYSINFO_EHDR));
- 
--	get_cpu = (getcpu_t)vdso_sym(version, name);
-+	get_cpu = (getcpu_t)vdso_sym(version, name[4]);
- 	if (!get_cpu) {
--		printf("Could not find %s\n", name);
-+		printf("Could not find %s\n", name[4]);
- 		return KSFT_SKIP;
- 	}
- 
-@@ -50,7 +46,7 @@ int main(int argc, char **argv)
- 	if (ret == 0) {
- 		printf("Running on CPU %u node %u\n", cpu, node);
- 	} else {
--		printf("%s failed\n", name);
-+		printf("%s failed\n", name[4]);
- 		return KSFT_FAIL;
- 	}
- 
-diff --git a/tools/testing/selftests/vDSO/vdso_test_gettimeofday.c b/tools/testing/selftests/vDSO/vdso_test_gettimeofday.c
-index e411f287a426..ee4f1ca56a71 100644
---- a/tools/testing/selftests/vDSO/vdso_test_gettimeofday.c
-+++ b/tools/testing/selftests/vDSO/vdso_test_gettimeofday.c
-@@ -18,25 +18,13 @@
- 
- #include "../kselftest.h"
- #include "parse_vdso.h"
--
--/*
-- * ARM64's vDSO exports its gettimeofday() implementation with a different
-- * name and version from other architectures, so we need to handle it as
-- * a special case.
-- */
--#if defined(__aarch64__)
--const char *version = "LINUX_2.6.39";
--const char *name = "__kernel_gettimeofday";
--#elif defined(__riscv)
--const char *version = "LINUX_4.15";
--const char *name = "__vdso_gettimeofday";
--#else
--const char *version = "LINUX_2.6";
--const char *name = "__vdso_gettimeofday";
--#endif
-+#include "vdso_config.h"
- 
- int main(int argc, char **argv)
- {
-+	const char *version = versions[VDSO_VERSION];
-+	const char **name = (const char **)&names[VDSO_NAMES];
-+
- 	unsigned long sysinfo_ehdr = getauxval(AT_SYSINFO_EHDR);
- 	if (!sysinfo_ehdr) {
- 		printf("AT_SYSINFO_EHDR is not present!\n");
-@@ -47,10 +35,10 @@ int main(int argc, char **argv)
- 
- 	/* Find gettimeofday. */
- 	typedef long (*gtod_t)(struct timeval *tv, struct timezone *tz);
--	gtod_t gtod = (gtod_t)vdso_sym(version, name);
-+	gtod_t gtod = (gtod_t)vdso_sym(version, name[0]);
- 
- 	if (!gtod) {
--		printf("Could not find %s\n", name);
-+		printf("Could not find %s\n", name[0]);
- 		return KSFT_SKIP;
- 	}
- 
-@@ -61,7 +49,7 @@ int main(int argc, char **argv)
- 		printf("The time is %lld.%06lld\n",
- 		       (long long)tv.tv_sec, (long long)tv.tv_usec);
- 	} else {
--		printf("%s failed\n", name);
-+		printf("%s failed\n", name[0]);
- 		return KSFT_FAIL;
- 	}
- 
--- 
-2.42.0
-
+Yes, this explains why disallowing userspace to change doesn't cause
+problem in this series. My earlier point was just that allowing userspace
+to change could be implemented for PF (though unnecessary with your
+explanation) to mimic the hardware behavior.
 
