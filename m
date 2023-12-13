@@ -1,127 +1,140 @@
-Return-Path: <linux-kselftest+bounces-1834-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1835-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0DC48113F1
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 15:00:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2AEFD811401
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 15:03:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E47281C20748
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 14:00:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5D0DB1C2110A
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 14:03:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B90412E629;
-	Wed, 13 Dec 2023 14:00:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F297D2E63C;
+	Wed, 13 Dec 2023 14:02:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MaBOz/47"
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="cqna6UjT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90E2E2DF62;
-	Wed, 13 Dec 2023 14:00:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C1A6C433C7;
-	Wed, 13 Dec 2023 14:00:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702476041;
-	bh=uBRmDLreG8WgwNQkvzLPBqQqss2T/ZofeYOVFa+eznA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MaBOz/47yY6VrRxrv3KKFtukVEZ+DALugU+umNCVqzDhVU9TRoPPiFIp6ki7L9H85
-	 +SSElnIH3cjgLrJjtr+W8i5TGHkloO1SPoxHDMtPwN7rgnMdsPs8Je95lVTgYqohyR
-	 JqrZYSFXbJEp38k/t+mh2g0yhf4bcVTVKhzt8BhWXEmA+Dp95HZqRoBeVDRrQFdJer
-	 vaqixHfU41igB/RuHZQCeqqD00PejJoOR9FbU1fUo6TJxgJ11TH6I5zO5bFGZAsJNH
-	 DIhMhseUcZXSIwpFgmoLPWal2mkolYNmSACLQw+G+Y6KkL40k6cbvAwEE3B3ToU/m3
-	 +VG3sMai75JfA==
-Date: Wed, 13 Dec 2023 14:00:32 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc: John Hubbard <jhubbard@nvidia.com>,
-	David Hildenbrand <david@redhat.com>,
-	Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
-	viro@zeniv.linux.org.uk, brauner@kernel.org, shuah@kernel.org,
-	aarcange@redhat.com, lokeshgidra@google.com, peterx@redhat.com,
-	ryan.roberts@arm.com, hughd@google.com, mhocko@suse.com,
-	axelrasmussen@google.com, rppt@kernel.org, willy@infradead.org,
-	Liam.Howlett@oracle.com, jannh@google.com, zhangpeng362@huawei.com,
-	bgeffon@google.com, kaleshsingh@google.com, ngeoffray@google.com,
-	jdduke@google.com, linux-mm@kvack.org,
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, kernel-team@android.com,
-	Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v6 5/5] selftests/mm: add UFFDIO_MOVE ioctl test
-Message-ID: <c0aa00a2-38a5-42da-9951-64131d936f7e@sirena.org.uk>
-References: <50385948-5eb4-47ea-87f8-add4265933d6@redhat.com>
- <6a34b0c9-e084-4928-b239-7af01c8d4479@sirena.org.uk>
- <CAJuCfpEcbcO0d5WPDHMqiEJws9k_5c30pE-J+E_VxO_fpTf_mw@mail.gmail.com>
- <3240f4b5-081b-4075-851a-7d1cd86f4333@redhat.com>
- <3eadd79c-c02a-495f-92c0-0315046ef59f@nvidia.com>
- <3d22f342-280f-4a44-87f4-8cca291cfce7@sirena.org.uk>
- <e3048458-726e-4b98-b2bf-908ea9066959@nvidia.com>
- <0f97db9c-5b86-4f56-8463-2520fe79f709@sirena.org.uk>
- <f1b0b80a-1cc6-48c4-8a53-0222b3e59c7f@nvidia.com>
- <2e4a719b-f2b3-48db-99db-d96040d78b12@collabora.com>
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 568ED121
+	for <linux-kselftest@vger.kernel.org>; Wed, 13 Dec 2023 06:02:54 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-40c2bb872e2so65104005e9.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 Dec 2023 06:02:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1702476173; x=1703080973; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=W8CNgTMGbobolB1r9w8VNb165BlBAplPuvdaxYrWog0=;
+        b=cqna6UjTYgeJ8FSvk+RW1RP2hFvImNPYN83jAtbXOkXJaaksS/kR0sg96ap1082BKz
+         p38ZcoACnlhalY9oCt9dN7rZhZa8OLQl0WdCTDIjA2myxB9XkFsY5tvdBeNIsvNf929d
+         2bHGlm4E8SZWSXGjCd2Vf9vCNHc2X5LXyTgmCN20k7IQ9ihxzMwZBTsIf1IF8Cu42b3w
+         QMvYW5BRq+cDMcsF+JLCeeFnBGZeyeYUMgkRfjtstVMlvMpnBK8ncqFkw9e8o5WI7bas
+         dB3CLtU/QVU64DFhNif9pTGGCu885Ln8G8pOFNuIr5ueW3o+4frxFeVFfufN+vrVh8hX
+         xlhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702476173; x=1703080973;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=W8CNgTMGbobolB1r9w8VNb165BlBAplPuvdaxYrWog0=;
+        b=R46/MhTTnboObDzUJ4nlSSymV3kpSfIC3CW7+ZQW6w/oBzJgvM0FTciaVVXwjwRyRv
+         RXyxQEoNEeQQ7kj9UTg9Z9RUoSnEcjXlnn59hYZQBw5Xa5CgWuv5AIyPYHTbKr9gEOlL
+         krJLsmAihklbyB+Jknqwpa9JDWH3Dm8/8AZTQmqfLci2/RGyEsTy8jJp4qg0TiSP29a+
+         UbOfYbQys8PND8l/lNbuGqe9RgCSmbaeTUVacrVcn3TFtW2QN62aceo1dQaNQUIII0cU
+         fN5kqeGzS5wrSEe4Oo+jSdvh23UjPPBJ4mF8E7GccuIxedRNM3/iSybzue7brif9MxZY
+         yxGg==
+X-Gm-Message-State: AOJu0YxYd05lehitWepUJEpxJmTeW/zV+QpH38plIclGZTF7fesV44B5
+	B2We4JiAKBMWJ9C8uCymU1JVOA==
+X-Google-Smtp-Source: AGHT+IHHe1VYvYeZf/3ceduRCoWvVbIdH20JSg3fNMXtxhw7fHkTGIiZ2b27mL7MboW3CuD0I846lA==
+X-Received: by 2002:a05:600c:2483:b0:40c:3314:5be0 with SMTP id 3-20020a05600c248300b0040c33145be0mr1879277wms.295.1702476172702;
+        Wed, 13 Dec 2023 06:02:52 -0800 (PST)
+Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
+        by smtp.gmail.com with ESMTPSA id fm14-20020a05600c0c0e00b00407b93d8085sm22968185wmb.27.2023.12.13.06.02.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Dec 2023 06:02:52 -0800 (PST)
+Date: Wed, 13 Dec 2023 15:02:51 +0100
+From: Andrew Jones <ajones@ventanamicro.com>
+To: Haibo Xu <haibo1.xu@intel.com>
+Cc: xiaobo55x@gmail.com, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, Marc Zyngier <maz@kernel.org>, 
+	Oliver Upton <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, 
+	Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, 
+	Anup Patel <anup@brainfault.org>, Atish Patra <atishp@atishpatra.org>, Guo Ren <guoren@kernel.org>, 
+	Conor Dooley <conor.dooley@microchip.com>, Mayuresh Chitale <mchitale@ventanamicro.com>, 
+	Daniel Henrique Barboza <dbarboza@ventanamicro.com>, Jisheng Zhang <jszhang@kernel.org>, 
+	Samuel Holland <samuel@sholland.org>, Minda Chen <minda.chen@starfivetech.com>, 
+	Sean Christopherson <seanjc@google.com>, Peter Xu <peterx@redhat.com>, Like Xu <likexu@tencent.com>, 
+	Vipin Sharma <vipinsh@google.com>, Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>, 
+	Thomas Huth <thuth@redhat.com>, Aaron Lewis <aaronlewis@google.com>, 
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	kvm-riscv@lists.infradead.org
+Subject: Re: [PATCH v4 05/11] tools: riscv: Add header file vdso/processor.h
+Message-ID: <20231213-9d5ad03bed3056007c6e714d@orel>
+References: <cover.1702371136.git.haibo1.xu@intel.com>
+ <7b633cc441f5133608597463301fef122f5174d3.1702371136.git.haibo1.xu@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="/XZEbL4J1kAPYGOF"
-Content-Disposition: inline
-In-Reply-To: <2e4a719b-f2b3-48db-99db-d96040d78b12@collabora.com>
-X-Cookie: One size fits all.
-
-
---/XZEbL4J1kAPYGOF
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <7b633cc441f5133608597463301fef122f5174d3.1702371136.git.haibo1.xu@intel.com>
 
-On Wed, Dec 13, 2023 at 08:58:06AM +0500, Muhammad Usama Anjum wrote:
-> On 12/13/23 7:14 AM, John Hubbard wrote:
+On Tue, Dec 12, 2023 at 05:31:14PM +0800, Haibo Xu wrote:
+> Borrow the cpu_relax() definitions from kernel's
+> arch/riscv/include/asm/vdso/processor.h to tools/ for riscv.
+> 
+> Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
+> ---
+>  tools/arch/riscv/include/asm/vdso/processor.h | 32 +++++++++++++++++++
+>  1 file changed, 32 insertions(+)
+>  create mode 100644 tools/arch/riscv/include/asm/vdso/processor.h
+> 
+> diff --git a/tools/arch/riscv/include/asm/vdso/processor.h b/tools/arch/riscv/include/asm/vdso/processor.h
+> new file mode 100644
+> index 000000000000..662aca039848
+> --- /dev/null
+> +++ b/tools/arch/riscv/include/asm/vdso/processor.h
+> @@ -0,0 +1,32 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +#ifndef __ASM_VDSO_PROCESSOR_H
+> +#define __ASM_VDSO_PROCESSOR_H
+> +
+> +#ifndef __ASSEMBLY__
+> +
+> +#include <asm-generic/barrier.h>
+> +
+> +static inline void cpu_relax(void)
+> +{
+> +#ifdef __riscv_muldiv
+> +	int dummy;
+> +	/* In lieu of a halt instruction, induce a long-latency stall. */
+> +	__asm__ __volatile__ ("div %0, %0, zero" : "=r" (dummy));
+> +#endif
+> +
+> +#ifdef CONFIG_TOOLCHAIN_HAS_ZIHINTPAUSE
+> +	/*
+> +	 * Reduce instruction retirement.
+> +	 * This assumes the PC changes.
+> +	 */
+> +	__asm__ __volatile__ ("pause");
+> +#else
+> +	/* Encoding of the pause instruction */
+> +	__asm__ __volatile__ (".4byte 0x100000F");
+> +#endif
+> +	barrier();
+> +}
+> +
+> +#endif /* __ASSEMBLY__ */
+> +
+> +#endif /* __ASM_VDSO_PROCESSOR_H */
+> -- 
+> 2.34.1
+>
 
-> > Oh, this sounds like it would work nicely. No more "make headers"
-> > required (hooray!). Instead, the new approach would be "selftests are
-> > allowed to include from tools/include", and then we can just start
-> > copying the files that we need to that location, and gradually fix up
-> > all the selftests.
-
-> No, this wouldn't work.
-
-Note that we have a bunch of selftests (at least arm64, hid, kvm, rseq
-and sgx from a quick grep) which already use and rely on the headers in
-tools/include.
-
-> * The selftests are applications which include default header files. The
-> application don't care from where the header files are picked up at compile
-> time. We should be able to build the application on normal system with
-> latest headers installed without any changes.
-
-I think there is much less interest in building out of the kernel than
-there is in avoiding having to handle random userspace headers...
-
-> * The header files cannot be included directly as they need to be processed
-> first which is done by `make headers`. Here is a diff between kernel fs.h
-> and processed header file to be used by applications:
-
-I guess that's another reason why the sync is done manually.  There are
-also a bunch of files in tools/include that are just completely
-different implementations of things (not just uapi).
-
---/XZEbL4J1kAPYGOF
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmV5uP8ACgkQJNaLcl1U
-h9B4Agf+MNb0FxSD5g83dGXjn3wfAIHYImULMzBSAyVwk+xbUBcF5RwuyI/Up6pe
-jF7sirB8JObQgIDvOntBvbLGxjnrbKVZmrnnrz3IZLy9coVcvydGocN2dgTK/U63
-0n4vbXdOYqavpATUodi9QyrB+1peaITg+DvOBR95uoORBc94VM7bXVxGgD61oZ0N
-ZElj6Uuiegt+pu4yzSnCsNrXvvIUk1y1jl59tH1NV+WAnoHsDkNJReua3pUtYU3c
-MUyU+EkGOUI256iUVCafNaBqkbWvy070pa/QToV9OI+js6AF5//Yj0LR1LtZprjq
-q371z9Rj+1s+jACuAtuq8ELOJrN3QQ==
-=PCP4
------END PGP SIGNATURE-----
-
---/XZEbL4J1kAPYGOF--
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 
