@@ -1,214 +1,194 @@
-Return-Path: <linux-kselftest+bounces-1817-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1818-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 316B5810C0F
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 09:10:40 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7BFB810DC7
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 10:59:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DAA232819DD
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 08:10:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 256631C2090E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 09:59:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 505731D6A1;
-	Wed, 13 Dec 2023 08:10:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA80B21A0F;
+	Wed, 13 Dec 2023 09:59:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="El4NDQuG"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PIzHDrI2"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49DA1B2;
-	Wed, 13 Dec 2023 00:10:27 -0800 (PST)
-Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-db4422fff15so5468537276.1;
-        Wed, 13 Dec 2023 00:10:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702455026; x=1703059826; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iUkMcrhywTTNY4STrYR47RlN3P1eamS17VyWAZKRyOk=;
-        b=El4NDQuGxT1pSeNmGDq4bNA5jnYOjjTs3bKViinEU/Fo6iCDWYY2a2yWtpNK9Ri8WN
-         JAq1cIK04wvy5yLCPK5MBXQjGXJbxZ3pz3qJStt612w2C5GOO807OypzavHHbbZkqNhK
-         e8jZm/neKPscNRDE8kW6lqN+nR5g7P+ma9L5H2WchqY3zsBa8hVGVbzAq0AwDi+04pB8
-         uZq0Ly/Wbh+JtYtpZnHDq2AOd0qd+kJ9+s62skHyAgbqB8el4qPilU66QbjAStlEVanm
-         2GCBycoQDfZdPqcCrrE8kfpYVbQu8zxhFM38n6EG2DotKaDmeRfkQ3UuxXE0K8iu5bWU
-         iASA==
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6507DC
+	for <linux-kselftest@vger.kernel.org>; Wed, 13 Dec 2023 01:59:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1702461546;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=JJhC2mLo7M1xrewt5LCijIe6486cl8jsTWSgbKFncqI=;
+	b=PIzHDrI2LnwYJMLr2mqSafqIyNQ0DChvhO1FcWj8Gk4vj+mKFcKQ15ARcuumbCt286VpC6
+	Db6HHTq9dhdwY2PHe2k1/x+iJxqfQ2htswDCJbskQ6zb9A4ZSCGWUOMn4Udepd2rIi5go8
+	+/6n0KSBw8nD+PqtU0j7WesBwUlXDLQ=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-558-8YrPOmdDMS2cvkp9Z6qG5Q-1; Wed, 13 Dec 2023 04:59:05 -0500
+X-MC-Unique: 8YrPOmdDMS2cvkp9Z6qG5Q-1
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-33637412100so537273f8f.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 Dec 2023 01:59:05 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702455026; x=1703059826;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iUkMcrhywTTNY4STrYR47RlN3P1eamS17VyWAZKRyOk=;
-        b=nO6BZODLgU7ijIPmj95YceuwGWLRbyJRFNOGCSNcl2XU0baIiNDKCiF8m4hG3IR3+/
-         F1CGn+pfBVanzcA7RSFRqrGb18qKgz5GV+onZZ6+pqzS6JBNDfIrnKxFKUz6lcEDptAM
-         iVDwiPu8NDNcz0qPE7jVuxJea6oMk0CoBuFw1qYeNdh+PkeWQGHc2r1lPXUxMbzuMyuv
-         eHf9ydvxklo4kR8wF1XH9YYZIZpFqq/oxwhrdP28LiUjrRgHMltscY/YgxLjs5zDShV4
-         dtlxMAjfIqKs9fzOE08PJBF6WcHlBwT5AVq/W/c7wDybAPRSmA+fw2VEGIclQL17YQNs
-         rIcg==
-X-Gm-Message-State: AOJu0Yzrdy9NGt0ez8oOu4i4h9SfHM00H8l+pG6DDfqm2EJV5ZRAGQl2
-	Sm8vWNOKCCiZDSLpBpATQ8Tmr/LW4vqmfFbgmTaXcIQaKqA=
-X-Google-Smtp-Source: AGHT+IG0KG2PWQfUyp+qm9XnN8+mADRLGM9Lneo7CHAvt+CzxmHLJcyOXhmnLVqPaHhyr3dP3xJPPdpd0WFZR94TsuA=
-X-Received: by 2002:a25:7797:0:b0:dbc:d349:5625 with SMTP id
- s145-20020a257797000000b00dbcd3495625mr136624ybc.82.1702455026353; Wed, 13
- Dec 2023 00:10:26 -0800 (PST)
+        d=1e100.net; s=20230601; t=1702461544; x=1703066344;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt:from
+         :references:cc:to:content-language:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JJhC2mLo7M1xrewt5LCijIe6486cl8jsTWSgbKFncqI=;
+        b=INm9TGeQdWDrHuZ1PiyNau1AHmhHXPF6CV2m6uvqiySOnw/eImh9yQeyizNhjFrZAg
+         G7I6wcE381KlHAfUIOvRifOdnxMEMR5vsT0dfGNbLrGQsTocbe9lEIoN3dP6szy46tKe
+         60GBKA6qx8qWMbeVxVob/zADluhttAa+yn+6bJy1PnRRyJgNvuOZueLV9PyPlfNT9Rsv
+         gizI3nG+Kcd6qt4xTNJ3QEoZRL2Q6kppUEXMDECfi3kWiMA95VaN7MelThHS77V8tw3x
+         AeIVfmL8FWsUgb1ScUSwHcBGIqYUgF7icvdNM/ZHft7a1Peo+iVeR/r/69ccPtURxEyr
+         +SvA==
+X-Gm-Message-State: AOJu0YxvLcFTwW+4oUU/PYnA5aIhJ0X+hSGVP8W9O40LHgQldgWbKiDd
+	WfdPHA9C0GErvK7DNlXF3erH8963XOiJLMRerfP9dJfQuddzTo9nrVpkchncefVqI0LfEHA0m5P
+	ssBIdjEmkTIYfLF8X4EyPAN0+jp7K
+X-Received: by 2002:a05:600c:1715:b0:40c:2bb5:f86 with SMTP id c21-20020a05600c171500b0040c2bb50f86mr3930712wmn.74.1702461544276;
+        Wed, 13 Dec 2023 01:59:04 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFYzOLPzh70Ndpe0zyponvfmOjfEIVO72cb1HP6w/sqXyCdveuNm5mjm3u+Rce1in5eocQ3Hw==
+X-Received: by 2002:a05:600c:1715:b0:40c:2bb5:f86 with SMTP id c21-20020a05600c171500b0040c2bb50f86mr3930684wmn.74.1702461543853;
+        Wed, 13 Dec 2023 01:59:03 -0800 (PST)
+Received: from ?IPV6:2003:cb:c709:6e00:7e5:5f4d:f300:5d52? (p200300cbc7096e0007e55f4df3005d52.dip0.t-ipconnect.de. [2003:cb:c709:6e00:7e5:5f4d:f300:5d52])
+        by smtp.gmail.com with ESMTPSA id fc7-20020a05600c524700b0040c44cb251dsm12118228wmb.46.2023.12.13.01.59.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 13 Dec 2023 01:59:03 -0800 (PST)
+Message-ID: <783a4178-1dec-4e30-989a-5174b8176b09@redhat.com>
+Date: Wed, 13 Dec 2023 10:59:01 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231212192317.0fb6b101@gandalf.local.home>
-In-Reply-To: <20231212192317.0fb6b101@gandalf.local.home>
-From: Alexander Kapshuk <alexander.kapshuk@gmail.com>
-Date: Wed, 13 Dec 2023 10:09:50 +0200
-Message-ID: <CAJ1xhMXuxGHfD8oRfbna_drpHmNv0RUXFrvuVv6rtt-KeCM9fQ@mail.gmail.com>
-Subject: Re: [PATCH v3] tracing/selftests: Add test to test the trace_marker
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, 
-	Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 5/5] selftests/mm: add UFFDIO_MOVE ioctl test
+Content-Language: en-US
+To: John Hubbard <jhubbard@nvidia.com>,
+ Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ Mark Brown <broonie@kernel.org>
+Cc: Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
+ viro@zeniv.linux.org.uk, brauner@kernel.org, shuah@kernel.org,
+ aarcange@redhat.com, lokeshgidra@google.com, peterx@redhat.com,
+ ryan.roberts@arm.com, hughd@google.com, mhocko@suse.com,
+ axelrasmussen@google.com, rppt@kernel.org, willy@infradead.org,
+ Liam.Howlett@oracle.com, jannh@google.com, zhangpeng362@huawei.com,
+ bgeffon@google.com, kaleshsingh@google.com, ngeoffray@google.com,
+ jdduke@google.com, linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kernel-team@android.com, Peter Zijlstra <peterz@infradead.org>
+References: <CAJuCfpFbWeycjvjAFryuugXuiv5ggm=cXG+Y1jfaCD9kJ6KWqQ@mail.gmail.com>
+ <CAJuCfpHRYi4S9c+KKQqtE6Faw1e0E0ENMMRE17zXsqv_CftTGw@mail.gmail.com>
+ <b93b29e9-c176-4111-ae0e-d4922511f223@sirena.org.uk>
+ <50385948-5eb4-47ea-87f8-add4265933d6@redhat.com>
+ <6a34b0c9-e084-4928-b239-7af01c8d4479@sirena.org.uk>
+ <CAJuCfpEcbcO0d5WPDHMqiEJws9k_5c30pE-J+E_VxO_fpTf_mw@mail.gmail.com>
+ <3240f4b5-081b-4075-851a-7d1cd86f4333@redhat.com>
+ <3eadd79c-c02a-495f-92c0-0315046ef59f@nvidia.com>
+ <3d22f342-280f-4a44-87f4-8cca291cfce7@sirena.org.uk>
+ <e3048458-726e-4b98-b2bf-908ea9066959@nvidia.com>
+ <0f97db9c-5b86-4f56-8463-2520fe79f709@sirena.org.uk>
+ <f1b0b80a-1cc6-48c4-8a53-0222b3e59c7f@nvidia.com>
+ <2e4a719b-f2b3-48db-99db-d96040d78b12@collabora.com>
+ <0d68fe7f-2a96-467d-87b0-52db36704e1d@nvidia.com>
+ <926b42f9-3689-480f-8dd5-78fc0ee6088d@nvidia.com>
+From: David Hildenbrand <david@redhat.com>
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ WNyWQQ==
+Organization: Red Hat
+In-Reply-To: <926b42f9-3689-480f-8dd5-78fc0ee6088d@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-The REs used in the sed commands below may be simplified as shown if desire=
-d.
+On 13.12.23 06:55, John Hubbard wrote:
+> On 12/12/23 21:52, John Hubbard wrote:
+>> On 12/12/23 19:58, Muhammad Usama Anjum wrote:
+>>>> ...
+>>>> Oh, this sounds like it would work nicely. No more "make headers"
+>>>> required (hooray!). Instead, the new approach would be "selftests are
+>>>> allowed to include from tools/include", and then we can just start
+>>>> copying the files that we need to that location, and gradually fix up
+>>>> all the selftests.
+>>> No, this wouldn't work.
+>>> * The selftests are applications which include default header files. The
+>>> application don't care from where the header files are picked up at
+>>> compile
+>>> time. We should be able to build the application on normal system with
+>>> latest headers installed without any changes.
+>>> * The header files cannot be included directly as they need to be
+>>> processed
+>>> first which is done by `make headers`. Here is a diff between kernel fs.h
+>>> and processed header file to be used by applications:
+>>
+>> Well, that's not the proposal. The idea is to snapshot various uapi/
+>> headers
+>> into tools/include, just like what is already being done:
+>>
+>> $ diff ./include/uapi/linux/fs.h ./tools/include/uapi/linux/fs.h
+>> $
+> 
+> Oh sorry, that's exactly what you were saying you don't want. ahem. :)
+> 
+> Another variation though, would be to run "make headers", and snapshot
+> some of those files into tools/include.
 
-On Wed, Dec 13, 2023 at 2:22=E2=80=AFAM Steven Rostedt <rostedt@goodmis.org=
-> wrote:
->
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
->
-> Add a test that writes longs strings, some over the size of the sub buffe=
-r
-> and make sure that the entire content is there.
->
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> ---
-> Changes since v2: https://lore.kernel.org/linux-trace-kernel/202312121516=
-32.25c9b67d@gandalf.local.home
->
-> - Realized with the upcoming change of the dynamic subbuffer sizes, that
->   this test will fail if the subbuffer is bigger than what the trace_seq
->   can hold. Now the trace_marker does not always utilize the full subbuff=
-er
->   but the size of the trace_seq instead. As that size isn't available to
->   user space, we can only just make sure all content is there.
->
->  .../ftrace/test.d/00basic/trace_marker.tc     | 82 +++++++++++++++++++
->  1 file changed, 82 insertions(+)
->  create mode 100755 tools/testing/selftests/ftrace/test.d/00basic/trace_m=
-arker.tc
->
-> diff --git a/tools/testing/selftests/ftrace/test.d/00basic/trace_marker.t=
-c b/tools/testing/selftests/ftrace/test.d/00basic/trace_marker.tc
-> new file mode 100755
-> index 000000000000..b24aff5807df
-> --- /dev/null
-> +++ b/tools/testing/selftests/ftrace/test.d/00basic/trace_marker.tc
-> @@ -0,0 +1,82 @@
-> +#!/bin/sh
-> +# SPDX-License-Identifier: GPL-2.0
-> +# description: Basic tests on writing to trace_marker
-> +# requires: trace_marker
-> +# flags: instance
-> +
-> +get_buffer_data_size() {
-> +       sed -ne 's/^.*data.*size:\([0-9][0-9]*\).*/\1/p' events/header_pa=
-ge
-            sed -n 's!.*data.*size:\([^;]*\).*!\1!p' events/header_page
-> +}
-> +
-> +get_buffer_data_offset() {
-> +       sed -ne 's/^.*data.*offset:\([0-9][0-9]*\).*/\1/p' events/header_=
-page
-            sed -n 's!.*data.*offset:\([^;]*\).*!\1!p' events/header_page
-> +}
-> +
-> +get_event_header_size() {
-> +       type_len=3D`sed -ne 's/^.*type_len.*:[^0-9]*\([0-9][0-9]*\).*/\1/=
-p' events/header_event`
-            type_len=3D`sed -n '/type_len.*bits/s![^0-9]*!!gp'
-events/header_event`
+^ this is what I had in mind
 
-> +       time_len=3D`sed -ne 's/^.*time_delta.*:[^0-9]*\([0-9][0-9]*\).*/\=
-1/p' events/header_event`
-            time_len=3D`sed -n '/time_delta/s![^0-9]*!!gp' events/header_ev=
-ent`
+If you're writing a test that needs some new fancy thing, update the 
+relevant header.
 
-> +       array_len=3D`sed -ne 's/^.*array.*:[^0-9]*\([0-9][0-9]*\).*/\1/p'=
- events/header_event`
-            array_len=3D`sed -n '/array/s![^0-9]*!!gp' events/header_event`
+-- 
+Cheers,
 
-> +       total_bits=3D$((type_len+time_len+array_len))
-> +       total_bits=3D$((total_bits+7))
-> +       echo $((total_bits/8))
-> +}
-> +
-> +get_print_event_buf_offset() {
-> +       sed -ne 's/^.*buf.*offset:\([0-9][0-9]*\).*/\1/p' events/ftrace/p=
-rint/format
-            sed -n 's!.*buf.*offset:\([^;]*\).*!\1!p' events/ftrace/print/f=
-ormat
-> +}
-> +
-> +event_header_size=3D`get_event_header_size`
-> +print_header_size=3D`get_print_event_buf_offset`
-> +
-> +data_offset=3D`get_buffer_data_offset`
-> +
-> +marker_meta=3D$((event_header_size+print_header_size))
-> +
-> +make_str() {
-> +        cnt=3D$1
-> +       # subtract two for \n\0 as marker adds these
-> +       cnt=3D$((cnt-2))
-> +       printf -- 'X%.0s' $(seq $cnt)
-> +}
-> +
-> +write_buffer() {
-> +       size=3D$1
-> +
-> +       str=3D`make_str $size`
-> +
-> +       # clear the buffer
-> +       echo > trace
-> +
-> +       # write the string into the marker
-> +       echo -n $str > trace_marker
-> +
-> +       echo $str
-> +}
-> +
-> +test_buffer() {
-> +
-> +       size=3D`get_buffer_data_size`
-> +       oneline_size=3D$((size-marker_meta))
-> +       echo size =3D $size
-> +       echo meta size =3D $marker_meta
-> +
-> +       # Now add a little more the meta data overhead will overflow
-> +
-> +       str=3D`write_buffer $size`
-> +
-> +       # Make sure the line was broken
-> +       new_str=3D`awk ' /tracing_mark_write:/ { sub(/^.*tracing_mark_wri=
-te: /,"");printf "%s", $0; exit}' trace`
-> +
-> +       if [ "$new_str" =3D "$str" ]; then
-> +               exit fail;
-> +       fi
-> +
-> +       # Make sure the entire line can be found
-> +       new_str=3D`awk ' /tracing_mark_write:/ { sub(/^.*tracing_mark_wri=
-te: */,"");printf "%s", $0; }' trace`
-> +
-> +       if [ "$new_str" !=3D "$str" ]; then
-> +               exit fail;
-> +       fi
-> +}
-> +
-> +test_buffer
-> --
-> 2.42.0
->
+David / dhildenb
+
 
