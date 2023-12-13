@@ -1,138 +1,143 @@
-Return-Path: <linux-kselftest+bounces-1826-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1827-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A9188112E7
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 14:31:41 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46B59811310
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 14:37:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BC76B2821EA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 13:31:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 79AA21C20FF7
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 13:37:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 708282D039;
-	Wed, 13 Dec 2023 13:31:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D5B72D057;
+	Wed, 13 Dec 2023 13:37:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gJJqpHn6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dU6A6nqf"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4EB4E3
-	for <linux-kselftest@vger.kernel.org>; Wed, 13 Dec 2023 05:31:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1702474293;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dC8eAG+rdDz771HyG+6UKW1N21lq1IFcm8wzo/9j4Ag=;
-	b=gJJqpHn6P9DZfGowORawvXOVVYLVpHsrgWGfPv+L9Tw8bl/SgW2brt7Or4lI6SvhR/AYc+
-	RGKVpGBkSLbzBkTPpDmDt24zKaGS4Ll8D1g+nIUpNEe6tkAyZmcKDUvll3Rmq35D7nOBwy
-	XkHA/A1hvcafWQYiPQPyrBjJKnXcAKE=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-437-d91iIjmvOb-NqLASPCdVNQ-1; Wed, 13 Dec 2023 08:31:32 -0500
-X-MC-Unique: d91iIjmvOb-NqLASPCdVNQ-1
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-a1f9ab28654so160589566b.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 Dec 2023 05:31:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702474291; x=1703079091;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dC8eAG+rdDz771HyG+6UKW1N21lq1IFcm8wzo/9j4Ag=;
-        b=wECR+DL27LsMPZ0PfCnZNZsQuUCEaKpIY0qtFoeDbD9G9RINlYt9X5N63lmfAXCJps
-         jtMlghTCHiAVdkKVFkvq/PmSiHvzfHGi0qrwSauo3f8EyPVACapvsmxnEk9hsr26W5SH
-         RjKMQidsYSae61wi96rdBHA0KR1Fnholm1U18WymrdGOpnSeqb8BSCz2ouYRK3hfTYec
-         LcBIYzjEgOHC+88yTc2QO1DGTOQlCV3ACEc+9r/Wen07NvWbXsk3sh9Uc9N2JZ4tBRQP
-         L2/s+SNLZm7QBgRkItCaXIzfFThjL43mnvvf5oEh1vsDbLGbGIquhev7RlJXwfjljeZY
-         DgQA==
-X-Gm-Message-State: AOJu0YxS+aN/NmOEeOI9ohO1BKr+tC+SSqiY5RIzYnIp7caDct3vbMPv
-	BGeRpADTTWpXKM5+QdPdYWoomXNc/6yDRRnty7D1c2xEvtjIkT5zv6yyFIKIR4BVU0qcZZT+qFZ
-	+srFOv3wpY0wHRQofK5/nFFHqLSt+xGvQ4sC0
-X-Received: by 2002:a17:906:b204:b0:a19:a1ba:8ce0 with SMTP id p4-20020a170906b20400b00a19a1ba8ce0mr3653205ejz.126.1702474290993;
-        Wed, 13 Dec 2023 05:31:30 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEMRBYvxquPjKh2oUpzsQZ4YofuMOR/BRB0u9Mr+JzAm33S9FD+0/e2kUugVLkdr9DckuEDFQ==
-X-Received: by 2002:a17:906:b204:b0:a19:a1ba:8ce0 with SMTP id p4-20020a170906b20400b00a19a1ba8ce0mr3653199ejz.126.1702474290682;
-        Wed, 13 Dec 2023 05:31:30 -0800 (PST)
-Received: from ?IPV6:2001:b07:6468:f312:63a7:c72e:ea0e:6045? ([2001:b07:6468:f312:63a7:c72e:ea0e:6045])
-        by smtp.googlemail.com with ESMTPSA id tg10-20020a1709078dca00b00a178b965899sm7819372ejc.100.2023.12.13.05.31.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 13 Dec 2023 05:31:30 -0800 (PST)
-Message-ID: <a2e25f7c-dd5b-4c88-b25a-4d8ddc8b7f29@redhat.com>
-Date: Wed, 13 Dec 2023 14:31:26 +0100
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C3582D042;
+	Wed, 13 Dec 2023 13:37:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FCFAC433C8;
+	Wed, 13 Dec 2023 13:37:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702474661;
+	bh=8D28zVA3/D34uSBC1WEJ8ykZpQrL4Gv4bA1SewGPSEQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dU6A6nqfPwdapBIE6N5MQX1pPgpiei2rY3w1Dun0KrZbDxbcB1dhzPyz1J2EGaTQj
+	 UPKZzVa039jVPJ33WfaTofzmcvZFSA/sLBnrGvxr16zaGokjdOl0SKR/ib2Xhd4pc3
+	 SeyCrYIvK1T7imXgRQXe3wDjMIqDoeMuXfobvB10h24nt3i0W5VNcMCs1A+EjSLVk5
+	 f5bcJfQFA0CN8h3S3SdylU7dYmBC9Cd6O+XAZDg7IVkEU8ruiejVfPviMrjE77eEXR
+	 A5aDJUCFKs/hXAy8O8flLE5igxpFsClxETJo/OA439A7sHSLT3d8ZylWdGK4KyBm0k
+	 t9qtTI5q/WF8g==
+Date: Wed, 13 Dec 2023 13:37:32 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Deepak Gupta <debug@rivosinc.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oliver.upton@linux.dev>,
+	James Morse <james.morse@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>,
+	Eric Biederman <ebiederm@xmission.com>,
+	Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>,
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>,
+	"H.J. Lu" <hjl.tools@gmail.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Florian Weimer <fweimer@redhat.com>,
+	Christian Brauner <brauner@kernel.org>,
+	Thiago Jung Bauermann <thiago.bauermann@linaro.org>,
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v7 02/39] prctl: arch-agnostic prctl for shadow stack
+Message-ID: <0d0d8802-09e3-4ea5-a0b4-b3a08c8a282e@sirena.org.uk>
+References: <20231122-arm64-gcs-v7-0-201c483bd775@kernel.org>
+ <20231122-arm64-gcs-v7-2-201c483bd775@kernel.org>
+ <CAKC1njSC5cC_fXnyNAPt=WU6cD-OjLKFxo90oVPmsLJbuWf4nw@mail.gmail.com>
+ <d708b493-267a-4418-be91-9bde6b2cf50c@sirena.org.uk>
+ <CAKC1njSQPO8ja7AkTzQ724hhSsGjchH9dLbbH9LXP0ZiKj-zPQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND v3] KVM: selftests: Initialise dynamically
- allocated configuration names
-Content-Language: en-US
-To: Mark Brown <broonie@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Haibo Xu <haibo1.xu@intel.com>, Andrew Jones <ajones@ventanamicro.com>,
- Anup Patel <anup@brainfault.org>
-Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20231211-kvm-get-reg-list-str-init-v3-1-6554c71c77b1@kernel.org>
-From: Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20231211-kvm-get-reg-list-str-init-v3-1-6554c71c77b1@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="jOCIbEw8Unb2aajd"
+Content-Disposition: inline
+In-Reply-To: <CAKC1njSQPO8ja7AkTzQ724hhSsGjchH9dLbbH9LXP0ZiKj-zPQ@mail.gmail.com>
+X-Cookie: One size fits all.
 
-On 12/11/23 14:08, Mark Brown wrote:
-> When we dynamically generate a name for a configuration in get-reg-list
-> we use strcat() to append to a buffer allocated using malloc() but we
-> never initialise that buffer. Since malloc() offers no guarantees
-> regarding the contents of the memory it returns this can lead to us
-> corrupting, and likely overflowing, the buffer:
-> 
->    vregs: PASS
->    vregs+pmu: PASS
->    sve: PASS
->    sve+pmu: PASS
->    vregs+pauth_address+pauth_generic: PASS
->    X�vr+gspauth_addre+spauth_generi+pmu: PASS
-> 
-> Initialise the buffer to an empty string to avoid this.
 
-> diff --git a/tools/testing/selftests/kvm/get-reg-list.c b/tools/testing/selftests/kvm/get-reg-list.c
-> index be7bf5224434..dd62a6976c0d 100644
-> --- a/tools/testing/selftests/kvm/get-reg-list.c
-> +++ b/tools/testing/selftests/kvm/get-reg-list.c
-> @@ -67,6 +67,7 @@ static const char *config_name(struct vcpu_reg_list *c)
->   
->   	c->name = malloc(len);
->   
-> +	c->name[0] = '\0';
->   	len = 0;
->   	for_each_sublist(c, s) {
->   		if (!strcmp(s->name, "base"))
->  			continue;
->  		strcat(c->name + len, s->name);
+--jOCIbEw8Unb2aajd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-This can be fixed just by s/strcat/strcpy/, but there's also an ugly 
-hidden assumption that for_each_sublist runs at least one iteration of 
-the loop; otherwise, the loop ends with a c->name[-1] = '\0';
+On Tue, Dec 12, 2023 at 04:50:38PM -0800, Deepak Gupta wrote:
 
->                 len += strlen(s->name) + 1;
->                 c->name[len - 1] = '+';
->         }
->         c->name[len - 1] = '\0';
+> A theoretical scenario (no current workloads should've this case
+> because no shadow stack)
 
-Now this *is* a bit academic, but it remains the fact that all the 
-invariants are screwed up and while we're fixing it we might at least 
-fix it well.
+> - User mode did _ENABLE on the main thread. Shadow stack was allocated
+> for the current
+>   thread.
+> - User mode created a bunch worker threads to run untrusted contained
+> code. They shadow
+>   stack too.
+> - main thread had to do dlopen and now need to disable shadow stack on
+> itself due to
+>   incompatibility of incoming object in address space.
+> - main thread controls worker threads and knows they're contained and
+> should still be running
+>   with a shadow stack. Although once in a while the main thread needs
+> to perform writes to a shadow
+>   stack of worker threads for some fixup (in the same addr space).
+> main thread doesn't want to delegate
+>   this responsibility of ss writes to worker threads because they're untrusted.
 
-So let's make the invariant that c->name[0..len-1] is initialized.  Then 
-every write is done with either strcpy of c->name[len++] = '...'.
+> How will it do that (currently _ENABLE is married to _WRITE and _PUSH) ?
 
-> ---
-> base-commit: b85ea95d086471afb4ad062012a4d73cd328fa86
-> change-id: 20231012-kvm-get-reg-list-str-init-76c8ed4e19d6
-> 
-> Best regards,
+That's feeling moderately firmly into "don't do that" territory to be
+honest, the problems of trying to modify the stack of another running
+thread while it's active just don't seem worth it - if you're
+coordinating enough to do the modifications it's probably possible to
+just ask the thread who's stack is being modified to do the modification
+itself and having an unprotected thread writing into shadow stack memory
+doesn't feel great.
 
+That said in terms of the API there would be nothing stopping us saying
+that _WRITE by itself is a valid combination of flags, in which case the
+thread would have permission to write to any shadow stack memory it
+could get to.  For arm64 I think we can implement that, I'm not sure
+about x86.  _PUSH without _ENABLE is a lot less clear, you would at the
+very least at some point have had a stack enabled to have a stack
+pointer.
+
+--jOCIbEw8Unb2aajd
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmV5s5sACgkQJNaLcl1U
+h9Av7gf+KhSSwAMSrKGbuD6mcS24/uKiaBK6VJvANYNhzxAxCIsGTekSDBnn5rx5
+JlxvhNT7TTqtigEvZs5VwVjBivsip6vCjdwW3bWOP1hBY1vThXm5vDpp6+hC/Xyq
+1dBwZcHedqhHVCH5AfwYiFDtW37k7rKggU19mKapXAMMLHcqniPH9vA8JNfwjvRk
+IZAXnqu2sqKKqhm79iZyFDFo2+8bZYgiZ2FaFCUSA853dm4ujBY2+W9uL4me61jV
+gAwO2vLgmoypMv3xyz83VV6rVoAP3icyuBVYgjuko58Xs74dY4FtD+Xyth9g93qO
+A5biKwps6ME8omCBijyTFUn4Ug8G4A==
+=M047
+-----END PGP SIGNATURE-----
+
+--jOCIbEw8Unb2aajd--
 
