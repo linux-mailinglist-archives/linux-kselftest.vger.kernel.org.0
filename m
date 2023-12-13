@@ -1,134 +1,179 @@
-Return-Path: <linux-kselftest+bounces-1790-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1791-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 579F6810857
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 03:45:24 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6227A8108DA
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 04:58:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CFD921F21A15
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 02:45:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BF1B7B20FAC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 03:58:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27E8F17D3;
-	Wed, 13 Dec 2023 02:45:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85157BA2E;
+	Wed, 13 Dec 2023 03:58:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZcidFv8J"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="bYYRLl0j"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA0EDAF
-	for <linux-kselftest@vger.kernel.org>; Tue, 12 Dec 2023 18:45:09 -0800 (PST)
-Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-6ceb2501f1bso5423905b3a.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 12 Dec 2023 18:45:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702435509; x=1703040309; darn=vger.kernel.org;
-        h=mime-version:message-id:date:in-reply-to:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=CJ7qwCmvq20mGgi3dRymJGPN14h9pbhwL4VM2txPZCM=;
-        b=ZcidFv8JCRaEhFx285fX5LJKtnAW/6xdQ+f7UfXQ943HmZyW9UeCMTAYCaHECv8vLb
-         URWXgHbvPOMeXQuHw0S2vjSjHuBlCXvquyzPVXx4sAqi1JBubDTEmBqHBx1KrJeEMFSr
-         062t+bhgVI5fKT3UeJt5TWjN/EyiUIycC4uMBVg7+ZpGfANAqH9sq327mW42WX36tCBA
-         EmOhUf9rvG1Eo7TCMc5XNLm9Olzb5gcmAmGaze1GIY+DTTPP25On2mTimeGQpBImvEr/
-         eUYhQKfZ/0EQF0sRexHfXempTf+gySR6FEDkr6mkUt0DHZ4wXN6L7dp0zbLaL0qsZsT+
-         vaEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702435509; x=1703040309;
-        h=mime-version:message-id:date:in-reply-to:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CJ7qwCmvq20mGgi3dRymJGPN14h9pbhwL4VM2txPZCM=;
-        b=mh1Je7Jevr982fa6RmWeAH8fCy+DbVZct3CXDLobDu4bE2hN/YBpyFmZi+exKrAgJ4
-         qrLVbSPwziVfX6yQUM5/XXxexcJjOc/ftOx5h2F1dvl8COF6DG3b4W8fI/8wmVr9yAGf
-         WNmi4jb2+yu0rvWgXMvjXcO3fiE9ZZC9pUXEF5WSftqq7VuKXZwL4iC7CZCTW7n0PFGR
-         tNwlqnXk9ut2vSe4NpoAtkJUGQjmC1DdkpCp9X66hWFHt+fTnCiT9BtISSJTWw3fT5lR
-         1iFR1rk6M51mQtD8FhCgi/1VIhvXzYxppp8efUcSShv20xgKn4rdr9W8dq1E/MeP5ZIm
-         iY9A==
-X-Gm-Message-State: AOJu0YwZJAR1JDLT5P+P8HsrTjFq6hPELR1xlPG3sp+bMcwtiZCr6njm
-	jr3kZWCc/NH0m3B/IgHsww0HZg==
-X-Google-Smtp-Source: AGHT+IGi//6HE3KINOZpirefGAX+e3jIHwZFWzUp/AR1xA1scaFysKSWvBw9/QjFkCNOqGCFGdEidA==
-X-Received: by 2002:a05:6a00:c81:b0:6cb:a2f4:8579 with SMTP id a1-20020a056a000c8100b006cba2f48579mr8585102pfv.15.1702435509333;
-        Tue, 12 Dec 2023 18:45:09 -0800 (PST)
-Received: from localhost ([2804:14d:7e39:8470:cddd:ffc9:f19e:a4dc])
-        by smtp.gmail.com with ESMTPSA id y72-20020a62ce4b000000b006cb7bdbc3besm9528817pfg.17.2023.12.12.18.45.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Dec 2023 18:45:08 -0800 (PST)
-References: <20231122-arm64-gcs-v7-0-201c483bd775@kernel.org>
- <20231122-arm64-gcs-v7-37-201c483bd775@kernel.org>
-User-agent: mu4e 1.10.8; emacs 29.1
-From: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon
- <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Andrew Morton
- <akpm@linux-foundation.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton
- <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, Suzuki K
- Poulose <suzuki.poulose@arm.com>, Arnd Bergmann <arnd@arndb.de>, Oleg
- Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, Kees
- Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>, "Rick P.
- Edgecombe" <rick.p.edgecombe@intel.com>, Deepak Gupta
- <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>, Szabolcs Nagy
- <Szabolcs.Nagy@arm.com>, "H.J. Lu" <hjl.tools@gmail.com>, Paul Walmsley
- <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
- <aou@eecs.berkeley.edu>, Florian Weimer <fweimer@redhat.com>, Christian
- Brauner <brauner@kernel.org>, linux-arm-kernel@lists.infradead.org,
- linux-doc@vger.kernel.org, kvmarm@lists.linux.dev,
- linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v7 37/39] kselftest/arm64: Add a GCS stress test
-In-reply-to: <20231122-arm64-gcs-v7-37-201c483bd775@kernel.org>
-Date: Tue, 12 Dec 2023 23:45:06 -0300
-Message-ID: <87zfyex1l9.fsf@linaro.org>
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF87E99;
+	Tue, 12 Dec 2023 19:58:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1702439898;
+	bh=11blm8HJnQ9+FMdEFOr+A0pNMEFB7Ju+WMZoc5kI8rI=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=bYYRLl0jzzJ/ry5xSjKpPL3Ta4LRbgeYJx3Vgef71CF0GIHSmOPdE+YzqWjksBsGW
+	 d7D6bFX9jKH/NKYYgsHD+Hx61y+8aPtGJxa6ftQOA3QNawyzS7/2OT0cIKohk7KXNp
+	 Ta0Z7jytlPEm/dv4XB9uu3kZ01TwCcxFvk3s0Ze97Vs4v5Ymo687c6GBYiBUjusNxM
+	 4AOPIQ8M5YIedSlhMujT/VRpw91eaObFkbTObneLptFPAsgiB+2uvpkrAcskIWlrGP
+	 BneWrr9+wgMp1N0R+bLRE/Nh9xaP4mOWhjbsACvzgCMSli8o+QnXqTMCRcAy/AVDaa
+	 4oW120hXsVqSA==
+Received: from [100.96.234.34] (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 9787637813F2;
+	Wed, 13 Dec 2023 03:58:09 +0000 (UTC)
+Message-ID: <2e4a719b-f2b3-48db-99db-d96040d78b12@collabora.com>
+Date: Wed, 13 Dec 2023 08:58:06 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ David Hildenbrand <david@redhat.com>, Suren Baghdasaryan
+ <surenb@google.com>, akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
+ brauner@kernel.org, shuah@kernel.org, aarcange@redhat.com,
+ lokeshgidra@google.com, peterx@redhat.com, ryan.roberts@arm.com,
+ hughd@google.com, mhocko@suse.com, axelrasmussen@google.com,
+ rppt@kernel.org, willy@infradead.org, Liam.Howlett@oracle.com,
+ jannh@google.com, zhangpeng362@huawei.com, bgeffon@google.com,
+ kaleshsingh@google.com, ngeoffray@google.com, jdduke@google.com,
+ linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kernel-team@android.com, Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH v6 5/5] selftests/mm: add UFFDIO_MOVE ioctl test
+Content-Language: en-US
+To: John Hubbard <jhubbard@nvidia.com>, Mark Brown <broonie@kernel.org>
+References: <CAJuCfpFbWeycjvjAFryuugXuiv5ggm=cXG+Y1jfaCD9kJ6KWqQ@mail.gmail.com>
+ <CAJuCfpHRYi4S9c+KKQqtE6Faw1e0E0ENMMRE17zXsqv_CftTGw@mail.gmail.com>
+ <b93b29e9-c176-4111-ae0e-d4922511f223@sirena.org.uk>
+ <50385948-5eb4-47ea-87f8-add4265933d6@redhat.com>
+ <6a34b0c9-e084-4928-b239-7af01c8d4479@sirena.org.uk>
+ <CAJuCfpEcbcO0d5WPDHMqiEJws9k_5c30pE-J+E_VxO_fpTf_mw@mail.gmail.com>
+ <3240f4b5-081b-4075-851a-7d1cd86f4333@redhat.com>
+ <3eadd79c-c02a-495f-92c0-0315046ef59f@nvidia.com>
+ <3d22f342-280f-4a44-87f4-8cca291cfce7@sirena.org.uk>
+ <e3048458-726e-4b98-b2bf-908ea9066959@nvidia.com>
+ <0f97db9c-5b86-4f56-8463-2520fe79f709@sirena.org.uk>
+ <f1b0b80a-1cc6-48c4-8a53-0222b3e59c7f@nvidia.com>
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+In-Reply-To: <f1b0b80a-1cc6-48c4-8a53-0222b3e59c7f@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+On 12/13/23 7:14 AM, John Hubbard wrote:
+> On 12/12/23 07:12, Mark Brown wrote:
+>> On Mon, Dec 11, 2023 at 12:29:58PM -0800, John Hubbard wrote:
+>>> On 12/11/23 12:21, Mark Brown wrote:
+> ...
+>>> Or maybe there is an innovative way to do all of this, that we have
+>>> yet to think of.
+>>
+>> We do copy files into tools/include at random times which makes sense
+>> for things that aren't uapi, and we are putting bits of uapi there
+>> already so we could just expand the set of files copied there.  AFAICT
+>> the only reason we're copying the uapi files at all is that they're
+>> directly in the same include/ directories as everything else and are
+>> always referenced with their uapi/ prefix.
+> 
+> Oh, this sounds like it would work nicely. No more "make headers"
+> required (hooray!). Instead, the new approach would be "selftests are
+> allowed to include from tools/include", and then we can just start
+> copying the files that we need to that location, and gradually fix up
+> all the selftests.
+No, this wouldn't work.
+* The selftests are applications which include default header files. The
+application don't care from where the header files are picked up at compile
+time. We should be able to build the application on normal system with
+latest headers installed without any changes.
+* The header files cannot be included directly as they need to be processed
+first which is done by `make headers`. Here is a diff between kernel fs.h
+and processed header file to be used by applications:
 
-I'm going a bit out-of-order to report a build failure in a test:
+--- include/uapi/linux/fs.h	2023-12-12 14:45:22.857409660 +0500
++++ usr/include/linux/fs.h	2023-12-12 14:49:23.469733573 +0500
+@@ -1,6 +1,6 @@
+ /* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+-#ifndef _UAPI_LINUX_FS_H
+-#define _UAPI_LINUX_FS_H
++#ifndef _LINUX_FS_H
++#define _LINUX_FS_H
 
-Mark Brown <broonie@kernel.org> writes:
+ /*
+  * This file has definitions for some important file table structures
+@@ -13,14 +13,10 @@
+ #include <linux/limits.h>
+ #include <linux/ioctl.h>
+ #include <linux/types.h>
+-#ifndef __KERNEL__
+ #include <linux/fscrypt.h>
+-#endif
 
-> +// Recurse x20 times
-> +.macro recurse id
+ /* Use of MS_* flags within the kernel is restricted to core mount(2) code. */
+-#if !defined(__KERNEL__)
+ #include <linux/mount.h>
+-#endif
 
-I get an assembler error here:
+ /*
+  * It's silly to have NR_OPEN bigger than NR_FILE, but you can change
+@@ -287,19 +283,19 @@
+ typedef int __bitwise __kernel_rwf_t;
 
-gcc -nostdlib gcs-stress-thread.S -o /home/thiago.bauermann/src/linux/tools/testing/selftests/arm64/gcs/gcs-stress-thread
-gcs-stress-thread.S: Assembler messages:
-gcs-stress-thread.S:236: Error: unexpected end of file in macro `recurse' definition
-make[2]: *** [Makefile:24: /home/thiago.bauermann/src/linux/tools/testing/selftests/arm64/gcs/gcs-stress-thread] Error 1
+ /* high priority request, poll if possible */
+-#define RWF_HIPRI	((__force __kernel_rwf_t)0x00000001)
++#define RWF_HIPRI	((__kernel_rwf_t)0x00000001)
 
-This is with gas from Ubuntu 22.04, which ships binutils 2.38.
+ /* per-IO O_DSYNC */
+-#define RWF_DSYNC	((__force __kernel_rwf_t)0x00000002)
++#define RWF_DSYNC	((__kernel_rwf_t)0x00000002)
 
-> +function recurse\id
-> +	stp	x29, x30, [sp, #-16]!
-> +	mov	x29, sp
-> +
-> +	cmp	x20, 0
-> +	beq	1f
-> +	sub	x20, x20, 1
-> +	bl	recurse\id
-> +
-> +1:
-> +	ldp	x29, x30, [sp], #16
-> +
-> +	// Do a syscall immediately prior to returning to try to provoke
-> +	// scheduling and migration at a point where coherency issues
-> +	// might trigger.
-> +	mov	x8, #__NR_getpid
-> +	svc	#0
-> +
-> +	ret
-> +endfunction
-> +.endmacro
-> +
-> +// Generate and use two copies so we're changing the GCS contents
-> +recurse 1
-> +recurse 2
+ /* per-IO O_SYNC */
+-#define RWF_SYNC	((__force __kernel_rwf_t)0x00000004)
++#define RWF_SYNC	((__kernel_rwf_t)0x00000004)
+
+ /* per-IO, return -EAGAIN if operation would block */
+-#define RWF_NOWAIT	((__force __kernel_rwf_t)0x00000008)
++#define RWF_NOWAIT	((__kernel_rwf_t)0x00000008)
+
+ /* per-IO O_APPEND */
+-#define RWF_APPEND	((__force __kernel_rwf_t)0x00000010)
++#define RWF_APPEND	((__kernel_rwf_t)0x00000010)
+
+ /* mask of flags supported by the kernel */
+ #define RWF_SUPPORTED	(RWF_HIPRI | RWF_DSYNC | RWF_SYNC | RWF_NOWAIT |\
+@@ -364,4 +360,4 @@
+ 	__u64 return_mask;
+ };
+
+-#endif /* _UAPI_LINUX_FS_H */
++#endif /* _LINUX_FS_H */
+
+> 
+> I really like this, at first reading anyway.
+> 
+> Muhammad, Shuah, others, what do you think?
+> 
+> +Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>
+> 
+> 
+> thanks,
 
 -- 
-Thiago
+BR,
+Muhammad Usama Anjum
 
