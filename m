@@ -1,85 +1,85 @@
-Return-Path: <linux-kselftest+bounces-1873-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1874-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30959812112
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 22:59:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C6BC812117
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 22:59:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8730428270E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 21:59:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9FE6C1F218C6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 21:59:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40CF77FBC2;
-	Wed, 13 Dec 2023 21:59:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D44D7FBC5;
+	Wed, 13 Dec 2023 21:59:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bdn4qks8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="he1FV3xk"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3E42E0;
-	Wed, 13 Dec 2023 13:59:32 -0800 (PST)
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BB77E4;
+	Wed, 13 Dec 2023 13:59:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702504773; x=1734040773;
+  t=1702504787; x=1734040787;
   h=message-id:date:subject:to:cc:references:from:
    in-reply-to:content-transfer-encoding:mime-version;
-  bh=99csRUN/INXJSUkMiziUJt3IOhapRZKiDQW37ke+isY=;
-  b=bdn4qks8puE5XbZSlsPjlLGTmpWSK50DNnLmzJVj1FMudLRyPF71dYwm
-   anoo1MVL2kOvl2aY8mJjdYQ7DxzToZsE3p+Y8qD0NPh9eAA+3GrNhpfYg
-   PptH2tbQb9sOg6y3t6T5/XCmoH7OJxo0cA1WnAbnB69SaTu3FKtTJY6qi
-   JXXWc2gv0A4bbzoDEY/HtvFKGdQorbjnC18jnTlgQZgAx8l5Y10ioB8jg
-   42YjOT8zz34RwWaha4OFrQdiGahMBzP6og4FLg2iWxKUtKjAJNr40k7I0
-   ricW1zN0IhBiN26GyoZDO2zrgRS3Lzk/vr6ma1Zr3879O/vWiPzXGN5VF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10923"; a="2204272"
+  bh=bxB5ANbzzq5s4hbsTRO0PHGA9B7kg4b2CdNMTusJFok=;
+  b=he1FV3xkDQsMtgrzP4RjTZPjHOUT72lRMDtgPikiKBJTbAf5Vbx2nju3
+   1BYyWwS3yym30paIyXWMYr0+I0+Po6KT2HtmWxsT9pu0Dyamr6h88ILKN
+   PWNBKBQaGgB8NtwCavkH1CvsNliOOew+n+JGA1Puox96GHuFHDGo6V799
+   9s7Chyijbp5b5jpE3RKqf2w8ewqk6Uf7siPuLHe6QeOFmhrZtQy4dApsM
+   C91W0DD6S0Bc+IMFcYRXftPoklaknbpQnyYvmWZlyNwhFmjNDUTAGYffr
+   niELl1a3aBvBCCMb75cpUxblwi7pxgq23yGoxGkPgp+qc2e1tI/uylJQB
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10923"; a="374538208"
 X-IronPort-AV: E=Sophos;i="6.04,274,1695711600"; 
-   d="scan'208";a="2204272"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2023 13:59:32 -0800
+   d="scan'208";a="374538208"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Dec 2023 13:59:46 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10923"; a="947331564"
+X-IronPort-AV: E=McAfee;i="6600,9927,10923"; a="774096677"
 X-IronPort-AV: E=Sophos;i="6.04,274,1695711600"; 
-   d="scan'208";a="947331564"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga005.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 13 Dec 2023 13:59:32 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+   d="scan'208";a="774096677"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orsmga002.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 13 Dec 2023 13:59:46 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Wed, 13 Dec 2023 13:59:31 -0800
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ 15.1.2507.35; Wed, 13 Dec 2023 13:59:46 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35 via Frontend Transport; Wed, 13 Dec 2023 13:59:31 -0800
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (104.47.56.40) by
- edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ 15.1.2507.35 via Frontend Transport; Wed, 13 Dec 2023 13:59:46 -0800
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.41) by
+ edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Wed, 13 Dec 2023 13:59:31 -0800
+ 15.1.2507.35; Wed, 13 Dec 2023 13:59:46 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OwdsmMmNxQuf+agTCc47spNFZoP43T7xoTMfCNk060qQBAwd+mZ2W3VniIDM8u5+9DFYiGtxkyV+BIDGM+QZz4AjqOg15GY8J74oHrU+tgmzpl1KJ8pwM1serVwvrVgd0T8nJKQ2BLvqMvC2ao0XdUXQh6dfKbMW7d7bhZ+/sEjj3/taIhfa1RES46rJqeKIEX250PEexZSEj84xDHIdXZEbHY14oBPc7XfXs2/jdRKc18M+RHTx7LOekKUzlen2S7sxqw7F1luRn/OiRHfkAYjru42mPUZ+Lo+t9BCdJjuCgexQChJawSymDYClNxn7pzZwcs1RmU6QqggM5jMTUg==
+ b=Li7ULUyzhvOEdF+zrMQQWi3QFGzFzYtuKg5oH8IGejYnlI8Dqgo32us9diPzB+uqfMpS2lS1JBy8ce4PeIPrWqapxFxElN2IZ39JxXwEzYMwlDJBOhEnib8DOzDE+hkFA1Up1FXHO9mTdZY9eJ+flwuKD6Rq4yKiMcBFRaRnONo/a4uFy/uzFt0bv3ODDHEVOGZSVYubD8NPvH6LOCDHGLgPYmbEkIOoWNq9WFRkUA1Hsb0RdPX+sOF0/b/rmporvTWazJq4RRDKNR8KhRh4An1pyQvbyKDtKWDC6GJ9HLJBrN9zHj3W1CtLFfNgyuCOYu+FNivcUwvwpomCT+tL0w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MdX1hOXNO4A1snTS2YWnG/uXHbvY0UYH6enY01KQcwk=;
- b=M3izsv9TrxWQlZhr3KXoHY36hTrOQZpax9/ee9rDssbPvhgKs2ykEdMbWHPdTSKcGLJzsl1ct/nDP6Y9KIwnARJz3kkSIOJvxyj0cmIXFraQ62dad450dlaGVreSMNb/F0/R1mNabmbJzIZ6nKsDnWS73IpfPdf3QHkaHAWWQS8viC1h082La1eVSbTaQuXk/7FjkkBmDmRLGz8q204kMxynsE2ueN5vU6wATe9Dl+SWBThJmG14zOCKLpgRq0dlPL/ZSEZapipCkIJzln2TuscHOSdkdFeyAaVmYvX23I4ftxst1fbuJWjnvg06g7cPr2+RVMAey/tY0StLhrPRbA==
+ bh=GHYPKvN/YVCC49ztEYfmY3KE9e9IzEYN5v/mHGw6/eg=;
+ b=Wo4/m9YkIlWkIbiV/RWGPic9m+PDuvcuo9r/EKeLWBI2LM1GROp7SHgKX5ycCuu/ytwvezGcsYHVHEYdFFKWAn8NIjZiHSDC1ZYvdumxTDvol4xMbh750zbGy/PN4cF5tof5RmKR0LWtib3NhS+2fJlN4iblwar4I0zW5PI3EUbPIdLI+JeJDEftqRbp4uhjaTAlxkRHRivhbtlbRCJuQxy7y9fRHtk0I7/nyn0NnTKqjzXJvjAF9oxtBST2B5NQ6RZTJKmlow58J1rN4J5hSnvKdDZJ2lDbfPRq4ZdW/J4bf80CDNIUfdIBKkEzbnJNsbAH7kPMyAK61K5qyQ3ugg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=intel.com;
 Received: from SJ2PR11MB7573.namprd11.prod.outlook.com (2603:10b6:a03:4d2::10)
- by PH0PR11MB5925.namprd11.prod.outlook.com (2603:10b6:510:143::10) with
+ by PH7PR11MB7663.namprd11.prod.outlook.com (2603:10b6:510:27c::7) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7091.26; Wed, 13 Dec
- 2023 21:59:29 +0000
+ 2023 21:59:43 +0000
 Received: from SJ2PR11MB7573.namprd11.prod.outlook.com
  ([fe80::6710:537d:b74:f1e5]) by SJ2PR11MB7573.namprd11.prod.outlook.com
  ([fe80::6710:537d:b74:f1e5%5]) with mapi id 15.20.7068.025; Wed, 13 Dec 2023
- 21:59:29 +0000
-Message-ID: <04650d92-fb80-49e2-87b7-4f9dbec922b8@intel.com>
-Date: Wed, 13 Dec 2023 13:59:19 -0800
+ 21:59:43 +0000
+Message-ID: <c0a05ec9-f572-487d-b4f2-e8e2ce4dba7e@intel.com>
+Date: Wed, 13 Dec 2023 13:59:42 -0800
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 23/29] selftests/resctrl: Restore the CPU affinity
- after CAT test
+Subject: Re: [PATCH v3 24/29] selftests/resctrl: Create struct for input
+ parameters
 Content-Language: en-US
 To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
 	<linux-kselftest@vger.kernel.org>, Shuah Khan <shuah@kernel.org>, "Shaopeng
@@ -87,9 +87,9 @@ To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
 	<maciej.wieczor-retman@intel.com>, Fenghua Yu <fenghua.yu@intel.com>
 CC: <linux-kernel@vger.kernel.org>
 References: <20231211121826.14392-1-ilpo.jarvinen@linux.intel.com>
- <20231211121826.14392-24-ilpo.jarvinen@linux.intel.com>
+ <20231211121826.14392-25-ilpo.jarvinen@linux.intel.com>
 From: Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <20231211121826.14392-24-ilpo.jarvinen@linux.intel.com>
+In-Reply-To: <20231211121826.14392-25-ilpo.jarvinen@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
 X-ClientProxiedBy: MW4PR04CA0259.namprd04.prod.outlook.com
@@ -102,227 +102,75 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ2PR11MB7573:EE_|PH0PR11MB5925:EE_
-X-MS-Office365-Filtering-Correlation-Id: 95c513e1-3996-41fd-0a79-08dbfc26c7c7
+X-MS-TrafficTypeDiagnostic: SJ2PR11MB7573:EE_|PH7PR11MB7663:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2a8be93c-46eb-4100-fb16-08dbfc26d02f
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: MEzoi8D6sw4JJCCdcAufwzqI13rS5cummeKB8KCEr1EYCcuwPe1k1v0YoLK0tWNQajd16tS1rA/3XYTDUNOuwUGrFYKMKvXmLUrNa78kZ0CDeUMPrmjvVn6Fhi0kpUnb4wjgoLah9BMEVpucAyoI32qSvgumA9V+BP0n9fhv3IaGsp1BsXGsLsIsHDoJIR2a8t+AVZAtd97CqmtJwjCNI6Tj8CkVOcNYWUD+1MJ6G6noq+KmRVOl44JHopToGuMdXUIL2mSVm+sE5CFBpYdCyu175gD+jm04mpEk5ZakMovoQJvi4jvhgk9ng41CmJxVzyzHu1f7gEgp/lLJD0WMlpVi7pgyhBsIjamy8cJOyc1cVOk/JikKdoF35wC4yH+jKfp1OoFIbA9R1XiN8Y/6wpgYJVl1dvxcvGXlDKcTkk/+PKQlZBdNhcTgFsMxJnDO0nA9hSsjvJAg0YdPuPK3RUzWVj+un6fzhKLYyaBF1eiRkvHOUGKxprXnnQTForLKqgtLL7Ci1iPP9++oY/X/VQNCOl/gg9csIz/mKCw/bujiScF/qkC3w/lwJKc1CjzHeH3c+b56839omBl21AIkN6B/rWYHHZ676a5vLJkNnaHGioOC+yZALWF+ShD9WxC5oumiXoDJjlGFF3UicpPbfQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7573.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(366004)(396003)(39860400002)(376002)(136003)(230922051799003)(1800799012)(64100799003)(186009)(451199024)(66574015)(2616005)(26005)(6506007)(6512007)(6666004)(83380400001)(5660300002)(4326008)(44832011)(8936002)(8676002)(41300700001)(2906002)(6486002)(53546011)(478600001)(316002)(6636002)(66556008)(66946007)(110136005)(66476007)(86362001)(31696002)(82960400001)(38100700002)(36756003)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: BixwgTcwBnifDpThLTLHjXHcLk6vNUHToL4r1emsKK1VSUrZIBkCRUvyI2qZ1EdTP8WoV1qlPgRCc32rXBvTsn0I8HNcB8H8ivJtciZb1rUuxxUxxHI85q3+/xXsCJTLz2BXJKrP/IZRPTKmeDw0wmv9S8xR7b/BgOuuyIgs8+66hAEonCpp2b5qWEcP7vSk0iGE2MdE4Kb00kqPWjjOt4AdmxpnsL5rXvoN4SWeJlSNelknrXeuX/bvOBrH8GCn+r8/r/fqo93vPyRXRLtfe4H+FiJQR4gQXZe3GBj5fMHsPYq2up+pdenDfPvAOy84Bb4YuYeeLpq7faY3KVQ7z5c0MVk9ggsLx9bk8nHhF9CfD5PZ0gBQLs5LW23N+LC8GLUmU+XrNN2e7BMN0xNOGoYmpkdEiBVyC/+VmV0aIxHwkE6Av/KlRd64ETg4EnfiZrHXcSGQgIFS95Bo1Ge7ztxqbY15GaD0G+XJsj/ogKDHsK2rOGP3eLqpIiVz4uVnq57sIvekb+kdB1yd6wcmujznilYQkIlcldTijgaWuZgBBb4nTmjd1y/lm4ehPXs0pQ34lAEcO78MJUf7ri0ujmFAI5VcVY1Z5HhEc5zXwt0revRfMskidTp5ST3qflHdrTBJEmp0OkKbsd2FQvZmOQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7573.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(366004)(136003)(376002)(346002)(39860400002)(230922051799003)(451199024)(1800799012)(64100799003)(186009)(31686004)(2616005)(53546011)(31696002)(86362001)(82960400001)(36756003)(38100700002)(4326008)(5660300002)(6512007)(6506007)(316002)(6636002)(478600001)(66946007)(66556008)(66476007)(110136005)(41300700001)(44832011)(8936002)(8676002)(6486002)(2906002)(26005)(4744005)(45980500001)(43740500002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?T0N4M1pTZTVrS0tkRUcwQjFSdjRXYzBYQ2k0ZmNVUUNFRHIzNVdyZkducHh6?=
- =?utf-8?B?QSs3N2JCZUNPOGhHS2tuUkRsWkthek81ckYvSHcvaTI4MThzYlFpMnR5TTVa?=
- =?utf-8?B?L2gwb0VwZ2UvMFVzMlpnRlVGUjNrR2RCY1VvaTh2TzNBNUpCV0RZaHpQYlF6?=
- =?utf-8?B?M0V4c3prd0RYVHdJYkxqOVdpRUR0NTZvZXBqSFZVSnQzMWx5bnE1UXR3NWE3?=
- =?utf-8?B?RXMveVYvejFZTThwL2VZOVBZaFdpcEIrS3p5eUxXcE9keHNnZ1hhNThVdzlN?=
- =?utf-8?B?K1ZsSXlMNzFnYk9XN05Ua3N0V1RZc1hqT2toc2QzTG9peTVtdlF1bGNkK1JJ?=
- =?utf-8?B?a1c5bDdua2h2alFoN2lhdkl6ei8zUndmVWFGdkpJNjh0T29TTndzcC9qYmRH?=
- =?utf-8?B?eUE5ZkZrV001aHRtckh4RUJaK0JTK0dVb01mcGpvOGxOSlVlbU9RNTFWcXc2?=
- =?utf-8?B?cVdrQVo1SFVXVzU4TnlNTWw2aWJHanlpVEwzOUlUU1E2dExwRFBuSHZ3SXg2?=
- =?utf-8?B?Z2w4clU4MlJlMWt1ZkI3T3hlQ1BzaFJnaWtCOTJ1ek8wQ2FsYUp2UWNuQVZW?=
- =?utf-8?B?akIxbUpXUlNHL0t3Z05LUjlla3VPbzk1cExheXRhZ1V4ODRBTXMzTjRhQkFV?=
- =?utf-8?B?TmUvUmd0L3NlTDQweTVHR3FnOW1BQWYvYnhic2tRd09QOTRRYXFtZDdEYWRt?=
- =?utf-8?B?clQwWGtySkRnUVNoQ0xlY2dmd21RbVgvZ1VSZWJFRlk0aDJqTmg1Z3NaYXRP?=
- =?utf-8?B?b0VNU3FJQ3NmV2s5Z25oR1F3ckkyTmJ0Q3FxNUlkVXRlMVB1YnU0WWcrWnk4?=
- =?utf-8?B?bUpjWVpWU2ZpL25yaXhwbnFDUHdUV2x2d3ZSRWRRaEJjVDVUY2dwdldiUk9H?=
- =?utf-8?B?TEEzUERzK2ROcHVWRWlXSWUvNjhCOXZxNk9HUEFka0ZQM2s1bUhmU0I5eGdh?=
- =?utf-8?B?L2MzV2Z5dEg3YzZ4Q3E0eWdKUFU4RTljd1BrejVRMEphQlFVQ2ZPU1hmWmQz?=
- =?utf-8?B?RjJLa0NRR0txOGxHc0hmeHVwRXY2SGVTcDBpb01Ucjh0RDJRWGZMT3RwUTcy?=
- =?utf-8?B?MGp3eng3QVVSeFkrN04zNTVpc25tRlQvdnBMVDIxSXBPdExXUUVJdm1XNnZ6?=
- =?utf-8?B?WStnRjBJTEZ6QnFlczYwM0ZUTURhL0s4THN2L3FWNEx5TTh3bVRlMHFJMTlO?=
- =?utf-8?B?SEgwRFYxTi91SE9qSkYxYmt1NXp6TWRjbkM5Uy91RFhSQk1NMGluV3I1cGc5?=
- =?utf-8?B?bDJ3d2U2Z1R0QldOWmFwUHRjcmh0bWc4SVlMN1ZZRWRIZCtKVFdhdlVnWGh6?=
- =?utf-8?B?WE5SWXFySENXNUZmeE5jQmNtemVXSVFNbW5zYnl2Z1RoZUFCYUVZbnB4Y1Vv?=
- =?utf-8?B?eGVMeXhNSWZ2RC9DcElpVURYTllrZjgycTU4OWhqT1o2WktjcGRyWGlQbW95?=
- =?utf-8?B?MGk3Uy9Dd1U0N2lwQzRSUGVnQWRaSUpIUjhkbXc0YjhScjM1VkNsS3IvenlZ?=
- =?utf-8?B?T3duTG9rc3pOdUw4eXh0YzBpRC9aKzBhSk9JdEVwZWZGMXZSMm1zKzgrbjdD?=
- =?utf-8?B?akdVclBrZVVTcmhnR2ZGVE80ai81bWQ1U2g1Z1p6ZzMwVVVmSStqZVpKNzZI?=
- =?utf-8?B?V2tZMFZMMWI0c2swUXh0T0hiWmRQM0FyczJqL2NrdkU5UkNCOVM2SWlaKzY2?=
- =?utf-8?B?Qm1PcTRqTEQwZ2hqUVgrUmZNR0dJdjd4bmZDSnpZVE5XdDFQb29wK0cxYW5i?=
- =?utf-8?B?Y0NlTnJkcW9MNzViSHBRUHZZVVM2R1JHc2o0eTNwU1RmYUx4YlFRdmVGV0V2?=
- =?utf-8?B?TWgvei8vSTIwalZtWkxOdzhIZFRvUzIxRi9SUmRpeUlIbVkvSTV5VTJRVE1Z?=
- =?utf-8?B?VGFyOFZQMU1HUXZzbG54TW5ZSE4xbTJOeXN1anVFR0NvbnpESWFCWERlajdB?=
- =?utf-8?B?WGIyRTBuRU5MZUV5amw1eGRmeGEzR3pucGRLbDREdUlnUXRwKy9ydDFpMlJy?=
- =?utf-8?B?MURGQm1DTVJVM3U1UkpoVUJ1R2V2NWNialplWGozRWFXeWxoL3BYaXh4TDlu?=
- =?utf-8?B?OVBlYlJDeXJjSnp6YW4xOVhMMVVrSjJvdlNrMXMxeEo0UVpZR29LRWlRZ2RS?=
- =?utf-8?B?VEtuZlZ4MGczNUx2MG5KWnpvQU5nY1hXTHY2YlRhSERNTWc3UXpKbkd4V1do?=
- =?utf-8?B?a3c9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 95c513e1-3996-41fd-0a79-08dbfc26c7c7
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Zm9xY3E3N1JXMWdTcm04R25lSFgwcGFhbjgzUWp2cEhkV2UzNitNWURaOW5h?=
+ =?utf-8?B?RkJua1A2MGNLZzdwaFRkVG9zNENOSVdkZXRiMFpCaHpSYlVHNmtQdisvUEN3?=
+ =?utf-8?B?WXF2L1pEUzJlS3FwblpQcTVLcnd5c2pnR0dtVWZNV2hjaCtFSDVodllyU0pz?=
+ =?utf-8?B?VHNpTit2K05TSkxOOEpYTWhVdXFzMUpxbnl3RnhTcFMrQWN4NnBKb0NRSHVk?=
+ =?utf-8?B?OTcvaHFyVEdzMXdqVWRMUjRzU0RtWlBXZ2Z6R09YKzFCRnJoWjZFWDcwcU5I?=
+ =?utf-8?B?cDdoMHB5MlhuWFF5dHhwS0JLYUhCMWlVWFB4SEZyUjExR1BqSnk1S1RDNkUz?=
+ =?utf-8?B?MmZYbGJ1UjdKLzFyZmVoNTAvNGh1UGpmZC95SkhyaXhGMndOQjhUd1NtZUdT?=
+ =?utf-8?B?eS9LVzJic3M5SDdhRzY2YU9hZXZkdStKV3lTYkJVVkUzczVWeVBQN2dIR0k3?=
+ =?utf-8?B?MVg5amppcTNDUktUSDNzSEI3dnh6NUlJdXZyd09HVjUrcytmVEhqZEwwcGMr?=
+ =?utf-8?B?Wklabml4Vjh2ZmhNeUZmd050dENkRFZHZ0J4WHhjRkhkTGRjbGFJOXdOS2tT?=
+ =?utf-8?B?dkVwZXhQWHJRWThmWDNkYjFsOVdXRklKVnE5K2swWHNQR1RTd0JtRmRWVTdZ?=
+ =?utf-8?B?SmRzcTRrM2s1MmFlNjdPaG9ZNElHanBXRGVlbUlBZUlBVlZhU2VCY0tnZGRr?=
+ =?utf-8?B?V3A3UnFLRjc3ZFJtNWR2d09zendyYjJnOWtidkM2SlJjL0RqQk1tM3I5UlV6?=
+ =?utf-8?B?cS9wZ3FTQzdxZVd3RXllUkhVckk5YTVFNWI5TjhwMzhVdTJKK1NOSjVBejFZ?=
+ =?utf-8?B?NGRoTVc0Qm8zekdnVTJQUVRZTDh1YmpVMDZZQzJEdUdiZWw2YzlEaXhTQmgz?=
+ =?utf-8?B?a05hcDRucXQvekpFQTFzc1d5WGhJN2VQWTlLaHNZeWtlNGNCTVpXZ04vc0xV?=
+ =?utf-8?B?ZHFjM2tlQTI1MlVoeEU0SWs5d3NkS3BCbGh6VFROTGJSSlhYblFsYTdDSDVk?=
+ =?utf-8?B?YlJkTlovUUZ4a0h2cnhHWUNiM0VBZmpSTDh1ZE5vMENRY28xb2swZmsxeEF5?=
+ =?utf-8?B?T01IdUNDcjV3WHRuTTZpeXowVTQwVmNWcDRGSkh5Y1lSbDRoRHZQTFR6VXVm?=
+ =?utf-8?B?aTVIbWNqbXIrQUtHVElKenlkelJ1VVlXc0hHQTE2Z0dLWkpsbEc4aXNzT01W?=
+ =?utf-8?B?MTRSTWRkVmFVcFhxMjg0NWU5RGtLcUJ0c1l1VjVRMkNnWEF0Q0dHbGZ4UDdD?=
+ =?utf-8?B?d3ZRb0VEOHp4YW9nM0pjQXA4NWFpSHU0VDRMNFF6Z2RXYmtXaFVzc25XdmFt?=
+ =?utf-8?B?QmdHNmtFK0RteEpoL29PODdrTW1ORXVTZE5EbzJyVkJPenppKzlSeGtpZ1pp?=
+ =?utf-8?B?Zm9BZ2tYYzNyU0ZBejd4RkZEV0Z3NWdrMnJ4aTB4TlZZVXh5OGJ6eDU5VW1m?=
+ =?utf-8?B?Tjk2K1ZYVHRmUzExSkNBRG1EemhGeTBPV05tUjJEdmF1YjFsTmxOcW5hVmR2?=
+ =?utf-8?B?aGlsc1B1SGp1V3ErVjBlZzVEWVV0c1N0aUpUN3FXdjV6UXJrV1RWM1orTUtw?=
+ =?utf-8?B?T3RUellQMy9NSXVyVkp4aVRLUzhTd3RzMWV4eGp3UENxNHVhenUxK0pSbnZP?=
+ =?utf-8?B?dWt2bStLTVVTR1k1RG1WY3dHTDE5a0taazRRbmdjM3RjMU4wZ0VrdHRnd3Ux?=
+ =?utf-8?B?cjVmOUQ0YXJDd1ZRb0RHVUp0cUs4R1hMLzZNS0NjaXFPbCtialNjVEJObGp0?=
+ =?utf-8?B?RmMrK3VtZ3MvTEUvNUVZb3NTeXNuQ1RvaVFnZTk5STdqUUVjYVUyVWo3Z3p3?=
+ =?utf-8?B?bUVFVzRvVWRjK3hLVjVnODJLcWR2Rk1mK2w4VkNXM3ZVMmN2Yy9qZHE2Y21k?=
+ =?utf-8?B?ZWcwK2wyRUJCbktibytFcVlSbE5rM1dnMzBjVnVjb1pqQlBnVVMvL1c3K1FW?=
+ =?utf-8?B?YVMyNGpTT2U1Sis2YXRNUEhpdkpTOXdSL3h0NmtPSHpOMEtJc3FRVXdkWHlw?=
+ =?utf-8?B?VlB6RXlKa0FWR2sxUmRzRXZDaDBsSGV0SFVYTXg1NU9leVhXN040TWloYmw5?=
+ =?utf-8?B?MlRHb1VEazBHQWljcFdlK2d5MTAzT0NiZE04QTIvZkJsKzZkWGxhaXN3V0ZJ?=
+ =?utf-8?B?YkN0MC9GZFhSeTYzZWdxUjYweWRRd3gxSnhEc25pVDk1dHBtNjRkTVhzNnpu?=
+ =?utf-8?B?bFE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2a8be93c-46eb-4100-fb16-08dbfc26d02f
 X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB7573.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2023 21:59:29.5394
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2023 21:59:43.6310
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: WA0EwAJzknR3cKdRD3vq44C+v6Pao5/zPJCHRW6cJo6UKswPHKyZyCuKRRR4TBMtaYlBWwZla2RzgAteMKAKWYl5Bik9Hvi9BDLU4jHZoE8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB5925
+X-MS-Exchange-CrossTenant-UserPrincipalName: /mPGgkQ1dLk8ZOF+ADuAihje4i7CHtBZg9alBY6mp7YIItdLreXe1RWja5k7U8RPgj/xGwuBC1eBPkLtmsElgDanL4LvR9R/7gsbaSrJ2/0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB7663
 X-OriginatorOrg: intel.com
 
 Hi Ilpo,
 
 On 12/11/2023 4:18 AM, Ilpo Järvinen wrote:
-> CAT test does not reset the CPU affinity after the benchmark.
-> This is relatively harmless as is because CAT test is the last
-> benchmark to run, however, more tests may be added later.
+> resctrl_tests reads a set of parameters and passes them individually
+> for each tests which causes variations in the call signature between
+> the tests.
 > 
-> Store the CPU affinity the first time taskset_benchmark() is run and
-> add taskset_restore() which the test can call to reset the CPU mask to
-> its original value.
+> Add struct input_params to hold all input parameters. It can be easily
+> passed to every test without varying the call signature.
 > 
 > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 > ---
-> 
-> v3:
-> - New patch
-> ---
->  tools/testing/selftests/resctrl/cat_test.c    | 13 +++++---
->  tools/testing/selftests/resctrl/resctrl.h     |  3 +-
->  tools/testing/selftests/resctrl/resctrl_val.c |  2 +-
->  tools/testing/selftests/resctrl/resctrlfs.c   | 33 +++++++++++++++++--
->  4 files changed, 42 insertions(+), 9 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-> index b79916069788..fa95433297c9 100644
-> --- a/tools/testing/selftests/resctrl/cat_test.c
-> +++ b/tools/testing/selftests/resctrl/cat_test.c
-> @@ -156,6 +156,7 @@ static int cat_test(struct resctrl_val_param *param, size_t span, unsigned long
->  	char *resctrl_val = param->resctrl_val;
->  	struct perf_event_read pe_read;
->  	struct perf_event_attr pea;
-> +	cpu_set_t old_affinity;
->  	unsigned char *buf;
->  	char schemata[64];
->  	int ret, i, pe_fd;
-> @@ -167,7 +168,7 @@ static int cat_test(struct resctrl_val_param *param, size_t span, unsigned long
->  	bm_pid = getpid();
->  
->  	/* Taskset benchmark to specified cpu */
-> -	ret = taskset_benchmark(bm_pid, param->cpu_no);
-> +	ret = taskset_benchmark(bm_pid, param->cpu_no, &old_affinity);
->  	if (ret)
->  		return ret;
->  
-> @@ -175,13 +176,15 @@ static int cat_test(struct resctrl_val_param *param, size_t span, unsigned long
->  	ret = write_bm_pid_to_resctrl(bm_pid, param->ctrlgrp, param->mongrp,
->  				      resctrl_val);
->  	if (ret)
-> -		return ret;
-> +		goto reset_affinity;
->  
->  	perf_event_attr_initialize(&pea, PERF_COUNT_HW_CACHE_MISSES);
->  	perf_event_initialize_read_format(&pe_read);
->  	pe_fd = perf_open(&pea, bm_pid, param->cpu_no);
-> -	if (pe_fd < 0)
-> -		return pe_fd;
-> +	if (pe_fd < 0) {
-> +		ret = -1;
-> +		goto reset_affinity;
-> +	}
->  
->  	buf = alloc_buffer(span, 1);
->  	if (!buf) {
-> @@ -220,6 +223,8 @@ static int cat_test(struct resctrl_val_param *param, size_t span, unsigned long
->  	free(buf);
->  pe_close:
->  	close(pe_fd);
-> +reset_affinity:
-> +	taskset_restore(bm_pid, &old_affinity);
->  
->  	return ret;
->  }
-> diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-> index da1f1b508aee..da62f4cd5add 100644
-> --- a/tools/testing/selftests/resctrl/resctrl.h
-> +++ b/tools/testing/selftests/resctrl/resctrl.h
-> @@ -98,7 +98,8 @@ int umount_resctrlfs(void);
->  int validate_bw_report_request(char *bw_report);
->  bool validate_resctrl_feature_request(const char *resource, const char *feature);
->  char *fgrep(FILE *inf, const char *str);
-> -int taskset_benchmark(pid_t bm_pid, int cpu_no);
-> +int taskset_benchmark(pid_t bm_pid, int cpu_no, cpu_set_t *old_affinity);
-> +int taskset_restore(pid_t bm_pid, cpu_set_t *old_affinity);
->  int write_schemata(char *ctrlgrp, char *schemata, int cpu_no,
->  		   char *resctrl_val);
->  int write_bm_pid_to_resctrl(pid_t bm_pid, char *ctrlgrp, char *mongrp,
-> diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
-> index d515850cc174..4aed974efa0f 100644
-> --- a/tools/testing/selftests/resctrl/resctrl_val.c
-> +++ b/tools/testing/selftests/resctrl/resctrl_val.c
-> @@ -777,7 +777,7 @@ int resctrl_val(const char * const *benchmark_cmd, struct resctrl_val_param *par
->  	value.sival_ptr = (void *)benchmark_cmd;
->  
->  	/* Taskset benchmark to specified cpu */
-> -	ret = taskset_benchmark(bm_pid, param->cpu_no);
-> +	ret = taskset_benchmark(bm_pid, param->cpu_no, NULL);
->  	if (ret)
->  		goto out;
->  
-> diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-> index dffe42e11c6c..97760fadcddf 100644
-> --- a/tools/testing/selftests/resctrl/resctrlfs.c
-> +++ b/tools/testing/selftests/resctrl/resctrlfs.c
-> @@ -345,15 +345,25 @@ int get_mask_no_shareable(const char *cache_type, unsigned long *mask)
->  
->  /*
->   * taskset_benchmark - Taskset PID (i.e. benchmark) to a specified cpu
-> - * @bm_pid:	PID that should be binded
-> - * @cpu_no:	CPU number at which the PID would be binded
-> + * @bm_pid:		PID that should be binded
-> + * @cpu_no:		CPU number at which the PID would be binded
-> + * @old_affinity:	When not NULL, set to old CPU affinity
->   *
->   * Return: 0 on success, < 0 on error.
->   */
-> -int taskset_benchmark(pid_t bm_pid, int cpu_no)
-> +int taskset_benchmark(pid_t bm_pid, int cpu_no, cpu_set_t *old_affinity)
->  {
->  	cpu_set_t my_set;
->  
-> +	if (old_affinity) {
-> +		CPU_ZERO(old_affinity);
-> +		if (sched_getaffinity(bm_pid, sizeof(*old_affinity),
-> +				      old_affinity)) {
-> +			ksft_perror("Unable to read previous CPU affinity");
-
-"previous" can be confusing here (it is not trying to determine something
-from the past but instead the current state). It can just be "Unable to read
-CPU affinity"
-
-> +			return -1;
-> +		}
-> +	}
-> +
->  	CPU_ZERO(&my_set);
->  	CPU_SET(cpu_no, &my_set);
->  
-> @@ -366,6 +376,23 @@ int taskset_benchmark(pid_t bm_pid, int cpu_no)
->  	return 0;
->  }
->  
-> +/*
-> + * taskset_restore - Taskset PID to the earlier CPU affinity
-> + * @bm_pid:		PID that should be reset
-> + * @old_affinity:	The old CPU affinity to restore
-> + *
-> + * Return: 0 on success, < 0 on error.
-> + */
-> +int taskset_restore(pid_t bm_pid, cpu_set_t *old_affinity)
-> +{
-> +	if (sched_setaffinity(bm_pid, sizeof(*old_affinity), old_affinity)) {
-> +		ksft_perror("Unable to restore taskset");
-
-This message is not clear to me. How about "Unable to restore CPU affinity"?
-
-> +		return -1;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->  /*
->   * create_grp - Create a group only if one doesn't exist
->   * @grp_name:	Name of the group
 
 Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
 
