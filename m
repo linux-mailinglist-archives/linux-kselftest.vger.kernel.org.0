@@ -1,58 +1,58 @@
-Return-Path: <linux-kselftest+bounces-1806-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1807-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5DF238109ED
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 07:10:21 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B09788109EF
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 07:10:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D7A2C1F21CC6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 06:10:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E1B721C20AD9
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 06:10:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8766F9F7;
-	Wed, 13 Dec 2023 06:10:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82895FBE5;
+	Wed, 13 Dec 2023 06:10:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BJ4DvhnR"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XL7yxTHA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0E459A;
-	Tue, 12 Dec 2023 22:10:00 -0800 (PST)
-Received: by mail-oo1-xc2a.google.com with SMTP id 006d021491bc7-59067ccb090so4146421eaf.1;
-        Tue, 12 Dec 2023 22:10:00 -0800 (PST)
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE1DA83;
+	Tue, 12 Dec 2023 22:10:04 -0800 (PST)
+Received: by mail-oi1-x22b.google.com with SMTP id 5614622812f47-3b9f8c9307dso3595060b6e.0;
+        Tue, 12 Dec 2023 22:10:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702447799; x=1703052599; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1702447803; x=1703052603; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XwOWxkOkKRXc1icP7YrE43xlzphSCiSZQsuVRPDsMzw=;
-        b=BJ4DvhnRw22HgQujpOHNXdf5SeNL5Dj7dB0S3Tm6k0C7HCiem6bioF9+NlhCHkCoj0
-         xxw8nuZxDJOPH4CVYkM1/2AQKCG/LWeDBXyuk5ftODZ1j3qPjfufhBOXi3QrEiZsD4kr
-         v779XZM8/dMllT5WI5PsNzHBxrRIr1bTEsYWjjCrafrhKnzyNcoSci5duIdpP6qJsds7
-         y8lTcDFPnnOzFFH19uYbYqePxrp+k8Nx93L+88iW1+C7ZCOO0uoq5uXxHWWwz+5+8Wgh
-         saj2/vBZJ9wtAktcVQWYeDXNgs71yD5BZ8CekSTLkPODBSKdeupKk49uET5kFNc+kCNF
-         XG9A==
+        bh=buvPtnR8AFIJn0EUsyN8HoYPJLQ+S82rOr7SY6NXD9c=;
+        b=XL7yxTHAb9cD4JKL5hdA5ForCajTSkH1LwXELdWXFOHzjFWz4UkakXbthw1gtmi9os
+         vDMmdKVO6jtE/k3mCTHz5JzqrGUxLF+dW18RqcH1zSpX7DN4rULeXtsu+49GNkJeV6xI
+         pCLJRZqDVTTaKkPvPCpoMdjROykAAPopeM2V4t6Qt+WpmnYziy0xH0jwZcpyNyxA4a/W
+         FUuzasqllv3W+dhKMRVaZQn3VbReUblypXKxZZtNSLvEVefFBYatWnwFyTmqkbUiVIvF
+         o/Ed3FuSfKAocBE3UatWQ68P476f27ilLTKGrlVNe54ix/iTfNHKzsP29a7EWB/jaUGd
+         SrmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702447799; x=1703052599;
+        d=1e100.net; s=20230601; t=1702447803; x=1703052603;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=XwOWxkOkKRXc1icP7YrE43xlzphSCiSZQsuVRPDsMzw=;
-        b=CEZGALmQgmdTrOQJTxETVByBotKuEWq9FLwLzVr6rT0uxkJISMhRvicm35939Ajlxi
-         qHNWWsJgaFWzehyKgzEkQBbjYaaxZzeVzDrVC4oZLtGvGndt2n5Y3cfbsFPEqn1aPDHf
-         3HLu21wGq2ftCtLSxGzKttMwLLergvt8T3GKpMP670lMNy9eCh+hYVEnHykSG2NyhBaT
-         9BvKZPOTtK6IlJbe+88CFQox8YoHLD/GWlMbzQN0Zd3F7HWu08/VwYqjpdtLDstOtiyS
-         k57DoHKulkXkESHInEMPZ+czOD9sNJyqD9Cyg1npL5lELpYSUQnrMNjBcWJafzH1Vg+4
-         6VCA==
-X-Gm-Message-State: AOJu0Yy6mAdTiMSW2s1tPadwzgiSkDe3XQLqWFGdSv74Q5I+Gv5Q13RW
-	W+MhgEKy+8B7m84pXRp/fxOYJDRqcxOC6ciilVQ=
-X-Google-Smtp-Source: AGHT+IHX3/RFZNfUb97FnN6zfbK6gs8FAl+bArrMmqE8elUXlYDf9mnW8DgHB4OpYQ1nae/CowSfGA==
-X-Received: by 2002:a05:6359:6e18:b0:170:6807:d8b with SMTP id th24-20020a0563596e1800b0017068070d8bmr5508410rwb.59.1702447799145;
-        Tue, 12 Dec 2023 22:09:59 -0800 (PST)
+        bh=buvPtnR8AFIJn0EUsyN8HoYPJLQ+S82rOr7SY6NXD9c=;
+        b=j1uWyyG+sOeD5KUJ0tW8VVMv+mqvnK7dWaDklvE/IsXoQ/uE6GdTD5m5m1eHKDyJWF
+         BBP7QVWJg9kFrfONSwjCyj5mjBmbPzCv6+1Xsi9pDge27kk4ZwJ137VpeIUokBpfO+JD
+         llqkCcjgT0xROnj/MThClVGED67/eBM8+c7rsNbWHzxV0UtzBWSRFUj6Xqwkd/6AAn0x
+         wJQ7ZVyg6MmbqB53YxUvzFCxq7mIPWlf8XiReSP+BGCmzU6UmCQTRfJLoWwWN60F2TZp
+         c9jUGOBi3nXBihGFq82FV9w7N+y/D4pL3xsBd/KgKhEi0S4btQhCa7m1wFQWlalv2agx
+         icxw==
+X-Gm-Message-State: AOJu0YwcDB+97d8aWDDrva8fIJx51CHCjgAZx0JCXssaS8GF9vnXlbS0
+	fW4kolvsgFpKKpdFPLbTX3iy8K6BZqZzrMsERFA=
+X-Google-Smtp-Source: AGHT+IEI3tJ63gjoAa2Tv5qGQDk9xL2QsrUWkLRykC1IXf15yDvdj+S62FE668jMrIBmvWIdKWbcjA==
+X-Received: by 2002:a05:6808:f09:b0:3b9:d5e3:8f28 with SMTP id m9-20020a0568080f0900b003b9d5e38f28mr10049000oiw.57.1702447803217;
+        Tue, 12 Dec 2023 22:10:03 -0800 (PST)
 Received: from Laptop-X1.redhat.com ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id kq9-20020a056a004b0900b006cef5e5a968sm6890084pfb.201.2023.12.12.22.09.54
+        by smtp.gmail.com with ESMTPSA id kq9-20020a056a004b0900b006cef5e5a968sm6890084pfb.201.2023.12.12.22.09.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Dec 2023 22:09:58 -0800 (PST)
+        Tue, 12 Dec 2023 22:10:02 -0800 (PST)
 From: Hangbin Liu <liuhangbin@gmail.com>
 To: netdev@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -69,9 +69,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Roopa Prabhu <roopa@nvidia.com>,
 	Ido Schimmel <idosch@nvidia.com>,
 	Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCHv2 net-next 12/13] selftests/net: convert fib_tests.sh to run it in unique namespace
-Date: Wed, 13 Dec 2023 14:08:55 +0800
-Message-ID: <20231213060856.4030084-13-liuhangbin@gmail.com>
+Subject: [PATCHv2 net-next 13/13] selftests/net: convert fdb_flush.sh to run it in unique namespace
+Date: Wed, 13 Dec 2023 14:08:56 +0800
+Message-ID: <20231213060856.4030084-14-liuhangbin@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20231213060856.4030084-1-liuhangbin@gmail.com>
 References: <20231213060856.4030084-1-liuhangbin@gmail.com>
@@ -84,395 +84,55 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
 Here is the test result after conversion.
-
- # ./fib_tests.sh
-
- Single path route test
-     Start point
-     TEST: IPv4 fibmatch                                                 [ OK ]
-
+ # ./fdb_flush.sh
+ TEST: vx10: Expected 5 FDB entries, got 5                           [ OK ]
+ TEST: vx20: Expected 5 FDB entries, got 5                           [ OK ]
  ...
-
- Fib6 garbage collection test
-     TEST: ipv6 route garbage collection                                 [ OK ]
-
- IPv4 multipath list receive tests
-     TEST: Multipath route hit ratio (1.00)                              [ OK ]
-
- IPv6 multipath list receive tests
-     TEST: Multipath route hit ratio (1.00)                              [ OK ]
-
- Tests passed: 225
- Tests failed:   0
+ TEST: vx10: Expected 5 FDB entries, got 5                           [ OK ]
+ TEST: Test entries with dst 192.0.2.1                               [ OK ]
 
 Acked-by: David Ahern <dsahern@kernel.org>
 Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
 ---
- tools/testing/selftests/net/fib_tests.sh | 184 +++++++++++------------
- 1 file changed, 87 insertions(+), 97 deletions(-)
+ tools/testing/selftests/net/fdb_flush.sh | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/net/fib_tests.sh b/tools/testing/selftests/net/fib_tests.sh
-index 66d0db7a2614..b3ecccbbfcd2 100755
---- a/tools/testing/selftests/net/fib_tests.sh
-+++ b/tools/testing/selftests/net/fib_tests.sh
-@@ -3,10 +3,8 @@
+diff --git a/tools/testing/selftests/net/fdb_flush.sh b/tools/testing/selftests/net/fdb_flush.sh
+index 90e7a29e0476..d5e3abb8658c 100755
+--- a/tools/testing/selftests/net/fdb_flush.sh
++++ b/tools/testing/selftests/net/fdb_flush.sh
+@@ -5,6 +5,8 @@
+ # Check that flush works as expected with all the supported arguments and verify
+ # some combinations of arguments.
  
- # This test is for checking IPv4 and IPv6 FIB behavior in response to
- # different events.
--
 +source lib.sh
- ret=0
--# Kselftest framework requirement - SKIP code is 4.
--ksft_skip=4
++
+ FLUSH_BY_STATE_TESTS="
+ 	vxlan_test_flush_by_permanent
+ 	vxlan_test_flush_by_nopermanent
+@@ -739,10 +741,9 @@ bridge_vxlan_test_flush()
  
- # all tests in this script. Can be overridden with -t option
- TESTS="unregister down carrier nexthop suppress ipv6_notify ipv4_notify \
-@@ -18,8 +16,6 @@ TESTS="unregister down carrier nexthop suppress ipv6_notify ipv4_notify \
- VERBOSE=0
- PAUSE_ON_FAIL=no
- PAUSE=no
--IP="$(which ip) -netns ns1"
--NS_EXEC="$(which ip) netns exec ns1"
- 
- which ping6 > /dev/null 2>&1 && ping6=$(which ping6) || ping6=$(which ping)
- 
-@@ -55,11 +51,11 @@ log_test()
  setup()
  {
- 	set -e
+-	IP="ip -netns ns1"
+-	BRIDGE="bridge -netns ns1"
+-
 -	ip netns add ns1
--	ip netns set ns1 auto
--	$IP link set dev lo up
--	ip netns exec ns1 sysctl -qw net.ipv4.ip_forward=1
--	ip netns exec ns1 sysctl -qw net.ipv6.conf.all.forwarding=1
-+	setup_ns ns1
-+	IP="$(which ip) -netns $ns1"
-+	NS_EXEC="$(which ip) netns exec $ns1"
-+	ip netns exec $ns1 sysctl -qw net.ipv4.ip_forward=1
-+	ip netns exec $ns1 sysctl -qw net.ipv6.conf.all.forwarding=1
++	setup_ns NS
++	IP="ip -netns ${NS}"
++	BRIDGE="bridge -netns ${NS}"
  
- 	$IP link add dummy0 type dummy
- 	$IP link set dev dummy0 up
-@@ -72,8 +68,7 @@ setup()
- cleanup()
- {
- 	$IP link del dev dummy0 &> /dev/null
--	ip netns del ns1 &> /dev/null
--	ip netns del ns2 &> /dev/null
-+	cleanup_ns $ns1 $ns2
+ 	$IP link add name vx10 type vxlan id 1000 dstport "$VXPORT"
+ 	$IP link add name vx20 type vxlan id 2000 dstport "$VXPORT"
+@@ -759,7 +760,7 @@ cleanup()
+ 	$IP link del dev vx20
+ 	$IP link del dev vx10
+ 
+-	ip netns del ns1
++	cleanup_ns ${NS}
  }
  
- get_linklocal()
-@@ -448,28 +443,25 @@ fib_rp_filter_test()
- 	setup
- 
- 	set -e
--	ip netns add ns2
--	ip netns set ns2 auto
--
--	ip -netns ns2 link set dev lo up
-+	setup_ns ns2
- 
- 	$IP link add name veth1 type veth peer name veth2
--	$IP link set dev veth2 netns ns2
-+	$IP link set dev veth2 netns $ns2
- 	$IP address add 192.0.2.1/24 dev veth1
--	ip -netns ns2 address add 192.0.2.1/24 dev veth2
-+	ip -netns $ns2 address add 192.0.2.1/24 dev veth2
- 	$IP link set dev veth1 up
--	ip -netns ns2 link set dev veth2 up
-+	ip -netns $ns2 link set dev veth2 up
- 
- 	$IP link set dev lo address 52:54:00:6a:c7:5e
- 	$IP link set dev veth1 address 52:54:00:6a:c7:5e
--	ip -netns ns2 link set dev lo address 52:54:00:6a:c7:5e
--	ip -netns ns2 link set dev veth2 address 52:54:00:6a:c7:5e
-+	ip -netns $ns2 link set dev lo address 52:54:00:6a:c7:5e
-+	ip -netns $ns2 link set dev veth2 address 52:54:00:6a:c7:5e
- 
- 	# 1. (ns2) redirect lo's egress to veth2's egress
--	ip netns exec ns2 tc qdisc add dev lo parent root handle 1: fq_codel
--	ip netns exec ns2 tc filter add dev lo parent 1: protocol arp basic \
-+	ip netns exec $ns2 tc qdisc add dev lo parent root handle 1: fq_codel
-+	ip netns exec $ns2 tc filter add dev lo parent 1: protocol arp basic \
- 		action mirred egress redirect dev veth2
--	ip netns exec ns2 tc filter add dev lo parent 1: protocol ip basic \
-+	ip netns exec $ns2 tc filter add dev lo parent 1: protocol ip basic \
- 		action mirred egress redirect dev veth2
- 
- 	# 2. (ns1) redirect veth1's ingress to lo's ingress
-@@ -487,24 +479,24 @@ fib_rp_filter_test()
- 		action mirred egress redirect dev veth1
- 
- 	# 4. (ns2) redirect veth2's ingress to lo's ingress
--	ip netns exec ns2 tc qdisc add dev veth2 ingress
--	ip netns exec ns2 tc filter add dev veth2 ingress protocol arp basic \
-+	ip netns exec $ns2 tc qdisc add dev veth2 ingress
-+	ip netns exec $ns2 tc filter add dev veth2 ingress protocol arp basic \
- 		action mirred ingress redirect dev lo
--	ip netns exec ns2 tc filter add dev veth2 ingress protocol ip basic \
-+	ip netns exec $ns2 tc filter add dev veth2 ingress protocol ip basic \
- 		action mirred ingress redirect dev lo
- 
- 	$NS_EXEC sysctl -qw net.ipv4.conf.all.rp_filter=1
- 	$NS_EXEC sysctl -qw net.ipv4.conf.all.accept_local=1
- 	$NS_EXEC sysctl -qw net.ipv4.conf.all.route_localnet=1
--	ip netns exec ns2 sysctl -qw net.ipv4.conf.all.rp_filter=1
--	ip netns exec ns2 sysctl -qw net.ipv4.conf.all.accept_local=1
--	ip netns exec ns2 sysctl -qw net.ipv4.conf.all.route_localnet=1
-+	ip netns exec $ns2 sysctl -qw net.ipv4.conf.all.rp_filter=1
-+	ip netns exec $ns2 sysctl -qw net.ipv4.conf.all.accept_local=1
-+	ip netns exec $ns2 sysctl -qw net.ipv4.conf.all.route_localnet=1
- 	set +e
- 
--	run_cmd "ip netns exec ns2 ping -w1 -c1 192.0.2.1"
-+	run_cmd "ip netns exec $ns2 ping -w1 -c1 192.0.2.1"
- 	log_test $? 0 "rp_filter passes local packets"
- 
--	run_cmd "ip netns exec ns2 ping -w1 -c1 127.0.0.1"
-+	run_cmd "ip netns exec $ns2 ping -w1 -c1 127.0.0.1"
- 	log_test $? 0 "rp_filter passes loopback packets"
- 
- 	cleanup
-@@ -959,34 +951,32 @@ route_setup()
- 	[ "${VERBOSE}" = "1" ] && set -x
- 	set -e
- 
--	ip netns add ns2
--	ip netns set ns2 auto
--	ip -netns ns2 link set dev lo up
--	ip netns exec ns2 sysctl -qw net.ipv4.ip_forward=1
--	ip netns exec ns2 sysctl -qw net.ipv6.conf.all.forwarding=1
-+	setup_ns ns2
-+	ip netns exec $ns2 sysctl -qw net.ipv4.ip_forward=1
-+	ip netns exec $ns2 sysctl -qw net.ipv6.conf.all.forwarding=1
- 
- 	$IP li add veth1 type veth peer name veth2
- 	$IP li add veth3 type veth peer name veth4
- 
- 	$IP li set veth1 up
- 	$IP li set veth3 up
--	$IP li set veth2 netns ns2 up
--	$IP li set veth4 netns ns2 up
--	ip -netns ns2 li add dummy1 type dummy
--	ip -netns ns2 li set dummy1 up
-+	$IP li set veth2 netns $ns2 up
-+	$IP li set veth4 netns $ns2 up
-+	ip -netns $ns2 li add dummy1 type dummy
-+	ip -netns $ns2 li set dummy1 up
- 
- 	$IP -6 addr add 2001:db8:101::1/64 dev veth1 nodad
- 	$IP -6 addr add 2001:db8:103::1/64 dev veth3 nodad
- 	$IP addr add 172.16.101.1/24 dev veth1
- 	$IP addr add 172.16.103.1/24 dev veth3
- 
--	ip -netns ns2 -6 addr add 2001:db8:101::2/64 dev veth2 nodad
--	ip -netns ns2 -6 addr add 2001:db8:103::2/64 dev veth4 nodad
--	ip -netns ns2 -6 addr add 2001:db8:104::1/64 dev dummy1 nodad
-+	ip -netns $ns2 -6 addr add 2001:db8:101::2/64 dev veth2 nodad
-+	ip -netns $ns2 -6 addr add 2001:db8:103::2/64 dev veth4 nodad
-+	ip -netns $ns2 -6 addr add 2001:db8:104::1/64 dev dummy1 nodad
- 
--	ip -netns ns2 addr add 172.16.101.2/24 dev veth2
--	ip -netns ns2 addr add 172.16.103.2/24 dev veth4
--	ip -netns ns2 addr add 172.16.104.1/24 dev dummy1
-+	ip -netns $ns2 addr add 172.16.101.2/24 dev veth2
-+	ip -netns $ns2 addr add 172.16.103.2/24 dev veth4
-+	ip -netns $ns2 addr add 172.16.104.1/24 dev dummy1
- 
- 	set +e
- }
-@@ -1238,7 +1228,7 @@ ipv6_addr_metric_test()
- 	log_test $rc 0 "Modify metric of address"
- 
- 	# verify prefix route removed on down
--	run_cmd "ip netns exec ns1 sysctl -qw net.ipv6.conf.all.keep_addr_on_down=1"
-+	run_cmd "ip netns exec $ns1 sysctl -qw net.ipv6.conf.all.keep_addr_on_down=1"
- 	run_cmd "$IP li set dev dummy2 down"
- 	rc=$?
- 	if [ $rc -eq 0 ]; then
-@@ -1344,7 +1334,7 @@ ipv6_route_metrics_test()
- 	log_test $rc 0 "Multipath route with mtu metric"
- 
- 	$IP -6 ro add 2001:db8:104::/64 via 2001:db8:101::2 mtu 1300
--	run_cmd "ip netns exec ns1 ${ping6} -w1 -c1 -s 1500 2001:db8:104::1"
-+	run_cmd "ip netns exec $ns1 ${ping6} -w1 -c1 -s 1500 2001:db8:104::1"
- 	log_test $? 0 "Using route with mtu metric"
- 
- 	run_cmd "$IP -6 ro add 2001:db8:114::/64 via  2001:db8:101::2  congctl lock foo"
-@@ -1599,19 +1589,19 @@ ipv4_rt_replace()
- ipv4_local_rt_cache()
- {
- 	run_cmd "ip addr add 10.0.0.1/32 dev lo"
--	run_cmd "ip netns add test-ns"
-+	run_cmd "setup_ns test-ns"
- 	run_cmd "ip link add veth-outside type veth peer name veth-inside"
- 	run_cmd "ip link add vrf-100 type vrf table 1100"
- 	run_cmd "ip link set veth-outside master vrf-100"
--	run_cmd "ip link set veth-inside netns test-ns"
-+	run_cmd "ip link set veth-inside netns $test-ns"
- 	run_cmd "ip link set veth-outside up"
- 	run_cmd "ip link set vrf-100 up"
- 	run_cmd "ip route add 10.1.1.1/32 dev veth-outside table 1100"
--	run_cmd "ip netns exec test-ns ip link set veth-inside up"
--	run_cmd "ip netns exec test-ns ip addr add 10.1.1.1/32 dev veth-inside"
--	run_cmd "ip netns exec test-ns ip route add 10.0.0.1/32 dev veth-inside"
--	run_cmd "ip netns exec test-ns ip route add default via 10.0.0.1"
--	run_cmd "ip netns exec test-ns ping 10.0.0.1 -c 1 -i 1"
-+	run_cmd "ip netns exec $test-ns ip link set veth-inside up"
-+	run_cmd "ip netns exec $test-ns ip addr add 10.1.1.1/32 dev veth-inside"
-+	run_cmd "ip netns exec $test-ns ip route add 10.0.0.1/32 dev veth-inside"
-+	run_cmd "ip netns exec $test-ns ip route add default via 10.0.0.1"
-+	run_cmd "ip netns exec $test-ns ping 10.0.0.1 -c 1 -i 1"
- 	run_cmd "ip link delete vrf-100"
- 
- 	# if we do not hang test is a success
-@@ -1841,7 +1831,7 @@ ipv4_route_metrics_test()
- 	log_test $rc 0 "Multipath route with mtu metric"
- 
- 	$IP ro add 172.16.104.0/24 via 172.16.101.2 mtu 1300
--	run_cmd "ip netns exec ns1 ping -w1 -c1 -s 1500 172.16.104.1"
-+	run_cmd "ip netns exec $ns1 ping -w1 -c1 -s 1500 172.16.104.1"
- 	log_test $? 0 "Using route with mtu metric"
- 
- 	run_cmd "$IP ro add 172.16.111.0/24 via 172.16.101.2 congctl lock foo"
-@@ -2105,7 +2095,7 @@ ipv4_route_v6_gw_test()
- 		check_route "172.16.104.0/24 via inet6 2001:db8:101::2 dev veth1"
- 	fi
- 
--	run_cmd "ip netns exec ns1 ping -w1 -c1 172.16.104.1"
-+	run_cmd "ip netns exec $ns1 ping -w1 -c1 172.16.104.1"
- 	log_test $rc 0 "Single path route with IPv6 gateway - ping"
- 
- 	run_cmd "$IP ro del 172.16.104.0/24 via inet6 2001:db8:101::2"
-@@ -2196,7 +2186,7 @@ ipv4_mangle_test()
- 	sleep 2
- 
- 	local tmp_file=$(mktemp)
--	ip netns exec ns2 socat UDP4-LISTEN:54321,fork $tmp_file &
-+	ip netns exec $ns2 socat UDP4-LISTEN:54321,fork $tmp_file &
- 
- 	# Add a FIB rule and a route that will direct our connection to the
- 	# listening server.
-@@ -2254,7 +2244,7 @@ ipv6_mangle_test()
- 	sleep 2
- 
- 	local tmp_file=$(mktemp)
--	ip netns exec ns2 socat UDP6-LISTEN:54321,fork $tmp_file &
-+	ip netns exec $ns2 socat UDP6-LISTEN:54321,fork $tmp_file &
- 
- 	# Add a FIB rule and a route that will direct our connection to the
- 	# listening server.
-@@ -2423,37 +2413,37 @@ ipv4_mpath_list_test()
- 	route_setup
- 
- 	set -e
--	run_cmd "ip netns exec ns1 ethtool -K veth1 tcp-segmentation-offload off"
--
--	run_cmd "ip netns exec ns2 bash -c \"echo 20000 > /sys/class/net/veth2/gro_flush_timeout\""
--	run_cmd "ip netns exec ns2 bash -c \"echo 1 > /sys/class/net/veth2/napi_defer_hard_irqs\""
--	run_cmd "ip netns exec ns2 ethtool -K veth2 generic-receive-offload on"
--	run_cmd "ip -n ns2 link add name nh1 up type dummy"
--	run_cmd "ip -n ns2 link add name nh2 up type dummy"
--	run_cmd "ip -n ns2 address add 172.16.201.1/24 dev nh1"
--	run_cmd "ip -n ns2 address add 172.16.202.1/24 dev nh2"
--	run_cmd "ip -n ns2 neigh add 172.16.201.2 lladdr 00:11:22:33:44:55 nud perm dev nh1"
--	run_cmd "ip -n ns2 neigh add 172.16.202.2 lladdr 00:aa:bb:cc:dd:ee nud perm dev nh2"
--	run_cmd "ip -n ns2 route add 203.0.113.0/24
-+	run_cmd "ip netns exec $ns1 ethtool -K veth1 tcp-segmentation-offload off"
-+
-+	run_cmd "ip netns exec $ns2 bash -c \"echo 20000 > /sys/class/net/veth2/gro_flush_timeout\""
-+	run_cmd "ip netns exec $ns2 bash -c \"echo 1 > /sys/class/net/veth2/napi_defer_hard_irqs\""
-+	run_cmd "ip netns exec $ns2 ethtool -K veth2 generic-receive-offload on"
-+	run_cmd "ip -n $ns2 link add name nh1 up type dummy"
-+	run_cmd "ip -n $ns2 link add name nh2 up type dummy"
-+	run_cmd "ip -n $ns2 address add 172.16.201.1/24 dev nh1"
-+	run_cmd "ip -n $ns2 address add 172.16.202.1/24 dev nh2"
-+	run_cmd "ip -n $ns2 neigh add 172.16.201.2 lladdr 00:11:22:33:44:55 nud perm dev nh1"
-+	run_cmd "ip -n $ns2 neigh add 172.16.202.2 lladdr 00:aa:bb:cc:dd:ee nud perm dev nh2"
-+	run_cmd "ip -n $ns2 route add 203.0.113.0/24
- 		nexthop via 172.16.201.2 nexthop via 172.16.202.2"
--	run_cmd "ip netns exec ns2 sysctl -qw net.ipv4.fib_multipath_hash_policy=1"
--	run_cmd "ip netns exec ns2 sysctl -qw net.ipv4.conf.veth2.rp_filter=0"
--	run_cmd "ip netns exec ns2 sysctl -qw net.ipv4.conf.all.rp_filter=0"
--	run_cmd "ip netns exec ns2 sysctl -qw net.ipv4.conf.default.rp_filter=0"
-+	run_cmd "ip netns exec $ns2 sysctl -qw net.ipv4.fib_multipath_hash_policy=1"
-+	run_cmd "ip netns exec $ns2 sysctl -qw net.ipv4.conf.veth2.rp_filter=0"
-+	run_cmd "ip netns exec $ns2 sysctl -qw net.ipv4.conf.all.rp_filter=0"
-+	run_cmd "ip netns exec $ns2 sysctl -qw net.ipv4.conf.default.rp_filter=0"
- 	set +e
- 
--	local dmac=$(ip -n ns2 -j link show dev veth2 | jq -r '.[]["address"]')
-+	local dmac=$(ip -n $ns2 -j link show dev veth2 | jq -r '.[]["address"]')
- 	local tmp_file=$(mktemp)
--	local cmd="ip netns exec ns1 mausezahn veth1 -a own -b $dmac
-+	local cmd="ip netns exec $ns1 mausezahn veth1 -a own -b $dmac
- 		-A 172.16.101.1 -B 203.0.113.1 -t udp 'sp=12345,dp=0-65535' -q"
- 
- 	# Packets forwarded in a list using a multipath route must not reuse a
- 	# cached result so that a flow always hits the same nexthop. In other
- 	# words, the FIB lookup tracepoint needs to be triggered for every
- 	# packet.
--	local t0_rx_pkts=$(link_stats_get ns2 veth2 rx packets)
-+	local t0_rx_pkts=$(link_stats_get $ns2 veth2 rx packets)
- 	run_cmd "perf stat -a -e fib:fib_table_lookup --filter 'err == 0' -j -o $tmp_file -- $cmd"
--	local t1_rx_pkts=$(link_stats_get ns2 veth2 rx packets)
-+	local t1_rx_pkts=$(link_stats_get $ns2 veth2 rx packets)
- 	local diff=$(echo $t1_rx_pkts - $t0_rx_pkts | bc -l)
- 	list_rcv_eval $tmp_file $diff
- 
-@@ -2471,34 +2461,34 @@ ipv6_mpath_list_test()
- 	route_setup
- 
- 	set -e
--	run_cmd "ip netns exec ns1 ethtool -K veth1 tcp-segmentation-offload off"
--
--	run_cmd "ip netns exec ns2 bash -c \"echo 20000 > /sys/class/net/veth2/gro_flush_timeout\""
--	run_cmd "ip netns exec ns2 bash -c \"echo 1 > /sys/class/net/veth2/napi_defer_hard_irqs\""
--	run_cmd "ip netns exec ns2 ethtool -K veth2 generic-receive-offload on"
--	run_cmd "ip -n ns2 link add name nh1 up type dummy"
--	run_cmd "ip -n ns2 link add name nh2 up type dummy"
--	run_cmd "ip -n ns2 -6 address add 2001:db8:201::1/64 dev nh1"
--	run_cmd "ip -n ns2 -6 address add 2001:db8:202::1/64 dev nh2"
--	run_cmd "ip -n ns2 -6 neigh add 2001:db8:201::2 lladdr 00:11:22:33:44:55 nud perm dev nh1"
--	run_cmd "ip -n ns2 -6 neigh add 2001:db8:202::2 lladdr 00:aa:bb:cc:dd:ee nud perm dev nh2"
--	run_cmd "ip -n ns2 -6 route add 2001:db8:301::/64
-+	run_cmd "ip netns exec $ns1 ethtool -K veth1 tcp-segmentation-offload off"
-+
-+	run_cmd "ip netns exec $ns2 bash -c \"echo 20000 > /sys/class/net/veth2/gro_flush_timeout\""
-+	run_cmd "ip netns exec $ns2 bash -c \"echo 1 > /sys/class/net/veth2/napi_defer_hard_irqs\""
-+	run_cmd "ip netns exec $ns2 ethtool -K veth2 generic-receive-offload on"
-+	run_cmd "ip -n $ns2 link add name nh1 up type dummy"
-+	run_cmd "ip -n $ns2 link add name nh2 up type dummy"
-+	run_cmd "ip -n $ns2 -6 address add 2001:db8:201::1/64 dev nh1"
-+	run_cmd "ip -n $ns2 -6 address add 2001:db8:202::1/64 dev nh2"
-+	run_cmd "ip -n $ns2 -6 neigh add 2001:db8:201::2 lladdr 00:11:22:33:44:55 nud perm dev nh1"
-+	run_cmd "ip -n $ns2 -6 neigh add 2001:db8:202::2 lladdr 00:aa:bb:cc:dd:ee nud perm dev nh2"
-+	run_cmd "ip -n $ns2 -6 route add 2001:db8:301::/64
- 		nexthop via 2001:db8:201::2 nexthop via 2001:db8:202::2"
--	run_cmd "ip netns exec ns2 sysctl -qw net.ipv6.fib_multipath_hash_policy=1"
-+	run_cmd "ip netns exec $ns2 sysctl -qw net.ipv6.fib_multipath_hash_policy=1"
- 	set +e
- 
--	local dmac=$(ip -n ns2 -j link show dev veth2 | jq -r '.[]["address"]')
-+	local dmac=$(ip -n $ns2 -j link show dev veth2 | jq -r '.[]["address"]')
- 	local tmp_file=$(mktemp)
--	local cmd="ip netns exec ns1 mausezahn -6 veth1 -a own -b $dmac
-+	local cmd="ip netns exec $ns1 mausezahn -6 veth1 -a own -b $dmac
- 		-A 2001:db8:101::1 -B 2001:db8:301::1 -t udp 'sp=12345,dp=0-65535' -q"
- 
- 	# Packets forwarded in a list using a multipath route must not reuse a
- 	# cached result so that a flow always hits the same nexthop. In other
- 	# words, the FIB lookup tracepoint needs to be triggered for every
- 	# packet.
--	local t0_rx_pkts=$(link_stats_get ns2 veth2 rx packets)
-+	local t0_rx_pkts=$(link_stats_get $ns2 veth2 rx packets)
- 	run_cmd "perf stat -a -e fib6:fib6_table_lookup --filter 'err == 0' -j -o $tmp_file -- $cmd"
--	local t1_rx_pkts=$(link_stats_get ns2 veth2 rx packets)
-+	local t1_rx_pkts=$(link_stats_get $ns2 veth2 rx packets)
- 	local diff=$(echo $t1_rx_pkts - $t0_rx_pkts | bc -l)
- 	list_rcv_eval $tmp_file $diff
- 
+ ################################################################################
 -- 
 2.43.0
 
