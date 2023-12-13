@@ -1,168 +1,131 @@
-Return-Path: <linux-kselftest+bounces-1852-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1853-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7451811B4B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 18:36:36 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E998E811F24
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 20:44:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 75A5F1F2196D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 17:36:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 78C562822B3
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 19:44:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DF3657336;
-	Wed, 13 Dec 2023 17:36:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8159168289;
+	Wed, 13 Dec 2023 19:44:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="D4TjJmic"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="YEamIdU7"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25D35100
-	for <linux-kselftest@vger.kernel.org>; Wed, 13 Dec 2023 09:36:26 -0800 (PST)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-40c38de1ee4so50030045e9.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 Dec 2023 09:36:26 -0800 (PST)
+Received: from mail-yb1-xb33.google.com (mail-yb1-xb33.google.com [IPv6:2607:f8b0:4864:20::b33])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10DD2DC
+	for <linux-kselftest@vger.kernel.org>; Wed, 13 Dec 2023 11:44:02 -0800 (PST)
+Received: by mail-yb1-xb33.google.com with SMTP id 3f1490d57ef6-db537948ea0so7191980276.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 13 Dec 2023 11:44:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1702488984; x=1703093784; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=nar7AGpkKCMY3vU9wBOjKXihyoMWUwSDoyGxla1FSMU=;
-        b=D4TjJmicgwyiuxU/0EQRMLlqFgwKB643M+Ls0ZrdgfTQzDGPaGC1+l7UiKTUp3QOIb
-         x99r8Tj1EMoiw66hZVfozvkOmJQGuciegH+usdnX50mw1fwPKvm3dbT4ryBibHhL66d6
-         B47I+JJQf6UKoeaxkSAv3Ud8TJU8S5rclkVcf1oTRsg+Qdr5z4/dMJ+nMul+SVdwKLvG
-         b2eXFTTcUMyVlEcNOZ4lQaEDl/pHOGVoRtSTsj9qoYJzVBdSOk6mFBPsxejolZHdf4Y7
-         85IQ993ek78WZ0ma1S7V/wEtRYvrdQBP4KkshvfvIAJ6IQB9tvvQQ2fzvtN7KJxa+Rsr
-         Zk4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702488984; x=1703093784;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1702496641; x=1703101441; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=nar7AGpkKCMY3vU9wBOjKXihyoMWUwSDoyGxla1FSMU=;
-        b=Wh7IarZN0vXHguOGdYDT2MmriNERsmEPjk/ntoyJZpk+C48CClNfwa4Gvja+cHkfNy
-         lB+krVRDZjqERrhImB9PDSdQYN+htSZakxF8DUDU07mSm3NwIm0FmRrTiG5dSq1r5BOr
-         tyVX+VsZuwHG8SAEsVDtdvu9fCb2zK6CWFOtfzpkvCP2Ou7NFH72BTHa3OzH/Gzq/Orf
-         4/unOxxDhJsJvKL3gCG/PNifwa2t9cTvQuLXQoOPqsLoOFCLHfeU22izkwSjRrMTzAYA
-         ojRWb4CCKoRT7Hyw7UvR2CQYGcxzrHXdqPIv76VRyU93Js/f2QX+wIQYCTIn5wgij+fr
-         KVfw==
-X-Gm-Message-State: AOJu0YwD1cyHEaIe6NSbPp82BFAtCygCf3/539IhY+dRvKeF25MXQuU5
-	+HzfYfCPhBFDx+3gGxl3H9cibQ==
-X-Google-Smtp-Source: AGHT+IEK2Pp7nkWqxvEj/mdVNQpoa5hctJ9KTENrVC46QZLfOUyzk+bN6eF4FhiRrxtksDL5J5C+hw==
-X-Received: by 2002:a05:600c:3590:b0:40c:2c56:4f37 with SMTP id p16-20020a05600c359000b0040c2c564f37mr4662038wmq.36.1702488984605;
-        Wed, 13 Dec 2023 09:36:24 -0800 (PST)
-Received: from localhost (2001-1ae9-1c2-4c00-20f-c6b4-1e57-7965.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:20f:c6b4:1e57:7965])
-        by smtp.gmail.com with ESMTPSA id m16-20020a05600c4f5000b0040c57e4ea28sm4720420wmq.17.2023.12.13.09.36.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 13 Dec 2023 09:36:24 -0800 (PST)
-Date: Wed, 13 Dec 2023 18:36:23 +0100
-From: Andrew Jones <ajones@ventanamicro.com>
-To: Anup Patel <apatel@ventanamicro.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, 
-	Atish Patra <atishp@atishpatra.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Shuah Khan <shuah@kernel.org>, Anup Patel <anup@brainfault.org>, 
-	devicetree@vger.kernel.org, kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, 
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 04/15] RISC-V: KVM: Allow scalar crypto extensions for
- Guest/VM
-Message-ID: <20231213-1c93d927d30feb6d09739e94@orel>
-References: <20231128145357.413321-1-apatel@ventanamicro.com>
- <20231128145357.413321-5-apatel@ventanamicro.com>
+        bh=7KwJmg/AmRci9oth6e0vim63G1m84y3oNQcN/OKV3e0=;
+        b=YEamIdU7C239wWPhqUHdM5mUnEJHCDsS6mV07MZk3u2h4XsRiQFtYsKTRzDqF0SWvz
+         8xo+oS9bCU9hLMZjmxNcqhlYARs7r1jd0M/EmCgne2ivcV9Jwg41OYIK08nVin/QqOKP
+         WRHp6VQRqdsdWCZMf5ig8td+pC8U6YnOfKYU4+BaqmyWYC3uGP+34m4+wxeI2Ccw32AQ
+         8miGZdidSEs2mBdcowgm7+DNQSD2Y8clzNrR9t+tmgLM0J8MLFDJhbjT/Q4ZhzS6GQoQ
+         dTbInR8BqVr0ts7LZpq7jntHS13SHrK82556ERAkjzACnvr3uLp8mJvvHkrucMbHcMAi
+         Viig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702496641; x=1703101441;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7KwJmg/AmRci9oth6e0vim63G1m84y3oNQcN/OKV3e0=;
+        b=t1a2U/0Pt6Xv5KkryB7GTohrYIQ5qdVa5jP+u3S9zHmfh2p1L5sX3UfhqMDV02HuwP
+         x20kL700Jvhb5rZAsnwySxty6gctqAQc9oplkJERvOjiG2vwyzpCwNne6dnUMCatWkgR
+         45qU+81xOahqoAHRg07a4LjG+PrUVQAoFyoB+UoL1GdcQGGLX12gaeWI1B8dyvB9ZPe9
+         VxIlF0zQuW0w2tpvJ86jd1ATlMQgQ+CpEgiz7jNSZlAiWpOVg4NKAejxfADZ71D/3wBW
+         V6CTEFKlhey5xNn++gsirWBoMZwRjYJt0Px6RWwfpMKGYEDPxnEeSdQayVbMFvcUZtBx
+         33GA==
+X-Gm-Message-State: AOJu0YzvOf0B0TjYBKmeOlx5nW681tZ7SQgs+l1a0L7c74qv83sZbT1D
+	VvWHWWGzbwUhbTm2ZLitSYvc/t6u/3J2zeBQYm7Q1Q==
+X-Google-Smtp-Source: AGHT+IFSmPxfZTBIe3gumpwK2nVwVDcDb9+yDl2yaVi4US6Ez2/rKUahNn9IJ0xE08iqlW2A2FfQ7xQQ2M/z/jnykQ4=
+X-Received: by 2002:a25:8c91:0:b0:db7:dacf:59de with SMTP id
+ m17-20020a258c91000000b00db7dacf59demr4990232ybl.82.1702496641231; Wed, 13
+ Dec 2023 11:44:01 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231128145357.413321-5-apatel@ventanamicro.com>
+References: <20231122-arm64-gcs-v7-0-201c483bd775@kernel.org>
+ <20231122-arm64-gcs-v7-2-201c483bd775@kernel.org> <CAKC1njSC5cC_fXnyNAPt=WU6cD-OjLKFxo90oVPmsLJbuWf4nw@mail.gmail.com>
+ <d708b493-267a-4418-be91-9bde6b2cf50c@sirena.org.uk> <CAKC1njSQPO8ja7AkTzQ724hhSsGjchH9dLbbH9LXP0ZiKj-zPQ@mail.gmail.com>
+ <0d0d8802-09e3-4ea5-a0b4-b3a08c8a282e@sirena.org.uk>
+In-Reply-To: <0d0d8802-09e3-4ea5-a0b4-b3a08c8a282e@sirena.org.uk>
+From: Deepak Gupta <debug@rivosinc.com>
+Date: Wed, 13 Dec 2023 11:43:49 -0800
+Message-ID: <CAKC1njRHs0R=VKfn4jBap9__oR0rBHmNy7_tqHR8=xEHdUE4+A@mail.gmail.com>
+Subject: Re: [PATCH v7 02/39] prctl: arch-agnostic prctl for shadow stack
+To: Mark Brown <broonie@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Andrew Morton <akpm@linux-foundation.org>, 
+	Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
+	James Morse <james.morse@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, 
+	Kees Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>, 
+	"Rick P. Edgecombe" <rick.p.edgecombe@intel.com>, Ard Biesheuvel <ardb@kernel.org>, 
+	Szabolcs Nagy <Szabolcs.Nagy@arm.com>, "H.J. Lu" <hjl.tools@gmail.com>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Florian Weimer <fweimer@redhat.com>, 
+	Christian Brauner <brauner@kernel.org>, Thiago Jung Bauermann <thiago.bauermann@linaro.org>, 
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, 
+	kvmarm@lists.linux.dev, linux-fsdevel@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Nov 28, 2023 at 08:23:46PM +0530, Anup Patel wrote:
-> We extend the KVM ISA extension ONE_REG interface to allow KVM
-> user space to detect and enable scalar crypto extensions for
-> Guest/VM. This includes extensions Zbkb, Zbkc, Zbkx, Zknd, Zkne,
-> Zknh, Zkr, Zksed, Zksh, and Zkt.
-> 
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> ---
->  arch/riscv/include/uapi/asm/kvm.h | 10 ++++++++++
->  arch/riscv/kvm/vcpu_onereg.c      | 20 ++++++++++++++++++++
->  2 files changed, 30 insertions(+)
-> 
-> diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/uapi/asm/kvm.h
-> index 518b368b41e5..7b54fa215d6d 100644
-> --- a/arch/riscv/include/uapi/asm/kvm.h
-> +++ b/arch/riscv/include/uapi/asm/kvm.h
-> @@ -140,6 +140,16 @@ enum KVM_RISCV_ISA_EXT_ID {
->  	KVM_RISCV_ISA_EXT_SMSTATEEN,
->  	KVM_RISCV_ISA_EXT_ZICOND,
->  	KVM_RISCV_ISA_EXT_ZBC,
-> +	KVM_RISCV_ISA_EXT_ZBKB,
-> +	KVM_RISCV_ISA_EXT_ZBKC,
-> +	KVM_RISCV_ISA_EXT_ZBKX,
-> +	KVM_RISCV_ISA_EXT_ZKND,
-> +	KVM_RISCV_ISA_EXT_ZKNE,
-> +	KVM_RISCV_ISA_EXT_ZKNH,
-> +	KVM_RISCV_ISA_EXT_ZKR,
-> +	KVM_RISCV_ISA_EXT_ZKSED,
-> +	KVM_RISCV_ISA_EXT_ZKSH,
-> +	KVM_RISCV_ISA_EXT_ZKT,
->  	KVM_RISCV_ISA_EXT_MAX,
->  };
->  
-> diff --git a/arch/riscv/kvm/vcpu_onereg.c b/arch/riscv/kvm/vcpu_onereg.c
-> index f789517c9fae..b0beebd4f86e 100644
-> --- a/arch/riscv/kvm/vcpu_onereg.c
-> +++ b/arch/riscv/kvm/vcpu_onereg.c
-> @@ -43,6 +43,9 @@ static const unsigned long kvm_isa_ext_arr[] = {
->  	KVM_ISA_EXT_ARR(ZBA),
->  	KVM_ISA_EXT_ARR(ZBB),
->  	KVM_ISA_EXT_ARR(ZBC),
-> +	KVM_ISA_EXT_ARR(ZBKB),
-> +	KVM_ISA_EXT_ARR(ZBKC),
-> +	KVM_ISA_EXT_ARR(ZBKX),
->  	KVM_ISA_EXT_ARR(ZBS),
->  	KVM_ISA_EXT_ARR(ZICBOM),
->  	KVM_ISA_EXT_ARR(ZICBOZ),
-> @@ -52,6 +55,13 @@ static const unsigned long kvm_isa_ext_arr[] = {
->  	KVM_ISA_EXT_ARR(ZIFENCEI),
->  	KVM_ISA_EXT_ARR(ZIHINTPAUSE),
->  	KVM_ISA_EXT_ARR(ZIHPM),
-> +	KVM_ISA_EXT_ARR(ZKND),
-> +	KVM_ISA_EXT_ARR(ZKNE),
-> +	KVM_ISA_EXT_ARR(ZKNH),
-> +	KVM_ISA_EXT_ARR(ZKR),
-> +	KVM_ISA_EXT_ARR(ZKSED),
-> +	KVM_ISA_EXT_ARR(ZKSH),
-> +	KVM_ISA_EXT_ARR(ZKT),
->  };
->  
->  static unsigned long kvm_riscv_vcpu_base2isa_ext(unsigned long base_ext)
-> @@ -94,6 +104,9 @@ static bool kvm_riscv_vcpu_isa_disable_allowed(unsigned long ext)
->  	case KVM_RISCV_ISA_EXT_ZBA:
->  	case KVM_RISCV_ISA_EXT_ZBB:
->  	case KVM_RISCV_ISA_EXT_ZBC:
-> +	case KVM_RISCV_ISA_EXT_ZBKB:
-> +	case KVM_RISCV_ISA_EXT_ZBKC:
-> +	case KVM_RISCV_ISA_EXT_ZBKX:
->  	case KVM_RISCV_ISA_EXT_ZBS:
->  	case KVM_RISCV_ISA_EXT_ZICNTR:
->  	case KVM_RISCV_ISA_EXT_ZICOND:
-> @@ -101,6 +114,13 @@ static bool kvm_riscv_vcpu_isa_disable_allowed(unsigned long ext)
->  	case KVM_RISCV_ISA_EXT_ZIFENCEI:
->  	case KVM_RISCV_ISA_EXT_ZIHINTPAUSE:
->  	case KVM_RISCV_ISA_EXT_ZIHPM:
-> +	case KVM_RISCV_ISA_EXT_ZKND:
-> +	case KVM_RISCV_ISA_EXT_ZKNE:
-> +	case KVM_RISCV_ISA_EXT_ZKNH:
-> +	case KVM_RISCV_ISA_EXT_ZKR:
-> +	case KVM_RISCV_ISA_EXT_ZKSED:
-> +	case KVM_RISCV_ISA_EXT_ZKSH:
-> +	case KVM_RISCV_ISA_EXT_ZKT:
->  		return false;
->  	/* Extensions which can be disabled using Smstateen */
->  	case KVM_RISCV_ISA_EXT_SSAIA:
-> -- 
-> 2.34.1
+On Wed, Dec 13, 2023 at 5:37=E2=80=AFAM Mark Brown <broonie@kernel.org> wro=
+te:
+>
+> On Tue, Dec 12, 2023 at 04:50:38PM -0800, Deepak Gupta wrote:
+>
+> > A theoretical scenario (no current workloads should've this case
+> > because no shadow stack)
+>
+> > - User mode did _ENABLE on the main thread. Shadow stack was allocated
+> > for the current
+> >   thread.
+> > - User mode created a bunch worker threads to run untrusted contained
+> > code. They shadow
+> >   stack too.
+> > - main thread had to do dlopen and now need to disable shadow stack on
+> > itself due to
+> >   incompatibility of incoming object in address space.
+> > - main thread controls worker threads and knows they're contained and
+> > should still be running
+> >   with a shadow stack. Although once in a while the main thread needs
+> > to perform writes to a shadow
+> >   stack of worker threads for some fixup (in the same addr space).
+> > main thread doesn't want to delegate
+> >   this responsibility of ss writes to worker threads because they're un=
+trusted.
+>
+> > How will it do that (currently _ENABLE is married to _WRITE and _PUSH) =
+?
+>
+> That's feeling moderately firmly into "don't do that" territory to be
+> honest, the problems of trying to modify the stack of another running
+> thread while it's active just don't seem worth it - if you're
+> coordinating enough to do the modifications it's probably possible to
+> just ask the thread who's stack is being modified to do the modification
+> itself and having an unprotected thread writing into shadow stack memory
+> doesn't feel great.
 >
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+Yeah no leanings on my side. Just wanted to articulate this scenario.
+Since this is new ground,
+we can define what's appropriate. Let's keep it this way where a
+thread can write to shadow
+stack mappings only when it itself has shadow stack enabled.
 
