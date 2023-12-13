@@ -1,58 +1,58 @@
-Return-Path: <linux-kselftest+bounces-1804-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1805-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9B9D8109E9
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 07:10:09 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 076AA8109EB
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 07:10:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 61250281ECF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 06:10:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2B2461C208FF
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 06:10:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26566FBF6;
-	Wed, 13 Dec 2023 06:09:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23D5DDF5B;
+	Wed, 13 Dec 2023 06:09:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eLadnqg2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iZV/DyJw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A71ADB;
-	Tue, 12 Dec 2023 22:09:50 -0800 (PST)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-6ce939ecfc2so5950319b3a.2;
-        Tue, 12 Dec 2023 22:09:50 -0800 (PST)
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C82683;
+	Tue, 12 Dec 2023 22:09:55 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id 41be03b00d2f7-517ab9a4a13so5530210a12.1;
+        Tue, 12 Dec 2023 22:09:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702447789; x=1703052589; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1702447794; x=1703052594; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=aQi+kDlznq0CFqtjRvuPpTyk/PEd2xJSKjNfnpVe/PA=;
-        b=eLadnqg2VXUBGRPEbDGxgHT4ZWrZNvXiuz1ks76XypFtgWWT2opLr8WPAE05EbRc8p
-         hV7q+AhevbzKlvmRe8Aspw44uaPLjAs3hee5V6jzr/RyQToT6GKKtMEnGHClOEPt6vL3
-         SLC5U/3091iZud/Q6JoY97xlvpMhdig4wAOb/JIfNklieKaAgXq1ZRmX/w7nlBU0vSdf
-         Mv95Geg0PnrdozPas2GinX4oRdePOnuuJdPyU4o7oDTBrG1htPODt3kuCVg9sIOxPa/m
-         HXBdOfzDxBDYo1WszQxMiPy+oaxd0A0q8ZNwPgi1CzIgVa7si6DUT2FFy3HQflfS89CG
-         YxCQ==
+        bh=zjS9g56UCivM8Kubm1Y/1I6O6NRDWMwcHBF7pF2NKHU=;
+        b=iZV/DyJw+E4pmmpj6dz8iTCgpHdbH+sve7vLwX5FhfED1iTau8gey9yfSjVE7GKz8V
+         xY8DDa+62KHrRaFb1O6+BOxsjASZ7m6Gpr6S1rSEwG5lsntOQnDHekuUv4DvGyah+9iU
+         LeChhcWhQtHKNnUTn8P3Tbgq9R0YEdBvuQ0JZ8BhOwPq73L6rjvPm3airyvR8qAlfLLH
+         jpvGZf5gkL5P9QQtWQF37mvKZjc6WkCAH5ytP6fEPbZhJiIUjWdEGU+vwGrVYMX0Qzed
+         TV4zJKsKA2RgeUE304GzOpC1Ah3lo8MyZJeReww0E73vbsCpNDV6IobGaiunOsM7GC1d
+         gD0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702447789; x=1703052589;
+        d=1e100.net; s=20230601; t=1702447794; x=1703052594;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=aQi+kDlznq0CFqtjRvuPpTyk/PEd2xJSKjNfnpVe/PA=;
-        b=T7DuzKtYLuH1qLP/bFEV4TLPjydoS9xaO8STNx7AMDmo4bx1jVrVPiS8GMwTO0nopd
-         o94JH99dVJjnllIR6UPIxLMXGL0U2CZB9Hpvz1dfy6+btDciuc/CAktNoq9ur1K4Fabo
-         6V7oU9aN0MurmpggMZBzgNvohB58s0x9O3d+AX8pezePNHaywVVAR5tbrFGMZt/vO/DF
-         l8asguJX47h5LAvXWck+z7oPtRegHkrMYACBBiwRhSDLLpyg23rg7EvdL4OU9emD8atz
-         yOvB8k36eC0pmAvT+itE6mmzyEnBklLLCsPbnoDPA/h50TtZAjtbm3HkmBQN2UEJ1LC9
-         KPzQ==
-X-Gm-Message-State: AOJu0Ywjy04ColcwItJFoVh4Rp7211LF2j+laikNXCGTSplQSmIeiX4X
-	cJjzXZME1g+N/byq+D7LC8lTy9E04a1Ageaz9Wc=
-X-Google-Smtp-Source: AGHT+IGIy5j/W9KkN1QjWvsCgSFaWiCEtRB9z9d93F8VG7lnf4zx1WfPDdc1RSzAUPMBx4jfvs5VFg==
-X-Received: by 2002:a05:6a00:2301:b0:6ce:ee3b:e529 with SMTP id h1-20020a056a00230100b006ceee3be529mr8593469pfh.62.1702447789364;
-        Tue, 12 Dec 2023 22:09:49 -0800 (PST)
+        bh=zjS9g56UCivM8Kubm1Y/1I6O6NRDWMwcHBF7pF2NKHU=;
+        b=KeweSwLpqTzAorXQ2zwSi7kzhrGQL5yJ40VjO4TXChlenf/nlxRrxYLBLCyWT+Q9dV
+         t8+k0USF+fw5EFTLejcxAEvOVL/ZIBS3QOfKHT+BynO336TeEa0xhqxFkXmelAclX5ot
+         FMFl+sZ1QJnNWfDJJ5/NOMeAzFIYjxTNfcCReCHoOsasRcVTk1uGaPLvJZ4z/g9FP/hH
+         SSjhwwVL1m98ELrNw5qHjFRwc8aNPUjI3ciT1EpwNZ/UNZtxYEbeiYxJRQqb88DV64OU
+         kQuqeMg9UBIb+2m0W1TDsDlhEwz4gD4IMZHfabWbQVmkqQcK4x58wG6hND2SR0rsVEjE
+         TG7w==
+X-Gm-Message-State: AOJu0YzbwMvxDCvSgmYt+5zFb9flyz76m1n+kL3Se/5m2V2fWiLGhV3a
+	1uOI0e5etyM5M/ZUfFYhaLsjnGNJJ0UFYdzkUJ0=
+X-Google-Smtp-Source: AGHT+IFaLbxVb22OI2ULPxFa+L80fkis03H+n6xE5rpY9TiBVYVrUqBDxKeMtXtBrZNkZgfiF97URw==
+X-Received: by 2002:a05:6a20:158b:b0:190:61a1:3be2 with SMTP id h11-20020a056a20158b00b0019061a13be2mr10203283pzj.97.1702447794148;
+        Tue, 12 Dec 2023 22:09:54 -0800 (PST)
 Received: from Laptop-X1.redhat.com ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id kq9-20020a056a004b0900b006cef5e5a968sm6890084pfb.201.2023.12.12.22.09.44
+        by smtp.gmail.com with ESMTPSA id kq9-20020a056a004b0900b006cef5e5a968sm6890084pfb.201.2023.12.12.22.09.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Dec 2023 22:09:48 -0800 (PST)
+        Tue, 12 Dec 2023 22:09:53 -0800 (PST)
 From: Hangbin Liu <liuhangbin@gmail.com>
 To: netdev@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -69,9 +69,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Roopa Prabhu <roopa@nvidia.com>,
 	Ido Schimmel <idosch@nvidia.com>,
 	Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCHv2 net-next 10/13] selftests/net: convert fib-onlink-tests.sh to run it in unique namespace
-Date: Wed, 13 Dec 2023 14:08:53 +0800
-Message-ID: <20231213060856.4030084-11-liuhangbin@gmail.com>
+Subject: [PATCHv2 net-next 11/13] selftests/net: convert fib_rule_tests.sh to run it in unique namespace
+Date: Wed, 13 Dec 2023 14:08:54 +0800
+Message-ID: <20231213060856.4030084-12-liuhangbin@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20231213060856.4030084-1-liuhangbin@gmail.com>
 References: <20231213060856.4030084-1-liuhangbin@gmail.com>
@@ -83,72 +83,131 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Remove PEER_CMD, which is not used in this test
-
 Here is the test result after conversion.
 
- ]# ./fib-onlink-tests.sh
- Error: ipv4: FIB table does not exist.
- Flush terminated
- Error: ipv6: FIB table does not exist.
- Flush terminated
+ ]# ./fib_rule_tests.sh
 
- ########################################
- Configuring interfaces
+     TEST: rule6 check: oif redirect to table                  [ OK ]
 
-   ...
+     ...
 
-     TEST: Gateway resolves to wrong nexthop device - VRF      [ OK ]
+     TEST: rule4 dsfield tcp connect (dsfield 0x07)            [ OK ]
 
- Tests passed:  38
+ Tests passed:  66
  Tests failed:   0
 
 Acked-by: David Ahern <dsahern@kernel.org>
 Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
 ---
- tools/testing/selftests/net/fib-onlink-tests.sh | 9 +++------
- 1 file changed, 3 insertions(+), 6 deletions(-)
+ tools/testing/selftests/net/fib_rule_tests.sh | 36 +++++++++----------
+ 1 file changed, 16 insertions(+), 20 deletions(-)
 
-diff --git a/tools/testing/selftests/net/fib-onlink-tests.sh b/tools/testing/selftests/net/fib-onlink-tests.sh
-index c287b90b8af8..ec2d6ceb1f08 100755
---- a/tools/testing/selftests/net/fib-onlink-tests.sh
-+++ b/tools/testing/selftests/net/fib-onlink-tests.sh
-@@ -3,6 +3,7 @@
+diff --git a/tools/testing/selftests/net/fib_rule_tests.sh b/tools/testing/selftests/net/fib_rule_tests.sh
+index 63c3eaec8d30..51157a5559b7 100755
+--- a/tools/testing/selftests/net/fib_rule_tests.sh
++++ b/tools/testing/selftests/net/fib_rule_tests.sh
+@@ -3,14 +3,9 @@
  
- # IPv4 and IPv6 onlink tests
+ # This test is for checking IPv4 and IPv6 FIB rules API
  
-+source lib.sh
- PAUSE_ON_FAIL=${PAUSE_ON_FAIL:=no}
- VERBOSE=0
- 
-@@ -74,9 +75,6 @@ TEST_NET4IN6[2]=10.2.1.254
- # mcast address
- MCAST6=ff02::1
- 
+-# Kselftest framework requirement - SKIP code is 4.
+-ksft_skip=4
 -
--PEER_NS=bart
--PEER_CMD="ip netns exec ${PEER_NS}"
- VRF=lisa
- VRF_TABLE=1101
- PBR_TABLE=101
-@@ -176,8 +174,7 @@ setup()
++source lib.sh
+ ret=0
+-
+ PAUSE_ON_FAIL=${PAUSE_ON_FAIL:=no}
+-IP="ip -netns testns"
+-IP_PEER="ip -netns peerns"
+ 
+ RTABLE=100
+ RTABLE_PEER=101
+@@ -84,8 +79,8 @@ check_nettest()
+ setup()
+ {
  	set -e
+-	ip netns add testns
+-	$IP link set dev lo up
++	setup_ns testns
++	IP="ip -netns $testns"
  
- 	# create namespace
--	ip netns add ${PEER_NS}
--	ip -netns ${PEER_NS} li set lo up
-+	setup_ns PEER_NS
- 
- 	# add vrf table
- 	ip li add ${VRF} type vrf table ${VRF_TABLE}
-@@ -219,7 +216,7 @@ setup()
+ 	$IP link add dummy0 type dummy
+ 	$IP link set dev dummy0 up
+@@ -98,18 +93,19 @@ setup()
  cleanup()
  {
- 	# make sure we start from a clean slate
--	ip netns del ${PEER_NS} 2>/dev/null
-+	cleanup_ns ${PEER_NS} 2>/dev/null
- 	for n in 1 3 5 7; do
- 		ip link del ${NETIFS[p${n}]} 2>/dev/null
+ 	$IP link del dev dummy0 &> /dev/null
+-	ip netns del testns
++	cleanup_ns $testns
+ }
+ 
+ setup_peer()
+ {
+ 	set -e
+ 
+-	ip netns add peerns
++	setup_ns peerns
++	IP_PEER="ip -netns $peerns"
+ 	$IP_PEER link set dev lo up
+ 
+-	ip link add name veth0 netns testns type veth \
+-		peer name veth1 netns peerns
++	ip link add name veth0 netns $testns type veth \
++		peer name veth1 netns $peerns
+ 	$IP link set dev veth0 up
+ 	$IP_PEER link set dev veth1 up
+ 
+@@ -131,7 +127,7 @@ setup_peer()
+ cleanup_peer()
+ {
+ 	$IP link del dev veth0
+-	ip netns del peerns
++	ip netns del $peerns
+ }
+ 
+ fib_check_iproute_support()
+@@ -270,11 +266,11 @@ fib_rule6_connect_test()
+ 	# (Not-ECT: 0, ECT(1): 1, ECT(0): 2, CE: 3).
+ 	# The ECN bits shouldn't influence the result of the test.
+ 	for dsfield in 0x04 0x05 0x06 0x07; do
+-		nettest -q -6 -B -t 5 -N testns -O peerns -U -D \
++		nettest -q -6 -B -t 5 -N $testns -O $peerns -U -D \
+ 			-Q "${dsfield}" -l 2001:db8::1:11 -r 2001:db8::1:11
+ 		log_test $? 0 "rule6 dsfield udp connect (dsfield ${dsfield})"
+ 
+-		nettest -q -6 -B -t 5 -N testns -O peerns -Q "${dsfield}" \
++		nettest -q -6 -B -t 5 -N $testns -O $peerns -Q "${dsfield}" \
+ 			-l 2001:db8::1:11 -r 2001:db8::1:11
+ 		log_test $? 0 "rule6 dsfield tcp connect (dsfield ${dsfield})"
+ 	done
+@@ -337,11 +333,11 @@ fib_rule4_test()
+ 
+ 	# need enable forwarding and disable rp_filter temporarily as all the
+ 	# addresses are in the same subnet and egress device == ingress device.
+-	ip netns exec testns sysctl -qw net.ipv4.ip_forward=1
+-	ip netns exec testns sysctl -qw net.ipv4.conf.$DEV.rp_filter=0
++	ip netns exec $testns sysctl -qw net.ipv4.ip_forward=1
++	ip netns exec $testns sysctl -qw net.ipv4.conf.$DEV.rp_filter=0
+ 	match="from $SRC_IP iif $DEV"
+ 	fib_rule4_test_match_n_redirect "$match" "$match" "iif redirect to table"
+-	ip netns exec testns sysctl -qw net.ipv4.ip_forward=0
++	ip netns exec $testns sysctl -qw net.ipv4.ip_forward=0
+ 
+ 	# Reject dsfield (tos) options which have ECN bits set
+ 	for cnt in $(seq 1 3); do
+@@ -407,11 +403,11 @@ fib_rule4_connect_test()
+ 	# (Not-ECT: 0, ECT(1): 1, ECT(0): 2, CE: 3).
+ 	# The ECN bits shouldn't influence the result of the test.
+ 	for dsfield in 0x04 0x05 0x06 0x07; do
+-		nettest -q -B -t 5 -N testns -O peerns -D -U -Q "${dsfield}" \
++		nettest -q -B -t 5 -N $testns -O $peerns -D -U -Q "${dsfield}" \
+ 			-l 198.51.100.11 -r 198.51.100.11
+ 		log_test $? 0 "rule4 dsfield udp connect (dsfield ${dsfield})"
+ 
+-		nettest -q -B -t 5 -N testns -O peerns -Q "${dsfield}" \
++		nettest -q -B -t 5 -N $testns -O $peerns -Q "${dsfield}" \
+ 			-l 198.51.100.11 -r 198.51.100.11
+ 		log_test $? 0 "rule4 dsfield tcp connect (dsfield ${dsfield})"
  	done
 -- 
 2.43.0
