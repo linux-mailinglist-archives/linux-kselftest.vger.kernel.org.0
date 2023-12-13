@@ -1,64 +1,67 @@
-Return-Path: <linux-kselftest+bounces-1791-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1792-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6227A8108DA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 04:58:31 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5C8C8109A6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 06:53:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BF1B7B20FAC
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 03:58:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 43D831F216DE
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 05:53:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85157BA2E;
-	Wed, 13 Dec 2023 03:58:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 968F3CA5D;
+	Wed, 13 Dec 2023 05:52:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="bYYRLl0j"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="KMWi8rN3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF87E99;
-	Tue, 12 Dec 2023 19:58:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1702439898;
-	bh=11blm8HJnQ9+FMdEFOr+A0pNMEFB7Ju+WMZoc5kI8rI=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=bYYRLl0jzzJ/ry5xSjKpPL3Ta4LRbgeYJx3Vgef71CF0GIHSmOPdE+YzqWjksBsGW
-	 d7D6bFX9jKH/NKYYgsHD+Hx61y+8aPtGJxa6ftQOA3QNawyzS7/2OT0cIKohk7KXNp
-	 Ta0Z7jytlPEm/dv4XB9uu3kZ01TwCcxFvk3s0Ze97Vs4v5Ymo687c6GBYiBUjusNxM
-	 4AOPIQ8M5YIedSlhMujT/VRpw91eaObFkbTObneLptFPAsgiB+2uvpkrAcskIWlrGP
-	 BneWrr9+wgMp1N0R+bLRE/Nh9xaP4mOWhjbsACvzgCMSli8o+QnXqTMCRcAy/AVDaa
-	 4oW120hXsVqSA==
-Received: from [100.96.234.34] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 9787637813F2;
-	Wed, 13 Dec 2023 03:58:09 +0000 (UTC)
-Message-ID: <2e4a719b-f2b3-48db-99db-d96040d78b12@collabora.com>
-Date: Wed, 13 Dec 2023 08:58:06 +0500
-Precedence: bulk
-X-Mailing-List: linux-kselftest@vger.kernel.org
-List-Id: <linux-kselftest.vger.kernel.org>
-List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
-List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2058.outbound.protection.outlook.com [40.107.223.58])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD5CC8E;
+	Tue, 12 Dec 2023 21:52:52 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eDJj0YMFlNCiitMHrO5hklnEjI0MoHTXJBLcV7Gr9krZT2NPbUzq6VH2elVd+fXZn4UUMJZ48UutDb5Xw4JVhbeUiDhKqjaDgiEAsWFbwYsRRyyaNZ90S8Mt98SZTLXlQMe6sHeB3IYUrzY8greSvtzI73MCimcgVSW+8hWZ0LhrgFjM8oxRfD5zAAeQNRZwt92VKgEsJnKo7UfWTwqIDjp8bsRa7PD5utFHdpv1q+USkxASd1yCXjoQN1q9rbLqjmKX005wAIPy+qP/8ocIdjjni5fTb2+j3n288qPIucF6I8DreeIwEUT+/xEsgIxwb7ay/OPpLaC7A/ZyOJ4cgA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Rh1J8sD45eecJoqT/b0n+CR3FXyf9Yjm6J5BXmRNi2Y=;
+ b=X5Ra7We4ZwiQJImFXb/Yg/aG5yVtrN4KSIIvJAT7hQyaliMTIt3CgIfkBYuX/GSOfQa8S+Lr2Zo1gBllsxWeKwrxZnfLY15gtBNzeq0dcLwNOP47LH7J9Fh58PPyu+FsSHHBAgNICTgbDDHBki8iFtFMPK9NXV6fTVNUQQqAFBTsyLCrGTE2ZNGznaSSZ0QEfNE/r5WCKbwiEOcaPuJIb9vOBjnUh27a0bKdt7VmZJn4XvPxF4IOE2/n8Nb0EQDL5+w+wa13VgsiOuebS0Xz9BgezDA+YqHbHfr5qhNcH4WfpjfGySQNVTVW18cW9v0AhoLSNPQ466W+SkQ4m4YAoQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Rh1J8sD45eecJoqT/b0n+CR3FXyf9Yjm6J5BXmRNi2Y=;
+ b=KMWi8rN3nspS8GTBD8lolQHKSkQr7MoweqVeZpw28zWcle4ttG1og/HjOq/9KPt6/6MlDuol5S234wRK6zMi1MIGQACj06DZ0Nsi8+zxDiMOv3B9eR34YSBme9rUJcoGnAA/2bHCEZtj7/NpxGP8kRDHJg4+7LiBhgnNTRKXfxGBL72M13wmrjQ6sB5beoDzLHRpHX8a8Gl9m179+qyn25M8AhoYxFSO+gb0mSdUFTDiFecChhqOHvEJNZOl+l+z6SRDUzacm0nrCK+Kdk4S2F81TCrXEUQHDoxwTdRr33thYhNozTg4V76SDCxEBW3J/aFNdGKf0J9+LV97ddTJww==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com (2603:10b6:a03:20b::16)
+ by CH2PR12MB4858.namprd12.prod.outlook.com (2603:10b6:610:67::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7068.33; Wed, 13 Dec
+ 2023 05:52:48 +0000
+Received: from BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::6b9f:df87:1ee2:88ca]) by BY5PR12MB4130.namprd12.prod.outlook.com
+ ([fe80::6b9f:df87:1ee2:88ca%6]) with mapi id 15.20.7091.022; Wed, 13 Dec 2023
+ 05:52:47 +0000
+Message-ID: <0d68fe7f-2a96-467d-87b0-52db36704e1d@nvidia.com>
+Date: Tue, 12 Dec 2023 21:52:18 -0800
 User-Agent: Mozilla Thunderbird
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- David Hildenbrand <david@redhat.com>, Suren Baghdasaryan
- <surenb@google.com>, akpm@linux-foundation.org, viro@zeniv.linux.org.uk,
- brauner@kernel.org, shuah@kernel.org, aarcange@redhat.com,
- lokeshgidra@google.com, peterx@redhat.com, ryan.roberts@arm.com,
- hughd@google.com, mhocko@suse.com, axelrasmussen@google.com,
- rppt@kernel.org, willy@infradead.org, Liam.Howlett@oracle.com,
- jannh@google.com, zhangpeng362@huawei.com, bgeffon@google.com,
- kaleshsingh@google.com, ngeoffray@google.com, jdduke@google.com,
- linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kernel-team@android.com, Peter Zijlstra <peterz@infradead.org>
 Subject: Re: [PATCH v6 5/5] selftests/mm: add UFFDIO_MOVE ioctl test
 Content-Language: en-US
-To: John Hubbard <jhubbard@nvidia.com>, Mark Brown <broonie@kernel.org>
+To: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+ Mark Brown <broonie@kernel.org>
+Cc: David Hildenbrand <david@redhat.com>,
+ Suren Baghdasaryan <surenb@google.com>, akpm@linux-foundation.org,
+ viro@zeniv.linux.org.uk, brauner@kernel.org, shuah@kernel.org,
+ aarcange@redhat.com, lokeshgidra@google.com, peterx@redhat.com,
+ ryan.roberts@arm.com, hughd@google.com, mhocko@suse.com,
+ axelrasmussen@google.com, rppt@kernel.org, willy@infradead.org,
+ Liam.Howlett@oracle.com, jannh@google.com, zhangpeng362@huawei.com,
+ bgeffon@google.com, kaleshsingh@google.com, ngeoffray@google.com,
+ jdduke@google.com, linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kernel-team@android.com, Peter Zijlstra <peterz@infradead.org>
 References: <CAJuCfpFbWeycjvjAFryuugXuiv5ggm=cXG+Y1jfaCD9kJ6KWqQ@mail.gmail.com>
  <CAJuCfpHRYi4S9c+KKQqtE6Faw1e0E0ENMMRE17zXsqv_CftTGw@mail.gmail.com>
  <b93b29e9-c176-4111-ae0e-d4922511f223@sirena.org.uk>
@@ -71,109 +74,107 @@ References: <CAJuCfpFbWeycjvjAFryuugXuiv5ggm=cXG+Y1jfaCD9kJ6KWqQ@mail.gmail.com>
  <e3048458-726e-4b98-b2bf-908ea9066959@nvidia.com>
  <0f97db9c-5b86-4f56-8463-2520fe79f709@sirena.org.uk>
  <f1b0b80a-1cc6-48c4-8a53-0222b3e59c7f@nvidia.com>
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <f1b0b80a-1cc6-48c4-8a53-0222b3e59c7f@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+ <2e4a719b-f2b3-48db-99db-d96040d78b12@collabora.com>
+From: John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <2e4a719b-f2b3-48db-99db-d96040d78b12@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: BYAPR07CA0058.namprd07.prod.outlook.com
+ (2603:10b6:a03:60::35) To BY5PR12MB4130.namprd12.prod.outlook.com
+ (2603:10b6:a03:20b::16)
+Precedence: bulk
+X-Mailing-List: linux-kselftest@vger.kernel.org
+List-Id: <linux-kselftest.vger.kernel.org>
+List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
+List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR12MB4130:EE_|CH2PR12MB4858:EE_
+X-MS-Office365-Filtering-Correlation-Id: a47fbe38-a1f1-4ef4-1bf5-08dbfb9fbb5b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	m4WsRd4UFl1Ki5NSdXXKpChQgRktA6QPC5Pa22yF+Awyz1M0M7TA5X0FgXazMgNiw/PPGNxfLLxS5sRabgVlywCeARfE3x1e/tlRS0jSY5lnr/y+cyYQ1Ri8dDiV5LaA4juDXMtCvElpqG67zOJRyTh6Bu5SApVHuvESp1b3ZJsoutmkOf1MZyccCAZnuSWfyr3cXx5rhypRxrTfhB2Bx6ntwpSGJt51hYy2NZnvkLTabyHMWxvtToi9scD1L1FKVvHAdf+OvB4E5WHbv77iAAv2/5+kr4Zqcoz535ZCKWBTYHjQdhXiqTuYYIwUU3OxD/nJ07dsNcgcuat0zQXOnF02dxceGECeTdrzGTNDtWJ4WhMnpjxLcXZ9oQIYdJdla0vp9s8+BUPAwwIY7ufApgpHsDQ29/a2l4MRvuVEpEexV3hRpjEsNVdKdsptU2FWgtflSRvNW3tpcMVblL+GQaj0UwsJI4zcvGxIrewXJkZfgSwGfjEQUBCUVkUD8zShV24zMAIb/cfYonUDIBZgyofpZseML0WuN9QiozGBC/vO6+HUQNhxwAFcBg8m0MuEsJ/addUP/2wmfDhlBM7s/BQtb/022r5UD2TgHQchZincr78YqUHM0u8mDaGnBdr7tZKbT/+Wj5vCQ+Lsha28oA==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB4130.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(346002)(39860400002)(136003)(366004)(376002)(230922051799003)(1800799012)(186009)(451199024)(64100799003)(31686004)(66476007)(66556008)(54906003)(86362001)(36756003)(66946007)(6506007)(31696002)(2616005)(6512007)(53546011)(8676002)(2906002)(38100700002)(110136005)(6666004)(316002)(6486002)(478600001)(5660300002)(41300700001)(8936002)(7416002)(7406005)(4326008)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?ODZsK00rM3FxNUdnWnZLdDdLQmhSVHBIQmtiUDhnL2lYR1BJU3gyVU13VlhG?=
+ =?utf-8?B?OVh0YlYxSUZnMnRDRXZBOHJhc1MwTWRKNTJXTzJqbVo5bnp6R1ZDcXZlYVc4?=
+ =?utf-8?B?eW5wMEVFNWtmZ2dxZk50cXBqL29MU3VqU1hPYnViMWpEMXp4SU9xemtGMllu?=
+ =?utf-8?B?bHBRenJrM1FjUkl1MVdmL3g1aXc2ZFZlNHV0NG5tSlZsaGo3TEY0TDFwT0pr?=
+ =?utf-8?B?dGtrcnFyUTB0RmY4dlhCNWdpTXdNT0laU2dXUUdnOVFBMTJQSUEybG83d2dO?=
+ =?utf-8?B?SFlqOEx4eVAwcDJWVjZDWnNzK3pTenhhMHNzUHc4MXVkczV0enpRWXpUeE02?=
+ =?utf-8?B?VERtUE92TUVGQXVIaTJDRW1nWi9BbjY5MHFsN1Z1ME81OGY0UkJZY2FjUXRv?=
+ =?utf-8?B?bGQ5aXBGODZDbTQ1Q3dmaVJRblc5eUNTYWR2YXZZUk0rSzFtQWxTZ002S2RY?=
+ =?utf-8?B?NVBRLy9CczBkQUs4MVZRMFFEbTU1VDdTcVJVcW1Ud0dxYU5oaENobUFWTldm?=
+ =?utf-8?B?VFpBbWxRZVZpSlA3NEljMlFaSDlEUFhoaXJvbm9NRGozdEtIU2FhWkc1WVEv?=
+ =?utf-8?B?TXZ5bHRpQTdFSmQ1NHNxY3cxb2V0VmdJYmpmWHVFdDJwV0k2NDFaQ1VqSits?=
+ =?utf-8?B?VnRGb0h3WGd1MnZadUVQNUw1RFA3TE5qMVk4MWc2WWFvVlVydksyeVVsczlK?=
+ =?utf-8?B?cUVJV2t0YlVSZTUzY2Q0OHJBdUZidDh4OHloOU01MU5TOU8vc2RsVTlFbkZ5?=
+ =?utf-8?B?a3FvZzcxRXNPRnBqeGo4Rmt5TzV6NFFrUzh5WUpEbEZzRE5aTjRCWjdCaytm?=
+ =?utf-8?B?cUJOWGdUN2dYWnJsMWZCaFVnT3JPWk0vS2F2aWZZczlob3pWdzNaa0VKOTVP?=
+ =?utf-8?B?TG92UHQvV2xUNWxDNGxBbVowZkRGbU9obXZrMDlKS3J4bS9sVjBRZ2F6TUNv?=
+ =?utf-8?B?cTZMODZHUEFmdy80UkEzbjZISE1uZk1iQ3kyYnJYSzdBck15WEtnOUNhbW1k?=
+ =?utf-8?B?MldOdWpSQ2xtZmlMYzkzU1J5TUtnMExENm14UDVGcm0wSm9FS2FmU0hOdHM0?=
+ =?utf-8?B?bkFyL2oyZWlqT0pLM2FQUmVhYkRJL2JKOEd2TGtQVkM1Q2Z2NTNLa2FPWi80?=
+ =?utf-8?B?ZVMrdHozSXlHUHVJYTZBNGtjcFg1MVE0M1ZiZDVWTkxYV1ozNGdHQktUTzkz?=
+ =?utf-8?B?NG5LQWlEV3B4dHo2R095VXNlOEQyN0ZidURuSkdFa2NueUR3R0tFVW92b0VV?=
+ =?utf-8?B?dkhhK3FXREtXenBnTEdpQm5XODlPMU14K0x1Y2w4NW5QKzlEb1JJSjVleHdQ?=
+ =?utf-8?B?eSs0SlZ0cm5JQitmSEp2aTlRZnpsLzZWK2dJR0RKTEk0a3NvUTY2Mnp2Q0dt?=
+ =?utf-8?B?dThocXg1d3FmQ2VzbXliUXlUaHhLd0tXRHVtOU9vdno2akNIUDdjMTlpSVJ4?=
+ =?utf-8?B?amp0TzN2aEFRWTJkWE9zc0t1ZFB1bDNsRHBzNTA4dlBkc2JzdFVjNW41V2RF?=
+ =?utf-8?B?Z3FmSjdSQURtRmFtTWhPVGkvUFdtVFdURUVlY21YN251V0F0MHBEVWM0UXBm?=
+ =?utf-8?B?MUNoOS8rWld3VWlTaS9GTi8vaG5SSld4WE4wZThDbzhwcTRPeXBoSlkvSzZT?=
+ =?utf-8?B?R1EycTNJYmtZYzVaUTdDdVVGYXpEYkJWZ2NmNlR3VGtSSkhqV0ROTHdkVUJW?=
+ =?utf-8?B?cGtTRXdlUWszakRtRVVuQlVETUxxNk9HZDdXdXN3b1BBUjBxWGErM0Yra1ZP?=
+ =?utf-8?B?TEdyajBVZzNpMmVkRW5LL1VLTjVSZjFmTjNZQzVZRVp1YnZZdXI1VHZpU2RQ?=
+ =?utf-8?B?MGw3dmpoTkUvV1FRU2Z3R21pRkxpVUhvK3lXMytrYnNOS1pDTURGZzBmR2JS?=
+ =?utf-8?B?TTJZNTBhYTRwN0k0T3RldlZHWkZwVU5lWkw1UXZYUGFsSjVzSXZJVitKak5I?=
+ =?utf-8?B?QmN3TTJLa0NKVGkxTS9PQTdUTTEyVU1RNEdsekdSMnZGQ2Rnc1VCYWlQTnZ2?=
+ =?utf-8?B?Y1VycFB2M1BxanhvSWF1OWFYeU9jUUMvUGNPdFhLUHI5ZWd2RXgwa2NKQTFY?=
+ =?utf-8?B?c2tIRWd1bVZwME1zTzNCaEIrZFh1NmhqU3ZucE5DaWE3Vm9BYUFvR2JxRm5Z?=
+ =?utf-8?B?dU5XUHFBWlFHMzAweVFIbzhLVGNlY2VpTEROQ3RTVWJOOGRYalhLS29NQ1ln?=
+ =?utf-8?B?R1E9PQ==?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a47fbe38-a1f1-4ef4-1bf5-08dbfb9fbb5b
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB4130.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Dec 2023 05:52:46.6848
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: m6QtjXjGuc+8XO5TSJUrWFe8HMD3MU37i/5uFeF59BD4Mx7atZ/95uTBbFVupNFHOSmlXhqFbHAJNhcmAqtuhw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4858
 
-On 12/13/23 7:14 AM, John Hubbard wrote:
-> On 12/12/23 07:12, Mark Brown wrote:
->> On Mon, Dec 11, 2023 at 12:29:58PM -0800, John Hubbard wrote:
->>> On 12/11/23 12:21, Mark Brown wrote:
-> ...
->>> Or maybe there is an innovative way to do all of this, that we have
->>> yet to think of.
->>
->> We do copy files into tools/include at random times which makes sense
->> for things that aren't uapi, and we are putting bits of uapi there
->> already so we could just expand the set of files copied there.  AFAICT
->> the only reason we're copying the uapi files at all is that they're
->> directly in the same include/ directories as everything else and are
->> always referenced with their uapi/ prefix.
-> 
-> Oh, this sounds like it would work nicely. No more "make headers"
-> required (hooray!). Instead, the new approach would be "selftests are
-> allowed to include from tools/include", and then we can just start
-> copying the files that we need to that location, and gradually fix up
-> all the selftests.
-No, this wouldn't work.
-* The selftests are applications which include default header files. The
-application don't care from where the header files are picked up at compile
-time. We should be able to build the application on normal system with
-latest headers installed without any changes.
-* The header files cannot be included directly as they need to be processed
-first which is done by `make headers`. Here is a diff between kernel fs.h
-and processed header file to be used by applications:
+On 12/12/23 19:58, Muhammad Usama Anjum wrote:
+>> ...
+>> Oh, this sounds like it would work nicely. No more "make headers"
+>> required (hooray!). Instead, the new approach would be "selftests are
+>> allowed to include from tools/include", and then we can just start
+>> copying the files that we need to that location, and gradually fix up
+>> all the selftests.
+> No, this wouldn't work.
+> * The selftests are applications which include default header files. The
+> application don't care from where the header files are picked up at compile
+> time. We should be able to build the application on normal system with
+> latest headers installed without any changes.
+> * The header files cannot be included directly as they need to be processed
+> first which is done by `make headers`. Here is a diff between kernel fs.h
+> and processed header file to be used by applications:
 
---- include/uapi/linux/fs.h	2023-12-12 14:45:22.857409660 +0500
-+++ usr/include/linux/fs.h	2023-12-12 14:49:23.469733573 +0500
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
--#ifndef _UAPI_LINUX_FS_H
--#define _UAPI_LINUX_FS_H
-+#ifndef _LINUX_FS_H
-+#define _LINUX_FS_H
+Well, that's not the proposal. The idea is to snapshot various uapi/ headers
+into tools/include, just like what is already being done:
 
- /*
-  * This file has definitions for some important file table structures
-@@ -13,14 +13,10 @@
- #include <linux/limits.h>
- #include <linux/ioctl.h>
- #include <linux/types.h>
--#ifndef __KERNEL__
- #include <linux/fscrypt.h>
--#endif
+$ diff ./include/uapi/linux/fs.h ./tools/include/uapi/linux/fs.h
+$
 
- /* Use of MS_* flags within the kernel is restricted to core mount(2) code. */
--#if !defined(__KERNEL__)
- #include <linux/mount.h>
--#endif
 
- /*
-  * It's silly to have NR_OPEN bigger than NR_FILE, but you can change
-@@ -287,19 +283,19 @@
- typedef int __bitwise __kernel_rwf_t;
-
- /* high priority request, poll if possible */
--#define RWF_HIPRI	((__force __kernel_rwf_t)0x00000001)
-+#define RWF_HIPRI	((__kernel_rwf_t)0x00000001)
-
- /* per-IO O_DSYNC */
--#define RWF_DSYNC	((__force __kernel_rwf_t)0x00000002)
-+#define RWF_DSYNC	((__kernel_rwf_t)0x00000002)
-
- /* per-IO O_SYNC */
--#define RWF_SYNC	((__force __kernel_rwf_t)0x00000004)
-+#define RWF_SYNC	((__kernel_rwf_t)0x00000004)
-
- /* per-IO, return -EAGAIN if operation would block */
--#define RWF_NOWAIT	((__force __kernel_rwf_t)0x00000008)
-+#define RWF_NOWAIT	((__kernel_rwf_t)0x00000008)
-
- /* per-IO O_APPEND */
--#define RWF_APPEND	((__force __kernel_rwf_t)0x00000010)
-+#define RWF_APPEND	((__kernel_rwf_t)0x00000010)
-
- /* mask of flags supported by the kernel */
- #define RWF_SUPPORTED	(RWF_HIPRI | RWF_DSYNC | RWF_SYNC | RWF_NOWAIT |\
-@@ -364,4 +360,4 @@
- 	__u64 return_mask;
- };
-
--#endif /* _UAPI_LINUX_FS_H */
-+#endif /* _LINUX_FS_H */
-
-> 
-> I really like this, at first reading anyway.
-> 
-> Muhammad, Shuah, others, what do you think?
-> 
-> +Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> 
-> 
-> thanks,
-
+thanks,
 -- 
-BR,
-Muhammad Usama Anjum
+John Hubbard
+NVIDIA
+
 
