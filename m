@@ -1,58 +1,58 @@
-Return-Path: <linux-kselftest+bounces-1796-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1797-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3714B8109DA
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 07:09:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AC5218109DC
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 07:09:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5971F1C20A9D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 06:09:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DD94B1C20AF3
+	for <lists+linux-kselftest@lfdr.de>; Wed, 13 Dec 2023 06:09:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0703FD314;
-	Wed, 13 Dec 2023 06:09:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AB4FDDB5;
+	Wed, 13 Dec 2023 06:09:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iFDlcCbe"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MzstRaQF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F102E98;
-	Tue, 12 Dec 2023 22:09:15 -0800 (PST)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-6ceb93fb381so4776942b3a.0;
-        Tue, 12 Dec 2023 22:09:15 -0800 (PST)
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C093DB;
+	Tue, 12 Dec 2023 22:09:20 -0800 (PST)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-6d089bc4e1aso2417438b3a.0;
+        Tue, 12 Dec 2023 22:09:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702447755; x=1703052555; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1702447759; x=1703052559; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=QzVNeV1YwIH2UjPu2VRHiWjkXicSI2lhifnPwTy/MSU=;
-        b=iFDlcCbextgjplgonnT8/83T/5QaRSJjYOanx8pUxCKBIWQJP1+mUDyqgWK02k12KP
-         LbF6OyFlHwrT52w+awPAs7C+ZOdHGIqhHR3laB75jZn58ArL6niSNzuTYqvksx8uWQnC
-         RURBHdOEU2UjGhyioOb7ydwNuZvjNEjuCYi+EXlRYXm9NtQtMtYYQFjnmuMad/1EOhFc
-         g04Ud7t3Tueh/Ad8bJWmVkzb7OH5T2mO5hntTUotGNR/JQmJEYYKm3xCpxmtOo9NRHOQ
-         sVPg7Vcx4/dErb7rUyd2y2Uyq++jSgK+lcTd5u1iiUhqcHIst4Mkx96RL3XqOgsazo+s
-         u33g==
+        bh=kjnW/dH8VanoQdWRjA4AB5VadbfNMRGd/bNplBHdrE4=;
+        b=MzstRaQFL+2c8dly4R5e8lEsYAJgnufqJ0ago0q8B6CqBMMG3qpR8tERBPFgbZbDT5
+         jXR061mvcZrPdWTA1OS5pfhD8THiY96Ic2qBYOSnfxUf4yv9P6Cxa7a6Y7T6GjoVCX37
+         1GPOEXj4kkmaOsQ8X+x1x5BFHYBLylnbG+IR7zuYBdhFTwWBY5MkGOWNqp+DGP6ifY8d
+         gChQapapFUR9esKyreTeIy1Bspxbs6yOi2n7XGcUSiVxwObOUPtSRtessPs3dIfni/8D
+         wO9s4wMa9YYTWYBr/2oxebE5HtbxMOM1Ut4T/w1595V/0suGj1nR8k56wjdZ13zg7s3O
+         ofUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702447755; x=1703052555;
+        d=1e100.net; s=20230601; t=1702447759; x=1703052559;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=QzVNeV1YwIH2UjPu2VRHiWjkXicSI2lhifnPwTy/MSU=;
-        b=hbJAE5ukoE2xjmNNAaVKjhc2dBm14Lq7lXfB/22ZkrxG+my0CcYMdgwop29ECxSDP9
-         uWijLlAkw4TyOGWTsG5XLAm503Ayr/AsINdGc0uZvnfvDGtI/3x13GfMnnf+FvY7kVzQ
-         aAGkoU6MLBPnImAzh7dnKm3iCVPuGmp7VVl+/4Rv0qJkoa4DWWVfha3hN5BALsJruRbP
-         OMUpyuH6MFmLDq23na0d/k+M5YNTj5GV0NLLsrqmB22czne9ehYj2VRvCIwWOkg0BPgh
-         FWmRf8WXyDmd+ZXdSjfZlgbbxPu+UTVRJdwXBJkVoH8iYP/RY9R3ebRs2vgja5b4rGGu
-         Qi4g==
-X-Gm-Message-State: AOJu0YxKplCovTrUduz5xe/08v5DtJ2RCs9o7CW2Uew1/3Lqdpq3kXWI
-	d1Z5/LB3xB6+x55PhciOe1M23SRnF21tWbGmqdY=
-X-Google-Smtp-Source: AGHT+IEPXlGhryOP48pLB5TkQGwczcABLa9IQljuc80pnS5tm7CGzbeKznxxe9/Gb36yh5cDkK01DQ==
-X-Received: by 2002:a05:6a00:1916:b0:6ce:4553:6171 with SMTP id y22-20020a056a00191600b006ce45536171mr10146012pfi.2.1702447754992;
-        Tue, 12 Dec 2023 22:09:14 -0800 (PST)
+        bh=kjnW/dH8VanoQdWRjA4AB5VadbfNMRGd/bNplBHdrE4=;
+        b=cVMXyU1mocicz3T/IkmzZ4Esr4/ZOV7+saWL05++caGSstze7+ReW2mDwy9cLav57E
+         5QF+9EquKoA5Ohr9gCQI6xdM0aU6A04UGlaHeB51Q5SIPepbqamz4/dlt0O5UXGM6jYB
+         9PVjYb9mYY4PfFi1iuQar1xxR0etL7xM8UcREVliB62oH0ZCr4IgGjoqd6971ZnRQEFz
+         9SsdHEf5vesetrRhze+V28qZNTWXY07sqcxLvnuy09uNgxNHItCFHnLqnM3st7BB1Yxf
+         SQYRhDxQsrosyubqV3Mqq6zwl5ltYx42hbZCrXeVx919qXhxjbm9yRsX3D4KBmYN0wfu
+         jB1A==
+X-Gm-Message-State: AOJu0YwvbDcx9MdwTKuJqmHpIwmEFXyhsbM+dRWhDzFJmjRT5I0dKlaw
+	ReQf960ddvkGquKxkx9byYCkLbdJ236EjyXIK6Q=
+X-Google-Smtp-Source: AGHT+IE4lYIKfKSmNRyzfd1FilQYhkjJqEdE1QsdBAN2+xcQIO6/ZX8aa4/a0oE5RoqpdGUHV3ty7g==
+X-Received: by 2002:a05:6a20:3d89:b0:190:7b07:b7e4 with SMTP id s9-20020a056a203d8900b001907b07b7e4mr8373395pzi.10.1702447759107;
+        Tue, 12 Dec 2023 22:09:19 -0800 (PST)
 Received: from Laptop-X1.redhat.com ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id kq9-20020a056a004b0900b006cef5e5a968sm6890084pfb.201.2023.12.12.22.09.10
+        by smtp.gmail.com with ESMTPSA id kq9-20020a056a004b0900b006cef5e5a968sm6890084pfb.201.2023.12.12.22.09.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Dec 2023 22:09:14 -0800 (PST)
+        Tue, 12 Dec 2023 22:09:18 -0800 (PST)
 From: Hangbin Liu <liuhangbin@gmail.com>
 To: netdev@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -69,9 +69,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Roopa Prabhu <roopa@nvidia.com>,
 	Ido Schimmel <idosch@nvidia.com>,
 	Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCHv2 net-next 02/13] selftests/net: convert srv6_end_dt46_l3vpn_test.sh to run it in unique namespace
-Date: Wed, 13 Dec 2023 14:08:45 +0800
-Message-ID: <20231213060856.4030084-3-liuhangbin@gmail.com>
+Subject: [PATCHv2 net-next 03/13] selftests/net: convert srv6_end_dt4_l3vpn_test.sh to run it in unique namespace
+Date: Wed, 13 Dec 2023 14:08:46 +0800
+Message-ID: <20231213060856.4030084-4-liuhangbin@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20231213060856.4030084-1-liuhangbin@gmail.com>
 References: <20231213060856.4030084-1-liuhangbin@gmail.com>
@@ -86,7 +86,7 @@ Content-Transfer-Encoding: 8bit
 As the name \${rt-${rt}} may make reader confuse, convert the variable
 hs/rt in setup_rt/hs to hid, rid. Here is the test result after conversion.
 
- ]# ./srv6_end_dt46_l3vpn_test.sh
+ ]# ./srv6_end_dt4_l3vpn_test.sh
 
  ################################################################################
  TEST SECTION: IPv6 routers connectivity test
@@ -95,24 +95,22 @@ hs/rt in setup_rt/hs to hid, rid. Here is the test result after conversion.
      TEST: Routers connectivity: rt-1 -> rt-2                            [ OK ]
 
      TEST: Routers connectivity: rt-2 -> rt-1                            [ OK ]
-
  ...
+     TEST: Hosts isolation: hs-t200-4 -X-> hs-t100-2                     [ OK ]
 
-     TEST: IPv4 Hosts isolation: hs-t200-4 -X-> hs-t100-2                [ OK ]
-
- Tests passed:  34
+ Tests passed:  18
  Tests failed:   0
 
 Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
 ---
- .../selftests/net/srv6_end_dt46_l3vpn_test.sh | 51 +++++++++----------
- 1 file changed, 24 insertions(+), 27 deletions(-)
+ .../selftests/net/srv6_end_dt4_l3vpn_test.sh  | 48 ++++++++-----------
+ 1 file changed, 21 insertions(+), 27 deletions(-)
 
-diff --git a/tools/testing/selftests/net/srv6_end_dt46_l3vpn_test.sh b/tools/testing/selftests/net/srv6_end_dt46_l3vpn_test.sh
-index 441eededa031..02d617040793 100755
---- a/tools/testing/selftests/net/srv6_end_dt46_l3vpn_test.sh
-+++ b/tools/testing/selftests/net/srv6_end_dt46_l3vpn_test.sh
-@@ -193,8 +193,7 @@
+diff --git a/tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh b/tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh
+index f96282362811..79fb81e63c59 100755
+--- a/tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh
++++ b/tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh
+@@ -163,8 +163,7 @@
  # +---------------------------------------------------+
  #
  
@@ -122,7 +120,7 @@ index 441eededa031..02d617040793 100755
  
  readonly LOCALSID_TABLE_ID=90
  readonly IPv6_RT_NETWORK=fd00
-@@ -250,26 +249,22 @@ cleanup()
+@@ -219,27 +218,22 @@ cleanup()
  	ip link del veth-rt-1 2>/dev/null || true
  	ip link del veth-rt-2 2>/dev/null || true
  
@@ -138,24 +136,25 @@ index 441eededa031..02d617040793 100755
  {
 -	local rt=$1
 -	local nsname=rt-${rt}
+-
+-	ip netns add ${nsname}
 +	local id=$1
 +	eval local nsname=\${rt_${id}}
  
--	ip netns add ${nsname}
+ 	ip netns exec ${nsname} sysctl -wq net.ipv6.conf.all.accept_dad=0
+ 	ip netns exec ${nsname} sysctl -wq net.ipv6.conf.default.accept_dad=0
+ 
 -	ip link set veth-rt-${rt} netns ${nsname}
 -	ip -netns ${nsname} link set veth-rt-${rt} name veth0
 +	ip link set veth-rt-${id} netns ${nsname}
 +	ip -netns ${nsname} link set veth-rt-${id} name veth0
- 
- 	ip netns exec ${nsname} sysctl -wq net.ipv6.conf.all.accept_dad=0
- 	ip netns exec ${nsname} sysctl -wq net.ipv6.conf.default.accept_dad=0
  
 -	ip -netns ${nsname} addr add ${IPv6_RT_NETWORK}::${rt}/64 dev veth0 nodad
 +	ip -netns ${nsname} addr add ${IPv6_RT_NETWORK}::${id}/64 dev veth0 nodad
  	ip -netns ${nsname} link set veth0 up
  	ip -netns ${nsname} link set lo up
  
-@@ -279,16 +274,14 @@ setup_rt_networking()
+@@ -249,16 +243,13 @@ setup_rt_networking()
  
  setup_hs()
  {
@@ -170,24 +169,22 @@ index 441eededa031..02d617040793 100755
 +	eval local rtname=\${rt_${rid}}
  	local rtveth=veth-t${tid}
  
- 	# set the networking for the host
+-	# set the networking for the host
 -	ip netns add ${hsname}
 -
- 	ip netns exec ${hsname} sysctl -wq net.ipv6.conf.all.accept_dad=0
- 	ip netns exec ${hsname} sysctl -wq net.ipv6.conf.default.accept_dad=0
- 
-@@ -299,8 +292,8 @@ setup_hs()
+ 	# disable the rp_filter otherwise the kernel gets confused about how
+ 	# to route decap ipv4 packets.
+ 	ip netns exec ${rtname} sysctl -wq net.ipv4.conf.all.rp_filter=0
+@@ -266,7 +257,7 @@ setup_hs()
  
  	ip -netns ${hsname} link add veth0 type veth peer name ${rtveth}
  	ip -netns ${hsname} link set ${rtveth} netns ${rtname}
--	ip -netns ${hsname} addr add ${IPv6_HS_NETWORK}::${hs}/64 dev veth0 nodad
 -	ip -netns ${hsname} addr add ${IPv4_HS_NETWORK}.${hs}/24 dev veth0
-+	ip -netns ${hsname} addr add ${IPv6_HS_NETWORK}::${hid}/64 dev veth0 nodad
 +	ip -netns ${hsname} addr add ${IPv4_HS_NETWORK}.${hid}/24 dev veth0
  	ip -netns ${hsname} link set veth0 up
  	ip -netns ${hsname} link set lo up
  
-@@ -332,10 +325,8 @@ setup_vpn_config()
+@@ -293,10 +284,8 @@ setup_vpn_config()
  	local rtdst=$4
  	local tid=$5
  
@@ -197,10 +194,10 @@ index 441eededa031..02d617040793 100755
 -	local rtdst_name=rt-${rtdst}
 +	eval local rtsrc_name=\${rt_${rtsrc}}
 +	eval local rtdst_name=\${rt_${rtdst}}
- 	local rtveth=veth-t${tid}
- 	local vpn_sid=${VPN_LOCATOR_SERVICE}:${hssrc}${hsdst}:${tid}::6046
+ 	local vpn_sid=${VPN_LOCATOR_SERVICE}:${hssrc}${hsdst}:${tid}::6004
  
-@@ -379,18 +370,21 @@ setup()
+ 	# set the encap route for encapsulating packets which arrive from the
+@@ -328,18 +317,21 @@ setup()
  {
  	ip link add veth-rt-1 type veth peer name veth-rt-2
  	# setup the networking for router rt-1 and router rt-2
@@ -222,7 +219,7 @@ index 441eededa031..02d617040793 100755
  	setup_hs 3 1 200
  	setup_hs 4 2 200
  
-@@ -409,8 +403,9 @@ check_rt_connectivity()
+@@ -358,8 +350,9 @@ check_rt_connectivity()
  {
  	local rtsrc=$1
  	local rtdst=$2
@@ -233,18 +230,7 @@ index 441eededa031..02d617040793 100755
  		>/dev/null 2>&1
  }
  
-@@ -428,8 +423,9 @@ check_hs_ipv6_connectivity()
- 	local hssrc=$1
- 	local hsdst=$2
- 	local tid=$3
-+	eval local nsname=\${hs_t${tid}_${hssrc}}
- 
--	ip netns exec hs-t${tid}-${hssrc} ping -c 1 -W ${PING_TIMEOUT_SEC} \
-+	ip netns exec ${nsname} ping -c 1 -W ${PING_TIMEOUT_SEC} \
- 		${IPv6_HS_NETWORK}::${hsdst} >/dev/null 2>&1
- }
- 
-@@ -438,8 +434,9 @@ check_hs_ipv4_connectivity()
+@@ -377,8 +370,9 @@ check_hs_connectivity()
  	local hssrc=$1
  	local hsdst=$2
  	local tid=$3
