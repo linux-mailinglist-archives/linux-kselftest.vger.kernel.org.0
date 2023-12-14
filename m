@@ -1,180 +1,128 @@
-Return-Path: <linux-kselftest+bounces-1962-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1963-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1830B813B2F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Dec 2023 21:03:35 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DF86813B4B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Dec 2023 21:11:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF7E31F224E8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Dec 2023 20:03:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8975FB2110A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Dec 2023 20:11:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C860E6A021;
-	Thu, 14 Dec 2023 20:03:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43FDA6A028;
+	Thu, 14 Dec 2023 20:11:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DcctqYnl"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Dka7iRwj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA4E6697B9
-	for <linux-kselftest@vger.kernel.org>; Thu, 14 Dec 2023 20:03:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-3364a657564so818455f8f.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Dec 2023 12:03:28 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EED86A006;
+	Thu, 14 Dec 2023 20:11:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-3b9f727d94cso2331719b6e.1;
+        Thu, 14 Dec 2023 12:11:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1702584207; x=1703189007; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1702584704; x=1703189504; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3t3FbK18GrHFwKE4zIkpGcLL7FiHaNow8xNq3R4/QdI=;
-        b=DcctqYnloBXyzr6/icFJ5nrbeI/fwc45lTK7zT/zDqs/kq2mNANjqfq2WI1CPbOIkl
-         3zpygJURz7qkPfte+tjx80A6gdM+O1FTYI2VvL7SuLYcjzd7H6DpQfdwmDLV9+nXMrPb
-         7dTw0mVB00N20UiuwNWRNzFDHCuBoP+J6TIeAJfZc3sS1MAXMzL9Z0GoRoatm7TLOu8j
-         8ZZNvlX+vs9HJuG2Y82vknoMM3anREwfsFsat4CTGetqMhnBOOAiPMlJfT5NqSfpdkqn
-         3Qd8clBnVZm39r28lU0UGMK8yIuIf8HPnzkmKCt9BujWkP4WutaWkmQdw0Vrw4Oq2nII
-         J76Q==
+        bh=Kfh8Dy6cQrhts0Y+UCJGg173DSLFoHSRig78lNgd6Fg=;
+        b=Dka7iRwjqy3XnAaS8QUUWkywJDET06cor2wo8xod1fSukvDJhMmtCSP9lYgHPROffT
+         l4isFcvnZkZahKSlvTXBToQ3YXAPpmM+E+72jLVaqrdxydicjFfsQ+aLCkfStZMOesvt
+         Lx+IyW4BeeSUzUzEBB2oauywMiQVTkoeflGX79GK4p/eYAKxYNow4KUa25B0dczXJXVS
+         iSII0Wn82S6CRPKALbbwg7qfHy2fU6AcFjsNW2vb0mvgkFaxH30XFsTLrGW3waG5Q5pX
+         FfAmedMffsnbT5M1dWIwJWbI9hbhiLM97wh6KiBsG7wd7q2R4GHBdeAkR6Ki+pLFQhvq
+         MyAQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702584207; x=1703189007;
+        d=1e100.net; s=20230601; t=1702584704; x=1703189504;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3t3FbK18GrHFwKE4zIkpGcLL7FiHaNow8xNq3R4/QdI=;
-        b=JagO+8d4QKgvdhT9CMJo1h4AvlTYFGB0JKF8GkXtR2uKqedoZo+/dr2AKtfRYXbU7k
-         ssl4EZR7zmduMxCwqYvvHi0K8k4S7oL4NcbJZ4ln0ZHe097YNHxsHPm9wdGmmM/769ZU
-         p3eHzcDOUcdOvyPisIPDsJJm4+cC70JOvujD6YgFygxIhqBiGkuE/F5uVTqiWOXlWSbW
-         HdHGrniBvzqOoNxeA2xOFgs8SM1cDRGWRXD94nwlzzARa+1tfwxOlZKfEYWfSfg4vay8
-         EWYH0YgqsuYIbWmgQh9hXW5SkmksC0xfNZoL0f6hHCdyZFRlYtO2xjM6niHeikuCSSax
-         1yGw==
-X-Gm-Message-State: AOJu0Yw/IjD2OZUpbM17bHxIzH4RiWOhLS0CwgPS/F7+rtCRYzTEjxh1
-	Q1Kpb11o2eJPe8ALUDSWndWDlQAlft2pbBT/hhQkZw==
-X-Google-Smtp-Source: AGHT+IFJxGuMnKvxp55N7GC1tz5/h738b4XoM+FeA8fRtBht8xQJ/kBDFL2qAi3ZYkZt7idruFgudyPvdRKWDedOoVg=
-X-Received: by 2002:a05:600c:2313:b0:40c:3e43:4183 with SMTP id
- 19-20020a05600c231300b0040c3e434183mr4682976wmo.5.1702584207011; Thu, 14 Dec
- 2023 12:03:27 -0800 (PST)
+        bh=Kfh8Dy6cQrhts0Y+UCJGg173DSLFoHSRig78lNgd6Fg=;
+        b=TN2NxRhCDJZZxVlPeDurQOL3rAt0cSRb0LU53gztzNiWHkOy5kHJdZcvOFDQo1ibQ8
+         3xUm8TNJCBcSOnEybJy26zweCLBO4X9evsMUQrX6mObk9kCa9QfZ0pqKfJmxaQuKKWDq
+         FYmVDEJ2Yfp54X9ksQWNdRd9h7rIX4ZC4oudp3bU2Zr84CydD2DdLtIzHDMT1rvJwfio
+         fvigWYJ7ozaFd3OmmEkEiFUx4WiGKJYM2OcqKu60XIdDFtABkkL8uO/XgNXjDpoBMG+Z
+         y9dI2bCek+3YD1y1GtrwGkvRuu+0/sG6YFlHQGxSKdGTommJw0Z/sUif/YXO6Jc2Ccb0
+         05QA==
+X-Gm-Message-State: AOJu0YxzUIoH/n3PaIU04beB4ulbaofvEq7ninchLooOnfXJuNSemFA1
+	FI6tZdOE/w0sN7elnSWGwd1XsvkmAhrzkTL6A1coFag3
+X-Google-Smtp-Source: AGHT+IE5OtfH6BmGn7Qjmv1Kb5hVv+UX/aLg+H3qizYtKhsIVRhRCc9OkzMWNCWsZ1PQBkFFBiPeRwTjP8svWjT4CCo=
+X-Received: by 2002:a05:6808:3849:b0:3ba:c52:7245 with SMTP id
+ ej9-20020a056808384900b003ba0c527245mr9035807oib.95.1702584704448; Thu, 14
+ Dec 2023 12:11:44 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231208005250.2910004-1-almasrymina@google.com>
- <20231208005250.2910004-9-almasrymina@google.com> <b07a4eca-0c3d-4620-9f97-b1d2c76642c2@gmail.com>
- <CAHS8izNVFx6oHoo7y86P8Di9VCVe8A_n_9UZFkg5Wnt=A=YcNQ@mail.gmail.com>
- <b1aea7bc-9627-499a-9bee-d2cc07856978@gmail.com> <CAHS8izPry13h49v+PqrmWSREZKZjYpPesxUTyPQy7AGyFwzo4g@mail.gmail.com>
- <661c1bae-d7d3-457e-b545-5f67b9ef4197@gmail.com>
-In-Reply-To: <661c1bae-d7d3-457e-b545-5f67b9ef4197@gmail.com>
-From: Mina Almasry <almasrymina@google.com>
-Date: Thu, 14 Dec 2023 12:03:15 -0800
-Message-ID: <CAHS8izOY9xm=LBEN8sYwEa3aFB4GWDvJVacom3o4mHZPdHzTUg@mail.gmail.com>
-Subject: Re: [net-next v1 08/16] memory-provider: dmabuf devmem memory provider
-To: Pavel Begunkov <asml.silence@gmail.com>
-Cc: Shailend Chand <shailend@google.com>, netdev@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	bpf@vger.kernel.org, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Jeroen de Borst <jeroendb@google.com>, 
-	Praveen Kaligineedi <pkaligineedi@google.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Arnd Bergmann <arnd@arndb.de>, 
-	David Ahern <dsahern@kernel.org>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
-	Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>, 
-	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	Yunsheng Lin <linyunsheng@huawei.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
-	Shakeel Butt <shakeelb@google.com>, Willem de Bruijn <willemb@google.com>, 
-	Kaiyuan Zhang <kaiyuanz@google.com>
+References: <20231212231706.2680890-1-jeffxu@chromium.org> <20231212231706.2680890-12-jeffxu@chromium.org>
+ <CAHk-=wgn02cpoFEDQGgS+5BUqA2z-=Ks9+PNd-pEJy8h+NOs5g@mail.gmail.com>
+ <CALmYWFu39nzHvBmRsA326GcmV9u=eM-2aCGOvLK31rrb2R9NEw@mail.gmail.com>
+ <CAHk-=wh_VViVZxjiQ5jtB0q=p=JtJMj2R24UAmj-fL-RNLWxNw@mail.gmail.com> <CAEAAPHZpYXHNPdca+xfj77bwYaL6PY-c_oQ54r+=wtJa6_hmCA@mail.gmail.com>
+In-Reply-To: <CAEAAPHZpYXHNPdca+xfj77bwYaL6PY-c_oQ54r+=wtJa6_hmCA@mail.gmail.com>
+From: Pedro Falcato <pedro.falcato@gmail.com>
+Date: Thu, 14 Dec 2023 20:11:32 +0000
+Message-ID: <CAKbZUD09VKfxsz4VCp+0-Y-cWJ-n=dV+t45Aan10HEhFCjxWdQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v3 11/11] mseal:add documentation
+To: =?UTF-8?Q?Stephen_R=C3=B6ttger?= <sroettger@google.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Jeff Xu <jeffxu@google.com>, 
+	jeffxu@chromium.org, akpm@linux-foundation.org, keescook@chromium.org, 
+	jannh@google.com, willy@infradead.org, gregkh@linuxfoundation.org, 
+	jorgelo@chromium.org, groeck@chromium.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, dave.hansen@intel.com, 
+	linux-hardening@vger.kernel.org, deraadt@openbsd.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Dec 11, 2023 at 12:37=E2=80=AFPM Pavel Begunkov <asml.silence@gmail=
-.com> wrote:
-...
-> >> If you remove the branch, let it fall into ->release and rely
-> >> on refcounting there, then the callback could also fix up
-> >> release_cnt or ask pp to do it, like in the patch I linked above
-> >>
+On Thu, Dec 14, 2023 at 6:07=E2=80=AFPM Stephen R=C3=B6ttger <sroettger@goo=
+gle.com> wrote:
+>
+> On Thu, Dec 14, 2023 at 2:31=E2=80=AFAM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
 > >
-> > Sadly I don't think this is possible due to the reasons I mention in
-> > the commit message of that patch. Prematurely releasing ppiov and not
-> > having them be candidates for recycling shows me a 4-5x degradation in
-> > performance.
+> > On Wed, 13 Dec 2023 at 16:36, Jeff Xu <jeffxu@google.com> wrote:
+> > >
+> > >
+> > > > IOW, when would you *ever* say "seal this area, but MADV_DONTNEED i=
+s ok"?
+> > > >
+> > > The MADV_DONTNEED is OK for file-backed mapping.
+> >
+> > Right. It makes no semantic difference. So there's no point to it.
+> >
+> > My point was that you added this magic flag for "not ok for RO anon map=
+ping".
+> >
+> > It's such a *completely* random flag, that I go "that's just crazy
+> > random - make sealing _always_ disallow that case".
+> >
+> > So what I object to in this series is basically random small details
+> > that should just eb part of the basic act of sealing.
+> >
+> > I think sealing should just mean "you can't do any operations that
+> > have semantic meaning for the mapping, because it is SEALED".
+> >
+> > So I think sealing should automatically mean "can't do MADV_DONTNEED
+> > on anon memory", because that's basically equivalent to a munmap/remap
+> > operation.
 >
-> I don't think I follow. The concept is to only recycle a buffer (i.e.
-> make it available for allocation) when its refs drop to zero, which is
-> IMHO the only way it can work, and IIUC what this patchset is doing.
->
-> That's also I suggest to do, but through a slightly different path.
-> Let's say at some moment there are 2 refs (e.g. 1 for an skb and
-> 1 for userspace/xarray).
->
-> Say it first puts the skb:
->
-> napi_pp_put_page()
->    -> page_pool_return_page()
->      -> mp_ops->release_page()
->         -> need_to_free =3D put_buf()
->            // not last ref, need_to_free=3D=3Dfalse,
->            // don't recycle, don't increase release_cnt
->
-> Then you put the last ref:
->
-> page_pool_iov_put_many()
->    -> page_pool_return_page()
->      -> mp_ops->release_page()
->         -> need_to_free =3D put_buf()
->            // last ref, need_to_free=3D=3Dtrue,
->            // recycle and release_cnt++
->
-> And that last put can even be recycled right into the
-> pp / ptr_ring, in which case it doesn't need to touch
-> release_cnt. Does it make sense? I don't see where
-> 4-5x degradation would come from
->
->
+> In Chrome, we have a use case to allow MADV_DONTNEED on sealed memory.
 
-Sorry for the late reply, I have been working on this locally.
+I don't want to be that guy (*believe me*), but what if there was a
+way to attach BPF programs to mm's? Such that you could handle 'seal
+failures' in BPF, and thus allow for this sort of weird semantics?
+e.g: madvise(MADV_DONTNEED) on a sealed region fails, kernel invokes
+the BPF program (that chrome loaded), BPF program sees it was a
+MADV_DONTNEED and allows it to proceed.
 
-What you're saying makes sense, and I'm no longer sure why I was
-seeing a perf degradation without '[net-next v1 10/16] page_pool:
-don't release iov on elevanted refcount'. However, even though what
-you're saying is technically correct, AFAIU it's actually semantically
-wrong. When a page is released by the page_pool, we should call
-page_pool_clear_pp_info() and completely disconnect the page from the
-pool. If we call release_page() on a page and then the page pool sees
-it again in page_pool_return_page(), I think that is considered a bug.
-In fact I think what you're proposing is as a result of a bug because
-we don't call a page_pool_clear_pp_info() equivalent on releasing
-ppiov.
-
-However, I'm reasonably confident I figured out the right thing to do
-here. The page_pool uses page->pp_frag_count for its refcounting.
-pp_frag_count is a misnomer, it's being renamed to pp_ref_count in
-Liang's series[1]). In this series I used a get_page/put_page
-equivalent for refcounting. Once I transitioned to using
-pp_[frag|ref]_count for refcounting inside the page_pool, the issue
-went away, and I no longer need the patch 'page_pool: don't release
-iov on elevanted refcount'.
-
-There is an additional upside, since pages and ppiovs are both being
-refcounted using pp_[frag|ref]_count, we get some unified handling for
-ppiov and we reduce the checks around ppiov. This should be fixed
-properly in the next series.
-
-I still need to do some work (~1 week) before I upload the next
-version as there is a new requirement from MM that we transition to a
-new type and not re-use page*, but I uploaded my changes github with
-the refcounting issues resolved in case they're useful to you. Sorry
-for the churn:
-
-https://github.com/mina/linux/commits/tcpdevmem-v1.5/
-
-[1] https://patchwork.kernel.org/project/netdevbpf/list/?series=3D809049&st=
-ate=3D*
+It requires BPF but sounds like a good compromise in order to not get
+an ugly API?
 
 --=20
-Thanks,
-Mina
+Pedro
 
