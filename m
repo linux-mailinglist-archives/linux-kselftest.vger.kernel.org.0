@@ -1,169 +1,223 @@
-Return-Path: <linux-kselftest+bounces-1964-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1965-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D613813B59
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Dec 2023 21:14:37 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CE23813B76
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Dec 2023 21:25:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 01B1528115E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Dec 2023 20:14:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3B3141C20748
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Dec 2023 20:25:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9C016A032;
-	Thu, 14 Dec 2023 20:14:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD0396A335;
+	Thu, 14 Dec 2023 20:25:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Zt2jpx02"
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="XssIEsre";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="n7nuOxai"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f66.google.com (mail-lf1-f66.google.com [209.85.167.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from wnew4-smtp.messagingengine.com (wnew4-smtp.messagingengine.com [64.147.123.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 191F56A006
-	for <linux-kselftest@vger.kernel.org>; Thu, 14 Dec 2023 20:14:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-lf1-f66.google.com with SMTP id 2adb3069b0e04-50bfa5a6cffso10049920e87.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Dec 2023 12:14:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1702584867; x=1703189667; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BzpbUH5EkrEm9i3H+vtEmgiPJGsbQVnri/dVuua/oQA=;
-        b=Zt2jpx025or3R+upmsZBAVw4TOoB+Ar5UIfFUYL3+8E6/abQk4KE/tEjPxEvxTlKPQ
-         6xPjUI5NVejZoryHs4aq0ZtkAARA2pdMRUymSHR8o2aRrDBgCJaSejdLgRr71ROsJ93d
-         u167LzKpsgZ9bixi8zJVFHomwewvdKU5AFyt0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702584867; x=1703189667;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BzpbUH5EkrEm9i3H+vtEmgiPJGsbQVnri/dVuua/oQA=;
-        b=rvVlYvH/GaPNOuRpxgm+/yOqGOac0IsHV0S1GYlBCjDEuGgGQ/iWYEJU7jtggFWlXC
-         nlLE67g+4mw01yLvweHyBmmkyZNmD+H7LOBegBuJdImzhAd+OVM0/8cmYMMFG6s+kS27
-         rn31q6422bWlUTg8ciNfTgEe202U97cb37YDRNG2KWoN+RMc113lXGWq8ARSk/mr8g1e
-         Zceer7mrkZbYtIZ935+vnxUcug6rJwKEkR3Jk/eqZ/QyM5qKGgNjisQWe/WEi5o8kZ7/
-         xBcSmDnIF4q3fsisilbONlhGjmFe0JLwFys1p09KqN+4JiOrZayRYWTgKYPjvPq/v8R0
-         8gGw==
-X-Gm-Message-State: AOJu0YzIH4SDKL3FFMwqcA8m1uNmzAMywLSuioZdM58EVH06Z7ZkIPAu
-	dG6x6n3hDgR3J71pOUFVpadMtm6IogqlgOv4C9UtwKgP1Bw=
-X-Google-Smtp-Source: AGHT+IGx5cEN6+bOtjcwpvk3R3oScHiClitqb7fMuBo9TN88hvLcEqwWOnIICIWQhzvX5TyOPYB6xA==
-X-Received: by 2002:a05:6512:e82:b0:50e:17e6:6bd2 with SMTP id bi2-20020a0565120e8200b0050e17e66bd2mr772759lfb.0.1702584866942;
-        Thu, 14 Dec 2023 12:14:26 -0800 (PST)
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com. [209.85.208.181])
-        by smtp.gmail.com with ESMTPSA id i14-20020a056512340e00b0050bf8129d47sm1962620lfr.146.2023.12.14.12.14.26
-        for <linux-kselftest@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Dec 2023 12:14:26 -0800 (PST)
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2c9fbb846b7so98216891fa.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Dec 2023 12:14:26 -0800 (PST)
-X-Received: by 2002:a2e:b80d:0:b0:2cc:3f14:405d with SMTP id
- u13-20020a2eb80d000000b002cc3f14405dmr1108832ljo.102.1702584866181; Thu, 14
- Dec 2023 12:14:26 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 821AC675CD;
+	Thu, 14 Dec 2023 20:24:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+	by mailnew.west.internal (Postfix) with ESMTP id 346A72B007D8;
+	Thu, 14 Dec 2023 15:24:56 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Thu, 14 Dec 2023 15:24:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1702585495;
+	 x=1702592695; bh=+t4pVgVSi2R2QRypiJjLIGqmBMSDOZdJg7dHN9HfN3g=; b=
+	XssIEsreV4K1heTY+91HoJX52cZPmrrpOYEqSO83jF/mx/4N9g6qLaN67bxVdlrM
+	gbQLIWXkwxqDkExCf8o5OMz2J8aWyy3eOgm1UZAbT3sEUzWeIg63AmOvo1mD+Ef8
+	YaraA/fKVPL8YZWtMa3YKKNttWkdo6wQ7aXGywwsf7iOpRyH7G9U+PPe5vvu6GHq
+	irs0SMewZVr0KKLtdNWRV4ZGRD7QdMLFXE+Ih3ziDTtiJW+RaByNl4dKIcV8DRkF
+	rt77Mf8rw/d4C0CYFA1x/ugMUTFQoJJcv+AwFFJyP5dy8MUL/Wp1wvxPwkP9jTlK
+	cmq89oQMUShG6CPmvnovEw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1702585495; x=
+	1702592695; bh=+t4pVgVSi2R2QRypiJjLIGqmBMSDOZdJg7dHN9HfN3g=; b=n
+	7nuOxaiJegwukTTbdEOHgVrsaojYuvEbAZGMkrWLg+wxWGYwt2jmpak/zFoaI8Ei
+	Q9lqu2AD6MNZictbUqPH+/xqEex2VCRCAdbn7vbdeOwdo7Fl1VzXi932RL0xSw/L
+	xfa0lSqusL8YeIxoJ59m8H7fkOjd2gF4bHd+syamQJxseVcjrVbCANtuRLUBx1yR
+	tRDqKMyZg0APRmKHsmDleWuV0JbfVq2XsgYJGzLJlEZpuQqvF1AV9SZYkBR2Vd2W
+	PWnLCQUIHPOEVCkLIEjHCbMXEsSpc/c3ZaTso/55ETAE7/HG7ZfKiq9ii49VIZi0
+	ejkPVVzP93VFmU0MJviig==
+X-ME-Sender: <xms:l2R7ZVgsl6HJ6-vzvv9P299qixo0hDZrWux9ZFimb8nmjaEl6oHZOA>
+    <xme:l2R7ZaANSxi_Q1vKDkiWuou3LW3xVmvcbENZkWL3kNQjgwW92mwO7we1A0nBwrM4t
+    HbEamfBpngp50acQA>
+X-ME-Received: <xmr:l2R7ZVHlEg1prvGc6mN8Z4u_fhGuBIQTPhNS8M2GbWBsQYd1oTr2yHhMurLis6YKooJCxbJ9yGLDOO-FkYRKGjcRfVmBcHERfhGCrow>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrudelledgudefhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enfghrlhcuvffnffculdefhedmnecujfgurhepfffhvfevuffkfhggtggugfgjsehtkefs
+    tddttdejnecuhfhrohhmpeffrghnihgvlhcuighuuceougiguhesugiguhhuuhdrgiihii
+    eqnecuggftrfgrthhtvghrnheptdfgueeuueekieekgfeiueekffelteekkeekgeegffev
+    tddvjeeuheeuueelfeetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
+    hilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
+X-ME-Proxy: <xmx:l2R7ZaTVoXTmId-GbkkIGRmhGaWXuWPcdD6_C5r1Hu-yzcXnl0jhyw>
+    <xmx:l2R7ZSwTTXZWGTwF7ArpmKY8WpeTsSmOHWfQXQhpPo7r_Me01b5Mfw>
+    <xmx:l2R7ZQ5OgfOSnYuoe3ksj1o7Dd0JMpmbtHTQ9R-kK5Ffh5jHP019EA>
+    <xmx:l2R7ZZL9cMn54QLmQHESJvSRjlZCbZr3vUZp3PiG4iUFJ6V_iIAg_jwyLRs>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 14 Dec 2023 15:24:53 -0500 (EST)
+Date: Thu, 14 Dec 2023 13:24:51 -0700
+From: Daniel Xu <dxu@dxuuu.xyz>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: Eyal Birger <eyal.birger@gmail.com>, daniel@iogearbox.net, 
+	davem@davemloft.net, shuah@kernel.org, ast@kernel.org, john.fastabend@gmail.com, 
+	kuba@kernel.org, andrii@kernel.org, hawk@kernel.org, steffen.klassert@secunet.com, 
+	antony.antony@secunet.com, alexei.starovoitov@gmail.com, yonghong.song@linux.dev, 
+	eddyz87@gmail.com, mykolal@fb.com, martin.lau@linux.dev, song@kernel.org, 
+	kpsingh@kernel.org, sdf@google.com, haoluo@google.com, jolsa@kernel.org, 
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	netdev@vger.kernel.org, devel@linux-ipsec.org
+Subject: Re: [PATCH bpf-next v5 9/9] bpf: xfrm: Add selftest for
+ bpf_xdp_get_xfrm_state()
+Message-ID: <i6kxylvo5hcttmjmhpjrmwdaxe4bi6cggk32js72ivr7qelknc@qnjkmr3df3b5>
+References: <qiv464c4y43mo5rih5k6lgzkbpnj6wsrl52hrhgbxeqj45atun@szmqlmnccm52>
+ <CAHsH6Gujycb9RBuRk7QHorLe0Q=Np_tb3uboQfp9KmJnegVXvw@mail.gmail.com>
+ <fwadmdjjogp4ybfxfpwovnmnn36jigffopijsuqt4ly4vxqghm@ysqhd25mzylp>
+ <fecc7tpmbnqxuxqqolm44ggyeomcr3piabsjkv3pgyzlhyonq6@iiaxf34erjzq>
+ <CAP01T770poh_63vBC+Heb9ASJ9pDZd1wTDWAgm5KCYHK9GtE1g@mail.gmail.com>
+ <yshbkwaiong7qq2rsgkpvvyvzefnwud5uywbea6ocfxxenzv6s@dn45gdaygaso>
+ <CAHsH6Gu_c29Nc+cH-s3EeztwScL=A42wi_SuJD=WeYV0mtVxbA@mail.gmail.com>
+ <CAP01T76ZtehyRidmnV5A0p3LCyjw6Q4sjRH6ZhczgGn1ap-x_g@mail.gmail.com>
+ <CAP01T74dKxYKM1GfTUJZ+G4+CKbRU=JLGoNcG6b8PMYcqUyEzQ@mail.gmail.com>
+ <idbmj3y65mi7isezhlq4lip54bbngoouv5hbai2xd7bqtv7dxy@qjcmln2ovmz2>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231212231706.2680890-1-jeffxu@chromium.org> <20231212231706.2680890-12-jeffxu@chromium.org>
- <CAHk-=wgn02cpoFEDQGgS+5BUqA2z-=Ks9+PNd-pEJy8h+NOs5g@mail.gmail.com>
- <CALmYWFu39nzHvBmRsA326GcmV9u=eM-2aCGOvLK31rrb2R9NEw@mail.gmail.com>
- <CAHk-=wh_VViVZxjiQ5jtB0q=p=JtJMj2R24UAmj-fL-RNLWxNw@mail.gmail.com> <CAEAAPHZpYXHNPdca+xfj77bwYaL6PY-c_oQ54r+=wtJa6_hmCA@mail.gmail.com>
-In-Reply-To: <CAEAAPHZpYXHNPdca+xfj77bwYaL6PY-c_oQ54r+=wtJa6_hmCA@mail.gmail.com>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Thu, 14 Dec 2023 12:14:09 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wiVhHmnXviy1xqStLRozC4ziSugTk=1JOc8ORWd2_0h7g@mail.gmail.com>
-Message-ID: <CAHk-=wiVhHmnXviy1xqStLRozC4ziSugTk=1JOc8ORWd2_0h7g@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 11/11] mseal:add documentation
-To: =?UTF-8?Q?Stephen_R=C3=B6ttger?= <sroettger@google.com>
-Cc: Jeff Xu <jeffxu@google.com>, jeffxu@chromium.org, akpm@linux-foundation.org, 
-	keescook@chromium.org, jannh@google.com, willy@infradead.org, 
-	gregkh@linuxfoundation.org, jorgelo@chromium.org, groeck@chromium.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-mm@kvack.org, pedro.falcato@gmail.com, dave.hansen@intel.com, 
-	linux-hardening@vger.kernel.org, deraadt@openbsd.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <idbmj3y65mi7isezhlq4lip54bbngoouv5hbai2xd7bqtv7dxy@qjcmln2ovmz2>
 
-On Thu, 14 Dec 2023 at 10:07, Stephen R=C3=B6ttger <sroettger@google.com> w=
-rote:
->
-> AIUI, the madvise(DONTNEED) should effectively only change the content of
-> anonymous pages, i.e. it's similar to a memset(0) in that case. That's wh=
-y we
-> added this special case: if you want to madvise(DONTNEED) an anonymous pa=
-ge,
-> you should have write permissions to the page.
+On Thu, Dec 14, 2023 at 11:23:02AM -0700, Daniel Xu wrote:
+> On Thu, Dec 14, 2023 at 05:16:08PM +0100, Kumar Kartikeya Dwivedi wrote:
+> > On Thu, 14 Dec 2023 at 17:08, Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
+> > >
+> > > On Thu, 14 Dec 2023 at 00:49, Eyal Birger <eyal.birger@gmail.com> wrote:
+> > > >
+> > > > On Wed, Dec 13, 2023 at 3:15 PM Daniel Xu <dxu@dxuuu.xyz> wrote:
+> > > > > > > [...]
+> > > > > > >
+> > > > > > > diff --git a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
+> > > > > > > index c0dd38616562..f00dba85ac5d 100644
+> > > > > > > --- a/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
+> > > > > > > +++ b/tools/testing/selftests/bpf/progs/test_tunnel_kern.c
+> > > > > > > @@ -8,8 +8,9 @@
+> > > > > > >   */
+> > > > > > >  #include "vmlinux.h"
+> > > > > > >  #include <bpf/bpf_core_read.h>
+> > > > > > > -#include <bpf/bpf_helpers.h>
+> > > > > > >  #include <bpf/bpf_endian.h>
+> > > > > > > +#include <bpf/bpf_helpers.h>
+> > > > > > > +#include "bpf_experimental.h"
+> > > > > > >  #include "bpf_kfuncs.h"
+> > > > > > >  #include "bpf_tracing_net.h"
+> > > > > > >
+> > > > > > > @@ -988,8 +989,9 @@ int xfrm_get_state_xdp(struct xdp_md *xdp)
+> > > > > > >         opts.family = AF_INET;
+> > > > > > >
+> > > > > > >         x = bpf_xdp_get_xfrm_state(xdp, &opts, sizeof(opts));
+> > > > > > > -       if (!x || opts.error)
+> > > > > > > +       if (!x)
+> > > > > > >                 goto out;
+> > > > > > > +       bpf_assert_with(opts.error == 0, XDP_PASS);
+> > > > > > >
+> > > > > > >         if (!x->replay_esn)
+> > > > > > >                 goto out;
+> > > > > > >
+> > > > > > > results in:
+> > > > > > >
+> > > > > > > 57: (b7) r1 = 2                       ; R1_w=2 refs=5
+> > > > > > > 58: (85) call bpf_throw#115436
+> > > > > > > calling kernel function bpf_throw is not allowed
+> > > > > > >
+> > > > > >
+> > > > > > I think this might be because bpf_throw is not registered for use by
+> > > > > > BPF_PROG_TYPE_XDP. I would simply register the generic_kfunc_set for
+> > > > > > this program type as well, since it's already done for TC.
+> > > > >
+> > > > > Ah yeah, that was it.
+> > > > >
+> > > > > >
+> > > > > > > It looks like the above error comes from verifier.c:fetch_kfunc_meta,
+> > > > > > > but I can run the exceptions selftests just fine with the same bzImage.
+> > > > > > > So I'm thinking it's not a kfunc registration or BTF issue.
+> > > > > > >
+> > > > > > > Maybe it's cuz I'm holding onto KFUNC_ACQUIRE'd `x`? Not sure.
+> > > > > > >
+> > > > > >
+> > > > > > Yes, even once you enable this, this will fail for now. I am sending
+> > > > > > out a series later this week that enables bpf_throw with acquired
+> > > > > > references, but until then may I suggest the following:
+> > > > > >
+> > > > > > #define bpf_assert_if(cond) for (int ___i = 0, ___j = (cond); !(___j) \
+> > > > > > && !___j; bpf_throw(), ___i++)
+> > > > > >
+> > > > > > This will allow you to insert some cleanup code with an assertion.
+> > > > > > Then in my series, I will convert this temporary bpf_assert_if back to
+> > > > > > the normal bpf_assert.
+> > > > > >
+> > > > > > It would look like:
+> > > > > > bpf_assert_if(opts.error == 0) {
+> > > > > >   // Execute if assertion failed
+> > > > > >   bpf_xdp_xfrm_state_release(x);
+> > > > > > }
+> > > > > >
+> > > > > > Likewise for bpf_assert_with_if, you get the idea.
+> > > > >
+> > > > > I gave it a try and I'm getting this compile error:
+> > > > >
+> > > > >         progs/test_tunnel_kern.c:996:2: error: variable '___j' used in loop condition not modified in loop body [-Werror,-Wfor-loop-analysis]
+> > > > >                 bpf_assert_with_if(opts.error == 0, XDP_PASS) {
+> > > > >                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> > > > >         /home/dxu/dev/linux/tools/testing/selftests/bpf/bpf_experimental.h:295:38: note: expanded from macro 'bpf_assert_with_if'
+> > > > >                 for (int ___i = 0, ___j = (cond); !(___j) && !___j; bpf_throw(value), ___i++)
+> > > > >                                                     ^~~~      ~~~~
+> > > > >         1 error generated.
+> > > > >         make: *** [Makefile:618: /home/dxu/dev/linux/tools/testing/selftests/bpf/test_tunnel_kern.bpf.o] Error 1
+> > > > >
+> > > > > Seems like the compiler is being clever.
+> > > >
+> > > > It looks like ___j is used twice - maybe it was meant to be ___i? i.e.:
+> > > >
+> > > >    for (int ___i = 0, ___j = (cond); !(___j) && !___i; bpf_throw(value), ___i++)
+> > > >
+> > >
+> > > Ah, yes, that's a typo. Eyal is right, it should be ___i.
+> > 
+> > Additionally, I would modify the macro to do ___j = !!(cond).
+> 
+> Makes sense. Will send out v6 with these fixes today.
+> 
 
-Hmm. I actually would be happier if we just made that change in
-general. Maybe even without sealing, but I agree that it *definitely*
-makes sense in general as a sealing thing.
+Looks like only x86 supports exceptions (looking at
+bpf_jit_supports_exceptions()).
 
-IOW, just saying
+This causes selftests in this patchset to fail on !x86, which is
+unfortunate. We probably want to be running these tests on all the major
+archs, so I will drop the assertion patches from this patchset.
 
- "madvise(DONTNEED) needs write permissions to an anonymous mapping when se=
-aled"
+But since they're generally useful and I've already written the
+selftests for it, I could put them up in another patchset? Or maybe not
+cuz you're gonna fix it later anyways. WDYT?
 
-makes 100% sense to me. Having a separate _flag_ to give sensible
-semantics is just odd.
-
-IOW, what I really want is exactly that "sensible semantics, not random fla=
-gs".
-
-Particularly for new system calls with fairly specialized use, I think
-it's very important that the semantics are sensible on a conceptual
-level, and that we do not add system calls that are based on "random
-implementation issue of the day".
-
-Yes, yes, then as we have to maintain things long-term, and we hit
-some compatibility issue, at *THAT* point we'll end up facing nasty
-"we had an implementation that had these semantics in practice, so now
-we're stuck with it", but when introducing a new system call, let's
-try really hard to start off from those kinds of random things.
-
-Wouldn't it be lovely if we can just come up with a sane set of "this
-is what it means to seal a vma", and enumerate those, and make those
-sane conceptual rules be the initial definition. By all means have a
-"flags" argument for future cases when we figure out there was
-something wrong or the notion needed to be extended, but if we already
-*start* with random extensions, I feel there's something wrong with
-the whole concept.
-
-So I would really wish for the first version of
-
-     mseal(start, len, flags);
-
-to have "flags=3D0" be the one and only case we actually handle
-initially, and only add a single PROT_SEAL flag to mmap() that says
-"create this mapping already pre-sealed".
-
-Strive very hard to make sealing be a single VM_SEALED flag in the
-vma->vm_flags that we already have, just admit that none of this
-matters on 32-bit architectures, so that VM_SEALED can just use one of
-the high flags that we have several free of (and that pkeys already
-depends on), and make this a standard feature with no #ifdef's.
-
-Can chrome live with that? And what would the required semantics be?
-I'll start the list:
-
- - you can't unmap or remap in any way (including over-mapping)
-
- - you can't change protections (but with architecture support like
-pkey, you can obviously change the protections indirectly with PKRU
-etc)
-
- - you can't do VM operations that change data without the area being
-writable (so the DONTNEED case - maybe there are others)
-
- - anything else?
-
-Wouldn't it be lovely to have just a single notion of sealing that is
-well-documented and makes sense, and doesn't require people to worry
-about odd special cases?
-
-And yes, we'd have the 'flags' argument for future special cases, and
-hope really hard that it's never needed.
-
-           Linus
+Thanks,
+Daniel
 
