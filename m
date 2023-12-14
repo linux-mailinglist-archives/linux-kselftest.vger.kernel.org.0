@@ -1,75 +1,180 @@
-Return-Path: <linux-kselftest+bounces-1961-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1962-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42C36813AE2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Dec 2023 20:41:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1830B813B2F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Dec 2023 21:03:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7547E1C20B06
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Dec 2023 19:41:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF7E31F224E8
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Dec 2023 20:03:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B34AB69794;
-	Thu, 14 Dec 2023 19:40:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C860E6A021;
+	Thu, 14 Dec 2023 20:03:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="ZBJ4R2IZ"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DcctqYnl"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BD2368EBE;
-	Thu, 14 Dec 2023 19:40:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB018C433C7;
-	Thu, 14 Dec 2023 19:40:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-	s=korg; t=1702582858;
-	bh=K9B2txQTgSN99zWiymlTobnzZROd0qplmIqjISRpvQw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=ZBJ4R2IZRRRmCnfDh77WXtFkNC4CWWem9aaV9bQ/gtkE1e1KAqpTBTvDniPwCLNWq
-	 y1AS5HkupWrkEZ48wVv+Lct/2IKsYS7w+iab947cADM689VNdCBaPr/NxKIRWU4jTC
-	 +ELPAKemP2y9hD2EbUWxZFECFBe8sqKJYLOUprVI=
-Date: Thu, 14 Dec 2023 11:40:56 -0800
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc: Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>, James
- Bottomley <James.Bottomley@HansenPartnership.com>, kernel@collabora.com,
- "kernelci.org bot" <bot@kernelci.org>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests: secretmem: Floor the memory size to the
- multiple of page_size
-Message-Id: <20231214114056.ec687939a411961db10e73df@linux-foundation.org>
-In-Reply-To: <20231214101931.1155586-1-usama.anjum@collabora.com>
-References: <20231214101931.1155586-1-usama.anjum@collabora.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA4E6697B9
+	for <linux-kselftest@vger.kernel.org>; Thu, 14 Dec 2023 20:03:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-3364a657564so818455f8f.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Dec 2023 12:03:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1702584207; x=1703189007; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3t3FbK18GrHFwKE4zIkpGcLL7FiHaNow8xNq3R4/QdI=;
+        b=DcctqYnloBXyzr6/icFJ5nrbeI/fwc45lTK7zT/zDqs/kq2mNANjqfq2WI1CPbOIkl
+         3zpygJURz7qkPfte+tjx80A6gdM+O1FTYI2VvL7SuLYcjzd7H6DpQfdwmDLV9+nXMrPb
+         7dTw0mVB00N20UiuwNWRNzFDHCuBoP+J6TIeAJfZc3sS1MAXMzL9Z0GoRoatm7TLOu8j
+         8ZZNvlX+vs9HJuG2Y82vknoMM3anREwfsFsat4CTGetqMhnBOOAiPMlJfT5NqSfpdkqn
+         3Qd8clBnVZm39r28lU0UGMK8yIuIf8HPnzkmKCt9BujWkP4WutaWkmQdw0Vrw4Oq2nII
+         J76Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702584207; x=1703189007;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3t3FbK18GrHFwKE4zIkpGcLL7FiHaNow8xNq3R4/QdI=;
+        b=JagO+8d4QKgvdhT9CMJo1h4AvlTYFGB0JKF8GkXtR2uKqedoZo+/dr2AKtfRYXbU7k
+         ssl4EZR7zmduMxCwqYvvHi0K8k4S7oL4NcbJZ4ln0ZHe097YNHxsHPm9wdGmmM/769ZU
+         p3eHzcDOUcdOvyPisIPDsJJm4+cC70JOvujD6YgFygxIhqBiGkuE/F5uVTqiWOXlWSbW
+         HdHGrniBvzqOoNxeA2xOFgs8SM1cDRGWRXD94nwlzzARa+1tfwxOlZKfEYWfSfg4vay8
+         EWYH0YgqsuYIbWmgQh9hXW5SkmksC0xfNZoL0f6hHCdyZFRlYtO2xjM6niHeikuCSSax
+         1yGw==
+X-Gm-Message-State: AOJu0Yw/IjD2OZUpbM17bHxIzH4RiWOhLS0CwgPS/F7+rtCRYzTEjxh1
+	Q1Kpb11o2eJPe8ALUDSWndWDlQAlft2pbBT/hhQkZw==
+X-Google-Smtp-Source: AGHT+IFJxGuMnKvxp55N7GC1tz5/h738b4XoM+FeA8fRtBht8xQJ/kBDFL2qAi3ZYkZt7idruFgudyPvdRKWDedOoVg=
+X-Received: by 2002:a05:600c:2313:b0:40c:3e43:4183 with SMTP id
+ 19-20020a05600c231300b0040c3e434183mr4682976wmo.5.1702584207011; Thu, 14 Dec
+ 2023 12:03:27 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+References: <20231208005250.2910004-1-almasrymina@google.com>
+ <20231208005250.2910004-9-almasrymina@google.com> <b07a4eca-0c3d-4620-9f97-b1d2c76642c2@gmail.com>
+ <CAHS8izNVFx6oHoo7y86P8Di9VCVe8A_n_9UZFkg5Wnt=A=YcNQ@mail.gmail.com>
+ <b1aea7bc-9627-499a-9bee-d2cc07856978@gmail.com> <CAHS8izPry13h49v+PqrmWSREZKZjYpPesxUTyPQy7AGyFwzo4g@mail.gmail.com>
+ <661c1bae-d7d3-457e-b545-5f67b9ef4197@gmail.com>
+In-Reply-To: <661c1bae-d7d3-457e-b545-5f67b9ef4197@gmail.com>
+From: Mina Almasry <almasrymina@google.com>
+Date: Thu, 14 Dec 2023 12:03:15 -0800
+Message-ID: <CAHS8izOY9xm=LBEN8sYwEa3aFB4GWDvJVacom3o4mHZPdHzTUg@mail.gmail.com>
+Subject: Re: [net-next v1 08/16] memory-provider: dmabuf devmem memory provider
+To: Pavel Begunkov <asml.silence@gmail.com>
+Cc: Shailend Chand <shailend@google.com>, netdev@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-arch@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	bpf@vger.kernel.org, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Jeroen de Borst <jeroendb@google.com>, 
+	Praveen Kaligineedi <pkaligineedi@google.com>, Jesper Dangaard Brouer <hawk@kernel.org>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Arnd Bergmann <arnd@arndb.de>, 
+	David Ahern <dsahern@kernel.org>, Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+	Shuah Khan <shuah@kernel.org>, Sumit Semwal <sumit.semwal@linaro.org>, 
+	=?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+	Yunsheng Lin <linyunsheng@huawei.com>, Harshitha Ramamurthy <hramamurthy@google.com>, 
+	Shakeel Butt <shakeelb@google.com>, Willem de Bruijn <willemb@google.com>, 
+	Kaiyuan Zhang <kaiyuanz@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, 14 Dec 2023 15:19:30 +0500 Muhammad Usama Anjum <usama.anjum@collabora.com> wrote:
+On Mon, Dec 11, 2023 at 12:37=E2=80=AFPM Pavel Begunkov <asml.silence@gmail=
+.com> wrote:
+...
+> >> If you remove the branch, let it fall into ->release and rely
+> >> on refcounting there, then the callback could also fix up
+> >> release_cnt or ask pp to do it, like in the patch I linked above
+> >>
+> >
+> > Sadly I don't think this is possible due to the reasons I mention in
+> > the commit message of that patch. Prematurely releasing ppiov and not
+> > having them be candidates for recycling shows me a 4-5x degradation in
+> > performance.
+>
+> I don't think I follow. The concept is to only recycle a buffer (i.e.
+> make it available for allocation) when its refs drop to zero, which is
+> IMHO the only way it can work, and IIUC what this patchset is doing.
+>
+> That's also I suggest to do, but through a slightly different path.
+> Let's say at some moment there are 2 refs (e.g. 1 for an skb and
+> 1 for userspace/xarray).
+>
+> Say it first puts the skb:
+>
+> napi_pp_put_page()
+>    -> page_pool_return_page()
+>      -> mp_ops->release_page()
+>         -> need_to_free =3D put_buf()
+>            // not last ref, need_to_free=3D=3Dfalse,
+>            // don't recycle, don't increase release_cnt
+>
+> Then you put the last ref:
+>
+> page_pool_iov_put_many()
+>    -> page_pool_return_page()
+>      -> mp_ops->release_page()
+>         -> need_to_free =3D put_buf()
+>            // last ref, need_to_free=3D=3Dtrue,
+>            // recycle and release_cnt++
+>
+> And that last put can even be recycled right into the
+> pp / ptr_ring, in which case it doesn't need to touch
+> release_cnt. Does it make sense? I don't see where
+> 4-5x degradation would come from
+>
+>
 
-> The "locked-in-memory size" limit per process can be non-multiple of
-> page_size. The mmap() fails if we try to allocate locked-in-memory
-> with same size as the allowed limit if it isn't multiple of the
-> page_size because mmap() rounds off the memory size to be allocated
-> to next multiple of page_size.
-> 
-> Fix this by flooring the length to be allocated with mmap() to the
-> previous multiple of the page_size.
+Sorry for the late reply, I have been working on this locally.
 
-I'd like to understand how this was noticed, what the ongoing effect
-might be, etc.  To help decide which kernel version(s) need the patch.
+What you're saying makes sense, and I'm no longer sure why I was
+seeing a perf degradation without '[net-next v1 10/16] page_pool:
+don't release iov on elevanted refcount'. However, even though what
+you're saying is technically correct, AFAIU it's actually semantically
+wrong. When a page is released by the page_pool, we should call
+page_pool_clear_pp_info() and completely disconnect the page from the
+pool. If we call release_page() on a page and then the page pool sees
+it again in page_pool_return_page(), I think that is considered a bug.
+In fact I think what you're proposing is as a result of a bug because
+we don't call a page_pool_clear_pp_info() equivalent on releasing
+ppiov.
 
-> Fixes: 76fe17ef588a ("secretmem: test: add basic selftest for memfd_secret(2)")
-> Reported-by: "kernelci.org bot" <bot@kernelci.org>
+However, I'm reasonably confident I figured out the right thing to do
+here. The page_pool uses page->pp_frag_count for its refcounting.
+pp_frag_count is a misnomer, it's being renamed to pp_ref_count in
+Liang's series[1]). In this series I used a get_page/put_page
+equivalent for refcounting. Once I transitioned to using
+pp_[frag|ref]_count for refcounting inside the page_pool, the issue
+went away, and I no longer need the patch 'page_pool: don't release
+iov on elevanted refcount'.
 
-Which is one of the reasons we're now placing a Closes: tag after a
-Reported-by:.
+There is an additional upside, since pages and ppiovs are both being
+refcounted using pp_[frag|ref]_count, we get some unified handling for
+ppiov and we reduce the checks around ppiov. This should be fixed
+properly in the next series.
 
+I still need to do some work (~1 week) before I upload the next
+version as there is a new requirement from MM that we transition to a
+new type and not re-use page*, but I uploaded my changes github with
+the refcounting issues resolved in case they're useful to you. Sorry
+for the churn:
 
+https://github.com/mina/linux/commits/tcpdevmem-v1.5/
+
+[1] https://patchwork.kernel.org/project/netdevbpf/list/?series=3D809049&st=
+ate=3D*
+
+--=20
+Thanks,
+Mina
 
