@@ -1,153 +1,117 @@
-Return-Path: <linux-kselftest+bounces-1884-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1886-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2576F8123F4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Dec 2023 01:36:16 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0D66812461
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Dec 2023 02:16:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B5D58281381
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Dec 2023 00:36:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 42B74B20D92
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Dec 2023 01:16:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 622DB389;
-	Thu, 14 Dec 2023 00:36:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 995E438E;
+	Thu, 14 Dec 2023 01:16:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zugocgvm"
+	dkim=pass (2048-bit key) header.d=openbsd.org header.i=@openbsd.org header.b="f8EJnL1p"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5C6A109
-	for <linux-kselftest@vger.kernel.org>; Wed, 13 Dec 2023 16:36:05 -0800 (PST)
-Received: by mail-qt1-x832.google.com with SMTP id d75a77b69052e-42598c2b0b7so62211cf.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 13 Dec 2023 16:36:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1702514164; x=1703118964; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Rh/JIPLuSc5XTJsnIXetpV5afhDLqc5qWgt+ZxYeVCQ=;
-        b=zugocgvmf1lxu84yfv4X9DbDntLR0AzZNqnReBvdS2ZE8OIoEw93XOQHmlvBQ0TZUn
-         857KK9j5mIUY3RRJspg+5g/UO/nyZR4x0W7oBG53ARP+Th6LvdCQhNm3lVTD14GqjNhW
-         VkGFrYefsMSFtfiQjVsFypCX4azcnrMif+HBWhdbf9p6wk8LqkBDBIFPj/qhvI07TsTW
-         XwodgsLBUWbZMpE4ZlglFfU0eQApAafb1wh4721RL7hl/pFxr8HTSCO7AqKeo3b4LLXf
-         BxIlqususmWl76ubddE7o8dq48aSKph0oKJxDUX9aKBeu3Buy0fqyi97CNfhoQJSG14G
-         KSsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702514164; x=1703118964;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Rh/JIPLuSc5XTJsnIXetpV5afhDLqc5qWgt+ZxYeVCQ=;
-        b=XOLjerzwV35FTsPjaCsjN8BilIOwDrWrY0xn2BiUZhVbOFJqE7x1jLfhmxaSepbKmm
-         5N/S83sG5cubMnN0DsJOSbGajVeMFyzybEWkQ3vUcd/tRF4jjsGkJp6Iq0ZK0gpSYLIE
-         33VsWJq3w3miSZVk05Rr9sJLpaTkJMGK7L9HVH2t71EZxJe9XekouMC3kZ6CKI/MYEPj
-         3cjR1rggb1DKCrMKG5z6MVMS0j2vqX6hRzOLYrYkNL9upDSMeafx6A4paFd6K5GgY88r
-         ATCBX0hpD5ZLqkn3EHFSs6Y8LG9lnValzPCNLW0lN2y+id2k5XWln3teMpSVQH3fa15/
-         nQPQ==
-X-Gm-Message-State: AOJu0Ywj9zeYnV3gsVlM50d2U+fKvAYeX1/URGKI8X6bsQvqsbPGKpVe
-	AWoCKj6n93zh3xRSJUPdg0EirkinqH0R9pkZ6aa2+Q==
-X-Google-Smtp-Source: AGHT+IFV9mswBOSTplU3GbpxbWwY83oDLBB8lfMgKwsXIlFx4/MATC30VcWkHbqFp7WCIuN5thSLGmaeWN2qqtvo+f4=
-X-Received: by 2002:a05:622a:1a15:b0:425:47fc:e6e6 with SMTP id
- f21-20020a05622a1a1500b0042547fce6e6mr1655213qtb.4.1702514164149; Wed, 13 Dec
- 2023 16:36:04 -0800 (PST)
+X-Greylist: delayed 399 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 13 Dec 2023 17:16:18 PST
+Received: from cvs.openbsd.org (cvs.openbsd.org [199.185.137.3])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEA1CE4;
+	Wed, 13 Dec 2023 17:16:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; s=selector1; bh=whGKbpn2mK
+	dixz+7VYNABz/psNG/LtxK3IfpFNItFm0=; h=date:references:in-reply-to:
+	subject:cc:to:from; d=openbsd.org; b=f8EJnL1pM686HWnsDZ2MM+QERZ5fn5hkB
+	jS2UEz9O0HQ3CMCPdqYpqvgemPzK/k3sYnnneBkmxRB2mwcLGksMDxQUepWmAMwQXOZWow
+	UnukNeZTT7/fyuRPG/vc6WY0665nhjTCzO3swQTttAdyYfO+ykooxNcn7hq9Jif7k877Zg
+	NzTQhv5fS8QmQ1kODqjycmd0+HMFk6tqn25KWRfbvwutgEQ8WduyIIyF5VupOqoooaYpMm
+	PcMkj3UvHwRNaSIbk8cWjCxE4kuZUOGfwXj+Pof8/c4Lkak7sNxM8KgYhPRr+6RT7pTSqL
+	cfcNtU11WwqUAXQZzouEGgjK2Ln1A==
+Received: from cvs.openbsd.org (localhost [127.0.0.1])
+	by cvs.openbsd.org (OpenSMTPD) with ESMTP id 3f9af318;
+	Wed, 13 Dec 2023 18:09:38 -0700 (MST)
+From: "Theo de Raadt" <deraadt@openbsd.org>
+To: Jeff Xu <jeffxu@google.com>
+cc: Linus Torvalds <torvalds@linux-foundation.org>, jeffxu@chromium.org,
+    akpm@linux-foundation.org, keescook@chromium.org, jannh@google.com,
+    sroettger@google.com, willy@infradead.org,
+    gregkh@linuxfoundation.org, jorgelo@chromium.org,
+    groeck@chromium.org, linux-kernel@vger.kernel.org,
+    linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+    pedro.falcato@gmail.com, dave.hansen@intel.com,
+    linux-hardening@vger.kernel.org
+Subject: Re: [RFC PATCH v3 11/11] mseal:add documentation
+In-reply-to: <CALmYWFu39nzHvBmRsA326GcmV9u=eM-2aCGOvLK31rrb2R9NEw@mail.gmail.com>
+References: <20231212231706.2680890-1-jeffxu@chromium.org> <20231212231706.2680890-12-jeffxu@chromium.org> <CAHk-=wgn02cpoFEDQGgS+5BUqA2z-=Ks9+PNd-pEJy8h+NOs5g@mail.gmail.com> <CALmYWFu39nzHvBmRsA326GcmV9u=eM-2aCGOvLK31rrb2R9NEw@mail.gmail.com>
+Comments: In-reply-to Jeff Xu <jeffxu@google.com>
+   message dated "Wed, 13 Dec 2023 16:35:26 -0800."
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231212231706.2680890-1-jeffxu@chromium.org> <20231212231706.2680890-12-jeffxu@chromium.org>
- <CAHk-=wgn02cpoFEDQGgS+5BUqA2z-=Ks9+PNd-pEJy8h+NOs5g@mail.gmail.com>
-In-Reply-To: <CAHk-=wgn02cpoFEDQGgS+5BUqA2z-=Ks9+PNd-pEJy8h+NOs5g@mail.gmail.com>
-From: Jeff Xu <jeffxu@google.com>
-Date: Wed, 13 Dec 2023 16:35:26 -0800
-Message-ID: <CALmYWFu39nzHvBmRsA326GcmV9u=eM-2aCGOvLK31rrb2R9NEw@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 11/11] mseal:add documentation
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: jeffxu@chromium.org, akpm@linux-foundation.org, keescook@chromium.org, 
-	jannh@google.com, sroettger@google.com, willy@infradead.org, 
-	gregkh@linuxfoundation.org, jorgelo@chromium.org, groeck@chromium.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-mm@kvack.org, pedro.falcato@gmail.com, dave.hansen@intel.com, 
-	linux-hardening@vger.kernel.org, deraadt@openbsd.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <45779.1702516178.1@cvs.openbsd.org>
+Date: Wed, 13 Dec 2023 18:09:38 -0700
+Message-ID: <58421.1702516178@cvs.openbsd.org>
 
-On Tue, Dec 12, 2023 at 4:39=E2=80=AFPM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> On Tue, 12 Dec 2023 at 15:17, <jeffxu@chromium.org> wrote:
-> > +
-> > +**types**: bit mask to specify the sealing types, they are:
->
-> I really want a real-life use-case for more than one bit of "don't modify=
-".
->
-For the real-life use case question, Stephen R=C3=B6ttger and I put
-description in the cover letter as well as the open discussion section
-(mseal() vs immutable()) of patch 0/11.  Perhaps you are looking for more
-details in chrome usage of the API, e.g. code-wise ?
+Jeff Xu <jeffxu@google.com> wrote:
 
-> IOW, when would you *ever* say "seal this area, but MADV_DONTNEED is ok"?
->
-The MADV_DONTNEED is OK for file-backed mapping.
-As state in man page of madvise: [1]
+> > Or when would you *ever* say "seal this area, but mprotect()" is ok.
+> >
+> The fact  that openBSD allows RW=>RO transaction, as in its man page [2]
+> 
+>  "  At present, mprotect(2) may reduce permissions on immutable pages
+>   marked PROT_READ | PROT_WRITE to the less permissive PROT_READ."
 
-"subsequent accesses of pages in the range will succeed,  but will
-result in either repopulating the memory contents from the up-to-date
-contents of the underlying mapped file"
+Let me explain this.
 
-> Or when would you *ever* say "seal this area, but mprotect()" is ok.
->
-The fact  that openBSD allows RW=3D>RO transaction, as in its man page [2]
+We encountered two places that needed this less-permission-transition.
 
- "  At present, mprotect(2) may reduce permissions on immutable pages
-  marked PROT_READ | PROT_WRITE to the less permissive PROT_READ."
+Both of these problems were found in either .data or bss, which the
+kernel makes immutable by default.  The OpenBSD kernel makes those
+regions immutable BY DEFAULT, and there is no way to turn that off.
 
-suggests application might desire multiple ways to seal the "PROT" bits.
+One was in our libc malloc, which after initialization, wants to protect
+a control data structure from being written in the future.
 
-E.g.
-Applications that wants a full lockdown of PROT and PKEY might use
-SEAL_PROT_PKEY (Chrome case and implemented in this patch)
+The other was in chrome v8, for the v8_flags variable, this is
+similarily mprotected to less permission after initialization to avoid
+tampering (because it's an amazing relative-address located control
+gadget).
 
-Application that desires RW=3D>RO transaction, might implement
-SEAL_PROT_DOWNGRADEABLE, or specifically allow RW=3D>RO.
-(not implemented but can be added in future as extension if  needed.)
+We introduced a different mechanism to solve these problem.
 
-> IOW, I want to know why we don't just do the BSD immutable thing, and
-> why we need this multi-level sealing thing.
->
-The details are discussed in mseal() vs immutable()) of the cover letter
-(patch 0/11)
+So we added a new ELF section which annotates objects you need to be
+MUTABLE.  If these are .data or .bss, they are placed in the MUTABLE
+region annotated with the following Program Header:
 
-In short, BSD's immutable is designed specific for libc case, and Chrome
-case is just different (e.g. the lifetime of those mappings and requirement=
- of
-free/discard unused memory).
+Program Headers:
+  Type           Offset   VirtAddr           PhysAddr           FileSiz  MemSiz   Flg Align
+  OPENBSD_MUTABLE 0x0e9000 0x00000000000ec000 0x00000000000ec000 0x001000 0x001000 RW  0x1000
 
-Single bit vs multi-bits are still up for discussion.
-If there are strong opinions on the multiple-bits approach, (and
-no objection on applying MM_SEAL_DISCARD_RO_ANON to the .text part
-during libc dynamic loading, which has no effect anyway because it is
-file backed.), we could combine all three bits into one. A side note is tha=
-t we
-could not add something such as SEAL_PROT_DOWNGRADEABLE later,
-since pkey_mprotect is sealed.
+associated with this Section Header
 
-I'm open to one bit approach. If we took that approach,
-We might consider the following:
+  [20] .openbsd.mutable  PROGBITS        00000000000ec000 0e9000 001000 00  WA  0   0 4096
 
-mseal() or
-mseal(flags), flags are reserved for future use.
+(It is vaguely similar to RELRO).
 
-I appreciate a direction on this.
+You can place objects there using the a compiler __attribute__((section
+declaration, like this example from our libc/malloc.c code
 
- [1] https://man7.org/linux/man-pages/man2/madvise.2.html
- [2] https://man.openbsd.org/mimmutable.2
+static union {
+        struct malloc_readonly mopts;
+        u_char _pad[MALLOC_PAGESIZE];
+} malloc_readonly __attribute__((aligned(MALLOC_PAGESIZE)))
+                __attribute__((section(".openbsd.mutable")));
 
--Jeff
+During startup the code can set the protection and then the immutability
+of the object correctly.
 
+Since we have no purpose left for this permission reduction semantic
+upon immutable mappings, we may be deleting that behaviour in the
+future.  I wrote that code, because I needed it to make progress with some
+difficult pieces of code.  But we found a better way.
 
-
->                Linus
 
