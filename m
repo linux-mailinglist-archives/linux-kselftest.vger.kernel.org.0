@@ -1,55 +1,55 @@
-Return-Path: <linux-kselftest+bounces-1900-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1901-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 206C9812AB3
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Dec 2023 09:49:55 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7534812AB5
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Dec 2023 09:49:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C00481F21853
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Dec 2023 08:49:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 05B4C1C214BA
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Dec 2023 08:49:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E7C92421F;
-	Thu, 14 Dec 2023 08:49:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C5C8249EF;
+	Thu, 14 Dec 2023 08:49:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="aRByfs6j"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cgvWjpRn"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 213E0116
-	for <linux-kselftest@vger.kernel.org>; Thu, 14 Dec 2023 00:49:45 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-dbcca4c56b9so2382326276.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Dec 2023 00:49:45 -0800 (PST)
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A38F10B
+	for <linux-kselftest@vger.kernel.org>; Thu, 14 Dec 2023 00:49:49 -0800 (PST)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-dbc4f389835so6875969276.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Dec 2023 00:49:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1702543784; x=1703148584; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1702543789; x=1703148589; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vJ3XYd4VAh0rMwZdPZnf0/R4/jXxDQ1RiH7pfcHiYc8=;
-        b=aRByfs6jJv1pPl+XO5MRrqPIEKLf20hbEIpup6djP2bJKRqLu9PMErZeB6Wn/uAKpr
-         G91nfjkpuuoXv581ZhCxU44bDu3oeBDHIkwI09alP0Ei6zXO3GqXx746/JAUu7mA0xcZ
-         d91pIaanzP9lwQUmw+P/4oFZGlKa/+nHsmOJs04dVVrtgq+bIgsnbKqbeAE/LxiIKWVd
-         60NngqrtSB8o79W+YfxOKpRVq0hfRyhbEwcvaOK1cQeq1+2uYNL4S8nvfNv2HpGi31C0
-         o1wkxhUq292fLKjC+F2uw5swWgMqpmvbjIW4rR/a2FH33eNGai5C4mUhzFKD8p5yLD2i
-         3AyA==
+        bh=NkRyaEIclzm+ShIMyVUbqREgKKajNjynsQ0mobEpXzk=;
+        b=cgvWjpRn1Wu1bWJ1qeTxF/WH65bRi37aahZVCQy3rXjzx32KJiErk89YQefh5ZEf+C
+         +dGWH7vRN8IOpRl07fQ+FSVoJEvUMfTLUWQVSgPkds49fzXfpZBNia34Scyg53Mu0lyz
+         Xg83Vle2jySQXw9ahzxjC7oPbrnv/qdWmfNPqfLe0ebqBcPYLqjql5AaIqa2aEwRDxly
+         rCIFfdsRrZtI80HrjIfaxg+kv+9g5CNd85HNocXkNODhjwPQQX6AoVNW92xwMHn9ICn5
+         2LPsuDlBJ2dQXuga3zKT2uOxAdfAJz7/6h6NQqXOnIXZfVL4ZdaYOnT3InSBTTjIFF+Q
+         +DdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702543784; x=1703148584;
+        d=1e100.net; s=20230601; t=1702543789; x=1703148589;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vJ3XYd4VAh0rMwZdPZnf0/R4/jXxDQ1RiH7pfcHiYc8=;
-        b=hAQmWe9b9nBTyJiXEveGHT2BkFLxbuyJIA6aWN88eipirgHmlHfvp43yh3bT93CWdH
-         WUxIRFnZYACNv8Ar6ioUceUvW1Ey1rCyfPvfIhMAd72nthAUDBNXfaF16JgUQsYo5HwD
-         dGakIQJHOKnkykyKaoqLasGyYN/hPiurcneYUwYFIeAPIuUL4f//w4Za8HrkIOGnwRiE
-         afj306Jl3Wb/YU5LTxMIhbtFw7iMX4lpS0JKmrQR+q2C+NDqv3Mn8YF+SZAn7uD1QiIK
-         8GeztaJLld5bF4kFQ9Iajzap/DbOcjoNXPY9dJkyinI0fK90i7RKkowBso+wJICxn4xs
-         3p+w==
-X-Gm-Message-State: AOJu0Yy4gjptZwQ4sKex+eQfm4GNma55QTgCPm9ZrmYJE3DVmuG0WzU0
-	JyokpLVTJ38oihTFe0GRPCq3eLhmda5rVQ==
-X-Google-Smtp-Source: AGHT+IFVOYWdsgVT9nhqnqJRy5ZyN3SJnHb/wvN1UGFrpdBCV2Uk0Ui6lM09NFUHkZEBROCN/4reVrGN3Guhgw==
+        bh=NkRyaEIclzm+ShIMyVUbqREgKKajNjynsQ0mobEpXzk=;
+        b=ebcVRFczcxLoxJUTX0STGqfZDTWAkuGKpuQi9t7DLCVSgkCVbbxWDgxIyrSon1wJeu
+         gIg/YbEoK226Te2kcs0HRYaoiprkuH1c6Xv0+ySa828Q79WDhCjzHWtqqPmi3fNLA0yZ
+         6IcnbCbsnhcqVX6QiqTl+Y9mR4VyUEd3+VE9vI82csr4FYcZaED8XCxgOeuSeah4JcJR
+         A8ELqKYW/LiKh/vXTG2IT6HfYS0C09JOkrrY0AT695qHN269Kv9e7wolxc7ZME7zN+kJ
+         eZWpbKrNGCUZYgY8TbDdzT6avFoJmJj3Rx7TsY8IKx7tcAndCy24YPOcjv2fbJ8yXKqH
+         G1RA==
+X-Gm-Message-State: AOJu0Yzf9/yU8uEgYYTQeDkcStxPn1F3487Q0pQSOilT4LCZjkMbNDix
+	0uuD/1GhNiUZrRKpbzPngpsTWqN9GVwx2g==
+X-Google-Smtp-Source: AGHT+IGDg0Fyhjpq76SSgGU1J4glcAEVxaBtoVs6Vf2R1J8FGM0E4F/WJ9Arlixnod9ZTdm1m5VCvxm1fX2tEQ==
 X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
- (user=davidgow job=sendgmr) by 2002:a25:ca92:0:b0:dbc:cb73:15c8 with SMTP id
- a140-20020a25ca92000000b00dbccb7315c8mr38319ybg.5.1702543784333; Thu, 14 Dec
- 2023 00:49:44 -0800 (PST)
-Date: Thu, 14 Dec 2023 16:49:16 +0800
+ (user=davidgow job=sendgmr) by 2002:a25:6b0b:0:b0:dbc:d896:9795 with SMTP id
+ g11-20020a256b0b000000b00dbcd8969795mr39417ybc.12.1702543788881; Thu, 14 Dec
+ 2023 00:49:48 -0800 (PST)
+Date: Thu, 14 Dec 2023 16:49:17 +0800
 In-Reply-To: <20231214-kunit_bus-v3-0-7e9a287d3048@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -59,8 +59,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20231214-kunit_bus-v3-0-7e9a287d3048@google.com>
 X-Mailer: b4 0.13-dev-099c9
-Message-ID: <20231214-kunit_bus-v3-2-7e9a287d3048@google.com>
-Subject: [PATCH v3 2/5] fortify: test: Use kunit_device
+Message-ID: <20231214-kunit_bus-v3-3-7e9a287d3048@google.com>
+Subject: [PATCH v3 3/5] overflow: Replace fake root_device with kunit_device
 From: davidgow@google.com
 To: Rae Moar <rmoar@google.com>, Brendan Higgins <brendan.higgins@linux.dev>, 
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Matti Vaittinen <mazziesaccount@gmail.com>, 
@@ -79,42 +79,41 @@ of a hack. The new struct kunit_device is meant for this purpose, so use
 it instead.
 
 Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
-Acked-by: Kees Cook <keescook@chromium.org>
 Signed-off-by: David Gow <davidgow@google.com>
 ---
- lib/fortify_kunit.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ lib/overflow_kunit.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/lib/fortify_kunit.c b/lib/fortify_kunit.c
-index c8c33cbaae9e..2e4fedc81621 100644
---- a/lib/fortify_kunit.c
-+++ b/lib/fortify_kunit.c
-@@ -15,6 +15,7 @@
+diff --git a/lib/overflow_kunit.c b/lib/overflow_kunit.c
+index 34db0b3aa502..c527f6b75789 100644
+--- a/lib/overflow_kunit.c
++++ b/lib/overflow_kunit.c
+@@ -6,6 +6,7 @@
   */
  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
  
 +#include <kunit/device.h>
  #include <kunit/test.h>
  #include <linux/device.h>
- #include <linux/slab.h>
-@@ -269,7 +270,7 @@ DEFINE_ALLOC_SIZE_TEST_PAIR(kvmalloc)
- 	size_t len;							\
- 									\
- 	/* Create dummy device for devm_kmalloc()-family tests. */	\
--	dev = root_device_register(dev_name);				\
-+	dev = kunit_device_register(test, dev_name);			\
- 	KUNIT_ASSERT_FALSE_MSG(test, IS_ERR(dev),			\
- 			       "Cannot register test device\n");	\
- 									\
-@@ -303,7 +304,7 @@ DEFINE_ALLOC_SIZE_TEST_PAIR(kvmalloc)
- 	checker(len, devm_kmemdup(dev, "Ohai", len, gfp),		\
- 		devm_kfree(dev, p));					\
- 									\
--	device_unregister(dev);						\
-+	kunit_device_unregister(test, dev);				\
+ #include <linux/kernel.h>
+@@ -618,7 +619,7 @@ static void overflow_allocation_test(struct kunit *test)
  } while (0)
- DEFINE_ALLOC_SIZE_TEST_PAIR(devm_kmalloc)
  
+ 	/* Create dummy device for devm_kmalloc()-family tests. */
+-	dev = root_device_register(device_name);
++	dev = kunit_device_register(test, device_name);
+ 	KUNIT_ASSERT_FALSE_MSG(test, IS_ERR(dev),
+ 			       "Cannot register test device\n");
+ 
+@@ -634,8 +635,6 @@ static void overflow_allocation_test(struct kunit *test)
+ 	check_allocation_overflow(devm_kmalloc);
+ 	check_allocation_overflow(devm_kzalloc);
+ 
+-	device_unregister(dev);
+-
+ 	kunit_info(test, "%d allocation overflow tests finished\n", count);
+ #undef check_allocation_overflow
+ }
 
 -- 
 2.43.0.472.g3155946c3a-goog
