@@ -1,39 +1,39 @@
-Return-Path: <linux-kselftest+bounces-1915-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1916-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D42C78131DD
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Dec 2023 14:42:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6572F8131F2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Dec 2023 14:45:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0F1FE1C21A86
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Dec 2023 13:42:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F19F31F22241
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Dec 2023 13:45:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2205856B6B;
-	Thu, 14 Dec 2023 13:42:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AEFF56B70;
+	Thu, 14 Dec 2023 13:45:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="SHUVZn5o"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="AhkJIMAv"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD201123;
-	Thu, 14 Dec 2023 05:42:22 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7643C8E;
+	Thu, 14 Dec 2023 05:45:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
 	In-Reply-To:Date:To:From:Subject:Message-ID:Sender:Reply-To:Cc:
 	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=wTvzaljoFbukn+/Jl9WfEDfWhcuj2PP2XSC/PtwrWC4=; b=SHUVZn5oNgB6eMQwLc321zRpXS
-	GVwx66J9cOgANy7sjSD4rVAGK9jjLuNMXAET9iLTDU+8Vo5D0C2ASZtHHWmLNNjevqpqd/WIefPkR
-	aXe/7Kg2Gu9zCPSHmSsRe7hQkAXR13RoYJzFU2EQXqXoNMJsA9YflIKLBechHo8MjyLWM2Ioo/5wM
-	a8VoN5UQo6Rcf946WccGRBo0SY5po2/F7De4veA0uEvIGXhlS8McJTlp7DbCqJRC4mvxYc3e9zse1
-	La6PDOEVtFPDHMJeklIwLzp/s8beiOEAq3rLOOOpHljvCT3L4Wjg0XieUD8rnTKteFVw0wBhPkxV4
-	9Xy/nN0Q==;
+	bh=e+KXyoKZMNHELo+VkGs7qzP4MkA5QoK6nrJuGUMLUPk=; b=AhkJIMAvWl9ersAe2gbuB1CDU6
+	nAWeCfnHy8eVrjP45zjhjjBLHbkFPTme5Kne9cqtXnHPNioubqMg072IwUVAaYsFaHqJ0bxBkD5uC
+	gXhB4qMyJDYxbZhwLGtTtH1Hkc3xIfejtB9GvGffayB+RvloZxW+KDDgjGb6PQumpF5zbBY5Nbdpx
+	vbCYkP7Dh4yOl22vfLPOQHrbfCic0sK+GHZ8yJdrOHT9Z80Pg0wmB9Hr3VURscxipNAmSzPtNoOOX
+	nEyskJqomkgGhtknLFhz0pASdCY0DHb0VVDSGpYLhAMWFxiTpRMmt1YADNtK73q8n/LltSH1pnTbC
+	dBnISSaQ==;
 Received: from [2001:8b0:10b:5:d232:2f0e:461d:68c2] (helo=u3832b3a9db3152.ant.amazon.com)
 	by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1rDlyG-007PNQ-PL; Thu, 14 Dec 2023 13:41:50 +0000
-Message-ID: <1556d890fac61e36b9546c5f520faa15e449bd55.camel@infradead.org>
-Subject: Re: [PATCH v10 09/19] KVM: xen: separate initialization of
- shared_info cache and content
+	id 1rDm13-007QRh-CZ; Thu, 14 Dec 2023 13:44:42 +0000
+Message-ID: <78bf00d0a25042bd21d1e3d2916ae007c25e9c10.camel@infradead.org>
+Subject: Re: [PATCH v10 10/19] KVM: xen: (re-)initialize shared_info if
+ guest (32/64-bit) mode is set
 From: David Woodhouse <dwmw2@infradead.org>
 To: Paul Durrant <paul@xen.org>, Paolo Bonzini <pbonzini@redhat.com>, 
  Jonathan Corbet <corbet@lwn.net>, Sean Christopherson <seanjc@google.com>,
@@ -42,12 +42,12 @@ To: Paul Durrant <paul@xen.org>, Paolo Bonzini <pbonzini@redhat.com>,
  x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan
  <shuah@kernel.org>, kvm@vger.kernel.org,  linux-doc@vger.kernel.org,
  linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org
-Date: Thu, 14 Dec 2023 13:41:49 +0000
-In-Reply-To: <20231204144334.910-10-paul@xen.org>
+Date: Thu, 14 Dec 2023 13:44:40 +0000
+In-Reply-To: <20231204144334.910-11-paul@xen.org>
 References: <20231204144334.910-1-paul@xen.org>
-	 <20231204144334.910-10-paul@xen.org>
+	 <20231204144334.910-11-paul@xen.org>
 Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-	boundary="=-ifCs8APwY6h0walxAdOj"
+	boundary="=-1u+tNm3Jk7R6xhgZsGro"
 User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -58,34 +58,28 @@ MIME-Version: 1.0
 X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
 
---=-ifCs8APwY6h0walxAdOj
+--=-1u+tNm3Jk7R6xhgZsGro
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: base64
+Content-Transfer-Encoding: quoted-printable
 
-T24gTW9uLCAyMDIzLTEyLTA0IGF0IDE0OjQzICswMDAwLCBQYXVsIER1cnJhbnQgd3JvdGU6Cj4g
-RnJvbTogUGF1bCBEdXJyYW50IDxwZHVycmFudEBhbWF6b24uY29tPgo+IAo+IEEgc3Vic2VxdWVu
-dCBwYXRjaCB3aWxsIGFsbG93IHNoYXJlZF9pbmZvIHRvIGJlIGluaXRpYWxpemVkIHVzaW5nIGVp
-dGhlciBhCj4gR1BBIG9yIGEgdXNlci1zcGFjZSAoaS5lLiBWTU0pIEhWQS4gVG8gbWFrZSB0aGF0
-IHBhdGNoIGNsZWFuZXIsIHNlcGFyYXRlCj4gdGhlIGluaXRpYWxpemF0aW9uIG9mIHRoZSBzaGFy
-ZWRfaW5mbyBjb250ZW50IGZyb20gdGhlIGFjdGl2YXRpb24gb2YgdGhlCj4gcGZuY2FjaGUuCj4g
-Cj4gU2lnbmVkLW9mZi1ieTogUGF1bCBEdXJyYW50IDxwZHVycmFudEBhbWF6b24uY29tPgoKClNw
-b3QgdGhlIGRpZmZlcmVuY2UuLi4KwqAKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-LyoKPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgICogVGhpcyBjb2RlIG1pcnJvcnMg
-a3ZtX3dyaXRlX3dhbGxfY2xvY2soKSBleGNlcHQgdGhhdCBpdCB3cml0ZXMKPiAtwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgICogZGlyZWN0bHkgdGhyb3VnaCB0aGUgcGZuIGNhY2hlIGFu
-ZCBkb2Vzbid0IG1hcmsgdGhlIHBhZ2UgZGlydHkuCj4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoCAqLwo+IC3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqB3YWxsX25zZWMgPSBr
-dm1fZ2V0X3dhbGxfY2xvY2tfZXBvY2goa3ZtKTsKCgo+ICvCoMKgwqDCoMKgwqDCoC8qCj4gK8Kg
-wqDCoMKgwqDCoMKgICogVGhpcyBjb2RlIG1pcnJvcnMga3ZtX3dyaXRlX3dhbGxfY2xvY2soKSBl
-eGNlcHQgdGhhdCBpdCB3cml0ZXMKPiArwqDCoMKgwqDCoMKgwqAgKiBkaXJlY3RseSB0aHJvdWdo
-IHRoZSBwZm4gY2FjaGUgYW5kIGRvZXNuJ3QgbWFyayB0aGUgcGFnZSBkaXJ0eS4KPiArwqDCoMKg
-wqDCoMKgwqAgKi8KPiArwqDCoMKgwqDCoMKgwqB3YWxsX25zZWMgPSBrdGltZV9nZXRfcmVhbF9u
-cygpIC0gZ2V0X2t2bWNsb2NrX25zKGt2bSk7CgooSGludDogaXQncyBjb21taXQgNWQ2ZDZhN2Q3
-ZTY2YSkKCldpdGggdGhhdCBmaXhlZCwKClJldmlld2VkLWJ5OiBEYXZpZCBXb29kaG91c2UgPGR3
-bXdAYW1hem9uLmNvLnVrPgoK
+On Mon, 2023-12-04 at 14:43 +0000, Paul Durrant wrote:
+> From: Paul Durrant <pdurrant@amazon.com>
+>=20
+> If the shared_info PFN cache has already been initialized then the conten=
+t
+> of the shared_info page needs to be (re-)initialized whenever the guest
+> mode is (re)set.
+> Setting the guest mode is either done explicitly by the VMM via the
+> KVM_XEN_ATTR_TYPE_LONG_MODE attribute, or implicitly when the guest write=
+s
+> the MSR to set up the hypercall page.
+>=20
+> Signed-off-by: Paul Durrant <pdurrant@amazon.com>
 
 
---=-ifCs8APwY6h0walxAdOj
+Reviewed-by: David Woodhouse <dwmw@amazon.co.uk>
+
+--=-1u+tNm3Jk7R6xhgZsGro
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Disposition: attachment; filename="smime.p7s"
 Content-Transfer-Encoding: base64
@@ -177,25 +171,25 @@ IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
 dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
 NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
 xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
-DQEHATAcBgkqhkiG9w0BCQUxDxcNMjMxMjE0MTM0MTQ5WjAvBgkqhkiG9w0BCQQxIgQg0/tvZPbX
-3mM0ErVeJKF2auws7w9d2UZmOdz+Q+m3sbAwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMjMxMjE0MTM0NDQwWjAvBgkqhkiG9w0BCQQxIgQgZC4Zczxj
+961jVIq516p5cRIXda4fle+95TtS8TR1PFcwgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
 BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
 A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
 dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
 DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
 MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
 Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
-lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgCAxQWZ9WMsMzjJrcb0qC5dgTT8jtUGyvC/
-uO6cKuVj6jbpMu0KhOpTufNBK/TwmpI36BRYLL3deaqITyrejV5xYIPZbiQqzWPYTF6T8dyR5HC3
-CWOY1qLASDUL0oSq7zKuJ3PMfAkTSqb50lDfGQe5DArfn6qS0g+imH1pzgeYkR/0dhK0P8PvS4Fd
-Ts3TmwHabyFJd4+AW9g0XswgK38TBdMGRi2r90XYwqPQpmMwnjx6rHKXPZYm1kYJN7QTCVYE4w5H
-z1AZm5DlS6F5Es3MUdZ2LQoe7iEJk3eYAjuZAeph5p8Nd3QNHhMKqLgAT3+HO9hr2LnjJcPeHt3W
-AbAiyVywQk/53iANccG3vOJIHFFtCXaqBopKdVEd2HG3nzoCJSQMOK4rHdJsDJYy8fcd9VB4gDd1
-mrfbj5BhyWgg0Q0iWLff0QbLcRmCUH8ixK/oBozLXA30s27Hh/fyReXKbEA/WUZfayUHLW3UJs7c
-YyVeSQk/CHU1lqUXFj3NJ5+pw8RCRTZzCpLUCEGCWjh/VNokgmbpsYx+OWjH0fjBfxAUh6YH/V/e
-7e8PHRfKynlLcbG1A/e3ePcY86EXQ/1xT8W73KlHNszawDfHLVG6LlrRwZh73Elgwo79lawgVW0R
-kkxeslK54oy7rz6DBy2vLdfz1OS7QCp8GawolqZN+AAAAAAAAA==
+lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgB2csao2DDvrguI4riB9ep+OVGZcZExv1lM
+oqqGdEIic9it1vG9fKZSE6xOX2TmH2B8lX4WEaAb9inwYd+TCntn7MQlBYlINeeFG7JiglFuHFp3
+xCPV2/nNuoPzwyb25xYTk8Ygm2y07GVMIs3581Z8btWdLOHVvEGFAWQ/7FRFjMlQ24rQFW6zNquG
+/Rax22qtu6YC+Sh2BT4IRuppdDNQhqaia5gSpY4/R/FOzdAwF2BKcWi7gO/m2/tVMDV+WImpuyLg
+6i3edd9QVKst2gbg8nm2PL4WcyzWNi2yyEP/UnMaLXwhysfYzbxsXPCCpl8j+trlFRrlLGoEbCxo
+kdmpq2A+en/a1pmSDEciyDs7alDGbIJvEDThDppT1jTRn0ikGoMkQaGZBmi9GEnUhmwdVmR7zpTe
+Orhm8ujvAuN46DBE9N6jYxulTxuusZ/OkZ4/5fDBO8fpBtSDkvxgxKgKITqz++8Gf1LQmqGEms+i
+Uh+bAwa4/jGwYoeORB4x+92ilRiSdpmFa6AUEIvPCeRXD/IemPTXJKgCUy+Fb+6G8EoPIQIkYHzK
+jsZBnu9Z+sZjI3kaOBPUD3incIBXffhxnZFcxVN8Yo2FuGaCvAvg8muX6y+RJIHtJ18L2GBHH+5o
+Cw6HklnIzetnW0ZhFNGJ+jqRJNTdC/m3SBK833GNZgAAAAAAAA==
 
 
---=-ifCs8APwY6h0walxAdOj--
+--=-1u+tNm3Jk7R6xhgZsGro--
 
