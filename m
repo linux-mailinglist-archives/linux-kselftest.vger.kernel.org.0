@@ -1,113 +1,171 @@
-Return-Path: <linux-kselftest+bounces-1966-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1967-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF3BD813C10
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Dec 2023 21:54:20 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA909813D7E
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Dec 2023 23:49:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9D3D4281E08
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Dec 2023 20:54:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C69321C21B9F
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Dec 2023 22:49:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 671156DCE5;
-	Thu, 14 Dec 2023 20:54:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A24C6E2CB;
+	Thu, 14 Dec 2023 22:49:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A0ZL9rv/"
+	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="V1GB+wpO";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="sT5D85BD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42CDB1110;
-	Thu, 14 Dec 2023 20:53:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-3360ae1b937so4539170f8f.0;
-        Thu, 14 Dec 2023 12:53:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702587220; x=1703192020; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EGYPk6/2LK4WB05DzAsE7gyIm4PhBFTb2r9q70jSsZY=;
-        b=A0ZL9rv/TCR847tKdOwWmNhARHOfMMpq6rGJzc6Ztg6Rbz35D4sWCVgBdJZpELCNS0
-         ObsEoLYfuR4D/VreB3pQzAdWGJMzilMYobk5dUmfSGZy43hIPCjhy6eb472CHUqwXt+o
-         BvmfxfUUq7Hy2Sw05fYnF+ZD/7p7D9M+Z1BYupOEAtcOiKS5OivyJPTpkrcnOELQCoZJ
-         +XZPrOq04IlWOskedEzJ+BP+zXd5WfM7yOgYNEhEIRZNvtItWo/SpYMy90o9fJ0a0rHY
-         VPs8hPY1MVm2u1Np3wLYL5ZbAhlumXm8fvXpxChL2iI17iHcsfg5f4L8+uCnC8H+f+9M
-         lEqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702587220; x=1703192020;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EGYPk6/2LK4WB05DzAsE7gyIm4PhBFTb2r9q70jSsZY=;
-        b=uj1rcEeJtCrFyRPgBjg6+wH2r1fOrR0UFkMhqXCSC5vzy2IvlTQfF5AOkl9D111gWz
-         zgaduFGjIvQnM1seP6pNkw7c92fop/ULnHXM//vDDog8UYnTvLRVvD1eC0Nz05sucPFz
-         3M4XQp2C0AEFajMQHjuElWKWF7yZbnJpOK/iS+YQpKODWOkesZ0CKSKQtP5v195UE8CU
-         DnWIAP/J5pon3GI1UmyMpEwoGVVuFtPBeexWTqp4HX5Hy8wQdWR/VEY606trVaBBLgin
-         wEHfIDXUzPYsQtQODPZ69V6Z6fB9I+K5gt87JeIorCW5d70mgVSjhP8+395wqxEYbnJG
-         3wcQ==
-X-Gm-Message-State: AOJu0YwJ4hZH9Csspx3FlckuvZ/SLNI4W0zjYWzcdNx9JFSRcX2odYVF
-	PiFSVtLcNxVB5rXbJXKmxqEcskCCIyS1Puqlyrv1SRU5
-X-Google-Smtp-Source: AGHT+IEn60KUK3G6CTwadCd0k9MiIqAGQ3rzBMDGyIiYKbZcEWgSu3gx0rWCz07xT2LLzY3YFYQ/rng7NW2Pl4nIbV8=
-X-Received: by 2002:a5d:54cd:0:b0:336:495c:8b39 with SMTP id
- x13-20020a5d54cd000000b00336495c8b39mr817426wrv.137.1702587220078; Thu, 14
- Dec 2023 12:53:40 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A19D6D1DD;
+	Thu, 14 Dec 2023 22:49:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+	by mailout.west.internal (Postfix) with ESMTP id 761BC3200B5A;
+	Thu, 14 Dec 2023 17:49:17 -0500 (EST)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute3.internal (MEProxy); Thu, 14 Dec 2023 17:49:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
+	:cc:content-transfer-encoding:content-type:date:date:from:from
+	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
+	:to; s=fm3; t=1702594156; x=1702680556; bh=ZFh7mAohRzEfC8EAB2/qm
+	p1+GaJriUVMYQQUQ3IIsw8=; b=V1GB+wpOoDak5vL+2MbB2FmZc2tbIaaW7zhcy
+	3D2sgArYuLnDisYAvIKjdqO8M5yit/3qQVC5y7itqyibMcEChryljNurDW7mczhq
+	9dKX3MyQOwh3jggs6Q2mw2ugVyHw3a0tGuN31vvH0oRFkVmZpkBoFbemiRpXUosF
+	XNVwt2OQaHHHN3NNR+VwWGnCbrBWvXv22Yyz6nH8rxa1UOCT0nrt107wOQCPOQHl
+	oovqK/b97wdrHa884Dsvs/G6nSNClRonWz3HCAdRhTOa7ZvB63m87KkLN9XTzUDy
+	NPDyml4KsWv4x1nH9O1QfmDxYBsC/bKVXEMEiZkaFzHozEYuQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm1; t=1702594156; x=1702680556; bh=ZFh7mAohRzEfC8EAB2/qmp1+GaJr
+	iUVMYQQUQ3IIsw8=; b=sT5D85BD/BhB2O7l+q58viyr2LKs/tpShV89mY3IDL+H
+	ky3ebZThMzW9NXAbxT4fCHAynMZkPGceemU6fgOd0s5A7rcTM2FSlrhrUZmYnbN3
+	JfgO7d/PRdw98mARIb/6Nc+GK1I2ObS8ihfSVaCIU1GEJvXWkZSAoJnvZrYigclW
+	QoJJCaBTGhDHueU0Qq1nwAnVgv95+tfKm5bMvy50yXP9cpx6u26DO6PUa+KEoJ1V
+	eVkAf0kD2RwzWimOibwovMXRlsb1ltiJA6r8iJgMO6GKkm2Pt9Y4oeTNdXsjDxEA
+	6/BD/Zu8JICuxGVVRrVXWD76vK2i5YQUREo0p7/C0w==
+X-ME-Sender: <xms:bIZ7ZVq4220B-391OcaC7cml5qO-TcAFnrftrGbmvgavPloHgy6_ew>
+    <xme:bIZ7ZXp2HHV96fk0cJSWrL9tIKIIxw3svPDJleJvNigIJXx_JWrAr0y64Wf_iEODx
+    hIdLti2r_xAC_pMww>
+X-ME-Received: <xmr:bIZ7ZSNmaGuoT9WCu3RB2lXr5G3hCjPr1CwjC117u-6IIr5-Uf9nzaXIwYiUs3CmogxLD_4FGjB7VznDCO3XioWAMLWN0sEHo4znnFCHxMgdcw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvddttddgtddvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucgfrhhlucfvnfffucdlvdefmdenucfjughrpefhvf
+    evufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeffrghnihgvlhcuighuuceougig
+    uhesugiguhhuuhdrgiihiieqnecuggftrfgrthhtvghrnhepieekhedugeetvedutdfhie
+    elhfejgfeuueeuffevveehgefgueefjeefuedukeefnecuffhomhgrihhnpehivghtfhdr
+    ohhrghdpghhithhhuhgsrdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomhepugiguhesugiguhhuuhdrgiihii
+X-ME-Proxy: <xmx:bIZ7ZQ5bXk4GWLzXp0FsE-3g75SystpD6tXrSWTi623H7KHgcCUFkA>
+    <xmx:bIZ7ZU4dJ3XftXR2w8NCeSfWzdYtOdYiy4PCPpNjaxBVmlrzgl-GXQ>
+    <xmx:bIZ7ZYgqyi7c-pwa1D8Kg2AHPW6Gf9wPmCkT3SM8z8wFESWQU3rMIw>
+    <xmx:bIZ7ZVFbGEIv2sDHf6OfDKprhn5KFRb9zkeMkI5m8c2AvJX_AQeLLA>
+Feedback-ID: i6a694271:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 14 Dec 2023 17:49:15 -0500 (EST)
+From: Daniel Xu <dxu@dxuuu.xyz>
+To: netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	steffen.klassert@secunet.com,
+	antony.antony@secunet.com,
+	alexei.starovoitov@gmail.com,
+	yonghong.song@linux.dev,
+	eddyz87@gmail.com,
+	eyal.birger@gmail.com
+Cc: devel@linux-ipsec.org
+Subject: [PATCH bpf-next v6 0/5] Add bpf_xdp_get_xfrm_state() kfunc
+Date: Thu, 14 Dec 2023 15:49:01 -0700
+Message-ID: <cover.1702593901.git.dxu@dxuuu.xyz>
+X-Mailer: git-send-email 2.42.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <qiv464c4y43mo5rih5k6lgzkbpnj6wsrl52hrhgbxeqj45atun@szmqlmnccm52>
- <CAHsH6Gujycb9RBuRk7QHorLe0Q=Np_tb3uboQfp9KmJnegVXvw@mail.gmail.com>
- <fwadmdjjogp4ybfxfpwovnmnn36jigffopijsuqt4ly4vxqghm@ysqhd25mzylp>
- <fecc7tpmbnqxuxqqolm44ggyeomcr3piabsjkv3pgyzlhyonq6@iiaxf34erjzq>
- <CAP01T770poh_63vBC+Heb9ASJ9pDZd1wTDWAgm5KCYHK9GtE1g@mail.gmail.com>
- <yshbkwaiong7qq2rsgkpvvyvzefnwud5uywbea6ocfxxenzv6s@dn45gdaygaso>
- <CAHsH6Gu_c29Nc+cH-s3EeztwScL=A42wi_SuJD=WeYV0mtVxbA@mail.gmail.com>
- <CAP01T76ZtehyRidmnV5A0p3LCyjw6Q4sjRH6ZhczgGn1ap-x_g@mail.gmail.com>
- <CAP01T74dKxYKM1GfTUJZ+G4+CKbRU=JLGoNcG6b8PMYcqUyEzQ@mail.gmail.com>
- <idbmj3y65mi7isezhlq4lip54bbngoouv5hbai2xd7bqtv7dxy@qjcmln2ovmz2> <i6kxylvo5hcttmjmhpjrmwdaxe4bi6cggk32js72ivr7qelknc@qnjkmr3df3b5>
-In-Reply-To: <i6kxylvo5hcttmjmhpjrmwdaxe4bi6cggk32js72ivr7qelknc@qnjkmr3df3b5>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 14 Dec 2023 12:53:28 -0800
-Message-ID: <CAADnVQL_=Hot71RV9dQ7FN6bm8TY3aMiouhAnQHUg3tmKtWStQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 9/9] bpf: xfrm: Add selftest for bpf_xdp_get_xfrm_state()
-To: Daniel Xu <dxu@dxuuu.xyz>
-Cc: Kumar Kartikeya Dwivedi <memxor@gmail.com>, Eyal Birger <eyal.birger@gmail.com>, 
-	Daniel Borkmann <daniel@iogearbox.net>, "David S. Miller" <davem@davemloft.net>, 
-	Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>, 
-	John Fastabend <john.fastabend@gmail.com>, Jakub Kicinski <kuba@kernel.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Jesper Dangaard Brouer <hawk@kernel.org>, 
-	Steffen Klassert <steffen.klassert@secunet.com>, antony.antony@secunet.com, 
-	Yonghong Song <yonghong.song@linux.dev>, Eddy Z <eddyz87@gmail.com>, 
-	Mykola Lysenko <mykolal@fb.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Network Development <netdev@vger.kernel.org>, devel@linux-ipsec.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Dec 14, 2023 at 12:24=E2=80=AFPM Daniel Xu <dxu@dxuuu.xyz> wrote:
->
->
-> Looks like only x86 supports exceptions (looking at
-> bpf_jit_supports_exceptions()).
->
-> This causes selftests in this patchset to fail on !x86, which is
-> unfortunate. We probably want to be running these tests on all the major
-> archs, so I will drop the assertion patches from this patchset.
->
-> But since they're generally useful and I've already written the
-> selftests for it, I could put them up in another patchset? Or maybe not
-> cuz you're gonna fix it later anyways. WDYT?
+This patchset adds two kfunc helpers, bpf_xdp_get_xfrm_state() and
+bpf_xdp_xfrm_state_release() that wrap xfrm_state_lookup() and
+xfrm_state_put(). The intent is to support software RSS (via XDP) for
+the ongoing/upcoming ipsec pcpu work [0]. Recent experiments performed
+on (hopefully) reproducible AWS testbeds indicate that single tunnel
+pcpu ipsec can reach line rate on 100G ENA nics.
 
-Yeah. don't use bpf_assert in generic tests yet.
-Only tests that test bpf_assert should use it.
+Note this patchset only tests/shows generic xfrm_state access. The
+"secret sauce" (if you can really even call it that) involves accessing
+a soon-to-be-upstreamed pcpu_num field in xfrm_state. Early example is
+available here [1].
 
-Pls send the ones you wrote separately, so they stay in email archives
-and we can pick them up later.
+[0]: https://datatracker.ietf.org/doc/draft-ietf-ipsecme-multi-sa-performance/03/
+[1]: https://github.com/danobi/xdp-tools/blob/e89a1c617aba3b50d990f779357d6ce2863ecb27/xdp-bench/xdp_redirect_cpumap.bpf.c#L385-L406
+
+Changes from v5:
+* Improve kfunc doc comments
+* Remove extraneous replay-window setting on selftest reverse path
+* Squash two kfunc commits into one
+* Rebase to bpf-next to pick up bitfield write patches
+* Remove testing of opts.error in selftest prog
+
+Changes from v4:
+* Fixup commit message for selftest
+* Set opts->error -ENOENT for !x
+* Revert single file xfrm + bpf
+
+Changes from v3:
+* Place all xfrm bpf integrations in xfrm_bpf.c
+* Avoid using nval as a temporary
+* Rebase to bpf-next
+* Remove extraneous __failure_unpriv annotation for verifier tests
+
+Changes from v2:
+* Fix/simplify BPF_CORE_WRITE_BITFIELD() algorithm
+* Added verifier tests for bitfield writes
+* Fix state leakage across test_tunnel subtests
+
+Changes from v1:
+* Move xfrm tunnel tests to test_progs
+* Fix writing to opts->error when opts is invalid
+* Use __bpf_kfunc_start_defs()
+* Remove unused vxlanhdr definition
+* Add and use BPF_CORE_WRITE_BITFIELD() macro
+* Make series bisect clean
+
+Changes from RFCv2:
+* Rebased to ipsec-next
+* Fix netns leak
+
+Changes from RFCv1:
+* Add Antony's commit tags
+* Add KF_ACQUIRE and KF_RELEASE semantics
+
+Daniel Xu (5):
+  bpf: xfrm: Add bpf_xdp_get_xfrm_state() kfunc
+  bpf: selftests: test_tunnel: Setup fresh topology for each subtest
+  bpf: selftests: test_tunnel: Use vmlinux.h declarations
+  bpf: selftests: Move xfrm tunnel test to test_progs
+  bpf: xfrm: Add selftest for bpf_xdp_get_xfrm_state()
+
+ include/net/xfrm.h                            |   9 +
+ net/xfrm/Makefile                             |   1 +
+ net/xfrm/xfrm_policy.c                        |   2 +
+ net/xfrm/xfrm_state_bpf.c                     | 134 +++++++++++++++
+ .../selftests/bpf/prog_tests/test_tunnel.c    | 162 +++++++++++++++++-
+ .../selftests/bpf/progs/bpf_tracing_net.h     |   1 +
+ .../selftests/bpf/progs/test_tunnel_kern.c    | 138 ++++++++-------
+ tools/testing/selftests/bpf/test_tunnel.sh    |  92 ----------
+ 8 files changed, 384 insertions(+), 155 deletions(-)
+ create mode 100644 net/xfrm/xfrm_state_bpf.c
+
+-- 
+2.42.1
+
 
