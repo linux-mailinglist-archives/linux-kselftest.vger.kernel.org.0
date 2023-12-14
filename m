@@ -1,173 +1,169 @@
-Return-Path: <linux-kselftest+bounces-1918-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1919-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC82E81320F
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Dec 2023 14:47:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7D0B813236
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Dec 2023 14:53:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7530F1F221E8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Dec 2023 13:47:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D34E281A1B
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Dec 2023 13:53:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7714056B82;
-	Thu, 14 Dec 2023 13:47:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFEE357868;
+	Thu, 14 Dec 2023 13:52:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="I6KEN0tN"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTP id E9EA3123;
-	Thu, 14 Dec 2023 05:47:46 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E632CC15;
-	Thu, 14 Dec 2023 05:48:31 -0800 (PST)
-Received: from e124191.cambridge.arm.com (e124191.cambridge.arm.com [10.1.197.45])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4CEFE3F5A1;
-	Thu, 14 Dec 2023 05:47:44 -0800 (PST)
-Date: Thu, 14 Dec 2023 13:47:39 +0000
-From: Joey Gouly <joey.gouly@arm.com>
-To: Catalin Marinas <catalin.marinas@arm.com>
-Cc: linux-arm-kernel@lists.infradead.org, akpm@linux-foundation.org,
-	aneesh.kumar@linux.ibm.com, broonie@kernel.org,
-	dave.hansen@linux.intel.com, maz@kernel.org, oliver.upton@linux.dev,
-	shuah@kernel.org, will@kernel.org, kvmarm@lists.linux.dev,
-	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>
-Subject: Re: [PATCH v3 14/25] arm64: implement PKEYS support
-Message-ID: <20231214134739.GB1234025@e124191.cambridge.arm.com>
-References: <20231124163510.1835740-1-joey.gouly@arm.com>
- <20231124163510.1835740-15-joey.gouly@arm.com>
- <ZXdZwRcc0BaEq-Uv@arm.com>
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 251C7114
+	for <linux-kselftest@vger.kernel.org>; Thu, 14 Dec 2023 05:52:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1702561976;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=47QTLpQUD6l8Dml/WreIBJeaYCFjo5y0akXYerqAVwk=;
+	b=I6KEN0tNiXe7PwSN+30VTWoUTyYPcXyYKkZtHGke+skoP644j78FrQU/dbHJ1pkdDNllRZ
+	94KjUuZVI/aF6wVf6wG8NKI0P9xlSjMkxBfOG/ro1/WXnT6zLb6JU5M1W6kryvH8rzMWgw
+	+4E6Ff4G3ZH/hF1bv9kqwAjmvQ7Uc5Q=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-302-5FUkXPkhP7KXNtVR5tXUuw-1; Thu, 14 Dec 2023 08:52:54 -0500
+X-MC-Unique: 5FUkXPkhP7KXNtVR5tXUuw-1
+Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-4259aafd543so92421481cf.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Dec 2023 05:52:54 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702561974; x=1703166774;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=47QTLpQUD6l8Dml/WreIBJeaYCFjo5y0akXYerqAVwk=;
+        b=DrhiRknq2rsogjtz6+wkXu1/WNebvZu/4zibdwAOKNF46UR9hdXNJPcnwye0LBZNRH
+         eqvsktblmEUqu7AhIvEDpoyf+i222zFo5AM9fHYDF/wLopehLJMsXIstywD63YPe/6sf
+         QLJysWfE59whdPjBGdrgUrZB1/PM4GCljxmDKztPY9kED9Fqv+6U3Xp3IVso/KGthh6G
+         PnfwCmnNCmtrB5e8m4t+jAK77Y4D3jLAzgvEMQABtgD0WHeO4xsisEk5iQpmr+iwoR9U
+         be/qRXhqDH3ebOLyUOuRRzdsGvYlfr3IL7ecZtdVov9gzzDxR8pJTK3u0ADQ/NHdq9nU
+         gchg==
+X-Gm-Message-State: AOJu0Yx4vmGnvG8Pt3BwnEONfUr1nj/kaZWWe6c27ru6vq6r4OJCUeMS
+	1pZBNh908IGg2KLTmHfcUxn4F6onnjHF6zygl5jZFnaays/Jh2hmjgZBllNddz34Rh8pgrMaVkq
+	xwTAduv0P/RggQvpspmxtbS2YBy2P
+X-Received: by 2002:a05:622a:1352:b0:425:85b7:a784 with SMTP id w18-20020a05622a135200b0042585b7a784mr14471919qtk.53.1702561974437;
+        Thu, 14 Dec 2023 05:52:54 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHpWkcb1WNBFDGT8fdgkiTcGoAQitzYeJZ2HpypjaPY5jt72qe2FYW2BYR+o3li4uteK49vkQ==
+X-Received: by 2002:a05:622a:1352:b0:425:85b7:a784 with SMTP id w18-20020a05622a135200b0042585b7a784mr14471902qtk.53.1702561974139;
+        Thu, 14 Dec 2023 05:52:54 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:59e:9d80:527b:9dff:feef:3874? ([2a01:e0a:59e:9d80:527b:9dff:feef:3874])
+        by smtp.gmail.com with ESMTPSA id ca25-20020a05622a1f1900b004259ba7bc08sm5760603qtb.42.2023.12.14.05.52.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Dec 2023 05:52:53 -0800 (PST)
+Message-ID: <7b1c4163-31e8-490e-9f19-3abceeeb2d7d@redhat.com>
+Date: Thu, 14 Dec 2023 14:52:49 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZXdZwRcc0BaEq-Uv@arm.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 5/5] KVM: selftests: aarch64: Add invalid filter test
+ in pmu_event_filter_test
+Content-Language: en-US
+To: Shaoqin Huang <shahuang@redhat.com>, Marc Zyngier <maz@kernel.org>,
+ Oliver Upton <oliver.upton@linux.dev>, kvmarm@lists.linux.dev
+Cc: James Morse <james.morse@arm.com>,
+ Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu
+ <yuzenghui@huawei.com>, Paolo Bonzini <pbonzini@redhat.com>,
+ Shuah Khan <shuah@kernel.org>, linux-arm-kernel@lists.infradead.org,
+ kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20231129072712.2667337-1-shahuang@redhat.com>
+ <20231129072712.2667337-6-shahuang@redhat.com>
+From: Eric Auger <eauger@redhat.com>
+In-Reply-To: <20231129072712.2667337-6-shahuang@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Dec 11, 2023 at 06:49:37PM +0000, Catalin Marinas wrote:
-> On Fri, Nov 24, 2023 at 04:34:59PM +0000, Joey Gouly wrote:
-> > @@ -211,11 +212,24 @@ init_new_context(struct task_struct *tsk, struct mm_struct *mm)
-> >  {
-> >  	atomic64_set(&mm->context.id, 0);
-> >  	refcount_set(&mm->context.pinned, 0);
-> > +
-> > +	// pkey 0 is the default, so always reserve it.
-> > +	mm->context.pkey_allocation_map = 0x1;
-> 
-> Nit: use /* */ style comments.
-> 
-> > @@ -151,7 +170,9 @@ static inline pteval_t __phys_to_pte_val(phys_addr_t phys)
-> >   * PTE_VALID bit set.
-> >   */
-> >  #define pte_access_permitted(pte, write) \
-> > -	(((pte_val(pte) & (PTE_VALID | PTE_USER)) == (PTE_VALID | PTE_USER)) && (!(write) || pte_write(pte)))
-> > +	(((pte_val(pte) & (PTE_VALID | PTE_USER)) == (PTE_VALID | PTE_USER)) && \
-> > +	 (!(write) || pte_write(pte)) && \
-> > +	 por_el0_allows_pkey(FIELD_GET(PTE_PO_IDX_MASK, pte_val(pte)), write, false))
-> 
-> Do not change pte_access_permitted(), just let it handle the base
-> permissions. This check is about the mm tables, not some current POR_EL0
-> setting of the thread.
-> 
-> As an example, with this change Linux may decide not to clear the MTE
-> tags just because the current POR_EL0 says no-access. The thread
-> subsequently changes POR_EL0 and it can read the stale tags.
-> 
-> I haven't checked what x86 and powerpc do here. There may be some
-> implications on GUP but I'd rather ignore POE for this case.
+Hi Shaoqin
 
-There are tests in tools/testing/selftests/mm/protection_keys.c
-test_kernel_gup_of_access_disabled_region etc, that explicitly check GUP is
-affected by pkeys. So if we didn't modify pte_access_permitted() it would fail
-the test and work differently than the other architectures.  For
-MTE/__sync_cache_and_tags, I think could add a pte_access_permitted_no_poe().
-
+On 11/29/23 08:27, Shaoqin Huang wrote:
+> Add the invalid filter test to double check if the KVM_ARM_VCPU_PMU_V3_FILTER
+> will return the expected error.
+... in which situations? filter beyond the 16b event space or incorrect
+action.
 > 
-> >  #define pmd_access_permitted(pmd, write) \
-> >  	(pte_access_permitted(pmd_pte(pmd), (write)))
-> >  #define pud_access_permitted(pud, write) \
-> > diff --git a/arch/arm64/include/asm/pkeys.h b/arch/arm64/include/asm/pkeys.h
-> > index 5761fb48fd53..a80c654da93d 100644
-> > --- a/arch/arm64/include/asm/pkeys.h
-> > +++ b/arch/arm64/include/asm/pkeys.h
-> [...]
-> >  static inline int execute_only_pkey(struct mm_struct *mm)
-> >  {
-> > +	// Execute-only mappings are handled by EPAN/FEAT_PAN3.
-> > +	WARN_ON_ONCE(!cpus_have_final_cap(ARM64_HAS_EPAN));
-> > +
-> >  	return -1;
-> >  }
+> Signed-off-by: Shaoqin Huang <shahuang@redhat.com>
+> ---
+>  .../kvm/aarch64/pmu_event_filter_test.c       | 36 +++++++++++++++++++
+>  1 file changed, 36 insertions(+)
 > 
-> Why the WARN_ON_ONCE() here? It will trigger if the user asks for
-> PROT_EXEC and I can't see any subsequent patch that changes the core
-> code not to call it. I think we need some arch_has_execute_only_pkey()
-> to avoid going on this path. Our arch would support exec-only with any
-> pkey.
+> diff --git a/tools/testing/selftests/kvm/aarch64/pmu_event_filter_test.c b/tools/testing/selftests/kvm/aarch64/pmu_event_filter_test.c
+> index 0e652fbdb37a..4c375417b194 100644
+> --- a/tools/testing/selftests/kvm/aarch64/pmu_event_filter_test.c
+> +++ b/tools/testing/selftests/kvm/aarch64/pmu_event_filter_test.c
+> @@ -7,6 +7,7 @@
+>   * This test checks if the guest only see the limited pmu event that userspace
+>   * sets, if the guest can use those events which user allow, and if the guest
+>   * can't use those events which user deny.
+> + * It also checks that setting invalid filter ranges return the expected error.
+>   * This test runs only when KVM_CAP_ARM_PMU_V3, KVM_ARM_VCPU_PMU_V3_FILTER
+>   * is supported on the host.
+>   */
+> @@ -197,6 +198,39 @@ static void for_each_test(void)
+>  		run_test(t);
+>  }
+>  
+> +static void set_invalid_filter(struct vpmu_vm *vm, void *arg)
+> +{
+> +	struct kvm_pmu_event_filter invalid;
+> +	struct kvm_device_attr attr = {
+> +		.group	= KVM_ARM_VCPU_PMU_V3_CTRL,
+> +		.attr	= KVM_ARM_VCPU_PMU_V3_FILTER,
+> +		.addr	= (uint64_t)&invalid,
+> +	};
+> +	int ret = 0;
+> +
+> +	/* The max event number is (1 << 16), set a range large than it. */
+larger
+> +	invalid = __DEFINE_FILTER(BIT(15), BIT(15)+1, 0);
+doc says
+must fit within the event space defined by the PMU
+architecture (10 bits on ARMv8.0, 16 bits from ARMv8.1 onwards).
 
-This would warn if you somehow had a CPU with FEAT_POE but not FEAT_PAN3. So I
-don't really need the WARN() here, if the CPU supports FEAT_POE it should also
-support FEAT_PAN3. Arm v8.7 made FEAT_PAN3 mandatory. 
+> +	ret = __vcpu_ioctl(vm->vcpu, KVM_SET_DEVICE_ATTR, &attr);
+> +	TEST_ASSERT(ret && errno == EINVAL, "Set Invalid filter range "
+> +		    "ret = %d, errno = %d (expected ret = -1, errno = EINVAL)",
+> +		    ret, errno);
+> +
+> +	ret = 0;
+> +
+> +	/* Set the Invalid action. */
+> +	invalid = __DEFINE_FILTER(0, 1, 3);
+> +	ret = __vcpu_ioctl(vm->vcpu, KVM_SET_DEVICE_ATTR, &attr);
+> +	TEST_ASSERT(ret && errno == EINVAL, "Set Invalid filter action "
+> +		    "ret = %d, errno = %d (expected ret = -1, errno = EINVAL)",
+> +		    ret, errno);
+> +}
+> +
+> +static void test_invalid_filter(void)
+> +{
+> +	vpmu_vm = __create_vpmu_vm(guest_code, set_invalid_filter, NULL);
+> +	destroy_vpmu_vm(vpmu_vm);
+> +}
+> +
+>  static bool kvm_supports_pmu_event_filter(void)
+>  {
+>  	int r;
+> @@ -228,4 +262,6 @@ int main(void)
+>  	TEST_REQUIRE(host_pmu_supports_events());
+>  
+>  	for_each_test();
+> +
+> +	test_invalid_filter();
+>  }
 
-> 
-> > @@ -1490,6 +1491,38 @@ void ptep_modify_prot_commit(struct vm_area_struct *vma, unsigned long addr, pte
-> >  #ifdef CONFIG_ARCH_HAS_PKEYS
-> >  int arch_set_user_pkey_access(struct task_struct *tsk, int pkey, unsigned long init_val)
-> >  {
-> > -	return -ENOSPC;
-> > +	u64 new_por = POE_RXW;
-> > +	u64 old_por;
-> > +	u64 pkey_shift;
-> > +
-> > +	if (!arch_pkeys_enabled())
-> > +		return -ENOSPC;
-> > +
-> > +	/*
-> > +	 * This code should only be called with valid 'pkey'
-> > +	 * values originating from in-kernel users.  Complain
-> > +	 * if a bad value is observed.
-> > +	 */
-> > +	if (WARN_ON_ONCE(pkey >= arch_max_pkey()))
-> > +		return -EINVAL;
-> > +
-> > +	/* Set the bits we need in POR:  */
-> > +	if (init_val & PKEY_DISABLE_ACCESS)
-> > +		new_por = POE_X;
-> 
-> Does PKEY_DISABLE_ACCESS mean allow execute? Or does x86 not have a way
-> to disable execution?
+Eric
 
-As I understand it X86 can either disable Read and Write or disable Write. No
-way to disable execution.
-
-The man page says:
-        PKEY_DISABLE_ACCESS
-              Disable all data access to memory covered by the returned
-              protection key.
-
-> 
-> > +	else if (init_val & PKEY_DISABLE_WRITE)
-> > +		new_por = POE_RX;
-> > +
-> > +	/* Shift the bits in to the correct place in POR for pkey: */
-> > +	pkey_shift = pkey * POR_BITS_PER_PKEY;
-> > +	new_por <<= pkey_shift;
-> > +
-> > +	/* Get old POR and mask off any old bits in place: */
-> > +	old_por = read_sysreg_s(SYS_POR_EL0);
-> > +	old_por &= ~(POE_MASK << pkey_shift);
-> > +
-> > +	/* Write old part along with new part: */
-> > +	write_sysreg_s(old_por | new_por, SYS_POR_EL0);
-> > +
-> > +	return 0;
-> >  }
-> >  #endif
-
-Thanks,
-Joey
 
