@@ -1,430 +1,313 @@
-Return-Path: <linux-kselftest+bounces-1955-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1956-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72E7881384A
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Dec 2023 18:17:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 456E28138DD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Dec 2023 18:41:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7B07C1C20B24
-	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Dec 2023 17:17:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F18C0282AC4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 14 Dec 2023 17:40:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE9E365ECA;
-	Thu, 14 Dec 2023 17:16:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73BA1675D4;
+	Thu, 14 Dec 2023 17:40:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=networkplumber-org.20230601.gappssmtp.com header.i=@networkplumber-org.20230601.gappssmtp.com header.b="HtpH4jdQ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F39ED54;
-	Thu, 14 Dec 2023 09:16:44 -0800 (PST)
-Received: from mail.maildlp.com (unknown [172.18.186.29])
-	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4SrdqY5mYQz9v7c2;
-	Fri, 15 Dec 2023 00:59:21 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id 302D4140803;
-	Fri, 15 Dec 2023 01:16:32 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.204.63.22])
-	by APP2 (Coremail) with SMTP id GxC2BwCnpV8uOHtlU7aDAg--.53464S6;
-	Thu, 14 Dec 2023 18:16:31 +0100 (CET)
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-To: viro@zeniv.linux.org.uk,
-	brauner@kernel.org,
-	chuck.lever@oracle.com,
-	jlayton@kernel.org,
-	neilb@suse.de,
-	kolga@netapp.com,
-	Dai.Ngo@oracle.com,
-	tom@talpey.com,
-	paul@paul-moore.com,
-	jmorris@namei.org,
-	serge@hallyn.com,
-	zohar@linux.ibm.com,
-	dmitry.kasatkin@gmail.com,
-	dhowells@redhat.com,
-	jarkko@kernel.org,
-	stephen.smalley.work@gmail.com,
-	eparis@parisplace.org,
-	casey@schaufler-ca.com,
-	shuah@kernel.org,
-	mic@digikod.net
-Cc: linux-fsdevel@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-nfs@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-integrity@vger.kernel.org,
-	keyrings@vger.kernel.org,
-	selinux@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Roberto Sassu <roberto.sassu@huawei.com>
-Subject: [PATCH v8 24/24] integrity: Remove LSM
-Date: Thu, 14 Dec 2023 18:08:34 +0100
-Message-Id: <20231214170834.3324559-25-roberto.sassu@huaweicloud.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231214170834.3324559-1-roberto.sassu@huaweicloud.com>
-References: <20231214170834.3324559-1-roberto.sassu@huaweicloud.com>
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2AF410E
+	for <linux-kselftest@vger.kernel.org>; Thu, 14 Dec 2023 09:40:45 -0800 (PST)
+Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-6cea0fd9b53so5409806b3a.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Dec 2023 09:40:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=networkplumber-org.20230601.gappssmtp.com; s=20230601; t=1702575645; x=1703180445; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H40nK5IpwIy9PQlp7QwxJH6+lSaRPIO031fd0w6k2mM=;
+        b=HtpH4jdQ2kUP5QG5waUErTB6IWLsGrKrx4CbmWQVa43lgHvZxjD/UVJ/rpr3K2BCOb
+         +3cuMjQzv9Dc/4jMMOZP02NcDKFMu9koKgzs7SzzGlLzt5kFuH/XyUI9nXGN1Zm2HjOq
+         uYdoa6+E89rfKFTbOvyJzOnoPAAoR/3tOtfnyJWl24dw9G69nMUsE1xo+VVSKq8UtfOC
+         JT0WM2F7WewNqAdBcpMExKgn0A4YQmBiSNoc1z7nQsaYdKfNYL39m9Pnvr2xiGZNIUJX
+         ZNcuMdtDOffzl9Ca/ISyL30vRIdBD8YAKiR8PNTS/yXZelJWypowKiwqzKLzOXmDj3JP
+         Iv1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702575645; x=1703180445;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=H40nK5IpwIy9PQlp7QwxJH6+lSaRPIO031fd0w6k2mM=;
+        b=hqow7+Vd39kCI5MRHyTCTYvF/SaklWvPC/ht7mag22eSBrpg89iUTOS4yKdw8NpL9G
+         HiHTJybcREwrbKYzMmFHT09cBsLM3zbzi3OfpN04PKWVrZmeMwjl05RjHVpGXFy92etx
+         sKLKXPsGvO+ZV9Ug67Uox1bWsWkkgYXtm8eJVaoJX0x2O9qwSYfFd8x0Oy458JoembRm
+         Im+SgGup2h+374u1B2Ip7SdWTwODRSu0NoDq33AH2UNragX4QnzvuFzCn7D5RqEaCAQ6
+         zjchSOzX35Lm+ThA5+UG0K7Is2N1ov7ZU9DQC8IG8/L+OYpB+ovNeogv8ZQgotXmRy5S
+         oxpg==
+X-Gm-Message-State: AOJu0YyFP3yB86oh+4p5lqSD+Is0GLkFBiltXITM6T/5Vpn70HLodTkC
+	qdYITeshCYUWCx/aBTqGyqYb8Q==
+X-Google-Smtp-Source: AGHT+IG7BgMGBuhTiCRVz5+mmRVftl5nKnTPsJ0urkZwVBwUIyjnJt5RfXGtkUUTbsy+ZMQJSeGPrg==
+X-Received: by 2002:a05:6a00:1381:b0:6ce:fa6e:5781 with SMTP id t1-20020a056a00138100b006cefa6e5781mr6017348pfg.45.1702575645311;
+        Thu, 14 Dec 2023 09:40:45 -0800 (PST)
+Received: from hermes.local (204-195-123-141.wavecable.com. [204.195.123.141])
+        by smtp.gmail.com with ESMTPSA id x26-20020a62fb1a000000b006ce48a0b7c6sm12066018pfm.109.2023.12.14.09.40.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Dec 2023 09:40:45 -0800 (PST)
+Date: Thu, 14 Dec 2023 09:40:42 -0800
+From: Stephen Hemminger <stephen@networkplumber.org>
+To: Akihiko Odaki <akihiko.odaki@daynix.com>
+Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>, Alexei Starovoitov
+ <alexei.starovoitov@gmail.com>, Jason Wang <jasowang@redhat.com>, Alexei
+ Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Yonghong Song <yonghong.song@linux.dev>, John
+ Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa
+ <jolsa@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Willem de Bruijn
+ <willemdebruijn.kernel@gmail.com>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
+ Abeni <pabeni@redhat.com>, "Michael S. Tsirkin" <mst@redhat.com>, Xuan Zhuo
+ <xuanzhuo@linux.alibaba.com>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan
+ <shuah@kernel.org>, Yuri Benditovich <yuri.benditovich@daynix.com>, Andrew
+ Melnychenko <andrew@daynix.com>, Benjamin Tissoires <bentiss@kernel.org>,
+ bpf <bpf@vger.kernel.org>, "open list:DOCUMENTATION"
+ <linux-doc@vger.kernel.org>, kvm@vger.kernel.org, LKML
+ <linux-kernel@vger.kernel.org>, virtualization@lists.linux-foundation.org,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ Network Development <netdev@vger.kernel.org>
+Subject: Re: Should I add BPF kfuncs for userspace apps? And how?
+Message-ID: <20231214094042.75f704f6@hermes.local>
+In-Reply-To: <0d68722c-9e29-407b-9ef0-331683c995d2@daynix.com>
+References: <2f33be45-fe11-4b69-8e89-4d2824a0bf01@daynix.com>
+	<CAO-hwJJhzHtKrUEw0zrjgub3+eapgJG-zsG0HRB=PaPi6BxG+w@mail.gmail.com>
+	<e256c6df-0a66-4f86-ae96-bff17920c2fb@daynix.com>
+	<CAO-hwJKMrWYRNpuprDj9=k87V0yHtLPEJuQ94bpOF3O81=v0kA@mail.gmail.com>
+	<0d68722c-9e29-407b-9ef0-331683c995d2@daynix.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:GxC2BwCnpV8uOHtlU7aDAg--.53464S6
-X-Coremail-Antispam: 1UD129KBjvJXoW3ZF43uFWxJw1fKr4xGF4kJFb_yoWDCF47pF
-	4UKayUJr4DAFW0kF4vyF15ur4fK34qgFWxW34Ykw1kAFyqvw1qqF4DAryj9F1rGrWFg34I
-	qrsxKr4UuF1Dt3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUBIb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAV
-	Cq3wA2048vs2IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0
-	rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267
-	AKxVWxJr0_GcWl84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxVAF
-	wI0_Cr1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7
-	xfMcIj6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Y
-	z7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2
-	Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s02
-	6x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0x
-	vE2Ix0cI8IcVAFwI0_Xr0_Ar1lIxAIcVC0I7IYx2IY6xkF7I0E14v26F4UJVW0owCI42IY
-	6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aV
-	CY1x0267AKxVWxJr0_GcJvcSsGvfC2KfnxnUUI43ZEXa7IU1FfO7UUUUU==
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAQALBF1jj5enzAACsB
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-From: Roberto Sassu <roberto.sassu@huawei.com>
+On Thu, 14 Dec 2023 14:51:12 +0900
+Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
 
-Since now IMA and EVM use their own integrity metadata, it is safe to
-remove the 'integrity' LSM, with its management of integrity metadata.
+> On 2023/12/13 19:22, Benjamin Tissoires wrote:
+> > On Tue, Dec 12, 2023 at 1:41=E2=80=AFPM Akihiko Odaki <akihiko.odaki@da=
+ynix.com> wrote: =20
+> >>
+> >> On 2023/12/12 19:39, Benjamin Tissoires wrote: =20
+> >>> Hi,
+> >>>
+> >>> On Tue, Dec 12, 2023 at 9:11=E2=80=AFAM Akihiko Odaki <akihiko.odaki@=
+daynix.com> wrote: =20
+> >>>>
+> >>>> Hi, =20
+> >>
+> >> Hi,
+> >>
+> >> Thanks for reply.
+> >> =20
+> >>>>
+> >>>> It is said eBPF is a safe way to extend kernels and that is very
+> >>>> attarctive, but we need to use kfuncs to add new usage of eBPF and
+> >>>> kfuncs are said as unstable as EXPORT_SYMBOL_GPL. So now I'd like to=
+ ask
+> >>>> some questions:
+> >>>>
+> >>>> 1) Which should I choose, BPF kfuncs or ioctl, when adding a new fea=
+ture
+> >>>> for userspace apps?
+> >>>> 2) How should I use BPF kfuncs from userspace apps if I add them?
+> >>>>
+> >>>> Here, a "userspace app" means something not like a system-wide daemon
+> >>>> like systemd (particularly, I have QEMU in mind). I'll describe the
+> >>>> context more below: =20
+> >>>
+> >>> I'm probably not the best person in the world to answer your
+> >>> questions, Alexei and others from the BPF core group are, but given
+> >>> that you pointed at a thread I was involved in, I feel I can give you
+> >>> a few pointers.
+> >>>
+> >>> But first and foremost, I encourage you to schedule an agenda item in
+> >>> the BPF office hour[4]. Being able to talk with the core people
+> >>> directly was tremendously helpful to me to understand their point. =20
+> >>
+> >> I prefer emails because I'm not very fluent when speaking in English a=
+nd
+> >> may have a difficultly to listen to other people, but I may try it in
+> >> future.
+> >> =20
+> >>>
+> >>> =20
+> >>>>
+> >>>> ---
+> >>>>
+> >>>> I'm working on a new feature that aids virtio-net implementations us=
+ing
+> >>>> tuntap virtual network device. You can see [1] for details, but
+> >>>> basically it's to extend BPF_PROG_TYPE_SOCKET_FILTER to report four =
+more
+> >>>> bytes.
+> >>>>
+> >>>> However, with long discussions we have confirmed extending
+> >>>> BPF_PROG_TYPE_SOCKET_FILTER is not going to happen, and adding kfunc=
+s is
+> >>>> the way forward. So I decided how to add kfuncs to the kernel and ho=
+w to
+> >>>> use it. There are rich documentations for the kernel side, but I fou=
+nd
+> >>>> little about the userspace. The best I could find is a systemd change
+> >>>> proposal that is based on WIP kernel changes[2]. =20
+> >>>
+> >>> Yes, as Alexei already replied, BPF is not adding new stable APIs,
+> >>> only kfuncs. The reason being that once it's marked as stable, you
+> >>> can't really remove it, even if you think it's badly designed and
+> >>> useless.
+> >>>
+> >>> Kfuncs, OTOH are "unstable" by default meaning that the constraints
+> >>> around it are more relaxed.
+> >>>
+> >>> However, "unstable" doesn't mean "unusable". It just means that the
+> >>> kernel might or might not have the function when you load your program
+> >>> in userspace. So you have to take that fact into account from day one,
+> >>> both from the kernel side and the userspace side. The kernel docs have
+> >>> a nice paragraph explaining that situation and makes the distinction
+> >>> between relatively unused kfuncs, and well known established ones.
+> >>>
+> >>> Regarding the systemd discussion you are mentioning ([2]), this is
+> >>> something that I have on my plate for a long time. I think I even
+> >>> mentioned it to Alexei at Kernel Recipes this year, and he frowned his
+> >>> eyebrows when I mentioned it. And looking at the systemd code and the
+> >>> benefits over a plain ioctl, it is clearer that in that case, a plain
+> >>> ioctl is better, mostly because we already know the API and the
+> >>> semantic.
+> >>>
+> >>> A kfunc would be interesting in cases where you are not sure about the
+> >>> overall design, and so you can give a shot at various API solutions
+> >>> without having to keep your bad v1 design forever.
+> >>> =20
+> >>>>
+> >>>> So now I'm wondering how I should use BPF kfuncs from userspace apps=
+ if
+> >>>> I add them. In the systemd discussion, it is told that Linus said it=
+'s
+> >>>> fine to use BPF kfuncs in a private infrastructure big companies own=
+, or
+> >>>> in systemd as those users know well about the system[3]. Indeed, tho=
+se
+> >>>> users should be able to make more assumptions on the kernel than
+> >>>> "normal" userspace applications can.
+> >>>>
+> >>>> Returning to my proposal, I'm proposing a new feature to be used by =
+QEMU
+> >>>> or other VMM applications. QEMU is more like a normal userspace
+> >>>> application, and usually does not make much assumptions on the kerne=
+l it
+> >>>> runs on. For example, it's generally safe to run a Debian container
+> >>>> including QEMU installed with apt on Fedora. BPF kfuncs may work eve=
+n in
+> >>>> such a situation thanks to CO-RE, but it sounds like *accidentally*
+> >>>> creating UAPIs.
+> >>>>
+> >>>> Considering all above, how can I integrate BPF kfuncs to the applica=
+tion? =20
+> >>>
+> >>> FWIW, I'm not sure you can rely on BPF calls from a container. There
+> >>> is a high chance the syscall gets disabled by the runtime. =20
+> >>
+> >> Right. Container runtimes will not pass CAP_BPF by default, but that
+> >> restriction can be lifted and I think that's a valid scenario.
+> >> =20
+> >>> =20
+> >>>>
+> >>>> If BPF kfuncs are like EXPORT_SYMBOL_GPL, the natural way to handle =
+them
+> >>>> is to think of BPF programs as some sort of kernel modules and
+> >>>> incorporate logic that behaves like modprobe. More concretely, I can=
+ put
+> >>>> eBPF binaries to a directory like:
+> >>>> /usr/local/share/qemu/ebpf/$KERNEL_RELEASE =20
+> >>>
+> >>> I would advise against that (one program per kernel release). Simply
+> >>> because your kfunc may or may not have been backported to kernel
+> >>> release v6.X.Y+1 while it was not there when v6.X.Y was out. So
+> >>> relying on the kernel number is just going to be a headache.
+> >>>
+> >>> As I understand it, the way forward is to rely on the kernel, libbpf
+> >>> and CO-RE: if the function is not available, the program will simply
+> >>> not load, and you'll know that this version of the code is not
+> >>> available (or has changed API).
+> >>>
+> >>> So what I would do if some kfunc API is becoming deprecated, is
+> >>> embedding both code paths in the same BPF unit, but marking them as
+> >>> not loaded by libppf. Then I can load the compilation unit, try v2 of
+> >>> the API, and if it's not available, try v1, and if not, then mention
+> >>> that I can not rely on BPF. Of course, this can also be done with
+> >>> separate compilation units. =20
+> >>
+> >> Doesn't it mean that the kernel is free to break old versions of QEMU
+> >> including BPF programs? That's something I'd like to avoid. =20
+> >=20
+> > Couple of points here:
+> > - when you say "the kernel", it feels like you are talking about an
+> > external actor tampering with your code. But if you submit a kernel
+> > patch with a specific use case and get yourself involved in the
+> > community, why would anybody change your kfunc API without you knowing
+> > it? =20
+>=20
+> You are right in the practical aspect.  I can pay efforts to keep kfunc=20
+> APIs alive and I'm also sure other developers would also try not to=20
+> break them for good.
+>=20
+> Nevertheless I'm being careful to evaluate APIs from both of the kernel=20
+> and userspace (QEMU) viewpoints. If I fail to keep kfuncs stable because=
+=20
+> I die in an accident, for example, it's a poor excuse for other QEMU=20
+> developers that I intended to keep them stable with my personal effort.
+>=20
+> > - the whole warning about "unstable" policy means that the user space
+> > component should not take for granted the capability. So if the kfunc
+> > changes/disappears for good reasons (because it was marked as well
+> > used and deprecated for quite some time), qemu should not *break*, it
+> > should not provide the functionality, or have a secondary plan.
+> >=20
+> > But even if you are encountering such issues, in case of a change in
+> > the ABI of your kfunc, it should be easy enough to backport the bpf
+> > changes to your old QEMUs and ask users to upgrade the user space if
+> > they upgrade their kernel.
+> >=20
+> > AFAIU, it is as unstable as you want it to be. It's just that we are
+> > not in the "we don't break user space" contract, because we are
+> > talking about adding a kernel functionality from userspace, which
+> > requires knowing the kernel intrinsics. =20
+>=20
+> I must admit I'm still not convinced the proposed BPF program=20
+> functionality needs to know internals of the kernel.
+>=20
+> The eBPF program QEMU carries is just to calculate hashes from packets.=20
+> It doesn't need to know the details of how the kernel handles packets.=20
+> It only needs to have an access to the packet content.
+>=20
+> It is exactly what BPF_PROG_TYPE_SOCKET_FILTER does, but it lacks a=20
+> mechanism to report hash values so I need to extend it or invent a new=20
+> method. Extending BPF_PROG_TYPE_SOCKET_FILTER is not a way forward since=
+=20
+> CO-RE is superior to the context rewrite it relies on. But apparently=20
+> adopting kfuncs and CO-RE also means to lose the "we don't break user=20
+> space" contract although I have no intention to expose kernel internals=20
+> to the eBPF program.
 
-Keep the iint.c file only for loading IMA and EVM keys at boot, and for
-creating the integrity directory in securityfs (we need to keep it for
-retrocompatibility reasons).
+An example is how one part of DPDK recomputes RSS over TAP.
 
-Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
----
- include/linux/fs.h             |   2 -
- include/linux/integrity.h      |  14 ---
- security/integrity/iint.c      | 197 +--------------------------------
- security/integrity/integrity.h |  25 -----
- security/security.c            |   2 -
- 5 files changed, 2 insertions(+), 238 deletions(-)
+https://git.dpdk.org/dpdk/tree/drivers/net/tap/bpf/tap_bpf_program.c
 
-diff --git a/include/linux/fs.h b/include/linux/fs.h
-index 98b7a7a8c42e..745c1faf6c5b 100644
---- a/include/linux/fs.h
-+++ b/include/linux/fs.h
-@@ -2104,7 +2104,6 @@ struct super_operations {
- #define S_NOCMTIME	(1 << 7)  /* Do not update file c/mtime */
- #define S_SWAPFILE	(1 << 8)  /* Do not truncate: swapon got its bmaps */
- #define S_PRIVATE	(1 << 9)  /* Inode is fs-internal */
--#define S_IMA		(1 << 10) /* Inode has an associated IMA struct */
- #define S_AUTOMOUNT	(1 << 11) /* Automount/referral quasi-directory */
- #define S_NOSEC		(1 << 12) /* no suid or xattr security attributes */
- #ifdef CONFIG_FS_DAX
-@@ -2156,7 +2155,6 @@ static inline bool sb_rdonly(const struct super_block *sb) { return sb->s_flags
- #define IS_NOCMTIME(inode)	((inode)->i_flags & S_NOCMTIME)
- #define IS_SWAPFILE(inode)	((inode)->i_flags & S_SWAPFILE)
- #define IS_PRIVATE(inode)	((inode)->i_flags & S_PRIVATE)
--#define IS_IMA(inode)		((inode)->i_flags & S_IMA)
- #define IS_AUTOMOUNT(inode)	((inode)->i_flags & S_AUTOMOUNT)
- #define IS_NOSEC(inode)		((inode)->i_flags & S_NOSEC)
- #define IS_DAX(inode)		((inode)->i_flags & S_DAX)
-diff --git a/include/linux/integrity.h b/include/linux/integrity.h
-index ef0f63ef5ebc..459b79683783 100644
---- a/include/linux/integrity.h
-+++ b/include/linux/integrity.h
-@@ -19,24 +19,10 @@ enum integrity_status {
- 	INTEGRITY_UNKNOWN,
- };
- 
--/* List of EVM protected security xattrs */
- #ifdef CONFIG_INTEGRITY
--extern struct integrity_iint_cache *integrity_inode_get(struct inode *inode);
--extern void integrity_inode_free(struct inode *inode);
- extern void __init integrity_load_keys(void);
- 
- #else
--static inline struct integrity_iint_cache *
--				integrity_inode_get(struct inode *inode)
--{
--	return NULL;
--}
--
--static inline void integrity_inode_free(struct inode *inode)
--{
--	return;
--}
--
- static inline void integrity_load_keys(void)
- {
- }
-diff --git a/security/integrity/iint.c b/security/integrity/iint.c
-index d4419a2a1e24..068ac6c2ae1e 100644
---- a/security/integrity/iint.c
-+++ b/security/integrity/iint.c
-@@ -6,207 +6,14 @@
-  * Mimi Zohar <zohar@us.ibm.com>
-  *
-  * File: integrity_iint.c
-- *	- implements the integrity hooks: integrity_inode_alloc,
-- *	  integrity_inode_free
-- *	- cache integrity information associated with an inode
-- *	  using a rbtree tree.
-+ *	- initialize the integrity directory in securityfs
-+ *	- load IMA and EVM keys
-  */
--#include <linux/slab.h>
--#include <linux/init.h>
--#include <linux/spinlock.h>
--#include <linux/rbtree.h>
--#include <linux/file.h>
--#include <linux/uaccess.h>
- #include <linux/security.h>
--#include <linux/lsm_hooks.h>
- #include "integrity.h"
- 
--static struct rb_root integrity_iint_tree = RB_ROOT;
--static DEFINE_RWLOCK(integrity_iint_lock);
--static struct kmem_cache *iint_cache __ro_after_init;
--
- struct dentry *integrity_dir;
- 
--/*
-- * __integrity_iint_find - return the iint associated with an inode
-- */
--static struct integrity_iint_cache *__integrity_iint_find(struct inode *inode)
--{
--	struct integrity_iint_cache *iint;
--	struct rb_node *n = integrity_iint_tree.rb_node;
--
--	while (n) {
--		iint = rb_entry(n, struct integrity_iint_cache, rb_node);
--
--		if (inode < iint->inode)
--			n = n->rb_left;
--		else if (inode > iint->inode)
--			n = n->rb_right;
--		else
--			return iint;
--	}
--
--	return NULL;
--}
--
--/*
-- * integrity_iint_find - return the iint associated with an inode
-- */
--struct integrity_iint_cache *integrity_iint_find(struct inode *inode)
--{
--	struct integrity_iint_cache *iint;
--
--	if (!IS_IMA(inode))
--		return NULL;
--
--	read_lock(&integrity_iint_lock);
--	iint = __integrity_iint_find(inode);
--	read_unlock(&integrity_iint_lock);
--
--	return iint;
--}
--
--#define IMA_MAX_NESTING (FILESYSTEM_MAX_STACK_DEPTH+1)
--
--/*
-- * It is not clear that IMA should be nested at all, but as long is it measures
-- * files both on overlayfs and on underlying fs, we need to annotate the iint
-- * mutex to avoid lockdep false positives related to IMA + overlayfs.
-- * See ovl_lockdep_annotate_inode_mutex_key() for more details.
-- */
--static inline void iint_lockdep_annotate(struct integrity_iint_cache *iint,
--					 struct inode *inode)
--{
--#ifdef CONFIG_LOCKDEP
--	static struct lock_class_key iint_mutex_key[IMA_MAX_NESTING];
--
--	int depth = inode->i_sb->s_stack_depth;
--
--	if (WARN_ON_ONCE(depth < 0 || depth >= IMA_MAX_NESTING))
--		depth = 0;
--
--	lockdep_set_class(&iint->mutex, &iint_mutex_key[depth]);
--#endif
--}
--
--static void iint_init_always(struct integrity_iint_cache *iint,
--			     struct inode *inode)
--{
--	iint->ima_hash = NULL;
--	iint->version = 0;
--	iint->flags = 0UL;
--	iint->atomic_flags = 0UL;
--	iint->ima_file_status = INTEGRITY_UNKNOWN;
--	iint->ima_mmap_status = INTEGRITY_UNKNOWN;
--	iint->ima_bprm_status = INTEGRITY_UNKNOWN;
--	iint->ima_read_status = INTEGRITY_UNKNOWN;
--	iint->ima_creds_status = INTEGRITY_UNKNOWN;
--	iint->evm_status = INTEGRITY_UNKNOWN;
--	iint->measured_pcrs = 0;
--	mutex_init(&iint->mutex);
--	iint_lockdep_annotate(iint, inode);
--}
--
--static void iint_free(struct integrity_iint_cache *iint)
--{
--	kfree(iint->ima_hash);
--	mutex_destroy(&iint->mutex);
--	kmem_cache_free(iint_cache, iint);
--}
--
--/**
-- * integrity_inode_get - find or allocate an iint associated with an inode
-- * @inode: pointer to the inode
-- * @return: allocated iint
-- *
-- * Caller must lock i_mutex
-- */
--struct integrity_iint_cache *integrity_inode_get(struct inode *inode)
--{
--	struct rb_node **p;
--	struct rb_node *node, *parent = NULL;
--	struct integrity_iint_cache *iint, *test_iint;
--
--	iint = integrity_iint_find(inode);
--	if (iint)
--		return iint;
--
--	iint = kmem_cache_alloc(iint_cache, GFP_NOFS);
--	if (!iint)
--		return NULL;
--
--	iint_init_always(iint, inode);
--
--	write_lock(&integrity_iint_lock);
--
--	p = &integrity_iint_tree.rb_node;
--	while (*p) {
--		parent = *p;
--		test_iint = rb_entry(parent, struct integrity_iint_cache,
--				     rb_node);
--		if (inode < test_iint->inode) {
--			p = &(*p)->rb_left;
--		} else if (inode > test_iint->inode) {
--			p = &(*p)->rb_right;
--		} else {
--			write_unlock(&integrity_iint_lock);
--			kmem_cache_free(iint_cache, iint);
--			return test_iint;
--		}
--	}
--
--	iint->inode = inode;
--	node = &iint->rb_node;
--	inode->i_flags |= S_IMA;
--	rb_link_node(node, parent, p);
--	rb_insert_color(node, &integrity_iint_tree);
--
--	write_unlock(&integrity_iint_lock);
--	return iint;
--}
--
--/**
-- * integrity_inode_free - called on security_inode_free
-- * @inode: pointer to the inode
-- *
-- * Free the integrity information(iint) associated with an inode.
-- */
--void integrity_inode_free(struct inode *inode)
--{
--	struct integrity_iint_cache *iint;
--
--	if (!IS_IMA(inode))
--		return;
--
--	write_lock(&integrity_iint_lock);
--	iint = __integrity_iint_find(inode);
--	rb_erase(&iint->rb_node, &integrity_iint_tree);
--	write_unlock(&integrity_iint_lock);
--
--	iint_free(iint);
--}
--
--static void iint_init_once(void *foo)
--{
--	struct integrity_iint_cache *iint = (struct integrity_iint_cache *) foo;
--
--	memset(iint, 0, sizeof(*iint));
--}
--
--static int __init integrity_iintcache_init(void)
--{
--	iint_cache =
--	    kmem_cache_create("iint_cache", sizeof(struct integrity_iint_cache),
--			      0, SLAB_PANIC, iint_init_once);
--	return 0;
--}
--DEFINE_LSM(integrity) = {
--	.name = "integrity",
--	.init = integrity_iintcache_init,
--	.order = LSM_ORDER_LAST,
--};
--
--
- /*
-  * integrity_kernel_read - read data from the file
-  *
-diff --git a/security/integrity/integrity.h b/security/integrity/integrity.h
-index 671fc50255f9..50d6f798e613 100644
---- a/security/integrity/integrity.h
-+++ b/security/integrity/integrity.h
-@@ -102,31 +102,6 @@ struct ima_file_id {
- 	__u8 hash[HASH_MAX_DIGESTSIZE];
- } __packed;
- 
--/* integrity data associated with an inode */
--struct integrity_iint_cache {
--	struct rb_node rb_node;	/* rooted in integrity_iint_tree */
--	struct mutex mutex;	/* protects: version, flags, digest */
--	struct inode *inode;	/* back pointer to inode in question */
--	u64 version;		/* track inode changes */
--	unsigned long flags;
--	unsigned long measured_pcrs;
--	unsigned long atomic_flags;
--	unsigned long real_ino;
--	dev_t real_dev;
--	enum integrity_status ima_file_status:4;
--	enum integrity_status ima_mmap_status:4;
--	enum integrity_status ima_bprm_status:4;
--	enum integrity_status ima_read_status:4;
--	enum integrity_status ima_creds_status:4;
--	enum integrity_status evm_status:4;
--	struct ima_digest_data *ima_hash;
--};
--
--/* rbtree tree calls to lookup, insert, delete
-- * integrity data associated with an inode.
-- */
--struct integrity_iint_cache *integrity_iint_find(struct inode *inode);
--
- int integrity_kernel_read(struct file *file, loff_t offset,
- 			  void *addr, unsigned long count);
- 
-diff --git a/security/security.c b/security/security.c
-index 7741d2d076c5..351a124b771c 100644
---- a/security/security.c
-+++ b/security/security.c
-@@ -19,7 +19,6 @@
- #include <linux/kernel.h>
- #include <linux/kernel_read_file.h>
- #include <linux/lsm_hooks.h>
--#include <linux/integrity.h>
- #include <linux/fsnotify.h>
- #include <linux/mman.h>
- #include <linux/mount.h>
-@@ -1597,7 +1596,6 @@ static void inode_free_by_rcu(struct rcu_head *head)
-  */
- void security_inode_free(struct inode *inode)
- {
--	integrity_inode_free(inode);
- 	call_void_hook(inode_free_security, inode);
- 	/*
- 	 * The inode may still be referenced in a path walk and
--- 
-2.34.1
-
+This feature is likely to be removed, because it is not actively used
+and the changes in BPF program loading broke it on current kernel
+releases.  Which brings up the point that since the kernel does
+not have stable API/ABI for BPF program infrastructure, I would
+avoid it for projects that don't want to deal with that.
 
