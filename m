@@ -1,94 +1,85 @@
-Return-Path: <linux-kselftest+bounces-2083-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2084-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20EA4814D34
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Dec 2023 17:37:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B376814DC3
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Dec 2023 18:02:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 531BB1C2354A
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Dec 2023 16:37:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D44E0285E97
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Dec 2023 17:02:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FB943DBBB;
-	Fri, 15 Dec 2023 16:36:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F09193EA78;
+	Fri, 15 Dec 2023 17:02:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=networkplumber-org.20230601.gappssmtp.com header.i=@networkplumber-org.20230601.gappssmtp.com header.b="FMziPy5F"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="PQkTfPy1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35FC73DBAE
-	for <linux-kselftest@vger.kernel.org>; Fri, 15 Dec 2023 16:36:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=networkplumber.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=networkplumber.org
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-28abb389323so406373a91.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 15 Dec 2023 08:36:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20230601.gappssmtp.com; s=20230601; t=1702658207; x=1703263007; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aJvYVagYHhoUh6izHlhrfd4VlIqIxeyLW6YH9/IOyR8=;
-        b=FMziPy5F0KuuWbuqia792leGIkEYU7QDEsuclB9QFip9dubN5SF+2PDn8809rmnxjK
-         wMl4/DjHttWumZ8JNKgouE6nNNdjGPJbkUWzvuTrg7izvDguTeO22lhyWP4d5F6NUjjv
-         WEnEVqSnaCtRLYN8UOKJcTytt4fPr0Fz1+SfOKCSELF8j7CNdjAy+ttS3Iu9ENbaJSTR
-         c/WyjxpScQosXyDYH82FyxqAlfLw3qFVra0/rKsTvt07kgX3Oh+qYC1v2wLwcPlTrten
-         Dfzn9qqzinuyvyPsX24hjsF3Meu6uw+htdB5Zs/puf76TwPgA4A0cs+j1hWs8w44Ejcq
-         liBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702658207; x=1703263007;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aJvYVagYHhoUh6izHlhrfd4VlIqIxeyLW6YH9/IOyR8=;
-        b=f0C1mINO9T/04PIoOahrmMsm7CyIpE81QzDLdj+nHOPFroIvAINnXVtspHttggnVE7
-         8uGXUgBQ/gmakp6NUduGvnkkrn5H98c4ApMJWVQbopYS+Soco1CtmxG7kud5Z4L3Q+4a
-         pnCxbmnpcPL51UMmcV+RaMM9sPC7tURIwZ2eB3gjfSmMFp7eOsT2OKlUedjac97xUvTb
-         vrKfZcTsf8Matlprnu4trqcvSkJRxVex/j3hILJ6F0g2z20UFcGa1aI5Zacx0UigWoot
-         aDAfluNKDYPYCOZ1HPWYkCA+v4Zbw6Ybj0hfuwuX6heCZOd74prog0Ji2nJarCQdoXZs
-         ghgA==
-X-Gm-Message-State: AOJu0YycIlE52a47eYIET1ckWRNobumt76WGVkI69sHNwz5NJcjBOvup
-	2Ma28dRhMgcFZRXOOT0JMC5HGg==
-X-Google-Smtp-Source: AGHT+IFeZMff91cUpMEe/cVJxJ+9czTxTnqQpAPTa8UZm78P42ynaIIY0rSElsDc43O0h3A+3heBEQ==
-X-Received: by 2002:a17:90a:4687:b0:28a:efa3:682f with SMTP id z7-20020a17090a468700b0028aefa3682fmr2312037pjf.74.1702658207601;
-        Fri, 15 Dec 2023 08:36:47 -0800 (PST)
-Received: from hermes.local (204-195-123-141.wavecable.com. [204.195.123.141])
-        by smtp.gmail.com with ESMTPSA id h5-20020a17090a9c0500b0028ad273525dsm6353303pjp.25.2023.12.15.08.36.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 15 Dec 2023 08:36:47 -0800 (PST)
-Date: Fri, 15 Dec 2023 08:36:44 -0800
-From: Stephen Hemminger <stephen@networkplumber.org>
-To: Akihiko Odaki <akihiko.odaki@daynix.com>
-Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>, Alexei Starovoitov
- <alexei.starovoitov@gmail.com>, Jason Wang <jasowang@redhat.com>, Alexei
- Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Yonghong Song <yonghong.song@linux.dev>, John
- Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa
- <jolsa@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Willem de Bruijn
- <willemdebruijn.kernel@gmail.com>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>, "Michael S. Tsirkin" <mst@redhat.com>, Xuan Zhuo
- <xuanzhuo@linux.alibaba.com>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan
- <shuah@kernel.org>, Yuri Benditovich <yuri.benditovich@daynix.com>, Andrew
- Melnychenko <andrew@daynix.com>, Benjamin Tissoires <bentiss@kernel.org>,
- bpf <bpf@vger.kernel.org>, "open list:DOCUMENTATION"
- <linux-doc@vger.kernel.org>, kvm@vger.kernel.org, LKML
- <linux-kernel@vger.kernel.org>, virtualization@lists.linux-foundation.org,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- Network Development <netdev@vger.kernel.org>
-Subject: Re: Should I add BPF kfuncs for userspace apps? And how?
-Message-ID: <20231215083644.4dd9a323@hermes.local>
-In-Reply-To: <72b8e198-7058-469a-a1e0-17f48330deca@daynix.com>
-References: <2f33be45-fe11-4b69-8e89-4d2824a0bf01@daynix.com>
-	<CAO-hwJJhzHtKrUEw0zrjgub3+eapgJG-zsG0HRB=PaPi6BxG+w@mail.gmail.com>
-	<e256c6df-0a66-4f86-ae96-bff17920c2fb@daynix.com>
-	<CAO-hwJKMrWYRNpuprDj9=k87V0yHtLPEJuQ94bpOF3O81=v0kA@mail.gmail.com>
-	<0d68722c-9e29-407b-9ef0-331683c995d2@daynix.com>
-	<20231214094042.75f704f6@hermes.local>
-	<72b8e198-7058-469a-a1e0-17f48330deca@daynix.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E9C93FB28;
+	Fri, 15 Dec 2023 17:02:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353728.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3BFGwALZ020777;
+	Fri, 15 Dec 2023 17:02:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=B2YPCL9awtaXdHC9oWXUXcPCAxjjCJr0Vn0rYyQXOJo=;
+ b=PQkTfPy19H+mSenEhnpAiTSvzh99ikxC/N8xceArJNxfudZcsbS0iOFt+hC3Kj8ja6T8
+ UPTff1wKw+WBjX3WrJhILb3ZQ14r22XUASmkpKxeUEQsYdVMco2e6feitgRiI+kTQIZZ
+ B8djZ5swFOcvuTSZFpj3MMJQDkE1ClPmW/fmCAhkm7pO/x/xjyys/Zh0zHmMH+HLc+CX
+ /SCEsUAPPyX3MBoZYp0tUJOxo7e2lpW+SyN+vnlQ1oow7pFzKfzV7As2MYeNy76kpKjG
+ 7jJFh/woJavBz8s9wXz23TkFkX4pRSiLGsIIbFnsnyoDE7l6JbVMDcLZuX44bwbZlFAY gw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3v0tft8qpg-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 15 Dec 2023 17:02:13 +0000
+Received: from m0353728.ppops.net (m0353728.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3BFGjUjK006288;
+	Fri, 15 Dec 2023 17:02:12 GMT
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3v0tft8qnu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 15 Dec 2023 17:02:12 +0000
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3BFFXtGX013937;
+	Fri, 15 Dec 2023 17:02:11 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 3uw592rwft-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 15 Dec 2023 17:02:11 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3BFH28GG27853434
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 15 Dec 2023 17:02:08 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 8CD1B20043;
+	Fri, 15 Dec 2023 17:02:08 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5FF8A20040;
+	Fri, 15 Dec 2023 17:02:08 +0000 (GMT)
+Received: from p-imbrenda (unknown [9.152.224.66])
+	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Fri, 15 Dec 2023 17:02:08 +0000 (GMT)
+Date: Fri, 15 Dec 2023 18:02:06 +0100
+From: Claudio Imbrenda <imbrenda@linux.ibm.com>
+To: Nina Schoetterl-Glausch <nsg@linux.ibm.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Christian Borntraeger
+ <borntraeger@linux.ibm.com>,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: s390: selftest: memop: Fix undefined behavior
+Message-ID: <20231215180206.740df738@p-imbrenda>
+In-Reply-To: <20231215161125.943551-1-nsg@linux.ibm.com>
+References: <20231215161125.943551-1-nsg@linux.ibm.com>
+Organization: IBM
+X-Mailer: Claws Mail 4.2.0 (GTK 3.24.38; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -97,32 +88,65 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: p_xIXzpWKEXFMQuEJFyjrgTdOUj5Kojn
+X-Proofpoint-GUID: sAFCq5iOnK_QJcqwHmouXldvP6Q9_rtw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-15_10,2023-12-14_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 adultscore=0 mlxscore=0 mlxlogscore=999 spamscore=0
+ malwarescore=0 clxscore=1011 impostorscore=0 phishscore=0 bulkscore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2312150118
 
-On Fri, 15 Dec 2023 14:49:56 +0900
-Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
+On Fri, 15 Dec 2023 17:11:25 +0100
+Nina Schoetterl-Glausch <nsg@linux.ibm.com> wrote:
 
-> >> It is exactly what BPF_PROG_TYPE_SOCKET_FILTER does, but it lacks a
-> >> mechanism to report hash values so I need to extend it or invent a new
-> >> method. Extending BPF_PROG_TYPE_SOCKET_FILTER is not a way forward since
-> >> CO-RE is superior to the context rewrite it relies on. But apparently
-> >> adopting kfuncs and CO-RE also means to lose the "we don't break user
-> >> space" contract although I have no intention to expose kernel internals
-> >> to the eBPF program.  
-> > 
-> > An example is how one part of DPDK recomputes RSS over TAP.
-> > 
-> > https://git.dpdk.org/dpdk/tree/drivers/net/tap/bpf/tap_bpf_program.c
-> > 
-> > This feature is likely to be removed, because it is not actively used
-> > and the changes in BPF program loading broke it on current kernel
-> > releases.  Which brings up the point that since the kernel does
-> > not have stable API/ABI for BPF program infrastructure, I would
-> > avoid it for projects that don't want to deal with that.  
+> If an integer's type has x bits, shifting the integer left by x or more
+> is undefined behavior.
+> This can happen in the rotate function when attempting to do a rotation
+> of the whole value by 0.
+
+is 0 the only problematic value? because in that case... 
+
 > 
-> It's unfortunate to hear that, but thanks for the information.
-> I'll consider more about the option not using BPF (plain ioctl and 
-> in-kernel implementation).
+> Fixes: 0dd714bfd200 ("KVM: s390: selftest: memop: Add cmpxchg tests")
+> Signed-off-by: Nina Schoetterl-Glausch <nsg@linux.ibm.com>
+> ---
+>  tools/testing/selftests/kvm/s390x/memop.c | 8 +++++---
+>  1 file changed, 5 insertions(+), 3 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
+> index bb3ca9a5d731..2eba9575828e 100644
+> --- a/tools/testing/selftests/kvm/s390x/memop.c
+> +++ b/tools/testing/selftests/kvm/s390x/memop.c
+> @@ -485,11 +485,13 @@ static bool popcount_eq(__uint128_t a, __uint128_t b)
+>  
+>  static __uint128_t rotate(int size, __uint128_t val, int amount)
+>  {
+> -	unsigned int bits = size * 8;
+> +	unsigned int left, right, bits = size * 8;
+>  
 
-With libbpf, things are much better. It is just that projects like
-DPDK have to support wide range of kernels including older versions of RHEL.
+...why not just:
+
+if (!amount)
+	return val;
+
+?
+
+> -	amount = (amount + bits) % bits;
+> +	right = (amount + bits) % bits;
+> +	/* % 128 prevents left shift UB if size == 16 && right == 0 */
+> +	left = (bits - right) % 128;
+>  	val = cut_to_size(size, val);
+> -	return (val << (bits - amount)) | (val >> amount);
+> +	return (val << left) | (val >> right);
+>  }
+>  
+>  const unsigned int max_block = 16;
+> 
+> base-commit: 305230142ae0637213bf6e04f6d9f10bbcb74af8
+
 
