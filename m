@@ -1,51 +1,51 @@
-Return-Path: <linux-kselftest+bounces-2060-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2061-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25F06814B55
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Dec 2023 16:11:55 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 873F8814B57
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Dec 2023 16:12:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D181928ABCA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Dec 2023 15:11:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E2865B23757
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Dec 2023 15:12:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 038373A8C9;
-	Fri, 15 Dec 2023 15:09:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDE453A8FD;
+	Fri, 15 Dec 2023 15:09:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QRlXiDQv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="enwYeWY0"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E315E3FE43;
-	Fri, 15 Dec 2023 15:09:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA7934174D;
+	Fri, 15 Dec 2023 15:09:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702652954; x=1734188954;
+  t=1702652963; x=1734188963;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=eba6jR0NTVAAqah4Ka1IihPesj4STMtaUmXU2ATgFgY=;
-  b=QRlXiDQvDk5G2JBAyNxvtGJKBos0FIzI4+Y+sJQf6naLD1FvUmVtdbHm
-   nhCUSLxnfC5avSXXR/DX7UcsKeIF6A4KFX/YTqiRZNasVyjCxAoXaE5+1
-   W0F+TTa+HWWgUyhlhy0ObpjljZhOwnyFWdfSmaKLB3eFMpl9dV+bbVqSJ
-   viYQTEvBW8E+pdg2G8kvxNhlzQPn8o7BWpegez6YeRCyejoZ9+LOiqfQA
-   lI+O0d4oL5Wbmu8p6MoRz0Ptwz3focc7h9p+57vPU03uUbzfrwSVKZaqQ
-   5XLbcHr/L1a6maqfS8co73ceqeOskTyuCTRLirpM+QBxQ1ZUMksu8x7DM
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10924"; a="392461714"
+  bh=I3hyOyBXTu48r2qfR1BkU7ORpis+hOLc3uFP8B19ybs=;
+  b=enwYeWY0W6x3FB5GVYSyhM/RBhPFkVF1dFaN5h3/Ff/RmfL27z/nns1O
+   +4RIaqu9WvjbRFgsZ7ZEtf3znNTFU7/UWKmiFBsssvjwoqFf+gF+hiWKP
+   2SzxCA73zk22j5hWB1rRqhjZJqpZHqkpTUnhe/4l+cLg2W20Xca+swL/y
+   T1SyIbyyC9sfTrFLotrT9Ug6NRaCSYna1mAqlf8p2EEpIITW/jpWpskrR
+   sAMYUkye1CFeXghMNJmYUnmSF1b5nFcdfn6znElRaRtKa8Y9fCnkSoDk1
+   9njCW+e4pf8WBEqunlPhen7eiI0ce3vqpb45NpXT+G3L145BYPMDnands
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10924"; a="392461740"
 X-IronPort-AV: E=Sophos;i="6.04,279,1695711600"; 
-   d="scan'208";a="392461714"
+   d="scan'208";a="392461740"
 Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2023 07:09:14 -0800
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2023 07:09:23 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10924"; a="1106151058"
+X-IronPort-AV: E=McAfee;i="6600,9927,10924"; a="1106151067"
 X-IronPort-AV: E=Sophos;i="6.04,279,1695711600"; 
-   d="scan'208";a="1106151058"
+   d="scan'208";a="1106151067"
 Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.246.49.116])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2023 07:09:10 -0800
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Dec 2023 07:09:19 -0800
 From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 To: linux-kselftest@vger.kernel.org,
 	Reinette Chatre <reinette.chatre@intel.com>,
@@ -55,9 +55,9 @@ To: linux-kselftest@vger.kernel.org,
 	Fenghua Yu <fenghua.yu@intel.com>
 Cc: linux-kernel@vger.kernel.org,
 	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH v4 24/29] selftests/resctrl: Create struct for input parameters
-Date: Fri, 15 Dec 2023 17:05:10 +0200
-Message-Id: <20231215150515.36983-25-ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v4 25/29] selftests/resctrl: Introduce generalized test framework
+Date: Fri, 15 Dec 2023 17:05:11 +0200
+Message-Id: <20231215150515.36983-26-ilpo.jarvinen@linux.intel.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20231215150515.36983-1-ilpo.jarvinen@linux.intel.com>
 References: <20231215150515.36983-1-ilpo.jarvinen@linux.intel.com>
@@ -70,603 +70,527 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-resctrl_tests reads a set of parameters and passes them individually
-for each tests which causes variations in the call signature between
-the tests.
+Each test currently has a "run test" function in per test file and
+another resctrl_tests.c. The functions in resctrl_tests.c are almost
+identical.
 
-Add struct input_params to hold all input parameters. It can be easily
-passed to every test without varying the call signature.
+Generalize the one in resctrl_tests.c such that it can be shared
+between all of the tests. It makes adding new tests easier and removes
+the per test if () forests.
+
+Also add comment to CPU vendor IDs that they must be defined as bits
+for a bitmask.
 
 Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
 ---
 
 v3:
-- Move uparams clear into init function
+- Add CPU vendor ID bitmask comment
+- Use test_resource_feature_check(test) in CMT
 ---
- tools/testing/selftests/resctrl/cat_test.c    | 20 +++---
- tools/testing/selftests/resctrl/cmt_test.c    | 16 ++---
- tools/testing/selftests/resctrl/mba_test.c    |  9 ++-
- tools/testing/selftests/resctrl/mbm_test.c    |  9 ++-
- tools/testing/selftests/resctrl/resctrl.h     | 28 ++++++---
- .../testing/selftests/resctrl/resctrl_tests.c | 63 +++++++++++--------
- tools/testing/selftests/resctrl/resctrl_val.c | 21 ++++---
- 7 files changed, 95 insertions(+), 71 deletions(-)
+ tools/testing/selftests/resctrl/cat_test.c    |  18 +-
+ tools/testing/selftests/resctrl/cmt_test.c    |  17 +-
+ tools/testing/selftests/resctrl/mba_test.c    |  16 +-
+ tools/testing/selftests/resctrl/mbm_test.c    |  18 +-
+ tools/testing/selftests/resctrl/resctrl.h     |  35 +++-
+ .../testing/selftests/resctrl/resctrl_tests.c | 160 ++++++------------
+ tools/testing/selftests/resctrl/resctrlfs.c   |   5 +
+ 7 files changed, 148 insertions(+), 121 deletions(-)
 
 diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-index fa95433297c9..272132ff7337 100644
+index 272132ff7337..a9b4583620d0 100644
 --- a/tools/testing/selftests/resctrl/cat_test.c
 +++ b/tools/testing/selftests/resctrl/cat_test.c
-@@ -135,6 +135,7 @@ void cat_test_cleanup(void)
- 
- /*
-  * cat_test - Execute CAT benchmark and measure cache misses
-+ * @uparams:		User supplied parameters
-  * @param:		Parameters passed to cat_test()
-  * @span:		Buffer size for the benchmark
-  * @current_mask	Start mask for the first iteration
-@@ -151,7 +152,8 @@ void cat_test_cleanup(void)
-  *
-  * Return:		0 when the test was run, < 0 on error.
-  */
--static int cat_test(struct resctrl_val_param *param, size_t span, unsigned long current_mask)
-+static int cat_test(const struct user_params *uparams, struct resctrl_val_param *param,
-+		    size_t span, unsigned long current_mask)
- {
- 	char *resctrl_val = param->resctrl_val;
- 	struct perf_event_read pe_read;
-@@ -168,7 +170,7 @@ static int cat_test(struct resctrl_val_param *param, size_t span, unsigned long
- 	bm_pid = getpid();
- 
- 	/* Taskset benchmark to specified cpu */
--	ret = taskset_benchmark(bm_pid, param->cpu_no, &old_affinity);
-+	ret = taskset_benchmark(bm_pid, uparams->cpu, &old_affinity);
- 	if (ret)
- 		return ret;
- 
-@@ -180,7 +182,7 @@ static int cat_test(struct resctrl_val_param *param, size_t span, unsigned long
- 
- 	perf_event_attr_initialize(&pea, PERF_COUNT_HW_CACHE_MISSES);
- 	perf_event_initialize_read_format(&pe_read);
--	pe_fd = perf_open(&pea, bm_pid, param->cpu_no);
-+	pe_fd = perf_open(&pea, bm_pid, uparams->cpu);
- 	if (pe_fd < 0) {
- 		ret = -1;
- 		goto reset_affinity;
-@@ -194,11 +196,11 @@ static int cat_test(struct resctrl_val_param *param, size_t span, unsigned long
- 
- 	while (current_mask) {
- 		snprintf(schemata, sizeof(schemata), "%lx", param->mask & ~current_mask);
--		ret = write_schemata("", schemata, param->cpu_no, param->resctrl_val);
-+		ret = write_schemata("", schemata, uparams->cpu, param->resctrl_val);
- 		if (ret)
- 			goto free_buf;
- 		snprintf(schemata, sizeof(schemata), "%lx", current_mask);
--		ret = write_schemata(param->ctrlgrp, schemata, param->cpu_no, param->resctrl_val);
-+		ret = write_schemata(param->ctrlgrp, schemata, uparams->cpu, param->resctrl_val);
- 		if (ret)
- 			goto free_buf;
- 
-@@ -229,10 +231,11 @@ static int cat_test(struct resctrl_val_param *param, size_t span, unsigned long
+@@ -231,7 +231,7 @@ static int cat_test(const struct user_params *uparams, struct resctrl_val_param
  	return ret;
  }
  
--int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
-+int cat_perf_miss_val(const struct user_params *uparams, char *cache_type)
+-int cat_perf_miss_val(const struct user_params *uparams, char *cache_type)
++static int cat_run_test(const struct resctrl_test *test, const struct user_params *uparams)
  {
  	unsigned long long_mask, start_mask, full_cache_mask;
  	unsigned long cache_total_size = 0;
-+	int n = uparams->bits;
- 	unsigned int start;
- 	int count_of_bits;
+@@ -241,16 +241,16 @@ int cat_perf_miss_val(const struct user_params *uparams, char *cache_type)
  	size_t span;
-@@ -247,7 +250,7 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
+ 	int ret;
+ 
+-	ret = get_full_cbm(cache_type, &full_cache_mask);
++	ret = get_full_cbm(test->resource, &full_cache_mask);
+ 	if (ret)
+ 		return ret;
+ 	/* Get the largest contiguous exclusive portion of the cache */
+-	ret = get_mask_no_shareable(cache_type, &long_mask);
++	ret = get_mask_no_shareable(test->resource, &long_mask);
+ 	if (ret)
  		return ret;
  
  	/* Get L3/L2 cache size */
--	ret = get_cache_size(cpu_no, cache_type, &cache_total_size);
-+	ret = get_cache_size(uparams->cpu, cache_type, &cache_total_size);
+-	ret = get_cache_size(uparams->cpu, cache_type, &cache_total_size);
++	ret = get_cache_size(uparams->cpu, test->resource, &cache_total_size);
  	if (ret)
  		return ret;
  	ksft_print_msg("Cache size :%lu\n", cache_total_size);
-@@ -267,7 +270,6 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
- 
- 	struct resctrl_val_param param = {
- 		.resctrl_val	= CAT_STR,
--		.cpu_no		= cpu_no,
- 		.ctrlgrp	= "c1",
- 		.filename	= RESULT_FILE_NAME,
- 		.num_of_runs	= 0,
-@@ -277,7 +279,7 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
- 
- 	remove(param.filename);
- 
--	ret = cat_test(&param, span, start_mask);
-+	ret = cat_test(uparams, &param, span, start_mask);
+@@ -283,9 +283,17 @@ int cat_perf_miss_val(const struct user_params *uparams, char *cache_type)
  	if (ret)
  		goto out;
  
+-	ret = check_results(&param, cache_type, cache_total_size, full_cache_mask, start_mask);
++	ret = check_results(&param, test->resource,
++			    cache_total_size, full_cache_mask, start_mask);
+ out:
+ 	cat_test_cleanup();
+ 
+ 	return ret;
+ }
++
++struct resctrl_test l3_cat_test = {
++	.name = "CAT",
++	.resource = "L3",
++	.feature_check = test_resource_feature_check,
++	.run_test = cat_run_test,
++};
 diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
-index 604690cd8b3e..a5d0c0878c42 100644
+index a5d0c0878c42..c01980039118 100644
 --- a/tools/testing/selftests/resctrl/cmt_test.c
 +++ b/tools/testing/selftests/resctrl/cmt_test.c
-@@ -16,7 +16,7 @@
- #define MAX_DIFF		2000000
- #define MAX_DIFF_PERCENT	15
- 
--static int cmt_setup(struct resctrl_val_param *p)
-+static int cmt_setup(const struct user_params *uparams, struct resctrl_val_param *p)
- {
- 	/* Run NUM_OF_RUNS times */
- 	if (p->num_of_runs >= NUM_OF_RUNS)
-@@ -94,11 +94,12 @@ void cmt_test_cleanup(void)
+@@ -94,7 +94,7 @@ void cmt_test_cleanup(void)
  	remove(RESULT_FILE_NAME);
  }
  
--int cmt_resctrl_val(int cpu_no, int n, const char * const *benchmark_cmd)
-+int cmt_resctrl_val(const struct user_params *uparams)
+-int cmt_resctrl_val(const struct user_params *uparams)
++static int cmt_run_test(const struct resctrl_test *test, const struct user_params *uparams)
  {
--	const char * const *cmd = benchmark_cmd;
-+	const char * const *cmd = uparams->benchmark_cmd;
+ 	const char * const *cmd = uparams->benchmark_cmd;
  	const char *new_cmd[BENCHMARK_ARGS];
- 	unsigned long cache_total_size = 0;
-+	int n = uparams->bits ? : 5;
- 	unsigned long long_mask;
- 	char *span_str = NULL;
- 	int count_of_bits;
-@@ -109,7 +110,7 @@ int cmt_resctrl_val(int cpu_no, int n, const char * const *benchmark_cmd)
- 	if (ret)
- 		return ret;
- 
--	ret = get_cache_size(cpu_no, "L3", &cache_total_size);
-+	ret = get_cache_size(uparams->cpu, "L3", &cache_total_size);
- 	if (ret)
- 		return ret;
- 	ksft_print_msg("Cache size :%lu\n", cache_total_size);
-@@ -126,7 +127,6 @@ int cmt_resctrl_val(int cpu_no, int n, const char * const *benchmark_cmd)
- 		.resctrl_val	= CMT_STR,
- 		.ctrlgrp	= "c1",
- 		.mongrp		= "m1",
--		.cpu_no		= cpu_no,
- 		.filename	= RESULT_FILE_NAME,
- 		.mask		= ~(long_mask << n) & long_mask,
- 		.num_of_runs	= 0,
-@@ -137,8 +137,8 @@ int cmt_resctrl_val(int cpu_no, int n, const char * const *benchmark_cmd)
- 
- 	if (strcmp(cmd[0], "fill_buf") == 0) {
- 		/* Duplicate the command to be able to replace span in it */
--		for (i = 0; benchmark_cmd[i]; i++)
--			new_cmd[i] = benchmark_cmd[i];
-+		for (i = 0; uparams->benchmark_cmd[i]; i++)
-+			new_cmd[i] = uparams->benchmark_cmd[i];
- 		new_cmd[i] = NULL;
- 
- 		ret = asprintf(&span_str, "%zu", span);
-@@ -150,7 +150,7 @@ int cmt_resctrl_val(int cpu_no, int n, const char * const *benchmark_cmd)
- 
- 	remove(RESULT_FILE_NAME);
- 
--	ret = resctrl_val(cmd, &param);
-+	ret = resctrl_val(uparams, cmd, &param);
- 	if (ret)
+@@ -155,6 +155,8 @@ int cmt_resctrl_val(const struct user_params *uparams)
  		goto out;
  
+ 	ret = check_results(&param, span, n);
++	if (ret && (get_vendor() == ARCH_INTEL))
++		ksft_print_msg("Intel CMT may be inaccurate when Sub-NUMA Clustering is enabled. Check BIOS configuration.\n");
+ 
+ out:
+ 	cmt_test_cleanup();
+@@ -162,3 +164,16 @@ int cmt_resctrl_val(const struct user_params *uparams)
+ 
+ 	return ret;
+ }
++
++static bool cmt_feature_check(const struct resctrl_test *test)
++{
++	return test_resource_feature_check(test) &&
++	       validate_resctrl_feature_request("L3_MON", "llc_occupancy");
++}
++
++struct resctrl_test cmt_test = {
++	.name = "CMT",
++	.resource = "L3",
++	.feature_check = cmt_feature_check,
++	.run_test = cmt_run_test,
++};
 diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
-index e907adf7cd25..8e54bc508a75 100644
+index 8e54bc508a75..c218af24f91d 100644
 --- a/tools/testing/selftests/resctrl/mba_test.c
 +++ b/tools/testing/selftests/resctrl/mba_test.c
-@@ -22,7 +22,7 @@
-  * con_mon grp, mon_grp in resctrl FS.
-  * For each allocation, run 5 times in order to get average values.
-  */
--static int mba_setup(struct resctrl_val_param *p)
-+static int mba_setup(const struct user_params *uparams, struct resctrl_val_param *p)
- {
- 	static int runs_per_allocation, allocation = 100;
- 	char allocation_str[64];
-@@ -40,7 +40,7 @@ static int mba_setup(struct resctrl_val_param *p)
- 
- 	sprintf(allocation_str, "%d", allocation);
- 
--	ret = write_schemata(p->ctrlgrp, allocation_str, p->cpu_no,
-+	ret = write_schemata(p->ctrlgrp, allocation_str, uparams->cpu,
- 			     p->resctrl_val);
- 	if (ret < 0)
- 		return ret;
-@@ -141,13 +141,12 @@ void mba_test_cleanup(void)
+@@ -141,7 +141,7 @@ void mba_test_cleanup(void)
  	remove(RESULT_FILE_NAME);
  }
  
--int mba_schemata_change(int cpu_no, const char * const *benchmark_cmd)
-+int mba_schemata_change(const struct user_params *uparams)
+-int mba_schemata_change(const struct user_params *uparams)
++static int mba_run_test(const struct resctrl_test *test, const struct user_params *uparams)
  {
  	struct resctrl_val_param param = {
  		.resctrl_val	= MBA_STR,
- 		.ctrlgrp	= "c1",
- 		.mongrp		= "m1",
--		.cpu_no		= cpu_no,
- 		.filename	= RESULT_FILE_NAME,
- 		.bw_report	= "reads",
- 		.setup		= mba_setup
-@@ -156,7 +155,7 @@ int mba_schemata_change(int cpu_no, const char * const *benchmark_cmd)
+@@ -166,3 +166,17 @@ int mba_schemata_change(const struct user_params *uparams)
  
- 	remove(RESULT_FILE_NAME);
- 
--	ret = resctrl_val(benchmark_cmd, &param);
-+	ret = resctrl_val(uparams, uparams->benchmark_cmd, &param);
- 	if (ret)
- 		goto out;
- 
-diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
-index 721b3ecbc158..ea951cfae5fe 100644
---- a/tools/testing/selftests/resctrl/mbm_test.c
-+++ b/tools/testing/selftests/resctrl/mbm_test.c
-@@ -86,7 +86,7 @@ static int check_results(size_t span)
  	return ret;
  }
- 
--static int mbm_setup(struct resctrl_val_param *p)
-+static int mbm_setup(const struct user_params *uparams, struct resctrl_val_param *p)
- {
- 	int ret = 0;
- 
-@@ -96,7 +96,7 @@ static int mbm_setup(struct resctrl_val_param *p)
- 
- 	/* Set up shemata with 100% allocation on the first run. */
- 	if (p->num_of_runs == 0 && validate_resctrl_feature_request("MB", NULL))
--		ret = write_schemata(p->ctrlgrp, "100", p->cpu_no,
-+		ret = write_schemata(p->ctrlgrp, "100", uparams->cpu,
- 				     p->resctrl_val);
- 
- 	p->num_of_runs++;
-@@ -109,13 +109,12 @@ void mbm_test_cleanup(void)
++
++static bool mba_feature_check(const struct resctrl_test *test)
++{
++	return test_resource_feature_check(test) &&
++	       validate_resctrl_feature_request("L3_MON", "mbm_local_bytes");
++}
++
++struct resctrl_test mba_test = {
++	.name = "MBA",
++	.resource = "MB",
++	.vendor_specific = ARCH_INTEL,
++	.feature_check = mba_feature_check,
++	.run_test = mba_run_test,
++};
+diff --git a/tools/testing/selftests/resctrl/mbm_test.c b/tools/testing/selftests/resctrl/mbm_test.c
+index ea951cfae5fe..919b10459c22 100644
+--- a/tools/testing/selftests/resctrl/mbm_test.c
++++ b/tools/testing/selftests/resctrl/mbm_test.c
+@@ -109,7 +109,7 @@ void mbm_test_cleanup(void)
  	remove(RESULT_FILE_NAME);
  }
  
--int mbm_bw_change(int cpu_no, const char * const *benchmark_cmd)
-+int mbm_bw_change(const struct user_params *uparams)
+-int mbm_bw_change(const struct user_params *uparams)
++static int mbm_run_test(const struct resctrl_test *test, const struct user_params *uparams)
  {
  	struct resctrl_val_param param = {
  		.resctrl_val	= MBM_STR,
- 		.ctrlgrp	= "c1",
- 		.mongrp		= "m1",
--		.cpu_no		= cpu_no,
- 		.filename	= RESULT_FILE_NAME,
- 		.bw_report	= "reads",
- 		.setup		= mbm_setup
-@@ -124,7 +123,7 @@ int mbm_bw_change(int cpu_no, const char * const *benchmark_cmd)
- 
- 	remove(RESULT_FILE_NAME);
- 
--	ret = resctrl_val(benchmark_cmd, &param);
-+	ret = resctrl_val(uparams, uparams->benchmark_cmd, &param);
- 	if (ret)
+@@ -128,9 +128,25 @@ int mbm_bw_change(const struct user_params *uparams)
  		goto out;
  
+ 	ret = check_results(DEFAULT_SPAN);
++	if (ret && (get_vendor() == ARCH_INTEL))
++		ksft_print_msg("Intel MBM may be inaccurate when Sub-NUMA Clustering is enabled. Check BIOS configuration.\n");
+ 
+ out:
+ 	mbm_test_cleanup();
+ 
+ 	return ret;
+ }
++
++static bool mbm_feature_check(const struct resctrl_test *test)
++{
++	return validate_resctrl_feature_request("L3_MON", "mbm_total_bytes") &&
++	       validate_resctrl_feature_request("L3_MON", "mbm_local_bytes");
++}
++
++struct resctrl_test mbm_test = {
++	.name = "MBM",
++	.resource = "MB",
++	.vendor_specific = ARCH_INTEL,
++	.feature_check = mbm_feature_check,
++	.run_test = mbm_run_test,
++};
 diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-index 94347acafe55..199ba91a78f7 100644
+index 199ba91a78f7..1168364b4cc2 100644
 --- a/tools/testing/selftests/resctrl/resctrl.h
 +++ b/tools/testing/selftests/resctrl/resctrl.h
-@@ -44,12 +44,23 @@
- 		exit(EXIT_FAILURE);		\
- 	} while (0)
+@@ -28,6 +28,12 @@
+ #define PHYS_ID_PATH		"/sys/devices/system/cpu/cpu"
+ #define INFO_PATH		"/sys/fs/resctrl/info"
  
 +/*
-+ * user_params:		User supplied parameters
-+ * @cpu:		CPU number to which the benchmark will be bound to
-+ * @bits:		Number of bits used for cache allocation size
-+ * @benchmark_cmd:	Benchmark command to run during (some of the) tests
++ * CPU vendor IDs
++ *
++ * Define as bits because they're used for vendor_specific bitmask in
++ * the struct resctrl_test.
 + */
-+struct user_params {
-+	int cpu;
-+	int bits;
-+	const char *benchmark_cmd[BENCHMARK_ARGS];
+ #define ARCH_INTEL     1
+ #define ARCH_AMD       2
+ 
+@@ -56,6 +62,25 @@ struct user_params {
+ 	const char *benchmark_cmd[BENCHMARK_ARGS];
+ };
+ 
++/*
++ * resctrl_test:	resctrl test definition
++ * @name:		Test name
++ * @resource:		Resource to test (e.g., MB, L3, L2, etc.)
++ * @vendor_specific:	Bitmask for vendor-specific tests (can be 0 for universal tests)
++ * @disabled:		Test is disabled
++ * @feature_check:	Callback to check required resctrl features
++ * @run_test:		Callback to run the test
++ */
++struct resctrl_test {
++	const char	*name;
++	const char	*resource;
++	unsigned int	vendor_specific;
++	bool		disabled;
++	bool		(*feature_check)(const struct resctrl_test *test);
++	int		(*run_test)(const struct resctrl_test *test,
++				    const struct user_params *uparams);
 +};
 +
  /*
   * resctrl_val_param:	resctrl test parameters
   * @resctrl_val:	Resctrl feature (Eg: mbm, mba.. etc)
-  * @ctrlgrp:		Name of the control monitor group (con_mon grp)
-  * @mongrp:		Name of the monitor group (mon grp)
-- * @cpu_no:		CPU number to which the benchmark would be binded
-  * @filename:		Name of file to which the o/p should be written
-  * @bw_report:		Bandwidth report type (reads vs writes)
-  * @setup:		Call back function to setup test environment
-@@ -58,12 +69,12 @@ struct resctrl_val_param {
- 	char		*resctrl_val;
- 	char		ctrlgrp[64];
- 	char		mongrp[64];
--	int		cpu_no;
- 	char		filename[64];
- 	char		*bw_report;
- 	unsigned long	mask;
- 	int		num_of_runs;
--	int		(*setup)(struct resctrl_val_param *param);
-+	int		(*setup)(const struct user_params *uparams,
-+				 struct resctrl_val_param *param);
- };
- 
- struct perf_event_read {
-@@ -110,11 +121,12 @@ unsigned char *alloc_buffer(size_t buf_size, int memflush);
- void mem_flush(unsigned char *buf, size_t buf_size);
- void fill_cache_read(unsigned char *buf, size_t buf_size, bool once);
+@@ -108,6 +133,7 @@ int mount_resctrlfs(void);
+ int umount_resctrlfs(void);
+ int validate_bw_report_request(char *bw_report);
+ bool validate_resctrl_feature_request(const char *resource, const char *feature);
++bool test_resource_feature_check(const struct resctrl_test *test);
+ char *fgrep(FILE *inf, const char *str);
+ int taskset_benchmark(pid_t bm_pid, int cpu_no, cpu_set_t *old_affinity);
+ int taskset_restore(pid_t bm_pid, cpu_set_t *old_affinity);
+@@ -123,10 +149,8 @@ void fill_cache_read(unsigned char *buf, size_t buf_size, bool once);
  int run_fill_buf(size_t buf_size, int memflush, int op, bool once);
--int resctrl_val(const char * const *benchmark_cmd, struct resctrl_val_param *param);
--int mbm_bw_change(int cpu_no, const char * const *benchmark_cmd);
-+int resctrl_val(const struct user_params *uparams, const char * const *benchmark_cmd,
-+		struct resctrl_val_param *param);
-+int mbm_bw_change(const struct user_params *uparams);
+ int resctrl_val(const struct user_params *uparams, const char * const *benchmark_cmd,
+ 		struct resctrl_val_param *param);
+-int mbm_bw_change(const struct user_params *uparams);
  void tests_cleanup(void);
  void mbm_test_cleanup(void);
--int mba_schemata_change(int cpu_no, const char * const *benchmark_cmd);
-+int mba_schemata_change(const struct user_params *uparams);
+-int mba_schemata_change(const struct user_params *uparams);
  void mba_test_cleanup(void);
  unsigned long create_bit_mask(unsigned int start, unsigned int len);
  unsigned int count_contiguous_bits(unsigned long val, unsigned int *start);
-@@ -125,8 +137,8 @@ void ctrlc_handler(int signum, siginfo_t *info, void *ptr);
+@@ -137,8 +161,6 @@ void ctrlc_handler(int signum, siginfo_t *info, void *ptr);
  int signal_handler_register(void);
  void signal_handler_unregister(void);
  void cat_test_cleanup(void);
--int cat_perf_miss_val(int cpu_no, int no_of_bits, char *cache_type);
--int cmt_resctrl_val(int cpu_no, int n, const char * const *benchmark_cmd);
-+int cat_perf_miss_val(const struct user_params *uparams, char *cache_type);
-+int cmt_resctrl_val(const struct user_params *uparams);
+-int cat_perf_miss_val(const struct user_params *uparams, char *cache_type);
+-int cmt_resctrl_val(const struct user_params *uparams);
  unsigned int count_bits(unsigned long n);
  void cmt_test_cleanup(void);
  
+@@ -175,4 +197,9 @@ static inline unsigned long cache_portion_size(unsigned long cache_size,
+ 	return cache_size * count_bits(portion_mask) / bits;
+ }
+ 
++extern struct resctrl_test mbm_test;
++extern struct resctrl_test mba_test;
++extern struct resctrl_test cmt_test;
++extern struct resctrl_test l3_cat_test;
++
+ #endif /* RESCTRL_H */
 diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
-index f0d573aa363b..3059a124ac59 100644
+index 3059a124ac59..75fc49ba3efb 100644
 --- a/tools/testing/selftests/resctrl/resctrl_tests.c
 +++ b/tools/testing/selftests/resctrl/resctrl_tests.c
-@@ -96,7 +96,7 @@ static void test_cleanup(void)
+@@ -14,6 +14,13 @@
+ static volatile int sink_target;
+ volatile int *value_sink = &sink_target;
+ 
++static struct resctrl_test *resctrl_tests[] = {
++	&mbm_test,
++	&mba_test,
++	&cmt_test,
++	&l3_cat_test,
++};
++
+ static int detect_vendor(void)
+ {
+ 	FILE *inf = fopen("/proc/cpuinfo", "r");
+@@ -53,11 +60,16 @@ int get_vendor(void)
+ 
+ static void cmd_help(void)
+ {
++	int i;
++
+ 	printf("usage: resctrl_tests [-h] [-t test list] [-n no_of_bits] [-b benchmark_cmd [option]...]\n");
+ 	printf("\t-b benchmark_cmd [option]...: run specified benchmark for MBM, MBA and CMT\n");
+ 	printf("\t   default benchmark is builtin fill_buf\n");
+ 	printf("\t-t test list: run tests specified in the test list, ");
+ 	printf("e.g. -t mbm,mba,cmt,cat\n");
++	printf("\t\tSupported tests:\n");
++	for (i = 0; i < ARRAY_SIZE(resctrl_tests); i++)
++		printf("\t\t\t%s\n", resctrl_tests[i]->name);
+ 	printf("\t-n no_of_bits: run cache tests using specified no of bits in cache bit mask\n");
+ 	printf("\t-p cpu_no: specify CPU number to run the test. 1 is default\n");
+ 	printf("\t-h: help\n");
+@@ -96,102 +108,41 @@ static void test_cleanup(void)
  	signal_handler_unregister();
  }
  
--static void run_mbm_test(const char * const *benchmark_cmd, int cpu_no)
-+static void run_mbm_test(const struct user_params *uparams)
+-static void run_mbm_test(const struct user_params *uparams)
++static bool test_vendor_specific_check(const struct resctrl_test *test)
  {
- 	int res;
+-	int res;
+-
+-	ksft_print_msg("Starting MBM BW change ...\n");
+-
+-	if (test_prepare()) {
+-		ksft_exit_fail_msg("Abnormal failure when preparing for the test\n");
+-		return;
+-	}
+-
+-	if (!validate_resctrl_feature_request("L3_MON", "mbm_total_bytes") ||
+-	    !validate_resctrl_feature_request("L3_MON", "mbm_local_bytes") ||
+-	    (get_vendor() != ARCH_INTEL)) {
+-		ksft_test_result_skip("Hardware does not support MBM or MBM is disabled\n");
+-		goto cleanup;
+-	}
+-
+-	res = mbm_bw_change(uparams);
+-	ksft_test_result(!res, "MBM: bw change\n");
+-	if ((get_vendor() == ARCH_INTEL) && res)
+-		ksft_print_msg("Intel MBM may be inaccurate when Sub-NUMA Clustering is enabled. Check BIOS configuration.\n");
++	if (!test->vendor_specific)
++		return true;
  
-@@ -114,7 +114,7 @@ static void run_mbm_test(const char * const *benchmark_cmd, int cpu_no)
- 		goto cleanup;
- 	}
- 
--	res = mbm_bw_change(cpu_no, benchmark_cmd);
-+	res = mbm_bw_change(uparams);
- 	ksft_test_result(!res, "MBM: bw change\n");
- 	if ((get_vendor() == ARCH_INTEL) && res)
- 		ksft_print_msg("Intel MBM may be inaccurate when Sub-NUMA Clustering is enabled. Check BIOS configuration.\n");
-@@ -123,7 +123,7 @@ static void run_mbm_test(const char * const *benchmark_cmd, int cpu_no)
- 	test_cleanup();
+-cleanup:
+-	test_cleanup();
++	return get_vendor() & test->vendor_specific;
  }
  
--static void run_mba_test(const char * const *benchmark_cmd, int cpu_no)
-+static void run_mba_test(const struct user_params *uparams)
+-static void run_mba_test(const struct user_params *uparams)
++static void run_single_test(const struct resctrl_test *test, const struct user_params *uparams)
  {
- 	int res;
+-	int res;
+-
+-	ksft_print_msg("Starting MBA Schemata change ...\n");
++	int ret;
  
-@@ -141,14 +141,14 @@ static void run_mba_test(const char * const *benchmark_cmd, int cpu_no)
+-	if (test_prepare()) {
+-		ksft_exit_fail_msg("Abnormal failure when preparing for the test\n");
++	if (test->disabled)
+ 		return;
+-	}
+ 
+-	if (!validate_resctrl_feature_request("MB", NULL) ||
+-	    !validate_resctrl_feature_request("L3_MON", "mbm_local_bytes") ||
+-	    (get_vendor() != ARCH_INTEL)) {
+-		ksft_test_result_skip("Hardware does not support MBA or MBA is disabled\n");
+-		goto cleanup;
+-	}
+-
+-	res = mba_schemata_change(uparams);
+-	ksft_test_result(!res, "MBA: schemata change\n");
+-
+-cleanup:
+-	test_cleanup();
+-}
+-
+-static void run_cmt_test(const struct user_params *uparams)
+-{
+-	int res;
+-
+-	ksft_print_msg("Starting CMT test ...\n");
+-
+-	if (test_prepare()) {
+-		ksft_exit_fail_msg("Abnormal failure when preparing for the test\n");
++	if (!test_vendor_specific_check(test)) {
++		ksft_test_result_skip("Hardware does not support %s\n", test->name);
+ 		return;
+ 	}
+ 
+-	if (!validate_resctrl_feature_request("L3_MON", "llc_occupancy") ||
+-	    !validate_resctrl_feature_request("L3", NULL)) {
+-		ksft_test_result_skip("Hardware does not support CMT or CMT is disabled\n");
+-		goto cleanup;
+-	}
+-
+-	res = cmt_resctrl_val(uparams);
+-	ksft_test_result(!res, "CMT: test\n");
+-	if ((get_vendor() == ARCH_INTEL) && res)
+-		ksft_print_msg("Intel CMT may be inaccurate when Sub-NUMA Clustering is enabled. Check BIOS configuration.\n");
+-
+-cleanup:
+-	test_cleanup();
+-}
+-
+-static void run_cat_test(const struct user_params *uparams)
+-{
+-	int res;
+-
+-	ksft_print_msg("Starting CAT test ...\n");
++	ksft_print_msg("Starting %s test ...\n", test->name);
+ 
+ 	if (test_prepare()) {
+ 		ksft_exit_fail_msg("Abnormal failure when preparing for the test\n");
+ 		return;
+ 	}
+ 
+-	if (!validate_resctrl_feature_request("L3", NULL)) {
+-		ksft_test_result_skip("Hardware does not support CAT or CAT is disabled\n");
++	if (!test->feature_check(test)) {
++		ksft_test_result_skip("Hardware does not support %s or %s is disabled\n",
++				      test->name, test->name);
  		goto cleanup;
  	}
  
--	res = mba_schemata_change(cpu_no, benchmark_cmd);
-+	res = mba_schemata_change(uparams);
- 	ksft_test_result(!res, "MBA: schemata change\n");
+-	res = cat_perf_miss_val(uparams, "L3");
+-	ksft_test_result(!res, "CAT: test\n");
++	ret = test->run_test(test, uparams);
++	ksft_test_result(!ret, "%s: test\n", test->name);
  
  cleanup:
  	test_cleanup();
- }
+@@ -207,11 +158,10 @@ static void init_user_params(struct user_params *uparams)
  
--static void run_cmt_test(const char * const *benchmark_cmd, int cpu_no)
-+static void run_cmt_test(const struct user_params *uparams)
- {
- 	int res;
- 
-@@ -165,7 +165,7 @@ static void run_cmt_test(const char * const *benchmark_cmd, int cpu_no)
- 		goto cleanup;
- 	}
- 
--	res = cmt_resctrl_val(cpu_no, 5, benchmark_cmd);
-+	res = cmt_resctrl_val(uparams);
- 	ksft_test_result(!res, "CMT: test\n");
- 	if ((get_vendor() == ARCH_INTEL) && res)
- 		ksft_print_msg("Intel CMT may be inaccurate when Sub-NUMA Clustering is enabled. Check BIOS configuration.\n");
-@@ -174,7 +174,7 @@ static void run_cmt_test(const char * const *benchmark_cmd, int cpu_no)
- 	test_cleanup();
- }
- 
--static void run_cat_test(int cpu_no, int no_of_bits)
-+static void run_cat_test(const struct user_params *uparams)
- {
- 	int res;
- 
-@@ -190,22 +190,31 @@ static void run_cat_test(int cpu_no, int no_of_bits)
- 		goto cleanup;
- 	}
- 
--	res = cat_perf_miss_val(cpu_no, no_of_bits, "L3");
-+	res = cat_perf_miss_val(uparams, "L3");
- 	ksft_test_result(!res, "CAT: test\n");
- 
- cleanup:
- 	test_cleanup();
- }
- 
-+static void init_user_params(struct user_params *uparams)
-+{
-+	memset(uparams, 0, sizeof(*uparams));
-+
-+	uparams->cpu = 1;
-+	uparams->bits = 0;
-+}
-+
  int main(int argc, char **argv)
  {
- 	bool mbm_test = true, mba_test = true, cmt_test = true;
--	const char *benchmark_cmd[BENCHMARK_ARGS] = {};
--	int c, cpu_no = 1, i, no_of_bits = 0;
-+	struct user_params uparams;
+-	bool mbm_test = true, mba_test = true, cmt_test = true;
++	int tests = ARRAY_SIZE(resctrl_tests);
++	bool test_param_seen = false;
+ 	struct user_params uparams;
  	char *span_str = NULL;
- 	bool cat_test = true;
- 	int tests = 0;
--	int ret;
-+	int ret, c, i;
-+
-+	init_user_params(&uparams);
+-	bool cat_test = true;
+-	int tests = 0;
+ 	int ret, c, i;
  
- 	while ((c = getopt(argc, argv, "ht:b:n:p:")) != -1) {
- 		char *token;
-@@ -223,8 +232,8 @@ int main(int argc, char **argv)
- 
- 			/* Extract benchmark command from command line. */
- 			for (i = 0; i < argc - optind; i++)
--				benchmark_cmd[i] = argv[i + optind];
--			benchmark_cmd[i] = NULL;
-+				uparams.benchmark_cmd[i] = argv[i + optind];
-+			uparams.benchmark_cmd[i] = NULL;
- 
- 			goto last_arg;
+ 	init_user_params(&uparams);
+@@ -239,25 +189,26 @@ int main(int argc, char **argv)
  		case 't':
-@@ -256,11 +265,11 @@ int main(int argc, char **argv)
- 			}
- 			break;
- 		case 'p':
--			cpu_no = atoi(optarg);
-+			uparams.cpu = atoi(optarg);
- 			break;
- 		case 'n':
--			no_of_bits = atoi(optarg);
--			if (no_of_bits <= 0) {
-+			uparams.bits = atoi(optarg);
-+			if (uparams.bits <= 0) {
- 				printf("Bail out! invalid argument for no_of_bits\n");
- 				return -1;
- 			}
-@@ -295,32 +304,32 @@ int main(int argc, char **argv)
+ 			token = strtok(optarg, ",");
  
- 	filter_dmesg();
+-			mbm_test = false;
+-			mba_test = false;
+-			cmt_test = false;
+-			cat_test = false;
++			if (!test_param_seen) {
++				for (i = 0; i < ARRAY_SIZE(resctrl_tests); i++)
++					resctrl_tests[i]->disabled = true;
++				tests = 0;
++				test_param_seen = true;
++			}
+ 			while (token) {
+-				if (!strncmp(token, MBM_STR, sizeof(MBM_STR))) {
+-					mbm_test = true;
+-					tests++;
+-				} else if (!strncmp(token, MBA_STR, sizeof(MBA_STR))) {
+-					mba_test = true;
+-					tests++;
+-				} else if (!strncmp(token, CMT_STR, sizeof(CMT_STR))) {
+-					cmt_test = true;
+-					tests++;
+-				} else if (!strncmp(token, CAT_STR, sizeof(CAT_STR))) {
+-					cat_test = true;
+-					tests++;
+-				} else {
+-					printf("invalid argument\n");
++				bool found = false;
++
++				for (i = 0; i < ARRAY_SIZE(resctrl_tests); i++) {
++					if (!strcasecmp(token, resctrl_tests[i]->name)) {
++						if (resctrl_tests[i]->disabled)
++							tests++;
++						resctrl_tests[i]->disabled = false;
++						found = true;
++					}
++				}
++
++				if (!found) {
++					printf("invalid test: %s\n", token);
  
--	if (!benchmark_cmd[0]) {
-+	if (!uparams.benchmark_cmd[0]) {
- 		/* If no benchmark is given by "-b" argument, use fill_buf. */
--		benchmark_cmd[0] = "fill_buf";
-+		uparams.benchmark_cmd[0] = "fill_buf";
- 		ret = asprintf(&span_str, "%u", DEFAULT_SPAN);
- 		if (ret < 0)
- 			ksft_exit_fail_msg("Out of memory!\n");
--		benchmark_cmd[1] = span_str;
--		benchmark_cmd[2] = "1";
--		benchmark_cmd[3] = "0";
--		benchmark_cmd[4] = "false";
--		benchmark_cmd[5] = NULL;
-+		uparams.benchmark_cmd[1] = span_str;
-+		uparams.benchmark_cmd[2] = "1";
-+		uparams.benchmark_cmd[3] = "0";
-+		uparams.benchmark_cmd[4] = "false";
-+		uparams.benchmark_cmd[5] = NULL;
+ 					return -1;
+ 				}
+@@ -317,19 +268,10 @@ int main(int argc, char **argv)
+ 		uparams.benchmark_cmd[5] = NULL;
  	}
  
- 	ksft_set_plan(tests ? : 4);
+-	ksft_set_plan(tests ? : 4);
+-
+-	if (mbm_test)
+-		run_mbm_test(&uparams);
+-
+-	if (mba_test)
+-		run_mba_test(&uparams);
+-
+-	if (cmt_test)
+-		run_cmt_test(&uparams);
++	ksft_set_plan(tests);
  
- 	if (mbm_test)
--		run_mbm_test(benchmark_cmd, cpu_no);
-+		run_mbm_test(&uparams);
- 
- 	if (mba_test)
--		run_mba_test(benchmark_cmd, cpu_no);
-+		run_mba_test(&uparams);
- 
- 	if (cmt_test)
--		run_cmt_test(benchmark_cmd, cpu_no);
-+		run_cmt_test(&uparams);
- 
- 	if (cat_test)
--		run_cat_test(cpu_no, no_of_bits);
-+		run_cat_test(&uparams);
+-	if (cat_test)
+-		run_cat_test(&uparams);
++	for (i = 0; i < ARRAY_SIZE(resctrl_tests); i++)
++		run_single_test(resctrl_tests[i], &uparams);
  
  	free(span_str);
  	ksft_finished();
-diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
-index 6574a13f3919..6d0a35e8bd02 100644
---- a/tools/testing/selftests/resctrl/resctrl_val.c
-+++ b/tools/testing/selftests/resctrl/resctrl_val.c
-@@ -593,8 +593,9 @@ static void initialize_llc_occu_resctrl(const char *ctrlgrp, const char *mongrp,
- 		set_cmt_path(ctrlgrp, mongrp, resource_id);
+diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
+index 1bcb9aa96cc2..140f65467ddb 100644
+--- a/tools/testing/selftests/resctrl/resctrlfs.c
++++ b/tools/testing/selftests/resctrl/resctrlfs.c
+@@ -706,6 +706,11 @@ bool validate_resctrl_feature_request(const char *resource, const char *feature)
+ 	return !!res;
  }
  
--static int
--measure_vals(struct resctrl_val_param *param, unsigned long *bw_resc_start)
-+static int measure_vals(const struct user_params *uparams,
-+			struct resctrl_val_param *param,
-+			unsigned long *bw_resc_start)
++bool test_resource_feature_check(const struct resctrl_test *test)
++{
++	return validate_resctrl_feature_request(test->resource, NULL);
++}
++
+ int filter_dmesg(void)
  {
- 	unsigned long bw_resc, bw_resc_end;
- 	float bw_imc;
-@@ -607,7 +608,7 @@ measure_vals(struct resctrl_val_param *param, unsigned long *bw_resc_start)
- 	 * Compare the two values to validate resctrl value.
- 	 * It takes 1sec to measure the data.
- 	 */
--	ret = get_mem_bw_imc(param->cpu_no, param->bw_report, &bw_imc);
-+	ret = get_mem_bw_imc(uparams->cpu, param->bw_report, &bw_imc);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -683,12 +684,14 @@ static void run_benchmark(int signum, siginfo_t *info, void *ucontext)
- /*
-  * resctrl_val:	execute benchmark and measure memory bandwidth on
-  *			the benchmark
-+ * @uparams:		user supplied parameters
-  * @benchmark_cmd:	benchmark command and its arguments
-  * @param:		parameters passed to resctrl_val()
-  *
-  * Return:		0 when the test was run, < 0 on error.
-  */
--int resctrl_val(const char * const *benchmark_cmd, struct resctrl_val_param *param)
-+int resctrl_val(const struct user_params *uparams, const char * const *benchmark_cmd,
-+		struct resctrl_val_param *param)
- {
- 	char *resctrl_val = param->resctrl_val;
- 	unsigned long bw_resc_start = 0;
-@@ -777,7 +780,7 @@ int resctrl_val(const char * const *benchmark_cmd, struct resctrl_val_param *par
- 	value.sival_ptr = (void *)benchmark_cmd;
- 
- 	/* Taskset benchmark to specified cpu */
--	ret = taskset_benchmark(bm_pid, param->cpu_no, NULL);
-+	ret = taskset_benchmark(bm_pid, uparams->cpu, NULL);
- 	if (ret)
- 		goto out;
- 
-@@ -794,10 +797,10 @@ int resctrl_val(const char * const *benchmark_cmd, struct resctrl_val_param *par
- 			goto out;
- 
- 		initialize_mem_bw_resctrl(param->ctrlgrp, param->mongrp,
--					  param->cpu_no, resctrl_val);
-+					  uparams->cpu, resctrl_val);
- 	} else if (!strncmp(resctrl_val, CMT_STR, sizeof(CMT_STR)))
- 		initialize_llc_occu_resctrl(param->ctrlgrp, param->mongrp,
--					    param->cpu_no, resctrl_val);
-+					    uparams->cpu, resctrl_val);
- 
- 	/* Parent waits for child to be ready. */
- 	close(pipefd[1]);
-@@ -823,7 +826,7 @@ int resctrl_val(const char * const *benchmark_cmd, struct resctrl_val_param *par
- 
- 	/* Test runs until the callback setup() tells the test to stop. */
- 	while (1) {
--		ret = param->setup(param);
-+		ret = param->setup(uparams, param);
- 		if (ret == END_OF_TESTS) {
- 			ret = 0;
- 			break;
-@@ -833,7 +836,7 @@ int resctrl_val(const char * const *benchmark_cmd, struct resctrl_val_param *par
- 
- 		if (!strncmp(resctrl_val, MBM_STR, sizeof(MBM_STR)) ||
- 		    !strncmp(resctrl_val, MBA_STR, sizeof(MBA_STR))) {
--			ret = measure_vals(param, &bw_resc_start);
-+			ret = measure_vals(uparams, param, &bw_resc_start);
- 			if (ret)
- 				break;
- 		} else if (!strncmp(resctrl_val, CMT_STR, sizeof(CMT_STR))) {
+ 	char line[1024];
 -- 
 2.30.2
 
