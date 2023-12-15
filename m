@@ -1,306 +1,184 @@
-Return-Path: <linux-kselftest+bounces-2001-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2002-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C128814185
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Dec 2023 06:50:29 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB54B81428F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Dec 2023 08:39:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8B9DD1F20FE2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Dec 2023 05:50:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 424D71F232D7
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Dec 2023 07:39:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17969CA7C;
-	Fri, 15 Dec 2023 05:50:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A709D534;
+	Fri, 15 Dec 2023 07:39:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="lRG3mKWA"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="l/RaSu98"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0887D6AD9
-	for <linux-kselftest@vger.kernel.org>; Fri, 15 Dec 2023 05:50:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=daynix.com
-Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-3b9f8c9307dso329550b6e.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 14 Dec 2023 21:50:04 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CE1F12E75
+	for <linux-kselftest@vger.kernel.org>; Fri, 15 Dec 2023 07:39:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-dbcfd1b2c96so100681276.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Dec 2023 23:39:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1702619404; x=1703224204; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xFKDorqrFC5bosM2lt/mDyJdprik2aA7TxjdYt0y1e4=;
-        b=lRG3mKWA3hLhxbJ++HHf2NQEw8lqXc4lAMsww+H2XM0tm7saisSRA+cLHbbE8/UDme
-         I+pd4IgdOJS51g9TaOsFo9DSUB1r1GPlU01PsitywapE+hKrxLQQL+q3VLcvpdAkp/we
-         v1jCBTl22HwIyhlBAvTLS5nfoCRqbCawuHUwNsOCeTT70UGUS1dl1pzIbeLUbo9iWDeW
-         U+lsTWy8I4z+1tfJYsac0MfM6wVmihVEHvFb6eNNfgqX3V8LymQ86PNGJjQV6KLRHvJS
-         +stmpcKGsrnM7ow/47GQHGZnjCEKU50wCskwqDxRPUIIq96wxE00q46nWVzTl/Nf6jMs
-         eBUQ==
+        d=google.com; s=20230601; t=1702625953; x=1703230753; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Mp/8hWJv2G3IEKZLrg9ZmDkM8WmGCalwoEjWRw4iU4I=;
+        b=l/RaSu98NWmILQWuM6rpl6zMyxbpbwNz5KIo9kTWfntjLzb2z3FiQlmQAufrErANHT
+         dDzaj3j7hVnfNg5wnniuA4g2980iXazQa/BeoTi4LPn8KYKVDCtyVxqy1UvgE+kKvwq1
+         /QgqK/pi+sODqBCWmYRmR+dIkrPDWf0bHqoYn4pYa6hVNCRevcnmfBHgmSoFJzRVJpKM
+         s0Gq1ICunwOB0rDco4o3b56lRR79dtn0SbQ4BQU4PoJLjSWqMaAdLcSbNyv6JK2gz6NE
+         UixTZ816jrYR73ON6JMT1BJJEVkCt9z2SOE8ypGbKC02wKDvGMOXj22xfW/3hoZ5xKui
+         4Zpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702619404; x=1703224204;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xFKDorqrFC5bosM2lt/mDyJdprik2aA7TxjdYt0y1e4=;
-        b=f6qF30dkAwdHjcUq0Fcr6QI+5YSAn6yZskQbx5aEF2fw0tFcbXwG9YHEJ/oCBT7N5w
-         AHL2Yt2qzvaLQq41NXoLU4pjNwEdTyoEDTmeFKQLY4C/Z8J+gE9lQaiQHmRV2clAjxvu
-         RvLmDC+AoXr5eYFPUtV4Bn/y6HYNoYB3Yl87UbyRk7HE/SEfQ28gNZkBtaN7/qN8N3I3
-         04uST7Ej7SBatzfrN6qdg5p4XE7wabZJ4z4OJVvojZUUEFUcKUhdIB0ia4AfM6jnTNNr
-         C88SyGRPiuRdJkVj/qisoAvBgvk/QEyWbP4ocG5Ww8IOmRdnHNJhmlJ2/uUr5OFWKfdd
-         8wHg==
-X-Gm-Message-State: AOJu0Yw9EQRwQDL/ylkGnZZPRur7nQumJ99/QbhevVK8CnCB7Syi+0wU
-	zqSZMWbYLuDM/0T4+/VSA8I/6g==
-X-Google-Smtp-Source: AGHT+IGx2R7EsZiNCgpjAWLFVnSbXZ01T55zLVZoewTO79uTMzNCSJGSk/7hhmSoBW352drVsZLTPg==
-X-Received: by 2002:a05:6808:16a3:b0:3b9:e7e2:f30 with SMTP id bb35-20020a05680816a300b003b9e7e20f30mr13382782oib.7.1702619403985;
-        Thu, 14 Dec 2023 21:50:03 -0800 (PST)
-Received: from [157.82.205.15] ([157.82.205.15])
-        by smtp.gmail.com with ESMTPSA id q5-20020a170902bd8500b001c9d011581dsm13310686pls.164.2023.12.14.21.49.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Dec 2023 21:50:03 -0800 (PST)
-Message-ID: <72b8e198-7058-469a-a1e0-17f48330deca@daynix.com>
-Date: Fri, 15 Dec 2023 14:49:56 +0900
+        d=1e100.net; s=20230601; t=1702625953; x=1703230753;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Mp/8hWJv2G3IEKZLrg9ZmDkM8WmGCalwoEjWRw4iU4I=;
+        b=UB69sKQmwgc9RrCnX/Uz0eUmLtBLfxai6wUWLsPNZpcSQm2Ye415PPunk5PWAyVluG
+         43G9adF+ac1cOGvSnVO4+pnRszf4ijQul9g587fszHcrWDZr2jmKxHroSQLnNDbpwARU
+         Oz6zZ6eLP7YEksJQ/6o91QeaFn3TojQamMKVjCVsOi85gffdt4JSdBiqQnNYG+VlOiXh
+         YM4jqzNfS7BhzA/8bpsItKE21wy07dD3CH488q4iRoPtba2rW4rAUc66E8KS7NMlGEF0
+         U2RuARt2mbvPQwGwYaWW4MLsZJfjbHXP+j4yI/ZR5CJH0fmntXZKyJ0+kKASfoQbjZTZ
+         S1BQ==
+X-Gm-Message-State: AOJu0YxoldB9HtlXuT7C4lqopOGR2HqRrQO3VI97FM/GkJ3pntrT1bEr
+	vCCdAXXDEsVg2DkdwBictZjF/xCdM98Qsw==
+X-Google-Smtp-Source: AGHT+IGHET7uXEidWHXMGL3nVLfetoQmh9ZEua39AXsgZMYdcjq38i3NEbBG3nl+MkvvMOLIudj38fXqOB+xkA==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a25:a122:0:b0:dbc:35fe:5e81 with SMTP id
+ z31-20020a25a122000000b00dbc35fe5e81mr102923ybh.12.1702625953359; Thu, 14 Dec
+ 2023 23:39:13 -0800 (PST)
+Date: Fri, 15 Dec 2023 15:39:07 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Should I add BPF kfuncs for userspace apps? And how?
-To: Stephen Hemminger <stephen@networkplumber.org>
-Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>,
- Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Jason Wang <jasowang@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- "Michael S. Tsirkin" <mst@redhat.com>, Xuan Zhuo
- <xuanzhuo@linux.alibaba.com>, Mykola Lysenko <mykolal@fb.com>,
- Shuah Khan <shuah@kernel.org>, Yuri Benditovich
- <yuri.benditovich@daynix.com>, Andrew Melnychenko <andrew@daynix.com>,
- Benjamin Tissoires <bentiss@kernel.org>, bpf <bpf@vger.kernel.org>,
- "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, kvm@vger.kernel.org,
- LKML <linux-kernel@vger.kernel.org>,
- virtualization@lists.linux-foundation.org,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- Network Development <netdev@vger.kernel.org>
-References: <2f33be45-fe11-4b69-8e89-4d2824a0bf01@daynix.com>
- <CAO-hwJJhzHtKrUEw0zrjgub3+eapgJG-zsG0HRB=PaPi6BxG+w@mail.gmail.com>
- <e256c6df-0a66-4f86-ae96-bff17920c2fb@daynix.com>
- <CAO-hwJKMrWYRNpuprDj9=k87V0yHtLPEJuQ94bpOF3O81=v0kA@mail.gmail.com>
- <0d68722c-9e29-407b-9ef0-331683c995d2@daynix.com>
- <20231214094042.75f704f6@hermes.local>
-Content-Language: en-US
-From: Akihiko Odaki <akihiko.odaki@daynix.com>
-In-Reply-To: <20231214094042.75f704f6@hermes.local>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAJsCfGUC/2XO0Q6CIBTG8VdxXEcDDqh01Xu01hSOyippUqzmf
+ PfQK1qX3xm//5hJwMlhIIdiJhNGF5wf05C7gpihGXukzqZNBBPAKl7T62t0z0v7CrRpuTYSO1l
+ bQ9L7x4Sde2+t0zntwYWnnz5bOvL1ulW4YCqrRE4ZLUExKC20hsOx976/4d74O1kzUeQ0/0AUi aJWmimrWxDqj0JGucwpJFqhbkRdWWCy/qHLsnwBjE6oShkBAAA=
+X-Mailer: b4 0.13-dev-099c9
+Message-ID: <20231215-kunit_bus-v4-0-4f5160e2f95e@google.com>
+Subject: [PATCH v4 0/5] kunit: Add helpers for creating test-managed devices
+From: davidgow@google.com
+To: Rae Moar <rmoar@google.com>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Matti Vaittinen <mazziesaccount@gmail.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Kees Cook <keescook@chromium.org>, 
+	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, Maxime Ripard <mripard@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-hardening@vger.kernel.org, linux-sound@vger.kernel.org, 
+	David Gow <davidgow@google.com>, Maxime Ripard <mripard@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 
-On 2023/12/15 2:40, Stephen Hemminger wrote:
-> On Thu, 14 Dec 2023 14:51:12 +0900
-> Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
-> 
->> On 2023/12/13 19:22, Benjamin Tissoires wrote:
->>> On Tue, Dec 12, 2023 at 1:41 PM Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
->>>>
->>>> On 2023/12/12 19:39, Benjamin Tissoires wrote:
->>>>> Hi,
->>>>>
->>>>> On Tue, Dec 12, 2023 at 9:11 AM Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
->>>>>>
->>>>>> Hi,
->>>>
->>>> Hi,
->>>>
->>>> Thanks for reply.
->>>>   
->>>>>>
->>>>>> It is said eBPF is a safe way to extend kernels and that is very
->>>>>> attarctive, but we need to use kfuncs to add new usage of eBPF and
->>>>>> kfuncs are said as unstable as EXPORT_SYMBOL_GPL. So now I'd like to ask
->>>>>> some questions:
->>>>>>
->>>>>> 1) Which should I choose, BPF kfuncs or ioctl, when adding a new feature
->>>>>> for userspace apps?
->>>>>> 2) How should I use BPF kfuncs from userspace apps if I add them?
->>>>>>
->>>>>> Here, a "userspace app" means something not like a system-wide daemon
->>>>>> like systemd (particularly, I have QEMU in mind). I'll describe the
->>>>>> context more below:
->>>>>
->>>>> I'm probably not the best person in the world to answer your
->>>>> questions, Alexei and others from the BPF core group are, but given
->>>>> that you pointed at a thread I was involved in, I feel I can give you
->>>>> a few pointers.
->>>>>
->>>>> But first and foremost, I encourage you to schedule an agenda item in
->>>>> the BPF office hour[4]. Being able to talk with the core people
->>>>> directly was tremendously helpful to me to understand their point.
->>>>
->>>> I prefer emails because I'm not very fluent when speaking in English and
->>>> may have a difficultly to listen to other people, but I may try it in
->>>> future.
->>>>   
->>>>>
->>>>>   
->>>>>>
->>>>>> ---
->>>>>>
->>>>>> I'm working on a new feature that aids virtio-net implementations using
->>>>>> tuntap virtual network device. You can see [1] for details, but
->>>>>> basically it's to extend BPF_PROG_TYPE_SOCKET_FILTER to report four more
->>>>>> bytes.
->>>>>>
->>>>>> However, with long discussions we have confirmed extending
->>>>>> BPF_PROG_TYPE_SOCKET_FILTER is not going to happen, and adding kfuncs is
->>>>>> the way forward. So I decided how to add kfuncs to the kernel and how to
->>>>>> use it. There are rich documentations for the kernel side, but I found
->>>>>> little about the userspace. The best I could find is a systemd change
->>>>>> proposal that is based on WIP kernel changes[2].
->>>>>
->>>>> Yes, as Alexei already replied, BPF is not adding new stable APIs,
->>>>> only kfuncs. The reason being that once it's marked as stable, you
->>>>> can't really remove it, even if you think it's badly designed and
->>>>> useless.
->>>>>
->>>>> Kfuncs, OTOH are "unstable" by default meaning that the constraints
->>>>> around it are more relaxed.
->>>>>
->>>>> However, "unstable" doesn't mean "unusable". It just means that the
->>>>> kernel might or might not have the function when you load your program
->>>>> in userspace. So you have to take that fact into account from day one,
->>>>> both from the kernel side and the userspace side. The kernel docs have
->>>>> a nice paragraph explaining that situation and makes the distinction
->>>>> between relatively unused kfuncs, and well known established ones.
->>>>>
->>>>> Regarding the systemd discussion you are mentioning ([2]), this is
->>>>> something that I have on my plate for a long time. I think I even
->>>>> mentioned it to Alexei at Kernel Recipes this year, and he frowned his
->>>>> eyebrows when I mentioned it. And looking at the systemd code and the
->>>>> benefits over a plain ioctl, it is clearer that in that case, a plain
->>>>> ioctl is better, mostly because we already know the API and the
->>>>> semantic.
->>>>>
->>>>> A kfunc would be interesting in cases where you are not sure about the
->>>>> overall design, and so you can give a shot at various API solutions
->>>>> without having to keep your bad v1 design forever.
->>>>>   
->>>>>>
->>>>>> So now I'm wondering how I should use BPF kfuncs from userspace apps if
->>>>>> I add them. In the systemd discussion, it is told that Linus said it's
->>>>>> fine to use BPF kfuncs in a private infrastructure big companies own, or
->>>>>> in systemd as those users know well about the system[3]. Indeed, those
->>>>>> users should be able to make more assumptions on the kernel than
->>>>>> "normal" userspace applications can.
->>>>>>
->>>>>> Returning to my proposal, I'm proposing a new feature to be used by QEMU
->>>>>> or other VMM applications. QEMU is more like a normal userspace
->>>>>> application, and usually does not make much assumptions on the kernel it
->>>>>> runs on. For example, it's generally safe to run a Debian container
->>>>>> including QEMU installed with apt on Fedora. BPF kfuncs may work even in
->>>>>> such a situation thanks to CO-RE, but it sounds like *accidentally*
->>>>>> creating UAPIs.
->>>>>>
->>>>>> Considering all above, how can I integrate BPF kfuncs to the application?
->>>>>
->>>>> FWIW, I'm not sure you can rely on BPF calls from a container. There
->>>>> is a high chance the syscall gets disabled by the runtime.
->>>>
->>>> Right. Container runtimes will not pass CAP_BPF by default, but that
->>>> restriction can be lifted and I think that's a valid scenario.
->>>>   
->>>>>   
->>>>>>
->>>>>> If BPF kfuncs are like EXPORT_SYMBOL_GPL, the natural way to handle them
->>>>>> is to think of BPF programs as some sort of kernel modules and
->>>>>> incorporate logic that behaves like modprobe. More concretely, I can put
->>>>>> eBPF binaries to a directory like:
->>>>>> /usr/local/share/qemu/ebpf/$KERNEL_RELEASE
->>>>>
->>>>> I would advise against that (one program per kernel release). Simply
->>>>> because your kfunc may or may not have been backported to kernel
->>>>> release v6.X.Y+1 while it was not there when v6.X.Y was out. So
->>>>> relying on the kernel number is just going to be a headache.
->>>>>
->>>>> As I understand it, the way forward is to rely on the kernel, libbpf
->>>>> and CO-RE: if the function is not available, the program will simply
->>>>> not load, and you'll know that this version of the code is not
->>>>> available (or has changed API).
->>>>>
->>>>> So what I would do if some kfunc API is becoming deprecated, is
->>>>> embedding both code paths in the same BPF unit, but marking them as
->>>>> not loaded by libppf. Then I can load the compilation unit, try v2 of
->>>>> the API, and if it's not available, try v1, and if not, then mention
->>>>> that I can not rely on BPF. Of course, this can also be done with
->>>>> separate compilation units.
->>>>
->>>> Doesn't it mean that the kernel is free to break old versions of QEMU
->>>> including BPF programs? That's something I'd like to avoid.
->>>
->>> Couple of points here:
->>> - when you say "the kernel", it feels like you are talking about an
->>> external actor tampering with your code. But if you submit a kernel
->>> patch with a specific use case and get yourself involved in the
->>> community, why would anybody change your kfunc API without you knowing
->>> it?
->>
->> You are right in the practical aspect.  I can pay efforts to keep kfunc
->> APIs alive and I'm also sure other developers would also try not to
->> break them for good.
->>
->> Nevertheless I'm being careful to evaluate APIs from both of the kernel
->> and userspace (QEMU) viewpoints. If I fail to keep kfuncs stable because
->> I die in an accident, for example, it's a poor excuse for other QEMU
->> developers that I intended to keep them stable with my personal effort.
->>
->>> - the whole warning about "unstable" policy means that the user space
->>> component should not take for granted the capability. So if the kfunc
->>> changes/disappears for good reasons (because it was marked as well
->>> used and deprecated for quite some time), qemu should not *break*, it
->>> should not provide the functionality, or have a secondary plan.
->>>
->>> But even if you are encountering such issues, in case of a change in
->>> the ABI of your kfunc, it should be easy enough to backport the bpf
->>> changes to your old QEMUs and ask users to upgrade the user space if
->>> they upgrade their kernel.
->>>
->>> AFAIU, it is as unstable as you want it to be. It's just that we are
->>> not in the "we don't break user space" contract, because we are
->>> talking about adding a kernel functionality from userspace, which
->>> requires knowing the kernel intrinsics.
->>
->> I must admit I'm still not convinced the proposed BPF program
->> functionality needs to know internals of the kernel.
->>
->> The eBPF program QEMU carries is just to calculate hashes from packets.
->> It doesn't need to know the details of how the kernel handles packets.
->> It only needs to have an access to the packet content.
->>
->> It is exactly what BPF_PROG_TYPE_SOCKET_FILTER does, but it lacks a
->> mechanism to report hash values so I need to extend it or invent a new
->> method. Extending BPF_PROG_TYPE_SOCKET_FILTER is not a way forward since
->> CO-RE is superior to the context rewrite it relies on. But apparently
->> adopting kfuncs and CO-RE also means to lose the "we don't break user
->> space" contract although I have no intention to expose kernel internals
->> to the eBPF program.
-> 
-> An example is how one part of DPDK recomputes RSS over TAP.
-> 
-> https://git.dpdk.org/dpdk/tree/drivers/net/tap/bpf/tap_bpf_program.c
-> 
-> This feature is likely to be removed, because it is not actively used
-> and the changes in BPF program loading broke it on current kernel
-> releases.  Which brings up the point that since the kernel does
-> not have stable API/ABI for BPF program infrastructure, I would
-> avoid it for projects that don't want to deal with that.
+KUnit tests often need to provide a struct device, and thus far have
+mostly been using root_device_register() or platform devices to create
+a 'fake device' for use with, e.g., code which uses device-managed
+resources. This has several disadvantages, including not being designed
+for test use, scattering files in sysfs, and requiring manual teardown
+on test exit, which may not always be possible in case of failure.
 
-It's unfortunate to hear that, but thanks for the information.
-I'll consider more about the option not using BPF (plain ioctl and 
-in-kernel implementation).
+Instead, introduce a set of helper functions which allow devices
+(internally a struct kunit_device) to be created and managed by KUnit --
+i.e., they will be automatically unregistered on test exit. These
+helpers can either use a user-provided struct device_driver, or have one
+automatically created and managed by KUnit. In both cases, the device
+lives on a new kunit_bus.
+
+This is a follow-up to a previous proposal here:
+https://lore.kernel.org/linux-kselftest/20230325043104.3761770-1-davidgow@google.com/
+
+(The kunit_defer() function in the first patch there has since been
+merged as the 'deferred actions' feature.)
+
+My intention is to take this whole series in via the kselftest/kunit
+branch, but I'm equally okay with splitting up the later patches which
+use this to go via the various subsystem trees in case there are merge
+conflicts.
+
+Cheers,
+-- David
+
+Signed-off-by: David Gow <davidgow@google.com>
+---
+Changes in v4:
+- Update tags, fix a missing Signed-off-by.
+- Link to v3: https://lore.kernel.org/r/20231214-kunit_bus-v3-0-7e9a287d3048@google.com
+
+Changes in v3:
+- Port the DRM tests to these new helpers (Thanks, Maxime!)
+- Include the lib/kunit/device-impl.h file, which was missing from the
+  previous revision.
+- Fix a use-after-free bug in kunit_device_driver_test, which resulted
+  in memory corruption on some clang-built UML builds.
+  - The 'test_state' is now allocated with kunit_kzalloc(), not on the
+    stack, as the stack will be gone when cleanup occurs.
+- Link to v2: https://lore.kernel.org/r/20231208-kunit_bus-v2-0-e95905d9b325@google.com
+
+Changes in v2:
+- Simplify device/driver/bus matching, removing the no-longer-required
+  kunit_bus_match function. (Thanks, Greg)
+- The return values are both more consistent (kunit_device_register now
+  returns an explicit error pointer, rather than failing the test), and
+  better documented.
+- Add some basic documentation to the implementations as well as the
+  headers. The documentation in the headers is still more complete, and
+  is now properly compiled into the HTML documentation (under
+  dev-tools/kunit/api/resources.html). (Thanks, Matti)
+- Moved the internal-only kunit_bus_init() function to a private header,
+  lib/kunit/device-impl.h to avoid polluting the public headers, and
+  match other internal-only headers. (Thanks, Greg)
+- Alphabetise KUnit includes in other test modules. (Thanks, Amadeusz.)
+- Several code cleanups, particularly around error handling and
+  allocation. (Thanks Greg, Maxime)
+- Several const-correctness and casting improvements. (Thanks, Greg)
+- Added a new test to verify KUnit cleanup triggers device cleanup.
+  (Thanks, Maxime).
+- Improved the user-specified device test to verify that probe/remove
+  hooks are called correctly. (Thanks, Maxime).
+- The overflow test no-longer needlessly calls
+  kunit_device_unregister().
+- Several other minor cleanups and documentation improvements, which
+  hopefully make this a bit clearer and more robust.
+- Link to v1: https://lore.kernel.org/r/20231205-kunit_bus-v1-0-635036d3bc13@google.com
+
+---
+David Gow (4):
+      kunit: Add APIs for managing devices
+      fortify: test: Use kunit_device
+      overflow: Replace fake root_device with kunit_device
+      ASoC: topology: Replace fake root_device with kunit_device in tests
+
+Maxime Ripard (1):
+      drm/tests: Switch to kunit devices
+
+ Documentation/dev-tools/kunit/api/resource.rst |   9 ++
+ Documentation/dev-tools/kunit/usage.rst        |  50 +++++++
+ drivers/gpu/drm/tests/drm_kunit_helpers.c      |  66 +--------
+ include/kunit/device.h                         |  80 +++++++++++
+ lib/fortify_kunit.c                            |   5 +-
+ lib/kunit/Makefile                             |   3 +-
+ lib/kunit/device-impl.h                        |  17 +++
+ lib/kunit/device.c                             | 181 +++++++++++++++++++++++++
+ lib/kunit/kunit-test.c                         | 134 +++++++++++++++++-
+ lib/kunit/test.c                               |   3 +
+ lib/overflow_kunit.c                           |   5 +-
+ sound/soc/soc-topology-test.c                  |  10 +-
+ 12 files changed, 485 insertions(+), 78 deletions(-)
+---
+base-commit: b285ba6f8cc1b2bfece0b4350fdb92c8780bc698
+change-id: 20230718-kunit_bus-ab19c4ef48dc
+
+Best regards,
+-- 
+David Gow <davidgow@google.com>
+
 
