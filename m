@@ -1,135 +1,144 @@
-Return-Path: <linux-kselftest+bounces-2080-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2081-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8BF0A814C99
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Dec 2023 17:12:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B182C814CB3
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Dec 2023 17:14:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 19C921F22E50
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Dec 2023 16:12:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3BFB51F234DA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Dec 2023 16:14:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E50E3BB27;
-	Fri, 15 Dec 2023 16:11:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 437D53C466;
+	Fri, 15 Dec 2023 16:14:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="N62UDXB7"
+	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="mKRgnA61"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2062.outbound.protection.outlook.com [40.107.20.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FDD33A8FA;
-	Fri, 15 Dec 2023 16:11:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3BFFKRBS022046;
-	Fri, 15 Dec 2023 16:11:32 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=wmAUk/vTF+5Nn1KK9suFd2BGYlSFrE/EsVXvj0c5NBE=;
- b=N62UDXB7gU3t1z6zfhUskS5mDL0zXUYJ87ez/vQTGkUITGkZmYJWpinvO4DVnbQG3Kt2
- XkvqnfL1OPz5G9T/k0hRGudJTIn87UbbqgXe8wdLWCq2CRhn5K2bDAy2qpSg7Yh7+cSK
- 3Ygw0uHBdQpPFqVQ5pkDUpmumGa1CGxh9gYr/z4LOyzZ5k+khKZMq1jn4gaq+zpKw2fI
- XX+81dKWc4dM7p9qA3Nj7tGYr9dn6k8TXJjtlCnwQog6omV9vWAcgq8gURHGRMyInA65
- nS90UVJWK4aJgGYdbWEH4deMOdZ4iEdj1SYrRJwaYuVjAXhihszHUGYW4RqSG3Wz0Q/B 8A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3v0reku5qm-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 15 Dec 2023 16:11:32 +0000
-Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3BFFlkiX010155;
-	Fri, 15 Dec 2023 16:11:32 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3v0reku5qb-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 15 Dec 2023 16:11:32 +0000
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3BFE9QRF012699;
-	Fri, 15 Dec 2023 16:11:31 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3uw3jph59y-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 15 Dec 2023 16:11:31 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3BFGBSIL42140308
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 15 Dec 2023 16:11:28 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 2500020040;
-	Fri, 15 Dec 2023 16:11:28 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id D884520043;
-	Fri, 15 Dec 2023 16:11:27 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Fri, 15 Dec 2023 16:11:27 +0000 (GMT)
-From: Nina Schoetterl-Glausch <nsg@linux.ibm.com>
-To: Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>
-Cc: Nina Schoetterl-Glausch <nsg@linux.ibm.com>, kvm@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, David Hildenbrand <david@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: s390: selftest: memop: Fix undefined behavior
-Date: Fri, 15 Dec 2023 17:11:25 +0100
-Message-Id: <20231215161125.943551-1-nsg@linux.ibm.com>
-X-Mailer: git-send-email 2.40.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00DD53BB30;
+	Fri, 15 Dec 2023 16:13:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XxduouIPGL+yD9l+81btz+/sTN8+rfqStUB8S+98R92qKOQYpfNTw7AtV40zEgD6xl4OTGcYX6ouVV0K5yh031Z2FLTA5H+adVtJS3Epnc2t3ZeFHzqKfvYfB5KZuapwrBLfXipWU/qBBI6k8dedk1koXasfokfNjBUvhfQBo7iVBod+5H6B7PaHh1vCJW+HNVIE6jnUCgvTY4m2qlbBctjs71kBigvtevvbMbsEX+9Bh+l8NVX4VvjN4wnjzdyNvoBKXFbpUpPKY0eBJ6ZKQVm5Oi2kMAi+U6mOXSGQTsKSYRGKo2RGWs6Td93W9Vf3vuXxoMQ5lC2L7KWS2ck4qA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TMJ6UtA7IBt/3joQR1ksu4sIx8mPJEt2r2xf5QaWCV8=;
+ b=FuarGSKGjnplFdhviq7cHmG7U8B8Rs4t/ymmCKNd+WnEAknRMA61exqhZcAB6YiTjXW3vwyhnI1m5dust0x248ghP6IvAnlBW5koHKFuD0Olk0UW1LXazxfijlfXp/AuwGe6Rbp9c/gLz/5sOfSw78r0GWBnQ7tLp2brabILzCVdDmvwVXl7rrGzlNhcyFPz22PUguEmgc9UanMWNIwwtBxfWdLk8GEu0FCf451ArOXLq85jhj1WXW4GgFytZJu7lBo9Rch7LV6PREdusC+lDGeUkjJUrQzi89sLOe5WFTGOUOOWsXYoSbYwP0+d6h4O/gBXnwgWfc2YTjjSvCS1Ow==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TMJ6UtA7IBt/3joQR1ksu4sIx8mPJEt2r2xf5QaWCV8=;
+ b=mKRgnA61nvEh6bPVvtByhuGp53OSUGXXDaX8TMb2ak/egz7Rr9VZMEFoMUyb4Yk+qeJc1Fdz5Ii01Fh+T6GKzniDw5KWkUu95TNkomgGJs9pSeE93bz21hxuUvLz4G0U3GKeNwQIYr0Nj2LDhwHZNw75On0T0SWPSXfFSLBoKOI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM0PR04MB6452.eurprd04.prod.outlook.com (2603:10a6:208:16d::21)
+ by PAXPR04MB8653.eurprd04.prod.outlook.com (2603:10a6:102:21c::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7091.28; Fri, 15 Dec
+ 2023 16:13:56 +0000
+Received: from AM0PR04MB6452.eurprd04.prod.outlook.com
+ ([fe80::dd33:f07:7cfd:afa4]) by AM0PR04MB6452.eurprd04.prod.outlook.com
+ ([fe80::dd33:f07:7cfd:afa4%7]) with mapi id 15.20.7091.030; Fri, 15 Dec 2023
+ 16:13:56 +0000
+Date: Fri, 15 Dec 2023 18:13:52 +0200
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
+To: Roger Quadros <rogerq@kernel.org>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, shuah@kernel.org, s-vadapalli@ti.com,
+	r-gunasekaran@ti.com, vigneshr@ti.com, srk@ti.com, horms@kernel.org,
+	p-varis@ti.com, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v9 05/10] net: ethernet: am65-cpsw: cleanup
+ TAPRIO handling
+Message-ID: <20231215161352.27pz5aaatgb4vfyr@skbuf>
+References: <20231215132048.43727-1-rogerq@kernel.org>
+ <20231215132048.43727-1-rogerq@kernel.org>
+ <20231215132048.43727-6-rogerq@kernel.org>
+ <20231215132048.43727-6-rogerq@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231215132048.43727-6-rogerq@kernel.org>
+ <20231215132048.43727-6-rogerq@kernel.org>
+X-ClientProxiedBy: FR4P281CA0020.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:c9::18) To AM0PR04MB6452.eurprd04.prod.outlook.com
+ (2603:10a6:208:16d::21)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 7IcDHKpNCswVDGbXMLYTUO2nGCw_s9Ta
-X-Proofpoint-GUID: NSSmaOt_irSiAKvDhBsP_AhVSPfMJKHH
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-15_10,2023-12-14_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- priorityscore=1501 mlxlogscore=999 phishscore=0 suspectscore=0 bulkscore=0
- adultscore=0 impostorscore=0 mlxscore=0 lowpriorityscore=0 clxscore=1011
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2312150111
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM0PR04MB6452:EE_|PAXPR04MB8653:EE_
+X-MS-Office365-Filtering-Correlation-Id: 70d4f3f4-11bc-4dbe-a2db-08dbfd88d6a1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	WlY5jNIiPrLiXKAZlGRiSznOBRLP7uFUJcBs87qMrAPZqfnBtJsItor45+RO0excldlua52C3zcETtdA7lMlxY0Wn41ExYlFAsm78ppuS0wuM/tnp9hlkqHnfaUkaTZ8Hap2VoAgQIKw05lemrfGHIP4CLnALW1BfiA9Alrcijdt6XLb3COXyEb7MTUxLbDS6KaeYzp4ixz1Pl4GcAdlKHsU4sgcOrDxIYECjnmY1ifMkUejFqr6SlyOMS1VA4W2q8bSPhZFOZcVTSSzx6cUTOnogZ/bflbDTje/SKlEG3d51U8x5T2UgSL9ObOCPWbFoWt54M08XXTTEXHOmwsaYkp1+JJl1rlhUaAZmJyvWJxLGCsgWqO8Iv0Sq5JUzRu/EX+TnocORJ+zEBbEEH3vSHBy1jD2VH06qO3HZAPa+Sm5Xy0RR2+TPcbLbn+FiZI9wz6mHb4y799nn3iPZRC00eBONhBqWytX2/uyiJv7eMR0bRXGc0DiqI/Sy8DtlgUmmkihtrb8bqsidPU5C+HoCa3mdlMl4y2C1d5TC0+zFrIGEIGtRph61ZGBSP0c6mFC
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6452.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(366004)(396003)(136003)(376002)(346002)(39860400002)(230922051799003)(64100799003)(186009)(451199024)(1800799012)(33716001)(66946007)(6916009)(6666004)(6486002)(66476007)(66556008)(478600001)(44832011)(86362001)(5660300002)(7416002)(316002)(8936002)(8676002)(4326008)(83380400001)(6512007)(9686003)(6506007)(26005)(1076003)(41300700001)(4744005)(2906002)(38100700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?MD8/ID+nqJnIv/gjZLR3HrKzm9DKCCbyTjrrhdElZiQbxansTrUOh3SZSU/G?=
+ =?us-ascii?Q?AYr4BtOQFl3H+KjBH8kV3KOCqfUXLV9mg/RNlQzqBpydvx2Ligs4AstWVxfM?=
+ =?us-ascii?Q?mMWg0djPBC1X5GWTpix/wrXJoXeYW1I3I499HFDFDcXcVCo+4Imd1ChBVFex?=
+ =?us-ascii?Q?OdjcTNj6rwx0jOR5Cckr1JBEAcrqCNnpnNA1gOjqTIrcNZjEiD2YMZinVMgw?=
+ =?us-ascii?Q?XMe6wPS/NIB816v2ptUfoRl7LxDf8qsUWGEFJaJVLOlztIrSAjktXJNWp2U8?=
+ =?us-ascii?Q?7vguyC7B0Ypc8r515FrPcL9w+BfEfwh+8uWF9XXdTz0FvqzrIbT2uz3BTaPX?=
+ =?us-ascii?Q?GKgBSC8S6ya5+jbRvHAud9LgQcpNOs3Y6DiHKH/UYBOmjf5r+LneEgl91Ncy?=
+ =?us-ascii?Q?XbW9vBpfkBLnGRbNAnQV1VagtGHcoH01VzAsoZed4zvYSL1kIPTRLr0WbxC2?=
+ =?us-ascii?Q?wyF1x1Zuq8w18FHx1oFbqI9Q6JYUe4PCJn64fFPJarTVwpZXknheyx9rQoH/?=
+ =?us-ascii?Q?2NV6d6lNtnzkB5fAlIWbyVKFCUpX75AivCfhfylcMn7+OmHUwmJ3bidQfZg9?=
+ =?us-ascii?Q?ep3RF76wfdQgdXtH1l0bcSnTm0FDHEzGaUDvjyrBVHGgTCfAeKeHoMOrhe7Z?=
+ =?us-ascii?Q?F1SnQSm6l4rb7ZC/1Vtd3XKdqONI7vXwWZkEzJ+IT6UcQ7cw2iqejjjOrtk0?=
+ =?us-ascii?Q?vYFEMqNDJkI0/5VW4FRsMajCQ08eCFQ0IGlLlxAydj37i6B+GVLKKsG/o3ZN?=
+ =?us-ascii?Q?vSZL5oiD4jTuwZKwhJQ3xh6nBzu+BKejPQTV+LmVETKBGP0OJZt1GnjUaiXE?=
+ =?us-ascii?Q?SMgWI0fiv8rIV+aJca43t/xeyN2C1rWwo11Z9K7t64t+fpkfCSWaaVCxtN8G?=
+ =?us-ascii?Q?bhbacZYX5Cb4liQxqqPHzm4BjHqpScPMmTEfL8/Pisji2jXrrvXevoehtWx1?=
+ =?us-ascii?Q?CKrRtby4wFZjj4iH/nVxxVNK508F6jQoiHWe6BwNVEi+mM4DykEWnjLi3nFO?=
+ =?us-ascii?Q?TyOPo7UMTxQTnxHJOV+SqMhtJD4IHkk9NYTkMYnKwx+TZY1HrfQwOTPzgOvZ?=
+ =?us-ascii?Q?V3h+jg6v0bL0Nr3YReKgNwXLtDMPpDVQuMU++U6RZd5wWEw1+ic1K4pDKVnF?=
+ =?us-ascii?Q?j9pb62dD0O2p3+5rXlUdFB0lWbLmd+OlM6VIPyqAf+YavLR5s/k/03COJErV?=
+ =?us-ascii?Q?sKzcOZR7xKz4Ox2EO6diSl7TKCPbG3SVCeC7kHF171Q/a/eocnlrDuxaTDl/?=
+ =?us-ascii?Q?YDdDtblyLHClDDzUnsp8pQZjyMNj6j0mqmqm0+ngnOUdznWf4QJUTlXz057v?=
+ =?us-ascii?Q?E5xt6aLYsKkYoSRqtm1SA1jfQwoMm8qMZZbAKHcVSVgHGtrHDwTz8ZQipMH8?=
+ =?us-ascii?Q?qQcW8etUAZEgkCyRQCBazbhLcrKeZdMD+j6FuUpFPUmhgqNg0Tlr+b2TunwL?=
+ =?us-ascii?Q?ijY28LGjWkflpWahU7CRsqL4lQCA9Qv8qbwnowh0eCBOs1AzEIh8hswCe9KW?=
+ =?us-ascii?Q?qfcIS6AkuodV1SzQ4e5jZIoYW2JdBfyyuHbY4ySD88DqDeocJMyy4tZrJN5n?=
+ =?us-ascii?Q?HogfoVMqmrt4fj0tu7v0tqZm2s2CmFbERFl+2cZSAq0AqTUFqXCJr1V/cip3?=
+ =?us-ascii?Q?tg=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 70d4f3f4-11bc-4dbe-a2db-08dbfd88d6a1
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6452.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Dec 2023 16:13:56.2492
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: fDNEtaJA3HwFwId0Y5i4yIyrmZgl2parDy/OT5yUoPljoczJBoaZmUHuRxMeKFgRCA2hj7z39gjIaFIwjvnWlw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8653
 
-If an integer's type has x bits, shifting the integer left by x or more
-is undefined behavior.
-This can happen in the rotate function when attempting to do a rotation
-of the whole value by 0.
+On Fri, Dec 15, 2023 at 03:20:43PM +0200, Roger Quadros wrote:
+> Handle offloading commands using switch-case in
+> am65_cpsw_setup_taprio().
+> 
+> Move checks to am65_cpsw_taprio_replace().
+> 
+> Use NL_SET_ERR_MSG_MOD for error messages.
+> Change error message from "Failed to set cycle time extension"
+> to "cycle time extension not supported"
+> 
+> Signed-off-by: Roger Quadros <rogerq@kernel.org>
+> ---
 
-Fixes: 0dd714bfd200 ("KVM: s390: selftest: memop: Add cmpxchg tests")
-Signed-off-by: Nina Schoetterl-Glausch <nsg@linux.ibm.com>
----
- tools/testing/selftests/kvm/s390x/memop.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
-index bb3ca9a5d731..2eba9575828e 100644
---- a/tools/testing/selftests/kvm/s390x/memop.c
-+++ b/tools/testing/selftests/kvm/s390x/memop.c
-@@ -485,11 +485,13 @@ static bool popcount_eq(__uint128_t a, __uint128_t b)
- 
- static __uint128_t rotate(int size, __uint128_t val, int amount)
- {
--	unsigned int bits = size * 8;
-+	unsigned int left, right, bits = size * 8;
- 
--	amount = (amount + bits) % bits;
-+	right = (amount + bits) % bits;
-+	/* % 128 prevents left shift UB if size == 16 && right == 0 */
-+	left = (bits - right) % 128;
- 	val = cut_to_size(size, val);
--	return (val << (bits - amount)) | (val >> amount);
-+	return (val << left) | (val >> right);
- }
- 
- const unsigned int max_block = 16;
-
-base-commit: 305230142ae0637213bf6e04f6d9f10bbcb74af8
--- 
-2.40.1
-
+Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 
