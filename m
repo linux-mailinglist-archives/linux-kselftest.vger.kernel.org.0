@@ -1,129 +1,238 @@
-Return-Path: <linux-kselftest+bounces-1994-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-1995-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66C2C814030
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Dec 2023 03:46:42 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52892814036
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Dec 2023 03:50:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 32CF01C221BA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Dec 2023 02:46:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A33CF1F2173E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Dec 2023 02:50:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EFC410E1;
-	Fri, 15 Dec 2023 02:46:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8428EC9;
+	Fri, 15 Dec 2023 02:50:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jLRQyiEc"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="n49iH/+0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DF9D46B1;
-	Fri, 15 Dec 2023 02:46:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-336447f240cso99222f8f.3;
-        Thu, 14 Dec 2023 18:46:31 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41CFCA56
+	for <linux-kselftest@vger.kernel.org>; Fri, 15 Dec 2023 02:50:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-5c66bbb3d77so143323a12.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Dec 2023 18:50:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702608390; x=1703213190; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oQP9MgK72ktKydhJ4Sd86nQLKYkKX/b8wJIAMimh76Y=;
-        b=jLRQyiEcYOSpj71XPYjhxFzsjPDrP7E+C9ph8KPlBJ3avkoc282jh/NqykQdWNikN1
-         DiFsGCSHn7ObMmiuY4STXY8y0WuC4jICrKEXLKmjpbEiXJO6evGY0enJ8ymbS/E0T+eA
-         /YdhB487RXeqzp4TcOYjuarVf7OBe9CZYXuWpidRVfORydRS4QLww0YM/7m3ePUBdNSb
-         ZYlN01tRrXdI7eK24Qch0/eN1WOaX/8oCK5fNVcLJfeZC96HtmOeNgiUBeyKlOLg1M3T
-         mE1laPSeEO10FswUo0PLiZmGU+plkq8qO9kRdWZpXYntzRLN8AhrvoSG732F2TPraN/X
-         NbQg==
+        d=linaro.org; s=google; t=1702608614; x=1703213414; darn=vger.kernel.org;
+        h=mime-version:message-id:date:in-reply-to:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=oDvaa/loPXs8QqeKn/dbAir7W2iAEYYDHF7svcomArc=;
+        b=n49iH/+0kxXivgE6iAXzj7+czwvv55cWQL9kTg0UMM4Lx/eMGtHI1DY8iyS8AUEKyc
+         BRyF3R+lr2nr3Vdnna2E+4ITdULkAfxiVVSi1egPPzx9cc9RKKU09AdH3La6VvFIhJLV
+         NztT/Dsg6me6YeSagWmh0YN2ZkfbUtN3yau7YTlkXto/l3MqOlL8Y6vOHLU9SqD1AeJu
+         iV/bo/zfgnAIHCKtzeu+Qa60mcIRlQ8Yjfel6QOpAq0cZInCayks+NuaHEjGfmlRUPyf
+         wCz8iT7/6SnM0/GVqvmyOCKCIc8+f3rZkxydiD808p9jvFdkDQWbXihRSBSYUvQQTd4P
+         wJIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702608390; x=1703213190;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oQP9MgK72ktKydhJ4Sd86nQLKYkKX/b8wJIAMimh76Y=;
-        b=Te7THDOxWJU0LuEh9Y51peWlnA0P3QGDX49q3LejqFKrFAofUudbMurYSVTHccyH8t
-         35CgdxfUwozi1j+Iqy4k6ZX189IPkJKNNwwE/85WndnvAjsxYzGmbHjw3Sf0A0kKnwC7
-         EaOUY5pEcfsMEE7FGg9NB2K+QBR2ghJYO02iXMl/VfSmUABZbl90C4g+6Zghj41wNR9y
-         Hx9+9xLF4dHUKM4Qmvcc1/P74RFHfP2rt10xPUgmv4wXXQuWzCOyoOemI3kQ+awBKUDt
-         by2hhi2vYOq0mtuv7yodSao121wugnvC+TUmQDdppiv9dCOcfi9GuA0VXn3/n0duiqs5
-         4yGw==
-X-Gm-Message-State: AOJu0YzzyNWlepPS5JRuwDr/1QEB6pa/0BwU7OYIgsbxWIkoEKeHdknR
-	kkm6QS3F7yxrUNduYCP2+aqdPlBDYzUYBSAsghc=
-X-Google-Smtp-Source: AGHT+IET6mk/5KdP95zibr3c9wPK3ZnXhMahqd+rDVI4co35xqUOEuC0bTo3empnf6uNK/k9YOZM4Ik2o/fuAUskq3w=
-X-Received: by 2002:a5d:4cd2:0:b0:336:42ff:6924 with SMTP id
- c18-20020a5d4cd2000000b0033642ff6924mr1654975wrt.56.1702608390344; Thu, 14
- Dec 2023 18:46:30 -0800 (PST)
+        d=1e100.net; s=20230601; t=1702608614; x=1703213414;
+        h=mime-version:message-id:date:in-reply-to:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oDvaa/loPXs8QqeKn/dbAir7W2iAEYYDHF7svcomArc=;
+        b=oJF5oHhFPi+5hBAdR6yBNDq2Y3+V6QHiocp4Eby4sEdaO6MH1MzkUf7rohuQaB7ZZM
+         W5X5rVqOf1AyV1S0DdRRNYLvUg7HQlUUM6IKSTFTcJJv9UPAYmiZ5FzaZqhQtYSxP8pd
+         jUXG12hCTs/lYAlgNNjLAvayv1Gdo5ASwB9d8FjsU+FUMAjgtsM4MlbPglgfC58eZhYx
+         o2yJSu8zyiD/IaBgXidD/iPyWw5nzfUE/zCov6brJ87obakPqz6rNNDowh0EqKpWFgYQ
+         seIZdKcI2YUW14jp//HPa17sShhtReLsVGEvLAC5rWjN2Z0qdTKJst92KyP6e3Z6EjmT
+         UkBw==
+X-Gm-Message-State: AOJu0Yxws3xcHcHdnTgWptbgKVU2y0BgT1HpyRUtmWvuT95bq8hB6SmA
+	7BPgvPKqDrVoGvr/VSLjWhip+g==
+X-Google-Smtp-Source: AGHT+IE99vQkPCzS0fUw2+RGCuARu2aeWphX23kJyqBn5JyJXY6hondFJhuQ9dhnml5rfwoe6hL5lw==
+X-Received: by 2002:a05:6a00:cd0:b0:6cd:e046:f3f0 with SMTP id b16-20020a056a000cd000b006cde046f3f0mr7542035pfv.13.1702608614486;
+        Thu, 14 Dec 2023 18:50:14 -0800 (PST)
+Received: from localhost ([2804:14d:7e39:8470:c901:5e00:3dbe:d1bd])
+        by smtp.gmail.com with ESMTPSA id r25-20020aa78b99000000b006d2738a2510sm384321pfd.146.2023.12.14.18.50.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Dec 2023 18:50:14 -0800 (PST)
+References: <20231122-arm64-gcs-v7-0-201c483bd775@kernel.org>
+ <20231122-arm64-gcs-v7-34-201c483bd775@kernel.org>
+User-agent: mu4e 1.10.8; emacs 29.1
+From: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon
+ <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Andrew Morton
+ <akpm@linux-foundation.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton
+ <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, Suzuki K
+ Poulose <suzuki.poulose@arm.com>, Arnd Bergmann <arnd@arndb.de>, Oleg
+ Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, Kees
+ Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>, "Rick P.
+ Edgecombe" <rick.p.edgecombe@intel.com>, Deepak Gupta
+ <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>, Szabolcs Nagy
+ <Szabolcs.Nagy@arm.com>, "H.J. Lu" <hjl.tools@gmail.com>, Paul Walmsley
+ <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
+ <aou@eecs.berkeley.edu>, Florian Weimer <fweimer@redhat.com>, Christian
+ Brauner <brauner@kernel.org>, linux-arm-kernel@lists.infradead.org,
+ linux-doc@vger.kernel.org, kvmarm@lists.linux.dev,
+ linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v7 34/39] kselftest/arm64: Add a GCS test program built
+ with the system libc
+In-reply-to: <20231122-arm64-gcs-v7-34-201c483bd775@kernel.org>
+Date: Thu, 14 Dec 2023 23:50:11 -0300
+Message-ID: <875y1089i4.fsf@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1702594357.git.dxu@dxuuu.xyz> <97ada80f3aaaeb16bf97e31a8fc204513b4fb6a9.1702594357.git.dxu@dxuuu.xyz>
-In-Reply-To: <97ada80f3aaaeb16bf97e31a8fc204513b4fb6a9.1702594357.git.dxu@dxuuu.xyz>
-From: Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date: Thu, 14 Dec 2023 18:46:19 -0800
-Message-ID: <CAADnVQ+j80DCDHsqJZVmBOohFzOT01Ofdi3TbFEuV2xJ4+A=tA@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/3] bpf: selftests: Add bpf_assert_if() and
- bpf_assert_with_if() macros
-To: Daniel Xu <dxu@dxuuu.xyz>
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Mykola Lysenko <mykolal@fb.com>, bpf <bpf@vger.kernel.org>, 
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-On Thu, Dec 14, 2023 at 2:56=E2=80=AFPM Daniel Xu <dxu@dxuuu.xyz> wrote:
->
-> These macros are a temporary stop-gap until bpf exceptions support
-> unwinding acquired entities. Basically these macros act as if they take
-> a callback which only get executed if the assertion fails.
->
-> Signed-off-by: Daniel Xu <dxu@dxuuu.xyz>
-> ---
->  .../testing/selftests/bpf/bpf_experimental.h  | 22 +++++++++++++++++++
->  1 file changed, 22 insertions(+)
->
-> diff --git a/tools/testing/selftests/bpf/bpf_experimental.h b/tools/testi=
-ng/selftests/bpf/bpf_experimental.h
-> index 1386baf9ae4a..d63f415bef26 100644
-> --- a/tools/testing/selftests/bpf/bpf_experimental.h
-> +++ b/tools/testing/selftests/bpf/bpf_experimental.h
-> @@ -263,6 +263,17 @@ extern void bpf_throw(u64 cookie) __ksym;
->   */
->  #define bpf_assert(cond) if (!(cond)) bpf_throw(0);
->
-> +/* Description
-> + *     Assert that a conditional expression is true. If false, runs code=
- in the
-> + *     body before throwing.
-> + * Returns
-> + *     Void.
-> + * Throws
-> + *     An exception with the value zero when the assertion fails.
-> + */
-> +#define bpf_assert_if(cond) \
-> +       for (int ___i =3D 0, ___j =3D !!(cond); !(___j) && !___i; bpf_thr=
-ow(0), ___i++)
 
-Kumar,
+Mark Brown <broonie@kernel.org> writes:
 
-Is this approach reliable?
-I suspect the compiler can still optimize it.
-I feel it will be annoying to clean up if folks start using it now,
-since there won't be a drop in replacement.
-Every such bpf_assert_if() would need to be manually patched.
+> +	/* Same thing via process_vm_readv() */
+> +	local_iov.iov_base = &rval;
+> +	local_iov.iov_len = sizeof(rval);
+> +	remote_iov.iov_base = (void *)gcspr;
+> +	remote_iov.iov_len = sizeof(rval);
+> +	ret = process_vm_writev(child, &local_iov, 1, &remote_iov, 1, 0);
+> +	if (ret == -1)
+> +		ksft_print_msg("process_vm_readv() failed: %s (%d)\n",
+> +			       strerror(errno), errno);
 
-If 2nd part of exception is far, how about we add an equivalent
-of __bpf_assert() macroses with conditional ops in asm,
-but with extra 'asm volatile goto' that can be used to construct
-release of resources.
+The comment and the error message say "process_vm_readv()", but the
+function actually called is process_vm_writev(). Is this intended?
 
-bpf_do_assert_eq(var1, 0) { bpf_spin_unlock(...); }
-bpf_do_assert_lt(var2, 0) { bpf_spin_unlock(...); }
+Also, process_vm_writev() is failing when I run on my Arm FVP:
+
+# #  RUN           global.ptrace_read_write ...
+# # Child: 1150
+# # Child GCSPR 0xffffa210ffd8, flags 1, locked 0
+# # process_vm_readv() failed: Bad address (14)
+# # libc-gcs.c:271:ptrace_read_write:Expected ret (-1) == sizeof(rval) (8)
+# # libc-gcs.c:272:ptrace_read_write:Expected val (281473401005692) == rval (281473402849248)
+# # libc-gcs.c:293:ptrace_read_write:Expected val (281473401005692) == ptrace(PTRACE_PEEKDATA, child, (void *)gcspr, NULL) (0)
+# # ptrace_read_write: Test failed at step #1
+# #          FAIL  global.ptrace_read_write
+# not ok 4 global.ptrace_read_write
+
+If I swap process_vm_readv() and process_vm_writev(), then the read
+succeeds but the write fails:
+
+#  RUN           global.ptrace_read_write ...
+# Child: 1996
+# Child GCSPR 0xffffa7fcffd8, flags 1, locked 0
+# process_vm_writev() failed: Bad address (14)
+# libc-gcs.c:291:ptrace_read_write:Expected ret (-1) == sizeof(rval) (8)
+# libc-gcs.c:293:ptrace_read_write:Expected val (281473500358268) == ptrace(PTRACE_PEEKDATA, child, (void *)gcspr, NULL) (0)
+# ptrace_read_write: Test failed at step #1
+#          FAIL  global.ptrace_read_write
+not ok 4 global.ptrace_read_write
+
+> +/* Put it all together, we can safely switch to and from the stack */
+> +TEST_F(map_gcs, stack_switch)
+> +{
+> +	size_t cap_index;
+> +	cap_index = (variant->stack_size / sizeof(unsigned long));
+> +	unsigned long *orig_gcspr_el0, *pivot_gcspr_el0;
+> +
+> +	/* Skip over the stack terminator and point at the cap */
+> + switch (variant->flags & (SHADOW_STACK_SET_MARKER | SHADOW_STACK_SET_TOKEN)) {
+> +	case SHADOW_STACK_SET_MARKER | SHADOW_STACK_SET_TOKEN:
+> +		cap_index -= 2;
+> +		break;
+> +	case SHADOW_STACK_SET_TOKEN:
+> +		cap_index -= 1;
+> +		break;
+> +	case SHADOW_STACK_SET_MARKER:
+> +	case 0:
+> +		/* No cap, no test */
+> +		return;
+> +	}
+> +	pivot_gcspr_el0 = &self->stack[cap_index];
+> +
+> +	/* Pivot to the new GCS */
+> +	ksft_print_msg("Pivoting to %p from %p, target has value 0x%lx\n",
+> +		       pivot_gcspr_el0, get_gcspr(),
+> +		       *pivot_gcspr_el0);
+> +	gcsss1(pivot_gcspr_el0);
+> +	orig_gcspr_el0 = gcsss2();
+> +	ksft_print_msg("Pivoted to %p from %p, target has value 0x%lx\n",
+> +		       pivot_gcspr_el0, get_gcspr(),
+
+Not sure about the intent here, but perhaps "get_gcspr()" here should be
+"orig_gcspr_el0" instead? Ditto in the equivalent place at the
+map_gcs.stack_overflow test below.
+
+Also, it's strange that the tests defined after map_gcs.stack_overflow
+don't run when I execute this test program. I'm doing:
+
+$ ./run_kselftest.sh -t arm64:libc-gcs
+
+I.e., these tests aren't being run in my FVP:
+
+> +FIXTURE_VARIANT_ADD(map_invalid_gcs, too_small)
+> +FIXTURE_VARIANT_ADD(map_invalid_gcs, unligned_1)
+> +FIXTURE_VARIANT_ADD(map_invalid_gcs, unligned_2)
+> +FIXTURE_VARIANT_ADD(map_invalid_gcs, unligned_3)
+> +FIXTURE_VARIANT_ADD(map_invalid_gcs, unligned_4)
+> +FIXTURE_VARIANT_ADD(map_invalid_gcs, unligned_5)
+> +FIXTURE_VARIANT_ADD(map_invalid_gcs, unligned_6)
+> +FIXTURE_VARIANT_ADD(map_invalid_gcs, unligned_7)
+> +TEST_F(map_invalid_gcs, do_map)
+> +FIXTURE_VARIANT_ADD(invalid_mprotect, exec)
+> +FIXTURE_VARIANT_ADD(invalid_mprotect, bti)
+> +FIXTURE_VARIANT_ADD(invalid_mprotect, exec_bti)
+> +TEST_F(invalid_mprotect, do_map)
+> +TEST_F(invalid_mprotect, do_map_read)
+
+Finally, one last comment:
+
+> +int main(int argc, char **argv)
+> +{
+> +	unsigned long gcs_mode;
+> +	int ret;
+> +
+> +	if (!(getauxval(AT_HWCAP2) & HWCAP2_GCS))
+> +		ksft_exit_skip("SKIP GCS not supported\n");
+> +
+> +	/* 
+> +	 * Force shadow stacks on, our tests *should* be fine with or
+> +	 * without libc support and with or without this having ended
+> +	 * up tagged for GCS and enabled by the dynamic linker.  We
+> +	 * can't use the libc prctl() function since we can't return
+> +	 * from enabling the stack.  Also lock GCS if not already
+> +	 * locked so we can test behaviour when it's locked.
+
+This is probably a leftover from a previous version: the test doesn't
+lock any GCS flag.
+
+> +	 */
+> +	ret = my_syscall2(__NR_prctl, PR_GET_SHADOW_STACK_STATUS, &gcs_mode);
+> +	if (ret) {
+> +		ksft_print_msg("Failed to read GCS state: %d\n", ret);
+> +		return EXIT_FAILURE;
+> +	}
+> +	
+> +	if (!(gcs_mode & PR_SHADOW_STACK_ENABLE)) {
+> +		gcs_mode = PR_SHADOW_STACK_ENABLE;
+> +		ret = my_syscall2(__NR_prctl, PR_SET_SHADOW_STACK_STATUS,
+> +				  gcs_mode);
+> +		if (ret) {
+> +			ksft_print_msg("Failed to configure GCS: %d\n", ret);
+> +			return EXIT_FAILURE;
+> +		}
+> +	}
+> +
+> +	/* Avoid returning in case libc doesn't understand GCS */
+> +	exit(test_harness_run(argc, argv));
+> +}
+
+
+-- 
+Thiago
 
