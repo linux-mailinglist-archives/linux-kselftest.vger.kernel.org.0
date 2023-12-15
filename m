@@ -1,37 +1,37 @@
-Return-Path: <linux-kselftest+bounces-2015-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2016-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2394D8148F8
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Dec 2023 14:21:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 306F68148FB
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Dec 2023 14:21:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CD1751F24C18
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Dec 2023 13:21:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DA4E51F23932
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Dec 2023 13:21:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BF782DB94;
-	Fri, 15 Dec 2023 13:20:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A4B62D7B6;
+	Fri, 15 Dec 2023 13:21:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gSUxJ2J7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eQDvHcYi"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B8602DB92;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD3FF2E62B;
+	Fri, 15 Dec 2023 13:21:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ADA4C433C8;
 	Fri, 15 Dec 2023 13:20:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AF12C433CD;
-	Fri, 15 Dec 2023 13:20:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702646458;
-	bh=6hII7Re0HVmoOSvj4a3MTp36DaERjeVsACnNLxoOxKM=;
+	s=k20201202; t=1702646462;
+	bh=glwQUbZej9xPHHx7W0zMnqG4yuuk1wNalrDhBBFRPnw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=gSUxJ2J7smMCx34RHtAiC26Hhyb3sHpRiEsswZ4c8gIL50soACYGtxhfOuq36wC0+
-	 tDH0m/KfaGLCon5/unmtFJy9QneuMuEKNW83JbRhbzQ1R71qjGziNIbtz4It8af/QY
-	 dHrwB74Ya/sW76NjiLqN0hm1ei9fzyYVQkC0JsNre864Ze6GDaGn5l+iX4nXzblXe5
-	 lP9E1VWlHdsFWOgkQgvn+ZrE3Tt71WOGCrF0EmLdR1aYh8SuL4wdliqiyp9aTS2h7a
-	 LIZ1OTE0xAe/nazEni+v07XYcEMhCVpJOfEgYM7DdAQL6FOZABZ/nLiWkTBGnGeSr4
-	 gllFhBH6IhsGA==
+	b=eQDvHcYi3V4aMF5bwJg1UGxS4x4Iuk/FTTudklABc3whggNVpuqJv/dJcdaTMWL4q
+	 sq8XbDvi2/WBE93+M2cf8+0Y+uP2ZEx+rGrJRgzw4IBCzNBLshi8lBh+VaiEgmQ5QQ
+	 Zco/EIFABt5BpR8Fw8vJy+J+WMPsKV2i0Xap+W1bwyzS7PPEAczl2IEcrz6tXddaGR
+	 ICNlLs2yCE0ydZ08XrgsjEeiSU5dJrFL9lGQah7IFcPZTzsVSDpORc7f7ktDcn4DZq
+	 M4wVIZ1leHhZyf1/qzL9jkh153TB2/py4vVnlhfIT72Pz9r+TCDr4Yeeoi5N80QR6u
+	 Xow6QHrbYSXhQ==
 From: Roger Quadros <rogerq@kernel.org>
 To: davem@davemloft.net,
 	edumazet@google.com,
@@ -49,9 +49,9 @@ Cc: s-vadapalli@ti.com,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	rogerq@kernel.org
-Subject: [PATCH net-next v9 01/10] selftests: forwarding: ethtool_mm: support devices with higher rx-min-frag-size
-Date: Fri, 15 Dec 2023 15:20:39 +0200
-Message-Id: <20231215132048.43727-2-rogerq@kernel.org>
+Subject: [PATCH net-next v9 02/10] selftests: forwarding: ethtool_mm: fall back to aggregate if device does not report pMAC stats
+Date: Fri, 15 Dec 2023 15:20:40 +0200
+Message-Id: <20231215132048.43727-3-rogerq@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231215132048.43727-1-rogerq@kernel.org>
 References: <20231215132048.43727-1-rogerq@kernel.org>
@@ -65,87 +65,72 @@ Content-Transfer-Encoding: 8bit
 
 From: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-Some devices have errata due to which they cannot report ETH_ZLEN (60)
-in the rx-min-frag-size. This was foreseen of course, and lldpad has
-logic that when we request it to advertise addFragSize 0, it will round
-it up to the lowest value that is _actually_ supported by the hardware.
-
-The problem is that the selftest expects lldpad to report back to us the
-same value as we requested.
-
-Make the selftest smarter by figuring out on its own what is a
-reasonable value to expect.
+Some devices do not support individual 'pmac' and 'emac' stats.
+For such devices, resort to 'aggregate' stats.
 
 Cc: Shuah Khan <shuah@kernel.org>
 Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 Tested-by: Roger Quadros <rogerq@kernel.org>
 Signed-off-by: Roger Quadros <rogerq@kernel.org>
 ---
- .../selftests/net/forwarding/ethtool_mm.sh    | 37 ++++++++++++++++++-
- 1 file changed, 35 insertions(+), 2 deletions(-)
+ tools/testing/selftests/net/forwarding/ethtool_mm.sh | 11 +++++++++++
+ tools/testing/selftests/net/forwarding/lib.sh        |  9 +++++++++
+ 2 files changed, 20 insertions(+)
 
 Changelog:
 
 v9: no code change. Added Kselftest maintainer in Cc.
-v8: no change. Moved to the beginning of series.
-v7: initial commit
-
+v8: initial commit
 
 diff --git a/tools/testing/selftests/net/forwarding/ethtool_mm.sh b/tools/testing/selftests/net/forwarding/ethtool_mm.sh
-index 39e736f30322..6212913f4ad1 100755
+index 6212913f4ad1..50d5bfb17ef1 100755
 --- a/tools/testing/selftests/net/forwarding/ethtool_mm.sh
 +++ b/tools/testing/selftests/net/forwarding/ethtool_mm.sh
-@@ -155,15 +155,48 @@ manual_failed_verification_h2_to_h1()
- 	manual_failed_verification $h2 $h1
- }
+@@ -25,6 +25,10 @@ traffic_test()
+ 	local after=
+ 	local delta=
  
-+smallest_supported_add_frag_size()
-+{
-+	local iface=$1
-+	local rx_min_frag_size=
-+
-+	rx_min_frag_size=$(ethtool --json --show-mm $iface | \
-+		jq '.[]."rx-min-frag-size"')
-+
-+	if [ $rx_min_frag_size -le 60 ]; then
-+		echo 0
-+	elif [ $rx_min_frag_size -le 124 ]; then
-+		echo 1
-+	elif [ $rx_min_frag_size -le 188 ]; then
-+		echo 2
-+	elif [ $rx_min_frag_size -le 252 ]; then
-+		echo 3
-+	else
-+		echo "$iface: RX min frag size $rx_min_frag_size cannot be advertised over LLDP"
-+		exit 1
++	if [ ${has_pmac_stats[$if]} = false ]; then
++		src="aggregate"
 +	fi
-+}
 +
-+expected_add_frag_size()
-+{
-+	local iface=$1
-+	local requested=$2
-+	local min=$(smallest_supported_add_frag_size $iface)
-+
-+	[ $requested -le $min ] && echo $min || echo $requested
-+}
-+
- lldp_change_add_frag_size()
- {
- 	local add_frag_size=$1
-+	local pattern=
+ 	before=$(ethtool_std_stats_get $if "eth-mac" "FramesTransmittedOK" $src)
  
- 	lldptool -T -i $h1 -V addEthCaps addFragSize=$add_frag_size >/dev/null
- 	# Wait for TLVs to be received
- 	sleep 2
--	lldptool -i $h2 -t -n -V addEthCaps | \
--		grep -q "Additional fragment size: $add_frag_size"
-+	pattern=$(printf "Additional fragment size: %d" \
-+			 $(expected_add_frag_size $h1 $add_frag_size))
-+	lldptool -i $h2 -t -n -V addEthCaps | grep -q "$pattern"
+ 	$MZ $if -q -c $num_pkts -p 64 -b bcast -t ip -R $PREEMPTIBLE_PRIO
+@@ -317,6 +321,13 @@ for netif in ${NETIFS[@]}; do
+ 		echo "SKIP: $netif does not support MAC Merge"
+ 		exit $ksft_skip
+ 	fi
++
++	if check_ethtool_pmac_std_stats_support $netif eth-mac; then
++		has_pmac_stats[$netif]=true
++	else
++		has_pmac_stats[$netif]=false
++		echo "$netif does not report pMAC statistics, falling back to aggregate"
++	fi
+ done
+ 
+ trap cleanup EXIT
+diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
+index 8f6ca458af9a..763c262a3453 100755
+--- a/tools/testing/selftests/net/forwarding/lib.sh
++++ b/tools/testing/selftests/net/forwarding/lib.sh
+@@ -146,6 +146,15 @@ check_ethtool_mm_support()
+ 	fi
  }
  
- lldp()
++check_ethtool_pmac_std_stats_support()
++{
++	local dev=$1; shift
++	local grp=$1; shift
++
++	[ 0 -ne $(ethtool --json -S $dev --all-groups --src pmac 2>/dev/null \
++		| jq '.[]."$grp" | length') ]
++}
++
+ check_locked_port_support()
+ {
+ 	if ! bridge -d link show | grep -q " locked"; then
 -- 
 2.34.1
 
