@@ -1,236 +1,306 @@
-Return-Path: <linux-kselftest+bounces-2000-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2001-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 968BA8140D5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Dec 2023 04:58:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C128814185
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Dec 2023 06:50:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4DE1628425E
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Dec 2023 03:58:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8B9DD1F20FE2
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Dec 2023 05:50:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D81AD5697;
-	Fri, 15 Dec 2023 03:58:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17969CA7C;
+	Fri, 15 Dec 2023 05:50:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="e/gUkfol"
+	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="lRG3mKWA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D172CA66;
-	Fri, 15 Dec 2023 03:58:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1702612718; x=1734148718;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=E2Q5mR3Nq+ylBpds7LuGW6aZWrY1I9MJqjIyvGrtPPc=;
-  b=e/gUkfolZwdyGGnC5mAtZQ7o1cXPTxMysxvwk5hfIJGZiMLaHW69uNVX
-   zwW3xJTOtsqKWf5sey+oe2a2cyLLfZh4rjnwB+SDpu/LwylGEbFWLCfek
-   +vMhMDl1JSH2BTreQThWlTH/dapnqf8yzL7uRXlieXbOxBT8igClm58Fs
-   s6+agDmH8Vcb3xt2P/SsVm9/7igbvtx+5+doGCKj/FvT9LZO2vjvUs3cT
-   Aq2aDZM67Ycio7LWzEKDrE8IMynm6Fx7uTay46roTVs9iHfbsaGjnB000
-   I/bDvGrCO47G+npzIQKijjqw//jWYCBpsQgJCzllA/RZqE5TAuvamfgUQ
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10924"; a="2314390"
-X-IronPort-AV: E=Sophos;i="6.04,277,1695711600"; 
-   d="scan'208";a="2314390"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Dec 2023 19:58:37 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10924"; a="724310938"
-X-IronPort-AV: E=Sophos;i="6.04,277,1695711600"; 
-   d="scan'208";a="724310938"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga003.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 14 Dec 2023 19:58:36 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Thu, 14 Dec 2023 19:58:36 -0800
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35 via Frontend Transport; Thu, 14 Dec 2023 19:58:36 -0800
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.100)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Thu, 14 Dec 2023 19:58:36 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EjUeylmhnnHKGFOuSzlOzX7w+5YwsXC6jnUCcwe+cWmFtYxSK5aUFtijUr78aD2ejPSN2zL2R6PgArBBjRbfb8IkohK1Q98T8LQAR69GPUGz1DiFQlM/aLSsIFgu73qc+eW9D3TFyEJszqtP1v7HCiSvqJHf/+MxG8dW+rDXOa0ntopqIO4kkVMyLMoikNKlZt5U15w2r+1dY/RF7AlhAvkCdmM1juPQESOVz50HG8q10u1P/JMBDC9FKRpgh4Z9V+4nUs/HLs2ZUYIoAYFfnQkO8UOX7gnuJUaUYf0/YCIpnIzysuQYmET+4CZlaCLLLaWTa3qTJkEP73RFkxseng==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3Emub2psSpmI+xoeBzX9EBfLg7n86j4KCLCcqlYdvpI=;
- b=fbG4D3Ft1nzZZRg0fq+RctDWw10+l+CulGS/SbU7PNRMdop6HjQ+NYSHbG6MedUDRAYYM+wyjSvMaxu0aTmgonERBtYoRKqNZtsKtyBubmoA+E76pliiff64kmKZbh+mMzxYhI/R/mfoK5WrKjQQTFjswBdEOIVVvaele3AXhWGuSCg8+t59bzSxmzvV7xtcV/3wCr3KTV1Kc44BZGMj8FtD7WuLxDD6+WKkQIFvuawtgZC8PSwmjjADq1dtPoyqzG9VzMy6JdWk/VLf+alZIM+Is62N5re0jWxeBwdY1uIrfvLHD6QC09NtRIRjgzMMdyGS4oVuo7bLhEsjCKwL0Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DS0PR11MB7529.namprd11.prod.outlook.com (2603:10b6:8:141::20)
- by LV3PR11MB8696.namprd11.prod.outlook.com (2603:10b6:408:216::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7091.28; Fri, 15 Dec
- 2023 03:58:34 +0000
-Received: from DS0PR11MB7529.namprd11.prod.outlook.com
- ([fe80::e4ae:3948:1f55:547d]) by DS0PR11MB7529.namprd11.prod.outlook.com
- ([fe80::e4ae:3948:1f55:547d%5]) with mapi id 15.20.7091.028; Fri, 15 Dec 2023
- 03:58:34 +0000
-Message-ID: <7c398efc-8a2f-479d-bcff-ded8cc1ef3d0@intel.com>
-Date: Fri, 15 Dec 2023 12:01:19 +0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 1/3] iommufd: Add data structure for Intel VT-d stage-1
- cache invalidation
-Content-Language: en-US
-To: Nicolin Chen <nicolinc@nvidia.com>, "Tian, Kevin" <kevin.tian@intel.com>
-CC: "joro@8bytes.org" <joro@8bytes.org>, "alex.williamson@redhat.com"
-	<alex.williamson@redhat.com>, "jgg@nvidia.com" <jgg@nvidia.com>,
-	"robin.murphy@arm.com" <robin.murphy@arm.com>, "baolu.lu@linux.intel.com"
-	<baolu.lu@linux.intel.com>, "cohuck@redhat.com" <cohuck@redhat.com>,
-	"eric.auger@redhat.com" <eric.auger@redhat.com>, "kvm@vger.kernel.org"
-	<kvm@vger.kernel.org>, "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-	"chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-	"yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>, "peterx@redhat.com"
-	<peterx@redhat.com>, "jasowang@redhat.com" <jasowang@redhat.com>,
-	"shameerali.kolothum.thodi@huawei.com"
-	<shameerali.kolothum.thodi@huawei.com>, "lulu@redhat.com" <lulu@redhat.com>,
-	"suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-	"iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "Duan,
- Zhenzhong" <zhenzhong.duan@intel.com>, "joao.m.martins@oracle.com"
-	<joao.m.martins@oracle.com>, "Zeng, Xin" <xin.zeng@intel.com>, "Zhao, Yan Y"
-	<yan.y.zhao@intel.com>
-References: <20231117131816.24359-1-yi.l.liu@intel.com>
- <20231117131816.24359-2-yi.l.liu@intel.com>
- <c967e716-9112-4d1a-b6f7-9a005e28202d@intel.com>
- <BN9PR11MB5276D14D2A7FF60B41A6A7B48C93A@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZXu5whlIGfiq16wF@Asurada-Nvidia>
- <BN9PR11MB52766D7F774510E0181CC89B8C93A@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZXvI2IiXwwuHRE8V@Asurada-Nvidia>
-From: Yi Liu <yi.l.liu@intel.com>
-In-Reply-To: <ZXvI2IiXwwuHRE8V@Asurada-Nvidia>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SG2PR04CA0212.apcprd04.prod.outlook.com
- (2603:1096:4:187::8) To DS0PR11MB7529.namprd11.prod.outlook.com
- (2603:10b6:8:141::20)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0887D6AD9
+	for <linux-kselftest@vger.kernel.org>; Fri, 15 Dec 2023 05:50:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=daynix.com
+Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-3b9f8c9307dso329550b6e.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 14 Dec 2023 21:50:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1702619404; x=1703224204; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xFKDorqrFC5bosM2lt/mDyJdprik2aA7TxjdYt0y1e4=;
+        b=lRG3mKWA3hLhxbJ++HHf2NQEw8lqXc4lAMsww+H2XM0tm7saisSRA+cLHbbE8/UDme
+         I+pd4IgdOJS51g9TaOsFo9DSUB1r1GPlU01PsitywapE+hKrxLQQL+q3VLcvpdAkp/we
+         v1jCBTl22HwIyhlBAvTLS5nfoCRqbCawuHUwNsOCeTT70UGUS1dl1pzIbeLUbo9iWDeW
+         U+lsTWy8I4z+1tfJYsac0MfM6wVmihVEHvFb6eNNfgqX3V8LymQ86PNGJjQV6KLRHvJS
+         +stmpcKGsrnM7ow/47GQHGZnjCEKU50wCskwqDxRPUIIq96wxE00q46nWVzTl/Nf6jMs
+         eBUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702619404; x=1703224204;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xFKDorqrFC5bosM2lt/mDyJdprik2aA7TxjdYt0y1e4=;
+        b=f6qF30dkAwdHjcUq0Fcr6QI+5YSAn6yZskQbx5aEF2fw0tFcbXwG9YHEJ/oCBT7N5w
+         AHL2Yt2qzvaLQq41NXoLU4pjNwEdTyoEDTmeFKQLY4C/Z8J+gE9lQaiQHmRV2clAjxvu
+         RvLmDC+AoXr5eYFPUtV4Bn/y6HYNoYB3Yl87UbyRk7HE/SEfQ28gNZkBtaN7/qN8N3I3
+         04uST7Ej7SBatzfrN6qdg5p4XE7wabZJ4z4OJVvojZUUEFUcKUhdIB0ia4AfM6jnTNNr
+         C88SyGRPiuRdJkVj/qisoAvBgvk/QEyWbP4ocG5Ww8IOmRdnHNJhmlJ2/uUr5OFWKfdd
+         8wHg==
+X-Gm-Message-State: AOJu0Yw9EQRwQDL/ylkGnZZPRur7nQumJ99/QbhevVK8CnCB7Syi+0wU
+	zqSZMWbYLuDM/0T4+/VSA8I/6g==
+X-Google-Smtp-Source: AGHT+IGx2R7EsZiNCgpjAWLFVnSbXZ01T55zLVZoewTO79uTMzNCSJGSk/7hhmSoBW352drVsZLTPg==
+X-Received: by 2002:a05:6808:16a3:b0:3b9:e7e2:f30 with SMTP id bb35-20020a05680816a300b003b9e7e20f30mr13382782oib.7.1702619403985;
+        Thu, 14 Dec 2023 21:50:03 -0800 (PST)
+Received: from [157.82.205.15] ([157.82.205.15])
+        by smtp.gmail.com with ESMTPSA id q5-20020a170902bd8500b001c9d011581dsm13310686pls.164.2023.12.14.21.49.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Dec 2023 21:50:03 -0800 (PST)
+Message-ID: <72b8e198-7058-469a-a1e0-17f48330deca@daynix.com>
+Date: Fri, 15 Dec 2023 14:49:56 +0900
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR11MB7529:EE_|LV3PR11MB8696:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4081d4c4-7a4c-485f-fd20-08dbfd221b49
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 10B+2jJAVqhGUYE0nfMthL4IuRa8XCx9Iba9mIsJHv+H1ikqfnHeekda4F2fndjQacnk+aPeHSarC2ytmQnCWZaW9cWthMafEbZLMFqM3bbb0N7DMwbOexaGfKDZw2yHfrpvdkS0wgPG6OzODIbBV0PeRApwU6iBf58eyFjmaKDv8ceWaeaMwQ2fRO06FIkBLyzKrsNSvMSIG4HZD89PJJAUGxqrazHUmsDc1U5LqVA3YklwJE6IQfOXcCNFCeAI/9lhP9CcL0YxWbniBW0KUlzd1TlyWNL2CROGKlm/AwfWXdKdRQ8KgawSt3Eo9K75tb4LEqWfmNU4RfO3AOiLcJyiz1gEASc2mLO4pthUWFezyYSz1lWCVpCT8Su536zAtZS+/ZzMtbzlOWVePJrX4a/18Bngn6yHK/sLGGGYmuumEzFKXKsEM7X1kO4X0AVim/MCPCtqGj7rXQGothS/dnJAzt5KcMl6PYrNl+PAEomP3OKMJyY5TWtMZwZs7ccm4ByT+yR7S5WipmP2hsm3CcMWEvOo87Lax/fjXh1vrtrruFS66UrheWIzy0tOZ+wV5Y4EZfGUeVhnKkNTFrSsFEyiESOeFezyE9kM1HFBRF6lRdmp7ITeC1knxUD3pAiwn3ZiWOf2yf5Z62sKq4j3Ug==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB7529.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(39860400002)(346002)(376002)(136003)(396003)(230922051799003)(64100799003)(451199024)(1800799012)(186009)(2906002)(31696002)(7416002)(6486002)(478600001)(41300700001)(82960400001)(31686004)(86362001)(5660300002)(4326008)(110136005)(66476007)(66556008)(66946007)(2616005)(6636002)(316002)(83380400001)(26005)(8676002)(53546011)(8936002)(6506007)(6512007)(6666004)(54906003)(36756003)(38100700002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bTVNSjN5a21veEI5d2NkVVVIa0dmLzVKbHRuMGN3c3dwNCtEa2JrcTE2K3JX?=
- =?utf-8?B?VmRjdGtNTUwzK2xHcC9nenRySEVPQXF2S1ByNE82cXdmbFoyU2EyV0lxaHlI?=
- =?utf-8?B?WmhZMHVEUUFHNkR6WTRPQklQSk8zcHpUNkpOZ2ZlenZiV3NEOEZzRkJMdlBw?=
- =?utf-8?B?V05PbEsvcHZYd3NYQXQrbHJYbWI3S3AyR0tERTZWSlQ5Z2p1ejE0KzNTU2hP?=
- =?utf-8?B?dnowN2wrOHMvL1VXUDJ0L2cxR09YMStUK2pQbEdhUkdSd05YT21sZHBxT2Q4?=
- =?utf-8?B?SFJGVXBla0tIbE5vOXFxc0dmRjYyRzhkOGVHNUduanZlM0dmZmg3WWtZVWpW?=
- =?utf-8?B?TXV4VEo4Mmp5VmRCUFZvNUVCOVZ3NEFBNSsyWWNEbEpwMDhjU2FWU0MvSEdl?=
- =?utf-8?B?M1NiSkVXSStTQUk2ZG0zRE90NU9wTitwQ0pnQThZREtJV1hhdzJId20ybndl?=
- =?utf-8?B?TjZsUWp6RnYyRmRDaHZWV2JLT0FoNGhLMjViUW00emorb21kUmpwUGRGQnpL?=
- =?utf-8?B?ZXV4MDk5ZlArRGdCbjc2ZWUydmIybVorMlcxQWpwSkxWeFVKMURCRFgwek80?=
- =?utf-8?B?c1BrYUZ1T0Q5aXJTcCtqV3JwcldSQ0Q2Nm1NVUtoTlMvREllcUxwNmJKMUNL?=
- =?utf-8?B?eHBjUGdpZXh3MDNYd2o1djRWL3N4WnBEVy8rdENaSk9lUUlUVkdzZzJHd0FY?=
- =?utf-8?B?VVNiNTQxRE9QbHc3QzRvMzV6VDZ1bW9xbGdaSnpSTWJKU09JVGNoc2ZNcWRK?=
- =?utf-8?B?YWlTeHM5UnEvaW9weS9EQWJaK25WeEF6OG1ReEk3bERRYmcwMXBzWmZvU1FT?=
- =?utf-8?B?V1pNSkFMZFpCRWh6bFVvUGkwSEN0ZkE3VkpNWW5LVVk5Z25tcUdIWjZZMUxt?=
- =?utf-8?B?NVMyTHdZeFZ1dklSZ2JCb1RGYlpyNlVuUlBTQVhlVEVRM0dJeWFQTlRIK1Bo?=
- =?utf-8?B?aFpqOFZ5cXBKQjlxOHYxUGdqeGhCdTZrSEhrdVUvWjZja09ONEFML1BsNXho?=
- =?utf-8?B?eWJWaERPckp1MUNXVmJGdm03V0JhY1hZc01TbzM5eHFKWFdZTFpJTXV0RU04?=
- =?utf-8?B?VHZ2by9xN0YxZzhmQ0dudEY4ZHVBcmlhS2pVMlZqOS83c3VPVElsbGVFbnpS?=
- =?utf-8?B?TXM0blhBajVXNmlOOUN3SHlScVRudSt3UEdFbXU4TkVxd1lDL1hZUXM4VmRT?=
- =?utf-8?B?VTYrQkZxNkxYenEyNUE0TFBEQWVJY3llU0V3V3lCeHNaUVdYWGVFOVZ0ekJo?=
- =?utf-8?B?RzFDYnQ0aGlzdWVraElQcEhwREJBUHIyYzBoajFEK2dydmxsT1pJc002SmF3?=
- =?utf-8?B?amRXSmxERy9XWVJZTDF4ell6cWRJQzBER242bHJFNzFIRStxRDZyRlVVY1dX?=
- =?utf-8?B?aDBPK3g5OTNnVFBpcFVJWEFpUjk3QnZncWFMMW5CdGhxcDA0Q0E5dndiNE1o?=
- =?utf-8?B?cUNkUGxDQmtmSm40WnZxdWpwMWtUSXVSRGNCREV5ZUthcGRWZG13RllYdjdY?=
- =?utf-8?B?Skw1WGVoMmlWWVFGVnJ0ZzgwQ3hNZTU5Q01NamNmMlhVNXEwRnN1V24zZXNv?=
- =?utf-8?B?VU12SGxGOG9zRDN2RGtYL3Z2Lys3V1F2WkZ6REFxNGM4azFRNENpbmFtM09J?=
- =?utf-8?B?NEdVVnIyWXUyRzNmdU1heldYaTdBSDQ0Z3VLM3dIYlVsR3dtVjFpVmQxYld6?=
- =?utf-8?B?dU1QeXphU2k0VVJuamJ5ejVLYkdqZ01OaSsrOVpZQUhFRzlqTUIrUkpwMllm?=
- =?utf-8?B?c1JnMFJSa3BzemNsa01tSDRtRHBKb2xta2swOGNIK1RIdnh0elJmdFNOa09O?=
- =?utf-8?B?MmVxcXBVSEpRbE5GOENVak9SU2NaVzg1YW1UN3NwTU53a2NoMFZ3WkNiQ0Yz?=
- =?utf-8?B?YkR3MXprazJGNkNWTGM3VUp2cFg2VzFMT0ZUQ1VVVHU4cmR6aEFVMmEyYnFJ?=
- =?utf-8?B?S1gyOWpsLzQ5UUJORzZkdWtnR2V2L2NRdWoyVnA0T2JYMkpiMlRFUkthUE5h?=
- =?utf-8?B?VFRPTVkzOGV0UzhXMFh0RjRENDdCaUdxV25TY1BuLzBBYXptY0xQeStKd1RS?=
- =?utf-8?B?dXZqSjJqYkhudnRRUmdYWEZlUzlxWURab0h0Q1VhQmQ0M2w0WkNPaUVJZUdJ?=
- =?utf-8?Q?Tsjyv817d0WA3Hg0AZoxACwKf?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4081d4c4-7a4c-485f-fd20-08dbfd221b49
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB7529.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 Dec 2023 03:58:33.7864
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: c7Tu+2x0wv7WQOAXMgvRN70SprRglQc2NXiPbUm3rXS2x3jN9nXGy1jTLIyhpKK37Hws4kuFxOS3oJrIzVJQBA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV3PR11MB8696
-X-OriginatorOrg: intel.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: Should I add BPF kfuncs for userspace apps? And how?
+To: Stephen Hemminger <stephen@networkplumber.org>
+Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Jason Wang <jasowang@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ "Michael S. Tsirkin" <mst@redhat.com>, Xuan Zhuo
+ <xuanzhuo@linux.alibaba.com>, Mykola Lysenko <mykolal@fb.com>,
+ Shuah Khan <shuah@kernel.org>, Yuri Benditovich
+ <yuri.benditovich@daynix.com>, Andrew Melnychenko <andrew@daynix.com>,
+ Benjamin Tissoires <bentiss@kernel.org>, bpf <bpf@vger.kernel.org>,
+ "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, kvm@vger.kernel.org,
+ LKML <linux-kernel@vger.kernel.org>,
+ virtualization@lists.linux-foundation.org,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ Network Development <netdev@vger.kernel.org>
+References: <2f33be45-fe11-4b69-8e89-4d2824a0bf01@daynix.com>
+ <CAO-hwJJhzHtKrUEw0zrjgub3+eapgJG-zsG0HRB=PaPi6BxG+w@mail.gmail.com>
+ <e256c6df-0a66-4f86-ae96-bff17920c2fb@daynix.com>
+ <CAO-hwJKMrWYRNpuprDj9=k87V0yHtLPEJuQ94bpOF3O81=v0kA@mail.gmail.com>
+ <0d68722c-9e29-407b-9ef0-331683c995d2@daynix.com>
+ <20231214094042.75f704f6@hermes.local>
+Content-Language: en-US
+From: Akihiko Odaki <akihiko.odaki@daynix.com>
+In-Reply-To: <20231214094042.75f704f6@hermes.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 2023/12/15 11:32, Nicolin Chen wrote:
-> On Fri, Dec 15, 2023 at 03:04:44AM +0000, Tian, Kevin wrote:
->>> From: Nicolin Chen <nicolinc@nvidia.com>
->>> Sent: Friday, December 15, 2023 10:28 AM
->>> On Fri, Dec 15, 2023 at 01:50:07AM +0000, Tian, Kevin wrote:
->>>>> From: Liu, Yi L <yi.l.liu@intel.com>
->>>>> Sent: Thursday, December 14, 2023 7:27 PM
->>>>>
->>>>> On 2023/11/17 21:18, Yi Liu wrote:> This adds the data structure for
->>>>> flushing iotlb for the nested domain
->>>>>
->>>>> +struct iommu_hwpt_vtd_s1_invalidate {
->>>>> +     __aligned_u64 addr;
->>>>> +     __aligned_u64 npages;
->>>>> +     __u32 flags;
->>>>> +     __u32 __reserved;
->>>>> +     __u32 error;
->>>>> +     __u32 dev_id;
->>>>> +};
->>>>>
->>>>> dev_id is used to report the failed device, userspace should be able to
->>> map
->>>>> it to a vRID, and inject it to VM as part of ITE/ICE error.
+On 2023/12/15 2:40, Stephen Hemminger wrote:
+> On Thu, 14 Dec 2023 14:51:12 +0900
+> Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
 > 
->>>> and for this error reporting case what we actually require is the
->>>> reverse map i.e. pRID->vRID. Not sure whether we can leverage the
->>>> same RID mapping uAPI as for ARM/AMD but ignore viommu_id
->>>> and then store vRID under device_domain_info. a bit tricky on
->>>> life cycle management and also incompatible with SIOV...
+>> On 2023/12/13 19:22, Benjamin Tissoires wrote:
+>>> On Tue, Dec 12, 2023 at 1:41 PM Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
+>>>>
+>>>> On 2023/12/12 19:39, Benjamin Tissoires wrote:
+>>>>> Hi,
+>>>>>
+>>>>> On Tue, Dec 12, 2023 at 9:11 AM Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
+>>>>>>
+>>>>>> Hi,
+>>>>
+>>>> Hi,
+>>>>
+>>>> Thanks for reply.
+>>>>   
+>>>>>>
+>>>>>> It is said eBPF is a safe way to extend kernels and that is very
+>>>>>> attarctive, but we need to use kfuncs to add new usage of eBPF and
+>>>>>> kfuncs are said as unstable as EXPORT_SYMBOL_GPL. So now I'd like to ask
+>>>>>> some questions:
+>>>>>>
+>>>>>> 1) Which should I choose, BPF kfuncs or ioctl, when adding a new feature
+>>>>>> for userspace apps?
+>>>>>> 2) How should I use BPF kfuncs from userspace apps if I add them?
+>>>>>>
+>>>>>> Here, a "userspace app" means something not like a system-wide daemon
+>>>>>> like systemd (particularly, I have QEMU in mind). I'll describe the
+>>>>>> context more below:
+>>>>>
+>>>>> I'm probably not the best person in the world to answer your
+>>>>> questions, Alexei and others from the BPF core group are, but given
+>>>>> that you pointed at a thread I was involved in, I feel I can give you
+>>>>> a few pointers.
+>>>>>
+>>>>> But first and foremost, I encourage you to schedule an agenda item in
+>>>>> the BPF office hour[4]. Being able to talk with the core people
+>>>>> directly was tremendously helpful to me to understand their point.
+>>>>
+>>>> I prefer emails because I'm not very fluent when speaking in English and
+>>>> may have a difficultly to listen to other people, but I may try it in
+>>>> future.
+>>>>   
+>>>>>
+>>>>>   
+>>>>>>
+>>>>>> ---
+>>>>>>
+>>>>>> I'm working on a new feature that aids virtio-net implementations using
+>>>>>> tuntap virtual network device. You can see [1] for details, but
+>>>>>> basically it's to extend BPF_PROG_TYPE_SOCKET_FILTER to report four more
+>>>>>> bytes.
+>>>>>>
+>>>>>> However, with long discussions we have confirmed extending
+>>>>>> BPF_PROG_TYPE_SOCKET_FILTER is not going to happen, and adding kfuncs is
+>>>>>> the way forward. So I decided how to add kfuncs to the kernel and how to
+>>>>>> use it. There are rich documentations for the kernel side, but I found
+>>>>>> little about the userspace. The best I could find is a systemd change
+>>>>>> proposal that is based on WIP kernel changes[2].
+>>>>>
+>>>>> Yes, as Alexei already replied, BPF is not adding new stable APIs,
+>>>>> only kfuncs. The reason being that once it's marked as stable, you
+>>>>> can't really remove it, even if you think it's badly designed and
+>>>>> useless.
+>>>>>
+>>>>> Kfuncs, OTOH are "unstable" by default meaning that the constraints
+>>>>> around it are more relaxed.
+>>>>>
+>>>>> However, "unstable" doesn't mean "unusable". It just means that the
+>>>>> kernel might or might not have the function when you load your program
+>>>>> in userspace. So you have to take that fact into account from day one,
+>>>>> both from the kernel side and the userspace side. The kernel docs have
+>>>>> a nice paragraph explaining that situation and makes the distinction
+>>>>> between relatively unused kfuncs, and well known established ones.
+>>>>>
+>>>>> Regarding the systemd discussion you are mentioning ([2]), this is
+>>>>> something that I have on my plate for a long time. I think I even
+>>>>> mentioned it to Alexei at Kernel Recipes this year, and he frowned his
+>>>>> eyebrows when I mentioned it. And looking at the systemd code and the
+>>>>> benefits over a plain ioctl, it is clearer that in that case, a plain
+>>>>> ioctl is better, mostly because we already know the API and the
+>>>>> semantic.
+>>>>>
+>>>>> A kfunc would be interesting in cases where you are not sure about the
+>>>>> overall design, and so you can give a shot at various API solutions
+>>>>> without having to keep your bad v1 design forever.
+>>>>>   
+>>>>>>
+>>>>>> So now I'm wondering how I should use BPF kfuncs from userspace apps if
+>>>>>> I add them. In the systemd discussion, it is told that Linus said it's
+>>>>>> fine to use BPF kfuncs in a private infrastructure big companies own, or
+>>>>>> in systemd as those users know well about the system[3]. Indeed, those
+>>>>>> users should be able to make more assumptions on the kernel than
+>>>>>> "normal" userspace applications can.
+>>>>>>
+>>>>>> Returning to my proposal, I'm proposing a new feature to be used by QEMU
+>>>>>> or other VMM applications. QEMU is more like a normal userspace
+>>>>>> application, and usually does not make much assumptions on the kernel it
+>>>>>> runs on. For example, it's generally safe to run a Debian container
+>>>>>> including QEMU installed with apt on Fedora. BPF kfuncs may work even in
+>>>>>> such a situation thanks to CO-RE, but it sounds like *accidentally*
+>>>>>> creating UAPIs.
+>>>>>>
+>>>>>> Considering all above, how can I integrate BPF kfuncs to the application?
+>>>>>
+>>>>> FWIW, I'm not sure you can rely on BPF calls from a container. There
+>>>>> is a high chance the syscall gets disabled by the runtime.
+>>>>
+>>>> Right. Container runtimes will not pass CAP_BPF by default, but that
+>>>> restriction can be lifted and I think that's a valid scenario.
+>>>>   
+>>>>>   
+>>>>>>
+>>>>>> If BPF kfuncs are like EXPORT_SYMBOL_GPL, the natural way to handle them
+>>>>>> is to think of BPF programs as some sort of kernel modules and
+>>>>>> incorporate logic that behaves like modprobe. More concretely, I can put
+>>>>>> eBPF binaries to a directory like:
+>>>>>> /usr/local/share/qemu/ebpf/$KERNEL_RELEASE
+>>>>>
+>>>>> I would advise against that (one program per kernel release). Simply
+>>>>> because your kfunc may or may not have been backported to kernel
+>>>>> release v6.X.Y+1 while it was not there when v6.X.Y was out. So
+>>>>> relying on the kernel number is just going to be a headache.
+>>>>>
+>>>>> As I understand it, the way forward is to rely on the kernel, libbpf
+>>>>> and CO-RE: if the function is not available, the program will simply
+>>>>> not load, and you'll know that this version of the code is not
+>>>>> available (or has changed API).
+>>>>>
+>>>>> So what I would do if some kfunc API is becoming deprecated, is
+>>>>> embedding both code paths in the same BPF unit, but marking them as
+>>>>> not loaded by libppf. Then I can load the compilation unit, try v2 of
+>>>>> the API, and if it's not available, try v1, and if not, then mention
+>>>>> that I can not rely on BPF. Of course, this can also be done with
+>>>>> separate compilation units.
+>>>>
+>>>> Doesn't it mean that the kernel is free to break old versions of QEMU
+>>>> including BPF programs? That's something I'd like to avoid.
 >>>
->>> One thing that I am not very clear here: since both vRID and dev_id
->>> are given by the VMM, shouldn't it already know the mapping if the
->>> point is to translate (pRID->)dev_id->vRID?
+>>> Couple of points here:
+>>> - when you say "the kernel", it feels like you are talking about an
+>>> external actor tampering with your code. But if you submit a kernel
+>>> patch with a specific use case and get yourself involved in the
+>>> community, why would anybody change your kfunc API without you knowing
+>>> it?
+>>
+>> You are right in the practical aspect.  I can pay efforts to keep kfunc
+>> APIs alive and I'm also sure other developers would also try not to
+>> break them for good.
+>>
+>> Nevertheless I'm being careful to evaluate APIs from both of the kernel
+>> and userspace (QEMU) viewpoints. If I fail to keep kfuncs stable because
+>> I die in an accident, for example, it's a poor excuse for other QEMU
+>> developers that I intended to keep them stable with my personal effort.
+>>
+>>> - the whole warning about "unstable" policy means that the user space
+>>> component should not take for granted the capability. So if the kfunc
+>>> changes/disappears for good reasons (because it was marked as well
+>>> used and deprecated for quite some time), qemu should not *break*, it
+>>> should not provide the functionality, or have a secondary plan.
 >>>
+>>> But even if you are encountering such issues, in case of a change in
+>>> the ABI of your kfunc, it should be easy enough to backport the bpf
+>>> changes to your old QEMUs and ask users to upgrade the user space if
+>>> they upgrade their kernel.
+>>>
+>>> AFAIU, it is as unstable as you want it to be. It's just that we are
+>>> not in the "we don't break user space" contract, because we are
+>>> talking about adding a kernel functionality from userspace, which
+>>> requires knowing the kernel intrinsics.
 >>
->> it's true for current Qemu.
+>> I must admit I'm still not convinced the proposed BPF program
+>> functionality needs to know internals of the kernel.
 >>
->> but there is plan to support Qemu accepting a fd passed by Libvirt.
->> In that case Qemu even doesn't see the sysfs path hence is not
->> aware of pRID. otherwise yes we could leave the translation to
->> VMM instead.
+>> The eBPF program QEMU carries is just to calculate hashes from packets.
+>> It doesn't need to know the details of how the kernel handles packets.
+>> It only needs to have an access to the packet content.
+>>
+>> It is exactly what BPF_PROG_TYPE_SOCKET_FILTER does, but it lacks a
+>> mechanism to report hash values so I need to extend it or invent a new
+>> method. Extending BPF_PROG_TYPE_SOCKET_FILTER is not a way forward since
+>> CO-RE is superior to the context rewrite it relies on. But apparently
+>> adopting kfuncs and CO-RE also means to lose the "we don't break user
+>> space" contract although I have no intention to expose kernel internals
+>> to the eBPF program.
 > 
-> I think I misread Yi's narrative: dev_id is a working approach
-> for VMM to convert to a vRID, while he is asking for a better
-> alternative :)
+> An example is how one part of DPDK recomputes RSS over TAP.
+> 
+> https://git.dpdk.org/dpdk/tree/drivers/net/tap/bpf/tap_bpf_program.c
+> 
+> This feature is likely to be removed, because it is not actively used
+> and the changes in BPF program loading broke it on current kernel
+> releases.  Which brings up the point that since the kernel does
+> not have stable API/ABI for BPF program infrastructure, I would
+> avoid it for projects that don't want to deal with that.
 
-In concept, dev_id works, but in reality we have problem to get a dev_id
-for a given device in intel iommu driver, hence I'm asking for help here. :)
-
--- 
-Regards,
-Yi Liu
+It's unfortunate to hear that, but thanks for the information.
+I'll consider more about the option not using BPF (plain ioctl and 
+in-kernel implementation).
 
