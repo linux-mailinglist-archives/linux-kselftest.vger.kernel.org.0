@@ -1,60 +1,64 @@
-Return-Path: <linux-kselftest+bounces-2024-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2025-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5482A814918
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Dec 2023 14:24:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 356AA81491B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Dec 2023 14:24:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BEBB81C220F9
-	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Dec 2023 13:24:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B43F01F23689
+	for <lists+linux-kselftest@lfdr.de>; Fri, 15 Dec 2023 13:24:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D64FE2DF91;
-	Fri, 15 Dec 2023 13:21:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EA482E622;
+	Fri, 15 Dec 2023 13:21:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UbCq2Xcw"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="YnPDEDkr"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B740E34CF4;
-	Fri, 15 Dec 2023 13:21:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9842C433CC;
-	Fri, 15 Dec 2023 13:21:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702646495;
-	bh=tguRDweVmXAx8BWsv5HDtmI+3kavF67X9xeMvzMRra4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=UbCq2XcwdnWshFWttQxOXXHpaYgTkOVt/uoV+FaZGKd0pwCSv037zko5grPpz6E+r
-	 d4k9ASxnCroXNcreVHmU8GIQ9C2nc449K6FlmPwJtwIqvPVA/tRN/w7C6/+L0et5V9
-	 TBECiYEgF699Wh0lYjkjOIg6mHzLturMi18mcLmOEoMdi3H+756h1KGgeV9qkr8UJL
-	 EQ8P5yLrdpUqSn5V0F48/45qkiF6GPuJZqDI9cV1uHptEDUwAxxLsWpEhWuz/oNUE6
-	 Rfde+gpzQ4/DWz89xTskbDxFB4odEAyR8P88Xd1wPdRXxU/dEon/6Q1PzG+vLQu/V3
-	 8vQCerD4q1pWA==
-From: Roger Quadros <rogerq@kernel.org>
-To: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	shuah@kernel.org,
-	vladimir.oltean@nxp.com
-Cc: s-vadapalli@ti.com,
-	r-gunasekaran@ti.com,
-	vigneshr@ti.com,
-	srk@ti.com,
-	horms@kernel.org,
-	p-varis@ti.com,
-	netdev@vger.kernel.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 271A12DF9F;
+	Fri, 15 Dec 2023 13:21:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1702646504;
+	bh=4G/ylAHrmIAiXwxQVYFSIowpnOIBt/Wfr3j3WfEtRUU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=YnPDEDkrlJK7uYBS/6sBOX9Sq6M4kPspArbh3gJ1DCzE5snGquYyg8kL2N0wPJTIw
+	 fiTSc1auL6Mrn8O2QSBOPSrPMlWxBPf3jPNuJbUHnsdPH5LR5bJkAMKTJj98edmWX9
+	 EQqNJ96HR/xd+mS1metDTIAz8ApaO54MSSCWRBUMHLACpKU6Iw9zbEmgX/C2M2uUD6
+	 Ka2QLagjNJUVVWlZdvyNKeYZbdyvMuTDpoOCOe+h8LDAWuMSvS3ZfdInZv9Fra5DMT
+	 DWv23iNxo1LIz1bliPL+B02uMNNhgwFwrVGJGcpUs6RFo72wEdK1GJ2QEpL+Wta5w7
+	 KxPiiRV5qPhPg==
+Received: from localhost.localdomain (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: laura.nao)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 1AC1D3781FB2;
+	Fri, 15 Dec 2023 13:21:43 +0000 (UTC)
+From: Laura Nao <laura.nao@collabora.com>
+To: Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Wedson Almeida Filho <wedsonaf@gmail.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Boqun Feng <boqun.feng@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@samsung.com>,
+	Alice Ryhl <aliceryhl@google.com>,
+	rust-for-linux@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	rogerq@kernel.org
-Subject: [PATCH net-next v9 10/10] net: ethernet: ti: am65-cpsw: add sw tx/rx irq coalescing based on hrtimers
-Date: Fri, 15 Dec 2023 15:20:48 +0200
-Message-Id: <20231215132048.43727-11-rogerq@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20231215132048.43727-1-rogerq@kernel.org>
-References: <20231215132048.43727-1-rogerq@kernel.org>
+	kernel@collabora.com,
+	Laura Nao <laura.nao@collabora.com>
+Subject: [PATCH] kselftest: Add basic test for probing the rust sample modules
+Date: Fri, 15 Dec 2023 14:21:32 +0100
+Message-Id: <20231215132132.169628-1-laura.nao@collabora.com>
+X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -63,319 +67,115 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Grygorii Strashko <grygorii.strashko@ti.com>
+Add new basic kselftest that checks if the available rust sample modules
+can be added and removed correctly.
 
-Add SW IRQ coalescing based on hrtimers for TX and RX data path which
-can be enabled by ethtool commands:
-
-- RX coalescing
-  ethtool -C eth1 rx-usecs 50
-
-- TX coalescing can be enabled per TX queue
-
-  - by default enables coalesing for TX0
-  ethtool -C eth1 tx-usecs 50
-  - configure TX0
-  ethtool -Q eth0 queue_mask 1 --coalesce tx-usecs 100
-  - configure TX1
-  ethtool -Q eth0 queue_mask 2 --coalesce tx-usecs 100
-  - configure TX0 and TX1
-  ethtool -Q eth0 queue_mask 3 --coalesce tx-usecs 100 --coalesce tx-usecs 100
-
-  show configuration for TX0 and TX1:
-  ethtool -Q eth0 queue_mask 3 --show-coalesce
-
-Comparing to gro_flush_timeout and napi_defer_hard_irqs, this patch
-allows to enable IRQ coalesing for RX path separately.
-
-Signed-off-by: Grygorii Strashko <grygorii.strashko@ti.com>
-Signed-off-by: Roger Quadros <rogerq@kernel.org>
+Signed-off-by: Laura Nao <laura.nao@collabora.com>
 ---
- drivers/net/ethernet/ti/am65-cpsw-ethtool.c | 79 +++++++++++++++++++++
- drivers/net/ethernet/ti/am65-cpsw-nuss.c    | 59 ++++++++++++---
- drivers/net/ethernet/ti/am65-cpsw-nuss.h    |  4 ++
- 3 files changed, 134 insertions(+), 8 deletions(-)
+ MAINTAINERS                                   |  1 +
+ tools/testing/selftests/Makefile              |  1 +
+ tools/testing/selftests/rust/.gitignore       |  1 +
+ tools/testing/selftests/rust/Makefile         |  8 ++++
+ .../selftests/rust/test_probe_samples.sh      | 42 +++++++++++++++++++
+ 5 files changed, 53 insertions(+)
+ create mode 100644 tools/testing/selftests/rust/.gitignore
+ create mode 100644 tools/testing/selftests/rust/Makefile
+ create mode 100755 tools/testing/selftests/rust/test_probe_samples.sh
 
-Changelog:
-
-v9: no change
-v8: no change
-v7: no change
-v6: no change
-v5: initial commit
-
-diff --git a/drivers/net/ethernet/ti/am65-cpsw-ethtool.c b/drivers/net/ethernet/ti/am65-cpsw-ethtool.c
-index 0a6134cdf39f..35fceba01ea4 100644
---- a/drivers/net/ethernet/ti/am65-cpsw-ethtool.c
-+++ b/drivers/net/ethernet/ti/am65-cpsw-ethtool.c
-@@ -904,6 +904,80 @@ static void am65_cpsw_get_mm_stats(struct net_device *ndev,
- 	s->MACMergeHoldCount = readl(base + AM65_CPSW_STATN_IET_TX_HOLD);
- }
+diff --git a/MAINTAINERS b/MAINTAINERS
+index e2c6187a3ac8..acf283a5d2c0 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -18847,6 +18847,7 @@ F:	Documentation/rust/
+ F:	rust/
+ F:	samples/rust/
+ F:	scripts/*rust*
++F:	tools/testing/selftests/rust/
+ K:	\b(?i:rust)\b
  
-+static int am65_cpsw_get_coalesce(struct net_device *ndev, struct ethtool_coalesce *coal,
-+				  struct kernel_ethtool_coalesce *kernel_coal,
-+				  struct netlink_ext_ack *extack)
-+{
-+	struct am65_cpsw_common *common = am65_ndev_to_common(ndev);
-+	struct am65_cpsw_tx_chn *tx_chn;
+ RXRPC SOCKETS (AF_RXRPC)
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 3b2061d1c1a5..26140426c849 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -74,6 +74,7 @@ TARGETS += riscv
+ TARGETS += rlimits
+ TARGETS += rseq
+ TARGETS += rtc
++TARGETS += rust
+ TARGETS += seccomp
+ TARGETS += sgx
+ TARGETS += sigaltstack
+diff --git a/tools/testing/selftests/rust/.gitignore b/tools/testing/selftests/rust/.gitignore
+new file mode 100644
+index 000000000000..e3c5c04d1b19
+--- /dev/null
++++ b/tools/testing/selftests/rust/.gitignore
+@@ -0,0 +1 @@
++ktap_helpers.sh
+diff --git a/tools/testing/selftests/rust/Makefile b/tools/testing/selftests/rust/Makefile
+new file mode 100644
+index 000000000000..ccaa50f35b5b
+--- /dev/null
++++ b/tools/testing/selftests/rust/Makefile
+@@ -0,0 +1,8 @@
 +
-+	tx_chn = &common->tx_chns[0];
++TEST_PROGS += test_probe_samples.sh
++TEST_GEN_FILES := ktap_helpers.sh
 +
-+	coal->rx_coalesce_usecs = common->rx_pace_timeout / 1000;
-+	coal->tx_coalesce_usecs = tx_chn->tx_pace_timeout / 1000;
++include ../lib.mk
 +
-+	return 0;
-+}
++$(OUTPUT)/ktap_helpers.sh:
++	cp $(top_srcdir)/tools/testing/selftests/dt/ktap_helpers.sh $@
+diff --git a/tools/testing/selftests/rust/test_probe_samples.sh b/tools/testing/selftests/rust/test_probe_samples.sh
+new file mode 100755
+index 000000000000..a46550543f73
+--- /dev/null
++++ b/tools/testing/selftests/rust/test_probe_samples.sh
+@@ -0,0 +1,42 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0
++#
++# Copyright (c) 2023 Collabora Ltd
++#
++# This script tests whether the rust sample modules can
++# be added and removed correctly.
++#
 +
-+static int am65_cpsw_get_per_queue_coalesce(struct net_device *ndev, u32 queue,
-+					    struct ethtool_coalesce *coal)
-+{
-+	struct am65_cpsw_common *common = am65_ndev_to_common(ndev);
-+	struct am65_cpsw_tx_chn *tx_chn;
++DIR="$(dirname "$(readlink -f "$0")")"
 +
-+	if (queue >= AM65_CPSW_MAX_TX_QUEUES)
-+		return -EINVAL;
++source "${DIR}"/ktap_helpers.sh
 +
-+	tx_chn = &common->tx_chns[queue];
++rust_sample_modules=("rust_minimal" "rust_print")
 +
-+	coal->tx_coalesce_usecs = tx_chn->tx_pace_timeout / 1000;
++KSFT_PASS=0
++KSFT_FAIL=1
++KSFT_SKIP=4
 +
-+	return 0;
-+}
++ret="${KSFT_PASS}"
 +
-+static int am65_cpsw_set_coalesce(struct net_device *ndev, struct ethtool_coalesce *coal,
-+				  struct kernel_ethtool_coalesce *kernel_coal,
-+				  struct netlink_ext_ack *extack)
-+{
-+	struct am65_cpsw_common *common = am65_ndev_to_common(ndev);
-+	struct am65_cpsw_tx_chn *tx_chn;
++ktap_print_header
 +
-+	tx_chn = &common->tx_chns[0];
++ktap_set_plan "${#rust_sample_modules[@]}"
 +
-+	if (coal->rx_coalesce_usecs && coal->rx_coalesce_usecs < 20)
-+		return -EINVAL;
++for sample in "${rust_sample_modules[@]}"; do
++    if ! /sbin/modprobe -n -q "$sample"; then
++        ktap_test_skip "module $sample is not found in /lib/modules/$(uname -r)"
++        continue
++    fi
 +
-+	if (coal->tx_coalesce_usecs && coal->tx_coalesce_usecs < 20)
-+		return -EINVAL;
++    if /sbin/modprobe -q "$sample"; then
++        /sbin/modprobe -q -r "$sample"
++        ktap_test_pass "$sample"
++    else
++        ret="${KSFT_FAIL}"
++        ktap_test_fail "$sample"
++    fi
++done
 +
-+	common->rx_pace_timeout = coal->rx_coalesce_usecs * 1000;
-+	tx_chn->tx_pace_timeout = coal->tx_coalesce_usecs * 1000;
-+
-+	return 0;
-+}
-+
-+static int am65_cpsw_set_per_queue_coalesce(struct net_device *ndev, u32 queue,
-+					    struct ethtool_coalesce *coal)
-+{
-+	struct am65_cpsw_common *common = am65_ndev_to_common(ndev);
-+	struct am65_cpsw_tx_chn *tx_chn;
-+
-+	if (queue >= AM65_CPSW_MAX_TX_QUEUES)
-+		return -EINVAL;
-+
-+	tx_chn = &common->tx_chns[queue];
-+
-+	if (coal->tx_coalesce_usecs && coal->tx_coalesce_usecs < 20) {
-+		dev_info(common->dev, "defaulting to min value of 20us for tx-usecs for tx-%u\n",
-+			 queue);
-+		coal->tx_coalesce_usecs = 20;
-+	}
-+
-+	tx_chn->tx_pace_timeout = coal->tx_coalesce_usecs * 1000;
-+
-+	return 0;
-+}
-+
- const struct ethtool_ops am65_cpsw_ethtool_ops_slave = {
- 	.begin			= am65_cpsw_ethtool_op_begin,
- 	.complete		= am65_cpsw_ethtool_op_complete,
-@@ -922,6 +996,11 @@ const struct ethtool_ops am65_cpsw_ethtool_ops_slave = {
- 	.get_ts_info		= am65_cpsw_get_ethtool_ts_info,
- 	.get_priv_flags		= am65_cpsw_get_ethtool_priv_flags,
- 	.set_priv_flags		= am65_cpsw_set_ethtool_priv_flags,
-+	.supported_coalesce_params = ETHTOOL_COALESCE_USECS,
-+	.get_coalesce           = am65_cpsw_get_coalesce,
-+	.set_coalesce           = am65_cpsw_set_coalesce,
-+	.get_per_queue_coalesce = am65_cpsw_get_per_queue_coalesce,
-+	.set_per_queue_coalesce = am65_cpsw_set_per_queue_coalesce,
- 
- 	.get_link		= ethtool_op_get_link,
- 	.get_link_ksettings	= am65_cpsw_get_link_ksettings,
-diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.c b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-index 41e0046a52d5..faa0561e988e 100644
---- a/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-+++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.c
-@@ -596,8 +596,10 @@ static int am65_cpsw_nuss_common_stop(struct am65_cpsw_common *common)
- 					msecs_to_jiffies(1000));
- 	if (!i)
- 		dev_err(common->dev, "tx timeout\n");
--	for (i = 0; i < common->tx_ch_num; i++)
-+	for (i = 0; i < common->tx_ch_num; i++) {
- 		napi_disable(&common->tx_chns[i].napi_tx);
-+		hrtimer_cancel(&common->tx_chns[i].tx_hrtimer);
-+	}
- 
- 	for (i = 0; i < common->tx_ch_num; i++) {
- 		k3_udma_glue_reset_tx_chn(common->tx_chns[i].tx_chn,
-@@ -616,6 +618,7 @@ static int am65_cpsw_nuss_common_stop(struct am65_cpsw_common *common)
- 	}
- 
- 	napi_disable(&common->napi_rx);
-+	hrtimer_cancel(&common->rx_hrtimer);
- 
- 	for (i = 0; i < AM65_CPSW_MAX_RX_FLOWS; i++)
- 		k3_udma_glue_reset_rx_chn(common->rx_chns.rx_chn, i,
-@@ -885,6 +888,15 @@ static int am65_cpsw_nuss_rx_packets(struct am65_cpsw_common *common,
- 	return ret;
- }
- 
-+static enum hrtimer_restart am65_cpsw_nuss_rx_timer_callback(struct hrtimer *timer)
-+{
-+	struct am65_cpsw_common *common =
-+			container_of(timer, struct am65_cpsw_common, rx_hrtimer);
-+
-+	enable_irq(common->rx_chns.irq);
-+	return HRTIMER_NORESTART;
-+}
-+
- static int am65_cpsw_nuss_rx_poll(struct napi_struct *napi_rx, int budget)
- {
- 	struct am65_cpsw_common *common = am65_cpsw_napi_to_common(napi_rx);
-@@ -912,7 +924,13 @@ static int am65_cpsw_nuss_rx_poll(struct napi_struct *napi_rx, int budget)
- 	if (num_rx < budget && napi_complete_done(napi_rx, num_rx)) {
- 		if (common->rx_irq_disabled) {
- 			common->rx_irq_disabled = false;
--			enable_irq(common->rx_chns.irq);
-+			if (unlikely(common->rx_pace_timeout)) {
-+				hrtimer_start(&common->rx_hrtimer,
-+					      ns_to_ktime(common->rx_pace_timeout),
-+					      HRTIMER_MODE_REL_PINNED);
-+			} else {
-+				enable_irq(common->rx_chns.irq);
-+			}
- 		}
- 	}
- 
-@@ -968,7 +986,7 @@ static void am65_cpsw_nuss_tx_wake(struct am65_cpsw_tx_chn *tx_chn, struct net_d
- }
- 
- static int am65_cpsw_nuss_tx_compl_packets(struct am65_cpsw_common *common,
--					   int chn, unsigned int budget)
-+					   int chn, unsigned int budget, bool *tdown)
- {
- 	struct device *dev = common->dev;
- 	struct am65_cpsw_tx_chn *tx_chn;
-@@ -991,6 +1009,7 @@ static int am65_cpsw_nuss_tx_compl_packets(struct am65_cpsw_common *common,
- 		if (cppi5_desc_is_tdcm(desc_dma)) {
- 			if (atomic_dec_and_test(&common->tdown_cnt))
- 				complete(&common->tdown_complete);
-+			*tdown = true;
- 			break;
- 		}
- 
-@@ -1013,7 +1032,7 @@ static int am65_cpsw_nuss_tx_compl_packets(struct am65_cpsw_common *common,
- }
- 
- static int am65_cpsw_nuss_tx_compl_packets_2g(struct am65_cpsw_common *common,
--					      int chn, unsigned int budget)
-+					      int chn, unsigned int budget, bool *tdown)
- {
- 	struct device *dev = common->dev;
- 	struct am65_cpsw_tx_chn *tx_chn;
-@@ -1034,6 +1053,7 @@ static int am65_cpsw_nuss_tx_compl_packets_2g(struct am65_cpsw_common *common,
- 		if (cppi5_desc_is_tdcm(desc_dma)) {
- 			if (atomic_dec_and_test(&common->tdown_cnt))
- 				complete(&common->tdown_complete);
-+			*tdown = true;
- 			break;
- 		}
- 
-@@ -1059,21 +1079,40 @@ static int am65_cpsw_nuss_tx_compl_packets_2g(struct am65_cpsw_common *common,
- 	return num_tx;
- }
- 
-+static enum hrtimer_restart am65_cpsw_nuss_tx_timer_callback(struct hrtimer *timer)
-+{
-+	struct am65_cpsw_tx_chn *tx_chns =
-+			container_of(timer, struct am65_cpsw_tx_chn, tx_hrtimer);
-+
-+	enable_irq(tx_chns->irq);
-+	return HRTIMER_NORESTART;
-+}
-+
- static int am65_cpsw_nuss_tx_poll(struct napi_struct *napi_tx, int budget)
- {
- 	struct am65_cpsw_tx_chn *tx_chn = am65_cpsw_napi_to_tx_chn(napi_tx);
-+	bool tdown = false;
- 	int num_tx;
- 
- 	if (AM65_CPSW_IS_CPSW2G(tx_chn->common))
--		num_tx = am65_cpsw_nuss_tx_compl_packets_2g(tx_chn->common, tx_chn->id, budget);
-+		num_tx = am65_cpsw_nuss_tx_compl_packets_2g(tx_chn->common, tx_chn->id,
-+							    budget, &tdown);
- 	else
--		num_tx = am65_cpsw_nuss_tx_compl_packets(tx_chn->common, tx_chn->id, budget);
-+		num_tx = am65_cpsw_nuss_tx_compl_packets(tx_chn->common,
-+							 tx_chn->id, budget, &tdown);
- 
- 	if (num_tx >= budget)
- 		return budget;
- 
--	if (napi_complete_done(napi_tx, num_tx))
--		enable_irq(tx_chn->irq);
-+	if (napi_complete_done(napi_tx, num_tx)) {
-+		if (unlikely(tx_chn->tx_pace_timeout && !tdown)) {
-+			hrtimer_start(&tx_chn->tx_hrtimer,
-+				      ns_to_ktime(tx_chn->tx_pace_timeout),
-+				      HRTIMER_MODE_REL_PINNED);
-+		} else {
-+			enable_irq(tx_chn->irq);
-+		}
-+	}
- 
- 	return 0;
- }
-@@ -1705,6 +1744,8 @@ static int am65_cpsw_nuss_ndev_add_tx_napi(struct am65_cpsw_common *common)
- 
- 		netif_napi_add_tx(common->dma_ndev, &tx_chn->napi_tx,
- 				  am65_cpsw_nuss_tx_poll);
-+		hrtimer_init(&tx_chn->tx_hrtimer, CLOCK_MONOTONIC, HRTIMER_MODE_REL_PINNED);
-+		tx_chn->tx_hrtimer.function = &am65_cpsw_nuss_tx_timer_callback;
- 
- 		ret = devm_request_irq(dev, tx_chn->irq,
- 				       am65_cpsw_nuss_tx_irq,
-@@ -1930,6 +1971,8 @@ static int am65_cpsw_nuss_init_rx_chns(struct am65_cpsw_common *common)
- 
- 	netif_napi_add(common->dma_ndev, &common->napi_rx,
- 		       am65_cpsw_nuss_rx_poll);
-+	hrtimer_init(&common->rx_hrtimer, CLOCK_MONOTONIC, HRTIMER_MODE_REL_PINNED);
-+	common->rx_hrtimer.function = &am65_cpsw_nuss_rx_timer_callback;
- 
- 	ret = devm_request_irq(dev, rx_chn->irq,
- 			       am65_cpsw_nuss_rx_irq,
-diff --git a/drivers/net/ethernet/ti/am65-cpsw-nuss.h b/drivers/net/ethernet/ti/am65-cpsw-nuss.h
-index 1e4a045057fc..7da0492dc091 100644
---- a/drivers/net/ethernet/ti/am65-cpsw-nuss.h
-+++ b/drivers/net/ethernet/ti/am65-cpsw-nuss.h
-@@ -75,6 +75,8 @@ struct am65_cpsw_tx_chn {
- 	struct k3_cppi_desc_pool *desc_pool;
- 	struct k3_udma_glue_tx_channel *tx_chn;
- 	spinlock_t lock; /* protect TX rings in multi-port mode */
-+	struct hrtimer tx_hrtimer;
-+	unsigned long tx_pace_timeout;
- 	int irq;
- 	u32 id;
- 	u32 descs_num;
-@@ -138,6 +140,8 @@ struct am65_cpsw_common {
- 	struct napi_struct	napi_rx;
- 
- 	bool			rx_irq_disabled;
-+	struct hrtimer		rx_hrtimer;
-+	unsigned long		rx_pace_timeout;
- 
- 	u32			nuss_ver;
- 	u32			cpsw_ver;
++ktap_print_totals
++exit "${ret}"
 -- 
-2.34.1
+2.30.2
 
 
