@@ -1,73 +1,64 @@
-Return-Path: <linux-kselftest+bounces-2099-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2100-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D373815672
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Dec 2023 03:40:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F198815860
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Dec 2023 09:15:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7299DB22D28
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Dec 2023 02:40:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A324A1C24AF5
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Dec 2023 08:15:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 612801384;
-	Sat, 16 Dec 2023 02:40:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F303134C0;
+	Sat, 16 Dec 2023 08:15:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="WhQiqRnw"
+	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="fSQlZQCi"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEDEF1852
-	for <linux-kselftest@vger.kernel.org>; Sat, 16 Dec 2023 02:40:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dNtj4ToNKM4cRhmVRRxhzLOQQ/DFtoPbp+dqiLNBTAtffYx/G6k3uPEoCDV0W5snI/TIHrwDF8Dr5X9DNfFu9Cc5aBc6pwj1MCD8+5vNPddxgNZHpy6zoxa8eobWxQlwcfJSZeS6lNbyh7D0Y+D4e+ghzzdgq8bKZEOAtRj0iRMxzQhB3yA7IJyeOPeeWm3WOEjuL+XYQ/XnjHxjZxVEVB8ez7+8LEx3Vu+sdP7E6XvmDrEUAw42emljAFpdAeSCQyzK866SKsQLiwHuu9Ux7V+I3yFjYqdl5ZVWoMo8gLXkAYQUvKREQRX/Zee9so3Dxyi2LhyHVMq4GDZLFJ/ADg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RkH534sGLWKnsKdz8DCmjuz2Y8yb/hMs4j+BOZD7M6k=;
- b=Rxu4klVqdpb/eYGXWfYW6oC4Chg31vMB4aWNeAsvwEwiKrwImal/DdNQcOUT2NPT2Rs8oMH5gjLNka1RyB4rInsv5FjqA1/0EVkA53C4RgqCpqnpcf7u/BGjmJBpmGjEH+kXUFR8G2FaVvOt5655dr6IQnQSHHpMqBNmeLe2YLtwIYGZ5XgCkxFvbLx83edKeDCGUGBPlMs2MyCJC+UYI+l1DLQ/O3dsyiHiDXrZjleWK6fElb6l5GL0uQ/ADZ2L25bA5evoKsEg0JhKky4sp1Hrl8qg9ROIMdwHN69cuuRa6hb5e53TjxHBkIKBSTc16GUEq9wyAjzR+z2lHKoQjA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=arm.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RkH534sGLWKnsKdz8DCmjuz2Y8yb/hMs4j+BOZD7M6k=;
- b=WhQiqRnwk4fOVngJ0sVCvdLZnavahXiAhhw5ORU57YQza3AH8dlR6pqWKHZhcY6IvZW74RS8g2oWnqQDVgjZB3aTKusuIdydQIOJAe5+BuiZfNQ2E86vH3bM7V9v+o3/UEWYub1/32VPvsZrzqd/1lO/De/Z0SyUghuVAKk0lm085IBYUOMGqukqynX2YcILxzaCqOjy1Y0okgVgFB78oOzR9bHfXYenOGMz4pAPyj4x8ESy9q5f6iIcbtoZPjqmWkfkm6bNPoiG9XxqPvO9hPdShqlocX3SVyum2thgdodVZG93w5nIedwhhSGzHE8VaXGF1TLCjsGcgNQETz6W8A==
-Received: from BL0PR03CA0017.namprd03.prod.outlook.com (2603:10b6:208:2d::30)
- by DM6PR12MB4404.namprd12.prod.outlook.com (2603:10b6:5:2a7::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7091.32; Sat, 16 Dec
- 2023 02:40:20 +0000
-Received: from BL02EPF0001A107.namprd05.prod.outlook.com
- (2603:10b6:208:2d:cafe::23) by BL0PR03CA0017.outlook.office365.com
- (2603:10b6:208:2d::30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7091.31 via Frontend
- Transport; Sat, 16 Dec 2023 02:40:20 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- BL02EPF0001A107.mail.protection.outlook.com (10.167.241.136) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7113.14 via Frontend Transport; Sat, 16 Dec 2023 02:40:20 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 15 Dec
- 2023 18:40:06 -0800
-Received: from [10.110.48.28] (10.126.230.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 15 Dec
- 2023 18:40:05 -0800
-Message-ID: <fb91ab59-ab5c-45c4-a413-bd6c060bfcc8@nvidia.com>
-Date: Fri, 15 Dec 2023 18:40:05 -0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D700B13FF3
+	for <linux-kselftest@vger.kernel.org>; Sat, 16 Dec 2023 08:15:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=daynix.com
+Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-6cebbf51742so1054875b3a.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 16 Dec 2023 00:15:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1702714547; x=1703319347; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=j34U3DbBJyUmmhCTSIWekoWpOW5ZdWSwa2YWU4yaUK4=;
+        b=fSQlZQCinU0xlc/C7XkWiMFc/n4JnuL0J2BMpN1y8kLXwcdhoph+AlxWeMItVAImiE
+         jM6ABIHhQDEgvbUyrzd0X86wCICqDW0QvnwDyNVUmlW8ad0NDZMuENaA94eOpf7oizEP
+         bDYoM5g04sXrYq6RBCcofqg0ond+33l5i0vzg/PGAo3DUXZcGUqXEDVCqO6Cs2Cgyd+8
+         3XZ+Sn2e9+MB3nRsl1LetszqffjwE/g4YMF7OH5tJCqwkugzCAmwj2hA3oZYRVc8jb3y
+         hGh6UPJHOvtpum9xUHMXBH80bGdJWsu/fBlT2pXpcPZS2i1YXetEGlN4ZOnLjFpAJrP4
+         FKVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702714547; x=1703319347;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=j34U3DbBJyUmmhCTSIWekoWpOW5ZdWSwa2YWU4yaUK4=;
+        b=i9gxlsuFIN6euYweyg6fxt8U5cqttFj+m6RPPldw6lVoln7WymZdeAC987OiYV9Q5W
+         iqRTGPgndGmkt/qXJw1JaGRyYi2lI7aqFK2A/xUCWOf98N8BF4MWoM5S/UX7q53fZnPY
+         Jlr9enQ6gyoIpCYOONReMYMQv8SUdY95wlqUxFyJknDSc42nVU3Nruk/iSAHB6CSCaGP
+         VVvMGt7RSfuPGZft1YtQ2eGCt2at8tOQLXbmyap9zQC2td0PevJAGPHlPyD/MBYRFjgF
+         TiOrKsFK2Mj72o7dYTzaF1BFua4zXOL5sl+E3k9wVuVdvNWaBPyWUp0LV2HtA0+eBqxV
+         tzoA==
+X-Gm-Message-State: AOJu0YzyIUVkTcJxq9pp5VXVeY2Q/YdzwfkXXzHAGisvFpRacFe04oes
+	bFjMaznq6A4dcHN0vMJP2o9R+A==
+X-Google-Smtp-Source: AGHT+IEeuPfCOabIrvg0uS3E2YqqLjNkgjJjHCcIA2x49ExvIgKwxCgYmGKVjZEUpfIORWU2Bd9Yug==
+X-Received: by 2002:a05:6a00:198b:b0:6ce:78c9:5979 with SMTP id d11-20020a056a00198b00b006ce78c95979mr17324911pfl.18.1702714547181;
+        Sat, 16 Dec 2023 00:15:47 -0800 (PST)
+Received: from [157.82.205.15] ([157.82.205.15])
+        by smtp.gmail.com with ESMTPSA id p18-20020a056a000b5200b006ce835b77d9sm14707733pfo.20.2023.12.16.00.15.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 16 Dec 2023 00:15:46 -0800 (PST)
+Message-ID: <11507101-ca4f-486d-9fb8-a5d4de0b1b85@daynix.com>
+Date: Sat, 16 Dec 2023 17:15:39 +0900
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -75,116 +66,89 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] selftests/mm: Log run_vmtests.sh results in TAP format
+Subject: Re: Should I add BPF kfuncs for userspace apps? And how?
 Content-Language: en-US
-From: John Hubbard <jhubbard@nvidia.com>
-To: Ryan Roberts <ryan.roberts@arm.com>, Mark Brown <broonie@kernel.org>
-CC: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
-	Peter Xu <peterx@redhat.com>, Aishwarya TCV <Aishwarya.TCV@arm.com>,
-	<linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>
-References: <20231214162434.3580009-1-ryan.roberts@arm.com>
- <e2296501-e9c9-4bc6-88ba-1e43ea083d4a@sirena.org.uk>
- <71228821-cbd3-4a3c-9ed5-18f6d5ebcfc0@arm.com>
- <07193932-941d-46f6-b152-d6c5fe09b26b@sirena.org.uk>
- <76abe3b9-3f66-4336-b09d-d5c137ff6582@arm.com>
- <d99367ef-72e0-48ad-ba83-45e25efdf0fc@nvidia.com>
-In-Reply-To: <d99367ef-72e0-48ad-ba83-45e25efdf0fc@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To: Stephen Hemminger <stephen@networkplumber.org>
+Cc: Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+ Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+ Jason Wang <jasowang@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
+ Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
+ Jiri Olsa <jolsa@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ "Michael S. Tsirkin" <mst@redhat.com>, Xuan Zhuo
+ <xuanzhuo@linux.alibaba.com>, Mykola Lysenko <mykolal@fb.com>,
+ Shuah Khan <shuah@kernel.org>, Yuri Benditovich
+ <yuri.benditovich@daynix.com>, Andrew Melnychenko <andrew@daynix.com>,
+ Benjamin Tissoires <bentiss@kernel.org>, bpf <bpf@vger.kernel.org>,
+ "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, kvm@vger.kernel.org,
+ LKML <linux-kernel@vger.kernel.org>,
+ virtualization@lists.linux-foundation.org,
+ "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
+ Network Development <netdev@vger.kernel.org>
+References: <2f33be45-fe11-4b69-8e89-4d2824a0bf01@daynix.com>
+ <CAO-hwJJhzHtKrUEw0zrjgub3+eapgJG-zsG0HRB=PaPi6BxG+w@mail.gmail.com>
+ <e256c6df-0a66-4f86-ae96-bff17920c2fb@daynix.com>
+ <CAO-hwJKMrWYRNpuprDj9=k87V0yHtLPEJuQ94bpOF3O81=v0kA@mail.gmail.com>
+ <0d68722c-9e29-407b-9ef0-331683c995d2@daynix.com>
+ <20231214094042.75f704f6@hermes.local>
+ <72b8e198-7058-469a-a1e0-17f48330deca@daynix.com>
+ <20231215083644.4dd9a323@hermes.local>
+From: Akihiko Odaki <akihiko.odaki@daynix.com>
+In-Reply-To: <20231215083644.4dd9a323@hermes.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF0001A107:EE_|DM6PR12MB4404:EE_
-X-MS-Office365-Filtering-Correlation-Id: 05115621-8d4b-4afb-8307-08dbfde058a0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	Qkkg1XWF+PFHr7tBiY8nI9AAP5swpS/skzChCNUx6Jensadc2YHJAFJk1K5UMsJY4bem/j3AC6F1CXFfCYJxS3djUtUh9DMq0uCwe10DL0igLSTfr7j2MN6hhgtfVtK+fFTr4JZ+s7T0afTBOzMKpyaxBqrE/J3CxgSAqcR2r1yOOEhoNSlRuOUM1BX5BBGrQZs3MHSIW+GXnQxii7mquiJDfc3nOWeGLtt7AlawVDU1dz9K+TqFnHQ0t9F6/wnhuao22E42cLd8or/wggub254Q9wXnYcguKD5N06Ca9p2epyvnAvQKj4m/gn6VV47CgKChbJGnN7x9+H77pIfucqUOTdB/NYkyVcVDE88KKoBmtilZUb6xBAPMyiG9jH4vTaL0IcFoedsanjKNYiCEOOSlus1ocejLRzR7O2Aj2HyjlG0OLNVwh1cnJcEuyibDD+65Ug2Su8nBuG1X1iRUIV5tM8Xmlr6nJkkTD1vbRwVDdkovw6pffwBAg5QGr4AClnI2Akb+jn4aDjYYhBM0xRVzdWuGrDFiQ3mWzEDNZO0M3r2TXrj1BbrleLOlVbNixUosPZS0iWuHOTDR5vtNkNHOQA/Bp7ThGq+me3I9MlV6uZ5QnNF7vqr9T3eCMPgHQGc8JWAJoet51FNOb6JKShpajQd5yb1DK4uAcyrngw8y1U38h8vzYwSxRigvdEtKjSE6bWmkajN1QqdbEApMGu97w+xkmmEr33PQ49MWzRiqcJXHKXEOScTcBL9hgkoMhwDlnK6bq4FiSJOoj7GhtA==
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230031)(4636009)(376002)(136003)(346002)(39860400002)(396003)(230922051799003)(82310400011)(1800799012)(186009)(451199024)(64100799003)(46966006)(36840700001)(40470700004)(36756003)(47076005)(36860700001)(4326008)(8676002)(8936002)(7636003)(40480700001)(5660300002)(2906002)(31686004)(478600001)(2616005)(70206006)(70586007)(54906003)(110136005)(316002)(16576012)(16526019)(26005)(426003)(336012)(41300700001)(40460700003)(53546011)(86362001)(31696002)(356005)(82740400003)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Dec 2023 02:40:20.2598
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 05115621-8d4b-4afb-8307-08dbfde058a0
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL02EPF0001A107.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4404
 
-On 12/15/23 18:25, John Hubbard wrote:
-> On 12/15/23 06:28, Ryan Roberts wrote:
-> ...
->> I've kept all the existing "pretty" output and results summary as is, it just
->> gets a hash in front of it when TAP is enabled.
->>
->> so this:
->>
->> -----------------------
->> running ./hugepage-mmap
->> -----------------------
->> Returned address is 0xffff89e00000
->> First hex is 0
->> First hex is 3020100
->> [PASS]
->> SUMMARY: PASS=1 SKIP=0 FAIL=0
->>
->> becomes this:
->>
->> TAP version 13
->> # -----------------------
->> # running ./hugepage-mmap
->> # -----------------------
->> # Returned address is 0xffff89e00000
->> # First hex is 0
->> # First hex is 3020100
->> # [PASS]
->> ok 1 hugepage-mmap
->> # SUMMARY: PASS=1 SKIP=0 FAIL=0
->> 1..1
->>
->> If you think the latter is ofensive, then I can do the wrapping as you suggest.
+On 2023/12/16 1:36, Stephen Hemminger wrote:
+> On Fri, 15 Dec 2023 14:49:56 +0900
+> Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
 > 
-> I applied this and ran the tests, all while carefully reminding myself
-> to "think like a human". :) And from that perspective, to me, the output
-> is effectively the same: the leading '#' characters do not really change
-> anything, from a readability point of view.
+>>>> It is exactly what BPF_PROG_TYPE_SOCKET_FILTER does, but it lacks a
+>>>> mechanism to report hash values so I need to extend it or invent a new
+>>>> method. Extending BPF_PROG_TYPE_SOCKET_FILTER is not a way forward since
+>>>> CO-RE is superior to the context rewrite it relies on. But apparently
+>>>> adopting kfuncs and CO-RE also means to lose the "we don't break user
+>>>> space" contract although I have no intention to expose kernel internals
+>>>> to the eBPF program.
+>>>
+>>> An example is how one part of DPDK recomputes RSS over TAP.
+>>>
+>>> https://git.dpdk.org/dpdk/tree/drivers/net/tap/bpf/tap_bpf_program.c
+>>>
+>>> This feature is likely to be removed, because it is not actively used
+>>> and the changes in BPF program loading broke it on current kernel
+>>> releases.  Which brings up the point that since the kernel does
+>>> not have stable API/ABI for BPF program infrastructure, I would
+>>> avoid it for projects that don't want to deal with that.
+>>
+>> It's unfortunate to hear that, but thanks for the information.
+>> I'll consider more about the option not using BPF (plain ioctl and
+>> in-kernel implementation).
 > 
-> So IMHO you're on perfectly solid ground, if you just switch over
-> directly to this format.
-> 
-> Tested-by: John Hubbard <jhubbard@nvidia.com>
-> 
+> With libbpf, things are much better. It is just that projects like
+> DPDK have to support wide range of kernels including older versions of RHEL.
 
-I should also point out that some of the subtests already attempt a TAP
-output. So now we end up with TAP-within-TAP output for those programs.
+I have checked DPDK documentation. It says it supports the oldest LTS 
+kernel:
+https://doc.dpdk.org/guides/linux_gsg/sys_reqs.html#system-software
 
-For example:
-     # -----------------------
-     # running ./madv_populate
-     # -----------------------
-     # TAP version 13
-     # 1..21
-     # # [RUN] test_prot_read
-     # ok 1 MADV_POPULATE_READ with PROT_READ
-     # ok 2 MADV_POPULATE_WRITE with PROT_READ
-     # # [RUN] test_prot_write
-     # ok 3 MADV_POPULATE_READ with PROT_WRITE
-     ...etc...
+My use case is QEMU, which has much more relaxed compatibility 
+requirement that refers to recent distribution versions instead of LTS 
+kernels:
+https://qemu.readthedocs.io/en/v8.1.0/about/build-platforms.html
 
-Note the double level of leading '#' characters.
+That said, I'm not really concerned about the case running QEMU on older 
+kernels. QEMU developers can just pay extra efforts to support those old 
+kernels if necessary.
 
-Again, this is still readable enough for humans. But it should probably
-be removed in subsequent patches to the subtests.
+The more concerning scenario is that a newer kernel breaks compatibility 
+with older QEMU versions; such a scenario has not been considered before 
+AFAIK.
 
-
-thanks,
--- 
-John Hubbard
-NVIDIA
-
+QEMU already uses libbpf to load a BPF_PROG_TYPE_SOCKET_FILTER program.
 
