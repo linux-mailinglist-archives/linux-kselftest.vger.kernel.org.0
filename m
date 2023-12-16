@@ -1,145 +1,138 @@
-Return-Path: <linux-kselftest+bounces-2096-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2097-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DC778155EB
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Dec 2023 02:20:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B7B858155EC
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Dec 2023 02:20:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B8E14B222A2
-	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Dec 2023 01:20:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1B0DBB2236E
+	for <lists+linux-kselftest@lfdr.de>; Sat, 16 Dec 2023 01:20:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB2CAED7;
-	Sat, 16 Dec 2023 01:20:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 669211100;
+	Sat, 16 Dec 2023 01:20:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="2INKfFX5"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wQVf6CCk"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3218A10F1
-	for <linux-kselftest@vger.kernel.org>; Sat, 16 Dec 2023 01:20:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3C8110EE
+	for <linux-kselftest@vger.kernel.org>; Sat, 16 Dec 2023 01:20:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-54744e66d27so5539a12.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 15 Dec 2023 17:20:17 -0800 (PST)
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-552eaf800abso5477a12.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 15 Dec 2023 17:20:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1702689616; x=1703294416; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1702689618; x=1703294418; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xEBeVTo4Jr4XZQEXknQBfdq3XHHHlWUDfj3jqDegxpU=;
-        b=2INKfFX5mPWcA8EnazZ1cvR+3rmleMVgyODijed9lOM2HxCY7ImKhMGhVf392sJ0yB
-         /EbuPA5+Q9wa3flfFLLsvvMUmDBguePIkpVT9RY/pFQuDwVLrCfGilr9S1gnTXLtt8q7
-         SiiOflsfqiahF30aoNg2SGjW9btbqHaBt4r5cJ9NjHTFb8vw0oxAH3LNmkttvo8beXS3
-         7wExng0MuHT3RdL9PRUaINIpAMG8keQUrjaeV91SfWFfPi/X9WbGYS9wBYLgAyU0OT/i
-         i9dbR3AZFUwBSzLlXIitxvtv2lWmm+KqO5RKxZ3jyB9b18ejT1Tgu+pFO57n1ycnpi0i
-         m1Ag==
+        bh=aCYywHHS8Pm/YKXJo2AkygoKFPOYFlG84ydm/2rK2Lc=;
+        b=wQVf6CCka2V9b8hpyM4TUs6kH5FvU8Lt1+pxBTMKaEma5LQuYVcOugzBd1EAwA3UK3
+         aMu1Spn6bSCX0fDKydQy9SmWq3hISuxHfUURdHkfusVToutHKdDWvuL6bUTLVJe43crP
+         Q49YFzlff2paQnbsHR4ZnJ5jFR96O5KJ1Py3KrWgXMrjG+jftj7frQTtthEab5JQvAM0
+         coFGfLwMjMPJUNBhw51XFtvZ8wG3EAm8B4qpemy/6LxnCriGV2Id/eSem3hGSBkmBeKl
+         dKt970789pJJn7ofeMI/N5FnqavxrbpmgMuG9Se5bho05F9g9a1nZtG1K8EiaJzo9vnp
+         D8Ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702689616; x=1703294416;
+        d=1e100.net; s=20230601; t=1702689618; x=1703294418;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=xEBeVTo4Jr4XZQEXknQBfdq3XHHHlWUDfj3jqDegxpU=;
-        b=B24TJkQkpdpYgMGK9JyGTKu4hV3VQbCKddj2XQwm+iPIDT7NaXmItS94wTudI2RFu1
-         qvMC6tVTxYZwIYS8DSrucGioBLs3dDJe+6RFWHxRPOCDDC2BFdH2/XoM1iSF8Krynood
-         8SAY6aWWZ0kbIyVaN6QksSJmnkVxC3YW9nBkzITq9fYPkj5LpHI3tw+36m3DyqTTaWWd
-         /ujMHWsKiqPrKPLFAw9ZspRrvtTwS4xsMJ4kiZ8/cRCbfDtpPkRTcJZw8P0rf+EhA498
-         UtuxQNS9qQIpot/cy6aPm+Md30hBIEEPsJbppqBHRwF7mFO+U7NAC+OqUoQmChVC3UNy
-         llVA==
-X-Gm-Message-State: AOJu0YwW4R5bq/mWc02iAcqtWHDFxS+jUWf6Cn2dZMao76lgWqvvwejU
-	bwhm0Rfy+sMp72W/hiGbvsxd5TeT9OObbBR35DbPxhIC3IN7
-X-Google-Smtp-Source: AGHT+IGnzxZdkgaHuKuNUBZw440TDMxgH9easecK5eLdMkJoLeXa1FtCYVI5fYlcAUvPoIc+rA85ZzQ6L6Rf+kRqsFs=
-X-Received: by 2002:a50:d781:0:b0:551:f450:752a with SMTP id
- w1-20020a50d781000000b00551f450752amr69949edi.6.1702689616081; Fri, 15 Dec
- 2023 17:20:16 -0800 (PST)
+        bh=aCYywHHS8Pm/YKXJo2AkygoKFPOYFlG84ydm/2rK2Lc=;
+        b=pCawm9lV9wHnHxIa0/9KAlDX5svFt/H1AG2IntOccAnzcxWpqbV3bRm8o/baard/H4
+         SI6b1IQZ22/QITbG7mCk9/1BK5H3RQyl27lDG55bPwlyYTQcY65y0Fl1BGL0rBJWi0g8
+         QaghFpX5MH62fyW5IV6zDzuGYfMIQBG9ZRvbj8e6CzIvbnlnlMWukU1goAsT8lUzb5NH
+         VsC7iIzPmMeKKyQpPXG5Olap4pMsUyIHVt9WgCKIhpG7ViB8lXdGmQKS1opyItJ+LuLx
+         Cw1rPza5W3eZKgEoFKi90qdS2iws/EcZOyWUtBj/Z1oEFIrh2Xxm9OBicfcdcHbwQSvH
+         t3eg==
+X-Gm-Message-State: AOJu0Yyz2ql/b82bAfSGI3I1OvnTW9hUSw+fevcwHk5TiHBhQPuZX3G7
+	Lv2YLufsSmagAyWvtANPFhYxWlc6XcRuyuzzsNFeeAjbYCCl
+X-Google-Smtp-Source: AGHT+IEfdmZ0eVYoeUMcvDVeNCP9rUJdqQ7g4q26FX1ntZyGoT+j3kL5hihTu5Tg1y0xIKCA4bRRvubYRLFYlTv2Wrc=
+X-Received: by 2002:a50:ab56:0:b0:54a:ee8b:7a99 with SMTP id
+ t22-20020a50ab56000000b0054aee8b7a99mr63533edc.0.1702689617846; Fri, 15 Dec
+ 2023 17:20:17 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231215151327.1835-1-michal.wajdeczko@intel.com> <20231215151327.1835-3-michal.wajdeczko@intel.com>
-In-Reply-To: <20231215151327.1835-3-michal.wajdeczko@intel.com>
+References: <20231215151327.1835-1-michal.wajdeczko@intel.com> <20231215151327.1835-2-michal.wajdeczko@intel.com>
+In-Reply-To: <20231215151327.1835-2-michal.wajdeczko@intel.com>
 From: David Gow <davidgow@google.com>
-Date: Sat, 16 Dec 2023 09:20:03 +0800
-Message-ID: <CABVgOS=imuVpgwwhSb8AQ_=YG2bfK8T5DE9yYr_XUb1CPDzxgA@mail.gmail.com>
-Subject: Re: [PATCH 2/2] kunit: Reset test->priv after each param iteration
+Date: Sat, 16 Dec 2023 09:20:06 +0800
+Message-ID: <CABVgOS=5z8WcN4yDZ03RHVFXoqcA=jz5csz2D0s9EWrCBVDnTQ@mail.gmail.com>
+Subject: Re: [PATCH 1/2] kunit: Add example for using test->priv
 To: Michal Wajdeczko <michal.wajdeczko@intel.com>
 Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
 	Rae Moar <rmoar@google.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000c31171060c96510d"
+	boundary="000000000000dbc2a9060c9651d0"
 
---000000000000c31171060c96510d
+--000000000000dbc2a9060c9651d0
 Content-Type: text/plain; charset="UTF-8"
 
 On Fri, 15 Dec 2023 at 23:13, Michal Wajdeczko
 <michal.wajdeczko@intel.com> wrote:
 >
-> If we run parameterized test that uses test->priv to prepare some
-> custom data, then value of test->priv will leak to the next param
-> iteration and may be unexpected.  This could be easily seen if
-> we promote example_priv_test to parameterized test as then only
-> first test iteration will be successful:
->
-> $ ./tools/testing/kunit/kunit.py run \
->         --kunitconfig ./lib/kunit/.kunitconfig *.example_priv*
->
-> [ ] Starting KUnit Kernel (1/1)...
-> [ ] ============================================================
-> [ ] =================== example (1 subtest) ====================
-> [ ] ==================== example_priv_test  ====================
-> [ ] [PASSED] example value 3
-> [ ] # example_priv_test: initializing
-> [ ] # example_priv_test: ASSERTION FAILED at lib/kunit/kunit-example-test.c:230
-> [ ] Expected test->priv == ((void *)0), but
-> [ ]     test->priv == 0000000060dfe290
-> [ ]     ((void *)0) == 0000000000000000
-> [ ] # example_priv_test: cleaning up
-> [ ] [FAILED] example value 2
-> [ ] # example_priv_test: initializing
-> [ ] # example_priv_test: ASSERTION FAILED at lib/kunit/kunit-example-test.c:230
-> [ ] Expected test->priv == ((void *)0), but
-> [ ]     test->priv == 0000000060dfe290
-> [ ]     ((void *)0) == 0000000000000000
-> [ ] # example_priv_test: cleaning up
-> [ ] [FAILED] example value 1
-> [ ] # example_priv_test: initializing
-> [ ] # example_priv_test: ASSERTION FAILED at lib/kunit/kunit-example-test.c:230
-> [ ] Expected test->priv == ((void *)0), but
-> [ ]     test->priv == 0000000060dfe290
-> [ ]     ((void *)0) == 0000000000000000
-> [ ] # example_priv_test: cleaning up
-> [ ] [FAILED] example value 0
-> [ ] # example_priv_test: initializing
-> [ ] # example_priv_test: cleaning up
-> [ ] # example_priv_test: pass:1 fail:3 skip:0 total:4
-> [ ] ================ [FAILED] example_priv_test ================
-> [ ]     # example: initializing suite
-> [ ]     # module: kunit_example_test
-> [ ]     # example: exiting suite
-> [ ] # Totals: pass:1 fail:3 skip:0 total:4
-> [ ] ===================== [FAILED] example =====================
->
-> Fix that by resetting test->priv after each param iteration, in
-> similar way what we did for the test->status.
+> In a test->priv field the user can store arbitrary data.
+> Add example how to use this feature in the test code.
 >
 > Signed-off-by: Michal Wajdeczko <michal.wajdeczko@intel.com>
 > Cc: David Gow <davidgow@google.com>
 > Cc: Rae Moar <rmoar@google.com>
 > ---
 
-Looks good to me. I'd vaguely assumed we'd treat test.priv as having
-an undefined value on test start, but thinking about it, I like making
-it explicitly NULL better.
+Looks good to me.
 
 Reviewed-by: David Gow <davidgow@google.com>
 
 Cheers,
 -- David
 
---000000000000c31171060c96510d
+>  lib/kunit/kunit-example-test.c | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
+>
+> diff --git a/lib/kunit/kunit-example-test.c b/lib/kunit/kunit-example-test.c
+> index 6bb5c2ef6696..d7dfcf209ece 100644
+> --- a/lib/kunit/kunit-example-test.c
+> +++ b/lib/kunit/kunit-example-test.c
+> @@ -221,6 +221,20 @@ static void example_params_test(struct kunit *test)
+>         KUNIT_EXPECT_EQ(test, param->value % param->value, 0);
+>  }
+>
+> +/*
+> + * This test shows the use of test->priv.
+> + */
+> +static void example_priv_test(struct kunit *test)
+> +{
+> +       /* unless setup in suite->init(), test->priv is NULL */
+> +       KUNIT_ASSERT_NULL(test, test->priv);
+> +
+> +       /* but can be used to pass arbitrary data to other functions */
+> +       test->priv = kunit_kzalloc(test, 1, GFP_KERNEL);
+> +       KUNIT_EXPECT_NOT_NULL(test, test->priv);
+> +       KUNIT_ASSERT_PTR_EQ(test, test->priv, kunit_get_current_test()->priv);
+> +}
+> +
+>  /*
+>   * This test should always pass. Can be used to practice filtering attributes.
+>   */
+> @@ -245,6 +259,7 @@ static struct kunit_case example_test_cases[] = {
+>         KUNIT_CASE(example_mark_skipped_test),
+>         KUNIT_CASE(example_all_expect_macros_test),
+>         KUNIT_CASE(example_static_stub_test),
+> +       KUNIT_CASE(example_priv_test),
+>         KUNIT_CASE_PARAM(example_params_test, example_gen_params),
+>         KUNIT_CASE_SLOW(example_slow_test),
+>         {}
+> --
+> 2.25.1
+>
+
+--000000000000dbc2a9060c9651d0
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -206,15 +199,15 @@ impZAng7ccvvK09K3ZuhwTIxJMsPXCZYsrXWORTw5sczRAP6XvKbPBJnsJoSTe5dFBPBHOQJOGhU
 qWfEfWnWMJPF3LxSGLpLFQXO3RwQqmxv08avwXfVPouh1xuB3FX7rpDabT8YDhu9JgIZkLEKko7L
 yQt6zWwng7k8YF/jGbiAta6VMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAN
-5pmaGVmcQH4zFHbM0cHKmjvHWxQCzlghgyLmj54uDTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzEyMTYwMTIwMTZaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCC5
++GrNQPUqNRO8Wy/JzJ6o6YF6B2aHkdiynnFgcP4qVzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzEyMTYwMTIwMThaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAovUvUlKik6fLclShkaQo
-PmNEc7koUIH08+2S3FnTZhkYrDHbmDCJ7qR/p9/RLOIvRCk/vyILVEAIwhQ4aZBdrzTEwlQ9n2Jr
-tMysE39pIUYW8HylBnE5qIHypRcgQHQU1Ksk5j5rk3g0n+pJbJ14U78FUvGl9expqhubqaMfT+b+
-6eEpLa2B6P1BPFQTGK62Fvg9heogBmRs8G6MSFDuTBNwNFTB8GQggq5N4q0uEvyIa2a2VyCXLrhE
-QlhGIJ1nu/XHyq2dcM/fPhHwYBjxvK6yvZ2J9H2YJpBK0BBbVsCFk44MBgyVzjmQwZwSOdpyLckg
-bs5oK/KFhJXuvxmwog==
---000000000000c31171060c96510d--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEApgxD4q44wn5dFhIXRm7O
+VdGy+N8Babw6kgNdIEDkf3N8xi5cqEA02MUbKUaPVFoptUluqB1AAYA+h4Z7ucEB33bJ6QwTNJlO
+eyh25Xjo93laSONYQtivVerIlGkHMxaE7RvACzyw6ulTC8fzHKL/EbSLlL9YYvkQhUKi396IxdUJ
+tr7cYAxh8fznGJ3xgoEa8zFFjdfC8QqrkgA4Jawi4L1H5OwWoaPBgxVl2gyrLkvq3nT9VVKrmgFD
+dh6AO+0ek8OLNpdQ442tiHV8bnDCl64v9+pZDxs/T604t+N2LtZqkgZnAl10wrzNj7PDo2+TZ9rE
+dK8qYdt52vsFGUgnAQ==
+--000000000000dbc2a9060c9651d0--
 
