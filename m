@@ -1,130 +1,104 @@
-Return-Path: <linux-kselftest+bounces-2104-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2105-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86C8A815D2D
-	for <lists+linux-kselftest@lfdr.de>; Sun, 17 Dec 2023 03:18:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6562C815DEA
+	for <lists+linux-kselftest@lfdr.de>; Sun, 17 Dec 2023 09:00:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ADF5A1C2157F
-	for <lists+linux-kselftest@lfdr.de>; Sun, 17 Dec 2023 02:18:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 933A41C212DF
+	for <lists+linux-kselftest@lfdr.de>; Sun, 17 Dec 2023 08:00:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E89D310F2;
-	Sun, 17 Dec 2023 02:18:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6838F1859;
+	Sun, 17 Dec 2023 08:00:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="VJFpDkED"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gPHfFAp1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 749B5A40
-	for <linux-kselftest@vger.kernel.org>; Sun, 17 Dec 2023 02:18:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-6da3659535fso1821201a34.3
-        for <linux-kselftest@vger.kernel.org>; Sat, 16 Dec 2023 18:18:16 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 238821849;
+	Sun, 17 Dec 2023 08:00:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-5cd8667c59eso485016a12.2;
+        Sun, 17 Dec 2023 00:00:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702779495; x=1703384295; darn=vger.kernel.org;
-        h=mime-version:message-id:date:in-reply-to:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=OFl8kjpw91XelbaLp/NqZrQDKjPZSUtARdmSUPQXSX8=;
-        b=VJFpDkEDGw/FR4o/St1bqanokQFV99ffBLRVEy4vwSZWwLafnkkXJAuTJnKac2oPV2
-         OXBcr2dAu0hwlqf2wxz5aLt3UFQIep2NFn1wCmTuxnCtmodjGz/zDewvgsiU4iSXfixU
-         5IVxUaZkOy7gQjYAuxwvMylvIqJJfZYzVtxdZI36NRheHiX2AnPmkUYB3odKBak+ULjN
-         fTdaFgbyOwmFglxoXQ1Zg669yAOCvBj1QUubpLI6NCTEHawkbq6uL9HvFYiM634LjBnh
-         64PUVxjLHjBEHLbM3gfV2plRQ4eK7UueVKhHogwHkhKUBayMnHNoIpCA5jfbhUHPF4sY
-         tzMA==
+        d=gmail.com; s=20230601; t=1702800034; x=1703404834; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WMyHbtuF9x070zlYFlq5kNsBiUOhZsD2fvl4NV4fsLM=;
+        b=gPHfFAp1XI8kMnHt0v5bcaU8zFYTvszoK63wUMjV9M65metworo/NENROVYeXMhaGb
+         r0jFBKwwGXQ84hn04qf/ino7KlsjdHOduCHzkl2YHc9uJckAwiFv7TniCyPiUOTWEn09
+         cCVeDqaPTO8MzYe9EZxOJPObPZ68lKaLvO7IDY2VHtMCTIJh01lqX8PSM0WrYI2a+xRj
+         ck6iP0HiP3wydJE605EAGTsforKKNaPBKuF8vtCF/KgRi/TRcjuRZQ7ljPn7kONox3YV
+         7EtI+Vv/vN09PxgmHMO96wCgD8WzX3SrQRtCsrG9Af1RrxHxfepfyB5lPM22ouygUTrT
+         MFAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702779495; x=1703384295;
-        h=mime-version:message-id:date:in-reply-to:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OFl8kjpw91XelbaLp/NqZrQDKjPZSUtARdmSUPQXSX8=;
-        b=MvIA/6di1Z9ZxlcuhMtzphtNI4W7KRg7reYIg+o3RyL8StAv+z4QILNK3XyO+8l7ng
-         wm6N2MehDe+9aTWZ9lRc5DW54rKXFvcoHK6lDibDP4su5b6K633qVCVKCFBHwbgWiP+g
-         uxYkhcPnhnM9AJq0Pu19NqdLlKo1QIqxfszcp8U/cdkg/+cqtDt/BBUnLOadyGU+TeYU
-         lRl3EX5E9OLEQo+xZcP6PgTTSVp7XSL3/Ipv1gIOmXGh5vT/G2g31t93kaT/p4VI3aUW
-         oa/l3sAK3t4kNARlc/pXg2iKoS+5jYWSJA02g79cl4gR7AXC+HgsEeLSGFsSJw23AqqN
-         yh0g==
-X-Gm-Message-State: AOJu0YxbxgMlv3ktlwP1PGgs4nWhfmbx+b/lI6eikrxmv0kc7Gd2BEo0
-	eRrzUwCF/R5zpo3wkhssIOH5qg==
-X-Google-Smtp-Source: AGHT+IF+rykhjl/vJMlMFtG1M64I68Xtmq2p6wjQt8Jp7El542Y7P1lc23SbwSwdEGVtxnixp9/AeQ==
-X-Received: by 2002:a05:6808:3a09:b0:3b9:e828:816 with SMTP id gr9-20020a0568083a0900b003b9e8280816mr20647236oib.48.1702779495498;
-        Sat, 16 Dec 2023 18:18:15 -0800 (PST)
-Received: from localhost ([2804:14d:7e39:8470:a30f:cc0e:7239:16c3])
-        by smtp.gmail.com with ESMTPSA id ja11-20020a170902efcb00b001d39f6edd54sm1453638plb.84.2023.12.16.18.18.14
+        d=1e100.net; s=20230601; t=1702800034; x=1703404834;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=WMyHbtuF9x070zlYFlq5kNsBiUOhZsD2fvl4NV4fsLM=;
+        b=vC2vnxxPCppfYrMVZXtwwW2uPQFhZ/UXa/tv2MumSwQ8cxDGtMOYlB4nQ6I3o2uLLz
+         UtgyAvXNDWLfC4c5HjS3mvUk0roPORbwir/y0Pp1Zn1sS3q/vqdSElJ6JbvKKHRrCVH8
+         TA7aF7vmv/y0Yl0hEfnbD3B88Vfzji966L/wV6v7SIcPEIi5zoBAw1BA8f9mO/Rk+7Ww
+         j9yY4mVGm7O/g/XujP9zkEXqXkxIOsrQgxa8+x4GA+glBUht1N3Kpd4xMnkq/bNWP4I5
+         zq5+l5NGmeXe/Fghk4tq0dKg+HPLgL97T7IximGTXl3Oi6pL0/P9OouBckb7+iHZF3VM
+         QQ/A==
+X-Gm-Message-State: AOJu0YwFmWCzAQcAqKBHjDXM5AWzRGF2t+l3iFI2NDUVDN5vjw88glKs
+	3+xbwcy227tHas8/A/R8gjCa8RTXXD8C5f06
+X-Google-Smtp-Source: AGHT+IE8bPJ0WDJ5dY071qkIv1Hb7eWdGaRmiaLbbxHuMA6GH6jqt39mgAFLTszZuQoGrN5+Xs1glg==
+X-Received: by 2002:a05:6a20:7fa0:b0:18f:97c:977e with SMTP id d32-20020a056a207fa000b0018f097c977emr20432258pzj.102.1702800034239;
+        Sun, 17 Dec 2023 00:00:34 -0800 (PST)
+Received: from localhost.localdomain ([2401:4900:3bca:b037:bb5b:1703:a617:d897])
+        by smtp.gmail.com with ESMTPSA id pb7-20020a17090b3c0700b0028aea6c24bcsm4092397pjb.53.2023.12.17.00.00.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 16 Dec 2023 18:18:14 -0800 (PST)
-References: <20231122-arm64-gcs-v7-0-201c483bd775@kernel.org>
- <20231122-arm64-gcs-v7-34-201c483bd775@kernel.org>
- <875y1089i4.fsf@linaro.org>
- <485b6454-135c-4dd4-b38e-8fb8a02779cd@sirena.org.uk>
-User-agent: mu4e 1.10.8; emacs 29.1
-From: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon
- <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Andrew Morton
- <akpm@linux-foundation.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton
- <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, Suzuki K
- Poulose <suzuki.poulose@arm.com>, Arnd Bergmann <arnd@arndb.de>, Oleg
- Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, Kees
- Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>, "Rick P.
- Edgecombe" <rick.p.edgecombe@intel.com>, Deepak Gupta
- <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>, Szabolcs Nagy
- <Szabolcs.Nagy@arm.com>, "H.J. Lu" <hjl.tools@gmail.com>, Paul Walmsley
- <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
- <aou@eecs.berkeley.edu>, Florian Weimer <fweimer@redhat.com>, Christian
- Brauner <brauner@kernel.org>, linux-arm-kernel@lists.infradead.org,
- linux-doc@vger.kernel.org, kvmarm@lists.linux.dev,
- linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v7 34/39] kselftest/arm64: Add a GCS test program built
- with the system libc
-In-reply-to: <485b6454-135c-4dd4-b38e-8fb8a02779cd@sirena.org.uk>
-Date: Sat, 16 Dec 2023 23:18:13 -0300
-Message-ID: <871qbl7esa.fsf@linaro.org>
+        Sun, 17 Dec 2023 00:00:33 -0800 (PST)
+From: Ghanshyam Agrawal <ghanshyam1898@gmail.com>
+To: perex@perex.cz,
+	tiwai@suse.com,
+	broonie@kernel.org,
+	shuah@kernel.org
+Cc: Ghanshyam Agrawal <ghanshyam1898@gmail.com>,
+	linux-sound@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] kselftest: alsa: fixed a print formatting warning
+Date: Sun, 17 Dec 2023 13:30:19 +0530
+Message-Id: <20231217080019.1063476-1-ghanshyam1898@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 
+A statement used %d print formatter where %s should have
+been used. The same has been fixed in this commit.
 
-Mark Brown <broonie@kernel.org> writes:
+Signed-off-by: Ghanshyam Agrawal <ghanshyam1898@gmail.com>
+---
+ tools/testing/selftests/alsa/mixer-test.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->> Also, it's strange that the tests defined after map_gcs.stack_overflow
->> don't run when I execute this test program. I'm doing:
->
->> $ ./run_kselftest.sh -t arm64:libc-gcs
->
->> I.e., these tests aren't being run in my FVP:
->
->> > +FIXTURE_VARIANT_ADD(map_invalid_gcs, too_small)
->> > +FIXTURE_VARIANT_ADD(map_invalid_gcs, unligned_1)
->> > +FIXTURE_VARIANT_ADD(map_invalid_gcs, unligned_2)
->> > +FIXTURE_VARIANT_ADD(map_invalid_gcs, unligned_3)
->> > +FIXTURE_VARIANT_ADD(map_invalid_gcs, unligned_4)
->> > +FIXTURE_VARIANT_ADD(map_invalid_gcs, unligned_5)
->> > +FIXTURE_VARIANT_ADD(map_invalid_gcs, unligned_6)
->> > +FIXTURE_VARIANT_ADD(map_invalid_gcs, unligned_7)
->> > +TEST_F(map_invalid_gcs, do_map)
->> > +FIXTURE_VARIANT_ADD(invalid_mprotect, exec)
->> > +FIXTURE_VARIANT_ADD(invalid_mprotect, bti)
->> > +FIXTURE_VARIANT_ADD(invalid_mprotect, exec_bti)
->> > +TEST_F(invalid_mprotect, do_map)
->> > +TEST_F(invalid_mprotect, do_map_read)
->
-> I'm seeing all of those appearing.  I'm not sure what to say there -
-> that's all kselftest framework stuff, I'd expect the framework to say
-> something about what it's doing if it decides to skip and I can't think
-> why it would decide to skip.
-
-Thanks. I'll poke some more to see if I can figure out what's going on.
-
+diff --git a/tools/testing/selftests/alsa/mixer-test.c b/tools/testing/selftests/alsa/mixer-test.c
+index 21e482b23f50..23df154fcdd7 100644
+--- a/tools/testing/selftests/alsa/mixer-test.c
++++ b/tools/testing/selftests/alsa/mixer-test.c
+@@ -138,7 +138,7 @@ static void find_controls(void)
+ 			err = snd_ctl_elem_info(card_data->handle,
+ 						ctl_data->info);
+ 			if (err < 0) {
+-				ksft_print_msg("%s getting info for %d\n",
++				ksft_print_msg("%s getting info for %s\n",
+ 					       snd_strerror(err),
+ 					       ctl_data->name);
+ 			}
 -- 
-Thiago
+2.25.1
+
 
