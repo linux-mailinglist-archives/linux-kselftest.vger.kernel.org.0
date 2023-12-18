@@ -1,62 +1,63 @@
-Return-Path: <linux-kselftest+bounces-2138-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2139-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44FF3816986
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Dec 2023 10:13:31 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8434D8169EF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Dec 2023 10:36:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D84061F23242
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Dec 2023 09:13:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A91841C22736
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Dec 2023 09:36:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E26C111AA;
-	Mon, 18 Dec 2023 09:12:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9672611C92;
+	Mon, 18 Dec 2023 09:36:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GTM4oZND"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dTL1HORh"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C17D515483;
-	Mon, 18 Dec 2023 09:12:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0FE412B61;
+	Mon, 18 Dec 2023 09:36:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1d32c5ce32eso28100805ad.0;
-        Mon, 18 Dec 2023 01:12:16 -0800 (PST)
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-5cdaa16ada8so102211a12.2;
+        Mon, 18 Dec 2023 01:36:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702890736; x=1703495536; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=l8wf06F/XJLNPFw5y4gVtxQ1Sn+Ur9N/zSmsQOxOZr0=;
-        b=GTM4oZNDvpdrT5b5SY3MT86K0UVKmfUaftKFxYSOJKdlRKAlgLLUtY7+9B3yFmUhQZ
-         PYQZBf0RP02WY1v9rt0MmiExryp3zX8MnGLo7r+Z6RzFGcQEEmZnIufbQnTEcDCXzmPU
-         vsvUrxPW5mdHLRnASXU4+dw07tXQqkPxj0vy5CZ860wrNpbxzSgAhD7oe1xpRtejwtmi
-         GStWeyy6YKyQFUi0t8DtG1uiEJiZu0rogG8TRxCXA2AF2d36avd5dQA0dd6gw7qpoF9c
-         CppIG7q/Dc5/Wx8sCkOqOVIF8+F7+/JzBD1MFAGIWDlIL+KqRa2aDOZiyl+nmn1Rxcfn
-         O2vw==
+        d=gmail.com; s=20230601; t=1702892186; x=1703496986; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=8R6aNhQRugJxtxnnWB950nAbu6QNw6QkitgqjPACCxU=;
+        b=dTL1HORhs7iHRdmH1ERPdLnfeZPgee98ggy9xONkvtQwyY03+Tzk6PZLvf/NzI1pNY
+         R6pMakB+QZb0JPnZbHP3tyl1uks75PIc2eujpsZQnlkrPhQLzB1rMYoRt2mlMWuq2vIa
+         W7pQhDUzf73/okv8Phq5qzWX5RmZx1XNrv0cL7RFIfr7M+tCRk/OSTZc4NJtnyDUzgHK
+         9q0T21tZxyjuMx8q7DdnuK0auNSFkhUv0AcCAEaVQltVTgYAgjSvhFDgDAGdJmHwBiPL
+         Fk4fmGwyZobE8KgjBlLs52PPaR8oemJjpUiP0uoUHnBHmuWLR0v5eqUn02tbJW4BScVG
+         L2fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702890736; x=1703495536;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l8wf06F/XJLNPFw5y4gVtxQ1Sn+Ur9N/zSmsQOxOZr0=;
-        b=JJtZhDO5ENtg5ywh8kH/NEeHUZYJP3xOb4ltO6N0XPUHk7ptVH8INdQ493jwaj4aml
-         hadgmW2Sc8OeunAL3KaLZRo5tJ6hjPtJjTIbs//mziLXPy7TVVJ2x28cUVkqrKteHGMo
-         mx9QKQZKLxx9AEQzYJ9w1VWKEDkM9KkHhq6Ltjm1GOEpOP/wYL2PcaDdsDZmZMfc+xzh
-         ZLIzKxnoMldaWHIySka+oxq+Wbivq+8J+SeFeDxYEXVOIZT398KKSQ4hosDiqtavc0TM
-         5tu9VJRDEAKYG9Avp2DpUb9af1Lr4owethJm+FTC7vsqwjM8zTMsCgPfkrF7m2ww8Zz5
-         xNQw==
-X-Gm-Message-State: AOJu0YyuvFu4ZOtE4EawPbSHUS4B3IdfamBR0C1G881oFtntbk01SmAI
-	SCvb6988EMm7zYkAucOtoj9nzl0vrWGo6R2m
-X-Google-Smtp-Source: AGHT+IGFD8Jz5ulAxVNCVNJzA/QZEO8b7C2RAtooPiF2BKrw73oalg3e2fULzLq5x9rOhBOAvgBOAw==
-X-Received: by 2002:a17:902:e54b:b0:1d0:bf4c:166c with SMTP id n11-20020a170902e54b00b001d0bf4c166cmr20889261plf.1.1702890736006;
-        Mon, 18 Dec 2023 01:12:16 -0800 (PST)
+        d=1e100.net; s=20230601; t=1702892186; x=1703496986;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8R6aNhQRugJxtxnnWB950nAbu6QNw6QkitgqjPACCxU=;
+        b=kHcaLADjAAoem1gSYiNGerWfEf+GMEyffVqdJStEnQNrgonTK9TbKvGBvf30Rc+zJU
+         xo6AhyiZyyZE3qPl9C80/8sDb4VwCs81HkfR9BmoBTmjFUYLjGMoIzQ9nZTc6xIEi0og
+         Y1xGZV5hVrIH+J5dh7SZ7v9+rE5R7F4d9I3RYX4K0ni47S160CbqZRpXoB9MYbVvdGzZ
+         RUR2cHlG0PyVB+P9OXWuxC+br7AAR0/bKQ/BMv4qSLx7wREboi+StIt0VtuWoEcjLhVm
+         VfhpLbyEq6LjZvLPnow/EXk04LpPvNfl1KNDLY1lb1NJg0fPS0OSSbb8sQmcBvlEMDVB
+         k4/Q==
+X-Gm-Message-State: AOJu0YylLVLVgmGUDGBKau7l9mseWf75/8Nc4uqHkICn9nn/TrlBGgMP
+	G7WSbhSb45IQFWR5p7LvYdE=
+X-Google-Smtp-Source: AGHT+IFLe9RPZ8uvd0ZGUCaWRgs3PCY8WdWTPcwd9UgquiTrbNZiTgwNxl05NU0HIH87f0yPMTysow==
+X-Received: by 2002:a05:6a20:7b29:b0:187:9521:92b9 with SMTP id s41-20020a056a207b2900b00187952192b9mr6374589pzh.53.1702892186060;
+        Mon, 18 Dec 2023 01:36:26 -0800 (PST)
 Received: from Laptop-X1 ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id t18-20020a170902e85200b001d0675e59f9sm18525659plg.200.2023.12.18.01.12.12
+        by smtp.gmail.com with ESMTPSA id x17-20020a170902821100b001d36dbb22a9sm7291454pln.4.2023.12.18.01.36.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Dec 2023 01:12:15 -0800 (PST)
-Date: Mon, 18 Dec 2023 17:12:10 +0800
+        Mon, 18 Dec 2023 01:36:25 -0800 (PST)
+Date: Mon, 18 Dec 2023 17:36:18 +0800
 From: Hangbin Liu <liuhangbin@gmail.com>
 To: Dmitry Safonov <dima@arista.com>
 Cc: Shuah Khan <shuah@kernel.org>, David Ahern <dsahern@kernel.org>,
@@ -67,41 +68,216 @@ Cc: Shuah Khan <shuah@kernel.org>, David Ahern <dsahern@kernel.org>,
 	Bob Gilligan <gilligan@arista.com>, linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
 	Dmitry Safonov <0x7f454c46@gmail.com>
-Subject: Re: [PATCH 11/12] selftests/net: Add TCP-AO selfconnect/simultaneous
- connect test
-Message-ID: <ZYAM6ioeJEq5FnJf@Laptop-X1>
+Subject: Re: [PATCH 00/12] selftests/net: Add TCP-AO tests
+Message-ID: <ZYASkk3sC6pDAVs1@Laptop-X1>
 References: <20231215-tcp-ao-selftests-v1-0-f6c08180b985@arista.com>
- <20231215-tcp-ao-selftests-v1-11-f6c08180b985@arista.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20231215-tcp-ao-selftests-v1-11-f6c08180b985@arista.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20231215-tcp-ao-selftests-v1-0-f6c08180b985@arista.com>
 
-On Fri, Dec 15, 2023 at 02:36:25AM +0000, Dmitry Safonov wrote:
-> Check that a rare functionality of TCP named self-connect works with
-> TCP-AO. This "under the cover" also checks TCP simultaneous connect
-> (TCP_SYN_RECV socket state), which would be harder to check other ways.
+Hi Dmitry,
+
+I just found the patch set has been merged. Sorry for the noise of
+tested-by replies. Please feel free to ignore the question for
+unsigned-md5_ipv6. The test passed with 6.7.0-rc5.
+
+Thanks
+Hangbin
+
+On Fri, Dec 15, 2023 at 02:36:14AM +0000, Dmitry Safonov wrote:
+> Hi,
 > 
-> In order to verify that it's indeed TCP simultaneous connect, check
-> the counters TCPChallengeACK and TCPSYNChallenge.
+> An essential part of any big kernel submissions is selftests.
+> At the beginning of TCP-AO project, I made patches to fcnal-test.sh
+> and nettest.c to have the benefits of easy refactoring, early noticing
+> breakages, putting a moat around the code, documenting
+> and designing uAPI.
 > 
-> Sample of the output:
-> > # ./self-connect_ipv6
-> > 1..4
-> > # 1738[lib/setup.c:254] rand seed 1696451931
-> > TAP version 13
-> > ok 1 self-connect(same keyids): connect TCPAOGood 0 => 24
-> > ok 2 self-connect(different keyids): connect TCPAOGood 26 => 50
-> > ok 3 self-connect(restore): connect TCPAOGood 52 => 97
-> > ok 4 self-connect(restore, different keyids): connect TCPAOGood 99 => 144
-> > # Totals: pass:4 fail:0 xfail:0 xpass:0 skip:0 error:0
+> While tests based on fcnal-test.sh/nettest.c provided initial testing*
+> and were very easy to add, the pile of TCP-AO quickly grew out of
+> one-binary + shell-script testing.
+> 
+> The design of the TCP-AO testing is a bit different than one-big
+> selftest binary as I did previously in net/ipsec.c. I found it
+> beneficial to avoid implementing a tests runner/scheduler and delegate
+> it to the user or Makefile. The approach is very influenced
+> by CRIU/ZDTM testing[1]: it provides a static library with helper
+> functions and selftest binaries that create specific scenarios.
+> I also tried to utilize kselftest.h.
+> 
+> test_init() function does all needed preparations. To not leave
+> any traces after a selftest exists, it creates a network namespace
+> and if the test wants to establish a TCP connection, a child netns.
+> The parent and child netns have veth pair with proper ip addresses
+> and routes set up. Both peers, the client and server are different
+> pthreads. The treading model was chosen over forking mostly by easiness
+> of cleanup on a failure: no need to search for children, handle SIGCHLD,
+> make sure not to wait for a dead peer to perform anything, etc.
+> Any thread that does exit() naturally kills the tests, sweet!
+> The selftests are compiled currently in two variants: ipv4 and ipv6.
+> Ipv4-mapped-ipv6 addresses might be a third variant to add, but it's not
+> there in this version. As pretty much all tests are shared between two
+> address families, most of the code can be shared, too. To differ in code
+> what kind of test is running, Makefile supplies -DIPV6_TEST to compiler
+> and ifdeffery in tests can do things that have to be different between
+> address families. This is similar to TARGETS_C_BOTHBITS in x86 selftests
+> and also to tests code sharing in CRIU/ZDTM.
+> 
+> The total number of tests is 832.
+> From them rst_ipv{4,6} has currently one flaky subtest, that may fail:
+> > not ok 9 client connection was not reset: 0
+> I'll investigate what happens there. Also, unsigned-md5_ipv{4,6}
+> are flaky because of netns counter checks: it doesn't expect that
+> there may be retransmitted TCP segments from a previous sub-selftest.
+> That will be fixed. Besides, key-management_ipv{4,6} has 3 sub-tests
+> passing with XFAIL:
+> > ok 15 # XFAIL listen() after current/rnext keys set: the socket has current/rnext keys: 100:200
+> > ok 16 # XFAIL listen socket, delete current key from before listen(): failed to delete the key 100:100 -16
+> > ok 17 # XFAIL listen socket, delete rnext key from before listen(): failed to delete the key 200:200 -16
+> ...
+> > # Totals: pass:117 fail:0 xfail:3 xpass:0 skip:0 error:0
+> Those need some more kernel work to pass instead of xfail.
+> 
+> The overview of selftests (see the diffstat at the bottom):
+> ├── lib
+> │   ├── aolib.h
+> │   │   The header for all selftests to include.
+> │   ├── kconfig.c
+> │   │   Kernel kconfig detector to SKIP tests that depend on something.
+> │   ├── netlink.c
+> │   │   Netlink helper to add/modify/delete VETH/IPs/routes/VRFs
+> │   │   I considered just using libmnl, but this is around 400 lines
+> │   │   and avoids selftests dependency on out-of-tree sources/packets.
+> │   ├── proc.c
+> │   │   SNMP/netstat procfs parser and the counters comparator.
+> │   ├── repair.c
+> │   │   Heavily influenced by libsoccr and reduced to minimum TCP
+> │   │   socket checkpoint/repair. Shouldn't be used out of selftests,
+> │   │   though.
+> │   ├── setup.c
+> │   │   All the needed netns/veth/ips/etc preparations for test init.
+> │   ├── sock.c
+> │   │   Socket helpers: {s,g}etsockopt()s/connect()/listen()/etc.
+> │   └── utils.c
+> │       Random stuff (a pun intended).
+> ├── bench-lookups.c
+> │   The only benchmark in selftests currently: checks how well TCP-AO
+> │   setsockopt()s perform, depending on the amount of keys on a socket.
+> ├── connect.c
+> │   Trivial sample, can be used as a boilerplate to write a new test.
+> ├── connect-deny.c
+> │   More-or-less what could be expected for TCP-AO in fcnal-test.sh
+> ├── icmps-accept.c -> icmps-discard.c
+> ├── icmps-discard.c
+> │   Verifies RFC5925 (7.8) by checking that TCP-AO connection can be
+> │   broken if ICMPs are accepted and survives when ::accept_icmps = 0
+> ├── key-management.c
+> │   Key manipulations, rotations between randomized hashing algorithms
+> │   and counter checks for those scenarios.
+> ├── restore.c
+> │   TCP_AO_REPAIR: verifies that a socket can be re-created without
+> │   TCP-AO connection being interrupted.
+> ├── rst.c
+> │   As RST segments are signed on a separate code-path in kernel,
+> │   verifies passive/active TCP send_reset().
+> ├── self-connect.c
+> │   Verifies that TCP self-connect and also simultaneous open work.
+> ├── seq-ext.c
+> │   Utilizes TCP_AO_REPAIR to check that on SEQ roll-over SNE
+> │   increment is performed and segments with different SNEs fail to
+> │   pass verification.
+> ├── setsockopt-closed.c
+> │   Checks that {s,g}etsockopt()s are extendable syscalls and common
+> │   error-paths for them.
+> └── unsigned-md5.c
+>     Checks listen() socket for (non-)matching peers with: AO/MD5/none
+>     keys. As well as their interaction with VRFs and AO_REQUIRED flag.
+> 
+> There are certainly more test scenarios that can be added, but even so,
+> I'm pretty happy that this much of TCP-AO functionality and uAPIs got
+> covered. These selftests were iteratively developed by me during TCP-AO
+> kernel upstreaming and the resulting kernel patches would have been
+> worse without having these tests. They provided the user-side
+> perspective but also allowed safer refactoring with less possibility
+> of introducing a regression. Now it's time to use them to dig
+> a moat around the TCP-AO code!
+> 
+> There are also people from other network companies that work on TCP-AO
+> (+testing), so sharing these selftests will allow them to contribute
+> and may benefit from their efforts.
+> 
+> The following changes since commit c7402612e2e61b76177f22e6e7f705adcbecc6fe:
+> 
+>   Merge tag 'net-6.7-rc6' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2023-12-14 13:11:49 -0800)
+> 
+> are available in the Git repository at:
+> 
+>   git@github.com:0x7f454c46/linux.git tcp-ao-selftests-v1
+> 
+> for you to fetch changes up to 85dc9bc676985d81f9043fd9c3a506f30851597b:
+> 
+>   selftests/net: Add TCP-AO key-management test (2023-12-15 00:44:49 +0000)
+> 
+> ----------------------------------------------------------------
+> 
+> * Planning to submit basic TCP-AO tests to fcnal-test.sh/nettest.c
+>   separately.
+> 
+> [1]: https://github.com/checkpoint-restore/criu/tree/criu-dev/test/zdtm/static
 > 
 > Signed-off-by: Dmitry Safonov <dima@arista.com>
-
-Tested-by: Hangbin Liu <liuhangbin@gmail.com>
+> ---
+> Dmitry Safonov (12):
+>       selftests/net: Add TCP-AO library
+>       selftests/net: Verify that TCP-AO complies with ignoring ICMPs
+>       selftests/net: Add TCP-AO ICMPs accept test
+>       selftests/net: Add a test for TCP-AO keys matching
+>       selftests/net: Add test for TCP-AO add setsockopt() command
+>       selftests/net: Add TCP-AO + TCP-MD5 + no sign listen socket tests
+>       selftests/net: Add test/benchmark for removing MKTs
+>       selftests/net: Add TCP_REPAIR TCP-AO tests
+>       selftests/net: Add SEQ number extension test
+>       selftests/net: Add TCP-AO RST test
+>       selftests/net: Add TCP-AO selfconnect/simultaneous connect test
+>       selftests/net: Add TCP-AO key-management test
+> 
+>  tools/testing/selftests/Makefile                   |    1 +
+>  tools/testing/selftests/net/tcp_ao/.gitignore      |    2 +
+>  tools/testing/selftests/net/tcp_ao/Makefile        |   59 +
+>  tools/testing/selftests/net/tcp_ao/bench-lookups.c |  358 ++++++
+>  tools/testing/selftests/net/tcp_ao/connect-deny.c  |  264 +++++
+>  tools/testing/selftests/net/tcp_ao/connect.c       |   90 ++
+>  tools/testing/selftests/net/tcp_ao/icmps-accept.c  |    1 +
+>  tools/testing/selftests/net/tcp_ao/icmps-discard.c |  449 ++++++++
+>  .../testing/selftests/net/tcp_ao/key-management.c  | 1180 ++++++++++++++++++++
+>  tools/testing/selftests/net/tcp_ao/lib/aolib.h     |  605 ++++++++++
+>  tools/testing/selftests/net/tcp_ao/lib/kconfig.c   |  148 +++
+>  tools/testing/selftests/net/tcp_ao/lib/netlink.c   |  415 +++++++
+>  tools/testing/selftests/net/tcp_ao/lib/proc.c      |  273 +++++
+>  tools/testing/selftests/net/tcp_ao/lib/repair.c    |  254 +++++
+>  tools/testing/selftests/net/tcp_ao/lib/setup.c     |  342 ++++++
+>  tools/testing/selftests/net/tcp_ao/lib/sock.c      |  592 ++++++++++
+>  tools/testing/selftests/net/tcp_ao/lib/utils.c     |   30 +
+>  tools/testing/selftests/net/tcp_ao/restore.c       |  236 ++++
+>  tools/testing/selftests/net/tcp_ao/rst.c           |  415 +++++++
+>  tools/testing/selftests/net/tcp_ao/self-connect.c  |  197 ++++
+>  tools/testing/selftests/net/tcp_ao/seq-ext.c       |  245 ++++
+>  .../selftests/net/tcp_ao/setsockopt-closed.c       |  835 ++++++++++++++
+>  tools/testing/selftests/net/tcp_ao/unsigned-md5.c  |  742 ++++++++++++
+>  23 files changed, 7733 insertions(+)
+> ---
+> base-commit: c7402612e2e61b76177f22e6e7f705adcbecc6fe
+> change-id: 20231213-tcp-ao-selftests-d0f323006667
+> 
+> Best regards,
+> -- 
+> Dmitry Safonov <dima@arista.com>
+> 
 
