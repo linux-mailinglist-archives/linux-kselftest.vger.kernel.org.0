@@ -1,149 +1,100 @@
-Return-Path: <linux-kselftest+bounces-2165-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2166-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F339817AF8
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Dec 2023 20:27:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BCF50817B82
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Dec 2023 20:58:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BFD17285FD6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Dec 2023 19:27:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 73D611F238FD
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Dec 2023 19:58:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F64B72047;
-	Mon, 18 Dec 2023 19:24:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E436674097;
+	Mon, 18 Dec 2023 19:56:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="WwC6rIZI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RuFXviiD"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8E3D71477;
-	Mon, 18 Dec 2023 19:24:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=DeGlvkmf7JbvE0tcyrLdxjYn4gMXVBumoPbNkhd0aQU=; b=WwC6rIZIejSiNehEe8vtqQOylB
-	K7ljy/FKOjAygaJH2+58l37UR5BVxBeQ7Zw4CCftqsNXrT4TTFrVLnE8mBJ/NIKEtTjPt+yQ0BZGK
-	F5fGCM9Xz+n7zUKVQDa3MTl2HN0HTbuVJwazhSQN7xcZ129cd//6hO4D04bnyB5Xxnfcfxt7aUdrn
-	O2zqQSVNq4Oyr2fIOBsCt5mBiqaWpxDX7qpTr1iLauk1ag3zVlv+73YpMXnb6GFbvuRN47ZxbDSLw
-	d90B8+SCVArMGtrkFbcbIBliBr58CNKpvHWjDzMn8791bg0L9eOBSl1SrwmWW/2+Nzsf/C6d18Wx1
-	wi4C67HQ==;
-Received: from [50.53.46.231] (helo=[192.168.254.15])
-	by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1rFJES-00BsrM-1g;
-	Mon, 18 Dec 2023 19:24:52 +0000
-Message-ID: <2b7964c1-3496-40de-bb61-a654d30b6fe6@infradead.org>
-Date: Mon, 18 Dec 2023 11:24:51 -0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A812372047;
+	Mon, 18 Dec 2023 19:56:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26CDEC433CA;
+	Mon, 18 Dec 2023 19:56:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702929400;
+	bh=grKlAQWV5xV5wJkfKbKrDwxqfLJY1vUR6WlZYNNuA/M=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=RuFXviiDAzvfM6oPPwKPeQxhxx0ROEeGABDBXhq8+EgQGsx84/SxCdxu6h2KyALeC
+	 yS18QnDvUZ+3Aa7PQRbyli72gr8maRcPxAkZpL/O6f6wOMUooq3TsDjzodkp50+6iY
+	 sdereDZp7Y5Kf2KTpOaVRw12M7DrO2RRGRO5PDJ1dxeRBZcB9UOCG77XZMA1ZdKQqk
+	 vvIAWPG9koo53krWGRGspu4tFnL2m3PLxMDI9pGKROG1tAkxcXec51DyZZ22fly72U
+	 RNtUB/YNiVzjqBx4cNhX3U/jpz5GKUQxa5WsCIvm7Ckru4YcNE+eNx1hcDTx96lOxx
+	 kYN53AyvKi9dQ==
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-50e384cd6ebso1758627e87.3;
+        Mon, 18 Dec 2023 11:56:40 -0800 (PST)
+X-Gm-Message-State: AOJu0YwAP8U83ZAT1OGBJ3UcXy7vRGMFbsj5JS8RATS3L6epacpwBtYN
+	yKiOOHm9URsaTSeGPdL3SUPqhI38kt04mAugcNw=
+X-Google-Smtp-Source: AGHT+IGRZ13EcavCOorqsgntfK6FaZoWyYwMzNZj5jKJnbQHE7+5oLKfwJj7KjKBJ+wssogvyt5tiMo+CYWeUoo1XBY=
+X-Received: by 2002:a05:6512:96a:b0:50e:1ce0:b510 with SMTP id
+ v10-20020a056512096a00b0050e1ce0b510mr1996591lft.97.1702929398315; Mon, 18
+ Dec 2023 11:56:38 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH][next] selftests/net: Fix various spelling mistakes in
- TCP-AO tests
-Content-Language: en-US
-To: Colin Ian King <colin.i.king@gmail.com>,
- "David S . Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
- Dmitry Safonov <0x7f454c46@gmail.com>, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20231218133022.321069-1-colin.i.king@gmail.com>
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20231218133022.321069-1-colin.i.king@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <2f33be45-fe11-4b69-8e89-4d2824a0bf01@daynix.com>
+In-Reply-To: <2f33be45-fe11-4b69-8e89-4d2824a0bf01@daynix.com>
+From: Song Liu <song@kernel.org>
+Date: Mon, 18 Dec 2023 11:56:27 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW6=-FK+ysh_Q1H7ana=A6v9d0Rsn+2hpJpm5n2dB_A1Qg@mail.gmail.com>
+Message-ID: <CAPhsuW6=-FK+ysh_Q1H7ana=A6v9d0Rsn+2hpJpm5n2dB_A1Qg@mail.gmail.com>
+Subject: Re: Should I add BPF kfuncs for userspace apps? And how?
+To: Akihiko Odaki <akihiko.odaki@daynix.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Jason Wang <jasowang@redhat.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	"Michael S. Tsirkin" <mst@redhat.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>, 
+	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	Yuri Benditovich <yuri.benditovich@daynix.com>, Andrew Melnychenko <andrew@daynix.com>, 
+	Benjamin Tissoires <bentiss@kernel.org>, bpf <bpf@vger.kernel.org>, 
+	"open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, kvm@vger.kernel.org, 
+	LKML <linux-kernel@vger.kernel.org>, virtualization@lists.linux-foundation.org, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, 
+	Network Development <netdev@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+Hi Akihiko,
 
-
-On 12/18/23 05:30, Colin Ian King wrote:
-> There are a handful of spelling mistakes in test messages in the
-> TCP-AIO selftests. Fix these.
-> 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-
-Reviewed-by: Randy Dunlap <rdunlap@infradead.org>
-
-Thanks.
-
+On Tue, Dec 12, 2023 at 12:05=E2=80=AFAM Akihiko Odaki <akihiko.odaki@dayni=
+x.com> wrote:
+>
+[...]
 > ---
->  tools/testing/selftests/net/tcp_ao/connect-deny.c      | 2 +-
->  tools/testing/selftests/net/tcp_ao/lib/proc.c          | 4 ++--
->  tools/testing/selftests/net/tcp_ao/setsockopt-closed.c | 2 +-
->  tools/testing/selftests/net/tcp_ao/unsigned-md5.c      | 2 +-
->  4 files changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/net/tcp_ao/connect-deny.c b/tools/testing/selftests/net/tcp_ao/connect-deny.c
-> index 1ca78040d8b7..185a2f6e5ff3 100644
-> --- a/tools/testing/selftests/net/tcp_ao/connect-deny.c
-> +++ b/tools/testing/selftests/net/tcp_ao/connect-deny.c
-> @@ -55,7 +55,7 @@ static void try_accept(const char *tst_name, unsigned int port, const char *pwd,
->  	err = test_wait_fd(lsk, timeout, 0);
->  	if (err == -ETIMEDOUT) {
->  		if (!fault(TIMEOUT))
-> -			test_fail("timeouted for accept()");
-> +			test_fail("timed out for accept()");
->  	} else if (err < 0) {
->  		test_error("test_wait_fd()");
->  	} else {
-> diff --git a/tools/testing/selftests/net/tcp_ao/lib/proc.c b/tools/testing/selftests/net/tcp_ao/lib/proc.c
-> index 2322f4d4676d..2fb6dd8adba6 100644
-> --- a/tools/testing/selftests/net/tcp_ao/lib/proc.c
-> +++ b/tools/testing/selftests/net/tcp_ao/lib/proc.c
-> @@ -227,7 +227,7 @@ void netstat_print_diff(struct netstat *nsa, struct netstat *nsb)
->  		}
->  
->  		if (nsb->counters_nr < nsa->counters_nr)
-> -			test_error("Unexpected: some counters dissapeared!");
-> +			test_error("Unexpected: some counters disappeared!");
->  
->  		for (j = 0, i = 0; i < nsb->counters_nr; i++) {
->  			if (strcmp(nsb->counters[i].name, nsa->counters[j].name)) {
-> @@ -244,7 +244,7 @@ void netstat_print_diff(struct netstat *nsa, struct netstat *nsb)
->  			j++;
->  		}
->  		if (j != nsa->counters_nr)
-> -			test_error("Unexpected: some counters dissapeared!");
-> +			test_error("Unexpected: some counters disappeared!");
->  
->  		nsb = nsb->next;
->  		nsa = nsa->next;
-> diff --git a/tools/testing/selftests/net/tcp_ao/setsockopt-closed.c b/tools/testing/selftests/net/tcp_ao/setsockopt-closed.c
-> index 7e4601b3f6a3..a329f42f40ce 100644
-> --- a/tools/testing/selftests/net/tcp_ao/setsockopt-closed.c
-> +++ b/tools/testing/selftests/net/tcp_ao/setsockopt-closed.c
-> @@ -427,7 +427,7 @@ static void test_einval_del_key(void)
->  
->  	sk = prepare_defs(TCP_AO_DEL_KEY, &del);
->  	del.set_current = 1;
-> -	setsockopt_checked(sk, TCP_AO_DEL_KEY, &del, ENOENT, "set non-exising current key");
-> +	setsockopt_checked(sk, TCP_AO_DEL_KEY, &del, ENOENT, "set non-existing current key");
->  
->  	sk = prepare_defs(TCP_AO_DEL_KEY, &del);
->  	del.set_rnext = 1;
-> diff --git a/tools/testing/selftests/net/tcp_ao/unsigned-md5.c b/tools/testing/selftests/net/tcp_ao/unsigned-md5.c
-> index 7cffde02d2be..14addfd46468 100644
-> --- a/tools/testing/selftests/net/tcp_ao/unsigned-md5.c
-> +++ b/tools/testing/selftests/net/tcp_ao/unsigned-md5.c
-> @@ -72,7 +72,7 @@ static void try_accept(const char *tst_name, unsigned int port,
->  	err = test_wait_fd(lsk, timeout, 0);
->  	if (err == -ETIMEDOUT) {
->  		if (!fault(TIMEOUT))
-> -			test_fail("timeouted for accept()");
-> +			test_fail("timed out for accept()");
->  	} else if (err < 0) {
->  		test_error("test_wait_fd()");
->  	} else {
+>
+> I'm working on a new feature that aids virtio-net implementations using
+> tuntap virtual network device. You can see [1] for details, but
+> basically it's to extend BPF_PROG_TYPE_SOCKET_FILTER to report four more
+> bytes.
 
--- 
-#Randy
-https://people.kernel.org/tglx/notes-about-netiquette
-https://subspace.kernel.org/etiquette.html
+AFAICT, [1] adds a new program type, which is really hard to ship. However,
+you mentioned it is basically "extend BPF_PROG_TYPE_SOCKET_FILTER to
+report four more bytes", which confuses me.
+
+Can we achieve the same goal by extending BPF_PROG_TYPE_SOCKET_FILTER
+(without adding a new program type)? Does this require extending
+__sk_buff, which
+is also not an option any more?
+
+Thanks,
+Song
 
