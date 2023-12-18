@@ -1,102 +1,142 @@
-Return-Path: <linux-kselftest+bounces-2158-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2159-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81E70817513
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Dec 2023 16:18:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 436DE81754C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Dec 2023 16:34:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 36E841F24B56
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Dec 2023 15:18:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6A1571C2460F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Dec 2023 15:34:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CF2F3D557;
-	Mon, 18 Dec 2023 15:17:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D4413A1D4;
+	Mon, 18 Dec 2023 15:34:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="bZt4B8QU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VAQNKWcE"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C08515485;
-	Mon, 18 Dec 2023 15:17:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-	by mx0b-001ae601.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3BICT98m005192;
-	Mon, 18 Dec 2023 09:17:34 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=
-	from:to:cc:subject:date:message-id:mime-version
-	:content-transfer-encoding:content-type; s=PODMain02222019; bh=e
-	vsG9arND7+YtX1uYAIhQEshiu9bxevrDqV1h0a/GAc=; b=bZt4B8QU6qyHnFsIi
-	6HSq1Le18T5l/9eVaZmZcV0n9xix1cRyg7dpCxbwulV6BUUg1eGE3nxZKiw8qkYz
-	PD6srcbonzKPOf+Nl4M15eNSs4O5pT0ew/4Izu9ugFV63LLJIBDS4Kba+0EM+M0K
-	X/2p123O7HrJjBA0YMuvVem8fpFDZxHUho8cQSuwzovL87bS2zQMNhCGlzgBFp8l
-	2kCsl6bxd2jSNVlXKqvWjM3fNHMN0FzOlOF1tm+YzaAqjq3BzMg/O93R5nk+cipC
-	8tEovEmEYhYXnbLlhFS6IXlf/o9zcGWnUiGY/aq3rqUT7HbmPnHirSKVM68Vpopl
-	dAR/g==
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-	by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3v196nau46-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 18 Dec 2023 09:17:33 -0600 (CST)
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Mon, 18 Dec
- 2023 15:17:32 +0000
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.40 via Frontend Transport; Mon, 18 Dec 2023 15:17:32 +0000
-Received: from work-debian.ad.cirrus.com (EDINJ39Q8D3.ad.cirrus.com [198.61.65.115])
-	by ediswmail.ad.cirrus.com (Postfix) with ESMTP id B1FD515A0;
-	Mon, 18 Dec 2023 15:17:31 +0000 (UTC)
-From: Richard Fitzgerald <rf@opensource.cirrus.com>
-To: <brendan.higgins@linux.dev>, <davidgow@google.com>, <rmoar@google.com>
-CC: <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
-        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>,
-        "Richard
- Fitzgerald" <rf@opensource.cirrus.com>
-Subject: [PATCH] kunit: Fix NULL-dereference in kunit_init_suite() if suite->log is NULL
-Date: Mon, 18 Dec 2023 15:17:29 +0000
-Message-ID: <20231218151729.210027-1-rf@opensource.cirrus.com>
-X-Mailer: git-send-email 2.30.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3870B1D137;
+	Mon, 18 Dec 2023 15:34:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D5B7C433C7;
+	Mon, 18 Dec 2023 15:34:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702913672;
+	bh=JcaGFOxBdAWGxXi0BmXm9oDYVTLNqgQcR2Pq85HZItc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=VAQNKWcEUkRWFjq6tpWYpQJzK2EUmIc9yeAFj8v+mWi4FsWAhIil3Jh8aBpZgvqPh
+	 0uQptdIHnawvGbZR1g93gc79o4LGnarrfoHFCWCYBLx2Ffgk2WHm3iGH2Hcfm5BVHu
+	 QlF8lC+M72l0dssDpPTrklriIUEfDVOZKgMHannI56uzru7PwMhLoXGKkuksDcVek7
+	 PxhuJ7PlZTzhPxpeQrx5K/T0WGdBaPWi2X/zDWM687OlJPfyawMCAGx5DjRV79esJC
+	 hnuLhOkFntCahq7G7Mas8avhe2rKd4+TgjYrAzZYssZ5TJxvf5j3wz94PYPqj98kog
+	 brUGx8y70iY5Q==
+Message-ID: <239a5cbc-126f-4c27-bbbc-2b8b102716d5@kernel.org>
+Date: Mon, 18 Dec 2023 17:34:26 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: 6-WZmN5DLqvHa1b2pkx3jcJdWCidvtaj
-X-Proofpoint-GUID: 6-WZmN5DLqvHa1b2pkx3jcJdWCidvtaj
-X-Proofpoint-Spam-Reason: safe
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v9 08/10] net: ethernet: ti: am65-cpsw: add
+ mqprio qdisc offload in channel mode
+To: Simon Horman <horms@kernel.org>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, shuah@kernel.org, vladimir.oltean@nxp.com,
+ s-vadapalli@ti.com, r-gunasekaran@ti.com, vigneshr@ti.com, srk@ti.com,
+ p-varis@ti.com, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20231215132048.43727-1-rogerq@kernel.org>
+ <20231215132048.43727-9-rogerq@kernel.org> <20231218134326.GD6288@kernel.org>
+Content-Language: en-US
+From: Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <20231218134326.GD6288@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-suite->log must be checked for NULL before passing it to
-string_stream_clear(). This was done in kunit_init_test() but was missing
-from kunit_init_suite().
+Hi Simon,
 
-Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
-Fixes: 6d696c4695c5 ("kunit: add ability to run tests after boot using debugfs")
----
- lib/kunit/test.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+On 18/12/2023 15:43, Simon Horman wrote:
+> On Fri, Dec 15, 2023 at 03:20:46PM +0200, Roger Quadros wrote:
+>> From: Grygorii Strashko <grygorii.strashko@ti.com>
+>>
+>> This patch adds MQPRIO Qdisc offload in full 'channel' mode which allows
+>> not only setting up pri:tc mapping, but also configuring TX shapers
+>> (rate-limiting) on external port FIFOs.
+>>
+>> The MQPRIO Qdisc offload is expected to work with or without VLAN/priority
+>> tagged packets.
+>>
+>> The CPSW external Port FIFO has 8 Priority queues. The rate-limit can be
+>> set for each of these priority queues. Which Priority queue a packet is
+>> assigned to depends on PN_REG_TX_PRI_MAP register which maps header
+>> priority to switch priority.
+>>
+>> The header priority of a packet is assigned via the RX_PRI_MAP_REG which
+>> maps packet priority to header priority.
+>>
+>> The packet priority is either the VLAN priority (for VLAN tagged packets)
+>> or the thread/channel offset.
+>>
+>> For simplicity, we assign the same priority queue to all queues of a
+>> Traffic Class so it can be rate-limited correctly.
+>>
+>> Configuration example:
+>>  ethtool -L eth1 tx 5
+>>  ethtool --set-priv-flags eth1 p0-rx-ptype-rrobin off
+>>
+>>  tc qdisc add dev eth1 parent root handle 100: mqprio num_tc 3 \
+>>  map 0 0 1 2 0 0 0 0 0 0 0 0 0 0 0 0 \
+>>  queues 1@0 1@1 1@2 hw 1 mode channel \
+>>  shaper bw_rlimit min_rate 0 100mbit 200mbit max_rate 0 101mbit 202mbit
+>>
+>>  tc qdisc replace dev eth2 handle 100: parent root mqprio num_tc 1 \
+>>  map 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 queues 1@0 hw 1
+>>
+>>  ip link add link eth1 name eth1.100 type vlan id 100
+>>  ip link set eth1.100 type vlan egress 0:0 1:1 2:2 3:3 4:4 5:5 6:6 7:7
+>>
+>> In the above example two ports share the same TX CPPI queue 0 for low
+>> priority traffic. 3 traffic classes are defined for eth1 and mapped to:
+>> TC0 - low priority, TX CPPI queue 0 -> ext Port 1 fifo0, no rate limit
+>> TC1 - prio 2, TX CPPI queue 1 -> ext Port 1 fifo1, CIR=100Mbit/s, EIR=1Mbit/s
+>> TC2 - prio 3, TX CPPI queue 2 -> ext Port 1 fifo2, CIR=200Mbit/s, EIR=2Mbit/s
+>>
+>> Signed-off-by: Grygorii Strashko <grygorii.strashko@ti.com>
+>> Signed-off-by: Roger Quadros <rogerq@kernel.org>
+> 
+> ...
+> 
+>> diff --git a/drivers/net/ethernet/ti/am65-cpsw-qos.c b/drivers/net/ethernet/ti/am65-cpsw-qos.c
+>> index 9f0a05e763d1..7ad7af3b3c60 100644
+>> --- a/drivers/net/ethernet/ti/am65-cpsw-qos.c
+>> +++ b/drivers/net/ethernet/ti/am65-cpsw-qos.c
+>> @@ -7,6 +7,7 @@
+>>   */
+>>  
+>>  #include <linux/pm_runtime.h>
+>> +#include <linux/math.h>
+>>  #include <linux/time.h>
+>>  #include <net/pkt_cls.h>
+>>  
+>> @@ -15,6 +16,8 @@
+>>  #include "am65-cpts.h"
+>>  #include "cpsw_ale.h"
+>>  
+>> +#define TO_MBPS(x)	DIV_ROUND_UP((x), BYTES_PER_MBIT)
+> 
+> Hi Grygorii and Roger,
+> 
+> a minor nit from my side: in order for BYTES_PER_MBIT to be defined
+> linux/units.h needs to be included. But that isn't added until
+> the next patch.
 
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index e803d998e855..ea7f0913e55a 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -658,7 +658,9 @@ static void kunit_init_suite(struct kunit_suite *suite)
- 	kunit_debugfs_create_suite(suite);
- 	suite->status_comment[0] = '\0';
- 	suite->suite_init_err = 0;
--	string_stream_clear(suite->log);
-+
-+	if (suite->log)
-+		string_stream_clear(suite->log);
- }
- 
- bool kunit_enabled(void)
+Thanks for the catch. I'll fix it in next spin.
+
 -- 
-2.30.2
-
+cheers,
+-roger
 
