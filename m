@@ -1,62 +1,62 @@
-Return-Path: <linux-kselftest+bounces-2137-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2138-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8FD42816983
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Dec 2023 10:13:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 44FF3816986
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Dec 2023 10:13:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2FDCD1F232A3
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Dec 2023 09:13:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D84061F23242
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Dec 2023 09:13:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E2DE134DF;
-	Mon, 18 Dec 2023 09:11:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E26C111AA;
+	Mon, 18 Dec 2023 09:12:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X5ZYcSVk"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GTM4oZND"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED12C13FED;
-	Mon, 18 Dec 2023 09:11:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C17D515483;
+	Mon, 18 Dec 2023 09:12:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-5cd86e3a9afso874207a12.1;
-        Mon, 18 Dec 2023 01:11:47 -0800 (PST)
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1d32c5ce32eso28100805ad.0;
+        Mon, 18 Dec 2023 01:12:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702890707; x=1703495507; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1702890736; x=1703495536; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=oamstZbN15K9v7B2Yii8F7ZBVCYFkDw5e8OQEaBwsXY=;
-        b=X5ZYcSVkgLm+BfPqDsDuFi/Cfxz9DHvR6wSxsjrK+zu5wLAXNonugMjVwyACw6iriW
-         uzlQA2mI5KKJHDbpwdm/ipyA2SefpllT8qtRwJ5RNbeXSWUa+b1eDlNR6zv5YBLxrRub
-         3wSMr3Lgi4aS5FlNeMqafD3LCff4gg5Q5yCb19KYy2hqX3v19nbmsCqdDjqOyTe2laAf
-         yfbvzbVS0WOiNI+AjUjLIrMgWLXynCnxouH+4YtlhtfgMFUh3hi74DsqlBQQRXvKUAHQ
-         9I4zTjQ/wes8o14T4PABPkUtlDonp2yyy3e4CYYBlTcQZlOKh/vi/wEnL5r6Lf+ULZYc
-         FJtQ==
+        bh=l8wf06F/XJLNPFw5y4gVtxQ1Sn+Ur9N/zSmsQOxOZr0=;
+        b=GTM4oZNDvpdrT5b5SY3MT86K0UVKmfUaftKFxYSOJKdlRKAlgLLUtY7+9B3yFmUhQZ
+         PYQZBf0RP02WY1v9rt0MmiExryp3zX8MnGLo7r+Z6RzFGcQEEmZnIufbQnTEcDCXzmPU
+         vsvUrxPW5mdHLRnASXU4+dw07tXQqkPxj0vy5CZ860wrNpbxzSgAhD7oe1xpRtejwtmi
+         GStWeyy6YKyQFUi0t8DtG1uiEJiZu0rogG8TRxCXA2AF2d36avd5dQA0dd6gw7qpoF9c
+         CppIG7q/Dc5/Wx8sCkOqOVIF8+F7+/JzBD1MFAGIWDlIL+KqRa2aDOZiyl+nmn1Rxcfn
+         O2vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702890707; x=1703495507;
+        d=1e100.net; s=20230601; t=1702890736; x=1703495536;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=oamstZbN15K9v7B2Yii8F7ZBVCYFkDw5e8OQEaBwsXY=;
-        b=ZOoKarM/gpBziyIggoPkXvw/bggLyCqtywMwza820RvvP5JP4ki/Ew6+W7+CwNzd5w
-         VUnL2/2zbDTc4bmyfKZfVA/EOE3Zo0iEPvelISImqaFSUW5wmmqkiFcV8Byf5upY0VJg
-         pE+ypiZbi3JG4jUBo/d5FGVHlmMLhNsoIJfvuw+qPMb6lFmqYwh9o6RLGlZTixr8Vr3H
-         MjjfUg+DQ/pN4wKuixEh2ttEmaP3yWXZqvozQsVUcwZG+xYLrZhQhXim4ZmEP3VlgZUs
-         0p0pwKVKTfPB4e5pd//h8V2Tk+iXrhzpPHI0xNgFMQdVqQvOfTzbKJX9r3kGZyQneXYa
-         zYBQ==
-X-Gm-Message-State: AOJu0YyULc8+e17hMxRas1zQ93hsjg1j2tOA6qGfh5iEGUiP1PivXF+N
-	AMCdWhbCP0R6cf9392Q8gg4=
-X-Google-Smtp-Source: AGHT+IElrdFe1Jr/qc2kdXlQQjkbrR7DD5sZxu8ga0fhCiDmugYYPl+QHBGUROH/AsmUlShiz8S2oQ==
-X-Received: by 2002:a05:6a20:29a5:b0:18f:97c:384f with SMTP id f37-20020a056a2029a500b0018f097c384fmr16245111pzh.41.1702890707307;
-        Mon, 18 Dec 2023 01:11:47 -0800 (PST)
+        bh=l8wf06F/XJLNPFw5y4gVtxQ1Sn+Ur9N/zSmsQOxOZr0=;
+        b=JJtZhDO5ENtg5ywh8kH/NEeHUZYJP3xOb4ltO6N0XPUHk7ptVH8INdQ493jwaj4aml
+         hadgmW2Sc8OeunAL3KaLZRo5tJ6hjPtJjTIbs//mziLXPy7TVVJ2x28cUVkqrKteHGMo
+         mx9QKQZKLxx9AEQzYJ9w1VWKEDkM9KkHhq6Ltjm1GOEpOP/wYL2PcaDdsDZmZMfc+xzh
+         ZLIzKxnoMldaWHIySka+oxq+Wbivq+8J+SeFeDxYEXVOIZT398KKSQ4hosDiqtavc0TM
+         5tu9VJRDEAKYG9Avp2DpUb9af1Lr4owethJm+FTC7vsqwjM8zTMsCgPfkrF7m2ww8Zz5
+         xNQw==
+X-Gm-Message-State: AOJu0YyuvFu4ZOtE4EawPbSHUS4B3IdfamBR0C1G881oFtntbk01SmAI
+	SCvb6988EMm7zYkAucOtoj9nzl0vrWGo6R2m
+X-Google-Smtp-Source: AGHT+IGFD8Jz5ulAxVNCVNJzA/QZEO8b7C2RAtooPiF2BKrw73oalg3e2fULzLq5x9rOhBOAvgBOAw==
+X-Received: by 2002:a17:902:e54b:b0:1d0:bf4c:166c with SMTP id n11-20020a170902e54b00b001d0bf4c166cmr20889261plf.1.1702890736006;
+        Mon, 18 Dec 2023 01:12:16 -0800 (PST)
 Received: from Laptop-X1 ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id kq13-20020a056a004b0d00b006c3069547bfsm17626092pfb.79.2023.12.18.01.11.43
+        by smtp.gmail.com with ESMTPSA id t18-20020a170902e85200b001d0675e59f9sm18525659plg.200.2023.12.18.01.12.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Dec 2023 01:11:46 -0800 (PST)
-Date: Mon, 18 Dec 2023 17:11:40 +0800
+        Mon, 18 Dec 2023 01:12:15 -0800 (PST)
+Date: Mon, 18 Dec 2023 17:12:10 +0800
 From: Hangbin Liu <liuhangbin@gmail.com>
 To: Dmitry Safonov <dima@arista.com>
 Cc: Shuah Khan <shuah@kernel.org>, David Ahern <dsahern@kernel.org>,
@@ -67,10 +67,11 @@ Cc: Shuah Khan <shuah@kernel.org>, David Ahern <dsahern@kernel.org>,
 	Bob Gilligan <gilligan@arista.com>, linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
 	Dmitry Safonov <0x7f454c46@gmail.com>
-Subject: Re: [PATCH 10/12] selftests/net: Add TCP-AO RST test
-Message-ID: <ZYAMzMzWa9PTUpLG@Laptop-X1>
+Subject: Re: [PATCH 11/12] selftests/net: Add TCP-AO selfconnect/simultaneous
+ connect test
+Message-ID: <ZYAM6ioeJEq5FnJf@Laptop-X1>
 References: <20231215-tcp-ao-selftests-v1-0-f6c08180b985@arista.com>
- <20231215-tcp-ao-selftests-v1-10-f6c08180b985@arista.com>
+ <20231215-tcp-ao-selftests-v1-11-f6c08180b985@arista.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -79,46 +80,26 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231215-tcp-ao-selftests-v1-10-f6c08180b985@arista.com>
+In-Reply-To: <20231215-tcp-ao-selftests-v1-11-f6c08180b985@arista.com>
 
-On Fri, Dec 15, 2023 at 02:36:24AM +0000, Dmitry Safonov wrote:
-> Check that both active and passive reset works and correctly sign
-> segments with TCP-AO or don't send RSTs if not possible to sign.
-> A listening socket with backlog = 0 gets one connection in accept
-> queue, another in syn queue. Once the server/listener socket is
-> forcibly closed, client sockets aren't connected to anything.
-> In regular situation they would receive RST on any segment, but
-> with TCP-AO as there's no listener, no AO-key and unknown ISNs,
-> no RST should be sent.
+On Fri, Dec 15, 2023 at 02:36:25AM +0000, Dmitry Safonov wrote:
+> Check that a rare functionality of TCP named self-connect works with
+> TCP-AO. This "under the cover" also checks TCP simultaneous connect
+> (TCP_SYN_RECV socket state), which would be harder to check other ways.
 > 
-> And "passive" reset, where RST is sent on reply for some segment
-> (tcp_v{4,6}_send_reset()) - there use TCP_REPAIR to corrupt SEQ numbers,
-> which later results in TCP-AO signed RST, which will be verified and
-> client socket will get EPIPE.
-> 
-> No TCPAORequired/TCPAOBad segments are expected during these tests.
+> In order to verify that it's indeed TCP simultaneous connect, check
+> the counters TCPChallengeACK and TCPSYNChallenge.
 > 
 > Sample of the output:
-> > # ./rst_ipv4
-> > 1..15
-> > # 1462[lib/setup.c:254] rand seed 1686611171
+> > # ./self-connect_ipv6
+> > 1..4
+> > # 1738[lib/setup.c:254] rand seed 1696451931
 > > TAP version 13
-> > ok 1 servered 1000 bytes
-> > ok 2 Verified established tcp connection
-> > ok 3 sk[0] = 7, connection was reset
-> > ok 4 sk[1] = 8, connection was reset
-> > ok 5 sk[2] = 9
-> > ok 6 MKT counters are good on server
-> > ok 7 Verified established tcp connection
-> > ok 8 client connection broken post-seq-adjust
-> > ok 9 client connection was reset
-> > ok 10 No segments without AO sign (server)
-> > ok 11 Signed AO segments (server): 0 => 30
-> > ok 12 No segments with bad AO sign (server)
-> > ok 13 No segments without AO sign (client)
-> > ok 14 Signed AO segments (client): 0 => 30
-> > ok 15 No segments with bad AO sign (client)
-> > # Totals: pass:15 fail:0 xfail:0 xpass:0 skip:0 error:0
+> > ok 1 self-connect(same keyids): connect TCPAOGood 0 => 24
+> > ok 2 self-connect(different keyids): connect TCPAOGood 26 => 50
+> > ok 3 self-connect(restore): connect TCPAOGood 52 => 97
+> > ok 4 self-connect(restore, different keyids): connect TCPAOGood 99 => 144
+> > # Totals: pass:4 fail:0 xfail:0 xpass:0 skip:0 error:0
 > 
 > Signed-off-by: Dmitry Safonov <dima@arista.com>
 
