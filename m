@@ -1,194 +1,122 @@
-Return-Path: <linux-kselftest+bounces-2162-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2163-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09B118177C7
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Dec 2023 17:44:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E200E81788B
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Dec 2023 18:22:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 616FB28441B
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Dec 2023 16:44:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0EE1C1C23DCA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Dec 2023 17:22:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD02A49887;
-	Mon, 18 Dec 2023 16:44:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C91CD5D728;
+	Mon, 18 Dec 2023 17:20:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DX9p3/eh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y2yQkEnF"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 261761E4AF
-	for <linux-kselftest@vger.kernel.org>; Mon, 18 Dec 2023 16:44:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1702917868;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ZMTA3QS7Ta1E6WqgyFWJhRzsScQ6pkKj8ELIzJ0/KvY=;
-	b=DX9p3/ehrshn82INOFXCCMub4T8e1mh+1L8PqV7Bla7Cq6YaPGXRpsJ3b3PRBOQRXVNT6I
-	jQSTYA4vS+RCVxt8wKrGzPcTSdXkzgyjzc91iTQ5PeM4QbNQ07AFv/h7dd5qSMtrF51kp/
-	GGMh/2+LQ7OD7U406IBJ/EzDNiUdTCQ=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-387-O3Yhm_g1NDGzkCCLPdnUZg-1; Mon, 18 Dec 2023 11:44:25 -0500
-X-MC-Unique: O3Yhm_g1NDGzkCCLPdnUZg-1
-Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-67f299d3c7bso40979696d6.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 18 Dec 2023 08:44:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702917865; x=1703522665;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZMTA3QS7Ta1E6WqgyFWJhRzsScQ6pkKj8ELIzJ0/KvY=;
-        b=JlGZqAlFqQ5mvoYUWYhPQnp16K4KqnR68ARQQj1NjX+cxCTh1ucLYo+CTqiPSzlQor
-         QqLb8PtaClFQkrAsRL1mfLEAxKBsoRZPMSfZMzSunDh2aZs+CArE9OS4lMvp9PqlOwtF
-         9e56UexRimI93J722g/hIXOTBEv+Sg5p5iaDocT8FaNGbjVOlpBOzt7JJ10Y+C+3F5dZ
-         jR/2WpjDsJ+aUC0QIixlSmPryhrxNLX1PLcw8VQXp+4r1FyIIqLjytbhhGCfR+E+Upc3
-         i4B9Yy4qEZITOjzWqmvjt9v0glOWO6BDYzLZK4T5JOOII+6MGw548TDYs2XDE8KRYHxY
-         pl5w==
-X-Gm-Message-State: AOJu0YyCm5jAVdPk0E1D+6XAgWYbULAt8OfTk44PBo2UltWVgp7Dg1up
-	T8tcKOYUva+7RAsYpsTP8vxAQRYvFj5rx6pWyjZS3/D5ChmWTmZD7u0c5h4T7bHRmgUjMx1jnVj
-	1YuEQs14qw3lDBFQTy9Muy7uGqqpi
-X-Received: by 2002:a05:6214:2529:b0:67f:2f9a:6c54 with SMTP id gg9-20020a056214252900b0067f2f9a6c54mr6330956qvb.85.1702917865400;
-        Mon, 18 Dec 2023 08:44:25 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFLOQvRjA6fmEi2zpxmpKYqxRhZ1i6tiDsOyYqL94EBT+uZcrgKk5rSANjTbDjDVJ7YWgLPLg==
-X-Received: by 2002:a05:6214:2529:b0:67f:2f9a:6c54 with SMTP id gg9-20020a056214252900b0067f2f9a6c54mr6330942qvb.85.1702917865134;
-        Mon, 18 Dec 2023 08:44:25 -0800 (PST)
-Received: from [192.168.1.14] (pool-68-160-135-240.bstnma.fios.verizon.net. [68.160.135.240])
-        by smtp.gmail.com with ESMTPSA id f5-20020a0cc305000000b0067f2b6fe775sm2018092qvi.131.2023.12.18.08.44.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 18 Dec 2023 08:44:24 -0800 (PST)
-Message-ID: <cf087c7e-d24d-5cee-eadd-dd1fe26efe39@redhat.com>
-Date: Mon, 18 Dec 2023 11:44:23 -0500
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A220B5BF9C;
+	Mon, 18 Dec 2023 17:20:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3A77C433C7;
+	Mon, 18 Dec 2023 17:20:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702920039;
+	bh=mxQodVK8Qo9iWtDoh+f+wkylLrmy3Zyz6oU2mXSN1t0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Y2yQkEnF95YPtGg+mLklR/7o4FtDTIxrwVBi4PYmUk+YTwLBqcT7WpUmFm/jV8+sv
+	 VNScfR1KSaABDVNP9JzH40oMDEgbQr6DSyb42bkfc528E8CibzpjHYXJG8Su61gz1/
+	 YCQZu5B7CIfpOK+Uyafa7Xqlub6I9MSbItN2deXY6MgKddE3LyJymziUMMLS8Sqp+W
+	 wqLFfV48vB88DppDq3YBH7TBO5i/ieDZ8991cFtCCivIAKmn1og8tkYY+RmZlitg3H
+	 ifkaTN7jH9ze3QcF9+ZwBiUXiQIFApfhUskYpeIsCm+wuJlAMRpB33E9blOO8K2kbF
+	 ovcDOXfb5uHIw==
+Message-ID: <a205c24f-f170-47eb-a21e-1809290fa7b2@kernel.org>
+Date: Mon, 18 Dec 2023 19:20:33 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.15.1
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v10 08/10] net: ethernet: ti: am65-cpsw: add
+ mqprio qdisc offload in channel mode
 Content-Language: en-US
-To: Alexander Gordeev <agordeev@linux.ibm.com>,
- Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>,
- Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>
-Cc: linux-kselftest@vger.kernel.org, live-patching@vger.kernel.org,
- linux-s390@vger.kernel.org
-References: <ZYAimyPYhxVA9wKg@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
-From: Joe Lawrence <joe.lawrence@redhat.com>
-Subject: Re: selftests/livepatch fails on s390
-In-Reply-To: <ZYAimyPYhxVA9wKg@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
+To: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, shuah@kernel.org, vladimir.oltean@nxp.com
+Cc: s-vadapalli@ti.com, r-gunasekaran@ti.com, vigneshr@ti.com, srk@ti.com,
+ horms@kernel.org, p-varis@ti.com, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20231218125513.52337-1-rogerq@kernel.org>
+ <20231218125513.52337-9-rogerq@kernel.org>
+From: Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <20231218125513.52337-9-rogerq@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 12/18/23 05:44, Alexander Gordeev wrote:
-> Hi all,
+
+
+On 18/12/2023 14:55, Roger Quadros wrote:
+> From: Grygorii Strashko <grygorii.strashko@ti.com>
 > 
-> The livepatch selftest somehow fails in -next on s390 due to what
-> appears to me as 'comm' usage issue. E.g the removal of timestamp-
-> less line "with link type OSD_10GIG." in the below output forces 
-> 'comm' to produce the correct result in check_result() function of
-> tools/testing/selftests/livepatch/functions.sh script:
+> This patch adds MQPRIO Qdisc offload in full 'channel' mode which allows
+> not only setting up pri:tc mapping, but also configuring TX shapers
+> (rate-limiting) on external port FIFOs.
 > 
-> [   11.229256] qeth 0.0.bd02: qdio: OSA on SC 2624 using AI:1 QEBSM:0 PRI:1 TDD:1 SIGA: W 
-> [   11.250189] systemd-journald[943]: Successfully sent stream file descriptor to service manager.
-> [   11.258763] qeth 0.0.bd00: Device is a OSD Express card (level: 0165)
->                with link type OSD_10GIG.
-> [   11.259261] qeth 0.0.bd00: The device represents a Bridge Capable Port
-> [   11.262376] qeth 0.0.bd00: MAC address b2:96:9c:49:aa:e9 successfully registered
-> [   11.269654] qeth 0.0.bd00: MAC address 06:c6:b5:7d:ee:63 successfully registered
+> The MQPRIO Qdisc offload is expected to work with or without VLAN/priority
+> tagged packets.
 > 
-> By contrast, using the 'diff' instead works as a charm. But it was
-> removed with commit 2f3f651f3756 ("selftests/livepatch: Use "comm"
-> instead of "diff" for dmesg").
+> The CPSW external Port FIFO has 8 Priority queues. The rate-limit can be
+> set for each of these priority queues. Which Priority queue a packet is
+> assigned to depends on PN_REG_TX_PRI_MAP register which maps header
+> priority to switch priority.
 > 
-> I am attaching the contents of "$expect" and "$result" script
-> variables and the output of 'dmesg' before and after test run
-> dmesg-saved.txt and dmesg.txt.
+> The header priority of a packet is assigned via the RX_PRI_MAP_REG which
+> maps packet priority to header priority.
 > 
-> Another 'dmesg' output dmesg-saved1.txt and dmesg1.txt also
-> shows the same problem, which seems like something to do with
-> sorting.
+> The packet priority is either the VLAN priority (for VLAN tagged packets)
+> or the thread/channel offset.
 > 
-> The minimal reproducer attached is dmesg-saved1-rep.txt and
-> dmesg1-rep.txt, that could be described as:
+> For simplicity, we assign the same priority queue to all queues of a
+> Traffic Class so it can be rate-limited correctly.
 > 
-> --- dmesg-saved1-rep.txt	2023-12-17 21:08:14.171014218 +0100
-> +++ dmesg1-rep.txt	2023-12-17 21:06:52.221014218 +0100
-> @@ -1,3 +1,3 @@
-> -[   98.820331] livepatch: 'test_klp_state2': starting patching transition
->  [  100.031067] livepatch: 'test_klp_state2': completing patching transition
->  [  284.224335] livepatch: kernel.ftrace_enabled = 1
-> +[  284.232921] ===== TEST: basic shadow variable API =====
+> Configuration example:
+>  ethtool -L eth1 tx 5
+>  ethtool --set-priv-flags eth1 p0-rx-ptype-rrobin off
 > 
-> The culprit is the extra space in [   98.820331] timestamp, that from
-> the script point of view produces the output with two extra lines:
+>  tc qdisc add dev eth1 parent root handle 100: mqprio num_tc 3 \
+>  map 0 0 1 2 0 0 0 0 0 0 0 0 0 0 0 0 \
+>  queues 1@0 1@1 1@2 hw 1 mode channel \
+>  shaper bw_rlimit min_rate 0 100mbit 200mbit max_rate 0 101mbit 202mbit
 > 
-> [  100.031067] livepatch: 'test_klp_state2': completing patching transition
-> [  284.224335] livepatch: kernel.ftrace_enabled = 1
-> [  284.232921] ===== TEST: basic shadow variable API =====
+>  tc qdisc replace dev eth2 handle 100: parent root mqprio num_tc 1 \
+>  map 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 queues 1@0 hw 1
 > 
-> If the line with [   98.820331] timestamp removed or changed to e.g
-> [  100.031066] (aka 1 us less), then the result output is as expected:
+>  ip link add link eth1 name eth1.100 type vlan id 100
+>  ip link set eth1.100 type vlan egress 0:0 1:1 2:2 3:3 4:4 5:5 6:6 7:7
 > 
-> [  284.232921] ===== TEST: basic shadow variable API =====
+> In the above example two ports share the same TX CPPI queue 0 for low
+> priority traffic. 3 traffic classes are defined for eth1 and mapped to:
+> TC0 - low priority, TX CPPI queue 0 -> ext Port 1 fifo0, no rate limit
+> TC1 - prio 2, TX CPPI queue 1 -> ext Port 1 fifo1, CIR=100Mbit/s, EIR=1Mbit/s
+> TC2 - prio 3, TX CPPI queue 2 -> ext Port 1 fifo2, CIR=200Mbit/s, EIR=2Mbit/s
 > 
-> Thanks!
+> Signed-off-by: Grygorii Strashko <grygorii.strashko@ti.com>
+> Signed-off-by: Roger Quadros <rogerq@kernel.org>
+> Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+> ---
+>  drivers/net/ethernet/ti/Kconfig          |   3 +-
+>  drivers/net/ethernet/ti/am65-cpsw-nuss.c |   3 +
+>  drivers/net/ethernet/ti/am65-cpsw-qos.c  | 255 ++++++++++++++++++++++-
+>  drivers/net/ethernet/ti/am65-cpsw-qos.h  |  20 ++
+>  4 files changed, 277 insertions(+), 4 deletions(-)
 
-Hi Alexander,
-
-You're right about the timestamp formatting.  I can repro with a a
-slight variant on your example:
-
-Assume a pre-test dmesg log has three msgs (including one with timestamp
-of fewer digits):
-
-  $ head /tmp/{A,B}
-  ==> /tmp/A <==
-  [ 1] message one
-  [10] message two
-  [11] message three
-
-during the rest, the first message rolls off the buffer post-test and a
-new fourth message is added:
-
-  ==> /tmp/B <==
-  [10] message two
-  [11] message three
-  [12] message four
-
-The test's comm invocation should be only printing "lines unique to
-FILE2", ie, the latest fourth message, but...
-
-  $ comm --nocheck-order -13 /tmp/A /tmp/B
-  [10] message two
-  [11] message three
-  [12] message four
-
-If we pre-trim the timestamps, the output is what we expect:
-
-  $ comm --nocheck-order -13 \
-      <(sed 's/^\[[ 0-9.]*\] //' /tmp/A) \
-      <(sed 's/^\[[ 0-9.]*\] //' /tmp/B)
-  message four
-
-however, I'm not sure if that fix would easily apply.  It looks like I
-provided a disclaimer notice in check_result():
-
-	# Note: when comparing dmesg output, the kernel log timestamps
-	# help differentiate repeated testing runs.  Remove them with a
-	# post-comparison sed filter.
-
-so I wonder if comm will get confused with repeated selftest runs?
-Using diff/comm was a trick that I surprised worked this long :) Maybe
-it can still hold, but I'll have to run a few experiements.
+This breaks build due to undefined BYTES_PER_MBIT.
+I'll fix it up and send another revision.
 
 -- 
-Joe
-
+cheers,
+-roger
 
