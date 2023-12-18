@@ -1,142 +1,154 @@
-Return-Path: <linux-kselftest+bounces-2159-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2160-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 436DE81754C
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Dec 2023 16:34:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C7A981770C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Dec 2023 17:11:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6A1571C2460F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Dec 2023 15:34:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DAEA11F26539
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Dec 2023 16:11:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D4413A1D4;
-	Mon, 18 Dec 2023 15:34:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2708F4FF65;
+	Mon, 18 Dec 2023 16:11:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VAQNKWcE"
+	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="Gt1cwHPw"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3870B1D137;
-	Mon, 18 Dec 2023 15:34:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D5B7C433C7;
-	Mon, 18 Dec 2023 15:34:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702913672;
-	bh=JcaGFOxBdAWGxXi0BmXm9oDYVTLNqgQcR2Pq85HZItc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=VAQNKWcEUkRWFjq6tpWYpQJzK2EUmIc9yeAFj8v+mWi4FsWAhIil3Jh8aBpZgvqPh
-	 0uQptdIHnawvGbZR1g93gc79o4LGnarrfoHFCWCYBLx2Ffgk2WHm3iGH2Hcfm5BVHu
-	 QlF8lC+M72l0dssDpPTrklriIUEfDVOZKgMHannI56uzru7PwMhLoXGKkuksDcVek7
-	 PxhuJ7PlZTzhPxpeQrx5K/T0WGdBaPWi2X/zDWM687OlJPfyawMCAGx5DjRV79esJC
-	 hnuLhOkFntCahq7G7Mas8avhe2rKd4+TgjYrAzZYssZ5TJxvf5j3wz94PYPqj98kog
-	 brUGx8y70iY5Q==
-Message-ID: <239a5cbc-126f-4c27-bbbc-2b8b102716d5@kernel.org>
-Date: Mon, 18 Dec 2023 17:34:26 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5365542386;
+	Mon, 18 Dec 2023 16:11:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+	by mx0a-001ae601.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 3BI6fl3a012777;
+	Mon, 18 Dec 2023 10:10:49 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=
+	from:to:cc:subject:date:message-id:mime-version:content-type
+	:content-transfer-encoding; s=PODMain02222019; bh=UjG2FX1pYQgdsa
+	d8oZ3msOCc5wPjlvgk283e8XXjitk=; b=Gt1cwHPw0m8gzvlZnMusZlonkCVBrd
+	dexXLx7+WNx+dZDH716tyRPjDCM0cfNRRLcUcbdaELky+tBHaFg/klkiLbkNyz2Z
+	TeAixobK6KnuxlKiQ4shUMxxuaWgoFJxNyQunXIn5Ks6pcRs7JQ4K0SE773UB+xH
+	OayeHEmebcCIfjitjdlRw6HmjL1VM7tNv4yo78qndWZSoTiaNldTbpPOCgopwnjP
+	Xuv7aWsXwzvdZtgRVvrCH9gnNsE1qyUOVJjXn/3uqIFnT+FjtuwtfKwasH1MJMxn
+	8WkZqrvfGqJGClroTiyrnj2euVX4axIl9CJQhX0eYFuk88ehpoVHA92g==
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+	by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3v1a622x3c-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 18 Dec 2023 10:10:49 -0600 (CST)
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.40; Mon, 18 Dec
+ 2023 16:10:47 +0000
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.40 via Frontend Transport; Mon, 18 Dec 2023 16:10:47 +0000
+Received: from work-debian.ad.cirrus.com (EDINJ39Q8D3.ad.cirrus.com [198.61.65.115])
+	by ediswmail.ad.cirrus.com (Postfix) with ESMTP id DDDF615A0;
+	Mon, 18 Dec 2023 16:10:46 +0000 (UTC)
+From: Richard Fitzgerald <rf@opensource.cirrus.com>
+To: <brendan.higgins@linux.dev>, <davidgow@google.com>, <rmoar@google.com>
+CC: <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
+        <linux-kernel@vger.kernel.org>, <patches@opensource.cirrus.com>,
+        "Richard
+ Fitzgerald" <rf@opensource.cirrus.com>
+Subject: [PATCH 1/2] kunit: Allow passing function pointer to kunit_activate_static_stub()
+Date: Mon, 18 Dec 2023 16:10:43 +0000
+Message-ID: <20231218161044.215640-1-rf@opensource.cirrus.com>
+X-Mailer: git-send-email 2.30.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v9 08/10] net: ethernet: ti: am65-cpsw: add
- mqprio qdisc offload in channel mode
-To: Simon Horman <horms@kernel.org>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, shuah@kernel.org, vladimir.oltean@nxp.com,
- s-vadapalli@ti.com, r-gunasekaran@ti.com, vigneshr@ti.com, srk@ti.com,
- p-varis@ti.com, netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20231215132048.43727-1-rogerq@kernel.org>
- <20231215132048.43727-9-rogerq@kernel.org> <20231218134326.GD6288@kernel.org>
-Content-Language: en-US
-From: Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20231218134326.GD6288@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: 8MoppAXG9dsU7CBuucIKj2cMnzATIQJ_
+X-Proofpoint-ORIG-GUID: 8MoppAXG9dsU7CBuucIKj2cMnzATIQJ_
+X-Proofpoint-Spam-Reason: safe
 
-Hi Simon,
+Swap the arguments to typecheck_fn() in kunit_activate_static_stub()
+so that real_fn_addr can be either the function itself or a pointer
+to that function.
 
-On 18/12/2023 15:43, Simon Horman wrote:
-> On Fri, Dec 15, 2023 at 03:20:46PM +0200, Roger Quadros wrote:
->> From: Grygorii Strashko <grygorii.strashko@ti.com>
->>
->> This patch adds MQPRIO Qdisc offload in full 'channel' mode which allows
->> not only setting up pri:tc mapping, but also configuring TX shapers
->> (rate-limiting) on external port FIFOs.
->>
->> The MQPRIO Qdisc offload is expected to work with or without VLAN/priority
->> tagged packets.
->>
->> The CPSW external Port FIFO has 8 Priority queues. The rate-limit can be
->> set for each of these priority queues. Which Priority queue a packet is
->> assigned to depends on PN_REG_TX_PRI_MAP register which maps header
->> priority to switch priority.
->>
->> The header priority of a packet is assigned via the RX_PRI_MAP_REG which
->> maps packet priority to header priority.
->>
->> The packet priority is either the VLAN priority (for VLAN tagged packets)
->> or the thread/channel offset.
->>
->> For simplicity, we assign the same priority queue to all queues of a
->> Traffic Class so it can be rate-limited correctly.
->>
->> Configuration example:
->>  ethtool -L eth1 tx 5
->>  ethtool --set-priv-flags eth1 p0-rx-ptype-rrobin off
->>
->>  tc qdisc add dev eth1 parent root handle 100: mqprio num_tc 3 \
->>  map 0 0 1 2 0 0 0 0 0 0 0 0 0 0 0 0 \
->>  queues 1@0 1@1 1@2 hw 1 mode channel \
->>  shaper bw_rlimit min_rate 0 100mbit 200mbit max_rate 0 101mbit 202mbit
->>
->>  tc qdisc replace dev eth2 handle 100: parent root mqprio num_tc 1 \
->>  map 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 queues 1@0 hw 1
->>
->>  ip link add link eth1 name eth1.100 type vlan id 100
->>  ip link set eth1.100 type vlan egress 0:0 1:1 2:2 3:3 4:4 5:5 6:6 7:7
->>
->> In the above example two ports share the same TX CPPI queue 0 for low
->> priority traffic. 3 traffic classes are defined for eth1 and mapped to:
->> TC0 - low priority, TX CPPI queue 0 -> ext Port 1 fifo0, no rate limit
->> TC1 - prio 2, TX CPPI queue 1 -> ext Port 1 fifo1, CIR=100Mbit/s, EIR=1Mbit/s
->> TC2 - prio 3, TX CPPI queue 2 -> ext Port 1 fifo2, CIR=200Mbit/s, EIR=2Mbit/s
->>
->> Signed-off-by: Grygorii Strashko <grygorii.strashko@ti.com>
->> Signed-off-by: Roger Quadros <rogerq@kernel.org>
-> 
-> ...
-> 
->> diff --git a/drivers/net/ethernet/ti/am65-cpsw-qos.c b/drivers/net/ethernet/ti/am65-cpsw-qos.c
->> index 9f0a05e763d1..7ad7af3b3c60 100644
->> --- a/drivers/net/ethernet/ti/am65-cpsw-qos.c
->> +++ b/drivers/net/ethernet/ti/am65-cpsw-qos.c
->> @@ -7,6 +7,7 @@
->>   */
->>  
->>  #include <linux/pm_runtime.h>
->> +#include <linux/math.h>
->>  #include <linux/time.h>
->>  #include <net/pkt_cls.h>
->>  
->> @@ -15,6 +16,8 @@
->>  #include "am65-cpts.h"
->>  #include "cpsw_ale.h"
->>  
->> +#define TO_MBPS(x)	DIV_ROUND_UP((x), BYTES_PER_MBIT)
-> 
-> Hi Grygorii and Roger,
-> 
-> a minor nit from my side: in order for BYTES_PER_MBIT to be defined
-> linux/units.h needs to be included. But that isn't added until
-> the next patch.
+This is useful to simplify redirecting static functions in a module.
+Having to pass the actual function meant that it must be exported
+from the module. Either making the 'static' and EXPORT_SYMBOL*()
+conditional (which makes the code messy), or change it to always
+exported (which increases the export namespace and prevents the
+compiler inlining a trivial stub function in non-test builds).
 
-Thanks for the catch. I'll fix it in next spin.
+With the original definition of kunit_activate_static_stub() the
+address of real_fn_addr was passed to typecheck_fn() as the type to
+be passed. This meant that if real_fn_addr was a pointer-to-function
+it would resolve to a ** instead of a *, giving an error like this:
 
+   error: initialization of ‘int (**)(int)’ from incompatible pointer
+   type ‘int (*)(int)’ [-Werror=incompatible-pointer-types]
+   kunit_activate_static_stub(test, add_one_fn_ptr, subtract_one);
+      |                             ^~~~~~~~~~~~
+   ./include/linux/typecheck.h:21:25: note: in definition of macro
+   ‘typecheck_fn’
+   21 | ({ typeof(type) __tmp = function; \
+
+Swapping the arguments to typecheck_fn makes it take the type of a
+pointer to the replacement function. Either a function or a pointer
+to function can be assigned to that. For example:
+
+static int some_function(int x)
+{
+    /* whatever */
+}
+
+int (* some_function_ptr)(int) = some_function;
+
+static int replacement(int x)
+{
+    /* whatever */
+}
+
+Then:
+  kunit_activate_static_stub(test, some_function, replacement);
+yields:
+  typecheck_fn(typeof(&replacement), some_function);
+
+and:
+  kunit_activate_static_stub(test, some_function_ptr, replacement);
+yields:
+  typecheck_fn(typeof(&replacement), some_function_ptr);
+
+The two typecheck_fn() then resolve to:
+
+  int (*__tmp)(int) = some_function;
+and
+  int (*__tmp)(int) = some_function_ptr;
+
+Both of these are valid. In the first case the compiler inserts
+an implicit '&' to take the address of the supplied function, and
+in the second case the RHS is already a pointer to the same type.
+
+Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+---
+ include/kunit/static_stub.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/kunit/static_stub.h b/include/kunit/static_stub.h
+index 85315c80b303..bf940322dfc0 100644
+--- a/include/kunit/static_stub.h
++++ b/include/kunit/static_stub.h
+@@ -93,7 +93,7 @@ void __kunit_activate_static_stub(struct kunit *test,
+  * The redirection can be disabled again with kunit_deactivate_static_stub().
+  */
+ #define kunit_activate_static_stub(test, real_fn_addr, replacement_addr) do {	\
+-	typecheck_fn(typeof(&real_fn_addr), replacement_addr);			\
++	typecheck_fn(typeof(&replacement_addr), real_fn_addr);			\
+ 	__kunit_activate_static_stub(test, real_fn_addr, replacement_addr);	\
+ } while (0)
+ 
 -- 
-cheers,
--roger
+2.30.2
+
 
