@@ -1,37 +1,37 @@
-Return-Path: <linux-kselftest+bounces-2146-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2147-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D845D816FAD
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Dec 2023 14:07:53 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41190816FB3
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Dec 2023 14:08:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 86873289526
-	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Dec 2023 13:07:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D4DED1F26E71
+	for <lists+linux-kselftest@lfdr.de>; Mon, 18 Dec 2023 13:08:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D26D4FF63;
-	Mon, 18 Dec 2023 12:55:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43BE84FF7B;
+	Mon, 18 Dec 2023 12:55:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZB9O7qYw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Aen2DYF/"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D72CE498BC;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B429498BC;
+	Mon, 18 Dec 2023 12:55:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E375CC433C9;
 	Mon, 18 Dec 2023 12:55:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBDC3C433CA;
-	Mon, 18 Dec 2023 12:55:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1702904128;
-	bh=Nlq9ZlGI1tQi8HuukcBJ/b6ytj5WozuimYpYe3B7rRo=;
+	s=k20201202; t=1702904132;
+	bh=cldzJ3I1IsYIN7DMqSuDmp7JjYC5z3dfJAI8HPtrLRA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ZB9O7qYw5yxkLok9FIbfsmwEukMZ5Rk3UBf41P0VuQ607NPnHc4eIZbz24HhxJCqC
-	 AvctlAxmX25myiNaQlPzCrbXthUNq7zGNSaeHE11q8W8QAD4hRpywY/50mZAysAhnY
-	 lR37uB60CuqkKIgMjAonR4NHMjKcgG1w5VeHU00uvI+DGs2iG74ibRPfvM6azhQC+4
-	 a8nIdGFDaNX1Km4IQW6a8aQWV9UO1IfyBQwt90vRHURlqigY7aWAHTSD+QQFI9XQDO
-	 SEYvzD7K7o4ech/FHBmzXd18yoqgS1UrJByv6cs/WqsLAIbvi053LuI5cpJSPyv6Ej
-	 LSdwuP0tzPtLA==
+	b=Aen2DYF/fvJotwOctKQdfIfNl410AKlQdMF/QxiwQpHBa4IovfJs4+eGmnNxxtdgk
+	 KtyMGQv7Pm9EtsFy08t2wgzSJ4zHZ4GilXSd4fXnm+P5WFDMvYJGLxlf4ylOuulffj
+	 4Lw12ibgX7CNah2r1ZMe2CzncihNiqy6naEr9E38vLj7Zo3lWqjT/UHW4V9PPMKONE
+	 TWBgtgAmKqXoaJB5QtT9kMZe8obRUqWX95argtqSNbvn3kr+SPIGmSZMzD2tpznMH7
+	 7dBRJHSRL6zujNJaYv6r2MHjNgXfO9w7L5H09GB2wchtnPmEeknJ1fa1JqtgBid1Wk
+	 b81XSAp2EXlBQ==
 From: Roger Quadros <rogerq@kernel.org>
 To: davem@davemloft.net,
 	edumazet@google.com,
@@ -49,9 +49,9 @@ Cc: s-vadapalli@ti.com,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	rogerq@kernel.org
-Subject: [PATCH net-next v10 02/10] selftests: forwarding: ethtool_mm: fall back to aggregate if device does not report pMAC stats
-Date: Mon, 18 Dec 2023 14:55:05 +0200
-Message-Id: <20231218125513.52337-3-rogerq@kernel.org>
+Subject: [PATCH net-next v10 03/10] net: ethernet: am65-cpsw: Build am65-cpsw-qos only if required
+Date: Mon, 18 Dec 2023 14:55:06 +0200
+Message-Id: <20231218125513.52337-4-rogerq@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231218125513.52337-1-rogerq@kernel.org>
 References: <20231218125513.52337-1-rogerq@kernel.org>
@@ -63,74 +63,124 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Vladimir Oltean <vladimir.oltean@nxp.com>
+Build am65-cpsw-qos only if CONFIG_TI_AM65_CPSW_TAS is enabled.
 
-Some devices do not support individual 'pmac' and 'emac' stats.
-For such devices, resort to 'aggregate' stats.
-
-Cc: Shuah Khan <shuah@kernel.org>
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
-Tested-by: Roger Quadros <rogerq@kernel.org>
 Signed-off-by: Roger Quadros <rogerq@kernel.org>
+Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 ---
- tools/testing/selftests/net/forwarding/ethtool_mm.sh | 11 +++++++++++
- tools/testing/selftests/net/forwarding/lib.sh        |  9 +++++++++
- 2 files changed, 20 insertions(+)
+ drivers/net/ethernet/ti/Makefile        |  3 ++-
+ drivers/net/ethernet/ti/am65-cpsw-qos.c | 12 ------------
+ drivers/net/ethernet/ti/am65-cpsw-qos.h | 26 +++++++++++++++++++++++++
+ 3 files changed, 28 insertions(+), 13 deletions(-)
 
 Changelog:
-v10: Fix check_ethtool_pmac_std_stats_support() logic.
-v9: no code change. Added Kselftest maintainer in Cc.
-v8: initial commit
 
-diff --git a/tools/testing/selftests/net/forwarding/ethtool_mm.sh b/tools/testing/selftests/net/forwarding/ethtool_mm.sh
-index 6212913f4ad1..50d5bfb17ef1 100755
---- a/tools/testing/selftests/net/forwarding/ethtool_mm.sh
-+++ b/tools/testing/selftests/net/forwarding/ethtool_mm.sh
-@@ -25,6 +25,10 @@ traffic_test()
- 	local after=
- 	local delta=
+v10: no code change. Added Reviewed-by tag.
+v9: no change
+v8: no change
+v7: no change
+v6: initial commit
+
+diff --git a/drivers/net/ethernet/ti/Makefile b/drivers/net/ethernet/ti/Makefile
+index 27de1d697134..9d7cd84d1e2d 100644
+--- a/drivers/net/ethernet/ti/Makefile
++++ b/drivers/net/ethernet/ti/Makefile
+@@ -26,7 +26,8 @@ keystone_netcp_ethss-y := netcp_ethss.o netcp_sgmii.o netcp_xgbepcsr.o cpsw_ale.
+ obj-$(CONFIG_TI_K3_CPPI_DESC_POOL) += k3-cppi-desc-pool.o
  
-+	if [ ${has_pmac_stats[$if]} = false ]; then
-+		src="aggregate"
-+	fi
-+
- 	before=$(ethtool_std_stats_get $if "eth-mac" "FramesTransmittedOK" $src)
+ obj-$(CONFIG_TI_K3_AM65_CPSW_NUSS) += ti-am65-cpsw-nuss.o
+-ti-am65-cpsw-nuss-y := am65-cpsw-nuss.o cpsw_sl.o am65-cpsw-ethtool.o cpsw_ale.o am65-cpsw-qos.o
++ti-am65-cpsw-nuss-y := am65-cpsw-nuss.o cpsw_sl.o am65-cpsw-ethtool.o cpsw_ale.o
++ti-am65-cpsw-nuss-$(CONFIG_TI_AM65_CPSW_TAS) += am65-cpsw-qos.o
+ ti-am65-cpsw-nuss-$(CONFIG_TI_K3_AM65_CPSW_SWITCHDEV) += am65-cpsw-switchdev.o
+ obj-$(CONFIG_TI_K3_AM65_CPTS) += am65-cpts.o
  
- 	$MZ $if -q -c $num_pkts -p 64 -b bcast -t ip -R $PREEMPTIBLE_PRIO
-@@ -317,6 +321,13 @@ for netif in ${NETIFS[@]}; do
- 		echo "SKIP: $netif does not support MAC Merge"
- 		exit $ksft_skip
- 	fi
-+
-+	if check_ethtool_pmac_std_stats_support $netif eth-mac; then
-+		has_pmac_stats[$netif]=true
-+	else
-+		has_pmac_stats[$netif]=false
-+		echo "$netif does not report pMAC statistics, falling back to aggregate"
-+	fi
- done
+diff --git a/drivers/net/ethernet/ti/am65-cpsw-qos.c b/drivers/net/ethernet/ti/am65-cpsw-qos.c
+index 9ac2ff05d501..4bc611cc4aad 100644
+--- a/drivers/net/ethernet/ti/am65-cpsw-qos.c
++++ b/drivers/net/ethernet/ti/am65-cpsw-qos.c
+@@ -571,9 +571,6 @@ static int am65_cpsw_setup_taprio(struct net_device *ndev, void *type_data)
+ 	    taprio->cmd != TAPRIO_CMD_DESTROY)
+ 		return -EOPNOTSUPP;
  
- trap cleanup EXIT
-diff --git a/tools/testing/selftests/net/forwarding/lib.sh b/tools/testing/selftests/net/forwarding/lib.sh
-index e3740163c384..69ef2a40df21 100755
---- a/tools/testing/selftests/net/forwarding/lib.sh
-+++ b/tools/testing/selftests/net/forwarding/lib.sh
-@@ -155,6 +155,15 @@ check_ethtool_counter_group_support()
- 	fi
+-	if (!IS_ENABLED(CONFIG_TI_AM65_CPSW_TAS))
+-		return -ENODEV;
+-
+ 	if (!netif_running(ndev)) {
+ 		dev_err(&ndev->dev, "interface is down, link speed unknown\n");
+ 		return -ENETDOWN;
+@@ -599,9 +596,6 @@ static int am65_cpsw_tc_query_caps(struct net_device *ndev, void *type_data)
+ 	case TC_SETUP_QDISC_TAPRIO: {
+ 		struct tc_taprio_caps *caps = base->caps;
+ 
+-		if (!IS_ENABLED(CONFIG_TI_AM65_CPSW_TAS))
+-			return -EOPNOTSUPP;
+-
+ 		caps->gate_mask_per_txq = true;
+ 
+ 		return 0;
+@@ -806,9 +800,6 @@ void am65_cpsw_qos_link_up(struct net_device *ndev, int link_speed)
+ {
+ 	struct am65_cpsw_port *port = am65_ndev_to_port(ndev);
+ 
+-	if (!IS_ENABLED(CONFIG_TI_AM65_CPSW_TAS))
+-		return;
+-
+ 	am65_cpsw_est_link_up(ndev, link_speed);
+ 	port->qos.link_down_time = 0;
  }
+@@ -817,9 +808,6 @@ void am65_cpsw_qos_link_down(struct net_device *ndev)
+ {
+ 	struct am65_cpsw_port *port = am65_ndev_to_port(ndev);
  
-+check_ethtool_pmac_std_stats_support()
+-	if (!IS_ENABLED(CONFIG_TI_AM65_CPSW_TAS))
+-		return;
+-
+ 	if (!port->qos.link_down_time)
+ 		port->qos.link_down_time = ktime_get();
+ 
+diff --git a/drivers/net/ethernet/ti/am65-cpsw-qos.h b/drivers/net/ethernet/ti/am65-cpsw-qos.h
+index 0cc2a3b3d7f9..898f13a4a112 100644
+--- a/drivers/net/ethernet/ti/am65-cpsw-qos.h
++++ b/drivers/net/ethernet/ti/am65-cpsw-qos.h
+@@ -31,11 +31,37 @@ struct am65_cpsw_qos {
+ 	struct am65_cpsw_ale_ratelimit ale_mc_ratelimit;
+ };
+ 
++#if IS_ENABLED(CONFIG_TI_AM65_CPSW_TAS)
+ int am65_cpsw_qos_ndo_setup_tc(struct net_device *ndev, enum tc_setup_type type,
+ 			       void *type_data);
+ void am65_cpsw_qos_link_up(struct net_device *ndev, int link_speed);
+ void am65_cpsw_qos_link_down(struct net_device *ndev);
+ int am65_cpsw_qos_ndo_tx_p0_set_maxrate(struct net_device *ndev, int queue, u32 rate_mbps);
+ void am65_cpsw_qos_tx_p0_rate_init(struct am65_cpsw_common *common);
++#else
++static inline int am65_cpsw_qos_ndo_setup_tc(struct net_device *ndev,
++					     enum tc_setup_type type,
++					     void *type_data)
 +{
-+	local dev=$1; shift
-+	local grp=$1; shift
-+
-+	[ 0 -ne $(ethtool --json -S $dev --all-groups --src pmac 2>/dev/null \
-+		| jq ".[].\"$grp\" | length") ]
++	return -EOPNOTSUPP;
 +}
 +
- check_locked_port_support()
- {
- 	if ! bridge -d link show | grep -q " locked"; then
++static inline void am65_cpsw_qos_link_up(struct net_device *ndev,
++					 int link_speed)
++{ }
++
++static inline void am65_cpsw_qos_link_down(struct net_device *ndev)
++{ }
++
++static inline int am65_cpsw_qos_ndo_tx_p0_set_maxrate(struct net_device *ndev,
++						      int queue,
++						      u32 rate_mbps)
++{
++	return 0;
++}
++
++static inline void am65_cpsw_qos_tx_p0_rate_init(struct am65_cpsw_common *common)
++{ }
++#endif
+ 
+ #endif /* AM65_CPSW_QOS_H_ */
 -- 
 2.34.1
 
