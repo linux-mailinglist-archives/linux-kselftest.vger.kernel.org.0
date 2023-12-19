@@ -1,42 +1,42 @@
-Return-Path: <linux-kselftest+bounces-2221-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2220-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87042818C87
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Dec 2023 17:42:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0280B818C85
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Dec 2023 17:42:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ACB471C24744
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Dec 2023 16:42:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 28D761C24689
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Dec 2023 16:42:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 967F81F605;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73C201DA22;
 	Tue, 19 Dec 2023 16:41:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=xen.org header.i=@xen.org header.b="p+0hw2zs"
+	dkim=pass (1024-bit key) header.d=xen.org header.i=@xen.org header.b="PHo4QIvo"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mail.xenproject.org (mail.xenproject.org [104.130.215.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4731A358AB;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A6CE35896;
 	Tue, 19 Dec 2023 16:41:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=xen.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xen.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=xen.org;
 	s=20200302mail; h=Content-Transfer-Encoding:MIME-Version:References:
 	In-Reply-To:Message-Id:Date:Subject:To:From;
-	bh=z7zH+v6OnxjwAjiPJoCCBsbBFCz5/p3/vhyVHwUde2s=; b=p+0hw2zsYJOzIGTveKGHhHTwG3
-	+fuOn7o4duxP5GOylzP/2h4eiWIGHrlQIr2s0s/tF7In22LN7qFw+yvrera/lZGJkRR6BByhU+d4y
-	9MCpDA+p7j1WuD2SwFFPRIHwEiX+wEuiWftpnJWOG0mJxl54FO4ziy5iQXCDrLqZNw9s=;
+	bh=AmbsIYupXhNEc+M3GAmFapvv+1Q9WOxTLba1bFXRLxM=; b=PHo4QIvo76d/X2kPOjUoZ5S0U0
+	vCjgR8KBqfgSBjMRuvjhQWkAGLcJbAfPHuhUu/WAFmVHrvXewvzknGM2a5uLuMrlbfLq5s9Nw/6Qb
+	orT5HrYtc5BIlsxtq7TYgXWVhvF2AQebyZasGjsUiBEFmkMnGz7w88ShhPHlbxIEZXJo=;
 Received: from xenbits.xenproject.org ([104.239.192.120])
 	by mail.xenproject.org with esmtp (Exim 4.92)
 	(envelope-from <paul@xen.org>)
-	id 1rFd9y-000657-BU; Tue, 19 Dec 2023 16:41:34 +0000
+	id 1rFd9x-00064v-VF; Tue, 19 Dec 2023 16:41:33 +0000
 Received: from 54-240-197-226.amazon.com ([54.240.197.226] helo=REM-PW02S00X.ant.amazon.com)
 	by xenbits.xenproject.org with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <paul@xen.org>)
-	id 1rFckR-0005h9-QH; Tue, 19 Dec 2023 16:15:12 +0000
+	id 1rFckU-0005h9-1N; Tue, 19 Dec 2023 16:15:14 +0000
 From: Paul Durrant <paul@xen.org>
 To: Paolo Bonzini <pbonzini@redhat.com>,
 	Jonathan Corbet <corbet@lwn.net>,
@@ -54,9 +54,9 @@ To: Paolo Bonzini <pbonzini@redhat.com>,
 	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH v11 18/19] KVM: pfncache: check the need for invalidation under read lock first
-Date: Tue, 19 Dec 2023 16:11:08 +0000
-Message-Id: <20231219161109.1318-19-paul@xen.org>
+Subject: [PATCH v11 19/19] KVM: xen: allow vcpu_info content to be 'safely' copied
+Date: Tue, 19 Dec 2023 16:11:09 +0000
+Message-Id: <20231219161109.1318-20-paul@xen.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231219161109.1318-1-paul@xen.org>
 References: <20231219161109.1318-1-paul@xen.org>
@@ -70,62 +70,57 @@ Content-Transfer-Encoding: 8bit
 
 From: Paul Durrant <pdurrant@amazon.com>
 
-Taking a write lock on a pfncache will be disruptive if the cache is
-heavily used (which only requires a read lock). Hence, in the MMU notifier
-callback, take read locks on caches to check for a match; only taking a
-write lock to actually perform an invalidation (after a another check).
+If the guest sets an explicit vcpu_info GPA then, for any of the first 32
+vCPUs, the content of the default vcpu_info in the shared_info page must be
+copied into the new location. Because this copy may race with event
+delivery (which updates the 'evtchn_pending_sel' field in vcpu_info) there
+needs to be a way to defer that until the copy is complete.
+Happily there is already a shadow of 'evtchn_pending_sel' in kvm_vcpu_xen
+that is used in atomic context if the vcpu_info PFN cache has been
+invalidated so that the update of vcpu_info can be deferred until the
+cache can be refreshed (on vCPU thread's the way back into guest context).
+
+Also use this shadow if the vcpu_info cache has been *deactivated*, so that
+the VMM can safely copy the vcpu_info content and then re-activate the
+cache with the new GPA. To do this, stop considering an inactive vcpu_info
+cache as a hard error in kvm_xen_set_evtchn_fast().
 
 Signed-off-by: Paul Durrant <pdurrant@amazon.com>
 Reviewed-by: David Woodhouse <dwmw@amazon.co.uk>
 ---
+Cc: David Woodhouse <dwmw2@infradead.org>
 Cc: Sean Christopherson <seanjc@google.com>
 Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: David Woodhouse <dwmw2@infradead.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: x86@kernel.org
 
-v10:
+v8:
+ - Update commit comment.
+
+v6:
  - New in this version.
 ---
- virt/kvm/pfncache.c | 22 +++++++++++++++++++---
- 1 file changed, 19 insertions(+), 3 deletions(-)
+ arch/x86/kvm/xen.c | 3 ---
+ 1 file changed, 3 deletions(-)
 
-diff --git a/virt/kvm/pfncache.c b/virt/kvm/pfncache.c
-index ae822bff812f..70394d7c9a38 100644
---- a/virt/kvm/pfncache.c
-+++ b/virt/kvm/pfncache.c
-@@ -29,14 +29,30 @@ void gfn_to_pfn_cache_invalidate_start(struct kvm *kvm, unsigned long start,
- 
- 	spin_lock(&kvm->gpc_lock);
- 	list_for_each_entry(gpc, &kvm->gpc_list, list) {
--		write_lock_irq(&gpc->lock);
-+		read_lock_irq(&gpc->lock);
- 
- 		/* Only a single page so no need to care about length */
- 		if (gpc->valid && !is_error_noslot_pfn(gpc->pfn) &&
- 		    gpc->uhva >= start && gpc->uhva < end) {
--			gpc->valid = false;
-+			read_unlock_irq(&gpc->lock);
-+
-+			/*
-+			 * There is a small window here where the cache could
-+			 * be modified, and invalidation would no longer be
-+			 * necessary. Hence check again whether invalidation
-+			 * is still necessary once the write lock has been
-+			 * acquired.
-+			 */
-+
-+			write_lock_irq(&gpc->lock);
-+			if (gpc->valid && !is_error_noslot_pfn(gpc->pfn) &&
-+			    gpc->uhva >= start && gpc->uhva < end)
-+				gpc->valid = false;
-+			write_unlock_irq(&gpc->lock);
-+			continue;
- 		}
--		write_unlock_irq(&gpc->lock);
-+
-+		read_unlock_irq(&gpc->lock);
+diff --git a/arch/x86/kvm/xen.c b/arch/x86/kvm/xen.c
+index 845ff23c8399..99eeb9b68a02 100644
+--- a/arch/x86/kvm/xen.c
++++ b/arch/x86/kvm/xen.c
+@@ -1799,9 +1799,6 @@ int kvm_xen_set_evtchn_fast(struct kvm_xen_evtchn *xe, struct kvm *kvm)
+ 		WRITE_ONCE(xe->vcpu_idx, vcpu->vcpu_idx);
  	}
- 	spin_unlock(&kvm->gpc_lock);
- }
+ 
+-	if (!vcpu->arch.xen.vcpu_info_cache.active)
+-		return -EINVAL;
+-
+ 	if (xe->port >= max_evtchn_port(kvm))
+ 		return -EINVAL;
+ 
 -- 
 2.39.2
 
