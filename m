@@ -1,62 +1,62 @@
-Return-Path: <linux-kselftest+bounces-2185-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2186-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B2278184C7
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Dec 2023 10:49:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22E9A8184CB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Dec 2023 10:50:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0016C1F268CB
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Dec 2023 09:49:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C04AF2858B9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Dec 2023 09:49:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D662B13FE9;
-	Tue, 19 Dec 2023 09:49:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA79714A81;
+	Tue, 19 Dec 2023 09:49:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E5ahzdRa"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lx5V3Tgc"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2303A1426B;
-	Tue, 19 Dec 2023 09:49:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 749CF1426B;
+	Tue, 19 Dec 2023 09:49:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-58d18c224c7so2672918eaf.2;
-        Tue, 19 Dec 2023 01:49:29 -0800 (PST)
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-5cda24a77e0so941226a12.2;
+        Tue, 19 Dec 2023 01:49:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1702979368; x=1703584168; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1702979372; x=1703584172; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3gnGTazMYDP2LaFiCvzMYscNqHB3XeHRTsf1tloUUig=;
-        b=E5ahzdRaZTJOULOG1RNfmxJjcFPhwOptcsd5J+vzNsB56SxCvbOOLfb4DcRt988l2c
-         J+fGoIbPP3rAboO0mcAS3ZdaVWRPvFfPc9MX0ob1I08AJvHoBJNyS7AuozyaYSK/XiFz
-         gMY2o20vU2ef+seTcJfCbyo4L+FzNmxojbgmx/QjZMF8rW7xE1oT8C18Rybw4BfOIq/H
-         VTX5X7/bHH5rnzgAquvifYn9yyhQTayPXCR8y9Sdvm83NgxngJ5A1my8gwxDn4zScnMw
-         llDf1MFYMXwtLlZWzu7UkoZ3GD7FIKaBjD0lBKml1lQuk1Lh3WrvRcguViwP8VOMfaiv
-         WaCg==
+        bh=2X8UVuUbchpztlNlu1B9MVgkZAm0pyuW2tgoQGv3vwg=;
+        b=lx5V3TgcSfpcQP25yUX8fM0aG/xxFWuCVZgjEzpd8pw1Ptb/WO30KwdQfvcJlkHAuf
+         FVlmW5jJpnaI5FZGT1AbTAGG2QUFxpSOWbpaGpHYShPCjSwlGqeMuvXfi1DgiwfeJ2om
+         ZEoyUUDwoVAMZc+gLv3lKMC1hyvxWHTWOaUhmzGIPidfCTg/JRJC85136byT6aVIiADW
+         KJ+zDtLw6Pi1S3ZPwpgiFxUIwgx5pxMHWxfN0nKiSHHwOcVANf6BctyKybQma9f5xfsB
+         WvVotbqtKKqxb3CzHivBXjWfd5ZsLz7FM3+1GEVLd3QA9u+528qTgKBKNQcmjyZdObZo
+         i2Kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702979368; x=1703584168;
+        d=1e100.net; s=20230601; t=1702979372; x=1703584172;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3gnGTazMYDP2LaFiCvzMYscNqHB3XeHRTsf1tloUUig=;
-        b=tDcbaHuaom7mqFUVrvyRK+4Ac8AFxfjrG5xMixq61y4rl1r7nmsmKeNJUzfcF3GuOH
-         clzBDfrcdmYqrGME6tgPcWuFHPtVRKAbmyBrsktIv44HVBUoVqsF90d9Ov+/V4W6RwkA
-         92Pzytaqlqa98qqrXh0f7+wMriAQsrEXuZxIkdNzVHLnq9j1gLOkIHmFlF235z19hH+I
-         uR9AMz0EFihTEayh/t0YOcwOUlCVvJ53+3LAOUm0r9Zm5Swz8jLtA/t86wzAq9Ga5RP9
-         WCgt2x5jcMgMNzPCanoz8J1Rg0l/IR0kOfvu+QgXmQSuCftIm9ywfy2ihZAoDRpX2WPb
-         zz9Q==
-X-Gm-Message-State: AOJu0Yy/cBZQWi/5Ivnuw6QP03wKv1D+9oQmvHzUcV8BJYluC4EiqVlh
-	NeFYJOAZ6TU+/Vf4gnN0Kz/OkCvLFv2onE2YCJ0=
-X-Google-Smtp-Source: AGHT+IE1ftuQqgtthA3a9u+wcnAkBGZPGf2pLe8tg1VSxCtTIwouz9WC5Bgro4DUlZINUUnIIVkB9Q==
-X-Received: by 2002:a05:6359:71c1:b0:170:2493:11fa with SMTP id uf1-20020a05635971c100b00170249311famr9295948rwb.50.1702979368185;
-        Tue, 19 Dec 2023 01:49:28 -0800 (PST)
+        bh=2X8UVuUbchpztlNlu1B9MVgkZAm0pyuW2tgoQGv3vwg=;
+        b=v0vL9GL8SV5M1kVLqI28x+bDcVdWro4GPeQ41zC4+Vu4URWXnzXqxBjbTEAhkL8pCx
+         IL1py+83fAIH+b/VWpwZSLookGNTRBvoE32rx60WkEj2fkc1Vl3yz6i152Yx6rjCqrbK
+         StfoNXNahLDj4ZeX3R00Ga91iTevzAGXLOz/LA5fIdVFlKCNvgpeJpJ0SJlyCUhXCT2V
+         +WyBho5PZfIpxyslmwB9Bmj3Tpa44ySWM/FeOXVNfosvBs6opioTl6A+JC0XeWVG55rb
+         mStzIcHIqmf9LA2AQPHQuTshpDsvI2m1Xwv0qUm0uLAG2TgwEi7M76Df5qBDVyTkZzut
+         mgNw==
+X-Gm-Message-State: AOJu0Yx2Fgr336w84nEAJxbFa0a9OZbgyk5tY/FpAGxz0D5BwMLjtBeH
+	ZeRcuuJ1Tzk9eY6WnaYMztf8jE8A163o3x3rh5Q=
+X-Google-Smtp-Source: AGHT+IHiAFRjisOy85FpbWoav45DgfkGtP/uqSxHeu5/9UcEFALuZkEFqzvbdSi5DiO66svEXSBCoA==
+X-Received: by 2002:a05:6a21:1a8:b0:194:b79c:9960 with SMTP id le40-20020a056a2101a800b00194b79c9960mr107496pzb.50.1702979372279;
+        Tue, 19 Dec 2023 01:49:32 -0800 (PST)
 Received: from Laptop-X1.redhat.com ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id ds17-20020a17090b08d100b0028b21d24ba6sm1076276pjb.15.2023.12.19.01.49.24
+        by smtp.gmail.com with ESMTPSA id ds17-20020a17090b08d100b0028b21d24ba6sm1076276pjb.15.2023.12.19.01.49.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Dec 2023 01:49:27 -0800 (PST)
+        Tue, 19 Dec 2023 01:49:31 -0800 (PST)
 From: Hangbin Liu <liuhangbin@gmail.com>
 To: netdev@vger.kernel.org
 Cc: "David S. Miller" <davem@davemloft.net>,
@@ -72,9 +72,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	Stefano Brivio <sbrivio@redhat.com>,
 	Kees Cook <keescook@chromium.org>,
 	Hangbin Liu <liuhangbin@gmail.com>
-Subject: [PATCH net-next 5/8] selftests/net: convert xfrm_policy.sh to run it in unique namespace
-Date: Tue, 19 Dec 2023 17:48:53 +0800
-Message-ID: <20231219094856.1740079-6-liuhangbin@gmail.com>
+Subject: [PATCH net-next 6/8] selftests/net: use unique netns name for setup_loopback.sh setup_veth.sh
+Date: Tue, 19 Dec 2023 17:48:54 +0800
+Message-ID: <20231219094856.1740079-7-liuhangbin@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20231219094856.1740079-1-liuhangbin@gmail.com>
 References: <20231219094856.1740079-1-liuhangbin@gmail.com>
@@ -86,288 +86,156 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Here is the test result after conversion.
+The setup_loopback and setup_veth use their own way to create namespace.
+So let's just re-define server_ns/client_ns to unique name.
+At the same time update the namespace name in gro.sh and toeplitz.sh.
+As I don't have env to run toeplitz.sh. Here is only the gro test result.
 
- # ./xfrm_policy.sh
- PASS: policy before exception matches
- PASS: ping to .254 bypassed ipsec tunnel (exceptions)
- PASS: direct policy matches (exceptions)
- PASS: policy matches (exceptions)
- PASS: ping to .254 bypassed ipsec tunnel (exceptions and block policies)
- PASS: direct policy matches (exceptions and block policies)
- PASS: policy matches (exceptions and block policies)
- PASS: ping to .254 bypassed ipsec tunnel (exceptions and block policies after hresh changes)
- PASS: direct policy matches (exceptions and block policies after hresh changes)
- PASS: policy matches (exceptions and block policies after hresh changes)
- PASS: ping to .254 bypassed ipsec tunnel (exceptions and block policies after hthresh change in ns3)
- PASS: direct policy matches (exceptions and block policies after hthresh change in ns3)
- PASS: policy matches (exceptions and block policies after hthresh change in ns3)
- PASS: ping to .254 bypassed ipsec tunnel (exceptions and block policies after htresh change to normal)
- PASS: direct policy matches (exceptions and block policies after htresh change to normal)
- PASS: policy matches (exceptions and block policies after htresh change to normal)
- PASS: policies with repeated htresh change
+ # ./gro.sh
+ running test ipv4 data
+ Expected {200 }, Total 1 packets
+ Received {200 }, Total 1 packets.
+ ...
+ Gro::large test passed.
+ All Tests Succeeded!
 
 Acked-by: David Ahern <dsahern@kernel.org>
 Signed-off-by: Hangbin Liu <liuhangbin@gmail.com>
 ---
- tools/testing/selftests/net/xfrm_policy.sh | 138 ++++++++++-----------
- 1 file changed, 69 insertions(+), 69 deletions(-)
+ tools/testing/selftests/net/gro.sh            |  4 ++--
+ tools/testing/selftests/net/setup_loopback.sh |  8 +++++---
+ tools/testing/selftests/net/setup_veth.sh     |  9 ++++++---
+ tools/testing/selftests/net/toeplitz.sh       | 14 +++++++-------
+ 4 files changed, 20 insertions(+), 15 deletions(-)
 
-diff --git a/tools/testing/selftests/net/xfrm_policy.sh b/tools/testing/selftests/net/xfrm_policy.sh
-index bdf450eaf60c..457789530645 100755
---- a/tools/testing/selftests/net/xfrm_policy.sh
-+++ b/tools/testing/selftests/net/xfrm_policy.sh
-@@ -18,8 +18,7 @@
- # ns1: ping 10.0.2.254: does NOT pass via ipsec tunnel (exception)
- # ns2: ping 10.0.1.254: does NOT pass via ipsec tunnel (exception)
+diff --git a/tools/testing/selftests/net/gro.sh b/tools/testing/selftests/net/gro.sh
+index 342ad27f631b..19352f106c1d 100755
+--- a/tools/testing/selftests/net/gro.sh
++++ b/tools/testing/selftests/net/gro.sh
+@@ -23,11 +23,11 @@ run_test() {
+   # on every try.
+   for tries in {1..3}; do
+     # Actual test starts here
+-    ip netns exec server_ns ./gro "${ARGS[@]}" "--rx" "--iface" "server" \
++    ip netns exec $server_ns ./gro "${ARGS[@]}" "--rx" "--iface" "server" \
+       1>>log.txt &
+     server_pid=$!
+     sleep 0.5  # to allow for socket init
+-    ip netns exec client_ns ./gro "${ARGS[@]}" "--iface" "client" \
++    ip netns exec $client_ns ./gro "${ARGS[@]}" "--iface" "client" \
+       1>>log.txt
+     wait "${server_pid}"
+     exit_code=$?
+diff --git a/tools/testing/selftests/net/setup_loopback.sh b/tools/testing/selftests/net/setup_loopback.sh
+index e57bbfbc5208..2070b57849de 100755
+--- a/tools/testing/selftests/net/setup_loopback.sh
++++ b/tools/testing/selftests/net/setup_loopback.sh
+@@ -5,6 +5,8 @@ readonly FLUSH_PATH="/sys/class/net/${dev}/gro_flush_timeout"
+ readonly IRQ_PATH="/sys/class/net/${dev}/napi_defer_hard_irqs"
+ readonly FLUSH_TIMEOUT="$(< ${FLUSH_PATH})"
+ readonly HARD_IRQS="$(< ${IRQ_PATH})"
++readonly server_ns=$(mktemp -u server-XXXXXXXX)
++readonly client_ns=$(mktemp -u client-XXXXXXXX)
  
--# Kselftest framework requirement - SKIP code is 4.
--ksft_skip=4
-+source lib.sh
- ret=0
- policy_checks_ok=1
+ netdev_check_for_carrier() {
+ 	local -r dev="$1"
+@@ -97,12 +99,12 @@ setup_interrupt() {
  
-@@ -204,24 +203,24 @@ check_xfrm() {
- 	ip=$2
- 	local lret=0
+ setup_ns() {
+ 	# Set up server_ns namespace and client_ns namespace
+-	setup_macvlan_ns "${dev}" server_ns server "${SERVER_MAC}"
+-	setup_macvlan_ns "${dev}" client_ns client "${CLIENT_MAC}"
++	setup_macvlan_ns "${dev}" ${server_ns} server "${SERVER_MAC}"
++	setup_macvlan_ns "${dev}" ${client_ns} client "${CLIENT_MAC}"
+ }
  
--	ip netns exec ns1 ping -q -c 1 10.0.2.$ip > /dev/null
-+	ip netns exec ${ns[1]} ping -q -c 1 10.0.2.$ip > /dev/null
+ cleanup_ns() {
+-	cleanup_macvlan_ns server_ns server client_ns client
++	cleanup_macvlan_ns ${server_ns} server ${client_ns} client
+ }
  
--	check_ipt_policy_count ns3
-+	check_ipt_policy_count ${ns[3]}
- 	if [ $? -ne $rval ] ; then
- 		lret=1
- 	fi
--	check_ipt_policy_count ns4
-+	check_ipt_policy_count ${ns[4]}
- 	if [ $? -ne $rval ] ; then
- 		lret=1
- 	fi
+ setup() {
+diff --git a/tools/testing/selftests/net/setup_veth.sh b/tools/testing/selftests/net/setup_veth.sh
+index 1003ddf7b3b2..a9a1759e035c 100644
+--- a/tools/testing/selftests/net/setup_veth.sh
++++ b/tools/testing/selftests/net/setup_veth.sh
+@@ -1,6 +1,9 @@
+ #!/bin/bash
+ # SPDX-License-Identifier: GPL-2.0
  
--	ip netns exec ns2 ping -q -c 1 10.0.1.$ip > /dev/null
-+	ip netns exec ${ns[2]} ping -q -c 1 10.0.1.$ip > /dev/null
- 
--	check_ipt_policy_count ns3
-+	check_ipt_policy_count ${ns[3]}
- 	if [ $? -ne $rval ] ; then
- 		lret=1
- 	fi
--	check_ipt_policy_count ns4
-+	check_ipt_policy_count ${ns[4]}
- 	if [ $? -ne $rval ] ; then
- 		lret=1
- 	fi
-@@ -270,11 +269,11 @@ check_hthresh_repeat()
- 	i=0
- 
- 	for i in $(seq 1 10);do
--		ip -net ns1 xfrm policy update src e000:0001::0000 dst ff01::0014:0000:0001 dir in tmpl src :: dst :: proto esp mode tunnel priority 100 action allow || break
--		ip -net ns1 xfrm policy set hthresh6 0 28 || break
-+		ip -net ${ns[1]} xfrm policy update src e000:0001::0000 dst ff01::0014:0000:0001 dir in tmpl src :: dst :: proto esp mode tunnel priority 100 action allow || break
-+		ip -net ${ns[1]} xfrm policy set hthresh6 0 28 || break
- 
--		ip -net ns1 xfrm policy update src e000:0001::0000 dst ff01::01 dir in tmpl src :: dst :: proto esp mode tunnel priority 100 action allow || break
--		ip -net ns1 xfrm policy set hthresh6 0 28 || break
-+		ip -net ${ns[1]} xfrm policy update src e000:0001::0000 dst ff01::01 dir in tmpl src :: dst :: proto esp mode tunnel priority 100 action allow || break
-+		ip -net ${ns[1]} xfrm policy set hthresh6 0 28 || break
- 	done
- 
- 	if [ $i -ne 10 ] ;then
-@@ -347,79 +346,80 @@ if [ $? -ne 0 ];then
- 	exit $ksft_skip
- fi
- 
--for i in 1 2 3 4; do
--    ip netns add ns$i
--    ip -net ns$i link set lo up
--done
-+setup_ns ns1 ns2 ns3 ns4
-+ns[1]=$ns1
-+ns[2]=$ns2
-+ns[3]=$ns3
-+ns[4]=$ns4
- 
- DEV=veth0
--ip link add $DEV netns ns1 type veth peer name eth1 netns ns3
--ip link add $DEV netns ns2 type veth peer name eth1 netns ns4
-+ip link add $DEV netns ${ns[1]} type veth peer name eth1 netns ${ns[3]}
-+ip link add $DEV netns ${ns[2]} type veth peer name eth1 netns ${ns[4]}
- 
--ip link add $DEV netns ns3 type veth peer name veth0 netns ns4
-+ip link add $DEV netns ${ns[3]} type veth peer name veth0 netns ${ns[4]}
- 
- DEV=veth0
- for i in 1 2; do
--    ip -net ns$i link set $DEV up
--    ip -net ns$i addr add 10.0.$i.2/24 dev $DEV
--    ip -net ns$i addr add dead:$i::2/64 dev $DEV
--
--    ip -net ns$i addr add 10.0.$i.253 dev $DEV
--    ip -net ns$i addr add 10.0.$i.254 dev $DEV
--    ip -net ns$i addr add dead:$i::fd dev $DEV
--    ip -net ns$i addr add dead:$i::fe dev $DEV
-+    ip -net ${ns[$i]} link set $DEV up
-+    ip -net ${ns[$i]} addr add 10.0.$i.2/24 dev $DEV
-+    ip -net ${ns[$i]} addr add dead:$i::2/64 dev $DEV
++readonly server_ns=$(mktemp -u server-XXXXXXXX)
++readonly client_ns=$(mktemp -u client-XXXXXXXX)
 +
-+    ip -net ${ns[$i]} addr add 10.0.$i.253 dev $DEV
-+    ip -net ${ns[$i]} addr add 10.0.$i.254 dev $DEV
-+    ip -net ${ns[$i]} addr add dead:$i::fd dev $DEV
-+    ip -net ${ns[$i]} addr add dead:$i::fe dev $DEV
- done
+ setup_veth_ns() {
+ 	local -r link_dev="$1"
+ 	local -r ns_name="$2"
+@@ -19,14 +22,14 @@ setup_ns() {
+ 	# Set up server_ns namespace and client_ns namespace
+ 	ip link add name server type veth peer name client
  
- for i in 3 4; do
--ip -net ns$i link set eth1 up
--ip -net ns$i link set veth0 up
-+    ip -net ${ns[$i]} link set eth1 up
-+    ip -net ${ns[$i]} link set veth0 up
- done
+-	setup_veth_ns "${dev}" server_ns server "${SERVER_MAC}"
+-	setup_veth_ns "${dev}" client_ns client "${CLIENT_MAC}"
++	setup_veth_ns "${dev}" ${server_ns} server "${SERVER_MAC}"
++	setup_veth_ns "${dev}" ${client_ns} client "${CLIENT_MAC}"
+ }
  
--ip -net ns1 route add default via 10.0.1.1
--ip -net ns2 route add default via 10.0.2.1
-+ip -net ${ns[1]} route add default via 10.0.1.1
-+ip -net ${ns[2]} route add default via 10.0.2.1
+ cleanup_ns() {
+ 	local ns_name
  
--ip -net ns3 addr add 10.0.1.1/24 dev eth1
--ip -net ns3 addr add 10.0.3.1/24 dev veth0
--ip -net ns3 addr add 2001:1::1/64 dev eth1
--ip -net ns3 addr add 2001:3::1/64 dev veth0
-+ip -net ${ns[3]} addr add 10.0.1.1/24 dev eth1
-+ip -net ${ns[3]} addr add 10.0.3.1/24 dev veth0
-+ip -net ${ns[3]} addr add 2001:1::1/64 dev eth1
-+ip -net ${ns[3]} addr add 2001:3::1/64 dev veth0
- 
--ip -net ns3 route add default via 10.0.3.10
-+ip -net ${ns[3]} route add default via 10.0.3.10
- 
--ip -net ns4 addr add 10.0.2.1/24 dev eth1
--ip -net ns4 addr add 10.0.3.10/24 dev veth0
--ip -net ns4 addr add 2001:2::1/64 dev eth1
--ip -net ns4 addr add 2001:3::10/64 dev veth0
--ip -net ns4 route add default via 10.0.3.1
-+ip -net ${ns[4]} addr add 10.0.2.1/24 dev eth1
-+ip -net ${ns[4]} addr add 10.0.3.10/24 dev veth0
-+ip -net ${ns[4]} addr add 2001:2::1/64 dev eth1
-+ip -net ${ns[4]} addr add 2001:3::10/64 dev veth0
-+ip -net ${ns[4]} route add default via 10.0.3.1
- 
- for j in 4 6; do
- 	for i in 3 4;do
--		ip netns exec ns$i sysctl net.ipv$j.conf.eth1.forwarding=1 > /dev/null
--		ip netns exec ns$i sysctl net.ipv$j.conf.veth0.forwarding=1 > /dev/null
-+		ip netns exec ${ns[$i]} sysctl net.ipv$j.conf.eth1.forwarding=1 > /dev/null
-+		ip netns exec ${ns[$i]} sysctl net.ipv$j.conf.veth0.forwarding=1 > /dev/null
+-	for ns_name in client_ns server_ns; do
++	for ns_name in ${client_ns} ${server_ns}; do
+ 		[[ -e /var/run/netns/"${ns_name}" ]] && ip netns del "${ns_name}"
  	done
- done
+ }
+diff --git a/tools/testing/selftests/net/toeplitz.sh b/tools/testing/selftests/net/toeplitz.sh
+index da5bfd834eff..8ff172f7bb1b 100755
+--- a/tools/testing/selftests/net/toeplitz.sh
++++ b/tools/testing/selftests/net/toeplitz.sh
+@@ -147,14 +147,14 @@ setup() {
+ 	setup_loopback_environment "${DEV}"
  
- # abuse iptables rule counter to check if ping matches a policy
--ip netns exec ns3 iptables -p icmp -A FORWARD -m policy --dir out --pol ipsec
--ip netns exec ns4 iptables -p icmp -A FORWARD -m policy --dir out --pol ipsec
-+ip netns exec ${ns[3]} iptables -p icmp -A FORWARD -m policy --dir out --pol ipsec
-+ip netns exec ${ns[4]} iptables -p icmp -A FORWARD -m policy --dir out --pol ipsec
- if [ $? -ne 0 ];then
- 	echo "SKIP: Could not insert iptables rule"
--	for i in 1 2 3 4;do ip netns del ns$i;done
-+	cleanup_ns $ns1 $ns2 $ns3 $ns4
- 	exit $ksft_skip
+ 	# Set up server_ns namespace and client_ns namespace
+-	setup_macvlan_ns "${DEV}" server_ns server \
++	setup_macvlan_ns "${DEV}" $server_ns server \
+ 	"${SERVER_MAC}" "${SERVER_IP}"
+-	setup_macvlan_ns "${DEV}" client_ns client \
++	setup_macvlan_ns "${DEV}" $client_ns client \
+ 	"${CLIENT_MAC}" "${CLIENT_IP}"
+ }
+ 
+ cleanup() {
+-	cleanup_macvlan_ns server_ns server client_ns client
++	cleanup_macvlan_ns $server_ns server $client_ns client
+ 	cleanup_loopback "${DEV}"
+ }
+ 
+@@ -170,22 +170,22 @@ if [[ "${TEST_RSS}" = true ]]; then
+ 	# RPS/RFS must be disabled because they move packets between cpus,
+ 	# which breaks the PACKET_FANOUT_CPU identification of RSS decisions.
+ 	eval "$(get_disable_rfs_cmd) $(get_disable_rps_cmd)" \
+-	  ip netns exec server_ns ./toeplitz "${IP_FLAG}" "${PROTO_FLAG}" \
++	  ip netns exec $server_ns ./toeplitz "${IP_FLAG}" "${PROTO_FLAG}" \
+ 	  -d "${PORT}" -i "${DEV}" -k "${KEY}" -T 1000 \
+ 	  -C "$(get_rx_irq_cpus)" -s -v &
+ elif [[ ! -z "${RPS_MAP}" ]]; then
+ 	eval "$(get_disable_rfs_cmd) $(get_set_rps_bitmaps_cmd ${RPS_MAP})" \
+-	  ip netns exec server_ns ./toeplitz "${IP_FLAG}" "${PROTO_FLAG}" \
++	  ip netns exec $server_ns ./toeplitz "${IP_FLAG}" "${PROTO_FLAG}" \
+ 	  -d "${PORT}" -i "${DEV}" -k "${KEY}" -T 1000 \
+ 	  -r "0x${RPS_MAP}" -s -v &
+ else
+-	ip netns exec server_ns ./toeplitz "${IP_FLAG}" "${PROTO_FLAG}" \
++	ip netns exec $server_ns ./toeplitz "${IP_FLAG}" "${PROTO_FLAG}" \
+ 	  -d "${PORT}" -i "${DEV}" -k "${KEY}" -T 1000 -s -v &
  fi
  
- #          localip  remoteip  localnet    remotenet
--do_esp ns3 10.0.3.1 10.0.3.10 10.0.1.0/24 10.0.2.0/24 $SPI1 $SPI2
--do_esp ns3 dead:3::1 dead:3::10 dead:1::/64 dead:2::/64 $SPI1 $SPI2
--do_esp ns4 10.0.3.10 10.0.3.1 10.0.2.0/24 10.0.1.0/24 $SPI2 $SPI1
--do_esp ns4 dead:3::10 dead:3::1 dead:2::/64 dead:1::/64 $SPI2 $SPI1
-+do_esp ${ns[3]} 10.0.3.1 10.0.3.10 10.0.1.0/24 10.0.2.0/24 $SPI1 $SPI2
-+do_esp ${ns[3]} dead:3::1 dead:3::10 dead:1::/64 dead:2::/64 $SPI1 $SPI2
-+do_esp ${ns[4]} 10.0.3.10 10.0.3.1 10.0.2.0/24 10.0.1.0/24 $SPI2 $SPI1
-+do_esp ${ns[4]} dead:3::10 dead:3::1 dead:2::/64 dead:1::/64 $SPI2 $SPI1
+ server_pid=$!
  
--do_dummies4 ns3
--do_dummies6 ns4
-+do_dummies4 ${ns[3]}
-+do_dummies6 ${ns[4]}
+-ip netns exec client_ns ./toeplitz_client.sh "${PROTO_FLAG}" \
++ip netns exec $client_ns ./toeplitz_client.sh "${PROTO_FLAG}" \
+   "${IP_FLAG}" "${SERVER_IP%%/*}" "${PORT}" &
  
--do_esp_policy_get_check ns3 10.0.1.0/24 10.0.2.0/24
--do_esp_policy_get_check ns4 10.0.2.0/24 10.0.1.0/24
--do_esp_policy_get_check ns3 dead:1::/64 dead:2::/64
--do_esp_policy_get_check ns4 dead:2::/64 dead:1::/64
-+do_esp_policy_get_check ${ns[3]} 10.0.1.0/24 10.0.2.0/24
-+do_esp_policy_get_check ${ns[4]} 10.0.2.0/24 10.0.1.0/24
-+do_esp_policy_get_check ${ns[3]} dead:1::/64 dead:2::/64
-+do_esp_policy_get_check ${ns[4]} dead:2::/64 dead:1::/64
- 
- # ping to .254 should use ipsec, exception is not installed.
- check_xfrm 1 254
-@@ -432,11 +432,11 @@ fi
- 
- # installs exceptions
- #                localip  remoteip   encryptdst  plaindst
--do_exception ns3 10.0.3.1 10.0.3.10 10.0.2.253 10.0.2.240/28
--do_exception ns4 10.0.3.10 10.0.3.1 10.0.1.253 10.0.1.240/28
-+do_exception ${ns[3]} 10.0.3.1 10.0.3.10 10.0.2.253 10.0.2.240/28
-+do_exception ${ns[4]} 10.0.3.10 10.0.3.1 10.0.1.253 10.0.1.240/28
- 
--do_exception ns3 dead:3::1 dead:3::10 dead:2::fd  dead:2:f0::/96
--do_exception ns4 dead:3::10 dead:3::1 dead:1::fd  dead:1:f0::/96
-+do_exception ${ns[3]} dead:3::1 dead:3::10 dead:2::fd  dead:2:f0::/96
-+do_exception ${ns[4]} dead:3::10 dead:3::1 dead:1::fd  dead:1:f0::/96
- 
- check_exceptions "exceptions"
- if [ $? -ne 0 ]; then
-@@ -444,14 +444,14 @@ if [ $? -ne 0 ]; then
- fi
- 
- # insert block policies with adjacent/overlapping netmasks
--do_overlap ns3
-+do_overlap ${ns[3]}
- 
- check_exceptions "exceptions and block policies"
- if [ $? -ne 0 ]; then
- 	ret=1
- fi
- 
--for n in ns3 ns4;do
-+for n in ${ns[3]} ${ns[4]};do
- 	ip -net $n xfrm policy set hthresh4 28 24 hthresh6 126 125
- 	sleep $((RANDOM%5))
- done
-@@ -459,19 +459,19 @@ done
- check_exceptions "exceptions and block policies after hresh changes"
- 
- # full flush of policy db, check everything gets freed incl. internal meta data
--ip -net ns3 xfrm policy flush
-+ip -net ${ns[3]} xfrm policy flush
- 
--do_esp_policy ns3 10.0.3.1 10.0.3.10 10.0.1.0/24 10.0.2.0/24
--do_exception ns3 10.0.3.1 10.0.3.10 10.0.2.253 10.0.2.240/28
-+do_esp_policy ${ns[3]} 10.0.3.1 10.0.3.10 10.0.1.0/24 10.0.2.0/24
-+do_exception ${ns[3]} 10.0.3.1 10.0.3.10 10.0.2.253 10.0.2.240/28
- 
- # move inexact policies to hash table
--ip -net ns3 xfrm policy set hthresh4 16 16
-+ip -net ${ns[3]} xfrm policy set hthresh4 16 16
- 
- sleep $((RANDOM%5))
- check_exceptions "exceptions and block policies after hthresh change in ns3"
- 
- # restore original hthresh settings -- move policies back to tables
--for n in ns3 ns4;do
-+for n in ${ns[3]} ${ns[4]};do
- 	ip -net $n xfrm policy set hthresh4 32 32 hthresh6 128 128
- 	sleep $((RANDOM%5))
- done
-@@ -479,8 +479,8 @@ check_exceptions "exceptions and block policies after htresh change to normal"
- 
- check_hthresh_repeat "policies with repeated htresh change"
- 
--check_random_order ns3 "policies inserted in random order"
-+check_random_order ${ns[3]} "policies inserted in random order"
- 
--for i in 1 2 3 4;do ip netns del ns$i;done
-+cleanup_ns $ns1 $ns2 $ns3 $ns4
- 
- exit $ret
+ client_pid=$!
 -- 
 2.43.0
 
