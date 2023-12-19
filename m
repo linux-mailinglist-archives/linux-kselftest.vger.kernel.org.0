@@ -1,119 +1,92 @@
-Return-Path: <linux-kselftest+bounces-2236-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2237-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9FDC8191DD
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Dec 2023 22:03:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E025181922F
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Dec 2023 22:21:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EC4C01C21078
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Dec 2023 21:03:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9CC012876FB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Dec 2023 21:21:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66B7439AEF;
-	Tue, 19 Dec 2023 21:03:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0073F3A268;
+	Tue, 19 Dec 2023 21:21:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bIimDqd1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XIRrVxde"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D14FF3D0A3
-	for <linux-kselftest@vger.kernel.org>; Tue, 19 Dec 2023 21:03:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-40c3963f9fcso1025e9.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Dec 2023 13:03:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1703019826; x=1703624626; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cPrvLQ9nSKbJaWthUQcTRxDkRs0WKc5wjPuSEHtrSQU=;
-        b=bIimDqd10RwEYvM9QoCk2rqaL3wQIdapP2ZHHCZE9cyCRns7JkyNRbTDibQMqm+xFj
-         z/T/Z1LzfVz3Vfznjn93gWC36dujDyqhyri3yL68eVVYRVt5Iklg+9Xmf4A2az/KMr0Z
-         vsL99WFj16MozYaSUAgGHuAV8fomq1tw4KP+M5qfOJJB5ZQOlojimn9xVgsJlzMil2yj
-         +8CJ3xNd/Kb1b6cvlq4h0kd/rg2fZutXgQcCUl1x7iTl30FFT51D9GQMGG+UK1ho1bFY
-         cwH25KRLEXQljsnzGFlzZcTh7BjyILs3UBI40yP3BdtWoEsf+EbqvI2CfWSKr8MV4ige
-         pYzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703019826; x=1703624626;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cPrvLQ9nSKbJaWthUQcTRxDkRs0WKc5wjPuSEHtrSQU=;
-        b=ur9/w4ka2KzXW1oNlFIolq+QGQV3USbZrFuOINxPVhc2M1JSOX3iHQFi+Iql/o5bFI
-         gjR+tpIUfkcvEzQ+7pawyBG8b0X/saq86ssAh0ESZGOoYwpjOacfNB6VnolaroTgCK0F
-         vZVA6aTVKO8UMy7Q4N8YJGV9Su6eR+G13Zp3xTi1JpUOneK0lH7rKMwHFwfqBvPkADNX
-         iQIhjR85BZdH9IGU9rYqzdYNxFfwFgr55rOyRpiAankhhoowZilQV9A21TWABuz09OEO
-         fjMqsfsVAV0SZx8+f7+7QM3tuLwEmAe7Hrl11SErhyDXdkJqFBtxpHetVI3hnkS5riVj
-         bvZA==
-X-Gm-Message-State: AOJu0Yyi3+GJxV81AojL4dR6cLhu8IlR99pFoUKrTOyHieEnBg69v7GE
-	a00Mx9Xg+pUFRf6JaTwgE0fvjrpbKp3T5wYBh2ugqM+QBIDQ
-X-Google-Smtp-Source: AGHT+IHtD2MzC0bAMHU9JfIRyz/yKwwNR6wfMtooBCTEUtmv9pzbQuKVvvdK8AUOCzhz/wGTTVopE1cFAEdvXzDJTJs=
-X-Received: by 2002:a7b:c8c6:0:b0:40b:5972:f56b with SMTP id
- f6-20020a7bc8c6000000b0040b5972f56bmr6502wml.3.1703019825979; Tue, 19 Dec
- 2023 13:03:45 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D50C23D0A4;
+	Tue, 19 Dec 2023 21:21:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D868AC433CA;
+	Tue, 19 Dec 2023 21:21:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1703020891;
+	bh=2seEOgq+gqVcBhPue9Lq8IjiLv1aBugq6YYJHM2Wm9c=;
+	h=From:Subject:Date:To:Cc:From;
+	b=XIRrVxdeTb+lhQUpc90GqP4QEFpO2kOTHHxo0uLE05yxkJTzSWQ+YTTWCpODLo+1h
+	 Dx8zk0UPn3Nm6ed/59q4DHgf28R7WRoTJ9PS65DVaD95lCF4/6X55hLqCjfvy+eKVX
+	 pyH/TmPZsEodWaTr4otBy4StLRVWwpE67tByIGIESW3o0K8NMNqAJT/YWzeCZoEaoH
+	 1VH+JaEuVgNNL9glRVGWcEmBA1yLQXdTDI7HfFXlWd64qvqf+ttAZJKxWziNeD041I
+	 ug9nYLqMJqgBPL2dXV9M0AxdzIc31fJFOm9IqGxis/1Q2c/rkkKYuFDv897qun69n7
+	 h0ZT1HSJSuaoQ==
+From: Mark Brown <broonie@kernel.org>
+Subject: [PATCH 0/2] kselftest/seccomp: Convert to KTAP output
+Date: Tue, 19 Dec 2023 21:21:18 +0000
+Message-Id: <20231219-b4-kselftest-seccomp-benchmark-ktap-v1-0-f99e228631b0@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231218151729.210027-1-rf@opensource.cirrus.com>
-In-Reply-To: <20231218151729.210027-1-rf@opensource.cirrus.com>
-From: Rae Moar <rmoar@google.com>
-Date: Tue, 19 Dec 2023 16:03:34 -0500
-Message-ID: <CA+GJov5MrgGO1bo8Zr=_E8h4beB7mkZdpODc=i_m7o5Sff6iLQ@mail.gmail.com>
-Subject: Re: [PATCH] kunit: Fix NULL-dereference in kunit_init_suite() if
- suite->log is NULL
-To: Richard Fitzgerald <rf@opensource.cirrus.com>
-Cc: brendan.higgins@linux.dev, davidgow@google.com, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAE8JgmUC/x3NTQqDMBBA4avIrDuQn1ZtryIuYjrqkBpDJkhBv
+ HtDl9/mvROEMpPAqzkh08HCe6zQtwb86uJCyO9qMMpYbfQTpzsGoc9cSAoKeb9vCSeKft1cDhi
+ KS2gfXatsb2yneqillGnm7/8yjNf1A+VsrbR1AAAA
+To: Kees Cook <keescook@chromium.org>, 
+ Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Mark Brown <broonie@kernel.org>
+X-Mailer: b4 0.13-dev-5c066
+X-Developer-Signature: v=1; a=openpgp-sha256; l=982; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=2seEOgq+gqVcBhPue9Lq8IjiLv1aBugq6YYJHM2Wm9c=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBlgglXoRAvlWmqI1O+t+4ipDdNNd6cxMltCLGXHf62
+ x59dyguJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZYIJVwAKCRAk1otyXVSH0AHUB/
+ sH1VXarSm9MortDtWxJLDp8bwdnntwJX37q8CMyTOgNzKRXPE7uUS6+PANIG+dGanBJS7/aHyixz7j
+ VyZ7tL8T0aX+H+/vNdDkb6i8bD5AvBmkwCKOsbWHceON3b+VJQZPFCVxjELkR7UkDJw8Stm1QrUo6t
+ 12srjyy279jjO30HzRscPpWnEh4rhL9sDwG8wp9VBijDJYgnmtUqjuxGKW8ljLRF/hoQMF9SqApn02
+ oUrnRzZ1kJkTIomRhrOe3EVRF+p1Hez4im8Bia/KBf5YUc1b4Znnh3RxBFsXJb5cjBf3u9LunRwNjp
+ tRz2kOGTEiEcNLN2rNJKcOa6sixIOu
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-On Mon, Dec 18, 2023 at 10:17=E2=80=AFAM Richard Fitzgerald
-<rf@opensource.cirrus.com> wrote:
->
-> suite->log must be checked for NULL before passing it to
-> string_stream_clear(). This was done in kunit_init_test() but was missing
-> from kunit_init_suite().
->
-> Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
-> Fixes: 6d696c4695c5 ("kunit: add ability to run tests after boot using de=
-bugfs")
+Currently the seccomp benchmark selftest produces non-standard output,
+meaning that while it makes a number of checks of the performance it
+observes this has to be parsed by humans.  This means that automated
+systems running this suite of tests are almost certainly ignoring the
+results which isn't ideal for spotting problems.  Let's rework things so
+that each check that the program does is reported as a test result to
+the framework.
 
-Hello!
+Signed-off-by: Mark Brown <broonie@kernel.org>
+---
+Mark Brown (2):
+      kselftest/seccomp: Use kselftest output functions for benchmark
+      kselftest/seccomp: Report each expectation we assert as a KTAP test
 
-This looks good! Thanks! Sorry I did not catch this earlier.
+ .../testing/selftests/seccomp/seccomp_benchmark.c  | 105 +++++++++++++--------
+ 1 file changed, 65 insertions(+), 40 deletions(-)
+---
+base-commit: 2cc14f52aeb78ce3f29677c2de1f06c0e91471ab
+change-id: 20231219-b4-kselftest-seccomp-benchmark-ktap-357603823708
 
-Reviewed-by: Rae Moar <rmoar@google.com>
+Best regards,
+-- 
+Mark Brown <broonie@kernel.org>
 
--Rae
-
-> ---
->  lib/kunit/test.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> index e803d998e855..ea7f0913e55a 100644
-> --- a/lib/kunit/test.c
-> +++ b/lib/kunit/test.c
-> @@ -658,7 +658,9 @@ static void kunit_init_suite(struct kunit_suite *suit=
-e)
->         kunit_debugfs_create_suite(suite);
->         suite->status_comment[0] =3D '\0';
->         suite->suite_init_err =3D 0;
-> -       string_stream_clear(suite->log);
-> +
-> +       if (suite->log)
-> +               string_stream_clear(suite->log);
->  }
->
->  bool kunit_enabled(void)
-> --
-> 2.30.2
->
 
