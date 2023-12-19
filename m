@@ -1,131 +1,157 @@
-Return-Path: <linux-kselftest+bounces-2202-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2203-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8303F818733
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Dec 2023 13:16:48 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B667B8188E9
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Dec 2023 14:50:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 31EB4283B0B
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Dec 2023 12:16:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6BACA1F25577
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Dec 2023 13:50:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BE9C168DE;
-	Tue, 19 Dec 2023 12:16:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA227199D3;
+	Tue, 19 Dec 2023 13:50:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=daynix-com.20230601.gappssmtp.com header.i=@daynix-com.20230601.gappssmtp.com header.b="RAneCU9w"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ekt+mOwx"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+Received: from mail-oo1-f65.google.com (mail-oo1-f65.google.com [209.85.161.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C48C199AA
-	for <linux-kselftest@vger.kernel.org>; Tue, 19 Dec 2023 12:16:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=daynix.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=daynix.com
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-5cda24a77e0so1020457a12.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 19 Dec 2023 04:16:40 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C8AD1C691;
+	Tue, 19 Dec 2023 13:50:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oo1-f65.google.com with SMTP id 006d021491bc7-58d06bfadf8so3204351eaf.1;
+        Tue, 19 Dec 2023 05:50:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=daynix-com.20230601.gappssmtp.com; s=20230601; t=1702988199; x=1703592999; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pdERbfWd8axs3o2A8KOivOOsBTH7eU7jDtQCQU5TR64=;
-        b=RAneCU9wXoqkp9sJKB3vJwk+9/S5DscO15PpEqNV94MOxjOqcGkbmJq92FLtm07lf1
-         btXH/h2kapHoettWj7tXmDhw8BybJ3HwzCFMIYT3KB0nAAR1TwaP96hFHo0vF9GsGt+w
-         SMjITtrm39RTTdE/UTAmaNAu6Fee/tYjvknt3QHI5vYw2HiTc5d0mUDpgNidFidPUUR3
-         2DVAxwx3hZ1Opa9qTJl64XXAQvgzGSezCQPKoomV/OTK6Pt6gX71ng0zBC0FVrR3xUqC
-         2vdZ4Toauj1JoRWM48Ba+HC3+dJNA6VFdA8yn7HIhjdmQIyLIvy23etcwNDXmP3k9WTD
-         8NsA==
+        d=gmail.com; s=20230601; t=1702993838; x=1703598638; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=usqe+Dnt7wqkTAv1w+i37oHGNIidymGi/ajhqi81wDs=;
+        b=Ekt+mOwx2YIqaeWMS2o7ss36Plg0HnvJFm16ItNRcKQzi2vkhchUAiUFe4cgxVygUU
+         mQYG0hbEtbroMnLT3/GoZTcMg60sOMrgTEY2IdSWe/9/PMmz+3GpCcrWRZP06Nhhb6aK
+         923scnfFW6i3NVli22ghU4xFRmVuUCcdaf4eko+ZI16BwYsCeXv0A/pCscuvOuNLSKWt
+         NnXYL+J71BIOXLCUU7C0TImw62Inpwi5NHtggVN0GGvj/lptrr8h+DhS9bdBgLJUxmyW
+         OfzbGJbfJ1PYQgPVXKM4WLqgK3HBbuCpPY35FAoOslA9rXVOLR86awGoGpDUwYmnUSpX
+         uCSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702988199; x=1703592999;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pdERbfWd8axs3o2A8KOivOOsBTH7eU7jDtQCQU5TR64=;
-        b=UdnMXMBfV/nGq49RwMzQZrY2ZKh7/lwVTE1Q1jrmjCK/0tSAz8uFt0GDFMER7E6L93
-         W5UV/5cB6usZwIkg5Fkt6dUtunD2ShCpw2u+7k5UWeKb8cDb6M7/psup+io3DsfWjL58
-         q1mFOIy+sUz7bjItdSX/ggxj5sl9p88FGg9ogMahAySm2/FwCf8S7Lynv2FRsiKsMhcB
-         sEaVf1cGQc6GHrckmAKmsDAorDxFf4YIBPPNdXfNXij2MK71lHo++4WbOurhhlsHVCU5
-         Flkm+J8kGhKFxybJAXy7V/Z1lUbViP8suLZS8qN04/H942HyPoUSGtAOSTHYsvhW+mfM
-         8c2Q==
-X-Gm-Message-State: AOJu0YwQokbYppQKZ6uo6qGumzaISh0M1a3jdQ9N+awSva3oX9/1Ve7m
-	zcsbF4C7K6wBnw+LO6eWLGQQ2Q==
-X-Google-Smtp-Source: AGHT+IFYjl+Fut6DF10AvB+rC8c9j309BtUc82beTcI2OpnuUGu9er2HNCKWhRNTJ7qi3gFQPi0b+g==
-X-Received: by 2002:a17:90a:303:b0:28a:f0bc:2a9f with SMTP id 3-20020a17090a030300b0028af0bc2a9fmr2996731pje.21.1702988199587;
-        Tue, 19 Dec 2023 04:16:39 -0800 (PST)
-Received: from [157.82.205.15] ([157.82.205.15])
-        by smtp.gmail.com with ESMTPSA id g15-20020a17090a4b0f00b0028bb87b2378sm1385953pjh.49.2023.12.19.04.16.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 19 Dec 2023 04:16:39 -0800 (PST)
-Message-ID: <87ae3eae-84b4-40eb-a637-b65161bdc1ed@daynix.com>
-Date: Tue, 19 Dec 2023 21:16:32 +0900
+        d=1e100.net; s=20230601; t=1702993838; x=1703598638;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=usqe+Dnt7wqkTAv1w+i37oHGNIidymGi/ajhqi81wDs=;
+        b=qocvekmc1RsAacnwvFEhNBuukCz8xloHVA/PuD9h/dD1Cbt2Acowy1Pr9rU11rqDk6
+         cCb8L7X9uUxycG/aXHvwZ1Sb7GWuf8Q3sCMGEbx2lLKkfMOOriV7s72DOSSKmoLZaV3G
+         yhUf0107z6aBPK8d16ATZ0CLyDuL2wOj4N9zgIvigR2xuymTxXT9HKHh/SBRHUFu6Oau
+         H5l+nmhyhEqb4ELNvgZ2l//ICgic+WV05GvMYsSPWIlaKPmh+zzwutOianLesnyt2tFx
+         TuiAZML/Ajv4uXRJfNXjBV6fipUszAK+PCldSjKCSJIELtLyQeG3OGjY2XfA8zyNRztT
+         b6yA==
+X-Gm-Message-State: AOJu0YzJgGwpv6zJlJOIMUfSWE1Taz56hTDkR6RnoDIrswEI8VaqyHnd
+	/JOjSf6yFIRojMl9yVKnGjcch6rbq7cuD3lx
+X-Google-Smtp-Source: AGHT+IGKkUBS62W9CM+0RV4DUXjCcVH4YsHKzbLwJ6JiH9n0fTQ4izm7M1oO0YCSdNG/TmHOED5WqA==
+X-Received: by 2002:a05:6358:2c93:b0:170:c991:d419 with SMTP id l19-20020a0563582c9300b00170c991d419mr20387683rwm.48.1702993838444;
+        Tue, 19 Dec 2023 05:50:38 -0800 (PST)
+Received: from localhost.localdomain ([43.129.244.20])
+        by smtp.gmail.com with ESMTPSA id d17-20020a056a00245100b006cddecbf432sm20695264pfj.96.2023.12.19.05.50.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Dec 2023 05:50:37 -0800 (PST)
+From: Menglong Dong <menglong8.dong@gmail.com>
+To: andrii@kernel.org,
+	eddyz87@gmail.com,
+	yonghong.song@linux.dev,
+	alexei.starovoitov@gmail.com
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	john.fastabend@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	kpsingh@kernel.org,
+	sdf@google.com,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	mykolal@fb.com,
+	shuah@kernel.org,
+	menglong8.dong@gmail.com,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next v5 0/4] bpf: support to track BPF_JNE
+Date: Tue, 19 Dec 2023 21:47:56 +0800
+Message-Id: <20231219134800.1550388-1-menglong8.dong@gmail.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: Should I add BPF kfuncs for userspace apps? And how?
-Content-Language: en-US
-To: Song Liu <song@kernel.org>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
- Jason Wang <jasowang@redhat.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>,
- Yonghong Song <yonghong.song@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>,
- Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>,
- Jiri Olsa <jolsa@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- "Michael S. Tsirkin" <mst@redhat.com>, Xuan Zhuo
- <xuanzhuo@linux.alibaba.com>, Mykola Lysenko <mykolal@fb.com>,
- Shuah Khan <shuah@kernel.org>, Yuri Benditovich
- <yuri.benditovich@daynix.com>, Andrew Melnychenko <andrew@daynix.com>,
- Benjamin Tissoires <bentiss@kernel.org>, bpf <bpf@vger.kernel.org>,
- "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>, kvm@vger.kernel.org,
- LKML <linux-kernel@vger.kernel.org>,
- virtualization@lists.linux-foundation.org,
- "open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
- Network Development <netdev@vger.kernel.org>
-References: <2f33be45-fe11-4b69-8e89-4d2824a0bf01@daynix.com>
- <CAPhsuW6=-FK+ysh_Q1H7ana=A6v9d0Rsn+2hpJpm5n2dB_A1Qg@mail.gmail.com>
-From: Akihiko Odaki <akihiko.odaki@daynix.com>
-In-Reply-To: <CAPhsuW6=-FK+ysh_Q1H7ana=A6v9d0Rsn+2hpJpm5n2dB_A1Qg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 2023/12/19 4:56, Song Liu wrote:
-> Hi Akihiko,
-> 
-> On Tue, Dec 12, 2023 at 12:05 AM Akihiko Odaki <akihiko.odaki@daynix.com> wrote:
->>
-> [...]
->> ---
->>
->> I'm working on a new feature that aids virtio-net implementations using
->> tuntap virtual network device. You can see [1] for details, but
->> basically it's to extend BPF_PROG_TYPE_SOCKET_FILTER to report four more
->> bytes.
-> 
-> AFAICT, [1] adds a new program type, which is really hard to ship. However,
-> you mentioned it is basically "extend BPF_PROG_TYPE_SOCKET_FILTER to
-> report four more bytes", which confuses me.
-> 
-> Can we achieve the same goal by extending BPF_PROG_TYPE_SOCKET_FILTER
-> (without adding a new program type)? Does this require extending
-> __sk_buff, which
-> is also not an option any more?
+For now, the reg bounds is not handled for BPF_JNE case, which can cause
+the failure of following case:
 
-It is certainly possible to achieve the same result by extending 
-BPF_PROG_TYPE_SOCKET_FILTER.
+  /* The type of "a" is u32 */
+  if (a > 0 && a < 100) {
+    /* the range of the register for a is [0, 99], not [1, 99],
+     * and will cause the following error:
+     *
+     *   invalid zero-sized read
+     *
+     * as a can be 0.
+     */
+    bpf_skb_store_bytes(skb, xx, xx, a, 0);
+  }
 
-It is not required to extend __sk_buff; we can repurpose the cb member. 
-But I think such an API will be error-prone than new members dedicated 
-for this particular purpose.
+In the code above, "a > 0" will be compiled to "if a == 0 goto xxx". In
+the TRUE branch, the dst_reg will be marked as known to 0. However, in the
+fallthrough(FALSE) branch, the dst_reg will not be handled, which makes
+the [min, max] for a is [0, 99], not [1, 99].
 
-Regards,
-Akihiko Odaki
+In the 1st patch, we reduce the range of the dst reg if the src reg is a
+const and is exactly the edge of the dst reg For BPF_JNE.
+
+In the 2nd patch, we remove reduplicated s32 casting in "crafted_cases".
+
+In the 3rd patch, we just activate the test case for this logic in
+range_cond(), which is committed by Andrii in the
+commit 8863238993e2 ("selftests/bpf: BPF register range bounds tester").
+
+In the 4th patch, we convert the case above to a testcase and add it to
+verifier_bounds.c.
+
+Changes since v4:
+- add the 2nd patch
+- add "{U32, U32, {0, U32_MAX}, {U32_MAX, U32_MAX}}" that we missed in the
+  3rd patch
+- add some comments to the function that we add in the 4th patch
+- add reg_not_equal_const() in the 4th patch
+
+Changes since v3:
+- do some adjustment to the crafted cases that we added in the 2nd patch
+- add the 3rd patch
+
+Changes since v2:
+- fix a typo in the subject of the 1st patch
+- add some comments to the 1st patch, as Eduard advised
+- add some cases to the "crafted_cases"
+
+Changes since v1:
+- simplify the code in the 1st patch
+- introduce the 2nd patch for the testing
+
+Menglong Dong (4):
+  bpf: make the verifier tracks the "not equal" for regs
+  selftests/bpf: remove reduplicated s32 casting in "crafted_cases"
+  selftests/bpf: activate the OP_NE logic in range_cond()
+  selftests/bpf: add testcase to verifier_bounds.c for BPF_JNE
+
+ kernel/bpf/verifier.c                         | 38 +++++++++++-
+ .../selftests/bpf/prog_tests/reg_bounds.c     | 27 +++++---
+ .../selftests/bpf/progs/verifier_bounds.c     | 62 +++++++++++++++++++
+ 3 files changed, 116 insertions(+), 11 deletions(-)
+
+-- 
+2.39.2
+
 
