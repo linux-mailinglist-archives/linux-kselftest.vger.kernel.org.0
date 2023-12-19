@@ -1,72 +1,72 @@
-Return-Path: <linux-kselftest+bounces-2233-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2234-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB34B818FE8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Dec 2023 19:41:36 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13556818FEB
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Dec 2023 19:42:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A78A72871C6
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Dec 2023 18:41:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 375941C212C6
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Dec 2023 18:42:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D233837D3B;
-	Tue, 19 Dec 2023 18:41:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50DD01E53F;
+	Tue, 19 Dec 2023 18:42:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LrFAo0fA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NswedWTY"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CC8737D1D;
-	Tue, 19 Dec 2023 18:41:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9BC039844;
+	Tue, 19 Dec 2023 18:42:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2cc6d9b4c6aso35549621fa.3;
-        Tue, 19 Dec 2023 10:41:29 -0800 (PST)
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-54cd2281ccbso5882484a12.2;
+        Tue, 19 Dec 2023 10:42:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1703011288; x=1703616088; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1703011335; x=1703616135; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kMdZ40wSCenjfx+wg1kZyop7OZDfIHjeq7ht6ib7e58=;
-        b=LrFAo0fA0GVX+TjvOog9lx+hzp8u5RcsMeJjpmMbJI5wUCN2x59foAyHCPN3EYAynp
-         L+atLSSgqUaM191nmGK0VnmZeAlC732EDczeukqSFqDRSi2E+H/vB6y9mmjHVAmZ2fJx
-         qw8sWgEE2pOah9i9Y+pqOuTDznNOdy47EMCeyqnjc5ozvWmBq61O6kC+VSrILSGX9GLF
-         8bFyVAGCJIvE4Nm/0/146r2OztdjNjVaFTfs6rsvMmk6zdwfhmhtJEkuUgkLvXwjt4hc
-         tGVZVMhmyDzM7mJiz2Wjo3HDbWs+I1IpYfSzgo7raJvKOJOChAdog1W99KeTuiZ71Uun
-         w9GA==
+        bh=zCrX3qiI8WCM7ZsJgc9YWSG5N+XDfTNhl1gXS8XnkOk=;
+        b=NswedWTY9XVuJQo0FdIAtQCL/Cb9R+Za0gnUs9X1mwcyrirnmAjMbz+86W6VoHxww4
+         666ggrUArSeBZxSilC5gg18834dYINcAlpNXanr5g03CaqXZB19stO8AgP6lCzfPFTdj
+         TRXS6Tylh9C9lPOISFYcOwS0UR7Ei2sVxsj7yq5mvt6tQRICGhC31G1SM5MGaaZ0gwV+
+         1MSR4fSd4eFhwDlROKlLdyvzDxCeGK5v4dKBMWSP70YOb+e2LId4kJgkmRS2dWZDW0Y/
+         vFeQnG/glAcbYXe3xOfwCP/a40OuIc41LTbUxwAyzCoXTkSW4nfHiO9IEmtYql5J0McG
+         FTYQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703011288; x=1703616088;
+        d=1e100.net; s=20230601; t=1703011335; x=1703616135;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kMdZ40wSCenjfx+wg1kZyop7OZDfIHjeq7ht6ib7e58=;
-        b=AcAWjZVNkjudOwJ0fklc40Xf60ndEkqAT1Y61NPq92xoeMivGoX95RhqssilY2yNzQ
-         wOEBG+Ig5ODsIRsoo8CM5pqZp3T7qKRWQq96FhqDs2Vs31Na0pA+QnY6k8La8eQIDPFk
-         w9Tl80F+UsawKTl0rQH65M8KEzNztzRI0rLMTVTuXR1Sjy+knEOrSTHMdpd4CsIb4l46
-         H8CDqWw1lHCsCcQ2GPT/3XtYD/hEg1/hr/QmDgquPZqeiyCpr+a2/zd92z8zEs/EDmQw
-         EGmtBg3HyH5ZXz0BZPjGeIqsv/MPR/+jA28PIk0VD+qM9bkIWhZjVTQcjdjQJ5IGckj9
-         aMoQ==
-X-Gm-Message-State: AOJu0Yyk8IRqeA6Ko5lXIb5dTTRRdfS2dcJAFw+9ENkrXpZ+Nn8Q5DE2
-	+ubzjhVTOrGqUO4DbCf47XcPnqqK5Nukv+Ub3QI=
-X-Google-Smtp-Source: AGHT+IHUw0CcZFkNLywf6O690h0anpGra+BYQP/c1DIrce93Wvjw6YbdNc2ityhdz7/V+zUNFbIxmlChXCzghuqE9Kk=
-X-Received: by 2002:a2e:b0d6:0:b0:2cc:84ea:d2b0 with SMTP id
- g22-20020a2eb0d6000000b002cc84ead2b0mr639945ljl.72.1703011288002; Tue, 19 Dec
- 2023 10:41:28 -0800 (PST)
+        bh=zCrX3qiI8WCM7ZsJgc9YWSG5N+XDfTNhl1gXS8XnkOk=;
+        b=CQdgSil41qDpEeYx5mf58DB3ewNbmR8/f6JCZ3LSsC3WunPtvaYAL75xLlZLWPyB13
+         RIXZ7c6t8eQy3Zbkdc20dxeouGFf1WPqRZiHvYdyht7/6tpCFzhVJx9Dtx/hkfv/RLzL
+         udSfoRb8S+lGHGKGAhswtPqYIIl+WBnPtmi1BRF8vmu6jmzIG7LZUPTxIFoBgiIwUFoo
+         fQ/844NbpNQI3Z97DinBP+vt1cLy4Q5KzMQiKzrH4MXcsIESuJToB8mnlYCIeEbuHKwv
+         NYk9tAsTLXvQenlSxaKYuuYIV9+Qsu26452ucvuCPbcJfxDyy6hyyhK5noeZThYRQG2/
+         FLtw==
+X-Gm-Message-State: AOJu0YyTE2ps4Yl3yh3uA7+AdqYaHWbmeoVxIYazgKlrCwZbP7iIDKDx
+	S1jyQX0vNeayP2fttlqfCvOkLdWFihb8QUMPu8DMwk6b+tQ=
+X-Google-Smtp-Source: AGHT+IFqy1ss0sMOr41W+1UaXtmSUn5QowHwgPrtGgzUF+fIe+nNJQ1fW5EThcRquYfibrKxpTMs1nmS1GdtXWSaWEc=
+X-Received: by 2002:a17:906:81d2:b0:a23:74a3:b6cd with SMTP id
+ e18-20020a17090681d200b00a2374a3b6cdmr720028ejx.148.1703011334814; Tue, 19
+ Dec 2023 10:42:14 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231219134800.1550388-1-menglong8.dong@gmail.com> <20231219134800.1550388-4-menglong8.dong@gmail.com>
-In-Reply-To: <20231219134800.1550388-4-menglong8.dong@gmail.com>
+References: <20231219134800.1550388-1-menglong8.dong@gmail.com> <20231219134800.1550388-5-menglong8.dong@gmail.com>
+In-Reply-To: <20231219134800.1550388-5-menglong8.dong@gmail.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 19 Dec 2023 10:41:16 -0800
-Message-ID: <CAEf4BzaUJq7ekynLgGZyMfe3cmoQaRs+0Hfpk_12KpLfXN_6iw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v5 3/4] selftests/bpf: activate the OP_NE logic
- in range_cond()
+Date: Tue, 19 Dec 2023 10:42:03 -0800
+Message-ID: <CAEf4BzYN2Mdx6zY01Uq3Kod41j96H3WfuN=PjCcOO=ZrUbVB9w@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v5 4/4] selftests/bpf: add testcase to
+ verifier_bounds.c for BPF_JNE
 To: Menglong Dong <menglong8.dong@gmail.com>
 Cc: andrii@kernel.org, eddyz87@gmail.com, yonghong.song@linux.dev, 
 	alexei.starovoitov@gmail.com, ast@kernel.org, daniel@iogearbox.net, 
@@ -77,84 +77,110 @@ Cc: andrii@kernel.org, eddyz87@gmail.com, yonghong.song@linux.dev,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Dec 19, 2023 at 5:50=E2=80=AFAM Menglong Dong <menglong8.dong@gmail=
+On Tue, Dec 19, 2023 at 5:51=E2=80=AFAM Menglong Dong <menglong8.dong@gmail=
 .com> wrote:
 >
-> The edge range checking for the registers is supported by the verifier
-> now, so we can activate the extended logic in
-> tools/testing/selftests/bpf/prog_tests/reg_bounds.c/range_cond() to test
-> such logic.
+> Add testcase for the logic that the verifier tracks the BPF_JNE for regs.
+> The assembly function "reg_not_equal_const()" and "reg_equal_const" that
+> we add is exactly converted from the following case:
 >
-> Besides, I added some cases to the "crafted_cases" array for this logic.
-> These cases are mainly used to test the edge of the src reg and dst reg.
+>   u32 a =3D bpf_get_prandom_u32();
+>   u64 b =3D 0;
 >
-> All reg bounds testings has passed in the SLOW_TESTS mode:
+>   a %=3D 8;
+>   /* the "a > 0" here will be optimized to "a !=3D 0" */
+>   if (a > 0) {
+>     /* now the range of a should be [1, 7] */
+>     bpf_skb_store_bytes(skb, 0, &b, a, 0);
+>   }
 >
-> $ export SLOW_TESTS=3D1 && ./test_progs -t reg_bounds -j
-> Summary: 65/18959832 PASSED, 0 SKIPPED, 0 FAILED
->
-
-Thanks for running SLOW_TESTS=3D1 mode as well!
-
-Acked-by: Andrii Nakryiko <andrii@kernel.org>
-
 > Signed-off-by: Menglong Dong <menglong8.dong@gmail.com>
 > ---
 > v5:
-> - add "{U32, U32, {0, U32_MAX}, {U32_MAX, U32_MAX}}"
-> v4:
-> - remove reduplicated s32 casting
-> v3:
-> - do some adjustment to the crafted cases that we added
-> v2:
-> - add some cases to the "crafted_cases"
+> - add some comments to the function that we add
+> - add reg_not_equal_const()
 > ---
->  .../selftests/bpf/prog_tests/reg_bounds.c     | 19 +++++++++++++------
->  1 file changed, 13 insertions(+), 6 deletions(-)
+>  .../selftests/bpf/progs/verifier_bounds.c     | 62 +++++++++++++++++++
+>  1 file changed, 62 insertions(+)
 >
-> diff --git a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c b/tools/=
-testing/selftests/bpf/prog_tests/reg_bounds.c
-> index 3bf4ddd720a8..820d0bcfc474 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/reg_bounds.c
-> @@ -590,12 +590,7 @@ static void range_cond(enum num_t t, struct range x,=
- struct range y,
->                 *newy =3D range(t, max_t(t, x.a, y.a), min_t(t, x.b, y.b)=
-);
->                 break;
->         case OP_NE:
-> -               /* generic case, can't derive more information */
-> -               *newx =3D range(t, x.a, x.b);
-> -               *newy =3D range(t, y.a, y.b);
-> -               break;
-> -
-> -               /* below extended logic is not supported by verifier just=
- yet */
-> +               /* below logic is supported by the verifier now */
->                 if (x.a =3D=3D x.b && x.a =3D=3D y.a) {
->                         /* X is a constant matching left side of Y */
->                         *newx =3D range(t, x.a, x.b);
-> @@ -2101,6 +2096,18 @@ static struct subtest_case crafted_cases[] =3D {
->         {S32, S64, {(u32)S32_MIN, (u32)(s32)-255}, {(u32)(s32)-2, 0}},
->         {S32, S64, {0, 1}, {(u32)S32_MIN, (u32)S32_MIN}},
->         {S32, U32, {(u32)S32_MIN, (u32)S32_MIN}, {(u32)S32_MIN, (u32)S32_=
-MIN}},
+
+LGTM
+
+Acked-by: Andrii Nakryiko <andrii@kernel.org>
+
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/=
+testing/selftests/bpf/progs/verifier_bounds.c
+> index ec430b71730b..960998f16306 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
+> @@ -1075,4 +1075,66 @@ l0_%=3D:   r0 =3D 0;                              =
+           \
+>         : __clobber_all);
+>  }
+>
+> +SEC("tc")
+> +__description("bounds check with JMP_NE for reg edge")
+> +__success __retval(0)
+> +__naked void reg_not_equal_const(void)
+> +{
+> +       asm volatile ("                                 \
+> +       r6 =3D r1;                                        \
+> +       r1 =3D 0;                                         \
+> +       *(u64*)(r10 - 8) =3D r1;                          \
+> +       call %[bpf_get_prandom_u32];                    \
+> +       r4 =3D r0;                                        \
+> +       r4 &=3D 7;                                        \
+> +       if r4 !=3D 0 goto l0_%=3D;                          \
+> +       r0 =3D 0;                                         \
+> +       exit;                                           \
+> +l0_%=3D: r1 =3D r6;                                        \
+> +       r2 =3D 0;                                         \
+> +       r3 =3D r10;                                       \
+> +       r3 +=3D -8;                                       \
+> +       r5 =3D 0;                                         \
+> +       /* The 4th argument of bpf_skb_store_bytes is defined as \
+> +        * ARG_CONST_SIZE, so 0 is not allowed. The 'r4 !=3D 0' \
+> +        * is providing us this exclusion of zero from initial \
+> +        * [0, 7] range.                                \
+> +        */                                             \
+> +       call %[bpf_skb_store_bytes];                    \
+> +       r0 =3D 0;                                         \
+> +       exit;                                           \
+> +"      :
+> +       : __imm(bpf_get_prandom_u32),
+> +         __imm(bpf_skb_store_bytes)
+> +       : __clobber_all);
+> +}
 > +
-> +       /* edge overlap testings for BPF_NE */
-> +       {U64, U64, {0, U64_MAX}, {U64_MAX, U64_MAX}},
-> +       {U64, U64, {0, U64_MAX}, {0, 0}},
-> +       {S64, U64, {S64_MIN, 0}, {S64_MIN, S64_MIN}},
-> +       {S64, U64, {S64_MIN, 0}, {0, 0}},
-> +       {S64, U64, {S64_MIN, S64_MAX}, {S64_MAX, S64_MAX}},
-> +       {U32, U32, {0, U32_MAX}, {0, 0}},
-> +       {U32, U32, {0, U32_MAX}, {U32_MAX, U32_MAX}},
-> +       {S32, U32, {(u32)S32_MIN, 0}, {0, 0}},
-> +       {S32, U32, {(u32)S32_MIN, 0}, {(u32)S32_MIN, (u32)S32_MIN}},
-> +       {S32, U32, {(u32)S32_MIN, S32_MAX}, {S32_MAX, S32_MAX}},
->  };
->
->  /* Go over crafted hard-coded cases. This is fast, so we do it as part o=
-f
+> +SEC("tc")
+> +__description("bounds check with JMP_EQ for reg edge")
+> +__success __retval(0)
+> +__naked void reg_equal_const(void)
+> +{
+> +       asm volatile ("                                 \
+> +       r6 =3D r1;                                        \
+> +       r1 =3D 0;                                         \
+> +       *(u64*)(r10 - 8) =3D r1;                          \
+> +       call %[bpf_get_prandom_u32];                    \
+> +       r4 =3D r0;                                        \
+> +       r4 &=3D 7;                                        \
+> +       if r4 =3D=3D 0 goto l0_%=3D;                          \
+> +       r1 =3D r6;                                        \
+> +       r2 =3D 0;                                         \
+> +       r3 =3D r10;                                       \
+> +       r3 +=3D -8;                                       \
+> +       r5 =3D 0;                                         \
+> +       /* Just the same as what we do in reg_not_equal_const() */ \
+> +       call %[bpf_skb_store_bytes];                    \
+> +l0_%=3D: r0 =3D 0;                                         \
+> +       exit;                                           \
+> +"      :
+> +       : __imm(bpf_get_prandom_u32),
+> +         __imm(bpf_skb_store_bytes)
+> +       : __clobber_all);
+> +}
+> +
+>  char _license[] SEC("license") =3D "GPL";
 > --
 > 2.39.2
 >
