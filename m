@@ -1,188 +1,164 @@
-Return-Path: <linux-kselftest+bounces-2173-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2174-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C82D0817F18
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Dec 2023 01:55:58 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A23B817F85
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Dec 2023 03:03:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 532A01F24D39
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Dec 2023 00:55:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0487B1F243F0
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Dec 2023 02:03:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49B02620;
-	Tue, 19 Dec 2023 00:55:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95A3B17F7;
+	Tue, 19 Dec 2023 02:03:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="awDnjkzb"
+	dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b="Xjlv5j/p"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2072.outbound.protection.outlook.com [40.107.243.72])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B125863AC
-	for <linux-kselftest@vger.kernel.org>; Tue, 19 Dec 2023 00:55:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=K9gTIiiG5eaNtpiypYopLf7mOBY+ggoBtBW1pEKOYYBP2FrZvOcFMxjJO+mhgXNIZD1mq1Izg1azX/NmU1kCziWkKBuMreSN4P9omF0OCvE9L/qM660bF4zDpFA9zeEmJeX+x2gaIrjcdNbefbiBbyO4Lx33QfKQAGWe59ShxQRbPLy1XiOdt3L63NUznSjN3RKN8N4aNUoj245p7OGAcFfCkdZIYFTIgS9kmMEYVJaJUQK1Km/0HrPROKLIcNXIDk3HHzR8GFEpmXIKcvTBVhraZe+mksqLjqMTJpsbeAmmBd8CJT+179kOj93szHZkXjRtqKP3J8ddlOl8mBgycg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2Uy4jeHer/VGh0uS36ZXUQfs5QCoK4AmPyey/aZ06tI=;
- b=GzDLlT6tPAEBjsfmbe0UXs9UPnRQuJIcRCcMw0fn5PRR+D9Ud3ma+aoarwaB/S5BNLuA58gOTMs2r+Ku6irGM9DhiCTYrSuL6bBl9Lpl/eW6iE37En3RwhYBvpwPLVrk3z04XvHwGdUQYIWvekIYBeFXPT4cHAywiSNOHY2tfsB5hrdmttGUMGLwEOYkMx5FdmjD+TUF//I1mhfMbmbQzxqvceKEuRysUAsRTsw1t7j6eZBJQGEc/JxdCIFMvb5/9CBbOMxSS29oHV4xTwAtR7VSSdhgUn1ceqI4tvi2qKadimcR0iXuZ5QaNB30B2zM1WCFLDsRvckQhQx/R1hssw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=arm.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2Uy4jeHer/VGh0uS36ZXUQfs5QCoK4AmPyey/aZ06tI=;
- b=awDnjkzbKly/n1wXbL9QpIjeVTw5a+ynyRwgD4UscwRct6FivSt/xqgATve2fQmdJxPyH93ZOO5yfLG1FRLaHE7ETsYGVarDmrx2gAJNsJSVq43WXKh1PVAWno6TYggcTVhm9HwFrEaibITmHkmbcasTQ5A/gGN20agC7IhoFa2DIZ3+cim4xlJbrFMgI8H98OFGN7k/R1fVFvJOuYPJcDgbxD3sA71hMv2cLv7Lw+jAsGV8wUxlvQijMI8whgboh2aCdMdZTvcxCkFp2y7mgsbvFA07OxH4PsSJ86DKTH2OB2UZhSJT6+43Gv7Tr8Wp3kKreBuhXq93M1HO/mqRuA==
-Received: from BLAP220CA0023.NAMP220.PROD.OUTLOOK.COM (2603:10b6:208:32c::28)
- by LV2PR12MB5798.namprd12.prod.outlook.com (2603:10b6:408:17a::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7091.37; Tue, 19 Dec
- 2023 00:55:24 +0000
-Received: from BL6PEPF0001AB4E.namprd04.prod.outlook.com
- (2603:10b6:208:32c:cafe::cd) by BLAP220CA0023.outlook.office365.com
- (2603:10b6:208:32c::28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7091.37 via Frontend
- Transport; Tue, 19 Dec 2023 00:55:24 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- BL6PEPF0001AB4E.mail.protection.outlook.com (10.167.242.72) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7113.14 via Frontend Transport; Tue, 19 Dec 2023 00:55:24 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 18 Dec
- 2023 16:55:07 -0800
-Received: from [10.110.48.28] (10.126.230.35) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 18 Dec
- 2023 16:55:06 -0800
-Message-ID: <cbcdce88-def8-49e2-aad4-d510fb82208f@nvidia.com>
-Date: Mon, 18 Dec 2023 16:55:01 -0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9B5817CF
+	for <linux-kselftest@vger.kernel.org>; Tue, 19 Dec 2023 02:03:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arista.com
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-40d12ade25dso26172185e9.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 18 Dec 2023 18:03:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=arista.com; s=google; t=1702951393; x=1703556193; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wjsAHbjfMeDwtBP8wrx8HGvaKAxkSsjCBhep4ZbKU2k=;
+        b=Xjlv5j/p/JeyugKxAljebVR7bkCLcw0+Z71qAklY64xXgDqZ0zE7y5p51cgcW6xXe7
+         AvdvN7e7KvjUL6z+QppAmkXcmsh4xrEKNY4xhhIgS9bIH1YSDUxrhkDH8iR07Wq+Fg03
+         Fzpz/07lNuSTaBeeKRBBqWMpdojmtE58Fo1I+hEALzkdRUM1A3CZk3USVE3bnzuGicsC
+         WBdYqqvqOoY5SPNDZBZKnBJTXrQ32ByzuIdEQNMdff0ExKz4qze9DIzLO/3Vvjh0ZFbG
+         7udnPWEC9KlKx8BPQsQ2IdntMLUXT3W7caKUBq8OPKzvm3qzRlMMu69XaJaPAGXHj748
+         lJnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702951393; x=1703556193;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wjsAHbjfMeDwtBP8wrx8HGvaKAxkSsjCBhep4ZbKU2k=;
+        b=gBSC+LhgteLI0EJ8dqwbKg4erd3daUCe4WGKobpskPT72kRb+07z9fya2NxQl8qJ6r
+         FJEP1ZD8NrDj3nSy8QmaNHEx3gqbzt8HZhMDzoAfIhLf8bmj0stKHPQs6CuMdfRvMlkl
+         6udfJYZ3yGBKRUTaskiLgoXf9caCavjqX69iwisHwVJDL0KwssLJ36zMKQ0HosqNIB7k
+         z0k7vCUQ1EucVADkyLSA+zfj4AzjzyB0P3/hGV3iyH/2njTjkYSw0XXZA5crVUtxqt/y
+         7z8MDjvmvVOY7zNX2EIdBob7ik8Teu18e0Ww8Yv7il7g4eunPbokNneJyd3ES1xdLDdY
+         T81A==
+X-Gm-Message-State: AOJu0YyVYM8aWr7l2ee4SdCBCrkQC1PGaCV24B2v6qeMOV9t+hA3V/gd
+	mBF9oGahr6yXwQ3zWvbfZdKMCg==
+X-Google-Smtp-Source: AGHT+IF/kNWkZMYNHeVVL3RUNGwgYlxAj7dA/S+cQyieGNqNAtjbstLMUDuonlQ07VWTyaXlrIyung==
+X-Received: by 2002:a05:600c:358d:b0:40d:27d3:8f2c with SMTP id p13-20020a05600c358d00b0040d27d38f2cmr25810wmq.56.1702951393183;
+        Mon, 18 Dec 2023 18:03:13 -0800 (PST)
+Received: from Mindolluin.ire.aristanetworks.com ([217.173.96.166])
+        by smtp.gmail.com with ESMTPSA id r19-20020a05600c35d300b0040c495b1c90sm590084wmq.11.2023.12.18.18.03.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Dec 2023 18:03:12 -0800 (PST)
+From: Dmitry Safonov <dima@arista.com>
+To: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Dmitry Safonov <0x7f454c46@gmail.com>
+Cc: Dmitry Safonov <dima@arista.com>,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kernel test robot <lkp@intel.com>
+Subject: [PATCH net-next] selftest/tcp-ao: Rectify out-of-tree build
+Date: Tue, 19 Dec 2023 02:03:05 +0000
+Message-ID: <20231219-b4-tcp-ao-selftests-out-of-tree-v1-1-0fff92d26eac@arista.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1] selftests/mm: Log run_vmtests.sh results in TAP format
-Content-Language: en-US
-From: John Hubbard <jhubbard@nvidia.com>
-To: Ryan Roberts <ryan.roberts@arm.com>, Mark Brown <broonie@kernel.org>
-CC: Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
-	Peter Xu <peterx@redhat.com>, Aishwarya TCV <Aishwarya.TCV@arm.com>,
-	<linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>
-References: <20231214162434.3580009-1-ryan.roberts@arm.com>
- <e2296501-e9c9-4bc6-88ba-1e43ea083d4a@sirena.org.uk>
- <71228821-cbd3-4a3c-9ed5-18f6d5ebcfc0@arm.com>
- <07193932-941d-46f6-b152-d6c5fe09b26b@sirena.org.uk>
- <76abe3b9-3f66-4336-b09d-d5c137ff6582@arm.com>
- <d99367ef-72e0-48ad-ba83-45e25efdf0fc@nvidia.com>
- <fb91ab59-ab5c-45c4-a413-bd6c060bfcc8@nvidia.com>
- <c417dabb-d7f5-4757-be4f-26b15c3f2fd2@arm.com>
- <7663374f-ed7e-4d86-a07f-e71c6bcef841@nvidia.com>
-In-Reply-To: <7663374f-ed7e-4d86-a07f-e71c6bcef841@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset="utf-8"
+X-Mailer: b4 0.13-dev-b6b4b
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1702951385; l=3173; i=dima@arista.com; s=20231212; h=from:subject:message-id; bh=kXGv43WpVA4QuiP4NyRqa0KCrJ/VO9r5P4J8vlLiCw4=; b=1kOnNm8p4AmUsY6Nx+/rLZt4zV6JjEDoQl4HTO7eoE4E/lSubDKnwS+Igmo/2rYam28n2VLEx I0by5+u8dJJCTRd323F9YsGNn3GyyBehrNSJVuJnaY7J2b0MMRoyxZ0
+X-Developer-Key: i=dima@arista.com; a=ed25519; pk=hXINUhX25b0D/zWBKvd6zkvH7W2rcwh/CH6cjEa3OTk=
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL6PEPF0001AB4E:EE_|LV2PR12MB5798:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1f4b60ff-8fc7-4e57-50e3-08dc002d2f38
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	AwOUNTSoUm7ZuxPHj5eYxM/HVD3T+vvfogbdF5kov5YXCdTgSbaPKR0ikfG8Fdy9CDv0KHe5TWXNHuhor9Ka+Vm0PYHEEXvfQZvZeST6vMppJVWUh5ONktBwbMzUPRHIMCRpvLZ60H7UUXH9D+2ozIfDfASU/a+un2qBkPoNORIj7gG8Oe80DQce8xrJS8zPOsWu+2JIODOIP+zjcIedGZYspV3M9HkWWGYWVfwHJddJoscenAOuXOjvw2BCRrzeLJwbuh3Lm/OGnwS1cioOJ//cGzfOdnP6V92rLqAVJSjhX2Em0CPWsNe8OJY0nGc69OOTxoX4hHNnkdNZSvUgN3AKpFtdcutPZr+QsAzvwxtQnj5WE3qNPEiPN9V2Ub/WNP9L2Aj2wa8aQ8fPo5/49p86DrofRD4nq3evIxTO/LPhrybE9tHKrzRO7/Ng0oQ7chIK2kO7KU+bjfPJEqQuyVPdAnmP1zXx387C3S/inTkydnsHL5ckfCMzkRGHZ0ed6nViVzreIFu4meN/P+Yr59lnmVWZsZsYaLDDUsDrYlmPOwTaTEIuz3o35bfxlEvAd2r86gyRk5yjL8t92A8V6yQXCWnnpTs9eHIwFcHZEprY8tztT2Eyz60iEoYxczTmHTWih6s4GYYvam4EoDR5bUVuLUNillZaOskLCziSbCj1r+lSBekQwBMveSCF7UCOjfSUHC4ziSBCUyyS1szwdNdpazgtWZK+33jzcMtR6a9UYwO/4hLf1KRY8hHH/YhA7Nw5JXUqjuCqLRJg3LTYyg==
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230031)(4636009)(346002)(136003)(396003)(39860400002)(376002)(230922051799003)(451199024)(64100799003)(82310400011)(186009)(1800799012)(46966006)(36840700001)(40470700004)(2906002)(5660300002)(66899024)(31696002)(41300700001)(36756003)(86362001)(356005)(82740400003)(7636003)(16526019)(336012)(426003)(26005)(40480700001)(54906003)(2616005)(36860700001)(70206006)(16576012)(70586007)(110136005)(478600001)(53546011)(31686004)(40460700003)(6666004)(4326008)(8936002)(8676002)(316002)(47076005)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Dec 2023 00:55:24.3485
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1f4b60ff-8fc7-4e57-50e3-08dc002d2f38
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL6PEPF0001AB4E.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5798
 
-On 12/18/23 16:51, John Hubbard wrote:
-> On 12/18/23 03:32, Ryan Roberts wrote:
-> ...
->>> I should also point out that some of the subtests already attempt a TAP
->>> output. So now we end up with TAP-within-TAP output for those programs.
->>
->> It's actually TAP-in-TAP-in-TAP if you're running from run_kselftest.sh :)
->>
->>>
->>> For example:
->>>      # -----------------------
->>>      # running ./madv_populate
->>>      # -----------------------
->>>      # TAP version 13
->>>      # 1..21
->>>      # # [RUN] test_prot_read
->>>      # ok 1 MADV_POPULATE_READ with PROT_READ
->>>      # ok 2 MADV_POPULATE_WRITE with PROT_READ
->>>      # # [RUN] test_prot_write
->>>      # ok 3 MADV_POPULATE_READ with PROT_WRITE
->>>      ...etc...
->>>
->>> Note the double level of leading '#' characters.
->>>
->>> Again, this is still readable enough for humans. But it should probably
->>> be removed in subsequent patches to the subtests.
->>
->> I personally don't agree with this. It would be difficult to flatten to a single
->> TAP instance because the top level doesn't have a clue how many test cases the
-> 
-> That's not quite what I had in mind...
-> 
->> child is running. Trying to do this will make things more fragile and less
->> modular. LAVA can certainly deal with nested test cases and correctly parses
->> everything to test case names that contain the test name at each level of
->> nesting. The thing I was trying to solve with this patch was that previously the
->> top level (run_kselftest.sh) and the bottom level (individual mm test binaries)
->> were using TAP, but the middle level (run_vmtests.sh) wasn't, and this was
->> confusing the LAVA parser.
->>
-> 
-> I was thinking more along these lines:
-> 
-> a) For the individual programs (binaries), there is actually neither need nor
-> desire to create TAP output at that level, because frameworks like LAVA only
-> care about running a lot of tests and parsing the output.
-> 
-> b) Therefore, just stop specifying TAP output at the leaf level, and let
-> run_vmtests.sh and run_kselftest.sh do it.
-> 
-> Looking at madv_populate.c, I see that it scatters calls to ksft_*() around.
-> And I was thinking that this is all just redundant, isn't it?
-> 
+Trivial fix for out-of-tree build that I wasn't testing previously:
 
-Although I suppose that the counter argument is that the subtests in
-madv_populate.c really *do* want to be specifically printed in TAP
-format.
+1. Create a directory for library object files, fixes:
+> gcc lib/kconfig.c -Wall -O2 -g -D_GNU_SOURCE -fno-strict-aliasing -I ../../../../../usr/include/ -iquote /tmp/kselftest/kselftest/net/tcp_ao/lib -I ../../../../include/  -o /tmp/kselftest/kselftest/net/tcp_ao/lib/kconfig.o -c
+> Assembler messages:
+> Fatal error: can't create /tmp/kselftest/kselftest/net/tcp_ao/lib/kconfig.o: No such file or directory
+> make[1]: *** [Makefile:46: /tmp/kselftest/kselftest/net/tcp_ao/lib/kconfig.o] Error 1
 
-arggh, I guess this is just not worth fooling around with after all.
-  
+2. Include $(KHDR_INCLUDES) that's exported by selftests/Makefile, fixes:
+> In file included from lib/kconfig.c:6:
+> lib/aolib.h:320:45: warning: ‘struct tcp_ao_add’ declared inside parameter list will not be visible outside of this definition or declaration
+>   320 | extern int test_prepare_key_sockaddr(struct tcp_ao_add *ao, const char *alg,
+>       |                                             ^~~~~~~~~~
+...
 
-thanks,
+3. While at here, clean-up $(KSFT_KHDR_INSTALL): it's not needed anymore
+   since commit f2745dc0ba3d ("selftests: stop using KSFT_KHDR_INSTALL")
+
+4. Also, while at here, drop .DEFAULT_GOAL definition: that has a
+   self-explaining comment, that was valid when I made these selftests
+   compile on local v4.19 kernel, but not needed since
+   commit 8ce72dc32578 ("selftests: fix headers_install circular dependency")
+
+Fixes: cfbab37b3da0 ("selftests/net: Add TCP-AO library")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202312190645.q76MmHyq-lkp@intel.com/
+Signed-off-by: Dmitry Safonov <dima@arista.com>
+---
+ tools/testing/selftests/net/tcp_ao/Makefile | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
+
+diff --git a/tools/testing/selftests/net/tcp_ao/Makefile b/tools/testing/selftests/net/tcp_ao/Makefile
+index 6343cfcf919b..8e60bae67aa9 100644
+--- a/tools/testing/selftests/net/tcp_ao/Makefile
++++ b/tools/testing/selftests/net/tcp_ao/Makefile
+@@ -17,22 +17,18 @@ TEST_IPV6_PROGS := $(TEST_BOTH_AF:%=%_ipv6)
+ TEST_GEN_PROGS := $(TEST_IPV4_PROGS) $(TEST_IPV6_PROGS)
+ 
+ top_srcdir	  := ../../../../..
+-KSFT_KHDR_INSTALL := 1
+ include ../../lib.mk
+ 
+ HOSTAR ?= ar
+ 
+-# Drop it on port to linux/master with commit 8ce72dc32578
+-.DEFAULT_GOAL := all
+-
+ LIBDIR	:= $(OUTPUT)/lib
+ LIB	:= $(LIBDIR)/libaotst.a
+ LDLIBS	+= $(LIB) -pthread
+ LIBDEPS	:= lib/aolib.h Makefile
+ 
+ CFLAGS	:= -Wall -O2 -g -D_GNU_SOURCE -fno-strict-aliasing
+-CFLAGS	+= -I ../../../../../usr/include/ -iquote $(LIBDIR)
+-CFLAGS	+= -I ../../../../include/
++CFLAGS	+= $(KHDR_INCLUDES)
++CFLAGS	+= -iquote ./lib/ -I ../../../../include/
+ 
+ # Library
+ LIBSRC	:= kconfig.c netlink.c proc.c repair.c setup.c sock.c utils.c
+@@ -43,6 +39,7 @@ $(LIB): $(LIBOBJ)
+ 	$(HOSTAR) rcs $@ $^
+ 
+ $(LIBDIR)/%.o: ./lib/%.c $(LIBDEPS)
++	mkdir -p $(LIBDIR)
+ 	$(CC) $< $(CFLAGS) $(CPPFLAGS) -o $@ -c
+ 
+ $(TEST_GEN_PROGS): $(LIB)
+
+---
+base-commit: ceb2fe0d438644e1de06b9a6468a1fb8e2199c70
+change-id: 20231219-b4-tcp-ao-selftests-out-of-tree-452f787f2d58
+
+Best regards,
 -- 
-John Hubbard
-NVIDIA
+Dmitry Safonov <dima@arista.com>
 
 
