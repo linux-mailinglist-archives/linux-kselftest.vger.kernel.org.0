@@ -1,154 +1,162 @@
-Return-Path: <linux-kselftest+bounces-2179-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2180-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03C2E8184B8
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Dec 2023 10:46:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C14B8184BE
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Dec 2023 10:49:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 812F2284D0E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Dec 2023 09:46:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 33E9B1F2687D
+	for <lists+linux-kselftest@lfdr.de>; Tue, 19 Dec 2023 09:49:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D95014017;
-	Tue, 19 Dec 2023 09:45:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC1E613AFC;
+	Tue, 19 Dec 2023 09:49:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="jy/1nwU7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="giun6UcR"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA9F213FFB;
-	Tue, 19 Dec 2023 09:45:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3BJ97Px2030485;
-	Tue, 19 Dec 2023 09:45:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=Ms7ur4E7a6ZJUk/bHA5Ykjz39zDPiKYSt7oHdQpIPPI=;
- b=jy/1nwU7wMQnFl6CpxuS3EpDYjjwObCIz+RgC57cstzhAjBC921/9HXn6IbhjIFRVPvn
- MDOpgERvSeMszWsPibrwuW4qr7qY1lonXQudwAzqNUXbmEJKvYSGyTT7sy++GSvdtZsx
- syxxRofn8cHOH9yNVVP8XAAADpIRItv2ayYi2ENDDbAwCIgvfyWqoMQCBdTuBVp5mAg/
- OGd+q+E11v84HfUePzX7s5dZluu7XDkgQ1E+8Mr2GQO3WTwbuiyFd8yq6FcrSp1izCyS
- 7akyi5HVhtzCvyX/Xza5ZEazV7fUyXmJpYOQyoyQ2hQYj5U+JcTaghCrkdEGaB09qxcb VA== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3v388xs03x-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 19 Dec 2023 09:45:36 +0000
-Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3BJ98iEe001724;
-	Tue, 19 Dec 2023 09:45:36 GMT
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3v388xs02d-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 19 Dec 2023 09:45:35 +0000
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3BJ7nQOn014071;
-	Tue, 19 Dec 2023 09:45:33 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3v1qqk6m1b-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 19 Dec 2023 09:45:33 +0000
-Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3BJ9jVHT25886988
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 19 Dec 2023 09:45:31 GMT
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5E21B2004D;
-	Tue, 19 Dec 2023 09:45:31 +0000 (GMT)
-Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id BDABA20043;
-	Tue, 19 Dec 2023 09:45:30 +0000 (GMT)
-Received: from li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com (unknown [9.171.6.112])
-	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Tue, 19 Dec 2023 09:45:30 +0000 (GMT)
-Date: Tue, 19 Dec 2023 10:45:29 +0100
-From: Alexander Gordeev <agordeev@linux.ibm.com>
-To: Joe Lawrence <joe.lawrence@redhat.com>
-Cc: Josh Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>,
-        linux-kselftest@vger.kernel.org, live-patching@vger.kernel.org,
-        linux-s390@vger.kernel.org
-Subject: Re: selftests/livepatch fails on s390
-Message-ID: <ZYFmOfFgsOdeikec@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
-References: <ZYAimyPYhxVA9wKg@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
- <cf087c7e-d24d-5cee-eadd-dd1fe26efe39@redhat.com>
- <ZYDLZkXdJ22AXtLW@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EC9613FE5;
+	Tue, 19 Dec 2023 09:49:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-6d411636a95so1830641b3a.0;
+        Tue, 19 Dec 2023 01:49:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1702979348; x=1703584148; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Qv6ayiB0gn1PnvSmyUoAGfG9689j0sDaLczeDjG83u4=;
+        b=giun6UcRzaeIGOcORwj45pI1XXv/CH3R9wYZoVIOh33xSFY02o4qxUP84P5elzgiRF
+         TQNJ2Dx6KONrkMy9bSNYna1vvqQzic+C3qg+ROFtCBhfVmGhbHw0B1VsczUYRvh4D6ic
+         lUAvqXV637NSVFTGgNqr3q2YkTbSwuat4Q+uoXNa/BTxt973Tlb0y9Gf+lmWIEy03zKf
+         AT+nxJZFWvvWviai9LYBxlWaXAqqXOhmXEMupIQyJvnrkuBdmUA9JFfAwZy6d6q5qc5r
+         g+wk0EyZ9v/mA6MpPGdD3WWRXW3F8G4TBI8kAbYzfXk0a+EfEqtSR+CKXWzk0WpOuUXB
+         tBMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1702979348; x=1703584148;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Qv6ayiB0gn1PnvSmyUoAGfG9689j0sDaLczeDjG83u4=;
+        b=BnvY75Bc0G9EMnbknZoi3Bo0eikfvyJCZuFx10EfPpP5PnWm+2iM4QvyK5AwtKYF/+
+         cGzNY2W0CFRf3OdnxFuTHPnRn5OYFY0rzypY+tBMmGwGB7zsOA+2usjXHyox/hBN2YLL
+         mU7q8teWs5XPDUKS/nH920zpzqprnQYiFvtCsV77v3TdaJuzbcvPvypRrJ6MILlKmkS2
+         9VGsG3MMA582LFYM4g0SaBqne8t90lXQJ1rLOhmulFGetj3RV2sIHmRkQrQVfPn1N9T4
+         a1WITlFtwu3K+7gYKFqg7Ttf5akzZiYsIeVzMlKr2Cl0XSFCH5Aem2sHttGjhAVo90Me
+         zmPQ==
+X-Gm-Message-State: AOJu0YzEEHdbodkCKG4/8LNzP0gcjUTcRB+FXil4RNSAW7JRjCMskfNY
+	Bb7/spYjMJgufmytf7w2rmmPoF6hUQAwzIW0SsY=
+X-Google-Smtp-Source: AGHT+IFLH/iPzSdZo0KcEzTihpRBQ1Ba1LPjV7Z/mQ0Pq19Kgta8Jz5kWk8lBE9p2E3UZSXcsLaHgQ==
+X-Received: by 2002:a17:90a:df0c:b0:28b:bdb5:f5e5 with SMTP id gp12-20020a17090adf0c00b0028bbdb5f5e5mr601487pjb.44.1702979348311;
+        Tue, 19 Dec 2023 01:49:08 -0800 (PST)
+Received: from Laptop-X1.redhat.com ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id ds17-20020a17090b08d100b0028b21d24ba6sm1076276pjb.15.2023.12.19.01.49.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Dec 2023 01:49:07 -0800 (PST)
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: netdev@vger.kernel.org
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	David Ahern <dsahern@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	Po-Hsu Lin <po-hsu.lin@canonical.com>,
+	Florian Westphal <fw@strlen.de>,
+	Martin KaFai Lau <kafai@fb.com>,
+	Stefano Brivio <sbrivio@redhat.com>,
+	Kees Cook <keescook@chromium.org>,
+	Hangbin Liu <liuhangbin@gmail.com>
+Subject: [PATCH net-next 0/8] Convert net selftests to run in unique namespace (last part)
+Date: Tue, 19 Dec 2023 17:48:48 +0800
+Message-ID: <20231219094856.1740079-1-liuhangbin@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZYDLZkXdJ22AXtLW@redhat.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: NR-FdXTkh4blAX33UwBTX-3agsjxwepP
-X-Proofpoint-GUID: FKrE8q9QEkDHMrS0xBKqlLC2w5BS57B7
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-19_05,2023-12-14_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- spamscore=0 adultscore=0 lowpriorityscore=0 clxscore=1015 suspectscore=0
- phishscore=0 bulkscore=0 malwarescore=0 priorityscore=1501 mlxlogscore=676
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2311290000
- definitions=main-2312190072
+Content-Transfer-Encoding: 8bit
 
-On Mon, Dec 18, 2023 at 05:44:54PM -0500, Joe Lawrence wrote:
+Here is the last part of converting net selftests to run in unique namespace.
+This part converts all left tests. After the conversion, we can run the net
+sleftests in parallel. e.g.
 
-Hi Joe!
+ # ./run_kselftest.sh -n -t net:reuseport_bpf
+ TAP version 13
+ 1..1
+ # selftests: net: reuseport_bpf
+ ok 1 selftests: net: reuseport_bpf
+  mod 10...
+ # Socket 0: 0
+ # Socket 1: 1
+ ...
+ # Socket 4: 19
+ # Testing filter add without bind...
+ # SUCCESS
 
-...
-> > If we pre-trim the timestamps, the output is what we expect:
-> > 
-> >   $ comm --nocheck-order -13 \
-> >       <(sed 's/^\[[ 0-9.]*\] //' /tmp/A) \
-> >       <(sed 's/^\[[ 0-9.]*\] //' /tmp/B)
-> >   message four
-> > 
-> > however, I'm not sure if that fix would easily apply.  It looks like I
-> > provided a disclaimer notice in check_result():
-> > 
-> > 	# Note: when comparing dmesg output, the kernel log timestamps
-> > 	# help differentiate repeated testing runs.  Remove them with a
-> > 	# post-comparison sed filter.
-> > 
-> > so I wonder if comm will get confused with repeated selftest runs?
+ # ./run_kselftest.sh -p -n -t net:cmsg_so_mark.sh -t net:cmsg_time.sh -t net:cmsg_ipv6.sh
+ TAP version 13
+ 1..3
+ # selftests: net: cmsg_so_mark.sh
+ ok 1 selftests: net: cmsg_so_mark.sh
+ # selftests: net: cmsg_time.sh
+ ok 2 selftests: net: cmsg_time.sh
+ # selftests: net: cmsg_ipv6.sh
+ ok 3 selftests: net: cmsg_ipv6.sh
 
-I would think so. AFAICT even a single run would produce duplicate lines.
+ # ./run_kselftest.sh -p -n -c net
+ TAP version 13
+ 1..95
+ # selftests: net: reuseport_bpf_numa
+ ok 3 selftests: net: reuseport_bpf_numa
+ # selftests: net: reuseport_bpf_cpu
+ ok 2 selftests: net: reuseport_bpf_cpu
+ # selftests: net: sk_bind_sendto_listen
+ ok 9 selftests: net: sk_bind_sendto_listen
+ # selftests: net: reuseaddr_conflict
+ ok 5 selftests: net: reuseaddr_conflict
+ ...
 
-...
-> This is *very* lightly tested, but I thought maybe you could give it a
-> spin.  Hopefully it's less brittle than diff/comm strategy.
+Here is the part 1 link:
+https://lore.kernel.org/netdev/20231202020110.362433-1-liuhangbin@gmail.com
+part 2 link:
+https://lore.kernel.org/netdev/20231206070801.1691247-1-liuhangbin@gmail.com
+part 3 link:
+https://lore.kernel.org/netdev/20231213060856.4030084-1-liuhangbin@gmail.com
 
-That seems to be working. However, please see below.
+Hangbin Liu (8):
+  selftests/net: convert gre_gso.sh to run it in unique namespace
+  selftests/net: convert netns-name.sh to run it in unique namespace
+  selftests/net: convert rtnetlink.sh to run it in unique namespace
+  selftests/net: convert stress_reuseport_listen.sh to run it in unique
+    namespace
+  selftests/net: convert xfrm_policy.sh to run it in unique namespace
+  selftests/net: use unique netns name for setup_loopback.sh
+    setup_veth.sh
+  selftests/net: convert pmtu.sh to run it in unique namespace
+  kselftest/runner.sh: add netns support
 
-...
-> @@ -280,7 +268,13 @@ function set_pre_patch_ret {
->  function start_test {
->  	local test="$1"
->  
-> -	save_dmesg
-> +	# Dump something unique into the dmesg log, then stash the entry
-> +	# in LAST_DMESG.  The check_result() function will use it to
-> +	# find new kernel messages since the test started.
-> +	local timestamp="$(date --rfc-3339=ns)"
-> +	log "livepatch kselftest timestamp: $timestamp"
-> +	LAST_DMESG=$(dmesg | grep "livepatch kselftest timestamp: $timestamp")
+ tools/testing/selftests/kselftest/runner.sh   |  38 ++++-
+ tools/testing/selftests/net/gre_gso.sh        |  18 +--
+ tools/testing/selftests/net/gro.sh            |   4 +-
+ tools/testing/selftests/net/netns-name.sh     |  44 +++---
+ tools/testing/selftests/net/pmtu.sh           |  27 ++--
+ tools/testing/selftests/net/rtnetlink.sh      |  34 +++--
+ tools/testing/selftests/net/setup_loopback.sh |   8 +-
+ tools/testing/selftests/net/setup_veth.sh     |   9 +-
+ .../selftests/net/stress_reuseport_listen.sh  |   6 +-
+ tools/testing/selftests/net/toeplitz.sh       |  14 +-
+ tools/testing/selftests/net/xfrm_policy.sh    | 138 +++++++++---------
+ tools/testing/selftests/run_kselftest.sh      |  10 +-
+ 12 files changed, 193 insertions(+), 157 deletions(-)
 
-Not sure if it not paranoid mode, but still..
-If the 'log' call is guaranteed synced? AKA would 'grep' always catch the line?
+-- 
+2.43.0
 
-And yeah.. if the log output is pushed away (e.g by a crazy-dumping concurrent
-logger), then nothing here would work. But this is not a new problem, so just
-my two cents.
-
->  	echo -n "TEST: $test ... "
->  	log "===== TEST: $test ====="
->  }
-
-Thanks!
 
