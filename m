@@ -1,166 +1,174 @@
-Return-Path: <linux-kselftest+bounces-2261-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2262-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 748B481A06D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Dec 2023 14:58:59 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC67981A1E6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Dec 2023 16:12:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A62881C22B4B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Dec 2023 13:58:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0E8EFB2419E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Dec 2023 15:12:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89791374FE;
-	Wed, 20 Dec 2023 13:58:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 830123E46E;
+	Wed, 20 Dec 2023 15:12:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NwM8+cbY"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iDFE105y"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F6AD38DD5;
-	Wed, 20 Dec 2023 13:58:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51FAAC433C8;
-	Wed, 20 Dec 2023 13:58:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1703080686;
-	bh=FX4VAPxyEVKvbbJffi2oi0T7IYc01Fhx2zd5wWkz3wc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=NwM8+cbYhkZDjaSPH54gM/FtSQx6WK56VcCUrgaSheWX7L6662Q9fpHMey/F+cXZg
-	 LtFvlGYJcQXNjGKH3q6PORLqW8xfTVeMW+qmdar9AMN+2hdBfaCbaiH4Dd2wDHodsP
-	 6FXgC3IFwnVC0v9tZgGSNbk0asM4KrATuC53simrWj1wtcSYwZ7eMZWO41nOb3MUa2
-	 1H0UHtmiEvgTJW85oLccXjlzIY0tGG0UBoOT5XJVBoWPiUHiiuKIzK2kohUG0eyu0w
-	 hZNhih9om2p+wdoGzMhF251x4XXMoN20Z9/D3usDXePXY2dt3r/kXxyFTMy6Hgqdl+
-	 a3TCwLcOZfNkg==
-Received: from [104.132.45.104] (helo=wait-a-minute.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1rFx5H-005hDm-0g;
-	Wed, 20 Dec 2023 13:58:03 +0000
-Date: Wed, 20 Dec 2023 13:58:02 +0000
-Message-ID: <87zfy5t1qt.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Haibo Xu <xiaobo55x@gmail.com>
-Cc: Haibo Xu <haibo1.xu@intel.com>,
-	ajones@ventanamicro.com,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Oliver Upton <oliver.upton@linux.dev>,
-	James Morse <james.morse@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Anup Patel <anup@brainfault.org>,
-	Atish Patra <atishp@atishpatra.org>,
-	Guo Ren <guoren@kernel.org>,
-	Mayuresh Chitale <mchitale@ventanamicro.com>,
-	Greentime Hu <greentime.hu@sifive.com>,
-	wchen <waylingii@gmail.com>,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Minda Chen <minda.chen@starfivetech.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Jisheng Zhang <jszhang@kernel.org>,
-	Sean Christopherson <seanjc@google.com>,
-	Peter Xu <peterx@redhat.com>,
-	Like Xu <likexu@tencent.com>,
-	Vipin Sharma <vipinsh@google.com>,
-	Maciej Wieczor-Retman <maciej.wieczor-retman@intel.com>,
-	Aaron Lewis <aaronlewis@google.com>,
-	Thomas Huth <thuth@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	kvm@vger.kernel.org,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8A7D3E47C
+	for <linux-kselftest@vger.kernel.org>; Wed, 20 Dec 2023 15:12:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1703085124;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=UGXHGx7fIiQQEp0PPgJ61uCfXTD7P90Z9jAT2290LTc=;
+	b=iDFE105yFlH9uW8tIfOdT5NKINALYWXvs5suNqOWVwuplT/T88xZdpnO5/cIOWPBrYQQ6m
+	yjfTYsxndbXZpnDWpUEx5eo7AAc1MiKxxIYtYkXNqT7X5Lg/uZDvYb4tuhJhQPOJRtU3Rq
+	B8l8FaiBKZNSVluM1zjsl2bu158TvnQ=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-171-Pnr5I9iHMSiIgdwsThPEeg-1; Wed, 20 Dec 2023 10:12:01 -0500
+X-MC-Unique: Pnr5I9iHMSiIgdwsThPEeg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id DBD97868903;
+	Wed, 20 Dec 2023 15:12:00 +0000 (UTC)
+Received: from jlaw-desktop.redhat.com (unknown [10.22.33.22])
+	by smtp.corp.redhat.com (Postfix) with ESMTP id 9BFAFC15968;
+	Wed, 20 Dec 2023 15:12:00 +0000 (UTC)
+From: Joe Lawrence <joe.lawrence@redhat.com>
+To: live-patching@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	kvm-riscv@lists.infradead.org
-Subject: Re: [PATCH v4 11/11] KVM: selftests: Enable tunning of err_margin_us in arch timer test
-In-Reply-To: <CAJve8ona7g=LxW1YeRB_FqGodF973H=A3b2m8054gmzK=Z7_ww@mail.gmail.com>
-References: <cover.1702371136.git.haibo1.xu@intel.com>
-	<0343a9e4bfa8011fbb6bca0286cee7eab1f17d5d.1702371136.git.haibo1.xu@intel.com>
-	<8734vy832j.wl-maz@kernel.org>
-	<CAJve8onc0WN5g98aOVBmJx15wFBAqfBKJ+ufoLY+oqYyVL+=3A@mail.gmail.com>
-	<f98879dc24f948f7a8a7b5374a32bc04@kernel.org>
-	<CAJve8ona7g=LxW1YeRB_FqGodF973H=A3b2m8054gmzK=Z7_ww@mail.gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
- (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	linux-s390@vger.kernel.org,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Petr Mladek <pmladek@suse.com>
+Subject: [PATCH] selftests/livepatch: fix and refactor new dmesg message code
+Date: Wed, 20 Dec 2023 10:11:51 -0500
+Message-ID: <20231220151151.267985-1-joe.lawrence@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-SA-Exim-Connect-IP: 104.132.45.104
-X-SA-Exim-Rcpt-To: xiaobo55x@gmail.com, haibo1.xu@intel.com, ajones@ventanamicro.com, paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, pbonzini@redhat.com, shuah@kernel.org, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, anup@brainfault.org, atishp@atishpatra.org, guoren@kernel.org, mchitale@ventanamicro.com, greentime.hu@sifive.com, waylingii@gmail.com, conor.dooley@microchip.com, heiko@sntech.de, minda.chen@starfivetech.com, samuel@sholland.org, jszhang@kernel.org, seanjc@google.com, peterx@redhat.com, likexu@tencent.com, vipinsh@google.com, maciej.wieczor-retman@intel.com, aaronlewis@google.com, thuth@redhat.com, linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, kvm-riscv@lists.infradead.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.8
 
-On Wed, 20 Dec 2023 13:51:24 +0000,
-Haibo Xu <xiaobo55x@gmail.com> wrote:
->=20
-> On Wed, Dec 20, 2023 at 5:00=E2=80=AFPM Marc Zyngier <maz@kernel.org> wro=
-te:
-> >
-> > On 2023-12-20 06:50, Haibo Xu wrote:
-> > > On Wed, Dec 20, 2023 at 2:22=E2=80=AFAM Marc Zyngier <maz@kernel.org>=
- wrote:
-> > >>
-> > >> On Tue, 12 Dec 2023 09:31:20 +0000,
-> > >> Haibo Xu <haibo1.xu@intel.com> wrote:
-> > >> > diff --git a/tools/testing/selftests/kvm/include/timer_test.h b/to=
-ols/testing/selftests/kvm/include/timer_test.h
-> > >> > index 968257b893a7..b1d405e7157d 100644
-> > >> > --- a/tools/testing/selftests/kvm/include/timer_test.h
-> > >> > +++ b/tools/testing/selftests/kvm/include/timer_test.h
-> > >> > @@ -22,6 +22,7 @@ struct test_args {
-> > >> >       int nr_iter;
-> > >> >       int timer_period_ms;
-> > >> >       int migration_freq_ms;
-> > >> > +     int timer_err_margin_us;
-> > >>
-> > >> ... except that you are storing it as a signed value. Some consisten=
-cy
-> > >> wouldn't hurt, really, and would avoid issues when passing large
-> > >> values.
-> > >>
-> > >
-> > > Yes, it's more proper to use an unsigned int for the non-negative err=
-or
-> > > margin.
-> > > Storing as signed here is just to keep the type consistent with that
-> > > of timer_period_ms
-> > > since there will be '+' operation in other places.
-> > >
-> > >         tools/testing/selftests/kvm/aarch64/arch_timer.c
-> > >         /* Setup a timeout for the interrupt to arrive */
-> > >          udelay(msecs_to_usecs(test_args.timer_period_ms) +
-> > >              test_args.timer_err_margin_us);
-> >
-> > But that's exactly why using a signed quantity is wrong.
-> > What does it mean to have a huge *negative* margin?
-> >
->=20
-> Hi Marc,
->=20
-> I agree that negative values are meaningless for the margin.
-> If I understand correctly, the negative margin should be filtered by
-> assertion in atoi_non_negative().
+The livepatching kselftests rely on comparing expected vs. observed
+dmesg output.  After each test, new dmesg entries are determined by the
+'comm' utility comparing a saved, pre-test copy of dmesg to post-test
+dmesg output.
 
-No. Please.
+Alexander reports that the 'comm --nocheck-order -13' invocation used by
+the tests can be confused when dmesg entry timestamps vary in magnitude
+(ie, "[   98.820331]" vs. "[  100.031067]"), in which case, additional
+messages are reported as new.  The unexpected entries then spoil the
+test results.
 
-atoi_non_negative() returns a uint32_t, which is what it should do.
-The bug is squarely in the use of an 'int' to store such value, and it
-is the *storage* that turns a positive value into a negative one.
+Instead of relying on 'comm' or 'diff' to determine new testing dmesg
+entries, refactor the code:
 
-	M.
+  - pre-test  : log a unique canary dmesg entry
+  - test      : run tests, log messages
+  - post-test : filter dmesg starting from pre-test message
 
---=20
-Without deviation from the norm, progress is not possible.
+Reported-by: Alexander Gordeev <agordeev@linux.ibm.com>
+Closes: https://lore.kernel.org/live-patching/ZYAimyPYhxVA9wKg@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com/
+Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
+---
+ .../testing/selftests/livepatch/functions.sh  | 37 +++++++++----------
+ 1 file changed, 17 insertions(+), 20 deletions(-)
+
+diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
+index c8416c54b463..b1fd7362c2fe 100644
+--- a/tools/testing/selftests/livepatch/functions.sh
++++ b/tools/testing/selftests/livepatch/functions.sh
+@@ -42,17 +42,6 @@ function die() {
+ 	exit 1
+ }
+ 
+-# save existing dmesg so we can detect new content
+-function save_dmesg() {
+-	SAVED_DMESG=$(mktemp --tmpdir -t klp-dmesg-XXXXXX)
+-	dmesg > "$SAVED_DMESG"
+-}
+-
+-# cleanup temporary dmesg file from save_dmesg()
+-function cleanup_dmesg_file() {
+-	rm -f "$SAVED_DMESG"
+-}
+-
+ function push_config() {
+ 	DYNAMIC_DEBUG=$(grep '^kernel/livepatch' /sys/kernel/debug/dynamic_debug/control | \
+ 			awk -F'[: ]' '{print "file " $1 " line " $2 " " $4}')
+@@ -99,7 +88,6 @@ function set_ftrace_enabled() {
+ 
+ function cleanup() {
+ 	pop_config
+-	cleanup_dmesg_file
+ }
+ 
+ # setup_config - save the current config and set a script exit trap that
+@@ -280,7 +268,15 @@ function set_pre_patch_ret {
+ function start_test {
+ 	local test="$1"
+ 
+-	save_dmesg
++	# Dump something unique into the dmesg log, then stash the entry
++	# in LAST_DMESG.  The check_result() function will use it to
++	# find new kernel messages since the test started.
++	local last_dmesg_msg="livepatch kselftest timestamp: $(date --rfc-3339=ns)"
++	log "$last_dmesg_msg"
++	loop_until 'dmesg | grep -q "$last_dmesg_msg"' ||
++		die "buffer busy? can't find canary dmesg message: $last_dmesg_msg"
++	LAST_DMESG=$(dmesg | grep "$last_dmesg_msg")
++
+ 	echo -n "TEST: $test ... "
+ 	log "===== TEST: $test ====="
+ }
+@@ -291,23 +287,24 @@ function check_result {
+ 	local expect="$*"
+ 	local result
+ 
+-	# Note: when comparing dmesg output, the kernel log timestamps
+-	# help differentiate repeated testing runs.  Remove them with a
+-	# post-comparison sed filter.
+-
+-	result=$(dmesg | comm --nocheck-order -13 "$SAVED_DMESG" - | \
++	# Test results include any new dmesg entry since LAST_DMESG, then:
++	# - include lines matching keywords
++	# - exclude lines matching keywords
++	# - filter out dmesg timestamp prefixes
++	result=$(dmesg | awk -v last_dmesg="$LAST_DMESG" 'p; $0 == last_dmesg { p=1 }' | \
+ 		 grep -e 'livepatch:' -e 'test_klp' | \
+ 		 grep -v '\(tainting\|taints\) kernel' | \
+ 		 sed 's/^\[[ 0-9.]*\] //')
+ 
+ 	if [[ "$expect" == "$result" ]] ; then
+ 		echo "ok"
++	elif [[ "$result" == "" ]] ; then
++		echo -e "not ok\n\nbuffer overrun? can't find canary dmesg entry: $LAST_DMESG\n"
++		die "livepatch kselftest(s) failed"
+ 	else
+ 		echo -e "not ok\n\n$(diff -upr --label expected --label result <(echo "$expect") <(echo "$result"))\n"
+ 		die "livepatch kselftest(s) failed"
+ 	fi
+-
+-	cleanup_dmesg_file
+ }
+ 
+ # check_sysfs_rights(modname, rel_path, expected_rights) - check sysfs
+-- 
+2.41.0
+
 
