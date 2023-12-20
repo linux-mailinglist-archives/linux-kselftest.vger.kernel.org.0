@@ -1,262 +1,141 @@
-Return-Path: <linux-kselftest+bounces-2249-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2250-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE3228196E3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Dec 2023 03:43:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00B78819794
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Dec 2023 05:13:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9F298B24F48
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Dec 2023 02:43:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 74A5D1F25CB8
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Dec 2023 04:13:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1094A1857;
-	Wed, 20 Dec 2023 02:43:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E4CA8F71;
+	Wed, 20 Dec 2023 04:13:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K2UuTASm"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sqFpniuU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 348E5BA5E;
-	Wed, 20 Dec 2023 02:43:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1703040191; x=1734576191;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5KZpWRhE02/YKJt8pKhmik0cSB79JwRv8nivSCwdSvg=;
-  b=K2UuTASmFz/090q/SS3Y2lcmDVPP3EfKnDQAc9Wx5Cr6jIRpl669csVA
-   zsZLg6DcabvUdDwrzHzJxqInxyQdhuoLAeH+qQDmYMqUdjRmt8qa1dxKK
-   sxrioiaaWmJoJh8mYakW6wZag4tiWcvdE0X2HMfmEZl5PorNw4RTk/Xv+
-   878T35KfShlPMW1pKZgrs0TF+GUS9m6FHZCZ3vRtBjzsB7dAgaakbMUTZ
-   e1MV7Hl+Eky8ThTfUvdocKJr9eYZ/U5Cc4Lp8tLxtjn2SGVxjIJBMLiQj
-   LXMWmwaPPKztUD6hcY912RTeMDHQnEGG7y7kW3XuLFnLpGMdDaNEGP0Pp
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10929"; a="17307952"
-X-IronPort-AV: E=Sophos;i="6.04,290,1695711600"; 
-   d="scan'208";a="17307952"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2023 18:43:10 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10929"; a="776178874"
-X-IronPort-AV: E=Sophos;i="6.04,290,1695711600"; 
-   d="scan'208";a="776178874"
-Received: from yilunxu-optiplex-7050.sh.intel.com (HELO localhost) ([10.239.159.165])
-  by orsmga002.jf.intel.com with ESMTP; 19 Dec 2023 18:43:05 -0800
-Date: Wed, 20 Dec 2023 10:40:34 +0800
-From: Xu Yilun <yilun.xu@linux.intel.com>
-To: Paul Durrant <paul@xen.org>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
-	Sean Christopherson <seanjc@google.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	David Woodhouse <dwmw2@infradead.org>,
-	Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v11 08/19] KVM: pfncache: allow a cache to be activated
- with a fixed (userspace) HVA
-Message-ID: <ZYJUIsQM06mhzOTY@yilunxu-OptiPlex-7050>
-References: <20231219161109.1318-1-paul@xen.org>
- <20231219161109.1318-9-paul@xen.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33964168C8
+	for <linux-kselftest@vger.kernel.org>; Wed, 20 Dec 2023 04:13:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-1d307cf18fdso22669385ad.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 19 Dec 2023 20:13:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1703045623; x=1703650423; darn=vger.kernel.org;
+        h=mime-version:message-id:date:in-reply-to:subject:cc:to:from
+         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
+        bh=mNVWdMSAqfvpbN5g4IovRqwuhzgdiEbCZgrhc7x2wjc=;
+        b=sqFpniuUv1jPeUcslD9u70BMjvDT3Pn1u4MVKC25xqk7qxT3ogc04/G7AzpnjFN9qP
+         wX0M0o6fDxBVGgdq1KImwVb4xQARFPNes9FjuZOpYBPXl78+YLFexHeH/h/L8Nd46oF7
+         fAtGCV4qqJLJvfql1Hx8OdbBb8T6rgdTXpDhofeX1aN/vUCjzKBiwFQhBDOFceaIVp83
+         2azW/SVeUaLquJ+xCC8bz30l5VXWxfNSJDHiWYyq95ua3xyhNLNWr7xoHg6PfDpmL2BE
+         LE2WARMFquM73UPg09z5t7bXfLsAARBhlaMR76KzetrUdMYZCIaOd5uQcViu/SWCjMdG
+         s+pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703045623; x=1703650423;
+        h=mime-version:message-id:date:in-reply-to:subject:cc:to:from
+         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mNVWdMSAqfvpbN5g4IovRqwuhzgdiEbCZgrhc7x2wjc=;
+        b=qmu+Dw8SW7SZB6Qna6oYkr++HEyKMYh3LxMhtoqjCDXvbe10JzGZ7bBqwjqlosSv4N
+         woGOB9qbbGTo7+iIqJoVsIdZIfnAZ78MIbztgHsQJz6oJ9pS9g3ar5a/5HMc8kVDkGI2
+         t0jF/+UAqpda853523kw4YwOliFA2gR2dghX5mobDBR8pP9XS/0sjMAOIJsH4IgqKnJh
+         wgeZTSYwIxuXpxE4MN1lLd9JYQXmrVjp9aatzFBgIrglPYPXkhlO9oWa3HRzyvyJ+uFG
+         qno3R7WdcKaMVwLXgf8fpZRQ7ZH+Ca78JSqo/LV6bbgE9XoDXOjYqDKxsGxVsaPuaLDG
+         k45w==
+X-Gm-Message-State: AOJu0YzO/hUeugPIMSBw7cxJvRsDx5g6j+frI9YD+IBNV8NaMo+pEx4s
+	S2VMbhP+AtogP//ShmrE69Cn1g==
+X-Google-Smtp-Source: AGHT+IGTH7Uz/NcmceVfotUGElTRFy6BFXANyvxa2H36ukICplsk22hKc23OStWdWx3+9daWWuC7hQ==
+X-Received: by 2002:a17:903:22c1:b0:1d3:c025:c99e with SMTP id y1-20020a17090322c100b001d3c025c99emr2935918plg.63.1703045623531;
+        Tue, 19 Dec 2023 20:13:43 -0800 (PST)
+Received: from localhost ([2804:14d:7e39:8470:8f60:ee5a:d698:1116])
+        by smtp.gmail.com with ESMTPSA id q14-20020a170902dace00b001d08e08003esm21884208plx.174.2023.12.19.20.13.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 19 Dec 2023 20:13:42 -0800 (PST)
+References: <20231122-arm64-gcs-v7-0-201c483bd775@kernel.org>
+User-agent: mu4e 1.10.8; emacs 29.1
+From: Thiago Jung Bauermann <thiago.bauermann@linaro.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, Will Deacon
+ <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Andrew Morton
+ <akpm@linux-foundation.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton
+ <oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, Suzuki K
+ Poulose <suzuki.poulose@arm.com>, Arnd Bergmann <arnd@arndb.de>, Oleg
+ Nesterov <oleg@redhat.com>, Eric Biederman <ebiederm@xmission.com>, Kees
+ Cook <keescook@chromium.org>, Shuah Khan <shuah@kernel.org>, "Rick P.
+ Edgecombe" <rick.p.edgecombe@intel.com>, Deepak Gupta
+ <debug@rivosinc.com>, Ard Biesheuvel <ardb@kernel.org>, Szabolcs Nagy
+ <Szabolcs.Nagy@arm.com>, "H.J. Lu" <hjl.tools@gmail.com>, Paul Walmsley
+ <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
+ <aou@eecs.berkeley.edu>, Florian Weimer <fweimer@redhat.com>, Christian
+ Brauner <brauner@kernel.org>, linux-arm-kernel@lists.infradead.org,
+ linux-doc@vger.kernel.org, kvmarm@lists.linux.dev,
+ linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v7 00/39] arm64/gcs: Provide support for GCS in userspace
+In-reply-to: <20231122-arm64-gcs-v7-0-201c483bd775@kernel.org>
+Date: Wed, 20 Dec 2023 01:13:41 -0300
+Message-ID: <874jgdh5oq.fsf@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231219161109.1318-9-paul@xen.org>
-
-On Tue, Dec 19, 2023 at 04:10:58PM +0000, Paul Durrant wrote:
-> From: Paul Durrant <pdurrant@amazon.com>
-> 
-> Some pfncache pages may actually be overlays on guest memory that have a
-> fixed HVA within the VMM. It's pointless to invalidate such cached
-> mappings if the overlay is moved so allow a cache to be activated directly
-> with the HVA to cater for such cases. A subsequent patch will make use
-> of this facility.
-> 
-> Signed-off-by: Paul Durrant <pdurrant@amazon.com>
-> Reviewed-by: David Woodhouse <dwmw@amazon.co.uk>
-> ---
-> Cc: Sean Christopherson <seanjc@google.com>
-> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> Cc: David Woodhouse <dwmw2@infradead.org>
-> 
-> v11:
->  - Fixed kvm_gpc_check() to ignore memslot generation if the cache is not
->    activated with a GPA. (This breakage occured during the re-work for v8).
-> 
-> v9:
->  - Pass both GPA and HVA into __kvm_gpc_refresh() rather than overloading
->    the address paraneter and using a bool flag to indicated what it is.
-> 
-> v8:
->  - Re-worked to avoid messing with struct gfn_to_pfn_cache.
-> ---
->  include/linux/kvm_host.h | 20 +++++++++++++++++++-
->  virt/kvm/pfncache.c      | 40 +++++++++++++++++++++++++++++++---------
->  2 files changed, 50 insertions(+), 10 deletions(-)
-> 
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index 6097f076a7b0..8120674b87b0 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -1345,6 +1345,22 @@ void kvm_gpc_init(struct gfn_to_pfn_cache *gpc, struct kvm *kvm);
->   */
->  int kvm_gpc_activate(struct gfn_to_pfn_cache *gpc, gpa_t gpa, unsigned long len);
->  
-> +/**
-> + * kvm_gpc_activate_hva - prepare a cached kernel mapping and HPA for a given HVA.
-> + *
-> + * @gpc:          struct gfn_to_pfn_cache object.
-> + * @hva:          userspace virtual address to map.
-> + * @len:          sanity check; the range being access must fit a single page.
-> + *
-> + * @return:       0 for success.
-> + *                -EINVAL for a mapping which would cross a page boundary.
-> + *                -EFAULT for an untranslatable guest physical address.
-> + *
-> + * The semantics of this function are the same as those of kvm_gpc_activate(). It
-> + * merely bypasses a layer of address translation.
-> + */
-> +int kvm_gpc_activate_hva(struct gfn_to_pfn_cache *gpc, unsigned long hva, unsigned long len);
-> +
->  /**
->   * kvm_gpc_check - check validity of a gfn_to_pfn_cache.
->   *
-> @@ -1399,7 +1415,9 @@ void kvm_gpc_deactivate(struct gfn_to_pfn_cache *gpc);
->  static inline void kvm_gpc_mark_dirty(struct gfn_to_pfn_cache *gpc)
->  {
->  	lockdep_assert_held(&gpc->lock);
-> -	mark_page_dirty_in_slot(gpc->kvm, gpc->memslot, gpc->gpa >> PAGE_SHIFT);
-> +
-> +	if (gpc->gpa != KVM_XEN_INVALID_GPA)
-> +		mark_page_dirty_in_slot(gpc->kvm, gpc->memslot, gpc->gpa >> PAGE_SHIFT);
->  }
->  
->  void kvm_sigset_activate(struct kvm_vcpu *vcpu);
-> diff --git a/virt/kvm/pfncache.c b/virt/kvm/pfncache.c
-> index 97eec8ee3449..ae822bff812f 100644
-> --- a/virt/kvm/pfncache.c
-> +++ b/virt/kvm/pfncache.c
-> @@ -48,7 +48,10 @@ bool kvm_gpc_check(struct gfn_to_pfn_cache *gpc, unsigned long len)
->  	if (!gpc->active)
->  		return false;
->  
-> -	if (gpc->generation != slots->generation || kvm_is_error_hva(gpc->uhva))
-> +	if (gpc->gpa != KVM_XEN_INVALID_GPA && gpc->generation != slots->generation)
-> +		return false;
-> +
-> +	if (kvm_is_error_hva(gpc->uhva))
->  		return false;
->  
->  	if (offset_in_page(gpc->uhva) + len > PAGE_SIZE)
-> @@ -209,11 +212,13 @@ static kvm_pfn_t hva_to_pfn_retry(struct gfn_to_pfn_cache *gpc)
->  	return -EFAULT;
->  }
->  
-> -static int __kvm_gpc_refresh(struct gfn_to_pfn_cache *gpc, gpa_t gpa,
-> +static int __kvm_gpc_refresh(struct gfn_to_pfn_cache *gpc, gpa_t gpa, unsigned long uhva,
->  			     unsigned long len)
->  {
->  	struct kvm_memslots *slots = kvm_memslots(gpc->kvm);
-> -	unsigned long page_offset = offset_in_page(gpa);
-> +	unsigned long page_offset = (gpa != KVM_XEN_INVALID_GPA) ?
-> +		offset_in_page(gpa) :
-> +		offset_in_page(uhva);
->  	bool unmap_old = false;
->  	unsigned long old_uhva;
->  	kvm_pfn_t old_pfn;
-> @@ -246,9 +251,15 @@ static int __kvm_gpc_refresh(struct gfn_to_pfn_cache *gpc, gpa_t gpa,
->  	old_khva = (void *)PAGE_ALIGN_DOWN((uintptr_t)gpc->khva);
->  	old_uhva = PAGE_ALIGN_DOWN(gpc->uhva);
->  
-> -	/* Refresh the userspace HVA if necessary */
-> -	if (gpc->gpa != gpa || gpc->generation != slots->generation ||
-> -	    kvm_is_error_hva(gpc->uhva)) {
-> +	if (gpa == KVM_XEN_INVALID_GPA) {
-> +		gpc->gpa = KVM_XEN_INVALID_GPA;
-> +		gpc->uhva = PAGE_ALIGN_DOWN(uhva);
-> +
-> +		if (gpc->uhva != old_uhva)
-> +			hva_change = true;
-> +	} else if (gpc->gpa != gpa ||
-> +		   gpc->generation != slots->generation ||
-> +		   kvm_is_error_hva(gpc->uhva)) {
->  		gfn_t gfn = gpa_to_gfn(gpa);
->  
->  		gpc->gpa = gpa;
-> @@ -319,7 +330,7 @@ static int __kvm_gpc_refresh(struct gfn_to_pfn_cache *gpc, gpa_t gpa,
->  
->  int kvm_gpc_refresh(struct gfn_to_pfn_cache *gpc, unsigned long len)
->  {
-> -	return __kvm_gpc_refresh(gpc, gpc->gpa, len);
-> +	return __kvm_gpc_refresh(gpc, gpc->gpa, gpc->uhva, len);
->  }
->  
->  void kvm_gpc_init(struct gfn_to_pfn_cache *gpc, struct kvm *kvm)
-> @@ -332,7 +343,8 @@ void kvm_gpc_init(struct gfn_to_pfn_cache *gpc, struct kvm *kvm)
->  	gpc->uhva = KVM_HVA_ERR_BAD;
->  }
->  
-> -int kvm_gpc_activate(struct gfn_to_pfn_cache *gpc, gpa_t gpa, unsigned long len)
-> +static int __kvm_gpc_activate(struct gfn_to_pfn_cache *gpc, gpa_t gpa, unsigned long uhva,
-> +			      unsigned long len)
->  {
->  	struct kvm *kvm = gpc->kvm;
->  
-> @@ -353,7 +365,17 @@ int kvm_gpc_activate(struct gfn_to_pfn_cache *gpc, gpa_t gpa, unsigned long len)
->  		gpc->active = true;
->  		write_unlock_irq(&gpc->lock);
->  	}
-> -	return __kvm_gpc_refresh(gpc, gpa, len);
-> +	return __kvm_gpc_refresh(gpc, gpa, uhva, len);
-> +}
-> +
-> +int kvm_gpc_activate(struct gfn_to_pfn_cache *gpc, gpa_t gpa, unsigned long len)
-> +{
-> +	return __kvm_gpc_activate(gpc, gpa, KVM_HVA_ERR_BAD, len);
-> +}
-> +
-> +int kvm_gpc_activate_hva(struct gfn_to_pfn_cache *gpc, unsigned long uhva, unsigned long len)
-> +{
-> +	return __kvm_gpc_activate(gpc, KVM_XEN_INVALID_GPA, uhva, len);
->  }
->  
->  void kvm_gpc_deactivate(struct gfn_to_pfn_cache *gpc)
-
-The code looks good to me, but I feel odd that a *gfn*_to_pfn_cache is
-used, but gfn is not taken into account.
-
-I think if it is possible we introduce an hva_to_pfn_cache(hpc) that
-actually does most of the job in this file. Xen could directly use hpc,
-and gfn_to_pfn_cache works on top of hpc.
+Content-Type: text/plain
 
 
-BTW: I also see there is a gfn_to_hva_cache which does pretty much the
-same as gpc's first half job. Is it possible to unify them like:
+Mark Brown <broonie@kernel.org> writes:
 
-struct gfn_to_pfn_cache {
-	struct gfn_to_hva_cache ghc;
-	struct hva_to_pfn_cache hpc;
-	...
-}
+>       arm64/mm: Restructure arch_validate_flags() for extensibility
+>       prctl: arch-agnostic prctl for shadow stack
+>       mman: Add map_shadow_stack() flags
+>       arm64: Document boot requirements for Guarded Control Stacks
+>       arm64/gcs: Document the ABI for Guarded Control Stacks
+>       arm64/sysreg: Add new system registers for GCS
+>       arm64/sysreg: Add definitions for architected GCS caps
+>       arm64/gcs: Add manual encodings of GCS instructions
+>       arm64/gcs: Provide put_user_gcs()
+>       arm64/cpufeature: Runtime detection of Guarded Control Stack (GCS)
+>       arm64/mm: Allocate PIE slots for EL0 guarded control stack
+>       mm: Define VM_SHADOW_STACK for arm64 when we support GCS
+>       arm64/mm: Map pages for guarded control stack
+>       KVM: arm64: Manage GCS registers for guests
+>       arm64/gcs: Allow GCS usage at EL0 and EL1
+>       arm64/idreg: Add overrride for GCS
+>       arm64/hwcap: Add hwcap for GCS
+>       arm64/traps: Handle GCS exceptions
+>       arm64/mm: Handle GCS data aborts
+>       arm64/gcs: Context switch GCS state for EL0
+>       arm64/gcs: Allocate a new GCS for threads with GCS enabled
+>       arm64/gcs: Implement shadow stack prctl() interface
+>       arm64/mm: Implement map_shadow_stack()
+>       arm64/signal: Set up and restore the GCS context for signal handlers
+>       arm64/signal: Expose GCS state in signal frames
+>       arm64/ptrace: Expose GCS via ptrace and core files
+>       arm64: Add Kconfig for Guarded Control Stack (GCS)
+>       kselftest/arm64: Verify the GCS hwcap
+>       kselftest/arm64: Add GCS as a detected feature in the signal tests
+>       kselftest/arm64: Add framework support for GCS to signal handling tests
+>       kselftest/arm64: Allow signals tests to specify an expected si_code
+>       kselftest/arm64: Always run signals tests with GCS enabled
+>       kselftest/arm64: Add very basic GCS test program
+>       kselftest/arm64: Add a GCS test program built with the system libc
+>       kselftest/arm64: Add test coverage for GCS mode locking
+>       selftests/arm64: Add GCS signal tests
+>       kselftest/arm64: Add a GCS stress test
+>       kselftest/arm64: Enable GCS for the FP stress tests
+>       kselftest/clone3: Enable GCS in the clone3 selftests
 
-Just my two cents.
+Not sure if this is warranted, so sorry for the potential spam:
 
-Thanks,
-Yilun
+I don't have any comments on the patches I haven't replied to.
 
-> -- 
-> 2.39.2
-> 
-> 
+-- 
+Thiago
 
