@@ -1,62 +1,62 @@
-Return-Path: <linux-kselftest+bounces-2282-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2283-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01F2F81A868
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Dec 2023 22:43:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A09181A86B
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Dec 2023 22:43:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3495D1C21EEE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Dec 2023 21:43:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3FD1B288B5C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Dec 2023 21:43:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DAC84C601;
-	Wed, 20 Dec 2023 21:40:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 396524C616;
+	Wed, 20 Dec 2023 21:40:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fG68nxr1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c/YzQOxp"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 008C54C3DC;
-	Wed, 20 Dec 2023 21:40:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 739F84C3B7;
+	Wed, 20 Dec 2023 21:40:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a2356bb40e3so8865466b.1;
-        Wed, 20 Dec 2023 13:40:36 -0800 (PST)
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-50c0f13ea11so189886e87.3;
+        Wed, 20 Dec 2023 13:40:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1703108435; x=1703713235; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1703108437; x=1703713237; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=CD7VeMnjKAxyZj8mbMwt4mJMl93BY6cO6FMg2JTnA74=;
-        b=fG68nxr1hIC/vqCaABoYJ4jQgTg3zdtHrBewyxENw+WXb/F2tmqvcw+UYwqvgmVre9
-         eKYqw7/BgtMmhWkXiYylvKAq1eVCqMCQiSrwKEcV3dTFjvVkviphUm+tYZ9hCjpIAp0a
-         pY8oe7VG4H/vqNFbYyZSr+246pyFp70wWWdA2VZDxzlkR1dwlMGB3smvrKXpK20eAbz1
-         ozD0yfnvs3RY7Iz4Vh2swhYK1AjGo2NSX2mYdfLjUjix44lXKmDWVWqtTMNx/Y5SbHKq
-         sX0/ovkZeI3f41vgzIzF20h67VVLR1pJpMlRADXJqlEDr3DQD53MqGcojJ7GpQfNQtie
-         9r5w==
+        bh=XCR2AWe8CH/pwYf56t8XoxHbIux/alGXqT7pZRazkTo=;
+        b=c/YzQOxpL/doambL6DwaXcXxI9aO1o8/huMsixmKRUpeQeKzxFmN8RiIqTnN60QDzV
+         k3jN7+frQ376L6fmVST3NaBw2twAlScKvuKtickI/MZz1IB+j2IlIVvoK0EbB/NnJPnA
+         udEwrfK74j6BA4JXGLdM3HfuQbeQ7HGNjUuYpJt9/snJctu0e38KC3HyOlTgGHJkyoOk
+         R/4vPuwakaZMuiVzoRwv4emsTXEy9DY1okn1cP10pN+gqajS/RzRjXDtoZtG0ba+ALNi
+         hDDl0iDdIv7PhCcBqNQJDuViM8FZHvUwMCy+WuMS01V91vG5Bf99ugeSRNHS2mRTYPhJ
+         3Mjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703108435; x=1703713235;
+        d=1e100.net; s=20230601; t=1703108437; x=1703713237;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=CD7VeMnjKAxyZj8mbMwt4mJMl93BY6cO6FMg2JTnA74=;
-        b=EzQ507Wv0a8wv0BSZJtMy631J2xTkVNkhO7GCSL1qCRti06I4iYONvUAvQZBxIV1p+
-         jRNlJCygQQECg/eYPlOt41IL5W6aFfsK7f1TFXO7SedM/i7HOxnzhQtiWCyTgAgrvwIx
-         /z8EIk+OjvZ116AqRfwvAl6t4fBZLRqHyvyTm0q+PCxyTsoNj7+lpybfJkfjhd5F/j/H
-         evqU+laHDaUHjbKJAx2kVIiHlE49H30c02MVlXCYOCsIkZ7EKSbwwTzIhaoax5w4wZDp
-         DubY9a7jyIw6Ma00y3dqRKRZKezYxcQ2bz37pNw7LSpB3qVTPS6O+xdeDGTeMFNJdv9Q
-         Y1+Q==
-X-Gm-Message-State: AOJu0YwGJx29ujtabsppTlBCq2xN2gJ5XocDv/exQiC5AfdrTXqsPAxc
-	O9z05gSzds0I5Vm+1RPn8Pk=
-X-Google-Smtp-Source: AGHT+IFOZ5KB1f8BKZKidNyLx56gZSqFtkxELjQ1V4ZwxFmpE05JVQpdm3NS3JKmInS9cV/9gheIqA==
-X-Received: by 2002:a17:906:5657:b0:a26:88f4:3fae with SMTP id v23-20020a170906565700b00a2688f43faemr1389315ejr.67.1703108435174;
-        Wed, 20 Dec 2023 13:40:35 -0800 (PST)
+        bh=XCR2AWe8CH/pwYf56t8XoxHbIux/alGXqT7pZRazkTo=;
+        b=BdZ3mxEIUCXMfZ4nXYDh6ioP3MapDqoqd/zXeKA6NdEze58WRinyIAiF+KDZHTLICD
+         EYlWpV3Dw2F6T5Ip3MRX0xZADSbZKlUbWlOBWQmdFuLIeHk3vjpq/HPvOyOzP4/lQp0j
+         yBk/d9WL0udq9b3x0wJ3p/1FYrQ9HQDZRTEUhYwqe+Yosa+UalcnEFTY6nCzCuXo/fy1
+         w9ReSSmOpksYcJe1y+7yTCXy4/gszGchLZ8zEOTK7Dt9NehS+S06koSNlX9BndIpinfs
+         TFkwnBFnIYvEA5gISXqM1e8mhNRUmQ14TKYk6d+3PIm5g6OQ4WIkDnCQmctajyBN0IFZ
+         fOQA==
+X-Gm-Message-State: AOJu0Yy2zeZgJrMCku1u9oe2BUOkL1pG/ycgOmOYb4wQS6b8CsqO+H82
+	Ekd+15y0vDMOEaDbcu0VmZU=
+X-Google-Smtp-Source: AGHT+IEsQljel7SOO/Bsutvovti6Jf3zmzicRNLYYglxCWca3X4elleb8WRQOdJXiqmYXDr/tTy2qA==
+X-Received: by 2002:a19:9146:0:b0:50e:5ac7:2f83 with SMTP id y6-20020a199146000000b0050e5ac72f83mr84530lfj.55.1703108437086;
+        Wed, 20 Dec 2023 13:40:37 -0800 (PST)
 Received: from localhost ([185.220.101.166])
-        by smtp.gmail.com with ESMTPSA id wl1-20020a170907310100b00a236378a43fsm241250ejb.62.2023.12.20.13.40.34
+        by smtp.gmail.com with ESMTPSA id wb1-20020a170907d50100b00a2300127f26sm233133ejc.185.2023.12.20.13.40.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Dec 2023 13:40:34 -0800 (PST)
+        Wed, 20 Dec 2023 13:40:36 -0800 (PST)
 From: Maxim Mikityanskiy <maxtram95@gmail.com>
 To: Eduard Zingerman <eddyz87@gmail.com>,
 	Alexei Starovoitov <ast@kernel.org>,
@@ -79,9 +79,9 @@ Cc: John Fastabend <john.fastabend@gmail.com>,
 	linux-kselftest@vger.kernel.org,
 	netdev@vger.kernel.org,
 	Maxim Mikityanskiy <maxim@isovalent.com>
-Subject: [PATCH bpf-next 05/15] selftests/bpf: Add a test case for 32-bit spill tracking
-Date: Wed, 20 Dec 2023 23:40:03 +0200
-Message-ID: <20231220214013.3327288-6-maxtram95@gmail.com>
+Subject: [PATCH bpf-next 06/15] bpf: Add the assign_scalar_id_before_mov function
+Date: Wed, 20 Dec 2023 23:40:04 +0200
+Message-ID: <20231220214013.3327288-7-maxtram95@gmail.com>
 X-Mailer: git-send-email 2.42.1
 In-Reply-To: <20231220214013.3327288-1-maxtram95@gmail.com>
 References: <20231220214013.3327288-1-maxtram95@gmail.com>
@@ -95,55 +95,93 @@ Content-Transfer-Encoding: 8bit
 
 From: Maxim Mikityanskiy <maxim@isovalent.com>
 
-When a range check is performed on a register that was 32-bit spilled to
-the stack, the IDs of the two instances of the register are the same, so
-the range should also be the same.
+Extract the common code that generates a register ID for src_reg before
+MOV if needed into a new function. This function will also be used in
+a following commit.
 
 Signed-off-by: Maxim Mikityanskiy <maxim@isovalent.com>
 ---
- .../selftests/bpf/progs/verifier_spill_fill.c | 31 +++++++++++++++++++
- 1 file changed, 31 insertions(+)
+ kernel/bpf/verifier.c | 33 +++++++++++++++++++--------------
+ 1 file changed, 19 insertions(+), 14 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-index 84eccab36582..f2c1fe5b1dba 100644
---- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-@@ -737,4 +737,35 @@ __naked void stack_load_preserves_const_precision_subreg(void)
- 	: __clobber_common);
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 89f8c527ed3c..a703e3adedd3 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -4401,6 +4401,18 @@ static bool __is_pointer_value(bool allow_ptr_leaks,
+ 	return reg->type != SCALAR_VALUE;
  }
  
-+SEC("xdp")
-+__description("32-bit spilled reg range should be tracked")
-+__success __retval(0)
-+__naked void spill_32bit_range_track(void)
++static void assign_scalar_id_before_mov(struct bpf_verifier_env *env,
++					struct bpf_reg_state *src_reg)
 +{
-+	asm volatile("					\
-+	call %[bpf_ktime_get_ns];			\
-+	/* Make r0 bounded. */				\
-+	r0 &= 65535;					\
-+	/* Assign an ID to r0. */			\
-+	r1 = r0;					\
-+	/* 32-bit spill r0 to stack. */			\
-+	*(u32*)(r10 - 8) = r0;				\
-+	/* Boundary check on r0. */			\
-+	if r0 < 1 goto l0_%=;				\
-+	/* 32-bit fill r1 from stack. */		\
-+	r1 = *(u32*)(r10 - 8);				\
-+	/* r1 == r0 => r1 >= 1 always. */		\
-+	if r1 >= 1 goto l0_%=;				\
-+	/* Dead branch: the verifier should prune it.   \
-+	 * Do an invalid memory access if the verifier	\
-+	 * follows it.					\
-+	 */						\
-+	r0 = *(u64*)(r9 + 0);				\
-+l0_%=:	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_ktime_get_ns)
-+	: __clobber_all);
++	if (src_reg->type == SCALAR_VALUE && !src_reg->id &&
++	    !tnum_is_const(src_reg->var_off))
++		/* Ensure that src_reg has a valid ID that will be copied to
++		 * dst_reg and then will be used by find_equal_scalars() to
++		 * propagate min/max range.
++		 */
++		src_reg->id = ++env->id_gen;
 +}
 +
- char _license[] SEC("license") = "GPL";
+ /* Copy src state preserving dst->parent and dst->live fields */
+ static void copy_register_state(struct bpf_reg_state *dst, const struct bpf_reg_state *src)
+ {
+@@ -13886,20 +13898,13 @@ static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
+ 		if (BPF_SRC(insn->code) == BPF_X) {
+ 			struct bpf_reg_state *src_reg = regs + insn->src_reg;
+ 			struct bpf_reg_state *dst_reg = regs + insn->dst_reg;
+-			bool need_id = src_reg->type == SCALAR_VALUE && !src_reg->id &&
+-				       !tnum_is_const(src_reg->var_off);
+ 
+ 			if (BPF_CLASS(insn->code) == BPF_ALU64) {
+ 				if (insn->off == 0) {
+ 					/* case: R1 = R2
+ 					 * copy register state to dest reg
+ 					 */
+-					if (need_id)
+-						/* Assign src and dst registers the same ID
+-						 * that will be used by find_equal_scalars()
+-						 * to propagate min/max range.
+-						 */
+-						src_reg->id = ++env->id_gen;
++					assign_scalar_id_before_mov(env, src_reg);
+ 					copy_register_state(dst_reg, src_reg);
+ 					dst_reg->live |= REG_LIVE_WRITTEN;
+ 					dst_reg->subreg_def = DEF_NOT_SUBREG;
+@@ -13914,8 +13919,8 @@ static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
+ 						bool no_sext;
+ 
+ 						no_sext = src_reg->umax_value < (1ULL << (insn->off - 1));
+-						if (no_sext && need_id)
+-							src_reg->id = ++env->id_gen;
++						if (no_sext)
++							assign_scalar_id_before_mov(env, src_reg);
+ 						copy_register_state(dst_reg, src_reg);
+ 						if (!no_sext)
+ 							dst_reg->id = 0;
+@@ -13937,8 +13942,8 @@ static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
+ 					if (insn->off == 0) {
+ 						bool is_src_reg_u32 = src_reg->umax_value <= U32_MAX;
+ 
+-						if (is_src_reg_u32 && need_id)
+-							src_reg->id = ++env->id_gen;
++						if (is_src_reg_u32)
++							assign_scalar_id_before_mov(env, src_reg);
+ 						copy_register_state(dst_reg, src_reg);
+ 						/* Make sure ID is cleared if src_reg is not in u32
+ 						 * range otherwise dst_reg min/max could be incorrectly
+@@ -13952,8 +13957,8 @@ static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
+ 						/* case: W1 = (s8, s16)W2 */
+ 						bool no_sext = src_reg->umax_value < (1ULL << (insn->off - 1));
+ 
+-						if (no_sext && need_id)
+-							src_reg->id = ++env->id_gen;
++						if (no_sext)
++							assign_scalar_id_before_mov(env, src_reg);
+ 						copy_register_state(dst_reg, src_reg);
+ 						if (!no_sext)
+ 							dst_reg->id = 0;
 -- 
 2.42.1
 
