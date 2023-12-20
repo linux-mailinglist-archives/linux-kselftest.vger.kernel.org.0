@@ -1,62 +1,62 @@
-Return-Path: <linux-kselftest+bounces-2285-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2286-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5205A81A871
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Dec 2023 22:43:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 469FF81A875
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Dec 2023 22:44:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 255EC1C22F5B
-	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Dec 2023 21:43:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EF382289044
+	for <lists+linux-kselftest@lfdr.de>; Wed, 20 Dec 2023 21:44:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E6394D11E;
-	Wed, 20 Dec 2023 21:40:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F24C4D592;
+	Wed, 20 Dec 2023 21:40:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d5jS6oXP"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c40Gwhr0"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF6674C3B7;
-	Wed, 20 Dec 2023 21:40:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A04A4D138;
+	Wed, 20 Dec 2023 21:40:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-a2698cff486so13722966b.0;
-        Wed, 20 Dec 2023 13:40:42 -0800 (PST)
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-553fe292cffso138781a12.3;
+        Wed, 20 Dec 2023 13:40:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1703108441; x=1703713241; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1703108443; x=1703713243; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Gvv0pY6A6i2DfvrEtu8tnwcwTcSQg/Fj4m22tiCCEIc=;
-        b=d5jS6oXPIKO7rM6Xss9YBTwvHwHa7e4kICmeLlQAIrgWMFewzmfBB5GFWDO/DsaAK4
-         39uYaEIsV8dtQzDEKtpaCDrhQq3OxFExBlaeZTCj+dNlnklYHpETOGPW+fgw00vDjJfg
-         HgMLUnTM6u6cW7TS3pntQ/WUuxpkUQhhWTJVMKPFmD1uZev+bouB1Dxlqd/SEAUOtxTW
-         MKFCuh6TFBFt9Q+XsaSWkHehE9sWWt8/G+FH4bav+pjnMrIna21ZL41GBRomFOQTrDqJ
-         hGm8nFQdm0brQoD/+1zVm0uHQOU8ZS4QJAuAx4aZJRI4DXJ3Z6bHQCHOVcO5s8C7htim
-         mbXw==
+        bh=8Cmahq1oN8skftCnwm4onZq6EwCNDIEX8Tio8RQhdao=;
+        b=c40Gwhr06loa82rrib6ZQBuo6DNIAa0zeXy4KTIjIxnaK6ito/jcIu1txyFB/3XoIv
+         5WK/WylHzxrQTtzy+w0Kg6zJINPOOmemFdlXl2aB7duA1a+XH1jUT0u7v2PsoYxlPGv5
+         2f0SzrHn1E2g7iRgxfWqBoHAOmBUyvZL4Rl7nBFJXU6ZBdrqDPL0crkGZGxXLLwVlDbk
+         7cJa0TF4NyDhWq24v7YmKeN/8WV4DkspzCkKIuzrOGkOVg1wRIwJPkwoP138qVnbkM8x
+         AKXwR+2fpkxm8rnsk7RxTrgC7Y8xUbl+VpnOTTFoWqZ2aW/2jgJGidV6GsPOv07ru0fl
+         uuKw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703108441; x=1703713241;
+        d=1e100.net; s=20230601; t=1703108443; x=1703713243;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Gvv0pY6A6i2DfvrEtu8tnwcwTcSQg/Fj4m22tiCCEIc=;
-        b=dRn4WXV2be5Fxrvq0wA1kIVKGcpdzxWdr3e1I1G8/0PJJXIPd7Yg39vfO3KXPNwjhY
-         VmrjuvuFtL6rqeCewfVG0AgD4fJEVSeFzKrS8orKRDxOueI1a6RoX1wBnehe33Oymj7d
-         mMkf9IoQ4pXjmAKG2Wzaltcp+75y03eFMyQHiStn19u0V5xYW9bmXH4eOlHm+Po6Z2fJ
-         Y3m8jq2m33jFxEZFhNqRuEqDWkxfKQbv8fzCG94TDyXjcsaWxcbKeQNqdf0WHw+JPTjJ
-         OYZIZZ1HyFal9Z3byGAxfHNn6sBmNJtIFhRtaFtVuU5c6/lbTqFzAfpp2Y5cDqaOY+K7
-         rJ/w==
-X-Gm-Message-State: AOJu0YxQHLDvNKnEKUs3ICQq7ey6sfAcWCWSAiMJMp7x31tl9veGwdlR
-	QeyQ3liZq/VVcgeR+1HSjX4=
-X-Google-Smtp-Source: AGHT+IEG+vbZCfaPYkd+ZYiamB9M4+7BZMnOHPrP/ZTHlQLhYzCRyzlX8y93l+SaW1Q3qCTTcV6DPQ==
-X-Received: by 2002:a17:906:5ac9:b0:a23:3b67:a14d with SMTP id x9-20020a1709065ac900b00a233b67a14dmr1898025ejs.189.1703108440972;
-        Wed, 20 Dec 2023 13:40:40 -0800 (PST)
+        bh=8Cmahq1oN8skftCnwm4onZq6EwCNDIEX8Tio8RQhdao=;
+        b=IKfKLqp0LAPYiAjzrSRK67k0VBLGlVtP1aejxwbd+I9AhRheFjXP7uKPMggYt7s8ME
+         m9g+jlprztBDaiMkzs+2uyjOjYeFGSaY5o6CIjR7lfXqO1P3mD+uMQE9wEpSMa34XJ4R
+         5Tz+N8/cRPWeVFf1Gt7a8F5LZWOeYEY956vvbFIj/mDJfZIydj2yX3FrRvGKuZ3GOrN9
+         OOi/HPWANIU88Qlqg3u6ms958lB3k2JuvV/u12z0mQrORHa7WxXAD+lZq1GlAiF+oxDY
+         V2j7rlxAN7xm4NyWRn3B5t0ZUSSMkJ0piNimkwnxC1LUUgOGvcx3UE6oa8essmDJCrXQ
+         LXAA==
+X-Gm-Message-State: AOJu0YxSoH+NxRyxZD7C6LeF9xp7rVfYE98BOTnX/JwGUZqx1KUQ9O1y
+	ySc/gxTzGJE5Gy01b8APs+M=
+X-Google-Smtp-Source: AGHT+IHnLwAlzsVAnk/ixCkuoYt0PYs2nhoogYEqVM+Q06urlmHE+saw2KWviIOXbdVGZcInu7xfIQ==
+X-Received: by 2002:a50:8d8c:0:b0:54b:22a1:e6fe with SMTP id r12-20020a508d8c000000b0054b22a1e6femr5828623edh.7.1703108442750;
+        Wed, 20 Dec 2023 13:40:42 -0800 (PST)
 Received: from localhost ([185.220.101.166])
-        by smtp.gmail.com with ESMTPSA id ex17-20020a170907955100b00a269fa0d305sm189501ejc.8.2023.12.20.13.40.40
+        by smtp.gmail.com with ESMTPSA id z14-20020aa7cf8e000000b0055351aa7d64sm288745edx.81.2023.12.20.13.40.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Dec 2023 13:40:40 -0800 (PST)
+        Wed, 20 Dec 2023 13:40:42 -0800 (PST)
 From: Maxim Mikityanskiy <maxtram95@gmail.com>
 To: Eduard Zingerman <eddyz87@gmail.com>,
 	Alexei Starovoitov <ast@kernel.org>,
@@ -79,9 +79,9 @@ Cc: John Fastabend <john.fastabend@gmail.com>,
 	linux-kselftest@vger.kernel.org,
 	netdev@vger.kernel.org,
 	Maxim Mikityanskiy <maxim@isovalent.com>
-Subject: [PATCH bpf-next 08/15] bpf: Assign ID to scalars on spill
-Date: Wed, 20 Dec 2023 23:40:06 +0200
-Message-ID: <20231220214013.3327288-9-maxtram95@gmail.com>
+Subject: [PATCH bpf-next 09/15] selftests/bpf: Test assigning ID to scalars on spill
+Date: Wed, 20 Dec 2023 23:40:07 +0200
+Message-ID: <20231220214013.3327288-10-maxtram95@gmail.com>
 X-Mailer: git-send-email 2.42.1
 In-Reply-To: <20231220214013.3327288-1-maxtram95@gmail.com>
 References: <20231220214013.3327288-1-maxtram95@gmail.com>
@@ -95,56 +95,156 @@ Content-Transfer-Encoding: 8bit
 
 From: Maxim Mikityanskiy <maxim@isovalent.com>
 
-Currently, when a scalar bounded register is spilled to the stack, its
-ID is preserved, but only if was already assigned, i.e. if this register
-was MOVed before.
-
-Assign an ID on spill if none is set, so that equal scalars could be
-tracked if a register is spilled to the stack and filled into another
-register.
-
-One test is adjusted to reflect the change in register IDs.
+The previous commit implemented assigning IDs to registers holding
+scalars before spill. Add the test cases to check the new functionality.
 
 Signed-off-by: Maxim Mikityanskiy <maxim@isovalent.com>
 ---
- kernel/bpf/verifier.c                                     | 8 +++++++-
- .../selftests/bpf/progs/verifier_direct_packet_access.c   | 2 +-
- 2 files changed, 8 insertions(+), 2 deletions(-)
+ .../selftests/bpf/progs/verifier_spill_fill.c | 133 ++++++++++++++++++
+ 1 file changed, 133 insertions(+)
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index b757fdbbbdd2..caa768f1e369 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -4503,9 +4503,15 @@ static int check_stack_write_fixed_off(struct bpf_verifier_env *env,
+diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
+index f2c1fe5b1dba..86881eaab4e2 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
++++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
+@@ -768,4 +768,137 @@ l0_%=:	r0 = 0;						\
+ 	: __clobber_all);
+ }
  
- 	mark_stack_slot_scratched(env, spi);
- 	if (reg && !(off % BPF_REG_SIZE) && register_is_bounded(reg) && env->bpf_capable) {
-+		bool reg_value_fits;
++SEC("xdp")
++__description("64-bit spill of 64-bit reg should assign ID")
++__success __retval(0)
++__naked void spill_64bit_of_64bit_ok(void)
++{
++	asm volatile ("					\
++	/* Roll one bit to make the register inexact. */\
++	call %[bpf_get_prandom_u32];			\
++	r0 &= 0x80000000;				\
++	r0 <<= 32;					\
++	/* 64-bit spill r0 to stack - should assign an ID. */\
++	*(u64*)(r10 - 8) = r0;				\
++	/* 64-bit fill r1 from stack - should preserve the ID. */\
++	r1 = *(u64*)(r10 - 8);				\
++	/* Compare r1 with another register to trigger find_equal_scalars.\
++	 * Having one random bit is important here, otherwise the verifier cuts\
++	 * the corners.					\
++	 */						\
++	r2 = 0;						\
++	if r1 != r2 goto l0_%=;				\
++	/* The result of this comparison is predefined. */\
++	if r0 == r2 goto l0_%=;				\
++	/* Dead branch: the verifier should prune it. Do an invalid memory\
++	 * access if the verifier follows it.		\
++	 */						\
++	r0 = *(u64*)(r9 + 0);				\
++	exit;						\
++l0_%=:	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
 +
-+		reg_value_fits = get_reg_width(reg) <= BITS_PER_BYTE * size;
-+		/* Make sure that reg had an ID to build a relation on spill. */
-+		if (reg_value_fits)
-+			assign_scalar_id_before_mov(env, reg);
- 		save_register_state(env, state, spi, reg, size);
- 		/* Break the relation on a narrowing spill. */
--		if (get_reg_width(reg) > BITS_PER_BYTE * size)
-+		if (!reg_value_fits)
- 			state->stack[spi].spilled_ptr.id = 0;
- 	} else if (!reg && !(off % BPF_REG_SIZE) && is_bpf_st_mem(insn) &&
- 		   insn->imm != 0 && env->bpf_capable) {
-diff --git a/tools/testing/selftests/bpf/progs/verifier_direct_packet_access.c b/tools/testing/selftests/bpf/progs/verifier_direct_packet_access.c
-index be95570ab382..28b602ac9cbe 100644
---- a/tools/testing/selftests/bpf/progs/verifier_direct_packet_access.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_direct_packet_access.c
-@@ -568,7 +568,7 @@ l0_%=:	r0 = 0;						\
- 
- SEC("tc")
- __description("direct packet access: test23 (x += pkt_ptr, 4)")
--__failure __msg("invalid access to packet, off=0 size=8, R5(id=2,off=0,r=0)")
-+__failure __msg("invalid access to packet, off=0 size=8, R5(id=3,off=0,r=0)")
- __flag(BPF_F_ANY_ALIGNMENT)
- __naked void test23_x_pkt_ptr_4(void)
- {
++SEC("xdp")
++__description("32-bit spill of 32-bit reg should assign ID")
++__success __retval(0)
++__naked void spill_32bit_of_32bit_ok(void)
++{
++	asm volatile ("					\
++	/* Roll one bit to make the register inexact. */\
++	call %[bpf_get_prandom_u32];			\
++	w0 &= 0x80000000;				\
++	/* 32-bit spill r0 to stack - should assign an ID. */\
++	*(u32*)(r10 - 8) = r0;				\
++	/* 32-bit fill r1 from stack - should preserve the ID. */\
++	r1 = *(u32*)(r10 - 8);				\
++	/* Compare r1 with another register to trigger find_equal_scalars.\
++	 * Having one random bit is important here, otherwise the verifier cuts\
++	 * the corners.					\
++	 */						\
++	r2 = 0;						\
++	if r1 != r2 goto l0_%=;				\
++	/* The result of this comparison is predefined. */\
++	if r0 == r2 goto l0_%=;				\
++	/* Dead branch: the verifier should prune it. Do an invalid memory\
++	 * access if the verifier follows it.		\
++	 */						\
++	r0 = *(u64*)(r9 + 0);				\
++	exit;						\
++l0_%=:	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++SEC("xdp")
++__description("16-bit spill of 16-bit reg should assign ID")
++__success __retval(0)
++__naked void spill_16bit_of_16bit_ok(void)
++{
++	asm volatile ("					\
++	/* Roll one bit to make the register inexact. */\
++	call %[bpf_get_prandom_u32];			\
++	r0 &= 0x8000;					\
++	/* 16-bit spill r0 to stack - should assign an ID. */\
++	*(u16*)(r10 - 8) = r0;				\
++	/* 16-bit fill r1 from stack - should preserve the ID. */\
++	r1 = *(u16*)(r10 - 8);				\
++	/* Compare r1 with another register to trigger find_equal_scalars.\
++	 * Having one random bit is important here, otherwise the verifier cuts\
++	 * the corners.					\
++	 */						\
++	r2 = 0;						\
++	if r1 != r2 goto l0_%=;				\
++	/* The result of this comparison is predefined. */\
++	if r0 == r2 goto l0_%=;				\
++	/* Dead branch: the verifier should prune it. Do an invalid memory\
++	 * access if the verifier follows it.		\
++	 */						\
++	r0 = *(u64*)(r9 + 0);				\
++	exit;						\
++l0_%=:	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
++SEC("xdp")
++__description("8-bit spill of 8-bit reg should assign ID")
++__success __retval(0)
++__naked void spill_8bit_of_8bit_ok(void)
++{
++	asm volatile ("					\
++	/* Roll one bit to make the register inexact. */\
++	call %[bpf_get_prandom_u32];			\
++	r0 &= 0x80;					\
++	/* 8-bit spill r0 to stack - should assign an ID. */\
++	*(u8*)(r10 - 8) = r0;				\
++	/* 8-bit fill r1 from stack - should preserve the ID. */\
++	r1 = *(u8*)(r10 - 8);				\
++	/* Compare r1 with another register to trigger find_equal_scalars.\
++	 * Having one random bit is important here, otherwise the verifier cuts\
++	 * the corners.					\
++	 */						\
++	r2 = 0;						\
++	if r1 != r2 goto l0_%=;				\
++	/* The result of this comparison is predefined. */\
++	if r0 == r2 goto l0_%=;				\
++	/* Dead branch: the verifier should prune it. Do an invalid memory\
++	 * access if the verifier follows it.		\
++	 */						\
++	r0 = *(u64*)(r9 + 0);				\
++	exit;						\
++l0_%=:	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32)
++	: __clobber_all);
++}
++
+ char _license[] SEC("license") = "GPL";
 -- 
 2.42.1
 
