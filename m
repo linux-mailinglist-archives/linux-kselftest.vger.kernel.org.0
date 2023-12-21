@@ -1,116 +1,117 @@
-Return-Path: <linux-kselftest+bounces-2318-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2319-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C1EB81BF74
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Dec 2023 21:10:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 560B781BFAD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Dec 2023 21:40:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8F4CB1C2476B
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Dec 2023 20:10:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DDE3C289ED5
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Dec 2023 20:40:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F5B2745E5;
-	Thu, 21 Dec 2023 20:10:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A7267690C;
+	Thu, 21 Dec 2023 20:40:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="htjTw8g8"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dlSSALkP"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13D0773191
-	for <linux-kselftest@vger.kernel.org>; Thu, 21 Dec 2023 20:10:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f182.google.com with SMTP id e9e14a558f8ab-35fd239f2cfso257195ab.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Dec 2023 12:10:18 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A0CE760BF
+	for <linux-kselftest@vger.kernel.org>; Thu, 21 Dec 2023 20:40:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-28c0565df34so156256a91.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 21 Dec 2023 12:40:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1703189418; x=1703794218; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KuNcu+xSyjheqKIJeQgDsNTkefgj8XV+ZlyaXQLWUtQ=;
-        b=htjTw8g8ZMl5/1bCZWg7QJZ0R2bBW3H0bSln7Nk2PsHatqe4pZT9je6JGPKugqgeMB
-         1p2YJvrhC+ApTKUGcYyREZFb0dq3iVhJFoyCUcYItKd2rxxcfBSJXiUoqSdtgjLYjcnK
-         sadUeqkJ55d8+Dw/4ctRnY7fGXNQr4J59/yeA=
+        d=linaro.org; s=google; t=1703191206; x=1703796006; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=y2n7W31aNWMIkIL9wLBmZYYyUB9rGbrcDxhFrQaq9TQ=;
+        b=dlSSALkPwOidhgB447+auCT8KSl/M5ZtN6RnYY2yh0k+vPE1cLK+IbgGARvDV+y3OF
+         yTPCCeavvymFh6BaOFPUOSv8gSdTVfs5lYZJX05L2cYR3fl+vrWxYMhS7G+6AJpuHNco
+         Flb0kyvjzuqjXDYOsCS9+OEC2vPm9FbYVAN238DLWjv5rkdm8HmMXFxUjHLedgkkHtKX
+         jNBomSrfoMdg7SLxUsSE7lFhp5jIDV8gjGCboJQ3FryOMykUfsJ2cmvAJ7WGT5SnNgBx
+         fvtkYPlravxYRgims4imvfGGjpk6kUtoTwnfgSLqg1QYbugrnATzNTOe8uPZUxylwpZk
+         gVBQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703189418; x=1703794218;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KuNcu+xSyjheqKIJeQgDsNTkefgj8XV+ZlyaXQLWUtQ=;
-        b=bB9T82kSZ9fYD1wsycmbTbgKpVycsU7yEwkWPq9tsara37rfKaSHFH+NZ4aJ8e7602
-         JVXn1gaH842UzLn7OGoKuLh7/2DD0aY63QIF5cSDjaWsiHyTODjC/LOW/hg4XY8vx43a
-         kDK1CKd1r5tB9NKpV2Ul5vB+NYD5d+b7ZH3ROOETBuCBlwN4NAMs4k/eFh/diqGbw5+2
-         caPQJJkp11lD1YUIrBRXfR8Rt1u55drVx7k/inJnzHVa22HP+8rjuJF6nymrbKSZdcic
-         pFK7psN7AWKC4uhR2KUVmkmgogNRigWFZHKaG3pXNVeMCo640yWgUsjRcZ25j9eedraY
-         SqgA==
-X-Gm-Message-State: AOJu0YwTyNMvDWhYIrqLATjWCHfiVZSZDKwxssnwmhcX2NYKbxki6NV/
-	nQrk2e3CeWv0Gebz1btEAluxpBwnrQ9v8w==
-X-Google-Smtp-Source: AGHT+IF1UnXSpqilXx5/i0ZEyW2V9x9IQmgHrp0PwIlsARHqqwSbXr2zVL9aQML5DMWwebj2OtVrKg==
-X-Received: by 2002:a05:6e02:1cab:b0:35f:d862:e451 with SMTP id x11-20020a056e021cab00b0035fd862e451mr384657ill.2.1703189418192;
-        Thu, 21 Dec 2023 12:10:18 -0800 (PST)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id f8-20020a056e020b4800b0035fc47d9014sm694293ilu.13.2023.12.21.12.10.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Dec 2023 12:10:17 -0800 (PST)
-Message-ID: <4fb5fac7-fa3a-4988-b5f4-8025864c4d37@linuxfoundation.org>
-Date: Thu, 21 Dec 2023 13:10:16 -0700
+        d=1e100.net; s=20230601; t=1703191206; x=1703796006;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=y2n7W31aNWMIkIL9wLBmZYYyUB9rGbrcDxhFrQaq9TQ=;
+        b=ciH+IgpaRj4mY1PHcnOs7XFxvSIeIxUv21u0SP1Ky2zd6b3JsL+0hhKURkfPWgaU9m
+         XlwCRHuWl68lTrZ4+jCM/U+01Ckr9xTdjCpOuw/77VeR0aSfxjla7ySyzo5yeTe7afXN
+         tCwLzKDYrRd/3moZBxXVR5KuXy/cT+qg4hiquKM4P7oxsn6GUEAengKHAdVMPQXH3n/W
+         b3gkvwXVYpMZUjbly1w80+MoQqMEb/MnP7kTJCNah/Fu7gR97hyGPZXbQRDd3Zl7KVkk
+         HahX1fmtU3YzfYWnVyaSDKGYvrFWOR/32YzSzrFJeAKLDKLXHsv1S+7ooP5p9KBaL0IT
+         DRfA==
+X-Gm-Message-State: AOJu0YxlbCEPCha923oG1yRi98kmtNs7NVgTYyF/Sa0LbRnlnQBqQBnm
+	Q4Zt+fQsL7sTV1uXy+yK1x9wB3V1A46vamfvOF2e+y0PMEpiEw==
+X-Google-Smtp-Source: AGHT+IHqBBi7MQB9335VyFpUAMC3Wig4NgFozmRCB+kcn2IAn4Xucox+CKjMVBCYYtR61k48BQTm7A==
+X-Received: by 2002:a17:90a:7285:b0:28b:e0e9:4816 with SMTP id e5-20020a17090a728500b0028be0e94816mr313510pjg.65.1703191206378;
+        Thu, 21 Dec 2023 12:40:06 -0800 (PST)
+Received: from vps.terceiro.xyz (vps.terceiro.xyz. [2a02:4780:14:7710::1])
+        by smtp.gmail.com with ESMTPSA id nh24-20020a17090b365800b00287731b0ceasm5842518pjb.13.2023.12.21.12.40.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Dec 2023 12:40:05 -0800 (PST)
+Received: from localhost (unknown [IPv6:2804:14d:7224:8745:26f4:3599:ce80:10])
+	by vps.terceiro.xyz (Postfix) with ESMTPSA id E4E5D43EA0;
+	Thu, 21 Dec 2023 17:40:01 -0300 (-03)
+From: Antonio Terceiro <antonio.terceiro@linaro.org>
+To: Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests: uevent: use shared makefile library
+Date: Thu, 21 Dec 2023 17:38:47 -0300
+Message-ID: <20231221203849.339025-1-antonio.terceiro@linaro.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND v4 0/3] livepatch: Move modules to selftests and
- add a new test
-Content-Language: en-US
-To: Marcos Paulo de Souza <mpdesouza@suse.com>, Shuah Khan
- <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- Alexander Gordeev <agordeev@linux.ibm.com>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- Sven Schnelle <svens@linux.ibm.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
- Jiri Kosina <jikos@kernel.org>, Miroslav Benes <mbenes@suse.cz>,
- Petr Mladek <pmladek@suse.com>, Joe Lawrence <joe.lawrence@redhat.com>
-Cc: linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
- live-patching@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
-References: <20231220-send-lp-kselftests-v4-0-3458ec1b1a38@suse.com>
- <55b717dba239f3bedf0da7e25925e390a63459f5.camel@suse.com>
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <55b717dba239f3bedf0da7e25925e390a63459f5.camel@suse.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 12/21/23 05:17, Marcos Paulo de Souza wrote:
-> On Wed, 2023-12-20 at 13:53 -0300, Marcos Paulo de Souza wrote:
->> Changes in v4:
->> * Documented how to compile the livepatch selftests without running
->> the
->>    tests (Joe)
->> * Removed the mention to lib/livepatch on MAINTAINERS file, reported
->> by
->>    checkpatch.
->>
-> 
-> To clarify: this is not a resend, this is the v4 that people were
-> waiting for. I made a mistake with b4 tool, that first I sent the email
-> just to myself, for testing, and it bumped the version to v5, but I
-> asked it to "resend" the v4, but it ended up adding the "RESEND" to the
-> series.
-> 
-> Please review this patchset and ignore the RESEND word.
-> 
-> Thanks to Petr Mladek for spotting my mistake.
-> 
+This makes the uevent selftests build not write to the source tree
+unconditionally, as that breaks out of tree builds when the source tree
+is read-only. It also avoids leaving a git repository in a dirty state
+after a build.
 
-Thank for the clarification. I was wondering why this is a RESEND :)
-I will wait for reviewers to comment on this before pulling them in
-for Linux 6.8-rc1.
+Signed-off-by: Antonio Terceiro <antonio.terceiro@linaro.org>
+---
+ tools/testing/selftests/uevent/Makefile | 16 ++++------------
+ 1 file changed, 4 insertions(+), 12 deletions(-)
 
-thanks,
--- Shuah
+diff --git a/tools/testing/selftests/uevent/Makefile b/tools/testing/selftests/uevent/Makefile
+index f7baa9aa2932..9d1ba09baa90 100644
+--- a/tools/testing/selftests/uevent/Makefile
++++ b/tools/testing/selftests/uevent/Makefile
+@@ -1,17 +1,9 @@
+ # SPDX-License-Identifier: GPL-2.0
+ all:
+ 
+-include ../lib.mk
+-
+-.PHONY: all clean
+-
+-BINARIES := uevent_filtering
+-CFLAGS += -Wl,-no-as-needed -Wall
+-
+-uevent_filtering: uevent_filtering.c ../kselftest.h ../kselftest_harness.h
+-	$(CC) $(CFLAGS) $< -o $@
++# SPDX-License-Identifier: GPL-2.0
++CFLAGS += -Wl,-no-as-needed -Wall $(KHDR_INCLUDES)
+ 
+-TEST_PROGS += $(BINARIES)
+-EXTRA_CLEAN := $(BINARIES)
++TEST_GEN_PROGS = uevent_filtering
+ 
+-all: $(BINARIES)
++include ../lib.mk
+-- 
+2.43.0
 
 
