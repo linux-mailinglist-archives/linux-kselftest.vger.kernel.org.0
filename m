@@ -1,25 +1,25 @@
-Return-Path: <linux-kselftest+bounces-2308-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2309-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74FB181BB18
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Dec 2023 16:41:52 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D636B81BB1A
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Dec 2023 16:42:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0385D1F22DDD
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Dec 2023 15:41:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 060CC1C25E8D
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Dec 2023 15:42:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3AFB634EC;
-	Thu, 21 Dec 2023 15:40:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3434663506;
+	Thu, 21 Dec 2023 15:40:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a4eFZ26C"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MVnZkFgk"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F14505991B;
-	Thu, 21 Dec 2023 15:39:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CD1A5992A;
+	Thu, 21 Dec 2023 15:39:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
@@ -27,23 +27,23 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   t=1703173199; x=1734709199;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=k4N1OyXS3Ua8EcKKoVBQJzRFeyXvDcufBXaBm2M8Qio=;
-  b=a4eFZ26CoRmrurXdvwmIaVz7wzzy1bCGyua4t9K0zzIps8ppyvdzUn8s
-   rNyvIJU5/q+eo8mAA97SpP73Z8WOvoAbCuZRYZtT4TdKJZ1HRYfqfIv6A
-   i3mIAfSKHL2OUw03oXqdFxtBW9vMOFrp/Svf+t3LukygJeZHDv6M/zs6a
-   zIopBwPlCO5a6IcdAwOmKHIPeHqCvWKWkO7VjKfB8ai/8qgwiXFN2Ktkm
-   ijUJ+5zkNMXvYqwb1jGAmjNCz9UPmZAEAVMsNVKWlv2qwuk4YR4X4prK7
-   KCxjZxOQlSDbNy+occE4b0Je6gmo/0OtC43PnWsBITMqMwWoQQF8B/iFK
+  bh=GPQp6rwIf4Fl++tm4er6+ZlRmU0ZXoDE0rmuYG9tedk=;
+  b=MVnZkFgkaJ+Elt3hiFvrU70JzopZ5DElROxmnHCw/xpY6bybnF4E1na5
+   0qDDH7y1zHXWJM80fpKj802tyIT/eDgciCDB1Qu+gIc6RWhlbsyf1kMZE
+   T0/vXJlj7QFG+gQNv6OMAV9hBCIhi6CcHCKRP713AjoiOMeIZwgJRGRbf
+   KmWoZzsEtKFHZpkJQ6Du8C1YtLl9E8Yq9h64FUnGwoKgdxMl/bPsg8nVi
+   4556OoPHpEAQ5hcCavJ671gtw/ruw+79TYdi5k6lBMcVxK8TcjW/PndUJ
+   n2RZ/YtEb0WVUM8epRxwjNTwiXhLNmLWOkIUzpZ18Ps3KInJBoIF7Kvqh
    A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10931"; a="393155575"
+X-IronPort-AV: E=McAfee;i="6600,9927,10931"; a="393155588"
 X-IronPort-AV: E=Sophos;i="6.04,293,1695711600"; 
-   d="scan'208";a="393155575"
+   d="scan'208";a="393155588"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2023 07:39:55 -0800
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Dec 2023 07:39:56 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10931"; a="949957263"
+X-IronPort-AV: E=McAfee;i="6600,9927,10931"; a="949957267"
 X-IronPort-AV: E=Sophos;i="6.04,293,1695711600"; 
-   d="scan'208";a="949957263"
+   d="scan'208";a="949957267"
 Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
   by orsmga005.jf.intel.com with ESMTP; 21 Dec 2023 07:39:55 -0800
 From: Yi Liu <yi.l.liu@intel.com>
@@ -74,9 +74,9 @@ Cc: cohuck@redhat.com,
 	xin.zeng@intel.com,
 	yan.y.zhao@intel.com,
 	j.granados@samsung.com
-Subject: [PATCH v7 7/9] iommu/vt-d: Allow qi_submit_sync() to return the QI faults
-Date: Thu, 21 Dec 2023 07:39:46 -0800
-Message-Id: <20231221153948.119007-8-yi.l.liu@intel.com>
+Subject: [PATCH v7 8/9] iommu/vt-d: Convert pasid based cache invalidation to return QI fault
+Date: Thu, 21 Dec 2023 07:39:47 -0800
+Message-Id: <20231221153948.119007-9-yi.l.liu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231221153948.119007-1-yi.l.liu@intel.com>
 References: <20231221153948.119007-1-yi.l.liu@intel.com>
@@ -90,201 +90,220 @@ Content-Transfer-Encoding: 8bit
 
 From: Lu Baolu <baolu.lu@linux.intel.com>
 
-This allows qi_submit_sync() to return back faults to callers.
+This makes the pasid based cache invalidation to return QI faults to callers.
+This is needed when usersapce wants to invalidate cache after modifying the
+stage-1 page table used in nested translation.
 
 Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 Signed-off-by: Yi Liu <yi.l.liu@intel.com>
 ---
- drivers/iommu/intel/dmar.c          | 29 ++++++++++++++++++-----------
- drivers/iommu/intel/iommu.h         |  2 +-
- drivers/iommu/intel/irq_remapping.c |  2 +-
- drivers/iommu/intel/pasid.c         |  2 +-
- drivers/iommu/intel/svm.c           |  6 +++---
- 5 files changed, 24 insertions(+), 17 deletions(-)
+ drivers/iommu/intel/dmar.c  | 13 +++++++------
+ drivers/iommu/intel/iommu.c | 12 ++++++------
+ drivers/iommu/intel/iommu.h |  6 +++---
+ drivers/iommu/intel/pasid.c | 12 +++++++-----
+ drivers/iommu/intel/svm.c   |  8 ++++----
+ 5 files changed, 27 insertions(+), 24 deletions(-)
 
 diff --git a/drivers/iommu/intel/dmar.c b/drivers/iommu/intel/dmar.c
-index 23cb80d62a9a..a3e0cb720e06 100644
+index a3e0cb720e06..83e37487f46a 100644
 --- a/drivers/iommu/intel/dmar.c
 +++ b/drivers/iommu/intel/dmar.c
-@@ -1267,7 +1267,8 @@ static void qi_dump_fault(struct intel_iommu *iommu, u32 fault)
- 	       (unsigned long long)desc->qw1);
- }
- 
--static int qi_check_fault(struct intel_iommu *iommu, int index, int wait_index)
-+static int qi_check_fault(struct intel_iommu *iommu, int index,
-+			  int wait_index, u32 *fsts)
- {
- 	u32 fault;
- 	int head, tail;
-@@ -1278,8 +1279,12 @@ static int qi_check_fault(struct intel_iommu *iommu, int index, int wait_index)
- 		return -EAGAIN;
- 
- 	fault = readl(iommu->reg + DMAR_FSTS_REG);
--	if (fault & (DMA_FSTS_IQE | DMA_FSTS_ITE | DMA_FSTS_ICE))
-+	fault &= DMA_FSTS_IQE | DMA_FSTS_ITE | DMA_FSTS_ICE;
-+	if (fault) {
-+		if (fsts)
-+			*fsts |= fault;
- 		qi_dump_fault(iommu, fault);
-+	}
- 
- 	/*
- 	 * If IQE happens, the head points to the descriptor associated
-@@ -1342,9 +1347,11 @@ static int qi_check_fault(struct intel_iommu *iommu, int index, int wait_index)
-  * time, a wait descriptor will be appended to each submission to ensure
-  * hardware has completed the invalidation before return. Wait descriptors
-  * can be part of the submission but it will not be polled for completion.
-+ * If callers are interested in the QI faults that occur during the handling
-+ * of requests, the QI faults are saved in @fault.
-  */
- int qi_submit_sync(struct intel_iommu *iommu, struct qi_desc *desc,
--		   unsigned int count, unsigned long options)
-+		   unsigned int count, unsigned long options, u32 *fault)
- {
- 	struct q_inval *qi = iommu->qi;
- 	s64 devtlb_start_ktime = 0;
-@@ -1430,7 +1437,7 @@ int qi_submit_sync(struct intel_iommu *iommu, struct qi_desc *desc,
- 		 * a deadlock where the interrupt context can wait indefinitely
- 		 * for free slots in the queue.
- 		 */
--		rc = qi_check_fault(iommu, index, wait_index);
-+		rc = qi_check_fault(iommu, index, wait_index, fault);
- 		if (rc)
- 			break;
- 
-@@ -1476,7 +1483,7 @@ void qi_global_iec(struct intel_iommu *iommu)
- 	desc.qw3 = 0;
- 
- 	/* should never fail */
--	qi_submit_sync(iommu, &desc, 1, 0);
-+	qi_submit_sync(iommu, &desc, 1, 0, NULL);
- }
- 
- void qi_flush_context(struct intel_iommu *iommu, u16 did, u16 sid, u8 fm,
-@@ -1490,7 +1497,7 @@ void qi_flush_context(struct intel_iommu *iommu, u16 did, u16 sid, u8 fm,
- 	desc.qw2 = 0;
- 	desc.qw3 = 0;
- 
--	qi_submit_sync(iommu, &desc, 1, 0);
-+	qi_submit_sync(iommu, &desc, 1, 0, NULL);
- }
- 
- void qi_flush_iotlb(struct intel_iommu *iommu, u16 did, u64 addr,
-@@ -1514,7 +1521,7 @@ void qi_flush_iotlb(struct intel_iommu *iommu, u16 did, u64 addr,
- 	desc.qw2 = 0;
- 	desc.qw3 = 0;
- 
--	qi_submit_sync(iommu, &desc, 1, 0);
-+	qi_submit_sync(iommu, &desc, 1, 0, NULL);
+@@ -1525,7 +1525,7 @@ void qi_flush_iotlb(struct intel_iommu *iommu, u16 did, u64 addr,
  }
  
  void qi_flush_dev_iotlb(struct intel_iommu *iommu, u16 sid, u16 pfsid,
-@@ -1545,7 +1552,7 @@ void qi_flush_dev_iotlb(struct intel_iommu *iommu, u16 sid, u16 pfsid,
+-			u16 qdep, u64 addr, unsigned mask)
++			u16 qdep, u64 addr, unsigned mask, u32 *fault)
+ {
+ 	struct qi_desc desc;
+ 
+@@ -1552,12 +1552,12 @@ void qi_flush_dev_iotlb(struct intel_iommu *iommu, u16 sid, u16 pfsid,
  	desc.qw2 = 0;
  	desc.qw3 = 0;
  
--	qi_submit_sync(iommu, &desc, 1, 0);
-+	qi_submit_sync(iommu, &desc, 1, 0, NULL);
+-	qi_submit_sync(iommu, &desc, 1, 0, NULL);
++	qi_submit_sync(iommu, &desc, 1, 0, fault);
  }
  
  /* PASID-based IOTLB invalidation */
-@@ -1586,7 +1593,7 @@ void qi_flush_piotlb(struct intel_iommu *iommu, u16 did, u32 pasid, u64 addr,
+ void qi_flush_piotlb(struct intel_iommu *iommu, u16 did, u32 pasid, u64 addr,
+-		     unsigned long npages, bool ih)
++		     unsigned long npages, bool ih, u32 *fault)
+ {
+ 	struct qi_desc desc = {.qw2 = 0, .qw3 = 0};
+ 
+@@ -1593,12 +1593,13 @@ void qi_flush_piotlb(struct intel_iommu *iommu, u16 did, u32 pasid, u64 addr,
  				QI_EIOTLB_AM(mask);
  	}
  
--	qi_submit_sync(iommu, &desc, 1, 0);
-+	qi_submit_sync(iommu, &desc, 1, 0, NULL);
+-	qi_submit_sync(iommu, &desc, 1, 0, NULL);
++	qi_submit_sync(iommu, &desc, 1, 0, fault);
  }
  
  /* PASID-based device IOTLB Invalidate */
-@@ -1639,7 +1646,7 @@ void qi_flush_dev_iotlb_pasid(struct intel_iommu *iommu, u16 sid, u16 pfsid,
+ void qi_flush_dev_iotlb_pasid(struct intel_iommu *iommu, u16 sid, u16 pfsid,
+-			      u32 pasid,  u16 qdep, u64 addr, unsigned int size_order)
++			      u32 pasid,  u16 qdep, u64 addr,
++			      unsigned int size_order, u32 *fault)
+ {
+ 	unsigned long mask = 1UL << (VTD_PAGE_SHIFT + size_order - 1);
+ 	struct qi_desc desc = {.qw1 = 0, .qw2 = 0, .qw3 = 0};
+@@ -1646,7 +1647,7 @@ void qi_flush_dev_iotlb_pasid(struct intel_iommu *iommu, u16 sid, u16 pfsid,
  		desc.qw1 |= QI_DEV_EIOTLB_SIZE;
  	}
  
--	qi_submit_sync(iommu, &desc, 1, 0);
-+	qi_submit_sync(iommu, &desc, 1, 0, NULL);
+-	qi_submit_sync(iommu, &desc, 1, 0, NULL);
++	qi_submit_sync(iommu, &desc, 1, 0, fault);
  }
  
  void qi_flush_pasid_cache(struct intel_iommu *iommu, u16 did,
-@@ -1649,7 +1656,7 @@ void qi_flush_pasid_cache(struct intel_iommu *iommu, u16 did,
- 
- 	desc.qw0 = QI_PC_PASID(pasid) | QI_PC_DID(did) |
- 			QI_PC_GRAN(granu) | QI_PC_TYPE;
--	qi_submit_sync(iommu, &desc, 1, 0);
-+	qi_submit_sync(iommu, &desc, 1, 0, NULL);
+diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
+index 897159dba47d..68e494f1d03a 100644
+--- a/drivers/iommu/intel/iommu.c
++++ b/drivers/iommu/intel/iommu.c
+@@ -1462,7 +1462,7 @@ static void __iommu_flush_dev_iotlb(struct device_domain_info *info,
+ 	sid = info->bus << 8 | info->devfn;
+ 	qdep = info->ats_qdep;
+ 	qi_flush_dev_iotlb(info->iommu, sid, info->pfsid,
+-			   qdep, addr, mask);
++			   qdep, addr, mask, NULL);
+ 	quirk_extra_dev_tlb_flush(info, addr, mask, IOMMU_NO_PASID, qdep);
  }
  
- /*
+@@ -1490,7 +1490,7 @@ static void iommu_flush_dev_iotlb(struct dmar_domain *domain,
+ 					 PCI_DEVID(info->bus, info->devfn),
+ 					 info->pfsid, dev_pasid->pasid,
+ 					 info->ats_qdep, addr,
+-					 mask);
++					 mask, NULL);
+ 	}
+ 	spin_unlock_irqrestore(&domain->lock, flags);
+ }
+@@ -1505,10 +1505,10 @@ static void domain_flush_pasid_iotlb(struct intel_iommu *iommu,
+ 
+ 	spin_lock_irqsave(&domain->lock, flags);
+ 	list_for_each_entry(dev_pasid, &domain->dev_pasids, link_domain)
+-		qi_flush_piotlb(iommu, did, dev_pasid->pasid, addr, npages, ih);
++		qi_flush_piotlb(iommu, did, dev_pasid->pasid, addr, npages, ih, NULL);
+ 
+ 	if (!list_empty(&domain->devices))
+-		qi_flush_piotlb(iommu, did, IOMMU_NO_PASID, addr, npages, ih);
++		qi_flush_piotlb(iommu, did, IOMMU_NO_PASID, addr, npages, ih, NULL);
+ 	spin_unlock_irqrestore(&domain->lock, flags);
+ }
+ 
+@@ -5195,10 +5195,10 @@ void quirk_extra_dev_tlb_flush(struct device_domain_info *info,
+ 	sid = PCI_DEVID(info->bus, info->devfn);
+ 	if (pasid == IOMMU_NO_PASID) {
+ 		qi_flush_dev_iotlb(info->iommu, sid, info->pfsid,
+-				   qdep, address, mask);
++				   qdep, address, mask, NULL);
+ 	} else {
+ 		qi_flush_dev_iotlb_pasid(info->iommu, sid, info->pfsid,
+-					 pasid, qdep, address, mask);
++					 pasid, qdep, address, mask, NULL);
+ 	}
+ }
+ 
 diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
-index ce030c5b5772..c6de958e4f54 100644
+index c6de958e4f54..ce9bd08dcd05 100644
 --- a/drivers/iommu/intel/iommu.h
 +++ b/drivers/iommu/intel/iommu.h
-@@ -881,7 +881,7 @@ void qi_flush_pasid_cache(struct intel_iommu *iommu, u16 did, u64 granu,
- 			  u32 pasid);
+@@ -866,14 +866,14 @@ void qi_flush_context(struct intel_iommu *iommu, u16 did,
+ void qi_flush_iotlb(struct intel_iommu *iommu, u16 did, u64 addr,
+ 		    unsigned int size_order, u64 type);
+ void qi_flush_dev_iotlb(struct intel_iommu *iommu, u16 sid, u16 pfsid,
+-			u16 qdep, u64 addr, unsigned mask);
++			u16 qdep, u64 addr, unsigned mask, u32 *fault);
  
- int qi_submit_sync(struct intel_iommu *iommu, struct qi_desc *desc,
--		   unsigned int count, unsigned long options);
-+		   unsigned int count, unsigned long options, u32 *fault);
- /*
-  * Options used in qi_submit_sync:
-  * QI_OPT_WAIT_DRAIN - Wait for PRQ drain completion, spec 6.5.2.8.
-diff --git a/drivers/iommu/intel/irq_remapping.c b/drivers/iommu/intel/irq_remapping.c
-index 29b9e55dcf26..f834afa3672d 100644
---- a/drivers/iommu/intel/irq_remapping.c
-+++ b/drivers/iommu/intel/irq_remapping.c
-@@ -153,7 +153,7 @@ static int qi_flush_iec(struct intel_iommu *iommu, int index, int mask)
- 	desc.qw2 = 0;
- 	desc.qw3 = 0;
+ void qi_flush_piotlb(struct intel_iommu *iommu, u16 did, u32 pasid, u64 addr,
+-		     unsigned long npages, bool ih);
++		     unsigned long npages, bool ih, u32 *fault);
  
--	return qi_submit_sync(iommu, &desc, 1, 0);
-+	return qi_submit_sync(iommu, &desc, 1, 0, NULL);
- }
- 
- static int modify_irte(struct irq_2_iommu *irq_iommu,
+ void qi_flush_dev_iotlb_pasid(struct intel_iommu *iommu, u16 sid, u16 pfsid,
+ 			      u32 pasid, u16 qdep, u64 addr,
+-			      unsigned int size_order);
++			      unsigned int size_order, u32 *fault);
+ void quirk_extra_dev_tlb_flush(struct device_domain_info *info,
+ 			       unsigned long address, unsigned long pages,
+ 			       u32 pasid, u16 qdep);
 diff --git a/drivers/iommu/intel/pasid.c b/drivers/iommu/intel/pasid.c
-index 74e8e4c17e81..67f924760ba8 100644
+index 67f924760ba8..4a7fe551d8a6 100644
 --- a/drivers/iommu/intel/pasid.c
 +++ b/drivers/iommu/intel/pasid.c
-@@ -467,7 +467,7 @@ pasid_cache_invalidation_with_pasid(struct intel_iommu *iommu,
- 	desc.qw2 = 0;
- 	desc.qw3 = 0;
- 
--	qi_submit_sync(iommu, &desc, 1, 0);
-+	qi_submit_sync(iommu, &desc, 1, 0, NULL);
+@@ -492,9 +492,11 @@ devtlb_invalidation_with_pasid(struct intel_iommu *iommu,
+ 	 * efficient to flush devTLB specific to the PASID.
+ 	 */
+ 	if (pasid == IOMMU_NO_PASID)
+-		qi_flush_dev_iotlb(iommu, sid, pfsid, qdep, 0, 64 - VTD_PAGE_SHIFT);
++		qi_flush_dev_iotlb(iommu, sid, pfsid, qdep, 0,
++				   64 - VTD_PAGE_SHIFT, NULL);
+ 	else
+-		qi_flush_dev_iotlb_pasid(iommu, sid, pfsid, pasid, qdep, 0, 64 - VTD_PAGE_SHIFT);
++		qi_flush_dev_iotlb_pasid(iommu, sid, pfsid, pasid, qdep, 0,
++					 64 - VTD_PAGE_SHIFT, NULL);
  }
  
- static void
+ void intel_pasid_tear_down_entry(struct intel_iommu *iommu, struct device *dev,
+@@ -521,7 +523,7 @@ void intel_pasid_tear_down_entry(struct intel_iommu *iommu, struct device *dev,
+ 	pasid_cache_invalidation_with_pasid(iommu, did, pasid);
+ 
+ 	if (pgtt == PASID_ENTRY_PGTT_PT || pgtt == PASID_ENTRY_PGTT_FL_ONLY)
+-		qi_flush_piotlb(iommu, did, pasid, 0, -1, 0);
++		qi_flush_piotlb(iommu, did, pasid, 0, -1, 0, NULL);
+ 	else
+ 		iommu->flush.flush_iotlb(iommu, did, 0, 0, DMA_TLB_DSI_FLUSH);
+ 
+@@ -543,7 +545,7 @@ static void pasid_flush_caches(struct intel_iommu *iommu,
+ 
+ 	if (cap_caching_mode(iommu->cap)) {
+ 		pasid_cache_invalidation_with_pasid(iommu, did, pasid);
+-		qi_flush_piotlb(iommu, did, pasid, 0, -1, 0);
++		qi_flush_piotlb(iommu, did, pasid, 0, -1, 0, NULL);
+ 	} else {
+ 		iommu_flush_write_buffer(iommu);
+ 	}
+@@ -834,7 +836,7 @@ void intel_pasid_setup_page_snoop_control(struct intel_iommu *iommu,
+ 	 *      Addr[63:12]=0x7FFFFFFF_FFFFF) to affected functions
+ 	 */
+ 	pasid_cache_invalidation_with_pasid(iommu, did, pasid);
+-	qi_flush_piotlb(iommu, did, pasid, 0, -1, 0);
++	qi_flush_piotlb(iommu, did, pasid, 0, -1, 0, NULL);
+ 
+ 	/* Device IOTLB doesn't need to be flushed in caching mode. */
+ 	if (!cap_caching_mode(iommu->cap))
 diff --git a/drivers/iommu/intel/svm.c b/drivers/iommu/intel/svm.c
-index ac12f76c1212..660d049ad5b6 100644
+index 660d049ad5b6..bf7b4c5c21f4 100644
 --- a/drivers/iommu/intel/svm.c
 +++ b/drivers/iommu/intel/svm.c
-@@ -543,7 +543,7 @@ void intel_drain_pasid_prq(struct device *dev, u32 pasid)
- 			QI_DEV_IOTLB_PFSID(info->pfsid);
- qi_retry:
- 	reinit_completion(&iommu->prq_complete);
--	qi_submit_sync(iommu, desc, 3, QI_OPT_WAIT_DRAIN);
-+	qi_submit_sync(iommu, desc, 3, QI_OPT_WAIT_DRAIN, NULL);
- 	if (readl(iommu->reg + DMAR_PRS_REG) & DMA_PRS_PRO) {
- 		wait_for_completion(&iommu->prq_complete);
- 		goto qi_retry;
-@@ -646,7 +646,7 @@ static void handle_bad_prq_event(struct intel_iommu *iommu,
- 		desc.qw3 = 0;
+@@ -179,11 +179,11 @@ static void __flush_svm_range_dev(struct intel_svm *svm,
+ 	if (WARN_ON(!pages))
+ 		return;
+ 
+-	qi_flush_piotlb(sdev->iommu, sdev->did, svm->pasid, address, pages, ih);
++	qi_flush_piotlb(sdev->iommu, sdev->did, svm->pasid, address, pages, ih, NULL);
+ 	if (info->ats_enabled) {
+ 		qi_flush_dev_iotlb_pasid(sdev->iommu, sdev->sid, info->pfsid,
+ 					 svm->pasid, sdev->qdep, address,
+-					 order_base_2(pages));
++					 order_base_2(pages), NULL);
+ 		quirk_extra_dev_tlb_flush(info, address, order_base_2(pages),
+ 					  svm->pasid, sdev->qdep);
  	}
+@@ -225,11 +225,11 @@ static void intel_flush_svm_all(struct intel_svm *svm)
+ 	list_for_each_entry_rcu(sdev, &svm->devs, list) {
+ 		info = dev_iommu_priv_get(sdev->dev);
  
--	qi_submit_sync(iommu, &desc, 1, 0);
-+	qi_submit_sync(iommu, &desc, 1, 0, NULL);
- }
- 
- static irqreturn_t prq_event_thread(int irq, void *d)
-@@ -811,7 +811,7 @@ int intel_svm_page_response(struct device *dev,
- 				ktime_to_ns(ktime_get()) - prm->private_data[0]);
+-		qi_flush_piotlb(sdev->iommu, sdev->did, svm->pasid, 0, -1UL, 0);
++		qi_flush_piotlb(sdev->iommu, sdev->did, svm->pasid, 0, -1UL, 0, NULL);
+ 		if (info->ats_enabled) {
+ 			qi_flush_dev_iotlb_pasid(sdev->iommu, sdev->sid, info->pfsid,
+ 						 svm->pasid, sdev->qdep,
+-						 0, 64 - VTD_PAGE_SHIFT);
++						 0, 64 - VTD_PAGE_SHIFT, NULL);
+ 			quirk_extra_dev_tlb_flush(info, 0, 64 - VTD_PAGE_SHIFT,
+ 						  svm->pasid, sdev->qdep);
  		}
- 
--		qi_submit_sync(iommu, &desc, 1, 0);
-+		qi_submit_sync(iommu, &desc, 1, 0, NULL);
- 	}
- out:
- 	return ret;
 -- 
 2.34.1
 
