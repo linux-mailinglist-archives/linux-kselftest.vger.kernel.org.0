@@ -1,275 +1,140 @@
-Return-Path: <linux-kselftest+bounces-2298-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2299-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7967881B59E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Dec 2023 13:17:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B180F81BAAD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Dec 2023 16:26:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3046328556E
-	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Dec 2023 12:17:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3BCCE1F214CB
+	for <lists+linux-kselftest@lfdr.de>; Thu, 21 Dec 2023 15:26:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED1666EB4D;
-	Thu, 21 Dec 2023 12:17:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 040FF53A18;
+	Thu, 21 Dec 2023 15:25:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="b2hXv4Fa"
+	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="Or29DBYv"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2080.outbound.protection.outlook.com [40.107.22.80])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 074BF6E2C2
-	for <linux-kselftest@vger.kernel.org>; Thu, 21 Dec 2023 12:17:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-40c31f18274so8897665e9.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 21 Dec 2023 04:17:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1703161035; x=1703765835; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=wo4F4JANDOClYN3jxQcqNRyTGhNp1nyKO/PKQRBOOYU=;
-        b=b2hXv4FadH3SMVjwstOXXV9hqWfCEQEkIAG9p9uCUHspvvLECNXeI6Shq/25ftaElw
-         LVbMmNxz5DEzQvw2xDVnlb0C+IqOAjlJtiLIVeZxcY6ydOsWqXlFsg3rGBNIqN+9FCfY
-         gdoIq1EXuwZAT8DYfTIMqje087V/5fg3ZbrAADs+rRVxArl/++NI6xJiLW6Q8zXmqGEi
-         dqFqfHydBHvAVdjQsZUg/XmfHaH/tMU1XDBBuoPH1YAI5cQ+jpJMJbsBajj1CzZeBbv8
-         SNVL+OvcIRD8o0M93z3yw6kBzRkIZb8+fO9xZGGJNDxQO25V4q0zWhV0g9K2xBg+W7nu
-         zrww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703161035; x=1703765835;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wo4F4JANDOClYN3jxQcqNRyTGhNp1nyKO/PKQRBOOYU=;
-        b=XDclq7/yerUEP9FH6WJ7x1SpkSD8X+QcmC5lfcihzxz5Mtl+Dtbb1yJ9QxScRceeM5
-         ossRPOf+7K8egJ8moX81ocIqLO9bYxMWXYSauSHMgjlEYWKJFdTjQnHedGIFOgLLJfIp
-         VPxLRICEF5k9Uo/YbvqoPiUOQcrOoROkNt5NNg9cwokrZ8a2ldMUw3/JDozpAJqyO5l0
-         nc6/k+UyohTz2gDl8uB0GWIrRS1bxaGgAdz4Sp/4gC6tJ0NzEjJs8Ihf31AgwjZZmacu
-         OnpxZv5z39rtIIouaARPoyUD1/1/q4FeUMkfGsGlqfdFm+vI/LtxTPFDkyZO497T6sFo
-         KnmA==
-X-Gm-Message-State: AOJu0YxLjBcjauhHQsF5q5B7HpjMvCFXDCX7dNPdAEmvSBLYq2XtzaKo
-	yTvvKYSmh1LIo5ysYBGDcHQNIA==
-X-Google-Smtp-Source: AGHT+IFihwiQ9oiYKP5ukG9du9pUTnhTefLm+hmzcqxCv27XCcqGJ9+vh83Neir6CDrML5VfrH6irQ==
-X-Received: by 2002:a7b:ce87:0:b0:40d:38df:5802 with SMTP id q7-20020a7bce87000000b0040d38df5802mr705115wmj.165.1703161035199;
-        Thu, 21 Dec 2023 04:17:15 -0800 (PST)
-Received: from ?IPv6:2804:30c:1668:b300:8fcd:588d:fb77:ed04? ([2804:30c:1668:b300:8fcd:588d:fb77:ed04])
-        by smtp.gmail.com with ESMTPSA id l15-20020a5d560f000000b0033609584b9dsm1909827wrv.74.2023.12.21.04.17.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Dec 2023 04:17:14 -0800 (PST)
-Message-ID: <55b717dba239f3bedf0da7e25925e390a63459f5.camel@suse.com>
-Subject: Re: [PATCH RESEND v4 0/3] livepatch: Move modules to selftests and
- add a new test
-From: Marcos Paulo de Souza <mpdesouza@suse.com>
-To: Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Heiko
- Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, Alexander
- Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger
- <borntraeger@linux.ibm.com>,  Sven Schnelle <svens@linux.ibm.com>, Josh
- Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>,  Miroslav
- Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, Joe Lawrence
- <joe.lawrence@redhat.com>
-Cc: linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org, 
-	live-patching@vger.kernel.org
-Date: Thu, 21 Dec 2023 09:17:04 -0300
-In-Reply-To: <20231220-send-lp-kselftests-v4-0-3458ec1b1a38@suse.com>
-References: <20231220-send-lp-kselftests-v4-0-3458ec1b1a38@suse.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.1 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26D11539EA;
+	Thu, 21 Dec 2023 15:25:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=d4GNZSlsYlOlHDyuOeUN1w7W3MBZX2CQYDYefq1O+GG/9loyyOoWLcD20YAZgOHoVQRaXLp/wA2sLKhZn/qHWXiU2u1KnU9yh4yxaluDbky7nNitEB91c+lRJGj1YkiegaIwnX2kFAi7Si2Rug7eC7H29f84uE6g97dRNDzF7zjDilspBbzxs+sHe3kf5VFDf+FrqmyFyytGjZPLrtLy9VPDD7Nht/jlQW+CsiDxMTrKc30jsogzS4Es9Jab3EpRCggv1kHJJxIRDbBwI3hVp49sza3yTQbdkUGDnhDvrMLP7wwdiRs1lXS/1nWU+5GqGE+TeV72PXsqUCZxivDYGA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=b8RacpBiT+l7FpBNqT9HS0eotUvqnNAQNT8Hs8Ytc5E=;
+ b=WibYmurw026b9bXqvTRpRo+iI7UD/taJfmzq4+kmOX1KJy05C2Uv/X769JunyASur+ucp8cZ0hiREYWIlg8Xir95edum/T8dsfHlEXRIZoDvc1pqeVP2vhveBQwTORRD6/LxA9WcZ6PER2mATWizEM8Lqq4sfRB0cgnRRr4vLUrQqB9+d7x2A+ZiJ2/iFyf5ELBaQNLb7m+deJFW/8Hw5hHcqOxeVkluc7wKlzED5UTU57v5vBlDW7yAtzIYK6jSWV+OHr3m5Dl91qBdrMYu8rhqXf7UWNwSYx60ogzbvD2f61X1kNQY7TDLpOnMIOvNm64Cd9Gk+p9eOtQ7/Ks2dQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=b8RacpBiT+l7FpBNqT9HS0eotUvqnNAQNT8Hs8Ytc5E=;
+ b=Or29DBYvMEfJV3Z/qVSGOgqSGUVCkkic63pXYYFHsY7JNHRA953dQDUxi2roI87AqjJw1uVdHWqJ6fA9P8RCfa2aEoSp53b8tHky3L5msYhR6J7go4Yw/G9YYH8UP4O9a5PgYntIsOQsYBQ6xpBtd1u9QjZxblcUBchDnyNR3/s=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM0PR04MB6452.eurprd04.prod.outlook.com (2603:10a6:208:16d::21)
+ by VI1PR04MB9978.eurprd04.prod.outlook.com (2603:10a6:800:1d7::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7113.20; Thu, 21 Dec
+ 2023 15:25:10 +0000
+Received: from AM0PR04MB6452.eurprd04.prod.outlook.com
+ ([fe80::dd33:f07:7cfd:afa4]) by AM0PR04MB6452.eurprd04.prod.outlook.com
+ ([fe80::dd33:f07:7cfd:afa4%7]) with mapi id 15.20.7113.016; Thu, 21 Dec 2023
+ 15:25:10 +0000
+Date: Thu, 21 Dec 2023 17:25:06 +0200
+From: Vladimir Oltean <vladimir.oltean@nxp.com>
+To: Roger Quadros <rogerq@kernel.org>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+	pabeni@redhat.com, shuah@kernel.org, s-vadapalli@ti.com,
+	r-gunasekaran@ti.com, vigneshr@ti.com, srk@ti.com, horms@kernel.org,
+	p-varis@ti.com, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next v11 02/10] selftests: forwarding: ethtool_mm:
+ fall back to aggregate if device does not report pMAC stats
+Message-ID: <20231221152506.yk4mlhyv2zkv57gc@skbuf>
+References: <20231219105805.80617-1-rogerq@kernel.org>
+ <20231219105805.80617-3-rogerq@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231219105805.80617-3-rogerq@kernel.org>
+X-ClientProxiedBy: AM4PR0302CA0011.eurprd03.prod.outlook.com
+ (2603:10a6:205:2::24) To AM0PR04MB6452.eurprd04.prod.outlook.com
+ (2603:10a6:208:16d::21)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM0PR04MB6452:EE_|VI1PR04MB9978:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2177f6c5-f9f6-4662-9f32-08dc023904dd
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	fJSf8KvhWgSqZbZDvgjmDgLogzpFdF/coYPOkOyn4QvIvgaCGeUJQFlASBUUL/w68J3eDmxvaeHJ3NyU8/JuGnyO1cMZOm6YD/5kCdj7RymxJRttO7l2Ch0a0/+O6Jhd2FSYnWdDoVaJFUHG3BmCJE4EDFQNjNOMDQ/6uYOFZ9GZe9/wWE4EcEm9fjOQIUpv3JS8l+qpMYiiqHUfA3Qp3aNI5Ls1a7nTFfid+ZGUEbkTrg9/Hl4jsoS6qYSAxKeqoam1CdyykkzsHSzR8YMaCjEoiKYOrrRnVc1hAJxW/NDJmqIrzwxiJSpG+pbbhyiK21WIO2xRWRFKTtnmIJJoeWQeXy5W6U8QP6V4t8idpbAqtpV7jxPaYiWop11UiBePXIAWG6bvY+rHBpBqHjtGRWCg1YbiPmbdFOTmaz+Q//aIlBeHfm8aXEongAQlmuPe0p9hhEVFBewQbNhqX5NAjPY4c50HMWGSN26PG7vqCGsNk+yRZTYooe61orkFr2ttUruJdDtetrXEKn6imrNsxr/1+Kd4TZURAvy51F08oy+iWT1ZzFSGEEKxfDOyH3ct
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6452.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(376002)(136003)(346002)(366004)(39860400002)(396003)(230922051799003)(1800799012)(64100799003)(186009)(451199024)(9686003)(26005)(6512007)(6666004)(1076003)(6506007)(86362001)(38100700002)(7416002)(4326008)(8936002)(8676002)(41300700001)(44832011)(66946007)(6916009)(66476007)(5660300002)(66556008)(6486002)(4744005)(2906002)(316002)(33716001)(478600001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?p9nBfiQb5SdiqBuBQyZ+49/SaDkVfhtuKjMZynn3NuuViR3o6/KxdFNwGZlH?=
+ =?us-ascii?Q?3ThzdqFQ9su7TIboj5E6L0B2meAsi4As2Jjycvqm9FpBtU6wnLxz01bEIJCE?=
+ =?us-ascii?Q?3GHwqXIF3g2DaOC+I5ud9dFx+ssXxBrHFvjd3x4Jc2eorvLhnBgKz/6xhQ38?=
+ =?us-ascii?Q?OgViPOIJ8qOv8T8yHqUF5y/nejZ74PRfa9j2+MQEw28OrQ0HUiJSGYTaf/RO?=
+ =?us-ascii?Q?xyVXcMjV9FxbYTpcA19J1qdwuhdAg23vM/VccFRBodDxv/g4dhUOKIXtrDGb?=
+ =?us-ascii?Q?J01ZW7oqaXQ0IJJLkzWEF2lHImHEA3RtaZHaWExCZ1KkomuomwqoTECNRJiS?=
+ =?us-ascii?Q?UD/fh6Og04mbpWMgFqUklhQWxsRZjHtacgEsV+H0Tss433RB2CCA5WEXKbNC?=
+ =?us-ascii?Q?Hzpa9FbfpSr24F0j+f/W0DeNJfFKL/AR+HkG4MTRGpRz2exRcKwXz7aiYIpN?=
+ =?us-ascii?Q?m5Jfcd0Lux16TY78jZDFhfIBAX7uEIb94x7X1U6KaTQZAaQV+siTIffsSsrz?=
+ =?us-ascii?Q?0lEaaQPuNCVFKHcKVPLc/fDXMJP6ldxVuh38oVXworQ+lXkg4ZAeUi674Nl3?=
+ =?us-ascii?Q?sDrjbdOEafed74zCCeBbfrHWE0fIZY6Mq4mEwYj3UIsFiiOCA4nftsT3YFi1?=
+ =?us-ascii?Q?BnmRhbsFgKr+0NULNGQMMANnBwT9hug2yN84S+kraXFh40jifTUjPcMx5K+F?=
+ =?us-ascii?Q?0s5PyskKET/ZxVFuTJU/UvAM6W3xtJnVtnHIiJpDDcQy8dtA61A1Emzlm7W4?=
+ =?us-ascii?Q?7lSag9s6+wylgcG6Y0VcWQpe3FSwOE89uRDkkwPOTElVDiVzTXQA8l67zwcY?=
+ =?us-ascii?Q?2zqZwaytACi/o1w6SUXWag9SvozII7/vpvq6nzwczcGHqFeuL/khouEXTuZH?=
+ =?us-ascii?Q?eATryqnJpxg23VOLqoU4ppGTEJ+w/fU+cO8604AEgJPbmdGHvOW/ICny05vR?=
+ =?us-ascii?Q?fCnxydOP5UDTya02yl+bVntCN5snVHfJiKj45+JNQOXTKWPAutxk0+MY0Jlt?=
+ =?us-ascii?Q?F/Y8vN5D94rj82Ah8DrC5vYQbQjetHb8e/119C4U6c00yqQJ7SVGCfwHLfbD?=
+ =?us-ascii?Q?+9T2/MZuZltelgood8EASmyNqh+H9zpfYch39Fmj/7JF3UwLmeheg/oqWi+K?=
+ =?us-ascii?Q?QKHuwEqOP32xLqg31mW3gH/LT8TqVlJnM1o+Z88R2rrThny6TP8uSPMnjeE9?=
+ =?us-ascii?Q?adtOWBKBd/BQngTaOE/vCAY3Yup96nqHQaIibUOCeZKz/UL1pnegeuBqqDi+?=
+ =?us-ascii?Q?P2+bKlc1RBe33tWnch+/W0BrvA2ZfBTmlJH6SqbgL+FvxzeSgkP7qKAa0jZp?=
+ =?us-ascii?Q?tZvz0bMijXM780jqN/y8BOJS8E5CyWkK0fiRQ3HQz6uso4Ft2TZIrnHQzSHY?=
+ =?us-ascii?Q?8MzFxMgiXLy29tCWBh3R8c9yy/xgDRG+uzKnGmwGg29Lho9tJHO2Z1+bsn42?=
+ =?us-ascii?Q?5A04yoOj8His5iXMrMCOaA/KlMXIKyH68r7+JzsIYYFaWVSCLNE4u7gCVJTX?=
+ =?us-ascii?Q?xzDlWDhAGlbw9rVRnxxlJtO/umbk9uTQzwVLVpv6JAEN0RXsZ4sBs2a38Lbv?=
+ =?us-ascii?Q?Ik2vINT7b0FDXkF94Zp8YTufAk3JWsp07Hq2qW923usTZ/APpvqeedvTRM3Z?=
+ =?us-ascii?Q?Bw=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2177f6c5-f9f6-4662-9f32-08dc023904dd
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6452.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Dec 2023 15:25:09.9935
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: SiWbGrw+F0uS/ML55C+JrHKwud8rAmc6ZkzHHbrPsBbJdPd1uIumlTWSKgeqsWW1qGSi/R+MZGzkI2Q1a8w8Qg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB9978
 
-On Wed, 2023-12-20 at 13:53 -0300, Marcos Paulo de Souza wrote:
-> Changes in v4:
-> * Documented how to compile the livepatch selftests without running
-> the
-> =C2=A0 tests (Joe)
-> * Removed the mention to lib/livepatch on MAINTAINERS file, reported
-> by
-> =C2=A0 checkpatch.
->=20
-
-To clarify: this is not a resend, this is the v4 that people were
-waiting for. I made a mistake with b4 tool, that first I sent the email
-just to myself, for testing, and it bumped the version to v5, but I
-asked it to "resend" the v4, but it ended up adding the "RESEND" to the
-series.
-
-Please review this patchset and ignore the RESEND word.
-
-Thanks to Petr Mladek for spotting my mistake.
-
-	Marcos
-
-> Changes in v3:
-> * Rebased on top of v6.6-rc5
-> * The commits messages were improved (Thanks Petr!)
-> * Created TEST_GEN_MODS_DIR variable to point to a directly that
-> contains kernel
-> =C2=A0 modules, and adapt selftests to build it before running the test.
-> * Moved test_klp-call_getpid out of test_programs, since the gen_tar
-> =C2=A0 would just copy the generated test programs to the livepatches dir=
-,
-> =C2=A0 and so scripts relying on test_programs/test_klp-call_getpid will
-> fail.
-> * Added a module_param for klp_pids, describing it's usage.
-> * Simplified the call_getpid program to ignore the return of getpid
-> syscall,
-> =C2=A0 since we only want to make sure the process transitions correctly
-> to the
-> =C2=A0 patched stated
-> * The test-syscall.sh not prints a log message showing the number of
-> remaining
-> =C2=A0 processes to transition into to livepatched state, and check_outpu=
-t
-> expects it
-> =C2=A0 to be 0.
-> * Added MODULE_AUTHOR and MODULE_DESCRIPTION to test_klp_syscall.c
->=20
-> - Link to v3:
-> https://lore.kernel.org/r/20231031-send-lp-kselftests-v3-0-2b1655c2605f@s=
-use.com
-> - Link to v2:
-> https://lore.kernel.org/linux-kselftest/20220630141226.2802-1-mpdesouza@s=
-use.com/
->=20
-> This patchset moves the current kernel testing livepatch modules from
-> lib/livepatches to tools/testing/selftest/livepatch/test_modules, and
-> compiles
-> them as out-of-tree modules before testing.
->=20
-> There is also a new test being added. This new test exercises
-> multiple processes
-> calling a syscall, while a livepatch patched the syscall.
->=20
-> Why this move is an improvement:
-> * The modules are now compiled as out-of-tree modules against the
-> current
-> =C2=A0 running kernel, making them capable of being tested on different
-> systems with
-> =C2=A0 newer or older kernels.
-> * Such approach now needs kernel-devel package to be installed, since
-> they are
-> =C2=A0 out-of-tree modules. These can be generated by running "make rpm-
-> pkg" in the
-> =C2=A0 kernel source.
->=20
-> What needs to be solved:
-> * Currently gen_tar only packages the resulting binaries of the
-> tests, and not
-> =C2=A0 the sources. For the current approach, the newly added modules
-> would be
-> =C2=A0 compiled and then packaged. It works when testing on a system with
-> the same
-> =C2=A0 kernel version. But it will fail when running on a machine with
-> different kernel
-> =C2=A0 version, since module was compiled against the kernel currently
-> running.
->=20
-> =C2=A0 This is not a new problem, just aligning the expectations. For the
-> current
-> =C2=A0 approach to be truly system agnostic gen_tar would need to include
-> the module
-> =C2=A0 and program sources to be compiled in the target systems.
->=20
-> Thanks in advance!
-> =C2=A0 Marcos
->=20
-> Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
+On Tue, Dec 19, 2023 at 12:57:57PM +0200, Roger Quadros wrote:
+> From: Vladimir Oltean <vladimir.oltean@nxp.com>
+> 
+> Some devices do not support individual 'pmac' and 'emac' stats.
+> For such devices, resort to 'aggregate' stats.
+> 
+> Cc: Shuah Khan <shuah@kernel.org>
+> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+> Tested-by: Roger Quadros <rogerq@kernel.org>
+> Signed-off-by: Roger Quadros <rogerq@kernel.org>
 > ---
-> Marcos Paulo de Souza (3):
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 kselftests: lib.mk: Add TEST_GEN_MODS_DIR =
-variable
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 livepatch: Move tests from lib/livepatch t=
-o selftests/livepatch
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 selftests: livepatch: Test livepatching a =
-heavily called
-> syscall
->=20
-> =C2=A0Documentation/dev-tools/kselftest.rst=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 4 +
-> =C2=A0MAINTAINERS=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 1 -
-> =C2=A0arch/s390/configs/debug_defconfig=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=
-=A0=C2=A0 1 -
-> =C2=A0arch/s390/configs/defconfig=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 1 -
-> =C2=A0lib/Kconfig.debug=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
- |=C2=A0 22 ----
-> =C2=A0lib/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 2 -
-> =C2=A0lib/livepatch/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 14 ---
-> =C2=A0tools/testing/selftests/lib.mk=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 |=C2=A0 20 +++-
-> =C2=A0tools/testing/selftests/livepatch/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 5 +-
-> =C2=A0tools/testing/selftests/livepatch/README=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 25 +++--
-> =C2=A0tools/testing/selftests/livepatch/config=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 1 -
-> =C2=A0tools/testing/selftests/livepatch/functions.sh=C2=A0=C2=A0=C2=A0=C2=
-=A0 |=C2=A0 34 +++---
-> =C2=A0.../testing/selftests/livepatch/test-callbacks.sh=C2=A0 |=C2=A0 50 =
-++++-----
-> =C2=A0tools/testing/selftests/livepatch/test-ftrace.sh=C2=A0=C2=A0 |=C2=
-=A0=C2=A0 6 +-
-> =C2=A0.../testing/selftests/livepatch/test-livepatch.sh=C2=A0 |=C2=A0 10 =
-+-
-> =C2=A0.../selftests/livepatch/test-shadow-vars.sh=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 2 +-
-> =C2=A0tools/testing/selftests/livepatch/test-state.sh=C2=A0=C2=A0=C2=A0 |=
-=C2=A0 18 ++--
-> =C2=A0tools/testing/selftests/livepatch/test-syscall.sh=C2=A0 |=C2=A0 53 =
-++++++++++
-> =C2=A0tools/testing/selftests/livepatch/test-sysfs.sh=C2=A0=C2=A0=C2=A0 |=
-=C2=A0=C2=A0 6 +-
-> =C2=A0.../selftests/livepatch/test_klp-call_getpid.c=C2=A0=C2=A0=C2=A0=C2=
-=A0 |=C2=A0 44 ++++++++
-> =C2=A0.../selftests/livepatch/test_modules/Makefile=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 |=C2=A0 20 ++++
-> =C2=A0.../test_modules}/test_klp_atomic_replace.c=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 0
-> =C2=A0.../test_modules}/test_klp_callbacks_busy.c=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 0
-> =C2=A0.../test_modules}/test_klp_callbacks_demo.c=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 0
-> =C2=A0.../test_modules}/test_klp_callbacks_demo2.c=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 0
-> =C2=A0.../test_modules}/test_klp_callbacks_mod.c=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 0
-> =C2=A0.../livepatch/test_modules}/test_klp_livepatch.c=C2=A0=C2=A0 |=C2=
-=A0=C2=A0 0
-> =C2=A0.../livepatch/test_modules}/test_klp_shadow_vars.c |=C2=A0=C2=A0 0
-> =C2=A0.../livepatch/test_modules}/test_klp_state.c=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 0
-> =C2=A0.../livepatch/test_modules}/test_klp_state2.c=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 |=C2=A0=C2=A0 0
-> =C2=A0.../livepatch/test_modules}/test_klp_state3.c=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 |=C2=A0=C2=A0 0
-> =C2=A0.../livepatch/test_modules/test_klp_syscall.c=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 | 116
-> +++++++++++++++++++++
-> =C2=A032 files changed, 334 insertions(+), 121 deletions(-)
-> ---
-> base-commit: 206ed72d6b33f53b2a8bf043f54ed6734121d26b
-> change-id: 20231031-send-lp-kselftests-4c917dcd4565
->=20
-> Best regards,
 
+Tested-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 
