@@ -1,121 +1,191 @@
-Return-Path: <linux-kselftest+bounces-2356-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2357-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE01781C6B5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Dec 2023 09:38:29 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6418F81C6B7
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Dec 2023 09:39:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A5EF0281BAE
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Dec 2023 08:38:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B648EB20C93
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Dec 2023 08:39:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EF5353AA;
-	Fri, 22 Dec 2023 08:38:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 952E4944E;
+	Fri, 22 Dec 2023 08:39:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="taJyKHao"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZpD82rv4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0268A2F52
-	for <linux-kselftest@vger.kernel.org>; Fri, 22 Dec 2023 08:38:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D61502F52
+	for <linux-kselftest@vger.kernel.org>; Fri, 22 Dec 2023 08:39:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-548ae9a5eeaso6882a12.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Dec 2023 00:38:24 -0800 (PST)
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-548ae9a5eeaso6889a12.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 Dec 2023 00:39:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1703234303; x=1703839103; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1703234344; x=1703839144; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=OtlqJIodas9mp+Hyt8ElIZpB+V9TI1bV3iOsdcaciZ0=;
-        b=taJyKHaoz4KUVgWr85M2hNtv3nvu7stl60P7T6ZeXy4sF2ueQh6jtpxpHxjk5I1whQ
-         QHRmY7hOxMnCXILWY1ZQr5RfUGxbcwwKG8GcL9EzbsEDsL33snhCBc8eZsJDDgQvU4jm
-         +/5yfu444Z2BvSq3pV3jG1AFl5ywksvx3LS2tD2ppjvJ3quaRYOZcQ8aReWKcwJOLsDQ
-         9KpCvXn+0ZPxX3V0dLkOzdvQuAr3G9RZgVjhZ1Vur1+JN06NZUYKUFfZC5V3dQNF6YVu
-         RAQZoNfP2+94oyro6aGPUyOCYgXSXCC2YFdwIBaguECbR8sfbR2EAROGL5zyYTdyJ65M
-         Li1w==
+        bh=cXcmf4LU4iiC7d3okeAUIX7HUI/lrp6bhaKRpssrxLo=;
+        b=ZpD82rv4y/11CWrt0LOWgwmJzHxXzNb81KD0T9VJdddzwl53BeNs8sBM3eJa4ue7OF
+         JgETEDXYpP2Bqy/6YZM/sk6/kX1QPfQJGOli1kXMd4xIOpw2UKdbSOmOCKJZao3oxamq
+         XanbQOBuDTP/KjjY7N7H8dU9AoypKsX0u8rY2senIQAU3AloTBl8eZE0oBNLP7/jv1CM
+         cZ/rZIn9o53+WxrH7MGnCahyp/rG2fNC1NL7QeXDarLPZcXLv1gPc41TkfcPhHHgChbo
+         l1ZxWBpYUpQeT3IT+mqppFs2tHEIC7p9uJZqdMhwkWLQkT8jTHqDCCHTUAT5N+UVgiUv
+         F/EQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703234303; x=1703839103;
+        d=1e100.net; s=20230601; t=1703234344; x=1703839144;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=OtlqJIodas9mp+Hyt8ElIZpB+V9TI1bV3iOsdcaciZ0=;
-        b=DdreaCIfHgQ6L3QFsdLxJHn0evhVQIaQu8oYiXJwiN12WeWID2mn2dKgqFyFxDkzBq
-         AmrUklFvyvvLp0Ua1yyjLGUgl7fj6tsgLk/A/nCrWuKCjKIsqeg1YwZiFDZlbB7RnMjJ
-         hC5G0fYl60AVqxbF4juGlvdA1dHE+0FeJFHlaoiGc6YsW5GybR8N68vOHSqjp4KO6I2s
-         2CDr0zKgzcjCLCSrXwQ1vYPMZp/GQcrZyDGa90NKR4AsaiUn8zU8EFYl9aHBkFbrt7O6
-         GDaQXul5g2dV9x9LCHvW9ZiiVzBiGXITJDjyFE1nfgqq7Y1oHmxVcHagUwdxCcP4fvah
-         BQhQ==
-X-Gm-Message-State: AOJu0YwwEpllcnTpsvAB+NNM2Xxp6sKAacxM7i6m3EgyqBPR95VRqPuI
-	W+WcCzlsefiuTd9pnQE7uG7JavX3/5R2aZ3sPnH2S/TJg0re
-X-Google-Smtp-Source: AGHT+IGHQYoU7azFLqMcU05kZwXGn9B9TAq/dPvFspOJ5hIrmyuT7UKJbn+bIZw1kFTUnlCszmQcje5CEJbw5VdfA5I=
-X-Received: by 2002:a50:a6c8:0:b0:553:5578:2fc9 with SMTP id
- f8-20020a50a6c8000000b0055355782fc9mr58735edc.5.1703234303216; Fri, 22 Dec
- 2023 00:38:23 -0800 (PST)
+        bh=cXcmf4LU4iiC7d3okeAUIX7HUI/lrp6bhaKRpssrxLo=;
+        b=MK792nWZ4VbGWawY/gnIU0NYxyL33mhNLRLv82jKN+5h/wNDCzmyDDCAkD4VTg3jE6
+         U/fSCiQftigEWhbU/h2N30hiIwNb2KYDOZ854P1RKkgXEZ2mB0Lp/GO7gndCt5fYDjed
+         R5litCt4ZS5uOM26y1aHtD4MvCb2bSYJQ6SI5RN9bjmmP9D1FJlYOAhHD6g24o3luAml
+         LT9VZ+gEtTfMiO+ckaSKgfGGG6R/lIOSZ9e6ZdyiuF+APLBL22wkB2nSohanfRvd3NPR
+         gdphgwoSLdUP5hPxVE7vx9+p+UrM09BkiEEFhSQH321snmcvCSj1BGZpSg/6XuUgUf/6
+         Telw==
+X-Gm-Message-State: AOJu0YxvHOb0GUb0GC3L3KkP1nUdrFagJv/3fhSKqW4uIIPfppCum26H
+	1V6sTkMLDf2krZDI/oy9R+ukWcRbE4lTT1NyyIHR0QQEvO02
+X-Google-Smtp-Source: AGHT+IHyailRraZ3yd8lW96Fn8XUo3VTEQaA2tBGRcF98d25EXKyiUQ00BKoRE16r/HjI4cB+NjCvylfgzpN7Yl5now=
+X-Received: by 2002:a50:ba8e:0:b0:554:228f:4b8e with SMTP id
+ x14-20020a50ba8e000000b00554228f4b8emr101387ede.2.1703234344152; Fri, 22 Dec
+ 2023 00:39:04 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231218151729.210027-1-rf@opensource.cirrus.com>
-In-Reply-To: <20231218151729.210027-1-rf@opensource.cirrus.com>
+References: <20231221103858.46010-1-rf@opensource.cirrus.com>
+In-Reply-To: <20231221103858.46010-1-rf@opensource.cirrus.com>
 From: David Gow <davidgow@google.com>
-Date: Fri, 22 Dec 2023 16:38:10 +0800
-Message-ID: <CABVgOS=YgpaYg=4Lks8naBqBZVEPhfXC7S1S1=KRe1WAuJLJrw@mail.gmail.com>
-Subject: Re: [PATCH] kunit: Fix NULL-dereference in kunit_init_suite() if
- suite->log is NULL
+Date: Fri, 22 Dec 2023 16:38:53 +0800
+Message-ID: <CABVgOS=kECrGMXCg49QWsO1q-CGEzJdshxZ8XAA5GLKw58nR-g@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] kunit: Allow passing function pointer to kunit_activate_static_stub()
 To: Richard Fitzgerald <rf@opensource.cirrus.com>
 Cc: brendan.higgins@linux.dev, rmoar@google.com, 
 	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
 	linux-kernel@vger.kernel.org, patches@opensource.cirrus.com
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000a2e3d9060d1523ca"
+	boundary="000000000000120dfe060d1526b6"
 
---000000000000a2e3d9060d1523ca
+--000000000000120dfe060d1526b6
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 18 Dec 2023 at 23:17, Richard Fitzgerald
+On Thu, 21 Dec 2023 at 18:39, Richard Fitzgerald
 <rf@opensource.cirrus.com> wrote:
 >
-> suite->log must be checked for NULL before passing it to
-> string_stream_clear(). This was done in kunit_init_test() but was missing
-> from kunit_init_suite().
+> Swap the arguments to typecheck_fn() in kunit_activate_static_stub()
+> so that real_fn_addr can be either the function itself or a pointer
+> to that function.
+>
+> This is useful to simplify redirecting static functions in a module.
+> Having to pass the actual function meant that it must be exported
+> from the module. Either making the 'static' and EXPORT_SYMBOL*()
+> conditional (which makes the code messy), or change it to always
+> exported (which increases the export namespace and prevents the
+> compiler inlining a trivial stub function in non-test builds).
+>
+> With the original definition of kunit_activate_static_stub() the
+> address of real_fn_addr was passed to typecheck_fn() as the type to
+> be passed. This meant that if real_fn_addr was a pointer-to-function
+> it would resolve to a ** instead of a *, giving an error like this:
+>
+>    error: initialization of =E2=80=98int (**)(int)=E2=80=99 from incompat=
+ible pointer
+>    type =E2=80=98int (*)(int)=E2=80=99 [-Werror=3Dincompatible-pointer-ty=
+pes]
+>    kunit_activate_static_stub(test, add_one_fn_ptr, subtract_one);
+>       |                             ^~~~~~~~~~~~
+>    ./include/linux/typecheck.h:21:25: note: in definition of macro
+>    =E2=80=98typecheck_fn=E2=80=99
+>    21 | ({ typeof(type) __tmp =3D function; \
+>
+> Swapping the arguments to typecheck_fn makes it take the type of a
+> pointer to the replacement function. Either a function or a pointer
+> to function can be assigned to that. For example:
+>
+> static int some_function(int x)
+> {
+>     /* whatever */
+> }
+>
+> int (* some_function_ptr)(int) =3D some_function;
+>
+> static int replacement(int x)
+> {
+>     /* whatever */
+> }
+>
+> Then:
+>   kunit_activate_static_stub(test, some_function, replacement);
+> yields:
+>   typecheck_fn(typeof(&replacement), some_function);
+>
+> and:
+>   kunit_activate_static_stub(test, some_function_ptr, replacement);
+> yields:
+>   typecheck_fn(typeof(&replacement), some_function_ptr);
+>
+> The two typecheck_fn() then resolve to:
+>
+>   int (*__tmp)(int) =3D some_function;
+> and
+>   int (*__tmp)(int) =3D some_function_ptr;
+>
+> Both of these are valid. In the first case the compiler inserts
+> an implicit '&' to take the address of the supplied function, and
+> in the second case the RHS is already a pointer to the same type.
 >
 > Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
-> Fixes: 6d696c4695c5 ("kunit: add ability to run tests after boot using debugfs")
+> Reviewed-by: Rae Moar <rmoar@google.com>
 > ---
 
-Acked-by: David Gow <davidgow@google.com>
+This makes sense to me.
+
+I was a little worried at first that this might actually be adding a
+layer of indirection (which, given we're keying on the pointer,
+would've needed to be done carefully), but this is an obvious fix to
+me.
+
+Reviewed-by: David Gow <davidgow@google.com>
 
 Cheers,
 -- David
 
 
->  lib/kunit/test.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
+> No changes since V1.
+> ---
+>  include/kunit/static_stub.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-> index e803d998e855..ea7f0913e55a 100644
-> --- a/lib/kunit/test.c
-> +++ b/lib/kunit/test.c
-> @@ -658,7 +658,9 @@ static void kunit_init_suite(struct kunit_suite *suite)
->         kunit_debugfs_create_suite(suite);
->         suite->status_comment[0] = '\0';
->         suite->suite_init_err = 0;
-> -       string_stream_clear(suite->log);
-> +
-> +       if (suite->log)
-> +               string_stream_clear(suite->log);
->  }
+> diff --git a/include/kunit/static_stub.h b/include/kunit/static_stub.h
+> index 85315c80b303..bf940322dfc0 100644
+> --- a/include/kunit/static_stub.h
+> +++ b/include/kunit/static_stub.h
+> @@ -93,7 +93,7 @@ void __kunit_activate_static_stub(struct kunit *test,
+>   * The redirection can be disabled again with kunit_deactivate_static_st=
+ub().
+>   */
+>  #define kunit_activate_static_stub(test, real_fn_addr, replacement_addr)=
+ do {  \
+> -       typecheck_fn(typeof(&real_fn_addr), replacement_addr);           =
+       \
+> +       typecheck_fn(typeof(&replacement_addr), real_fn_addr);           =
+       \
+>         __kunit_activate_static_stub(test, real_fn_addr, replacement_addr=
+);     \
+>  } while (0)
 >
->  bool kunit_enabled(void)
 > --
 > 2.30.2
 >
 
---000000000000a2e3d9060d1523ca
+--000000000000120dfe060d1526b6
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -182,15 +252,15 @@ impZAng7ccvvK09K3ZuhwTIxJMsPXCZYsrXWORTw5sczRAP6XvKbPBJnsJoSTe5dFBPBHOQJOGhU
 qWfEfWnWMJPF3LxSGLpLFQXO3RwQqmxv08avwXfVPouh1xuB3FX7rpDabT8YDhu9JgIZkLEKko7L
 yQt6zWwng7k8YF/jGbiAta6VMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCAp
-Pw0mypln0u+Ml/zsCiP5oWsm8v+R0TJa+W/cNP9jfDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzEyMjIwODM4MjNaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCCV
+tSgRF2QWw07pLTlzkew4GpUEDKc1+4lREeF5ICBdvDAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzEyMjIwODM5MDRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAFe3Ww4sSi2LSLGLM/btJ
-I+OGlS90hRDEnhsNKRBd+E0gOA4igcKgBo0KRwjsDpQaOdrpQz+wp+2FWwzpU5kLMe/95X7iO4z9
-ftDfHOKtt2XLDI+TUNDBfNXmA9KB6ebLk9xD+kz0di5UUTSBFrDNeL67m6EgsWGZqtJMdvjMuPWd
-CZyOiOsK6zEftwDT6FzkoFSRMf0ytrdizfGJcbelqpMSCRlTgPcC60QMOfSLjTWQdI2MMRdUMhzy
-qT6gW+puMtjON02qDYkEU2i1RUVNdx77gFIDRL40PZ+QLgLKezjMo+iPbFacO135OxlDZUYrvS6D
-Px9XToNiFn3iFXzO8A==
---000000000000a2e3d9060d1523ca--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAlRZ6W0/q0rFjGYDaRAy8
+bCQEuMQxy2V6fuVbp7yRa/qKHTbo/HBGVj8LnWijzLvpX5OlUYF/5ZMkeESZN/l3+8yzcNNT2QVB
+nH0GUR6OdMMiMnhaBp6og3pbyNlcZOkXiQFvoqZfijopTYUj3yNWLJVnZNheIvOa+rGtOKUpZGXn
+g43bqzMbiW/TViVkaWA1ykqVNV4ucyTQLAi0uZlVCxxY80TJNFbIPYf+xVhJRzb9kdJHqIp428/C
+Qg36DAsgbE+/k7Q1tqUyGi1tmklXPmqmn/2IHeYL/Xullq3fMhIsqlUVO0vVt9qjDP0GUvzwCh2Q
+pVA3fZTgKkn3wWi8AQ==
+--000000000000120dfe060d1526b6--
 
