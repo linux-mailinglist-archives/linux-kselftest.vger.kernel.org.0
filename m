@@ -1,112 +1,208 @@
-Return-Path: <linux-kselftest+bounces-2363-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2364-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95CF481C7D3
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Dec 2023 11:09:25 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2473C81C965
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Dec 2023 12:51:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 50204286630
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Dec 2023 10:09:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 494FA1C2147F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Dec 2023 11:51:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2272F101FB;
-	Fri, 22 Dec 2023 10:09:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D481714AB1;
+	Fri, 22 Dec 2023 11:51:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="lL34I9TW"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="S+ckMuZ7"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6362101E6;
-	Fri, 22 Dec 2023 10:09:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-	Resent-Cc:Resent-Message-ID; bh=5A/7DWiQyqPF64i2PEtKJ85mmlmlSCimVC8q5meWoRk=;
-	t=1703239759; x=1704449359; b=lL34I9TWuY9MiZG47nhsfvIFmQyUk4K39yw+sAuov2c+kls
-	bXKsHNy5My3dWkEBrJk7GenKzbs+Rwn+kpdsX5SZdbu9qrA1hSrhumrvTwcygFnocuYU6JhIBlq+h
-	jg27mrZu7d3zjCi2FIr05GnEO67SmjZHAkjGWr1vs7NroKbbWs3trOKe+3DQXFBAg6k5vcWxQwAF4
-	bgkcii+bSZxBVpe3bhyR+T1f78YO9t1nDgA0SaNJ7/pXqyDZE3f6qpACfsBNnRKjjkMD2f32TAFeg
-	illX8Qw2Ey8Yt/3F1jqyiZS+WbXLEy7VA4ed6kuEVqYv5IYO4xA/sDMDsWEau54Q==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.97)
-	(envelope-from <johannes@sipsolutions.net>)
-	id 1rGcSt-00000004AJP-1NtX;
-	Fri, 22 Dec 2023 11:09:11 +0100
-Message-ID: <2a508793563c46116ef8ef274a9fa3b5675cd7b3.camel@sipsolutions.net>
-Subject: Re: [PATCH 0/6] Add some more cfg80211 and mac80211 kunit tests
-From: Johannes Berg <johannes@sipsolutions.net>
-To: David Gow <davidgow@google.com>, Shuah Khan <skhan@linuxfoundation.org>
-Cc: benjamin@sipsolutions.net, linux-wireless@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, Brendan
- Higgins <brendanhiggins@google.com>, Benjamin Berg <benjamin.berg@intel.com>
-Date: Fri, 22 Dec 2023 11:09:09 +0100
-In-Reply-To: <CABVgOSkrhEYXvzjtWfdxmKVGZwGnJTKwbd9+kBSRWxbOfyaRUA@mail.gmail.com>
-References: <20231220151952.415232-1-benjamin@sipsolutions.net>
-	 <fab3c87ea726208cbdec03dfd61230e4c8ceb694.camel@sipsolutions.net>
-	 <ae651d3d-58f7-40de-a625-4882cf0efc9b@linuxfoundation.org>
-	 <dbcadbe4430cd314373f15a9f4b814e44662bef6.camel@sipsolutions.net>
-	 <a2ef9ea4-00e8-4fa4-bc2e-58fbec306503@linuxfoundation.org>
-	 <CABVgOSkrhEYXvzjtWfdxmKVGZwGnJTKwbd9+kBSRWxbOfyaRUA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.50.2 (3.50.2-1.fc39) 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3450517984
+	for <linux-kselftest@vger.kernel.org>; Fri, 22 Dec 2023 11:51:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-6dbc4675749so285131a34.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 Dec 2023 03:51:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1703245873; x=1703850673; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=BoM5xHXFmNnDYRPpvEPp480i76UtG2GRcAozKAy32GE=;
+        b=S+ckMuZ7m8RC5KKbJNDz7mhVemuksrd65ncJQ2J40KIAGK2Xfya+73VgGf88PFU+I0
+         /wa1QH/KWmaT+dsdMGrj9kzLKDAzgzvLIBmcHrH6HnvNqqPhQjUMafIDo9wf26F6JzJ6
+         Z/wxU57ES3ZJqEPcKhR72IdHfcQAdmxZy6tEMQMZiPBG5rN9vuROAnq7XqoA2p6fuBN7
+         ix3UvfuCIRayhZBbi4KxkIA4aO+pECRRfCHgiMSRF51hxWP73CerX8OorXTUKWANcLbO
+         JTavaFfLIEbEUy7sVmPgdK+g/8YDmV5d4aDASeN+L2I6xnWsmq9fZYYbQ6i/QsLxWVxI
+         25LA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703245873; x=1703850673;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BoM5xHXFmNnDYRPpvEPp480i76UtG2GRcAozKAy32GE=;
+        b=Ue6Cunt7N+i3AkrTavoNKUnaYxsHRQlA0ImErS9XUjPf03ZT8SEq+bfTj8lmTx0gta
+         yjM/sY9SoastahXmb7EGEEHBc1w24hwATnfom2iJt6zK1bm2ycGfDqRzWSXWIZwm3l1e
+         0L/Nox/LxQpA0fHOMNdc6OHCtaT5/P2QfnBPd7CdZjnsl502bZAVCvmWFtSmr8cyqQtp
+         L58aXh/JHUT24HKQheirW/79J6Giy8KhW+oTRFdVhZaB9ZWudxLalLb5GCrSn0slDnaI
+         eD1mzlqq71nNr5qw8zxC/hkiXVgbSeDCIHELyn6Wt+WN3SSq6lTH21SUj7SCptPbpYKC
+         AVYg==
+X-Gm-Message-State: AOJu0YwP8rLDrx0XIrw3+8dwPtlMOjdlChyWagi4UvxK/OKil7ohMOjH
+	HR0PBKPr9+nU6LoDQenktrGBZThw+hX0kB3mmEe7Dd49jIo=
+X-Google-Smtp-Source: AGHT+IFw4K55CFuOVXFhnBfb+XlWVqL/EHzoInQ/RG677cRc/CcrXScIzdNRNNszNL9RZPILzb/MRQ==
+X-Received: by 2002:a05:6830:100e:b0:6db:bd00:d646 with SMTP id a14-20020a056830100e00b006dbbd00d646mr956782otp.26.1703245869210;
+        Fri, 22 Dec 2023 03:51:09 -0800 (PST)
+Received: from vps.terceiro.xyz (vps.terceiro.xyz. [191.101.235.31])
+        by smtp.gmail.com with ESMTPSA id b16-20020a63cf50000000b005aa800c149bsm3174759pgj.39.2023.12.22.03.51.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Dec 2023 03:51:08 -0800 (PST)
+Received: from localhost (unknown [IPv6:2804:14d:7224:8745:26f4:3599:ce80:10])
+	by vps.terceiro.xyz (Postfix) with ESMTPSA id 8B129441D4;
+	Fri, 22 Dec 2023 08:51:04 -0300 (-03)
+Date: Fri, 22 Dec 2023 08:50:56 -0300
+From: Antonio Terceiro <antonio.terceiro@linaro.org>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] selftests: uevent: use shared makefile library
+Message-ID: <ZYV4ICTvandgWE4I@linaro.org>
+References: <20231221204908.341677-2-antonio.terceiro@linaro.org>
+ <f38374bd-bb1f-451e-9d34-9c38029ffd15@linuxfoundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="VtLPA9UNJt+q8agv"
+Content-Disposition: inline
+In-Reply-To: <f38374bd-bb1f-451e-9d34-9c38029ffd15@linuxfoundation.org>
 
-Hi,
 
-Thanks for taking a look!
+--VtLPA9UNJt+q8agv
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 2023-12-22 at 18:02 +0800, David Gow wrote:
-> The two initial KUnit patches look fine, modulo a couple of minor docs
-> issues and checkpatch warnings.=C2=A0
+On Thu, Dec 21, 2023 at 02:44:52PM -0700, Shuah Khan wrote:
+> On 12/21/23 13:49, Antonio Terceiro wrote:
+> > This makes the uevent selftests build not write to the source tree
+> > unconditionally, as that breaks out of tree builds when the source tree
+> > is read-only. It also avoids leaving a git repository in a dirty state
+> > after a build.
+> >=20
+>=20
+> Why can't you do that using make O=3D directive.
 
-I can run checkpatch (even if I can't always take it seriously), but do
-you want to comment more specifically wrt. the docs?
+That's what I meant by out of tree builds. When using O=3D, the uevent
+selftests build still writes to the source directory. Maybe my wording
+in the commit message is not clear enough, I will try to improve it.
 
-> They apply cleanly, and I doubt
-> there's much chance of there being a merge conflict for 6.8 -- there
-> are no other changes to the parameterised test macros, and the skb
-> stuff is in its own file.
+> > v2: drop spurious extra SPDX-License-Identifier
+> >=20
+> > Signed-off-by: Antonio Terceiro <antonio.terceiro@linaro.org>
+> > ---
+> >   tools/testing/selftests/uevent/Makefile | 15 +++------------
+> >   1 file changed, 3 insertions(+), 12 deletions(-)
+> >=20
+> > diff --git a/tools/testing/selftests/uevent/Makefile b/tools/testing/se=
+lftests/uevent/Makefile
+> > index f7baa9aa2932..872969f42694 100644
+> > --- a/tools/testing/selftests/uevent/Makefile
+> > +++ b/tools/testing/selftests/uevent/Makefile
+> > @@ -1,17 +1,8 @@
+> >   # SPDX-License-Identifier: GPL-2.0
+> >   all:
+> > -include ../lib.mk
+> > -
+> > -.PHONY: all clean
+> > -
+> > -BINARIES :=3D uevent_filtering
+> > -CFLAGS +=3D -Wl,-no-as-needed -Wall
+> > +CFLAGS +=3D -Wl,-no-as-needed -Wall $(KHDR_INCLUDES)
+> > -uevent_filtering: uevent_filtering.c ../kselftest.h ../kselftest_harne=
+ss.h
+> > -	$(CC) $(CFLAGS) $< -o $@
+> > +TEST_GEN_PROGS =3D uevent_filtering
+> > -TEST_PROGS +=3D $(BINARIES)
+> > -EXTRA_CLEAN :=3D $(BINARIES)
+> > -
+> > -all: $(BINARIES)
+> > +include ../lib.mk
+>=20
+> This change doesn't get the intended result of not writing to
+> source tree. Binaries will still be written to the source
+> tree unless O=3D is specified.
 
-Right.
+It does in my tests. Maybe I am missing something.
 
-> The remaining patches don't apply on top of the kunit branch as-is.
+mainline without the patch:
 
-Oh, OK. That makes some sense though, we've had a number of changes in
-the stack this cycle before. I somehow thought the tests were likely
-standalone, but apparently not.
+----------------8<----------------8<----------------8<-----------------
+$ make -s defconfig O=3D/tmp/output && make -s kselftest-all TARGETS=3Dueve=
+nt O=3D/tmp/output
+make[4]: Entrando no diret=F3rio '/home/terceiro/src/linaro/linux/tools/tes=
+ting/selftests/uevent'
 
-> I
-> haven't had a chance to review them properly yet; the initial glance I
-> had didn't show any serious issues (though I think checkpatch
-> suggested some things to 'check').
+make[4]: Nada a ser feito para 'all'.
+make[4]: Saindo do diret=F3rio '/home/terceiro/src/linaro/linux/tools/testi=
+ng/selftests/uevent'
 
-I can check.
+$ git status --ignored
+On branch master
+Your branch is up to date with 'origin/master'.
 
-> So (once those small issues are finished), I'm okay with the first two
-> patches going in via either tree. The remaining ones are probably best
-> done via the wireless tree, as they seem to depend on some existing
-> patches there, so maybe it makes sense to push everything via
-> wireless.
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	tools/testing/selftests/uevent/uevent_filtering
 
-If not through wireless I doubt we'll get it synchronized for 6.8,
-though of course it's also not needed for 6.8 to have the extra unit
-tests :)
+nothing added to commit but untracked files present (use "git add" to track)
+$ git clean -dxf
+Removing tools/testing/selftests/uevent/uevent_filtering
+----------------8<----------------8<----------------8<-----------------
 
-I'll let Shuah decide.
+mainline with the patch:
 
-Thanks!
+----------------8<----------------8<----------------8<-----------------
+$ git branch -m kselftest-uvent kselftest-uvent-o
+$ rm -rf /tmp/output/
+$ make -s defconfig O=3D/tmp/output && make -s kselftest-all TARGETS=3Dueve=
+nt O=3D/tmp/output
+make[4]: Entrando no diret=F3rio '/home/terceiro/src/linaro/linux/tools/tes=
+ting/selftests/uevent'
 
-johannes
+gcc -Wl,-no-as-needed -Wall -isystem /tmp/output/usr/include     uevent_fil=
+tering.c  -o /tmp/output/kselftest/uevent/uevent_filtering
+make[4]: Saindo do diret=F3rio '/home/terceiro/src/linaro/linux/tools/testi=
+ng/selftests/uevent'
+
+$ git status --ignored
+On branch kselftest-uvent-o
+nothing to commit, working tree clean
+$ git clean -dxf
+$
+----------------8<----------------8<----------------8<-----------------
+
+--VtLPA9UNJt+q8agv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEst7mYDbECCn80PEM/A2xu81GC94FAmWFeBoACgkQ/A2xu81G
+C94m0Q//WKZqcUvOON9R0vYG+fWY3pF617BKqujoKftM8Glhtq1bQob8x7z3P7u/
+FvFvuG7VhkkUtUmOsKFSWghJRnSGDQiKzFnmwWO3U48rsFsuWIohk58kGTDRacoU
+gfYXHLhe7yRNGtHfZXh+s7XSNxaX3QZG1YVstMmb4WJwAqXN6WaKIuXcPTwAl7rO
+G1SPD+kxUDc+jpAx9j81o6Syy5F3Cuj8hqQEjJrk/rD6QhgCxNtWwNM1OnxnJZRc
+pGzu23Ta7y6JGEe0UfwGn/HbhhXL3TJXVvIgzlMb3eY3zPVRhjVT3T6mUyWjSCV5
+wfpl2YrpSTp9Iay+booAZTrM+V5dUgFIj2kYGlxRlAYWwGxYr0LKPORMQ+FJQcla
+H5L0exfaZDGmfv3H6BHH0YdmkyzK8o6T2BDCD+1VR+n1BlxgY7QPUfD9BwiS7aQ2
+S2XttPwX7IvmnP7oRlT5aqudeooRadjhxcVLTQpvrXumq8EUgEmTa/GISyEx22Ct
+a08kZMNWP5TN02G65swLfDLDmLgVvZdeFPbnoqjwbrCLnqaClhhqOd0Hvti1E653
+y9AdomoOjtD28E6M+YFmcaZfMm9PjexWP8yQS2j0Qu5M31OtTjm4remReV2BfpYB
++g0KgpoW7bh11mQ3m2jKY620aeD1U1+1f/2YCPa26xND5FkqU6U=
+=Khk4
+-----END PGP SIGNATURE-----
+
+--VtLPA9UNJt+q8agv--
 
