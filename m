@@ -1,120 +1,73 @@
-Return-Path: <linux-kselftest+bounces-2403-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2404-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43DDA81CD73
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Dec 2023 18:03:37 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DFEED81CF4F
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Dec 2023 21:35:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 967EAB214A2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Dec 2023 17:03:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B61D283E6C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Dec 2023 20:35:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8858286BD;
-	Fri, 22 Dec 2023 17:03:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C13A41DDE1;
+	Fri, 22 Dec 2023 20:35:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="AmtkH4kh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dxBtVClU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com [209.85.166.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03F8F2554E
-	for <linux-kselftest@vger.kernel.org>; Fri, 22 Dec 2023 17:03:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f49.google.com with SMTP id ca18e2360f4ac-7b74bc536dbso17563939f.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Dec 2023 09:03:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1703264601; x=1703869401; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ltRRpZS+EOcPiETxy95NBLjy+e16UT8/TWTaVCrYa08=;
-        b=AmtkH4khFMtKHhxoCNqyNq5lGWxBtPBahG/pLvnAtxiABv1o1KeY/a7R80o+SkUSpo
-         sTaPO/qskOk7eUmOeAn5q1RuwkZcKkcGK/JEMlHDo2dObpana5sOIjDxS+l3KM4uwsFl
-         ieBM5JeB9RcO9E4iKdNgD6KnbxvTB6asLYxPI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703264601; x=1703869401;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ltRRpZS+EOcPiETxy95NBLjy+e16UT8/TWTaVCrYa08=;
-        b=Ig4JCTjE7BD0aA4gfjFx+rZKFC5OzK6TpXa4Ee/aHOO2Un7qko008gq7pxDNQI6+2J
-         +w1vx7it6TA5+zFa1jxHbm9o34vqBFWZ8KHP2Kee0zh3WgNdNqZu8zEeqgrwl+mj+Ya0
-         1IgqV5hpaNYP1v4NGSfr7quhSlwR6K4p7W5VFzN43adKMl5bkETUsz5tO4/17TIxoM77
-         caNYRB6GWxsYUY24GiczaZV4+GRxLfhNpxnc78mllPAqXexmJa8vBH1dBbPCOKc+fIj2
-         hoMvOdovqrh4qzuemJqxgW99WuC2QXZ/zmr6AoH1JakEKWSFjFLrw7Q0HEtX0w4a/eSc
-         acRA==
-X-Gm-Message-State: AOJu0Yzs4r2fQj5w+eBmUd4DT1a9Mi4VsKrJALDU4hxOTx350Wu8h3GJ
-	If4UnIPL+b0BRyCOzTQ8oWlxEmVHbcEGkw==
-X-Google-Smtp-Source: AGHT+IG8x9fpWMWrm5btoGGjgbfKlOW9ON3tdHN6XzxnXT29KlFDVnIHs5y0IVbj/bXEE2sM5V6gQw==
-X-Received: by 2002:a05:6e02:1cab:b0:35f:d862:e451 with SMTP id x11-20020a056e021cab00b0035fd862e451mr3120716ill.2.1703264601030;
-        Fri, 22 Dec 2023 09:03:21 -0800 (PST)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id by3-20020a056e02260300b0035d53e82fc1sm1226169ilb.19.2023.12.22.09.03.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 22 Dec 2023 09:03:19 -0800 (PST)
-Message-ID: <80b5ef43-7b3d-4af0-8efd-0bb080e99ccf@linuxfoundation.org>
-Date: Fri, 22 Dec 2023 10:03:19 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87A411DDC7;
+	Fri, 22 Dec 2023 20:35:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F214EC433C8;
+	Fri, 22 Dec 2023 20:35:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1703277342;
+	bh=iXKYtqMzVuHtlxTF0qfLDk0CULUFNn1jMRPwGx0uC14=;
+	h=From:To:In-Reply-To:References:Subject:Date:From;
+	b=dxBtVClU5CP6vF/PlVc04A9fZ3uEaCZ+yVqtibwuvN/j24xSM6R8aaXp0dORQ9wMG
+	 mN4rldr7PAt+zRsrymf88EQ2Ry7sM3qf7hNDfknc7aE9F95reGLs9vsu+wIlo4j3yK
+	 kt/iu8UW/L//tMin+vg38QqJlYkyl1s0+rpW42JfaxpNfa2zzTH2TrL+HgLbXLkd+N
+	 vLpSm7fqbhbSpkXHo1ZDR4OSfkSpJQmgj1Te5x9WXdGYpFbqvFb+FPwB6yn6/qNP50
+	 5KbsaYsaZ0EavRznf3f2sCgvTnupcr25mDX4eYgsiZlXzKW3TXICquKON5fU5SqmEr
+	 eOubaekmX2iyg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D2F8DDD4EE0;
+	Fri, 22 Dec 2023 20:35:41 +0000 (UTC)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4] tracing/selftests: Add ownership modification tests
- for eventfs
-Content-Language: en-US
-To: Steven Rostedt <rostedt@goodmis.org>, LKML
- <linux-kernel@vger.kernel.org>,
- Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Linus Torvalds <torvalds@linux-foundation.org>, Shuah Khan
- <shuah@kernel.org>, Linux selftests <linux-kselftest@vger.kernel.org>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20231222113459.4d645bfc@gandalf.local.home>
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20231222113459.4d645bfc@gandalf.local.home>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+From: "Kernel.org Bugbot" <bugbot@kernel.org>
+To: mpdesouza@suse.com, borntraeger@linux.ibm.com, shuah@kernel.org, 
+ linux-doc@vger.kernel.org, joe.lawrence@redhat.com, jpoimboe@kernel.org, 
+ live-patching@vger.kernel.org, mbenes@suse.cz, bugs@lists.linux.dev, 
+ linux-kselftest@vger.kernel.org, svens@linux.ibm.com, 
+ linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org, 
+ agordeev@linux.ibm.com, pmladek@suse.com, gor@linux.ibm.com, 
+ hca@linux.ibm.com, jikos@kernel.org, corbet@lwn.net
+Message-ID: <20231222-b218303-d272473600e9@bugzilla.kernel.org>
+In-Reply-To: <20231220-send-lp-kselftests-v4-0-3458ec1b1a38@suse.com>
+References: <20231220-send-lp-kselftests-v4-0-3458ec1b1a38@suse.com>
+Subject: Re: livepatch: Move modules to selftests and add a new test
+X-Bugzilla-Product: Linux
+X-Bugzilla-Component: Kernel
+X-Mailer: peebz 0.1
+Date: Fri, 22 Dec 2023 20:35:41 +0000 (UTC)
 
-On 12/22/23 09:34, Steven Rostedt wrote:
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
-> 
-> As there were bugs found with the ownership of eventfs dynamic file
-> creation. Add a test to test it.
-> 
-> It will remount tracefs with a different gid and check the ownership of
-> the eventfs directory, as well as the system and event directories. It
-> will also check the event file directories.
-> 
-> It then does a chgrp on each of these as well to see if they all get
-> updated as expected.
-> 
-> Then it remounts the tracefs file system back to the original group and
-> makes sure that all the updated files and directories were reset back to
-> the original ownership.
-> 
-> It does the same for instances that change the ownership of he instance
-> directory.
-> 
-> Note, because the uid is not reset by a remount, it is tested for every
-> file by switching it to a new owner and then back again.
-> 
-> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> Tested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> ---
-> Changes since v3: https://lore.kernel.org/linux-trace-kernel/20231221211229.13398ef3@gandalf.local.home
-> 
-> - Added missing SPDX and removed exec permission from file (Shuah Khan)
-> 
+Hello:
 
-Thank you. Applied to linux-kselftest next branch for Linux 6.8-rc1
+This conversation is now tracked by Kernel.org Bugzilla:
+https://bugzilla.kernel.org/show_bug.cgi?id=218303
 
-thanks,
--- Shuah
+There is no need to do anything else, just keep talking.
+-- 
+Deet-doot-dot, I am a bot.
+Kernel.org Bugzilla (peebz 0.1)
 
 
