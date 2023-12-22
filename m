@@ -1,208 +1,211 @@
-Return-Path: <linux-kselftest+bounces-2364-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2365-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2473C81C965
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Dec 2023 12:51:22 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7072881C98D
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Dec 2023 13:00:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 494FA1C2147F
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Dec 2023 11:51:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C3F61B2194E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Dec 2023 12:00:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D481714AB1;
-	Fri, 22 Dec 2023 11:51:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0854A17989;
+	Fri, 22 Dec 2023 11:59:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="S+ckMuZ7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZukzZqvj"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3450517984
-	for <linux-kselftest@vger.kernel.org>; Fri, 22 Dec 2023 11:51:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-6dbc4675749so285131a34.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Dec 2023 03:51:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1703245873; x=1703850673; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BoM5xHXFmNnDYRPpvEPp480i76UtG2GRcAozKAy32GE=;
-        b=S+ckMuZ7m8RC5KKbJNDz7mhVemuksrd65ncJQ2J40KIAGK2Xfya+73VgGf88PFU+I0
-         /wa1QH/KWmaT+dsdMGrj9kzLKDAzgzvLIBmcHrH6HnvNqqPhQjUMafIDo9wf26F6JzJ6
-         Z/wxU57ES3ZJqEPcKhR72IdHfcQAdmxZy6tEMQMZiPBG5rN9vuROAnq7XqoA2p6fuBN7
-         ix3UvfuCIRayhZBbi4KxkIA4aO+pECRRfCHgiMSRF51hxWP73CerX8OorXTUKWANcLbO
-         JTavaFfLIEbEUy7sVmPgdK+g/8YDmV5d4aDASeN+L2I6xnWsmq9fZYYbQ6i/QsLxWVxI
-         25LA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703245873; x=1703850673;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BoM5xHXFmNnDYRPpvEPp480i76UtG2GRcAozKAy32GE=;
-        b=Ue6Cunt7N+i3AkrTavoNKUnaYxsHRQlA0ImErS9XUjPf03ZT8SEq+bfTj8lmTx0gta
-         yjM/sY9SoastahXmb7EGEEHBc1w24hwATnfom2iJt6zK1bm2ycGfDqRzWSXWIZwm3l1e
-         0L/Nox/LxQpA0fHOMNdc6OHCtaT5/P2QfnBPd7CdZjnsl502bZAVCvmWFtSmr8cyqQtp
-         L58aXh/JHUT24HKQheirW/79J6Giy8KhW+oTRFdVhZaB9ZWudxLalLb5GCrSn0slDnaI
-         eD1mzlqq71nNr5qw8zxC/hkiXVgbSeDCIHELyn6Wt+WN3SSq6lTH21SUj7SCptPbpYKC
-         AVYg==
-X-Gm-Message-State: AOJu0YwP8rLDrx0XIrw3+8dwPtlMOjdlChyWagi4UvxK/OKil7ohMOjH
-	HR0PBKPr9+nU6LoDQenktrGBZThw+hX0kB3mmEe7Dd49jIo=
-X-Google-Smtp-Source: AGHT+IFw4K55CFuOVXFhnBfb+XlWVqL/EHzoInQ/RG677cRc/CcrXScIzdNRNNszNL9RZPILzb/MRQ==
-X-Received: by 2002:a05:6830:100e:b0:6db:bd00:d646 with SMTP id a14-20020a056830100e00b006dbbd00d646mr956782otp.26.1703245869210;
-        Fri, 22 Dec 2023 03:51:09 -0800 (PST)
-Received: from vps.terceiro.xyz (vps.terceiro.xyz. [191.101.235.31])
-        by smtp.gmail.com with ESMTPSA id b16-20020a63cf50000000b005aa800c149bsm3174759pgj.39.2023.12.22.03.51.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Dec 2023 03:51:08 -0800 (PST)
-Received: from localhost (unknown [IPv6:2804:14d:7224:8745:26f4:3599:ce80:10])
-	by vps.terceiro.xyz (Postfix) with ESMTPSA id 8B129441D4;
-	Fri, 22 Dec 2023 08:51:04 -0300 (-03)
-Date: Fri, 22 Dec 2023 08:50:56 -0300
-From: Antonio Terceiro <antonio.terceiro@linaro.org>
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] selftests: uevent: use shared makefile library
-Message-ID: <ZYV4ICTvandgWE4I@linaro.org>
-References: <20231221204908.341677-2-antonio.terceiro@linaro.org>
- <f38374bd-bb1f-451e-9d34-9c38029ffd15@linuxfoundation.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DEB317985;
+	Fri, 22 Dec 2023 11:59:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1703246395; x=1734782395;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=xlzGsy2zLFFE4xWGnSgpBAySsmX5etaq6UAkksC7+7U=;
+  b=ZukzZqvjRcqaXOfi3gXQffg1Les0BPnSciLn9fUHUqaUCLghAHZ6e8Ow
+   8rFHQIYr4x8QrGCciufGjp3xyR9SVUZuuSlX/lhu8dfAX/nOR7Qwm/ofc
+   M4B7zAicziQsPB/n5DQuywYzRfhLvW2gwoQnJro5tZdgVI2UgOHS3uVCI
+   vUtLEi+h/Lstbnv8fcI5QhWWGnqujfJoE2vx7FnlztfXpOu3nSMZ69c3n
+   IKXCwdZEuKe7XUH9xdpV0XwhjtK0kvMBSk8BA4S5iGinXzvlX1E6TRynD
+   UusXW3dmCGsEsVJLBO2Vg1gnAr7Y0RW12+FgIsNQZ39hwOGAKMgWOLY/x
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10931"; a="3351795"
+X-IronPort-AV: E=Sophos;i="6.04,296,1695711600"; 
+   d="scan'208";a="3351795"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Dec 2023 03:59:55 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10931"; a="895450427"
+X-IronPort-AV: E=Sophos;i="6.04,296,1695711600"; 
+   d="scan'208";a="895450427"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by fmsmga002.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 22 Dec 2023 03:59:53 -0800
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Fri, 22 Dec 2023 03:59:53 -0800
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Fri, 22 Dec 2023 03:59:53 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35 via Frontend Transport; Fri, 22 Dec 2023 03:59:46 -0800
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.169)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.35; Fri, 22 Dec 2023 03:59:40 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dg5EpnzUKha3vo9OquQ/T81p+nlkocw5nFZ3XNfLWcGtyuVBC5i5y3JRFPwyiv/6urJzvC7FlvkFAJHxpWc7AUK2+Eo056E90l5KB/EmEeRxqkUoWDGPTZhXLNk3Un0rbuOLuBThABw3QeMMoyUSYwm1eGQVcTr81z5ieMj6zkN26pNoFZ+YJwoqWKAkZBFioQm4cxb30bKtULYOGxQ93L2n9uIFiXnlZVP2Tpmua1AOVEDAXmK68HymN6vzLrRsH0fAs5m0Ek57JQVgUYOLLNZxXHusMcWqtT2IOL9teI7sjvBd02CKbnZ6gHqcWz3spbNXweXMLF97DNiFik8YIg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xlzGsy2zLFFE4xWGnSgpBAySsmX5etaq6UAkksC7+7U=;
+ b=HkknTx+KeIKCtxehlODmMKKjayRFkC6rn5loZy4JGG3mqWg00CQNNBHJ+55mVgJ23xNFemzsYQkM0z7nhG6DyGoEYWMeoSNsM/PV0QnRbTtx/2C2VwrUzUhKoJwp8FrMZhNyD35cH1yYksxMRNoPrmh1uOLFSuPPBkpg5+vpfEFEXEYZmNYLgJ9I6s4a/kI3xB0ZchaLLhuugGehK/lCYOVuH0Fs9fg3ryXj1+KxLcaQ86thdDaantEb7UrWtRgvrIJDrb8hYuGrjslg1de+yqWdlMpyjjNHil3+4+kw0d27IYGc5q1wyF1j0ZnLxXK1KQbRNy1jYY1QysMEha6EaQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from DS0PR11MB7529.namprd11.prod.outlook.com (2603:10b6:8:141::20)
+ by DM4PR11MB5309.namprd11.prod.outlook.com (2603:10b6:5:390::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7113.20; Fri, 22 Dec
+ 2023 11:59:38 +0000
+Received: from DS0PR11MB7529.namprd11.prod.outlook.com
+ ([fe80::e4ae:3948:1f55:547d]) by DS0PR11MB7529.namprd11.prod.outlook.com
+ ([fe80::e4ae:3948:1f55:547d%5]) with mapi id 15.20.7113.019; Fri, 22 Dec 2023
+ 11:59:38 +0000
+From: "Liu, Yi L" <yi.l.liu@intel.com>
+To: "Tian, Kevin" <kevin.tian@intel.com>
+CC: "Yang, Weijiang" <weijiang.yang@intel.com>, "joro@8bytes.org"
+	<joro@8bytes.org>, "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+	"jgg@nvidia.com" <jgg@nvidia.com>, "robin.murphy@arm.com"
+	<robin.murphy@arm.com>, "baolu.lu@linux.intel.com"
+	<baolu.lu@linux.intel.com>, "cohuck@redhat.com" <cohuck@redhat.com>,
+	"eric.auger@redhat.com" <eric.auger@redhat.com>, "nicolinc@nvidia.com"
+	<nicolinc@nvidia.com>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+	"mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+	"chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
+	"yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>, "peterx@redhat.com"
+	<peterx@redhat.com>, "jasowang@redhat.com" <jasowang@redhat.com>,
+	"shameerali.kolothum.thodi@huawei.com"
+	<shameerali.kolothum.thodi@huawei.com>, "lulu@redhat.com" <lulu@redhat.com>,
+	"suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+	"iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "Duan,
+ Zhenzhong" <zhenzhong.duan@intel.com>, "joao.m.martins@oracle.com"
+	<joao.m.martins@oracle.com>, "Zeng, Xin" <xin.zeng@intel.com>, "Zhao, Yan Y"
+	<yan.y.zhao@intel.com>, "j.granados@samsung.com" <j.granados@samsung.com>
+Subject: Re: [PATCH v7 9/9] iommu/vt-d: Add iotlb flush for nested domain
+Thread-Topic: [PATCH v7 9/9] iommu/vt-d: Add iotlb flush for nested domain
+Thread-Index: AQHaNCP4qRuDL+bDzEuyhcu89eXATrC0rU2AgAAv1gCAAAQBdoAAAw4AgABQMN0=
+Date: Fri, 22 Dec 2023 11:59:38 +0000
+Message-ID: <65B6D347-5C85-4CB0-9CD8-1C914045B62B@intel.com>
+References: <20231221153948.119007-1-yi.l.liu@intel.com>
+ <20231221153948.119007-10-yi.l.liu@intel.com>
+ <f6302d8e-fd5f-45e1-8148-e5812c61f5c0@intel.com>
+ <BN9PR11MB52766A289D2CA50F8BD802F18C94A@BN9PR11MB5276.namprd11.prod.outlook.com>
+ <D35102EE-F1E8-4888-8A5E-A1A723B3363D@intel.com>
+ <BN9PR11MB527672402F30F701A5EA53028C94A@BN9PR11MB5276.namprd11.prod.outlook.com>
+In-Reply-To: <BN9PR11MB527672402F30F701A5EA53028C94A@BN9PR11MB5276.namprd11.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DS0PR11MB7529:EE_|DM4PR11MB5309:EE_
+x-ms-office365-filtering-correlation-id: f6c4fc0f-33e3-4059-e022-08dc02e57900
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 9UCnRalu1KZ30lx3Ssr0GBnBm1A4DCb8XP4RwDZ8QAk32Euf0jetMQSsWgzIodutMQFcEA3ia8szjFtc5cFnxWXKxURJiJIF/09AlqQbot91xXYQRPj9XhthwEem4ofnVnmJYDmAfv726XS0FxmK886GD6seYpEf4O0RVjOwUzO+O/phEy2BBC8bkRnLosJixK9yvXuf1mJTsi39IN95Nk8+SqptIgbsBqEjmnVznZk1nR2m02eGLc+3OScBO/GAvseaTURIyIc4XwLcnzZ7pbXLAvNDCFZ6XZ8WQ4om4qjXrZdMnuQGMqSybm6LDzEivYItxkMiXDz5ebT9Vn7iZMDHk4Z24qI5rJXrhI9c8ZLoaY0Ulu2+YHL2ptGIsIply/2Baf4jZc1+0vf3ydiQ0PPI1hcb5OsDHwDbHIkMnQ1H7FdCe1usfG5eZRcamlE7wEjO/nqj9eMMMa3gz/bMQORAq+bC1DxezkfiH9c4cQqu135zw0+M1MHIsTfg3XYrQbwTybL/+RyoY/262c/WpDKzYhGV1Hbw46z6Gt1pi0zfQZNA/xQPkjOrsbiQYnVE4IolnRe8mxfASZKY2RQsORF7Dp2/02bl4Ir9EB743erGBTNNGCHvDWMgc9rRhlZqEaEWOuutxaGferH7YPE9IQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB7529.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(376002)(396003)(39860400002)(366004)(136003)(230922051799003)(186009)(451199024)(1800799012)(64100799003)(478600001)(6486002)(4326008)(38100700002)(6862004)(122000001)(5660300002)(6636002)(66476007)(76116006)(316002)(66556008)(37006003)(66946007)(66446008)(54906003)(8676002)(8936002)(64756008)(2616005)(71200400001)(53546011)(6506007)(6512007)(36756003)(41300700001)(86362001)(33656002)(2906002)(82960400001)(38070700009)(7416002)(4744005)(45980500001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?LzdsRHVUMVpMb1ByZk43NEIxYkhZUEUxNjBUNVFxZld2VitNR3RseFhrZnlu?=
+ =?utf-8?B?VUNrYWFuM1ZGNlZ4WXZoa0pCQ3RHM1RoTkRVWjlCMmRrVmdzQmZpNktIMFly?=
+ =?utf-8?B?NkU2Zml1OWEya2lxWFQ2cW85Y0dvUmlJTDlFZCtYOXY0bG01YmJqNlJBTTg2?=
+ =?utf-8?B?ZXI2SzhlVGpUSURFNUJPc2xmNkdNbi9lTkZKTlVMUVo4OXhpdlZ1Vk4vSldB?=
+ =?utf-8?B?NTM3czNPR3FITVhJa1RPZXhPLzREUVVKSUtqM05vblluSlFmVkx4aVg3VjBH?=
+ =?utf-8?B?L010NzB6Mm1mZEZQZS9EMk9Zc0psVWdHVlBYSHVGek5ES0ZUaTNxdDJGOVBV?=
+ =?utf-8?B?TkdtR3Vtd3lxTHhyREJTc1lRR3B6LzdIQ3ZTRDNZQVNnQ0ErVVMzVUMwek5u?=
+ =?utf-8?B?bG5HZXJLOFY5RnBMR2UrRVRJc1FZbDl4OU5laTA0ZmJ5TlUzcFFiRXhOYVBx?=
+ =?utf-8?B?U0xWMXBoSmxUMFhyaWwyYzdPa2docFZpSWtNVWNvNWxTbkdUTER1RUV6M2pv?=
+ =?utf-8?B?cE9CRDdDMTNOSThIb2luOUNMSHhPRkNwRnhQTFd4RTA1b0Y3NWZPL3c5TjBm?=
+ =?utf-8?B?TjhhU242Y2hkNVBYNGZjZ0hhTDc4My9CM1BubHplczVsMGZBVUVwSDJHY2xk?=
+ =?utf-8?B?eXMrakpvRENIYmdXbDk4WFJtMURLT2hGRFRFTUVQUVpmTHMzMHhQLzVVRjFT?=
+ =?utf-8?B?NStBS3ZOajArZHJmWXZjRWxTbTJGY21ieTNrMXpBVkd5YWlJbWFncjJaMUVv?=
+ =?utf-8?B?Yld5SEovQmR4VkVmcW1TNnR5dkN5L2E4VWJZb09pZGg4ZHZHV2c1dmM3VjYv?=
+ =?utf-8?B?TWNyWDZNWGNGbThPTTFmUnltWnB0RkdPc09PeHBONmkwZzZpYkdkUjZIbmtZ?=
+ =?utf-8?B?ZmRucHNUU1NJdisvUUxIdThUeW5yeGRFcVU4ck4zaXg4WG5TVnVYQ1BiWGxr?=
+ =?utf-8?B?Vi92SWdYdGN6Q2JYMjQvMDU0SEZCUTBzd2ozWjVlQWhJL3dMNFJ2QVQwOXNs?=
+ =?utf-8?B?QlVBVnZ6S05kSU9LS0UweHVMZnpXUHdOdDYrQ0ZVNnUxSTRTMGR2QmxnWFE2?=
+ =?utf-8?B?bXQrM2JDeExwU2tsTXZESExmVTZITDNUWVVDbTRmZWlPVStQZTZiQ2tqOUpi?=
+ =?utf-8?B?UVRtbXdjT0x3VFhacjFtV3IzcnlRaWxObkpnclpTVy9MUi8vdkdqYjRjSE14?=
+ =?utf-8?B?TlFsVjJxSHNwbTAxK0IvWnF0TGxocitGcjU4NUFwa0o2M3VKUWxrRURxMGVB?=
+ =?utf-8?B?SjFwZVFDN1ExdlNWNnhlMFNJVG5wODFOeGZuVENSNWhjVElEWWFUa2Zwekox?=
+ =?utf-8?B?WSt4c0J0V2FjKzl6akdFV1Q3czlPWnhuT3RnQjM5bmRCMHZIZmFLZTRiUTZ0?=
+ =?utf-8?B?UlI3WUhhc0xRdktHZDY1SjhxTFdnYnRSSldzb2Fua3VhRlNGUVJrMTJ0bEtS?=
+ =?utf-8?B?SlBTSjBHRnBuNHYyMldxdi9xanpraXB2ZGlaRTFZVVBRUlJaK0F3Sk0wS3pr?=
+ =?utf-8?B?dGNpdzE5eXdoR1UxU01mRTVXVG1RR2cvWEpIaEJudy9Pb0JBbjViUS9ldUVm?=
+ =?utf-8?B?SzIvR0QxWUhZTFFOeERmL3FUbkVaMUVWOUNjcGo4YWdXVTVsaXBRN0F2WVVs?=
+ =?utf-8?B?Q3N3MkhKdHZ4RHhGQnZodHhWdkVidUtWSU0yYndsdHFaL1l5eGNRS2FKRUYx?=
+ =?utf-8?B?ajNaMHZyanJUWjIzQk9hL01hL3BZeGxmREtQV0UxODcxZ2IzS1BpS0IzUGZN?=
+ =?utf-8?B?Z0lXd0NrZFFYb1ltcTUycUhMbEQzOElsRGFyWDh1Rms2Q24yb1U1NVN3QUVM?=
+ =?utf-8?B?VlJSZHBMYjFDOC9Lc1krU0syZ3JySEdVS3hFR0NINDVIOWxlSjY3eTlFa0t2?=
+ =?utf-8?B?WktpMFJDTy9TeStxYUZHR3RmTkY3ZE5jcHE1UmFZZk5MY0d4L3FJMXF0U2ZF?=
+ =?utf-8?B?R3lHcWJKMTg3TmtUVWxRdjFFSzg5ZU0vZ0cvdkdKaEVFZVhoSGJxUjNsNmtZ?=
+ =?utf-8?B?VXN5aEFBT2lDQ3BTMFFTeU5JREwvZnI0a3pSam1ISS94YXRnSzZjVzMvaWxP?=
+ =?utf-8?B?RGlXZmUzckx3ZzVveWpzYlkxNm9nT0I4RGxxUnRaaHptUEtjbDdid1BsbnBC?=
+ =?utf-8?B?REdwMWZOREFtSG4rcGZkZUVUM0V5MVJ6dU4rVk5zOW9qUG91a1YraTZ0NlNw?=
+ =?utf-8?Q?I58VbNcTB/4iQLo98CSsAwH9yL+91ByxYRhtu/jA8LIm?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="VtLPA9UNJt+q8agv"
-Content-Disposition: inline
-In-Reply-To: <f38374bd-bb1f-451e-9d34-9c38029ffd15@linuxfoundation.org>
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB7529.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f6c4fc0f-33e3-4059-e022-08dc02e57900
+X-MS-Exchange-CrossTenant-originalarrivaltime: 22 Dec 2023 11:59:38.0585
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 7MAk/Ys/4okQGSYpAGjWsbK4cTw9eRCco00apvFkR7sKY+HcOmdt6cxi92dxBUrFtEX4Sarg8S5AUq7+W39n/Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5309
+X-OriginatorOrg: intel.com
 
-
---VtLPA9UNJt+q8agv
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Thu, Dec 21, 2023 at 02:44:52PM -0700, Shuah Khan wrote:
-> On 12/21/23 13:49, Antonio Terceiro wrote:
-> > This makes the uevent selftests build not write to the source tree
-> > unconditionally, as that breaks out of tree builds when the source tree
-> > is read-only. It also avoids leaving a git repository in a dirty state
-> > after a build.
-> >=20
->=20
-> Why can't you do that using make O=3D directive.
-
-That's what I meant by out of tree builds. When using O=3D, the uevent
-selftests build still writes to the source directory. Maybe my wording
-in the commit message is not clear enough, I will try to improve it.
-
-> > v2: drop spurious extra SPDX-License-Identifier
-> >=20
-> > Signed-off-by: Antonio Terceiro <antonio.terceiro@linaro.org>
-> > ---
-> >   tools/testing/selftests/uevent/Makefile | 15 +++------------
-> >   1 file changed, 3 insertions(+), 12 deletions(-)
-> >=20
-> > diff --git a/tools/testing/selftests/uevent/Makefile b/tools/testing/se=
-lftests/uevent/Makefile
-> > index f7baa9aa2932..872969f42694 100644
-> > --- a/tools/testing/selftests/uevent/Makefile
-> > +++ b/tools/testing/selftests/uevent/Makefile
-> > @@ -1,17 +1,8 @@
-> >   # SPDX-License-Identifier: GPL-2.0
-> >   all:
-> > -include ../lib.mk
-> > -
-> > -.PHONY: all clean
-> > -
-> > -BINARIES :=3D uevent_filtering
-> > -CFLAGS +=3D -Wl,-no-as-needed -Wall
-> > +CFLAGS +=3D -Wl,-no-as-needed -Wall $(KHDR_INCLUDES)
-> > -uevent_filtering: uevent_filtering.c ../kselftest.h ../kselftest_harne=
-ss.h
-> > -	$(CC) $(CFLAGS) $< -o $@
-> > +TEST_GEN_PROGS =3D uevent_filtering
-> > -TEST_PROGS +=3D $(BINARIES)
-> > -EXTRA_CLEAN :=3D $(BINARIES)
-> > -
-> > -all: $(BINARIES)
-> > +include ../lib.mk
->=20
-> This change doesn't get the intended result of not writing to
-> source tree. Binaries will still be written to the source
-> tree unless O=3D is specified.
-
-It does in my tests. Maybe I am missing something.
-
-mainline without the patch:
-
-----------------8<----------------8<----------------8<-----------------
-$ make -s defconfig O=3D/tmp/output && make -s kselftest-all TARGETS=3Dueve=
-nt O=3D/tmp/output
-make[4]: Entrando no diret=F3rio '/home/terceiro/src/linaro/linux/tools/tes=
-ting/selftests/uevent'
-
-make[4]: Nada a ser feito para 'all'.
-make[4]: Saindo do diret=F3rio '/home/terceiro/src/linaro/linux/tools/testi=
-ng/selftests/uevent'
-
-$ git status --ignored
-On branch master
-Your branch is up to date with 'origin/master'.
-
-Untracked files:
-  (use "git add <file>..." to include in what will be committed)
-	tools/testing/selftests/uevent/uevent_filtering
-
-nothing added to commit but untracked files present (use "git add" to track)
-$ git clean -dxf
-Removing tools/testing/selftests/uevent/uevent_filtering
-----------------8<----------------8<----------------8<-----------------
-
-mainline with the patch:
-
-----------------8<----------------8<----------------8<-----------------
-$ git branch -m kselftest-uvent kselftest-uvent-o
-$ rm -rf /tmp/output/
-$ make -s defconfig O=3D/tmp/output && make -s kselftest-all TARGETS=3Dueve=
-nt O=3D/tmp/output
-make[4]: Entrando no diret=F3rio '/home/terceiro/src/linaro/linux/tools/tes=
-ting/selftests/uevent'
-
-gcc -Wl,-no-as-needed -Wall -isystem /tmp/output/usr/include     uevent_fil=
-tering.c  -o /tmp/output/kselftest/uevent/uevent_filtering
-make[4]: Saindo do diret=F3rio '/home/terceiro/src/linaro/linux/tools/testi=
-ng/selftests/uevent'
-
-$ git status --ignored
-On branch kselftest-uvent-o
-nothing to commit, working tree clean
-$ git clean -dxf
-$
-----------------8<----------------8<----------------8<-----------------
-
---VtLPA9UNJt+q8agv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEst7mYDbECCn80PEM/A2xu81GC94FAmWFeBoACgkQ/A2xu81G
-C94m0Q//WKZqcUvOON9R0vYG+fWY3pF617BKqujoKftM8Glhtq1bQob8x7z3P7u/
-FvFvuG7VhkkUtUmOsKFSWghJRnSGDQiKzFnmwWO3U48rsFsuWIohk58kGTDRacoU
-gfYXHLhe7yRNGtHfZXh+s7XSNxaX3QZG1YVstMmb4WJwAqXN6WaKIuXcPTwAl7rO
-G1SPD+kxUDc+jpAx9j81o6Syy5F3Cuj8hqQEjJrk/rD6QhgCxNtWwNM1OnxnJZRc
-pGzu23Ta7y6JGEe0UfwGn/HbhhXL3TJXVvIgzlMb3eY3zPVRhjVT3T6mUyWjSCV5
-wfpl2YrpSTp9Iay+booAZTrM+V5dUgFIj2kYGlxRlAYWwGxYr0LKPORMQ+FJQcla
-H5L0exfaZDGmfv3H6BHH0YdmkyzK8o6T2BDCD+1VR+n1BlxgY7QPUfD9BwiS7aQ2
-S2XttPwX7IvmnP7oRlT5aqudeooRadjhxcVLTQpvrXumq8EUgEmTa/GISyEx22Ct
-a08kZMNWP5TN02G65swLfDLDmLgVvZdeFPbnoqjwbrCLnqaClhhqOd0Hvti1E653
-y9AdomoOjtD28E6M+YFmcaZfMm9PjexWP8yQS2j0Qu5M31OtTjm4remReV2BfpYB
-+g0KgpoW7bh11mQ3m2jKY620aeD1U1+1f/2YCPa26xND5FkqU6U=
-=Khk4
------END PGP SIGNATURE-----
-
---VtLPA9UNJt+q8agv--
+DQo+IE9uIERlYyAyMiwgMjAyMywgYXQgMTU6MTIsIFRpYW4sIEtldmluIDxrZXZpbi50aWFuQGlu
+dGVsLmNvbT4gd3JvdGU6DQo+IA0KPiDvu78NCj4+IA0KPj4gRnJvbTogTGl1LCBZaSBMIDx5aS5s
+LmxpdUBpbnRlbC5jb20+DQo+PiBTZW50OiBGcmlkYXksIERlY2VtYmVyIDIyLCAyMDIzIDM6MDIg
+UE0NCj4+IA0KPj4gDQo+Pj4+IE9uIERlYyAyMiwgMjAyMywgYXQgMTQ6NDcsIFRpYW4sIEtldmlu
+IDxrZXZpbi50aWFuQGludGVsLmNvbT4gd3JvdGU6DQo+Pj4gDQo+Pj4gDQo+Pj4+IA0KPj4+PiBG
+cm9tOiBZYW5nLCBXZWlqaWFuZyA8d2VpamlhbmcueWFuZ0BpbnRlbC5jb20+DQo+Pj4+IFNlbnQ6
+IEZyaWRheSwgRGVjZW1iZXIgMjIsIDIwMjMgMTE6NTYgQU0NCj4+Pj4+ICsNCj4+Pj4+ICsgICAg
+eGFfZm9yX2VhY2goJmRvbWFpbi0+aW9tbXVfYXJyYXksIGksIGluZm8pIHsNCj4+Pj4+ICsgICAg
+ICAgIG5lc3RlZF9mbHVzaF9wYXNpZF9pb3RsYihpbmZvLT5pb21tdSwgZG9tYWluLCBhZGRyLA0K
+Pj4+PiBucGFnZXMsIDApOw0KPj4+Pj4gKw0KPj4+Pj4gKyAgICAgICAgaWYgKGRvbWFpbi0+aGFz
+X2lvdGxiX2RldmljZSkNCj4+Pj4+ICsgICAgICAgICAgICBjb250aW51ZTsNCj4+Pj4gDQo+Pj4+
+IFNob3VsZG4ndCB0aGlzIGJlIGlmICghZG9tYWluLT5oYXNfaW90bGJfZGV2aWNlKT8NCj4+PiAN
+Cj4+PiB5ZXMgdGhhdCBpcyB3cm9uZy4NCj4+PiANCj4+PiBhY3R1YWxseSBpdCdzIHdlaXJkIHRv
+IHB1dCBkb21haW4gY2hlY2sgaW4gYSBsb29wIG9mIGRvbWFpbi0+aW9tbXVfYXJyYXkuDQo+Pj4g
+DQo+Pj4gdGhhdCBjaGVjayBhbG9uZyB3aXRoIGRldnRsYiBmbHVzaCBzaG91bGQgYmUgZG9uZSBv
+dXQgb2YgdGhhdCBsb29wLg0KPj4gDQo+PiBNYXliZSBhZGRpbmcgYSBib29sLCBzZXQgaXQgb3V0
+IG9mIHRoZSBsb29wLCBjaGVjayB0aGUgYm9vbCBpbiB0aGUgbG9vcC4NCj4gDQo+IHRoZSBwb2lu
+dCBpcyB0aGF0IGRldiBpb3RsYiBkb2Vzbid0IHJlbHkgb24gaW5mby0+aW9tbXU6DQo+IA0KPiAg
+ICBuZXN0ZWRfZmx1c2hfZGV2X2lvdGxiKGRvbWFpbiwgYWRkciwgbWFzaywgJmZhdWx0KTsNCj4g
+DQo+IHRoZW4gd2h5IGRvIGl0IGluIHRoZSBsb29wIG9mIGluZm8tPmlvbW11Pw0KDQp5ZXMuIEl0
+IHNob3VsZCBoYXZlIGFub3RoZXIgZGV2aWNlIGxvb3AgaW5zdGVhZC4NCg==
 
