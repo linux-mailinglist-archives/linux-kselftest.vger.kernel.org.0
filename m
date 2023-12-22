@@ -1,184 +1,135 @@
-Return-Path: <linux-kselftest+bounces-2361-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2362-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C973581C7C2
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Dec 2023 11:03:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 519FE81C7C7
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Dec 2023 11:03:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EE5351C24EEA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Dec 2023 10:03:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D529D1F250ED
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Dec 2023 10:03:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56AE2FBE5;
-	Fri, 22 Dec 2023 10:03:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B1B4101DA;
+	Fri, 22 Dec 2023 10:03:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YBJez3ya"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mbd0c7ld"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DC4D10A0C
-	for <linux-kselftest@vger.kernel.org>; Fri, 22 Dec 2023 10:03:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D619911722
+	for <linux-kselftest@vger.kernel.org>; Fri, 22 Dec 2023 10:03:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-553e36acfbaso10669a12.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 22 Dec 2023 02:03:05 -0800 (PST)
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-54744e66d27so10916a12.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 Dec 2023 02:03:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1703239384; x=1703844184; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1703239388; x=1703844188; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=j8KRgl+3zHkE/puXFpyOcwZ4XwAeKoslBcriKgmKo0Q=;
-        b=YBJez3yaASXbm1+ON8alyU8tCJUH7fZmCW+7I/x5RcQjd7F8/4ubfdIOY6fOGvjRsC
-         95YM0uSGR4Tp5VDu5I/RR+rqlxiZ/G6sl3eZq1fNRQcDJK9UBeRLpP5qtxx+NbobJ2tN
-         4g8WVtP1N0GtM0yAAfOVqpT7bdi172iqbijRCFzw3ewshkh6aK67UTk2IJcjq2bBVYmC
-         Nd/wqllZjWmPmxLEBFjZoyt4XcwUMBBUuVWAVWPgEWOh76qnZeBUohZmEfR9MsCsB3Bv
-         ypi0pmPNguZtFUKpBlNPLtf1pqjc0VHUTE63WLOjPjWzwC5uLHk7ex6SknJmSJuhDJRo
-         KI7w==
+        bh=n3keAZOOTFhzbSWQhSNoQK9BCKpSTUYPwjC/ley3qF0=;
+        b=mbd0c7ldP68NbJcXgU/JxLcHVb6/arVTx37MMjSAXdf2AWDKNRZHnvnGXRUAlAHo3Z
+         khQEbbF/585t3WHwkpk4Us5q1WnoLnwft587xECczlRyFteqiQdVwOnorAnUO6Me/S9f
+         VBjtefJHTF2bfrT0C+QP3bRMHPWVJOcJOCOJ1+9suxcdFUtIwLuWXhmcckH0od5ioUvv
+         nKcoQzgXKvUwPdEsHzOihCYqfTSAIXV99nEr6c8f3sHLfCFQ52gt5ZnHpxy52WGIVdw6
+         L5GCVk/8qJ6DXn7/H6n9Jj6ptkeslZn9FrCCXPtZLjNAJ9Vm9/3NczxMQOsIygp+ixT8
+         8MkA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703239384; x=1703844184;
+        d=1e100.net; s=20230601; t=1703239388; x=1703844188;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=j8KRgl+3zHkE/puXFpyOcwZ4XwAeKoslBcriKgmKo0Q=;
-        b=ng3iigsSYVLf1Yb9KDqxy+UW7zLX8CY2ziV7czeZaJ69hGZFFlHnky2XehTSKwn6v3
-         hAQDkTlt/d6BHvZQDJINujtARIh7b7hH6JEURKtHQ/lNflDKrN/UGjHMpHimPJ5FilOd
-         ktpwxMmWUggztl1F6C2UR+LcsLU1GzEh7I807QCuUHgvMWNl3J7gN+BRh3wRtUXX8NWW
-         X+KQ0fw5TIrNyQ0lgWjn/VmRP8/rIpuh6IllCVY9yA7cmoMHNrI1hWC5BSvFBguR6yJH
-         vaagpUOKtZGKDcmcW/0W5agCUZWFXtzYKxEG3pC8wT16DNULeVctj7ErZzCNgl3se4M0
-         4U4g==
-X-Gm-Message-State: AOJu0YztprwmLpyxnjBiQt/2zIFv44q++/hA1uZPpuEJUwrN8mbuXsag
-	o7FO8HEXaFmjZIom4uXgwMBeWtx+Eca0d1pUlw5qgmj6tu9Ar38ZBJjg/Sb8bw==
-X-Google-Smtp-Source: AGHT+IHy4z/t2Va50FsIUc/pu2c7UtArwWmahNKSHYZNeRj0BziHt1PHMt3k+n3OytKBcmI0K7IrWZef+ur5lScLaEk=
-X-Received: by 2002:a50:f611:0:b0:553:faf5:6841 with SMTP id
- c17-20020a50f611000000b00553faf56841mr69709edn.5.1703239383668; Fri, 22 Dec
- 2023 02:03:03 -0800 (PST)
+        bh=n3keAZOOTFhzbSWQhSNoQK9BCKpSTUYPwjC/ley3qF0=;
+        b=SzI/M6Xhccoyf77PP2bEPv32q3amct79GhYlG0Vkm5FE7tBK2wBHSfJqL08OSZ7E1/
+         Tzz90O7IqG86/9YakVF4JvMXz/G/IVzB0jwlVGg9f64NcoaZHs5H67wvCneQh7GwZD45
+         HoKzHVy0lCbGgvqO1Oln2qga3oaOJHzkGGMFjdOwRKSo4pS5Eemms6gRYn4MLwR0gJZN
+         ccnDFMTHOB64+GbbpVRqS0WEJNOsSk32yth12ihQIb5qGHJT16ySOS+Ca/kG9zMtopr1
+         Zl+WzTYFZODVWHMEvC/CUXSGsfaBsCNokxVeWOuEE9NtlojlEZDu+kqqnzmqOk2Ptzze
+         Go+A==
+X-Gm-Message-State: AOJu0YxAZm8/oPBrbWOjk2bibKDfX2yaEIQ/p/2MJs89ZGq+hTv5WGhU
+	x2PSI697i/SIiVkZMHDPe+O2i72eJKsJa58DIaWzOmH2Q1BJ
+X-Google-Smtp-Source: AGHT+IGpXwHZ79rgomiOU9kgzJNEtB4BcIILO29fCz0wX3JZZkeUvC5iCERyu71xs7aVOJND1y9paf+DjDTttKW3ofg=
+X-Received: by 2002:a50:c318:0:b0:551:9870:472 with SMTP id
+ a24-20020a50c318000000b0055198700472mr71653edb.1.1703239388048; Fri, 22 Dec
+ 2023 02:03:08 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231220151952.415232-1-benjamin@sipsolutions.net> <20231220151952.415232-3-benjamin@sipsolutions.net>
-In-Reply-To: <20231220151952.415232-3-benjamin@sipsolutions.net>
+References: <20231220151952.415232-1-benjamin@sipsolutions.net>
+ <fab3c87ea726208cbdec03dfd61230e4c8ceb694.camel@sipsolutions.net>
+ <ae651d3d-58f7-40de-a625-4882cf0efc9b@linuxfoundation.org>
+ <dbcadbe4430cd314373f15a9f4b814e44662bef6.camel@sipsolutions.net> <a2ef9ea4-00e8-4fa4-bc2e-58fbec306503@linuxfoundation.org>
+In-Reply-To: <a2ef9ea4-00e8-4fa4-bc2e-58fbec306503@linuxfoundation.org>
 From: David Gow <davidgow@google.com>
-Date: Fri, 22 Dec 2023 18:02:52 +0800
-Message-ID: <CABVgOSmq+vWoqDWye_4AveLTQep3z+xCUPT8KhQM5CheUm3HOw@mail.gmail.com>
-Subject: Re: [PATCH 2/6] kunit: add a convenience allocation wrapper for SKBs
-To: benjamin@sipsolutions.net
-Cc: linux-wireless@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, Benjamin Berg <benjamin.berg@intel.com>
+Date: Fri, 22 Dec 2023 18:02:56 +0800
+Message-ID: <CABVgOSkrhEYXvzjtWfdxmKVGZwGnJTKwbd9+kBSRWxbOfyaRUA@mail.gmail.com>
+Subject: Re: [PATCH 0/6] Add some more cfg80211 and mac80211 kunit tests
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Johannes Berg <johannes@sipsolutions.net>, benjamin@sipsolutions.net, 
+	linux-wireless@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com, Brendan Higgins <brendanhiggins@google.com>, 
+	Benjamin Berg <benjamin.berg@intel.com>
 Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="00000000000074d9d4060d1652be"
+	boundary="000000000000b71c82060d165290"
 
---00000000000074d9d4060d1652be
+--000000000000b71c82060d165290
 Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 20 Dec 2023 at 23:20, <benjamin@sipsolutions.net> wrote:
+On Fri, 22 Dec 2023 at 05:47, Shuah Khan <skhan@linuxfoundation.org> wrote:
 >
-> From: Benjamin Berg <benjamin.berg@intel.com>
+> On 12/21/23 13:40, Johannes Berg wrote:
+> > On Thu, 2023-12-21 at 13:06 -0700, Shuah Khan wrote:
+> >> On 12/21/23 12:39, Johannes Berg wrote:
+> >>>>
+> >>>> This patchset adds a couple of helpers for kunit as well as tests for
+> >>>> cfg80211 and mac80211 that use them.
+> >>>
+> >>> I can take this through the wireless tree, but then I'd like to have
+> >>> ACKs from kunit folks for the kunit patches:
+> >>>
+> >>
+> >> We have run into conflicts in the past with the kunit tree. I take the
+> >> kunit patches through linux-kselftest tree. I do want to make sure there
+> >> are no conflicts. I don't mind taking these through my tree.
+> >
+> > OK, fair enough.
+> >
+> > If you can still put it into 6.8, then I think you can also take the
+> > wireless tests, assuming they pass (I haven't run them in the posted
+> > version). I don't think we'll have conflicts there, we don't have much
+> > work in wireless that's likely to land for 6.8.
+> >
 >
-> Add a simple convenience helper to allocate and zero fill an SKB for the
-> use by a kunit test. Also provide a way to free it again in case that
-> may be desirable.
+> Sounds good.
 >
-> This simply mirrors the kunit_kmalloc API.
->
-> Signed-off-by: Benjamin Berg <benjamin.berg@intel.com>
-> ---
+> David, will you be able to look at these patches and let me know if
+> I can apply for Linux 6.8-rc1.
 
-I'm happy with this as-is, but do think there's a discussion to be had
-about where subsystem-specific KUnit helpers should live. I think,
-because this is just a header (and it mirrors the normal
-linux/skbuff.h), that having it in include/kunit works well.
+The two initial KUnit patches look fine, modulo a couple of minor docs
+issues and checkpatch warnings. They apply cleanly, and I doubt
+there's much chance of there being a merge conflict for 6.8 -- there
+are no other changes to the parameterised test macros, and the skb
+stuff is in its own file.
 
-If it needed a source file, I'm not 100% sure whether it should be in
-net/core/ or lib/kunit.
+The remaining patches don't apply on top of the kunit branch as-is. I
+haven't had a chance to review them properly yet; the initial glance I
+had didn't show any serious issues (though I think checkpatch
+suggested some things to 'check').
 
-Regardless, this looks good to me, modulo the small nitpick below.
+So (once those small issues are finished), I'm okay with the first two
+patches going in via either tree. The remaining ones are probably best
+done via the wireless tree, as they seem to depend on some existing
+patches there, so maybe it makes sense to push everything via
+wireless.
 
-Reviewed-by: David Gow <davidgow@google.com>
+Cheers,
+-- David
 
->  include/kunit/skbuff.h | 56 ++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 56 insertions(+)
->  create mode 100644 include/kunit/skbuff.h
->
-> diff --git a/include/kunit/skbuff.h b/include/kunit/skbuff.h
-> new file mode 100644
-> index 000000000000..2144d01e556f
-> --- /dev/null
-> +++ b/include/kunit/skbuff.h
-> @@ -0,0 +1,56 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Base unit test (KUnit) API.
-
-This probably needs a better description which mentions skbuff, and
-that it's for resource management.
-
-
-> + *
-> + * Copyright (C) 2023 Intel Corporation
-> + */
-> +
-> +#ifndef _KUNIT_SKBUFF_H
-> +#define _KUNIT_SKBUFF_H
-> +
-> +#include <kunit/resource.h>
-> +#include <linux/skbuff.h>
-> +
-> +static void kunit_action_kfree_skb(void *p)
-> +{
-> +       kfree_skb((struct sk_buff *)p);
-> +}
-> +
-> +/**
-> + * kunit_zalloc_skb() - Allocate and initialize a resource managed skb.
-> + * @test: The test case to which the skb belongs
-> + * @len: size to allocate
-> + *
-> + * Allocate a new struct sk_buff with GFP_KERNEL, zero fill the give length
-> + * and add it as a resource to the kunit test for automatic cleanup.
-> + *
-> + * Returns: newly allocated SKB, or %NULL on error
-> + */
-> +static inline struct sk_buff *kunit_zalloc_skb(struct kunit *test, int len,
-> +                                              gfp_t gfp)
-> +{
-> +       struct sk_buff *res = alloc_skb(len, GFP_KERNEL);
-> +
-> +       if (!res || skb_pad(res, len))
-> +               return NULL;
-> +
-> +       if (kunit_add_action_or_reset(test, kunit_action_kfree_skb, res))
-> +               return NULL;
-> +
-> +       return res;
-> +}
-> +
-> +/**
-> + * kunit_kfree_skb() - Like kfree_skb except for allocations managed by KUnit.
-> + * @test: The test case to which the resource belongs.
-> + * @skb: The SKB to free.
-> + */
-> +static inline void kunit_kfree_skb(struct kunit *test, struct sk_buff *skb)
-> +{
-> +       if (!skb)
-> +               return;
-> +
-> +       kunit_release_action(test, kunit_action_kfree_skb, (void *)skb);
-> +}
-> +
-> +#endif /* _KUNIT_SKBUFF_H */
-> --
-> 2.43.0
->
-> --
-> You received this message because you are subscribed to the Google Groups "KUnit Development" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to kunit-dev+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/kunit-dev/20231220151952.415232-3-benjamin%40sipsolutions.net.
-
---00000000000074d9d4060d1652be
+--000000000000b71c82060d165290
 Content-Type: application/pkcs7-signature; name="smime.p7s"
 Content-Transfer-Encoding: base64
 Content-Disposition: attachment; filename="smime.p7s"
@@ -245,15 +196,15 @@ impZAng7ccvvK09K3ZuhwTIxJMsPXCZYsrXWORTw5sczRAP6XvKbPBJnsJoSTe5dFBPBHOQJOGhU
 qWfEfWnWMJPF3LxSGLpLFQXO3RwQqmxv08avwXfVPouh1xuB3FX7rpDabT8YDhu9JgIZkLEKko7L
 yQt6zWwng7k8YF/jGbiAta6VMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
 R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
-MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDs
-KTglr7rY/5EJe/jxIAt6KmLDKr10cIMrm1uJX6u5UTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
-MBwGCSqGSIb3DQEJBTEPFw0yMzEyMjIxMDAzMDRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+MDIwAhABzgV+4+mJnUzG7XDy6d2uMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCDH
+s8y2Q/18eZYlmLH0i5FPdFE3oRpedImezAiWiPO/fjAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMzEyMjIxMDAzMDhaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
 BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
-CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEATvXJAoV7u2mzzOhV4JS/
-FStSwq+pYG6wrW01sqBcgdnpaRLYlFZPwTkIeHchzCgoiGDSzifx+Rulc6RllyaaUWU/xVeZAdhk
-fn2iHtWei/IPf/hFHIeEUTy0nQLBhQMOplAl6ED55emtw2ECX8s87m+RuJHvKgwjSFzhbx5ptwRa
-EatQsmM1XnhuJ2aVFwrU7VDiog3LUlh1+DFhrjA5pddHv5SE/4EwdVNmj7TddxVMPPcQ9B9sT7T7
-TIhFDBH/hefkj77UbXqhq3+lWxtML00VfmBzEFMBUJZ4HTb0EpYiyWKBR/k+H1ke84sY0UAOQmbW
-f8WV8gSOFdQrbYOQhQ==
---00000000000074d9d4060d1652be--
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAcMa+SUUkgfHVGn3JRWQZ
+A1Wo8xsZJqVy5k8NdUrbHyWIIT2X3QPKykrt03tAuCYdZl3S8iR57jLe88Jh9pE83kSu/YRjnKVa
+1r9+eLSKBuYVqAfLLdff9EEbHLkEVuBrE1IplcaKN5djBSUm8g/xNsbj4HKzhaXzc00Vt+c1fM+d
+nORKw8u5B1PTnd9ArybXqSGnk2jr3x/y5jrFZCwPaGvi7OWGtJwupr76m1Wzy9zTVpzsCE4asDnf
+3mwAmXlfQBmdsH4NEoS5XPXOAUIC7vi+4W2qCx0d7cTXdX4m2cdZkqo7Se4HNdBNX6lo/eYUGIkF
+MWfIx3XXLXKvD/q4yQ==
+--000000000000b71c82060d165290--
 
