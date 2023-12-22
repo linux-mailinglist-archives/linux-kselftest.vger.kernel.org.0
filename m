@@ -1,40 +1,40 @@
-Return-Path: <linux-kselftest+bounces-2371-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2372-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6EF781CA3C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Dec 2023 13:49:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8B9D81CA3E
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Dec 2023 13:49:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4A99FB24D67
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Dec 2023 12:49:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 763491F22CF0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Dec 2023 12:49:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95F7720B33;
-	Fri, 22 Dec 2023 12:48:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 296A11863F;
+	Fri, 22 Dec 2023 12:48:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rMG6POUd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NfxyJdrG"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F63820B20;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02E2322314;
+	Fri, 22 Dec 2023 12:48:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6706AC433C8;
 	Fri, 22 Dec 2023 12:48:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8587AC433CB;
-	Fri, 22 Dec 2023 12:47:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1703249282;
-	bh=0XsZNMC7rZ4PpQo/nWnNMLjUOxV29/JKV7xPuiqrXVA=;
+	s=k20201202; t=1703249284;
+	bh=f8MxnKNl8aWOOpIhsgtOmNgNY2U+VCvmLARJV8km6Lw=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=rMG6POUdc5DynIACKIj1rikv4g1Dd7j7m8AkrRCMYPi6Ej80rc1fYgsxtxKpxFmUG
-	 gNIaJUVmiiMKXjAE7jirCf21hNTOMiMKqxNVvHdmEwg3NroXsrro0ObWW6RoGNSdrE
-	 WrU0jMBKyAQqEfhuZ2oEklvSijtSfZcajK+2bGJ6u9ozVgspBEqy2lB9SF0WUPscLk
-	 19Em3qgVsJWfylFt3B9Y+BHK2zrUb77B2PdGfzDZ8wff8l7AEKZpQuWBc2SMZB7OXP
-	 TFmHLTXNiyKkP02uFiwKhwKsBN2mlO3UyLVfEzBB2g/y7MJdidj6WN27RRTXaKEXr4
-	 EgtPQxF+Os+4g==
+	b=NfxyJdrGlPtLvGrB4WosOs67jTR2/ZZocAKu9cNtbVnDaVoVQNGrgEOXTPkv6ncyh
+	 oJ+XhP0SmyWs5MwOtFxgBGrbYBTYdXBhyq5ABRQBnbQmhtVY4+akSCgAOaxGYcXLdO
+	 GonHpnDI6el3OfgYbbg183yb/CJNMjM/GPXlfDPFUG6AmddRCOXaAOkmj+F/meSlYU
+	 KGhcWMKdpO81HcdgIfi07oYfSftBnY4KB1u55KApEXQCsnGFsg+mTvFryhzIiDz2rW
+	 rpRsXQW0wruNYCT+oN3dNtw6Tmcm+yT+ryrkUGUYRrxjh+PICH5GwkuzoDO4vNefE8
+	 O5xXw0URnzcFQ==
 From: Matthieu Baerts <matttbe@kernel.org>
-Date: Fri, 22 Dec 2023 13:47:24 +0100
-Subject: [PATCH net-next 3/4] selftests: mptcp: join: check CURRESTAB
+Date: Fri, 22 Dec 2023 13:47:25 +0100
+Subject: [PATCH net-next 4/4] selftests: mptcp: diag: check CURRESTAB
  counters
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -44,7 +44,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20231222-upstream-net-next-20231221-mptcp-currestab-v1-3-c1eb73d6b2b2@kernel.org>
+Message-Id: <20231222-upstream-net-next-20231221-mptcp-currestab-v1-4-c1eb73d6b2b2@kernel.org>
 References: <20231222-upstream-net-next-20231221-mptcp-currestab-v1-0-c1eb73d6b2b2@kernel.org>
 In-Reply-To: <20231222-upstream-net-next-20231221-mptcp-currestab-v1-0-c1eb73d6b2b2@kernel.org>
 To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>, 
@@ -54,156 +54,101 @@ To: mptcp@lists.linux.dev, Mat Martineau <martineau@kernel.org>,
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, Matthieu Baerts <matttbe@kernel.org>
 X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3657; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=3vXnHeyEbokDd1nQmEOTmW/dnLowAGGgCm839d/zVb0=;
- b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBlhYV2f0aSUpzxzuPe70dXdaErfggTdZqjlCdi2
- BxLMFm4JC2JAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZYWFdgAKCRD2t4JPQmmg
- c5PJEADrtwvBTQX86CRymC35dH1ag4ssAXqKqZUR0atN35a8bizXp23UDETNDo8JfKdFzunrt9j
- wReObWZpvQoWoRDRQOK50LmN4LnZ3oV5IKI/QpCWqjYIg48aIYeZOGQbt8S1xyI/kcAY/AyxrSL
- Qvau78vw1IV1Czok6RO6WvjNp5VbH3+0HAsF1p08ogbtFHphIAhnWDuLGHHX2/NH/Zdpb0VmS39
- MfInaZ10gWqP7GA+TEOrmcVQ9fjv5kSnOfEisvw7lABDKXqh6g+qfupt/qz4WMzs71IuzI7P6pE
- dUfjaVXXgSIBeZunITJ//J3YWDK5vNh8i1fgdqnkbM2qbSiHFKrnr7FE+6mdFa4UAnMfJeMT8f0
- 6YkpMNtvB0iuoObTumgvbf51c4/5MgOlum4gvedLFmYRI7mzh1tM2yZK7Yest9gW0gJv6PKvSG/
- koWWdJ5RfzOZof1kw2zMHlDxrA+bUKxWUvs2nScQegmYO9NOtlot57ir3zo/YNRho5kbjBy3ba0
- DUzX44brz3/XV7zaZyExb/rTY8rZAfsMdIFp4AxjHjH75SphkZnHHYJi+TLWEwXwrHZglng2x0q
- ga7gvn7CyNhDEWapuTaUS0x7qWVuuwP+B0W1BL3zJCYXVuiLe2aQIy/49eBvGvgYqLGG+YN9PTy
- laK/thd8+toiIEA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2223; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=QjbEHosfHcKKjU3RogRURLP58YI1j0WbbK15xL3Nrjc=;
+ b=owEBbQKS/ZANAwAIAfa3gk9CaaBzAcsmYgBlhYV27kvIeEPmFqwJYkWT0hr+wWSl24PB90bs3
+ 8+++PkN1wCJAjMEAAEIAB0WIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZYWFdgAKCRD2t4JPQmmg
+ c1oID/9k9tbHs37JFpAk89njTgeXdt38bCqSe77DoL7Refyn9uXvhB0t3j43cDE3lXTkDHwXOCf
+ vahWBybTiilXlCwgJzam49sZqdTEiW9MDxGxUzlGTCbr5bo8pF+YT2xRyJPKG7+Qk17CeBGsQLD
+ iAMTl+v/965bw+QE+FcR8Vfbcnqvc0kdzy70iSZMfkFvx6nRDOHJn68p++r7WDzyrMrMYpqC61i
+ b72TB97yRl6kzMzRlgOQyT4j46p3GwsuzL5QpUY6VxGdHAeWIQMDqAPG2tRRFsv8lF4pl97KfP4
+ o9yXE3BEY/XMxMFx43sQU0RVzPdfM5+UmKmaeU9rrmsMHZ7p/hB2jmyLeCWPT/20raDCTNXuJ+Z
+ usw3rUCiXm3/X10Lfn1zD9G89/tFgdkaraoCNvAatLTafEryh1c24T/a1uJyfskqKdHqIPwR07y
+ oxfpHiGQ/qzptc6mRKwn3y5QUU/hMdK8UpPHKWSEY7KjouQnHcGTQ+9/U9S4S2fn7pq69x1jSA1
+ oUlJ7jETdkdMQY2n2+zlSqcOGc8+GEwsa23b/B/xnBMuNZERizU/yCYi/wKnT7l8pqOmH2TAzaM
+ q12dMzt88GQ8p8ZoOIkVPi2VqTp4ElYNjmG3r0B5d896lDCXTEv2wGAo89GPs6tFmk+RlCMnYkl
+ DYPmcohz6PHPxXw==
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
 From: Geliang Tang <geliang.tang@linux.dev>
 
-This patch adds a new helper chk_cestab_nr() to check the current
-established connections counter MIB_CURRESTAB. Set the newly added
-variables cestab_ns1 and cestab_ns2 to indicate how many connections
-are expected in ns1 or ns2.
-
-Invoke check_cestab() to check the counter during the connection in
-do_transfer() and invoke chk_cestab_nr() to re-check it when the
-connection closed. These checks are embedded in add_tests().
+This patch adds a new helper chk_msk_cestab() to check the current
+established connections counter MIB_CURRESTAB in diag.sh. Invoke it
+to check the counter during the connection after every chk_msk_inuse().
 
 Signed-off-by: Geliang Tang <geliang.tang@linux.dev>
-Acked-by: Paolo Abeni <pabeni@redhat.com>
 Reviewed-by: Matthieu Baerts <matttbe@kernel.org>
 Signed-off-by: Matthieu Baerts <matttbe@kernel.org>
 ---
- tools/testing/selftests/net/mptcp/mptcp_join.sh | 46 ++++++++++++++++++++++---
- 1 file changed, 41 insertions(+), 5 deletions(-)
+ tools/testing/selftests/net/mptcp/diag.sh | 17 ++++++++++++++++-
+ 1 file changed, 16 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/net/mptcp/mptcp_join.sh b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-index 87590a43b50d..3a5b63026191 100755
---- a/tools/testing/selftests/net/mptcp/mptcp_join.sh
-+++ b/tools/testing/selftests/net/mptcp/mptcp_join.sh
-@@ -56,6 +56,8 @@ unset FAILING_LINKS
- unset test_linkfail
- unset addr_nr_ns1
- unset addr_nr_ns2
-+unset cestab_ns1
-+unset cestab_ns2
- unset sflags
- unset fastclose
- unset fullmesh
-@@ -976,6 +978,34 @@ pm_nl_set_endpoint()
- 	fi
+diff --git a/tools/testing/selftests/net/mptcp/diag.sh b/tools/testing/selftests/net/mptcp/diag.sh
+index 95b498efacd1..04fcb8a077c9 100755
+--- a/tools/testing/selftests/net/mptcp/diag.sh
++++ b/tools/testing/selftests/net/mptcp/diag.sh
+@@ -56,7 +56,7 @@ __chk_nr()
+ 	local command="$1"
+ 	local expected=$2
+ 	local msg="$3"
+-	local skip="${4:-SKIP}"
++	local skip="${4-SKIP}"
+ 	local nr
+ 
+ 	nr=$(eval $command)
+@@ -182,6 +182,15 @@ chk_msk_inuse()
+ 	__chk_nr get_msk_inuse $expected "$msg" 0
  }
  
-+chk_cestab_nr()
++# $1: cestab nr
++chk_msk_cestab()
 +{
-+	local ns=$1
-+	local cestab=$2
-+	local count
++	local cestab=$1
 +
-+	print_check "cestab $cestab"
-+	count=$(mptcp_lib_get_counter ${ns} "MPTcpExtMPCurrEstab")
-+	if [ -z "$count" ]; then
-+		print_skip
-+	elif [ "$count" != "$cestab" ]; then
-+		fail_test "got $count current establish[s] expected $cestab"
-+	else
-+		print_ok
-+	fi
++	__chk_nr "mptcp_lib_get_counter ${ns} MPTcpExtMPCurrEstab" \
++		 "${cestab}" "....chk ${cestab} cestab" ""
 +}
 +
-+# $1 namespace 1, $2 namespace 2
-+check_cestab()
-+{
-+	if [ -n "${cestab_ns1}" ]; then
-+		chk_cestab_nr ${1} ${cestab_ns1}
-+	fi
-+	if [ -n "${cestab_ns2}" ]; then
-+		chk_cestab_nr ${2} ${cestab_ns2}
-+	fi
-+}
-+
- do_transfer()
+ wait_connected()
  {
- 	local listener_ns="$1"
-@@ -1089,6 +1119,7 @@ do_transfer()
- 	local cpid=$!
+ 	local listener_ns="${1}"
+@@ -219,9 +228,11 @@ chk_msk_nr 2 "after MPC handshake "
+ chk_msk_remote_key_nr 2 "....chk remote_key"
+ chk_msk_fallback_nr 0 "....chk no fallback"
+ chk_msk_inuse 2 "....chk 2 msk in use"
++chk_msk_cestab 2
+ flush_pids
  
- 	pm_nl_set_endpoint $listener_ns $connector_ns $connect_addr
-+	check_cestab $listener_ns $connector_ns
+ chk_msk_inuse 0 "....chk 0 msk in use after flush"
++chk_msk_cestab 0
  
- 	wait $cpid
- 	local retc=$?
-@@ -2477,47 +2508,52 @@ add_tests()
- 	if reset "add single subflow"; then
- 		pm_nl_set_limits $ns1 0 1
- 		pm_nl_set_limits $ns2 0 1
--		addr_nr_ns2=1 speed=slow \
-+		addr_nr_ns2=1 speed=slow cestab_ns2=1 \
- 			run_tests $ns1 $ns2 10.0.1.1
- 		chk_join_nr 1 1 1
-+		chk_cestab_nr $ns2 0
- 	fi
+ echo "a" | \
+ 	timeout ${timeout_test} \
+@@ -237,9 +248,11 @@ echo "b" | \
+ wait_connected $ns 10001
+ chk_msk_fallback_nr 1 "check fallback"
+ chk_msk_inuse 1 "....chk 1 msk in use"
++chk_msk_cestab 1
+ flush_pids
  
- 	# add signal address
- 	if reset "add signal address"; then
- 		pm_nl_set_limits $ns1 0 1
- 		pm_nl_set_limits $ns2 1 1
--		addr_nr_ns1=1 speed=slow \
-+		addr_nr_ns1=1 speed=slow cestab_ns1=1 \
- 			run_tests $ns1 $ns2 10.0.1.1
- 		chk_join_nr 1 1 1
- 		chk_add_nr 1 1
-+		chk_cestab_nr $ns1 0
- 	fi
+ chk_msk_inuse 0 "....chk 0 msk in use after flush"
++chk_msk_cestab 0
  
- 	# add multiple subflows
- 	if reset "add multiple subflows"; then
- 		pm_nl_set_limits $ns1 0 2
- 		pm_nl_set_limits $ns2 0 2
--		addr_nr_ns2=2 speed=slow \
-+		addr_nr_ns2=2 speed=slow cestab_ns2=1 \
- 			run_tests $ns1 $ns2 10.0.1.1
- 		chk_join_nr 2 2 2
-+		chk_cestab_nr $ns2 0
- 	fi
+ NR_CLIENTS=100
+ for I in `seq 1 $NR_CLIENTS`; do
+@@ -261,9 +274,11 @@ done
  
- 	# add multiple subflows IPv6
- 	if reset "add multiple subflows IPv6"; then
- 		pm_nl_set_limits $ns1 0 2
- 		pm_nl_set_limits $ns2 0 2
--		addr_nr_ns2=2 speed=slow \
-+		addr_nr_ns2=2 speed=slow cestab_ns2=1 \
- 			run_tests $ns1 $ns2 dead:beef:1::1
- 		chk_join_nr 2 2 2
-+		chk_cestab_nr $ns2 0
- 	fi
+ wait_msk_nr $((NR_CLIENTS*2)) "many msk socket present"
+ chk_msk_inuse $((NR_CLIENTS*2)) "....chk many msk in use"
++chk_msk_cestab $((NR_CLIENTS*2))
+ flush_pids
  
- 	# add multiple addresses IPv6
- 	if reset "add multiple addresses IPv6"; then
- 		pm_nl_set_limits $ns1 0 2
- 		pm_nl_set_limits $ns2 2 2
--		addr_nr_ns1=2 speed=slow \
-+		addr_nr_ns1=2 speed=slow cestab_ns1=1 \
- 			run_tests $ns1 $ns2 dead:beef:1::1
- 		chk_join_nr 2 2 2
- 		chk_add_nr 2 2
-+		chk_cestab_nr $ns1 0
- 	fi
- }
+ chk_msk_inuse 0 "....chk 0 msk in use after flush"
++chk_msk_cestab 0
  
+ mptcp_lib_result_print_all_tap
+ exit $ret
 
 -- 
 2.43.0
