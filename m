@@ -1,41 +1,40 @@
-Return-Path: <linux-kselftest+bounces-2383-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2384-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F0CA81CCC5
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Dec 2023 17:23:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C96781CCCA
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Dec 2023 17:24:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 73C24286D1D
-	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Dec 2023 16:23:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1C7981F23AE0
+	for <lists+linux-kselftest@lfdr.de>; Fri, 22 Dec 2023 16:24:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A0A924A1F;
-	Fri, 22 Dec 2023 16:21:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8D0A24B49;
+	Fri, 22 Dec 2023 16:22:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fpVAfOqe"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BA+5Nxg4"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E59242CCB0;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F9652D610;
+	Fri, 22 Dec 2023 16:22:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E22E3C433C9;
 	Fri, 22 Dec 2023 16:21:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67721C433C7;
-	Fri, 22 Dec 2023 16:21:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1703262118;
-	bh=1bBIjD+wbUNzAB0NuFPa7A3b8Nc97HnjasnAGnyWwgU=;
+	s=k20201202; t=1703262122;
+	bh=PySm9eUuq81uqznwETRDeb/dBioLefSS+yd1vb3ztqE=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=fpVAfOqeCbl/7P1gKRxRmJWiq9FzwyM3bilb9NaFxVrATv8J/regoObnBodgskudo
-	 1SNoQpiluYX0qEjjcT0LZGbzeCta4pIDlzK44lapOmTjC5/2IppYYlvQafQ2hSQ4Rq
-	 ZGPSnLM7HeYVnZ3Ve87sia0wmhfVn1C+dGNbAtVE2d6eNPcLhgp5k7a7bTq0je9mhp
-	 USp4fzODzcCDid9bavgPLw1jSPx93qHkSkE1kURRp8mzXbsyKN4habm4qGeLQRH6Uc
-	 Y234zw227b++mm+2uctQuqGu/S4KFO6FNysz902jjeAOy6DOjbSUEwOwFjErAtRgEB
-	 SZYjxWc1AQ6KA==
+	b=BA+5Nxg4BoxYIDuLZD58KPSzrIgf6p70ovrBhk3XkPcQGK59BIojMzlUKtTvTHNqB
+	 VkvTsnXXdOL8LlstYVlHr0eSHF5yw0jKkS63UHW5ktgEyfmeMMXnWrsZsvSASLuAkr
+	 sUEfm9Ec9Kh9Lffp23dOS1IelktvUFHjBGPtj0Rs9vVHmHuM9ZrwCJKwxOZrQkrL5f
+	 xgvidkyI8QNPcQNLJ9yhmPWHxYQ2YWfTMINV/9sNqdXCGXPrPiz1NuPdqGerTUmBL2
+	 38VjzjFb9y/LIYwb02wmBfSursR8wHHY8Bv3xesIMCXnX86IYSrVFGAG4s1GZyd02j
+	 EMtDhVHWGoCYg==
 From: Mark Brown <broonie@kernel.org>
-Date: Fri, 22 Dec 2023 16:21:14 +0000
-Subject: [PATCH RFC v2 06/22] KVM: arm64: Make FFR restore optional in
- __sve_restore_state()
+Date: Fri, 22 Dec 2023 16:21:15 +0000
+Subject: [PATCH RFC v2 07/22] KVM: arm64: Define guest flags for SME
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -44,7 +43,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20231222-kvm-arm64-sme-v2-6-da226cb180bb@kernel.org>
+Message-Id: <20231222-kvm-arm64-sme-v2-7-da226cb180bb@kernel.org>
 References: <20231222-kvm-arm64-sme-v2-0-da226cb180bb@kernel.org>
 In-Reply-To: <20231222-kvm-arm64-sme-v2-0-da226cb180bb@kernel.org>
 To: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
@@ -58,69 +57,89 @@ Cc: linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
  linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  Mark Brown <broonie@kernel.org>
 X-Mailer: b4 0.13-dev-5c066
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2195; i=broonie@kernel.org;
- h=from:subject:message-id; bh=1bBIjD+wbUNzAB0NuFPa7A3b8Nc97HnjasnAGnyWwgU=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBlhbeA2Qd4QdN/9YGa9o3oh8iKknZQNHuq27PENN5I
- OBd7RrSJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCZYW3gAAKCRAk1otyXVSH0IUGB/
- 9WnCOTceTaBmPiLNLYCbumqKhOCbz2CbgwbNa2qIB+3lP01J12KdnBYUcCfzNmnEzGKlJyObrlPDq+
- cbp8gbESIOL0VOV1w6QalUnE+fOyI1DEcoRryCLgg/3ZOpeG2dThqKIFWTDBeSQ8eBEETCkRYRb8Ix
- SxrZqK48DmBD6Q4Eguo9u+PeG1rmPfDFSgTh2Lim4vhq2AhxVy4BV0OkwSHG56kwhpeYsyHqTTznFW
- twrHuljYQSv1D3DEBP4KTyIvyM7M+G09PGC/9D6uG9v8WjbfwrAnsXRDg7J0801MUp7lrhQlZpik/8
- 39v6iHmt9FYUeGhfWogp6j3XV0x4xP
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2850; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=PySm9eUuq81uqznwETRDeb/dBioLefSS+yd1vb3ztqE=;
+ b=owGbwMvMwMWocq27KDak/QLjabUkhtTW7Y2zHSb27DRwZEyRFM90N3+3dH9ZTnzz0Z9Z0cd+eOs5
+ 6Gt1MhqzMDByMciKKbKsfZaxKj1cYuv8R/NfwQxiZQKZwsDFKQATqdvJ/s+Ye75K4tqi3aGxHLu/pc
+ yV0XTx4OOdID/7qdn/wv8Tk92OMmfxT0yT06/TWi9fG81w975fxv45Hs4HgoVYVVzlmX7OOXvVqZi9
+ wPdiAB8T87kCPR9FwUqP+ZdXcc4Qv117/Nhx2/fbDh1+oncqRZCRi3mGmPN9eeulhntaz21sYu4ufX
+ /ipjjj+7L2MuunDy7PCnNY/FBp9Q9D8UPhEu8ehq3/IJD5U1Ova2NLso9LZtjteWzMyV1VvK9cbTJS
+ imTj/xqJ2zx1kkg9zvCvdfop7bC4gO2S5x+Xq9nI8xhuuGIi9aqrjkNFKLnHUUjSi/Wn23v5G2nelX
+ /jkyU+afziPl19y3vlpFpz3icA
 X-Developer-Key: i=broonie@kernel.org; a=openpgp;
  fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-Since FFR is an optional feature of SME's streaming SVE mode in order to
-support load of guest register state when SME is implemented we need to
-provide callers of __sve_restore_state() access to the flag that the
-sve_load macro has indicating if FFR should be loaded. Do so, simply a
-matter of removing the hard coding in the asm.
+Introduce flags for the individually selectable features in SME which
+add architectural state:
+
+ - Base SME which adds the system registers and ZA matrix.
+ - SME 2 which adds ZT0.
+ - FA64 which enables access to the full floating point feature set in
+   streaming mode, including adding FFR in streaming mode.
+
+along with helper functions for checking them.
+
+These will be used by further patches actually implementing support for
+SME in guests.
 
 Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
- arch/arm64/include/asm/kvm_hyp.h        | 2 +-
- arch/arm64/kvm/hyp/fpsimd.S             | 1 -
- arch/arm64/kvm/hyp/include/hyp/switch.h | 2 +-
- 3 files changed, 2 insertions(+), 3 deletions(-)
+ arch/arm64/include/asm/kvm_host.h          | 13 +++++++++++++
+ arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h | 10 ++++++++++
+ 2 files changed, 23 insertions(+)
 
-diff --git a/arch/arm64/include/asm/kvm_hyp.h b/arch/arm64/include/asm/kvm_hyp.h
-index 145ce73fc16c..7ac38ed90062 100644
---- a/arch/arm64/include/asm/kvm_hyp.h
-+++ b/arch/arm64/include/asm/kvm_hyp.h
-@@ -111,7 +111,7 @@ void __debug_restore_host_buffers_nvhe(struct kvm_vcpu *vcpu);
+diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
+index 3b557ffb8e7b..461068c99b61 100644
+--- a/arch/arm64/include/asm/kvm_host.h
++++ b/arch/arm64/include/asm/kvm_host.h
+@@ -710,6 +710,12 @@ struct kvm_vcpu_arch {
+ #define GUEST_HAS_PTRAUTH	__vcpu_single_flag(cflags, BIT(2))
+ /* KVM_ARM_VCPU_INIT completed */
+ #define VCPU_INITIALIZED	__vcpu_single_flag(cflags, BIT(3))
++/* SME1 exposed to guest */
++#define GUEST_HAS_SME		__vcpu_single_flag(cflags, BIT(4))
++/* SME2 exposed to guest */
++#define GUEST_HAS_SME2		__vcpu_single_flag(cflags, BIT(5))
++/* FA64 exposed to guest */
++#define GUEST_HAS_FA64		__vcpu_single_flag(cflags, BIT(6))
  
- void __fpsimd_save_state(struct user_fpsimd_state *fp_regs);
- void __fpsimd_restore_state(struct user_fpsimd_state *fp_regs);
--void __sve_restore_state(void *sve_pffr, u32 *fpsr);
-+void __sve_restore_state(void *sve_pffr, u32 *fpsr, bool restore_ffr);
+ /* Exception pending */
+ #define PENDING_EXCEPTION	__vcpu_single_flag(iflags, BIT(0))
+@@ -780,6 +786,13 @@ struct kvm_vcpu_arch {
+ #define vcpu_has_sve(vcpu) (system_supports_sve() &&			\
+ 			    vcpu_get_flag(vcpu, GUEST_HAS_SVE))
  
- u64 __guest_enter(struct kvm_vcpu *vcpu);
- 
-diff --git a/arch/arm64/kvm/hyp/fpsimd.S b/arch/arm64/kvm/hyp/fpsimd.S
-index 61e6f3ba7b7d..8940954b5420 100644
---- a/arch/arm64/kvm/hyp/fpsimd.S
-+++ b/arch/arm64/kvm/hyp/fpsimd.S
-@@ -21,7 +21,6 @@ SYM_FUNC_START(__fpsimd_restore_state)
- SYM_FUNC_END(__fpsimd_restore_state)
- 
- SYM_FUNC_START(__sve_restore_state)
--	mov	x2, #1
- 	sve_load 0, x1, x2, 3
- 	ret
- SYM_FUNC_END(__sve_restore_state)
-diff --git a/arch/arm64/kvm/hyp/include/hyp/switch.h b/arch/arm64/kvm/hyp/include/hyp/switch.h
-index f99d8af0b9af..9601212bd3ce 100644
---- a/arch/arm64/kvm/hyp/include/hyp/switch.h
-+++ b/arch/arm64/kvm/hyp/include/hyp/switch.h
-@@ -286,7 +286,7 @@ static inline void __hyp_sve_restore_guest(struct kvm_vcpu *vcpu)
- {
- 	sve_cond_update_zcr_vq(vcpu_sve_max_vq(vcpu) - 1, SYS_ZCR_EL2);
- 	__sve_restore_state(vcpu_sve_pffr(vcpu),
--			    &vcpu->arch.ctxt.fp_regs.fpsr);
-+			    &vcpu->arch.ctxt.fp_regs.fpsr, true);
- 	write_sysreg_el1(__vcpu_sys_reg(vcpu, ZCR_EL1), SYS_ZCR);
++#define vcpu_has_sme(vcpu) (system_supports_sme() &&			\
++			    vcpu_get_flag(vcpu, GUEST_HAS_SME))
++#define vcpu_has_sme2(vcpu) (system_supports_sme2() &&			\
++			     vcpu_get_flag(vcpu, GUEST_HAS_SME2))
++#define vcpu_has_fa64(vcpu) (system_supports_fa64() &&			\
++			     vcpu_get_flag(vcpu, GUEST_HAS_FA64))
++
+ #ifdef CONFIG_ARM64_PTR_AUTH
+ #define vcpu_has_ptrauth(vcpu)						\
+ 	((cpus_have_final_cap(ARM64_HAS_ADDRESS_AUTH) ||		\
+diff --git a/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h b/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h
+index bb6b571ec627..fb84834cd2a0 100644
+--- a/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h
++++ b/arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h
+@@ -21,6 +21,16 @@ static inline void __sysreg_save_common_state(struct kvm_cpu_context *ctxt)
+ 	ctxt_sys_reg(ctxt, MDSCR_EL1)	= read_sysreg(mdscr_el1);
  }
  
++static inline bool ctxt_has_sme(struct kvm_cpu_context *ctxt)
++{
++	struct kvm_vcpu *vcpu = ctxt->__hyp_running_vcpu;
++
++	if (!vcpu)
++		vcpu = container_of(ctxt, struct kvm_vcpu, arch.ctxt);
++
++	return vcpu_has_sme(vcpu);
++}
++
+ static inline void __sysreg_save_user_state(struct kvm_cpu_context *ctxt)
+ {
+ 	ctxt_sys_reg(ctxt, TPIDR_EL0)	= read_sysreg(tpidr_el0);
 
 -- 
 2.30.2
