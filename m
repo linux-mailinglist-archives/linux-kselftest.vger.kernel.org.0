@@ -1,107 +1,124 @@
-Return-Path: <linux-kselftest+bounces-2410-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2411-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3F6681D0E8
-	for <lists+linux-kselftest@lfdr.de>; Sat, 23 Dec 2023 02:10:33 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 31D2481D221
+	for <lists+linux-kselftest@lfdr.de>; Sat, 23 Dec 2023 05:19:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 13ADB1C224D4
-	for <lists+linux-kselftest@lfdr.de>; Sat, 23 Dec 2023 01:10:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E175B28359D
+	for <lists+linux-kselftest@lfdr.de>; Sat, 23 Dec 2023 04:19:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47282645;
-	Sat, 23 Dec 2023 01:10:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B5131392;
+	Sat, 23 Dec 2023 04:19:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jxnIR1Oj"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lLE0ntR+"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 243431368;
-	Sat, 23 Dec 2023 01:10:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 91B11C433C9;
-	Sat, 23 Dec 2023 01:10:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1703293827;
-	bh=u75DN3s2OPwUPSX6ZbFKV/tG2RZIBlNRA4FZBD+I1Ss=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=jxnIR1OjSuNcMTMGFa7J8mOHMZygrB+UlmEmoyhNTuHvsJpDWOvSByleDRIpLShdu
-	 mIetg5OIUzjZON1o9+7fpdulGJ5VTf/jqc9hBk5WW7uDVwh9E8aWcNxWp8NRKSVPqb
-	 SCOT8mQFVIeb2uuHi0B3QBYeYzgjczTf94yHEqeIEdrpDZFIXh0rfRpdWB5b0ok0/g
-	 I/91kbDCgE8zDaAzuwv5vINa9o3+g09CwaoZrm+YvclbkrR4RuGnxO4fMSXGXVoWyd
-	 z/4aME7Ue0G/Kgt8VhpZA4rr5cz6DcyE0A59tcpo5kw6EmMkaOHGA6ECtV4Rcxfu/3
-	 SUcVPc7Nse6pQ==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 78D8BC41620;
-	Sat, 23 Dec 2023 01:10:27 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25EE61368
+	for <linux-kselftest@vger.kernel.org>; Sat, 23 Dec 2023 04:19:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--davidgow.bounces.google.com
+Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-5e20c9c4080so41586427b3.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 22 Dec 2023 20:19:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1703305144; x=1703909944; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=yzOnnfcizg793z1bTTo1OJr4lB84vx2e8wyRTapkvIs=;
+        b=lLE0ntR+zEWFdzWCvjjUJmVDp9z8t5fnIdFrV38f2FiThoAvJBLHryywXJXO5+qXac
+         N2uITMudGV9tdb5iVqLmidfUWAs4mMlV8HOW17lXU1YOmimXeyA6K6EiSpIP/pdtXNls
+         feZp0uUeBwsEX8VLe8DYryVLIxVmv4uyZdPLnArjd4yfSXMnjysjAj+bFxaukaDaNQ1X
+         Q9wbMkJjyehQcmwv1zGiH3viASULLZSOWZhPVzTaaMBUMFGTaH6yKtNo5DP3Z+LziY0S
+         /wzqASgCIXrEPu7XoksvdDZsvZqLH/8po5kJptlXZm2K2Y514ppbcXFViBliLIyQIdoG
+         WK/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703305144; x=1703909944;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yzOnnfcizg793z1bTTo1OJr4lB84vx2e8wyRTapkvIs=;
+        b=RlqxL3cXUviz192ozRLpm1e35JkffehDbzbWxu9sUk+9Xmmge+FGYTYCCQG0R+vVsq
+         zM39C1XXMCM3FjBFLaHp2hY10eFJxl/XOZ4W3Sev6MrFtnXCZneVQCRGOFGmdS99lh8d
+         epLCv29jwjg0VcSqSBnpq6IGeN27rnUP7eelG+UJzzIblavE+PA+adyoNIzFp/NlyLS9
+         l7JEl2ow1p0rKLwN4dTvZdNq8QsNwnGCc8z8zoMQsJEnjlH9Tb0Fx4KSbp3nu6g1lXSX
+         e8hrgVtAybFlawGN5jV6eyyRtfoSixgAOKXv0lZoojSaxYXEhz0xh3ileGEdn2qAut1e
+         wDPQ==
+X-Gm-Message-State: AOJu0Yxl0YPQwTZTpFNezp93ltRaMI5ATnl2lWiy80iPdUDxRr3QCn4k
+	h1TMFrMKvGXtZU7uFT+4ISObCvyf/ItLYMjvCGZm
+X-Google-Smtp-Source: AGHT+IHGponKp0XQTyzs9vH3r6ydI9jS3rtBdIKJ69/XZfN3KnpaJcoZkLX2kT/Wy5dYTgSdwfJ+hALF20xOPA==
+X-Received: from slicestar.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:20a1])
+ (user=davidgow job=sendgmr) by 2002:a05:690c:3389:b0:5e8:90de:db6c with SMTP
+ id fl9-20020a05690c338900b005e890dedb6cmr1246726ywb.1.1703305144116; Fri, 22
+ Dec 2023 20:19:04 -0800 (PST)
+Date: Sat, 23 Dec 2023 12:18:58 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v11 00/10] net: ethernet: am65-cpsw: Add mqprio,
- frame preemption & coalescing
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <170329382749.26300.2655743385787592194.git-patchwork-notify@kernel.org>
-Date: Sat, 23 Dec 2023 01:10:27 +0000
-References: <20231219105805.80617-1-rogerq@kernel.org>
-In-Reply-To: <20231219105805.80617-1-rogerq@kernel.org>
-To: Roger Quadros <rogerq@kernel.org>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, shuah@kernel.org, vladimir.oltean@nxp.com,
- s-vadapalli@ti.com, r-gunasekaran@ti.com, vigneshr@ti.com, srk@ti.com,
- horms@kernel.org, p-varis@ti.com, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.43.0.472.g3155946c3a-goog
+Message-ID: <20231223041858.1991349-1-davidgow@google.com>
+Subject: [PATCH] kunit: Fix some comments which were mistakenly kerneldoc
+From: David Gow <davidgow@google.com>
+To: Shuah Khan <skhan@linuxfoundation.org>, Rae Moar <rmoar@google.com>
+Cc: kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Brendan Higgins <brendan.higgins@linux.dev>, 
+	David Gow <davidgow@google.com>, kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hello:
+The KUnit device helpers are documented with kerneldoc in their header
+file, but also have short comments over their implementation. These were
+mistakenly formatted as kerneldoc comments, even though they're not
+valid kerneldoc. It shouldn't cause any serious problems -- this file
+isn't included in the docs -- but it could be confusing, and causes
+warnings.
 
-This series was applied to netdev/net-next.git (main)
-by David S. Miller <davem@davemloft.net>:
+Remove the extra '*' so that these aren't treated as kerneldoc.
 
-On Tue, 19 Dec 2023 12:57:55 +0200 you wrote:
-> Hi,
-> 
-> This series adds mqprio qdisc offload in channel mode,
-> Frame Preemption MAC merge support and RX/TX coalesing
-> for AM65 CPSW driver.
-> 
-> In v11 following changes were made
-> - Fix patch "net: ethernet: ti: am65-cpsw: add mqprio qdisc offload in channel mode"
-> by including units.h
-> 
-> [...]
+Fixes: d03c720e03bd ("kunit: Add APIs for managing devices")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202312181920.H4EPAH20-lkp@intel.com/
+Signed-off-by: David Gow <davidgow@google.com>
+---
+ lib/kunit/device.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-Here is the summary with links:
-  - [net-next,v11,01/10] selftests: forwarding: ethtool_mm: support devices with higher rx-min-frag-size
-    https://git.kernel.org/netdev/net-next/c/2491d66ae66c
-  - [net-next,v11,02/10] selftests: forwarding: ethtool_mm: fall back to aggregate if device does not report pMAC stats
-    https://git.kernel.org/netdev/net-next/c/c8659bd9d1c0
-  - [net-next,v11,03/10] net: ethernet: am65-cpsw: Build am65-cpsw-qos only if required
-    https://git.kernel.org/netdev/net-next/c/c92b1321bbf3
-  - [net-next,v11,04/10] net: ethernet: am65-cpsw: Rename TI_AM65_CPSW_TAS to TI_AM65_CPSW_QOS
-    https://git.kernel.org/netdev/net-next/c/d0f9535b3182
-  - [net-next,v11,05/10] net: ethernet: am65-cpsw: cleanup TAPRIO handling
-    https://git.kernel.org/netdev/net-next/c/5db81bdc486d
-  - [net-next,v11,06/10] net: ethernet: ti: am65-cpsw: Move code to avoid forward declaration
-    https://git.kernel.org/netdev/net-next/c/1374841ad477
-  - [net-next,v11,07/10] net: ethernet: am65-cpsw: Move register definitions to header file
-    https://git.kernel.org/netdev/net-next/c/8f5a75610698
-  - [net-next,v11,08/10] net: ethernet: ti: am65-cpsw: add mqprio qdisc offload in channel mode
-    https://git.kernel.org/netdev/net-next/c/bc8d62e16ec2
-  - [net-next,v11,09/10] net: ethernet: ti: am65-cpsw-qos: Add Frame Preemption MAC Merge support
-    https://git.kernel.org/netdev/net-next/c/49a2eb906824
-  - [net-next,v11,10/10] net: ethernet: ti: am65-cpsw: add sw tx/rx irq coalescing based on hrtimers
-    https://git.kernel.org/netdev/net-next/c/e4918f9d4882
-
-You are awesome, thank you!
+diff --git a/lib/kunit/device.c b/lib/kunit/device.c
+index 1db4305b615a..f5371287b375 100644
+--- a/lib/kunit/device.c
++++ b/lib/kunit/device.c
+@@ -60,7 +60,7 @@ static void kunit_device_release(struct device *d)
+ 	kfree(to_kunit_device(d));
+ }
+ 
+-/**
++/*
+  * Create and register a KUnit-managed struct device_driver on the kunit_bus.
+  * Returns an error pointer on failure.
+  */
+@@ -124,7 +124,7 @@ static struct kunit_device *kunit_device_register_internal(struct kunit *test,
+ 	return kunit_dev;
+ }
+ 
+-/**
++/*
+  * Create and register a new KUnit-managed device, using the user-supplied device_driver.
+  * On failure, returns an error pointer.
+  */
+@@ -141,7 +141,7 @@ struct device *kunit_device_register_with_driver(struct kunit *test,
+ }
+ EXPORT_SYMBOL_GPL(kunit_device_register_with_driver);
+ 
+-/**
++/*
+  * Create and register a new KUnit-managed device, including a matching device_driver.
+  * On failure, returns an error pointer.
+  */
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.43.0.472.g3155946c3a-goog
 
 
