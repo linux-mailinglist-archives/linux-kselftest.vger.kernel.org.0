@@ -1,127 +1,92 @@
-Return-Path: <linux-kselftest+bounces-2417-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2418-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6BB2481DED0
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Dec 2023 08:25:39 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF36D81E077
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Dec 2023 13:39:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E54F01F21C73
-	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Dec 2023 07:25:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6E0BEB2057F
+	for <lists+linux-kselftest@lfdr.de>; Mon, 25 Dec 2023 12:39:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22CDE139E;
-	Mon, 25 Dec 2023 07:25:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8382235887;
+	Mon, 25 Dec 2023 12:39:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JgoUNfS1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BIL/6fzZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E77A15AF;
-	Mon, 25 Dec 2023 07:25:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1703489133; x=1735025133;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=BfzAFQ9bC5PkBKJdRJQbLjw96vqNP/rj3JExPsy7EoM=;
-  b=JgoUNfS1oW6VgTwlt4lQA1i0B5GmzaOA6wg5QyW7Gl9h2xwiunv7EJrZ
-   hLOBWrXrcKPWzEBYrkp+Rf3bx5haa3ki5Khu3qmi1Osbr30EpYBQ71HYA
-   iXq/Q/vkAvQvzGJ0Li0E8fGK3xCtziC6BC8dEUHh3lZnU0cpyifGHTxP0
-   kbV1ZG1IdEad1JWiBrn5YdBBw5mozmFUPsE04LdbSldJMoNacUYBOPaQE
-   0IQD1RBlheaedlPYtHJ3MKFZZTpJG89AN67fHbBdQss9A5Dip5kNpdpFz
-   YJUbVU9tKqbem/VaRHjdDP+7b9vTOARB2uOddzIq88pHP0xCire+L4Mab
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10934"; a="375764978"
-X-IronPort-AV: E=Sophos;i="6.04,302,1695711600"; 
-   d="scan'208";a="375764978"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Dec 2023 23:25:32 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10934"; a="727467086"
-X-IronPort-AV: E=Sophos;i="6.04,302,1695711600"; 
-   d="scan'208";a="727467086"
-Received: from yujie-x299.sh.intel.com ([10.239.159.77])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Dec 2023 23:25:29 -0800
-From: Yujie Liu <yujie.liu@intel.com>
-To: netdev@vger.kernel.org,
-	Hangbin Liu <liuhangbin@gmail.com>
-Cc: Paolo Abeni <pabeni@redhat.com>,
-	David Ahern <dsahern@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	lkp@intel.com,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46D072574B;
+	Mon, 25 Dec 2023 12:39:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-1d3e6c86868so29866815ad.1;
+        Mon, 25 Dec 2023 04:39:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1703507955; x=1704112755; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lt7y85wdBzW7T0fKOcTK5uAk2Vc6N/J05wAxgQgPaB8=;
+        b=BIL/6fzZcQPRY5VbtzQeHUKeyFBNz4ggikrbchwA8DYYaC+laENLsYJqIiP5DXQsyn
+         GMa8cLNJq1Aiq3Sz8LFUVLxuN5GymeICGI+X7guuNehaivfwpH2R35tQ41FrHx6zHre+
+         0w3UaxqYm3IJjP2QNzgNsZLwqfTJYalPmNOpN/TnBUjSBYzI8E525aNc14N+ZNxHPlbL
+         zXFdlmVeukXd40JFOZk7Ow9rqnqqoeRIn6oFLXBWvasbMjX75Mkw4ydKbJmyisqQIZdx
+         8Rp7D8iAD4zO2fKyu8CP3XL7QoKE4Hkq9IdzV6SUCwHyb4oOBML/6gRNeYWTrDdJvVAK
+         5Rlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703507955; x=1704112755;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lt7y85wdBzW7T0fKOcTK5uAk2Vc6N/J05wAxgQgPaB8=;
+        b=iPAp9I669pW9c7yPHnvAUB2H2StEO9g0XfCltV9xUrPikoTKIjwiF468M9TOUYu1d+
+         Zd1hCdHOFuLEGlNmrwL6OqGOHXG1xkkQcdsOs09Olyzmmto3QPYvztSjwpia5YT+aYVI
+         XoFB9xgtCPxEnM/gfnLt3nj9AJXIg66mMshH/gX/1+DAt6ct9ISsJQ5FmLW6v/ksYvi1
+         QGEru2qDBtKgglMPyicPpIEHZjs0VpVd2IHFIbq4CAvIliQkHYOoNXQL3kO2V0e0i+hI
+         Ugr54qQTJfZuzDqR1KKUrQqWXykcVYSyIzXd/yfUUoOSdTzcbTR6REXlrBP+eN+syAvt
+         97Wg==
+X-Gm-Message-State: AOJu0YyRMsp0ZTH8yXroGLJCY1YMgHULrNmYcyuJF7eByxTIJjkrKjIU
+	9bsqjfz0RkMN6jZjm527LUM=
+X-Google-Smtp-Source: AGHT+IGgcUupcgnEjwe5cz+o7NA3nD2BSC5KshmWoyOnv/mTiHcnok1KfGIqVTNaAwtMz0IcUCKSog==
+X-Received: by 2002:a17:903:603:b0:1d3:c21b:db5a with SMTP id kg3-20020a170903060300b001d3c21bdb5amr5488895plb.34.1703507955502;
+        Mon, 25 Dec 2023 04:39:15 -0800 (PST)
+Received: from Laptop-X1 ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id j14-20020a170902da8e00b001d09c5424d4sm8059719plx.297.2023.12.25.04.39.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Dec 2023 04:39:14 -0800 (PST)
+Date: Mon, 25 Dec 2023 20:39:09 +0800
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: Yujie Liu <yujie.liu@intel.com>
+Cc: netdev@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+	David Ahern <dsahern@kernel.org>, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, lkp@intel.com,
 	kernel test robot <oliver.sang@intel.com>
-Subject: [PATCH net-next] selftests/net: change the shebang of unicast_extensions.sh to bash
-Date: Mon, 25 Dec 2023 15:21:09 +0800
-Message-Id: <20231225072109.3835503-1-yujie.liu@intel.com>
-X-Mailer: git-send-email 2.34.1
+Subject: Re: [PATCH net-next] selftests/net: change the shebang of
+ unicast_extensions.sh to bash
+Message-ID: <ZYl37fnxGGop7VCs@Laptop-X1>
+References: <20231225072109.3835503-1-yujie.liu@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231225072109.3835503-1-yujie.liu@intel.com>
 
-The patch set [1] added a general lib.sh in net selftests, and converted
-several test scripts to source the lib.sh.
+On Mon, Dec 25, 2023 at 03:21:09PM +0800, Yujie Liu wrote:
+> The patch set [1] added a general lib.sh in net selftests, and converted
+> several test scripts to source the lib.sh.
 
-The shebang of unicast_extensions.sh is /bin/sh which may point to various
-shells in different distributions, but "source" is only available in some
-of them. For example, "source" is a built-it function in bash, but it
-cannot be used in dash.
+Oh, I didn't know dash doesn't support "source". Thanks for the fix.
+Would you please also help fix the pmtu.sh, which has the same issue?
 
-Refer to other scripts that were converted together, simply change the
-shebang to bash to suppress the following errors when the default /bin/sh
-points to other shells.
+BTW, you can change the "source ./lib.sh" to "source lib.sh" to consistent
+with other tests.
 
-# selftests: net: unicast_extensions.sh
-# ./unicast_extensions.sh: 31: source: not found
-# ###########################################################################
-# Unicast address extensions tests (behavior of reserved IPv4 addresses)
-# ###########################################################################
-# TEST: assign and ping within 240/4 (1 of 2) (is allowed)            [FAIL]
-# TEST: assign and ping within 240/4 (2 of 2) (is allowed)            [FAIL]
-# TEST: assign and ping within 0/8 (1 of 2) (is allowed)              [FAIL]
-# TEST: assign and ping within 0/8 (2 of 2) (is allowed)              [FAIL]
-# TEST: assign and ping inside 255.255/16 (is allowed)                [FAIL]
-# TEST: assign and ping inside 255.255.255/24 (is allowed)            [FAIL]
-# TEST: route between 240.5.6/24 and 255.1.2/24 (is allowed)          [FAIL]
-# TEST: route between 0.200/16 and 245.99/16 (is allowed)             [FAIL]
-# TEST: assign and ping lowest address (/24)                          [FAIL]
-# TEST: assign and ping lowest address (/26)                          [FAIL]
-# TEST: routing using lowest address                                  [FAIL]
-# TEST: assigning 0.0.0.0 (is forbidden)                              [ OK ]
-# TEST: assigning 255.255.255.255 (is forbidden)                      [ OK ]
-# TEST: assign and ping inside 127/8 (is forbidden)                   [ OK ]
-# TEST: assign and ping class D address (is forbidden)                [ OK ]
-# TEST: routing using class D (is forbidden)                          [ OK ]
-# TEST: routing using 127/8 (is forbidden)                            [ OK ]
-not ok 51 selftests: net: unicast_extensions.sh # exit=1
-
-Link: https://lore.kernel.org/all/20231202020110.362433-1-liuhangbin@gmail.com/ [1]
-Fixes: 0f4765d0b48d ("selftests/net: convert unicast_extensions.sh to run it in unique namespace")
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Signed-off-by: Yujie Liu <yujie.liu@intel.com>
----
- tools/testing/selftests/net/unicast_extensions.sh | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/net/unicast_extensions.sh b/tools/testing/selftests/net/unicast_extensions.sh
-index b7a2cb9e7477..2766990c2b78 100755
---- a/tools/testing/selftests/net/unicast_extensions.sh
-+++ b/tools/testing/selftests/net/unicast_extensions.sh
-@@ -1,4 +1,4 @@
--#!/bin/sh
-+#!/bin/bash
- # SPDX-License-Identifier: GPL-2.0
- #
- # By Seth Schoen (c) 2021, for the IPv4 Unicast Extensions Project
--- 
-2.34.1
-
+Thanks
+Hangbin
 
