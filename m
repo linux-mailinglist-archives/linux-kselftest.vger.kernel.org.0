@@ -1,132 +1,92 @@
-Return-Path: <linux-kselftest+bounces-2450-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2451-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B14DB81EA49
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Dec 2023 23:16:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E29C981EA5A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Dec 2023 23:40:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E3FB01C214F3
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Dec 2023 22:16:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C496228332A
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Dec 2023 22:40:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B160F523E;
-	Tue, 26 Dec 2023 22:16:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8FC2525E;
+	Tue, 26 Dec 2023 22:40:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="fyZHtNnp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F8OOMrMZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE07A101CA;
-	Tue, 26 Dec 2023 22:16:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3BQIDaNR016393;
-	Tue, 26 Dec 2023 22:15:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=VoRo5f6IrCV9ALJyUXnzTLDuogXBDmbUaDVMt4gglAo=;
- b=fyZHtNnpBcz/UuSTBUru5KIOSo2YU93PY1F5j6F9H0WOWNmUFSdE0EO9Lh07xkGyw3Uy
- m32uaBM4EIuwSGtlbmJDmwD1SQoNZ1yoQuxK4gbOh5DocEHgMOkge1PoUqjDfQRaJQXX
- aLR6AZ7LYvt0mkN4AIMMYlYORYAOMArPL8Yuc2nO2JhN9Xc/8LVGO/iD9c7NK/BCgl1Y
- gL5VGvYoe3Q+QnMccMTd33q4xHH3KzGBcdRmpqQ7MrewZ5EKyQI4FxeJgjjJ7tnbmMId
- 3rgD6cRy4xbP/yt0f+Y3AJROutYDUxIsUvEOzfya//Dqwjhz1jSUo8GW2I6MhCcJkq3X kg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3v83wtkatg-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 26 Dec 2023 22:15:24 +0000
-Received: from m0353724.ppops.net (m0353724.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3BQMFOxd023492;
-	Tue, 26 Dec 2023 22:15:24 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3v83wtkat9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 26 Dec 2023 22:15:24 +0000
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3BQIf0Vr029924;
-	Tue, 26 Dec 2023 22:15:23 GMT
-Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3v6avnevrs-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 26 Dec 2023 22:15:23 +0000
-Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
-	by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3BQMFMRC14680722
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 26 Dec 2023 22:15:22 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B9BCF58050;
-	Tue, 26 Dec 2023 22:15:22 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 6AE8B58045;
-	Tue, 26 Dec 2023 22:15:19 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.184.58])
-	by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Tue, 26 Dec 2023 22:15:19 +0000 (GMT)
-Message-ID: <b16e3c23475119a51218378a0749d023773b30f1.camel@linux.ibm.com>
-Subject: Re: [PATCH v8 20/24] ima: Move IMA-Appraisal to LSM infrastructure
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>, viro@zeniv.linux.org.uk,
-        brauner@kernel.org, chuck.lever@oracle.com, jlayton@kernel.org,
-        neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com, tom@talpey.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        dmitry.kasatkin@gmail.com, dhowells@redhat.com, jarkko@kernel.org,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        casey@schaufler-ca.com, shuah@kernel.org, mic@digikod.net
-Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Roberto Sassu
-	 <roberto.sassu@huawei.com>,
-        Stefan Berger <stefanb@linux.ibm.com>
-Date: Tue, 26 Dec 2023 17:15:18 -0500
-In-Reply-To: <20231214170834.3324559-21-roberto.sassu@huaweicloud.com>
-References: <20231214170834.3324559-1-roberto.sassu@huaweicloud.com>
-	 <20231214170834.3324559-21-roberto.sassu@huaweicloud.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82A6A5250;
+	Tue, 26 Dec 2023 22:40:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E6948C433C9;
+	Tue, 26 Dec 2023 22:40:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1703630424;
+	bh=t7Azjows6a4NudAwFasVutuu3ZSXugHqZpvg/vQupZc=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=F8OOMrMZQGGkH81i5df0nHGftbOQDJVEAKb7h6LP/qJoTLvXbzKER+k1mHuX+YvGY
+	 fGVNCVAvEu1bpRVlgdpVZMR40XZBr06aQQ8F8EWjWRfojb5kcegjcX07jsH29G8JLb
+	 j5C3fHXQiS0kvCGuuYdG04eZUwXFXivizYewXR9ZNDY6SgNQlq9zAeqQRUxdOczrLC
+	 RA5FcUAW4Obt0yRFn5TwL+c7TayE8Kjze7Fl04+rkib6ommYoauqqbkmbit8hsbf3f
+	 Cp+sO4SDRN9MAagAPj0hqjWVk6otsm7FnHJD2WerJ0WHKU7nvbX20Q4anfmx1MAl4O
+	 hNEpVNxlaeNjg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id CC014E333D7;
+	Tue, 26 Dec 2023 22:40:23 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: tlhLAv7YzTcht7l2Hkl5NXy03ihqIFql
-X-Proofpoint-ORIG-GUID: nHQ2p4p0s8yrqBO3GhxsV7FCYYxw18SV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-26_12,2023-12-26_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 phishscore=0 suspectscore=0 mlxlogscore=999 clxscore=1015
- malwarescore=0 bulkscore=0 spamscore=0 adultscore=0 lowpriorityscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2312260170
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 0/4] mptcp: cleanup and support more ephemeral
+ ports sockopts
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <170363042382.9770.13227130852306828650.git-patchwork-notify@kernel.org>
+Date: Tue, 26 Dec 2023 22:40:23 +0000
+References: <20231219-upstream-net-next-20231219-mptcp-sockopts-ephemeral-ports-v1-0-2b13bedfcaf8@kernel.org>
+In-Reply-To: <20231219-upstream-net-next-20231219-mptcp-sockopts-ephemeral-ports-v1-0-2b13bedfcaf8@kernel.org>
+To: Matthieu Baerts <matttbe@kernel.org>
+Cc: mptcp@lists.linux.dev, martineau@kernel.org, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
+ netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, dcaratti@redhat.com, max@internet.ru
 
-On Thu, 2023-12-14 at 18:08 +0100, Roberto Sassu wrote:
-> From: Roberto Sassu <roberto.sassu@huawei.com>
+Hello:
 
-A few additional IMA hooks are needed to reset the cached appraisal
-status, causing the file's integrity to be re-evaluated on next access.
-Register these IMA-appraisal only functions separately ...
+This series was applied to netdev/net-next.git (main)
+by David S. Miller <davem@davemloft.net>:
 
-Mimi
-
-> Do the registration of IMA-Appraisal only functions separately from the
-> rest of IMA functions, as appraisal is a separate feature not necessarily
-> enabled in the kernel configuration.
+On Tue, 19 Dec 2023 22:31:03 +0100 you wrote:
+> Patch 1 is a cleanup one: mptcp_is_tcpsk() helper was modifying sock_ops
+> in some cases which is unexpected with that name.
 > 
-> Reuse the same approach as for other IMA functions, move hardcoded calls
-> from various places in the kernel to the LSM infrastructure. Declare the
-> functions as static and register them as hook implementations in
-> init_ima_appraise_lsm(), called by init_ima_lsm().
+> Patch 2 to 4 add support for two socket options: IP_LOCAL_PORT_RANGE and
+> IP_BIND_ADDRESS_NO_PORT. The first one is a preparation patch, the
+> second one adds the support while the last one modifies an existing
+> selftest to validate the new features.
 > 
-> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> Reviewed-by: Stefan Berger <stefanb@linux.ibm.com>
-> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> [...]
+
+Here is the summary with links:
+  - [net-next,1/4] mptcp: don't overwrite sock_ops in mptcp_is_tcpsk()
+    https://git.kernel.org/netdev/net-next/c/8e2b8a9fa512
+  - [net-next,2/4] mptcp: rename mptcp_setsockopt_sol_ip_set_transparent()
+    https://git.kernel.org/netdev/net-next/c/57d3117ca80f
+  - [net-next,3/4] mptcp: sockopt: support IP_LOCAL_PORT_RANGE and IP_BIND_ADDRESS_NO_PORT
+    https://git.kernel.org/netdev/net-next/c/c85636a29264
+  - [net-next,4/4] selftests/net: add MPTCP coverage for IP_LOCAL_PORT_RANGE
+    https://git.kernel.org/netdev/net-next/c/122db5e3634b
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
