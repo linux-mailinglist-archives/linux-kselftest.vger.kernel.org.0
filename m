@@ -1,262 +1,141 @@
-Return-Path: <linux-kselftest+bounces-2441-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2442-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 731A181E769
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Dec 2023 13:32:59 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7BBC81E778
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Dec 2023 13:51:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A940283031
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Dec 2023 12:32:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DCD4B1C21D94
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Dec 2023 12:51:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32C8D4EB36;
-	Tue, 26 Dec 2023 12:32:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 844314E63E;
+	Tue, 26 Dec 2023 12:51:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mPbb3kvs"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bn9w1i8n"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6703A4D5BA;
-	Tue, 26 Dec 2023 12:32:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1703593966; x=1735129966;
-  h=message-id:date:subject:from:to:cc:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=javgje0HYNQU0mVRp/fGPyUA9BlJrs4YXlvbxbiVD+8=;
-  b=mPbb3kvsA0jhmxDiIr77FSFLL78FgpXPrkcEmcrK8l8SrYqG16oJ42Ok
-   2Mz262A/Y/ZAvq4INdd7uuYgrrQz2YVx3V4P4NStZ4AShz30inHmErXHQ
-   Y71vLL1shpdcEICD/ZY6yhHf8eXztAa1r+CVhEG9HJ1+cadSrudcVlVua
-   tUd2z8k9rlG7na62csbBmvH4vr85/Q29JinESvBoT5ENYf0EZr5bKBLak
-   OisukdNs5XSXq5TO6hz7s5sWD+j7mJ6j4YGaN5RIO3ByxOdn59vKinCL1
-   hgvz7mH5K++bnxMXBaI2+n3lJ6EvqyxC8sr+s0C7f+z+9KuuAQCwT3mh9
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10934"; a="3158469"
-X-IronPort-AV: E=Sophos;i="6.04,306,1695711600"; 
-   d="scan'208";a="3158469"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Dec 2023 04:32:46 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10934"; a="781465652"
-X-IronPort-AV: E=Sophos;i="6.04,306,1695711600"; 
-   d="scan'208";a="781465652"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmsmga007.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 26 Dec 2023 04:32:44 -0800
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Tue, 26 Dec 2023 04:32:43 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Tue, 26 Dec 2023 04:32:43 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35 via Frontend Transport; Tue, 26 Dec 2023 04:32:43 -0800
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.168)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Tue, 26 Dec 2023 04:32:39 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dPr8o50wbKiuoIhIX+1mHgrJO7kEn7nNMNkyg1aa7VWNDFAGEouOommKLeT9mwYmvhf6JAUDSCVnlRW5ICA7tlWq7DAnZvLm+VzrCCfmyjBO21UIBrlZoFcCJp/RjBuGS5cwZFbhgDHfNFh4oHswHATMJYNiR7J6hdKRNejzI4g6P9DB6SOmL5IwmaXNMNx2rrFeApU6p4RMpNf4nXpKddwDQ0v7Ng0fQj0BJJaueEIN41OtdkMcQAdD4FmG1cT7IM6fKfqkLl5RCUXkIgp4Yxps/NHPEap7bEAEFVQGCmS9rWi9hERIaiH8/0cKCCFNnvK/IsVERLAk0cH/0U/abQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mZFCtESi4UdHEwg7lrISfahFVlqgAYYY661j6XDFwnQ=;
- b=AolX648HEqGOlDCUKIM1R7QrDSLSJTECt2Refs6NmN7sm4IgEGWJ6gNdU8UzICVNsdEU71Eie19767Iu1ZedUMzMJP9cDONXpaFItNCsj/PsQJoWhfHgLtgdjHyVAT+JvBISQbZrSvDdzk9sExLdur6cP9pq3PlBU1p2/NJheUUyXhNKIjcYoFgEcDBkMUrizoWew9vdM3oz2AkXZCdZ5ur9wBLzAQy5qqeEmx364V3RIw8ToRJwFSz5zJlPJ1uRBZ+W0+7bpt/s6Vb/mHxQHieZeGIqJoqowcYMXJ3NOEU9g2E1V6kQ66MN3u77ImBIEgE3aMMBOKZ9Zk7y/8ah6w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DS0PR11MB7529.namprd11.prod.outlook.com (2603:10b6:8:141::20)
- by CY5PR11MB6366.namprd11.prod.outlook.com (2603:10b6:930:3a::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7113.27; Tue, 26 Dec
- 2023 12:32:38 +0000
-Received: from DS0PR11MB7529.namprd11.prod.outlook.com
- ([fe80::e4ae:3948:1f55:547d]) by DS0PR11MB7529.namprd11.prod.outlook.com
- ([fe80::e4ae:3948:1f55:547d%5]) with mapi id 15.20.7113.027; Tue, 26 Dec 2023
- 12:32:38 +0000
-Message-ID: <54b6d7ed-c496-42d6-a4b2-50ba4c4b180c@intel.com>
-Date: Tue, 26 Dec 2023 20:35:25 +0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 9/9] iommu/vt-d: Add iotlb flush for nested domain
-Content-Language: en-US
-From: Yi Liu <yi.l.liu@intel.com>
-To: "Tian, Kevin" <kevin.tian@intel.com>, "joro@8bytes.org" <joro@8bytes.org>,
-	"alex.williamson@redhat.com" <alex.williamson@redhat.com>, "jgg@nvidia.com"
-	<jgg@nvidia.com>, "robin.murphy@arm.com" <robin.murphy@arm.com>,
-	"baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>
-CC: "cohuck@redhat.com" <cohuck@redhat.com>, "eric.auger@redhat.com"
-	<eric.auger@redhat.com>, "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
-	"kvm@vger.kernel.org" <kvm@vger.kernel.org>, "mjrosato@linux.ibm.com"
-	<mjrosato@linux.ibm.com>, "chao.p.peng@linux.intel.com"
-	<chao.p.peng@linux.intel.com>, "yi.y.sun@linux.intel.com"
-	<yi.y.sun@linux.intel.com>, "peterx@redhat.com" <peterx@redhat.com>,
-	"jasowang@redhat.com" <jasowang@redhat.com>,
-	"shameerali.kolothum.thodi@huawei.com"
-	<shameerali.kolothum.thodi@huawei.com>, "lulu@redhat.com" <lulu@redhat.com>,
-	"suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-	"iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "Duan,
- Zhenzhong" <zhenzhong.duan@intel.com>, "joao.m.martins@oracle.com"
-	<joao.m.martins@oracle.com>, "Zeng, Xin" <xin.zeng@intel.com>, "Zhao, Yan Y"
-	<yan.y.zhao@intel.com>, "j.granados@samsung.com" <j.granados@samsung.com>
-References: <20231221153948.119007-1-yi.l.liu@intel.com>
- <20231221153948.119007-10-yi.l.liu@intel.com>
- <BN9PR11MB5276A45F5355A6DAA8CBE5738C94A@BN9PR11MB5276.namprd11.prod.outlook.com>
- <cbd97b49-37b5-4445-a8b5-717b8ce99f59@intel.com>
-In-Reply-To: <cbd97b49-37b5-4445-a8b5-717b8ce99f59@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SG2PR02CA0034.apcprd02.prod.outlook.com
- (2603:1096:3:18::22) To DS0PR11MB7529.namprd11.prod.outlook.com
- (2603:10b6:8:141::20)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31D9E4E631;
+	Tue, 26 Dec 2023 12:51:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-6d099d316a8so4136750b3a.0;
+        Tue, 26 Dec 2023 04:51:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1703595109; x=1704199909; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8I6eOdWU4tKnR7IavMXk04RzDq/PuX82Y4y0SpAzUkk=;
+        b=Bn9w1i8nqDndcNqdMAJihuW4TqwDCcsfk7QyAVW5/o7XZaZpuF0bj35f7XyxbVJQK9
+         MLBM1IklObu2iZn1iw/0ltt7MgojcQ9ru68BiEeJBcH8BikCoDl2Y3teODLcilTra4bu
+         wIljksUbqzV0ZFvw4Sls4pyW40SaYptl7CyDzZ2jLgkpe3Ny8nCwmpMap2CMGSntWBuW
+         q1KVhqUiXWNrwwLFnKlJZN72QO+sChAd1+a2ShvSW352rGo/CgGxbzqN5zaRH5yrXdj3
+         G1LO5g1QsB2ZOVZ/bp0Ihx+DaxZy4OF5qAc7mHhI23mdRWDP2sw2ZmJD85v9gi5KZqBU
+         Srxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1703595109; x=1704199909;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8I6eOdWU4tKnR7IavMXk04RzDq/PuX82Y4y0SpAzUkk=;
+        b=LxadtMwHfnFMVPuS8UTEUwyL1/sFMeN6Zy+2TIhXiYWFC31tYxEovn9yuNQ3C9Umuo
+         7igqCw6pOQ7q8KobeFMtoWPHrDvRi1RNO4aplLkYFUKggfXJZK3DWp+YSkbu023JjkQR
+         6q0i1UzoXrMdu0kKGY62/n4ItQuWUKinBG7xkz0bpNWansaM4L4Vvl8mVPaQygkUsKE+
+         dBMg2aBsRWjxWT8/2vtDkPrzilVvGkmjqsB+0bxH75HnVSZWSpfNI/bxNt03VoRTq+S3
+         qu/vyafMHXkfSeScXVmX4dnGk6rWu6iTHGkIIImeBwy2pBnljmnJJYu8RT9HroTRZYng
+         cf1g==
+X-Gm-Message-State: AOJu0YxyuAom01anorV5nIjbIAbWRyga6lQTMWqfnqty6TW0+6/1NIIi
+	7eRDvog77Y8qhE3YMmTMu4I=
+X-Google-Smtp-Source: AGHT+IEm6DwiwwbjMok5Hg2b2sDi1RmVsgcgt7KlVA48YtMdjivpc6UnEOvWham0wYyY5EgxS7Kf2g==
+X-Received: by 2002:a05:6a20:324b:b0:190:35f4:c515 with SMTP id hm11-20020a056a20324b00b0019035f4c515mr7495561pzc.12.1703595109295;
+        Tue, 26 Dec 2023 04:51:49 -0800 (PST)
+Received: from Laptop-X1 ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id fb35-20020a056a002da300b006d9bff075cfsm2726177pfb.33.2023.12.26.04.51.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 26 Dec 2023 04:51:48 -0800 (PST)
+Date: Tue, 26 Dec 2023 20:51:43 +0800
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: Yujie Liu <yujie.liu@intel.com>
+Cc: netdev@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
+	David Ahern <dsahern@kernel.org>, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, lkp@intel.com,
+	kernel test robot <oliver.sang@intel.com>
+Subject: Re: [PATCH net-next] selftests/net: change the shebang of
+ unicast_extensions.sh to bash
+Message-ID: <ZYrMX5GTjxCzGeK-@Laptop-X1>
+References: <20231225072109.3835503-1-yujie.liu@intel.com>
+ <ZYl37fnxGGop7VCs@Laptop-X1>
+ <ZYqSJk9rMxGxLx8s@yujie-X299>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR11MB7529:EE_|CY5PR11MB6366:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1bd22870-f38d-4674-bcd4-08dc060ebe89
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: KCe5rdJiZhAdnOaJm0l2aeiw3KF+lx9rkA0OuQCobbthnyHg7QREJUVw24AmaGPH7s34fDhrvsrrgDQ3Mlw/RPEA9BLiKPtf7bYqHHYdVN8RhGpQ/hvJphqxfw9BMx7QOx8CtiIKr/wjt59mFNdRhpU/TKXqXiFELxfstQBxLxHiIKZ61zP6Oxzb8kacBXbV27/ETS+ep5mTeizaqAd6DgWxugP3Izsec07MRfvGPzVLmaRUfL+97hp9l3je1pdkSb41K+WzCAxwnAQOTrRrI+1+ETCWCakWF3Y+EcyyTQYWXebjX32nTN3FxYADIcnwOTdxe47TNTo4pSy1xI+V66lMn4AWVVYBY0/s3PEfsVNNK9NDuKHZ8nSAabaoxyHstKyhdaOnFFkGNIwJnlFIfE1JLUBjCBRahyWQLHZRyMC9zapYivt1dK8fyrWDcsvFMnaqc2VY7qki/NCmndMPkyvAmCz22I25DlbpxdvFB10Xh4HLQXK3zHGEKn0D3AoXEg7hAzOQBrECCwQxcYzDOcrL5fSS00cUmqU1gsOTwzGiVe5GtYbqUGLPKn1dPizeEKrwq5Jjn4h2rtAQ8DziWszESFviwy+mrqQ2xzRPcgKbNGO879p7rHSUlwowwPnjbX+Gy3enhfKJNi7RuhH09Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB7529.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(39860400002)(366004)(136003)(346002)(396003)(376002)(230922051799003)(1800799012)(451199024)(64100799003)(186009)(36756003)(31686004)(6666004)(6512007)(6506007)(53546011)(66946007)(66556008)(66476007)(6486002)(86362001)(31696002)(82960400001)(26005)(38100700002)(83380400001)(2616005)(41300700001)(2906002)(5660300002)(8936002)(7416002)(8676002)(478600001)(316002)(54906003)(4326008)(110136005)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NGlBRUZNbTJoaC9EZFEyU2RVMWFNeDV6VWNhMFBZQ3FrWC9zUkNhZmZsdUZ2?=
- =?utf-8?B?R0FvM3hkOUFLNENndklJemtnaE1yUW1tL1ZKb0haS0xpREVmZ3ZtZXJ2c2JQ?=
- =?utf-8?B?cURVaXJiUm1oT2xKM2UzQTdDQUNVb0ltMXBybFVrcnVVaExPRUh1VWl4ekpF?=
- =?utf-8?B?TVk4eUlIUm94TzEvdXg4M3VPQUtxOUo2WjZKLzFoNnBzbWE3bTFkeEJadXFk?=
- =?utf-8?B?T213N1dvZHB4SEd3SGZXL0o0aEUvZUhqNXhwTEg5N3NjVExTWWk2ZFhHOHlz?=
- =?utf-8?B?YUNhU1JWa1d6bDV3V1hWL1dJZURzRGtpLzJLQkhlK3RHNW43cERYazF2cWJW?=
- =?utf-8?B?K2x4UG1uRU04NW9JWXdya2hWMFFkZXVZNkQrcTJOTzladFFrTzd5L2o5bW5j?=
- =?utf-8?B?SEd2ZkI2VVlDUHI5V25Qd1BNdldXdXNPRkkxcm1rKy9SbkFZeTVPNUdONW9C?=
- =?utf-8?B?RjMxY3dSVzJVVWs1N1grb0d5MVJmeG5lbXZTcERsejRTYlhIay9lMUcrdWFw?=
- =?utf-8?B?WTdsZjllc09yaDJITlM0RWtwL0VRVkRDTWlpTTR4cU15TGpSK3Y0V0NTYmhK?=
- =?utf-8?B?ZGppMFMzenB0dHdYQTlYMXRkSC83MGFCckl4THViaVJybHlMWnNSQ3JlbG51?=
- =?utf-8?B?S2o1VHdBN3VBdy9aeFFkU05LTHJpS0VsSUdTRUNKdnptQ25OL2VFZkZGYlBG?=
- =?utf-8?B?M2dwN0dUMFlOckd3ZWdZaUNVYmFXcm56WXM4M2R6YXJuNWF2WDZUaDBZaE1Y?=
- =?utf-8?B?ek9kd2phdzN1Q0U5cmMvVzNMQ3NIMm5HeEJ5d2llck1xTEVmQkhrSjFQb050?=
- =?utf-8?B?d0JaaW4wWm1wTGNEd0ZBczlQaGZhSXN1VHVyT042NjhSbW9ONDhvMDVLaDdT?=
- =?utf-8?B?dmtHU1cwTEx5M3NxODc5Q3JHR0RKZmVQd3lDR1ZhYWJCUjVNdXd0S3VtWnBk?=
- =?utf-8?B?Tko3QVdUS2UzRXlUQnB3SElMQXAyS2VGQ09PQ0RuYkZVdDRHdWtPWTlOQmZM?=
- =?utf-8?B?VUdUQndLUmxkamNRYVJ2anBoTk5UbE5wdGp6V3NrYXZ5RGU5Y2FRYjdlSW5v?=
- =?utf-8?B?dnNicTBUTmhwN0pjSVczT3hYNng5QjBhOXppSzBERTExYjBsMFpaalVsd2tN?=
- =?utf-8?B?Tyt0dllrVTM5bmcrMmpyckZUMFBoZklGL0M2alVWQ1VZMW03STcya293N1RZ?=
- =?utf-8?B?OGMyQitzeVM4SzhUNmxaZmp6OEFteEgyRnF3b0M4aGtTSk80RjBlQ2lEYjZT?=
- =?utf-8?B?UzJPaEZjZFh1VzFKMUdOYlFVczFXOXBGeldpbjJnV2tVaXJBVDlLb25ESE1w?=
- =?utf-8?B?bXpWM05UeTVYTFpwTEh2TW1WTGV1Vnk2RVZuK0ZCdG54c1VibGIreXl6eHcz?=
- =?utf-8?B?WGtadEdLYXh1STdmNWdEczBXWTAvaGRlcTVaeUt0ZzVJejBsTTlzbHYzV2w5?=
- =?utf-8?B?Ni9ZV0RUSEpHWVdNMWV5eXcvem44QW9TQmM2ejAzRHZHRmJCbkQyVjR2LzRT?=
- =?utf-8?B?WmxPMmRXaEU2YndpbHdUQUE5OXpvWTdNTjdZZEJBNTdDUDBHMGc4YkRrbWhq?=
- =?utf-8?B?ajFBVWJHM0FZN0k3S3NncVd3Q0h4TlpMMllUczA2d09xMXYyaFpGbjFiZktt?=
- =?utf-8?B?bzdVT3dSc0pMbWRhdVU3K0JhUUZHUXQ2ZmUxblVydnVHeTBreFlDM2FVNW1i?=
- =?utf-8?B?YWJ4RTY4Sm83bHNpeHJnWE80S0taM0JvMHRLd1J3b2czblFoUnhXOUZYNkxh?=
- =?utf-8?B?UU5YZ1JaVkk0SXoxa0FGRUdwZ3pGcnpCeWx6YVhTMnQrKzZtS3hvdUJxcGoy?=
- =?utf-8?B?RzBwRWc4N0o4MS82QWx6U3I1OXR5amhaRGRYdksySjdwanZBRkNqYlVrTjBG?=
- =?utf-8?B?ajV2MlA3MExkZzN1Y0FBcDNNSWRmOHVabHljQ1pwQWJ1WTZJTldGb0l6YjdM?=
- =?utf-8?B?N1laeFpXbTVyamY0SThxUysxZHNlM2IvK0tSRU05MmNVSFBpWkliQTRQTTF2?=
- =?utf-8?B?WVNMcGNZdDBlcTJaR05wRGV4Qk1WWnNpUmlDK0tLdm1yYjNIYks0ZEZ5ZS9i?=
- =?utf-8?B?RFVYdTBBajIycFhnNXZjM0k5bFAyUE53Q3pQYWNleDZzUnkvN2xJd3B3SXRu?=
- =?utf-8?Q?9C1I7Nr8qe/SDuEw0ykEQM9mo?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1bd22870-f38d-4674-bcd4-08dc060ebe89
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB7529.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Dec 2023 12:32:37.9408
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5bYxhzN28QN96rha613u3OGzjiYCMDWPAHSEoCgWOsSR76zgwyJybKL2rvO+2PoYNkN2oGrxMlBOdgeY7jayDA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR11MB6366
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZYqSJk9rMxGxLx8s@yujie-X299>
 
-On 2023/12/26 12:51, Yi Liu wrote:
-> On 2023/12/22 14:57, Tian, Kevin wrote:
->>> From: Liu, Yi L <yi.l.liu@intel.com>
->>> Sent: Thursday, December 21, 2023 11:40 PM
->>>
->>> +
->>> +static void intel_nested_flush_cache(struct dmar_domain *domain, u64
->>> addr,
->>> +                     unsigned long npages, u32 *error)
->>> +{
->>> +    struct iommu_domain_info *info;
->>> +    unsigned long i;
->>> +    unsigned mask;
->>> +    u32 fault = 0;
->>> +
->>> +    if (npages == U64_MAX)
->>> +        mask = 64 - VTD_PAGE_SHIFT;
->>> +    else
->>> +        mask = ilog2(__roundup_pow_of_two(npages));
->>> +
->>> +    xa_for_each(&domain->iommu_array, i, info) {
->>> +        nested_flush_pasid_iotlb(info->iommu, domain, addr,
->>> npages, 0);
->>
->> so IOMMU_VTD_INV_FLAGS_LEAF is defined but ignored?
+On Tue, Dec 26, 2023 at 04:43:18PM +0800, Yujie Liu wrote:
+> Hi Hangbin,
 > 
-> yeah... it is. It is named as ih in the driver code. But it appears only
-> the below code is set ih. When calling iommu_flush_iotlb_psi(), the 5th
-> parameter (ih) may be true.
+> On Mon, Dec 25, 2023 at 08:39:09PM +0800, Hangbin Liu wrote:
+> > On Mon, Dec 25, 2023 at 03:21:09PM +0800, Yujie Liu wrote:
+> > > The patch set [1] added a general lib.sh in net selftests, and converted
+> > > several test scripts to source the lib.sh.
+> > 
+> > Oh, I didn't know dash doesn't support "source". Thanks for the fix.
+> > Would you please also help fix the pmtu.sh, which has the same issue?
 > 
-> static int intel_iommu_memory_notifier(struct notifier_block *nb,
->                         unsigned long val, void *v)
-> {
->      struct memory_notify *mhp = v;
->      unsigned long start_vpfn = mm_to_dma_pfn(mhp->start_pfn);
->      unsigned long last_vpfn = mm_to_dma_pfn(mhp->start_pfn +
->              mhp->nr_pages - 1);
-> 
->      switch (val) {
->      case MEM_GOING_ONLINE:
->          if (iommu_domain_identity_map(si_domain,
->                            start_vpfn, last_vpfn)) {
->              pr_warn("Failed to build identity map for [%lx-%lx]\n",
->                  start_vpfn, last_vpfn);
->              return NOTIFY_BAD;
->          }
->          break;
-> 
->      case MEM_OFFLINE:
->      case MEM_CANCEL_ONLINE:
->          {
->              struct dmar_drhd_unit *drhd;
->              struct intel_iommu *iommu;
->              LIST_HEAD(freelist);
-> 
->              domain_unmap(si_domain, start_vpfn, last_vpfn, &freelist);
-> 
->              rcu_read_lock();
->              for_each_active_iommu(iommu, drhd)
->                  iommu_flush_iotlb_psi(iommu, si_domain,
->                      start_vpfn, mhp->nr_pages,
->                      list_empty(&freelist), 0);
->              rcu_read_unlock();
->              put_pages_list(&freelist);
->          }
->          break;
->      }
-> 
->      return NOTIFY_OK;
-> }
+> It looks like pmtu.sh was not converted in patch set [1], so it doesn't
+> have "source lib.sh" yet. The cover letter of [1] mentions that the
+> whole process of conversion will be split into several parts. Not sure
+> if pmtu.sh will be converted in the subsequent parts soon? If so, would
+> you like to change the shebang of pmtu.sh when converting it later, or
+> change it together in this patch? Thanks.
 
-I passed this flag to the intel_nested_flush_cache() now as the
-helper accepts an ih parameter.
+The pmtu.sh update is in this patch set.
+https://lore.kernel.org/all/20231219094856.1740079-1-liuhangbin@gmail.com/
 
--- 
-Regards,
-Yi Liu
+It would be good to fix these 2 tests together.
+
+> 
+> BTW, in addition to pmtu.sh, I noticed that there are several other
+> scripts in net selftests which have "/bin/sh" shebang:
+
+Yes, but the other tests don't use "source".
+
+> 
+> linux/tools/testing/selftests/net$ grep -rF '#!/bin/sh'
+> openvswitch/openvswitch.sh:#!/bin/sh
+> in_netns.sh:#!/bin/sh
+> netdevice.sh:#!/bin/sh
+> test_bpf.sh:#!/bin/sh
+> test_blackhole_dev.sh:#!/bin/sh
+> vlan_hw_filter.sh:#!/bin/sh
+> run_netsocktests:#!/bin/sh
+> pmtu.sh:#!/bin/sh
+> bareudp.sh:#!/bin/sh
+> l2_tos_ttl_inherit.sh:#!/bin/sh
+> veth.sh:#!/bin/sh
+> ipv6_flowlabel.sh:#!/bin/sh
+> unicast_extensions.sh:#!/bin/sh
+> reuseport_addr_any.sh:#!/bin/sh
+> run_afpackettests:#!/bin/sh
+> ip_local_port_range.sh:#!/bin/sh
+> amt.sh:#!/bin/sh
+> udpgso.sh:#!/bin/sh
+> ip_defrag.sh:#!/bin/sh
+> rps_default_mask.sh:#!/bin/sh
+> 
+> > BTW, you can change the "source ./lib.sh" to "source lib.sh" to consistent
+> > with other tests.
+> 
+> Sure, will respin a v2 with this change added.
+
+Thanks
+Hangbin
 
