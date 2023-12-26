@@ -1,141 +1,174 @@
-Return-Path: <linux-kselftest+bounces-2443-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2444-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9A9981E795
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Dec 2023 14:22:20 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E57A281E8F3
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Dec 2023 19:16:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B7E42826F9
-	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Dec 2023 13:22:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 61917B22529
+	for <lists+linux-kselftest@lfdr.de>; Tue, 26 Dec 2023 18:16:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2017C4EB40;
-	Tue, 26 Dec 2023 13:22:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB79A524AE;
+	Tue, 26 Dec 2023 18:15:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="J4L5rAOf"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="tBE7JHBp"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4396E4EB3B
-	for <linux-kselftest@vger.kernel.org>; Tue, 26 Dec 2023 13:22:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-2ccce3bc472so6563821fa.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 26 Dec 2023 05:22:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1703596933; x=1704201733; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CR5Mc6S1wCj7Fjrv1MlaC7BI2JRcmGN+tCmj6tVa1EY=;
-        b=J4L5rAOfh7bGj6TxHaPH/s8tGriFNUOuCsRhtpwZ62slFmHk/eyYyBsvKkXoM8SRMq
-         mcNFrSuzMpiPwmWs57bX/PLID6vdZsGYiJTLdUd6PwcqANZ9/kjywE+XlXwtKX0NfiY/
-         SASTUiTVvXEE4vN/zCzTqdpz8y+oUt/72PYc5fVRCczJLIZL8oTnV5ZDupGJfO5Nk7GF
-         12fcMpLh85yMZ69/k13G86omfTYgqHUBqm5ywKidkzbJnF9gsH8t65CNhfguxr8Dx32A
-         nT7sFBmgXug4CpshkW1/abafQmTeuveFPwry5V1KZpLxYAOQzLyiNzvveMhU+teyufdZ
-         iO3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703596933; x=1704201733;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CR5Mc6S1wCj7Fjrv1MlaC7BI2JRcmGN+tCmj6tVa1EY=;
-        b=OupQ7vjCPwKzIUmqd4S8DvZPAuuQU+EZLbkfgKwL4mei7M6FPBTlbvLipPTnJoL1CP
-         7QCEvbSuimforKigGNOm4FVrAZrcWkB9dYjGLEg/zTUglLF87V/Zzpy+XNc3cCnfS3ta
-         r+/FXaBtwfyv10RqcYO0cJfcBkyxqGr4mQrIMMde2pD96PKsNjcv9BrxO3dIm9LLtxvp
-         jXyOL5K1r7/34b72bn8BQRVEcmPTBi8/Mf01W8fs1Rf+MX0IUEur5j0FMFi7O0cxauAu
-         AmJuoAe9IRs4xPB+lpyjnIBjig9VeFsYvg/UFV/v7uEIf+vEdSD98DiEiiW3cbzEeFuz
-         sqOA==
-X-Gm-Message-State: AOJu0YxvVA/nUgvKla5khlKL1jAIDNt92Y+AdV83ugM297sMxhUzLx1G
-	HDLuf1d/k+Lvn5mHf0g5uYxigoiaKgO2nw==
-X-Google-Smtp-Source: AGHT+IHhN61dvntgp6XWctfPX5u8iVH15VLdhnKHc3ENYWxrGgPtdwk0Uxk67Oon7SfRsIhRxfDing==
-X-Received: by 2002:a2e:9049:0:b0:2cc:7d70:fa45 with SMTP id n9-20020a2e9049000000b002cc7d70fa45mr3070024ljg.27.1703596933283;
-        Tue, 26 Dec 2023 05:22:13 -0800 (PST)
-Received: from u94a (2001-b011-fa04-d3bc-b2dc-efff-fee8-7e7a.dynamic-ip6.hinet.net. [2001:b011:fa04:d3bc:b2dc:efff:fee8:7e7a])
-        by smtp.gmail.com with ESMTPSA id jk15-20020a170903330f00b001d1c96a0c63sm10075044plb.274.2023.12.26.05.22.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 26 Dec 2023 05:22:12 -0800 (PST)
-Date: Tue, 26 Dec 2023 21:22:03 +0800
-From: Shung-Hsi Yu <shung-hsi.yu@suse.com>
-To: Maxim Mikityanskiy <maxtram95@gmail.com>
-Cc: Eduard Zingerman <eddyz87@gmail.com>, 
-	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
-	Andrii Nakryiko <andrii@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	netdev@vger.kernel.org, Maxim Mikityanskiy <maxim@isovalent.com>
-Subject: Re: [PATCH bpf-next 01/15] selftests/bpf: Fix the
- u64_offset_to_skb_data test
-Message-ID: <j3ops2mlylgtb5ybkht75gu3dljlee6omu6zu4hsmnojssziyo@gnpsrrvh7f7l>
-References: <20231220214013.3327288-1-maxtram95@gmail.com>
- <20231220214013.3327288-2-maxtram95@gmail.com>
- <w7xg34uqlrnbb3o3rspng6y563astp3hkfxjtz3xp32rqr4a42@xgpeu7qevatg>
- <ZYqtDuhpbS1ltM2Q@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E612250255;
+	Tue, 26 Dec 2023 18:15:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3BQHdFUH022692;
+	Tue, 26 Dec 2023 18:14:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=5dBZDtb+K1DCgJH8DDLwaveoKzmRMAvBcJFK+/Jtf5I=;
+ b=tBE7JHBpq71tQ+K3ym4xn3RtzQBOmFL5vykkg3ijEoZnJWRpIzBB05XEzLUG/EvBmcGd
+ kCA0+HxQBZ+QewvZdCsfDqA1pqQ5D1lxGoN74Q4jrJOQ0iSZGO+LJujHjAuUcabL/0j5
+ 0jrPPUW0IGLT0elmfgWCiT/n+9xmppNESTdzSkyZlwXACm32VMVYs6uz/G80QU0C5vrv
+ 0RztzkLhkCgm4iqu/qAF1H6wCC7Yo/5tGnsEfDBE6wnlg2i84vs3rK3UMGFFNmOajb/b
+ eeN0ZSaKE9zmqbzNp0aKmeS0Y50VgVjnTc700t//qaPX17AKGdRPU6phl4U6AOabA0y9 xg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3v6y4ssehr-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 26 Dec 2023 18:14:57 +0000
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3BQIDaSr006127;
+	Tue, 26 Dec 2023 18:14:56 GMT
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3v6y4ssehh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 26 Dec 2023 18:14:56 +0000
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3BQGW7Mb016594;
+	Tue, 26 Dec 2023 18:14:55 GMT
+Received: from smtprelay05.wdc07v.mail.ibm.com ([172.16.1.72])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 3v6c3jwkab-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 26 Dec 2023 18:14:55 +0000
+Received: from smtpav06.dal12v.mail.ibm.com (smtpav06.dal12v.mail.ibm.com [10.241.53.105])
+	by smtprelay05.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3BQIEspK16450192
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 26 Dec 2023 18:14:54 GMT
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 29A6A58055;
+	Tue, 26 Dec 2023 18:14:54 +0000 (GMT)
+Received: from smtpav06.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B8A4858043;
+	Tue, 26 Dec 2023 18:14:52 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.184.58])
+	by smtpav06.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Tue, 26 Dec 2023 18:14:52 +0000 (GMT)
+Message-ID: <c6c2d413f340d858e43aa3837abdf80cb8be9d84.camel@linux.ibm.com>
+Subject: Re: [PATCH v8 19/24] ima: Move to LSM infrastructure
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Roberto Sassu <roberto.sassu@huaweicloud.com>, viro@zeniv.linux.org.uk,
+        brauner@kernel.org, chuck.lever@oracle.com, jlayton@kernel.org,
+        neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com, tom@talpey.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        dmitry.kasatkin@gmail.com, dhowells@redhat.com, jarkko@kernel.org,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        casey@schaufler-ca.com, shuah@kernel.org, mic@digikod.net
+Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Roberto Sassu
+	 <roberto.sassu@huawei.com>
+Date: Tue, 26 Dec 2023 13:14:52 -0500
+In-Reply-To: <20231214170834.3324559-20-roberto.sassu@huaweicloud.com>
+References: <20231214170834.3324559-1-roberto.sassu@huaweicloud.com>
+	 <20231214170834.3324559-20-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZYqtDuhpbS1ltM2Q@mail.gmail.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: pT8fJVabVdrbFwkeTKU5Il3CfFkW_KRY
+X-Proofpoint-ORIG-GUID: yVmeWBPZBscIZbs1SjyEsPPoKK6xZjsl
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-26_10,2023-12-26_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 suspectscore=0
+ spamscore=0 clxscore=1011 phishscore=0 mlxlogscore=999 bulkscore=0
+ priorityscore=1501 malwarescore=0 lowpriorityscore=0 impostorscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2312260138
 
-On Tue, Dec 26, 2023 at 12:38:06PM +0200, Maxim Mikityanskiy wrote:
-> On Tue, 26 Dec 2023 at 17:52:56 +0800, Shung-Hsi Yu wrote:
-> > On Wed, Dec 20, 2023 at 11:39:59PM +0200, Maxim Mikityanskiy wrote:
-> > > From: Maxim Mikityanskiy <maxim@isovalent.com>
-> > > 
-> > > The u64_offset_to_skb_data test is supposed to make a 64-bit fill, but
-> > > instead makes a 16-bit one. Fix the test according to its intention. The
-> > > 16-bit fill is covered by u16_offset_to_skb_data.
-> > 
-> > Cover letter mentioned
-> > 
-> >   Patch 1 (Maxim): Fix for an existing test, it will matter later in the
-> >   series.
-> > 
-> > However no subsequent patch touch upon u64_offset_to_skb_data(). Was the
-> > followup missing from this series?
+On Thu, 2023-12-14 at 18:08 +0100, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
 > 
-> Thanks for your vigilance, but it's actually correct, sorry for not
-> making it clear enough. In patch 11 ("bpf: Preserve boundaries and track
-> scalars on narrowing fill") I modify u16_offset_to_skb_data, because it
-> becomes a valid pattern after that change. If I didn't change and fix
-> u64_offset_to_skb_data here, I'd need to modify it in patch 11 as well
-> (that's what I meant when I said "it will matter later in the series",
-> it's indeed subtle and implicit, now that I look at it), because it
-> would also start passing, however, that's not what we want, because:
+> Move hardcoded IMA function calls (not appraisal-specific functions) from
+> various places in the kernel to the LSM infrastructure, by introducing a
+> new LSM named 'ima' (at the end of the LSM list and always enabled like
+> 'integrity').
 > 
-> 1. Both tests would essentially test the same thing: a 16-bit fill after
-> a 32-bit spill.
+> Having IMA before EVM in the Makefile is sufficient to preserve the
+> relative order of the new 'ima' LSM in respect to the upcoming 'evm' LSM,
+> and thus the order of IMA and EVM function calls as when they were
+> hardcoded.
 > 
-> 2. The description of u64_offset_to_skb_data clearly says: "Refill as
-> u64". It's a typo in the code, u16->u64 makes sense, because we spill
-> two u32s and fill them as a single u64.
+> Make moved functions as static (except ima_post_key_create_or_update(),
+> which is not in ima_main.c), and register them as implementation of the
+> respective hooks in the new function init_ima_lsm().
 > 
-> So, this patch essentially prevents wrong changes in a further patch.
+> A slight difference is that IMA and EVM functions registered for the
+> inode_post_setattr, inode_post_removexattr, path_post_mknod,
+> inode_post_create_tmpfile, inode_post_set_acl and inode_post_remove_acl
+> won't be executed for private inodes. Since those inodes are supposed to be
+> fs-internal, they should not be of interest of IMA or EVM. The S_PRIVATE
+> flag is used for anonymous inodes, hugetlbfs, reiserfs xattrs, XFS scrub
+> and kernel-internal tmpfs files.
+> 
+> Conditionally register ima_post_path_mknod() if CONFIG_SECURITY_PATH is
+> enabled, otherwise the path_post_mknod hook won't be available.
 
-Thank for the thorough explanation. Now I can see and agree that the
-u16->u64 change should be made. Digging back a big, the change also
-aligns with what's said in commit 0be2516f865f5 ("selftests/bpf: Tests
-for state pruning with u32 spill/fill") that introduced the check:
+Up to this point, enabling CONFIG_SECURITY_PATH was not required.  By
+making it conditional on CONFIG_SECURITY_PATH, anyone enabling IMA will
+also need to enable CONFIG_SECURITY_PATH.  Without it, new files will
+not be tagged as a "new" file.
 
-  ... checks that a filled u64 register is marked unknown if the
-  register spilled in the same slack slot was less than 8B.
+Casey, Paul, how common is it today not to enable CONFIG_SECURITY_PATH?
+Will enabling it just for IMA be a problem?
 
-Side note: the r4 value in comment is still "R4=umax=65535", that
-probably should be updated as well now that r4 is unbounded.
+> 
+> Also, conditionally register ima_post_key_create_or_update() if
+> CONFIG_IMA_MEASURE_ASYMMETRIC_KEYS is enabled.
+> 
+> Move integrity_kernel_module_request() to IMA and name it
+> ima_kernel_module_request(), as only appraisal is affected by the crypto
+> subsystem trying to load kernel modules. Conditionally register
+> ima_kernel_module_request() if CONFIG_INTEGRITY_ASYMMETRIC_KEYS is
+> enabled.
 
-> [...]
-> > > -	r4 = *(u16*)(r10 - 8);				\
-> > > +	r4 = *(u64*)(r10 - 8);				\
-> > >  	r0 = r2;					\
-> > >  	/* r0 += r4 R0=pkt R2=pkt R3=pkt_end R4=umax=65535 */\
-> > >  	r0 += r4;					\
+The previous version was so clean. 
+Moving integrity_kernel_module_request() to IMA should be a separate
+patch, probably a prereq.  Then like the other functions convert it to
+an LSM hook.
+
+Please include a line explaning why the original EVM signature is not
+affected.
+
+> 
+> Finally, add the LSM_ID_IMA case in lsm_list_modules_test.c.
+> 
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> Acked-by: Chuck Lever <chuck.lever@oracle.com>
+
+-- 
+thanks,
+
+Mimi
+
 
