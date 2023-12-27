@@ -1,51 +1,51 @@
-Return-Path: <linux-kselftest+bounces-2475-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2476-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4231581F031
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Dec 2023 17:17:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40FFD81F034
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Dec 2023 17:18:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D85D1B22707
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Dec 2023 16:17:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EC0B61F22D7E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Dec 2023 16:18:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA9C84988C;
-	Wed, 27 Dec 2023 16:14:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89C6B45C0F;
+	Wed, 27 Dec 2023 16:14:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="oDF7m4SM"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="THCJ0Oqu"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B07E48CE5;
-	Wed, 27 Dec 2023 16:14:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16540495DE;
+	Wed, 27 Dec 2023 16:14:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1703693651; x=1735229651;
+  t=1703693652; x=1735229652;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=WdtqJXn4o/JksNspoDogjPrqBmrQwHzi0UiIL1TFC3M=;
-  b=oDF7m4SMhO/maK+SVnqW4DfJ0Y8rRl5SZgIkMtQLVqk/DFIPwyjgvkA8
-   zpEzd8jaNPzHvphLK8SCrkr/s2gU4ZHVcErUQke+PmDRf59cmjAU1bt6Q
-   oYZ2cecKy7TI8VEHp4UBQpuBIuEJX29hfZzHWodIVWzecipgNDDb9Zdpc
-   IGGrm/hywDgL95db8wkomQiBl6t67xLBbAGhxSa9DB8tgWjPh1bRAUChA
-   m32Nem728GsZ4broB9j2WF8ZpISrUNDeba6Q8abFi7XfH8ZrJgSzV0mUM
-   zujhtJzr1Hy85lHuYCuBJfFbbfNucqwb/SXxlR7WeSi/MnWrxVQsRTISz
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10936"; a="396186309"
+  bh=n7TK3hOHBZCHKUUtwN8CSWmxd8FxVEH9nRA4PZnV3dY=;
+  b=THCJ0OquEigJrN2T+GPy9Wx2bYXRBY00zlBj3xLDQS3G90dB+PPjpifZ
+   6DGoZfBAv2w9qQPE/hFflkI7NZ53qtGzlzS2glSiM8RD4xZ+VAY3K92Dg
+   2NiLfRxkaNqnr17WanhTA/bPgiXyeQBCWjrOXXMQd2blNJbVJz7PzBf17
+   SOTgHoOKYXQQhUorectPfXOaUneeZ7nVRKmeZLumyLdSmGDRu2/yyoNvW
+   TbLRffTOou5MnH7GNFHPEnTqPdipvdpqfhqj0Wlkras4GRxuPuVJ/hcVk
+   oHuRCnPYlz1FsbkxjuC7auXM3mxZ1Tyep6izoUwa3ixO7MaNjZvNNu4R6
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10936"; a="396186320"
 X-IronPort-AV: E=Sophos;i="6.04,309,1695711600"; 
-   d="scan'208";a="396186309"
+   d="scan'208";a="396186320"
 Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2023 08:14:10 -0800
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2023 08:14:11 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10936"; a="781775227"
+X-IronPort-AV: E=McAfee;i="6600,9927,10936"; a="781775232"
 X-IronPort-AV: E=Sophos;i="6.04,309,1695711600"; 
-   d="scan'208";a="781775227"
+   d="scan'208";a="781775232"
 Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by fmsmga007.fm.intel.com with ESMTP; 27 Dec 2023 08:14:09 -0800
+  by fmsmga007.fm.intel.com with ESMTP; 27 Dec 2023 08:14:10 -0800
 From: Yi Liu <yi.l.liu@intel.com>
 To: joro@8bytes.org,
 	alex.williamson@redhat.com,
@@ -74,9 +74,9 @@ Cc: cohuck@redhat.com,
 	xin.zeng@intel.com,
 	yan.y.zhao@intel.com,
 	j.granados@samsung.com
-Subject: [PATCH v8 09/10] iommufd: Add data structure for Intel VT-d stage-1 cache invalidation
-Date: Wed, 27 Dec 2023 08:13:53 -0800
-Message-Id: <20231227161354.67701-10-yi.l.liu@intel.com>
+Subject: [PATCH v8 10/10] iommu/vt-d: Add iotlb flush for nested domain
+Date: Wed, 27 Dec 2023 08:13:54 -0800
+Message-Id: <20231227161354.67701-11-yi.l.liu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20231227161354.67701-1-yi.l.liu@intel.com>
 References: <20231227161354.67701-1-yi.l.liu@intel.com>
@@ -88,81 +88,150 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This adds the data structure invalidating caches for the nested domain
-allocated with IOMMU_HWPT_DATA_VTD_S1 type.
+From: Lu Baolu <baolu.lu@linux.intel.com>
+
+This implements the .cache_invalidate_user() callback to support iotlb
+flush for nested domain.
 
 Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+Co-developed-by: Yi Liu <yi.l.liu@intel.com>
 Signed-off-by: Yi Liu <yi.l.liu@intel.com>
 ---
- include/uapi/linux/iommufd.h | 55 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
+ drivers/iommu/intel/nested.c | 118 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 118 insertions(+)
 
-diff --git a/include/uapi/linux/iommufd.h b/include/uapi/linux/iommufd.h
-index 824560c50ec6..2067aa00d2a3 100644
---- a/include/uapi/linux/iommufd.h
-+++ b/include/uapi/linux/iommufd.h
-@@ -623,6 +623,61 @@ enum iommu_hwpt_invalidate_data_type {
- 	IOMMU_HWPT_INVALIDATE_DATA_VTD_S1,
+diff --git a/drivers/iommu/intel/nested.c b/drivers/iommu/intel/nested.c
+index b5a5563ab32c..cc9887a68318 100644
+--- a/drivers/iommu/intel/nested.c
++++ b/drivers/iommu/intel/nested.c
+@@ -73,9 +73,127 @@ static void intel_nested_domain_free(struct iommu_domain *domain)
+ 	kfree(to_dmar_domain(domain));
+ }
+ 
++static void nested_flush_pasid_iotlb(struct intel_iommu *iommu,
++				     struct dmar_domain *domain, u64 addr,
++				     unsigned long npages, bool ih)
++{
++	u16 did = domain_id_iommu(domain, iommu);
++	unsigned long flags;
++
++	spin_lock_irqsave(&domain->lock, flags);
++	if (!list_empty(&domain->devices))
++		qi_flush_piotlb(iommu, did, IOMMU_NO_PASID, addr,
++				npages, ih, NULL);
++	spin_unlock_irqrestore(&domain->lock, flags);
++}
++
++static void nested_flush_dev_iotlb(struct dmar_domain *domain, u64 addr,
++				   unsigned mask, u32 *fault)
++{
++	struct device_domain_info *info;
++	unsigned long flags;
++	u16 sid, qdep;
++
++	spin_lock_irqsave(&domain->lock, flags);
++	list_for_each_entry(info, &domain->devices, link) {
++		if (!info->ats_enabled)
++			continue;
++		sid = info->bus << 8 | info->devfn;
++		qdep = info->ats_qdep;
++		qi_flush_dev_iotlb(info->iommu, sid, info->pfsid,
++				   qdep, addr, mask, fault);
++		quirk_extra_dev_tlb_flush(info, addr, mask,
++					  IOMMU_NO_PASID, qdep);
++	}
++	spin_unlock_irqrestore(&domain->lock, flags);
++}
++
++static void intel_nested_flush_cache(struct dmar_domain *domain, u64 addr,
++				     unsigned long npages, bool ih, u32 *error)
++{
++	struct iommu_domain_info *info;
++	unsigned long i;
++	unsigned mask;
++	u32 fault;
++
++	xa_for_each(&domain->iommu_array, i, info)
++		nested_flush_pasid_iotlb(info->iommu, domain, addr, npages, ih);
++
++	if (!domain->has_iotlb_device)
++		return;
++
++	if (npages == U64_MAX)
++		mask = 64 - VTD_PAGE_SHIFT;
++	else
++		mask = ilog2(__roundup_pow_of_two(npages));
++
++	nested_flush_dev_iotlb(domain, addr, mask, &fault);
++
++	/*
++	 * Invalidation queue error (i.e. IQE) will not be reported to user
++	 * as it's caused only by driver internal bug.
++	 */
++	if (fault & DMA_FSTS_ICE)
++		*error |= IOMMU_HWPT_INVALIDATE_VTD_S1_ICE;
++	if (fault & DMA_FSTS_ITE)
++		*error |= IOMMU_HWPT_INVALIDATE_VTD_S1_ITE;
++}
++
++static int intel_nested_cache_invalidate_user(struct iommu_domain *domain,
++					      struct iommu_user_data_array *array)
++{
++	struct dmar_domain *dmar_domain = to_dmar_domain(domain);
++	struct iommu_hwpt_vtd_s1_invalidate inv_entry;
++	u32 processed = 0;
++	int ret = 0;
++	u32 index;
++
++	if (array->type != IOMMU_HWPT_INVALIDATE_DATA_VTD_S1) {
++		ret = -EINVAL;
++		goto out;
++	}
++
++	for (index = 0; index < array->entry_num; index++) {
++		ret = iommu_copy_struct_from_user_array(&inv_entry, array,
++							IOMMU_HWPT_INVALIDATE_DATA_VTD_S1,
++							index, hw_error);
++		if (ret)
++			break;
++
++		if (inv_entry.flags & ~IOMMU_VTD_INV_FLAGS_LEAF) {
++			ret = -EOPNOTSUPP;
++			break;
++		}
++
++		if (!IS_ALIGNED(inv_entry.addr, VTD_PAGE_SIZE) ||
++		    ((inv_entry.npages == U64_MAX) && inv_entry.addr)) {
++			ret = -EINVAL;
++			break;
++		}
++
++		intel_nested_flush_cache(dmar_domain, inv_entry.addr,
++					 inv_entry.npages,
++					 inv_entry.flags & IOMMU_VTD_INV_FLAGS_LEAF,
++					 &inv_entry.hw_error);
++
++		ret = iommu_respond_struct_to_user_array(array, index,
++							 (void *)&inv_entry,
++							 sizeof(inv_entry));
++		if (ret)
++			break;
++
++		processed++;
++	}
++
++out:
++	array->entry_num = processed;
++	return ret;
++}
++
+ static const struct iommu_domain_ops intel_nested_domain_ops = {
+ 	.attach_dev		= intel_nested_attach_dev,
+ 	.free			= intel_nested_domain_free,
++	.cache_invalidate_user	= intel_nested_cache_invalidate_user,
  };
  
-+/**
-+ * enum iommu_hwpt_vtd_s1_invalidate_flags - Flags for Intel VT-d
-+ *                                           stage-1 cache invalidation
-+ * @IOMMU_VTD_INV_FLAGS_LEAF: Indicates whether the invalidation applies
-+ *                            to all-levels page structure cache or just
-+ *                            the leaf PTE cache.
-+ */
-+enum iommu_hwpt_vtd_s1_invalidate_flags {
-+	IOMMU_VTD_INV_FLAGS_LEAF = 1 << 0,
-+};
-+
-+/**
-+ * enum iommu_hwpt_vtd_s1_invalidate_error - Hardware error of invalidation
-+ * @IOMMU_HWPT_INVALIDATE_VTD_S1_ICE: Invalidation Completion Error, details
-+ *                                    refer to 11.4.7.1 Fault Status Register
-+ *                                    of VT-d specification.
-+ * @IOMMU_HWPT_INVALIDATE_VTD_S1_ITE: Invalidation Time-out Error, details
-+ *                                    refer to 11.4.7.1 Fault Status Register
-+ *                                    of VT-d specification.
-+ */
-+enum iommu_hwpt_vtd_s1_invalidate_error {
-+	IOMMU_HWPT_INVALIDATE_VTD_S1_ICE = 1 << 0,
-+	IOMMU_HWPT_INVALIDATE_VTD_S1_ITE = 1 << 1,
-+};
-+
-+/**
-+ * struct iommu_hwpt_vtd_s1_invalidate - Intel VT-d cache invalidation
-+ *                                       (IOMMU_HWPT_INVALIDATE_DATA_VTD_S1)
-+ * @addr: The start address of the range to be invalidated. It needs to
-+ *        be 4KB aligned.
-+ * @npages: Number of contiguous 4K pages to be invalidated.
-+ * @flags: Combination of enum iommu_hwpt_vtd_s1_invalidate_flags
-+ * @hw_error: One of enum iommu_hwpt_vtd_s1_invalidate_error
-+ *
-+ * The Intel VT-d specific invalidation data for user-managed stage-1 cache
-+ * invalidation in nested translation. Userspace uses this structure to
-+ * tell the impacted cache scope after modifying the stage-1 page table.
-+ *
-+ * Invalidating all the caches related to the page table by setting @addr
-+ * to be 0 and @npages to be U64_MAX.
-+ *
-+ * The device TLB will be invalidated automatically if ATS is enabled.
-+ *
-+ * The @hw_error is meaningful when the entry is handled by the kernel.
-+ * Check the entry_num output of IOMMU_HWPT_INVALIDATE ioctl to know the
-+ * handled entries. @hw_error only covers the errors detected by hardware.
-+ * The software detected errors would go through the normal ioctl errno.
-+ */
-+struct iommu_hwpt_vtd_s1_invalidate {
-+	__aligned_u64 addr;
-+	__aligned_u64 npages;
-+	__u32 flags;
-+	__u32 hw_error;
-+};
-+
- /**
-  * struct iommu_hwpt_invalidate - ioctl(IOMMU_HWPT_INVALIDATE)
-  * @size: sizeof(struct iommu_hwpt_invalidate)
+ struct iommu_domain *intel_nested_domain_alloc(struct iommu_domain *parent,
 -- 
 2.34.1
 
