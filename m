@@ -1,240 +1,171 @@
-Return-Path: <linux-kselftest+bounces-2478-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2479-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D11981F0AF
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Dec 2023 18:04:16 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id EDDDD81F198
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Dec 2023 20:22:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 81E251C21AD6
-	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Dec 2023 17:04:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5AC66B21882
+	for <lists+linux-kselftest@lfdr.de>; Wed, 27 Dec 2023 19:22:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 304E445C19;
-	Wed, 27 Dec 2023 17:04:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 349CE4776E;
+	Wed, 27 Dec 2023 19:22:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="bVtsB3an"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84AAB46521;
-	Wed, 27 Dec 2023 17:04:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=kernel.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-593f182f263so1107882eaf.0;
-        Wed, 27 Dec 2023 09:04:07 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703696646; x=1704301446;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ChF2D9NuT+aryC9LIMkklXUUM4qM6A4dzbxpF9Dkw5Y=;
-        b=S0ymUDVZJf8ldiOgXGya3BW4hV/HBeTINh+QalV9yX5RbGTxsLjlx8l/qG/O89u7U/
-         X25KDQXd+bRIOx579UrXp5DoR3f1+t+2ht79b2pryR60ZABBca+e7WWdbFvea17i3O8+
-         wcnqxA6zvNMFZUso6Tf39l4yeEvTB+dP/7C0tAohzaOtCOuouqB+5fDIc3LB+dxuakPw
-         sgfqFcAjg+BRPB0WA6bizrjJcYtiKla0fFxYqbPk8uklMp99GdhefkfMTAdGSAPgV/sp
-         mYhSNflEJh0EmCR/3FQktwvRFkRaRrO+Hi0DoPxJ62jbmv0OehqUzzGyYsIj+gH2Kzuj
-         uzmw==
-X-Gm-Message-State: AOJu0YymX2HBltTR7DW6p4RCIbXEpZB01BWbRKhC9EGtWsfzywX2MgOz
-	loMvAoI6BnqxHnwcFSrHDQBsL8QCmoAzLcPFrVE=
-X-Google-Smtp-Source: AGHT+IFVqwsopcL3FWguuGTYMy2Bpr8eEz81q/YxplhwEAyn7vCzQwSbkj+x7JRglbxNnSL/PeJ0coTY4MtFswVM8nA=
-X-Received: by 2002:a4a:c719:0:b0:594:c433:66e6 with SMTP id
- n25-20020a4ac719000000b00594c43366e6mr3541007ooq.0.1703696646434; Wed, 27 Dec
- 2023 09:04:06 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26A1E46B85;
+	Wed, 27 Dec 2023 19:22:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3BRFrDWu015987;
+	Wed, 27 Dec 2023 19:21:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=18f/gr/PZcXdeMM5kpAIhPR02z3c/KDZi/eOcuzIIpQ=;
+ b=bVtsB3annBIu4X6srNn88R2Vl4YR8tkm/MkIDQOt+CJnjUudlHDyvvtuYUnkqLxa6Y4K
+ VrtdgWWkDpNwGFkQ/DdUqkL/EbmNwifBK+8TkMaPTUvSGhAG2bkMa7iUk74lWbLfeNo1
+ Rbu9Rf1wPuB8Ves/aRY+oPoa2u54fwch5e5cOpn1MFlXn1mZg90QPfsvH2pzC6MR/IIv
+ 9Ob8WYFq2s8cORaUzVWSo9Np2P8zq2IVmRPXmt2HfvLVXfFg5CF/G0O9V00Y5FAF7omV
+ +rV4EUw/YFbCa7pFwWLpD1aR0GueZPwEIAyb30YHEX0qAXiYSaOhW0dxN+tSsQL+1Q8U tQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3v8pxvkj0g-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 27 Dec 2023 19:21:24 +0000
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 3BRJDXvQ032429;
+	Wed, 27 Dec 2023 19:21:23 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3v8pxvkj07-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 27 Dec 2023 19:21:23 +0000
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 3BRGAZE4008402;
+	Wed, 27 Dec 2023 19:21:22 GMT
+Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 3v69vsv4r7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 27 Dec 2023 19:21:22 +0000
+Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
+	by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 3BRJLLSj61866258
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 27 Dec 2023 19:21:21 GMT
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 1AC475805D;
+	Wed, 27 Dec 2023 19:21:21 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A90C758052;
+	Wed, 27 Dec 2023 19:21:19 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.140.144])
+	by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 27 Dec 2023 19:21:19 +0000 (GMT)
+Message-ID: <96f82924cd2fda95f0c89341215e128419bf77fd.camel@linux.ibm.com>
+Subject: Re: [PATCH v8 23/24] ima: Make it independent from 'integrity' LSM
+From: Mimi Zohar <zohar@linux.ibm.com>
+To: Roberto Sassu <roberto.sassu@huaweicloud.com>, viro@zeniv.linux.org.uk,
+        brauner@kernel.org, chuck.lever@oracle.com, jlayton@kernel.org,
+        neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com, tom@talpey.com,
+        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+        dmitry.kasatkin@gmail.com, dhowells@redhat.com, jarkko@kernel.org,
+        stephen.smalley.work@gmail.com, eparis@parisplace.org,
+        casey@schaufler-ca.com, shuah@kernel.org, mic@digikod.net
+Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org,
+        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Roberto Sassu
+	 <roberto.sassu@huawei.com>
+Date: Wed, 27 Dec 2023 14:21:18 -0500
+In-Reply-To: <ff8e6341-1ff0-4163-b5c7-236a0e8bdc7c@huaweicloud.com>
+References: <20231214170834.3324559-1-roberto.sassu@huaweicloud.com>
+	 <20231214170834.3324559-24-roberto.sassu@huaweicloud.com>
+	 <5aa5986266c3a3f834114a835378455cbbff7b64.camel@linux.ibm.com>
+	 <ff8e6341-1ff0-4163-b5c7-236a0e8bdc7c@huaweicloud.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20231205063537.872834-1-li.meng@amd.com> <20231205063537.872834-5-li.meng@amd.com>
- <CAJZ5v0ju-Thhz2_rQVbTosTsBaRoyQW2kjtPWWTsiT_Yi2DbsQ@mail.gmail.com>
- <CAJZ5v0hMAZxvuMWK3dNeOL9FRTrVW7j7PzCFwcp9+0K87y-L0A@mail.gmail.com>
- <CAJZ5v0gYj6C_-m7dD_aN-FWiuLn6bG9MRTe_c7SryTtJJN7FKA@mail.gmail.com>
- <DM4PR12MB635185821F31AFB0D2655D01F798A@DM4PR12MB6351.namprd12.prod.outlook.com>
- <DM4PR12MB6351C4ADE9E48A06482027B0F79FA@DM4PR12MB6351.namprd12.prod.outlook.com>
-In-Reply-To: <DM4PR12MB6351C4ADE9E48A06482027B0F79FA@DM4PR12MB6351.namprd12.prod.outlook.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 27 Dec 2023 18:03:48 +0100
-Message-ID: <CAJZ5v0iriUv8ZMLYz43AB88rQL2DdP3Wn8WwF00XWhZyce+eYw@mail.gmail.com>
-Subject: Re: [PATCH V12 4/7] cpufreq: Add a notification message that the
- highest perf has changed
-To: "Meng, Li (Jassmine)" <Li.Meng@amd.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, 
-	"Huang, Ray" <Ray.Huang@amd.com>, "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "x86@kernel.org" <x86@kernel.org>, 
-	"linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>, Shuah Khan <skhan@linuxfoundation.org>, 
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, 
-	"Fontenot, Nathan" <Nathan.Fontenot@amd.com>, "Sharma, Deepak" <Deepak.Sharma@amd.com>, 
-	"Deucher, Alexander" <Alexander.Deucher@amd.com>, 
-	"Limonciello, Mario" <Mario.Limonciello@amd.com>, "Huang, Shimmer" <Shimmer.Huang@amd.com>, 
-	"Yuan, Perry" <Perry.Yuan@amd.com>, "Du, Xiaojian" <Xiaojian.Du@amd.com>, 
-	Viresh Kumar <viresh.kumar@linaro.org>, Borislav Petkov <bp@alien8.de>, 
-	Oleksandr Natalenko <oleksandr@natalenko.name>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: ZuI2XL95XsmBzpGslmSc2WJbPjAOR3zJ
+X-Proofpoint-ORIG-GUID: 96PxLxuOz0BBu8l6Y97vO_NKje96XAZy
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2023-12-27_12,2023-12-27_01,2023-05-22_02
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
+ priorityscore=1501 suspectscore=0 spamscore=0 bulkscore=0 mlxscore=0
+ impostorscore=0 mlxlogscore=932 malwarescore=0 clxscore=1015
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2311290000 definitions=main-2312270142
 
-On Wed, Dec 27, 2023 at 2:40=E2=80=AFAM Meng, Li (Jassmine) <Li.Meng@amd.co=
-m> wrote:
->
-> [AMD Official Use Only - General]
->
-> Hi Rafael:
->
-> > -----Original Message-----
-> > From: Meng, Li (Jassmine)
-> > Sent: Tuesday, December 26, 2023 4:27 PM
-> > To: Rafael J. Wysocki <rafael@kernel.org>
-> > Cc: Rafael J . Wysocki <rafael.j.wysocki@intel.com>; Huang, Ray
-> > <Ray.Huang@amd.com>; linux-pm@vger.kernel.org; linux-
-> > kernel@vger.kernel.org; x86@kernel.org; linux-acpi@vger.kernel.org; Shu=
-ah
-> > Khan <skhan@linuxfoundation.org>; linux-kselftest@vger.kernel.org;
-> > Fontenot, Nathan <Nathan.Fontenot@amd.com>; Sharma, Deepak
-> > <Deepak.Sharma@amd.com>; Deucher, Alexander
-> > <Alexander.Deucher@amd.com>; Limonciello, Mario
-> > <Mario.Limonciello@amd.com>; Huang, Shimmer
-> > <Shimmer.Huang@amd.com>; Yuan, Perry <Perry.Yuan@amd.com>; Du,
-> > Xiaojian <Xiaojian.Du@amd.com>; Viresh Kumar <viresh.kumar@linaro.org>;
-> > Borislav Petkov <bp@alien8.de>; Oleksandr Natalenko
-> > <oleksandr@natalenko.name>
-> > Subject: RE: [PATCH V12 4/7] cpufreq: Add a notification message that t=
-he
-> > highest perf has changed
-> >
-> > Hi Rafael:
-> >
-> > > -----Original Message-----
-> > > From: Rafael J. Wysocki <rafael@kernel.org>
-> > > Sent: Tuesday, December 12, 2023 9:44 PM
-> > > To: Meng, Li (Jassmine) <Li.Meng@amd.com>
-> > > Cc: Rafael J . Wysocki <rafael.j.wysocki@intel.com>; Huang, Ray
-> > > <Ray.Huang@amd.com>; linux-pm@vger.kernel.org; linux-
-> > > kernel@vger.kernel.org; x86@kernel.org; linux-acpi@vger.kernel.org;
-> > > Shuah Khan <skhan@linuxfoundation.org>;
-> > > linux-kselftest@vger.kernel.org; Fontenot, Nathan
-> > > <Nathan.Fontenot@amd.com>; Sharma, Deepak
-> > <Deepak.Sharma@amd.com>;
-> > > Deucher, Alexander <Alexander.Deucher@amd.com>; Limonciello, Mario
-> > > <Mario.Limonciello@amd.com>; Huang, Shimmer
-> > <Shimmer.Huang@amd.com>;
-> > > Yuan, Perry <Perry.Yuan@amd.com>; Du, Xiaojian
-> > <Xiaojian.Du@amd.com>;
-> > > Viresh Kumar <viresh.kumar@linaro.org>; Borislav Petkov
-> > > <bp@alien8.de>; Oleksandr Natalenko <oleksandr@natalenko.name>
-> > > Subject: Re: [PATCH V12 4/7] cpufreq: Add a notification message that
-> > > the highest perf has changed
-> > >
-> > > Caution: This message originated from an External Source. Use proper
-> > > caution when opening attachments, clicking links, or responding.
-> > >
-> > >
-> > > On Wed, Dec 6, 2023 at 10:13=E2=80=AFPM Rafael J. Wysocki <rafael@ker=
-nel.org>
-> > > wrote:
-> > > >
-> > > > On Wed, Dec 6, 2023 at 9:58=E2=80=AFPM Rafael J. Wysocki <rafael@ke=
-rnel.org>
-> > > wrote:
-> > > > >
-> > > > > On Tue, Dec 5, 2023 at 7:38=E2=80=AFAM Meng Li <li.meng@amd.com> =
-wrote:
-> > > > > >
-> > > > > > ACPI 6.5 section 8.4.6.1.1.1 specifies that Notify event 0x85
-> > > > > > can be emmitted to cause the the OSPM to re-evaluate the highes=
-t
-> > > > > > performance
-> > > > >
-> > > > > Typos above.  Given the number of iterations of this patch, this
-> > > > > is kind of disappointing.
-> > > > >
-> > > > > > register. Add support for this event.
-> > > > >
-> > > > > Also it would be nice to describe how this is supposed to work at
-> > > > > least roughly, so it is not necessary to reverse-engineer the
-> > > > > patch to find out that.
-> > > > >
-> > > > > > Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
-> > > > > > Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-> > > > > > Reviewed-by: Huang Rui <ray.huang@amd.com>
-> > > > > > Reviewed-by: Perry Yuan <perry.yuan@amd.com>
-> > > > > > Signed-off-by: Meng Li <li.meng@amd.com>
-> > > > > > Link:
-> > > > > >
-> > > https://uefi.org/specs/ACPI/6.5/05_ACPI_Software_Programming_Model
-> > > > > > .html#processor-device-notification-values
-> > > > > > ---
-> > > > > >  drivers/acpi/processor_driver.c |  6 ++++++
-> > > > > >  drivers/cpufreq/cpufreq.c       | 13 +++++++++++++
-> > > > > >  include/linux/cpufreq.h         |  5 +++++
-> > > > > >  3 files changed, 24 insertions(+)
-> > > > > >
-> > > > > > diff --git a/drivers/acpi/processor_driver.c
-> > > > > > b/drivers/acpi/processor_driver.c index
-> > > > > > 4bd16b3f0781..29b2fb68a35d
-> > > > > > 100644
-> > > > > > --- a/drivers/acpi/processor_driver.c
-> > > > > > +++ b/drivers/acpi/processor_driver.c
-> > > > > > @@ -27,6 +27,7 @@
-> > > > > >  #define ACPI_PROCESSOR_NOTIFY_PERFORMANCE 0x80
-> > > > > >  #define ACPI_PROCESSOR_NOTIFY_POWER    0x81
-> > > > > >  #define ACPI_PROCESSOR_NOTIFY_THROTTLING       0x82
-> > > > > > +#define ACPI_PROCESSOR_NOTIFY_HIGEST_PERF_CHANGED
-> > 0x85
-> > > > > >
-> > > > > >  MODULE_AUTHOR("Paul Diefenbaugh");
-> > > MODULE_DESCRIPTION("ACPI
-> > > > > > Processor Driver"); @@ -83,6 +84,11 @@ static void
-> > > > > > acpi_processor_notify(acpi_handle handle, u32 event, void *data=
-)
-> > > > > >                 acpi_bus_generate_netlink_event(device->pnp.dev=
-ice_class,
-> > > > > >                                                   dev_name(&dev=
-ice->dev), event, 0);
-> > > > > >                 break;
-> > > > > > +       case ACPI_PROCESSOR_NOTIFY_HIGEST_PERF_CHANGED:
-> > > > > > +               cpufreq_update_highest_perf(pr->id);
-> > > > >
-> > > > > And the design appears to be a bit ad-hoc here.
-> > > > >
-> > > > > Because why does it have anything to do with cpufreq?
-> > > >
-> > > > Well, clearly, cpufreq can be affected by this, but why would it be
-> > > > not affected the same way as in the
-> > > ACPI_PROCESSOR_NOTIFY_PERFORMANCE
-> > > > case?
-> > > >
-> > > > That is, why isn't cpufreq_update_limits() the right thing to do?
-> > >
-> > > Seriously, I'm not going to apply this patch so long as my comments
-> > > above are not addressed.
-> > [Meng, Li (Jassmine)]
-> > Sorry for the delayed reply to the email.
-> > BIOS/AGESA is responsible to issue the Notify 0x85 to OS that the prefe=
-rred
-> > core has changed.
-> > It will only affect the ranking of the preferred core, not the impact p=
-olicy
-> > limits.
-> > AMD P-state driver will set the priority of the cores based on the pref=
-erred
-> > core ranking, and prioritize selecting higher priority core to run the =
-task.
-> [Meng, Li (Jassmine)]
-> From ACPI v6.5, Table 5.197 Processor Device Notification Values:
-> Hex value               Description
-> 0x80                    Performance Present Capabilities Changed. Used to=
- notify OSPM that the number of supported processor performance states has =
-changed. This notification causes OSPM to re-evaluate the _PPC object. See =
-Section 8.4.5.3 for more information.
->
-> 0x85                    Highest Performance Changed. Used to notify OSPM =
-that the value of the CPPC Highest Performance Register has changed.
->
-> I think they are different notify events, so they need different function=
-s to handle these events.
+On Wed, 2023-12-27 at 17:39 +0100, Roberto Sassu wrote:
+> On 12/27/2023 2:22 PM, Mimi Zohar wrote:
+> > On Thu, 2023-12-14 at 18:08 +0100, Roberto Sassu wrote:
+> >> From: Roberto Sassu <roberto.sassu@huawei.com>
+> >>
+> >> Make the 'ima' LSM independent from the 'integrity' LSM by introducing IMA
+> >> own integrity metadata (ima_iint_cache structure, with IMA-specific fields
+> >> from the integrity_iint_cache structure), and by managing it directly from
+> >> the 'ima' LSM.
+> >>
+> >> Move the remaining IMA-specific flags to security/integrity/ima/ima.h,
+> >> since they are now unnecessary in the common integrity layer.
+> >>
+> >> Replace integrity_iint_cache with ima_iint_cache in various places
+> >> of the IMA code.
+> >>
+> >> Then, reserve space in the security blob for the entire ima_iint_cache
+> >> structure, so that it is available for all inodes having the security blob
+> >> allocated (those for which security_inode_alloc() was called).  Adjust the
+> >> IMA code accordingly, call ima_iint_inode() to retrieve the ima_iint_cache
+> >> structure. Keep the non-NULL checks since there can be inodes without
+> >> security blob.
+> > 
+> > Previously the 'iint' memory was only allocated for regular files in
+> > policy and were tagged S_IMA.  This patch totally changes when and how
+> > memory is being allocated.  Does it make sense to allocate memory at
+> > security_inode_alloc()?  Is this change really necessary for making IMA
+> > a full fledged LSM?
+> 
+> Good question. I think it wouldn't be necessary, we can reuse the same 
+> approach as in the patch 'integrity: Switch from rbtree to LSM-managed 
+> blob for integrity_iint_cache'.
 
-But they effectively mean pretty much the same thing: the highest
-available performance state of the CPU has changed.
+Going forward with the v8 proposed solution would require some real
+memory usage analysis for different types of policies.
 
-Why would the response need to be different?
+To me the "integrity: Switch from rbtree to LSM-managed blob for
+integrity_iint_cache" makes a lot more sense.   Looking back at the
+original thread, your reasons back then for not directly allocating the
+integrity_iint_cache are still valid for the ima_iint_cache structure.
+
+Mimi
+
+> > 
+> >>
+> >> Don't include the inode pointer as field in the ima_iint_cache structure,
+> >> since the association with the inode is clear. Since the inode field is
+> >> missing in ima_iint_cache, pass the extra inode parameter to
+> >> ima_get_verity_digest().
+> >>
+> >> Finally, register ima_inode_alloc_security/ima_inode_free_security() to
+> >> initialize/deinitialize the new ima_iint_cache structure (before this task
+> >> was done by iint_init_always() and iint_free()). Also, duplicate
+> >> iint_lockdep_annotate() for the ima_iint_cache structure, and name it
+> >> ima_iint_lockdep_annotate().
+> >>
+> >> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+> 
+
+
 
