@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-2530-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2531-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBCC78203DE
-	for <lists+linux-kselftest@lfdr.de>; Sat, 30 Dec 2023 08:07:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 962D18203E1
+	for <lists+linux-kselftest@lfdr.de>; Sat, 30 Dec 2023 08:16:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F245D1C20B3D
-	for <lists+linux-kselftest@lfdr.de>; Sat, 30 Dec 2023 07:07:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7D21B1C20AB0
+	for <lists+linux-kselftest@lfdr.de>; Sat, 30 Dec 2023 07:16:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF3DE1843;
-	Sat, 30 Dec 2023 07:07:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 435FA1843;
+	Sat, 30 Dec 2023 07:16:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="D5e8Uz0P"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="AoqxjK3e"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4680523AE;
-	Sat, 30 Dec 2023 07:07:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D92728F8;
+	Sat, 30 Dec 2023 07:16:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1703920023;
-	bh=CxlImPBq53eZem5Et6yBckyx0PnHoMgFMsFpjlSIejE=;
+	s=mail; t=1703920580;
+	bh=PchXuul0g9RoRBGhYz5X5+1f1bVnhlkCfxJtLzU81r0=;
 	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=D5e8Uz0PeLBwDcLY7fbsI0z23YVblUvbcsD9J7qHRtU8xuH82viTwf7dO+jProDBo
-	 DbHm9sE5+epJUxb1+iinKgCN4f7m9Hjo6R6emk7p4L8dNGLJs8MI38dMnLgTXKBSqd
-	 FLNvIE7RUxMzTfr5Lat447BWzW/XV/mRju9OsFO/Nxlts8KRIWmh/XESOGO8Kuj0RZ
-	 VdDfj3kSz8qdo+u6PBnA4Vsn3uAQI/kTb1TuPK+gkJ+QHofKJPYn9F+L3ltkdDp5hp
-	 q0azNFo6x8T81HzINRYFSFXfi8Hea9inPco72cHo2yc6yZenzZM6eD0eJ38i/eqW4a
-	 gKzVnD/iwhN0A==
+	b=AoqxjK3enuMiIv7gQkxemmSAB1cfxZ7QyfK5DSY9LIlJiNyS1OcyI+S3nUMQMOwzT
+	 tuj1bg2lk4rhvUrKYvUhOil3SfA1K6LMbOCG2fPV0cMubwyJ9PTR2/6BEFNdI+em3M
+	 zOP2bHS3xlOfYkiMV2k/Tls5UcV1Qe1UTEHiT8vi3VkNLZCnZie3UFZ2oOff3p37i7
+	 F39vkawdqUzoBxGdL1GKhX4pSIb/MyN/zVKcr1TByL455ZWr/ouHWiwarfW0dP55U+
+	 xVI0IrZ3mK3HJKyGlfZjihkS/f/F0LAdDXBAKxVxhybCCpaoXvnjll/zxwKJnrfrGV
+	 vYaSLDpwiVnyw==
 Received: from [100.96.234.34] (cola.collaboradmins.com [195.201.22.229])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 4DF6C378105A;
-	Sat, 30 Dec 2023 07:06:59 +0000 (UTC)
-Message-ID: <d3dd3a6c-ae60-48c9-945b-40aa18ccad86@collabora.com>
-Date: Sat, 30 Dec 2023 12:07:00 +0500
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 1CD67378045F;
+	Sat, 30 Dec 2023 07:16:17 +0000 (UTC)
+Message-ID: <0bac8f5c-5531-40dc-8b64-b1e079f99a1c@collabora.com>
+Date: Sat, 30 Dec 2023 12:16:16 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -49,54 +49,59 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- linux-kselftest@vger.kernel.org, loongarch@lists.linux.dev,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/2] selftests/vDSO: Fix errors on LoongArch
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] selftests: uevent: use shared makefile library
 Content-Language: en-US
-To: Tiezhu Yang <yangtiezhu@loongson.cn>, Shuah Khan <shuah@kernel.org>,
- Shuah Khan <skhan@linuxfoundation.org>,
- Andrew Morton <akpm@linux-foundation.org>, Mark Brown <broonie@kernel.org>
-References: <20231213012300.5640-1-yangtiezhu@loongson.cn>
- <d73d107d-9e04-4250-f467-f6ff7eb92103@loongson.cn>
+To: Antonio Terceiro <antonio.terceiro@linaro.org>,
+ Shuah Khan <shuah@kernel.org>
+References: <20231221204908.341677-2-antonio.terceiro@linaro.org>
 From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <d73d107d-9e04-4250-f467-f6ff7eb92103@loongson.cn>
+In-Reply-To: <20231221204908.341677-2-antonio.terceiro@linaro.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 12/27/23 12:55 PM, Tiezhu Yang wrote:
-> + Andrew Morton <akpm@linux-foundation.org>
-> + Mark Brown <broonie@kernel.org>
-> 
-> On 12/13/2023 09:22 AM, Tiezhu Yang wrote:
->> v3: Rebase on the next branch of linux-kselftest.git,
->>     modify the patch title and update the commit message
->>
->> v2: Rebase on 6.5-rc1 and update the commit message
->>
->> Tiezhu Yang (2):
->>   selftests/vDSO: Fix building errors on LoongArch
->>   selftests/vDSO: Fix runtime errors on LoongArch
->>
->>  tools/testing/selftests/vDSO/vdso_config.h    |  6 ++++-
->>  .../testing/selftests/vDSO/vdso_test_getcpu.c | 16 +++++-------
->>  .../selftests/vDSO/vdso_test_gettimeofday.c   | 26 +++++--------------
->>  3 files changed, 18 insertions(+), 30 deletions(-)
->>
-> 
-> Hi Shuah, Andrew and Mark,
-> 
-> The patches still seem to apply cleanly.
-> Could you please review and merge them for the upcoming merge window?
-People may be on vacation. I'm also waiting to hear back on my patches.
-Lets see when they get back and start picking up patches.
+On 12/22/23 1:49 AM, Antonio Terceiro wrote:
+> This makes the uevent selftests build not write to the source tree
+> unconditionally, as that breaks out of tree builds when the source tree
+> is read-only. It also avoids leaving a git repository in a dirty state
+> after a build.
+I can see what you are trying to do. The makefile has issues such as lib.mk
+should be included at the end of the file. Please just clarify this in the
+message.
 
 > 
-> https://lore.kernel.org/lkml/20231213012300.5640-1-yangtiezhu@loongson.cn/
+> v2: drop spurious extra SPDX-License-Identifier
 > 
-> Thanks,
-> Tiezhu
+> Signed-off-by: Antonio Terceiro <antonio.terceiro@linaro.org>
+> ---
+>  tools/testing/selftests/uevent/Makefile | 15 +++------------
+>  1 file changed, 3 insertions(+), 12 deletions(-)
 > 
-> 
+> diff --git a/tools/testing/selftests/uevent/Makefile b/tools/testing/selftests/uevent/Makefile
+> index f7baa9aa2932..872969f42694 100644
+> --- a/tools/testing/selftests/uevent/Makefile
+> +++ b/tools/testing/selftests/uevent/Makefile
+> @@ -1,17 +1,8 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  all:
+>  
+> -include ../lib.mk
+> -
+> -.PHONY: all clean
+> -
+> -BINARIES := uevent_filtering
+> -CFLAGS += -Wl,-no-as-needed -Wall
+> +CFLAGS += -Wl,-no-as-needed -Wall $(KHDR_INCLUDES)
+>  
+> -uevent_filtering: uevent_filtering.c ../kselftest.h ../kselftest_harness.h
+> -	$(CC) $(CFLAGS) $< -o $@
+> +TEST_GEN_PROGS = uevent_filtering
+>  
+> -TEST_PROGS += $(BINARIES)
+> -EXTRA_CLEAN := $(BINARIES)
+> -
+> -all: $(BINARIES)
+> +include ../lib.mk
 
 -- 
 BR,
