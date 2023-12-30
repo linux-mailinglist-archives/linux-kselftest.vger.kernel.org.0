@@ -1,59 +1,59 @@
-Return-Path: <linux-kselftest+bounces-2523-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2524-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5C61820365
-	for <lists+linux-kselftest@lfdr.de>; Sat, 30 Dec 2023 03:56:17 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69763820368
+	for <lists+linux-kselftest@lfdr.de>; Sat, 30 Dec 2023 03:56:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 660B01F21655
-	for <lists+linux-kselftest@lfdr.de>; Sat, 30 Dec 2023 02:56:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2657A281FAA
+	for <lists+linux-kselftest@lfdr.de>; Sat, 30 Dec 2023 02:56:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB60BEA8;
-	Sat, 30 Dec 2023 02:56:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89B77EA8;
+	Sat, 30 Dec 2023 02:56:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Qel/S75D"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uN10LrAV"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
+Received: from mail-yb1-f201.google.com (mail-yb1-f201.google.com [209.85.219.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 633F317D9
-	for <linux-kselftest@vger.kernel.org>; Sat, 30 Dec 2023 02:56:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B8322567
+	for <linux-kselftest@vger.kernel.org>; Sat, 30 Dec 2023 02:56:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--surenb.bounces.google.com
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-5ea8a108952so74147907b3.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 29 Dec 2023 18:56:12 -0800 (PST)
+Received: by mail-yb1-f201.google.com with SMTP id 3f1490d57ef6-dbe47a05516so2409658276.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 29 Dec 2023 18:56:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1703904971; x=1704509771; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1703905001; x=1704509801; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=rx3xKuaGL8HWrRRVUoZvzccCFnr0zto7mWLIM9ls3L0=;
-        b=Qel/S75DOdqITLXV/a6AJCG7SwRIIK5gtXS9EFvmWXhuy4iQzES6UqT9nImfBvJ1Am
-         lwZYTx/V/lXyvkVeHn0AJGmlPWs5ZfpNYhvUY0x2zbuxJYoxRr5PcKjmFfeeQYrnCdSM
-         Xan3gIDbivRTuDYRegFYQXB8OMRqH2O0Wz/mLaApt89RPdLnkVc4aeVUoDb9oUXTojTU
-         510lvSk1btjP0Yy6iA5Bt7OfNmFTaS1AHZrEy0pGRN64E2Y5XdAyAtnXDSNW2qiUAH8a
-         qfgk+THvTANiWWZAjjGhf+3ZacEaIKM2Af15BKa9bbZXtuyW/SqGgfhtA0y0RLle2XCG
-         nEnA==
+        bh=uWd3JqiAE2BBpQa8flrDjVspwGJTFaM7DQZsv7IndQE=;
+        b=uN10LrAVWk/f6UnLmZdJyiNxfWgTP2OUTj3v1ZbfS18VvpKR2kZlER08qeI+D1hmhG
+         yJgWJOswHp/bDCDGqEmYWhF9w3jGl0yIIlirnNea2I64ImIBRF7BbMDatD+RlUoG+IeZ
+         mes1HFUaWYAjgznC9ayoFY/zQO50ZJLMH/Yx0qBP1/lKz91IICTEMi3G/c/Qj5qqn/dA
+         d3nhfBnh0Aw+4B9EjuF+AJi2B74O7k2l8k8lZqotzztTontejQPk2IdcxTOo6ggvgz06
+         w3eeL+ET2vsRds4zKWs8H02B/2VGmJC1O0DA9V4KbHS5RssUwoqVsomvCdzkPdFRLnyd
+         bzkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703904971; x=1704509771;
+        d=1e100.net; s=20230601; t=1703905001; x=1704509801;
         h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=rx3xKuaGL8HWrRRVUoZvzccCFnr0zto7mWLIM9ls3L0=;
-        b=KBeI12OqIglvAbYPl1kj4I159nokao/YbZTpMwKQm+HGZp6mzyusEZnuGf9+flYHmK
-         O5zQs2452bvHEaiFlqTbEsNBBm5xZfyX3GK7IwFZ5Dh+j1JCWZczLpwjzccyitb6hhsN
-         vxZMJeBCADNBseS/Uh/dO7Iniu7PhsQgi2ZXPeQ/ihRfAlw8ZM6H1Bzgqt3Pi0gxvAZA
-         zEf4A1RRHn0bqd8Sx72APCXvJGKhLAOpleD+mAd7aGcQaqe0KfGnWDUUYMvqj06cb3nx
-         xsabeL48wyaxeNpLZhPJi/FvPloTWH9PwPQ6pSWJ1xFGJPhz2FVQhc0TtbvxkBlE/o3Q
-         fT4w==
-X-Gm-Message-State: AOJu0YwQiBsaGftfzEkBhspLYJT5gIOL4nlIEfbepGWrzDopQcbqhsGs
-	+T+gKYEcx900Z0xqPasBMc7dSXtHy997PLIuJw==
-X-Google-Smtp-Source: AGHT+IEa0V0G+LZdy2Xqpj9r4ydRhq229LLnwM8al0ZDxIMrbdtDuGldtaNSDvCbTs1jv2oUX2fZyzvUP58=
+        bh=uWd3JqiAE2BBpQa8flrDjVspwGJTFaM7DQZsv7IndQE=;
+        b=OP/yzMIIts4hdEEQFPCiz3eoTewQRxiJKsxgHJpXOgcwiMhcj2qz6M/rXjhJPrVJu5
+         1pPJGIc5oTYMwEAuMXkLx+IOOtdXUfkdKAkngRhrqseXQYJt6L6LMorD8UFZ/twcQEDy
+         75In61AYlIkT8TBYOwKIXa97Ik5kS954FQtKNUgx2bl9jJ6zcrUgWpfgq7nAZpPmJFT7
+         Ii7EGDmZHZgsWEbkvGNekAloSmHHetK9HzIqz9eFxAoUtd1dW2jfH8/rtYruT3Sm5Xsd
+         JVV+/659t3xkUONEcFWOlgRUkhGkVSktElKVR7OY1l6Kgb0oECdoc4aIuItyPWpDGYk+
+         ohug==
+X-Gm-Message-State: AOJu0Yym2TRY2zIz+xfyXgAn7/g2BsQCQqZBvE7eEVqMVZVihvh/OxU6
+	34DxsN3ZnRBH0teAiJZZziDlizWHRgG7v6hcRw==
+X-Google-Smtp-Source: AGHT+IHRb6MDmtyBRGquDuap6l4J0StnX2Ra/8WXL9DSsV83HHhUqhEmdZo6j2U3K5QEkTzvL3vHZ9ujVYM=
 X-Received: from surenb-desktop.mtv.corp.google.com ([2620:15c:211:201:aa12:a8e:81ce:b04d])
- (user=surenb job=sendgmr) by 2002:a5b:8d2:0:b0:dbe:269d:13f4 with SMTP id
- w18-20020a5b08d2000000b00dbe269d13f4mr219681ybq.0.1703904971448; Fri, 29 Dec
- 2023 18:56:11 -0800 (PST)
-Date: Fri, 29 Dec 2023 18:56:07 -0800
+ (user=surenb job=sendgmr) by 2002:a05:6902:561:b0:dbd:b59f:217c with SMTP id
+ a1-20020a056902056100b00dbdb59f217cmr4894826ybt.6.1703905001158; Fri, 29 Dec
+ 2023 18:56:41 -0800 (PST)
+Date: Fri, 29 Dec 2023 18:56:36 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -61,9 +61,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.43.0.472.g3155946c3a-goog
-Message-ID: <20231230025607.2476912-1-surenb@google.com>
-Subject: [PATCH 1/1] userfaultfd: fix move_pages_pte() splitting folio under
- RCU read lock
+Message-ID: <20231230025636.2477429-1-surenb@google.com>
+Subject: [PATCH 1/2] selftests/mm: add separate UFFDIO_MOVE test for PMD splitting
 From: Suren Baghdasaryan <surenb@google.com>
 To: akpm@linux-foundation.org
 Cc: viro@zeniv.linux.org.uk, brauner@kernel.org, shuah@kernel.org, 
@@ -77,43 +76,54 @@ Cc: viro@zeniv.linux.org.uk, brauner@kernel.org, shuah@kernel.org,
 	linux-kselftest@vger.kernel.org, kernel-team@android.com
 Content-Type: text/plain; charset="UTF-8"
 
-While testing the split PMD path with lockdep enabled I've got an
-"Invalid wait context" error caused by split_huge_page_to_list() trying
-to lock anon_vma->rwsem while inside RCU read section. The issues is due
-to move_pages_pte() calling split_folio() under RCU read lock. Fix this
-by unmapping the PTEs and exiting RCU read section before splitting the
-folio and then retrying. The same retry pattern is used when locking the
-folio or anon_vma in this function.
+Add a test for UFFDIO_MOVE ioctl operating on a hugepage which has to
+be split because destination is marked with MADV_NOHUGEPAGE. With this
+we cover all 3 cases: normal page move, hugepage move, hugepage splitting
+before move.
 
-Fixes: 94b01c885131 ("userfaultfd: UFFDIO_MOVE uABI")
 Signed-off-by: Suren Baghdasaryan <surenb@google.com>
 ---
 Patch applies over mm-unstable.
-Please note that the SHA in Fixes tag is unstable.
 
- mm/userfaultfd.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ tools/testing/selftests/mm/uffd-unit-tests.c | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
-diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-index 5e718014e671..71393410e028 100644
---- a/mm/userfaultfd.c
-+++ b/mm/userfaultfd.c
-@@ -1078,9 +1078,14 @@ static int move_pages_pte(struct mm_struct *mm, pmd_t *dst_pmd, pmd_t *src_pmd,
+diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
+index d8091523c2df..cce90a10515a 100644
+--- a/tools/testing/selftests/mm/uffd-unit-tests.c
++++ b/tools/testing/selftests/mm/uffd-unit-tests.c
+@@ -1199,6 +1199,16 @@ static void uffd_move_test(uffd_test_args_t *targs)
  
- 		/* at this point we have src_folio locked */
- 		if (folio_test_large(src_folio)) {
-+			/* split_folio() can block */
-+			pte_unmap(&orig_src_pte);
-+			pte_unmap(&orig_dst_pte);
-+			src_pte = dst_pte = NULL;
- 			err = split_folio(src_folio);
- 			if (err)
- 				goto out;
-+			goto retry;
- 		}
- 
- 		if (!src_anon_vma) {
+ static void uffd_move_pmd_test(uffd_test_args_t *targs)
+ {
++	if (madvise(area_dst, nr_pages * page_size, MADV_HUGEPAGE))
++		err("madvise(MADV_HUGEPAGE) failure");
++	uffd_move_test_common(targs, read_pmd_pagesize(),
++			      uffd_move_pmd_handle_fault);
++}
++
++static void uffd_move_pmd_split_test(uffd_test_args_t *targs)
++{
++	if (madvise(area_dst, nr_pages * page_size, MADV_NOHUGEPAGE))
++		err("madvise(MADV_NOHUGEPAGE) failure");
+ 	uffd_move_test_common(targs, read_pmd_pagesize(),
+ 			      uffd_move_pmd_handle_fault);
+ }
+@@ -1330,6 +1340,13 @@ uffd_test_case_t uffd_tests[] = {
+ 		.uffd_feature_required = UFFD_FEATURE_MOVE,
+ 		.test_case_ops = &uffd_move_test_pmd_case_ops,
+ 	},
++	{
++		.name = "move-pmd-split",
++		.uffd_fn = uffd_move_pmd_split_test,
++		.mem_targets = MEM_ANON,
++		.uffd_feature_required = UFFD_FEATURE_MOVE,
++		.test_case_ops = &uffd_move_test_pmd_case_ops,
++	},
+ 	{
+ 		.name = "wp-fork",
+ 		.uffd_fn = uffd_wp_fork_test,
 -- 
-2.43.0.472.g3155946c3a-goog
+2.34.1
 
 
