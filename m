@@ -1,46 +1,46 @@
-Return-Path: <linux-kselftest+bounces-2527-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2528-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3EE88203CC
-	for <lists+linux-kselftest@lfdr.de>; Sat, 30 Dec 2023 07:30:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 48B668203D5
+	for <lists+linux-kselftest@lfdr.de>; Sat, 30 Dec 2023 07:56:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 60FE81F21D92
-	for <lists+linux-kselftest@lfdr.de>; Sat, 30 Dec 2023 06:30:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A8CF328216F
+	for <lists+linux-kselftest@lfdr.de>; Sat, 30 Dec 2023 06:56:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 667D617D9;
-	Sat, 30 Dec 2023 06:30:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE5526D6CA;
+	Sat, 30 Dec 2023 06:56:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="wxPHgnG3"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="ZDLtXxlm"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8441879D8;
-	Sat, 30 Dec 2023 06:30:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AB9723A5;
+	Sat, 30 Dec 2023 06:56:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1703917811;
-	bh=Jadexy0SMnKker8eqnZd2xRLk+xbpxqZD/9apBM550c=;
+	s=mail; t=1703919411;
+	bh=+OElTmrrmq2Aav7SM2X6Q9NUonp7GhK6Fak4brj5YJg=;
 	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=wxPHgnG3RNBUxzlhzKz1SQdqneucuudlcmMHHIo4rxRFYRKs5Y79+4o/wyl6f3vpp
-	 TZLZdWwualNEHKglUZ0M97A7IuDAh1gK1AKlEJw+xpMi+A0KmV/dSgUZEx5qDxJ8sx
-	 WmSasXaVlXAZJzZyGMLqY9srQRvQnadQiSIKxxJVpvixzP1sviSsBDtG9pbll6k4ld
-	 4f5LG6sOvecfO4IQCFmMSqjMn6XSJlhsBJnIWcOsSQGsT5B4VAtQRFPrQGmam0loFW
-	 CmoKJzZNpJGGANWKBIxvwWzTY/aeSkdL/3x+QXtEL0VOhT6nEAOJvVUsPiyhYQZgVX
-	 PKFqNGcMKGFxQ==
+	b=ZDLtXxlm6j7aJmqrzS3QlTM79Lts9zj0b8khTg6rB4LxhBNx5gW28K5JL3DemJEG2
+	 obC6EXDrvuTxXvBfbc6ciprVvtNXmK9/vN0cWG8yiWmwq5z8aSiiKLQxMpZC6oMFRR
+	 IyB24SstN/7WRFn1OEyT0U4z+VvF60STVPsej/UxBlCgnAmCW5BrMwqYQl93sR91RL
+	 n01/pA/sAn/QKI/0ixLGyJcefz4Z6B0O5cf5FmZGWiuV/gQL69ARonS4laCiKELnON
+	 J8O4C30mqTw506ge6o//k716tfTpAlM3/nVoJqtsWhbLf6U/mqo4z1XTp6+IT46ktZ
+	 SxAjgjCXVH5fA==
 Received: from [100.96.234.34] (cola.collaboradmins.com [195.201.22.229])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id E9C28378105A;
-	Sat, 30 Dec 2023 06:30:07 +0000 (UTC)
-Message-ID: <3e98be92-8507-410b-bfa2-dfdd42829764@collabora.com>
-Date: Sat, 30 Dec 2023 11:30:04 +0500
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id D4A1D378045F;
+	Sat, 30 Dec 2023 06:56:47 +0000 (UTC)
+Message-ID: <b9bfa260-779a-493c-814e-13295203a5c4@collabora.com>
+Date: Sat, 30 Dec 2023 11:56:45 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -49,115 +49,78 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- Paolo Abeni <pabeni@redhat.com>, David Ahern <dsahern@kernel.org>,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- lkp@intel.com, kernel test robot <oliver.sang@intel.com>
-Subject: Re: [PATCH v2 net-next] selftests/net: change shebang to bash to
- support "source"
-To: Yujie Liu <yujie.liu@intel.com>, netdev@vger.kernel.org,
- Hangbin Liu <liuhangbin@gmail.com>
-References: <20231229131931.3961150-1-yujie.liu@intel.com>
+ linux-kselftest@vger.kernel.org, loongarch@lists.linux.dev,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] selftests/vDSO: Fix building errors on LoongArch
 Content-Language: en-US
+To: Tiezhu Yang <yangtiezhu@loongson.cn>, Shuah Khan <shuah@kernel.org>,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20231213012300.5640-1-yangtiezhu@loongson.cn>
+ <20231213012300.5640-2-yangtiezhu@loongson.cn>
 From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20231229131931.3961150-1-yujie.liu@intel.com>
+In-Reply-To: <20231213012300.5640-2-yangtiezhu@loongson.cn>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 12/29/23 6:19 PM, Yujie Liu wrote:
-> The patch set [1] added a general lib.sh in net selftests, and converted
-> several test scripts to source the lib.sh.
+On 12/13/23 6:22 AM, Tiezhu Yang wrote:
+> There exist the following errors when build vDSO selftests on LoongArch:
 > 
-> unicast_extensions.sh (converted in [1]) and pmtu.sh (converted in [2])
-> have a /bin/sh shebang which may point to various shells in different
-> distributions, but "source" is only available in some of them. For
-> example, "source" is a built-it function in bash, but it cannot be
-> used in dash.
+>   # make headers && cd tools/testing/selftests/vDSO && make
+>   ...
+>   error: 'VDSO_VERSION' undeclared (first use in this function)
+>   ...
+>   error: 'VDSO_NAMES' undeclared (first use in this function)
 > 
-> Refer to other scripts that were converted together, simply change the
-> shebang to bash to fix the following issues when the default /bin/sh
-> points to other shells.
+> We can see the following code in arch/loongarch/vdso/vdso.lds.S:
 > 
-> # selftests: net: unicast_extensions.sh
-> # ./unicast_extensions.sh: 31: source: not found
-> # ###########################################################################
-> # Unicast address extensions tests (behavior of reserved IPv4 addresses)
-> # ###########################################################################
-> # TEST: assign and ping within 240/4 (1 of 2) (is allowed)            [FAIL]
-> # TEST: assign and ping within 240/4 (2 of 2) (is allowed)            [FAIL]
-> # TEST: assign and ping within 0/8 (1 of 2) (is allowed)              [FAIL]
-> # TEST: assign and ping within 0/8 (2 of 2) (is allowed)              [FAIL]
-> # TEST: assign and ping inside 255.255/16 (is allowed)                [FAIL]
-> # TEST: assign and ping inside 255.255.255/24 (is allowed)            [FAIL]
-> # TEST: route between 240.5.6/24 and 255.1.2/24 (is allowed)          [FAIL]
-> # TEST: route between 0.200/16 and 245.99/16 (is allowed)             [FAIL]
-> # TEST: assign and ping lowest address (/24)                          [FAIL]
-> # TEST: assign and ping lowest address (/26)                          [FAIL]
-> # TEST: routing using lowest address                                  [FAIL]
-> # TEST: assigning 0.0.0.0 (is forbidden)                              [ OK ]
-> # TEST: assigning 255.255.255.255 (is forbidden)                      [ OK ]
-> # TEST: assign and ping inside 127/8 (is forbidden)                   [ OK ]
-> # TEST: assign and ping class D address (is forbidden)                [ OK ]
-> # TEST: routing using class D (is forbidden)                          [ OK ]
-> # TEST: routing using 127/8 (is forbidden)                            [ OK ]
-> not ok 51 selftests: net: unicast_extensions.sh # exit=1
+> VERSION
+> {
+>         LINUX_5.10 {
+>         global:
+>                 __vdso_getcpu;
+>                 __vdso_clock_getres;
+>                 __vdso_clock_gettime;
+>                 __vdso_gettimeofday;
+>                 __vdso_rt_sigreturn;
+>         local: *;
+>         };
+> }
 > 
-> v1 -> v2:
->   - Fix pmtu.sh which has the same issue as unicast_extensions.sh,
->     suggested by Hangbin
->   - Change the style of the "source" line to be consistent with other
->     tests, suggested by Hangbin
+> so VDSO_VERSION should be 6 and VDSO_NAMES should be 1 for LoongArch,
+> add them to fix the building errors on LoongArch.
 > 
-> Link: https://lore.kernel.org/all/20231202020110.362433-1-liuhangbin@gmail.com/ [1]
-> Link: https://lore.kernel.org/all/20231219094856.1740079-1-liuhangbin@gmail.com/ [2]
-> Reported-by: kernel test robot <oliver.sang@intel.com>
-> Signed-off-by: Yujie Liu <yujie.liu@intel.com>
+> Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
 Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 
 > ---
->  tools/testing/selftests/net/pmtu.sh               | 4 ++--
->  tools/testing/selftests/net/unicast_extensions.sh | 4 ++--
->  2 files changed, 4 insertions(+), 4 deletions(-)
+>  tools/testing/selftests/vDSO/vdso_config.h | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
 > 
-> diff --git a/tools/testing/selftests/net/pmtu.sh b/tools/testing/selftests/net/pmtu.sh
-> index 175d3d1d773b..f10879788f61 100755
-> --- a/tools/testing/selftests/net/pmtu.sh
-> +++ b/tools/testing/selftests/net/pmtu.sh
-> @@ -1,4 +1,4 @@
-> -#!/bin/sh
-> +#!/bin/bash
->  # SPDX-License-Identifier: GPL-2.0
->  #
->  # Check that route PMTU values match expectations, and that initial device MTU
-> @@ -198,7 +198,7 @@
->  # - pmtu_ipv6_route_change
->  #	Same as above but with IPv6
+> diff --git a/tools/testing/selftests/vDSO/vdso_config.h b/tools/testing/selftests/vDSO/vdso_config.h
+> index cdfed403ba13..7b543e7f04d7 100644
+> --- a/tools/testing/selftests/vDSO/vdso_config.h
+> +++ b/tools/testing/selftests/vDSO/vdso_config.h
+> @@ -53,15 +53,19 @@
+>  #if __riscv_xlen == 32
+>  #define VDSO_32BIT		1
+>  #endif
+> +#elif defined(__loongarch__)
+> +#define VDSO_VERSION		6
+> +#define VDSO_NAMES		1
+>  #endif
 >  
-> -source ./lib.sh
-> +source lib.sh
+> -static const char *versions[6] = {
+> +static const char *versions[7] = {
+>  	"LINUX_2.6",
+>  	"LINUX_2.6.15",
+>  	"LINUX_2.6.29",
+>  	"LINUX_2.6.39",
+>  	"LINUX_4",
+>  	"LINUX_4.15",
+> +	"LINUX_5.10"
+>  };
 >  
->  PAUSE_ON_FAIL=no
->  VERBOSE=0
-> diff --git a/tools/testing/selftests/net/unicast_extensions.sh b/tools/testing/selftests/net/unicast_extensions.sh
-> index b7a2cb9e7477..f52aa5f7da52 100755
-> --- a/tools/testing/selftests/net/unicast_extensions.sh
-> +++ b/tools/testing/selftests/net/unicast_extensions.sh
-> @@ -1,4 +1,4 @@
-> -#!/bin/sh
-> +#!/bin/bash
->  # SPDX-License-Identifier: GPL-2.0
->  #
->  # By Seth Schoen (c) 2021, for the IPv4 Unicast Extensions Project
-> @@ -28,7 +28,7 @@
->  # These tests provide an easy way to flip the expected result of any
->  # of these behaviors for testing kernel patches that change them.
->  
-> -source ./lib.sh
-> +source lib.sh
->  
->  # nettest can be run from PATH or from same directory as this selftest
->  if ! which nettest >/dev/null; then
-> 
-> base-commit: cd4d7263d58ab98fd4dee876776e4da6c328faa3
+>  static const char *names[2][6] = {
 
 -- 
 BR,
