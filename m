@@ -1,150 +1,284 @@
-Return-Path: <linux-kselftest+bounces-2557-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2558-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D75F821A87
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jan 2024 11:54:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C1A57821B01
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jan 2024 12:33:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E78142830B6
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jan 2024 10:54:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 42DCE28324E
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jan 2024 11:33:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31C4FDDA6;
-	Tue,  2 Jan 2024 10:54:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53151EAD3;
+	Tue,  2 Jan 2024 11:33:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ICocrGht"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from frasgout12.his.huawei.com (frasgout12.his.huawei.com [14.137.139.154])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27CFFD507;
-	Tue,  2 Jan 2024 10:54:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=huaweicloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=huaweicloud.com
-Received: from mail.maildlp.com (unknown [172.18.186.29])
-	by frasgout12.his.huawei.com (SkyGuard) with ESMTP id 4T48R00yTDz9xGZH;
-	Tue,  2 Jan 2024 18:36:28 +0800 (CST)
-Received: from mail02.huawei.com (unknown [7.182.16.27])
-	by mail.maildlp.com (Postfix) with ESMTP id 689EF140D05;
-	Tue,  2 Jan 2024 18:54:11 +0800 (CST)
-Received: from [10.48.129.192] (unknown [10.48.129.192])
-	by APP2 (Coremail) with SMTP id GxC2BwAnIlxD65NlVSetAw--.48730S2;
-	Tue, 02 Jan 2024 11:54:10 +0100 (CET)
-Message-ID: <997cfb2f-a493-4f02-9e75-6ebb525c8406@huaweicloud.com>
-Date: Tue, 2 Jan 2024 11:53:50 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7626E544
+	for <linux-kselftest@vger.kernel.org>; Tue,  2 Jan 2024 11:33:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1704195184;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=XWxHimkeFDNjn6YSxYvmBLIqeHTwIpJqYoBnohM5/0g=;
+	b=ICocrGhtYhSmH1Y2HwX2DibKNNAXD4BN7a5a6YQQ2Ks9KWAjCcaYOrEMrYZCQLs66Ofk7y
+	k6SWNRTJiex86prb/97jq4IBFQ5phyPkyCWpwkvJlzHjqgG8KLr9r09kjqiN+RXr/U1KpC
+	coOXVjSB4ylLZXMT9AFWR/IHoYQPyt0=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-695-NJOorye0PeOE-_05NUvyOw-1; Tue, 02 Jan 2024 06:33:02 -0500
+X-MC-Unique: NJOorye0PeOE-_05NUvyOw-1
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-40d45be1ce2so44171985e9.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 02 Jan 2024 03:33:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704195181; x=1704799981;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XWxHimkeFDNjn6YSxYvmBLIqeHTwIpJqYoBnohM5/0g=;
+        b=COPveJ8dVBIeADEH2dsq1oG0ypVGR4Fx9y0UcSBibEwkCsfgZkiyeezPz94zlfZXku
+         JYc1+bc8SgbqcsctQvp+mFFumXbcA9nkKKK9mtOj18rhK34soOAKMidBof5Zny2XiZm3
+         jGkfX7tItpxR0kV5NZwWJCjEveKj8+5a/xcxZNUC/xzEB4W0pyx8UpYBPXC/piEwvdS+
+         Heey/iq6ynsp/Rk0YzBH+w7iKr4suckCXJnCkXWbsfrYBiYH3flbCZauG8NuM7w+n2RP
+         K84JiqRJCsWJDD7KVokBqtSj97V40Izny00vXUtDbXyKf2+k1rYZ3+C2TtueSdK8vrnp
+         BGvg==
+X-Gm-Message-State: AOJu0Yx9T04OgZShdfLp5FW3bfPday08jce84HpctD2VtEk/jqq8uoTP
+	ghPUjdlZtigjNFJMYBKTpX/plZ9KdYY9ctH5NNQwYOFFWeV0sBNd7iRX9k9/xQhxjHfOE5qNl4P
+	UJD9RT1EAh2WscOqIhwnST0BoWqd0xQ2UPT6f
+X-Received: by 2002:a05:600c:2255:b0:40d:80a1:867 with SMTP id a21-20020a05600c225500b0040d80a10867mr2701909wmm.146.1704195180976;
+        Tue, 02 Jan 2024 03:33:00 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEmH97otICNik6jF5g8bpqPEue2LDedjKabzLVwMIouA4GG3UCE1rYraye49W7NVZJ+THP9GQ==
+X-Received: by 2002:a05:600c:2255:b0:40d:80a1:867 with SMTP id a21-20020a05600c225500b0040d80a10867mr2701899wmm.146.1704195180607;
+        Tue, 02 Jan 2024 03:33:00 -0800 (PST)
+Received: from debian (2a01cb058918ce008532542fb9fcf433.ipv6.abo.wanadoo.fr. [2a01:cb05:8918:ce00:8532:542f:b9fc:f433])
+        by smtp.gmail.com with ESMTPSA id t18-20020a5d49d2000000b00336751cd4ebsm28311844wrs.72.2024.01.02.03.32.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 02 Jan 2024 03:33:00 -0800 (PST)
+Date: Tue, 2 Jan 2024 12:32:58 +0100
+From: Guillaume Nault <gnault@redhat.com>
+To: Yujie Liu <yujie.liu@intel.com>
+Cc: netdev@vger.kernel.org, Hangbin Liu <liuhangbin@gmail.com>,
+	Paolo Abeni <pabeni@redhat.com>, David Ahern <dsahern@kernel.org>,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	lkp@intel.com, kernel test robot <oliver.sang@intel.com>
+Subject: Re: [PATCH v2 net-next] selftests/net: change shebang to bash to
+ support "source"
+Message-ID: <ZZP0akFff+nzFhc0@debian>
+References: <20231229131931.3961150-1-yujie.liu@intel.com>
+ <ZZFbxyQeHgf3UQrN@debian>
+ <ZZPHQF6wL95oSGzK@yujie-X299>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 23/24] ima: Make it independent from 'integrity' LSM
-To: Mimi Zohar <zohar@linux.ibm.com>, viro@zeniv.linux.org.uk,
- brauner@kernel.org, chuck.lever@oracle.com, jlayton@kernel.org,
- neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com, tom@talpey.com,
- paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
- dmitry.kasatkin@gmail.com, dhowells@redhat.com, jarkko@kernel.org,
- stephen.smalley.work@gmail.com, eparis@parisplace.org,
- casey@schaufler-ca.com, shuah@kernel.org, mic@digikod.net
-Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org,
- linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
- selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Roberto Sassu <roberto.sassu@huawei.com>
-References: <20231214170834.3324559-1-roberto.sassu@huaweicloud.com>
- <20231214170834.3324559-24-roberto.sassu@huaweicloud.com>
- <5aa5986266c3a3f834114a835378455cbbff7b64.camel@linux.ibm.com>
- <ff8e6341-1ff0-4163-b5c7-236a0e8bdc7c@huaweicloud.com>
- <96f82924cd2fda95f0c89341215e128419bf77fd.camel@linux.ibm.com>
-Content-Language: en-US
-From: Roberto Sassu <roberto.sassu@huaweicloud.com>
-In-Reply-To: <96f82924cd2fda95f0c89341215e128419bf77fd.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID:GxC2BwAnIlxD65NlVSetAw--.48730S2
-X-Coremail-Antispam: 1UD129KBjvJXoWxCF1xAF47CF1rZFWkGF4xXrb_yoW5AFWrpF
-	Z7Ka4UGr1DZry2kw4vya9xZrWfK395WFW7urn0kr1kAr1vvrn0qF40kr1UuFy5Gr1Ut3WI
-	qF4UG3sxZ3Wqy3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUkjb4IE77IF4wAFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k2
-	6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-	vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7Cj
-	xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIEc7CjxV
-	AFwI0_Gr0_Gr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-	x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-	0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij
-	64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x
-	8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE
-	2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42
-	xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIE
-	c7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UAkuxUUUUU=
-X-CM-SenderInfo: purev21wro2thvvxqx5xdzvxpfor3voofrz/1tbiAgAKBF1jj5QiDQABsH
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZZPHQF6wL95oSGzK@yujie-X299>
 
-On 12/27/2023 8:21 PM, Mimi Zohar wrote:
-> On Wed, 2023-12-27 at 17:39 +0100, Roberto Sassu wrote:
->> On 12/27/2023 2:22 PM, Mimi Zohar wrote:
->>> On Thu, 2023-12-14 at 18:08 +0100, Roberto Sassu wrote:
->>>> From: Roberto Sassu <roberto.sassu@huawei.com>
->>>>
->>>> Make the 'ima' LSM independent from the 'integrity' LSM by introducing IMA
->>>> own integrity metadata (ima_iint_cache structure, with IMA-specific fields
->>>> from the integrity_iint_cache structure), and by managing it directly from
->>>> the 'ima' LSM.
->>>>
->>>> Move the remaining IMA-specific flags to security/integrity/ima/ima.h,
->>>> since they are now unnecessary in the common integrity layer.
->>>>
->>>> Replace integrity_iint_cache with ima_iint_cache in various places
->>>> of the IMA code.
->>>>
->>>> Then, reserve space in the security blob for the entire ima_iint_cache
->>>> structure, so that it is available for all inodes having the security blob
->>>> allocated (those for which security_inode_alloc() was called).  Adjust the
->>>> IMA code accordingly, call ima_iint_inode() to retrieve the ima_iint_cache
->>>> structure. Keep the non-NULL checks since there can be inodes without
->>>> security blob.
->>>
->>> Previously the 'iint' memory was only allocated for regular files in
->>> policy and were tagged S_IMA.  This patch totally changes when and how
->>> memory is being allocated.  Does it make sense to allocate memory at
->>> security_inode_alloc()?  Is this change really necessary for making IMA
->>> a full fledged LSM?
->>
->> Good question. I think it wouldn't be necessary, we can reuse the same
->> approach as in the patch 'integrity: Switch from rbtree to LSM-managed
->> blob for integrity_iint_cache'.
+On Tue, Jan 02, 2024 at 04:20:16PM +0800, Yujie Liu wrote:
+> On Sun, Dec 31, 2023 at 01:17:11PM +0100, Guillaume Nault wrote:
+> > On Fri, Dec 29, 2023 at 09:19:31PM +0800, Yujie Liu wrote:
+> > > The patch set [1] added a general lib.sh in net selftests, and converted
+> > > several test scripts to source the lib.sh.
+> > > 
+> > > unicast_extensions.sh (converted in [1]) and pmtu.sh (converted in [2])
+> > > have a /bin/sh shebang which may point to various shells in different
+> > > distributions, but "source" is only available in some of them. For
+> > > example, "source" is a built-it function in bash, but it cannot be
+> > > used in dash.
+> > > 
+> > > Refer to other scripts that were converted together, simply change the
+> > > shebang to bash to fix the following issues when the default /bin/sh
+> > > points to other shells.
+> > 
+> > Looks like it'd be simpler to just replace the "source" commands with
+> > "." and leave the shebang as is (unless there are other bash-specific
+> > constructs in these scripts of course).
+> > 
+> > Generally speaking, I think we should avoid madating a specific shell,
+> > unless that really simplifies the test script (which is not the case
+> > here).
 > 
-> Going forward with the v8 proposed solution would require some real
-> memory usage analysis for different types of policies.
+> Hi Guillaume,
 > 
-> To me the "integrity: Switch from rbtree to LSM-managed blob for
-> integrity_iint_cache" makes a lot more sense.   Looking back at the
-> original thread, your reasons back then for not directly allocating the
-> integrity_iint_cache are still valid for the ima_iint_cache structure.
+> Thanks for the comments. Actually I also considered replacing "source"
+> with "." at first, but finally decided to change the shebang in
+> consideration of being consistent with other scripts. We can see that
+> there are 140+ scripts in net selftests that have "source lib.sh" and
+> "bash" shebang, but none of the selftests has ". lib.sh". If we replace
+> "source" with "." and keep the "sh" shebang specifically for
+> unicast_extensions.sh and pmtu.sh, we will get only 2 scripts using
+> "sh and ." while most other scripts using "bash and source". Maybe it
+> would be nice to keep the consistency by changing the shebang as well?
+> What do you think? :)
 
-Uhm, ok. It should not be too difficult to restore the old mechanism for 
-ima_iint_cache. Will do it in v9.
+The use of "source" instead of "." is clearly an overlook. Consistency
+is desirable only when it brings better quality code.
 
-Thanks
+And it should be easy enough to convert the remaining "source lib.sh"
+in a followup patch to make the other shell scripts consistent.
 
-Roberto
 
-> Mimi
+> linux/tools/testing/selftests/net$ grep -rl "source lib.sh" . | xargs grep -F '#!/bin/'
+> ./test_vxlan_under_vrf.sh:#!/bin/bash
+> ./test_vxlan_nolocalbypass.sh:#!/bin/bash
+> ./xfrm_policy.sh:#!/bin/bash
+> ./test_vxlan_mdb.sh:#!/bin/bash
+> ./test_bridge_backup_port.sh:#!/bin/bash
+> ./vrf_route_leaking.sh:#!/bin/bash
+> ./l2tp.sh:#!/bin/bash
+> ./netns-name.sh:#!/bin/bash
+> ./rtnetlink.sh:#!/bin/bash
+> ./ioam6.sh:#!/bin/bash
+> ./drop_monitor_tests.sh:#!/bin/bash
+> ./test_vxlan_vnifiltering.sh:#!/bin/bash
+> ./icmp.sh:#!/bin/bash
+> ./gre_gso.sh:#!/bin/bash
+> ./fib_nexthop_multiprefix.sh:#!/bin/bash
+> ./icmp_redirect.sh:#!/bin/bash
+> ./vrf-xfrm-tests.sh:#!/bin/bash
+> ./vrf_strict_mode_test.sh:#!/bin/bash
+> ./fcnal-test.sh:#!/bin/bash
+> ./stress_reuseport_listen.sh:#!/bin/bash
+> ./srv6_end_dt4_l3vpn_test.sh:#!/bin/bash
+> ./test_bridge_neigh_suppress.sh:#!/bin/bash
+> ./cmsg_ipv6.sh:#!/bin/bash
+> ./arp_ndisc_evict_nocarrier.sh:#!/bin/bash
+> ./fib_rule_tests.sh:#!/bin/bash
+> ./srv6_end_dt6_l3vpn_test.sh:#!/bin/bash
+> ./forwarding/custom_multipath_hash.sh:#!/bin/bash
+> ./forwarding/gre_inner_v4_multipath.sh:#!/bin/bash
+> ./forwarding/tc_tunnel_key.sh:#!/bin/bash
+> ./forwarding/tc_shblocks.sh:#!/bin/bash
+> ./forwarding/router_nh.sh:#!/bin/bash
+> ./forwarding/skbedit_priority.sh:#!/bin/bash
+> ./forwarding/tc_mpls_l2vpn.sh:#!/bin/bash
+> ./forwarding/gre_inner_v6_multipath.sh:#!/bin/bash
+> ./forwarding/vxlan_symmetric.sh:#!/bin/bash
+> ./forwarding/bridge_mdb.sh:#!/bin/bash
+> ./forwarding/no_forwarding.sh:#!/bin/bash
+> ./forwarding/router_bridge_1d.sh:#!/bin/bash
+> ./forwarding/tc_flower_port_range.sh:#!/bin/bash
+> ./forwarding/router_multicast.sh:#!/bin/bash
+> ./forwarding/bridge_locked_port.sh:#!/bin/bash
+> ./forwarding/vxlan_asymmetric_ipv6.sh:#!/bin/bash
+> ./forwarding/dual_vxlan_bridge.sh:#!/bin/bash
+> ./forwarding/bridge_port_isolation.sh:#!/bin/bash
+> ./forwarding/local_termination.sh:#!/bin/bash
+> ./forwarding/ipip_flat_gre_keys.sh:#!/bin/bash
+> ./forwarding/gre_multipath_nh_res.sh:#!/bin/bash
+> ./forwarding/gre_multipath.sh:#!/bin/bash
+> ./forwarding/vxlan_bridge_1d_ipv6.sh:#!/bin/bash
+> ./forwarding/ip6gre_flat_keys.sh:#!/bin/bash
+> ./forwarding/gre_multipath_nh.sh:#!/bin/bash
+> ./forwarding/bridge_mld.sh:#!/bin/bash
+> ./forwarding/ip6gre_inner_v6_multipath.sh:#!/bin/bash
+> ./forwarding/ip6gre_flat_key.sh:#!/bin/bash
+> ./forwarding/vxlan_asymmetric.sh:#!/bin/bash
+> ./forwarding/tc_flower_router.sh:#!/bin/bash
+> ./forwarding/router_bridge_vlan_upper_pvid.sh:#!/bin/bash
+> ./forwarding/mirror_gre_vlan_bridge_1q.sh:#!/bin/bash
+> ./forwarding/q_in_vni_ipv6.sh:#!/bin/bash
+> ./forwarding/mirror_gre_lag_lacp.sh:#!/bin/bash
+> ./forwarding/ip6gre_custom_multipath_hash.sh:#!/bin/bash
+> ./forwarding/vxlan_bridge_1d.sh:#!/bin/bash
+> ./forwarding/ip6gre_hier_key.sh:#!/bin/bash
+> ./forwarding/gre_custom_multipath_hash.sh:#!/bin/bash
+> ./forwarding/ipip_flat_gre_key.sh:#!/bin/bash
+> ./forwarding/mirror_gre_flower.sh:#!/bin/bash
+> ./forwarding/router_bridge.sh:#!/bin/bash
+> ./forwarding/vxlan_symmetric_ipv6.sh:#!/bin/bash
+> ./forwarding/mirror_gre_bridge_1q.sh:#!/bin/bash
+> ./forwarding/router_multipath.sh:#!/bin/bash
+> ./forwarding/tc_vlan_modify.sh:#!/bin/bash
+> ./forwarding/vxlan_bridge_1q.sh:#!/bin/bash
+> ./forwarding/bridge_mdb_port_down.sh:#!/bin/bash
+> ./forwarding/tc_flower.sh:#!/bin/bash
+> ./forwarding/tc_flower_cfm.sh:#!/bin/bash
+> ./forwarding/mirror_gre_neigh.sh:#!/bin/bash
+> ./forwarding/ethtool_rmon.sh:#!/bin/bash
+> ./forwarding/hw_stats_l3_gre.sh:#!/bin/bash
+> ./forwarding/router.sh:#!/bin/bash
+> ./forwarding/ipip_hier_gre_key.sh:#!/bin/bash
+> ./forwarding/tc_police.sh:#!/bin/bash
+> ./forwarding/pedit_ip.sh:#!/bin/bash
+> ./forwarding/ip6_forward_instats_vrf.sh:#!/bin/bash
+> ./forwarding/router_mpath_nh_res.sh:#!/bin/bash
+> ./forwarding/mirror_gre_changes.sh:#!/bin/bash
+> ./forwarding/hw_stats_l3.sh:#!/bin/bash
+> ./forwarding/ipip_hier_gre.sh:#!/bin/bash
+> ./forwarding/q_in_vni.sh:#!/bin/bash
+> ./forwarding/ip6gre_flat.sh:#!/bin/bash
+> ./forwarding/router_bridge_vlan_upper.sh:#!/bin/bash
+> ./forwarding/bridge_igmp.sh:#!/bin/bash
+> ./forwarding/mirror_gre_nh.sh:#!/bin/bash
+> ./forwarding/bridge_mdb_host.sh:#!/bin/bash
+> ./forwarding/ipip_hier_gre_keys.sh:#!/bin/bash
+> ./forwarding/pedit_dsfield.sh:#!/bin/bash
+> ./forwarding/bridge_vlan_mcast.sh:#!/bin/bash
+> ./forwarding/mirror_gre_bridge_1d_vlan.sh:#!/bin/bash
+> ./forwarding/router_bridge_1d_lag.sh:#!/bin/bash
+> ./forwarding/router_bridge_pvid_vlan_upper.sh:#!/bin/bash
+> ./forwarding/mirror_gre_bound.sh:#!/bin/bash
+> ./forwarding/ip6gre_hier.sh:#!/bin/bash
+> ./forwarding/ip6gre_hier_keys.sh:#!/bin/bash
+> ./forwarding/ethtool_extended_state.sh:#!/bin/bash
+> ./forwarding/router_mpath_nh.sh:#!/bin/bash
+> ./forwarding/tc_flower_l2_miss.sh:#!/bin/bash
+> ./forwarding/bridge_vlan_unaware.sh:#!/bin/bash
+> ./forwarding/router_broadcast.sh:#!/bin/bash
+> ./forwarding/bridge_fdb_learning_limit.sh:#!/bin/bash
+> ./forwarding/ipip_lib.sh:#!/bin/bash
+> ./forwarding/ip6gre_inner_v4_multipath.sh:#!/bin/bash
+> ./forwarding/router_vid_1.sh:#!/bin/bash
+> ./forwarding/mirror_gre.sh:#!/bin/bash
+> ./forwarding/router_bridge_vlan.sh:#!/bin/bash
+> ./forwarding/bridge_vlan_aware.sh:#!/bin/bash
+> ./forwarding/ethtool.sh:#!/bin/bash
+> ./forwarding/loopback.sh:#!/bin/bash
+> ./forwarding/bridge_sticky_fdb.sh:#!/bin/bash
+> ./forwarding/bridge_mdb_max.sh:#!/bin/bash
+> ./forwarding/pedit_l4port.sh:#!/bin/bash
+> ./forwarding/tc_actions.sh:#!/bin/bash
+> ./forwarding/mirror_vlan.sh:#!/bin/bash
+> ./forwarding/sch_red.sh:#!/bin/bash
+> ./forwarding/ipip_flat_gre.sh:#!/bin/bash
+> ./forwarding/mirror_gre_bridge_1d.sh:#!/bin/bash
+> ./forwarding/lib.sh:#!/bin/bash
+> ./forwarding/mirror_gre_vlan.sh:#!/bin/bash
+> ./forwarding/mirror_gre_bridge_1q_lag.sh:#!/bin/bash
+> ./forwarding/ethtool_mm.sh:#!/bin/bash
+> ./forwarding/vxlan_bridge_1q_ipv6.sh:#!/bin/bash
+> ./forwarding/tc_chains.sh:#!/bin/bash
+> ./forwarding/ip6gre_lib.sh:#!/bin/bash
+> ./fib_nexthop_nongw.sh:#!/bin/bash
+> ./srv6_end_dt46_l3vpn_test.sh:#!/bin/bash
+> ./cmsg_so_mark.sh:#!/bin/bash
+> ./sctp_vrf.sh:#!/bin/bash
+> ./fdb_flush.sh:#!/bin/bash
+> ./ndisc_unsolicited_na_test.sh:#!/bin/bash
+> ./traceroute.sh:#!/bin/bash
+> ./fib-onlink-tests.sh:#!/bin/bash
+> ./fib_tests.sh:#!/bin/bash
+> ./cmsg_time.sh:#!/bin/bash
+> ./arp_ndisc_untracked_subnets.sh:#!/bin/bash
+> ./fib_nexthops.sh:#!/bin/bash
 > 
->>>
->>>>
->>>> Don't include the inode pointer as field in the ima_iint_cache structure,
->>>> since the association with the inode is clear. Since the inode field is
->>>> missing in ima_iint_cache, pass the extra inode parameter to
->>>> ima_get_verity_digest().
->>>>
->>>> Finally, register ima_inode_alloc_security/ima_inode_free_security() to
->>>> initialize/deinitialize the new ima_iint_cache structure (before this task
->>>> was done by iint_init_always() and iint_free()). Also, duplicate
->>>> iint_lockdep_annotate() for the ima_iint_cache structure, and name it
->>>> ima_iint_lockdep_annotate().
->>>>
->>>> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
->>
+> linux/tools/testing/selftests/net$ grep -rF ". lib.sh"
+> <-- nothing
+> 
+> Thanks,
+> Yujie
 > 
 
 
