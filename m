@@ -1,72 +1,72 @@
-Return-Path: <linux-kselftest+bounces-2562-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2563-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 166BF821C7D
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jan 2024 14:21:11 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09868821C86
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jan 2024 14:25:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ADB9EB21402
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jan 2024 13:21:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1C5B41C22002
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jan 2024 13:25:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 721D0F9FC;
-	Tue,  2 Jan 2024 13:21:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C6DEF9FF;
+	Tue,  2 Jan 2024 13:25:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ih3D4CVK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wdl2jTYv"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5F81F9EB;
-	Tue,  2 Jan 2024 13:21:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C735AFBE5;
+	Tue,  2 Jan 2024 13:25:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-33679c49fe5so8174511f8f.3;
-        Tue, 02 Jan 2024 05:21:03 -0800 (PST)
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-336897b6bd6so9267405f8f.2;
+        Tue, 02 Jan 2024 05:25:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1704201662; x=1704806462; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1704201904; x=1704806704; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:references:to:from:subject
          :mime-version:date:message-id:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=j5PNTurghlPI/wU+fXieHZ4gaYw2koYqIseDXj5bnCo=;
-        b=ih3D4CVKHytliUvNDPFK4SOlu0n3djAwJpOO1shEhTQBKvPTLtLQgQSs9HWIxNCSnf
-         TU4p6PlqnR5APTuS4vKNeEi7X5JyqlpIaldDR6zlKLII80U9f5lEE+Bh4bOudKik7Gm2
-         iwHU09tSJC4Jlo1ItAfzVqj/BNiVaEKX/hfRYETGGzkIAwH/4PYCvz1sTL1+VlSesM47
-         kMxfzFbmKCvBCz1lwFi9QskHipaEm9yLaaE22ZuntJ74JhBjcFzAU1lFn9NdJbruXUva
-         sjOnuVSztFBKXlkVVChzjCYZ2lD98w7wJg7RzJ6LDlxZdqnkPAgJyJQ4zc44+wpcbDjp
-         QO7Q==
+        bh=B6O9NOwtuteIYyicF8P0HuZgF44ilFnB7nwaX+Y1Si4=;
+        b=Wdl2jTYv5SVXCDyZRPuTGJ87iDvWpzGLugZFQrhtzIIp+yZlCMtQT1amqsDFfXBU7R
+         2pdXcy/ctCXX1mOu1OzHmcnKDS0JurhG2uVzEvwPqmLHWp5EDX/eWqpGJXOo8Dh2owPB
+         /E5phEb/mOp+fJ++yGevE8WW4pDQzVwa3q9edzLe0nzDVMCeyFKipqDYaM9LLTbDhKDZ
+         o+fXSkv27cjGVfB0d1UzcXYvhbyTgBnUD40WRezaJbbs7qMg6l07EBG6T+hUte0Hme5K
+         zrmSkfJM/Yx4pDSIW0n6UBpXRlbsFM09xQwwl5n+nEOWKxFbfZs/EOrX6HB/tFexNILo
+         CoPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704201662; x=1704806462;
+        d=1e100.net; s=20230601; t=1704201904; x=1704806704;
         h=content-transfer-encoding:in-reply-to:references:to:from:subject
          :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=j5PNTurghlPI/wU+fXieHZ4gaYw2koYqIseDXj5bnCo=;
-        b=BPHKLjc4PNsqAzprxrA64mKDLXvwrz4K4fjEzYDyn43bJMyBmIxPpRSOVlI0t76OHm
-         S67VFAEt7s8/xfuYDarO/VmubbdERW3x3/W2rbji7hyPPa839nLQOd5PYlOhUUs9E4bp
-         0DgmCJWIGOzj4poiFYRrizIe6KMkM79KbWa698LbpqwC5YC2nxkmBVhKvH+4dsZJAiQc
-         0UkWQXtEoUuu96RhQhDw+JxNSqhji4HlkFB4ukVr1n22YH7etusQHpEsGM8F3zs+sc7i
-         1OE6obnahH+8tvhIhYL0KMfJhU3F6oQ7LTOsrHg2z5YabEYeosFTqeJmGuMd8Mt5OnNu
-         CcMw==
-X-Gm-Message-State: AOJu0YxYQ43VWcrCfQDICPrDjz8A+ooHXbwMf9y1fs3RAn97P0vR/dsq
-	eNkiDCLIonRYTOrqpiwxMCQkrE9pcGRY4IzJ
-X-Google-Smtp-Source: AGHT+IFLlUav8GWe5NG2HjLMQrfHBduQLQfTxbhgX8wDmq3p883iCjfMT51YVL92baFsVky4mXKolQ==
-X-Received: by 2002:a5d:4482:0:b0:336:7f81:d825 with SMTP id j2-20020a5d4482000000b003367f81d825mr9192600wrq.56.1704201662000;
-        Tue, 02 Jan 2024 05:21:02 -0800 (PST)
+        bh=B6O9NOwtuteIYyicF8P0HuZgF44ilFnB7nwaX+Y1Si4=;
+        b=AMnJv+rMZ7Z23wRqevRB7ufJbW1YXnauJI6jb6f6+or8aI51yluUOyXcl3atptdm7Y
+         RALvJP8vIARo/f8A6R/I0mxJ5Gf7YY7/Hzkswlub1R2jYT5tsDtHQToe+D6BKkAKJFSD
+         v6sF29GZtCwF8ftTUVXxymNrmFn6niRW3edNqwz2KgyO26OHRrhEKLfZLppcdZsBAQvT
+         kvgnzUmWItEIPG0/CSC5UOuBye9Ftuj5BidYzWL1rUlAK7TjaihMtWetMj6KBfSJAEii
+         Mtd/o03i0y0JXfULOFktgUQ4X8c2cDCiRmhQk5fjGS//dg4CABYJreazMEvoQG64uccg
+         NXaQ==
+X-Gm-Message-State: AOJu0YzyuQ+9jMAW5fzBBQAHumqDM3j2eWfpgJmOIq7+YRnin1KWLIfp
+	zeKilBNK3KHEXVGbZ2KyQDU=
+X-Google-Smtp-Source: AGHT+IHU+SO7b1fE1+XwQKpCy3gbwCpuSRN0P+3842bCNi2SaBuDV3wfdru03iIEALag45tVPEGY+A==
+X-Received: by 2002:adf:efc5:0:b0:336:b52d:30cf with SMTP id i5-20020adfefc5000000b00336b52d30cfmr8039000wrp.61.1704201903880;
+        Tue, 02 Jan 2024 05:25:03 -0800 (PST)
 Received: from debian ([146.70.204.204])
-        by smtp.gmail.com with ESMTPSA id r8-20020a5d4948000000b003367a5b6b69sm28254743wrs.106.2024.01.02.05.20.57
+        by smtp.gmail.com with ESMTPSA id x13-20020a5d650d000000b00336b702af06sm22777821wru.16.2024.01.02.05.24.58
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Jan 2024 05:21:01 -0800 (PST)
-Message-ID: <27d4cc21-1ce5-4417-bd0c-6dd43a92e4aa@gmail.com>
-Date: Tue, 2 Jan 2024 14:20:55 +0100
+        Tue, 02 Jan 2024 05:25:03 -0800 (PST)
+Message-ID: <90117449-1f4a-47d7-baf4-2ed6540bc436@gmail.com>
+Date: Tue, 2 Jan 2024 14:24:56 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: [PATCH net-next v2 1/3] net: gso: add HBH extension header offload
- support
+Subject: [PATCH net-next v2 2/3] net: gro: parse ipv6 ext headers without
+ frag0 invalidation
 From: Richard Gobert <richardbgobert@gmail.com>
 To: davem@davemloft.net, dsahern@kernel.org, edumazet@google.com,
  kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org,
@@ -77,95 +77,122 @@ In-Reply-To: <127b8199-1cd4-42d7-9b2b-875abaad93fe@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-This commit adds net_offload to IPv6 Hop-by-Hop extension headers (as it
-is done for routing and dstopts) since it is supported in GSO and GRO.
-This allows to remove specific HBH conditionals in GSO and GRO when
-pulling and parsing an incoming packet.
+The existing code always pulls the IPv6 header and sets the transport
+offset initially. Then optionally again pulls any extension headers in
+ipv6_gso_pull_exthdrs and sets the transport offset again on return from
+that call. skb->data is set at the start of the first extension header
+before calling ipv6_gso_pull_exthdrs, and must disable the frag0
+optimization because that function uses pskb_may_pull/pskb_pull instead of
+skb_gro_ helpers. It sets the GRO offset to the TCP header with
+skb_gro_pull and sets the transport header. Then returns skb->data to its
+position before this block.
+
+This commit introduces a new helper function - ipv6_gro_pull_exthdrs -
+which is used in ipv6_gro_receive to pull ipv6 ext headers instead of
+ipv6_gso_pull_exthdrs. Thus, there is no modification of skb->data, all
+operations use skb_gro_* helpers, and the frag0 fast path can be taken for
+IPv6 packets with ext headers.
 
 Signed-off-by: Richard Gobert <richardbgobert@gmail.com>
 Reviewed-by: Willem de Bruijn <willemb@google.com>
 ---
- net/ipv6/exthdrs_offload.c | 11 +++++++++++
- net/ipv6/ip6_offload.c     | 25 +++++++++++--------------
- 2 files changed, 22 insertions(+), 14 deletions(-)
+ include/net/ipv6.h     |  1 +
+ net/ipv6/ip6_offload.c | 51 +++++++++++++++++++++++++++++++++---------
+ 2 files changed, 42 insertions(+), 10 deletions(-)
 
-diff --git a/net/ipv6/exthdrs_offload.c b/net/ipv6/exthdrs_offload.c
-index 06750d65d480..4c00398f4dca 100644
---- a/net/ipv6/exthdrs_offload.c
-+++ b/net/ipv6/exthdrs_offload.c
-@@ -16,6 +16,10 @@ static const struct net_offload dstopt_offload = {
- 	.flags		=	INET6_PROTO_GSO_EXTHDR,
- };
+diff --git a/include/net/ipv6.h b/include/net/ipv6.h
+index 78d38dd88aba..217240efa182 100644
+--- a/include/net/ipv6.h
++++ b/include/net/ipv6.h
+@@ -26,6 +26,7 @@ struct ip_tunnel_info;
+ #define SIN6_LEN_RFC2133	24
  
-+static const struct net_offload hbh_offload = {
-+	.flags		=	INET6_PROTO_GSO_EXTHDR,
-+};
-+
- int __init ipv6_exthdrs_offload_init(void)
- {
- 	int ret;
-@@ -28,9 +32,16 @@ int __init ipv6_exthdrs_offload_init(void)
- 	if (ret)
- 		goto out_rt;
+ #define IPV6_MAXPLEN		65535
++#define IPV6_MIN_EXTHDR_LEN	8
  
-+	ret = inet6_add_offload(&hbh_offload, IPPROTO_HOPOPTS);
-+	if (ret)
-+		goto out_dstopts;
-+
- out:
- 	return ret;
- 
-+out_dstopts:
-+	inet6_del_offload(&dstopt_offload, IPPROTO_DSTOPTS);
-+
- out_rt:
- 	inet6_del_offload(&rthdr_offload, IPPROTO_ROUTING);
- 	goto out;
+ /*
+  *	NextHeader field of IPv6 header
 diff --git a/net/ipv6/ip6_offload.c b/net/ipv6/ip6_offload.c
-index d6314287338d..0e0b5fed0995 100644
+index 0e0b5fed0995..c07111d8f56a 100644
 --- a/net/ipv6/ip6_offload.c
 +++ b/net/ipv6/ip6_offload.c
-@@ -45,15 +45,13 @@ static int ipv6_gso_pull_exthdrs(struct sk_buff *skb, int proto)
- 		struct ipv6_opt_hdr *opth;
- 		int len;
+@@ -37,6 +37,40 @@
+ 		INDIRECT_CALL_L4(cb, f2, f1, head, skb);	\
+ })
  
--		if (proto != NEXTHDR_HOP) {
--			ops = rcu_dereference(inet6_offloads[proto]);
++static int ipv6_gro_pull_exthdrs(struct sk_buff *skb, int off, int proto)
++{
++	const struct net_offload *ops = NULL;
++	struct ipv6_opt_hdr *opth;
++
++	for (;;) {
++		int len;
++
 +		ops = rcu_dereference(inet6_offloads[proto]);
- 
--			if (unlikely(!ops))
--				break;
++
 +		if (unlikely(!ops))
 +			break;
- 
--			if (!(ops->flags & INET6_PROTO_GSO_EXTHDR))
--				break;
--		}
++
 +		if (!(ops->flags & INET6_PROTO_GSO_EXTHDR))
 +			break;
- 
- 		if (unlikely(!pskb_may_pull(skb, 8)))
- 			break;
-@@ -171,13 +169,12 @@ static int ipv6_exthdrs_len(struct ipv6hdr *iph,
- 
- 	proto = iph->nexthdr;
- 	for (;;) {
--		if (proto != NEXTHDR_HOP) {
--			*opps = rcu_dereference(inet6_offloads[proto]);
--			if (unlikely(!(*opps)))
--				break;
--			if (!((*opps)->flags & INET6_PROTO_GSO_EXTHDR))
--				break;
--		}
-+		*opps = rcu_dereference(inet6_offloads[proto]);
-+		if (unlikely(!(*opps)))
-+			break;
-+		if (!((*opps)->flags & INET6_PROTO_GSO_EXTHDR))
++
++		opth = skb_gro_header(skb, off + IPV6_MIN_EXTHDR_LEN, off);
++		if (unlikely(!opth))
 +			break;
 +
- 		opth = (void *)opth + optlen;
- 		optlen = ipv6_optlen(opth);
- 		len += optlen;
++		len = ipv6_optlen(opth);
++
++		opth = skb_gro_header(skb, off + len, off);
++		if (unlikely(!opth))
++			break;
++		proto = opth->nexthdr;
++
++		off += len;
++	}
++
++	skb_gro_pull(skb, off - skb_network_offset(skb));
++	return proto;
++}
++
+ static int ipv6_gso_pull_exthdrs(struct sk_buff *skb, int proto)
+ {
+ 	const struct net_offload *ops = NULL;
+@@ -203,28 +237,25 @@ INDIRECT_CALLABLE_SCOPE struct sk_buff *ipv6_gro_receive(struct list_head *head,
+ 		goto out;
+ 
+ 	skb_set_network_header(skb, off);
+-	skb_gro_pull(skb, sizeof(*iph));
+-	skb_set_transport_header(skb, skb_gro_offset(skb));
+ 
+-	flush += ntohs(iph->payload_len) != skb_gro_len(skb);
++	flush += ntohs(iph->payload_len) != skb->len - hlen;
+ 
+ 	proto = iph->nexthdr;
+ 	ops = rcu_dereference(inet6_offloads[proto]);
+ 	if (!ops || !ops->callbacks.gro_receive) {
+-		pskb_pull(skb, skb_gro_offset(skb));
+-		skb_gro_frag0_invalidate(skb);
+-		proto = ipv6_gso_pull_exthdrs(skb, proto);
+-		skb_gro_pull(skb, -skb_transport_offset(skb));
+-		skb_reset_transport_header(skb);
+-		__skb_push(skb, skb_gro_offset(skb));
++		proto = ipv6_gro_pull_exthdrs(skb, hlen, proto);
+ 
+ 		ops = rcu_dereference(inet6_offloads[proto]);
+ 		if (!ops || !ops->callbacks.gro_receive)
+ 			goto out;
+ 
+-		iph = ipv6_hdr(skb);
++		iph = skb_gro_network_header(skb);
++	} else {
++		skb_gro_pull(skb, sizeof(*iph));
+ 	}
+ 
++	skb_set_transport_header(skb, skb_gro_offset(skb));
++
+ 	NAPI_GRO_CB(skb)->proto = proto;
+ 
+ 	flush--;
 -- 
 2.36.1
 
