@@ -1,264 +1,293 @@
-Return-Path: <linux-kselftest+bounces-2592-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2593-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5ED378224BF
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jan 2024 23:31:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 035E28224F3
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jan 2024 23:49:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7F77A1C22B19
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jan 2024 22:31:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C4F21F2277D
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jan 2024 22:49:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 212891772E;
-	Tue,  2 Jan 2024 22:31:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0914B171D9;
+	Tue,  2 Jan 2024 22:49:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TM9Jwa1p"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GABLzOHT"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 548F01772A
-	for <linux-kselftest@vger.kernel.org>; Tue,  2 Jan 2024 22:31:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1704234685;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=WxX/DwYRiytQqrsyv6xPbUj6O86YcsayJdMC1Rh079w=;
-	b=TM9Jwa1psXALhsjwGR1vRVu0TzU07A3kPdV1UKoGZI81ae/VkbBs44unakvJ3W3Dgnv+QR
-	vWH52G6l40d/stVWjVB4DO9IWOXdx6NRhg+HEUcptKlxRgf6ksQrjnEbLCqqmTeRZinLtv
-	FKYZCHDutwoRmU/t0PMmD24ZTCEJBIc=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-102-41CIv6mVMvuFpQ2fC74M9w-1; Tue, 02 Jan 2024 17:31:21 -0500
-X-MC-Unique: 41CIv6mVMvuFpQ2fC74M9w-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E456D848A64;
-	Tue,  2 Jan 2024 22:31:20 +0000 (UTC)
-Received: from redhat.com (unknown [10.22.9.153])
-	by smtp.corp.redhat.com (Postfix) with ESMTPS id 3ED1040C6EB9;
-	Tue,  2 Jan 2024 22:31:20 +0000 (UTC)
-Date: Tue, 2 Jan 2024 17:31:18 -0500
-From: Joe Lawrence <joe.lawrence@redhat.com>
-To: Marcos Paulo de Souza <mpdesouza@suse.com>
-Cc: Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Jiri Kosina <jikos@kernel.org>, Miroslav Benes <mbenes@suse.cz>,
-	Petr Mladek <pmladek@suse.com>, linux-kselftest@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-s390@vger.kernel.org, live-patching@vger.kernel.org
-Subject: Re: [PATCH RESEND v4 1/3] kselftests: lib.mk: Add TEST_GEN_MODS_DIR
- variable
-Message-ID: <ZZSOtsbzpy2mvmUC@redhat.com>
-References: <20231220-send-lp-kselftests-v4-0-3458ec1b1a38@suse.com>
- <20231220-send-lp-kselftests-v4-1-3458ec1b1a38@suse.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D87DD17725;
+	Tue,  2 Jan 2024 22:49:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EDBAC433C9;
+	Tue,  2 Jan 2024 22:49:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704235767;
+	bh=T55WCsDDBMdV44KiSumuwswipm/mouhybrbqOhV7kkU=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=GABLzOHTEGGqdIiCGunbjc+duSdiwfQMRPKVlMit9ewdi3H+HlL/Kw/sbaR4FAMkY
+	 AF4FFcpa2skkuxiGHI7HOHf/kW/O+CM6hPLvPpQOZ+5i6utTUl4wdl5oPqXUSLLLYY
+	 CGQfPnmQLLWMWoM2nWjIf8YoufUCISHlPF+x7F7yY1SfFinwZ31zxzN3SxH7Volg+V
+	 +iHwhQgvoVZ9OrakOgl/Q4GTqj4zpGTXFJ+iK7gQ7wuHzro27L17bt1fkryw+UfMrG
+	 ImxbP2fWoROXbtZCPU/Vx1wqHDimLRR41Xfn1144wl5YFsSOak2SL5RHg+BbR0yqZv
+	 GGbyaf2VG5z9g==
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-50e7aed08f4so6375751e87.0;
+        Tue, 02 Jan 2024 14:49:27 -0800 (PST)
+X-Gm-Message-State: AOJu0YywjJGIapn3Kl8qbv/9z98UGtP+JD0FwP7Vp1m/GqKsoVatUgkw
+	vrahiyCe/jlEvChU/7QlOsUDjC/qZvY2J2wqv9c=
+X-Google-Smtp-Source: AGHT+IE4onFQu2m3/yigoFFipvmSg5RKz59Ta3rrI6N6ihY71iQrMqWiWYr7mDijLk2toIJ6FkK8bbsppHiFhIs1/Po=
+X-Received: by 2002:a05:6512:398a:b0:50e:15d4:7f8c with SMTP id
+ j10-20020a056512398a00b0050e15d47f8cmr86449lfu.27.1704235765634; Tue, 02 Jan
+ 2024 14:49:25 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20231220-send-lp-kselftests-v4-1-3458ec1b1a38@suse.com>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.11.54.2
+References: <20231211045543.31741-1-khuey@kylehuey.com> <20231211045543.31741-5-khuey@kylehuey.com>
+In-Reply-To: <20231211045543.31741-5-khuey@kylehuey.com>
+From: Song Liu <song@kernel.org>
+Date: Tue, 2 Jan 2024 14:49:14 -0800
+X-Gmail-Original-Message-ID: <CAPhsuW7EU0nJq3fF_DqB3o7+5fuGZgs-W1jN1e4F4VHVjgj8Cg@mail.gmail.com>
+Message-ID: <CAPhsuW7EU0nJq3fF_DqB3o7+5fuGZgs-W1jN1e4F4VHVjgj8Cg@mail.gmail.com>
+Subject: Re: [PATCH v3 4/4] selftest/bpf: Test a perf bpf program that
+ suppresses side effects.
+To: Kyle Huey <me@kylehuey.com>
+Cc: Kyle Huey <khuey@kylehuey.com>, linux-kernel@vger.kernel.org, 
+	Andrii Nakryiko <andrii.nakryiko@gmail.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, Marco Elver <elver@google.com>, 
+	Yonghong Song <yonghong.song@linux.dev>, "Robert O'Callahan" <robert@ocallahan.org>, 
+	Andrii Nakryiko <andrii@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Shuah Khan <shuah@kernel.org>, 
+	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Dec 20, 2023 at 01:53:12PM -0300, Marcos Paulo de Souza wrote:
-> Add TEST_GEN_MODS_DIR variable for kselftests. It can point to
-> a directory containing kernel modules that will be used by
-> selftest scripts.
-> 
-> The modules are built as external modules for the running kernel.
-> As a result they are always binary compatible and the same tests
-> can be used for older or newer kernels.
-> 
-> The build requires "kernel-devel" package to be installed.
-> For example, in the upstream sources, the rpm devel package
-> is produced by "make rpm-pkg"
-> 
-> The modules can be built independently by
-> 
->   make -C tools/testing/selftests/livepatch/
-> 
-> or they will be automatically built before running the tests via
-> 
->   make -C tools/testing/selftests/livepatch/ run_tests
-> 
-> Note that they are _not_ built when running the standalone
-> tests by calling, for example, ./test-state.sh.
-> 
-> Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
+On Sun, Dec 10, 2023 at 8:56=E2=80=AFPM Kyle Huey <me@kylehuey.com> wrote:
+>
+> The test sets a hardware breakpoint and uses a bpf program to suppress th=
+e
+> side effects of a perf event sample, including I/O availability signals,
+> SIGTRAPs, and decrementing the event counter limit, if the ip matches the
+> expected value. Then the function with the breakpoint is executed multipl=
+e
+> times to test that all effects behave as expected.
+>
+> Signed-off-by: Kyle Huey <khuey@kylehuey.com>
 > ---
->  Documentation/dev-tools/kselftest.rst |  4 ++++
->  tools/testing/selftests/lib.mk        | 20 +++++++++++++++-----
->  2 files changed, 19 insertions(+), 5 deletions(-)
-> 
-> diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
-> index ab376b316c36..7f3582a67318 100644
-> --- a/Documentation/dev-tools/kselftest.rst
-> +++ b/Documentation/dev-tools/kselftest.rst
-> @@ -245,6 +245,10 @@ Contributing new tests (details)
->     TEST_PROGS, TEST_GEN_PROGS mean it is the executable tested by
->     default.
->  
-> +   TEST_GEN_MODS_DIR should be used by tests that require modules to be built
-> +   before the test starts. The variable will contain the name of the directory
-> +   containing the modules.
+>  .../selftests/bpf/prog_tests/perf_skip.c      | 140 ++++++++++++++++++
+>  .../selftests/bpf/progs/test_perf_skip.c      |  15 ++
+>  2 files changed, 155 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/perf_skip.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/test_perf_skip.c
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/perf_skip.c b/tools/t=
+esting/selftests/bpf/prog_tests/perf_skip.c
+> new file mode 100644
+> index 000000000000..0200736a8baf
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/perf_skip.c
+> @@ -0,0 +1,140 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#define _GNU_SOURCE
 > +
->     TEST_CUSTOM_PROGS should be used by tests that require custom build
->     rules and prevent common build rule use.
->  
-> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-> index 118e0964bda9..6c7c5a0112cf 100644
-> --- a/tools/testing/selftests/lib.mk
-> +++ b/tools/testing/selftests/lib.mk
-> @@ -70,12 +70,15 @@ KHDR_INCLUDES := -isystem $(KHDR_DIR)
->  # TEST_PROGS are for test shell scripts.
->  # TEST_CUSTOM_PROGS and TEST_PROGS will be run by common run_tests
->  # and install targets. Common clean doesn't touch them.
-> +# TEST_GEN_MODS_DIR is used to specify a directory with modules to be built
-> +# before the test executes. These modules are cleaned on the clean target as well.
->  TEST_GEN_PROGS := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS))
->  TEST_GEN_PROGS_EXTENDED := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS_EXTENDED))
->  TEST_GEN_FILES := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_FILES))
-> +TEST_GEN_MODS_DIR := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_MODS_DIR))
->  
->  all: kernel_header_files $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) \
-> -     $(TEST_GEN_FILES)
-> +     $(TEST_GEN_FILES) $(if $(TEST_GEN_MODS_DIR),gen_mods_dir)
->  
->  kernel_header_files:
->  	@ls $(KHDR_DIR)/linux/*.h >/dev/null 2>/dev/null;                      \
-> @@ -105,8 +108,8 @@ endef
->  
->  run_tests: all
->  ifdef building_out_of_srctree
-> -	@if [ "X$(TEST_PROGS)$(TEST_PROGS_EXTENDED)$(TEST_FILES)" != "X" ]; then \
-> -		rsync -aq --copy-unsafe-links $(TEST_PROGS) $(TEST_PROGS_EXTENDED) $(TEST_FILES) $(OUTPUT); \
-> +	@if [ "X$(TEST_PROGS)$(TEST_PROGS_EXTENDED)$(TEST_FILES)$(TEST_GEN_MODS_DIR)" != "X" ]; then \
-> +		rsync -aq --copy-unsafe-links $(TEST_PROGS) $(TEST_PROGS_EXTENDED) $(TEST_FILES) $(TEST_GEN_MODS_DIR) $(OUTPUT); \
->  	fi
->  	@if [ "X$(TEST_PROGS)" != "X" ]; then \
->  		$(call RUN_TESTS, $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) \
-> @@ -118,6 +121,12 @@ else
->  	@$(call RUN_TESTS, $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) $(TEST_PROGS))
->  endif
->  
-> +gen_mods_dir:
-> +	$(Q)$(MAKE) -C $(TEST_GEN_MODS_DIR)
+> +#include <test_progs.h>
+> +#include "test_perf_skip.skel.h"
+> +#include <linux/compiler.h>
+> +#include <linux/hw_breakpoint.h>
+> +#include <sys/mman.h>
 > +
-> +clean_mods_dir:
-> +	$(Q)$(MAKE) -C $(TEST_GEN_MODS_DIR) clean
+> +#ifndef TRAP_PERF
+> +#define TRAP_PERF 6
+> +#endif
 > +
->  define INSTALL_SINGLE_RULE
->  	$(if $(INSTALL_LIST),@mkdir -p $(INSTALL_PATH))
->  	$(if $(INSTALL_LIST),rsync -a --copy-unsafe-links $(INSTALL_LIST) $(INSTALL_PATH)/)
-> @@ -131,6 +140,7 @@ define INSTALL_RULE
->  	$(eval INSTALL_LIST = $(TEST_CUSTOM_PROGS)) $(INSTALL_SINGLE_RULE)
->  	$(eval INSTALL_LIST = $(TEST_GEN_PROGS_EXTENDED)) $(INSTALL_SINGLE_RULE)
->  	$(eval INSTALL_LIST = $(TEST_GEN_FILES)) $(INSTALL_SINGLE_RULE)
-> +	$(eval INSTALL_LIST = $(TEST_GEN_MODS_DIR)) $(INSTALL_SINGLE_RULE)
+> +int signals_unexpected =3D 1;
+> +int sigio_count, sigtrap_count;
+> +
+> +static void handle_sigio(int sig __always_unused)
+> +{
+> +       ASSERT_OK(signals_unexpected, "perf event not skipped");
 
-Hi Marcos,
+ASSERT_OK is a little confusing. Maybe do something like:
 
-Sorry for the late reply on this, but I'm reviewing this version by
-trying to retrofit it into our selftest packaging (pre-build the test
-module .ko's and stash those into an rpm rather than building on the
-test host).
+static int signals_expected;
+static void handle_sigio(int sig __always_unused)
+{
+    ASSERT_EQ(signals_expected, 1, "expected sig_io");
+}
+serial_test_perf_skip()
+{
+...
+signals_expected =3D 1;
+}
 
-Since $TEST_GEN_MODS_DIR is treated as a directory, I found that the
-selftest install target copies a bunch of intermediate object and kbuild
-files:
+> +       ++sigio_count;
+> +}
+> +
+> +static void handle_sigtrap(int signum __always_unused,
+> +                          siginfo_t *info,
+> +                          void *ucontext __always_unused)
+> +{
+> +       ASSERT_OK(signals_unexpected, "perf event not skipped");
+ditto
 
-  $ mkdir /tmp/test-install
-  $ make KDIR=$(pwd) INSTALL_PATH=/tmp/test-install TARGETS=livepatch \
-       -C tools/testing/selftests/ install
+> +       ASSERT_EQ(info->si_code, TRAP_PERF, "wrong si_code");
+> +       ++sigtrap_count;
+> +}
+> +
+> +static noinline int test_function(void)
+> +{
+> +       asm volatile ("");
+> +       return 0;
+> +}
+> +
+> +void serial_test_perf_skip(void)
+> +{
+> +       struct sigaction action =3D {};
+> +       struct sigaction previous_sigtrap;
+> +       sighandler_t previous_sigio;
+> +       struct test_perf_skip *skel =3D NULL;
+> +       struct perf_event_attr attr =3D {};
+> +       int perf_fd =3D -1;
+> +       int err;
+> +       struct f_owner_ex owner;
+> +       struct bpf_link *prog_link =3D NULL;
+> +
+> +       action.sa_flags =3D SA_SIGINFO | SA_NODEFER;
+> +       action.sa_sigaction =3D handle_sigtrap;
+> +       sigemptyset(&action.sa_mask);
+> +       if (!ASSERT_OK(sigaction(SIGTRAP, &action, &previous_sigtrap), "s=
+igaction"))
+> +               return;
+> +
+> +       previous_sigio =3D signal(SIGIO, handle_sigio);
 
-  [ ... builds livepatch selftests ... ]
+handle signal() errors here?
 
-the rsync in question:
+> +
+> +       skel =3D test_perf_skip__open_and_load();
+> +       if (!ASSERT_OK_PTR(skel, "skel_load"))
+> +               goto cleanup;
+> +
+> +       attr.type =3D PERF_TYPE_BREAKPOINT;
+> +       attr.size =3D sizeof(attr);
+> +       attr.bp_type =3D HW_BREAKPOINT_X;
+> +       attr.bp_addr =3D (uintptr_t)test_function;
+> +       attr.bp_len =3D sizeof(long);
+> +       attr.sample_period =3D 1;
+> +       attr.sample_type =3D PERF_SAMPLE_IP;
+> +       attr.pinned =3D 1;
+> +       attr.exclude_kernel =3D 1;
+> +       attr.exclude_hv =3D 1;
+> +       attr.precise_ip =3D 3;
+> +       attr.sigtrap =3D 1;
+> +       attr.remove_on_exec =3D 1;
+> +
+> +       perf_fd =3D syscall(__NR_perf_event_open, &attr, 0, -1, -1, 0);
+> +       if (perf_fd < 0 && (errno =3D=3D ENOENT || errno =3D=3D EOPNOTSUP=
+P)) {
+> +               printf("SKIP:no PERF_TYPE_BREAKPOINT/HW_BREAKPOINT_X\n");
+> +               test__skip();
+> +               goto cleanup;
+> +       }
+> +       if (!ASSERT_OK(perf_fd < 0, "perf_event_open"))
+> +               goto cleanup;
+> +
+> +       /* Configure the perf event to signal on sample. */
+> +       err =3D fcntl(perf_fd, F_SETFL, O_ASYNC);
+> +       if (!ASSERT_OK(err, "fcntl(F_SETFL, O_ASYNC)"))
+> +               goto cleanup;
+> +
+> +       owner.type =3D F_OWNER_TID;
+> +       owner.pid =3D syscall(__NR_gettid);
+> +       err =3D fcntl(perf_fd, F_SETOWN_EX, &owner);
+> +       if (!ASSERT_OK(err, "fcntl(F_SETOWN_EX)"))
+> +               goto cleanup;
+> +
+> +       /*
+> +        * Allow at most one sample. A sample rejected by bpf should
+> +        * not count against this.
+> +        */
 
-  rsync -a --copy-unsafe-links /home/jolawren/src/kernel/tools/testing/selftests/livepatch/test_modules /tmp/test-install/livepatch/
-  ...
+Multi-line comment style should be like
 
-and then looking at the destination:
+        /* Allow at most one sample. A sample rejected by bpf should
+        * not count against this.
+        */
 
-  $ tree -a /tmp/test-install/
-  /tmp/test-install/
-  ├── kselftest
-  │   ├── module.sh
-  │   ├── prefix.pl
-  │   └── runner.sh
-  ├── kselftest-list.txt
-  ├── livepatch
-  │   ├── config
-  │   ├── functions.sh
-  │   ├── settings
-  │   ├── test-callbacks.sh
-  │   ├── test-ftrace.sh
-  │   ├── test_klp-call_getpid
-  │   ├── test-livepatch.sh
-  │   ├── test_modules
-  │   │   ├── Makefile
-  │   │   ├── modules.order
-  │   │   ├── .modules.order.cmd
-  │   │   ├── Module.symvers
-  │   │   ├── .Module.symvers.cmd
-  │   │   ├── test_klp_atomic_replace.c
-  │   │   ├── test_klp_atomic_replace.ko
-  │   │   ├── .test_klp_atomic_replace.ko.cmd
-  │   │   ├── test_klp_atomic_replace.mod
-  │   │   ├── test_klp_atomic_replace.mod.c
-  │   │   ├── .test_klp_atomic_replace.mod.cmd
-  │   │   ├── test_klp_atomic_replace.mod.o
-  │   │   ├── .test_klp_atomic_replace.mod.o.cmd
-  │   │   ├── test_klp_atomic_replace.o
-  │   │   ├── .test_klp_atomic_replace.o.cmd
-  ...
+> +       err =3D ioctl(perf_fd, PERF_EVENT_IOC_REFRESH, 1);
+> +       if (!ASSERT_OK(err, "ioctl(PERF_EVENT_IOC_REFRESH)"))
+> +               goto cleanup;
+> +
+> +       prog_link =3D bpf_program__attach_perf_event(skel->progs.handler,=
+ perf_fd);
+> +       if (!ASSERT_OK_PTR(prog_link, "bpf_program__attach_perf_event"))
+> +               goto cleanup;
+> +
+> +       /* Configure the bpf program to suppress the sample. */
+> +       skel->bss->ip =3D (uintptr_t)test_function;
+> +       test_function();
+> +
+> +       ASSERT_EQ(sigio_count, 0, "sigio_count");
+> +       ASSERT_EQ(sigtrap_count, 0, "sigtrap_count");
+> +
+> +       /* Configure the bpf program to allow the sample. */
+> +       skel->bss->ip =3D 0;
+> +       signals_unexpected =3D 0;
+> +       test_function();
+> +
+> +       ASSERT_EQ(sigio_count, 1, "sigio_count");
+> +       ASSERT_EQ(sigtrap_count, 1, "sigtrap_count");
+> +
+> +       /*
+> +        * Test that the sample above is the only one allowed (by perf, n=
+ot
+> +        * by bpf)
+> +        */
 
-On the other hand, variables like $TEST_GEN_FILES specify individual
-files, so only final binaries like test_klp-call_getpid (and not
-test_klp-call_getpid.c) are copied to $INSTALL_PATH.
+ditto.
 
-Since the selftest module builds appear to ignore
-CONFIG_MODULE_COMPRESS_* the smallest tweak I can think of to avoid the
-above scenario is:
-
-  --- a/tools/testing/selftests/lib.mk
-  +++ b/tools/testing/selftests/lib.mk
-  @@ -106,7 +106,7 @@ define INSTALL_RULE
-          $(eval INSTALL_LIST = $(TEST_CUSTOM_PROGS)) $(INSTALL_SINGLE_RULE)
-          $(eval INSTALL_LIST = $(TEST_GEN_PROGS_EXTENDED)) $(INSTALL_SINGLE_RULE)
-          $(eval INSTALL_LIST = $(TEST_GEN_FILES)) $(INSTALL_SINGLE_RULE)
-  -       $(eval INSTALL_LIST = $(TEST_GEN_MODS_DIR)) $(INSTALL_SINGLE_RULE)
-  +       $(eval INSTALL_LIST = $(shell sed 's/.o$$/.ko/' $(TEST_GEN_MODS_DIR)/modules.order)) $(INSTALL_SINGLE_RULE)
-          $(eval INSTALL_LIST = $(wildcard config settings)) $(INSTALL_SINGLE_RULE)
-   endef
-
-However, that will copy .ko's directly into $INSTALL_PATH and out of the
-$TEST_GEN_MODS_DIR subdirectory(s), so maybe not a great solution after
-all.
-
-Anyway, I thought I might mention this in case it runs against the
-spirit of the selftest install target.  I only tripped over it while
-digging into the bowels of our kernel specfile and discovered that it
-invoked this target.
-
---
-Joe
-
+> +       test_function();
+> +
+> +       ASSERT_EQ(sigio_count, 1, "sigio_count");
+> +       ASSERT_EQ(sigtrap_count, 1, "sigtrap_count");
+> +
+> +cleanup:
+> +       bpf_link__destroy(prog_link);
+> +       if (perf_fd >=3D 0)
+> +               close(perf_fd);
+> +       test_perf_skip__destroy(skel);
+> +
+> +       signal(SIGIO, previous_sigio);
+> +       sigaction(SIGTRAP, &previous_sigtrap, NULL);
+> +}
+> diff --git a/tools/testing/selftests/bpf/progs/test_perf_skip.c b/tools/t=
+esting/selftests/bpf/progs/test_perf_skip.c
+> new file mode 100644
+> index 000000000000..7eb8b6de7a57
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/test_perf_skip.c
+> @@ -0,0 +1,15 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include "vmlinux.h"
+> +#include <bpf/bpf_helpers.h>
+> +#include <bpf/bpf_tracing.h>
+> +
+> +uintptr_t ip;
+> +
+> +SEC("perf_event")
+> +int handler(struct bpf_perf_event_data *data)
+> +{
+> +       /* Skip events that have the correct ip. */
+> +       return ip !=3D PT_REGS_IP(&data->regs);
+> +}
+> +
+> +char _license[] SEC("license") =3D "GPL";
+> --
+> 2.34.1
+>
 
