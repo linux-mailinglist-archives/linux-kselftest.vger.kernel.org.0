@@ -1,200 +1,202 @@
-Return-Path: <linux-kselftest+bounces-2586-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2587-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1395282208B
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jan 2024 18:45:50 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CE52822093
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jan 2024 18:46:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 011281C226C6
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jan 2024 17:45:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0103CB21E2D
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jan 2024 17:46:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B8D8154A9;
-	Tue,  2 Jan 2024 17:45:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6C18156C0;
+	Tue,  2 Jan 2024 17:46:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="dgoP3kcJ"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="BtT/bkPn"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2040.outbound.protection.outlook.com [40.107.96.40])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1654D156EC;
-	Tue,  2 Jan 2024 17:45:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 402HI09n019616;
-	Tue, 2 Jan 2024 17:44:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=y42mo2JnJSDN9WOIeW8Q048HnRpueulusig05FfdHSc=;
- b=dgoP3kcJoBgDCM9LrG2PGDCQO/22Bz5HCVjjcGaCW2HD1d78czChL9JN0t8UI/BTCRA6
- nQc7vUnm2EFfMkazXQ/6je+MhIFtH5XXoT6cIt5REwXEUrAsI1T/u6LhWPo1R9o2+1fq
- WR43NDCuqemyLlU9YWC8+9/pR/U1v5HQQFTMqRF1Lvxk7cHS/mCTPr56WOay9HDj3fCn
- V19+gZPAukXreGvyxZ07WKgq4LrTp45CCS6Cy9qpAIydAyuZJuy3PmxMIjeXl0hWdR92
- wnUUH4PSpI0t1p1yDjicQYtPocb4IT+hNdbDuEJfW33Bozg7zhfKHO1l0s4zuIaWpFsb 4Q== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vcprx8hgq-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 02 Jan 2024 17:44:21 +0000
-Received: from m0353724.ppops.net (m0353724.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 402HJEQj023759;
-	Tue, 2 Jan 2024 17:44:20 GMT
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vcprx8hgc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 02 Jan 2024 17:44:20 +0000
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 402Gn5st007335;
-	Tue, 2 Jan 2024 17:44:19 GMT
-Received: from smtprelay05.dal12v.mail.ibm.com ([172.16.1.7])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3vaxhnxatc-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 02 Jan 2024 17:44:19 +0000
-Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
-	by smtprelay05.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 402HiILQ3736236
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 2 Jan 2024 17:44:18 GMT
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5C62F58056;
-	Tue,  2 Jan 2024 17:44:18 +0000 (GMT)
-Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C239858052;
-	Tue,  2 Jan 2024 17:44:16 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.61.135.171])
-	by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Tue,  2 Jan 2024 17:44:16 +0000 (GMT)
-Message-ID: <08e90ff7754aad45785ab05576f308a7aaae3438.camel@linux.ibm.com>
-Subject: Re: [PATCH v8 21/24] evm: Move to LSM infrastructure
-From: Mimi Zohar <zohar@linux.ibm.com>
-To: Roberto Sassu <roberto.sassu@huaweicloud.com>, viro@zeniv.linux.org.uk,
-        brauner@kernel.org, chuck.lever@oracle.com, jlayton@kernel.org,
-        neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com, tom@talpey.com,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        dmitry.kasatkin@gmail.com, dhowells@redhat.com, jarkko@kernel.org,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        casey@schaufler-ca.com, shuah@kernel.org, mic@digikod.net
-Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org,
-        linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
-        selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Roberto Sassu
-	 <roberto.sassu@huawei.com>
-Date: Tue, 02 Jan 2024 12:44:16 -0500
-In-Reply-To: <42911719-547d-443a-b2f2-07b0cfb11f7a@huaweicloud.com>
-References: <20231214170834.3324559-1-roberto.sassu@huaweicloud.com>
-	 <20231214170834.3324559-22-roberto.sassu@huaweicloud.com>
-	 <b03e68e9fa1803d6b2cc7a2c0260f78a05a4d88e.camel@linux.ibm.com>
-	 <42911719-547d-443a-b2f2-07b0cfb11f7a@huaweicloud.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-22.el8) 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 276E5154B2;
+	Tue,  2 Jan 2024 17:46:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GbwIJA4jjOXJjxgFPWM1YpJKQljBXNaRoSR+jNy4dFxeye3SG1BObyknjg+639wc7RzRD4IC5/DsZFoTf1LKo9xWCwgBYgutzc5hqd0N/a1iawSOuv2P7Ls+20xMDL8QtjPbVlWrEcSqsmGfzgji/DzOERyojcMza29ZTJm2hH04Ii6eo4XgR+qLOrIQgcoYFuXWWVxszUIpB4zkef9Xo+X4tfGqsPLG6wNyVgI5kJtRND84mv2OwQW6YOtf4PJhN6fUuuoo7qRLHkKHlTbjV6JI0O6bDs2D56tqoj38t55rEiVhUYx2mCxZKn1SnCQQw7MfjKbYwIJ04wZJ0YJMwA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eUKDGRnFIPSJ0LRN9R4WG3OzHsTXLIeocX8kxVP6t0g=;
+ b=M0p1c7KVRIAOyTHO0Q63PNMO7V1HHkGjdpTRYZHx85mnekugWkrUnl2d2q+6zVdZMOSqzdNwFtM4lXdOQDZLTe4Tq7ehYcQOnKZfZUlPfDJDtkINIOlbxcPaLdc1LEB1R69zuJDArpjy6gf75rC/HLwpagAyElepzKe7j1OxL8KyAY4Fy+CUfoHdAAxJ9ZEXENjs8RIg9fA43v7gfREzFQ46vl90cWcRK2a72BzyjujjVoJpOFlIaB10ojWSuOKxPvfWc/E6YTFplihAz4kqult4u1UFIEvYvMjYcRAV2eVIDBo25M+zP+wxzaU58w4EkfTs7XqKUDyVmCV94T05cA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eUKDGRnFIPSJ0LRN9R4WG3OzHsTXLIeocX8kxVP6t0g=;
+ b=BtT/bkPnKyzugicjUg2ecLBfYAxGluOZkMyJik3GTBLMHoEDOAT+qn80lTXh9pRGsZds5AK2CIeZmVoYiFi6hGsSOuDEXaG+Jkqys1izs41JgzJwm4uNLNbWgQ4pCtASsqU37Az6tO/DMjrqGMzEvgt+O1+vIsCJOKxNyW8Lrs4JgASYQ4jfTU52m7jUDo9+Mmies21YLER5NWL52c2ZgViHxfDriryxTxq344M+NgAvUmEQA3V8d0IOVv+SiRqIMJ5Bfl/tbIHy3q0h3jiiitMcyY4OF85sAOk3VrMHZPHZ1N63sgzITncxSEMki6H16i94UfW46gRsyF1KZo2mgQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by SJ0PR12MB5405.namprd12.prod.outlook.com (2603:10b6:a03:3af::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7135.25; Tue, 2 Jan
+ 2024 17:46:41 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::60d4:c1e3:e1aa:8f93]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::60d4:c1e3:e1aa:8f93%4]) with mapi id 15.20.7135.023; Tue, 2 Jan 2024
+ 17:46:41 +0000
+Date: Tue, 2 Jan 2024 13:46:40 -0400
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: "Tian, Kevin" <kevin.tian@intel.com>
+Cc: "Liu, Yi L" <yi.l.liu@intel.com>, "joro@8bytes.org" <joro@8bytes.org>,
+	"alex.williamson@redhat.com" <alex.williamson@redhat.com>,
+	"robin.murphy@arm.com" <robin.murphy@arm.com>,
+	"baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
+	"cohuck@redhat.com" <cohuck@redhat.com>,
+	"eric.auger@redhat.com" <eric.auger@redhat.com>,
+	"nicolinc@nvidia.com" <nicolinc@nvidia.com>,
+	"kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+	"mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
+	"chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
+	"yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
+	"peterx@redhat.com" <peterx@redhat.com>,
+	"jasowang@redhat.com" <jasowang@redhat.com>,
+	"shameerali.kolothum.thodi@huawei.com" <shameerali.kolothum.thodi@huawei.com>,
+	"lulu@redhat.com" <lulu@redhat.com>,
+	"suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
+	"iommu@lists.linux.dev" <iommu@lists.linux.dev>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"Duan, Zhenzhong" <zhenzhong.duan@intel.com>,
+	"joao.m.martins@oracle.com" <joao.m.martins@oracle.com>,
+	"Zeng, Xin" <xin.zeng@intel.com>,
+	"Zhao, Yan Y" <yan.y.zhao@intel.com>
+Subject: Re: [PATCH v7 1/3] iommufd: Add data structure for Intel VT-d
+ stage-1 cache invalidation
+Message-ID: <20240102174640.GA171005@nvidia.com>
+References: <20231117131816.24359-1-yi.l.liu@intel.com>
+ <20231117131816.24359-2-yi.l.liu@intel.com>
+ <c967e716-9112-4d1a-b6f7-9a005e28202d@intel.com>
+ <BN9PR11MB5276D14D2A7FF60B41A6A7B48C93A@BN9PR11MB5276.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BN9PR11MB5276D14D2A7FF60B41A6A7B48C93A@BN9PR11MB5276.namprd11.prod.outlook.com>
+X-ClientProxiedBy: BL1PR13CA0338.namprd13.prod.outlook.com
+ (2603:10b6:208:2c6::13) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: VtIxUobX29if44MZAZlKTPViebn08Xdu
-X-Proofpoint-ORIG-GUID: 4wNfWCza0Tzp9fc5Zi2QfysG-XW8l4q-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-02_06,2024-01-02_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- priorityscore=1501 bulkscore=0 mlxlogscore=926 impostorscore=0
- lowpriorityscore=0 suspectscore=0 adultscore=0 phishscore=0 mlxscore=0
- spamscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2401020133
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SJ0PR12MB5405:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5c802ba9-64e4-4ed9-200f-08dc0bbac74f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	MABMqP9OROM1UWOalIBn347H0uS0J/lOQC9lJIHoHbSm1KTzNxyibZmsvfrwTfNYPvmQxwGTqpPiYIhB97mBKoM53cZ1MrrdplSN45VBMKFajPjghEfv7Rpr7uJBbNlpYgZOCowb8r+AV3ajS0rNFvJLuUWD3fqxVnZ9dt+ptyuS7LrWaCW+1jkjK4+/X59cj4Vf36rhuPQCpeUWtDT40rT84fUAgTp9WwEONkzdcTvf283XoI+J/9RjkqLgPBqRDLTkZOZucZGJ1Y3MDObEeRVDQTFrvfJ8n5Da6AnOCpXiz+WIguA/z5PzTlTPBJX4BQJiZMyWTHD1feD7SONo7B5hFL9sSQht5tVu+u/6/EO416tIFmmvNaWFf5JE0eP9EZ4rKLZOkB1pv/jlkwLKhRMkqRD0Yb4ikkENdMWK5w5fRSlf9eXWCmXADx8YFNcMn/1qY49OWWE5MA0vIohKOtwAEhN4n2aTlt4R+B8JbRJJ1JkChYu6RH7KVTwbeWo/+nOy2uFcfR34o0xjOsyB2vE9PLerQnUTpj5jIVD6PN8MjxVWFintzQB360Ob/7yZJgOxiVhEki9EWAWhH0aHt941YAiyoD5CNDvzv7+yuFaEq2gbvmY7BU1Ia7DSaGJF
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(346002)(366004)(376002)(396003)(39860400002)(230922051799003)(1800799012)(64100799003)(186009)(451199024)(33656002)(83380400001)(2616005)(1076003)(26005)(6512007)(6506007)(478600001)(6486002)(41300700001)(66556008)(316002)(6916009)(66476007)(86362001)(54906003)(66946007)(8936002)(36756003)(4326008)(8676002)(38100700002)(2906002)(7416002)(5660300002)(27376004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?IzjYOORsvPkkzDpdoRD+Kgi8Q9pD1fyEEsSDGT6YBzIzMfvndtiHLHy/heKN?=
+ =?us-ascii?Q?gj7beS8jRUic5AOny8+FbzerLXjoTJHmnxp8kbwLUFqoNXcl626bNCZV1T1v?=
+ =?us-ascii?Q?XBEsnVBSK7E2IEWhQk1wbPub1IKkRL7nVZ/dm9bzyzqUIVP0ihl7uLkmyKdG?=
+ =?us-ascii?Q?1qEbJTPFFC9B7kmFdPPUmXZpa+D/rgjLSakXNlX66mK+DWQ8e8Sosi7yM3qi?=
+ =?us-ascii?Q?pCF47oGHknTgEn0j3kxjYZpA62xxIAyrq7e7TT31wfeYncxQGjK4WOdkU5US?=
+ =?us-ascii?Q?BcvdWlVRn4JewIiPo8aEGwA/JTccckWOjwuoS/7UDi8Z+n6VE1FDjLZ33vNp?=
+ =?us-ascii?Q?JkZKs6hyc+puDqAMQZKDFUBmPzdwxPwbdO6TbViGbaaHVU2ufyQLQenFVY6T?=
+ =?us-ascii?Q?cyonCVU7nzzGIcspjAzTg7Z+0pcx7/dEaBK6Im0U2GFGKCLBjtg5dmgsceYK?=
+ =?us-ascii?Q?n63LBrpB0d864l3wafgcpU52oBo5c9yfPMW1oElrlncnUPOf00XiMlbw0K2o?=
+ =?us-ascii?Q?pp3YpWFwsuAMegMNhZP/4u7y6Ixax6IBfAT77RdvM9p51ZxoDLN9nlqPFbIu?=
+ =?us-ascii?Q?yP3CbslvLhsn1eU3h8ANkHHDis0WtCWFMseADnaSRWuwbDI84xZ8BAMw8xuY?=
+ =?us-ascii?Q?YXfht/91EbsyZE3mKzayvNm4T1SCw5q0Q6i4M19UMAMygInvjjuQyayPeUcK?=
+ =?us-ascii?Q?AT8cSKvh6mMvZNGxmDpW246uJ1d7LVArpIrGNxpadZ1BJRLrGnWe+S0QzDqX?=
+ =?us-ascii?Q?9j06i06HOMaTkJpOy7LMR+EYtFp2hBsBYQuIPmek9Wk6xihy2izuBLGrKXai?=
+ =?us-ascii?Q?V1xITc9cF6dwqSTmcVn4SNxuIGiT4tvBT3dUYWx6yOYJHGoOkbLZyf0rYtxL?=
+ =?us-ascii?Q?cUCyFF40m/97fVkfTCuJYz8z7Xzhi/qJrrg/5ExIx9k6Z15AEYAR0xuFRxFs?=
+ =?us-ascii?Q?YvP1jzVQAfmmA18Q2KArgPz//s1PSLf36Q4VXQOjuFjPbwoAKzFw1sVdDQwa?=
+ =?us-ascii?Q?wn6e4ySqzdsban3eAUZtAkLE2zmDZoD+XtTJv6S62C++QMfuRvmc+JNwCXOo?=
+ =?us-ascii?Q?FG3OhRjXVD3d6S6sXFo22SbGVEItK6HSfDC6eGiPPOvAWoMa/e11iak/5lPc?=
+ =?us-ascii?Q?AavctH2B8h8r98I5hR94vFSXf+x85WMCu2jPu221MiAfw0Q61aZlGncEz1nN?=
+ =?us-ascii?Q?izvo7xyuG2bLVgy8OGwdu4VxLJCancUO+rW7z2MjtIQtK6FwAlRFl4/6aFYt?=
+ =?us-ascii?Q?uApUOXUETDxFVNGcd2PLkaIbvLGLXhqYEkAgCK/nK3dV7pSNqHhg88BQzwZP?=
+ =?us-ascii?Q?kXG5sz9Es2lV0Ba2qCZ6HLjE55kKAoxLcel8pHdhB2ICXX4jHBounzjJbBHv?=
+ =?us-ascii?Q?7aYpSXDqVk5SbIVBBfimYRTUvaazbVZ5WxxU4W4zF45BYWO5uDPMlCPTROtj?=
+ =?us-ascii?Q?n6Wo0YUBaFzI9C6mcgxLXNnjOM5ArWog2uLcNmIhCwCDVbISlp3hrfikANb/?=
+ =?us-ascii?Q?ZBTvtvIYWt3d7TGNRdvpMkACzslAoUbwHGy/uRaZQF0V0d+JWs5Enns3Ss6P?=
+ =?us-ascii?Q?6hgsNlepFQ1lz05fPeE=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5c802ba9-64e4-4ed9-200f-08dc0bbac74f
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Jan 2024 17:46:41.7249
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: htsGWAgAth3edLmxdFo3T680mJ/nP+lfCBoa0juL/3I3f2iitjSfdjuVg9vOpz6m
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5405
 
-On Tue, 2024-01-02 at 12:56 +0100, Roberto Sassu wrote:
-> On 12/26/2023 11:13 PM, Mimi Zohar wrote:
-> > On Thu, 2023-12-14 at 18:08 +0100, Roberto Sassu wrote:
-> >> From: Roberto Sassu <roberto.sassu@huawei.com>
-> >>
-> >> As for IMA, move hardcoded EVM function calls from various places in the
-> >> kernel to the LSM infrastructure, by introducing a new LSM named 'evm'
-> >> (last and always enabled like 'ima'). The order in the Makefile ensures
-> >> that 'evm' hooks are executed after 'ima' ones.
-> >>
-> >> Make EVM functions as static (except for evm_inode_init_security(), which
-> >> is exported), and register them as hook implementations in init_evm_lsm().
-> >>
-> >> Unlike before (see commit to move IMA to the LSM infrastructure),
-> >> evm_inode_post_setattr(), evm_inode_post_set_acl(),
-> >> evm_inode_post_remove_acl(), and evm_inode_post_removexattr() are not
-> >> executed for private inodes.
-> >>
-> > 
-> > Missing is a comment on moving the inline function definitions -
-> > evm_inode_remove_acl(), evm_inode_post_remove_acl(), and
-> > evm_inode_post_set_acl() - to evm_main.c.
+On Fri, Dec 15, 2023 at 01:50:07AM +0000, Tian, Kevin wrote:
+
+> > - Reuse Nicolin's vRID->pRID mapping. If thevRID->pRID mapping is
+> > maintained, then intel iommu can report a vRID back to user. But intel
+> > iommu driver does not have viommu context, no place to hold the vRID-
+> > >pRID
+> > mapping. TBH. It may require other reasons to introduce it other than the
+> > error reporting need. Anyhow, this requires more thinking and also has
+> > dependency even if it is doable in intel side.
 > 
-> Ok.
+> this sounds like a cleaner way to inject knowledge which iommu driver
+> requires to find out the user tag. but yes it's a bit weird to introduce
+> viommu awareness in intel iommu driver when there is no such thing
+> in real hardware.
 > 
-> >> Finally, add the LSM_ID_EVM case in lsm_list_modules_test.c
-> >>
-> >> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
-> >> ---
-> > 
-> > [...]
-> >> @@ -2307,9 +2299,7 @@ int security_inode_setxattr(struct mnt_idmap *idmap,
-> >>   
-> >>   	if (ret == 1)
-> >>   		ret = cap_inode_setxattr(dentry, name, value, size, flags);
-> >> -	if (ret)
-> >> -		return ret;
-> >> -	return evm_inode_setxattr(idmap, dentry, name, value, size, flags);
-> >> +	return ret;
-> >>   }
-> > 
-> > Even though capability will be called after EVM, it doesn't make a
-> > difference in this instance.
-> > 
-> > [...]
-> > 
-> >>   /**
-> >> @@ -2493,9 +2472,7 @@ int security_inode_removexattr(struct mnt_idmap *idmap,
-> >>   	ret = call_int_hook(inode_removexattr, 1, idmap, dentry, name);
-> >>   	if (ret == 1)
-> >>   		ret = cap_inode_removexattr(idmap, dentry, name);
-> >> -	if (ret)
-> >> -		return ret;
-> >> -	return evm_inode_removexattr(idmap, dentry, name);
-> >> +	return ret;
-> >>   }
-> > 
-> > 'security.capability' is one of the EVM protected xattrs.  As
-> > capability isn't an LSM, it will now be called after EVM, which is a
-> > problem.
+> and for this error reporting case what we actually require is the
+> reverse map i.e. pRID->vRID. Not sure whether we can leverage the
+> same RID mapping uAPI as for ARM/AMD but ignore viommu_id
+> and then store vRID under device_domain_info. a bit tricky on
+> life cycle management and also incompatible with SIOV...
 > 
-> Uhm, according to this comment in security_inode_removexattr() and 
-> security_inode_setxattr():
-> 
-> 	/*
-> 	 * SELinux and Smack integrate the cap call,
-> 	 * so assume that all LSMs supplying this call do so.
-> 	 */
-> 
-> We can add the call to IMA and EVM as well, to be compliant.
+> let's see whether Jason has a better idea here.
 
-SELinux and Smack are the only current LSMs that register the
-security_inode_removexattr hook.  Both enforce mandatory access
-control,
-so their calling capabilities to enforce DAC kind of makes sense.  I'm
-not sure it makes sense for IMA and EVM to call capability directly,
-just because of the comment.
+I think v10 is OK
 
-> However, I'm missing why the two cases are different. It seems 
-> cap_inode_set/removexattr() are doing just checks.
+struct iommu_hwpt_invalidate {
+	__u32 size;
+	__u32 hwpt_id;
+	__aligned_u64 data_uptr;
+	__u32 data_type;
+	__u32 entry_len;
+	__u32 entry_num;
+	__u32 __reserved;
+};
 
-Both IMA and EVM require CAP_SYS_ADMIN to write/remove security.ima and
-security.evm respectively.  In addition, EVM must recalculate
-security.evm if any protected security xattrs are set or
-removed.   However, security.evm is updated on
-security_inode_post_setxattr, not security_inode_setxattr.
+Sends the invalidation to the HWPT which matches what Intel wanted
+where the entire HWPT and all its associated devices are
+invalidated. No seperate per-device invalidation.
 
-Mimi
+For error and event reporting they should be returned to userspace
+with the IOMMU dev_id indicating the originating PCI function.
 
+The VMM would have to convert dev_id into vRID according to the vIOMMU
+instance that the device is hooked up.
+
+In iommu land we should never have a "RID" but always some kind of
+device-specific "device ID" which is the index into the particular HW
+table, and that ID is naturally scoped to within the IOMMU instance
+that owns the table - so it is very much not a global ID that can be
+used alone in any of the uAPI.
+
+The uAPI should use the iommufd device ID to refer to specific
+devices.
+
+Jason
 
