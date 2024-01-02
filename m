@@ -1,51 +1,51 @@
-Return-Path: <linux-kselftest+bounces-2575-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2576-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E319F821DE7
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jan 2024 15:41:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE4A6821DEA
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jan 2024 15:41:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E684F1C222EB
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jan 2024 14:41:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 94E9D28350B
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jan 2024 14:41:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F00C215AC6;
-	Tue,  2 Jan 2024 14:38:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 085BF15AF1;
+	Tue,  2 Jan 2024 14:38:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="F2H6YYhF"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SdLgbPm5"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A6A4156C7;
-	Tue,  2 Jan 2024 14:38:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DDB0156F0;
+	Tue,  2 Jan 2024 14:38:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704206326; x=1735742326;
+  t=1704206327; x=1735742327;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=xD/D1mwaQz0aVDoqEolYgPt9rT0WuEPycyZdvUJpam8=;
-  b=F2H6YYhF1sJZnqgZi3qNh5fBpIxaUhUi3RqbqyEIfrFXTYZIdRLQkDw0
-   YFJnNr8yc/XC7Kg5Z6o+0tL6YQhDe9Fqttg0EWxkW/ZRlifKcaTaVVkwU
-   fMvBavPGmKaVZLNIJsKlw1oiKx9QVU94bsZLC1KZP1ku0GGVcnzn3UhQ5
-   MS9FnsZzSoIdCcpsCB31BF2I1McidVjwuqgp+n+/dPt0M5Ne2w66JfkO9
-   4WWLTC2mKRCjDcyOSN4xx15TQU0xdphmYz7HEloT5bb1HU9/OFh1ekUAP
-   9Qar1JDvQ13aCe9b2M9TY/CHjWn7JT65Ze5GrftDldoNeFoLYaugJcQ/l
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10941"; a="10270478"
+  bh=pEYBNa0M9lZzJ/nWD3V7BKxpMiETKpIwIqr86MnTO2s=;
+  b=SdLgbPm5bgFc+GQLBVR9dGVphI93+U2OixdDF6SBG5F2hhb6K/mxNk+5
+   Hh2bjLjwMwMqOjoy8YtgUrHpIBtKyqXQJzlT1o7X33tYd23Ed7Kl4XLcW
+   LANhIuIp+tS0HdocvlcQwEZzlZR5hCz2QiCCmHvZgNoqbZteJFG1G6nJW
+   OmG3IQC9BUTkq7EkJD4GpI7aO8jJic+r7x+4psqy7L2LMsKG5g3eTTAuc
+   xpm7A2iFlT4vau+JbyYOGnvZSDk1cQg+CCe+9Y09a1sKagpdYVv+l2gS+
+   ONd2YgMzcfEXvIevH2pgpU/J5NwFqqzPZcb7ccRbIHCVbEg9VkmsO5sbw
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10941"; a="10270491"
 X-IronPort-AV: E=Sophos;i="6.04,325,1695711600"; 
-   d="scan'208";a="10270478"
+   d="scan'208";a="10270491"
 Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2024 06:38:46 -0800
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2024 06:38:47 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10941"; a="923234300"
+X-IronPort-AV: E=McAfee;i="6600,9927,10941"; a="923234307"
 X-IronPort-AV: E=Sophos;i="6.04,325,1695711600"; 
-   d="scan'208";a="923234300"
+   d="scan'208";a="923234307"
 Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by fmsmga001.fm.intel.com with ESMTP; 02 Jan 2024 06:38:44 -0800
+  by fmsmga001.fm.intel.com with ESMTP; 02 Jan 2024 06:38:45 -0800
 From: Yi Liu <yi.l.liu@intel.com>
 To: joro@8bytes.org,
 	alex.williamson@redhat.com,
@@ -74,9 +74,9 @@ Cc: cohuck@redhat.com,
 	xin.zeng@intel.com,
 	yan.y.zhao@intel.com,
 	j.granados@samsung.com
-Subject: [PATCH v10 06/10] iommufd/selftest: Add coverage for IOMMU_HWPT_INVALIDATE ioctl
-Date: Tue,  2 Jan 2024 06:38:30 -0800
-Message-Id: <20240102143834.146165-7-yi.l.liu@intel.com>
+Subject: [PATCH v10 07/10] iommu/vt-d: Allow qi_submit_sync() to return the QI faults
+Date: Tue,  2 Jan 2024 06:38:31 -0800
+Message-Id: <20240102143834.146165-8-yi.l.liu@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20240102143834.146165-1-yi.l.liu@intel.com>
 References: <20240102143834.146165-1-yi.l.liu@intel.com>
@@ -88,276 +88,233 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Nicolin Chen <nicolinc@nvidia.com>
+From: Lu Baolu <baolu.lu@linux.intel.com>
 
-Add test cases for the IOMMU_HWPT_INVALIDATE ioctl and verify it by using
-the new IOMMU_TEST_OP_MD_CHECK_IOTLB.
+This allows qi_submit_sync() to return back faults to callers.
+
+qi_submit_sync() has a retry when timeout error happens, thus it cannot
+return timeout error back to the caller. This was discussed in a separate
+thread [1]. Here we keep it intact and just make sure no retry for the
+newly added user domain cache invalidation by checking if the caller is
+interested in the fault or not.
+
+[1] https://lore.kernel.org/all/20231228001646.587653-6-haifeng.zhao@linux.intel.com/
 
 Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-Co-developed-by: Yi Liu <yi.l.liu@intel.com>
+Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
 Signed-off-by: Yi Liu <yi.l.liu@intel.com>
 ---
- tools/testing/selftests/iommu/iommufd.c       | 186 ++++++++++++++++++
- tools/testing/selftests/iommu/iommufd_utils.h |  33 ++++
- 2 files changed, 219 insertions(+)
+ drivers/iommu/intel/dmar.c          | 35 +++++++++++++++++++----------
+ drivers/iommu/intel/iommu.h         |  2 +-
+ drivers/iommu/intel/irq_remapping.c |  2 +-
+ drivers/iommu/intel/pasid.c         |  2 +-
+ drivers/iommu/intel/svm.c           |  6 ++---
+ 5 files changed, 29 insertions(+), 18 deletions(-)
 
-diff --git a/tools/testing/selftests/iommu/iommufd.c b/tools/testing/selftests/iommu/iommufd.c
-index c8763b880a16..ff0aa77911f3 100644
---- a/tools/testing/selftests/iommu/iommufd.c
-+++ b/tools/testing/selftests/iommu/iommufd.c
-@@ -116,6 +116,7 @@ TEST_F(iommufd, cmd_length)
- 	TEST_LENGTH(iommu_destroy, IOMMU_DESTROY, id);
- 	TEST_LENGTH(iommu_hw_info, IOMMU_GET_HW_INFO, __reserved);
- 	TEST_LENGTH(iommu_hwpt_alloc, IOMMU_HWPT_ALLOC, __reserved);
-+	TEST_LENGTH(iommu_hwpt_invalidate, IOMMU_HWPT_INVALIDATE, __reserved);
- 	TEST_LENGTH(iommu_ioas_alloc, IOMMU_IOAS_ALLOC, out_ioas_id);
- 	TEST_LENGTH(iommu_ioas_iova_ranges, IOMMU_IOAS_IOVA_RANGES,
- 		    out_iova_alignment);
-@@ -271,7 +272,9 @@ TEST_F(iommufd_ioas, alloc_hwpt_nested)
- 	struct iommu_hwpt_selftest data = {
- 		.iotlb = IOMMU_TEST_IOTLB_DEFAULT,
- 	};
-+	struct iommu_hwpt_invalidate_selftest inv_reqs[2] = {};
- 	uint32_t nested_hwpt_id[2] = {};
-+	uint32_t num_inv;
- 	uint32_t parent_hwpt_id = 0;
- 	uint32_t parent_hwpt_id_not_work = 0;
- 	uint32_t test_hwpt_id = 0;
-@@ -344,6 +347,189 @@ TEST_F(iommufd_ioas, alloc_hwpt_nested)
- 		EXPECT_ERRNO(EBUSY,
- 			     _test_ioctl_destroy(self->fd, parent_hwpt_id));
+diff --git a/drivers/iommu/intel/dmar.c b/drivers/iommu/intel/dmar.c
+index 23cb80d62a9a..c3251c36c567 100644
+--- a/drivers/iommu/intel/dmar.c
++++ b/drivers/iommu/intel/dmar.c
+@@ -1267,7 +1267,8 @@ static void qi_dump_fault(struct intel_iommu *iommu, u32 fault)
+ 	       (unsigned long long)desc->qw1);
+ }
  
-+		/* hwpt_invalidate only supports a user-managed hwpt (nested) */
-+		num_inv = 1;
-+		test_err_hwpt_invalidate(ENOENT, parent_hwpt_id, inv_reqs,
-+					 IOMMU_HWPT_INVALIDATE_DATA_SELFTEST,
-+					 sizeof(*inv_reqs), &num_inv);
-+		assert(!num_inv);
-+
-+		/* Check data_type by passing zero-length array */
-+		num_inv = 0;
-+		test_cmd_hwpt_invalidate(nested_hwpt_id[0], inv_reqs,
-+					 IOMMU_HWPT_INVALIDATE_DATA_SELFTEST,
-+					 sizeof(*inv_reqs), &num_inv);
-+		assert(!num_inv);
-+
-+		/* Negative test: Invalid data_type */
-+		num_inv = 1;
-+		test_err_hwpt_invalidate(EINVAL, nested_hwpt_id[0], inv_reqs,
-+					 IOMMU_HWPT_INVALIDATE_DATA_SELFTEST_INVALID,
-+					 sizeof(*inv_reqs), &num_inv);
-+		assert(!num_inv);
-+
-+		/* Negative test: structure size sanity */
-+		num_inv = 1;
-+		test_err_hwpt_invalidate(EINVAL, nested_hwpt_id[0], inv_reqs,
-+					 IOMMU_HWPT_INVALIDATE_DATA_SELFTEST,
-+					 sizeof(*inv_reqs) + 1, &num_inv);
-+		assert(!num_inv);
-+
-+		num_inv = 1;
-+		test_err_hwpt_invalidate(EINVAL, nested_hwpt_id[0], inv_reqs,
-+					 IOMMU_HWPT_INVALIDATE_DATA_SELFTEST,
-+					 1, &num_inv);
-+		assert(!num_inv);
-+
-+		/* Negative test: invalid flag is passed */
-+		num_inv = 1;
-+		inv_reqs[0].flags = 0xffffffff;
-+		test_err_hwpt_invalidate(EOPNOTSUPP, nested_hwpt_id[0], inv_reqs,
-+					 IOMMU_HWPT_INVALIDATE_DATA_SELFTEST,
-+					 sizeof(*inv_reqs), &num_inv);
-+		assert(!num_inv);
-+
-+		/* Negative test: non-zero __reserved is passed */
-+		num_inv = 1;
-+		inv_reqs[0].flags = 0;
-+		inv_reqs[0].__reserved = 0x1234;
-+		test_err_hwpt_invalidate(EOPNOTSUPP, nested_hwpt_id[0], inv_reqs,
-+					 IOMMU_HWPT_INVALIDATE_DATA_SELFTEST,
-+					 sizeof(*inv_reqs), &num_inv);
-+		assert(!num_inv);
-+
-+		/* Negative test: invalid data_uptr when array is not empty */
-+		num_inv = 1;
-+		inv_reqs[0].flags = 0;
-+		test_err_hwpt_invalidate(EINVAL, nested_hwpt_id[0], NULL,
-+					 IOMMU_HWPT_INVALIDATE_DATA_SELFTEST,
-+					 sizeof(*inv_reqs), &num_inv);
-+		assert(!num_inv);
-+
-+		/* Negative test: invalid entry_len when array is not empty */
-+		num_inv = 1;
-+		inv_reqs[0].flags = 0;
-+		test_err_hwpt_invalidate(EINVAL, nested_hwpt_id[0], inv_reqs,
-+					 IOMMU_HWPT_INVALIDATE_DATA_SELFTEST,
-+					 0, &num_inv);
-+		assert(!num_inv);
-+
-+		/* Negative test: invalid iotlb_id */
-+		num_inv = 1;
-+		inv_reqs[0].flags = 0;
-+		inv_reqs[0].__reserved = 0;
-+		inv_reqs[0].iotlb_id = MOCK_NESTED_DOMAIN_IOTLB_ID_MAX + 1;
-+		test_err_hwpt_invalidate(EINVAL, nested_hwpt_id[0], inv_reqs,
-+					 IOMMU_HWPT_INVALIDATE_DATA_SELFTEST,
-+					 sizeof(*inv_reqs), &num_inv);
-+		assert(!num_inv);
-+
-+		/* Negative test: trigger error */
-+		num_inv = 1;
-+		inv_reqs[0].flags = IOMMU_TEST_INVALIDATE_FLAG_TRIGGER_ERROR;
-+		inv_reqs[0].iotlb_id = 0;
-+		test_cmd_hwpt_invalidate(nested_hwpt_id[0], inv_reqs,
-+					 IOMMU_HWPT_INVALIDATE_DATA_SELFTEST,
-+					 sizeof(*inv_reqs), &num_inv);
-+		assert(num_inv == 1);
-+		assert(inv_reqs[0].hw_error == IOMMU_TEST_INVALIDATE_FAKE_ERROR);
-+
-+		/* Negative test: trigger error with ALL flag set */
-+		num_inv = 1;
-+		inv_reqs[0].flags = IOMMU_TEST_INVALIDATE_FLAG_TRIGGER_ERROR |
-+				    IOMMU_TEST_INVALIDATE_FLAG_ALL;
-+		inv_reqs[0].iotlb_id = 0;
-+		test_cmd_hwpt_invalidate(nested_hwpt_id[0], inv_reqs,
-+					 IOMMU_HWPT_INVALIDATE_DATA_SELFTEST,
-+					 sizeof(*inv_reqs), &num_inv);
-+		assert(num_inv == 1);
-+		assert(inv_reqs[0].hw_error == IOMMU_TEST_INVALIDATE_FAKE_ERROR);
-+
-+		/*
-+		 * Invalidate the 1st iotlb entry but fail the 2nd request
-+		 *  - mock driver error, the hw_error field is meaningful,
-+		 *    the ioctl returns 0.
-+		 */
-+		num_inv = 2;
-+		inv_reqs[0].flags = 0;
-+		inv_reqs[0].iotlb_id = 0;
-+		inv_reqs[1].flags = IOMMU_TEST_INVALIDATE_FLAG_TRIGGER_ERROR;
-+		inv_reqs[1].iotlb_id = 1;
-+		test_cmd_hwpt_invalidate(nested_hwpt_id[0], inv_reqs,
-+					 IOMMU_HWPT_INVALIDATE_DATA_SELFTEST,
-+					 sizeof(*inv_reqs), &num_inv);
-+		assert(num_inv == 2);
-+		assert(!inv_reqs[0].hw_error);
-+		assert(inv_reqs[1].hw_error == IOMMU_TEST_INVALIDATE_FAKE_ERROR);
-+		test_cmd_hwpt_check_iotlb(nested_hwpt_id[0], 0, 0);
-+		test_cmd_hwpt_check_iotlb(nested_hwpt_id[0], 1,
-+					  IOMMU_TEST_IOTLB_DEFAULT);
-+		test_cmd_hwpt_check_iotlb(nested_hwpt_id[0], 2,
-+					  IOMMU_TEST_IOTLB_DEFAULT);
-+		test_cmd_hwpt_check_iotlb(nested_hwpt_id[0], 3,
-+					  IOMMU_TEST_IOTLB_DEFAULT);
-+
-+		/*
-+		 * Invalidate the 1st iotlb entry but fail the 2nd request
-+		 *  - ioctl error, the hw_error field is meaningless
-+		 */
-+		num_inv = 2;
-+		inv_reqs[0].flags = 0;
-+		inv_reqs[0].iotlb_id = 0;
-+		inv_reqs[1].flags = 0;
-+		inv_reqs[1].iotlb_id = MOCK_NESTED_DOMAIN_IOTLB_ID_MAX + 1;
-+		test_err_hwpt_invalidate(EINVAL, nested_hwpt_id[0], inv_reqs,
-+					 IOMMU_HWPT_INVALIDATE_DATA_SELFTEST,
-+					 sizeof(*inv_reqs), &num_inv);
-+		assert(num_inv == 1);
-+		assert(!inv_reqs[0].hw_error);
-+		test_cmd_hwpt_check_iotlb(nested_hwpt_id[0], 0, 0);
-+		test_cmd_hwpt_check_iotlb(nested_hwpt_id[0], 1,
-+					  IOMMU_TEST_IOTLB_DEFAULT);
-+		test_cmd_hwpt_check_iotlb(nested_hwpt_id[0], 2,
-+					  IOMMU_TEST_IOTLB_DEFAULT);
-+		test_cmd_hwpt_check_iotlb(nested_hwpt_id[0], 3,
-+					  IOMMU_TEST_IOTLB_DEFAULT);
-+
-+		/* Invalidate the 2nd iotlb entry and verify */
-+		num_inv = 1;
-+		inv_reqs[0].flags = 0;
-+		inv_reqs[0].iotlb_id = 1;
-+		test_cmd_hwpt_invalidate(nested_hwpt_id[0], inv_reqs,
-+					 IOMMU_HWPT_INVALIDATE_DATA_SELFTEST,
-+					 sizeof(*inv_reqs), &num_inv);
-+		assert(!inv_reqs[0].hw_error);
-+		test_cmd_hwpt_check_iotlb(nested_hwpt_id[0], 0, 0);
-+		test_cmd_hwpt_check_iotlb(nested_hwpt_id[0], 1, 0);
-+		test_cmd_hwpt_check_iotlb(nested_hwpt_id[0], 2,
-+					  IOMMU_TEST_IOTLB_DEFAULT);
-+		test_cmd_hwpt_check_iotlb(nested_hwpt_id[0], 3,
-+					  IOMMU_TEST_IOTLB_DEFAULT);
-+
-+		/* Invalidate the 3rd and 4th iotlb entries and verify */
-+		num_inv = 2;
-+		inv_reqs[0].flags = 0;
-+		inv_reqs[0].iotlb_id = 2;
-+		inv_reqs[1].flags = 0;
-+		inv_reqs[1].iotlb_id = 3;
-+		test_cmd_hwpt_invalidate(nested_hwpt_id[0], inv_reqs,
-+					 IOMMU_HWPT_INVALIDATE_DATA_SELFTEST,
-+					 sizeof(*inv_reqs), &num_inv);
-+		assert(num_inv == 2);
-+		assert(!inv_reqs[0].hw_error);
-+		assert(!inv_reqs[1].hw_error);
-+		test_cmd_hwpt_check_iotlb_all(nested_hwpt_id[0], 0);
-+
-+		/* Invalidate all iotlb entries for nested_hwpt_id[1] and verify */
-+		num_inv = 1;
-+		inv_reqs[0].flags = IOMMU_TEST_INVALIDATE_FLAG_ALL;
-+		test_cmd_hwpt_invalidate(nested_hwpt_id[1], inv_reqs,
-+					 IOMMU_HWPT_INVALIDATE_DATA_SELFTEST,
-+					 sizeof(*inv_reqs), &num_inv);
-+		assert(num_inv == 1);
-+		assert(!inv_reqs[0].hw_error);
-+		test_cmd_hwpt_check_iotlb_all(nested_hwpt_id[1], 0);
-+
- 		/* Attach device to nested_hwpt_id[0] that then will be busy */
- 		test_cmd_mock_domain_replace(self->stdev_id, nested_hwpt_id[0]);
- 		EXPECT_ERRNO(EBUSY,
-diff --git a/tools/testing/selftests/iommu/iommufd_utils.h b/tools/testing/selftests/iommu/iommufd_utils.h
-index fe0a0f566b67..7f41fb796a8a 100644
---- a/tools/testing/selftests/iommu/iommufd_utils.h
-+++ b/tools/testing/selftests/iommu/iommufd_utils.h
-@@ -219,6 +219,39 @@ static int _test_cmd_hwpt_alloc(int fd, __u32 device_id, __u32 pt_id,
- 			test_cmd_hwpt_check_iotlb(hwpt_id, i, expected);       \
- 	})
- 
-+static int _test_cmd_hwpt_invalidate(int fd, __u32 hwpt_id, void *reqs,
-+				     uint32_t data_type, uint32_t lreq,
-+				     uint32_t *nreqs)
-+{
-+	struct iommu_hwpt_invalidate cmd = {
-+		.size = sizeof(cmd),
-+		.hwpt_id = hwpt_id,
-+		.data_type = data_type,
-+		.data_uptr = (uint64_t)reqs,
-+		.entry_len = lreq,
-+		.entry_num = *nreqs,
-+	};
-+	int rc = ioctl(fd, IOMMU_HWPT_INVALIDATE, &cmd);
-+	*nreqs = cmd.entry_num;
-+	return rc;
-+}
-+
-+#define test_cmd_hwpt_invalidate(hwpt_id, reqs, data_type, lreq, nreqs)        \
-+	({                                                                    \
-+		ASSERT_EQ(0,                                                  \
-+			  _test_cmd_hwpt_invalidate(self->fd, hwpt_id, reqs,  \
-+						    data_type,                 \
-+						    lreq, nreqs));            \
-+	})
-+#define test_err_hwpt_invalidate(_errno, hwpt_id, reqs, data_type, lreq,    \
-+				 nreqs)                                    \
-+	({                                                                 \
-+		EXPECT_ERRNO(_errno,                                       \
-+			     _test_cmd_hwpt_invalidate(self->fd, hwpt_id,  \
-+						       reqs, data_type,     \
-+						       lreq, nreqs));      \
-+	})
-+
- static int _test_cmd_access_replace_ioas(int fd, __u32 access_id,
- 					 unsigned int ioas_id)
+-static int qi_check_fault(struct intel_iommu *iommu, int index, int wait_index)
++static int qi_check_fault(struct intel_iommu *iommu, int index,
++			  int wait_index, u32 *fsts)
  {
+ 	u32 fault;
+ 	int head, tail;
+@@ -1278,8 +1279,12 @@ static int qi_check_fault(struct intel_iommu *iommu, int index, int wait_index)
+ 		return -EAGAIN;
+ 
+ 	fault = readl(iommu->reg + DMAR_FSTS_REG);
+-	if (fault & (DMA_FSTS_IQE | DMA_FSTS_ITE | DMA_FSTS_ICE))
++	fault &= DMA_FSTS_IQE | DMA_FSTS_ITE | DMA_FSTS_ICE;
++	if (fault) {
++		if (fsts)
++			*fsts |= fault;
+ 		qi_dump_fault(iommu, fault);
++	}
+ 
+ 	/*
+ 	 * If IQE happens, the head points to the descriptor associated
+@@ -1324,8 +1329,9 @@ static int qi_check_fault(struct intel_iommu *iommu, int index, int wait_index)
+ 			head = (head - 2 + QI_LENGTH) % QI_LENGTH;
+ 		} while (head != tail);
+ 
++		/* No need to retry if the caller is interested in the timeout error */
+ 		if (qi->desc_status[wait_index] == QI_ABORT)
+-			return -EAGAIN;
++			return fsts ? -ETIMEDOUT : -EAGAIN;
+ 	}
+ 
+ 	if (fault & DMA_FSTS_ICE) {
+@@ -1342,9 +1348,11 @@ static int qi_check_fault(struct intel_iommu *iommu, int index, int wait_index)
+  * time, a wait descriptor will be appended to each submission to ensure
+  * hardware has completed the invalidation before return. Wait descriptors
+  * can be part of the submission but it will not be polled for completion.
++ * If callers are interested in the QI faults that occur during the handling
++ * of requests, the QI faults are saved in @fault.
+  */
+ int qi_submit_sync(struct intel_iommu *iommu, struct qi_desc *desc,
+-		   unsigned int count, unsigned long options)
++		   unsigned int count, unsigned long options, u32 *fault)
+ {
+ 	struct q_inval *qi = iommu->qi;
+ 	s64 devtlb_start_ktime = 0;
+@@ -1422,6 +1430,9 @@ int qi_submit_sync(struct intel_iommu *iommu, struct qi_desc *desc,
+ 	 */
+ 	writel(qi->free_head << shift, iommu->reg + DMAR_IQT_REG);
+ 
++	if (fault)
++		*fault = 0;
++
+ 	while (qi->desc_status[wait_index] != QI_DONE) {
+ 		/*
+ 		 * We will leave the interrupts disabled, to prevent interrupt
+@@ -1430,7 +1441,7 @@ int qi_submit_sync(struct intel_iommu *iommu, struct qi_desc *desc,
+ 		 * a deadlock where the interrupt context can wait indefinitely
+ 		 * for free slots in the queue.
+ 		 */
+-		rc = qi_check_fault(iommu, index, wait_index);
++		rc = qi_check_fault(iommu, index, wait_index, fault);
+ 		if (rc)
+ 			break;
+ 
+@@ -1476,7 +1487,7 @@ void qi_global_iec(struct intel_iommu *iommu)
+ 	desc.qw3 = 0;
+ 
+ 	/* should never fail */
+-	qi_submit_sync(iommu, &desc, 1, 0);
++	qi_submit_sync(iommu, &desc, 1, 0, NULL);
+ }
+ 
+ void qi_flush_context(struct intel_iommu *iommu, u16 did, u16 sid, u8 fm,
+@@ -1490,7 +1501,7 @@ void qi_flush_context(struct intel_iommu *iommu, u16 did, u16 sid, u8 fm,
+ 	desc.qw2 = 0;
+ 	desc.qw3 = 0;
+ 
+-	qi_submit_sync(iommu, &desc, 1, 0);
++	qi_submit_sync(iommu, &desc, 1, 0, NULL);
+ }
+ 
+ void qi_flush_iotlb(struct intel_iommu *iommu, u16 did, u64 addr,
+@@ -1514,7 +1525,7 @@ void qi_flush_iotlb(struct intel_iommu *iommu, u16 did, u64 addr,
+ 	desc.qw2 = 0;
+ 	desc.qw3 = 0;
+ 
+-	qi_submit_sync(iommu, &desc, 1, 0);
++	qi_submit_sync(iommu, &desc, 1, 0, NULL);
+ }
+ 
+ void qi_flush_dev_iotlb(struct intel_iommu *iommu, u16 sid, u16 pfsid,
+@@ -1545,7 +1556,7 @@ void qi_flush_dev_iotlb(struct intel_iommu *iommu, u16 sid, u16 pfsid,
+ 	desc.qw2 = 0;
+ 	desc.qw3 = 0;
+ 
+-	qi_submit_sync(iommu, &desc, 1, 0);
++	qi_submit_sync(iommu, &desc, 1, 0, NULL);
+ }
+ 
+ /* PASID-based IOTLB invalidation */
+@@ -1586,7 +1597,7 @@ void qi_flush_piotlb(struct intel_iommu *iommu, u16 did, u32 pasid, u64 addr,
+ 				QI_EIOTLB_AM(mask);
+ 	}
+ 
+-	qi_submit_sync(iommu, &desc, 1, 0);
++	qi_submit_sync(iommu, &desc, 1, 0, NULL);
+ }
+ 
+ /* PASID-based device IOTLB Invalidate */
+@@ -1639,7 +1650,7 @@ void qi_flush_dev_iotlb_pasid(struct intel_iommu *iommu, u16 sid, u16 pfsid,
+ 		desc.qw1 |= QI_DEV_EIOTLB_SIZE;
+ 	}
+ 
+-	qi_submit_sync(iommu, &desc, 1, 0);
++	qi_submit_sync(iommu, &desc, 1, 0, NULL);
+ }
+ 
+ void qi_flush_pasid_cache(struct intel_iommu *iommu, u16 did,
+@@ -1649,7 +1660,7 @@ void qi_flush_pasid_cache(struct intel_iommu *iommu, u16 did,
+ 
+ 	desc.qw0 = QI_PC_PASID(pasid) | QI_PC_DID(did) |
+ 			QI_PC_GRAN(granu) | QI_PC_TYPE;
+-	qi_submit_sync(iommu, &desc, 1, 0);
++	qi_submit_sync(iommu, &desc, 1, 0, NULL);
+ }
+ 
+ /*
+diff --git a/drivers/iommu/intel/iommu.h b/drivers/iommu/intel/iommu.h
+index ce030c5b5772..c6de958e4f54 100644
+--- a/drivers/iommu/intel/iommu.h
++++ b/drivers/iommu/intel/iommu.h
+@@ -881,7 +881,7 @@ void qi_flush_pasid_cache(struct intel_iommu *iommu, u16 did, u64 granu,
+ 			  u32 pasid);
+ 
+ int qi_submit_sync(struct intel_iommu *iommu, struct qi_desc *desc,
+-		   unsigned int count, unsigned long options);
++		   unsigned int count, unsigned long options, u32 *fault);
+ /*
+  * Options used in qi_submit_sync:
+  * QI_OPT_WAIT_DRAIN - Wait for PRQ drain completion, spec 6.5.2.8.
+diff --git a/drivers/iommu/intel/irq_remapping.c b/drivers/iommu/intel/irq_remapping.c
+index 29b9e55dcf26..f834afa3672d 100644
+--- a/drivers/iommu/intel/irq_remapping.c
++++ b/drivers/iommu/intel/irq_remapping.c
+@@ -153,7 +153,7 @@ static int qi_flush_iec(struct intel_iommu *iommu, int index, int mask)
+ 	desc.qw2 = 0;
+ 	desc.qw3 = 0;
+ 
+-	return qi_submit_sync(iommu, &desc, 1, 0);
++	return qi_submit_sync(iommu, &desc, 1, 0, NULL);
+ }
+ 
+ static int modify_irte(struct irq_2_iommu *irq_iommu,
+diff --git a/drivers/iommu/intel/pasid.c b/drivers/iommu/intel/pasid.c
+index 74e8e4c17e81..67f924760ba8 100644
+--- a/drivers/iommu/intel/pasid.c
++++ b/drivers/iommu/intel/pasid.c
+@@ -467,7 +467,7 @@ pasid_cache_invalidation_with_pasid(struct intel_iommu *iommu,
+ 	desc.qw2 = 0;
+ 	desc.qw3 = 0;
+ 
+-	qi_submit_sync(iommu, &desc, 1, 0);
++	qi_submit_sync(iommu, &desc, 1, 0, NULL);
+ }
+ 
+ static void
+diff --git a/drivers/iommu/intel/svm.c b/drivers/iommu/intel/svm.c
+index ac12f76c1212..660d049ad5b6 100644
+--- a/drivers/iommu/intel/svm.c
++++ b/drivers/iommu/intel/svm.c
+@@ -543,7 +543,7 @@ void intel_drain_pasid_prq(struct device *dev, u32 pasid)
+ 			QI_DEV_IOTLB_PFSID(info->pfsid);
+ qi_retry:
+ 	reinit_completion(&iommu->prq_complete);
+-	qi_submit_sync(iommu, desc, 3, QI_OPT_WAIT_DRAIN);
++	qi_submit_sync(iommu, desc, 3, QI_OPT_WAIT_DRAIN, NULL);
+ 	if (readl(iommu->reg + DMAR_PRS_REG) & DMA_PRS_PRO) {
+ 		wait_for_completion(&iommu->prq_complete);
+ 		goto qi_retry;
+@@ -646,7 +646,7 @@ static void handle_bad_prq_event(struct intel_iommu *iommu,
+ 		desc.qw3 = 0;
+ 	}
+ 
+-	qi_submit_sync(iommu, &desc, 1, 0);
++	qi_submit_sync(iommu, &desc, 1, 0, NULL);
+ }
+ 
+ static irqreturn_t prq_event_thread(int irq, void *d)
+@@ -811,7 +811,7 @@ int intel_svm_page_response(struct device *dev,
+ 				ktime_to_ns(ktime_get()) - prm->private_data[0]);
+ 		}
+ 
+-		qi_submit_sync(iommu, &desc, 1, 0);
++		qi_submit_sync(iommu, &desc, 1, 0, NULL);
+ 	}
+ out:
+ 	return ret;
 -- 
 2.34.1
 
