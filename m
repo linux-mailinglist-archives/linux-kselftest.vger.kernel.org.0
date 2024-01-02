@@ -1,293 +1,127 @@
-Return-Path: <linux-kselftest+bounces-2593-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2594-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 035E28224F3
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jan 2024 23:49:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8063F82256B
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Jan 2024 00:16:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C4F21F2277D
-	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jan 2024 22:49:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1861B1F23460
+	for <lists+linux-kselftest@lfdr.de>; Tue,  2 Jan 2024 23:16:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0914B171D9;
-	Tue,  2 Jan 2024 22:49:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A41917740;
+	Tue,  2 Jan 2024 23:16:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GABLzOHT"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="n7U12ke9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D87DD17725;
-	Tue,  2 Jan 2024 22:49:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EDBAC433C9;
-	Tue,  2 Jan 2024 22:49:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704235767;
-	bh=T55WCsDDBMdV44KiSumuwswipm/mouhybrbqOhV7kkU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=GABLzOHTEGGqdIiCGunbjc+duSdiwfQMRPKVlMit9ewdi3H+HlL/Kw/sbaR4FAMkY
-	 AF4FFcpa2skkuxiGHI7HOHf/kW/O+CM6hPLvPpQOZ+5i6utTUl4wdl5oPqXUSLLLYY
-	 CGQfPnmQLLWMWoM2nWjIf8YoufUCISHlPF+x7F7yY1SfFinwZ31zxzN3SxH7Volg+V
-	 +iHwhQgvoVZ9OrakOgl/Q4GTqj4zpGTXFJ+iK7gQ7wuHzro27L17bt1fkryw+UfMrG
-	 ImxbP2fWoROXbtZCPU/Vx1wqHDimLRR41Xfn1144wl5YFsSOak2SL5RHg+BbR0yqZv
-	 GGbyaf2VG5z9g==
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-50e7aed08f4so6375751e87.0;
-        Tue, 02 Jan 2024 14:49:27 -0800 (PST)
-X-Gm-Message-State: AOJu0YywjJGIapn3Kl8qbv/9z98UGtP+JD0FwP7Vp1m/GqKsoVatUgkw
-	vrahiyCe/jlEvChU/7QlOsUDjC/qZvY2J2wqv9c=
-X-Google-Smtp-Source: AGHT+IE4onFQu2m3/yigoFFipvmSg5RKz59Ta3rrI6N6ihY71iQrMqWiWYr7mDijLk2toIJ6FkK8bbsppHiFhIs1/Po=
-X-Received: by 2002:a05:6512:398a:b0:50e:15d4:7f8c with SMTP id
- j10-20020a056512398a00b0050e15d47f8cmr86449lfu.27.1704235765634; Tue, 02 Jan
- 2024 14:49:25 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D16E01773B
+	for <linux-kselftest@vger.kernel.org>; Tue,  2 Jan 2024 23:16:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-5f2aab1c0c5so11305807b3.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 02 Jan 2024 15:16:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1704237394; x=1704842194; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=W9VsReBQkICOIEczr/aBz2S0AWm3omPhTa+sgYDFysE=;
+        b=n7U12ke9HUlf9h9JIl4Hr4vTl35sGXHRFMUgb0qxklXMMaAXtpchclYkN9V5/aUTEl
+         Tr+qgAczELBPYnbHzYrM0+3gFdEDFDtoO4vEaRIUxgUQ1qF2AcB5wFnuhKA0ns+ZuYJY
+         V6ZvLt2PtpBTCrbg+9RgWIms6P5JcQDd22XEI7HCgmpV+hjmECCUX2U+6ilocGPbSpzv
+         jZc10ZpGudzYXnBg3WhZ2ITPdYtunH+Jt8XWEV4k444EEbqZ8gBgZxFEgLJLFEht3sA/
+         DyfYjkWmuVp9mjOQ/184BWYsOQdG/a9KSLWXv/ZUXjGxdK7X7brrHc060NlcRki7zmK8
+         vCrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704237394; x=1704842194;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=W9VsReBQkICOIEczr/aBz2S0AWm3omPhTa+sgYDFysE=;
+        b=cVWFGVB4uEbFwmBs6IYq89m7dnuP2Mmd6iqraqrYoS4P7ZEjJfIekFe6jKPEw87ylz
+         4/c/zrVMUlmYgTJtlZ1ER8sAuTh2hLpAibnua0oeqbmXEsOAV2wcwFmqUtWMyWeHM+Kw
+         BaZ2joTon64VRX9ufvCu6zMpLTNeRlIXFZr1PSe/0HqDALAm36vtuFDO1h2Po0Nxxku6
+         JogmlIwDkIi2fi4a01M7SW1p42TADAQUgUZtMun+ELpZ5eWo4t3kMzdyDY1U9+sMlVgz
+         be3Y0xXCeN5dKEqS8gKRoKFpBApsRsgnWPLOLmje5YG55vNnutoUhVgh1V7nc4LBpRhj
+         CB+w==
+X-Gm-Message-State: AOJu0YyHbpUI3RYoXAg1Eq6jfUNIym2twvn/koYNMVjZB6U5kQOIGBtQ
+	kxceZIlzPQ5H7gcUw4lSG9AtBVEW9IdNO6R3DBeNF36efYPk
+X-Google-Smtp-Source: AGHT+IE8Ax7U2bqyqO1lsnqmhbIiZe0ibMeQxiHn/HbCQlPrEjVBV5+vDgfgYKVCj0YEiEECTa6N9nL3Qu/E0E5RKYw=
+X-Received: by 2002:a81:574d:0:b0:5d3:dacc:63bd with SMTP id
+ l74-20020a81574d000000b005d3dacc63bdmr108135ywb.19.1704237393551; Tue, 02 Jan
+ 2024 15:16:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20231211045543.31741-1-khuey@kylehuey.com> <20231211045543.31741-5-khuey@kylehuey.com>
-In-Reply-To: <20231211045543.31741-5-khuey@kylehuey.com>
-From: Song Liu <song@kernel.org>
-Date: Tue, 2 Jan 2024 14:49:14 -0800
-X-Gmail-Original-Message-ID: <CAPhsuW7EU0nJq3fF_DqB3o7+5fuGZgs-W1jN1e4F4VHVjgj8Cg@mail.gmail.com>
-Message-ID: <CAPhsuW7EU0nJq3fF_DqB3o7+5fuGZgs-W1jN1e4F4VHVjgj8Cg@mail.gmail.com>
-Subject: Re: [PATCH v3 4/4] selftest/bpf: Test a perf bpf program that
- suppresses side effects.
-To: Kyle Huey <me@kylehuey.com>
-Cc: Kyle Huey <khuey@kylehuey.com>, linux-kernel@vger.kernel.org, 
-	Andrii Nakryiko <andrii.nakryiko@gmail.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Namhyung Kim <namhyung@kernel.org>, Marco Elver <elver@google.com>, 
-	Yonghong Song <yonghong.song@linux.dev>, "Robert O'Callahan" <robert@ocallahan.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Shuah Khan <shuah@kernel.org>, 
-	bpf@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20231230025607.2476912-1-surenb@google.com> <ZZPQjO91fvB66z1s@x1n>
+ <CAJuCfpF8h4aPAvFQv4NjX=DRWTZ1P5DcO16DfT-Sot1cGucjJQ@mail.gmail.com>
+In-Reply-To: <CAJuCfpF8h4aPAvFQv4NjX=DRWTZ1P5DcO16DfT-Sot1cGucjJQ@mail.gmail.com>
+From: Suren Baghdasaryan <surenb@google.com>
+Date: Tue, 2 Jan 2024 15:16:20 -0800
+Message-ID: <CAJuCfpG4tSPADrSpUCubsymoT_FWO4mONFODb2_sK4f-5RTY-A@mail.gmail.com>
+Subject: Re: [PATCH 1/1] userfaultfd: fix move_pages_pte() splitting folio
+ under RCU read lock
+To: Peter Xu <peterx@redhat.com>
+Cc: akpm@linux-foundation.org, viro@zeniv.linux.org.uk, brauner@kernel.org, 
+	shuah@kernel.org, aarcange@redhat.com, lokeshgidra@google.com, 
+	david@redhat.com, ryan.roberts@arm.com, hughd@google.com, mhocko@suse.com, 
+	axelrasmussen@google.com, rppt@kernel.org, willy@infradead.org, 
+	Liam.Howlett@oracle.com, jannh@google.com, zhangpeng362@huawei.com, 
+	bgeffon@google.com, kaleshsingh@google.com, ngeoffray@google.com, 
+	jdduke@google.com, linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kernel-team@android.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Dec 10, 2023 at 8:56=E2=80=AFPM Kyle Huey <me@kylehuey.com> wrote:
+On Tue, Jan 2, 2024 at 8:58=E2=80=AFAM Suren Baghdasaryan <surenb@google.co=
+m> wrote:
 >
-> The test sets a hardware breakpoint and uses a bpf program to suppress th=
-e
-> side effects of a perf event sample, including I/O availability signals,
-> SIGTRAPs, and decrementing the event counter limit, if the ip matches the
-> expected value. Then the function with the breakpoint is executed multipl=
-e
-> times to test that all effects behave as expected.
+> On Tue, Jan 2, 2024 at 1:00=E2=80=AFAM Peter Xu <peterx@redhat.com> wrote=
+:
+> >
+> > On Fri, Dec 29, 2023 at 06:56:07PM -0800, Suren Baghdasaryan wrote:
+> > > @@ -1078,9 +1078,14 @@ static int move_pages_pte(struct mm_struct *mm=
+, pmd_t *dst_pmd, pmd_t *src_pmd,
+> > >
+> > >               /* at this point we have src_folio locked */
+> > >               if (folio_test_large(src_folio)) {
+> > > +                     /* split_folio() can block */
+> > > +                     pte_unmap(&orig_src_pte);
+> > > +                     pte_unmap(&orig_dst_pte);
+> > > +                     src_pte =3D dst_pte =3D NULL;
+> > >                       err =3D split_folio(src_folio);
+> > >                       if (err)
+> > >                               goto out;
+> > > +                     goto retry;
+> > >               }
+> >
+> > Do we also need to clear src_folio and src_folio_pte?  If the folio is =
+a
+> > thp, I think it means it's pte mapped here. Then after the split we may
+> > want to fetch the small folio after the split, not the head one?
 >
-> Signed-off-by: Kyle Huey <khuey@kylehuey.com>
-> ---
->  .../selftests/bpf/prog_tests/perf_skip.c      | 140 ++++++++++++++++++
->  .../selftests/bpf/progs/test_perf_skip.c      |  15 ++
->  2 files changed, 155 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/perf_skip.c
->  create mode 100644 tools/testing/selftests/bpf/progs/test_perf_skip.c
+> I think we need to re-fetch the src_folio only if the src_addr falls
+> into a non-head page. Looking at the __split_huge_page(), the head
+> page is skipped in the last loop, so I think it should stay valid.
+> That said, maybe it's just an implementation detail of the
+> __split_huge_page() and I should not rely on that and refetch anyway?
+
+I'll post a v2 with this fix and re-fetching the folio
+unconditionally. We also don't need to reset src_folio_pte value
+because it's used only if src_folio is not NULL.
+Thanks for catching this, Peter!
+
 >
-> diff --git a/tools/testing/selftests/bpf/prog_tests/perf_skip.c b/tools/t=
-esting/selftests/bpf/prog_tests/perf_skip.c
-> new file mode 100644
-> index 000000000000..0200736a8baf
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/perf_skip.c
-> @@ -0,0 +1,140 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#define _GNU_SOURCE
-> +
-> +#include <test_progs.h>
-> +#include "test_perf_skip.skel.h"
-> +#include <linux/compiler.h>
-> +#include <linux/hw_breakpoint.h>
-> +#include <sys/mman.h>
-> +
-> +#ifndef TRAP_PERF
-> +#define TRAP_PERF 6
-> +#endif
-> +
-> +int signals_unexpected =3D 1;
-> +int sigio_count, sigtrap_count;
-> +
-> +static void handle_sigio(int sig __always_unused)
-> +{
-> +       ASSERT_OK(signals_unexpected, "perf event not skipped");
-
-ASSERT_OK is a little confusing. Maybe do something like:
-
-static int signals_expected;
-static void handle_sigio(int sig __always_unused)
-{
-    ASSERT_EQ(signals_expected, 1, "expected sig_io");
-}
-serial_test_perf_skip()
-{
-...
-signals_expected =3D 1;
-}
-
-> +       ++sigio_count;
-> +}
-> +
-> +static void handle_sigtrap(int signum __always_unused,
-> +                          siginfo_t *info,
-> +                          void *ucontext __always_unused)
-> +{
-> +       ASSERT_OK(signals_unexpected, "perf event not skipped");
-ditto
-
-> +       ASSERT_EQ(info->si_code, TRAP_PERF, "wrong si_code");
-> +       ++sigtrap_count;
-> +}
-> +
-> +static noinline int test_function(void)
-> +{
-> +       asm volatile ("");
-> +       return 0;
-> +}
-> +
-> +void serial_test_perf_skip(void)
-> +{
-> +       struct sigaction action =3D {};
-> +       struct sigaction previous_sigtrap;
-> +       sighandler_t previous_sigio;
-> +       struct test_perf_skip *skel =3D NULL;
-> +       struct perf_event_attr attr =3D {};
-> +       int perf_fd =3D -1;
-> +       int err;
-> +       struct f_owner_ex owner;
-> +       struct bpf_link *prog_link =3D NULL;
-> +
-> +       action.sa_flags =3D SA_SIGINFO | SA_NODEFER;
-> +       action.sa_sigaction =3D handle_sigtrap;
-> +       sigemptyset(&action.sa_mask);
-> +       if (!ASSERT_OK(sigaction(SIGTRAP, &action, &previous_sigtrap), "s=
-igaction"))
-> +               return;
-> +
-> +       previous_sigio =3D signal(SIGIO, handle_sigio);
-
-handle signal() errors here?
-
-> +
-> +       skel =3D test_perf_skip__open_and_load();
-> +       if (!ASSERT_OK_PTR(skel, "skel_load"))
-> +               goto cleanup;
-> +
-> +       attr.type =3D PERF_TYPE_BREAKPOINT;
-> +       attr.size =3D sizeof(attr);
-> +       attr.bp_type =3D HW_BREAKPOINT_X;
-> +       attr.bp_addr =3D (uintptr_t)test_function;
-> +       attr.bp_len =3D sizeof(long);
-> +       attr.sample_period =3D 1;
-> +       attr.sample_type =3D PERF_SAMPLE_IP;
-> +       attr.pinned =3D 1;
-> +       attr.exclude_kernel =3D 1;
-> +       attr.exclude_hv =3D 1;
-> +       attr.precise_ip =3D 3;
-> +       attr.sigtrap =3D 1;
-> +       attr.remove_on_exec =3D 1;
-> +
-> +       perf_fd =3D syscall(__NR_perf_event_open, &attr, 0, -1, -1, 0);
-> +       if (perf_fd < 0 && (errno =3D=3D ENOENT || errno =3D=3D EOPNOTSUP=
-P)) {
-> +               printf("SKIP:no PERF_TYPE_BREAKPOINT/HW_BREAKPOINT_X\n");
-> +               test__skip();
-> +               goto cleanup;
-> +       }
-> +       if (!ASSERT_OK(perf_fd < 0, "perf_event_open"))
-> +               goto cleanup;
-> +
-> +       /* Configure the perf event to signal on sample. */
-> +       err =3D fcntl(perf_fd, F_SETFL, O_ASYNC);
-> +       if (!ASSERT_OK(err, "fcntl(F_SETFL, O_ASYNC)"))
-> +               goto cleanup;
-> +
-> +       owner.type =3D F_OWNER_TID;
-> +       owner.pid =3D syscall(__NR_gettid);
-> +       err =3D fcntl(perf_fd, F_SETOWN_EX, &owner);
-> +       if (!ASSERT_OK(err, "fcntl(F_SETOWN_EX)"))
-> +               goto cleanup;
-> +
-> +       /*
-> +        * Allow at most one sample. A sample rejected by bpf should
-> +        * not count against this.
-> +        */
-
-Multi-line comment style should be like
-
-        /* Allow at most one sample. A sample rejected by bpf should
-        * not count against this.
-        */
-
-> +       err =3D ioctl(perf_fd, PERF_EVENT_IOC_REFRESH, 1);
-> +       if (!ASSERT_OK(err, "ioctl(PERF_EVENT_IOC_REFRESH)"))
-> +               goto cleanup;
-> +
-> +       prog_link =3D bpf_program__attach_perf_event(skel->progs.handler,=
- perf_fd);
-> +       if (!ASSERT_OK_PTR(prog_link, "bpf_program__attach_perf_event"))
-> +               goto cleanup;
-> +
-> +       /* Configure the bpf program to suppress the sample. */
-> +       skel->bss->ip =3D (uintptr_t)test_function;
-> +       test_function();
-> +
-> +       ASSERT_EQ(sigio_count, 0, "sigio_count");
-> +       ASSERT_EQ(sigtrap_count, 0, "sigtrap_count");
-> +
-> +       /* Configure the bpf program to allow the sample. */
-> +       skel->bss->ip =3D 0;
-> +       signals_unexpected =3D 0;
-> +       test_function();
-> +
-> +       ASSERT_EQ(sigio_count, 1, "sigio_count");
-> +       ASSERT_EQ(sigtrap_count, 1, "sigtrap_count");
-> +
-> +       /*
-> +        * Test that the sample above is the only one allowed (by perf, n=
-ot
-> +        * by bpf)
-> +        */
-
-ditto.
-
-> +       test_function();
-> +
-> +       ASSERT_EQ(sigio_count, 1, "sigio_count");
-> +       ASSERT_EQ(sigtrap_count, 1, "sigtrap_count");
-> +
-> +cleanup:
-> +       bpf_link__destroy(prog_link);
-> +       if (perf_fd >=3D 0)
-> +               close(perf_fd);
-> +       test_perf_skip__destroy(skel);
-> +
-> +       signal(SIGIO, previous_sigio);
-> +       sigaction(SIGTRAP, &previous_sigtrap, NULL);
-> +}
-> diff --git a/tools/testing/selftests/bpf/progs/test_perf_skip.c b/tools/t=
-esting/selftests/bpf/progs/test_perf_skip.c
-> new file mode 100644
-> index 000000000000..7eb8b6de7a57
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/test_perf_skip.c
-> @@ -0,0 +1,15 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include "vmlinux.h"
-> +#include <bpf/bpf_helpers.h>
-> +#include <bpf/bpf_tracing.h>
-> +
-> +uintptr_t ip;
-> +
-> +SEC("perf_event")
-> +int handler(struct bpf_perf_event_data *data)
-> +{
-> +       /* Skip events that have the correct ip. */
-> +       return ip !=3D PT_REGS_IP(&data->regs);
-> +}
-> +
-> +char _license[] SEC("license") =3D "GPL";
-> --
-> 2.34.1
->
+> >
+> > --
+> > Peter Xu
+> >
 
