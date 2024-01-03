@@ -1,134 +1,117 @@
-Return-Path: <linux-kselftest+bounces-2605-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2606-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id ECE59822827
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Jan 2024 07:03:20 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB774822A00
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Jan 2024 10:13:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 87AE61F2398B
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Jan 2024 06:03:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D77341C2316F
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Jan 2024 09:13:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D3B11798A;
-	Wed,  3 Jan 2024 06:03:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34C9818628;
+	Wed,  3 Jan 2024 09:12:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DyIC+AF1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RgmJcQaY"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-yb1-f194.google.com (mail-yb1-f194.google.com [209.85.219.194])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E92CC17988;
-	Wed,  3 Jan 2024 06:03:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f194.google.com with SMTP id 3f1490d57ef6-dbdd61d80a3so100888276.0;
-        Tue, 02 Jan 2024 22:03:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1704261794; x=1704866594; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sQ5IlZ0V3FHaUxfy2Z13jv10QMbc9LLMikTDxO1h8tE=;
-        b=DyIC+AF171WqM4aLiGMC76IYMmccZPtTVWw39TUWmWbz2fLUqDHyztCnPtXQOk7gDV
-         bbXmcLBe4T1EONz3N7vd9s9NON5O40hsP5C63v+lgAFnJmHD06Ur24BrzCuAMOiilHCh
-         GRyPI11P8A8HeR6OgRVEnAeUYRu5V6eYRTFOaCaLcGBYA9wRZTJFSrfsiIrt57zDDzTy
-         ZYkWxV44ffJHyJreUbK6b4zMUJ14i89BNauWryNTP/1NfpBUqzcj2FUSp2B7sU1PSgh0
-         +JX98EI+JnQq7p84enY4bsNSCM8mIYW03Q9fuI50oKFZKGGv4lqSOAqjWmuPaLAlVyaA
-         nrpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704261794; x=1704866594;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sQ5IlZ0V3FHaUxfy2Z13jv10QMbc9LLMikTDxO1h8tE=;
-        b=djbNB166j2YkAClvDRVE7ozhsGAMtKviYdPWhe5SITt9izNw1L0K+tsAknGS2OztVa
-         fXjTEJ73+TQdq05JFQ+knQjtJ3w6sjoAawt63yGOWVLOOD9GoSdGRXElj1g/2x1y73qJ
-         e1J2MNgGVH8AzoHXeNf2eD+g1pFV8Rnir3ngaSl2JLdCJIgvTp2e+qG7ioXNdjsc4MNb
-         uOB3S0+ecqYdmyy7+AfjlwBmf9zuas5PXxEppzf4imTZGTYNthE4W8bXdwf2J4PYQIXt
-         UkLqf3Tj14KvqcjjnMiSDVCPKP4kAyKckS9OqRfVeOmuQFBzze0BrBNoetRz7bHXepKs
-         LH9w==
-X-Gm-Message-State: AOJu0YzlEwSiT1YqP4QIpFQ4E3pmiS5E56OwozbB+dxtHGThjl528r3z
-	9zfzL8VR6FHXCwccquZomSplIHgKUMrD7DsIJzU=
-X-Google-Smtp-Source: AGHT+IEin4aLwzgRDR4YF1/z/b9ItG0hiLXmGxsk6KOXZ+HGU75LTH+uJ4VHAoPVHhGqhsVSBupooXSyuU5C53pXdVg=
-X-Received: by 2002:a05:6902:10d:b0:dbc:da55:b397 with SMTP id
- o13-20020a056902010d00b00dbcda55b397mr321129ybh.65.1704261793832; Tue, 02 Jan
- 2024 22:03:13 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCB0F182AF;
+	Wed,  3 Jan 2024 09:12:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1704273168; x=1735809168;
+  h=from:to:cc:subject:date:message-id;
+  bh=gPf7rfKmzwzlXV8d5iHJVEkj1nA/mwcPl3PJ7L7K2SY=;
+  b=RgmJcQaYTdhtkAMWmVasSkGa3nwp9fdwGMzftKwiXfqQFi4oCdQotMp/
+   990xE/ePj+O2oY0hST05KlA+j6sRrzXS+hUNloz9YrdRFxCF2y/fbj3kr
+   cCvfBGRv79raVpmfNNcvo0u3EJ67tCJ5E8MD+42iU11/yEDhrTEw6fE7B
+   35zjStJQgtwxjY00MRPDVVzyx8sEy5rc4wQ13aln8YDhUl/4/yaVKw1Nj
+   NW6uafhp/pmwjK51rDMpMzayaSnGdfjNxRcpjf/yp/UCruEQth7BseTJX
+   OkZuIQf5cwhV42Hlx0TIANcBG2vD3/GY1KHocJF/cd4HqCbvb7rKK7K11
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10941"; a="463386609"
+X-IronPort-AV: E=Sophos;i="6.04,327,1695711600"; 
+   d="scan'208";a="463386609"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2024 01:12:48 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10941"; a="783445220"
+X-IronPort-AV: E=Sophos;i="6.04,327,1695711600"; 
+   d="scan'208";a="783445220"
+Received: from yzhao56-desk.sh.intel.com ([10.239.159.62])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Jan 2024 01:12:45 -0800
+From: Yan Zhao <yan.y.zhao@intel.com>
+To: kvm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: pbonzini@redhat.com,
+	seanjc@google.com,
+	shuah@kernel.org,
+	stevensd@chromium.org,
+	Yan Zhao <yan.y.zhao@intel.com>
+Subject: [RFC PATCH v2 0/3] KVM: allow mapping of compound tail pages for IO or PFNMAP mapping
+Date: Wed,  3 Jan 2024 16:43:27 +0800
+Message-Id: <20240103084327.19955-1-yan.y.zhao@intel.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20231229081409.1276386-1-menglong8.dong@gmail.com>
- <ZZRR1q1JrJMD1lAy@google.com> <c628c362-b2e8-4ad6-a34f-50c2822bccd6@linux.dev>
- <CADxym3bPjdErhZ_wgQNK3BqbeUgvGMtLJRA_rD3pRa+BVcA95A@mail.gmail.com> <4fa8ae9d-11fd-4728-83bd-848cb22952e7@linux.dev>
-In-Reply-To: <4fa8ae9d-11fd-4728-83bd-848cb22952e7@linux.dev>
-From: Menglong Dong <menglong8.dong@gmail.com>
-Date: Wed, 3 Jan 2024 14:03:02 +0800
-Message-ID: <CADxym3aYT6ftPMFiuMSiTpNEYpvPz1p3rEtK6bX2_N=BreXOzQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 0/2] bpf: add csum/ip_summed fields to __sk_buff
-To: Yonghong Song <yonghong.song@linux.dev>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>, Stanislav Fomichev <sdf@google.com>, andrii@kernel.org, 
-	ast@kernel.org, daniel@iogearbox.net, song@kernel.org, 
-	john.fastabend@gmail.com, kpsingh@kernel.org, haoluo@google.com, 
-	jolsa@kernel.org, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, mykolal@fb.com, shuah@kernel.org, horms@kernel.org, 
-	dhowells@redhat.com, linyunsheng@huawei.com, aleksander.lobakin@intel.com, 
-	joannelkoong@gmail.com, laoar.shao@gmail.com, kuifeng@meta.com, 
-	bjorn@rivosinc.com, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 3, 2024 at 11:55=E2=80=AFAM Yonghong Song <yonghong.song@linux.=
-dev> wrote:
->
->
-> On 1/2/24 6:54 PM, Menglong Dong wrote:
-> > On Wed, Jan 3, 2024 at 8:52=E2=80=AFAM Martin KaFai Lau <martin.lau@lin=
-ux.dev> wrote:
-> >> On 1/2/24 10:11 AM, Stanislav Fomichev wrote:
-> >>> On 12/29, Menglong Dong wrote:
-> >>>> For now, we have to call some helpers when we need to update the csu=
-m,
-> >>>> such as bpf_l4_csum_replace, bpf_l3_csum_replace, etc. These helpers=
- are
-> >>>> not inlined, which causes poor performance.
-> >>>>
-> >>>> In fact, we can define our own csum update functions in BPF program
-> >>>> instead of bpf_l3_csum_replace, which is totally inlined and efficie=
-nt.
-> >>>> However, we can't do this for bpf_l4_csum_replace for now, as we can=
-'t
-> >>>> update skb->csum, which can cause skb->csum invalid in the rx path w=
-ith
-> >>>> CHECKSUM_COMPLETE mode.
-> >>>>
-> >>>> What's more, we can't use the direct data access and have to use
-> >>>> skb_store_bytes() with the BPF_F_RECOMPUTE_CSUM flag in some case, s=
-uch
-> >>>> as modifing the vni in the vxlan header and the underlay udp header =
-has
-> >>>> no checksum.
-> >> There is bpf_csum_update(), does it work?
-> >> A helper call should be acceptable comparing with the csum calculation=
- itself.
-> > Yeah, this helper works in this case! Now we miss the last
-> > piece for the tx path: ip_summed. We need to know if it is
-> > CHECKSUM_PARTIAL to decide if we should update the
-> > csum in the packet. In the tx path, the csum in the L4 is the
-> > pseudo header only if skb->ip_summed is CHECKSUM_PARTIAL.
-> >
-> > Maybe we can introduce a lightweight kfunc to get its
-> > value? Such as bpf_skb_csum_mode(). As we need only call
-> > it once, there shouldn't be overhead on it.
->
-> You don't need kfunc, you can do checking like
->    struct sk_buff *kskb =3D bpf_cast_to_kern_ctx(skb);
->    if (kskb->ip_summed =3D=3D CHECKSUM_PARTIAL) ...
->    ...
->
+This is a v2 for previous series [1] to allow mapping for compound tail
+pages for IO or PFNMAP mapping.
 
-Great, this is exactly what I need! Thanks~
+Compared to v1, this version provides selftest to check functionality in
+KVM to map memslots for MMIO BARs (VMAs with flag VM_IO | VM_PFNMAP), as
+requested by Sean in [1].
+
+The selftest can also be used to test series "allow mapping non-refcounted
+pages" [2].
+
+Tag RFC is added because a test driver is introduced in patch 2, which is
+new to KVM selftest, and test "set_memory_region_io" in patch 3 depends on
+that the test driver is compiled and loaded in kernel.
+Besides, patch 3 calls vm_set_user_memory_region() directly without
+modifying vm_mem_add().
+So, this series is sent to ensure the main direction is right.
+
+Thanks
+Yan
+
+[1] https://lore.kernel.org/all/20230719083332.4584-1-yan.y.zhao@intel.com/
+[2] https://lore.kernel.org/all/20230911021637.1941096-1-stevensd@google.com/
+
+v2:
+added patch 2 and 3 to do selftest for patch 1 (Sean).
+
+Yan Zhao (3):
+  KVM: allow mapping of compound tail pages for IO or PFNMAP mapping
+  KVM: selftests: add selftest driver for KVM to test memory slots for
+    MMIO BARs
+  KVM: selftests: Add set_memory_region_io to test memslots for MMIO
+    BARs
+
+ lib/Kconfig.debug                             |  14 +
+ lib/Makefile                                  |   1 +
+ lib/test_kvm_mock_device.c                    | 281 ++++++++++++++++++
+ lib/test_kvm_mock_device_uapi.h               |  16 +
+ tools/testing/selftests/kvm/Makefile          |   1 +
+ .../selftests/kvm/set_memory_region_io.c      | 188 ++++++++++++
+ virt/kvm/kvm_main.c                           |   2 +-
+ 7 files changed, 502 insertions(+), 1 deletion(-)
+ create mode 100644 lib/test_kvm_mock_device.c
+ create mode 100644 lib/test_kvm_mock_device_uapi.h
+ create mode 100644 tools/testing/selftests/kvm/set_memory_region_io.c
+
+
+base-commit: 8ed26ab8d59111c2f7b86d200d1eb97d2a458fd1
+-- 
+2.17.1
+
 
