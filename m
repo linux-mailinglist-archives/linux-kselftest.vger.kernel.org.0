@@ -1,211 +1,256 @@
-Return-Path: <linux-kselftest+bounces-2625-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2626-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E0B482366E
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Jan 2024 21:20:21 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CCEDE82377B
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Jan 2024 23:09:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C78C5281BAC
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Jan 2024 20:20:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0F2FBB2103B
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Jan 2024 22:09:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AC711D6A1;
-	Wed,  3 Jan 2024 20:18:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A5291DA34;
+	Wed,  3 Jan 2024 22:09:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="cudjj8zo"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="NRDjHM81"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2060.outbound.protection.outlook.com [40.107.101.60])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f177.google.com (mail-il1-f177.google.com [209.85.166.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C32B91DA22;
-	Wed,  3 Jan 2024 20:18:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=KIO/LXh92c42RCc8sukOkjKnU8o15Fgadg57OvOI4KDoEvOsaUuU0bi5Det5Z6jOeAfQ+kZEoDewws5WjD2K1rlddhaGLSENSBv8X87trjkRVLPH4EwyGf9aE1LV/bD06BdBRWrw1xOxmsyhuE/zpqrmHDqmA9LkFJV7rq1HeSZ1em/MuvghKS5el/08qd9a969K2x6YlfC3H79Wj/hLB+BS8VMZhNrJ/WrhYkQOteRlCQ1vtdCJBVXmANy2NsLJFJQSCF8CxJuJ1o6U+k4kmJFXv4wkP7Cy8lGP3aIG0+Syv9D7CJfnf7ypbSTrThtz2AnHWX35TH3glQiTPl9vgg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3Jkzvf45R652jTNTistK6FIpzk5K5NTE1x/nlt5KJjg=;
- b=niCkWzzRyx/9G1ju/rGUeRjHWVv9bwnT8pJ9gcD8RCOZ0kbCSXv7V/RqXuF6EaKHJ0W+JW0z4LMfoOGZP24kVzc5RtOGEYFAJZXNtWD4fW166qZkVhUMk+dj5TOwT+W/rYCDB2Eu7Uad35fcVQ32goyn7sLTcfKa9pGyi/qNGcVQFHCTwW0JZNt+AMVay+IrbVyqfGraFdaIZdWH288K70K8LZQ3/XxnGEbf8ejXxSc2INSdwX83xXzwfwYzvA6a0R/mc4xtyEYmgjk90B+XLU8C1wP10MJjJDeYzfKHJK/C2GakxYdCPzfWow4EMHMOW0zGWYcqg8pSMw4/MNKcgA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=oracle.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3Jkzvf45R652jTNTistK6FIpzk5K5NTE1x/nlt5KJjg=;
- b=cudjj8zoOGTKywdtHbQ0ZQxegR7VOILFwtnnzRvFyqcJnSffrJCc9UauSvqv2iqPTpftiWGm1gDhdogbe3U1X8c5sE3C1Gl3hzmX5MayHu01K3RV22vlbL2PN28umV5E2Y7ynptCdrj6a9EGkbRbilR1nXkzp6fQS1K9T7Pkoh8o3Sa4ruoJ0pqobQAcZDMVAuKEkSD1duadj63w1nNT5VRpCPSt8kaFEm++9dXHmZ1sh2Ry7TNBI3wcb/Rfi/AIOs+NlfnZHf+YOo18VHDTWyx0lduaxj/3EO97DREenlTyBSnC0YTpD7sykwnaA7ORFTdGO4Wr17gP7nyFvpS6BA==
-Received: from BLAPR03CA0066.namprd03.prod.outlook.com (2603:10b6:208:329::11)
- by SA1PR12MB5613.namprd12.prod.outlook.com (2603:10b6:806:22b::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7159.13; Wed, 3 Jan
- 2024 20:18:48 +0000
-Received: from MN1PEPF0000F0E2.namprd04.prod.outlook.com
- (2603:10b6:208:329:cafe::8) by BLAPR03CA0066.outlook.office365.com
- (2603:10b6:208:329::11) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7159.13 via Frontend
- Transport; Wed, 3 Jan 2024 20:18:47 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- MN1PEPF0000F0E2.mail.protection.outlook.com (10.167.242.40) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.7159.9 via Frontend Transport; Wed, 3 Jan 2024 20:18:47 +0000
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Wed, 3 Jan 2024
- 12:18:38 -0800
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail204.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Wed, 3 Jan 2024
- 12:18:38 -0800
-Received: from Asurada-Nvidia (10.127.8.12) by mail.nvidia.com (10.129.68.9)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41 via Frontend
- Transport; Wed, 3 Jan 2024 12:18:37 -0800
-Date: Wed, 3 Jan 2024 12:18:35 -0800
-From: Nicolin Chen <nicolinc@nvidia.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-CC: Yi Liu <yi.l.liu@intel.com>, "Tian, Kevin" <kevin.tian@intel.com>,
-	"joro@8bytes.org" <joro@8bytes.org>, "alex.williamson@redhat.com"
-	<alex.williamson@redhat.com>, "robin.murphy@arm.com" <robin.murphy@arm.com>,
-	"baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>, "cohuck@redhat.com"
-	<cohuck@redhat.com>, "eric.auger@redhat.com" <eric.auger@redhat.com>,
-	"kvm@vger.kernel.org" <kvm@vger.kernel.org>, "mjrosato@linux.ibm.com"
-	<mjrosato@linux.ibm.com>, "chao.p.peng@linux.intel.com"
-	<chao.p.peng@linux.intel.com>, "yi.y.sun@linux.intel.com"
-	<yi.y.sun@linux.intel.com>, "peterx@redhat.com" <peterx@redhat.com>,
-	"jasowang@redhat.com" <jasowang@redhat.com>,
-	"shameerali.kolothum.thodi@huawei.com"
-	<shameerali.kolothum.thodi@huawei.com>, "lulu@redhat.com" <lulu@redhat.com>,
-	"suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-	"iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "Duan,
- Zhenzhong" <zhenzhong.duan@intel.com>, "joao.m.martins@oracle.com"
-	<joao.m.martins@oracle.com>, "Zeng, Xin" <xin.zeng@intel.com>, "Zhao, Yan Y"
-	<yan.y.zhao@intel.com>
-Subject: Re: [PATCH v7 1/3] iommufd: Add data structure for Intel VT-d
- stage-1 cache invalidation
-Message-ID: <ZZXBGw9dJyvb/5r5@Asurada-Nvidia>
-References: <BN9PR11MB52766D7F774510E0181CC89B8C93A@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZXvI2IiXwwuHRE8V@Asurada-Nvidia>
- <7c398efc-8a2f-479d-bcff-ded8cc1ef3d0@intel.com>
- <20240102233849.GK50406@nvidia.com>
- <c59a780d-4030-4815-a34b-fb2e2f902ab3@intel.com>
- <20240103160108.GP50406@nvidia.com>
- <ZZWP7iBqUtbTRb3s@Asurada-Nvidia>
- <20240103165848.GR50406@nvidia.com>
- <ZZWUD+lCw3mRc/15@Asurada-Nvidia>
- <20240103175202.GT50406@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D7F81DDE9
+	for <linux-kselftest@vger.kernel.org>; Wed,  3 Jan 2024 22:09:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-il1-f177.google.com with SMTP id e9e14a558f8ab-35d374bebe3so5269155ab.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 03 Jan 2024 14:09:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1704319762; x=1704924562; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=te2PH2Kdt4cQrnvMOmJ454BBecoYeY1JOfYpAxEXWxY=;
+        b=NRDjHM81w/sZiM8JrKwggU2qq7U5V4q/crH6ON1yBYTp2vZZhLcgkLmmUv9mGCkTqQ
+         NOAUtvVjPVSJmK3wmDU5BnUXP9dHxDKOlvhhwrLcVk2gmrTFm1HyUj9H/hGEzoOdvyXd
+         zZ7QvoiOd617OtYbSpl8eMXtzaJnS7Xa5Gkaw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704319762; x=1704924562;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=te2PH2Kdt4cQrnvMOmJ454BBecoYeY1JOfYpAxEXWxY=;
+        b=TlRUjOV7d3sxtPr7PLbR7bC9jnqK9XPIREy/z26o6M1IJ6aHHyimEc2j50xPEhUyC4
+         CkoTVaE+JHKM16hgDKznTlPWSdXGoWBzupe+S3RjbWv6rskMoWZTs3QRkO3nhW+ShznD
+         yMLHetI9GfktgbYDwKbFgcj72LJ3jQztU6Sbx2koZlsUUktBVkI9d7mWolSR7S+WnEv2
+         dV2L9On/qgt7p5V4FUYiRTXiuNDevbhvv3WnBAqcJAsjiEPcGVmuczkdYvSOo0IU2/Fc
+         2QHU9btSC9kV7oI8mxP2geJjaxKeekLDgoVkXclEJQT7tlC1jaS4JczacznO4O+Ly+bD
+         SKeQ==
+X-Gm-Message-State: AOJu0YxZ1fPJuXVSYnTGZqjl4rpoSWEfpLCJHwbNCclDxv+jhtyExGIm
+	iFjqAK0rocIheK0QzsrC7qMP2sfVDIpZIA==
+X-Google-Smtp-Source: AGHT+IFaaY5Skh+o7ny4ui5W9ZhTFlM4FEgUH0yIGmZMDbedaycTOwiYk25gWja3CQeLGAKe5kxYVg==
+X-Received: by 2002:a05:6602:2190:b0:7ba:a0f9:7660 with SMTP id b16-20020a056602219000b007baa0f97660mr30672565iob.1.1704319762050;
+        Wed, 03 Jan 2024 14:09:22 -0800 (PST)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id bq11-20020a056638468b00b0046dd22fd24csm1096998jab.87.2024.01.03.14.09.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Jan 2024 14:09:21 -0800 (PST)
+Message-ID: <4fb169fd-393c-441e-b0f7-32a3777c1d11@linuxfoundation.org>
+Date: Wed, 3 Jan 2024 15:09:20 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20240103175202.GT50406@nvidia.com>
-X-NV-OnPremToCloud: ExternallySecured
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN1PEPF0000F0E2:EE_|SA1PR12MB5613:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7b7a37cf-0c68-447d-36a5-08dc0c993177
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	1JeP9scPdpI5yaSzg1u9k4VBF1pBKy0IMLNohTEOQPy5Cu1W/hy6BTDAM7U8oCO3vSpOseatrrOxKpNa/mZxPMTgj7UqhUm5x/m87O/g7ys4VO0l4lolK9aKN44j4y40pAiFzzOwKKuArEPwMdR+I+oFtJDfPCf34txyGDfooH3oBec3sJK0jDCg+V+4OEk1y6gD0Br7vhvDGqW/jFSQObuxLZXsFqPcX1VvbUthIBgd7LT+HnuEaMD/sukf55wNBZ43Myjj4kogZOBYYu4mKhbrYJ+ikYpWQbg9bk4WKqhAUl4N/0PEYqolqffxoUM1YJdQF92oPDnaNjsM4ZN+IU0b5I4BZEkrzwlD5zUQE57m+Bt5ahdnj4JbVH7jRyMi7JD/3OnMqDOjbfN7uNECbnPbi0U4L1N0+5CpdBM+HaDji27q3flzbJlkMvKmxJ9DV7We6OlfQvFXDW2z9X9AYqJOdLWVpzjEfVK+htLldyRx/23+Hp1Qa51EsE6QsYDIA83riJTtvw6L1TaZ9qpWj+eqdgi+jpw7Fbgi/VmkXOIXszmbxkfskxA42tXsJ9jAgvMcaLtOLHO0scauSeciqZigFhRgezk0mZH9HHLxtHS1HlwfJadiAe0s3njqAF+4kc1Drkqt1tHqBog+H9/g/sgXC9ReMmfdozexbLo/fF4FnUb6E7Ry22IHesvtSE9lY9kMZEkVxxoj+WI1MzoaxciGAOgnxW8Vn3RDbvfeokeiuePdwMSYVwxkZ1uLbD55
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230031)(4636009)(396003)(39860400002)(136003)(376002)(346002)(230922051799003)(82310400011)(186009)(64100799003)(451199024)(1800799012)(40470700004)(36840700001)(46966006)(55016003)(40480700001)(40460700003)(70206006)(70586007)(336012)(9686003)(86362001)(7636003)(356005)(82740400003)(33716001)(426003)(41300700001)(47076005)(26005)(83380400001)(2906002)(5660300002)(6862004)(7416002)(4326008)(6636002)(478600001)(8676002)(8936002)(316002)(36860700001)(54906003);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jan 2024 20:18:47.7318
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7b7a37cf-0c68-447d-36a5-08dc0c993177
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	MN1PEPF0000F0E2.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB5613
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RESEND v4 1/3] kselftests: lib.mk: Add TEST_GEN_MODS_DIR
+ variable
+Content-Language: en-US
+To: Joe Lawrence <joe.lawrence@redhat.com>,
+ Marcos Paulo de Souza <mpdesouza@suse.com>
+Cc: Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+ Alexander Gordeev <agordeev@linux.ibm.com>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,
+ Sven Schnelle <svens@linux.ibm.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
+ Jiri Kosina <jikos@kernel.org>, Miroslav Benes <mbenes@suse.cz>,
+ Petr Mladek <pmladek@suse.com>, linux-kselftest@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-s390@vger.kernel.org, live-patching@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20231220-send-lp-kselftests-v4-0-3458ec1b1a38@suse.com>
+ <20231220-send-lp-kselftests-v4-1-3458ec1b1a38@suse.com>
+ <ZZSOtsbzpy2mvmUC@redhat.com>
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <ZZSOtsbzpy2mvmUC@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jan 03, 2024 at 01:52:02PM -0400, Jason Gunthorpe wrote:
-> On Wed, Jan 03, 2024 at 09:06:23AM -0800, Nicolin Chen wrote:
-> > On Wed, Jan 03, 2024 at 12:58:48PM -0400, Jason Gunthorpe wrote:
-> > > On Wed, Jan 03, 2024 at 08:48:46AM -0800, Nicolin Chen wrote:
-> > > > > You can pass the ctx to the invalidate op, it is already implied
-> > > > > because the passed iommu_domain is linked to a single iommufd ctx.
-> > > > 
-> > > > The device virtual id lookup API needs something similar, yet it
-> > > > likely needs a viommu pointer (or its id) instead? As the table
-> > > > is attached to a viommu while an ictx can have multiple viommus,
-> > > > right?
-> > > 
-> > > Yes, when we get to an API for that it will have to be some op
-> > > 'invalidate_viommu(..)' and it can get the necessary pointers.
-> > 
-> > OK! I will try that first.
-> > 
-> > > The viommu object will have to be some driver object like the
-> > > iommu_domain.
-> > 
-> > I drafted something like this, linking it to struct iommu_device:
-> > 
-> > +struct iommufd_viommu {
-> > +       struct iommufd_object obj;
-> > +       struct iommufd_ctx *ictx;
-> > +       struct iommu_device *iommu_dev;
-> > +       struct iommufd_hwpt_paging *hwpt;
-> > +       /* array of struct iommufd_device, indexed by device virtual id */
-> > +       struct xarray device_ids;
-> > +};
+On 1/2/24 15:31, Joe Lawrence wrote:
+> On Wed, Dec 20, 2023 at 01:53:12PM -0300, Marcos Paulo de Souza wrote:
+>> Add TEST_GEN_MODS_DIR variable for kselftests. It can point to
+>> a directory containing kernel modules that will be used by
+>> selftest scripts.
+>>
+>> The modules are built as external modules for the running kernel.
+>> As a result they are always binary compatible and the same tests
+>> can be used for older or newer kernels.
+>>
+>> The build requires "kernel-devel" package to be installed.
+>> For example, in the upstream sources, the rpm devel package
+>> is produced by "make rpm-pkg"
+>>
+>> The modules can be built independently by
+>>
+>>    make -C tools/testing/selftests/livepatch/
+>>
+>> or they will be automatically built before running the tests via
+>>
+>>    make -C tools/testing/selftests/livepatch/ run_tests
+>>
+>> Note that they are _not_ built when running the standalone
+>> tests by calling, for example, ./test-state.sh.
+>>
+>> Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
+>> ---
+>>   Documentation/dev-tools/kselftest.rst |  4 ++++
+>>   tools/testing/selftests/lib.mk        | 20 +++++++++++++++-----
+>>   2 files changed, 19 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
+>> index ab376b316c36..7f3582a67318 100644
+>> --- a/Documentation/dev-tools/kselftest.rst
+>> +++ b/Documentation/dev-tools/kselftest.rst
+>> @@ -245,6 +245,10 @@ Contributing new tests (details)
+>>      TEST_PROGS, TEST_GEN_PROGS mean it is the executable tested by
+>>      default.
+>>   
+>> +   TEST_GEN_MODS_DIR should be used by tests that require modules to be built
+>> +   before the test starts. The variable will contain the name of the directory
+>> +   containing the modules.
+>> +
+>>      TEST_CUSTOM_PROGS should be used by tests that require custom build
+>>      rules and prevent common build rule use.
+>>   
+>> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+>> index 118e0964bda9..6c7c5a0112cf 100644
+>> --- a/tools/testing/selftests/lib.mk
+>> +++ b/tools/testing/selftests/lib.mk
+>> @@ -70,12 +70,15 @@ KHDR_INCLUDES := -isystem $(KHDR_DIR)
+>>   # TEST_PROGS are for test shell scripts.
+>>   # TEST_CUSTOM_PROGS and TEST_PROGS will be run by common run_tests
+>>   # and install targets. Common clean doesn't touch them.
+>> +# TEST_GEN_MODS_DIR is used to specify a directory with modules to be built
+>> +# before the test executes. These modules are cleaned on the clean target as well.
+>>   TEST_GEN_PROGS := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS))
+>>   TEST_GEN_PROGS_EXTENDED := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS_EXTENDED))
+>>   TEST_GEN_FILES := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_FILES))
+>> +TEST_GEN_MODS_DIR := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_MODS_DIR))
+>>   
+>>   all: kernel_header_files $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) \
+>> -     $(TEST_GEN_FILES)
+>> +     $(TEST_GEN_FILES) $(if $(TEST_GEN_MODS_DIR),gen_mods_dir)
+>>   
+>>   kernel_header_files:
+>>   	@ls $(KHDR_DIR)/linux/*.h >/dev/null 2>/dev/null;                      \
+>> @@ -105,8 +108,8 @@ endef
+>>   
+>>   run_tests: all
+>>   ifdef building_out_of_srctree
+>> -	@if [ "X$(TEST_PROGS)$(TEST_PROGS_EXTENDED)$(TEST_FILES)" != "X" ]; then \
+>> -		rsync -aq --copy-unsafe-links $(TEST_PROGS) $(TEST_PROGS_EXTENDED) $(TEST_FILES) $(OUTPUT); \
+>> +	@if [ "X$(TEST_PROGS)$(TEST_PROGS_EXTENDED)$(TEST_FILES)$(TEST_GEN_MODS_DIR)" != "X" ]; then \
+>> +		rsync -aq --copy-unsafe-links $(TEST_PROGS) $(TEST_PROGS_EXTENDED) $(TEST_FILES) $(TEST_GEN_MODS_DIR) $(OUTPUT); \
+>>   	fi
+>>   	@if [ "X$(TEST_PROGS)" != "X" ]; then \
+>>   		$(call RUN_TESTS, $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) \
+>> @@ -118,6 +121,12 @@ else
+>>   	@$(call RUN_TESTS, $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) $(TEST_PROGS))
+>>   endif
+>>   
+>> +gen_mods_dir:
+>> +	$(Q)$(MAKE) -C $(TEST_GEN_MODS_DIR)
+>> +
+>> +clean_mods_dir:
+>> +	$(Q)$(MAKE) -C $(TEST_GEN_MODS_DIR) clean
+>> +
+>>   define INSTALL_SINGLE_RULE
+>>   	$(if $(INSTALL_LIST),@mkdir -p $(INSTALL_PATH))
+>>   	$(if $(INSTALL_LIST),rsync -a --copy-unsafe-links $(INSTALL_LIST) $(INSTALL_PATH)/)
+>> @@ -131,6 +140,7 @@ define INSTALL_RULE
+>>   	$(eval INSTALL_LIST = $(TEST_CUSTOM_PROGS)) $(INSTALL_SINGLE_RULE)
+>>   	$(eval INSTALL_LIST = $(TEST_GEN_PROGS_EXTENDED)) $(INSTALL_SINGLE_RULE)
+>>   	$(eval INSTALL_LIST = $(TEST_GEN_FILES)) $(INSTALL_SINGLE_RULE)
+>> +	$(eval INSTALL_LIST = $(TEST_GEN_MODS_DIR)) $(INSTALL_SINGLE_RULE)
 > 
-> The driver would have to create it and there would be some driver
-> specific enclosing struct to go with it
+> Hi Marcos,
 > 
-> Perhaps device_ids goes in the driver specific struct, I don't know.
+> Sorry for the late reply on this, but I'm reviewing this version by
+> trying to retrofit it into our selftest packaging (pre-build the test
+> module .ko's and stash those into an rpm rather than building on the
+> test host).
+> 
+> Since $TEST_GEN_MODS_DIR is treated as a directory, I found that the
+> selftest install target copies a bunch of intermediate object and kbuild
+> files:
+> 
+>    $ mkdir /tmp/test-install
+>    $ make KDIR=$(pwd) INSTALL_PATH=/tmp/test-install TARGETS=livepatch \
+>         -C tools/testing/selftests/ install
+> 
+>    [ ... builds livepatch selftests ... ]
+> 
+> the rsync in question:
+> 
+>    rsync -a --copy-unsafe-links /home/jolawren/src/kernel/tools/testing/selftests/livepatch/test_modules /tmp/test-install/livepatch/
+>    ...
+> 
+> and then looking at the destination:
+> 
+>    $ tree -a /tmp/test-install/
+>    /tmp/test-install/
+>    ├── kselftest
+>    │   ├── module.sh
+>    │   ├── prefix.pl
+>    │   └── runner.sh
+>    ├── kselftest-list.txt
+>    ├── livepatch
+>    │   ├── config
+>    │   ├── functions.sh
+>    │   ├── settings
+>    │   ├── test-callbacks.sh
+>    │   ├── test-ftrace.sh
+>    │   ├── test_klp-call_getpid
+>    │   ├── test-livepatch.sh
+>    │   ├── test_modules
+>    │   │   ├── Makefile
+>    │   │   ├── modules.order
+>    │   │   ├── .modules.order.cmd
+>    │   │   ├── Module.symvers
+>    │   │   ├── .Module.symvers.cmd
+>    │   │   ├── test_klp_atomic_replace.c
+>    │   │   ├── test_klp_atomic_replace.ko
+>    │   │   ├── .test_klp_atomic_replace.ko.cmd
+>    │   │   ├── test_klp_atomic_replace.mod
+>    │   │   ├── test_klp_atomic_replace.mod.c
+>    │   │   ├── .test_klp_atomic_replace.mod.cmd
+>    │   │   ├── test_klp_atomic_replace.mod.o
+>    │   │   ├── .test_klp_atomic_replace.mod.o.cmd
+>    │   │   ├── test_klp_atomic_replace.o
+>    │   │   ├── .test_klp_atomic_replace.o.cmd
+>    ...
+> 
+> On the other hand, variables like $TEST_GEN_FILES specify individual
+> files, so only final binaries like test_klp-call_getpid (and not
+> test_klp-call_getpid.c) are copied to $INSTALL_PATH.
 
-+struct iommufd_viommu {
-+	struct iommufd_object obj;
-+	struct iommufd_ctx *ictx;
-+	struct iommu_device *iommu_dev;
-+	struct iommufd_hwpt_paging *hwpt;	/* maybe unneeded */
-+
-+	int vmid;
-+
-+	union iommu_driver_user_data {
-+		struct iommu_driver_user_vtd;
-+		struct iommu_driver_user_arm_smmuv3;
-+		struct iommu_driver_user_amd_viommu;
-+	};
-+};
 
-Then iommu_ops would need something like:
-	iommu_user_alloc/free(struct iommu_device *iommu_dev,
-			      union *iommu_driver_user_data, int *vmid);
-	iommu_user_set/unset_dev_id(union iommu_driver_user_data,
-				    struct device* dev. u32/u64 id);
-	iommu_user_invalidate(union iommu_driver_user_data *iommu,
-			      struct iommu_user_data_array *array);
+Thank you Joe for finding this problem.
 
-Comments and ideas on better naming convention?
+Copying source files and object files doesn't sound right. This isn't
+how the ksleftest installs work. Let's fix this.
 
-> Not sure it should have hwpt at all, probably vmid should come from
-> the driver specific struct in some driver specific way
+thanks,
+--Shuah
 
-The idea having a hwpt pointer is to share the paging hwpt among
-the viommu objects. I don't think it "shouldn't have", yet likely
-we can avoid it depending on whether it will have some use or not
-in the context.
-
-Nicolin
 
