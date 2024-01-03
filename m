@@ -1,189 +1,233 @@
-Return-Path: <linux-kselftest+bounces-2610-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2611-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E16CE822D59
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Jan 2024 13:44:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD5B1822DFE
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Jan 2024 14:08:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DC4BA1C232AF
-	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Jan 2024 12:44:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B00528420C
+	for <lists+linux-kselftest@lfdr.de>; Wed,  3 Jan 2024 13:08:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFCFB18ED7;
-	Wed,  3 Jan 2024 12:44:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09A521946F;
+	Wed,  3 Jan 2024 13:08:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="ZWQk1+rH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Be4k8Y9h"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2070.outbound.protection.outlook.com [40.107.96.70])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 204E719447;
-	Wed,  3 Jan 2024 12:44:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UqTlkbfy16t9pURMeKZEePX45h3C7rpJMa2r6wjaVqL3kX96PK1HM43xH9Zti92jzL8rdSJ0hy0wNFFRgyITy4kVXXhXWtXOThfVJYX4jVt15hnqbZqo9xj0CwjLRj8dyKK+NGwlfj1hoiTIYC/X2iCjsiA5ZDxTRB5foV7UDe/6S4S+DtWwcW6NL6rW03GXdXhLJkyWEHyQcfIyzDszqLBbyILHbMq4H4zf85BRl3IIdvZlx4tNticiz2HKX7Bh7kChApMZ9HbBgwjMCL1mka9OFGcH1NqJZJvNCNdtCljIvrJhC0TLpL4uarjYPJ2mmu5Fc9gxEyHoLOti2PkNpA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=77Z/1QumbsaXZ1Otjyeou0YVuNkOzpo14wR2XD6mmto=;
- b=f7tGOKBRIw4EM3ZG02FaTjCjkARVKYBcONySqyK23ec3yOP8wpJldtBPId8a1OL28UYtQkrmioktVRtcWXSFwqTC+IU28DJ7eaGBQ1B8I1x5ba87FoP0cBI8NNfoYjTXX4NfQVqu/U/uIRQKqj9WSwHhscjn/Ovc4onYU2swCMvZhPRwkfF3h3wivcBwuLM6BaDboUlHNUHpaATRUGhbfxyPgM0yeUjarAwWWUV4KTG3lQD1JiFCtux8Ge4Jehbk5Lm4agIxEY5y7Njmeegqh7WWBA4MGXI1j1sj28FgJmCWBFnlu9XCUDlagt7EkNgmBCsZVgGfjzyIJg2b4K3DtA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=77Z/1QumbsaXZ1Otjyeou0YVuNkOzpo14wR2XD6mmto=;
- b=ZWQk1+rHEYNXdIcnkPjCwKzuRjdRi6qrm4lZCLIWsSj/RM1/XJzeVGYDCB+OAx8jNOaM+2vgYIPAp/+VKsQl1TjigxUpny07cDBNvWXlwQArV+yfh5OOyxI85bdSmGI0UQzZt1kF1Phn38jxwNQD8nSVvxxMlhNKPFl2dXGlTYk+FVOKjzNVuHYSv5Q6zWCy2wkRpv6/kWrVAZHfUzQ4fIufRxasr9Dn9HU1z0rA4DrmiYBtIRZvjToDv+kbB/q4e+tYc9WG22gldNO1IX+Pn8NsKGOC8/spxRkgwzojJqfuIsv6mY+vY8FI9XQRlNUKHKEwbzR+eDIW2UI51XU2FA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by IA0PR12MB7722.namprd12.prod.outlook.com (2603:10b6:208:432::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7135.25; Wed, 3 Jan
- 2024 12:44:04 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::60d4:c1e3:e1aa:8f93]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::60d4:c1e3:e1aa:8f93%4]) with mapi id 15.20.7135.023; Wed, 3 Jan 2024
- 12:44:04 +0000
-Date: Wed, 3 Jan 2024 08:44:03 -0400
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Baolu Lu <baolu.lu@linux.intel.com>
-Cc: Yi Liu <yi.l.liu@intel.com>, joro@8bytes.org,
-	alex.williamson@redhat.com, kevin.tian@intel.com,
-	robin.murphy@arm.com, cohuck@redhat.com, eric.auger@redhat.com,
-	nicolinc@nvidia.com, kvm@vger.kernel.org, mjrosato@linux.ibm.com,
-	chao.p.peng@linux.intel.com, yi.y.sun@linux.intel.com,
-	peterx@redhat.com, jasowang@redhat.com,
-	shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
-	suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	zhenzhong.duan@intel.com, joao.m.martins@oracle.com,
-	xin.zeng@intel.com, yan.y.zhao@intel.com, j.granados@samsung.com
-Subject: Re: [PATCH v10 10/10] iommu/vt-d: Add iotlb flush for nested domain
-Message-ID: <20240103124403.GM50406@nvidia.com>
-References: <20240102143834.146165-1-yi.l.liu@intel.com>
- <20240102143834.146165-11-yi.l.liu@intel.com>
- <20240102184422.GI50406@nvidia.com>
- <ae271e08-f390-4ce7-914c-63668a46bc4b@intel.com>
- <7486492a-d6ca-425d-9fbe-87107dbbecea@linux.intel.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7486492a-d6ca-425d-9fbe-87107dbbecea@linux.intel.com>
-X-ClientProxiedBy: BL0PR02CA0141.namprd02.prod.outlook.com
- (2603:10b6:208:35::46) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51F1E1944C;
+	Wed,  3 Jan 2024 13:08:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-336c5b5c163so261471f8f.1;
+        Wed, 03 Jan 2024 05:08:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1704287320; x=1704892120; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=b+E6QcjAYA11vs3Rp1E6NcIULNumFumjIbOzut1MN1o=;
+        b=Be4k8Y9hL1XyEQWtAl01WCEgziEJX3YoJkLD7uATB+CwWuB8izu6MKQ2jCuuanBwS5
+         ObXUFDP+KrpGBkzu6MivCbPZwEq3u+Sb9nzbb2O2vn/WnvH9lp5fY70046iO3gjxhGei
+         CJy7Bog4i65XHSa2GmfY58eNopwErvAFFLIFQvH9Kipd9PB1rBBoZGsUeRR/QEwzcLKQ
+         GJhjABXKI19zuVMwmyAu2XFnUML4XrDec6v37/bFN56+mAQMwIwiNb3p2C11LpoHdtVz
+         mSaETr7fD9tdISfSHoXXMHu9+ODknjnOCja2TZcpKgqdfnhBYJLzWycX/UrLJs3Cd6Fm
+         Rbhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704287320; x=1704892120;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=b+E6QcjAYA11vs3Rp1E6NcIULNumFumjIbOzut1MN1o=;
+        b=U2k99ABmHrWQMXNfIdsPU0dzPonhR12EpAk0wstySdZSydA8Olq8RLt9rh39+9ogni
+         hCOW1BrxM5oAXiwTRIU00oV67UUzzMALep3c2S4H9l9jNHLpe4pADMv8k8eKCZRryUmh
+         gvM5rUMOmvPUYGhyVOflqICf0xzFMh4fezMGZOArVaiUatGB09mNqOI2IKCGjt5xrI1t
+         MOVAZgiQiNUbhyb0dVJM0b5BgyvoYpPDqp+Z/pbAHyU+BcVAvu1nsGwy96tUCe7wvCq4
+         Q/kyV2RruKP3NcsP3QO1UdPqdGIrFYVsFFYbo9baX4zhTNLb41CAeLdpYsImPnlQ+2PY
+         dUBA==
+X-Gm-Message-State: AOJu0YxzUQmacsxTEdZd0keeYxJ/Q9Nx/PcZAnmQKQfjmEcV0wqW0kIU
+	XzbrDt4vvqJfRaIzqHWsHkk=
+X-Google-Smtp-Source: AGHT+IEHNseMKZWGxt834g4VKrXkRrJsFyU57vwKh8E7gQkFokNFLyheQbhs3qvdOY74FLKZNx6PQw==
+X-Received: by 2002:a5d:4fd1:0:b0:337:4fa5:f378 with SMTP id h17-20020a5d4fd1000000b003374fa5f378mr125924wrw.52.1704287320213;
+        Wed, 03 Jan 2024 05:08:40 -0800 (PST)
+Received: from debian ([146.70.204.204])
+        by smtp.gmail.com with ESMTPSA id dr16-20020a5d5f90000000b003373ef060d5sm8091435wrb.113.2024.01.03.05.08.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Jan 2024 05:08:39 -0800 (PST)
+Message-ID: <9419df03-a203-4b73-91a6-f008076c29b4@gmail.com>
+Date: Wed, 3 Jan 2024 14:08:19 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|IA0PR12MB7722:EE_
-X-MS-Office365-Filtering-Correlation-Id: d6f164f7-10d0-437d-cae8-08dc0c59ab08
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	UTmfAl0T1YsXPMJsrH6HuCE4qlprhsRV/N3Q76kYKA33vpNmXMYWOtNhGj/ocT5Tu9VN5tJq0FGk5lOAqWGQZ16oaoasUfQK+HU1ZXkCVp07Y8/VNGPOO/9UwkPKBYRWikZLGqLZhJ5ZZ/9XHfTogIS3qaAfny6BrayPtwmlOygeHeYyGAJ9/Js++gV5HWMBtvBZvWtruPX0lqdLrck5YS/3y2b98VtdesqJoNh+eI51CIj/fLP4HwjxF93BP5C/1OTlT0WhExh/QFXaq8knlSlJEfzw+sdCnDlx2TmuLTt6Qt6i/il1jFwUV3adKpmOtO6hNRCNhnbZmBcURAkAAizWwigY4s35qTsoeRIx4sBC4kMBheNN0qaukKkajdoyU01ujbjwqWKNQd7LL53Ac87Ix3uBMNZW6YpUPf/2PvB0K5o5pC/mrR6770cI1G/NzrQGjHnQfPm54lU0xGCUQGnZr548DQIwxlAj3v8nHFaQMAGCwNuL7iXx2WAh8FsK1PH4XHhid3C0kCZze19OdWZjQSPLte4rwZet6VJhGnTaTVwqoVBxtPbHnhgxzXh/Jx/Ak4Sax2+IsVNUQ5q7dv11tSoItCCz6wUroPVEwUU=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(396003)(346002)(376002)(39860400002)(136003)(366004)(230922051799003)(451199024)(64100799003)(186009)(1800799012)(6512007)(1076003)(83380400001)(26005)(2616005)(6506007)(8936002)(8676002)(53546011)(5660300002)(7416002)(4326008)(66946007)(41300700001)(6486002)(478600001)(2906002)(6916009)(316002)(66476007)(66556008)(86362001)(33656002)(38100700002)(36756003)(2304002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?cGpCeU5DVlZYcTJOdkF5R0RkenJudWlPaUUxeDc2bm1yYnM3VnUrYllWNDlp?=
- =?utf-8?B?RUtoL05RVmtGVWlpcnFuSkU1UHRYZmluTmlQcUkzWHd5RlFYOWp5emNzdzBW?=
- =?utf-8?B?aXd1Tit1R0pteC9Jc1FweGQxWHVidnRJTFRiNTVaS2t0RFV4cGo3MHlrMUdD?=
- =?utf-8?B?NC9kdGl2V3BxUWdoeHRZQXdsVXNYeU1LU1UzRHJZTzhMdXlMT2tqSjJ2Nmgx?=
- =?utf-8?B?WU0ydysrMW1rWUhsaTQ5QzVuZnhzNDFrS2xvRGlMeWR6dDVHbGI5eDltRHFD?=
- =?utf-8?B?R0lrSVNnaUhFUHA5OXlPSCtybmVEWVYrcER1bWhkVDlnU3B2UWhmRUM2S0VP?=
- =?utf-8?B?VElZeHBvRWlUSng4S2REUEZNQ256amRlc21pZ3R0VW5uMi8rQ2xBUWJsNnNG?=
- =?utf-8?B?Tit5ZUtqUzhZVSt5aW5uQnM0VkNKUE9jR0ZGeVIxaUhrTERGL0h6RGxDbnBk?=
- =?utf-8?B?NDh1ankwZ2RXbVNGSUJ2WkdTZy9KdUVkUFlTWHBLYzFCTzNxMDBWZ2pqTnY5?=
- =?utf-8?B?SUFMclFSTDhCQjlRcDNsVEFpNzdTWWZOVnFYeEJnVWxTM0VhdkY3Rzl4MXhQ?=
- =?utf-8?B?ZFE1aTFsU0FIeDF0ay9LbnQwYjFGdjR1RG5EYlRrTVJUVnZBWkRiZDVKTHNk?=
- =?utf-8?B?bTJrRVlBNlFEdmFkQ0hLWlpqampDQzBqRmlaUVEzd3RMMVI4VzBsTnJrODVI?=
- =?utf-8?B?L1VYUWY5UUR6YmJ4Ty9QN3NuK1h6aGVFSTE5bzc4SXE3TU1VNVpTVFNKaFlV?=
- =?utf-8?B?ZGlCc1I5YVNxVURMWDg5bmdsRkoxcnBVWktOT25qeTdEQmh6Y0haYnA0dFhh?=
- =?utf-8?B?SFN6VkRTR2kzOTlVSHZkNFNJYWFXQ3V2K3lnMXRFRHh1MG5FUWFvY09zeE9n?=
- =?utf-8?B?blBqZUFuQ0VhanI4VlRFL3hLQWNlMnI5MWF2UWtwcGJueXB2SEJxOFVYc3ZI?=
- =?utf-8?B?VlU4eU9keWI2UVFnQk5EU3F3UDRQN2ZoRmFSUlpoY1FvKzllMExjdXUrVGpJ?=
- =?utf-8?B?ejZZbzQ1a0E0MENGZU9mMTVRUGx0YmhvaExOcDBYTEFVbnhXR1pVekJvQVdV?=
- =?utf-8?B?TVdTZDk1cUtZdHg5ZTBaZXVWcHFtSEVGUVltUFEvVG9jQnlPdGRmczlpVFRY?=
- =?utf-8?B?WWNuOHBoUDFRcm52WjZIRUsxd29rTVVLbnRGUk1hTTJaUEZHNlBVdzhGak5v?=
- =?utf-8?B?TlpscUNuQnA1Q05sL09hSHV5YWNFUUVwQUNYT1AwWi9SYmJFMUNPVG5CRklU?=
- =?utf-8?B?NURFT0FwVHNHLzJMQjF1WW9PWGhyc3RsNnU5SWFSK2lnSlc4cGV0SEFEU3JH?=
- =?utf-8?B?YUczaG1oR1YrMHg5RWZRZzVraDFRckpsZHdseWkydG92M0kzNXNpWGM4OWIv?=
- =?utf-8?B?MjU4eHZObzB5S1prN2hDR0daRXNLbHlyOXZ0VmpVWnV5VnBSK3RhMklzc05T?=
- =?utf-8?B?OG52ZEh6RHRxTEk2QTZiZzR2dnF2bTk4and5RDZkRlA5Rm8yWnRWdGtQNTNm?=
- =?utf-8?B?TUxra1RUMjRIUDIzK3d5QURJQStsNVQ5TmFHaHFVdGtrYnlEQ3h4SWRLbFZQ?=
- =?utf-8?B?OWdmZmtRbGFuSGp2WTdTcml5U2laMjZvQVlHdHZrWFNOb1E3bStFNUR6UU5C?=
- =?utf-8?B?WE1LY09xbWdPZ001amsxM1J2UHFucmZqY0poUDE2NWJhcG10L2grOEZPZlo1?=
- =?utf-8?B?akxSL0ZlZVhoUzVnQVBRU2ovcUhJT0dYSmFaZ1diZ2RhV3g4MHhZRVVtV2xw?=
- =?utf-8?B?SXFRcWdGNmZCNHVWc1BUbnJYcEtHK0lsUmNOV3V2NDBYWXlqWlpnMWwrYTE1?=
- =?utf-8?B?bm14WjBVSkQ3ajExMm9TWEo1L043OW8rUWtpcUZ0UFhyRFZoeXUyUUJCaE1T?=
- =?utf-8?B?aGd1SW90YWNMVUxBVzNqMTVXeE1aVGZkWDJabWx4TFltTjFmMlZLeDMwUXpS?=
- =?utf-8?B?UnF2T000Kyt0VDZnQmFUUFJmNTlYZ0NYYklxNjdwY0t1OFhHOXdRakp5MEZ6?=
- =?utf-8?B?QVRUK2cvK3FLdzBtZmY1dW0rUmhwbDAyWGp0YlYvK3V0S1F1OGRVVTFsbWxU?=
- =?utf-8?B?MExFcmZEcURmYmY1NDJ1b1VjK0tyNHZyeS9NMXFteHo3b2s5RDRES3FPa29S?=
- =?utf-8?Q?3wYqJhhPqwovutf4eZzPV8Wxb?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d6f164f7-10d0-437d-cae8-08dc0c59ab08
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Jan 2024 12:44:04.2406
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 1nyUeDQfD5YIKq1slgrJZ6kVH54YvRlhZFTAm/vsxUgpIN5M000dpEBc6r6P2bhP
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB7722
+Subject: Re: [PATCH net-next v2 2/3] net: gro: parse ipv6 ext headers without
+ frag0 invalidation
+To: Eric Dumazet <edumazet@google.com>
+Cc: davem@davemloft.net, dsahern@kernel.org, kuba@kernel.org,
+ pabeni@redhat.com, shuah@kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <127b8199-1cd4-42d7-9b2b-875abaad93fe@gmail.com>
+ <90117449-1f4a-47d7-baf4-2ed6540bc436@gmail.com>
+ <CANn89i+GJOgcDWK=C0+vmomt2ShotrOKyLiXzFkfT1W8vpJv1Q@mail.gmail.com>
+From: Richard Gobert <richardbgobert@gmail.com>
+In-Reply-To: <CANn89i+GJOgcDWK=C0+vmomt2ShotrOKyLiXzFkfT1W8vpJv1Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jan 03, 2024 at 11:06:19AM +0800, Baolu Lu wrote:
-> On 2024/1/3 9:33, Yi Liu wrote:
-> > On 2024/1/3 02:44, Jason Gunthorpe wrote:
-> > > On Tue, Jan 02, 2024 at 06:38:34AM -0800, Yi Liu wrote:
-> > > 
-> > > > +static void intel_nested_flush_cache(struct dmar_domain
-> > > > *domain, u64 addr,
-> > > > +                     unsigned long npages, bool ih, u32 *error)
-> > > > +{
-> > > > +    struct iommu_domain_info *info;
-> > > > +    unsigned long i;
-> > > > +    unsigned mask;
-> > > > +    u32 fault;
-> > > > +
-> > > > +    xa_for_each(&domain->iommu_array, i, info)
-> > > > +        qi_flush_piotlb(info->iommu,
-> > > > +                domain_id_iommu(domain, info->iommu),
-> > > > +                IOMMU_NO_PASID, addr, npages, ih, NULL);
-> > > 
-> > > This locking on the xarray is messed up throughout the driver. There
-> > > could be a concurrent detach at this point which will free info and
-> > > UAF this.
-> > 
-> > hmmm, xa_for_each() takes and releases rcu lock, and according to the
-> > domain_detach_iommu(), info is freed after xa_erase(). For an existing
-> > info stored in xarray, xa_erase() should return after rcu lock is released.
-> > is it? Any idea? @Baolu
+
+
+Eric Dumazet wrote:
+> On Tue, Jan 2, 2024 at 2:25 PM Richard Gobert <richardbgobert@gmail.com> wrote:
+>>
+>> The existing code always pulls the IPv6 header and sets the transport
+>> offset initially. Then optionally again pulls any extension headers in
+>> ipv6_gso_pull_exthdrs and sets the transport offset again on return from
+>> that call. skb->data is set at the start of the first extension header
+>> before calling ipv6_gso_pull_exthdrs, and must disable the frag0
+>> optimization because that function uses pskb_may_pull/pskb_pull instead of
+>> skb_gro_ helpers. It sets the GRO offset to the TCP header with
+>> skb_gro_pull and sets the transport header. Then returns skb->data to its
+>> position before this block.
+>>
+>> This commit introduces a new helper function - ipv6_gro_pull_exthdrs -
+>> which is used in ipv6_gro_receive to pull ipv6 ext headers instead of
+>> ipv6_gso_pull_exthdrs. Thus, there is no modification of skb->data, all
+>> operations use skb_gro_* helpers, and the frag0 fast path can be taken for
+>> IPv6 packets with ext headers.
+>>
+>> Signed-off-by: Richard Gobert <richardbgobert@gmail.com>
+>> Reviewed-by: Willem de Bruijn <willemb@google.com>
+>> ---
+>>  include/net/ipv6.h     |  1 +
+>>  net/ipv6/ip6_offload.c | 51 +++++++++++++++++++++++++++++++++---------
+>>  2 files changed, 42 insertions(+), 10 deletions(-)
+>>
+>> diff --git a/include/net/ipv6.h b/include/net/ipv6.h
+>> index 78d38dd88aba..217240efa182 100644
+>> --- a/include/net/ipv6.h
+>> +++ b/include/net/ipv6.h
+>> @@ -26,6 +26,7 @@ struct ip_tunnel_info;
+>>  #define SIN6_LEN_RFC2133       24
+>>
+>>  #define IPV6_MAXPLEN           65535
+>> +#define IPV6_MIN_EXTHDR_LEN    8
 > 
-> I once thought locking for xarray is self-contained. I need more thought
-> on this before taking further action.
+> // Hmm see my following comment.
+> 
+>>
+>>  /*
+>>   *     NextHeader field of IPv6 header
+>> diff --git a/net/ipv6/ip6_offload.c b/net/ipv6/ip6_offload.c
+>> index 0e0b5fed0995..c07111d8f56a 100644
+>> --- a/net/ipv6/ip6_offload.c
+>> +++ b/net/ipv6/ip6_offload.c
+>> @@ -37,6 +37,40 @@
+>>                 INDIRECT_CALL_L4(cb, f2, f1, head, skb);        \
+>>  })
+>>
+>> +static int ipv6_gro_pull_exthdrs(struct sk_buff *skb, int off, int proto)
+>> +{
+>> +       const struct net_offload *ops = NULL;
+>> +       struct ipv6_opt_hdr *opth;
+>> +
+>> +       for (;;) {
+>> +               int len;
+>> +
+>> +               ops = rcu_dereference(inet6_offloads[proto]);
+>> +
+>> +               if (unlikely(!ops))
+>> +                       break;
+>> +
+>> +               if (!(ops->flags & INET6_PROTO_GSO_EXTHDR))
+>> +                       break;
+>> +
+>> +               opth = skb_gro_header(skb, off + IPV6_MIN_EXTHDR_LEN, off);
+> 
+> I do not see a compelling reason for adding yet another constant here.
+> 
+> I would stick to
+> 
+>    opth = skb_gro_header(skb, off + sizeof(*opth), off);
+> 
+> Consistency with similar helpers is desirable.
+> 
 
-The locking of xarray itself is self-contained, but once it returns a
-value then the user has to provide locking to protect the value.
+In terms of consistency - similar helper functions (ipv6_gso_pull_exthdrs,
+ipv6_parse_hopopts) also pull 8 bytes at the beginning of every IPv6
+extension header, because the minimum extension header length is 8 bytes.
 
-In this case the xarray storage memory itself will not UAF but the
-info pointer to memory returned from the xarray will.
+sizeof(*opth) = 2, so for an IPv6 packet with one extension header with a
+common length of 8 bytes, pskb_may_pull will be called twice: first with
+length = 2 and again with length = 8, which might not be ideal when parsing
+non-linear packets.
 
-I've been thinking arm/amd/intel all need the same datastructure here,
-and it is a bit complicated. We should try to make a library to handle
-it..
+Willem suggested adding a constant to make the code more self-documenting.
 
-It is straightforward except for the RCU list walk for invalidation..
-
-Jason
+>> +               if (unlikely(!opth))
+>> +                       break;
+>> +
+>> +               len = ipv6_optlen(opth);
+>> +
+>> +               opth = skb_gro_header(skb, off + len, off);
+> 
+> Note this call will take care of precise pull.
+> 
+>> +               if (unlikely(!opth))
+>> +                       break;
+>> +               proto = opth->nexthdr;
+>> +
+>> +               off += len;
+>> +       }
+>> +
+>> +       skb_gro_pull(skb, off - skb_network_offset(skb));
+>> +       return proto;
+>> +}
+>> +
+>>  static int ipv6_gso_pull_exthdrs(struct sk_buff *skb, int proto)
+>>  {
+>>         const struct net_offload *ops = NULL;
+>> @@ -203,28 +237,25 @@ INDIRECT_CALLABLE_SCOPE struct sk_buff *ipv6_gro_receive(struct list_head *head,
+>>                 goto out;
+>>
+>>         skb_set_network_header(skb, off);
+>> -       skb_gro_pull(skb, sizeof(*iph));
+>> -       skb_set_transport_header(skb, skb_gro_offset(skb));
+>>
+>> -       flush += ntohs(iph->payload_len) != skb_gro_len(skb);
+>> +       flush += ntohs(iph->payload_len) != skb->len - hlen;
+>>
+>>         proto = iph->nexthdr;
+>>         ops = rcu_dereference(inet6_offloads[proto]);
+>>         if (!ops || !ops->callbacks.gro_receive) {
+>> -               pskb_pull(skb, skb_gro_offset(skb));
+>> -               skb_gro_frag0_invalidate(skb);
+>> -               proto = ipv6_gso_pull_exthdrs(skb, proto);
+>> -               skb_gro_pull(skb, -skb_transport_offset(skb));
+>> -               skb_reset_transport_header(skb);
+>> -               __skb_push(skb, skb_gro_offset(skb));
+>> +               proto = ipv6_gro_pull_exthdrs(skb, hlen, proto);
+>>
+>>                 ops = rcu_dereference(inet6_offloads[proto]);
+>>                 if (!ops || !ops->callbacks.gro_receive)
+>>                         goto out;
+>>
+>> -               iph = ipv6_hdr(skb);
+>> +               iph = skb_gro_network_header(skb);
+>> +       } else {
+>> +               skb_gro_pull(skb, sizeof(*iph));
+>>         }
+>>
+>> +       skb_set_transport_header(skb, skb_gro_offset(skb));
+>> +
+>>         NAPI_GRO_CB(skb)->proto = proto;
+>>
+>>         flush--;
+>> --
+>> 2.36.1
+>>
 
