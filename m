@@ -1,291 +1,248 @@
-Return-Path: <linux-kselftest+bounces-2641-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2643-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86D69824868
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Jan 2024 19:52:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 899FD824A44
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Jan 2024 22:25:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EF76F1F24E7E
-	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Jan 2024 18:52:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A22D11C20DAF
+	for <lists+linux-kselftest@lfdr.de>; Thu,  4 Jan 2024 21:25:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F73728E21;
-	Thu,  4 Jan 2024 18:51:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E32AA2C6BA;
+	Thu,  4 Jan 2024 21:24:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="la9o0m8e"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RhwXOTh4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-yw1-f201.google.com (mail-yw1-f201.google.com [209.85.128.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A40D2C1B7
-	for <linux-kselftest@vger.kernel.org>; Thu,  4 Jan 2024 18:51:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-1d4d4542526so6029825ad.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 04 Jan 2024 10:51:52 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62DD62D03D
+	for <linux-kselftest@vger.kernel.org>; Thu,  4 Jan 2024 21:24:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--maheshb.bounces.google.com
+Received: by mail-yw1-f201.google.com with SMTP id 00721157ae682-5eef1c0fdadso15202677b3.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 04 Jan 2024 13:24:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1704394312; x=1704999112; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Jycb6hYHwyiIhFY8GEZ+4HXYhrCSpdkd/0XeHo/twrU=;
-        b=la9o0m8eRYvPPmNa9D6NAUgBOQHu0dwEpGW0FFlR3FSM9+WKvDRVQuRSxJrwsPZdQT
-         MzIwXiRxjtnwliKKdsxnhAJieclP6jLyKcf8RTpOe+FKsoin8BNXUXBNN9hKXCCRIUTQ
-         T0QmKhxkAE11UqP88nxa5/8gWLlqtTEQdAD5k=
+        d=google.com; s=20230601; t=1704403485; x=1705008285; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=xENgso4n4fwY8PEdZvKR4PshgcWGW2WWHOQxmwL55XE=;
+        b=RhwXOTh4OY7SZ5jAZ7pJ8OlxR54FOn2ymG4/SAY5qUum+8C5PPEPwbPiSFZv3lecBr
+         ZoeaxigfJ6z6jfcOh9/ha5W92Kt3Ws9Rf5081MIM1g27iwzlztmr9iXLli2KMYgxZqv6
+         J5x3dyrnROefuig2qclji6EntxBflTc7Hln9zd6v6V4tSzRXYgJX6Lpi/orhaFRhPnf3
+         LfNQBcvQcllO95nsLmL2AAtLFlqcwPoieCFV6f1x9GhHH/sH/G/4iWMTPcucmVag2oce
+         7bkxzaQwRc+wNI6GellgSWeGCdKOg2RAz1NdUbfNZJm7b5bbrS13Tr2sQvz3/xPEgSvC
+         6gcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704394312; x=1704999112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Jycb6hYHwyiIhFY8GEZ+4HXYhrCSpdkd/0XeHo/twrU=;
-        b=Jzykyqae+hpmNdYAqvJofCHf/ig334WJyo6oZLWy9Aijg7/Gwvbxs8W8XwwECSo/Jr
-         qvTgyOqPMfJ5EXO+c5Anb3GlqbNSGnyYjJTLaf6XJGKR8S+W7nEAeMR2j7VJ0aZ7QfAB
-         jXFileBnOBX1Mo24mEx2+MdwOYHBqc2qzxBng/Cm/pPuo1ZegSsqrqiJET98sYU02B46
-         rExJA3YxelFi/6OItBjLoQri5HTYGyuZZVaVwJWl4ze14n+GTRGpagrV+Z4uGil4rp0e
-         ozoKnq04NCHqT9M1BLunAWtDrH7dNoA/BjE2rs7pSFquxBj248ih1fIr0EWUAInrOJKG
-         rx+Q==
-X-Gm-Message-State: AOJu0YyPOUX92PTUIoUXJgCN5kvyCckIUlAdnaNQMJtHLOANCf+ZKRww
-	l8ojo3QVHcZmnRXBGdgqCmFhY8pLGmfs
-X-Google-Smtp-Source: AGHT+IGiMfjpvphjF5Sdh5G8uUcbaXUgkSlaqH4Fciap9D7iafeQeLa6oLHP/SX6kjaHPtcOmgVn1g==
-X-Received: by 2002:a17:902:7c12:b0:1d4:3012:f4ca with SMTP id x18-20020a1709027c1200b001d43012f4camr942477pll.56.1704394311796;
-        Thu, 04 Jan 2024 10:51:51 -0800 (PST)
-Received: from localhost (34.85.168.34.bc.googleusercontent.com. [34.168.85.34])
-        by smtp.gmail.com with UTF8SMTPSA id p16-20020a170903249000b001cffd42711csm8234968plw.199.2024.01.04.10.51.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 04 Jan 2024 10:51:50 -0800 (PST)
-From: jeffxu@chromium.org
-To: akpm@linux-foundation.org,
-	keescook@chromium.org,
-	jannh@google.com,
-	sroettger@google.com,
-	willy@infradead.org,
-	gregkh@linuxfoundation.org,
-	torvalds@linux-foundation.org,
-	usama.anjum@collabora.com
-Cc: jeffxu@google.com,
-	jorgelo@chromium.org,
-	groeck@chromium.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org,
-	pedro.falcato@gmail.com,
-	dave.hansen@intel.com,
-	linux-hardening@vger.kernel.org,
-	deraadt@openbsd.org,
-	Jeff Xu <jeffxu@chromium.org>
-Subject: [RFC PATCH v4 4/4] mseal:add documentation
-Date: Thu,  4 Jan 2024 18:51:37 +0000
-Message-ID: <20240104185138.169307-5-jeffxu@chromium.org>
-X-Mailer: git-send-email 2.43.0.195.gebba966016-goog
-In-Reply-To: <20240104185138.169307-1-jeffxu@chromium.org>
-References: <20240104185138.169307-1-jeffxu@chromium.org>
+        d=1e100.net; s=20230601; t=1704403485; x=1705008285;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xENgso4n4fwY8PEdZvKR4PshgcWGW2WWHOQxmwL55XE=;
+        b=APOacWtNr9WjWIw4W8R+fc7qD38VKt7IfRSwdywsrKpVdk7SCczq3I38vMERm9sinn
+         3+VVkDGLVXam06c+zjcSPuS1j9G9ruJx/Rf0fEs/QQ8uPE2C8gV0bidZfAPmh+8/k5uw
+         V7EHM+85ICw935oPPrVvneNwvNy1skcP9sJufO37uCu6RRP3iFW+THWqp3xbCjotftw/
+         zVNMPvGTEqt9JLuuLK5Y2PBZyQsNjQcgxOdbJ4hctlHtKUba245IPZqbdjetD2UD2QIc
+         IUmcMp3pFwwxFQAqm5xYd9kJR5xO27a94ypkfgqfU3p77fxDfr2jNBPxQDYBTv4TkRSt
+         FcEg==
+X-Gm-Message-State: AOJu0YwirIGwppuNkYK53V30HQoluE+6Qhtw32eswfc5DdWGYWWyT4SX
+	I7eN/mOJmzrXnP9TmZgpFozmi4hITvQVSdQoLT8=
+X-Google-Smtp-Source: AGHT+IET83VvDAOj7JZXvBx/xaIF5a53RRUZ4JeEWaaMQjz8Wpcmfjbtpny2NCSB1F0J2HSWux18PBjjMx+4
+X-Received: from coldfire.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:2b7a])
+ (user=maheshb job=sendgmr) by 2002:a05:690c:303:b0:5d3:b449:e58e with SMTP id
+ bg3-20020a05690c030300b005d3b449e58emr494691ywb.6.1704403485511; Thu, 04 Jan
+ 2024 13:24:45 -0800 (PST)
+Date: Thu,  4 Jan 2024 13:24:42 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.43.0.195.gebba966016-goog
+Message-ID: <20240104212442.3276812-1-maheshb@google.com>
+Subject: [PATCHv3 net-next 3/3] selftest/ptp: extend test to include ptp_gettimex64any()
+From: Mahesh Bandewar <maheshb@google.com>
+To: Netdev <netdev@vger.kernel.org>, Linux <linux-kernel@vger.kernel.org>, 
+	David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, John Stultz <jstultz@google.com>, Don Hatchett <hatch@google.com>, 
+	Yuliang Li <yuliangli@google.com>, Mahesh Bandewar <mahesh@bandewar.net>, 
+	Mahesh Bandewar <maheshb@google.com>, Richard Cochran <richardcochran@gmail.com>, 
+	Willem de Bruijn <willemb@google.com>, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-From: Jeff Xu <jeffxu@chromium.org>
+Update testptp.c to exercise the new ptp method gettimex64any().
 
-Add documentation for mseal().
+When only -x option is given the PTP_SYS_OFFSET_EXTENDED or
+gettimex64() method is exercised while presence of -x with -y
+will exercise PTP_SYS_OFFSET_ANY or gettimex64any() method.
+-y option is to choose the timebase from available options
+of real, mono, or raw.
 
-Signed-off-by: Jeff Xu <jeffxu@chromium.org>
+Signed-off-by: Mahesh Bandewar <maheshb@google.com>
+CC: Richard Cochran <richardcochran@gmail.com>
+CC: "David S. Miller" <davem@davemloft.net>
+CC: John Stultz <jstultz@google.com>
+CC: Jakub Kicinski <kuba@kernel.org>
+CC: "Willem de Bruijn" <willemb@google.com>
+CC: linux-kselftest@vger.kernel.org
+CC: netdev@vger.kernel.org
 ---
- Documentation/userspace-api/mseal.rst | 181 ++++++++++++++++++++++++++
- 1 file changed, 181 insertions(+)
- create mode 100644 Documentation/userspace-api/mseal.rst
+ tools/testing/selftests/ptp/testptp.c | 96 ++++++++++++++++++++++++++-
+ 1 file changed, 94 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/userspace-api/mseal.rst b/Documentation/userspace-api/mseal.rst
-new file mode 100644
-index 000000000000..1700ce5af218
---- /dev/null
-+++ b/Documentation/userspace-api/mseal.rst
-@@ -0,0 +1,181 @@
-+.. SPDX-License-Identifier: GPL-2.0
+diff --git a/tools/testing/selftests/ptp/testptp.c b/tools/testing/selftests/ptp/testptp.c
+index 011252fe238c..dd390062b883 100644
+--- a/tools/testing/selftests/ptp/testptp.c
++++ b/tools/testing/selftests/ptp/testptp.c
+@@ -146,8 +146,9 @@ static void usage(char *progname)
+ 		" -T val     set the ptp clock time to 'val' seconds\n"
+ 		" -x val     get an extended ptp clock time with the desired number of samples (up to %d)\n"
+ 		" -X         get a ptp clock cross timestamp\n"
++		" -y val     sandwich timebase to use {real|mono|raw}\n"
+ 		" -z         test combinations of rising/falling external time stamp flags\n",
+-		progname, PTP_MAX_SAMPLES);
++		progname, PTP_MAX_SAMPLES, PTP_MAX_SAMPLES);
+ }
+ 
+ int main(int argc, char *argv[])
+@@ -163,6 +164,7 @@ int main(int argc, char *argv[])
+ 	struct ptp_sys_offset *sysoff;
+ 	struct ptp_sys_offset_extended *soe;
+ 	struct ptp_sys_offset_precise *xts;
++	struct ptp_sys_offset_any *ats;
+ 
+ 	char *progname;
+ 	unsigned int i;
+@@ -183,6 +185,8 @@ int main(int argc, char *argv[])
+ 	int pct_offset = 0;
+ 	int getextended = 0;
+ 	int getcross = 0;
++	int get_ext_any = 0;
++	clockid_t ext_any_clkid = -1;
+ 	int n_samples = 0;
+ 	int pin_index = -1, pin_func;
+ 	int pps = -1;
+@@ -198,7 +202,7 @@ int main(int argc, char *argv[])
+ 
+ 	progname = strrchr(argv[0], '/');
+ 	progname = progname ? 1+progname : argv[0];
+-	while (EOF != (c = getopt(argc, argv, "cd:e:f:F:ghH:i:k:lL:n:o:p:P:sSt:T:w:x:Xz"))) {
++	while (EOF != (c = getopt(argc, argv, "cd:e:f:F:ghH:i:k:lL:n:o:p:P:sSt:T:w:x:Xy:z"))) {
+ 		switch (c) {
+ 		case 'c':
+ 			capabilities = 1;
+@@ -278,6 +282,20 @@ int main(int argc, char *argv[])
+ 		case 'X':
+ 			getcross = 1;
+ 			break;
++		case 'y':
++			if (!strcasecmp(optarg, "real"))
++				ext_any_clkid = CLOCK_REALTIME;
++			else if (!strcasecmp(optarg, "mono"))
++				ext_any_clkid = CLOCK_MONOTONIC;
++			else if (!strcasecmp(optarg, "raw"))
++				ext_any_clkid = CLOCK_MONOTONIC_RAW;
++			else {
++				fprintf(stderr,
++					"type needs to be one of real,mono,raw only; was given %s\n",
++					optarg);
++				return -1;
++			}
++			break;
+ 		case 'z':
+ 			flagtest = 1;
+ 			break;
+@@ -291,6 +309,18 @@ int main(int argc, char *argv[])
+ 		}
+ 	}
+ 
++	/* For ptp_sys_offset_any both options 'x', 'y' must be given */
++	if (ext_any_clkid > -1) {
++		if (getextended == 0) {
++			fprintf(stderr,
++				"For extended-any TS both options -x, and -y are required.\n");
++			usage(progname);
++			return -1;
++		}
++		get_ext_any = getextended;
++		getextended = 0;
++	}
 +
-+=====================
-+Introduction of mseal
-+=====================
+ 	fd = open(device, O_RDWR);
+ 	if (fd < 0) {
+ 		fprintf(stderr, "opening %s: %s\n", device, strerror(errno));
+@@ -621,6 +651,68 @@ int main(int argc, char *argv[])
+ 		}
+ 	}
+ 
++	if (get_ext_any) {
++		ats = calloc(1, sizeof(*ats));
++		if (!ats) {
++			perror("calloc");
++			return -1;
++		}
 +
-+:Author: Jeff Xu <jeffxu@chromium.org>
++		ats->n_samples = get_ext_any;
++		ats->clockid = ext_any_clkid;
 +
-+Modern CPUs support memory permissions such as RW and NX bits. The memory
-+permission feature improves security stance on memory corruption bugs, i.e.
-+the attacker can’t just write to arbitrary memory and point the code to it,
-+the memory has to be marked with X bit, or else an exception will happen.
++		if (ioctl(fd, PTP_SYS_OFFSET_ANY, ats)) {
++			perror("PTP_SYS_OFFSET_ANY");
++		} else {
++			printf("extended-any timestamp request returned %d samples\n",
++			       get_ext_any);
 +
-+Memory sealing additionally protects the mapping itself against
-+modifications. This is useful to mitigate memory corruption issues where a
-+corrupted pointer is passed to a memory management system. For example,
-+such an attacker primitive can break control-flow integrity guarantees
-+since read-only memory that is supposed to be trusted can become writable
-+or .text pages can get remapped. Memory sealing can automatically be
-+applied by the runtime loader to seal .text and .rodata pages and
-+applications can additionally seal security critical data at runtime.
++			for (i = 0; i < get_ext_any; i++) {
++				switch (ext_any_clkid) {
++				case CLOCK_REALTIME:
++					printf("sample #%2d: system time before: %lld.%09u\n",
++					       i, ats->ts[i][0].sec,
++					       ats->ts[i][0].nsec);
++					break;
++				case CLOCK_MONOTONIC:
++					printf("sample #%2d: monotonic time before: %lld.%09u\n",
++					       i, ats->ts[i][0].sec,
++					       ats->ts[i][0].nsec);
++					break;
++				case CLOCK_MONOTONIC_RAW:
++					printf("sample #%2d: raw-monotonic time before: %lld.%09u\n",
++					       i, ats->ts[i][0].sec,
++					       ats->ts[i][0].nsec);
++					break;
++				default:
++					break;
++				}
++				printf("            phc time: %lld.%09u\n",
++				       ats->ts[i][1].sec, ats->ts[i][1].nsec);
++				switch (ext_any_clkid) {
++				case CLOCK_REALTIME:
++					printf("            system time after: %lld.%09u\n",
++					       ats->ts[i][2].sec,
++					       ats->ts[i][2].nsec);
++					break;
++				case CLOCK_MONOTONIC:
++					printf("            monotonic time after: %lld.%09u\n",
++					       ats->ts[i][2].sec,
++					       ats->ts[i][2].nsec);
++					break;
++				case CLOCK_MONOTONIC_RAW:
++					printf("            raw-monotonic time after: %lld.%09u\n",
++					       ats->ts[i][2].sec,
++					       ats->ts[i][2].nsec);
++					break;
++				default:
++					break;
++				}
++			}
++		}
 +
-+A similar feature already exists in the XNU kernel with the
-+VM_FLAGS_PERMANENT flag [1] and on OpenBSD with the mimmutable syscall [2].
-+
-+User API
-+========
-+Two system calls are involved in virtual memory sealing, mseal() and mmap().
-+
-+mseal()
-+-----------
-+The mseal() syscall has following signature:
-+
-+``int mseal(void addr, size_t len, unsigned long flags)``
-+
-+**addr/len**: virtual memory address range.
-+
-+The address range set by ``addr``/``len`` must meet:
-+   - The start address must be in an allocated VMA.
-+   - The start address must be page aligned.
-+   - The end address (``addr`` + ``len``) must be in an allocated VMA.
-+   - no gap (unallocated memory) between start and end address.
-+
-+The ``len`` will be paged aligned implicitly by the kernel.
-+
-+**flags**: reserved for future use.
-+
-+**return values**:
-+
-+- ``0``: Success.
-+
-+- ``-EINVAL``:
-+    - Invalid input ``flags``.
-+    - The start address (``addr``) is not page aligned.
-+    - Address range (``addr`` + ``len``) overflow.
-+
-+- ``-ENOMEM``:
-+    - The start address (``addr``) is not allocated.
-+    - The end address (``addr`` + ``len``) is not allocated.
-+    - A gap (unallocated memory) between start and end address.
-+
-+- ``-EACCES``:
-+    - ``MAP_SEALABLE`` is not set during mmap().
-+
-+- ``-EPERM``:
-+    - sealing is supported only on 64 bit CPUs, 32-bit is not supported.
-+
-+- For above error cases, users can expect the given memory range is
-+  unmodified, i.e. no partial update.
-+
-+- There might be other internal errors/cases not listed here, e.g.
-+  error during merging/splitting VMAs, or the process reaching the max
-+  number of supported VMAs. In those cases, partial updates to the given
-+  memory range could happen. However, those cases shall be rare.
-+
-+**Blocked operations after sealing**:
-+    Unmapping, moving to another location, and shrinking the size,
-+    via munmap() and mremap(), can leave an empty space, therefore
-+    can be replaced with a VMA with a new set of attributes.
-+
-+    Moving or expanding a different VMA into the current location,
-+    via mremap().
-+
-+    Modifying a VMA via mmap(MAP_FIXED).
-+
-+    Size expansion, via mremap(), does not appear to pose any
-+    specific risks to sealed VMAs. It is included anyway because
-+    the use case is unclear. In any case, users can rely on
-+    merging to expand a sealed VMA.
-+
-+    mprotect() and pkey_mprotect().
-+
-+    Some destructive madvice() behaviors (e.g. MADV_DONTNEED)
-+    for anonymous memory, when users don't have write permission to the
-+    memory. Those behaviors can alter region contents by discarding pages,
-+    effectively a memset(0) for anonymous memory.
-+
-+**Note**:
-+
-+- mseal() only works on 64-bit CPUs, not 32-bit CPU.
-+
-+- users can call mseal() multiple times, mseal() on an already sealed memory
-+  is a no-action (not error).
-+
-+- munseal() is not supported.
-+
-+mmap()
-+----------
-+``void *mmap(void* addr, size_t length, int prot, int flags, int fd,
-+off_t offset);``
-+
-+We add two changes in ``prot`` and ``flags`` of  mmap() related to
-+memory sealing.
-+
-+**prot**
-+
-+The ``PROT_SEAL`` bit in ``prot`` field of mmap().
-+
-+When present, it marks the memory is sealed since creation.
-+
-+This is useful as optimization because it avoids having to make two
-+system calls: one for mmap() and one for mseal().
-+
-+It's worth noting that even though the sealing is set via the
-+``prot`` field in mmap(), it can't be set in the ``prot``
-+field in later mprotect(). This is unlike the ``PROT_READ``,
-+``PROT_WRITE``, ``PROT_EXEC`` bits, e.g. if ``PROT_WRITE`` is not set in
-+mprotect(), it means that the region is not writable.
-+
-+Setting ``PROT_SEAL`` implies setting ``MAP_SEALABLE`` below.
-+
-+**flags**
-+
-+The ``MAP_SEALABLE`` bit in the ``flags`` field of mmap().
-+
-+When present, it marks the map as sealable. A map created
-+without ``MAP_SEALABLE`` will not support sealing; In other words,
-+mseal() will fail for such a map.
-+
-+
-+Applications that don't care about sealing will expect their
-+behavior unchanged. For those that need sealing support, opt-in
-+by adding ``MAP_SEALABLE`` in mmap().
-+
-+Note: for a map created without ``MAP_SEALABLE`` or a map created
-+with ``MAP_SEALABLE`` but not sealed yet, mmap(MAP_FIXED) can
-+change the sealable or sealing bit.
-+
-+Use Case:
-+=========
-+- glibc:
-+  The dynamic linker, during loading ELF executables, can apply sealing to
-+  non-writable memory segments.
-+
-+- Chrome browser: protect some security sensitive data-structures.
-+
-+Additional notes:
-+=================
-+As Jann Horn pointed out in [3], there are still a few ways to write
-+to RO memory, which is, in a way, by design. Those cases are not covered
-+by mseal(). If applications want to block such cases, sandbox tools (such as
-+seccomp, LSM, etc) might be considered.
-+
-+Those cases are:
-+
-+- Write to read-only memory through /proc/self/mem interface.
-+- Write to read-only memory through ptrace (such as PTRACE_POKETEXT).
-+- userfaultfd.
-+
-+The idea that inspired this patch comes from Stephen Röttger’s work in V8
-+CFI [4]. Chrome browser in ChromeOS will be the first user of this API.
-+
-+Reference:
-+==========
-+[1] https://github.com/apple-oss-distributions/xnu/blob/1031c584a5e37aff177559b9f69dbd3c8c3fd30a/osfmk/mach/vm_statistics.h#L274
-+
-+[2] https://man.openbsd.org/mimmutable.2
-+
-+[3] https://lore.kernel.org/lkml/CAG48ez3ShUYey+ZAFsU2i1RpQn0a5eOs2hzQ426FkcgnfUGLvA@mail.gmail.com
-+
-+[4] https://docs.google.com/document/d/1O2jwK4dxI3nRcOJuPYkonhTkNQfbmwdvxQMyXgeaRHo/edit#heading=h.bvaojj9fu6hc
++		free(ats);
++	}
+ 	close(fd);
+ 	return 0;
+ }
 -- 
 2.43.0.195.gebba966016-goog
 
