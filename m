@@ -1,169 +1,100 @@
-Return-Path: <linux-kselftest+bounces-2673-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2674-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 249BA825B24
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jan 2024 20:37:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3EEAA825B25
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jan 2024 20:38:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B0B5C285AF9
-	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jan 2024 19:37:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC2CA285AA0
+	for <lists+linux-kselftest@lfdr.de>; Fri,  5 Jan 2024 19:38:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6A5535F1C;
-	Fri,  5 Jan 2024 19:37:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C3CB3609D;
+	Fri,  5 Jan 2024 19:37:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="AwPpw0Tp"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="QiA22JfZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5681E35F12
-	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jan 2024 19:37:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16DC736093
+	for <linux-kselftest@vger.kernel.org>; Fri,  5 Jan 2024 19:37:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-3bba50cd318so1416969b6e.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 05 Jan 2024 11:37:46 -0800 (PST)
+Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-59600dbfb58so895094eaf.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 05 Jan 2024 11:37:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1704483465; x=1705088265; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1704483472; x=1705088272; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vrOZywRVHYQrwYA4rEvbQOcCE+oYGeNQVUbfflcP1O8=;
-        b=AwPpw0Tphp3fbFYYPoIYS3l2fzwPI7FZuvaKt+ycRxz2VmTgh4ojp1DLrZSdTOnJ6g
-         BtAeHYG/qwzoZnRxTOKSvh4m6j/lDY8vLErNY19GAmguko+y2KQcsAtykqbMZFDgDXen
-         MQnDnjpT+xrvYfR3UAaEm2g6v1W8nj2Oo76a4=
+        bh=ysJtfL7xn4mw2/JhRDtFdZIwWQRHRrqhzNonJ4C4q6o=;
+        b=QiA22JfZPLskyBiltFkXNu1FJhr9q+96EtiywnsTv2kq5gqfVpg4AMPZ59pFtrb4hG
+         Jwa+Ef8i/jLJjrBbd3qsslSbcTNFsIy2KstFnjssJA44L3eKesTI0TAsYDBhxNrwU+F1
+         pExjuZPGRgc9cS/b8HjSOaMypOXbCEJ+Q14ms=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704483465; x=1705088265;
+        d=1e100.net; s=20230601; t=1704483472; x=1705088272;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=vrOZywRVHYQrwYA4rEvbQOcCE+oYGeNQVUbfflcP1O8=;
-        b=KiP7YPgO0baQEtmxC6/m9FGPrPsttwvFLI70ApAmk2Pl3Lj6b4yHrFfKUFSiRjdWAc
-         dYoPFvZQMlA+qHjptC2IZMe4yvNMu13Nj9KdiWcx7oazYJBdBjymQarmnJUTv9grOvpH
-         GtqkWbFKesYhZsAurTREbF5Zr16ucMQ/WgJRxruNfbeuke24t7E3ZIPf3jfkn+Yea+Cg
-         ybjt69WWTpvflEgXJPM4BlcamD2q80zkpvwVBCj2RXRK9nWdSgoy5QnIVlXAJydQo8ab
-         xd2sxwKOUeWeW06ziHgWUPm4hl2bzJbbB+4ohCJtIn+uEIWhBnsr0yRoTyHpFXbJ9dy/
-         LyWQ==
-X-Gm-Message-State: AOJu0Yy5Ai8rtaFWvSS8lbGVcizFH4sAIkh1nJWMjfQKrW+IbDTPQxIH
-	jwxuq2GrHK0hGearlRnzYHPdiwkT3LfXgrpbD32SbZFQ2r5H
-X-Google-Smtp-Source: AGHT+IF+iHC1gEAXC43HF3ocZtXJBAdcsjjaDe5rzg2X0p+MIUjbNDmhc5uxVg01loIn0VUHcHP25gmmMl2GNf+rx+4=
-X-Received: by 2002:a05:6870:a19f:b0:203:c869:cd44 with SMTP id
- a31-20020a056870a19f00b00203c869cd44mr2937532oaf.92.1704483465420; Fri, 05
- Jan 2024 11:37:45 -0800 (PST)
+        bh=ysJtfL7xn4mw2/JhRDtFdZIwWQRHRrqhzNonJ4C4q6o=;
+        b=WiL0SDh0BhA9+iC3MrZ8V6It9FaIJCLgXT2s8BPAcksLfX0iW4O4Hts5hrATGabkaw
+         lx2bNdtBzEIviDQ4V3JYXASwk5z4lzFW7lGkoviVwD4GJrxgqOdz/04+CPX2fJF9a95c
+         +opQAWss/G77QuskoFPaNcNuwcnsM2LJA3xgL7V+2yWv8/TnLZD86hU2t8+144ndMYgE
+         kpdgURrLZZSIx00eaV21NB7eJRQhwGnivcuyn3DyuneL0xFWZIVq9bpQN/p9tFAxdJla
+         /KRmb3I7rUk11OVVxn6IbOovexktt9daa9ZoAU+LSjeJmaXVxinloobDxiLk+BnjkVlD
+         JiQA==
+X-Gm-Message-State: AOJu0YwbdZV37zv8Han6xSoiJu0CTHGHaz8HzGk1joyrJWX2OaEwuHLK
+	jJoU2klX0YacptejhohTxiMZFiQXnoS99kiHaekrN401hkL0
+X-Google-Smtp-Source: AGHT+IHyJ08At1xbQtvdZtqNHioDPsQ8FF5EAPZvWfoKWTr4xfM1rd0KIRxTNuZ+Ldep8MpXwH14+oALsgE8ne8CIQs=
+X-Received: by 2002:a05:6870:c18b:b0:203:fb8c:587f with SMTP id
+ h11-20020a056870c18b00b00203fb8c587fmr2814912oad.17.1704483472236; Fri, 05
+ Jan 2024 11:37:52 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240104185138.169307-1-jeffxu@chromium.org> <20240104185138.169307-5-jeffxu@chromium.org>
- <796b6877-0548-4d2a-a484-ba4156104a20@infradead.org>
-In-Reply-To: <796b6877-0548-4d2a-a484-ba4156104a20@infradead.org>
+References: <20240104185138.169307-1-jeffxu@chromium.org> <20240104185138.169307-2-jeffxu@chromium.org>
+ <2024010509-pretty-proclaim-78e5@gregkh>
+In-Reply-To: <2024010509-pretty-proclaim-78e5@gregkh>
 From: Jeff Xu <jeffxu@chromium.org>
-Date: Fri, 5 Jan 2024 11:37:34 -0800
-Message-ID: <CABi2SkWF8sVeqjOar8MMftEv-piZuLtb8Pt5Bz7dNTekcwzByg@mail.gmail.com>
-Subject: Re: [RFC PATCH v4 4/4] mseal:add documentation
-To: Randy Dunlap <rdunlap@infradead.org>
+Date: Fri, 5 Jan 2024 11:37:41 -0800
+Message-ID: <CABi2SkWrZzxob3j6X_e24-dYw8o3-pSJKh2QDqVDJKVOK4cu=Q@mail.gmail.com>
+Subject: Re: [RFC PATCH v4 1/4] mseal: Wire up mseal syscall
+To: Greg KH <gregkh@linuxfoundation.org>
 Cc: akpm@linux-foundation.org, keescook@chromium.org, jannh@google.com, 
-	sroettger@google.com, willy@infradead.org, gregkh@linuxfoundation.org, 
-	torvalds@linux-foundation.org, usama.anjum@collabora.com, jeffxu@google.com, 
-	jorgelo@chromium.org, groeck@chromium.org, linux-kernel@vger.kernel.org, 
+	sroettger@google.com, willy@infradead.org, torvalds@linux-foundation.org, 
+	usama.anjum@collabora.com, jeffxu@google.com, jorgelo@chromium.org, 
+	groeck@chromium.org, linux-kernel@vger.kernel.org, 
 	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, pedro.falcato@gmail.com, 
 	dave.hansen@intel.com, linux-hardening@vger.kernel.org, deraadt@openbsd.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jan 4, 2024 at 3:47=E2=80=AFPM Randy Dunlap <rdunlap@infradead.org>=
- wrote:
+On Thu, Jan 4, 2024 at 11:44=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org=
+> wrote:
 >
->
->
-> On 1/4/24 10:51, jeffxu@chromium.org wrote:
+> On Thu, Jan 04, 2024 at 06:51:34PM +0000, jeffxu@chromium.org wrote:
 > > From: Jeff Xu <jeffxu@chromium.org>
 > >
-> > Add documentation for mseal().
+> > Wire up mseal syscall for all architectures.
 > >
 > > Signed-off-by: Jeff Xu <jeffxu@chromium.org>
-> > ---
-> >  Documentation/userspace-api/mseal.rst | 181 ++++++++++++++++++++++++++
-> >  1 file changed, 181 insertions(+)
-> >  create mode 100644 Documentation/userspace-api/mseal.rst
-> >
-> > diff --git a/Documentation/userspace-api/mseal.rst b/Documentation/user=
-space-api/mseal.rst
-> > new file mode 100644
-> > index 000000000000..1700ce5af218
-> > --- /dev/null
-> > +++ b/Documentation/userspace-api/mseal.rst
-> > @@ -0,0 +1,181 @@
-> > +.. SPDX-License-Identifier: GPL-2.0
-> > +
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > +Introduction of mseal
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > +
-> > +:Author: Jeff Xu <jeffxu@chromium.org>
-> > +
-> > +Modern CPUs support memory permissions such as RW and NX bits. The mem=
-ory
-> > +permission feature improves security stance on memory corruption bugs,=
- i.e.
-> > +the attacker can=E2=80=99t just write to arbitrary memory and point th=
-e code to it,
-> > +the memory has to be marked with X bit, or else an exception will happ=
-en.
-> > +
-> > +Memory sealing additionally protects the mapping itself against
-> > +modifications. This is useful to mitigate memory corruption issues whe=
-re a
-> > +corrupted pointer is passed to a memory management system. For example=
-,
-> > +such an attacker primitive can break control-flow integrity guarantees
-> > +since read-only memory that is supposed to be trusted can become writa=
-ble
-> > +or .text pages can get remapped. Memory sealing can automatically be
-> > +applied by the runtime loader to seal .text and .rodata pages and
-> > +applications can additionally seal security critical data at runtime.
-> > +
-> > +A similar feature already exists in the XNU kernel with the
-> > +VM_FLAGS_PERMANENT flag [1] and on OpenBSD with the mimmutable syscall=
- [2].
-> > +
-> > +User API
-> > +=3D=3D=3D=3D=3D=3D=3D=3D
-> > +Two system calls are involved in virtual memory sealing, mseal() and m=
-map().
-> > +
-> > +mseal()
-> > +-----------
-> > +The mseal() syscall has following signature:
-> > +
-> > +``int mseal(void addr, size_t len, unsigned long flags)``
-> > +
-> > +**addr/len**: virtual memory address range.
-> > +
-> > +The address range set by ``addr``/``len`` must meet:
-> > +   - The start address must be in an allocated VMA.
-> > +   - The start address must be page aligned.
-> > +   - The end address (``addr`` + ``len``) must be in an allocated VMA.
-> > +   - no gap (unallocated memory) between start and end address.
-> > +
-> > +The ``len`` will be paged aligned implicitly by the kernel.
 >
-> Does that mean that the <len> will be extended to be page aligned
-> if it's not already page aligned?
+> Doesn't this break the build at this point in the patch series?
 >
 Yes.
-the code (do_mseal) calls PAGE_ALIGNED(len).
-mprotect() also has this.
 
-Two test cases cover this part.
-test_seal_mprotect_unalign_len
-test_seal_mprotect_unalign_len_variant_2
-
+> Normally you add the code for the syscall first, and then you wire it
+> up.
+>
+Thanks. Will update in the next version.
 -Jeff
 
-> --
-> #Randy
+> thanks,
+>
+> greg k-h
 
