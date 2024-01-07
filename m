@@ -1,89 +1,75 @@
-Return-Path: <linux-kselftest+bounces-2703-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2706-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5C31826588
-	for <lists+linux-kselftest@lfdr.de>; Sun,  7 Jan 2024 19:14:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56BB08265B0
+	for <lists+linux-kselftest@lfdr.de>; Sun,  7 Jan 2024 19:48:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA6531C20A43
-	for <lists+linux-kselftest@lfdr.de>; Sun,  7 Jan 2024 18:14:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 30478281BD0
+	for <lists+linux-kselftest@lfdr.de>; Sun,  7 Jan 2024 18:48:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32BDE13FF5;
-	Sun,  7 Jan 2024 18:14:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TPhVtzEx"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A4B510A25;
+	Sun,  7 Jan 2024 18:48:16 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail-out.m-online.net (mail-out.m-online.net [212.18.0.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E18613FE7;
-	Sun,  7 Jan 2024 18:14:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBBC1C433C8;
-	Sun,  7 Jan 2024 18:14:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704651287;
-	bh=D5Nom47ccMZ97QeLtyaOdTVnONRBDihub2rgb4f09og=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TPhVtzExBoCgx5NuC2ZbvarxZ/zJCcbZK3JJZFOzuEd1EjYISOZrFuppVVq1/amdR
-	 n4tuzDLmnGFKLwa18If3m4HcRdVhfR9Gd3UpzYqGGObucyOTz5i3QWP+9u6LHAajRe
-	 reuKOvNkfoEXG9QetuLmggbJPADJBYdsWgvNYLUjXow8cAMbR355XbR60++LuoOPXK
-	 PC9g58QW8vWNqGCVg3v2UCoxGiILF+UtHatQRUmO/Ax2YqdyyGkFK/rdIM5Cxxzu0Q
-	 F09orz7R7wmFRrEu0LEf9erUj5jDcAwI4z+MskYcAMJk5CQsBVxoPYJUKad5T82vUU
-	 lGdnmzoMjEIHg==
-Date: Sun, 7 Jan 2024 18:14:43 +0000
-From: Mark Brown <broonie@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 184E010A1F;
+	Sun,  7 Jan 2024 18:48:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nefkom.net
+Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
+	by mail-out.m-online.net (Postfix) with ESMTP id 4T7Qxh08bDz1sBq3;
+	Sun,  7 Jan 2024 19:40:55 +0100 (CET)
+Received: from localhost (dynscan1.mnet-online.de [192.168.6.68])
+	by mail.m-online.net (Postfix) with ESMTP id 4T7Qxg5Slpz1qqlS;
+	Sun,  7 Jan 2024 19:40:55 +0100 (CET)
+X-Virus-Scanned: amavis at mnet-online.de
+Received: from mail.mnet-online.de ([192.168.8.182])
+ by localhost (dynscan1.mail.m-online.net [192.168.6.68]) (amavis, port 10024)
+ with ESMTP id xkFHhBBJOFcf; Sun,  7 Jan 2024 19:40:54 +0100 (CET)
+X-Auth-Info: /W4ayZJD3y3xzE2nctsIdMXMG3SGQlPURR+PFDNHw9uO7xJQj9/m8RstH8iW2NKE
+Received: from igel.home (aftr-62-216-202-6.dynamic.mnet-online.de [62.216.202.6])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail.mnet-online.de (Postfix) with ESMTPSA;
+	Sun,  7 Jan 2024 19:40:54 +0100 (CET)
+Received: by igel.home (Postfix, from userid 1000)
+	id 7D9912C12EA; Sun,  7 Jan 2024 19:40:54 +0100 (CET)
+From: Andreas Schwab <schwab@linux-m68k.org>
 To: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-Cc: =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado <nfraprado@collabora.com>,
-	linux-sound@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>, Shuah Khan <shuah@kernel.org>
-Subject: Re: [PATCH v1 3/4] ksellftest: alsa: Fix the printf format specifier
- to unsigned int
-Message-ID: <ZZrqE4iCRMqTX/3v@finisterre.sirena.org.uk>
+Cc: =?utf-8?Q?N=C3=ADcolas?= F. R. A. Prado <nfraprado@collabora.com>,  Mark
+ Brown
+ <broonie@kernel.org>,  linux-sound@vger.kernel.org,
+  linux-kselftest@vger.kernel.org,  linux-kernel@vger.kernel.org,  Jaroslav
+ Kysela <perex@perex.cz>,  Takashi Iwai <tiwai@suse.com>,  Shuah Khan
+ <shuah@kernel.org>
+Subject: Re: [PATCH v1 3/4] ksellftest: alsa: Fix the printf format
+ specifier to unsigned int
+In-Reply-To: <20240107151218.933806-4-mirsad.todorovac@alu.unizg.hr> (Mirsad
+	Todorovac's message of "Sun, 7 Jan 2024 16:12:20 +0100")
 References: <20240107151218.933806-1-mirsad.todorovac@alu.unizg.hr>
- <20240107151218.933806-4-mirsad.todorovac@alu.unizg.hr>
- <ZZrEXSU3Bx85rSGo@finisterre.sirena.org.uk>
- <34121d01-34dd-4c29-b31e-91f3e8ea15bc@alu.unizg.hr>
+	<20240107151218.933806-4-mirsad.todorovac@alu.unizg.hr>
+X-Yow: --``I love KATRINKA because she drives a PONTIAC.  We're going away now.
+ I fed the cat. - Zippy''
+Date: Sun, 07 Jan 2024 19:40:54 +0100
+Message-ID: <87r0itm1ft.fsf@igel.home>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="XCxdPNrpuVCVekfZ"
-Content-Disposition: inline
-In-Reply-To: <34121d01-34dd-4c29-b31e-91f3e8ea15bc@alu.unizg.hr>
-X-Cookie: You might have mail.
+Content-Type: text/plain
 
+s/ksellftest/kselftest/
 
---XCxdPNrpuVCVekfZ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-
-On Sun, Jan 07, 2024 at 05:21:00PM +0100, Mirsad Todorovac wrote:
-
-> I guess I can keep the Acked-by tags. Will the patchwork find the tag in
-> the v1 patch set?
-
-No, you need to include it.
-
---XCxdPNrpuVCVekfZ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmWa6hMACgkQJNaLcl1U
-h9DqiAf9H/lxmjuXFFoExRxTy9SeGZtlRitB+Mjw32/2JiK5kwlTJEiiyaqzTQQV
-15hvrrGbDHWGGFy6TwMFAC7xK2C9ahvJeOOQNmt7F605eds03YVe+LqbonqamMCc
-Txt48KAJhcv8SocP/OTJvLquz6ALoaeGU/Cb2Q7NkbzUHt/78jH1U7n4Q4UPSssq
-1QOeEWsMAin4piwRPthM0/D33jawybLQDsWVaq1G85Y909dT/4nhQySRpgsZn1wS
-1+y8y6xhK7x8WnXoLJgIXhV7Dwqraorbk68FYGjvUyG32giCyJLbE5Mu8r8iMvZF
-MXQUzFUQNHYtE0OGgYD8/mMHRrxEOA==
-=TwJb
------END PGP SIGNATURE-----
-
---XCxdPNrpuVCVekfZ--
+-- 
+Andreas Schwab, schwab@linux-m68k.org
+GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
+"And now for something completely different."
 
