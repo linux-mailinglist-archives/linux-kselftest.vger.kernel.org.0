@@ -1,117 +1,97 @@
-Return-Path: <linux-kselftest+bounces-2687-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2688-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9683C826416
-	for <lists+linux-kselftest@lfdr.de>; Sun,  7 Jan 2024 13:50:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4DC0482649C
+	for <lists+linux-kselftest@lfdr.de>; Sun,  7 Jan 2024 16:12:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8CE3D1C20ACD
-	for <lists+linux-kselftest@lfdr.de>; Sun,  7 Jan 2024 12:50:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B83D7281EBF
+	for <lists+linux-kselftest@lfdr.de>; Sun,  7 Jan 2024 15:12:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5745212E75;
-	Sun,  7 Jan 2024 12:50:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65F95134BE;
+	Sun,  7 Jan 2024 15:12:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H0Ku7Egw"
+	dkim=pass (2048-bit key) header.d=alu.unizg.hr header.i=@alu.unizg.hr header.b="Tcr0kwTQ";
+	dkim=pass (2048-bit key) header.d=alu.unizg.hr header.i=@alu.unizg.hr header.b="AwU58B0v"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB3C712E6D;
-	Sun,  7 Jan 2024 12:49:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-204f50f305cso898078fac.3;
-        Sun, 07 Jan 2024 04:49:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1704631799; x=1705236599; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fw6LNu+4Os2RyArnTn0kvCbw+nWEEHo4TWDigi7tfZk=;
-        b=H0Ku7EgwBjhxFs9GHxH2Y38toXnmCSBYyn9R5j5agjechdBCTOFCrbzMz+YmoBm191
-         xop6t4fqRYL5Yj2dVhf8OPNQb6Cfx0JyOv3gQv3nZYOiwDxnjolqkbDc6xZVKdoWuMea
-         wq83dxhqkvil+hUlePS0xXGGxu3X6Uyok2Nnsh2ZqMGose5GTCcfRWz/elPpfAr6wF+F
-         WJ3HXDHPBgo7EkY7JtkIeldTvzMGtNkrB+8l82Croix2GkojityoNW4QgKnCJuzmtCuL
-         n+WfDDYMdoJp/QP7FaqOBrFdPBw9bXWBwmyK4kMO8DMYf5qsf2kM2wogCJVq+3TWgI/+
-         lHLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704631799; x=1705236599;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fw6LNu+4Os2RyArnTn0kvCbw+nWEEHo4TWDigi7tfZk=;
-        b=NKmLUXk2McHsoe8rk5cpCn/3NfNaB0wwYO3vPj84RH4slpTgFUeZDt9i7FJGtwWY6H
-         1Ma8hT0qRueDXQ+uEwteWVYd92nR79BjG/fD/LiXOZH7EqzMITHm5tLy2s9NBarciitl
-         yKoFOCO5lrobhtNLWEYU4JLRtoNf0UN+9/7hGEjRv8gPQYsa5xXuVnkONeLFlIeRaQhj
-         oAznF5HV15xUx8Lp3d/yAc5RnOo2XozM/Hk/VnmwjRDQLovpSXhGbfN7iRR+/ApJf4zH
-         0xG6T8Vuly1V/ulOFqPA4ZU0loaTaCwbiZd2d1gk7YMHeOAIe4ALM0WURUvNKU9XO5WI
-         x/yA==
-X-Gm-Message-State: AOJu0YxreCgAXLkvSFN2apw9HU2QIM82HADPBBgvnJXb2PvdDZZiLsLM
-	fu45DYhImjuiAHsJokkfcToQFLBYco8KIAgu
-X-Google-Smtp-Source: AGHT+IExWjMjl5bhO/eiUz2V64PosSrE/WPB8weni3JzT4kna+np4EHpEd0PIMfh/kqvMGZDhxzB4g==
-X-Received: by 2002:a05:6870:4150:b0:1fb:75a:6d2c with SMTP id r16-20020a056870415000b001fb075a6d2cmr3260537oad.83.1704631798705;
-        Sun, 07 Jan 2024 04:49:58 -0800 (PST)
-Received: from Laptop-X1 ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id p11-20020a17090ad30b00b0028ca92ab09asm4646551pju.56.2024.01.07.04.49.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 07 Jan 2024 04:49:57 -0800 (PST)
-Date: Sun, 7 Jan 2024 20:49:52 +0800
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, David Ahern <dsahern@kernel.org>
-Subject: Re: [PATCH v1 1/1] selftests: net: increase timeout value for tests
-Message-ID: <ZZqd8PqvHlYCqbMX@Laptop-X1>
-References: <20240107003929.891669-1-mirsad.todorovac@alu.unizg.hr>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47DA9134A7;
+	Sun,  7 Jan 2024 15:12:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alu.unizg.hr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alu.unizg.hr
+Received: from localhost (localhost [127.0.0.1])
+	by domac.alu.hr (Postfix) with ESMTP id 238B76017E;
+	Sun,  7 Jan 2024 16:12:33 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+	t=1704640353; bh=xn6DasHTsMAQHER5mfWi98jQpRtzxJAUx0/2f4aE9zE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Tcr0kwTQWFCATkAr9varlglUMYZLdT9m1TBGW/MdxJKzW3seW9cvE7tXbfUw9Qzo/
+	 koEoyI/3QBymlfKFiqzxQdRV+39qF2QAnnLdqu1eP/dL33otZggfHHrQqDXv9bKhOH
+	 PdvK8FWsLOB1pChE/HC+0XHgi9Y/+OaxxvfiGumdGpTEwyPm50VntadLJUi0NHvuZ6
+	 4GxlEqnnlIRcol/sM94/NyaFroLuja+UNiF1PN47pMgdkbWm403DHTjm/D2d0gIcU0
+	 4p5/T4Yh2/0O039ikxYxBclNPXd4E3mEIotzJcmvRtHmk4D5AVkTTjF/oTxxbT6k9+
+	 bjQCPnxYka0jg==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+	by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id IS2Lb0vPvWkg; Sun,  7 Jan 2024 16:12:30 +0100 (CET)
+Received: from defiant.. (unknown [95.168.121.73])
+	by domac.alu.hr (Postfix) with ESMTPSA id D482660171;
+	Sun,  7 Jan 2024 16:12:29 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+	t=1704640350; bh=xn6DasHTsMAQHER5mfWi98jQpRtzxJAUx0/2f4aE9zE=;
+	h=From:To:Cc:Subject:Date:From;
+	b=AwU58B0vyBi9bCOIcPhPES5jCuQ8hvZndwNawnRf8r4Wcd0cpGHPSEfSqaaC9aRvd
+	 F7GEvM9l8GEZOTPoqEx4YBREC6idHn954PeHjAy2URbi2hUHn22i5vT/mr9HVPprZx
+	 4sAEAaXbQJXn/M+N5HgrO7xpV0i3MNXDJolVSichyyoL8nDM4V5Bsd4JfgDXkAzScl
+	 QLEDKHR6p/PCXfMpyvNGyThKWlg0q24w1pKP1192JYJgsaSmJ+Q4Mi+Fh5fsaWAkXs
+	 8PkKZhA6qi0bAmDa3NZMFQ+Q86zrWiyCbK/eVkNxp/kA0cylov85Dq66Ybg31+UjU9
+	 0wB1z7BRDGCfQ==
+From: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+To: =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= <nfraprado@collabora.com>,
+	Mark Brown <broonie@kernel.org>,
+	linux-sound@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+Subject: [PATCH v1 0/4] kselftest: alsa: Fix a couple of format specifiers and function parameters
+Date: Sun,  7 Jan 2024 16:12:14 +0100
+Message-Id: <20240107151218.933806-1-mirsad.todorovac@alu.unizg.hr>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240107003929.891669-1-mirsad.todorovac@alu.unizg.hr>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Sun, Jan 07, 2024 at 01:39:29AM +0100, Mirsad Todorovac wrote:
-> In particular, fcnal-test.sh timed out on slower hardware after
-> some new permutations of tests were added.
-> 
-> This single test ran for almost an hour instead of the expected
-> 25 min (1500s). 75 minutes should suffice for most systems.
-> 
-> Cc: David Ahern <dsahern@kernel.org>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: netdev@vger.kernel.org
-> Cc: linux-kselftest@vger.kernel.org
-> Signed-off-by: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-> ---
->  tools/testing/selftests/net/settings | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/net/settings b/tools/testing/selftests/net/settings
-> index dfc27cdc6c05..ed8418e8217a 100644
-> --- a/tools/testing/selftests/net/settings
-> +++ b/tools/testing/selftests/net/settings
-> @@ -1 +1 @@
-> -timeout=1500
-> +timeout=4500
-> -- 
-> 2.40.1
-> 
+Minor fixes of compiler warnings and one bug in the number of parameters which
+would not crash the test but it is better fixed for correctness sake.
 
-FYI, the net-next patch 779283b7770f ("selftests/net: convert fcnal-test.sh
-to run it in unique namespace") has extended the timeout to 3600s.
+As the general climate in the Linux kernel community is to fix all compiler
+warnings, this could be on the right track, even if only in the testing suite.
 
-Thanks
-Hangbin
+Mirsad Todorovac (4):
+  kselftest: alsa: fix the number of parameters to ksft_exit_fail_msg()
+  kselftest: alsa: Fix the printf format specifier in call to
+    ksft_print_msg()
+  ksellftest: alsa: Fix the printf format specifier to unsigned int
+  selftests: alsa: Fix the exit error message parameter in sysfs_get()
+
+ tools/testing/selftests/alsa/conf.c       | 2 +-
+ tools/testing/selftests/alsa/mixer-test.c | 6 +++---
+ 2 files changed, 4 insertions(+), 4 deletions(-)
+
+-- 
+2.40.1
+
 
