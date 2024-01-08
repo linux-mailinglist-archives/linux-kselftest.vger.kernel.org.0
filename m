@@ -1,62 +1,62 @@
-Return-Path: <linux-kselftest+bounces-2735-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2736-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19A488279A5
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jan 2024 21:54:05 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F240F8279A8
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jan 2024 21:54:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B7CE8285093
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jan 2024 20:54:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 125511C22975
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jan 2024 20:54:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA66E55E7E;
-	Mon,  8 Jan 2024 20:53:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD25956468;
+	Mon,  8 Jan 2024 20:53:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OgJsQK3d"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Pw6rD420"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA9CF55E55;
-	Mon,  8 Jan 2024 20:53:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28C0D56467;
+	Mon,  8 Jan 2024 20:53:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-40d5336986cso29744205e9.1;
-        Mon, 08 Jan 2024 12:53:28 -0800 (PST)
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a28b1095064so246027266b.2;
+        Mon, 08 Jan 2024 12:53:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1704747207; x=1705352007; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1704747212; x=1705352012; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=L4YlXYJMAttQeRUGHeeQCdYKHw087JtCupOXw2uBL7U=;
-        b=OgJsQK3dsSbUVzIN74bx0rlob9KA1z4wWEqg2MiRp2sBFXOJm1ygd4nWwv36IpPTHA
-         xVw4xnFLxfQwAOK+G0ihEh7yRWzkkAWHkPTzg5UbdGh/+VfwDsaaKXfNcnQzltXROpVQ
-         iyGjyFXUe7kM+py7d/W5+Hnwxw+FJPtw0tXyg7mbLaZn2Tm1nXLncVf8K5+D+qAvDTgL
-         mWqhe4Q3XMdexoPFCkcg8sQYtJrBSu+gwYfwXTIuSxbYIFTEs4GVtvfn+pnScp2r+v/1
-         VJl8YToNvGqxmIji+1RBgDZ8tD4nOKOTKv7M5EnWf+n6njXtzREIt2vF2MuJuSH+4rPK
-         7q2w==
+        bh=C23Ia8KDgm3NZnmRi0kSKyscN+EmGw68vBX1pkziOPc=;
+        b=Pw6rD420+lxdClsbnm4tRSbKJccMS62aagiqX21DZ5QBZRlS+REIeATuwNt+0rYuEc
+         0Lk1dDxNkjT7t/Z7PYjhjvQGqZ3HAZkvpUKC4Xq5Z2L0nTecs3mvBZYeaB36m5d909c/
+         LyrLjsvlNKStYGw2Rw5EC5N67FoW5tSoRY37JBLn6pEbxFM8e1Nja/QEETKVBXdBdyUG
+         I4qtbi5ZRqqzUMhraIl1Nq59iKANxy/VbyN/sAMvo7HTyntlCSDRzZ6+2pDML3OES99g
+         JV/h6SFjhQwW+dcKK7KsCbLdFuZgvEQpngyNEAvb70huGcGegHCYsS3J6qDl+X3YeHYI
+         lx3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704747207; x=1705352007;
+        d=1e100.net; s=20230601; t=1704747212; x=1705352012;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=L4YlXYJMAttQeRUGHeeQCdYKHw087JtCupOXw2uBL7U=;
-        b=iLEUNABCxyqK28Z59q+UVTOmZQajWM8HxaUa+ftFnw1Lx6e5UQx3d06p5FF/9V9n8u
-         PMly6sGTcCBQXiAb3qnPUjdZTdigav5WcEsxcNiJGkJCQsIHWF944NK8VDLYFxG6f9rb
-         HPv4Y/D3q/t5roTxTBVKGK0s5FJq53pHAmR3599qzx+RlsMLYVH8GeBUgG9o1koNls3U
-         tMuDjFaaJHKhpvBPb+0vk4Mdg4A86/ehlW/zRmBRNRXCQdbR9OdbMRIfEo5PWLzW11TP
-         p/bE2iOFcn+zMjbj3Sp00EN7lUCmDzy6RbrgEvSCVzrFwp6nr5Spig6SqmyeuQuWMpUb
-         bSsA==
-X-Gm-Message-State: AOJu0YxbVQ+LURn1zBNo+nVcYrgBmOYtbhXPxBX30+kARqLdcGPQ7hHP
-	xBp6GqYG6cMGm+G26Jbs868=
-X-Google-Smtp-Source: AGHT+IFWfP2KgCdPWlOIm+9tf4F2y+HBtjp27VCgJ2SLRi8qejXhNUypcZusVoBytirW4TholAzmOQ==
-X-Received: by 2002:a05:600c:1d9d:b0:40e:4914:31d0 with SMTP id p29-20020a05600c1d9d00b0040e491431d0mr649700wms.70.1704747206734;
-        Mon, 08 Jan 2024 12:53:26 -0800 (PST)
+        bh=C23Ia8KDgm3NZnmRi0kSKyscN+EmGw68vBX1pkziOPc=;
+        b=iTzkty5DhXJlUuDl0ZI+shdZgGNywf5TfG047tTHA4K8cvpGB6nFprI/XkqEqI8qW0
+         wjUeSv5jChcegi1lqQ+AammCPLv6e/UZ1zHGk/KiDKLaKpCnJ4xSVYPk/vru/BLGsYBm
+         nc8Q7BcbbxAGwsV1aPfaaNnqGFQAvpGJuDyzV+pqL+mCoEUxvOrNTMYEmZtsSztDOZUP
+         GLnLxD/2pIX+X/eFkpOW/+fCF+T33B+8CmwyJstlSeXSTRriX2U1VvH1tQj4awAZ63pA
+         vwnPqiiwdIG1Ji0eB4qYfQsXm16Qy4/C746ce+sGf5PqU6awfxZOzv1YaBWex1khHSaP
+         74VA==
+X-Gm-Message-State: AOJu0YyxC4rveE0htBd+VCsZ2jmzqoC+yg+HfXZmSAvOivOiqCCd8H2N
+	1vLbf+55vVZ3IHP5GwBVh7c=
+X-Google-Smtp-Source: AGHT+IGtkVNw4QJzY82TEiJ+RyskmX1QkWRto9t63dOw/iXHNlxKb8ouG0vDQQZv1XmJUUBD9O1H4A==
+X-Received: by 2002:a17:906:c2d7:b0:a2a:1f1c:a317 with SMTP id ch23-20020a170906c2d700b00a2a1f1ca317mr3525ejb.208.1704747212351;
+        Mon, 08 Jan 2024 12:53:32 -0800 (PST)
 Received: from localhost ([185.220.101.80])
-        by smtp.gmail.com with ESMTPSA id x8-20020a1709065ac800b00a28d1d73654sm239553ejs.207.2024.01.08.12.53.23
+        by smtp.gmail.com with ESMTPSA id y19-20020a17090668d300b00a27a7fa8691sm244476ejr.137.2024.01.08.12.53.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Jan 2024 12:53:26 -0800 (PST)
+        Mon, 08 Jan 2024 12:53:32 -0800 (PST)
 From: Maxim Mikityanskiy <maxtram95@gmail.com>
 To: Eduard Zingerman <eddyz87@gmail.com>,
 	Alexei Starovoitov <ast@kernel.org>,
@@ -80,9 +80,9 @@ Cc: John Fastabend <john.fastabend@gmail.com>,
 	linux-kselftest@vger.kernel.org,
 	netdev@vger.kernel.org,
 	Maxim Mikityanskiy <maxim@isovalent.com>
-Subject: [PATCH bpf-next v2 12/15] bpf: Preserve boundaries and track scalars on narrowing fill
-Date: Mon,  8 Jan 2024 22:52:06 +0200
-Message-ID: <20240108205209.838365-13-maxtram95@gmail.com>
+Subject: [PATCH bpf-next v2 13/15] selftests/bpf: Add test cases for narrowing fill
+Date: Mon,  8 Jan 2024 22:52:07 +0200
+Message-ID: <20240108205209.838365-14-maxtram95@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240108205209.838365-1-maxtram95@gmail.com>
 References: <20240108205209.838365-1-maxtram95@gmail.com>
@@ -96,192 +96,132 @@ Content-Transfer-Encoding: 8bit
 
 From: Maxim Mikityanskiy <maxim@isovalent.com>
 
-When the width of a fill is smaller than the width of the preceding
-spill, the information about scalar boundaries can still be preserved,
-as long as it's coerced to the right width (done by coerce_reg_to_size).
-Even further, if the actual value fits into the fill width, the ID can
-be preserved as well for further tracking of equal scalars.
-
-Implement the above improvements, which makes narrowing fills behave the
-same as narrowing spills and MOVs between registers.
-
-Two tests are adjusted to accommodate for endianness differences and to
-take into account that it's now allowed to do a narrowing fill from the
-least significant bits.
-
-reg_bounds_sync is added to coerce_reg_to_size to correctly adjust
-umin/umax boundaries after the var_off truncation, for example, a 64-bit
-value 0xXXXXXXXX00000000, when read as a 32-bit, gets umin = 0, umax =
-0xFFFFFFFF, var_off = (0x0; 0xffffffff00000000), which needs to be
-synced down to umax = 0, otherwise reg_bounds_sanity_check doesn't pass.
+The previous commit allowed to preserve boundaries and track IDs of
+scalars on narrowing fills. Add test cases for that pattern.
 
 Signed-off-by: Maxim Mikityanskiy <maxim@isovalent.com>
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- include/linux/bpf_verifier.h                  |  2 --
- include/linux/filter.h                        | 12 ++++++++
- kernel/bpf/verifier.c                         | 15 +++++++---
- .../selftests/bpf/progs/verifier_spill_fill.c | 28 +++++++++++++------
- 4 files changed, 42 insertions(+), 15 deletions(-)
+ .../selftests/bpf/progs/verifier_spill_fill.c | 108 ++++++++++++++++++
+ 1 file changed, 108 insertions(+)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index e11baecbde68..95ea7657f07e 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -239,8 +239,6 @@ enum bpf_stack_slot_type {
- 	STACK_ITER,
- };
- 
--#define BPF_REG_SIZE 8	/* size of eBPF register in bytes */
--
- #define BPF_REGMASK_ARGS ((1 << BPF_REG_1) | (1 << BPF_REG_2) | \
- 			  (1 << BPF_REG_3) | (1 << BPF_REG_4) | \
- 			  (1 << BPF_REG_5))
-diff --git a/include/linux/filter.h b/include/linux/filter.h
-index 68fb6c8142fe..be784be7ed4e 100644
---- a/include/linux/filter.h
-+++ b/include/linux/filter.h
-@@ -39,6 +39,8 @@ struct sock_reuseport;
- struct ctl_table;
- struct ctl_table_header;
- 
-+#define BPF_REG_SIZE 8	/* size of eBPF register in bytes */
-+
- /* ArgX, context and stack frame pointer register positions. Note,
-  * Arg1, Arg2, Arg3, etc are used as argument mappings of function
-  * calls in BPF_CALL instruction.
-@@ -881,6 +883,16 @@ bpf_ctx_narrow_access_offset(u32 off, u32 size, u32 size_default)
- 
- #define bpf_classic_proglen(fprog) (fprog->len * sizeof(fprog->filter[0]))
- 
-+static inline bool
-+bpf_stack_narrow_access_ok(int off, int size, int spill_size)
-+{
-+#ifdef __BIG_ENDIAN
-+	off -= spill_size - size;
-+#endif
-+
-+	return !(off % BPF_REG_SIZE);
-+}
-+
- static inline void bpf_prog_lock_ro(struct bpf_prog *fp)
- {
- #ifndef CONFIG_BPF_JIT_ALWAYS_ON
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index e7fff5f5aa1d..aeb3e198a5ea 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -4774,7 +4774,8 @@ static int check_stack_read_fixed_off(struct bpf_verifier_env *env,
- 			if (dst_regno < 0)
- 				return 0;
- 
--			if (!(off % BPF_REG_SIZE) && size == spill_size) {
-+			if (size <= spill_size &&
-+			    bpf_stack_narrow_access_ok(off, size, spill_size)) {
- 				/* The earlier check_reg_arg() has decided the
- 				 * subreg_def for this insn.  Save it first.
- 				 */
-@@ -4782,6 +4783,12 @@ static int check_stack_read_fixed_off(struct bpf_verifier_env *env,
- 
- 				copy_register_state(&state->regs[dst_regno], reg);
- 				state->regs[dst_regno].subreg_def = subreg_def;
-+
-+				/* Break the relation on a narrowing fill.
-+				 * coerce_reg_to_size will adjust the boundaries.
-+				 */
-+				if (get_reg_width(reg) > size * BITS_PER_BYTE)
-+					state->regs[dst_regno].id = 0;
- 			} else {
- 				int spill_cnt = 0, zero_cnt = 0;
- 
-@@ -6057,10 +6064,10 @@ static void coerce_reg_to_size(struct bpf_reg_state *reg, int size)
- 	 * values are also truncated so we push 64-bit bounds into
- 	 * 32-bit bounds. Above were truncated < 32-bits already.
- 	 */
--	if (size < 4) {
-+	if (size < 4)
- 		__mark_reg32_unbounded(reg);
--		reg_bounds_sync(reg);
--	}
-+
-+	reg_bounds_sync(reg);
- }
- 
- static void set_sext64_default_val(struct bpf_reg_state *reg, int size)
 diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-index cc6c5a3b464b..fab8ae9fe947 100644
+index fab8ae9fe947..3764111d190d 100644
 --- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
 +++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-@@ -217,7 +217,7 @@ __naked void uninit_u32_from_the_stack(void)
+@@ -936,4 +936,112 @@ l0_%=:	r0 = 0;						\
+ 	: __clobber_all);
+ }
  
- SEC("tc")
- __description("Spill a u32 const scalar.  Refill as u16.  Offset to skb->data")
--__failure __msg("invalid access to packet")
++SEC("xdp")
++__description("32-bit fill after 64-bit spill")
 +__success __retval(0)
- __naked void u16_offset_to_skb_data(void)
- {
- 	asm volatile ("					\
-@@ -225,19 +225,24 @@ __naked void u16_offset_to_skb_data(void)
- 	r3 = *(u32*)(r1 + %[__sk_buff_data_end]);	\
- 	w4 = 20;					\
- 	*(u32*)(r10 - 8) = r4;				\
--	r4 = *(u16*)(r10 - 8);				\
-+	r4 = *(u16*)(r10 - %[offset]);			\
- 	r0 = r2;					\
--	/* r0 += r4 R0=pkt R2=pkt R3=pkt_end R4=umax=65535 */\
-+	/* r0 += r4 R0=pkt R2=pkt R3=pkt_end R4=20 */\
- 	r0 += r4;					\
--	/* if (r0 > r3) R0=pkt,umax=65535 R2=pkt R3=pkt_end R4=umax=65535 */\
-+	/* if (r0 > r3) R0=pkt,off=20 R2=pkt R3=pkt_end R4=20 */\
- 	if r0 > r3 goto l0_%=;				\
--	/* r0 = *(u32 *)r2 R0=pkt,umax=65535 R2=pkt R3=pkt_end R4=20 */\
-+	/* r0 = *(u32 *)r2 R0=pkt,off=20 R2=pkt R3=pkt_end R4=20 */\
- 	r0 = *(u32*)(r2 + 0);				\
- l0_%=:	r0 = 0;						\
- 	exit;						\
- "	:
- 	: __imm_const(__sk_buff_data, offsetof(struct __sk_buff, data)),
--	  __imm_const(__sk_buff_data_end, offsetof(struct __sk_buff, data_end))
-+	  __imm_const(__sk_buff_data_end, offsetof(struct __sk_buff, data_end)),
++__naked void fill_32bit_after_spill_64bit(void)
++{
++	asm volatile("					\
++	/* Randomize the upper 32 bits. */		\
++	call %[bpf_get_prandom_u32];			\
++	r0 <<= 32;					\
++	/* 64-bit spill r0 to stack. */			\
++	*(u64*)(r10 - 8) = r0;				\
++	/* 32-bit fill r0 from stack. */		\
++	r0 = *(u32*)(r10 - %[offset]);				\
++	/* Boundary check on r0 with predetermined result. */\
++	if r0 == 0 goto l0_%=;				\
++	/* Dead branch: the verifier should prune it. Do an invalid memory\
++	 * access if the verifier follows it.		\
++	 */						\
++	r0 = *(u64*)(r9 + 0);				\
++l0_%=:	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32),
 +#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
 +	  __imm_const(offset, 8)
 +#else
-+	  __imm_const(offset, 6)
++	  __imm_const(offset, 4)
 +#endif
- 	: __clobber_all);
- }
- 
-@@ -268,7 +273,7 @@ l0_%=:	r0 = 0;						\
- }
- 
- SEC("tc")
--__description("Spill a u32 const scalar.  Refill as u16 from fp-6.  Offset to skb->data")
-+__description("Spill a u32 const scalar.  Refill as u16 from MSB.  Offset to skb->data")
- __failure __msg("invalid access to packet")
- __naked void _6_offset_to_skb_data(void)
- {
-@@ -277,7 +282,7 @@ __naked void _6_offset_to_skb_data(void)
- 	r3 = *(u32*)(r1 + %[__sk_buff_data_end]);	\
- 	w4 = 20;					\
- 	*(u32*)(r10 - 8) = r4;				\
--	r4 = *(u16*)(r10 - 6);				\
-+	r4 = *(u16*)(r10 - %[offset]);			\
- 	r0 = r2;					\
- 	/* r0 += r4 R0=pkt R2=pkt R3=pkt_end R4=umax=65535 */\
- 	r0 += r4;					\
-@@ -289,7 +294,12 @@ l0_%=:	r0 = 0;						\
- 	exit;						\
- "	:
- 	: __imm_const(__sk_buff_data, offsetof(struct __sk_buff, data)),
--	  __imm_const(__sk_buff_data_end, offsetof(struct __sk_buff, data_end))
-+	  __imm_const(__sk_buff_data_end, offsetof(struct __sk_buff, data_end)),
++	: __clobber_all);
++}
++
++SEC("xdp")
++__description("32-bit fill after 64-bit spill of 32-bit value should preserve ID")
++__success __retval(0)
++__naked void fill_32bit_after_spill_64bit_preserve_id(void)
++{
++	asm volatile ("					\
++	/* Randomize the lower 32 bits. */		\
++	call %[bpf_get_prandom_u32];			\
++	w0 &= 0xffffffff;				\
++	/* 64-bit spill r0 to stack - should assign an ID. */\
++	*(u64*)(r10 - 8) = r0;				\
++	/* 32-bit fill r1 from stack - should preserve the ID. */\
++	r1 = *(u32*)(r10 - %[offset]);				\
++	/* Compare r1 with another register to trigger find_equal_scalars. */\
++	r2 = 0;						\
++	if r1 != r2 goto l0_%=;				\
++	/* The result of this comparison is predefined. */\
++	if r0 == r2 goto l0_%=;				\
++	/* Dead branch: the verifier should prune it. Do an invalid memory\
++	 * access if the verifier follows it.		\
++	 */						\
++	r0 = *(u64*)(r9 + 0);				\
++	exit;						\
++l0_%=:	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32),
 +#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-+	  __imm_const(offset, 6)
-+#else
 +	  __imm_const(offset, 8)
++#else
++	  __imm_const(offset, 4)
 +#endif
- 	: __clobber_all);
- }
- 
++	: __clobber_all);
++}
++
++SEC("xdp")
++__description("32-bit fill after 64-bit spill should clear ID")
++__failure __msg("math between ctx pointer and 4294967295 is not allowed")
++__naked void fill_32bit_after_spill_64bit_clear_id(void)
++{
++	asm volatile ("					\
++	r6 = r1;					\
++	/* Roll one bit to force the verifier to track both branches. */\
++	call %[bpf_get_prandom_u32];			\
++	r0 &= 0x8;					\
++	/* Put a large number into r1. */		\
++	r1 = 0xffffffff;				\
++	r1 <<= 32;					\
++	r1 += r0;					\
++	/* 64-bit spill r1 to stack - should assign an ID. */\
++	*(u64*)(r10 - 8) = r1;				\
++	/* 32-bit fill r2 from stack - should clear the ID. */\
++	r2 = *(u32*)(r10 - %[offset]);			\
++	/* Compare r2 with another register to trigger find_equal_scalars.\
++	 * Having one random bit is important here, otherwise the verifier cuts\
++	 * the corners. If the ID was mistakenly preserved on fill, this would\
++	 * cause the verifier to think that r1 is also equal to zero in one of\
++	 * the branches, and equal to eight on the other branch.\
++	 */						\
++	r3 = 0;						\
++	if r2 != r3 goto l0_%=;				\
++l0_%=:	r1 >>= 32;					\
++	/* The verifier shouldn't propagate r2's range to r1, so it should\
++	 * still remember r1 = 0xffffffff and reject the below.\
++	 */						\
++	r6 += r1;					\
++	r0 = *(u32*)(r6 + 0);				\
++	exit;						\
++"	:
++	: __imm(bpf_get_prandom_u32),
++#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
++	  __imm_const(offset, 8)
++#else
++	  __imm_const(offset, 4)
++#endif
++	: __clobber_all);
++}
++
+ char _license[] SEC("license") = "GPL";
 -- 
 2.43.0
 
