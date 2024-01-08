@@ -1,62 +1,62 @@
-Return-Path: <linux-kselftest+bounces-2726-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2727-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA6C7827987
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jan 2024 21:52:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C31EB82798A
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jan 2024 21:52:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 26C79285056
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jan 2024 20:52:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E9F4A1C211FF
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jan 2024 20:52:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FAC955E73;
-	Mon,  8 Jan 2024 20:52:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E98AA55E52;
+	Mon,  8 Jan 2024 20:52:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZUMVQDkT"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iqNGgoPp"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7674B55E68;
-	Mon,  8 Jan 2024 20:52:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5921F55E45;
+	Mon,  8 Jan 2024 20:52:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-557d554ca30so977981a12.2;
-        Mon, 08 Jan 2024 12:52:33 -0800 (PST)
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-55745901085so2785822a12.0;
+        Mon, 08 Jan 2024 12:52:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1704747152; x=1705351952; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1704747157; x=1705351957; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=adI7f1RlY+ltIHKhZGqEjhbXbsGlT5KUxNsWV+Nqtu8=;
-        b=ZUMVQDkTjMcsd6fEbWg4HtlY3et5hzHW8/lrkOrGdlmlyVhcwWcxXpF/sACIuWRFCC
-         xd5nbKys+uzLJ9MQBjS2KItcwtlSzNf1PsjkdGyqVKguuZaN+eKIWIiQkjmXh7B6rhC7
-         m1RQiKARBWMcvDntXsIIH5XAFs3tk3HisWuzYRzpkuAT+cMKsrEc8Fn57QtkeSzpT+l6
-         VYlx+fs+QH87pzpKo7PJ+WVaFvmHh8bBfGc3P0MD0shq+tB5RR9hf7jGskZPUQqllH9q
-         s5xmDNGAZ3Vcjs0dU/ZrPhihI1EK5x5py14UwFplaY6GkgcvDBVq2xIZlOL8lF3M7nFx
-         DByg==
+        bh=q8bFyaBTWGO9YtHUlCOAC9syiZawhLxoZiiL7FBJDXo=;
+        b=iqNGgoPpML2o07UxouiH7o92H2mRes/gUTTYuYhHqk9r0pmQiXxK6z8dReJ7Y2m8C/
+         nu7BW9T9tlpHiWkexaU5WLqZxqDjWHFF2dxZyvshwT4nA/9ZuIunJB7hnCr88jakNRSa
+         3VGshDmk/Fq1Nw2SW8KCIA/+iSnG4KOOcpwqBieB+xNRgPg+iELgD5JEbUQdZ8uxkWQ5
+         rD3KLL1DNsA5qOlv2MkSbPNgTQDirJ86zjrqFXRiGzJBHeByZm4N9n7LVNevK15m9qTQ
+         wzGYmYymPXUDooIiKcCy8yfY8vAQQXh3AziZg2tb0Y1nMeBNAtLpe1TQXcyDfDIMnK7H
+         vWOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704747152; x=1705351952;
+        d=1e100.net; s=20230601; t=1704747157; x=1705351957;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=adI7f1RlY+ltIHKhZGqEjhbXbsGlT5KUxNsWV+Nqtu8=;
-        b=D6BQqhK5SaElgUNCUMmRI9RZVcOgwhjXzhR+Nu2KjNrigIuOd5vvpj1GfvfWWbYiTM
-         OjuOi99jYe0IMPJH+cPmm5DKTcRmSwSIgPBY391VR4OXo9X+zoHiWf+rnu+eQ17TNI/0
-         HFnXylJiHbzp5TdUxyFHONGYosnw82Y9JnxBbagnleWJdHIK86BRgc/K5YXcnXrtl/KQ
-         zMHh5zqVebnJgyej9+dUl4QR79BeRgm1syPsSxD46e4Dh96D/8mmObfQ/k8kNTyPhB+7
-         M/QOtgO8DwWu+0Y89AB8AvSixbpNzDINdkJlZ0KakUychPv5fmREFXFAQ4uEIVB9y1fg
-         HEkA==
-X-Gm-Message-State: AOJu0Yxg+wKCQX24uh2PMAMD81O2f4L28I7K8ucO1zPk87pz3umVTBDB
-	xLx7Bq2vuwoAmt8UPxU55RM=
-X-Google-Smtp-Source: AGHT+IFh3NpDyh01CwEX8/55m43siA24ttbMhvSdDCSwNAhhteJmeiKTxLmJqSZKHN1jcuFMmr7fAg==
-X-Received: by 2002:a17:906:1cd8:b0:a28:f8d2:7897 with SMTP id i24-20020a1709061cd800b00a28f8d27897mr16527ejh.20.1704747151799;
-        Mon, 08 Jan 2024 12:52:31 -0800 (PST)
-Received: from localhost (tor-exit-1.zbau.f3netze.de. [185.220.100.252])
-        by smtp.gmail.com with ESMTPSA id k7-20020a170906158700b00a2add419e33sm244982ejd.176.2024.01.08.12.52.31
+        bh=q8bFyaBTWGO9YtHUlCOAC9syiZawhLxoZiiL7FBJDXo=;
+        b=xEFiW2MJJ7Gj/ih9MBLAWFoAfiSYMxMmdzYpXahCs7xwBXFXYANgD2fcnM6WKSru7r
+         bbFqkcuZeWxzYhwEjBvKL8fiEFjV/3VrJvay+98/DODQ8P5vwbL3eQdbIikkowGIarND
+         tejyOQxeFDql0jFqFhGSFXmZur31f8Q9mRRSN6mppCOd/iPPzVF0cQ/+mYT/T4W6h6p6
+         wa3cef8tw1REDU8RxFNC63vUCkccA7IO8P4wzWLibWgzMLNJWC7tqGCPnsDPNnk3b0/s
+         kwt0e9phMfesPpViSvn/hAVkC/gxTWxWsuJ/7Z6hZCMGwlZRYb12ZcQDuNOVpdzLXqtX
+         G54w==
+X-Gm-Message-State: AOJu0YzuaOte9G4zYifbbXt4dc01f37xfX5pdSMKGGGyFbpbYgEjHfyj
+	5deCnRnnSKav2A5srAUV3Ks=
+X-Google-Smtp-Source: AGHT+IHkPlQbCTfVkOa1+Z9mPBmsAVl+28FS9fBT+EHVdi4HwpaWqFHpDxZzETVpBjbsT2PlzOx6/w==
+X-Received: by 2002:a50:f617:0:b0:557:d5c1:a4ae with SMTP id c23-20020a50f617000000b00557d5c1a4aemr743628edn.47.1704747157544;
+        Mon, 08 Jan 2024 12:52:37 -0800 (PST)
+Received: from localhost ([185.220.101.80])
+        by smtp.gmail.com with ESMTPSA id c13-20020aa7df0d000000b0055422adeb00sm201966edy.33.2024.01.08.12.52.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Jan 2024 12:52:31 -0800 (PST)
+        Mon, 08 Jan 2024 12:52:37 -0800 (PST)
 From: Maxim Mikityanskiy <maxtram95@gmail.com>
 To: Eduard Zingerman <eddyz87@gmail.com>,
 	Alexei Starovoitov <ast@kernel.org>,
@@ -78,10 +78,11 @@ Cc: John Fastabend <john.fastabend@gmail.com>,
 	Jesper Dangaard Brouer <hawk@kernel.org>,
 	bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: [PATCH bpf-next v2 03/15] selftests/bpf: check if imprecise stack spills confuse infinite loop detection
-Date: Mon,  8 Jan 2024 22:51:57 +0200
-Message-ID: <20240108205209.838365-4-maxtram95@gmail.com>
+	netdev@vger.kernel.org,
+	Maxim Mikityanskiy <maxim@isovalent.com>
+Subject: [PATCH bpf-next v2 04/15] bpf: Make bpf_for_each_spilled_reg consider narrow spills
+Date: Mon,  8 Jan 2024 22:51:58 +0200
+Message-ID: <20240108205209.838365-5-maxtram95@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240108205209.838365-1-maxtram95@gmail.com>
 References: <20240108205209.838365-1-maxtram95@gmail.com>
@@ -93,50 +94,34 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Eduard Zingerman <eddyz87@gmail.com>
+From: Maxim Mikityanskiy <maxim@isovalent.com>
 
-Verify that infinite loop detection logic separates states with
-identical register states but different imprecise scalars spilled to
-stack.
+Adjust the check in bpf_get_spilled_reg to take into account spilled
+registers narrower than 64 bits. That allows find_equal_scalars to
+properly adjust the range of all spilled registers that have the same
+ID. Before this change, it was possible for a register and a spilled
+register to have the same IDs but different ranges if the spill was
+narrower than 64 bits and a range check was performed on the register.
 
-Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
+Signed-off-by: Maxim Mikityanskiy <maxim@isovalent.com>
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- .../selftests/bpf/progs/verifier_loops1.c     | 24 +++++++++++++++++++
- 1 file changed, 24 insertions(+)
+ include/linux/bpf_verifier.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_loops1.c b/tools/testing/selftests/bpf/progs/verifier_loops1.c
-index 71735dbf33d4..e07b43b78fd2 100644
---- a/tools/testing/selftests/bpf/progs/verifier_loops1.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_loops1.c
-@@ -259,4 +259,28 @@ l0_%=:	r2 += r1;					\
- "	::: __clobber_all);
- }
+diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
+index d07d857ca67f..e11baecbde68 100644
+--- a/include/linux/bpf_verifier.h
++++ b/include/linux/bpf_verifier.h
+@@ -453,7 +453,7 @@ struct bpf_verifier_state {
  
-+SEC("xdp")
-+__success
-+__naked void not_an_inifinite_loop(void)
-+{
-+	asm volatile ("					\
-+	call %[bpf_get_prandom_u32];			\
-+	r0 &= 0xff;					\
-+	*(u64 *)(r10 - 8) = r0;				\
-+	r0 = 0;						\
-+loop_%=:						\
-+	r0 = *(u64 *)(r10 - 8);				\
-+	if r0 > 10 goto exit_%=;			\
-+	r0 += 1;					\
-+	*(u64 *)(r10 - 8) = r0;				\
-+	r0 = 0;						\
-+	goto loop_%=;					\
-+exit_%=:						\
-+	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
- char _license[] SEC("license") = "GPL";
+ #define bpf_get_spilled_reg(slot, frame, mask)				\
+ 	(((slot < frame->allocated_stack / BPF_REG_SIZE) &&		\
+-	  ((1 << frame->stack[slot].slot_type[0]) & (mask))) \
++	  ((1 << frame->stack[slot].slot_type[BPF_REG_SIZE - 1]) & (mask))) \
+ 	 ? &frame->stack[slot].spilled_ptr : NULL)
+ 
+ /* Iterate over 'frame', setting 'reg' to either NULL or a spilled register. */
 -- 
 2.43.0
 
