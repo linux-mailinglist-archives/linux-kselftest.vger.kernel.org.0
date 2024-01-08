@@ -1,266 +1,293 @@
-Return-Path: <linux-kselftest+bounces-2708-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2709-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44BA7826785
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jan 2024 05:07:26 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9BF2E82688E
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jan 2024 08:27:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DCF971C20B6B
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jan 2024 04:07:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1D8D91F21CB5
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jan 2024 07:27:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A5D010F7;
-	Mon,  8 Jan 2024 04:07:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87DA2849C;
+	Mon,  8 Jan 2024 07:27:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mu4L6Dfn"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bZTi/P5P"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C5BD7493;
-	Mon,  8 Jan 2024 04:07:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704686837; x=1736222837;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=1BZxPey4EA+hg+6LDc2ICxtvC2/zLfSZ8i2i96+OmWY=;
-  b=mu4L6DfnLSoLchoST219gTCsUoze7GRw8uKhRHkzgrM39EqMiPhBOOTk
-   3YJI46V9mOXPVv0VS/pdSGmqJZOeksAVudm31wEEOVKtWvALsNWs2SEj2
-   3akiNaIsLG0FwGxoQ5V/Pi8zmwk9HPYNsX3JzzYvNVXn3hync1FHMWkkH
-   2eOhp/2AUrbdHHhTp+YyPcbe6jpNEfbieZ4MEy34LSq0sR9VckARPpp6v
-   9LHhzYo03OD0LZiCZ1rrc3bZvTkb9DmPWFfLb48+Bo6O463OvmDvmihVK
-   NbvKPiB04RFPIaBveHFsDWSxqfg/6Rtc5yD8FV1WRRmq7duGUbqQQsi5L
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10946"; a="464189906"
-X-IronPort-AV: E=Sophos;i="6.04,340,1695711600"; 
-   d="scan'208";a="464189906"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2024 20:07:16 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.04,340,1695711600"; 
-   d="scan'208";a="29654489"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orviesa001.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 07 Jan 2024 20:07:16 -0800
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Sun, 7 Jan 2024 20:07:15 -0800
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Sun, 7 Jan 2024 20:07:14 -0800
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35 via Frontend Transport; Sun, 7 Jan 2024 20:07:14 -0800
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.100)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.35; Sun, 7 Jan 2024 20:07:14 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=htlluF+fkWanC9NQe396UB8GjwJAkrsivyQS3yR/SJTXPhzOaCAKDqg5ZFkOccjfg2JcEltlDoJ/UoXt+Wx1v42ehNrKQ0SBbe41C3/a/Sj7UWdO0k+Qffyee8j1U0lpgCUd2yrPUMgRPABfh+U2D/cDdFWGQw0dGMi+RJwGLPUStLIeeNLbrnGDzT8cF4oXrFyZrEuCkR2PTQDYUqxxkkVTy4J8KPb8QAh4fK+jr7yDb5c6hFuJxGFFB0PmL3+lQ4j5FVVDQhzlYsW3VRxp0c4O3R/B1Wq16oaGeVxks3f/4d8ZV2+QZhGtXULjOMdab5rr4hCzeaxpx8SxYVxzxw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1BZxPey4EA+hg+6LDc2ICxtvC2/zLfSZ8i2i96+OmWY=;
- b=c8bBHwq2FD4gi+mAcQnCiGIZpKZ3PhmXyHttatqrPbIZZOglRhYBxsHAdDwfRhELP/8O4Iz2QVmGoWkKlWqmsAtDXBD2VITUiBnJVhFS+nvflcw56q8sz42IbY23akOfKjXINFT23cHpaZNHNpDCLlEBx+bRqBpw2BO4KcBCW7HhoJ5Vf0xilhmTGFtd6/E/AKf3bcRUNN87UM3K9JxKuVvcIWq2agYrMJPtXsNZulay1cSgaHZ3tbH91M7f9FdO1wHXpiJM4Hs2nO0mT/A81g6kimqYIyCiQcjOcVk0qpcsPdSUurTMUe1db/czvwkbnC9eSHsCiEgT+or8yp/iHg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by SA1PR11MB6991.namprd11.prod.outlook.com (2603:10b6:806:2b8::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7159.21; Mon, 8 Jan
- 2024 04:07:12 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::a8e9:c80f:9484:f7cb]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::a8e9:c80f:9484:f7cb%3]) with mapi id 15.20.7159.020; Mon, 8 Jan 2024
- 04:07:12 +0000
-From: "Tian, Kevin" <kevin.tian@intel.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-CC: "Liu, Yi L" <yi.l.liu@intel.com>, "joro@8bytes.org" <joro@8bytes.org>,
-	"alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-	"robin.murphy@arm.com" <robin.murphy@arm.com>, "baolu.lu@linux.intel.com"
-	<baolu.lu@linux.intel.com>, "cohuck@redhat.com" <cohuck@redhat.com>,
-	"eric.auger@redhat.com" <eric.auger@redhat.com>, "nicolinc@nvidia.com"
-	<nicolinc@nvidia.com>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-	"mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-	"chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-	"yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>, "peterx@redhat.com"
-	<peterx@redhat.com>, "jasowang@redhat.com" <jasowang@redhat.com>,
-	"shameerali.kolothum.thodi@huawei.com"
-	<shameerali.kolothum.thodi@huawei.com>, "lulu@redhat.com" <lulu@redhat.com>,
-	"suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-	"iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "Duan,
- Zhenzhong" <zhenzhong.duan@intel.com>, "joao.m.martins@oracle.com"
-	<joao.m.martins@oracle.com>, "Zeng, Xin" <xin.zeng@intel.com>, "Zhao, Yan Y"
-	<yan.y.zhao@intel.com>
-Subject: RE: [PATCH v7 1/3] iommufd: Add data structure for Intel VT-d stage-1
- cache invalidation
-Thread-Topic: [PATCH v7 1/3] iommufd: Add data structure for Intel VT-d
- stage-1 cache invalidation
-Thread-Index: AQHaGViOWXGe59nutU2rEx/0zRDvrrCozh6AgCE2IQCAALd70IAADhuggADPEQCAA/GQIA==
-Date: Mon, 8 Jan 2024 04:07:12 +0000
-Message-ID: <BN9PR11MB52765C91893A28A7D21D324E8C6B2@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20231117131816.24359-1-yi.l.liu@intel.com>
- <20231117131816.24359-2-yi.l.liu@intel.com>
- <c967e716-9112-4d1a-b6f7-9a005e28202d@intel.com>
- <20240104143658.GX50406@nvidia.com>
- <BN9PR11MB52769EEDAE2783426144E2588C662@BN9PR11MB5276.namprd11.prod.outlook.com>
- <20240105144516.GC50406@nvidia.com>
-In-Reply-To: <20240105144516.GC50406@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|SA1PR11MB6991:EE_
-x-ms-office365-filtering-correlation-id: 1ff0e0d1-b160-4428-b434-08dc0fff4ab0
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 3bO/ZlxXVEjiuMKR5z1B8qLWl4AadjgCRGb8TS/S/2RwO5nLcQWQw49B4pZT1oij9J4m3ztxcvTTmF/u0shHXppltS68rCSh1C2+NxNJ6EXgUBSJS8hLwedU3wSxFUrh4mZLCD9MVsYE54CgU6GKx/EuShAC86ffWHtOfqGqP481kOZJd8GzfUq9FQeJWo8kGRDe6ydM1HTUhC/gI9tQ9/ziT2PJkR3PKDVGfyw70RlzSRpYovTWMJBud/AzlLxQkHBUl1tkD57LICLhb1xfuHlDTxXXrkmPTfpgUW8NEYixFMUMib6LEkOMLU+V4cwJD9Tl6o/33MJEF4d4H1n4FrN+roj94IVAYseWQcq2bC01KG5xPcgDiCGfZibYBd6ppkdxgNjY2XvbtDZD+c4ZQKE9nqo8/B35RHM5BeTM8Dkxio8B5v5jaZ+ePq2UKSdeHCZciW2R5a5xqv6vpnWJSyBn2rZGHs1AArDazEZ3aZe9Yd5e39wlIrQhhMBMg7lF/4ZN5D533dczK2odhqoRdJeVGqOjzgF2HBYaUg3ZVu32lOzXFy+TCo79+e/xQC9zrUrQVleKNWr0dfDUxxqSD+sFX2kbU4mKXl/zqgPTAsPFxGbf3KedMuL5inY0vwlE
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(136003)(346002)(376002)(366004)(39860400002)(396003)(230922051799003)(186009)(1800799012)(64100799003)(451199024)(55016003)(26005)(83380400001)(33656002)(7416002)(5660300002)(86362001)(6506007)(7696005)(71200400001)(478600001)(122000001)(38100700002)(9686003)(54906003)(41300700001)(66946007)(66556008)(6916009)(64756008)(66446008)(66476007)(2906002)(38070700009)(52536014)(8936002)(8676002)(4326008)(316002)(82960400001)(76116006);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?PhhxOj7L4ttO1n1gYVkTdxRndAb2YTOKLueHxZDblDmw+hSaxZ8apV5EnMj6?=
- =?us-ascii?Q?R9iX3OhZ832eOtgond1wNPlwW/vjzspOrFII7sgx5/EE3GWbCPEnT3/3TFH0?=
- =?us-ascii?Q?n30HuZAZnal/d0ZzUvpW6OOsQ5mlKX/7FbTscjZ1AFUkogT5+9HnC5DY3UHq?=
- =?us-ascii?Q?ug8AMQxk1UQ29ZyXDefd4YIcy7g/mhctYYX+wyFSRAERdm4oKvYrckqCS/+m?=
- =?us-ascii?Q?d27F3khMuOkQBOW+ce7jSgDAGaX+7IQtIAfL8qxidaUmp5C+YzFaGlBK0RPJ?=
- =?us-ascii?Q?jBScKWPppkJt/AGytPC2sx+e4RLhkCajO9m/gjKd3LrBtrxB6Yn25Q6REyz5?=
- =?us-ascii?Q?XUzNwAN+Krml8KOWFiTeH+HOHfM6MgrIDdDWgt+MbIbMFj5vVQKm3s/ubJRZ?=
- =?us-ascii?Q?VVT4PJfGEymjj5qP+25f6AR69ngMEe9mvr53S+8PjgnxqCCctHwz73ASnhge?=
- =?us-ascii?Q?hjxxv5VZaJOWJDmBPKWC881DxOKAWj2iWW75ojnX46ucAfLXtaXRwNZdjMFx?=
- =?us-ascii?Q?49dD5al5KpMdJikMTpSSbFsyK0vuzHa1KcHiGLuREioRsNy4yRJ6qMWK8P/x?=
- =?us-ascii?Q?U8vvCplCMoYu8PrwQbKzisI6xePhXQvNnXTPEZoNKA6lzwi+wxnQSmKYyQm+?=
- =?us-ascii?Q?PnPKiSYQg9JXlfzSahKK2XRbLIbQR//oZ+igK5OOHgTwFv3IHozQ/9wA9NWT?=
- =?us-ascii?Q?2WXvYzN9irWvbByf/AaNoyFjGGwhH2CBJeOBBrZmsrDOXszjEchdDYiCdb9Z?=
- =?us-ascii?Q?Z1NmW96RmMQ3cGMW5+ouaLLtAfHB3tQduwKrbQgASJkZcQ6UyU8zaudwjAOb?=
- =?us-ascii?Q?C4Vm+A5rRvhTZSPqZ++v2c5z51029BaObvYzWkDzxyGhD85fj0Wpj/za6vxp?=
- =?us-ascii?Q?r3ONc/DZ2lTENYj//37F44qqigP+FmjDrYyUp4nFpLEGzLETrdx5PbrtNcF1?=
- =?us-ascii?Q?fqh4bihtiu6CjOKSVw2WOqjvTu0ikNDpT8XlAPvAUzGj+GMBfgSzOinK/mEW?=
- =?us-ascii?Q?bSO5Ns82iUAuteKsWSFebso4y4qqv3GVSJO+4jSr2MAt4pFi3EKrV4I34u73?=
- =?us-ascii?Q?iQP1PYo+kkUy+fPqhg3dEb3C9CMWTCjdAnP4vBx4Z819LLPKIl+9kp0R93GU?=
- =?us-ascii?Q?v78fGK96ecIEPpsIpUvNC16K9/x7efP6ITsqLn668q+clW+4jkxpaEKwLTmE?=
- =?us-ascii?Q?EW9yP7pO/Wxu8IR0R+sV8h4CaLvDj6aswISgI73DqJlD3AbMNNfYkj31YtKo?=
- =?us-ascii?Q?PrlFQlAIPreBlQXQX7iIN3SCvSCfU+/YPV3o1v+BbR94t9sjXvygosY7vyUB?=
- =?us-ascii?Q?L53eeSq6OWVMqwPtwe/Amtsjc9e1HZDdmWBRn98KiaYPpqBlfPK6x4f39+Ns?=
- =?us-ascii?Q?JbDwGPkBs20bMlpIUPVtJ1/dEVUMBN92R3s2NkkMNTjQBFrO1s7Iwnd/i7vp?=
- =?us-ascii?Q?ojMb1JMGyPCudtG5KQpyQhSHPawteii++0ko8189SrtnZoxY84MQW2iibiEU?=
- =?us-ascii?Q?36zzwWaSNfIRtcCrv6aGpBKCoqXJOh5c0uqSxCwl3OtUJOn52+TZLSjLKVhQ?=
- =?us-ascii?Q?hfIO7Bs2SiW6/WrFePfkvET1MiSZW5mTZqD7UXQ4?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B29A4B657
+	for <linux-kselftest@vger.kernel.org>; Mon,  8 Jan 2024 07:27:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-557a615108eso3380a12.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 07 Jan 2024 23:27:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1704698870; x=1705303670; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=h3jK4NFDggVvNQOELANdw9OSDeVXrYUDxm7bInuJzRw=;
+        b=bZTi/P5P7XgQDiekL+Wncq1XVFixM8OMfWGRN1bdgVEX6+vWgU0HE7w/AiMucZbhJA
+         dc7w+hL9rGFQYOntGhuekojURwOd5RGyp9Ggokwd1gJWqj9r4a29VZ8huRE6sZgLorT5
+         WY9SHnkw0RZDsPAOJyAuAUqcA9iQ66gdC6feaD46F6DltYfwH2xy7FYyQwV4L560ethN
+         DTSjxv4U1ZbE6LuydoscFe1EsZPuem5p25pwQaEYnWd82pigO2icTwKwBHDD2H/V9tz7
+         bfpjS6we42Kg0d/aNz/vR0EDfdGSIjQBBKF8FyQItc/EJmKaKn+wIaCkYMUBbvIwzzke
+         HKGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704698870; x=1705303670;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=h3jK4NFDggVvNQOELANdw9OSDeVXrYUDxm7bInuJzRw=;
+        b=VZCqruOo8EIDnZlDIsQrY+PkoyAC2B8CPMXWt97Qxpmts6GaxK9mrGrQ3Bo1qnIwgf
+         jLplcCrTAIAm8+Wvb/xkZDYJty+fbabvW47pwfLBNllGXTnJSEGWT7Qs7WSKqSBKtIts
+         +e/ZRyklTLNfS8THMphQDgBpdTRYx0k4PbzqOE+/HnZhQMpr5HkERyK7+tRhc1bhorQI
+         JTi0qKAUl80i0LVBerJ3fYp/v2hT3j9HtavV3K8OTnIiU3cvB9G5YsKjcP+FqTU0CZCT
+         JIUj+nJtw6FIa/Jlv3jXhQx7faVmhOBw7+gNqGWxHaumv7q/523nJ/X1cORr2QCUnWyh
+         hIZQ==
+X-Gm-Message-State: AOJu0YxemdCJXvu5ARSMXZG2WRI80myuZhiATeanZyBAaz/TY0XgHq3B
+	gT+h+u0CRLCGCSV7BlKZkpCQdtxAfk8cRVbrDWfGdQbQxdfq
+X-Google-Smtp-Source: AGHT+IGo8qYamOBr/SIC/RUrheMOYr/AMLjM0qBOsfKYXZ4g5n/M6cTlzmAE+bvOFfU+9VeZuB6dq8Adlr8mGNPF4jQ=
+X-Received: by 2002:a50:8a93:0:b0:557:15d:b784 with SMTP id
+ j19-20020a508a93000000b00557015db784mr204034edj.2.1704698869895; Sun, 07 Jan
+ 2024 23:27:49 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1ff0e0d1-b160-4428-b434-08dc0fff4ab0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 08 Jan 2024 04:07:12.3587
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: GaWzIUXkvHB2qk098pPUkEYw3H7g6RCj5uLe7I5TqdJkXBGgZqlPq+CbRsRl3FQMYFMZ/0GiTYqfqcwgxuqbMg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB6991
-X-OriginatorOrg: intel.com
+References: <20231206150729.54604-1-marpagan@redhat.com>
+In-Reply-To: <20231206150729.54604-1-marpagan@redhat.com>
+From: David Gow <davidgow@google.com>
+Date: Mon, 8 Jan 2024 15:27:37 +0800
+Message-ID: <CABVgOSnbBzjcb_zt=YJ8p8Rm97s2ZYp=YvjThB_NCZD9BJQaSg@mail.gmail.com>
+Subject: Re: [PATCH v3] kunit: run test suites only after module
+ initialization completes
+To: Marco Pagani <marpagan@redhat.com>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Jinjie Ruan <ruanjinjie@huawei.com>, Rae Moar <rmoar@google.com>, 
+	Richard Fitzgerald <rf@opensource.cirrus.com>, Javier Martinez Canillas <javierm@redhat.com>, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	linux-kernel@vger.kernel.org
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+	boundary="0000000000009d2484060e6a22b4"
 
-> From: Jason Gunthorpe <jgg@nvidia.com>
-> Sent: Friday, January 5, 2024 10:45 PM
->=20
-> On Fri, Jan 05, 2024 at 02:52:50AM +0000, Tian, Kevin wrote:
-> > > but in reality the relation could be identified in an easy way due to=
- a SIOV
-> > > restriction which we discussed before - shared PASID space of PF
-> disallows
-> > > assigning sibling vdev's to a same VM (otherwise no way to identify w=
-hich
-> > > sibling vdev triggering an iopf when a pasid is used on both vdev's).=
- That
-> > > restriction implies that within an iommufd context every iommufd_devi=
-ce
-> > > object should contain a unique struct device pointer. So PASID can be
-> > > instead ignored in the lookup then just always do iommufd_get_dev_id(=
-)
-> > > using struct device.
-> >
-> > A bit more background.
-> >
-> > Previously we thought this restriction only applies to SIOV+vSVA, as
-> > a guest process may bind to both sibling vdev's, leading to the same
-> > pasid situation.
-> >
-> > In concept w/o vSVA it's still possible to assign sibling vdev's to
-> > a same VM as each vdev is allocated with a unique pasid to mark vRID
-> > so can be differentiated from each other in the fault/error path.
->=20
-> I thought the SIOV plan was that each "vdev" ie vpci function would
-> get a slice of the pRID's PASID space statically selected at creation?
->=20
-> So SVA/etc doesn't matter, you reliably get a disjoint set of pRID &
-> pPASID into each VM.
->=20
-> From that view you can't identify the iommufd dev_id without knowing
-> both the pRID and pPASID which will disambiguate the different SIOV
-> iommufd dev_id instances sharing a rid.
+--0000000000009d2484060e6a22b4
+Content-Type: text/plain; charset="UTF-8"
 
-true when assigning those instances to different VMs.
+On Wed, 6 Dec 2023 at 23:07, Marco Pagani <marpagan@redhat.com> wrote:
+>
+> Commit 2810c1e99867 ("kunit: Fix wild-memory-access bug in
+> kunit_free_suite_set()") fixed a wild-memory-access bug that could have
+> happened during the loading phase of test suites built and executed as
+> loadable modules. However, it also introduced a problematic side effect
+> that causes test suites modules to crash when they attempt to register
+> fake devices.
+>
+> When a module is loaded, it traverses the MODULE_STATE_UNFORMED and
+> MODULE_STATE_COMING states before reaching the normal operating state
+> MODULE_STATE_LIVE. Finally, when the module is removed, it moves to
+> MODULE_STATE_GOING before being released. However, if the loading
+> function load_module() fails between complete_formation() and
+> do_init_module(), the module goes directly from MODULE_STATE_COMING to
+> MODULE_STATE_GOING without passing through MODULE_STATE_LIVE.
+>
+> This behavior was causing kunit_module_exit() to be called without
+> having first executed kunit_module_init(). Since kunit_module_exit() is
+> responsible for freeing the memory allocated by kunit_module_init()
+> through kunit_filter_suites(), this behavior was resulting in a
+> wild-memory-access bug.
+>
+> Commit 2810c1e99867 ("kunit: Fix wild-memory-access bug in
+> kunit_free_suite_set()") fixed this issue by running the tests when the
+> module is still in MODULE_STATE_COMING. However, modules in that state
+> are not fully initialized, lacking sysfs kobjects. Therefore, if a test
+> module attempts to register a fake device, it will inevitably crash.
+>
+> This patch proposes a different approach to fix the original
+> wild-memory-access bug while restoring the normal module execution flow
+> by making kunit_module_exit() able to detect if kunit_module_init() has
+> previously initialized the tests suite set. In this way, test modules
+> can once again register fake devices without crashing.
+>
+> This behavior is achieved by checking whether mod->kunit_suites is a
+> virtual or direct mapping address. If it is a virtual address, then
+> kunit_module_init() has allocated the suite_set in kunit_filter_suites()
+> using kmalloc_array(). On the contrary, if mod->kunit_suites is still
+> pointing to the original address that was set when looking up the
+> .kunit_test_suites section of the module, then the loading phase has
+> failed and there's no memory to be freed.
+>
+> v3:
+> - add a comment to clarify why the start address is checked
+> v2:
+> - add include <linux/mm.h>
+>
+> Fixes: 2810c1e99867 ("kunit: Fix wild-memory-access bug in kunit_free_suite_set()")
+> Tested-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+> Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+> Signed-off-by: Marco Pagani <marpagan@redhat.com>
+> ---
 
-Here I was talking about assigning them to a same VM being a problem.
-with rid sharing plus same ENQCMD pPASID potentially used on both
-instances there'd be ambiguity in vSVA e.g. iopf to identify dev_id.
+Sorry for the delay here: there are enough subtleties here that I
+wanted to double check some things.
 
-we agreed before on preventing sibling vdev's in one VM for above
-reason, but only as far as vSVA is concerned.
+I keep feeling that there has to be a nicer way of doing this, but I
+can't think of one, so let's go with this, since it's fixing a real
+issue.
 
-then given the new finding in err reporting I wondered whether this
-restriction should be applied to all SIOV scenarios (but irrelevant now
-with below explanation after another thinking)
+I'm a little hesitant about our use of the suite_set.start address as
+an 'is initialised' flag, and depending on it being reallocated via
+kunit_filter_suites(), but since we already depend on that (by always
+using kunit_free_suite_set()), I'm okay with it.
 
->=20
-> > But when looking at this err code issue with Yi closely, we found
-> > there is another gap in the VT-d spec. Upon devtlb invalidation
-> > timeout the hw doesn't report pasid in the error info register. this
-> > makes it impossible to identify the source vdev if a hwpt invalidation
-> > request involves sibling vdev's from a same PF.
->=20
-> Don't you know which command timed out?
+My only request (other than this needing a rebase, probably on top of
+6.8) would be to add a comment in kunit_filter_suites() noting that it
+must return a virtual address. That's probably something we should've
+done a while ago, but I can just see this requirement getting
+forgotten.
 
-unfortunately no.
+Reviewed-by: David Gow <davidgow@google.com>
 
-for errors related to descriptor fetch the driver can tell the command
-by looking at the head pointer of the invalidation queue.
+Cheers,
+-- David
 
-command completion is indirectly detected by inserting a wait descriptor
-as fence. completion timeout error is reported in an error register. but
-this register doesn't record pasid, nor does the command location. if there
-are multiple pending devtlb invalidation commands upon timeout=20
-error the spec suggests the driver to treat all of them timeout as the
-register can only record one rid.
+>  lib/kunit/test.c | 14 +++++++++++---
+>  1 file changed, 11 insertions(+), 3 deletions(-)
+>
+> diff --git a/lib/kunit/test.c b/lib/kunit/test.c
+> index 7aceb07a1af9..3263e0d5e0f6 100644
+> --- a/lib/kunit/test.c
+> +++ b/lib/kunit/test.c
+> @@ -16,6 +16,7 @@
+>  #include <linux/panic.h>
+>  #include <linux/sched/debug.h>
+>  #include <linux/sched.h>
+> +#include <linux/mm.h>
+>
+>  #include "debugfs.h"
+>  #include "hooks-impl.h"
+> @@ -775,12 +776,19 @@ static void kunit_module_exit(struct module *mod)
+>         };
+>         const char *action = kunit_action();
+>
+> +       /*
+> +        * Check if the start address is a valid virtual address to detect
+> +        * if the module load sequence has failed and the suite set has not
+> +        * been initialized and filtered.
+> +        */
+> +       if (!suite_set.start || !virt_addr_valid(suite_set.start))
+> +               return;
+> +
+>         if (!action)
+>                 __kunit_test_suites_exit(mod->kunit_suites,
+>                                          mod->num_kunit_suites);
+>
+> -       if (suite_set.start)
+> -               kunit_free_suite_set(suite_set);
+> +       kunit_free_suite_set(suite_set);
+>  }
+>
+>  static int kunit_module_notify(struct notifier_block *nb, unsigned long val,
+> @@ -790,12 +798,12 @@ static int kunit_module_notify(struct notifier_block *nb, unsigned long val,
+>
+>         switch (val) {
+>         case MODULE_STATE_LIVE:
+> +               kunit_module_init(mod);
+>                 break;
+>         case MODULE_STATE_GOING:
+>                 kunit_module_exit(mod);
+>                 break;
+>         case MODULE_STATE_COMING:
+> -               kunit_module_init(mod);
+>                 break;
+>         case MODULE_STATE_UNFORMED:
+>                 break;
+>
+> base-commit: 33cc938e65a98f1d29d0a18403dbbee050dcad9a
+> --
+> 2.43.0
+>
 
-this is kind of moot. If the driver submits only one command (plus wait)
-at a time it doesn't need hw's help to identify the timeout command.=20
-If the driver batches invalidation commands it must treat all timeout if
-an timeout error is reported.
+--0000000000009d2484060e6a22b4
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
 
-from this angle whether to record pasid doesn't really matter.
-
-intel-iommu driver doesn't batch commands. so it's possible for
-the driver to figure out the timeout device itself and identify rid plus
-pasid to find dev_id from iommufd.
-
-Thanks
-Kevin
+MIIPqgYJKoZIhvcNAQcCoIIPmzCCD5cCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+gg0EMIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+7xDrOPfX3COqq162RFg/MFcGA1UdIARQME4wCQYHZ4EMAQUBATBBBgkrBgEEAaAyASgwNDAyBggr
+BgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wDAYDVR0TAQH/
+BAIwADCBmgYIKwYBBQUHAQEEgY0wgYowPgYIKwYBBQUHMAGGMmh0dHA6Ly9vY3NwLmdsb2JhbHNp
+Z24uY29tL2NhL2dzYXRsYXNyM3NtaW1lY2EyMDIwMEgGCCsGAQUFBzAChjxodHRwOi8vc2VjdXJl
+Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2F0bGFzcjNzbWltZWNhMjAyMC5jcnQwHwYDVR0jBBgw
+FoAUfMwKaNei6x4schvRzV2Vb4378mMwRgYDVR0fBD8wPTA7oDmgN4Y1aHR0cDovL2NybC5nbG9i
+YWxzaWduLmNvbS9jYS9nc2F0bGFzcjNzbWltZWNhMjAyMC5jcmwwDQYJKoZIhvcNAQELBQADggEB
+AK0lDd6/eSh3qHmXaw1YUfIFy07B25BEcTvWgOdla99gF1O7sOsdYaTz/DFkZI5ghjgaPJCovgla
+mRMfNcxZCfoBtsB7mAS6iOYjuwFOZxi9cv6jhfiON6b89QWdMaPeDddg/F2Q0bxZ9Z2ZEBxyT34G
+wlDp+1p6RAqlDpHifQJW16h5jWIIwYisvm5QyfxQEVc+XH1lt+taSzCfiBT0ZLgjB9Sg+zAo8ys6
+5PHxFaT2a5Td/fj5yJ5hRSrqy/nj/hjT14w3/ZdX5uWg+cus6VjiiR/5qGSZRjHt8JoApD6t6/tg
+ITv8ZEy6ByumbU23nkHTMOzzQSxczHkT+0q10/MxggJqMIICZgIBATBoMFQxCzAJBgNVBAYTAkJF
+MRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFzIFIz
+IFNNSU1FIENBIDIwMjACEAHS+TgZvH/tCq5FcDC0n9IwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZI
+hvcNAQkEMSIEIBiYDyCC/O89ptU6ntT70LtGso8A7nzhLj2fqsxf1IpSMBgGCSqGSIb3DQEJAzEL
+BgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI0MDEwODA3Mjc1MFowaQYJKoZIhvcNAQkPMVww
+WjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkq
+hkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQAkZ5lu
+9MZY53R0aUdPmlanDJnrqB3PJdfG0OygtakjXPRt5Mzaajv14/QVg8A4iiSsaRYV4cg6vuKWT593
+fASVidbtzF/rN2J3glPR39Lbtb6Ye6TURS4n3GtQhm7S8Hd/LZaNcHPKMmWffnhTGtDnikTC5ZIU
+3qFXic3dDpQ84O4XZfShVlsoUeltjRspFjargAMbI7VAIjBKKIiSR7IPFmRMACoRbObIDhlJUcOA
+SaiO3BgAmYNzFGgYcyJP15sOHdoM+CwN3Vg0wbr7JNK6dAqf7XTFtBG8q1q369qR2Gkuhqpxb83g
+d0qAac+3mu2LExo1NWC+UvcGSWK3iUOs
+--0000000000009d2484060e6a22b4--
 
