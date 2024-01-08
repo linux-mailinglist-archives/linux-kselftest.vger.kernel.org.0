@@ -1,62 +1,62 @@
-Return-Path: <linux-kselftest+bounces-2728-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2729-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BBF182798E
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jan 2024 21:53:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8085C827990
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jan 2024 21:53:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CDCC028393D
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jan 2024 20:53:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E32EB1F23FD4
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jan 2024 20:53:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16AB755E61;
-	Mon,  8 Jan 2024 20:52:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0F4955E69;
+	Mon,  8 Jan 2024 20:52:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="agrTGG1j"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jYcRyf2I"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67CDB55E5D;
-	Mon,  8 Jan 2024 20:52:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D60155E5D;
+	Mon,  8 Jan 2024 20:52:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-50e759ece35so2321289e87.3;
-        Mon, 08 Jan 2024 12:52:44 -0800 (PST)
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-55719cdc0e1so2546040a12.1;
+        Mon, 08 Jan 2024 12:52:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1704747162; x=1705351962; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1704747168; x=1705351968; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0qdhZQ50yhU/SRCB/PIjXryngjXoiTzCDGKP0J5FKhQ=;
-        b=agrTGG1jCiSP2FSDfu/qOl1rTJ2f2CH2PG3s+x8jXsTHKpLSJ6uWQx66tsl8hUjBbX
-         A4stqnTzTE2S4w1XexgKjyDY/nwfChlXbxeG4ByYpvVxdA2CeahsDu1eCw8EV5ag8y0p
-         GbbMANOuRGxHGV+75B8ND2krdiGKwtVK7EpJUqWxR+B7m/fFH+zq+TOqAoVF3boMFyvl
-         i48YZFRWSSOh//OaKcaaSTeXAiR/d0JxIawN8ytylqyGtzBTHBoq1R1Wl0vV35rxCAFO
-         vsNz0bqFBa9Pqny7tgp+cx6jaTrXXd1iBfs3jeR1s3Ud/6s2vTTIHLP+sCnHmPNx5rWv
-         mSHw==
+        bh=Ql4Pqfjh0Jhi1BvTKprb/E446Img2B4kp0cwEWA8FYU=;
+        b=jYcRyf2I3h5ZVaJWQjpnKMBsIhGyF1fSN5JYsiChFZwafghzLwoh4oHwHHbAFXfKnk
+         Ahh8MVHuFYVdLc4gcg5uB+YISXKnLt8C5nmMLcUjKTm9nSpVBfWAbIJFlFRyktFKT1LQ
+         I2e5H9XZ3Fd/msrwQdk1sGmXvoDWJ8VL+QZzCbZxRZKQaVD2v1N79RUcCIG5ZTXKciG2
+         qEBgTCFUODe+GQmrONOwSGotqzsITc39zs15HsIRRtiMF9pu9hxJTYWuiRnKXcN98k07
+         oMCx53ulbtlHywct56MxIoX6zvFKp9UGKbJN0mk3ZHruRBW1Cx3+mqfLAq5SYi+z627x
+         T/qg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704747162; x=1705351962;
+        d=1e100.net; s=20230601; t=1704747168; x=1705351968;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=0qdhZQ50yhU/SRCB/PIjXryngjXoiTzCDGKP0J5FKhQ=;
-        b=U2guxmJUjSRnGjqKjfddLqwYaVEGI61i1Br76qElcRHNzJS9UgMkSqP43I/g6LJdXK
-         /j2jePghb786hhaQ1O5Gm2R1a3sQncvMKm98yQmLD9TiSPWGSMSGmP6My/JPfcx/QFad
-         e7DATq15Y67sv9cRaB6z3fl03SwQKbx+Vh834/UhcndDFkvFJGOiJ4Um5EKUUQsSTW43
-         Gj3H4b7QJGw86Ch+ba2PGrYtX/1sBy8Tb2BBxaxm4M/VHf3Az19QEYrd7KSDfCON6s/D
-         p1F0yC505wXd1gWVf9NZ5Q9TcYAHDRLyyHB38/yJeUimvzQ6cdTIBPXUDd6uF7d4/G64
-         2AmQ==
-X-Gm-Message-State: AOJu0YxTytdyArzN6nzTxkAMoE8kvdR9Z8Klqz7y5rtSmMnWx8O1csFF
-	RLO48jSzS4NdBg0DVvodaDc=
-X-Google-Smtp-Source: AGHT+IFeJ99k98c+GtyJciKxCA0cmzsKkflU47ocxDxxI2gqMKhGDOuOB1GQHhGOHCIXTtn48hv45g==
-X-Received: by 2002:a05:6512:2394:b0:50e:7c70:fbe1 with SMTP id c20-20020a056512239400b0050e7c70fbe1mr1874713lfv.100.1704747162071;
-        Mon, 08 Jan 2024 12:52:42 -0800 (PST)
+        bh=Ql4Pqfjh0Jhi1BvTKprb/E446Img2B4kp0cwEWA8FYU=;
+        b=V5+QaaWyRO94rgSNpUEGvbfGOXqP1QeBbzDTSO6MqNAur8qpeVDArV79d74lyo3Xze
+         Gq2XMVo2qT7x7RHqr/quOOKbs5/ggOVxDyAAx9cQjCtpXBVVpeAMWVL75MADS3N7vSX6
+         gtMcb1hKj2CRyqHU5BzPOeM09KUtwlbdZkgEaFRqsJeYDxcewuN5gsAoOuyH3QHZ7R1k
+         WD8EFmw5mfwrahWY/qNrDxgyKjFRVfjkmrQ9O2kOTFZc81b7h/b5EukaAHHTl9749GBP
+         vqJnkZoazm6dXkBHL98GgBhWBzLhh04ykX7QYwnwMmIMcVSPgA/RT7emIxIaiMM+ckV/
+         R1Mw==
+X-Gm-Message-State: AOJu0YxmSM/7mpbqbIvWXpGu3nG49dRt8KIOk6izcITKoTfNzrv+zGDv
+	Nog+DoJmGsyvjV9x557zoUs=
+X-Google-Smtp-Source: AGHT+IHm3reXS/cS+H3l5RG6G2jaSgJes2s3dXPKqT3uvgOrpu+uBPSL4cznoKTs86c9uLJ6AW11Sw==
+X-Received: by 2002:a50:8e53:0:b0:552:7433:23ee with SMTP id 19-20020a508e53000000b00552743323eemr3023958edx.0.1704747168526;
+        Mon, 08 Jan 2024 12:52:48 -0800 (PST)
 Received: from localhost ([185.220.101.80])
-        by smtp.gmail.com with ESMTPSA id w1-20020a17090652c100b00a2777219307sm236577ejn.202.2024.01.08.12.52.41
+        by smtp.gmail.com with ESMTPSA id i4-20020a056402054400b00555e52fed52sm198492edx.91.2024.01.08.12.52.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Jan 2024 12:52:41 -0800 (PST)
+        Mon, 08 Jan 2024 12:52:48 -0800 (PST)
 From: Maxim Mikityanskiy <maxtram95@gmail.com>
 To: Eduard Zingerman <eddyz87@gmail.com>,
 	Alexei Starovoitov <ast@kernel.org>,
@@ -80,9 +80,9 @@ Cc: John Fastabend <john.fastabend@gmail.com>,
 	linux-kselftest@vger.kernel.org,
 	netdev@vger.kernel.org,
 	Maxim Mikityanskiy <maxim@isovalent.com>
-Subject: [PATCH bpf-next v2 05/15] selftests/bpf: Add a test case for 32-bit spill tracking
-Date: Mon,  8 Jan 2024 22:51:59 +0200
-Message-ID: <20240108205209.838365-6-maxtram95@gmail.com>
+Subject: [PATCH bpf-next v2 06/15] bpf: Add the assign_scalar_id_before_mov function
+Date: Mon,  8 Jan 2024 22:52:00 +0200
+Message-ID: <20240108205209.838365-7-maxtram95@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240108205209.838365-1-maxtram95@gmail.com>
 References: <20240108205209.838365-1-maxtram95@gmail.com>
@@ -96,56 +96,94 @@ Content-Transfer-Encoding: 8bit
 
 From: Maxim Mikityanskiy <maxim@isovalent.com>
 
-When a range check is performed on a register that was 32-bit spilled to
-the stack, the IDs of the two instances of the register are the same, so
-the range should also be the same.
+Extract the common code that generates a register ID for src_reg before
+MOV if needed into a new function. This function will also be used in
+a following commit.
 
 Signed-off-by: Maxim Mikityanskiy <maxim@isovalent.com>
 Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- .../selftests/bpf/progs/verifier_spill_fill.c | 31 +++++++++++++++++++
- 1 file changed, 31 insertions(+)
+ kernel/bpf/verifier.c | 33 +++++++++++++++++++--------------
+ 1 file changed, 19 insertions(+), 14 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-index 848f2930f599..f303ac19cf41 100644
---- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
-@@ -735,4 +735,35 @@ __naked void stack_load_preserves_const_precision_subreg(void)
- 	: __clobber_common);
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index bc565f445410..e3eff2becd64 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -4403,6 +4403,18 @@ static bool __is_pointer_value(bool allow_ptr_leaks,
+ 	return reg->type != SCALAR_VALUE;
  }
  
-+SEC("xdp")
-+__description("32-bit spilled reg range should be tracked")
-+__success __retval(0)
-+__naked void spill_32bit_range_track(void)
++static void assign_scalar_id_before_mov(struct bpf_verifier_env *env,
++					struct bpf_reg_state *src_reg)
 +{
-+	asm volatile("					\
-+	call %[bpf_ktime_get_ns];			\
-+	/* Make r0 bounded. */				\
-+	r0 &= 65535;					\
-+	/* Assign an ID to r0. */			\
-+	r1 = r0;					\
-+	/* 32-bit spill r0 to stack. */			\
-+	*(u32*)(r10 - 8) = r0;				\
-+	/* Boundary check on r0. */			\
-+	if r0 < 1 goto l0_%=;				\
-+	/* 32-bit fill r1 from stack. */		\
-+	r1 = *(u32*)(r10 - 8);				\
-+	/* r1 == r0 => r1 >= 1 always. */		\
-+	if r1 >= 1 goto l0_%=;				\
-+	/* Dead branch: the verifier should prune it.   \
-+	 * Do an invalid memory access if the verifier	\
-+	 * follows it.					\
-+	 */						\
-+	r0 = *(u64*)(r9 + 0);				\
-+l0_%=:	r0 = 0;						\
-+	exit;						\
-+"	:
-+	: __imm(bpf_ktime_get_ns)
-+	: __clobber_all);
++	if (src_reg->type == SCALAR_VALUE && !src_reg->id &&
++	    !tnum_is_const(src_reg->var_off))
++		/* Ensure that src_reg has a valid ID that will be copied to
++		 * dst_reg and then will be used by find_equal_scalars() to
++		 * propagate min/max range.
++		 */
++		src_reg->id = ++env->id_gen;
 +}
 +
- char _license[] SEC("license") = "GPL";
+ /* Copy src state preserving dst->parent and dst->live fields */
+ static void copy_register_state(struct bpf_reg_state *dst, const struct bpf_reg_state *src)
+ {
+@@ -13901,20 +13913,13 @@ static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
+ 		if (BPF_SRC(insn->code) == BPF_X) {
+ 			struct bpf_reg_state *src_reg = regs + insn->src_reg;
+ 			struct bpf_reg_state *dst_reg = regs + insn->dst_reg;
+-			bool need_id = src_reg->type == SCALAR_VALUE && !src_reg->id &&
+-				       !tnum_is_const(src_reg->var_off);
+ 
+ 			if (BPF_CLASS(insn->code) == BPF_ALU64) {
+ 				if (insn->off == 0) {
+ 					/* case: R1 = R2
+ 					 * copy register state to dest reg
+ 					 */
+-					if (need_id)
+-						/* Assign src and dst registers the same ID
+-						 * that will be used by find_equal_scalars()
+-						 * to propagate min/max range.
+-						 */
+-						src_reg->id = ++env->id_gen;
++					assign_scalar_id_before_mov(env, src_reg);
+ 					copy_register_state(dst_reg, src_reg);
+ 					dst_reg->live |= REG_LIVE_WRITTEN;
+ 					dst_reg->subreg_def = DEF_NOT_SUBREG;
+@@ -13929,8 +13934,8 @@ static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
+ 						bool no_sext;
+ 
+ 						no_sext = src_reg->umax_value < (1ULL << (insn->off - 1));
+-						if (no_sext && need_id)
+-							src_reg->id = ++env->id_gen;
++						if (no_sext)
++							assign_scalar_id_before_mov(env, src_reg);
+ 						copy_register_state(dst_reg, src_reg);
+ 						if (!no_sext)
+ 							dst_reg->id = 0;
+@@ -13952,8 +13957,8 @@ static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
+ 					if (insn->off == 0) {
+ 						bool is_src_reg_u32 = src_reg->umax_value <= U32_MAX;
+ 
+-						if (is_src_reg_u32 && need_id)
+-							src_reg->id = ++env->id_gen;
++						if (is_src_reg_u32)
++							assign_scalar_id_before_mov(env, src_reg);
+ 						copy_register_state(dst_reg, src_reg);
+ 						/* Make sure ID is cleared if src_reg is not in u32
+ 						 * range otherwise dst_reg min/max could be incorrectly
+@@ -13967,8 +13972,8 @@ static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
+ 						/* case: W1 = (s8, s16)W2 */
+ 						bool no_sext = src_reg->umax_value < (1ULL << (insn->off - 1));
+ 
+-						if (no_sext && need_id)
+-							src_reg->id = ++env->id_gen;
++						if (no_sext)
++							assign_scalar_id_before_mov(env, src_reg);
+ 						copy_register_state(dst_reg, src_reg);
+ 						if (!no_sext)
+ 							dst_reg->id = 0;
 -- 
 2.43.0
 
