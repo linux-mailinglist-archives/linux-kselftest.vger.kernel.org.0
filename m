@@ -1,62 +1,62 @@
-Return-Path: <linux-kselftest+bounces-2727-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2728-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C31EB82798A
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jan 2024 21:52:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BBF182798E
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jan 2024 21:53:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E9F4A1C211FF
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jan 2024 20:52:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CDCC028393D
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jan 2024 20:53:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E98AA55E52;
-	Mon,  8 Jan 2024 20:52:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16AB755E61;
+	Mon,  8 Jan 2024 20:52:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iqNGgoPp"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="agrTGG1j"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5921F55E45;
-	Mon,  8 Jan 2024 20:52:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67CDB55E5D;
+	Mon,  8 Jan 2024 20:52:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-55745901085so2785822a12.0;
-        Mon, 08 Jan 2024 12:52:39 -0800 (PST)
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-50e759ece35so2321289e87.3;
+        Mon, 08 Jan 2024 12:52:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1704747157; x=1705351957; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1704747162; x=1705351962; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=q8bFyaBTWGO9YtHUlCOAC9syiZawhLxoZiiL7FBJDXo=;
-        b=iqNGgoPpML2o07UxouiH7o92H2mRes/gUTTYuYhHqk9r0pmQiXxK6z8dReJ7Y2m8C/
-         nu7BW9T9tlpHiWkexaU5WLqZxqDjWHFF2dxZyvshwT4nA/9ZuIunJB7hnCr88jakNRSa
-         3VGshDmk/Fq1Nw2SW8KCIA/+iSnG4KOOcpwqBieB+xNRgPg+iELgD5JEbUQdZ8uxkWQ5
-         rD3KLL1DNsA5qOlv2MkSbPNgTQDirJ86zjrqFXRiGzJBHeByZm4N9n7LVNevK15m9qTQ
-         wzGYmYymPXUDooIiKcCy8yfY8vAQQXh3AziZg2tb0Y1nMeBNAtLpe1TQXcyDfDIMnK7H
-         vWOg==
+        bh=0qdhZQ50yhU/SRCB/PIjXryngjXoiTzCDGKP0J5FKhQ=;
+        b=agrTGG1jCiSP2FSDfu/qOl1rTJ2f2CH2PG3s+x8jXsTHKpLSJ6uWQx66tsl8hUjBbX
+         A4stqnTzTE2S4w1XexgKjyDY/nwfChlXbxeG4ByYpvVxdA2CeahsDu1eCw8EV5ag8y0p
+         GbbMANOuRGxHGV+75B8ND2krdiGKwtVK7EpJUqWxR+B7m/fFH+zq+TOqAoVF3boMFyvl
+         i48YZFRWSSOh//OaKcaaSTeXAiR/d0JxIawN8ytylqyGtzBTHBoq1R1Wl0vV35rxCAFO
+         vsNz0bqFBa9Pqny7tgp+cx6jaTrXXd1iBfs3jeR1s3Ud/6s2vTTIHLP+sCnHmPNx5rWv
+         mSHw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704747157; x=1705351957;
+        d=1e100.net; s=20230601; t=1704747162; x=1705351962;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=q8bFyaBTWGO9YtHUlCOAC9syiZawhLxoZiiL7FBJDXo=;
-        b=xEFiW2MJJ7Gj/ih9MBLAWFoAfiSYMxMmdzYpXahCs7xwBXFXYANgD2fcnM6WKSru7r
-         bbFqkcuZeWxzYhwEjBvKL8fiEFjV/3VrJvay+98/DODQ8P5vwbL3eQdbIikkowGIarND
-         tejyOQxeFDql0jFqFhGSFXmZur31f8Q9mRRSN6mppCOd/iPPzVF0cQ/+mYT/T4W6h6p6
-         wa3cef8tw1REDU8RxFNC63vUCkccA7IO8P4wzWLibWgzMLNJWC7tqGCPnsDPNnk3b0/s
-         kwt0e9phMfesPpViSvn/hAVkC/gxTWxWsuJ/7Z6hZCMGwlZRYb12ZcQDuNOVpdzLXqtX
-         G54w==
-X-Gm-Message-State: AOJu0YzuaOte9G4zYifbbXt4dc01f37xfX5pdSMKGGGyFbpbYgEjHfyj
-	5deCnRnnSKav2A5srAUV3Ks=
-X-Google-Smtp-Source: AGHT+IHkPlQbCTfVkOa1+Z9mPBmsAVl+28FS9fBT+EHVdi4HwpaWqFHpDxZzETVpBjbsT2PlzOx6/w==
-X-Received: by 2002:a50:f617:0:b0:557:d5c1:a4ae with SMTP id c23-20020a50f617000000b00557d5c1a4aemr743628edn.47.1704747157544;
-        Mon, 08 Jan 2024 12:52:37 -0800 (PST)
+        bh=0qdhZQ50yhU/SRCB/PIjXryngjXoiTzCDGKP0J5FKhQ=;
+        b=U2guxmJUjSRnGjqKjfddLqwYaVEGI61i1Br76qElcRHNzJS9UgMkSqP43I/g6LJdXK
+         /j2jePghb786hhaQ1O5Gm2R1a3sQncvMKm98yQmLD9TiSPWGSMSGmP6My/JPfcx/QFad
+         e7DATq15Y67sv9cRaB6z3fl03SwQKbx+Vh834/UhcndDFkvFJGOiJ4Um5EKUUQsSTW43
+         Gj3H4b7QJGw86Ch+ba2PGrYtX/1sBy8Tb2BBxaxm4M/VHf3Az19QEYrd7KSDfCON6s/D
+         p1F0yC505wXd1gWVf9NZ5Q9TcYAHDRLyyHB38/yJeUimvzQ6cdTIBPXUDd6uF7d4/G64
+         2AmQ==
+X-Gm-Message-State: AOJu0YxTytdyArzN6nzTxkAMoE8kvdR9Z8Klqz7y5rtSmMnWx8O1csFF
+	RLO48jSzS4NdBg0DVvodaDc=
+X-Google-Smtp-Source: AGHT+IFeJ99k98c+GtyJciKxCA0cmzsKkflU47ocxDxxI2gqMKhGDOuOB1GQHhGOHCIXTtn48hv45g==
+X-Received: by 2002:a05:6512:2394:b0:50e:7c70:fbe1 with SMTP id c20-20020a056512239400b0050e7c70fbe1mr1874713lfv.100.1704747162071;
+        Mon, 08 Jan 2024 12:52:42 -0800 (PST)
 Received: from localhost ([185.220.101.80])
-        by smtp.gmail.com with ESMTPSA id c13-20020aa7df0d000000b0055422adeb00sm201966edy.33.2024.01.08.12.52.36
+        by smtp.gmail.com with ESMTPSA id w1-20020a17090652c100b00a2777219307sm236577ejn.202.2024.01.08.12.52.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Jan 2024 12:52:37 -0800 (PST)
+        Mon, 08 Jan 2024 12:52:41 -0800 (PST)
 From: Maxim Mikityanskiy <maxtram95@gmail.com>
 To: Eduard Zingerman <eddyz87@gmail.com>,
 	Alexei Starovoitov <ast@kernel.org>,
@@ -80,9 +80,9 @@ Cc: John Fastabend <john.fastabend@gmail.com>,
 	linux-kselftest@vger.kernel.org,
 	netdev@vger.kernel.org,
 	Maxim Mikityanskiy <maxim@isovalent.com>
-Subject: [PATCH bpf-next v2 04/15] bpf: Make bpf_for_each_spilled_reg consider narrow spills
-Date: Mon,  8 Jan 2024 22:51:58 +0200
-Message-ID: <20240108205209.838365-5-maxtram95@gmail.com>
+Subject: [PATCH bpf-next v2 05/15] selftests/bpf: Add a test case for 32-bit spill tracking
+Date: Mon,  8 Jan 2024 22:51:59 +0200
+Message-ID: <20240108205209.838365-6-maxtram95@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240108205209.838365-1-maxtram95@gmail.com>
 References: <20240108205209.838365-1-maxtram95@gmail.com>
@@ -96,32 +96,56 @@ Content-Transfer-Encoding: 8bit
 
 From: Maxim Mikityanskiy <maxim@isovalent.com>
 
-Adjust the check in bpf_get_spilled_reg to take into account spilled
-registers narrower than 64 bits. That allows find_equal_scalars to
-properly adjust the range of all spilled registers that have the same
-ID. Before this change, it was possible for a register and a spilled
-register to have the same IDs but different ranges if the spill was
-narrower than 64 bits and a range check was performed on the register.
+When a range check is performed on a register that was 32-bit spilled to
+the stack, the IDs of the two instances of the register are the same, so
+the range should also be the same.
 
 Signed-off-by: Maxim Mikityanskiy <maxim@isovalent.com>
 Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- include/linux/bpf_verifier.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../selftests/bpf/progs/verifier_spill_fill.c | 31 +++++++++++++++++++
+ 1 file changed, 31 insertions(+)
 
-diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index d07d857ca67f..e11baecbde68 100644
---- a/include/linux/bpf_verifier.h
-+++ b/include/linux/bpf_verifier.h
-@@ -453,7 +453,7 @@ struct bpf_verifier_state {
+diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
+index 848f2930f599..f303ac19cf41 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
++++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
+@@ -735,4 +735,35 @@ __naked void stack_load_preserves_const_precision_subreg(void)
+ 	: __clobber_common);
+ }
  
- #define bpf_get_spilled_reg(slot, frame, mask)				\
- 	(((slot < frame->allocated_stack / BPF_REG_SIZE) &&		\
--	  ((1 << frame->stack[slot].slot_type[0]) & (mask))) \
-+	  ((1 << frame->stack[slot].slot_type[BPF_REG_SIZE - 1]) & (mask))) \
- 	 ? &frame->stack[slot].spilled_ptr : NULL)
- 
- /* Iterate over 'frame', setting 'reg' to either NULL or a spilled register. */
++SEC("xdp")
++__description("32-bit spilled reg range should be tracked")
++__success __retval(0)
++__naked void spill_32bit_range_track(void)
++{
++	asm volatile("					\
++	call %[bpf_ktime_get_ns];			\
++	/* Make r0 bounded. */				\
++	r0 &= 65535;					\
++	/* Assign an ID to r0. */			\
++	r1 = r0;					\
++	/* 32-bit spill r0 to stack. */			\
++	*(u32*)(r10 - 8) = r0;				\
++	/* Boundary check on r0. */			\
++	if r0 < 1 goto l0_%=;				\
++	/* 32-bit fill r1 from stack. */		\
++	r1 = *(u32*)(r10 - 8);				\
++	/* r1 == r0 => r1 >= 1 always. */		\
++	if r1 >= 1 goto l0_%=;				\
++	/* Dead branch: the verifier should prune it.   \
++	 * Do an invalid memory access if the verifier	\
++	 * follows it.					\
++	 */						\
++	r0 = *(u64*)(r9 + 0);				\
++l0_%=:	r0 = 0;						\
++	exit;						\
++"	:
++	: __imm(bpf_ktime_get_ns)
++	: __clobber_all);
++}
++
+ char _license[] SEC("license") = "GPL";
 -- 
 2.43.0
 
