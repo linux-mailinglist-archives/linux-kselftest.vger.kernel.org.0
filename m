@@ -1,205 +1,319 @@
-Return-Path: <linux-kselftest+bounces-2714-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2715-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 013C9827059
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jan 2024 14:52:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CD3C82748D
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jan 2024 16:57:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1B91F1C22284
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jan 2024 13:52:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EAAF4284A21
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jan 2024 15:57:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35B6B45945;
-	Mon,  8 Jan 2024 13:51:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70B0E5103E;
+	Mon,  8 Jan 2024 15:57:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="EA06J147"
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="PvdeB1hS"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2041.outbound.protection.outlook.com [40.107.223.41])
+Received: from out203-205-221-231.mail.qq.com (out203-205-221-231.mail.qq.com [203.205.221.231])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A82B944C99;
-	Mon,  8 Jan 2024 13:51:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Lh4Tpzwur/YB3+TvFrHpCSB6XtU7J9q39IXLbuHo0g4p0X10pTg/K9DsuVxr2chjiz5xJ06VYrEcxVmIHE0681bBo9EiOICBB0EYTJm6NPyGqIpta4ZJo/bf3T+9frajxlSDb6Lw1yULvmzG9kdRzoOLEP2C9JIQb3lVOc+CQPsoi93NBfYaUuaesX5g1fD5g9tHTbnNzUe3cv4a3j0Yw8LY2TJUR3T9v9eHhRQQgHV/4VKt887NqO+kHd3Yvq3Hl22/bpGax1g7+Lu9mrV2O6nYBLssrRLIw6jUFwCUs1prB7/rz1k+0hqW/Amor+ylBH2TEBZUoEMxKGEJuMRSkQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TJ5Vi1ZBvCQqoh+E5fmJh5uYInDiBpZ7YJqtfosDNtk=;
- b=DQ3KlZyYIKtznU+UxRQChXQBK8RbxI8ewIcOL01DFDgdvIlN0lU6631APufij9h70iwjDUwVXr1+ffunLn4vMbOsLMgq2Fj1yFq/fZhMrGAJ7CZ9PZM2YFSjxviQNlFrA1xyAk9nNzhK2SvdArvc2N1woFTwdp7bxuanztBvDuC4CpZevpBkqcKwKyBntMpOj43xqhdPqgLNbCrFWFm/V/8cOulSYAxqWjAfEhimqigIlk24j1fXJROPUccYGglAvypJhpV46B5+x8JqaqRGEPfbwV7Dr6QP6slX8BpcqFUrhQCpK42fN0XmYUy7gkcIYxGB99fIIKsxeM8iFqhfiQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=TJ5Vi1ZBvCQqoh+E5fmJh5uYInDiBpZ7YJqtfosDNtk=;
- b=EA06J147aFtQxKE4UYa0ww2TmVVEhW/s9VgVkWEoDenU7CAfTHPQGBmhElSW3GRmI3ecpvgU2G5AZDZzeVlW0nFZalKUHgR+2QvREwPW1djk2gKd/GOQsF0vJu52VBIcdsmOwQqSC4E1iHSmourjK8OtuUQQ90gM+63d7Pmqv8uAZ1HNWggLLpSwHDLN/kUFgSik5v+Q91mcnSMInCK5rsXYB7egAhdbe+F1BDU+AYqNz0zHwBYqmOzU/qeMZ50ZJBsNlN9BkprW9p/J5Urh76Mje7HLt1zuFsicymhETMQ0XF/Q02CmQk1rS8vP4VMnMxu9iuzW2lbix5zMGC5OKQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by SA1PR12MB7443.namprd12.prod.outlook.com (2603:10b6:806:2b7::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7159.19; Mon, 8 Jan
- 2024 13:51:33 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::60d4:c1e3:e1aa:8f93]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::60d4:c1e3:e1aa:8f93%4]) with mapi id 15.20.7159.020; Mon, 8 Jan 2024
- 13:51:33 +0000
-Date: Mon, 8 Jan 2024 09:51:32 -0400
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: "Tian, Kevin" <kevin.tian@intel.com>
-Cc: "Liu, Yi L" <yi.l.liu@intel.com>, "joro@8bytes.org" <joro@8bytes.org>,
-	"alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-	"robin.murphy@arm.com" <robin.murphy@arm.com>,
-	"baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-	"cohuck@redhat.com" <cohuck@redhat.com>,
-	"eric.auger@redhat.com" <eric.auger@redhat.com>,
-	"nicolinc@nvidia.com" <nicolinc@nvidia.com>,
-	"kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-	"mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-	"chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-	"yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-	"peterx@redhat.com" <peterx@redhat.com>,
-	"jasowang@redhat.com" <jasowang@redhat.com>,
-	"shameerali.kolothum.thodi@huawei.com" <shameerali.kolothum.thodi@huawei.com>,
-	"lulu@redhat.com" <lulu@redhat.com>,
-	"suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-	"iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"Duan, Zhenzhong" <zhenzhong.duan@intel.com>,
-	"joao.m.martins@oracle.com" <joao.m.martins@oracle.com>,
-	"Zeng, Xin" <xin.zeng@intel.com>,
-	"Zhao, Yan Y" <yan.y.zhao@intel.com>
-Subject: Re: [PATCH v7 1/3] iommufd: Add data structure for Intel VT-d
- stage-1 cache invalidation
-Message-ID: <20240108135132.GI50406@nvidia.com>
-References: <20231117131816.24359-1-yi.l.liu@intel.com>
- <20231117131816.24359-2-yi.l.liu@intel.com>
- <c967e716-9112-4d1a-b6f7-9a005e28202d@intel.com>
- <20240104143658.GX50406@nvidia.com>
- <BN9PR11MB52769EEDAE2783426144E2588C662@BN9PR11MB5276.namprd11.prod.outlook.com>
- <20240105144516.GC50406@nvidia.com>
- <BN9PR11MB52765C91893A28A7D21D324E8C6B2@BN9PR11MB5276.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BN9PR11MB52765C91893A28A7D21D324E8C6B2@BN9PR11MB5276.namprd11.prod.outlook.com>
-X-ClientProxiedBy: BL1PR13CA0375.namprd13.prod.outlook.com
- (2603:10b6:208:2c0::20) To LV2PR12MB5869.namprd12.prod.outlook.com
- (2603:10b6:408:176::16)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADA5352F71
+	for <linux-kselftest@vger.kernel.org>; Mon,  8 Jan 2024 15:57:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+	s=s201512; t=1704729115;
+	bh=Ij+3Ix3Kb6+ZSZanXqYqNIh8zHKZtPuZeycz8V73gG4=;
+	h=From:To:Cc:Subject:Date;
+	b=PvdeB1hS3Pq86PKeL3eqV0KaQ8w9LtY4b6x0pxUgWm8Q6klkGgEBcitmiPnzq6o8G
+	 ATHiURZKKv5NugiRAKCABcPVMlYAqvnLNNd+2W2dTZyoRVhYRAvSeicy6v3ndnPvj+
+	 fVud2jR4kDQ9ggXQG21zXfcB0D90E4LTyZnSY/FU=
+Received: from localhost.localdomain ([2409:8a60:2a63:2f30:4bcb:13ed:5b05:9ecd])
+	by newxmesmtplogicsvrszb6-0.qq.com (NewEsmtp) with SMTP
+	id CF306402; Mon, 08 Jan 2024 23:51:51 +0800
+X-QQ-mid: xmsmtpt1704729111trkm971hy
+Message-ID: <tencent_3C9A298878D22B5D8F79DC2FEE99BB4A8F05@qq.com>
+X-QQ-XMAILINFO: NhUkPfKlCtQwYYTj5BM41Da47XdYIN0Aqf80Ha1rwlfNNQbfTlo7hvwJnDp3S2
+	 5u0vTsM1Xcyjon9qX2Oh6+svAepkkKNenUt/ZuyFnG+8h9zZUu1eSHUs1JCtQc/angeMNJyqlexP
+	 xKlFBe7jCcW4RAhRjSiugTkUyqWJ11omvsCQ/Cx2hY1tuQm952qfNsy2mY7mpjz+M9UXncT/nPsd
+	 n36lM6L+pKWL62RMCOjhEpw/ZDx/dToGm38h19a7rKTi0GdAtZ86d/rEaeiZMKBsA1G323LckkyX
+	 i7XO80lhIHI4dL5ThOYauj7PEOjrWKo11QZ6y6+zOAZN8hp/qXQeNmlY+IMVu4Gs0xyMvGAJ7VYf
+	 EcNdcZsbjZQ0HEziNxbVw7DNvBgwG1lgixuZ8LeAGRZR8FFQlrApWlrfM5Xp2SagYEm30towE1BU
+	 6F5xpYJeJNBw/y7IFNoKKN4NIWqU7KifN+vnJUE6QC3g50yys/Yhd/cZ0Te1deWJeZc9Rdtl/SHb
+	 EU1Iwqzxy8Kf8Yf7jQ7uY5vMUALKktLathT9hFd3lJq1BVKwL3h9PVyot0WIAl8UevrDj+awHiXe
+	 S1vwNtx3wieN37sGVVdZtR0SUwCngB71htTTXNFqgjVvWAFYLNfL0aLUavya0xLfdY4LAipctSFd
+	 hWebDNQ93flcH8rhR5UANgeG6ATdTnpDDdDvptkR1iAvrTU/uOCcvzkBTfn3jQJnlU4lvpkSrgDI
+	 UD5wTgYwfb+PL7vRTWlB4jxB6YcxBiqhZUiB9SfyfCqwMeVaVPNX/h8AlTeUEwCWNrAccBoSOiqf
+	 HaGHL51JBrg98AGzWinqYtnB1IiO13MIHD0eZgawxIegsd11blQJgyv1lewBnrKgpqhhC9MANQVW
+	 YaEegcWIsbn/jsZcKoimIdM0kmgyGTW6/70gUk1N8SlixZWJxz+mUUz+IPnk7EKv6tiJ5x3SNlSH
+	 M3Q34vIaXk1a6BGLcViyah7I7Vo2P3aqbpQ2jKiArM0o8/hnaB/xVla9YQSoztgkS51nIynVGzvS
+	 ZdEBd+YftEAn3kPnzAYxZL/bp6CLWDiI0FlQ9As6CVDMmvU45g
+X-QQ-XMRINFO: MPJ6Tf5t3I/ycC2BItcBVIA=
+From: wenyang.linux@foxmail.com
+To: Shuah Khan <skhan@linuxfoundation.org>,
+	Christian Brauner <brauner@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: Wen Yang <wenyang.linux@foxmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Javier Martinez Canillas <javierm@redhat.com>,
+	Pengfei Xu <pengfei.xu@intel.com>,
+	Miklos Szeredi <mszeredi@redhat.com>,
+	Andrei Vagin <avagin@google.com>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] selftests: add eventfd selftests
+Date: Mon,  8 Jan 2024 23:51:32 +0800
+X-OQ-MSGID: <20240108155132.9153-1-wenyang.linux@foxmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SA1PR12MB7443:EE_
-X-MS-Office365-Filtering-Correlation-Id: dc05106a-8c1c-4458-299a-08dc1050ecd7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	88cEMUaLWcsWYEzBxYYFmRCXGkcRauBLzd2twV+cZZrYhBMJB8wNdYTX6WMBU3n0tHHRvNS0P3zpUC21Ar8Gbzppg9iyC07zSCDvMRvGF6xVpdWVaX4Eb/m8BBD5gnX1LjeNZUdyEB5neSmGMvUvklujvroIvvWLl2iOWzeSQwka+r5Hqtpan6zhkWvQw4SsSuChqweqjR/IQ1v9rXeDq9wFDpTXJxTIvL+Ooqq59L9RcV97HHspcAKd/Y4HK9VnzVzCi37Irji/U+oaWtRN/1gJGuSffcHNzqhpKg8kd+bKVFELNP/U3LihyFMnZ/98arWwUcdp3MAmBN+KtcRPnUbZWt2C+6NTcUUsd52yBciOyqzsSTXzWhToPDpM3clwOii8bDLYKX8lO58dPpmwXZO0lKfbW3FptetLeIZOCyF/WkU+PPrI6eTPHP84EFUKLHR30diMUw/XETZdG5KigX4nQMfJunCM2fexGx+DhX6+d+Efgpo8cpN8Oa5OcWbyEyrJwcz+jhdld16Kcm3qC7J/1G5SiL088+pCD2W5NgpJi9bSkqANLlC0aEQ5jAXF
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(366004)(396003)(39860400002)(136003)(376002)(230922051799003)(64100799003)(451199024)(186009)(1800799012)(6506007)(26005)(1076003)(2616005)(6512007)(478600001)(6486002)(38100700002)(86362001)(33656002)(36756003)(2906002)(41300700001)(7416002)(5660300002)(83380400001)(6916009)(66946007)(8676002)(54906003)(316002)(4326008)(66556008)(8936002)(66476007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?9GwLurVp1bsa3b/nxpR89Exp2XSvuPgO1wXVOTqWhgttDISUFRK7VxD0+Pkw?=
- =?us-ascii?Q?jyS4cxpMNh8CRDZzRgrx0LC0ccve1wgK5L1WfhrOgFb2NC7/bdBs1mapUzub?=
- =?us-ascii?Q?RUHTGoLeDpOvzzREcvw0AJOcPa0vylZqyGIpxqCGg0047JssU0uMKLSwcoSy?=
- =?us-ascii?Q?tZNbD41d2tmubORVDNVTxSjs3Ta+nvRvg9Us6xD5ATs7gz2uyI/4nl5jtL3S?=
- =?us-ascii?Q?6ioP1ipm0MZxRqoNt9xFnhGPxBrDMX2PKtx5PVSOfot8dfZP14hU1oXK6UYE?=
- =?us-ascii?Q?HAwO/ktDfTJDkqVZsTadQTfmHot1jO0TPJvebqDyeXXxrmHqaVu8gsjMo9Tb?=
- =?us-ascii?Q?ABvG8r74RoOr/5vunqOy5VxW6Wms8phIJdUcCLiPrE23TATo1wq1U1qKSpav?=
- =?us-ascii?Q?O9MJAD23zxf7xx8ntkgTgLsO+OCX/3iPPUXBX12xJ8ptmk/uer2AacaJNd3B?=
- =?us-ascii?Q?KFlsXklePdP+fL2Tws89zsO+lr7Wf3EjvZCgycHEo3e+74obSiOXEDVrKXl4?=
- =?us-ascii?Q?JSxJy5eskSKbhz6IoKz1cMCMwVQBWfipfUfXk5gi0GAbME2FIdgOEUKvAC1n?=
- =?us-ascii?Q?WdDGRMRwmDfQZQL+zmChJ4enZUkzWWLtsTa5OshDmWEjHHRn9IaY0T4tsE+u?=
- =?us-ascii?Q?8yn/1IL+9LNYl8wR4IMef/DcZPb5shS/a4u2YO7Zj7wH2JQ5UgQojKr3hsRI?=
- =?us-ascii?Q?b1NM9BEorll3pY61H2dGtTBlScvIAv0kv6NWDtSK4C6HY1V3nPgyAhmYMJ7f?=
- =?us-ascii?Q?wPduUYzPCyVJkFR3Ne9OlrwP3i/xkMvJUIe9kaEGugv6RU/rJzQZ6z2fJpBN?=
- =?us-ascii?Q?DW6XygQqO9qwX2M41EXPtpNgT4SrLUy5VhElGM1wqcxCzx8/SVkbngMUMXE1?=
- =?us-ascii?Q?HgxGW7duyw+mDhorWeBQszb4d5KxV7aMsz7mBabmFD8ZROANorM/UTTEf6xp?=
- =?us-ascii?Q?PRUvMobD8qXBxfSLvwPFmx9g753oWVyrxbQrgoPtMF+z7WRSLwSLMadpOQLP?=
- =?us-ascii?Q?hrJDsq6d+x/BAAfxFT3Gb9qAx2eR6Hk2f+xqz0FX5uxp9dUQ7Fx6GC1Yi8tT?=
- =?us-ascii?Q?vJ8WbxexK2ISmA1YtGoeWSRf6f1H2sZm6Z7ZHfUznhyaE8HX9QZ9Tbo7as+3?=
- =?us-ascii?Q?qNHkCMCtqzie9LvAZvFqo9pePCOSj3oUiOsakNJUZxNBOoUbJ1rq54RcdJB4?=
- =?us-ascii?Q?NbiFCyXQ/3UmK1EumqsA6a4EJ76PwfDq/lmvmHCc8QAkHHkD/Mm57j5xCx9d?=
- =?us-ascii?Q?Ff1w6F13u9n3KYNGUwl87LT9yKviExS2Zt33BWK7Fmg59lahHIWWcH6TRhau?=
- =?us-ascii?Q?+z8EGwV9UWEJzUvBd8OP1cG6kd5wS2UkYoSdTx1NnNio678A+2vDvrcuvhe6?=
- =?us-ascii?Q?Yvr+jo9QZ2dknR1kow4gX8p3hs+pimXb/fgr6BDO2U5FAOoZ5GpipDdHSfb+?=
- =?us-ascii?Q?YU8WY3aJ2Js1kHtOvJxYrUZOwmi54keP7A6YZvhZCsd86wGrOCk0TwQCtrnL?=
- =?us-ascii?Q?3CMUzmJ/uEzytwzgMiwy3aoY7UIPieDwM4JILmfCPWwPczp4Kr8aUQd5+kQo?=
- =?us-ascii?Q?8orT8d0qc2PMHH/rUJk=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dc05106a-8c1c-4458-299a-08dc1050ecd7
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 08 Jan 2024 13:51:33.8450
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CDY5yDRbDaspQzG0KtbGC7p1xNO3J/QYwAKEzkgcTXqGZGqSZ9BE5kNrHunvpSaU
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7443
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jan 08, 2024 at 04:07:12AM +0000, Tian, Kevin wrote:
-> > > In concept w/o vSVA it's still possible to assign sibling vdev's to
-> > > a same VM as each vdev is allocated with a unique pasid to mark vRID
-> > > so can be differentiated from each other in the fault/error path.
-> > 
-> > I thought the SIOV plan was that each "vdev" ie vpci function would
-> > get a slice of the pRID's PASID space statically selected at creation?
-> > 
-> > So SVA/etc doesn't matter, you reliably get a disjoint set of pRID &
-> > pPASID into each VM.
-> > 
-> > From that view you can't identify the iommufd dev_id without knowing
-> > both the pRID and pPASID which will disambiguate the different SIOV
-> > iommufd dev_id instances sharing a rid.
-> 
-> true when assigning those instances to different VMs.
-> 
-> Here I was talking about assigning them to a same VM being a problem.
-> with rid sharing plus same ENQCMD pPASID potentially used on both
-> instances there'd be ambiguity in vSVA e.g. iopf to identify dev_id.
+From: Wen Yang <wenyang.linux@foxmail.com>
 
-Oh you imaging sharing the pPASID if things have the same translation?
-I guess I can see why, but given where things are overall I'd say just
-don't do that.
+This adds the promised selftest for eventfd. It will verify the flags
+of eventfd2, including EFD_CLOEXEC,  EFD_NONBLOCK and EFD_SEMAPHORE.
 
-Indeed we can't do that because it makes the vRID unknowable.
+Signed-off-by: Wen Yang <wenyang.linux@foxmail.com>
+Cc: Shuah Khan <shuah@kernel.org>
+Cc: Javier Martinez Canillas <javierm@redhat.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Christian Brauner <brauner@kernel.org>
+Cc: Pengfei Xu <pengfei.xu@intel.com>
+Cc: Miklos Szeredi <mszeredi@redhat.com>
+Cc: Andrei Vagin <avagin@google.com>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+ .../selftests/filesystems/eventfd/.gitignore  |   2 +
+ .../selftests/filesystems/eventfd/Makefile    |   7 +
+ .../filesystems/eventfd/eventfd_test.c        | 186 ++++++++++++++++++
+ 3 files changed, 195 insertions(+)
+ create mode 100644 tools/testing/selftests/filesystems/eventfd/.gitignore
+ create mode 100644 tools/testing/selftests/filesystems/eventfd/Makefile
+ create mode 100644 tools/testing/selftests/filesystems/eventfd/eventfd_test.c
 
-(again I continue to think that vt-d cache design is messed up, using
-the PASID for the cache tag is a *terrible* design, and causes exactly
-these kinds of problems)
+diff --git a/tools/testing/selftests/filesystems/eventfd/.gitignore b/tools/testing/selftests/filesystems/eventfd/.gitignore
+new file mode 100644
+index 000000000000..483faf59fe4a
+--- /dev/null
++++ b/tools/testing/selftests/filesystems/eventfd/.gitignore
+@@ -0,0 +1,2 @@
++# SPDX-License-Identifier: GPL-2.0-only
++eventfd_test
+diff --git a/tools/testing/selftests/filesystems/eventfd/Makefile b/tools/testing/selftests/filesystems/eventfd/Makefile
+new file mode 100644
+index 000000000000..0a8e3910df15
+--- /dev/null
++++ b/tools/testing/selftests/filesystems/eventfd/Makefile
+@@ -0,0 +1,7 @@
++# SPDX-License-Identifier: GPL-2.0
++
++CFLAGS += $(KHDR_INCLUDES)
++LDLIBS += -lpthread
++TEST_GEN_PROGS := eventfd_test
++
++include ../../lib.mk
+diff --git a/tools/testing/selftests/filesystems/eventfd/eventfd_test.c b/tools/testing/selftests/filesystems/eventfd/eventfd_test.c
+new file mode 100644
+index 000000000000..f142a137526c
+--- /dev/null
++++ b/tools/testing/selftests/filesystems/eventfd/eventfd_test.c
+@@ -0,0 +1,186 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#define _GNU_SOURCE
++#include <errno.h>
++#include <fcntl.h>
++#include <asm/unistd.h>
++#include <linux/time_types.h>
++#include <unistd.h>
++#include <assert.h>
++#include <signal.h>
++#include <pthread.h>
++#include <sys/epoll.h>
++#include <sys/eventfd.h>
++#include "../../kselftest_harness.h"
++
++struct error {
++	int  code;
++	char msg[512];
++};
++
++static int error_set(struct error *err, int code, const char *fmt, ...)
++{
++	va_list args;
++	int r;
++
++	if (code == 0 || !err || err->code != 0)
++		return code;
++
++	err->code = code;
++	va_start(args, fmt);
++	r = vsnprintf(err->msg, sizeof(err->msg), fmt, args);
++	assert((size_t)r < sizeof(err->msg));
++	va_end(args);
++
++	return code;
++}
++
++static inline int sys_eventfd2(unsigned int count, int flags)
++{
++	return syscall(__NR_eventfd2, count, flags);
++}
++
++TEST(eventfd01)
++{
++	int fd, flags;
++
++	fd = sys_eventfd2(0, 0);
++	ASSERT_GE(fd, 0);
++
++	flags = fcntl(fd, F_GETFL);
++	// since the kernel automatically added O_RDWR.
++	EXPECT_EQ(flags, O_RDWR);
++
++	close(fd);
++}
++
++TEST(eventfd02)
++{
++	int fd, flags;
++
++	fd = sys_eventfd2(0, EFD_CLOEXEC);
++	ASSERT_GE(fd, 0);
++
++	flags = fcntl(fd, F_GETFD);
++	ASSERT_GT(flags, -1);
++	EXPECT_EQ(flags, FD_CLOEXEC);
++
++	close(fd);
++}
++
++TEST(eventfd03)
++{
++	int fd, flags;
++
++	fd = sys_eventfd2(0, EFD_NONBLOCK);
++	ASSERT_GE(fd, 0);
++
++	flags = fcntl(fd, F_GETFL);
++	ASSERT_GT(flags, -1);
++	EXPECT_EQ(flags & EFD_NONBLOCK, EFD_NONBLOCK);
++	EXPECT_EQ(flags & O_RDWR, O_RDWR);
++
++	close(fd);
++}
++
++TEST(eventfd04)
++{
++	int fd, flags;
++
++	fd = sys_eventfd2(0, EFD_CLOEXEC|EFD_NONBLOCK);
++	ASSERT_GE(fd, 0);
++
++	flags = fcntl(fd, F_GETFL);
++	ASSERT_GT(flags, -1);
++	EXPECT_EQ(flags & EFD_NONBLOCK, EFD_NONBLOCK);
++	EXPECT_EQ(flags & O_RDWR, O_RDWR);
++
++	flags = fcntl(fd, F_GETFD);
++	ASSERT_GT(flags, -1);
++	EXPECT_EQ(flags, FD_CLOEXEC);
++
++	close(fd);
++}
++
++static inline void trim_newline(char *str)
++{
++	char *pos = strrchr(str, '\n');
++
++	if (pos)
++		*pos = '\0';
++}
++
++static int verify_fdinfo(int fd, struct error *err, const char *prefix,
++		size_t prefix_len, const char *expect, ...)
++{
++	char buffer[512] = {0, };
++	char path[512] = {0, };
++	va_list args;
++	FILE *f;
++	char *line = NULL;
++	size_t n = 0;
++	int found = 0;
++	int r;
++
++	va_start(args, expect);
++	r = vsnprintf(buffer, sizeof(buffer), expect, args);
++	assert((size_t)r < sizeof(buffer));
++	va_end(args);
++
++	snprintf(path, sizeof(path), "/proc/self/fdinfo/%d", fd);
++	f = fopen(path, "re");
++	if (!f)
++		return error_set(err, -1, "fdinfo open failed for %d", fd);
++
++	while (getline(&line, &n, f) != -1) {
++		char *val;
++
++		if (strncmp(line, prefix, prefix_len))
++			continue;
++
++		found = 1;
++
++		val = line + prefix_len;
++		r = strcmp(val, buffer);
++		if (r != 0) {
++			trim_newline(line);
++			trim_newline(buffer);
++			error_set(err, -1, "%s '%s' != '%s'",
++				  prefix, val, buffer);
++		}
++		break;
++	}
++
++	free(line);
++	fclose(f);
++
++	if (found == 0)
++		return error_set(err, -1, "%s not found for fd %d",
++				 prefix, fd);
++
++	return 0;
++}
++
++TEST(eventfd05)
++{
++	struct error err = {0};
++	int fd, ret;
++
++	fd = sys_eventfd2(0, EFD_SEMAPHORE);
++	ASSERT_GE(fd, 0);
++
++	ret = fcntl(fd, F_GETFL);
++	ASSERT_GT(ret, -1);
++	EXPECT_EQ(ret & O_RDWR, O_RDWR);
++
++	// The semaphore could only be obtained from fdinfo.
++	ret = verify_fdinfo(fd, &err, "eventfd-semaphore: ", 19, "1\n");
++	if (ret != 0)
++		ksft_print_msg("eventfd-semaphore check failed, msg: %s\n",
++				err.msg);
++	EXPECT_EQ(ret, 0);
++
++	close(fd);
++}
++
++TEST_HARNESS_MAIN
+-- 
+2.25.1
 
-> for errors related to descriptor fetch the driver can tell the command
-> by looking at the head pointer of the invalidation queue.
-> 
-> command completion is indirectly detected by inserting a wait descriptor
-> as fence. completion timeout error is reported in an error register. but
-> this register doesn't record pasid, nor does the command location. if there
-> are multiple pending devtlb invalidation commands upon timeout 
-> error the spec suggests the driver to treat all of them timeout as the
-> register can only record one rid.
-
-Makes sense, or at least you have to re-issue them one by one
-
-> this is kind of moot. If the driver submits only one command (plus wait)
-> at a time it doesn't need hw's help to identify the timeout command. 
-> If the driver batches invalidation commands it must treat all timeout if
-> an timeout error is reported.
-
-Yes
- 
-> from this angle whether to record pasid doesn't really matter.
-
-At least for error handling..
- 
-Jason
 
