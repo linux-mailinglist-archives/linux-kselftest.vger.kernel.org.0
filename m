@@ -1,62 +1,62 @@
-Return-Path: <linux-kselftest+bounces-2730-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2731-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B8BE827995
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jan 2024 21:53:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4E32827998
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jan 2024 21:53:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 086E4284F21
-	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jan 2024 20:53:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9EB5B1C22B37
+	for <lists+linux-kselftest@lfdr.de>; Mon,  8 Jan 2024 20:53:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C258655E7C;
-	Mon,  8 Jan 2024 20:52:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CA0756464;
+	Mon,  8 Jan 2024 20:53:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XEAgeZwQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FWJ0aZ4d"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B41914264;
-	Mon,  8 Jan 2024 20:52:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED0E15467C;
+	Mon,  8 Jan 2024 20:53:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a271a28aeb4so225710266b.2;
-        Mon, 08 Jan 2024 12:52:55 -0800 (PST)
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-55745901085so2786256a12.0;
+        Mon, 08 Jan 2024 12:53:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1704747174; x=1705351974; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1704747179; x=1705351979; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=H/2ahyKl2REEzGAF9J7O+/7m1Ul3qlQ5KbFjuAOQvVM=;
-        b=XEAgeZwQxXVF6iFQhqyvBW1PKyJPdudjDJmIpQu2CJ4MtMkBl/OVb98t5ZhjKuzhEQ
-         FJ982BGkzoWlF/0+U1/VpFbzJwz3pMcs8pI/c/6nuvx3FXo1bKoORoRrvxZA8/ymBA/W
-         JgHMXmCVcQdFWDmIrS3rOIms47jLoEqXrr1Qsm6E0d3+5VG4r0gpOTt4glIyvnDCC+Ey
-         efDMeXH8LgjY50EZ7NwIXn8IW3MLyslX9gRznSV2HUIrcmCH0ztFruR0ol2NiBlpNMlX
-         kqcSeLRJFlrwPvHfK4OL/E9UlYTSNaTuwuiSxxM7wdf9pbQnEvrcKL+kng99vSasgzuu
-         wtyA==
+        bh=5d/FIxpPJtgATfH89NHC2zsxYFMsV/1h0vIJMGRORcc=;
+        b=FWJ0aZ4d40FRBCrPPLv1OIFFfjWBGUyGNmh8BaD1XMe9jAlho8eXYBgX4j4XoBSq36
+         3iolxRa3EYj79Wk9aLqmedQmUkJcFmhYPG0DNvN/aDKY81PqXIiu1oejo3OrVSFhpTUO
+         IPXQF4Vy9mo0rJqeQDJFxLWaM8SsaM3GUlGMHSgGvmRAoWjibY9yAJrn4WP0aQvYXrzn
+         XYIr+K5B6IgCOvwVRdq41SH/dx1m60bid6QHeKQUNghEjvnOFEaGVWno/YyXQQV3BEu0
+         mMiwuOh8jclMADxXcxjLEIYZmNFz3fmWA+FXRPv12mVSUY/3ufYF+bF4JqYcE6GFkqoy
+         TxWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704747174; x=1705351974;
+        d=1e100.net; s=20230601; t=1704747179; x=1705351979;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=H/2ahyKl2REEzGAF9J7O+/7m1Ul3qlQ5KbFjuAOQvVM=;
-        b=WUsY206oOGLXW/TjvNaXFgJc7CqkJUxvUEwWCUOIwFHBP+/NbIVoP+OBelnBjAJXGs
-         UfIh8DP2qc3tCmUbwQMLNzxDp7poUeFrqplpWfxfoIIs70GhXT4iMHaIWSq/63TVIO0U
-         T1pJ9TN/93/wyh+F0OLEctSACT8AkuhsfHEAiOrDlh7JzfkjVS5RT6vhyPoF1AT/OE+4
-         RqELkidcFVwffrcR/v+ym+W9IyGWkOqjwfzEsEpeVJc4oCfIZkcPsGdtsp9RY94HZt82
-         JN0yPu1zYm3G72z0bvjbSeqf/PNZgQo3PxmVLXUzXbn73icuKcUSskd3tN+FwlEBFUgz
-         gZnQ==
-X-Gm-Message-State: AOJu0Ywt4EjH1kcPk5ZScQ4TeqdQnqs8TvYRWvOBZ8s6XcEtdthqK2kZ
-	Xi15x40uHA5aPHtCFd8VSRQ=
-X-Google-Smtp-Source: AGHT+IEW4Gmp1cib7z+Sn7CvDzf8ungGZE5RIbblg019aWmYE3hHr8Vogo/gFCKJbbxEhCJQTeOrOA==
-X-Received: by 2002:a17:907:1b0d:b0:a28:d2d9:4e66 with SMTP id mp13-20020a1709071b0d00b00a28d2d94e66mr29058ejc.31.1704747174433;
-        Mon, 08 Jan 2024 12:52:54 -0800 (PST)
+        bh=5d/FIxpPJtgATfH89NHC2zsxYFMsV/1h0vIJMGRORcc=;
+        b=IEYmF7yZZEd//Wd71e2nyJsXdSx/J323rUxys0Wy3G8rKuNLg1d3+EsO77vp5B0hzL
+         WzE2s77VyAP9rqHnWdLEDWdur/DYEK7CbhRc1KJ0dJ+aX5CYBkOKwDAceD0VSS1+BOtY
+         U0pTTsh0akP+H+yGb47tW3/cDnOejGAPbXIX6jkpNT34CPqqlL2uKB0Qm+57+v2PH5OI
+         vTQ/sgA31uKa9UA66FdE6hSfnjXXJJmmmAjEkW0DdiBOSRHHoZGQdBYN/o7nqgcaEKHZ
+         vbarwlMBB6BAhKTwEzKMy332ol6LdojiElAXGuSGemenxmEBOLslKrjokU248Ts7eOhB
+         oRhw==
+X-Gm-Message-State: AOJu0YyU+/XhaQsCCfbmGJe7kSJW0uascDcC1g5HT1TVyfGr3C5X9or4
+	pSxS58/z2jWtNR1PqmibaVw=
+X-Google-Smtp-Source: AGHT+IEq4hA0Q4TjZhbtBQ3f8rnS7QTIYFDK6Om0y0vMZ6I7l8K76VO1V09LqnPK4E+yqDbsbPDlzw==
+X-Received: by 2002:a17:907:320b:b0:a2b:3a97:205a with SMTP id xg11-20020a170907320b00b00a2b3a97205amr18923ejb.52.1704747179138;
+        Mon, 08 Jan 2024 12:52:59 -0800 (PST)
 Received: from localhost ([185.220.101.80])
-        by smtp.gmail.com with ESMTPSA id u22-20020a170906781600b00a26af6131e0sm246615ejm.7.2024.01.08.12.52.51
+        by smtp.gmail.com with ESMTPSA id t13-20020a1709063e4d00b00a1f7ab65d3fsm242866eji.131.2024.01.08.12.52.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 08 Jan 2024 12:52:54 -0800 (PST)
+        Mon, 08 Jan 2024 12:52:58 -0800 (PST)
 From: Maxim Mikityanskiy <maxtram95@gmail.com>
 To: Eduard Zingerman <eddyz87@gmail.com>,
 	Alexei Starovoitov <ast@kernel.org>,
@@ -80,9 +80,9 @@ Cc: John Fastabend <john.fastabend@gmail.com>,
 	linux-kselftest@vger.kernel.org,
 	netdev@vger.kernel.org,
 	Maxim Mikityanskiy <maxim@isovalent.com>
-Subject: [PATCH bpf-next v2 07/15] bpf: Add the get_reg_width function
-Date: Mon,  8 Jan 2024 22:52:01 +0200
-Message-ID: <20240108205209.838365-8-maxtram95@gmail.com>
+Subject: [PATCH bpf-next v2 08/15] bpf: Assign ID to scalars on spill
+Date: Mon,  8 Jan 2024 22:52:02 +0200
+Message-ID: <20240108205209.838365-9-maxtram95@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240108205209.838365-1-maxtram95@gmail.com>
 References: <20240108205209.838365-1-maxtram95@gmail.com>
@@ -96,48 +96,57 @@ Content-Transfer-Encoding: 8bit
 
 From: Maxim Mikityanskiy <maxim@isovalent.com>
 
-Put calculation of the register value width into a dedicated function.
-This function will also be used in a following commit.
+Currently, when a scalar bounded register is spilled to the stack, its
+ID is preserved, but only if was already assigned, i.e. if this register
+was MOVed before.
+
+Assign an ID on spill if none is set, so that equal scalars could be
+tracked if a register is spilled to the stack and filled into another
+register.
+
+One test is adjusted to reflect the change in register IDs.
 
 Signed-off-by: Maxim Mikityanskiy <maxim@isovalent.com>
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- kernel/bpf/verifier.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ kernel/bpf/verifier.c                                     | 8 +++++++-
+ .../selftests/bpf/progs/verifier_direct_packet_access.c   | 2 +-
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index e3eff2becd64..4cd82a7c1318 100644
+index 4cd82a7c1318..055fa8096a08 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -4450,6 +4450,11 @@ static bool is_bpf_st_mem(struct bpf_insn *insn)
- 	return BPF_CLASS(insn->code) == BPF_ST && BPF_MODE(insn->code) == BPF_MEM;
- }
+@@ -4505,9 +4505,15 @@ static int check_stack_write_fixed_off(struct bpf_verifier_env *env,
  
-+static int get_reg_width(struct bpf_reg_state *reg)
-+{
-+	return fls64(reg->umax_value);
-+}
-+
- /* check_stack_{read,write}_fixed_off functions track spill/fill of registers,
-  * stack boundary and alignment are checked in check_mem_access()
-  */
-@@ -4502,7 +4507,7 @@ static int check_stack_write_fixed_off(struct bpf_verifier_env *env,
+ 	mark_stack_slot_scratched(env, spi);
  	if (reg && !(off % BPF_REG_SIZE) && register_is_bounded(reg) && env->bpf_capable) {
++		bool reg_value_fits;
++
++		reg_value_fits = get_reg_width(reg) <= BITS_PER_BYTE * size;
++		/* Make sure that reg had an ID to build a relation on spill. */
++		if (reg_value_fits)
++			assign_scalar_id_before_mov(env, reg);
  		save_register_state(env, state, spi, reg, size);
  		/* Break the relation on a narrowing spill. */
--		if (fls64(reg->umax_value) > BITS_PER_BYTE * size)
-+		if (get_reg_width(reg) > BITS_PER_BYTE * size)
+-		if (get_reg_width(reg) > BITS_PER_BYTE * size)
++		if (!reg_value_fits)
  			state->stack[spi].spilled_ptr.id = 0;
  	} else if (!reg && !(off % BPF_REG_SIZE) && is_bpf_st_mem(insn) &&
  		   insn->imm != 0 && env->bpf_capable) {
-@@ -13955,7 +13960,7 @@ static int check_alu_op(struct bpf_verifier_env *env, struct bpf_insn *insn)
- 					return -EACCES;
- 				} else if (src_reg->type == SCALAR_VALUE) {
- 					if (insn->off == 0) {
--						bool is_src_reg_u32 = src_reg->umax_value <= U32_MAX;
-+						bool is_src_reg_u32 = get_reg_width(src_reg) <= 32;
+diff --git a/tools/testing/selftests/bpf/progs/verifier_direct_packet_access.c b/tools/testing/selftests/bpf/progs/verifier_direct_packet_access.c
+index be95570ab382..28b602ac9cbe 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_direct_packet_access.c
++++ b/tools/testing/selftests/bpf/progs/verifier_direct_packet_access.c
+@@ -568,7 +568,7 @@ l0_%=:	r0 = 0;						\
  
- 						if (is_src_reg_u32)
- 							assign_scalar_id_before_mov(env, src_reg);
+ SEC("tc")
+ __description("direct packet access: test23 (x += pkt_ptr, 4)")
+-__failure __msg("invalid access to packet, off=0 size=8, R5(id=2,off=0,r=0)")
++__failure __msg("invalid access to packet, off=0 size=8, R5(id=3,off=0,r=0)")
+ __flag(BPF_F_ANY_ALIGNMENT)
+ __naked void test23_x_pkt_ptr_4(void)
+ {
 -- 
 2.43.0
 
