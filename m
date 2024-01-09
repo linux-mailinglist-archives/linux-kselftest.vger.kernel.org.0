@@ -1,103 +1,92 @@
-Return-Path: <linux-kselftest+bounces-2767-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2768-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64248828E8B
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jan 2024 21:37:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F2A0828F4A
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jan 2024 22:54:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 07EEE286AAE
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jan 2024 20:37:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1E92C28583C
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jan 2024 21:54:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FF143D96B;
-	Tue,  9 Jan 2024 20:36:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46ECE3DB9A;
+	Tue,  9 Jan 2024 21:54:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Ceez6eWN"
+	dkim=pass (2048-bit key) header.d=alu.unizg.hr header.i=@alu.unizg.hr header.b="tcuMtN/P";
+	dkim=pass (2048-bit key) header.d=alu.unizg.hr header.i=@alu.unizg.hr header.b="INdqGZ5b"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E90CA3A8E3;
-	Tue,  9 Jan 2024 20:36:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=b2HomVXY7FzMXkiwOxrMKlwOQEHDYNZAL5sKCtuBtfk=; b=Ceez6eWNOAP75GYM7O6sxoxLMK
-	sEyjYspnASHzv4goTZkwM3Azj9T0S7OArOGxOU0BOxqwe41T54sximqesBg7tYZ2EljvmUQbzuqfs
-	HtwprQ1pepzRo3YWq4OU0ZII2MeOfSxGvO9mWRXg+B1f4bGSCsXK93nokeodRy1CNMbURutmgvIXr
-	0KZ+RyDs4RA8S5DouFLHfXW22t6qXMqJWoS2/KlDbl+InFqT8xmW7WSXCHnEoq+Zz7ODVYHdpWcbX
-	4+8Ux7WmXEdCstEG7wBE3mnDIhmtbpiK7ct9wzwe/d/z5PliZNsv5D0yOj0TOzGJyppNW3vNYrnVF
-	herDEtbw==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-	id 1rNIq7-00AIGa-4i; Tue, 09 Jan 2024 20:36:47 +0000
-Date: Tue, 9 Jan 2024 20:36:47 +0000
-From: Matthew Wilcox <willy@infradead.org>
-To: jeffxu@chromium.org
-Cc: akpm@linux-foundation.org, keescook@chromium.org, jannh@google.com,
-	sroettger@google.com, gregkh@linuxfoundation.org,
-	torvalds@linux-foundation.org, usama.anjum@collabora.com,
-	jeffxu@google.com, jorgelo@chromium.org, groeck@chromium.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org, pedro.falcato@gmail.com, dave.hansen@intel.com,
-	linux-hardening@vger.kernel.org, deraadt@openbsd.org
-Subject: Re: [RFC PATCH v5 2/4] mseal: add mseal syscall
-Message-ID: <ZZ2uXyPCE+l2Uccr@casper.infradead.org>
-References: <20240109154547.1839886-1-jeffxu@chromium.org>
- <20240109154547.1839886-3-jeffxu@chromium.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C2523DB98;
+	Tue,  9 Jan 2024 21:54:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alu.unizg.hr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alu.unizg.hr
+Received: from localhost (localhost [127.0.0.1])
+	by domac.alu.hr (Postfix) with ESMTP id 0F31260177;
+	Tue,  9 Jan 2024 22:54:29 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+	t=1704837269; bh=dRxFw5p+aq6ymY6wMk/W0bLOKcB81JXGCstzbRw+IUA=;
+	h=From:To:Cc:Subject:Date:From;
+	b=tcuMtN/PcH/XqAqDun2ldK+Yl8EEeZXBW0srFj9O+NKybqeEngKHW6R0rI1mK94jE
+	 fzHWV0P5cuqpRXqLQWDeoTDMisFJgXjdPwf74mE5NUokC6tT7Xs8EAZ9s8DMH9M0uC
+	 a+K4A/SP+GWp62+qO8NtaTSUOcPnvohkkxOodQhcewnHbT73SWwWLGnHygQWikNTR6
+	 cLbJAs4DmRmMBr62W/3QqIFQj1Tqt70FKh+OCV186NYok4DW7PkZDOVysEfqXlwIxu
+	 /GqJ7ypK5X+3bfHPjOU8cTLwlm5ChYQKCnPZ/xRhhCF+lgc/snUSe5Wg2DpcCJHsX5
+	 hJ2D1oiKByQPg==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+	by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id PodAykXuILWA; Tue,  9 Jan 2024 22:54:27 +0100 (CET)
+Received: from defiant.. (unknown [95.168.105.29])
+	by domac.alu.hr (Postfix) with ESMTPSA id 8131960171;
+	Tue,  9 Jan 2024 22:54:26 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+	t=1704837267; bh=dRxFw5p+aq6ymY6wMk/W0bLOKcB81JXGCstzbRw+IUA=;
+	h=From:To:Cc:Subject:Date:From;
+	b=INdqGZ5b0eWMwJia7/6cnjs4dx5XCJwP6X118wJeJbV/895EK/ApROZmwNhJv8dRI
+	 PC7fkfZQIa88m4uZ+gYn5j+zmfQRqZ+yKV6YtAJSPXUbk2u3PnPD1VfgQAXG72q+gs
+	 0XNR4GSf/t5Lsewezb2yXO1UNJ1wifX81DExW8WZlbjnb+hvly9kZQRtzKxfjEADOQ
+	 ua+4RPbDwDU9xZ2tZ6cO5qGbAWScao8f7Wkteq5mEdEP7Z8q6Qf2ytR7djIzHCDKj8
+	 NB18YA9WG2XMJ1fEJNSQnYl8JTEKaj9PexCTh9mtFKiG+AHASdLw+uddG8sGDkWCjc
+	 Viy4CmYpqh6Yw==
+From: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+To: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Shuah Khan <shuah@kernel.org>
+Subject: [PATCH v1 0/2] selftest: breakpoints: minor format string fixes
+Date: Tue,  9 Jan 2024 22:54:04 +0100
+Message-Id: <20240109215406.18218-1-mirsad.todorovac@alu.unizg.hr>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240109154547.1839886-3-jeffxu@chromium.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jan 09, 2024 at 03:45:40PM +0000, jeffxu@chromium.org wrote:
-> +extern bool can_modify_mm(struct mm_struct *mm, unsigned long start,
-> +		unsigned long end);
-> +extern bool can_modify_mm_madv(struct mm_struct *mm, unsigned long start,
-> +		unsigned long end, int behavior);
+Minor consistency fixes.
 
-unnecessary use of extern.
+They clear a couple of compiler format string warnings.
 
-> +static inline unsigned long get_mmap_seals(unsigned long prot,
-> +	unsigned long flags)
+[1/2] is the fix of an obvious typo in the format specifier
+[2/2] is securing the print function against spurious format specifiers
+	in passed paramater string
 
-needs more than one tab indent so it doesn't look like part of the body.
+Mirsad Todorovac (2):
+  selftest: breakpoints: fix a minor typo in the format string
+  selftest: breakpoints: clear the format string warning and secure the
+    output
 
-> +{
-> +	unsigned long vm_seals;
-> +
-> +	if (prot & PROT_SEAL)
-> +		vm_seals = VM_SEALED | VM_SEALABLE;
-> +	else
-> +		vm_seals = (flags & MAP_SEALABLE) ? VM_SEALABLE:0;
+ tools/testing/selftests/breakpoints/breakpoint_test.c         | 4 ++--
+ tools/testing/selftests/breakpoints/step_after_suspend_test.c | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-need spaces around the :
-
-> +++ b/include/uapi/asm-generic/mman-common.h
-> @@ -17,6 +17,11 @@
->  #define PROT_GROWSDOWN	0x01000000	/* mprotect flag: extend change to start of growsdown vma */
->  #define PROT_GROWSUP	0x02000000	/* mprotect flag: extend change to end of growsup vma */
->  
-> +/*
-> + * The PROT_SEAL defines memory sealing in the prot argument of mmap().
-> + */
-> +#define PROT_SEAL	_BITUL(26)	/* 0x04000000 */
-
-why not follow the existing style?
-
-> +static inline void set_vma_sealed(struct vm_area_struct *vma)
-> +{
-> +	vma->__vm_flags |= VM_SEALED;
-> +}
-
-uhh ... vm_flags_set() ?
+-- 
+2.40.1
 
 
