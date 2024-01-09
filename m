@@ -1,117 +1,94 @@
-Return-Path: <linux-kselftest+bounces-2765-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2766-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0046F828D6A
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jan 2024 20:32:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28AB9828E24
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jan 2024 20:49:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 280631C248B8
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jan 2024 19:32:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5022D1C24B34
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jan 2024 19:49:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0D873D54E;
-	Tue,  9 Jan 2024 19:31:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93E7E3D55C;
+	Tue,  9 Jan 2024 19:47:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="cQOLlmca"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="WmFMijfi"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-io1-f53.google.com (mail-io1-f53.google.com [209.85.166.53])
+Received: from mail-io1-f44.google.com (mail-io1-f44.google.com [209.85.166.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C25B3D3BC
-	for <linux-kselftest@vger.kernel.org>; Tue,  9 Jan 2024 19:31:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f53.google.com with SMTP id ca18e2360f4ac-7bbdd28a52aso29469839f.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 09 Jan 2024 11:31:56 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CCBD3D554
+	for <linux-kselftest@vger.kernel.org>; Tue,  9 Jan 2024 19:47:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-io1-f44.google.com with SMTP id ca18e2360f4ac-7bc332d3a8cso232440739f.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 09 Jan 2024 11:47:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1704828716; x=1705433516; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BX6WX/X3x+sI97fYVnBXml21yMAcf1vyq5kAEe0Em5I=;
-        b=cQOLlmcaqUhwLAlPb+YoK3cpqG/tM8PhBonRBnB5rSFHDbv9gltx+ferLiG2ju6r9G
-         iMPRslGBbDavGiQMV8dbOmz3cYbsLyFAhy/ICM4Y6nmP4tZmKAxZ8lRnwQQypWQ8XnlM
-         7d3Mi6ANWHBF7ByciB6j+Aeu8Lig//xPys6BE=
+        d=chromium.org; s=google; t=1704829634; x=1705434434; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jp3sPNgDn5/w+4+SQ1Qzo5FCSJIVAu5zu+xhNcaS+RE=;
+        b=WmFMijfiyoN4iXHXnNTgp9SZ3FGgajoebCBzBn2+XT8eXw9KYXXP8u8n8RWp5u3U8S
+         diK0rc0TIrU/3540+ag3pm3B4Vzkz0c6ZWHcpVKmtvKbWKCAdU+2fvc8beCJ+M5g07Aa
+         ZutY43ahCZPDU7Wt/qgCxAGFrx9ACN6CryvJk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704828716; x=1705433516;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BX6WX/X3x+sI97fYVnBXml21yMAcf1vyq5kAEe0Em5I=;
-        b=FMLUHfvPMqmDZHYtkhGiFne4Bt0zwCT7SfZHlxuFMAxrY1he1LD0HMLGu0zP3IQLZT
-         sitDvSTJ6zYXt5IhsZJ0m3+/c7czd0DNNFzdPVoVM1xun8Pvv2C3LfnpzKsBitj6+zVN
-         SS/64Cqa3uW/BK6KwFgp9Wjp3qwiiTQb/PiaUYw8DEguY28kf8Il7FoimUmLKU8pclHp
-         IJ+dCAX1H1FjbPo4VxbDLiA/5enQxE6qoPsWp28/3o5JiVn3Mt/OSlrF/znOGC49R/XZ
-         D/h+7Yx5W59ZiBiZ2+ywEOCkT/k5HaPHw5Dd7flCnvY5LX98+hFETW9dSPfexjH6NvPP
-         yY8A==
-X-Gm-Message-State: AOJu0YzJYyezAQMFoxoZ///J1AuP3ukaHh4QPrkE1ovA+ca3cxeMO2wE
-	fY/LzQHGelv+g/4jOjITzCmkEIKQ1h4v0g==
-X-Google-Smtp-Source: AGHT+IF17YouLb8dLiAWKBE/dIFNs+76nEgViYUyT37MYA3oOcuaMwflJbAwRKNo9bXNPVTnggdieA==
-X-Received: by 2002:a5d:804a:0:b0:7bc:207d:5178 with SMTP id b10-20020a5d804a000000b007bc207d5178mr10285797ior.2.1704828715769;
-        Tue, 09 Jan 2024 11:31:55 -0800 (PST)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id dq33-20020a0566384d2100b0046dd0db4a14sm800066jab.99.2024.01.09.11.31.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Jan 2024 11:31:55 -0800 (PST)
-Message-ID: <87b55a25-4288-4add-b2b3-0038ed41b08e@linuxfoundation.org>
-Date: Tue, 9 Jan 2024 12:31:53 -0700
+        d=1e100.net; s=20230601; t=1704829634; x=1705434434;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jp3sPNgDn5/w+4+SQ1Qzo5FCSJIVAu5zu+xhNcaS+RE=;
+        b=X4IZ6WaUzkvnraLoT0+julhi8lJEkHfN7t1s4ZDww0PA0W9MSW9+XpqF+l8uUTeDlw
+         +xMGF/3BOGwXNPb4hX5kdLWBfJdWEb26bt2BL2l3CsG2Aaby7g61plQzc3XA331pz42/
+         xJXJf5VtE9fUzxz+4XlrQweHnipEeZ1DwK9ubwiCcLzWXq5ucdWqnomhq4GxfnvFq5Sr
+         Ji4qMkCovcKEYPxmANO4Otj1McjaxJUFJ9ZY1ydU/D0gy8CjoigJHLiIpv8qml5LxmQY
+         EtA2D/QelhPq6x7zMUkzRbZzPtLM8lfY191jFbUO9Q5qgsGTLjFj/rtVPvkAUVActI78
+         5hPA==
+X-Gm-Message-State: AOJu0YyPKv8G0QePK1TWJvNRXThnDolaVGVVCRSRJJilzkJUJem6xiUb
+	OEApADYwkrv3s9ifhfjwKCgwrMDLXfag
+X-Google-Smtp-Source: AGHT+IF2+p52+a/uGcKh/I7JeXkJJoDrdwxg8dNkuNsj9eVicHWq61t6V8lQJDA2Rjq6uoJanlNaeg==
+X-Received: by 2002:a05:6e02:1989:b0:360:637:f64d with SMTP id g9-20020a056e02198900b003600637f64dmr9062346ilf.6.1704829634495;
+        Tue, 09 Jan 2024 11:47:14 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id n68-20020a632747000000b005cd8044c6fesm2019222pgn.23.2024.01.09.11.47.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Jan 2024 11:47:14 -0800 (PST)
+Date: Tue, 9 Jan 2024 11:47:13 -0800
+From: Kees Cook <keescook@chromium.org>
+To: jeffxu@chromium.org
+Cc: akpm@linux-foundation.org, jannh@google.com, sroettger@google.com,
+	willy@infradead.org, gregkh@linuxfoundation.org,
+	torvalds@linux-foundation.org, usama.anjum@collabora.com,
+	jeffxu@google.com, jorgelo@chromium.org, groeck@chromium.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org, pedro.falcato@gmail.com, dave.hansen@intel.com,
+	linux-hardening@vger.kernel.org, deraadt@openbsd.org
+Subject: Re: [RFC PATCH v5 0/4] Introduce mseal()
+Message-ID: <202401091144.2C203AA7@keescook>
+References: <20240109154547.1839886-1-jeffxu@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND v4 1/3] kselftests: lib.mk: Add TEST_GEN_MODS_DIR
- variable
-Content-Language: en-US
-To: Marcos Paulo de Souza <mpdesouza@suse.com>,
- Joe Lawrence <joe.lawrence@redhat.com>
-Cc: Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- Alexander Gordeev <agordeev@linux.ibm.com>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- Sven Schnelle <svens@linux.ibm.com>, Josh Poimboeuf <jpoimboe@kernel.org>,
- Jiri Kosina <jikos@kernel.org>, Miroslav Benes <mbenes@suse.cz>,
- Petr Mladek <pmladek@suse.com>, linux-kselftest@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-s390@vger.kernel.org, live-patching@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20231220-send-lp-kselftests-v4-0-3458ec1b1a38@suse.com>
- <20231220-send-lp-kselftests-v4-1-3458ec1b1a38@suse.com>
- <ZZSOtsbzpy2mvmUC@redhat.com>
- <4fb169fd-393c-441e-b0f7-32a3777c1d11@linuxfoundation.org>
- <11c112df801008f6bc4b7813645d505388894e29.camel@suse.com>
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <11c112df801008f6bc4b7813645d505388894e29.camel@suse.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240109154547.1839886-1-jeffxu@chromium.org>
 
-On 1/8/24 10:13, Marcos Paulo de Souza wrote:
-> On Wed, 2024-01-03 at 15:09 -0700, Shuah Khan wrote:
+On Tue, Jan 09, 2024 at 03:45:38PM +0000, jeffxu@chromium.org wrote:
+> This patchset proposes a new mseal() syscall for the Linux kernel.
 
->>
->> Copying source files and object files doesn't sound right. This isn't
->> how the ksleftest installs work. Let's fix this.
-> 
-> Hi Shuah,
-> 
-> what do you think about the proposed solution? Could you please amend
-> the fix into the first patch if you think it's the right approach?
-> 
+Thanks for continuing to work on this! Given Linus's general approval
+on the v4, I think this series can also drop the "RFC" part -- this code
+is looking to land. :)
 
-I would like to see a new revision of the patch series with the fix to
-the problem. I will pull this into a separate test branch for us all
-to test different scenarios. I would like to make sure the repo will
-stay clean after install in the case of when out of tree builds.
+Since we're in the merge window right now, it'll likely be a couple
+weeks before akpm will consider putting this in -next. But given timing,
+this means it'll have a long time to bake in -next, which is good.
 
-Sorry I can't amend the patch as this isn't a trivial merge change.
-This change requires more testing.
+-Kees
 
-thanks,
--- Shuah
-
-
-
+-- 
+Kees Cook
 
