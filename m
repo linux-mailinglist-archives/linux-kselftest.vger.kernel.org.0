@@ -1,58 +1,59 @@
-Return-Path: <linux-kselftest+bounces-2754-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2753-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F0C5828933
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jan 2024 16:46:18 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A797828931
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jan 2024 16:46:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 862BFB23A2D
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jan 2024 15:46:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B0DBD1C243FE
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jan 2024 15:46:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F2AB3A1A0;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BA6839FF9;
 	Tue,  9 Jan 2024 15:46:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="WbXNlM/t"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="NCjpjh/i"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DC7939FDD
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB9C839FE7
 	for <linux-kselftest@vger.kernel.org>; Tue,  9 Jan 2024 15:46:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1d4ab4e65aeso26649155ad.0
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-1d4ca2fd2fbso14160275ad.2
         for <linux-kselftest@vger.kernel.org>; Tue, 09 Jan 2024 07:46:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google; t=1704815162; x=1705419962; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=A9qXIoDCd7h+bgZzsLb2aAyJxOinrvrXiERWxYOAVz0=;
-        b=WbXNlM/tzWk0TGk+JVKs+zz/61mSsAAipEXeOOU8Njcp0qlEJE29PNscNdH84KjSAs
-         1jxypEXjgla0z+bXk0Te6Hfyy9dtXXvyqrqni4wg9ShSu/DZJKE6yqPp5QZLPP/JenxT
-         X4/zw86cLzwoLQZn44a6XqP99n7NqVyHdlGYQ=
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ig3ohwHzq/4+GvsXCviFQR9Ej/i5Rnl+U+9CFpvV1sg=;
+        b=NCjpjh/iCaA3heLvOS3B4E7Fe4On1CzMaoruY7djqUt71I5ikyNI9ZNgp2VObGucxQ
+         0XhtPKF5oh/VANmRcpxV0xZ5/fwZpQJodMgonyro7eoJbSTq7tFrHWBj0z7NhRw4dTCB
+         uzFkzgURPuiwWHjzEVeVVk/HjeQiRP9Xn83MQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1704815162; x=1705419962;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=A9qXIoDCd7h+bgZzsLb2aAyJxOinrvrXiERWxYOAVz0=;
-        b=GC7TFH9PO/vf3ugfOkAuxyFuojQUSQDPeApaVBQoCkvRoZrlIbrbLKteYzpcqWiAW0
-         Bunjfg+zIM+chJPRKwnjdbaqgSoRu19Dr6dF4AAsdM7SB87k7sjQldZtp/tC5eEKXrgG
-         C+uail6qIT4AAH1Fz6Mu7V/j+VAro0DZz1BsTTm99gSnJtflAg9G942I2y9+GUznPQmJ
-         IQpTgZJY3fSF1it/xkVQyFhDe45diYqzC92cf1mYhtZw5oUXU4TP++hf8NfyEohgXrMi
-         rGwZMrtak6hBWx6X02pcTWDyf6XZhuKeFwZg2Zqm+NDDGEE90ME20Mf3b+XiB0z3YR7Z
-         mbsQ==
-X-Gm-Message-State: AOJu0YxCcj/37brWlDyCKborBLm3FbvCbNtIOqpQFGFWmtOwIWZIVmT6
-	jPhU0WShCRfGVOrUoOY4t/kFUs4BfUbL
-X-Google-Smtp-Source: AGHT+IGV1o3IsxS4uIR1ntV+5wVya/FO49fK4jm4wNLUivzA/P/EcxgupN+L3dlO0b2whW3oUIjhww==
-X-Received: by 2002:a17:902:680f:b0:1cf:f868:5b8c with SMTP id h15-20020a170902680f00b001cff8685b8cmr1059219plk.8.1704815161403;
-        Tue, 09 Jan 2024 07:46:01 -0800 (PST)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ig3ohwHzq/4+GvsXCviFQR9Ej/i5Rnl+U+9CFpvV1sg=;
+        b=rJiruapgKlkjnr5saYJPmcUduHpTHVc/H1D9aViguUAu40SvchK+VVHrU9OkxZuQO0
+         gxzmUcjDPuZutspB/Pi1ODZA+L9EQJpKWnrszzq/HFz7edJZeUwYEcdZv1JTs+piQTGS
+         C8rpzVT88tfLOPwwlV54uETvzQ+7KI+W+tH8d+pb6mJHDTraoMY7av/T9+5ujLup6K1R
+         CUVeWtg2+l3eYvTaxhaLVeNkw1HnJgbGSq+Q1PnYt8ANCLYvJPQO/otj0tu3/PMV6Jtn
+         3eIUnpRtNCbr5VaMI6whA0vPjxZHqiuRIEAsz1MD+1C/bCebDNAV82qIfpEu0WTe/8hj
+         KN8A==
+X-Gm-Message-State: AOJu0YwuImeBv9+gpRAMI8PvnI9+MYpEGfU2j0q/Je5q269XapdtKlHc
+	vbO689pZmA5ipj4Dx9sQmkIhupxok5E3
+X-Google-Smtp-Source: AGHT+IH4k0ufyA+hoVXReRKZGJVZrKy5Y1nbuBoicBfPXBbSt8cSLBYs3HNIHxmv1p7vZ518XLU4cw==
+X-Received: by 2002:a17:902:b405:b0:1d4:133d:6ace with SMTP id x5-20020a170902b40500b001d4133d6acemr2714492plr.7.1704815162231;
+        Tue, 09 Jan 2024 07:46:02 -0800 (PST)
 Received: from localhost (34.85.168.34.bc.googleusercontent.com. [34.168.85.34])
-        by smtp.gmail.com with UTF8SMTPSA id ba3-20020a170902720300b001d4df6ccc30sm1928416plb.253.2024.01.09.07.46.00
+        by smtp.gmail.com with UTF8SMTPSA id j9-20020a170902690900b001d403969b65sm1939344plk.187.2024.01.09.07.46.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Jan 2024 07:46:00 -0800 (PST)
+        Tue, 09 Jan 2024 07:46:01 -0800 (PST)
 From: jeffxu@chromium.org
 To: akpm@linux-foundation.org,
 	keescook@chromium.org,
@@ -73,232 +74,240 @@ Cc: jeffxu@google.com,
 	linux-hardening@vger.kernel.org,
 	deraadt@openbsd.org,
 	Jeff Xu <jeffxu@chromium.org>
-Subject: [RFC PATCH v5 0/4] Introduce mseal()
-Date: Tue,  9 Jan 2024 15:45:38 +0000
-Message-ID: <20240109154547.1839886-1-jeffxu@chromium.org>
+Subject: [RFC PATCH v5 1/4] mseal: Wire up mseal syscall
+Date: Tue,  9 Jan 2024 15:45:39 +0000
+Message-ID: <20240109154547.1839886-2-jeffxu@chromium.org>
 X-Mailer: git-send-email 2.43.0.195.gebba966016-goog
+In-Reply-To: <20240109154547.1839886-1-jeffxu@chromium.org>
+References: <20240109154547.1839886-1-jeffxu@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 From: Jeff Xu <jeffxu@chromium.org>
 
-This patchset proposes a new mseal() syscall for the Linux kernel.
+Wire up mseal syscall for all architectures.
 
-In a nutshell, mseal() protects the VMAs of a given virtual memory
-range against modifications, such as changes to their permission bits.
+Signed-off-by: Jeff Xu <jeffxu@chromium.org>
+---
+ arch/alpha/kernel/syscalls/syscall.tbl      | 1 +
+ arch/arm/tools/syscall.tbl                  | 1 +
+ arch/arm64/include/asm/unistd.h             | 2 +-
+ arch/arm64/include/asm/unistd32.h           | 2 ++
+ arch/m68k/kernel/syscalls/syscall.tbl       | 1 +
+ arch/microblaze/kernel/syscalls/syscall.tbl | 1 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl   | 1 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl   | 1 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl   | 1 +
+ arch/parisc/kernel/syscalls/syscall.tbl     | 1 +
+ arch/powerpc/kernel/syscalls/syscall.tbl    | 1 +
+ arch/s390/kernel/syscalls/syscall.tbl       | 1 +
+ arch/sh/kernel/syscalls/syscall.tbl         | 1 +
+ arch/sparc/kernel/syscalls/syscall.tbl      | 1 +
+ arch/x86/entry/syscalls/syscall_32.tbl      | 1 +
+ arch/x86/entry/syscalls/syscall_64.tbl      | 1 +
+ arch/xtensa/kernel/syscalls/syscall.tbl     | 1 +
+ include/uapi/asm-generic/unistd.h           | 5 ++++-
+ kernel/sys_ni.c                             | 1 +
+ 19 files changed, 23 insertions(+), 2 deletions(-)
 
-Modern CPUs support memory permissions, such as the read/write (RW)
-and no-execute (NX) bits. Linux has supported NX since the release of
-kernel version 2.6.8 in August 2004 [1]. The memory permission feature
-improves the security stance on memory corruption bugs, as an attacker
-cannot simply write to arbitrary memory and point the code to it. The
-memory must be marked with the X bit, or else an exception will occur.
-Internally, the kernel maintains the memory permissions in a data
-structure called VMA (vm_area_struct). mseal() additionally protects
-the VMA itself against modifications of the selected seal type.
-
-Memory sealing is useful to mitigate memory corruption issues where a
-corrupted pointer is passed to a memory management system. For
-example, such an attacker primitive can break control-flow integrity
-guarantees since read-only memory that is supposed to be trusted can
-become writable or .text pages can get remapped. Memory sealing can
-automatically be applied by the runtime loader to seal .text and
-.rodata pages and applications can additionally seal security critical
-data at runtime. A similar feature already exists in the XNU kernel
-with the VM_FLAGS_PERMANENT [3] flag and on OpenBSD with the
-mimmutable syscall [4]. Also, Chrome wants to adopt this feature for
-their CFI work [2] and this patchset has been designed to be
-compatible with the Chrome use case.
-
-Two system calls are involved in sealing the map:  mmap() and mseal().
-
-The new mseal() is an syscall on 64 bit CPU, and with
-following signature:
-
-int mseal(void addr, size_t len, unsigned long flags)
-addr/len: memory range.
-flags: reserved.
-
-mseal() blocks following operations for the given memory range.
-
-1> Unmapping, moving to another location, and shrinking the size,
-   via munmap() and mremap(), can leave an empty space, therefore can
-   be replaced with a VMA with a new set of attributes.
-
-2> Moving or expanding a different VMA into the current location,
-   via mremap().
-
-3> Modifying a VMA via mmap(MAP_FIXED).
-
-4> Size expansion, via mremap(), does not appear to pose any specific
-   risks to sealed VMAs. It is included anyway because the use case is
-   unclear. In any case, users can rely on merging to expand a sealed VMA.
-
-5> mprotect() and pkey_mprotect().
-
-6> Some destructive madvice() behaviors (e.g. MADV_DONTNEED) for anonymous
-   memory, when users don't have write permission to the memory. Those
-   behaviors can alter region contents by discarding pages, effectively a
-   memset(0) for anonymous memory.
-
-In addition: mmap() has two related changes.
-
-The PROT_SEAL bit in prot field of mmap(). When present, it marks
-the map sealed since creation.
-
-The MAP_SEALABLE bit in the flags field of mmap(). When present, it marks
-the map as sealable. A map created without MAP_SEALABLE will not support
-sealing, i.e. mseal() will fail.
-
-Applications that don't care about sealing will expect their behavior
-unchanged. For those that need sealing support, opt-in by adding
-MAP_SEALABLE in mmap().
-
-The idea that inspired this patch comes from Stephen Röttger’s work in
-V8 CFI [5]. Chrome browser in ChromeOS will be the first user of this
-API.
-
-Indeed, the Chrome browser has very specific requirements for sealing,
-which are distinct from those of most applications. For example, in
-the case of libc, sealing is only applied to read-only (RO) or
-read-execute (RX) memory segments (such as .text and .RELRO) to
-prevent them from becoming writable, the lifetime of those mappings
-are tied to the lifetime of the process.
-
-Chrome wants to seal two large address space reservations that are
-managed by different allocators. The memory is mapped RW- and RWX
-respectively but write access to it is restricted using pkeys (or in
-the future ARM permission overlay extensions). The lifetime of those
-mappings are not tied to the lifetime of the process, therefore, while
-the memory is sealed, the allocators still need to free or discard the
-unused memory. For example, with madvise(DONTNEED).
-
-However, always allowing madvise(DONTNEED) on this range poses a
-security risk. For example if a jump instruction crosses a page
-boundary and the second page gets discarded, it will overwrite the
-target bytes with zeros and change the control flow. Checking
-write-permission before the discard operation allows us to control
-when the operation is valid. In this case, the madvise will only
-succeed if the executing thread has PKEY write permissions and PKRU
-changes are protected in software by control-flow integrity.
-
-Although the initial version of this patch series is targeting the
-Chrome browser as its first user, it became evident during upstream
-discussions that we would also want to ensure that the patch set
-eventually is a complete solution for memory sealing and compatible
-with other use cases. The specific scenario currently in mind is
-glibc's use case of loading and sealing ELF executables. To this end,
-Stephen is working on a change to glibc to add sealing support to the
-dynamic linker, which will seal all non-writable segments at startup.
-Once this work is completed, all applications will be able to
-automatically benefit from these new protections.
-
-Change history:
-===============
-V5:
-- fix build issue in mseal-Wire-up-mseal-syscall
-  (Suggested by Linus Torvalds, and Greg KH)
-- updates on selftest.
-
-V4:
-(Suggested by Linus Torvalds)
-- new signature: mseal(start,len,flags)
-- 32 bit is not supported. vm_seal is removed, use vm_flags instead.
-- single bit in vm_flags for sealed state.
-- CONFIG_MSEAL kernel config is removed.
-- single bit of PROT_SEAL in the "Prot" field of mmap().
-Other changes:
-- update selftest (Suggested by Muhammad Usama Anjum)
-- update documentation.
-https://lore.kernel.org/all/20240104185138.169307-1-jeffxu@chromium.org/
-
-V3:
-- Abandon per-syscall approach, (Suggested by Linus Torvalds).
-- Organize sealing types around their functionality, such as
-  MM_SEAL_BASE, MM_SEAL_PROT_PKEY.
-- Extend the scope of sealing from calls originated in userspace to
-  both kernel and userspace. (Suggested by Linus Torvalds)
-- Add seal type support in mmap(). (Suggested by Pedro Falcato)
-- Add a new sealing type: MM_SEAL_DISCARD_RO_ANON to prevent
-  destructive operations of madvise. (Suggested by Jann Horn and
-  Stephen Röttger)
-- Make sealed VMAs mergeable. (Suggested by Jann Horn)
-- Add MAP_SEALABLE to mmap()
-- Add documentation - mseal.rst
-https://lore.kernel.org/linux-mm/20231212231706.2680890-2-jeffxu@chromium.org/
-
-v2:
-Use _BITUL to define MM_SEAL_XX type.
-Use unsigned long for seal type in sys_mseal() and other functions.
-Remove internal VM_SEAL_XX type and convert_user_seal_type().
-Remove MM_ACTION_XX type.
-Remove caller_origin(ON_BEHALF_OF_XX) and replace with sealing bitmask.
-Add more comments in code.
-Add a detailed commit message.
-https://lore.kernel.org/lkml/20231017090815.1067790-1-jeffxu@chromium.org/
-
-v1:
-https://lore.kernel.org/lkml/20231016143828.647848-1-jeffxu@chromium.org/
-
-----------------------------------------------------------------
-[1] https://kernelnewbies.org/Linux_2_6_8
-[2] https://v8.dev/blog/control-flow-integrity
-[3] https://github.com/apple-oss-distributions/xnu/blob/1031c584a5e37aff177559b9f69dbd3c8c3fd30a/osfmk/mach/vm_statistics.h#L274
-[4] https://man.openbsd.org/mimmutable.2
-[5] https://docs.google.com/document/d/1O2jwK4dxI3nRcOJuPYkonhTkNQfbmwdvxQMyXgeaRHo/edit#heading=h.bvaojj9fu6hc
-[6] https://lore.kernel.org/lkml/CAG48ez3ShUYey+ZAFsU2i1RpQn0a5eOs2hzQ426FkcgnfUGLvA@mail.gmail.com/
-[7] https://lore.kernel.org/lkml/20230515130553.2311248-1-jeffxu@chromium.org/
-
-
-Jeff Xu (4):
-  mseal: Wire up mseal syscall
-  mseal: add mseal syscall
-  selftest mm/mseal memory sealing
-  mseal:add documentation
-
- Documentation/userspace-api/mseal.rst       |  181 ++
- arch/alpha/kernel/syscalls/syscall.tbl      |    1 +
- arch/arm/tools/syscall.tbl                  |    1 +
- arch/arm64/include/asm/unistd.h             |    2 +-
- arch/arm64/include/asm/unistd32.h           |    2 +
- arch/m68k/kernel/syscalls/syscall.tbl       |    1 +
- arch/microblaze/kernel/syscalls/syscall.tbl |    1 +
- arch/mips/kernel/syscalls/syscall_n32.tbl   |    1 +
- arch/mips/kernel/syscalls/syscall_n64.tbl   |    1 +
- arch/mips/kernel/syscalls/syscall_o32.tbl   |    1 +
- arch/parisc/kernel/syscalls/syscall.tbl     |    1 +
- arch/powerpc/kernel/syscalls/syscall.tbl    |    1 +
- arch/s390/kernel/syscalls/syscall.tbl       |    1 +
- arch/sh/kernel/syscalls/syscall.tbl         |    1 +
- arch/sparc/kernel/syscalls/syscall.tbl      |    1 +
- arch/x86/entry/syscalls/syscall_32.tbl      |    1 +
- arch/x86/entry/syscalls/syscall_64.tbl      |    1 +
- arch/xtensa/kernel/syscalls/syscall.tbl     |    1 +
- include/linux/mm.h                          |   60 +
- include/linux/syscalls.h                    |    1 +
- include/uapi/asm-generic/mman-common.h      |    7 +
- include/uapi/asm-generic/unistd.h           |    5 +-
- kernel/sys_ni.c                             |    1 +
- mm/Makefile                                 |    4 +
- mm/madvise.c                                |   12 +
- mm/mmap.c                                   |   27 +
- mm/mprotect.c                               |   10 +
- mm/mremap.c                                 |   31 +
- mm/mseal.c                                  |  330 +++
- tools/testing/selftests/mm/.gitignore       |    1 +
- tools/testing/selftests/mm/Makefile         |    1 +
- tools/testing/selftests/mm/mseal_test.c     | 1989 +++++++++++++++++++
- 32 files changed, 2677 insertions(+), 2 deletions(-)
- create mode 100644 Documentation/userspace-api/mseal.rst
- create mode 100644 mm/mseal.c
- create mode 100644 tools/testing/selftests/mm/mseal_test.c
-
+diff --git a/arch/alpha/kernel/syscalls/syscall.tbl b/arch/alpha/kernel/syscalls/syscall.tbl
+index 18c842ca6c32..dd92e2639a03 100644
+--- a/arch/alpha/kernel/syscalls/syscall.tbl
++++ b/arch/alpha/kernel/syscalls/syscall.tbl
+@@ -496,3 +496,4 @@
+ 564	common	futex_wake			sys_futex_wake
+ 565	common	futex_wait			sys_futex_wait
+ 566	common	futex_requeue			sys_futex_requeue
++567	common  mseal				sys_mseal
+diff --git a/arch/arm/tools/syscall.tbl b/arch/arm/tools/syscall.tbl
+index 584f9528c996..d96461ee1ebe 100644
+--- a/arch/arm/tools/syscall.tbl
++++ b/arch/arm/tools/syscall.tbl
+@@ -470,3 +470,4 @@
+ 454	common	futex_wake			sys_futex_wake
+ 455	common	futex_wait			sys_futex_wait
+ 456	common	futex_requeue			sys_futex_requeue
++457	common	mseal				sys_mseal
+diff --git a/arch/arm64/include/asm/unistd.h b/arch/arm64/include/asm/unistd.h
+index 531effca5f1f..298313d2e0af 100644
+--- a/arch/arm64/include/asm/unistd.h
++++ b/arch/arm64/include/asm/unistd.h
+@@ -39,7 +39,7 @@
+ #define __ARM_NR_compat_set_tls		(__ARM_NR_COMPAT_BASE + 5)
+ #define __ARM_NR_COMPAT_END		(__ARM_NR_COMPAT_BASE + 0x800)
+ 
+-#define __NR_compat_syscalls		457
++#define __NR_compat_syscalls		458
+ #endif
+ 
+ #define __ARCH_WANT_SYS_CLONE
+diff --git a/arch/arm64/include/asm/unistd32.h b/arch/arm64/include/asm/unistd32.h
+index 9f7c1bf99526..e3118e0327c7 100644
+--- a/arch/arm64/include/asm/unistd32.h
++++ b/arch/arm64/include/asm/unistd32.h
+@@ -919,6 +919,8 @@ __SYSCALL(__NR_futex_wake, sys_futex_wake)
+ __SYSCALL(__NR_futex_wait, sys_futex_wait)
+ #define __NR_futex_requeue 456
+ __SYSCALL(__NR_futex_requeue, sys_futex_requeue)
++#define __NR_mseal 457
++__SYSCALL(__NR_mseal, sys_mseal)
+ 
+ /*
+  * Please add new compat syscalls above this comment and update
+diff --git a/arch/m68k/kernel/syscalls/syscall.tbl b/arch/m68k/kernel/syscalls/syscall.tbl
+index 7a4b780e82cb..105e966db655 100644
+--- a/arch/m68k/kernel/syscalls/syscall.tbl
++++ b/arch/m68k/kernel/syscalls/syscall.tbl
+@@ -456,3 +456,4 @@
+ 454	common	futex_wake			sys_futex_wake
+ 455	common	futex_wait			sys_futex_wait
+ 456	common	futex_requeue			sys_futex_requeue
++457	common	mseal				sys_mseal
+diff --git a/arch/microblaze/kernel/syscalls/syscall.tbl b/arch/microblaze/kernel/syscalls/syscall.tbl
+index 5b6a0b02b7de..18956345d348 100644
+--- a/arch/microblaze/kernel/syscalls/syscall.tbl
++++ b/arch/microblaze/kernel/syscalls/syscall.tbl
+@@ -462,3 +462,4 @@
+ 454	common	futex_wake			sys_futex_wake
+ 455	common	futex_wait			sys_futex_wait
+ 456	common	futex_requeue			sys_futex_requeue
++457	common	mseal				sys_mseal
+diff --git a/arch/mips/kernel/syscalls/syscall_n32.tbl b/arch/mips/kernel/syscalls/syscall_n32.tbl
+index a842b41c8e06..06cac28209d2 100644
+--- a/arch/mips/kernel/syscalls/syscall_n32.tbl
++++ b/arch/mips/kernel/syscalls/syscall_n32.tbl
+@@ -395,3 +395,4 @@
+ 454	n32	futex_wake			sys_futex_wake
+ 455	n32	futex_wait			sys_futex_wait
+ 456	n32	futex_requeue			sys_futex_requeue
++457	n32	mseal				sys_mseal
+diff --git a/arch/mips/kernel/syscalls/syscall_n64.tbl b/arch/mips/kernel/syscalls/syscall_n64.tbl
+index 116ff501bf92..bb8270588953 100644
+--- a/arch/mips/kernel/syscalls/syscall_n64.tbl
++++ b/arch/mips/kernel/syscalls/syscall_n64.tbl
+@@ -371,3 +371,4 @@
+ 454	n64	futex_wake			sys_futex_wake
+ 455	n64	futex_wait			sys_futex_wait
+ 456	n64	futex_requeue			sys_futex_requeue
++457	n64	mseal				sys_mseal
+diff --git a/arch/mips/kernel/syscalls/syscall_o32.tbl b/arch/mips/kernel/syscalls/syscall_o32.tbl
+index 525cc54bc63b..93958f063c3f 100644
+--- a/arch/mips/kernel/syscalls/syscall_o32.tbl
++++ b/arch/mips/kernel/syscalls/syscall_o32.tbl
+@@ -444,3 +444,4 @@
+ 454	o32	futex_wake			sys_futex_wake
+ 455	o32	futex_wait			sys_futex_wait
+ 456	o32	futex_requeue			sys_futex_requeue
++457	o32	mseal				sys_mseal
+diff --git a/arch/parisc/kernel/syscalls/syscall.tbl b/arch/parisc/kernel/syscalls/syscall.tbl
+index a47798fed54e..c6bc9277dcd7 100644
+--- a/arch/parisc/kernel/syscalls/syscall.tbl
++++ b/arch/parisc/kernel/syscalls/syscall.tbl
+@@ -455,3 +455,4 @@
+ 454	common	futex_wake			sys_futex_wake
+ 455	common	futex_wait			sys_futex_wait
+ 456	common	futex_requeue			sys_futex_requeue
++457	common	mseal				sys_mseal
+diff --git a/arch/powerpc/kernel/syscalls/syscall.tbl b/arch/powerpc/kernel/syscalls/syscall.tbl
+index 7fab411378f2..2947c4caf22e 100644
+--- a/arch/powerpc/kernel/syscalls/syscall.tbl
++++ b/arch/powerpc/kernel/syscalls/syscall.tbl
+@@ -543,3 +543,4 @@
+ 454	common	futex_wake			sys_futex_wake
+ 455	common	futex_wait			sys_futex_wait
+ 456	common	futex_requeue			sys_futex_requeue
++457	common	mseal				sys_mseal
+diff --git a/arch/s390/kernel/syscalls/syscall.tbl b/arch/s390/kernel/syscalls/syscall.tbl
+index 86fec9b080f6..2400a0e91883 100644
+--- a/arch/s390/kernel/syscalls/syscall.tbl
++++ b/arch/s390/kernel/syscalls/syscall.tbl
+@@ -459,3 +459,4 @@
+ 454  common	futex_wake		sys_futex_wake			sys_futex_wake
+ 455  common	futex_wait		sys_futex_wait			sys_futex_wait
+ 456  common	futex_requeue		sys_futex_requeue		sys_futex_requeue
++457  common	mseal			sys_mseal			sys_mseal
+diff --git a/arch/sh/kernel/syscalls/syscall.tbl b/arch/sh/kernel/syscalls/syscall.tbl
+index 363fae0fe9bf..6768e43c5d23 100644
+--- a/arch/sh/kernel/syscalls/syscall.tbl
++++ b/arch/sh/kernel/syscalls/syscall.tbl
+@@ -459,3 +459,4 @@
+ 454	common	futex_wake			sys_futex_wake
+ 455	common	futex_wait			sys_futex_wait
+ 456	common	futex_requeue			sys_futex_requeue
++457	common	mseal				sys_mseal
+diff --git a/arch/sparc/kernel/syscalls/syscall.tbl b/arch/sparc/kernel/syscalls/syscall.tbl
+index 7bcaa3d5ea44..4285465f7e4b 100644
+--- a/arch/sparc/kernel/syscalls/syscall.tbl
++++ b/arch/sparc/kernel/syscalls/syscall.tbl
+@@ -502,3 +502,4 @@
+ 454	common	futex_wake			sys_futex_wake
+ 455	common	futex_wait			sys_futex_wait
+ 456	common	futex_requeue			sys_futex_requeue
++457	common	mseal 				sys_mseal
+diff --git a/arch/x86/entry/syscalls/syscall_32.tbl b/arch/x86/entry/syscalls/syscall_32.tbl
+index c8fac5205803..e4e3b2097658 100644
+--- a/arch/x86/entry/syscalls/syscall_32.tbl
++++ b/arch/x86/entry/syscalls/syscall_32.tbl
+@@ -461,3 +461,4 @@
+ 454	i386	futex_wake		sys_futex_wake
+ 455	i386	futex_wait		sys_futex_wait
+ 456	i386	futex_requeue		sys_futex_requeue
++457	i386	mseal 			sys_mseal
+diff --git a/arch/x86/entry/syscalls/syscall_64.tbl b/arch/x86/entry/syscalls/syscall_64.tbl
+index 8cb8bf68721c..03cff8a24726 100644
+--- a/arch/x86/entry/syscalls/syscall_64.tbl
++++ b/arch/x86/entry/syscalls/syscall_64.tbl
+@@ -378,6 +378,7 @@
+ 454	common	futex_wake		sys_futex_wake
+ 455	common	futex_wait		sys_futex_wait
+ 456	common	futex_requeue		sys_futex_requeue
++457 	common  mseal			sys_mseal
+ 
+ #
+ # Due to a historical design error, certain syscalls are numbered differently
+diff --git a/arch/xtensa/kernel/syscalls/syscall.tbl b/arch/xtensa/kernel/syscalls/syscall.tbl
+index 06eefa9c1458..3c87cf0424c8 100644
+--- a/arch/xtensa/kernel/syscalls/syscall.tbl
++++ b/arch/xtensa/kernel/syscalls/syscall.tbl
+@@ -427,3 +427,4 @@
+ 454	common	futex_wake			sys_futex_wake
+ 455	common	futex_wait			sys_futex_wait
+ 456	common	futex_requeue			sys_futex_requeue
++457	common	mseal 				sys_mseal
+diff --git a/include/uapi/asm-generic/unistd.h b/include/uapi/asm-generic/unistd.h
+index 756b013fb832..9b2b6a4a80b6 100644
+--- a/include/uapi/asm-generic/unistd.h
++++ b/include/uapi/asm-generic/unistd.h
+@@ -829,8 +829,11 @@ __SYSCALL(__NR_futex_wait, sys_futex_wait)
+ #define __NR_futex_requeue 456
+ __SYSCALL(__NR_futex_requeue, sys_futex_requeue)
+ 
++#define __NR_mseal 457
++__SYSCALL(__NR_mseal, sys_mseal)
++
+ #undef __NR_syscalls
+-#define __NR_syscalls 457
++#define __NR_syscalls 458
+ 
+ /*
+  * 32 bit systems traditionally used different
+diff --git a/kernel/sys_ni.c b/kernel/sys_ni.c
+index 9a846439b36a..02280199069b 100644
+--- a/kernel/sys_ni.c
++++ b/kernel/sys_ni.c
+@@ -193,6 +193,7 @@ COND_SYSCALL(migrate_pages);
+ COND_SYSCALL(move_pages);
+ COND_SYSCALL(set_mempolicy_home_node);
+ COND_SYSCALL(cachestat);
++COND_SYSCALL(mseal);
+ 
+ COND_SYSCALL(perf_event_open);
+ COND_SYSCALL(accept4);
 -- 
 2.43.0.195.gebba966016-goog
 
