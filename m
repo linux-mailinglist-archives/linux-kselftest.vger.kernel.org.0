@@ -1,133 +1,164 @@
-Return-Path: <linux-kselftest+bounces-2750-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2751-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B013A828430
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jan 2024 11:45:48 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CB028287DF
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jan 2024 15:16:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5EBD4287A76
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jan 2024 10:45:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 59F7DB24A38
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jan 2024 14:16:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6434364CC;
-	Tue,  9 Jan 2024 10:45:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EABC739AF3;
+	Tue,  9 Jan 2024 14:16:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="EallK46W"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="Zmlav5tN";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="D6dliPd4";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="Zmlav5tN";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="D6dliPd4"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC35A364B9;
-	Tue,  9 Jan 2024 10:45:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 94F6040E01B2;
-	Tue,  9 Jan 2024 10:45:37 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
-	header.d=alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id bTZI_qzADFUM; Tue,  9 Jan 2024 10:45:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1704797134; bh=ypRr+iAfvDjfeKwlwq/k5cw5LfYK0leTEqBNJmrJKi8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=EallK46WDGLi11Jtx7MUajDnzNbDJ8ilnoCJY+03U0LHDS7Mawrg6jY8JEcHNdc+N
-	 AOTyK5ddG8fyHDaf63A5Ca6nQ679uXKJDUyOV7tx4RMI8CoUxmdxroSTmtWMnMgBsl
-	 q8NcVecvD5ySwYGkttWvEMMrtobS4y7JNL4yZefXEgVOnUhZDQyabtq0QtS9qwY7sa
-	 KaOgHQ35HGTZIRmN2XNbGtuPBoTHL9a+yrzuKcKfWKnCPy4vv4AXQEUYKkTxEGqAL6
-	 EGVOYZEyX9Pc/6jmP8RYpLSBQ2eoKpBPHDKtuubyjWZ4iIEE7T1cfpJz54zZMMs3r0
-	 erLj35VetdhW1k7YWn9fPdOmwYmMge0xKWqflMoSWuSW3ALlxJo7MH8lr7WPjqpOhH
-	 uw2KyL0VYUSksJHhP0MHBXsLysc8YjaMG8Gv0l7YZxmzykiJbbNGKX39cIKU0fwLhh
-	 SKUvtUN2m3p2xKkC9/jLBUum7y5SzCe7M+RxyrHym6do5x5WZ1nf2KmdKTyNg+cx5j
-	 fKl0TTCaRKS+EUTqBg3hs+J3mSUHy7YDz+7TKY1BRkfGc61vGX0gjzC/B/lWWw9Qu1
-	 PfmoIbt/J1nbKrsoCyUu/nS2G22fAfmjK98hT7BfSpGwmDku1GB2B1h7TPe1wmInAl
-	 FeeNKVliD799m9dEJ4nysViY=
-Received: from zn.tnic (pd9530f8c.dip0.t-ipconnect.de [217.83.15.140])
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CAB739ADD;
+	Tue,  9 Jan 2024 14:16:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D1BCC40E016C;
-	Tue,  9 Jan 2024 10:45:15 +0000 (UTC)
-Date: Tue, 9 Jan 2024 11:45:12 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Meng Li <li.meng@amd.com>
-Cc: "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-	Huang Rui <ray.huang@amd.com>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, x86@kernel.org,
-	linux-acpi@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>,
-	linux-kselftest@vger.kernel.org,
-	Nathan Fontenot <nathan.fontenot@amd.com>,
-	Deepak Sharma <deepak.sharma@amd.com>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Shimmer Huang <shimmer.huang@amd.com>,
-	Perry Yuan <Perry.Yuan@amd.com>, Xiaojian Du <Xiaojian.Du@amd.com>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Oleksandr Natalenko <oleksandr@natalenko.name>
-Subject: Re: [PATCH V12 1/7] x86: Drop CPU_SUP_INTEL from SCHED_MC_PRIO for
- the expansion.
-Message-ID: <20240109104504.GAZZ0jsFrrncZ8Vx8y@fat_crate.local>
-References: <20231205063537.872834-1-li.meng@amd.com>
- <20231205063537.872834-2-li.meng@amd.com>
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 053CE21EB7;
+	Tue,  9 Jan 2024 14:16:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1704809781; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Ase84CEJhxi2XOYq2zDYFAUKWRmb+ZfRJUDpaFwdHpY=;
+	b=Zmlav5tNGpaoMYrMAXhBPwM5iK5pvTZ/xhEtVFlZiiH+ImONkFr1GIo+HtxFZamctvHVsO
+	rkDxcqW9Ur1ro1/EMzPggocKzPRPzS4iFlC1hNRP619zZNYiOFLszELjqGLF3IXXBg1dlh
+	i+NXIgD4IwPzHevxLzzVjWrotf+cjI4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1704809781;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Ase84CEJhxi2XOYq2zDYFAUKWRmb+ZfRJUDpaFwdHpY=;
+	b=D6dliPd4z9BzjIAsTvdGOF4sIXHSlrNgavVUXz9IYHwZE58lyd4+DUj9NOL4MGT39Y77KC
+	0YXE7LaVRhu2ECCg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1704809781; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Ase84CEJhxi2XOYq2zDYFAUKWRmb+ZfRJUDpaFwdHpY=;
+	b=Zmlav5tNGpaoMYrMAXhBPwM5iK5pvTZ/xhEtVFlZiiH+ImONkFr1GIo+HtxFZamctvHVsO
+	rkDxcqW9Ur1ro1/EMzPggocKzPRPzS4iFlC1hNRP619zZNYiOFLszELjqGLF3IXXBg1dlh
+	i+NXIgD4IwPzHevxLzzVjWrotf+cjI4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1704809781;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Ase84CEJhxi2XOYq2zDYFAUKWRmb+ZfRJUDpaFwdHpY=;
+	b=D6dliPd4z9BzjIAsTvdGOF4sIXHSlrNgavVUXz9IYHwZE58lyd4+DUj9NOL4MGT39Y77KC
+	0YXE7LaVRhu2ECCg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id B3765134E8;
+	Tue,  9 Jan 2024 14:16:20 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([10.150.64.162])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id dyJiKjRVnWV2CAAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Tue, 09 Jan 2024 14:16:20 +0000
+Date: Tue, 09 Jan 2024 15:16:20 +0100
+Message-ID: <87le8yr3rf.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+Cc: =?ISO-8859-1?Q?=22N=EDcolas_F=2E_R=2E_A=2E_Prado=22?=
+ <nfraprado@collabora.com>,	Mark Brown <broonie@kernel.org>,
+	linux-sound@vger.kernel.org,	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,	Jaroslav Kysela <perex@perex.cz>,	Takashi
+ Iwai <tiwai@suse.com>,	Shuah Khan <shuah@kernel.org>
+Subject: Re: [PATCH v2 0/4] kselftest: alsa: Fix a couple of format specifiers and function parameters
+In-Reply-To: <20240107173704.937824-1-mirsad.todorovac@alu.unizg.hr>
+References: <20240107173704.937824-1-mirsad.todorovac@alu.unizg.hr>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20231205063537.872834-2-li.meng@amd.com>
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Level: *
+X-Spamd-Bar: +
+Authentication-Results: smtp-out1.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=Zmlav5tN;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=D6dliPd4
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Spamd-Result: default: False [1.99 / 50.00];
+	 ARC_NA(0.00)[];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	 SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	 FROM_HAS_DN(0.00)[];
+	 TO_DN_SOME(0.00)[];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 MIME_GOOD(-0.10)[text/plain];
+	 DWL_DNSWL_MED(-2.00)[suse.de:dkim];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	 DKIM_TRACE(0.00)[suse.de:+];
+	 MX_GOOD(-0.01)[];
+	 RCPT_COUNT_SEVEN(0.00)[9];
+	 MID_CONTAINS_FROM(1.00)[];
+	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 NEURAL_SPAM_LONG(3.50)[1.000];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 NEURAL_HAM_SHORT(-0.20)[-1.000];
+	 RCVD_TLS_ALL(0.00)[];
+	 BAYES_HAM(-0.00)[11.36%];
+	 RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from]
+X-Spam-Score: 1.99
+X-Rspamd-Queue-Id: 053CE21EB7
+X-Spam-Flag: NO
 
-On Tue, Dec 05, 2023 at 02:35:31PM +0800, Meng Li wrote:
-> amd-pstate driver also uses SCHED_MC_PRIO, so decouple the requirement
-> of CPU_SUP_INTEL from the dependencies to allow compilation in kernels
-> without Intel CPU support.
+On Sun, 07 Jan 2024 18:37:00 +0100,
+Mirsad Todorovac wrote:
 > 
-> Tested-by: Oleksandr Natalenko <oleksandr@natalenko.name>
-> Reviewed-by: Mario Limonciello <mario.limonciello@amd.com>
-> Reviewed-by: Huang Rui <ray.huang@amd.com>
-> Reviewed-by: Perry Yuan <perry.yuan@amd.com>
-> Signed-off-by: Meng Li <li.meng@amd.com>
-> ---
->  arch/x86/Kconfig | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
+> Minor fixes of compiler warnings and one bug in the number of parameters which
+> would not crash the test but it is better fixed for correctness sake.
 > 
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index 3762f41bb092..3e57773f946a 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -1054,8 +1054,9 @@ config SCHED_MC
->  
->  config SCHED_MC_PRIO
->  	bool "CPU core priorities scheduler support"
-> -	depends on SCHED_MC && CPU_SUP_INTEL
-> -	select X86_INTEL_PSTATE
-> +	depends on SCHED_MC
-> +	select X86_INTEL_PSTATE if CPU_SUP_INTEL
-> +	select X86_AMD_PSTATE if CPU_SUP_AMD && ACPI
->  	select CPU_FREQ
->  	default y
->  	help
-> -- 
+> As the general climate in the Linux kernel community is to fix all compiler
+> warnings, this could be on the right track, even if only in the testing suite.
+> 
+> Changelog:
+> 
+> v1 -> v2:
+> - Compared to v1, commit subject lines have been adjusted to reflect the style
+>   of the subsystem, as suggested by Mark.
+> - 1/4 was already acked and unchanged (adjusted the subject line as suggested)
+>   (code unchanged)
+> - 2/4 was acked with suggestion to adjust the subject line (done).
+>   (code unchanged)
+> - 3/4 The format specifier was changed from %d to %u as suggested.
+> - The 4/4 submitted for review (in the v1 it was delayed by an omission).
+>   (code unchanged)
+> 
+> Mirsad Todorovac (4):
+>   kselftest/alsa - mixer-test: fix the number of parameters to
+>     ksft_exit_fail_msg()
+>   kselftest/alsa - mixer-test: Fix the print format specifier warning
+>   kselftest/alsa - mixer-test: Fix the print format specifier warning
+>   kselftest/alsa - conf: Stringify the printed errno in sysfs_get()
 
-I was gonna ask why the selects but apparently mingo wants SCHED_MC_PRIO
-to be selectable easier:
+Applied all patches now.  Thanks.
 
-0a21fc1214a2 ("sched/x86: Make CONFIG_SCHED_MC_PRIO=y easier to enable")
 
-So,
-
-Acked-by: Borislav Petkov (AMD) <bp@alien8.de>
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Takashi
 
