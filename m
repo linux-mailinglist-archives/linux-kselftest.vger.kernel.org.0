@@ -1,72 +1,72 @@
-Return-Path: <linux-kselftest+bounces-2776-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2777-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62EE1829102
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jan 2024 00:51:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1023482910C
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jan 2024 00:56:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4F3021C250F3
-	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jan 2024 23:51:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2208C1C244E9
+	for <lists+linux-kselftest@lfdr.de>; Tue,  9 Jan 2024 23:56:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FE9A3E480;
-	Tue,  9 Jan 2024 23:51:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8DE23E48E;
+	Tue,  9 Jan 2024 23:56:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xd1NsK0K"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cngmUbnH"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8F91364B5;
-	Tue,  9 Jan 2024 23:51:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A0953E480;
+	Tue,  9 Jan 2024 23:56:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-55719cdc0e1so4002584a12.1;
-        Tue, 09 Jan 2024 15:51:40 -0800 (PST)
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-50ea9daac4cso3742572e87.3;
+        Tue, 09 Jan 2024 15:56:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1704844299; x=1705449099; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1704844565; x=1705449365; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=gt9b2XHBtKSzu7V5D9PWo+9Hr9WnYT/2ETEwyufFis0=;
-        b=Xd1NsK0KmZB9aqpFdcVpidyS2b2Ux1zIwOeaB2Wh4QUbRSiz+01z84XcFnHbDIz1sb
-         2DLiAHhFryW9aqdwutF41BklSbscKL/LYFQBEWieFyj66H6bnFA/Rc2QWfkGW29ejUlb
-         lmBefKZBxNcoFwGlJVM1rVi8B3yvCig4EDEXNabP24laHTVl401xhZi0aBgzz3z5XT5c
-         GZUwctM88WtAhCnsSSdmfj288oC7DJtDh/Af5L2v6ir+hxVtEkQrH3SPbVxo/e6kSbNF
-         TxaKZ1Ok3tDHUP++OCMJmo+Ku/cY0s2dT2MCE61sr7SK1Jqsd7nwZoIogmoPc7IkZbQv
-         m4hw==
+        bh=lCona3v6onYyB9IuV+M2B43GdQFvdO/v3FuNvf1zkBU=;
+        b=cngmUbnHqGWZ2v3qAUStBV7i47BXi+y6R/ZoDa2wlSi/BfLKqyrdH00ZYRMOjym6rc
+         GWYOXjMwKtX9iQnyCqmIl8ec4kYVH3cYIsb+l0G3OL47Nwf8kpoeGBJlFkDE+FBOgSWF
+         Z2XQxBrpF7gutc0UtvEmZ83D4cJrfx+JadXhk5R6fnSqyPtXJuiT9RA79w58ylv8GLUR
+         RB7uGyEYgIGqLLCQv2K5IFikCtopzqPCO71J9ffldn4wX5cfvZuKSdkULqAX9R1j13TY
+         GrffSTu11EuObGT9XTwRx39FYolvrveBpC3NBi2R1n8a+q0seiSMXHDUK4Z3iMvazoa8
+         aMxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704844299; x=1705449099;
+        d=1e100.net; s=20230601; t=1704844565; x=1705449365;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gt9b2XHBtKSzu7V5D9PWo+9Hr9WnYT/2ETEwyufFis0=;
-        b=Fe0CMw61NcJHAG6mWWgn0O28JtYx5tMvhKsR8CEiZiZ1//y0evx4WLAbwoPT9WPnLf
-         k0nPRxBw2UFUC9olNXrKHsSyTrqjpkcK/dRMArKk32bcgDUFz6sE+r5QKbUOaS44ZJMd
-         i3F78l3pRKq5lKSlRp4gOb7Y520eO/1lHD/5fQvZDnwCioIi+gSrk3GOo+PhDcdPeW20
-         SCBue2ax0HPC1woMqNHZO2hXZx83rGNoVLUk1KSO3Hi7dJuDbtV895QFq98KBFkst9Dk
-         ml4pzvPhqv6bK0AniLYZhe1coycD0EwMvO+kC5ONG18xSugYX08Sj5Iwa1k16Tu5HI1C
-         w1mg==
-X-Gm-Message-State: AOJu0Yy7BWJs8f98qDqK2Q8czqUnhQAI3lPoRi4GpCCkCAUMuS3bML5R
-	1rGCRE8c3lKcIW8jLnK5pOEKA+k9blX7hChBhfE=
-X-Google-Smtp-Source: AGHT+IEDBqwqtOIgFzpACFpa+mEDRSeUYcka1/XE8tMhf3xhp5/VPJ9gTdrqi3C6sBGwFrcOwysitmsovdaLXXmKNxs=
-X-Received: by 2002:a17:907:ca5:b0:a28:5815:cbb3 with SMTP id
- gi37-20020a1709070ca500b00a285815cbb3mr92003ejc.56.1704844298811; Tue, 09 Jan
- 2024 15:51:38 -0800 (PST)
+        bh=lCona3v6onYyB9IuV+M2B43GdQFvdO/v3FuNvf1zkBU=;
+        b=m9KFpkZ8SvwMz6BiI6OPFsrvVNFOr5TlQRxeFDKShmXP0Eji21jnQyXy4RyQ2BN6Ir
+         PC+sQ2mR0ypFHog1HCTxTez8uVUNaUoCT8YlA/QBTLfSm+371bcPKRvhVAYtshu/J54p
+         ZbfOBFBWIc8pMzWPCdWeSIy4NV+hLA+GtI8yKQkooL8Vw3k9STawnCYUBeoERf90MXjN
+         He1BqkIAVdtXh3Hpixlpd08Ac6mHBAeTFPUAhl/yC4eQfE4fKdT0osDdCFRfY4Geum0m
+         1SH7g8888GkyX0AxPHJERl9yRWaHqqWVUgljTdfsI/nYn0vPMGcx19EQGdqIH6JQl5bu
+         7WFA==
+X-Gm-Message-State: AOJu0Yz+xnBRRNW0AchpSj+r58uAvbCVEVNEEcoqrXYLZUKgAEkzW5Xy
+	oLsjKZ+Jmg7lInHq50QNli2hy03TKIjbN72eV20=
+X-Google-Smtp-Source: AGHT+IG4D6zX08qL43tDPBD8elQbBkfnvRkR3rtCFv5GibmyydifywmykWmDQ4eeZLBqB6mkkuJCMVqJIgv11zXJ22o=
+X-Received: by 2002:ac2:5f75:0:b0:50e:d7f6:efd6 with SMTP id
+ c21-20020ac25f75000000b0050ed7f6efd6mr44185lfc.35.1704844564916; Tue, 09 Jan
+ 2024 15:56:04 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240108205209.838365-1-maxtram95@gmail.com> <20240108205209.838365-13-maxtram95@gmail.com>
-In-Reply-To: <20240108205209.838365-13-maxtram95@gmail.com>
+References: <20240108205209.838365-1-maxtram95@gmail.com> <20240108205209.838365-14-maxtram95@gmail.com>
+In-Reply-To: <20240108205209.838365-14-maxtram95@gmail.com>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 9 Jan 2024 15:51:26 -0800
-Message-ID: <CAEf4BzaNUfO-EBiJPtOKpBFay2gqr=nzT0Aipe274MG+m2Jvrw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 12/15] bpf: Preserve boundaries and track
- scalars on narrowing fill
+Date: Tue, 9 Jan 2024 15:55:52 -0800
+Message-ID: <CAEf4Bza3S_HmhHEz34nVDauOB9r09dDW4fZcL26as_hx4XQsWw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 13/15] selftests/bpf: Add test cases for
+ narrowing fill
 To: Maxim Mikityanskiy <maxtram95@gmail.com>
 Cc: Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
 	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
@@ -86,86 +86,75 @@ On Mon, Jan 8, 2024 at 12:53=E2=80=AFPM Maxim Mikityanskiy <maxtram95@gmail=
 >
 > From: Maxim Mikityanskiy <maxim@isovalent.com>
 >
-> When the width of a fill is smaller than the width of the preceding
-> spill, the information about scalar boundaries can still be preserved,
-> as long as it's coerced to the right width (done by coerce_reg_to_size).
-> Even further, if the actual value fits into the fill width, the ID can
-> be preserved as well for further tracking of equal scalars.
->
-> Implement the above improvements, which makes narrowing fills behave the
-> same as narrowing spills and MOVs between registers.
->
-> Two tests are adjusted to accommodate for endianness differences and to
-> take into account that it's now allowed to do a narrowing fill from the
-> least significant bits.
->
-> reg_bounds_sync is added to coerce_reg_to_size to correctly adjust
-> umin/umax boundaries after the var_off truncation, for example, a 64-bit
-> value 0xXXXXXXXX00000000, when read as a 32-bit, gets umin =3D 0, umax =
-=3D
-> 0xFFFFFFFF, var_off =3D (0x0; 0xffffffff00000000), which needs to be
-> synced down to umax =3D 0, otherwise reg_bounds_sanity_check doesn't pass=
-.
+> The previous commit allowed to preserve boundaries and track IDs of
+> scalars on narrowing fills. Add test cases for that pattern.
 >
 > Signed-off-by: Maxim Mikityanskiy <maxim@isovalent.com>
+> Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 > ---
->  include/linux/bpf_verifier.h                  |  2 --
->  include/linux/filter.h                        | 12 ++++++++
->  kernel/bpf/verifier.c                         | 15 +++++++---
->  .../selftests/bpf/progs/verifier_spill_fill.c | 28 +++++++++++++------
->  4 files changed, 42 insertions(+), 15 deletions(-)
+>  .../selftests/bpf/progs/verifier_spill_fill.c | 108 ++++++++++++++++++
+>  1 file changed, 108 insertions(+)
 >
-> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-> index e11baecbde68..95ea7657f07e 100644
-> --- a/include/linux/bpf_verifier.h
-> +++ b/include/linux/bpf_verifier.h
-> @@ -239,8 +239,6 @@ enum bpf_stack_slot_type {
->         STACK_ITER,
->  };
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c b/to=
+ols/testing/selftests/bpf/progs/verifier_spill_fill.c
+> index fab8ae9fe947..3764111d190d 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_spill_fill.c
+> @@ -936,4 +936,112 @@ l0_%=3D:    r0 =3D 0;                              =
+           \
+>         : __clobber_all);
+>  }
 >
-> -#define BPF_REG_SIZE 8 /* size of eBPF register in bytes */
-> -
->  #define BPF_REGMASK_ARGS ((1 << BPF_REG_1) | (1 << BPF_REG_2) | \
->                           (1 << BPF_REG_3) | (1 << BPF_REG_4) | \
->                           (1 << BPF_REG_5))
-> diff --git a/include/linux/filter.h b/include/linux/filter.h
-> index 68fb6c8142fe..be784be7ed4e 100644
-> --- a/include/linux/filter.h
-> +++ b/include/linux/filter.h
-> @@ -39,6 +39,8 @@ struct sock_reuseport;
->  struct ctl_table;
->  struct ctl_table_header;
->
-> +#define BPF_REG_SIZE 8 /* size of eBPF register in bytes */
-> +
->  /* ArgX, context and stack frame pointer register positions. Note,
->   * Arg1, Arg2, Arg3, etc are used as argument mappings of function
->   * calls in BPF_CALL instruction.
-> @@ -881,6 +883,16 @@ bpf_ctx_narrow_access_offset(u32 off, u32 size, u32 =
-size_default)
->
->  #define bpf_classic_proglen(fprog) (fprog->len * sizeof(fprog->filter[0]=
-))
->
-> +static inline bool
-> +bpf_stack_narrow_access_ok(int off, int size, int spill_size)
+> +SEC("xdp")
+> +__description("32-bit fill after 64-bit spill")
+> +__success __retval(0)
+> +__naked void fill_32bit_after_spill_64bit(void)
 
-this is used by verifier.c, right? So why not add this to bpf_verifier.h?
-
-
-nit: given we have spill_size, should we s/size/fill_size/ for symmetry?
+I guess these tests are an answer for my question about mixing
+spill/fill sizes on earlier patch (so disregard those)
 
 > +{
-> +#ifdef __BIG_ENDIAN
-> +       off -=3D spill_size - size;
+> +       asm volatile("                                  \
+> +       /* Randomize the upper 32 bits. */              \
+> +       call %[bpf_get_prandom_u32];                    \
+> +       r0 <<=3D 32;                                      \
+> +       /* 64-bit spill r0 to stack. */                 \
+> +       *(u64*)(r10 - 8) =3D r0;                          \
+> +       /* 32-bit fill r0 from stack. */                \
+> +       r0 =3D *(u32*)(r10 - %[offset]);                          \
+
+have you considered doing the BYTE_ORDER check right here and have
+offset embedded in assembly instruction directly:
+
+#if __BYTE_ORDER__ =3D=3D __ORDER_LITTLE_ENDIAN__
+    r0 =3D *(u32*)(r10 - 8);
+#else
+    r0 =3D *(u32*)(r10 - 4);
+#endif
+
+It's a bit less jumping around the code when reading. And it's kind of
+obviously that this is endianness-dependent without jumping to
+definition of %[offset]?
+
+
+> +       /* Boundary check on r0 with predetermined result. */\
+> +       if r0 =3D=3D 0 goto l0_%=3D;                          \
+> +       /* Dead branch: the verifier should prune it. Do an invalid memor=
+y\
+> +        * access if the verifier follows it.           \
+> +        */                                             \
+> +       r0 =3D *(u64*)(r9 + 0);                           \
+> +l0_%=3D: exit;                                           \
+> +"      :
+> +       : __imm(bpf_get_prandom_u32),
+> +#if __BYTE_ORDER__ =3D=3D __ORDER_LITTLE_ENDIAN__
+> +         __imm_const(offset, 8)
+> +#else
+> +         __imm_const(offset, 4)
 > +#endif
-> +
-> +       return !(off % BPF_REG_SIZE);
+> +       : __clobber_all);
 > +}
 > +
->  static inline void bpf_prog_lock_ro(struct bpf_prog *fp)
->  {
->  #ifndef CONFIG_BPF_JIT_ALWAYS_ON
 
 [...]
 
