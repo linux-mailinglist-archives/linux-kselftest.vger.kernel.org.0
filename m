@@ -1,156 +1,211 @@
-Return-Path: <linux-kselftest+bounces-2814-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2815-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26FBF82A352
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jan 2024 22:34:26 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91BCD82A38D
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jan 2024 22:52:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4DB7D1C22D57
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jan 2024 21:34:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 44DF528973E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jan 2024 21:52:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 242994F5F2;
-	Wed, 10 Jan 2024 21:34:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82F7A4F886;
+	Wed, 10 Jan 2024 21:52:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b="eISlyelm"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nmkZGwI9"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C3B04F881
-	for <linux-kselftest@vger.kernel.org>; Wed, 10 Jan 2024 21:34:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arista.com
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-336dcebcdb9so4471544f8f.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 10 Jan 2024 13:34:19 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9C524F883;
+	Wed, 10 Jan 2024 21:52:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-5578485fc0eso3697430a12.1;
+        Wed, 10 Jan 2024 13:52:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google; t=1704922457; x=1705527257; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ULJlgsbYbFdx3cKG7esKuUDjzGCjCZ7y1LhDjw4dP0A=;
-        b=eISlyelm/bqLfb6AhL8zLj51CBIuxKZ9rfdDrVZzuRe4l/CXHePYiSpGDj+MoNKjBQ
-         mASKJsKalWq2Cj36U0MnUiF8W2/mZZu+VDxE0p2FASb7TmWRi+xi0LITuBUT41N1nB5F
-         lhG5Ubi8GOLOUJ4WvEd19YtTdL9MOFclADguEpwD/uzmR9eG/YXGX4zH8GO39oPW1r5R
-         D/dvzw158H5wpOQ2wL4HIcxwED6KfRv7/wPCPfAUn1unppVzEo6gqt8KlnCdG6bqQk2Z
-         TBpMphxItqV8jc26ZV3zpZJZ7le2yVJDRIkCxtHudhQO4unZWDr+83/W8CMIWd1OP59Q
-         PBCg==
+        d=gmail.com; s=20230601; t=1704923545; x=1705528345; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sPanO/SqIYc4Q6eykHNme3WnMQup3s9zl6+bSP5wmLg=;
+        b=nmkZGwI9Zh+lv8INMcwRVfV5cVSIClhY32atPnnNsIgEhj+Z+IxIo47Y36xPCngAPF
+         AGF6x3AObn2oIehTgBhpjAa9zlM4LrJPY9nJKl/2WS9nqTwdY2NI9R7xJgSfQZhSjjcN
+         Edd3LLz9PVk866PNQcUti1i/DounqAiRbGKbVI1wg3o7Fsji+ujRmZZV9XGPK0MmabWZ
+         Qkl/Re3ZQvZmNCCMQb4ILZMdveVoE3GJeenIKyIFzTHORcDAUPyHKgT6Ajbx7UqYuV7x
+         JMJ0sSM7oEchNt+AsiIbE+zlvyjgTPZ5Jwn842yXnlakmXnGFlT3oflvhY7NpgbUWON9
+         1Aow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704922457; x=1705527257;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ULJlgsbYbFdx3cKG7esKuUDjzGCjCZ7y1LhDjw4dP0A=;
-        b=qlClRVpKdcW8G0I/x4v/v6IHOnHLdx7+Ul34+eJDshmddaDSsM2IGn3gMSJt5jJrlU
-         R/F+aXFaWtw0vIHqHNWO3o96JapkYUiYeZbc0XlBFhzTWhqICZAixJwE6Fn+2OHQahvq
-         CClHt0KqL/wqqKXa6daUnfgMHeRaMg8YGYHebLHZiLlAmwGggTE9n5wDTq4Vu5xefr1b
-         MovUp5tkm/72uqzgs4PK9S5Meq77+zIQTHRMley5VkRu2oK+QavuP3e2Yk1S2B25w2R9
-         2HwOT/Ka7dMpXMm2LWNeUrHKD7UB4AcZ4Ug1mziWLtDk82Exhrdr1cD2nvxuiP7/1QRa
-         oWbw==
-X-Gm-Message-State: AOJu0YwISyGKqZiQQnGtfBx9zGqA824Y53om81nMx0QTb/SKyPnKScqI
-	ut2KORsgJxJxHb65yKvIC7R2CHtcxLI9
-X-Google-Smtp-Source: AGHT+IGHWhbaDD4IwqxDfw9jHTHkuUKjQBNNUmn/8eVs+uq7aRefvD7j/ILYF+UvNVbHn3mv4iVq8A==
-X-Received: by 2002:adf:f64f:0:b0:336:c434:5c20 with SMTP id x15-20020adff64f000000b00336c4345c20mr25026wrp.149.1704922457598;
-        Wed, 10 Jan 2024 13:34:17 -0800 (PST)
-Received: from Mindolluin.ire.aristanetworks.com ([217.173.96.166])
-        by smtp.gmail.com with ESMTPSA id j17-20020adfea51000000b0033660f75d08sm5686611wrn.116.2024.01.10.13.34.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 Jan 2024 13:34:16 -0800 (PST)
-From: Dmitry Safonov <dima@arista.com>
-To: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Dmitry Safonov <dima@arista.com>,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	kernel test robot <lkp@intel.com>,
-	Dmitry Safonov <0x7f454c46@gmail.com>
-Subject: [PATCH] selftests/net/tcp-ao: Use LDLIBS instead of LDFLAGS
-Date: Wed, 10 Jan 2024 21:34:10 +0000
-Message-ID: <20240110-tcp_ao-selftests-makefile-v1-1-aa07d043f052@arista.com>
-X-Mailer: git-send-email 2.43.0
+        d=1e100.net; s=20230601; t=1704923545; x=1705528345;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=sPanO/SqIYc4Q6eykHNme3WnMQup3s9zl6+bSP5wmLg=;
+        b=LmbodJT4IL9fYJauRUU2wHXBugCrqCB7HuHCmYzPgl56xHLYMx3T3G5TnWmV4bHN7J
+         y06pcjEy1fnji/vDOhmLlE2zBMNPYGsmh4fH76cAKNQ97Iehs3db9nQHUpHaYHED8D7f
+         XDMq53a3Trzljp3K8YfeqHFD5tdTrdoQVt1n3dRSqRGEKp4Oud7/sykbFEQF6MZebEas
+         Xo/HvCKSI3JGB8TIVFy/r6p9Uzn7GB7ciWV+wHepGbPktBlYMcYZAaKN9yjfkfmulYHv
+         ZVxbZZcRkzG8iFj0mr8ckzBVx0qLiuwTlSCws+Dd9kduIOd/3KBMj/nQQnurrY0jdDGa
+         lYDA==
+X-Gm-Message-State: AOJu0Yxn05JFDveO2y9ENGZBJ6VLnCWYrfDPj7aOlZCwY5dutmI4QWPO
+	9JWrtIIBf0UEJZZGGi6sbxKVTeP68lVkNjuptZM=
+X-Google-Smtp-Source: AGHT+IFz/cbzXiMwKfN1LO/rrM07hdScb89Zn3ZtGJ42uaFbatOGS5BcAqOOfFnp9R4hIwiKE8k1YAHTWxCLNrCuqRc=
+X-Received: by 2002:aa7:c954:0:b0:557:ed8b:c606 with SMTP id
+ h20-20020aa7c954000000b00557ed8bc606mr65860edt.23.1704923544651; Wed, 10 Jan
+ 2024 13:52:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Mailer: b4 0.13-dev-b6b4b
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1704922450; l=2675; i=dima@arista.com; s=20231212; h=from:subject:message-id; bh=jOEuqyTW483yTy2cXCaxWhi99+o9vEjXDhzO6CQSOWA=; b=fC9CsSMSOCG1M+izUI7BZ21j+Sjv1Pv5AgqclfGnYKUnkC+G4GIygOQfa85B570ArTNpDdeOe avefNzHNYi9DgxCtqYgoAHI9MmxtdzMXB4Hd9iy6lHxZ+QElE3iTFk7
-X-Developer-Key: i=dima@arista.com; a=ed25519; pk=hXINUhX25b0D/zWBKvd6zkvH7W2rcwh/CH6cjEa3OTk=
-Content-Transfer-Encoding: 8bit
+References: <20240108205209.838365-1-maxtram95@gmail.com> <20240108205209.838365-15-maxtram95@gmail.com>
+ <CAEf4BzYizLHHYPg0yKu-no3toMLS3wSyA2V_wtnHAyn6Burofg@mail.gmail.com> <bf909ed6b01224e03f0b2770f041f5b3ecb4b218.camel@gmail.com>
+In-Reply-To: <bf909ed6b01224e03f0b2770f041f5b3ecb4b218.camel@gmail.com>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Wed, 10 Jan 2024 13:52:12 -0800
+Message-ID: <CAEf4BzaKS_f9uOorcCbsoui9KNRA0HxX8=A+9sNAq+1mJoy-kg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2 14/15] bpf: Optimize state pruning for spilled scalars
+To: Eduard Zingerman <eddyz87@gmail.com>
+Cc: Maxim Mikityanskiy <maxtram95@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Shung-Hsi Yu <shung-hsi.yu@suse.com>, John Fastabend <john.fastabend@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
+	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The rules to link selftests are:
-
-> $(OUTPUT)/%_ipv4: %.c
-> 	$(LINK.c) $^ $(LDLIBS) -o $@
+On Wed, Jan 10, 2024 at 1:04=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com=
+> wrote:
 >
-> $(OUTPUT)/%_ipv6: %.c
-> 	$(LINK.c) -DIPV6_TEST $^ $(LDLIBS) -o $@
+> On Tue, 2024-01-09 at 16:22 -0800, Andrii Nakryiko wrote:
+> [...]
+> > >  static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_=
+state *old,
+> > >                       struct bpf_func_state *cur, struct bpf_idmap *i=
+dmap, bool exact)
+> > >  {
+> > > +       struct bpf_reg_state unbound_reg =3D {};
+> > > +       struct bpf_reg_state zero_reg =3D {};
+> > >         int i, spi;
+> > >
+> > > +       __mark_reg_unknown(env, &unbound_reg);
+> > > +       __mark_reg_const_zero(env, &zero_reg);
+> > > +       zero_reg.precise =3D true;
+> >
+> > these are immutable, right? Would it make sense to set them up just
+> > once as static variables instead of initializing on each check?
+>
+> Should be possible.
+>
+> > > +
+> > >         /* walk slots of the explored stack and ignore any additional
+> > >          * slots in the current stack, since explored(safe) state
+> > >          * didn't use them
+> > > @@ -16484,6 +16524,49 @@ static bool stacksafe(struct bpf_verifier_en=
+v *env, struct bpf_func_state *old,
+> > >                         continue;
+> > >                 }
+> > >
+> >
+> > we didn't check that cur->stack[spi] is ok to access yet, it's done a
+> > bit later with `if (i >=3D cur->allocated_stack)`, if I'm not mistaken.
+> > So these checks would need to be moved a bit lower, probably.
+>
+> Right. And it seems the issue is already present:
+>
+>                 if (exact &&
+>                     old->stack[spi].slot_type[i % BPF_REG_SIZE] !=3D
+>                     cur->stack[spi].slot_type[i % BPF_REG_SIZE])
+>                         return false;
+>
+> This is currently executed before `if (i >=3D cur->allocated_stack)` chec=
+k as well.
+> Introduced by another commit of mine :(
 
-The intel test robot uses only selftest's Makefile, not the top linux
-Makefile:
+I guess we'll need to move that too, then
 
-> make W=1 O=/tmp/kselftest -C tools/testing/selftests
+>
+> > > +               /* load of stack value with all MISC and ZERO slots p=
+roduces unbounded
+> > > +                * scalar value, call regsafe to ensure scalar ids ar=
+e compared.
+> > > +                */
+> > > +               if (is_spilled_unbound_scalar_reg64(&old->stack[spi])=
+ &&
+> > > +                   is_stack_unbound_slot64(env, &cur->stack[spi])) {
+> > > +                       i +=3D BPF_REG_SIZE - 1;
+> > > +                       if (!regsafe(env, &old->stack[spi].spilled_pt=
+r, &unbound_reg,
+> > > +                                    idmap, exact))
+> > > +                               return false;
+> > > +                       continue;
+> > > +               }
+> > > +
+> > > +               if (is_stack_unbound_slot64(env, &old->stack[spi]) &&
+> > > +                   is_spilled_unbound_scalar_reg64(&cur->stack[spi])=
+) {
+> > > +                       i +=3D BPF_REG_SIZE - 1;
+> > > +                       if (!regsafe(env,  &unbound_reg, &cur->stack[=
+spi].spilled_ptr,
+> > > +                                    idmap, exact))
+> > > +                               return false;
+> > > +                       continue;
+> > > +               }
+> >
+> > scalar_old =3D scalar_cur =3D NULL;
+> > if (is_spilled_unbound64(&old->..))
+> >     scalar_old =3D old->stack[spi].slot_type[0] =3D=3D STACK_SPILL ?
+> > &old->stack[spi].spilled_ptr : &unbound_reg;
+> > if (is_spilled_unbound64(&cur->..))
+> >     scalar_cur =3D cur->stack[spi].slot_type[0] =3D=3D STACK_SPILL ?
+> > &cur->stack[spi].spilled_ptr : &unbound_reg;
+> > if (scalar_old && scalar_cur) {
+> >     if (!regsafe(env, scalar_old, scalar_new, idmap, exact)
+> >         return false;
+> >     i +=3D BPF_REG_SIZE - 1;
+> >     continue;
+> > }
+>
+> Ok, I'll switch to this.
+> (Although, I think old variant is a bit simpler to follow).
 
-So, $(LINK.c) is determined by environment, rather than by kernel
-Makefiles. On my machine (as well as other people that ran tcp-ao
-selftests) GNU/Make implicit definition does use $(LDFLAGS):
+my goal was to eliminate duplicated logic inside each if and kind of
+showing at high level that we are comparing two "logically unbound
+scalars", regardless of whether that's STACK_xxx mix or spilled
+scalar.
 
-> [dima@Mindolluin ~]$ make -p -f/dev/null | grep '^LINK.c\>'
-> make: *** No targets.  Stop.
-> LINK.c = $(CC) $(CFLAGS) $(CPPFLAGS) $(LDFLAGS) $(TARGET_ARCH)
+I haven't thought this through, but if we can simplify further to
+something like this:
 
-But, according to build robot report, it's not the case for them.
-While I could just avoid using pre-defined $(LINK.c), it's also used by
-selftests/lib.mk by default.
+if (is_spilled_unbound64(old) && is_spilled_unbound64(cur)) {
+  scalar_cur =3D ...
+  scalar_old =3D ...
+  if (!regsafe(...))
+    return false;
+  i +=3D BPF_REG_SIZE - 1;
+}
 
-Anyways, according to GNU/Make documentation [1], I should have used
-$(LDLIBS) instead of $(LDFLAGS) in the first place, so let's just do it:
+In general, this symmetry in two consecutive if conditions seems like
+an opportunity to simplify. But if you think it's more complicated,
+I'm fine with leaving it as is.
 
-> LDFLAGS
->     Extra flags to give to compilers when they are supposed to invoke
->     the linker, ‘ld’, such as -L. Libraries (-lfoo) should be added
->     to the LDLIBS variable instead.
-> LDLIBS
->     Library flags or names given to compilers when they are supposed
->     to invoke the linker, ‘ld’. LOADLIBES is a deprecated (but still
->     supported) alternative to LDLIBS. Non-library linker flags, such
->     as -L, should go in the LDFLAGS variable.
-
-[1]: https://www.gnu.org/software/make/manual/html_node/Implicit-Variables.html
-
-Fixes: cfbab37b3da0 ("selftests/net: Add TCP-AO library")
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202401011151.veyYTJzq-lkp@intel.com/
-Signed-off-by: Dmitry Safonov <dima@arista.com>
----
- tools/testing/selftests/net/tcp_ao/Makefile | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/net/tcp_ao/Makefile b/tools/testing/selftests/net/tcp_ao/Makefile
-index 8e60bae67aa9..522d991e310e 100644
---- a/tools/testing/selftests/net/tcp_ao/Makefile
-+++ b/tools/testing/selftests/net/tcp_ao/Makefile
-@@ -52,5 +52,5 @@ $(OUTPUT)/%_ipv6: %.c
- 
- $(OUTPUT)/icmps-accept_ipv4: CFLAGS+= -DTEST_ICMPS_ACCEPT
- $(OUTPUT)/icmps-accept_ipv6: CFLAGS+= -DTEST_ICMPS_ACCEPT
--$(OUTPUT)/bench-lookups_ipv4: LDFLAGS+= -lm
--$(OUTPUT)/bench-lookups_ipv6: LDFLAGS+= -lm
-+$(OUTPUT)/bench-lookups_ipv4: LDLIBS+= -lm
-+$(OUTPUT)/bench-lookups_ipv6: LDLIBS+= -lm
-
----
-base-commit: 8cb47d7cd090a690c1785385b2f3d407d4a53ad0
-change-id: 20240110-tcp_ao-selftests-makefile-3dafb1e96df8
-
-Best regards,
--- 
-Dmitry Safonov <dima@arista.com>
-
+>
+> > where is_spilled_unbound64() would be basically `return
+> > is_spilled_unbound_scalar_reg64(&old->..) ||
+> > is_stack_unbound_slot64(&old->...)`;
+> >
+> > Similarly for zero case? Though I'm wondering if zero case should be
+> > checked first, as it's actually a subset of is_spilled_unbound64 when
+> > it comes to STACK_ZERO/STACK_MISC mixes, no?
+>
+> Yes, makes sense.
+>
+> [...]
 
