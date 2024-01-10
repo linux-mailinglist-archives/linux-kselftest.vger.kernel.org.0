@@ -1,281 +1,228 @@
-Return-Path: <linux-kselftest+bounces-2778-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2779-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0144829135
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jan 2024 01:22:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5960382913E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jan 2024 01:25:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 256471F260B3
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jan 2024 00:22:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D75661F260B6
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jan 2024 00:25:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A61A9182;
-	Wed, 10 Jan 2024 00:22:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D23E6389;
+	Wed, 10 Jan 2024 00:25:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HEOASrjV"
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="kfdyF9VU";
+	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="kfdyF9VU"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB54D18A;
-	Wed, 10 Jan 2024 00:22:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-336755f1688so3267452f8f.0;
-        Tue, 09 Jan 2024 16:22:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1704846163; x=1705450963; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=//4jWgfQ5Fh7VrpoQ0ByJkNQD3sR20k+3Su+DVlmwJ4=;
-        b=HEOASrjVxUlKhT9CyG9FuuPat4ArLrdhv/LLju78i5CgQYaUUJ4NwqxS74+pOqeBoQ
-         8vH4Gf6nIL0baRAfDm3FXVyLIdbFkmytIjKjE8GqIFwbze75qTGx3tnmBJkm6Py7bxgp
-         LaDteFTTKzwfH1bG9cbfvBIYlKP14nA7kk48A1BVDXMtPUutfuoug4BAhMTPSH26bTSD
-         98zV2MKWYQn++zOr8K/2FvaA+faNc/xUvoUrcGtD2NqM5/HpJFtsA92PnDYimMGVA4Zf
-         08c+DAtDB1vdmNi6YhgnvmM0a8GOEM35nDz26MRSXpp5cZXvqjHZHEyHBh4MIuHph2Wt
-         LQiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704846163; x=1705450963;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=//4jWgfQ5Fh7VrpoQ0ByJkNQD3sR20k+3Su+DVlmwJ4=;
-        b=K3GSpyQ8yDcEcpKLzotPC3XAJ7u29zfixTGJXlAe7cW7UaWDdnkrJY8EY85dLZPA0t
-         HHNuzSsnGPFnByraTST690SW18wfnzC8wzUhDVGEVECJ2ixV+xj5P4rpQBQbNoGRcRhz
-         voe+HDCHQAburHPoOgMzaze71GO8euaQcdp4NZNcbvdTUOY+k3+9W5WEvUh5rpp32yE5
-         Bmh5Zpq15g7qSHUSWYGvGZgdVwW1r2U+KJ5U5cpDwxBI5SiXbxT3gdwWlfOxxuebhEbA
-         D1NjJeoXtBSwg00EGAXHQbsUbJaroNx/zsG35PWwbWOdOH2Qp7s92ULQ16sHgjATXEA5
-         PuoA==
-X-Gm-Message-State: AOJu0Yz4485okUMp7Q/YtLWWnAQNb31iaawgPuNPX6z0zCrjXFaiBiXJ
-	NhiI9fiBwd3+0ztzkLVgpf32cBDMVeQ5aVMk2qM=
-X-Google-Smtp-Source: AGHT+IFJu4pcuWWDwwPzsPS+GtYejENavAEoRXZDRagJ95uoP6CMoV93PRbhGbpMGrX34B6cs7g5kdS2u7LfPfOQ19c=
-X-Received: by 2002:adf:f34a:0:b0:337:5479:991d with SMTP id
- e10-20020adff34a000000b003375479991dmr75053wrp.71.1704846162827; Tue, 09 Jan
- 2024 16:22:42 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60F75182;
+	Wed, 10 Jan 2024 00:25:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 099C321A6E;
+	Wed, 10 Jan 2024 00:24:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1704846298; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=eKECFS3PJhCrAEPASVX42gwRyuFXy0Bqz33UabNUzDg=;
+	b=kfdyF9VUVpGUTYo8Gy7k0bx+0JKZQrU5JwJEK3WS5WAz6/ZYasiyTGIGj0TTqQ4KalQsER
+	2L3i9NAytAODcBy+BfL/jn+nZdOb+METa9E/wXMY4myzZGocz8IQ6XLsxN63Rt3XU7gq9A
+	cy9wlaN0yyonYgHOilhe2SijnWKHNQM=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+	t=1704846298; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=eKECFS3PJhCrAEPASVX42gwRyuFXy0Bqz33UabNUzDg=;
+	b=kfdyF9VUVpGUTYo8Gy7k0bx+0JKZQrU5JwJEK3WS5WAz6/ZYasiyTGIGj0TTqQ4KalQsER
+	2L3i9NAytAODcBy+BfL/jn+nZdOb+METa9E/wXMY4myzZGocz8IQ6XLsxN63Rt3XU7gq9A
+	cy9wlaN0yyonYgHOilhe2SijnWKHNQM=
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 4A3A813786;
+	Wed, 10 Jan 2024 00:24:57 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 9XG9BNnjnWUiWwAAD6G6ig
+	(envelope-from <mpdesouza@suse.com>); Wed, 10 Jan 2024 00:24:57 +0000
+From: Marcos Paulo de Souza <mpdesouza@suse.com>
+Subject: [PATCH v5 0/3] livepatch: Move modules to selftests and add a new
+ test
+Date: Tue, 09 Jan 2024 21:24:53 -0300
+Message-Id: <20240109-send-lp-kselftests-v5-0-364d59a69f12@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240108205209.838365-1-maxtram95@gmail.com> <20240108205209.838365-15-maxtram95@gmail.com>
-In-Reply-To: <20240108205209.838365-15-maxtram95@gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 9 Jan 2024 16:22:30 -0800
-Message-ID: <CAEf4BzYizLHHYPg0yKu-no3toMLS3wSyA2V_wtnHAyn6Burofg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 14/15] bpf: Optimize state pruning for spilled scalars
-To: Maxim Mikityanskiy <maxtram95@gmail.com>
-Cc: Eduard Zingerman <eddyz87@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Shung-Hsi Yu <shung-hsi.yu@suse.com>, John Fastabend <john.fastabend@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANXjnWUC/32Py07DMBBFf6XyGkf2+JGUFf+BWPgxIRZtEnnSq
+ KXKv2NXQq0QsLyjOefOXBlhTkjseXdlGddEaRpLME87FgY3viNPsWQGApQUSnLCMfLDzD8ID/2
+ CtBDXYS/bGKI21rACekfIfXZjGCrq5/5xe4W6M2fs0/lW/PpW8pBomfLldscq67RWgrClUyvQ0
+ HSt4JIf54g0nT7dC50ImzAdWcWL9I4oIbUEsA10Av5h1Dfz52er4oKDl9aYAFaY/odB3w2l+Fe
+ DLgYdhWg7NHvvHm/Ytu0LpjStU4ABAAA=
+To: Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+ Alexander Gordeev <agordeev@linux.ibm.com>, 
+ Christian Borntraeger <borntraeger@linux.ibm.com>, 
+ Sven Schnelle <svens@linux.ibm.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
+ Jiri Kosina <jikos@kernel.org>, Miroslav Benes <mbenes@suse.cz>, 
+ Petr Mladek <pmladek@suse.com>, Joe Lawrence <joe.lawrence@redhat.com>
+Cc: linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org, 
+ live-patching@vger.kernel.org, Marcos Paulo de Souza <mpdesouza@suse.com>
+X-Mailer: b4 0.12.4
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1704846294; l=5452;
+ i=mpdesouza@suse.com; s=20231031; h=from:subject:message-id;
+ bh=qCNt1f6IEQXbGWVTpxhhcLzk8E1XQy5xkgDo4O//u2s=;
+ b=o7fXB1IB/RrfU4gvYSGu5u8CTxe2nOeZBORltlCDYTT1u6ptjfnj8GAuinNcdXvH8bEqh99Sv
+ EWcw4+1uXUlDH/cMwQbIDkZXG5qxgTFY+ZFF9ZOC2dlESs3MKCTb/L1
+X-Developer-Key: i=mpdesouza@suse.com; a=ed25519;
+ pk=/Ni/TsKkr69EOmdZXkp1Q/BlzDonbOBRsfPa18ySIwU=
+X-Spam-Level: 
+Authentication-Results: smtp-out1.suse.de;
+	none
+X-Spamd-Result: default: False [-4.30 / 50.00];
+	 ARC_NA(0.00)[];
+	 RCVD_VIA_SMTP_AUTH(0.00)[];
+	 BAYES_HAM(-3.00)[100.00%];
+	 FROM_HAS_DN(0.00)[];
+	 TO_DN_SOME(0.00)[];
+	 TO_MATCH_ENVRCPT_ALL(0.00)[];
+	 NEURAL_HAM_LONG(-1.00)[-1.000];
+	 MIME_GOOD(-0.10)[text/plain];
+	 RCVD_COUNT_THREE(0.00)[3];
+	 DKIM_SIGNED(0.00)[suse.com:s=susede1];
+	 NEURAL_HAM_SHORT(-0.20)[-1.000];
+	 RCPT_COUNT_TWELVE(0.00)[18];
+	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email];
+	 FUZZY_BLOCKED(0.00)[rspamd.com];
+	 FROM_EQ_ENVFROM(0.00)[];
+	 MIME_TRACE(0.00)[0:+];
+	 RCVD_TLS_ALL(0.00)[];
+	 MID_RHS_MATCH_FROM(0.00)[]
+X-Spam-Level: 
+X-Spam-Flag: NO
+X-Spam-Score: -4.30
 
-On Mon, Jan 8, 2024 at 12:53=E2=80=AFPM Maxim Mikityanskiy <maxtram95@gmail=
-.com> wrote:
->
-> From: Eduard Zingerman <eddyz87@gmail.com>
->
-> Changes for scalar ID tracking of spilled unbound scalars lead to
-> certain verification performance regression. This commit mitigates the
-> regression by exploiting the following properties maintained by
-> check_stack_read_fixed_off():
-> - a mix of STACK_MISC, STACK_ZERO and STACK_INVALID marks is read as
->   unbounded scalar register;
-> - spi with all slots marked STACK_ZERO is read as scalar register with
->   value zero.
->
-> This commit modifies stacksafe() to consider situations above
-> equivalent.
->
-> Veristat results after this patch show significant gains:
->
-> $ ./veristat -e file,prog,states -f '!states_pct<10' -f '!states_b<10' -C=
- not-opt after
-> File              Program   States (A)  States (B)  States    (DIFF)
-> ----------------  --------  ----------  ----------  ----------------
-> pyperf180.bpf.o   on_event       10456        8422   -2034 (-19.45%)
-> pyperf600.bpf.o   on_event       37319       22519  -14800 (-39.66%)
-> strobemeta.bpf.o  on_event       13435        4703   -8732 (-64.99%)
->
-> Signed-off-by: Eduard Zingerman <eddyz87@gmail.com>
-> ---
->  kernel/bpf/verifier.c | 83 +++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 83 insertions(+)
->
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index aeb3e198a5ea..cb82f8d4226f 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -1170,6 +1170,12 @@ static void mark_stack_slot_misc(struct bpf_verifi=
-er_env *env, u8 *stype)
->         *stype =3D STACK_MISC;
->  }
->
-> +static bool is_spilled_scalar_reg64(const struct bpf_stack_state *stack)
-> +{
-> +       return stack->slot_type[0] =3D=3D STACK_SPILL &&
-> +              stack->spilled_ptr.type =3D=3D SCALAR_VALUE;
-> +}
-> +
->  static void scrub_spilled_slot(u8 *stype)
->  {
->         if (*stype !=3D STACK_INVALID)
-> @@ -16459,11 +16465,45 @@ static bool regsafe(struct bpf_verifier_env *en=
-v, struct bpf_reg_state *rold,
->         }
->  }
->
-> +static bool is_stack_zero64(struct bpf_stack_state *stack)
-> +{
-> +       u32 i;
-> +
-> +       for (i =3D 0; i < ARRAY_SIZE(stack->slot_type); ++i)
-> +               if (stack->slot_type[i] !=3D STACK_ZERO)
-> +                       return false;
-> +       return true;
-> +}
-> +
-> +static bool is_stack_unbound_slot64(struct bpf_verifier_env *env,
-> +                                   struct bpf_stack_state *stack)
-> +{
-> +       u32 i;
-> +
-> +       for (i =3D 0; i < ARRAY_SIZE(stack->slot_type); ++i)
-> +               if (stack->slot_type[i] !=3D STACK_ZERO &&
-> +                   stack->slot_type[i] !=3D STACK_MISC &&
-> +                   (!env->allow_uninit_stack || stack->slot_type[i] !=3D=
- STACK_INVALID))
-> +                       return false;
-> +       return true;
-> +}
-> +
-> +static bool is_spilled_unbound_scalar_reg64(struct bpf_stack_state *stac=
-k)
-> +{
-> +       return is_spilled_scalar_reg64(stack) && __is_scalar_unbounded(&s=
-tack->spilled_ptr);
-> +}
-> +
->  static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_stat=
-e *old,
->                       struct bpf_func_state *cur, struct bpf_idmap *idmap=
-, bool exact)
->  {
-> +       struct bpf_reg_state unbound_reg =3D {};
-> +       struct bpf_reg_state zero_reg =3D {};
->         int i, spi;
->
-> +       __mark_reg_unknown(env, &unbound_reg);
-> +       __mark_reg_const_zero(env, &zero_reg);
-> +       zero_reg.precise =3D true;
+Changes in v5:
+* Fixed an issue found by Joe that copied Kbuild files along with the
+  test modules to the installation directory.
+* Added Joe Lawrense review tags.
 
-these are immutable, right? Would it make sense to set them up just
-once as static variables instead of initializing on each check?
+Changes in v4:
+* Documented how to compile the livepatch selftests without running the
+  tests (Joe)
+* Removed the mention to lib/livepatch on MAINTAINERS file, reported by
+  checkpatch.
 
-> +
->         /* walk slots of the explored stack and ignore any additional
->          * slots in the current stack, since explored(safe) state
->          * didn't use them
-> @@ -16484,6 +16524,49 @@ static bool stacksafe(struct bpf_verifier_env *e=
-nv, struct bpf_func_state *old,
->                         continue;
->                 }
->
+Changes in v3:
+* Rebased on top of v6.6-rc5
+* The commits messages were improved (Thanks Petr!)
+* Created TEST_GEN_MODS_DIR variable to point to a directly that contains kernel
+  modules, and adapt selftests to build it before running the test.
+* Moved test_klp-call_getpid out of test_programs, since the gen_tar
+  would just copy the generated test programs to the livepatches dir,
+  and so scripts relying on test_programs/test_klp-call_getpid will fail.
+* Added a module_param for klp_pids, describing it's usage.
+* Simplified the call_getpid program to ignore the return of getpid syscall,
+  since we only want to make sure the process transitions correctly to the
+  patched stated
+* The test-syscall.sh not prints a log message showing the number of remaining
+  processes to transition into to livepatched state, and check_output expects it
+  to be 0.
+* Added MODULE_AUTHOR and MODULE_DESCRIPTION to test_klp_syscall.c
 
-we didn't check that cur->stack[spi] is ok to access yet, it's done a
-bit later with `if (i >=3D cur->allocated_stack)`, if I'm not mistaken.
-So these checks would need to be moved a bit lower, probably.
+- Link to v3: https://lore.kernel.org/r/20231031-send-lp-kselftests-v3-0-2b1655c2605f@suse.com
+- Link to v2: https://lore.kernel.org/linux-kselftest/20220630141226.2802-1-mpdesouza@suse.com/
 
-> +               /* load of stack value with all MISC and ZERO slots produ=
-ces unbounded
-> +                * scalar value, call regsafe to ensure scalar ids are co=
-mpared.
-> +                */
-> +               if (is_spilled_unbound_scalar_reg64(&old->stack[spi]) &&
-> +                   is_stack_unbound_slot64(env, &cur->stack[spi])) {
-> +                       i +=3D BPF_REG_SIZE - 1;
-> +                       if (!regsafe(env, &old->stack[spi].spilled_ptr, &=
-unbound_reg,
-> +                                    idmap, exact))
-> +                               return false;
-> +                       continue;
-> +               }
-> +
-> +               if (is_stack_unbound_slot64(env, &old->stack[spi]) &&
-> +                   is_spilled_unbound_scalar_reg64(&cur->stack[spi])) {
-> +                       i +=3D BPF_REG_SIZE - 1;
-> +                       if (!regsafe(env,  &unbound_reg, &cur->stack[spi]=
-.spilled_ptr,
-> +                                    idmap, exact))
-> +                               return false;
-> +                       continue;
-> +               }
+This patchset moves the current kernel testing livepatch modules from
+lib/livepatches to tools/testing/selftest/livepatch/test_modules, and compiles
+them as out-of-tree modules before testing.
 
-scalar_old =3D scalar_cur =3D NULL;
-if (is_spilled_unbound64(&old->..))
-    scalar_old =3D old->stack[spi].slot_type[0] =3D=3D STACK_SPILL ?
-&old->stack[spi].spilled_ptr : &unbound_reg;
-if (is_spilled_unbound64(&cur->..))
-    scalar_cur =3D cur->stack[spi].slot_type[0] =3D=3D STACK_SPILL ?
-&cur->stack[spi].spilled_ptr : &unbound_reg;
-if (scalar_old && scalar_cur) {
-    if (!regsafe(env, scalar_old, scalar_new, idmap, exact)
-        return false;
-    i +=3D BPF_REG_SIZE - 1;
-    continue;
-}
+There is also a new test being added. This new test exercises multiple processes
+calling a syscall, while a livepatch patched the syscall.
 
-where is_spilled_unbound64() would be basically `return
-is_spilled_unbound_scalar_reg64(&old->..) ||
-is_stack_unbound_slot64(&old->...)`;
+Why this move is an improvement:
+* The modules are now compiled as out-of-tree modules against the current
+  running kernel, making them capable of being tested on different systems with
+  newer or older kernels.
+* Such approach now needs kernel-devel package to be installed, since they are
+  out-of-tree modules. These can be generated by running "make rpm-pkg" in the
+  kernel source.
 
-Similarly for zero case? Though I'm wondering if zero case should be
-checked first, as it's actually a subset of is_spilled_unbound64 when
-it comes to STACK_ZERO/STACK_MISC mixes, no?
+What needs to be solved:
+* Currently gen_tar only packages the resulting binaries of the tests, and not
+  the sources. For the current approach, the newly added modules would be
+  compiled and then packaged. It works when testing on a system with the same
+  kernel version. But it will fail when running on a machine with different kernel
+  version, since module was compiled against the kernel currently running.
 
+  This is not a new problem, just aligning the expectations. For the current
+  approach to be truly system agnostic gen_tar would need to include the module
+  and program sources to be compiled in the target systems.
 
-> +
-> +               /* load of stack value with all ZERO slots produces scala=
-r value 0,
-> +                * call regsafe to ensure scalar ids are compared and pre=
-cision
-> +                * flags are taken into account.
-> +                */
-> +               if (is_spilled_scalar_reg64(&old->stack[spi]) &&
-> +                   is_stack_zero64(&cur->stack[spi])) {
-> +                       if (!regsafe(env, &old->stack[spi].spilled_ptr, &=
-zero_reg,
-> +                                    idmap, exact))
-> +                               return false;
-> +                       i +=3D BPF_REG_SIZE - 1;
-> +                       continue;
-> +               }
-> +
-> +               if (is_stack_zero64(&old->stack[spi]) &&
-> +                   is_spilled_scalar_reg64(&cur->stack[spi])) {
-> +                       if (!regsafe(env, &zero_reg, &cur->stack[spi].spi=
-lled_ptr,
-> +                                    idmap, exact))
-> +                               return false;
-> +                       i +=3D BPF_REG_SIZE - 1;
-> +                       continue;
-> +               }
-> +
->                 if (old->stack[spi].slot_type[i % BPF_REG_SIZE] =3D=3D ST=
-ACK_INVALID)
->                         continue;
->
-> --
-> 2.43.0
->
+Thanks in advance!
+  Marcos
+
+Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
+---
+Marcos Paulo de Souza (3):
+      kselftests: lib.mk: Add TEST_GEN_MODS_DIR variable
+      livepatch: Move tests from lib/livepatch to selftests/livepatch
+      selftests: livepatch: Test livepatching a heavily called syscall
+
+ Documentation/dev-tools/kselftest.rst              |   4 +
+ MAINTAINERS                                        |   1 -
+ arch/s390/configs/debug_defconfig                  |   1 -
+ arch/s390/configs/defconfig                        |   1 -
+ lib/Kconfig.debug                                  |  22 ----
+ lib/Makefile                                       |   2 -
+ lib/livepatch/Makefile                             |  14 ---
+ tools/testing/selftests/lib.mk                     |  25 ++++-
+ tools/testing/selftests/livepatch/Makefile         |   5 +-
+ tools/testing/selftests/livepatch/README           |  25 +++--
+ tools/testing/selftests/livepatch/config           |   1 -
+ tools/testing/selftests/livepatch/functions.sh     |  34 +++---
+ .../testing/selftests/livepatch/test-callbacks.sh  |  50 ++++-----
+ tools/testing/selftests/livepatch/test-ftrace.sh   |   6 +-
+ .../testing/selftests/livepatch/test-livepatch.sh  |  10 +-
+ .../selftests/livepatch/test-shadow-vars.sh        |   2 +-
+ tools/testing/selftests/livepatch/test-state.sh    |  18 ++--
+ tools/testing/selftests/livepatch/test-syscall.sh  |  53 ++++++++++
+ tools/testing/selftests/livepatch/test-sysfs.sh    |   6 +-
+ .../selftests/livepatch/test_klp-call_getpid.c     |  44 ++++++++
+ .../selftests/livepatch/test_modules/Makefile      |  20 ++++
+ .../test_modules}/test_klp_atomic_replace.c        |   0
+ .../test_modules}/test_klp_callbacks_busy.c        |   0
+ .../test_modules}/test_klp_callbacks_demo.c        |   0
+ .../test_modules}/test_klp_callbacks_demo2.c       |   0
+ .../test_modules}/test_klp_callbacks_mod.c         |   0
+ .../livepatch/test_modules}/test_klp_livepatch.c   |   0
+ .../livepatch/test_modules}/test_klp_shadow_vars.c |   0
+ .../livepatch/test_modules}/test_klp_state.c       |   0
+ .../livepatch/test_modules}/test_klp_state2.c      |   0
+ .../livepatch/test_modules}/test_klp_state3.c      |   0
+ .../livepatch/test_modules/test_klp_syscall.c      | 116 +++++++++++++++++++++
+ 32 files changed, 339 insertions(+), 121 deletions(-)
+---
+base-commit: 89ecef4cb0ac442d5ad48c1aae1e2e1e7744d46f
+change-id: 20231031-send-lp-kselftests-4c917dcd4565
+
+Best regards,
+-- 
+Marcos Paulo de Souza <mpdesouza@suse.com>
+
 
