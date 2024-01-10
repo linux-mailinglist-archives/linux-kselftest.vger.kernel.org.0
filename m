@@ -1,71 +1,72 @@
-Return-Path: <linux-kselftest+bounces-2788-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2789-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E349082932E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jan 2024 06:10:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3919829330
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jan 2024 06:10:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 81DA11F269BE
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jan 2024 05:10:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 76711280E95
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jan 2024 05:10:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5EF0CA4A;
-	Wed, 10 Jan 2024 05:10:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 076108BF7;
+	Wed, 10 Jan 2024 05:10:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="VualP6Tk"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="GHWuMtFp"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F73CDDA9
-	for <linux-kselftest@vger.kernel.org>; Wed, 10 Jan 2024 05:10:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93D51DDA1
+	for <linux-kselftest@vger.kernel.org>; Wed, 10 Jan 2024 05:10:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-205f223639fso2505967fac.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 09 Jan 2024 21:10:13 -0800 (PST)
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-204f50f305cso2531825fac.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 09 Jan 2024 21:10:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1704863412; x=1705468212; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1704863442; x=1705468242; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hqYcNWY0+b4B+ZSOG0sn5MgB4C9W0WVUcXjDmWofD1Y=;
-        b=VualP6TkUfHsIjmRB07FzILzkiQk8aUT4StQEsGMZPVngz6NTLiejhQpAcjItTlTMX
-         gDycuVtkj3RPxxCrCYCdgkEPjQ2+wKvj7C8GOU2VucCbkjsBy5Wt4N7ALv9KgW7XCnTK
-         moSDemU4A5teYf3TFFZnUoprQW7a4FjdL/vUw=
+        bh=tqFyBuMc6fS1E/k0UoQASz+hs9FQx1u1fDT0hLV9lNA=;
+        b=GHWuMtFpYIwoe42qRwZsGFubYEvh1fXTj969PaNa7K4dQN/p9bDPfxgRNmUvq/9AGs
+         9b6DLbFmS99hUBIjS7SuK82qHTDMjHSDRO/9oQ7uAS3Bc3SvgN6iUTflIXXE58lJ4EEC
+         ZiCY7ys7YxVM3PKQ3USzloKxPnkmx6tItLz/M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704863412; x=1705468212;
+        d=1e100.net; s=20230601; t=1704863442; x=1705468242;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hqYcNWY0+b4B+ZSOG0sn5MgB4C9W0WVUcXjDmWofD1Y=;
-        b=ZBTfLYZnd9EtqK/Lsa6gHAQuqd4zBns26sOaxZS4LPKNAUZz1b1mdib7G8OcBPR+vQ
-         WEbJOp1b0BgnyTveq4brRwFwwGgARLRknX6Msp42FSABgpvI77db3+zsk/tCDogt/cg3
-         4evBxFumGjInubiLPWwFM4VCDZ5REItYuga5LpZ0kEIbgQhXWCDddYFKM9i8FqrC2T+p
-         /akUqnzJwo4QXe7tTpiO3K8dkTl2Yxi2kMkp5q+OacUpjsnqOWulda266bUr3Mhpto/D
-         ZmR7ys1bwOjZyjz5FoBsU+be23qknpI3SgKGMaIEwvU4Q/ITlGXQiFzDQixfHOcUQ5Nx
-         3v/w==
-X-Gm-Message-State: AOJu0Yz5Ab6jBAIay5ux95IXTWDdbSnFQAXerLUxtTtofWzRiBo/2lEU
-	xxk6bUm4aMn6iJEhYbmIm67L52kiVNodicmwzK7RpCrQC/Jy
-X-Google-Smtp-Source: AGHT+IGNsvR7puufHhdh8BMcPQbS0gnnOxM0dRuq29mQYdK8iwWzGA1wLv0fQE2MxP5JUCfTd+Ie7pgIvAzCeOBeYqE=
-X-Received: by 2002:a05:6870:1b8e:b0:203:ea22:4d98 with SMTP id
- hm14-20020a0568701b8e00b00203ea224d98mr235952oab.87.1704863412576; Tue, 09
- Jan 2024 21:10:12 -0800 (PST)
+        bh=tqFyBuMc6fS1E/k0UoQASz+hs9FQx1u1fDT0hLV9lNA=;
+        b=QegTSUonxBge8I7EkNB9I8zC1ZguPr//ShNNbRT3k0zD1S7FLHftdSGj59jmC6oq3V
+         jVdiV3kjvhCqcisuvEeGiFaSFPsGLfiu7nhyToDTj1wO9RRHPXBs2rQVneHYVk+W+VII
+         VQGsAq3Cf7jJPuX14rx7sNWZDlC0pB9rs9Z8v4Qo37CGSb9NZ/6V8Kb0wVNuoQbduI7+
+         XiLKKw3h3YHw+uX7Q6Dh3O5DjKLkDF6ydoWf9rsU4EbPbP/ZRtQlRco4Dc3VKICn1WnG
+         fi/ifawQ/wi4tJz77Ie9TTAZrEO/N/z3jvrCXVtzSNq+harX8VPfYjigSUY8IX3ILDQm
+         4Tlg==
+X-Gm-Message-State: AOJu0YwhNmuZMAeVsJPxj6V+1ut56X2tBWrmQ0v6jEtw++jqc8KeCWy/
+	W5ae8sl9sLJ3riQwSSlIUtQ0uKbcOHYr9lnsfI5qPhHaEZX4
+X-Google-Smtp-Source: AGHT+IFzInwEpmPhc/U9+ydEplUFYyrbuwyIxW/doupjiq5FShE4fPsCc8x8D2TMy9+WDinLmFAW9YkJ/grsITlSt80=
+X-Received: by 2002:a05:6870:b296:b0:206:7b6:9700 with SMTP id
+ c22-20020a056870b29600b0020607b69700mr182118oao.41.1704863441699; Tue, 09 Jan
+ 2024 21:10:41 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240109154547.1839886-1-jeffxu@chromium.org> <202401091144.2C203AA7@keescook>
-In-Reply-To: <202401091144.2C203AA7@keescook>
+References: <20240109154547.1839886-1-jeffxu@chromium.org> <20240109154547.1839886-2-jeffxu@chromium.org>
+ <CAMuHMdWhHuhviuK=Ku-HUm_y9SzVPuubjiNfHS_jQMk4NRxJxg@mail.gmail.com>
+In-Reply-To: <CAMuHMdWhHuhviuK=Ku-HUm_y9SzVPuubjiNfHS_jQMk4NRxJxg@mail.gmail.com>
 From: Jeff Xu <jeffxu@chromium.org>
-Date: Tue, 9 Jan 2024 21:10:01 -0800
-Message-ID: <CABi2SkVGW5n0NJqa_1RHnXt=GEizm0ixvGiu+F_mStFwx7pjQw@mail.gmail.com>
-Subject: Re: [RFC PATCH v5 0/4] Introduce mseal()
-To: Kees Cook <keescook@chromium.org>
-Cc: akpm@linux-foundation.org, jannh@google.com, sroettger@google.com, 
-	willy@infradead.org, gregkh@linuxfoundation.org, 
+Date: Tue, 9 Jan 2024 21:10:30 -0800
+Message-ID: <CABi2SkVGPjeFEk7jUHHeckx9U+EuFW8ydf8oy92KCJcSHbiWNQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v5 1/4] mseal: Wire up mseal syscall
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: akpm@linux-foundation.org, keescook@chromium.org, jannh@google.com, 
+	sroettger@google.com, willy@infradead.org, gregkh@linuxfoundation.org, 
 	torvalds@linux-foundation.org, usama.anjum@collabora.com, jeffxu@google.com, 
 	jorgelo@chromium.org, groeck@chromium.org, linux-kernel@vger.kernel.org, 
 	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, pedro.falcato@gmail.com, 
@@ -73,28 +74,53 @@ Cc: akpm@linux-foundation.org, jannh@google.com, sroettger@google.com,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jan 9, 2024 at 11:47=E2=80=AFAM Kees Cook <keescook@chromium.org> w=
-rote:
+On Tue, Jan 9, 2024 at 10:32=E2=80=AFAM Geert Uytterhoeven <geert@linux-m68=
+k.org> wrote:
 >
-> On Tue, Jan 09, 2024 at 03:45:38PM +0000, jeffxu@chromium.org wrote:
-> > This patchset proposes a new mseal() syscall for the Linux kernel.
+> Hi Jeff,
 >
-> Thanks for continuing to work on this! Given Linus's general approval
-> on the v4, I think this series can also drop the "RFC" part -- this code
-> is looking to land. :)
+> On Tue, Jan 9, 2024 at 4:46=E2=80=AFPM <jeffxu@chromium.org> wrote:
+> > From: Jeff Xu <jeffxu@chromium.org>
+> >
+> > Wire up mseal syscall for all architectures.
+> >
+> > Signed-off-by: Jeff Xu <jeffxu@chromium.org>
 >
-OK.
-
-> Since we're in the merge window right now, it'll likely be a couple
-> weeks before akpm will consider putting this in -next. But given timing,
-> this means it'll have a long time to bake in -next, which is good.
+> Thanks for the update!
 >
-Thanks for the heads up.
+> > --- a/arch/m68k/kernel/syscalls/syscall.tbl
+> > +++ b/arch/m68k/kernel/syscalls/syscall.tbl
+> > @@ -456,3 +456,4 @@
+> >  454    common  futex_wake                      sys_futex_wake
+> >  455    common  futex_wait                      sys_futex_wait
+> >  456    common  futex_requeue                   sys_futex_requeue
+> > +457    common  mseal                           sys_mseal
+>
+> In the meantime, 457 and 458 are already taken by statmount() and
+> listmount():
+>
+Thanks! I will adjust that in the next version.
 -Jeff
 
-> -Kees
 
+
+
+-Jeff
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arc=
+h/m68k/kernel/syscalls/syscall.tbl#n459
+>
+> Gr{oetje,eeting}s,
+>
+>                         Geert
 >
 > --
-> Kees Cook
+> Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m6=
+8k.org
+>
+> In personal conversations with technical people, I call myself a hacker. =
+But
+> when I'm talking to journalists I just say "programmer" or something like=
+ that.
+>                                 -- Linus Torvalds
 
