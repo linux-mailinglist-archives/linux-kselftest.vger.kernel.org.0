@@ -1,420 +1,134 @@
-Return-Path: <linux-kselftest+bounces-2782-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2783-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D643982914E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jan 2024 01:25:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 94380829156
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jan 2024 01:27:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2B0BD1F25373
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jan 2024 00:25:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2D26B1F2630E
+	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jan 2024 00:27:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F64C396;
-	Wed, 10 Jan 2024 00:25:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19F5C391;
+	Wed, 10 Jan 2024 00:27:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="swnkg/6T";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="eFIj4b6w"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="I27gy5NA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1BDC1FB0;
-	Wed, 10 Jan 2024 00:25:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 002D1ECF
+	for <linux-kselftest@vger.kernel.org>; Wed, 10 Jan 2024 00:27:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id DC9FA21ADC;
-	Wed, 10 Jan 2024 00:25:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1704846310; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=WLSiYWehmEV9GnCmGPabJ3Bko0j0l0ICeNmJynChSdY=;
-	b=swnkg/6TKGJkvMJvihqPRgntfzloIpyRAYjq93IN9r9FjVVs3MrTo4rhVq48oACDE+P/hc
-	eZTR0BcvCFMTqhlUFXQRFdvmAPMuHsp4J7vgxvOAsCJ9Rpl1oA0Ib7e1nPCkC3P/NyTXod
-	yrG/fQHGdGz+AqcMGA/a4tpjgDiUIW8=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1704846309; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=WLSiYWehmEV9GnCmGPabJ3Bko0j0l0ICeNmJynChSdY=;
-	b=eFIj4b6w0+YuSbjDjzcTEjTnoPoHPyxRcHwI7vBLiCryghLu0G2LDLS+OOAMbmifpHCVdB
-	ST30PoAkKdsUPRWeByaDPonaffzkcOlmhedXrDjA7WxfmoyeqTjRBVQRo9MbLDswRmKqxx
-	swU1zchghui85dGqqrN8+32AUYdm7UA=
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 6862113786;
-	Wed, 10 Jan 2024 00:25:09 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id UribC+XjnWVHWwAAD6G6ig
-	(envelope-from <mpdesouza@suse.com>); Wed, 10 Jan 2024 00:25:09 +0000
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2cd053d5683so42303531fa.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 09 Jan 2024 16:27:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1704846462; x=1705451262; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=dyyk71hEnUH8o+yU27Ica0B5hnuq4HgZWd0sqVp36iI=;
+        b=I27gy5NAkrwS27o+UFWt4GiitEODjtHGgLvpf5U4To5GiFyiag8m/bFDjvClWkwzUq
+         tkbpI//Z2DDD0YMaktuC8E6fzZ2ibJ2XIcNqui5IU9DuQkR74seal/wjXaSEyUiVfCHR
+         PZCVydIffLiZGP3je/p+l9UhBSSIBcN+3MfwBydtCIk3NlPcF+WPu5sEBkkgT8PNJ6Pi
+         mkmTjxCEPZSzAkMZjO4LMktJpeYcZSor5h6QW3WAlYlnA+rCPBm6X8Q4uP/Ata0M1wFE
+         wAIhfaizSzyrkWEjfmLqUvg/6LlSuDQeiD3bsxYIlTpr4Ra3J/AEysl9Ms9V05takTqQ
+         ravg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704846462; x=1705451262;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dyyk71hEnUH8o+yU27Ica0B5hnuq4HgZWd0sqVp36iI=;
+        b=GtZc0dabDQ7egg/6NPaMBsAcjO4sXJhIPXAtOIWfZ/lp+bc7oZxyFKi+x4wY+4CnCg
+         W1e3uDxli2MAusjfB22EQ5L3zzbIVA5Tnynw5qDYqspNe/kfY1oRG5bYyBjscxJpnuO3
+         MZIVJTuXTy5hJx3hcaqSz/sXhCbHO1D9xw36GyaPVlc5zgn6hZOicDWl61Hna5h19/0y
+         lmM81YxZY/rpq/IItf1up77nfgvrevgIzFv1lzJo2VgjS0ogbSRB9dIWstEjfuOmJX15
+         Nb8Vv34wFigeO68haswnq45dgISo6nSBxW4gRnMZBu3TrvW/UTjoyfsKkvmxAlUvkayB
+         Yjcw==
+X-Gm-Message-State: AOJu0YxwwdrsZoGjDhyAasfeIyhDXDpecDZovcFtSmMz7CEleceRqHLw
+	ukrRhsvQzflf+L2W4DEnQcCeZC3aKyi31A==
+X-Google-Smtp-Source: AGHT+IHrPfMyoRcp9SJQJNfwgTAOMS35Hg1hTDLX2tyHfdnWr4LZ1cgREPzxpiaVrsGwmdO64/AgPA==
+X-Received: by 2002:a2e:98d3:0:b0:2cd:433:bdfc with SMTP id s19-20020a2e98d3000000b002cd0433bdfcmr88914ljj.5.1704846461991;
+        Tue, 09 Jan 2024 16:27:41 -0800 (PST)
+Received: from ?IPv6:2804:30c:1668:b300:8fcd:588d:fb77:ed04? ([2804:30c:1668:b300:8fcd:588d:fb77:ed04])
+        by smtp.gmail.com with ESMTPSA id bw10-20020a056638460a00b0046e33773c09sm940129jab.36.2024.01.09.16.27.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 Jan 2024 16:27:41 -0800 (PST)
+Message-ID: <79e4f9c604a8e2a9165a84473a7c5354dd11c2db.camel@suse.com>
+Subject: Re: [PATCH RESEND v4 1/3] kselftests: lib.mk: Add TEST_GEN_MODS_DIR
+ variable
 From: Marcos Paulo de Souza <mpdesouza@suse.com>
-Date: Tue, 09 Jan 2024 21:24:56 -0300
-Subject: [PATCH v5 3/3] selftests: livepatch: Test livepatching a heavily
- called syscall
+To: Shuah Khan <skhan@linuxfoundation.org>, Joe Lawrence
+	 <joe.lawrence@redhat.com>
+Cc: Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, Heiko
+ Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, Alexander
+ Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger
+ <borntraeger@linux.ibm.com>,  Sven Schnelle <svens@linux.ibm.com>, Josh
+ Poimboeuf <jpoimboe@kernel.org>, Jiri Kosina <jikos@kernel.org>,  Miroslav
+ Benes <mbenes@suse.cz>, Petr Mladek <pmladek@suse.com>, 
+ linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org, 
+ live-patching@vger.kernel.org
+Date: Tue, 09 Jan 2024 21:27:34 -0300
+In-Reply-To: <87b55a25-4288-4add-b2b3-0038ed41b08e@linuxfoundation.org>
+References: <20231220-send-lp-kselftests-v4-0-3458ec1b1a38@suse.com>
+	 <20231220-send-lp-kselftests-v4-1-3458ec1b1a38@suse.com>
+	 <ZZSOtsbzpy2mvmUC@redhat.com>
+	 <4fb169fd-393c-441e-b0f7-32a3777c1d11@linuxfoundation.org>
+	 <11c112df801008f6bc4b7813645d505388894e29.camel@suse.com>
+	 <87b55a25-4288-4add-b2b3-0038ed41b08e@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.1 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240109-send-lp-kselftests-v5-3-364d59a69f12@suse.com>
-References: <20240109-send-lp-kselftests-v5-0-364d59a69f12@suse.com>
-In-Reply-To: <20240109-send-lp-kselftests-v5-0-364d59a69f12@suse.com>
-To: Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
- Alexander Gordeev <agordeev@linux.ibm.com>, 
- Christian Borntraeger <borntraeger@linux.ibm.com>, 
- Sven Schnelle <svens@linux.ibm.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
- Jiri Kosina <jikos@kernel.org>, Miroslav Benes <mbenes@suse.cz>, 
- Petr Mladek <pmladek@suse.com>, Joe Lawrence <joe.lawrence@redhat.com>
-Cc: linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org, 
- live-patching@vger.kernel.org, Marcos Paulo de Souza <mpdesouza@suse.com>
-X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1704846294; l=8776;
- i=mpdesouza@suse.com; s=20231031; h=from:subject:message-id;
- bh=KnuBP1v6T7OUaEh2JpxjV5uTxbxsASDbJccBuI1AfIY=;
- b=7rWyBCXXamleAfCmtp28a+wUmkwPDB0kEvpdr7eIpGkIG0xHW6p3FkwV157pMqSim+8JkXyP4
- jfdmEhscgRHA7X0W0rClTSBlogzcQWVDFOhd9DxwE09/Q7jqxODoRxg
-X-Developer-Key: i=mpdesouza@suse.com; a=ed25519;
- pk=/Ni/TsKkr69EOmdZXkp1Q/BlzDonbOBRsfPa18ySIwU=
-X-Spam-Level: 
-Authentication-Results: smtp-out1.suse.de;
-	none
-X-Spam-Level: 
-X-Spam-Score: -3.80
-X-Spamd-Result: default: False [-3.80 / 50.00];
-	 ARC_NA(0.00)[];
-	 RCVD_VIA_SMTP_AUTH(0.00)[];
-	 BAYES_HAM(-3.00)[100.00%];
-	 FROM_HAS_DN(0.00)[];
-	 TO_DN_SOME(0.00)[];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 MIME_GOOD(-0.10)[text/plain];
-	 REPLY(-4.00)[];
-	 R_RATELIMIT(0.00)[to_ip_from(RL64puoyk87hsyf83pd56xsc3m)];
-	 RCVD_COUNT_THREE(0.00)[3];
-	 DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	 NEURAL_HAM_SHORT(-0.20)[-1.000];
-	 NEURAL_SPAM_LONG(3.50)[1.000];
-	 RCPT_COUNT_TWELVE(0.00)[18];
-	 DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:email,suse.de:email,suse.com:email];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 MIME_TRACE(0.00)[0:+];
-	 RCVD_TLS_ALL(0.00)[];
-	 MID_RHS_MATCH_FROM(0.00)[]
-X-Spam-Flag: NO
 
-The test proves that a syscall can be livepatched. It is interesting
-because syscalls are called a tricky way. Also the process gets
-livepatched either when sleeping in the userspace or when entering
-or leaving the kernel space.
+On Tue, 2024-01-09 at 12:31 -0700, Shuah Khan wrote:
+> On 1/8/24 10:13, Marcos Paulo de Souza wrote:
+> > On Wed, 2024-01-03 at 15:09 -0700, Shuah Khan wrote:
+>=20
+> > >=20
+> > > Copying source files and object files doesn't sound right. This
+> > > isn't
+> > > how the ksleftest installs work. Let's fix this.
+> >=20
+> > Hi Shuah,
+> >=20
+> > what do you think about the proposed solution? Could you please
+> > amend
+> > the fix into the first patch if you think it's the right approach?
+> >=20
+>=20
+> I would like to see a new revision of the patch series with the fix
+> to
+> the problem. I will pull this into a separate test branch for us all
+> to test different scenarios. I would like to make sure the repo will
+> stay clean after install in the case of when out of tree builds.
+>=20
+> Sorry I can't amend the patch as this isn't a trivial merge change.
+> This change requires more testing.
 
-The livepatch is a bit tricky:
-  1. The syscall function name is architecture specific. Also
-     ARCH_HAS_SYSCALL_WRAPPER must be taken in account.
+I sent a v5 of the patches. This new version has that diff that I sent
+earlier to avoid copying the Kbuild files. It worked on make install
+and with gen_tar.
 
-  2. The syscall must stay working the same way for other processes
-     on the system. It is solved by decrementing a counter only
-     for PIDs of the test processes. It means that the test processes
-     has to call the livepatched syscall at least once.
+Feel free to use this version in your test branch then.
 
-The test creates one userspace process per online cpu. The processes
-are calling getpid in a busy loop. The intention is to create random
-locations when the livepatch gets enabled. Nothing is guarantted.
-The magic is in the randomness.
+Thanks in advance,
+  Marcos
 
-Reviewed-by: Joe Lawrence <joe.lawrence@redhat.com>
-Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
----
- tools/testing/selftests/livepatch/Makefile         |   4 +-
- tools/testing/selftests/livepatch/test-syscall.sh  |  53 ++++++++++
- .../selftests/livepatch/test_klp-call_getpid.c     |  44 ++++++++
- .../selftests/livepatch/test_modules/Makefile      |   3 +-
- .../livepatch/test_modules/test_klp_syscall.c      | 116 +++++++++++++++++++++
- 5 files changed, 218 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/livepatch/Makefile b/tools/testing/selftests/livepatch/Makefile
-index 119e2bbebe5d..35418a4790be 100644
---- a/tools/testing/selftests/livepatch/Makefile
-+++ b/tools/testing/selftests/livepatch/Makefile
-@@ -1,5 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
- 
-+TEST_GEN_FILES := test_klp-call_getpid
- TEST_GEN_MODS_DIR := test_modules
- TEST_PROGS_EXTENDED := functions.sh
- TEST_PROGS := \
-@@ -8,7 +9,8 @@ TEST_PROGS := \
- 	test-shadow-vars.sh \
- 	test-state.sh \
- 	test-ftrace.sh \
--	test-sysfs.sh
-+	test-sysfs.sh \
-+	test-syscall.sh
- 
- TEST_FILES := settings
- 
-diff --git a/tools/testing/selftests/livepatch/test-syscall.sh b/tools/testing/selftests/livepatch/test-syscall.sh
-new file mode 100755
-index 000000000000..b76a881d4013
---- /dev/null
-+++ b/tools/testing/selftests/livepatch/test-syscall.sh
-@@ -0,0 +1,53 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+# Copyright (C) 2023 SUSE
-+# Author: Marcos Paulo de Souza <mpdesouza@suse.com>
-+
-+. $(dirname $0)/functions.sh
-+
-+MOD_SYSCALL=test_klp_syscall
-+
-+setup_config
-+
-+# - Start _NRPROC processes calling getpid and load a livepatch to patch the
-+#   getpid syscall. Check if all the processes transitioned to the livepatched
-+#   state.
-+
-+start_test "patch getpid syscall while being heavily hammered"
-+
-+for i in $(seq 1 $(getconf _NPROCESSORS_ONLN)); do
-+	./test_klp-call_getpid &
-+	pids[$i]="$!"
-+done
-+
-+pid_list=$(echo ${pids[@]} | tr ' ' ',')
-+load_lp $MOD_SYSCALL klp_pids=$pid_list
-+
-+# wait for all tasks to transition to patched state
-+loop_until 'grep -q '^0$' /sys/kernel/test_klp_syscall/npids'
-+
-+pending_pids=$(cat /sys/kernel/test_klp_syscall/npids)
-+log "$MOD_SYSCALL: Remaining not livepatched processes: $pending_pids"
-+
-+for pid in ${pids[@]}; do
-+	kill $pid || true
-+done
-+
-+disable_lp $MOD_SYSCALL
-+unload_lp $MOD_SYSCALL
-+
-+check_result "% insmod test_modules/$MOD_SYSCALL.ko klp_pids=$pid_list
-+livepatch: enabling patch '$MOD_SYSCALL'
-+livepatch: '$MOD_SYSCALL': initializing patching transition
-+livepatch: '$MOD_SYSCALL': starting patching transition
-+livepatch: '$MOD_SYSCALL': completing patching transition
-+livepatch: '$MOD_SYSCALL': patching complete
-+$MOD_SYSCALL: Remaining not livepatched processes: 0
-+% echo 0 > /sys/kernel/livepatch/$MOD_SYSCALL/enabled
-+livepatch: '$MOD_SYSCALL': initializing unpatching transition
-+livepatch: '$MOD_SYSCALL': starting unpatching transition
-+livepatch: '$MOD_SYSCALL': completing unpatching transition
-+livepatch: '$MOD_SYSCALL': unpatching complete
-+% rmmod $MOD_SYSCALL"
-+
-+exit 0
-diff --git a/tools/testing/selftests/livepatch/test_klp-call_getpid.c b/tools/testing/selftests/livepatch/test_klp-call_getpid.c
-new file mode 100644
-index 000000000000..ce321a2d7308
---- /dev/null
-+++ b/tools/testing/selftests/livepatch/test_klp-call_getpid.c
-@@ -0,0 +1,44 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2023 SUSE
-+ * Authors: Libor Pechacek <lpechacek@suse.cz>
-+ *          Marcos Paulo de Souza <mpdesouza@suse.com>
-+ */
-+
-+#include <stdio.h>
-+#include <unistd.h>
-+#include <sys/syscall.h>
-+#include <sys/types.h>
-+#include <signal.h>
-+
-+static int stop;
-+static int sig_int;
-+
-+void hup_handler(int signum)
-+{
-+	stop = 1;
-+}
-+
-+void int_handler(int signum)
-+{
-+	stop = 1;
-+	sig_int = 1;
-+}
-+
-+int main(int argc, char *argv[])
-+{
-+	long count = 0;
-+
-+	signal(SIGHUP, &hup_handler);
-+	signal(SIGINT, &int_handler);
-+
-+	while (!stop) {
-+		(void)syscall(SYS_getpid);
-+		count++;
-+	}
-+
-+	if (sig_int)
-+		printf("%ld iterations done\n", count);
-+
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/livepatch/test_modules/Makefile b/tools/testing/selftests/livepatch/test_modules/Makefile
-index 6f7c2103d27d..f5e880269bff 100644
---- a/tools/testing/selftests/livepatch/test_modules/Makefile
-+++ b/tools/testing/selftests/livepatch/test_modules/Makefile
-@@ -10,7 +10,8 @@ obj-m += test_klp_atomic_replace.o \
- 	test_klp_state.o \
- 	test_klp_state2.o \
- 	test_klp_state3.o \
--	test_klp_shadow_vars.o
-+	test_klp_shadow_vars.o \
-+	test_klp_syscall.o
- 
- modules:
- 	$(Q)$(MAKE) -C $(KDIR) modules KBUILD_EXTMOD=$(TESTMODS_DIR)
-diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c b/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
-new file mode 100644
-index 000000000000..619496cc3481
---- /dev/null
-+++ b/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
-@@ -0,0 +1,116 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (C) 2017-2023 SUSE
-+ * Authors: Libor Pechacek <lpechacek@suse.cz>
-+ *          Nicolai Stange <nstange@suse.de>
-+ *          Marcos Paulo de Souza <mpdesouza@suse.com>
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/kernel.h>
-+#include <linux/sched.h>
-+#include <linux/slab.h>
-+#include <linux/livepatch.h>
-+
-+#if defined(__x86_64__)
-+#define FN_PREFIX __x64_
-+#elif defined(__s390x__)
-+#define FN_PREFIX __s390x_
-+#elif defined(__aarch64__)
-+#define FN_PREFIX __arm64_
-+#else
-+/* powerpc does not select ARCH_HAS_SYSCALL_WRAPPER */
-+#define FN_PREFIX
-+#endif
-+
-+/* Protects klp_pids */
-+static DEFINE_MUTEX(kpid_mutex);
-+
-+static unsigned int npids, npids_pending;
-+static int klp_pids[NR_CPUS];
-+module_param_array(klp_pids, int, &npids_pending, 0);
-+MODULE_PARM_DESC(klp_pids, "Array of pids to be transitioned to livepatched state.");
-+
-+static ssize_t npids_show(struct kobject *kobj, struct kobj_attribute *attr,
-+			  char *buf)
-+{
-+	return sprintf(buf, "%u\n", npids_pending);
-+}
-+
-+static struct kobj_attribute klp_attr = __ATTR_RO(npids);
-+static struct kobject *klp_kobj;
-+
-+asmlinkage long lp_sys_getpid(void)
-+{
-+	int i;
-+
-+	mutex_lock(&kpid_mutex);
-+	if (npids_pending > 0) {
-+		for (i = 0; i < npids; i++) {
-+			if (current->pid == klp_pids[i]) {
-+				klp_pids[i] = 0;
-+				npids_pending--;
-+				break;
-+			}
-+		}
-+	}
-+	mutex_unlock(&kpid_mutex);
-+
-+	return task_tgid_vnr(current);
-+}
-+
-+static struct klp_func vmlinux_funcs[] = {
-+	{
-+		.old_name = __stringify(FN_PREFIX) "sys_getpid",
-+		.new_func = lp_sys_getpid,
-+	}, {}
-+};
-+
-+static struct klp_object objs[] = {
-+	{
-+		/* name being NULL means vmlinux */
-+		.funcs = vmlinux_funcs,
-+	}, {}
-+};
-+
-+static struct klp_patch patch = {
-+	.mod = THIS_MODULE,
-+	.objs = objs,
-+};
-+
-+static int livepatch_init(void)
-+{
-+	int ret;
-+
-+	klp_kobj = kobject_create_and_add("test_klp_syscall", kernel_kobj);
-+	if (!klp_kobj)
-+		return -ENOMEM;
-+
-+	ret = sysfs_create_file(klp_kobj, &klp_attr.attr);
-+	if (ret) {
-+		kobject_put(klp_kobj);
-+		return ret;
-+	}
-+
-+	/*
-+	 * Save the number pids to transition to livepatched state before the
-+	 * number of pending pids is decremented.
-+	 */
-+	npids = npids_pending;
-+
-+	return klp_enable_patch(&patch);
-+}
-+
-+static void livepatch_exit(void)
-+{
-+	kobject_put(klp_kobj);
-+}
-+
-+module_init(livepatch_init);
-+module_exit(livepatch_exit);
-+MODULE_LICENSE("GPL");
-+MODULE_INFO(livepatch, "Y");
-+MODULE_AUTHOR("Libor Pechacek <lpechacek@suse.cz>");
-+MODULE_AUTHOR("Nicolai Stange <nstange@suse.de>");
-+MODULE_AUTHOR("Marcos Paulo de Souza <mpdesouza@suse.com>");
-+MODULE_DESCRIPTION("Livepatch test: syscall transition");
-
--- 
-2.42.1
+>=20
+> thanks,
+> -- Shuah
+>=20
+>=20
+>=20
 
 
