@@ -1,211 +1,146 @@
-Return-Path: <linux-kselftest+bounces-2815-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2816-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91BCD82A38D
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jan 2024 22:52:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 25A7882A551
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jan 2024 01:46:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 44DF528973E
-	for <lists+linux-kselftest@lfdr.de>; Wed, 10 Jan 2024 21:52:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2A0791C22BE2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jan 2024 00:46:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82F7A4F886;
-	Wed, 10 Jan 2024 21:52:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E604A393;
+	Thu, 11 Jan 2024 00:46:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nmkZGwI9"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="iLYMN66F"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9C524F883;
-	Wed, 10 Jan 2024 21:52:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-5578485fc0eso3697430a12.1;
-        Wed, 10 Jan 2024 13:52:26 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BAFD62F
+	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jan 2024 00:46:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-6daa822be30so2220178b3a.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 10 Jan 2024 16:46:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1704923545; x=1705528345; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sPanO/SqIYc4Q6eykHNme3WnMQup3s9zl6+bSP5wmLg=;
-        b=nmkZGwI9Zh+lv8INMcwRVfV5cVSIClhY32atPnnNsIgEhj+Z+IxIo47Y36xPCngAPF
-         AGF6x3AObn2oIehTgBhpjAa9zlM4LrJPY9nJKl/2WS9nqTwdY2NI9R7xJgSfQZhSjjcN
-         Edd3LLz9PVk866PNQcUti1i/DounqAiRbGKbVI1wg3o7Fsji+ujRmZZV9XGPK0MmabWZ
-         Qkl/Re3ZQvZmNCCMQb4ILZMdveVoE3GJeenIKyIFzTHORcDAUPyHKgT6Ajbx7UqYuV7x
-         JMJ0sSM7oEchNt+AsiIbE+zlvyjgTPZ5Jwn842yXnlakmXnGFlT3oflvhY7NpgbUWON9
-         1Aow==
+        d=chromium.org; s=google; t=1704933967; x=1705538767; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=gueNhZrbsNiJzCN2gb4yLrjECQBWf6cwwXnoTcfXIT4=;
+        b=iLYMN66FKBdyLftqxvShVV6YPPjxaiH0A4bEAzAFXUh07Rtw7cg392gFExYv4aTjPp
+         8ZhTs0xsPpn6Xt3z7ZSCx9+l33aZXrNwfon+LzcPDHf5jEjnvZK8v7t2AiI8yLH+ugI3
+         SAixjT3vhp/BZBahYdq2dQahnHiGSuF9qMJow=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1704923545; x=1705528345;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sPanO/SqIYc4Q6eykHNme3WnMQup3s9zl6+bSP5wmLg=;
-        b=LmbodJT4IL9fYJauRUU2wHXBugCrqCB7HuHCmYzPgl56xHLYMx3T3G5TnWmV4bHN7J
-         y06pcjEy1fnji/vDOhmLlE2zBMNPYGsmh4fH76cAKNQ97Iehs3db9nQHUpHaYHED8D7f
-         XDMq53a3Trzljp3K8YfeqHFD5tdTrdoQVt1n3dRSqRGEKp4Oud7/sykbFEQF6MZebEas
-         Xo/HvCKSI3JGB8TIVFy/r6p9Uzn7GB7ciWV+wHepGbPktBlYMcYZAaKN9yjfkfmulYHv
-         ZVxbZZcRkzG8iFj0mr8ckzBVx0qLiuwTlSCws+Dd9kduIOd/3KBMj/nQQnurrY0jdDGa
-         lYDA==
-X-Gm-Message-State: AOJu0Yxn05JFDveO2y9ENGZBJ6VLnCWYrfDPj7aOlZCwY5dutmI4QWPO
-	9JWrtIIBf0UEJZZGGi6sbxKVTeP68lVkNjuptZM=
-X-Google-Smtp-Source: AGHT+IFz/cbzXiMwKfN1LO/rrM07hdScb89Zn3ZtGJ42uaFbatOGS5BcAqOOfFnp9R4hIwiKE8k1YAHTWxCLNrCuqRc=
-X-Received: by 2002:aa7:c954:0:b0:557:ed8b:c606 with SMTP id
- h20-20020aa7c954000000b00557ed8bc606mr65860edt.23.1704923544651; Wed, 10 Jan
- 2024 13:52:24 -0800 (PST)
+        d=1e100.net; s=20230601; t=1704933967; x=1705538767;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gueNhZrbsNiJzCN2gb4yLrjECQBWf6cwwXnoTcfXIT4=;
+        b=HJAW2FHIrpZZrvd73JTMnlsxQG6HpBumNdP0qbO82ePthPBNN5+RllQ6EzKXNFWdIW
+         hEJJX5wveS2ajK2mLk5U6g8/Po5Z9kl+CNwR6cvO1pNc2ZlirxfHjLSZgrroRb8KAUuQ
+         tyXQJdbax4TxMf9DqCWHwZPjSdt+g+Vmp6ASEj9Pzsd2qbr9tnJkTiUHdFUF/othqQ8W
+         ABfzUeeoDU/OdmmH6lTqreeTbcgDF6DjG1rfijr18ec8G4SkyYXjRjqDOjntoBzApEsB
+         yoBU02uW+qATMY0NJKOVEQrF928jSCRZJAv6EBzXvplsP4p3tBTycV5AXJRzW4H80j16
+         lYRg==
+X-Gm-Message-State: AOJu0YwWU9EsNmzoNaCJueh2Ex7sQX2OM+V1CVVypmZSiFNvxP707w88
+	d1so7Ll3SvShsqRWUKMrdwDBE6FnP+vS
+X-Google-Smtp-Source: AGHT+IGkiZ1hknB2+0UC/gxIH8jrVZxWAA/1vUWxP929828CA6Qm4M9e8Oxn46aJ8qOxkFFVf4GTPg==
+X-Received: by 2002:aa7:90d3:0:b0:6d9:a64c:c5d1 with SMTP id k19-20020aa790d3000000b006d9a64cc5d1mr504196pfk.26.1704933967538;
+        Wed, 10 Jan 2024 16:46:07 -0800 (PST)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id y2-20020a62b502000000b006dac91d6da5sm4071344pfe.68.2024.01.10.16.46.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 Jan 2024 16:46:06 -0800 (PST)
+Date: Wed, 10 Jan 2024 16:46:06 -0800
+From: Kees Cook <keescook@chromium.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: akpm@linux-foundation.org, llvm@lists.linux.dev,
+	patches@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	kvm@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-trace-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-crypto@vger.kernel.org,
+	linux-efi@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org, linux-media@vger.kernel.org,
+	linux-arch@vger.kernel.org, kasan-dev@googlegroups.com,
+	linux-mm@kvack.org, bridge@lists.linux.dev, netdev@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, ast@kernel.org,
+	daniel@iogearbox.net, andrii@kernel.org, mykolal@fb.com,
+	bpf@vger.kernel.org
+Subject: Re: [PATCH 0/3] Update LLVM Phabricator and Bugzilla links
+Message-ID: <202401101645.ED161519BA@keescook>
+References: <20240109-update-llvm-links-v1-0-eb09b59db071@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240108205209.838365-1-maxtram95@gmail.com> <20240108205209.838365-15-maxtram95@gmail.com>
- <CAEf4BzYizLHHYPg0yKu-no3toMLS3wSyA2V_wtnHAyn6Burofg@mail.gmail.com> <bf909ed6b01224e03f0b2770f041f5b3ecb4b218.camel@gmail.com>
-In-Reply-To: <bf909ed6b01224e03f0b2770f041f5b3ecb4b218.camel@gmail.com>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Wed, 10 Jan 2024 13:52:12 -0800
-Message-ID: <CAEf4BzaKS_f9uOorcCbsoui9KNRA0HxX8=A+9sNAq+1mJoy-kg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v2 14/15] bpf: Optimize state pruning for spilled scalars
-To: Eduard Zingerman <eddyz87@gmail.com>
-Cc: Maxim Mikityanskiy <maxtram95@gmail.com>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
-	Shung-Hsi Yu <shung-hsi.yu@suse.com>, John Fastabend <john.fastabend@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, KP Singh <kpsingh@kernel.org>, 
-	Stanislav Fomichev <sdf@google.com>, Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
-	Jesper Dangaard Brouer <hawk@kernel.org>, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240109-update-llvm-links-v1-0-eb09b59db071@kernel.org>
 
-On Wed, Jan 10, 2024 at 1:04=E2=80=AFPM Eduard Zingerman <eddyz87@gmail.com=
-> wrote:
->
-> On Tue, 2024-01-09 at 16:22 -0800, Andrii Nakryiko wrote:
-> [...]
-> > >  static bool stacksafe(struct bpf_verifier_env *env, struct bpf_func_=
-state *old,
-> > >                       struct bpf_func_state *cur, struct bpf_idmap *i=
-dmap, bool exact)
-> > >  {
-> > > +       struct bpf_reg_state unbound_reg =3D {};
-> > > +       struct bpf_reg_state zero_reg =3D {};
-> > >         int i, spi;
-> > >
-> > > +       __mark_reg_unknown(env, &unbound_reg);
-> > > +       __mark_reg_const_zero(env, &zero_reg);
-> > > +       zero_reg.precise =3D true;
-> >
-> > these are immutable, right? Would it make sense to set them up just
-> > once as static variables instead of initializing on each check?
->
-> Should be possible.
->
-> > > +
-> > >         /* walk slots of the explored stack and ignore any additional
-> > >          * slots in the current stack, since explored(safe) state
-> > >          * didn't use them
-> > > @@ -16484,6 +16524,49 @@ static bool stacksafe(struct bpf_verifier_en=
-v *env, struct bpf_func_state *old,
-> > >                         continue;
-> > >                 }
-> > >
-> >
-> > we didn't check that cur->stack[spi] is ok to access yet, it's done a
-> > bit later with `if (i >=3D cur->allocated_stack)`, if I'm not mistaken.
-> > So these checks would need to be moved a bit lower, probably.
->
-> Right. And it seems the issue is already present:
->
->                 if (exact &&
->                     old->stack[spi].slot_type[i % BPF_REG_SIZE] !=3D
->                     cur->stack[spi].slot_type[i % BPF_REG_SIZE])
->                         return false;
->
-> This is currently executed before `if (i >=3D cur->allocated_stack)` chec=
-k as well.
-> Introduced by another commit of mine :(
+On Tue, Jan 09, 2024 at 03:16:28PM -0700, Nathan Chancellor wrote:
+> This series updates all instances of LLVM Phabricator and Bugzilla links
+> to point to GitHub commits directly and LLVM's Bugzilla to GitHub issue
+> shortlinks respectively.
+> 
+> I split up the Phabricator patch into BPF selftests and the rest of the
+> kernel in case the BPF folks want to take it separately from the rest of
+> the series, there are obviously no dependency issues in that case. The
+> Bugzilla change was mechanical enough and should have no conflicts.
+> 
+> I am aiming this at Andrew and CC'ing other lists, in case maintainers
+> want to chime in, but I think this is pretty uncontroversial (famous
+> last words...).
+> 
+> ---
+> Nathan Chancellor (3):
+>       selftests/bpf: Update LLVM Phabricator links
+>       arch and include: Update LLVM Phabricator links
+>       treewide: Update LLVM Bugzilla links
+> 
+>  arch/arm64/Kconfig                                 |  4 +--
+>  arch/powerpc/Makefile                              |  4 +--
+>  arch/powerpc/kvm/book3s_hv_nested.c                |  2 +-
+>  arch/riscv/Kconfig                                 |  2 +-
+>  arch/riscv/include/asm/ftrace.h                    |  2 +-
+>  arch/s390/include/asm/ftrace.h                     |  2 +-
+>  arch/x86/power/Makefile                            |  2 +-
+>  crypto/blake2b_generic.c                           |  2 +-
+>  drivers/firmware/efi/libstub/Makefile              |  2 +-
+>  drivers/gpu/drm/amd/amdgpu/sdma_v4_4_2.c           |  2 +-
+>  drivers/media/test-drivers/vicodec/codec-fwht.c    |  2 +-
+>  drivers/regulator/Kconfig                          |  2 +-
+>  include/asm-generic/vmlinux.lds.h                  |  2 +-
+>  include/linux/compiler-clang.h                     |  2 +-
+>  lib/Kconfig.kasan                                  |  2 +-
+>  lib/raid6/Makefile                                 |  2 +-
+>  lib/stackinit_kunit.c                              |  2 +-
+>  mm/slab_common.c                                   |  2 +-
+>  net/bridge/br_multicast.c                          |  2 +-
+>  security/Kconfig                                   |  2 +-
+>  tools/testing/selftests/bpf/README.rst             | 32 +++++++++++-----------
+>  tools/testing/selftests/bpf/prog_tests/xdpwall.c   |  2 +-
+>  .../selftests/bpf/progs/test_core_reloc_type_id.c  |  2 +-
+>  23 files changed, 40 insertions(+), 40 deletions(-)
+> ---
+> base-commit: 0dd3ee31125508cd67f7e7172247f05b7fd1753a
+> change-id: 20240109-update-llvm-links-d03f9d649e1e
+> 
+> Best regards,
+> -- 
+> Nathan Chancellor <nathan@kernel.org>
+> 
 
-I guess we'll need to move that too, then
+Excellent! Thanks for doing this. I spot checked a handful I was
+familiar with and everything looks good to me.
 
->
-> > > +               /* load of stack value with all MISC and ZERO slots p=
-roduces unbounded
-> > > +                * scalar value, call regsafe to ensure scalar ids ar=
-e compared.
-> > > +                */
-> > > +               if (is_spilled_unbound_scalar_reg64(&old->stack[spi])=
- &&
-> > > +                   is_stack_unbound_slot64(env, &cur->stack[spi])) {
-> > > +                       i +=3D BPF_REG_SIZE - 1;
-> > > +                       if (!regsafe(env, &old->stack[spi].spilled_pt=
-r, &unbound_reg,
-> > > +                                    idmap, exact))
-> > > +                               return false;
-> > > +                       continue;
-> > > +               }
-> > > +
-> > > +               if (is_stack_unbound_slot64(env, &old->stack[spi]) &&
-> > > +                   is_spilled_unbound_scalar_reg64(&cur->stack[spi])=
-) {
-> > > +                       i +=3D BPF_REG_SIZE - 1;
-> > > +                       if (!regsafe(env,  &unbound_reg, &cur->stack[=
-spi].spilled_ptr,
-> > > +                                    idmap, exact))
-> > > +                               return false;
-> > > +                       continue;
-> > > +               }
-> >
-> > scalar_old =3D scalar_cur =3D NULL;
-> > if (is_spilled_unbound64(&old->..))
-> >     scalar_old =3D old->stack[spi].slot_type[0] =3D=3D STACK_SPILL ?
-> > &old->stack[spi].spilled_ptr : &unbound_reg;
-> > if (is_spilled_unbound64(&cur->..))
-> >     scalar_cur =3D cur->stack[spi].slot_type[0] =3D=3D STACK_SPILL ?
-> > &cur->stack[spi].spilled_ptr : &unbound_reg;
-> > if (scalar_old && scalar_cur) {
-> >     if (!regsafe(env, scalar_old, scalar_new, idmap, exact)
-> >         return false;
-> >     i +=3D BPF_REG_SIZE - 1;
-> >     continue;
-> > }
->
-> Ok, I'll switch to this.
-> (Although, I think old variant is a bit simpler to follow).
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-my goal was to eliminate duplicated logic inside each if and kind of
-showing at high level that we are comparing two "logically unbound
-scalars", regardless of whether that's STACK_xxx mix or spilled
-scalar.
-
-I haven't thought this through, but if we can simplify further to
-something like this:
-
-if (is_spilled_unbound64(old) && is_spilled_unbound64(cur)) {
-  scalar_cur =3D ...
-  scalar_old =3D ...
-  if (!regsafe(...))
-    return false;
-  i +=3D BPF_REG_SIZE - 1;
-}
-
-In general, this symmetry in two consecutive if conditions seems like
-an opportunity to simplify. But if you think it's more complicated,
-I'm fine with leaving it as is.
-
->
-> > where is_spilled_unbound64() would be basically `return
-> > is_spilled_unbound_scalar_reg64(&old->..) ||
-> > is_stack_unbound_slot64(&old->...)`;
-> >
-> > Similarly for zero case? Though I'm wondering if zero case should be
-> > checked first, as it's actually a subset of is_spilled_unbound64 when
-> > it comes to STACK_ZERO/STACK_MISC mixes, no?
->
-> Yes, makes sense.
->
-> [...]
+-- 
+Kees Cook
 
