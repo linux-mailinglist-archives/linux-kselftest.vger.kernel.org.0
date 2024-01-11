@@ -1,116 +1,116 @@
-Return-Path: <linux-kselftest+bounces-2817-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2818-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 195A882A5CD
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jan 2024 03:08:47 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 486BA82A5FC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jan 2024 03:26:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BC221282449
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jan 2024 02:08:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 462741C22EFE
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jan 2024 02:26:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63A9F7ED;
-	Thu, 11 Jan 2024 02:08:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="IH1ZeZrj"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A238804;
+	Thu, 11 Jan 2024 02:25:46 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
+Received: from h3cspam02-ex.h3c.com (smtp.h3c.com [60.191.123.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D31B810E1
-	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jan 2024 02:08:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Content-Type: text/plain;
-	charset=us-ascii
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1704938917;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=qmEEcsA0fyriEKAX8TlwhNLaVQANlK3RwRydup4EB8s=;
-	b=IH1ZeZrj6G+es7br9lTnFYyTgS8/NZ0PXntEb9/Z50vjKtlOktUF47bs/H13CEyBNEL2G4
-	Rtdm1BiJg+oE9KqACaizjUPUDDtYR5OwEN4CIDMNootAWjFqNFtLBWJ976MsR1q1AcffSr
-	nHPjaiVp52YhioD9c5kbusjZypUg/44=
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87EF67FC
+	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jan 2024 02:25:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=h3c.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=h3c.com
+Received: from mail.maildlp.com ([172.25.15.154])
+	by h3cspam02-ex.h3c.com with ESMTP id 40B2P3Oi095226;
+	Thu, 11 Jan 2024 10:25:03 +0800 (GMT-8)
+	(envelope-from hu.yadi@h3c.com)
+Received: from DAG6EX01-IMDC.srv.huawei-3com.com (unknown [10.62.14.10])
+	by mail.maildlp.com (Postfix) with ESMTP id 559F822D4780;
+	Thu, 11 Jan 2024 10:29:23 +0800 (CST)
+Received: from DAG6EX02-IMDC.srv.huawei-3com.com (10.62.14.11) by
+ DAG6EX01-IMDC.srv.huawei-3com.com (10.62.14.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.27; Thu, 11 Jan 2024 10:25:04 +0800
+Received: from DAG6EX02-IMDC.srv.huawei-3com.com ([fe80::4c21:7c89:4f9d:e4c4])
+ by DAG6EX02-IMDC.srv.huawei-3com.com ([fe80::4c21:7c89:4f9d:e4c4%16]) with
+ mapi id 15.02.1258.027; Thu, 11 Jan 2024 10:25:03 +0800
+From: Huyadi <hu.yadi@h3c.com>
+To: =?utf-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
+CC: "jmorris@namei.org" <jmorris@namei.org>,
+        "serge@hallyn.com"
+	<serge@hallyn.com>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "mathieu.desnoyers@efficios.com" <mathieu.desnoyers@efficios.com>,
+        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-security-module@vger.kernel.org"
+	<linux-security-module@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org"
+	<linux-kselftest@vger.kernel.org>,
+        "514118380@qq.com" <514118380@qq.com>
+Subject: =?utf-8?B?5Zue5aSNOiBbUEFUQ0ggdjJdIHNlbGZ0ZXN0cy9tb3ZlX21vdW50X3NldF9n?=
+ =?utf-8?Q?roup:Make_tests_build_with_old_libc?=
+Thread-Topic: [PATCH v2] selftests/move_mount_set_group:Make tests build with
+ old libc
+Thread-Index: AQHaQ5cFEyIWLbXjpU+9djDN1vXVNrDSzHOAgAEVTtA=
+Date: Thu, 11 Jan 2024 02:25:03 +0000
+Message-ID: <6c398076d4624691a97766bad168d975@h3c.com>
+References: <20240110072901.5873-1-hu.yadi@h3c.com>
+ <20240110.Yap9Aw9aeghu@digikod.net>
+In-Reply-To: <20240110.Yap9Aw9aeghu@digikod.net>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-sender-location: DAG2
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Subject: Re: [PATCH 1/1] selftests: mm: hugepage-vmemmap fails on 64K page
- size systems.
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Muchun Song <muchun.song@linux.dev>
-In-Reply-To: <20240110075351.f4b6f43e31629ddcb96503cc@linux-foundation.org>
-Date: Thu, 11 Jan 2024 10:07:58 +0800
-Cc: linux-kselftest@vger.kernel.org,
- Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
- Linux-MM <linux-mm@kvack.org>,
- linuxppc-dev@lists.ozlabs.org,
- LKML <linux-kernel@vger.kernel.org>,
- Geetika Moolchandani <geetika@linux.ibm.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <C3CE35A3-7663-4B8E-9E85-8F0C3CD7D9EC@linux.dev>
-References: <3b3a3ae37ba21218481c482a872bbf7526031600.1704865754.git.donettom@linux.vnet.ibm.com>
- <20240110075351.f4b6f43e31629ddcb96503cc@linux-foundation.org>
-To: Donet Tom <donettom@linux.vnet.ibm.com>,
- Andrew Morton <akpm@linux-foundation.org>
-X-Migadu-Flow: FLOW_OUT
+MIME-Version: 1.0
+X-DNSRBL: 
+X-SPAM-SOURCE-CHECK: pass
+X-MAIL:h3cspam02-ex.h3c.com 40B2P3Oi095226
 
-
-
-> On Jan 10, 2024, at 23:53, Andrew Morton <akpm@linux-foundation.org> =
-wrote:
->=20
-> (cc Muchun)
-> On Wed, 10 Jan 2024 14:03:35 +0530 Donet Tom =
-<donettom@linux.vnet.ibm.com> wrote:
->=20
->> The kernel sefltest mm/hugepage-vmemmap fails on architectures
->> which has different page size other than 4K. In hugepage-vmemmap
->> page size used is 4k so the pfn calculation will go wrong on systems
->> which has different page size .The length of MAP_HUGETLB memory must
->> be hugepage aligned but in hugepage-vmemmap map length is 2M so this
->> will not get aligned if the system has differnet hugepage size.
->>=20
->> Added  psize() to get the page size and default_huge_page_size() to
->> get the default hugepage size at run time, hugepage-vmemmap test pass
->> on powerpc with 64K page size and x86 with 4K page size.
->>=20
->> Result on powerpc without patch (page size 64K)
->> *# ./hugepage-vmemmap
->> Returned address is 0x7effff000000 whose pfn is 0
->> Head page flags (100000000) is invalid
->> check_page_flags: Invalid argument
->> *#
->>=20
->> Result on powerpc with patch (page size 64K)
->> *# ./hugepage-vmemmap
->> Returned address is 0x7effff000000 whose pfn is 600
->> *#
->>=20
->> Result on x86 with patch (page size 4K)
->> *# ./hugepage-vmemmap
->> Returned address is 0x7fc7c2c00000 whose pfn is 1dac00
->> *#
->>=20
->> Signed-off-by: Donet Tom <donettom@linux.vnet.ibm.com>
->> Reported-by : Geetika Moolchandani (geetika@linux.ibm.com)
->> Tested-by : Geetika Moolchandani (geetika@linux.ibm.com)
-
-Acked-by: Muchun Song <muchun.song@linux.dev>
-
->=20
-> I'll add=20
->=20
-> Fixes: b147c89cd429 ("selftests: vm: add a hugetlb test case")
-> Cc: <stable@vger.kernel.org>
-
-Yes. It should be a real bug fix.
-
-Thanks.
-
+DQo+T24gV2VkLCBKYW4gMTAsIDIwMjQgYXQgMDM6Mjk6MDFQTSArMDgwMCwgSHUgWWFkaSB3cm90
+ZToNCj4+IEZyb206ICJIdS5ZYWRpIiA8aHUueWFkaUBoM2MuY29tPg0KPj4gDQo+PiBSZXBsYWNl
+IFNZU188c3lzY2FsbD4gd2l0aCBfX05SXzxzeXNjYWxsPi4gIFVzaW5nIHRoZSBfX05SXzxzeXNj
+YWxsPiANCj4+IG5vdGF0aW9uLCBwcm92aWRlZCBieSBVQVBJLCBpcyB1c2VmdWwgdG8gYnVpbGQg
+dGVzdHMgb24gc3lzdGVtcyANCj4+IHdpdGhvdXQgdGhlIFNZU188c3lzY2FsbD4gZGVmaW5pdGlv
+bnMuDQo+DQo+VGhpcyBsb29rcyBhIGxvdCBsaWtlIHRoYXQuLi4NCj5odHRwczovL2dpdC5rZXJu
+ZWwub3JnL3N0YWJsZS9jLzg3MTI5ZWYxMzYwM2FlNDZjODJiY2QwOWVlZDk0OGFjZjA1MDZkYmIN
+Cg0KWWVzLCBJIHBpY2tlZCB1cCBjb21tZW50cyBmcm9tIGFib3ZlIGNvbW1pdCBpbiBvcmRlciBm
+b3IgY29uc2lzdGVudCwNCkkgd291bGQgc2VuZCB2MyBwYXRjaCBpZiBpdCBpcyBpbmFwcHJvcHJp
+YXRlLiANCg0KPj4gDQo+PiBSZXBsYWNlIFNZU19tb3ZlX21vdW50IHdpdGggX19OUl9tb3ZlX21v
+dW50DQo+PiANCj4+IFNpZ25lZC1vZmYtYnk6IEh1LllhZGkgPGh1LnlhZGlAaDNjLmNvbT4gU3Vn
+Z2VzdGVkLWJ5OkppYW8gDQo+PiA8amlhb3h1cG9AaDNjLmNvbT4gUmV2aWV3ZWQtYnk6QmVybGlu
+IDxiZXJsaW5AaDNjLmNvbT4NCj4+IC0tLQ0KPj4gQ2hhbmdlcyB2MSAtPiB2MjoNCj4+ICAtIEZp
+eCBtYWlsIG9mIFN1Z2dlc3RlZC1ieSBhbmQgUmV2aWV3ZWQtYnkNCj4+IA0KPj4gIC4uLi9tb3Zl
+X21vdW50X3NldF9ncm91cC9tb3ZlX21vdW50X3NldF9ncm91cF90ZXN0LmMgICAgICAgICAgfCA0
+ICsrLS0NCj4+ICAxIGZpbGUgY2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAyIGRlbGV0aW9ucygt
+KQ0KPj4gDQo+PiBkaWZmIC0tZ2l0IA0KPj4gYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9tb3Zl
+X21vdW50X3NldF9ncm91cC9tb3ZlX21vdW50X3NldF9ncm91cF90ZQ0KPj4gc3QuYyANCj4+IGIv
+dG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvbW92ZV9tb3VudF9zZXRfZ3JvdXAvbW92ZV9tb3VudF9z
+ZXRfZ3JvdXBfdGUNCj4+IHN0LmMgaW5kZXggNTBlZDVkNDc1ZGQxLi5iY2Y1MWQ3ODVhMzcgMTAw
+NjQ0DQo+PiAtLS0gDQo+PiBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL21vdmVfbW91bnRfc2V0
+X2dyb3VwL21vdmVfbW91bnRfc2V0X2dyb3VwX3RlDQo+PiBzdC5jDQo+PiArKysgYi90b29scy90
+ZXN0aW5nL3NlbGZ0ZXN0cy9tb3ZlX21vdW50X3NldF9ncm91cC9tb3ZlX21vdW50X3NldF9ncm91
+DQo+PiArKysgcF90ZXN0LmMNCj4+IEBAIC0yMTgsNyArMjE4LDcgQEAgc3RhdGljIGJvb2wgbW92
+ZV9tb3VudF9zZXRfZ3JvdXBfc3VwcG9ydGVkKHZvaWQpDQo+PiAgCWlmIChtb3VudChOVUxMLCBT
+RVRfR1JPVVBfRlJPTSwgTlVMTCwgTVNfU0hBUkVELCAwKSkNCj4+ICAJCXJldHVybiAtMTsNCj4+
+ICANCj4+IC0JcmV0ID0gc3lzY2FsbChTWVNfbW92ZV9tb3VudCwgQVRfRkRDV0QsIFNFVF9HUk9V
+UF9GUk9NLA0KPj4gKwlyZXQgPSBzeXNjYWxsKF9fTlJfbW92ZV9tb3VudCwgQVRfRkRDV0QsIFNF
+VF9HUk9VUF9GUk9NLA0KPj4gIAkJICAgICAgQVRfRkRDV0QsIFNFVF9HUk9VUF9UTywgTU9WRV9N
+T1VOVF9TRVRfR1JPVVApOw0KPj4gIAl1bW91bnQyKCIvdG1wIiwgTU5UX0RFVEFDSCk7DQo+PiAg
+DQo+PiBAQCAtMzYzLDcgKzM2Myw3IEBAIFRFU1RfRihtb3ZlX21vdW50X3NldF9ncm91cCwgY29t
+cGxleF9zaGFyaW5nX2NvcHlpbmcpDQo+PiAgCQkgICAgICAgQ0xPTkVfVk0gfCBDTE9ORV9GSUxF
+Uyk7IEFTU0VSVF9HVChwaWQsIDApOw0KPj4gIAlBU1NFUlRfRVEod2FpdF9mb3JfcGlkKHBpZCks
+IDApOw0KPj4gIA0KPj4gLQlBU1NFUlRfRVEoc3lzY2FsbChTWVNfbW92ZV9tb3VudCwgY2FfZnJv
+bS5tbnRmZCwgIiIsDQo+PiArCUFTU0VSVF9FUShzeXNjYWxsKF9fTlJfbW92ZV9tb3VudCwgY2Ff
+ZnJvbS5tbnRmZCwgIiIsDQo+PiAgCQkJICBjYV90by5tbnRmZCwgIiIsIE1PVkVfTU9VTlRfU0VU
+X0dST1VQDQo+PiAgCQkJICB8IE1PVkVfTU9VTlRfRl9FTVBUWV9QQVRIIHwgTU9WRV9NT1VOVF9U
+X0VNUFRZX1BBVEgpLA0KPj4gIAkJICAwKTsNCj4+IC0tDQo+PiAyLjIzLjANCj4+ICANCg==
 
