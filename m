@@ -1,131 +1,136 @@
-Return-Path: <linux-kselftest+bounces-2842-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2843-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F0E882AB34
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jan 2024 10:48:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 144DA82AD25
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jan 2024 12:14:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BC2DC286F47
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jan 2024 09:48:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BF283281BE4
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jan 2024 11:14:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87828125D2;
-	Thu, 11 Jan 2024 09:48:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97A7F15483;
+	Thu, 11 Jan 2024 11:13:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="b/Q+Dqre"
+	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="cKmWR6dd"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from smtp-bc08.mail.infomaniak.ch (smtp-bc08.mail.infomaniak.ch [45.157.188.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DA2E11C94;
-	Thu, 11 Jan 2024 09:48:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 40B9RHIM014131;
-	Thu, 11 Jan 2024 09:48:12 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : mime-version : content-transfer-encoding; s=pp1;
- bh=wvTLrgJ57dCimWAXoMI3h/eODrMhe93Bg5qydQtEB8g=;
- b=b/Q+DqreznMvgzwMVhSa/ng8ovwYCevntTmGvObxH3YJyxRY6ZH4pRrSLS2TGCBDFg8k
- ScLV3gB9gdzF5+o/X+dpS+SX3vq2EeT5xDDiuSHTZPVFH+jmhmLszIyNPMcLh5XgCm6a
- TpnAnMdnY6Lqe5Bb0JBTCN5/3L+da5wXFIJB2iyGCTfAnkoyJn/kgefyFuUgGwH6Bsls
- 0BWZs4dHHfkji7+amfElXetLq8793Doatmslc0Cpnry4KDHbZZLcwKsRGF2jHOvPwA8C
- hCe5mCxkQS57h6x1TJKFgCM10dmewjRbWCVXVq3j7/2On2AG3ArO/Xdt1IIE1FZqf3So Nw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vjdq7rhaf-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 11 Jan 2024 09:48:12 +0000
-Received: from m0353726.ppops.net (m0353726.ppops.net [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 40B9TY0F022689;
-	Thu, 11 Jan 2024 09:48:11 GMT
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3vjdq7rh97-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 11 Jan 2024 09:48:11 +0000
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 40B7RYIK022793;
-	Thu, 11 Jan 2024 09:48:10 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 3vfhjytudu-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 11 Jan 2024 09:48:10 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 40B9m7mU53018952
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 11 Jan 2024 09:48:07 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 054AA2004B;
-	Thu, 11 Jan 2024 09:48:07 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A7F1620043;
-	Thu, 11 Jan 2024 09:48:06 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Thu, 11 Jan 2024 09:48:06 +0000 (GMT)
-From: Nina Schoetterl-Glausch <nsg@linux.ibm.com>
-To: Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>
-Cc: Nina Schoetterl-Glausch <nsg@linux.ibm.com>,
-        David Hildenbrand <david@redhat.com>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: [PATCH v2] KVM: s390: selftest: memop: Fix undefined behavior
-Date: Thu, 11 Jan 2024 10:48:05 +0100
-Message-Id: <20240111094805.363047-1-nsg@linux.ibm.com>
-X-Mailer: git-send-email 2.40.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F7B414F88
+	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jan 2024 11:13:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
+Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
+	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4T9hqx0cJqzMq1bb;
+	Thu, 11 Jan 2024 11:13:49 +0000 (UTC)
+Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4T9hqv3yjdzr0;
+	Thu, 11 Jan 2024 12:13:47 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
+	s=20191114; t=1704971628;
+	bh=+Dx1y3NlPG0Oz8roNtugh3aPtZh2p+5yMmqeI1QIBEo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=cKmWR6dd9MEc0f1sWvXvwPne86uMgX6Rg0KeJVVsscclRS1cSJCPmDmTNkT/1XtcZ
+	 M9CkaQ17CndY2CFXQa2yAo/NkWO74ADRLKDwND8coyTVI9ArZiO6sunp1VX8yJVUIp
+	 eaoribqixdWDGKshebZ45tTsKaao8crTDJDZXE9U=
+Date: Thu, 11 Jan 2024 12:13:46 +0100
+From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
+To: Huyadi <hu.yadi@h3c.com>
+Cc: "jmorris@namei.org" <jmorris@namei.org>, 
+	"serge@hallyn.com" <serge@hallyn.com>, "shuah@kernel.org" <shuah@kernel.org>, 
+	"mathieu.desnoyers@efficios.com" <mathieu.desnoyers@efficios.com>, "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"linux-security-module@vger.kernel.org" <linux-security-module@vger.kernel.org>, 
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "514118380@qq.com" <514118380@qq.com>
+Subject: Re: =?utf-8?B?5Zue5aSNOiBbUEFUQ0ggdjJdIHNlbGZ0ZXN0cy9tb3ZlX21v?=
+ =?utf-8?Q?unt=5Fset=5Fgroup=3AMake?= tests build with old libc
+Message-ID: <20240111.aeth4shoo0Oo@digikod.net>
+References: <20240110072901.5873-1-hu.yadi@h3c.com>
+ <20240110.Yap9Aw9aeghu@digikod.net>
+ <6c398076d4624691a97766bad168d975@h3c.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: SWNQtjCMs4eHGBGLZhPsijYvBsEWshFL
-X-Proofpoint-GUID: K-ouiBLoaUNHAfKCJRF_77Hu4ecu9vgj
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2024-01-11_04,2024-01-10_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- suspectscore=0 phishscore=0 spamscore=0 clxscore=1011 impostorscore=0
- lowpriorityscore=0 bulkscore=0 priorityscore=1501 malwarescore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2401110079
+In-Reply-To: <6c398076d4624691a97766bad168d975@h3c.com>
+X-Infomaniak-Routing: alpha
 
-If an integer's type has x bits, shifting the integer left by x or more
-is undefined behavior.
-This can happen in the rotate function when attempting to do a rotation
-of the whole value by 0.
+On Thu, Jan 11, 2024 at 02:25:03AM +0000, Huyadi wrote:
+> 
+> >On Wed, Jan 10, 2024 at 03:29:01PM +0800, Hu Yadi wrote:
+> >> From: "Hu.Yadi" <hu.yadi@h3c.com>
+> >> 
+> >> Replace SYS_<syscall> with __NR_<syscall>.  Using the __NR_<syscall> 
+> >> notation, provided by UAPI, is useful to build tests on systems 
+> >> without the SYS_<syscall> definitions.
+> >
+> >This looks a lot like that...
+> >https://git.kernel.org/stable/c/87129ef13603ae46c82bcd09eed948acf0506dbb
+> 
+> Yes, I picked up comments from above commit in order for consistent,
+> I would send v3 patch if it is inappropriate. 
 
-Fixes: 0dd714bfd200 ("KVM: s390: selftest: memop: Add cmpxchg tests")
-Signed-off-by: Nina Schoetterl-Glausch <nsg@linux.ibm.com>
----
+This is not an issue at all to use the same wording if it makes sense.
+Actually, the description of v3 is less explanatory.  It might just be
+appropriate to reference past similar work. That would justify your
+work, add a precedent, and if there is any issue we could fix both
+changes.
 
-v1 -> v2:
-	use early return instead of modulus
+You can append this to the commit message (with the v2 description):
 
- tools/testing/selftests/kvm/s390x/memop.c | 2 ++
- 1 file changed, 2 insertions(+)
+Similar changes: commit 87129ef13603 ("selftests/landlock: Make tests
+build with old libc")
 
-diff --git a/tools/testing/selftests/kvm/s390x/memop.c b/tools/testing/selftests/kvm/s390x/memop.c
-index bb3ca9a5d731..4ec8d0181e8d 100644
---- a/tools/testing/selftests/kvm/s390x/memop.c
-+++ b/tools/testing/selftests/kvm/s390x/memop.c
-@@ -489,6 +489,8 @@ static __uint128_t rotate(int size, __uint128_t val, int amount)
- 
- 	amount = (amount + bits) % bits;
- 	val = cut_to_size(size, val);
-+	if (!amount)
-+		return val;
- 	return (val << (bits - amount)) | (val >> amount);
- }
- 
+Acked-by: Mickaël Salaün <mic@digikod.net>
 
-base-commit: 305230142ae0637213bf6e04f6d9f10bbcb74af8
--- 
-2.40.1
-
+> 
+> >> 
+> >> Replace SYS_move_mount with __NR_move_mount
+> >> 
+> >> Signed-off-by: Hu.Yadi <hu.yadi@h3c.com> Suggested-by:Jiao 
+> >> <jiaoxupo@h3c.com> Reviewed-by:Berlin <berlin@h3c.com>
+> >> ---
+> >> Changes v1 -> v2:
+> >>  - Fix mail of Suggested-by and Reviewed-by
+> >> 
+> >>  .../move_mount_set_group/move_mount_set_group_test.c          | 4 ++--
+> >>  1 file changed, 2 insertions(+), 2 deletions(-)
+> >> 
+> >> diff --git 
+> >> a/tools/testing/selftests/move_mount_set_group/move_mount_set_group_te
+> >> st.c 
+> >> b/tools/testing/selftests/move_mount_set_group/move_mount_set_group_te
+> >> st.c index 50ed5d475dd1..bcf51d785a37 100644
+> >> --- 
+> >> a/tools/testing/selftests/move_mount_set_group/move_mount_set_group_te
+> >> st.c
+> >> +++ b/tools/testing/selftests/move_mount_set_group/move_mount_set_grou
+> >> +++ p_test.c
+> >> @@ -218,7 +218,7 @@ static bool move_mount_set_group_supported(void)
+> >>  	if (mount(NULL, SET_GROUP_FROM, NULL, MS_SHARED, 0))
+> >>  		return -1;
+> >>  
+> >> -	ret = syscall(SYS_move_mount, AT_FDCWD, SET_GROUP_FROM,
+> >> +	ret = syscall(__NR_move_mount, AT_FDCWD, SET_GROUP_FROM,
+> >>  		      AT_FDCWD, SET_GROUP_TO, MOVE_MOUNT_SET_GROUP);
+> >>  	umount2("/tmp", MNT_DETACH);
+> >>  
+> >> @@ -363,7 +363,7 @@ TEST_F(move_mount_set_group, complex_sharing_copying)
+> >>  		       CLONE_VM | CLONE_FILES); ASSERT_GT(pid, 0);
+> >>  	ASSERT_EQ(wait_for_pid(pid), 0);
+> >>  
+> >> -	ASSERT_EQ(syscall(SYS_move_mount, ca_from.mntfd, "",
+> >> +	ASSERT_EQ(syscall(__NR_move_mount, ca_from.mntfd, "",
+> >>  			  ca_to.mntfd, "", MOVE_MOUNT_SET_GROUP
+> >>  			  | MOVE_MOUNT_F_EMPTY_PATH | MOVE_MOUNT_T_EMPTY_PATH),
+> >>  		  0);
+> >> --
+> >> 2.23.0
+> >>  
 
