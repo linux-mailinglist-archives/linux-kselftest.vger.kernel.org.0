@@ -1,210 +1,330 @@
-Return-Path: <linux-kselftest+bounces-2835-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2836-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A09B882A6E4
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jan 2024 05:12:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 346AE82A739
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jan 2024 06:20:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 183361F21FFF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jan 2024 04:12:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CBA1D282929
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jan 2024 05:20:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56F1515D5;
-	Thu, 11 Jan 2024 04:10:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EC9B1FD6;
+	Thu, 11 Jan 2024 05:20:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="asQJoT0o"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="j+M94Lc1"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C117ADF69;
-	Thu, 11 Jan 2024 04:10:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704946234; x=1736482234;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=sjL5Dfrqx7fX931BlScUsmc+6VABv8SzlS11acNijUI=;
-  b=asQJoT0oeFC4yI2fXJKJ0sZW3UljPh8MAM5s2Fkw00Pq87Ve3NDOGndd
-   SdtJycS7sx/GZfQsg/smnOF79ZxNV6apITivBFYkItyvGctxd3eGtyN2M
-   5DDT3Um4e9h3i5/tl0vIGr9YG2strzIW3i/f+n9DcTcd5IE6JDemmoBmp
-   1oX/Ed5a9v4sLiPOozPZNwJeaNttSrzuJ3mC+HIdy+h5HwGIDL00gCFNq
-   MpxHkBH2T4lKcJ3w6tNZ19virCUgqmsM0PUAGnfKXAjEXUACZSO9Rcun2
-   oHMjX6Cu6JFxRPByyA/Sp6T8z2Kbhy1fonvd/f/AaJkFjx/fvSfae7qHa
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10949"; a="389167702"
-X-IronPort-AV: E=Sophos;i="6.04,185,1695711600"; 
-   d="scan'208";a="389167702"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2024 20:10:34 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10949"; a="1113691918"
-X-IronPort-AV: E=Sophos;i="6.04,185,1695711600"; 
-   d="scan'208";a="1113691918"
-Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by fmsmga005.fm.intel.com with ESMTP; 10 Jan 2024 20:10:32 -0800
-From: Yi Liu <yi.l.liu@intel.com>
-To: joro@8bytes.org,
-	alex.williamson@redhat.com,
-	jgg@nvidia.com,
-	kevin.tian@intel.com,
-	robin.murphy@arm.com,
-	baolu.lu@linux.intel.com
-Cc: cohuck@redhat.com,
-	eric.auger@redhat.com,
-	nicolinc@nvidia.com,
-	kvm@vger.kernel.org,
-	mjrosato@linux.ibm.com,
-	chao.p.peng@linux.intel.com,
-	yi.l.liu@intel.com,
-	yi.y.sun@linux.intel.com,
-	peterx@redhat.com,
-	jasowang@redhat.com,
-	shameerali.kolothum.thodi@huawei.com,
-	lulu@redhat.com,
-	suravee.suthikulpanit@amd.com,
-	iommu@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	zhenzhong.duan@intel.com,
-	joao.m.martins@oracle.com,
-	xin.zeng@intel.com,
-	yan.y.zhao@intel.com,
-	j.granados@samsung.com,
-	binbin.wu@linux.intel.com
-Subject: [PATCH v11 8/8] iommu/vt-d: Add iotlb flush for nested domain
-Date: Wed, 10 Jan 2024 20:10:15 -0800
-Message-Id: <20240111041015.47920-9-yi.l.liu@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240111041015.47920-1-yi.l.liu@intel.com>
-References: <20240111041015.47920-1-yi.l.liu@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 401F91C2D
+	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jan 2024 05:19:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-428405a0205so117591cf.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 10 Jan 2024 21:19:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1704950399; x=1705555199; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UgeziysLb2J3LhlwEkz6N5kyQ2UlLlN8+orUb8FLk+4=;
+        b=j+M94Lc1to/hTbCLn85CpB12cMZuYOrgBewFxbwxb24qD7zQlY6fB0iyAsgZUkE7vf
+         a7z6sUSYXLrTC6YYgA4JBzOs6C213SCDOX5b2BLBdgUlw5ZaHg9LCisNUM4hOWu3h5uf
+         K5Fy1HskRclz8KWKRQ0vXJ7c4wW5PYOOZ0yq92c/64sZuAxrt5XwY/6qfSl6Rwq4dkmV
+         wGhBq9R4LRdU05RcGZa8K6XuaOFr6i3dU/esSNnmdSRmvEZEgh8QBHJtMo4HDejAAOop
+         Jc16jZkeozJSi3waEHvd/9+hAIVbXk8zMYKY37qxhouh3Z7Qk/ek6Q8D7ivW1zJJYls4
+         y5PQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704950399; x=1705555199;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UgeziysLb2J3LhlwEkz6N5kyQ2UlLlN8+orUb8FLk+4=;
+        b=ime+2549N/0sV5ThQh15Hj4uQJVd96hHRjN69IFirjJh+eKdNFssSfRiOZCdBSrdzS
+         mTg9QHahB1Id586fBtu+Bq7Xpx7RLRNYfnIGjEwtg9nIc3SNvN+w+NqoS+wzMPnYSFfh
+         vfzFzLKlJVKELUiAU23G60OJ76j/beqEYzORpGT8Dc7Lgwt75w9q8eztp3+Qy8zjMjPV
+         DowaQSqG1kya1C3AoIhrEU8thOd7S3GG/RqSteOkiqMpuJ/GsyyB7o06ZG7BoIAHk7z6
+         aR2twxvMdPcrOpd+JkTQCI1KMFmO6unEXQdFX9f+OuYrifVUTkJXI0xecmhOAuCkmAUS
+         f4ZQ==
+X-Gm-Message-State: AOJu0Yz7CmLgxeBs6eGZ/3dy9FLQ56wVPHKq+5t4ybmvRyBBFnH44Juu
+	hYb2QSEeL6hsP7SblV09jdm6vjAojIqeHxbDy55W7eyV6oVJ
+X-Google-Smtp-Source: AGHT+IEe8s9dpzI9ncLxh0Z+0oPzE8+94OJNpX+tnA36qrhzi0o9LTutmeb9aH99f60803+gXUvtn+zpbllNONpyBbM=
+X-Received: by 2002:a05:622a:609:b0:429:8fa1:e4c7 with SMTP id
+ z9-20020a05622a060900b004298fa1e4c7mr86121qta.0.1704950398872; Wed, 10 Jan
+ 2024 21:19:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240109154547.1839886-1-jeffxu@chromium.org> <20240109154547.1839886-5-jeffxu@chromium.org>
+ <e580030f-9d2e-485c-b62e-ada59f639ef7@infradead.org>
+In-Reply-To: <e580030f-9d2e-485c-b62e-ada59f639ef7@infradead.org>
+From: Jeff Xu <jeffxu@google.com>
+Date: Wed, 10 Jan 2024 21:19:21 -0800
+Message-ID: <CALmYWFsEL8bDEGh035QJO4y-UO0GLnkXeC=oKPEg+Z3yZ6td2Q@mail.gmail.com>
+Subject: Re: [RFC PATCH v5 4/4] mseal:add documentation
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: jeffxu@chromium.org, akpm@linux-foundation.org, keescook@chromium.org, 
+	jannh@google.com, sroettger@google.com, willy@infradead.org, 
+	gregkh@linuxfoundation.org, torvalds@linux-foundation.org, 
+	usama.anjum@collabora.com, jorgelo@chromium.org, groeck@chromium.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, pedro.falcato@gmail.com, dave.hansen@intel.com, 
+	linux-hardening@vger.kernel.org, deraadt@openbsd.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Lu Baolu <baolu.lu@linux.intel.com>
+On Wed, Jan 10, 2024 at 7:16=E2=80=AFPM Randy Dunlap <rdunlap@infradead.org=
+> wrote:
+>
+>
+>
+> On 1/9/24 07:45, jeffxu@chromium.org wrote:
+> > From: Jeff Xu <jeffxu@chromium.org>
+> >
+> > Add documentation for mseal().
+> >
+> > Signed-off-by: Jeff Xu <jeffxu@chromium.org>
+> > ---
+> >  Documentation/userspace-api/mseal.rst | 181 ++++++++++++++++++++++++++
+> >  1 file changed, 181 insertions(+)
+> >  create mode 100644 Documentation/userspace-api/mseal.rst
+> >
+> > diff --git a/Documentation/userspace-api/mseal.rst b/Documentation/user=
+space-api/mseal.rst
+> > new file mode 100644
+> > index 000000000000..1700ce5af218
+> > --- /dev/null
+> > +++ b/Documentation/userspace-api/mseal.rst
+> > @@ -0,0 +1,181 @@
+> > +.. SPDX-License-Identifier: GPL-2.0
+> > +
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > +Introduction of mseal
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > +
+> > +:Author: Jeff Xu <jeffxu@chromium.org>
+> > +
+> > +Modern CPUs support memory permissions such as RW and NX bits. The mem=
+ory
+> > +permission feature improves security stance on memory corruption bugs,=
+ i.e.
+> > +the attacker can=E2=80=99t just write to arbitrary memory and point th=
+e code to it,
+> > +the memory has to be marked with X bit, or else an exception will happ=
+en.
+> > +
+> > +Memory sealing additionally protects the mapping itself against
+> > +modifications. This is useful to mitigate memory corruption issues whe=
+re a
+> > +corrupted pointer is passed to a memory management system. For example=
+,
+> > +such an attacker primitive can break control-flow integrity guarantees
+> > +since read-only memory that is supposed to be trusted can become writa=
+ble
+> > +or .text pages can get remapped. Memory sealing can automatically be
+> > +applied by the runtime loader to seal .text and .rodata pages and
+> > +applications can additionally seal security critical data at runtime.
+> > +
+> > +A similar feature already exists in the XNU kernel with the
+> > +VM_FLAGS_PERMANENT flag [1] and on OpenBSD with the mimmutable syscall=
+ [2].
+> > +
+> > +User API
+> > +=3D=3D=3D=3D=3D=3D=3D=3D
+> > +Two system calls are involved in virtual memory sealing, mseal() and m=
+map().
+> > +
+> > +mseal()
+> > +-----------
+> > +The mseal() syscall has following signature:
+>
+>                        has the following signature:
+>
+> > +
+> > +``int mseal(void addr, size_t len, unsigned long flags)``
+> > +
+> > +**addr/len**: virtual memory address range.
+> > +
+> > +The address range set by ``addr``/``len`` must meet:
+> > +   - The start address must be in an allocated VMA.
+> > +   - The start address must be page aligned.
+> > +   - The end address (``addr`` + ``len``) must be in an allocated VMA.
+> > +   - no gap (unallocated memory) between start and end address.
+> > +
+> > +The ``len`` will be paged aligned implicitly by the kernel.
+> > +
+> > +**flags**: reserved for future use.
+> > +
+> > +**return values**:
+> > +
+> > +- ``0``: Success.
+> > +
+> > +- ``-EINVAL``:
+> > +    - Invalid input ``flags``.
+> > +    - The start address (``addr``) is not page aligned.
+> > +    - Address range (``addr`` + ``len``) overflow.
+> > +
+> > +- ``-ENOMEM``:
+> > +    - The start address (``addr``) is not allocated.
+> > +    - The end address (``addr`` + ``len``) is not allocated.
+> > +    - A gap (unallocated memory) between start and end address.
+> > +
+> > +- ``-EACCES``:
+> > +    - ``MAP_SEALABLE`` is not set during mmap().
+> > +
+> > +- ``-EPERM``:
+> > +    - sealing is supported only on 64 bit CPUs, 32-bit is not supporte=
+d.
+>
+>                                       64-bit
+>
+> > +
+> > +- For above error cases, users can expect the given memory range is
+> > +  unmodified, i.e. no partial update.
+> > +
+> > +- There might be other internal errors/cases not listed here, e.g.
+> > +  error during merging/splitting VMAs, or the process reaching the max
+> > +  number of supported VMAs. In those cases, partial updates to the giv=
+en
+> > +  memory range could happen. However, those cases shall be rare.
+>
+> s/shall/should/
+> unless you are predicting the future.
+>
+> > +
+> > +**Blocked operations after sealing**:
+> > +    Unmapping, moving to another location, and shrinking the size,
+> > +    via munmap() and mremap(), can leave an empty space, therefore
+> > +    can be replaced with a VMA with a new set of attributes.
+> > +
+> > +    Moving or expanding a different VMA into the current location,
+> > +    via mremap().
+> > +
+> > +    Modifying a VMA via mmap(MAP_FIXED).
+> > +
+> > +    Size expansion, via mremap(), does not appear to pose any
+> > +    specific risks to sealed VMAs. It is included anyway because
+> > +    the use case is unclear. In any case, users can rely on
+> > +    merging to expand a sealed VMA.
+> > +
+> > +    mprotect() and pkey_mprotect().
+> > +
+> > +    Some destructive madvice() behaviors (e.g. MADV_DONTNEED)
+> > +    for anonymous memory, when users don't have write permission to th=
+e
+> > +    memory. Those behaviors can alter region contents by discarding pa=
+ges,
+> > +    effectively a memset(0) for anonymous memory.
+> > +
+> > +**Note**:
+> > +
+> > +- mseal() only works on 64-bit CPUs, not 32-bit CPU.
+> > +
+> > +- users can call mseal() multiple times, mseal() on an already sealed =
+memory
+> > +  is a no-action (not error).
+> > +
+> > +- munseal() is not supported.
+> > +
+> > +mmap()
+> > +----------
+> > +``void *mmap(void* addr, size_t length, int prot, int flags, int fd,
+> > +off_t offset);``
+> > +
+> > +We add two changes in ``prot`` and ``flags`` of  mmap() related to
+> > +memory sealing.
+> > +
+> > +**prot**
+> > +
+> > +The ``PROT_SEAL`` bit in ``prot`` field of mmap().
+> > +
+> > +When present, it marks the memory is sealed since creation.
+> > +
+> > +This is useful as optimization because it avoids having to make two
+> > +system calls: one for mmap() and one for mseal().
+> > +
+> > +It's worth noting that even though the sealing is set via the
+> > +``prot`` field in mmap(), it can't be set in the ``prot``
+> > +field in later mprotect(). This is unlike the ``PROT_READ``,
+> > +``PROT_WRITE``, ``PROT_EXEC`` bits, e.g. if ``PROT_WRITE`` is not set =
+in
+> > +mprotect(), it means that the region is not writable.
+> > +
+> > +Setting ``PROT_SEAL`` implies setting ``MAP_SEALABLE`` below.
+> > +
+> > +**flags**
+> > +
+> > +The ``MAP_SEALABLE`` bit in the ``flags`` field of mmap().
+> > +
+> > +When present, it marks the map as sealable. A map created
+> > +without ``MAP_SEALABLE`` will not support sealing; In other words,
+>
+>                                              sealing. In
+>
+> > +mseal() will fail for such a map.
+> > +
+> > +
+> > +Applications that don't care about sealing will expect their
+> > +behavior unchanged. For those that need sealing support, opt-in
+>
+>                                                             opt in
+>
+> > +by adding ``MAP_SEALABLE`` in mmap().
+> > +
+> > +Note: for a map created without ``MAP_SEALABLE`` or a map created
+> > +with ``MAP_SEALABLE`` but not sealed yet, mmap(MAP_FIXED) can
+> > +change the sealable or sealing bit.
+> > +
+> > +Use Case:
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > +- glibc:
+> > +  The dynamic linker, during loading ELF executables, can apply sealin=
+g to
+> > +  non-writable memory segments.
+> > +
+> > +- Chrome browser: protect some security sensitive data-structures.
+> > +
+> > +Additional notes:
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > +As Jann Horn pointed out in [3], there are still a few ways to write
+> > +to RO memory, which is, in a way, by design. Those cases are not cover=
+ed
+> > +by mseal(). If applications want to block such cases, sandbox tools (s=
+uch as
+> > +seccomp, LSM, etc) might be considered.
+> > +
+> > +Those cases are:
+> > +
+> > +- Write to read-only memory through /proc/self/mem interface.
+> > +- Write to read-only memory through ptrace (such as PTRACE_POKETEXT).
+> > +- userfaultfd.
+> > +
+> > +The idea that inspired this patch comes from Stephen R=C3=B6ttger=E2=
+=80=99s work in V8
+> > +CFI [4]. Chrome browser in ChromeOS will be the first user of this API=
+.
+> > +
+> > +Reference:
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> > +[1] https://github.com/apple-oss-distributions/xnu/blob/1031c584a5e37a=
+ff177559b9f69dbd3c8c3fd30a/osfmk/mach/vm_statistics.h#L274
+> > +
+> > +[2] https://man.openbsd.org/mimmutable.2
+> > +
+> > +[3] https://lore.kernel.org/lkml/CAG48ez3ShUYey+ZAFsU2i1RpQn0a5eOs2hzQ=
+426FkcgnfUGLvA@mail.gmail.com
+> > +
+> > +[4] https://docs.google.com/document/d/1O2jwK4dxI3nRcOJuPYkonhTkNQfbmw=
+dvxQMyXgeaRHo/edit#heading=3Dh.bvaojj9fu6hc
+>
+Thanks. Will update in the next version.
+-Jeff
 
-This implements the .cache_invalidate_user() callback to support iotlb
-flush for nested domain.
-
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-Co-developed-by: Yi Liu <yi.l.liu@intel.com>
-Signed-off-by: Yi Liu <yi.l.liu@intel.com>
----
- drivers/iommu/intel/nested.c | 88 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 88 insertions(+)
-
-diff --git a/drivers/iommu/intel/nested.c b/drivers/iommu/intel/nested.c
-index b5a5563ab32c..1e866ed02fef 100644
---- a/drivers/iommu/intel/nested.c
-+++ b/drivers/iommu/intel/nested.c
-@@ -73,9 +73,97 @@ static void intel_nested_domain_free(struct iommu_domain *domain)
- 	kfree(to_dmar_domain(domain));
- }
- 
-+static void nested_flush_dev_iotlb(struct dmar_domain *domain, u64 addr,
-+				   unsigned mask)
-+{
-+	struct device_domain_info *info;
-+	unsigned long flags;
-+	u16 sid, qdep;
-+
-+	spin_lock_irqsave(&domain->lock, flags);
-+	list_for_each_entry(info, &domain->devices, link) {
-+		if (!info->ats_enabled)
-+			continue;
-+		sid = info->bus << 8 | info->devfn;
-+		qdep = info->ats_qdep;
-+		qi_flush_dev_iotlb(info->iommu, sid, info->pfsid,
-+				   qdep, addr, mask);
-+		quirk_extra_dev_tlb_flush(info, addr, mask,
-+					  IOMMU_NO_PASID, qdep);
-+	}
-+	spin_unlock_irqrestore(&domain->lock, flags);
-+}
-+
-+static void intel_nested_flush_cache(struct dmar_domain *domain, u64 addr,
-+				     unsigned long npages, bool ih)
-+{
-+	struct iommu_domain_info *info;
-+	unsigned long i;
-+	unsigned mask;
-+
-+	xa_for_each(&domain->iommu_array, i, info)
-+		qi_flush_piotlb(info->iommu,
-+				domain_id_iommu(domain, info->iommu),
-+				IOMMU_NO_PASID, addr, npages, ih);
-+
-+	if (!domain->has_iotlb_device)
-+		return;
-+
-+	if (npages == U64_MAX)
-+		mask = 64 - VTD_PAGE_SHIFT;
-+	else
-+		mask = ilog2(__roundup_pow_of_two(npages));
-+
-+	nested_flush_dev_iotlb(domain, addr, mask);
-+}
-+
-+static int intel_nested_cache_invalidate_user(struct iommu_domain *domain,
-+					      struct iommu_user_data_array *array)
-+{
-+	struct dmar_domain *dmar_domain = to_dmar_domain(domain);
-+	struct iommu_hwpt_vtd_s1_invalidate inv_entry;
-+	u32 index, processed = 0;
-+	int ret = 0;
-+
-+	if (array->type != IOMMU_HWPT_INVALIDATE_DATA_VTD_S1) {
-+		ret = -EINVAL;
-+		goto out;
-+	}
-+
-+	for (index = 0; index < array->entry_num; index++) {
-+		ret = iommu_copy_struct_from_user_array(&inv_entry, array,
-+							IOMMU_HWPT_INVALIDATE_DATA_VTD_S1,
-+							index, __reserved);
-+		if (ret)
-+			break;
-+
-+		if ((inv_entry.flags & ~IOMMU_VTD_INV_FLAGS_LEAF) ||
-+		    inv_entry.__reserved) {
-+			ret = -EOPNOTSUPP;
-+			break;
-+		}
-+
-+		if (!IS_ALIGNED(inv_entry.addr, VTD_PAGE_SIZE) ||
-+		    ((inv_entry.npages == U64_MAX) && inv_entry.addr)) {
-+			ret = -EINVAL;
-+			break;
-+		}
-+
-+		intel_nested_flush_cache(dmar_domain, inv_entry.addr,
-+					 inv_entry.npages,
-+					 inv_entry.flags & IOMMU_VTD_INV_FLAGS_LEAF);
-+		processed++;
-+	}
-+
-+out:
-+	array->entry_num = processed;
-+	return ret;
-+}
-+
- static const struct iommu_domain_ops intel_nested_domain_ops = {
- 	.attach_dev		= intel_nested_attach_dev,
- 	.free			= intel_nested_domain_free,
-+	.cache_invalidate_user	= intel_nested_cache_invalidate_user,
- };
- 
- struct iommu_domain *intel_nested_domain_alloc(struct iommu_domain *parent,
--- 
-2.34.1
-
+> --
+> #Randy
 
