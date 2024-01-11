@@ -1,119 +1,116 @@
-Return-Path: <linux-kselftest+bounces-2856-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2857-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1420882AFA8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jan 2024 14:27:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 983DB82AFCD
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jan 2024 14:37:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2316A1C236B2
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jan 2024 13:27:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BDC601C23EA2
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jan 2024 13:37:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF5E6171D3;
-	Thu, 11 Jan 2024 13:27:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4609418033;
+	Thu, 11 Jan 2024 13:37:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=digikod.net header.i=@digikod.net header.b="mEvfMIL8"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ZOCZCaqp"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from smtp-bc0e.mail.infomaniak.ch (smtp-bc0e.mail.infomaniak.ch [45.157.188.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4A9C171BB;
-	Thu, 11 Jan 2024 13:27:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=digikod.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=digikod.net
-Received: from smtp-2-0000.mail.infomaniak.ch (unknown [10.5.36.107])
-	by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4T9lp50cJjzMqlwl;
-	Thu, 11 Jan 2024 13:27:25 +0000 (UTC)
-Received: from unknown by smtp-2-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4T9lp40hDzzMpnPr;
-	Thu, 11 Jan 2024 14:27:23 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-	s=20191114; t=1704979644;
-	bh=NcqqHqbHcG+SCp8ggpuwIKesgMZhBMGU2oOkDWhEbbM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mEvfMIL8w/91vuf2+ilbVcjIHYmM1diMZINM0JzdDDczWXcvNNoaBmlCHuEJQnw3L
-	 BF4gtyQax3ytNPKu7AV8CoDCavZzV54n9xTZq2APhQB677qFd/Jar7UulQVKRDVU0Y
-	 Ili5KwP5JpLXiJb25B6Fasjvym0M9aOWUuRxGLpk=
-Date: Thu, 11 Jan 2024 14:27:22 +0100
-From: =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>
-To: Hu Yadi <hu.yadi@h3c.com>
-Cc: jmorris@namei.org, serge@hallyn.com, shuah@kernel.org, 
-	mathieu.desnoyers@efficios.com, linux-api@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-kselftest@vger.kernel.org, 514118380@qq.com, 
-	Christian Brauner <brauner@kernel.org>, linux-fsdevel@vger.kernel.org, 
-	Shuah Khan <skhan@linuxfoundation.org>
-Subject: Re: [PATCH v4] selftests/move_mount_set_group:Make tests build with
- old libc
-Message-ID: <20240111.mee0ohZie5he@digikod.net>
-References: <20240111113229.10820-1-hu.yadi@h3c.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CE801802D
+	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jan 2024 13:36:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-a2c375d2430so109203266b.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jan 2024 05:36:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1704980218; x=1705585018; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jZJk/zGzcW9P8tv4ZwjNAa3xZGwDose/eLLHnMc+PRQ=;
+        b=ZOCZCaqpvYZ3bBY5TBOaLdxkjUu0Y1M4qGDH2C54y64OKSEa8QfUguYNkfgPVtJro0
+         db/17QZmRTuwebhcRRnaTbj5InvAOEypdWtkCeWZkR3+vQRlu5UoOFFToqq/eDoZ4XGj
+         BrNEHry11dHIIh3S5LQUjyG+XDf+zJApF7Q9Z6AZ0+z00sbPlJOkuqgZaMhCUvnq1hEa
+         VKdqMYvzFVJnOsw7jiTm2JD3ke+pooTpjpG9yI4NYfe+p4nDy55RCopow29acp6vyVY1
+         Ik2fBVHId/o752TjMiKIZRHNYMw/ashOTOzN2dgKaWmy0vgx7Q4ST0AsH4stfnOcUf8F
+         B7hw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704980218; x=1705585018;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jZJk/zGzcW9P8tv4ZwjNAa3xZGwDose/eLLHnMc+PRQ=;
+        b=lTx1Dp6ai2W6nkRhfkFjEGx3QDPFkFxldCmmzJtz+MPS+tnkn7LLDdl+XC2u0k5daz
+         QOvRL49cNpnvLqxp7/2ZS4Q/n358Mn7/VDg3PPxzRsf3Wb0PZbL0tM+U8ODpc25SlXOI
+         6oTQO9s6KpH7ZT5S15U3E369s48T8RiLXkjy0cLtTKkJkdgV4P3rjUi9HUi5P8iZex+M
+         8NjHydFuIwHXXs8xYfz5vuJF2dHBoIfubNIIQw8yHkiIqW35rIWwkMuHD6uOFZnBFFrn
+         BC9PFkRWugVgUVrv6uC2Mpb5qypO5sznldJLO/cPlTHpDs1BtDmu8es+CaQZs9Etf7qq
+         FB9w==
+X-Gm-Message-State: AOJu0Yzo1TPdmngUEyH5kUbzxcIceQxL1SFdAfQToSEbKbIKYWO1vauh
+	Sc9QYqzsqYgbAwdIW7NuGqVIezvaepokVw==
+X-Google-Smtp-Source: AGHT+IGEU7aZg/2yhXR+7vRPuvW+00xt0POJADrekQintDzFcawk6SkTP6e5ed5ccxxZAhl88qmNuA==
+X-Received: by 2002:a17:906:71d4:b0:a28:e67e:9b36 with SMTP id i20-20020a17090671d400b00a28e67e9b36mr624635ejk.102.1704980218518;
+        Thu, 11 Jan 2024 05:36:58 -0800 (PST)
+Received: from alley ([176.114.240.50])
+        by smtp.gmail.com with ESMTPSA id c6-20020a17090603c600b00a2a4a6e1bc5sm583798eja.204.2024.01.11.05.36.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 Jan 2024 05:36:58 -0800 (PST)
+Date: Thu, 11 Jan 2024 14:36:56 +0100
+From: Petr Mladek <pmladek@suse.com>
+To: Marcos Paulo de Souza <mpdesouza@suse.com>
+Cc: Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Jiri Kosina <jikos@kernel.org>, Miroslav Benes <mbenes@suse.cz>,
+	Joe Lawrence <joe.lawrence@redhat.com>,
+	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+	live-patching@vger.kernel.org
+Subject: Re: [PATCH v5 3/3] selftests: livepatch: Test livepatching a heavily
+ called syscall
+Message-ID: <ZZ_u-ChoLo2AW_DE@alley>
+References: <20240109-send-lp-kselftests-v5-0-364d59a69f12@suse.com>
+ <20240109-send-lp-kselftests-v5-3-364d59a69f12@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240111113229.10820-1-hu.yadi@h3c.com>
-X-Infomaniak-Routing: alpha
+In-Reply-To: <20240109-send-lp-kselftests-v5-3-364d59a69f12@suse.com>
 
-On Thu, Jan 11, 2024 at 07:32:29PM +0800, Hu Yadi wrote:
-> From: "Hu.Yadi" <hu.yadi@h3c.com>
+On Tue 2024-01-09 21:24:56, Marcos Paulo de Souza wrote:
+> The test proves that a syscall can be livepatched. It is interesting
+> because syscalls are called a tricky way. Also the process gets
+> livepatched either when sleeping in the userspace or when entering
+> or leaving the kernel space.
 > 
-> Replace SYS_<syscall> with __NR_<syscall>.  Using the __NR_<syscall>
-> notation, provided by UAPI, is useful to build tests on systems without
-> the SYS_<syscall> definitions.
+> The livepatch is a bit tricky:
+>   1. The syscall function name is architecture specific. Also
+>      ARCH_HAS_SYSCALL_WRAPPER must be taken in account.
 > 
-> Replace SYS_move_mount with __NR_move_mount
+>   2. The syscall must stay working the same way for other processes
+>      on the system. It is solved by decrementing a counter only
+>      for PIDs of the test processes. It means that the test processes
+>      has to call the livepatched syscall at least once.
 > 
-> Similar changes: commit 87129ef13603 ("selftests/landlock: Make tests build with old libc")
+> The test creates one userspace process per online cpu. The processes
+> are calling getpid in a busy loop. The intention is to create random
+> locations when the livepatch gets enabled. Nothing is guarantted.
+> The magic is in the randomness.
 > 
-> Acked-by: Mickaël Salaün <mic@digikod.net>
+> Reviewed-by: Joe Lawrence <joe.lawrence@redhat.com>
+> Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
 
-Sorry, it should have been Reviewed-by: Mickaël Salaün <mic@digikod.net>
+Reviewed-by: Petr Mladek <pmladek@suse.com>
 
-Also, this is maintained by the VFS maintainers. I CCed three relevant addresses.
-
-> Signed-off-by: Hu.Yadi <hu.yadi@h3c.com>
-> Suggested-by: Jiao <jiaoxupo@h3c.com>
-> Reviewed-by: Berlin <berlin@h3c.com>
-> ---
-> Changes v4 -> v3:
->  - Adjust comments for consistent
->  - Add Acked-by
-> Changes v2 -> v3:
->  - Adjust comments
-> Changes v1 -> v2:
->  - Fix mail of Suggested-by and Reviewed-by
-> 
->  .../move_mount_set_group/move_mount_set_group_test.c          | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/move_mount_set_group/move_mount_set_group_test.c b/tools/testing/selftests/move_mount_set_group/move_mount_set_group_test.c
-> index 50ed5d475dd1..bcf51d785a37 100644
-> --- a/tools/testing/selftests/move_mount_set_group/move_mount_set_group_test.c
-> +++ b/tools/testing/selftests/move_mount_set_group/move_mount_set_group_test.c
-> @@ -218,7 +218,7 @@ static bool move_mount_set_group_supported(void)
->  	if (mount(NULL, SET_GROUP_FROM, NULL, MS_SHARED, 0))
->  		return -1;
->  
-> -	ret = syscall(SYS_move_mount, AT_FDCWD, SET_GROUP_FROM,
-> +	ret = syscall(__NR_move_mount, AT_FDCWD, SET_GROUP_FROM,
->  		      AT_FDCWD, SET_GROUP_TO, MOVE_MOUNT_SET_GROUP);
->  	umount2("/tmp", MNT_DETACH);
->  
-> @@ -363,7 +363,7 @@ TEST_F(move_mount_set_group, complex_sharing_copying)
->  		       CLONE_VM | CLONE_FILES); ASSERT_GT(pid, 0);
->  	ASSERT_EQ(wait_for_pid(pid), 0);
->  
-> -	ASSERT_EQ(syscall(SYS_move_mount, ca_from.mntfd, "",
-> +	ASSERT_EQ(syscall(__NR_move_mount, ca_from.mntfd, "",
->  			  ca_to.mntfd, "", MOVE_MOUNT_SET_GROUP
->  			  | MOVE_MOUNT_F_EMPTY_PATH | MOVE_MOUNT_T_EMPTY_PATH),
->  		  0);
-> -- 
-> 2.23.0
-> 
-> 
+Best Regards,
+Petr
 
