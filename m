@@ -1,237 +1,301 @@
-Return-Path: <linux-kselftest+bounces-2826-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2828-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 333B682A6BF
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jan 2024 05:06:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A96E82A6C9
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jan 2024 05:10:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AFA911F24222
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jan 2024 04:06:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF1D61F22052
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jan 2024 04:10:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9778D15D0;
-	Thu, 11 Jan 2024 04:05:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDB2D15A1;
+	Thu, 11 Jan 2024 04:10:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="q90eKb7K"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TdvQIXTM"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C1E010FD;
-	Thu, 11 Jan 2024 04:05:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <6a655e9f-9878-4292-9d16-f988c4bdfc73@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1704945949;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=oe8y6rx2nxJCVb5v6A3KEWIfmf39eOlQDxZDCZDQpSs=;
-	b=q90eKb7K7E7fJPyeOkcWuuQTXMX/wft3oCBjOBhlyiFmrgkyKMUJJweJzGZ7ubFNp8EHyV
-	GcPbNwdLXwLn7SNydULG8Gy/XrORJnr8NctjugZkNqq03qyefn2lSAbUGAAVNkmDZdUytt
-	a026lbDO23xBpkhnXEJJxhDMfDKiHMo=
-Date: Wed, 10 Jan 2024 20:05:36 -0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88C4410E8;
+	Thu, 11 Jan 2024 04:10:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1704946222; x=1736482222;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=fcNNOpnUiopxwxLLRjTPWlOodA82QG6wZAkZT6fx3fQ=;
+  b=TdvQIXTM28TQMle2kInTt5peBeiH+4mhY3ASSbKNshrmOXxCWEZt9eYY
+   2kbCVf75imbD0T7jy7U6wqAPORzewBSj+o1pvY6O5hFCuQbWLQ+zvqHcz
+   Rn6c4CnL/CkNMU1LqIQpaxpZVldRWOe7lYUpKuh/3l9nlWf7Sv8gsmGeA
+   BBEl/5AgdSrqEm+ZD4fgMQfz4P75HV7ED/tmIGm5WqgjS6ws62HNu80rc
+   BUFReiw0nGGSx+JErICcQUum8wYLlSRDcDAtlfxvg7oQqU8NR4lcKYZBG
+   O+q7Q6QRS62yj9Rb8DEb1+7kBz/9Psr+jDmFsQcHrC/mc2WDMoMVNGnZi
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10949"; a="389167600"
+X-IronPort-AV: E=Sophos;i="6.04,185,1695711600"; 
+   d="scan'208";a="389167600"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2024 20:10:21 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10949"; a="1113691776"
+X-IronPort-AV: E=Sophos;i="6.04,185,1695711600"; 
+   d="scan'208";a="1113691776"
+Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
+  by fmsmga005.fm.intel.com with ESMTP; 10 Jan 2024 20:10:19 -0800
+From: Yi Liu <yi.l.liu@intel.com>
+To: joro@8bytes.org,
+	alex.williamson@redhat.com,
+	jgg@nvidia.com,
+	kevin.tian@intel.com,
+	robin.murphy@arm.com,
+	baolu.lu@linux.intel.com
+Cc: cohuck@redhat.com,
+	eric.auger@redhat.com,
+	nicolinc@nvidia.com,
+	kvm@vger.kernel.org,
+	mjrosato@linux.ibm.com,
+	chao.p.peng@linux.intel.com,
+	yi.l.liu@intel.com,
+	yi.y.sun@linux.intel.com,
+	peterx@redhat.com,
+	jasowang@redhat.com,
+	shameerali.kolothum.thodi@huawei.com,
+	lulu@redhat.com,
+	suravee.suthikulpanit@amd.com,
+	iommu@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	zhenzhong.duan@intel.com,
+	joao.m.martins@oracle.com,
+	xin.zeng@intel.com,
+	yan.y.zhao@intel.com,
+	j.granados@samsung.com,
+	binbin.wu@linux.intel.com
+Subject: [PATCH v11 0/8] Add iommufd nesting (part 2/2)
+Date: Wed, 10 Jan 2024 20:10:07 -0800
+Message-Id: <20240111041015.47920-1-yi.l.liu@intel.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH 1/3] selftests/bpf: Update LLVM Phabricator links
-Content-Language: en-GB
-To: Nathan Chancellor <nathan@kernel.org>, akpm@linux-foundation.org
-Cc: llvm@lists.linux.dev, patches@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, kvm@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux-trace-kernel@vger.kernel.org,
- linux-s390@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-crypto@vger.kernel.org, linux-efi@vger.kernel.org,
- amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
- linux-media@vger.kernel.org, linux-arch@vger.kernel.org,
- kasan-dev@googlegroups.com, linux-mm@kvack.org, bridge@lists.linux.dev,
- netdev@vger.kernel.org, linux-security-module@vger.kernel.org,
- linux-kselftest@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, mykolal@fb.com, bpf@vger.kernel.org
-References: <20240109-update-llvm-links-v1-0-eb09b59db071@kernel.org>
- <20240109-update-llvm-links-v1-1-eb09b59db071@kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Yonghong Song <yonghong.song@linux.dev>
-In-Reply-To: <20240109-update-llvm-links-v1-1-eb09b59db071@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
 
+Nested translation is a hardware feature that is supported by many modern
+IOMMU hardwares. It has two stages (stage-1, stage-2) address translation
+to get access to the physical address. stage-1 translation table is owned
+by userspace (e.g. by a guest OS), while stage-2 is owned by kernel. Changes
+to stage-1 translation table should be followed by an IOTLB invalidation.
 
-On 1/9/24 2:16 PM, Nathan Chancellor wrote:
-> reviews.llvm.org was LLVM's Phabricator instances for code review. It
-> has been abandoned in favor of GitHub pull requests. While the majority
-> of links in the kernel sources still work because of the work Fangrui
-> has done turning the dynamic Phabricator instance into a static archive,
-> there are some issues with that work, so preemptively convert all the
-> links in the kernel sources to point to the commit on GitHub.
->
-> Most of the commits have the corresponding differential review link in
-> the commit message itself so there should not be any loss of fidelity in
-> the relevant information.
->
-> Additionally, fix a typo in the xdpwall.c print ("LLMV" -> "LLVM") while
-> in the area.
->
-> Link: https://discourse.llvm.org/t/update-on-github-pull-requests/71540/172
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Take Intel VT-d as an example, the stage-1 translation table is I/O page
+table. As the below diagram shows, guest I/O page table pointer in GPA
+(guest physical address) is passed to host and be used to perform the stage-1
+address translation. Along with it, modifications to present mappings in the
+guest I/O page table should be followed with an IOTLB invalidation.
 
-Ack with one nit below.
+    .-------------.  .---------------------------.
+    |   vIOMMU    |  | Guest I/O page table      |
+    |             |  '---------------------------'
+    .----------------/
+    | PASID Entry |--- PASID cache flush --+
+    '-------------'                        |
+    |             |                        V
+    |             |           I/O page table pointer in GPA
+    '-------------'
+Guest
+------| Shadow |---------------------------|--------
+      v        v                           v
+Host
+    .-------------.  .------------------------.
+    |   pIOMMU    |  |  FS for GIOVA->GPA     |
+    |             |  '------------------------'
+    .----------------/  |
+    | PASID Entry |     V (Nested xlate)
+    '----------------\.----------------------------------.
+    |             |   | SS for GPA->HPA, unmanaged domain|
+    |             |   '----------------------------------'
+    '-------------'
+Where:
+ - FS = First stage page tables
+ - SS = Second stage page tables
+<Intel VT-d Nested translation>
 
-Acked-by: Yonghong Song <yonghong.song@linux.dev>
+This series is based on the first part which was merged [1], this series is to
+add the cache invalidation interface or the userspace to invalidate cache after
+modifying the stage-1 page table. This includes both the iommufd changes and the
+VT-d driver changes.
 
-> ---
-> Cc: ast@kernel.org
-> Cc: daniel@iogearbox.net
-> Cc: andrii@kernel.org
-> Cc: mykolal@fb.com
-> Cc: bpf@vger.kernel.org
-> Cc: linux-kselftest@vger.kernel.org
-> ---
->   tools/testing/selftests/bpf/README.rst             | 32 +++++++++++-----------
->   tools/testing/selftests/bpf/prog_tests/xdpwall.c   |  2 +-
->   .../selftests/bpf/progs/test_core_reloc_type_id.c  |  2 +-
->   3 files changed, 18 insertions(+), 18 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/README.rst b/tools/testing/selftests/bpf/README.rst
-> index cb9b95702ac6..b9a493f66557 100644
-> --- a/tools/testing/selftests/bpf/README.rst
-> +++ b/tools/testing/selftests/bpf/README.rst
-> @@ -115,7 +115,7 @@ the insn 20 undoes map_value addition. It is currently impossible for the
->   verifier to understand such speculative pointer arithmetic.
->   Hence `this patch`__ addresses it on the compiler side. It was committed on llvm 12.
->   
-> -__ https://reviews.llvm.org/D85570
-> +__ https://github.com/llvm/llvm-project/commit/ddf1864ace484035e3cde5e83b3a31ac81e059c6
->   
->   The corresponding C code
->   
-> @@ -165,7 +165,7 @@ This is due to a llvm BPF backend bug. `The fix`__
->   has been pushed to llvm 10.x release branch and will be
->   available in 10.0.1. The patch is available in llvm 11.0.0 trunk.
->   
-> -__  https://reviews.llvm.org/D78466
-> +__  https://github.com/llvm/llvm-project/commit/3cb7e7bf959dcd3b8080986c62e10a75c7af43f0
->   
->   bpf_verif_scale/loop6.bpf.o test failure with Clang 12
->   ======================================================
-> @@ -204,7 +204,7 @@ r5(w5) is eventually saved on stack at insn #24 for later use.
->   This cause later verifier failure. The bug has been `fixed`__ in
->   Clang 13.
->   
-> -__  https://reviews.llvm.org/D97479
-> +__  https://github.com/llvm/llvm-project/commit/1959ead525b8830cc8a345f45e1c3ef9902d3229
->   
->   BPF CO-RE-based tests and Clang version
->   =======================================
-> @@ -221,11 +221,11 @@ failures:
->   - __builtin_btf_type_id() [0_, 1_, 2_];
->   - __builtin_preserve_type_info(), __builtin_preserve_enum_value() [3_, 4_].
->   
-> -.. _0: https://reviews.llvm.org/D74572
-> -.. _1: https://reviews.llvm.org/D74668
-> -.. _2: https://reviews.llvm.org/D85174
-> -.. _3: https://reviews.llvm.org/D83878
-> -.. _4: https://reviews.llvm.org/D83242
-> +.. _0: https://github.com/llvm/llvm-project/commit/6b01b465388b204d543da3cf49efd6080db094a9
-> +.. _1: https://github.com/llvm/llvm-project/commit/072cde03aaa13a2c57acf62d79876bf79aa1919f
-> +.. _2: https://github.com/llvm/llvm-project/commit/00602ee7ef0bf6c68d690a2bd729c12b95c95c99
-> +.. _3: https://github.com/llvm/llvm-project/commit/6d218b4adb093ff2e9764febbbc89f429412006c
-> +.. _4: https://github.com/llvm/llvm-project/commit/6d6750696400e7ce988d66a1a00e1d0cb32815f8
->   
->   Floating-point tests and Clang version
->   ======================================
-> @@ -234,7 +234,7 @@ Certain selftests, e.g. core_reloc, require support for the floating-point
->   types, which was introduced in `Clang 13`__. The older Clang versions will
->   either crash when compiling these tests, or generate an incorrect BTF.
->   
-> -__  https://reviews.llvm.org/D83289
-> +__  https://github.com/llvm/llvm-project/commit/a7137b238a07d9399d3ae96c0b461571bd5aa8b2
->   
->   Kernel function call test and Clang version
->   ===========================================
-> @@ -248,7 +248,7 @@ Without it, the error from compiling bpf selftests looks like:
->   
->     libbpf: failed to find BTF for extern 'tcp_slow_start' [25] section: -2
->   
-> -__ https://reviews.llvm.org/D93563
-> +__ https://github.com/llvm/llvm-project/commit/886f9ff53155075bd5f1e994f17b85d1e1b7470c
->   
->   btf_tag test and Clang version
->   ==============================
-> @@ -264,8 +264,8 @@ Without them, the btf_tag selftest will be skipped and you will observe:
->   
->     #<test_num> btf_tag:SKIP
->   
-> -.. _0: https://reviews.llvm.org/D111588
-> -.. _1: https://reviews.llvm.org/D111199
-> +.. _0: https://github.com/llvm/llvm-project/commit/a162b67c98066218d0d00aa13b99afb95d9bb5e6
-> +.. _1: https://github.com/llvm/llvm-project/commit/3466e00716e12e32fdb100e3fcfca5c2b3e8d784
->   
->   Clang dependencies for static linking tests
->   ===========================================
-> @@ -274,7 +274,7 @@ linked_vars, linked_maps, and linked_funcs tests depend on `Clang fix`__ to
->   generate valid BTF information for weak variables. Please make sure you use
->   Clang that contains the fix.
->   
-> -__ https://reviews.llvm.org/D100362
-> +__ https://github.com/llvm/llvm-project/commit/968292cb93198442138128d850fd54dc7edc0035
->   
->   Clang relocation changes
->   ========================
-> @@ -292,7 +292,7 @@ Here, ``type 2`` refers to new relocation type ``R_BPF_64_ABS64``.
->   To fix this issue, user newer libbpf.
->   
->   .. Links
-> -.. _clang reloc patch: https://reviews.llvm.org/D102712
-> +.. _clang reloc patch: https://github.com/llvm/llvm-project/commit/6a2ea84600ba4bd3b2733bd8f08f5115eb32164b
->   .. _kernel llvm reloc: /Documentation/bpf/llvm_reloc.rst
->   
->   Clang dependencies for the u32 spill test (xdpwall)
-> @@ -304,6 +304,6 @@ from running test_progs will look like:
->   
->   .. code-block:: console
->   
-> -  test_xdpwall:FAIL:Does LLVM have https://reviews.llvm.org/D109073? unexpected error: -4007
-> +  test_xdpwall:FAIL:Does LLVM have https://github.com/llvm/llvm-project/commit/ea72b0319d7b0f0c2fcf41d121afa5d031b319d5? unexpected error: -4007
->   
-> -__ https://reviews.llvm.org/D109073
-> +__ https://github.com/llvm/llvm-project/commit/ea72b0319d7b0f0c2fcf41d121afa5d031b319d
+Complete code can be found in [2], QEMU could can be found in [3].
 
-To be consistent with other links, could you add the missing last alnum '5' to the above link?
+At last, this is a team work together with Nicolin Chen, Lu Baolu. Thanks
+them for the help. ^_^. Look forward to your feedbacks.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/xdpwall.c b/tools/testing/selftests/bpf/prog_tests/xdpwall.c
-> index f3927829a55a..4599154c8e9b 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/xdpwall.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/xdpwall.c
-> @@ -9,7 +9,7 @@ void test_xdpwall(void)
->   	struct xdpwall *skel;
->   
->   	skel = xdpwall__open_and_load();
-> -	ASSERT_OK_PTR(skel, "Does LLMV have https://reviews.llvm.org/D109073?");
-> +	ASSERT_OK_PTR(skel, "Does LLVM have https://github.com/llvm/llvm-project/commit/ea72b0319d7b0f0c2fcf41d121afa5d031b319d5?");
->   
->   	xdpwall__destroy(skel);
->   }
-> diff --git a/tools/testing/selftests/bpf/progs/test_core_reloc_type_id.c b/tools/testing/selftests/bpf/progs/test_core_reloc_type_id.c
-> index 22aba3f6e344..6fc8b9d66e34 100644
-> --- a/tools/testing/selftests/bpf/progs/test_core_reloc_type_id.c
-> +++ b/tools/testing/selftests/bpf/progs/test_core_reloc_type_id.c
-> @@ -80,7 +80,7 @@ int test_core_type_id(void *ctx)
->   	 * to detect whether this test has to be executed, however strange
->   	 * that might look like.
->   	 *
-> -	 *   [0] https://reviews.llvm.org/D85174
-> +	 *   [0] https://github.com/llvm/llvm-project/commit/00602ee7ef0bf6c68d690a2bd729c12b95c95c99
->   	 */
->   #if __has_builtin(__builtin_preserve_type_info)
->   	struct core_reloc_type_id_output *out = (void *)&data.out;
->
+[1] https://lore.kernel.org/linux-iommu/20231026044216.64964-1-yi.l.liu@intel.com/ - merged
+[2] https://github.com/yiliu1765/iommufd/tree/iommufd_nesting
+[3] https://github.com/yiliu1765/qemu/tree/zhenzhong/wip/iommufd_nesting_rfcv1
+
+Change log:
+
+v11:
+ - Drop hw_error field in vtd cache invalidation uapi. devTLB invalidation
+   error is a serious security emergency requiring the host kernel to handle.
+   No need to expose it to userspace (especially given existing VMs doesn't
+   issue devTLB invalidation at all).
+ - The vtd qi_submit_sync() and related callers are reverted back to the
+   original state due to above drop.
+ - Align with the vtd path, drop the hw_error reporting in mock driver and
+   selftest as well since selftest is a demo of the real driver.
+ - Drop iommu_respond_struct_to_user_array() since no more driver want to
+   respond single entry in the user_array.
+ - Two typos from Wubinbin
+
+v10: https://lore.kernel.org/all/20240102143834.146165-1-yi.l.liu@intel.com/
+ - Minor tweak to patch 07 (Kevin)
+ - Rebase on top of 6.7-rc8
+
+v9: https://lore.kernel.org/linux-iommu/20231228150629.13149-1-yi.l.liu@intel.com/
+ - Add a test case which sets both IOMMU_TEST_INVALIDATE_FLAG_ALL and
+   IOMMU_TEST_INVALIDATE_FLAG_TRIGGER_ERROR in flags, and expect to succeed
+   and see an 'error'. (Kevin)
+ - Returns -ETIMEOUT in qi_check_fault() if caller is interested with the
+   fault when timeout happens. If not, the qi_submit_sync() will keep retry
+   hence unable to report the error back to user. For now, only the user cache
+   invalidation path has interest on the time out error. So this change only
+   affects the user cache invalidation path. Other path will still hang in
+   qi_submit_sync() when timeout happens. (Kevin)
+
+v8: https://lore.kernel.org/linux-iommu/20231227161354.67701-1-yi.l.liu@intel.com/
+ - Pass invalidation hint to the cache invalidation helper in the cache_invalidate_user
+   op path (Kevin)
+ - Move the devTLB invalidation out of info->iommu loop (Kevin, Weijiang)
+ - Clear *fault per restart in qi_submit_sync() to avoid acroos submission error
+   accumulation. (Kevin)
+ - Define the vtd cache invalidation uapi structure in separate patch (Kevin)
+ - Rename inv_error to be hw_error (Kevin)
+ - Rename 'reqs_uptr', 'req_type', 'req_len' and 'req_num' to be 'data_uptr',
+   'data_type', "entry_len' and 'entry_num" (Kevin)
+ - Allow user to set IOMMU_TEST_INVALIDATE_FLAG_ALL and IOMMU_TEST_INVALIDATE_FLAG_TRIGGER_ERROR
+   in the same time (Kevin)
+
+v7: https://lore.kernel.org/linux-iommu/20231221153948.119007-1-yi.l.liu@intel.com/
+ - Remove domain->ops->cache_invalidate_user check in hwpt alloc path due
+   to failure in bisect (Baolu)
+ - Remove out_driver_error_code from struct iommu_hwpt_invalidate after
+   discussion in v6. Should expect per-entry error code.
+ - Rework the selftest cache invalidation part to report a per-entry error
+ - Allow user to pass in an empty array to have a try-and-fail mechanism for
+   user to check if a given req_type is supported by the kernel (Jason)
+ - Define a separate enum type for cache invalidation data (Jason)
+ - Fix the IOMMU_HWPT_INVALIDATE to always update the req_num field before
+   returning (Nicolin)
+ - Merge the VT-d nesting part 2/2
+   https://lore.kernel.org/linux-iommu/20231117131816.24359-1-yi.l.liu@intel.com/
+   into this series to avoid defining empty enum in the middle of the series.
+   The major difference is adding the VT-d related invalidation uapi structures
+   together with the generic data structures in patch 02 of this series.
+ - VT-d driver was refined to report ICE/ITE error from the bottom cache
+   invalidation submit helpers, hence the cache_invalidate_user op could
+   report such errors via the per-entry error field to user. VT-d driver
+   will not stop the invalidation array walking due to the ICE/ITE errors
+   as such errors are defined by VT-d spec, userspace should be able to
+   handle it and let the real user (say Virtual Machine) know about it.
+   But for other errors like invalid uapi data structure configuration,
+   memory copy failure, such errors should stop the array walking as it
+   may have more issues if go on.
+ - Minor fixes per Jason and Kevin's review comments
+
+v6: https://lore.kernel.org/linux-iommu/20231117130717.19875-1-yi.l.liu@intel.com/
+ - No much change, just rebase on top of 6.7-rc1 as part 1/2 is merged
+
+v5: https://lore.kernel.org/linux-iommu/20231020092426.13907-1-yi.l.liu@intel.com/#t
+ - Split the iommufd nesting series into two parts of alloc_user and
+   invalidation (Jason)
+ - Split IOMMUFD_OBJ_HW_PAGETABLE to IOMMUFD_OBJ_HWPT_PAGING/_NESTED, and
+   do the same with the structures/alloc()/abort()/destroy(). Reworked the
+   selftest accordingly too. (Jason)
+ - Move hwpt/data_type into struct iommu_user_data from standalone op
+   arguments. (Jason)
+ - Rename hwpt_type to be data_type, the HWPT_TYPE to be HWPT_ALLOC_DATA,
+   _TYPE_DEFAULT to be _ALLOC_DATA_NONE (Jason, Kevin)
+ - Rename iommu_copy_user_data() to iommu_copy_struct_from_user() (Kevin)
+ - Add macro to the iommu_copy_struct_from_user() to calculate min_size
+   (Jason)
+ - Fix two bugs spotted by ZhaoYan
+
+v4: https://lore.kernel.org/linux-iommu/20230921075138.124099-1-yi.l.liu@intel.com/
+ - Separate HWPT alloc/destroy/abort functions between user-managed HWPTs
+   and kernel-managed HWPTs
+ - Rework invalidate uAPI to be a multi-request array-based design
+ - Add a struct iommu_user_data_array and a helper for driver to sanitize
+   and copy the entry data from user space invalidation array
+ - Add a patch fixing TEST_LENGTH() in selftest program
+ - Drop IOMMU_RESV_IOVA_RANGES patches
+ - Update kdoc and inline comments
+ - Drop the code to add IOMMU_RESV_SW_MSI to kernel-managed HWPT in nested translation,
+   this does not change the rule that resv regions should only be added to the
+   kernel-managed HWPT. The IOMMU_RESV_SW_MSI stuff will be added in later series
+   as it is needed only by SMMU so far.
+
+v3: https://lore.kernel.org/linux-iommu/20230724110406.107212-1-yi.l.liu@intel.com/
+ - Add new uAPI things in alphabetical order
+ - Pass in "enum iommu_hwpt_type hwpt_type" to op->domain_alloc_user for
+   sanity, replacing the previous op->domain_alloc_user_data_len solution
+ - Return ERR_PTR from domain_alloc_user instead of NULL
+ - Only add IOMMU_RESV_SW_MSI to kernel-managed HWPT in nested translation (Kevin)
+ - Add IOMMU_RESV_IOVA_RANGES to report resv iova ranges to userspace hence
+   userspace is able to exclude the ranges in the stage-1 HWPT (e.g. guest I/O
+   page table). (Kevin)
+ - Add selftest coverage for the new IOMMU_RESV_IOVA_RANGES ioctl
+ - Minor changes per Kevin's inputs
+
+v2: https://lore.kernel.org/linux-iommu/20230511143844.22693-1-yi.l.liu@intel.com/
+ - Add union iommu_domain_user_data to include all user data structures to avoid
+   passing void * in kernel APIs.
+ - Add iommu op to return user data length for user domain allocation
+ - Rename struct iommu_hwpt_alloc::data_type to be hwpt_type
+ - Store the invalidation data length in iommu_domain_ops::cache_invalidate_user_data_len
+ - Convert cache_invalidate_user op to be int instead of void
+ - Remove @data_type in struct iommu_hwpt_invalidate
+ - Remove out_hwpt_type_bitmap in struct iommu_hw_info hence drop patch 08 of v1
+
+v1: https://lore.kernel.org/linux-iommu/20230309080910.607396-1-yi.l.liu@intel.com/
+
+Thanks,
+	Yi Liu
+
+Lu Baolu (2):
+  iommu: Add cache_invalidate_user op
+  iommu/vt-d: Add iotlb flush for nested domain
+
+Nicolin Chen (4):
+  iommu: Add iommu_copy_struct_from_user_array helper
+  iommufd/selftest: Add mock_domain_cache_invalidate_user support
+  iommufd/selftest: Add IOMMU_TEST_OP_MD_CHECK_IOTLB test op
+  iommufd/selftest: Add coverage for IOMMU_HWPT_INVALIDATE ioctl
+
+Yi Liu (2):
+  iommufd: Add IOMMU_HWPT_INVALIDATE
+  iommufd: Add data structure for Intel VT-d stage-1 cache invalidation
+
+ drivers/iommu/intel/nested.c                  |  88 ++++++++++
+ drivers/iommu/iommufd/hw_pagetable.c          |  41 +++++
+ drivers/iommu/iommufd/iommufd_private.h       |  10 ++
+ drivers/iommu/iommufd/iommufd_test.h          |  23 +++
+ drivers/iommu/iommufd/main.c                  |   3 +
+ drivers/iommu/iommufd/selftest.c              |  76 +++++++++
+ include/linux/iommu.h                         |  79 +++++++++
+ include/uapi/linux/iommufd.h                  |  79 +++++++++
+ tools/testing/selftests/iommu/iommufd.c       | 152 ++++++++++++++++++
+ tools/testing/selftests/iommu/iommufd_utils.h |  57 +++++++
+ 10 files changed, 608 insertions(+)
+
+-- 
+2.34.1
+
 
