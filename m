@@ -1,208 +1,313 @@
-Return-Path: <linux-kselftest+bounces-2872-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2873-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E72A82B81B
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jan 2024 00:39:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4839582B821
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jan 2024 00:42:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A8ED7B20EE8
-	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jan 2024 23:39:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BC5952858CC
+	for <lists+linux-kselftest@lfdr.de>; Thu, 11 Jan 2024 23:42:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78CD259B6E;
-	Thu, 11 Jan 2024 23:39:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4140058132;
+	Thu, 11 Jan 2024 23:42:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tLRkQIdj"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Y88TDU2q"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4A0359B69
-	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jan 2024 23:39:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-5534180f0e9so2045a12.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jan 2024 15:39:28 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FF905A0F4
+	for <linux-kselftest@vger.kernel.org>; Thu, 11 Jan 2024 23:42:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-598b25eadeeso637615eaf.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jan 2024 15:42:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1705016367; x=1705621167; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=55KDX9V2vkObpP6E2DnxsVE9epovnEouYUNOhzieLO0=;
-        b=tLRkQIdjyxQ/9KHkn0ZzUfPqn+Pdt6k0B6S+PGbeK8wzHgXwrj3DTtN0d8TdNtULUC
-         v5d/ufwRpFqBjCnX24bYa6XWbcTi2Oibkf267nDmgExcEygzPI6VC0KSwtet7nq+dBHH
-         EFMKDSpsQvs+2g13upGjkadnluh6ZEN//zm46+lp8LeY49t8u29uCR2VjWX1URoCBz+1
-         ud5KC7fHyAuofO5kvoMibQoCkKecw420M37e1w5dFOI3XEOiI9V8Y7UsoKRp2lVyESGa
-         o0YRo+N5VkpIW/IaYSW5jY+ZZIK1/wAllh382mCnY8XpJdI9QJeAbfxG6zjYJ65C3Vjy
-         71CA==
+        d=chromium.org; s=google; t=1705016547; x=1705621347; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nQ88mFK7sFkh1njhDonNomw1p3DChoUnv33VvGn+i0U=;
+        b=Y88TDU2qLsyBHXrbxCt15SpxMKvQA95tSBYqW75K8tFF5AXm3PuLvdWuy54kYXLSiq
+         rh5VZHzcFfnU0lyzglAZKgGcloT+fhbTvbC6X6NqE/uR4NvrE+5xJltd/ueRYFhdPJNx
+         k1s5v7A9mDB9ct8f9pcj5DkYJTzM66D/e5M64=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705016367; x=1705621167;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1705016547; x=1705621347;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=55KDX9V2vkObpP6E2DnxsVE9epovnEouYUNOhzieLO0=;
-        b=t4Oqh5gvEoQzhRbjCqsJDoyAHTHEE4xCscqvcXl+ZZ3Fj9sCj2yw9sp/QCCqAFWLED
-         9wVJ6jTF84sz4fE2rikKy48nH9Zq8XLsWVumvN5ZjAdB1yqtly2VGmNdRN299ziqDBWo
-         DYY8f3NVmOP7ieRm3gfF6+LJEhJEehnrhh1EWekRlZnmBByubBb7V8uce+2KtCotnq/a
-         Ev4CBs0WwfV1ulCtbMCVNJZcxvM8+b1VK2Vk4xg/l9ktrDuCdV/+OH0eZE+l2aNDJ/aQ
-         B4/6eib2IOVUpkCgCLYYuJ+0t5VqC9wqosXY08oRahIqkhudHU9EoRkc+B5ZnXGOIyfJ
-         PoFA==
-X-Gm-Message-State: AOJu0YzoQOXNtnKbqFxundhBeYwiAHQQDr7PhBFonPcznCfDPSpX8uFm
-	6e6cv8IMaIpQN6CR+s6CRJqwz4pJdpQ6diRjAlvmmHcz6P/U
-X-Google-Smtp-Source: AGHT+IEHqAByhVT5g2KkHutWjnSZzw81yvlGwS8DeLvk0yvLrPrQwI24UxBWg5pjsj0H3bQe+C+CAeDAcVbgRRN2S8w=
-X-Received: by 2002:a05:6402:c0c:b0:557:a991:6c40 with SMTP id
- co12-20020a0564020c0c00b00557a9916c40mr198682edb.3.1705016366962; Thu, 11 Jan
- 2024 15:39:26 -0800 (PST)
+        bh=nQ88mFK7sFkh1njhDonNomw1p3DChoUnv33VvGn+i0U=;
+        b=gdjgsZCOb/JhEypqZfA8ov10xiNiTXlTrQuRVi897/zaHRJ+4APFj9Adsx2ZI8cqUx
+         uB6ubPwVYOlVoZOf+L+9YphQ7XZxKhuVJMYoNwl04+eNfGYe/lS7FgfxpEsX7/gC4xht
+         D8YlStyomgUasp4zXxpluE5C1IWmtQFox3jlo3kpF7/E6pI6zfp8mB4en0ZCy3lwxczn
+         XExxDpjPNJ6Al0CIs5qdU0p7BIR7skJOoEcYrEdls3hykB4uG1og7iuk0FSD3bpN2cHU
+         iuUfdU3SLQ5FPO6lDkIFnB3WgjPH+jVzCU4N/ASnTPe0+vGOYBLzQNyn4w9f51rfr88k
+         bLjQ==
+X-Gm-Message-State: AOJu0YwRklBo7W+F3uggt8oUHa7qJsvwxKQsX/sRUagF99IUjPwWP6wo
+	y0IDW3vYdGLafbovwqBmyWs62MPMc+jM
+X-Google-Smtp-Source: AGHT+IFnuGh6CbgifPotsFGdhRSuRfjLegeHtIDMuAskzoqgzDFGpw7dCKrIqYFRDmH/OzHEpxULTA==
+X-Received: by 2002:a05:6359:504a:b0:172:d476:3f33 with SMTP id om10-20020a056359504a00b00172d4763f33mr1097417rwb.53.1705016547235;
+        Thu, 11 Jan 2024 15:42:27 -0800 (PST)
+Received: from localhost (34.85.168.34.bc.googleusercontent.com. [34.168.85.34])
+        by smtp.gmail.com with UTF8SMTPSA id c23-20020aa78817000000b006d96dc803b3sm1847158pfo.12.2024.01.11.15.42.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 Jan 2024 15:42:26 -0800 (PST)
+From: jeffxu@chromium.org
+To: akpm@linux-foundation.org,
+	keescook@chromium.org,
+	jannh@google.com,
+	sroettger@google.com,
+	willy@infradead.org,
+	gregkh@linuxfoundation.org,
+	torvalds@linux-foundation.org,
+	usama.anjum@collabora.com,
+	rdunlap@infradead.org
+Cc: jeffxu@google.com,
+	jorgelo@chromium.org,
+	groeck@chromium.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	pedro.falcato@gmail.com,
+	dave.hansen@intel.com,
+	linux-hardening@vger.kernel.org,
+	deraadt@openbsd.org
+Subject: [PATCH v6 0/4] Introduce mseal()
+Date: Thu, 11 Jan 2024 23:41:37 +0000
+Message-ID: <20240111234142.2944934-1-jeffxu@chromium.org>
+X-Mailer: git-send-email 2.43.0.275.g3460e3d667-goog
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <39b4278f-35d2-4071-a3aa-ec49705272af@moroto.mountain>
-In-Reply-To: <39b4278f-35d2-4071-a3aa-ec49705272af@moroto.mountain>
-From: David Gow <davidgow@google.com>
-Date: Fri, 12 Jan 2024 07:39:14 +0800
-Message-ID: <CABVgOSmxsfxZ9tPpnJZF+3FUymw0Lv=zsBx5UGYD+83-qnAagw@mail.gmail.com>
-Subject: Re: [PATCH] kunit: Fix a NULL vs IS_ERR() bug
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
-	kernel-janitors@vger.kernel.org
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-	boundary="000000000000e95a58060eb40e34"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
---000000000000e95a58060eb40e34
-Content-Type: text/plain; charset="UTF-8"
+From: Jeff Xu <jeffxu@google.com>
 
-On Thu, 11 Jan 2024 at 02:55, Dan Carpenter <dan.carpenter@linaro.org> wrote:
->
-> The kunit_device_register() function doesn't return NULL, it returns
-> error pointers.  Change the KUNIT_ASSERT_NOT_NULL() to check for
-> ERR_OR_NULL().
->
-> Fixes: d03c720e03bd ("kunit: Add APIs for managing devices")
-> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
-> ---
+This patchset proposes a new mseal() syscall for the Linux kernel.
 
-Nice catch, thanks!
+In a nutshell, mseal() protects the VMAs of a given virtual memory
+range against modifications, such as changes to their permission bits.
 
-Reviewed-by: David Gow <davidgow@google.com>
+Modern CPUs support memory permissions, such as the read/write (RW)
+and no-execute (NX) bits. Linux has supported NX since the release of
+kernel version 2.6.8 in August 2004 [1]. The memory permission feature
+improves the security stance on memory corruption bugs, as an attacker
+cannot simply write to arbitrary memory and point the code to it. The
+memory must be marked with the X bit, or else an exception will occur.
+Internally, the kernel maintains the memory permissions in a data
+structure called VMA (vm_area_struct). mseal() additionally protects
+the VMA itself against modifications of the selected seal type.
 
-> It's a pity that there isn't a KUNIT_ASSERT_NOT_ERR_PTR() macro...
+Memory sealing is useful to mitigate memory corruption issues where a
+corrupted pointer is passed to a memory management system. For
+example, such an attacker primitive can break control-flow integrity
+guarantees since read-only memory that is supposed to be trusted can
+become writable or .text pages can get remapped. Memory sealing can
+automatically be applied by the runtime loader to seal .text and
+.rodata pages and applications can additionally seal security critical
+data at runtime. A similar feature already exists in the XNU kernel
+with the VM_FLAGS_PERMANENT [3] flag and on OpenBSD with the
+mimmutable syscall [4]. Also, Chrome wants to adopt this feature for
+their CFI work [2] and this patchset has been designed to be
+compatible with the Chrome use case.
 
-I think we'll add one, but I'm not yet totally convinced that it would
-be better than using ASSERT_NOT_ERR_OR_NULL() in cases like this,
-where we're:
-1. In a test; and,
-2. using the pointer afterwards, expecting it to be valid
-(dereferencing it and/or passing it to functions which will)
+Two system calls are involved in sealing the map:  mmap() and mseal().
 
-This is largely because it'd be nicer, if the pointer is NULL (due to
-a bug), to get a more explicit assertion failure, rather than a crash.
-It does make the test code less indicative of how the APIs are meant
-to be used elsewhere, though, and annoys the static analysis, though.
+The new mseal() is an syscall on 64 bit CPU, and with
+following signature:
 
-Thoughts?
+int mseal(void addr, size_t len, unsigned long flags)
+addr/len: memory range.
+flags: reserved.
 
--- David
+mseal() blocks following operations for the given memory range.
 
->  lib/kunit/kunit-test.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/lib/kunit/kunit-test.c b/lib/kunit/kunit-test.c
-> index c4259d910356..f7980ef236a3 100644
-> --- a/lib/kunit/kunit-test.c
-> +++ b/lib/kunit/kunit-test.c
-> @@ -720,7 +720,7 @@ static void kunit_device_cleanup_test(struct kunit *test)
->         long action_was_run = 0;
->
->         test_device = kunit_device_register(test, "my_device");
-> -       KUNIT_ASSERT_NOT_NULL(test, test_device);
-> +       KUNIT_ASSERT_NOT_ERR_OR_NULL(test, test_device);
->
->         /* Add an action to verify cleanup. */
->         devm_add_action(test_device, test_dev_action, &action_was_run);
-> --
-> 2.43.0
->
+1> Unmapping, moving to another location, and shrinking the size,
+   via munmap() and mremap(), can leave an empty space, therefore can
+   be replaced with a VMA with a new set of attributes.
 
---000000000000e95a58060eb40e34
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
+2> Moving or expanding a different VMA into the current location,
+   via mremap().
 
-MIIPqgYJKoZIhvcNAQcCoIIPmzCCD5cCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
-gg0EMIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
-VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
-AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
-AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
-IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
-dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
-6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
-c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
-I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
-AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
-BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
-CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
-AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
-MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
-My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
-LmNybDBMBgNVHSAERTBDMEEGCSsGAQQBoDIBKDA0MDIGCCsGAQUFBwIBFiZodHRwczovL3d3dy5n
-bG9iYWxzaWduLmNvbS9yZXBvc2l0b3J5LzANBgkqhkiG9w0BAQsFAAOCAQEANyYcO+9JZYyqQt41
-TMwvFWAw3vLoLOQIfIn48/yea/ekOcParTb0mbhsvVSZ6sGn+txYAZb33wIb1f4wK4xQ7+RUYBfI
-TuTPL7olF9hDpojC2F6Eu8nuEf1XD9qNI8zFd4kfjg4rb+AME0L81WaCL/WhP2kDCnRU4jm6TryB
-CHhZqtxkIvXGPGHjwJJazJBnX5NayIce4fGuUEJ7HkuCthVZ3Rws0UyHSAXesT/0tXATND4mNr1X
-El6adiSQy619ybVERnRi5aDe1PTwE+qNiotEEaeujz1a/+yYaaTY+k+qJcVxi7tbyQ0hi0UB3myM
-A/z2HmGEwO8hx7hDjKmKbDCCA18wggJHoAMCAQICCwQAAAAAASFYUwiiMA0GCSqGSIb3DQEBCwUA
-MEwxIDAeBgNVBAsTF0dsb2JhbFNpZ24gUm9vdCBDQSAtIFIzMRMwEQYDVQQKEwpHbG9iYWxTaWdu
-MRMwEQYDVQQDEwpHbG9iYWxTaWduMB4XDTA5MDMxODEwMDAwMFoXDTI5MDMxODEwMDAwMFowTDEg
-MB4GA1UECxMXR2xvYmFsU2lnbiBSb290IENBIC0gUjMxEzARBgNVBAoTCkdsb2JhbFNpZ24xEzAR
-BgNVBAMTCkdsb2JhbFNpZ24wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDMJXaQeQZ4
-Ihb1wIO2hMoonv0FdhHFrYhy/EYCQ8eyip0EXyTLLkvhYIJG4VKrDIFHcGzdZNHr9SyjD4I9DCuu
-l9e2FIYQebs7E4B3jAjhSdJqYi8fXvqWaN+JJ5U4nwbXPsnLJlkNc96wyOkmDoMVxu9bi9IEYMpJ
-pij2aTv2y8gokeWdimFXN6x0FNx04Druci8unPvQu7/1PQDhBjPogiuuU6Y6FnOM3UEOIDrAtKeh
-6bJPkC4yYOlXy7kEkmho5TgmYHWyn3f/kRTvriBJ/K1AFUjRAjFhGV64l++td7dkmnq/X8ET75ti
-+w1s4FRpFqkD2m7pg5NxdsZphYIXAgMBAAGjQjBAMA4GA1UdDwEB/wQEAwIBBjAPBgNVHRMBAf8E
-BTADAQH/MB0GA1UdDgQWBBSP8Et/qC5FJK5NUPpjmove4t0bvDANBgkqhkiG9w0BAQsFAAOCAQEA
-S0DbwFCq/sgM7/eWVEVJu5YACUGssxOGhigHM8pr5nS5ugAtrqQK0/Xx8Q+Kv3NnSoPHRHt44K9u
-bG8DKY4zOUXDjuS5V2yq/BKW7FPGLeQkbLmUY/vcU2hnVj6DuM81IcPJaP7O2sJTqsyQiunwXUaM
-ld16WCgaLx3ezQA3QY/tRG3XUyiXfvNnBB4V14qWtNPeTCekTBtzc3b0F5nCH3oO4y0IrQocLP88
-q1UOD5F+NuvDV0m+4S4tfGCLw0FREyOdzvcya5QBqJnnLDMfOjsl0oZAzjsshnjJYS8Uuu7bVW/f
-hO4FCU29KNhyztNiUGUe65KXgzHZs7XKR1g/XzCCBOMwggPLoAMCAQICEAHS+TgZvH/tCq5FcDC0
-n9IwDQYJKoZIhvcNAQELBQAwVDELMAkGA1UEBhMCQkUxGTAXBgNVBAoTEEdsb2JhbFNpZ24gbnYt
-c2ExKjAoBgNVBAMTIUdsb2JhbFNpZ24gQXRsYXMgUjMgU01JTUUgQ0EgMjAyMDAeFw0yNDAxMDcx
-MDQ5MDJaFw0yNDA3MDUxMDQ5MDJaMCQxIjAgBgkqhkiG9w0BCQEWE2RhdmlkZ293QGdvb2dsZS5j
-b20wggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQDY2jJMFqnyVx9tBZhkuJguTnM4nHJI
-ZGdQAt5hic4KMUR2KbYKHuTQpTNJz6gZ54lsH26D/RS1fawr64fewddmUIPOuRxaecSFexpzGf3J
-Igkjzu54wULNQzFLp1SdF+mPjBSrcULSHBgrsFJqilQcudqXr6wMQsdRHyaEr3orDL9QFYBegYec
-fn7dqwoXKByjhyvs/juYwxoeAiLNR2hGWt4+URursrD4DJXaf13j/c4N+dTMLO3eCwykTBDufzyC
-t6G+O3dSXDzZ2OarW/miZvN/y+QD2ZRe+wl39x2HMo3Fc6Dhz2IWawh7E8p2FvbFSosBxRZyJH38
-84Qr8NSHAgMBAAGjggHfMIIB2zAeBgNVHREEFzAVgRNkYXZpZGdvd0Bnb29nbGUuY29tMA4GA1Ud
-DwEB/wQEAwIFoDAdBgNVHSUEFjAUBggrBgEFBQcDBAYIKwYBBQUHAwIwHQYDVR0OBBYEFC+LS03D
-7xDrOPfX3COqq162RFg/MFcGA1UdIARQME4wCQYHZ4EMAQUBATBBBgkrBgEEAaAyASgwNDAyBggr
-BgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wDAYDVR0TAQH/
-BAIwADCBmgYIKwYBBQUHAQEEgY0wgYowPgYIKwYBBQUHMAGGMmh0dHA6Ly9vY3NwLmdsb2JhbHNp
-Z24uY29tL2NhL2dzYXRsYXNyM3NtaW1lY2EyMDIwMEgGCCsGAQUFBzAChjxodHRwOi8vc2VjdXJl
-Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2F0bGFzcjNzbWltZWNhMjAyMC5jcnQwHwYDVR0jBBgw
-FoAUfMwKaNei6x4schvRzV2Vb4378mMwRgYDVR0fBD8wPTA7oDmgN4Y1aHR0cDovL2NybC5nbG9i
-YWxzaWduLmNvbS9jYS9nc2F0bGFzcjNzbWltZWNhMjAyMC5jcmwwDQYJKoZIhvcNAQELBQADggEB
-AK0lDd6/eSh3qHmXaw1YUfIFy07B25BEcTvWgOdla99gF1O7sOsdYaTz/DFkZI5ghjgaPJCovgla
-mRMfNcxZCfoBtsB7mAS6iOYjuwFOZxi9cv6jhfiON6b89QWdMaPeDddg/F2Q0bxZ9Z2ZEBxyT34G
-wlDp+1p6RAqlDpHifQJW16h5jWIIwYisvm5QyfxQEVc+XH1lt+taSzCfiBT0ZLgjB9Sg+zAo8ys6
-5PHxFaT2a5Td/fj5yJ5hRSrqy/nj/hjT14w3/ZdX5uWg+cus6VjiiR/5qGSZRjHt8JoApD6t6/tg
-ITv8ZEy6ByumbU23nkHTMOzzQSxczHkT+0q10/MxggJqMIICZgIBATBoMFQxCzAJBgNVBAYTAkJF
-MRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFzIFIz
-IFNNSU1FIENBIDIwMjACEAHS+TgZvH/tCq5FcDC0n9IwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZI
-hvcNAQkEMSIEIJqYWz9xb4ZbUZEUwpLfn0br2UviRk8zyxX2Z0ijWrJYMBgGCSqGSIb3DQEJAzEL
-BgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI0MDExMTIzMzkyN1owaQYJKoZIhvcNAQkPMVww
-WjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkq
-hkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQAhC3sS
-GuSvnSv8Uv/+zVjoSdLwSviKe6wHZhdLQ14fx0zVCeOAC2BH1JiZgmQQWyR53tPNx1ZNW3gg4kpa
-25IYit7F7wtyJWDyJEGaHkvqlWVXQYgAOXFvARlfauTZNZ3i/OT1U26Qur9a2+PUWapylJQeReqi
-D//jNFyULesXR3K4UWFeZYgUPbmXx76EfFuu6hK+XZsjff1Gx7pirtUvpNTPqxNgAyPsRmZZzISh
-gd0cjA7ida2qp5icPK72+ZNr9CyI/3f+Nc3jr6k7wM4nLJmHRWP9hnOFhGDakcSUexkTYnRaWOhV
-1Dle38AIxP1jAYaMzFzBA8fbJnoPUzbQ
---000000000000e95a58060eb40e34--
+3> Modifying a VMA via mmap(MAP_FIXED).
+
+4> Size expansion, via mremap(), does not appear to pose any specific
+   risks to sealed VMAs. It is included anyway because the use case is
+   unclear. In any case, users can rely on merging to expand a sealed VMA.
+
+5> mprotect() and pkey_mprotect().
+
+6> Some destructive madvice() behaviors (e.g. MADV_DONTNEED) for anonymous
+   memory, when users don't have write permission to the memory. Those
+   behaviors can alter region contents by discarding pages, effectively a
+   memset(0) for anonymous memory.
+
+In addition: mmap() has two related changes.
+
+The PROT_SEAL bit in prot field of mmap(). When present, it marks
+the map sealed since creation.
+
+The MAP_SEALABLE bit in the flags field of mmap(). When present, it marks
+the map as sealable. A map created without MAP_SEALABLE will not support
+sealing, i.e. mseal() will fail.
+
+Applications that don't care about sealing will expect their behavior
+unchanged. For those that need sealing support, opt-in by adding
+MAP_SEALABLE in mmap().
+
+The idea that inspired this patch comes from Stephen Röttger’s work in
+V8 CFI [5]. Chrome browser in ChromeOS will be the first user of this
+API.
+
+Indeed, the Chrome browser has very specific requirements for sealing,
+which are distinct from those of most applications. For example, in
+the case of libc, sealing is only applied to read-only (RO) or
+read-execute (RX) memory segments (such as .text and .RELRO) to
+prevent them from becoming writable, the lifetime of those mappings
+are tied to the lifetime of the process.
+
+Chrome wants to seal two large address space reservations that are
+managed by different allocators. The memory is mapped RW- and RWX
+respectively but write access to it is restricted using pkeys (or in
+the future ARM permission overlay extensions). The lifetime of those
+mappings are not tied to the lifetime of the process, therefore, while
+the memory is sealed, the allocators still need to free or discard the
+unused memory. For example, with madvise(DONTNEED).
+
+However, always allowing madvise(DONTNEED) on this range poses a
+security risk. For example if a jump instruction crosses a page
+boundary and the second page gets discarded, it will overwrite the
+target bytes with zeros and change the control flow. Checking
+write-permission before the discard operation allows us to control
+when the operation is valid. In this case, the madvise will only
+succeed if the executing thread has PKEY write permissions and PKRU
+changes are protected in software by control-flow integrity.
+
+Although the initial version of this patch series is targeting the
+Chrome browser as its first user, it became evident during upstream
+discussions that we would also want to ensure that the patch set
+eventually is a complete solution for memory sealing and compatible
+with other use cases. The specific scenario currently in mind is
+glibc's use case of loading and sealing ELF executables. To this end,
+Stephen is working on a change to glibc to add sealing support to the
+dynamic linker, which will seal all non-writable segments at startup.
+Once this work is completed, all applications will be able to
+automatically benefit from these new protections.
+
+Change history:
+===============
+V6:
+- Drop RFC from subject, Given Linus's general approval.
+- Adjust syscall number for mseal (main Jan.11/2024) 
+- Code style fix (Matthew Wilcox)
+- selftest: use ksft macros (Muhammad Usama Anjum)
+- Document fix. (Randy Dunlap)
+
+V5:
+- fix build issue in mseal-Wire-up-mseal-syscall
+  (Suggested by Linus Torvalds, and Greg KH)
+- updates on selftest.
+https://lore.kernel.org/lkml/20240109154547.1839886-1-jeffxu@chromium.org/#r
+
+V4:
+(Suggested by Linus Torvalds)
+- new signature: mseal(start,len,flags)
+- 32 bit is not supported. vm_seal is removed, use vm_flags instead.
+- single bit in vm_flags for sealed state.
+- CONFIG_MSEAL kernel config is removed.
+- single bit of PROT_SEAL in the "Prot" field of mmap().
+Other changes:
+- update selftest (Suggested by Muhammad Usama Anjum)
+- update documentation.
+https://lore.kernel.org/all/20240104185138.169307-1-jeffxu@chromium.org/
+
+V3:
+- Abandon per-syscall approach, (Suggested by Linus Torvalds).
+- Organize sealing types around their functionality, such as
+  MM_SEAL_BASE, MM_SEAL_PROT_PKEY.
+- Extend the scope of sealing from calls originated in userspace to
+  both kernel and userspace. (Suggested by Linus Torvalds)
+- Add seal type support in mmap(). (Suggested by Pedro Falcato)
+- Add a new sealing type: MM_SEAL_DISCARD_RO_ANON to prevent
+  destructive operations of madvise. (Suggested by Jann Horn and
+  Stephen Röttger)
+- Make sealed VMAs mergeable. (Suggested by Jann Horn)
+- Add MAP_SEALABLE to mmap()
+- Add documentation - mseal.rst
+https://lore.kernel.org/linux-mm/20231212231706.2680890-2-jeffxu@chromium.org/
+
+v2:
+Use _BITUL to define MM_SEAL_XX type.
+Use unsigned long for seal type in sys_mseal() and other functions.
+Remove internal VM_SEAL_XX type and convert_user_seal_type().
+Remove MM_ACTION_XX type.
+Remove caller_origin(ON_BEHALF_OF_XX) and replace with sealing bitmask.
+Add more comments in code.
+Add a detailed commit message.
+https://lore.kernel.org/lkml/20231017090815.1067790-1-jeffxu@chromium.org/
+
+v1:
+https://lore.kernel.org/lkml/20231016143828.647848-1-jeffxu@chromium.org/
+
+----------------------------------------------------------------
+[1] https://kernelnewbies.org/Linux_2_6_8
+[2] https://v8.dev/blog/control-flow-integrity
+[3] https://github.com/apple-oss-distributions/xnu/blob/1031c584a5e37aff177559b9f69dbd3c8c3fd30a/osfmk/mach/vm_statistics.h#L274
+[4] https://man.openbsd.org/mimmutable.2
+[5] https://docs.google.com/document/d/1O2jwK4dxI3nRcOJuPYkonhTkNQfbmwdvxQMyXgeaRHo/edit#heading=h.bvaojj9fu6hc
+[6] https://lore.kernel.org/lkml/CAG48ez3ShUYey+ZAFsU2i1RpQn0a5eOs2hzQ426FkcgnfUGLvA@mail.gmail.com/
+[7] https://lore.kernel.org/lkml/20230515130553.2311248-1-jeffxu@chromium.org/
+
+
+Jeff Xu (4):
+  mseal: Wire up mseal syscall
+  mseal: add mseal syscall
+  selftest mm/mseal memory sealing
+  mseal:add documentation
+
+ Documentation/userspace-api/mseal.rst       |  181 ++
+ arch/alpha/kernel/syscalls/syscall.tbl      |    1 +
+ arch/arm/tools/syscall.tbl                  |    1 +
+ arch/arm64/include/asm/unistd.h             |    2 +-
+ arch/arm64/include/asm/unistd32.h           |    2 +
+ arch/m68k/kernel/syscalls/syscall.tbl       |    1 +
+ arch/microblaze/kernel/syscalls/syscall.tbl |    1 +
+ arch/mips/kernel/syscalls/syscall_n32.tbl   |    1 +
+ arch/mips/kernel/syscalls/syscall_n64.tbl   |    1 +
+ arch/mips/kernel/syscalls/syscall_o32.tbl   |    1 +
+ arch/parisc/kernel/syscalls/syscall.tbl     |    1 +
+ arch/powerpc/kernel/syscalls/syscall.tbl    |    1 +
+ arch/s390/kernel/syscalls/syscall.tbl       |    1 +
+ arch/sh/kernel/syscalls/syscall.tbl         |    1 +
+ arch/sparc/kernel/syscalls/syscall.tbl      |    1 +
+ arch/x86/entry/syscalls/syscall_32.tbl      |    1 +
+ arch/x86/entry/syscalls/syscall_64.tbl      |    1 +
+ arch/xtensa/kernel/syscalls/syscall.tbl     |    1 +
+ include/linux/mm.h                          |   60 +
+ include/linux/syscalls.h                    |    1 +
+ include/uapi/asm-generic/mman-common.h      |    8 +
+ include/uapi/asm-generic/unistd.h           |    5 +-
+ kernel/sys_ni.c                             |    1 +
+ mm/Makefile                                 |    4 +
+ mm/madvise.c                                |   12 +
+ mm/mmap.c                                   |   27 +
+ mm/mprotect.c                               |   10 +
+ mm/mremap.c                                 |   31 +
+ mm/mseal.c                                  |  330 +++
+ tools/testing/selftests/mm/.gitignore       |    1 +
+ tools/testing/selftests/mm/Makefile         |    1 +
+ tools/testing/selftests/mm/mseal_test.c     | 1997 +++++++++++++++++++
+ 32 files changed, 2686 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/userspace-api/mseal.rst
+ create mode 100644 mm/mseal.c
+ create mode 100644 tools/testing/selftests/mm/mseal_test.c
+
+-- 
+2.43.0.275.g3460e3d667-goog
+
 
