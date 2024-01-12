@@ -1,95 +1,135 @@
-Return-Path: <linux-kselftest+bounces-2893-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2894-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BDFC82BB57
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jan 2024 07:50:40 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64F6782BB88
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jan 2024 08:15:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B2E02B25251
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jan 2024 06:50:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 00C6A1F25BFC
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jan 2024 07:15:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7271B482F2;
-	Fri, 12 Jan 2024 06:50:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="4lNpPT8A"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C57EA5C8EA;
+	Fri, 12 Jan 2024 07:15:42 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from h3cspam02-ex.h3c.com (smtp.h3c.com [60.191.123.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED51133067;
-	Fri, 12 Jan 2024 06:50:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1705042228;
-	bh=rXcbu4QY6UCu3qy4gvXw+tpopWxC0tsBqLnsgFqfj/Y=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=4lNpPT8APDolfFCTLwh0woAmpgkpMjWjRiAcuOwGVtOmZHgPQJPjDY1i+rTrdB2jo
-	 rcLq9g8koWFxvFcoNPA6t6zy4fOxXySsLwmAPgXM0FD+11scWCGX3MGaDgD/FZ1CyV
-	 KMRCqOYoCxQQrN7fbTlRVoBgBdkE8c/9sFm7cHxjIzhxP8nr1tEn51VGbVZNWvbg+K
-	 4oJveuu99TmvFwQj7tp1/wpHPw+/4BsCoOMl2XjIJnulTxtFHOxzY/6EDeQhnuBn9A
-	 rPAyhbTVZdGvr+4haE6jnHKRaXNN9G779HKR2d3cHiwmg9/1Zji3GKx+wnSwFBsOeZ
-	 A7PSHbMh2Jijg==
-Received: from [100.96.234.34] (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id EC6403780624;
-	Fri, 12 Jan 2024 06:50:25 +0000 (UTC)
-Message-ID: <bfb6f6ac-d29f-4857-aa8c-6b8da9c2f436@collabora.com>
-Date: Fri, 12 Jan 2024 11:50:33 +0500
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B75395C8E6
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jan 2024 07:15:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=h3c.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=h3c.com
+Received: from mail.maildlp.com ([172.25.15.154])
+	by h3cspam02-ex.h3c.com with ESMTP id 40C7F1rd043835;
+	Fri, 12 Jan 2024 15:15:02 +0800 (GMT-8)
+	(envelope-from hu.yadi@h3c.com)
+Received: from DAG6EX02-IMDC.srv.huawei-3com.com (unknown [10.62.14.11])
+	by mail.maildlp.com (Postfix) with ESMTP id 886D122E1859;
+	Fri, 12 Jan 2024 15:19:24 +0800 (CST)
+Received: from localhost.localdomain (10.99.206.12) by
+ DAG6EX02-IMDC.srv.huawei-3com.com (10.62.14.11) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.2.1258.27; Fri, 12 Jan 2024 15:15:02 +0800
+From: Hu Yadi <hu.yadi@h3c.com>
+To: <jmorris@namei.org>, <serge@hallyn.com>, <shuah@kernel.org>,
+        <mathieu.desnoyers@efficios.com>, <mic@digikod.net>
+CC: <linux-api@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-security-module@vger.kernel.org>,
+        <linux-kselftest@vger.kernel.org>, <514118380@qq.com>,
+        "Hu.Yadi" <hu.yadi@h3c.com>
+Subject: [PATCH v3] selftests/landlock:Fix two build issues
+Date: Fri, 12 Jan 2024 15:12:45 +0800
+Message-ID: <20240112071245.669-1-hu.yadi@h3c.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
- Shuah Khan <shuah@kernel.org>,
- "Joel Fernandes (Google)" <joel@joelfernandes.org>,
- Lorenzo Stoakes <lstoakes@gmail.com>, kernel@collabora.com,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/mm: mremap_test: fix build warning
-Content-Language: en-US
-To: Andrew Morton <akpm@linux-foundation.org>
-References: <20240111082039.3398848-1-usama.anjum@collabora.com>
- <20240111131405.4b47521fb8884760d712e93d@linux-foundation.org>
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-In-Reply-To: <20240111131405.4b47521fb8884760d712e93d@linux-foundation.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BJSMTP01-EX.srv.huawei-3com.com (10.63.20.132) To
+ DAG6EX02-IMDC.srv.huawei-3com.com (10.62.14.11)
+X-DNSRBL: 
+X-SPAM-SOURCE-CHECK: pass
+X-MAIL:h3cspam02-ex.h3c.com 40C7F1rd043835
 
-On 1/12/24 2:14 AM, Andrew Morton wrote:
-> On Thu, 11 Jan 2024 13:20:38 +0500 Muhammad Usama Anjum <usama.anjum@collabora.com> wrote:
-> 
->> Fix following build warning:
->> warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘long long unsigned int’
->>
-> 
-> Looks good to me, but... grumble.
-> 
-> `i' is an integer.  That's just how it is, Blame Fortran if you like. 
-Didn't know this. Thanks for sharing. I'll send a v2 by using two variables.
+From: "Hu.Yadi" <hu.yadi@h3c.com>
 
-> Discovering that someone used `i' for an unsigned long long is like
-> seeing
-> 
-> 	struct inode *page;
-> 
-> It is surprising, and readers shouldn't be subjected to surprises.
-> 
-> `i' is used in two ways here.  Twice to iterate across threshold values
-> (as a ULL) and once to iterate across dest_preamble_size, which is an
-> int.  It would be better to have two different variables for the two
-> different uses.  Ones with more appropriate names than `i'.
-> 
+Two issues comes up while building selftest/landlock on my side
+(gcc 7.3/glibc-2.28/kernel-4.19)
 
+the first one is as to gettid
+
+net_test.c: In function ‘set_service’:
+net_test.c:91:45: warning: implicit declaration of function ‘gettid’; [-Wimplicit-function-declaration]
+    "_selftests-landlock-net-tid%d-index%d", gettid(),
+                                             ^~~~~~
+                                             getgid
+net_test.c:(.text+0x4e0): undefined reference to `gettid'
+
+the second is compiler error
+gcc -Wall -O2 -isystem   fs_test.c -lcap -o selftests/landlock/fs_test
+fs_test.c:4575:9: error: initializer element is not constant
+  .mnt = mnt_tmp,
+         ^~~~~~~
+
+this patch is to fix them
+
+Signed-off-by: Hu.Yadi <hu.yadi@h3c.com>
+Suggested-by: Jiao <jiaoxupo@h3c.com>
+Reviewed-by: Berlin <berlin@h3c.com>
+---
+Changes v3 -> v2:
+ - add helper of gettid instead of __NR_gettid
+ - add gcc/glibc version info in comments
+Changes v1 -> v2:
+ - fix whitespace error
+ - replace SYS_gettid with _NR_gettid
+
+ tools/testing/selftests/landlock/fs_test.c  | 5 ++++-
+ tools/testing/selftests/landlock/net_test.c | 9 +++++++++
+ 2 files changed, 13 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
+index 18e1f86a6234..a992cf7c0ad1 100644
+--- a/tools/testing/selftests/landlock/fs_test.c
++++ b/tools/testing/selftests/landlock/fs_test.c
+@@ -4572,7 +4572,10 @@ FIXTURE_VARIANT(layout3_fs)
+ /* clang-format off */
+ FIXTURE_VARIANT_ADD(layout3_fs, tmpfs) {
+ 	/* clang-format on */
+-	.mnt = mnt_tmp,
++	.mnt = {
++		.type = "tmpfs",
++		.data = "size=4m,mode=700",
++	},
+ 	.file_path = file1_s1d1,
+ };
+ 
+diff --git a/tools/testing/selftests/landlock/net_test.c b/tools/testing/selftests/landlock/net_test.c
+index 929e21c4db05..12a6744568e2 100644
+--- a/tools/testing/selftests/landlock/net_test.c
++++ b/tools/testing/selftests/landlock/net_test.c
+@@ -21,6 +21,15 @@
+ 
+ #include "common.h"
+ 
++#ifndef gettid
++static pid_t gettid(void)
++{
++        return syscall(__NR_gettid);
++}
++
++#endif
++
++
+ const short sock_port_start = (1 << 10);
+ 
+ static const char loopback_ipv4[] = "127.0.0.1";
 -- 
-BR,
-Muhammad Usama Anjum
+2.23.0
+
 
