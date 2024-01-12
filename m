@@ -1,135 +1,157 @@
-Return-Path: <linux-kselftest+bounces-2894-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2895-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64F6782BB88
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jan 2024 08:15:47 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC64982BB95
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jan 2024 08:19:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 00C6A1F25BFC
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jan 2024 07:15:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CF7861C2094C
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jan 2024 07:18:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C57EA5C8EA;
-	Fri, 12 Jan 2024 07:15:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC1015B5C1;
+	Fri, 12 Jan 2024 07:18:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="mpZdZsKZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from h3cspam02-ex.h3c.com (smtp.h3c.com [60.191.123.50])
+Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B75395C8E6
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jan 2024 07:15:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=h3c.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=h3c.com
-Received: from mail.maildlp.com ([172.25.15.154])
-	by h3cspam02-ex.h3c.com with ESMTP id 40C7F1rd043835;
-	Fri, 12 Jan 2024 15:15:02 +0800 (GMT-8)
-	(envelope-from hu.yadi@h3c.com)
-Received: from DAG6EX02-IMDC.srv.huawei-3com.com (unknown [10.62.14.11])
-	by mail.maildlp.com (Postfix) with ESMTP id 886D122E1859;
-	Fri, 12 Jan 2024 15:19:24 +0800 (CST)
-Received: from localhost.localdomain (10.99.206.12) by
- DAG6EX02-IMDC.srv.huawei-3com.com (10.62.14.11) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.2.1258.27; Fri, 12 Jan 2024 15:15:02 +0800
-From: Hu Yadi <hu.yadi@h3c.com>
-To: <jmorris@namei.org>, <serge@hallyn.com>, <shuah@kernel.org>,
-        <mathieu.desnoyers@efficios.com>, <mic@digikod.net>
-CC: <linux-api@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-security-module@vger.kernel.org>,
-        <linux-kselftest@vger.kernel.org>, <514118380@qq.com>,
-        "Hu.Yadi" <hu.yadi@h3c.com>
-Subject: [PATCH v3] selftests/landlock:Fix two build issues
-Date: Fri, 12 Jan 2024 15:12:45 +0800
-Message-ID: <20240112071245.669-1-hu.yadi@h3c.com>
-X-Mailer: git-send-email 2.17.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 377EF14F66;
+	Fri, 12 Jan 2024 07:18:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1705043934;
+	bh=1mGvbpuqwHtoANCV1zxPQROR5hRRyjn81bfXlsqdtlk=;
+	h=From:To:Cc:Subject:Date:From;
+	b=mpZdZsKZk1liMVoBMl9BW48ImM2eycPAcD60OJjUCvQlK3yBVJH7Z1AxTTSwLxwgG
+	 E/cHfULVXqZ4C1/JgmbhVPlaRJmmU5XZMgk0TLQKTI8hSrHf7Tlwm2mgVb7uIXua+o
+	 naGk5SJNSQ51SHcMvQf8Qn1lBNshBb0v47m7x6sf/3D+oKsw9M5gr7cG/hZQ0UHL0D
+	 iRYuwEmRUdJ5A6x7ejfGt1APvGNaQa1GYqmoCANhv4NlWcKyHsK9Ad2m48lQOZnBRz
+	 mTXEkc0w88Z6x3owMRt/VMPlqyjk9jq9KlcZrRVzFZxNbrMrnOHatbqFqDz6ZnxIuz
+	 LzXSn3s017cgw==
+Received: from localhost.localdomain (cola.collaboradmins.com [195.201.22.229])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: usama.anjum)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 15AE73780894;
+	Fri, 12 Jan 2024 07:18:51 +0000 (UTC)
+From: Muhammad Usama Anjum <usama.anjum@collabora.com>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>,
+	"Joel Fernandes (Google)" <joel@joelfernandes.org>,
+	Lorenzo Stoakes <lstoakes@gmail.com>
+Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
+	kernel@collabora.com,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2] selftests/mm: mremap_test: fix build warning
+Date: Fri, 12 Jan 2024 12:18:50 +0500
+Message-ID: <20240112071851.612930-1-usama.anjum@collabora.com>
+X-Mailer: git-send-email 2.42.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BJSMTP01-EX.srv.huawei-3com.com (10.63.20.132) To
- DAG6EX02-IMDC.srv.huawei-3com.com (10.62.14.11)
-X-DNSRBL: 
-X-SPAM-SOURCE-CHECK: pass
-X-MAIL:h3cspam02-ex.h3c.com 40C7F1rd043835
 
-From: "Hu.Yadi" <hu.yadi@h3c.com>
+Use 2 separate variables of types int and unsigned long long instead of
+confusing them. This corrects the correct print format for each of them
+and removes the build warning:
 
-Two issues comes up while building selftest/landlock on my side
-(gcc 7.3/glibc-2.28/kernel-4.19)
+warning: format ‘%d’ expects argument of type ‘int’, but argument 2 has type ‘long long unsigned int’
 
-the first one is as to gettid
-
-net_test.c: In function ‘set_service’:
-net_test.c:91:45: warning: implicit declaration of function ‘gettid’; [-Wimplicit-function-declaration]
-    "_selftests-landlock-net-tid%d-index%d", gettid(),
-                                             ^~~~~~
-                                             getgid
-net_test.c:(.text+0x4e0): undefined reference to `gettid'
-
-the second is compiler error
-gcc -Wall -O2 -isystem   fs_test.c -lcap -o selftests/landlock/fs_test
-fs_test.c:4575:9: error: initializer element is not constant
-  .mnt = mnt_tmp,
-         ^~~~~~~
-
-this patch is to fix them
-
-Signed-off-by: Hu.Yadi <hu.yadi@h3c.com>
-Suggested-by: Jiao <jiaoxupo@h3c.com>
-Reviewed-by: Berlin <berlin@h3c.com>
+Fixes: a4cb3b243343 ("selftests: mm: add a test for remapping to area immediately after existing mapping")
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 ---
-Changes v3 -> v2:
- - add helper of gettid instead of __NR_gettid
- - add gcc/glibc version info in comments
-Changes v1 -> v2:
- - fix whitespace error
- - replace SYS_gettid with _NR_gettid
+Changes since v1:
+- Don't just fix the print format, instead use different variables
+---
+ tools/testing/selftests/mm/mremap_test.c | 27 ++++++++++++------------
+ 1 file changed, 14 insertions(+), 13 deletions(-)
 
- tools/testing/selftests/landlock/fs_test.c  | 5 ++++-
- tools/testing/selftests/landlock/net_test.c | 9 +++++++++
- 2 files changed, 13 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/landlock/fs_test.c b/tools/testing/selftests/landlock/fs_test.c
-index 18e1f86a6234..a992cf7c0ad1 100644
---- a/tools/testing/selftests/landlock/fs_test.c
-+++ b/tools/testing/selftests/landlock/fs_test.c
-@@ -4572,7 +4572,10 @@ FIXTURE_VARIANT(layout3_fs)
- /* clang-format off */
- FIXTURE_VARIANT_ADD(layout3_fs, tmpfs) {
- 	/* clang-format on */
--	.mnt = mnt_tmp,
-+	.mnt = {
-+		.type = "tmpfs",
-+		.data = "size=4m,mode=700",
-+	},
- 	.file_path = file1_s1d1,
- };
+diff --git a/tools/testing/selftests/mm/mremap_test.c b/tools/testing/selftests/mm/mremap_test.c
+index 1d4c1589c305..2f8b991f78cb 100644
+--- a/tools/testing/selftests/mm/mremap_test.c
++++ b/tools/testing/selftests/mm/mremap_test.c
+@@ -360,7 +360,8 @@ static long long remap_region(struct config c, unsigned int threshold_mb,
+ 			      char pattern_seed)
+ {
+ 	void *addr, *src_addr, *dest_addr, *dest_preamble_addr;
+-	unsigned long long i;
++	int d;
++	unsigned long long t;
+ 	struct timespec t_start = {0, 0}, t_end = {0, 0};
+ 	long long  start_ns, end_ns, align_mask, ret, offset;
+ 	unsigned long long threshold;
+@@ -378,8 +379,8 @@ static long long remap_region(struct config c, unsigned int threshold_mb,
  
-diff --git a/tools/testing/selftests/landlock/net_test.c b/tools/testing/selftests/landlock/net_test.c
-index 929e21c4db05..12a6744568e2 100644
---- a/tools/testing/selftests/landlock/net_test.c
-+++ b/tools/testing/selftests/landlock/net_test.c
-@@ -21,6 +21,15 @@
+ 	/* Set byte pattern for source block. */
+ 	srand(pattern_seed);
+-	for (i = 0; i < threshold; i++)
+-		memset((char *) src_addr + i, (char) rand(), 1);
++	for (t = 0; t < threshold; t++)
++		memset((char *) src_addr + t, (char) rand(), 1);
  
- #include "common.h"
+ 	/* Mask to zero out lower bits of address for alignment */
+ 	align_mask = ~(c.dest_alignment - 1);
+@@ -420,8 +421,8 @@ static long long remap_region(struct config c, unsigned int threshold_mb,
  
-+#ifndef gettid
-+static pid_t gettid(void)
-+{
-+        return syscall(__NR_gettid);
-+}
-+
-+#endif
-+
-+
- const short sock_port_start = (1 << 10);
+ 		/* Set byte pattern for the dest preamble block. */
+ 		srand(pattern_seed);
+-		for (i = 0; i < c.dest_preamble_size; i++)
+-			memset((char *) dest_preamble_addr + i, (char) rand(), 1);
++		for (d = 0; d < c.dest_preamble_size; d++)
++			memset((char *) dest_preamble_addr + d, (char) rand(), 1);
+ 	}
  
- static const char loopback_ipv4[] = "127.0.0.1";
+ 	clock_gettime(CLOCK_MONOTONIC, &t_start);
+@@ -437,14 +438,14 @@ static long long remap_region(struct config c, unsigned int threshold_mb,
+ 
+ 	/* Verify byte pattern after remapping */
+ 	srand(pattern_seed);
+-	for (i = 0; i < threshold; i++) {
++	for (t = 0; t < threshold; t++) {
+ 		char c = (char) rand();
+ 
+-		if (((char *) dest_addr)[i] != c) {
++		if (((char *) dest_addr)[t] != c) {
+ 			ksft_print_msg("Data after remap doesn't match at offset %llu\n",
+-				       i);
++				       t);
+ 			ksft_print_msg("Expected: %#x\t Got: %#x\n", c & 0xff,
+-					((char *) dest_addr)[i] & 0xff);
++					((char *) dest_addr)[t] & 0xff);
+ 			ret = -1;
+ 			goto clean_up_dest;
+ 		}
+@@ -453,14 +454,14 @@ static long long remap_region(struct config c, unsigned int threshold_mb,
+ 	/* Verify the dest preamble byte pattern after remapping */
+ 	if (c.dest_preamble_size) {
+ 		srand(pattern_seed);
+-		for (i = 0; i < c.dest_preamble_size; i++) {
++		for (d = 0; d < c.dest_preamble_size; d++) {
+ 			char c = (char) rand();
+ 
+-			if (((char *) dest_preamble_addr)[i] != c) {
++			if (((char *) dest_preamble_addr)[d] != c) {
+ 				ksft_print_msg("Preamble data after remap doesn't match at offset %d\n",
+-					       i);
++					       d);
+ 				ksft_print_msg("Expected: %#x\t Got: %#x\n", c & 0xff,
+-					       ((char *) dest_preamble_addr)[i] & 0xff);
++					       ((char *) dest_preamble_addr)[d] & 0xff);
+ 				ret = -1;
+ 				goto clean_up_dest;
+ 			}
 -- 
-2.23.0
+2.42.0
 
 
