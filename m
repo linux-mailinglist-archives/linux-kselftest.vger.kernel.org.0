@@ -1,44 +1,45 @@
-Return-Path: <linux-kselftest+bounces-2918-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2919-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A087982C4E8
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jan 2024 18:44:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5FFAD82C4EE
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jan 2024 18:44:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2BF3F1F24D14
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jan 2024 17:44:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E8D7E2862A3
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jan 2024 17:44:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEDCA1AAAD;
-	Fri, 12 Jan 2024 17:44:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8708C1AAC9;
+	Fri, 12 Jan 2024 17:44:07 +0000 (UTC)
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D5FC17C92;
-	Fri, 12 Jan 2024 17:44:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BE331AAC1;
+	Fri, 12 Jan 2024 17:44:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 4F52D1FCE4;
-	Fri, 12 Jan 2024 17:43:59 +0000 (UTC)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id C73081FCE1;
+	Fri, 12 Jan 2024 17:44:02 +0000 (UTC)
 Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id CDD03136A4;
-	Fri, 12 Jan 2024 17:43:58 +0000 (UTC)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 17BCB136A4;
+	Fri, 12 Jan 2024 17:44:01 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
 	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id qtgSJV56oWUDPgAAD6G6ig
-	(envelope-from <mpdesouza@suse.com>); Fri, 12 Jan 2024 17:43:58 +0000
+	id +YNPNGF6oWUJPgAAD6G6ig
+	(envelope-from <mpdesouza@suse.com>); Fri, 12 Jan 2024 17:44:01 +0000
 From: Marcos Paulo de Souza <mpdesouza@suse.com>
-Date: Fri, 12 Jan 2024 14:43:50 -0300
-Subject: [PATCH v6 1/3] kselftests: lib.mk: Add TEST_GEN_MODS_DIR variable
+Date: Fri, 12 Jan 2024 14:43:51 -0300
+Subject: [PATCH v6 2/3] livepatch: Move tests from lib/livepatch to
+ selftests/livepatch
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -47,7 +48,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20240112-send-lp-kselftests-v6-1-79f3e9a46717@suse.com>
+Message-Id: <20240112-send-lp-kselftests-v6-2-79f3e9a46717@suse.com>
 References: <20240112-send-lp-kselftests-v6-0-79f3e9a46717@suse.com>
 In-Reply-To: <20240112-send-lp-kselftests-v6-0-79f3e9a46717@suse.com>
 To: Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
@@ -61,153 +62,820 @@ Cc: linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org, 
  live-patching@vger.kernel.org, Marcos Paulo de Souza <mpdesouza@suse.com>
 X-Mailer: b4 0.12.4
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1705081432; l=5532;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1705081432; l=35667;
  i=mpdesouza@suse.com; s=20231031; h=from:subject:message-id;
- bh=DxYGIqHdO8SS/+GxeCGTh9/b0o40/vuzOtxjLfRVJMg=;
- b=EdhtFoslvfRkUt9r5V/KOwll2qb7l2XoolCpIRb1wBvBKXY3oTsiSyilVvWVWA1HcpYHsR/DM
- oLnFEsbd7k/B1A7ZR3s5/EMjN7bb3cyigYpm+Tf9YTcJKry1Z3rNTU+
+ bh=6BqhyL2oBlo5CEDyE3xxxmnX0cNlziRA0Vlp76GLMX8=;
+ b=uO9upJbNPlPUFKChmpMN1fQnBHajlfKjMlBDaIjFoSomuxSPOCLP0BN1g0Z9Z/w4i0Tv640e8
+ pwOwZ/M83/IASowcR5mUANVwT/E41hEBFhI3Bg/JlpKnpYV3RnzUYpq
 X-Developer-Key: i=mpdesouza@suse.com; a=ed25519;
  pk=/Ni/TsKkr69EOmdZXkp1Q/BlzDonbOBRsfPa18ySIwU=
+X-Spam-Level: 
 Authentication-Results: smtp-out2.suse.de;
 	none
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
 X-Spamd-Result: default: False [-4.00 / 50.00];
 	 REPLY(-4.00)[]
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Rspamd-Queue-Id: 4F52D1FCE4
-X-Spam-Level: 
 X-Spam-Score: -4.00
+X-Rspamd-Queue-Id: C73081FCE1
 X-Spam-Flag: NO
 
-Add TEST_GEN_MODS_DIR variable for kselftests. It can point to
-a directory containing kernel modules that will be used by
-selftest scripts.
+The modules are being moved from lib/livepatch to
+tools/testing/selftests/livepatch/test_modules.
 
-The modules are built as external modules for the running kernel.
-As a result they are always binary compatible and the same tests
-can be used for older or newer kernels.
+This code moving will allow writing more complex tests, like for example an
+userspace C code that will call a livepatched kernel function.
 
-The build requires "kernel-devel" package to be installed.
-For example, in the upstream sources, the rpm devel package
-is produced by "make rpm-pkg"
+The modules are now built as out-of-tree
+modules, but being part of the kernel source means they will be maintained.
 
-The modules can be built independently by
+Another advantage of the code moving is to be able to easily change,
+debug and rebuild the tests by running make on the selftests/livepatch
+directory, which is not currently possible since the modules on
+lib/livepatch are build and installed using the "modules" target.
 
-  make -C tools/testing/selftests/livepatch/
+The current approach also keeps the ability to execute the tests manually
+by executing the scripts inside selftests/livepatch directory, as it's
+currently supported. If the modules are modified, they needed to be
+rebuilt before running the scripts though.
 
-or they will be automatically built before running the tests via
+The modules are built before running the selftests when using the
+kselftest invocations:
 
-  make -C tools/testing/selftests/livepatch/ run_tests
+	make kselftest TARGETS=livepatch
+or
+	make -C tools/testing/selftests/livepatch run_tests
 
-Note that they are _not_ built when running the standalone
-tests by calling, for example, ./test-state.sh.
+Having the modules being built as out-of-modules requires changing the
+currently used 'modprobe' by 'insmod' and adapt the test scripts that
+check for the kernel message buffer.
 
-Along with TEST_GEN_MODS_DIR, it was necessary to create a new install
-rule. INSTALL_MODS_RULE is needed because INSTALL_SINGLE_RULE would
-copy the entire TEST_GEN_MODS_DIR directory to the destination, even
-the files created by Kbuild to compile the modules. The new install
-rule copies only the .ko files, as we would expect the gen_tar to work.
+Now it is possible to only compile the modules by running:
+
+	make -C tools/testing/selftests/livepatch/
+
+This way the test modules and other test program can be built in order
+to be packaged if so desired.
+
+As there aren't any modules being built on lib/livepatch, remove the
+TEST_LIVEPATCH Kconfig and it's references.
+
+Note: "make gen_tar" packages the pre-built binaries into the tarball.
+       It means that it will store the test modules pre-built for
+       the kernel running on the build host.
+
+       Note that these modules need not binary compatible with
+       the kernel built from the same sources. But the same
+       is true for other packaged selftest binaries.
+
+       The entire kernel sources are needed for rebuilding
+       the selftests on another system.
 
 Reviewed-by: Joe Lawrence <joe.lawrence@redhat.com>
 Reviewed-by: Petr Mladek <pmladek@suse.com>
 Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
 ---
- Documentation/dev-tools/kselftest.rst |  4 ++++
- tools/testing/selftests/lib.mk        | 26 +++++++++++++++++++++-----
- 2 files changed, 25 insertions(+), 5 deletions(-)
+ MAINTAINERS                                        |  1 -
+ arch/s390/configs/debug_defconfig                  |  1 -
+ arch/s390/configs/defconfig                        |  1 -
+ lib/Kconfig.debug                                  | 22 ----------
+ lib/Makefile                                       |  2 -
+ lib/livepatch/Makefile                             | 14 ------
+ tools/testing/selftests/livepatch/Makefile         |  1 +
+ tools/testing/selftests/livepatch/README           | 25 ++++++++---
+ tools/testing/selftests/livepatch/config           |  1 -
+ tools/testing/selftests/livepatch/functions.sh     | 34 ++++++---------
+ .../testing/selftests/livepatch/test-callbacks.sh  | 50 +++++++++++-----------
+ tools/testing/selftests/livepatch/test-ftrace.sh   |  6 +--
+ .../testing/selftests/livepatch/test-livepatch.sh  | 10 ++---
+ .../selftests/livepatch/test-shadow-vars.sh        |  2 +-
+ tools/testing/selftests/livepatch/test-state.sh    | 18 ++++----
+ tools/testing/selftests/livepatch/test-sysfs.sh    |  6 +--
+ .../selftests/livepatch/test_modules/Makefile      | 19 ++++++++
+ .../test_modules}/test_klp_atomic_replace.c        |  0
+ .../test_modules}/test_klp_callbacks_busy.c        |  0
+ .../test_modules}/test_klp_callbacks_demo.c        |  0
+ .../test_modules}/test_klp_callbacks_demo2.c       |  0
+ .../test_modules}/test_klp_callbacks_mod.c         |  0
+ .../livepatch/test_modules}/test_klp_livepatch.c   |  0
+ .../livepatch/test_modules}/test_klp_shadow_vars.c |  0
+ .../livepatch/test_modules}/test_klp_state.c       |  0
+ .../livepatch/test_modules}/test_klp_state2.c      |  0
+ .../livepatch/test_modules}/test_klp_state3.c      |  0
+ 27 files changed, 98 insertions(+), 115 deletions(-)
 
-diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
-index ab376b316c36..7f3582a67318 100644
---- a/Documentation/dev-tools/kselftest.rst
-+++ b/Documentation/dev-tools/kselftest.rst
-@@ -245,6 +245,10 @@ Contributing new tests (details)
-    TEST_PROGS, TEST_GEN_PROGS mean it is the executable tested by
-    default.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index c121b5212027..1f1275f4147a 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12385,7 +12385,6 @@ F:	arch/powerpc/include/asm/livepatch.h
+ F:	include/linux/livepatch.h
+ F:	kernel/livepatch/
+ F:	kernel/module/livepatch.c
+-F:	lib/livepatch/
+ F:	samples/livepatch/
+ F:	tools/testing/selftests/livepatch/
  
-+   TEST_GEN_MODS_DIR should be used by tests that require modules to be built
-+   before the test starts. The variable will contain the name of the directory
-+   containing the modules.
+diff --git a/arch/s390/configs/debug_defconfig b/arch/s390/configs/debug_defconfig
+index 85490d9373fc..5948afeeb56c 100644
+--- a/arch/s390/configs/debug_defconfig
++++ b/arch/s390/configs/debug_defconfig
+@@ -884,4 +884,3 @@ CONFIG_ATOMIC64_SELFTEST=y
+ CONFIG_STRING_SELFTEST=y
+ CONFIG_TEST_BITOPS=m
+ CONFIG_TEST_BPF=m
+-CONFIG_TEST_LIVEPATCH=m
+diff --git a/arch/s390/configs/defconfig b/arch/s390/configs/defconfig
+index fb690fbbf54b..8d8c2989b6fe 100644
+--- a/arch/s390/configs/defconfig
++++ b/arch/s390/configs/defconfig
+@@ -813,4 +813,3 @@ CONFIG_KPROBES_SANITY_TEST=m
+ CONFIG_PERCPU_TEST=m
+ CONFIG_ATOMIC64_SELFTEST=y
+ CONFIG_TEST_BPF=m
+-CONFIG_TEST_LIVEPATCH=m
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 97ce28f4d154..c2147caa7da2 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -2853,28 +2853,6 @@ config TEST_MEMCAT_P
+ 
+ 	  If unsure, say N.
+ 
+-config TEST_LIVEPATCH
+-	tristate "Test livepatching"
+-	default n
+-	depends on DYNAMIC_DEBUG
+-	depends on LIVEPATCH
+-	depends on m
+-	help
+-	  Test kernel livepatching features for correctness.  The tests will
+-	  load test modules that will be livepatched in various scenarios.
+-
+-	  To run all the livepatching tests:
+-
+-	  make -C tools/testing/selftests TARGETS=livepatch run_tests
+-
+-	  Alternatively, individual tests may be invoked:
+-
+-	  tools/testing/selftests/livepatch/test-callbacks.sh
+-	  tools/testing/selftests/livepatch/test-livepatch.sh
+-	  tools/testing/selftests/livepatch/test-shadow-vars.sh
+-
+-	  If unsure, say N.
+-
+ config TEST_OBJAGG
+ 	tristate "Perform selftest on object aggreration manager"
+ 	default n
+diff --git a/lib/Makefile b/lib/Makefile
+index 6b09731d8e61..95ed57f377fd 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -134,8 +134,6 @@ endif
+ obj-$(CONFIG_TEST_FPU) += test_fpu.o
+ CFLAGS_test_fpu.o += $(FPU_CFLAGS)
+ 
+-obj-$(CONFIG_TEST_LIVEPATCH) += livepatch/
+-
+ # Some KUnit files (hooks.o) need to be built-in even when KUnit is a module,
+ # so we can't just use obj-$(CONFIG_KUNIT).
+ ifdef CONFIG_KUNIT
+diff --git a/lib/livepatch/Makefile b/lib/livepatch/Makefile
+deleted file mode 100644
+index dcc912b3478f..000000000000
+--- a/lib/livepatch/Makefile
++++ /dev/null
+@@ -1,14 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0
+-#
+-# Makefile for livepatch test code.
+-
+-obj-$(CONFIG_TEST_LIVEPATCH) += test_klp_atomic_replace.o \
+-				test_klp_callbacks_demo.o \
+-				test_klp_callbacks_demo2.o \
+-				test_klp_callbacks_busy.o \
+-				test_klp_callbacks_mod.o \
+-				test_klp_livepatch.o \
+-				test_klp_shadow_vars.o \
+-				test_klp_state.o \
+-				test_klp_state2.o \
+-				test_klp_state3.o
+diff --git a/tools/testing/selftests/livepatch/Makefile b/tools/testing/selftests/livepatch/Makefile
+index 02fadc9d55e0..119e2bbebe5d 100644
+--- a/tools/testing/selftests/livepatch/Makefile
++++ b/tools/testing/selftests/livepatch/Makefile
+@@ -1,5 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
++TEST_GEN_MODS_DIR := test_modules
+ TEST_PROGS_EXTENDED := functions.sh
+ TEST_PROGS := \
+ 	test-livepatch.sh \
+diff --git a/tools/testing/selftests/livepatch/README b/tools/testing/selftests/livepatch/README
+index 0942dd5826f8..d2035dd64a2b 100644
+--- a/tools/testing/selftests/livepatch/README
++++ b/tools/testing/selftests/livepatch/README
+@@ -13,23 +13,36 @@ the message buffer for only the duration of each individual test.)
+ Config
+ ------
+ 
+-Set these config options and their prerequisites:
++Set CONFIG_LIVEPATCH=y option and it's prerequisites.
+ 
+-CONFIG_LIVEPATCH=y
+-CONFIG_TEST_LIVEPATCH=m
+ 
++Building the tests
++------------------
 +
-    TEST_CUSTOM_PROGS should be used by tests that require custom build
-    rules and prevent common build rule use.
++To only build the tests without running them, run:
++
++  % make -C tools/testing/selftests/livepatch
++
++The command above will compile all test modules and test programs, making them
++ready to be packaged if so desired.
  
-diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index aa646e0661f3..0d8b7db92715 100644
---- a/tools/testing/selftests/lib.mk
-+++ b/tools/testing/selftests/lib.mk
-@@ -54,11 +54,15 @@ endif
- # TEST_PROGS are for test shell scripts.
- # TEST_CUSTOM_PROGS and TEST_PROGS will be run by common run_tests
- # and install targets. Common clean doesn't touch them.
-+# TEST_GEN_MODS_DIR is used to specify a directory with modules to be built
-+# before the test executes. These modules are cleaned on the clean target as well.
- TEST_GEN_PROGS := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS))
- TEST_GEN_PROGS_EXTENDED := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS_EXTENDED))
- TEST_GEN_FILES := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_FILES))
-+TEST_GEN_MODS_DIR := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_MODS_DIR))
+ Running the tests
+ -----------------
  
--all: $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES)
-+all: $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES) \
-+	$(if $(TEST_GEN_MODS_DIR),gen_mods_dir)
+-Test kernel modules are built as part of lib/ (make modules) and need to
+-be installed (make modules_install) as the test scripts will modprobe
+-them.
++Test kernel modules are built before running the livepatch selftests.  The
++modules are located under test_modules directory, and are built as out-of-tree
++modules.  This is specially useful since the same sources can be built and
++tested on systems with different kABI, ensuring they the tests are backwards
++compatible.  The modules will be loaded by the test scripts using insmod.
  
- define RUN_TESTS
- 	BASE_DIR="$(selfdir)";			\
-@@ -71,8 +75,8 @@ endef
+ To run the livepatch selftests, from the top of the kernel source tree:
  
- run_tests: all
- ifdef building_out_of_srctree
--	@if [ "X$(TEST_PROGS)$(TEST_PROGS_EXTENDED)$(TEST_FILES)" != "X" ]; then \
--		rsync -aq --copy-unsafe-links $(TEST_PROGS) $(TEST_PROGS_EXTENDED) $(TEST_FILES) $(OUTPUT); \
-+	@if [ "X$(TEST_PROGS)$(TEST_PROGS_EXTENDED)$(TEST_FILES)$(TEST_GEN_MODS_DIR)" != "X" ]; then \
-+		rsync -aq --copy-unsafe-links $(TEST_PROGS) $(TEST_PROGS_EXTENDED) $(TEST_FILES) $(TEST_GEN_MODS_DIR) $(OUTPUT); \
+   % make -C tools/testing/selftests TARGETS=livepatch run_tests
+ 
++or
++
++  % make kselftest TARGETS=livepatch
++
+ 
+ Adding tests
+ ------------
+diff --git a/tools/testing/selftests/livepatch/config b/tools/testing/selftests/livepatch/config
+index ad23100cb27c..e88bf518a23a 100644
+--- a/tools/testing/selftests/livepatch/config
++++ b/tools/testing/selftests/livepatch/config
+@@ -1,3 +1,2 @@
+ CONFIG_LIVEPATCH=y
+ CONFIG_DYNAMIC_DEBUG=y
+-CONFIG_TEST_LIVEPATCH=m
+diff --git a/tools/testing/selftests/livepatch/functions.sh b/tools/testing/selftests/livepatch/functions.sh
+index c8416c54b463..e60cf09491a6 100644
+--- a/tools/testing/selftests/livepatch/functions.sh
++++ b/tools/testing/selftests/livepatch/functions.sh
+@@ -127,16 +127,14 @@ function loop_until() {
+ 	done
+ }
+ 
+-function assert_mod() {
+-	local mod="$1"
+-
+-	modprobe --dry-run "$mod" &>/dev/null
+-}
+-
+ function is_livepatch_mod() {
+ 	local mod="$1"
+ 
+-	if [[ $(modinfo "$mod" | awk '/^livepatch:/{print $NF}') == "Y" ]]; then
++	if [[ ! -f "test_modules/$mod.ko" ]]; then
++		die "Can't find \"test_modules/$mod.ko\", try \"make\""
++	fi
++
++	if [[ $(modinfo "test_modules/$mod.ko" | awk '/^livepatch:/{print $NF}') == "Y" ]]; then
+ 		return 0
  	fi
- 	@if [ "X$(TEST_PROGS)" != "X" ]; then \
- 		$(call RUN_TESTS, $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) \
-@@ -84,11 +88,22 @@ else
- 	@$(call RUN_TESTS, $(TEST_GEN_PROGS) $(TEST_CUSTOM_PROGS) $(TEST_PROGS))
- endif
  
-+gen_mods_dir:
-+	$(Q)$(MAKE) -C $(TEST_GEN_MODS_DIR)
+@@ -146,9 +144,9 @@ function is_livepatch_mod() {
+ function __load_mod() {
+ 	local mod="$1"; shift
+ 
+-	local msg="% modprobe $mod $*"
++	local msg="% insmod test_modules/$mod.ko $*"
+ 	log "${msg%% }"
+-	ret=$(modprobe "$mod" "$@" 2>&1)
++	ret=$(insmod "test_modules/$mod.ko" "$@" 2>&1)
+ 	if [[ "$ret" != "" ]]; then
+ 		die "$ret"
+ 	fi
+@@ -161,13 +159,10 @@ function __load_mod() {
+ 
+ # load_mod(modname, params) - load a kernel module
+ #	modname - module name to load
+-#	params  - module parameters to pass to modprobe
++#	params  - module parameters to pass to insmod
+ function load_mod() {
+ 	local mod="$1"; shift
+ 
+-	assert_mod "$mod" ||
+-		skip "unable to load module ${mod}, verify CONFIG_TEST_LIVEPATCH=m and run self-tests as root"
+-
+ 	is_livepatch_mod "$mod" &&
+ 		die "use load_lp() to load the livepatch module $mod"
+ 
+@@ -177,13 +172,10 @@ function load_mod() {
+ # load_lp_nowait(modname, params) - load a kernel module with a livepatch
+ #			but do not wait on until the transition finishes
+ #	modname - module name to load
+-#	params  - module parameters to pass to modprobe
++#	params  - module parameters to pass to insmod
+ function load_lp_nowait() {
+ 	local mod="$1"; shift
+ 
+-	assert_mod "$mod" ||
+-		skip "unable to load module ${mod}, verify CONFIG_TEST_LIVEPATCH=m and run self-tests as root"
+-
+ 	is_livepatch_mod "$mod" ||
+ 		die "module $mod is not a livepatch"
+ 
+@@ -196,7 +188,7 @@ function load_lp_nowait() {
+ 
+ # load_lp(modname, params) - load a kernel module with a livepatch
+ #	modname - module name to load
+-#	params  - module parameters to pass to modprobe
++#	params  - module parameters to pass to insmod
+ function load_lp() {
+ 	local mod="$1"; shift
+ 
+@@ -209,13 +201,13 @@ function load_lp() {
+ 
+ # load_failing_mod(modname, params) - load a kernel module, expect to fail
+ #	modname - module name to load
+-#	params  - module parameters to pass to modprobe
++#	params  - module parameters to pass to insmod
+ function load_failing_mod() {
+ 	local mod="$1"; shift
+ 
+-	local msg="% modprobe $mod $*"
++	local msg="% insmod test_modules/$mod.ko $*"
+ 	log "${msg%% }"
+-	ret=$(modprobe "$mod" "$@" 2>&1)
++	ret=$(insmod "test_modules/$mod.ko" "$@" 2>&1)
+ 	if [[ "$ret" == "" ]]; then
+ 		die "$mod unexpectedly loaded"
+ 	fi
+diff --git a/tools/testing/selftests/livepatch/test-callbacks.sh b/tools/testing/selftests/livepatch/test-callbacks.sh
+index 90b26dbb2626..32b150e25b10 100755
+--- a/tools/testing/selftests/livepatch/test-callbacks.sh
++++ b/tools/testing/selftests/livepatch/test-callbacks.sh
+@@ -34,9 +34,9 @@ disable_lp $MOD_LIVEPATCH
+ unload_lp $MOD_LIVEPATCH
+ unload_mod $MOD_TARGET
+ 
+-check_result "% modprobe $MOD_TARGET
++check_result "% insmod test_modules/$MOD_TARGET.ko
+ $MOD_TARGET: ${MOD_TARGET}_init
+-% modprobe $MOD_LIVEPATCH
++% insmod test_modules/$MOD_LIVEPATCH.ko
+ livepatch: enabling patch '$MOD_LIVEPATCH'
+ livepatch: '$MOD_LIVEPATCH': initializing patching transition
+ $MOD_LIVEPATCH: pre_patch_callback: vmlinux
+@@ -81,7 +81,7 @@ disable_lp $MOD_LIVEPATCH
+ unload_lp $MOD_LIVEPATCH
+ unload_mod $MOD_TARGET
+ 
+-check_result "% modprobe $MOD_LIVEPATCH
++check_result "% insmod test_modules/$MOD_LIVEPATCH.ko
+ livepatch: enabling patch '$MOD_LIVEPATCH'
+ livepatch: '$MOD_LIVEPATCH': initializing patching transition
+ $MOD_LIVEPATCH: pre_patch_callback: vmlinux
+@@ -89,7 +89,7 @@ livepatch: '$MOD_LIVEPATCH': starting patching transition
+ livepatch: '$MOD_LIVEPATCH': completing patching transition
+ $MOD_LIVEPATCH: post_patch_callback: vmlinux
+ livepatch: '$MOD_LIVEPATCH': patching complete
+-% modprobe $MOD_TARGET
++% insmod test_modules/$MOD_TARGET.ko
+ livepatch: applying patch '$MOD_LIVEPATCH' to loading module '$MOD_TARGET'
+ $MOD_LIVEPATCH: pre_patch_callback: $MOD_TARGET -> [MODULE_STATE_COMING] Full formed, running module_init
+ $MOD_LIVEPATCH: post_patch_callback: $MOD_TARGET -> [MODULE_STATE_COMING] Full formed, running module_init
+@@ -129,9 +129,9 @@ unload_mod $MOD_TARGET
+ disable_lp $MOD_LIVEPATCH
+ unload_lp $MOD_LIVEPATCH
+ 
+-check_result "% modprobe $MOD_TARGET
++check_result "% insmod test_modules/$MOD_TARGET.ko
+ $MOD_TARGET: ${MOD_TARGET}_init
+-% modprobe $MOD_LIVEPATCH
++% insmod test_modules/$MOD_LIVEPATCH.ko
+ livepatch: enabling patch '$MOD_LIVEPATCH'
+ livepatch: '$MOD_LIVEPATCH': initializing patching transition
+ $MOD_LIVEPATCH: pre_patch_callback: vmlinux
+@@ -177,7 +177,7 @@ unload_mod $MOD_TARGET
+ disable_lp $MOD_LIVEPATCH
+ unload_lp $MOD_LIVEPATCH
+ 
+-check_result "% modprobe $MOD_LIVEPATCH
++check_result "% insmod test_modules/$MOD_LIVEPATCH.ko
+ livepatch: enabling patch '$MOD_LIVEPATCH'
+ livepatch: '$MOD_LIVEPATCH': initializing patching transition
+ $MOD_LIVEPATCH: pre_patch_callback: vmlinux
+@@ -185,7 +185,7 @@ livepatch: '$MOD_LIVEPATCH': starting patching transition
+ livepatch: '$MOD_LIVEPATCH': completing patching transition
+ $MOD_LIVEPATCH: post_patch_callback: vmlinux
+ livepatch: '$MOD_LIVEPATCH': patching complete
+-% modprobe $MOD_TARGET
++% insmod test_modules/$MOD_TARGET.ko
+ livepatch: applying patch '$MOD_LIVEPATCH' to loading module '$MOD_TARGET'
+ $MOD_LIVEPATCH: pre_patch_callback: $MOD_TARGET -> [MODULE_STATE_COMING] Full formed, running module_init
+ $MOD_LIVEPATCH: post_patch_callback: $MOD_TARGET -> [MODULE_STATE_COMING] Full formed, running module_init
+@@ -219,7 +219,7 @@ load_lp $MOD_LIVEPATCH
+ disable_lp $MOD_LIVEPATCH
+ unload_lp $MOD_LIVEPATCH
+ 
+-check_result "% modprobe $MOD_LIVEPATCH
++check_result "% insmod test_modules/$MOD_LIVEPATCH.ko
+ livepatch: enabling patch '$MOD_LIVEPATCH'
+ livepatch: '$MOD_LIVEPATCH': initializing patching transition
+ $MOD_LIVEPATCH: pre_patch_callback: vmlinux
+@@ -254,9 +254,9 @@ load_mod $MOD_TARGET
+ load_failing_mod $MOD_LIVEPATCH pre_patch_ret=-19
+ unload_mod $MOD_TARGET
+ 
+-check_result "% modprobe $MOD_TARGET
++check_result "% insmod test_modules/$MOD_TARGET.ko
+ $MOD_TARGET: ${MOD_TARGET}_init
+-% modprobe $MOD_LIVEPATCH pre_patch_ret=-19
++% insmod test_modules/$MOD_LIVEPATCH.ko pre_patch_ret=-19
+ livepatch: enabling patch '$MOD_LIVEPATCH'
+ livepatch: '$MOD_LIVEPATCH': initializing patching transition
+ test_klp_callbacks_demo: pre_patch_callback: vmlinux
+@@ -265,7 +265,7 @@ livepatch: failed to enable patch '$MOD_LIVEPATCH'
+ livepatch: '$MOD_LIVEPATCH': canceling patching transition, going to unpatch
+ livepatch: '$MOD_LIVEPATCH': completing unpatching transition
+ livepatch: '$MOD_LIVEPATCH': unpatching complete
+-modprobe: ERROR: could not insert '$MOD_LIVEPATCH': No such device
++insmod: ERROR: could not insert module test_modules/$MOD_LIVEPATCH.ko: No such device
+ % rmmod $MOD_TARGET
+ $MOD_TARGET: ${MOD_TARGET}_exit"
+ 
+@@ -295,7 +295,7 @@ load_failing_mod $MOD_TARGET
+ disable_lp $MOD_LIVEPATCH
+ unload_lp $MOD_LIVEPATCH
+ 
+-check_result "% modprobe $MOD_LIVEPATCH
++check_result "% insmod test_modules/$MOD_LIVEPATCH.ko
+ livepatch: enabling patch '$MOD_LIVEPATCH'
+ livepatch: '$MOD_LIVEPATCH': initializing patching transition
+ $MOD_LIVEPATCH: pre_patch_callback: vmlinux
+@@ -304,12 +304,12 @@ livepatch: '$MOD_LIVEPATCH': completing patching transition
+ $MOD_LIVEPATCH: post_patch_callback: vmlinux
+ livepatch: '$MOD_LIVEPATCH': patching complete
+ % echo -19 > /sys/module/$MOD_LIVEPATCH/parameters/pre_patch_ret
+-% modprobe $MOD_TARGET
++% insmod test_modules/$MOD_TARGET.ko
+ livepatch: applying patch '$MOD_LIVEPATCH' to loading module '$MOD_TARGET'
+ $MOD_LIVEPATCH: pre_patch_callback: $MOD_TARGET -> [MODULE_STATE_COMING] Full formed, running module_init
+ livepatch: pre-patch callback failed for object '$MOD_TARGET'
+ livepatch: patch '$MOD_LIVEPATCH' failed for module '$MOD_TARGET', refusing to load module '$MOD_TARGET'
+-modprobe: ERROR: could not insert '$MOD_TARGET': No such device
++insmod: ERROR: could not insert module test_modules/$MOD_TARGET.ko: No such device
+ % echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH/enabled
+ livepatch: '$MOD_LIVEPATCH': initializing unpatching transition
+ $MOD_LIVEPATCH: pre_unpatch_callback: vmlinux
+@@ -340,11 +340,11 @@ disable_lp $MOD_LIVEPATCH
+ unload_lp $MOD_LIVEPATCH
+ unload_mod $MOD_TARGET_BUSY
+ 
+-check_result "% modprobe $MOD_TARGET_BUSY block_transition=N
++check_result "% insmod test_modules/$MOD_TARGET_BUSY.ko block_transition=N
+ $MOD_TARGET_BUSY: ${MOD_TARGET_BUSY}_init
+ $MOD_TARGET_BUSY: busymod_work_func enter
+ $MOD_TARGET_BUSY: busymod_work_func exit
+-% modprobe $MOD_LIVEPATCH
++% insmod test_modules/$MOD_LIVEPATCH.ko
+ livepatch: enabling patch '$MOD_LIVEPATCH'
+ livepatch: '$MOD_LIVEPATCH': initializing patching transition
+ $MOD_LIVEPATCH: pre_patch_callback: vmlinux
+@@ -354,7 +354,7 @@ livepatch: '$MOD_LIVEPATCH': completing patching transition
+ $MOD_LIVEPATCH: post_patch_callback: vmlinux
+ $MOD_LIVEPATCH: post_patch_callback: $MOD_TARGET_BUSY -> [MODULE_STATE_LIVE] Normal state
+ livepatch: '$MOD_LIVEPATCH': patching complete
+-% modprobe $MOD_TARGET
++% insmod test_modules/$MOD_TARGET.ko
+ livepatch: applying patch '$MOD_LIVEPATCH' to loading module '$MOD_TARGET'
+ $MOD_LIVEPATCH: pre_patch_callback: $MOD_TARGET -> [MODULE_STATE_COMING] Full formed, running module_init
+ $MOD_LIVEPATCH: post_patch_callback: $MOD_TARGET -> [MODULE_STATE_COMING] Full formed, running module_init
+@@ -421,16 +421,16 @@ disable_lp $MOD_LIVEPATCH
+ unload_lp $MOD_LIVEPATCH
+ unload_mod $MOD_TARGET_BUSY
+ 
+-check_result "% modprobe $MOD_TARGET_BUSY block_transition=Y
++check_result "% insmod test_modules/$MOD_TARGET_BUSY.ko block_transition=Y
+ $MOD_TARGET_BUSY: ${MOD_TARGET_BUSY}_init
+ $MOD_TARGET_BUSY: busymod_work_func enter
+-% modprobe $MOD_LIVEPATCH
++% insmod test_modules/$MOD_LIVEPATCH.ko
+ livepatch: enabling patch '$MOD_LIVEPATCH'
+ livepatch: '$MOD_LIVEPATCH': initializing patching transition
+ $MOD_LIVEPATCH: pre_patch_callback: vmlinux
+ $MOD_LIVEPATCH: pre_patch_callback: $MOD_TARGET_BUSY -> [MODULE_STATE_LIVE] Normal state
+ livepatch: '$MOD_LIVEPATCH': starting patching transition
+-% modprobe $MOD_TARGET
++% insmod test_modules/$MOD_TARGET.ko
+ livepatch: applying patch '$MOD_LIVEPATCH' to loading module '$MOD_TARGET'
+ $MOD_LIVEPATCH: pre_patch_callback: $MOD_TARGET -> [MODULE_STATE_COMING] Full formed, running module_init
+ $MOD_TARGET: ${MOD_TARGET}_init
+@@ -467,7 +467,7 @@ disable_lp $MOD_LIVEPATCH
+ unload_lp $MOD_LIVEPATCH2
+ unload_lp $MOD_LIVEPATCH
+ 
+-check_result "% modprobe $MOD_LIVEPATCH
++check_result "% insmod test_modules/$MOD_LIVEPATCH.ko
+ livepatch: enabling patch '$MOD_LIVEPATCH'
+ livepatch: '$MOD_LIVEPATCH': initializing patching transition
+ $MOD_LIVEPATCH: pre_patch_callback: vmlinux
+@@ -475,7 +475,7 @@ livepatch: '$MOD_LIVEPATCH': starting patching transition
+ livepatch: '$MOD_LIVEPATCH': completing patching transition
+ $MOD_LIVEPATCH: post_patch_callback: vmlinux
+ livepatch: '$MOD_LIVEPATCH': patching complete
+-% modprobe $MOD_LIVEPATCH2
++% insmod test_modules/$MOD_LIVEPATCH2.ko
+ livepatch: enabling patch '$MOD_LIVEPATCH2'
+ livepatch: '$MOD_LIVEPATCH2': initializing patching transition
+ $MOD_LIVEPATCH2: pre_patch_callback: vmlinux
+@@ -523,7 +523,7 @@ disable_lp $MOD_LIVEPATCH2
+ unload_lp $MOD_LIVEPATCH2
+ unload_lp $MOD_LIVEPATCH
+ 
+-check_result "% modprobe $MOD_LIVEPATCH
++check_result "% insmod test_modules/$MOD_LIVEPATCH.ko
+ livepatch: enabling patch '$MOD_LIVEPATCH'
+ livepatch: '$MOD_LIVEPATCH': initializing patching transition
+ $MOD_LIVEPATCH: pre_patch_callback: vmlinux
+@@ -531,7 +531,7 @@ livepatch: '$MOD_LIVEPATCH': starting patching transition
+ livepatch: '$MOD_LIVEPATCH': completing patching transition
+ $MOD_LIVEPATCH: post_patch_callback: vmlinux
+ livepatch: '$MOD_LIVEPATCH': patching complete
+-% modprobe $MOD_LIVEPATCH2 replace=1
++% insmod test_modules/$MOD_LIVEPATCH2.ko replace=1
+ livepatch: enabling patch '$MOD_LIVEPATCH2'
+ livepatch: '$MOD_LIVEPATCH2': initializing patching transition
+ $MOD_LIVEPATCH2: pre_patch_callback: vmlinux
+diff --git a/tools/testing/selftests/livepatch/test-ftrace.sh b/tools/testing/selftests/livepatch/test-ftrace.sh
+index 825540a5194d..730218bce99c 100755
+--- a/tools/testing/selftests/livepatch/test-ftrace.sh
++++ b/tools/testing/selftests/livepatch/test-ftrace.sh
+@@ -35,7 +35,7 @@ disable_lp $MOD_LIVEPATCH
+ unload_lp $MOD_LIVEPATCH
+ 
+ check_result "livepatch: kernel.ftrace_enabled = 0
+-% modprobe $MOD_LIVEPATCH
++% insmod test_modules/$MOD_LIVEPATCH.ko
+ livepatch: enabling patch '$MOD_LIVEPATCH'
+ livepatch: '$MOD_LIVEPATCH': initializing patching transition
+ livepatch: failed to register ftrace handler for function 'cmdline_proc_show' (-16)
+@@ -44,9 +44,9 @@ livepatch: failed to enable patch '$MOD_LIVEPATCH'
+ livepatch: '$MOD_LIVEPATCH': canceling patching transition, going to unpatch
+ livepatch: '$MOD_LIVEPATCH': completing unpatching transition
+ livepatch: '$MOD_LIVEPATCH': unpatching complete
+-modprobe: ERROR: could not insert '$MOD_LIVEPATCH': Device or resource busy
++insmod: ERROR: could not insert module test_modules/$MOD_LIVEPATCH.ko: Device or resource busy
+ livepatch: kernel.ftrace_enabled = 1
+-% modprobe $MOD_LIVEPATCH
++% insmod test_modules/$MOD_LIVEPATCH.ko
+ livepatch: enabling patch '$MOD_LIVEPATCH'
+ livepatch: '$MOD_LIVEPATCH': initializing patching transition
+ livepatch: '$MOD_LIVEPATCH': starting patching transition
+diff --git a/tools/testing/selftests/livepatch/test-livepatch.sh b/tools/testing/selftests/livepatch/test-livepatch.sh
+index 5fe79ac34be1..e3455a6b1158 100755
+--- a/tools/testing/selftests/livepatch/test-livepatch.sh
++++ b/tools/testing/selftests/livepatch/test-livepatch.sh
+@@ -31,7 +31,7 @@ if [[ "$(cat /proc/cmdline)" == "$MOD_LIVEPATCH: this has been live patched" ]]
+ 	die "livepatch kselftest(s) failed"
+ fi
+ 
+-check_result "% modprobe $MOD_LIVEPATCH
++check_result "% insmod test_modules/$MOD_LIVEPATCH.ko
+ livepatch: enabling patch '$MOD_LIVEPATCH'
+ livepatch: '$MOD_LIVEPATCH': initializing patching transition
+ livepatch: '$MOD_LIVEPATCH': starting patching transition
+@@ -75,14 +75,14 @@ unload_lp $MOD_LIVEPATCH
+ grep 'live patched' /proc/cmdline > /dev/kmsg
+ grep 'live patched' /proc/meminfo > /dev/kmsg
+ 
+-check_result "% modprobe $MOD_LIVEPATCH
++check_result "% insmod test_modules/$MOD_LIVEPATCH.ko
+ livepatch: enabling patch '$MOD_LIVEPATCH'
+ livepatch: '$MOD_LIVEPATCH': initializing patching transition
+ livepatch: '$MOD_LIVEPATCH': starting patching transition
+ livepatch: '$MOD_LIVEPATCH': completing patching transition
+ livepatch: '$MOD_LIVEPATCH': patching complete
+ $MOD_LIVEPATCH: this has been live patched
+-% modprobe $MOD_REPLACE replace=0
++% insmod test_modules/$MOD_REPLACE.ko replace=0
+ livepatch: enabling patch '$MOD_REPLACE'
+ livepatch: '$MOD_REPLACE': initializing patching transition
+ livepatch: '$MOD_REPLACE': starting patching transition
+@@ -135,14 +135,14 @@ unload_lp $MOD_REPLACE
+ grep 'live patched' /proc/cmdline > /dev/kmsg
+ grep 'live patched' /proc/meminfo > /dev/kmsg
+ 
+-check_result "% modprobe $MOD_LIVEPATCH
++check_result "% insmod test_modules/$MOD_LIVEPATCH.ko
+ livepatch: enabling patch '$MOD_LIVEPATCH'
+ livepatch: '$MOD_LIVEPATCH': initializing patching transition
+ livepatch: '$MOD_LIVEPATCH': starting patching transition
+ livepatch: '$MOD_LIVEPATCH': completing patching transition
+ livepatch: '$MOD_LIVEPATCH': patching complete
+ $MOD_LIVEPATCH: this has been live patched
+-% modprobe $MOD_REPLACE replace=1
++% insmod test_modules/$MOD_REPLACE.ko replace=1
+ livepatch: enabling patch '$MOD_REPLACE'
+ livepatch: '$MOD_REPLACE': initializing patching transition
+ livepatch: '$MOD_REPLACE': starting patching transition
+diff --git a/tools/testing/selftests/livepatch/test-shadow-vars.sh b/tools/testing/selftests/livepatch/test-shadow-vars.sh
+index e04cb354f56b..1218c155bffe 100755
+--- a/tools/testing/selftests/livepatch/test-shadow-vars.sh
++++ b/tools/testing/selftests/livepatch/test-shadow-vars.sh
+@@ -16,7 +16,7 @@ start_test "basic shadow variable API"
+ load_mod $MOD_TEST
+ unload_mod $MOD_TEST
+ 
+-check_result "% modprobe $MOD_TEST
++check_result "% insmod test_modules/$MOD_TEST.ko
+ $MOD_TEST: klp_shadow_get(obj=PTR1, id=0x1234) = PTR0
+ $MOD_TEST:   got expected NULL result
+ $MOD_TEST: shadow_ctor: PTR3 -> PTR2
+diff --git a/tools/testing/selftests/livepatch/test-state.sh b/tools/testing/selftests/livepatch/test-state.sh
+index 38656721c958..10a52ac06185 100755
+--- a/tools/testing/selftests/livepatch/test-state.sh
++++ b/tools/testing/selftests/livepatch/test-state.sh
+@@ -19,7 +19,7 @@ load_lp $MOD_LIVEPATCH
+ disable_lp $MOD_LIVEPATCH
+ unload_lp $MOD_LIVEPATCH
+ 
+-check_result "% modprobe $MOD_LIVEPATCH
++check_result "% insmod test_modules/$MOD_LIVEPATCH.ko
+ livepatch: enabling patch '$MOD_LIVEPATCH'
+ livepatch: '$MOD_LIVEPATCH': initializing patching transition
+ $MOD_LIVEPATCH: pre_patch_callback: vmlinux
+@@ -51,7 +51,7 @@ unload_lp $MOD_LIVEPATCH
+ disable_lp $MOD_LIVEPATCH2
+ unload_lp $MOD_LIVEPATCH2
+ 
+-check_result "% modprobe $MOD_LIVEPATCH
++check_result "% insmod test_modules/$MOD_LIVEPATCH.ko
+ livepatch: enabling patch '$MOD_LIVEPATCH'
+ livepatch: '$MOD_LIVEPATCH': initializing patching transition
+ $MOD_LIVEPATCH: pre_patch_callback: vmlinux
+@@ -61,7 +61,7 @@ livepatch: '$MOD_LIVEPATCH': completing patching transition
+ $MOD_LIVEPATCH: post_patch_callback: vmlinux
+ $MOD_LIVEPATCH: fix_console_loglevel: fixing console_loglevel
+ livepatch: '$MOD_LIVEPATCH': patching complete
+-% modprobe $MOD_LIVEPATCH2
++% insmod test_modules/$MOD_LIVEPATCH2.ko
+ livepatch: enabling patch '$MOD_LIVEPATCH2'
+ livepatch: '$MOD_LIVEPATCH2': initializing patching transition
+ $MOD_LIVEPATCH2: pre_patch_callback: vmlinux
+@@ -96,7 +96,7 @@ disable_lp $MOD_LIVEPATCH2
+ unload_lp $MOD_LIVEPATCH2
+ unload_lp $MOD_LIVEPATCH3
+ 
+-check_result "% modprobe $MOD_LIVEPATCH2
++check_result "% insmod test_modules/$MOD_LIVEPATCH2.ko
+ livepatch: enabling patch '$MOD_LIVEPATCH2'
+ livepatch: '$MOD_LIVEPATCH2': initializing patching transition
+ $MOD_LIVEPATCH2: pre_patch_callback: vmlinux
+@@ -106,7 +106,7 @@ livepatch: '$MOD_LIVEPATCH2': completing patching transition
+ $MOD_LIVEPATCH2: post_patch_callback: vmlinux
+ $MOD_LIVEPATCH2: fix_console_loglevel: fixing console_loglevel
+ livepatch: '$MOD_LIVEPATCH2': patching complete
+-% modprobe $MOD_LIVEPATCH3
++% insmod test_modules/$MOD_LIVEPATCH3.ko
+ livepatch: enabling patch '$MOD_LIVEPATCH3'
+ livepatch: '$MOD_LIVEPATCH3': initializing patching transition
+ $MOD_LIVEPATCH3: pre_patch_callback: vmlinux
+@@ -117,7 +117,7 @@ $MOD_LIVEPATCH3: post_patch_callback: vmlinux
+ $MOD_LIVEPATCH3: fix_console_loglevel: taking over the console_loglevel change
+ livepatch: '$MOD_LIVEPATCH3': patching complete
+ % rmmod $MOD_LIVEPATCH2
+-% modprobe $MOD_LIVEPATCH2
++% insmod test_modules/$MOD_LIVEPATCH2.ko
+ livepatch: enabling patch '$MOD_LIVEPATCH2'
+ livepatch: '$MOD_LIVEPATCH2': initializing patching transition
+ $MOD_LIVEPATCH2: pre_patch_callback: vmlinux
+@@ -149,7 +149,7 @@ load_failing_mod $MOD_LIVEPATCH
+ disable_lp $MOD_LIVEPATCH2
+ unload_lp $MOD_LIVEPATCH2
+ 
+-check_result "% modprobe $MOD_LIVEPATCH2
++check_result "% insmod test_modules/$MOD_LIVEPATCH2.ko
+ livepatch: enabling patch '$MOD_LIVEPATCH2'
+ livepatch: '$MOD_LIVEPATCH2': initializing patching transition
+ $MOD_LIVEPATCH2: pre_patch_callback: vmlinux
+@@ -159,9 +159,9 @@ livepatch: '$MOD_LIVEPATCH2': completing patching transition
+ $MOD_LIVEPATCH2: post_patch_callback: vmlinux
+ $MOD_LIVEPATCH2: fix_console_loglevel: fixing console_loglevel
+ livepatch: '$MOD_LIVEPATCH2': patching complete
+-% modprobe $MOD_LIVEPATCH
++% insmod test_modules/$MOD_LIVEPATCH.ko
+ livepatch: Livepatch patch ($MOD_LIVEPATCH) is not compatible with the already installed livepatches.
+-modprobe: ERROR: could not insert '$MOD_LIVEPATCH': Invalid argument
++insmod: ERROR: could not insert module test_modules/$MOD_LIVEPATCH.ko: Invalid parameters
+ % echo 0 > /sys/kernel/livepatch/$MOD_LIVEPATCH2/enabled
+ livepatch: '$MOD_LIVEPATCH2': initializing unpatching transition
+ $MOD_LIVEPATCH2: pre_unpatch_callback: vmlinux
+diff --git a/tools/testing/selftests/livepatch/test-sysfs.sh b/tools/testing/selftests/livepatch/test-sysfs.sh
+index 7f76f280189a..6c646afa7395 100755
+--- a/tools/testing/selftests/livepatch/test-sysfs.sh
++++ b/tools/testing/selftests/livepatch/test-sysfs.sh
+@@ -27,7 +27,7 @@ disable_lp $MOD_LIVEPATCH
+ 
+ unload_lp $MOD_LIVEPATCH
+ 
+-check_result "% modprobe $MOD_LIVEPATCH
++check_result "% insmod test_modules/$MOD_LIVEPATCH.ko
+ livepatch: enabling patch '$MOD_LIVEPATCH'
+ livepatch: '$MOD_LIVEPATCH': initializing patching transition
+ livepatch: '$MOD_LIVEPATCH': starting patching transition
+@@ -56,7 +56,7 @@ check_sysfs_value  "$MOD_LIVEPATCH" "$MOD_TARGET/patched" "0"
+ disable_lp $MOD_LIVEPATCH
+ unload_lp $MOD_LIVEPATCH
+ 
+-check_result "% modprobe test_klp_callbacks_demo
++check_result "% insmod test_modules/test_klp_callbacks_demo.ko
+ livepatch: enabling patch 'test_klp_callbacks_demo'
+ livepatch: 'test_klp_callbacks_demo': initializing patching transition
+ test_klp_callbacks_demo: pre_patch_callback: vmlinux
+@@ -64,7 +64,7 @@ livepatch: 'test_klp_callbacks_demo': starting patching transition
+ livepatch: 'test_klp_callbacks_demo': completing patching transition
+ test_klp_callbacks_demo: post_patch_callback: vmlinux
+ livepatch: 'test_klp_callbacks_demo': patching complete
+-% modprobe test_klp_callbacks_mod
++% insmod test_modules/test_klp_callbacks_mod.ko
+ livepatch: applying patch 'test_klp_callbacks_demo' to loading module 'test_klp_callbacks_mod'
+ test_klp_callbacks_demo: pre_patch_callback: test_klp_callbacks_mod -> [MODULE_STATE_COMING] Full formed, running module_init
+ test_klp_callbacks_demo: post_patch_callback: test_klp_callbacks_mod -> [MODULE_STATE_COMING] Full formed, running module_init
+diff --git a/tools/testing/selftests/livepatch/test_modules/Makefile b/tools/testing/selftests/livepatch/test_modules/Makefile
+new file mode 100644
+index 000000000000..6f7c2103d27d
+--- /dev/null
++++ b/tools/testing/selftests/livepatch/test_modules/Makefile
+@@ -0,0 +1,19 @@
++TESTMODS_DIR := $(realpath $(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
++KDIR ?= /lib/modules/$(shell uname -r)/build
 +
-+clean_mods_dir:
-+	$(Q)$(MAKE) -C $(TEST_GEN_MODS_DIR) clean
++obj-m += test_klp_atomic_replace.o \
++	test_klp_callbacks_busy.o \
++	test_klp_callbacks_demo.o \
++	test_klp_callbacks_demo2.o \
++	test_klp_callbacks_mod.o \
++	test_klp_livepatch.o \
++	test_klp_state.o \
++	test_klp_state2.o \
++	test_klp_state3.o \
++	test_klp_shadow_vars.o
 +
- define INSTALL_SINGLE_RULE
- 	$(if $(INSTALL_LIST),@mkdir -p $(INSTALL_PATH))
- 	$(if $(INSTALL_LIST),rsync -a --copy-unsafe-links $(INSTALL_LIST) $(INSTALL_PATH)/)
- endef
- 
-+define INSTALL_MODS_RULE
-+	$(if $(INSTALL_LIST),@mkdir -p $(INSTALL_PATH)/$(INSTALL_LIST))
-+	$(if $(INSTALL_LIST),rsync -a --copy-unsafe-links $(INSTALL_LIST)/*.ko $(INSTALL_PATH)/$(INSTALL_LIST))
-+endef
++modules:
++	$(Q)$(MAKE) -C $(KDIR) modules KBUILD_EXTMOD=$(TESTMODS_DIR)
 +
- define INSTALL_RULE
- 	$(eval INSTALL_LIST = $(TEST_PROGS)) $(INSTALL_SINGLE_RULE)
- 	$(eval INSTALL_LIST = $(TEST_PROGS_EXTENDED)) $(INSTALL_SINGLE_RULE)
-@@ -97,6 +112,7 @@ define INSTALL_RULE
- 	$(eval INSTALL_LIST = $(TEST_CUSTOM_PROGS)) $(INSTALL_SINGLE_RULE)
- 	$(eval INSTALL_LIST = $(TEST_GEN_PROGS_EXTENDED)) $(INSTALL_SINGLE_RULE)
- 	$(eval INSTALL_LIST = $(TEST_GEN_FILES)) $(INSTALL_SINGLE_RULE)
-+	$(eval INSTALL_LIST = $(notdir $(TEST_GEN_MODS_DIR))) $(INSTALL_MODS_RULE)
- 	$(eval INSTALL_LIST = $(wildcard config settings)) $(INSTALL_SINGLE_RULE)
- endef
- 
-@@ -122,7 +138,7 @@ define CLEAN
- 	$(RM) -r $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES) $(EXTRA_CLEAN)
- endef
- 
--clean:
-+clean: $(if $(TEST_GEN_MODS_DIR),clean_mods_dir)
- 	$(CLEAN)
- 
- # Enables to extend CFLAGS and LDFLAGS from command line, e.g.
-@@ -153,4 +169,4 @@ $(OUTPUT)/%:%.S
- 	$(LINK.S) $^ $(LDLIBS) -o $@
- endif
- 
--.PHONY: run_tests all clean install emit_tests
-+.PHONY: run_tests all clean install emit_tests gen_mods_dir clean_mods_dir
++clean:
++	$(Q)$(MAKE) -C $(KDIR) clean KBUILD_EXTMOD=$(TESTMODS_DIR)
+diff --git a/lib/livepatch/test_klp_atomic_replace.c b/tools/testing/selftests/livepatch/test_modules/test_klp_atomic_replace.c
+similarity index 100%
+rename from lib/livepatch/test_klp_atomic_replace.c
+rename to tools/testing/selftests/livepatch/test_modules/test_klp_atomic_replace.c
+diff --git a/lib/livepatch/test_klp_callbacks_busy.c b/tools/testing/selftests/livepatch/test_modules/test_klp_callbacks_busy.c
+similarity index 100%
+rename from lib/livepatch/test_klp_callbacks_busy.c
+rename to tools/testing/selftests/livepatch/test_modules/test_klp_callbacks_busy.c
+diff --git a/lib/livepatch/test_klp_callbacks_demo.c b/tools/testing/selftests/livepatch/test_modules/test_klp_callbacks_demo.c
+similarity index 100%
+rename from lib/livepatch/test_klp_callbacks_demo.c
+rename to tools/testing/selftests/livepatch/test_modules/test_klp_callbacks_demo.c
+diff --git a/lib/livepatch/test_klp_callbacks_demo2.c b/tools/testing/selftests/livepatch/test_modules/test_klp_callbacks_demo2.c
+similarity index 100%
+rename from lib/livepatch/test_klp_callbacks_demo2.c
+rename to tools/testing/selftests/livepatch/test_modules/test_klp_callbacks_demo2.c
+diff --git a/lib/livepatch/test_klp_callbacks_mod.c b/tools/testing/selftests/livepatch/test_modules/test_klp_callbacks_mod.c
+similarity index 100%
+rename from lib/livepatch/test_klp_callbacks_mod.c
+rename to tools/testing/selftests/livepatch/test_modules/test_klp_callbacks_mod.c
+diff --git a/lib/livepatch/test_klp_livepatch.c b/tools/testing/selftests/livepatch/test_modules/test_klp_livepatch.c
+similarity index 100%
+rename from lib/livepatch/test_klp_livepatch.c
+rename to tools/testing/selftests/livepatch/test_modules/test_klp_livepatch.c
+diff --git a/lib/livepatch/test_klp_shadow_vars.c b/tools/testing/selftests/livepatch/test_modules/test_klp_shadow_vars.c
+similarity index 100%
+rename from lib/livepatch/test_klp_shadow_vars.c
+rename to tools/testing/selftests/livepatch/test_modules/test_klp_shadow_vars.c
+diff --git a/lib/livepatch/test_klp_state.c b/tools/testing/selftests/livepatch/test_modules/test_klp_state.c
+similarity index 100%
+rename from lib/livepatch/test_klp_state.c
+rename to tools/testing/selftests/livepatch/test_modules/test_klp_state.c
+diff --git a/lib/livepatch/test_klp_state2.c b/tools/testing/selftests/livepatch/test_modules/test_klp_state2.c
+similarity index 100%
+rename from lib/livepatch/test_klp_state2.c
+rename to tools/testing/selftests/livepatch/test_modules/test_klp_state2.c
+diff --git a/lib/livepatch/test_klp_state3.c b/tools/testing/selftests/livepatch/test_modules/test_klp_state3.c
+similarity index 100%
+rename from lib/livepatch/test_klp_state3.c
+rename to tools/testing/selftests/livepatch/test_modules/test_klp_state3.c
 
 -- 
 2.42.1
