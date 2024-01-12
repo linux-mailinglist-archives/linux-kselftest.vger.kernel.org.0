@@ -1,119 +1,126 @@
-Return-Path: <linux-kselftest+bounces-2925-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2926-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69CE082C617
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jan 2024 21:04:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96D6A82C622
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jan 2024 21:07:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 12AB21C21042
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jan 2024 20:04:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4882B1F24537
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jan 2024 20:07:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 389551640B;
-	Fri, 12 Jan 2024 20:04:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D143616410;
+	Fri, 12 Jan 2024 20:07:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dxuuu.xyz header.i=@dxuuu.xyz header.b="XKtJaWQ5";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="q0MxCTl2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gtxcC37X"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63A1D15ACF;
-	Fri, 12 Jan 2024 20:04:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dxuuu.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dxuuu.xyz
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-	by mailout.west.internal (Postfix) with ESMTP id EAC4E3200AE9;
-	Fri, 12 Jan 2024 15:04:03 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Fri, 12 Jan 2024 15:04:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dxuuu.xyz; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm1; t=1705089843; x=1705176243; bh=+8mz4XZguZ
-	in9UP/KR7blhH64FTif6Z1M+wN3fDN6dQ=; b=XKtJaWQ5K8ENuQnLrOOFCe9Oqr
-	N+oxaTUlyPe1bFrj5Ndq8a9kzF/XPvQX6V/zjvpeJFWrKO4IiAz56Im7dS/5tUrg
-	LF9LA2PXRzfpXWbenlCDejl4IS1BT9j3K7syUQeoyl9bti1963hqfi4BGr5C6VIx
-	7/y6K8qb/pQgvRf8Cc1Z1d99CITcCUaqBgQJ/alRxAxlprAawk1pR5QwDr7e5c/b
-	ianfPN82FOg+0d3pFTd2bCjoiHFs8krGwgd6f9yRPCSGZwV6KTfPmNpAaLrtgvZi
-	YD9Tc+mLGUrXWWGkDNSaLo3Z1GqZdK8IaN4HFZFYb8AxZzOjLh6SgBZS9VNA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm2; t=1705089843; x=1705176243; bh=+8mz4XZguZin9UP/KR7blhH64FTi
-	f6Z1M+wN3fDN6dQ=; b=q0MxCTl2AoML2E0BHeGfYNog4xC/sRa8vIfOKKiGddNw
-	0prH+OWyfMFIyJ2II/bw0Acx5uQfHaBhF0KaGnf4l9MeU5DC8wRMphxLi9FFqupn
-	mdp2kiq0yiIJlmTTPaIo0RfC9hGgujQs71lq2ft23KL2cJCLIGP0nMoXJN6HySnc
-	pHMz5fo0GGhFKXRhBqa1Fw0Rwo/nbPjp3wAVG8IpcYU3ToCvgoUa5JlsPA8dzUN9
-	J35/kx7dlxio9pAYIzJj4Z+P1/PFaUZ93JOdvKJqO6haIYJ09PELFGwtjX14fylt
-	d8NSFTZNlLWN/+KGSMjW5yQnmel62kXjpV94alsy3w==
-X-ME-Sender: <xms:MpuhZb8duYQSytqWdU77MM6IyqWHqYh050N5HvRxrLHKhlKlkVCRXA>
-    <xme:MpuhZXtglSlLhLRZefoYM7vdW83i9wqN1BKWtHjZXQJlCL8hyF8itey3_N2gvsuzB
-    NzND2cMU2agHpfTOA>
-X-ME-Received: <xmr:MpuhZZDuDHyUNifp5hPfOoiAEamPCMUJHybPVSKqEB6-EjrFvWPg744nZvo-X_Rbjw0W7SqQRprjTdHRuLTWcd2QbEVrqJ_SXEwR0lo>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvkedrvdeihedgudefudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enfghrlhcuvffnffculdejtddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtsfdt
-    tddtvdenucfhrhhomhepffgrnhhivghlucgiuhcuoegugihusegugihuuhhurdighiiiqe
-    enucggtffrrghtthgvrhhnpedvfeekteduudefieegtdehfeffkeeuudekheduffduffff
-    gfegiedttefgvdfhvdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrih
-    hlfhhrohhmpegugihusegugihuuhhurdighiii
-X-ME-Proxy: <xmx:MpuhZXdfeoElfiSSF5KdEALU43XdsO3V3q9kxSEDq4zGsYW4hMg2ag>
-    <xmx:MpuhZQNU14LzFDa4papP7154zoWDsLRztvp615vN5cZ88HXyqd19ew>
-    <xmx:MpuhZZkT1Li4-Lqb_29omSMiU-F0NlfGeKOwvQLHj6BY5T46UmhJEA>
-    <xmx:M5uhZVvjD4ejrvco6EgFK3lew0AWY7HU4KijWUhlweUkBmFLK5sPog>
-Feedback-ID: i6a694271:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 12 Jan 2024 15:04:00 -0500 (EST)
-Date: Fri, 12 Jan 2024 13:03:59 -0700
-From: Daniel Xu <dxu@dxuuu.xyz>
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: linux-input@vger.kernel.org, coreteam@netfilter.org, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, netfilter-devel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-trace-kernel@vger.kernel.org, fsverity@lists.linux.dev, 
-	bpf@vger.kernel.org, netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
-	cgroups@vger.kernel.org, alexei.starovoitov@gmail.com, quentin@isovalent.com, 
-	alan.maguire@oracle.com, memxor@gmail.com
-Subject: Re: [PATCH bpf-next v3 0/3] Annotate kfuncs in .BTF_ids section
-Message-ID: <2dhmwvfnnqnlrui2qcr5fob54gdsuse5caievct42trvvia6qe@p24nymz3uttv>
-References: <cover.1704565248.git.dxu@dxuuu.xyz>
- <ZaFm13GyXUukcnkm@krava>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A728E15ADB;
+	Fri, 12 Jan 2024 20:07:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93C27C433F1;
+	Fri, 12 Jan 2024 20:07:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705090072;
+	bh=OrQw0dbMF0js5SoZCQr9kcnhmqPonHSy4cpM0zYdF2w=;
+	h=From:To:Cc:Subject:Date:From;
+	b=gtxcC37X2WxJ4Ag5UD09FLbJ3nEwuGIhOGOu6DNMTfRiSgUvAiRWHv3/hQyJQpxKQ
+	 A1asoHh7C1ft4+IuEbfix1Gf1pt1YKCEzW7Y/XOaeNOUyUEv9ePpL23qc0FqrHzZqp
+	 vT3y2v8e52od6NzaKnSki/9n/gksekczLmkQVO1HYRmwE2logou69Sl7/ae1Peys+e
+	 OSjyJlHtTNAfgsEzTESnp2XR4K3Fx40Ac3xvUanMsNvTH4mh64puVDEqjC4QR9xuIS
+	 4XN4firdS38espv2NzXsbmhGVx95bDBpNtKxSdI3K1VifWNRQXzOCmz+sIxI3qs3A2
+	 cKz3F2pW1w9aA==
+From: Stephen Boyd <sboyd@kernel.org>
+To: Rob Herring <robh+dt@kernel.org>
+Cc: linux-kernel@vger.kernel.org,
+	patches@lists.linux.dev,
+	linux-um@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	kunit-dev@googlegroups.com,
+	linux-kselftest@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	David Gow <davidgow@google.com>,
+	Frank Rowand <frowand.list@gmail.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Richard Weinberger <richard@nod.at>,
+	Will Deacon <will@kernel.org>
+Subject: [PATCH 0/6] of: populate of_root node if bootloader doesn't
+Date: Fri, 12 Jan 2024 12:07:43 -0800
+Message-ID: <20240112200750.4062441-1-sboyd@kernel.org>
+X-Mailer: git-send-email 2.43.0.275.g3460e3d667-goog
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZaFm13GyXUukcnkm@krava>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Jan 12, 2024 at 05:20:39PM +0100, Jiri Olsa wrote:
-> On Sat, Jan 06, 2024 at 11:24:07AM -0700, Daniel Xu wrote:
-> > === Description ===
-> > 
-> > This is a bpf-treewide change that annotates all kfuncs as such inside
-> > .BTF_ids. This annotation eventually allows us to automatically generate
-> > kfunc prototypes from bpftool.
-> > 
-> > We store this metadata inside a yet-unused flags field inside struct
-> > btf_id_set8 (thanks Kumar!). pahole will be taught where to look.
-> > 
-> > More details about the full chain of events are available in commit 3's
-> > description.
-> > 
-> > The accompanying pahole changes (still needs some cleanup) can be viewed
-> > here on this "frozen" branch [0].
-> 
-> so the plan is to have bpftool support to generate header file
-> with detected kfuncs?
+Arch maintainers, please ack/review patches.
 
-Yep, that's the major use case. But I see other use cases as well like
-precision probing of kfuncs. Rather than guess and check which progs can
-load (in the event of backwards incompatible kfunc changes), programs
-can look at kfunc type signature thru BTF.
+This is a resend of a series from Frank last year[1]. I worked in Rob's
+review comments to unconditionally call unflatten_device_tree() and
+fixup/audit calls to of_have_populated_dt() so that behavior doesn't
+change.
+
+I need this series so I can add DT based tests in the clk framework.
+Either I can merge it through the clk tree once everyone is happy, or
+Rob can merge it through the DT tree and provide some branch so I can
+base clk patches on it.
+
+Changes from Frank's series[1]:
+ * Add a DTB loaded kunit test
+ * Make of_have_populated_dt() return false if the DTB isn't from the
+   bootloader
+ * Architecture calls made unconditional so that a root node is always
+   made
+
+Frank Rowand (2):
+  of: Create of_root if no dtb provided by firmware
+  of: unittest: treat missing of_root as error instead of fixing up
+
+Stephen Boyd (4):
+  arm64: Unconditionally call unflatten_device_tree()
+  um: Unconditionally call unflatten_device_tree()
+  of: Always unflatten in unflatten_and_copy_device_tree()
+  of: Add KUnit test to confirm DTB is loaded
+
+ arch/arm64/kernel/setup.c |  3 +-
+ arch/um/kernel/dtb.c      | 14 +++---
+ drivers/of/.kunitconfig   |  3 ++
+ drivers/of/Kconfig        | 16 ++++++-
+ drivers/of/Makefile       |  4 +-
+ drivers/of/empty_root.dts |  6 +++
+ drivers/of/fdt.c          | 57 +++++++++++++++++------
+ drivers/of/of_test.c      | 98 +++++++++++++++++++++++++++++++++++++++
+ drivers/of/platform.c     |  3 --
+ drivers/of/unittest.c     | 16 ++-----
+ include/linux/of.h        | 17 +++++--
+ 11 files changed, 191 insertions(+), 46 deletions(-)
+ create mode 100644 drivers/of/.kunitconfig
+ create mode 100644 drivers/of/empty_root.dts
+ create mode 100644 drivers/of/of_test.c
+
+Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: David Gow <davidgow@google.com>
+Cc: Frank Rowand <frowand.list@gmail.com>
+Cc: Johannes Berg <johannes@sipsolutions.net>
+Cc: Richard Weinberger <richard@nod.at>
+Cc: Rob Herring <robh+dt@kernel.org>
+Cc: Will Deacon <will@kernel.org>
+
+[1] https://lore.kernel.org/r/20230317053415.2254616-1-frowand.list@gmail.com
+
+base-commit: 0dd3ee31125508cd67f7e7172247f05b7fd1753a
+-- 
+https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
+https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
+
 
