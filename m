@@ -1,87 +1,87 @@
-Return-Path: <linux-kselftest+bounces-2902-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2903-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2597B82BBAA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jan 2024 08:22:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8236D82BBF8
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jan 2024 08:45:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CE2DD1F2342C
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jan 2024 07:22:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1D8FA285999
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jan 2024 07:45:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A34955D912;
-	Fri, 12 Jan 2024 07:21:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F00ED5D72E;
+	Fri, 12 Jan 2024 07:45:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Er+Z95A4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ns5wnlEi"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 455C15D905;
-	Fri, 12 Jan 2024 07:21:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1705044114;
-	bh=QBJld2GpTQR5BTBjcyDUEA5vStcxynZ+NNL+dIDUE1Y=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Er+Z95A4+cQQLCKnefhakDIXVkXWbOi70sl6PINU+hcHa/DqHFRnWxcOAAdofYpW+
-	 YSvC1IK6PPwZDQGmxvuKMC0uG6fo2sfaNsnJgan7GAQzJ/R7ZL4zJzrUnwrWDmnkQZ
-	 GzoWEe9yo2+1CNQM8bLUquRy+ImTi8AYngJh8rMApCUtyX8oCOlUTKiRlTsub6egnH
-	 YED6pRy0s7EXglqhqhdO9lNwZK2Igh1J1XWy5gpKEBYQCyLU5+oPnchv/lxOuVfrxN
-	 2c23j+7OIPvEk2ihFSp8XWMCtwM8X8yL1Hbbh/B1/bHtZPpPno9Ha9PkWL2kPwW1Bj
-	 Ucz99YQdLGKOg==
-Received: from localhost.localdomain (cola.collaboradmins.com [195.201.22.229])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 4742B3780894;
-	Fri, 12 Jan 2024 07:21:53 +0000 (UTC)
-From: Muhammad Usama Anjum <usama.anjum@collabora.com>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
-	kernel@collabora.com,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 7/7] selftests/mm: config: add missing configs
-Date: Fri, 12 Jan 2024 12:21:40 +0500
-Message-ID: <20240112072144.620098-7-usama.anjum@collabora.com>
-X-Mailer: git-send-email 2.42.0
-In-Reply-To: <20240112072144.620098-1-usama.anjum@collabora.com>
-References: <20240112072144.620098-1-usama.anjum@collabora.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC6F25D727;
+	Fri, 12 Jan 2024 07:45:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A626DC43390;
+	Fri, 12 Jan 2024 07:45:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705045509;
+	bh=QDKvLfHcVgDLq23uE3D+65a5GLHkyMlCz9HrxqSl/UY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Ns5wnlEiKkgmTVCBcmxcjJL72keAjJOrwRSc3yjtX/gZgBJwvKMIvYcTACWw5Iw9B
+	 DzHXIfWKpA4MsG1TF58sD/Mgd8GVWLcHqznM0cI9pINBpbtCmquXZx1nj6r3r5ZYRE
+	 3EMAdjdud2cGaaFWALMJm/fOL/r62Ncari1Ju1TRL03qwx4sNbLoL90K9xVqmqbfUM
+	 XLdUMuY4fYInCOn7rSBa8mk2yQFT6V02LbiWuxMJoU+yLk61vWliiDyON8NVeNu/U7
+	 iWN+lMSl76INE58kgY/wSijVyR+TbIYg2LbxB87c3RL1ZpM6E/Kb6EG6yAnBM/UPOp
+	 v48RTzaktkzwQ==
+Date: Fri, 12 Jan 2024 13:05:11 +0530
+From: Naveen N Rao <naveen@kernel.org>
+To: Shuah Khan <shuah@kernel.org>
+Cc: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Michael Ellerman <mpe@ellerman.id.au>, Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH v2] selftests/ftrace: Add test to exercize function
+ tracer across cpu hotplug
+Message-ID: <fseaxfxqh5xjbn23mjpgev33zpkpfthbcwfd2hset5bxtznt4k@2cxci6mcnqyl>
+References: <20231213113802.1278600-1-naveen@kernel.org>
+ <20231213215450.792f5e6f21eb3e709f4ea05c@kernel.org>
+ <20231213100629.338c358c@gandalf.local.home>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20231213100629.338c358c@gandalf.local.home>
 
-Add configurations which are needed for
-- hugetlb-read-hwpoison
-- ksm_functional_test and ksm_test
+Hi Shuah,
 
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
----
- tools/testing/selftests/mm/config | 3 +++
- 1 file changed, 3 insertions(+)
+On Wed, Dec 13, 2023 at 10:06:29AM -0500, Steven Rostedt wrote:
+> On Wed, 13 Dec 2023 21:54:50 +0900
+> Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
+> 
+> > On Wed, 13 Dec 2023 17:08:02 +0530
+> > Naveen N Rao <naveen@kernel.org> wrote:
+> > 
+> > > Add a test to exercize cpu hotplug with the function tracer active to
+> > > ensure that sensitive functions in idle path are excluded from being
+> > > traced. This helps catch issues such as the one fixed by commit
+> > > 4b3338aaa74d ("powerpc/ftrace: Fix stack teardown in ftrace_no_trace").
+> > >   
+> > 
+> > Looks good to me.
+> > 
+> > Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > 
+> > Thank you,
+> > 
+> 
+> Thanks Naveen and Masami!
+> 
+> Shuah, can you take this through your tree?
 
-diff --git a/tools/testing/selftests/mm/config b/tools/testing/selftests/mm/config
-index 4309916f629e..d16a72036eb7 100644
---- a/tools/testing/selftests/mm/config
-+++ b/tools/testing/selftests/mm/config
-@@ -7,3 +7,6 @@ CONFIG_TEST_HMM=m
- CONFIG_GUP_TEST=y
- CONFIG_TRANSPARENT_HUGEPAGE=y
- CONFIG_MEM_SOFT_DIRTY=y
-+CONFIG_MEMORY_FAILURE=y
-+CONFIG_HWPOISON_INJECT=y
-+CONFIG_KSM=y
--- 
-2.42.0
+Can you please pick up this patch?
+
+- Naveen
 
 
