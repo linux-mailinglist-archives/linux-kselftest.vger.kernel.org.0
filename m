@@ -1,157 +1,225 @@
-Return-Path: <linux-kselftest+bounces-2885-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2886-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5232182BA28
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jan 2024 04:51:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EEC4B82BA3B
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jan 2024 05:07:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B4A8A1F211EA
-	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jan 2024 03:51:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5458B1F25E00
+	for <lists+linux-kselftest@lfdr.de>; Fri, 12 Jan 2024 04:07:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 623F61B27B;
-	Fri, 12 Jan 2024 03:51:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C7871B283;
+	Fri, 12 Jan 2024 04:07:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ysjSMXrZ"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from h3cspam02-ex.h3c.com (smtp.h3c.com [60.191.123.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9747922078
-	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jan 2024 03:51:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=h3c.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=h3c.com
-Received: from mail.maildlp.com ([172.25.15.154])
-	by h3cspam02-ex.h3c.com with ESMTP id 40C3p4MT003113;
-	Fri, 12 Jan 2024 11:51:04 +0800 (GMT-8)
-	(envelope-from hu.yadi@h3c.com)
-Received: from DAG6EX03-IMDC.srv.huawei-3com.com (unknown [10.62.14.12])
-	by mail.maildlp.com (Postfix) with ESMTP id 70BD02383F3B;
-	Fri, 12 Jan 2024 11:55:26 +0800 (CST)
-Received: from DAG6EX02-IMDC.srv.huawei-3com.com (10.62.14.11) by
- DAG6EX03-IMDC.srv.huawei-3com.com (10.62.14.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.27; Fri, 12 Jan 2024 11:51:05 +0800
-Received: from DAG6EX02-IMDC.srv.huawei-3com.com ([fe80::4c21:7c89:4f9d:e4c4])
- by DAG6EX02-IMDC.srv.huawei-3com.com ([fe80::4c21:7c89:4f9d:e4c4%16]) with
- mapi id 15.02.1258.027; Fri, 12 Jan 2024 11:51:05 +0800
-From: Huyadi <hu.yadi@h3c.com>
-To: =?utf-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>
-CC: "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com"
-	<serge@hallyn.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "mathieu.desnoyers@efficios.com" <mathieu.desnoyers@efficios.com>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org"
-	<linux-security-module@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org"
-	<linux-kselftest@vger.kernel.org>,
-        "514118380@qq.com" <514118380@qq.com>
-Subject: =?utf-8?B?5Zue5aSNOiDlm57lpI06IFtQQVRDSF0gc2VsZnRlc3RzL2xhbmRsb2NrOkZp?=
- =?utf-8?Q?x_two_build_issues?=
-Thread-Topic: =?utf-8?B?5Zue5aSNOiBbUEFUQ0hdIHNlbGZ0ZXN0cy9sYW5kbG9jazpGaXggdHdvIGJ1?=
- =?utf-8?Q?ild_issues?=
-Thread-Index: AQHaQ5QxkbjYpIV9GUSOObpENmDqbrDSzGWAgAEYDgCAADzbgIABap9w
-Date: Fri, 12 Jan 2024 03:51:05 +0000
-Message-ID: <9a040b2653114a059956ee33703cf05e@h3c.com>
-References: <20240110070854.7077-1-hu.yadi@h3c.com>
- <20240110.ob2roh1Xai9y@digikod.net>
- <9820400d6083428bbab2dfe5d5682d19@h3c.com>
- <20240111.Ooraegolah6n@digikod.net>
-In-Reply-To: <20240111.Ooraegolah6n@digikod.net>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-sender-location: DAG2
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CCD81B27B
+	for <linux-kselftest@vger.kernel.org>; Fri, 12 Jan 2024 04:07:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5534180f0e9so3834a12.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 11 Jan 2024 20:07:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1705032425; x=1705637225; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=E2D3WnN//dEL34fMCVRDrhtzfAYDNH0EGPLifIuUJP0=;
+        b=ysjSMXrZAfFSrTlDk1mIsZ9fLZmwbL3S1888jw72lf05FHEq84FnuAcY3G9eJuytXL
+         3xoQdqfW8fkca87nD50v2Im0XDkD/n/TB/GoXY/+JP2jT/2A59VH27HisXPqgv4ysfDb
+         Ur4J4RveRFXmr6VlrdysgFZMhPPHzRJhmLq1WZ3hwWkuCNVItM5owX++SQkgqVCCVJJ3
+         vfe7Ow/30lEpFVTaL35JC8liCGA8x8Z4zqrFIqn+8KJ5FmSbsgqLCCW1GxrULPEPW9T3
+         qo+6c+HAs7xLWGDaL2DAKlM29e3Ph2Y1b4HhVDeWG45JUqXgC28T8EIhwl587HMqApu3
+         FoMQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705032425; x=1705637225;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=E2D3WnN//dEL34fMCVRDrhtzfAYDNH0EGPLifIuUJP0=;
+        b=LJ/3rWKkPwf6Ksuj1zLZBdjdYZupeWfTOCuu5dNKeFiLdme2FpXZj5Xhw2GL26pN9J
+         1aTgDT2uhBDtxTRAC1gQYKVyjd5LbpVsVHPHJZ/m884I3bNepVCKvd4GapYaBgWuvVwX
+         TWw+BShnvvMriSzn9AnH9gcDuj6jfz6LxT5thZwb5P7RhqHXzySiEe7R3O0g74mxPXA1
+         Mxnay5VXZ+UeBT1p6ZEVgr9Neok/uglinAjgBPiC3a7Utuco5LqKUYvEdY6G4mnZqzm/
+         kOx+8QHM0itmSttqSqFwWZniOyMcZXzy2kWp5+iMUBPc7JFLMidaDH06iSUPAG2A6ih9
+         zIHg==
+X-Gm-Message-State: AOJu0Yy1ggeVNRpqYFwIwk7JYqjlYz4y+RTLGTGGTb+0ei730jDIl11C
+	DI+spq/COYnUfCyFJta3I/zTRU6epGk8PXn/3kyQGoqH5TzG
+X-Google-Smtp-Source: AGHT+IHSwPBjiXpVxHHb/RHltoFzihlx3bYB6li2RGPRSVFUtryemOLMObXWMwcaOJMjFqmmnJ+EvsyBQ//k1EGDZVc=
+X-Received: by 2002:a05:6402:2804:b0:558:8096:5c2f with SMTP id
+ h4-20020a056402280400b0055880965c2fmr275145ede.1.1705032424813; Thu, 11 Jan
+ 2024 20:07:04 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-DNSRBL: 
-X-SPAM-SOURCE-CHECK: pass
-X-MAIL:h3cspam02-ex.h3c.com 40C3p4MT003113
+References: <20240110155948.90964-1-marpagan@redhat.com>
+In-Reply-To: <20240110155948.90964-1-marpagan@redhat.com>
+From: David Gow <davidgow@google.com>
+Date: Fri, 12 Jan 2024 12:06:52 +0800
+Message-ID: <CABVgOSmb0oFK--1oCO3Y_-4tjpkS2FrkekfMcaU1wmdLZnxGUA@mail.gmail.com>
+Subject: Re: [PATCH v4] kunit: run test suites only after module
+ initialization completes
+To: Marco Pagani <marpagan@redhat.com>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>, Jinjie Ruan <ruanjinjie@huawei.com>, 
+	Rae Moar <rmoar@google.com>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Richard Fitzgerald <rf@opensource.cirrus.com>, Javier Martinez Canillas <javierm@redhat.com>, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+	linux-kernel@vger.kernel.org
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+	boundary="000000000000083468060eb7cc7e"
 
-Pk9uIFRodSwgSmFuIDExLCAyMDI0IGF0IDAyOjM0OjA4QU0gKzAwMDAsIEh1eWFkaSB3cm90ZToN
-Cj4+IA0KPj4gLT5PbiBXZWQsIEphbiAxMCwgMjAyNCBhdCAwMzowODo1NFBNICswODAwLCBIdSBZ
-YWRpIHdyb3RlOg0KPj4gPj4gRnJvbTogIkh1LllhZGkiIDxodS55YWRpQGgzYy5jb20+DQo+PiA+
-PiANCj4+ID4+IFR3byBpc3N1ZXMgY29tZXMgdXAgIHdoaWxlIGJ1aWxkaW5nIHNlbGZ0ZXN0L2xh
-bmRsb2NrOg0KPj4gPj4gDQo+PiA+PiB0aGUgZmlyc3Qgb25lIGlzIGFzIHRvIGdldHRpZA0KPj4g
-Pj4gDQo+PiA+PiBuZXRfdGVzdC5jOiBJbiBmdW5jdGlvbiDigJhzZXRfc2VydmljZeKAmToNCj4+
-ID4+IG5ldF90ZXN0LmM6OTE6NDU6IHdhcm5pbmc6IGltcGxpY2l0IGRlY2xhcmF0aW9uIG9mIGZ1
-bmN0aW9uIOKAmGdldHRpZOKAmTsgZGlkIHlvdSBtZWFuIOKAmGdldGdpZOKAmT8gWy1XaW1wbGlj
-aXQtZnVuY3Rpb24tZGVjbGFyYXRpb25dDQo+PiA+PiAgICAgIl9zZWxmdGVzdHMtbGFuZGxvY2st
-bmV0LXRpZCVkLWluZGV4JWQiLCBnZXR0aWQoKSwNCj4+ID4+ICAgICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgIF5+fn5+fg0KPj4gPj4gICAgICAgICAgICAgICAgICAg
-ICAgICAgICAgICAgICAgICAgICAgICAgICAgZ2V0Z2lkDQo+PiA+PiBuZXRfdGVzdC5jOigudGV4
-dCsweDRlMCk6IHVuZGVmaW5lZCByZWZlcmVuY2UgdG8gYGdldHRpZCcNCj4+ID4+IA0KPj4gPj4g
-dGhlIHNlY29uZCBpcyBjb21waWxlciBlcnJvcg0KPj4gPj4gZ2NjIC1XYWxsIC1PMiAtaXN5c3Rl
-bSAgIGZzX3Rlc3QuYyAtbGNhcCAtbyAvaG9tZS9saW51eC90b29scy90ZXN0aW5nL3NlbGZ0ZXN0
-cy9sYW5kbG9jay9mc190ZXN0DQo+PiA+PiBmc190ZXN0LmM6NDU3NTo5OiBlcnJvcjogaW5pdGlh
-bGl6ZXIgZWxlbWVudCBpcyBub3QgY29uc3RhbnQNCj4+ID4+ICAgLm1udCA9IG1udF90bXAsDQo+
-PiA+PiAgICAgICAgICBefn5+fn5+DQo+PiA+DQo+PiA+V2hhdCBpcyB0aGUgdmVyc2lvbiBvZiBH
-Q0MgKGFuZCBoZWFkZXJzKSBhbmQgb24gd2hpY2ggc3lzdGVtIChhbmQNCj4+ID52ZXJzaW9uKSBh
-cmUgeW91IGJ1aWxkaW5nIHRoZXNlIHRlc3RzPw0KPj4gDQo+PiBnY2MgNy4zIC8gZ2xpYmMtMi4y
-OC8ga2VybmVsIDQuMTkvIE9wZW5FdWxvcjIwLjAzDQo+DQo+VGhlc2UgYXJlIG9sZCB2ZXJzaW9u
-cy4gWW91IHNob3VsZCBtZW50aW9uIGluIHRoZSBjb21taXQgbWVzc2FnZSB3aGljaCB2ZXJzaW9u
-IG9mIGdsaWJjIGFkZGVkIGdldHRpZCgpLj4NCg0KT2ssIEknbGwgYWRkIGl0IC4NCg0KPj4gDQo+
-PiA+PiANCj4+ID4+IHRoaXMgcGF0Y2ggaXMgdG8gZml4IHRoZW0NCj4+ID4+IA0KPj4gPj4gU2ln
-bmVkLW9mZi1ieTogSHUuWWFkaSA8aHUueWFkaUBoM2MuY29tPg0KPj4gPj4gU3VnZ2VzdGVkLWJ5
-OiBKaWFvIDxqaWFveHVwb0BoM2MuY29tPiBSZXZpZXdlZC1ieTpCZXJsaW4gDQo+PiA+PiA8YmVy
-bGluQGgzYy5jb20+DQo+PiA+PiAtLS0NCj4+ID4+ICB0b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9s
-YW5kbG9jay9mc190ZXN0LmMgIHwgNSArKysrLSANCj4+ID4+IHRvb2xzL3Rlc3Rpbmcvc2VsZnRl
-c3RzL2xhbmRsb2NrL25ldF90ZXN0LmMgfCAzICstLQ0KPj4gPj4gIDIgZmlsZXMgY2hhbmdlZCwg
-NSBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQ0KPj4gPj4gDQo+PiA+PiBkaWZmIC0tZ2l0
-IGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvbGFuZGxvY2svZnNfdGVzdC5jDQo+PiA+PiBiL3Rv
-b2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2xhbmRsb2NrL2ZzX3Rlc3QuYw0KPj4gPj4gaW5kZXggMThl
-MWY4NmE2MjM0Li45M2ViNDBhMDkwNzMgMTAwNjQ0DQo+PiA+PiAtLS0gYS90b29scy90ZXN0aW5n
-L3NlbGZ0ZXN0cy9sYW5kbG9jay9mc190ZXN0LmMNCj4+ID4+ICsrKyBiL3Rvb2xzL3Rlc3Rpbmcv
-c2VsZnRlc3RzL2xhbmRsb2NrL2ZzX3Rlc3QuYw0KPj4gPj4gQEAgLTQ1NzIsNyArNDU3MiwxMCBA
-QCBGSVhUVVJFX1ZBUklBTlQobGF5b3V0M19mcykNCj4+ID4+ICAvKiBjbGFuZy1mb3JtYXQgb2Zm
-ICovDQo+PiA+PiAgRklYVFVSRV9WQVJJQU5UX0FERChsYXlvdXQzX2ZzLCB0bXBmcykgew0KPj4g
-Pj4gIAkvKiBjbGFuZy1mb3JtYXQgb24gKi8NCj4+ID4+IC0JLm1udCA9IG1udF90bXAsDQo+DQo+
-Q2FuIHlvdSBqdXN0IGNhc3QgbW50X3RtcD8gSXQgZXhpc3RzIHRvIGF2b2lkIHN1Y2ggZHVwbGlj
-YXRlIGNvZGUuDQoNCkkgdHJpZWQgdG8gYWRkIGNhc3QsIGJ1dCBpdCBpcyBub3QgZWZmZWN0aXZl
-LiAgd2hhdCdzIG1vcmUsIGFsbCBGSVhUVVJFX1ZBUklBTlRfQUREIGRlY2xhcmF0aW9uIHVuZGVy
-IHRvb2xzL3Rlc3RpbmcgYXJlIGFzc2lnbmVkIHdpdGggY29uc3RhbnQsDQpTbywgY3VycmVudCBz
-b2x1dGlvbiBsb29rcyBmaW5lIHRvIG1lLCB3aGF0J3MgeW91ciBvcHRpb24/DQo+DQo+PiA+PiAr
-CS5tbnQgPSB7DQo+PiA+PiArCQkudHlwZSA9ICJ0bXBmcyIsDQo+PiA+PiArICAgICAgICAJLmRh
-dGEgPSAic2l6ZT00bSxtb2RlPTcwMCIsDQo+PiA+DQo+PiA+V2hlbiBhcHBseWluZyB0aGlzIHBh
-dGNoIHdlIGdldDogInNwYWNlIGJlZm9yZSB0YWIgaW4gaW5kZW50Ig0KPj4gDQo+PiBTb3JyeSBm
-b3IgaW5jb252ZW5pZW50LCBJJ2xsIHJlc2VuZCBpdCB2MiBhZnRlciBjaGVja3BhdGNoLnBsIHNo
-b3dzIG5vIGVycm9yLg0KPj4gDQo+PiA+PiArCX0sDQo+PiA+PiAgCS5maWxlX3BhdGggPSBmaWxl
-MV9zMWQxLA0KPj4gPj4gIH07DQo+PiA+PiAgDQo+PiA+PiBkaWZmIC0tZ2l0IGEvdG9vbHMvdGVz
-dGluZy9zZWxmdGVzdHMvbGFuZGxvY2svbmV0X3Rlc3QuYw0KPj4gPj4gYi90b29scy90ZXN0aW5n
-L3NlbGZ0ZXN0cy9sYW5kbG9jay9uZXRfdGVzdC5jDQo+PiA+PiBpbmRleCA5MjllMjFjNGRiMDUu
-LjhmYjM1N2RlOGM1NSAxMDA2NDQNCj4+ID4+IC0tLSBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3Rz
-L2xhbmRsb2NrL25ldF90ZXN0LmMNCj4+ID4+ICsrKyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3Rz
-L2xhbmRsb2NrL25ldF90ZXN0LmMNCj4+ID4+IEBAIC0xOCw3ICsxOCw2IEBADQo+PiA+PiAgI2lu
-Y2x1ZGUgPHN5cy9wcmN0bC5oPg0KPj4gPj4gICNpbmNsdWRlIDxzeXMvc29ja2V0Lmg+DQo+PiA+
-PiAgI2luY2x1ZGUgPHN5cy91bi5oPg0KPj4gPj4gLQ0KPj4gPj4gICNpbmNsdWRlICJjb21tb24u
-aCINCj4+ID4+ICANCj4+ID4+ICBjb25zdCBzaG9ydCBzb2NrX3BvcnRfc3RhcnQgPSAoMSA8PCAx
-MCk7IEBAIC04OCw3ICs4Nyw3IEBAIHN0YXRpYyANCj4+ID4+IGludCBzZXRfc2VydmljZShzdHJ1
-Y3Qgc2VydmljZV9maXh0dXJlICpjb25zdCBzcnYsDQo+PiA+PiAgCWNhc2UgQUZfVU5JWDoNCj4+
-ID4+ICAJCXNydi0+dW5peF9hZGRyLnN1bl9mYW1pbHkgPSBwcm90LmRvbWFpbjsNCj4+ID4+ICAJ
-CXNwcmludGYoc3J2LT51bml4X2FkZHIuc3VuX3BhdGgsDQo+PiA+PiAtCQkJIl9zZWxmdGVzdHMt
-bGFuZGxvY2stbmV0LXRpZCVkLWluZGV4JWQiLCBnZXR0aWQoKSwNCj4+ID4+ICsJCQkiX3NlbGZ0
-ZXN0cy1sYW5kbG9jay1uZXQtdGlkJWxkLWluZGV4JWQiLCBzeXNjYWxsKFNZU19nZXR0aWQpLA0K
-Pj4gPg0KPj4gPllvdSBzZW50IGFub3RoZXIgcGF0Y2ggdGhhdCAicmVwbGFjZSBTWVNfPHN5c2Nh
-bGw+IHdpdGggX19OUl88c3lzY2FsbD4iLg0KPj4gPldoeSBub3QgaGVyZT8NCj4+ID4NCj4+ID5Q
-bGVhc2UgZm9sbG93IHRoZSBzYW1lIGFwcHJvYWNoOg0KPj4gPmh0dHBzOi8vZ2l0Lmtlcm5lbC5v
-cmcvc3RhYmxlL2MvODcxMjllZjEzNjAzYWU0NmM4MmJjZDA5ZWVkOTQ4YWNmMDUwNg0KPj4gPmRi
-Yg0KPg0KPkNhbiB5b3UgcGxlYXNlIGFkZCBhIGdldHBpZCgpIGhlbHBlciBsaWtlIGZvciByZW5h
-bWVhdDIoKSBpbiB0aGlzIGNvbW1pdD8+DQoNClRoYW5rcyB5b3VyIHdhcm0gaW5zdHJ1Y3Rpb24s
-IEknbGwgZG8gaXQgYW5kIHNlbmQgcGF0Y2ggc29vbi4NCg0KPkFsc28sIGFsbCBMYW5kbG9jay1y
-ZWxhdGVkIGNvZGUgaXMgZm9ybWF0dGVkIHdpdGggY2xhbmctZm9ybWF0LiBZb3UgY2FuIGRvIGl0
-IHdpdGggY2xhbmctZm9ybWF0IC1pIHRvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL2xhbmRsb2NrLyou
-W2NoXQ0KPg0KPj4gDQo+PiBHb3QgaXQsIEknbGwgcmVzZW5kIGl0IHYyIGluY2x1ZGluZyB0aGUg
-Zml4DQo+PiANCj4+ID4+ICAJCQlpbmRleCk7DQo+PiA+PiAgCQlzcnYtPnVuaXhfYWRkcl9sZW4g
-PSBTVU5fTEVOKCZzcnYtPnVuaXhfYWRkcik7DQo+PiA+PiAgCQlzcnYtPnVuaXhfYWRkci5zdW5f
-cGF0aFswXSA9ICdcMCc7DQo+PiA+PiAtLQ0KPj4gPj4gMi4yMy4wDQo+PiA+PiANCj4+ID4+IA0K
-Pj4gDQo+PiAgDQogDQo=
+--000000000000083468060eb7cc7e
+Content-Type: text/plain; charset="UTF-8"
+
+On Wed, 10 Jan 2024 at 23:59, Marco Pagani <marpagan@redhat.com> wrote:
+>
+> Commit 2810c1e99867 ("kunit: Fix wild-memory-access bug in
+> kunit_free_suite_set()") fixed a wild-memory-access bug that could have
+> happened during the loading phase of test suites built and executed as
+> loadable modules. However, it also introduced a problematic side effect
+> that causes test suites modules to crash when they attempt to register
+> fake devices.
+>
+> When a module is loaded, it traverses the MODULE_STATE_UNFORMED and
+> MODULE_STATE_COMING states before reaching the normal operating state
+> MODULE_STATE_LIVE. Finally, when the module is removed, it moves to
+> MODULE_STATE_GOING before being released. However, if the loading
+> function load_module() fails between complete_formation() and
+> do_init_module(), the module goes directly from MODULE_STATE_COMING to
+> MODULE_STATE_GOING without passing through MODULE_STATE_LIVE.
+>
+> This behavior was causing kunit_module_exit() to be called without
+> having first executed kunit_module_init(). Since kunit_module_exit() is
+> responsible for freeing the memory allocated by kunit_module_init()
+> through kunit_filter_suites(), this behavior was resulting in a
+> wild-memory-access bug.
+>
+> Commit 2810c1e99867 ("kunit: Fix wild-memory-access bug in
+> kunit_free_suite_set()") fixed this issue by running the tests when the
+> module is still in MODULE_STATE_COMING. However, modules in that state
+> are not fully initialized, lacking sysfs kobjects. Therefore, if a test
+> module attempts to register a fake device, it will inevitably crash.
+>
+> This patch proposes a different approach to fix the original
+> wild-memory-access bug while restoring the normal module execution flow
+> by making kunit_module_exit() able to detect if kunit_module_init() has
+> previously initialized the tests suite set. In this way, test modules
+> can once again register fake devices without crashing.
+>
+> This behavior is achieved by checking whether mod->kunit_suites is a
+> virtual or direct mapping address. If it is a virtual address, then
+> kunit_module_init() has allocated the suite_set in kunit_filter_suites()
+> using kmalloc_array(). On the contrary, if mod->kunit_suites is still
+> pointing to the original address that was set when looking up the
+> .kunit_test_suites section of the module, then the loading phase has
+> failed and there's no memory to be freed.
+>
+> v4:
+> - rebased on 6.8
+> - noted that kunit_filter_suites() must return a virtual address
+> v3:
+> - add a comment to clarify why the start address is checked
+> v2:
+> - add include <linux/mm.h>
+>
+> Fixes: 2810c1e99867 ("kunit: Fix wild-memory-access bug in kunit_free_suite_set()")
+> Reviewed-by: David Gow <davidgow@google.com>
+> Tested-by: Rae Moar <rmoar@google.com>
+> Tested-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+> Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
+> Signed-off-by: Marco Pagani <marpagan@redhat.com>
+> ---
+
+Thanks very much.
+
+Reviewed-by: David Gow <davidgow@google.com>
+
+Cheers,
+-- David
+
+--000000000000083468060eb7cc7e
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPqgYJKoZIhvcNAQcCoIIPmzCCD5cCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+gg0EMIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+7xDrOPfX3COqq162RFg/MFcGA1UdIARQME4wCQYHZ4EMAQUBATBBBgkrBgEEAaAyASgwNDAyBggr
+BgEFBQcCARYmaHR0cHM6Ly93d3cuZ2xvYmFsc2lnbi5jb20vcmVwb3NpdG9yeS8wDAYDVR0TAQH/
+BAIwADCBmgYIKwYBBQUHAQEEgY0wgYowPgYIKwYBBQUHMAGGMmh0dHA6Ly9vY3NwLmdsb2JhbHNp
+Z24uY29tL2NhL2dzYXRsYXNyM3NtaW1lY2EyMDIwMEgGCCsGAQUFBzAChjxodHRwOi8vc2VjdXJl
+Lmdsb2JhbHNpZ24uY29tL2NhY2VydC9nc2F0bGFzcjNzbWltZWNhMjAyMC5jcnQwHwYDVR0jBBgw
+FoAUfMwKaNei6x4schvRzV2Vb4378mMwRgYDVR0fBD8wPTA7oDmgN4Y1aHR0cDovL2NybC5nbG9i
+YWxzaWduLmNvbS9jYS9nc2F0bGFzcjNzbWltZWNhMjAyMC5jcmwwDQYJKoZIhvcNAQELBQADggEB
+AK0lDd6/eSh3qHmXaw1YUfIFy07B25BEcTvWgOdla99gF1O7sOsdYaTz/DFkZI5ghjgaPJCovgla
+mRMfNcxZCfoBtsB7mAS6iOYjuwFOZxi9cv6jhfiON6b89QWdMaPeDddg/F2Q0bxZ9Z2ZEBxyT34G
+wlDp+1p6RAqlDpHifQJW16h5jWIIwYisvm5QyfxQEVc+XH1lt+taSzCfiBT0ZLgjB9Sg+zAo8ys6
+5PHxFaT2a5Td/fj5yJ5hRSrqy/nj/hjT14w3/ZdX5uWg+cus6VjiiR/5qGSZRjHt8JoApD6t6/tg
+ITv8ZEy6ByumbU23nkHTMOzzQSxczHkT+0q10/MxggJqMIICZgIBATBoMFQxCzAJBgNVBAYTAkJF
+MRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFzIFIz
+IFNNSU1FIENBIDIwMjACEAHS+TgZvH/tCq5FcDC0n9IwDQYJYIZIAWUDBAIBBQCggdQwLwYJKoZI
+hvcNAQkEMSIEIKHSHOPGPMzcrQ8D4C36bPgV03FQ/82KkZl2prHRJfreMBgGCSqGSIb3DQEJAzEL
+BgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTI0MDExMjA0MDcwNVowaQYJKoZIhvcNAQkPMVww
+WjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCGSAFlAwQBAjAKBggqhkiG9w0DBzALBgkq
+hkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQCATANBgkqhkiG9w0BAQEFAASCAQBVi+Gy
+zwYYle2RTW6mEKzh1u2zg6e73y/5Lyop4MYV/ntdvEyhw21cU5B7iF6PYgnbZRgW30h5l/rJkGNF
+Y3Nn5d7FBvjbtyI5+3h3Z5rkcXzUQ+mezdXFjrsXzMeb23ZwXaDi/S/mptxXEvMZgWiHbItcElFA
+eUXNqxGNPzVaXNtWduJ3R2tSe4VXvz7hKCUMwpnY9BQ+gUdsJuHSOzuYIa0wwdP0K1rteLGJ4gG+
+20JTgjHPd+jFy2AepZWT2v6IC4awf5mll+LgcJuSFhdoX4isebjcp9h1ydZ41uMQq7xKSGylJy8q
+RVKNj1S9h44vsRLJ3q+bRcJnBfztzKaM
+--000000000000083468060eb7cc7e--
 
