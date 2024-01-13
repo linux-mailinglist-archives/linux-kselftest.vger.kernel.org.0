@@ -1,155 +1,299 @@
-Return-Path: <linux-kselftest+bounces-2942-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2943-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72C5B82CA09
-	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Jan 2024 06:57:37 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DAA682CCD4
+	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Jan 2024 14:40:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 80BDA1C2280F
-	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Jan 2024 05:57:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E56211F221C6
+	for <lists+linux-kselftest@lfdr.de>; Sat, 13 Jan 2024 13:39:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A44C3FBEC;
-	Sat, 13 Jan 2024 05:57:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AE2721103;
+	Sat, 13 Jan 2024 13:39:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="h5M/1VGt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XTaV2lm3"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C530EF4F5;
-	Sat, 13 Jan 2024 05:57:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=yS6I6mddaN1yhy8N4LUTGdLFHpiWXV0zrUgAi9pBpv4=; b=h5M/1VGtX+ODHUeJEoWo69qsbW
-	z6FFC22WSyh33kzA7XO2XfdN5fg60WbujwazNJUVxZC0wrH9qzw+Zd5rfqk4DpGaGyFd7651Y3pJa
-	5l0Ol3isbnzMD1khnGn/sinOaf7tsVIQGZ969EPt/zIf4PrS0MN3ce6nYiv6K+cIhSO3WSFJYWPLu
-	kMhy412zKba0Nso3hCjJw3bqc7sfCgzEiItUuinmJmWOyHQdPLgT8UfCn275137linx2xBu5aM1Vh
-	Fg634eI7ESNhLxbYXpCj+X8zTzl8GrrlP4KGg8cRWwzbiQ56xQf3OH4N1miNeVRsVU8G5oeKNG5x8
-	A+0Vr+kA==;
-Received: from [50.53.46.231] (helo=[192.168.254.15])
-	by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-	id 1rOX16-004aGO-0f;
-	Sat, 13 Jan 2024 05:57:12 +0000
-Message-ID: <84df0f74-b165-4076-97bc-9f90e29410d4@infradead.org>
-Date: Fri, 12 Jan 2024 21:57:04 -0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2918621340;
+	Sat, 13 Jan 2024 13:39:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95D21C433F1;
+	Sat, 13 Jan 2024 13:39:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1705153190;
+	bh=30UFseJtYbMgi4KrTjNXLIsc4Cc9xJPODHdnxx2gh5I=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=XTaV2lm3LjFhAt0Ms15Stx6/GnWmCr7ucgwy+FwbIvaxdLEnwk3UocGwtmNKx89+a
+	 oADt0PKz7O7XRP/aDMAveYlOrSeRavFBGs4oYvxY2MQoPt50cHgRcaLvEAsq6q+KRP
+	 ZPvgNGqliehp24+L9tZ/DS8EsJCIPc5IIaFviDzdQSyy9gWZAkBqi+ysarE71QjFpc
+	 ++mJVpSN2l4ZYuk0BeM30jK3imXb0M8WiPfi4auZrlZbD4xYlPQsDOo9kWRr2n+zvQ
+	 zG6Ftmvl5q+brLLCTRX+JSewmU+4xoXY3tWGVYrCLZvWLu6RYkkvgvggkbwNHQepCd
+	 OCjXblZsWrCFg==
+Date: Sat, 13 Jan 2024 22:39:46 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: Vincent Donnefort <vdonnefort@google.com>
+Cc: rostedt@goodmis.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, mathieu.desnoyers@efficios.com,
+ kernel-team@android.com, Shuah Khan <shuah@kernel.org>, Shuah Khan
+ <skhan@linuxfoundation.org>, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v11 5/5] ring-buffer/selftest: Add ring-buffer mapping
+ test
+Message-Id: <20240113223946.9c463c5a4787dc0261789e65@kernel.org>
+In-Reply-To: <20240111161712.1480333-6-vdonnefort@google.com>
+References: <20240111161712.1480333-1-vdonnefort@google.com>
+	<20240111161712.1480333-6-vdonnefort@google.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 0/4] Introduce mseal()
-Content-Language: en-US
-To: Jeff Xu <jeffxu@chromium.org>
-Cc: akpm@linux-foundation.org, keescook@chromium.org, jannh@google.com,
- sroettger@google.com, willy@infradead.org, gregkh@linuxfoundation.org,
- torvalds@linux-foundation.org, usama.anjum@collabora.com, jeffxu@google.com,
- jorgelo@chromium.org, groeck@chromium.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- pedro.falcato@gmail.com, dave.hansen@intel.com,
- linux-hardening@vger.kernel.org, deraadt@openbsd.org
-References: <20240111234142.2944934-1-jeffxu@chromium.org>
- <c65170fe-f596-4ce0-96e3-ba83f4e60eaf@infradead.org>
- <CABi2SkXt2_eBS=7QkPST0uHGaaEszRJbVLajbwM95RWJrbDXwQ@mail.gmail.com>
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <CABi2SkXt2_eBS=7QkPST0uHGaaEszRJbVLajbwM95RWJrbDXwQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
+On Thu, 11 Jan 2024 16:17:12 +0000
+Vincent Donnefort <vdonnefort@google.com> wrote:
 
+> This test maps a ring-buffer and validate the meta-page after reset and
+> after emitting few events.
+> 
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: Shuah Khan <skhan@linuxfoundation.org>
+> Cc: linux-kselftest@vger.kernel.org
+> Signed-off-by: Vincent Donnefort <vdonnefort@google.com>
 
-On 1/12/24 20:53, Jeff Xu wrote:
-> On Fri, Jan 12, 2024 at 6:20 PM Randy Dunlap <rdunlap@infradead.org> wrote:
->>
->>
->>
->> On 1/11/24 15:41, jeffxu@chromium.org wrote:
->>> From: Jeff Xu <jeffxu@google.com>
->>>
->>> This patchset proposes a new mseal() syscall for the Linux kernel.
->>>
->>
->> Jeff,
->> Building arm64 defconfig, on linux-next-20240112, I get:
->>
-> I don't quite get how this is related to my change.
-> Can you please send me the steps to reproduce ?  I don't usually build arm.
+Looks good to me and tested.
 
-I don't get how it's related either, but when I build arm64 defconfig without
-your patches, it builds without errors. After applying your patches, it has
-errors... I did it 2 times just to make sure.
+Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Tested-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
-It may just be some difference between x86_64 headers (is that what you
-build?) and arm64 headers.
+Thank you,
 
-Install the x86_64-hosted arm64 compiler from
-https://mirrors.edge.kernel.org/pub/tools/crosstool/ in
-e.g. /opt/crosstool .
-
-
-In the kernel source tree:
-mkdir ARM64
-
-make ARCH=arm64 O=ARM64 defconfig
-make -j25 CROSS_COMPILE=/opt/crosstool/gcc-13.2.0-nolibc/aarch64-linux/bin/aarch64-linux- ARCH=arm64 O=ARM64 all 2>&1 | tee aa64defcon.lst
-
-make ARCH=arm64 O=ARM64 clean
-<apply your mseal patches>
-make -j25 CROSS_COMPILE=/opt/crosstool/gcc-13.2.0-nolibc/aarch64-linux/bin/aarch64-linux- ARCH=arm64 O=ARM64 all 2>&1 | tee aa64mseal.lst
-
-
-If that does not reproduce the problem, please let me know.
-
-(I use a script, but that's the essence of the script.)
-
-
-
->>   CC      arch/arm64/kernel/asm-offsets.s
->> In file included from ../include/uapi/linux/mman.h:5,
->>                  from ../include/linux/mm.h:33,
->>                  from ../include/linux/memblock.h:12,
->>                  from ../arch/arm64/include/asm/acpi.h:14,
->>                  from ../include/acpi/acpi_io.h:7,
->>                  from ../include/linux/acpi.h:39,
->>                  from ../include/acpi/apei.h:9,
->>                  from ../include/acpi/ghes.h:5,
->>                  from ../include/linux/arm_sdei.h:8,
->>                  from ../arch/arm64/kernel/asm-offsets.c:10:
->> ../arch/arm64/include/asm/mman.h: In function 'arch_calc_vm_prot_bits':
->> ../arch/arm64/include/asm/mman.h:15:24: error: 'VM_ARM64_BTI' undeclared (first use in this function); did you mean 'ARM64_BTI'?
->>    15 |                 ret |= VM_ARM64_BTI;
->>       |                        ^~~~~~~~~~~~
->>       |                        ARM64_BTI
->> ../arch/arm64/include/asm/mman.h:15:24: note: each undeclared identifier is reported only once for each function it appears in
->> ../arch/arm64/include/asm/mman.h:18:24: error: 'VM_MTE' undeclared (first use in this function); did you mean 'VM_MAP'?
->>    18 |                 ret |= VM_MTE;
->>       |                        ^~~~~~
->>       |                        VM_MAP
->> ../arch/arm64/include/asm/mman.h: In function 'arch_calc_vm_flag_bits':
->> ../arch/arm64/include/asm/mman.h:32:24: error: 'VM_MTE_ALLOWED' undeclared (first use in this function)
->>    32 |                 return VM_MTE_ALLOWED;
->>       |                        ^~~~~~~~~~~~~~
->> ../arch/arm64/include/asm/mman.h: In function 'arch_validate_flags':
->> ../arch/arm64/include/asm/mman.h:59:29: error: 'VM_MTE' undeclared (first use in this function); did you mean 'VM_MAP'?
->>    59 |         return !(vm_flags & VM_MTE) || (vm_flags & VM_MTE_ALLOWED);
->>       |                             ^~~~~~
->>       |                             VM_MAP
->> ../arch/arm64/include/asm/mman.h:59:52: error: 'VM_MTE_ALLOWED' undeclared (first use in this function)
->>    59 |         return !(vm_flags & VM_MTE) || (vm_flags & VM_MTE_ALLOWED);
->>       |                                                    ^~~~~~~~~~~~~~
->>
->>
->> --
->> #Randy
+> 
+> diff --git a/tools/testing/selftests/ring-buffer/Makefile b/tools/testing/selftests/ring-buffer/Makefile
+> new file mode 100644
+> index 000000000000..627c5fa6d1ab
+> --- /dev/null
+> +++ b/tools/testing/selftests/ring-buffer/Makefile
+> @@ -0,0 +1,8 @@
+> +# SPDX-License-Identifier: GPL-2.0
+> +CFLAGS += -Wl,-no-as-needed -Wall
+> +CFLAGS += $(KHDR_INCLUDES)
+> +CFLAGS += -D_GNU_SOURCE
+> +
+> +TEST_GEN_PROGS = map_test
+> +
+> +include ../lib.mk
+> diff --git a/tools/testing/selftests/ring-buffer/config b/tools/testing/selftests/ring-buffer/config
+> new file mode 100644
+> index 000000000000..ef8214661612
+> --- /dev/null
+> +++ b/tools/testing/selftests/ring-buffer/config
+> @@ -0,0 +1 @@
+> +CONFIG_FTRACE=y
+> diff --git a/tools/testing/selftests/ring-buffer/map_test.c b/tools/testing/selftests/ring-buffer/map_test.c
+> new file mode 100644
+> index 000000000000..49107e8da5e9
+> --- /dev/null
+> +++ b/tools/testing/selftests/ring-buffer/map_test.c
+> @@ -0,0 +1,188 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Ring-buffer memory mapping tests
+> + *
+> + * Copyright (c) 2024 Vincent Donnefort <vdonnefort@google.com>
+> + */
+> +#include <fcntl.h>
+> +#include <sched.h>
+> +#include <stdbool.h>
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <unistd.h>
+> +
+> +#include <linux/trace_mmap.h>
+> +
+> +#include <sys/mman.h>
+> +#include <sys/ioctl.h>
+> +
+> +#include "../user_events/user_events_selftests.h" /* share tracefs setup */
+> +#include "../kselftest_harness.h"
+> +
+> +#define TRACEFS_ROOT "/sys/kernel/tracing"
+> +
+> +static int __tracefs_write(const char *path, const char *value)
+> +{
+> +	FILE *file;
+> +
+> +	file = fopen(path, "w");
+> +	if (!file)
+> +		return -1;
+> +
+> +	fputs(value, file);
+> +	fclose(file);
+> +
+> +	return 0;
+> +}
+> +
+> +static int __tracefs_write_int(const char *path, int value)
+> +{
+> +	char *str;
+> +	int ret;
+> +
+> +	if (asprintf(&str, "%d", value) < 0)
+> +		return -1;
+> +
+> +	ret = __tracefs_write(path, str);
+> +
+> +	free(str);
+> +
+> +	return ret;
+> +}
+> +
+> +#define tracefs_write_int(path, value) \
+> +	ASSERT_EQ(__tracefs_write_int((path), (value)), 0)
+> +
+> +static int tracefs_reset(void)
+> +{
+> +	if (__tracefs_write_int(TRACEFS_ROOT"/tracing_on", 0))
+> +		return -1;
+> +	if (__tracefs_write_int(TRACEFS_ROOT"/trace", 0))
+> +		return -1;
+> +	if (__tracefs_write(TRACEFS_ROOT"/set_event", ""))
+> +		return -1;
+> +
+> +	return 0;
+> +}
+> +
+> +FIXTURE(map) {
+> +	struct trace_buffer_meta	*meta;
+> +	void				*data;
+> +	int				cpu_fd;
+> +	bool				umount;
+> +};
+> +
+> +FIXTURE_VARIANT(map) {
+> +	int	subbuf_size;
+> +};
+> +
+> +FIXTURE_VARIANT_ADD(map, subbuf_size_4k) {
+> +	.subbuf_size = 4,
+> +};
+> +
+> +FIXTURE_VARIANT_ADD(map, subbuf_size_8k) {
+> +	.subbuf_size = 8,
+> +};
+> +
+> +FIXTURE_SETUP(map)
+> +{
+> +	int cpu = sched_getcpu(), page_size = getpagesize();
+> +	unsigned long meta_len, data_len;
+> +	char *cpu_path, *message;
+> +	bool fail, umount;
+> +	cpu_set_t cpu_mask;
+> +	void *map;
+> +
+> +	if (!tracefs_enabled(&message, &fail, &umount)) {
+> +		if (fail) {
+> +			TH_LOG("Tracefs setup failed: %s", message);
+> +			ASSERT_FALSE(fail);
+> +		}
+> +		SKIP(return, "Skipping: %s", message);
+> +	}
+> +
+> +	self->umount = umount;
+> +
+> +	ASSERT_GE(cpu, 0);
+> +
+> +	ASSERT_EQ(tracefs_reset(), 0);
+> +
+> +	tracefs_write_int(TRACEFS_ROOT"/buffer_subbuf_size_kb", variant->subbuf_size);
+> +
+> +	ASSERT_GE(asprintf(&cpu_path,
+> +			   TRACEFS_ROOT"/per_cpu/cpu%d/trace_pipe_raw",
+> +			   cpu), 0);
+> +
+> +	self->cpu_fd = open(cpu_path, O_RDONLY | O_NONBLOCK);
+> +	ASSERT_GE(self->cpu_fd, 0);
+> +	free(cpu_path);
+> +
+> +	map = mmap(NULL, page_size, PROT_READ, MAP_SHARED, self->cpu_fd, 0);
+> +	ASSERT_NE(map, MAP_FAILED);
+> +	self->meta = (struct trace_buffer_meta *)map;
+> +
+> +	meta_len = self->meta->meta_page_size;
+> +	data_len = self->meta->subbuf_size * self->meta->nr_subbufs;
+> +
+> +	map = mmap(NULL, data_len, PROT_READ, MAP_SHARED, self->cpu_fd, meta_len);
+> +	ASSERT_NE(map, MAP_FAILED);
+> +	self->data = map;
+> +
+> +	/*
+> +	 * Ensure generated events will be found on this very same ring-buffer.
+> +	 */
+> +	CPU_ZERO(&cpu_mask);
+> +	CPU_SET(cpu, &cpu_mask);
+> +	ASSERT_EQ(sched_setaffinity(0, sizeof(cpu_mask), &cpu_mask), 0);
+> +}
+> +
+> +FIXTURE_TEARDOWN(map)
+> +{
+> +	tracefs_reset();
+> +
+> +	if (self->umount)
+> +		tracefs_unmount();
+> +
+> +	munmap(self->data, self->meta->subbuf_size * self->meta->nr_subbufs);
+> +	munmap(self->meta, self->meta->meta_page_size);
+> +	close(self->cpu_fd);
+> +}
+> +
+> +TEST_F(map, meta_page_check)
+> +{
+> +	int cnt = 0;
+> +
+> +	ASSERT_EQ(self->meta->entries, 0);
+> +	ASSERT_EQ(self->meta->overrun, 0);
+> +	ASSERT_EQ(self->meta->read, 0);
+> +	ASSERT_EQ(self->meta->subbufs_touched, 0);
+> +	ASSERT_EQ(self->meta->subbufs_lost, 0);
+> +	ASSERT_EQ(self->meta->subbufs_read, 0);
+> +
+> +	ASSERT_EQ(self->meta->reader.id, 0);
+> +	ASSERT_EQ(self->meta->reader.read, 0);
+> +
+> +	ASSERT_EQ(ioctl(self->cpu_fd, TRACE_MMAP_IOCTL_GET_READER), 0);
+> +	ASSERT_EQ(self->meta->reader.id, 0);
+> +
+> +	tracefs_write_int(TRACEFS_ROOT"/tracing_on", 1);
+> +	for (int i = 0; i < 16; i++)
+> +		tracefs_write_int(TRACEFS_ROOT"/trace_marker", i);
+> +again:
+> +	ASSERT_EQ(ioctl(self->cpu_fd, TRACE_MMAP_IOCTL_GET_READER), 0);
+> +
+> +	ASSERT_EQ(self->meta->entries, 16);
+> +	ASSERT_EQ(self->meta->overrun, 0);
+> +	ASSERT_EQ(self->meta->read, 16);
+> +	/* subbufs_touched doesn't take into account the commit page */
+> +	ASSERT_EQ(self->meta->subbufs_touched, 0);
+> +	ASSERT_EQ(self->meta->subbufs_lost, 0);
+> +	ASSERT_EQ(self->meta->subbufs_read, 1);
+> +
+> +	ASSERT_EQ(self->meta->reader.id, 1);
+> +
+> +	if (!(cnt++))
+> +		goto again;
+> +}
+> +
+> +TEST_HARNESS_MAIN
+> -- 
+> 2.43.0.275.g3460e3d667-goog
 > 
 
+
 -- 
-#Randy
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
