@@ -1,44 +1,44 @@
-Return-Path: <linux-kselftest+bounces-2961-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2962-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED82882D498
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jan 2024 08:33:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8E9F82D499
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jan 2024 08:33:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 05FB8B20A53
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jan 2024 07:33:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4748D1F2159A
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jan 2024 07:33:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 331D53C0E;
-	Mon, 15 Jan 2024 07:33:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECCD35253;
+	Mon, 15 Jan 2024 07:33:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="GXO9YEPS"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="USadmbn7"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from madrid.collaboradmins.com (madrid.collaboradmins.com [46.235.227.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9541663AA;
-	Mon, 15 Jan 2024 07:33:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73ABF4401;
+	Mon, 15 Jan 2024 07:33:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1705303984;
-	bh=rRQZLwAtR4o/VCOAcxTzVSxdZ70bLgI9faWJJSJCsAc=;
-	h=From:To:Cc:Subject:Date:From;
-	b=GXO9YEPS9ah8KzQBBmYq2zTQ8EXx61CYFKebrzMonKYCXxDbjWZTjw7hHmB00Irk4
-	 qG4tgLvhIH/RZlwBB/Us60q5DJWpt+EgCDQiD6mj3stX0zVEiIBZPXAXOkz1OebYVi
-	 SWvpwFyk+zxxpuufBiddr/mgfEpmFBKEhnhpB5H+LjpQm9rGth+Nqnlsem98XSw+84
-	 edi3gQdsTxJwMcFw71BUCVdkhtPOunql0K3TLyAnOmek8pRNGhSqpvSMW9b6zyC0YA
-	 sHvs+MzaU9+NKaVOM/0ZAwvcaaygPhcB24md/WrHWhslctzLv4F51+qv6Iiq8Efqrr
-	 8jtdxvayhgIIA==
+	s=mail; t=1705303986;
+	bh=o1IUw1D3iI8Y90Z4hsu7JwinzA97QoWLS2TEa1p944o=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=USadmbn7PKHWToYkvjVZ3AC9iI/3+wePMhbl5oyp9VALBYEYxXCLsmpwTUDdZ7qch
+	 pK15+SiFt97hasoGzAIIIMuSTPRsKI/c8mB3YgKxiYlaJ6x0JFKwqFUuJ7oS804wgq
+	 iwbR39xeZxL6mbejPq19dqYziJSfQPiHUtJQnESxPB1pZpOICzFN5GxlMNiTkgb/AT
+	 3T+VM2viAh8oKC+WjyMZsC+SX2WE/u9a/zm96hYFKMKXUqxVn9maqbdb7IPBFJ7kUy
+	 wSq2OwCGeWVhc/TcF3igjZU99k/C1a+8W/wv2CTSA7UjMNocOR/JUSZ74UGeiMe+QD
+	 vv/XSvNU81h+Q==
 Received: from localhost.localdomain (cola.collaboradmins.com [195.201.22.229])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: usama.anjum)
-	by madrid.collaboradmins.com (Postfix) with ESMTPSA id DFFA737813DD;
-	Mon, 15 Jan 2024 07:33:02 +0000 (UTC)
+	by madrid.collaboradmins.com (Postfix) with ESMTPSA id 374EF3781F80;
+	Mon, 15 Jan 2024 07:33:05 +0000 (UTC)
 From: Muhammad Usama Anjum <usama.anjum@collabora.com>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	Shuah Khan <shuah@kernel.org>
@@ -47,10 +47,12 @@ Cc: Muhammad Usama Anjum <usama.anjum@collabora.com>,
 	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 1/7] selftests/mm: hugepage-shm: conform test to TAP format output
-Date: Mon, 15 Jan 2024 12:32:37 +0500
-Message-ID: <20240115073247.1280266-1-usama.anjum@collabora.com>
+Subject: [PATCH v3 2/7] selftests/mm: hugepage-vmemmap: conform test to TAP format output
+Date: Mon, 15 Jan 2024 12:32:38 +0500
+Message-ID: <20240115073247.1280266-2-usama.anjum@collabora.com>
 X-Mailer: git-send-email 2.42.0
+In-Reply-To: <20240115073247.1280266-1-usama.anjum@collabora.com>
+References: <20240115073247.1280266-1-usama.anjum@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -62,95 +64,89 @@ Content-Transfer-Encoding: 8bit
 Conform the layout, informational and status messages to TAP. No
 functional change is intended other than the layout of output messages.
 
-The "." was being printed inside for loop to indicate the writes
-progress. This was extraneous and hence removed in the patch.
-
 Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
 ---
- tools/testing/selftests/mm/hugepage-shm.c | 47 +++++++++++------------
- 1 file changed, 22 insertions(+), 25 deletions(-)
+ tools/testing/selftests/mm/hugepage-vmemmap.c | 36 +++++++++----------
+ 1 file changed, 17 insertions(+), 19 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/hugepage-shm.c b/tools/testing/selftests/mm/hugepage-shm.c
-index 478bb1e989e9..f949dbbc3454 100644
---- a/tools/testing/selftests/mm/hugepage-shm.c
-+++ b/tools/testing/selftests/mm/hugepage-shm.c
-@@ -34,11 +34,10 @@
- #include <sys/ipc.h>
- #include <sys/shm.h>
+diff --git a/tools/testing/selftests/mm/hugepage-vmemmap.c b/tools/testing/selftests/mm/hugepage-vmemmap.c
+index 5b354c209e93..125b96a65286 100644
+--- a/tools/testing/selftests/mm/hugepage-vmemmap.c
++++ b/tools/testing/selftests/mm/hugepage-vmemmap.c
+@@ -10,6 +10,7 @@
+ #include <unistd.h>
  #include <sys/mman.h>
+ #include <fcntl.h>
 +#include "../kselftest.h"
  
- #define LENGTH (256UL*1024*1024)
+ #define MAP_LENGTH		(2UL * 1024 * 1024)
  
--#define dprintf(x)  printf(x)
--
- /* Only ia64 requires this */
- #ifdef __ia64__
- #define ADDR (void *)(0x8000000000000000UL)
-@@ -54,44 +53,42 @@ int main(void)
- 	unsigned long i;
- 	char *shmaddr;
+@@ -77,7 +78,7 @@ static int check_page_flags(unsigned long pfn)
+ 	read(fd, &pageflags, sizeof(pageflags));
+ 	if ((pageflags & HEAD_PAGE_FLAGS) != HEAD_PAGE_FLAGS) {
+ 		close(fd);
+-		printf("Head page flags (%lx) is invalid\n", pageflags);
++		ksft_print_msg("Head page flags (%lx) is invalid\n", pageflags);
+ 		return -1;
+ 	}
+ 
+@@ -91,7 +92,7 @@ static int check_page_flags(unsigned long pfn)
+ 		if ((pageflags & TAIL_PAGE_FLAGS) != TAIL_PAGE_FLAGS ||
+ 		    (pageflags & HEAD_PAGE_FLAGS) == HEAD_PAGE_FLAGS) {
+ 			close(fd);
+-			printf("Tail page flags (%lx) is invalid\n", pageflags);
++			ksft_print_msg("Tail page flags (%lx) is invalid\n", pageflags);
+ 			return -1;
+ 		}
+ 	}
+@@ -106,11 +107,12 @@ int main(int argc, char **argv)
+ 	void *addr;
+ 	unsigned long pfn;
  
 +	ksft_print_header();
 +	ksft_set_plan(1);
 +
- 	shmid = shmget(2, LENGTH, SHM_HUGETLB | IPC_CREAT | SHM_R | SHM_W);
--	if (shmid < 0) {
--		perror("shmget");
+ 	addr = mmap(MAP_ADDR, MAP_LENGTH, PROT_READ | PROT_WRITE, MAP_FLAGS, -1, 0);
+-	if (addr == MAP_FAILED) {
+-		perror("mmap");
 -		exit(1);
 -	}
--	printf("shmid: 0x%x\n", shmid);
-+	if (shmid < 0)
-+		ksft_exit_fail_msg("shmget: %s\n", strerror(errno));
-+
-+	ksft_print_msg("shmid: 0x%x\n", shmid);
++	if (addr == MAP_FAILED)
++		ksft_exit_fail_msg("mmap: %s\n", strerror(errno));
  
- 	shmaddr = shmat(shmid, ADDR, SHMAT_FLAGS);
- 	if (shmaddr == (char *)-1) {
--		perror("Shared memory attach failure");
- 		shmctl(shmid, IPC_RMID, NULL);
--		exit(2);
-+		ksft_exit_fail_msg("Shared memory attach failure: %s\n", strerror(errno));
+ 	/* Trigger allocation of HugeTLB page. */
+ 	write_bytes(addr, MAP_LENGTH);
+@@ -118,23 +120,19 @@ int main(int argc, char **argv)
+ 	pfn = virt_to_pfn(addr);
+ 	if (pfn == -1UL) {
+ 		munmap(addr, MAP_LENGTH);
+-		perror("virt_to_pfn");
+-		exit(1);
++		ksft_exit_fail_msg("virt_to_pfn: %s\n", strerror(errno));
++	} else if (!pfn && geteuid()) {
++		ksft_test_result_skip("Unable to read the pfn as non-root user\n");
++		ksft_finished();
  	}
--	printf("shmaddr: %p\n", shmaddr);
  
--	dprintf("Starting the writes:\n");
--	for (i = 0; i < LENGTH; i++) {
-+	ksft_print_msg("shmaddr: %p\n", shmaddr);
-+
-+	ksft_print_msg("Starting the writes:");
-+	for (i = 0; i < LENGTH; i++)
- 		shmaddr[i] = (char)(i);
--		if (!(i % (1024 * 1024)))
--			dprintf(".");
+-	printf("Returned address is %p whose pfn is %lx\n", addr, pfn);
++	ksft_print_msg("Returned address is %p whose pfn is %lx\n", addr, pfn);
+ 
+-	if (check_page_flags(pfn) < 0) {
+-		munmap(addr, MAP_LENGTH);
+-		perror("check_page_flags");
+-		exit(1);
 -	}
--	dprintf("\n");
-+	ksft_print_msg("Done.\n");
++	ksft_test_result(!check_page_flags(pfn), "Check page flags\n");
  
--	dprintf("Starting the Check...");
-+	ksft_print_msg("Starting the Check...");
- 	for (i = 0; i < LENGTH; i++)
--		if (shmaddr[i] != (char)i) {
--			printf("\nIndex %lu mismatched\n", i);
--			exit(3);
--		}
--	dprintf("Done.\n");
-+		if (shmaddr[i] != (char)i)
-+			ksft_exit_fail_msg("\nIndex %lu mismatched\n", i);
-+	ksft_print_msg("Done.\n");
- 
- 	if (shmdt((const void *)shmaddr) != 0) {
--		perror("Detach failure");
- 		shmctl(shmid, IPC_RMID, NULL);
--		exit(4);
-+		ksft_exit_fail_msg("Detach failure: %s\n", strerror(errno));
- 	}
- 
- 	shmctl(shmid, IPC_RMID, NULL);
+ 	/* munmap() length of MAP_HUGETLB memory must be hugepage aligned */
+-	if (munmap(addr, MAP_LENGTH)) {
+-		perror("munmap");
+-		exit(1);
+-	}
++	if (munmap(addr, MAP_LENGTH))
++		ksft_exit_fail_msg("munmap: %s\n", strerror(errno));
  
 -	return 0;
-+	ksft_test_result_pass("Completed test\n");
-+
 +	ksft_finished();
  }
 -- 
