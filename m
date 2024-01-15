@@ -1,118 +1,231 @@
-Return-Path: <linux-kselftest+bounces-2971-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-2972-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 779FC82D793
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jan 2024 11:42:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64E1682D94E
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jan 2024 13:59:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 254031F21D3F
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jan 2024 10:42:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7E1061C218BA
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jan 2024 12:59:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8FC963AD;
-	Mon, 15 Jan 2024 10:42:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85DA6168D2;
+	Mon, 15 Jan 2024 12:58:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=xen.org header.i=@xen.org header.b="dpMcEDtG"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from h3cspam02-ex.h3c.com (smtp.h3c.com [60.191.123.50])
+Received: from mail.xenproject.org (mail.xenproject.org [104.130.215.37])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2B9D1A27E
-	for <linux-kselftest@vger.kernel.org>; Mon, 15 Jan 2024 10:41:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=h3c.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=h3c.com
-Received: from mail.maildlp.com ([172.25.15.154])
-	by h3cspam02-ex.h3c.com with ESMTP id 40FAfUqO038155;
-	Mon, 15 Jan 2024 18:41:30 +0800 (GMT-8)
-	(envelope-from hu.yadi@h3c.com)
-Received: from DAG6EX13-BJD.srv.huawei-3com.com (unknown [10.153.34.15])
-	by mail.maildlp.com (Postfix) with ESMTP id 88C4C2004DB6;
-	Mon, 15 Jan 2024 18:45:58 +0800 (CST)
-Received: from DAG6EX02-IMDC.srv.huawei-3com.com (10.62.14.11) by
- DAG6EX13-BJD.srv.huawei-3com.com (10.153.34.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.27; Mon, 15 Jan 2024 18:41:32 +0800
-Received: from DAG6EX02-IMDC.srv.huawei-3com.com ([fe80::4c21:7c89:4f9d:e4c4])
- by DAG6EX02-IMDC.srv.huawei-3com.com ([fe80::4c21:7c89:4f9d:e4c4%16]) with
- mapi id 15.02.1258.027; Mon, 15 Jan 2024 18:41:32 +0800
-From: Huyadi <hu.yadi@h3c.com>
-To: "'kernel test robot'" <lkp@intel.com>,
-        "jmorris@namei.org"
-	<jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "mathieu.desnoyers@efficios.com"
-	<mathieu.desnoyers@efficios.com>,
-        "mic@digikod.net" <mic@digikod.net>
-CC: "oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org"
-	<linux-security-module@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org"
-	<linux-kselftest@vger.kernel.org>,
-        "514118380@qq.com" <514118380@qq.com>
-Subject: =?gb2312?B?u9i4tDogW1BBVENIIHYzXSBzZWxmdGVzdHMvbGFuZGxvY2s6Rml4IHR3byBi?=
- =?gb2312?Q?uild_issues?=
-Thread-Topic: [PATCH v3] selftests/landlock:Fix two build issues
-Thread-Index: AQHaRScQ690ykYEnskymgvTI87URSbDZuk8AgAD5tWA=
-Date: Mon, 15 Jan 2024 10:41:32 +0000
-Message-ID: <44bf55ff3e3649c88c5b1daf843a86b5@h3c.com>
-References: <20240112071245.669-1-hu.yadi@h3c.com>
- <202401151147.T1s11iHJ-lkp@intel.com>
-In-Reply-To: <202401151147.T1s11iHJ-lkp@intel.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-sender-location: DAG2
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1721F175AB;
+	Mon, 15 Jan 2024 12:58:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=xen.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xen.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=xen.org;
+	s=20200302mail; h=Content-Transfer-Encoding:MIME-Version:References:
+	In-Reply-To:Message-Id:Date:Subject:To:From;
+	bh=JUiDe6hOaIy+4uee/fAnBCB3ywCyITQC8m671brMaTc=; b=dpMcEDtG7nb+ErCgJ/rncMoljY
+	vuxrqgCEb9Dy5nunHKYECPU7jeMoUDFKmt88j4f0OqytKqIk2G/4EW7EQA+7OCsw3O7e8tfhzbgN6
+	xTgopbE+lD4IiKDnYJpbay7lgK7qNVwJoqizFhkpfvSMX3bdIgSTLy6F4/rmu3Cs9dkU=;
+Received: from xenbits.xenproject.org ([104.239.192.120])
+	by mail.xenproject.org with esmtp (Exim 4.92)
+	(envelope-from <paul@xen.org>)
+	id 1rPMXI-0002kY-Np; Mon, 15 Jan 2024 12:57:52 +0000
+Received: from 54-240-197-231.amazon.com ([54.240.197.231] helo=REM-PW02S00X.ant.amazon.com)
+	by xenbits.xenproject.org with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <paul@xen.org>)
+	id 1rPMXI-0002kM-Et; Mon, 15 Jan 2024 12:57:52 +0000
+From: Paul Durrant <paul@xen.org>
+To: Paolo Bonzini <pbonzini@redhat.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Sean Christopherson <seanjc@google.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	David Woodhouse <dwmw2@infradead.org>,
+	Paul Durrant <paul@xen.org>,
+	Shuah Khan <shuah@kernel.org>,
+	kvm@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH v12 08/20] KVM: pfncache: allow a cache to be activated with a fixed (userspace) HVA
+Date: Mon, 15 Jan 2024 12:56:55 +0000
+Message-Id: <20240115125707.1183-9-paul@xen.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20240115125707.1183-1-paul@xen.org>
+References: <20240115125707.1183-1-paul@xen.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-DNSRBL: 
-X-SPAM-SOURCE-CHECK: pass
-X-MAIL:h3cspam02-ex.h3c.com 40FAfUqO038155
+Content-Transfer-Encoding: 8bit
 
-DQo+SGkgSHUsDQo+DQo+a2VybmVsIHRlc3Qgcm9ib3Qgbm90aWNlZCB0aGUgZm9sbG93aW5nIGJ1
-aWxkIGVycm9yczoNCj4NCj4gW2F1dG8gYnVpbGQgdGVzdCBFUlJPUiBvbiBzaHVhaC1rc2VsZnRl
-c3QvbmV4dF0gW2Fsc28gYnVpbGQgdGVzdCBFUlJPUiBvbiBzaHVhaC1rc2VsZnRlc3QvZml4ZXMg
-bGludXMvbWFzdGVyIHY2LjcgbmV4dC0yMDI0MDExMl0gW0lmIHlvdXIgcGF0Y2ggaXMgYXBwbGll
-ZCB0byB0aGUgd3JvbmcgZ2l0IHRyZWUsIGtpbmRseSBkcm9wIHVzIGEgbm90ZS4NCj5BbmQgd2hl
-biBzdWJtaXR0aW5nIHBhdGNoLCB3ZSBzdWdnZXN0IHRvIHVzZSAnLS1iYXNlJyBhcyBkb2N1bWVu
-dGVkIGluIGh0dHBzOi8vZ2l0LXNjbS5jb20vZG9jcy9naXQtZm9ybWF0LXBhdGNoI19iYXNlX3Ry
-ZWVfaW5mb3JtYXRpb25dDQoNCj51cmw6ICAgIGh0dHBzOi8vZ2l0aHViLmNvbS9pbnRlbC1sYWIt
-bGtwL2xpbnV4L2NvbW1pdHMvSHUtWWFkaS9zZWxmdGVzdHMtbGFuZGxvY2stRml4LXR3by1idWls
-ZC1pc3N1ZXMvMjAyNDAxMTItMTUxODA1DQo+YmFzZTogICBodHRwczovL2dpdC5rZXJuZWwub3Jn
-L3B1Yi9zY20vbGludXgva2VybmVsL2dpdC9zaHVhaC9saW51eC1rc2VsZnRlc3QuZ2l0IG5leHQN
-Cj5wYXRjaCBsaW5rOiAgICBodHRwczovL2xvcmUua2VybmVsLm9yZy9yLzIwMjQwMTEyMDcxMjQ1
-LjY2OS0xLWh1LnlhZGklNDBoM2MuY29tDQo+cGF0Y2ggc3ViamVjdDogW1BBVENIIHYzXSBzZWxm
-dGVzdHMvbGFuZGxvY2s6Rml4IHR3byBidWlsZCBpc3N1ZXMNCj5jb21waWxlcjogZ2NjLTEyIChE
-ZWJpYW4gMTIuMi4wLTE0KSAxMi4yLjAgcmVwcm9kdWNlICh0aGlzIGlzIGEgVz0xIGJ1aWxkKTog
-KGh0dHBzOi8vZG93bmxvYWQuMDEub3JnLzBkYXktY2kvYXJjaGl2ZS8yMDI0MDExNS8yMDI0MDEx
-NTExNDcuVDFzMTFpSEotbGtwQGludGVsLmNvbS9yZXByb2R1Y2UpDQo+DQo+SWYgeW91IGZpeCB0
-aGUgaXNzdWUgaW4gYSBzZXBhcmF0ZSBwYXRjaC9jb21taXQgKGkuZS4gbm90IGp1c3QgYSBuZXcg
-dmVyc2lvbiBvZiB0aGUgc2FtZSBwYXRjaC9jb21taXQpLCBraW5kbHkgYWRkIGZvbGxvd2luZyB0
-YWdzDQo+fCBSZXBvcnRlZC1ieToga2VybmVsIHRlc3Qgcm9ib3QgPGxrcEBpbnRlbC5jb20+DQo+
-fCBDbG9zZXM6IA0KPnwgaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvb2Uta2J1aWxkLWFsbC8yMDI0
-MDExNTExNDcuVDFzMTFpSEotbGtwQGludGVsLg0KPnwgY29tLw0KPg0KPkFsbCBlcnJvcnMgKG5l
-dyBvbmVzIHByZWZpeGVkIGJ5ID4+KToNCj4NCg0KRml4IGl0LCBhbmQgc2VuZCBwYXRjaCBWNCBz
-b29uLg0KDQo+Pj4gbmV0X3Rlc3QuYzoyNToxNDogZXJyb3I6IHN0YXRpYyBkZWNsYXJhdGlvbiBv
-ZiAnZ2V0dGlkJyBmb2xsb3dzIA0KPj4+IG5vbi1zdGF0aWMgZGVjbGFyYXRpb24NCj4gICAgICAy
-NSB8IHN0YXRpYyBwaWRfdCBnZXR0aWQodm9pZCkNCj4gICAgICAgICB8ICAgICAgICAgICAgICBe
-fn5+fn4NCj4gICBJbiBmaWxlIGluY2x1ZGVkIGZyb20gL3Vzci9pbmNsdWRlL3VuaXN0ZC5oOjEy
-MTgsDQo+ICAgICAgICAgICAgICAgICAgICBmcm9tIC91c3IvaW5jbHVkZS94ODZfNjQtbGludXgt
-Z251L2JpdHMvc2lnc3Rrc3ouaDoyNCwNCj4gICAgICAgICAgICAgICAgICAgIGZyb20gL3Vzci9p
-bmNsdWRlL3NpZ25hbC5oOjMyOCwNCj4gICAgICAgICAgICAgICAgICAgIGZyb20gL3Vzci9pbmNs
-dWRlL3g4Nl82NC1saW51eC1nbnUvc3lzL3dhaXQuaDozNiwNCj4gICAgICAgICAgICAgICAgICAg
-IGZyb20gY29tbW9uLmg6MTYsDQo+ICAgICAgICAgICAgICAgICAgICBmcm9tIG5ldF90ZXN0LmM6
-MjI6DQo+ICAgL3Vzci9pbmNsdWRlL3g4Nl82NC1saW51eC1nbnUvYml0cy91bmlzdGRfZXh0Lmg6
-MzQ6MTY6IG5vdGU6IHByZXZpb3VzIGRlY2xhcmF0aW9uIG9mICdnZXR0aWQnIHdpdGggdHlwZSAn
-X19waWRfdCh2b2lkKScge2FrYSAnaW50KHZvaWQpJ30NCj4gICAgICAzNCB8IGV4dGVybiBfX3Bp
-ZF90IGdldHRpZCAodm9pZCkgX19USFJPVzsNCj4gICAgICAgICB8ICAgICAgICAgICAgICAgIF5+
-fn5+fg0KPg0KPi0tDQo+MC1EQVkgQ0kgS2VybmVsIFRlc3QgU2VydmljZQ0KaHR0cHM6Ly9naXRo
-dWIuY29tL2ludGVsL2xrcC10ZXN0cy93aWtpDQo=
+From: Paul Durrant <pdurrant@amazon.com>
+
+Some pfncache pages may actually be overlays on guest memory that have a
+fixed HVA within the VMM. It's pointless to invalidate such cached
+mappings if the overlay is moved so allow a cache to be activated directly
+with the HVA to cater for such cases. A subsequent patch will make use
+of this facility.
+
+Signed-off-by: Paul Durrant <pdurrant@amazon.com>
+Reviewed-by: David Woodhouse <dwmw@amazon.co.uk>
+---
+Cc: Sean Christopherson <seanjc@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: David Woodhouse <dwmw2@infradead.org>
+
+v11:
+ - Fixed kvm_gpc_check() to ignore memslot generation if the cache is not
+   activated with a GPA. (This breakage occured during the re-work for v8).
+
+v9:
+ - Pass both GPA and HVA into __kvm_gpc_refresh() rather than overloading
+   the address paraneter and using a bool flag to indicated what it is.
+
+v8:
+ - Re-worked to avoid messing with struct gfn_to_pfn_cache.
+---
+ include/linux/kvm_host.h | 20 +++++++++++++++++++-
+ virt/kvm/pfncache.c      | 40 +++++++++++++++++++++++++++++++---------
+ 2 files changed, 50 insertions(+), 10 deletions(-)
+
+diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+index f2354f808d04..7994c4d16783 100644
+--- a/include/linux/kvm_host.h
++++ b/include/linux/kvm_host.h
+@@ -1344,6 +1344,22 @@ void kvm_gpc_init(struct gfn_to_pfn_cache *gpc, struct kvm *kvm);
+  */
+ int kvm_gpc_activate(struct gfn_to_pfn_cache *gpc, gpa_t gpa, unsigned long len);
+ 
++/**
++ * kvm_gpc_activate_hva - prepare a cached kernel mapping and HPA for a given HVA.
++ *
++ * @gpc:          struct gfn_to_pfn_cache object.
++ * @hva:          userspace virtual address to map.
++ * @len:          sanity check; the range being access must fit a single page.
++ *
++ * @return:       0 for success.
++ *                -EINVAL for a mapping which would cross a page boundary.
++ *                -EFAULT for an untranslatable guest physical address.
++ *
++ * The semantics of this function are the same as those of kvm_gpc_activate(). It
++ * merely bypasses a layer of address translation.
++ */
++int kvm_gpc_activate_hva(struct gfn_to_pfn_cache *gpc, unsigned long hva, unsigned long len);
++
+ /**
+  * kvm_gpc_check - check validity of a gfn_to_pfn_cache.
+  *
+@@ -1398,7 +1414,9 @@ void kvm_gpc_deactivate(struct gfn_to_pfn_cache *gpc);
+ static inline void kvm_gpc_mark_dirty(struct gfn_to_pfn_cache *gpc)
+ {
+ 	lockdep_assert_held(&gpc->lock);
+-	mark_page_dirty_in_slot(gpc->kvm, gpc->memslot, gpc->gpa >> PAGE_SHIFT);
++
++	if (gpc->gpa != KVM_XEN_INVALID_GPA)
++		mark_page_dirty_in_slot(gpc->kvm, gpc->memslot, gpc->gpa >> PAGE_SHIFT);
+ }
+ 
+ void kvm_sigset_activate(struct kvm_vcpu *vcpu);
+diff --git a/virt/kvm/pfncache.c b/virt/kvm/pfncache.c
+index 97eec8ee3449..ae822bff812f 100644
+--- a/virt/kvm/pfncache.c
++++ b/virt/kvm/pfncache.c
+@@ -48,7 +48,10 @@ bool kvm_gpc_check(struct gfn_to_pfn_cache *gpc, unsigned long len)
+ 	if (!gpc->active)
+ 		return false;
+ 
+-	if (gpc->generation != slots->generation || kvm_is_error_hva(gpc->uhva))
++	if (gpc->gpa != KVM_XEN_INVALID_GPA && gpc->generation != slots->generation)
++		return false;
++
++	if (kvm_is_error_hva(gpc->uhva))
+ 		return false;
+ 
+ 	if (offset_in_page(gpc->uhva) + len > PAGE_SIZE)
+@@ -209,11 +212,13 @@ static kvm_pfn_t hva_to_pfn_retry(struct gfn_to_pfn_cache *gpc)
+ 	return -EFAULT;
+ }
+ 
+-static int __kvm_gpc_refresh(struct gfn_to_pfn_cache *gpc, gpa_t gpa,
++static int __kvm_gpc_refresh(struct gfn_to_pfn_cache *gpc, gpa_t gpa, unsigned long uhva,
+ 			     unsigned long len)
+ {
+ 	struct kvm_memslots *slots = kvm_memslots(gpc->kvm);
+-	unsigned long page_offset = offset_in_page(gpa);
++	unsigned long page_offset = (gpa != KVM_XEN_INVALID_GPA) ?
++		offset_in_page(gpa) :
++		offset_in_page(uhva);
+ 	bool unmap_old = false;
+ 	unsigned long old_uhva;
+ 	kvm_pfn_t old_pfn;
+@@ -246,9 +251,15 @@ static int __kvm_gpc_refresh(struct gfn_to_pfn_cache *gpc, gpa_t gpa,
+ 	old_khva = (void *)PAGE_ALIGN_DOWN((uintptr_t)gpc->khva);
+ 	old_uhva = PAGE_ALIGN_DOWN(gpc->uhva);
+ 
+-	/* Refresh the userspace HVA if necessary */
+-	if (gpc->gpa != gpa || gpc->generation != slots->generation ||
+-	    kvm_is_error_hva(gpc->uhva)) {
++	if (gpa == KVM_XEN_INVALID_GPA) {
++		gpc->gpa = KVM_XEN_INVALID_GPA;
++		gpc->uhva = PAGE_ALIGN_DOWN(uhva);
++
++		if (gpc->uhva != old_uhva)
++			hva_change = true;
++	} else if (gpc->gpa != gpa ||
++		   gpc->generation != slots->generation ||
++		   kvm_is_error_hva(gpc->uhva)) {
+ 		gfn_t gfn = gpa_to_gfn(gpa);
+ 
+ 		gpc->gpa = gpa;
+@@ -319,7 +330,7 @@ static int __kvm_gpc_refresh(struct gfn_to_pfn_cache *gpc, gpa_t gpa,
+ 
+ int kvm_gpc_refresh(struct gfn_to_pfn_cache *gpc, unsigned long len)
+ {
+-	return __kvm_gpc_refresh(gpc, gpc->gpa, len);
++	return __kvm_gpc_refresh(gpc, gpc->gpa, gpc->uhva, len);
+ }
+ 
+ void kvm_gpc_init(struct gfn_to_pfn_cache *gpc, struct kvm *kvm)
+@@ -332,7 +343,8 @@ void kvm_gpc_init(struct gfn_to_pfn_cache *gpc, struct kvm *kvm)
+ 	gpc->uhva = KVM_HVA_ERR_BAD;
+ }
+ 
+-int kvm_gpc_activate(struct gfn_to_pfn_cache *gpc, gpa_t gpa, unsigned long len)
++static int __kvm_gpc_activate(struct gfn_to_pfn_cache *gpc, gpa_t gpa, unsigned long uhva,
++			      unsigned long len)
+ {
+ 	struct kvm *kvm = gpc->kvm;
+ 
+@@ -353,7 +365,17 @@ int kvm_gpc_activate(struct gfn_to_pfn_cache *gpc, gpa_t gpa, unsigned long len)
+ 		gpc->active = true;
+ 		write_unlock_irq(&gpc->lock);
+ 	}
+-	return __kvm_gpc_refresh(gpc, gpa, len);
++	return __kvm_gpc_refresh(gpc, gpa, uhva, len);
++}
++
++int kvm_gpc_activate(struct gfn_to_pfn_cache *gpc, gpa_t gpa, unsigned long len)
++{
++	return __kvm_gpc_activate(gpc, gpa, KVM_HVA_ERR_BAD, len);
++}
++
++int kvm_gpc_activate_hva(struct gfn_to_pfn_cache *gpc, unsigned long uhva, unsigned long len)
++{
++	return __kvm_gpc_activate(gpc, KVM_XEN_INVALID_GPA, uhva, len);
+ }
+ 
+ void kvm_gpc_deactivate(struct gfn_to_pfn_cache *gpc)
+-- 
+2.39.2
+
 
