@@ -1,123 +1,132 @@
-Return-Path: <linux-kselftest+bounces-3014-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3015-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3845682DEBB
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jan 2024 18:59:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6528982DEDF
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jan 2024 19:05:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2B0C2833E6
-	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jan 2024 17:59:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 618001C21F1C
+	for <lists+linux-kselftest@lfdr.de>; Mon, 15 Jan 2024 18:05:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2546F18059;
-	Mon, 15 Jan 2024 17:59:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68CE61805E;
+	Mon, 15 Jan 2024 18:05:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="ILZGkR44"
+	dkim=pass (2048-bit key) header.d=arista.com header.i=@arista.com header.b="T2nyDvqA"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFE781804E
-	for <linux-kselftest@vger.kernel.org>; Mon, 15 Jan 2024 17:59:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
-Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-7831362c9bcso729626585a.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jan 2024 09:59:01 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3A3118625
+	for <linux-kselftest@vger.kernel.org>; Mon, 15 Jan 2024 18:05:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=arista.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arista.com
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-40e586a62f7so67251245e9.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 15 Jan 2024 10:05:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1705341540; x=1705946340; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1wGaOr22tAz8ZsKDr+cBOsYsgD9Gp6tmTN5qVEUIqRw=;
-        b=ILZGkR44NdOor92BDo3h2CNCw9AGUff2VFZN4safD0dL1Y6fqJBwGRcgfTsn0upGDf
-         XOypfW1xsJK4BuNPD4oyusXyNSRXMsnMVB5hQWonegGg8IHJsDFPaoO2HtA/TlIPInMA
-         zc+2Z1GCc+bhuIFSPITTPsPS8Yzma0qsDyT5IGl7uq+oE8tuJXBz/7rnNqnpyR6ImYt5
-         4lmk25EL0dJ8v7JO7PwbsOHtqi9LMTzoxzsOPg4Ao8QfQMp94EkDAVaHGCCU8aitXqDn
-         0cOBsqJ20RmhgCqFGo/QksyCT0lEKKOqQp0WHGvnbxZagB/bfltJyiF420khfBiPhFj8
-         Ylsg==
+        d=arista.com; s=google; t=1705341911; x=1705946711; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZYebFm02oQzKSho2r6zut1eAIyUxcztuNRtBzpyES9c=;
+        b=T2nyDvqA8Ef2ytacO55Ifrc2iQbForb2eIzGmKfYiSSt4oJ4Bn+CPYEFOO6BbH+C2e
+         ssyP6OPdmsqYXencyQN46T/K35s30V8byPuH42t18uEzb3P8Beob6HXHbwfO9QMQQr4s
+         Gexvy49Vbz5RJWPnqz+RZdYxoTcZ/EEP4qnu4IMsnf96LC7Am8TjH+wN/GUHHHW1kmCv
+         H6LeoSbdsw2aO0rUx2yefZIMenWsYD6RsZd6z9PmJdGKl6fdN6hLz26D/elPBj2yDMr7
+         cWC6DIlcn5HQs4v3kz6Md3nI8+DBaTZG83DvpKy+jNZ7HeKvVocs3M7z1ltiY5J0rWed
+         BlhQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705341540; x=1705946340;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1wGaOr22tAz8ZsKDr+cBOsYsgD9Gp6tmTN5qVEUIqRw=;
-        b=gfTEJ4mVGBe7ICbQQnRw8PDjzp4odRuiDNyr10wXLM1cbWSGiZCn/Ju3YU1A3Q5kAE
-         TDG0+lljcuLrvQmruz8mX8fTxjCk3AzrSX3eagSdvAqWEON1g5TK6uRI5+0eeQvgUMgZ
-         I2f9+hkRgM+1h918vzawEJX0p/IMFPHLkzGQXBsNUmuNAuuErd5o+Bqchzg+54avbVdQ
-         Vid8nJWzysRBMqkQwU8x2rwoW7A3odjzxM5F378VlGLJiUg6sHjzOKCa2+ngZSEkMu6/
-         r5Ir53P9bpOiW9RsgNihqOjkikKIid4kOhq/Cco5Xh7qnyroB9pDBdldzwjK+ONb/WRs
-         AN0A==
-X-Gm-Message-State: AOJu0YwwCR6EpMhrhDVEpqLQbnShJ7qmlXxNjOxQajuEXLSIbEvg6VkC
-	+b7cPA96ouJyWcQlc8XlRGf+uLxcM4LBPA==
-X-Google-Smtp-Source: AGHT+IH3qvjmHpS/20mUo+xR0imhTBslJ6twopYzo9p1d1flQYlhOLrwJcWYbmGWgldNtbhvIF7Uzw==
-X-Received: by 2002:a05:6214:518c:b0:67f:d236:5c0f with SMTP id kl12-20020a056214518c00b0067fd2365c0fmr7596556qvb.90.1705341540583;
-        Mon, 15 Jan 2024 09:59:00 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-68-80-239.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.80.239])
-        by smtp.gmail.com with ESMTPSA id d10-20020a0cfe8a000000b0067f454b5307sm3452291qvs.108.2024.01.15.09.59.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Jan 2024 09:59:00 -0800 (PST)
-Received: from jgg by wakko with local (Exim 4.95)
-	(envelope-from <jgg@ziepe.ca>)
-	id 1rPREh-003u0V-Kj;
-	Mon, 15 Jan 2024 13:58:59 -0400
-Date: Mon, 15 Jan 2024 13:58:59 -0400
-From: Jason Gunthorpe <jgg@ziepe.ca>
-To: Shameerali Kolothum Thodi <shameerali.kolothum.thodi@huawei.com>
-Cc: Lu Baolu <baolu.lu@linux.intel.com>, Kevin Tian <kevin.tian@intel.com>,
-	Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Jean-Philippe Brucker <jean-philippe@linaro.org>,
-	Nicolin Chen <nicolinc@nvidia.com>, Yi Liu <yi.l.liu@intel.com>,
-	Jacob Pan <jacob.jun.pan@linux.intel.com>,
-	"iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"virtualization@lists.linux-foundation.org" <virtualization@lists.linux-foundation.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 4/6] iommufd: Deliver fault messages to user space
-Message-ID: <20240115175859.GC50608@ziepe.ca>
-References: <20231026024930.382898-1-baolu.lu@linux.intel.com>
- <20231026024930.382898-5-baolu.lu@linux.intel.com>
- <b822096cc3b441309d99832c587be25a@huawei.com>
- <20240115164723.GB50608@ziepe.ca>
- <b1663110e1ca4301834f403270357bea@huawei.com>
+        d=1e100.net; s=20230601; t=1705341911; x=1705946711;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZYebFm02oQzKSho2r6zut1eAIyUxcztuNRtBzpyES9c=;
+        b=e6SzSQR81EH8hPyNCUxnn3OMoFGL9Ni+tgVKwvr9LDI5CtUQ5xrSfEZjd1PHXv3Vl4
+         u1ls6BljoSRnTNUdmVWrSISaWPrKb2lZu5MkruEcOd1Qd3v62oYLqXTphvaSuDUXOvsB
+         aM7ALc3GwSKkoS1Q18bkvppKqXcZF+rjmadz9+SXz3wsh4bCZ27woXAnaBFHY71qBDxD
+         nggsqO6kA03hA/mJJfA9ho0yzHPbCewS/xqEffVdI6YoyqOu+de8qyknRMGU/QbJhTUF
+         F6fTp8DwZbqvHSS5U27eEhMAaYs248xb41R5ct4/x45uwMKQ1weFzIvmL4nxoOJggydA
+         JTRQ==
+X-Gm-Message-State: AOJu0YybNnF9GnjsA0mGO+S57MDksZxpojwZyYlpMbhViKM39EpC+UfX
+	R0pu376uvCnHV8mNF41WE+9ygb6bdzfU
+X-Google-Smtp-Source: AGHT+IHpC9i2Zt+9OEH1Tthw6TnEM6T2HC0YM/LK4Eu6Lh2rak77Rau9N04giTZ7ccPypztzdYglYw==
+X-Received: by 2002:a05:600c:3546:b0:40e:7e0a:65f2 with SMTP id i6-20020a05600c354600b0040e7e0a65f2mr662182wmq.163.1705341911024;
+        Mon, 15 Jan 2024 10:05:11 -0800 (PST)
+Received: from [10.83.37.178] ([217.173.96.166])
+        by smtp.gmail.com with ESMTPSA id ay12-20020a05600c1e0c00b0040d802a7619sm20871602wmb.38.2024.01.15.10.05.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 Jan 2024 10:05:10 -0800 (PST)
+Message-ID: <934627c5-eebb-4626-be23-cfb134c01d1a@arista.com>
+Date: Mon, 15 Jan 2024 18:05:10 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b1663110e1ca4301834f403270357bea@huawei.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 12/12] selftests/net: Add TCP-AO key-management test
+Content-Language: en-US
+To: "Nassiri, Mohammad" <mnassiri@ciena.com>
+Cc: Shuah Khan <shuah@kernel.org>, David Ahern <dsahern@kernel.org>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Salam Noureddine <noureddine@arista.com>, Bob Gilligan
+ <gilligan@arista.com>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+ "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+ Dmitry Safonov <0x7f454c46@gmail.com>
+References: <20231215-tcp-ao-selftests-v1-0-f6c08180b985@arista.com>
+ <20231215-tcp-ao-selftests-v1-12-f6c08180b985@arista.com>
+ <DM6PR04MB4202DA43D14985A28055CE0FC56F2@DM6PR04MB4202.namprd04.prod.outlook.com>
+From: Dmitry Safonov <dima@arista.com>
+In-Reply-To: <DM6PR04MB4202DA43D14985A28055CE0FC56F2@DM6PR04MB4202.namprd04.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Jan 15, 2024 at 05:44:13PM +0000, Shameerali Kolothum Thodi wrote:
+Hi Mohammad,
 
-> > If it is valid when userspace does read() then it should be valid when
-> > userspace does write() too.
-> > 
-> > It is the only way the kernel can actually match request and response
-> > here.
+On 1/12/24 18:57, Nassiri, Mohammad wrote:
+>> -----Original Message-----
+>> From: Dmitry Safonov <dima@arista.com>
+>> Sent: Thursday, December 14, 2023 9:36 PM
 > 
-> The kernel currently checks the pasid only if IOMMU_FAULT_PAGE_RESPONSE_NEEDS_PASID
-> is set.
+>> +
+>> +static void end_server(const char *tst_name, int sk,
+>> +		       struct tcp_ao_counters *begin) {
+>> +	struct tcp_ao_counters end;
+>> +
+>> +	if (test_get_tcp_ao_counters(sk, &end))
+>> +		test_error("test_get_tcp_ao_counters()");
+>> +	verify_keys(tst_name, sk, false, true);
+>> +
+>> +	synchronize_threads(); /* 4: verified => closed */
+>> +	close(sk);
+>> +
+>> +	verify_counters(tst_name, true, false, begin, &end);
 > 
-> https://lore.kernel.org/linux-iommu/20200616144712.748818-1-jean-philippe@linaro.org/
+> Shouldn't it be reversed instead?
+> verify_counters(tst_name, false, true, begin, &end);
+> The sk is an accept socket and the function is called by the server.
+
+Good catch!
+Do you want to send a patch? :-)
+
+>> +	synchronize_threads(); /* 5: counters */ }
+>> +
+>> +int main(int argc, char *argv[])
+>> +{
+>> +	test_init(120, server_fn, client_fn);
+>> +	return 0;
+>> +}
+>>
+>> --
+>> 2.43.0
 > 
-> > So, I think you have a userspace issue to not provide the right
-> > pasid??
-> 
-> This is not just ARM stall resume case, but for some PCI devices as well as per
-> the above commit log. So do we really need to track this in userspace ?
 
-Yes, these weird HW details should not leak into userspace.
+Thanks,
+            Dmitry
 
-The PASID is required on the read() side, userspace should provide it
-on the write() side. It is trivial for it to do, there is no reason to
-accommodate anything else.
-
-Alternatively I'm wondering if we should supply a serial number to
-userspace so it can match the request/response instead of relying on
-guessing based on pasid/grpid?
-
-Jason
 
