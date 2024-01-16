@@ -1,138 +1,112 @@
-Return-Path: <linux-kselftest+bounces-3050-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3051-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B491E82E47E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jan 2024 01:20:12 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DC5682E4AC
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jan 2024 01:24:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2942C1C2084F
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jan 2024 00:20:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 016C8B23074
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jan 2024 00:24:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0BF01BDFC;
-	Tue, 16 Jan 2024 00:13:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CB581B7E2;
+	Tue, 16 Jan 2024 00:14:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l4GQ4SZq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="noflotDk"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C06821BF23;
-	Tue, 16 Jan 2024 00:13:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9065BC43390;
-	Tue, 16 Jan 2024 00:13:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D1DD1D69C;
+	Tue, 16 Jan 2024 00:14:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7FEF9C43390;
+	Tue, 16 Jan 2024 00:14:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705364010;
-	bh=uI7Btu/J/8YtgV/1o+liXNpmIE97ptazBIRFlD38JsI=;
+	s=k20201202; t=1705364041;
+	bh=ZO2PWE9bECNpGOyQt9OHBLtp54IKPBgy6OU+PB87aK0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=l4GQ4SZq/cvpCc/9ZhG3QEpESHJHIj+GhGFAIF2EhXinadzfaZ8I/PHPH/o9SnnbR
-	 ZmHHrYK7mB4e/toPaf0toKVRQ0Lv4Fz5ZeMJGrhkkb/H/TOKxYaZYjkCyymtt67+TQ
-	 BnxAJwm7Ut4mZeDhM1B1kbZcpwIRhpMmMcmckSyMg/tYs18HgalBxVv9ay40wWVRVk
-	 57W3SJ1ncasaOAqN0+ZczH1ASKx+tQBf3n0CUMQ6Vmoatjr1PfjTbYE2k3eDIP3Pzn
-	 FFb+8Dt48mrX4rFpoI7g7yAzOoVbp2gC/wlmau26Z8xBFwVAOE8Skq/5lOnLNaqvnr
-	 tm8HKWTd8WywA==
+	b=noflotDkJKKvxwQAAIvwwRi9Siy4ygyLWgnXFbpu9cctrpOna1XaA//zwlDoqF9QL
+	 o+I+j+XMyMXfT5poq3y7aJA1El3PWFnXT2jiRrcIsK6xLW79F6fpRktR3pFskL+3YR
+	 U6VuNngcyQsEUuXHFoGkrQXDWRXs5qB55H4FIR6gvy5GHXC/1aGk8koWx0udtbBu3r
+	 RrPPTrNReC0CUOKD7ufU5JYvShIpBDV9iHR1BQkHA32N2zZSghqCeNP/LDRqKS9ZRQ
+	 wcx+4pzthQZFQRkOPRnQLy7AnFNe0eMvxjdvPT58fvjdKVl5bJo2LA3P8hBLPQYrhD
+	 3CjVlz4vfSHFA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Michal Wajdeczko <michal.wajdeczko@intel.com>,
-	David Gow <davidgow@google.com>,
-	Rae Moar <rmoar@google.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
+Cc: =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+	Willy Tarreau <w@1wt.eu>,
 	Sasha Levin <sashal@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	kunit-dev@googlegroups.com
-Subject: [PATCH AUTOSEL 6.7 13/18] kunit: Reset test->priv after each param iteration
-Date: Mon, 15 Jan 2024 19:12:55 -0500
-Message-ID: <20240116001308.212917-13-sashal@kernel.org>
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.6 08/14] selftests/nolibc: use EFI -bios for LoongArch qemu
+Date: Mon, 15 Jan 2024 19:13:34 -0500
+Message-ID: <20240116001347.213328-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240116001308.212917-1-sashal@kernel.org>
-References: <20240116001308.212917-1-sashal@kernel.org>
+In-Reply-To: <20240116001347.213328-1-sashal@kernel.org>
+References: <20240116001347.213328-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.7
+X-stable-base: Linux 6.6.12
 Content-Transfer-Encoding: 8bit
 
-From: Michal Wajdeczko <michal.wajdeczko@intel.com>
+From: Thomas Weißschuh <linux@weissschuh.net>
 
-[ Upstream commit 342fb9789267ee3908959bfa136b82e88e2ce918 ]
+[ Upstream commit bdeeeaba83682225a7bf5f100fe8652a59590d33 ]
 
-If we run parameterized test that uses test->priv to prepare some
-custom data, then value of test->priv will leak to the next param
-iteration and may be unexpected.  This could be easily seen if
-we promote example_priv_test to parameterized test as then only
-first test iteration will be successful:
+qemu for LoongArch does not work properly with direct kernel boot.
+The kernel will panic during initialization and hang without any output.
 
-$ ./tools/testing/kunit/kunit.py run \
-	--kunitconfig ./lib/kunit/.kunitconfig *.example_priv*
+When booting in EFI mode everything work correctly.
 
-[ ] Starting KUnit Kernel (1/1)...
-[ ] ============================================================
-[ ] =================== example (1 subtest) ====================
-[ ] ==================== example_priv_test  ====================
-[ ] [PASSED] example value 3
-[ ] # example_priv_test: initializing
-[ ] # example_priv_test: ASSERTION FAILED at lib/kunit/kunit-example-test.c:230
-[ ] Expected test->priv == ((void *)0), but
-[ ]     test->priv == 0000000060dfe290
-[ ]     ((void *)0) == 0000000000000000
-[ ] # example_priv_test: cleaning up
-[ ] [FAILED] example value 2
-[ ] # example_priv_test: initializing
-[ ] # example_priv_test: ASSERTION FAILED at lib/kunit/kunit-example-test.c:230
-[ ] Expected test->priv == ((void *)0), but
-[ ]     test->priv == 0000000060dfe290
-[ ]     ((void *)0) == 0000000000000000
-[ ] # example_priv_test: cleaning up
-[ ] [FAILED] example value 1
-[ ] # example_priv_test: initializing
-[ ] # example_priv_test: ASSERTION FAILED at lib/kunit/kunit-example-test.c:230
-[ ] Expected test->priv == ((void *)0), but
-[ ]     test->priv == 0000000060dfe290
-[ ]     ((void *)0) == 0000000000000000
-[ ] # example_priv_test: cleaning up
-[ ] [FAILED] example value 0
-[ ] # example_priv_test: initializing
-[ ] # example_priv_test: cleaning up
-[ ] # example_priv_test: pass:1 fail:3 skip:0 total:4
-[ ] ================ [FAILED] example_priv_test ================
-[ ]     # example: initializing suite
-[ ]     # module: kunit_example_test
-[ ]     # example: exiting suite
-[ ] # Totals: pass:1 fail:3 skip:0 total:4
-[ ] ===================== [FAILED] example =====================
+While users most likely don't have the LoongArch EFI binary installed at
+least an explicit error about 'file not found' is better than a hanging
+test without output that can never succeed.
 
-Fix that by resetting test->priv after each param iteration, in
-similar way what we did for the test->status.
-
-Signed-off-by: Michal Wajdeczko <michal.wajdeczko@intel.com>
-Cc: David Gow <davidgow@google.com>
-Cc: Rae Moar <rmoar@google.com>
-Reviewed-by: David Gow <davidgow@google.com>
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
+Link: https://lore.kernel.org/loongarch/1738d60a-df3a-4102-b1da-d16a29b6e06a@t-8ch.de/
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+Acked-by: Willy Tarreau <w@1wt.eu>
+Link: https://lore.kernel.org/r/20231031-nolibc-out-of-tree-v1-1-47c92f73590a@weissschuh.net
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- lib/kunit/test.c | 1 +
- 1 file changed, 1 insertion(+)
+ tools/testing/selftests/nolibc/Makefile | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/lib/kunit/test.c b/lib/kunit/test.c
-index 7aceb07a1af9..1cdc405daa30 100644
---- a/lib/kunit/test.c
-+++ b/lib/kunit/test.c
-@@ -660,6 +660,7 @@ int kunit_run_tests(struct kunit_suite *suite)
- 				test.param_index++;
- 				test.status = KUNIT_SUCCESS;
- 				test.status_comment[0] = '\0';
-+				test.priv = NULL;
- 			}
- 		}
+diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
+index dfe66776a331..be7711014ade 100644
+--- a/tools/testing/selftests/nolibc/Makefile
++++ b/tools/testing/selftests/nolibc/Makefile
+@@ -88,6 +88,13 @@ QEMU_ARCH_s390       = s390x
+ QEMU_ARCH_loongarch  = loongarch64
+ QEMU_ARCH            = $(QEMU_ARCH_$(XARCH))
  
++QEMU_BIOS_DIR = /usr/share/edk2/
++QEMU_BIOS_loongarch = $(QEMU_BIOS_DIR)/loongarch64/OVMF_CODE.fd
++
++ifneq ($(QEMU_BIOS_$(XARCH)),)
++QEMU_ARGS_BIOS = -bios $(QEMU_BIOS_$(XARCH))
++endif
++
+ # QEMU_ARGS : some arch-specific args to pass to qemu
+ QEMU_ARGS_i386       = -M pc -append "console=ttyS0,9600 i8042.noaux panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+ QEMU_ARGS_x86_64     = -M pc -append "console=ttyS0,9600 i8042.noaux panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+@@ -101,7 +108,7 @@ QEMU_ARGS_ppc64le    = -M powernv -append "console=hvc0 panic=-1 $(TEST:%=NOLIBC
+ QEMU_ARGS_riscv      = -M virt -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+ QEMU_ARGS_s390       = -M s390-ccw-virtio -m 1G -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+ QEMU_ARGS_loongarch  = -M virt -append "console=ttyS0,115200 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
+-QEMU_ARGS            = $(QEMU_ARGS_$(XARCH)) $(QEMU_ARGS_EXTRA)
++QEMU_ARGS            = $(QEMU_ARGS_$(XARCH)) $(QEMU_ARGS_BIOS) $(QEMU_ARGS_EXTRA)
+ 
+ # OUTPUT is only set when run from the main makefile, otherwise
+ # it defaults to this nolibc directory.
 -- 
 2.43.0
 
