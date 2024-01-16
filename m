@@ -1,69 +1,66 @@
-Return-Path: <linux-kselftest+bounces-3113-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3114-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15B6282F812
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jan 2024 21:37:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8333B82F891
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jan 2024 21:48:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0E6D71C24ABA
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jan 2024 20:37:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 33C401F26730
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jan 2024 20:48:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB74A12CD84;
-	Tue, 16 Jan 2024 19:50:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACFBA1350EA;
+	Tue, 16 Jan 2024 19:52:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fODjdGQN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J7hIVzAM"
 X-Original-To: linux-kselftest@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B78E824214;
-	Tue, 16 Jan 2024 19:50:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79EE825571;
+	Tue, 16 Jan 2024 19:52:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705434625; cv=none; b=gpzEYLU0ov2EyWeRom9PBgknx3d3wvPUy+jXXRxDo55iB0MFVGGx6LOC/O0pIkfepy94ochKu1F7LQt61NVWCY3sgqDKnn1QS0PftQcCKfyiXZFy/1g33kp0YmSr+VeLnsIHwtvl1V99QaF2lZPqAgkv7m2jTgHxtelg2DUMJOA=
+	t=1705434737; cv=none; b=kgOpoU9dTRon91+G6HsZn2F1434ywGSMVS55tRJWgnlqG46Gj7d4uiKSpVs0JG8d+FiuSTx9TKQzyS1YmF5oX1fFagalqhangc8jAHKs+53HrYRmM3P11FDJkqG5YZd/6nT2LT2s/qaLFsbUkzErdprrA6HZsT2gute0Y3cnGcU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705434625; c=relaxed/simple;
-	bh=W/wZE/1C8o+w7gHiW4PUYQXU0ahgzy3AaYoVFq7n96o=;
+	s=arc-20240116; t=1705434737; c=relaxed/simple;
+	bh=05L/uzPbJ7wRSbnpKAg1qZm8m6Vca+gadFeO8ZPGfJM=;
 	h=Received:DKIM-Signature:From:To:Cc:Subject:Date:Message-ID:
 	 X-Mailer:In-Reply-To:References:MIME-Version:X-stable:
-	 X-Patchwork-Hint:X-stable-base:Content-Transfer-Encoding; b=fuShb12nysvYBQOCRs7f9cefbPce1/0UAqcouKHYc0sQT7isCdu7DA2zyiXR4CAjmVNlvNM9zuHj9+msyr08DyaoS+gHY47ZXIEW4PJxysLx8KIKnXaYgVvwTbI9LIJzAWIC7MlMbPcHGgieyf/Lq8b3H9wXjIXSgTCfL8mTx/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fODjdGQN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43093C433C7;
-	Tue, 16 Jan 2024 19:50:23 +0000 (UTC)
+	 X-Patchwork-Hint:X-stable-base:Content-Transfer-Encoding; b=ALMshZ702x7IxKz+ZwW61m5NBWzgDHShphjaroKjIkkAv9X7w0puTh9f029IbcSvC9Xudv0JfrD96hk2kEnwb6y+FGirfq1fpFVXfB2yUl3o+iUewoD69uRaWgEcv8bp/0HRIIbvev2wdKpscSpMz888TfrTosjZgB1LLK2Yqmw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J7hIVzAM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54F03C433A6;
+	Tue, 16 Jan 2024 19:52:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1705434625;
-	bh=W/wZE/1C8o+w7gHiW4PUYQXU0ahgzy3AaYoVFq7n96o=;
+	s=k20201202; t=1705434736;
+	bh=05L/uzPbJ7wRSbnpKAg1qZm8m6Vca+gadFeO8ZPGfJM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=fODjdGQNaBmZzdqSGKoPNXHLhIlwj2wN1byM6h4PkpIOeV72dYly1BjZqPFFaJAnb
-	 +2PbdIrZeGrKA4L5Le9i1CeGG5a5aTpvGgocBftsz/ShPheniuwXdxUQf9B7SKXIqC
-	 ltTnxQU7CA6SlNySLZ56qU88lGcplnYGByimBxjI4tbpv9WzRtUDXpoNRGZEi1SjpV
-	 yNTjym+mfMdSZo9rspq5fX0+bDKMBo8nwuHI2bzqBQzXgF+VlyNJAh0xfqQYoz4JvH
-	 WMFLjvQAkwSQn2hKrVvt/3x77yOdM058Xkonztuf+jGhCd4Hsjg7tGMiKkayaj75Ug
-	 fI59zZvFd4Stw==
+	b=J7hIVzAMluV840uHW1cAxJfgTPuSAU5P0+dGRRXf55aP50T4qiJWRFS3r4EizMNiM
+	 f+KtUEm5DSPlcAfIXjzXNGkmbVkQg/16fn4qvYXU7eb3yw8+VXsUPyDgFcwd+JuEuB
+	 otVcYVuVTfIDbsifKTY50KuETSqP/GKqT2QPs2ZRlQjxbH9ttTsHqa+WCktZPTyImr
+	 JGR7hAL20HEw4B0NEkJp68xvsguDhnrLw2DavjBoCdmbSbv1RjT82mzClWE3ZHsrm9
+	 x1/ni2hjmVbKGZrHc0F22D+D29cePoXiCmPeuF/82QK/sGBZp40qo2+uAeqtr8PPXJ
+	 tgR5fNvhKb6gw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Yonghong Song <yonghong.song@linux.dev>,
-	Daniel Borkmann <daniel@iogearbox.net>,
+Cc: Andrii Nakryiko <andrii@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
-	ast@kernel.org,
-	andrii@kernel.org,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
+	daniel@iogearbox.net,
 	shuah@kernel.org,
-	nathan@kernel.org,
-	sdf@google.com,
+	davem@davemloft.net,
+	kuba@kernel.org,
+	hawk@kernel.org,
 	bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.6 031/104] bpf: Fix a few selftest failures due to llvm18 change
-Date: Tue, 16 Jan 2024 14:45:57 -0500
-Message-ID: <20240116194908.253437-31-sashal@kernel.org>
+	netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.6 065/104] selftests/bpf: fix compiler warnings in RELEASE=1 mode
+Date: Tue, 16 Jan 2024 14:46:31 -0500
+Message-ID: <20240116194908.253437-65-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20240116194908.253437-1-sashal@kernel.org>
 References: <20240116194908.253437-1-sashal@kernel.org>
@@ -78,97 +75,50 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.6.12
 Content-Transfer-Encoding: 8bit
 
-From: Yonghong Song <yonghong.song@linux.dev>
+From: Andrii Nakryiko <andrii@kernel.org>
 
-[ Upstream commit b16904fd9f01b580db357ef2b1cc9e86d89576c2 ]
+[ Upstream commit 62d9a969f4a95219c757831e9ad66cd4dd9edee5 ]
 
-With latest upstream llvm18, the following test cases failed:
+When compiling BPF selftests with RELEASE=1, we get two new
+warnings, which are treated as errors. Fix them.
 
-  $ ./test_progs -j
-  #13/2    bpf_cookie/multi_kprobe_link_api:FAIL
-  #13/3    bpf_cookie/multi_kprobe_attach_api:FAIL
-  #13      bpf_cookie:FAIL
-  #77      fentry_fexit:FAIL
-  #78/1    fentry_test/fentry:FAIL
-  #78      fentry_test:FAIL
-  #82/1    fexit_test/fexit:FAIL
-  #82      fexit_test:FAIL
-  #112/1   kprobe_multi_test/skel_api:FAIL
-  #112/2   kprobe_multi_test/link_api_addrs:FAIL
-  [...]
-  #112     kprobe_multi_test:FAIL
-  #356/17  test_global_funcs/global_func17:FAIL
-  #356     test_global_funcs:FAIL
-
-Further analysis shows llvm upstream patch [1] is responsible for the above
-failures. For example, for function bpf_fentry_test7() in net/bpf/test_run.c,
-without [1], the asm code is:
-
-  0000000000000400 <bpf_fentry_test7>:
-     400: f3 0f 1e fa                   endbr64
-     404: e8 00 00 00 00                callq   0x409 <bpf_fentry_test7+0x9>
-     409: 48 89 f8                      movq    %rdi, %rax
-     40c: c3                            retq
-     40d: 0f 1f 00                      nopl    (%rax)
-
-... and with [1], the asm code is:
-
-  0000000000005d20 <bpf_fentry_test7.specialized.1>:
-    5d20: e8 00 00 00 00                callq   0x5d25 <bpf_fentry_test7.specialized.1+0x5>
-    5d25: c3                            retq
-
-... and <bpf_fentry_test7.specialized.1> is called instead of <bpf_fentry_test7>
-and this caused test failures for #13/#77 etc. except #356.
-
-For test case #356/17, with [1] (progs/test_global_func17.c)), the main prog
-looks like:
-
-  0000000000000000 <global_func17>:
-       0:       b4 00 00 00 2a 00 00 00 w0 = 0x2a
-       1:       95 00 00 00 00 00 00 00 exit
-
-... which passed verification while the test itself expects a verification
-failure.
-
-Let us add 'barrier_var' style asm code in both places to prevent function
-specialization which caused selftests failure.
-
-  [1] https://github.com/llvm/llvm-project/pull/72903
-
-Signed-off-by: Yonghong Song <yonghong.song@linux.dev>
-Signed-off-by: Daniel Borkmann <daniel@iogearbox.net>
-Link: https://lore.kernel.org/bpf/20231127050342.1945270-1-yonghong.song@linux.dev
+Signed-off-by: Andrii Nakryiko <andrii@kernel.org>
+Acked-by: Yonghong Song <yonghong.song@linux.dev>
+Acked-by: John Fastabend <john.fastabend@gmail.com>
+Link: https://lore.kernel.org/r/20231212225343.1723081-1-andrii@kernel.org
+Signed-off-by: Alexei Starovoitov <ast@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- net/bpf/test_run.c                                     | 2 +-
- tools/testing/selftests/bpf/progs/test_global_func17.c | 1 +
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ tools/testing/selftests/bpf/veristat.c        | 2 +-
+ tools/testing/selftests/bpf/xdp_hw_metadata.c | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index 0841f8d82419..478ee7aba85f 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -543,7 +543,7 @@ struct bpf_fentry_test_t {
- 
- int noinline bpf_fentry_test7(struct bpf_fentry_test_t *arg)
+diff --git a/tools/testing/selftests/bpf/veristat.c b/tools/testing/selftests/bpf/veristat.c
+index 655095810d4a..0ad98b6a8e6e 100644
+--- a/tools/testing/selftests/bpf/veristat.c
++++ b/tools/testing/selftests/bpf/veristat.c
+@@ -1214,7 +1214,7 @@ static int cmp_join_stat(const struct verif_stats_join *s1,
+ 			 enum stat_id id, enum stat_variant var, bool asc)
  {
--	asm volatile ("");
-+	asm volatile ("": "+r"(arg));
- 	return (long)arg;
- }
+ 	const char *str1 = NULL, *str2 = NULL;
+-	double v1, v2;
++	double v1 = 0.0, v2 = 0.0;
+ 	int cmp = 0;
  
-diff --git a/tools/testing/selftests/bpf/progs/test_global_func17.c b/tools/testing/selftests/bpf/progs/test_global_func17.c
-index a32e11c7d933..5de44b09e8ec 100644
---- a/tools/testing/selftests/bpf/progs/test_global_func17.c
-+++ b/tools/testing/selftests/bpf/progs/test_global_func17.c
-@@ -5,6 +5,7 @@
- 
- __noinline int foo(int *p)
- {
-+	barrier_var(p);
- 	return p ? (*p = 42) : 0;
- }
- 
+ 	fetch_join_stat_value(s1, id, var, &str1, &v1);
+diff --git a/tools/testing/selftests/bpf/xdp_hw_metadata.c b/tools/testing/selftests/bpf/xdp_hw_metadata.c
+index 613321eb84c1..adb77c1a6a74 100644
+--- a/tools/testing/selftests/bpf/xdp_hw_metadata.c
++++ b/tools/testing/selftests/bpf/xdp_hw_metadata.c
+@@ -68,7 +68,7 @@ static int open_xsk(int ifindex, struct xsk *xsk, __u32 queue_id)
+ 		.frame_size = XSK_UMEM__DEFAULT_FRAME_SIZE,
+ 		.flags = XDP_UMEM_UNALIGNED_CHUNK_FLAG,
+ 	};
+-	__u32 idx;
++	__u32 idx = 0;
+ 	u64 addr;
+ 	int ret;
+ 	int i;
 -- 
 2.43.0
 
