@@ -1,163 +1,124 @@
-Return-Path: <linux-kselftest+bounces-3082-lists+linux-kselftest=lfdr.de@vger.kernel.org>
+Return-Path: <linux-kselftest+bounces-3083-lists+linux-kselftest=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-kselftest@lfdr.de
 Delivered-To: lists+linux-kselftest@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2578C82F1CC
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jan 2024 16:50:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA47382F298
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jan 2024 17:51:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 610A7B2296E
-	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jan 2024 15:50:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 15A4628531E
+	for <lists+linux-kselftest@lfdr.de>; Tue, 16 Jan 2024 16:51:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FAE11C2B2;
-	Tue, 16 Jan 2024 15:50:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47F271C69E;
+	Tue, 16 Jan 2024 16:51:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="S/5uPw6V"
+	dkim=pass (2048-bit key) header.d=yahoo.com header.i=@yahoo.com header.b="A7u7ADJq"
 X-Original-To: linux-kselftest@vger.kernel.org
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2061.outbound.protection.outlook.com [40.107.212.61])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sonic302-27.consmr.mail.ne1.yahoo.com (sonic302-27.consmr.mail.ne1.yahoo.com [66.163.186.153])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E51E81BF53;
-	Tue, 16 Jan 2024 15:49:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SW5TbgOtmNWrcz31a5FYNKCx52Te61nz82Se3gKWnuOC7Xp5/W+OtgePMWqbYDi4QWh2lqVVziZ04QFpoQrvQBhnulqHGlGymD0rCpf0eHIzdLaKoJwcKwbKhh+17nVPzUgWYNgLWftXPmUD9RVhdQcrmcZAi0MEZD5L4uJtc8zGRpCxuJx8R8izgrUvSxu246/YUikFq+cGPJpG+PCjxje9cwnv/5JtFnILbaoDb1t2iZ/0ZMsqRaZL0Y+XMXtXXW+SFTlpbDdjYuoWK3xmN+O1ryvZhnD3PaQqVI9u4Ok4EujdY0Ou7lSpWSXhQtjDaiCodoWLDT6Ybs3QXqFN7A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QMqNo4dHqCnPuvxC3FWN8LNGrePVHYlLqEijTILJ5LY=;
- b=BP0UE1spB9a0CI8yTGARjjwM5sAkRfZ6OWSZR7JCqRMlCIR9FK+AP6FlqTp9IscvXhMbSR3tg9Y5jH84ikHY5la8X2onXa7fVk0HyTGpgcPlAJD8CHX2/clqRoZUKbTqLQLcRMJlooLCN1sxVvv8r59TLiGl2z4Cs0Xka+fM1c/HeXCMuDp5jvdSs7h62TjCl7afE2ExBixkc+itw/WB/LoDU/GF3lm8fCrNP7RWoyO9waZxLKp8Lkj5M/wi88AGE6rNM/16JKjT4Se1Aq0mCh0xO0Tkq08MScZ3LCv3TDig7GQr/Eq+RlFoMgDsbRZ5Fl0SWFRA2cYNsiWAaq8YPA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=QMqNo4dHqCnPuvxC3FWN8LNGrePVHYlLqEijTILJ5LY=;
- b=S/5uPw6VbntvvTV7VHZWPwdIE+wEQHTgoacMxPa0iKCOa+YhExtEI2iHGLVzA+p9XgEA8rz9k+GwpSz4bm2yTKo8yTMicuqfti/HCSBe5pdfvQ3o1AjrhHxfme8RY2ZNFrx9lyJm2lk+BjK+NdvjoItRcl9NGZP33Ltr+HlOeO0kIqlMUuQtHZqv0z94UBxIsq12ekHT7v2AZVipSRnl/O/Ya3lWRWX3vx2QpS8z6ZhmqiLV9Xt/OnFU2PEgmWQf+mEVrYnWxrYbyacAaD0/ieEF+1kShm+Vdhh7kkinaIHzldXEIs4fH8IkIFGncvvM5CNXsML/RIh8o99H6tq3Sg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB4373.namprd12.prod.outlook.com (2603:10b6:208:261::8)
- by DS0PR12MB7608.namprd12.prod.outlook.com (2603:10b6:8:13b::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7181.21; Tue, 16 Jan
- 2024 15:49:55 +0000
-Received: from MN2PR12MB4373.namprd12.prod.outlook.com
- ([fe80::ff68:f81b:d451:9765]) by MN2PR12MB4373.namprd12.prod.outlook.com
- ([fe80::ff68:f81b:d451:9765%4]) with mapi id 15.20.7181.029; Tue, 16 Jan 2024
- 15:49:54 +0000
-From: Benjamin Poirier <bpoirier@nvidia.com>
-To: netdev@vger.kernel.org
-Cc: Jay Vosburgh <j.vosburgh@gmail.com>,
-	Andy Gospodarek <andy@greyhouse.net>,
-	Shuah Khan <shuah@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Hangbin Liu <liuhangbin@gmail.com>,
-	Jonathan Toppins <jon.toppins+linux@gmail.com>,
-	Nikolay Aleksandrov <razor@blackwall.org>,
-	Michal Kubiak <michal.kubiak@intel.com>,
-	linux-kselftest@vger.kernel.org,
-	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net] selftests: bonding: Add more missing config options
-Date: Tue, 16 Jan 2024 10:49:26 -0500
-Message-ID: <20240116154926.202164-1-bpoirier@nvidia.com>
-X-Mailer: git-send-email 2.43.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: YQBPR01CA0165.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:7e::22) To MN2PR12MB4373.namprd12.prod.outlook.com
- (2603:10b6:208:261::8)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E05D21CA83
+	for <linux-kselftest@vger.kernel.org>; Tue, 16 Jan 2024 16:51:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=schaufler-ca.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=schaufler-ca.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1705423879; bh=3SJp5s3Z+exCH+4UfHcT4UCsjWtziANQFAalTNp3V4c=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=A7u7ADJqhucDT/inj+zEnSMaejTIONrsEM1yaVmWrmsNg+aNwf2yDcsjf0DHwehiGogDbZlGAA1PU97UbzGCBUOmEDpzwgLtf5a4QhXNiUvCvbanOiJ1ol3UXeP0ITEmwrQPyUr58NPzGMBh+ySGQWZIGaqM/lJm8g50+tEuznMw3u58zCylW9KD7uHlXfCt98KpVJR4H3DXY7mYfUFE2dBJasazPAsGPfVhh8pNVfSw8RaWpNvu9SxPGg4X9uHMDlZO2DQJsk0RintUKlP7vFyv7IYJXaoq8ZlP7X3dDzFukyGLkbMBY71ByEc8vizGgpVmAUVUD0YKQ4hMNIgSQA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1705423879; bh=6g1/Z5dhwtw34v2/raI1RfnLcnZRJC7llHW1yzDrq7O=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=HHPu3liBO2n+pM1rPTxEPcgtbTjb14gZHzeduQaiNR7QcXvwLrW+t19dNENBguBJWqkIMOEDCoE9WqWAMVYDjb1dEdqVYWZTgB6LHvkbPVwrMxmKuILTs9DNUuu2xEWZxtN/gFLh/PSJU1Iw1RMmfGK08EflKNKlFlpewDbFgZ17NRY1vaPebOtf11My02lwuMj+e+XKX56Pihp9FQuwaR9UfNUCBwpOWW4/4uSlYnEzEWwrDU/CB0VZp1VPhD2jzfR6stYT1bix9ZBwFO8CUBin9Jahhp+0jgZoyxe3rX6hL9OVFM4w+rr3Xye+D63bIGmPVfd6afBBGg+xop8G9g==
+X-YMail-OSG: A5CgyOEVM1k7T20.uer7oRuubZ6Y.egXrwI9sExA1NznFEIXkWCZcUCJBQRI5z0
+ dUVoM9vL8JUmxqY.WM2kmbbrxV.NfunHNLhqt27_Td7Qp8mDDtF8yKJtMEwlwRlQqFtI0uc6UNuy
+ v_t3cIW12YNMGiUmM6FM4nPaT9nu2e6onqnHWVYEP7jb61S0dwwoMh__F8x2QCcICqwKrK6hMHU_
+ pqxG7IcbsGCV0pbHfJO00Y8.sGYefulMmQgbRxUbeZvdZ6BpGK6hqnLVM1wdlTUaMdsYfOGgdIIK
+ IUearccrrWHBGkDy3PmPk8lzrQhbRNQ1LiuIKGfgD6B1ywCC2nTjtE6HrQjoIfTB8acmrUDOowAo
+ BmigJ1K9guUkP55v9SyMzPXid.6ClEW.cVDO8SBwoc1fLktaQhOEt95B.o00s35aPT6juJVzHPbw
+ lY1dHEVUmWNd5YynMOegvFdy1Z2oO1BSMEDt1NrLGPBUY1mbUA4H55YgUYT_5cWSL9UXu7ApG_NQ
+ 74s40GkbeWfg1w2cBEPnfkaysIBp96g.o4Is_0HnhHo6ABa7j0VZUxSVKN7XOQ5DcNwfIRsveNif
+ 5sHuJIOJBI2dnzkuw1HloeLo1jRayxwz3me4iqG_8kSJOBDug9WqGgR_ItxTwaaf7l91eq6a7.JP
+ Oz66mhWnRGJjQpmcZeHcaurCHDLhfiXw8eq2tHNBCod9.2LNVd9wPKMSb1xktR4bqElOr2syyum2
+ 7LeMoURNNR7lPicU5dXVjnvE0lMHs.pbHx10gQNWgkhOL_ooOFif23zY52KjLihVBfohWM3IyiwN
+ N.h3r1huoQ_60cNOv3A8OSSYgeNeKX_Jsa1LEQw4aZKZAQbEuYmJuzTwT6G6FiPcYT7k8ODiPyZ6
+ 5uytBjv3N4S5fFaqaDtF6KZ1wUsPGJuefm62Fde3xRnjK1q0fyAZ3bqi08cm32JsMg.h_fGSIUdB
+ 6aIAjWdqU1W4HFqTQ.lHZC2SSdWvUMfQ.97VPLKZmc1chzt8NmnLud2oh4rdQ7MGE1ynInKRZdTs
+ cPH6m8O7vLOyaPUfZoZOgZi5kmvj0WW7OBGHR5AKh8KtUnTyGCPz8FDRRjexQ_y33Nh4fGagXtfG
+ YLCjiXLVC7rBZiw0.jqkV3Anp7Exz6SsyRvEBuraPG6StqmvWItzASprjkpeERwr431mfouJ2QRo
+ NEHC_oLtPECK9h6ORbFRW7Bn1aDwDQKW_6DzKKC72GtjxqQSQhrPqx1bULiTykszuG2tRsjyDbZI
+ GFIFhYPq9gQLI0HQsToaiZ.aGz8hRFRImH4_UBqEdAk.cbTASyHqPHVdHcRtTKaF0i7RKOrpFFRD
+ DCieCh7SftO0cdeDtn4qS1T_jaOPDAelXyJThAcR1wJV948czh6gM586k1N8IGG4ce2vb5TWgmC9
+ x8J.b4.k9ZakLNmtAM_oC7P5UI9iWQOa2RMfW6YQhldAiMki.6cZw6HcfOsoxUqIB4wahHwyF.Oz
+ H3Gs1wqS.aQXtEdgQYKQTTn63BrWPjIH4VY3a9CfgoCyYmMatopckhvT4SUFtiyHHbnzV5b8Rj1U
+ jxO5FhDkUsZKkp_HQIIK_0iNBx_7iSBTjt4xz6I6IP9gvW8S_VxfRPlJ.pC0UdbabMngDaiCgcTZ
+ FjmkuXQtO3yqbDd4emfoZxh6uO3XQtSRMHe2a0xBQtyzobBh3Be3n0IvlF7HhnfJm7Rb4PpLNmaO
+ yrSEZ7RIqnQOGZSt.lP0DnTI0jpc4vMNEsaWCvK73hMiQjva_ajuJaDhXYATCWd_wQYn3in9en8C
+ LAuiLXdQDl2Q1jjGMcf2nt5vObnJnzirYjod8N2IYulsifjIU0wgapS4JTDLIqDraLMyXG7sP3xq
+ vYCeABKYECZJkxZ1kspcltO0yfr.E0f5zAHLuajake8Hj9k300IvFqAJhL_IqnfyDnXEUAt39QME
+ qbdxglOjBmjP2OC.yivvwfak_unL4S6GUKypZOtfifFzTXH8Rmn63WTf64F39y45aCUdy9QVF4r5
+ 3xq.HH0id_rBFNbce9gsI6P8Sz0IWxV6C.iA_OLzb3p0E2FA5Y6AZFFmdacSnrfStmeVX1NUeuHp
+ meURET0zgC18FcL7e7_b7AoBWmElfXF7Pg7maB9re_.PPQp15DeeDq1HR7q6fcs4VOFkIQbnq2va
+ Rg1VWn9PiQrAiarWNFi0yClhqn_tw8kWJ5QaIMOeovQ8Ut.Itbsg.PbSbKaa0zFJHTjaD3hKaYE_
+ zDfVfk0qF2Ns_9Le9GQ75eJD3ybiOYwPFOwK2.5Ap.5BLgwkZjhJHJLGXSE4a
+X-Sonic-MF: <casey@schaufler-ca.com>
+X-Sonic-ID: 15ae8b31-4e9c-4be6-9dc6-e6e06b3d0f25
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic302.consmr.mail.ne1.yahoo.com with HTTP; Tue, 16 Jan 2024 16:51:19 +0000
+Received: by hermes--production-gq1-78d49cd6df-mvdth (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 44515f8eb2e2b5946457ba67dd58da86;
+          Tue, 16 Jan 2024 16:51:14 +0000 (UTC)
+Message-ID: <00b7ff22-f213-471a-a604-658a9af80d59@schaufler-ca.com>
+Date: Tue, 16 Jan 2024 08:51:11 -0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN2PR12MB4373:EE_|DS0PR12MB7608:EE_
-X-MS-Office365-Filtering-Correlation-Id: e97e3d4b-71a1-4cc8-d4d2-08dc16aac86e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	hv0NfpHGTnx0Jhy81ytSgMA7GauTTGP5FNybx3NN8tOgU2sa8Z58+H4PC5JLGag0sf5oqpsTsr8IIwR7tlRzhXNPQCv7pi3hId40mbPx/icvYGNjDDWdTpI3J0JOMZbvJNfDOF1zNm8aucQzT1wMtGl9hRDJI+RK2iqC24IuuAJJdm+RQAI8Rr48ulF9m092kkjc8SL2wbZPzh5DLagNXY55gNRIK97N8HVAeNjQIXvQxxKO1hdrakwQzYUIV4v1ZIiT7gw0Uq0gGHfFfSeyLAUE2MIqXjp2trff+i0YcwfrebvSZLz6qsZR/F8JZ0E0WqtarNx2aLiXP2W42bDriGrCzsiehuWZ6jwN3rduGEPDNyJjOPP2xzwF8bt2b0biVR5NbXbbmcEjut1yeJ9FQ4qniYqeKVuqaIDQFkljsDn0j8Sq9d4SZUeoTZJKrX8QYRbv7xmrpir4UMI3+r/IE/WHU2wTIhfJM18CFzkmL637vmZbyO/XgYAJqMQ5A9t87BP4EikDjUXiW37QSpCMIbAZQDw/rHtwG24CbSE2xXaK0jOW6hJwprqkCZ2W2RhC
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB4373.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(366004)(346002)(376002)(136003)(396003)(39860400002)(230922051799003)(1800799012)(64100799003)(451199024)(186009)(4326008)(5660300002)(7416002)(8676002)(38100700002)(66556008)(6916009)(66476007)(8936002)(54906003)(66946007)(316002)(6486002)(86362001)(6512007)(478600001)(6506007)(2616005)(41300700001)(6666004)(2906002)(1076003)(26005)(36756003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?ZW4zOH0zlmk0jcO70R9d+TFTajhA76LRERbil+UiMH+gOAxie7MLfx+ZmlMA?=
- =?us-ascii?Q?Tl89RjbGH2NkP1W9U9r8VtlCkFlWjHP1HOsD1lTMgFRbmyl7xH3bY+huclAd?=
- =?us-ascii?Q?TlGH3Jl8A4OHCToMooGjgakMwhFlwxg2EnKJX+UL7N2yerE5EvXyL0BiGapM?=
- =?us-ascii?Q?OZjmq1ipHjsoZFGDMV1n7vkBZfv11ig7LV+rFYwykof325pSshzRUwEkX0yn?=
- =?us-ascii?Q?xKtRuOx3PJXCHgHLoyyZb9Pe27ZyvgT4WErRaGGdUQBa8/D1+Fo8g23tIFHI?=
- =?us-ascii?Q?Mgd2ityrd/CYYea9M8w0s7JXngluyr6RA/VROutK6Mq8IFMKiB870P06wL61?=
- =?us-ascii?Q?ByMmr7eeJNQXq/Mme5IiVro8Om9kdk69qYSs2MUug+c9gICxVm8irLSeobzo?=
- =?us-ascii?Q?qihHj+tDK+KuRya1wK4JEaFGDjnc4nkU/EvE9wOK+4ZgE3h7QzEdxktDqBP7?=
- =?us-ascii?Q?Xrar16NWHKqjBEu7kUZKqqpSKZybAVmwuEWEf3NzvyCX7QPg/EUPJteKg89K?=
- =?us-ascii?Q?M+0gjicex8NqT14URBKc8xX04FsYxAnfuMryultNB0NbKE3E0cTCOtMsVgjs?=
- =?us-ascii?Q?b7OFcBc+glCxk6LnOP1dY9nDdrkcdYz/M8FQgATUKNImzi8MuGq+qtnc86Ba?=
- =?us-ascii?Q?jQM3OfdylbZqKpq4mmbuGFVU24/0oVu2N2UzdKXemHQ8N2Nxr7aAREJPFP5i?=
- =?us-ascii?Q?7b9I0A+C+jGIaYXNr1VODDDZJR5YL1q0yQ0R6GpdOWHsPMXfE0eY5ja1UcWK?=
- =?us-ascii?Q?SPujlv08wS0xv7l69N0AUDKqHsKOyaf7RmO25lfuNndFfohwYKXO7MpCWN/S?=
- =?us-ascii?Q?oGH6Y2z6befWsj2Vnx5UF47Txy7kO3npxuVXVWS/eYZABPiFg9zvo09JTXHu?=
- =?us-ascii?Q?FZn3b7WnXRiEruJWnwUnwxKZwtSbON4/nKKygZoXp418VH5+JB6fauwKEtVk?=
- =?us-ascii?Q?/OS8jdRR7lVXMe6ee+cjipPyXV9ATToXmCfFZQOS2p8v7fWL9/lcV/tdLtht?=
- =?us-ascii?Q?S7StbrAt9uZofKVabl9VaTpGH9/IFGiah4lE2uAP/Gl4H3O8kjizrumlqTqM?=
- =?us-ascii?Q?6ivq9pj/Y+hnqLGahqR0ZTlbfgyHeXbyhJ+dHxmVvg2t+TGoUBahaQgIhjxF?=
- =?us-ascii?Q?tbd7619p5c6WK18KUuMUdJB4hahz341f6U7eFygStgVCMl5if2ajFZuz61Pi?=
- =?us-ascii?Q?xrkBTgmwr3tAtNnA2baH5byFhYqSrsrlmTsACoLQA5e9vDBDX9lXB9yOpoUr?=
- =?us-ascii?Q?o9Kqq2pn+m6yYeiL/8gRtVbCfHEiBHA6pgEIPAViomVJ9Nhe0On9qxKk9ukg?=
- =?us-ascii?Q?Ve6lMDrChyPUcWaa3I0aQdenL/b6oq2YuoYNMOze5q1jN+xDBKIc/9g21sdr?=
- =?us-ascii?Q?JOm1j8SAdJmnyMRW9r8aSxW7E6SyyHSpHip84WQXaM38+zleRoM9Qn3aoCd6?=
- =?us-ascii?Q?bCQMKFHr7TCVhIycX9udeIWrFrx/Szi3auR+aXOJfnqefKI45zh1efl0y2R4?=
- =?us-ascii?Q?kpF2MdW4ajJL0+ExKUSS6wXgHG3Zep7o8999Wy8juIJcnmCZlljqd7COmZC3?=
- =?us-ascii?Q?oQkQ4YG4CL/TL+WNC9RvCiS6U9zVaya2SgH6vUOs?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e97e3d4b-71a1-4cc8-d4d2-08dc16aac86e
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB4373.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jan 2024 15:49:54.3823
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: CcxvTFDjOnOKQwz3XiTC7S2256v8NzzUkD7KkhhTrD6dN8ufNZ15HF3jMAyqXKLaBb5+IhAqqnVFj/LegBCOnQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7608
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 13/25] security: Introduce file_release hook
+To: Roberto Sassu <roberto.sassu@huaweicloud.com>,
+ Al Viro <viro@zeniv.linux.org.uk>
+Cc: brauner@kernel.org, chuck.lever@oracle.com, jlayton@kernel.org,
+ neilb@suse.de, kolga@netapp.com, Dai.Ngo@oracle.com, tom@talpey.com,
+ paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
+ zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, eric.snowberg@oracle.com,
+ dhowells@redhat.com, jarkko@kernel.org, stephen.smalley.work@gmail.com,
+ eparis@parisplace.org, shuah@kernel.org, mic@digikod.net,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-nfs@vger.kernel.org, linux-security-module@vger.kernel.org,
+ linux-integrity@vger.kernel.org, keyrings@vger.kernel.org,
+ selinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Roberto Sassu <roberto.sassu@huawei.com>,
+ Casey Schaufler <casey@schaufler-ca.com>
+References: <20240115181809.885385-1-roberto.sassu@huaweicloud.com>
+ <20240115181809.885385-14-roberto.sassu@huaweicloud.com>
+ <20240115191508.GG1674809@ZenIV>
+ <3b440f064a1ae04d69f7e85f4077f8406c0eac67.camel@huaweicloud.com>
+Content-Language: en-US
+From: Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <3b440f064a1ae04d69f7e85f4077f8406c0eac67.camel@huaweicloud.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.22010 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
 
-As a followup to commit 03fb8565c880 ("selftests: bonding: add missing
-build configs"), add more networking-specific config options which are
-needed for bonding tests.
+On 1/16/2024 12:47 AM, Roberto Sassu wrote:
+> On Mon, 2024-01-15 at 19:15 +0000, Al Viro wrote:
+>> On Mon, Jan 15, 2024 at 07:17:57PM +0100, Roberto Sassu wrote:
+>>> From: Roberto Sassu <roberto.sassu@huawei.com>
+>>>
+>>> In preparation for moving IMA and EVM to the LSM infrastructure, introduce
+>>> the file_release hook.
+>>>
+>>> IMA calculates at file close the new digest of the file content and writes
+>>> it to security.ima, so that appraisal at next file access succeeds.
+>>>
+>>> An LSM could implement an exclusive access scheme for files, only allowing
+>>> access to files that have no references.
+>> Elaborate that last part, please.
+> Apologies, I didn't understand that either. Casey?
 
-For testing, I used the minimal config generated by virtme-ng and I added
-the options in the config file. All bonding tests passed.
+Just a hypothetical notion that if an LSM wanted to implement an
+exclusive access scheme it might find the proposed hook helpful.
+I don't have any plan to create such a scheme, nor do I think that
+a file_release hook would be the only thing you'd need.
 
-Fixes: bbb774d921e2 ("net: Add tests for bonding and team address list management") # for ipv6
-Fixes: 6cbe791c0f4e ("kselftest: bonding: add num_grat_arp test") # for tc options
-Fixes: 222c94ec0ad4 ("selftests: bonding: add tests for ether type changes") # for nlmon
-Suggested-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Benjamin Poirier <bpoirier@nvidia.com>
----
- tools/testing/selftests/drivers/net/bonding/config | 5 +++++
- 1 file changed, 5 insertions(+)
-
-diff --git a/tools/testing/selftests/drivers/net/bonding/config b/tools/testing/selftests/drivers/net/bonding/config
-index f85b16fc5128..899d7fb6ea8e 100644
---- a/tools/testing/selftests/drivers/net/bonding/config
-+++ b/tools/testing/selftests/drivers/net/bonding/config
-@@ -1,5 +1,10 @@
- CONFIG_BONDING=y
- CONFIG_BRIDGE=y
- CONFIG_DUMMY=y
-+CONFIG_IPV6=y
- CONFIG_MACVLAN=y
-+CONFIG_NET_ACT_GACT=y
-+CONFIG_NET_CLS_FLOWER=y
-+CONFIG_NET_SCH_INGRESS=y
-+CONFIG_NLMON=y
- CONFIG_VETH=y
--- 
-2.43.0
-
+>
+> Thanks
+>
+> Roberto
+>
 
